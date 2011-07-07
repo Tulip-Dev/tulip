@@ -23,10 +23,14 @@ SET(pythonscriptview_LIB_SRCS
     PythonScriptViewWidget.cpp
     PythonShellWidget.cpp
     TulipUtilsModule.h
+    PluginCreationDialog.h
+    PluginCreationDialog.cpp
+    ConsoleOutputHandler.h
 )
 
 SET(pythonscriptview_UI
     PythonScriptViewWidget.ui
+    PluginCreationDialog.ui
 )
 
 SET(pythonscriptview_MOC
@@ -34,6 +38,8 @@ SET(pythonscriptview_MOC
     PythonScriptViewWidget.h
     PythonInterpreter.h
     PythonShellWidget.h
+    PluginCreationDialog.h
+    ConsoleOutputHandler.h
 )
 
 SET(pythonscriptview_RCC

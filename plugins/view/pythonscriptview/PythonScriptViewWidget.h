@@ -42,15 +42,20 @@ public :
 
 	int addMainScriptEditor();
 	int addModuleEditor();
+	int addPluginEditor();
 
 	PythonCodeEditor *getMainScriptEditor(int idx) const;
 	PythonCodeEditor *getCurrentMainScriptEditor() const;
 	PythonCodeEditor *getModuleEditor(int idx) const;
 	PythonCodeEditor *getCurrentModuleEditor() const;
+	PythonCodeEditor *getPluginEditor(int idx) const;
+	PythonCodeEditor *getCurrentPluginEditor() const;
 
 	std::string getCurrentMainScriptCode() const;
 	std::string getMainScriptCode(int idx) const;
 	std::string getModuleCode(int idx) const;
+	std::string getPluginCode(int idx) const;
+
 
 	bool eventFilter(QObject *obj, QEvent *event);
 
@@ -60,6 +65,7 @@ public slots :
 	void increaseFontSize();
 	void mainScriptTextChanged();
 	void moduleScriptTextChanged();
+	void pluginScriptTextChanged();
 	void resizeToolBars();
 
 	void currentTabChanged(int index);
@@ -73,9 +79,14 @@ public :
 	QAction *newFileModuleAction;
 	QAction *loadModuleAction;
 	QAction *saveModuleAction;
+	QAction *newPluginAction;
+	QAction *loadPluginAction;
+	QAction *savePluginAction;
+
 
 	QToolBar *mainScriptToolBar;
 	QToolBar *modulesToolBar;
+	QToolBar *pluginsToolBar;
 
 private :
 

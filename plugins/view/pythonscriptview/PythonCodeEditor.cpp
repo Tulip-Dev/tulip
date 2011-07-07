@@ -32,8 +32,6 @@
 
 using namespace std;
 
-
-
 static void loadApiFile(const QString &path, QsciAPIs *api) {
 	QFile apiFile(path);
 	apiFile.open(QIODevice::ReadOnly | QIODevice::Text);

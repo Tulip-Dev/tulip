@@ -20,6 +20,7 @@
 #ifndef PYTHONINTERPRETER_H_
 #define PYTHONINTERPRETER_H_
 
+// thanks to the VTK project for this patch for Visual Studio in debug mode
 #if defined(_MSC_VER) && defined(_DEBUG)
 // Include these low level headers before undefing _DEBUG. Otherwise when doing
 // a debug build against a release build of python the compiler will end up 
@@ -89,6 +90,10 @@ private:
 
 };
 
+const char pythonReservedCharacters[] = {'#', '%', '/', '+', '-', '&', '*', '<', '>',
+		'|', '~', '^', '=', '!', '\'', '\"', '{', '}',
+		'(', ')', '[', ']', 0};
+
 class PythonShellWidget;
 
 class PythonInterpreter {
@@ -97,7 +102,7 @@ public :
 
 	static PythonInterpreter *getInstance();
 
-	bool interpreterInit() const;
+	bool interpreterInit() ;
 
 	void registerNewModule(const std::string &moduleName, PyMethodDef *moduleDef);
 	void registerNewModuleFromString(const std::string &moduleName, const std::string &moduleSrcCode);
@@ -111,7 +116,7 @@ public :
 	void stopCurrentScript();
 	bool isRunningScript() const {return runningScript;}
 	std::string getPythonVersion() const {return pythonVersion;}
-	std::string getPythonShellBanner() const;
+	std::string getPythonShellBanner();
 	void setDefaultSIGINTHandler();
 	
 
@@ -127,6 +132,9 @@ private :
 	PythonInterpreter();
 	~PythonInterpreter();
 
+	void holdGIL();
+	void releaseGIL();
+
 	static PythonInterpreter instance;
 	
 	bool runningScript;
@@ -136,6 +144,8 @@ private :
 	ConsoleOutputDialog *consoleDialog;
 	
 	std::string pythonVersion; 
+	PyThreadState*  mainThreadState;
+	PyGILState_STATE gilState;
 
 };
 

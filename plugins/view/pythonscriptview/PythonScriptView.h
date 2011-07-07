@@ -91,9 +91,14 @@ private slots :
 	void newFileModule();
 	void loadModule();
 	void saveModuleToFile();
+	void newPythonPlugin();
+	void loadPythonPlugin();
+	void savePythonPlugin();
+	void registerPythonPlugin();
 
 	void closeMainScriptTabRequested(int tab);
 	void closeModuleTabRequested(int tab);
+	void closePluginTabRequested(int tab);
 
 
 private :
@@ -116,6 +121,10 @@ private :
 
 	std::map<int, std::string> editedMainScripts;
 	std::map<int, std::string> editedModules;
+	std::map<int, std::string> editedPlugins;
+	std::map<std::string, std::string> editedPluginsClassName;
+	std::map<std::string, std::string> editedPluginsType;
+	std::map<std::string, std::string> editedPluginsName;
 
 
 	tlp::SGHierarchyWidget *clusterTreeWidget;

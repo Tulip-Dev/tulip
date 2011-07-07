@@ -20,6 +20,7 @@
 #include "PythonInterpreter.h"
 #include "PythonScriptView.h"
 #include "PythonCodeEditor.h"
+#include "PluginCreationDialog.h"
 
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
@@ -39,6 +40,9 @@
 #include <tulip/GraphProperty.h>
 #include <tulip/SGHierarchyWidget.h>
 #include <tulip/MainController.h>
+#include <tulip/Algorithm.h>
+#include <tulip/ImportModule.h>
+#include <tulip/ExportModule.h>
 
 #include <sstream>
 
@@ -53,21 +57,19 @@ const string updateVisualizationFunc =
 		"\n"
 		"\n";
 
-const unsigned int nbReservedCharacters = 22;
-const char pythonReservedCharacters[nbReservedCharacters] = {'#', '%', '/', '+', '-', '&', '*', '<', '>',
-		'|', '~', '^', '=', '!', '\'', '\"', '{', '}',
-		'(', ')', '[', ']'};
 
-const std::string cleanPropertyName(const std::string &propertyName) {
+
+std::string cleanPropertyName(const std::string &propertyName) {
 	std::string ret(propertyName);
 	std::replace(ret.begin(), ret.end(), ' ', '_');
-	for (unsigned int i = 0 ; i < nbReservedCharacters ; ++i) {
-		ret.erase(std::remove(ret.begin(), ret.end(), pythonReservedCharacters[i]), ret.end());
+	int i = 0;
+	while (pythonReservedCharacters[i]) {
+		ret.erase(std::remove(ret.begin(), ret.end(), pythonReservedCharacters[i++]), ret.end());
 	}
 	return ret;
 }
 
-const std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph) {
+std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph) {
 	ostringstream oss;
 
 	oss << "# Powered by Python " << pythonVersion << endl << endl;
@@ -138,6 +140,135 @@ const std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph
 	return oss.str();
 }	
 
+QString getTulipPythonPluginSkeleton(const QString &pluginClassName, const QString &pluginType,
+		const QString &pluginName, const QString &pluginAuthor,
+		const QString &pluginDate, const QString &pluginInfos,
+		const QString &pluginRelease, const QString &pluginGroup) {
+
+	QString pluginClass;
+	QString tlpType;
+	if (pluginType == "General") {
+		pluginClass = "tlp.Algorithm";
+		tlpType = "Algorithm";
+	} else if (pluginType == "Layout") {
+		pluginClass = "tlp.LayoutAlgorithm";
+		tlpType = "Layout";
+	} else if (pluginType == "Size") {
+		pluginClass = "tlp.SizeAlgorithm";
+		tlpType = "Size";
+	} else if (pluginType == "Measure") {
+		pluginClass = "tlp.DoubleAlgorithm";
+		tlpType = "Double";
+	} else if (pluginType == "Color") {
+		pluginClass = "tlp.ColorAlgorithm";
+		tlpType = "Color";
+	} else if (pluginType == "Selection") {
+		pluginClass = "tlp.BooleanAlgorithm";
+		tlpType = "Boolean";
+	} else if (pluginType == "Import") {
+		pluginClass = "tlp.PythonImportModule";
+		tlpType = "Import";
+	} else {
+		pluginClass = "tlp.PythonExportModule";
+		tlpType = "Export";
+	}
+
+	QString pluginSkeleton;
+	QTextStream textStream(&pluginSkeleton);
+
+	textStream << "from tulip import *" << endl;
+	textStream << "import tulipplugins" << endl << endl;
+
+	textStream << "class " << pluginClassName << "(" << pluginClass << "):" << endl;
+	textStream << "\tdef __init__(self, context):" << endl;
+	textStream << "\t\t" << pluginClass << ".__init__(self, context)"<< endl;
+	textStream << "\t\t# you can add parameters to the plugin here through the following syntax"<< endl;
+	textStream << "\t\t# self.add<Type>Parameter(\"<paramName>\", \"<paramDoc>\", \"<paramDefaultValue>\")" << endl;
+	textStream << "\t\t# (see documentation of class tlp.WithParameter to see what types of parameters are supported)"<< endl << endl;
+
+	if (pluginType != "Import" && pluginType != "Export") {
+
+		textStream << "\tdef check(self):" << endl;
+		textStream << "\t\t# This method is called before applying the algorithm on the input graph." << endl;
+		textStream << "\t\t# You can perform some precondition checks here." << endl;
+		textStream << "\t\t# See comments in the run method to know how to access to the input graph." << endl << endl;
+		textStream << "\t\t# Must return a tuple (boolean, string). First member indicates if the algorithm can be applied" << endl;
+		textStream << "\t\t# and the second one can be used to provide an error message" << endl;
+		textStream << "\t\treturn (True, \"Ok\")" << endl << endl;
+		textStream << "\tdef run(self):" << endl;
+		textStream << "\t\t# This method is the entry point of the algorithm when it is called" << endl;
+		textStream << "\t\t# and must contain its implementation." << endl << endl;
+		textStream << "\t\t# The graph on which the algorithm is applied can be accessed through" << endl;
+		textStream << "\t\t# the \"graph\" class attribute (see documentation of class tlp.Graph)." << endl << endl;
+		textStream << "\t\t# The parameters provided by the user are stored in a Tulip DataSet " << endl;
+		textStream << "\t\t# and can be accessed through the \"dataSet\" class attribute" << endl ;
+		textStream << "\t\t# (see documentation of class tlp.DataSet)." << endl << endl;
+
+		if (pluginType == "Layout") {
+			textStream << "\t\t# The result of this layout algorithm must be stored in the" << endl;
+			textStream << "\t\t# layout property accessible through the \"layoutResult\" class attribute" << endl;
+			textStream << "\t\t# (see documentation to kwow how to work with graph properties)." << endl << endl;
+		} else if (pluginType == "Size") {
+			textStream << "\t\t# The result of this size algorithm must be stored in the" << endl;
+			textStream << "\t\t# size property accessible through the \"sizeResult\" class attribute" << endl;
+			textStream << "\t\t# (see documentation to kwow how to work with graph properties)." << endl << endl;
+		} else if (pluginType == "Measure") {
+			textStream << "\t\t# The result of this measure algorithm must be stored in the" << endl;
+			textStream << "\t\t# double property accessible through the \"doubleResult\" class attribute" << endl;
+			textStream << "\t\t# (see documentation to kwow how to work with graph properties)." << endl << endl;
+		} else if (pluginType == "Color") {
+			textStream << "\t\t# The result of this color algorithm must be stored in the" << endl;
+			textStream << "\t\t# color property accessible through the \"colorResult\" class attribute" << endl;
+			textStream << "\t\t# (see documentation to kwow how to work with graph properties)." << endl << endl;
+		} else if (pluginType == "Selection") {
+			textStream << "\t\t# The result of this selection algorithm must be stored in the" << endl;
+			textStream << "\t\t# boolean property accessible through the \"booleanResult\" class attribute" << endl;
+			textStream << "\t\t# (see documentation to kwow how to work with graph properties)." << endl << endl;
+		}
+
+		textStream << "\t\t# The method must return a boolean indicating if the algorithm" << endl;
+		textStream << "\t\t# has been successfully applied on the input graph." << endl;
+		textStream << "\t\treturn True" << endl << endl;
+
+	} else if (pluginType == "Import") {
+		textStream << "\tdef importGraph(self):" << endl;
+		textStream << "\t\t# This method is called to import a new graph." << endl;
+		textStream << "\t\t# An empty graph to populate is accessible through the \"graph\" class attribute" << endl;
+		textStream << "\t\t# (see documentation of class tlp.Graph)." << endl << endl;
+		textStream << "\t\t# The parameters provided by the user are stored in a Tulip DataSet " << endl;
+		textStream << "\t\t# and can be accessed through the \"dataSet\" class attribute" << endl ;
+		textStream << "\t\t# (see documentation of class tlp.DataSet)." << endl << endl;
+		textStream << "\t\t# The method must return a boolean indicating if the" << endl;
+		textStream << "\t\t# graph has been successfully imported." << endl;
+		textStream << "\t\treturn True" << endl << endl;
+	} else if (pluginType == "Export") {
+		textStream << "\tdef exportGraph(self):" << endl;
+		textStream << "\t\t# This method is called to export a graph." << endl;
+		textStream << "\t\t# The graph to export is accessible through the \"graph\" class attribute" << endl;
+		textStream << "\t\t# (see documentation of class tlp.Graph)." << endl << endl;
+		textStream << "\t\t# The parameters provided by the user are stored in a Tulip DataSet " << endl;
+		textStream << "\t\t# and can be accessed through the \"dataSet\" class attribute" << endl ;
+		textStream << "\t\t# (see documentation of class tlp.DataSet)." << endl << endl;
+		textStream << "\t\t# The method must return a boolean indicating if the" << endl;
+		textStream << "\t\t# graph has been successfully exported." << endl;
+		textStream << "\t\treturn True" << endl << endl;
+	}
+
+	textStream << "# The line below does the magic to register the plugin to the plugin database" << endl;
+	textStream << "# and updates the GUI to make it accessible through the menus." << endl;
+	if (pluginGroup == "") {
+		textStream << "tulipplugins.register" << tlpType << "Plugin(\"" << pluginClassName << "\", \""
+				<< pluginName << "\", \"" << pluginAuthor << "\", \"" << pluginDate << "\", \""
+				<< pluginInfos << "\", \"" <<  pluginRelease <<"\")" << endl;
+	} else {
+		textStream << "tulipplugins.register" << tlpType << "PluginOfGroup(\"" << pluginClassName << "\", \""
+				<< pluginName << "\", \"" << pluginAuthor << "\", \"" << pluginDate << "\", \""
+				<< pluginInfos << "\", \"" <<  pluginRelease << "\", \"" << pluginGroup << "\")" << endl;
+	}
+
+	return pluginSkeleton;
+}
+
 VIEWPLUGIN(PythonScriptView, "Python Script view", "Antoine Lambert", "04/2010", "Python Script View", "0.7");
 
 PythonScriptView::PythonScriptView() : pythonInterpreter(NULL),graph(NULL), scriptStopped(false) {}
@@ -165,8 +296,13 @@ QWidget *PythonScriptView::construct(QWidget *parent) {
 	connect(viewWidget->newFileModuleAction, SIGNAL(triggered()), this, SLOT(newFileModule()));
 	connect(viewWidget->loadModuleAction, SIGNAL(triggered()), this, SLOT(loadModule()));
 	connect(viewWidget->saveModuleAction, SIGNAL(triggered()), this, SLOT(saveModuleToFile()));
+	connect(viewWidget->newPluginAction, SIGNAL(triggered()), this, SLOT(newPythonPlugin()));
+	connect(viewWidget->loadPluginAction, SIGNAL(triggered()), this, SLOT(loadPythonPlugin()));
+	connect(viewWidget->savePluginAction, SIGNAL(triggered()), this, SLOT(savePythonPlugin()));
+	connect(viewWidget->registerPluginButton, SIGNAL(clicked()), this, SLOT(registerPythonPlugin()));
 	connect(viewWidget->mainScriptsTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeMainScriptTabRequested(int)));
 	connect(viewWidget->modulesTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeModuleTabRequested(int)));
+	connect(viewWidget->pluginsTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closePluginTabRequested(int)));
 
 	setCentralWidget(viewWidget);
 	pythonInterpreter = PythonInterpreter::getInstance();
@@ -191,8 +327,6 @@ QWidget *PythonScriptView::construct(QWidget *parent) {
 		}
 	}
 
-	viewWidget->pythonShellWidget->setConsoleWidget(viewWidget->consoleOutputWidget);
-
 	return widget;
 }
 
@@ -208,7 +342,6 @@ string& replaceAll(string& context, const string& from, const string& to) {
 
 
 void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
-	this->graph = graph;
 
 	viewWidget->pythonShellWidget->setCurrentGraph(graph);
 
@@ -298,6 +431,16 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
 		pythonInterpreter->setDefaultConsoleWidget();
 
 	}
+
+// Special case for Visual Studio, run the default script at first init
+// to force the instantiation of some qt objects we couldn't do at the plugin
+// initialisation (segfault otherwise)
+#if defined(_MSC_VER) && defined(_DEBUG)
+	if (this->graph == NULL)
+		executeCurrentScript();
+#endif
+
+	this->graph = graph;
 }
 
 void PythonScriptView::getData(Graph **graph,DataSet *dataSet) {
@@ -392,7 +535,6 @@ void PythonScriptView::executeCurrentScript() {
 
 		bool scriptExecOk = pythonInterpreter->runGraphScript("__main__", "main", graph);
 
-
 		pythonInterpreter->setTraceFunction(NULL);
 		viewWidget->stopScriptButton->setEnabled(false);
 		viewWidget->runScriptButton->setEnabled(true);
@@ -443,6 +585,7 @@ void PythonScriptView::executeCurrentScript() {
 			}
 			graph->pop();
 		}
+
 		viewWidget->progressBar->setRange(0,100);
 		viewWidget->progressBar->reset();
 
@@ -450,8 +593,8 @@ void PythonScriptView::executeCurrentScript() {
 
 		Observable::unholdObservers();
 
-// some external modules (like numpy) overrides the SIGINT handler at import
-// reinstall the default one, otherwise Tulip can not be interrupted by hitting Ctrl-C in a console
+		// some external modules (like numpy) overrides the SIGINT handler at import
+		// reinstall the default one, otherwise Tulip can not be interrupted by hitting Ctrl-C in a console
 		pythonInterpreter->setDefaultSIGINTHandler();
 
 		scriptStopped = false;
@@ -566,8 +709,6 @@ bool PythonScriptView::loadModule(const QString &fileName) {
 
 	pythonInterpreter->reloadModule(moduleName.replace(".py", "").toStdString());
 
-
-
 	return true;
 }
 
@@ -642,6 +783,111 @@ void PythonScriptView::saveModule() {
 	saveModule(curModule);
 }
 
+void PythonScriptView::loadPythonPlugin() {
+	QString fileName = QFileDialog::getOpenFileName(viewWidget, "Open Tulip Python plugin","./", "Python script (*.py)");
+	QFile file(fileName);
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+		return ;
+
+	QFileInfo fileInfo(file);
+	QString moduleName(fileInfo.fileName());
+	QString modulePath(fileInfo.absolutePath());
+
+	QString pluginCode;
+	while (!file.atEnd()) {
+		pluginCode += file.readLine();
+	}
+	file.close();
+
+	QString s = "tulipplugins.register";
+	int idx1 = pluginCode.indexOf(s);
+	if (idx1 == -1) {
+		QMessageBox::critical(viewWidget, "Error", "This file does not seem to contain the source code of a Tulip Python plugin.");
+	} else {
+		idx1 += s.length();
+		int idx2 = pluginCode.indexOf("Plugin", idx1);
+		QString tlpType = pluginCode.mid(idx1, idx2 - idx1);
+		QString pluginType = pluginCode.mid(idx1, idx2 - idx1);
+		QString pluginClass = "";
+		QString pluginClassName = "";
+		QString pluginName = "";
+		if (tlpType == "Algorithm") {
+			pluginClass = "tlp.Algorithm";
+			pluginType = "General";
+		} else if (tlpType == "Layout") {
+			pluginClass = "tlp.LayoutAlgorithm";
+			pluginType = tlpType;
+		} else if (tlpType == "Size") {
+			pluginType = tlpType;
+			pluginClass = "tlp.SizeAlgorithm";
+		} else if (tlpType == "Color") {
+			pluginType = tlpType;
+			pluginClass = "tlp.ColorAlgorithm";
+		} else if (tlpType == "Double") {
+			pluginType = "Measure";
+			pluginClass = "tlp.DoubleAlgorithm";
+		} else if (tlpType == "Boolean") {
+			pluginType = "Selection";
+			pluginClass = "tlp.BooleanAlgorithm";
+		} else if (tlpType == "Import") {
+			pluginType = tlpType;
+			pluginClass = "tlp.PythonImportModule";
+		} else {
+			pluginType = "Export";
+			pluginClass = "tlp.PythonExportModule";
+		}
+
+		ostringstream oss;
+		oss << "^.*class (.*)\\(" << pluginClass.toStdString() << "\\).*$";
+		QRegExp rx(oss.str().c_str());
+		if (rx.indexIn(pluginCode) != -1) {
+			pluginClassName = rx.cap(1);
+		}
+		oss.str("");
+		oss << "^.*register" << tlpType.toStdString() << "Plugin.*\\(.*,.*\"([^,]+)\",.*$";
+		rx.setPattern(oss.str().c_str());
+		if (rx.indexIn(pluginCode) != -1) {
+			pluginName = rx.cap(1);
+		}
+
+		if (pluginClassName == "" || pluginName == "") {
+			QMessageBox::critical(viewWidget, "Error", "Unable to retrieve the plugin class name and the plugin name from the source code\n.");
+		} else {
+			int editorId = viewWidget->addPluginEditor();
+			PythonCodeEditor *codeEditor = viewWidget->getPluginEditor(editorId);
+			codeEditor->setText(pluginCode);
+			pythonInterpreter->addModuleSearchPath(modulePath.toStdString());
+			viewWidget->pluginsTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
+			viewWidget->pluginsTabWidget->setTabText(editorId, QString("[") + pluginType + QString("] ") + fileInfo.fileName());
+			editedPlugins[editorId] = fileInfo.absoluteFilePath().toStdString();
+			editedPluginsClassName[editedPlugins[editorId]] = pluginClassName.toStdString();
+			editedPluginsType[editedPlugins[editorId]] = pluginType.toStdString();
+			editedPluginsName[editedPlugins[editorId]] = pluginName.toStdString();
+		}
+	}
+}
+
+void PythonScriptView::savePythonPlugin() {
+	int tabIdx = viewWidget->pluginsTabWidget->currentIndex();
+	if (tabIdx == -1)
+		return;
+	QString moduleNameExt = viewWidget->pluginsTabWidget->tabText(tabIdx);
+	QString moduleName;
+	if (moduleNameExt[moduleNameExt.size() - 1] == '*')
+		moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 4);
+	else
+		moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 3);
+	viewWidget->pluginsTabWidget->setTabText(tabIdx, moduleName+".py");
+	QFile file(editedPlugins[tabIdx].c_str());
+	QFileInfo fileInfo(file);
+	if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+		QTextStream out(&file);
+		out << viewWidget->getPluginCode(tabIdx).c_str();
+		file.close();
+		viewWidget->pluginsTabWidget->setTabToolTip(tabIdx, fileInfo.absoluteFilePath());
+	}
+}
+
 void PythonScriptView::saveModule(int tabIdx) {
 	if (editedModules.find(tabIdx) != editedModules.end()) {
 		QString moduleNameExt = viewWidget->modulesTabWidget->tabText(tabIdx);
@@ -667,6 +913,7 @@ void PythonScriptView::saveAllModules() {
 	map<int, string>::const_iterator it;
 	for (it = editedModules.begin() ; it != editedModules.end() ; ++it) {
 		saveModule(it->first);
+
 	}
 }
 
@@ -697,19 +944,22 @@ bool PythonScriptView::eventFilter(QObject *obj, QEvent *event) {
 		if (keyEvt->modifiers() == Qt::ControlModifier && keyEvt->key() == Qt::Key_S) {
 			if (obj == viewWidget->getCurrentMainScriptEditor()) {
 				saveScript();
-			} else {
+				return true;
+			} else if (obj == viewWidget->getCurrentModuleEditor()) {
 				saveModule();
+				return true;
+			} else if (obj == viewWidget->getCurrentPluginEditor()) {
+				savePythonPlugin();
+				return true;
 			}
-			return true;
-		} else if (keyEvt->modifiers() == Qt::ControlModifier && keyEvt->key() == Qt::Key_Space) {
+
+		} else if (obj == viewWidget->getCurrentMainScriptEditor() && keyEvt->modifiers() == Qt::ControlModifier && keyEvt->key() == Qt::Key_Space) {
 			executeCurrentScript();
 			return true;
 		}
 	}
 	return false;
 }
-
-
 
 void PythonScriptView::closeModuleTabRequested(int tab) {
 	editedModules.erase(tab);
@@ -741,4 +991,160 @@ void PythonScriptView::closeMainScriptTabRequested(int tab) {
 		}
 	}
 	editedMainScripts = editedMainScriptsCp;
+}
+
+void PythonScriptView::closePluginTabRequested(int tab) {
+	editedPluginsClassName.erase(editedPlugins[tab]);
+	editedPluginsType.erase(editedPlugins[tab]);
+	editedPluginsName.erase(editedPlugins[tab]);
+	editedPlugins.erase(tab);
+	QWidget *editorWidget = viewWidget->pluginsTabWidget->widget(tab);
+	viewWidget->pluginsTabWidget->removeTab(tab);
+	delete editorWidget;
+	std::map<int, std::string> editedPluginsCp(editedPlugins);
+	std::map<int, std::string>::iterator it;
+	for (it = editedPlugins.begin() ; it != editedPlugins.end() ; ++it) {
+		if (it->first > tab) {
+			editedPluginsCp[it->first - 1] = editedPlugins[it->first];
+			editedPluginsCp.erase(it->first);
+		}
+	}
+	editedPlugins = editedPluginsCp;
+}
+
+void PythonScriptView::newPythonPlugin() {
+	PluginCreationDialog pluginCreationDialog(viewWidget);
+	if (pluginCreationDialog.exec() == QDialog::Accepted) {
+		QFile file(pluginCreationDialog.getPluginFileName());
+		if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+			return;
+
+		QFileInfo fileInfo(file);
+		QString moduleName(fileInfo.fileName());
+		QString modulePath(fileInfo.absolutePath());
+
+		int editorId = viewWidget->addPluginEditor();
+		viewWidget->pluginsTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
+		pythonInterpreter->addModuleSearchPath(modulePath.toStdString());
+		viewWidget->pluginsTabWidget->setTabText(editorId, QString("[") + pluginCreationDialog.getPluginType() + QString("] ") + fileInfo.fileName());
+
+		editedPlugins[editorId] = fileInfo.absoluteFilePath().toStdString();
+		editedPluginsClassName[editedPlugins[editorId]] = pluginCreationDialog.getPluginClassName().toStdString();
+		editedPluginsType[editedPlugins[editorId]] = pluginCreationDialog.getPluginType().toStdString();
+		editedPluginsName[editedPlugins[editorId]] = pluginCreationDialog.getPluginName().toStdString();
+		QString pluginSkeleton = getTulipPythonPluginSkeleton(pluginCreationDialog.getPluginClassName(),
+				pluginCreationDialog.getPluginType(),
+				pluginCreationDialog.getPluginName(),
+				pluginCreationDialog.getPluginAuthor(),
+				pluginCreationDialog.getPluginDate(),
+				pluginCreationDialog.getPluginInfos(),
+				pluginCreationDialog.getPluginRelease(),
+				pluginCreationDialog.getPluginGroup());
+
+		viewWidget->getPluginEditor(editorId)->setText(pluginSkeleton);
+		savePythonPlugin();
+	}
+}
+
+template <typename T>
+static bool pluginExists(std::string pluginName) {
+	std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
+	for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
+		if (it->first == tlp::demangleTlpClassName(typeid(T).name()) && it->second->pluginExists(pluginName)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+template <typename T>
+static void removePlugin(std::string pluginName) {
+	std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
+	for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
+		if (it->first == tlp::demangleTlpClassName(typeid(T).name())) {
+			it->second->removePlugin(pluginName);
+			return;
+		}
+	}
+}
+
+static void removePluginAndUpdateGui(const string &pluginName, const string &pluginType) {
+	if (pluginType == "General") {
+		if (pluginExists<tlp::Algorithm>(pluginName)) {
+			removePlugin<tlp::Algorithm>(pluginName);
+		}
+	} else if (pluginType == "Layout") {
+		if (pluginExists<tlp::LayoutAlgorithm>(pluginName)) {
+			removePlugin<tlp::LayoutAlgorithm>(pluginName);
+		}
+	} else if (pluginType == "Size") {
+		if (pluginExists<tlp::SizeAlgorithm>(pluginName)) {
+			removePlugin<tlp::SizeAlgorithm>(pluginName);
+		}
+	} else if (pluginType == "Color") {
+		if (pluginExists<tlp::ColorAlgorithm>(pluginName)) {
+			removePlugin<tlp::ColorAlgorithm>(pluginName);
+		}
+	} else if (pluginType == "Measure") {
+		if (pluginExists<tlp::DoubleAlgorithm>(pluginName)) {
+			removePlugin<tlp::DoubleAlgorithm>(pluginName);
+		}
+	} else if (pluginType == "Selection") {
+		if (pluginExists<tlp::BooleanAlgorithm>(pluginName)) {
+			removePlugin<tlp::BooleanAlgorithm>(pluginName);
+		}
+	} else if (pluginType == "Import") {
+		if (pluginExists<tlp::ImportModule>(pluginName)) {
+			removePlugin<tlp::ImportModule>(pluginName);
+		}
+	} else if (pluginType == "Export") {
+		if (pluginExists<tlp::ExportModule>(pluginName)) {
+			removePlugin<tlp::ExportModule>(pluginName);
+		}
+	}
+	PythonInterpreter::getInstance()->runString("tuliputils.updatePluginsMenus()");
+}
+
+void PythonScriptView::registerPythonPlugin() {
+	int tabIdx = viewWidget->pluginsTabWidget->currentIndex();
+	if (tabIdx == -1)
+		return;
+	savePythonPlugin();
+	QString moduleNameExt = viewWidget->pluginsTabWidget->tabText(tabIdx);
+	moduleNameExt = moduleNameExt.mid(moduleNameExt.lastIndexOf("]") + 2);
+	QString moduleName;
+	if (moduleNameExt[moduleNameExt.size() - 1] == '*')
+		moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 4);
+	else
+		moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 3);
+	PythonInterpreter::getInstance()->runString("import tulipplugins;tulipplugins.setTestMode(True)");
+	PythonInterpreter::getInstance()->reloadModule(moduleName.toStdString());
+	PythonInterpreter::getInstance()->runString("tulipplugins.setTestMode(False)");
+	ostringstream oss;
+	string pluginType = editedPluginsType[editedPlugins[tabIdx]];
+	if (pluginType == "General" || pluginType == "Import" || pluginType == "Export") {
+		oss << "plugin = " << moduleName.toStdString() << "." << editedPluginsClassName[editedPlugins[tabIdx]] << "(tlp.AlgorithmContext())";
+	} else {
+		oss << "plugin = " << moduleName.toStdString() << "." << editedPluginsClassName[editedPlugins[tabIdx]] << "(tlp.PropertyContext())";
+	}
+	pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
+	viewWidget->consoleOutputWidget->clear();
+	removePluginAndUpdateGui(editedPluginsName[editedPlugins[tabIdx]], pluginType);
+	if (PythonInterpreter::getInstance()->runString(oss.str())) {
+		QList<int> sizes;
+		sizes.push_back(viewWidget->height());
+		sizes.push_back(0);
+		viewWidget->splitter->setSizes(sizes);
+		PythonInterpreter::getInstance()->reloadModule(moduleName.toStdString());
+		viewWidget->pluginStatusLabel->setText("Plugin has been successfully registered.");
+
+	} else {
+		QList<int> sizes;
+		sizes.push_back(viewWidget->height() - 200);
+		sizes.push_back(200);
+		viewWidget->splitter->setSizes(sizes);
+		viewWidget->pluginStatusLabel->setText("Plugin registration has failed.");
+	}
+	pythonInterpreter->setDefaultConsoleWidget();
+
 }

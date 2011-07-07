@@ -17,28 +17,6 @@
  *
  */
 
-// +-------------------------------------------------------------------------+
-// | Tulip Python View                                                       |
-// | Author:  Antoine Lambert                                                |
-// | Contact:  antoine.lambert@labri.fr                                      |
-// +-------------------------------------------------------------------------+
-// | License:                                                                |
-// |                                                                         |
-// | Tulip Python View is free software; you can redistribute it             |
-// | and/or modify  it under the terms of the GNU General Public License     |
-// | as published by the Free Software Foundation; either version 2 of the   |
-// | License, or (at your option) any later version.                         |
-// |                                                                         |
-// | Tulip Python View is distributed in the hope that it will be            |
-// | useful, but WITHOUT ANY WARRANTY; without even the implied warranty of  |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the            |
-// | GNU General Public License for more details.                            |
-// |                                                                         |
-// | You should have received a copy of the GNU General Public License       |
-// | along with this program.  If not, see <http://www.gnu.org/licenses/>.   |
-// |                                                                         |
-// +-------------------------------------------------------------------------+
-
 #if defined(__GNUC__) && __GNUC__ >= 4 && ((__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >= 1) || (__GNUC_MINOR__ >= 3))
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
@@ -47,19 +25,17 @@
 #ifndef CONSOLEOUTPUTMODULE_H_
 #define CONSOLEOUTPUTMODULE_H_
 
-#include <QtGui/QPlainTextEdit>
-
-
 #include "PythonShellWidget.h"
-#include "PythonInterpreter.h"
+#include "ConsoleOutputHandler.h"
 
 #include <iostream>
 
 using namespace std;
 
-static QPlainTextEdit *consoleWidget = NULL;
+static ConsoleOutputHandler *consoleOuputHandler = NULL;
+static ConsoleOutputEmitter *consoleOuputEmitter = NULL;
 static PythonShellWidget *shellWidget = NULL;
-static std::string consoleOuput = "";
+static std::string consoleOuputString = "";
 static bool outputActivated = true;
 
 typedef struct {
@@ -102,7 +78,7 @@ scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
 	if(!PyArg_ParseTuple(o, "s", &buf))
 		return NULL;
 
-	consoleOuput += buf;
+	consoleOuputString += buf;
 
 	if (outputActivated) {
 
@@ -110,26 +86,13 @@ scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
 			cerr << buf << endl;
 		}
 
-		if (consoleWidget) {
-			if (buf != NULL && ((scriptengine_ConsoleOutput *)self)->writeToConsole) {
-				QBrush brush(Qt::SolidPattern);
-				if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
-					brush.setColor(Qt::red);
-
-				} else {
-					brush.setColor(Qt::black);
-				}
-
-				QTextCharFormat formt;
-				formt.setForeground(brush);
-				consoleWidget->moveCursor(QTextCursor::End);
-				QTextCursor cursor = consoleWidget->textCursor();
-				cursor.insertText(buf, formt);
-			}
-		} else if (shellWidget) {
+		if (shellWidget) {
 			shellWidget->insert(buf, true);
+		} else if (consoleOuputEmitter) {
+			if (buf != NULL && ((scriptengine_ConsoleOutput *)self)->writeToConsole) {
+				consoleOuputEmitter->sendOutputToConsole(buf, ((scriptengine_ConsoleOutput *)self)->stderrflag);
+			}
 		}
-
 	}
 
 	Py_RETURN_NONE;

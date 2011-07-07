@@ -44,8 +44,6 @@ public :
 
 	bool isCursorOnLastLine();
 
-	void setConsoleWidget(QPlainTextEdit *consoleWidget) {this->consoleWidget = consoleWidget;}
-
 	void executeCurrentLines();
 
 	void setCurrentGraph(tlp::Graph *graph);
@@ -69,8 +67,6 @@ private :
 
 	QsciLexer *pythonLexer;
 	QsciAPIs *api;
-
-	QPlainTextEdit *consoleWidget;
 
 };
 

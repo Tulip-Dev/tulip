@@ -38,18 +38,28 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
 	loadModuleAction = modulesToolBar->addAction(QIcon(":/icons/doc_import.png"), "Import module from file");
 	saveModuleAction = modulesToolBar->addAction(QIcon(":/icons/doc_export.png"), "Save module to file");
 
+	pluginsToolBar = new QToolBar(pluginsToolBarWidget);
+	pluginsToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+	newPluginAction = pluginsToolBar->addAction(QIcon(":/icons/doc_plus.png"), "New Tulip plugin");
+	loadPluginAction = pluginsToolBar->addAction(QIcon(":/icons/doc_import.png"), "Import Tulip plugin from file");
+	savePluginAction = pluginsToolBar->addAction(QIcon(":/icons/doc_export.png"), "Save Tulip plugin to file");
+
 
 	modulesTabWidget->clear();
 	mainScriptsTabWidget->clear();
+	pluginsTabWidget->clear();
 	QList<int> sizes;
 	sizes.push_back(550);
 	sizes.push_back(150);
 	splitter->setSizes(sizes);
 	splitter->setCollapsible(0, false);
+	pluginControlFrame->hide();
 
 	connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(resizeToolBars()));
 	connect(decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
 	connect(increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
+	connect(decreaseFontSizeButton2, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
+	connect(increaseFontSizeButton2, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
 	connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 }
 
@@ -63,6 +73,10 @@ std::string PythonScriptViewWidget::getMainScriptCode(int idx) const {
 
 std::string PythonScriptViewWidget::getModuleCode(int idx) const {
 	return static_cast<PythonCodeEditor *>(modulesTabWidget->widget(idx))->text().replace("\r\n", "\n").toStdString();
+}
+
+std::string PythonScriptViewWidget::getPluginCode(int idx) const {
+	return static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(idx))->text().replace("\r\n", "\n").toStdString();
 }
 
 void PythonScriptViewWidget::resizeEvent(QResizeEvent *e) {
@@ -102,6 +116,17 @@ int PythonScriptViewWidget::addModuleEditor() {
 	return idx;
 }
 
+int PythonScriptViewWidget::addPluginEditor() {
+	PythonCodeEditor *codeEditor = new PythonCodeEditor(this);
+	codeEditor->installEventFilter(this);
+	codeEditor->installEventFilter(pythonScriptView);
+	codeEditor->setFocus(Qt::ActiveWindowFocusReason);
+	connect(codeEditor, SIGNAL(textChanged()), this, SLOT(pluginScriptTextChanged()));
+	int idx = pluginsTabWidget->addTab(codeEditor, "");
+	pluginsTabWidget->setCurrentIndex(idx);
+	return idx;
+}
+
 PythonCodeEditor *PythonScriptViewWidget::getCurrentMainScriptEditor() const {
 	return static_cast<PythonCodeEditor *>(mainScriptsTabWidget->currentWidget());
 }
@@ -124,6 +149,18 @@ PythonCodeEditor *PythonScriptViewWidget::getModuleEditor(int idx) const {
 	} else {
 		return NULL;
 	}
+}
+
+PythonCodeEditor *PythonScriptViewWidget::getPluginEditor(int idx) const {
+	if (idx < pluginsTabWidget->count()) {
+		return static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(idx));
+	} else {
+		return NULL;
+	}
+}
+
+PythonCodeEditor *PythonScriptViewWidget::getCurrentPluginEditor() const {
+	return static_cast<PythonCodeEditor *>(pluginsTabWidget->currentWidget());
 }
 
 bool PythonScriptViewWidget::eventFilter(QObject *obj, QEvent *event) {
@@ -179,6 +216,9 @@ void PythonScriptViewWidget::decreaseFontSize() {
 	for (int i = 0 ; i < modulesTabWidget->count() ; ++i) {
 		static_cast<QsciScintilla *>(modulesTabWidget->widget(i))->zoomOut();
 	}
+	for (int i = 0 ; i < pluginsTabWidget->count() ; ++i) {
+		static_cast<QsciScintilla *>(pluginsTabWidget->widget(i))->zoomOut();
+	}
 	pythonShellWidget->zoomOut();
 	--fontZoom;
 }
@@ -189,6 +229,9 @@ void PythonScriptViewWidget::increaseFontSize() {
 	}
 	for (int i = 0 ; i < modulesTabWidget->count() ; ++i) {
 		static_cast<QsciScintilla *>(modulesTabWidget->widget(i))->zoomIn();
+	}
+	for (int i = 0 ; i < pluginsTabWidget->count() ; ++i) {
+		static_cast<QsciScintilla *>(pluginsTabWidget->widget(i))->zoomIn();
 	}
 	pythonShellWidget->zoomIn();
 	++fontZoom;
@@ -214,14 +257,24 @@ void PythonScriptViewWidget::moduleScriptTextChanged() {
 	}
 }
 
+void PythonScriptViewWidget::pluginScriptTextChanged() {
+	QString curTabText = pluginsTabWidget->tabText(pluginsTabWidget->currentIndex());
+	if (curTabText == "")
+		return;
+	if (curTabText[curTabText.size() -1] != '*') {
+		curTabText += "*";
+		pluginsTabWidget->setTabText(pluginsTabWidget->currentIndex(), curTabText);
+	}
+}
+
 void PythonScriptViewWidget::currentTabChanged(int index) {
 	static int lastTabIndex = 0;
 	static QList<int> lastSizes = splitter->sizes();
-	if (lastTabIndex != 2) {
+	if (lastTabIndex != 2 && lastTabIndex != 3) {
 		lastSizes = splitter->sizes();
 	}
 	QList<int> sizes;
-	if (index == 2) {
+	if (index == 2 || index == 3) {
 		sizes.push_back(height());
 		sizes.push_back(0);
 		runScriptButton->setEnabled(false);
@@ -230,5 +283,14 @@ void PythonScriptViewWidget::currentTabChanged(int index) {
 		sizes = lastSizes;
 	}
 	splitter->setSizes(sizes);
+
+	if (index == 3) {
+		scriptControlFrame->hide();
+		pluginControlFrame->show();
+	} else {
+		scriptControlFrame->show();
+		pluginControlFrame->hide();
+	}
+
 	lastTabIndex = index;
 }

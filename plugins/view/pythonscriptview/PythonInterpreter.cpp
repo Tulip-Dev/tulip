@@ -92,6 +92,7 @@ ConsoleOutputDialog::ConsoleOutputDialog(QWidget *parent) : QDialog(parent, Qt::
 	connect(clearButton, SIGNAL(clicked()), consoleWidget, SLOT(clear()));
 	QPushButton *closeButton = new QPushButton("Close");
 	connect(closeButton, SIGNAL(clicked()), this, SLOT(hideConsoleOutputDialog()));
+	hLayout->addItem(new QSpacerItem(100, 20, QSizePolicy::Expanding));
 	hLayout->addWidget(clearButton);
 	hLayout->addWidget(closeButton);
 	QVBoxLayout *layout = new QVBoxLayout();
@@ -124,6 +125,12 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 	Py_OptimizeFlag = 1;
 	Py_NoSiteFlag = 1;
 	Py_InitializeEx(0);
+	PyEval_InitThreads();
+	mainThreadState = PyEval_SaveThread();
+	PyEval_ReleaseLock();
+
+	holdGIL();
+
 	PySys_SetArgv(argc, argv);
 
 	runString("import sys");
@@ -153,7 +160,11 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 // instantiating a widget when the plugin is being loaded (PythonInterpreter object is instantiated when LoadLibrary is called on the dll of the plugin)
 // makes tulip crash
 #if !defined(_MSC_VER) && !defined(_DEBUG)
+		consoleOuputHandler = new ConsoleOutputHandler();
+		consoleOuputEmitter = new ConsoleOutputEmitter();
+		QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QPlainTextEdit*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QPlainTextEdit*, const QString &, bool)), Qt::QueuedConnection);
 		consoleDialog = new ConsoleOutputDialog();
+		setDefaultConsoleWidget();
 #endif
 		if (interpreterInit()) {
 
@@ -171,7 +182,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 			inittuliputils();
 			_PyImport_FixupExtension(const_cast<char *>("tuliputils"), const_cast<char *>("tuliputils"));
 
-			runString("import sys; import scriptengine ; sys.stdout = scriptengine.ConsoleOutput(False); sys.stderr = scriptengine.ConsoleOutput(True);\n");
+			runString("import sys; import scriptengine ; import tuliputils ; sys.stdout = scriptengine.ConsoleOutput(False); sys.stderr = scriptengine.ConsoleOutput(True);\n");
 			
 			// Try to import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
 			// and if the site module is not present on the host system
@@ -180,8 +191,6 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 			runString("import site");
 			outputActivated = true;
 			
-			setDefaultConsoleWidget();
-
 			runString("from tulip import *");
 
 			QDir pythonPluginsDir(pythonPluginsPath.c_str());
@@ -201,28 +210,41 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 			runString(printObjectDictFunction);
 		}
 	}
+
+	releaseGIL();
 }
 
 PythonInterpreter::~PythonInterpreter() {
 	if (interpreterInit()) {
+		PyEval_RestoreThread(mainThreadState);
 		Py_Finalize();
 	}
 	delete consoleDialog;
+	delete consoleOuputEmitter;
+	consoleOuputEmitter = NULL;
+	delete consoleOuputHandler;
+	consoleOuputHandler = NULL;
 }
 
 PythonInterpreter *PythonInterpreter::getInstance() {
 	return &instance;
 }
 
-bool PythonInterpreter::interpreterInit() const {
-	return Py_IsInitialized();
+bool PythonInterpreter::interpreterInit() {
+	holdGIL();
+	bool ret = Py_IsInitialized();
+	releaseGIL();
+	return ret;
 }
 
 void PythonInterpreter::registerNewModule(const string &moduleName, PyMethodDef *moduleDef) {
+	holdGIL();
 	Py_InitModule(moduleName.c_str(), moduleDef);
+	releaseGIL();
 }
 
 void PythonInterpreter::registerNewModuleFromString(const std::string &moduleName, const std::string &moduleSrcCode) {
+	holdGIL();
 	ostringstream oss;
 	oss << moduleName << ".py";
 	PyObject *pycomp = Py_CompileString(moduleSrcCode.c_str(),oss.str().c_str(), Py_file_input);
@@ -236,23 +258,30 @@ void PythonInterpreter::registerNewModuleFromString(const std::string &moduleNam
 		PyErr_Print();
 		PyErr_Clear();
 	}
+	releaseGIL();
 }
 
 bool PythonInterpreter::functionExists(const string &moduleName, const string &functionName) {
+	holdGIL();
 	PyObject *pName = PyString_FromString(moduleName.c_str());
 	PyObject *pModule = PyImport_Import(pName);
 	Py_DECREF(pName);
 	PyObject *pDict = PyModule_GetDict(pModule);
 	PyObject *pFunc = PyDict_GetItemString(pDict, functionName.c_str());
-	return (pFunc != NULL && PyCallable_Check(pFunc));
+	bool ret = (pFunc != NULL && PyCallable_Check(pFunc));
+	releaseGIL();
+	return ret;
 }
 
 bool PythonInterpreter::runString(const string &pyhtonCode) {
-	int ret = PyRun_SimpleString(pyhtonCode.c_str());
+	int ret = 0;
+	holdGIL();
+	ret = PyRun_SimpleString(pyhtonCode.c_str());
 	if (PyErr_Occurred()) {
 		PyErr_Print();
 		PyErr_Clear();
 	}
+	releaseGIL();
 	return  ret != -1;
 }
 
@@ -275,9 +304,17 @@ bool PythonInterpreter::runGraphScript(const string &module, const string &funct
 // special case for Visual Studio debug mode :
 // instantiate the console dialog here because we could not in the constructor (segfault otherwise)
 #if defined(_MSC_VER) && defined(_DEBUG)
-	if (!consoleDialog)
+	if (!consoleDialog) {
+		consoleOuputHandler = new ConsoleOutputHandler();
+		consoleOuputEmitter = new ConsoleOutputEmitter();
+		QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QPlainTextEdit*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QPlainTextEdit*,const QString &, bool)), Qt::QueuedConnection);
 		consoleDialog = new ConsoleOutputDialog();
+	}
 #endif
+
+	holdGIL();
+
+	bool ret = true;
 
 	// Build the name object
 	PyObject *pName = PyString_FromString(module.c_str());
@@ -314,15 +351,17 @@ bool PythonInterpreter::runGraphScript(const string &module, const string &funct
 		Py_DECREF(pArgs);
 		if (PyErr_Occurred()) {
 			PyErr_Print();
-			return false;
+			ret = false;
 		}
 
 	} else {
 		PyErr_Print();
-		return false;
+		ret =  false;
 	}
 
-	return true;
+	releaseGIL();
+
+	return ret;
 }
 
 int stopScript(void *) {
@@ -332,11 +371,15 @@ int stopScript(void *) {
 
 
 void PythonInterpreter::stopCurrentScript() {
+	holdGIL();
 	Py_AddPendingCall(&stopScript, NULL);
+	releaseGIL();
 }
 
 void PythonInterpreter::setTraceFunction(Py_tracefunc tracefunc) {
+	holdGIL();
 	PyEval_SetTrace(tracefunc, NULL);
+	releaseGIL();
 }
 
 void PythonInterpreter::deleteModule(const std::string &moduleName) {
@@ -355,41 +398,53 @@ void PythonInterpreter::reloadModule(const std::string &moduleName) {
 }
 
 void PythonInterpreter::setConsoleWidget(QPlainTextEdit *console) {
-	consoleWidget = console;
+	if (consoleOuputHandler) {
+		consoleOuputEmitter->setOutputActivated(true);
+		consoleOuputEmitter->setConsoleWidget(console);
+	}
 	shellWidget = NULL;
 }
 
 void PythonInterpreter::setDefaultConsoleWidget() {
-	if (consoleDialog)
-		consoleWidget = consoleDialog->consoleWidget;
+	if (consoleDialog) {
+		consoleOuputEmitter->setOutputActivated(true);
+		consoleOuputEmitter->setConsoleWidget(consoleDialog->consoleWidget);
+	}
 	shellWidget = NULL;
 }
 
 void PythonInterpreter::setPythonShellWidget(PythonShellWidget *shell) {
-	consoleWidget = NULL;
+	if (consoleOuputEmitter)
+		consoleOuputEmitter->setOutputActivated(false);
 	shellWidget = shell;
 }
 
 void PythonInterpreter::setDefaultSIGINTHandler() {
-	QPlainTextEdit *lastConsoleWidget = consoleWidget;
-	consoleWidget = NULL;
+	if (consoleOuputEmitter) {
+		consoleOuputEmitter->setOutputActivated(false);
+	}
 	if (runString("import signal")) {
 		runString("signal.signal(signal.SIGINT, signal.SIG_DFL)");
 	}
-	consoleWidget = lastConsoleWidget;
+	if (consoleOuputEmitter) {
+		consoleOuputEmitter->setOutputActivated(true);
+	}
 }
 
-std::string PythonInterpreter::getPythonShellBanner() const {
-	return string("Python ") + string(Py_GetVersion()) + string(" on ") + string(Py_GetPlatform());
+std::string PythonInterpreter::getPythonShellBanner() {
+	holdGIL();
+	string ret = string("Python ") + string(Py_GetVersion()) + string(" on ") + string(Py_GetPlatform());
+	releaseGIL();
+	return ret;
 }
 
 std::vector<std::string> PythonInterpreter::getGlobalDictEntries(const std::string &prefixFilter) {
 	std::vector<std::string> ret;
 	std::set<std::string> publicMembersSorted;
 	outputActivated = false;
-	consoleOuput = "";
-	runString("import __main__\nprintObjectDict(__main__)");
-	QStringList objectDictList = QString(consoleOuput.c_str()).split("\n");
+	consoleOuputString = "";
+	runString("import __main__;printObjectDict(__main__)");
+	QStringList objectDictList = QString(consoleOuputString.c_str()).split("\n");
 	for (int i = 0 ; i < objectDictList.count() ; ++i) {
 		if (objectDictList[i] != "") {
 			if (objectDictList[i].startsWith("_")) {
@@ -418,12 +473,12 @@ std::vector<std::string> PythonInterpreter::getObjectDictEntries(const std::stri
 	std::vector<std::string> ret;
 	std::set<std::string> publicMembersSorted;
 	outputActivated = false;
-	consoleOuput = "";
+	consoleOuputString = "";
 	if (runString(objectName)) {
 		ostringstream oss;
 		oss << "printObjectDict(" << objectName << ")";
 		runString(oss.str());
-		QStringList objectDictList = QString(consoleOuput.c_str()).split("\n");
+		QStringList objectDictList = QString(consoleOuputString.c_str()).split("\n");
 		for (int i = 0 ; i < objectDictList.count() ; ++i) {
 			if (objectDictList[i] != "") {
 				if (objectDictList[i].startsWith("_")) {
@@ -447,4 +502,12 @@ std::vector<std::string> PythonInterpreter::getObjectDictEntries(const std::stri
 	}
 	outputActivated = true;
 	return ret;
+}
+
+void PythonInterpreter::holdGIL() {
+	gilState = PyGILState_Ensure();
+}
+
+void PythonInterpreter::releaseGIL() {
+	PyGILState_Release(gilState);
 }
