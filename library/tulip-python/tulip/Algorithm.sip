@@ -36,7 +36,7 @@ public:
 
 	virtual bool run() = 0;
 
-	virtual bool check(std::string &);
+	virtual bool check(std::string & /Out/);
 
 	virtual void reset();
 	
