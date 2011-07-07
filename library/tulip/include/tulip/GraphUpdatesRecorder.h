@@ -116,53 +116,53 @@ namespace tlp {
     const GraphStorageIdsMemento* newIdsState;
 
     // one set of added sub graphs per graph
-    TLP_HASH_MAP<unsigned long, std::set<Graph*> > addedSubGraphs;
+    TLP_HASH_MAP<Graph*, std::set<Graph*> > addedSubGraphs;
     // one set of deleted sub graphs per graph
-    TLP_HASH_MAP<unsigned long, std::set<Graph *> > deletedSubGraphs;
+    TLP_HASH_MAP<Graph*, std::set<Graph *> > deletedSubGraphs;
 
     // one set of added properties per graph
-    TLP_HASH_MAP<unsigned long,  std::set<PropertyRecord> > addedProperties;
+    TLP_HASH_MAP<Graph*,  std::set<PropertyRecord> > addedProperties;
     // one set of deleted properties per graph
-    TLP_HASH_MAP<unsigned long,  std::set<PropertyRecord> > deletedProperties;
+    TLP_HASH_MAP<Graph*,  std::set<PropertyRecord> > deletedProperties;
     // one set of old attribute values per graph
-    TLP_HASH_MAP<unsigned long, DataSet> oldAttributeValues;
+    TLP_HASH_MAP<Graph*, DataSet> oldAttributeValues;
     // one set of new attribute values per graph
-    TLP_HASH_MAP<unsigned long, DataSet> newAttributeValues;
+    TLP_HASH_MAP<Graph*, DataSet> newAttributeValues;
     
     // one set of updated addNodes per property
-    TLP_HASH_MAP<unsigned long, std::set<node> > updatedPropsAddedNodes;
+    TLP_HASH_MAP<PropertyInterface*, std::set<node> > updatedPropsAddedNodes;
 
     // one set of updated addEdges per property
-    TLP_HASH_MAP<unsigned long, std::set<edge> > updatedPropsAddedEdges;
+    TLP_HASH_MAP<PropertyInterface*, std::set<edge> > updatedPropsAddedEdges;
 
     // the old default node value for each updated property
-    TLP_HASH_MAP<unsigned long, DataMem*> oldNodeDefaultValues;
+    TLP_HASH_MAP<PropertyInterface*, DataMem*> oldNodeDefaultValues;
     // the new default node value for each updated property
-    TLP_HASH_MAP<unsigned long, DataMem*> newNodeDefaultValues;
+    TLP_HASH_MAP<PropertyInterface*, DataMem*> newNodeDefaultValues;
     // the old default edge value for each updated property
-    TLP_HASH_MAP<unsigned long, DataMem*> oldEdgeDefaultValues;
+    TLP_HASH_MAP<PropertyInterface*, DataMem*> oldEdgeDefaultValues;
     // the new default edge value for each updated property
-    TLP_HASH_MAP<unsigned long, DataMem*> newEdgeDefaultValues;
+    TLP_HASH_MAP<PropertyInterface*, DataMem*> newEdgeDefaultValues;
 
     // the old node values for each updated property
-    TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* > oldNodeValues;
+    TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* > oldNodeValues;
     // the new node value for each updated property
-    TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >  newNodeValues;
+    TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* >  newNodeValues;
 
     // the old edge values for each updated property
-    TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* > oldEdgeValues;
+    TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* > oldEdgeValues;
     // the new edge value for each property
-    TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* > newEdgeValues;
+    TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* > newEdgeValues;
 
     // real deletion of deleted objects (properties, sub graphs)
     // during the recording of updates thes objects are removed from graph
     // structures but not really 'deleted'
     void deleteDeletedObjects();
     // deletion of recorded DataMem
-    void deleteValues(TLP_HASH_MAP<unsigned long,
+    void deleteValues(TLP_HASH_MAP<PropertyInterface*,
 		      MutableContainer<DataMem*>* >& values);
     void deleteValues(MutableContainer<DataMem*>* values);
-    void deleteDefaultValues(TLP_HASH_MAP<unsigned long, DataMem*>& values);
+    void deleteDefaultValues(TLP_HASH_MAP<PropertyInterface*, DataMem*>& values);
     // record of a node's edges container before/after modification
     void recordEdgeContainer(TLP_HASH_MAP<node, std::vector<edge> >&,
 			     GraphImpl*, node);
