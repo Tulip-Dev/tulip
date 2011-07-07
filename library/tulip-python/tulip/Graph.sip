@@ -1753,6 +1753,17 @@ Removes and deletes the property associated to name in the graph properties pool
 :type name: string
 %End
 
+%MethodCode
+	bool observablesHolded = tlp::Observable::observersHoldCounter() > 0; 
+	if (observablesHolded) {
+		tlp::Observable::unholdObservers();
+	}
+	sipCpp->delLocalProperty(*a0);
+	if (observablesHolded) {
+		tlp::Observable::holdObservers();
+	}
+%End
+
 //===========================================================================================
 
 	tlp::Iterator<std::string>* getLocalProperties();
