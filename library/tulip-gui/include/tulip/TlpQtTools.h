@@ -117,7 +117,7 @@ TLP_QT_SCOPE std::string propertyTypeLabelToPropertyType(const QString& typeName
     *
     * @param pluginName The name of the plugin for which we want the package name.
     **/
-  TLP_QT_SCOPE QString getPluginPackageName(const QString& pluginName);
+TLP_QT_SCOPE QString getPluginPackageName(const QString& pluginName);
 
 }
 

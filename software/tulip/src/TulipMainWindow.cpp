@@ -148,22 +148,27 @@ void TulipMainWindow::CreatePerspective(const QString &name) {
 void TulipMainWindow::ShowOpenProjectWindow() {
   setVisible(true);
   QString filePath = QFileDialog::getOpenFileName(this,trUtf8("Choose a Tulip project to open with its associated perspective. Or select a external file format to import."),QDir::homePath(),".tlpx");
+
   if (filePath.isEmpty())
     return;
+
   OpenProject(filePath);
 }
 
 void TulipMainWindow::OpenProject(const QString &file) {
   tlp::TulipProject *project = tlp::TulipProject::openProject(file);
+
   if (!project->isValid()) {
     setVisible(true);
     PerspectiveSelectionDialog dlg(this);
     dlg.exec();
+
     if (!dlg.selectedPerspectiveName.isNull())
       OpenProjectWith(file,dlg.selectedPerspectiveName,QVariantMap());
   }
   else
     OpenProjectWith(file, project->perspective(),QVariantMap());
+
   delete project;
 }
 
