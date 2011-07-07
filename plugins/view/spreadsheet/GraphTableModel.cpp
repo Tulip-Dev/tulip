@@ -413,25 +413,25 @@ bool GraphTableModel::removeRows( const QModelIndexList& toRemove){
 
 void GraphTableModel::addNode(Graph *, const node n){
     if(_elementType == NODE){
-        _idsToAdd.insert(n.id);
+        _idsToAdd.insert(n.id);        
     }
 }
 
 void GraphTableModel::addEdge(Graph *, const edge e){
     if(_elementType == EDGE){
-        _idsToAdd.insert(e.id);
+        _idsToAdd.insert(e.id);        
     }
 }
 
 void GraphTableModel::delNode(Graph *,const node n){    
     if(_elementType == NODE){
-        _idsToDelete.insert(n.id);
+        _idsToDelete.insert(n.id);        
     }
 }
 
 void GraphTableModel::delEdge(Graph *,const edge e){
     if(_elementType == EDGE){
-        _idsToDelete.insert(e.id);
+        _idsToDelete.insert(e.id);        
     }
 }
 void GraphTableModel::addLocalProperty(Graph* g, const string& propertyName){    
@@ -448,7 +448,7 @@ void GraphTableModel::addLocalProperty(Graph* g, const string& propertyName){
             }
         }
         _propertiesToAdd.insert(property);
-    }
+    }    
 }
 
 void GraphTableModel::beforeDelLocalProperty(tlp::Graph *graph, const std::string & name){
@@ -458,6 +458,8 @@ void GraphTableModel::beforeDelLocalProperty(tlp::Graph *graph, const std::strin
         _propertiesToAdd.erase(property);
     }else{
         _propertiesToDelete.insert(property);
+        removeFromVector<PropertyInterface*>(_propertiesToDelete,_propertiesTable,_propertyToIndex,_orientation==Qt::Horizontal);
+        _propertiesToDelete.clear();
         property->removePropertyObserver(this);
         property->removeObserver(this);
     }
@@ -474,9 +476,13 @@ void GraphTableModel::beforeDelInheritedProperty(Graph *graph, const std::string
         _propertiesToAdd.erase(property);
     }else{
         _propertiesToDelete.insert(property);
+        removeFromVector<PropertyInterface*>(_propertiesToDelete,_propertiesTable,_propertyToIndex,_orientation==Qt::Horizontal);
+        _propertiesToDelete.clear();
         property->removePropertyObserver(this);
         property->removeObserver(this);
+
     }
+
 }
 
 void GraphTableModel::afterSetNodeValue(PropertyInterface* property, const node n){
@@ -484,7 +490,7 @@ void GraphTableModel::afterSetNodeValue(PropertyInterface* property, const node 
         //If the element was not marked for deletion
         if(_idsToDelete.find(n.id) == _idsToDelete.end()){
             _dataUpdated.push_back(GraphTableModelIndex(n.id,property));
-        }
+        }        
     }
 }
 
@@ -493,19 +499,19 @@ void GraphTableModel::afterSetEdgeValue(PropertyInterface* property, const edge 
         //If the element was not marked for deletion
         if(_idsToDelete.find(e.id) == _idsToDelete.end()){
             _dataUpdated.push_back(GraphTableModelIndex(e.id,property));
-        }
+        }        
     }
 }
 
 void GraphTableModel::afterSetAllNodeValue(PropertyInterface* property){
     if(_elementType == NODE){
-        _propertiesUpdated.insert(property);
+        _propertiesUpdated.insert(property);        
     }
 }
 
 void GraphTableModel::afterSetAllEdgeValue(PropertyInterface* property){
     if(_elementType == EDGE){
-        _propertiesUpdated.insert(property);
+        _propertiesUpdated.insert(property);        
     }
 }
 

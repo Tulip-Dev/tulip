@@ -243,7 +243,7 @@ private:
             vect.erase(vect.begin()+fromIndex,vect.begin()+toIndex+1);
             //Update objToIndex map
             for(unsigned int i = fromIndex ; i < vect.size() ; ++i){
-                objToIndexes[vect[i]] = static_cast<int>(i-1);
+                objToIndexes[vect[i]] = static_cast<int>(i);
             }
             if(deleteRows){
                 endRemoveRows();

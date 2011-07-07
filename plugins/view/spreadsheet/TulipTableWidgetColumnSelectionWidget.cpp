@@ -200,12 +200,17 @@ void TulipTableWidgetColumnSelectionWidget::deleteSelectedColumns(){
     QModelIndexList rows = ui->listView->selectionModel()->selectedRows(0);
     ui->listView->selectionModel()->clearSelection();
     tlp::Observable::holdObservers();
+    std::vector<tlp::PropertyInterface*> toDelete;
     for(QModelIndexList::iterator it  = rows.begin() ; it != rows.end(); ++it){
-        tlp::PropertyInterface* property = _tableColumnModel->propertyForIndex(*it);        
+        tlp::PropertyInterface* property = _tableColumnModel->propertyForIndex(*it);                
         //Check if the property exist in the graph (avoid to delete a function two time).
-        if(property->getGraph()->existProperty(property->getName())){
-            property->getGraph()->delLocalProperty(std::string(property->getName()));
+        if(property!= NULL && property->getGraph()->existProperty(property->getName())){
+            toDelete.push_back(property);
         }
+    }
+    //Need to store the elements to delete as the indexes can be updated during the deletion.
+    for(std::vector<tlp::PropertyInterface*>::iterator it = toDelete.begin() ; it != toDelete.end() ; ++it){
+        (*it)->getGraph()->delLocalProperty(std::string((*it)->getName()));
     }
     tlp::Observable::unholdObservers();
 }
