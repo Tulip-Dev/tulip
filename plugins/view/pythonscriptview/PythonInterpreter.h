@@ -144,7 +144,6 @@ private :
 	ConsoleOutputDialog *consoleDialog;
 	
 	std::string pythonVersion; 
-	PyThreadState*  mainThreadState;
 	PyGILState_STATE gilState;
 
 };

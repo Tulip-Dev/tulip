@@ -125,12 +125,16 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 	Py_OptimizeFlag = 1;
 	Py_NoSiteFlag = 1;
 	Py_InitializeEx(0);
-	PyEval_InitThreads();
-	mainThreadState = PyEval_SaveThread();
+	
+	PyEval_InitThreads();	
+	PyThreadState* tcur = PyThreadState_Get() ;
+	PyThreadState_Swap(NULL);
+	PyThreadState_Clear(tcur);	
+	PyThreadState_Delete(tcur);		
 	PyEval_ReleaseLock();
-
+	
 	holdGIL();
-
+	
 	PySys_SetArgv(argc, argv);
 
 	runString("import sys");
@@ -216,7 +220,6 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 
 PythonInterpreter::~PythonInterpreter() {
 	if (interpreterInit()) {
-		PyEval_RestoreThread(mainThreadState);
 		Py_Finalize();
 	}
 	delete consoleDialog;
