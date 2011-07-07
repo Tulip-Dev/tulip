@@ -171,20 +171,72 @@ public:
     }
     bool inheritedPropertyExist;
     bool initialized;
-    void afterDelInheritedProperty(Graph* g, const string& name) {
+    void beforeDelInheritedProperty(Graph* g, const string& name) {
         if(!initialized){
-            inheritedPropertyExist = g->getProperty(name)!=NULL;
+            inheritedPropertyExist = g->existProperty(name);
             if(inheritedPropertyExist){
                 g->getProperty(name)->getName();
             }
             initialized = true;
         }else{
-            inheritedPropertyExist = inheritedPropertyExist & (g->getProperty(name)!=NULL);
+            inheritedPropertyExist = inheritedPropertyExist & (g->existProperty(name));
             if(inheritedPropertyExist){
                 g->getProperty(name)->getName();
             }
         }
     }
+};
+
+
+class PropertiesDeletedObserver :public GraphObserver {
+public:
+    PropertiesDeletedObserver():inheritedPropertyExist(false),initialized(false){
+
+    }
+    bool inheritedPropertyExist;
+    bool initialized;
+
+    vector<PropertyInterface*> _inheritedProperties;
+    vector<PropertyInterface*> _localProperties;
+    void beforeDelLocalProperty(Graph *g, const std::string &pName){
+        CPPUNIT_ASSERT(g->existLocalProperty(pName));
+        beforeDelLocalPropertyCalledGraphs.push_back(g);
+    }
+
+    void afterDelInheritedProperty(Graph *g, const std::string &pName){
+        afterDelInheritedPropertyCalledGraphs.push_back(g);
+    }
+
+    void afterDelLocalProperty(Graph *g, const std::string &pName){
+        CPPUNIT_ASSERT(!g->existLocalProperty(pName));
+        afterDelLocalPropertyCalledGraphs.push_back(g);
+    }
+
+    void beforeDelInheritedProperty(Graph *g, const std::string &pName){
+        CPPUNIT_ASSERT(!g->existLocalProperty(pName));
+        CPPUNIT_ASSERT(g->existProperty(pName));
+        beforeDelInheritedPropertyCalledGraphs.push_back(g);
+    }
+
+    void addLocalProperty(Graph *g, const std::string & pName){
+        CPPUNIT_ASSERT(g->existLocalProperty(pName));
+        addLocalPropertyCalledGraphs.push_back(g);
+    }
+
+    void addInheritedProperty(Graph *g, const std::string &pName){
+        CPPUNIT_ASSERT(!g->existLocalProperty(pName));
+        CPPUNIT_ASSERT(g->existProperty(pName));
+        addInheritedPropertyCalledGraphs.push_back(g);
+    }
+
+
+    vector<Graph*> beforeDelLocalPropertyCalledGraphs;
+    vector<Graph*> beforeDelInheritedPropertyCalledGraphs;
+    vector<Graph*> afterDelLocalPropertyCalledGraphs;
+    vector<Graph*> afterDelInheritedPropertyCalledGraphs;
+
+    vector<Graph*> addInheritedPropertyCalledGraphs;
+    vector<Graph*> addLocalPropertyCalledGraphs;
 };
 
 static GraphObserverTest* gObserver;
@@ -679,6 +731,84 @@ void ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyI
     CPPUNIT_ASSERT(observer.inheritedPropertyExist);
 }
 
+void ObservableGraphTest::testNotifyDelInheritedPropertyIsSendWhenLocalPropertyIsDeleted(){
+
+    Graph* g1 = graph->addSubGraph();
+    Graph* g2 = g1->addSubGraph();
+
+    PropertiesDeletedObserver observer;
+
+    graph->addGraphObserver(&observer);
+    g1->addGraphObserver(&observer);
+    g2->addGraphObserver(&observer);
+
+    graph->getLocalProperty<BooleanProperty>("test");
+    CPPUNIT_ASSERT(observer.afterDelInheritedPropertyCalledGraphs.size()==0);
+    CPPUNIT_ASSERT(observer.beforeDelInheritedPropertyCalledGraphs.size()==0);
+    CPPUNIT_ASSERT(observer.afterDelLocalPropertyCalledGraphs.size()==0);
+    CPPUNIT_ASSERT(observer.beforeDelLocalPropertyCalledGraphs.size()==0);
+
+    CPPUNIT_ASSERT(observer.addLocalPropertyCalledGraphs.size()==1);
+    CPPUNIT_ASSERT(observer.addLocalPropertyCalledGraphs[0]==graph);
+    CPPUNIT_ASSERT(observer.addInheritedPropertyCalledGraphs.size()==2);
+    CPPUNIT_ASSERT(observer.addInheritedPropertyCalledGraphs[0]==g1);
+    CPPUNIT_ASSERT(observer.addInheritedPropertyCalledGraphs[1]==g2);
+
+    observer.afterDelInheritedPropertyCalledGraphs.clear();
+    observer.beforeDelInheritedPropertyCalledGraphs.clear();
+    observer.afterDelLocalPropertyCalledGraphs.clear();
+    observer.beforeDelLocalPropertyCalledGraphs.clear();
+    observer.addLocalPropertyCalledGraphs.clear();
+    observer.addInheritedPropertyCalledGraphs.clear();
+
+    graph->delLocalProperty("test");
+
+    CPPUNIT_ASSERT(observer.afterDelInheritedPropertyCalledGraphs.size()==2);
+    CPPUNIT_ASSERT(observer.afterDelInheritedPropertyCalledGraphs[0]==g1);
+    CPPUNIT_ASSERT(observer.afterDelInheritedPropertyCalledGraphs[1]==g2);
+
+    CPPUNIT_ASSERT(observer.beforeDelInheritedPropertyCalledGraphs.size()==2);
+    CPPUNIT_ASSERT(observer.beforeDelInheritedPropertyCalledGraphs[0]==g1);
+    CPPUNIT_ASSERT(observer.beforeDelInheritedPropertyCalledGraphs[1]==g2);
+
+    CPPUNIT_ASSERT(observer.afterDelLocalPropertyCalledGraphs.size()==1);
+    CPPUNIT_ASSERT(observer.afterDelLocalPropertyCalledGraphs[0]==graph);
+    CPPUNIT_ASSERT(observer.beforeDelLocalPropertyCalledGraphs.size()==1);
+    CPPUNIT_ASSERT(observer.beforeDelLocalPropertyCalledGraphs[0]==graph);
+
+    CPPUNIT_ASSERT(observer.addLocalPropertyCalledGraphs.size()==0);
+    CPPUNIT_ASSERT(observer.addInheritedPropertyCalledGraphs.size()==0);
+
+    graph->getLocalProperty<BooleanProperty>("test");
+    g1->getLocalProperty<BooleanProperty>("test");
+
+    observer.afterDelInheritedPropertyCalledGraphs.clear();
+    observer.beforeDelInheritedPropertyCalledGraphs.clear();
+    observer.afterDelLocalPropertyCalledGraphs.clear();
+    observer.beforeDelLocalPropertyCalledGraphs.clear();
+    observer.addLocalPropertyCalledGraphs.clear();
+    observer.addInheritedPropertyCalledGraphs.clear();
+
+    g1->delLocalProperty("test");
+
+    CPPUNIT_ASSERT(observer.afterDelInheritedPropertyCalledGraphs.size()==1);
+    CPPUNIT_ASSERT(observer.afterDelInheritedPropertyCalledGraphs[0]==g2);
+
+    CPPUNIT_ASSERT(observer.beforeDelInheritedPropertyCalledGraphs.size()==1);
+    CPPUNIT_ASSERT(observer.beforeDelInheritedPropertyCalledGraphs[0]==g2);
+
+    CPPUNIT_ASSERT(observer.afterDelLocalPropertyCalledGraphs.size()==1);
+    CPPUNIT_ASSERT(observer.afterDelLocalPropertyCalledGraphs[0]==g1);
+    CPPUNIT_ASSERT(observer.beforeDelLocalPropertyCalledGraphs.size()==1);
+    CPPUNIT_ASSERT(observer.beforeDelLocalPropertyCalledGraphs[0]==g1);
+
+    CPPUNIT_ASSERT(observer.addLocalPropertyCalledGraphs.size()==0);
+    CPPUNIT_ASSERT(observer.addInheritedPropertyCalledGraphs.size()==2);
+    CPPUNIT_ASSERT(observer.addInheritedPropertyCalledGraphs[0]==g1);
+    CPPUNIT_ASSERT(observer.addInheritedPropertyCalledGraphs[1]==g2);
+
+}
+
 //==========================================================
 CppUnit::Test * ObservableGraphTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph" );
@@ -700,8 +830,11 @@ CppUnit::Test * ObservableGraphTest::suite() {
 
   suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test if the property exist when delInherited function is called",
                                                                   &ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test if the property exist when delInherited function is called",
+                                                                  &ObservableGraphTest::testNotifyDelInheritedPropertyIsSendWhenLocalPropertyIsDeleted) );
 
 
   return suiteOfTests;
 }
 //==========================================================
+

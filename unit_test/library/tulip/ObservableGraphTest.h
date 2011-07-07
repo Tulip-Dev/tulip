@@ -42,6 +42,7 @@ public:
   void testReverse();
   void testObserverWhenRemoveObservable();
   void testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend();
+  void testNotifyDelInheritedPropertyIsSendWhenLocalPropertyIsDeleted();
 
   static CppUnit::Test *suite();
 };

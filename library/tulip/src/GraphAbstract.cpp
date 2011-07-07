@@ -380,6 +380,7 @@ PropertyInterface* GraphAbstract::getProperty(const string &str) {
 }
 //=========================================================================
 void GraphAbstract::delLocalProperty(const std::string &name) {
+  assert(existLocalProperty(name));
   notifyBeforeDelLocalProperty(name);
   propertyContainer->delLocalProperty(name);
   notifyAfterDelLocalProperty(name);
