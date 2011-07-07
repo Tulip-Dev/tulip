@@ -28,10 +28,12 @@ void VisibleSectionsModel::initModel(int selectedColumnIndex){
     for(int i = 0 ; i < _columnModel->rowCount() ; ++i){
         if(_columnModel->isColumnVisible(i)){
             tlp::PropertyInterface* property = _columnModel->propertyForIndex(_columnModel->index(i));
-            addItem(tlp::tlpStringToQString(property->getName()),QVariant(i));
-            //If the last added index match with the column to select
-            if(i == selectedColumnIndex){
-                index = count()-1;
+            if(property != NULL){
+                addItem(tlp::tlpStringToQString(property->getName()),QVariant(i));
+                //If the last added index match with the column to select
+                if(i == selectedColumnIndex){
+                    index = count()-1;
+                }
             }
         }
     }

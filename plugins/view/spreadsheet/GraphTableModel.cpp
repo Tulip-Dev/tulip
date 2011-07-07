@@ -453,20 +453,30 @@ void GraphTableModel::addLocalProperty(Graph* g, const string& propertyName){
 
 void GraphTableModel::beforeDelLocalProperty(tlp::Graph *graph, const std::string & name){
     PropertyInterface* property = graph->getProperty(name);
-    _propertiesToDelete.insert(property);
-    property->removePropertyObserver(this);
-    property->removeObserver(this);
+    //If the property was added then deleted before an update of the table
+    if(_propertiesToAdd.find(property) != _propertiesToAdd.end()){
+        _propertiesToAdd.erase(property);
+    }else{
+        _propertiesToDelete.insert(property);
+        property->removePropertyObserver(this);
+        property->removeObserver(this);
+    }
 }
 
 void GraphTableModel::addInheritedProperty(Graph* g, const string& propertyName){
-        _propertiesToAdd.insert(g->getProperty(propertyName));
+    _propertiesToAdd.insert(g->getProperty(propertyName));
 }
 
 void GraphTableModel::beforeDelInheritedProperty(Graph *graph, const std::string &name){
     PropertyInterface* property = graph->getProperty(name);
-    _propertiesToDelete.insert(property);
-    property->removePropertyObserver(this);
-    property->removeObserver(this);
+    //If the property was added then deleted before an update of the table
+    if(_propertiesToAdd.find(property) != _propertiesToAdd.end()){
+        _propertiesToAdd.erase(property);
+    }else{
+        _propertiesToDelete.insert(property);
+        property->removePropertyObserver(this);
+        property->removeObserver(this);
+    }
 }
 
 void GraphTableModel::afterSetNodeValue(PropertyInterface* property, const node n){
@@ -499,7 +509,7 @@ void GraphTableModel::afterSetAllEdgeValue(PropertyInterface* property){
     }
 }
 
-void GraphTableModel::update(){
+void GraphTableModel::update(){    
     //Remove deleted properties and elements from vector.
     if(!_idsToDelete.empty()){
         removeFromVector<unsigned int>(_idsToDelete,_idTable,_idToIndex,_orientation==Qt::Vertical);
