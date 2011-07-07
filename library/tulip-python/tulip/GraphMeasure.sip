@@ -101,7 +101,7 @@ Returns the maximum degree of the graph's nodes.
   
 	unsigned int minDegree(const tlp::Graph *);
 %Docstring
-tlp.maxDegree(graph)
+tlp.minDegree(graph)
 
 Returns the minimum degree of the graph's nodes.
 
