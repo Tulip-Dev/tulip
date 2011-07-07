@@ -31,11 +31,11 @@ public :
 	PythonImportModule(AlgorithmContext context) : 
 		ImportModule(context){}
 	
-	bool import(const std::string &s) {
-		return importGraph(s);
+	bool import(const std::string &) {
+		return importGraph();
 	}
 	
-	virtual bool importGraph(const std::string &s) = 0;
+	virtual bool importGraph() = 0;
 };
 }
 %End
@@ -61,7 +61,7 @@ public:
 
   PythonImportModule(tlp::AlgorithmContext context);
   
-  virtual bool importGraph(const std::string &s) = 0;
+  virtual bool importGraph() = 0;
   
 };
 
