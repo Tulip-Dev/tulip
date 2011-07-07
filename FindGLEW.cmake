@@ -22,7 +22,7 @@ if( WIN32 )
    FIND_PATH( GLEW_INCLUDE_DIR glew.h wglew.h
               PATHS c:/glew/include ${COMPILER_PATH}/PlatformSDK/Include
               PATH_SUFFIXES gl GL )
-   SET( GLEW_NAMES glew32 )
+   SET( GLEW_NAMES glew32 glew)
    FIND_LIBRARY( GLEW_LIBRARY
                  NAMES ${GLEW_NAMES}
                  PATHS c:/glew/lib ${COMPILER_PATH}/PlatformSDK/Lib )
