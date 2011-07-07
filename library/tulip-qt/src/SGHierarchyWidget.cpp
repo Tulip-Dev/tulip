@@ -121,7 +121,7 @@ namespace tlp {
   void SGHierarchyWidget::setItemInfos(QTreeWidgetItem *item, Graph *graph,
 				       unsigned int nbNodes, unsigned int nbEdges) {
     item->setText(0, QString::fromUtf8(graph->getAttribute<string>("name").c_str()));
-    char tmpstr[9];
+    char tmpstr[10];
     sprintf(tmpstr, " %.7d", nbNodes);
     item->setText(1, QString(tmpstr));
     sprintf(tmpstr, " %.7d", nbEdges);
