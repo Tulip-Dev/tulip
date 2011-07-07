@@ -20,8 +20,8 @@ using namespace std;
 using namespace tlp;
 
 SpreadViewTableWidget::SpreadViewTableWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::SpreadViewTableWidget),_tableColumnModel(NULL)
+        QWidget(parent),
+        ui(new Ui::SpreadViewTableWidget),_tableColumnModel(NULL)
 {
     ui->setupUi(this);
     //Edges table
@@ -165,6 +165,8 @@ void SpreadViewTableWidget::showPropertiesContextMenu(GraphTableWidget* tableWid
     contextMenu.exec(tableWidget->mapToGlobal(position));
 }
 void SpreadViewTableWidget::fillPropertiesContextMenu(QMenu& menu,GraphTableWidget* tulipTableWidget,int clickedColumn){
+    PropertyInterface* property = tulipTableWidget->graphModel()->propertyForIndex(clickedColumn);
+
     //Properties operations
     QAction *hideColumnAction = menu.addAction(tr("Hide column"),this,SLOT(hideColumn()));
     hideColumnAction->setData(QVariant(clickedColumn));
@@ -184,14 +186,26 @@ void SpreadViewTableWidget::fillPropertiesContextMenu(QMenu& menu,GraphTableWidg
     QAction *deleteColumnAction =menu.addAction(tr("Delete column"),this,SLOT(deleteColumn()));
     deleteColumnAction->setData(QVariant(clickedColumn));
     //Avoid to delete inherited properties
-    if(tulipTableWidget->graphModel()->propertyForIndex(clickedColumn)->getGraph() != ui->tableView->graph()){
+    if(property == NULL ){
+        hideColumnAction->setEnabled(false);
+        copyToColumnAction->setEnabled(false);
+        setAllValuesAction->setEnabled(false);
+        clearColumnAction->setEnabled(false);
         deleteColumnAction->setEnabled(false);
+    }else{
+        if(property->getGraph() != ui->tableView->graph()){
+            deleteColumnAction->setEnabled(false);
+        }
     }
 }
 
 void SpreadViewTableWidget::showElementsContextMenu(const QPoint& position){
     QHeaderView* headerView = qobject_cast<QHeaderView*>(sender());
-    showElementsContextMenu(ui->tableView,headerView->logicalIndexAt(position),position);
+    int logicalIndex = headerView->logicalIndexAt(position);
+    //If there is no row under the pointer don't show the menu.
+    if(logicalIndex != -1){
+        showElementsContextMenu(ui->tableView,logicalIndex,position);
+    }
 }
 
 void SpreadViewTableWidget::showPropertiesContextMenu(const QPoint& position){
@@ -201,9 +215,13 @@ void SpreadViewTableWidget::showPropertiesContextMenu(const QPoint& position){
 
 void SpreadViewTableWidget::showTableContextMenu(const QPoint& position){
     GraphTableWidget* tableWidget = qobject_cast<GraphTableWidget*>(sender());
-    QMenu contextMenu(tableWidget);
-    fillElementsContextMenu(contextMenu,tableWidget,tableWidget->indexAt(position).row());
-    contextMenu.exec(tableWidget->mapToGlobal(position));
+    int logicalIndex = tableWidget->indexAt(position).row();
+    //If there is no row under the pointer don't show the menu.
+    if(logicalIndex != -1){
+        QMenu contextMenu(tableWidget);
+        fillElementsContextMenu(contextMenu,tableWidget,logicalIndex);
+        contextMenu.exec(tableWidget->mapToGlobal(position));
+    }
 }
 
 
@@ -235,7 +253,7 @@ void SpreadViewTableWidget::setAllColumnValues(){
     if(action!=NULL){
         int index = action->data().toInt();
         GraphTableWidget* tableWidget = ui->tableView;
-        GraphTableModel* model = tableWidget->graphModel();
+        QAbstractItemModel* model = tableWidget->model();
         QDialog dialog(tableWidget);
         dialog.setLayout(new QVBoxLayout(&dialog));
         //Take the value of the first element.
