@@ -34,13 +34,13 @@ public:
 
 public slots :
 
-void writeToConsole(QPlainTextEdit *consoleWidget, const QString &output, bool stderr) {
+void writeToConsole(QPlainTextEdit *consoleWidget, const QString &output, bool errorOutput) {
 
 	if (!consoleWidget)
 		return;
 
 	QBrush brush(Qt::SolidPattern);
-	if (stderr) {
+	if (errorOutput) {
 		brush.setColor(Qt::red);
 	} else {
 		brush.setColor(Qt::black);
@@ -63,9 +63,9 @@ public:
 
 	ConsoleOutputEmitter() : consoleWidget(NULL), outputActivated(true) {}
 
-	void sendOutputToConsole(const QString &output, bool stderr) {
+	void sendOutputToConsole(const QString &output, bool errorOutput) {
 		if (outputActivated)
-			emit consoleOutput(consoleWidget, output, stderr);
+			emit consoleOutput(consoleWidget, output, errorOutput);
 	}
 
 	void setConsoleWidget(QPlainTextEdit *consoleWidget) {
@@ -78,7 +78,7 @@ public:
 
 signals:
 
-	void consoleOutput(QPlainTextEdit *consoleWidget, const QString &output, bool stderr);
+	void consoleOutput(QPlainTextEdit *consoleWidget, const QString &output, bool errorOutput);
 
 private :
 
