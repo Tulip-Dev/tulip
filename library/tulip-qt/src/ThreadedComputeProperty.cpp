@@ -9,9 +9,7 @@ AbstractComputeProperty::AbstractComputeProperty(tlp::Graph* graph, std::string 
 }
 
 //=================
-ComputePropertyThread::ComputePropertyThread(AbstractComputeProperty* computeProperty) : _computeProperty(computeProperty), _finished(false) {
-  connect(this, SIGNAL(finished()), this, SLOT(notifyFinished()));
-}
+ComputePropertyThread::ComputePropertyThread(AbstractComputeProperty* computeProperty) : _computeProperty(computeProperty), _finished(false) {}
 
 void ComputePropertyThread::run() {
   _result = _computeProperty->run();
@@ -19,12 +17,9 @@ void ComputePropertyThread::run() {
 
 bool ComputePropertyThread::computeProperty() {
   start();
-  while(!_finished) {
+  while(isRunning()) {
     QCoreApplication::processEvents();
   }
   return _result;
 }
 
-void ComputePropertyThread::notifyFinished() {
-  _finished = true;
-}

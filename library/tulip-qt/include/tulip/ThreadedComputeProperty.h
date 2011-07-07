@@ -43,7 +43,7 @@ struct ComputePropertyTemplate : public AbstractComputeProperty {
 };
 
 class ComputePropertyThread : public QThread {
-  Q_OBJECT
+
 public:
   explicit ComputePropertyThread(AbstractComputeProperty* computeProperty);
   virtual void run();
@@ -53,8 +53,6 @@ private:
   bool _result;
   AbstractComputeProperty* _computeProperty;
   bool _finished;
-public slots:
-  void notifyFinished();
 };
 
 #endif //THREADEDCOMPUTEPROPERTY_H
