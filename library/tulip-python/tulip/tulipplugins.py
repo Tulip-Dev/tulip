@@ -1,6 +1,11 @@
 from tulip import *
 pluginFactory = {}
 pluginModules = {}
+testMode = False
+
+def setTestMode(mode):
+  global testMode
+  testMode = mode
 
 def getCallingModuleName():
    import sys
@@ -8,22 +13,32 @@ def getCallingModuleName():
    f = f.f_back
    return f.f_back.f_globals['__name__']
    
-def reloadTulipPythonPlugin(module):
-   code = ""
-   code += "import " + module + "\n"
-   code += "reload(" + module + ")\n"
-   exec(code)
+def reloadTulipPythonPlugin(pluginName):
+   if pluginName in pluginModules: 
+    module = pluginModules[pluginName]
+    code = ""
+    code += "import " + module + "\n"
+    code += "reload(" + module + ")\n"
+    exec(code)
    
 def reloadTulipPythonPlugins():
-   code = ""
-   for module in pluginModules.keys():
-      reloadTulipPythonPlugin(module)
-      
-def registerAlgorithmPlugin(pluginClassName, algoName, author, date, info, release):
-        if algoName in pluginFactory.keys():
-                return
+   for plugin in pluginModules.keys():
+      reloadTulipPythonPlugin(plugin)
+
+def updateTulipMenus():
+  tulipUtilsOk = True
+  try:
+    import tuliputils
+  except ImportError:
+    tulipUtilsOk = False
+  if tulipUtilsOk:
+    tuliputils.updatePluginsMenus()
+
+def registerAlgorithmPlugin(pluginClassName, pluginName, author, date, info, release):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.AlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.AlgorithmFactory.__init__(self)\n"
@@ -32,7 +47,7 @@ def registerAlgorithmPlugin(pluginClassName, algoName, author, date, info, relea
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -45,14 +60,15 @@ def registerAlgorithmPlugin(pluginClassName, algoName, author, date, info, relea
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerAlgorithmPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):
-        if algoName in pluginFactory.keys():
-                return
+def registerAlgorithmPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.AlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.AlgorithmFactory.__init__(self)\n"
@@ -61,7 +77,7 @@ def registerAlgorithmPluginOfGroup(pluginClassName, algoName, author, date, info
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -74,14 +90,15 @@ def registerAlgorithmPluginOfGroup(pluginClassName, algoName, author, date, info
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerLayoutPlugin(pluginClassName, algoName, author, date, info, release):
-        if algoName in pluginFactory.keys():
-                return
+def registerLayoutPlugin(pluginClassName, pluginName, author, date, info, release):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.LayoutAlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.LayoutAlgorithmFactory.__init__(self)\n"
@@ -90,7 +107,7 @@ def registerLayoutPlugin(pluginClassName, algoName, author, date, info, release)
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -103,14 +120,15 @@ def registerLayoutPlugin(pluginClassName, algoName, author, date, info, release)
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerLayoutPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):
-        if algoName in pluginFactory.keys():
-                return
+def registerLayoutPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.LayoutAlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.LayoutAlgorithmFactory.__init__(self)\n"
@@ -119,7 +137,7 @@ def registerLayoutPluginOfGroup(pluginClassName, algoName, author, date, info, r
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -132,14 +150,15 @@ def registerLayoutPluginOfGroup(pluginClassName, algoName, author, date, info, r
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerDoublePlugin(pluginClassName, algoName, author, date, info, release):
-        if algoName in pluginFactory.keys():
-                return
+def registerDoublePlugin(pluginClassName, pluginName, author, date, info, release):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.DoubleAlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.DoubleAlgorithmFactory.__init__(self)\n"
@@ -148,7 +167,7 @@ def registerDoublePlugin(pluginClassName, algoName, author, date, info, release)
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -161,14 +180,15 @@ def registerDoublePlugin(pluginClassName, algoName, author, date, info, release)
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerDoublePluginOfGroup(pluginClassName, algoName, author, date, info, release, group):
-        if algoName in pluginFactory.keys():
-                return
+def registerDoublePluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.DoubleAlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.DoubleAlgorithmFactory.__init__(self)\n"
@@ -177,7 +197,7 @@ def registerDoublePluginOfGroup(pluginClassName, algoName, author, date, info, r
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -190,14 +210,15 @@ def registerDoublePluginOfGroup(pluginClassName, algoName, author, date, info, r
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerIntegerPlugin(pluginClassName, algoName, author, date, info, release):
-        if algoName in pluginFactory.keys():
-                return
+def registerIntegerPlugin(pluginClassName, pluginName, author, date, info, release):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.IntegerAlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.IntegerAlgorithmFactory.__init__(self)\n"
@@ -206,7 +227,7 @@ def registerIntegerPlugin(pluginClassName, algoName, author, date, info, release
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -219,14 +240,15 @@ def registerIntegerPlugin(pluginClassName, algoName, author, date, info, release
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerIntegerPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):
-        if algoName in pluginFactory.keys():
-                return
+def registerIntegerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.IntegerAlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.IntegerAlgorithmFactory.__init__(self)\n"
@@ -235,7 +257,7 @@ def registerIntegerPluginOfGroup(pluginClassName, algoName, author, date, info, 
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -248,14 +270,15 @@ def registerIntegerPluginOfGroup(pluginClassName, algoName, author, date, info, 
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerBooleanPlugin(pluginClassName, algoName, author, date, info, release):
-        if algoName in pluginFactory.keys():
-                return
+def registerBooleanPlugin(pluginClassName, pluginName, author, date, info, release):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.BooleanAlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.BooleanAlgorithmFactory.__init__(self)\n"
@@ -264,7 +287,7 @@ def registerBooleanPlugin(pluginClassName, algoName, author, date, info, release
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -277,14 +300,15 @@ def registerBooleanPlugin(pluginClassName, algoName, author, date, info, release
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerBooleanPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):
-        if algoName in pluginFactory.keys():
-                return
+def registerBooleanPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.BooleanAlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.BooleanAlgorithmFactory.__init__(self)\n"
@@ -293,7 +317,7 @@ def registerBooleanPluginOfGroup(pluginClassName, algoName, author, date, info, 
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -306,14 +330,15 @@ def registerBooleanPluginOfGroup(pluginClassName, algoName, author, date, info, 
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerSizePlugin(pluginClassName, algoName, author, date, info, release):
-        if algoName in pluginFactory.keys():
-                return
+def registerSizePlugin(pluginClassName, pluginName, author, date, info, release):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.SizeAlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.SizeAlgorithmFactory.__init__(self)\n"
@@ -322,7 +347,7 @@ def registerSizePlugin(pluginClassName, algoName, author, date, info, release):
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -335,14 +360,15 @@ def registerSizePlugin(pluginClassName, algoName, author, date, info, release):
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerSizePluginOfGroup(pluginClassName, algoName, author, date, info, release, group):
-        if algoName in pluginFactory.keys():
-                return
+def registerSizePluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.SizeAlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.SizeAlgorithmFactory.__init__(self)\n"
@@ -351,7 +377,7 @@ def registerSizePluginOfGroup(pluginClassName, algoName, author, date, info, rel
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -364,14 +390,15 @@ def registerSizePluginOfGroup(pluginClassName, algoName, author, date, info, rel
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerColorPlugin(pluginClassName, algoName, author, date, info, release):
-        if algoName in pluginFactory.keys():
-                return
+def registerColorPlugin(pluginClassName, pluginName, author, date, info, release):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.ColorAlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.ColorAlgorithmFactory.__init__(self)\n"
@@ -380,7 +407,7 @@ def registerColorPlugin(pluginClassName, algoName, author, date, info, release):
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -393,14 +420,15 @@ def registerColorPlugin(pluginClassName, algoName, author, date, info, release):
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerColorPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):
-        if algoName in pluginFactory.keys():
-                return
+def registerColorPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.ColorAlgorithmFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.ColorAlgorithmFactory.__init__(self)\n"
@@ -409,7 +437,7 @@ def registerColorPluginOfGroup(pluginClassName, algoName, author, date, info, re
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -422,14 +450,15 @@ def registerColorPluginOfGroup(pluginClassName, algoName, author, date, info, re
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerImportPlugin(pluginClassName, algoName, author, date, info, release):
-        if algoName in pluginFactory.keys():
-                return
+def registerImportPlugin(pluginClassName, pluginName, author, date, info, release):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.ImportModuleFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.ImportModuleFactory.__init__(self)\n"
@@ -438,7 +467,7 @@ def registerImportPlugin(pluginClassName, algoName, author, date, info, release)
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -451,14 +480,15 @@ def registerImportPlugin(pluginClassName, algoName, author, date, info, release)
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerImportPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):
-        if algoName in pluginFactory.keys():
-                return
+def registerImportPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.ImportModuleFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.ImportModuleFactory.__init__(self)\n"
@@ -467,7 +497,7 @@ def registerImportPluginOfGroup(pluginClassName, algoName, author, date, info, r
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -480,14 +510,15 @@ def registerImportPluginOfGroup(pluginClassName, algoName, author, date, info, r
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerExportPlugin(pluginClassName, algoName, author, date, info, release):
-        if algoName in pluginFactory.keys():
-                return
+def registerExportPlugin(pluginClassName, pluginName, author, date, info, release):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.ExportModuleFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.ExportModuleFactory.__init__(self)\n"
@@ -496,7 +527,7 @@ def registerExportPlugin(pluginClassName, algoName, author, date, info, release)
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -509,14 +540,15 @@ def registerExportPlugin(pluginClassName, algoName, author, date, info, release)
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
         
-def registerExportPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):
-        if algoName in pluginFactory.keys():
-                return
+def registerExportPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+	if testMode:
+	  return
         pluginModule = getCallingModuleName()
-        pluginModules[pluginModule] = 1
+        pluginModules[pluginName] = pluginModule
         code = "class " + pluginClassName + "Factory(tlp.ExportModuleFactory):\n"
         code += "\tdef __init__(self):\n"
         code += "\t\ttlp.ExportModuleFactory.__init__(self)\n"
@@ -525,7 +557,7 @@ def registerExportPluginOfGroup(pluginClassName, algoName, author, date, info, r
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
         code += "\tdef getName(self):\n"
-        code += "\t\t return \"" + algoName + "\"\n"
+        code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
         code += "\t\t return \"" + author + "\"\n"
         code += "\tdef getGroup(self):\n"
@@ -538,5 +570,6 @@ def registerExportPluginOfGroup(pluginClassName, algoName, author, date, info, r
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
         code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
-        code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
+        code += "pluginFactory[pluginName] = " + pluginClassName + "Factory()\n"
         exec(code)
+        updateTulipMenus()
