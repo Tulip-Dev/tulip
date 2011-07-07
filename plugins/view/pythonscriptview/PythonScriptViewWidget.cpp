@@ -92,6 +92,7 @@ void PythonScriptViewWidget::showEvent(QShowEvent *e) {
 void PythonScriptViewWidget::resizeToolBars() {
 	modulesToolBar->resize(modulesToolBarWidget->size());
 	mainScriptToolBar->resize(mainScriptToolBarWidget->size());
+	pluginsToolBar->resize(pluginsToolBarWidget->size());
 }
 
 int PythonScriptViewWidget::addMainScriptEditor() {
