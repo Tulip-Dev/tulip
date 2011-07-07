@@ -128,18 +128,18 @@ void TulipTableWidgetColumnSelectionWidget::showContextMenu(const QPoint& positi
     QModelIndexList rows = ui->listView->selectionModel()->selectedRows(0);
 
     //Properties operations
-    menu.addAction(tr("Show column(s)"),this,SLOT(showSelectedColumns()));
-    menu.addAction(tr("Show only selected column(s)"),this,SLOT(showOnlySelectedColumns()));
-    menu.addAction(tr("Hide column(s)"),this,SLOT(hideSelectedColumns()));
+    menu.addAction(tr("Show"),this,SLOT(showSelectedColumns()));
+    menu.addAction(tr("Show selected only"),this,SLOT(showOnlySelectedColumns()));
+    menu.addAction(tr("Hide"),this,SLOT(hideSelectedColumns()));
 
-    menu.addAction(tr("Create new column"),this,SLOT(createNewColumn()));
+    menu.addAction(tr("Create new property"),this,SLOT(createNewColumn()));
 
     QAction *copyToColumnAction = menu.addAction(tr("Copy to"),this,SLOT(copyColumn()));
     if(rows.size()!=1){
         copyToColumnAction->setEnabled(false);
     }
 
-    QAction *deleteColumnAction =menu.addAction(tr("Delete column(s)"));
+    QAction *deleteColumnAction =menu.addAction(tr("Delete"));
     connect(deleteColumnAction,SIGNAL(triggered()),this,SLOT(deleteSelectedColumns()),Qt::QueuedConnection);
     //Avoid to delete inherited properties
     for(QModelIndexList::iterator it  = rows.begin() ; it != rows.end(); ++it){

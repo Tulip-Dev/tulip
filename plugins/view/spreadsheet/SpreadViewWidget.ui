@@ -53,7 +53,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
-         <string>Columns</string>
+         <string>Properties</string>
         </property>
        </widget>
       </item>

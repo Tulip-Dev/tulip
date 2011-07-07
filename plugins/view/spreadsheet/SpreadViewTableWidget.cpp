@@ -121,32 +121,36 @@ void SpreadViewTableWidget::fillElementsContextMenu(QMenu& menu,GraphTableWidget
     if(!tableWidget->selectionModel()->isRowSelected(clickedRowIndex,QModelIndex())){
         tableWidget->selectionModel()->select(tulipTableModel->index(clickedRowIndex,0),QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     }
+    QString elementTypeLabel = tableWidget->graphModel()->elementType()==NODE?tr("node(s)"):tr("edge(s)");
     QModelIndexList rows = tableWidget->selectedRows(0);
     set<unsigned int> elements = tableWidget->indexListToIds(rows);
-    QAction* selectOnGraph = menu.addAction(tr("Select on graph"),this,SLOT(selectElements()));
-    selectOnGraph->setToolTip(tr("Replace the current graph selection by the elements highlighted in the table."));
+    QAction* selectOnGraph = menu.addAction(tr("Select"),this,SLOT(selectElements()));
+    selectOnGraph->setToolTip(tr("Replace the graph selection by the ")+ elementTypeLabel + tr(" highlighted in the table."));
     GraphTableWidget::SelectionStatus status = tableWidget->selectionStatus(rows);
-    QAction* addToSelection = menu.addAction(tr("Add to graph selection"),this,SLOT(addToSelection()));
-    addToSelection->setToolTip(tr("Add the elements highlighted in the table to the graph selection."));
-    QAction* removeFromSelection = menu.addAction(tr("Remove from graph selection"),this,SLOT(removeFromSelection()));
-    removeFromSelection->setToolTip(tr("Remove the elements highlighted in the table from the graph selection."));
+    QAction* addToSelection = menu.addAction(tr("Add to the graph selection"),this,SLOT(addToSelection()));
+    addToSelection->setToolTip(tr("Add the ")+elementTypeLabel+tr(" highlighted in the table to the graph selection."));
+    QAction* removeFromSelection = menu.addAction(tr("Remove from the graph selection"),this,SLOT(removeFromSelection()));
+    removeFromSelection->setToolTip(tr("Remove the ") + elementTypeLabel + tr(" highlighted in the table from the graph selection."));
     if(status == GraphTableWidget::Selected){
         addToSelection->setEnabled(false);
     }else if(status == GraphTableWidget::Unselected){
         removeFromSelection->setEnabled(false);
     }
-    menu.addAction(tr("Highlight graph selection in the table"),this,SLOT(highlightElements()));
+    QAction* highlightAction = menu.addAction(tr("Highlight selection"),this,SLOT(highlightElements()));
+    highlightAction->setToolTip(tr("Highlight the ")+elementTypeLabel+tr(" selected in the graph"));
 
     if(tableWidget->elementType() == NODE){
 
-        menu.addAction(tr("Copy"),this,SLOT(copyNodes()));
+        QAction* copyAction=menu.addAction(tr("Clone"),this,SLOT(copyNodes()));
+        copyAction->setToolTip(tr("Clone the ")+elementTypeLabel+tr(" highlighted"));
 
         //Group only available if there is more than one node selected.
         QAction *group = menu.addAction(tr("Group "),this,SLOT(group()));
+        group->setToolTip(tr("Create a meta node with the highlighted nodes"));
         //Can only create a metanode if we have more than one node and if the current graph is not the root graph.
         group->setEnabled(rows.size()>1 && ui->tableView->graph()->getRoot() != ui->tableView->graph());
 
-        QAction *ungroup = menu.addAction(tr("Ungroup "),this,SLOT(ungroup()));
+        QAction *ungroup = menu.addAction(tr("Ungroup "),this,SLOT(ungroup()));        
         //If only one node is not a meta node cannot ungroup.
         for(set<unsigned int>::iterator it = elements.begin(); it != elements.end();++it){
             if(!ui->tableView->graph()->isMetaNode(node(*it))){
@@ -168,10 +172,10 @@ void SpreadViewTableWidget::fillPropertiesContextMenu(QMenu& menu,GraphTableWidg
     PropertyInterface* property = tulipTableWidget->graphModel()->propertyForIndex(clickedColumn);
 
     //Properties operations
-    QAction *hideColumnAction = menu.addAction(tr("Hide column"),this,SLOT(hideColumn()));
+    QAction *hideColumnAction = menu.addAction(tr("Hide"),this,SLOT(hideColumn()));
     hideColumnAction->setData(QVariant(clickedColumn));
 
-    menu.addAction(tr("Create new column"),this,SLOT(createNewProperties()));
+    menu.addAction(tr("Create new property"),this,SLOT(createNewProperties()));
 
     QAction *copyToColumnAction = menu.addAction(tr("Copy to"),this,SLOT(copyColumnToOther()));
     copyToColumnAction->setData(QVariant(clickedColumn));
@@ -179,11 +183,11 @@ void SpreadViewTableWidget::fillPropertiesContextMenu(QMenu& menu,GraphTableWidg
     QAction *setAllValuesAction = menu.addAction(tr("Set all values"),this,SLOT(setAllColumnValues()));
     setAllValuesAction->setData(QVariant(clickedColumn));
 
-    QAction *clearColumnAction =menu.addAction(tr("Reset column"),this,SLOT(resetColumn()));
+    QAction *clearColumnAction =menu.addAction(tr("Reset"),this,SLOT(resetColumn()));
     clearColumnAction->setData(QVariant(clickedColumn));
 
 
-    QAction *deleteColumnAction =menu.addAction(tr("Delete column"),this,SLOT(deleteColumn()));
+    QAction *deleteColumnAction =menu.addAction(tr("Delete"),this,SLOT(deleteColumn()));
     deleteColumnAction->setData(QVariant(clickedColumn));
     //Avoid to delete inherited properties
     if(property == NULL ){

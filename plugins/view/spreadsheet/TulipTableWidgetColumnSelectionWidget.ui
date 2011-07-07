@@ -58,14 +58,14 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Filter properties</string>
+      <string>Properties filter</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>0</number>
       </property>
       <property name="topMargin">
-       <number>6</number>
+       <number>3</number>
       </property>
       <property name="rightMargin">
        <number>0</number>
@@ -85,7 +85,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Visual</string>
+         <string>Visual properties</string>
         </property>
        </widget>
       </item>
@@ -100,12 +100,16 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Custom pattern</string>
+           <string>Custom filter</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="customPatternLineEdit"/>
+         <widget class="QLineEdit" name="customPatternLineEdit">
+          <property name="placeholderText">
+           <string>Input a custom filter</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -118,7 +122,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Data</string>
+         <string>Data properties</string>
         </property>
        </widget>
       </item>
