@@ -94,6 +94,12 @@ public:
   void getColors(GlGraphInputData *data,const std::vector<Coord> &vertices,std::vector<Color> &linesColorsArray);
 
   /**
+  * Compute the edge size
+  */
+  void getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,const float maxSrcSize,const float maxTgtSize,Size &edgeSize);
+
+
+  /**
    * This function must be called before each graph rendering
    * This function clears previously compute edgeWidthLod
    * FIXME remove the unused bool (was named orthoProjection) ?
@@ -117,7 +123,7 @@ private :
   void drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos,
                 const Coord &startPoint, const Coord &endPoint, const LineType::RealType &bends,
                 const Color &startColor, const Color &endColor, const Coord &lookDir, bool colorInterpolate, const Color &borderColor,
-                const Size &size, int shape, bool edge3D, float lod,const std::string &textureName);
+                const Size &size, int shape, bool edge3D, float lod,const std::string &textureName, const float outlineWidth);
 
   /**
    * Function used to compute bounding box for edge extremity.
@@ -130,10 +136,6 @@ private :
    */
   void getEdgeColor(GlGraphInputData *data,edge e,node source, node target, bool selected,Color &srcCol, Color &tgtCol);
 
-  /**
-   * Compute the edge size
-   */
-  void getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,const float maxSrcSize,const float maxTgtSize,Size &edgeSize);
 
   /**
    * Compute width lod of edge
