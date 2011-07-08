@@ -18,17 +18,19 @@ fi
 for PLUGIN_LIB in $(find $BUILD_TOP_DIR -name 'lib*-'@TulipVersion@.$SUFFIX)
 do
   PLUGIN_LIB_NAME=$(basename $PLUGIN_LIB)
-  PLUGIN_XML_NAME=${PLUGIN_LIB_NAME%.$SUFFIX}.xml
-  PLUGIN_XML=$(find $SRV_DIR -name $PLUGIN_XML_NAME)
-  if [ "$PLUGIN_XML" == "" ]; then
-    echo Error: no directory found for $PLUGIN_LIB
-    exit
+  PLUGIN_DIR_NAME=${PLUGIN_LIB_NAME%.$SUFFIX}
+  PLUGIN_DIR=$(find $SRV_DIR -name "$PLUGIN_DIR_NAME.*" -a -type d)
+  if [ "$PLUGIN_DIR" = "" ]; then
+      tput setaf 1
+      tput bold
+      echo Error: no directory found for $PLUGIN_LIB
+      tput sgr0
   else
-    echo copying $PLUGIN_LIB_NAME in $(dirname $PLUGIN_XML)/$ARCH
-    if [ ! -d $(dirname $PLUGIN_XML)/$ARCH ]; then
-      mkdir $(dirname $PLUGIN_XML)/$ARCH
-    fi
-    cp $PLUGIN_LIB $(dirname $PLUGIN_XML)/$ARCH
+      echo copying $PLUGIN_LIB_NAME in $PLUGIN_DIR/$ARCH
+      if [ ! -d $PLUGIN_DIR/$ARCH ]; then
+	  mkdir $PLUGIN_DIR/$ARCH
+      fi
+      cp $PLUGIN_LIB $PLUGIN_DIR/$ARCH
   fi
 done
 
