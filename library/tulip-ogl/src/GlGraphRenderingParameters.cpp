@@ -204,6 +204,16 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setSelectionColor(c);
 }
 //====================================================
+unsigned int GlGraphRenderingParameters::getLabelsBorder() const {
+  if(_labelsDensity<0)
+    return 100;
+  else
+    return -_labelsDensity;
+}
+void GlGraphRenderingParameters::setLabelsBorder(const unsigned int border) {
+  _labelsDensity = -static_cast<int>(border);
+}
+//====================================================
 bool GlGraphRenderingParameters::isViewMetaLabel()const {
   return (_viewMetaLabel);
 }

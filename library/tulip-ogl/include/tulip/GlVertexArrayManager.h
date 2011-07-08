@@ -76,6 +76,7 @@ public:
   void activate(bool act);
 
   void activateLineEdgeDisplay(GlEdge *edge, bool selected);
+  void activateQuadEdgeDisplay(GlEdge *edge, bool selected);
   void activatePointEdgeDisplay(GlEdge *edge, bool selected);
   void activatePointNodeDisplay(GlNode *node, bool onePixel, bool selected);
 
@@ -120,14 +121,34 @@ protected:
   bool vectorIndexSizeInit;
 
   bool colorInterpolate;
+  bool sizeInterpolate;
   bool edgesModified;
 
   std::vector<Coord> linesCoordsArray;
   std::vector<Color> linesColorsArray;
   std::vector<GLint> linesIndexArray;
   std::vector<GLsizei> linesIndexCountArray;
-  std::vector<GLuint> linesRenderingIndexArray;
-  std::vector<GLuint> linesSelectedRenderingIndexArray;
+  std::vector<GLint> linesRenderingStartIndexArray;
+  std::vector<GLsizei> linesRenderingCountArray;
+  std::vector<GLint> linesSelectedRenderingStartIndexArray;
+  std::vector<GLsizei> linesSelectedRenderingCountArray;
+
+  std::vector<Coord> quadsCoordsArray;
+  std::vector<Color> quadsColorsArray;
+  std::vector<Color> quadsOutlineColorsArray;
+  std::vector<GLint> quadsIndexArray;
+  std::vector<GLsizei> quadsIndexCountArray;
+  std::vector<std::vector<GLuint> > quadsBottomOutlineIndexArray;
+  std::vector<std::vector<GLuint> > quadsTopOutlineIndexArray;
+
+  std::vector<GLint> quadsRenderingStartIndexArray;
+  std::vector<GLsizei> quadsRenderingCountArray;
+  std::vector<GLint> quadsSelectedRenderingStartIndexArray;
+  std::vector<GLsizei> quadsSelectedRenderingCountArray;
+  std::map<float, std::vector<const GLuint* > > quadsOutlineRenderingIndexArray;
+  std::map<float, std::vector<GLsizei> > quadsOutlineRenderingCountArray;
+  std::map<float, std::vector<const GLuint* > > quadsOutlineSelectedRenderingIndexArray;
+  std::map<float, std::vector<GLsizei> > quadsOutlineSelectedRenderingCountArray;
 
   std::vector<Coord> pointsCoordsArray;
   std::vector<Color> pointsColorsArray;
@@ -142,6 +163,9 @@ protected:
 
 
   std::vector<std::pair<unsigned int,unsigned int> > edgeToLineIndexVector;
+  std::vector<std::pair<unsigned int,unsigned int> > edgeToQuadIndexVector;
+  std::vector<unsigned int> edgeToBottomOulineIndexVector;
+  std::vector<unsigned int> edgeToTopOutlineIndexVector;
   std::vector<unsigned int> edgeToPointIndexVector;
   std::vector<unsigned int> nodeToPointIndexVector;
 };
