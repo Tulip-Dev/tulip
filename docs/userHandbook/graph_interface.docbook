@@ -619,7 +619,85 @@
 
     <sect2 id="SpreadsheetComponent"><title>Table view</title>
       <graphic fileref="images/spreadsheet_view.png"/>
-    <para> In this view you can visualize and edit the values of the properties of the graph elements (nodes or edges) in a table form.</para>
+    <para> In this view you can visualize and edit the values of each graph elements (nodes or edges) using a table form. Each column represents a graph property and each row a node or an edge.</para>
+    <para> The picture <inlinegraphic fileref="images/spreadsheet_inherited_properties.png"/>  beside a property mean that property is inherited.</para>
+    <para> Nodes and edges are drawn in different tables. To switch the current table click on the <code>Nodes</code> or the <code>Edges</code> tab at the top of the view.</para>
+    <graphic fileref="images/spreadsheet_tabs.png"/>
+    <para>To edit a value double click on the corresponding cell. Once the modification done press the <code>Enter</code> key to commit the modification or <code>Escape</code> to cancel it.</para>
+    <sect3><title>Sort elements</title>
+    <para>To sort elements click on the label of the property. To invert the sort order click again on the label of the property.</para>
+    </sect3>
+    <sect3><title>Contextual menu</title>
+    <para>There is three kinds of contextual menu : </para>
+    <itemizedlist>
+      <listitem><para>Property menu</para></listitem>
+      <listitem><para>Nodes menu</para></listitem>
+      <listitem><para>Edges menu</para></listitem>
+    </itemizedlist>
+    <sect4><title>Property menu</title>
+    <para>Right click on the label of a property to show it's contextual menu.</para>
+    <itemizedlist>
+      <listitem><para><code>Hide</code>: hide the property in the table. To show it again use the property management panel.</para></listitem>
+      <listitem><para><code>Create new property</code>: display the property creation dialog. Choose a property type and input a property name then click on Ok.</para></listitem>
+      <listitem><para><code>Copy to</code>: display the property copy dialog. In this dialog you can choose to copy the property in a new property or in an existing property.</para></listitem>
+      <listitem><para><code>Set all values</code>: set the value of each element of the table. If a filter is defined update only displayed elements.</para></listitem>
+      <listitem><para><code>Reset</code>: reset properties values to default value. Do not take in account filter.</para></listitem>
+      <listitem><para><code>Delete</code>: delete the property. You cannot delete inherited properties.</para></listitem>
+    </itemizedlist>
+    </sect4>
+    <sect4><title>Nodes menu</title>
+    <para>Right click on the label of a node or on a row in the table to show the contextual menu.</para>
+    <itemizedlist>
+      <listitem><para><code>Select</code>: replace the nodes selected in the graph by the nodes highlighted in the table.</para></listitem>
+      <listitem><para><code>Add to the graph selection</code>: add the nodes highlighted in the table to the graph selection. Do not clear the old selection.</para></listitem>
+      <listitem><para><code>Remove from the graph selection</code>: remove the nodes highlighted in the table from the graph selection.</para></listitem>
+      <listitem><para><code>Highlight selection</code>: highlight in the table the nodes selected in the graph. Clear previously highlighted nodes.</para></listitem>
+      <listitem><para><code>Clone</code>: duplicate highlighted nodes in the table. Also copy the properties values.</para></listitem>
+      <listitem><para><code>Group</code>: create a meta node with the highlighted nodes. This action is available if more than one node is highlighted</para></listitem>
+      <listitem><para><code>Ungroup</code>: extract all the nodes in the highlighted metanodes. Metanodes will be deleted. This action is available if all highlighted nodes are metanodes.</para></listitem>
+      <listitem><para><code>Delete</code>: remove highlighted nodes from the current graph.</para></listitem>
+    </itemizedlist>
+    </sect4>
+    <sect4><title>Edges menu</title>
+    <para>Right click on the label of an edge or on a row in the table to show the contextual menu.</para>
+    <itemizedlist>
+      <listitem><para><code>Select</code>: replace the edges selected in the graph by the edges highlighted in the table.</para></listitem>
+      <listitem><para><code>Add to the graph selection</code>: add the edges highlighted in the table to the graph selection. Do not clear the old selection.</para></listitem>
+      <listitem><para><code>Remove from the graph selection</code>: remove the edges highlighted in the table from the graph selection.</para></listitem>
+      <listitem><para><code>Highlight selection</code>: highlight in the table the edges selected in the graph. Clear previously highlighted edges.</para></listitem>
+      <listitem><para><code>Delete</code>: remove highlighted edges from the current graph.</para></listitem>
+    </itemizedlist>
+    </sect4>
+    </sect3>
+    <sect3><title>Properties management panel</title>
+    <para>To show the property management panel click on the <code>Properties</code> button at the top left corner of the view.</para>
+    <para>Each table has it's own property management panel, so displayed properties can be different in nodes table and in edges table.</para>
+    <graphic fileref="images/spreadsheet_property_management.png"/>
+    <sect4><title>Displayed properties widget</title>
+    <para>This widget allows the user to show and hide properties in the table. Check or uncheck the check-box beside a property to show or hide it.</para>
+    <para>A right click on the list display a contextual menu : </para>
+    <itemizedlist>
+      <listitem><para><code>Show</code>: show the highlighted properties. Do not hide previously displayed properties.</para></listitem>
+      <listitem><para><code>Show selected only</code>: show the highlighted properties and hide all the other.</para></listitem>
+      <listitem><para><code>Hide</code>: hide the highlighted properties.</para></listitem>
+      <listitem><para><code>Create new property</code>: display the property creation dialog. Choose a property type and input a property name then click on Ok.</para></listitem>
+      <listitem><para><code>Copy to</code>: display the property copy dialog. In this dialog you can choose to copy the property in a new property or in an existing property.</para></listitem>
+      <listitem><para><code>Delete</code>: delete the property. You cannot delete inherited properties.</para></listitem>
+    </itemizedlist>
+    </sect4>
+    <sect4><title>Filter displayed properties</title>
+    <para>This widget allow the user to select group of properties.</para>
+    <para>The <code>Visual properties</code> button selects all the properties that affect visual rendering.</para>
+    <para>The <code>Data properties</code> button selects all the properties containing user data i.e. properties created by the user, an algorithm or properties imported from a CSV file.</para>
+    <para>The <code>Custom filter</code> field allow the user to filter displayed properties using a regular expression. Each property with a name matching the pattern will be displayed.</para>
+    </sect4>
+    </sect3>
+    <sect3><title>Filter data</title>
+    <para>This widget allow the user to filter displayed elements in the current table.</para>
+    <graphic fileref="images/spreadsheet_filter.png"/>
+    <para>The <code>Show only selected elements</code> check-box hide all the elements that are not selected in the graph.</para>
+    <para>To filter elements using regular expression : input a pattern in the <code>Search</code> filed, choose to search in a specific property or in all the properties and click on the <code>Filter</code> button.</para>
+    </sect3>
     </sect2>
   </sect1>
 </chapter>
