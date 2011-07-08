@@ -127,6 +127,9 @@ public :
 	void setConsoleWidget(QPlainTextEdit *consoleWidget);
 	void setPythonShellWidget(PythonShellWidget *shellWidget);
 
+	void initConsoleOutput();
+	void loadTulipPythonPlugins();
+
 private :
 
 	PythonInterpreter();

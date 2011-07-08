@@ -432,14 +432,6 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
 
 	}
 
-// Special case for Visual Studio, run the default script at first init
-// to force the instantiation of some qt objects we couldn't do at the plugin
-// initialisation (segfault otherwise)
-#if defined(_MSC_VER) && defined(_DEBUG)
-	if (this->graph == NULL)
-		executeCurrentScript();
-#endif
-
 	this->graph = graph;
 }
 

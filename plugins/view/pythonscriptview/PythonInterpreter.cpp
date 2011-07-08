@@ -116,9 +116,34 @@ void ConsoleOutputDialog::hideConsoleOutputDialog() {
 	hide();
 }
 
+string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";
+
 PythonInterpreter PythonInterpreter::instance;
 
+#ifdef _MSC_VER
+BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
+    switch (ul_reason_for_call)
+	{
+		case DLL_PROCESS_ATTACH:
+			if (QApplication::instance()) {
+				PythonInterpreter::getInstance()->initConsoleOutput();
+				PythonInterpreter::getInstance()->loadTulipPythonPlugins();
+			}
+			break;
+
+		case DLL_THREAD_ATTACH:
+		case DLL_THREAD_DETACH:
+			break;
+
+		case DLL_PROCESS_DETACH:
+			break;
+    }
+    return TRUE;
+}
+#endif
+
 PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NULL) {
+
 	int argc=1;
 	char *argv[1];
 	argv[0] = const_cast<char *>("");
@@ -164,19 +189,11 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 		dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
 #endif
 
-// fix a bug when linking to the qt debug libraries for Visual Studio : 
-// instantiating a widget when the plugin is being loaded (PythonInterpreter object is instantiated when LoadLibrary is called on the dll of the plugin)
-// makes tulip crash
-#if !defined(_MSC_VER) && !defined(_DEBUG)
-		consoleOuputHandler = new ConsoleOutputHandler();
-		consoleOuputEmitter = new ConsoleOutputEmitter();
-		QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QPlainTextEdit*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QPlainTextEdit*, const QString &, bool)), Qt::QueuedConnection);
-		consoleDialog = new ConsoleOutputDialog();
-		setDefaultConsoleWidget();
+#if !defined(_MSC_VER)
+		initConsoleOutput();		
 #endif
 		if (interpreterInit()) {
 
-			string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";
 			addModuleSearchPath(pythonPluginsPath, true);
 
 #ifdef __APPLE__
@@ -201,25 +218,17 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 			
 			runString("from tulip import *");
 
-			QDir pythonPluginsDir(pythonPluginsPath.c_str());
-			QStringList nameFilter;
-			nameFilter << "*.py";
-			QFileInfoList fileList = pythonPluginsDir.entryInfoList(nameFilter);
-			for (int i = 0 ; i < fileList.size() ; ++i) {
-				QFileInfo fileInfo = fileList.at(i);
-				QString moduleName = fileInfo.fileName();
-				moduleName.replace(".py", "");
-				runString("import " + moduleName.toStdString());
-			}
-			// some external modules (like numpy) overrides the SIGINT handler at import
-			// reinstall the default one, otherwise Tulip can not be interrupted by hitting Ctrl-C in a console
-			setDefaultSIGINTHandler();
+#ifndef _MSC_VER
+			loadTulipPythonPlugins();
+#endif
 
 			runString(printObjectDictFunction);
 		}
 	}
 
 	releaseGIL();
+
+	
 }
 
 PythonInterpreter::~PythonInterpreter() {
@@ -241,6 +250,30 @@ PythonInterpreter::~PythonInterpreter() {
 
 PythonInterpreter *PythonInterpreter::getInstance() {
 	return &instance;
+}
+
+void PythonInterpreter::initConsoleOutput() {
+	consoleOuputHandler = new ConsoleOutputHandler();
+	consoleOuputEmitter = new ConsoleOutputEmitter();
+	QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QPlainTextEdit*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QPlainTextEdit*, const QString &, bool)), Qt::QueuedConnection);
+	consoleDialog = new ConsoleOutputDialog();
+	setDefaultConsoleWidget();
+}	
+
+void PythonInterpreter::loadTulipPythonPlugins() {
+	QDir pythonPluginsDir(pythonPluginsPath.c_str());
+	QStringList nameFilter;
+	nameFilter << "*.py";
+	QFileInfoList fileList = pythonPluginsDir.entryInfoList(nameFilter);
+	for (int i = 0 ; i < fileList.size() ; ++i) {
+		QFileInfo fileInfo = fileList.at(i);
+		QString moduleName = fileInfo.fileName();
+		moduleName.replace(".py", "");
+		runString("import " + moduleName.toStdString());
+	}
+	// some external modules (like numpy) overrides the SIGINT handler at import
+	// reinstall the default one, otherwise Tulip can not be interrupted by hitting Ctrl-C in a console
+	setDefaultSIGINTHandler();
 }
 
 bool PythonInterpreter::interpreterInit() {
@@ -313,17 +346,6 @@ void PythonInterpreter::addModuleSearchPath(const std::string &path, const bool 
 }
 
 bool PythonInterpreter::runGraphScript(const string &module, const string &function, tlp::Graph *graph) {
-
-// special case for Visual Studio debug mode :
-// instantiate the console dialog here because we could not in the constructor (segfault otherwise)
-#if defined(_MSC_VER) && defined(_DEBUG)
-	if (!consoleDialog) {
-		consoleOuputHandler = new ConsoleOutputHandler();
-		consoleOuputEmitter = new ConsoleOutputEmitter();
-		QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QPlainTextEdit*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QPlainTextEdit*,const QString &, bool)), Qt::QueuedConnection);
-		consoleDialog = new ConsoleOutputDialog();
-	}
-#endif
 
 	holdGIL();
 
