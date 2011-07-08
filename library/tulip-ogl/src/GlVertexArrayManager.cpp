@@ -253,7 +253,7 @@ void GlVertexArrayManager::endRendering() {
 			  glMultiDrawElements(GL_LINE_STRIP, VECTOR_DATA(quadsOutlineSelectedRenderingCountArray[it->first]), GL_UNSIGNED_INT, reinterpret_cast<const GLvoid **>(VECTOR_DATA(quadsOutlineSelectedRenderingIndexArray[it->first])), quadsOutlineSelectedRenderingCountArray[it->first].size());
 			} else {
 			  for (size_t i = 0 ; i < quadsOutlineSelectedRenderingCountArray[it->first].size() ; ++i) {
-			    glDrawElements(GL_LINE_STRIP, quadsOutlineSelectedRenderingCountArray[it->first][i], GL_UNSIGNED_INT, VECTOR_DATA(quadsOutlineSelectedRenderingIndexArray[it->first][i]));
+			    glDrawElements(GL_LINE_STRIP, quadsOutlineSelectedRenderingCountArray[it->first][i], GL_UNSIGNED_INT, &quadsOutlineSelectedRenderingIndexArray[it->first][i][0]);
 			  }
 			}  
 		}
@@ -325,7 +325,7 @@ void GlVertexArrayManager::endRendering() {
 			  glMultiDrawElements(GL_LINE_STRIP, VECTOR_DATA(quadsOutlineRenderingCountArray[it->first]), GL_UNSIGNED_INT, reinterpret_cast<const GLvoid **>(VECTOR_DATA(quadsOutlineRenderingIndexArray[it->first])), quadsOutlineRenderingCountArray[it->first].size());
 			} else {
 			  for (size_t i = 0 ; i < quadsOutlineRenderingCountArray[it->first].size() ; ++i) {
-			    glDrawElements(GL_LINE_STRIP, quadsOutlineRenderingCountArray[it->first][i], GL_UNSIGNED_INT, VECTOR_DATA(quadsOutlineRenderingIndexArray[it->first][i])); 
+			    glDrawElements(GL_LINE_STRIP, quadsOutlineRenderingCountArray[it->first][i], GL_UNSIGNED_INT, &quadsOutlineRenderingIndexArray[it->first][i][0]);
 			  }
 			}
 		}
