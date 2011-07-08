@@ -28,11 +28,11 @@
 #define STRINGIFY_INTERNAL(PARAM) #PARAM
 
 //MSVC is the only compiler we use that does not have typeof
-#if not defined _MSC_VER
+#if !defined(_MSC_VER)
 #  define TYPEOF typeof
 #endif
 
-#if defined _MSC_VER
+#if defined(_MSC_VER)
 // disable some annoying Visual Studio warnings 
 #pragma warning(disable: 4251)
 #pragma warning(disable: 4275)

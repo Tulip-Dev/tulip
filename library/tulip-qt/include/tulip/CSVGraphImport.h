@@ -26,6 +26,7 @@
 #include <QtGui/QWidget>
 #include <QtGui/QMessageBox>
 #include <tulip/tuliphash.h>
+
 namespace tlp{    
     class PropertyInterface;
 
@@ -36,27 +37,26 @@ namespace tlp{
     class TLP_QT_SCOPE PropertyTools
     {
     public:
-        static std::string _DEPRECATED getPropertyTypeLabel(const std::string& typeName);
-        static std::string _DEPRECATED getPropertyTypeFromPropertyTypeLabel(const std::string& typeNameLabel);
-        static QStringList _DEPRECATED getPropertyTypeLabelsList();
+        static _DEPRECATED std::string getPropertyTypeLabel(const std::string& typeName);
+        static _DEPRECATED std::string getPropertyTypeFromPropertyTypeLabel(const std::string& typeNameLabel);
+        static _DEPRECATED QStringList getPropertyTypeLabelsList();
         /**
            * @brief Try to find the type from a string.
            */
-        static std::string _DEPRECATED guessDataType(const std::string& data,const std::string& decimalSeparator);
+        static _DEPRECATED std::string guessDataType(const std::string& data,const std::string& decimalSeparator);
         /**
            * @brief Test if a property is compatible with the given type.
            */
-        static bool _DEPRECATED existingPropertyIsCompatibleWithType(Graph* graph,const std::string& propertyName,
+        static _DEPRECATED bool existingPropertyIsCompatibleWithType(Graph* graph,const std::string& propertyName,
                                                   const std::string& propertyType);
         /**
            * @brief Find or create a property in the graph.
            */
-        static PropertyInterface * _DEPRECATED getProperty(Graph* graph, const std::string& propertyName,
-                                            const std::string& propertyType);
+        static _DEPRECATED PropertyInterface *getProperty(Graph* graph, const std::string& propertyName, const std::string& propertyType);
         /**
            * @brief Find or create a local property in the graph.
            */
-        static PropertyInterface * _DEPRECATED getLocalProperty(Graph* graph, const std::string& propertyName,
+        static _DEPRECATED PropertyInterface *getLocalProperty(Graph* graph, const std::string& propertyName,
                                             const std::string& propertyType);
     };
 

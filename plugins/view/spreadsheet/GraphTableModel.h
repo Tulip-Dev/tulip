@@ -216,10 +216,10 @@ private:
 
         while(!indexes.empty()){
             //Compute the greatest range of successive indexes.
-            typename std::set<int>::iterator from = indexes.begin();
+            std::set<int, std::greater<int> >::const_iterator from = indexes.begin();
 
-            typename std::set<int>::iterator current = from;
-            typename std::set<int>::iterator to=from;
+            std::set<int, std::greater<int> >::const_iterator current = from;
+            std::set<int, std::greater<int> >::const_iterator to=from;
             ++to;
 
             //If the indexes are successive delete them at the same time.
