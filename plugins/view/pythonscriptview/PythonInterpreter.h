@@ -143,7 +143,11 @@ private :
 
 	ConsoleOutputDialog *consoleDialog;
 	
-	std::string pythonVersion; 
+	std::string pythonVersion;
+
+#ifndef WIN32
+	PyThreadState*  mainThreadState;
+#endif 
 	PyGILState_STATE gilState;
 
 };

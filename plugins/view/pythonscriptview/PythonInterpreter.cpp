@@ -126,11 +126,15 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 	Py_NoSiteFlag = 1;
 	Py_InitializeEx(0);
 	
-	PyEval_InitThreads();	
+	PyEval_InitThreads();
+#ifndef WIN32
+	mainThreadState = PyEval_SaveThread();
+#else
 	PyThreadState* tcur = PyThreadState_Get() ;
 	PyThreadState_Swap(NULL);
 	PyThreadState_Clear(tcur);	
-	PyThreadState_Delete(tcur);		
+	PyThreadState_Delete(tcur);
+#endif		
 	PyEval_ReleaseLock();
 	
 	holdGIL();
@@ -220,7 +224,11 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 
 PythonInterpreter::~PythonInterpreter() {
 	if (interpreterInit()) {
+#ifndef WIN32
+	        PyEval_RestoreThread(mainThreadState);
+#else
 		holdGIL();
+#endif
 		Py_Finalize();
 	}
 	delete consoleDialog;
