@@ -179,6 +179,8 @@ void GlVertexArrayManager::endRendering() {
 		return;
 	isBegin=false;
 
+	static double glVersion = atof(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
+
 	OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
 	glDisable(GL_LIGHTING);
@@ -221,7 +223,13 @@ void GlVertexArrayManager::endRendering() {
 	glLineWidth(4);
 	if(linesSelectedRenderingStartIndexArray.size()!=0) {
 		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
-		glMultiDrawArrays(GL_LINE_STRIP, &linesSelectedRenderingStartIndexArray[0], &linesSelectedRenderingCountArray[0], linesSelectedRenderingStartIndexArray.size());
+		if (glVersion >= 1.4) {
+		  glMultiDrawArrays(GL_LINE_STRIP, VECTOR_DATA(linesSelectedRenderingStartIndexArray), VECTOR_DATA(linesSelectedRenderingCountArray), linesSelectedRenderingStartIndexArray.size());
+		} else {
+		  for (size_t i = 0 ; i < linesSelectedRenderingStartIndexArray.size() ; ++i) {
+		    glDrawArrays(GL_LINE_STRIP, linesSelectedRenderingStartIndexArray[i], linesSelectedRenderingCountArray[i]);
+		  }  
+		} 
 	}
 
 	// Selected edges quad rendering
@@ -229,13 +237,25 @@ void GlVertexArrayManager::endRendering() {
 		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(quadsCoordsArray));
 		OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 		OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-		glMultiDrawArrays(GL_QUAD_STRIP, &quadsSelectedRenderingStartIndexArray[0], &quadsSelectedRenderingCountArray[0], quadsSelectedRenderingStartIndexArray.size());
+		if (glVersion >= 1.4) {
+		  glMultiDrawArrays(GL_QUAD_STRIP, VECTOR_DATA(quadsSelectedRenderingStartIndexArray), VECTOR_DATA(quadsSelectedRenderingCountArray), quadsSelectedRenderingStartIndexArray.size());
+		} else {
+		  for (size_t i = 0 ; i < quadsSelectedRenderingStartIndexArray.size() ; ++i) {
+		    glDrawArrays(GL_QUAD_STRIP, quadsSelectedRenderingStartIndexArray[i], quadsSelectedRenderingCountArray[i]);
+		  }
+		}  
 		OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 		OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 		std::map<float, vector<GLsizei> >::iterator it = quadsOutlineSelectedRenderingCountArray.begin();
 		for (; it != quadsOutlineSelectedRenderingCountArray.end() ; ++it) {
 			glLineWidth(it->first);
-			glMultiDrawElements(GL_LINE_STRIP, &quadsOutlineSelectedRenderingCountArray[it->first][0], GL_UNSIGNED_INT, reinterpret_cast<const GLvoid **>(&quadsOutlineSelectedRenderingIndexArray[it->first][0]), quadsOutlineSelectedRenderingCountArray[it->first].size());
+			if (glVersion >= 1.4) {
+			  glMultiDrawElements(GL_LINE_STRIP, VECTOR_DATA(quadsOutlineSelectedRenderingCountArray[it->first]), GL_UNSIGNED_INT, reinterpret_cast<const GLvoid **>(VECTOR_DATA(quadsOutlineSelectedRenderingIndexArray[it->first])), quadsOutlineSelectedRenderingCountArray[it->first].size());
+			} else {
+			  for (size_t i = 0 ; i < quadsOutlineSelectedRenderingCountArray[it->first].size() ; ++i) {
+			    glDrawElements(GL_LINE_STRIP, quadsOutlineSelectedRenderingCountArray[it->first][i], GL_UNSIGNED_INT, VECTOR_DATA(quadsOutlineSelectedRenderingIndexArray[it->first][i]));
+			  }
+			}  
 		}
 		OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 	}
@@ -278,7 +298,13 @@ void GlVertexArrayManager::endRendering() {
 	if (!linesRenderingStartIndexArray.empty()) {
 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(linesColorsArray));
 		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
-		glMultiDrawArrays(GL_LINE_STRIP, &linesRenderingStartIndexArray[0], &linesRenderingCountArray[0], linesRenderingStartIndexArray.size());
+		if (glVersion >= 1.4) {
+		  glMultiDrawArrays(GL_LINE_STRIP, &linesRenderingStartIndexArray[0], &linesRenderingCountArray[0], linesRenderingStartIndexArray.size());
+		} else {
+		  for (size_t i = 0 ; i < linesRenderingStartIndexArray.size() ; ++i) {
+		    glDrawArrays(GL_LINE_STRIP, linesRenderingStartIndexArray[i], linesRenderingCountArray[i]);
+		  }
+		}
 	}
 
 	OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
@@ -295,13 +321,25 @@ void GlVertexArrayManager::endRendering() {
 		std::map<float, vector<GLsizei> >::iterator it = quadsOutlineRenderingCountArray.begin();
 		for (; it != quadsOutlineRenderingCountArray.end() ; ++it) {
 			glLineWidth(it->first);
-			glMultiDrawElements(GL_LINE_STRIP, &quadsOutlineRenderingCountArray[it->first][0], GL_UNSIGNED_INT, reinterpret_cast<const GLvoid **>(&quadsOutlineRenderingIndexArray[it->first][0]), quadsOutlineRenderingCountArray[it->first].size());
+			if (glVersion >= 1.4) {
+			  glMultiDrawElements(GL_LINE_STRIP, VECTOR_DATA(quadsOutlineRenderingCountArray[it->first]), GL_UNSIGNED_INT, reinterpret_cast<const GLvoid **>(VECTOR_DATA(quadsOutlineRenderingIndexArray[it->first])), quadsOutlineRenderingCountArray[it->first].size());
+			} else {
+			  for (size_t i = 0 ; i < quadsOutlineRenderingCountArray[it->first].size() ; ++i) {
+			    glDrawElements(GL_LINE_STRIP, quadsOutlineRenderingCountArray[it->first][i], GL_UNSIGNED_INT, VECTOR_DATA(quadsOutlineRenderingIndexArray[it->first][i])); 
+			  }
+			}
 		}
 		OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(quadsColorsArray));
 		OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-		glMultiDrawArrays(GL_QUAD_STRIP, &quadsRenderingStartIndexArray[0], &quadsRenderingCountArray[0], quadsRenderingStartIndexArray.size());
+		if (glVersion >= 1.4) {
+		  glMultiDrawArrays(GL_QUAD_STRIP, VECTOR_DATA(quadsRenderingStartIndexArray), VECTOR_DATA(quadsRenderingCountArray), quadsRenderingStartIndexArray.size());
+		} else {
+		  for (size_t i = 0 ; i < quadsRenderingStartIndexArray.size() ; ++i) {
+		    glDrawArrays(GL_QUAD_STRIP, quadsRenderingStartIndexArray[i], quadsRenderingCountArray[i]);
+		  }
+		}
 		OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 	}
 
