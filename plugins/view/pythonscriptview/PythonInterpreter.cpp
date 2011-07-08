@@ -225,6 +225,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 PythonInterpreter::~PythonInterpreter() {
 	if (interpreterInit()) {
 #ifndef WIN32
+	        PyEval_ReleaseLock();
 	        PyEval_RestoreThread(mainThreadState);
 #else
 		holdGIL();
