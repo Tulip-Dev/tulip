@@ -220,6 +220,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 
 PythonInterpreter::~PythonInterpreter() {
 	if (interpreterInit()) {
+		holdGIL();
 		Py_Finalize();
 	}
 	delete consoleDialog;
