@@ -82,12 +82,13 @@ bool GlVertexArrayManager::haveToCompute() {
     toComputeColor = true;
     return true;
   }
-  if(inputData->parameters->isEdgeSizeInterpolate()!=sizeInterpolate){
-      sizeInterpolate=inputData->parameters->isEdgeSizeInterpolate();
-      clearLayoutData();
-      toComputeLayout = true;
 
-      return true;
+  if(inputData->parameters->isEdgeSizeInterpolate()!=sizeInterpolate) {
+    sizeInterpolate=inputData->parameters->isEdgeSizeInterpolate();
+    clearLayoutData();
+    toComputeLayout = true;
+
+    return true;
   }
 
   return false;
@@ -228,31 +229,33 @@ void GlVertexArrayManager::endRendering() {
   glLineWidth(4);
 
   if(linesSelectedRenderingStartIndexArray.size()!=0) {
-                  glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
-                  glMultiDrawArrays(GL_LINE_STRIP, &linesSelectedRenderingStartIndexArray[0], &linesSelectedRenderingCountArray[0], linesSelectedRenderingStartIndexArray.size());
-          }
-
-          // Selected edges quad rendering
-          if (!quadsSelectedRenderingStartIndexArray.empty()) {
-                  glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(quadsCoordsArray));
-                  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
-                  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-                  glMultiDrawArrays(GL_QUAD_STRIP, &quadsSelectedRenderingStartIndexArray[0], &quadsSelectedRenderingCountArray[0], quadsSelectedRenderingStartIndexArray.size());
-                  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-                  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-                  std::map<float, vector<GLsizei> >::iterator it = quadsOutlineSelectedRenderingCountArray.begin();
-                  for (; it != quadsOutlineSelectedRenderingCountArray.end() ; ++it) {
-                          glLineWidth(it->first);
-                          glMultiDrawElements(GL_LINE_STRIP, &quadsOutlineSelectedRenderingCountArray[it->first][0], GL_UNSIGNED_INT, reinterpret_cast<const GLvoid **>(&quadsOutlineSelectedRenderingIndexArray[it->first][0]), quadsOutlineSelectedRenderingCountArray[it->first].size());
-                  }
-                  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+    glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
+    glMultiDrawArrays(GL_LINE_STRIP, &linesSelectedRenderingStartIndexArray[0], &linesSelectedRenderingCountArray[0], linesSelectedRenderingStartIndexArray.size());
   }
 
-OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+  // Selected edges quad rendering
+  if (!quadsSelectedRenderingStartIndexArray.empty()) {
+    glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(quadsCoordsArray));
+    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+    glMultiDrawArrays(GL_QUAD_STRIP, &quadsSelectedRenderingStartIndexArray[0], &quadsSelectedRenderingCountArray[0], quadsSelectedRenderingStartIndexArray.size());
+    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
+    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+    std::map<float, vector<GLsizei> >::iterator it = quadsOutlineSelectedRenderingCountArray.begin();
+
+    for (; it != quadsOutlineSelectedRenderingCountArray.end() ; ++it) {
+      glLineWidth(it->first);
+      glMultiDrawElements(GL_LINE_STRIP, &quadsOutlineSelectedRenderingCountArray[it->first][0], GL_UNSIGNED_INT, reinterpret_cast<const GLvoid **>(&quadsOutlineSelectedRenderingIndexArray[it->first][0]), quadsOutlineSelectedRenderingCountArray[it->first].size());
+    }
+
+    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+  }
+
+  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
 //============ Graph elements rendering ============================
 
-OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
 
   glEnableClientState(GL_COLOR_ARRAY);
@@ -288,37 +291,43 @@ OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
   // Edges polyline rendering
   glStencilFunc(GL_LEQUAL, inputData->parameters->getEdgesStencil(), 0xFFFF);
   glLineWidth(1.4f);
+
   if (!linesRenderingStartIndexArray.empty()) {
-      glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(linesColorsArray));
-      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
-      glMultiDrawArrays(GL_LINE_STRIP, &linesRenderingStartIndexArray[0], &linesRenderingCountArray[0], linesRenderingStartIndexArray.size());
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(linesColorsArray));
+    glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
+    glMultiDrawArrays(GL_LINE_STRIP, &linesRenderingStartIndexArray[0], &linesRenderingCountArray[0], linesRenderingStartIndexArray.size());
   }
 
   OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
   // Edges quad rendering
   if (!quadsRenderingStartIndexArray.empty()) {
-      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(quadsCoordsArray));
-      OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-      if (!inputData->parameters->isEdgeColorInterpolate()) {
-          glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(quadsOutlineColorsArray));
-      } else {
-          glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(quadsColorsArray));
-      }
-      std::map<float, vector<GLsizei> >::iterator it = quadsOutlineRenderingCountArray.begin();
-      for (; it != quadsOutlineRenderingCountArray.end() ; ++it) {
-          glLineWidth(it->first);
-          glMultiDrawElements(GL_LINE_STRIP, &quadsOutlineRenderingCountArray[it->first][0], GL_UNSIGNED_INT, reinterpret_cast<const GLvoid **>(&quadsOutlineRenderingIndexArray[it->first][0]), quadsOutlineRenderingCountArray[it->first].size());
-      }
-      OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+    glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(quadsCoordsArray));
+    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
+    if (!inputData->parameters->isEdgeColorInterpolate()) {
+      glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(quadsOutlineColorsArray));
+    }
+    else {
       glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(quadsColorsArray));
-      OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-      glMultiDrawArrays(GL_QUAD_STRIP, &quadsRenderingStartIndexArray[0], &quadsRenderingCountArray[0], quadsRenderingStartIndexArray.size());
-      OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
+    }
+
+    std::map<float, vector<GLsizei> >::iterator it = quadsOutlineRenderingCountArray.begin();
+
+    for (; it != quadsOutlineRenderingCountArray.end() ; ++it) {
+      glLineWidth(it->first);
+      glMultiDrawElements(GL_LINE_STRIP, &quadsOutlineRenderingCountArray[it->first][0], GL_UNSIGNED_INT, reinterpret_cast<const GLvoid **>(&quadsOutlineRenderingIndexArray[it->first][0]), quadsOutlineRenderingCountArray[it->first].size());
+    }
+
+    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(quadsColorsArray));
+    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+    glMultiDrawArrays(GL_QUAD_STRIP, &quadsRenderingStartIndexArray[0], &quadsRenderingCountArray[0], quadsRenderingStartIndexArray.size());
+    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
   }
 
-  glDisableClientState(GL_COLOR_ARRAY);  
+  glDisableClientState(GL_COLOR_ARRAY);
   glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
   glDisableClientState(GL_VERTEX_ARRAY);
   glPointSize(1);
@@ -361,16 +370,16 @@ void GlVertexArrayManager::addEdge(GlEdge *edge) {
       edgeToLineIndexVector.resize(edge->id+1);
 
     if(edgeToPointIndexVector.size()<edge->id+1)
-        edgeToPointIndexVector.resize(edge->id+1);
+      edgeToPointIndexVector.resize(edge->id+1);
 
     if(edgeToQuadIndexVector.size()<edge->id+1)
-        edgeToQuadIndexVector.resize(edge->id+1);
+      edgeToQuadIndexVector.resize(edge->id+1);
 
     if(edgeToBottomOulineIndexVector.size()<edge->id+1)
-        edgeToBottomOulineIndexVector.resize(edge->id+1);
+      edgeToBottomOulineIndexVector.resize(edge->id+1);
 
     if(edgeToTopOutlineIndexVector.size()<edge->id+1)
-        edgeToTopOutlineIndexVector.resize(edge->id+1);
+      edgeToTopOutlineIndexVector.resize(edge->id+1);
 
 
     if(edgeToPointIndexVector.size()<edge->id+1)
@@ -378,122 +387,134 @@ void GlVertexArrayManager::addEdge(GlEdge *edge) {
 
     vector<Coord> vertices;
     vector<Color> colors;
-    if(numberOfVertices!=0){
-        edgeToLineIndexVector[edge->id]=pair<unsigned int,unsigned int>(linesIndexArray.size(),linesIndexCountArray.size());
-        linesIndexArray.push_back(lastIndex);
-        for(size_t i=0;i<numberOfVertices;++i){
-            vertices.push_back(linesCoordsArray[lastIndex+i]);
+
+    if(numberOfVertices!=0) {
+      edgeToLineIndexVector[edge->id]=pair<unsigned int,unsigned int>(linesIndexArray.size(),linesIndexCountArray.size());
+      linesIndexArray.push_back(lastIndex);
+
+      for(size_t i=0; i<numberOfVertices; ++i) {
+        vertices.push_back(linesCoordsArray[lastIndex+i]);
+      }
+
+      edge->getColors(inputData, vertices,colors);
+      linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
+      linesIndexCountArray.push_back(numberOfVertices);
+
+      pointsCoordsArray.push_back(linesCoordsArray[lastIndex]);
+      pointsColorsArray.push_back(linesColorsArray[lastIndex]);
+      edgeToPointIndexVector[edge->id]=pointsCoordsArray.size()-1;
+
+      Size edgeSize;
+      float maxSrcSize, maxTgtSize;
+
+      if(srcSize[0]>=srcSize[1])
+        maxSrcSize=srcSize[0];
+      else
+        maxSrcSize=srcSize[1];
+
+      if(tgtSize[0]>=tgtSize[1])
+        maxTgtSize=tgtSize[0];
+      else
+        maxTgtSize=tgtSize[1];
+
+      edge->getEdgeSize(inputData, tlp::edge(edge->id),srcSize,tgtSize,maxSrcSize,maxTgtSize,edgeSize);
+
+      vector<float> edgeSizes;
+      getSizes(vertices, edgeSize[0]/2.0f, edgeSize[1]/2.0f, edgeSizes);
+
+      edgeToQuadIndexVector[edge->id]=pair<unsigned int,unsigned int>(quadsIndexArray.size(),quadsIndexCountArray.size());
+      edgeToBottomOulineIndexVector[edge->id]=quadsBottomOutlineIndexArray.size();
+      edgeToTopOutlineIndexVector[edge->id]=quadsTopOutlineIndexArray.size();
+
+      size_t lastQuadIndex=quadsCoordsArray.size();
+      quadsIndexArray.push_back(lastQuadIndex);
+
+      vector<Coord> quadVertices;
+      buildCurvePoints(vertices, edgeSizes, inputData->elementLayout->getNodeValue(src), inputData->elementLayout->getNodeValue(tgt), quadVertices);
+
+      vector<Coord> centerLine;
+      centerLine.reserve(quadVertices.size()/2);
+      vector<GLuint> quadBottomOutlineIndices;
+      vector<GLuint> quadTopOutlineIndices;
+
+      for (size_t i = 0 ; i < quadVertices.size() / 2 ; ++i) {
+        centerLine.push_back((quadVertices[2*i]+quadVertices[2*i+1])/2);
+        quadBottomOutlineIndices.push_back(lastQuadIndex+2*i);
+        quadTopOutlineIndices.push_back(lastQuadIndex+2*i+1);
+      }
+
+      quadsBottomOutlineIndexArray.push_back(quadBottomOutlineIndices);
+      quadsTopOutlineIndexArray.push_back(quadTopOutlineIndices);
+
+      vector<Color> colors;
+      getColors(&centerLine[0], centerLine.size(), srcColor, tgtColor,colors);
+
+      for (size_t i = 0 ; i < colors.size() ; ++i) {
+        if (inputData->parameters->isEdgeColorInterpolate()) {
+          quadsColorsArray.push_back(colors[i]);
+          quadsColorsArray.push_back(colors[i]);
+        }
+        else {
+          quadsColorsArray.push_back(edgeColor);
+          quadsColorsArray.push_back(edgeColor);
         }
 
-        edge->getColors(inputData, vertices,colors);
-        linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
-        linesIndexCountArray.push_back(numberOfVertices);
+        quadsOutlineColorsArray.push_back(borderColor);
+        quadsOutlineColorsArray.push_back(borderColor);
+      }
 
-        pointsCoordsArray.push_back(linesCoordsArray[lastIndex]);
-        pointsColorsArray.push_back(linesColorsArray[lastIndex]);
-        edgeToPointIndexVector[edge->id]=pointsCoordsArray.size()-1;
+      quadsCoordsArray.insert(quadsCoordsArray.end(), quadVertices.begin(), quadVertices.end());
+      quadsIndexCountArray.push_back(quadVertices.size());
 
-        Size edgeSize;
-        float maxSrcSize, maxTgtSize;
-        if(srcSize[0]>=srcSize[1])
-            maxSrcSize=srcSize[0];
-        else
-            maxSrcSize=srcSize[1];
-        if(tgtSize[0]>=tgtSize[1])
-            maxTgtSize=tgtSize[0];
-        else
-            maxTgtSize=tgtSize[1];
-
-        edge->getEdgeSize(inputData, tlp::edge(edge->id),srcSize,tgtSize,maxSrcSize,maxTgtSize,edgeSize);
-
-        vector<float> edgeSizes;
-        getSizes(vertices, edgeSize[0]/2.0f, edgeSize[1]/2.0f, edgeSizes);
-
-        edgeToQuadIndexVector[edge->id]=pair<unsigned int,unsigned int>(quadsIndexArray.size(),quadsIndexCountArray.size());
-        edgeToBottomOulineIndexVector[edge->id]=quadsBottomOutlineIndexArray.size();
-        edgeToTopOutlineIndexVector[edge->id]=quadsTopOutlineIndexArray.size();
-
-        size_t lastQuadIndex=quadsCoordsArray.size();
-        quadsIndexArray.push_back(lastQuadIndex);
-
-        vector<Coord> quadVertices;
-        buildCurvePoints(vertices, edgeSizes, inputData->elementLayout->getNodeValue(src), inputData->elementLayout->getNodeValue(tgt), quadVertices);
-
-        vector<Coord> centerLine;
-        centerLine.reserve(quadVertices.size()/2);
-        vector<GLuint> quadBottomOutlineIndices;
-        vector<GLuint> quadTopOutlineIndices;
-        for (size_t i = 0 ; i < quadVertices.size() / 2 ; ++i) {
-            centerLine.push_back((quadVertices[2*i]+quadVertices[2*i+1])/2);
-            quadBottomOutlineIndices.push_back(lastQuadIndex+2*i);
-            quadTopOutlineIndices.push_back(lastQuadIndex+2*i+1);
-        }
-
-        quadsBottomOutlineIndexArray.push_back(quadBottomOutlineIndices);
-        quadsTopOutlineIndexArray.push_back(quadTopOutlineIndices);
-
-        vector<Color> colors;
-        getColors(&centerLine[0], centerLine.size(), srcColor, tgtColor,colors);
-
-        for (size_t i = 0 ; i < colors.size() ; ++i) {
-            if (inputData->parameters->isEdgeColorInterpolate()) {
-                quadsColorsArray.push_back(colors[i]);
-                quadsColorsArray.push_back(colors[i]);
-            } else {
-                quadsColorsArray.push_back(edgeColor);
-                quadsColorsArray.push_back(edgeColor);
-            }
-            quadsOutlineColorsArray.push_back(borderColor);
-            quadsOutlineColorsArray.push_back(borderColor);
-        }
-
-        quadsCoordsArray.insert(quadsCoordsArray.end(), quadVertices.begin(), quadVertices.end());
-        quadsIndexCountArray.push_back(quadVertices.size());
-
-    }else{
-        linesIndexCountArray.push_back(0);
-        edgeToPointIndexVector[edge->id]=-1;
-        quadsIndexCountArray.push_back(0);
-        edgeToLineIndexVector[edge->id]=make_pair(-1,linesIndexCountArray.size()-1);
-        edgeToQuadIndexVector[edge->id] = make_pair(-1,quadsIndexCountArray.size()-1);
     }
-  }else{
+    else {
+      linesIndexCountArray.push_back(0);
+      edgeToPointIndexVector[edge->id]=-1;
+      quadsIndexCountArray.push_back(0);
+      edgeToLineIndexVector[edge->id]=make_pair(-1,linesIndexCountArray.size()-1);
+      edgeToQuadIndexVector[edge->id] = make_pair(-1,quadsIndexCountArray.size()-1);
+    }
+  }
+  else {
 
-      size_t lastIndex=linesColorsArray.size();
-      pair<unsigned int,unsigned int> index=edgeToLineIndexVector[edge->id];
-      pair<unsigned int,unsigned int> indexQuad=edgeToQuadIndexVector[edge->id];
-      GLsizei numberOfVertices=linesIndexCountArray[index.second];
+    size_t lastIndex=linesColorsArray.size();
+    pair<unsigned int,unsigned int> index=edgeToLineIndexVector[edge->id];
+    pair<unsigned int,unsigned int> indexQuad=edgeToQuadIndexVector[edge->id];
+    GLsizei numberOfVertices=linesIndexCountArray[index.second];
 
-      if(numberOfVertices!=0){
+    if(numberOfVertices!=0) {
 
-          vector<Color> colors;
-          edge->getColors(inputData, &linesCoordsArray[linesIndexArray[index.first]],numberOfVertices,colors);
-          linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
+      vector<Color> colors;
+      edge->getColors(inputData, &linesCoordsArray[linesIndexArray[index.first]],numberOfVertices,colors);
+      linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
 
-          GLsizei numberQuadVertices=quadsIndexCountArray[indexQuad.second];
+      GLsizei numberQuadVertices=quadsIndexCountArray[indexQuad.second];
 
-          unsigned int baseQuadIndex=quadsIndexArray[indexQuad.first];
+      unsigned int baseQuadIndex=quadsIndexArray[indexQuad.first];
 
-          vector<Coord> centerLine;
-          centerLine.reserve(numberQuadVertices/2);
-          for (int i = 0 ; i < numberQuadVertices / 2 ; ++i) {
-              centerLine.push_back((quadsCoordsArray[baseQuadIndex+2*i]+quadsCoordsArray[2*i+1])/2);
-          }
-          colors.clear();
-          getColors(&centerLine[0], centerLine.size(), srcColor, tgtColor,colors);
+      vector<Coord> centerLine;
+      centerLine.reserve(numberQuadVertices/2);
 
-          for (size_t i = 0 ; i < colors.size() ; ++i) {
-              if (inputData->parameters->isEdgeColorInterpolate()) {
-                  quadsColorsArray.push_back(colors[i]);
-                  quadsColorsArray.push_back(colors[i]);
-              } else {
-                  quadsColorsArray.push_back(edgeColor);
-                  quadsColorsArray.push_back(edgeColor);
-              }
+      for (int i = 0 ; i < numberQuadVertices / 2 ; ++i) {
+        centerLine.push_back((quadsCoordsArray[baseQuadIndex+2*i]+quadsCoordsArray[2*i+1])/2);
+      }
 
-              quadsOutlineColorsArray.push_back(borderColor);
-              quadsOutlineColorsArray.push_back(borderColor);
-          }
+      colors.clear();
+      getColors(&centerLine[0], centerLine.size(), srcColor, tgtColor,colors);
+
+      for (size_t i = 0 ; i < colors.size() ; ++i) {
+        if (inputData->parameters->isEdgeColorInterpolate()) {
+          quadsColorsArray.push_back(colors[i]);
+          quadsColorsArray.push_back(colors[i]);
+        }
+        else {
+          quadsColorsArray.push_back(edgeColor);
+          quadsColorsArray.push_back(edgeColor);
+        }
+
+        quadsOutlineColorsArray.push_back(borderColor);
+        quadsOutlineColorsArray.push_back(borderColor);
+      }
 
       pointsColorsArray.push_back(linesColorsArray[lastIndex]);
     }
@@ -508,7 +529,8 @@ void GlVertexArrayManager::addNode(GlNode *node) {
       nodeToPointIndexVector.resize(node->id+1);
 
     nodeToPointIndexVector[node->id]=pointsCoordsArray.size()-1;
-  }  else {
+  }
+  else {
     node->getColor(inputData,pointsColorsArray);
   }
 }
@@ -521,62 +543,66 @@ void GlVertexArrayManager::activateLineEdgeDisplay(GlEdge *edge,bool selected) {
     return;
 
   unsigned int baseIndex=linesIndexArray[index.first];
-  if(!selected){
-      linesRenderingStartIndexArray.push_back(baseIndex);
-      linesRenderingCountArray.push_back(numberOfVertices);
-  }else{
-      linesSelectedRenderingStartIndexArray.push_back(baseIndex);
-      linesSelectedRenderingCountArray.push_back(numberOfVertices);
+
+  if(!selected) {
+    linesRenderingStartIndexArray.push_back(baseIndex);
+    linesRenderingCountArray.push_back(numberOfVertices);
+  }
+  else {
+    linesSelectedRenderingStartIndexArray.push_back(baseIndex);
+    linesSelectedRenderingCountArray.push_back(numberOfVertices);
   }
 }
 
 void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *edge, bool selected) {
-    pair<unsigned int,unsigned int> index=edgeToQuadIndexVector[edge->id];
-    unsigned int numberOfVertices=quadsIndexCountArray[index.second];
-    unsigned int bottomOutlineIndicesIdx = edgeToBottomOulineIndexVector[edge->id];
-    unsigned int topOutlineIndicesIdx = edgeToTopOutlineIndexVector[edge->id];
+  pair<unsigned int,unsigned int> index=edgeToQuadIndexVector[edge->id];
+  unsigned int numberOfVertices=quadsIndexCountArray[index.second];
+  unsigned int bottomOutlineIndicesIdx = edgeToBottomOulineIndexVector[edge->id];
+  unsigned int topOutlineIndicesIdx = edgeToTopOutlineIndexVector[edge->id];
 
-    float borderWidth = static_cast<float>(inputData->getElementBorderWidth()->getEdgeValue(tlp::edge(edge->id)));
+  float borderWidth = static_cast<float>(inputData->getElementBorderWidth()->getEdgeValue(tlp::edge(edge->id)));
 
 
-    if(numberOfVertices==0)
-        return;
+  if(numberOfVertices==0)
+    return;
 
-    unsigned int baseIndex=quadsIndexArray[index.first];
-    if (!selected) {
-        quadsRenderingStartIndexArray.push_back(baseIndex);
-        quadsRenderingCountArray.push_back(numberOfVertices);
+  unsigned int baseIndex=quadsIndexArray[index.first];
 
-        if (borderWidth > 0) {
+  if (!selected) {
+    quadsRenderingStartIndexArray.push_back(baseIndex);
+    quadsRenderingCountArray.push_back(numberOfVertices);
 
-            if (quadsOutlineRenderingIndexArray.find(borderWidth) == quadsOutlineRenderingIndexArray.end()) {
-                quadsOutlineRenderingIndexArray[borderWidth] = vector<const GLuint *>();
-                quadsOutlineRenderingCountArray[borderWidth] = vector<GLsizei>();
-            }
+    if (borderWidth > 0) {
 
-            quadsOutlineRenderingIndexArray[borderWidth].push_back(&quadsBottomOutlineIndexArray[bottomOutlineIndicesIdx][0]);
-            quadsOutlineRenderingCountArray[borderWidth].push_back(quadsBottomOutlineIndexArray[bottomOutlineIndicesIdx].size());
-            quadsOutlineRenderingIndexArray[borderWidth].push_back(&quadsTopOutlineIndexArray[topOutlineIndicesIdx][0]);
-            quadsOutlineRenderingCountArray[borderWidth].push_back(quadsTopOutlineIndexArray[topOutlineIndicesIdx].size());
-        }
-    } else {
-        quadsSelectedRenderingStartIndexArray.push_back(baseIndex);
-        quadsSelectedRenderingCountArray.push_back(numberOfVertices);
+      if (quadsOutlineRenderingIndexArray.find(borderWidth) == quadsOutlineRenderingIndexArray.end()) {
+        quadsOutlineRenderingIndexArray[borderWidth] = vector<const GLuint *>();
+        quadsOutlineRenderingCountArray[borderWidth] = vector<GLsizei>();
+      }
 
-        if (borderWidth > 0) {
-
-            if (quadsOutlineSelectedRenderingIndexArray.find(borderWidth) == quadsOutlineSelectedRenderingIndexArray.end()) {
-                quadsOutlineSelectedRenderingIndexArray[borderWidth] = vector<const GLuint *>();
-                quadsOutlineSelectedRenderingCountArray[borderWidth] = vector<GLsizei>();
-            }
-
-            quadsOutlineSelectedRenderingIndexArray[borderWidth].push_back(&quadsBottomOutlineIndexArray[bottomOutlineIndicesIdx][0]);
-            quadsOutlineSelectedRenderingCountArray[borderWidth].push_back(quadsBottomOutlineIndexArray[bottomOutlineIndicesIdx].size());
-            quadsOutlineSelectedRenderingIndexArray[borderWidth].push_back(&quadsTopOutlineIndexArray[topOutlineIndicesIdx][0]);
-            quadsOutlineSelectedRenderingCountArray[borderWidth].push_back(quadsTopOutlineIndexArray[topOutlineIndicesIdx].size());
-
-        }
+      quadsOutlineRenderingIndexArray[borderWidth].push_back(&quadsBottomOutlineIndexArray[bottomOutlineIndicesIdx][0]);
+      quadsOutlineRenderingCountArray[borderWidth].push_back(quadsBottomOutlineIndexArray[bottomOutlineIndicesIdx].size());
+      quadsOutlineRenderingIndexArray[borderWidth].push_back(&quadsTopOutlineIndexArray[topOutlineIndicesIdx][0]);
+      quadsOutlineRenderingCountArray[borderWidth].push_back(quadsTopOutlineIndexArray[topOutlineIndicesIdx].size());
     }
+  }
+  else {
+    quadsSelectedRenderingStartIndexArray.push_back(baseIndex);
+    quadsSelectedRenderingCountArray.push_back(numberOfVertices);
+
+    if (borderWidth > 0) {
+
+      if (quadsOutlineSelectedRenderingIndexArray.find(borderWidth) == quadsOutlineSelectedRenderingIndexArray.end()) {
+        quadsOutlineSelectedRenderingIndexArray[borderWidth] = vector<const GLuint *>();
+        quadsOutlineSelectedRenderingCountArray[borderWidth] = vector<GLsizei>();
+      }
+
+      quadsOutlineSelectedRenderingIndexArray[borderWidth].push_back(&quadsBottomOutlineIndexArray[bottomOutlineIndicesIdx][0]);
+      quadsOutlineSelectedRenderingCountArray[borderWidth].push_back(quadsBottomOutlineIndexArray[bottomOutlineIndicesIdx].size());
+      quadsOutlineSelectedRenderingIndexArray[borderWidth].push_back(&quadsTopOutlineIndexArray[topOutlineIndicesIdx][0]);
+      quadsOutlineSelectedRenderingCountArray[borderWidth].push_back(quadsTopOutlineIndexArray[topOutlineIndicesIdx].size());
+
+    }
+  }
 }
 
 void GlVertexArrayManager::activatePointEdgeDisplay(GlEdge *edge,bool selected) {
@@ -587,7 +613,8 @@ void GlVertexArrayManager::activatePointEdgeDisplay(GlEdge *edge,bool selected) 
 
   if(!selected) {
     points1PEdgesRenderingIndexArray.push_back(index);
-  }  else {
+  }
+  else {
     points1PEdgesSelectedRenderingIndexArray.push_back(index);
   }
 }
@@ -603,7 +630,8 @@ void GlVertexArrayManager::activatePointNodeDisplay(GlNode *node,bool onePixel,b
       points1PNodesRenderingIndexArray.push_back(index);
     else
       points2PNodesRenderingIndexArray.push_back(index);
-  }  else {
+  }
+  else {
     if(onePixel)
       points1PNodesSelectedRenderingIndexArray.push_back(index);
     else
@@ -627,11 +655,11 @@ void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
     clearLayoutData();
     inputData->getElementLayout()->removePropertyObserver(this);
     inputData->getElementSize()->removePropertyObserver(this);
-       inputData->getElementShape()->removePropertyObserver(this);
+    inputData->getElementShape()->removePropertyObserver(this);
     layoutObserverActivated=false;
   }
 
-  if(edgesModified || inputData->getElementColor()==property || inputData->getElementBorderColor()==property ){
+  if(edgesModified || inputData->getElementColor()==property || inputData->getElementBorderColor()==property ) {
     setHaveToComputeColor(true);
     clearColorData();
     inputData->getElementColor()->removePropertyObserver(this);
