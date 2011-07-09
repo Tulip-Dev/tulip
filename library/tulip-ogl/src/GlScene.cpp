@@ -89,7 +89,7 @@ public:
 //====================================================
 GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
 
-GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),displayEdgesInLastRendering(true),glGraphComposite(NULL), noClearBackground(false) {  
+GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),displayEdgesInLastRendering(true),glGraphComposite(NULL), noClearBackground(false) {
 
   if(calculator!=NULL)
     lodCalculator=calculator;
@@ -210,9 +210,9 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
   Iterator<edge> *nonDefaultLabelEdges = glGraphComposite->getInputData()->getElementLabel()->getNonDefaultValuatedEdges();
 
   bool nodeLabelEmpty=(!nonDefaultLabelNodes->hasNext())
-          && glGraphComposite->getInputData()->getElementLabel()->getNodeDefaultStringValue()=="";
+                      && glGraphComposite->getInputData()->getElementLabel()->getNodeDefaultStringValue()=="";
   bool edgeLabelEmpty=(!nonDefaultLabelEdges->hasNext())
-          && glGraphComposite->getInputData()->getElementLabel()->getEdgeDefaultStringValue()=="";
+                      && glGraphComposite->getInputData()->getElementLabel()->getEdgeDefaultStringValue()=="";
 
   delete nonDefaultLabelNodes;
   delete nonDefaultLabelEdges;
@@ -231,7 +231,7 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
       float lod=(*it).lod;
 
       if(viewOutScreenLabel && lod<0)
-          lod=-lod;
+        lod=-lod;
 
       n.id=(*it).id;
 
@@ -241,11 +241,13 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
           if(!graph->isMetaNode(n) && viewNodeLabel) {
             glNode.id=n.id;
             glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),lod,(Camera *)(layerLODUnit.camera));
-          }else if(graph->isMetaNode(n)) {
+          }
+          else if(graph->isMetaNode(n)) {
             glMetaNode.id=n.id;
             glMetaNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),lod,(Camera *)(layerLODUnit.camera));
           }
-        }else {
+        }
+        else {
           // Metric ordered
           if((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)) {
             nodesMetricOrdered.push_back(pair<node,float>(n,lod));
@@ -265,7 +267,8 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
         if(!graph->isMetaNode((*it).first)) {
           glNode.id=(*it).first.id;
           glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
-        }else {
+        }
+        else {
           glMetaNode.id=(*it).first.id;
           glMetaNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
         }
@@ -288,7 +291,8 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
           // Not metric ordered
           glEdge.id=e.id;
           glEdge.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
-        }else {
+        }
+        else {
           // Metric ordered
           edgesMetricOrdered.push_back(pair<edge,float>(e,(*it).lod));
         }
@@ -430,7 +434,7 @@ void GlScene::draw() {
     if(!zOrdering) {
       // If elements are not zOrdered
 
-    if(glGraphComposite)
+      if(glGraphComposite)
         glGraphComposite->getInputData()->getGlVertexArrayManager()->beginRendering();
 
       // Draw simple entities
@@ -491,8 +495,9 @@ void GlScene::draw() {
           glEdge.draw((*it).lod,glGraphComposite->getInputData(),camera);
         }
       }
+
       if(glGraphComposite)
-         glGraphComposite->getInputData()->getGlVertexArrayManager()->endRendering();
+        glGraphComposite->getInputData()->getGlVertexArrayManager()->endRendering();
 
     }
     else {
@@ -562,7 +567,8 @@ void GlScene::draw() {
           GlSimpleEntity *entity = (((SimpleEntityLODUnit*)((*it).entity))->entity);
           glStencilFunc(GL_LEQUAL,entity->getStencil(),0xFFFF);
           entity->draw((*it).entity->lod,camera);
-        }else {
+        }
+        else {
           // Complex entities
           ComplexEntityLODUnit *entity=(ComplexEntityLODUnit*)((*it).entity);
 
@@ -573,14 +579,16 @@ void GlScene::draw() {
 
               glNode.id=entity->id;
               glNode.draw(entity->lod,glGraphComposite->getInputData(),camera);
-            }else {
+            }
+            else {
               if(!displayMetaNodes)
                 continue;
 
               glMetaNode.id=entity->id;
               glMetaNode.draw(entity->lod,glGraphComposite->getInputData(),camera);
             }
-          }else {
+          }
+          else {
             if(!displayEdges)
               continue;
 
@@ -750,9 +758,9 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
       *eye=*eye + *center;
     }
 
-    if(zoomFactor){
-         *zoomFactor=1.;
-       }
+    if(zoomFactor) {
+      *zoomFactor=1.;
+    }
 
 
     return;
@@ -762,9 +770,10 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
   Coord minC(boundingBox[0]);
 
   int zoomTmp=1;
-    for(int i=0;i<viewportZoom-1;++i){
-      zoomTmp=zoomTmp*2;
-    }
+
+  for(int i=0; i<viewportZoom-1; ++i) {
+    zoomTmp=zoomTmp*2;
+  }
 
 
   double dx = maxC[0] - minC[0];
@@ -772,54 +781,60 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
   double dz = maxC[2] - minC[2];
 
   double dxZoomed=(maxC[0] - minC[0])/zoomTmp;
-                  double dyZoomed=(maxC[1] - minC[1])/zoomTmp;
+  double dyZoomed=(maxC[1] - minC[1])/zoomTmp;
 
-                  int newXDecViewport;
-                  if(xDecViewport<zoomTmp/2)
-                          newXDecViewport=xDecViewport-zoomTmp/2;
-                  else
-                          newXDecViewport=xDecViewport-zoomTmp/2+1;
+  int newXDecViewport;
 
-                  int newYDecViewport;
-                  if(yDecViewport<zoomTmp/2)
-                          newYDecViewport=yDecViewport-zoomTmp/2;
-                  else
-                          newYDecViewport=yDecViewport-zoomTmp/2+1;
+  if(xDecViewport<zoomTmp/2)
+    newXDecViewport=xDecViewport-zoomTmp/2;
+  else
+    newXDecViewport=xDecViewport-zoomTmp/2+1;
+
+  int newYDecViewport;
+
+  if(yDecViewport<zoomTmp/2)
+    newYDecViewport=yDecViewport-zoomTmp/2;
+  else
+    newYDecViewport=yDecViewport-zoomTmp/2+1;
 
 
 
-                  Coord centerTmp=(maxC + minC)/2;
+  Coord centerTmp=(maxC + minC)/2;
 
-                  if(zoomTmp!=1){
-                          double dec;
-                          if(dxZoomed>=dyZoomed)
-                                  dec=dxZoomed;
-                          else
-                                  dec=dyZoomed;
+  if(zoomTmp!=1) {
+    double dec;
 
-                          if(newXDecViewport<0) {
-                                  if(newXDecViewport==-1)
-                                          centerTmp[0]-=static_cast<float>(dec/2);
-                                  else
-                                          centerTmp[0]-=static_cast<float>(dec/2-dec*(newXDecViewport+1));
-                          }else{
-                                  if(newXDecViewport==1)
-                                          centerTmp[0]+=static_cast<float>(dec/2);
-                                  else
-                                          centerTmp[0]+=static_cast<float>(dec/2+dec*(newXDecViewport-1));
-                          }
-                          if(newYDecViewport<0) {
-                                  if(newYDecViewport==-1)
-                                          centerTmp[1]-=static_cast<float>(dec/2);
-                                  else
-                                          centerTmp[1]-=static_cast<float>(dec/2-dec*(newYDecViewport+1));
-                          }else{
-                                  if(newYDecViewport==1)
-                                          centerTmp[1]+=static_cast<float>(dec/2);
-                                  else
-                                          centerTmp[1]+=static_cast<float>(dec/2+dec*(newYDecViewport-1));
-                          }
-                  }
+    if(dxZoomed>=dyZoomed)
+      dec=dxZoomed;
+    else
+      dec=dyZoomed;
+
+    if(newXDecViewport<0) {
+      if(newXDecViewport==-1)
+        centerTmp[0]-=static_cast<float>(dec/2);
+      else
+        centerTmp[0]-=static_cast<float>(dec/2-dec*(newXDecViewport+1));
+    }
+    else {
+      if(newXDecViewport==1)
+        centerTmp[0]+=static_cast<float>(dec/2);
+      else
+        centerTmp[0]+=static_cast<float>(dec/2+dec*(newXDecViewport-1));
+    }
+
+    if(newYDecViewport<0) {
+      if(newYDecViewport==-1)
+        centerTmp[1]-=static_cast<float>(dec/2);
+      else
+        centerTmp[1]-=static_cast<float>(dec/2-dec*(newYDecViewport+1));
+    }
+    else {
+      if(newYDecViewport==1)
+        centerTmp[1]+=static_cast<float>(dec/2);
+      else
+        centerTmp[1]+=static_cast<float>(dec/2+dec*(newYDecViewport-1));
+    }
+  }
 
 
   if(center) {
@@ -840,7 +855,8 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
 
       if(yWhiteFactor)
         *yWhiteFactor=static_cast<float>((1.-(dy/(sceneRadiusTmp*(height/width))))/2.);
-    }else {
+    }
+    else {
       if (width < height)
         sceneRadiusTmp=static_cast<float>(dx*wdx/hdy);
       else
@@ -850,13 +866,15 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
         *xWhiteFactor=static_cast<float>((1.-(dx/sceneRadiusTmp))/2.);
       }
     }
-  } else {
+  }
+  else {
     if(wdx>hdy) {
       sceneRadiusTmp=static_cast<float>(dy);
 
       if(xWhiteFactor)
         *xWhiteFactor=static_cast<float>((1.-(dx/(sceneRadiusTmp*(width/height))))/2.);
-    }else {
+    }
+    else {
       if (height < width)
         sceneRadiusTmp=static_cast<float>(dy*hdy/wdx);
       else
@@ -880,9 +898,9 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
     *sceneBoundingBox=boundingBox;
   }
 
-  if(zoomFactor){
-     *zoomFactor=static_cast<float>(zoomTmp);
-   }
+  if(zoomFactor) {
+    *zoomFactor=static_cast<float>(zoomTmp);
+  }
 
 }
 
@@ -987,7 +1005,8 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
 
   if(layerInScene) {
     selectLODCalculator=lodCalculator;
-  }  else {
+  }
+  else {
     selectLODCalculator=lodCalculator->clone();
   }
 
@@ -1009,7 +1028,8 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
         (*it).second->acceptVisitor(lodVisitor);
       }
     }
-  } else {
+  }
+  else {
     layer->acceptVisitor(lodVisitor);
   }
 
@@ -1186,16 +1206,17 @@ void GlScene::outputSVG(unsigned int size,const string& filename) {
     /* subgraphs drawing disabled
        initMapsSVG(_renderingParameters.getGraph(), &ge); */
     FILE* file ;
-    #ifndef _MSC_VER
-            file = fopen(filename.c_str(), "w");
-    #else
-            fopen_s(&file, filename.c_str(), "w");
-    #endif
+#ifndef _MSC_VER
+    file = fopen(filename.c_str(), "w");
+#else
+    fopen_s(&file, filename.c_str(), "w");
+#endif
 
     if (file) {
       fprintf(file, "%s",str.c_str());
       fclose(file);
-    } else {
+    }
+    else {
       perror(filename.c_str());
     }
   }
@@ -1231,18 +1252,19 @@ void GlScene::outputEPS(unsigned int size,const string& filename) {
   builder.getResult(&str);
 
   if(!filename.empty()) {
-      FILE* file;
-      #ifndef _MSC_VER
-                file = fopen(filename.c_str(), "w");
-      #else
-                fopen_s(&file, filename.c_str(), "w");
-      #endif
+    FILE* file;
+#ifndef _MSC_VER
+    file = fopen(filename.c_str(), "w");
+#else
+    fopen_s(&file, filename.c_str(), "w");
+#endif
 
 
     if (file) {
       fprintf(file, "%s", str.c_str());
       fclose(file);
-    } else {
+    }
+    else {
       perror(filename.c_str());
     }
   }
@@ -1339,7 +1361,8 @@ void GlScene::setWithXML(string &in, Graph *graph) {
 
   if (rootNode->type == XML_ELEMENT_NODE && name=="scene") {
     GlXMLTools::getDataAndChildrenNodes(rootNode,dataNode,childrenNode);
-  } else {
+  }
+  else {
     assert(false);
   }
 
@@ -1361,10 +1384,12 @@ void GlScene::setWithXML(string &in, Graph *graph) {
           GlLayer *newLayer=new GlLayer(propValue);
           addLayer(newLayer);
           newLayer->setWithXML(node);
-        } else {
+        }
+        else {
           assert(false);
         }
-      } else {
+      }
+      else {
         //Previous version compatibility
         string propName=(char*)node->properties->name;
         string propValue=(char*)node->properties->children->content;
@@ -1373,7 +1398,8 @@ void GlScene::setWithXML(string &in, Graph *graph) {
           GlLayer *newLayer=new GlLayer((char*)node->name);
           addLayer(newLayer);
           newLayer->setWithXML(node);
-        } else {
+        }
+        else {
           assert(false);
         }
       }
