@@ -19,10 +19,6 @@
 #ifndef TULIPELEMENTPROPERTIES_H
 #define TULIPELEMENTPROPERTIES_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <QtCore/qstringlist.h>
 #include <QtCore/qsize.h>
 

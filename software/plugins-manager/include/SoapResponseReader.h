@@ -20,10 +20,6 @@
 #ifndef _Tulip_SOAPRESPONSEREADER_H_
 #define _Tulip_SOAPRESPONSEREADER_H_
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 #include <QtXml/QDomDocument>

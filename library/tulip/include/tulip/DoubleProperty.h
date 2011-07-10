@@ -25,10 +25,6 @@
 #include <tulip/DoubleAlgorithm.h>
 #include <tulip/ObservableGraph.h>
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 namespace tlp {
 
 class PropertyContext;

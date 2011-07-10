@@ -19,10 +19,6 @@
 #ifndef Tulip_SUPERGRAPH_H
 #define Tulip_SUPERGRAPH_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <iostream>
 #include <string>
 #include <vector>

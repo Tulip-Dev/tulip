@@ -19,10 +19,6 @@
 #ifndef MOUSEOBJECT_H
 #define MOUSEOBJECT_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 #include <QtGui/qcursor.h>

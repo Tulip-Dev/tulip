@@ -19,10 +19,6 @@
 #ifndef TLP_PROGRESS
 #define TLP_PROGRESS
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 #include <string>
 

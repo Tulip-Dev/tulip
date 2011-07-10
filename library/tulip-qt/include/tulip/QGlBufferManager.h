@@ -19,10 +19,6 @@
 #ifndef Tulip_QGLBUFFERMANAGER_H
 #define Tulip_QGLBUFFERMANAGER_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <map>
 
 #include <tulip/tulipconf.h>

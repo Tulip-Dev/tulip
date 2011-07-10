@@ -16,29 +16,19 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include "ImageWriter.h"
-#ifdef HAVE_LIBPNG
-#  include "PNGWriter.h"
-#endif
-#ifdef HAVE_LIBJPEG
-#  include "JPEGWriter.h"
-#endif
+#include "PNGWriter.h"
+#include "JPEGWriter.h"
+
 
 using namespace std;
 
 namespace tlprender
 {
   const string SUPPORTED_IMAGE_FORMATS[] = {
-#ifdef HAVE_LIBPNG
     "png",
-#endif
-#ifdef HAVE_LIBJPEG
     "jpeg",
-#endif
     ""
   };
 

@@ -21,10 +21,6 @@
 #ifndef TULIP_INTALGO_H
 #define TULIP_INTALGO_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/PropertyAlgorithm.h>
 
 namespace tlp {

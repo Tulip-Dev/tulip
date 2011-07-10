@@ -19,10 +19,6 @@
 #ifndef _TLPGRAPHTOOLS_H
 #define _TLPGRAPHTOOLS_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <set>
 #include <list>
 #include <tulip/tuliphash.h>

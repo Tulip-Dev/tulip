@@ -19,10 +19,6 @@
 #ifndef TULIP_COORD_H
 #define TULIP_COORD_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <string.h>
 #include <tulip/tulipconf.h>
 #include <tulip/VectorCast.h>

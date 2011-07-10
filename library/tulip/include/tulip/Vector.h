@@ -21,10 +21,6 @@
 #ifndef _TLP_GEO_VECTOR_H
 #define _TLP_GEO_VECTOR_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <cassert>
 #include <tulip/Array.h>
 

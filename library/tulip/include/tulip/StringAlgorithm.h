@@ -30,10 +30,6 @@
 #ifndef TULIP_STRINGALGO_H
 #define TULIP_STRINGALGO_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/PropertyAlgorithm.h>
 
 namespace tlp {

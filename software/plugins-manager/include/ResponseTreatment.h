@@ -20,10 +20,6 @@
 #ifndef _Tulip_RESPONSETREATMENT_H
 #define _Tulip_RESPONSETREATMENT_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 namespace tlp {

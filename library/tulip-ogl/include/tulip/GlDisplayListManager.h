@@ -24,11 +24,6 @@
 #include <string>
 
 #include <tulip/OpenGlConfigManager.h>
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 

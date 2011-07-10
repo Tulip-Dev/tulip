@@ -22,10 +22,6 @@
 
 #ifndef DOXYGEN_NOTFOR_USER
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <list>
 #include <vector>
 #include <tulip/ObservableGraph.h>

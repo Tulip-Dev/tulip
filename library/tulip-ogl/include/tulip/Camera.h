@@ -19,10 +19,6 @@
 #ifndef TLPCAMERA_H
 #define TLPCAMERA_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/Coord.h>
 #include <tulip/Vector.h>
 #include <tulip/Matrix.h>

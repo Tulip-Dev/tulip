@@ -16,9 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <tulip/LayoutProperty.h>
 #include <tulip/Vector.h>

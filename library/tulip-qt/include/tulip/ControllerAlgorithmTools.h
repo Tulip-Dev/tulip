@@ -19,10 +19,6 @@
 #ifndef Tulip_CONTROLLERALGORITHMTOOLS_H
 #define Tulip_CONTROLLERALGORITHMTOOLS_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 #include <QtGui/QWidget>

@@ -81,6 +81,8 @@ public:
     settings.sync();
   }
 
+  void buildMenus();
+
 protected:
   QWidget *aboutWidget;
   //tlp::GlMainWidget *glWidget;
@@ -131,7 +133,7 @@ protected slots:
   void closeAll();
 
 private:
-  void buildMenus();
+
   bool doFileSave(int);
   bool doFileSaveAs();
   bool doFileSave(tlp::Controller *controllerToSave,std::string plugin, std::string filename, std::string author, std::string comments);

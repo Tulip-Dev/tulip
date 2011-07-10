@@ -19,10 +19,6 @@
 #ifndef _DRAWINGTOOLS_H
 #define _DRAWINGTOOLS_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <vector>
 #include <tulip/Coord.h>
 #include <tulip/BoundingBox.h>

@@ -30,10 +30,6 @@
 #ifndef Tulip_GLMAINWIDGET_H
 #define Tulip_GLMAINWIDGET_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/GlScene.h>
 
 #include <QtOpenGL/qgl.h>

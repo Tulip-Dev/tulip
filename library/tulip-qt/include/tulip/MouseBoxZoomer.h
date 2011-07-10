@@ -19,11 +19,6 @@
 #ifndef MOUSEZOOMBOX_H
 #define MOUSEZOOMBOX_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-
 #include <tulip/InteractorComponent.h>
 
 class QMouseEvent;

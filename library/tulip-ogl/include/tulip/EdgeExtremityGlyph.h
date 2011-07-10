@@ -20,10 +20,6 @@
 #ifndef EDGEEXTREMITYGLYPH_H_
 #define EDGEEXTREMITYGLYPH_H_
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/TulipRelease.h>
 #include <tulip/WithDependency.h>
 #include <tulip/WithParameter.h>

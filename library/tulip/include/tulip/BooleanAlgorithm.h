@@ -20,10 +20,6 @@
 #ifndef _SELECTIONALGO_H
 #define _SELECTIONALGO_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/PropertyAlgorithm.h>
 
 namespace tlp {

@@ -19,10 +19,6 @@
 #ifndef _TLPQTTOOLS_H
 #define _TLPQTTOOLS_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include "tulip/Color.h"
 #include "tulip/Reflect.h"
 #include "tulip/Graph.h"

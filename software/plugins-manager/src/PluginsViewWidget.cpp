@@ -313,14 +313,14 @@ namespace tlp {
       }
       ++it;
     }
-  };
+  }
 
   bool PluginsViewWidget::isCompatible(const string & version){
     QStringList list = QString(version.c_str()).split(' ');
     QString tulipCompatibilityNumber(TULIP_RELEASE);
     tulipCompatibilityNumber = tulipCompatibilityNumber.left(tulipCompatibilityNumber.lastIndexOf("."));
     return (list[0].startsWith(tulipCompatibilityNumber));
-  };
+  }
 
   bool PluginsViewWidget::isMoreRecent(const string & version1, const string & version2){
     QStringList list1 = QString(version1.c_str()).split(' ');

@@ -19,9 +19,6 @@
 #ifndef _TULIPREFLECT
 #define _TULIPREFLECT
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <tulip/tulipconf.h>
 #include <tulip/tuliphash.h>
 #include <iostream>

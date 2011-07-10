@@ -30,10 +30,6 @@
 #ifndef TULIP_PROPERTY_H
 #define TULIP_PROPERTY_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/PluginContext.h>
 #include <tulip/Graph.h>
 #include <tulip/Reflect.h>
