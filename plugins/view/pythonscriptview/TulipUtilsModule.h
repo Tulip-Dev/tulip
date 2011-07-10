@@ -23,6 +23,7 @@
 #include "PythonInterpreter.h"
 
 #include <tulip/MainController.h>
+#include <tulip/ControllerAlgorithmTools.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/TemplateFactory.h>
@@ -116,8 +117,10 @@ tuliputils_updatePluginsMenus(PyObject *, PyObject *)
 {
 	tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
 	if (mainController) {
-		mainController->buildMenu();
 
+		tlp::ControllerAlgorithmTools::cleanPluginParameters();
+
+		mainController->buildMenu();
 
 		// Big hack to get access to the Import and Export Menu to update their content
 		QWidget *mainWindow = mainController->getMainWindowFacade()->getParentWidget();

@@ -26,6 +26,7 @@
 #include <QtGui/QFileDialog>
 #include <QtGui/QMessageBox>
 
+#include <iostream>
 
 PluginCreationDialog::PluginCreationDialog(QWidget *parent) : QDialog(parent) {
 	setupUi(this);
@@ -42,6 +43,23 @@ void PluginCreationDialog::validateForm() {
 		QMessageBox::critical(this, "Error", "No file has been selected to save the plugin source code.");
 		return;
 	}
+	QString moduleName = pluginFileName->text().mid(pluginFileName->text().lastIndexOf("/")+1);
+	moduleName = moduleName.mid(0, moduleName.length() - 3);
+	if (moduleName.at(0).isNumber()) {
+		QMessageBox::critical(this, "Error", "Python does not allow a module name to begin with a number.");
+		return;
+	}
+	if (moduleName.contains(" ")) {
+		QMessageBox::critical(this, "Error", "The Python module name can not contain any whitespace.");
+		return;
+	}
+	int i = 0;
+	while (pythonReservedCharacters[i]) {
+		if (moduleName.contains(pythonReservedCharacters[i++])) {
+			QMessageBox::critical(this, "Error", "The Python module name contains an invalid character.");
+			return;
+		}
+	}
 	if (pluginClassName->text().isEmpty()) {
 		QMessageBox::critical(this, "Error", "No class name has been provided for the plugin.");
 		return;
@@ -54,7 +72,7 @@ void PluginCreationDialog::validateForm() {
 		QMessageBox::critical(this, "Error", "The Python class name can not contain any whitespace.");
 		return;
 	}
-	int i = 0;
+	i = 0;
 	while (pythonReservedCharacters[i]) {
 		if (pluginClassName->text().contains(pythonReservedCharacters[i++])) {
 			QMessageBox::critical(this, "Error", "The Python class name contains an invalid character.");
@@ -70,7 +88,7 @@ void PluginCreationDialog::validateForm() {
 }
 
 void PluginCreationDialog::selectPluginSourceFile() {
-	QString fileName = QFileDialog::getSaveFileName(this, tr("Set Plugin source filen"),"./","Python script (*.py)");
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Set Plugin source filen"),"","Python script (*.py)");
 	if (fileName.isEmpty())
 		return;
 	if (!fileName.endsWith(".py"))

@@ -611,7 +611,7 @@ void PythonScriptView::newScript() {
 }
 
 void PythonScriptView::loadScript() {
-	QString fileName = QFileDialog::getOpenFileName(viewWidget, "Open Main Script","./", "Python script (*.py)");
+	QString fileName = QFileDialog::getOpenFileName(viewWidget, "Open Main Script","", "Python script (*.py)");
 	loadScript(fileName);
 }
 
@@ -642,7 +642,7 @@ void PythonScriptView::saveScript() {
 	int curMainEditorId = viewWidget->mainScriptsTabWidget->currentIndex();
 	QString mainScriptFileName = editedMainScripts[curMainEditorId].c_str();
 	if (mainScriptFileName == "")
-		fileName = QFileDialog::getSaveFileName(viewWidget, tr("Save Main Script"),"./","Python script (*.py)");
+		fileName = QFileDialog::getSaveFileName(viewWidget, tr("Save Main Script"),"","Python script (*.py)");
 	else
 		fileName = mainScriptFileName;
 
@@ -667,7 +667,7 @@ void PythonScriptView::showApiDocumentation() {
 
 
 void PythonScriptView::loadModule() {
-	QString fileName = QFileDialog::getOpenFileName(viewWidget, "Open Module","./", "Python script (*.py)");
+	QString fileName = QFileDialog::getOpenFileName(viewWidget, "Open Module","", "Python script (*.py)");
 	loadModule(fileName);
 }
 
@@ -718,7 +718,7 @@ bool PythonScriptView::loadModuleFromSrcCode(const std::string &moduleName, cons
 }
 
 void PythonScriptView::newFileModule() {
-	QString fileName = QFileDialog::getSaveFileName(viewWidget, tr("Set Module filename"),"./","Python script (*.py)");
+	QString fileName = QFileDialog::getSaveFileName(viewWidget, tr("Set Module filename"),"","Python script (*.py)");
 	if (fileName.isEmpty())
 		return;
 	if (!fileName.endsWith(".py"))
@@ -758,7 +758,7 @@ void PythonScriptView::newStringModule() {
 }
 
 void PythonScriptView::saveModuleToFile() {
-	QString fileName = QFileDialog::getSaveFileName(viewWidget, tr("Set Module filename"),"./","Python script (*.py)");
+	QString fileName = QFileDialog::getSaveFileName(viewWidget, tr("Set Module filename"),"","Python script (*.py)");
 	if (!fileName.isEmpty()) {
 		if (!fileName.endsWith(".py"))
 			fileName += ".py";
@@ -776,7 +776,7 @@ void PythonScriptView::saveModule() {
 }
 
 void PythonScriptView::loadPythonPlugin() {
-	QString fileName = QFileDialog::getOpenFileName(viewWidget, "Open Tulip Python plugin","./", "Python script (*.py)");
+	QString fileName = QFileDialog::getOpenFileName(viewWidget, "Open Tulip Python plugin","", "Python script (*.py)");
 	QFile file(fileName);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 		return ;

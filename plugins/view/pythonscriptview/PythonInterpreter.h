@@ -92,7 +92,7 @@ private:
 
 const char pythonReservedCharacters[] = {'#', '%', '/', '+', '-', '&', '*', '<', '>',
 		'|', '~', '^', '=', '!', '\'', '\"', '{', '}',
-		'(', ')', '[', ']', 0};
+		'(', ')', '[', ']', '.', 0};
 
 class PythonShellWidget;
 
