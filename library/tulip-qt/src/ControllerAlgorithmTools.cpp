@@ -47,14 +47,33 @@ using namespace std;
 
 namespace tlp {
 
+  static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > > paramMaps;
+
   StructDef *ControllerAlgorithmTools::getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
-    static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > > paramMaps;
     TLP_HASH_MAP<std::string, StructDef *>::const_iterator it;
     it = paramMaps[(unsigned long) factory].find(name);
-    if (it == paramMaps[(unsigned long) factory].end())
+    if (it == paramMaps[(unsigned long) factory].end()) {
       paramMaps[(unsigned long) factory][name] = new StructDef(factory->getPluginParameters(name));
+    }
     return paramMaps[(unsigned long) factory][name];
   }
+
+  void ControllerAlgorithmTools::cleanPluginParameters() {
+	  TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > >::iterator it = paramMaps.begin();
+	  for (; it != paramMaps.end() ; ++it) {
+		  vector<string> entriesToErase;
+		  TLP_HASH_MAP<std::string, StructDef * >::const_iterator it2 = it->second.begin();
+		  for (; it2 != it->second.end() ; ++it2) {
+			  if (!reinterpret_cast<TemplateFactoryInterface *>(it->first)->pluginExists(it2->first)) {
+				  entriesToErase.push_back(it2->first);
+			  }
+		  }
+		  for (size_t i = 0 ; i < entriesToErase.size() ; ++i) {
+			  it->second.erase(entriesToErase[i]);
+		  }
+	  }
+  }
+
   //**********************************************************************
   bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const string &name,DataSet *dataSet) {
     Observable::holdObservers();

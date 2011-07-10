@@ -44,6 +44,11 @@ namespace tlp {
       static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::string name);
       
       /**
+       * Remove entries from the parameters map if the plugin does not exist anymore
+       */
+      static void cleanPluginParameters();
+
+      /**
        * Apply an algorithm on graph with given name and given dataSet, if the algorithm has a problem : display it in a QDialog in parent widget and return false
        */
       static bool applyAlgorithm(Graph *graph,QWidget *parent,const std::string &name,DataSet *dataSet);
