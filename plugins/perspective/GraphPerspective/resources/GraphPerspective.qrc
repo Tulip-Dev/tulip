@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/tulip/graphperspective/icons">
+        <file>document-import.svg</file>
+        <file>document-new.svg</file>
+        <file>document-open.svg</file>
+        <file>document-save.svg</file>
+        <file>document-save-as.svg</file>
+        <file>edit-redo.svg</file>
+        <file>edit-undo.svg</file>
+        <file>help-about.svg</file>
+        <file>preferences-other.svg</file>
+        <file>process-stop.svg</file>
+        <file>group.svg</file>
+        <file>hierarchy.png</file>
+        <file>spreadsheet.svg</file>
+        <file>python.svg</file>
+        <file>desktop.svg</file>
+        <file>system-software-install.svg</file>
+    </qresource>
+</RCC>

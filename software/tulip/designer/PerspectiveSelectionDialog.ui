@@ -15,7 +15,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QToolButton, QPushButton, QComboBox {
-    border-image: url(:/tulip/app/ui/btn_26.png) 4;
+    border-image: url(:/tulip/gui/ui/btn_26.png) 4;
     border-width: 4;
     padding: 0px 6px;
     font-size: 12px;
@@ -26,7 +26,7 @@ QToolButton, QPushButton, QComboBox, QLabel {
 }
 
 QToolButton:hover, QPushButton:hover, QComboBox:hover {
-    border-image: url(:/tulip/app/ui/btn_26_hover.png) 4;
+    border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
 }
 
 QToolButton:disabled, QPushButton:disabled, QComboBox::disabled {
@@ -34,7 +34,7 @@ QToolButton:disabled, QPushButton:disabled, QComboBox::disabled {
 }
 
 QToolButton:pressed, QPushButton:pressed{
-    border-image: url(:/tulip/app/ui/btn_26_pressed.png) 4;
+    border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
 }
 
  QPushButton::menu-indicator{
@@ -53,7 +53,7 @@ QToolButton:pressed, QPushButton:pressed{
 }
 
  QComboBox::down-arrow {
-     image: url(:/tulip/app/ui/combobox_arrow.png);
+     image: url(:/tulip/gui/ui/combobox_arrow.png);
  }
 QComboBox:drop-down
 {

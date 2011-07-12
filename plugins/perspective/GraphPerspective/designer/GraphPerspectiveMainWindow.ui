@@ -1,0 +1,742 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GraphPerspectiveMainWindowData</class>
+ <widget class="QMainWindow" name="GraphPerspectiveMainWindowData">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1005</width>
+    <height>824</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QToolButton, QPushButton, QComboBox {
+    border-image: url(:/tulip/gui/ui/btn_26.png) 4;
+    border-width: 4;
+    padding: 0px 6px;
+    font-size: 12px;
+}
+
+QToolButton, QPushButton, QComboBox, QLabel {
+    color: black;
+}
+
+QToolButton:hover, QPushButton:hover, QComboBox:hover {
+    border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+}
+
+QToolButton:disabled, QPushButton:disabled, QComboBox::disabled {
+	color:gray;
+}
+
+QToolButton:pressed, QPushButton:pressed{
+    border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
+}
+
+ QPushButton::menu-indicator{
+    subcontrol-origin: margin;
+	subcontrol-position: center right;
+	right: 4px;
+ }
+
+ QPushButton{
+	outline: none;
+	margin: 2
+ }
+
+ QComboBox QAbstractItemView {
+    background-color:white;
+}
+
+ QComboBox::down-arrow {
+     image: url(:/tulip/gui/ui/combobox_arrow.png);
+ }
+QComboBox:drop-down
+{
+     subcontrol-origin: padding;
+     subcontrol-position: top right;
+     border-left-style: none; 
+     border-top-right-radius: 1px;
+     border-bottom-right-radius: 1px;
+}
+</string>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>true</bool>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="margin">
+     <number>0</number>
+    </property>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1005</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen_Project"/>
+    <addaction name="actionSave_Project"/>
+    <addaction name="actionSave_Project_as"/>
+    <addaction name="separator"/>
+    <addaction name="actionImport"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionCut"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+    <addaction name="actionDelete"/>
+    <addaction name="separator"/>
+    <addaction name="actionSelect_All"/>
+    <addaction name="actionInvert_selection"/>
+    <addaction name="actionCancel_selection"/>
+    <addaction name="separator"/>
+    <addaction name="actionGroup_elements"/>
+    <addaction name="actionCreate_sub_graph"/>
+    <addaction name="separator"/>
+    <addaction name="actionPreferences"/>
+   </widget>
+   <widget class="QMenu" name="menuWindow">
+    <property name="title">
+     <string>Window</string>
+    </property>
+    <addaction name="actionFull_screen"/>
+    <addaction name="separator"/>
+    <addaction name="actionTile"/>
+    <addaction name="actionMinimize_All"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout_us"/>
+    <addaction name="actionPlugins_Center"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuWindow"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QDockWidget" name="modesSwitcherDock">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#modeSwitcherDock {
+	border-top: black;
+	border-bottom: black;
+	border-right: black;
+	border-left: black;
+}
+
+#modesSwitcherDockContents {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(73, 73, 73, 255), stop:1 rgba(130, 130, 130, 255));
+}
+
+QToolButton {
+	border-image:none;
+	border-top: 1px solid rgba(0,0,0,0);
+	border-bottom: 1px solid rgba(0,0,0,0);
+	border-left: 0px solid rgba(0,0,0,0);
+	border-right: 0px solid rgba(0,0,0,0);
+	color: white;
+	font: bold 10px;
+	height:20px;
+    background-color: rgba(0,0,0,0);
+}
+
+QToolButton:hover {
+	border-image:none;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
+    stop:0 rgba(93, 93, 93, 255), 
+    stop:1 rgba(150, 150, 150, 255));
+	border-top: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	stop: 0.0 rgba(0,0,0,0),
+	stop: 0.4 rgba(170,170,170,255),
+	stop: 0.5 rgba(170,170,170,255),
+	stop: 1.0 rgba(0,0,0,0));
+	border-bottom: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	stop: 0.0 rgba(0,0,0,0),
+	stop: 0.4 rgba(170,170,170,255),
+	stop: 0.5 rgba(170,170,170,255),
+	stop: 1.0 rgba(0,0,0,0));
+}
+
+QToolButton:checked, QToolButton:checked:pressed, QToolButton:pressed {
+	border-image:none;
+	color: black;
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
+    stop:0 rgba(198, 198, 198, 255), 
+    stop:1 rgba(255, 255, 255, 255));
+	border-top: 1px solid rgba(70,70,70);
+	border-bottom: 1px solid rgba(70,70,70);
+}
+
+QPushButton::pressed {
+	border-image:none;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(53, 53, 53, 255), stop:1 rgba(120, 120, 120, 255));
+	border-top: 1px solid rgba(70,70,70);
+	border-bottom: 1px solid rgba(70,70,70);
+}
+
+QToolButton:pressed {
+	border-image:none;
+}</string>
+   </property>
+   <property name="features">
+    <set>QDockWidget::NoDockWidgetFeatures</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea</set>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="modesSwitcherDockContents">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <property name="spacing">
+      <number>4</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>1</number>
+     </property>
+     <item>
+      <widget class="QToolButton" name="visualizeModeButton">
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>75</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Visualize</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources/GraphPerspective.qrc">
+         <normaloff>:/tulip/graphperspective/icons/desktop.svg</normaloff>:/tulip/graphperspective/icons/desktop.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+1</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="editModeButton">
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>75</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Edit</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources/GraphPerspective.qrc">
+         <normaloff>:/tulip/graphperspective/icons/spreadsheet.svg</normaloff>:/tulip/graphperspective/icons/spreadsheet.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+2</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="developModeButton">
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>75</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Develop</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources/GraphPerspective.qrc">
+         <normaloff>:/tulip/graphperspective/icons/python.svg</normaloff>:/tulip/graphperspective/icons/python.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+3</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="Line" name="separator1">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="importButton">
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>75</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Import</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources/GraphPerspective.qrc">
+         <normaloff>:/tulip/graphperspective/icons/document-import.svg</normaloff>:/tulip/graphperspective/icons/document-import.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="pluginsButton">
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>75</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Plugins</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources/GraphPerspective.qrc">
+         <normaloff>:/tulip/graphperspective/icons/system-software-install.svg</normaloff>:/tulip/graphperspective/icons/system-software-install.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="showHelpButton">
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>75</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Help</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources/GraphPerspective.qrc">
+         <normaloff>:/tulip/graphperspective/icons/help-about.svg</normaloff>:/tulip/graphperspective/icons/help-about.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="actionNew">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/document-new.svg</normaloff>:/tulip/graphperspective/icons/document-new.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;New Project</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionOpen_Project">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/document-open.svg</normaloff>:/tulip/graphperspective/icons/document-open.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open Project</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave_Project">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/document-save.svg</normaloff>:/tulip/graphperspective/icons/document-save.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Save Project</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_Project_as">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/document-save-as.svg</normaloff>:/tulip/graphperspective/icons/document-save-as.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Save Project as</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionImport">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/document-import.svg</normaloff>:/tulip/graphperspective/icons/document-import.svg</iconset>
+   </property>
+   <property name="text">
+    <string>I&amp;mport</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/process-stop.svg</normaloff>:/tulip/graphperspective/icons/process-stop.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/edit-undo.svg</normaloff>:/tulip/graphperspective/icons/edit-undo.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/edit-redo.svg</normaloff>:/tulip/graphperspective/icons/edit-redo.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="actionSelect_All">
+   <property name="text">
+    <string>Select All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionInvert_selection">
+   <property name="text">
+    <string>Invert selection</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionCancel_selection">
+   <property name="text">
+    <string>Cancel selection</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+A</string>
+   </property>
+  </action>
+  <action name="actionGroup_elements">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/group.svg</normaloff>:/tulip/graphperspective/icons/group.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Group elements</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionCreate_sub_graph">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/hierarchy.png</normaloff>:/tulip/graphperspective/icons/hierarchy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create sub-graph</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+G</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/preferences-other.svg</normaloff>:/tulip/graphperspective/icons/preferences-other.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Preferences...</string>
+   </property>
+  </action>
+  <action name="actionFull_screen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Full screen</string>
+   </property>
+   <property name="shortcut">
+    <string>F11</string>
+   </property>
+  </action>
+  <action name="actionTile">
+   <property name="text">
+    <string>Tile</string>
+   </property>
+  </action>
+  <action name="actionMinimize_All">
+   <property name="text">
+    <string>Minimize All</string>
+   </property>
+  </action>
+  <action name="actionAbout_us">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/help-about.svg</normaloff>:/tulip/graphperspective/icons/help-about.svg</iconset>
+   </property>
+   <property name="text">
+    <string>About us</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="actionPlugins_Center">
+   <property name="text">
+    <string>Plugins Center</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../resources/GraphPerspective.qrc"/>
+  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

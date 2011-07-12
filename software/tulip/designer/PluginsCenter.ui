@@ -344,7 +344,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            </property>
            <property name="text">
             <string>&lt;body&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/tulip/app/ui/list_bullet_arrow.png&quot; /&gt;&lt;span style=&quot;color:#626262; font-size:large;&quot;&gt;   Manage your plugins&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/tulip/gui/ui/list_bullet_arrow.png&quot; /&gt;&lt;span style=&quot;color:#626262; font-size:large;&quot;&gt;   Manage your plugins&lt;/span&gt;&lt;/p&gt;
 
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:medium;&quot;&gt; &lt;/p&gt;
 
@@ -757,7 +757,7 @@ background-color: white;
           <widget class="QLabel" name="label_2">
            <property name="text">
             <string>&lt;body&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/tulip/app/ui/list_bullet_arrow.png&quot; /&gt;&lt;span style=&quot;color:#626262; font-size:large;&quot;&gt;   Manage repositories&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/tulip/gui/ui/list_bullet_arrow.png&quot; /&gt;&lt;span style=&quot;color:#626262; font-size:large;&quot;&gt;   Manage repositories&lt;/span&gt;&lt;/p&gt;
 
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:medium;&quot;&gt; &lt;/p&gt;
 
@@ -967,7 +967,7 @@ p, li { white-space: pre-wrap; }
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>&lt;p&gt;&lt;img src=&quot;:/tulip/app/ui/list_bullet_arrow.png&quot; /&gt;&lt;span style=&quot;color:#626262; font-size:large;&quot;&gt;   Fix plugins errors&lt;/span&gt;&lt;/p&gt;
+            <string>&lt;p&gt;&lt;img src=&quot;:/tulip/gui/ui/list_bullet_arrow.png&quot; /&gt;&lt;span style=&quot;color:#626262; font-size:large;&quot;&gt;   Fix plugins errors&lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&quot;color:#dc4d4f;&quot;&gt;Errors have been detected while loading plugins. Check the error log for details.&lt;/span&gt;&lt;/p&gt;</string>
            </property>
