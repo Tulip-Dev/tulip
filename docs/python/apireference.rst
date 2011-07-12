@@ -366,6 +366,10 @@ Tulip datatypes
 	
 .. autoclass:: tulip::tlp.Color
 	:members:
+	:undoc-members:
+
+.. autoclass:: tulip::tlp.DataSet
+	:members:
 	:undoc-members:		
 
 Graph properties classes

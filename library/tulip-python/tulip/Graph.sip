@@ -249,9 +249,6 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 //===========================================================================================
 
 	void addNode(const tlp::node);
-// The docstring is commented because Sphinx does not handle method overloading correctly when using autodoc
-// The documentation of the method has been added manually to the Sphinx build files
-	
 %Docstring
 tlp.Graph.addNode(node)
 
@@ -329,9 +326,6 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 //===========================================================================================
 
 	void addEdge(const tlp::edge);
-// The docstring is commented because Sphinx does not handle method overloading correctly when using autodoc
-// The documentation of the method has been added manually to the Sphinx build files
-	
 %Docstring
 tlp.Graph.addEdge(edge)
 

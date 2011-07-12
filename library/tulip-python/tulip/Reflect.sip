@@ -32,17 +32,88 @@ namespace tlp {
 
 struct DataSet {
 
+%Docstring
+This class is used to store a set of parameters to transmit to a Tulip algorithm.
+Below is an exhaustive list of data types that can be stored in a Tulip data set:
+
+	* boolean
+	* integer 
+	* float
+	* string
+	* :class:`tlp.Coord`
+	* :class:`tlp.Color`
+	* :class:`tlp.Size`
+	* :class:`tlp.DataSet`
+	* :class:`tlp.ColorScale`
+	* :class:`tlp.StringCollection`
+	* :class:`tlp.BooleanProperty`
+	* :class:`tlp.ColorProperty`
+	* :class:`tlp.DoubleProperty`
+	* :class:`tlp.IntegerProperty`
+	* :class:`tlp.LayoutProperty`
+	* :class:`tlp.SizeProperty`
+	* :class:`tlp.StringProperty`
+	* :class:`tlp.PropertyInterface`
+
+If you try to store an unsupported data type, an exception will be thrown.	
+Each value stored in a data set is associated to a string key. Reading / Writing a value in 
+a data set is done through the [] operator as illustrated below::
+
+	# data set creation
+	dataSet = tlp.DataSet()
+	
+	# writing integer values
+	dataSet["height"] = 100
+	dataSet["width"] = 300
+	
+	# reading integer values
+	area = dataSet["height"] * dataSet["width"] 
+
+%End
+
 	DataSet();
 	
 	DataSet(const tlp::DataSet &set);
 
 	bool exist(const std::string &str) const;
+%Docstring
+tlp.DataSet.exist(key)
+
+Checks if the data set contains a value associated to a particular key.
+
+:param key: the key to check
+:type key: string
+:rtype: boolean
+%End
 
 	void remove(const std::string &str);
+%Docstring
+tlp.DataSet.remove(key)
+
+Remove the value associated to a particular key from the data set if it exists.
+
+:param key: the key of the value to remove.
+:type key: string
+%End
 	
 	unsigned int size() const;
+%Docstring
+tlp.DataSet.size()
+
+Returns the number of values stored in the data set.
+
+:rtype: integer
+%End
 	
 	std::vector<std::string> getKeys() const;
+%Docstring
+tlp.DataSet.getKeys()
+
+Returns the list of keys associated to the values stored in the data set.
+
+:rtype: list of string
+%End	
+	
 %MethodCode
 	std::vector<std::string> ret;
 	tlp::Iterator< std::pair<std::string, tlp::DataType*> > *it = sipCpp->getValues();
