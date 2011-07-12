@@ -23,6 +23,7 @@
 #include <tulip/WithDependency.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TulipProject.h>
+#include <tulip/TulipRelease.h>
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
 
