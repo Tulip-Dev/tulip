@@ -195,7 +195,7 @@
 	<para>The purpose of each labeled component is explained below: </para>
 	<orderedlist>
 		<listitem>
-		  <para>Use first line tokens as columns names : use the elements in the first line as default names for the columns. If checked the first line will be skipped during the import process.</para>
+                  <para>Use first line tokens as column names : use the elements in the first line as default names for the columns. If checked the first line will be skipped during the import process.</para>
 		</listitem>
 		<listitem>
 		  <para>The line range spinbuttons : these two spin buttons allow the user to select the start and end rows for the data import. The spin boxes can be used either by typing a new value in the text entry area where the numbers are displayed, or by using the mouse button to click on the up arrow to increase the number and the down arrow to decrease the number. 
@@ -233,28 +233,28 @@
 		  <para>The configuration area for the selected import method</para>
 		</listitem>
 	</orderedlist>
-	<para>Currently there is 4 methods to import data on graph:</para>
+        <para>Currently you can import data on:</para>
 	<itemizedlist>
-	  <listitem>Import data on new entities (nodes).</listitem>
-	  <listitem>Import data on new relations (edges).</listitem>
-	  <listitem>Import data on existing entities (nodes).</listitem>
-	  <listitem>Import data on existing relations (edges).</listitem>	  
+          <listitem>New entities (nodes).</listitem>
+          <listitem>New relations (edges).</listitem>
+          <listitem>Existing entities (nodes).</listitem>
+          <listitem>Existing relations (edges).</listitem>
 	</itemizedlist>
-	<sect3><title>Import data on new entities (nodes)</title>
+        <sect3><title>New entities (nodes)</title>
 	<para>Create a new entity (node) for each row in the file and import the data of selected columns on created entities (nodes).</para>
 	</sect3>
-	  <sect3><title>Import data on new relations (edges)</title>	  
+          <sect3><title>New relations (edges)</title>
 	  <para>Create a new relation (edge) for each row and import the data of  selected columns on created relations (edges). </para>
 	  <para>A relation is defined by it's source entity id and it's destination entity id. For each row we compare source and destination ids to graph entities ids. If the source and destination ids correspond to existing entities ids a new relation is created between those entities. If there is no entities in the graph with such ids you can force the creation of missing entities with the “Create missing entities” option.</para>
 	  <para>The example below represents a graph with four entities “a”, “b”, “c”, “d” and  two  relations : “a” -> “b” and “b” -> “c”. </para>	  
 	  <para><code>a;b</code></para>
 	  <para><code>b;c</code></para>	
 	  </sect3>
-	  <sect3><title>Import data on existing entities (nodes)</title>
+          <sect3><title>Existing entities (nodes)</title>
 	  <para>Import the data of selected columns on existing entities (node).</para>
 	  <para>For each row we compare the destination entity id to graph entities ids. If there is a correspondence we import the row data on the first matching entity. If there is no entity with such id you can force the creation of a new entity with the “Create missing entities” option.</para>
 	  </sect3>
-	  <sect3><title>Import data on existing relations (edges)</title>
+          <sect3><title>Existing relations (edges)</title>
 	  <para>Import selected columns on existing relations(edges).</para>
 	  <para>For each row we compare the destination relation id to graph relations ids. If there is a correspondence we import the row data on the first matching relation.</para>
 	  </sect3>
