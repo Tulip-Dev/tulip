@@ -17,4 +17,7 @@
         <file>desktop.svg</file>
         <file>system-software-install.svg</file>
     </qresource>
+    <qresource prefix="/tulip/graphperspective/ui">
+        <file>down_arrow-white.png</file>
+    </qresource>
 </RCC>

@@ -134,18 +134,6 @@ int main(int argc,char **argv) {
   progress->setComment("Setting up GUI (this can take some time)");
   QMainWindow *mainWindow = new QMainWindow();
   mainWindow->setVisible(false);
-  QString title("Tulip [" + perspectiveName + "]");
-
-  if (project) {
-    title += " - ";
-
-    if (!project->name().isNull())
-      title += project->name();
-    else
-      title += projectFilePath;
-  }
-
-  mainWindow->setWindowTitle(title);
   context.mainWindow = mainWindow;
 
   // Create perspective object
@@ -170,6 +158,15 @@ int main(int argc,char **argv) {
   communicator->EnableCrashHandling(project->absoluteRootPath(),QApplication::applicationPid());
 
   perspective->construct();
+  QString title("Tulip [" + perspectiveName + "]");
+  if (project) {
+    title += " - ";
+    if (!project->name().isNull())
+      title += project->name();
+    else
+      title += projectFilePath;
+  }
+  mainWindow->setWindowTitle(title);
 
   delete progress;
 

@@ -1,12 +1,20 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(LIB_SRCS
-GraphPerspective.cpp)
+GraphPerspective.cpp
+HeaderFrame.cpp)
 
 QT4_ADD_RESOURCES(RCC_SRCS
 resources/GraphPerspective.qrc)
 
-ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS})
+QT4_WRAP_UI(UI_SRCS
+designer/GraphPerspectiveMainWindow.ui
+designer/HeaderFrame.ui)
+
+QT4_WRAP_CPP(MOC_SRCS
+HeaderFrame.h)
+
+ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
 
 TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
