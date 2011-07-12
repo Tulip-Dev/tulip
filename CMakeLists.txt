@@ -65,7 +65,7 @@ ENDIF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
 ## -----------------------------------------------------------------------------------------------
 SET(TulipMajorVersion 3)
 SET(TulipMinorVersion 6)
-SET(TulipReleaseVersion 0)
+SET(TulipReleaseVersion 1)
 SET(TulipVersionSeparator .)
 IF(MSVC) #specific options for Visual Studio
 	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9") #visual studio 2008 needs boost
