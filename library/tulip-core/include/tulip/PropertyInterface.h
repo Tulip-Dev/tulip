@@ -329,7 +329,24 @@ protected:
   PropertyEventType evtType;
   unsigned int eltId;
 };
-
 }
+
+//================================================================================
+// Specilization of some template class
+//================================================================================
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
+TLP_BEGIN_HASH_NAMESPACE {
+	template <>
+	struct TLP_SCOPE hash<const tlp::PropertyInterface *> {
+		size_t operator()(const tlp::PropertyInterface *prop) const {return size_t(prop);}
+	};
+	template <>
+	struct TLP_SCOPE hash<tlp::PropertyInterface *> {
+		size_t operator()(tlp::PropertyInterface *prop) const {return size_t(prop);}
+	};
+} TLP_END_HASH_NAMESPACE
+
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // PROPERTY_INTERFACE_H
