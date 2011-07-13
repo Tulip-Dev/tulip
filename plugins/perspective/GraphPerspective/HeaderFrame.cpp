@@ -19,14 +19,17 @@ QString HeaderFrame::title() const {
 
 void HeaderFrame::setTitle(const QString &title) {
   _ui->titleLabel->setText(title);
+
   if (_ui->menusCombo->count() == 0)
     switchToLabel(_ui);
 }
 
 QStringList HeaderFrame::menus() const {
   QStringList result;
-  for(int i=0;i<_ui->menusCombo->count();++i)
+
+  for(int i=0; i<_ui->menusCombo->count(); ++i)
     result << _ui->menusCombo->itemText(i);
+
   return result;
 }
 
@@ -35,5 +38,5 @@ void HeaderFrame::setMenus(const QStringList &menus) {
   switchToLabel(_ui,menus.size()==0);
   QString s;
   foreach(s,menus)
-    _ui->menusCombo->addItem(s);
+  _ui->menusCombo->addItem(s);
 }
