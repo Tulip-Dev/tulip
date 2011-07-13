@@ -757,7 +757,7 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
     graphs.insert(g);
     deletedNodes[n] = graphs;
   } else
-    (*it).second.insert(g);    set<node> nodes;
+    (*it).second.insert(g);
   // no need of the loop below because properties are observed too
   // loop on properties to save the node's associated values
   /*PropertyInterface* prop;
