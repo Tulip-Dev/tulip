@@ -157,7 +157,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Show again ?</string>
+    <string>Show again?</string>
    </property>
    <property name="checked">
     <bool>true</bool>
