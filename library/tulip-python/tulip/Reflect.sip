@@ -130,12 +130,26 @@ Returns the list of keys associated to the values stored in the data set.
 		if (PyBool_Check(a1)) {
 			long l = PyLong_AsLong(a1);
 			sipCpp->set<bool>(*a0, (l > 0));
-		} else if (PyInt_CheckExact(a1)) {
-			sipCpp->set(*a0, PyInt_AsLong(a1));	
-		} else if (PyLong_Check(a1)) {
-			sipCpp->set(*a0, PyLong_AsLong(a1));
+		} else if (PyInt_CheckExact(a1) || PyLong_Check(a1)) {
+			tlp::DataType* dataType = sipCpp->getData(*a0);
+			if (dataType && dataType->getTypeName() == std::string(typeid(int).name())) {
+				sipCpp->set(*a0, static_cast<int>(PyInt_AsLong(a1)));
+			} else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned int).name())) {
+				sipCpp->set(*a0, static_cast<unsigned int>(PyInt_AsLong(a1)));
+			} else if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {
+				sipCpp->set(*a0, static_cast<float>(PyInt_AsLong(a1)));
+			} else if (dataType && dataType->getTypeName() == std::string(typeid(double).name())) {
+				sipCpp->set(*a0, static_cast<double>(PyInt_AsLong(a1)));		
+			} else {
+				sipCpp->set(*a0, PyInt_AsLong(a1));
+			}	
 		} else if (PyFloat_Check(a1)) {
-			sipCpp->set(*a0, PyFloat_AsDouble(a1));
+			tlp::DataType* dataType = sipCpp->getData(*a0);
+			if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {
+				sipCpp->set(*a0, static_cast<float>(PyFloat_AsDouble(a1)));
+			} else {
+				sipCpp->set(*a0, PyFloat_AsDouble(a1));
+			}
 		} else if (sipCanConvertToType(a1, sipType_std_string, SIP_NOT_NONE)) {		
 			std::string *s = reinterpret_cast<std::string *>(sipConvertToType(a1, sipType_std_string, NULL, SIP_NOT_NONE, &state, &iserr));
 			sipCpp->set(*a0, *s);	

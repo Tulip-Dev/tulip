@@ -1824,7 +1824,9 @@ which can contain an error message.
 
 %MethodCode
 	if (pluginExists<tlp::IntegerAlgorithm>(*a0)) {
-		sipRes = sipCpp->computeProperty<tlp::IntegerProperty>(*a0, a1, *a2, NULL, a3);
+		tlp::IntegerProperty tmp(sipCpp);
+		sipRes = sipCpp->computeProperty<tlp::IntegerProperty>(*a0, &tmp, *a2, NULL, a3);
+		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
 		std::string msg = "No Tulip integer algorithm plugin named  ";
@@ -1867,7 +1869,9 @@ which can contain an error message.
 	
 %MethodCode
 	if (pluginExists<tlp::DoubleAlgorithm>(*a0)) {
-		sipRes = sipCpp->computeProperty<tlp::DoubleProperty>(*a0, a1, *a2, NULL, a3);
+		tlp::DoubleProperty tmp(sipCpp);
+		sipRes = sipCpp->computeProperty<tlp::DoubleProperty>(*a0, &tmp, *a2, NULL, a3);
+		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
 		std::string msg = "No Tulip double algorithm plugin named  ";
@@ -1910,7 +1914,9 @@ which can contain an error message.
 	
 %MethodCode
 	if (pluginExists<tlp::LayoutAlgorithm>(*a0)) {
-		sipRes = sipCpp->computeProperty<tlp::LayoutProperty>(*a0, a1, *a2, NULL, a3);
+		tlp::LayoutProperty tmp(sipCpp);
+		sipRes = sipCpp->computeProperty<tlp::LayoutProperty>(*a0, &tmp, *a2, NULL, a3);
+		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
 		std::string msg = "No Tulip layout algorithm plugin named  ";
@@ -1953,7 +1959,9 @@ which can contain an error message.
 	
 %MethodCode
 	if (pluginExists<tlp::BooleanAlgorithm>(*a0)) {
-		sipRes = sipCpp->computeProperty<tlp::BooleanProperty>(*a0, a1, *a2, NULL, a3);
+		tlp::BooleanProperty tmp(sipCpp);
+		sipRes = sipCpp->computeProperty<tlp::BooleanProperty>(*a0, &tmp, *a2, NULL, a3);
+		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
 		std::string msg = "No Tulip boolean algorithm plugin named  ";
@@ -1995,7 +2003,9 @@ which can contain an error message.
 	
 %MethodCode
 	if (pluginExists<tlp::SizeAlgorithm>(*a0)) {
-		sipRes = sipCpp->computeProperty<tlp::SizeProperty>(*a0, a1, *a2, NULL, a3);
+		tlp::SizeProperty tmp(sipCpp);
+		sipRes = sipCpp->computeProperty<tlp::SizeProperty>(*a0, &tmp, *a2, NULL, a3);
+		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
 		std::string msg = "No Tulip size algorithm plugin named  ";
@@ -2038,7 +2048,9 @@ which can contain an error message.
 
 %MethodCode
 	if (pluginExists<tlp::ColorAlgorithm>(*a0)) {
-		sipRes = sipCpp->computeProperty<tlp::ColorProperty>(*a0, a1, *a2, NULL, a3);
+		tlp::ColorProperty tmp(sipCpp);
+		sipRes = sipCpp->computeProperty<tlp::ColorProperty>(*a0, &tmp, *a2, NULL, a3);
+		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
 		std::string msg = "No Tulip color algorithm plugin named  ";
@@ -2081,7 +2093,9 @@ which can contain an error message.
 
 %MethodCode
 	if (pluginExists<tlp::StringAlgorithm>(*a0)) {
-		sipRes = sipCpp->computeProperty<tlp::StringProperty>(*a0, a1, *a2, NULL, a3);
+		tlp::StringProperty tmp(sipCpp);
+		sipRes = sipCpp->computeProperty<tlp::StringProperty>(*a0, &tmp, *a2, NULL, a3);
+		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
 		std::string msg = "No Tulip string algorithm plugin named  ";
