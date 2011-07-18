@@ -274,7 +274,7 @@ void ColorScaleConfigDialog::saveCurrentColorScale() {
 			"unnamed", &ok);
 	if (ok && !text.isEmpty()) {
 		if (savedColorScalesList.contains(text)) {
-			QString question = "There is already a color scale saved under the name " + text + ". Do you want to owerwrite it ?";
+			QString question = "There is already a color scale saved under the name " + text + ". Do you really want to owerwrite it?";
 			if (QMessageBox::question (this, "Color scale saving", question, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) != QMessageBox::Yes) {
 				return;
 			}
@@ -294,7 +294,7 @@ void ColorScaleConfigDialog::saveCurrentColorScale() {
 void ColorScaleConfigDialog::deleteSavedColorScale() {
 	if (savedColorScalesList->count() > 0 && savedColorScalesList->currentItem()) {
 		QString savedColorScaleId = savedColorScalesList->currentItem()->text();
-		if (QMessageBox::question (this, "Color scale deleting", "Delete saved color scale " + savedColorScaleId + " ?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) != QMessageBox::Yes) {
+		if (QMessageBox::question (this, "Color scale deleting", "Delete saved color scale " + savedColorScaleId + "?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) != QMessageBox::Yes) {
 			return;
 		}
 		QSettings settings("TulipSoftware","Tulip");

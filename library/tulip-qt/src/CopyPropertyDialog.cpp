@@ -229,7 +229,7 @@ PropertyInterface* CopyPropertyDialog::copyProperty(Graph* graph,PropertyInterfa
             QString selectedPropertyName = dialog.destinationPropertyName();
             if(graph->existProperty(QStringToTlpString(selectedPropertyName))){
                 if (QMessageBox::question(parent, "Copy confirmation", QString("Property ")
-                    + selectedPropertyName + " already exists,\ndo you really want to overwrite it ?", QMessageBox::Ok,
+                    + selectedPropertyName + " already exists,\ndo you really want to overwrite it?", QMessageBox::Ok,
                     QMessageBox::Cancel) == QDialog::Rejected){
                     copy = false;
                 }
