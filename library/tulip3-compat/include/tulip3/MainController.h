@@ -38,7 +38,7 @@ class SGHierarchyWidget;
 class PropertyDialog;
 class ElementPropertiesWidget;
 class Morphing;
-class GraphState;
+struct GraphState;
 
 /** \brief Default controller of Tulip
  *

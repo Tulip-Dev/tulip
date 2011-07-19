@@ -39,7 +39,7 @@ class FTSimpleLayoutImpl : public FTLayoutImpl
     protected:
         FTSimpleLayoutImpl();
 
-        virtual ~FTSimpleLayoutImpl() {};
+        virtual ~FTSimpleLayoutImpl() {}
 
         virtual FTBBox BBox(const char* string, const int len,
                             FTPoint position);

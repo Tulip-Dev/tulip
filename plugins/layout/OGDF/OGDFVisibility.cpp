@@ -99,4 +99,4 @@ public:
 };
 
 
-LAYOUTPLUGINOFGROUP(OGDFVisibility,"Visibility (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical");
+LAYOUTPLUGINOFGROUP(OGDFVisibility,"Visibility (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")

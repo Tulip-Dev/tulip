@@ -36,7 +36,7 @@ public:
    */
   Number(float f) {
     value=f;
-  };
+  }
 
   /**
    *Overload of the operator >.

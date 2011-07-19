@@ -59,7 +59,7 @@ public:
    */
   static void makeDirectedTree(Graph *freeTree, node root) {
     makeRootedTree(freeTree, root);
-  };
+  }
 
   /**
    * Computes a rooted tree from the graph.

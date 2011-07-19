@@ -45,7 +45,7 @@ public:
   **/
   ImportModule (AlgorithmContext context) :
     graph(context.graph),pluginProgress(context.pluginProgress), dataSet(context.dataSet) {}
-  virtual ~ImportModule() {};
+  virtual ~ImportModule() {}
 
   /**
   * @brief The import operations should take place here.

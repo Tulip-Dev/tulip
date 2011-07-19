@@ -69,9 +69,9 @@ public :
 
 protected:
 
-  virtual void setCurveVertexShaderRenderingSpecificParameters() {};
+  virtual void setCurveVertexShaderRenderingSpecificParameters() {}
 
-  virtual void cleanupAfterCurveVertexShaderRendering() {};
+  virtual void cleanupAfterCurveVertexShaderRendering() {}
 
   virtual Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) = 0;
 

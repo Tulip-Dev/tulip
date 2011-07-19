@@ -60,5 +60,4 @@ public:
 
 };
 
-
-LAYOUTPLUGINOFGROUP(OGDFMMMExampleNoTwistLayout,"MMM Example No Twist Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel");
+LAYOUTPLUGINOFGROUP(OGDFMMMExampleNoTwistLayout,"MMM Example No Twist Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel")

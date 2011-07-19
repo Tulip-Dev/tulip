@@ -37,11 +37,11 @@ class FTBitmapFontImpl : public FTFontImpl
 
     protected:
         FTBitmapFontImpl(FTFont *ftFont, const char* fontFilePath) :
-            FTFontImpl(ftFont, fontFilePath) {};
+            FTFontImpl(ftFont, fontFilePath) {}
 
         FTBitmapFontImpl(FTFont *ftFont, const unsigned char *pBufferBytes,
                          size_t bufferSizeInBytes) :
-            FTFontImpl(ftFont, pBufferBytes, bufferSizeInBytes) {};
+            FTFontImpl(ftFont, pBufferBytes, bufferSizeInBytes) {}
 
         virtual FTPoint Render(const char *s, const int len,
                                FTPoint position, FTPoint spacing,

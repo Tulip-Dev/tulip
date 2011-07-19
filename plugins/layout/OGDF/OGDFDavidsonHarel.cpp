@@ -158,5 +158,4 @@ public:
 
 };
 
-
-LAYOUTPLUGINOFGROUP(OGDFDavidsonHarel,"Davidson Harel (OGDF)","Rene Weiskircher","12/11/2007","Ok","1.3","Force Directed");
+LAYOUTPLUGINOFGROUP(OGDFDavidsonHarel,"Davidson Harel (OGDF)","Rene Weiskircher","12/11/2007","Ok","1.3","Force Directed")

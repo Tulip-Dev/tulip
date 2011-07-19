@@ -111,5 +111,4 @@ public:
 
 };
 
-
-LAYOUTPLUGINOFGROUP(OGDFCircular,"Circular (OGDF)","Carsten Gutwenger","13/11/2007","Ok","1.4","Basic");
+LAYOUTPLUGINOFGROUP(OGDFCircular,"Circular (OGDF)","Carsten Gutwenger","13/11/2007","Ok","1.4","Basic")

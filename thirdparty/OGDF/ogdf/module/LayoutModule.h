@@ -120,7 +120,7 @@ public:
 		MLG.exportAttributesSimple(GA);
 		call(GA);
 		MLG.importAttributesSimple(GA);
-	};
+	}
 
 	OGDF_MALLOC_NEW_DELETE
 };

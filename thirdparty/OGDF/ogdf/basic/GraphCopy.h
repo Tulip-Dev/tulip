@@ -103,7 +103,7 @@ public:
 	//! Copy constructor.
 	GraphCopySimple(const GraphCopySimple &GC);
 
-	virtual ~GraphCopySimple() {};
+	virtual ~GraphCopySimple() {}
 
 	//! Returns a reference to the original graph.
 	const Graph &original() const { return *m_pGraph; }
@@ -262,7 +262,7 @@ public:
 	 */
 	GraphCopy(const GraphCopy &GC);
 
-	virtual ~GraphCopy() {};
+	virtual ~GraphCopy() {}
 
 
 	/**

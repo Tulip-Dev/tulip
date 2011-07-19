@@ -44,7 +44,7 @@ public:
   int         getCurrent();
   void push_back(const std::string& element) {
     _data.push_back(element);
-  };
+  }
   inline bool empty() {
     return _data.empty();
   }

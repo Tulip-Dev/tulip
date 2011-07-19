@@ -60,5 +60,4 @@ public:
 
 };
 
-
-LAYOUTPLUGINOFGROUP(OGDFMMMExampleNiceLayout,"MMM Example Nice Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel");
+LAYOUTPLUGINOFGROUP(OGDFMMMExampleNiceLayout,"MMM Example Nice Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel")

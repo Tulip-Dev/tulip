@@ -80,4 +80,4 @@ public:
 };
 
 
-LAYOUTPLUGINOFGROUP(OGDFUpwardPlanarization,"Upward Planarization (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical");
+LAYOUTPLUGINOFGROUP(OGDFUpwardPlanarization,"Upward Planarization (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")

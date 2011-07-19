@@ -35,7 +35,7 @@ class Graph;
 // basic interface to embed a data of any type
 struct TLP_SCOPE DataMem {
   DataMem() {}
-  virtual ~DataMem() {};
+  virtual ~DataMem() {}
 };
 
 // basic template to embed a value of a known type
