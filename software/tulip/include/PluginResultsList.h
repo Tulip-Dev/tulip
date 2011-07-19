@@ -45,8 +45,6 @@ private:
 
   QStringList _typeFilter;
   QString _nameFilter;
-
-
 };
 
 #endif // PLUGINRESULTSLIST_H

@@ -37,6 +37,11 @@ using namespace tlp;
 
 class PluginInformationsCollector : public PluginLoader {
 public:
+
+  void setCurrentPluginName(const QString& name) {
+    _name = name;
+  }
+  
   virtual void loaded(const tlp::AbstractPluginInfo* info, const std::list< Dependency >& dependencies) {
     QString pluginName = QString::fromStdString(info->getName());
     QString pluginLibrary;
@@ -64,6 +69,7 @@ public:
     infoElement.setAttribute("release", QString::fromStdString(info->getRelease()));
     infoElement.setAttribute("group", QString::fromStdString(info->getGroup()));
     infoElement.setAttribute("tulipRelease", QString::fromStdString(info->getTulipRelease()));
+    infoElement.setAttribute("folder", _name.simplified().remove(' ').toLower());
 
     for(std::list<Dependency>::const_iterator it = dependencies.begin(); it != dependencies.end(); ++it) {
       QDomElement dependencyElement = pluginInfoDocument.createElement("dependency");
@@ -89,6 +95,7 @@ public:
 
 private:
   QList<QDomElement> _xmlElements;
+  QString _name;
 };
 
 int main(int argc,char **argv) {
@@ -143,12 +150,14 @@ int main(int argc,char **argv) {
     QDir pluginDirectory(plugindir);
     pluginDirectory.cd("lib");
     pluginDirectory.cd("tulip");
-    foreach(const QString& pluginFile, pluginDirectory.entryList(libraries, QDir::Files | QDir::NoSymLinks)) {
-      QString pluginFileName = pluginDirectory.canonicalPath() + "/" + pluginFile;
-      PluginLibraryLoader::loadPluginLibrary(pluginFileName.toStdString(), &collector);
-    }
 
     QString pluginSimplifiedName = component.simplified().remove(' ').toLower();
+    
+    foreach(const QString& pluginFile, pluginDirectory.entryList(libraries, QDir::Files | QDir::NoSymLinks)) {
+      QString pluginFileName = pluginDirectory.canonicalPath() + "/" + pluginFile;
+      collector.setCurrentPluginName(pluginSimplifiedName);
+      PluginLibraryLoader::loadPluginLibrary(pluginFileName.toStdString(), &collector);
+    }
 
     QString archiveName = tlp::getPluginPackageName(pluginSimplifiedName);
 
