@@ -53,7 +53,7 @@ public:
     FTUnicodeStringItr(const T* string) : curPos(string), nextPos(string)
     {
         (*this)++;
-    };
+    }
 
     /**
      * Pre-increment operator.  Reads the next unicode character and sets

@@ -288,7 +288,7 @@ public:
 
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de
  creation,informations, release, groupe*/
-LAYOUTPLUGINOFGROUP(OGDFFm3,"FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Alpha", "1.2" ,"Force Directed");
+LAYOUTPLUGINOFGROUP(OGDFFm3,"FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Alpha", "1.2" ,"Force Directed")
 
 OGDFFm3::OGDFFm3(const tlp::PropertyContext &context) :
   OGDFLayoutPluginBase(context, new ogdf::FMMMLayout()) {

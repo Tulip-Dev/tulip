@@ -145,7 +145,7 @@ public:
 
 };
 
-LAYOUTPLUGINOFGROUP(OGDFGemFrick,"GEM Frick (OGDF)","Christoph Buchheim", "15/11/2007","Alpha","1.1", "Force Directed");
+LAYOUTPLUGINOFGROUP(OGDFGemFrick,"GEM Frick (OGDF)","Christoph Buchheim", "15/11/2007","Alpha","1.1", "Force Directed")
 
 OGDFGemFrick::OGDFGemFrick(const tlp::PropertyContext &context) : OGDFLayoutPluginBase(context,new ogdf::GEMLayout()) {
   addParameter<int>("number of rounds", paramHelp[0], "30000");

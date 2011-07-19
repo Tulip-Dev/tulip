@@ -82,5 +82,4 @@ public:
 
 };
 
-
-LAYOUTPLUGINOFGROUP(OGDFBalloon,"Balloon (OGDF)","Karsten Klein","13/11/2007","Ok","1.3","Hierarchical");
+LAYOUTPLUGINOFGROUP(OGDFBalloon,"Balloon (OGDF)","Karsten Klein","13/11/2007","Ok","1.3","Hierarchical")

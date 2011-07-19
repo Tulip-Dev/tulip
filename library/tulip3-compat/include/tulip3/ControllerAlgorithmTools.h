@@ -30,7 +30,7 @@ class Graph;
 class PluginListerInterface;
 class View;
 class DataSet;
-class ParameterList;
+struct ParameterList;
 
 /** \brief Algorithm tools for Controller
  *

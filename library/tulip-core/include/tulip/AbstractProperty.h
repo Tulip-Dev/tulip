@@ -459,7 +459,7 @@ protected:
   typedef PropertyAlgorithm PAlgorithm;
   //=================================================================================
   ///Enable to clone part of sub_class
-  virtual void clone_handler(AbstractProperty<Tnode,Tedge,TPROPERTY> &) {};
+  virtual void clone_handler(AbstractProperty<Tnode,Tedge,TPROPERTY> &) {}
 
 protected:
   MutableContainer<typename Tnode::RealType> nodeProperties;

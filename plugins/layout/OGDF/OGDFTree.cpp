@@ -174,8 +174,4 @@ public:
 
 };
 
-
-
-
-
-LAYOUTPLUGINOFGROUP(OGDFTree,"Improved Walker (OGDF)","Christoph Buchheim","12/11/2007","Ok","1.5","Tree");
+LAYOUTPLUGINOFGROUP(OGDFTree,"Improved Walker (OGDF)","Christoph Buchheim","12/11/2007","Ok","1.5","Tree")

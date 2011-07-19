@@ -130,5 +130,4 @@ public:
 
 };
 
-
-LAYOUTPLUGINOFGROUP(OGDFPlanarizationGrid,"Planarization Grid (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.0","Planar");
+LAYOUTPLUGINOFGROUP(OGDFPlanarizationGrid,"Planarization Grid (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.0","Planar")

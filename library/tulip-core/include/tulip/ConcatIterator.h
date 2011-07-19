@@ -48,7 +48,7 @@ template<class itType> struct ConcatIterator : public Iterator<itType> {
   ~ConcatIterator() {
     delete itOne;
     delete itTwo;
-  };
+  }
 
   itType next() {
     if (itOne->hasNext())
@@ -60,7 +60,7 @@ template<class itType> struct ConcatIterator : public Iterator<itType> {
 
   bool hasNext() {
     return (itOne->hasNext() || itTwo->hasNext());
-  };
+  }
 
 private :
   Iterator<itType> *itOne;

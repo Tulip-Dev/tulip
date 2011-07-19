@@ -133,7 +133,7 @@ public:
 
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de
  creation,informations, realease, groupe*/
-LAYOUTPLUGINOFGROUP(OGDFFrutchermanReingold, "Frutcherman Reingold (OGDF)","Stephan Hachul","15/11/2007", "Alpha", "1.1","Force Directed");
+LAYOUTPLUGINOFGROUP(OGDFFrutchermanReingold, "Frutcherman Reingold (OGDF)","Stephan Hachul","15/11/2007", "Alpha", "1.1","Force Directed")
 
 OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PropertyContext &context) :
   OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderFRExact()) {

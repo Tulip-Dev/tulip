@@ -210,5 +210,4 @@ public:
 
 };
 
-
-LAYOUTPLUGINOFGROUP(OGDFSugiyama,"Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.4","Hierarchical");
+LAYOUTPLUGINOFGROUP(OGDFSugiyama,"Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.4","Hierarchical")

@@ -112,63 +112,63 @@ public:
 		m_parent = parent;
 		m_head = cutvertex;
 		m_stopCause = sc;
-	};
+	}
 
 	bool isBLabel() {
 		return (m_parent != 0);
-	};
+	}
 
 	bool isCLabel() {
 		return (m_parent == 0);
-	};
+	}
 
 	//! return pendant with number nr, starts counting at 0
 	node getPendant(int nr) {
 		return (nr < m_pendants.size()) ? (*(m_pendants.get(nr))) : 0;
-	};
+	}
 
 	node getFirstPendant() {
 		return (m_pendants.size() > 0) ? m_pendants.front() : 0;
-	};
+	}
 
 	node getLastPendant() {
 		return (m_pendants.size() > 0) ? m_pendants.back() : 0;
-	};
+	}
 	
     //! return number of pendants
 	int size() {
 		return m_pendants.size();
-	};
+	}
 	
 	void removePendant(node pendant);
 
 	void removePendant(ListIterator<node> it){
 		m_pendants.del(it);
-	};
+	}
 
 	void removeFirstPendant() {
 		if (m_pendants.size() > 0){
 			m_pendants.popFront();
 		}
-	};
+	}
 	
 	void addPendant(node pendant) {
 		m_pendants.pushBack(pendant);
-	};
+	}
 
 	void deleteAllPendants() {
 		m_pendants.clear();
-	};
+	}
 
 	//! return the parent node. If the label is a c-label it returns m_head
 	node parent() {
 		return (m_parent != 0) ? m_parent : m_head;
-	};
+	}
 
 	//! returns the head node
 	node head() {
 		return m_head;
-	};
+	}
 	
 	void setParent(node newParent){
 		m_parent = newParent;

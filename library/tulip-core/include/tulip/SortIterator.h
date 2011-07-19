@@ -66,7 +66,7 @@ struct SortNodeIterator : public StableIterator<node> {
     copyIterator=sequenceCopy.begin();
   }
   ///
-  ~SortNodeIterator() {};
+  ~SortNodeIterator() {}
 };
 
 /**
@@ -80,7 +80,7 @@ struct SortTargetEdgeIterator : public StableIterator<edge> {
     copyIterator=sequenceCopy.begin();
   }
   ///
-  ~SortTargetEdgeIterator() {};
+  ~SortTargetEdgeIterator() {}
 };
 /*@}*/
 }

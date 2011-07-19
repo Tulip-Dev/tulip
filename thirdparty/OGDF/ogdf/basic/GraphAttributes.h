@@ -183,7 +183,7 @@ public:
 	//! Specifies scaling of images.
     enum ImageStyle {
         FreeScale    = 0,
-        FixScale   = 1,
+        FixScale   = 1
     };
 	//! Specifies image alignment.
     enum ImageAlignment {
@@ -395,10 +395,10 @@ public:
     const Graph& constGraph() const { return *m_pGraph; }
     
 	//! Returns if the graph is directed.
-	bool directed() { return m_directed; };
+	bool directed() { return m_directed; }
 	
 	//! Sets if the graph is directed to \a directed.
-	void directed(bool directed) { m_directed = directed; };
+	void directed(bool directed) { m_directed = directed; }
 	
 	//! Returns the template name of node \a v.
 	const String &templateNode(node v) const { return m_nodeTemplate[v]; }

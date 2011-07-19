@@ -135,5 +135,4 @@ public:
 
 };
 
-
-LAYOUTPLUGINOFGROUP(OGDFKamadaKawai,"Kamada Kawai (OGDF)","Karsten Klein","12/11/2007","Ok","1.0","Force Directed");
+LAYOUTPLUGINOFGROUP(OGDFKamadaKawai,"Kamada Kawai (OGDF)","Karsten Klein","12/11/2007","Ok","1.0","Force Directed")

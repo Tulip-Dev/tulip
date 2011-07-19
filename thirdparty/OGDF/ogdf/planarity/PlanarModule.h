@@ -79,8 +79,8 @@ class OGDF_EXPORT PlanarModule{
 
 public:
 
-	PlanarModule() {};
-	~PlanarModule() {};
+	PlanarModule() {}
+	~PlanarModule() {}
 
 	// Returns true, if G is planar, false otherwise.
 	bool planarityTest(Graph &G);

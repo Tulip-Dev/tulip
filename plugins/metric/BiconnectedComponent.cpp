@@ -207,7 +207,7 @@ using namespace tlp;
  */
 class BiconnectedComponent:public DoubleAlgorithm {
 public:
-  BiconnectedComponent(const PropertyContext &context):DoubleAlgorithm(context) {};
+  BiconnectedComponent(const PropertyContext &context):DoubleAlgorithm(context) {}
   bool run() {
     MutableContainer<int> compo;
     compo.setAll(-1);

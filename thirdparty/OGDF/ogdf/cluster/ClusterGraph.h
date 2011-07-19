@@ -127,7 +127,7 @@ public:
 		m_pClusterGraph(pClusterGraph) {};
 	#else
 	ClusterElement(int id):
-		m_id(id), m_depth(0),m_parent(0),m_pPrev(0),m_pNext(0),m_it(0) {};
+		m_id(id), m_depth(0),m_parent(0),m_pPrev(0),m_pNext(0),m_it(0) {}
 	#endif
 
 
@@ -379,7 +379,7 @@ public:
 	void delCluster(cluster c);
 
 	//! Returns the root cluster.
-	cluster rootCluster() const {return m_rootCluster;};
+	cluster rootCluster() const {return m_rootCluster;}
 
 	//! Returns the cluster to which a node belongs.
 	inline cluster clusterOf(node v) const{ 
@@ -635,7 +635,7 @@ public:
 	bool representsCombEmbedding();
 
 	//! Sets the availability status of the adjacency entries. 
-	void adjAvailable(bool val){ m_adjAvailable = val;};
+	void adjAvailable(bool val){ m_adjAvailable = val;}
 
 protected:
 	//! Creates new cluster containing nodes in parameter list
@@ -702,20 +702,20 @@ protected:
 	virtual void nodeAdded(node v)   
 	{
 		assignNode(v, rootCluster());
-	};
+	}
 	//! Implementation of inherited method: Updates data if edge deleted.
-	virtual void edgeDeleted(edge /* e */) {};
+	virtual void edgeDeleted(edge /* e */) {}
 	//! Implementation of inherited method: Updates data if edge added.
-	virtual void edgeAdded(edge /* e */)   {};
+	virtual void edgeAdded(edge /* e */)   {}
 	//! Currently does nothing.
-	virtual void reInit()            {};
+	virtual void reInit()            {}
 	//! Clears cluster data without deleting root when underlying graphs' clear method is called.
 	virtual void cleared()			 
 	{
 		//we don't want a complete clear, as the graph still exists
 		//and can be updated from input stream
 		semiClear();
-	};//Graph cleared
+	}//Graph cleared
 
 private:
 	//! Assigns node \a v to cluster \a c (\a v not yet assigned!).

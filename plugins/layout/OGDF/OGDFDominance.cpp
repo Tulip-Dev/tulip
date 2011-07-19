@@ -97,5 +97,4 @@ public:
 
 };
 
-
-LAYOUTPLUGINOFGROUP(OGDFDominance,"Dominance (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical");
+LAYOUTPLUGINOFGROUP(OGDFDominance,"Dominance (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")

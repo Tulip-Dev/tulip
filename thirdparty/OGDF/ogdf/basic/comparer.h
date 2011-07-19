@@ -108,9 +108,9 @@ public:
 		static bool equal  (const type &x, const type &y) { return x == y; } \
 	};
 
-OGDF_STD_COMPARER(int);
-OGDF_STD_COMPARER(float);
-OGDF_STD_COMPARER(double);
+OGDF_STD_COMPARER(int)
+OGDF_STD_COMPARER(float)
+OGDF_STD_COMPARER(double)
 
 //! Generates a specialization of the standard static comparer for booleans.
 template<> class StdComparer<bool> {

@@ -127,5 +127,4 @@ public:
 
 };
 
-
-LAYOUTPLUGINOFGROUP(OGDFFastMultipoleEmbedder,"Fast Multipole Embedder (OGDF)","Martin Gronemann","12/11/2007","Ok","1.0","Force Directed");
+LAYOUTPLUGINOFGROUP(OGDFFastMultipoleEmbedder,"Fast Multipole Embedder (OGDF)","Martin Gronemann","12/11/2007","Ok","1.0","Force Directed")

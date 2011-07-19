@@ -39,7 +39,7 @@ public:
   ///
   ExportModule (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet) {}
   ///
-  virtual ~ExportModule() {};
+  virtual ~ExportModule() {}
   ///
   virtual bool exportGraph(std::ostream &,Graph *)=0;
   /** It is the root graph*/
