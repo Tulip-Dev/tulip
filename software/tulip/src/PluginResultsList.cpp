@@ -10,6 +10,7 @@
 
 PluginResultsList::PluginResultsList(QWidget *parent)
   : QScrollArea(parent), _pluginManager(new tlp::PluginManager), _focusedItem(0), _resultsListCache(0) {
+    _pluginManager->addRemoteLocation("http://www.labri.fr/perso/huet/archive/");
   initPluginsCache();
 }
 
