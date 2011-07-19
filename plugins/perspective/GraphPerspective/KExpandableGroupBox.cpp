@@ -57,6 +57,7 @@ void ArrowButton::paintEvent(QPaintEvent *event) {
   opt.rect = QRect(0, (height() - h) / 2, h, h);
   opt.palette = palette();
   opt.state = QStyle::State_Children;
+
   if (isChecked())
     opt.state |= QStyle::State_Open;
 
@@ -154,9 +155,11 @@ void KExpandableGroupBox::setWidget(QWidget *w) {
     if (!isExpanded()) {
       d->widget->hide();
     }
+
     d->gridLayout->addWidget(d->widget, 2, 2);
     d->gridLayout->setRowStretch(2, 1);
-  } else {
+  }
+  else {
     if (!d->expander) {
       d->expander = new QWidget(this);
       d->gridLayout->addWidget(d->expander, 2, 2);
@@ -171,6 +174,7 @@ void KExpandableGroupBox::setWidget(QWidget *w) {
     d->widget->show();
     d->expanderLayout->addWidget(d->widget);
   }
+
   setEnabled(true);
 
   if (isExpanded()) {
@@ -203,9 +207,11 @@ void KExpandableGroupBox::setExpanded(bool expanded) {
   if (!d->animateExpansion) {
     if (!expanded)
       d->widget->setVisible(false);
-  } else {
+  }
+  else {
     if (expanded)
       d->expander->setVisible(true);
+
     d->widget->setVisible(expanded);
   }
 
@@ -224,7 +230,8 @@ void KExpandableGroupBox::animateExpansion(qreal showAmount) {
     if (showAmount == 1) {
       d->widget->setVisible(true);
     }
-  } else {
+  }
+  else {
     d->expander->setFixedHeight(pixels);
   }
 }
@@ -249,8 +256,10 @@ void KExpandableGroupBox::paintEvent(QPaintEvent *ev) {
   opt.rect = QRect(0, 0, h, h);
   opt.palette = palette();
   opt.state = QStyle::State_Children;
+
   if (d->colButton->isChecked())
-  opt.state |= QStyle::State_Open;
+    opt.state |= QStyle::State_Open;
+
   style()->drawPrimitive(QStyle::PE_IndicatorBranch, &opt, &p);
   p.drawText(h, 0, width(), height(), Qt::TextShowMnemonic, d->title);
   p.end();
@@ -260,9 +269,11 @@ void KExpandableGroupBox::paintEvent(QPaintEvent *ev) {
 
 void KExpandableGroupBox::mouseReleaseEvent(QMouseEvent *ev) {
 #if 0
+
   if ( (ev->button() & Qt::LeftButton) && QRect(0, 0, width(), 16).contains(ev->pos())) {
     setExpanded(!isExpanded());
   }
+
 #endif
   QWidget::mouseReleaseEvent(ev);
 }

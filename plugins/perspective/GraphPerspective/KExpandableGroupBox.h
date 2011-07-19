@@ -156,10 +156,10 @@ protected:
   void mouseReleaseEvent(QMouseEvent *ev);
   void paintEvent(QPaintEvent*);
 
-  private slots:
+private slots:
   void animateExpansion(qreal);
 
-  private:
+private:
   void init();
   Q_DISABLE_COPY(KExpandableGroupBox)
   class Private;
@@ -180,7 +180,9 @@ class ArrowButton: public QAbstractButton {
 public:
   ArrowButton(QWidget *parent = 0);
   ~ArrowButton();
-  QSize sizeHint() const { return QSize(16, 16); }
+  QSize sizeHint() const {
+    return QSize(16, 16);
+  }
 
 protected:
   void paintEvent(QPaintEvent*);
