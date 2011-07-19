@@ -1,4 +1,5 @@
 INSTALL(FILES
+  tulip/DownloadManager.h
   tulip/GlMainWidget.h
   tulip/CopyPropertyDialog.h
   tulip/RenderingParametersDialog.h

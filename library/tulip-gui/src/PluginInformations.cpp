@@ -7,6 +7,8 @@
 
 #include <QtCore/QFileInfo>
 #include <tulip/TlpQtTools.h>
+#include <tulip/DownloadManager.h>
+#include <QDesktopServices>
 
 using namespace tlp;
 
@@ -112,6 +114,7 @@ bool PluginInformations::updateAvailable() const {
 
 bool PluginInformations::fetch(QString version) const {
   const QString archiveName = tlp::getPluginPackageName(name());
+  DownloadManager::getInstance()->downloadPlugin(_remoteLocation + archiveName, QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/staging/" + archiveName);
   return false;
 }
 

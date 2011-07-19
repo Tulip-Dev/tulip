@@ -3,6 +3,7 @@ IF(ENABLE_RENDERING_TIME_DISPLAY)
 ENDIF(ENABLE_RENDERING_TIME_DISPLAY)
 
 SET(SRCS
+  DownloadManager.cpp
   GlMainWidget.cpp
   GlMainView.cpp
   NodeLinkDiagramComponent.cpp
@@ -88,6 +89,7 @@ QT4_WRAP_UI(UI_HEADERS
 )
 
 QT4_WRAP_CPP(MOC_SRCS
+  ../include/tulip/DownloadManager.h
   ../include/tulip/GlMainWidget.h
   ../include/tulip/GlMainView.h
   ../include/tulip/NodeLinkDiagramComponent.h
