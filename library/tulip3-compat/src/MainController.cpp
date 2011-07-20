@@ -130,8 +130,8 @@ void buildPropertyMenu(QMenu &menu, QObject *receiver, const char *slot) {
   std::string::size_type nGroups = 0;
   string pluginName;
   forEach(pluginName, PropertyPluginLister<TemplateAlgorithm<TPROPERTY> >::availablePlugins()) {
-    const AbstractPluginInfo* pluginInfo = PropertyPluginLister<TemplateAlgorithm<TPROPERTY> >::pluginInformations(pluginName);
-    insertInMenu(menu, pluginName, pluginInfo->getGroup(), groupMenus, nGroups, receiver, slot);
+    const AbstractPluginInfo& pluginInfo = PropertyPluginLister<TemplateAlgorithm<TPROPERTY> >::pluginInformations(pluginName);
+    insertInMenu(menu, pluginName, pluginInfo.getGroup(), groupMenus, nGroups, receiver, slot);
   }
 }
 
@@ -140,7 +140,7 @@ void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
   std::string::size_type nGroups = 0;
   string pluginName;
   forEach(pluginName, AlgorithmLister::availablePlugins()) {
-    insertInMenu(menu, pluginName.c_str(), AlgorithmLister::pluginInformations(pluginName)->getGroup(), groupMenus, nGroups,receiver,slot);
+    insertInMenu(menu, pluginName.c_str(), AlgorithmLister::pluginInformations(pluginName).getGroup(), groupMenus, nGroups,receiver,slot);
   }
 }
 typedef std::vector<node> NodeA;

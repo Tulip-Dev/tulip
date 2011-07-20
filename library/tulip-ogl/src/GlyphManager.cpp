@@ -57,7 +57,7 @@ int GlyphManager::glyphId(string name) {
 void GlyphManager::loadGlyphPlugins() {
   string pluginName;
   forEach(pluginName, GlyphLister::availablePlugins()) {
-    int pluginId=GlyphLister::pluginInformations(pluginName)->getId();
+    int pluginId=GlyphLister::pluginInformations(pluginName).getId();
     glyphIdToName[pluginId]=pluginName;
     nameToGlyphId[pluginName]=pluginId;
   }
@@ -70,14 +70,14 @@ void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputDat
   string glyphName;
   forEach(glyphName, GlyphLister::availablePlugins()) {
     Glyph *newGlyph = GlyphLister::getPluginObject(glyphName, &gc);
-    glyphs.set(GlyphLister::pluginInformations(glyphName)->getId(), newGlyph);
+    glyphs.set(GlyphLister::pluginInformations(glyphName).getId(), newGlyph);
   }
 }
 
 void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Glyph *>& glyphs) {
   string glyphName;
   forEach(glyphName, GlyphLister::availablePlugins()) {
-    delete glyphs.get(GlyphLister::pluginInformations(glyphName)->getId());
+    delete glyphs.get(GlyphLister::pluginInformations(glyphName).getId());
   }
 }
 }

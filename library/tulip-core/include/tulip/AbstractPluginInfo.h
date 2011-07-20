@@ -155,7 +155,7 @@ public:
    * @return PluginObject* A newly created algorithm plug-in.
    **/
   virtual PluginObject* createPluginObject(PluginContext context) {
-    (void) context;
+    (void) context; //suppresses the unused parameter warning
     std::cerr << "error from FactoryInterface<" << typeid(PluginObject).name() << ", " << typeid(PluginContext).name() <<">" << std::endl;
     assert(false);
     return NULL;

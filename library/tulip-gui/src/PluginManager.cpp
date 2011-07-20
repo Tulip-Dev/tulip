@@ -22,7 +22,7 @@ QList<tlp::PluginInformations*> PluginManager::pluginsList(Location list) {
 
       while(plugins->hasNext()) {
         string pluginName = plugins->next();
-        const AbstractPluginInfo* info = currentLister->pluginInformations(pluginName);
+        const AbstractPluginInfo& info = currentLister->pluginInformations(pluginName);
         PluginInformations* localinfo = new PluginInformations(info, currentLister->getPluginsClassName(), currentLister->getPluginLibrary(pluginName));
         result[pluginName.c_str()] = localinfo;
       }
@@ -98,7 +98,7 @@ LocationPlugins PluginManager::parseDescription(const QString& xmlDescription, c
 
     tlp::AbstractPluginInfo* pluginInfo = new DistantPluginInfo(author, date, group, name, info, release, tulipRelease, dependencies);
 
-    PluginInformations* pluginInformations = new PluginInformations(pluginInfo, type, location + "/" + name.c_str());
+    PluginInformations* pluginInformations = new PluginInformations(*pluginInfo, type, location + "/" + name.c_str());
 
 //     PluginInfoWithDependencies infos(pluginInfo, dependencies);
     remotePlugins[pluginInfo->getName().c_str()] = pluginInformations;
