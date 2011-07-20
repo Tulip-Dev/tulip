@@ -22,6 +22,9 @@ public:
 public slots:
   void setTitle(const QString &title);
   void setMenus(const QStringList &menus);
+
+signals:
+  void menuChanged(const QString &);
 };
 
 #endif // HEADERFRAME_H

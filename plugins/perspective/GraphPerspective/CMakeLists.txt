@@ -3,7 +3,8 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclu
 SET(LIB_SRCS
 AlgorithmRunner.cpp
 GraphPerspective.cpp
-HeaderFrame.cpp)
+HeaderFrame.cpp
+KExpandableGroupBox.cpp)
 
 QT4_ADD_RESOURCES(RCC_SRCS
 resources/GraphPerspective.qrc)
@@ -15,7 +16,8 @@ designer/HeaderFrame.ui)
 
 QT4_WRAP_CPP(MOC_SRCS
 AlgorithmRunner.h
-HeaderFrame.h)
+HeaderFrame.h
+KExpandableGroupBox.h)
 
 ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
 

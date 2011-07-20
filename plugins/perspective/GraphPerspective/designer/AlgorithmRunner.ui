@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>139</width>
-    <height>744</height>
+    <width>410</width>
+    <height>736</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -39,12 +39,12 @@
 }</string>
      </property>
      <property name="placeholderText">
-      <string>Filter names here...</string>
+      <string>Filter name...</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QScrollArea" name="pluginsList">
+    <widget class="QScrollArea" name="algorithmList">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -52,8 +52,8 @@
       </sizepolicy>
      </property>
      <property name="styleSheet">
-      <string notr="true">#pluginsListWidget {
-  background-color: white;
+      <string notr="true">#algorithmListContents {
+  /*background-color: white;*/
   border-left: 1px solid &quot;#C9C9C9&quot;;
   border-right: 1px solid &quot;#C9C9C9&quot;;
   border-top: 1px solid &quot;#C9C9C9&quot;;
@@ -66,13 +66,13 @@
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
-     <widget class="QWidget" name="pluginsListWidget">
+     <widget class="QWidget" name="algorithmListContents">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>139</width>
-        <height>717</height>
+        <width>410</width>
+        <height>709</height>
        </rect>
       </property>
      </widget>
