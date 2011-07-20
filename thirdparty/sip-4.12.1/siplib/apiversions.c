@@ -16,9 +16,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-
-#include <Python.h>
-
 #include <string.h>
 
 #include "sip.h"
