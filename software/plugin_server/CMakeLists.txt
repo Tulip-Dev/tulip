@@ -17,3 +17,8 @@ target_link_libraries(packagePlugins ${QT_LIBRARIES}
 target_link_libraries(pushPlugins ${QT_LIBRARIES}
                       ${LibTulipGUIName}
                       ${QT_QTXML_LIBRARY})
+
+IF(TULIP_GENERATE_PLUGINSERVER)
+  INSTALL(TARGETS packagePlugins DESTINATION ${TulipBinInstallDir})
+  INSTALL(TARGETS pushPlugins DESTINATION ${TulipBinInstallDir})
+ENDIF()
