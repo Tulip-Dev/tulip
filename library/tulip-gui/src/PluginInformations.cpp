@@ -17,18 +17,18 @@ static std::list<tlp::Dependency> getPluginDependencies(T* factory, U context) {
   return StaticPluginLister<T, U>::getPluginDependencies(factory->getName());
 }
 
-PluginInformations::PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::string& library)
-  :_type(type.c_str()), _iconPath(":/tulip/gui/icons/logo32x32.png"), _longDescriptionPath("http://www.perdu.com"), _isLocal(true), _installedVersion(info->getRelease().c_str()), _updateAvailable(false) {
-  _versions << info->getRelease().c_str();
+PluginInformations::PluginInformations(const tlp::AbstractPluginInfo& info, const std::string& type, const std::string& library)
+  :_type(type.c_str()), _iconPath(":/tulip/gui/icons/logo32x32.png"), _longDescriptionPath("http://www.perdu.com"), _isLocal(true), _installedVersion(info.getRelease().c_str()), _updateAvailable(false) {
+  _versions << info.getRelease().c_str();
 //   PluginInfoWithDependencies pluginInfo(info, dependencies);
-  _infos[info->getName().c_str()] = info;
+  _infos[info.getName().c_str()] = &info;
 }
 
-PluginInformations::PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const QString& basePath)
+PluginInformations::PluginInformations(const tlp::AbstractPluginInfo& info, const std::string& type, const QString& basePath)
   :_type(type.c_str()), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html"), _isLocal(false), _installedVersion(QString::null), _updateAvailable(false), _remoteLocation(basePath) {
-  _versions << info->getRelease().c_str();
+  _versions << info.getRelease().c_str();
 //   PluginInfoWithDependencies pluginInfo(info, dependencies);
-  _infos[info->getName().c_str()] = info;
+  _infos[info.getName().c_str()] = &info;
 }
 
 void PluginInformations::AddPluginInformations(const tlp::AbstractPluginInfo* info) {

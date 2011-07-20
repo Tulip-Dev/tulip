@@ -90,7 +90,7 @@ public:
     * @param dependencies The dependencies of the plugin.
     * @param library The library file from which the plugin was loaded.
     **/
-  PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::string& library);
+  PluginInformations(const tlp::AbstractPluginInfo& info, const std::string& type, const std::string& library);
 
   /**
     * @brief This constructor is used for remote plugin description, the long description and icon's paths are directly provided.
@@ -101,7 +101,7 @@ public:
     * @param longDescriptionPath The URL where the long description resides.
     * @param iconPath The URL where the icon resides.
     **/
-  PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const QString& basePath);
+  PluginInformations(const tlp::AbstractPluginInfo& info, const std::string& type, const QString& basePath);
 
   void AddPluginInformations(const tlp::AbstractPluginInfo* info);
   void AddPluginInformations(const tlp::PluginInformations* info);

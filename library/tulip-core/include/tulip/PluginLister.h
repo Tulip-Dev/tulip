@@ -84,7 +84,7 @@ public:
    * @param name The name of the plugin to retrieve informations for.
    * @return :AbstractPluginInfo* The informations on the plugin.
    **/
-  virtual const AbstractPluginInfo* pluginInformations(const std::string& name) const = 0;
+  virtual const AbstractPluginInfo& pluginInformations(const std::string& name) const = 0;
 
   /**
    * @brief Checks if a given name is registered in this factory.
@@ -290,7 +290,7 @@ public:
 
   //the following function are inherited from PluginListerInterface, and by default inherit the doc.
   Iterator<std::string>* availablePlugins() const;
-  const AbstractPluginInfo* pluginInformations(const std::string& name) const;
+  const AbstractPluginInfo& pluginInformations(const std::string& name) const;
   bool pluginExists(const std::string& pluginName) const;
   const ParameterList getPluginParameters(std::string name) const;
   std::string getPluginLibrary(const std::string& name) const;
@@ -346,7 +346,7 @@ public:
     return PluginLister<ObjectType, Context>::getInstance()->getPluginObject(name, p);
   }
 
-  static const AbstractPluginInfo* pluginInformations(const std::string& name) {
+  static const AbstractPluginInfo& pluginInformations(const std::string& name) {
     return PluginLister<ObjectType, Context>::getInstance()->pluginInformations(name);
   }
 };

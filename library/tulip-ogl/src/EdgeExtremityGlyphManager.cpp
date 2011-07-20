@@ -69,7 +69,7 @@ void EdgeExtremityGlyphManager::loadGlyphPlugins() {
 
   while (itS->hasNext()) {
     string pluginName = itS->next();
-    int pluginId = EdgeExtremityGlyphLister::pluginInformations(pluginName)->getId();
+    int pluginId = EdgeExtremityGlyphLister::pluginInformations(pluginName).getId();
     eeglyphIdToName[pluginId] = pluginName;
     nameToEeGlyphId[pluginName] = pluginId;
   }
@@ -88,14 +88,14 @@ void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
   string glyphName;
   forEach(glyphName, EdgeExtremityGlyphLister::availablePlugins()) {
     EdgeExtremityGlyph *newGlyph = EdgeExtremityGlyphLister::getPluginObject(glyphName, &gc);
-    glyphs.set(EdgeExtremityGlyphLister::pluginInformations(glyphName)->getId(), newGlyph);
+    glyphs.set(EdgeExtremityGlyphLister::pluginInformations(glyphName).getId(), newGlyph);
   }
 }
 
 void EdgeExtremityGlyphManager::clearGlyphList(Graph **, GlGraphInputData*, MutableContainer<EdgeExtremityGlyph *>& glyphs) {
   string glyphName;
   forEach(glyphName, EdgeExtremityGlyphLister::availablePlugins()) {
-    delete glyphs.get(EdgeExtremityGlyphLister::pluginInformations(glyphName)->getId());
+    delete glyphs.get(EdgeExtremityGlyphLister::pluginInformations(glyphName).getId());
   }
 }
 
