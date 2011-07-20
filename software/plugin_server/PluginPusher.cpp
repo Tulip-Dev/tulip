@@ -32,8 +32,8 @@ void uploadfolder(const QString& origin, WebDavManager& manager) {
 
 int main(int argc, char** argv) {
   if(argc < 4) {
-    std::cout << "pushPlugin pluginsPath serverURL base64EncodedCredentials" << std::endl;
-    cout << "destinationDir defaults to the current dir" << endl;
+    std::cout << "pushPlugin pluginsPath serverURL base64EncodedCredentials [destinationPath]" << std::endl;
+    cout << "destinationPath defaults to pluginsPath" << endl;
     exit(0);
   }
 
@@ -42,6 +42,11 @@ int main(int argc, char** argv) {
   QString path = argv[1];
   QString serverURL = argv[2];
   QString credentials = argv[3];
+  QString destinationPath = path;
+
+  if(argc > 4) {
+    destinationPath = argv[4];
+  }
 
   WebDavManager manager("webdav." + serverURL, "/perso/huet", credentials);
 
@@ -54,7 +59,7 @@ int main(int argc, char** argv) {
 
   QString localDescription(description.readAll());
 
-  QString location = "http://www." + serverURL + "/perso/huet/" + path;
+  QString location = "http://www." + serverURL + "/perso/huet/" + destinationPath;
 
   QString remoteDescription = tlp::PluginManager::getPluginServerDescription(location);
 
