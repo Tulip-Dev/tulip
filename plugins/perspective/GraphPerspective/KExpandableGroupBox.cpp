@@ -1,21 +1,21 @@
 /*
-  This file is part of the KDE libraries
-  Copyright (C) 2005-2007 Daniel Molkentin <molkentin@kde.org>
+ This file is part of the KDE libraries
+ Copyright (C) 2005-2007 Daniel Molkentin <molkentin@kde.org>
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License version 2 as published by the Free Software Foundation.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Library General Public
+ License version 2 as published by the Free Software Foundation.
 
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the GNU
-  Library General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the GNU
+ Library General Public License for more details.
 
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.    If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  Boston, MA 02110-1301, USA.
-*/
+ You should have received a copy of the GNU Library General Public License
+ along with this library; see the file COPYING.LIB.    If not, write to
+ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ Boston, MA 02110-1301, USA.
+ */
 
 #include <QtGui/QPainter>
 #include <QtGui/QMouseEvent>
@@ -30,6 +30,9 @@
 /******************************************************************
  * Helper classes
  *****************************************************************/
+
+
+
 ClickableLabel::ClickableLabel(QWidget* parent) :
   QLabel(parent) {
 }
@@ -41,6 +44,8 @@ void ClickableLabel::mouseReleaseEvent(QMouseEvent *e) {
   Q_UNUSED( e );
   emit clicked();
 }
+
+
 
 ArrowButton::ArrowButton(QWidget *parent) :
   QAbstractButton(parent) {
@@ -57,7 +62,6 @@ void ArrowButton::paintEvent(QPaintEvent *event) {
   opt.rect = QRect(0, (height() - h) / 2, h, h);
   opt.palette = palette();
   opt.state = QStyle::State_Children;
-
   if (isChecked())
     opt.state |= QStyle::State_Open;
 
@@ -123,6 +127,10 @@ void KExpandableGroupBox::init() {
   d->label->setBuddy(d->widget);
   setFocusProxy(d->label);
 
+  //test
+  //d->label->hide();
+  //d->colButton->hide();
+
   d->gridLayout->addWidget(d->colButton, 1, 1);
   d->gridLayout->addWidget(d->label, 1, 2);
 
@@ -141,7 +149,7 @@ KExpandableGroupBox::~KExpandableGroupBox() {
 QWidget* KExpandableGroupBox::widget() const {
   return d->widget;
 }
-
+#include <iostream>
 void KExpandableGroupBox::setWidget(QWidget *w) {
   if (!w) {
     d->expanderLayout->removeWidget(d->widget);
@@ -155,11 +163,9 @@ void KExpandableGroupBox::setWidget(QWidget *w) {
     if (!isExpanded()) {
       d->widget->hide();
     }
-
     d->gridLayout->addWidget(d->widget, 2, 2);
     d->gridLayout->setRowStretch(2, 1);
-  }
-  else {
+  } else {
     if (!d->expander) {
       d->expander = new QWidget(this);
       d->gridLayout->addWidget(d->expander, 2, 2);
@@ -174,7 +180,6 @@ void KExpandableGroupBox::setWidget(QWidget *w) {
     d->widget->show();
     d->expanderLayout->addWidget(d->widget);
   }
-
   setEnabled(true);
 
   if (isExpanded()) {
@@ -183,12 +188,14 @@ void KExpandableGroupBox::setWidget(QWidget *w) {
 }
 
 void KExpandableGroupBox::setTitle(const QString& title) {
+  //d->label->setText(QString("<b>%1</b>").arg(title));
   d->label->setText(title);
   d->title = title;
 }
 
 QString KExpandableGroupBox::title() const {
   return d->title;
+  //return d->label->text();
 }
 
 Qt::Alignment KExpandableGroupBox::alignment() const {
@@ -207,11 +214,9 @@ void KExpandableGroupBox::setExpanded(bool expanded) {
   if (!d->animateExpansion) {
     if (!expanded)
       d->widget->setVisible(false);
-  }
-  else {
+  } else {
     if (expanded)
       d->expander->setVisible(true);
-
     d->widget->setVisible(expanded);
   }
 
@@ -230,8 +235,7 @@ void KExpandableGroupBox::animateExpansion(qreal showAmount) {
     if (showAmount == 1) {
       d->widget->setVisible(true);
     }
-  }
-  else {
+  } else {
     d->expander->setFixedHeight(pixels);
   }
 }
@@ -256,10 +260,8 @@ void KExpandableGroupBox::paintEvent(QPaintEvent *ev) {
   opt.rect = QRect(0, 0, h, h);
   opt.palette = palette();
   opt.state = QStyle::State_Children;
-
   if (d->colButton->isChecked())
-    opt.state |= QStyle::State_Open;
-
+  opt.state |= QStyle::State_Open;
   style()->drawPrimitive(QStyle::PE_IndicatorBranch, &opt, &p);
   p.drawText(h, 0, width(), height(), Qt::TextShowMnemonic, d->title);
   p.end();
@@ -269,15 +271,16 @@ void KExpandableGroupBox::paintEvent(QPaintEvent *ev) {
 
 void KExpandableGroupBox::mouseReleaseEvent(QMouseEvent *ev) {
 #if 0
-
   if ( (ev->button() & Qt::LeftButton) && QRect(0, 0, width(), 16).contains(ev->pos())) {
     setExpanded(!isExpanded());
   }
-
 #endif
   QWidget::mouseReleaseEvent(ev);
 }
 
 QSize KExpandableGroupBox::minimumSizeHint() const {
+  //    return QSize(0,16);
   return QWidget::minimumSizeHint();
 }
+
+//#include "kexpandablegroupbox.moc"
