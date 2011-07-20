@@ -6,7 +6,7 @@
 #include <tulip/PluginLister.h>
 
 #include "ui_AlgorithmRunner.h"
-#include "KExpandableGroupBox.h"
+#include "ExpandableGroupBox.h"
 
 #include <QtCore/QDebug>
 
@@ -29,11 +29,7 @@ QWidget *PluginListWidgetManagerInterface::buildListWidget() {
   else {
     QString group;
     foreach(group,algorithmInfos.keys()) {
-      KExpandableGroupBox *groupBox = new KExpandableGroupBox("mooh");
-      groupBox->setObjectName("kapoué");
-      groupBox->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Maximum);
-      groupBox->setWidget(new QLabel("prout"));
-//      groupBox->setExpanded(true);
+      ExpandableGroupBox *groupBox = new ExpandableGroupBox(group);
       layout->addWidget(groupBox);
     }
     layout->addItem(new QSpacerItem(2,2,QSizePolicy::Maximum,QSizePolicy::Expanding));
@@ -52,7 +48,7 @@ public:
     tlp::Iterator<std::string> *it = Lister::availablePlugins();
     while (it->hasNext()) {
       name = it->next();
-      QString group = Lister::pluginInformations(name)->getGroup().c_str();
+      QString group = Lister::pluginInformations(name).getGroup().c_str();
       QStringList lst = result[group];
       lst << name.c_str();
       result[group] = lst;
