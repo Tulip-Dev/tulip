@@ -14,9 +14,6 @@ class PluginResultsList : public QScrollArea {
   Q_OBJECT
 public:
   explicit PluginResultsList(QWidget *parent=0);
-  tlp::PluginManager *pluginManager() const {
-    return _pluginManager;
-  }
 
 public slots:
   void setTypeFilter(const QStringList &,bool autoRefresh=true);
@@ -38,7 +35,6 @@ signals:
   void remove(tlp::PluginInformations *);
 
 private:
-  tlp::PluginManager *_pluginManager;
   QWidget *_focusedItem;
   QWidget *_resultsListCache;
   QMap<tlp::PluginInformations *,PluginInformationsListItem *> _pluginWidgetsCache;

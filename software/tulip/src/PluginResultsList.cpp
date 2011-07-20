@@ -7,10 +7,13 @@
 #include <tulip/PluginInformations.h>
 #include <QtGui/QVBoxLayout>
 #include <QtCore/QDebug>
+#include <tulip/TulipSettings.h>
 
 PluginResultsList::PluginResultsList(QWidget *parent)
-  : QScrollArea(parent), _pluginManager(new tlp::PluginManager), _focusedItem(0), _resultsListCache(0) {
-  _pluginManager->addRemoteLocation("http://www.labri.fr/perso/huet/archive/");
+  : QScrollArea(parent), _focusedItem(0), _resultsListCache(0) {
+  foreach(const QString& remoteLocation, TulipSettings::instance().remoteLocations()) {
+    tlp::PluginManager::addRemoteLocation(remoteLocation);
+  }
   initPluginsCache();
 }
 
@@ -125,7 +128,7 @@ void PluginResultsList::initPluginsCache() {
     delete _pluginWidgetsCache[i];
   }
   _pluginWidgetsCache.clear();
-  foreach(i,_pluginManager->pluginsList(tlp::PluginManager::All)) {
+  foreach(i, tlp::PluginManager::pluginsList(tlp::PluginManager::All)) {
     PluginInformationsListItem *item = new PluginInformationsListItem(i);
     connect(item,SIGNAL(gotFocus()),this,SLOT(changeFocus()));
     connect(item,SIGNAL(showDetailedInformations()),this,SLOT(switchToDetailedInformations()));

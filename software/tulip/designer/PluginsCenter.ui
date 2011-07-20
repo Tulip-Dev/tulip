@@ -10,9 +10,6 @@
     <height>478</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -658,7 +655,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                 <x>0</x>
                 <y>0</y>
                 <width>709</width>
-                <height>190</height>
+                <height>199</height>
                </rect>
               </property>
               <property name="styleSheet">
@@ -730,8 +727,8 @@ background-color: white;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>98</width>
-              <height>28</height>
+              <width>709</width>
+              <height>427</height>
              </rect>
             </property>
            </widget>
@@ -877,7 +874,7 @@ p, li { white-space: pre-wrap; }
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <item>
-             <widget class="QListWidget" name="listWidget"/>
+             <widget class="QListWidget" name="remoteLocationsList"/>
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout">
@@ -885,14 +882,14 @@ p, li { white-space: pre-wrap; }
                <number>0</number>
               </property>
               <item>
-               <widget class="QLineEdit" name="lineEdit">
+               <widget class="QLineEdit" name="remoteLocationText">
                 <property name="placeholderText">
                  <string>Add your custom repository URL here</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton">
+               <widget class="QPushButton" name="addRemoteLocation">
                 <property name="minimumSize">
                  <size>
                   <width>32</width>
@@ -918,7 +915,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_2">
+               <widget class="QPushButton" name="removeRemoteLocation">
                 <property name="minimumSize">
                  <size>
                   <width>32</width>
@@ -997,8 +994,8 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>83</width>
-              <height>28</height>
+              <width>692</width>
+              <height>346</height>
              </rect>
             </property>
             <property name="styleSheet">
@@ -1090,8 +1087,8 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>100</width>
-              <height>30</height>
+              <width>711</width>
+              <height>429</height>
              </rect>
             </property>
            </widget>

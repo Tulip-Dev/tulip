@@ -12,14 +12,8 @@ TulipSettings &TulipSettings::instance() {
   return *_instance;
 }
 
-QList<QString> TulipSettings::recentDocuments() const {
-  QList<QVariant> recentDocumentsValue = value("app/recent_documents").toList();
-  QList<QString> result;
-
-  for (QList<QVariant>::iterator it = recentDocumentsValue.begin(); it != recentDocumentsValue.end(); ++it)
-    result.append(it->toString());
-
-  return result;
+QStringList TulipSettings::recentDocuments() const {
+  return value("app/recent_documents").toStringList();
 }
 
 void TulipSettings::addToRecentDocuments(const QString &name) {
@@ -34,4 +28,28 @@ void TulipSettings::addToRecentDocuments(const QString &name) {
     recentDocumentsValue.pop_back();
 
   setValue("app/recent_documents",recentDocumentsValue);
+}
+
+void TulipSettings::addRemoteLocation(const QString& remoteLocation) {
+  QStringList remoteLocations = value("app/remote_locations").toStringList();
+
+  if(!remoteLocations.contains(remoteLocation)) {
+    remoteLocations.append(remoteLocation);
+  }
+
+  setValue("app/remote_locations", remoteLocations);
+}
+
+void TulipSettings::removeRemoteLocation(const QString& remoteLocation) {
+  QStringList remoteLocations = value("app/remote_locations").toStringList();
+  
+  if(remoteLocations.contains(remoteLocation)) {
+    remoteLocations.removeOne(remoteLocation);
+  }
+  
+  setValue("app/remote_locations", remoteLocations);
+}
+
+const QStringList TulipSettings::remoteLocations() const {
+  return value("app/remote_locations").toStringList();
 }

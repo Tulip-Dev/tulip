@@ -33,6 +33,8 @@ public slots:
   void reportPluginError(const QString &filename, const QString &errormsg);
   void fetch(tlp::PluginInformations *);
   void remove(tlp::PluginInformations *);
+  void addRemoteLocation();
+  void removeRemoteLocation();
 
 protected slots:
   void showPage(QWidget *page);

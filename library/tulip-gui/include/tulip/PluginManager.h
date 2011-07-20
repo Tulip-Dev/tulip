@@ -49,15 +49,24 @@ public:
    * @param list The locations from which to list plugins (All, Remote or Local). Defaults to All.
    * @return :PluginInformations* > The list of plugins available (or installed) at the specified location.
    **/
-  QList< PluginInformations* > pluginsList(tlp::PluginManager::Location list = All);
+  static QList< PluginInformations* > pluginsList(tlp::PluginManager::Location list = All);
 
   /**
    * @brief Adds a remote location from which to list plugins.
    *
    * @param location The URL of the remote location (e.g. http://www.labri.fr/perso/huet/archive/ for testing purposes)
+   * @return bool whether the adding of the remote location suceeded.
+   * TODO This needs to be chan ged to an enum or whatever so what happened can be known (could not contact remote server, location already in list, ...)
+   **/
+  static bool addRemoteLocation(const QString& location);
+
+  /**
+   * @brief Removes a remote location from which to list plugins.
+   *
+   * @param location The URL of the remote location from which we do not want plugins to be listed anymore.
    * @return void
    **/
-  static void addRemoteLocation(const QString& location);
+  static void removeRemoteLocation(const QString& location);
 
   /**
    * @brief Retrieves the serverDescription.xml file from the specified location and returns its contents.
