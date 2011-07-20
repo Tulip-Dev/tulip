@@ -53,5 +53,10 @@ public:
 	virtual  std::string getTulipMajor() const = 0;
 
 	virtual  std::string getTulipMinor() const = 0;
+	
+	virtual int getId() const;
+	
+	virtual std::list<tlp::Dependency> getDependencies() const = 0;
+	
 };
 };
