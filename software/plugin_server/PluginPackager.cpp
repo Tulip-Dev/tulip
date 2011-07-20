@@ -166,7 +166,7 @@ int main(int argc,char **argv) {
     bool compressed = QuaZIPFacade::zipDir(plugindir, destinationDir + "/" + pluginSimplifiedName + "/" + archiveName);
 
     if(!compressed) {
-      cout << "failed to compress folder " << plugindir.toStdString() << " as archive: " << destinationDir + "/" + pluginSimplifiedName + "/" + archiveName << endl;
+      cout << "failed to compress folder " << plugindir.toStdString() << " as archive: " << destinationDir.toStdString() << "/" << pluginSimplifiedName.toStdString() << "/" + archiveName.toStdString() << endl;
     }
     else {
       std::cout << "created archive: " << destinationDir.toStdString() << "/" + pluginSimplifiedName.toStdString( )+ "/" << archiveName.toStdString() << std::endl;
