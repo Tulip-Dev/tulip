@@ -1,11 +1,6 @@
 # Installation of DBus configuration files
 IF(WIN32)
-  INSTALL(FILES
-    etc/dbus-1/session.conf
-    etc/dbus-1/system.conf
-  DESTINATION etc/dbus-1/
-  COMPONENT dbus)
-
+  ADD_SUBDIRECTORY(libdbus/cmake)	
 ELSEIF(APPLE)
   ADD_CUSTOM_TARGET(libdbus ALL
     COMMAND ./configure --mandir=${CMAKE_CURRENT_BINARY_DIR}/dbus/man --libexecdir=${CMAKE_CURRENT_BINARY_DIR}/dbus/sbin --disable-static --with-dbus-user=messagebus --with-dbus-daemondir=${CMAKE_CURRENT_BINARY_DIR}/dbus/bin --enable-console-owner-file --disable-asserts --disable-tests --enable-checks --enable-kqueue --disable-launchd --disable-userdb-cache --disable-ansi --with-xml=expat --disable-xml-docs --disable-dependency-tracking --without-x ac_cv_func_poll=no --prefix=${CMAKE_CURRENT_BINARY_DIR}/dbus

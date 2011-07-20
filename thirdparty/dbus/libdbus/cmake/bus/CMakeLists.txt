@@ -3,7 +3,7 @@ project(bus)
 add_definitions(-DDBUS_COMPILATION)
 
 SET(EFENCE "")
-SET(BUS_DIR ${CMAKE_SOURCE_DIR}/../bus)
+SET(BUS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../bus)
 
 set (config_DATA
 	session.conf				
@@ -17,10 +17,10 @@ ENDFOREACH(file)
 
 # copy services for local daemon start to local service dir data/dbus-1/services
 SET (SERVICE_FILES test/data/valid-service-files)
-FILE(GLOB FILES "${CMAKE_SOURCE_DIR}/../${SERVICE_FILES}/*.service.in" )
-FOREACH(FILE ${FILES})	
+FILE(GLOB FILES "${CMAKE_CURRENT_SOURCE_DIR}/../../${SERVICE_FILES}/*.service.in" )
+FOREACH(FILE ${FILES})
 	GET_FILENAME_COMPONENT(FILENAME ${FILE} NAME_WE)
-	SET (TARGET ${CMAKE_BINARY_DIR}/data/dbus-1/services/${FILENAME}.service)
+	SET (TARGET ${CMAKE_CURRENT_BINARY_DIR}/../../test/data/dbus-1/services/${FILENAME}.service)
 	IF (CONFIG_VERBOSE)
 		MESSAGE("FROM: ${FILE}\nTO: ${TARGET}\n")
 	ENDIF (CONFIG_VERBOSE)
@@ -85,6 +85,7 @@ set_target_properties(dbus-daemon PROPERTIES COMPILE_FLAGS ${DBUS_INTERNAL_CLIEN
 install_targets(/bin dbus-daemon)
 install_files(/etc/dbus-1 FILES ${config_DATA})
 
+
 if (DBUS_SERVICE)
 	set (dbus_service_SOURCES 
 		${BUS_DIR}/bus-service-win.c
@@ -103,7 +104,7 @@ if (DBUS_BUILD_TESTS)
 	add_executable(bus-test ${BUS_SOURCES} ${BUS_DIR}/test-main.c)
 	target_link_libraries(bus-test ${DBUS_INTERNAL_LIBRARIES} ${XML_LIBRARY})
 	set_target_properties(bus-test PROPERTIES COMPILE_FLAGS ${DBUS_INTERNAL_CLIENT_DEFINITIONS})
-	add_test(bus-test ${EXECUTABLE_OUTPUT_PATH}/bus-test ${CMAKE_BINARY_DIR}/test/data)
+	add_test(bus-test ${EXECUTABLE_OUTPUT_PATH}/bus-test ${CMAKE_CURRENT_BINARY_DIR}/../test/data)
 endif (DBUS_BUILD_TESTS)
 
 if(MSVC)
