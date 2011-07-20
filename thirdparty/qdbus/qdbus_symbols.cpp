@@ -40,9 +40,14 @@
 ****************************************************************************/
 
 #include <QtCore/qglobal.h>
+#include <QtCore/qstringlist.h>
 #include <QtCore/qlibrary.h>
 #include <QtCore/qmutex.h>
 #include <private/qmutexpool_p.h>
+
+#include <iostream>
+
+using namespace std;
 
 #ifndef QT_NO_DBUS
 
@@ -73,19 +78,38 @@ bool qdbus_loadLibDBus()
     lib = new QLibrary;
     triedToLoadLibrary = true;
 
+	QStringList libNames;
+#if defined(Q_OS_WIN32)
+#if defined(Q_CC_MINGW)
+#if defined(QT_DEBUG)
+    libNames << QLatin1String("libdbus-1d");
+#endif
+    libNames << QLatin1String("libdbus-1") << QLatin1String("dbus-1");
+#else // MSVC
+#if defined(QT_DEBUG)
+    libNames << QLatin1String("dbus-1d");
+#endif
+    libNames << QLatin1String("dbus-1");
+#endif
+    static int majorversions[] = { -1 };
+#else // UNIX
+    libNames << QLatin1String("dbus-1");
     static int majorversions[] = { 3, 2, -1 };
-    lib->unload();
-    lib->setFileName(QLatin1String("dbus-1"));
-    for (uint i = 0; i < sizeof(majorversions) / sizeof(majorversions[0]); ++i) {
-        lib->setFileNameAndVersion(lib->fileName(), majorversions[i]);
-        if (lib->load() && lib->resolve("dbus_connection_open_private"))
-            return true;
+#endif
 
-        lib->unload();
+	lib->unload();
+
+    foreach(const QString libName, libNames) {
+        for (uint i = 0; i < sizeof(majorversions) / sizeof(majorversions[0]); ++i) {
+			lib->setFileNameAndVersion(libName, majorversions[i]);
+            if (lib->load() && lib->resolve("dbus_connection_open_private"))
+			    return true;
+            lib->unload();
+        }
     }
 
-    delete lib;
-    lib = 0;
+	delete lib;
+	lib = 0;
     return false;
 }
 
