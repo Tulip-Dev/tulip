@@ -21,7 +21,7 @@ if(COMMAND cmake_policy)
 endif(COMMAND cmake_policy)
 
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/modules")
 
 ########### basic vars ###############
 
@@ -36,8 +36,9 @@ endif ($ENV{DBUSDIR})
 if (DBUS_INSTALL_DIR)
 	set(CMAKE_INSTALL_PREFIX "${DBUS_INSTALL_DIR}" CACHE TYPE PATH FORCE)
 else (DBUS_INSTALL_DIR)
-	set(DBUS_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}")
+	set(DBUS_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../")
 endif (DBUS_INSTALL_DIR)
+
 
 # autotools style
 if (NOT DATAROOTDIR)
@@ -78,7 +79,7 @@ endif (CYGWIN)
 # search for required packages
 if (WIN32)
     # include local header first to avoid using old installed header
-    set (CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} ${CMAKE_SOURCE_DIR}/..)
+    set (CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/..)
 	find_package(LibIconv)
     include(Win32Macros)
     addExplorerWrapper(${CMAKE_PROJECT_NAME})
@@ -197,15 +198,15 @@ ENABLE_TESTING()
 #########################################################################
 
 if (WIN32 OR CYGWIN)
-	set (LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/bin)
+	set (LIBRARY_OUTPUT_PATH  ${CMAKE_CURRENT_BINARY_DIR}/../bin)
 else (WIN32 OR CYGWIN)
-	set (LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
+	set (LIBRARY_OUTPUT_PATH  ${CMAKE_CURRENT_BINARY_DIR}/../lib)
 endif (WIN32 OR CYGWIN)
 
-set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+set (EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/../bin)
 
 # for including config.h and for includes like <dir/foo.h>
-include_directories( ${CMAKE_SOURCE_DIR}/.. ${CMAKE_BINARY_DIR} ${CMAKE_INCLUDE_PATH} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_INCLUDE_PATH} )
 
 # linker search directories
 link_directories(${DBUS_LIB_DIR} ${LIBRARY_OUTPUT_PATH} )
@@ -435,8 +436,8 @@ set (DBUS_USER )
 
 
 if (WIN32)
-  set (DBUS_SYSTEM_BUS_DEFAULT_ADDRESS "nonce-tcp:" CACHE STRING "system bus default address" )
-  set (DBUS_SESSION_BUS_DEFAULT_ADDRESS "nonce-tcp:" CACHE STRING "session bus default address" )
+  set (DBUS_SYSTEM_BUS_DEFAULT_ADDRESS "autolaunch:scope=install-path" CACHE STRING "system bus default address" )
+  set (DBUS_SESSION_BUS_DEFAULT_ADDRESS "autolaunch:scope=install-path" CACHE STRING "session bus default address" )
 
   set (DBUS_SYSTEM_CONFIG_FILE "etc/dbus-1/system.conf")
   set (DBUS_SESSION_CONFIG_FILE "etc/dbus-1/session.conf")

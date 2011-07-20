@@ -3,53 +3,53 @@ project(test)
 add_definitions(${DBUS_INTERNAL_CLIENT_DEFINITIONS})
 
 add_library(dbus_testutils STATIC
-    ${CMAKE_SOURCE_DIR}/../test/test-utils.h
-    ${CMAKE_SOURCE_DIR}/../test/test-utils.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-utils.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-utils.c
 )
 target_link_libraries(dbus_testutils ${DBUS_INTERNAL_LIBRARIES})
 
 add_subdirectory( name-test )
 
 set (test-service_SOURCES
-    ${CMAKE_SOURCE_DIR}/../test/test-service.c
-    ${CMAKE_SOURCE_DIR}/../test/test-utils.c
-    ${CMAKE_SOURCE_DIR}/../test/test-utils.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-service.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-utils.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-utils.h
 )
 
 set (test-names_SOURCES
-    ${CMAKE_SOURCE_DIR}/../test/test-names.c
-    ${CMAKE_SOURCE_DIR}/../test/test-utils.c
-    ${CMAKE_SOURCE_DIR}/../test/test-utils.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-names.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-utils.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-utils.h
 )
 
 set (break_loader_SOURCES
-    ${CMAKE_SOURCE_DIR}/../test/break-loader.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/break-loader.c
 )
 
 set (test-shell-service_SOURCES
-    ${CMAKE_SOURCE_DIR}/../test/test-shell-service.c
-    ${CMAKE_SOURCE_DIR}/../test/test-utils.c
-    ${CMAKE_SOURCE_DIR}/../test/test-utils.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-shell-service.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-utils.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-utils.h
 )
 
 set (shell-test_SOURCES
-        ${CMAKE_SOURCE_DIR}/../test/shell-test.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../test/shell-test.c
 )
 
 set (spawn-test_SOURCES
-    ${CMAKE_SOURCE_DIR}/../test/spawn-test.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/spawn-test.c
 )
 
 set (test-exit_SOURCES
-    ${CMAKE_SOURCE_DIR}/../test/test-exit.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-exit.c
 )
 
 set (test-segfault_SOURCES
-    ${CMAKE_SOURCE_DIR}/../test/test-segfault.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-segfault.c
 )
 
 set (test-sleep-forever_SOURCES
-    ${CMAKE_SOURCE_DIR}/../test/test-sleep-forever.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../test/test-sleep-forever.c
 )
 
 add_executable(test-service ${test-service_SOURCES})
@@ -110,11 +110,11 @@ set (CONFIG_VERBOSE 0)
 MESSAGE(STATUS "Copying test files to test directory")
 FOREACH(FILE_TYPE *.message *.message-raw *.auth-script *.sha1 *.txt *.conf *.service)
     FOREACH(DIR ${TESTDIRS})
-        FILE(GLOB FILES "${CMAKE_SOURCE_DIR}/../${DIR}/${FILE_TYPE}" )
-        FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${DIR})
+        FILE(GLOB FILES "${CMAKE_CURRENT_SOURCE_DIR}/../../${DIR}/${FILE_TYPE}" )
+        FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../../${DIR})
         FOREACH(FILE ${FILES})
             GET_FILENAME_COMPONENT(FILENAME ${FILE} NAME)
-            SET (TARGET ${CMAKE_BINARY_DIR}/${DIR}/${FILENAME})
+            SET (TARGET ${CMAKE_CURRENT_BINARY_DIR}/../../${DIR}/${FILENAME})
             configure_file(${FILE} ${TARGET} COPYONLY)
             IF (CONFIG_VERBOSE)
                 MESSAGE("${FILE}")
@@ -128,12 +128,12 @@ MESSAGE(STATUS "Generating test files from templates into test directory")
 
 FOREACH(FILE_TYPE *.conf.in *.service.in)
   FOREACH(DIR ${TESTDIRS})
-    FILE(GLOB FILES "${CMAKE_SOURCE_DIR}/../${DIR}/${FILE_TYPE}" )
-    FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${DIR})
+    FILE(GLOB FILES "${CMAKE_CURRENT_SOURCE_DIR}/../../${DIR}/${FILE_TYPE}" )
+    FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../../${DIR})
     FOREACH(FILE ${FILES})
       GET_FILENAME_COMPONENT(FILENAME ${FILE} NAME)
       STRING(REGEX REPLACE "\\.in$" "" FILENAME ${FILENAME})
-      SET (TARGET ${CMAKE_BINARY_DIR}/${DIR}/${FILENAME})
+      SET (TARGET ${CMAKE_CURRENT_BINARY_DIR}/../../${DIR}/${FILENAME})
       STRING(REGEX REPLACE "\\.in$" ".cmake" _file ${FILE})
       IF (EXISTS ${_file})
         SET (FILE ${_file})
@@ -147,7 +147,7 @@ FOREACH(FILE_TYPE *.conf.in *.service.in)
 ENDFOREACH(FILE_TYPE)
 
 MESSAGE(STATUS "Copying generated bus config files to test directory")
-set (OUTDIR ${CMAKE_BINARY_DIR}/test/data/valid-config-files)
+set (OUTDIR ${CMAKE_CURRENT_BINARY_DIR}/../../test/data/valid-config-files)
 
 FILE(GLOB FILES "${CMAKE_BINARY_DIR}/bus/*.conf" )
 FILE(MAKE_DIRECTORY ${OUTDIR})
