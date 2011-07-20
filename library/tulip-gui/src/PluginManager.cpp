@@ -107,12 +107,27 @@ LocationPlugins PluginManager::parseDescription(const QString& xmlDescription, c
   return remotePlugins;
 }
 
-void PluginManager::addRemoteLocation(const QString& location) {
+bool PluginManager::addRemoteLocation(const QString& location) {
 
   QString xmlDocument(getPluginServerDescription(location));
+
+  if(xmlDocument.isEmpty() || _remoteLocations.contains(location)) {
+    return false;
+  }
+  
   QDomDocument description;
   description.setContent(xmlDocument);
   QDomElement elm = description.documentElement();
 
-  _remoteLocations[elm.attribute("serverName")] = parseDescription(xmlDocument, location);
+  _remoteLocations[location] = parseDescription(xmlDocument, location);
+  return true;
+}
+
+void PluginManager::removeRemoteLocation(const QString& location) {
+  QString xmlDocument(getPluginServerDescription(location));
+  QDomDocument description;
+  description.setContent(xmlDocument);
+  QDomElement elm = description.documentElement();
+  
+  _remoteLocations.remove(location);
 }

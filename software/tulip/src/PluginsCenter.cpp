@@ -5,6 +5,7 @@
 
 #include <tulip/PluginManager.h>
 #include <QtCore/QDebug>
+#include <tulip/TulipSettings.h>
 
 PluginsCenter::PluginsCenter(QWidget *parent) :
   QWidget(parent), _ui(new Ui::PluginsCenterData()) {
@@ -21,6 +22,13 @@ PluginsCenter::PluginsCenter(QWidget *parent) :
   connect(_ui->searchEdit,SIGNAL(textChanged(QString)),this,SLOT(setPluginNameFilter(QString)));
   connect(_ui->pluginsSearchList,SIGNAL(fetch(tlp::PluginInformations*)),this,SLOT(fetch(tlp::PluginInformations*)));
   connect(_ui->pluginsSearchList,SIGNAL(remove(tlp::PluginInformations*)),this,SLOT(remove(tlp::PluginInformations*)));
+  connect(_ui->addRemoteLocation, SIGNAL(clicked()), this, SLOT(addRemoteLocation()));
+  connect(_ui->removeRemoteLocation, SIGNAL(clicked()), this, SLOT(removeRemoteLocation()));
+
+  foreach(const QString& remoteLocation, TulipSettings::instance().remoteLocations()) {
+    _ui->remoteLocationsList->addItem(remoteLocation);
+  }
+  
 }
 
 void PluginsCenter::showDownloadsPage() {
@@ -145,4 +153,29 @@ void PluginsCenter::fetch(tlp::PluginInformations *infos) {
 
 void PluginsCenter::remove(tlp::PluginInformations *infos) {
   qWarning() << "remove " << infos->name();
+}
+
+void PluginsCenter::addRemoteLocation() {
+  const QString remoteLocation = _ui->remoteLocationText->text();
+  std::cout << remoteLocation.toStdString() << std::endl;
+  if(tlp::PluginManager::addRemoteLocation(remoteLocation)) {
+    TulipSettings::instance().addRemoteLocation(remoteLocation);
+    _ui->remoteLocationsList->addItem(remoteLocation);
+    _ui->remoteLocationText->clear();
+    _ui->pluginsSearchList->initPluginsCache();
+    _ui->pluginsSearchList->refreshResults();
+  }
+  else {
+    //TODO error
+  }
+}
+
+void PluginsCenter::removeRemoteLocation() {
+  foreach(QListWidgetItem* item, _ui->remoteLocationsList->selectedItems()) {
+    TulipSettings::instance().removeRemoteLocation(item->text());
+    tlp::PluginManager::removeRemoteLocation(item->text());
+    _ui->pluginsSearchList->initPluginsCache();
+    _ui->pluginsSearchList->refreshResults();
+    delete item;
+  }
 }
