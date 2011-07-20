@@ -41,7 +41,7 @@ public:
   void setCurrentPluginName(const QString& name) {
     _name = name;
   }
-  
+
   virtual void loaded(const tlp::AbstractPluginInfo* info, const std::list< Dependency >& dependencies) {
     QString pluginName = QString::fromStdString(info->getName());
     QString pluginLibrary;
@@ -152,7 +152,7 @@ int main(int argc,char **argv) {
     pluginDirectory.cd("tulip");
 
     QString pluginSimplifiedName = component.simplified().remove(' ').toLower();
-    
+
     foreach(const QString& pluginFile, pluginDirectory.entryList(libraries, QDir::Files | QDir::NoSymLinks)) {
       QString pluginFileName = pluginDirectory.canonicalPath() + "/" + pluginFile;
       collector.setCurrentPluginName(pluginSimplifiedName);
