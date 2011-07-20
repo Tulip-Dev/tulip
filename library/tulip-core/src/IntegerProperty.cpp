@@ -300,11 +300,11 @@ void IntegerProperty::treatEvent(const Event& evt) {
   GraphObserver::treatEvent(evt);
 }
 //=================================================================================
-int IntegerProperty::compare(node n1,node n2)const {
+int IntegerProperty::compare(const node n1, const node n2)const {
   return getNodeValue(n1) - getNodeValue(n2);
 }
 //=================================================================================
-int IntegerProperty::compare(edge e1,edge e2)const {
+int IntegerProperty::compare(const edge e1, const edge e2)const {
   return getEdgeValue(e1) - getEdgeValue(e2);
 }
 //=================================================================================
