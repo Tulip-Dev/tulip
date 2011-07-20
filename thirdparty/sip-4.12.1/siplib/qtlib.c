@@ -17,8 +17,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-
-#include <Python.h>
 #include <assert.h>
 #include <string.h>
 
