@@ -33,15 +33,15 @@
 #endif
 
 #if defined(_MSC_VER)
-// disable some annoying Visual Studio warnings 
+// disable some annoying Visual Studio warnings
 #pragma warning(disable: 4251)
 #pragma warning(disable: 4275)
 #pragma warning(disable: 4244)
 #pragma warning(disable: 4355)
 #pragma warning(disable: 4800)
 #pragma warning(disable: 4503)
-// disable deprecated warnings when compiling the tulip dlls 
-#if defined(DLL_TULIP) || defined(DLL_TULIP_GL) || defined(DLL_TULIP_QT) || defined(DLL_TULIP_QT2) 
+// disable deprecated warnings when compiling the tulip dlls
+#if defined(DLL_TULIP) || defined(DLL_TULIP_GL) || defined(DLL_TULIP_QT) || defined(DLL_TULIP_QT2)
 #pragma warning(disable: 4996)
 #endif
 //MSVC 2010 has a different keyword for typeof, and deprecated
