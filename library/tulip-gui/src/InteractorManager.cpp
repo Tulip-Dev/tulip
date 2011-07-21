@@ -27,7 +27,7 @@ using namespace std;
 namespace tlp {
 
 bool InteractorManager::operator()(std::string first, std::string second) {
-  return interactorsMap[first]->getPriority() >= interactorsMap[second]->getPriority();
+  return interactorsMap[second]->getPriority() < interactorsMap[first]->getPriority();
 }
 
 InteractorManager::InteractorManager() {
