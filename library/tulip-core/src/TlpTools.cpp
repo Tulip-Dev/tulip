@@ -25,12 +25,7 @@
 #include <unistd.h>
 #endif
 
-#if _MSC_VER
-#include <windows.h>
-#include <Dbghelp.h>
-#endif
 #include <thirdparty/gzstream/gzstream.h>
-
 #include <tulip/TlpTools.h>
 #include <tulip/PropertyTypes.h>
 
@@ -170,14 +165,12 @@ std::string tlp::demangleTlpClassName(const char* className) {
   // skip tlp::
   return std::string(demangleBuffer + 5);
 }
-#elif _MSC_VER
-
+#elif defined(_MSC_VER)
+// With Visual Studio, typeid(tlp::T).name() does not return a mangled type name
+// but a human readable type name in the form "class tlp::T"
+// so just remove the first 11 characters to return T
 std::string tlp::demangleTlpClassName(const char* className) {
-  std::string result;
-  static char demangleBuffer[256];
-  UnDecorateSymbolName(className, demangleBuffer, 256, UNDNAME_32_BIT_DECODE);
-  result = std::string(demangleBuffer + 5);
-  return result;
+  return std::string(className + 11);
 }
 #else
 #error define symbols demangling function
