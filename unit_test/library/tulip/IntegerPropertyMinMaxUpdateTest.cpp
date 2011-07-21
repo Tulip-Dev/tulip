@@ -36,7 +36,6 @@ const string newStringMin = "1";
 const int newMax = 15;
 const string newStringMax = "15";
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( IntegerPropertyMinMaxUpdateTest );
 
 void IntegerPropertyMinMaxUpdateTest::setUp() {
@@ -65,26 +64,26 @@ void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMinUpdate() {
   int minNode;
 
   minNode = integerProperty->getNodeMin();
-  CPPUNIT_ASSERT_MESSAGE("test IntegerProperty min value before update", minNode == originalMin);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value before update", originalMin, minNode);
 
   integerProperty->setNodeValue(n1, newMin);
   minNode = integerProperty->getNodeMin();
-  CPPUNIT_ASSERT_MESSAGE("test IntegerProperty min value after update", minNode == newMin);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value after update", newMin, minNode);
 
   Graph* subGraph = graph->addSubGraph();
   node n2 = subGraph->addNode();
   integerProperty->setNodeValue(n2, 6);
   node n3 = subGraph->addNode();
   integerProperty->setNodeValue(n3, 9);
-  CPPUNIT_ASSERT(integerProperty->getNodeMin() == newMin);
-  CPPUNIT_ASSERT(integerProperty->getNodeMin(subGraph) == 6);
+  CPPUNIT_ASSERT_EQUAL(newMin, integerProperty->getNodeMin());
+  CPPUNIT_ASSERT_EQUAL(6, integerProperty->getNodeMin(subGraph));
 
   subGraph->delNode(n2);
-  CPPUNIT_ASSERT(integerProperty->getNodeMin(subGraph) == 9);
-  CPPUNIT_ASSERT(integerProperty->getNodeMin() == newMin);
+  CPPUNIT_ASSERT_EQUAL(9, integerProperty->getNodeMin(subGraph));
+  CPPUNIT_ASSERT_EQUAL(newMin, integerProperty->getNodeMin());
   graph->delNode(n1);
-  CPPUNIT_ASSERT(integerProperty->getNodeMin(subGraph) == 9);
-  CPPUNIT_ASSERT(integerProperty->getNodeMin() == 6);
+  CPPUNIT_ASSERT_EQUAL(9, integerProperty->getNodeMin(subGraph));
+  CPPUNIT_ASSERT_EQUAL(6, integerProperty->getNodeMin());
 }
 
 void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdate() {
@@ -92,58 +91,46 @@ void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdate() {
   int maxNode;
 
   maxNode = integerProperty->getNodeMax();
-  CPPUNIT_ASSERT_MESSAGE("test IntegerProperty max value before update", maxNode == originalMax);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value before update", originalMax, maxNode);
 
   integerProperty->setNodeValue(n4, newMax);
   maxNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMax();
-  CPPUNIT_ASSERT_MESSAGE("test IntegerProperty max value after update", maxNode == newMax);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value after update", newMax, maxNode);
 
   Graph* subGraph = graph->addSubGraph();
   node n2 = subGraph->addNode();
   integerProperty->setNodeValue(n2, 6);
   node n3 = subGraph->addNode();
   integerProperty->setNodeValue(n3, 9);
-  CPPUNIT_ASSERT(integerProperty->getNodeMax() == newMax);
-  CPPUNIT_ASSERT(integerProperty->getNodeMax(subGraph) == 9);
+  CPPUNIT_ASSERT_EQUAL(newMax, integerProperty->getNodeMax());
+  CPPUNIT_ASSERT_EQUAL(9, integerProperty->getNodeMax(subGraph));
 
   subGraph->delNode(n3);
-  CPPUNIT_ASSERT(integerProperty->getNodeMax() == newMax);
-  CPPUNIT_ASSERT(integerProperty->getNodeMax(subGraph) == 6);
+  CPPUNIT_ASSERT_EQUAL(newMax, integerProperty->getNodeMax());
+  CPPUNIT_ASSERT_EQUAL(6, integerProperty->getNodeMax(subGraph));
   graph->delNode(n4);
-  CPPUNIT_ASSERT(integerProperty->getNodeMax(subGraph) == 6);
-  CPPUNIT_ASSERT(integerProperty->getNodeMax() == 9);
+  CPPUNIT_ASSERT_EQUAL(6, integerProperty->getNodeMax(subGraph));
+  CPPUNIT_ASSERT_EQUAL(9, integerProperty->getNodeMax());
 }
 
 void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMinUpdateFromString() {
   int minNode;
 
   minNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMin();
-  CPPUNIT_ASSERT_MESSAGE("test IntegerProperty min value before update", minNode == originalMin);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value before update", originalMin, minNode);
 
   graph->getLocalProperty<IntegerProperty>(integerPropertyName)->setNodeStringValue(n1, newStringMin);
   minNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMin();
-  CPPUNIT_ASSERT_MESSAGE("test IntegerProperty min value after update", minNode == newMin);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value after update", newMin, minNode);
 }
 
 void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdateFromString() {
   int maxNode;
 
   maxNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMax();
-  CPPUNIT_ASSERT_MESSAGE("test IntegerProperty max value before update", maxNode == originalMax);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value before update", originalMax, maxNode);
 
   graph->getLocalProperty<IntegerProperty>(integerPropertyName)->setNodeStringValue(n4, newStringMax);
   maxNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMax();
-  CPPUNIT_ASSERT_MESSAGE("test IntegerProperty max value after update", maxNode == newMax);
-}
-
-//==========================================================
-CppUnit::Test * IntegerPropertyMinMaxUpdateTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Integer Property" );
-
-  suiteOfTests->addTest(new CppUnit::TestCaller<IntegerPropertyMinMaxUpdateTest>(" Min update", &IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMinUpdate));
-  suiteOfTests->addTest(new CppUnit::TestCaller<IntegerPropertyMinMaxUpdateTest>(" Max update", &IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdate));
-  suiteOfTests->addTest(new CppUnit::TestCaller<IntegerPropertyMinMaxUpdateTest>(" Min update from string", &IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMinUpdateFromString));
-  suiteOfTests->addTest(new CppUnit::TestCaller<IntegerPropertyMinMaxUpdateTest>(" Max update from string", &IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdateFromString));
-
-  return suiteOfTests;
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value after update", newMax, maxNode);
 }

@@ -24,11 +24,18 @@
 #include <tulip/Reflect.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 namespace tlp {
 
 class DataSetTest : public CppUnit::TestFixture {
-
+  CPPUNIT_TEST_SUITE(DataSetTest);
+  CPPUNIT_TEST(testSetGetBool);
+  CPPUNIT_TEST(testSetGetDouble);
+  CPPUNIT_TEST(testSetGetInt);
+  CPPUNIT_TEST(testSetGetString);
+  CPPUNIT_TEST(testSetGetStruct);
+  CPPUNIT_TEST_SUITE_END();
 public:
   void setUp() {}
   void tearDown() {}
@@ -37,7 +44,6 @@ public:
   void testSetGetInt();
   void testSetGetString();
   void testSetGetStruct();
-  static CppUnit::Test *suite();
 };
 
 }

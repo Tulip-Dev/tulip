@@ -24,11 +24,17 @@
 #include <tulip/IdManager.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 namespace tlp {
 
 class IdManagerTest : public CppUnit::TestFixture {
-
+  CPPUNIT_TEST_SUITE(IdManagerTest);
+  CPPUNIT_TEST(testIsFree);
+  CPPUNIT_TEST(testFragmentation);
+  CPPUNIT_TEST(testGetFree);
+  CPPUNIT_TEST(testIterate);
+  CPPUNIT_TEST_SUITE_END();
 public:
   void setUp() {
     idManager = new IdManager();
@@ -40,8 +46,6 @@ public:
   void testFragmentation();
   void testGetFree();
   void testIterate();
-
-  static CppUnit::Test *suite();
 
 private:
   IdManager *idManager;

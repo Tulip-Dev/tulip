@@ -25,7 +25,6 @@
 using namespace std;
 using namespace tlp;
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( MatrixTest );
 
 template<typename Obj, unsigned int SIZE>
@@ -71,21 +70,21 @@ void MatrixTest::testExternalOperation() {
 
   result = result / 2.0;
 
-  CPPUNIT_ASSERT_EQUAL(true, result == mat2);
+  CPPUNIT_ASSERT_EQUAL(mat2, result);
 
   result = mat2 * 2.0;
 
   result = result - mat2;
 
-  CPPUNIT_ASSERT_EQUAL(true, result == mat2);
+  CPPUNIT_ASSERT_EQUAL(mat2, result);
 
   result = result - mat2;
 
-  CPPUNIT_ASSERT_EQUAL(true, result == matnull);
+  CPPUNIT_ASSERT_EQUAL(matnull, result);
 
   result = mat2;
 
-  CPPUNIT_ASSERT_EQUAL(true, result == mat2);
+  CPPUNIT_ASSERT_EQUAL(result, mat2);
 
   Matrix<double, SIZE> matinv(mat2);
 
@@ -100,12 +99,13 @@ void MatrixTest::testExternalOperation() {
 
       if (fabs(res) < 1.E-5) ok = true;
 
-      CPPUNIT_ASSERT_EQUAL(true, ok);
+      CPPUNIT_ASSERT(ok);
     }
 
   Vector<double, SIZE> vec2, vec3;
   vec2 = matid * vec;
-  CPPUNIT_ASSERT_EQUAL(true, vec == vec2);
+
+  CPPUNIT_ASSERT_EQUAL(vec, vec2);
 
   vec2 = mat2 * vec;
   vec2 = matinv * vec2;
@@ -116,7 +116,7 @@ void MatrixTest::testExternalOperation() {
 
     if (res < 1.E-5) ok = true;
 
-    CPPUNIT_ASSERT_EQUAL(true, ok);
+    CPPUNIT_ASSERT(ok);
   }
 
   vec2 = mat2 * vec;
@@ -129,7 +129,7 @@ void MatrixTest::testExternalOperation() {
     if (res > 1.E-5) ok = true;
   }
 
-  CPPUNIT_ASSERT_EQUAL(true, ok);
+  CPPUNIT_ASSERT(ok);
 
   vec2 = vec * mat2;
   vec3 = vec2 * matinv;
@@ -140,11 +140,8 @@ void MatrixTest::testExternalOperation() {
 
     if (res < 1.E-5) ok = true;
 
-    CPPUNIT_ASSERT_EQUAL(true, ok);
+    CPPUNIT_ASSERT(ok);
   }
-
-
-
 }
 //==========================================================
 void MatrixTest::testInternalOperation() {
@@ -159,28 +156,28 @@ void MatrixTest::testInternalOperation() {
 
       if (i==j) matid[i][j] = 1.0;
 
-      CPPUNIT_ASSERT_EQUAL((double)0.0, matnull[i][j]);
+      CPPUNIT_ASSERT_EQUAL(0.0, matnull[i][j]);
       CPPUNIT_ASSERT_EQUAL((double)((i+1)*(j+SIZE)), mat1[i][j]);
 
       if (i==j) mat1[i][j] = 0.0;
     }
 
   Matrix<double, SIZE> mat2(mat1);
-  CPPUNIT_ASSERT_EQUAL(true, mat1 == mat2);
+  CPPUNIT_ASSERT_EQUAL(mat2, mat1);
   mat1[1] += 3;
-  CPPUNIT_ASSERT_EQUAL(false, mat1 == mat2);
+  CPPUNIT_ASSERT(mat1 != mat2);
   mat1[1] -= 3;
-  CPPUNIT_ASSERT_EQUAL(true, mat1 == mat2);
+  CPPUNIT_ASSERT_EQUAL(mat2, mat1);
   mat1 += mat2;
   mat1 /= 2.0;
-  CPPUNIT_ASSERT_EQUAL(true, mat1 == mat2);
+  CPPUNIT_ASSERT_EQUAL(mat2, mat1);
   mat1 *= 2.0;
   mat1 -= mat2;
-  CPPUNIT_ASSERT_EQUAL(true, mat1 == mat2);
+  CPPUNIT_ASSERT_EQUAL(mat2, mat1);
   mat1 -= mat2;
-  CPPUNIT_ASSERT_EQUAL(true, mat1 == matnull);
+  CPPUNIT_ASSERT_EQUAL(matnull, mat1);
   mat1 = mat2;
-  CPPUNIT_ASSERT_EQUAL(true, mat1 == mat2);
+  CPPUNIT_ASSERT_EQUAL(mat2, mat1);
   Matrix<double, SIZE> matinv(mat1);
   matinv.inverse();
   mat1 *= matinv;
@@ -192,25 +189,15 @@ void MatrixTest::testInternalOperation() {
 
       if (res < 1.E-5) ok = true;
 
-      CPPUNIT_ASSERT_EQUAL(true, ok);
+      CPPUNIT_ASSERT(ok);
     }
 
   mat1.fill(1.0);
   mat2 = mat1;
   mat1*= mat2;
   mat2*= SIZE;
-  CPPUNIT_ASSERT_EQUAL(true, mat1 == mat2);
+  CPPUNIT_ASSERT_EQUAL(mat2, mat1);
   mat1.fill(1.0);
   mat1*= mat1;
-  CPPUNIT_ASSERT_EQUAL(true, mat1 == mat2);
+  CPPUNIT_ASSERT_EQUAL(mat2, mat1);
 }
-//==========================================================
-CppUnit::Test * MatrixTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Matrix" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<MatrixTest>( "Internal functions",
-                         &MatrixTest::testInternalOperation ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<MatrixTest>( "External functions",
-                         &MatrixTest::testExternalOperation ) );
-  return suiteOfTests;
-}
-//==========================================================

@@ -24,10 +24,17 @@
 #include <tulip/IntegerProperty.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 class IntegerPropertyMinMaxUpdateTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(IntegerPropertyMinMaxUpdateTest);
+  CPPUNIT_TEST(testIntegerPropertyMinUpdate);
+  CPPUNIT_TEST(testIntegerPropertyMaxUpdate);
+  CPPUNIT_TEST(testIntegerPropertyMinUpdateFromString);
+  CPPUNIT_TEST(testIntegerPropertyMaxUpdateFromString);
+  CPPUNIT_TEST_SUITE_END();
+  
 public:
-
   void setUp();
   void tearDown();
   void testIntegerPropertyMinUpdate();
@@ -35,10 +42,7 @@ public:
   void testIntegerPropertyMinUpdateFromString();
   void testIntegerPropertyMaxUpdateFromString();
 
-  static CppUnit::Test *suite();
-
 private :
-
   tlp::Graph *graph;
   tlp::node n1, n4;
 };

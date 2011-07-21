@@ -26,7 +26,6 @@
 using namespace std;
 using namespace tlp;
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( MutableContainerTest );
 
 //==========================================================
@@ -45,7 +44,7 @@ void MutableContainerTest::tearDown() {
 void MutableContainerTest::testCompression() {
   mutDouble->setAll(10.0);
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
-  CPPUNIT_ASSERT_EQUAL(unsigned(0)   , mutDouble->elementInserted);
+  CPPUNIT_ASSERT_EQUAL(unsigned(0), mutDouble->elementInserted);
 
   for (unsigned int i=0; i<1000; ++i) {
     mutDouble->set(100+i,13.0);
@@ -55,7 +54,7 @@ void MutableContainerTest::testCompression() {
 
   mutDouble->setAll(10.0);
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
-  CPPUNIT_ASSERT_EQUAL(unsigned(0)   , mutDouble->elementInserted);
+  CPPUNIT_ASSERT_EQUAL(unsigned(0), mutDouble->elementInserted);
 
   for (unsigned int i=0; i<1000; ++i) {
     mutDouble->set(10000+i*2,13.0);
@@ -71,15 +70,15 @@ void MutableContainerTest::testCompression() {
 
   mutDouble->setAll(10.0);
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
-  CPPUNIT_ASSERT_EQUAL(unsigned(0)   , mutDouble->elementInserted);
+  CPPUNIT_ASSERT_EQUAL(unsigned(0), mutDouble->elementInserted);
   mutDouble->set(1000, 345);
   mutDouble->set(10000, 345);
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::HASH, mutDouble->state);
-  CPPUNIT_ASSERT_EQUAL(unsigned(2)   , mutDouble->elementInserted);
+  CPPUNIT_ASSERT_EQUAL(unsigned(2), mutDouble->elementInserted);
 
   for (unsigned int i=1001; i<10000; ++i) {
     mutDouble->set(i, 345);
-    CPPUNIT_ASSERT_EQUAL(unsigned(i+2-1000) , mutDouble->elementInserted);
+    CPPUNIT_ASSERT_EQUAL(unsigned(i+2-1000), mutDouble->elementInserted);
   }
 
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
@@ -118,39 +117,41 @@ void MutableContainerTest::testFindAll() {
   itB = mutBool->findAll(true);
   itD = mutDouble->findAll(13.0);
   itS = mutString->findAll("Sophie");
-  CPPUNIT_ASSERT( itB->hasNext());
-  CPPUNIT_ASSERT( itB->next() == 10 );
-  CPPUNIT_ASSERT( itD->hasNext());
-  CPPUNIT_ASSERT( itD->next() == 10 );
-  CPPUNIT_ASSERT( itS->hasNext());
-  CPPUNIT_ASSERT( itS->next() == 10 );
+  CPPUNIT_ASSERT(itB->hasNext());
+  CPPUNIT_ASSERT_EQUAL(10u, itB->next());
+  CPPUNIT_ASSERT(itD->hasNext());
+  CPPUNIT_ASSERT_EQUAL(10u, itD->next());
+  CPPUNIT_ASSERT(itS->hasNext());
+  CPPUNIT_ASSERT_EQUAL(10u, itS->next());
 
-  CPPUNIT_ASSERT( itB->hasNext());
-  CPPUNIT_ASSERT( itB->next() == 15 );
-  CPPUNIT_ASSERT( itD->hasNext());
-  CPPUNIT_ASSERT( itD->next() == 15 );
-  CPPUNIT_ASSERT( itS->hasNext());
-  CPPUNIT_ASSERT( itS->next() == 15 );
+  CPPUNIT_ASSERT(itB->hasNext());
+  CPPUNIT_ASSERT_EQUAL(15u, itB->next());
+  CPPUNIT_ASSERT(itD->hasNext());
+  CPPUNIT_ASSERT_EQUAL(15u, itD->next());
+  CPPUNIT_ASSERT(itS->hasNext());
+  CPPUNIT_ASSERT_EQUAL(15u, itS->next());
 
-  CPPUNIT_ASSERT( itB->hasNext());
-  CPPUNIT_ASSERT( itB->next() == 17 );
-  CPPUNIT_ASSERT( itD->hasNext());
-  CPPUNIT_ASSERT( itD->next() == 17 );
-  CPPUNIT_ASSERT( itS->hasNext());
-  CPPUNIT_ASSERT( itS->next() == 17 );
+  CPPUNIT_ASSERT(itB->hasNext());
+  CPPUNIT_ASSERT_EQUAL(17u, itB->next());
+  CPPUNIT_ASSERT(itD->hasNext());
+  CPPUNIT_ASSERT_EQUAL(17u, itD->next());
+  CPPUNIT_ASSERT(itS->hasNext());
+  CPPUNIT_ASSERT_EQUAL(17u, itS->next());
 
   delete itB;
   delete itD;
   delete itS;
+
+  Iterator<unsigned int> *nullIterator = NULL;
+  
   itB = mutBool->findAll(false);
-  CPPUNIT_ASSERT(itB == NULL);
+  CPPUNIT_ASSERT_EQUAL(nullIterator, itB);
 
   itD = mutDouble->findAll(10.0);
-  CPPUNIT_ASSERT(itD == NULL);
+  CPPUNIT_ASSERT_EQUAL(nullIterator, itD);
 
   itS = mutString->findAll("David");
-  CPPUNIT_ASSERT(itS == NULL);
-
+  CPPUNIT_ASSERT_EQUAL(nullIterator, itS);
 }
 //==========================================================
 void MutableContainerTest::testSetAll() {
@@ -159,9 +160,9 @@ void MutableContainerTest::testSetAll() {
   mutString->setAll("David");
 
   for (unsigned int i=0; i<NBTEST; ++i) {
-    CPPUNIT_ASSERT( mutBool->get(i) == true );
-    CPPUNIT_ASSERT( mutDouble->get(i) == 10.0 );
-    CPPUNIT_ASSERT( mutString->get(i) == string("David") );
+    CPPUNIT_ASSERT(mutBool->get(i));
+    CPPUNIT_ASSERT_EQUAL(10.0, mutDouble->get(i));
+    CPPUNIT_ASSERT_EQUAL(string("David"), mutString->get(i));
   }
 
   mutBool->setAll(false);
@@ -169,26 +170,26 @@ void MutableContainerTest::testSetAll() {
   mutString->setAll("Sophie");
 
   for (unsigned int i=0; i<NBTEST; ++i) {
-    CPPUNIT_ASSERT( mutBool->get(i) == false );
-    CPPUNIT_ASSERT( mutDouble->get(i) == -33.0 );
-    CPPUNIT_ASSERT( mutString->get(i) == string("Sophie") );
+    CPPUNIT_ASSERT(!mutBool->get(i));
+    CPPUNIT_ASSERT_EQUAL(-33.0, mutDouble->get(i));
+    CPPUNIT_ASSERT_EQUAL(string("Sophie"), mutString->get(i));
   }
 
   //New test bug at index 0
   MutableContainer<int> vect;
   vect.setAll(-1);
-  CPPUNIT_ASSERT( vect.get(1) == -1 );
+  CPPUNIT_ASSERT_EQUAL(-1, vect.get(1));
   vect.set(1,1);
-  CPPUNIT_ASSERT( vect.get(1) ==  1 );
-  CPPUNIT_ASSERT( vect.get(2) == -1 );
-  CPPUNIT_ASSERT( vect.get(0) == -1 );
+  CPPUNIT_ASSERT_EQUAL(1, vect.get(1));
+  CPPUNIT_ASSERT_EQUAL(-1, vect.get(2));
+  CPPUNIT_ASSERT_EQUAL(-1, vect.get(0));
 
   MutableContainer<int> vect2;
   vect2.setAll(0);
   vect2.set(0,0);
-  CPPUNIT_ASSERT( vect2.get(0) ==  0 );
+  CPPUNIT_ASSERT_EQUAL(0, vect2.get(0));
   vect2.set(1,0);
-  CPPUNIT_ASSERT( vect2.get(1) ==  0 );
+  CPPUNIT_ASSERT_EQUAL(0, vect2.get(1));
 }
 //==========================================================
 void MutableContainerTest::testSetGet() {
@@ -196,20 +197,20 @@ void MutableContainerTest::testSetGet() {
   mutDouble->setAll(-33.0);
   mutDouble->set(100, 10);
   mutDouble->set(1000000, 20);
-  CPPUNIT_ASSERT( mutDouble->get(100) == 10 );
-  CPPUNIT_ASSERT( mutDouble->get(1000000) == 20 );
+  CPPUNIT_ASSERT_EQUAL(10.0, mutDouble->get(100));
+  CPPUNIT_ASSERT_EQUAL(20.0, mutDouble->get(1000000));
   mutDouble->set(1000000,-33.0);
 
   for (unsigned int i=101; i<1000; ++i) {
     mutDouble->set(i,i);
-    CPPUNIT_ASSERT( mutDouble->get(i) == i );
+    CPPUNIT_ASSERT_EQUAL((double)i, mutDouble->get(i));
   }
 
   for (unsigned int i=101; i<999; ++i) {
     mutDouble->set(i,-33.0);
   }
 
-  CPPUNIT_ASSERT( mutDouble->get(100) == 10 );
+  CPPUNIT_ASSERT_EQUAL(10.0, mutDouble->get(100));
 
   mutString->setAll("Sophie");
 
@@ -218,9 +219,9 @@ void MutableContainerTest::testSetGet() {
     mutBool->set(rando,true);
     mutDouble->set(rando, rando);
     mutString->set(rando, string("David"));
-    CPPUNIT_ASSERT( mutBool->get(rando) == true );
-    CPPUNIT_ASSERT( mutDouble->get(rando) == rando );
-    CPPUNIT_ASSERT( mutString->get(rando) == string("David") );
+    CPPUNIT_ASSERT(mutBool->get(rando));
+    CPPUNIT_ASSERT_EQUAL((double)rando, mutDouble->get(rando));
+    CPPUNIT_ASSERT_EQUAL(string("David"), mutString->get(rando));
   }
 
   mutBool->setAll(true);
@@ -228,35 +229,17 @@ void MutableContainerTest::testSetGet() {
   for (unsigned int i=0; i<NBTEST*10; ++i) {
     unsigned int rando=rand()%NBTEST;
     mutBool->set(rando, false);
-    CPPUNIT_ASSERT( mutBool->get(rando) == false );
+    CPPUNIT_ASSERT(!mutBool->get(rando));
   }
 
   for (unsigned int i=0; i<NBTEST*10; ++i) {
     unsigned int rando=rand()%NBTEST;
     bool isNotDefault = true;
     mutBool->set(rando, true);
-    CPPUNIT_ASSERT(mutBool->get(rando, isNotDefault) == true);
-    CPPUNIT_ASSERT(isNotDefault == false);
+    CPPUNIT_ASSERT(mutBool->get(rando, isNotDefault));
+    CPPUNIT_ASSERT(!isNotDefault);
     mutString->set(rando, string("Sophie"));
-    CPPUNIT_ASSERT(mutString->get(rando, isNotDefault) == string("Sophie"));
-    CPPUNIT_ASSERT(isNotDefault == false);
+    CPPUNIT_ASSERT_EQUAL(string("Sophie"), mutString->get(rando, isNotDefault));
+    CPPUNIT_ASSERT(!isNotDefault);
   }
 }
-//==========================================================
-CppUnit::Test * MutableContainerTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : MutableContainer" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<MutableContainerTest>(
-                           "test setAll",
-                           &MutableContainerTest::testSetAll ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<MutableContainerTest>(
-                           "test set/get",
-                           &MutableContainerTest::testSetGet ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<MutableContainerTest>(
-                           "test find all",
-                           &MutableContainerTest::testFindAll ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<MutableContainerTest>(
-                           "test state of the mutable",
-                           &MutableContainerTest::testCompression ) );
-  return suiteOfTests;
-}
-//==========================================================

@@ -22,10 +22,24 @@
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <cppunit/TestFixture.h>
-//#include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 class SuperGraphTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(SuperGraphTest);
+  CPPUNIT_TEST(testAddDel);
+  CPPUNIT_TEST(testClear);
+  CPPUNIT_TEST(testOrderEdgeAndSwap);
+  CPPUNIT_TEST(testSubgraph);
+  CPPUNIT_TEST(testSubgraphId);
+  CPPUNIT_TEST(testDeleteSubgraph);
+  CPPUNIT_TEST(testInheritance);
+  CPPUNIT_TEST(testIterators);
+  CPPUNIT_TEST(testPropertiesIteration);
+  CPPUNIT_TEST(testDegree);
+  CPPUNIT_TEST(testAttributes);
+  CPPUNIT_TEST(testGetNodesEqualTo);
+  CPPUNIT_TEST_SUITE_END();
 private:
   tlp::Graph *graph;
 
@@ -45,8 +59,6 @@ public:
   void testDegree();
   void testAttributes();
   void testGetNodesEqualTo();
-
-  static CppUnit::Test *suite();
 private:
   void build(unsigned int, unsigned int);
 };

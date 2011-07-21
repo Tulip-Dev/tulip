@@ -25,7 +25,6 @@
 using namespace std;
 using namespace tlp;
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( GraphToolsTest );
 
 //==========================================================
@@ -35,21 +34,6 @@ void GraphToolsTest::setUp() {
 //==========================================================
 void GraphToolsTest::tearDown() {
   delete graph;
-}
-//==========================================================
-void GraphToolsTest::build(unsigned int nbNodes, unsigned int edgeRatio) {
-  vector<node> nodes;
-  vector<edge> edges;
-  unsigned int NB_ADD  = nbNodes;
-  unsigned int EDGE_RATIO = edgeRatio;
-
-  for (unsigned int i=0; i<NB_ADD; ++i)
-    nodes.push_back(graph->addNode());
-
-  unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
-
-  for (unsigned int i=0; i< NB_EDGES; ++i)
-    graph->addEdge(nodes[rand()%NB_ADD], nodes[rand()%NB_ADD]);
 }
 //==========================================================
 void GraphToolsTest::testComputeEqualValueClustering() {
@@ -77,12 +61,3 @@ void GraphToolsTest::testComputeEqualValueClustering() {
   // check dcall to computeEqualValueClustering
   CPPUNIT_ASSERT(computeEqualValueClustering(graph, &metric));
 }
-//==========================================================
-CppUnit::Test* GraphToolsTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<GraphToolsTest>( "computeEqualValueClustering",
-                         &GraphToolsTest::testComputeEqualValueClustering) );
-
-  return suiteOfTests;
-}
-//==========================================================

@@ -24,22 +24,24 @@
 #include <tulip/Graph.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
-
+#include <cppunit/extensions/HelperMacros.h>
 
 class PlanarityTestTest : public CppUnit::TestFixture {
-
+  CPPUNIT_TEST_SUITE(PlanarityTestTest);
+  CPPUNIT_TEST(planarGraphs);
+  CPPUNIT_TEST(notPlanarGraphs);
+  CPPUNIT_TEST(planarGraphsEmbedding);
+  CPPUNIT_TEST(planarMetaGraphsEmbedding);
+  CPPUNIT_TEST(planarEmbeddingFromLayoutGraphs);
+  CPPUNIT_TEST_SUITE_END();
 public:
   void setUp();
   void tearDown();
   void planarGraphs();
   void notPlanarGraphs();
   void planarGraphsEmbedding();
-  void isPlanrEmbeddingTest();
   void planarMetaGraphsEmbedding();
-  void notPlanarGraphsObstruction();
   void planarEmbeddingFromLayoutGraphs();
-  static CppUnit::Test *suite();
-
 private:
   tlp::Graph *graph;
 };

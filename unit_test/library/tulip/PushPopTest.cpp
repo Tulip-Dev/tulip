@@ -30,7 +30,6 @@
 using namespace std;
 using namespace tlp;
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( PushPopTest );
 
 //==========================================================
@@ -69,94 +68,94 @@ void PushPopTest::testAddDel() {
   node n3 = graph->addNode();
 
   edge e1 = graph->addEdge(n2, n3);
-  CPPUNIT_ASSERT(graph->existEdge(n2, n3) == e1);
+  CPPUNIT_ASSERT_EQUAL(e1, graph->existEdge(n2, n3));
 
   graph->reverse(e0);
-  CPPUNIT_ASSERT(graph->existEdge(n1, n0) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n1, n0));
 
   graph->delNode(n0);
-  CPPUNIT_ASSERT(graph->isElement(n0) == false);
-  CPPUNIT_ASSERT(graph->isElement(e0) == false);
+  CPPUNIT_ASSERT(!graph->isElement(n0));
+  CPPUNIT_ASSERT(!graph->isElement(e0));
 
   vector<node> nodes;
   vector<pair <node, node> > ends;
   vector<edge> edges;
 
   graph->addNodes(3, nodes);
-  CPPUNIT_ASSERT(nodes.size() == 3);
+  CPPUNIT_ASSERT_EQUAL(size_t(3), nodes.size());
   ends.push_back(pair<node, node>(nodes[0], nodes[1]));
   ends.push_back(pair<node, node>(nodes[0], nodes[2]));
   ends.push_back(pair<node, node>(nodes[1], nodes[2]));
   graph->addEdges(ends, edges);
-  CPPUNIT_ASSERT(edges.size() == 3);
+  CPPUNIT_ASSERT_EQUAL(size_t(3), edges.size());
 
   graph->pop();
 
-  CPPUNIT_ASSERT(graph->isElement(e1) == false);
-  CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
-  CPPUNIT_ASSERT(graph->isElement(nodes[0]) == false);
-  CPPUNIT_ASSERT(graph->isElement(nodes[1]) == false);
-  CPPUNIT_ASSERT(graph->isElement(nodes[2]) == false);
+  CPPUNIT_ASSERT(!graph->isElement(e1));
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n0, n1));
+  CPPUNIT_ASSERT(!graph->isElement(nodes[0]));
+  CPPUNIT_ASSERT(!graph->isElement(nodes[1]));
+  CPPUNIT_ASSERT(!graph->isElement(nodes[2]));
 
   graph->unpop();
-  CPPUNIT_ASSERT(graph->existEdge(n2, n3) == e1);
-  CPPUNIT_ASSERT(graph->isElement(e0) == false);
+  CPPUNIT_ASSERT_EQUAL(e1, graph->existEdge(n2, n3));
+  CPPUNIT_ASSERT(!graph->isElement(e0));
   CPPUNIT_ASSERT(graph->isElement(nodes[0]));
   CPPUNIT_ASSERT(graph->isElement(nodes[1]));
   CPPUNIT_ASSERT(graph->isElement(nodes[2]));
-  CPPUNIT_ASSERT(graph->existEdge(nodes[0], nodes[1]) == edges[0]);
-  CPPUNIT_ASSERT(graph->existEdge(nodes[0], nodes[2]) == edges[1]);
-  CPPUNIT_ASSERT(graph->existEdge(nodes[1], nodes[2]) == edges[2]);
+  CPPUNIT_ASSERT_EQUAL(edges[0], graph->existEdge(nodes[0], nodes[1]));
+  CPPUNIT_ASSERT_EQUAL(edges[1], graph->existEdge(nodes[0], nodes[2]));
+  CPPUNIT_ASSERT_EQUAL(edges[2], graph->existEdge(nodes[1], nodes[2]));
 
   graph->reverse(e1);
-  CPPUNIT_ASSERT(graph->existEdge(n3, n2) == e1);
+  CPPUNIT_ASSERT_EQUAL(e1, graph->existEdge(n3, n2));
 
   StlIterator<edge, std::vector<edge>::const_iterator> ite(edges.begin(),
       edges.end());
   graph->delEdges(&ite);
-  CPPUNIT_ASSERT(graph->isElement(edges[0]) == false);
-  CPPUNIT_ASSERT(graph->isElement(edges[1]) == false);
-  CPPUNIT_ASSERT(graph->isElement(edges[2]) == false);
+  CPPUNIT_ASSERT(!graph->isElement(edges[0]));
+  CPPUNIT_ASSERT(!graph->isElement(edges[1]));
+  CPPUNIT_ASSERT(!graph->isElement(edges[2]));
 
   graph->pop();
-  CPPUNIT_ASSERT(graph->isElement(e1) == false);
-  CPPUNIT_ASSERT(graph->isElement(n2) == false);
-  CPPUNIT_ASSERT(graph->isElement(n3) == false);
-  CPPUNIT_ASSERT(graph->isElement(nodes[0]) == false);
-  CPPUNIT_ASSERT(graph->isElement(nodes[1]) == false);
-  CPPUNIT_ASSERT(graph->isElement(nodes[2]) == false);
+  CPPUNIT_ASSERT(!graph->isElement(e1));
+  CPPUNIT_ASSERT(!graph->isElement(n2));
+  CPPUNIT_ASSERT(!graph->isElement(n3));
+  CPPUNIT_ASSERT(!graph->isElement(nodes[0]));
+  CPPUNIT_ASSERT(!graph->isElement(nodes[1]));
+  CPPUNIT_ASSERT(!graph->isElement(nodes[2]));
 
   graph->unpop();
-  CPPUNIT_ASSERT(graph->isElement(e1) == true);
-  CPPUNIT_ASSERT(graph->isElement(n2) == true);
-  CPPUNIT_ASSERT(graph->isElement(n3) == true);
-  CPPUNIT_ASSERT(graph->existEdge(n3, n2) == e1);
+  CPPUNIT_ASSERT(graph->isElement(e1));
+  CPPUNIT_ASSERT(graph->isElement(n2));
+  CPPUNIT_ASSERT(graph->isElement(n3));
+  CPPUNIT_ASSERT_EQUAL(e1, graph->existEdge(n3, n2));
   CPPUNIT_ASSERT(graph->isElement(nodes[0]));
   CPPUNIT_ASSERT(graph->isElement(nodes[1]));
   CPPUNIT_ASSERT(graph->isElement(nodes[2]));
-  CPPUNIT_ASSERT(graph->isElement(edges[0]) == false);
-  CPPUNIT_ASSERT(graph->isElement(edges[1]) == false);
-  CPPUNIT_ASSERT(graph->isElement(edges[2]) == false);
+  CPPUNIT_ASSERT(!graph->isElement(edges[0]));
+  CPPUNIT_ASSERT(!graph->isElement(edges[1]));
+  CPPUNIT_ASSERT(!graph->isElement(edges[2]));
 
   graph->delEdge(e1);
-  CPPUNIT_ASSERT(graph->isElement(e1) == false);
-  CPPUNIT_ASSERT(graph->isElement(n2) == true);
-  CPPUNIT_ASSERT(graph->isElement(n3) == true);
+  CPPUNIT_ASSERT(!graph->isElement(e1));
+  CPPUNIT_ASSERT(graph->isElement(n2));
+  CPPUNIT_ASSERT(graph->isElement(n3));
 
   graph->delNode(n2);
-  CPPUNIT_ASSERT(graph->isElement(e1) == false);
-  CPPUNIT_ASSERT(graph->isElement(n2) == false);
-  CPPUNIT_ASSERT(graph->isElement(n3) == true);
+  CPPUNIT_ASSERT(!graph->isElement(e1));
+  CPPUNIT_ASSERT(!graph->isElement(n2));
+  CPPUNIT_ASSERT(graph->isElement(n3));
 
   graph->pop();
-  CPPUNIT_ASSERT(graph->isElement(e1) == false);
-  CPPUNIT_ASSERT(graph->isElement(n2) == false);
-  CPPUNIT_ASSERT(graph->isElement(n3) == false);
+  CPPUNIT_ASSERT(!graph->isElement(e1));
+  CPPUNIT_ASSERT(!graph->isElement(n2));
+  CPPUNIT_ASSERT(!graph->isElement(n3));
 
   graph->unpop();
-  CPPUNIT_ASSERT(graph->isElement(e1) == false);
-  CPPUNIT_ASSERT(graph->isElement(n2) == false);
-  CPPUNIT_ASSERT(graph->isElement(n3) == true);
+  CPPUNIT_ASSERT(!graph->isElement(e1));
+  CPPUNIT_ASSERT(!graph->isElement(n2));
+  CPPUNIT_ASSERT(graph->isElement(n3));
 
 }
 
@@ -172,26 +171,26 @@ void PushPopTest::testSetEnds() {
   node n3 = graph->addNode();
 
   graph->setEnds(e0, n2, n3);
-  CPPUNIT_ASSERT(graph->existEdge(n2, n3) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n2, n3));
 
   graph->reverse(e0);
-  CPPUNIT_ASSERT(graph->existEdge(n3, n2) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n3, n2));
 
   graph->pop();
 
-  CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n0, n1));
 
   graph->unpop();
 
-  CPPUNIT_ASSERT(graph->existEdge(n3, n2) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n3, n2));
 
   graph->delEdge(e0);
-  CPPUNIT_ASSERT(graph->isElement(e0) == false);
-  CPPUNIT_ASSERT(graph->existEdge(n3, n2).isValid() == false);
+  CPPUNIT_ASSERT(!graph->isElement(e0));
+  CPPUNIT_ASSERT(!graph->existEdge(n3, n2).isValid());
 
   graph->pop();
   CPPUNIT_ASSERT(graph->isElement(e0));
-  CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n0, n1));
 
   Graph* g1 = graph->addSubGraph();
   g1->addNode(n0);
@@ -202,46 +201,46 @@ void PushPopTest::testSetEnds() {
 
   g1->reverse(e0);
   CPPUNIT_ASSERT(graph->isElement(e0));
-  CPPUNIT_ASSERT(graph->existEdge(n1, n0) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n1, n0));
 
   n2 = g1->addNode();
   g1->setTarget(e0, n2);
   CPPUNIT_ASSERT(graph->isElement(e0));
-  CPPUNIT_ASSERT(graph->existEdge(n1, n2) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n1, n2));
 
   graph->pop();
   CPPUNIT_ASSERT(graph->isElement(e0));
-  CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n0, n1));
 
   graph->unpop();
   CPPUNIT_ASSERT(graph->isElement(e0));
-  CPPUNIT_ASSERT(graph->existEdge(n1, n2) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n1, n2));
 
   g1->setSource(e0, n0);
   CPPUNIT_ASSERT(graph->isElement(e0));
-  CPPUNIT_ASSERT(graph->existEdge(n0, n2) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n0, n2));
 
   g1->delEdge(e0);
 
   graph->pop();
   CPPUNIT_ASSERT(graph->isElement(e0));
-  CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n0, n1));
 
   graph->unpop();
   CPPUNIT_ASSERT(graph->isElement(e0));
-  CPPUNIT_ASSERT(graph->existEdge(n0, n2) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n0, n2));
 
   g1->addEdge(e0);
   CPPUNIT_ASSERT(g1->isElement(e0));
-  CPPUNIT_ASSERT(g1->existEdge(n0, n2) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, g1->existEdge(n0, n2));
 
   g1->setEnds(e0, n2, n1);
-  CPPUNIT_ASSERT(g1->existEdge(n2, n1) == e0);
-  CPPUNIT_ASSERT(graph->existEdge(n2, n1) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, g1->existEdge(n2, n1));
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n2, n1));
 
   graph->pop();
   CPPUNIT_ASSERT(graph->isElement(e0));
-  CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
+  CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n0, n1));
 }
 
 //==========================================================
@@ -262,58 +261,58 @@ void PushPopTest::testSetValue() {
 
   prop->setNodeValue(n2, 2.0);
   prop->setEdgeValue(e1, 2.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n2) == 2.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 2.0);
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeValue(e0));
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeValue(n2));
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getEdgeValue(e1));
 
   prop->setNodeValue(n1, 2.0);
   prop->setEdgeValue(e0, 2.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 2.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 2.0);
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getEdgeValue(e0));
 
   graph->push();
   prop->setAllNodeValue(3.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 3.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 3.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n2) == 3.0);
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeValue(n2));
   graph->pop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 2.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n2) == 2.0);
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeValue(n2));
 
   graph->unpop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 3.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 3.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n2) == 3.0);
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeValue(n2));
 
   prop->setAllEdgeValue(3.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 3.0);
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getEdgeValue(e0));
 
   graph->delNode(n1);
-  CPPUNIT_ASSERT(graph->isElement(n1) == false);
-  CPPUNIT_ASSERT(graph->isElement(e0) == false);
+  CPPUNIT_ASSERT(!graph->isElement(n1));
+  CPPUNIT_ASSERT(!graph->isElement(e0));
 
   graph->pop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 2.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 2.0);
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getEdgeValue(e0));
 
   graph->unpop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 3.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 3.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 3.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 3.0);
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getEdgeValue(e0));
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getEdgeValue(e1));
 
   prop->setNodeValue(n0, 2.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 2.0);
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeValue(n0));
   prop->setEdgeValue(e0, 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeValue(e0));
 
   graph->pop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 2.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 2.0);
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getEdgeValue(e0));
 }
 
 //==========================================================
@@ -337,19 +336,19 @@ void PushPopTest::testSetEltValue() {
   node n2 = graph->addNode();
   edge e1 = graph->addEdge(n0, n2);
 
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1).size() == 0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1).empty());
 
   prop->setNodeValue(n2, vv);
   prop->setEdgeValue(e1, vv);
-  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 0) == 1.0);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 0) == 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e1, 1) == 1.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).empty());
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeEltValue(e0, 0));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeEltValue(n2, 0));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeEltValue(e1, 1));
 
   prop->setNodeEltValue(n1, 1, 2.0);
   prop->setEdgeEltValue(e0, 1, 2.0);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 2.0);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 1) == 2.0);
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeEltValue(n1, 1));
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getEdgeEltValue(e0, 1));
 
   graph->push();
   vector<double> dv;
@@ -358,70 +357,70 @@ void PushPopTest::testSetEltValue() {
   prop->pushBackNodeEltValue(n1, 3.0);
   prop->pushBackNodeEltValue(n2, 3.0);
   prop->pushBackNodeEltValue(n2, 3.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 1);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n0, 0) == 3.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1).size() == 2);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 3.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n2).size() == 3);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 2) == 3.0);
+  CPPUNIT_ASSERT_EQUAL(size_t(1), prop->getNodeValue(n0).size());
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeEltValue(n0, 0));
+  CPPUNIT_ASSERT_EQUAL(size_t(2), prop->getNodeValue(n1).size());
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeEltValue(n1, 1));
+  CPPUNIT_ASSERT_EQUAL(size_t(3), prop->getNodeValue(n2).size());
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeEltValue(n2, 2));
 
   prop->setNodeEltValue(n0, 0, 4.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 1);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n0, 0) == 4.0);
+  CPPUNIT_ASSERT_EQUAL(size_t(1), prop->getNodeValue(n0).size());
+  CPPUNIT_ASSERT_EQUAL(4.0, prop->getNodeEltValue(n0, 0));
 
   prop->popBackNodeEltValue(n0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).empty());
   prop->pushBackNodeEltValue(n0, 3.0);
 
   graph->pop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 2.0);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 1) == 1.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).empty());
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeEltValue(n1, 1));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeEltValue(n2, 1));
 
   graph->unpop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 1);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n0, 0) == 3.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1).size() == 2);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 3.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n2).size() == 3);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 2) == 3.0);
+  CPPUNIT_ASSERT_EQUAL(size_t(1), prop->getNodeValue(n0).size());
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeEltValue(n0, 0));
+  CPPUNIT_ASSERT_EQUAL(size_t(2), prop->getNodeValue(n1).size());
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeEltValue(n1, 1));
+  CPPUNIT_ASSERT_EQUAL(size_t(3), prop->getNodeValue(n2).size());
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeEltValue(n2, 2));
 
   prop->setAllEdgeValue(dv);
   prop->pushBackEdgeEltValue(e1, 3.0);
   prop->pushBackEdgeEltValue(e1, 3.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0).size() == 1);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 0) == 3.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1).size() == 3);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e1, 1) == 3.0);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e1, 2) == 3.0);
+  CPPUNIT_ASSERT_EQUAL(size_t(1), prop->getEdgeValue(e0).size());
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getEdgeEltValue(e0, 0));
+  CPPUNIT_ASSERT_EQUAL(size_t(3), prop->getEdgeValue(e1).size());
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getEdgeEltValue(e1, 1));
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getEdgeEltValue(e1, 2));
 
   prop->setEdgeEltValue(e0, 0, 4.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0).size() == 1);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 0) == 4.0);
+  CPPUNIT_ASSERT_EQUAL(size_t(1), prop->getEdgeValue(e0).size());
+  CPPUNIT_ASSERT_EQUAL(4.0, prop->getEdgeEltValue(e0, 0));
 
   graph->delNode(n1);
-  CPPUNIT_ASSERT(graph->isElement(n1) == false);
-  CPPUNIT_ASSERT(graph->isElement(e0) == false);
+  CPPUNIT_ASSERT(!graph->isElement(n1));
+  CPPUNIT_ASSERT(!graph->isElement(e0));
 
   graph->pop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 2.0);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 1) == 1.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).empty());
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeEltValue(n1, 1));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeEltValue(n2, 1));
 
   graph->unpop();
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n0, 0) == 3.0);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 0) == 3.0);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e1, 1) == 3.0);
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeEltValue(n0, 0));
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getEdgeEltValue(e0, 0));
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getEdgeEltValue(e1, 1));
 
   prop->pushBackNodeEltValue(n0, 3.0);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n0, 1) == 3.0);
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeEltValue(n0, 1));
   prop->pushBackEdgeEltValue(e0, 3.0);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 1) == 3.0);
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getEdgeEltValue(e0, 1));
 
   graph->pop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 2.0);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 1) == 2.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).empty());
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeEltValue(n1, 1));
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getEdgeEltValue(e0, 1));
 }
 
 //==========================================================
@@ -447,52 +446,52 @@ void PushPopTest::testVectorValue() {
 
   prop->setNodeValue(n2, vv);
   prop->setEdgeValue(e1, vv);
-  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 0) == 1.0);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 0) == 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e1, 1) == 1.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).empty());
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeEltValue(e0, 0));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeEltValue(n2, 0));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeEltValue(e1, 1));
 
   prop->setNodeEltValue(n1, 1, 2.0);
   prop->setEdgeEltValue(e0, 1, 2.0);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 2.0);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 1) == 2.0);
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeEltValue(n1, 1));
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getEdgeEltValue(e0, 1));
 
   graph->push();
   prop->resizeNodeValue(n1, 2);
   prop->resizeNodeValue(n2, 3, 3.0);
   prop->resizeEdgeValue(e1, 3, 3.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1).size() == 2);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 2.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n2).size() == 3);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 2) == 3.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1).size() == 3);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e1, 2) == 3.0);
+  CPPUNIT_ASSERT_EQUAL(size_t(2), prop->getNodeValue(n1).size());
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeEltValue(n1, 1));
+  CPPUNIT_ASSERT_EQUAL(size_t(3), prop->getNodeValue(n2).size());
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeEltValue(n2, 2));
+  CPPUNIT_ASSERT_EQUAL(size_t(3), prop->getEdgeValue(e1).size());
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getEdgeEltValue(e1, 2));
 
   graph->pop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n1).size() == 2);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 2.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n2).size() == 2);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 1) == 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1).size() == 2);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e1, 1) == 1.0);
+  CPPUNIT_ASSERT_EQUAL(size_t(2), prop->getNodeValue(n1).size());
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeEltValue(n1, 1));
+  CPPUNIT_ASSERT_EQUAL(size_t(2), prop->getNodeValue(n2).size());
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeEltValue(n2, 1));
+  CPPUNIT_ASSERT_EQUAL(size_t(2), prop->getEdgeValue(e1).size());
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeEltValue(e1, 1));
 
   graph->unpop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n1).size() == 2);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 2.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n2).size() == 3);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 2) == 3.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1).size() == 3);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e1, 2) == 3.0);
+  CPPUNIT_ASSERT_EQUAL(size_t(2), prop->getNodeValue(n1).size());
+  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeEltValue(n1, 1));
+  CPPUNIT_ASSERT_EQUAL(size_t(3), prop->getNodeValue(n2).size());
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeEltValue(n2, 2));
+  CPPUNIT_ASSERT_EQUAL(size_t(3), prop->getEdgeValue(e1).size());
+  CPPUNIT_ASSERT_EQUAL(3.0, prop->getEdgeEltValue(e1, 2));
 
   prop->popBackNodeEltValue(n1);
   prop->popBackNodeEltValue(n2);
   prop->popBackEdgeEltValue(e1);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1).size() == 1);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 0) == 1.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n2).size() == 2);
-  CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 1) == 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1).size() == 2);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e1, 1) == 1.0);
+  CPPUNIT_ASSERT_EQUAL(size_t(1), prop->getNodeValue(n1).size());
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeEltValue(n1, 0));
+  CPPUNIT_ASSERT_EQUAL(size_t(2), prop->getNodeValue(n2).size());
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeEltValue(n2, 1));
+  CPPUNIT_ASSERT_EQUAL(size_t(2), prop->getEdgeValue(e1).size());
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeEltValue(e1, 1));
 }
 
 //==========================================================
@@ -507,55 +506,55 @@ void PushPopTest::testCopyProperty() {
 
   prop->setNodeValue(n0, 1.0);
   prop->setEdgeValue(e0, 1.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 1.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 0.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 0.0);
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeValue(e0));
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getEdgeValue(e1));
 
   DoubleProperty p(graph);
 
   p.setNodeValue(n1, 1.0);
   p.setEdgeValue(e1, 1.0);
-  CPPUNIT_ASSERT(p.getNodeValue(n0) == 0.0);
-  CPPUNIT_ASSERT(p.getNodeValue(n1) == 1.0);
-  CPPUNIT_ASSERT(p.getEdgeValue(e0) == 0.0);
-  CPPUNIT_ASSERT(p.getEdgeValue(e1) == 1.0);
+  CPPUNIT_ASSERT_EQUAL(0.0, p.getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(1.0, p.getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(0.0, p.getEdgeValue(e0));
+  CPPUNIT_ASSERT_EQUAL(1.0, p.getEdgeValue(e1));
 
   graph->push();
 
   *prop = p;
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 0.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 1.0);
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getEdgeValue(e0));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeValue(e1));
 
   graph->pop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 1.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 0.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 0.0);
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeValue(e0));
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getEdgeValue(e1));
 
   graph->push();
   prop->setAllNodeValue(0.0);
   prop->setAllEdgeValue(0.0);
   prop->setNodeValue(n1, 1.0);
   prop->setEdgeValue(e1, 1.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 0.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 1.0);
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getEdgeValue(e0));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeValue(e1));
 
   graph->pop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 1.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 0.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 0.0);
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeValue(e0));
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getEdgeValue(e1));
 
   graph->unpop();
-  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 0.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 1.0);
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getNodeValue(n0));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(0.0, prop->getEdgeValue(e0));
+  CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeValue(e1));
 }
 
 void PushPopTest::testSubgraph() {
@@ -737,7 +736,7 @@ void PushPopTest::testSubgraph() {
   CPPUNIT_ASSERT(it->hasNext());
   a = it->next();
   CPPUNIT_ASSERT(!it->hasNext());
-  CPPUNIT_ASSERT(a == g3);
+  CPPUNIT_ASSERT_EQUAL(g3, a);
   delete it;
 
   graph->push();
@@ -804,10 +803,10 @@ void PushPopTest::testAddDelProps() {
 
   graph->unpop();
   CPPUNIT_ASSERT(graph->existProperty("double"));
-  CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double") == dProp);
+  CPPUNIT_ASSERT_EQUAL(dProp, graph->getProperty<DoubleProperty>("double"));
   CPPUNIT_ASSERT(graph->existProperty("boolean"));
   CPPUNIT_ASSERT(graph->isElement(n));
-  CPPUNIT_ASSERT(dProp->getNodeValue(n) == 123456789.);
+  CPPUNIT_ASSERT_EQUAL(123456789., dProp->getNodeValue(n));
 
   graph->delLocalProperty("boolean");
   CPPUNIT_ASSERT(!graph->existProperty("boolean"));
@@ -832,7 +831,7 @@ void PushPopTest::testAddDelProps() {
   graph->pop();
   CPPUNIT_ASSERT(!graph->existProperty("double"));
   CPPUNIT_ASSERT(graph->existProperty("boolean"));
-  CPPUNIT_ASSERT(graph->getProperty<BooleanProperty>("boolean") == bProp);
+  CPPUNIT_ASSERT_EQUAL(bProp, graph->getProperty<BooleanProperty>("boolean"));
 }
 
 // this class will capture
@@ -878,41 +877,41 @@ void PushPopTest::testObserveDelProps() {
   PropertyObserverForTest pObserver;
   pObserver.reset();
   bProp->addPropertyObserver(&pObserver);
-  CPPUNIT_ASSERT(pObserver.nbProperties() == 0);
+  CPPUNIT_ASSERT_EQUAL(0u, pObserver.nbProperties());
 
   graph->push();
 
   graph->delLocalProperty("boolean");
   CPPUNIT_ASSERT(!graph->existProperty("boolean"));
-  CPPUNIT_ASSERT(pObserver.nbProperties() == 1);
+  CPPUNIT_ASSERT_EQUAL(1u, pObserver.nbProperties());
   CPPUNIT_ASSERT(pObserver.found(bProp));
 
   DoubleProperty* dProp = graph->getProperty<DoubleProperty>("double");
   dProp->addPropertyObserver(&pObserver);
   pObserver.reset();
-  CPPUNIT_ASSERT(pObserver.nbProperties() == 0);
+  CPPUNIT_ASSERT_EQUAL(0u, pObserver.nbProperties());
   graph->pop();
   CPPUNIT_ASSERT(graph->existProperty("boolean"));
   CPPUNIT_ASSERT(!graph->existProperty("double"));
-  CPPUNIT_ASSERT(pObserver.nbProperties() == 1);
+  CPPUNIT_ASSERT_EQUAL(1u, pObserver.nbProperties());
   CPPUNIT_ASSERT(pObserver.found(dProp));
   pObserver.reset();
 
   graph->unpop();
   CPPUNIT_ASSERT(graph->existProperty("double"));
-  CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double") == dProp);
+  CPPUNIT_ASSERT_EQUAL(dProp, graph->getProperty<DoubleProperty>("double"));
   CPPUNIT_ASSERT(!graph->existProperty("boolean"));
-  CPPUNIT_ASSERT(pObserver.nbProperties() == 1);
+  CPPUNIT_ASSERT_EQUAL(1u, pObserver.nbProperties());
   CPPUNIT_ASSERT(pObserver.found(bProp));
 
   graph->delLocalProperty("double");
   CPPUNIT_ASSERT(!graph->existProperty("double"));
-  CPPUNIT_ASSERT(pObserver.nbProperties() == 2);
+  CPPUNIT_ASSERT_EQUAL(2u, pObserver.nbProperties());
   CPPUNIT_ASSERT(pObserver.found(dProp));
 
   graph->pop();
   CPPUNIT_ASSERT(graph->existProperty("boolean"));
-  CPPUNIT_ASSERT(graph->getProperty<BooleanProperty>("boolean") == bProp);
+  CPPUNIT_ASSERT_EQUAL(bProp, graph->getProperty<BooleanProperty>("boolean"));
   CPPUNIT_ASSERT(!graph->existProperty("double"));
 }
 
@@ -929,7 +928,7 @@ void PushPopTest::testAddSubgraphProp() {
 
   it = graph->getSubGraphs();
   CPPUNIT_ASSERT(it->hasNext());
-  CPPUNIT_ASSERT(sg == it->next());
+  CPPUNIT_ASSERT_EQUAL(sg, it->next());
   delete it;
 
   sg->push();
@@ -941,13 +940,13 @@ void PushPopTest::testAddSubgraphProp() {
 
   sg->unpop();
   CPPUNIT_ASSERT(sg->existProperty("test"));
-  CPPUNIT_ASSERT(sg->getLocalProperty<DoubleProperty>("test") == prop);
+  CPPUNIT_ASSERT_EQUAL(prop, sg->getLocalProperty<DoubleProperty>("test"));
 
   sg->pop();
   CPPUNIT_ASSERT(!sg->existProperty("test"));
   it = graph->getSubGraphs();
   CPPUNIT_ASSERT(it->hasNext());
-  CPPUNIT_ASSERT(sg == it->next());
+  CPPUNIT_ASSERT_EQUAL(sg, it->next());
   delete it;
 
   graph->pop();
@@ -958,18 +957,18 @@ void PushPopTest::testAddSubgraphProp() {
   graph->unpop();
   it = graph->getSubGraphs();
   CPPUNIT_ASSERT(it->hasNext());
-  CPPUNIT_ASSERT(sg == it->next());
+  CPPUNIT_ASSERT_EQUAL(sg, it->next());
   delete it;
 
   sg->unpop();
   CPPUNIT_ASSERT(sg->existProperty("test"));
-  CPPUNIT_ASSERT(sg->getLocalProperty<DoubleProperty>("test") == prop);
+  CPPUNIT_ASSERT_EQUAL(prop, sg->getLocalProperty<DoubleProperty>("test"));
 
   sg->pop();
   CPPUNIT_ASSERT(!sg->existProperty("test"));
   it = graph->getSubGraphs();
   CPPUNIT_ASSERT(it->hasNext());
-  CPPUNIT_ASSERT(sg == it->next());
+  CPPUNIT_ASSERT_EQUAL(sg, it->next());
   delete it;
 
   graph->pop();
@@ -1009,8 +1008,8 @@ void PushPopTest::testMetaNode() {
 
   CPPUNIT_ASSERT(graph->isElement(metaNode));
   CPPUNIT_ASSERT(graph->isMetaNode(metaNode));
-  CPPUNIT_ASSERT(coord0 == layout->getNodeValue(metaNode));
-  CPPUNIT_ASSERT(mColor == color->getNodeValue(metaNode));
+  CPPUNIT_ASSERT_EQUAL(coord0,  layout->getNodeValue(metaNode));
+  CPPUNIT_ASSERT_EQUAL(mColor,  color->getNodeValue(metaNode));
 
   graph->pop();
   CPPUNIT_ASSERT(!graph->isElement(metaNode));
@@ -1019,37 +1018,6 @@ void PushPopTest::testMetaNode() {
   graph->unpop();
   CPPUNIT_ASSERT(graph->isElement(metaNode));
   CPPUNIT_ASSERT(graph->isMetaNode(metaNode));
-  CPPUNIT_ASSERT(coord0 == layout->getNodeValue(metaNode));
-  CPPUNIT_ASSERT(mColor == color->getNodeValue(metaNode));
+  CPPUNIT_ASSERT_EQUAL(coord0,  layout->getNodeValue(metaNode));
+  CPPUNIT_ASSERT_EQUAL(mColor,  color->getNodeValue(metaNode));
 }
-
-//==========================================================
-CppUnit::Test * PushPopTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Push/Pop" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Add/Del operations (Simple Graph)",
-                         &PushPopTest::testAddDel) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetNode/EdgeValue operations",
-                         &PushPopTest::testSetValue) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetNode/EdgeEltValue operations",
-                         &PushPopTest::testSetEltValue) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Vector Value operations",
-                         &PushPopTest::testVectorValue) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetEnds operations",
-                         &PushPopTest::testSetEnds) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Copy Prop operations",
-                         &PushPopTest::testCopyProperty) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "addSubGraph operations",
-                         &PushPopTest::testSubgraph) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "addSubGraphProp operations",
-                         &PushPopTest::testAddSubgraphProp) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Tests operations",
-                         &PushPopTest::testTests) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Properties deletion operations",
-                         &PushPopTest::testObserveDelProps) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Properties operations",
-                         &PushPopTest::testAddDelProps) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "MetaNode operations",
-                         &PushPopTest::testMetaNode) );
-  return suiteOfTests;
-}
-//==========================================================

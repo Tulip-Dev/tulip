@@ -24,10 +24,19 @@
 #include <tulip/DoubleProperty.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 class DoublePropertyTest : public CppUnit::TestFixture {
-public:
+  CPPUNIT_TEST_SUITE(DoublePropertyTest);
+  CPPUNIT_TEST(testDoublePropertyMinUpdate);
+  CPPUNIT_TEST(testDoublePropertyMaxUpdate);
+  CPPUNIT_TEST(testDoublePropertyMinUpdateFromString);
+  CPPUNIT_TEST(testDoublePropertyMaxUpdateFromString);
+  CPPUNIT_TEST(testDoublePropertySubGraphMin);
+  CPPUNIT_TEST(testDoublePropertySubGraphMax);
+  CPPUNIT_TEST_SUITE_END();
 
+public:
   void setUp();
   void tearDown();
   void testDoublePropertyMinUpdate();
@@ -37,10 +46,7 @@ public:
   void testDoublePropertySubGraphMin();
   void testDoublePropertySubGraphMax();
 
-  static CppUnit::Test *suite();
-
 private :
-
   tlp::Graph *graph;
   tlp::node n1, n4;
 };

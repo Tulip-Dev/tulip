@@ -24,7 +24,7 @@
 #include <tulip/BooleanProperty.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
-
+#include <cppunit/extensions/HelperMacros.h>
 // Warning SelectionProxy has been renamed in BooleanAlgorithm
 
 namespace tlp {
@@ -32,6 +32,13 @@ class BooleanProperty;
 }
 
 class SelectionProxyTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(SelectionProxyTest);
+  CPPUNIT_TEST(testSetAll);
+  CPPUNIT_TEST(testSetGet);
+  CPPUNIT_TEST(testCopy);
+  CPPUNIT_TEST(testIterators);
+  CPPUNIT_TEST(testDelete);
+CPPUNIT_TEST_SUITE_END();
 private:
   tlp::Graph *graph;
   tlp::BooleanProperty *selection;
@@ -47,7 +54,6 @@ public:
   void testIterators();
   void testDelete(bool value);
   void testDelete();
-  static CppUnit::Test *suite();
 };
 
 #endif

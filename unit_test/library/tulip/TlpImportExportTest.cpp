@@ -32,17 +32,16 @@ using namespace std;
 
 using namespace tlp;
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( TlpImportExportTest );
 
 //==========================================================
 void TlpImportExportTest::testLoad() {
   Graph *graph = tlp::loadGraph("cette erreur fait partie de testLoad");
-  CPPUNIT_ASSERT(graph == 0);
+  CPPUNIT_ASSERT(graph == NULL);
   graph = tlp::loadGraph("TlpImportExportTest.cpp");
-  CPPUNIT_ASSERT(graph == 0);
+  CPPUNIT_ASSERT(graph == NULL);
   graph = tlp::loadGraph("DATA/filesystem.tlp.gz");
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   delete graph;
 }
 //==========================================================
@@ -50,25 +49,25 @@ void TlpImportExportTest::testImport() {
   DataSet dataSet;
   dataSet.set("file::filename", std::string("cette erreur fait partie de testImport"));
   Graph *graph = tlp::importGraph("tlp", dataSet, NULL);
-  CPPUNIT_ASSERT(graph == 0);
+  CPPUNIT_ASSERT(graph == NULL);
   dataSet.set("file::filename", std::string("TlpImportExportTest.cpp"));
   graph = tlp::importGraph("tlp", dataSet, NULL);
-  CPPUNIT_ASSERT(graph == 0);
+  CPPUNIT_ASSERT(graph == NULL);
   dataSet.set("file::filename", std::string("DATA/filesystem.tlp.gz"));
   graph = tlp::importGraph("tlp", dataSet, NULL);
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   delete graph;
 }
 //==========================================================
 void TlpImportExportTest::testSave() {
   Graph *graph = newGraph();
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   node n1 = graph->addNode();
   node n2 = graph->addNode();
   edge e1 = graph->addEdge(n1, n2);
   bool ok = saveGraph(graph, "save_test.tlp");
   delete graph;
-  CPPUNIT_ASSERT(ok == true);
+  CPPUNIT_ASSERT(ok);
   graph = (Graph *) NULL;
   graph = loadGraph("save_test.tlp");
   CPPUNIT_ASSERT(graph != 0);
@@ -85,7 +84,7 @@ void TlpImportExportTest::testSave() {
 //==========================================================
 void TlpImportExportTest::testExport() {
   Graph *graph = newGraph();
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   node n1 = graph->addNode();
   // for sf bug  #2999413
   graph->delNode(n1);
@@ -97,10 +96,10 @@ void TlpImportExportTest::testExport() {
   bool ok = exportGraph(graph, *os, "tlp", dataSet);
   delete graph;
   delete os;
-  CPPUNIT_ASSERT(ok == true);
+  CPPUNIT_ASSERT(ok);
   graph = (Graph *) NULL;
   graph = loadGraph("export_test.tlp");
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   node n;
   forEach(n, graph->getNodes()) {
     // - 1 is because of delNode
@@ -108,14 +107,14 @@ void TlpImportExportTest::testExport() {
   }
   edge e;
   forEach(e, graph->getEdges()) {
-    CPPUNIT_ASSERT(e == e1);
+    CPPUNIT_ASSERT_EQUAL(e1, e);
   }
   delete graph;
 }
 //==========================================================
 void TlpImportExportTest::testExportCluster() {
   Graph *graph = newGraph();
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   node n1 = graph->addNode();
   node n2 = graph->addNode();
   edge e1 = graph->addEdge(n1, n2);
@@ -127,23 +126,23 @@ void TlpImportExportTest::testExportCluster() {
   bool ok = exportGraph(graph, *os, "tlp", dataSet);
   delete graph;
   delete os;
-  CPPUNIT_ASSERT(ok == true);
+  CPPUNIT_ASSERT(ok);
   graph = (Graph *) NULL;
   graph = loadGraph("export_test.tlp");
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   node n;
   forEach(n, graph->getNodes()) {
     CPPUNIT_ASSERT((n == n1) || (n == n2));
   }
   edge e;
   forEach(e, graph->getEdges()) {
-    CPPUNIT_ASSERT(e == e1);
+    CPPUNIT_ASSERT_EQUAL(e1, e);
   }
   Graph* g;
   forEach(g, graph->getSubGraphs()) {
     string name;
     g->getAttribute(string("name"), name);
-    CPPUNIT_ASSERT(name == string("\"name with double quotes \""));
+    CPPUNIT_ASSERT_EQUAL(string("\"name with double quotes \""), name);
     forEach(n, g->getNodes()) {
       CPPUNIT_ASSERT((n == n1) || (n == n2));
     }
@@ -176,7 +175,7 @@ void TlpImportExportTest::testExportAttributes() {
   graph->setAttribute("type = string", str);
 
   Graph* sg = newSubGraph(graph, "sg");
-  CPPUNIT_ASSERT(sg->getId() == 1);
+  CPPUNIT_ASSERT_EQUAL(1u, sg->getId());
 
   // set sg attributes of different types
   sg->setAttribute("type = bool", sb);
@@ -193,7 +192,7 @@ void TlpImportExportTest::testExportAttributes() {
   bool ok = exportGraph(graph, *os, "tlp", dataSet);
   delete graph;
   delete os;
-  CPPUNIT_ASSERT(ok == true);
+  CPPUNIT_ASSERT(ok);
   graph = (Graph *) NULL;
   graph = loadGraph("export_attributes.tlp");
   CPPUNIT_ASSERT(graph);
@@ -209,29 +208,29 @@ void TlpImportExportTest::testExportAttributes() {
   CPPUNIT_ASSERT(color == Color(1, 2, 3, 4));
   coord = Coord(0., 0., 0);
   CPPUNIT_ASSERT(graph->getAttribute("type = coord", coord));
-  CPPUNIT_ASSERT(coord == Coord(5., 6., 7.));
+  CPPUNIT_ASSERT_EQUAL(Coord(5., 6., 7.), coord);
   f = 0.;
   CPPUNIT_ASSERT(graph->getAttribute("type = float", f));
-  CPPUNIT_ASSERT(f == 200.);
+  CPPUNIT_ASSERT_EQUAL(200.0f, f);
   i = 0;
   CPPUNIT_ASSERT(graph->getAttribute("type = int", i));
-  CPPUNIT_ASSERT(i == -10);
+  CPPUNIT_ASSERT_EQUAL(-10, i);
   ui = 0;
   CPPUNIT_ASSERT(graph->getAttribute("type = uint", ui));
-  CPPUNIT_ASSERT(ui == 10);
+  CPPUNIT_ASSERT_EQUAL(10u, ui);
   size = Size(0., 0., 0.);
   CPPUNIT_ASSERT(graph->getAttribute("type = size", size));
-  CPPUNIT_ASSERT(size == Size(8., 9., 10.));
+  CPPUNIT_ASSERT_EQUAL(Size(8., 9., 10.), size);
   str = string("");
   CPPUNIT_ASSERT(graph->getAttribute("type = string", str));
-  CPPUNIT_ASSERT(str == "data");
+  CPPUNIT_ASSERT_EQUAL(string("data"), str);
 
   sg = graph->getSubGraph(1);
   CPPUNIT_ASSERT(sg);
 
   b = false;
   CPPUNIT_ASSERT(sg->getAttribute("type = bool", b));
-  CPPUNIT_ASSERT(b == sb);
+  CPPUNIT_ASSERT_EQUAL(sb, b);
   d = 0.;
   CPPUNIT_ASSERT(sg->getAttribute("type = double", d));
   CPPUNIT_ASSERT(d == sd);
@@ -258,27 +257,4 @@ void TlpImportExportTest::testExportAttributes() {
   CPPUNIT_ASSERT(str == sstr);
 
   delete graph;
-}
-//==========================================================
-CppUnit::Test * TlpImportExportTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Tlp Import/Export mechanism" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>(
-                           "Load test",
-                           &TlpImportExportTest::testLoad ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>(
-                           "Import test",
-                           &TlpImportExportTest::testImport ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>(
-                           "Save test",
-                           &TlpImportExportTest::testSave ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>(
-                           "Export test",
-                           &TlpImportExportTest::testExport ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>(
-                           "Export Cluster test",
-                           &TlpImportExportTest::testExportCluster ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>(
-                           "Export Attributes test",
-                           &TlpImportExportTest::testExportAttributes ) );
-  return suiteOfTests;
 }

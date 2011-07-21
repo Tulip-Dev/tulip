@@ -25,9 +25,16 @@
 #include <tulip/PropertyTypes.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 namespace tlp {
 class MutableContainerTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(MutableContainerTest);
+  CPPUNIT_TEST(testSetAll);
+  CPPUNIT_TEST(testSetGet);
+  CPPUNIT_TEST(testFindAll);
+  CPPUNIT_TEST(testCompression);
+  CPPUNIT_TEST_SUITE_END();
 private:
   tlp::MutableContainer<bool> *mutBool;
   tlp::MutableContainer<double> *mutDouble;
@@ -41,7 +48,6 @@ public:
   void testSetGet();
   void testFindAll();
   void testCompression();
-  static CppUnit::Test *suite();
 };
 }
 #endif

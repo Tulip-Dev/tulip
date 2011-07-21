@@ -19,15 +19,24 @@
 #ifndef TLPTESTALGORITHMTEST
 #define TLPTESTALGORITHMTEST
 
-
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 namespace tlp {
 class Graph;
 }
 
 class TestAlgorithmTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(TestAlgorithmTest);
+  CPPUNIT_TEST(testSimple);
+  CPPUNIT_TEST(testFreeTree);
+  CPPUNIT_TEST(testTree);
+  CPPUNIT_TEST(testAcyclic);
+  CPPUNIT_TEST(testConnected);
+  CPPUNIT_TEST(testBiconnected);
+  CPPUNIT_TEST(testTriconnected);
+CPPUNIT_TEST_SUITE_END();
 private:
   tlp::Graph *graph;
 
@@ -41,8 +50,6 @@ public:
   void testConnected();
   void testBiconnected();
   void testTriconnected();
-  static CppUnit::Test *suite();
-
 };
 
 #endif

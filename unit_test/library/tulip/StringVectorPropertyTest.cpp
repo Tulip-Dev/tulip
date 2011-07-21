@@ -30,6 +30,12 @@ using namespace tlp;
 #include <cppunit/extensions/HelperMacros.h>
 
 class StringVectorPropertyTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(StringVectorPropertyTest);
+  CPPUNIT_TEST(simpleTest);
+  CPPUNIT_TEST(simpleDavidTest);
+  CPPUNIT_TEST(complexTest);
+  CPPUNIT_TEST(complexDavidTest);
+  CPPUNIT_TEST_SUITE_END();
 private:
   tlp::Graph *graph;
 
@@ -41,8 +47,6 @@ public:
   void simpleDavidTest();
   void complexTest();
   void complexDavidTest();
-
-  static CppUnit::Test *suite();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION( StringVectorPropertyTest );
@@ -72,10 +76,10 @@ void StringVectorPropertyTest::simpleTest() {
   stP->setNodeValue(n, tmp);
 
   const vector<string>& value = stP->getNodeValue(n);
-  CPPUNIT_ASSERT(value.size() == 5);
+  CPPUNIT_ASSERT_EQUAL(size_t(5), value.size());
 
   for(unsigned int i=0; i< value.size(); ++i) {
-    CPPUNIT_ASSERT(tmp[i] == value[i]);
+    CPPUNIT_ASSERT_EQUAL(tmp[i], value[i]);
   }
 }
 
@@ -94,10 +98,10 @@ void StringVectorPropertyTest::simpleDavidTest() {
   stP->setNodeValue(n, tmp);
 
   const vector<string>& value = stP->getNodeValue(n);
-  CPPUNIT_ASSERT(value.size() == 5);
+  CPPUNIT_ASSERT_EQUAL(size_t(5), value.size());
 
   for(unsigned int i=0; i< value.size(); ++i) {
-    CPPUNIT_ASSERT(tmp[i] == value[i]);
+    CPPUNIT_ASSERT_EQUAL(tmp[i], value[i]);
   }
 }
 
@@ -118,10 +122,10 @@ void StringVectorPropertyTest::complexTest() {
 
   const vector<string>& value = stP->getNodeValue(n);
 
-  CPPUNIT_ASSERT(value.size() == 5000);
+  CPPUNIT_ASSERT_EQUAL(size_t(5000), value.size());
 
   for(unsigned int i=0; i< value.size(); ++i) {
-    CPPUNIT_ASSERT(tmp[i] == value[i]);
+    CPPUNIT_ASSERT_EQUAL(tmp[i], value[i]);
   }
 }
 //==========================================================
@@ -135,7 +139,7 @@ void StringVectorPropertyTest::complexDavidTest() {
     stringstream tmpstr;
     tmpstr << "fdjlksjflks\"jl : " << i;
     tmp = stP->getNodeValue(n);
-    CPPUNIT_ASSERT(tmp.size() == i);
+    CPPUNIT_ASSERT_EQUAL(size_t(i), tmp.size());
     tmp.push_back(tmpstr.str());
     expectedValues.push_back(tmpstr.str());
     stP->setNodeValue(n, tmp);
@@ -143,24 +147,9 @@ void StringVectorPropertyTest::complexDavidTest() {
 
   const vector<string>& value = stP->getNodeValue(n);
 
-  CPPUNIT_ASSERT(value.size() == expectedValues.size());
+  CPPUNIT_ASSERT_EQUAL(expectedValues.size(), value.size());
 
   for(unsigned int i=0; i< value.size(); ++i) {
-    CPPUNIT_ASSERT(expectedValues[i] == value[i]);
+    CPPUNIT_ASSERT_EQUAL(value[i], expectedValues[i]);
   }
 }
-
-//==========================================================
-CppUnit::Test * StringVectorPropertyTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Vector property" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<StringVectorPropertyTest>( "simple StringVectorProperty",
-                         &StringVectorPropertyTest::simpleTest) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<StringVectorPropertyTest>( "simple david StringVectorProperty",
-                         &StringVectorPropertyTest::simpleDavidTest) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<StringVectorPropertyTest>( "complex StringVectorProperty",
-                         &StringVectorPropertyTest::complexTest) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<StringVectorPropertyTest>( "complex david StringVectorProperty",
-                         &StringVectorPropertyTest::complexDavidTest) );
-  return suiteOfTests;
-}
-//==========================================================

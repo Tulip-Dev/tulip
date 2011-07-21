@@ -27,7 +27,6 @@
 using namespace std;
 using namespace tlp;
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( ObservableGraphTest );
 
 // these classes will capture
@@ -254,9 +253,9 @@ void ObservableGraphTest::testAddDel() {
     gObserver->reset();
     observer->reset();
     nodes.push_back(graph->addNode());
-    CPPUNIT_ASSERT(nodes[i] == gObserver->getObservedNode());
-    CPPUNIT_ASSERT(graph == gObserver->getObservedGraph());
-    CPPUNIT_ASSERT(observer->nbObservables() == 1);
+    CPPUNIT_ASSERT_EQUAL(nodes[i], gObserver->getObservedNode());
+    CPPUNIT_ASSERT_EQUAL(graph, gObserver->getObservedGraph());
+    CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
     CPPUNIT_ASSERT(observer->found(graph));
   }
 
@@ -266,9 +265,9 @@ void ObservableGraphTest::testAddDel() {
     edges.push_back(graph->addEdge(nodes[i],
                                    (i == NB_NODES - 1)
                                    ? nodes[0] : nodes[i]));
-    CPPUNIT_ASSERT(edges[i] == gObserver->getObservedEdge());
-    CPPUNIT_ASSERT(graph == gObserver->getObservedGraph());
-    CPPUNIT_ASSERT(observer->nbObservables() == 1);
+    CPPUNIT_ASSERT_EQUAL(edges[i], gObserver->getObservedEdge());
+    CPPUNIT_ASSERT_EQUAL(graph, gObserver->getObservedGraph());
+    CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
     CPPUNIT_ASSERT(observer->found(graph));
   }
 
@@ -276,9 +275,9 @@ void ObservableGraphTest::testAddDel() {
     gObserver->reset();
     observer->reset();
     graph->delEdge(edges[2 * i]);
-    CPPUNIT_ASSERT(edges[2 * i] == gObserver->getObservedEdge());
-    CPPUNIT_ASSERT(graph == gObserver->getObservedGraph());
-    CPPUNIT_ASSERT(observer->nbObservables() == 1);
+    CPPUNIT_ASSERT_EQUAL(edges[2 * i], gObserver->getObservedEdge());
+    CPPUNIT_ASSERT_EQUAL(graph, gObserver->getObservedGraph());
+    CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
     CPPUNIT_ASSERT(observer->found(graph));
   }
 
@@ -286,24 +285,24 @@ void ObservableGraphTest::testAddDel() {
     gObserver->reset();
     observer->reset();
     graph->delNode(nodes[i]);
-    CPPUNIT_ASSERT(nodes[i] == gObserver->getObservedNode());
+    CPPUNIT_ASSERT_EQUAL(nodes[i], gObserver->getObservedNode());
 
     if (i == 0 || (i%2 && i != (NB_NODES - 1))) {
       vector<Graph*>& graphs = gObserver->getObservedGraphs();
-      CPPUNIT_ASSERT(graphs.size() == 2);
-      CPPUNIT_ASSERT(graphs[0] == graph);
-      CPPUNIT_ASSERT(graphs[1] == graph);
+      CPPUNIT_ASSERT_EQUAL(size_t(2), graphs.size());
+      CPPUNIT_ASSERT_EQUAL(graph, graphs[0]);
+      CPPUNIT_ASSERT_EQUAL(graph, graphs[1]);
 
       if (i == 0)
-        CPPUNIT_ASSERT(edges[NB_NODES - 1] == gObserver->getObservedEdge());
+        CPPUNIT_ASSERT_EQUAL(edges[NB_NODES - 1], gObserver->getObservedEdge());
       else
-        CPPUNIT_ASSERT(edges[i] == gObserver->getObservedEdge());
+        CPPUNIT_ASSERT_EQUAL(edges[i], gObserver->getObservedEdge());
     }
     else {
-      CPPUNIT_ASSERT(graph == gObserver->getObservedGraph());
+      CPPUNIT_ASSERT_EQUAL(graph, gObserver->getObservedGraph());
     }
 
-    CPPUNIT_ASSERT(observer->nbObservables() == 1);
+    CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
     CPPUNIT_ASSERT(observer->found(graph));
   }
 }
@@ -329,23 +328,23 @@ void ObservableGraphTest::testClear() {
   graph->clear();
 
   vector<node>& oNodes = gObserver->getObservedNodes();
-  CPPUNIT_ASSERT(oNodes.size() == NB_NODES);
+  CPPUNIT_ASSERT_EQUAL(size_t(NB_NODES), oNodes.size());
 
   for(unsigned int i = 0; i < NB_NODES; ++i) {
-    CPPUNIT_ASSERT(nodes[i] == oNodes[i]);
+    CPPUNIT_ASSERT_EQUAL(oNodes[i], nodes[i]);
   }
 
   vector<edge>& oEdges = gObserver->getObservedEdges();
-  CPPUNIT_ASSERT(oEdges.size() == NB_NODES);
+  CPPUNIT_ASSERT_EQUAL(size_t(NB_NODES), oEdges.size());
 
   for(unsigned int i = 0; i < NB_NODES; ++i) {
     if (i == 0)
-      CPPUNIT_ASSERT(oEdges[i] == edges[NB_NODES - 1]);
+      CPPUNIT_ASSERT_EQUAL(edges[NB_NODES - 1], oEdges[i]);
     else
-      CPPUNIT_ASSERT(oEdges[i] == edges[i - 1]);
+      CPPUNIT_ASSERT_EQUAL(edges[i - 1], oEdges[i]);
   }
 
-  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(graph));
 }
 //==========================================================
@@ -368,9 +367,9 @@ void ObservableGraphTest::testReverse() {
     gObserver->reset();
     observer->reset();
     graph->reverse(edges[i]);
-    CPPUNIT_ASSERT(edges[i] == gObserver->getObservedEdge());
-    CPPUNIT_ASSERT(graph == gObserver->getObservedGraph());
-    CPPUNIT_ASSERT(observer->nbObservables() == 1);
+    CPPUNIT_ASSERT_EQUAL(gObserver->getObservedEdge(), edges[i]);
+    CPPUNIT_ASSERT_EQUAL(gObserver->getObservedGraph(), graph);
+    CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
     CPPUNIT_ASSERT(observer->found(graph));
   }
 
@@ -383,13 +382,13 @@ void ObservableGraphTest::testReverse() {
   observer->reset();
   g1->addGraphObserver(gObserver);
   g1->addObserver(observer);
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
-  CPPUNIT_ASSERT(gObserver->getObservedGraphs().size() == 0);
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
+  CPPUNIT_ASSERT_EQUAL(size_t(0), gObserver->getObservedGraphs().size());
   g1->reverse(edges[0]);
   // 2 calls only to reverseEdge & update
-  CPPUNIT_ASSERT(gObserver->getObservedEdges().size() == 2);
-  CPPUNIT_ASSERT(gObserver->getObservedGraphs().size() == 2);
-  CPPUNIT_ASSERT(observer->nbObservables() == 2);
+  CPPUNIT_ASSERT_EQUAL(size_t(2), gObserver->getObservedEdges().size());
+  CPPUNIT_ASSERT_EQUAL(size_t(2), gObserver->getObservedGraphs().size());
+  CPPUNIT_ASSERT_EQUAL(2u, observer->nbObservables());
 }
 //==========================================================
 void ObservableGraphTest::testSubgraph() {
@@ -398,33 +397,33 @@ void ObservableGraphTest::testSubgraph() {
   gObserver->reset();
   observer->reset();
   g1 = graph->addSubGraph();
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g1);
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == graph);
-  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT_EQUAL(g1, gObserver->getObservedSubgraph());
+  CPPUNIT_ASSERT_EQUAL(graph, gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(graph));
   gObserver->reset();
   observer->reset();
   g2 = graph->addSubGraph();
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g2);
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == graph);
-  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT_EQUAL(g2, gObserver->getObservedSubgraph());
+  CPPUNIT_ASSERT_EQUAL(graph, gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(graph));
   gObserver->reset();
   observer->reset();
-  CPPUNIT_ASSERT(gObserver->sGraphs.size() == 0);
+  CPPUNIT_ASSERT_EQUAL(size_t(0), gObserver->sGraphs.size());
   g2->addGraphObserver(gObserver);
   g2->addObserver(observer);
   g3 = g2->addSubGraph();
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g3);
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == g2);
-  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT_EQUAL(g3, gObserver->getObservedSubgraph());
+  CPPUNIT_ASSERT_EQUAL(g2, gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(g2));
   gObserver->reset();
   observer->reset();
   g4 = g2->addSubGraph();
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g4);
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == g2);
-  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT_EQUAL(g4, gObserver->getObservedSubgraph());
+  CPPUNIT_ASSERT_EQUAL(g2, gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(g2));
 
   gObserver->reset();
@@ -437,129 +436,129 @@ void ObservableGraphTest::testSubgraph() {
   Observable::holdObservers();
   node n1 = g3->addNode();
   vector<Graph*>& graphs = gObserver->getObservedGraphs();
-  CPPUNIT_ASSERT(graphs.size() == 3);
-  CPPUNIT_ASSERT(graphs[0] == graph);
-  CPPUNIT_ASSERT(graphs[1] == g2);
-  CPPUNIT_ASSERT(graphs[2] == g3);
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
-  CPPUNIT_ASSERT(Observable::observersHoldCounter() == 3);
+  CPPUNIT_ASSERT_EQUAL(size_t(3), graphs.size());
+  CPPUNIT_ASSERT_EQUAL(graph, graphs[0]);
+  CPPUNIT_ASSERT_EQUAL(g2, graphs[1]);
+  CPPUNIT_ASSERT_EQUAL(g3, graphs[2]);
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
+  CPPUNIT_ASSERT_EQUAL(3u, Observable::observersHoldCounter());
   // first unhold
   Observable::unholdObservers();
   // nothing happens
-  CPPUNIT_ASSERT(Observable::observersHoldCounter() == 2);
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
-  CPPUNIT_ASSERT(observer->found(graph) == false);
-  CPPUNIT_ASSERT(observer->found(g2) == false);
-  CPPUNIT_ASSERT(observer->found(g3) == false);
+  CPPUNIT_ASSERT_EQUAL(2u, Observable::observersHoldCounter());
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
+  CPPUNIT_ASSERT(!observer->found(graph));
+  CPPUNIT_ASSERT(!observer->found(g2));
+  CPPUNIT_ASSERT(!observer->found(g3));
   // second unhold
   Observable::unholdObservers();
-  CPPUNIT_ASSERT(Observable::observersHoldCounter() == 1);
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
-  CPPUNIT_ASSERT(observer->found(graph) == false);
-  CPPUNIT_ASSERT(observer->found(g2) == false);
-  CPPUNIT_ASSERT(observer->found(g3) == false);
+  CPPUNIT_ASSERT_EQUAL(1u, Observable::observersHoldCounter());
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
+  CPPUNIT_ASSERT(!observer->found(graph));
+  CPPUNIT_ASSERT(!observer->found(g2));
+  CPPUNIT_ASSERT(!observer->found(g3));
   // third unhold
   Observable::unholdObservers();
-  CPPUNIT_ASSERT(Observable::observersHoldCounter() == 0);
-  CPPUNIT_ASSERT(observer->nbObservables() == 3);
+  CPPUNIT_ASSERT_EQUAL(0u, Observable::observersHoldCounter());
+  CPPUNIT_ASSERT_EQUAL(3u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(graph));
   CPPUNIT_ASSERT(observer->found(g2));
   CPPUNIT_ASSERT(observer->found(g3));
   vector<node>& nodes = gObserver->getObservedNodes();
-  CPPUNIT_ASSERT(nodes.size() == 3);
-  CPPUNIT_ASSERT(nodes[0] == n1);
-  CPPUNIT_ASSERT(nodes[1] == n1);
-  CPPUNIT_ASSERT(nodes[2] == n1);
+  CPPUNIT_ASSERT_EQUAL(size_t(3), nodes.size());
+  CPPUNIT_ASSERT_EQUAL(n1, nodes[0]);
+  CPPUNIT_ASSERT_EQUAL(n1, nodes[1]);
+  CPPUNIT_ASSERT_EQUAL(n1, nodes[2]);
 
   gObserver->reset();
   observer->reset();
   g4->addGraphObserver(gObserver);
   g4->addObserver(observer);
   node n2 = g4->addNode();
-  CPPUNIT_ASSERT(graphs.size() == 3);
-  CPPUNIT_ASSERT(graphs[0] == graph);
-  CPPUNIT_ASSERT(graphs[1] == g2);
-  CPPUNIT_ASSERT(graphs[2] == g4);
-  CPPUNIT_ASSERT(observer->nbObservables() == 3);
+  CPPUNIT_ASSERT_EQUAL(size_t(3), graphs.size());
+  CPPUNIT_ASSERT_EQUAL(graph, graphs[0]);
+  CPPUNIT_ASSERT_EQUAL(g2, graphs[1]);
+  CPPUNIT_ASSERT_EQUAL(g4, graphs[2]);
+  CPPUNIT_ASSERT_EQUAL(3u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(graph));
   CPPUNIT_ASSERT(observer->found(g2));
   CPPUNIT_ASSERT(observer->found(g4));
-  CPPUNIT_ASSERT(nodes.size() == 3);
-  CPPUNIT_ASSERT(nodes[0] == n2);
-  CPPUNIT_ASSERT(nodes[1] == n2);
-  CPPUNIT_ASSERT(nodes[2] == n2);
+  CPPUNIT_ASSERT_EQUAL(size_t(3), nodes.size());
+  CPPUNIT_ASSERT_EQUAL(n2, nodes[0]);
+  CPPUNIT_ASSERT_EQUAL(n2, nodes[1]);
+  CPPUNIT_ASSERT_EQUAL(n2, nodes[2]);
 
   gObserver->reset();
   observer->reset();
   Observable::holdObservers();
   edge e = g2->addEdge(n1, n2);
-  CPPUNIT_ASSERT(graphs.size() == 2);
-  CPPUNIT_ASSERT(graphs[0] == graph);
-  CPPUNIT_ASSERT(graphs[1] == g2);
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT_EQUAL(size_t(2), graphs.size());
+  CPPUNIT_ASSERT_EQUAL(graph, graphs[0]);
+  CPPUNIT_ASSERT_EQUAL(g2, graphs[1]);
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
   Observable::unholdObservers();
-  CPPUNIT_ASSERT(observer->nbObservables() == 2);
+  CPPUNIT_ASSERT_EQUAL(2u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(graph));
   CPPUNIT_ASSERT(observer->found(g2));
   vector<edge>& edges = gObserver->getObservedEdges();
-  CPPUNIT_ASSERT(edges.size() == 2);
-  CPPUNIT_ASSERT(edges[0] == e);
-  CPPUNIT_ASSERT(edges[1] == e);
+  CPPUNIT_ASSERT_EQUAL(size_t(2), edges.size());
+  CPPUNIT_ASSERT_EQUAL(e, edges[0]);
+  CPPUNIT_ASSERT_EQUAL(e, edges[1]);
 
   gObserver->reset();
   observer->reset();
   Observable::holdObservers();
   g2->delNode(n2);
-  CPPUNIT_ASSERT(graphs.size() == 3);
-  CPPUNIT_ASSERT(graphs[0] == g2);
-  CPPUNIT_ASSERT(graphs[1] == g4);
-  CPPUNIT_ASSERT(graphs[2] == g2);
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT_EQUAL(size_t(3), graphs.size());
+  CPPUNIT_ASSERT_EQUAL(g2, graphs[0]);
+  CPPUNIT_ASSERT_EQUAL(g4, graphs[1]);
+  CPPUNIT_ASSERT_EQUAL(g2, graphs[2]);
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
   Observable::unholdObservers();
-  CPPUNIT_ASSERT(observer->nbObservables() == 2);
+  CPPUNIT_ASSERT_EQUAL(2u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(g2));
   CPPUNIT_ASSERT(observer->found(g4));
-  CPPUNIT_ASSERT(nodes.size() == 2);
-  CPPUNIT_ASSERT(nodes[0] == n2);
-  CPPUNIT_ASSERT(nodes[1] == n2);
-  CPPUNIT_ASSERT(edges.size() == 1);
-  CPPUNIT_ASSERT(edges[0] == e);
+  CPPUNIT_ASSERT_EQUAL(size_t(2), nodes.size());
+  CPPUNIT_ASSERT_EQUAL(n2, nodes[0]);
+  CPPUNIT_ASSERT_EQUAL(n2, nodes[1]);
+  CPPUNIT_ASSERT_EQUAL(size_t(1), edges.size());
+  CPPUNIT_ASSERT_EQUAL(e, edges[0]);
 
   gObserver->reset();
   observer->reset();
   g2->addNode(n2);
-  CPPUNIT_ASSERT(graphs[0] == gObserver->getObservedGraph());
-  CPPUNIT_ASSERT(n2 == gObserver->getObservedNode());
-  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT_EQUAL(graphs[0], gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(n2, gObserver->getObservedNode());
+  CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(g2));
   gObserver->reset();
   observer->reset();
   g2->addEdge(e);
-  CPPUNIT_ASSERT(graphs[0] == gObserver->getObservedGraph());
-  CPPUNIT_ASSERT(e == gObserver->getObservedEdge());
-  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT_EQUAL(graphs[0], gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(e, gObserver->getObservedEdge());
+  CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(g2));
 
   gObserver->reset();
   observer->reset();
   Observable::holdObservers();
   g2->delNode(n2, true);
-  CPPUNIT_ASSERT(graphs.size() == 4);
-  CPPUNIT_ASSERT(graphs[0] == graph);
-  CPPUNIT_ASSERT(graphs[1] == g2);
-  CPPUNIT_ASSERT(graphs[2] == g2);
-  CPPUNIT_ASSERT(graphs[3] == graph);
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT_EQUAL(size_t(4), graphs.size());
+  CPPUNIT_ASSERT_EQUAL(graph, graphs[0]);
+  CPPUNIT_ASSERT_EQUAL(g2, graphs[1]);
+  CPPUNIT_ASSERT_EQUAL(g2, graphs[2]);
+  CPPUNIT_ASSERT_EQUAL(graph, graphs[3]);
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
   Observable::unholdObservers();
-  CPPUNIT_ASSERT(observer->nbObservables() == 2);
+  CPPUNIT_ASSERT_EQUAL(2u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(graph));
   CPPUNIT_ASSERT(observer->found(g2));
-  CPPUNIT_ASSERT(nodes.size() == 2);
-  CPPUNIT_ASSERT(nodes[0] == n2);
-  CPPUNIT_ASSERT(nodes[1] == n2);
-  CPPUNIT_ASSERT(edges.size() == 2);
-  CPPUNIT_ASSERT(edges[0] == e);
-  CPPUNIT_ASSERT(edges[1] == e);
+  CPPUNIT_ASSERT_EQUAL(size_t(2), nodes.size());
+  CPPUNIT_ASSERT_EQUAL(n2, nodes[0]);
+  CPPUNIT_ASSERT_EQUAL(n2, nodes[1]);
+  CPPUNIT_ASSERT_EQUAL(size_t(2), edges.size());
+  CPPUNIT_ASSERT_EQUAL(e, edges[0]);
+  CPPUNIT_ASSERT_EQUAL(e, edges[1]);
 }
 //==========================================================
 void ObservableGraphTest::testDeleteSubgraph() {
@@ -575,141 +574,141 @@ void ObservableGraphTest::testDeleteSubgraph() {
   gObserver->reset();
   observer->reset();
   g2->delSubGraph(g3);
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g3);
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == g2);
-  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT_EQUAL(g3, gObserver->getObservedSubgraph());
+  CPPUNIT_ASSERT_EQUAL(g2, gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(g2));
 
   gObserver->reset();
   observer->reset();
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
   Observable::holdObservers();
   g2->delSubGraph(g4);
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g4);
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == g2);
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT_EQUAL(g4, gObserver->getObservedSubgraph());
+  CPPUNIT_ASSERT_EQUAL(g2, gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
   Observable::unholdObservers();
-  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(g2));
 
   gObserver->reset();
   observer->reset();
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
   graph->delAllSubGraphs(g2);
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g2);
+  CPPUNIT_ASSERT_EQUAL(g2, gObserver->getObservedSubgraph());
   vector<Graph*>& graphs = gObserver->getObservedGraphs();
-  CPPUNIT_ASSERT(graphs[0] == graph);
-  CPPUNIT_ASSERT(graphs[1] == g2);
-  CPPUNIT_ASSERT(observer->nbObservables() == 2);
+  CPPUNIT_ASSERT_EQUAL(graph, graphs[0]);
+  CPPUNIT_ASSERT_EQUAL(g2, graphs[1]);
+  CPPUNIT_ASSERT_EQUAL(2u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(graph));
   CPPUNIT_ASSERT(observer->found(g2));
 
   observer->reset();
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
   Observable::holdObservers();
   g2 = graph->addSubGraph();
   g2->addObserver(observer);
   g3 = g2->addSubGraph();
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
   g3->addObserver(observer);
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
   g2->delSubGraph(g3);
-  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(g3));
   observer->reset();
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
   graph->delSubGraph(g2);
-  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(g2));
   observer->reset();
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
   Observable::unholdObservers();
-  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(graph));
-  CPPUNIT_ASSERT(observer->found(g2) == false);
+  CPPUNIT_ASSERT(!observer->found(g2));
 }
 //==========================================================
 void ObservableGraphTest::testAddDelProperties() {
   Graph *g1, *g2;
 
-  CPPUNIT_ASSERT(gObserver->graphs.size() == 0);
-  CPPUNIT_ASSERT(gObserver->sGraphs.size() == 0);
-  CPPUNIT_ASSERT(gObserver->getLocalPropertyName() == "");
-  CPPUNIT_ASSERT(gObserver->getInheritedPropertyName() == "");
+  CPPUNIT_ASSERT(gObserver->graphs.empty());
+  CPPUNIT_ASSERT(gObserver->sGraphs.empty());
+  CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getLocalPropertyName());
+  CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getInheritedPropertyName());
 
   BooleanProperty* bp = graph->getProperty<BooleanProperty>("test");
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == graph);
-  CPPUNIT_ASSERT(gObserver->getLocalPropertyName() == "test");
-  CPPUNIT_ASSERT(gObserver->sGraphs.size() == 0);
-  CPPUNIT_ASSERT(gObserver->getInheritedPropertyName() == "");
+  CPPUNIT_ASSERT_EQUAL(graph, gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(string("test"), gObserver->getLocalPropertyName());
+  CPPUNIT_ASSERT(gObserver->sGraphs.empty());
+  CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getInheritedPropertyName());
 
   gObserver->reset();
-  CPPUNIT_ASSERT(gObserver->graphs.size() == 0);
-  CPPUNIT_ASSERT(gObserver->getLocalPropertyName() == "");
-  CPPUNIT_ASSERT(gObserver->sGraphs.size() == 0);
-  CPPUNIT_ASSERT(gObserver->getInheritedPropertyName() == "");
+  CPPUNIT_ASSERT(gObserver->graphs.empty());
+  CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getLocalPropertyName());
+  CPPUNIT_ASSERT(gObserver->sGraphs.empty());
+  CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getInheritedPropertyName());
   graph->delLocalProperty("test");
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == graph);
-  CPPUNIT_ASSERT(gObserver->getLocalPropertyName() == "test");
-  CPPUNIT_ASSERT(gObserver->sGraphs.size() == 0);
-  CPPUNIT_ASSERT(gObserver->getInheritedPropertyName() == "");
+  CPPUNIT_ASSERT_EQUAL(graph, gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(string("test"), gObserver->getLocalPropertyName());
+  CPPUNIT_ASSERT(gObserver->sGraphs.empty());
+  CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getInheritedPropertyName());
 
   g1 = graph->addSubGraph();
   g1->addGraphObserver(gObserver);
   gObserver->reset();
 
   bp = graph->getProperty<BooleanProperty>("test");
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == graph);
-  CPPUNIT_ASSERT(gObserver->getLocalPropertyName() == "test");
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g1);
-  CPPUNIT_ASSERT(gObserver->getInheritedPropertyName() == "test");
+  CPPUNIT_ASSERT_EQUAL(graph, gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(string("test"), gObserver->getLocalPropertyName());
+  CPPUNIT_ASSERT_EQUAL(g1, gObserver->getObservedSubgraph());
+  CPPUNIT_ASSERT_EQUAL(string("test"), gObserver->getInheritedPropertyName());
 
   gObserver->reset();
-  CPPUNIT_ASSERT(gObserver->graphs.size() == 0);
-  CPPUNIT_ASSERT(gObserver->getLocalPropertyName() == "");
-  CPPUNIT_ASSERT(gObserver->sGraphs.size() == 0);
-  CPPUNIT_ASSERT(gObserver->getInheritedPropertyName() == "");
+  CPPUNIT_ASSERT(gObserver->graphs.empty());
+  CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getLocalPropertyName());
+  CPPUNIT_ASSERT(gObserver->sGraphs.empty());
+  CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getInheritedPropertyName());
 
   graph->delLocalProperty("test");
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == graph);
-  CPPUNIT_ASSERT(gObserver->getLocalPropertyName() == "test");
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g1);
-  CPPUNIT_ASSERT(gObserver->getInheritedPropertyName() == "test");
+  CPPUNIT_ASSERT_EQUAL(graph, gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(string("test"), gObserver->getLocalPropertyName());
+  CPPUNIT_ASSERT_EQUAL(g1, gObserver->getObservedSubgraph());
+  CPPUNIT_ASSERT_EQUAL(string("test"), gObserver->getInheritedPropertyName());
 
   g2 = g1->addSubGraph();
   g2->addGraphObserver(gObserver);
   gObserver->reset();
-  CPPUNIT_ASSERT(gObserver->graphs.size() == 0);
-  CPPUNIT_ASSERT(gObserver->getLocalPropertyName() == "");
-  CPPUNIT_ASSERT(gObserver->sGraphs.size() == 0);
-  CPPUNIT_ASSERT(gObserver->getInheritedPropertyName() == "");
+  CPPUNIT_ASSERT(gObserver->graphs.empty());
+  CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getLocalPropertyName());
+  CPPUNIT_ASSERT(gObserver->sGraphs.empty());
+  CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getInheritedPropertyName());
 
   bp = g1->getProperty<BooleanProperty>("test1");
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == g1);
-  CPPUNIT_ASSERT(gObserver->getLocalPropertyName() == "test1");
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g2);
-  CPPUNIT_ASSERT(gObserver->getInheritedPropertyName() == "test1");
+  CPPUNIT_ASSERT_EQUAL(g1, gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(string("test1"), gObserver->getLocalPropertyName());
+  CPPUNIT_ASSERT_EQUAL(g2, gObserver->getObservedSubgraph());
+  CPPUNIT_ASSERT_EQUAL(string("test1"), gObserver->getInheritedPropertyName());
 
   gObserver->reset();
-  CPPUNIT_ASSERT(gObserver->graphs.size() == 0);
-  CPPUNIT_ASSERT(gObserver->getLocalPropertyName() == "");
-  CPPUNIT_ASSERT(gObserver->sGraphs.size() == 0);
-  CPPUNIT_ASSERT(gObserver->getInheritedPropertyName() == "");
+  CPPUNIT_ASSERT(gObserver->graphs.empty());
+  CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getLocalPropertyName());
+  CPPUNIT_ASSERT(gObserver->sGraphs.empty());
+  CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getInheritedPropertyName());
 
   g1->delLocalProperty("test1");
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == g1);
-  CPPUNIT_ASSERT(gObserver->getLocalPropertyName() == "test1");
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g2);
-  CPPUNIT_ASSERT(gObserver->getInheritedPropertyName() == "test1");
+  CPPUNIT_ASSERT_EQUAL(g1, gObserver->getObservedGraph());
+  CPPUNIT_ASSERT_EQUAL(string("test1"), gObserver->getLocalPropertyName());
+  CPPUNIT_ASSERT_EQUAL(g2, gObserver->getObservedSubgraph());
+  CPPUNIT_ASSERT_EQUAL(string("test1"), gObserver->getInheritedPropertyName());
 }
 //==========================================================
 void ObservableGraphTest::testObserverWhenRemoveObservable() {
-  CPPUNIT_ASSERT(graph->countGraphObservers() == 1);
+  CPPUNIT_ASSERT_EQUAL(1u, graph->countGraphObservers());
   GraphObserverTest *graphObserverTmp=new GraphObserverTest();
   graph->addGraphObserver(graphObserverTmp);
-  CPPUNIT_ASSERT(graph->countGraphObservers() == 2);
+  CPPUNIT_ASSERT_EQUAL(2u, graph->countGraphObservers());
   delete graphObserverTmp;
-  CPPUNIT_ASSERT(graph->countGraphObservers() == 1);
+  CPPUNIT_ASSERT_EQUAL(1u, graph->countGraphObservers());
 
   /*CPPUNIT_ASSERT(graph->countObservers() == 1);
   ObserverGTest *observerTmp=new ObserverGTest();
@@ -728,30 +727,3 @@ void ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyI
   CPPUNIT_ASSERT(observer->initialized);
   CPPUNIT_ASSERT(observer->inheritedPropertyExist);
 }
-
-//==========================================================
-CppUnit::Test * ObservableGraphTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Add/Del operations (Simple Graph)",
-                         &ObservableGraphTest::testAddDel) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Clean operations (Simple Graph)",
-                         &ObservableGraphTest::testClear) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Edge reversing",
-                         &ObservableGraphTest::testReverse) );
-
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Sub Graph operations (add/del/clean/iterators)",
-                         &ObservableGraphTest::testSubgraph) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test Sub Graph delete",
-                         &ObservableGraphTest::testDeleteSubgraph) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Add/Del  properties operations (Graph & subgraphs)",
-                         &ObservableGraphTest::testAddDelProperties) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test Observer when remove Observable",
-                         &ObservableGraphTest::testObserverWhenRemoveObservable) );
-
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test if the property exist when delInherited function is called",
-                         &ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend) );
-
-
-  return suiteOfTests;
-}
-//==========================================================

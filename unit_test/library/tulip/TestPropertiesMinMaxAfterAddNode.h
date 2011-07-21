@@ -20,20 +20,22 @@
 #include <tulip/Graph.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 class TestPropertiesMinMaxAfterAddNode : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(TestPropertiesMinMaxAfterAddNode);
+    CPPUNIT_TEST(testDoublePropertyMinMaxAfterAddNode);
+    CPPUNIT_TEST(testIntegerPropertyMinMaxAfterAddNode);
+    CPPUNIT_TEST(testLayoutPropertyMinMaxAfterAddNode);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
-
   void setUp();
   void tearDown();
   void testDoublePropertyMinMaxAfterAddNode();
   void testIntegerPropertyMinMaxAfterAddNode();
   void testLayoutPropertyMinMaxAfterAddNode();
 
-  static CppUnit::Test *suite();
-
 private:
-
   tlp::Graph *graph;
 };
