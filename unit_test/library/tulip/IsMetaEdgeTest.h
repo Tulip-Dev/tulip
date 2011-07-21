@@ -21,19 +21,17 @@
 #include <tulip/Matrix.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 class IsMetaEdgeTest : public CppUnit::TestFixture {
-
+  CPPUNIT_TEST_SUITE(IsMetaEdgeTest);
+  CPPUNIT_TEST(testIsMetaEdge);
+  CPPUNIT_TEST_SUITE_END();
 public:
-
   void setUp();
   void tearDown();
   void testIsMetaEdge();
-  static CppUnit::Test *suite();
-
 private:
-
   tlp::Graph *graph;
   tlp::Graph *quotientGraph;
-
 };

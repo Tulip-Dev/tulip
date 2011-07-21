@@ -49,7 +49,6 @@ void createCompleteGraphAndSelect(Graph *graph, BooleanProperty *selection) {
   }
 }
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( IsMetaEdgeTest );
 
 void IsMetaEdgeTest::setUp() {
@@ -96,8 +95,8 @@ void IsMetaEdgeTest::testIsMetaEdge() {
   unsigned int nbMetaEdges = 0;
 
   // check if we have two nodes and one edge in the quotient
-  CPPUNIT_ASSERT(quotientGraph->numberOfNodes() == 2);
-  CPPUNIT_ASSERT(quotientGraph->numberOfEdges() == 1);
+  CPPUNIT_ASSERT_EQUAL(2u, quotientGraph->numberOfNodes());
+  CPPUNIT_ASSERT_EQUAL(1u, quotientGraph->numberOfEdges());
 
   node n;
   forEach(n, quotientGraph->getNodes()) {
@@ -114,22 +113,14 @@ void IsMetaEdgeTest::testIsMetaEdge() {
   }
 
   // check that the two quotient nodes are meta nodes
-  CPPUNIT_ASSERT(nbMetaNodes == 2);
+  CPPUNIT_ASSERT_EQUAL(2u, nbMetaNodes);
 
 
   set<edge> underlyingEdgesInMetaEdge = quotientGraph->getProperty<GraphProperty>("viewMetaGraph")->getEdgeValue(quotientGraph->getOneEdge());
 
   // check the number of underlying edges in meta edge
-  CPPUNIT_ASSERT(underlyingEdgesInMetaEdge.size() == nbNodesPerCluster * nbNodesPerCluster);
+  CPPUNIT_ASSERT_EQUAL((size_t)nbNodesPerCluster * nbNodesPerCluster, underlyingEdgesInMetaEdge.size());
 
   // check if the quotient edge is a meta edge
-  CPPUNIT_ASSERT(nbMetaEdges == 1);
-
-}
-
-CppUnit::Test *IsMetaEdgeTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : MetaEdge" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<IsMetaEdgeTest>( "isMetaEdge test",
-                         &IsMetaEdgeTest::testIsMetaEdge));
-  return suiteOfTests;
+  CPPUNIT_ASSERT_EQUAL(1u, nbMetaEdges);
 }

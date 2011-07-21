@@ -23,10 +23,16 @@
 #include <tulip/IntegerProperty.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 class IntegerPropertyMinMaxSubgraphTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(IntegerPropertyMinMaxSubgraphTest);
+  CPPUNIT_TEST(testIntegerPropertyRootGraphMin);
+  CPPUNIT_TEST(testIntegerPropertyRootGraphMax);
+  CPPUNIT_TEST(testIntegerPropertySubgraphMin);
+  CPPUNIT_TEST(testIntegerPropertySubgraphMax);
+  CPPUNIT_TEST_SUITE_END();
 public:
-
   void setUp();
   void tearDown();
   void testIntegerPropertyRootGraphMin();
@@ -34,10 +40,7 @@ public:
   void testIntegerPropertySubgraphMin();
   void testIntegerPropertySubgraphMax();
 
-  static CppUnit::Test *suite();
-
 private :
-
   tlp::Graph *graph, *subGraph;
 
 };

@@ -22,22 +22,20 @@
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <cppunit/TestFixture.h>
-//#include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 class GraphToolsTest : public CppUnit::TestFixture {
-private:
-  tlp::Graph *graph;
-
+  CPPUNIT_TEST_SUITE(GraphToolsTest);
+  CPPUNIT_TEST(testComputeEqualValueClustering);
+  CPPUNIT_TEST_SUITE_END();
 public:
   void setUp();
   void tearDown();
 
   void testComputeEqualValueClustering();
-
-  static CppUnit::Test *suite();
 private:
-  void build(unsigned int, unsigned int);
+  tlp::Graph *graph;
 };
 
 #endif

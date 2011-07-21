@@ -25,11 +25,23 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 namespace tlp {
 
 class PlanarConMapTest : public CppUnit::TestFixture {
-
+  CPPUNIT_TEST_SUITE(PlanarConMapTest);
+  CPPUNIT_TEST(testAddEdgeMap);
+  CPPUNIT_TEST(testDelEdgeMap);
+  CPPUNIT_TEST(testNbFaces);
+  CPPUNIT_TEST(testUpdate);
+  CPPUNIT_TEST(testMergeFaces);
+  CPPUNIT_TEST(testSplitFace);
+  CPPUNIT_TEST(testSuccCycleEdge);
+  CPPUNIT_TEST(testPrecCycleEdge);
+  CPPUNIT_TEST(testComputeFaces);
+  CPPUNIT_TEST_SUITE_END();
+  
 private :
   tlp::Graph* graph;
   tlp::PlanarConMap* carte;
@@ -68,9 +80,6 @@ public :
   void testPrecCycleEdge();
 
   void testComputeFaces();
-
-  static CppUnit::Test *suite();
-
 };
 
 }

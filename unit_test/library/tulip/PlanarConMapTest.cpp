@@ -21,7 +21,6 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( tlp::PlanarConMapTest );
 
 using namespace std;
@@ -147,10 +146,10 @@ void PlanarConMapTest::testAddEdgeMap() {
     }
 
     delete it;
-    CPPUNIT_ASSERT_MESSAGE(" test 1 AddEdgeMap cycle ",tmp == cycles[i]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 1 AddEdgeMap cycle ", cycles[i], tmp);
   }
 
-  CPPUNIT_ASSERT_MESSAGE(" test 1 AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 1 AddEdgeMap dispositif decorateur ", graph->numberOfEdges(), carte->numberOfEdges());
 
   /* test 2 */
   build2();
@@ -188,10 +187,10 @@ void PlanarConMapTest::testAddEdgeMap() {
     }
 
     delete it;
-    CPPUNIT_ASSERT_MESSAGE(" test 2 AddEdgeMap cycle ",tmp == cycles2[i]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 2 AddEdgeMap cycle ", cycles2[i], tmp);
   }
 
-  CPPUNIT_ASSERT_MESSAGE(" test 2 AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 2 AddEdgeMap dispositif decorateur ", graph->numberOfEdges(), carte->numberOfEdges());
 
   /* test 3 */
   build4();
@@ -256,10 +255,11 @@ void PlanarConMapTest::testAddEdgeMap() {
     }
 
     delete it;
-    CPPUNIT_ASSERT_MESSAGE(" test 2 AddEdgeMap cycle ",tmp == cycles3[i]);
-  }
 
-  CPPUNIT_ASSERT_MESSAGE(" test 2 AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 3 AddEdgeMap cycle ", cycles3[i], tmp);
+  }
+  
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 3 AddEdgeMap dispositif decorateur ", graph->numberOfEdges(), carte->numberOfEdges());
 }
 
 //============================================================
@@ -300,10 +300,10 @@ void PlanarConMapTest::testDelEdgeMap() {
     }
 
     delete it;
-    CPPUNIT_ASSERT_MESSAGE(" test DelEdgeMap cycle ",tmp == cycles[i]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(" test DelEdgeMap cycle ", cycles[i], tmp);
   }
 
-  CPPUNIT_ASSERT_MESSAGE(" test AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test AddEdgeMap dispositif decorateur ", graph->numberOfEdges(), carte->numberOfEdges());
   carte->clear();
 }
 
@@ -311,7 +311,7 @@ void PlanarConMapTest::testDelEdgeMap() {
 void PlanarConMapTest::testNbFaces() {
 
   build();
-  CPPUNIT_ASSERT_MESSAGE(" test nbFaces ",2 == carte->nbFaces());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test nbFaces ", 2, carte->nbFaces());
   carte->clear();
 }
 
@@ -323,7 +323,7 @@ void PlanarConMapTest::testUpdate() {
   unsigned int tmp = carte->nbFaces();
   edge e = graph->addEdge(nodes[0],nodes[2]);
   carte->update();
-  CPPUNIT_ASSERT_MESSAGE(" test update() ", (tmp+1) == carte->nbFaces());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test update() ", (tmp+1), carte->nbFaces());
 }
 
 //============================================================
@@ -364,10 +364,10 @@ void PlanarConMapTest::testMergeFaces() {
     }
 
     delete it;
-    CPPUNIT_ASSERT_MESSAGE(" test DelEdgeMap cycle ",tmp == cycles[i]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(" test DelEdgeMap cycle ",tmp, cycles[i]);
   }
 
-  CPPUNIT_ASSERT_MESSAGE(" test AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test AddEdgeMap dispositif decorateur ",carte->numberOfEdges(), graph->numberOfEdges());
   carte->clear();
 
 }
@@ -412,10 +412,10 @@ void PlanarConMapTest::testSplitFace() {
     }
 
     delete it;
-    CPPUNIT_ASSERT_MESSAGE(" test AddEdgeMap cycle ",tmp == cycles[i]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(" test AddEdgeMap cycle ",tmp, cycles[i]);
   }
 
-  CPPUNIT_ASSERT_MESSAGE(" test AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test AddEdgeMap dispositif decorateur ", graph->numberOfEdges(), carte->numberOfEdges());
 
   /* test 2 */
   build4();
@@ -484,11 +484,10 @@ void PlanarConMapTest::testSplitFace() {
     }
 
     delete it;
-    CPPUNIT_ASSERT_MESSAGE(" test 2 AddEdgeMap cycle ",tmp == cycles3[i]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 2 AddEdgeMap cycle ",tmp == cycles3[i]);
   }
 
-  CPPUNIT_ASSERT_MESSAGE(" test 2 AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
-
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 2 AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
 }
 
 //============================================================
@@ -508,12 +507,12 @@ void PlanarConMapTest::testSuccCycleEdge() {
   Iterator<edge>* it = carte->getInOutEdges(nodes[0]);
   edge e = it->next();
   delete it;
-  CPPUNIT_ASSERT_MESSAGE(" test SuccCycleEdge deb",e == cycles[0]);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test SuccCycleEdge deb", cycles[0], e);
 
   do {
     e = carte->succCycleEdge(e,nodes[0]);
     i++;
-    CPPUNIT_ASSERT_MESSAGE(string(" test SuccCycleEdge cycle "),e == cycles[i]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(string(" test SuccCycleEdge cycle "), cycles[i], e);
   }
   while(e != edges[0] && i<4);
 
@@ -536,12 +535,12 @@ void PlanarConMapTest::testPrecCycleEdge() {
   Iterator<edge>* it = carte->getInOutEdges(nodes[0]);
   edge e = it->next();
   delete it;
-  CPPUNIT_ASSERT_MESSAGE(" test predCycleEdge deb",e == cycles[0]);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test predCycleEdge deb", cycles[0], e);
 
   do {
     e = carte->predCycleEdge(e,nodes[0]);
     i++;
-    CPPUNIT_ASSERT_MESSAGE(string(" test predCycleEdge cycle "),e == cycles[i]);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(string(" test predCycleEdge cycle "), cycles[i], e);
   }
   while((e != edges[0]) && (i<4));
 
@@ -555,36 +554,20 @@ void PlanarConMapTest::testComputeFaces() {
   int fc = carte->nbFaces();
   int e = carte->numberOfEdges();
   int n = carte->numberOfNodes();
-  CPPUNIT_ASSERT_MESSAGE(" test ComputesFaces 1", fc == e - n + 2);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test ComputesFaces 1", e - n + 2, fc );
   carte->clear();
 
   build2();
   fc = carte->nbFaces();
   e = carte->numberOfEdges();
   n = carte->numberOfNodes();
-  CPPUNIT_ASSERT_MESSAGE(" test ComputesFaces 2", fc == e - n + 2);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test ComputesFaces 2", e - n + 2, fc);
   carte->clear();
 
   build3();
   fc = carte->nbFaces();
   e = carte->numberOfEdges();
   n = carte->numberOfNodes();
-  CPPUNIT_ASSERT_MESSAGE(" test ComputesFaces 3 ", fc == e - n + 2);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test ComputesFaces 3 ", e - n + 2, fc);
   carte->clear();
 }
-
-//============================================================
-CppUnit::Test* PlanarConMapTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite;
-  suiteOfTests->addTest(new CppUnit::TestCaller<PlanarConMapTest>("testComputeFaces", &PlanarConMapTest::testComputeFaces));
-  suiteOfTests->addTest(new CppUnit::TestCaller<PlanarConMapTest>("testNbFaces", &PlanarConMapTest::testNbFaces));
-  suiteOfTests->addTest(new CppUnit::TestCaller<PlanarConMapTest>("testSuccCycleEdge", &PlanarConMapTest::testSuccCycleEdge));
-  suiteOfTests->addTest(new CppUnit::TestCaller<PlanarConMapTest>("testPrecCycleEdge", &PlanarConMapTest::testPrecCycleEdge));
-  suiteOfTests->addTest(new CppUnit::TestCaller<PlanarConMapTest>("testAddEdgeMap", &PlanarConMapTest::testAddEdgeMap));
-  suiteOfTests->addTest(new CppUnit::TestCaller<PlanarConMapTest>("testAddEdgeMap", &PlanarConMapTest::testDelEdgeMap));
-  suiteOfTests->addTest(new CppUnit::TestCaller<PlanarConMapTest>("testSplitFace", &PlanarConMapTest::testMergeFaces));
-  suiteOfTests->addTest(new CppUnit::TestCaller<PlanarConMapTest>("testSplitFace", &PlanarConMapTest::testSplitFace));
-  suiteOfTests->addTest(new CppUnit::TestCaller<PlanarConMapTest>("testUpdate", &PlanarConMapTest::testUpdate));
-  return suiteOfTests;
-}
-//============================================================

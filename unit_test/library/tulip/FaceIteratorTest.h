@@ -21,37 +21,31 @@
 #define Tulip_FaceIteratorTest_h
 
 #include <tulip/FaceIterator.h>
+#include <tulip/PlanarConMap.h>
 #include <tulip/TlpTools.h>
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 class FaceIteratorTest : public CppUnit::TestFixture {
-
+  CPPUNIT_TEST_SUITE(FaceIteratorTest);
+  CPPUNIT_TEST(testNodeFaceIterator);
+  CPPUNIT_TEST(testFaceAdjIterator);
+  CPPUNIT_TEST_SUITE_END();
+  
 private :
-  PlanarConMap* carte;
+  tlp::PlanarConMap* map;
 
-  std::vector<edge> edges;
-  std::vector<node> nodes;
-
-  void build();
+  std::vector<tlp::edge> edges;
+  std::vector<tlp::node> nodes;
 
 public :
-  void setUp() {
-    carte = computePlanarConMap(tlp::newGraph());
-    edges.clear();
-    nodes.clear();
-  }
-
-  void tearDown() {
-    delete carte;
-  }
+  void setUp();
+  void tearDown();
 
   void testNodeFaceIterator();
   void testFaceAdjIterator();
-
-  static CppUnit::Test *suite();
-
 };
 
 #endif

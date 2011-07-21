@@ -32,11 +32,8 @@ const double originalMin = 5;
 const double originalMax = 10;
 
 const double newMin = 1;
-const string newStringMin = "1";
 const double newMax = 15;
-const string newStringMax = "15";
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( DoublePropertyTest );
 
 void DoublePropertyTest::setUp() {
@@ -64,44 +61,48 @@ void DoublePropertyTest::testDoublePropertyMinUpdate() {
   double minNode;
 
   minNode = graph->getLocalProperty<DoubleProperty>(doublePropertyName)->getNodeMin();
-  CPPUNIT_ASSERT_MESSAGE("test DoubleProperty min value before update", minNode == originalMin);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test DoubleProperty min value before update", originalMin, minNode);
 
   graph->getLocalProperty<DoubleProperty>(doublePropertyName)->setNodeValue(n1, newMin);
   minNode = graph->getLocalProperty<DoubleProperty>(doublePropertyName)->getNodeMin();
-  CPPUNIT_ASSERT_MESSAGE("test DoubleProperty min value after update", minNode == newMin);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test DoubleProperty min value after update", newMin, minNode);
 }
 
 void DoublePropertyTest::testDoublePropertyMaxUpdate() {
   double maxNode;
 
   maxNode = graph->getLocalProperty<DoubleProperty>(doublePropertyName)->getNodeMax();
-  CPPUNIT_ASSERT_MESSAGE("test DoubleProperty max value before update", maxNode == originalMax);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test DoubleProperty max value before update", originalMax, maxNode);
 
   graph->getLocalProperty<DoubleProperty>(doublePropertyName)->setNodeValue(n4, newMax);
   maxNode = graph->getLocalProperty<DoubleProperty>(doublePropertyName)->getNodeMax();
-  CPPUNIT_ASSERT_MESSAGE("test DoubleProperty max value after update", maxNode == newMax);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test DoubleProperty max value after update", newMax, maxNode);
 }
 
 void DoublePropertyTest::testDoublePropertyMinUpdateFromString() {
   double minNode;
 
   minNode = graph->getLocalProperty<DoubleProperty>(doublePropertyName)->getNodeMin();
-  CPPUNIT_ASSERT_MESSAGE("test DoubleProperty min value before update", minNode == originalMin);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test DoubleProperty min value before update", originalMin, minNode);
 
+  const string newStringMin = "1";
+  
   graph->getLocalProperty<DoubleProperty>(doublePropertyName)->setNodeStringValue(n1, newStringMin);
   minNode = graph->getLocalProperty<DoubleProperty>(doublePropertyName)->getNodeMin();
-  CPPUNIT_ASSERT_MESSAGE("test DoubleProperty min value after update", minNode == newMin);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test DoubleProperty min value after update", newMin, minNode);
 }
 
 void DoublePropertyTest::testDoublePropertyMaxUpdateFromString() {
   double maxNode;
 
   maxNode = graph->getLocalProperty<DoubleProperty>(doublePropertyName)->getNodeMax();
-  CPPUNIT_ASSERT_MESSAGE("test DoubleProperty max value before update", maxNode == originalMax);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test DoubleProperty max value before update", originalMax, maxNode);
 
+  const string newStringMax = "15";
+  
   graph->getLocalProperty<DoubleProperty>(doublePropertyName)->setNodeStringValue(n4, newStringMax);
   maxNode = graph->getLocalProperty<DoubleProperty>(doublePropertyName)->getNodeMax();
-  CPPUNIT_ASSERT_MESSAGE("test DoubleProperty max value after update", maxNode == newMax);
+  CPPUNIT_ASSERT_EQUAL_MESSAGE("test DoubleProperty max value after update", newMax, maxNode);
 }
 
 void DoublePropertyTest::testDoublePropertySubGraphMin() {
@@ -111,45 +112,31 @@ void DoublePropertyTest::testDoublePropertySubGraphMin() {
   doubleProperty->setNodeValue(n2, 6);
   node n3 = subGraph->addNode();
   doubleProperty->setNodeValue(n3, 9);
-  CPPUNIT_ASSERT(doubleProperty->getNodeMin() == originalMin);
-  CPPUNIT_ASSERT(doubleProperty->getNodeMin(subGraph) == 6);
+  CPPUNIT_ASSERT_EQUAL(originalMin, doubleProperty->getNodeMin());
+  CPPUNIT_ASSERT_EQUAL(6.0, doubleProperty->getNodeMin(subGraph));
 
   subGraph->delNode(n2);
-  CPPUNIT_ASSERT(doubleProperty->getNodeMin(subGraph) == 9);
-  CPPUNIT_ASSERT(doubleProperty->getNodeMin() == originalMin);
+  CPPUNIT_ASSERT_EQUAL(9.0, doubleProperty->getNodeMin(subGraph));
+  CPPUNIT_ASSERT_EQUAL(originalMin, doubleProperty->getNodeMin());
   graph->delNode(n1);
-  CPPUNIT_ASSERT(doubleProperty->getNodeMin(subGraph) == 9);
-  CPPUNIT_ASSERT(doubleProperty->getNodeMin() == 6);
+  CPPUNIT_ASSERT_EQUAL(9.0, doubleProperty->getNodeMin(subGraph));
+  CPPUNIT_ASSERT_EQUAL(6.0, doubleProperty->getNodeMin());
 }
 
 void DoublePropertyTest::testDoublePropertySubGraphMax() {
   DoubleProperty *doubleProperty = graph->getProperty<DoubleProperty>(doublePropertyName);
   Graph* subGraph = graph->addSubGraph();
   node n2 = subGraph->addNode();
-  doubleProperty->setNodeValue(n2, 6);
+  doubleProperty->setNodeValue(n2, 6.0);
   node n3 = subGraph->addNode();
-  doubleProperty->setNodeValue(n3, 9);
-  CPPUNIT_ASSERT(doubleProperty->getNodeMax() == originalMax);
-  CPPUNIT_ASSERT(doubleProperty->getNodeMax(subGraph) == 9);
+  doubleProperty->setNodeValue(n3, 9.0);
+  CPPUNIT_ASSERT_EQUAL(doubleProperty->getNodeMax(), originalMax);
+  CPPUNIT_ASSERT_EQUAL(9.0, doubleProperty->getNodeMax(subGraph));
 
   subGraph->delNode(n3);
-  CPPUNIT_ASSERT(doubleProperty->getNodeMax() == originalMax);
-  CPPUNIT_ASSERT(doubleProperty->getNodeMax(subGraph) == 6);
+  CPPUNIT_ASSERT_EQUAL(doubleProperty->getNodeMax(), originalMax);
+  CPPUNIT_ASSERT_EQUAL(6.0, doubleProperty->getNodeMax(subGraph));
   graph->delNode(n4);
-  CPPUNIT_ASSERT(doubleProperty->getNodeMax(subGraph) == 6);
-  CPPUNIT_ASSERT(doubleProperty->getNodeMax() == 9);
-}
-
-//==========================================================
-CppUnit::Test * DoublePropertyTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Double Property" );
-
-  suiteOfTests->addTest(new CppUnit::TestCaller<DoublePropertyTest>(" Min update", &DoublePropertyTest::testDoublePropertyMinUpdate));
-  suiteOfTests->addTest(new CppUnit::TestCaller<DoublePropertyTest>(" Max update", &DoublePropertyTest::testDoublePropertyMaxUpdate));
-  suiteOfTests->addTest(new CppUnit::TestCaller<DoublePropertyTest>(" Min update from string", &DoublePropertyTest::testDoublePropertyMinUpdateFromString));
-  suiteOfTests->addTest(new CppUnit::TestCaller<DoublePropertyTest>(" Max update from string", &DoublePropertyTest::testDoublePropertyMaxUpdateFromString));
-  suiteOfTests->addTest(new CppUnit::TestCaller<DoublePropertyTest>(" Min update on subgraph", &DoublePropertyTest::testDoublePropertySubGraphMin));
-  suiteOfTests->addTest(new CppUnit::TestCaller<DoublePropertyTest>(" Max update on subgraph", &DoublePropertyTest::testDoublePropertySubGraphMax));
-
-  return suiteOfTests;
+  CPPUNIT_ASSERT_EQUAL(6.0, doubleProperty->getNodeMax(subGraph));
+  CPPUNIT_ASSERT_EQUAL(9.0, doubleProperty->getNodeMax());
 }

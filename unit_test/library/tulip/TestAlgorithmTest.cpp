@@ -34,9 +34,7 @@
 using namespace std;
 using namespace tlp;
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( TestAlgorithmTest );
-
 
 //==========================================================
 void TestAlgorithmTest::setUp() {
@@ -54,9 +52,9 @@ void TestAlgorithmTest::testSimple() {
 void TestAlgorithmTest::testFreeTree() {
   node n1 = graph->addNode();
   edge e = graph->addEdge(n1, n1);
-  CPPUNIT_ASSERT(TreeTest::isFreeTree(graph) == false);
+  CPPUNIT_ASSERT(!TreeTest::isFreeTree(graph));
   graph->delEdge(e);
-  CPPUNIT_ASSERT(TreeTest::isFreeTree(graph) == true);
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
   node n2 = graph->addNode();
   node n3 = graph->addNode();
   CPPUNIT_ASSERT(!TreeTest::isTree(graph));
@@ -67,7 +65,7 @@ void TestAlgorithmTest::testFreeTree() {
   CPPUNIT_ASSERT(!TreeTest::isFreeTree(graph));
   edge e2 = graph->addEdge(n4, n1);
   CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
-  CPPUNIT_ASSERT(TreeTest::isTree(graph) == false);
+  CPPUNIT_ASSERT(!TreeTest::isTree(graph));
   Graph* clone = tlp::newCloneSubGraph(graph);
   CPPUNIT_ASSERT(TreeTest::isFreeTree(clone));
   clone->reverse(e1);
@@ -78,7 +76,7 @@ void TestAlgorithmTest::testFreeTree() {
   CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
   clone->delEdge(e1);
   CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
-  CPPUNIT_ASSERT(TreeTest::isFreeTree(clone) == false);
+  CPPUNIT_ASSERT(!TreeTest::isFreeTree(clone));
   clone->delNode(n3);
   CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
   CPPUNIT_ASSERT(TreeTest::isFreeTree(clone));
@@ -123,6 +121,7 @@ void TestAlgorithmTest::testTree() {
 }
 //==========================================================
 void TestAlgorithmTest::testAcyclic() {
+  //TODO check this test, as it was not executed for some time
   graph->clear();
   node n1 = graph->addNode();
   node n2 = graph->addNode();
@@ -135,7 +134,7 @@ void TestAlgorithmTest::testAcyclic() {
   edge e1 = clone->addEdge(n2, n3);
   CPPUNIT_ASSERT(AcyclicTest::isAcyclic(graph));
   CPPUNIT_ASSERT(AcyclicTest::isAcyclic(clone));
-  edge e2 = graph->addEdge(n3, n1);
+  edge e2 = clone->addEdge(n3, n1);
   CPPUNIT_ASSERT(!AcyclicTest::isAcyclic(graph));
   CPPUNIT_ASSERT(!AcyclicTest::isAcyclic(clone));
   clone->reverse(e2);
@@ -143,7 +142,7 @@ void TestAlgorithmTest::testAcyclic() {
   CPPUNIT_ASSERT(AcyclicTest::isAcyclic(clone));
   clone->delEdge(e2);
   CPPUNIT_ASSERT(AcyclicTest::isAcyclic(graph));
-  CPPUNIT_ASSERT(!AcyclicTest::isAcyclic(clone));
+  CPPUNIT_ASSERT(AcyclicTest::isAcyclic(clone));
 }
 //==========================================================
 void TestAlgorithmTest::testConnected() {
@@ -161,9 +160,9 @@ void TestAlgorithmTest::testConnected() {
   vector<edge> addedEdge;
   ConnectedTest::makeConnected(graph, addedEdge);
   CPPUNIT_ASSERT(ConnectedTest::isConnected(graph));
-  CPPUNIT_ASSERT(addedEdge.size() == 1u);
+  CPPUNIT_ASSERT_EQUAL(size_t(1), addedEdge.size());
   graph->delEdge(addedEdge[0]);
-  CPPUNIT_ASSERT(ConnectedTest::numberOfConnectedComponents(graph) == 2u);
+  CPPUNIT_ASSERT_EQUAL(2u, ConnectedTest::numberOfConnectedComponents(graph));
 }
 //==========================================================
 const std::string GRAPHPATH = "./DATA/graphs/";
@@ -241,23 +240,3 @@ void TestAlgorithmTest::testBiconnected() {
 void TestAlgorithmTest::testTriconnected() {
   cerr << __FUNCTION__ << " : not implemented" << endl;
 }
-//==========================================================
-CppUnit::Test * TestAlgorithmTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph Test" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Simple test",
-                         &TestAlgorithmTest::testSimple ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Free Tree test",
-                         &TestAlgorithmTest::testFreeTree ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Tree test",
-                         &TestAlgorithmTest::testTree ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Acyclic test",
-                         &TestAlgorithmTest::testTree ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Biconnected test",
-                         &TestAlgorithmTest::testBiconnected ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Connected test",
-                         &TestAlgorithmTest::testConnected ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Triconnected test",
-                         &TestAlgorithmTest::testTriconnected ) );
-  return suiteOfTests;
-}
-//==========================================================

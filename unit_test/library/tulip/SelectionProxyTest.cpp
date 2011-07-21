@@ -24,8 +24,6 @@
 using namespace std;
 using namespace tlp;
 
-#include <cppunit/extensions/HelperMacros.h>
-
 // Warning SelectionProxy has been renamed in BooleanAlgorithm
 
 CPPUNIT_TEST_SUITE_REGISTRATION( SelectionProxyTest );
@@ -60,7 +58,7 @@ void SelectionProxyTest::testIterators() {
     Iterator<node> *itSE = selection->getNodesEqualTo(true);
 
     while (itSG->hasNext() && itSE->hasNext()) {
-      CPPUNIT_ASSERT(itSG->next()==itSE->next());
+      CPPUNIT_ASSERT_EQUAL(itSG->next(), itSE->next());
     }
 
     CPPUNIT_ASSERT(!itSG->hasNext());
@@ -73,7 +71,7 @@ void SelectionProxyTest::testIterators() {
     Iterator<edge> *itSE = selection->getEdgesEqualTo(true);
 
     while (itSG->hasNext() && itSE->hasNext()) {
-      CPPUNIT_ASSERT(itSG->next()==itSE->next());
+      CPPUNIT_ASSERT_EQUAL(itSG->next(), itSE->next());
     }
 
     CPPUNIT_ASSERT(!itSG->hasNext());
@@ -90,14 +88,14 @@ void SelectionProxyTest::testSetAll(bool value) {
   Iterator<node> *itN=graph->getNodes();
 
   while(itN->hasNext()) {
-    CPPUNIT_ASSERT( selection->getNodeValue(itN->next()) == value );
+    CPPUNIT_ASSERT_EQUAL(value, selection->getNodeValue(itN->next()));
   }
 
   delete itN;
   Iterator<edge> *itE=graph->getEdges();
 
   while(itE->hasNext()) {
-    CPPUNIT_ASSERT( selection->getEdgeValue(itE->next()) == value );
+    CPPUNIT_ASSERT_EQUAL(value, selection->getEdgeValue(itE->next()));
   }
 
   delete itE;
@@ -134,13 +132,13 @@ void SelectionProxyTest::testSetGet(bool value) {
   for (unsigned int i=0; i<graph->numberOfNodes()*10; ++i) {
     unsigned int rando=rand()%graph->numberOfNodes();
     selection->setNodeValue(nodes[rando],!value);
-    CPPUNIT_ASSERT( selection->getNodeValue(nodes[rando]) == !value );
+    CPPUNIT_ASSERT_EQUAL(!value, selection->getNodeValue(nodes[rando]));
   }
 
   for (unsigned int i=0; i<graph->numberOfEdges()*10; ++i) {
     unsigned int rando=rand()%graph->numberOfEdges();
     selection->setEdgeValue(edges[rando],!value);
-    CPPUNIT_ASSERT( selection->getEdgeValue(edges[rando]) == !value );
+    CPPUNIT_ASSERT_EQUAL(!value, selection->getEdgeValue(edges[rando]));
   }
 }
 //==========================================================
@@ -170,13 +168,13 @@ void SelectionProxyTest::testCopy() {
   for (unsigned int i=0; i<graph->numberOfNodes()*10; ++i) {
     unsigned int rando=rand()%graph->numberOfNodes();
     selection->setNodeValue(nodes[rando],!value);
-    CPPUNIT_ASSERT( selection->getNodeValue(nodes[rando]) == !value );
+    CPPUNIT_ASSERT_EQUAL(!value, selection->getNodeValue(nodes[rando]));
   }
 
   for (unsigned int i=0; i<graph->numberOfEdges()*10; ++i) {
     unsigned int rando=rand()%graph->numberOfEdges();
     selection->setEdgeValue(edges[rando],!value);
-    CPPUNIT_ASSERT( selection->getEdgeValue(edges[rando]) == !value );
+    CPPUNIT_ASSERT_EQUAL(!value, selection->getEdgeValue(edges[rando]));
   }
 
   BooleanProperty tmp(graph);
@@ -216,35 +214,19 @@ void SelectionProxyTest::testDelete(bool value) {
 
   delete itN;
   selection->setNodeValue(n, !value);
-  CPPUNIT_ASSERT(selection->getNodeValue(n) == !value);
+  CPPUNIT_ASSERT_EQUAL(!value, selection->getNodeValue(n));
   graph->delNode(n);
   n = graph->addNode();
-  CPPUNIT_ASSERT(selection->getNodeValue(n) == value);
+  CPPUNIT_ASSERT_EQUAL(value, selection->getNodeValue(n));
   edge e = graph->addEdge(n, n);
   selection->setEdgeValue(e, !value);
-  CPPUNIT_ASSERT(selection->getEdgeValue(e) == !value);
+  CPPUNIT_ASSERT_EQUAL(!value, selection->getEdgeValue(e));
   graph->delEdge(e);
   e = graph->addEdge(n, n);
-  CPPUNIT_ASSERT(selection->getEdgeValue(e) == value);
+  CPPUNIT_ASSERT_EQUAL(value, selection->getEdgeValue(e));
 }
 //==========================================================
 void SelectionProxyTest::testDelete() {
   testDelete(false);
   testDelete(true);
-}
-//==========================================================
-
-CppUnit::Test * SelectionProxyTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : BooleanProperty" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test iterators",
-                         &SelectionProxyTest::testIterators ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test setAll",
-                         &SelectionProxyTest::testSetAll ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test set/get",
-                         &SelectionProxyTest::testSetGet ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test copy operator",
-                         &SelectionProxyTest::testCopy ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test delete",
-                         &SelectionProxyTest::testDelete ) );
-  return suiteOfTests;
 }

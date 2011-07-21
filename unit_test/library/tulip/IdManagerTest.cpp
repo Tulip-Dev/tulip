@@ -24,7 +24,6 @@
 using namespace std;
 using namespace tlp;
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( IdManagerTest );
 
 //==========================================================
@@ -37,17 +36,17 @@ void IdManagerTest::testFragmentation() {
     idManager->free(i);
   }
 
-  CPPUNIT_ASSERT_EQUAL((size_t) 99, idManager->state.freeIds.size());
+  CPPUNIT_ASSERT_EQUAL((size_t)99, idManager->state.freeIds.size());
   idManager->free(0);
-  CPPUNIT_ASSERT_EQUAL((size_t) 0, idManager->state.freeIds.size());
+  CPPUNIT_ASSERT_EQUAL((size_t)0, idManager->state.freeIds.size());
 
   for (unsigned int i = 900; i <999; ++i) {
     idManager->free(i);
   }
 
-  CPPUNIT_ASSERT_EQUAL((size_t) 99, idManager->state.freeIds.size());
+  CPPUNIT_ASSERT_EQUAL((size_t)99, idManager->state.freeIds.size());
   idManager->free(999);
-  CPPUNIT_ASSERT_EQUAL((size_t) 100, idManager->state.freeIds.size());
+  CPPUNIT_ASSERT_EQUAL((size_t)100, idManager->state.freeIds.size());
 }
 //==========================================================
 void IdManagerTest::testGetFree() {
@@ -65,9 +64,9 @@ void IdManagerTest::testGetFree() {
 
   for (unsigned int i = 1; i < 500; ++i) {
 #ifdef TLP_NO_IDS_REUSE
-    CPPUNIT_ASSERT(idManager->get() == ++maxId);
+    CPPUNIT_ASSERT_EQUAL(++maxId, idManager->get());
 #else
-    CPPUNIT_ASSERT(idManager->get() == i*2);
+    CPPUNIT_ASSERT_EQUAL(i*2, idManager->get());
 #endif
   }
 
@@ -77,9 +76,9 @@ void IdManagerTest::testGetFree() {
 
   for (unsigned int i = 100; i <= 200; ++i) {
 #ifdef TLP_NO_IDS_REUSE
-    CPPUNIT_ASSERT(idManager->get() == ++maxId);
+    CPPUNIT_ASSERT_EQUAL(++maxId, idManager->get());
 #else
-    CPPUNIT_ASSERT(idManager->get() == i);
+    CPPUNIT_ASSERT_EQUAL(i, idManager->get());
 #endif
   }
 }
@@ -94,11 +93,11 @@ void IdManagerTest::testIsFree() {
   }
 
   for (unsigned int i = 0; i < 500; ++i) {
-    CPPUNIT_ASSERT_EQUAL( true , idManager->is_free(i * 2));
-    CPPUNIT_ASSERT_EQUAL( false, idManager->is_free(i * 2 + 1));
+    CPPUNIT_ASSERT(idManager->is_free(i * 2));
+    CPPUNIT_ASSERT(!idManager->is_free(i * 2 + 1));
   }
 
-  CPPUNIT_ASSERT_EQUAL( true , idManager->is_free(1200));
+  CPPUNIT_ASSERT(idManager->is_free(1200));
 }
 //==========================================================
 void IdManagerTest::testIterate() {
@@ -110,7 +109,7 @@ void IdManagerTest::testIterate() {
   unsigned int id = 0;
 
   while(it->hasNext()) {
-    CPPUNIT_ASSERT(it->next() == id);
+    CPPUNIT_ASSERT_EQUAL(id, it->next());
     ++id;
   }
 
@@ -124,30 +123,16 @@ void IdManagerTest::testIterate() {
   id = 0;
 
   while(it->hasNext()) {
-    CPPUNIT_ASSERT(it->next() == 2 * id + 1);
+    CPPUNIT_ASSERT_EQUAL(2u * id + 1u, it->next());
     ++id;
   }
 
   delete it;
 
   for (unsigned int i = 0; i < 500; ++i) {
-    CPPUNIT_ASSERT_EQUAL( true , idManager->is_free(i * 2));
-    CPPUNIT_ASSERT_EQUAL( false, idManager->is_free(i * 2 + 1));
+    CPPUNIT_ASSERT(idManager->is_free(i * 2));
+    CPPUNIT_ASSERT(!idManager->is_free(i * 2 + 1));
   }
 
-  CPPUNIT_ASSERT_EQUAL( true , idManager->is_free(1200));
+  CPPUNIT_ASSERT(idManager->is_free(1200));
 }
-//==========================================================
-CppUnit::Test * IdManagerTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : IdManager" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<IdManagerTest>( "Is Free test",
-                         &IdManagerTest::testIsFree ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<IdManagerTest>( "Iterate test",
-                         &IdManagerTest::testIterate ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<IdManagerTest>( "Get / Free Id",
-                         &IdManagerTest::testGetFree ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<IdManagerTest>( "Fragmentation",
-                         &IdManagerTest::testFragmentation ) );
-  return suiteOfTests;
-}
-//==========================================================

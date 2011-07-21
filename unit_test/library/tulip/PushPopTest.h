@@ -22,10 +22,24 @@
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <cppunit/TestFixture.h>
-//#include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 class PushPopTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(PushPopTest);
+  CPPUNIT_TEST(testAddDel);
+  CPPUNIT_TEST(testSetValue);
+  CPPUNIT_TEST(testSetEltValue);
+  CPPUNIT_TEST(testVectorValue);
+  CPPUNIT_TEST(testSetEnds);
+  CPPUNIT_TEST(testCopyProperty);
+  CPPUNIT_TEST(testSubgraph);
+  CPPUNIT_TEST(testTests);
+  CPPUNIT_TEST(testAddDelProps);
+  CPPUNIT_TEST(testObserveDelProps);
+  CPPUNIT_TEST(testAddSubgraphProp);
+  CPPUNIT_TEST(testMetaNode);
+  CPPUNIT_TEST_SUITE_END();
 private:
   tlp::Graph *graph;
 
@@ -45,8 +59,6 @@ public:
   void testObserveDelProps();
   void testAddSubgraphProp();
   void testMetaNode();
-
-  static CppUnit::Test *suite();
 private:
   void build(unsigned int, unsigned int);
 };

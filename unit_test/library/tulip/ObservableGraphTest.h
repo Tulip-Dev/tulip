@@ -22,10 +22,20 @@
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <cppunit/TestFixture.h>
-//#include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 class ObservableGraphTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(ObservableGraphTest);
+  CPPUNIT_TEST(testAddDel);
+  CPPUNIT_TEST(testAddDelProperties);
+  CPPUNIT_TEST(testClear);
+  CPPUNIT_TEST(testSubgraph);
+  CPPUNIT_TEST(testDeleteSubgraph);
+  CPPUNIT_TEST(testReverse);
+  CPPUNIT_TEST(testObserverWhenRemoveObservable);
+  CPPUNIT_TEST(testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend);
+  CPPUNIT_TEST_SUITE_END();
 private:
   tlp::Graph *graph;
 
@@ -36,14 +46,11 @@ public:
   void testAddDel();
   void testAddDelProperties();
   void testClear();
-  void testOrderEdgeAndSwap();
   void testSubgraph();
   void testDeleteSubgraph();
   void testReverse();
   void testObserverWhenRemoveObservable();
   void testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend();
-
-  static CppUnit::Test *suite();
 };
 
 #endif

@@ -23,8 +23,16 @@
 #include <tulip/Graph.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 class ExtendedClusterOperationTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(ExtendedClusterOperationTest);
+  CPPUNIT_TEST(testCreateMetaNode);
+  CPPUNIT_TEST(testBugCreateOpenMetaNode);
+  CPPUNIT_TEST(testBugOpenInSubgraph);
+  CPPUNIT_TEST(testOpenMetaNode);
+  CPPUNIT_TEST(testOpenMetaNodes);
+  CPPUNIT_TEST_SUITE_END();
 private:
   tlp::Graph *graph,*quotient;
   tlp::node meta;
@@ -37,11 +45,8 @@ public:
   void testCreateMetaNode();
   void testBugCreateOpenMetaNode();
   void testBugOpenInSubgraph();
-  //  void testExtractNodeFromMetaNode();
-  //  void testAddNodeToMetaNode();
   void testOpenMetaNode();
   void testOpenMetaNodes();
-  static CppUnit::Test *suite();
 };
 
 #endif

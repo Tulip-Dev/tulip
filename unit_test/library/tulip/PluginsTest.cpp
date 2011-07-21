@@ -33,7 +33,6 @@
 using namespace std;
 using namespace tlp;
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( PluginsTest );
 
 //==========================================================
@@ -54,9 +53,9 @@ void PluginsTest::testloadPlugin() {
   CPPUNIT_ASSERT(tlp::PropertyPluginLister<tlp::TemplateAlgorithm<tlp::BooleanProperty> >::pluginExists("Test"));
   list<Dependency> deps = tlp::PropertyPluginLister<tlp::TemplateAlgorithm<tlp::BooleanProperty> >::getPluginDependencies("Test");
   // only one dependency (see testPlugin.cpp)
-  CPPUNIT_ASSERT(deps.size() == 1);
-  CPPUNIT_ASSERT(deps.front().factoryName == tlp::demangleTlpClassName(typeid(BooleanAlgorithm).name()));
-  CPPUNIT_ASSERT(deps.front().pluginName == "Test");
+  CPPUNIT_ASSERT_EQUAL(size_t(1), deps.size());
+  CPPUNIT_ASSERT_EQUAL(tlp::demangleTlpClassName(typeid(BooleanAlgorithm).name()), deps.front().factoryName);
+  CPPUNIT_ASSERT_EQUAL(string("Test"), deps.front().pluginName);
 }
 //==========================================================
 void PluginsTest::testCircularPlugin() {
@@ -83,16 +82,4 @@ void PluginsTest::testAncestorGraph() {
   CPPUNIT_ASSERT(!graph->computeProperty(name, &sel, err));
   CPPUNIT_ASSERT(!child2->computeProperty(name, &sel, err));
   CPPUNIT_ASSERT(child3->computeProperty(name, &sel, err));
-}
-
-CppUnit::Test * PluginsTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite("Tulip lib : Plugins mechanism" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PluginsTest>("loadPlugin",
-                         &PluginsTest::testloadPlugin ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PluginsTest>("Circular call",
-                         &PluginsTest::testCircularPlugin ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PluginsTest>("Graph validity",
-                         &PluginsTest::testAncestorGraph) );
-
-  return suiteOfTests;
 }

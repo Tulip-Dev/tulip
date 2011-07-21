@@ -23,10 +23,16 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 #include <tulip/Graph.h>
 
 class PluginsTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(PluginsTest);
+  CPPUNIT_TEST(testloadPlugin);
+  CPPUNIT_TEST(testCircularPlugin);
+  CPPUNIT_TEST(testAncestorGraph);
+  CPPUNIT_TEST_SUITE_END();
 private:
   tlp::Graph *graph;
 
@@ -36,7 +42,6 @@ public:
   void testloadPlugin();
   void testCircularPlugin();
   void testAncestorGraph();
-  static CppUnit::Test *suite();
 };
 
 #endif

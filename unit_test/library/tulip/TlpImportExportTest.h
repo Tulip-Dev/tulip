@@ -24,9 +24,17 @@
 #include <tulip/TlpTools.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 class TlpImportExportTest : public CppUnit::TestFixture {
-
+  CPPUNIT_TEST_SUITE(TlpImportExportTest);
+  CPPUNIT_TEST(testLoad);
+  CPPUNIT_TEST(testImport);
+  CPPUNIT_TEST(testSave);
+  CPPUNIT_TEST(testExport);
+  CPPUNIT_TEST(testExportCluster);
+  CPPUNIT_TEST(testExportAttributes);
+  CPPUNIT_TEST_SUITE_END();
 public:
   void testLoad();
   void testImport();
@@ -34,7 +42,6 @@ public:
   void testExport();
   void testExportCluster();
   void testExportAttributes();
-  static CppUnit::Test *suite();
 };
 
 #endif

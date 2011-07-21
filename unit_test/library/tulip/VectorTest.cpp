@@ -24,7 +24,6 @@
 using namespace std;
 using namespace tlp;
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( VectorTest );
 
 //==========================================================
@@ -43,22 +42,22 @@ void VectorTest::testInternalOperation() {
   }
 
   Vector<double, SIZE> vect2(vect1);
-  CPPUNIT_ASSERT_EQUAL(true, vect1 == vect2);
+  CPPUNIT_ASSERT_EQUAL(vect2, vect1);
   vect1 += 3;
-  CPPUNIT_ASSERT_EQUAL(false, vect1 == vect2);
+  CPPUNIT_ASSERT(vect1 != vect2);
 
   for (unsigned int i=0; i<SIZE; ++i)
     CPPUNIT_ASSERT_EQUAL(double(i + 3), vect1[i]);
 
   vect1 -= 3;
-  CPPUNIT_ASSERT_EQUAL(true, vect1 == vect2);
+  CPPUNIT_ASSERT_EQUAL(vect2, vect1);
   vect1 += vect2;
   vect1 /= 2.0;
-  CPPUNIT_ASSERT_EQUAL(true, vect1 == vect2);
+  CPPUNIT_ASSERT_EQUAL(vect2, vect1);
   vect1 -= vect2;
-  CPPUNIT_ASSERT_EQUAL(true, vect1 == vectnull);
+  CPPUNIT_ASSERT_EQUAL(vectnull, vect1);
   vect1 = vect2;
-  CPPUNIT_ASSERT_EQUAL(true, vect1 == vect2);
+  CPPUNIT_ASSERT_EQUAL(vect2, vect1);
 
   for (unsigned int i=0; i<SIZE; ++i) {
     vect1[i]=i;
@@ -67,24 +66,13 @@ void VectorTest::testInternalOperation() {
 
   CPPUNIT_ASSERT_EQUAL(false, vect1 < vect2);
   CPPUNIT_ASSERT_EQUAL(false, vect1 > vect2);
-  CPPUNIT_ASSERT_EQUAL(true, vect1 == vect2);
+  CPPUNIT_ASSERT_EQUAL(vect2, vect1);
   vect2[SIZE-1]++;
-  CPPUNIT_ASSERT_EQUAL(true, vect1 < vect2);
+  CPPUNIT_ASSERT(vect1 < vect2);
   CPPUNIT_ASSERT_EQUAL(false, vect1 > vect2);
-  CPPUNIT_ASSERT_EQUAL(false, vect1 == vect2);
+  CPPUNIT_ASSERT(vect1 != vect2);
   vect1[0]++;
   CPPUNIT_ASSERT_EQUAL(false, vect1 < vect2);
-  CPPUNIT_ASSERT_EQUAL(true, vect1 > vect2);
-  CPPUNIT_ASSERT_EQUAL(false, vect1 == vect2);
-
+  CPPUNIT_ASSERT(vect1 > vect2);
+  CPPUNIT_ASSERT(vect1 != vect2);
 }
-//==========================================================
-CppUnit::Test * VectorTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Vector" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<VectorTest>( "Internal functions",
-                         &VectorTest::testInternalOperation ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<VectorTest>( "External functions",
-                         &VectorTest::testExternalOperation ) );
-  return suiteOfTests;
-}
-//==========================================================

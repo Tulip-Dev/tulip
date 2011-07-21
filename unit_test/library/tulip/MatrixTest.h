@@ -24,15 +24,19 @@
 #include <tulip/Matrix.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 class MatrixTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(MatrixTest);
+  CPPUNIT_TEST(testExternalOperation);
+  CPPUNIT_TEST(testInternalOperation);
+  CPPUNIT_TEST_SUITE_END();
 
 public:
   void setUp() {}
   void tearDown() {}
   void testExternalOperation();
   void testInternalOperation();
-  static CppUnit::Test *suite();
 };
 
 #endif
