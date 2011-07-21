@@ -530,6 +530,25 @@ void LayoutProperty::reverseEdge(Graph *sg, const edge e) {
   }
 }
 //=================================================================================
+void LayoutProperty::addNode(Graph* g, const tlp::node n) {
+  // invalidate all to avoid time consuming checking
+  // when loading graph
+  minMaxOk.clear();
+}
+//=================================================================================
+void LayoutProperty::delNode(Graph* g, const tlp::node n){
+  unsigned int sgi = g->getId();
+  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOk.find(sgi);
+  
+  if (it != minMaxOk.end() && it->second) {
+    Coord oldV = getNodeValue(n);
+    
+    // check if min or max has to be updated
+    if ((oldV == min[sgi]) || (oldV == max[sgi]))
+      minMaxOk[sgi] = false;
+  }
+}
+//=================================================================================
 double LayoutProperty::averageAngularResolution(const Graph *sg) const {
   if (sg==0) sg=graph;
 
