@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>410</width>
-    <height>736</height>
+    <width>406</width>
+    <height>732</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -53,11 +53,31 @@
      </property>
      <property name="styleSheet">
       <string notr="true">#algorithmListContents {
-  /*background-color: white;*/
+  background-color: white;
   border-left: 1px solid &quot;#C9C9C9&quot;;
   border-right: 1px solid &quot;#C9C9C9&quot;;
   border-top: 1px solid &quot;#C9C9C9&quot;;
   border-bottom: 1px solid &quot;#C9C9C9&quot;;
+}
+
+ExpandableGroupBox {
+  border: 1px solid &quot;#C9C9C9&quot;;
+  margin-top: 1.5ex;
+  font: bold;
+}
+
+ExpandableGroupBox::title {
+  subcontrol-origin: margin;
+  subcontrol-position: top left;
+  padding: 0 3px;
+}
+
+ExpandableGroupBox::indicator:unchecked {
+  image: url(:/tulip/graphperspective/ui/right_arrow-black.png);
+}
+
+ExpandableGroupBox::indicator:checked {
+  image: url(:/tulip/graphperspective/ui/down_arrow-black.png);
 }</string>
      </property>
      <property name="frameShape">
@@ -71,8 +91,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>410</width>
-        <height>709</height>
+        <width>406</width>
+        <height>705</height>
        </rect>
       </property>
      </widget>

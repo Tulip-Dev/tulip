@@ -19,5 +19,7 @@
     </qresource>
     <qresource prefix="/tulip/graphperspective/ui">
         <file>down_arrow-white.png</file>
+        <file>down_arrow-black.png</file>
+        <file>right_arrow-black.png</file>
     </qresource>
 </RCC>
