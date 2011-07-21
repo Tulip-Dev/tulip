@@ -10,6 +10,7 @@ class DataSet;
 }
 namespace Ui {
 class AlgorithmRunnerData;
+class AlgorithmRunnerItemData;
 }
 
 class PluginListWidgetManagerInterface {
@@ -36,7 +37,23 @@ public slots:
 
 protected slots:
   void algorithmTypeChanged(const QString &);
+};
 
+class AlgorithmRunnerItem: public QWidget {
+  Q_OBJECT
+
+  Ui::AlgorithmRunnerItemData *_ui;
+
+  Q_PROPERTY(QString group READ group)
+  QString _group;
+
+  Q_PROPERTY(QString name READ name)
+public:
+  explicit AlgorithmRunnerItem(const QString &group,const QString &name, QWidget *parent=0);
+  virtual ~AlgorithmRunnerItem();
+
+  QString group() const { return _group; }
+  QString name() const;
 };
 
 #endif // ALGORITHMRUNNER_H
