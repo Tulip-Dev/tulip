@@ -21,6 +21,7 @@ QWidget *PluginListWidgetManagerInterface::buildListWidget() {
   result->setObjectName("algorithmListContents");
   QVBoxLayout *layout = new QVBoxLayout;
   layout->setObjectName("algorithmListContentsLayout");
+
   if (algorithmInfos.empty()) {
     QLabel *errorLabel = new QLabel("<span style=\"color:#626262;\">" + AlgorithmRunner::trUtf8("There is no plugin to display.") + "</span>");
     errorLabel->setWordWrap(true);
@@ -34,6 +35,7 @@ QWidget *PluginListWidgetManagerInterface::buildListWidget() {
     }
     layout->addItem(new QSpacerItem(2,2,QSizePolicy::Maximum,QSizePolicy::Expanding));
   }
+
   result->setLayout(layout);
   return result;
 }
@@ -46,6 +48,7 @@ public:
     typedef tlp::StaticPluginLister<ALG,tlp::PropertyContext> Lister;
     std::string name;
     tlp::Iterator<std::string> *it = Lister::availablePlugins();
+
     while (it->hasNext()) {
       name = it->next();
       QString group = Lister::pluginInformations(name).getGroup().c_str();
@@ -53,6 +56,7 @@ public:
       lst << name.c_str();
       result[group] = lst;
     }
+
     delete it;
     return result;
   }

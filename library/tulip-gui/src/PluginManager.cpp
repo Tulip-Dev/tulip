@@ -114,7 +114,7 @@ bool PluginManager::addRemoteLocation(const QString& location) {
   if(xmlDocument.isEmpty() || _remoteLocations.contains(location)) {
     return false;
   }
-  
+
   QDomDocument description;
   description.setContent(xmlDocument);
   QDomElement elm = description.documentElement();
@@ -128,6 +128,6 @@ void PluginManager::removeRemoteLocation(const QString& location) {
   QDomDocument description;
   description.setContent(xmlDocument);
   QDomElement elm = description.documentElement();
-  
+
   _remoteLocations.remove(location);
 }

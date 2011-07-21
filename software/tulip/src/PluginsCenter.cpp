@@ -28,7 +28,7 @@ PluginsCenter::PluginsCenter(QWidget *parent) :
   foreach(const QString& remoteLocation, TulipSettings::instance().remoteLocations()) {
     _ui->remoteLocationsList->addItem(remoteLocation);
   }
-  
+
 }
 
 void PluginsCenter::showDownloadsPage() {
@@ -158,6 +158,7 @@ void PluginsCenter::remove(tlp::PluginInformations *infos) {
 void PluginsCenter::addRemoteLocation() {
   const QString remoteLocation = _ui->remoteLocationText->text();
   std::cout << remoteLocation.toStdString() << std::endl;
+
   if(tlp::PluginManager::addRemoteLocation(remoteLocation)) {
     TulipSettings::instance().addRemoteLocation(remoteLocation);
     _ui->remoteLocationsList->addItem(remoteLocation);

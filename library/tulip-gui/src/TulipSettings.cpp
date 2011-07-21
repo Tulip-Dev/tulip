@@ -42,11 +42,11 @@ void TulipSettings::addRemoteLocation(const QString& remoteLocation) {
 
 void TulipSettings::removeRemoteLocation(const QString& remoteLocation) {
   QStringList remoteLocations = value("app/remote_locations").toStringList();
-  
+
   if(remoteLocations.contains(remoteLocation)) {
     remoteLocations.removeOne(remoteLocation);
   }
-  
+
   setValue("app/remote_locations", remoteLocations);
 }
 
