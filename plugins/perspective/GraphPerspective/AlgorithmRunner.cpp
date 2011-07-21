@@ -11,6 +11,7 @@
 #include <QtCore/QDebug>
 
 #include <QtGui/QLabel>
+#include <QtGui/QVBoxLayout>
 
 // **********************************************
 // Helper classes
@@ -32,6 +33,10 @@ QWidget *PluginListWidgetManagerInterface::buildListWidget() {
     foreach(group,algorithmInfos.keys()) {
       ExpandableGroupBox *groupBox = new ExpandableGroupBox(group);
       layout->addWidget(groupBox);
+      QVBoxLayout *testLayout = new QVBoxLayout;
+      for (int i=0;i<10;++i)
+        testLayout->addWidget(new QLabel("prouuuuuuuuuuuuuuut"));
+      groupBox->setLayout(testLayout);
     }
     layout->addItem(new QSpacerItem(2,2,QSizePolicy::Maximum,QSizePolicy::Expanding));
   }
