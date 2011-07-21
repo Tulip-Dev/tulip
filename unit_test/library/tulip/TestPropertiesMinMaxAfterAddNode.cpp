@@ -22,6 +22,7 @@
 #include <tulip/IntegerProperty.h>
 
 #include <cppunit/extensions/HelperMacros.h>
+#include <tulip/LayoutProperty.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( TestPropertiesMinMaxAfterAddNode );
 
 int i1 = 3;
@@ -50,15 +51,15 @@ void TestPropertiesMinMaxAfterAddNode::testDoublePropertyMinMaxAfterAddNode() {
   // set values to doubleProp
   doubleProp->setNodeValue(n1, d1);
   doubleProp->setNodeValue(n2, d2);
-  CPPUNIT_ASSERT(doubleProp->getNodeMin(graph) == d1);
-  CPPUNIT_ASSERT(doubleProp->getNodeMax(graph) == d2);
+  CPPUNIT_ASSERT_EQUAL(doubleProp->getNodeMin(graph), d1);
+  CPPUNIT_ASSERT_EQUAL(doubleProp->getNodeMax(graph), d2);
 
   // add a new node, the value associated to doubleProp property is the default one 0
   node n3 = graph->addNode();
 
   // min should be 0
-  CPPUNIT_ASSERT(doubleProp->getNodeMin(graph) == 0);
-  CPPUNIT_ASSERT(doubleProp->getNodeMax(graph) == d2);
+  CPPUNIT_ASSERT_EQUAL(doubleProp->getNodeMin(graph), 0.0d);
+  CPPUNIT_ASSERT_EQUAL(doubleProp->getNodeMax(graph), d2);
 }
 
 void TestPropertiesMinMaxAfterAddNode::testIntegerPropertyMinMaxAfterAddNode() {
@@ -71,15 +72,39 @@ void TestPropertiesMinMaxAfterAddNode::testIntegerPropertyMinMaxAfterAddNode() {
   // set values to doubleProp
   intProp->setNodeValue(n1, i1);
   intProp->setNodeValue(n2, i2);
-  CPPUNIT_ASSERT(intProp->getNodeMin(graph) == i1);
-  CPPUNIT_ASSERT(intProp->getNodeMax(graph) == i2);
+  CPPUNIT_ASSERT_EQUAL(intProp->getNodeMin(graph), i1);
+  CPPUNIT_ASSERT_EQUAL(intProp->getNodeMax(graph), i2);
 
   // add a new node, the value associated to doubleProp property is the default one 0
   node n3 = graph->addNode();
 
   // min should be 0
-  CPPUNIT_ASSERT(intProp->getNodeMin(graph) == 0);
-  CPPUNIT_ASSERT(intProp->getNodeMax(graph) == i2);
+  CPPUNIT_ASSERT_EQUAL(intProp->getNodeMin(graph), 0);
+  CPPUNIT_ASSERT_EQUAL(intProp->getNodeMax(graph), i2);
+}
+
+void TestPropertiesMinMaxAfterAddNode::testLayoutPropertyMinMaxAfterAddNode() {
+  LayoutProperty *property = graph->getProperty<LayoutProperty>("testLayout");
+  
+  // add two nodes
+  node n1 = graph->addNode();
+  node n2 = graph->addNode();
+
+  Coord firstNodePos(1.0f, 2.0f);
+  Coord secondNodePos(3.0f, 4.0f);
+  
+  // set values to doubleProp
+  property->setNodeValue(n1, firstNodePos);
+  property->setNodeValue(n2, secondNodePos);
+  CPPUNIT_ASSERT_EQUAL(property->getMin(graph), firstNodePos);
+  CPPUNIT_ASSERT_EQUAL(property->getMax(graph), secondNodePos);
+  
+  // add a new node, the value associated to doubleProp property is the default one 0
+  node n3 = graph->addNode();
+  
+  // min should be 0
+  CPPUNIT_ASSERT_EQUAL(property->getMin(graph), Coord());
+  CPPUNIT_ASSERT_EQUAL(property->getMax(graph), secondNodePos);
 }
 
 CppUnit::Test *TestPropertiesMinMaxAfterAddNode::suite() {
@@ -88,5 +113,7 @@ CppUnit::Test *TestPropertiesMinMaxAfterAddNode::suite() {
                          &TestPropertiesMinMaxAfterAddNode::testDoublePropertyMinMaxAfterAddNode));
   suiteOfTests->addTest( new CppUnit::TestCaller<TestPropertiesMinMaxAfterAddNode>( "IntegerProperty Min Max after addNode test",
                          &TestPropertiesMinMaxAfterAddNode::testIntegerPropertyMinMaxAfterAddNode));
+  suiteOfTests->addTest( new CppUnit::TestCaller<TestPropertiesMinMaxAfterAddNode>( "LayoutProperty Min Max after addNode test",
+                         &TestPropertiesMinMaxAfterAddNode::testLayoutPropertyMinMaxAfterAddNode));
   return suiteOfTests;
 }

@@ -29,6 +29,7 @@ public:
   void tearDown();
   void testDoublePropertyMinMaxAfterAddNode();
   void testIntegerPropertyMinMaxAfterAddNode();
+  void testLayoutPropertyMinMaxAfterAddNode();
 
   static CppUnit::Test *suite();
 

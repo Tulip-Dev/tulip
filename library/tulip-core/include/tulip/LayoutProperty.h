@@ -139,6 +139,8 @@ private:
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
   // override an GraphObserver method
   void reverseEdge(Graph *, const edge);
+  void addNode(Graph* g, const tlp::node n);
+  void delNode(Graph* g, const tlp::node n);
   // override Observable::treatEvent
   void treatEvent(const Event&);
 };
