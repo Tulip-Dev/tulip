@@ -18,8 +18,6 @@
  */
 #include <cmath>
 
-#define MATRIX tlp::Matrix<Obj,SIZE>
-
 //===================================================================
 //Specialisation
 namespace tlp {

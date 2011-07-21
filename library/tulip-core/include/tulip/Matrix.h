@@ -32,7 +32,7 @@ namespace tlp {
 /**
  * \addtogroup basic
  */
-#define MATRIX Matrix<Obj,SIZE>
+#define MATRIX tlp::Matrix<Obj,SIZE>
 
 /*@{*/
 /**

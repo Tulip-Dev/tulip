@@ -69,7 +69,7 @@ class Graph;
  * }
  * \endcode
  */
-class TLP_SCOPE GraphObserver {
+class _DEPRECATED  TLP_SCOPE GraphObserver {
 
 public:
   virtual ~GraphObserver() {}
