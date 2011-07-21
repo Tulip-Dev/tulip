@@ -77,25 +77,25 @@ struct Circle : public Vector<Obj,2> {
  * Compute the optimum enclosing circle of 2 circles.
  */
 template<typename Obj>
-Circle<Obj> enclosingCircle(const Circle<Obj> &,const Circle<Obj> &);
+tlp::Circle<Obj> enclosingCircle(const tlp::Circle<Obj> &,const tlp::Circle<Obj> &);
 
 /**
  * Compute the optimum enclosing circle of a set of circles.
  */
 template<typename Obj>
-Circle<Obj> enclosingCircle(const std::vector< Circle<Obj> > & circles);
+tlp::Circle<Obj> enclosingCircle(const std::vector< tlp::Circle<Obj> > & circles);
 /**
  * Compute an enclosing circle of a set of circles,
  * this algorithm is an aproximation of the smallest
  * enclosing circle.
  */
 template<typename Obj>
-Circle<Obj> lazyEnclosingCircle(const std::vector< Circle<Obj> > & circles);
+tlp::Circle<Obj> lazyEnclosingCircle(const std::vector< tlp::Circle<Obj> > & circles);
 /**
  * Write circle in a stream
  */
 template<typename Obj>
-std::ostream& operator<<(std::ostream &os,const Circle<Obj> &);
+std::ostream& operator<<(std::ostream &os,const tlp::Circle<Obj> &);
 /*@}*/
 }
 

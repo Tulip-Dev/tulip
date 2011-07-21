@@ -134,7 +134,7 @@ public:
   bool isInstalled() const;
   bool updateAvailable() const;
 
-  bool fetch(QString version) const;
+  bool fetch() const;
   bool remove() const;
 private:
   QString _lastVersion;
@@ -145,6 +145,7 @@ private:
   const QString _installedVersion;
   bool _updateAvailable;
   const QString _remoteLocation;
+  const QString _remoteArchive;
   QStringList _versions;
   QMap<QString, const tlp::AbstractPluginInfo*> _infos;
 };

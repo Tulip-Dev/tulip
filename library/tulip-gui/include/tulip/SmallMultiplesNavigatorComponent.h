@@ -32,6 +32,7 @@ class MouseNKeysNavigator;
   * For instance:
   * @code INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(MyCustomSmallMultipleViewObject, "The name of the interactor for my custom view", "InteractorSmallMultiplesNavigation", "Name of my custom view", "Authors", "Date", "Desc", "Version", INT_MAX);
   * @warning the last parameter of the INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY defines the priority. This should always be set to INT_MAX.
+  * @endcode
   */
 class TLP_QT_SCOPE SmallMultiplesNavigatorComponent: public InteractorComponent {
 public:

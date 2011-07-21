@@ -63,7 +63,7 @@ public:
   //=======================================================
   /**
         * @brief delete all nodes/edges and Properties of the graph
-        * @complexity o(N + E + NbProp)
+        * @remark o(N + E + NbProp)
         */
   void clear();
   //=======================================================
@@ -71,34 +71,34 @@ public:
         * @brief Test if an edge exist between two nodes, in directed mode the orientation
         * is taken into account.
         * @return the found edge, else an invalid edge.
-        * @complexity o(min(deg(src), deg(tgt))
+        * @remark o(min(deg(src), deg(tgt))
         * @todo test
         */
   edge existEdge(const node src, const node tgt, const bool directed = true) const;
   //=======================================================
   /**
         * @brief Return true if n belongs to the graph
-        * @complexity o(1)
+        * @remark o(1)
         */
   bool isElement(const node n) const;
   //=======================================================
   /**
         * @brief Return true if e belongs to the graph
-        * @complexity o(1)
+        * @remark o(1)
         */
   bool isElement(const edge e) const;
   //=======================================================
   /**
         * \brief Set the ordering of edges around n according to their order in v.
         * \warning there is no test here, all edge in v must be element of star(e)
-        * @complexity o(v.size())
+        * @remark o(v.size())
         */
   void setEdgeOrder(const node n, const std::vector<edge> &v );
   //=======================================================
   /**
         * \brief swap to edge in the ordered adjacency vector
         * \warning the two edges must be element of star(v)
-        * @complexity o(1)
+        * @remark o(1)
         */
   void swapEdgeOrder(const node n, const edge e1, const edge e2);
   //=======================================================
@@ -106,7 +106,7 @@ public:
         * @brief Enables to reserve memory for nbNodes
         * Reserving memory before to addNode enable to reduce the number of vector resizing and then
         * to speed up significantly construction of graphs.
-        * @complexity o(N + nbNodes)
+        * @remark o(N + nbNodes)
         */
   void reserveNodes(const size_t nbNodes);
   //=======================================================
@@ -114,7 +114,7 @@ public:
         * @brief Enables to reserve memory for nbEdges
         * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
         * to speed up significantly construction of graphs.
-        * @complexity o(N + nbNodes)
+        * @remark o(N + nbNodes)
         */
   void reserveEdges(const size_t nbEdges);
   //=======================================================
@@ -122,7 +122,7 @@ public:
         * @brief Enables to reserve memory for adjacency nodes
         * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
         * to speed up significantly construction of graphs.
-        * @complexity o(E + nbEdges)
+        * @remark o(E + nbEdges)
         */
   void reserveAdj(const size_t nbEdges);
   //=======================================================
@@ -130,112 +130,112 @@ public:
         * @brief Enables to reserve memory for adjacency nodes
         * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
         * to speed up significantly construction of graphs.
-        * @complexity o(E + nbEdges)
+        * @remark o(E + nbEdges)
         */
   void reserveAdj(const node n, const size_t nbEdges);
   //=======================================================
   /**
         * @brief Return the node at position id in the array of nodes
-        * @complexity o(1)
+        * @remark o(1)
         */
   node operator[](const unsigned int id) const;
   //=======================================================
   /**
         * @brief Return the edge at position id in the array of nodes
-        * @complexity o(1)
+        * @remark o(1)
         */
   edge operator()(const unsigned int id) const;
   //=======================================================
   /**
         * @brief Return the first node of graph (ie first node in the array of nodes)
-        * @complexity o(1)
+        * @remark o(1)
         */
   node getOneNode() const;
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on nodes of the graph
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @complexity: o(1)
+        * @remark: o(1)
         */
   Iterator<node> * getNodes() const;
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on edges of the graph
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @complexity: o(1)
+        * @remark: o(1)
         */
   Iterator<edge> * getEdges() const;
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on adjacent edges of the node n
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @complexity: o(1)
+        * @remark: o(1)
         */
   Iterator<edge> * getInOutEdges(const node n) const;
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on out edges of the node n
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @complexity: o(1)
+        * @remark: o(1)
         */
   Iterator<edge> * getOutEdges(const node n) const;
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on in edges of the node n
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @complexity: o(1)
+        * @remark: o(1)
         */
   Iterator<edge> * getInEdges(const node n) const;
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on adjacent nodes of the node n
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @complexity: o(1)
+        * @remark: o(1)
         */
   Iterator<node> * getInOutNodes(const node n) const;
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on in nodes of the node n
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @complexity o(1)
+        * @remark o(1)
         */
   //=======================================================
   Iterator<node> * getInNodes(const node n) const;
   /**
         * @brief Return a Tulip Iterator on out nodes of the node n
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
-        * @complexity o(1)
+        * @remark o(1)
         */
   //=======================================================
   Iterator<node> * getOutNodes(const node n) const;
   //=======================================================
   /**
        * @brief Return the degree of a node
-       * @complexity o(1)
+       * @remark o(1)
        */
   unsigned int deg(const node n) const;
   //=======================================================
   /**
        * @brief Return the out degree of a node
-       * @complexity o(1)
+       * @remark o(1)
        */
   unsigned int outdeg(const node n) const;
   //=======================================================
   /**
        * @brief Return the in degree of a node
-       * @complexity o(1)
+       * @remark o(1)
        */
   unsigned int indeg(const node n) const;
   //=======================================================
   /**
        * @brief Return the number of edges in the graph
-       * @complexity: o(1)
+       * @remark: o(1)
        */
   unsigned int numberOfEdges() const;
   //=======================================================
   /**
        * @brief Return the number of nodes in the graph
-       * @complexity: o(1)
+       * @remark: o(1)
        */
   unsigned int numberOfNodes() const;
   //=======================================================
@@ -243,7 +243,7 @@ public:
        * @brief Add a new node in the graph and return it
        * @warning: That operation modify the array of nodes
        * and thus devalidate all iterators on it.
-       * @complexity: o(1)
+       * @remark: o(1)
        */
   node addNode();
   //=======================================================
@@ -254,7 +254,7 @@ public:
         * @warning That operation modify the array of neighboors of extrmities of edges, thus
         * it devalidates iterators on adjacency for the nodes at the extremities od the deleted edges.
         * @warning Orders of edges in the extremities of the deleted edges are affected
-        * @complexity: o(1)
+        * @remark: o(1)
         */
   void delNode(const node n);
   //=======================================================
@@ -262,7 +262,7 @@ public:
        * @brief Add a new edge between src and tgt and return it
        * @warning That operation modify the array of neighboors of extrmities of edges, thus
        * it devalidates iterators on adjacency for the nodes at the extremities od the deleted edges.
-       * @complexity o(1)
+       * @remark o(1)
        */
   edge addEdge(const node src, const node tgt);
   //=======================================================
@@ -273,7 +273,7 @@ public:
         * @warning That operation modify the array of neighboors of extremities of the edge e, thus
         * it devalidates iterators on adjacency for the nodes at the extremities od the deleted edge.
         * @warning Orders of edges in the extremities of the deleted edge are affected
-        * @complexity o(1)
+        * @remark o(1)
         */
   void delEdge(const edge e);
   //=======================================================
@@ -284,7 +284,7 @@ public:
         * @warning That operation modify the array of neighboors of extremities of the edge e, thus
         * it devalidates iterators on adjacency for the nodes at the extremities od the deleted edge.
         * @warning Orders of edges in the extremities of the deleted edge are affected
-        * @complexity o(deg(V))
+        * @remark o(deg(V))
         * @todo test
         */
   void delEdges(const node n);
@@ -293,7 +293,7 @@ public:
         * @brief Delete all edges in the graph
         * @warning: That operation modify the array of edges and all arrays of nodes
         * and thus devalidate all iterators, only graph nodes iterators are not affected.
-        * @complexity o(E + V)
+        * @remark o(E + V)
         */
   void delAllEdges();
   //=======================================================
@@ -301,31 +301,31 @@ public:
         * @brief Delete all nodes in the graph
         * @warning: That operation modify the array of edges and all arrays of nodes
         * and thus devalidate all iterators.
-        * @complexity o(E + V)
+        * @remark o(E + V)
         */
   void delAllNodes();
   //=======================================================
   /**
       * @brief return the first extremity (considered as source if the graph is directed) of an edge
-      * @complexity o(1)
+      * @remark o(1)
       */
   node source(const edge e) const;
   //=======================================================
   /**
       * @brief return the second extremity (considered as target if the graph is directed) of an edge
-      * @complexity o(1)
+      * @remark o(1)
       */
   node target(const edge e) const;
   //=======================================================
   /**
         * @brief return the opposite node of n through edge e
-        * @complexity o(1)
+        * @remark o(1)
         */
   node opposite(const edge e, const node n) const;
   //=======================================================
   /**
        * @brief Reverse an edge e, source become target and target become soure
-       * @complexity o(1)
+       * @remark o(1)
        */
   void reverse(const edge e);
   //=======================================================
@@ -333,7 +333,7 @@ public:
        * @brief change the source of an edge
        * @warning That operation modify the array of neighboors of extrmities of edges, thus
        * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges and nodes.
-       * @complexity o(1)
+       * @remark o(1)
        * \see setEnds
        */
   void setSource(const edge e, const node n);
@@ -342,14 +342,14 @@ public:
        * @brief change the target of an edge
        * @warning That operation modify the array of neighboors of extrmities of edges, thus
        * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges and nodes.
-       * @complexity o(1)
+       * @remark o(1)
        * \see setEnds
        */
   void setTarget(const edge e, const node n);
   //=======================================================
   /**
        * @brief Return the extremities of an edge (src, target)
-       * @complexity o(1)
+       * @remark o(1)
        */
   std::pair<node, node> ends(const edge e) const;
   //=======================================================
@@ -357,19 +357,19 @@ public:
        * @brief Reconnect the edeg e to have the new given extremities
        * @warning That operation modify the array of neighboors of extrmities of edges, thus
        * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges and nodes.
-       * @complexity o(1)
+       * @remark o(1)
        */
   void setEnds(const edge e, const node src, const node tgt);
   //=======================================================
   /**
        * @brief Shuffle the array of graph nodes
-       * @complexity dependant of stl::random_shuffle algorithm (should be o(N))
+       * @remark dependant of stl::random_shuffle algorithm (should be o(N))
        */
   void shuffleNodes();
   //=======================================================
   /**
        * @brief Shuffle the array of graph edges
-       * @complexity dependant of stl::random_shuffle algorithm (should be o(E))
+       * @remark dependant of stl::random_shuffle algorithm (should be o(E))
        */
   void shuffleEdges();
   //=======================================================
@@ -377,7 +377,7 @@ public:
        * @brief Sort all edges according to comparison functor given in parameter
        * if stable is true a stable sort algorithm is applied
        * Comparison should be an instance of a class wihch implements operator():
-       * @complexity dependant of stl::sort and stl::stable_sort algorithm (should be o(E log (E)))
+       * @remark dependant of stl::sort and stl::stable_sort algorithm (should be o(E log (E)))
        * @code
        *  class Compare {
        *  //return true if a < b
@@ -409,7 +409,7 @@ public:
        *  bool operator()(const node a, const node b);
        *  };
        * @endcode
-       * @complexity dependant of stl::sort and stl::stable_sort algorithm (should be o(N log (N)))
+       * @remark dependant of stl::sort and stl::stable_sort algorithm (should be o(N log (N)))
        * \warning that function is not compatible with the Tulip Graph API
        */
   template<typename Compare >
@@ -428,27 +428,27 @@ public:
   /**
        * @brief return the position of an edge in the array of edges.
        * \warning that function is not compatible with the Tulip Graph API
-       * @complexity  o(1)
+       * @remark  o(1)
        */
   unsigned int edgePos(const edge e) const;
   //=======================================================
   /**
        * @brief return the position of a node in the array of nodes.
        * \warning that function is not compatible with the Tulip Graph API
-       * @complexity  o(1)
+       * @remark  o(1)
        */
   unsigned int nodePos(const node n) const;
   //=======================================================
   /**
         * @brief Swap two nodes in the array of graph nodes
-        * @complexity  o(1)
+        * @remark  o(1)
        * \warning that function is not compatible with the Tulip Graph API
         */
   void swap(const node a, const node b);
   //=======================================================
   /**
         * @brief Swap two edges in the array of graph edge
-        * @complexity  o(1)
+        * @remark  o(1)
        * \warning that function is not compatible with the Tulip Graph API
         */
   void swap(const edge a, const edge b);
@@ -457,7 +457,7 @@ public:
         * @brief Create a new node array of type TYPE
         * NodesAttr can be copied in constant time it is just a pointer
         * NodesAttr is not a smart pointer it must be deleted with freeNodesAttribute
-        * @complexity  o(log(number of arrays) + new of a vector<TYPE> of size N)
+        * @remark  o(log(number of arrays) + new of a vector<TYPE> of size N)
         * \warning that function is not compatible with the Tulip Graph API
         */
   template<typename TYPE>
@@ -470,7 +470,7 @@ public:
   /**
         * @brief Delete an Array from the set of node arrays
         * @warning all copy of the ValArray are no more valid (serious bug if they are used after)
-        * @complexity  o(log(number of arrays) + free of a vector<TYPE> of size N)
+        * @remark  o(log(number of arrays) + free of a vector<TYPE> of size N)
         * \warning that function is not compatible with the Tulip Graph API
         */
   template<typename TYPE>
@@ -484,7 +484,7 @@ public:
       * @brief Create a new edge array of type TYPE
       * EdgesAttr can be copied in constant time it is just a pointer
       * EdgesAttr is not a smart pointer it must be deleted with freeEdgesAttribute
-      * @complexity  o(log(number of node arrays) + new of a vector<TYPE> of size E)
+      * @remark  o(log(number of node arrays) + new of a vector<TYPE> of size E)
       * \warning that function is not compatible with the Tulip Graph API
       */
   template<typename TYPE>
@@ -497,7 +497,7 @@ public:
   /**
         * @brief Delete an Array from the set of edge arrays
         * @warning all copy of the ValArray are no more valid (serious bug if they are used after)
-        * @complexity  o(log(number of edge arrays) + free of a vector<TYPE> of size E)
+        * @remark  o(log(number of edge arrays) + free of a vector<TYPE> of size E)
         * \warning that function is not compatible with the Tulip Graph API
         */
   template<typename TYPE>
@@ -513,7 +513,7 @@ public:
         * It is the fastest way to access to node adjacency, Iterators are 25% slower.
         * \warning code that use that function won't be compatible with Tulip Graph API
         *
-        * @complexity o(1)
+        * @remark o(1)
         * \see getInOutNodes
         * \see getInNodes
         * \see getOutNodes
@@ -526,7 +526,7 @@ public:
         * It is the fastest way to access to edge adjacency, Iterators are 25% slower.
         * \warning code that use that function won't be compatible with Tulip Graph API
         *
-        * @complexity o(1)
+        * @remark o(1)
         * \see getInOutEdges
         * \see getInEdges
         * \see getOutEdges
@@ -537,7 +537,7 @@ public:
         * @brief Return a const reference on the vector of nodes of the graph
         * It is the fastest way to access to edge adjacency, Iterators are 25% slower.
         * \warning code that use that function won't be compatible with Tulip Graph API
-        * @complexity o(1)
+        * @remark o(1)
         */
   const std::vector<node>& nodes() const;
   //=======================================================
@@ -545,7 +545,7 @@ public:
         * @brief Return a const reference on the vector of edges of the graph
         * It is the fastest way to access to edge adjacency, Iterators are 25% slower.
         * \warning code that use that function won't be compatible with Tulip Graph API
-        * @complexity o(1)
+        * @remark o(1)
         */
   const std::vector<edge>& edges() const;
   //=======================================================

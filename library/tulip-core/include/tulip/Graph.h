@@ -115,7 +115,7 @@ TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSel
 TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection = 0 );
 
 /**
- * \defgroup graphs
+ * \defgroup graphs Graphs
  */
 /*@{*/
 /// Interface for a graph

@@ -33,7 +33,7 @@ namespace tlp {
 class PropertyObserver;
 
 /**
- * \defgroup properties
+ * \defgroup properties Properties
  */
 /*@{*/
 //=============================================================

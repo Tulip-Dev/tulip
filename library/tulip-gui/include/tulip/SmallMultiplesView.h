@@ -67,7 +67,7 @@ class GlLayer;
   *                  The user can redefine this method to change the default behavior (we consider to be in the specific mode when the overview layer is not visible)
   *                  When in the specifc mode, you may want to call the toggleInteractors(bool) method to enable your specific interactors.
   *                  When the small multiples navigation interactor is enabled in this mode, the overviewSelected method is called when the user double clicks.
-  *
+  * @endcode
   */
 class TLP_QT_SCOPE SmallMultiplesView: public AbstractView {
   Q_OBJECT
