@@ -25,12 +25,16 @@
 namespace tlp {
 
 /**
- * @brief Describes what the plug-in should do.
- * @enum tlp::ProgressState::TLP_CONTINUE The plugin should continue its execution.
- * @enum tlp::ProgressState::TLP_CANCEL The plugin should cancel, reverting all performed changes since the plugin was called.
- * @enum tlp::ProgressState::TLP_STOP The plugin should stop, leaving the graph in its current state.
+ * @enum tlp::ProgressState Describes what the plug-in should do.
  **/
-enum ProgressState {TLP_CONTINUE, TLP_CANCEL , TLP_STOP };
+enum ProgressState {
+  /** The plugin should continue its execution. */
+  TLP_CONTINUE,
+  /** The plugin should cancel, reverting all performed changes since the plugin was called. */
+  TLP_CANCEL,
+  /** The plugin should stop, leaving the graph in its current state. */
+  TLP_STOP 
+};
 
 /**
   * @brief Interface to notify and control the progression of a process.
