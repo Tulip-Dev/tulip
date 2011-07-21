@@ -39,7 +39,7 @@ namespace tlp {
 class Graph;
 
 /**
- * \defgroup types
+ * \defgroup types Types
  */
 /*@{*/
 

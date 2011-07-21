@@ -78,7 +78,7 @@ LocationPlugins PluginManager::parseDescription(const QString& xmlDescription, c
   for(int i = 0; i < pluginNodes.count(); ++i) {
     const QDomNode& child = pluginNodes.at(i);
     QDomElement childElement = child.toElement();
-    const std::string name = childElement.attribute("name").toStdString();
+    const QString name = childElement.attribute("name");
     const std::string type = childElement.attribute("type").toStdString();
     const std::string author = childElement.attribute("author").toStdString();
     const std::string date = childElement.attribute("date").toStdString();
@@ -87,6 +87,7 @@ LocationPlugins PluginManager::parseDescription(const QString& xmlDescription, c
     const std::string release = childElement.attribute("release").toStdString();
     const std::string group = childElement.attribute("group").toStdString();
     const std::string tulipRelease = childElement.attribute("tulipRelease").toStdString();
+    const QString folder = childElement.attribute("folder");
 
     std::list<tlp::Dependency> dependencies;
 
@@ -96,9 +97,9 @@ LocationPlugins PluginManager::parseDescription(const QString& xmlDescription, c
       dependencies.push_back(dep);
     }
 
-    tlp::AbstractPluginInfo* pluginInfo = new DistantPluginInfo(author, date, group, name, info, release, tulipRelease, dependencies);
+    tlp::AbstractPluginInfo* pluginInfo = new DistantPluginInfo(author, date, group, name.toStdString(), info, release, tulipRelease, dependencies);
 
-    PluginInformations* pluginInformations = new PluginInformations(*pluginInfo, type, location + "/" + name.c_str());
+    PluginInformations* pluginInformations = new PluginInformations(*pluginInfo, type, location + "/" + name.simplified().remove(' ').toLower());
 
 //     PluginInfoWithDependencies infos(pluginInfo, dependencies);
     remotePlugins[pluginInfo->getName().c_str()] = pluginInformations;

@@ -147,7 +147,7 @@ void PluginsCenter::setPluginNameFilter(const QString &f) {
 }
 
 void PluginsCenter::fetch(tlp::PluginInformations *infos) {
-  infos->fetch(infos->latestVersion());
+  infos->fetch();
   qWarning() << "Fetch " << infos->name();
 }
 

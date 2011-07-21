@@ -148,7 +148,7 @@ const string roundedBoxOutlineGeometryShaderSrc =
   "}"
   ;
 
-/** \addtogroup glyph */
+/** @addtogroup glyph */
 /*@{*/
 /// A 2D glyph.
 /**
@@ -378,3 +378,5 @@ Coord RoundedBox::getAnchor(const Coord &vector) const {
 }
 
 GLYPHPLUGIN(RoundedBox, "2D - Rounded Box", "Antoine LAMBERT", "02/11/2010", "Rounded Box", "1.0", 18)
+
+/*@}*/

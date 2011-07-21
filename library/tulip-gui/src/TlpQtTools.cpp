@@ -135,7 +135,7 @@ string propertyTypeLabelToPropertyType(const QString& typeNameLabel) {
 }
 
 QString getPluginPackageName(const QString& pluginName) {
-  return pluginName.toLower() + /*"-" + info->getRelease().c_str() +*/ "-" + TULIP_RELEASE + "-" + OS_PLATFORM + OS_ARCHITECTURE + "-" + OS_COMPILER + ".zip";
+  return pluginName.simplified().remove(' ').toLower() + /*"-" + info->getRelease().c_str() +*/ "-" + TULIP_RELEASE + "-" + OS_PLATFORM + OS_ARCHITECTURE + "-" + OS_COMPILER + ".zip";
 }
 
 }

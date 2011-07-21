@@ -29,7 +29,7 @@ class PropertyInterface;
 class PluginProgress;
 
 /**
- * \defgroup plugins
+ * \defgroup plugins Plugins
  */
 /*@{*/
 
