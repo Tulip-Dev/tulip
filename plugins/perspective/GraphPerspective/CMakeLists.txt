@@ -11,6 +11,7 @@ resources/GraphPerspective.qrc)
 
 QT4_WRAP_UI(UI_SRCS
 designer/AlgorithmRunner.ui
+designer/AlgorithmRunnerItem.ui
 designer/GraphPerspectiveMainWindow.ui
 designer/HeaderFrame.ui)
 

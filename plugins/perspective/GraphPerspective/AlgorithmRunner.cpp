@@ -6,37 +6,62 @@
 #include <tulip/PluginLister.h>
 
 #include "ui_AlgorithmRunner.h"
+#include "ui_AlgorithmRunnerItem.h"
 #include "ExpandableGroupBox.h"
 
 #include <QtCore/QDebug>
 
 #include <QtGui/QLabel>
 #include <QtGui/QVBoxLayout>
+#include <QtGui/QPushButton>
 
 // **********************************************
 // Helper classes
 // **********************************************
+
+AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &name, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItemData), _group(group) {
+  _ui->setupUi(this);
+  _ui->algNameLabel->setText(name);
+  _ui->algNameLabel->setToolTip(_ui->algNameLabel->text());
+  _ui->settingsButton->setToolTip(trUtf8("Set up ") + name);
+  _ui->playButton->setToolTip(trUtf8("Run ") + name);
+}
+
+AlgorithmRunnerItem::~AlgorithmRunnerItem() {
+}
+
 QWidget *PluginListWidgetManagerInterface::buildListWidget() {
   QMap<QString,QStringList> algorithmInfos = algorithms();
   QWidget *result = new QWidget;
   result->setObjectName("algorithmListContents");
   QVBoxLayout *layout = new QVBoxLayout;
   layout->setObjectName("algorithmListContentsLayout");
+  layout->setSpacing(10);
 
   if (algorithmInfos.empty()) {
     QLabel *errorLabel = new QLabel("<span style=\"color:#626262;\">" + AlgorithmRunner::trUtf8("There is no plugin to display.") + "</span>");
+    errorLabel->setObjectName("errorLabel");
     errorLabel->setWordWrap(true);
     layout->addWidget(errorLabel);
   }
   else {
+    layout->setContentsMargins(3,6,3,6);
     QString group;
     foreach(group,algorithmInfos.keys()) {
-      ExpandableGroupBox *groupBox = new ExpandableGroupBox(group);
-      layout->addWidget(groupBox);
-      QVBoxLayout *testLayout = new QVBoxLayout;
-      for (int i=0;i<10;++i)
-        testLayout->addWidget(new QLabel("prouuuuuuuuuuuuuuut"));
-      groupBox->setLayout(testLayout);
+      QWidget *groupWidget;
+      if (group == "")
+        groupWidget = new QWidget;
+      else
+        groupWidget = new ExpandableGroupBox(group);
+      groupWidget->setObjectName(group + "_groupBox");
+      QVBoxLayout *groupLayout = new QVBoxLayout;
+      groupLayout->setContentsMargins(6,15,6,15);
+      groupLayout->setObjectName(group + "_boxLayout");
+      QString algName;
+      foreach(algName,algorithmInfos[group])
+        groupLayout->addWidget(new AlgorithmRunnerItem(group,algName));
+      groupWidget->setLayout(groupLayout);
+      layout->addWidget(groupWidget);
     }
     layout->addItem(new QSpacerItem(2,2,QSizePolicy::Maximum,QSizePolicy::Expanding));
   }
