@@ -21,7 +21,7 @@
 
 int main(int argc, char **argv) {
   QApplication tulip_agent(argc, argv);
-  tulip_agent.setApplicationName(QObject::trUtf8("Tulip Agent"));
+  tulip_agent.setApplicationName(QObject::trUtf8("Tulip"));
   QLocale::setDefault(QLocale(QLocale::English));
 
 #if defined(__APPLE__)
