@@ -25,7 +25,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &na
   _ui->algNameLabel->setToolTip(_ui->algNameLabel->text());
   _ui->settingsButton->setToolTip(trUtf8("Set up ") + name);
   _ui->playButton->setToolTip(trUtf8("Run ") + name);
-  setObjectName(group + "_" + name + "_runnerItem");
+  setObjectName(name);
 }
 
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {
@@ -77,20 +77,22 @@ AlgorithmRunner::AlgorithmRunner(QWidget *parent): QWidget(parent), _ui(new Ui::
   staticInit();
   _ui->setupUi(this);
   connect(_ui->header,SIGNAL(menuChanged(QString)),this,SLOT(algorithmTypeChanged(QString)));
+  connect(_ui->searchBox,SIGNAL(textEdited(QString)),this,SLOT(setFilter(QString)));
   _ui->header->setMenus(PLUGIN_LIST_MANAGERS_DISPLAY_NAMES.keys());
 }
 
 void AlgorithmRunner::algorithmTypeChanged(const QString &type) {
   _pluginsListMgr = PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[type];
   assert(_pluginsListMgr);
-  _ui->algorithmList->setWidget(buildListWidget());
+  buildListWidget();
+  _ui->searchBox->setText("");
 }
 
-QWidget *AlgorithmRunner::buildListWidget() {
+void AlgorithmRunner::buildListWidget() {
   _currentAlgorithmsList = _pluginsListMgr->algorithms();
 
-  QWidget *result = new QWidget;
-  result->setObjectName("algorithmListContents");
+  QWidget *listWidget = new QWidget;
+  listWidget->setObjectName("algorithmListContents");
   QVBoxLayout *layout = new QVBoxLayout;
   layout->setObjectName("algorithmListContentsLayout");
   layout->setSpacing(10);
@@ -109,25 +111,25 @@ QWidget *AlgorithmRunner::buildListWidget() {
       QWidget *groupWidget;
 
       QVBoxLayout *groupLayout = new QVBoxLayout;
-      groupLayout->setObjectName(group + "_boxLayout");
-      groupLayout->setSpacing(0);
+      groupLayout->setObjectName(group);
+      groupLayout->setSpacing(3);
       if (group == "") {
         groupWidget = new QWidget;
         groupLayout->setContentsMargins(0,0,0,0);
       }
       else {
         groupWidget = new ExpandableGroupBox(group);
-        groupLayout->setContentsMargins(0,15,0,15);
+        groupLayout->setContentsMargins(0,15,0,6);
       }
 
-      groupWidget->setObjectName(group + "_groupBox");
-      int i=0;
+      groupWidget->setObjectName(group);
+//      int i=0;
       QString algName;
       foreach(algName,_currentAlgorithmsList[group]) {
-        i=(i+1)%2;
+//        i=(i+1)%2;
         AlgorithmRunnerItem *item = new AlgorithmRunnerItem(group,algName);
-        if (i == 0)
-          item->setStyleSheet("#algFrame { background-color: #EFEFEF }");
+//        if (i == 0)
+//          item->setStyleSheet("#algFrame { background-color: #EFEFEF }");
         groupLayout->addWidget(item);
       }
       groupWidget->setLayout(groupLayout);
@@ -136,6 +138,21 @@ QWidget *AlgorithmRunner::buildListWidget() {
     layout->addItem(new QSpacerItem(2,2,QSizePolicy::Maximum,QSizePolicy::Expanding));
   }
 
-  result->setLayout(layout);
-  return result;
+  listWidget->setLayout(layout);
+
+  _ui->algorithmList->setWidget(listWidget);
+}
+
+void AlgorithmRunner::setFilter(const QString &filter) {
+  ExpandableGroupBox *gi;
+  foreach(gi, findChildren<ExpandableGroupBox *>())
+    gi->setVisible(gi->objectName().contains(filter,Qt::CaseInsensitive));
+  AlgorithmRunnerItem *it;
+  foreach(it, findChildren<AlgorithmRunnerItem *>()) {
+    it->hide();
+    if (it->parentWidget()->isVisible() || it->objectName().contains(filter,Qt::CaseInsensitive)) {
+      it->show();
+      it->parentWidget()->show();
+    }
+  }
 }

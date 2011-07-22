@@ -13,11 +13,17 @@ ExpandableGroupBox::~ExpandableGroupBox() {
 }
 
 void ExpandableGroupBox::setExpanded(bool e) {
-  QObject *o;
-  foreach(o,children()) {
-    QWidget *w = dynamic_cast<QWidget *>(o);
-
-    if (w)
-      w->setVisible(e);
+  if (layout()) {
+    if (!e) {
+      _oldMargins = layout()->contentsMargins();
+      layout()->setContentsMargins(0,0,0,0);
+    }
+    else
+      layout()->setContentsMargins(_oldMargins);
   }
+
+  _expanded=e;
+  QWidget *w;
+  foreach(w,findChildren<QWidget *>())
+    w->setVisible(e);
 }
