@@ -40,7 +40,7 @@ class CubeOutLinedTransparent: public Glyph,
   public EdgeExtremityGlyphFrom3DGlyph {
 public:
   CubeOutLinedTransparent(GlyphContext *gc = NULL);
-  CubeOutLinedTransparent(EdgeExtremityGlyphContext *gc = NULL);
+  CubeOutLinedTransparent(EdgeExtremityGlyphContext *gc);
   virtual ~CubeOutLinedTransparent();
   virtual void draw(node n, float lod);
   virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);

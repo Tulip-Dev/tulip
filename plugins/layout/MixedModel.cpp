@@ -414,7 +414,7 @@ void MixedModel::placeNodesEdges() {
     node n = it->next();
     Coord c = nodeSize.get(n.id);
     c[0] -= edgeNodeSpacing;
-    graph->getProperty<SizeProperty>("viewSize")->setNodeValue(n,Size(c[0],c[1],0.3));
+    graph->getProperty<SizeProperty>("viewSize")->setNodeValue(n,Size(c[0],c[1],0.3f));
     result->setNodeValue(n, NodeCoords[n]);
   }
 

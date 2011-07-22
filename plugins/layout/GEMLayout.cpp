@@ -65,22 +65,22 @@ static const float MAXATTRACT = 8192;
  * GEM3D Default Parameter Values
  */
 static const float IMAXTEMPDEF     = 1.0;
-static const float ISTARTTEMPDEF   = 0.3;
-static const float IFINALTEMPDEF   = 0.05;
+static const float ISTARTTEMPDEF   = 0.3f;
+static const float IFINALTEMPDEF   = 0.05f;
 static const int   IMAXITERDEF     = 10;
-static const float IGRAVITYDEF     = 0.05;
+static const float IGRAVITYDEF     = 0.05f;
 static const float IOSCILLATIONDEF = 0.5;
 static const float IROTATIONDEF    = 0.5;
-static const float ISHAKEDEF       = 0.2;
+static const float ISHAKEDEF       = 0.2f;
 
 static const float AMAXTEMPDEF     = 1.5;
 static const float ASTARTTEMPDEF   = 1.0;
-static const float AFINALTEMPDEF   = 0.02;
+static const float AFINALTEMPDEF   = 0.02f;
 static const int   AMAXITERDEF     = 3;
-static const float AGRAVITYDEF     = 0.1;
+static const float AGRAVITYDEF     = 0.1f;
 static const float AOSCILLATIONDEF = 1.;
 static const float AROTATIONDEF    = 1.;
-static const float ASHAKEDEF       = 0.3;
+static const float ASHAKEDEF       = 0.3f;
 
 
 LAYOUTPLUGINOFGROUP(GEMLayout,"GEM (Frick)","Tulip Team","16/10/2008","Stable","1.1","Force Directed")

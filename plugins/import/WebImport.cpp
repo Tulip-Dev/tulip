@@ -196,7 +196,7 @@ bool UrlElement::isHtmlPage() {
 
 bool UrlElement::siteconnect(const std::string &server, const std::string &url,const int serverport, bool headonly) {
   // check that we actually got data..
-  if (server.empty()) return -1;
+  if (server.empty()) return false;
 
   if (!context)
     context = new HttpContext();

@@ -46,7 +46,7 @@ using namespace tlp;
 class Sphere: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
   Sphere(GlyphContext *gc = NULL);
-  Sphere(EdgeExtremityGlyphContext *gc = NULL);
+  Sphere(EdgeExtremityGlyphContext *gc);
   virtual ~Sphere();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
@@ -73,8 +73,8 @@ Sphere::~Sphere() {
 }
 //=====================================================
 void Sphere::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-  boundingBox[0] = Coord(-0.35, -0.35, -0.35);
-  boundingBox[1] = Coord(0.35, 0.35, 0.35);
+  boundingBox[0] = Coord(-0.35f, -0.35f, -0.35f);
+  boundingBox[1] = Coord(0.35f, 0.35f, 0.35f);
 }
 
 static GLuint buffers[] = { 0, 0, 0 };

@@ -87,7 +87,7 @@ Cross::Cross(EdgeExtremityGlyphContext *gc) :
 }
 void Cross::initCross() {
   if(!cross) {
-    float bWidth = 0.1;
+    float bWidth = 0.1f;
     vector<Coord> points;
     points.push_back(Coord(-bWidth, 0.5, 0));
     points.push_back(Coord(bWidth, 0.5, 0));
@@ -149,8 +149,8 @@ void Cross::draw(const Color &fillColor,
                  float borderWidth,
                  const std::string &textureName,
                  float lod) {
-  if(borderWidth<1e-6)
-    borderWidth=1e-6;
+  if(borderWidth<1e-6f)
+    borderWidth=1e-6f;
 
   cross->setFillColor(fillColor);
   cross->setOutlineMode(true);

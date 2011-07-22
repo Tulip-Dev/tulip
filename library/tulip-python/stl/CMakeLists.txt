@@ -22,8 +22,13 @@ ADD_CUSTOM_COMMAND(OUTPUT ${STL_PYTHON_BINDINGS_SRC}
   COMMENT "Generating Python Bindings for stl"
   DEPENDS ${STL_SIP_FILES})
 
+IF(MSVC)
+STRING(REGEX REPLACE "/W[0-9]" "/W0" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+STRING(REGEX REPLACE "/W[0-9]" "/W0" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+ELSE(MSVC)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w ")
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w ")
+ENDIF(MSVC)
 
 # Force to use SIP and headers located in thirdparty
 # instead of those installed in the system

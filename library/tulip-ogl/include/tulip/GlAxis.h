@@ -24,7 +24,7 @@
 
 const float DEFAULT_GRAD_WIDTH = 6.;
 
-const float MAGIG_FACTOR = (1. / (1.3));
+const float MAGIG_FACTOR = (1.f / (1.3f));
 
 namespace tlp {
 

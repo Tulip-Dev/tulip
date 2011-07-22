@@ -35,6 +35,7 @@
 #	else
 #		define GZSTREAM_SCOPE       __declspec(dllimport)
 #	endif
+#pragma warning(disable: 4275)
 #else 
 #	define GZSTREAM_SCOPE
 #endif

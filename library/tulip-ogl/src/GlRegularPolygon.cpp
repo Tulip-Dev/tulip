@@ -36,7 +36,7 @@ GlRegularPolygon::GlRegularPolygon(const Coord &position,
   position(position),
   size(size),
   numberOfSides(numberOfSides),
-  startAngle(M_PI/2.) {
+  startAngle(float(M_PI)/2.0f) {
   computePolygon();
 
   invertYTexture=false;

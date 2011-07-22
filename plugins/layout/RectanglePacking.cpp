@@ -59,7 +59,7 @@ void RectanglePacking::optimalPositionOfNewRectangle(vector<Rectangle<float> >::
       ratio = calculateRatio();
       perimeterOfBoundingRectangle = maxWidthOfBoundingBox+maxHeightOfBoundingBox;
 
-      if( ((ratio<=1.2)&&((bestRatio>1.2)||(bestPerimeterOfBoundingRectangle>perimeterOfBoundingRectangle))) || ((1.2<ratio)&&(bestRatio>ratio) )) {
+      if( ((ratio<=1.2f)&&((bestRatio>1.2f)||(bestPerimeterOfBoundingRectangle>perimeterOfBoundingRectangle))) || ((1.2f<ratio)&&(bestRatio>ratio) )) {
         bestRatio.value = ratio;
         bestPerimeterOfBoundingRectangle.value = perimeterOfBoundingRectangle;
         bestPlaceInFirstSequence = positionInFirstSequence;
@@ -545,7 +545,7 @@ void RectanglePacking::optimalPositionOfNewRectangleLimPos(vector<Rectangle<floa
         ratio = calculateRatio();
         perimeterOfBoundingRectangle = maxWidthOfBoundingBox+maxHeightOfBoundingBox;
 
-        if( ((ratio<=1.2)&&((bestRatio>1.2)||(bestPerimeterOfBoundingRectangle>perimeterOfBoundingRectangle))) || ((1.2<ratio)&&(bestRatio>ratio) )) {
+        if( ((ratio<=1.2f)&&((bestRatio>1.2f)||(bestPerimeterOfBoundingRectangle>perimeterOfBoundingRectangle))) || ((1.2f<ratio)&&(bestRatio>ratio) )) {
           bestRatio.value = ratio;
           bestPerimeterOfBoundingRectangle.value = perimeterOfBoundingRectangle;
           bestPlaceInFirstSequence = positionInFirstSequence;

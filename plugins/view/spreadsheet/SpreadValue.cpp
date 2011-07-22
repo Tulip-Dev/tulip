@@ -97,17 +97,17 @@ bool SpreadValue::valueList2List(const QList<SpreadValue> &values,QList<QList<do
 
 void SpreadValue::list2Value(QList<double> &in,unsigned int begin,SpreadValue::Type type,SpreadValue &value) {
   if(type==SpreadValue::doublev) {
-    assert(in.size()>=begin);
+    assert(in.size()>=int(begin));
     value.valueType=SpreadValue::doublev;
     value.doubleV=in[begin];
   }
   else if(type==SpreadValue::coordv) {
-    assert(in.size()>=begin+3);
+    assert(in.size()>=int(begin)+3);
     value.valueType=SpreadValue::coordv;
     value.coordV=Coord(in[begin],in[begin+1],in[begin+2]);
   }
   else if(type==SpreadValue::colorv) {
-    assert(in.size()>=begin+4);
+    assert(in.size()>=int(begin)+4);
 
     for(int i=0; i<4; ++i) {
       if(in[begin+i]>255)

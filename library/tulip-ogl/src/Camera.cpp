@@ -166,12 +166,12 @@ void Camera::initLight() {
     pos[3]=0;
   }
 
-  GLfloat amb[4] = {0.3,0.3 , 0.3 ,0.3};
-  GLfloat dif[4] = {0.5,0.5,0.5,1};
-  GLfloat specular[4] = {0,0,0,1};
-  GLfloat attC[3] = {1.,1.,1.};
-  GLfloat attL[3] = {0,0,0};
-  GLfloat attQ[3] = {0,0,0};
+  GLfloat amb[4] = {0.3f,0.3f , 0.3f ,0.3f};
+  GLfloat dif[4] = {0.5f,0.5f,0.5f,1.0f};
+  GLfloat specular[4] = {0.0f,0.0f,0.0f,1.0f};
+  GLfloat attC[3] = {1.0f,1.0f,1.0f};
+  GLfloat attL[3] = {0.0f,0.0f,0.0f};
+  GLfloat attQ[3] = {0.0f,0.0f,0.0f};
 
   glEnable( GL_LIGHTING );
   glEnable( GL_LIGHT0 );

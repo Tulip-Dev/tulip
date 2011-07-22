@@ -562,8 +562,8 @@ void GlComplexPolygon::draw(float,Camera *) {
   if (outlined) {
     float lineWidth=outlineSize;
 
-    if(lineWidth < 1e-6)
-      lineWidth=1e-6;
+    if(lineWidth < 1e-6f)
+      lineWidth=1e-6f;
 
     glLineWidth(lineWidth);
     setMaterial(outlineColor);
