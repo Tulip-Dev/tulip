@@ -108,32 +108,31 @@ void AlgorithmRunner::buildListWidget() {
     layout->setContentsMargins(3,6,3,6);
     QString group;
     foreach(group,_currentAlgorithmsList.keys()) {
-      QWidget *groupWidget;
+      QWidget *groupWidget = new QWidget;
+      groupWidget->setObjectName(group + "_contents");
 
       QVBoxLayout *groupLayout = new QVBoxLayout;
       groupLayout->setObjectName(group);
-      groupLayout->setSpacing(3);
-      if (group == "") {
-        groupWidget = new QWidget;
-        groupLayout->setContentsMargins(0,0,0,0);
-      }
-      else {
-        groupWidget = new ExpandableGroupBox(group);
-        groupLayout->setContentsMargins(0,15,0,6);
-      }
+      groupLayout->setSpacing(4);
+      groupWidget->setLayout(groupLayout);
 
-      groupWidget->setObjectName(group);
-//      int i=0;
       QString algName;
       foreach(algName,_currentAlgorithmsList[group]) {
-//        i=(i+1)%2;
         AlgorithmRunnerItem *item = new AlgorithmRunnerItem(group,algName);
-//        if (i == 0)
-//          item->setStyleSheet("#algFrame { background-color: #EFEFEF }");
         groupLayout->addWidget(item);
       }
-      groupWidget->setLayout(groupLayout);
-      layout->addWidget(groupWidget);
+
+      if (group == "") {
+        groupLayout->setContentsMargins(0,0,0,0);
+        layout->addWidget(groupWidget);
+      }
+      else {
+        groupLayout->setContentsMargins(0,15,0,6);
+        ExpandableGroupBox *groupBox = new ExpandableGroupBox(group);
+        groupBox->setObjectName(group);
+        groupBox->setWidget(groupWidget);
+        layout->addWidget(groupBox);
+      }
     }
     layout->addItem(new QSpacerItem(2,2,QSizePolicy::Maximum,QSizePolicy::Expanding));
   }
@@ -149,10 +148,13 @@ void AlgorithmRunner::setFilter(const QString &filter) {
     gi->setVisible(gi->objectName().contains(filter,Qt::CaseInsensitive));
   AlgorithmRunnerItem *it;
   foreach(it, findChildren<AlgorithmRunnerItem *>()) {
-    it->hide();
-    if (it->parentWidget()->isVisible() || it->objectName().contains(filter,Qt::CaseInsensitive)) {
+    if (!it->parentWidget()->isVisible())
+      it->hide();
+  }
+  foreach(it, findChildren<AlgorithmRunnerItem *>()) {
+    if (it->objectName().contains(filter,Qt::CaseInsensitive)) {
       it->show();
-      it->parentWidget()->show();
+      it->parentWidget()->parentWidget()->show();
     }
   }
 }
