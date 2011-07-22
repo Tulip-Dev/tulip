@@ -2,6 +2,7 @@
 #define EXPANDABLEGROUPBOX_H
 
 #include <QtGui/QGroupBox>
+#include <QtCore/QMap>
 
 class ExpandableGroupBox : public QGroupBox {
   Q_OBJECT
@@ -9,7 +10,9 @@ class ExpandableGroupBox : public QGroupBox {
   Q_PROPERTY(bool expanded READ expanded WRITE setExpanded)
   bool _expanded;
 
-  QMargins _oldMargins;
+  Q_PROPERTY(QWidget * widget READ widget WRITE setWidget)
+  QWidget *_widget;
+
 public:
   explicit ExpandableGroupBox(const QString &title=QString(),QWidget *parent = 0);
   virtual ~ExpandableGroupBox();
@@ -17,13 +20,14 @@ public:
     return _expanded;
   }
 
+  QWidget *widget() const { return _widget; }
+  QWidget *takeWidget();
+
 signals:
 
 public slots:
   void setExpanded(bool e);
-
-protected slots:
-  void layoutDestroyed();
+  void setWidget(QWidget *);
 };
 
 #endif // EXPANDABLEGROUPBOX_H
