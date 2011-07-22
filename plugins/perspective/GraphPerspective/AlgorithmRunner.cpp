@@ -49,17 +49,19 @@ QWidget *PluginListWidgetManagerInterface::buildListWidget() {
     QString group;
     foreach(group,algorithmInfos.keys()) {
       QWidget *groupWidget;
+
       if (group == "")
         groupWidget = new QWidget;
       else
         groupWidget = new ExpandableGroupBox(group);
+
       groupWidget->setObjectName(group + "_groupBox");
       QVBoxLayout *groupLayout = new QVBoxLayout;
       groupLayout->setContentsMargins(6,15,6,15);
       groupLayout->setObjectName(group + "_boxLayout");
       QString algName;
       foreach(algName,algorithmInfos[group])
-        groupLayout->addWidget(new AlgorithmRunnerItem(group,algName));
+      groupLayout->addWidget(new AlgorithmRunnerItem(group,algName));
       groupWidget->setLayout(groupLayout);
       layout->addWidget(groupWidget);
     }

@@ -34,25 +34,25 @@ void FaceIteratorTest::setUp() {
   map->clear();
   edges.clear();
   nodes.clear();
-  
+
   for(unsigned int i = 0; i<10; i++)
     nodes.push_back(map->addNode());
-  
+
   edges.push_back(map->addEdge(nodes[0],nodes[1]));
   edges.push_back(map->addEdge(nodes[1],nodes[2]));
   edges.push_back(map->addEdge(nodes[3],nodes[2]));
-  
+
   edges.push_back(map->addEdge(nodes[4],nodes[3]));
   edges.push_back(map->addEdge(nodes[3],nodes[5]));
   edges.push_back(map->addEdge(nodes[3],nodes[6]));
-  
+
   edges.push_back(map->addEdge(nodes[7],nodes[6]));
   edges.push_back(map->addEdge(nodes[7],nodes[1]));
-  
+
   edges.push_back(map->addEdge(nodes[0],nodes[8]));
   edges.push_back(map->addEdge(nodes[8],nodes[9]));
   edges.push_back(map->addEdge(nodes[0],nodes[9]));
-  
+
   edges.push_back(map->addEdge(nodes[4],nodes[2]));
   edges.push_back(map->addEdge(nodes[4],nodes[5]));
   edges.push_back(map->addEdge(nodes[7],nodes[9]));
@@ -76,7 +76,7 @@ void FaceIteratorTest::testNodeFaceIterator() {
       i++;
     }
 
-  CPPUNIT_ASSERT_EQUAL_MESSAGE(" test NodeFaceIterator ",map->nbFacesEdges(f), i);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(" test NodeFaceIterator ",map->nbFacesEdges(f), i);
     delete it;
   }
 

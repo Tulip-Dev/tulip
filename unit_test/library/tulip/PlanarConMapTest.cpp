@@ -258,7 +258,7 @@ void PlanarConMapTest::testAddEdgeMap() {
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 3 AddEdgeMap cycle ", cycles3[i], tmp);
   }
-  
+
   CPPUNIT_ASSERT_EQUAL_MESSAGE(" test 3 AddEdgeMap dispositif decorateur ", graph->numberOfEdges(), carte->numberOfEdges());
 }
 

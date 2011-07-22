@@ -33,7 +33,7 @@ enum ProgressState {
   /** The plugin should cancel, reverting all performed changes since the plugin was called. */
   TLP_CANCEL,
   /** The plugin should stop, leaving the graph in its current state. */
-  TLP_STOP 
+  TLP_STOP
 };
 
 /**

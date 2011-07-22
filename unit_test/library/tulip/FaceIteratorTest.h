@@ -33,7 +33,7 @@ class FaceIteratorTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testNodeFaceIterator);
   CPPUNIT_TEST(testFaceAdjIterator);
   CPPUNIT_TEST_SUITE_END();
-  
+
 private :
   tlp::PlanarConMap* map;
 

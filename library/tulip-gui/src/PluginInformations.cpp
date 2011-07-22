@@ -25,8 +25,8 @@ PluginInformations::PluginInformations(const tlp::AbstractPluginInfo& info, cons
 }
 
 PluginInformations::PluginInformations(const tlp::AbstractPluginInfo& info, const std::string& type, const QString& basePath)
-:_type(type.c_str()), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html"), _isLocal(false), _installedVersion(QString::null), 
-_updateAvailable(false), _remoteLocation(basePath), _remoteArchive(_remoteLocation + "/" + tlp::getPluginPackageName(info.getName().c_str())) {
+  :_type(type.c_str()), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html"), _isLocal(false), _installedVersion(QString::null),
+   _updateAvailable(false), _remoteLocation(basePath), _remoteArchive(_remoteLocation + "/" + tlp::getPluginPackageName(info.getName().c_str())) {
   _versions << info.getRelease().c_str();
 //   PluginInfoWithDependencies pluginInfo(info, dependencies);
   _infos[info.getName().c_str()] = &info;

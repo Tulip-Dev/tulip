@@ -38,7 +38,7 @@ class SelectionProxyTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testCopy);
   CPPUNIT_TEST(testIterators);
   CPPUNIT_TEST(testDelete);
-CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE_END();
 private:
   tlp::Graph *graph;
   tlp::BooleanProperty *selection;
