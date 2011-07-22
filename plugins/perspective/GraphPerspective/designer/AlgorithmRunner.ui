@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>726</height>
+    <width>398</width>
+    <height>724</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -47,7 +47,7 @@
   border-left: 1px solid &quot;#C9C9C9&quot;;
   border-right: 1px solid &quot;#C9C9C9&quot;;
   border-top: 0px;
-  border-bottom: 0px;
+  border-bottom: 1px solid &quot;#C9C9C9&quot;;
 }</string>
      </property>
      <property name="placeholderText">
@@ -68,7 +68,7 @@
   background-color: white;
   border-left: 1px solid &quot;#C9C9C9&quot;;
   border-right: 1px solid &quot;#C9C9C9&quot;;
-  border-top: 1px solid &quot;#C9C9C9&quot;;
+  border-top: 0px;
   border-bottom: 1px solid &quot;#C9C9C9&quot;;
 }
 
@@ -94,6 +94,38 @@ ExpandableGroupBox::indicator:unchecked {
 
 ExpandableGroupBox::indicator:checked {
   image: url(:/tulip/graphperspective/ui/down_arrow-black.png);
+}
+
+QToolButton, QComboBox {
+    border-image: url(:/tulip/gui/ui/btn_26.png) 4;
+    border-width: 4;
+    padding: 0px 6px;
+    font-size: 12px;
+}
+
+QPushButton {
+  border-image: none;
+  background-color: white;
+  border: 1px solid &quot;#E9E9E9&quot;;
+  color: black;
+  outline: none;
+  margin: 2
+}
+
+QPushButton:hover {
+  border-image: none;
+  background-color: white;
+  border: 1px solid &quot;#C9C9C9&quot;;
+}
+
+QPushButton:disabled {
+	color:gray;
+}
+
+QPushButton:pressed{
+  border-image: none;
+  background-color: &quot;#E9E9E9&quot;;
+  border: 1px solid &quot;#C9C9C9&quot;;
 }</string>
      </property>
      <property name="frameShape">
@@ -107,8 +139,8 @@ ExpandableGroupBox::indicator:checked {
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>400</width>
-        <height>694</height>
+        <width>398</width>
+        <height>692</height>
        </rect>
       </property>
      </widget>

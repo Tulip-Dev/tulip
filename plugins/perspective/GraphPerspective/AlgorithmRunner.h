@@ -2,6 +2,7 @@
 #define ALGORITHMRUNNER_H
 
 #include <QtGui/QWidget>
+#include <QtCore/QMap>
 
 namespace tlp {
 class Graph;
@@ -15,7 +16,6 @@ class AlgorithmRunnerItemData;
 
 class PluginListWidgetManagerInterface {
 public:
-  virtual QWidget *buildListWidget();
   virtual QMap<QString,QStringList> algorithms()=0;
   virtual bool computeProperty(tlp::Graph *,const QString &alg, const QString &outPropertyName, QString &msg, tlp::PluginProgress *progress=0, tlp::DataSet *data=0)=0;
 };
@@ -28,6 +28,10 @@ class AlgorithmRunner : public QWidget {
 
   Ui::AlgorithmRunnerData *_ui;
   PluginListWidgetManagerInterface *_pluginsListMgr;
+
+  QMap<QString,QStringList> _currentAlgorithmsList;
+
+  QWidget *buildListWidget();
 public:
   explicit AlgorithmRunner(QWidget *parent = 0);
 
