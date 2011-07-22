@@ -6,11 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>388</width>
+    <width>386</width>
     <height>28</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <property name="styleSheet">
+   <string notr="true">#algFrame {
+  border-top: 0px solid red;
+  border-left: 0px solid red;
+  border-right: 0px solid red;
+  border-bottom: 1px solid #E9E9E9;
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -19,12 +27,6 @@
    </property>
    <item>
     <widget class="QFrame" name="algFrame">
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="spacing">
        <number>0</number>
@@ -32,29 +34,6 @@
       <property name="margin">
        <number>0</number>
       </property>
-      <item>
-       <widget class="QPushButton" name="settingsButton">
-        <property name="minimumSize">
-         <size>
-          <width>28</width>
-          <height>28</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>28</width>
-          <height>28</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/tulip/graphperspective/icons/preferences-other.svg</normaloff>:/tulip/graphperspective/icons/preferences-other.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QPushButton" name="playButton">
         <property name="minimumSize">
@@ -79,6 +58,29 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="settingsButton">
+        <property name="minimumSize">
+         <size>
+          <width>28</width>
+          <height>28</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>28</width>
+          <height>28</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/graphperspective/icons/preferences-other.svg</normaloff>:/tulip/graphperspective/icons/preferences-other.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="spacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -96,6 +98,12 @@
       </item>
       <item>
        <widget class="QLabel" name="algNameLabel">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
         <property name="text">
          <string/>
         </property>

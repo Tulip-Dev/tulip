@@ -28,19 +28,18 @@ class AlgorithmRunner : public QWidget {
 
   Ui::AlgorithmRunnerData *_ui;
   PluginListWidgetManagerInterface *_pluginsListMgr;
-
   QMap<QString,QStringList> _currentAlgorithmsList;
-
-  QWidget *buildListWidget();
 public:
   explicit AlgorithmRunner(QWidget *parent = 0);
 
 signals:
 
 public slots:
+  void buildListWidget();
 
 protected slots:
   void algorithmTypeChanged(const QString &);
+  void setFilter(const QString &);
 };
 
 class AlgorithmRunnerItem: public QWidget {
