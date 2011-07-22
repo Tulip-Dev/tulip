@@ -124,9 +124,10 @@ QWidget *AlgorithmRunner::buildListWidget() {
       int i=0;
       QString algName;
       foreach(algName,_currentAlgorithmsList[group]) {
-        i=(++i)%2;
+        i=(i+1)%2;
         AlgorithmRunnerItem *item = new AlgorithmRunnerItem(group,algName);
-        item->setStyleSheet("#algFrame { background-color: #" + QString(i==0 ? "FDFDFD" : "EFEFEF") + "; }");
+        if (i == 0)
+          item->setStyleSheet("#algFrame { background-color: #EFEFEF }");
         groupLayout->addWidget(item);
       }
       groupWidget->setLayout(groupLayout);
