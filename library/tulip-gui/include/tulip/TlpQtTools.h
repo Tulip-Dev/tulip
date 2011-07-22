@@ -119,6 +119,8 @@ TLP_QT_SCOPE std::string propertyTypeLabelToPropertyType(const QString& typeName
     **/
 TLP_QT_SCOPE QString getPluginPackageName(const QString& pluginName);
 
+TLP_QT_SCOPE QString getPluginStagingDirectory();
+
 }
 
 #endif

@@ -22,9 +22,9 @@ PluginInformations::PluginInformations(const tlp::AbstractPluginInfo& info, cons
 _installedVersion(info.getRelease().c_str()), _updateAvailable(false), _version(info.getRelease().c_str()), _infos(&info) {
 }
 
-PluginInformations::PluginInformations(const tlp::AbstractPluginInfo& info, const QString& type, const QString& basePath)
+PluginInformations::PluginInformations(const tlp::AbstractPluginInfo& info, const QString& type, const QString& basePath, const QString& remotepluginName)
 :_lastVersion(info.getRelease().c_str()), _type(type), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html"), _isLocal(false), _installedVersion(QString::null),
-  _updateAvailable(false), _remoteLocation(basePath), _remoteArchive(_remoteLocation + "/" + tlp::getPluginPackageName(info.getName().c_str())), _version(info.getRelease().c_str()), _infos(&info) {
+  _updateAvailable(false), _remoteLocation(basePath + "/" + remotepluginName), _remoteArchive(_remoteLocation + "/" + tlp::getPluginPackageName(remotepluginName)), _version(info.getRelease().c_str()), _infos(&info) {
 }
 
 void PluginInformations::AddPluginInformations(const tlp::AbstractPluginInfo* info) {
@@ -105,7 +105,7 @@ QString PluginInformations::latestVersion() const {
 
 bool PluginInformations::fetch() const {
   const QString archiveName = tlp::getPluginPackageName(name());
-  DownloadManager::getInstance()->downloadPlugin(_remoteArchive, QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/staging/" + archiveName);
+  DownloadManager::getInstance()->downloadPlugin(_remoteArchive, tlp::getPluginStagingDirectory() + archiveName);
   return false;
 }
 

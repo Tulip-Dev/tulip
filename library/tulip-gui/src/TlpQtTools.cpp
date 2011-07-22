@@ -34,6 +34,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/SystemDefinition.h>
+#include <QDesktopServices>
 
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
@@ -136,6 +137,10 @@ string propertyTypeLabelToPropertyType(const QString& typeNameLabel) {
 
 QString getPluginPackageName(const QString& pluginName) {
   return pluginName.simplified().remove(' ').toLower() + /*"-" + info->getRelease().c_str() +*/ "-" + TULIP_RELEASE + "-" + OS_PLATFORM + OS_ARCHITECTURE + "-" + OS_COMPILER + ".zip";
+}
+
+QString getPluginStagingDirectory() {
+  return QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/staging/";
 }
 
 }
