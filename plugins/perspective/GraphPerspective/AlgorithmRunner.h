@@ -52,7 +52,9 @@ public:
   explicit AlgorithmRunnerItem(const QString &group,const QString &name, QWidget *parent=0);
   virtual ~AlgorithmRunnerItem();
 
-  QString group() const { return _group; }
+  QString group() const {
+    return _group;
+  }
   QString name() const;
 };
 

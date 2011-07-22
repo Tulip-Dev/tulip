@@ -143,7 +143,7 @@ void MutableContainerTest::testFindAll() {
   delete itS;
 
   Iterator<unsigned int> *nullIterator = NULL;
-  
+
   itB = mutBool->findAll(false);
   CPPUNIT_ASSERT_EQUAL(nullIterator, itB);
 

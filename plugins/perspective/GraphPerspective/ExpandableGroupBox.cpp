@@ -16,6 +16,7 @@ void ExpandableGroupBox::setExpanded(bool e) {
   QObject *o;
   foreach(o,children()) {
     QWidget *w = dynamic_cast<QWidget *>(o);
+
     if (w)
       w->setVisible(e);
   }

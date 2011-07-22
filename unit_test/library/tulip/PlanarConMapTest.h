@@ -41,7 +41,7 @@ class PlanarConMapTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testPrecCycleEdge);
   CPPUNIT_TEST(testComputeFaces);
   CPPUNIT_TEST_SUITE_END();
-  
+
 private :
   tlp::Graph* graph;
   tlp::PlanarConMap* carte;

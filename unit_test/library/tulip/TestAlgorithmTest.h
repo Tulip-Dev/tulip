@@ -36,7 +36,7 @@ class TestAlgorithmTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testConnected);
   CPPUNIT_TEST(testBiconnected);
   CPPUNIT_TEST(testTriconnected);
-CPPUNIT_TEST_SUITE_END();
+  CPPUNIT_TEST_SUITE_END();
 private:
   tlp::Graph *graph;
 

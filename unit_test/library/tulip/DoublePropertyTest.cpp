@@ -86,7 +86,7 @@ void DoublePropertyTest::testDoublePropertyMinUpdateFromString() {
   CPPUNIT_ASSERT_EQUAL_MESSAGE("test DoubleProperty min value before update", originalMin, minNode);
 
   const string newStringMin = "1";
-  
+
   graph->getLocalProperty<DoubleProperty>(doublePropertyName)->setNodeStringValue(n1, newStringMin);
   minNode = graph->getLocalProperty<DoubleProperty>(doublePropertyName)->getNodeMin();
   CPPUNIT_ASSERT_EQUAL_MESSAGE("test DoubleProperty min value after update", newMin, minNode);
@@ -99,7 +99,7 @@ void DoublePropertyTest::testDoublePropertyMaxUpdateFromString() {
   CPPUNIT_ASSERT_EQUAL_MESSAGE("test DoubleProperty max value before update", originalMax, maxNode);
 
   const string newStringMax = "15";
-  
+
   graph->getLocalProperty<DoubleProperty>(doublePropertyName)->setNodeStringValue(n4, newStringMax);
   maxNode = graph->getLocalProperty<DoubleProperty>(doublePropertyName)->getNodeMax();
   CPPUNIT_ASSERT_EQUAL_MESSAGE("test DoubleProperty max value after update", newMax, maxNode);

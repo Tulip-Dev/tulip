@@ -344,7 +344,7 @@ void ObservableGraphTest::testClear() {
       CPPUNIT_ASSERT_EQUAL(edges[i - 1], oEdges[i]);
   }
 
-CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
+  CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
   CPPUNIT_ASSERT(observer->found(graph));
 }
 //==========================================================

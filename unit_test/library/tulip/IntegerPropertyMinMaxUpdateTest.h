@@ -33,7 +33,7 @@ class IntegerPropertyMinMaxUpdateTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testIntegerPropertyMinUpdateFromString);
   CPPUNIT_TEST(testIntegerPropertyMaxUpdateFromString);
   CPPUNIT_TEST_SUITE_END();
-  
+
 public:
   void setUp();
   void tearDown();

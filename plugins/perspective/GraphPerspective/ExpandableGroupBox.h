@@ -12,7 +12,9 @@ class ExpandableGroupBox : public QGroupBox {
 public:
   explicit ExpandableGroupBox(const QString &title=QString(),QWidget *parent = 0);
   virtual ~ExpandableGroupBox();
-  bool expanded() const { return _expanded; }
+  bool expanded() const {
+    return _expanded;
+  }
 
 signals:
 

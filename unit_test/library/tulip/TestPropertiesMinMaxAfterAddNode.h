@@ -24,9 +24,9 @@
 
 class TestPropertiesMinMaxAfterAddNode : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE(TestPropertiesMinMaxAfterAddNode);
-    CPPUNIT_TEST(testDoublePropertyMinMaxAfterAddNode);
-    CPPUNIT_TEST(testIntegerPropertyMinMaxAfterAddNode);
-    CPPUNIT_TEST(testLayoutPropertyMinMaxAfterAddNode);
+  CPPUNIT_TEST(testDoublePropertyMinMaxAfterAddNode);
+  CPPUNIT_TEST(testIntegerPropertyMinMaxAfterAddNode);
+  CPPUNIT_TEST(testLayoutPropertyMinMaxAfterAddNode);
   CPPUNIT_TEST_SUITE_END();
 
 public:
