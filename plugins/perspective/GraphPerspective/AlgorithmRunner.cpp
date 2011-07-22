@@ -25,6 +25,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &na
   _ui->algNameLabel->setToolTip(_ui->algNameLabel->text());
   _ui->settingsButton->setToolTip(trUtf8("Set up ") + name);
   _ui->playButton->setToolTip(trUtf8("Run ") + name);
+  setObjectName(group + "_" + name + "_runnerItem");
 }
 
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {
@@ -109,19 +110,25 @@ QWidget *AlgorithmRunner::buildListWidget() {
 
       QVBoxLayout *groupLayout = new QVBoxLayout;
       groupLayout->setObjectName(group + "_boxLayout");
+      groupLayout->setSpacing(0);
       if (group == "") {
         groupWidget = new QWidget;
         groupLayout->setContentsMargins(0,0,0,0);
       }
       else {
         groupWidget = new ExpandableGroupBox(group);
-        groupLayout->setContentsMargins(6,15,6,15);
+        groupLayout->setContentsMargins(0,15,0,15);
       }
 
       groupWidget->setObjectName(group + "_groupBox");
+      int i=0;
       QString algName;
-      foreach(algName,_currentAlgorithmsList[group])
-      groupLayout->addWidget(new AlgorithmRunnerItem(group,algName));
+      foreach(algName,_currentAlgorithmsList[group]) {
+        i=(++i)%2;
+        AlgorithmRunnerItem *item = new AlgorithmRunnerItem(group,algName);
+        item->setStyleSheet("#algFrame { background-color: #" + QString(i==0 ? "FDFDFD" : "EFEFEF") + "; }");
+        groupLayout->addWidget(item);
+      }
       groupWidget->setLayout(groupLayout);
       layout->addWidget(groupWidget);
     }

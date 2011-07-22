@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>398</width>
-    <height>724</height>
+    <width>394</width>
+    <height>720</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -73,7 +73,7 @@
 }
 
 ExpandableGroupBox {
-  background-color: #FDFDFD;
+  background-color: &quot;#FDFDFD&quot;;
   border-left: 1px solid &quot;#E9E9E9&quot;;
   border-right: 1px solid &quot;#E9E9E9&quot;;
   border-top: 1px solid &quot;#E9E9E9&quot;;
@@ -139,8 +139,8 @@ QPushButton:pressed{
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>398</width>
-        <height>692</height>
+        <width>394</width>
+        <height>688</height>
        </rect>
       </property>
      </widget>
