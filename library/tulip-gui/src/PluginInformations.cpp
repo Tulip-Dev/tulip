@@ -18,52 +18,42 @@ static std::list<tlp::Dependency> getPluginDependencies(T* factory, U context) {
 }
 
 PluginInformations::PluginInformations(const tlp::AbstractPluginInfo& info, const std::string& type, const std::string& library)
-  :_type(type.c_str()), _iconPath(":/tulip/gui/icons/logo32x32.png"), _longDescriptionPath("http://www.perdu.com"), _isLocal(true), _installedVersion(info.getRelease().c_str()), _updateAvailable(false) {
-  _versions << info.getRelease().c_str();
-//   PluginInfoWithDependencies pluginInfo(info, dependencies);
-  _infos[info.getName().c_str()] = &info;
+:_lastVersion(info.getRelease().c_str()), _type(type.c_str()), _iconPath(":/tulip/gui/icons/logo32x32.png"), _longDescriptionPath("http://www.perdu.com"), _isLocal(true),
+_installedVersion(info.getRelease().c_str()), _updateAvailable(false), _version(info.getRelease().c_str()), _infos(&info) {
 }
 
-PluginInformations::PluginInformations(const tlp::AbstractPluginInfo& info, const std::string& type, const QString& basePath)
-  :_type(type.c_str()), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html"), _isLocal(false), _installedVersion(QString::null),
-   _updateAvailable(false), _remoteLocation(basePath), _remoteArchive(_remoteLocation + "/" + tlp::getPluginPackageName(info.getName().c_str())) {
-  _versions << info.getRelease().c_str();
-//   PluginInfoWithDependencies pluginInfo(info, dependencies);
-  _infos[info.getName().c_str()] = &info;
+PluginInformations::PluginInformations(const tlp::AbstractPluginInfo& info, const QString& type, const QString& basePath)
+:_lastVersion(info.getRelease().c_str()), _type(type), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html"), _isLocal(false), _installedVersion(QString::null),
+  _updateAvailable(false), _remoteLocation(basePath), _remoteArchive(_remoteLocation + "/" + tlp::getPluginPackageName(info.getName().c_str())), _version(info.getRelease().c_str()), _infos(&info) {
 }
 
 void PluginInformations::AddPluginInformations(const tlp::AbstractPluginInfo* info) {
   QString newVersion = info->getRelease().c_str();
 
-  if(_installedVersion > newVersion) {
+  if(_installedVersion < newVersion) {
     _updateAvailable = true;
-  }
-
-  _versions << newVersion;
-//     PluginInfoWithDependencies pluginInfo(info, dependencies);
-  _infos[info->getName().c_str()] = info;
-}
-
-void PluginInformations::AddPluginInformations(const tlp::PluginInformations* info) {
-  foreach(const QString& version, info->versions()) {
-    if(version > _installedVersion) {
-      _updateAvailable = true;
-    }
-
-    _versions << version;
+    _lastVersion = newVersion;
   }
 }
 
 QString PluginInformations::identifier() const {
-  return _infos.begin().value()->getName().c_str();
+  return _infos->getName().c_str();
 }
 
 QString PluginInformations::name() const {
-  return _infos.begin().value()->getName().c_str();
+  return _infos->getName().c_str();
+}
+
+QString PluginInformations::author() const {
+  return _infos->getAuthor().c_str();
+}
+
+QString PluginInformations::group() const {
+  return _infos->getGroup().c_str();
 }
 
 QString PluginInformations::shortDescription() const {
-  return _infos.begin().value()->getInfo().c_str();
+  return _infos->getInfo().c_str();
 }
 
 QString PluginInformations::longDescriptionPath() const {
@@ -82,27 +72,23 @@ QString PluginInformations::type() const {
   return _type;
 }
 
-const QStringList PluginInformations::dependencies(QString version) const {
+const QStringList PluginInformations::dependencies() const {
   QStringList result;
-  result.reserve(_infos[version]->getDependencies().size());
+  result.reserve(_infos->getDependencies().size());
 
-  for(std::list<tlp::Dependency>::const_iterator it = _infos[version]->getDependencies().begin(); it != _infos[version]->getDependencies().end(); ++it) {
+  for(std::list<tlp::Dependency>::const_iterator it = _infos->getDependencies().begin(); it != _infos->getDependencies().end(); ++it) {
     result.append(it->pluginName.c_str());
   }
 
   return result;
 }
 
-const QStringList& PluginInformations::versions() const {
-  return _versions;
+const QString& PluginInformations::version() const {
+  return _version;
 }
 
 QString PluginInformations::installedVersion() const {
   return _installedVersion;
-}
-
-bool PluginInformations::isInstalled(QString version) const {
-  return version == _installedVersion;
 }
 
 bool PluginInformations::isInstalled() const {
@@ -111,6 +97,10 @@ bool PluginInformations::isInstalled() const {
 
 bool PluginInformations::updateAvailable() const {
   return _updateAvailable;
+}
+
+QString PluginInformations::latestVersion() const {
+  return _lastVersion;
 }
 
 bool PluginInformations::fetch() const {

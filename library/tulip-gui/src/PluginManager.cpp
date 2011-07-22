@@ -37,7 +37,9 @@ QList<tlp::PluginInformations*> PluginManager::pluginsList(Location list) {
         QMap<QString, tlp::PluginInformations*>::const_iterator current = result.find(locationIt.key());
 
         if(current == result.end()) {
-          result[locationIt.key()] = locationIt.value();
+          DistantPluginInfo* pluginInfo = locationIt.value();
+          PluginInformations* pluginInformations = new PluginInformations(*pluginInfo, pluginInfo->getType(), pluginInfo->getLocation());
+          result[locationIt.key()] = pluginInformations;
         }
         else {
           current.value()->AddPluginInformations(locationIt.value());
@@ -79,7 +81,7 @@ LocationPlugins PluginManager::parseDescription(const QString& xmlDescription, c
     const QDomNode& child = pluginNodes.at(i);
     QDomElement childElement = child.toElement();
     const QString name = childElement.attribute("name");
-    const std::string type = childElement.attribute("type").toStdString();
+    const QString type = childElement.attribute("type");
     const std::string author = childElement.attribute("author").toStdString();
     const std::string date = childElement.attribute("date").toStdString();
     const std::string info = childElement.attribute("info").toStdString();
@@ -97,12 +99,9 @@ LocationPlugins PluginManager::parseDescription(const QString& xmlDescription, c
       dependencies.push_back(dep);
     }
 
-    tlp::AbstractPluginInfo* pluginInfo = new DistantPluginInfo(author, date, group, name.toStdString(), info, release, tulipRelease, dependencies);
+    tlp::DistantPluginInfo* pluginInfo = new DistantPluginInfo(author, date, group, name.toStdString(), info, release, tulipRelease, dependencies, type, location + "/" + name.simplified().remove(' ').toLower());
 
-    PluginInformations* pluginInformations = new PluginInformations(*pluginInfo, type, location + "/" + name.simplified().remove(' ').toLower());
-
-//     PluginInfoWithDependencies infos(pluginInfo, dependencies);
-    remotePlugins[pluginInfo->getName().c_str()] = pluginInformations;
+    remotePlugins[pluginInfo->getName().c_str()] = pluginInfo;
   }
 
   return remotePlugins;
