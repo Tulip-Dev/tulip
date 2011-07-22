@@ -25,7 +25,7 @@ namespace tlp {
 
 class AbstractPluginInfo;
 
-typedef QMap<QString, tlp::PluginInformations*> LocationPlugins;
+typedef QMap<QString, tlp::DistantPluginInfo*> LocationPlugins;
 
 /**
  * @brief This class allows to easily install, remove, update, and list plugins (both installed and available).

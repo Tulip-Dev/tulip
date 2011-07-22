@@ -38,8 +38,9 @@ namespace tlp {
 class TLP_QT_SCOPE DistantPluginInfo : public tlp::AbstractPluginInfo {
 public:
   DistantPluginInfo(const std::string& author, const std::string& date, const std::string& group, const std::string& name, const std::string& info, const std::string& release,
-                    const std::string& tulipRelease, const std::list<tlp::Dependency> dependencies)
-    : _author(author), _date(date), _group(group), _name(name), _info(info), _release(release), _tulipRelease(tulipRelease), _dependencies(dependencies) {
+                    const std::string& tulipRelease, const std::list<tlp::Dependency> dependencies, const QString& type, const QString& location)
+    : _author(author), _date(date), _group(group), _name(name), _info(info), _release(release), _tulipRelease(tulipRelease), _dependencies(dependencies),
+      _type(type), _location(location) {
   }
   virtual std::string getAuthor() const {
     return _author;
@@ -65,6 +66,12 @@ public:
   virtual std::list<tlp::Dependency> getDependencies() const {
     return _dependencies;
   }
+  virtual const QString& getType() const {
+    return _type;
+  }
+  virtual const QString& getLocation() const {
+    return _location;
+  }
 
 private:
   const std::string _author;
@@ -75,10 +82,12 @@ private:
   const std::string _release;
   const std::string _tulipRelease;
   const std::list<tlp::Dependency> _dependencies;
+  const QString _type;
+  const QString _location;
 };
 
 /**
- * @brief Straightforward implementation of PluginInformationsInterface, useable for both remote and local plugins.
+ * @brief Simple wrapper around AbstractPluginInfo to provide informations about updates and installation/removal functions.
  **/
 class TLP_QT_SCOPE PluginInformations {
 public:
@@ -101,20 +110,22 @@ public:
     * @param longDescriptionPath The URL where the long description resides.
     * @param iconPath The URL where the icon resides.
     **/
-  PluginInformations(const tlp::AbstractPluginInfo& info, const std::string& type, const QString& basePath);
+  PluginInformations(const tlp::AbstractPluginInfo& info, const QString& type, const QString& basePath);
 
+  /**
+   * @brief This is used when a plugin is installed and available on a remote server.
+   * If the remote version is greater than the local one, consider an update is available.
+   *
+   * @param info The PluginInfo of the remote plugin.
+   * @return void
+   **/
   void AddPluginInformations(const tlp::AbstractPluginInfo* info);
-  void AddPluginInformations(const tlp::PluginInformations* info);
 
   QString identifier() const;
   //TODO this should be a displayname, not the name used to register into the plugin system
   QString name() const;
-  QString author() const {
-    return "author";
-  }
-  QString group() const {
-    return "group";
-  }
+  QString author() const;
+  QString group() const;
 
   QString shortDescription() const;
   QString longDescriptionPath() const;
@@ -123,17 +134,15 @@ public:
   QDateTime installDate() const;
 
   QString type() const;
-  const QStringList dependencies(QString version) const;
-  const QStringList& versions() const;
-  QString latestVersion() const {
-    return "latestVersion";
-  }
+  const QStringList dependencies() const;
+  const QString& version() const;
 
   QString installedVersion() const;
-  bool isInstalled(QString version) const;
   bool isInstalled() const;
   bool updateAvailable() const;
 
+  QString latestVersion() const;
+  
   bool fetch() const;
   bool remove() const;
 private:
@@ -146,8 +155,8 @@ private:
   bool _updateAvailable;
   const QString _remoteLocation;
   const QString _remoteArchive;
-  QStringList _versions;
-  QMap<QString, const tlp::AbstractPluginInfo*> _infos;
+  const QString& _version;
+  const tlp::AbstractPluginInfo* _infos;
 };
 
 }
