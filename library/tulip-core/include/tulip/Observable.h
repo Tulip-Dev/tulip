@@ -498,7 +498,7 @@ private:
   * @see Observer
   * @see Event
   **/
-class  TLP_SCOPE Observable: virtual public OLOObject {
+class  TLP_SCOPE Observable: public OLOObject {
 public:
   Observable();
   _DEPRECATED Observable(bool) {}
