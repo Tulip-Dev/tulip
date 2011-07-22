@@ -38,9 +38,9 @@ namespace tlp {
 class TLP_QT_SCOPE DistantPluginInfo : public tlp::AbstractPluginInfo {
 public:
   DistantPluginInfo(const std::string& author, const std::string& date, const std::string& group, const std::string& name, const std::string& info, const std::string& release,
-                    const std::string& tulipRelease, const std::list<tlp::Dependency> dependencies, const QString& type, const QString& location)
+                    const std::string& tulipRelease, const std::list<tlp::Dependency> dependencies, const QString& type, const QString& location, const QString& remotepluginName)
     : _author(author), _date(date), _group(group), _name(name), _info(info), _release(release), _tulipRelease(tulipRelease), _dependencies(dependencies),
-      _type(type), _location(location) {
+      _type(type), _location(location), _remotePluginName(remotepluginName) {
   }
   virtual std::string getAuthor() const {
     return _author;
@@ -72,6 +72,9 @@ public:
   virtual const QString& getLocation() const {
     return _location;
   }
+  virtual const QString& getRemotePluginName() const {
+    return _remotePluginName;
+  }
 
 private:
   const std::string _author;
@@ -84,6 +87,7 @@ private:
   const std::list<tlp::Dependency> _dependencies;
   const QString _type;
   const QString _location;
+  const QString _remotePluginName;
 };
 
 /**
@@ -110,7 +114,7 @@ public:
     * @param longDescriptionPath The URL where the long description resides.
     * @param iconPath The URL where the icon resides.
     **/
-  PluginInformations(const tlp::AbstractPluginInfo& info, const QString& type, const QString& basePath);
+  PluginInformations(const tlp::AbstractPluginInfo& info, const QString& type, const QString& basePath, const QString& remotepluginName);
 
   /**
    * @brief This is used when a plugin is installed and available on a remote server.

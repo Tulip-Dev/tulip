@@ -13,8 +13,10 @@
 #include "TulipSplashScreen.h"
 #include "PluginsCenter.h"
 
-#if defined(__APPLE__)
+#include <tulip/TlpQtTools.h>
 #include <QtCore/QDir>
+
+#if defined(__APPLE__)
 #include <sys/types.h>
 #include <signal.h>
 #endif
@@ -24,6 +26,11 @@ int main(int argc, char **argv) {
   tulip_agent.setApplicationName(QObject::trUtf8("Tulip"));
   QLocale::setDefault(QLocale(QLocale::English));
 
+  QDir stagingDirectory(tlp::getPluginStagingDirectory());
+  if(!stagingDirectory.exists()) {
+    stagingDirectory.mkpath(tlp::getPluginStagingDirectory());
+  }
+  
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
