@@ -69,7 +69,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
         if (progress) {
             progress->progress(0, 100);
         }
-        while (multiplatformgetline(csvFile, line) && row <_lastLine) {
+        while (multiplatformgetline(csvFile, line) && row <=_lastLine) {
 
             if (progress) {
                 readSize += line.size();
