@@ -43,7 +43,7 @@ using namespace tlp;
 class Cube: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
   Cube(GlyphContext *gc = NULL);
-  Cube(EdgeExtremityGlyphContext *gc = NULL);
+  Cube(EdgeExtremityGlyphContext *gc);
   virtual ~Cube();
   virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord & vector) const;

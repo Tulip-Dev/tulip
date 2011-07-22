@@ -184,8 +184,8 @@ void RoundedBox::initRoundedSquare() {
 }
 
 void RoundedBox::getIncludeBoundingBox(BoundingBox &boundingBox,node ) {
-  boundingBox[0] = Coord(-0.35, -0.35, 0);
-  boundingBox[1] = Coord(0.35, 0.35, 0);
+  boundingBox[0] = Coord(-0.35f, -0.35f, 0);
+  boundingBox[1] = Coord(0.35f, 0.35f, 0);
 }
 
 GlPolygon *RoundedBox::createRoundedRect(const Size &size) {

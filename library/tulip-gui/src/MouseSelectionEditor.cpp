@@ -902,12 +902,12 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   advRect.setBottomRightPos(positions[7]);
 
   _controls[0].set(positions[0], 7, 0.0); //t
-  _controls[1].set(positions[1], 6, M_PI/4.); //c
-  _controls[2].set(positions[2], 7, -M_PI/2.); //t
+  _controls[1].set(positions[1], 6, float(M_PI)/4.f); //c
+  _controls[2].set(positions[2], 7, float(-M_PI)/2.f); //t
   _controls[3].set(positions[3], 5, 0.);//s
-  _controls[4].set(positions[4], 7, M_PI);//t
-  _controls[5].set(positions[5], 6, M_PI/4.);//c
-  _controls[6].set(positions[6], 7, M_PI/2.);//
+  _controls[4].set(positions[4], 7, float(M_PI));//t
+  _controls[5].set(positions[5], 6, float(M_PI)/4.f);//c
+  _controls[6].set(positions[6], 7, float(M_PI)/2.f);//
   _controls[7].set(positions[7], 5, 0.);//s
 
   vector<Coord> advControlVect;

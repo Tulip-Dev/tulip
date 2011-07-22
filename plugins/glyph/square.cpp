@@ -44,7 +44,7 @@ using namespace tlp;
 class Square: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
   Square(GlyphContext *gc = NULL);
-  Square(EdgeExtremityGlyphContext*gc = NULL);
+  Square(EdgeExtremityGlyphContext*gc);
   virtual ~Square();
   virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord &vector) const;

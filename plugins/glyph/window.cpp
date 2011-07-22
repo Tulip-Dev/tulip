@@ -71,11 +71,11 @@ Window::Window(GlyphContext* context):
   Glyph(context),
   _rectColor(205, 205, 205, 255),
   _textColor(205, 205, 205, 255),
-  _titleBarSize(0.1),
-  _borderWidth(0.02),
+  _titleBarSize(0.1f),
+  _borderWidth(0.02f),
   _border(texture) {
 
-  const float textheight = 0.05;
+  const float textheight = 0.05f;
 
   Coord v[10];
   v[0].set(-0.5, 0.5, 0);

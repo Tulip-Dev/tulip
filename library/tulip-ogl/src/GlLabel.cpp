@@ -256,8 +256,8 @@ void GlLabel::draw(float lod, Camera *camera) {
     }
   }
   else {
-    scaleToApply=0.05;
-    float tmpScreenH=screenH*0.05;
+    scaleToApply=0.05f;
+    float tmpScreenH=screenH*0.05f;
 
     if(useMinMaxSize) {
       if(tmpScreenH<minSize) {

@@ -77,8 +77,8 @@ Hexagone::~Hexagone() {
 }
 //=====================================================
 void Hexagone::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-  boundingBox[0] = Coord(-0.35, -0.35, 0);
-  boundingBox[1] = Coord(0.35, 0.35, 0);
+  boundingBox[0] = Coord(-0.35f, -0.35f, 0);
+  boundingBox[1] = Coord(0.35f, 0.35f, 0);
 }
 //=====================================================
 void Hexagone::draw(node n, float lod) {
@@ -118,8 +118,8 @@ void Hexagone::draw(const Color &fillColor,
                     float borderWidth,
                     const std::string &textureName,
                     float lod) {
-  if(borderWidth<1e-6)
-    borderWidth=1e-6;
+  if(borderWidth<1e-6f)
+    borderWidth=1e-6f;
 
   hexagon->setFillColor(fillColor);
   hexagon->setOutlineColor(borderColor);

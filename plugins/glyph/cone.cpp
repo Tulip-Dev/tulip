@@ -44,7 +44,7 @@ using namespace tlp;
 class Cone: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
   Cone(GlyphContext *gc = NULL);
-  Cone(EdgeExtremityGlyphContext *gc = NULL);
+  Cone(EdgeExtremityGlyphContext *gc);
   virtual ~Cone();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);

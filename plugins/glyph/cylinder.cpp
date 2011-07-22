@@ -41,7 +41,7 @@ using namespace tlp;
 class Cylinder: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
   Cylinder(GlyphContext *gc = NULL);
-  Cylinder(EdgeExtremityGlyphContext *gc = NULL);
+  Cylinder(EdgeExtremityGlyphContext *gc);
   virtual ~Cylinder();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
@@ -65,8 +65,8 @@ Cylinder::~Cylinder() {
 }
 //=====================================================
 void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-  boundingBox[0] = Coord(-0.35, -0.35, 0);
-  boundingBox[1] = Coord(0.35, 0.35, 1);
+  boundingBox[0] = Coord(-0.35f, -0.35f, 0);
+  boundingBox[1] = Coord(0.35f, 0.35f, 1);
 }
 //=================================================================================================
 void Cylinder::draw(node n, float) {

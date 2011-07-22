@@ -155,7 +155,7 @@ private:
   bool _updateAvailable;
   const QString _remoteLocation;
   const QString _remoteArchive;
-  const QString& _version;
+  const QString _version;
   const tlp::AbstractPluginInfo* _infos;
 };
 

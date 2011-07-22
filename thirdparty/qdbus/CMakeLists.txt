@@ -52,7 +52,7 @@ ADD_LIBRARY(QtDBus4 SHARED ${SRCS} ${MOC_SRCS})
 
 TARGET_LINK_LIBRARIES(QtDBus4 ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY} ${DBUS_LIBRARY})
 IF(WIN32)
-  TARGET_LINK_LIBRARIES(QtDBus4 -lws2_32 -ladvapi32 -lnetapi32 -luser32)
+  TARGET_LINK_LIBRARIES(QtDBus4 ws2_32 advapi32 netapi32 user32)
 ENDIF(WIN32)
 
 #if this is not specified, the compilation might try to go ahead without generating the mocs

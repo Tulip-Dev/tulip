@@ -604,7 +604,7 @@ bool PointType::fromString( RealType & v, const string & s ) {
 // SizeType
 
 Size SizeType::undefinedValue() {
-  return Size(-DBL_MAX,-DBL_MAX,-DBL_MAX);
+  return Size(-FLT_MAX,-FLT_MAX,-FLT_MAX);
 }
 
 Size SizeType::defaultValue() {
