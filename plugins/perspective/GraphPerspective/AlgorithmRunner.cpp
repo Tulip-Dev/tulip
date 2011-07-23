@@ -98,6 +98,7 @@ void AlgorithmRunner::buildListWidget() {
   layout->setSpacing(10);
 
   _ui->searchBox->setEnabled(!_currentAlgorithmsList.empty());
+
   if (_currentAlgorithmsList.empty()) {
     QLabel *errorLabel = new QLabel("<span style=\"color:#626262;\">" + AlgorithmRunner::trUtf8("There is no plugin to display.") + "</span>");
     errorLabel->setObjectName("errorLabel");
@@ -145,7 +146,7 @@ void AlgorithmRunner::buildListWidget() {
 void AlgorithmRunner::setFilter(const QString &filter) {
   ExpandableGroupBox *gi;
   foreach(gi, findChildren<ExpandableGroupBox *>())
-    gi->setVisible(gi->objectName().contains(filter,Qt::CaseInsensitive));
+  gi->setVisible(gi->objectName().contains(filter,Qt::CaseInsensitive));
   AlgorithmRunnerItem *it;
   foreach(it, findChildren<AlgorithmRunnerItem *>()) {
     if (!it->parentWidget()->isVisible())
