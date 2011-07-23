@@ -58,7 +58,9 @@ public:
   QString group() const {
     return _group;
   }
-  QString name() const {return "";}
+  QString name() const {
+    return "";
+  }
 };
 
 #endif // ALGORITHMRUNNER_H

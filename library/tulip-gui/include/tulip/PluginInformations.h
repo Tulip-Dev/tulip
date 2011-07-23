@@ -146,7 +146,7 @@ public:
   bool updateAvailable() const;
 
   QString latestVersion() const;
-  
+
   bool fetch() const;
   bool remove() const;
 private:

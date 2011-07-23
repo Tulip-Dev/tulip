@@ -27,10 +27,11 @@ int main(int argc, char **argv) {
   QLocale::setDefault(QLocale(QLocale::English));
 
   QDir stagingDirectory(tlp::getPluginStagingDirectory());
+
   if(!stagingDirectory.exists()) {
     stagingDirectory.mkpath(tlp::getPluginStagingDirectory());
   }
-  
+
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");

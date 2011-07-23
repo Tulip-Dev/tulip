@@ -21,6 +21,7 @@ ExpandableGroupBox::~ExpandableGroupBox() {
 
 void ExpandableGroupBox::setExpanded(bool e) {
   _expanded=e;
+
   if (_widget)
     _widget->setVisible(e);
 }
@@ -28,6 +29,7 @@ void ExpandableGroupBox::setExpanded(bool e) {
 void ExpandableGroupBox::setWidget(QWidget *w) {
   delete _widget;
   _widget = w;
+
   if (_widget)
     layout()->addWidget(_widget);
 }
@@ -35,7 +37,9 @@ void ExpandableGroupBox::setWidget(QWidget *w) {
 QWidget *ExpandableGroupBox::takeWidget() {
   QWidget *result = _widget;
   _widget = 0;
+
   if (result)
     layout()->removeWidget(result);
+
   return result;
 }

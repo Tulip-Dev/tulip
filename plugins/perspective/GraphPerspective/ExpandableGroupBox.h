@@ -20,7 +20,9 @@ public:
     return _expanded;
   }
 
-  QWidget *widget() const { return _widget; }
+  QWidget *widget() const {
+    return _widget;
+  }
   QWidget *takeWidget();
 
 signals:
