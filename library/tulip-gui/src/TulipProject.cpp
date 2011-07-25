@@ -2,6 +2,7 @@
 
 #include <tulip/SimplePluginProgress.h>
 
+#include <QtCore/QDebug>
 #include <QtCore/QMetaProperty>
 #include <QtCore/QDir>
 #include <QtCore/QCoreApplication>
@@ -27,9 +28,6 @@ TulipProject::TulipProject(const QString &path)
 }
 
 TulipProject::~TulipProject() {
-  if (!isValid())
-    return;
-
   removeAllDirPrivate(_rootDir.absolutePath());
 }
 
@@ -123,6 +121,14 @@ QStringList TulipProject::entryList(const QString &relativePath) {
 bool TulipProject::isDir(const QString &path) {
   QFileInfo info(toAbsolutePath(path));
   return info.isDir();
+}
+
+bool TulipProject::mkpath(const QString &path) {
+  return _rootDir.mkpath(toAbsolutePath(path));
+}
+
+bool TulipProject::exists(const QString &path) {
+  return QFileInfo(toAbsolutePath(path)).exists();
 }
 
 bool TulipProject::removeFile(const QString &path) {

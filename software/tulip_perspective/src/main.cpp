@@ -110,6 +110,7 @@ int main(int argc,char **argv) {
 
     if (!project->isValid()) {
       error = project->lastError();
+      std::cerr << error.toStdString() << std::endl;
       delete project;
       project = NULL;
     }
@@ -157,7 +158,7 @@ int main(int argc,char **argv) {
 
   communicator->EnableCrashHandling(project->absoluteRootPath(),QApplication::applicationPid());
 
-  perspective->construct();
+  perspective->construct(progress);
   QString title("Tulip [" + perspectiveName + "]");
 
   if (project) {

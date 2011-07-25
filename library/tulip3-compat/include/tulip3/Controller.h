@@ -192,7 +192,7 @@ public:
   virtual ~Controller() {}
 
   // Methods inherited from Perspective
-  virtual void construct();
+  virtual void construct(tlp::PluginProgress *);
 
 protected slots:
   void save();

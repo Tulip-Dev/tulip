@@ -98,6 +98,20 @@ public:
   QStringList entryList(const QString &path);
 
   /**
+    @brief Checks if the specified file/folder exists
+    @param path The path to check.
+    @return true if the path exists.
+    */
+  bool exists(const QString &path);
+
+  /**
+    @brief Recursively creates the specified path.
+    Created folders will be empty
+    @return true if path was successfully created.
+    */
+  bool mkpath(const QString &path);
+
+  /**
     @brief Checks if the given path is a directory.
     @param path The path to check. @see TulipProject
     @return true/false wether the path is a directory.

@@ -113,7 +113,7 @@ void AlgorithmRunner::buildListWidget() {
       groupWidget->setObjectName(group + "_contents");
 
       QVBoxLayout *groupLayout = new QVBoxLayout;
-      groupLayout->setObjectName(group);
+      groupLayout->setObjectName(group + "_layout");
       groupLayout->setSpacing(4);
       groupWidget->setLayout(groupLayout);
 
