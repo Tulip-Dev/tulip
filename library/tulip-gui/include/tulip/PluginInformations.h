@@ -148,7 +148,7 @@ public:
   QString latestVersion() const;
 
   bool fetch() const;
-  bool remove() const;
+  void remove() const;
 private:
   QString _lastVersion;
   const QString _type;
@@ -161,6 +161,7 @@ private:
   const QString _remoteArchive;
   const QString _version;
   const tlp::AbstractPluginInfo* _infos;
+  const QString _library;
 };
 
 }

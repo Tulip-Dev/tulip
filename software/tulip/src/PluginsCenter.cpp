@@ -152,6 +152,7 @@ void PluginsCenter::fetch(tlp::PluginInformations *infos) {
 }
 
 void PluginsCenter::remove(tlp::PluginInformations *infos) {
+  infos->remove();
   qWarning() << "remove " << infos->name();
 }
 

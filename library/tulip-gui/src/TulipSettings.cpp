@@ -53,3 +53,27 @@ void TulipSettings::removeRemoteLocation(const QString& remoteLocation) {
 const QStringList TulipSettings::remoteLocations() const {
   return value("app/remote_locations").toStringList();
 }
+
+const QStringList TulipSettings::pluginsToRemove() const {
+  return value("app/pluginsToRemove").toStringList();
+}
+
+void TulipSettings::markPluginForRemoval(const QString& pluginLibrary) {
+  QStringList markedPlugins = value("app/pluginsToRemove").toStringList();
+  
+  if(!markedPlugins.contains(pluginLibrary)) {
+    markedPlugins.append(pluginLibrary);
+  }
+  
+  setValue("app/pluginsToRemove", markedPlugins);
+}
+
+void TulipSettings::unmarkPluginForRemoval(const QString& pluginLibrary) {
+  QStringList markedPlugins = value("app/pluginsToRemove").toStringList();
+  
+  if(markedPlugins.contains(pluginLibrary)) {
+    markedPlugins.removeAll(pluginLibrary);
+  }
+  
+  setValue("app/pluginsToRemove", markedPlugins);
+}
