@@ -30,6 +30,7 @@ signals:
 public slots:
   void expand();
   void collapse();
+  void markedForRemoval();
 
 private:
   Ui::PluginInformationsListItemData *_ui;

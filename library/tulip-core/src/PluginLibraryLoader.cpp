@@ -52,6 +52,7 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, std::string folder) 
 
   //load the plugins in 'folder' for each path in TulipPluginsPath (TulipPluginsPath/folder)
   for(std::vector<std::string>::const_iterator it = paths.begin(); it != paths.end(); ++it) {
+    std::cout << "loading plugins from folder: " << *it << std::endl;
     std::string dir = (*it) + "/" + folder;
 
     if (loader!=0)

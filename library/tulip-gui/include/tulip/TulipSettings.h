@@ -48,6 +48,11 @@ public:
    **/
   const QStringList remoteLocations() const;
 
+  const QStringList pluginsToRemove() const;
+
+  void markPluginForRemoval(const QString& pluginLibrary);
+  void unmarkPluginForRemoval(const QString& pluginLibrary);
+
 private:
   TulipSettings();
 

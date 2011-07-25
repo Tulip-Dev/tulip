@@ -9,6 +9,9 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/DownloadManager.h>
 #include <QDesktopServices>
+#include <tulip/QuaZIPFacade.h>
+#include <qtextstream.h>
+#include <tulip/TulipSettings.h>
 
 using namespace tlp;
 
@@ -19,7 +22,7 @@ static std::list<tlp::Dependency> getPluginDependencies(T* factory, U context) {
 
 PluginInformations::PluginInformations(const tlp::AbstractPluginInfo& info, const std::string& type, const std::string& library)
   :_lastVersion(info.getRelease().c_str()), _type(type.c_str()), _iconPath(":/tulip/gui/icons/logo32x32.png"), _longDescriptionPath("http://www.perdu.com"), _isLocal(true),
-   _installedVersion(info.getRelease().c_str()), _updateAvailable(false), _version(info.getRelease().c_str()), _infos(&info) {
+   _installedVersion(info.getRelease().c_str()), _updateAvailable(false), _version(info.getRelease().c_str()), _infos(&info), _library(library.c_str()) {
 }
 
 PluginInformations::PluginInformations(const tlp::AbstractPluginInfo& info, const QString& type, const QString& basePath, const QString& remotepluginName)
@@ -104,12 +107,19 @@ QString PluginInformations::latestVersion() const {
 }
 
 bool PluginInformations::fetch() const {
+  bool result = false;
   const QString archiveName = tlp::getPluginPackageName(name());
   DownloadManager::getInstance()->downloadPlugin(_remoteArchive, tlp::getPluginStagingDirectory() + archiveName);
-  return false;
+  std::cout << isInstalled() << ": " << installedVersion().toStdString() << ";" << _installedVersion.isEmpty() << std::endl;
+  if(!isInstalled()) {
+    tlp::SimplePluginProgress* progress = new tlp::SimplePluginProgress();
+    result = QuaZIPFacade::unzip(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins", tlp::getPluginStagingDirectory() + "/" + archiveName, progress);
+//     std::cout << archiveName.toStdString() << ":" << result << "; " << progress->getError() << std::endl;
+//     PluginLibraryLoader::loadPlugins();
+  }
+  return result;
 }
 
-bool PluginInformations::remove() const {
-  //FIXME implement me
-  return false;
+void PluginInformations::remove() const {
+  TulipSettings::instance().markPluginForRemoval(_library);
 }

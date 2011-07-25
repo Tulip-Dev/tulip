@@ -32,6 +32,7 @@ PluginInformationsListItem::PluginInformationsListItem(tlp::PluginInformations *
   connect(_ui->infosButton,SIGNAL(clicked()),this,SIGNAL(showDetailedInformations()));
   connect(_ui->installButton,SIGNAL(clicked()),this,SIGNAL(fetch()));
   connect(_ui->removeButton,SIGNAL(clicked()),this,SIGNAL(remove()));
+  connect(_ui->removeButton,SIGNAL(clicked()),this, SLOT(markedForRemoval()));
 }
 
 void PluginInformationsListItem::focusInEvent(QFocusEvent *) {
@@ -46,4 +47,9 @@ void PluginInformationsListItem::expand() {
 void PluginInformationsListItem::collapse() {
   _ui->mainFrame->setStyleSheet("#mainFrame { background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(245, 245, 245, 255), stop:1 rgba(225,225,225, 255));  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
   _ui->bottomFrame->hide();
+}
+
+void PluginInformationsListItem::markedForRemoval() {
+  _ui->removeButton->setEnabled(false);
+  _ui->removeButton->setText("Plugin has been marked for removal");
 }

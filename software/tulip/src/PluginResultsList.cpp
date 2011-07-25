@@ -106,10 +106,13 @@ void PluginResultsList::switchToDetailedInformations() {
 void PluginResultsList::pluginFetch() {
   PluginInformationsListItem *listItem = dynamic_cast<PluginInformationsListItem *>(sender());
 
-  if (listItem)
+  if (listItem) {
     emit fetch(listItem->pluginInformations());
-  else
+//     listItem->set
+  }
+  else {
     emit fetch(dynamic_cast<DetailedPluginInformationsWidget *>(sender())->pluginInformations());
+  }
 }
 
 void PluginResultsList::pluginRemove() {

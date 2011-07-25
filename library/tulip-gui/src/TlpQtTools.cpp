@@ -143,4 +143,8 @@ QString getPluginStagingDirectory() {
   return QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/staging/";
 }
 
+QString getPluginRemovalList() {
+  return QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/pluginsRemovalList.txt";
+}
+
 }

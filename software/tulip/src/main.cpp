@@ -14,7 +14,10 @@
 #include "PluginsCenter.h"
 
 #include <tulip/TlpQtTools.h>
+
+#include <QDesktopServices>
 #include <QtCore/QDir>
+#include <tulip/TulipSettings.h>
 
 #if defined(__APPLE__)
 #include <sys/types.h>
@@ -30,6 +33,17 @@ int main(int argc, char **argv) {
 
   if(!stagingDirectory.exists()) {
     stagingDirectory.mkpath(tlp::getPluginStagingDirectory());
+  }
+
+  foreach(const QString& plugin, TulipSettings::instance().pluginsToRemove()) {
+    QFile pluginToRemove(plugin);
+    bool removed = pluginToRemove.remove();
+    if(removed) {
+      TulipSettings::instance().unmarkPluginForRemoval(plugin);
+    }
+    else {
+      //TODO error reporting on removal failure
+    }
   }
 
 #if defined(__APPLE__)
@@ -72,6 +86,8 @@ int main(int argc, char **argv) {
 #endif
 
   tlp::initTulipLib(QApplication::applicationDirPath().toStdString().c_str());
+  //TODO find a cleaner way to achieve this (QDesktopServices is part of QtGui, so it does not belong in TlpTools)
+  tlp::TulipPluginsPath = QString(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins/lib/tulip/").toStdString() + tlp::PATH_DELIMITER + tlp::TulipPluginsPath;
 
   // Check dependencies
   PluginLoaderDispatcher *dispatcher = new PluginLoaderDispatcher();
@@ -81,6 +97,7 @@ int main(int argc, char **argv) {
   dispatcher->registerLoader(splashScreen);
   tlp::PluginLibraryLoader::loadPlugins(dispatcher);
   tlp::PluginListerInterface::checkLoadedPluginsDependencies(dispatcher);
+  
   delete dispatcher;
   delete splashScreen;
 
