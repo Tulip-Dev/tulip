@@ -47,7 +47,9 @@ class BooleanProperty;
 /** \file
  *  \brief  Table view
 
- * This view plugin allows to visualize, sort and edit element and properties in a spreadsheet.
+ * In this view you can visualize and edit the values of each graph elements (nodes or edges) using a table form.
+ * Each column represents a graph property and each row a node or an edge.
+ * Refer to the user manual for a more information on the table view.
  *
  * <b>LICENCE</b>
  *

@@ -47,6 +47,7 @@ public:
     ~CSVParserConfigurationWidget();    
     /**
       * @brief Generate a csv parser in function of the parameters in the widget. User define the range of line to import.
+      * The user takes the ownership of the widget.
       **/
     CSVParser * buildParser(unsigned int firstLine=0, unsigned int lastLine=UINT_MAX)const;
 
