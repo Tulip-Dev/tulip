@@ -1,11 +1,11 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 SET(LIB_SRCS
-AlgorithmRunner.cpp
-ExpandableGroupBox.cpp
-GraphPerspective.cpp
-GraphPerspectiveProject.cpp
-HeaderFrame.cpp)
+src/AlgorithmRunner.cpp
+src/ExpandableGroupBox.cpp
+src/GraphPerspective.cpp
+src/GraphPerspectiveProject.cpp
+src/HeaderFrame.cpp)
 
 QT4_ADD_RESOURCES(RCC_SRCS
 resources/GraphPerspective.qrc)
@@ -17,10 +17,10 @@ designer/GraphPerspectiveMainWindow.ui
 designer/HeaderFrame.ui)
 
 QT4_WRAP_CPP(MOC_SRCS
-AlgorithmRunner.h
-GraphPerspectiveProject.h
-ExpandableGroupBox.h
-HeaderFrame.h)
+include/AlgorithmRunner.h
+include/GraphPerspectiveProject.h
+include/ExpandableGroupBox.h
+include/HeaderFrame.h)
 
 ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
 
