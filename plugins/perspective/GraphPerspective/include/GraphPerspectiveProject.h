@@ -16,17 +16,18 @@ class GraphPerspectiveProject: public QObject {
   Q_PROPERTY(tlp::TulipProject * project READ project)
   tlp::TulipProject *_project;
 
-  Q_PROPERTY(QVector<tlp::Graph *> graphs READ graphs)
-  QVector<tlp::Graph *> _graphs;
+  Q_PROPERTY(QList<tlp::Graph *> graphs READ graphs)
 
-  QMap<tlp::Graph *,QString> _graphPath;
+  QMap<tlp::Graph *,QString> _graphFolder;
+
+  QString uniqueFolderName(tlp::Graph *g);
 
 public:
   GraphPerspectiveProject(tlp::TulipProject *project, tlp::PluginProgress *);
   virtual ~GraphPerspectiveProject();
 
   tlp::TulipProject *project() const { return _project; }
-  QVector<tlp::Graph *> graphs() const { return _graphs; }
+  QList<tlp::Graph *> graphs() const;
 
 public slots:
   void addGraph(tlp::Graph *);
