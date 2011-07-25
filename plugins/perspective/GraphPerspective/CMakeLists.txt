@@ -4,6 +4,7 @@ SET(LIB_SRCS
 AlgorithmRunner.cpp
 ExpandableGroupBox.cpp
 GraphPerspective.cpp
+GraphPerspectiveProject.cpp
 HeaderFrame.cpp)
 
 QT4_ADD_RESOURCES(RCC_SRCS
@@ -17,6 +18,7 @@ designer/HeaderFrame.ui)
 
 QT4_WRAP_CPP(MOC_SRCS
 AlgorithmRunner.h
+GraphPerspectiveProject.h
 ExpandableGroupBox.h
 HeaderFrame.h)
 

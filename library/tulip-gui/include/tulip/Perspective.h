@@ -31,6 +31,8 @@ class QMainWindow;
 
 namespace tlp {
 
+class PluginProgress;
+
 class TLP_QT_SCOPE PerspectiveContext {
 public:
   PerspectiveContext(): mainWindow(0), project(0) {}
@@ -56,7 +58,7 @@ public:
 
   virtual bool isCompatible(tlp::TulipProject *);
 
-  virtual void construct()=0;
+  virtual void construct(tlp::PluginProgress *)=0;
 
 public slots:
 
