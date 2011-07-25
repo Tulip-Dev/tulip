@@ -89,18 +89,30 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tl
 
   QFileInfo rootPathInfo(rootPath);
 
-  if (rootPathInfo.exists() && !rootPathInfo.isDir())
+  if (rootPathInfo.exists() && !rootPathInfo.isDir()) {
+    progress->setError("root path does not exists or is not a dir");
     return false;
+  }
 
   QDir rootDir(rootPath);
 
-  if (!rootDir.exists() && !rootDir.mkpath(rootPath))
+  if (!rootDir.exists() && !rootDir.mkpath(rootPath)) {
+    progress->setError("could not create root path");
     return false;
+  }
 
+  QFile archiveFile(archivePath);
+  if(!archiveFile.exists()) {
+    progress->setError(QString("no such file : " + archivePath).toStdString());
+    return false;
+  }
+  
   QuaZip archive(archivePath);
 
-  if (!archive.open(QuaZip::mdUnzip))
+  if (!archive.open(QuaZip::mdUnzip)) {
+    progress->setError("could not open archive");
     return false;
+  }
 
   bool deleteProgress = false;
 
@@ -125,8 +137,10 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tl
 
     QFile outFile(outInfo.absoluteFilePath());
 
-    if (!outFile.open(QIODevice::WriteOnly) || !inFile.open(QIODevice::ReadOnly))
+    if (!outFile.open(QIODevice::WriteOnly) || !inFile.open(QIODevice::ReadOnly)) {
+      progress->setError("Could not write in folder or could not read from file");
       return false;
+    }
 
     copy(inFile,outFile);
   }
