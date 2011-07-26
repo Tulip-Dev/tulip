@@ -23,16 +23,17 @@
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/PropertyAlgorithm.h>
-#include <tulip/ObservableGraph.h>
+#include <tulip/MinMaxCalculator.h>
 
 namespace tlp {
 
 class PropertyContext;
 
 typedef AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> AbstractDoubleProperty;
+typedef MinMaxCalculator<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> DoubleMinMaxCalculator;
 /** \addtogroup properties */
 /*\@{*/
-class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, private GraphObserver {
+class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, private DoubleMinMaxCalculator {
 public :
   DoubleProperty (Graph *, std::string n="");
   DoubleType::RealType  getNodeMin(Graph *sg=0);
@@ -59,14 +60,6 @@ public :
   virtual void setAllNodeValue(const double &v);
   virtual void setAllEdgeValue(const double &v);
 
-  // override some GraphObserver methods
-  virtual void addNode(Graph* graph, const node n);
-  virtual void addEdge(Graph* graph, const edge e);
-  virtual void delNode(Graph* graph, const node n);
-  virtual void delEdge(Graph* graph, const edge e);
-  virtual void addSubGraph(Graph* graph, Graph *sub);
-  virtual void delSubGraph(Graph* graph, Graph *sub);
-
   enum PredefinedMetaValueCalculator {NO_CALC = 0, AVG_CALC = 1, SUM_CALC = 2,
                                       MAX_CALC = 3, MIN_CALC = 4
                                      };
@@ -77,11 +70,6 @@ public :
                               PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
 
 private:
-  TLP_HASH_MAP<unsigned int, double> maxN,minN,maxE,minE;
-  TLP_HASH_MAP<unsigned int, bool> minMaxOkNode;
-  TLP_HASH_MAP<unsigned int, bool> minMaxOkEdge;
-  void computeMinMaxNode(Graph *sg=0);
-  void computeMinMaxEdge(Graph *sg=0);
   // override Observable::treatEvent
   void treatEvent(const Event&);
 

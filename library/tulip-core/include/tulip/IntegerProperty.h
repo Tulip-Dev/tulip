@@ -24,8 +24,7 @@
 #include <tulip/AbstractProperty.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
-
+#include <tulip/MinMaxCalculator.h>
 
 namespace tlp {
 
@@ -33,9 +32,10 @@ class Graph;
 class PropertyContext;
 
 typedef AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> AbstractIntegerProperty;
+typedef MinMaxCalculator<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> IntegerMinMaxCalculator;
 /** \addtogroup properties */
 /*@{*/
-class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, private GraphObserver {
+class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, private IntegerMinMaxCalculator {
 
 public :
   IntegerProperty(Graph *, std::string n = "");
@@ -72,21 +72,8 @@ protected:
   virtual void clone_handler(AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> &);
 
 private:
-  // override some GraphObserver methods
-  void addNode(Graph* graph, const node n);
-  void addEdge(Graph* graph, const edge e);
-  void delNode(Graph* graph, const node n);
-  void delEdge(Graph* graph, const edge e);
-  void addSubGraph(Graph* graph, Graph *sub);
-  void delSubGraph(Graph* graph, Graph *sub);
   // override Observable::treatEvent
   void treatEvent(const Event&);
-
-  TLP_HASH_MAP<unsigned int, int> maxN,minN,maxE,minE;
-  TLP_HASH_MAP<unsigned int, bool> minMaxOkNode;
-  TLP_HASH_MAP<unsigned int, bool> minMaxOkEdge;
-  void computeMinMaxNode(Graph *sg=0);
-  void computeMinMaxEdge(Graph *sg=0);
 };
 
 class TLP_SCOPE IntegerVectorProperty:public AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType> {

@@ -22,9 +22,9 @@
 #include <tulip/tuliphash.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/PropertyAlgorithm.h>
+#include <tulip/MinMaxCalculator.h>
 
 namespace tlp {
 
@@ -32,10 +32,11 @@ class PropertyContext;
 class Graph;
 
 typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> AbstractLayoutProperty;
+typedef MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> LayoutMinMaxCalculator;
 
 /** \addtogroup properties */
 /*@{*/
-class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, private GraphObserver {
+class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, private LayoutMinMaxCalculator {
 public:
   LayoutProperty(Graph *, std::string n="", bool updateOnEdgeReversal = true);
 
@@ -133,15 +134,8 @@ protected:
   virtual void clone_handler(AbstractProperty<PointType,LineType, LayoutAlgorithm> &);
 
 private:
-  TLP_HASH_MAP<unsigned int, Coord> max,min;
-  TLP_HASH_MAP<unsigned int, bool> minMaxOk;
-  void computeMinMax(Graph * graph=NULL);
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
-  // override an GraphObserver method
-  void reverseEdge(Graph *, const edge);
-  void addNode(Graph* g, const tlp::node n);
-  void delNode(Graph* g, const tlp::node n);
-  // override Observable::treatEvent
+// override Observable::treatEvent
   void treatEvent(const Event&);
 };
 

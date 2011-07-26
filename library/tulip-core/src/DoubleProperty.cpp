@@ -182,8 +182,7 @@ static DoublePropertyPredefinedCalculator avgCalculator;
 
 //==============================
 ///Constructeur d'un DoubleProperty
-DoubleProperty::DoubleProperty (Graph *sg, std::string n):AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm>(sg, n),
-  minMaxOkNode(false),minMaxOkEdge(false) {
+DoubleProperty::DoubleProperty (Graph *sg, std::string n):AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm>(sg, n), DoubleMinMaxCalculator(this, -DBL_MAX, DBL_MAX) {
   // the property observes the graph
   sg->addGraphObserver(this);
   // the computed meta value will be the average value
@@ -285,247 +284,58 @@ void DoubleProperty::edgesUniformQuantification(unsigned int k) {
 double DoubleProperty::getNodeMin(Graph *sg) {
   if (sg==0) sg=graph;
 
-  unsigned int sgi = sg->getId();
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.find(sgi);
-
-  if ((it == minMaxOkNode.end()) || ((*it).second == false))
-    computeMinMaxNode(sg);
-
-  return minN[sgi];
+  return DoubleMinMaxCalculator::getNodeMin(sg);
 }
 //====================================================================
 ///Renvoie le maximum de la metrique associe aux noeuds du DoubleProperty
 double DoubleProperty::getNodeMax(Graph *sg) {
   if (sg==0) sg=graph;
 
-  unsigned int sgi = sg->getId();
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.find(sgi);
-
-  if ((it == minMaxOkNode.end()) || ((*it).second == false))
-    computeMinMaxNode(sg);
-
-  return maxN[sgi];
+  return DoubleMinMaxCalculator::getNodeMax(sg);
 }
 //====================================================================
 ///Renvoie le Minimum de la metrique associe aux aretes du DoubleProperty
 double DoubleProperty::getEdgeMin(Graph *sg) {
   if (sg==0) sg=graph;
 
-  unsigned int sgi = sg->getId();
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.find(sgi);
-
-  if ((it == minMaxOkEdge.end()) || ((*it).second == false))
-    computeMinMaxEdge(sg);
-
-  return minE[sgi];
+  return DoubleMinMaxCalculator::getEdgeMin(sg);
 }
 //====================================================================
 ///Renvoie le Maximum de la metrique associe aux aretes du DoubleProperty
 double DoubleProperty::getEdgeMax(Graph *sg) {
   if (sg==0) sg=graph;
 
-  unsigned int sgi = sg->getId();
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.find(sgi);
-
-  if ((it == minMaxOkEdge.end()) || ((*it).second == false))
-    computeMinMaxEdge(sg);
-
-  return maxE[sgi];
-}
-//=========================================================
-void DoubleProperty::computeMinMaxNode(Graph *sg) {
-  double maxN2 = -DBL_MAX, minN2 = DBL_MAX;
-
-  if (sg==0) sg=graph;
-
-  Iterator<node> *itN=sg->getNodes();
-
-  while (itN->hasNext()) {
-    node itn=itN->next();
-    const double& tmp=getNodeValue(itn);
-
-    if (tmp>maxN2) maxN2=tmp;
-
-    if (tmp<minN2) minN2=tmp;
-  }
-
-  delete itN;
-
-  unsigned int sgi = sg->getId();
-
-  minMaxOkNode[sgi]=true;
-  minN[sgi]=minN2;
-  maxN[sgi]=maxN2;
-}
-//=========================================================
-void DoubleProperty::computeMinMaxEdge(Graph *sg) {
-  double maxE2 = -DBL_MAX, minE2 = DBL_MAX;
-
-  if (sg==0) sg=graph;
-
-  Iterator<edge> *itE=sg->getEdges();
-
-  while (itE->hasNext()) {
-    edge ite=itE->next();
-    const double& tmp=getEdgeValue(ite);
-
-    if (tmp>maxE2) maxE2=tmp;
-
-    if (tmp<minE2) minE2=tmp;
-  }
-
-  delete itE;
-
-  unsigned int sgi = sg->getId();
-
-  minMaxOkEdge[sgi]=true;
-  minE[sgi]=minE2;
-  maxE[sgi]=maxE2;
+  return DoubleMinMaxCalculator::getEdgeMax(sg);
 }
 //=================================================================================
 void DoubleProperty::clone_handler(AbstractProperty<DoubleType,DoubleType, DoubleAlgorithm> &proxyC) {
   DoubleProperty *proxy=(DoubleProperty *)&proxyC;
-  minMaxOkNode=proxy->minMaxOkNode;
-  minMaxOkEdge=proxy->minMaxOkEdge;
-  minN=proxy->minN;
-  maxN=proxy->maxN;
-  minE=proxy->minE;
-  maxE=proxy->maxE;
+  nodeValueUptodate = proxy->nodeValueUptodate;
+  edgeValueUptodate = proxy->edgeValueUptodate;
+  minNode = proxy->minNode;
+  maxNode = proxy->maxNode;
+  minEdge = proxy->minEdge;
+  maxEdge = proxy->maxEdge;
 }
 //=================================================================================
 void DoubleProperty::setNodeValue(const node n, const double &v) {
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.begin();
-
-  if (it != minMaxOkNode.end()) {
-    double oldV = getNodeValue(n);
-
-    if (v != oldV) {
-      // loop on subgraph min/max
-      for(; it != minMaxOkNode.end(); ++it) {
-        // if min/max is ok for the current subgraph
-        // check if min or max has to be updated
-        if ((*it).second == true) {
-          unsigned int gid = (*it).first;
-          double minV = minN[gid];
-          double maxV = maxN[gid];
-
-          if ((v < minV) || (v > maxV) || (oldV == minV) || (oldV == maxV)) {
-            minMaxOkNode.clear();
-            break;
-          }
-        }
-      }
-    }
-  }
-
+  DoubleMinMaxCalculator::updateNodeValue(n, v);
   AbstractDoubleProperty::setNodeValue(n, v);
 }
 //=================================================================================
 void DoubleProperty::setEdgeValue(const edge e, const double &v) {
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.begin();
-
-  if (it != minMaxOkEdge.end()) {
-    double oldV = getEdgeValue(e);
-
-    if (v != oldV) {
-      // loop on subgraph min/max
-      for(; it != minMaxOkEdge.end(); ++it) {
-        // if min/max is ok for the current subgraph
-        // check if min or max has to be updated
-        if ((*it).second == true) {
-          unsigned int gid = (*it).first;
-          double minV = minE[gid];
-          double maxV = maxE[gid];
-
-          if ((v < minV) || (v > maxV) || (oldV == minV) || (oldV == maxV)) {
-            minMaxOkEdge.clear();
-            break;
-          }
-        }
-      }
-    }
-  }
-
+  DoubleMinMaxCalculator::updateEdgeValue(e, v);
   AbstractDoubleProperty::setEdgeValue(e, v);
 }
 //=================================================================================
 void DoubleProperty::setAllNodeValue(const double &v) {
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.begin();
-
-  if (it != minMaxOkNode.end()) {
-    // loop on subgraph min/max
-    for(; it != minMaxOkNode.end(); ++it) {
-      unsigned int gid = (*it).first;
-      minN[gid] = maxN[gid] = v;
-      minMaxOkNode[gid] = true;
-    }
-  }
-
+  DoubleMinMaxCalculator::updateAllNodesValues(v);
   AbstractDoubleProperty::setAllNodeValue(v);
 }
 //=================================================================================
 void DoubleProperty::setAllEdgeValue(const double &v) {
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.begin();
-
-  if (it != minMaxOkEdge.end()) {
-    // loop on subgraph min/max
-    for(; it != minMaxOkEdge.end(); ++it) {
-      unsigned int gid = (*it).first;
-      minE[gid] = maxE[gid] = v;
-      minMaxOkEdge[gid] = true;
-    }
-  }
-
+  DoubleMinMaxCalculator::updateAllEdgesValues(v);
   AbstractDoubleProperty::setAllEdgeValue(v);
-}
-//=================================================================================
-void DoubleProperty::addNode(Graph*, const node) {
-  // invalidate all to avoid time consuming checking
-  // when loading graph
-  minMaxOkNode.clear();
-}
-//=================================================================================
-void DoubleProperty::addEdge(Graph*, const edge) {
-  // invalidate all to avoid time consuming checking
-  // when loading graph
-  minMaxOkEdge.clear();
-}
-//=================================================================================
-void DoubleProperty::delNode(Graph* sg, const node n) {
-  unsigned int sgi = sg->getId();
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.find(sgi);
-
-  if (it != minMaxOkNode.end() && it->second) {
-    double oldV = getNodeValue(n);
-
-    // check if min or max has to be updated
-    if ((oldV == minN[sgi]) || (oldV == maxN[sgi]))
-      minMaxOkNode[sgi] = false;
-  }
-}
-//=================================================================================
-void DoubleProperty::delEdge(Graph* sg, const edge e) {
-  unsigned int sgi = sg->getId();
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.find(sgi);
-
-  if (it != minMaxOkEdge.end() && it->second) {
-    double oldV = getEdgeValue(e);
-
-    // check if min or max has to be updated
-    if ((oldV == minE[sgi]) || (oldV == maxE[sgi])) {
-      minMaxOkEdge[sgi] = false;
-    }
-  }
-}
-//=================================================================================
-void DoubleProperty::addSubGraph(Graph*, Graph *sg) {
-  // the property observes the new subgraph
-  sg->addGraphObserver(this);
-}
-//=================================================================================
-void DoubleProperty::delSubGraph(Graph*, Graph *sg) {
-  // the property no longer observes the subgraph
-  sg->removeGraphObserver(this);
 }
 //=================================================================================
 PropertyInterface* DoubleProperty::clonePrototype(Graph * g, const std::string& n) {
@@ -562,7 +372,7 @@ void DoubleProperty::setMetaValueCalculator(PropertyInterface::MetaValueCalculat
 }
 //=============================================================
 void DoubleProperty::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
+  DoubleMinMaxCalculator::treatEvent(evt);
 }
 
 
