@@ -132,6 +132,21 @@ Checks whether the bounding box's lowest point is less than it's highest point.
 		sipIsErr = 1;	
 %End
 
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+		std::ostringstream oss;
+		oss << *sipCpp;
+		std::string s = oss.str();
+		for (size_t i = 0 ; i < s.length() ; ++i) {
+			if (s[i] == '(') {
+				s[i] = '[';
+			} else if (s[i] == ')') {
+				s[i] = ']';
+			}
+		}
+        sipRes = PyString_FromString(s.c_str());
+%End
+
 };
   
 };
