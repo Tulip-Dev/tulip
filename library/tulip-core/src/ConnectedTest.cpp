@@ -188,40 +188,45 @@ void ConnectedTest::connect(const tlp::Graph* const graph, vector< node >& toLin
   delete itN;
 }
 //=================================================================
-void ConnectedTest::addEdge(Graph *graph,const edge) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (resultsBuffer[(unsigned long)graph]) return;
-
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
-void ConnectedTest::delEdge(Graph *graph,const edge) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (!resultsBuffer[(unsigned long)graph]) return;
-
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
-void ConnectedTest::reverseEdge(Graph *,const edge) {
-}
-//=================================================================
-void ConnectedTest::addNode(Graph *graph,const node) {
-  resultsBuffer[(unsigned long)graph]=false;
-}
-//=================================================================
-void ConnectedTest::delNode(Graph *graph,const node) {
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
-void ConnectedTest::destroy(Graph *graph) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
 void ConnectedTest::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
+  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+  
+  if (gEvt) {
+    Graph* graph = gEvt->getGraph();
+    
+    switch(gEvt->getType()) {
+      case GraphEvent::TLP_ADD_NODE:
+        resultsBuffer[(unsigned long)graph]=false;
+        break;
+      case GraphEvent::TLP_DEL_NODE:
+        graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      case GraphEvent::TLP_ADD_EDGE:
+        if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+          if (resultsBuffer[(unsigned long)graph]) return;
+          
+          graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      case GraphEvent::TLP_DEL_EDGE:
+        if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+          if (!resultsBuffer[(unsigned long)graph]) return;
+          
+          graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      default:
+        break;
+    }
+  }
+  else {
+    Graph* graph =
+    // From my point of view the use of dynamic_cast should be correct
+    // but it fails, so I use reinterpret_cast (pm)
+    reinterpret_cast<Graph *>(evt.sender());
+    
+    if (graph && evt.type() == Event::TLP_DELETE)
+      resultsBuffer.erase((unsigned long)graph);
+  }
 }
