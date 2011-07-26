@@ -42,7 +42,7 @@ public:
    * @param graph The graph to check for biconnectivity.
    * @return bool True if the graph is biconnected, false otherwise.
    **/
-  static bool isBiconnected(Graph *graph);
+  static bool isBiconnected(const Graph *graph);
 
   /**
    * If the graph is not biconnected, adds edges in order to make the graph
@@ -77,7 +77,7 @@ private:
    * @param graph the graph to check.
    * @return bool true if the graph is biconnected, false otherwise.
    **/
-  bool compute(Graph * graph);
+  bool compute(const Graph * graph);
 
   //override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   virtual void treatEvent(const Event&);

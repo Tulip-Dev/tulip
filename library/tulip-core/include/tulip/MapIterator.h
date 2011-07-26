@@ -92,7 +92,7 @@ private :
   */
 struct TLP_SCOPE EdgeMapIterator : public Iterator<edge> {
   ///
-  EdgeMapIterator(Graph *sg, edge source, node target);
+  EdgeMapIterator(const Graph *sg, edge source, node target);
   ///Return the next element
   edge next();
   ///Return true if it exist a next element

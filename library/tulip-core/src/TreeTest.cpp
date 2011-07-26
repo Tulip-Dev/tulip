@@ -32,7 +32,7 @@ TreeTest * TreeTest::instance=0;
 TreeTest::TreeTest() {
 }
 
-bool TreeTest::isTree(Graph *graph) {
+bool TreeTest::isTree(const tlp::Graph* graph) {
   if (instance==0)
     instance=new TreeTest();
 
@@ -42,7 +42,7 @@ bool TreeTest::isTree(Graph *graph) {
 //====================================================================
 //Determines if a graph is a topological tree.  This means that
 //if the graph was undirected, there would be no cycle
-bool TreeTest::isFreeTree(Graph *graph) {
+bool TreeTest::isFreeTree(const tlp::Graph* graph) {
   if (instance==0) instance = new TreeTest();
 
   node firstNode = graph->getOneNode();
@@ -69,7 +69,7 @@ struct dfsFreeTreeStruct {
 };
 
 //Determines if the given graph is topologically a tree
-bool TreeTest::isFreeTree (Graph *graph, node curRoot) {
+bool TreeTest::isFreeTree (const Graph *graph, node curRoot) {
   // do a dfs traversal from curRoot;
   MutableContainer<bool> visited;
   visited.setAll (false);
@@ -302,7 +302,7 @@ static Graph* computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
 }
 
 // the documented functions
-Graph* TreeTest::computeTree(Graph *graph, PluginProgress *pluginProgress) {
+Graph* TreeTest::computeTree(tlp::Graph* graph, PluginProgress* pluginProgress) {
   return computeTreeInternal(graph, NULL, false, pluginProgress);
 }
 
@@ -350,7 +350,7 @@ void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
 }
 
 //====================================================================
-bool TreeTest::compute(Graph *graph) {
+bool TreeTest::compute(const Graph *graph) {
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) {
     return resultsBuffer[(unsigned long)graph];
   }
@@ -400,31 +400,43 @@ bool TreeTest::compute(Graph *graph) {
   }
 }
 
-void TreeTest::addEdge(Graph *graph,const edge) {
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-void TreeTest::delEdge(Graph *graph,const edge) {
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-void TreeTest::reverseEdge(Graph *graph,const edge) {
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-void TreeTest::addNode(Graph *graph,const node) {
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-void TreeTest::delNode(Graph *graph,const node) {
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-
-void TreeTest::destroy(Graph *graph) {
-  resultsBuffer.erase((unsigned long)graph);
-}
-
 void TreeTest::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
+  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+  
+  if (gEvt) {
+    Graph* graph = gEvt->getGraph();
+    
+    switch(gEvt->getType()) {
+      case GraphEvent::TLP_ADD_NODE:
+        graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      case GraphEvent::TLP_DEL_NODE:
+        graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      case GraphEvent::TLP_ADD_EDGE:
+        graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      case GraphEvent::TLP_DEL_EDGE:
+        graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      case GraphEvent::TLP_REVERSE_EDGE:
+        graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      default:
+        break;
+    }
+  }
+  else {
+    // From my point of view the use of dynamic_cast should be correct
+    // but it fails, so I use reinterpret_cast (pm)
+    Graph* graph = reinterpret_cast<Graph *>(evt.sender());
+    
+    if (graph && evt.type() == Event::TLP_DELETE)
+      resultsBuffer.erase((unsigned long)graph);
+  }
 }

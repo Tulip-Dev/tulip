@@ -30,7 +30,7 @@ SimpleTest * SimpleTest::instance=0;
 SimpleTest::SimpleTest () {
 }
 //=================================================================
-bool SimpleTest::isSimple(Graph *graph) {
+bool SimpleTest::isSimple(const tlp::Graph* graph) {
   if(instance == 0 )
     instance = new SimpleTest();
 
@@ -55,7 +55,7 @@ void SimpleTest::makeSimple(Graph* graph,vector<edge> &removed) {
   assert(SimpleTest::isSimple(graph));
 }
 //=================================================================
-bool SimpleTest::simpleTest(Graph *graph, vector<edge> *multipleEdges, vector<edge> *loops) {
+bool SimpleTest::simpleTest(const tlp::Graph* graph, vector< edge >* multipleEdges, vector< edge >* loops) {
   bool result = true;
   bool computeAll = (loops != 0) || (multipleEdges != 0);
   Iterator<node> *itNode = graph->getNodes();
@@ -127,20 +127,35 @@ void SimpleTest::deleteResult(Graph *graph) {
   graph->removeGraphObserver(this);
 }
 //=================================================================
-void SimpleTest::addEdge(Graph *graph, const edge) {
-  if (resultsBuffer[(unsigned long)graph] == true)
-    deleteResult(graph);
-}
-//=================================================================
-void SimpleTest::delEdge(Graph *graph, const edge) {
-  if (resultsBuffer[(unsigned long)graph] == false)
-    deleteResult(graph);
-}
-//=================================================================
-void SimpleTest::destroy(Graph *graph) {
-  deleteResult(graph);
-}
-//=================================================================
 void SimpleTest::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
+  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+  
+  if (gEvt) {
+    Graph* graph = gEvt->getGraph();
+    
+    switch(gEvt->getType()) {
+    case GraphEvent::TLP_ADD_EDGE:
+        if (resultsBuffer[(unsigned long)graph])
+          deleteResult(graph);
+        break;
+      case GraphEvent::TLP_DEL_EDGE:
+        if (!resultsBuffer[(unsigned long)graph])
+          deleteResult(graph);
+        break;
+      case GraphEvent::TLP_REVERSE_EDGE:
+        graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      default:
+        break;
+    }
+  }
+  else {
+    // From my point of view the use of dynamic_cast should be correct
+    // but it fails, so I use reinterpret_cast (pm)
+    Graph* graph = reinterpret_cast<Graph *>(evt.sender());
+    
+    if (graph && evt.type() == Event::TLP_DELETE)
+      deleteResult(graph);
+  }
 }

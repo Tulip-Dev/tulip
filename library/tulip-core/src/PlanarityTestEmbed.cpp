@@ -773,7 +773,7 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
 /*
  * Algebric criteria to check the plane map...
  */
-bool PlanarityTestImpl::isPlanarEmbedding(Graph *sG) {
+bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph* sG) {
   int n = sG->numberOfNodes();
 
   if (n == 1)

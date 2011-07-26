@@ -68,7 +68,7 @@ bool NodeMapIterator::hasNext() {
 }
 
 //=========================================
-EdgeMapIterator::EdgeMapIterator(Graph *sg, edge source, node target) {
+EdgeMapIterator::EdgeMapIterator(const Graph *sg, edge source, node target) {
   adj.resize(sg->deg(target));
   finished = false;
   treat = 0;

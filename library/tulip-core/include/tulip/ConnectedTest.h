@@ -72,7 +72,7 @@ public:
    * @return void
    * @note The components parameter can be returned with c++11 thanks to move constructors without performance loss, chenge this function once c++11 compilers are used.
    **/
-  static void computeConnectedComponents(Graph *graph, std::vector< std::set<node> >& components);
+  static void computeConnectedComponents(const Graph *graph, std::vector< std::set<node> >& components);
 
 private:
   ConnectedTest();
