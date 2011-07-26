@@ -39,7 +39,7 @@ ColorScale::ColorScale(const vector<Color> &colors, const bool gradient) :
   setColorScale(colors, gradient);
 }
 
-ColorScale::ColorScale(const ColorScale& scale) {
+ColorScale::ColorScale(const ColorScale& scale) : Observable() {
   colorMap = scale.colorMap;
   gradient = scale.gradient;
   colorScaleSet = scale.colorScaleSet;
@@ -98,7 +98,7 @@ void ColorScale::setColorScale(const std::vector<Color> colors,
       }
     }
 
-    notifyObservers();
+    sendEvent(Event(*this, Event::TLP_MODIFICATION));
   }
 }
 

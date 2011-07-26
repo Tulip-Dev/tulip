@@ -29,7 +29,7 @@ GlColorScale::GlColorScale(ColorScale *colorScale, const Coord &baseCoord, const
                            const float thickness, Orientation orientation) :
   colorScale(colorScale), baseCoord(baseCoord), length(length),
   thickness(thickness), colorScalePolyQuad(NULL),orientation(orientation) {
-  colorScale->addObserver(this);
+  colorScale->addListener(this);
   updateDrawing();
 }
 
@@ -38,18 +38,19 @@ GlColorScale::~GlColorScale() {
     delete colorScalePolyQuad;
   }
 
-  colorScale->removeObserver(this);
+  colorScale->removeListener(this);
 }
 
 void GlColorScale::setColorScale(ColorScale * scale) {
-  colorScale->removeObserver(this);
+  colorScale->removeListener(this);
   colorScale = scale;
-  colorScale->addObserver(this);
+  colorScale->addListener(this);
   updateDrawing();
 }
 
-void GlColorScale::update(std::set<Observable *>::iterator, std::set<Observable *>::iterator) {
-  updateDrawing();
+void GlColorScale::treatEvent(const Event &evt) {
+  if (dynamic_cast<ColorScale *>(evt.sender()) && evt.type() == Event::TLP_MODIFICATION)
+	  updateDrawing();
 }
 
 void GlColorScale::updateDrawing() {
