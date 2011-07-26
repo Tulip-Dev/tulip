@@ -30,10 +30,10 @@ namespace tlp {
      * \brief This class represents the 3D bounding box of an object.
      * It is mostly used to determine whether or not two object are in a state of collision.
      *
-     * It is composed of two voxels, the first one (A) being the lowest point, the second (B) being the highest.
+     * It is defined by two 3d points, the first one (A) being the lowest point, the second (B) being the highest.
      * As a bounding box is a mathematical entity describing the lowest and highest points, whether these points are in the top-left corner or 
      * lower-right corner depends on the axes we use.
-     * Below is a crude ASCII-art description of tthe axes we use in our 3D world and the points where the min and max are thus positioned.
+     * Below is a crude ASCII-art description of the axes we use in our 3D world and the points where the min and max are thus positioned.
      * Through the rest of this class's documentation, it will be assumed that this is the convention.
      * 
      *     y
@@ -62,7 +62,7 @@ namespace tlp {
       
     /**
      * @brief Creates an invalid boundig box.
-     * The minimum is in (1, 1, 1) and the maximum in (-1, -1, -1).
+     * The minimum is (1, 1, 1) and the maximum is (-1, -1, -1).
      *
      **/
     BoundingBox() {
@@ -85,7 +85,7 @@ namespace tlp {
     }
       
     /**
-     * @brief gets the geometrical center of the bounding box.
+     * @brief Returns the geometrical center of the bounding box.
      * An assertion is raised in debug mode if the BoundingBox is not valid.
      *
      * @return The center of the bounding box :Vec3f
@@ -127,7 +127,7 @@ namespace tlp {
       
 
     /**
-     * @brief Expands the bounding box to one containing the vector passed as param.
+     * @brief Expands the bounding box to one containing the vector passed as parameter.
      * If the parameter is inside the bounding box, it remains unchanged.
      *
      * @param coord A point in the 3D space we want the bounding box to encompass.
@@ -144,9 +144,9 @@ namespace tlp {
     }
     
     /**
-     * @brief Translates the bounding box of the distance given by the parameter vector.
+     * @brief Translates the bounding box by the displacement given by the vector passed as parameter.
      *
-     * @param vec The distance in 3D space to translate this bounding box by.
+     * @param vec The displacement vector in 3D space to translate this bounding box by.
      * @return void
      **/
     void translate(const tlp::Vec3f& vec) {
@@ -155,8 +155,8 @@ namespace tlp {
     }
     
     /**
-     * @brief Checks whether this bounding box's lowest point is less than it's highest point.
-     * "Less Than" means axis-by-axis comparison, e.g. x1 < x2 && y1 < y2 && z1 < z3.
+     * @brief Checks whether the bounding box's lowest point is less than it's highest point.
+     * "Less Than" means axis-by-axis comparison, i.e. x1 < x2 && y1 < y2 && z1 < z2.
      *
      * @return bool Whether this bounding box is valid.
      **/
@@ -165,7 +165,7 @@ namespace tlp {
     }
     
     /**
-     * @brief The vector passed as param is modified to contain the 8 points of the bounding box.
+     * @brief The vector passed as parameter is modified to contain the 8 points of the bounding box.
      * The points are, in order :
      * 0: lower leftmost closest point (the bounding box's minimum)
      * 1: lower rightmost closest point
