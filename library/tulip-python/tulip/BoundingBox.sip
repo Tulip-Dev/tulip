@@ -30,24 +30,98 @@ struct BoundingBox {
 #include <tulip/BoundingBox.h>
 %End
 
+%Docstring
+This class represents the 3D bounding box of an object.
+It is defined by two 3d points, the first one being the lowest point (bottom-left corner), 
+the second being the highest (top-right corner).
+
+A bounding box can be instantiated and manipulated the following ways::
+
+	# Initialize a non-valid bounding box.
+	# The minimum is (1, 1, 1) and the maximum is (-1, -1, -1).
+	bb = tlp.BoundingBox()
+	
+	# Initialize a bounding box by specifying the lowest and highest point.
+	# The validity of the bounding box is checked in debug mode (an assertion is raised if it is not valid). 
+	bb2 = tlp.BoundingBox(tlp.Vec3f(0,0,0), tlp.Vec3f(10,10,10))
+	
+	# Reading / writing the bounding box components can be done through the [] operator
+	min = bb2[0]
+	max = bb2[1]
+%End
+
       BoundingBox();
       
       BoundingBox(const tlp::Vec3f& min, const tlp::Vec3f& max);
       
       tlp::Vec3f center() const;
+%Docstring
+tlp.BoundingBox.center()
+
+Returns the geometrical center of the bounding box.
+
+:rtype: :class:`tlp.Vec3f` 
+%End
 
 	  float width() const;
+%Docstring
+tlp.BoundingBox.width()
+
+Returns the width of the bounding box.
+
+:rtype: float
+%End	  
 	  
 	  float height() const;	
+%Docstring
+tlp.BoundingBox.height()
+
+Returns the height of the bounding box.
+
+:rtype: float
+%End
 
 	  float depth() const;	
+%Docstring
+tlp.BoundingBox.depth()
+
+Returns the depth of the bounding box.
+
+:rtype: float
+%End
 
       void expand(const tlp::Vec3f& coord);
+%Docstring
+tlp.BoundingBox.expand(point)
+
+Expands the bounding box to one containing the vector passed as parameter.
+If the vector is inside the bounding box, it remains unchanged.
+
+:param point: A point in the 3D space we want the bounding box to encompass.
+:type point: :class:`tlp.Vec3f`
+%End
+
 
       void translate(const tlp::Vec3f& vec);
+%Docstring
+tlp.BoundingBox.translate(displacement)
+
+Translates the bounding box by the displacement given by the vector passed as parameter.
+
+:param displacement: The displacement vector in 3D space to translate this bounding box by.
+:type displacement: :class:`tlp.Vec3f`
+%End
 
       bool isValid() const;
+%Docstring
+tlp.BoundingBox.isValid()
 
+Checks whether the bounding box's lowest point is less than it's highest point.
+"Less Than" means axis-by-axis comparison, i.e. x1 < x2 && y1 < y2 && z1 < z2.
+
+:rtype: boolean
+%End      
+      
       tlp::Vec3f operator[](const unsigned int i) const;
 	
       void __setitem__(int i, const tlp::Vec3f &value);
