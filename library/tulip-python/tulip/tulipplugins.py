@@ -1,3 +1,7 @@
+"""
+This module provides utility functions to register Tulip plugins written in Python in the plugins database.
+"""
+
 from tulip import *
 pluginFactory = {}
 pluginModules = {}
@@ -35,6 +39,26 @@ def updateTulipMenus():
     tuliputils.updatePluginsMenus()
 
 def registerAlgorithmPlugin(pluginClassName, pluginName, author, date, info, release):
+  
+	"""
+	tulipplugins.registerAlgorithmPlugin(pluginClassName, pluginName, author, date, info, release)
+	
+	Registers a Tulip general algorithm written in Python in the plugins database.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.Algorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	"""
+	
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -65,6 +89,28 @@ def registerAlgorithmPlugin(pluginClassName, pluginName, author, date, info, rel
         updateTulipMenus()
         
 def registerAlgorithmPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+  
+	"""
+	tulipplugins.registerAlgorithmPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+	
+	Registers a Tulip general algorithm written in Python in the plugins database and inserts it in a specific group.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.Algorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the Algorithm -> General menu from the Tulip Software GUI)
+	:type group: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -95,6 +141,26 @@ def registerAlgorithmPluginOfGroup(pluginClassName, pluginName, author, date, in
         updateTulipMenus()
         
 def registerLayoutPlugin(pluginClassName, pluginName, author, date, info, release):
+  
+	"""
+	tulipplugins.registerLayoutPlugin(pluginClassName, pluginName, author, date, info, release)
+	
+	Registers a Tulip layout algorithm written in Python in the plugins database.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.LayoutAlgorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -125,6 +191,28 @@ def registerLayoutPlugin(pluginClassName, pluginName, author, date, info, releas
         updateTulipMenus()
         
 def registerLayoutPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+  
+	"""
+	tulipplugins.registerLayoutPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+	
+	Registers a Tulip layout algorithm written in Python in the plugins database and inserts it in a specific group.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.LayoutAlgorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the Algorithm -> Layout menu from the Tulip Software GUI)
+	:type group: string
+	"""
+	
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -155,6 +243,26 @@ def registerLayoutPluginOfGroup(pluginClassName, pluginName, author, date, info,
         updateTulipMenus()
         
 def registerDoublePlugin(pluginClassName, pluginName, author, date, info, release):
+  
+	"""
+	tulipplugins.registerDoublePlugin(pluginClassName, pluginName, author, date, info, release)
+	
+	Registers a Tulip double algorithm (metric) written in Python in the plugins database.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.DoubleAlgorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	"""
+	
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -185,6 +293,28 @@ def registerDoublePlugin(pluginClassName, pluginName, author, date, info, releas
         updateTulipMenus()
         
 def registerDoublePluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+  
+	"""
+	tulipplugins.registerDoublePluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+	
+	Registers a Tulip double algorithm (metric) written in Python in the plugins database and inserts it in a specific group.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.DoubleAlgorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the Algorithm -> Measure menu from the Tulip Software GUI)
+	:type group: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -215,6 +345,26 @@ def registerDoublePluginOfGroup(pluginClassName, pluginName, author, date, info,
         updateTulipMenus()
         
 def registerIntegerPlugin(pluginClassName, pluginName, author, date, info, release):
+  
+	"""
+	tulipplugins.registerIntegerPlugin(pluginClassName, pluginName, author, date, info, release)
+	
+	Registers a Tulip integer algorithm written in Python in the plugins database.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.IntegerAlgorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -245,6 +395,28 @@ def registerIntegerPlugin(pluginClassName, pluginName, author, date, info, relea
         updateTulipMenus()
         
 def registerIntegerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+  
+	"""
+	tulipplugins.registerIntegerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+	
+	Registers a Tulip integer algorithm written in Python in the plugins database and inserts it in a specific group.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.IntegerAlgorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the Algorithm -> Integer menu from the Tulip Software GUI)
+	:type group: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -275,6 +447,26 @@ def registerIntegerPluginOfGroup(pluginClassName, pluginName, author, date, info
         updateTulipMenus()
         
 def registerBooleanPlugin(pluginClassName, pluginName, author, date, info, release):
+  
+	"""
+	tulipplugins.registerBooleanPlugin(pluginClassName, pluginName, author, date, info, release)
+	
+	Registers a Tulip boolean algorithm (selection) written in Python in the plugins database.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.BooleanAlgorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -305,6 +497,28 @@ def registerBooleanPlugin(pluginClassName, pluginName, author, date, info, relea
         updateTulipMenus()
         
 def registerBooleanPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+  
+	"""
+	tulipplugins.registerBooleanPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+	
+	Registers a Tulip boolean algorithm (selection) written in Python in the plugins database and inserts it in a specific group.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.BooleanAlgorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the Algorithm -> Selection menu from the Tulip Software GUI)
+	:type group: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -335,6 +549,26 @@ def registerBooleanPluginOfGroup(pluginClassName, pluginName, author, date, info
         updateTulipMenus()
         
 def registerSizePlugin(pluginClassName, pluginName, author, date, info, release):
+  
+	"""
+	tulipplugins.registerSizePlugin(pluginClassName, pluginName, author, date, info, release)
+	
+	Registers a Tulip size algorithm written in Python in the plugins database.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.SizeAlgorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -365,6 +599,28 @@ def registerSizePlugin(pluginClassName, pluginName, author, date, info, release)
         updateTulipMenus()
         
 def registerSizePluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+  
+	"""
+	tulipplugins.registerSizePluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+	
+	Registers a Tulip size algorithm written in Python in the plugins database and inserts it in a specific group.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.SizeAlgorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the Algorithm -> Size menu from the Tulip Software GUI)
+	:type group: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -395,6 +651,26 @@ def registerSizePluginOfGroup(pluginClassName, pluginName, author, date, info, r
         updateTulipMenus()
         
 def registerColorPlugin(pluginClassName, pluginName, author, date, info, release):
+  
+	"""
+	tulipplugins.registerColorPlugin(pluginClassName, pluginName, author, date, info, release)
+	
+	Registers a Tulip color algorithm written in Python in the plugins database.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.ColorAlgorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -425,6 +701,28 @@ def registerColorPlugin(pluginClassName, pluginName, author, date, info, release
         updateTulipMenus()
         
 def registerColorPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+  
+	"""
+	tulipplugins.registerColorPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+	
+	Registers a Tulip color algorithm written in Python in the plugins database and inserts it in a specific group.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.ColorAlgorithm`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the Algorithm -> Color menu from the Tulip Software GUI)
+	:type group: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -455,6 +753,26 @@ def registerColorPluginOfGroup(pluginClassName, pluginName, author, date, info, 
         updateTulipMenus()
         
 def registerImportPlugin(pluginClassName, pluginName, author, date, info, release):
+  
+	"""
+	tulipplugins.registerImportPlugin(pluginClassName, pluginName, author, date, info, release)
+	
+	Registers a Tulip import module written in Python in the plugins database.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.PythonImportModule`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -485,6 +803,28 @@ def registerImportPlugin(pluginClassName, pluginName, author, date, info, releas
         updateTulipMenus()
         
 def registerImportPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+  
+	"""
+	tulipplugins.registerImportPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+	
+	Registers a Tulip import module written in Python in the plugins database and inserts it in a specific group.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.PythonImportModule`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the File -> Import menu from the Tulip Software GUI)
+	:type group: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -515,6 +855,26 @@ def registerImportPluginOfGroup(pluginClassName, pluginName, author, date, info,
         updateTulipMenus()
         
 def registerExportPlugin(pluginClassName, pluginName, author, date, info, release):
+  
+	"""
+	tulipplugins.registerExportPlugin(pluginClassName, pluginName, author, date, info, release)
+	
+	Registers a Tulip export module written in Python in the plugins database.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.PythonExportModule`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -545,6 +905,28 @@ def registerExportPlugin(pluginClassName, pluginName, author, date, info, releas
         updateTulipMenus()
         
 def registerExportPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+  
+	"""
+	tulipplugins.registerExportPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+	
+	Registers a Tulip export module written in Python in the plugins database and inserts it in a specific group.
+	
+	:param pluginClassName: the name of the Python class implementing the plugin (deriving from :class:`tlp.PythonExportModule`)
+	:type pluginClassName: string
+	:param pluginName: the name of the plugin as it will appear in the interface and that will be used to call it
+	:type pluginName: string
+	:param author: the name of the plugin's author
+	:type author: string
+	:param date: the date of creation of the plugin
+	:type date: string
+	:param info: some informations relative to the plugin
+	:type info: string
+	:param release: the version number of the plugin in the form X.Y
+	:type release: string
+	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the File -> Export menu from the Tulip Software GUI)
+	:type group: string
+	"""
+  
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
