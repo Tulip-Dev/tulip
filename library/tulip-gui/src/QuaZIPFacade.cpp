@@ -102,11 +102,12 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tl
   }
 
   QFile archiveFile(archivePath);
+
   if(!archiveFile.exists()) {
     progress->setError(QString("no such file : " + archivePath).toStdString());
     return false;
   }
-  
+
   QuaZip archive(archivePath);
 
   if (!archive.open(QuaZip::mdUnzip)) {

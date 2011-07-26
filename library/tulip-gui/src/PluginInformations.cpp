@@ -111,12 +111,14 @@ bool PluginInformations::fetch() const {
   const QString archiveName = tlp::getPluginPackageName(name());
   DownloadManager::getInstance()->downloadPlugin(_remoteArchive, tlp::getPluginStagingDirectory() + archiveName);
   std::cout << isInstalled() << ": " << installedVersion().toStdString() << ";" << _installedVersion.isEmpty() << std::endl;
+
   if(!isInstalled()) {
     tlp::SimplePluginProgress* progress = new tlp::SimplePluginProgress();
     result = QuaZIPFacade::unzip(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins", tlp::getPluginStagingDirectory() + "/" + archiveName, progress);
 //     std::cout << archiveName.toStdString() << ":" << result << "; " << progress->getError() << std::endl;
 //     PluginLibraryLoader::loadPlugins();
   }
+
   return result;
 }
 

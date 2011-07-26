@@ -26,7 +26,9 @@ public:
   GraphPerspectiveProject(tlp::TulipProject *project, tlp::PluginProgress *);
   virtual ~GraphPerspectiveProject();
 
-  tlp::TulipProject *project() const { return _project; }
+  tlp::TulipProject *project() const {
+    return _project;
+  }
   QList<tlp::Graph *> graphs() const;
 
 public slots:
