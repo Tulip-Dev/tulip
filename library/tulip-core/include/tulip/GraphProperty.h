@@ -21,7 +21,6 @@
 
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
-#include <tulip/ObservableGraph.h>
 
 namespace tlp {
 
@@ -32,15 +31,12 @@ typedef AbstractProperty<tlp::GraphType, tlp::EdgeSetType> AbstractGraphProperty
 
 /** \addtogroup properties */
 /*@{*/
-class TLP_SCOPE GraphProperty:public AbstractGraphProperty,
-  public GraphObserver {
+class TLP_SCOPE GraphProperty : public AbstractGraphProperty {
   friend class GraphAbstract;
 
 public :
   GraphProperty (Graph *, std::string n="");
   virtual ~GraphProperty();
-  // override GraphObserver::destroy
-  void destroy(Graph *);
   // override Observable::treatEvent
   void treatEvent(const Event&);
 

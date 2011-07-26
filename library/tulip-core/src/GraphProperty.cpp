@@ -120,54 +120,6 @@ void GraphProperty::setNodeValue(const node n, const GraphType::RealType& sg) {
     }
   }
 }
-//==========================================================
-void GraphProperty::destroy(Graph *sg) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-#ifndef NDEBUG
-  cerr << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to prevent segmentation fault" << endl;
-#endif
-
-  if (getNodeDefaultValue() == sg) {
-    //we must backup old value
-    MutableContainer<Graph *> backup;
-    backup.setAll(0);
-    Iterator<node> *it = graph->getNodes();
-
-    while(it->hasNext()) {
-      node n = it->next();
-
-      if (getNodeValue(n) != sg)
-        backup.set(n.id, getNodeValue(n));
-    }
-
-    delete it;
-    setAllNodeValue(0);
-    //restore values
-    it = graph->getNodes();
-
-    while(it->hasNext()) {
-      node n = it->next();
-      setNodeValue(n, backup.get(n.id));
-    }
-
-    delete it;
-  }
-
-  const set<node>& refs = referencedGraph.get(sg->getId());
-
-  set<node>::const_iterator it = refs.begin();
-
-  if (it != refs.end()) {
-    // don't change values if this non longer exists (when undoing)
-    if (graph->existProperty(name)) {
-      for (; it!=refs.end(); ++it) {
-        AbstractGraphProperty::setNodeValue((*it), 0);
-      }
-    }
-
-    referencedGraph.set(sg->getId(), set<node>());
-  }
-}
 //============================================================
 PropertyInterface* GraphProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
@@ -204,5 +156,56 @@ const set<edge>& GraphProperty::getReferencedEdges(const edge e) const {
 }
 //=============================================================
 void GraphProperty::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
+  if (evt.type() == Event::TLP_DELETE) {
+    // From my point of view the use of dynamic_cast should be correct
+    // but it fails, so I use reinterpret_cast (pm)
+    Graph* sg = reinterpret_cast<Graph *>(evt.sender());
+    if(sg) {
+      //  cerr << __PRETTY_FUNCTION__ << endl;
+      #ifndef NDEBUG
+      cerr << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to prevent segmentation fault" << endl;
+      #endif
+
+      if (getNodeDefaultValue() == sg) {
+        //we must backup old value
+        MutableContainer<Graph *> backup;
+        backup.setAll(0);
+        Iterator<node> *it = graph->getNodes();
+
+        while(it->hasNext()) {
+          node n = it->next();
+
+          if (getNodeValue(n) != sg)
+            backup.set(n.id, getNodeValue(n));
+        }
+
+        delete it;
+        setAllNodeValue(0);
+        //restore values
+        it = graph->getNodes();
+
+        while(it->hasNext()) {
+          node n = it->next();
+          setNodeValue(n, backup.get(n.id));
+        }
+
+        delete it;
+      }
+
+      const set<node>& refs = referencedGraph.get(sg->getId());
+
+      set<node>::const_iterator it = refs.begin();
+
+      if (it != refs.end()) {
+        // don't change values if this non longer exists (when undoing)
+        if (graph->existProperty(name)) {
+          for (; it!=refs.end(); ++it) {
+            AbstractGraphProperty::setNodeValue((*it), 0);
+          }
+        }
+
+        referencedGraph.set(sg->getId(), set<node>());
+      }
+    }
+  }
 }
