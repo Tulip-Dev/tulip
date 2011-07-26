@@ -75,7 +75,7 @@ private:
    * @brief check if the graph is biconnected.
    *
    * @param graph the graph to check.
-   * @return bool true if the graph is biconnecte, false otherwise.
+   * @return bool true if the graph is biconnected, false otherwise.
    **/
   bool compute(Graph * graph);
 
