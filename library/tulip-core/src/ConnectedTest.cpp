@@ -71,7 +71,7 @@ unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph* const 
   return result;
 }
 //======================================================================
-void ConnectedTest::computeConnectedComponents(Graph *graph, std::vector<std::set<node> >& components) {
+void ConnectedTest::computeConnectedComponents(const tlp::Graph* graph, vector< set< node > >& components) {
   MutableContainer<bool> visited;
   visited.setAll(false);
   // do a bfs traversal for each node
@@ -221,10 +221,9 @@ void ConnectedTest::treatEvent(const Event& evt) {
     }
   }
   else {
-    Graph* graph =
     // From my point of view the use of dynamic_cast should be correct
     // but it fails, so I use reinterpret_cast (pm)
-    reinterpret_cast<Graph *>(evt.sender());
+    Graph* graph = reinterpret_cast<Graph *>(evt.sender());
     
     if (graph && evt.type() == Event::TLP_DELETE)
       resultsBuffer.erase((unsigned long)graph);

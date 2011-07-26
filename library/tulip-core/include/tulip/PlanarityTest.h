@@ -33,8 +33,12 @@ class Graph;
 
 /** \addtogroup graph_test */
 /*@{*/
-/// class for testing the planarity of a graph
-class TLP_SCOPE PlanarityTest : private GraphObserver, private Observable {
+
+/**
+ * @brief performs tests to check zhether a graph is planar.
+ * From wikipedia: "A planar graph is a graph that can be embedded in the plane, i.e., it can be drawn on the plane in such a way that its edges intersect only at their endpoints."
+ **/
+class TLP_SCOPE PlanarityTest : private Observable {
 public:
   /*
     The set of edges of the graph is modified during the execution of
@@ -44,41 +48,56 @@ public:
   */
 
   /**
-   * Returns true if the graph is planar (i.e. the graph can be drawn in such a way that no edges cross each other),
-   * false otherwise.
-   */
+   * @brief Checks whether the graph is planar (i.e. the graph can be drawn on the plane in such a way that no edges cross each other).
+   *
+   * @param graph The graph to check for planarity.
+   * @return bool True if the graph is planar, false otherwise.
+   * @note The graph is made biconnected to ease (?) the computation.
+   **/
   static bool isPlanar(Graph *graph);
 
   /**
    * Returns true if the current embedding of the graph is planar, false otherwise.
    */
-  static bool isPlanarEmbedding(Graph *graph);
+  /**
+   * @brief Checks if the graph is plane (or a planar embedding).
+   * A planar graph *can* be drawn such as no edges cross each other, a plane graph *is* drawn such as no edges cross each other.
+   *
+   * @param graph The graph to check for a planar e;bedding.
+   * @return bool True if the graph is a planar embedding, false otherwise.
+   **/
+  static bool isPlanarEmbedding(const Graph *graph);
 
   /**
-   * Changes the order of edges around the nodes in order to make the
-   * embedding planar (the graph must be planar for that).
-   * Returns true if the graph is planar, false otherwise.
-   */
+   * @brief Makes a planar graph a planar embedding, i.e. makes a graph so that no edges cross each other if it is known to be possible.
+   * This modifies the order of the edges around the nodes.
+   *
+   * @param graph The graph to make a planar embedding of.
+   * @return bool True if the graph is planar, false otherwise.
+   **/
   static bool planarEmbedding(Graph *graph);
 
   /**
-   * Returns a list of edges that prevents to make the graph planar
-   * (ie. part of the minor of K3,3 or K5).
-   */
+   * @brief Computes a list of edges that prevent the graph from being planar (i.e. part of the minor of K3,3 or K5).
+   *
+   * @param graph The graph on which to compute the obstruction edges.
+   * @return :list< tlp::edge, std::allocator< tlp::edge > > The obstruction edges.
+   **/
   static std::list<edge> getObstructionsEdges(Graph *graph);
 
 private:
-  // override some GraphObserver methods
-  void addEdge(Graph *,const edge);
-  void delEdge(Graph *,const edge);
-  void addNode(Graph *,const node);
-  void delNode(Graph *,const node);
-  void destroy(Graph *);
-  // override Observable::treatEvent
+  PlanarityTest() {}
+  //override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   void treatEvent(const Event&);
   bool compute(Graph *graph);
-  PlanarityTest() : GraphObserver() {}
+
+  /**
+   * @brief Singleton instance of this class.
+   **/
   static PlanarityTest * instance;
+  /**
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
+   **/
   TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };
 /*@}*/

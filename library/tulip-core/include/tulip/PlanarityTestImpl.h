@@ -40,7 +40,7 @@ class TLP_SCOPE PlanarityTestImpl {
 public:
   PlanarityTestImpl(Graph *sg);
   bool isPlanar(bool embedsg = false);
-  static bool isPlanarEmbedding(Graph *sG);
+  static bool isPlanarEmbedding(const Graph *sG);
   std::list<edge> getObstructions();
 
 private:

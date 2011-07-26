@@ -26,7 +26,7 @@ using namespace tlp;
 //=================================================================
 PlanarityTest * PlanarityTest::instance=0;
 //=================================================================
-bool PlanarityTest::isPlanar(Graph *graph) {
+bool PlanarityTest::isPlanar(Graph* graph) {
   if(instance==0)
     instance = new PlanarityTest();
 
@@ -35,7 +35,7 @@ bool PlanarityTest::isPlanar(Graph *graph) {
   Observable::unholdObservers();
   return result;
 }
-bool PlanarityTest::isPlanarEmbedding(Graph *graph) {
+bool PlanarityTest::isPlanarEmbedding(const tlp::Graph* graph) {
   return PlanarityTestImpl::isPlanarEmbedding(graph);
 }
 //=================================================================
@@ -57,7 +57,7 @@ bool PlanarityTest::planarEmbedding(Graph *graph) {
   return true;
 }
 //=================================================================
-list<edge> PlanarityTest::getObstructionsEdges(Graph *graph) {
+list<edge> PlanarityTest::getObstructionsEdges(Graph* graph) {
   if (PlanarityTest::isPlanar(graph))
     return list<edge>();
 
@@ -85,7 +85,7 @@ list<edge> PlanarityTest::getObstructionsEdges(Graph *graph) {
   return result;
 }
 //=================================================================
-bool PlanarityTest::compute(Graph *graph) {
+bool PlanarityTest::compute(Graph* graph) {
 
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     return resultsBuffer[(unsigned long)graph];
@@ -107,37 +107,44 @@ bool PlanarityTest::compute(Graph *graph) {
   return resultsBuffer[(unsigned long)graph];
 }
 //=================================================================
-void PlanarityTest::addEdge(Graph *graph,const edge) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (!resultsBuffer[(unsigned long)graph]) return;
-
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
-void PlanarityTest::delEdge(Graph *graph,const edge) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (resultsBuffer[(unsigned long)graph]) return;
-
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
-void PlanarityTest::addNode(Graph*,const node) {
-}
-//=================================================================
-void PlanarityTest::delNode(Graph *graph,const node) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (resultsBuffer[(unsigned long)graph]) return;
-
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
-void PlanarityTest::destroy(Graph *graph) {
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
 void PlanarityTest::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
+  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+  
+  if (gEvt) {
+    Graph* graph = gEvt->getGraph();
+    
+    switch(gEvt->getType()) {
+      case GraphEvent::TLP_DEL_NODE:
+        if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+          if (resultsBuffer[(unsigned long)graph]) return;
+          
+          graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      case GraphEvent::TLP_ADD_EDGE:
+        if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+          if (!resultsBuffer[(unsigned long)graph]) return;
+          
+          graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      case GraphEvent::TLP_DEL_EDGE:
+        if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+          if (resultsBuffer[(unsigned long)graph]) return;
+          
+          graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      default:
+        break;
+    }
+  }
+  else {
+    // From my point of view the use of dynamic_cast should be correct
+    // but it fails, so I use reinterpret_cast (pm)
+    Graph* graph = reinterpret_cast<Graph *>(evt.sender());
+    
+    if (graph && evt.type() == Event::TLP_DELETE)
+      resultsBuffer.erase((unsigned long)graph);
+  }
 }

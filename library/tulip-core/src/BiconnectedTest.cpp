@@ -72,7 +72,7 @@ void makeBiconnectedDFS(Graph *graph, node from,
   }
 }
 //=================================================================
-bool biconnectedTest(Graph *graph, node v,
+bool biconnectedTest(const Graph *graph, node v,
                      MutableContainer<bool> &mark,
                      MutableContainer<unsigned int> &low,
                      MutableContainer<unsigned int> &dfsNumber,
@@ -125,7 +125,7 @@ bool biconnectedTest(Graph *graph, node v,
 BiconnectedTest::BiconnectedTest() {
 }
 //=================================================================
-bool BiconnectedTest::isBiconnected(Graph *graph) {
+bool BiconnectedTest::isBiconnected(const tlp::Graph* graph) {
   if (instance == NULL) {
     instance = new BiconnectedTest();
   }
@@ -162,7 +162,7 @@ void BiconnectedTest::connect(Graph *graph, vector<edge> &addedEdges) {
   }
 }
 //=================================================================
-bool BiconnectedTest::compute(Graph *graph) {
+bool BiconnectedTest::compute(const tlp::Graph* graph) {
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     return resultsBuffer[(unsigned long)graph];
 

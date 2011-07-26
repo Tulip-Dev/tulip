@@ -77,7 +77,7 @@ public:
    * @brief Returns whether the graph is acyclic.
    * Collection of obstruction edges takes a bit of time, as iteration over the graph must continue even when it has been found cyclic.
    *
-   * @param graph the graph to  test for acyclicity
+   * @param graph the graph to test for acyclicity
    * @param obstructionEdges If not null, will be filled with edges that cause the graph to be cyclic. Defaults to 0.
    * @return bool
    **/
