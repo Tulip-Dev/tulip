@@ -3,7 +3,8 @@
 
 #include <tulip/Perspective.h>
 
-class GraphPerspectiveProject;
+class GraphHierarchiesModel;
+class GraphHierarchiesEditor;
 
 namespace Ui {
 class GraphPerspectiveMainWindowData;
@@ -12,7 +13,8 @@ class GraphPerspectiveMainWindowData;
 class GraphPerspective : public tlp::Perspective {
   Ui::GraphPerspectiveMainWindowData *_ui;
 
-  GraphPerspectiveProject *_perspectiveProject;
+  GraphHierarchiesModel *_graphs;
+  GraphHierarchiesEditor *_graphsEditor;
 
 public:
   GraphPerspective(tlp::PerspectiveContext &c);
