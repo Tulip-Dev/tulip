@@ -20,47 +20,76 @@
 #ifndef TULIP_BICONNEX_H
 #define TULIP_BICONNEX_H
 
-
-#include <tulip/tuliphash.h>
+#include <tulip/MutableContainer.h>
 #include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
 
 namespace tlp {
 class Graph;
 
 /** \addtogroup graph_test */
 /*@{*/
-/// class for testing if the graph is biconnected
-class TLP_SCOPE BiconnectedTest : private GraphObserver, private Observable {
-public:
 
+/**
+ * @brief Performs a test of biconnexity on the graph, and provides a function to make a graph biconnected.
+ * From Wikipedia: "A biconnected graph is connected and nonseparable, meaning that if any vertex were to be removed, the graph will remain connected."
+ **/
+class TLP_SCOPE BiconnectedTest : private Observable {
+
+public:
   /**
-   * Returns true if the graph is biconnected (ie. one must remove at least two nodes in order
-   * to disconnect the graph), false otherwise.
-   */
+   * @brief Checks whether the graph is biconnected (i.e. removing one edge does not disconnect the graph, at least two must be removed).
+   *
+   * @param graph The graph to check for biconnectivity.
+   * @return bool True if the graph is biconnected, false otherwise.
+   **/
   static bool isBiconnected(Graph *graph);
 
   /**
    * If the graph is not biconnected, adds edges in order to make the graph
    * biconnected. The new edges are added in addedEdges.
    */
+  /**
+   * @brief Adds edges to make the graph biconnected.
+   *
+   * @param graph The graph to make biconnected.
+   * @param addedEdges The edges that were added in the process.
+   * @return void
+   **/
   static void makeBiconnected(Graph *graph, std::vector<edge>& addedEdges);
 
 private:
-  void connect(Graph *, std::vector<edge>& addedEdges);
-  bool compute(Graph *);
-  // override GraphObserver methods
-  void addEdge(Graph *,const edge);
-  void delEdge(Graph *,const edge);
-  void reverseEdge(Graph *,const edge);
-  void addNode(Graph *,const node);
-  void delNode(Graph *,const node);
-  void destroy(Graph *);
-  BiconnectedTest(); //to ensure singleton
-  static BiconnectedTest * instance;
-  TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
-  // override Observable::treatEvent
+  BiconnectedTest();
+  
+  /**
+   * @brief Makes the graph biconnected.
+   * Starts by making the graph connected (using ConnectgedTest::makeConnected()),
+   * then calls another function that will visit the graph using a recursive dfs algorithm and make it biconnected.
+   * 
+   * @param graph The graph to make biconnected.
+   * @param addedEdges The edges that were added to make it biconnected.
+   * @return void
+   **/
+  void connect(Graph * graph, std::vector<edge>& addedEdges);
+
+  /**
+   * @brief check if the graph is biconnected.
+   *
+   * @param graph the graph to check.
+   * @return bool true if the graph is biconnecte, false otherwise.
+   **/
+  bool compute(Graph * graph);
+
+  //override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   virtual void treatEvent(const Event&);
+
+  /**
+   * @brief Singleton instance of this class.
+   **/
+  static BiconnectedTest * instance;
+  /**
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
+   **/
+  TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
 };
 }
 /*@}*/

@@ -25,63 +25,50 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-BiconnectedTest * BiconnectedTest::instance=0;
-//=================================================================
-bool BiconnectedTest::isBiconnected(Graph *graph) {
-  if (instance==0)
-    instance=new BiconnectedTest();
-
-  return instance->compute(graph);
-}
-//=================================================================
-void BiconnectedTest::makeBiconnected(Graph *graph, vector<edge> &addedEdges) {
-  //  cerr << __PRETTY_FUNCTION__ << " : " << graph->getAttribute<string>("name") << endl;
-  //  if (BiconnectedTest::isBiconnected(graph)) return;
-  if (instance==0) instance=new BiconnectedTest();
-
-  graph->removeGraphObserver(instance);
-  instance->resultsBuffer.erase((unsigned long)graph);
-  instance->connect(graph, addedEdges);
-  assert(BiconnectedTest::isBiconnected(graph));
-}
-//=================================================================
-BiconnectedTest::BiconnectedTest() {
-}
+BiconnectedTest * BiconnectedTest::instance = NULL;
 //=================================================================
 void makeBiconnectedDFS(Graph *graph, node from,
                         MutableContainer<int> &low,
-                        MutableContainer<int> &dfsNumber,
+                        MutableContainer<int> &depth,
                         MutableContainer<node> &supergraph,
-                        unsigned int &count,
+                        unsigned int &currentDepth,
                         vector<edge> &addedEdges) {
   node u;
-  dfsNumber.set(from.id, count++);
-  low.set(from.id, dfsNumber.get(from.id));
+  depth.set(from.id, currentDepth++);
+  low.set(from.id, depth.get(from.id));
+
+  //for every node connected to this one, call this function so it runs on every node.
   StableIterator<node> itN(graph->getInOutNodes(from));
-
   while (itN.hasNext()) {
-    node w = itN.next();
+    node to = itN.next();
 
-    if (from == w) continue;
+    //if there is a loop, ignore it
+    if (from == to) {
+      continue;
+    }
 
-    if (!u.isValid()) u = w;
+    if (!u.isValid()) {
+      u = to;
+    }
 
-    if (dfsNumber.get(w.id) == -1) {
-      supergraph.set(w.id, from);
-      makeBiconnectedDFS(graph, w, low, dfsNumber, supergraph, count, addedEdges);
+    //if the destination node has not been visited, visit it
+    if (depth.get(to.id) == -1) {
+      supergraph.set(to.id, from);
+      makeBiconnectedDFS(graph, to, low, depth, supergraph, currentDepth, addedEdges);
 
-      if (low.get(w.id) == dfsNumber.get(from.id)) {
-        if (w == u && supergraph.get(from.id).isValid())
-          addedEdges.push_back(graph->addEdge(w, supergraph.get(from.id)));
+      if (low.get(to.id) == depth.get(from.id)) {
+        if (to == u && supergraph.get(from.id).isValid())
+          addedEdges.push_back(graph->addEdge(to, supergraph.get(from.id)));
 
-        if (w != u)
-          addedEdges.push_back(graph->addEdge(u, w));
+        if (to != u)
+          addedEdges.push_back(graph->addEdge(u, to));
       }
 
-      low.set(from.id, std::min(low.get(from.id), low.get(w.id)));
+      low.set(from.id, std::min(low.get(from.id), low.get(to.id)));
     }
-    else
-      low.set(from.id, std::min(low.get(from.id), dfsNumber.get(w.id)));
+    else {
+      low.set(from.id, std::min(low.get(from.id), depth.get(to.id)));
+    }
   }
 }
 //=================================================================
@@ -135,6 +122,30 @@ bool biconnectedTest(Graph *graph, node v,
   return true;
 }
 //=================================================================
+BiconnectedTest::BiconnectedTest() {
+}
+//=================================================================
+bool BiconnectedTest::isBiconnected(Graph *graph) {
+  if (instance == NULL) {
+    instance = new BiconnectedTest();
+  }
+  
+  return instance->compute(graph);
+}
+//=================================================================
+void BiconnectedTest::makeBiconnected(Graph *graph, vector<edge> &addedEdges) {
+  //  cerr << __PRETTY_FUNCTION__ << " : " << graph->getAttribute<string>("name") << endl;
+  //  if (BiconnectedTest::isBiconnected(graph)) return;
+  if (instance == NULL) {
+    instance = new BiconnectedTest();
+  }
+  
+  graph->removeGraphObserver(instance);
+  instance->resultsBuffer.erase((unsigned long)graph);
+  instance->connect(graph, addedEdges);
+  assert(BiconnectedTest::isBiconnected(graph));
+}
+//=================================================================
 void BiconnectedTest::connect(Graph *graph, vector<edge> &addedEdges) {
   //  cerr << __PRETTY_FUNCTION__ << " : " << graph->getAttribute<string>("name") << endl;
   ConnectedTest::makeConnected(graph, addedEdges);
@@ -146,9 +157,9 @@ void BiconnectedTest::connect(Graph *graph, vector<edge> &addedEdges) {
   unsigned int count = 0;
   node root = graph->getOneNode();
 
-  if (root.isValid())
-    makeBiconnectedDFS(graph, root, low, dfsNumber,
-                       supergraph, count, addedEdges);
+  if (root.isValid()) {
+    makeBiconnectedDFS(graph, root, low, dfsNumber, supergraph, count, addedEdges);
+  }
 }
 //=================================================================
 bool BiconnectedTest::compute(Graph *graph) {
@@ -179,45 +190,47 @@ bool BiconnectedTest::compute(Graph *graph) {
   return result;
 }
 //=================================================================
-void BiconnectedTest::addEdge(Graph *graph,const edge) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (resultsBuffer[(unsigned long)graph]) return;
-
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
-void BiconnectedTest::delEdge(Graph *graph,const edge) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (!resultsBuffer[(unsigned long)graph]) return;
-
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
-void BiconnectedTest::reverseEdge(Graph *,const edge) {
-}
-//=================================================================
-void BiconnectedTest::addNode(Graph *graph,const node) {
-  //  cerr << __PRETTY_FUNCTION__  << (unsigned)graph << endl;
-  resultsBuffer[(unsigned long)graph]=false;
-}
-//=================================================================
-void BiconnectedTest::delNode(Graph *graph,const node) {
-  //  cerr << __PRETTY_FUNCTION__  << (unsigned)graph << endl;
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
-void BiconnectedTest::destroy(Graph *graph) {
-  //  cerr << __PRETTY_FUNCTION__ << (unsigned)graph << endl;
-  //  cerr << "Graph name : " << graph->getAttribute<string>("name") << endl;
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
 void BiconnectedTest::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
+  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+  
+  if (gEvt) {
+    Graph* graph = gEvt->getGraph();
+    
+    switch(gEvt->getType()) {
+      case GraphEvent::TLP_ADD_NODE:
+        resultsBuffer[(unsigned long)graph]=false;
+        break;
+      case GraphEvent::TLP_DEL_NODE:
+        graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      case GraphEvent::TLP_ADD_EDGE:
+        if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+          if (resultsBuffer[(unsigned long)graph]) return;
+          
+          graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      case GraphEvent::TLP_DEL_EDGE:
+        if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+          if (!resultsBuffer[(unsigned long)graph]) return;
+          
+          graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      default:
+        // we don't care about other events
+        break;
+    }
+  }
+  else {
+    // From my point of view the use of dynamic_cast should be correct
+    // but it fails, so I use reinterpret_cast (pm)
+    Graph* graph = reinterpret_cast<Graph *>(evt.sender());
+    
+    if (graph && evt.type() == Event::TLP_DELETE) {
+      resultsBuffer.erase((unsigned long)graph);
+    }
+  }
 }
 
