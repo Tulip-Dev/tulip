@@ -60,20 +60,20 @@ const QStringList TulipSettings::pluginsToRemove() const {
 
 void TulipSettings::markPluginForRemoval(const QString& pluginLibrary) {
   QStringList markedPlugins = value("app/pluginsToRemove").toStringList();
-  
+
   if(!markedPlugins.contains(pluginLibrary)) {
     markedPlugins.append(pluginLibrary);
   }
-  
+
   setValue("app/pluginsToRemove", markedPlugins);
 }
 
 void TulipSettings::unmarkPluginForRemoval(const QString& pluginLibrary) {
   QStringList markedPlugins = value("app/pluginsToRemove").toStringList();
-  
+
   if(markedPlugins.contains(pluginLibrary)) {
     markedPlugins.removeAll(pluginLibrary);
   }
-  
+
   setValue("app/pluginsToRemove", markedPlugins);
 }

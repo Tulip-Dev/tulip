@@ -38,6 +38,7 @@ int main(int argc, char **argv) {
   foreach(const QString& plugin, TulipSettings::instance().pluginsToRemove()) {
     QFile pluginToRemove(plugin);
     bool removed = pluginToRemove.remove();
+
     if(removed) {
       TulipSettings::instance().unmarkPluginForRemoval(plugin);
     }
@@ -97,7 +98,7 @@ int main(int argc, char **argv) {
   dispatcher->registerLoader(splashScreen);
   tlp::PluginLibraryLoader::loadPlugins(dispatcher);
   tlp::PluginListerInterface::checkLoadedPluginsDependencies(dispatcher);
-  
+
   delete dispatcher;
   delete splashScreen;
 
