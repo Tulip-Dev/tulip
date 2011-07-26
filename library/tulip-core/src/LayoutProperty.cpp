@@ -25,6 +25,139 @@
 using namespace std;
 using namespace tlp;
 
+//=================================================================================
+namespace tlp {
+void maxV(tlp::Coord &res, const tlp::Coord &cmp) {
+  for (unsigned int i = 0; i<3; ++i) {
+    res[i] = std::max(res[i], cmp[i]);
+  }
+}
+void minV(tlp::Coord &res, const tlp::Coord &cmp) {
+  for (unsigned int i = 0; i<3; ++i) {
+    res[i] = std::min(res[i], cmp[i]);
+  }
+}
+
+/**
+ * @brief This template specialization provides specific computation for min and max values of Layout properties (they are specific in that they use the control points of the edges)
+ **/
+template <>
+void tlp::MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::computeMinMaxNode(Graph *sg) {
+  #ifndef NDEBUG
+  std::cerr << __PRETTY_FUNCTION__ << std::endl;
+  #endif
+  tlp::Coord maxT(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+  tlp::Coord minT(FLT_MAX, FLT_MAX, FLT_MAX);
+  
+  tlp::Iterator<node> *itN=sg->getNodes();
+  
+  if  (itN->hasNext()) {
+    node itn=itN->next();
+    const Coord& tmpCoord = _property->getNodeValue(itn);
+    maxV(maxT, tmpCoord);
+    minV(minT, tmpCoord);
+  }
+  
+  while (itN->hasNext()) {
+    node itn=itN->next();
+    const Coord& tmpCoord = _property->getNodeValue(itn);
+    maxV(maxT, tmpCoord);
+    minV(minT, tmpCoord);
+  }
+  
+  delete itN;
+  tlp::Iterator<edge> *itE = sg->getEdges();
+  
+  while (itE->hasNext()) {
+    edge ite=itE->next();
+    const LineType::RealType& value = _property->getEdgeValue(ite);
+    LineType::RealType::const_iterator itCoord;
+    
+    for (itCoord=value.begin(); itCoord!=value.end(); ++itCoord) {
+      const Coord& tmpCoord = *itCoord;
+      maxV(maxT, tmpCoord);
+      minV(minT, tmpCoord);
+    }
+  }
+  
+  delete itE;
+  unsigned int sgi = sg->getId();
+  nodeValueUptodate[sgi] = true;
+  minNode[sgi] = minT;
+  maxNode[sgi] = maxT;
+  //  cerr << "LayoutProperty::computeMinMax end" << endl;
+}
+
+/**
+ * @brief This template specialization provides specific computation for min and max values of Layout properties (they are specific in that they use the control points of the edges)
+ **/
+template <>
+void tlp::MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue) {
+  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = nodeValueUptodate.begin();
+
+  if (it != nodeValueUptodate.end()) {
+    const std::vector<Coord>& oldV = _property->getEdgeValue(e);
+
+    if (newValue != oldV) {
+      // loop on subgraph min/max
+      for(; it != nodeValueUptodate.end(); ++it) {
+        unsigned int gid = (*it).first;
+        const Coord& minV = minNode[gid];
+        const Coord& maxV = maxNode[gid];
+        bool reset = false;
+
+        // check if min has to be updated
+        for(unsigned i = 0; i < newValue.size(); ++i) {
+          if (minV > newValue[i]) {
+            reset = true;
+            break;
+          }
+        }
+
+        if (!reset) {
+          // check if max has to be updated
+          for(unsigned i = 0; i < newValue.size(); ++i) {
+            if (maxV < newValue[i]) {
+              reset = true;
+              break;
+            }
+          }
+        }
+
+        if (!reset) {
+          // check if minV belongs to oldV
+          for(unsigned i = 0; i < oldV.size(); ++i) {
+            if (minV == oldV[i]) {
+              reset = false;
+              break;
+            }
+          }
+        }
+
+        if (!reset) {
+          // check if maxV belongs to oldV
+          for(unsigned i = 0; i < oldV.size(); ++i) {
+            if (maxV == oldV[i]) {
+              reset = false;
+              break;
+            }
+          }
+        }
+
+        // reset bounding box if needed
+        if (reset) {
+          nodeValueUptodate.clear();
+          minNode.clear();
+          maxNode.clear();
+          break;
+        }
+      }
+    }
+  }
+}
+ 
+}
+
 inline double sqr(double x) {
   return (x*x);
 }
@@ -57,10 +190,9 @@ public:
 static LayoutMetaValueCalculator mvLayoutCalculator;
 
 //======================================================
-LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeReversal):AbstractLayoutProperty(sg, n) {
-  minMaxOk[(unsigned long)graph]=false;
-
-  // if needed the property observes the graph (see reverseEdge)
+LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeReversal):AbstractLayoutProperty(sg, n),
+  LayoutMinMaxCalculator(this, Coord(FLT_MAX, FLT_MAX, FLT_MAX), Coord(-FLT_MAX, -FLT_MAX, -FLT_MAX), tlp::LineType::RealType(), tlp::LineType::RealType()) {
+// if needed the property observes the graph (see reverseEdge)
   if (updateOnEdgeReversal)
     graph->addGraphObserver(this);
 
@@ -71,25 +203,13 @@ LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeRevers
 Coord LayoutProperty::getMax(Graph *sg) {
   if (sg==0) sg=graph;
 
-  unsigned int sgi = sg->getId();
-
-  if (minMaxOk.find(sgi)==minMaxOk.end()) minMaxOk[sgi]=false;
-
-  if (!minMaxOk[sgi]) computeMinMax(sg);
-
-  return max[sgi];
+  return LayoutMinMaxCalculator::getNodeMax(sg);
 }
 //======================================================
 Coord  LayoutProperty::getMin(Graph *sg) {
   if (sg==0) sg=graph;
 
-  unsigned int sgi = sg->getId();
-
-  if (minMaxOk.find(sgi)==minMaxOk.end()) minMaxOk[sgi]=false;
-
-  if (!minMaxOk[sgi]) computeMinMax(sg);
-
-  return min[sgi];
+  return LayoutMinMaxCalculator::getNodeMin(sg);
 }
 //=================================================================================
 #define X_ROT 0
@@ -337,167 +457,29 @@ void LayoutProperty::perfectAspectRatio() {
   Observable::unholdObservers();
 }
 
-void maxV(Coord &res, const Coord &cmp) {
-  for (unsigned int i = 0; i<3; ++i) {
-    res[i] = std::max(res[i], cmp[i]);
-  }
-}
-void minV(Coord &res, const Coord &cmp) {
-  for (unsigned int i = 0; i<3; ++i) {
-    res[i] = std::min(res[i], cmp[i]);
-  }
-}
-//=================================================================================
-void LayoutProperty::computeMinMax(Graph *sg) {
-#ifndef NDEBUG
-  cerr << __PRETTY_FUNCTION__ << endl;
-#endif
-  Coord maxT(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-  Coord minT(FLT_MAX, FLT_MAX, FLT_MAX);
-
-  if (sg==0) sg=graph;
-
-  Iterator<node> *itN=sg->getNodes();
-
-  if  (itN->hasNext()) {
-    node itn=itN->next();
-    const Coord& tmpCoord=getNodeValue(itn);
-    maxV(maxT, tmpCoord);
-    minV(minT, tmpCoord);
-  }
-
-  while (itN->hasNext()) {
-    node itn=itN->next();
-    const Coord& tmpCoord=getNodeValue(itn);
-    maxV(maxT, tmpCoord);
-    minV(minT, tmpCoord);
-  }
-
-  delete itN;
-  Iterator<edge> *itE=sg->getEdges();
-
-  while (itE->hasNext()) {
-    edge ite=itE->next();
-    const LineType::RealType& value = getEdgeValue(ite);
-    LineType::RealType::const_iterator itCoord;
-
-    for (itCoord=value.begin(); itCoord!=value.end(); ++itCoord) {
-      const Coord& tmpCoord = *itCoord;
-      maxV(maxT, tmpCoord);
-      minV(minT, tmpCoord);
-    }
-  }
-
-  delete itE;
-  unsigned int sgi = sg->getId();
-  minMaxOk[sgi]=true;
-  min[sgi] = minT;
-  max[sgi] = maxT;
-  //  cerr << "LayoutProperty::computeMinMax end" << endl;
-}
 //=================================================================================
 void LayoutProperty::clone_handler(AbstractProperty<PointType,LineType, LayoutAlgorithm> &proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
     LayoutProperty *proxy=(LayoutProperty *)&proxyC;
-    minMaxOk = proxy->minMaxOk;
-    min = proxy->min;
-    max = proxy->max;
+    nodeValueUptodate = proxy->nodeValueUptodate;
+    minNode = proxy->minNode;
+    maxNode = proxy->maxNode;
   }
 }
 //=================================================================================
 void LayoutProperty::resetBoundingBox() {
-  minMaxOk.clear();
-  min.clear();
-  max.clear();
+  nodeValueUptodate.clear();
+  minNode.clear();
+  minEdge.clear();
 }
 //================================================================================
 void LayoutProperty::setNodeValue(const node n, const Coord& v) {
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOk.begin();
-
-  if (it != minMaxOk.end()) {
-    const Coord& oldV = getNodeValue(n);
-
-    if (v != oldV) {
-      // loop on subgraph min/max
-      for(; it != minMaxOk.end(); ++it) {
-        unsigned int gid = (*it).first;
-        const Coord& minV = min[gid];
-        const Coord& maxV = max[gid];
-
-        // check if min or max have to be updated
-        if ((v < minV) || (v > maxV) ||
-            ((v != oldV) && ((oldV == minV) || (oldV == maxV)))) {
-          resetBoundingBox();
-          break;
-        }
-      }
-    }
-  }
-
+  LayoutMinMaxCalculator::updateNodeValue(n, v);
   AbstractLayoutProperty::setNodeValue(n, v);
 }
 //================================================================================
 void LayoutProperty::setEdgeValue(const edge e, const std::vector<Coord>& v) {
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOk.begin();
-
-  if (it != minMaxOk.end()) {
-    const std::vector<Coord>& oldV = getEdgeValue(e);
-
-    if (v != oldV) {
-      // loop on subgraph min/max
-      for(; it != minMaxOk.end(); ++it) {
-        unsigned int gid = (*it).first;
-        const Coord& minV = min[gid];
-        const Coord& maxV = max[gid];
-        bool reset = false;
-
-        // check if min has to be updated
-        for(unsigned i = 0; i < v.size(); ++i) {
-          if (minV > v[i]) {
-            reset = true;
-            break;
-          }
-        }
-
-        if (!reset) {
-          // check if max has to be updated
-          for(unsigned i = 0; i < v.size(); ++i) {
-            if (maxV < v[i]) {
-              reset = true;
-              break;
-            }
-          }
-        }
-
-        if (!reset) {
-          // check if minV belongs to oldV
-          for(unsigned i = 0; i < oldV.size(); ++i) {
-            if (minV == oldV[i]) {
-              reset = false;
-              break;
-            }
-          }
-        }
-
-        if (!reset) {
-          // check if maxV belongs to oldV
-          for(unsigned i = 0; i < oldV.size(); ++i) {
-            if (maxV == oldV[i]) {
-              reset = false;
-              break;
-            }
-          }
-        }
-
-        // reset bounding box if needed
-        if (reset) {
-          resetBoundingBox();
-          break;
-        }
-      }
-    }
-  }
-
+  LayoutMinMaxCalculator::updateEdgeValue(e, v);
   AbstractLayoutProperty::setEdgeValue(e, v);
 }
 //=================================================================================
@@ -509,44 +491,6 @@ void LayoutProperty::setAllNodeValue(const Coord &v) {
 void LayoutProperty::setAllEdgeValue(const std::vector<Coord> &v) {
   resetBoundingBox();
   AbstractLayoutProperty::setAllEdgeValue(v);
-}
-//================================================================================
-void LayoutProperty::reverseEdge(Graph *sg, const edge e) {
-  (void)sg; //fixes unused parameter warning in release builds
-  assert(sg == graph);
-  std::vector<Coord> bends = getEdgeValue(e);
-
-  // reverse bends if needed
-  if (bends.size() > 1) {
-    unsigned int halfSize = bends.size()/2;
-
-    for (unsigned int i = 0, j = bends.size() - 1; i < halfSize; ++i, j--) {
-      Coord tmp = bends[i];
-      bends[i] = bends[j];
-      bends[j] = tmp;
-    }
-
-    setEdgeValue(e, bends);
-  }
-}
-//=================================================================================
-void LayoutProperty::addNode(Graph* g, const tlp::node n) {
-  // invalidate all to avoid time consuming checking
-  // when loading graph
-  minMaxOk.clear();
-}
-//=================================================================================
-void LayoutProperty::delNode(Graph* g, const tlp::node n) {
-  unsigned int sgi = g->getId();
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOk.find(sgi);
-
-  if (it != minMaxOk.end() && it->second) {
-    Coord oldV = getNodeValue(n);
-
-    // check if min or max has to be updated
-    if ((oldV == min[sgi]) || (oldV == max[sgi]))
-      minMaxOk[sgi] = false;
-  }
 }
 //=================================================================================
 double LayoutProperty::averageAngularResolution(const Graph *sg) const {
@@ -786,7 +730,27 @@ PropertyInterface* LayoutProperty::clonePrototype(Graph * g, const std::string& 
 }
 //=============================================================
 void LayoutProperty::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
+  LayoutMinMaxCalculator::treatEvent(evt);
+
+  const GraphEvent* graphEvent = dynamic_cast<const tlp::GraphEvent*>(&evt);
+  
+  if (graphEvent && graphEvent->getType() == GraphEvent::TLP_REVERSE_EDGE) {
+    assert(graphEvent->getGraph() == graph);
+    std::vector<Coord> bends = getEdgeValue(graphEvent->getEdge());
+    
+    // reverse bends if needed
+    if (bends.size() > 1) {
+      unsigned int halfSize = bends.size()/2;
+      
+      for (unsigned int i = 0, j = bends.size() - 1; i < halfSize; ++i, j--) {
+        Coord tmp = bends[i];
+        bends[i] = bends[j];
+        bends[j] = tmp;
+      }
+      
+      setEdgeValue(graphEvent->getEdge(), bends);
+    }
+  } 
 }
 //=================================================================================
 PropertyInterface* CoordVectorProperty::clonePrototype(Graph * g, const std::string& n) {

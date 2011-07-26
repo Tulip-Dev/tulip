@@ -1,4 +1,5 @@
 INSTALL(FILES
+  tulip/MinMaxCalculator.h
   tulip/Bfs.h
   tulip/Ordering.h
   tulip/ConvexHull.h

@@ -34,7 +34,7 @@ class Graph;
  * @brief Performs test to check if a graph is Simple.
  * From Wikipedia: "A simple graph is an undirected graph that has no loops and no more than one edge between any two different vertices."
  **/
-class TLP_SCOPE SimpleTest : private GraphObserver, private Observable {
+class TLP_SCOPE SimpleTest : private Observable {
 public:
 
   /**
