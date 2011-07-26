@@ -17,15 +17,11 @@
  *
  */
 
-#ifndef TULIP_TEST_H
-#define TULIP_TEST_H
-
+#ifndef TULIP_ACYCLICITY_TEST_H
+#define TULIP_ACYCLICITY_TEST_H
 #include <vector>
-#include <tulip/tuliphash.h>
 #include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
 #include <tulip/MutableContainer.h>
-
 
 namespace tlp {
 class Graph;
@@ -35,6 +31,7 @@ class BooleanProperty;
  * @brief Stores all the added informations on self loops.
  * Self loops are removed by adding two nodes and three edges.
  * These are stores here, along with the old self looping edge.
+ * From Wikipedia: "A directed acyclic graph (DAG), is a directed graph with no directed cycles."
  **/
 struct SelfLoops {
 public:
@@ -58,11 +55,7 @@ class TLP_SCOPE AcyclicTest : private Observable {
 public:
 
   /**
-   * Returns true if the graph is acyclic, false otherwise.
-   * The result is cached (ie. the next call with the same graph is done in O(1) time)
-   */
-  /**
-   * @brief Returns whether the graph is acyclic or not.
+   * @brief Checks whether the graph is acyclic or not.
    * The result is cached so subsequent calls are in O(1).
    *
    * @param graph The graph on which to perform the acyclicity test.
@@ -70,11 +63,6 @@ public:
    **/
   static bool isAcyclic(const Graph *graph);
 
-  /**
-    * Makes the graph acyclic, by reversing edge direction (feedback arc set problem).
-    * If there is self loops, a new node is added with two edges that points to it.
-    *
-    */
   /**
    * @brief Makes the graph acyclic by removing edges.
    *
@@ -85,12 +73,6 @@ public:
    **/
   static void makeAcyclic(Graph* graph, std::vector<edge> &reversed, std::vector<tlp::SelfLoops> &selfLoops);
 
-  /**
-    * Returns true if the graph is acyclic, false otherwise.
-    * If the graph is not acyclic, uses obstructionEdges variable to store all edges
-    * that create cycle.
-    *
-    */
   /**
    * @brief Returns whether the graph is acyclic.
    * Collection of obstruction edges takes a bit of time, as iteration over the graph must continue even when it has been found cyclic.
@@ -117,4 +99,4 @@ private:
 };
 }
 /*@}*/
-#endif
+#endif //TULIP_ACYCLICITY_TEST_H
