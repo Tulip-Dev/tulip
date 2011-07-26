@@ -73,9 +73,7 @@ public:
 
 protected :
 
-  void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end);
-
-  void observableDestroyed(Observable *) {}
+  void treatEvent(const Event &);
 
 private:
 
