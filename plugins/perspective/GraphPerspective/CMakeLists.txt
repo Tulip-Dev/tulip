@@ -3,8 +3,9 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclu
 SET(LIB_SRCS
 src/AlgorithmRunner.cpp
 src/ExpandableGroupBox.cpp
+src/GraphHierarchiesEditor.cpp
+src/GraphHierarchiesModel.cpp
 src/GraphPerspective.cpp
-src/GraphPerspectiveProject.cpp
 src/HeaderFrame.cpp)
 
 QT4_ADD_RESOURCES(RCC_SRCS
@@ -13,12 +14,14 @@ resources/GraphPerspective.qrc)
 QT4_WRAP_UI(UI_SRCS
 designer/AlgorithmRunner.ui
 designer/AlgorithmRunnerItem.ui
+designer/GraphHierarchiesEditor.ui
 designer/GraphPerspectiveMainWindow.ui
 designer/HeaderFrame.ui)
 
 QT4_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
-include/GraphPerspectiveProject.h
+include/GraphHierarchiesEditor.h
+include/GraphHierarchiesModel.h
 include/ExpandableGroupBox.h
 include/HeaderFrame.h)
 
@@ -27,3 +30,4 @@ ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI
 TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
 INSTALL(TARGETS GraphPerspective-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT GraphPerspective-${TulipVersion})
+
