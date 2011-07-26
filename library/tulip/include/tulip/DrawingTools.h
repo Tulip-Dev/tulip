@@ -32,17 +32,10 @@ class SizeProperty;
 class DoubleProperty;
 class BooleanProperty;
 
-
 /**
   *
-  * add a "Circle computeBoundingCircle(...)" function (the code to compute it correctly is already available in Circle.h)
-  *
-  */
-
-/**
-  *
-  * Compute the bounding box of a graph according to node position edge bends
-  * node z-rotation, and size of elements
+  * Computes the bounding box of a graph according to nodes positions, edges bends,
+  * nodes z-rotations and sizes of elements.
   *
   */
 TLP_SCOPE   BoundingBox computeBoundingBox(const Graph *graph,
@@ -53,10 +46,10 @@ TLP_SCOPE   BoundingBox computeBoundingBox(const Graph *graph,
 
 
 /**
- * Compute the bounding box of graph elements according to node position edge bends
- * node z-rotation, and size of elements
+ * Compute the bounding box of graph elements according to node positions, edges bends,
+ * nodes z-rotations and sizes of elements.
  *
- * Iterator itN and itE will be deleted after the computations (ie. no need to delete them yourself)
+ * Iterator itN and itE will be deleted after the computations (i.e. no need to delete them yourself).
  */
 TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
 										 Iterator<edge> *itE,
@@ -66,12 +59,16 @@ TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
 									     const BooleanProperty *selection = 0);
 /**
   *
-  * Compute a bounding sphere of a graph according to node position edge bends
-  * node z-rotation, and size of elements
+  * Computes a bounding sphere (or a bounding circle if the graph has a 2D layout) of a graph according to nodes positions, edges bends,
+  * nodes z-rotations and sizes of elements.
   *
-  * @todo make that fucntion return a new type of class called BoundingSphere
-  * @todo test if that function correctly compute a bounding sphere.
+  * Returns a pair of tlp::Coord whose first member is the center of the bounding sphere (circle for 2D layout)
+  * and second member is the farthest point from the center (computed from graph elements positions).
+  * To get the bounding radius, you have to compute the distance between the two members of the pair
+  * (use the dist method from tlp::Coord).
+  *
   */
+
 TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (const Graph *graph,
                                                            const LayoutProperty *layout,
                                                            const SizeProperty *size,
@@ -79,9 +76,10 @@ TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (const Graph *graph,
                                                            const BooleanProperty *selection = 0);
 /**
   *
-  * Compute a convexHull of a graph according to node position edge bends
-  * node z-rotation, and size of elements. Only works in 2D.
-  * @todo refactor code from GlConvexHull here
+  * Computes a convex hull of a graph according to nodes positions, edges bends,
+  * nodes z-rotations, and sizes of elements. Only works with 2D layouts.
+  *
+  * Returns a vector of tlp::Coord containing the vertices of the graph convex hull correctly ordered.
   *
   */
 TLP_SCOPE   std::vector<Coord> computeConvexHull (const Graph *graph,
