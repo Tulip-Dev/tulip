@@ -31,8 +31,14 @@ struct node;
 
 /** \addtogroup graph_test */
 /*@{*/
-/// class for testing the outerplanarity of a graph
-class TLP_SCOPE OuterPlanarTest  : private GraphObserver, private Observable {
+
+/**
+ * @brief Provides functions to test if a graph is Outer Planar.
+ *
+ * From Wikipedia: "An OuterPlanar Graph is a graph that can be drawn in the plane without crossings in such a way that all of the vertices belong to the unbounded face of the drawing.
+ * Alternatively, a graph G is outerplanar if the graph formed from G by adding a new vertex, with edges connecting it to all the other vertices, is a planar graph."
+ **/
+class TLP_SCOPE OuterPlanarTest : private Observable {
 public:
 
   /**
@@ -40,22 +46,29 @@ public:
    * in the plane such that all vertices belong to the unbounded face of the embedding),
    * false otherwise.
    */
+  /**
+   * @brief Checks if a graph is outer planar (i.e. a graph with an embedding in the plane such that all vertices belong to the unbounded face of the embedding).
+   * 
+   * @param graph The graph to check.
+   * @return bool True if the graph is outer planar, false otherwise.
+   * @note this cannot be const as it uses the planarity test, which is not const and would be complex (impossible?) to make const.
+   **/
   static bool isOuterPlanar(Graph *graph);
 
 private:
-  // override some GraphObserver methods
-  void addEdge(Graph *,const edge);
-  void delEdge(Graph *,const edge);
-  void reverseEdge(Graph *,const edge);
-  void addNode(Graph *,const node);
-  void delNode(Graph *,const node);
-  void destroy(Graph *);
+  OuterPlanarTest() {}
   // override Observable::treatEvent
   void treatEvent(const Event&);
 
   bool compute(Graph *graph);
-  OuterPlanarTest() : GraphObserver() {}
+
+  /**
+   * @brief Singleton instance of this class.
+   **/
   static OuterPlanarTest* instance;
+  /**
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
+   **/
   TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };
 /*@}*/

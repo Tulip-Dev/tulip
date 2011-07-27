@@ -30,30 +30,43 @@ class Graph;
 
 /** \addtogroup graph_test */
 /*@{*/
-/// class for testing if a graph is triconnected
-class TLP_SCOPE TriconnectedTest : private GraphObserver, private Observable {
-public:
 
+/**
+ * @brief Provides functions to test if a graph is Triconnected.
+ **/
+class TLP_SCOPE TriconnectedTest : private Observable {
+public:
 
   /**
    * Returns true if the graph is triconnected (i.e. a connected graph such that deleting any two nodes (and incident edges)
    * results in a graph that is still connected), false otherwise.
    */
+  /**
+   * @brief Checks if the graph is triconnected.
+   * Creates a clone sugraph in which to operate, then iterates over the nodes, and deletes them.
+   * Once the node is deleted, checks if the graph is biconnected.
+   * If it is not, then the graph is not triconnected.
+   * If it is, adds back the node and its edges.
+   *
+   * @param graph The graph to check is triconnected.
+   * @return bool True if the graph is triconnected, false otherwise.
+   **/
   static bool isTriconnected(Graph *graph);
 
 private:
-  bool compute(Graph *);
-  // override some GraphObserver methods
-  void addEdge(Graph *,const edge);
-  void delEdge(Graph *,const edge);
-  void reverseEdge(Graph *,const edge);
-  void addNode(Graph *,const node);
-  void delNode(Graph *,const node);
-  void destroy(Graph *);
+  TriconnectedTest();
+  
+  bool compute(tlp::Graph* graph);
   // override Observable::treatEvent
   void treatEvent(const Event&);
-  TriconnectedTest();
+
+  /**
+   * @brief Singleton instance of this class.
+   **/
   static TriconnectedTest * instance;
+  /**
+   * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
+   **/
   TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
 };
 /*@}*/

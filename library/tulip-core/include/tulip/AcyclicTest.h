@@ -29,8 +29,11 @@ class BooleanProperty;
 
 /**
  * @brief Stores all the added informations on self loops.
+ * 
  * Self loops are removed by adding two nodes and three edges.
+ * 
  * These are stores here, along with the old self looping edge.
+ * 
  * From Wikipedia: "A directed acyclic graph (DAG), is a directed graph with no directed cycles."
  **/
 struct SelfLoops {
