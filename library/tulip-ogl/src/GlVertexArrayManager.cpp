@@ -639,16 +639,6 @@ void GlVertexArrayManager::activatePointNodeDisplay(GlNode *node,bool onePixel,b
   }
 }
 
-void GlVertexArrayManager::addEdge(Graph *,const edge) {
-  clearData();
-  clearObservers();
-}
-
-void GlVertexArrayManager::addNode(Graph *,const node) {
-  clearData();
-  clearObservers();
-}
-
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
   if(inputData->getElementLayout()==property || inputData->getElementSize()==property || inputData->getElementShape()==property) {
     setHaveToComputeLayout(true);
@@ -668,54 +658,6 @@ void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
   }
 
   edgesModified = false;
-}
-
-void GlVertexArrayManager::beforeSetAllNodeValue(PropertyInterface *property) {
-  propertyValueChanged(property);
-}
-
-void GlVertexArrayManager::beforeSetAllEdgeValue(PropertyInterface *property) {
-  if (inputData->getElementLayout()==property) {
-    edgesModified = true;
-  }
-
-  propertyValueChanged(property);
-}
-
-void GlVertexArrayManager::beforeSetNodeValue(PropertyInterface *property, const node) {
-  propertyValueChanged(property);
-}
-
-void GlVertexArrayManager::beforeSetEdgeValue(PropertyInterface *property, const edge) {
-  if (inputData->getElementLayout()==property) {
-    edgesModified = true;
-  }
-
-  propertyValueChanged(property);
-}
-
-void GlVertexArrayManager::destroy(Graph *) {
-  clearData();
-  clearObservers();
-}
-
-void GlVertexArrayManager::destroy(PropertyInterface*) {
-  clearData();
-  clearObservers();
-}
-
-void GlVertexArrayManager::addLocalProperty(Graph *, const std::string &name) {
-  if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName()  || name==inputData->getElementShapePropName()) {
-    clearData();
-    clearObservers();
-  }
-}
-
-void GlVertexArrayManager::delLocalProperty(Graph *, const std::string &name) {
-  if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName() || name==inputData->getElementShapePropName()) {
-    clearData();
-    clearObservers();
-  }
 }
 
 void GlVertexArrayManager::clearLayoutData() {
@@ -813,12 +755,52 @@ void GlVertexArrayManager::clearObservers() {
 }
 
 void GlVertexArrayManager::treatEvent(const Event &evt) {
-  if (typeid(evt) == typeid(GraphEvent) ||
-      (evt.type() == Event::TLP_DELETE &&
-       dynamic_cast<Graph*>(evt.sender())))
-    GraphObserver::treatEvent(evt);
-  else
-    PropertyObserver::treatEvent(evt);
+  const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
+  if (graphEvent) {
+    switch(graphEvent->getType()) {
+      case GraphEvent::TLP_ADD_NODE:
+      case GraphEvent::TLP_ADD_EDGE:
+        clearData();
+        clearObservers();
+        break;
+      case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
+      case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
+        const std::string name = graphEvent->getPropertyName();
+        if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName()  || name==inputData->getElementShapePropName()) {
+          clearData();
+          clearObservers();
+        }
+        break;
+      }
+      default:
+        break;
+    }
+  }
+  else if(evt.type() == Event::TLP_DELETE) {
+    clearData();
+    clearObservers();
+  }
+  else {
+    const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&evt);
+    PropertyInterface* property = propertyEvent->getProperty();
+    
+    switch(propertyEvent->getType()) {
+      case PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE:
+      case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
+        propertyValueChanged(property);
+        break;
+      case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
+      case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
+        if (inputData->getElementLayout()==property) {
+          edgesModified = true;
+        }
+        
+        propertyValueChanged(property);
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 }

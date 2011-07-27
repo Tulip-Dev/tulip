@@ -29,8 +29,7 @@
 #include <tulip/Size.h>
 #include <tulip/tuliphash.h>
 #include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
-#include <tulip/ObservableProperty.h>
+#include <tulip/PropertyInterface.h>
 
 #include <vector>
 
@@ -45,8 +44,7 @@ class GlGraphInputData;
  *
  * Class used to render edges/nodes with vertex array
  */
-class TLP_GL_SCOPE GlVertexArrayManager :
-  private GraphObserver, private PropertyObserver, private Observable {
+class TLP_GL_SCOPE GlVertexArrayManager : private Observable {
 
 public:
 
@@ -82,20 +80,7 @@ public:
 
 protected:
 
-  void propertyValueChanged(PropertyInterface *property);
-
-  void addEdge(Graph *,const edge);
-  void addNode(Graph *,const node);
-  void beforeSetAllNodeValue(PropertyInterface*);
-  void beforeSetAllEdgeValue(PropertyInterface*);
-  void beforeSetNodeValue(PropertyInterface*, const node);
-  void beforeSetEdgeValue(PropertyInterface*, const edge);
-  void addLocalProperty(Graph*, const std::string&);
-  void delLocalProperty(Graph*, const std::string&);
-
-  void destroy(Graph *);
-  void destroy(PropertyInterface*);
-
+  void propertyValueChanged(tlp::PropertyInterface *property);
   void treatEvent(const Event&);
 
   void clearLayoutData();
