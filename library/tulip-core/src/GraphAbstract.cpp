@@ -100,6 +100,7 @@ Graph *GraphAbstract::addSubGraph(BooleanProperty *selection, unsigned int id) {
   return tmp;
 }
 Graph *GraphAbstract::getNthSubGraph(unsigned int n) const {
+
   if (n >= subgraphs.size())
     return NULL;
   return subgraphs[n];
