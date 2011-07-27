@@ -66,7 +66,7 @@ public:
   virtual ~PluginProgress() {}
 
   /**
-   * @brief Notify the progression of the process.
+   * @brief Notifies the progression of the process.
    *
    * @param step The current step number.
    * @param max_step The total number of steps.
@@ -114,14 +114,14 @@ public:
   virtual void showPreview(bool showPreview)=0;
 
   /**
-   * @brief Get the current internal state of the PluginProgress.
+   * @brief Gets the current internal state of the PluginProgress.
    *
    * @return :ProgressState The current state.
    **/
   virtual ProgressState state() const=0;
 
   /**
-   * @brief Return a message describing the error encountered during the process. If no error has been encountered, an empty string is returned.
+   * @brief Returns a message describing the error encountered during the process. If no error has been encountered, an empty string is returned.
    *
    * @return :string A description of the encountered error, if any.
    **/
