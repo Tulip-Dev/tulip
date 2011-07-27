@@ -4,10 +4,9 @@
 
 #include "GraphHierarchiesEditor.h"
 #include "GraphHierarchiesModel.h"
-#include <tulip/SimplePluginProgressWidget.h>
+#include <tulip/Graph.h>
 
 //FIXME: remove me
-#include <tulip/Graph.h>
 
 using namespace tlp;
 
@@ -22,21 +21,25 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _mainWindow->show();
 
   // Open project with model
-
-  //FIXME: remove me
   Graph *g = tlp::newGraph();
-
-  for (int i=0; i<200; ++i)
-    g->addNode();
-
-  Graph *g1 = g->addSubGraph();
-
-  for (int i=0; i<200; ++i)
-    g->addNode();
-
+  g->addSubGraph()->setAttribute<std::string>("name","sg1");
+  g->addSubGraph()->addSubGraph()->addSubGraph()->setAttribute<std::string>("name","sg2");
   _graphs->addGraph(g);
+
+  Graph *g1 = tlp::newGraph();
+  g1->addSubGraph()->setAttribute<std::string>("name","sg1");
+  g1->addSubGraph()->addSubGraph()->addSubGraph()->setAttribute<std::string>("name","sg2");
+  _graphs->addGraph(g1);
+
   _graphsEditor = new GraphHierarchiesEditor(_graphs,_mainWindow);
-  connect(_ui->graphsHierarchyManagerButton,SIGNAL(clicked()),_graphsEditor,SLOT(show()));
+  connect(_ui->graphsHierarchyManagerButton,SIGNAL(clicked()),this,SLOT(showGraphHierarchyEditor()));
+}
+
+void GraphPerspective::showGraphHierarchyEditor() {
+  _graphsEditor->move(_mainWindow->geometry().x() + _ui->centralWidget->x(),
+                      _mainWindow->geometry().y() + _ui->mainWidget->geometry().y());
+  _graphsEditor->resize(_ui->docksWidget->width()+20,_ui->docksWidget->height()-20);
+  _graphsEditor->show();
 }
 
 PERSPECTIVEPLUGIN(GraphPerspective,"Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0")

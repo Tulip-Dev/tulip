@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>996</width>
-    <height>740</height>
+    <width>994</width>
+    <height>738</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -584,7 +584,7 @@ QToolButton:pressed {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>996</width>
+     <width>994</width>
      <height>22</height>
     </rect>
    </property>
