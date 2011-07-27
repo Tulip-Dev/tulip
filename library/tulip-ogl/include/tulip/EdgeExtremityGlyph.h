@@ -58,11 +58,6 @@ public:
 
   virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
                                        const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix) = 0;
-  //  virtual MatrixGL getTransformationMatrix(const Coord &src, const Coord &dest,
-  //      const Size &glyphSize) = 0;
-  //
-  //  virtual MatrixGL getScalingMatrix(const Size &glyphSize) = 0;
-
 
 protected:
   GlGraphInputData *edgeExtGlGraphInputData;
@@ -79,17 +74,8 @@ public:
   EdgeExtremityGlyphFrom3DGlyph(EdgeExtremityGlyphContext *gc);
   virtual ~EdgeExtremityGlyphFrom3DGlyph();
 
-  virtual void draw(edge, node, const Color&, float,
-                    GlGraphInputData*) {
-  }
-
   virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
                                        const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix);
-
-  //  virtual MatrixGL getTransformationMatrix(const Coord &src, const Coord &dest,
-  //      const Size &glyphSize);
-  //
-  //  virtual MatrixGL getScalingMatrix(const Size &glyphSize);
 };
 
 class TLP_GL_SCOPE EdgeExtremityGlyphFrom2DGlyph: public EdgeExtremityGlyph {
@@ -97,16 +83,8 @@ public:
   EdgeExtremityGlyphFrom2DGlyph(EdgeExtremityGlyphContext *gc);
   virtual ~EdgeExtremityGlyphFrom2DGlyph();
 
-  virtual void draw(edge, node, const Color&, float,
-                    GlGraphInputData*) {
-  }
-
   virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
                                        const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix);
-  //  virtual MatrixGL getTransformationMatrix(const Coord &src, const Coord &dest,
-  //      const Size &glyphSize);
-  //
-  //  virtual MatrixGL getScalingMatrix(const Size &glyphSize);
 };
 
 }
