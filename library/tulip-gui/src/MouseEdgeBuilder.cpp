@@ -162,35 +162,19 @@ void MouseEdgeBuilder::clearObserver() {
   layoutProperty=NULL;
 }
 
-void MouseEdgeBuilder::delNode(Graph*,const node n) {
-  if(n==source) {
-    bends.clear();
-    started=false;
-    clearObserver();
-  }
-}
-
-void MouseEdgeBuilder::destroy(Graph *g) {
-  if(graph==g)
-    graph=NULL;
-}
-
-void MouseEdgeBuilder::afterSetNodeValue(PropertyInterface *property, const node n) {
-  if(n==source && property==layoutProperty) {
-    startPos=layoutProperty->getNodeValue(source);
-  }
-}
-
-void MouseEdgeBuilder::destroy(PropertyInterface *property) {
-  if(property==layoutProperty)
-    layoutProperty=NULL;
-}
-
 void MouseEdgeBuilder::treatEvent(const Event& evt) {
-  if (typeid(evt) == typeid(GraphEvent) ||
-      (evt.type() == Event::TLP_DELETE &&
-       dynamic_cast<Graph*>(evt.sender())))
-    GraphObserver::treatEvent(evt);
-  else
-    PropertyObserver::treatEvent(evt);
+  if (typeid(evt) == typeid(GraphEvent)) {
+    const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
+    if(graphEvent && graphEvent->getType() == GraphEvent::TLP_DEL_NODE && graphEvent->getNode() == source) {
+      bends.clear();
+      started=false;
+      clearObserver();
+    }
+  }
+  else {
+    const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&evt);
+    if(propertyEvent && propertyEvent->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE && propertyEvent->getNode() == source && propertyEvent->getProperty() == layoutProperty) {
+      startPos=layoutProperty->getNodeValue(source);
+    }
+  }
 }
