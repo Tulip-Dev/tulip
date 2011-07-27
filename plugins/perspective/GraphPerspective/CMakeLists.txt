@@ -22,6 +22,7 @@ QT4_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
 include/GraphHierarchiesEditor.h
 include/GraphHierarchiesModel.h
+include/GraphPerspective.h
 include/ExpandableGroupBox.h
 include/HeaderFrame.h)
 

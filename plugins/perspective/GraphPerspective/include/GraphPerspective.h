@@ -11,6 +11,8 @@ class GraphPerspectiveMainWindowData;
 }
 
 class GraphPerspective : public tlp::Perspective {
+  Q_OBJECT
+
   Ui::GraphPerspectiveMainWindowData *_ui;
 
   GraphHierarchiesModel *_graphs;
@@ -19,6 +21,9 @@ class GraphPerspective : public tlp::Perspective {
 public:
   GraphPerspective(tlp::PerspectiveContext &c);
   virtual void construct(tlp::PluginProgress *);
+
+public slots:
+  void showGraphHierarchyEditor();
 };
 
 #endif // GRAPHPERSPECTIVE_H
