@@ -80,7 +80,7 @@ public:
    * If the graph is connected, a rooted spanning tree of a clone subgraph is returned
    * If the graph is not connected, computes a tree for each of the connected components of a clone subgraph, adds a simple source and returns the clone.
    *
-   * @param graph The graph to compute a tree on. 
+   * @param graph The graph to compute a tree on.
    * @param pluginProgress reports progress on the computation. Defaults to 0.
    * @return :Graph* If the input graph is a rooted tree, returns it as is, otherwise a clone subgraph transformed into a rooted tree.
    **/
@@ -103,10 +103,10 @@ private:
   bool compute(const Graph * graph);
 
   bool isFreeTree (const Graph *graph, node curRoot);
-  
+
   // override Observable::treatEvent
   void treatEvent(const Event&);
-  
+
   /**
    * @brief Singleton instance of this class.
    **/

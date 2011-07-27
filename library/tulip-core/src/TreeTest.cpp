@@ -402,40 +402,40 @@ bool TreeTest::compute(const Graph *graph) {
 
 void TreeTest::treatEvent(const Event& evt) {
   const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
-  
+
   if (gEvt) {
     Graph* graph = gEvt->getGraph();
-    
+
     switch(gEvt->getType()) {
-      case GraphEvent::TLP_ADD_NODE:
-        graph->removeGraphObserver(this);
-        resultsBuffer.erase((unsigned long)graph);
-        break;
-      case GraphEvent::TLP_DEL_NODE:
-        graph->removeGraphObserver(this);
-        resultsBuffer.erase((unsigned long)graph);
-        break;
-      case GraphEvent::TLP_ADD_EDGE:
-        graph->removeGraphObserver(this);
-        resultsBuffer.erase((unsigned long)graph);
-        break;
-      case GraphEvent::TLP_DEL_EDGE:
-        graph->removeGraphObserver(this);
-        resultsBuffer.erase((unsigned long)graph);
-        break;
-      case GraphEvent::TLP_REVERSE_EDGE:
-        graph->removeGraphObserver(this);
-        resultsBuffer.erase((unsigned long)graph);
-        break;
-      default:
-        break;
+    case GraphEvent::TLP_ADD_NODE:
+      graph->removeGraphObserver(this);
+      resultsBuffer.erase((unsigned long)graph);
+      break;
+    case GraphEvent::TLP_DEL_NODE:
+      graph->removeGraphObserver(this);
+      resultsBuffer.erase((unsigned long)graph);
+      break;
+    case GraphEvent::TLP_ADD_EDGE:
+      graph->removeGraphObserver(this);
+      resultsBuffer.erase((unsigned long)graph);
+      break;
+    case GraphEvent::TLP_DEL_EDGE:
+      graph->removeGraphObserver(this);
+      resultsBuffer.erase((unsigned long)graph);
+      break;
+    case GraphEvent::TLP_REVERSE_EDGE:
+      graph->removeGraphObserver(this);
+      resultsBuffer.erase((unsigned long)graph);
+      break;
+    default:
+      break;
     }
   }
   else {
     // From my point of view the use of dynamic_cast should be correct
     // but it fails, so I use reinterpret_cast (pm)
     Graph* graph = reinterpret_cast<Graph *>(evt.sender());
-    
+
     if (graph && evt.type() == Event::TLP_DELETE)
       resultsBuffer.erase((unsigned long)graph);
   }

@@ -160,11 +160,12 @@ void GraphProperty::treatEvent(const Event& evt) {
     // From my point of view the use of dynamic_cast should be correct
     // but it fails, so I use reinterpret_cast (pm)
     Graph* sg = reinterpret_cast<Graph *>(evt.sender());
+
     if(sg) {
       //  cerr << __PRETTY_FUNCTION__ << endl;
-      #ifndef NDEBUG
+#ifndef NDEBUG
       cerr << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to prevent segmentation fault" << endl;
-      #endif
+#endif
 
       if (getNodeDefaultValue() == sg) {
         //we must backup old value

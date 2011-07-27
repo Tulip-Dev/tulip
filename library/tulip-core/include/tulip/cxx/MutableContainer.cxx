@@ -240,7 +240,7 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 //===================================================================
 template <typename TYPE>
 void tlp::MutableContainer<TYPE>::vectset(const unsigned int i,
-                                     typename StoredType<TYPE>::Value value) {
+    typename StoredType<TYPE>::Value value) {
   assert(value != defaultValue);
 
   if (minIndex == UINT_MAX) {

@@ -101,43 +101,43 @@ template <typename TYPE>
 class IteratorVect : public tlp::IteratorValue {
 public:
   IteratorVect(const TYPE &value, bool equal, std::deque<typename StoredType<TYPE>::Value> *vData, unsigned int minIndex):
-  _value(value),
-  _equal(equal),
-  _pos(minIndex),
-  vData(vData),
-  it(vData->begin()) {
+    _value(value),
+    _equal(equal),
+    _pos(minIndex),
+    vData(vData),
+    it(vData->begin()) {
     while (it!=(*vData).end() &&
-      StoredType<TYPE>::equal((*it), _value) != _equal) {
+           StoredType<TYPE>::equal((*it), _value) != _equal) {
       ++it;
-    ++_pos;
-      }
+      ++_pos;
+    }
   }
   bool hasNext() {
     return (_pos<UINT_MAX && it!=(*vData).end());
   }
   unsigned int next() {
     unsigned int tmp = _pos;
-    
+
     do {
       ++it;
       ++_pos;
     }
     while (it!=(*vData).end() &&
-      StoredType<TYPE>::equal((*it), _value) != _equal);
-    
+           StoredType<TYPE>::equal((*it), _value) != _equal);
+
     return tmp;
   }
   unsigned int nextValue(DataMem& val) {
     ((TypedValueContainer<TYPE>&) val).value = StoredType<TYPE>::get(*it);
     unsigned int pos = _pos;
-    
+
     do {
       ++it;
       ++_pos;
     }
     while (it!=(*vData).end() &&
-      StoredType<TYPE>::equal((*it), _value) != _equal);
-    
+           StoredType<TYPE>::equal((*it), _value) != _equal);
+
     return pos;
   }
 private:
@@ -153,13 +153,13 @@ template <typename TYPE>
 class IteratorHash : public IteratorValue {
 public:
   IteratorHash(const TYPE &value, bool equal, TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData):
-  _value(value),
-  _equal(equal),
-  hData(hData) {
+    _value(value),
+    _equal(equal),
+    hData(hData) {
     it=(*hData).begin();
-    
+
     while (it!=(*hData).end() &&
-      StoredType<TYPE>::equal((*it).second,_value) != _equal)
+           StoredType<TYPE>::equal((*it).second,_value) != _equal)
       ++it;
   }
   bool hasNext() {
@@ -167,26 +167,26 @@ public:
   }
   unsigned int next() {
     unsigned int tmp = (*it).first;
-    
+
     do {
       ++it;
     }
     while (it!=(*hData).end() &&
-      StoredType<TYPE>::equal((*it).second,_value) != _equal);
-    
+           StoredType<TYPE>::equal((*it).second,_value) != _equal);
+
     return tmp;
   }
   unsigned int nextValue(DataMem& val) {
     ((TypedValueContainer<TYPE>&) val).value =
-    StoredType<TYPE>::get((*it).second);
+      StoredType<TYPE>::get((*it).second);
     unsigned int pos = (*it).first;
-    
+
     do {
       ++it;
     }
     while (it!=(*hData).end() &&
-      StoredType<TYPE>::equal((*it).second,_value) != _equal);
-    
+           StoredType<TYPE>::equal((*it).second,_value) != _equal);
+
     return pos;
   }
 private:

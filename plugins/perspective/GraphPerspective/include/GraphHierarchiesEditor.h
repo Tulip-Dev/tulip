@@ -6,7 +6,7 @@
 class GraphHierarchiesModel;
 
 namespace Ui {
-  class GraphHierarchiesEditorData;
+class GraphHierarchiesEditorData;
 }
 
 class GraphHierarchiesEditor : public QWidget {
