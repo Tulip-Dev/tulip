@@ -22,7 +22,6 @@
 
 #include <tulip/tuliphash.h>
 #include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
 
 namespace tlp {
 
