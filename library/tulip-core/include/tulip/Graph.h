@@ -184,6 +184,42 @@ public:
    */
   virtual Iterator<Graph *> * getSubGraphs() const=0;
   /**
+    This method returns the nth subgraph.
+    Since order cannot be ensured in every implementation, this method should be equivalent to:
+    int i=0;
+    Iterator<Graph *> *it = g->getSubGraphs();
+    while (it->hasNext()) {
+      if (i++ == n) {
+        Graph *result = it->next();
+        delete it;
+        return result;
+      }
+    }
+    delete it;
+    return NULL;
+    */
+  virtual Graph *getNthSubGraph(int n) const {
+    int i=0;
+    Iterator<Graph *> *it = getSubGraphs();
+    while (it->hasNext()) {
+      if (i++ == n) {
+        Graph *result = it->next();
+        delete it;
+        return result;
+      }
+    }
+    delete it;
+    return NULL;
+  }
+  /**
+    Return the number of direct sub-graphs
+    */
+  virtual int numberOfSubGraphs() const=0;
+  /**
+    Return the number of descendant graphs
+    */
+  virtual int numberOfDescendantGraphs() const=0;
+  /**
    * Indicates if the graph argument is a direct sub-graph.
    */
   virtual bool isSubGraph(const Graph* sg) const=0;

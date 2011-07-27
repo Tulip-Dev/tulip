@@ -99,6 +99,25 @@ Graph *GraphAbstract::addSubGraph(BooleanProperty *selection, unsigned int id) {
   notifyAddSubGraph(tmp);
   return tmp;
 }
+Graph *GraphAbstract::getNthSubGraph(int n) const {
+  if (n >= subgraphs.size() || n < 0)
+    return NULL;
+  return subgraphs[n];
+}
+//=========================================================================
+int GraphAbstract::numberOfSubGraphs() const {
+  return subgraphs.size();
+}
+//=========================================================================
+int GraphAbstract::numberOfDescendantGraphs() const {
+  GRAPH_SEQ::const_iterator it = subgraphs.begin();
+  int result = 0;
+  while(it != subgraphs.end()) {
+    result += (*it)->numberOfDescendantGraphs();
+    it++;
+  }
+  return result;
+}
 //=========================================================================
 void GraphAbstract::delSubGraph(Graph *toRemove) {
   // look for the graph we want to remove in the subgraphs
