@@ -24,7 +24,6 @@
 #include <vector>
 
 #include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
 
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphInputData.h>
@@ -40,8 +39,7 @@ class Graph;
  *
  * GlComposite use to represent a graph with nodes, metanodes and edges
  */
-class TLP_GL_SCOPE GlGraphComposite : public GlComposite,
-  private GraphObserver, private PropertyObserver, public Observable {
+class TLP_GL_SCOPE GlGraphComposite : public GlComposite, public Observable {
 
 public:
 
@@ -203,50 +201,8 @@ public:
   }
 
 protected:
-
-  /**
-   * Function use by the GraphObserver when a node is create in the graph
-   */
-  virtual void addNode(Graph *,const node) {
-    nodesModified=true;
-    haveToSort=true;
-  }
-  /**
-   * Function use by the GraphObserver when an edge is create in the graph
-   */
-  virtual void addEdge(Graph *,const edge ) {
-    haveToSort=true;
-  }
-  /**
-   * Function use by the GraphObserver when a node is delete in the graph
-   */
-  virtual void delNode(Graph *,const node) {
-    nodesModified=true;
-    haveToSort=true;
-  }
-  /**
-   * Function use by the GraphObserver when an edge is delete in the graph
-   */
-  virtual void delEdge(Graph *,const edge ) {
-    haveToSort=true;
-  }
-  virtual void afterSetNodeValue(PropertyInterface*, const node) {
-    nodesModified=true;
-  }
-  /**
-   * Function use by the GraphObserver when the graph is delete
-   */
-  virtual void destroy(Graph *);
-
   // override Observable::treatEvent
-  void treatEvent(const Event& evt) {
-    if (typeid(evt) == typeid(GraphEvent) ||
-        (evt.type() == Event::TLP_DELETE &&
-         dynamic_cast<Graph*>(evt.sender())))
-      GraphObserver::treatEvent(evt);
-    else
-      PropertyObserver::treatEvent(evt);
-  }
+  void treatEvent(const Event& evt);
 
   void buildSortedList();
   void acceptVisitorForNodes(Graph *graph,GlSceneVisitor *visitor);

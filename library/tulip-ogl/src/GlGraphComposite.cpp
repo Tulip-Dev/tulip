@@ -118,13 +118,6 @@ void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor) {
   }
 }
 //===================================================================
-void GlGraphComposite::destroy(Graph *g) {
-  if(inputData.getGraph()==g) {
-    inputData.graph=NULL;
-  }
-}
-
-//===================================================================
 const GlGraphRenderingParameters& GlGraphComposite::getRenderingParameters() {
   return parameters;
 }
@@ -153,4 +146,41 @@ void GlGraphComposite::getXML(xmlNodePtr rootNode) {
 //====================================================
 void GlGraphComposite::setWithXML(xmlNodePtr) {
 }
+
+void GlGraphComposite::treatEvent(const Event& evt) {
+  const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
+  if (graphEvent) {
+    switch(graphEvent->getType()) {
+      case GraphEvent::TLP_ADD_NODE:
+        nodesModified=true;
+        haveToSort=true;
+        break;
+      case GraphEvent::TLP_DEL_NODE:
+        nodesModified=true;
+        haveToSort=true;
+        break;
+      case GraphEvent::TLP_ADD_EDGE:
+        haveToSort=true;
+        break;
+      case GraphEvent::TLP_DEL_EDGE:
+        haveToSort=true;
+        break;
+      default:
+        break;
+    }
+  }
+  else if(evt.type() == Event::TLP_DELETE) {
+    Graph* g = dynamic_cast<Graph*>(evt.sender());
+    if(g && inputData.getGraph() == g) {
+      inputData.graph = NULL;
+    }
+  }
+  else {
+    const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&evt);
+    if(propertyEvent && propertyEvent->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
+      nodesModified=true;
+    }
+  }
+}
+
 }
