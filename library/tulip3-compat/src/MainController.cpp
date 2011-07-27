@@ -414,7 +414,7 @@ void MainController::setData(Graph *graph,DataSet dataSet) {
   }
 
   newGraph->addObserver(this);
-  newGraph->addGraphObserver(this);
+  newGraph->addListener(this);
 
   clusterTreeWidget->setGraph(lastViewedGraph);
   eltProperties->setGraph(lastViewedGraph);
@@ -981,10 +981,10 @@ bool MainController::windowActivated(QWidget *widget) {
     configWidgetTab->setCurrentIndex(lastConfigTabIndexOnView[view]);
 
   //Remove observer (nothing if this not observe)
-  graph->removeGraphObserver(this);
+  graph->removeListener(this);
   graph->removeObserver(this);
   //Add observer
-  graph->addGraphObserver(this);
+  graph->addListener(this);
   graph->addObserver(this);
 
   return true;
@@ -1018,10 +1018,10 @@ bool MainController::changeGraph(Graph *graph) {
 
   initObservers();
   //Remove observer (nothing if this not observe)
-  graph->removeGraphObserver(this);
+  graph->removeListener(this);
   graph->removeObserver(this);
   //Add observer
-  graph->addGraphObserver(this);
+  graph->addListener(this);
   graph->addObserver(this);
   // install predefined meta value calculators
   graph->getProperty<ColorProperty>("viewColor")->

@@ -36,7 +36,7 @@ bool SimpleTest::isSimple(const tlp::Graph* graph) {
 
   if (instance->resultsBuffer.find((unsigned long)graph) == instance->resultsBuffer.end()) {
     instance->resultsBuffer[(unsigned long)graph] = simpleTest(graph);
-    graph->addGraphObserver(instance);
+    graph->addListener(instance);
   }
 
   return instance->resultsBuffer[(unsigned long)graph];
@@ -124,7 +124,7 @@ bool SimpleTest::simpleTest(const tlp::Graph* graph, vector< edge >* multipleEdg
 //=================================================================
 void SimpleTest::deleteResult(Graph *graph) {
   resultsBuffer.erase((unsigned long)graph);
-  graph->removeGraphObserver(this);
+  graph->removeListener(this);
 }
 //=================================================================
 void SimpleTest::treatEvent(const Event& evt) {
@@ -147,7 +147,7 @@ void SimpleTest::treatEvent(const Event& evt) {
 
       break;
     case GraphEvent::TLP_REVERSE_EDGE:
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     default:

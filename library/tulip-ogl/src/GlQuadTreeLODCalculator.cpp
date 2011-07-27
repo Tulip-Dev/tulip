@@ -453,7 +453,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
 void GlQuadTreeLODCalculator::removeObservers() {
   if(inputData) {
     if(currentGraph)
-      currentGraph->removeGraphObserver(this);
+      currentGraph->removeListener(this);
 
     if(layoutProperty)
       layoutProperty->removePropertyObserver(this);
@@ -472,7 +472,7 @@ void GlQuadTreeLODCalculator::removeObservers() {
 void GlQuadTreeLODCalculator::addObservers() {
   if(inputData) {
     currentGraph=inputData->getGraph();
-    currentGraph->addGraphObserver(this);
+    currentGraph->addListener(this);
     layoutProperty=currentGraph->getProperty(inputData->getElementLayoutPropName());
     layoutProperty->addPropertyObserver(this);
     sizeProperty=currentGraph->getProperty(inputData->getElementSizePropName());

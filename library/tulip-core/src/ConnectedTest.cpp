@@ -39,7 +39,7 @@ void ConnectedTest::makeConnected(Graph *graph, vector<edge> &addedEdges) {
   if (instance==0)
     instance=new ConnectedTest();
 
-  graph->removeGraphObserver(instance);
+  graph->removeListener(instance);
   instance->resultsBuffer.erase((unsigned long)graph);
   vector<node> toLink;
   instance->connect(graph, toLink);
@@ -56,7 +56,7 @@ unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph* const 
   if (instance==0)
     instance=new ConnectedTest();
 
-  graph->removeGraphObserver(instance);
+  graph->removeListener(instance);
   vector<node> toLink;
   instance->connect(graph, toLink);
   unsigned int result;
@@ -67,7 +67,7 @@ unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph* const 
     result = 1u;
 
   instance->resultsBuffer[(unsigned long)graph] = (result == 1u);
-  graph->addGraphObserver(instance);
+  graph->addListener(instance);
   return result;
 }
 //======================================================================
@@ -159,7 +159,7 @@ bool ConnectedTest::compute(const tlp::Graph* const graph) {
   connectedTest(graph, graph->getOneNode(), visited, count);
   bool result = (count == graph->numberOfNodes());
   resultsBuffer[(unsigned long)graph]=result;
-  graph->addGraphObserver(this);
+  graph->addListener(this);
   return result;
 }
 //=================================================================
@@ -199,7 +199,7 @@ void ConnectedTest::treatEvent(const Event& evt) {
       resultsBuffer[(unsigned long)graph]=false;
       break;
     case GraphEvent::TLP_DEL_NODE:
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     case GraphEvent::TLP_ADD_EDGE:
@@ -207,7 +207,7 @@ void ConnectedTest::treatEvent(const Event& evt) {
       if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
         if (resultsBuffer[(unsigned long)graph]) return;
 
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     case GraphEvent::TLP_DEL_EDGE:
@@ -215,7 +215,7 @@ void ConnectedTest::treatEvent(const Event& evt) {
       if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
         if (!resultsBuffer[(unsigned long)graph]) return;
 
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     default:

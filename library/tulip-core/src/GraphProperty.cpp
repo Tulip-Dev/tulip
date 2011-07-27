@@ -42,13 +42,13 @@ GraphProperty::~GraphProperty() {
       node n = it->next();
 
       if (getNodeValue(n) != 0)
-        getNodeValue(n)->removeGraphObserver(this);
+        getNodeValue(n)->removeListener(this);
     }
 
     delete it;
 
     if (getNodeDefaultValue() != 0) {
-      getNodeDefaultValue()->removeGraphObserver(this);
+      getNodeDefaultValue()->removeListener(this);
     }
   }
 }
@@ -59,7 +59,7 @@ void GraphProperty::setAllNodeValue(const GraphType::RealType& g) {
 
   while(it->hasNext()) {
     node n = it->next();
-    getNodeValue(n)->removeGraphObserver(this);
+    getNodeValue(n)->removeListener(this);
   }
 
   delete it;
@@ -67,13 +67,13 @@ void GraphProperty::setAllNodeValue(const GraphType::RealType& g) {
   referencedGraph.setAll(emptySet);
 
   if (getNodeDefaultValue() != 0) {
-    getNodeDefaultValue()->removeGraphObserver(this);
+    getNodeDefaultValue()->removeListener(this);
   }
 
   AbstractGraphProperty::setAllNodeValue(g);
 
   if (g != NULL)
-    g->addGraphObserver(this);
+    g->addListener(this);
 }
 //==============================
 void GraphProperty::setNodeValue(const node n, const GraphType::RealType& sg) {
@@ -90,13 +90,13 @@ void GraphProperty::setNodeValue(const node n, const GraphType::RealType& sg) {
 
       if (refs.empty())  {
         if (oldGraph != getNodeDefaultValue())
-          oldGraph->removeGraphObserver(this);
+          oldGraph->removeListener(this);
 
         referencedGraph.set(oldGraph->getId(), set<node>());
       }
     }
     else if (oldGraph != getNodeDefaultValue())
-      oldGraph->removeGraphObserver(this);
+      oldGraph->removeListener(this);
   }
 
   AbstractGraphProperty::setNodeValue(n, sg);
@@ -105,7 +105,7 @@ void GraphProperty::setNodeValue(const node n, const GraphType::RealType& sg) {
     return;
 
   //Gestion de l'abonnement
-  sg->addGraphObserver(this);
+  sg->addListener(this);
 
   if (sg != getNodeDefaultValue()) {
     bool notDefault;

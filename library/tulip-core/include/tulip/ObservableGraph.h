@@ -63,7 +63,7 @@ class Graph;
  * int main() {
  *   Graph *g = tlp::newGraph();
  *   PrintObs obs;
- *   g->addGraphObserver(&obs);
+ *   g->addListener(&obs);
  *   g->addNode(); //output node 0 added in 0x
  *   g->addNode(); //output node 0 added in 0x
  * }

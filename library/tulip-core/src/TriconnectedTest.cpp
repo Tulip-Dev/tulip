@@ -41,7 +41,7 @@ bool TriconnectedTest::compute(Graph* graph) {
 
   if (graph->numberOfNodes()==0) return false;
 
-  graph->addGraphObserver(this);
+  graph->addListener(this);
   bool result = true;
   Graph *tmp = tlp::newCloneSubGraph(graph);
   Iterator<node> *itN = graph->getNodes();
@@ -82,15 +82,15 @@ void TriconnectedTest::treatEvent(const Event& evt) {
         if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
           if (resultsBuffer[(unsigned long)graph]) return;
           
-          graph->removeGraphObserver(this);
+          graph->removeListener(this);
         resultsBuffer.erase((unsigned long)graph);
         break;
       case GraphEvent::TLP_DEL_EDGE:
-        graph->removeGraphObserver(this);
+        graph->removeListener(this);
         resultsBuffer.erase((unsigned long)graph);
         break;
       case GraphEvent::TLP_DEL_NODE:
-        graph->removeGraphObserver(this);
+        graph->removeListener(this);
         resultsBuffer.erase((unsigned long)graph);
         break;
       case GraphEvent::TLP_ADD_NODE:

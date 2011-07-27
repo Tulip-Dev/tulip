@@ -31,7 +31,7 @@ using namespace std;
 namespace tlp {
 
 GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),rootGraph(graph->getRoot()),haveToSort(true),nodesModified(true) {
-  graph->addGraphObserver(this);
+  graph->addListener(this);
   graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addPropertyObserver(this);
 
   Iterator<node>* nodesIterator = graph->getNodes();

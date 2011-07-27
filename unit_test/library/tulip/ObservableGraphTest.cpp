@@ -233,7 +233,7 @@ void ObservableGraphTest::setUp() {
   graph = tlp::newGraph();
   gObserver = new GraphObserverTest();
   observer = new ObserverGTest();
-  graph->addGraphObserver(gObserver);
+  graph->addListener(gObserver);
   graph->addObserver(observer);
 }
 //==========================================================
@@ -380,7 +380,7 @@ void ObservableGraphTest::testReverse() {
   g1->addEdge(edges[0]);
   gObserver->reset();
   observer->reset();
-  g1->addGraphObserver(gObserver);
+  g1->addListener(gObserver);
   g1->addObserver(observer);
   CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
   CPPUNIT_ASSERT_EQUAL(size_t(0), gObserver->getObservedGraphs().size());
@@ -411,7 +411,7 @@ void ObservableGraphTest::testSubgraph() {
   gObserver->reset();
   observer->reset();
   CPPUNIT_ASSERT_EQUAL(size_t(0), gObserver->sGraphs.size());
-  g2->addGraphObserver(gObserver);
+  g2->addListener(gObserver);
   g2->addObserver(observer);
   g3 = g2->addSubGraph();
   CPPUNIT_ASSERT_EQUAL(g3, gObserver->getObservedSubgraph());
@@ -428,7 +428,7 @@ void ObservableGraphTest::testSubgraph() {
 
   gObserver->reset();
   observer->reset();
-  g3->addGraphObserver(gObserver);
+  g3->addListener(gObserver);
   g3->addObserver(observer);
   Observable::holdObservers();
   // 2 hold more for testing purpose
@@ -472,7 +472,7 @@ void ObservableGraphTest::testSubgraph() {
 
   gObserver->reset();
   observer->reset();
-  g4->addGraphObserver(gObserver);
+  g4->addListener(gObserver);
   g4->addObserver(observer);
   node n2 = g4->addNode();
   CPPUNIT_ASSERT_EQUAL(size_t(3), graphs.size());
@@ -566,7 +566,7 @@ void ObservableGraphTest::testDeleteSubgraph() {
 
   g1 = graph->addSubGraph();
   g2 = graph->addSubGraph();
-  g2->addGraphObserver(gObserver);
+  g2->addListener(gObserver);
   g2->addObserver(observer);
   g3 = g2->addSubGraph();
   g4 = g2->addSubGraph();
@@ -654,7 +654,7 @@ void ObservableGraphTest::testAddDelProperties() {
   CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getInheritedPropertyName());
 
   g1 = graph->addSubGraph();
-  g1->addGraphObserver(gObserver);
+  g1->addListener(gObserver);
   gObserver->reset();
 
   bp = graph->getProperty<BooleanProperty>("test");
@@ -676,7 +676,7 @@ void ObservableGraphTest::testAddDelProperties() {
   CPPUNIT_ASSERT_EQUAL(string("test"), gObserver->getInheritedPropertyName());
 
   g2 = g1->addSubGraph();
-  g2->addGraphObserver(gObserver);
+  g2->addListener(gObserver);
   gObserver->reset();
   CPPUNIT_ASSERT(gObserver->graphs.empty());
   CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getLocalPropertyName());
@@ -703,12 +703,12 @@ void ObservableGraphTest::testAddDelProperties() {
 }
 //==========================================================
 void ObservableGraphTest::testObserverWhenRemoveObservable() {
-  CPPUNIT_ASSERT_EQUAL(1u, graph->countGraphObservers());
+  CPPUNIT_ASSERT_EQUAL(1u, graph->countListeners());
   GraphObserverTest *graphObserverTmp=new GraphObserverTest();
-  graph->addGraphObserver(graphObserverTmp);
-  CPPUNIT_ASSERT_EQUAL(2u, graph->countGraphObservers());
+  graph->addListener(graphObserverTmp);
+  CPPUNIT_ASSERT_EQUAL(2u, graph->countListeners());
   delete graphObserverTmp;
-  CPPUNIT_ASSERT_EQUAL(1u, graph->countGraphObservers());
+  CPPUNIT_ASSERT_EQUAL(1u, graph->countListeners());
 
   /*CPPUNIT_ASSERT(graph->countObservers() == 1);
   ObserverGTest *observerTmp=new ObserverGTest();
@@ -721,7 +721,7 @@ void ObservableGraphTest::testObserverWhenRemoveObservable() {
 void ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend() {
   Graph *g1 = graph->addSubGraph();
   DelInheritedPropertyObserverTest *observer = new DelInheritedPropertyObserverTest();
-  g1->addGraphObserver(observer);
+  g1->addListener(observer);
   graph->getLocalProperty<BooleanProperty>("test");
   graph->delLocalProperty("test");
   CPPUNIT_ASSERT(observer->initialized);
