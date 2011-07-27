@@ -103,7 +103,7 @@ bool PlanarityTest::compute(Graph* graph) {
   for (; it!=addedEdges.end(); ++it)
     graph->delEdge(*it, true);
 
-  graph->addGraphObserver(this);
+  graph->addListener(this);
   return resultsBuffer[(unsigned long)graph];
 }
 //=================================================================
@@ -119,7 +119,7 @@ void PlanarityTest::treatEvent(const Event& evt) {
       if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
         if (resultsBuffer[(unsigned long)graph]) return;
 
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     case GraphEvent::TLP_ADD_EDGE:
@@ -127,7 +127,7 @@ void PlanarityTest::treatEvent(const Event& evt) {
       if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
         if (!resultsBuffer[(unsigned long)graph]) return;
 
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     case GraphEvent::TLP_DEL_EDGE:
@@ -135,7 +135,7 @@ void PlanarityTest::treatEvent(const Event& evt) {
       if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
         if (resultsBuffer[(unsigned long)graph]) return;
 
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     default:

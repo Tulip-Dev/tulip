@@ -84,14 +84,14 @@ SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<b
   :FactorNodeIterator(sG,filter), sg(sG), value(val) {
   it=_parentGraph->getNodes();
 #ifndef NDEBUG
-  _parentGraph->addGraphObserver(this);
+  _parentGraph->addListener(this);
 #endif
   // anticipate first iteration
   prepareNext();
 }
 SGraphNodeIterator::~SGraphNodeIterator() {
 #ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
+  _parentGraph->removeListener(this);
 #endif
   delete it;
 }
@@ -123,12 +123,12 @@ OutNodesIterator::OutNodesIterator(const Graph *sG, const MutableContainer<bool>
   it = new OutEdgesIterator(sG,filter,n);
 #ifndef NDEBUG
   sg = sG;
-  _parentGraph->addGraphObserver(this);
+  _parentGraph->addListener(this);
 #endif
 }
 OutNodesIterator::~OutNodesIterator() {
 #ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
+  _parentGraph->removeListener(this);
 #endif
   delete it;
 }
@@ -149,12 +149,12 @@ InNodesIterator::InNodesIterator(const Graph *sG, const MutableContainer<bool>& 
   it(new InEdgesIterator(sG,filter,n)) {
 #ifndef NDEBUG
   sg = sG;
-  _parentGraph->addGraphObserver(this);
+  _parentGraph->addListener(this);
 #endif
 }
 InNodesIterator::~InNodesIterator() {
 #ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
+  _parentGraph->removeListener(this);
 #endif
   delete it;
 }
@@ -176,12 +176,12 @@ InOutNodesIterator::InOutNodesIterator(const Graph *sG, const MutableContainer<b
   n(n) {
 #ifndef NDEBUG
   sg = sG;
-  _parentGraph->addGraphObserver(this);
+  _parentGraph->addListener(this);
 #endif
 }
 InOutNodesIterator::~InOutNodesIterator() {
 #ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
+  _parentGraph->removeListener(this);
 #endif
   delete it;
 }
@@ -202,14 +202,14 @@ bool InOutNodesIterator::hasNext() {
 SGraphEdgeIterator::SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val):FactorEdgeIterator(sG,filter), sg(sG), value(val) {
   it=_parentGraph->getEdges();
 #ifndef NDEBUG
-  _parentGraph->addGraphObserver(this);
+  _parentGraph->addListener(this);
 #endif
   // anticipate first iteration
   prepareNext();
 }
 SGraphEdgeIterator::~SGraphEdgeIterator() {
 #ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
+  _parentGraph->removeListener(this);
 #endif
   delete it;
 }
@@ -241,14 +241,14 @@ OutEdgesIterator::OutEdgesIterator(const Graph *sG, const MutableContainer<bool>
   assert(sG->isElement(n));
   it=_parentGraph->getOutEdges(n);
 #ifndef NDEBUG
-  _parentGraph->addGraphObserver(this);
+  _parentGraph->addListener(this);
 #endif
   // anticipate first iteration
   prepareNext();
 }
 OutEdgesIterator::~OutEdgesIterator() {
 #ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
+  _parentGraph->removeListener(this);
 #endif
   delete it;
 }
@@ -279,14 +279,14 @@ InEdgesIterator::InEdgesIterator(const Graph *sG, const MutableContainer<bool>& 
   assert(sG->isElement(n));
   it=_parentGraph->getInEdges(n);
 #ifndef NDEBUG
-  _parentGraph->addGraphObserver(this);
+  _parentGraph->addListener(this);
 #endif
   // anticipate first iteration
   prepareNext();
 }
 InEdgesIterator::~InEdgesIterator() {
 #ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
+  _parentGraph->removeListener(this);
 #endif
   delete it;
 }
@@ -317,14 +317,14 @@ InOutEdgesIterator::InOutEdgesIterator(const Graph *sG,const MutableContainer<bo
   assert(sG->isElement(n));
   it=_parentGraph->getInOutEdges(n);
 #ifndef NDEBUG
-  _parentGraph->addGraphObserver(this);
+  _parentGraph->addListener(this);
 #endif
   // anticipate first iteration
   prepareNext();
 }
 InOutEdgesIterator::~InOutEdgesIterator() {
 #ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
+  _parentGraph->removeListener(this);
 #endif
   delete it;
 }
@@ -362,12 +362,12 @@ GraphImplNodeIterator::GraphImplNodeIterator(const Graph*
   itId(it) {
 #ifndef NDEBUG
   graph = (GraphImpl *) g;
-  graph->addGraphObserver(this);
+  graph->addListener(this);
 #endif
 }
 GraphImplNodeIterator::~GraphImplNodeIterator() {
 #ifndef NDEBUG
-  graph->removeGraphObserver(this);
+  graph->removeListener(this);
 #endif
   delete itId;
 }
@@ -387,12 +387,12 @@ GraphImplEdgeIterator::GraphImplEdgeIterator(const Graph*
   itId(it) {
 #ifndef NDEBUG
   graph = (GraphImpl *) g;
-  graph->addGraphObserver(this);
+  graph->addListener(this);
 #endif
 }
 GraphImplEdgeIterator::~GraphImplEdgeIterator() {
 #ifndef NDEBUG
-  graph->removeGraphObserver(this);
+  graph->removeListener(this);
 #endif
   delete itId;
 }

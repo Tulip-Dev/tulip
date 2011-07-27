@@ -30,7 +30,7 @@ const string IntegerVectorProperty::propertyTypename="vector<int>";
 ///Constructeur d'un IntegerProperty
 IntegerProperty::IntegerProperty (Graph *sg, std::string n):AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm>(sg, n), IntegerMinMaxCalculator(this, -INT_MAX, INT_MAX) {
   // the property observes the graph
-  sg->addGraphObserver(this);
+  sg->addListener(this);
 }
 //====================================================================
 ///Renvoie le minimum de la m�trique associ� aux noeuds du IntegerProperty

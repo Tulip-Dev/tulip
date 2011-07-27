@@ -35,7 +35,7 @@ bool AcyclicTest::isAcyclic(const Graph *graph) {
 
   if (instance->resultsBuffer.find((unsigned long)graph) == instance->resultsBuffer.end()) {
     instance->resultsBuffer[(unsigned long)graph] = acyclicTest(graph);
-    graph->addGraphObserver(instance);
+    graph->addListener(instance);
   }
 
   return instance->resultsBuffer[(unsigned long)graph];
@@ -172,29 +172,29 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
 }
 //**********************************************************************
 void AcyclicTest::treatEvent(const Event& evt) {
-  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+  const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
 
-  if (gEvt) {
-    Graph* graph = gEvt->getGraph();
+  if (graphEvent) {
+    Graph* graph = graphEvent->getGraph();
 
-    switch(gEvt->getType()) {
+    switch(graphEvent->getType()) {
     case GraphEvent::TLP_ADD_EDGE:
 
       if (resultsBuffer[(unsigned long)graph]==false)
         return;
 
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     case GraphEvent::TLP_DEL_EDGE:
 
       if (resultsBuffer[(unsigned long)graph]==true) return;
 
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     case GraphEvent::TLP_REVERSE_EDGE:
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     default:

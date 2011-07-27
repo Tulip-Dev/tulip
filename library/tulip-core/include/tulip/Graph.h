@@ -570,17 +570,17 @@ public:
   /**
    * Register a new observer
    */
-  void addGraphObserver(Observable *) const;
+  void _DEPRECATED addGraphObserver(Observable *) const;
   /**
    * Returns the number of observers
    */
-  unsigned int countGraphObservers() const {
+  unsigned int _DEPRECATED countGraphObservers() const {
     return countListeners();
   }
   /**
    * Remove an observer
    */
-  void removeGraphObserver(Observable *) const;
+  void _DEPRECATED removeGraphObserver(Observable *) const;
 
   // updates management
   /*

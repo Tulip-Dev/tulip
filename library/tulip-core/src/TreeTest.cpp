@@ -183,7 +183,7 @@ static void makeRootedTree (Graph *graph, node curRoot,
 void TreeTest::makeRootedTree(Graph *graph, node root) {
   if (instance==0) instance=new TreeTest();
 
-  graph->removeGraphObserver(instance);
+  graph->removeListener(instance);
   instance->resultsBuffer.erase((unsigned long)graph);
 
   if (!graph->isElement (root)) {
@@ -357,7 +357,7 @@ bool TreeTest::compute(const Graph *graph) {
 
   if (graph->numberOfEdges()!=graph->numberOfNodes()-1) {
     resultsBuffer[(unsigned long)graph]=false;
-    graph->addGraphObserver(this);
+    graph->addListener(this);
     return false;
   }
 
@@ -370,7 +370,7 @@ bool TreeTest::compute(const Graph *graph) {
     if (graph->indeg(tmp)>1) {
       delete it;
       resultsBuffer[(unsigned long)graph]=false;
-      graph->addGraphObserver(this);
+      graph->addListener(this);
       return false;
     }
 
@@ -378,7 +378,7 @@ bool TreeTest::compute(const Graph *graph) {
       if (rootNodeFound) {
         delete it;
         resultsBuffer[(unsigned long)graph]=false;
-        graph->addGraphObserver(this);
+        graph->addListener(this);
         return false;
       }
       else
@@ -390,12 +390,12 @@ bool TreeTest::compute(const Graph *graph) {
 
   if (AcyclicTest::isAcyclic(graph)) {
     resultsBuffer[(unsigned long)graph]=true;
-    graph->addGraphObserver(this);
+    graph->addListener(this);
     return true;
   }
   else {
     resultsBuffer[(unsigned long)graph]=false;
-    graph->addGraphObserver(this);
+    graph->addListener(this);
     return false;
   }
 }
@@ -408,23 +408,23 @@ void TreeTest::treatEvent(const Event& evt) {
 
     switch(gEvt->getType()) {
     case GraphEvent::TLP_ADD_NODE:
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     case GraphEvent::TLP_DEL_NODE:
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     case GraphEvent::TLP_ADD_EDGE:
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     case GraphEvent::TLP_DEL_EDGE:
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     case GraphEvent::TLP_REVERSE_EDGE:
-      graph->removeGraphObserver(this);
+      graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
     default:
