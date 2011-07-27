@@ -15,6 +15,8 @@
 #include <tulip/Perspective.h>
 #include <tulip/InteractorManager.h>
 #include <tulip/CrashHandling.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/EdgeExtremityGlyphManager.h>
 
 #include <iostream>
 using namespace std;
@@ -76,6 +78,8 @@ int main(int argc,char **argv) {
   tlp::PluginLibraryLoader::loadPlugins();
   tlp::PluginListerInterface::checkLoadedPluginsDependencies(0);
   tlp::InteractorManager::getInst().loadInteractorPlugins();
+  tlp::GlyphManager::getInst().loadGlyphPlugins();
+  tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
 
   // Check arguments
   progress->progress(60,100);
