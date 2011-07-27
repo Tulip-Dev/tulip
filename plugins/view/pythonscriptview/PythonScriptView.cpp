@@ -207,23 +207,23 @@ QString getTulipPythonPluginSkeleton(const QString &pluginClassName, const QStri
 		if (pluginType == "Layout") {
 			textStream << "\t\t# The result of this layout algorithm must be stored in the" << endl;
 			textStream << "\t\t# layout property accessible through the \"layoutResult\" class attribute" << endl;
-			textStream << "\t\t# (see documentation to kwow how to work with graph properties)." << endl << endl;
+			textStream << "\t\t# (see documentation to know how to work with graph properties)." << endl << endl;
 		} else if (pluginType == "Size") {
 			textStream << "\t\t# The result of this size algorithm must be stored in the" << endl;
 			textStream << "\t\t# size property accessible through the \"sizeResult\" class attribute" << endl;
-			textStream << "\t\t# (see documentation to kwow how to work with graph properties)." << endl << endl;
+			textStream << "\t\t# (see documentation to know how to work with graph properties)." << endl << endl;
 		} else if (pluginType == "Measure") {
 			textStream << "\t\t# The result of this measure algorithm must be stored in the" << endl;
 			textStream << "\t\t# double property accessible through the \"doubleResult\" class attribute" << endl;
-			textStream << "\t\t# (see documentation to kwow how to work with graph properties)." << endl << endl;
+			textStream << "\t\t# (see documentation to know how to work with graph properties)." << endl << endl;
 		} else if (pluginType == "Color") {
 			textStream << "\t\t# The result of this color algorithm must be stored in the" << endl;
 			textStream << "\t\t# color property accessible through the \"colorResult\" class attribute" << endl;
-			textStream << "\t\t# (see documentation to kwow how to work with graph properties)." << endl << endl;
+			textStream << "\t\t# (see documentation to know how to work with graph properties)." << endl << endl;
 		} else if (pluginType == "Selection") {
 			textStream << "\t\t# The result of this selection algorithm must be stored in the" << endl;
 			textStream << "\t\t# boolean property accessible through the \"booleanResult\" class attribute" << endl;
-			textStream << "\t\t# (see documentation to kwow how to work with graph properties)." << endl << endl;
+			textStream << "\t\t# (see documentation to know how to work with graph properties)." << endl << endl;
 		}
 
 		textStream << "\t\t# The method must return a boolean indicating if the algorithm" << endl;
