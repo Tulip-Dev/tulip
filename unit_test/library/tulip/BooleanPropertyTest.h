@@ -25,14 +25,13 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 #include <cppunit/extensions/HelperMacros.h>
-// Warning SelectionProxy has been renamed in BooleanAlgorithm
 
 namespace tlp {
 class BooleanProperty;
 }
 
-class SelectionProxyTest : public CppUnit::TestFixture {
-  CPPUNIT_TEST_SUITE(SelectionProxyTest);
+class BooleanPropertyTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(BooleanPropertyTest);
   CPPUNIT_TEST(testSetAll);
   CPPUNIT_TEST(testSetGet);
   CPPUNIT_TEST(testCopy);

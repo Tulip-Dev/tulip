@@ -6,8 +6,8 @@ SET(TULIP_LIBRARY_TESTS_SRCS
   VectorTest.cpp
   MatrixTest.cpp
   TestAlgorithmTest.cpp
-  SelectionProxyTest.cpp
-  MetaGraphProxyTest.cpp
+  BooleanPropertyTest.cpp
+  GraphPropertyTest.cpp
   SuperGraphTest.cpp
   TlpImportExportTest.cpp
   PluginsTest.cpp
