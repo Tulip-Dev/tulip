@@ -35,7 +35,7 @@ const std::string GlCompositeHierarchyManager::temporaryPropertyValue = "tempora
 GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, std::string layerName, LayoutProperty *layout,
     SizeProperty *size, DoubleProperty *rotation, bool visible, std::string namingProperty, std::string subCompositeSuffix)
   :_shouldRecreate(false), _currentColor(0), _graph(graph), _layer(layer), _composite(new GlHierarchyMainComposite(this)), _layout(layout), _size(size), _rotation(rotation), _layerName(layerName),
-   _isVisible(visible), _subCompositesSuffix(subCompositeSuffix), _property(namingProperty) {
+   _isVisible(visible), _subCompositesSuffix(subCompositeSuffix), _nameAttribute(namingProperty) {
   this->_layer->addGlEntity(this->_composite, this->_layerName);
   this->_composite->setVisible(_isVisible);
   _layout->addObserver(this);
@@ -59,10 +59,10 @@ const tlp::Color GlCompositeHierarchyManager::getColor() {
 }
 
 void GlCompositeHierarchyManager::buildComposite(Graph* current, GlComposite* composite) {
-  current->addGraphObserver(this);
+  current->addListener(this);
 
   string propertyValue;
-  current->getAttribute<string>(_property, propertyValue);
+  current->getAttribute<string>(_nameAttribute, propertyValue);
   stringstream naming;
   naming << propertyValue << " (" << current->getId() << ")";
   GlConvexGraphHull* hull = new GlConvexGraphHull(composite, naming.str(), getColor(), current, _layout, _size, _rotation);
@@ -82,57 +82,59 @@ void GlCompositeHierarchyManager::buildComposite(Graph* current, GlComposite* co
   delete it;
 }
 
-void GlCompositeHierarchyManager::addSubGraph(Graph *, Graph*) {
-  _shouldRecreate = true;
-}
-
-void GlCompositeHierarchyManager::delSubGraph(Graph*, Graph*subGraph) {
-  subGraph->removeGraphObserver(this);
-  _shouldRecreate = true;
-}
-
-void GlCompositeHierarchyManager::beforeSetAttribute(Graph* graph, const std::string& property) {
-  //we save the old property value in a temporary attribute, so we can find the GlEntity and change its name once the attribute has been set
-  if(property == _property) {
-    string propertyValue;
-    graph->getAttribute<string>(_property, propertyValue);
-    graph->setAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue, propertyValue);
-  }
-}
-
-void GlCompositeHierarchyManager::addNode(tlp::Graph* source, tlp::node) {
-  if(_graphsComposites[source].second) {
-    _graphsComposites[source].second->updateHull();
-  }
-}
-
-// void GlCompositeHierarchyManager::afterSetNodeValue(PropertyInterface*, const node) {
-//   updateHull();
-// }
-
-void GlCompositeHierarchyManager::afterSetAttribute(Graph* graph, const std::string& property) {
-  if(property == _property) {
-    string propertyValue;
-    graph->getAttribute<string>(_property, propertyValue);
-    string oldPropertyValue;
-    graph->getAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue, oldPropertyValue);
-    graph->removeAttribute(GlCompositeHierarchyManager::temporaryPropertyValue);
-    GlComposite* composite = _graphsComposites[graph].first;
-    GlSimpleEntity* temporaryEntity = composite->findGlEntity(oldPropertyValue);
-
-    if(temporaryEntity) {
-      composite->deleteGlEntity(temporaryEntity);
-      composite->addGlEntity(temporaryEntity, propertyValue);
+void GlCompositeHierarchyManager::treatEvent(const Event& evt) {
+  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+  
+  if (gEvt) {
+    Graph* graph = gEvt->getGraph();
+    
+    switch(gEvt->getType()) {
+      case GraphEvent::TLP_ADD_NODE:
+        if(_graphsComposites[graph].second) {
+          _graphsComposites[graph].second->updateHull();
+        }
+        break;
+      case GraphEvent::TLP_ADD_SUBGRAPH:
+      case GraphEvent::TLP_DEL_SUBGRAPH:
+        _shouldRecreate = true;
+        _shouldRecreate = true;
+        break;
+      case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE: {
+        const std::string attributeName = gEvt->getAttributeName();
+        //we save the old property value in a temporary attribute, so we can find the GlEntity and change its name once the attribute has been set
+        if(attributeName == _nameAttribute) {
+          string propertyValue;
+          graph->getAttribute<string>(_nameAttribute, propertyValue);
+          graph->setAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue, propertyValue);
+        }
+        break;
+      }
+      case GraphEvent::TLP_AFTER_SET_ATTRIBUTE: {
+        const std::string attributeName = gEvt->getAttributeName();
+        if(attributeName == _nameAttribute) {
+          string propertyValue;
+          graph->getAttribute<string>(_nameAttribute, propertyValue);
+          string oldPropertyValue;
+          graph->getAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue, oldPropertyValue);
+          graph->removeAttribute(GlCompositeHierarchyManager::temporaryPropertyValue);
+          GlComposite* composite = _graphsComposites[graph].first;
+          GlSimpleEntity* temporaryEntity = composite->findGlEntity(oldPropertyValue);
+          
+          if(temporaryEntity) {
+            composite->deleteGlEntity(temporaryEntity);
+            composite->addGlEntity(temporaryEntity, propertyValue);
+          }
+        }
+        break;
+      }
+      default:
+        //we don't care about other events
+        break;
     }
   }
 }
 
-void GlCompositeHierarchyManager::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
-}
-
-
-void GlCompositeHierarchyManager::update(std::set< Observable* >::iterator, std::set< Observable* >::iterator) {
+void GlCompositeHierarchyManager::treatEvents(const  std::vector<Event>&) {
   if(_shouldRecreate) {
     createComposite();
   }
@@ -149,9 +151,6 @@ void GlCompositeHierarchyManager::update(std::set< Observable* >::iterator, std:
   }
 
   _shouldRecreate = false;
-}
-
-void GlCompositeHierarchyManager::observableDestroyed(Observable*) {
 }
 
 void GlCompositeHierarchyManager::setGraph(tlp::Graph* graph) {
