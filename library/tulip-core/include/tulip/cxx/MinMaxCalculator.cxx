@@ -239,10 +239,10 @@ void tlp::MinMaxCalculator<nodeType, edgeType, algorithmType>::treatEvent(const 
       break;
     }
     case GraphEvent::TLP_ADD_SUBGRAPH:
-      graphEvent->getSubGraph()->addGraphObserver(_property);
+      graphEvent->getSubGraph()->addListener(_property);
       break;
     case GraphEvent::TLP_DEL_SUBGRAPH:
-      graphEvent->getSubGraph()->removeGraphObserver(_property);
+      graphEvent->getSubGraph()->removeListener(_property);
       break;
     default:
       // we don't care about the rest
