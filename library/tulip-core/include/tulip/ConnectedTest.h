@@ -63,11 +63,11 @@ public:
    * @return unsigned int The number of connected componments.
    **/
   static unsigned int numberOfConnectedComponents(const Graph* const graph);
-  
+
   /**
    * @brief Computes the sets of connected components and stores the result in the components vector.
    *
-   * @param graph The graph on which to compute connected components. 
+   * @param graph The graph on which to compute connected components.
    * @param components The components that were found. It is passed as a reference to avoid copying the data when returning.
    * @return void
    * @note The components parameter can be returned with c++11 thanks to move constructors without performance loss, chenge this function once c++11 compilers are used.
@@ -86,7 +86,7 @@ private:
    * @return void
    **/
   void connect(const Graph * const, std::vector<node>& toLink);
-  
+
   /**
    * @brief check if the graph is biconnected.
    *
@@ -97,7 +97,7 @@ private:
 
   //override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   virtual void treatEvent(const Event&);
-  
+
   /**
    * @brief Singleton instance of this class.
    **/

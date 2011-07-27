@@ -25,11 +25,15 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
 
   //FIXME: remove me
   Graph *g = tlp::newGraph();
-  for (int i=0;i<200;++i)
+
+  for (int i=0; i<200; ++i)
     g->addNode();
+
   Graph *g1 = g->addSubGraph();
-  for (int i=0;i<200;++i)
+
+  for (int i=0; i<200; ++i)
     g->addNode();
+
   _graphs->addGraph(g);
   _graphsEditor = new GraphHierarchiesEditor(_graphs,_mainWindow);
   connect(_ui->graphsHierarchyManagerButton,SIGNAL(clicked()),_graphsEditor,SLOT(show()));

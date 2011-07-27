@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
@@ -46,7 +46,7 @@ public:
 
   void updateAllNodesValues(typename nodeType::RealType newValue);
   void updateAllEdgesValues(typename edgeType::RealType newValue);
-  
+
 protected:
   tlp::AbstractProperty<nodeType, edgeType, algorithmType>* _property;
   TLP_HASH_MAP<unsigned int, typename nodeType::RealType> maxNode, minNode;
@@ -58,7 +58,7 @@ protected:
   typename nodeType::RealType _nodeMax;
   typename edgeType::RealType _edgeMin;
   typename edgeType::RealType _edgeMax;
-  
+
   void computeMinMaxNode(Graph* graph);
   void computeMinMaxEdge(Graph* graph);
 };

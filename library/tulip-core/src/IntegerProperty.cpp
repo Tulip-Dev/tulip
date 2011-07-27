@@ -38,7 +38,7 @@ int IntegerProperty::getNodeMin(Graph *sg) {
   if (sg == NULL) {
     sg = graph;
   }
-  
+
   return IntegerMinMaxCalculator::getNodeMin(sg);
 }
 //====================================================================
@@ -47,7 +47,7 @@ int IntegerProperty::getNodeMax(Graph *sg) {
   if (sg == NULL) {
     sg = graph;
   }
-  
+
   return IntegerMinMaxCalculator::getNodeMax(sg);
 }
 //====================================================================
@@ -56,7 +56,7 @@ int IntegerProperty::getEdgeMin(Graph *sg) {
   if (sg == NULL) {
     sg = graph;
   }
-  
+
   return IntegerMinMaxCalculator::getEdgeMin(sg);
 }
 //====================================================================
@@ -65,7 +65,7 @@ int IntegerProperty::getEdgeMax(Graph *sg) {
   if (sg == NULL) {
     sg = graph;
   }
-  
+
   return IntegerMinMaxCalculator::getEdgeMax(sg);
 }
 //=================================================================================

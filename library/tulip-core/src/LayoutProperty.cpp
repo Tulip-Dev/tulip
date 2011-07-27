@@ -43,43 +43,43 @@ void minV(tlp::Coord &res, const tlp::Coord &cmp) {
  **/
 template <>
 void tlp::MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::computeMinMaxNode(Graph *sg) {
-  #ifndef NDEBUG
+#ifndef NDEBUG
   std::cerr << __PRETTY_FUNCTION__ << std::endl;
-  #endif
+#endif
   tlp::Coord maxT(-FLT_MAX, -FLT_MAX, -FLT_MAX);
   tlp::Coord minT(FLT_MAX, FLT_MAX, FLT_MAX);
-  
+
   tlp::Iterator<node> *itN=sg->getNodes();
-  
+
   if  (itN->hasNext()) {
     node itn=itN->next();
     const Coord& tmpCoord = _property->getNodeValue(itn);
     maxV(maxT, tmpCoord);
     minV(minT, tmpCoord);
   }
-  
+
   while (itN->hasNext()) {
     node itn=itN->next();
     const Coord& tmpCoord = _property->getNodeValue(itn);
     maxV(maxT, tmpCoord);
     minV(minT, tmpCoord);
   }
-  
+
   delete itN;
   tlp::Iterator<edge> *itE = sg->getEdges();
-  
+
   while (itE->hasNext()) {
     edge ite=itE->next();
     const LineType::RealType& value = _property->getEdgeValue(ite);
     LineType::RealType::const_iterator itCoord;
-    
+
     for (itCoord=value.begin(); itCoord!=value.end(); ++itCoord) {
       const Coord& tmpCoord = *itCoord;
       maxV(maxT, tmpCoord);
       minV(minT, tmpCoord);
     }
   }
-  
+
   delete itE;
   unsigned int sgi = sg->getId();
   nodeValueUptodate[sgi] = true;
@@ -155,7 +155,7 @@ void tlp::MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>:
     }
   }
 }
- 
+
 }
 
 inline double sqr(double x) {
@@ -733,24 +733,24 @@ void LayoutProperty::treatEvent(const Event& evt) {
   LayoutMinMaxCalculator::treatEvent(evt);
 
   const GraphEvent* graphEvent = dynamic_cast<const tlp::GraphEvent*>(&evt);
-  
+
   if (graphEvent && graphEvent->getType() == GraphEvent::TLP_REVERSE_EDGE) {
     assert(graphEvent->getGraph() == graph);
     std::vector<Coord> bends = getEdgeValue(graphEvent->getEdge());
-    
+
     // reverse bends if needed
     if (bends.size() > 1) {
       unsigned int halfSize = bends.size()/2;
-      
+
       for (unsigned int i = 0, j = bends.size() - 1; i < halfSize; ++i, j--) {
         Coord tmp = bends[i];
         bends[i] = bends[j];
         bends[j] = tmp;
       }
-      
+
       setEdgeValue(graphEvent->getEdge(), bends);
     }
-  } 
+  }
 }
 //=================================================================================
 PropertyInterface* CoordVectorProperty::clonePrototype(Graph * g, const std::string& n) {
