@@ -99,8 +99,8 @@ Graph *GraphAbstract::addSubGraph(BooleanProperty *selection, unsigned int id) {
   notifyAddSubGraph(tmp);
   return tmp;
 }
-Graph *GraphAbstract::getNthSubGraph(int n) const {
-  if (n >= subgraphs.size() || n < 0)
+Graph *GraphAbstract::getNthSubGraph(unsigned int n) const {
+  if (n >= subgraphs.size())
     return NULL;
   return subgraphs[n];
 }
