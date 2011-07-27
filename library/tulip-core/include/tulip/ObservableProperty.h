@@ -41,7 +41,7 @@ class PropertyInterface;
  * framework for handling state dependency between observer and observed
  * object.
  */
-class _DEPRECATED  TLP_SCOPE PropertyObserver {
+class _DEPRECATED TLP_SCOPE PropertyObserver {
 
 public:
   virtual ~PropertyObserver() {}

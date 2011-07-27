@@ -19,14 +19,12 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
 #include <tulip/TlpTools.h>
-#include "SelectionProxyTest.h"
+#include "BooleanPropertyTest.h"
 
 using namespace std;
 using namespace tlp;
 
-// Warning SelectionProxy has been renamed in BooleanAlgorithm
-
-CPPUNIT_TEST_SUITE_REGISTRATION( SelectionProxyTest );
+CPPUNIT_TEST_SUITE_REGISTRATION( BooleanPropertyTest );
 
 //==========================================================
 void buildGraph(Graph *graph) {
@@ -40,17 +38,17 @@ void buildGraph(Graph *graph) {
   graph->addEdge(n3,n1);
 }
 //==========================================================
-void SelectionProxyTest::setUp() {
+void BooleanPropertyTest::setUp() {
   graph    = tlp::newGraph();
   selection = graph->getProperty<BooleanProperty>("Select Test");
   buildGraph(graph);
 }
 //==========================================================
-void SelectionProxyTest::tearDown() {
+void BooleanPropertyTest::tearDown() {
   delete graph;
 }
 //==========================================================
-void SelectionProxyTest::testIterators() {
+void BooleanPropertyTest::testIterators() {
   selection->setAllNodeValue(true);
   selection->setAllEdgeValue(true);
   {
@@ -82,7 +80,7 @@ void SelectionProxyTest::testIterators() {
 
 }
 //==========================================================
-void SelectionProxyTest::testSetAll(bool value) {
+void BooleanPropertyTest::testSetAll(bool value) {
   selection->setAllNodeValue(value);
   selection->setAllEdgeValue(value);
   Iterator<node> *itN=graph->getNodes();
@@ -101,12 +99,12 @@ void SelectionProxyTest::testSetAll(bool value) {
   delete itE;
 }
 //==========================================================
-void SelectionProxyTest::testSetAll() {
+void BooleanPropertyTest::testSetAll() {
   testSetAll(true);
   testSetAll(false);
 }
 //==========================================================
-void SelectionProxyTest::testSetGet(bool value) {
+void BooleanPropertyTest::testSetGet(bool value) {
   vector<node> nodes(graph->numberOfNodes());
   vector<edge> edges(graph->numberOfEdges());
   unsigned int i=0;
@@ -142,7 +140,7 @@ void SelectionProxyTest::testSetGet(bool value) {
   }
 }
 //==========================================================
-void SelectionProxyTest::testCopy() {
+void BooleanPropertyTest::testCopy() {
   vector<node> nodes(graph->numberOfNodes());
   vector<edge> edges(graph->numberOfEdges());
   unsigned int i=0;
@@ -197,12 +195,12 @@ void SelectionProxyTest::testCopy() {
   delete itE;
 }
 //==========================================================
-void SelectionProxyTest::testSetGet() {
+void BooleanPropertyTest::testSetGet() {
   testSetGet(false);
   testSetGet(true);
 }
 //==========================================================
-void SelectionProxyTest::testDelete(bool value) {
+void BooleanPropertyTest::testDelete(bool value) {
   selection->setAllNodeValue(value);
   selection->setAllEdgeValue(value);
   Iterator<node> *itN=graph->getNodes();
@@ -226,7 +224,7 @@ void SelectionProxyTest::testDelete(bool value) {
   CPPUNIT_ASSERT_EQUAL(value, selection->getEdgeValue(e));
 }
 //==========================================================
-void SelectionProxyTest::testDelete() {
+void BooleanPropertyTest::testDelete() {
   testDelete(false);
   testDelete(true);
 }

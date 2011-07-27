@@ -25,10 +25,9 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
-// Warning MetaGraphProxy has been renamed in GraphAlgorithm
 #include <cppunit/extensions/HelperMacros.h>
-class MetaGraphProxyTest : public CppUnit::TestFixture {
-  CPPUNIT_TEST_SUITE(MetaGraphProxyTest);
+class GraphPropertyTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(GraphPropertyTest);
   CPPUNIT_TEST(testDestroyGraph);
   CPPUNIT_TEST(testSetGet);
   CPPUNIT_TEST(testSetAll);

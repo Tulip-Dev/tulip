@@ -19,19 +19,17 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
 #include <tulip/TlpTools.h>
-#include "MetaGraphProxyTest.h"
+#include "GraphPropertyTest.h"
 
 using namespace std;
 using namespace tlp;
 
 tlp::Graph* nullGraph = NULL;
 
-// Warning MetaGraphProxy has been renamed in GraphAlgorithm
-
-CPPUNIT_TEST_SUITE_REGISTRATION( MetaGraphProxyTest );
+CPPUNIT_TEST_SUITE_REGISTRATION( GraphPropertyTest );
 
 //==========================================================
-void MetaGraphProxyTest::setUp() {
+void GraphPropertyTest::setUp() {
   graph    = tlp::newGraph();
   //add three nodes
   node n1=graph->addNode();
@@ -43,11 +41,11 @@ void MetaGraphProxyTest::setUp() {
   graph->addEdge(n3,n1);
 }
 //==========================================================
-void MetaGraphProxyTest::tearDown() {
+void GraphPropertyTest::tearDown() {
   delete graph;
 }
 //==========================================================
-void MetaGraphProxyTest::testDestroyGraph() {
+void GraphPropertyTest::testDestroyGraph() {
   //build the hierarchy
   Graph * g1 = tlp::newCloneSubGraph(graph, "G1");
   Graph * g2 = tlp::newCloneSubGraph(graph, "G2");
@@ -65,7 +63,7 @@ void MetaGraphProxyTest::testDestroyGraph() {
   CPPUNIT_ASSERT_EQUAL(nullGraph, proxy1->getNodeValue(mnode1));
 }
 //==========================================================
-void MetaGraphProxyTest::testSetGet() {
+void GraphPropertyTest::testSetGet() {
   //build the hierarchy
   Graph * g1 = tlp::newCloneSubGraph(graph, "G1");
   Graph * g2 = tlp::newCloneSubGraph(graph, "G2");
@@ -82,7 +80,7 @@ void MetaGraphProxyTest::testSetGet() {
   CPPUNIT_ASSERT_EQUAL(g1, proxy1->getNodeValue(mnode1));
 }
 //==========================================================
-void MetaGraphProxyTest::testSetAll() {
+void GraphPropertyTest::testSetAll() {
   //build the hierarchy
   Graph * g1 = tlp::newCloneSubGraph(graph, "G1");
   Graph * g2 = tlp::newCloneSubGraph(graph, "G2");
