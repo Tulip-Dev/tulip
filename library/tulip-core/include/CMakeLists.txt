@@ -102,6 +102,8 @@ INSTALL(FILES
   tulip/cxx/PluginLister.cxx
   tulip/cxx/Reflect.cxx
   tulip/cxx/Graph.cxx
+  tulip/cxx/MutableContainer.cxx
+  tulip/cxx/MinMaxCalculator.cxx
 DESTINATION ${TulipIncludeInstallDir}/tulip/cxx/
 COMPONENT tulip_core_dev
 )
