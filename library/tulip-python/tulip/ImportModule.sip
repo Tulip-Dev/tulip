@@ -28,6 +28,7 @@
 namespace tlp {
 class PythonImportModule : public ImportModule {
 public :
+
 	PythonImportModule(AlgorithmContext context) : 
 		ImportModule(context){}
 	
@@ -35,7 +36,7 @@ public :
 		return importGraph();
 	}
 	
-	virtual bool importGraph() = 0;
+	virtual bool importGraph() = 0;	
 };
 }
 %End
@@ -59,9 +60,42 @@ public:
 class PythonImportModule : tlp::ImportModule {
 public:
 
+%Docstring
+Bases: :class:`tlp.WithParameter`
+
+This abstract class describes an import plugin.
+
+.. rubric:: class attributes
+
+.. py:attribute:: graph
+
+	An empty :class:`tlp.Graph` to populate when running the import process
+
+.. py:attribute:: dataSet
+
+	A :class:`tlp.DataSet` containing parameters for this import plugin, if any
+	
+.. py:attribute:: pluginProgress
+
+	A :class:`tlp.PluginProgress` to give feedback to the user. It can be :const:`None`, so use with caution	 
+
+.. rubric:: class methods
+
+%End
+
   PythonImportModule(tlp::AlgorithmContext context);
   
   virtual bool importGraph() = 0;
+%Docstring
+tlp.PythonImportModule.importGraph()
+
+This method is called to import a graph.
+Derived classes must implement it. A boolean must also be returned
+to indicate if the import was successful.
+
+:rtype: boolean
+%End  
+  
   
 };
 

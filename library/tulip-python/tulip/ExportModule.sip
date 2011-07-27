@@ -31,11 +31,11 @@ public :
 	PythonExportModule(AlgorithmContext context) : 
 		ExportModule(context){}
 	
-	bool exportGraph(std::ostream &,Graph *g) {
-		return exportGraph(g);
+	bool exportGraph(std::ostream &,Graph *) {
+		return exportGraph();
 	}
 	
-	virtual bool exportGraph(Graph *g) = 0;
+	virtual bool exportGraph() = 0;
 	
 };
 }
@@ -62,9 +62,41 @@ public:
 class PythonExportModule : tlp::ExportModule {
 public :
 
+%Docstring
+Bases: :class:`tlp.WithParameter`
+
+This abstract class describes an export plugin.
+
+.. rubric:: class attributes
+
+.. py:attribute:: graph
+
+	The :class:`tlp.Graph` to export
+
+.. py:attribute:: dataSet
+
+	A :class:`tlp.DataSet` containing parameters for this export plugin, if any
+	
+.. py:attribute:: pluginProgress
+
+	A :class:`tlp.PluginProgress` to give feedback to the user. It can be :const:`None`, so use with caution	 
+
+.. rubric:: class methods
+
+%End
+
 	PythonExportModule(tlp::AlgorithmContext context);
 		
-	virtual bool exportGraph(tlp::Graph *g) = 0;
+	virtual bool exportGraph() = 0;
+%Docstring
+tlp.PythonExportModule.exportGraph()
+
+This method is called to export the graph.
+Derived classes must implement it. A boolean must also be returned
+to indicate if the export was successful.
+
+:rtype: boolean
+%End 
 	
 };
 
