@@ -48,7 +48,7 @@ public:
 %Docstring
 tlp.node.isValid()
 
-Returns True if the node is a valid one, meaning it is attached to a graph.
+Returns :const:`True` if the node is a valid one, meaning it is attached to a graph.
 
 :rtype: boolean 
 %End

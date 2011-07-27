@@ -40,8 +40,8 @@ public:
 %Docstring
 tlp.ConnectedTest.isConnected(graph)
 
-Returns True if the graph is connected (ie. it exists an undirected path 
-between each pair of nodes), False otherwise.
+Returns :const:`True` if the graph is connected (ie. it exists an undirected path 
+between each pair of nodes), :const:`False` otherwise.
 
 :param graph: the graph on which to perform the connected test
 :type graph: :class:`tlp.Graph`

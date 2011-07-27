@@ -35,8 +35,8 @@ public:
 %Docstring
 tlp.BiconnectedTest.isBiconnected(graph)
 
-Returns True if the graph is biconnected (ie. one must remove at least two nodes in order
-to disconnect the graph), False otherwise.
+Returns :const:`True` if the graph is biconnected (ie. one must remove at least two nodes in order
+to disconnect the graph), :const:`False` otherwise.
 
 :param graph: the graph on which to perform the biconnected test
 :type graph: :class:`tlp.Graph`

@@ -73,7 +73,7 @@ Stopping a process does not revert changes.
 %Docstring
 tlp.PluginProgress.isPreviewMode()
 
-Returns True if the preview mode is enabled. 
+Returns :const:`True` if the preview mode is enabled. 
 The preview mode redraws the graph while applying the algorithm, making it slower.
 
 :rtype: boolean

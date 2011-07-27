@@ -35,8 +35,8 @@ public:
 %Docstring
 tlp.PlanarityTest.isPlanar(graph)
 
-Returns True if the graph is planar (i.e. the graph can be drawn in such a way that no edges cross each other),
-False otherwise.
+Returns :const:`True` if the graph is planar (i.e. the graph can be drawn in such a way that no edges cross each other),
+:const:`False` otherwise.
 
 :param graph: the graph on which to perform the planarity test
 :type graph: :class:`tlp.Graph`
@@ -49,7 +49,7 @@ False otherwise.
 %Docstring
 tlp.PlanarityTest.isPlanarEmbedding(graph)
 
-Returns True if the current embedding of the graph is planar, False otherwise.
+Returns :const:`True` if the current embedding of the graph is planar, :const:`False` otherwise.
 
 :param graph: the graph on which to perform the planar embedding test
 :type graph: :class:`tlp.Graph`
@@ -64,7 +64,7 @@ tlp.PlanarityTest.planarEmbedding(graph)
 
 Changes the order of edges around the nodes in order to make the
 embedding planar (the graph must be planar for that).
-Returns True if the graph is planar, False otherwise.
+Returns :const:`True` if the graph is planar, :const:`False` otherwise.
 
 :param graph: the graph on which to compute a planar embedding
 :type graph: :class:`tlp.Graph`

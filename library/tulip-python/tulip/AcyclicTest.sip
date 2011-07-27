@@ -66,7 +66,7 @@ public:
 %Docstring
 tlp.AcyclicTest.isAcyclic(graph)
 
-Returns true if the graph is acyclic, false if not.
+Returns :const:`True` if the graph is acyclic, :const:`False` if not.
 The result is cached (ie. the next call with the same graph is done in O(1) time)
 
 :param graph: the graph on which to perform the acyclic test

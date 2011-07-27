@@ -77,7 +77,7 @@ If the scale was previously configured the old configuration is lost.
 
 :param colors: The colors to use in the color scale.
 :type colors: list of :class:`tlp.Color`
-:param gradient: If set to True, the color scale is a gradient
+:param gradient: If set to :const:`True`, the color scale is a gradient
 :type gradient: boolean
 %End
 
@@ -107,7 +107,7 @@ tlp.ColorScale.getColorAtPos(pos)
 %Docstring
 tlp.ColorScale.isGradient()
 
-Returns True if the color scale is a gradient.
+Returns :const:`True` if the color scale is a gradient.
 
 :rtype: boolean 
 %End  

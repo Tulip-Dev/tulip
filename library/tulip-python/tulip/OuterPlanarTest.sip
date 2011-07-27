@@ -35,9 +35,9 @@ public:
 %Docstring
 tlp.OuterPlanarTest.isOuterPlanar(graph)
 
-Returns True if the graph is outerplanar (i.e. a graph with an embedding
+Returns :const:`True` if the graph is outerplanar (i.e. a graph with an embedding
 in the plane such that all vertices belong to the unbounded face of the embedding),
-False otherwise.
+:const:`False` otherwise.
 
 :param graph: the graph on which to perform the outerplanarity test
 :type graph: :class:`tlp.Graph`

@@ -35,8 +35,8 @@ public:
 %Docstring
 tlp.TreeTest.isTree(graph)
 
-Returns True if the graph is a rooted tree (i.e. a graph with one node designated as the root),
-False otherwise.
+Returns :const:`True` if the graph is a rooted tree (i.e. a graph with one node designated as the root),
+:const:`False` otherwise.
 
 :param graph: the graph on which to perform the tree test
 :type graph: :class:`tlp.Graph`
@@ -49,9 +49,9 @@ False otherwise.
 %Docstring
 tlp.TreeTest.isFreeTree(graph)
 
-Returns True if the graph is a topological tree
+Returns :const:`True` if the graph is a topological tree
 (i.e. if the graph was undirected, there would be no cycle),
-False otherwise.
+:const:`False` otherwise.
 
 :param graph: the graph on which to perform the free tree test
 :type graph: :class:`tlp.Graph`

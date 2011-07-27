@@ -122,7 +122,7 @@ tlp.PropertyInterface.setAllNodeStringValue(str)
 
 Clears all nodes registered values, and sets a new node default value
 in converting the given string representation of a value.
-Returns True if the given string representation has been successfully converted to a value, False otherwise.
+Returns :const:`True` if the given string representation has been successfully converted to a value, :const:`False` otherwise.
 
 :param str: a string representation of a value
 :type str: string
@@ -137,7 +137,7 @@ tlp.PropertyInterface.setAllEdgeStringValue(str)
 
 Clears all edges registered values, and sets a new edge default value
 in converting the given string representation of a value.
-Returns True if the given string representation has been successfully converted to a value, False otherwise.
+Returns :const:`True` if the given string representation has been successfully converted to a value, :const:`False` otherwise.
 
 :param str: a string representation of a value
 :type str: string
@@ -239,7 +239,7 @@ tlp.PropertyInterface.setNodeStringValue(node, str)
 
 Registers a new value for the given node in converting
 the given string representation.
-Returns True if the given string representation has been successfully converted to a value, False otherwise.
+Returns :const:`True` if the given string representation has been successfully converted to a value, :const:`False` otherwise.
 
 :param node: an existing node
 :type node: :class:`tlp.node`
@@ -265,7 +265,7 @@ tlp.PropertyInterface.setEdgeStringValue(edge, str)
 
 Registers a new value for the given edge in converting
 the given string representation.
-Returns True if the given string representation has been successfully converted to a value, False otherwise.
+Returns :const:`True` if the given string representation has been successfully converted to a value, :const:`False` otherwise.
 
 :param edge: an existing edge
 :type edge: :class:`tlp.edge`

@@ -36,8 +36,8 @@ public:
 %Docstring
 tlp.SimpleTest.isSimple(graph)
 
-Returns True if the graph is simple (i.e. it contains no self loops or parallel edges),
-False otherwise.
+Returns :const:`True` if the graph is simple (i.e. it contains no self loops or parallel edges),
+:const:`False` otherwise.
 
 :param graph: the graph on which to perform the simple test
 :type graph: :class:`tlp.Graph`

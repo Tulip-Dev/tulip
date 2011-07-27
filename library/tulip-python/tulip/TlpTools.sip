@@ -84,7 +84,7 @@ bool loadPlugin(const std::string &filename, tlp::PluginLoader *plug=0);
 tlp.loadPlugin(filename)
 
 Loads a C++ plugin from a specific shared library.
-Returns True if the plugin was correctly loaded.
+Returns :const:`True` if the plugin was correctly loaded.
 
 :param filename: the path to the shared library containing the Tulip plugin (file extension : .so on linux, .dylib on mac, .dll on windows)
 :type filename: string

@@ -50,7 +50,7 @@ public:
 %Docstring
 tlp.edge.isValid()
 
-Returns True if the edge is a valid one, meaning it is attached to a graph.
+Returns :const:`True` if the edge is a valid one, meaning it is attached to a graph.
 
 :rtype: boolean 
 %End
