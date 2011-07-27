@@ -50,7 +50,7 @@ public :
   /**
    * @brief Constructs an algorithm and initializes members from the AlgorithmContext.
    *
-   * @param context The context this algorithm runs in, containing the graph, a dataSet for the arameters, and a pluginProgress
+   * @param context The context this algorithm runs in, containing the graph, a DataSet for the parameters, and a PluginProgress
    * to give feedback to the user about the tasks the algorithm is performing.
    */
   Algorithm (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet){}
@@ -58,11 +58,11 @@ public :
   /**
    * @brief Runs the algorithm on the context that was specified during construction.
    *
-   * @return bool Whether the algorithm was sucessfull or not.
+   * @return bool Whether the algorithm was successful or not.
    */
   virtual bool run() = 0;
   /**
-   * @brief Checks if the algorithm can run on the context it was gieven.
+   * @brief Checks if the algorithm can run on the context it was given.
    *
    * @return Whether the algorithm can be applied or not.
    */
@@ -70,15 +70,15 @@ public :
   virtual void reset() {}  
 
   /**
-   * @brief The Graph this algorithm will be run on. Retrieved from the context at construction.
+   * @brief The graph this algorithm will be run on. Retrieved from the context at construction.
    */
   Graph *graph;
   /**
-   * @brief A pluginProgress to give feedback to the user, retrieved from the context. It can be a NULL pointer, so use with caution.
+   * @brief A PluginProgress to give feedback to the user, retrieved from the context. It can be a NULL pointer, so use with caution.
    */
   PluginProgress *pluginProgress;
   /**
-   * @brief A DataSet containing parameters for this algorithm, if any. Retrived from the context at construction.
+   * @brief A DataSet containing parameters for this algorithm, if any. Retrieved from the context at construction.
    */
   DataSet *dataSet;
 };
@@ -87,7 +87,7 @@ public :
  * @brief A base class for algorithm plug-ins factory.
  * Each plug-in declares (through a macro) its own factory.
  * The factory the registers itself in the Tulip plug-in system (through the static initFactory() method when the library is loaded..
- * The actual registration is delegated to a TemplateFactory to factorize code.
+ * The actual registration is delegated to a TemplateFactory for code factorization.
  */
 class AlgorithmFactory:public PluginInfoInterface{
 public:
@@ -96,7 +96,7 @@ public:
    */
   static TLP_SCOPE TemplateFactory<AlgorithmFactory, Algorithm,AlgorithmContext > *factory;
   /**
-   * @brief This static initilization is called when the plug-in library is loaded, and registers the new plug-in in the
+   * @brief This static initialization is called when the plug-in library is loaded, and registers the new plug-in in the
    * Tulip plug-in system.
    */
   static void initFactory() {
