@@ -189,8 +189,8 @@ public:
     int i=0;
     Iterator<Graph *> *it = g->getSubGraphs();
     while (it->hasNext()) {
+      Graph *result = it->next();
       if (i++ == n) {
-        Graph *result = it->next();
         delete it;
         return result;
       }
@@ -198,19 +198,7 @@ public:
     delete it;
     return NULL;
     */
-  virtual Graph *getNthSubGraph(int n) const {
-    int i=0;
-    Iterator<Graph *> *it = getSubGraphs();
-    while (it->hasNext()) {
-      if (i++ == n) {
-        Graph *result = it->next();
-        delete it;
-        return result;
-      }
-    }
-    delete it;
-    return NULL;
-  }
+  virtual Graph *getNthSubGraph(unsigned int n) const;
   /**
     Return the number of direct sub-graphs
     */
