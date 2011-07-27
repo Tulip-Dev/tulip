@@ -499,76 +499,70 @@ void GlQuadTreeLODCalculator::update(PropertyInterface *property) {
 
 void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
   const GlSceneEvent *sceneEv = dynamic_cast<const GlSceneEvent *>(&ev);
-
+  
   if(sceneEv) {
     setHaveToCompute();
   }
-  else {
-    const Camera *camera=dynamic_cast<Camera *>(ev.sender());
-
-    if (camera) {
-      if (ev.type()==Event::TLP_DELETE) {
-        destroy(camera);
+  else if (typeid(ev) == typeid(GraphEvent)) {
+    const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&ev);
+    switch(graphEvent->getType()) {
+      case GraphEvent::TLP_ADD_NODE:
+      case GraphEvent::TLP_ADD_EDGE:
+      case GraphEvent::TLP_DEL_NODE:
+      case GraphEvent::TLP_DEL_EDGE:
+        setHaveToCompute();
+        break;
+      case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
+      case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
+        const std::string name = graphEvent->getPropertyName();
+        if(name == inputData->getElementLayoutPropName() || name == inputData->getElementSizePropName()) {
+          setHaveToCompute();
+          addObservers();
+        }
+        break;
       }
-    }
-    else {
-      if (typeid(ev) == typeid(GraphEvent) ||
-          (ev.type() == Event::TLP_DELETE &&
-           dynamic_cast<Graph*>(ev.sender())))
-        GraphObserver::treatEvent(ev);
-      else
-        PropertyObserver::treatEvent(ev);
+      default:
+        break;
     }
   }
-}
+  else if(typeid(ev) == typeid(PropertyEvent)) {
+    const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&ev);
+    PropertyInterface* property = propertyEvent->getProperty();
 
-void GlQuadTreeLODCalculator::afterSetNodeValue(PropertyInterface *property,const node) {
-  update(property);
-}
-void GlQuadTreeLODCalculator::afterSetEdgeValue(PropertyInterface *property,const edge) {
-  update(property);
-}
-void GlQuadTreeLODCalculator::afterSetAllNodeValue(PropertyInterface *property) {
-  update(property);
-}
-void GlQuadTreeLODCalculator::afterSetAllEdgeValue(PropertyInterface *property) {
-  update(property);
-}
-
-void GlQuadTreeLODCalculator::addLocalProperty(Graph*, const std::string &name) {
-  if(name==inputData->getElementLayoutPropName() || name==inputData->getElementSizePropName()) {
-    setHaveToCompute();
-    addObservers();
+    switch(propertyEvent->getType()) {
+      case PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE:
+      case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
+      case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
+      case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
+        update(property);
+        break;
+      default:
+        break;
+    }
   }
-}
-void GlQuadTreeLODCalculator::delLocalProperty(Graph*, const std::string &name) {
-  if(name==inputData->getElementLayoutPropName() || name==inputData->getElementSizePropName()) {
-    setHaveToCompute();
-    addObservers();
+  else if (ev.type()==Event::TLP_DELETE) {
+    if (dynamic_cast<Camera*>(ev.sender())) {
+      std::vector<std::pair<std::string, GlLayer*> > *layerList=glScene->getLayersList();
+      
+      clearCamerasObservers();
+      
+      cameras.clear();
+      
+      for(std::vector<std::pair<std::string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
+        if(layerToCamera.find((*it).second)==layerToCamera.end())
+          continue;
+        
+        (*layerToCamera.find((*it).second)).second.first=&(*it).second->getCamera();
+        cameras.push_back(&(*it).second->getCamera());
+      }
+      
+      initCamerasObservers();
+    }
+    if (dynamic_cast<tlp::Graph*>(ev.sender())) {
+      clear();
+      setInputData(NULL);
+    }
   }
-}
-
-void GlQuadTreeLODCalculator::destroy(Graph *) {
-  clear();
-  setInputData(NULL);
-}
-
-void GlQuadTreeLODCalculator::destroy(const Camera *) {
-  std::vector<std::pair<std::string, GlLayer*> > *layerList=glScene->getLayersList();
-
-  clearCamerasObservers();
-
-  cameras.clear();
-
-  for(std::vector<std::pair<std::string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
-    if(layerToCamera.find((*it).second)==layerToCamera.end())
-      continue;
-
-    (*layerToCamera.find((*it).second)).second.first=&(*it).second->getCamera();
-    cameras.push_back(&(*it).second->getCamera());
-  }
-
-  initCamerasObservers();
 }
 
 void GlQuadTreeLODCalculator::initCamerasObservers() {

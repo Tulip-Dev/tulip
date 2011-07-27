@@ -38,8 +38,7 @@ class GlScene;
 /**
  * Class use to compute bounding boxs of a vector of GlEntity
  */
-class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator,
-  private GraphObserver, private PropertyObserver, private Observable {
+class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, private Observable {
 
 public:
 
@@ -75,27 +74,6 @@ protected :
 
   void update(PropertyInterface *property);
   void treatEvent(const Event &ev);
-  void observableDestroyed(Observable *) {}
-  void afterSetNodeValue(PropertyInterface*,const node n);
-  void afterSetEdgeValue(PropertyInterface*,const edge e);
-  void afterSetAllNodeValue(PropertyInterface*);
-  void afterSetAllEdgeValue(PropertyInterface*);
-  void addNode(Graph *,const node ) {
-    setHaveToCompute();
-  }
-  void addEdge(Graph *,const edge ) {
-    setHaveToCompute();
-  }
-  void delNode(Graph *,const node ) {
-    setHaveToCompute();
-  }
-  void delEdge(Graph *,const edge ) {
-    setHaveToCompute();
-  }
-  void addLocalProperty(Graph*, const std::string &name);
-  void delLocalProperty(Graph*, const std::string &name);
-  void destroy(Graph *);
-  void destroy(const Camera *);
 
   void removeObservers();
   void addObservers();
