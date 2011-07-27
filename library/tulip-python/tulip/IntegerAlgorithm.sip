@@ -38,6 +38,19 @@ class IntegerAlgorithm : tlp::PropertyAlgorithm {
 #include <tulip/IntegerAlgorithm.h>
 %End
 public:
+
+%Docstring
+Bases: :class:`tlp.PropertyAlgorithm`
+
+This class is the base interface for integer plugins.
+
+.. rubric:: class attributes
+
+.. py:attribute:: integerResult
+
+	The result of the algorithm must be stored in this :class:`tlp.IntegerProperty`.
+%End
+
 	virtual ~IntegerAlgorithm();
 	tlp::IntegerProperty *integerResult;
 protected:

@@ -38,6 +38,19 @@ class ColorAlgorithm : tlp::PropertyAlgorithm {
 #include <tulip/ColorAlgorithm.h>
 %End
 public:
+
+%Docstring
+Bases: :class:`tlp.PropertyAlgorithm`
+
+This class is the base interface for color plugins.
+
+.. rubric:: class attributes
+
+.. py:attribute:: colorResult
+
+	The result of the algorithm must be stored in this :class:`tlp.ColorProperty`.
+%End
+
 	virtual ~ColorAlgorithm();
 	tlp::ColorProperty *colorResult;
 protected:

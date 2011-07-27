@@ -34,14 +34,21 @@ typedef tlp::PropertyFactory<tlp::DoubleAlgorithm> DoubleAlgorithmFactory;
 
 
 namespace tlp {
+
 class DoubleAlgorithm: tlp::PropertyAlgorithm {
 %TypeHeaderCode
 #include <tulip/DoubleAlgorithm.h>
 %End
+
 public:
+
+// Setting a docstring here makes SIP failed to generate a compilable source code (bug ?)
+
 	virtual ~DoubleAlgorithm();
 	tlp::DoubleProperty *doubleResult;
+	
 protected:
+
 	DoubleAlgorithm(const tlp::PropertyContext &context);
 	
 };
@@ -73,6 +80,3 @@ public:
 };
 
 };
-
-
-

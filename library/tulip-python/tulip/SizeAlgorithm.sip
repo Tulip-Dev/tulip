@@ -38,6 +38,19 @@ class SizeAlgorithm : tlp::PropertyAlgorithm {
 #include <tulip/SizeAlgorithm.h>
 %End
 public:
+
+%Docstring
+Bases: :class:`tlp.PropertyAlgorithm`
+
+This class is the base interface for size plugins.
+
+.. rubric:: class attributes
+
+.. py:attribute:: sizeResult
+
+	The result of the algorithm must be stored in this :class:`tlp.SizeProperty`.
+%End
+
 	virtual ~SizeAlgorithm();
 	tlp::SizeProperty *sizeResult;
 protected:

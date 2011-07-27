@@ -38,6 +38,19 @@ class BooleanAlgorithm : tlp::PropertyAlgorithm {
 #include <tulip/BooleanAlgorithm.h>
 %End
 public:
+
+%Docstring
+Bases: :class:`tlp.PropertyAlgorithm`
+
+This class is the base interface for selection plugins.
+
+.. rubric:: class attributes
+
+.. py:attribute:: booleanResult
+
+	The result of the algorithm must be stored in this :class:`tlp.BooleanProperty`.
+%End
+
 	virtual ~BooleanAlgorithm();
 	tlp::BooleanProperty *booleanResult;
 protected:

@@ -31,7 +31,7 @@ class Algorithm : tlp::WithParameter, tlp::WithDependency {
 public:
 
 %Docstring
-Bases: :class:`tlp.WithParameter`, :class:`tlp.WithDependency`
+Bases: :class:`tlp.WithParameter`
 
 This abstract class describes a general algorithm plugin.
 Basic functionality consists in checking the algorithm can run on the current Graph 
@@ -51,7 +51,7 @@ if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, .
 	
 .. py:attribute:: pluginProgress
 
-	A :class:`tlp.PluginProgress` to give feedback to the user. It can be None, so use with caution.	 
+	A :class:`tlp.PluginProgress` to give feedback to the user. It can be :const:`None`, so use with caution.	 
 
 .. rubric:: class methods
 

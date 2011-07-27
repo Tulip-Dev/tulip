@@ -39,6 +39,19 @@ class LayoutAlgorithm: tlp::PropertyAlgorithm {
 #include <tulip/LayoutAlgorithm.h>
 %End
 public:
+
+%Docstring
+Bases: :class:`tlp.PropertyAlgorithm`
+
+This class is the base interface for layout plugins.
+
+.. rubric:: class attributes
+
+.. py:attribute:: layoutResult
+
+	The result of the algorithm must be stored in this :class:`tlp.LayoutProperty`.
+%End
+
 	virtual ~LayoutAlgorithm();
 	tlp::LayoutProperty *layoutResult;
 protected:
