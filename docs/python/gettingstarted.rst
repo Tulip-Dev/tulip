@@ -3,6 +3,8 @@
 Getting started
 ===============
 
+.. _usingBindingsInTulipGUI:
+
 Using the bindings from the Tulip Software GUI
 -----------------------------------------------
 
@@ -24,7 +26,7 @@ and can be accessed through the "View" menu. The interface of this component is 
    Figure 1: Screenshot of the "Script editor" tab from the Tulip Python Script view.
 
 	* the "Modules editor" tab (see :ref:`Figure 2`) that enables to write and edit 
-	  Python modules that can be immediatly imported in the main script.
+	  Python modules that can be immediately imported in the main script.
 
 .. figure:: pythonScriptViewGUI2.png
    :align: center
@@ -33,14 +35,14 @@ and can be accessed through the "View" menu. The interface of this component is 
 
 	* the "Interactive session" tab (see :ref:`Figure 3`) that provides an interactive
           Python shell. The graph currently loaded in Tulip is wrapped to a :class:`tlp.Graph`
-          object and bound to the "graph" variate.
+          object and bound to the "graph" variable.
 
 .. figure:: pythonScriptViewGUI3.png
    :align: center
 
    Figure 3: Screenshot of the "Interactive session" tab from the Tulip Python Script view.
 
-       * The "Tulip plugin editor" tab (see :ref:`Figure 4`) that allows to develop Tulip plugins in Python and registers them immediatly in the interface to test them.
+       * The "Tulip plugin editor" tab (see :ref:`Figure 4`) that allows to develop Tulip plugins in Python and registers them immediately in the interface to test them.
          Different kinds of plugins can be develop : General Algorithms, Property Algorithms, Import plugins and Export plugins. 
 
 .. figure:: pythonScriptViewGUI4.png
@@ -50,13 +52,14 @@ and can be accessed through the "View" menu. The interface of this component is 
 
 .. warning:: If you installed Tulip from a bundle and want to import external Python modules from the Python Script view, proceed the following way according to your sytem :
 
-      * Windows : Simply install Python 2.7 (32 bits version) from the installer dowloadable from the Python website.
+      * Windows : Simply install Python 2.7 (32 bits version) from the installer downloadable from the Python website.
 
       * Mac OS : Nothing to do, you should be able to import all the modules installed on the system.
 
       * Linux : Unfortunately, our linux bundle does not allow to import the majority of Python external modules as the Python library included in the bundle lacks some important built-in modules
-	(like math, cPickle, ...). The only solution you have is to compile Tulip yourself (don't forget to install the Python devlopment package on your sytem to be able to build the bindings).
+	(like math, cPickle, ...). The only solution you have is to compile Tulip yourself (don't forget to install the Python development package on your system to be able to build the bindings).
 
+.. _usingBindingsInShell:
 
 Using the bindings from the Python Interpreter
 ----------------------------------------------
@@ -112,7 +115,7 @@ at the shell prompt to perform that task::
 	>>> tlp.initTulipLib("<path_to_tulip_binary>")
 	>>> tlp.loadPlugins()
 
-  The path to the Tulip binary is explicited below according to your system:
+  The path to the Tulip binary is given below according to your system:
 
 	* Linux and Windows : <tulip_install_dir>/bin
 

@@ -29,8 +29,8 @@ Graph management
 
 .. autofunction:: tulip::tlp.removeFromGraph
 
-Graph measures
-^^^^^^^^^^^^^^
+Graph measures and drawing tools
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autofunction:: tulip::tlp.averagePathLength
 
@@ -47,6 +47,12 @@ Graph measures
 .. autofunction:: tulip::tlp.maxDistance
 
 .. autofunction:: tulip::tlp.reachableNodes
+
+.. autofunction:: tulip::tlp.computeBoundingBox
+
+.. autofunction:: tulip::tlp.computeBoundingRadius
+
+.. autofunction:: tulip::tlp.computeConvexHull
 
 Plugins Management
 ^^^^^^^^^^^^^^^^^^
@@ -359,6 +365,10 @@ Tulip datatypes
 .. autoclass:: tulip::tlp.Coord
 	:members:
 	:undoc-members:
+
+.. autoclass:: tulip::tlp.BoundingBox
+	:members:
+	:undoc-members:
 	
 .. autoclass:: tulip::tlp.Size
 	:members:
@@ -367,10 +377,21 @@ Tulip datatypes
 .. autoclass:: tulip::tlp.Color
 	:members:
 	:undoc-members:
+	
+.. autoclass:: tulip::tlp.ColorScale
+	:members:
+	:undoc-members:	
+	
+.. autoclass:: tulip::tlp.StringCollection
+	:members: at, empty, getCurrent, getCurrentString, push_back, setCurrent, setCurrent, size	
 
 .. autoclass:: tulip::tlp.DataSet
 	:members:
 	:undoc-members:		
+
+.. autoclass:: tulip::tlp.PluginProgress
+	:members:
+	:undoc-members:
 
 Graph properties classes
 ----------------------------
@@ -466,6 +487,66 @@ Graph properties classes
 	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
 	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,  
 	          pushBackEdgeEltValue, popBackEdgeEltValue, resizeEdgeValue, resizeEdgeValue
+
+Tulip plugins classes
+----------------------
+
+.. autoclass:: tulip::tlp.WithParameter
+	:members:
+	:undoc-members:
+
+.. autoclass:: tulip::tlp.Algorithm
+	:members:
+	:undoc-members:
+	
+.. autoclass:: tulip::tlp.PropertyAlgorithm
+	:members:
+	:undoc-members:
+	
+.. autoclass:: tulip::tlp.BooleanAlgorithm
+	:members:
+	:undoc-members:
+	
+.. autoclass:: tulip::tlp.ColorAlgorithm
+	:members:
+	:undoc-members:			
+
+.. 
+	Don't know why but setting a docstring in DoubleAlgorithm.sip
+	makes SIP failed to generate a valid compilable source code (bug ?).
+	So don't use autodoc for this class. 
+	
+.. class:: tlp.DoubleAlgorithm
+
+	Bases: :class:`tlp.PropertyAlgorithm`
+
+	This class is the base interface for metric plugins.
+
+	.. rubric:: class attributes
+
+	.. py:attribute:: doubleResult
+
+		The result of the algorithm must be stored in this :class:`tlp.DoubleProperty`.
+	
+.. autoclass:: tulip::tlp.IntegerAlgorithm
+	:members:
+	:undoc-members:	
+	
+.. autoclass:: tulip::tlp.LayoutAlgorithm
+	:members:
+	:undoc-members:	
+	
+.. autoclass:: tulip::tlp.SizeAlgorithm
+	:members:
+	:undoc-members:	
+
+.. autoclass:: tulip::tlp.PythonImportModule
+	:members:
+	:undoc-members:
+	
+.. autoclass:: tulip::tlp.PythonExportModule
+	:members:
+	:undoc-members:	
 
 Graph test classes
 -------------------
