@@ -188,7 +188,7 @@ Returns an iterator on all the sub-graphs of the graph.
 %Docstring
 tlp.Graph.isSubGraph(graph)
 
-Returns True if the graph argument is a direct sub-graph of the graph.
+Returns :const:`True` if the graph argument is a direct sub-graph of the graph.
 
 :param graph: a graph
 :type graph: :class:`tlp.Graph`
@@ -201,7 +201,7 @@ Returns True if the graph argument is a direct sub-graph of the graph.
 %Docstring
 tlp.Graph.isDescendantGraph(graph)
 
-Returns True if the graph argument is a descendant of this graph.
+Returns :const:`True` if the graph argument is a descendant of this graph.
 
 :param graph: a graph
 :type graph: :class:`tlp.Graph`
@@ -281,7 +281,7 @@ to maintain the sub-graph relation between graphs.
 
 :param node: the node to delete
 :type node: :class:`tlp.node` 
-:param deleteInAllGraphs: if True, remove the node in all the hierarchy of graphs
+:param deleteInAllGraphs: if :const:`True`, remove the node in all the hierarchy of graphs
 :type deleteInAllGraphs: boolean
 :throws: an exception if the node does not belong to the graph
 %End	
@@ -359,7 +359,7 @@ of the graph to maintain the sub-graph relation between graphs. The ordering of 
 
 :param edge: the edge to delete
 :type edge: :class:`tlp.edge` 
-:param deleteInAllGraphs: if True, remove the edge in all the hierarchy of graphs
+:param deleteInAllGraphs: if :const:`True`, remove the edge in all the hierarchy of graphs
 :type deleteInAllGraphs: boolean
 :throws: an exception if the edge does not belong to the graph
 %End	 
@@ -1027,7 +1027,7 @@ Returns the opposite node of the edge for the given node.
 %Docstring
 tlp.Graph.isElement(node)
 
-Returns true if the node is an element of the graph.
+Returns :const:`True` if the node is an element of the graph.
 
 :param node: a node
 :type node: :class:`tlp.node`
@@ -1040,7 +1040,7 @@ Returns true if the node is an element of the graph.
 %Docstring
 tlp.Graph.isElement(edge)
 
-Returns true if the edge is an element of the graph.
+Returns :const:`True` if the edge is an element of the graph.
 
 :param edge: an edge
 :type edge: :class:`tlp.edge`
@@ -1053,7 +1053,7 @@ Returns true if the edge is an element of the graph.
 %Docstring
 tlp.Graph.isMetaNode(node)
 
-Returns true if the node is a meta-node.
+Returns :const:`True` if the node is a meta-node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.edge`
@@ -1075,7 +1075,7 @@ Returns true if the node is a meta-node.
 %Docstring
 tlp.Graph.isMetaEdge(edge)
 
-Returns true if the edge is a meta-edge.
+Returns :const:`True` if the edge is a meta-edge.
 
 :param edge: an existing edge of the graph
 :type node: :class:`tlp.edge`
@@ -1715,7 +1715,7 @@ If the property does not exist it returns :const:`None`.
 %Docstring
 tlp.Graph.existProperty(name)
 
-Returns True if a property of that name exists in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+Returns :const:`True` if a property of that name exists in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
 
 :param name: the name of the property
 :type name: string
@@ -1728,7 +1728,7 @@ Returns True if a property of that name exists in the graph properties pool or i
 %Docstring
 tlp.Graph.existLocalProperty(name)
 
-Returns True if a property of that name exists in the graph properties pool.
+Returns :const:`True` if a property of that name exists in the graph properties pool.
 
 :param name: the name of the property
 :type name: string
@@ -2116,7 +2116,7 @@ The next updates will be recorded in order to be undone at the
 next call of the :meth:`tlp.Graph.pop` method. Be careful that all 
 the updates are undone except those who affect the ordering of edges.
 
-:param unpopAllowed: If set to False, the next updates could not be replayed after undone. If some previously undonevupdates exist they could no longer be replayed.
+:param unpopAllowed: If set to :const:`False`, the next updates could not be replayed after undone. If some previously undonevupdates exist they could no longer be replayed.
 :type unpopAllowed: boolean
 %End	
 	
@@ -2129,7 +2129,7 @@ tlp.Graph.pop([unpopAllowed=True])
 Restores a previously marked state of the current root graph
 in the hierarchy. The restored state does not remain marked.
 
-:param unpopAllowed: If set to False, the undone updates could not be replayed.
+:param unpopAllowed: If set to :const:`False`, the undone updates could not be replayed.
 :type unpopAllowed: boolean
 %End
 
@@ -2149,7 +2149,7 @@ and replays the last updates previously undone.
 %Docstring
 tlp.Graph.canPop()
 
-Returns True if a previously marked state can be restored.
+Returns :const:`True` if a previously marked state can be restored.
 
 :rtype: boolean
 %End
@@ -2160,7 +2160,7 @@ Returns True if a previously marked state can be restored.
 %Docstring
 tlp.Graph.canUnpop()
 
-Returns True if some previously undone updates can be replayed.
+Returns :const:`True` if some previously undone updates can be replayed.
 
 :rtype: boolean
 %End
@@ -2171,7 +2171,7 @@ Returns True if some previously undone updates can be replayed.
 %Docstring
 tlp.Graph.canUnpop()
 
-Returns True if the current state updates can be undone then replayed.
+Returns :const:`True` if the current state updates can be undone then replayed.
 
 :rtype: boolean
 %End	
@@ -2244,7 +2244,7 @@ Warning: this method will failed when called on the root graph.
 
 :param metaNode: the meta-node to open
 :type metaNode: :class:`tlp.node`
-:param updateProperties: If True, open meta node will update inner nodes layout, color, size, etc...
+:param updateProperties: If :const:`True`, open meta node will update inner nodes layout, color, size, etc...
 :type updateProperties: boolean
 %End
 	
@@ -2592,7 +2592,7 @@ tlp::Graph *loadGraph(const std::string &filename);
 tlp.loadGraph(filename)
 
 Loads a graph in the tlp format from a file (extension can be .tlp or .tlp.gz).
-Returns a new graph or None if the import fails.
+Returns a new graph or :const:`None` if the import fails.
 
 :param filename: the path to the tlp file
 :type filename: string
@@ -2607,7 +2607,7 @@ bool saveGraph(tlp::Graph *, const std::string &filename);
 tlp.saveGraph(graph, filename)
 
 Saves a graph to a file in the tlp format. Extension of the destination file can be either 
-.tlp (raw export) or .tlp.gz (compressed export). Returns True if the graph has been 
+.tlp (raw export) or .tlp.gz (compressed export). Returns :const:`True` if the graph has been 
 successfully saved.
 
 :param graph: the graph to export
