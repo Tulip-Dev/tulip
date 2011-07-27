@@ -81,11 +81,17 @@ public:
 
 	/**
 	 * Sets the current selected string index.
+	 * Returns true if the provided index is valid.
+	 *
+	 * @param param a valid index in the string collection
 	 */
 	bool setCurrent(unsigned int param);
 
 	/**
 	 * Sets the current selected string value.
+	 * Returns true if the string value exists in the collection.
+	 *
+	 * @param param a string value from the collection
 	 */
 	bool setCurrent(std::string param);
 
