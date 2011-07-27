@@ -52,7 +52,7 @@ public :
   /**
    * @brief Builds a new plug-in that modifies a single property.
    *
-   * @param context The context containing the Graph and PropertyInterface this plug-in has access to,a s well as a PluginProgress.
+   * @param context The context containing the graph and PropertyInterface this plug-in has access to, as well as a PluginProgress.
    **/
   PropertyAlgorithm(const tlp::PropertyContext & context) :
     graph(context.graph),
@@ -68,14 +68,14 @@ public :
    * Keep in mind that Tulip can handle very large graphs.
    * The PluginProgress should also be used to report errors, if any.
    *
-   * @return bool Whether the algorithm execution was sucessfull or not.
+   * @return bool Whether the algorithm execution was successful or not.
    **/
   virtual bool run() {
     return true;
   }
 
   /**
-   * @brief Checks whether the algorithm can ru on this Graph or not.
+   * @brief Checks whether the algorithm can be applied on this graph or not.
    * If not, the reason why should be reported through the PluginProgress.
    *
    * @param errorMessage A string whose value will be modified to an error message, if the check fails.
