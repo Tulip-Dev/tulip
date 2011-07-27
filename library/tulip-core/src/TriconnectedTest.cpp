@@ -28,14 +28,14 @@ TriconnectedTest * TriconnectedTest::instance=0;
 TriconnectedTest::TriconnectedTest() {
 }
 //=================================================================
-bool TriconnectedTest::isTriconnected(Graph *graph) {
+bool TriconnectedTest::isTriconnected(Graph* graph) {
   if (instance==0)
     instance=new TriconnectedTest();
 
   return instance->compute(graph);
 }
 //=================================================================
-bool TriconnectedTest::compute(Graph *graph) {
+bool TriconnectedTest::compute(Graph* graph) {
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     return resultsBuffer[(unsigned long)graph];
 
@@ -71,36 +71,43 @@ bool TriconnectedTest::compute(Graph *graph) {
   return result;
 }
 //=================================================================
-void TriconnectedTest::addEdge(Graph *graph,const edge) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (resultsBuffer[(unsigned long)graph]) return;
-
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
-void TriconnectedTest::delEdge(Graph *graph,const edge) {
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
-void TriconnectedTest::reverseEdge(Graph *,const edge) {
-}
-//=================================================================
-void TriconnectedTest::addNode(Graph *graph,const node) {
-  resultsBuffer[(unsigned long)graph]=false;
-}
-//=================================================================
-void TriconnectedTest::delNode(Graph *graph,const node) {
-  graph->removeGraphObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
-void TriconnectedTest::destroy(Graph *graph) {
-  resultsBuffer.erase((unsigned long)graph);
-}
-//=================================================================
 void TriconnectedTest::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
+  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+  
+  if (gEvt) {
+    Graph* graph = gEvt->getGraph();
+    
+    switch(gEvt->getType()) {
+      case GraphEvent::TLP_ADD_EDGE:
+        if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+          if (resultsBuffer[(unsigned long)graph]) return;
+          
+          graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      case GraphEvent::TLP_DEL_EDGE:
+        graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      case GraphEvent::TLP_DEL_NODE:
+        graph->removeGraphObserver(this);
+        resultsBuffer.erase((unsigned long)graph);
+        break;
+      case GraphEvent::TLP_ADD_NODE:
+        resultsBuffer[(unsigned long)graph]=false;
+        break;
+      default:
+        //we don't care about other events
+        break;
+    }
+  }
+  else {
+    // From my point of view the use of dynamic_cast should be correct
+    // but it fails, so I use reinterpret_cast (pm)
+    Graph* graph = reinterpret_cast<Graph *>(evt.sender());
+    
+    if (graph && evt.type() == Event::TLP_DELETE)
+      resultsBuffer.erase((unsigned long)graph);
+  }
 }
 
