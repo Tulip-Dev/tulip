@@ -7,6 +7,7 @@
 #include <tulip/Graph.h>
 
 //FIXME: remove me
+#include <QtCore/QTimer>
 
 using namespace tlp;
 
@@ -21,15 +22,6 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _mainWindow->show();
 
   // Open project with model
-  Graph *g = tlp::newGraph();
-  g->addSubGraph()->setAttribute<std::string>("name","sg1");
-  g->addSubGraph()->addSubGraph()->addSubGraph()->setAttribute<std::string>("name","sg2");
-  _graphs->addGraph(g);
-
-  Graph *g1 = tlp::newGraph();
-  g1->addSubGraph()->setAttribute<std::string>("name","sg1");
-  g1->addSubGraph()->addSubGraph()->addSubGraph()->setAttribute<std::string>("name","sg2");
-  _graphs->addGraph(g1);
 
   _graphsEditor = new GraphHierarchiesEditor(_graphs,_mainWindow);
   connect(_ui->graphsHierarchyManagerButton,SIGNAL(clicked()),this,SLOT(showGraphHierarchyEditor()));

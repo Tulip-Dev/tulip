@@ -24,6 +24,8 @@ public:
 
 public slots:
   void showGraphHierarchyEditor();
+
+  void prout();
 };
 
 #endif // GRAPHPERSPECTIVE_H

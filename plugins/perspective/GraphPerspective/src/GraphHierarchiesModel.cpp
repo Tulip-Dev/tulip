@@ -3,6 +3,11 @@
 #include <tulip/Graph.h>
 #include <QtGui/QFont>
 #include <QtCore/QSize>
+
+//FIXME: remove me
+#include <QtCore/QDebug>
+
+using namespace std;
 using namespace tlp;
 
 #define NAME_SECTION 0
@@ -11,6 +16,14 @@ using namespace tlp;
 #define EDGES_SECTION 3
 
 GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): QAbstractItemModel(parent) {
+}
+
+GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy): QAbstractItemModel(copy.QObject::parent()), tlp::Observable() {
+  for (int i=0;i < copy.size();++i)
+    addGraph(copy[i]);
+}
+
+GraphHierarchiesModel::~GraphHierarchiesModel() {
 }
 
 QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex &parent) const {
@@ -117,22 +130,51 @@ QVariant GraphHierarchiesModel::headerData(int section, Qt::Orientation orientat
 }
 
 void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
+  emit layoutAboutToBeChanged();
   if (_graphs.contains(g))
     return;
-
   Graph *i;
-  foreach(i,_graphs)
-
-  if (i->isDescendantGraph(g))
-    return;
-
+  foreach(i,_graphs) {
+    if (i->isDescendantGraph(g))
+      return;
+  }
   _graphs.push_back(g);
-  emit dataChanged(createIndex(_graphs.size()-1,0,g),createIndex(_graphs.size()-1,3,g));
+  g->addListener(this);
+  emit layoutChanged();
 }
 
 void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
+  emit layoutAboutToBeChanged();
   if (_graphs.contains(g))
     _graphs.removeAll(g);
+  emit layoutChanged();
+}
 
-  emit dataChanged(createIndex(0,0,_graphs[0]),createIndex(_graphs.size()-1,3,_graphs[_graphs.size()-1]));
+//void GraphHierarchiesModel::treatEvent(const std::vector<tlp::Event> &events) {
+//  emit layoutAboutToBeChanged();
+//  for(vector<Event>::const_iterator it = events.begin(); it != events.end();++it) {
+//    Event e = *it;
+//    if (e.type() == Event::TLP_DELETE) {
+//      Graph *g = dynamic_cast<tlp::Graph *>(e.sender());
+//      _graphs.removeAll(g);
+//    }
+//  }
+//  emit layoutChanged();
+//}
+
+void GraphHierarchiesModel::treatEvent(const Event &e) {
+  Graph *g = dynamic_cast<tlp::Graph *>(e.sender());
+  assert(g);
+  if (e.type() == Event::TLP_DELETE) {
+    emit layoutAboutToBeChanged();
+    _graphs.removeAll(g);
+    emit layoutChanged();
+  }
+  else if (e.type() == Event::TLP_MODIFICATION) {
+    const GraphEvent *ge = dynamic_cast<const tlp::GraphEvent *>(&e);
+    if (!ge)
+      return;
+    if (ge->getType() == GraphEvent::TLP_ADD_DESCENDANTGRAPH || ge->getType() == GraphEvent::TLP_DEL_DESCENDANTGRAPH)
+      emit layoutChanged();
+  }
 }
