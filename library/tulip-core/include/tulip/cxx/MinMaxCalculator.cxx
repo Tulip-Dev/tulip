@@ -81,7 +81,7 @@ void tlp::MinMaxCalculator<nodeType, edgeType, algorithmType>::computeMinMaxNode
 
 template<typename nodeType, typename edgeType, typename algorithmType>
 void tlp::MinMaxCalculator<nodeType, edgeType, algorithmType>::computeMinMaxEdge(Graph* graph) {
-  typename edgeType::RealType maxE2 = _nodeMin, minE2 = _nodeMax;
+  typename edgeType::RealType maxE2 = _edgeMin, minE2 = _edgeMax;
 
   Iterator<edge>* edgeIterator = graph->getEdges();
 

@@ -28,6 +28,12 @@
 
 namespace tlp {
 
+template <>
+void tlp::MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue);
+
+template <>
+void tlp::MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::computeMinMaxNode(Graph *sg);
+
 class PropertyContext;
 class Graph;
 
