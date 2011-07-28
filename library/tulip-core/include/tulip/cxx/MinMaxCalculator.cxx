@@ -8,12 +8,6 @@ tlp::MinMaxCalculator<nodeType, edgeType, algorithmType>::MinMaxCalculator(tlp::
 }
 
 template<typename nodeType, typename edgeType, typename algorithmType>
-tlp::MinMaxCalculator<nodeType, edgeType, algorithmType>::MinMaxCalculator(tlp::AbstractProperty<nodeType, edgeType, algorithmType>* property, typename nodeType::RealType NodeMin,
-    typename nodeType::RealType NodeMax)
-  : _property(property), nodeValueUptodate(false), edgeValueUptodate(false), _nodeMin(NodeMin), _nodeMax(NodeMax), _edgeMin(NodeMin), _edgeMax(NodeMax) {
-}
-
-template<typename nodeType, typename edgeType, typename algorithmType>
 typename nodeType::RealType tlp::MinMaxCalculator<nodeType, edgeType, algorithmType>::getNodeMin(tlp::Graph* graph) {
   unsigned int graphID = graph->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = nodeValueUptodate.find(graphID);
