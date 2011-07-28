@@ -719,6 +719,10 @@ protected:
   void notifyDelSubGraph(Graph*, const Graph* sg) {
     notifyDelSubGraph(sg);
   }
+
+  void notifyAddDescendantGraph(const Graph*);
+  void notifyDelDescendantGraph(const Graph*);
+
   void notifyAddLocalProperty(const std::string&);
   void notifyAddLocalProperty(Graph*, const std::string& name) {
     notifyAddLocalProperty(name);
@@ -766,17 +770,19 @@ public:
     TLP_AFTER_SET_ENDS = 6,
     TLP_ADD_NODES = 7,
     TLP_ADD_EDGES = 8,
-    TLP_ADD_SUBGRAPH = 9,
-    TLP_DEL_SUBGRAPH = 10,
-    TLP_ADD_LOCAL_PROPERTY = 11,
-    TLP_BEFORE_DEL_LOCAL_PROPERTY = 12,
-    TLP_AFTER_DEL_LOCAL_PROPERTY = 13,
-    TLP_ADD_INHERITED_PROPERTY = 14,
-    TLP_BEFORE_DEL_INHERITED_PROPERTY = 15,
-    TLP_AFTER_DEL_INHERITED_PROPERTY = 16,
-    TLP_BEFORE_SET_ATTRIBUTE = 17,
-    TLP_AFTER_SET_ATTRIBUTE = 18,
-    TLP_REMOVE_ATTRIBUTE = 19
+    TLP_ADD_DESCENDANTGRAPH = 9,
+    TLP_DEL_DESCENDANTGRAPH = 10,
+    TLP_ADD_SUBGRAPH = 11,
+    TLP_DEL_SUBGRAPH = 12,
+    TLP_ADD_LOCAL_PROPERTY = 13,
+    TLP_BEFORE_DEL_LOCAL_PROPERTY = 14,
+    TLP_AFTER_DEL_LOCAL_PROPERTY = 15,
+    TLP_ADD_INHERITED_PROPERTY = 16,
+    TLP_BEFORE_DEL_INHERITED_PROPERTY = 17,
+    TLP_AFTER_DEL_INHERITED_PROPERTY = 18,
+    TLP_BEFORE_SET_ATTRIBUTE = 19,
+    TLP_AFTER_SET_ATTRIBUTE = 20,
+    TLP_REMOVE_ATTRIBUTE = 21
   };
 
   // constructor for node/edge events
