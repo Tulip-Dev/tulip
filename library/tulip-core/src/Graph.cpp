@@ -480,13 +480,31 @@ void Graph::notifyAfterSetEnds(const edge e) {
 }
 
 void Graph::notifyAddSubGraph(const Graph* sg) {
-  if (hasOnlookers())
+  if (hasOnlookers()) {
     sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_SUBGRAPH, sg));
+    notifyDelDescendantGraph(sg);
+    if (getSuperGraph() != this)
+      getSuperGraph()->notifyAddDescendantGraph(sg);
+  }
 }
 
 void Graph::notifyDelSubGraph(const Graph* sg) {
-  if (hasOnlookers())
+  if (hasOnlookers()) {
     sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_SUBGRAPH, sg));
+    notifyDelDescendantGraph(sg);
+    if (getSuperGraph() != this)
+      getSuperGraph()->notifyDelDescendantGraph(sg);
+  }
+}
+
+void Graph::notifyAddDescendantGraph(const Graph* sg) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_DESCENDANTGRAPH, sg));
+}
+
+void Graph::notifyDelDescendantGraph(const Graph* sg) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_DESCENDANTGRAPH, sg));
 }
 
 void Graph::notifyAddLocalProperty(const std::string& propName) {
