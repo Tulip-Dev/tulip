@@ -279,19 +279,11 @@ QWidget *PythonScriptView::construct(QWidget *parent) {
 	QWidget *widget = AbstractView::construct(parent);
 	viewWidget = new PythonScriptViewWidget(this, widget);
 	widget->resize(550,700);
-	browserDialog = new QDialog(viewWidget);
-	browserDialog->setWindowTitle("Tulip Python API");
-	browser = new QWebView(browserDialog);
-	browser->load(QUrl("qrc:/apidoc/index.html"));
-	QVBoxLayout *vLayout = new QVBoxLayout;
-	vLayout->addWidget(browser);
-	browserDialog->setLayout(vLayout);
 	connect(viewWidget->runScriptButton, SIGNAL(clicked()), this, SLOT(executeCurrentScript()));
 	connect(viewWidget->stopScriptButton, SIGNAL(clicked()), this, SLOT(stopCurrentScript()));
 	connect(viewWidget->newMainScriptAction, SIGNAL(triggered()), this, SLOT(newScript()));
 	connect(viewWidget->loadMainScriptAction, SIGNAL(triggered()), this, SLOT(loadScript()));
 	connect(viewWidget->saveMainScriptAction, SIGNAL(triggered()), this, SLOT(saveScript()));
-	connect(viewWidget->showApiDocButton, SIGNAL(clicked()), this, SLOT(showApiDocumentation()));
 	connect(viewWidget->newStringModuleAction, SIGNAL(triggered()), this, SLOT(newStringModule()));
 	connect(viewWidget->newFileModuleAction, SIGNAL(triggered()), this, SLOT(newFileModule()));
 	connect(viewWidget->loadModuleAction, SIGNAL(triggered()), this, SLOT(loadModule()));
@@ -660,11 +652,6 @@ void PythonScriptView::saveScript() {
 		file.close();
 	}
 }
-
-void PythonScriptView::showApiDocumentation() {
-	browserDialog->show();
-}
-
 
 void PythonScriptView::loadModule() {
 	QString fileName = QFileDialog::getOpenFileName(viewWidget, "Open Module","", "Python script (*.py)");

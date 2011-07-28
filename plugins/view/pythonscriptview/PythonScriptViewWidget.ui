@@ -290,20 +290,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="showApiDocButton">
-          <property name="toolTip">
-           <string>Tulip Python API documentation</string>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-          <property name="icon">
-           <iconset resource="PythonScriptViewResource.qrc">
-            <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>

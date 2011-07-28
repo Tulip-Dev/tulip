@@ -9,8 +9,6 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQSCINTILLA_DLL")
 INCLUDE_DIRECTORIES(BEFORE ${qscintilla2Include} ${SIP_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 
-SET(QT_USE_QTWEBKIT true)
-
 SET(pythonscriptview_LIB_SRCS
     ConsoleOutputModule.h
     PythonCodeEditor.cpp
@@ -56,7 +54,6 @@ TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipQtName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} qscintilla2)
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_LIBRARIES})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
 ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipQtName} qscintilla2)

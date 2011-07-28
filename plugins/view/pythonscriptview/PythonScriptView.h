@@ -23,8 +23,6 @@
 #include "PythonScriptViewWidget.h"
 
 #include <QtCore/QObject>
-#include <QtWebKit/QWebView>
-
 #include <tulip/AbstractView.h>
 
 class PythonInterpreter;
@@ -86,7 +84,6 @@ private slots :
 	void saveScript();
 	void executeCurrentScript();
 	void stopCurrentScript();
-	void showApiDocumentation();
 	void newStringModule();
 	void newFileModule();
 	void loadModule();
@@ -116,8 +113,6 @@ private :
 	PythonScriptViewWidget *viewWidget;
 	PythonInterpreter *pythonInterpreter;
 	tlp::Graph *graph;
-	QDialog *browserDialog;
-	QWebView *browser;
 
 	std::map<int, std::string> editedMainScripts;
 	std::map<int, std::string> editedModules;
