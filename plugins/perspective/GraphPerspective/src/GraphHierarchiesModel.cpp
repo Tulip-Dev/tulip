@@ -150,18 +150,6 @@ void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
   emit layoutChanged();
 }
 
-//void GraphHierarchiesModel::treatEvent(const std::vector<tlp::Event> &events) {
-//  emit layoutAboutToBeChanged();
-//  for(vector<Event>::const_iterator it = events.begin(); it != events.end();++it) {
-//    Event e = *it;
-//    if (e.type() == Event::TLP_DELETE) {
-//      Graph *g = dynamic_cast<tlp::Graph *>(e.sender());
-//      _graphs.removeAll(g);
-//    }
-//  }
-//  emit layoutChanged();
-//}
-
 void GraphHierarchiesModel::treatEvent(const Event &e) {
   Graph *g = dynamic_cast<tlp::Graph *>(e.sender());
   assert(g);

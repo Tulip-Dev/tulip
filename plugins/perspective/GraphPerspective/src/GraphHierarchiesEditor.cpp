@@ -5,14 +5,13 @@
 
 #include <assert.h>
 
-GraphHierarchiesEditor::GraphHierarchiesEditor(GraphHierarchiesModel *model, QWidget *parent): QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData), _model(model) {
-  assert(_model);
+GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData) {
   _ui->setupUi(this);
-//  setWindowFlags(Qt::Popup);
-  _ui->hierarchiesTree->setModel(model);
+}
 
-  for (int i=1; i<4; ++i)
-    _ui->hierarchiesTree->setColumnWidth(i,50);
+void GraphHierarchiesEditor::setModel(GraphHierarchiesModel *model) {
+  _ui->hierarchiesTree->setModel(model);
+  _ui->hierarchiesTree->header()->resizeSections(QHeaderView::ResizeToContents);
 }
 
 GraphHierarchiesEditor::~GraphHierarchiesEditor() {

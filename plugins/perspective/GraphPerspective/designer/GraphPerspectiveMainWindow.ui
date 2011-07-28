@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>994</width>
-    <height>738</height>
+    <width>992</width>
+    <height>736</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -381,6 +381,9 @@ QToolButton:pressed {
          <property name="shortcut">
           <string>Ctrl+H</string>
          </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
          <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
@@ -531,6 +534,9 @@ QToolButton:pressed {
                 <number>0</number>
                </property>
                <item>
+                <widget class="GraphHierarchiesEditor" name="graphHierarchiesEditor" native="true"/>
+               </item>
+               <item>
                 <widget class="QSplitter" name="docksSplitter">
                  <property name="frameShape">
                   <enum>QFrame::NoFrame</enum>
@@ -584,7 +590,7 @@ QToolButton:pressed {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>994</width>
+     <width>992</width>
      <height>22</height>
     </rect>
    </property>
@@ -880,7 +886,30 @@ QToolButton:pressed {
    <header>AlgorithmRunner.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>GraphHierarchiesEditor</class>
+   <extends>QWidget</extends>
+   <header>GraphHierarchiesEditor.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>graphsHierarchyManagerButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>graphHierarchiesEditor</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>446</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>79</x>
+     <y>197</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
