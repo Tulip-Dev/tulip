@@ -47,15 +47,6 @@ public:
    **/
   MinMaxCalculator(tlp::AbstractProperty<nodeType, edgeType, algorithmType>* property, typename nodeType::RealType NodeMin,
                    typename nodeType::RealType NodeMax, typename edgeType::RealType EdgeMin, typename edgeType::RealType EdgeMax);
-  /**
-   * @brief Constructs a MinMaxCalculator.
-   *
-   * @param property The property on which to compute minimum and maximum values.
-   * @param NodeMin The minimal value the property can take for nodes (e.g. INT_MIN)
-   * @param NodeMax The maximal value the property can take for nodes (e.g. INT_MIN)
-   **/
-  MinMaxCalculator(tlp::AbstractProperty<nodeType, edgeType, algorithmType>* property, typename nodeType::RealType NodeMin,
-                   typename nodeType::RealType NodeMax);
 
   /**
    * @brief A bridge to Observable's treatEvent() so this class can easily be delegated to.

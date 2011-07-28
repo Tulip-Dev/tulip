@@ -28,7 +28,7 @@ const string IntegerVectorProperty::propertyTypename="vector<int>";
 
 //==============================
 ///Constructeur d'un IntegerProperty
-IntegerProperty::IntegerProperty (Graph *sg, std::string n):AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm>(sg, n), IntegerMinMaxCalculator(this, -INT_MAX, INT_MAX) {
+IntegerProperty::IntegerProperty (Graph *sg, std::string n):AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm>(sg, n), IntegerMinMaxCalculator(this, -INT_MAX, INT_MAX, -INT_MAX, INT_MAX) {
   // the property observes the graph
   sg->addListener(this);
 }
