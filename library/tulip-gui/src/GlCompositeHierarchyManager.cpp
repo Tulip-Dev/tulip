@@ -84,52 +84,58 @@ void GlCompositeHierarchyManager::buildComposite(Graph* current, GlComposite* co
 
 void GlCompositeHierarchyManager::treatEvent(const Event& evt) {
   const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
-  
+
   if (gEvt) {
     Graph* graph = gEvt->getGraph();
-    
+
     switch(gEvt->getType()) {
-      case GraphEvent::TLP_ADD_NODE:
-        if(_graphsComposites[graph].second) {
-          _graphsComposites[graph].second->updateHull();
-        }
-        break;
-      case GraphEvent::TLP_ADD_SUBGRAPH:
-      case GraphEvent::TLP_DEL_SUBGRAPH:
-        _shouldRecreate = true;
-        _shouldRecreate = true;
-        break;
-      case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE: {
-        const std::string attributeName = gEvt->getAttributeName();
-        //we save the old property value in a temporary attribute, so we can find the GlEntity and change its name once the attribute has been set
-        if(attributeName == _nameAttribute) {
-          string propertyValue;
-          graph->getAttribute<string>(_nameAttribute, propertyValue);
-          graph->setAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue, propertyValue);
-        }
-        break;
+    case GraphEvent::TLP_ADD_NODE:
+
+      if(_graphsComposites[graph].second) {
+        _graphsComposites[graph].second->updateHull();
       }
-      case GraphEvent::TLP_AFTER_SET_ATTRIBUTE: {
-        const std::string attributeName = gEvt->getAttributeName();
-        if(attributeName == _nameAttribute) {
-          string propertyValue;
-          graph->getAttribute<string>(_nameAttribute, propertyValue);
-          string oldPropertyValue;
-          graph->getAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue, oldPropertyValue);
-          graph->removeAttribute(GlCompositeHierarchyManager::temporaryPropertyValue);
-          GlComposite* composite = _graphsComposites[graph].first;
-          GlSimpleEntity* temporaryEntity = composite->findGlEntity(oldPropertyValue);
-          
-          if(temporaryEntity) {
-            composite->deleteGlEntity(temporaryEntity);
-            composite->addGlEntity(temporaryEntity, propertyValue);
-          }
-        }
-        break;
+
+      break;
+    case GraphEvent::TLP_ADD_SUBGRAPH:
+    case GraphEvent::TLP_DEL_SUBGRAPH:
+      _shouldRecreate = true;
+      _shouldRecreate = true;
+      break;
+    case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE: {
+      const std::string attributeName = gEvt->getAttributeName();
+
+      //we save the old property value in a temporary attribute, so we can find the GlEntity and change its name once the attribute has been set
+      if(attributeName == _nameAttribute) {
+        string propertyValue;
+        graph->getAttribute<string>(_nameAttribute, propertyValue);
+        graph->setAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue, propertyValue);
       }
-      default:
-        //we don't care about other events
-        break;
+
+      break;
+    }
+    case GraphEvent::TLP_AFTER_SET_ATTRIBUTE: {
+      const std::string attributeName = gEvt->getAttributeName();
+
+      if(attributeName == _nameAttribute) {
+        string propertyValue;
+        graph->getAttribute<string>(_nameAttribute, propertyValue);
+        string oldPropertyValue;
+        graph->getAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue, oldPropertyValue);
+        graph->removeAttribute(GlCompositeHierarchyManager::temporaryPropertyValue);
+        GlComposite* composite = _graphsComposites[graph].first;
+        GlSimpleEntity* temporaryEntity = composite->findGlEntity(oldPropertyValue);
+
+        if(temporaryEntity) {
+          composite->deleteGlEntity(temporaryEntity);
+          composite->addGlEntity(temporaryEntity, propertyValue);
+        }
+      }
+
+      break;
+    }
+    default:
+      //we don't care about other events
+      break;
     }
   }
 }

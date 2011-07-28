@@ -103,6 +103,7 @@ Graph *GraphAbstract::getNthSubGraph(unsigned int n) const {
 
   if (n >= subgraphs.size())
     return NULL;
+
   return subgraphs[n];
 }
 //=========================================================================
@@ -113,10 +114,12 @@ int GraphAbstract::numberOfSubGraphs() const {
 int GraphAbstract::numberOfDescendantGraphs() const {
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
   int result = 0;
+
   while(it != subgraphs.end()) {
     result += (*it)->numberOfDescendantGraphs();
     it++;
   }
+
   return result;
 }
 //=========================================================================

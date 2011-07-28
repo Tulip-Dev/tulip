@@ -114,7 +114,7 @@ public:
   /**
    * @brief Updates the value of all nodes, setting the maximum and minimum values to this.
    *
-   * @param newValue The new maximal and minimal value. 
+   * @param newValue The new maximal and minimal value.
    * @return void
    **/
   void updateAllNodesValues(typename nodeType::RealType newValue);

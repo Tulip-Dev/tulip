@@ -1262,13 +1262,16 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
 Graph *Graph::getNthSubGraph(unsigned int n) const {
   int i=0;
   Iterator<Graph *> *it = getSubGraphs();
+
   while (it->hasNext()) {
     Graph *result = it->next();
+
     if (i++ == n) {
       delete it;
       return result;
     }
   }
+
   delete it;
   return NULL;
 }

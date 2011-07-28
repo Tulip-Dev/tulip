@@ -10,7 +10,8 @@ GraphHierarchiesEditor::GraphHierarchiesEditor(GraphHierarchiesModel *model, QWi
   _ui->setupUi(this);
   setWindowFlags(Qt::Popup);
   _ui->hierarchiesTree->setModel(model);
-  for (int i=1;i<4;++i)
+
+  for (int i=1; i<4; ++i)
     _ui->hierarchiesTree->setColumnWidth(i,50);
 }
 

@@ -47,7 +47,7 @@ public:
    */
   /**
    * @brief Checks if a graph is outer planar (i.e. a graph with an embedding in the plane such that all vertices belong to the unbounded face of the embedding).
-   * 
+   *
    * @param graph The graph to check.
    * @return bool True if the graph is outer planar, false otherwise.
    * @note this cannot be const as it uses the planarity test, which is not const and would be complex (impossible?) to make const.
