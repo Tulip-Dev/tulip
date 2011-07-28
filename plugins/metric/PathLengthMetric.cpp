@@ -82,7 +82,7 @@ double PathLengthMetric::getNodeValue(tlp::node current) {
 	  dfsLevels.top().result = result;
 	  // push new dfsParams on stack
 	  current = dfsParams.current = neighbour;
-	  outNodes = dfsParams.outNodes;
+	  dfsParams.outNodes = outNodes;
 	  result = dfsParams.result = 0.0;
 	  dfsLevels.push(dfsParams);
 	  // and go deeper
