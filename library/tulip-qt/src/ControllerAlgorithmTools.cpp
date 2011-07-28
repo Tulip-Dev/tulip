@@ -184,7 +184,7 @@ namespace tlp {
 #if  (!defined(WIN32) || (defined(__GNUC_MINOR__) && (__GNUC_MINOR__ >= 5 && __GNUC__ == 4)))
       // Because QtGui calls are not allowed outside de main thread
       // I just add this ugly hack to avoid crash of convolution plugin
-      if (name == "Convolution")
+      if ((name == "Convolution") || (name == "Color Mapping"))
 	resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
       else  {
 	AbstractComputeProperty* param = new ComputePropertyTemplate<PROPERTY>(graph, name, tmp, erreurMsg, myProgress, &dataSet);
