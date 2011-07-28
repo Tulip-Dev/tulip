@@ -149,6 +149,9 @@ private:
   StringCollection targetType;
   ColorScale colorScale;
   Vector<float,4> deltaRGBA;
+  vector<pair<string,Color> > enumeratedMappingResultVector;
+  map<string, vector<unsigned int> > mapMetricElements;
+
 
 public:
   ColorMapping(const PropertyContext &context):ColorAlgorithm(context),eltTypes(ELT_TYPES){
@@ -221,9 +224,34 @@ public:
       if(targetType.getCurrent()==EDGES_TARGET && graph->numberOfEdges()!=0)
         computeEdgeColor();
 
-    }else{
-      map<string,vector<unsigned int> > mapMetricElements;
+    } else {
+        for(vector<pair<string,Color> >::iterator it =
+	      enumeratedMappingResultVector.begin();
+	    it!=enumeratedMappingResultVector.end(); ++it){
+          vector<unsigned int> *elements=&mapMetricElements[(*it).first];
+          for(vector<unsigned>::iterator itE=elements->begin();itE!=elements->end();++itE){
+            if(targetType.getCurrent()==NODES_TARGET)
+              colorResult->setNodeValue(node(*itE),(*it).second);
+            else
+              colorResult->setEdgeValue(edge(*itE),(*it).second);
+          }
+        }
+      }
 
+    if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
+    return true;
+  }
+  //=========================================================
+  bool check(string &errorMsg) {
+    //    cerr << __PRETTY_FUNCTION__ << endl;
+    PropertyInterface *metric = graph->getProperty("viewMetric");
+    if (dataSet!=0) {
+      dataSet->get("enumerated\nproperty", metric);
+      dataSet->get(ELT_TYPE, eltTypes);
+      dataSet->get(TARGET_TYPE, targetType);
+      dataSet->get("colorScale", colorScale);
+    }
+    if (eltTypes.getCurrent() == ENUMERATED_ELT) {
       if(targetType.getCurrent()==NODES_TARGET){
         StableIterator<node> itN(graph->getNodes());
         while (itN.hasNext()) {
@@ -233,7 +261,7 @@ public:
             mapMetricElements[tmp]=vector<unsigned int>();
           mapMetricElements[tmp].push_back(n.id);
         }
-      }else{
+      } else {
         StableIterator<edge> itE(graph->getEdges());
         while (itE.hasNext()) {
           edge e=itE.next();
@@ -255,30 +283,12 @@ public:
       }
 
       DoubleStringsListRelationDialog dialog(enumeratedValues,enumeratedColors);
-      if(dialog.exec()){
-        vector<pair<string,Color> > resultVector;
-        dialog.getResult(resultVector);
-        for(vector<pair<string,Color> >::iterator it=resultVector.begin();it!=resultVector.end();++it){
-          vector<unsigned int> *elements=&mapMetricElements[(*it).first];
-          for(vector<unsigned>::iterator itE=elements->begin();itE!=elements->end();++itE){
-            if(targetType.getCurrent()==NODES_TARGET)
-              colorResult->setNodeValue(node(*itE),(*it).second);
-            else
-              colorResult->setEdgeValue(edge(*itE),(*it).second);
-          }
-        }
-      }else{
-        return false;
+      if(!dialog.exec()) {
+	errorMsg += "Cancelled by user";
+	return false;
       }
-
+      dialog.getResult(enumeratedMappingResultVector);
     }
-
-    if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
-    return true;
-  }
-  //=========================================================
-  bool check(string &){
-    //    cerr << __PRETTY_FUNCTION__ << endl;
     return true;
   }
 };
