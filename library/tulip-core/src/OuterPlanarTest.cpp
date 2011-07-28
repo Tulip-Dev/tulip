@@ -65,46 +65,49 @@ bool OuterPlanarTest::compute(tlp::Graph* graph) {
 //=================================================================
 void OuterPlanarTest::treatEvent(const Event& evt) {
   const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
-  
+
   if (gEvt) {
     Graph* graph = gEvt->getGraph();
-    
+
     switch(gEvt->getType()) {
-      case GraphEvent::TLP_ADD_EDGE:
-        if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-          if (!resultsBuffer[(unsigned long)graph]) return;
-          
-          graph->removeListener(this);
-        resultsBuffer.erase((unsigned long)graph);
-        break;
-      case GraphEvent::TLP_DEL_EDGE:
-        if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-          if (resultsBuffer[(unsigned long)graph]) return;
-          
-          graph->removeListener(this);
-        resultsBuffer.erase((unsigned long)graph);
-        break;
-      case GraphEvent::TLP_DEL_NODE:
-        if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-          if (resultsBuffer[(unsigned long)graph]) return;
-          
-          graph->removeListener(this);
-        resultsBuffer.erase((unsigned long)graph);
-        break;
-      case GraphEvent::TLP_REVERSE_EDGE:
-        graph->removeListener(this);
-        resultsBuffer.erase((unsigned long)graph);
-        break;
-      default:
-        //we don't care about other events
-        break;
+    case GraphEvent::TLP_ADD_EDGE:
+
+      if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+        if (!resultsBuffer[(unsigned long)graph]) return;
+
+      graph->removeListener(this);
+      resultsBuffer.erase((unsigned long)graph);
+      break;
+    case GraphEvent::TLP_DEL_EDGE:
+
+      if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+        if (resultsBuffer[(unsigned long)graph]) return;
+
+      graph->removeListener(this);
+      resultsBuffer.erase((unsigned long)graph);
+      break;
+    case GraphEvent::TLP_DEL_NODE:
+
+      if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+        if (resultsBuffer[(unsigned long)graph]) return;
+
+      graph->removeListener(this);
+      resultsBuffer.erase((unsigned long)graph);
+      break;
+    case GraphEvent::TLP_REVERSE_EDGE:
+      graph->removeListener(this);
+      resultsBuffer.erase((unsigned long)graph);
+      break;
+    default:
+      //we don't care about other events
+      break;
     }
   }
   else {
     // From my point of view the use of dynamic_cast should be correct
     // but it fails, so I use reinterpret_cast (pm)
     Graph* graph = reinterpret_cast<Graph *>(evt.sender());
-    
+
     if (graph && evt.type() == Event::TLP_DELETE)
       resultsBuffer.erase((unsigned long)graph);
   }

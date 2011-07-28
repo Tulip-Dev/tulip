@@ -54,7 +54,7 @@ public:
 
 private:
   TriconnectedTest();
-  
+
   bool compute(tlp::Graph* graph);
   // override Observable::treatEvent
   void treatEvent(const Event&);

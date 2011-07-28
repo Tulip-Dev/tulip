@@ -33,99 +33,111 @@ namespace tlp {
 struct TLP_SCOPE StringCollection {
 
 private:
-	size_t current;
-	std::vector<std::string> _data;
+  size_t current;
+  std::vector<std::string> _data;
 
 public:
 
-	/**
-	 * Initializes an empty string collection.
-	 */
-	StringCollection();
+  /**
+   * Initializes an empty string collection.
+   */
+  StringCollection();
 
-	/**
-	 * Initializes a string collection with strings stored in a vector.
-	 *
-	 * @param vectorParam a vector of strings entries for the string collection
-	 */
-	explicit StringCollection(const std::vector<std::string> &vectorParam);
+  /**
+   * Initializes a string collection with strings stored in a vector.
+   *
+   * @param vectorParam a vector of strings entries for the string collection
+   */
+  explicit StringCollection(const std::vector<std::string> &vectorParam);
 
-	/**
-	 * Initializes a string collection from a semicolon separated values string.
-	 *
-	 * @param param  a semicolon separated values string ("entry1;...;entryN"). If an entry need to contain a semicolon, you have to escape it the following way : \; .
-	 */
-	StringCollection(const std::string param);
+  /**
+   * Initializes a string collection from a semicolon separated values string.
+   *
+   * @param param  a semicolon separated values string ("entry1;...;entryN"). If an entry need to contain a semicolon, you have to escape it the following way : \; .
+   */
+  StringCollection(const std::string param);
 
-	/**
-	 * Initializes a string collection with strings stored in a vector.
-	 *
-	 * @param vectorParam a vector of strings entries for the string collection
-	 * @param currentParam the index of the current selected string in the vector
-	 */
-	StringCollection(const std::vector<std::string>&  vectorParam, int currentParam);
+  /**
+   * Initializes a string collection with strings stored in a vector.
+   *
+   * @param vectorParam a vector of strings entries for the string collection
+   * @param currentParam the index of the current selected string in the vector
+   */
+  StringCollection(const std::vector<std::string>&  vectorParam, int currentParam);
 
-	/**
-	 * Initializes a string collection with strings stored in a vector.
-	 *
-	 * @param vectorParam a vector of strings entries for the string collection
-	 * @param currentString the current selected string value from the vector
-	 */
-	StringCollection(const std::vector<std::string>& vectorParam, std::string currentString);
+  /**
+   * Initializes a string collection with strings stored in a vector.
+   *
+   * @param vectorParam a vector of strings entries for the string collection
+   * @param currentString the current selected string value from the vector
+   */
+  StringCollection(const std::vector<std::string>& vectorParam, std::string currentString);
 
 
-	/**
-	 * Returns the current selected string value.
-	 */
-	std::string getCurrentString();
+  /**
+   * Returns the current selected string value.
+   */
+  std::string getCurrentString();
 
-	/**
-	 * Sets the current selected string index.
-	 * Returns true if the provided index is valid.
-	 *
-	 * @param param a valid index in the string collection
-	 */
-	bool setCurrent(unsigned int param);
+  /**
+   * Sets the current selected string index.
+   * Returns true if the provided index is valid.
+   *
+   * @param param a valid index in the string collection
+   */
+  bool setCurrent(unsigned int param);
 
-	/**
-	 * Sets the current selected string value.
-	 * Returns true if the string value exists in the collection.
-	 *
-	 * @param param a string value from the collection
-	 */
-	bool setCurrent(std::string param);
+  /**
+   * Sets the current selected string value.
+   * Returns true if the string value exists in the collection.
+   *
+   * @param param a string value from the collection
+   */
+  bool setCurrent(std::string param);
 
-	/**
-	 * Returns the index of the current selected string.
-	 */
-	int getCurrent();
+  /**
+   * Returns the index of the current selected string.
+   */
+  int getCurrent();
 
-	/**
-	 * Adds a string value to this string collection.
-	 *
-	 * @param element the string to add to the collection
-	 */
-	void push_back(const std::string& element) { _data.push_back(element); };
+  /**
+   * Adds a string value to this string collection.
+   *
+   * @param element the string to add to the collection
+   */
+  void push_back(const std::string& element) {
+    _data.push_back(element);
+  };
 
-	/**
-	 * Returns true if the collection is empty.
-	 */
-	inline bool empty() { return _data.empty(); }
+  /**
+   * Returns true if the collection is empty.
+   */
+  inline bool empty() {
+    return _data.empty();
+  }
 
-	/**
-	 * Returns the string element at a certain index in the collection.
-	 *
-	 * @param index a valid index in the collection
-	 */
-	inline std::string at(size_t index) { return _data.at(index); }
+  /**
+   * Returns the string element at a certain index in the collection.
+   *
+   * @param index a valid index in the collection
+   */
+  inline std::string at(size_t index) {
+    return _data.at(index);
+  }
 
-	/**
-	 * Returns the number of strings in the collection.
-	 */
-	inline size_t size() { return _data.size(); }
+  /**
+   * Returns the number of strings in the collection.
+   */
+  inline size_t size() {
+    return _data.size();
+  }
 
-	inline std::string operator[](const unsigned int i) const { return _data[i]; }
-	inline std::string& operator[](const unsigned int i) { return _data[i];}
+  inline std::string operator[](const unsigned int i) const {
+    return _data[i];
+  }
+  inline std::string& operator[](const unsigned int i) {
+    return _data[i];
+  }
 };
 
 }

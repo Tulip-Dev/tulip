@@ -46,7 +46,7 @@ public:
   bool eventFilter(QObject *, QEvent *);
   void initObserver(Graph *);
   void clearObserver();
-  
+
   void treatEvent(const Event&);
 
   InteractorComponent *clone() {

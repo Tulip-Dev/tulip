@@ -165,6 +165,7 @@ void MouseEdgeBuilder::clearObserver() {
 void MouseEdgeBuilder::treatEvent(const Event& evt) {
   if (typeid(evt) == typeid(GraphEvent)) {
     const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
+
     if(graphEvent && graphEvent->getType() == GraphEvent::TLP_DEL_NODE && graphEvent->getNode() == source) {
       bends.clear();
       started=false;
@@ -173,6 +174,7 @@ void MouseEdgeBuilder::treatEvent(const Event& evt) {
   }
   else {
     const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&evt);
+
     if(propertyEvent && propertyEvent->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE && propertyEvent->getNode() == source && propertyEvent->getProperty() == layoutProperty) {
       startPos=layoutProperty->getNodeValue(source);
     }

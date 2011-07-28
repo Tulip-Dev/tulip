@@ -756,24 +756,27 @@ void GlVertexArrayManager::clearObservers() {
 
 void GlVertexArrayManager::treatEvent(const Event &evt) {
   const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
+
   if (graphEvent) {
     switch(graphEvent->getType()) {
-      case GraphEvent::TLP_ADD_NODE:
-      case GraphEvent::TLP_ADD_EDGE:
+    case GraphEvent::TLP_ADD_NODE:
+    case GraphEvent::TLP_ADD_EDGE:
+      clearData();
+      clearObservers();
+      break;
+    case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
+    case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
+      const std::string name = graphEvent->getPropertyName();
+
+      if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName()  || name==inputData->getElementShapePropName()) {
         clearData();
         clearObservers();
-        break;
-      case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
-      case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
-        const std::string name = graphEvent->getPropertyName();
-        if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName()  || name==inputData->getElementShapePropName()) {
-          clearData();
-          clearObservers();
-        }
-        break;
       }
-      default:
-        break;
+
+      break;
+    }
+    default:
+      break;
     }
   }
   else if(evt.type() == Event::TLP_DELETE) {
@@ -783,22 +786,23 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
   else {
     const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&evt);
     PropertyInterface* property = propertyEvent->getProperty();
-    
+
     switch(propertyEvent->getType()) {
-      case PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE:
-      case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
-        propertyValueChanged(property);
-        break;
-      case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
-      case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
-        if (inputData->getElementLayout()==property) {
-          edgesModified = true;
-        }
-        
-        propertyValueChanged(property);
-        break;
-      default:
-        break;
+    case PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE:
+    case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
+      propertyValueChanged(property);
+      break;
+    case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
+    case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
+
+      if (inputData->getElementLayout()==property) {
+        edgesModified = true;
+      }
+
+      propertyValueChanged(property);
+      break;
+    default:
+      break;
     }
   }
 }

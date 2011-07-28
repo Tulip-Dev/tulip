@@ -15,10 +15,12 @@ GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): QAbstractItemMode
 
 QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex &parent) const {
   Graph *g;
+
   if (parent.isValid())
     g = ((Graph *)(parent.internalPointer()))->getNthSubGraph(row);
   else
     g = _graphs[row];
+
   return createIndex(row,column,g);
 }
 
@@ -30,14 +32,17 @@ QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
 
   int row=0;
   Graph *parent = graph->getSuperGraph();
+
   if (_graphs.contains(parent))
     row=_graphs.indexOf(parent);
 
   else {
     Graph *ancestor = parent->getSuperGraph();
-    for (int i=0;i<ancestor->numberOfSubGraphs();i++) {
+
+    for (int i=0; i<ancestor->numberOfSubGraphs(); i++) {
       if (ancestor->getNthSubGraph(i) == parent)
         break;
+
       row++;
     }
   }
@@ -49,6 +54,7 @@ QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
 int GraphHierarchiesModel::rowCount(const QModelIndex &parent) const {
   if (!parent.isValid())
     return _graphs.size();
+
   return ((Graph *)(parent.internalPointer()))->numberOfSubGraphs();
 }
 
@@ -59,11 +65,14 @@ int GraphHierarchiesModel::columnCount(const QModelIndex &parent) const {
 QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
   if (role == Qt::DisplayRole || role == Qt::EditRole) {
     Graph *graph = (Graph *)(index.internalPointer());
+
     if (index.column() == NAME_SECTION) {
       std::string name;
       graph->getAttribute<std::string>("name",name);
+
       if (name == "")
         return trUtf8("untitled_") + QString::number(graph->getId());
+
       return name.c_str();
     }
     else if (index.column() == ID_SECTION)
@@ -103,16 +112,20 @@ QVariant GraphHierarchiesModel::headerData(int section, Qt::Orientation orientat
       return f;
     }
   }
+
   return QAbstractItemModel::headerData(section,orientation,role);
 }
 
 void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   if (_graphs.contains(g))
     return;
+
   Graph *i;
   foreach(i,_graphs)
-    if (i->isDescendantGraph(g))
-      return;
+
+  if (i->isDescendantGraph(g))
+    return;
+
   _graphs.push_back(g);
   emit dataChanged(createIndex(_graphs.size()-1,0,g),createIndex(_graphs.size()-1,3,g));
 }
@@ -120,5 +133,6 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
 void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
   if (_graphs.contains(g))
     _graphs.removeAll(g);
+
   emit dataChanged(createIndex(0,0,_graphs[0]),createIndex(_graphs.size()-1,3,_graphs[_graphs.size()-1]));
 }
