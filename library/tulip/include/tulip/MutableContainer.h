@@ -52,7 +52,7 @@ public:
   MutableContainer();
   ~MutableContainer();
   void setAll(const TYPE &value);
-  void set(const unsigned int i,const TYPE &value);  
+  void set(const unsigned int i, const TYPE &value);  
   /**
    * get the value associated to i 
    */
@@ -61,6 +61,10 @@ public:
    * get the value associated to i and indicates if it is not the default one
    */
   typename StoredType<TYPE>::ReturnedValue get(const unsigned int i, bool& isNotDefault) const;
+  /**
+   * get the default value
+   */
+  typename StoredType<TYPE>::ReturnedValue getDefault() const;
   /**
    * return if the value associated to i is not the default one
    */
@@ -493,6 +497,11 @@ template <typename TYPE>
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     return StoredType<TYPE>::get(defaultValue);
   }
+}
+//===================================================================
+template <typename TYPE>   
+  typename StoredType<TYPE>::ReturnedValue MutableContainer<TYPE>::getDefault() const {
+  return StoredType<TYPE>::get(defaultValue);
 }
 //===================================================================
 template <typename TYPE> 

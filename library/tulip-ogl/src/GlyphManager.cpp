@@ -87,6 +87,12 @@ namespace tlp
   }
   //
   void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs) {
+    // first destroy current default glyph
+    Glyph* defaultGlyph = glyphs.getDefault();
+    if (defaultGlyph)
+      delete defaultGlyph;
+
+    // then set a new one
     GlyphContext gc = GlyphContext(graph,glGraphInputData);
     glyphs.setAll(GlyphFactory::factory->getPluginObject("3D - Cube OutLined", &gc));
     Iterator<string> *itS = GlyphFactory::factory->availablePlugins();
