@@ -44,7 +44,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Move values to yours prefered colors</string>
+         <string>Move values to your preferred colors</string>
         </property>
         <property name="alignment" >
          <set>Qt::AlignCenter</set>
