@@ -12,10 +12,10 @@ class GraphHierarchiesEditorData;
 class GraphHierarchiesEditor : public QWidget {
   Q_OBJECT
   Ui::GraphHierarchiesEditorData *_ui;
-  GraphHierarchiesModel *_model;
 
 public:
-  explicit GraphHierarchiesEditor(GraphHierarchiesModel *model, QWidget *parent = 0);
+  explicit GraphHierarchiesEditor(QWidget *parent = 0);
+  void setModel(GraphHierarchiesModel *model);
   ~GraphHierarchiesEditor();
 
 private:
