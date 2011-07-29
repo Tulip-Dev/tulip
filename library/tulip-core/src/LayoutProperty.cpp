@@ -735,7 +735,10 @@ void LayoutProperty::treatEvent(const Event& evt) {
   const GraphEvent* graphEvent = dynamic_cast<const tlp::GraphEvent*>(&evt);
 
   if (graphEvent && graphEvent->getType() == GraphEvent::TLP_REVERSE_EDGE) {
-    assert(graphEvent->getGraph() == graph);
+    // cannot use the assert below because this property
+    // may observe subgraphs
+    // see MinMaxCalculator<>::treatEvent in MinMaxCalculator.cxx
+    //assert(graphEvent->getGraph() == graph);
     std::vector<Coord> bends = getEdgeValue(graphEvent->getEdge());
 
     // reverse bends if needed
