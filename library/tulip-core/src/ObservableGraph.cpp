@@ -90,6 +90,8 @@ void GraphObserver::treatEvent(const Event& ev) {
     case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
     case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
     case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
+    case GraphEvent::TLP_ADD_DESCENDANTGRAPH:
+    case GraphEvent::TLP_DEL_DESCENDANTGRAPH:
       break;
     default:
       // this should not happen
