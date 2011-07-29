@@ -107,7 +107,8 @@ TulipProject *TulipProject::restoreProject(const QString &path) {
 // ==============================
 //      FILES MANIPULATION
 // ==============================
-QStringList TulipProject::entryList(const QString &relativePath) {
+QStringList TulipProject::entryList(const QString &relativePath, const QStringList &nameFilters,
+                                    QDir::Filters filters, QDir::SortFlags sort) {
   QString path(toAbsolutePath(relativePath));
   QFileInfo info(path);
 
@@ -115,7 +116,18 @@ QStringList TulipProject::entryList(const QString &relativePath) {
     return QStringList();
 
   QDir dir(path);
-  return dir.entryList();
+  return dir.entryList(nameFilters,filters,sort);
+}
+
+QStringList TulipProject::entryList(const QString &relativePath, QDir::Filters filters, QDir::SortFlags sort) {
+  QString path(toAbsolutePath(relativePath));
+  QFileInfo info(path);
+
+  if (!info.exists() || !info.isDir())
+    return QStringList();
+
+  QDir dir(path);
+  return dir.entryList(filters,sort);
 }
 
 bool TulipProject::isDir(const QString &path) {

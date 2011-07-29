@@ -92,10 +92,19 @@ public:
 
   /**
     @brief Lists entries in a directory
+    @see QDir documentation for a complete description of filtering arguments
     @param path The path to scan. @see TulipProject
     @return The list of files and directories present in the given directory
     */
-  QStringList entryList(const QString &path);
+  QStringList entryList(const QString &path, QDir::Filters filters = QDir::NoFilter, QDir::SortFlags sort = QDir::NoSort);
+
+  /**
+    @brief Lists entries in a directory
+    @see QDir documentation for a complete description of filtering arguments
+    @param path The path to scan. @see TulipProject
+    @return The list of files and directories present in the given directory
+    */
+  QStringList entryList(const QString &path, const QStringList &nameFilters, QDir::Filters filters = QDir::NoFilter, QDir::SortFlags sort = QDir::NoSort);
 
   /**
     @brief Checks if the specified file/folder exists
