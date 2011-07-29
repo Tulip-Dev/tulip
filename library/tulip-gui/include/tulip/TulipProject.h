@@ -234,6 +234,12 @@ public:
     */
   QString version() const;
 
+  /**
+    @brief Returns the absolute filesystem path used to store the file
+    @warning Be cautious though since directly modifying project files without using TulipProject methods could result in undefined behavior.
+    */
+  QString toAbsolutePath(const QString &relativePath);
+
 public slots:
   void setName(const QString &);
   void setDescription(const QString &);
@@ -246,7 +252,6 @@ private:
   bool writeMetaInfos();
   bool readMetaInfos();
 
-  QString toAbsolutePath(const QString &relativePath);
   bool removeAllDirPrivate(const QString &path);
 
   // Core fileset
