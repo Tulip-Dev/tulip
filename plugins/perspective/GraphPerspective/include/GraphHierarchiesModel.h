@@ -22,16 +22,32 @@ public:
   // Allows the model to behave like a list and to be iterable
   typedef QList<tlp::Graph *>::iterator iterator;
   typedef QList<tlp::Graph *>::const_iterator const_iterator;
-  tlp::Graph *operator[](int i) const { return _graphs[i]; }
-  tlp::Graph *operator[](int i) { return _graphs[i]; }
-  int size() const { return _graphs.size(); }
+  tlp::Graph *operator[](int i) const {
+    return _graphs[i];
+  }
+  tlp::Graph *operator[](int i) {
+    return _graphs[i];
+  }
+  int size() const {
+    return _graphs.size();
+  }
 
-  iterator begin() { return _graphs.begin(); }
-  iterator end() { return _graphs.end(); }
-  const_iterator begin() const { return _graphs.begin(); }
-  const_iterator end() const { return _graphs.end(); }
+  iterator begin() {
+    return _graphs.begin();
+  }
+  iterator end() {
+    return _graphs.end();
+  }
+  const_iterator begin() const {
+    return _graphs.begin();
+  }
+  const_iterator end() const {
+    return _graphs.end();
+  }
 
-  QList<tlp::Graph *> graphs() const { return _graphs; }
+  QList<tlp::Graph *> graphs() const {
+    return _graphs;
+  }
 
   // Methods re-implemented from QAbstractItemModel
   QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;

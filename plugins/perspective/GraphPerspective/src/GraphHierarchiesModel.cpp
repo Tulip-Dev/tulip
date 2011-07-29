@@ -19,7 +19,7 @@ GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): QAbstractItemMode
 }
 
 GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy): QAbstractItemModel(copy.QObject::parent()), tlp::Observable() {
-  for (int i=0;i < copy.size();++i)
+  for (int i=0; i < copy.size(); ++i)
     addGraph(copy[i]);
 }
 
@@ -131,8 +131,10 @@ QVariant GraphHierarchiesModel::headerData(int section, Qt::Orientation orientat
 
 void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   emit layoutAboutToBeChanged();
+
   if (_graphs.contains(g))
     return;
+
   Graph *i;
   foreach(i,_graphs) {
     if (i->isDescendantGraph(g))
@@ -145,14 +147,17 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
 
 void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
   emit layoutAboutToBeChanged();
+
   if (_graphs.contains(g))
     _graphs.removeAll(g);
+
   emit layoutChanged();
 }
 
 void GraphHierarchiesModel::treatEvent(const Event &e) {
   Graph *g = dynamic_cast<tlp::Graph *>(e.sender());
   assert(g);
+
   if (e.type() == Event::TLP_DELETE) {
     emit layoutAboutToBeChanged();
     _graphs.removeAll(g);
@@ -160,8 +165,10 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
   }
   else if (e.type() == Event::TLP_MODIFICATION) {
     const GraphEvent *ge = dynamic_cast<const tlp::GraphEvent *>(&e);
+
     if (!ge)
       return;
+
     if (ge->getType() == GraphEvent::TLP_ADD_DESCENDANTGRAPH || ge->getType() == GraphEvent::TLP_DEL_DESCENDANTGRAPH)
       emit layoutChanged();
   }

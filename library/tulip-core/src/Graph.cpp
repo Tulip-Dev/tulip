@@ -484,10 +484,12 @@ void Graph::notifyAddSubGraph(const Graph* sg) {
     sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_SUBGRAPH, sg));
 
   Graph *g = this;
+
   while (g != getRoot()) {
     g->notifyAddDescendantGraph(sg);
     g = g->getSuperGraph();
   }
+
   getRoot()->notifyAddDescendantGraph(sg);
 }
 
@@ -496,10 +498,12 @@ void Graph::notifyDelSubGraph(const Graph* sg) {
     sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_SUBGRAPH, sg));
 
   Graph *g = this;
+
   while (g != getRoot()) {
     g->notifyDelDescendantGraph(sg);
     g = g->getSuperGraph();
   }
+
   getRoot()->notifyDelDescendantGraph(sg);
 }
 
