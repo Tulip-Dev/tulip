@@ -306,6 +306,11 @@ typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::
   }
 }
 //===================================================================
+template <typename TYPE>   
+typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::getDefault() const {
+  return StoredType<TYPE>::get(defaultValue);
+}
+//===================================================================
 template <typename TYPE>
 bool tlp::MutableContainer<TYPE>::hasNonDefaultValue(const unsigned int i) const {
   if (maxIndex == UINT_MAX) return false;

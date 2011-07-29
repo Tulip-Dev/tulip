@@ -1024,7 +1024,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
 
         while(it->hasNext()) {
           mappingM.set(it->next().id, mn);
-        }
+        } delete it;
       }
     }
 
