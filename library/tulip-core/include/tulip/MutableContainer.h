@@ -62,6 +62,10 @@ public:
    */
   typename StoredType<TYPE>::ReturnedValue get(const unsigned int i, bool& isNotDefault) const;
   /**
+   * get the default value
+   */
+  typename StoredType<TYPE>::ReturnedValue getDefault() const;
+  /**
    * return if the value associated to i is not the default one
    */
   bool hasNonDefaultValue(const unsigned int i) const;
