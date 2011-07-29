@@ -3,6 +3,9 @@
 #include <tulip/Graph.h>
 #include <QtGui/QFont>
 #include <QtCore/QSize>
+#include <fstream>
+
+#include <tulip/TulipProject.h>
 
 //FIXME: remove me
 #include <QtCore/QDebug>
@@ -76,18 +79,11 @@ int GraphHierarchiesModel::columnCount(const QModelIndex &parent) const {
 }
 
 QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
+  Graph *graph = (Graph *)(index.internalPointer());
   if (role == Qt::DisplayRole || role == Qt::EditRole) {
-    Graph *graph = (Graph *)(index.internalPointer());
 
-    if (index.column() == NAME_SECTION) {
-      std::string name;
-      graph->getAttribute<std::string>("name",name);
-
-      if (name == "")
-        return trUtf8("untitled_") + QString::number(graph->getId());
-
-      return name.c_str();
-    }
+    if (index.column() == NAME_SECTION)
+      return generateName(graph);
     else if (index.column() == ID_SECTION)
       return graph->getId();
     else if (index.column() == NODES_SECTION)
@@ -98,6 +94,13 @@ QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
 
   else if (role == Qt::TextAlignmentRole && index.column() != NAME_SECTION)
     return Qt::AlignCenter;
+
+  else if (role == Qt::FontRole) {
+    QFont f;
+    if (index.column() == NAME_SECTION && graph == graph->getRoot())
+      f.setItalic(true);
+    return f;
+  }
 
   return QVariant();
 }
@@ -172,4 +175,51 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
     if (ge->getType() == GraphEvent::TLP_ADD_DESCENDANTGRAPH || ge->getType() == GraphEvent::TLP_DEL_DESCENDANTGRAPH)
       emit layoutChanged();
   }
+}
+
+static QString GRAPHS_PATH("/graphs/");
+static QString GRAPH_FOLDER_PREFIX("graph_");
+static QString GRAPH_FILE("graph.tlp");
+
+void GraphHierarchiesModel::readProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
+  if (!project->exists(GRAPHS_PATH) || !project->isDir(GRAPHS_PATH))
+    return;
+  QString e;
+  foreach (e,project->entryList(GRAPHS_PATH,QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs)) {
+    DataSet dataSet;
+    dataSet.set<std::string>("file::filename", project->toAbsolutePath(GRAPHS_PATH + "/" + e + "/" + GRAPH_FILE).toStdString());
+    Graph *g = tlp::importGraph("tlp",dataSet,progress);
+    if (g)
+      addGraph(g);
+  }
+}
+
+bool GraphHierarchiesModel::writeProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
+  if (project->exists(GRAPHS_PATH) && !project->isDir(GRAPHS_PATH))
+    return false;
+
+  project->removeAllDir(GRAPHS_PATH);
+
+  int i=0;
+  Graph *g;
+  foreach (g,_graphs) {
+    QString path = GRAPHS_PATH + "graph_" + QString::number(i++);
+    project->mkpath(path);
+    std::fstream *file = project->stdFileStream(path + "/" + GRAPH_FILE);
+    DataSet dataSet;
+    tlp::exportGraph(g, *file, "tlp", dataSet, progress);
+    delete file;
+  }
+
+  return true;
+}
+
+QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
+  std::string name;
+  graph->getAttribute<std::string>("name",name);
+
+  if (name == "")
+    return trUtf8("untitled_") + QString::number(graph->getId());
+
+  return name.c_str();
 }

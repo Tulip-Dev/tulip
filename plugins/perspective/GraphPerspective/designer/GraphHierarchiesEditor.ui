@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>241</width>
-    <height>423</height>
+    <width>239</width>
+    <height>421</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -54,9 +54,6 @@
      </attribute>
      <attribute name="headerDefaultSectionSize">
       <number>50</number>
-     </attribute>
-     <attribute name="headerStretchLastSection">
-      <bool>false</bool>
      </attribute>
     </widget>
    </item>

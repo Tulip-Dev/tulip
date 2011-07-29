@@ -7,6 +7,8 @@
 
 namespace tlp {
 class Graph;
+class TulipProject;
+class PluginProgress;
 }
 
 class GraphHierarchiesModel : public QAbstractItemModel, public tlp::Observable {
@@ -14,6 +16,7 @@ class GraphHierarchiesModel : public QAbstractItemModel, public tlp::Observable 
 
   QList<tlp::Graph *> _graphs;
 
+  QString generateName(tlp::Graph *) const;
 public:
   explicit GraphHierarchiesModel(QObject *parent=0);
   GraphHierarchiesModel(const GraphHierarchiesModel &);
@@ -66,6 +69,9 @@ signals:
 public slots:
   void addGraph(tlp::Graph *);
   void removeGraph(tlp::Graph *);
+
+  void readProject(tlp::TulipProject *,tlp::PluginProgress *);
+  bool writeProject(tlp::TulipProject *, tlp::PluginProgress *);
 };
 
 #endif // GRAPHHIERARCHIESMODEL_H
