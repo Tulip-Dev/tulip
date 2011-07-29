@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>392</width>
-    <height>718</height>
+    <width>390</width>
+    <height>716</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -45,7 +45,7 @@
       <string notr="true">#searchBox {
   background-color: white;
   border-left: 1px solid &quot;#C9C9C9&quot;;
-  border-right: 1px solid &quot;#C9C9C9&quot;;
+  border-right: 0px;
   border-top: 0px;
   border-bottom: 1px solid &quot;#C9C9C9&quot;;
 }</string>
@@ -66,18 +66,15 @@
      <property name="styleSheet">
       <string notr="true">#algorithmListContents {
   background-color: white;
-  border-left: 1px solid &quot;#C9C9C9&quot;;
-  border-right: 1px solid &quot;#C9C9C9&quot;;
   border-top: 0px;
-  border-bottom: 1px solid &quot;#C9C9C9&quot;;
+  border-left: 1px solid &quot;#C9C9C9&quot;;
+  border-right: 0px;
+  border-bottom: 0px;
 }
 
 ExpandableGroupBox {
   background-color: &quot;#FDFDFD&quot;;
-  border-left: 1px solid &quot;#E9E9E9&quot;;
-  border-right: 1px solid &quot;#E9E9E9&quot;;
-  border-top: 1px solid &quot;#E9E9E9&quot;;
-  border-bottom: 1px solid &quot;#E9E9E9&quot;;
+  border: 1px solid &quot;#E9E9E9&quot;;
   margin-top: 1.5ex;
   font: bold;
 }
@@ -139,8 +136,8 @@ QPushButton:pressed{
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>392</width>
-        <height>686</height>
+        <width>390</width>
+        <height>684</height>
        </rect>
       </property>
      </widget>
