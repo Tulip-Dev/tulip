@@ -66,6 +66,7 @@ void GlyphManager::loadGlyphPlugins() {
 void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs) {
   // first destroy current default glyph
   Glyph* defaultGlyph = glyphs.getDefault();
+
   if (defaultGlyph)
     delete defaultGlyph;
 

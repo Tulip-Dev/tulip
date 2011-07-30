@@ -306,7 +306,7 @@ typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::
   }
 }
 //===================================================================
-template <typename TYPE>   
+template <typename TYPE>
 typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::getDefault() const {
   return StoredType<TYPE>::get(defaultValue);
 }
