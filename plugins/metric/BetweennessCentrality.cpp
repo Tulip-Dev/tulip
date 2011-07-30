@@ -159,7 +159,9 @@ public:
 
         if (w != s) result->setNodeValue(w, result->getNodeValue(w) + delta.get(w.id));
       }
-    } delete it;
+    }
+
+    delete it;
 
     //Normalization
     if(norm || !directed) {
@@ -175,7 +177,9 @@ public:
         else {
           if(!directed) result->setNodeValue(s,result->getNodeValue(s)/2.0);
         }
-      } delete it;
+      }
+
+      delete it;
 
       Iterator<edge> *itE = graph->getEdges();
 

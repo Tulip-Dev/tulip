@@ -541,7 +541,7 @@ void BasicPluginsTest::testStrengthClustering() {
   ds.set("metric", &metric);
   DoubleProperty resultMetric(graph);
   result = graph->computeProperty("Strength Clustering", &resultMetric,
-				       errorMsg); 
+                                  errorMsg);
   CPPUNIT_ASSERT(result);
 }
 

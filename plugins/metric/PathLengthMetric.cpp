@@ -58,7 +58,9 @@ struct dfsStruct {
 //=======================================================================
 double PathLengthMetric::getNodeValue(tlp::node current) {
   if (graph->outdeg(current) == 0) return 0.0;
+
   double value = result->getNodeValue(current);
+
   if (value > 0.1)
     return value;
 
@@ -68,42 +70,50 @@ double PathLengthMetric::getNodeValue(tlp::node current) {
   dfsStruct dfsParams(current, outNodes);
   double res = 0.0;
   dfsLevels.push(dfsParams);
+
   while(!dfsLevels.empty()) {
     while (outNodes->hasNext()) {
       node neighbour = outNodes->next();
       value = result->getNodeValue(neighbour);
+
       // compute result
       if (value > 0.1)
-	res += value;
+        res += value;
       else {
-	outNodes = graph->getOutNodes(neighbour);
-	if (outNodes->hasNext()) {
-	  // store result for current
-	  dfsLevels.top().res = res;
-	  // push new dfsParams on stack
-	  current = dfsParams.current = neighbour;
-	  dfsParams.outNodes = outNodes;
-	  res = dfsParams.res = 0.0;
-	  dfsLevels.push(dfsParams);
-	  // and go deeper
-	  break;
-	} else {
-	  delete outNodes;
-	  outNodes = dfsParams.outNodes;
-	}
+        outNodes = graph->getOutNodes(neighbour);
+
+        if (outNodes->hasNext()) {
+          // store result for current
+          dfsLevels.top().res = res;
+          // push new dfsParams on stack
+          current = dfsParams.current = neighbour;
+          dfsParams.outNodes = outNodes;
+          res = dfsParams.res = 0.0;
+          dfsLevels.push(dfsParams);
+          // and go deeper
+          break;
+        }
+        else {
+          delete outNodes;
+          outNodes = dfsParams.outNodes;
+        }
       }
     }
+
     if (outNodes->hasNext())
       // new dfsParams has been pushed on stack
       continue;
+
     res += leafMetric->getNodeValue(current);
     // save current result
     result->setNodeValue(current, res);
     // unstack current dfsParams
     delete outNodes;
     dfsLevels.pop();
+
     if (dfsLevels.empty())
       break;
+
     // get dfsParams on top of dfsLevels
     dfsParams = dfsLevels.top();
     current = dfsParams.current;
@@ -112,6 +122,7 @@ double PathLengthMetric::getNodeValue(tlp::node current) {
     dfsParams.res += res;
     res = dfsParams.res;
   }
+
   return res;
 }
 //=======================================
@@ -128,7 +139,7 @@ bool PathLengthMetric::run() {
 
   node _n;
   forEach(_n, graph->getNodes())
-    getNodeValue(_n);
+  getNodeValue(_n);
   delete leafMetric;
   return true;
 }
