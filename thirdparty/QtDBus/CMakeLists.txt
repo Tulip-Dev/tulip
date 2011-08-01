@@ -4,9 +4,11 @@
 # Included mocs should not be compiled and are put into a separate QT4_WRAP_CPP macro.
 # no other modification should be made on the sources.
 
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/../)
+
 INCLUDE_DIRECTORIES(${QT_INCLUDE_DIRECTORY} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${DBUS_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/../dbus/libdbus/cmake/)
 
-ADD_DEFINITIONS(-DQT_BUILD_DBUS_LIB -DDBUS_API_SUBJECT_TO_CHANGE -DQT_MAKEDLL)
+ADD_DEFINITIONS(-DQT_BUILD_DBUS_LIB -DDBUS_API_SUBJECT_TO_CHANGE -DQT_MAKEDLL -DQT_DBUS -DQT_NO_DBUS)
 
 SET(SRCS
 qdbusconnection.cpp
@@ -47,6 +49,8 @@ qdbusconnection_p.h
 qdbusconnectioninterface.h
 qdbuspendingcall_p.h
 qdbusserver.h)
+
+DISABLE_COMPILER_WARNINGS()
 
 ADD_LIBRARY(QtDBus4 SHARED ${SRCS} ${MOC_SRCS})
 

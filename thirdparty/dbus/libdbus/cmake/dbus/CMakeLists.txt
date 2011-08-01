@@ -267,9 +267,12 @@ if(WIN32)
     endif(WINCE)
 endif(WIN32)
 
-install_targets(/lib dbus-1 )
-install_files(/include/dbus FILES ${dbusinclude_HEADERS})
+INSTALL(TARGETS dbus-1
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT dbus
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT dbus
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT dbus)
 
+	   
 ### Internal library, used for the daemon, tools and tests, compiled statically.
 
 add_library(dbus-internal ${DBUS_INTERNAL_ADD_LIBRARY_OPTIONS}

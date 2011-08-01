@@ -498,7 +498,12 @@ set (DBUS_INTERNAL_CLIENT_DEFINITIONS "-DDBUS_STATIC_BUILD")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dbus-env.bat.cmake ${CMAKE_BINARY_DIR}/bin/dbus-env.bat )
-install_files(/bin FILES ${CMAKE_BINARY_DIR}/bin/dbus-env.bat)
+
+INSTALL(FILES 
+		${CMAKE_BINARY_DIR}/bin/dbus-env.bat				
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/bin 
+        COMPONENT dbus)
+
 add_definitions(-DHAVE_CONFIG_H=1)
 
 ########### subdirs ###############
@@ -607,4 +612,4 @@ OPTION(DBUS_INSTALL_SYSTEM_LIBS "install required system libraries" OFF)
 # endif(DBUS_DISABLE_CHECKS)
 # MESSAGE(" ")
 
-INCLUDE(modules/CPackInstallConfig.cmake)
+# INCLUDE(modules/CPackInstallConfig.cmake)

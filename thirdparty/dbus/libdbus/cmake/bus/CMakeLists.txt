@@ -82,9 +82,16 @@ target_link_libraries(dbus-daemon ${DBUS_INTERNAL_LIBRARIES} ${XML_LIBRARY})
 set_target_properties(dbus-daemon PROPERTIES OUTPUT_NAME ${DBUS_DAEMON_NAME})
 set_target_properties(dbus-daemon PROPERTIES COMPILE_FLAGS ${DBUS_INTERNAL_CLIENT_DEFINITIONS})
 
-install_targets(/bin dbus-daemon)
-install_files(/etc/dbus-1 FILES ${config_DATA})
+INSTALL(TARGETS dbus-daemon
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT dbus
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT dbus
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT dbus)
 
+INSTALL(FILES 
+		${CMAKE_CURRENT_BINARY_DIR}/session.conf				
+		${CMAKE_CURRENT_BINARY_DIR}/system.conf
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/etc/dbus-1 
+        COMPONENT dbus)
 
 if (DBUS_SERVICE)
 	set (dbus_service_SOURCES 
@@ -97,7 +104,7 @@ if (DBUS_SERVICE)
 	add_executable(dbus-service ${dbus_service_SOURCES} )
 	target_link_libraries(dbus-service ${DBUS_INTERNAL_LIBRARIES} ${XML_LIBRARY})
 	set_target_properties(dbus-service PROPERTIES COMPILE_FLAGS ${DBUS_INTERNAL_CLIENT_DEFINITIONS})
-	install_targets(/bin dbus-service )
+	#install_targets(/bin dbus-service )
 endif (DBUS_SERVICE)
 
 if (DBUS_BUILD_TESTS)	
