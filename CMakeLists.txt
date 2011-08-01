@@ -105,7 +105,12 @@ SET(QT_USE_QTOPENGL true)
 SET(QT_USE_QTXML true)
 SET(QT_USE_QTNETWORK true)
 SET(QT_USE_QTWEBKIT true)
+IF (NOT WIN32)
 SET(QT_USE_QTDBUS true)
+ELSE()
+SET(QT_QTDBUS_LIBRARY QtDBus4)
+SET(QT_QTDBUS_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty)
+ENDIF()
 INCLUDE(${QT_USE_FILE})
 
 FIND_PACKAGE(OpenGL REQUIRED)
@@ -126,11 +131,6 @@ INCLUDE(FindXML2.cmake)
 IF(NOT LIBXML2_FOUND)
    message(FATAL_ERROR "Cannot find the XML2 library (required)")
 ENDIF(NOT LIBXML2_FOUND)
-
-IF(WIN32)
-# Qt D-Bus definitions
-  ADD_DEFINITIONS(-DQT_NO_DBUS -DQT_DBUS)
-ENDIF(WIN32)
 
 ## -----------------------------------------------------------------------------------------------
 ## OpenMP
