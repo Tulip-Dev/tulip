@@ -47,130 +47,130 @@ class TLP3_COMPAT_SCOPE MainWindowFacade {
 
 public :
 
-  /**
-   * basic constructor : no use it
-   */
-  MainWindowFacade();
-  /**
-   * default constructor
-   */
-  MainWindowFacade(QMainWindow *mainWindow,QToolBar *toolBar,QToolBar *interactorsToolBar,QWorkspace *workspace);
+	/**
+	 * basic constructor : no use it
+	 */
+	MainWindowFacade();
+	/**
+	 * default constructor
+	 */
+	MainWindowFacade(QMainWindow *mainWindow,QToolBar *toolBar,QToolBar *interactorsToolBar,QWorkspace *workspace);
 
-  /**
-   * Get the parent widget : use it as parent if you want to create a QDialog (for example)
-   * \warning QWidget returned is QMainWindow but for prevent segfault don't use it as QMainWindow
-   */
-  QWidget *getParentWidget() {
-    return mainWindow;
-  }
-  /**
-   * get menu bar
-   * \return the menu bar
-   */
-  QMenuBar *getMenuBar() {
-    return menuBar;
-  }
-  /**
-   * get tools bar
-   * \return the tool bar
-   */
-  QToolBar *getToolBar() {
-    return toolBar;
-  }
-  /**
-   * get interators tool bar
-   * \return the interactors tool bar
-   */
-  QToolBar *getInteractorsToolBar() {
-    return interactorsToolBar;
-  }
-  /**
-   * get workspace
-   * \return the workspace
-       */
-  QWorkspace *getWorkspace() {
-    return workspace;
-  }
-  /**
-   * get status bar
-   * \return the status bar
-   */
-  QStatusBar *getStatusBar() {
-    return statusBar;
-  }
+	/**
+	 * Get the parent widget : use it as parent if you want to create a QDialog (for example)
+	 * \warning QWidget returned is QMainWindow but for prevent segfault don't use it as QMainWindow
+	 */
+	QWidget *getParentWidget() {
+		return mainWindow;
+	}
+	/**
+	 * get menu bar
+	 * \return the menu bar
+	 */
+	QMenuBar *getMenuBar() {
+		return menuBar;
+	}
+	/**
+	 * get tools bar
+	 * \return the tool bar
+	 */
+	QToolBar *getToolBar() {
+		return toolBar;
+	}
+	/**
+	 * get interators tool bar
+	 * \return the interactors tool bar
+	 */
+	QToolBar *getInteractorsToolBar() {
+		return interactorsToolBar;
+	}
+	/**
+	 * get workspace
+	 * \return the workspace
+	 */
+	QWorkspace *getWorkspace() {
+		return workspace;
+	}
+	/**
+	 * get status bar
+	 * \return the status bar
+	 */
+	QStatusBar *getStatusBar() {
+		return statusBar;
+	}
 
-  /**
-   * Add a dock widget to QMainWindow
-   * This function call QMainWindow::addDockWidget(Qt::DockWidgetArea,QDockWidget)
-   */
-  void addDockWidget( Qt::DockWidgetArea area, QDockWidget * dockWidget) {
-    mainWindow->addDockWidget(area,dockWidget);
-  }
-  /**
-  * @brief Remove a dock widget from the QMainWindow.
-  **/
-  void removeDockWidget(QDockWidget* dockWidet) {
-    mainWindow->removeDockWidget(dockWidet);
-  }
+	/**
+	 * Add a dock widget to QMainWindow
+	 * This function call QMainWindow::addDockWidget(Qt::DockWidgetArea,QDockWidget)
+	 */
+	void addDockWidget( Qt::DockWidgetArea area, QDockWidget * dockWidget) {
+		mainWindow->addDockWidget(area,dockWidget);
+	}
+	/**
+	 * @brief Remove a dock widget from the QMainWindow.
+	 **/
+	void removeDockWidget(QDockWidget* dockWidet) {
+		mainWindow->removeDockWidget(dockWidet);
+	}
 
-  /**
-   * Moves second dock widget on top of first dock widget, creating a tabbed docked area
-   */
-  void tabifyDockWidget ( QDockWidget * first, QDockWidget * second ) {
-    mainWindow->tabifyDockWidget(first,second);
-    tabifiedDockWidget.push_back(std::pair<QDockWidget *,QDockWidget *>(first,second));
-  }
+	/**
+	 * Moves second dock widget on top of first dock widget, creating a tabbed docked area
+	 */
+	void tabifyDockWidget ( QDockWidget * first, QDockWidget * second ) {
+		mainWindow->tabifyDockWidget(first,second);
+		tabifiedDockWidget.push_back(std::pair<QDockWidget *,QDockWidget *>(first,second));
+	}
 
-  /**
-   * Return couple of tabified QDockWidget
-   */
-  std::vector<std::pair<QDockWidget *,QDockWidget *> > getTabifiedDockWidget() {
-    return tabifiedDockWidget;
-  }
+	/**
+	 * Return couple of tabified QDockWidget
+	 */
+	std::vector<std::pair<QDockWidget *,QDockWidget *> > getTabifiedDockWidget() {
+		return tabifiedDockWidget;
+	}
 
-  /**
-   * Set the given dock widget area to occupy the specified corner.
-   */
-  void setCorner(Qt::Corner corner, Qt::DockWidgetArea area) {
-    mainWindow->setCorner(corner, area);
-  }
+	/**
+	 * Set the given dock widget area to occupy the specified corner.
+	 */
+	void setCorner(Qt::Corner corner, Qt::DockWidgetArea area) {
+		mainWindow->setCorner(corner, area);
+	}
 
-  void setDockOptions(QMainWindow::DockOptions options) {
-    mainWindow->setDockOptions(options);
-  }
+	void setDockOptions(QMainWindow::DockOptions options) {
+		mainWindow->setDockOptions(options);
+	}
 
-  QWidget* centralWidget() const {
-    return mainWindow->centralWidget();
-  }
+	QWidget* centralWidget() const {
+		return mainWindow->centralWidget();
+	}
 
-  /**
-    * Add a new custom toolbar on a side of the main Window.
-    */
-  void addToolBar(Qt::ToolBarArea area, QToolBar *toolBar) {
-    mainWindow->addToolBar(area, toolBar);
-  }
+	/**
+	 * Add a new custom toolbar on a side of the main Window.
+	 */
+	void addToolBar(Qt::ToolBarArea area, QToolBar *toolBar) {
+		mainWindow->addToolBar(area, toolBar);
+	}
 
-  Qt::DockWidgetArea dockWidgetArea(QDockWidget *dock) {
-    return mainWindow->dockWidgetArea(dock);
-  }
+	Qt::DockWidgetArea dockWidgetArea(QDockWidget *dock) {
+		return mainWindow->dockWidgetArea(dock);
+	}
 
-  QByteArray saveState(int version = 0) {
-    return mainWindow->saveState(version);
-  }
+	QByteArray saveState(int version = 0) {
+		return mainWindow->saveState(version);
+	}
 
-  bool restoreState(const QByteArray& state, int version = 0) {
-    return mainWindow->restoreState(state, version);
-  }
+	bool restoreState(const QByteArray& state, int version = 0) {
+		return mainWindow->restoreState(state, version);
+	}
 
 private:
 
-  QMainWindow *mainWindow;
-  QMenuBar *menuBar;
-  QToolBar *toolBar;
-  QToolBar *interactorsToolBar;
-  QWorkspace *workspace;
-  QStatusBar *statusBar;
-  std::vector<std::pair<QDockWidget *,QDockWidget *> > tabifiedDockWidget;
+	QMainWindow *mainWindow;
+	QMenuBar *menuBar;
+	QToolBar *toolBar;
+	QToolBar *interactorsToolBar;
+	QWorkspace *workspace;
+	QStatusBar *statusBar;
+	std::vector<std::pair<QDockWidget *,QDockWidget *> > tabifiedDockWidget;
 
 };
 
@@ -181,101 +181,112 @@ private:
  */
 class TLP3_COMPAT_SCOPE Controller : public tlp::Perspective {
 
-  Q_OBJECT
+	Q_OBJECT
 
-  QString _lastUsedSavePath;
+	QString _lastUsedSavePath;
 
 public:
 
-  Controller(tlp::PerspectiveContext &c);
+	Controller(tlp::PerspectiveContext &c);
 
-  virtual ~Controller() {}
+	virtual ~Controller() {}
 
-  // Methods inherited from Perspective
-  virtual void construct(tlp::PluginProgress *);
+	// Methods inherited from Perspective
+	virtual void construct(tlp::PluginProgress *);
 
 protected slots:
-  void save();
-  void saveAs();
-  void saveAs(const QString &);
+void save();
+void saveAs();
+void saveAs(const QString &);
 
 public:
 
-  /**
-   * By default in Tulip, if we have only one controller, we auto load it
-   * If in your controller, you modify return of this function, you stop this process
-   */
-  //virtual bool autoLoadController() {return true;}
+/**
+ * By default in Tulip, if we have only one controller, we auto load it
+ * If in your controller, you modify return of this function, you stop this process
+ */
+//virtual bool autoLoadController() {return true;}
 
-  /**
-   * Attach the main window to this controller
-   * Extend this function in your controller because attachMainWindow must construct the GUI
-   * \warning In new attachMainWindow function call Controller::attachMainWindow(MainWindowFacade)
-   * At default when tulip start with only one controller this controller is autoload and attachMainWindow function is call
-   */
-  virtual void attachMainWindow(MainWindowFacade facade);
-  /**
-   * Set data of controller
-   * graph and dataSet may be empty
-   */
-  virtual void setData(Graph *graph=0,DataSet dataSet=DataSet()) =0;
-  /**
-   * Get the graph and the dataSet of this controller
-   * \return the graph and the dataSet who will be store in tlp file
-   */
-  virtual void getData(Graph **graph,DataSet *data) =0;
-  /**
-   * Get the graph of this controller
-   * \return the graph
-   */
-  virtual Graph *getGraph() =0;
-  /**
-   * Return MainWindowFacade use with this controller
-   */
-  MainWindowFacade* getMainWindowFacade() {
-    return &mainWindowFacade;
-  }
+/**
+ * Attach the main window to this controller
+ * Extend this function in your controller because attachMainWindow must construct the GUI
+ * \warning In new attachMainWindow function call Controller::attachMainWindow(MainWindowFacade)
+ * At default when tulip start with only one controller this controller is autoload and attachMainWindow function is call
+ */
+virtual void attachMainWindow(MainWindowFacade facade);
+/**
+ * Set data of controller
+ * graph and dataSet may be empty
+ */
+virtual void setData(Graph *graph=0,DataSet dataSet=DataSet()) =0;
+/**
+ * Get the graph and the dataSet of this controller
+ * \return the graph and the dataSet who will be store in tlp file
+ */
+virtual void getData(Graph **graph,DataSet *data) =0;
+/**
+ * Get the graph of this controller
+ * \return the graph
+ */
+virtual Graph *getGraph() =0;
+/**
+ * Return MainWindowFacade use with this controller
+ */
+MainWindowFacade* getMainWindowFacade() {
+	return &mainWindowFacade;
+}
 
-  /**
-   * Set the current active controller
-   */
-  static void currentActiveController(Controller *controller) {
-    currentController=controller;
-  }
+/**
+ * Update the Import and Export menu
+ */
+void updateImportExportMenus();
 
-  /**
-   * Return the current active controller
-   */
-  static Controller *getCurrentController() {
-    return currentController;
-  }
+/**
+ * Set the current active controller
+ */
+static void currentActiveController(Controller *controller) {
+	currentController=controller;
+}
+
+/**
+ * Return the current active controller
+ */
+static Controller *getCurrentController() {
+	return currentController;
+}
 
 public slots:
-  void terminated();
-  void runImportPlugin(const QString &name, tlp::Graph *);
+void terminated();
+void runImportPlugin(const QString &name, tlp::Graph *);
 
 protected slots:
-  void importMenuClicked();
+void importMenuClicked();
+void windowsMenuAboutToShow();
+void closeAll();
+void cascade();
 
 signals:
 
-  void willBeClosed();
+void willBeClosed();
 
 protected :
 
-  virtual bool isEmpty();
+virtual bool isEmpty();
 
-  MainWindowFacade mainWindowFacade;
+MainWindowFacade mainWindowFacade;
 
-  static Controller *currentController;
+static Controller *currentController;
 
 
 private:
-  void _buildUi();
+void _buildUi();
 
-  // methods and code taken from the old TulipApp object
-  void initializeGraph(Graph *graph);
-  void doFileSave();
+// methods and code taken from the old TulipApp object
+void initializeGraph(Graph *graph);
+void doFileSave();
+
+QMenu *importMenu;
+QMenu *windowsMenu;
 };
 
 class TLP3_COMPAT_SCOPE ControllerContext {
