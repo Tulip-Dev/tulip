@@ -65,7 +65,7 @@ public:
 
 	virtual ~ColorAlgorithmFactory();
 	
-	virtual tlp::ColorAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
+	virtual tlp::ColorAlgorithm * createPluginObject(tlp::PropertyContext) /Factory/; 
 
 	virtual  std::string getMajor() const;
 	

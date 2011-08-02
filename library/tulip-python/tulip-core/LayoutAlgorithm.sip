@@ -66,7 +66,7 @@ public:
 
 	virtual ~LayoutAlgorithmFactory();
 	
-	virtual tlp::LayoutAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
+	virtual tlp::LayoutAlgorithm * createPluginObject(tlp::PropertyContext) /Factory/; 
 
 	virtual  std::string getMajor() const;
 	
