@@ -23,11 +23,29 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%Module stl 0
+namespace tlp {
+class TriconnectedTest {
+%TypeHeaderCode
+#include <tulip/TriconnectedTest.h>
+%End
+public:
 
-%Include list.sip
-%Include pair.sip
-%Include set.sip
-%Include string.sip
-%Include vector.sip
-%Include map.sip
+  static bool isTriconnected(tlp::Graph *graph);
+%Docstring
+tlp.TriconnectedTest.isTriconnected(graph)
+
+Returns :const:`True` if the graph is triconnected (i.e. a connected graph such that deleting any two nodes (and incident edges)
+results in a graph that is still connected), :const:`False` otherwise.
+
+:param graph: the graph on which to perform the triconnected test
+:type graph: :class:`tlp.Graph`
+:rtype: boolean
+%End
+  
+private :
+
+   TriconnectedTest();  
+};
+
+};
+

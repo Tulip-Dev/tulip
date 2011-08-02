@@ -23,11 +23,32 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%Module stl 0
+namespace tlp {
 
-%Include list.sip
-%Include pair.sip
-%Include set.sip
-%Include string.sip
-%Include vector.sip
-%Include map.sip
+class OuterPlanarTest {
+%TypeHeaderCode
+#include <tulip/OuterPlanarTest.h>
+%End
+public:
+
+  static bool isOuterPlanar(tlp::Graph *graph);
+%Docstring
+tlp.OuterPlanarTest.isOuterPlanar(graph)
+
+Returns :const:`True` if the graph is outerplanar (i.e. a graph with an embedding
+in the plane such that all vertices belong to the unbounded face of the embedding),
+:const:`False` otherwise.
+
+:param graph: the graph on which to perform the outerplanarity test
+:type graph: :class:`tlp.Graph`
+:rtype: boolean
+%End
+  
+private:
+
+	OuterPlanarTest();  
+  
+};
+
+};
+ 
