@@ -67,7 +67,7 @@ public:
 
 	virtual ~BooleanAlgorithmFactory();
 	
-	virtual tlp::BooleanAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
+	virtual tlp::BooleanAlgorithm * createPluginObject(tlp::PropertyContext) /Factory/; 
 
 	virtual  std::string getMajor() const;
 	

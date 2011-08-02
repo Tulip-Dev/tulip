@@ -65,7 +65,7 @@ public:
 
 	virtual ~SizeAlgorithmFactory();
 	
-	virtual tlp::SizeAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
+	virtual tlp::SizeAlgorithm * createPluginObject(tlp::PropertyContext) /Factory/; 
 
 	virtual  std::string getMajor() const;
 	

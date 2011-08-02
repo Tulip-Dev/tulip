@@ -59,7 +59,7 @@ public:
 
 	virtual ~DoubleAlgorithmFactory();
 	
-	virtual tlp::DoubleAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
+	virtual tlp::DoubleAlgorithm * createPluginObject(tlp::PropertyContext) /Factory/; 
 
 	virtual  std::string getMajor() const;
 	

@@ -65,7 +65,7 @@ public:
 
 	virtual ~IntegerAlgorithmFactory();
 	
-	virtual tlp::IntegerAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
+	virtual tlp::IntegerAlgorithm * createPluginObject(tlp::PropertyContext) /Factory/; 
 
 	virtual  std::string getMajor() const;
 	
