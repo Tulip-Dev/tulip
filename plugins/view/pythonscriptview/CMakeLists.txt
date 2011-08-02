@@ -1,58 +1,69 @@
 IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
-ADD_DEFINITIONS("-DQSCINTILLA_DLL")
+INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQSCINTILLA_DLL")
 
 # Force to use SIP and QScintilla headers located in thirdparty and not those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${qscintilla2Include} ${SIP_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${Tulip3CompatInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 
-SET(QT_USE_QTWEBKIT true)
-
-SET(SRCS
-  ConsoleOutputModule.h
-  PythonCodeEditor.cpp
-  PythonCodeEditor.h
-  PythonInterpreter.cpp
-  PythonInterpreter.h
-  PythonScriptView.h
-  PythonScriptView.cpp
-  PythonScriptViewWidget.h
-  PythonScriptViewWidget.cpp
-  TulipUtilsModule.h)
-
-QT4_WRAP_UI(UI_HEADERS
-  PythonScriptViewWidget.ui
+SET(pythonscriptview_LIB_SRCS
+    ConsoleOutputModule.h
+    PythonCodeEditor.cpp
+    PythonCodeEditor.h
+    PythonInterpreter.cpp
+    PythonInterpreter.h
+    PythonScriptView.h
+    PythonScriptView.cpp
+    PythonScriptViewWidget.h
+    PythonScriptViewWidget.cpp
+    PythonShellWidget.cpp
+    TulipUtilsModule.h
+    PluginCreationDialog.h
+    PluginCreationDialog.cpp
+    ConsoleOutputHandler.h
 )
 
-QT4_WRAP_CPP(MOC_SRCS
-  PythonScriptView.h
-  PythonScriptViewWidget.h
-  PythonInterpreter.h
+SET(pythonscriptview_UI
+    PythonScriptViewWidget.ui
+    PluginCreationDialog.ui
 )
 
-QT4_ADD_RESOURCES(RCC_SRCS
-  PythonScriptViewResource.qrc
+SET(pythonscriptview_MOC
+    PythonScriptView.h
+    PythonScriptViewWidget.h
+    PythonInterpreter.h
+    PythonShellWidget.h
+    PluginCreationDialog.h
+    ConsoleOutputHandler.h
 )
 
-IF(HAS_TULIP_QT_PYTHON_BINDINGS)
-  SET_SOURCE_FILES_PROPERTIES(PythonInterpreter.cpp PROPERTIES COMPILE_DEFINITIONS HAS_TULIP_QT_PYTHON_BINDINGS)
-ENDIF()
+SET(pythonscriptview_RCC
+    PythonScriptViewResource.qrc
+)
 
-ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${SRCS} ${MOC_SRCS} ${UI_HEADERS} ${RCC_SRCS})
+QT4_WRAP_UI(pythonscriptview_UI_SRCS ${pythonscriptview_UI})
+QT4_WRAP_CPP(pythonscriptview_MOC_SRCS ${pythonscriptview_MOC})
+QT4_ADD_RESOURCES(pythonscriptview_RCC_SRCS ${pythonscriptview_RCC})
 
-ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipQtName} qscintilla2)
+ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${pythonscriptview_LIB_SRCS} ${pythonscriptview_MOC_SRCS} ${pythonscriptview_UI_SRCS} ${pythonscriptview_RCC_SRCS})
 
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipQtName})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulip3CompatName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} qscintilla2)
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTCORE_LIBRARY})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTGUI_LIBRARY})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_LIBRARIES})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
-INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT pythonscriptview-${TulipVersion})
+ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipQtName} qscintilla2)
+
+INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT tulip_plugins_pythonscriptview)
+
+IF(WIN32)
+	FIND_LIBRARY_GLOB(PYTHON_INSTALL_PATH "python2*.dll")
+	INSTALL_EXTERNAL_LIB(PYTHON_INSTALL_PATH tulip_plugins_pythonscriptview)
+ENDIF()
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)
