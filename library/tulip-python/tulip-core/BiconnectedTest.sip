@@ -23,11 +23,43 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%Module stl 0
+namespace tlp {
 
-%Include list.sip
-%Include pair.sip
-%Include set.sip
-%Include string.sip
-%Include vector.sip
-%Include map.sip
+class BiconnectedTest {
+%TypeHeaderCode
+#include <tulip/BiconnectedTest.h>
+%End
+public:
+
+  static bool isBiconnected(tlp::Graph *graph);
+%Docstring
+tlp.BiconnectedTest.isBiconnected(graph)
+
+Returns :const:`True` if the graph is biconnected (ie. one must remove at least two nodes in order
+to disconnect the graph), :const:`False` otherwise.
+
+:param graph: the graph on which to perform the biconnected test
+:type graph: :class:`tlp.Graph`
+:rtype: boolean
+%End 
+
+//========================================================================================
+
+  static void makeBiconnected(tlp::Graph *graph, std::vector<tlp::edge>& addedEdges /Out/);
+%Docstring
+tlp.BiconnectedTest.makeBiconnected(graph)
+
+If the graph is not biconnected, adds edges in order to make the graph
+biconnected. Returns a list of added edges.
+
+:param graph: the graph to make biconnected.
+:type graph: :class:`tlp.Graph`
+:rtype: list of :class:`tlp.edge`
+%End
+  
+private :
+
+	BiconnectedTest(); 
+};
+
+};

@@ -40,7 +40,6 @@ template<TYPE>
        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
             PyObject *item = PyList_GET_ITEM(sipPy, i);
             if (!sipCanConvertToType(item, sipType_TYPE, SIP_NOT_NONE)) {
-                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
                 return 0;
             }
        }
@@ -118,7 +117,6 @@ template<TYPE>
        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
             PyObject *item = PyList_GET_ITEM(sipPy, i);
             if (!PyNumber_Check(item)) {
-                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to double");
                 return 0;
             }
        }
@@ -176,7 +174,6 @@ template<TYPE>
        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
             PyObject *item = PyList_GET_ITEM(sipPy, i);
             if (!PyInt_Check(item)) {
-                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to int");
                 return 0;
             }
        }

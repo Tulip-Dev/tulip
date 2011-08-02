@@ -37,14 +37,14 @@
 	 "	import sys\n"
 	 "	_origimportfunc = __builtin__.__import__\n"
 	  
-	 "	def tlpimporthook(*args):\n"
-     "		fullname = args[0]\n"
-     "		m = _origimportfunc(*args)\n"
+	 "	def tlpimporthook(name, globals={}, locals={}, fromlist=[], level=-1):\n"
+     "		fullname = name\n"
+     "		m = _origimportfunc(name, globals, locals, fromlist, level)\n"
      "		if fullname == \"tulip\" or fullname == \"tulipogl\" or fullname == \"tulipqt\":\n"
-	 "			if args[3] and args[3][0] == \"*\":\n"
+	 "			if len(fromlist) > 0 and fromlist[0] == \"*\":\n"
 	 "				curTlpDict = None\n"			
-	 "				if \"tlp\" in args[2]:\n"
-     "					curTlpDict = args[2][\"tlp\"].__dict__\n"
+	 "				if \"tlp\" in locals:\n"
+     "					curTlpDict = locals[\"tlp\"].__dict__\n"
 	 "		 		if curTlpDict:\n"
 	 "					m = type(fullname, (object,), dict(m.__dict__))\n"
 	 "					m.tlp = type(\"tlp\", (object,), dict(m.tlp.__dict__))\n"
@@ -90,4 +90,4 @@ namespace tlp;
 %Include GlCircle.sip
 %Include GlRect.sip
 
-%Import ../tulip/Module.sip
+%Import ../tulip-core/Module.sip
