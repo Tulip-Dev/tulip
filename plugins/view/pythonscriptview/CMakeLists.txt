@@ -1,8 +1,6 @@
 IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
-INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
-
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQSCINTILLA_DLL")
 
 # Force to use SIP and QScintilla headers located in thirdparty and not those installed in the system
