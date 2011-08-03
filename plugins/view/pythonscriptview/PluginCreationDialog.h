@@ -26,35 +26,35 @@
 
 class PluginCreationDialog : public QDialog, public Ui::PluginCreationDialogData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public:
 
-	PluginCreationDialog(QWidget *parent = 0);
+  PluginCreationDialog(QWidget *parent = 0);
 
-	QString getPluginFileName() const;
+  QString getPluginFileName() const;
 
-	QString getPluginType() const;
+  QString getPluginType() const;
 
-	QString getPluginClassName() const;
+  QString getPluginClassName() const;
 
-	QString getPluginName() const;
+  QString getPluginName() const;
 
-	QString getPluginAuthor() const;
+  QString getPluginAuthor() const;
 
-	QString getPluginDate() const;
+  QString getPluginDate() const;
 
-	QString getPluginInfos() const;
+  QString getPluginInfos() const;
 
-	QString getPluginRelease() const;
+  QString getPluginRelease() const;
 
-	QString getPluginGroup() const;
+  QString getPluginGroup() const;
 
 protected slots:
 
-	void validateForm();
+  void validateForm();
 
-	void selectPluginSourceFile();
+  void selectPluginSourceFile();
 
 };
 

@@ -29,106 +29,120 @@
 #include <iostream>
 
 PluginCreationDialog::PluginCreationDialog(QWidget *parent) : QDialog(parent) {
-	setupUi(this);
-	setModal(true);
-	connect(okButton, SIGNAL(clicked()), this, SLOT(validateForm()));
-	connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
-	connect(browseButton, SIGNAL(clicked()), this, SLOT(selectPluginSourceFile()));
-	QDate currentDate = QDate::currentDate();
-	date->setText(currentDate.toString("dd/MM/yyyy"));
+  setupUi(this);
+  setModal(true);
+  connect(okButton, SIGNAL(clicked()), this, SLOT(validateForm()));
+  connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+  connect(browseButton, SIGNAL(clicked()), this, SLOT(selectPluginSourceFile()));
+  QDate currentDate = QDate::currentDate();
+  date->setText(currentDate.toString("dd/MM/yyyy"));
 }
 
 void PluginCreationDialog::validateForm() {
-	if (pluginFileName->text().isEmpty()) {
-		QMessageBox::critical(this, "Error", "No file has been selected to save the plugin source code.");
-		return;
-	}
-	QString moduleName = pluginFileName->text().mid(pluginFileName->text().lastIndexOf("/")+1);
-	moduleName = moduleName.mid(0, moduleName.length() - 3);
-	if (moduleName.at(0).isNumber()) {
-		QMessageBox::critical(this, "Error", "Python does not allow a module name to begin with a number.");
-		return;
-	}
-	if (moduleName.contains(" ")) {
-		QMessageBox::critical(this, "Error", "The Python module name can not contain any whitespace.");
-		return;
-	}
-	int i = 0;
-	while (pythonReservedCharacters[i]) {
-		if (moduleName.contains(pythonReservedCharacters[i++])) {
-			QMessageBox::critical(this, "Error", "The Python module name contains an invalid character.");
-			return;
-		}
-	}
-	if (pluginClassName->text().isEmpty()) {
-		QMessageBox::critical(this, "Error", "No class name has been provided for the plugin.");
-		return;
-	}
-	if (pluginClassName->text().at(0).isNumber()) {
-		QMessageBox::critical(this, "Error", "Python does not allow a class name to begin with a number.");
-		return;
-	}
-	if (pluginClassName->text().contains(" ")) {
-		QMessageBox::critical(this, "Error", "The Python class name can not contain any whitespace.");
-		return;
-	}
-	i = 0;
-	while (pythonReservedCharacters[i]) {
-		if (pluginClassName->text().contains(pythonReservedCharacters[i++])) {
-			QMessageBox::critical(this, "Error", "The Python class name contains an invalid character.");
-			return;
-		}
-	}
-	if (pluginName->text().isEmpty()) {
-		QMessageBox::critical(this, "Error", "No name has been provided for the plugin.");
-		return;
-	}
+  if (pluginFileName->text().isEmpty()) {
+    QMessageBox::critical(this, "Error", "No file has been selected to save the plugin source code.");
+    return;
+  }
 
-	accept();
+  QString moduleName = pluginFileName->text().mid(pluginFileName->text().lastIndexOf("/")+1);
+  moduleName = moduleName.mid(0, moduleName.length() - 3);
+
+  if (moduleName.at(0).isNumber()) {
+    QMessageBox::critical(this, "Error", "Python does not allow a module name to begin with a number.");
+    return;
+  }
+
+  if (moduleName.contains(" ")) {
+    QMessageBox::critical(this, "Error", "The Python module name can not contain any whitespace.");
+    return;
+  }
+
+  int i = 0;
+
+  while (pythonReservedCharacters[i]) {
+    if (moduleName.contains(pythonReservedCharacters[i++])) {
+      QMessageBox::critical(this, "Error", "The Python module name contains an invalid character.");
+      return;
+    }
+  }
+
+  if (pluginClassName->text().isEmpty()) {
+    QMessageBox::critical(this, "Error", "No class name has been provided for the plugin.");
+    return;
+  }
+
+  if (pluginClassName->text().at(0).isNumber()) {
+    QMessageBox::critical(this, "Error", "Python does not allow a class name to begin with a number.");
+    return;
+  }
+
+  if (pluginClassName->text().contains(" ")) {
+    QMessageBox::critical(this, "Error", "The Python class name can not contain any whitespace.");
+    return;
+  }
+
+  i = 0;
+
+  while (pythonReservedCharacters[i]) {
+    if (pluginClassName->text().contains(pythonReservedCharacters[i++])) {
+      QMessageBox::critical(this, "Error", "The Python class name contains an invalid character.");
+      return;
+    }
+  }
+
+  if (pluginName->text().isEmpty()) {
+    QMessageBox::critical(this, "Error", "No name has been provided for the plugin.");
+    return;
+  }
+
+  accept();
 }
 
 void PluginCreationDialog::selectPluginSourceFile() {
-	QString fileName = QFileDialog::getSaveFileName(this, tr("Set Plugin source filen"),"","Python script (*.py)");
-	if (fileName.isEmpty())
-		return;
-	if (!fileName.endsWith(".py"))
-		fileName += ".py";
-	pluginFileName->setText(fileName);
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Set Plugin source filen"),"","Python script (*.py)");
+
+  if (fileName.isEmpty())
+    return;
+
+  if (!fileName.endsWith(".py"))
+    fileName += ".py";
+
+  pluginFileName->setText(fileName);
 }
 
 QString PluginCreationDialog::getPluginFileName() const {
-	return pluginFileName->text();
+  return pluginFileName->text();
 }
 
 QString PluginCreationDialog::getPluginType() const {
-	return pluginType->currentText();
+  return pluginType->currentText();
 }
 
 QString PluginCreationDialog::getPluginClassName() const {
-	return pluginClassName->text();
+  return pluginClassName->text();
 }
 
 QString PluginCreationDialog::getPluginName() const {
-	return pluginName->text();
+  return pluginName->text();
 }
 
 QString PluginCreationDialog::getPluginAuthor() const {
-	return author->text();
+  return author->text();
 }
 
 QString PluginCreationDialog::getPluginDate() const {
-	return date->text();
+  return date->text();
 }
 
 QString PluginCreationDialog::getPluginInfos() const {
-	return infos->text();
+  return infos->text();
 }
 
 QString PluginCreationDialog::getPluginRelease() const {
-	return release->text();
+  return release->text();
 }
 
 QString PluginCreationDialog::getPluginGroup() const {
-	return group->text();
+  return group->text();
 }
 

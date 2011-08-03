@@ -66,178 +66,178 @@ namespace tlp {
  **/
 class TLP_SCOPE PluginListerInterface {
 public:
-	static std::map<std::string, PluginListerInterface*> *allFactories;
-	static PluginLoader *currentLoader;
+  static std::map<std::string, PluginListerInterface*> *allFactories;
+  static PluginLoader *currentLoader;
 
-	virtual ~PluginListerInterface() {}
+  virtual ~PluginListerInterface() {}
 
-	/**
-	 * @brief Gets the list of plug-ins that registered themselves in this factory.
-	 *
-	 * @return :Iterator< std::string >* An iterator over the names of the plug-ins registered in this factory.
-	 **/
-	virtual Iterator<std::string>* availablePlugins() const = 0;
+  /**
+   * @brief Gets the list of plug-ins that registered themselves in this factory.
+   *
+   * @return :Iterator< std::string >* An iterator over the names of the plug-ins registered in this factory.
+   **/
+  virtual Iterator<std::string>* availablePlugins() const = 0;
 
-	/**
-	 * @brief Gets more detailed informations about one specific plug-in.
-	 *
-	 * @param name The name of the plugin to retrieve informations for.
-	 * @return :AbstractPluginInfo* The informations on the plugin.
-	 **/
-	virtual const AbstractPluginInfo& pluginInformations(const std::string& name) const = 0;
+  /**
+   * @brief Gets more detailed informations about one specific plug-in.
+   *
+   * @param name The name of the plugin to retrieve informations for.
+   * @return :AbstractPluginInfo* The informations on the plugin.
+   **/
+  virtual const AbstractPluginInfo& pluginInformations(const std::string& name) const = 0;
 
-	/**
-	 * @brief Checks if a given name is registered in this factory.
-	 *
-	 * @param pluginName The name of the plug-in to look for.
-	 * @return bool Whether there is a plug-in with the given name registered in this factory.
-	 **/
-	virtual bool pluginExists(const std::string &pluginName) const = 0;
+  /**
+   * @brief Checks if a given name is registered in this factory.
+   *
+   * @param pluginName The name of the plug-in to look for.
+   * @return bool Whether there is a plug-in with the given name registered in this factory.
+   **/
+  virtual bool pluginExists(const std::string &pluginName) const = 0;
 
-	/**
-	 * @brief Gets the list of parameters for the given plug-in.
-	 *
-	 * @param name The name of the plug-in to retrieve the parameters of.
-	 * @return :ParameterList The parameters of the plug-in.
-	 **/
-	virtual const ParameterList getPluginParameters(std::string name) const = 0;
+  /**
+   * @brief Gets the list of parameters for the given plug-in.
+   *
+   * @param name The name of the plug-in to retrieve the parameters of.
+   * @return :ParameterList The parameters of the plug-in.
+   **/
+  virtual const ParameterList getPluginParameters(std::string name) const = 0;
 
-	/**
-	 * @brief Gets the dependencies of a plug-in.
-	 *
-	 * @param name The name of the plug-in to retrieve the dependencies of.
-	 * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > > The list of dependencies of the plug-in.
-	 **/
-	virtual std::list<tlp::Dependency> getPluginDependencies(std::string name) const = 0;
+  /**
+   * @brief Gets the dependencies of a plug-in.
+   *
+   * @param name The name of the plug-in to retrieve the dependencies of.
+   * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > > The list of dependencies of the plug-in.
+   **/
+  virtual std::list<tlp::Dependency> getPluginDependencies(std::string name) const = 0;
 
-	/**
-	 * @brief Gets the library from which a plug-in has been loaded.
-	 *
-	 * @param name The name of the plug-in to retrieve the library of.
-	 * @return std::string The library from which the plug-in was loaded.
-	 **/
-	virtual std::string getPluginLibrary(const std::string& name) const = 0;
+  /**
+   * @brief Gets the library from which a plug-in has been loaded.
+   *
+   * @param name The name of the plug-in to retrieve the library of.
+   * @return std::string The library from which the plug-in was loaded.
+   **/
+  virtual std::string getPluginLibrary(const std::string& name) const = 0;
 
-	/**
-	 * @brief Gets the class name for the plug-in's registered class.
-	 *  If the class is in the tlp namespace, the 'tlp::' prefix is removed.
-	 *
-	 * @return :string The class name of the plug-in.
-	 **/
-	virtual std::string getPluginsClassName() const = 0;
+  /**
+   * @brief Gets the class name for the plug-in's registered class.
+   *  If the class is in the tlp namespace, the 'tlp::' prefix is removed.
+   *
+   * @return :string The class name of the plug-in.
+   **/
+  virtual std::string getPluginsClassName() const = 0;
 
-	/**
-	 * @brief Adds a factory to a static map of factories.
-	 * This map is then used to list all the factories, and all the plug-ins for each factory.
-	 *
-	 * @param factory The factory to add.
-	 * @param name The name of the factory to add, used as key.
-	 * @return void
-	 **/
-	static void addFactory(PluginListerInterface *factory, const std::string &name)  {
-		if (!allFactories)
-			allFactories = new std::map<std::string, PluginListerInterface*>();
+  /**
+   * @brief Adds a factory to a static map of factories.
+   * This map is then used to list all the factories, and all the plug-ins for each factory.
+   *
+   * @param factory The factory to add.
+   * @param name The name of the factory to add, used as key.
+   * @return void
+   **/
+  static void addFactory(PluginListerInterface *factory, const std::string &name)  {
+    if (!allFactories)
+      allFactories = new std::map<std::string, PluginListerInterface*>();
 
-		//std::cerr << name.c_str() << " factory added" << std::endl;
-		(*allFactories)[name] = factory;
-	}
+    //std::cerr << name.c_str() << " factory added" << std::endl;
+    (*allFactories)[name] = factory;
+  }
 
-	/**
-	 * @brief Checks if a plug-in exists in a specific factory.
-	 * In debug mode, an assert checks the factory is registered in the factory map before accessing it.
-	 *
-	 * @param factoryName The name of the factory to look into.
-	 * @param pluginName The name of the plugin to look for.
-	 * @return bool Whether the plug-in exists in the specified factory.
-	 **/
-	static bool pluginExists(const std::string& factoryName, const std::string& pluginName) {
-		assert(allFactories->find(factoryName) != allFactories->end());
-		return (*allFactories)[factoryName]->pluginExists(pluginName);
-	}
+  /**
+   * @brief Checks if a plug-in exists in a specific factory.
+   * In debug mode, an assert checks the factory is registered in the factory map before accessing it.
+   *
+   * @param factoryName The name of the factory to look into.
+   * @param pluginName The name of the plugin to look for.
+   * @return bool Whether the plug-in exists in the specified factory.
+   **/
+  static bool pluginExists(const std::string& factoryName, const std::string& pluginName) {
+    assert(allFactories->find(factoryName) != allFactories->end());
+    return (*allFactories)[factoryName]->pluginExists(pluginName);
+  }
 
-	/**
-	 * @brief Checks if all registered plug-ins have their dependencies met.
-	 *
-	 * @param loader If there are errors, the loader is informed about them so they can be displayed.
-	 * @return void
-	 **/
-	static void checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
-		// plugins dependencies loop
-		bool depsNeedCheck;
+  /**
+   * @brief Checks if all registered plug-ins have their dependencies met.
+   *
+   * @param loader If there are errors, the loader is informed about them so they can be displayed.
+   * @return void
+   **/
+  static void checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
+    // plugins dependencies loop
+    bool depsNeedCheck;
 
-		do {
-			std::map<std::string, PluginListerInterface *>::const_iterator it = PluginListerInterface::allFactories->begin();
-			depsNeedCheck = false;
+    do {
+      std::map<std::string, PluginListerInterface *>::const_iterator it = PluginListerInterface::allFactories->begin();
+      depsNeedCheck = false;
 
-			// loop over factories
-			for (; it != PluginListerInterface::allFactories->end(); ++  it) {
-				PluginListerInterface *tfi = (*it).second;
-				// loop over plugins
-				Iterator<std::string> *itP = tfi->availablePlugins();
+      // loop over factories
+      for (; it != PluginListerInterface::allFactories->end(); ++  it) {
+        PluginListerInterface *tfi = (*it).second;
+        // loop over plugins
+        Iterator<std::string> *itP = tfi->availablePlugins();
 
-				while(itP->hasNext()) {
-					std::string pluginName = itP->next();
-					std::list<Dependency> dependencies = tfi->getPluginDependencies(pluginName);
-					std::list<Dependency>::const_iterator itD = dependencies.begin();
+        while(itP->hasNext()) {
+          std::string pluginName = itP->next();
+          std::list<Dependency> dependencies = tfi->getPluginDependencies(pluginName);
+          std::list<Dependency>::const_iterator itD = dependencies.begin();
 
-					// loop over dependencies
-					for (; itD != dependencies.end(); ++itD) {
-						std::string factoryDepName = (*itD).factoryName;
-						std::string pluginDepName = (*itD).pluginName;
+          // loop over dependencies
+          for (; itD != dependencies.end(); ++itD) {
+            std::string factoryDepName = (*itD).factoryName;
+            std::string pluginDepName = (*itD).pluginName;
 
-						if (!PluginListerInterface::pluginExists(factoryDepName, pluginDepName)) {
-							if (loader)
-								loader->aborted(pluginName, tfi->getPluginsClassName() +
-										" '" + pluginName + "' will be removed, it depends on missing " +
-										factoryDepName + " '" + pluginDepName + "'.");
+            if (!PluginListerInterface::pluginExists(factoryDepName, pluginDepName)) {
+              if (loader)
+                loader->aborted(pluginName, tfi->getPluginsClassName() +
+                                " '" + pluginName + "' will be removed, it depends on missing " +
+                                factoryDepName + " '" + pluginDepName + "'.");
 
-							tfi->removePlugin(pluginName);
-							depsNeedCheck = true;
-							break;
-						}
+              tfi->removePlugin(pluginName);
+              depsNeedCheck = true;
+              break;
+            }
 
-						std::string release = (*PluginListerInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
-						std::string releaseDep = (*itD).pluginRelease;
+            std::string release = (*PluginListerInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
+            std::string releaseDep = (*itD).pluginRelease;
 
-						if (getMajor(release) != getMajor(releaseDep) ||
-								getMinor(release) != getMinor(releaseDep)) {
-							if (loader) {
-								loader->aborted(pluginName, tfi->getPluginsClassName() +
-										" '" + pluginName + "' will be removed, it depends on release " +
-										releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
-										release + " is loaded.");
-							}
+            if (getMajor(release) != getMajor(releaseDep) ||
+                getMinor(release) != getMinor(releaseDep)) {
+              if (loader) {
+                loader->aborted(pluginName, tfi->getPluginsClassName() +
+                                " '" + pluginName + "' will be removed, it depends on release " +
+                                releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
+                                release + " is loaded.");
+              }
 
-							tfi->removePlugin(pluginName);
-							depsNeedCheck = true;
-							break;
-						}
-					}
-				}
+              tfi->removePlugin(pluginName);
+              depsNeedCheck = true;
+              break;
+            }
+          }
+        }
 
-				delete itP;
-			}
-		}
-		while (depsNeedCheck);
-	}
+        delete itP;
+      }
+    }
+    while (depsNeedCheck);
+  }
 
-	/**
-	 * @brief Removes a plug-in from this factory.
-	 * This is usefull when a plug-in has unmet dependencies, or appears more than once.
-	 *
-	 * @param name The name of the plug-in to remove.
-	 * @return void
-	 **/
-	virtual void removePlugin(const std::string& name)=0;
+  /**
+   * @brief Removes a plug-in from this factory.
+   * This is usefull when a plug-in has unmet dependencies, or appears more than once.
+   *
+   * @param name The name of the plug-in to remove.
+   * @return void
+   **/
+  virtual void removePlugin(const std::string& name)=0;
 
 protected:
-	/**
-	 * @brief Gets the release number of the given plug-in.
-	 *
-	 * @param name The name of the plug-in to retrieve the version number of.
-	 * @return :string The version number, ussually formatted as X[.Y], where X is the major, and Y the minor.
-	 **/
-	virtual std::string getPluginRelease(std::string name) const = 0;
+  /**
+   * @brief Gets the release number of the given plug-in.
+   *
+   * @param name The name of the plug-in to retrieve the version number of.
+   * @return :string The version number, ussually formatted as X[.Y], where X is the major, and Y the minor.
+   **/
+  virtual std::string getPluginRelease(std::string name) const = 0;
 
 };
 
@@ -258,63 +258,63 @@ class FactoryInterface;
 template<class ObjectType, class Context>
 class PluginLister: public PluginListerInterface {
 private:
-	struct PluginDescription {
-		FactoryInterface<ObjectType, Context>* factory;
-		ParameterList parameters;
-		std::list<tlp::Dependency> dependencies;
-		std::string library;
-	};
+  struct PluginDescription {
+    FactoryInterface<ObjectType, Context>* factory;
+    ParameterList parameters;
+    std::list<tlp::Dependency> dependencies;
+    std::string library;
+  };
 
 public:
 
-	/**
-	 * @brief Gets the static instance of this class. If not already done, creates it beforehand.
-	 *
-	 * @return PluginLister< ObjectType, Context >* The only instance of this object that exists in the whole program.
-	 **/
-	static PluginLister<ObjectType, Context>* getInstance() {
-		if(_instance == NULL) {
-			_instance = new PluginLister<ObjectType, Context>();
-		}
+  /**
+   * @brief Gets the static instance of this class. If not already done, creates it beforehand.
+   *
+   * @return PluginLister< ObjectType, Context >* The only instance of this object that exists in the whole program.
+   **/
+  static PluginLister<ObjectType, Context>* getInstance() {
+    if(_instance == NULL) {
+      _instance = new PluginLister<ObjectType, Context>();
+    }
 
-		return _instance;
-	}
+    return _instance;
+  }
 
-	/**
-	 * @brief Constructs a plug-in.
-	 *
-	 * @param name The name of the plug-in to instantiate.
-	 * @param p The context to give to the plug-in.
-	 * @return ObjectType* The newly constructed plug-in.
-	 **/
-	ObjectType *getPluginObject(const std::string& name, Context p) const;
+  /**
+   * @brief Constructs a plug-in.
+   *
+   * @param name The name of the plug-in to instantiate.
+   * @param p The context to give to the plug-in.
+   * @return ObjectType* The newly constructed plug-in.
+   **/
+  ObjectType *getPluginObject(const std::string& name, Context p) const;
 
-	//the following function are inherited from PluginListerInterface, and by default inherit the doc.
-	Iterator<std::string>* availablePlugins() const;
-	const AbstractPluginInfo& pluginInformations(const std::string& name) const;
-	bool pluginExists(const std::string& pluginName) const;
-	const ParameterList getPluginParameters(std::string name) const;
-	std::string getPluginLibrary(const std::string& name) const;
-	std::list<tlp::Dependency> getPluginDependencies(std::string name) const;
-	void registerPlugin(FactoryInterface<ObjectType, Context>* objectFactory);
-	void removePlugin(const std::string &name);
+  //the following function are inherited from PluginListerInterface, and by default inherit the doc.
+  Iterator<std::string>* availablePlugins() const;
+  const AbstractPluginInfo& pluginInformations(const std::string& name) const;
+  bool pluginExists(const std::string& pluginName) const;
+  const ParameterList getPluginParameters(std::string name) const;
+  std::string getPluginLibrary(const std::string& name) const;
+  std::list<tlp::Dependency> getPluginDependencies(std::string name) const;
+  void registerPlugin(FactoryInterface<ObjectType, Context>* objectFactory);
+  void removePlugin(const std::string &name);
 
 protected:
 
-	static PluginLister<ObjectType, Context>* _instance;
+  static PluginLister<ObjectType, Context>* _instance;
 
-	PluginLister() {
-		PluginListerInterface::addFactory(this, tlp::demangleTlpClassName(typeid(ObjectType).name()));
-	}
+  PluginLister() {
+    PluginListerInterface::addFactory(this, tlp::demangleTlpClassName(typeid(ObjectType).name()));
+  }
 
-	/**
-	 * @brief Stores the the factory, dependencies, and parameters of all the plugins that register into this factory.
-	 **/
-	std::map<std::string , PluginDescription> plugins;
+  /**
+   * @brief Stores the the factory, dependencies, and parameters of all the plugins that register into this factory.
+   **/
+  std::map<std::string , PluginDescription> plugins;
 
 
-	std::string getPluginRelease(std::string name) const;
-	std::string getPluginsClassName() const;
+  std::string getPluginRelease(std::string name) const;
+  std::string getPluginsClassName() const;
 };
 
 template <class ObjectType, class Context>
@@ -329,35 +329,35 @@ PluginLister<ObjectType, Context>* PluginLister<ObjectType, Context>::_instance 
 template<class ObjectType, class Context>
 class StaticPluginLister {
 public:
-	static Iterator<std::string>* availablePlugins() {
-		return PluginLister<ObjectType, Context>::getInstance()->availablePlugins();
-	}
-	static bool pluginExists(const std::string& pluginName) {
-		return PluginLister<ObjectType, Context>::getInstance()->pluginExists(pluginName);
-	}
-	static const ParameterList getPluginParameters(std::string name) {
-		return PluginLister<ObjectType, Context>::getInstance()->getPluginParameters(name);
-	}
-	static std::list<tlp::Dependency> getPluginDependencies(std::string name) {
-		return PluginLister<ObjectType, Context>::getInstance()->getPluginDependencies(name);
-	}
-	static void registerPlugin(FactoryInterface<ObjectType, Context>* objectFactory) {
-		PluginLister<ObjectType, Context>::getInstance()->registerPlugin(objectFactory);
-	}
+  static Iterator<std::string>* availablePlugins() {
+    return PluginLister<ObjectType, Context>::getInstance()->availablePlugins();
+  }
+  static bool pluginExists(const std::string& pluginName) {
+    return PluginLister<ObjectType, Context>::getInstance()->pluginExists(pluginName);
+  }
+  static const ParameterList getPluginParameters(std::string name) {
+    return PluginLister<ObjectType, Context>::getInstance()->getPluginParameters(name);
+  }
+  static std::list<tlp::Dependency> getPluginDependencies(std::string name) {
+    return PluginLister<ObjectType, Context>::getInstance()->getPluginDependencies(name);
+  }
+  static void registerPlugin(FactoryInterface<ObjectType, Context>* objectFactory) {
+    PluginLister<ObjectType, Context>::getInstance()->registerPlugin(objectFactory);
+  }
 
-	static ObjectType *getPluginObject(const std::string& name, Context p) {
-		return PluginLister<ObjectType, Context>::getInstance()->getPluginObject(name, p);
-	}
+  static ObjectType *getPluginObject(const std::string& name, Context p) {
+    return PluginLister<ObjectType, Context>::getInstance()->getPluginObject(name, p);
+  }
 
-	static const AbstractPluginInfo& pluginInformations(const std::string& name) {
-		return PluginLister<ObjectType, Context>::getInstance()->pluginInformations(name);
-	}
+  static const AbstractPluginInfo& pluginInformations(const std::string& name) {
+    return PluginLister<ObjectType, Context>::getInstance()->pluginInformations(name);
+  }
 };
 
 template <class PropertyAlgorithm>
 class PropertyPluginLister : public StaticPluginLister<PropertyAlgorithm, PropertyContext> {
 public:
-	virtual ~PropertyPluginLister() {}
+  virtual ~PropertyPluginLister() {}
 };
 
 /*@}*/
