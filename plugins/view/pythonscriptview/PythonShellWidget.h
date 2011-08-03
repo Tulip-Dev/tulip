@@ -34,39 +34,39 @@ class QsciLexer;
 
 class PythonShellWidget : public QsciScintilla {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	PythonShellWidget(QWidget *parent = 0);
+  PythonShellWidget(QWidget *parent = 0);
 
-	void keyPressEvent(QKeyEvent * e);
+  void keyPressEvent(QKeyEvent * e);
 
-	bool isCursorOnLastLine();
+  bool isCursorOnLastLine();
 
-	void executeCurrentLines();
+  void executeCurrentLines();
 
-	void setCurrentGraph(tlp::Graph *graph);
+  void setCurrentGraph(tlp::Graph *graph);
 
 protected:
 
-	void showEvent(QShowEvent * event);
+  void showEvent(QShowEvent * event);
 
 public slots:
 
-	void insert(const QString &txt, const bool atEnd = false);
-	void treatUserListSelection(int id, const QString &text);
+  void insert(const QString &txt, const bool atEnd = false);
+  void treatUserListSelection(int id, const QString &text);
 
 private :
 
-	QString currentPs;
-	QString currentCodeLines;
+  QString currentPs;
+  QString currentCodeLines;
 
-	std::vector<QString> history;
-	int currentHistoryPos;
+  std::vector<QString> history;
+  int currentHistoryPos;
 
-	QsciLexer *pythonLexer;
-	QsciAPIs *api;
+  QsciLexer *pythonLexer;
+  QsciAPIs *api;
 
 };
 

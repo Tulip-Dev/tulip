@@ -31,72 +31,72 @@ class PythonScriptView;
 
 class PythonScriptViewWidget : public QWidget, public Ui::PythonScriptViewWidgetData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	PythonScriptViewWidget(PythonScriptView *view, QWidget *parent);
+  PythonScriptViewWidget(PythonScriptView *view, QWidget *parent);
 
-	void showEvent(QShowEvent *);
-	void resizeEvent(QResizeEvent *);
+  void showEvent(QShowEvent *);
+  void resizeEvent(QResizeEvent *);
 
-	int addMainScriptEditor();
-	int addModuleEditor();
-	int addPluginEditor();
+  int addMainScriptEditor();
+  int addModuleEditor();
+  int addPluginEditor();
 
-	PythonCodeEditor *getMainScriptEditor(int idx) const;
-	PythonCodeEditor *getCurrentMainScriptEditor() const;
-	PythonCodeEditor *getModuleEditor(int idx) const;
-	PythonCodeEditor *getCurrentModuleEditor() const;
-	PythonCodeEditor *getPluginEditor(int idx) const;
-	PythonCodeEditor *getCurrentPluginEditor() const;
+  PythonCodeEditor *getMainScriptEditor(int idx) const;
+  PythonCodeEditor *getCurrentMainScriptEditor() const;
+  PythonCodeEditor *getModuleEditor(int idx) const;
+  PythonCodeEditor *getCurrentModuleEditor() const;
+  PythonCodeEditor *getPluginEditor(int idx) const;
+  PythonCodeEditor *getCurrentPluginEditor() const;
 
-	std::string getCurrentMainScriptCode() const;
-	std::string getMainScriptCode(int idx) const;
-	std::string getModuleCode(int idx) const;
-	std::string getPluginCode(int idx) const;
+  std::string getCurrentMainScriptCode() const;
+  std::string getMainScriptCode(int idx) const;
+  std::string getModuleCode(int idx) const;
+  std::string getPluginCode(int idx) const;
 
 
-	bool eventFilter(QObject *obj, QEvent *event);
+  bool eventFilter(QObject *obj, QEvent *event);
 
 public slots :
 
-	void decreaseFontSize();
-	void increaseFontSize();
-	void mainScriptTextChanged();
-	void moduleScriptTextChanged();
-	void pluginScriptTextChanged();
-	void resizeToolBars();
+  void decreaseFontSize();
+  void increaseFontSize();
+  void mainScriptTextChanged();
+  void moduleScriptTextChanged();
+  void pluginScriptTextChanged();
+  void resizeToolBars();
 
-	void currentTabChanged(int index);
+  void currentTabChanged(int index);
 
 public :
 
-	QAction *newMainScriptAction;
-	QAction *loadMainScriptAction;
-	QAction *saveMainScriptAction;
-	QAction *newStringModuleAction;
-	QAction *newFileModuleAction;
-	QAction *loadModuleAction;
-	QAction *saveModuleAction;
-	QAction *newPluginAction;
-	QAction *loadPluginAction;
-	QAction *savePluginAction;
+  QAction *newMainScriptAction;
+  QAction *loadMainScriptAction;
+  QAction *saveMainScriptAction;
+  QAction *newStringModuleAction;
+  QAction *newFileModuleAction;
+  QAction *loadModuleAction;
+  QAction *saveModuleAction;
+  QAction *newPluginAction;
+  QAction *loadPluginAction;
+  QAction *savePluginAction;
 
 
-	QToolBar *mainScriptToolBar;
-	QToolBar *modulesToolBar;
-	QToolBar *pluginsToolBar;
+  QToolBar *mainScriptToolBar;
+  QToolBar *modulesToolBar;
+  QToolBar *pluginsToolBar;
 
 private :
 
-	int fontZoom;
+  int fontZoom;
 
 
-	void commentSelectedCode(QObject *obj);
-	void uncommentSelectedCode(QObject *obj);
+  void commentSelectedCode(QObject *obj);
+  void uncommentSelectedCode(QObject *obj);
 
-	PythonScriptView *pythonScriptView;
+  PythonScriptView *pythonScriptView;
 };
 
 #endif /* PYTHONSCRIPTVIEWWIDGET_H_ */

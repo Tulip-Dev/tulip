@@ -39,33 +39,35 @@ static std::string consoleOuputString = "";
 static bool outputActivated = true;
 
 typedef struct {
-	PyObject_HEAD
-	bool stderrflag;
-	bool writeToConsole;
+  PyObject_HEAD
+  bool stderrflag;
+  bool writeToConsole;
 } scriptengine_ConsoleOutput;
 
 static void
 scriptengine_ConsoleOutput_dealloc(scriptengine_ConsoleOutput* self) {
-	self->ob_type->tp_free((PyObject*)self);
+  self->ob_type->tp_free((PyObject*)self);
 }
 
 static PyObject *
 scriptengine_ConsoleOutput_new(PyTypeObject *type, PyObject *, PyObject *) {
-	scriptengine_ConsoleOutput *self;
-	self = reinterpret_cast<scriptengine_ConsoleOutput *>(type->tp_alloc(type, 0));
-	self->stderrflag = false;
-	self->writeToConsole = true;
-	return reinterpret_cast<PyObject *>(self);
+  scriptengine_ConsoleOutput *self;
+  self = reinterpret_cast<scriptengine_ConsoleOutput *>(type->tp_alloc(type, 0));
+  self->stderrflag = false;
+  self->writeToConsole = true;
+  return reinterpret_cast<PyObject *>(self);
 }
 
 static int
 scriptengine_ConsoleOutput_init(scriptengine_ConsoleOutput *self, PyObject *args, PyObject *) {
-	int i;
-	if (!PyArg_ParseTuple(args, "|i", &i))
-		return -1;
-	self->stderrflag = i > 0;
-	self->writeToConsole = true;
-	return 0;
+  int i;
+
+  if (!PyArg_ParseTuple(args, "|i", &i))
+    return -1;
+
+  self->stderrflag = i > 0;
+  self->writeToConsole = true;
+  return 0;
 }
 
 
@@ -73,42 +75,43 @@ scriptengine_ConsoleOutput_init(scriptengine_ConsoleOutput *self, PyObject *args
 static PyObject *
 scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
 
-	char *buf;
+  char *buf;
 
-	if(!PyArg_ParseTuple(o, "s", &buf))
-		return NULL;
+  if(!PyArg_ParseTuple(o, "s", &buf))
+    return NULL;
 
-	consoleOuputString += buf;
+  consoleOuputString += buf;
 
-	if (outputActivated) {
+  if (outputActivated) {
 
-		if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
-			cerr << buf << endl;
-		}
+    if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
+      cerr << buf << endl;
+    }
 
-		if (shellWidget) {
-			shellWidget->insert(buf, true);
-		} else if (consoleOuputEmitter) {
-			if (buf != NULL && ((scriptengine_ConsoleOutput *)self)->writeToConsole) {
-				consoleOuputEmitter->sendOutputToConsole(buf, ((scriptengine_ConsoleOutput *)self)->stderrflag);
-			}
-		}
-	}
+    if (shellWidget) {
+      shellWidget->insert(buf, true);
+    }
+    else if (consoleOuputEmitter) {
+      if (buf != NULL && ((scriptengine_ConsoleOutput *)self)->writeToConsole) {
+        consoleOuputEmitter->sendOutputToConsole(buf, ((scriptengine_ConsoleOutput *)self)->stderrflag);
+      }
+    }
+  }
 
-	Py_RETURN_NONE;
+  Py_RETURN_NONE;
 }
 
 /* This redirects stdout from the calling script. */
 static PyObject *
 scriptengine_ConsoleOutput_enableConsoleOutput(PyObject *self, PyObject *o) {
-	int i;
+  int i;
 
-	if(!PyArg_ParseTuple(o, "i", &i))
-		return NULL;
+  if(!PyArg_ParseTuple(o, "i", &i))
+    return NULL;
 
-	((scriptengine_ConsoleOutput *)self)->writeToConsole = i > 0;
+  ((scriptengine_ConsoleOutput *)self)->writeToConsole = i > 0;
 
-	Py_RETURN_NONE;
+  Py_RETURN_NONE;
 }
 
 // T_BOOL is not defined for older versions of Python (2.5 for instance)
@@ -118,75 +121,80 @@ scriptengine_ConsoleOutput_enableConsoleOutput(PyObject *self, PyObject *o) {
 #endif
 
 static PyMemberDef scriptengine_ConsoleOutput_members[] = {
-		{const_cast<char*>("stderrflag"), T_BOOL, offsetof(scriptengine_ConsoleOutput, stderrflag), 0, const_cast<char *>("flag for stderrflag")},
-		{const_cast<char*>("writeToConsole"), T_BOOL, offsetof(scriptengine_ConsoleOutput, writeToConsole), 0, const_cast<char *>("flag for enabling/disabling console output")},
-		{NULL}  /* Sentinel */
+  {const_cast<char*>("stderrflag"), T_BOOL, offsetof(scriptengine_ConsoleOutput, stderrflag), 0, const_cast<char *>("flag for stderrflag")},
+  {const_cast<char*>("writeToConsole"), T_BOOL, offsetof(scriptengine_ConsoleOutput, writeToConsole), 0, const_cast<char *>("flag for enabling/disabling console output")},
+  {NULL}  /* Sentinel */
 };
 
 
 static PyMethodDef scriptengine_ConsoleOutput_methods[] = {
-		{"write", (PyCFunction) scriptengine_ConsoleOutput_write, METH_VARARGS,
-				"Post output to the scripting engine"},
-				{"enableConsoleOutput", (PyCFunction) scriptengine_ConsoleOutput_enableConsoleOutput, METH_VARARGS,
-						"enable / disable console output"},
-						{0, 0, 0, 0}  /* Sentinel */
+  {
+    "write", (PyCFunction) scriptengine_ConsoleOutput_write, METH_VARARGS,
+    "Post output to the scripting engine"
+  },
+  {
+    "enableConsoleOutput", (PyCFunction) scriptengine_ConsoleOutput_enableConsoleOutput, METH_VARARGS,
+    "enable / disable console output"
+  },
+  {0, 0, 0, 0}  /* Sentinel */
 };
 
 static PyTypeObject scriptengine_ConsoleOutputType = {
-		PyObject_HEAD_INIT(NULL)
-		0,                         /*ob_size*/
-		"scriptengine.ConsoleOutput",             /*tp_name*/
-		sizeof(scriptengine_ConsoleOutput),             /*tp_basicsize*/
-		0,                         /*tp_itemsize*/
-		(destructor)scriptengine_ConsoleOutput_dealloc, /*tp_dealloc*/
-		0,                         /*tp_print*/
-		0,                         /*tp_getattr*/
-		0,                         /*tp_setattr*/
-		0,                         /*tp_compare*/
-		0,                         /*tp_repr*/
-		0,                         /*tp_as_number*/
-		0,                         /*tp_as_sequence*/
-		0,                         /*tp_as_mapping*/
-		0,                         /*tp_hash */
-		0,                         /*tp_call*/
-		0,                         /*tp_str*/
-		0,                         /*tp_getattro*/
-		0,                         /*tp_setattro*/
-		0,                         /*tp_as_buffer*/
-		Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /*tp_flags*/
-		"",           /* tp_doc */
-		0,		               /* tp_traverse */
-		0,		               /* tp_clear */
-		0,		               /* tp_richcompare */
-		0,		               /* tp_weaklistoffset */
-		0,		               /* tp_iter */
-		0,		               /* tp_iternext */
-		scriptengine_ConsoleOutput_methods,             /* tp_methods */
-		scriptengine_ConsoleOutput_members,             /* tp_members */
-		0,                         /* tp_getset */
-		0,                         /* tp_base */
-		0,                         /* tp_dict */
-		0,                         /* tp_descr_get */
-		0,                         /* tp_descr_set */
-		0,                         /* tp_dictoffset */
-		(initproc)scriptengine_ConsoleOutput_init,      /* tp_init */
-		0,                         /* tp_alloc */
-		scriptengine_ConsoleOutput_new,                 /* tp_new */
+  PyObject_HEAD_INIT(NULL)
+  0,                         /*ob_size*/
+  "scriptengine.ConsoleOutput",             /*tp_name*/
+  sizeof(scriptengine_ConsoleOutput),             /*tp_basicsize*/
+  0,                         /*tp_itemsize*/
+  (destructor)scriptengine_ConsoleOutput_dealloc, /*tp_dealloc*/
+  0,                         /*tp_print*/
+  0,                         /*tp_getattr*/
+  0,                         /*tp_setattr*/
+  0,                         /*tp_compare*/
+  0,                         /*tp_repr*/
+  0,                         /*tp_as_number*/
+  0,                         /*tp_as_sequence*/
+  0,                         /*tp_as_mapping*/
+  0,                         /*tp_hash */
+  0,                         /*tp_call*/
+  0,                         /*tp_str*/
+  0,                         /*tp_getattro*/
+  0,                         /*tp_setattro*/
+  0,                         /*tp_as_buffer*/
+  Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /*tp_flags*/
+  "",           /* tp_doc */
+  0,                   /* tp_traverse */
+  0,                   /* tp_clear */
+  0,                   /* tp_richcompare */
+  0,                   /* tp_weaklistoffset */
+  0,                   /* tp_iter */
+  0,                   /* tp_iternext */
+  scriptengine_ConsoleOutput_methods,             /* tp_methods */
+  scriptengine_ConsoleOutput_members,             /* tp_members */
+  0,                         /* tp_getset */
+  0,                         /* tp_base */
+  0,                         /* tp_dict */
+  0,                         /* tp_descr_get */
+  0,                         /* tp_descr_set */
+  0,                         /* tp_dictoffset */
+  (initproc)scriptengine_ConsoleOutput_init,      /* tp_init */
+  0,                         /* tp_alloc */
+  scriptengine_ConsoleOutput_new,                 /* tp_new */
 };
 
 
 void
 initscriptengine(void) {
-	PyObject* m;
+  PyObject* m;
 
-	scriptengine_ConsoleOutputType.tp_new = PyType_GenericNew;
-	if (PyType_Ready(&scriptengine_ConsoleOutputType) < 0)
-		return;
+  scriptengine_ConsoleOutputType.tp_new = PyType_GenericNew;
 
-	m = Py_InitModule3("scriptengine", NULL,"");
+  if (PyType_Ready(&scriptengine_ConsoleOutputType) < 0)
+    return;
 
-	Py_INCREF(&scriptengine_ConsoleOutputType);
-	PyModule_AddObject(m, "ConsoleOutput", (PyObject *)&scriptengine_ConsoleOutputType);
+  m = Py_InitModule3("scriptengine", NULL,"");
+
+  Py_INCREF(&scriptengine_ConsoleOutputType);
+  PyModule_AddObject(m, "ConsoleOutput", (PyObject *)&scriptengine_ConsoleOutputType);
 }
 
 #endif /* CONSOLEOUTPUTMODULE_H_ */

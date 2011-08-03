@@ -32,52 +32,58 @@
 #include <QtGui/QMenu>
 
 static PyObject *
-tuliputils_updateVisualization(PyObject *, PyObject *args)
-{
-	int i;
-	if (!PyArg_ParseTuple(args, "|i", &i))
-		Py_RETURN_NONE;
-	bool centerViews = i > 0;
+tuliputils_updateVisualization(PyObject *, PyObject *args) {
+  int i;
 
-	tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
-	if (mainController) {
-		std::vector<tlp::View*> tulipViews = mainController->getViewsOfGraph(mainController->getGraph());
-		for (size_t i = 0 ; i < tulipViews.size() ; ++i) {
-			tlp::GlMainView *glView = dynamic_cast<tlp::GlMainView *>(tulipViews[i]);
-			if (centerViews && glView) {
-				glView->getGlMainWidget()->getScene()->centerScene();
-			}
-			tulipViews[i]->draw();
-		}
-	}
+  if (!PyArg_ParseTuple(args, "|i", &i))
+    Py_RETURN_NONE;
 
-	Py_RETURN_NONE;
+  bool centerViews = i > 0;
+
+  tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
+
+  if (mainController) {
+    std::vector<tlp::View*> tulipViews = mainController->getViewsOfGraph(mainController->getGraph());
+
+    for (size_t i = 0 ; i < tulipViews.size() ; ++i) {
+      tlp::GlMainView *glView = dynamic_cast<tlp::GlMainView *>(tulipViews[i]);
+
+      if (centerViews && glView) {
+        glView->getGlMainWidget()->getScene()->centerScene();
+      }
+
+      tulipViews[i]->draw();
+    }
+  }
+
+  Py_RETURN_NONE;
 }
 
 static PyObject *
-tuliputils_updatePluginsMenus(PyObject *, PyObject *)
-{
-	tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
-	if (mainController) {
-		tlp::ControllerAlgorithmTools::cleanPluginParameters();
-		mainController->buildMenu();
-		mainController->updateImportExportMenus();
-	}
+tuliputils_updatePluginsMenus(PyObject *, PyObject *) {
+  tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
 
-	Py_RETURN_NONE;
+  if (mainController) {
+    tlp::ControllerAlgorithmTools::cleanPluginParameters();
+    mainController->buildMenu();
+    mainController->updateImportExportMenus();
+  }
+
+  Py_RETURN_NONE;
 }
 
 static PyMethodDef TulipUtilsMethods[] = {
-		{"updateVisualization",  tuliputils_updateVisualization, METH_VARARGS, "Update views on current graph."},
-		{"updatePluginsMenus",  tuliputils_updatePluginsMenus, METH_VARARGS, "Update the plugins menus entries in the Tulip GUI."},
-		{NULL, NULL, 0, NULL}        /* Sentinel */
+  {"updateVisualization",  tuliputils_updateVisualization, METH_VARARGS, "Update views on current graph."},
+  {"updatePluginsMenus",  tuliputils_updatePluginsMenus, METH_VARARGS, "Update the plugins menus entries in the Tulip GUI."},
+  {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
 void
 inittuliputils(void) {
-	PyObject *m = Py_InitModule("tuliputils", TulipUtilsMethods);
-	if (m == NULL)
-		return;
+  PyObject *m = Py_InitModule("tuliputils", TulipUtilsMethods);
+
+  if (m == NULL)
+    return;
 }
 
 #endif /* TULIPUTILSMODULE_H_ */
