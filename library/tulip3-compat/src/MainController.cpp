@@ -238,7 +238,7 @@ MainController::~MainController() {
     delete tabWidgetDock;
     delete configWidgetDock;
     delete morph;
-    delete currentGraph;
+//    delete currentGraph;
     currentActiveController(this);
   }
 }
