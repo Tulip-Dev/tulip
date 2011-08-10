@@ -197,7 +197,12 @@ void Camera::initProjection(const Vector<int, 4>& viewport,bool reset) {
   double _near;
   double _far;
 
-  if(sceneBoundingBox.isValid() && sceneBoundingBox[0]!=sceneBoundingBox[1]) {
+
+  bool valid = sceneBoundingBox.isValid();
+  Vec3f v1 = sceneBoundingBox[0];
+  Vec3f v2 = sceneBoundingBox[1];
+
+  if(valid && v1 != v2) {
     sceneBoundingBox.expand(eyes);
     Coord diagCoord(sceneBoundingBox[1]-sceneBoundingBox[0]);
     double diag=2*sqrt(diagCoord[0]*diagCoord[0]+diagCoord[1]*diagCoord[1]+diagCoord[2]*diagCoord[2]);
