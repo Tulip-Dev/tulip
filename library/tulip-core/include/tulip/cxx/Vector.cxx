@@ -212,19 +212,16 @@ template <typename TYPE,unsigned int SIZE>
 bool VECTORTLP::operator!=(const VECTORTLP &vecto) const {
   if (std::numeric_limits<TYPE>::is_integer ||
       !std::numeric_limits<TYPE>::is_specialized) {
-    for (unsigned int i=0; i<SIZE; ++i)
-      if (VECTORTLP::array[i]!=vecto[i]) return true;
+  for (unsigned int i=0;i<SIZE;++i)
+    if (VECTORTLP::array[i]!=vecto[i]) return true;
+  } else {
+      for (unsigned int i=0;i<SIZE;++i) {
+  TYPE tmp = VECTORTLP::array[i] - vecto[i];
+  if (tmp > std::numeric_limits<TYPE>::epsilon() ||
+      tmp < -std::numeric_limits<TYPE>::epsilon())
+    return true;
+      }
   }
-  else {
-    for (unsigned int i=0; i<SIZE; ++i) {
-      TYPE tmp = VECTORTLP::array[i] - vecto[i];
-
-      if (tmp > std::numeric_limits<TYPE>::epsilon() ||
-          tmp < -std::numeric_limits<TYPE>::epsilon())
-        return true;
-    }
-  }
-
   return false;
 }
 //======================================================
