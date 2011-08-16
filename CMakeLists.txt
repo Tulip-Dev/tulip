@@ -27,11 +27,13 @@ IF(NOT MSVC) #visual studio does not recognize these options
 ENDIF()
 
 IF(WIN32)
+  SET(MINGW FALSE)	
   IF(NOT MSVC) #visual studio does not recognize these options
-
+	
     # Dynamic ling against libstdc++ on win32/MinGW
     # The second test is for the case where ccache is used (CMAKE_CXX_COMPILER_ARG1 contains the path to the g++ compiler)
     IF(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ARG1}" MATCHES ".*[g][+][+].*")
+	  SET(MINGW TRUE)
       EXECUTE_PROCESS(COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -dumpversion OUTPUT_VARIABLE GCXX_VERSION)
 
       IF(GCXX_VERSION VERSION_GREATER 4.0)
@@ -343,14 +345,8 @@ ENDIF(LINUX)
 ## Google breakpad
 ## -----------------------------------------------------------------------------------------------
 IF(WIN32 OR LINUX)
-  OPTION(USE_GOOGLE_BREAKPAD "Use Google breakpad to generate error reports. You'll have to run the breakpad_strip script corresponding to your system as a post-install step." OFF)
+  OPTION(USE_CRASH_HANDLING "Activate the generation of error reports through the use of Google breakpad. A stack trace will also be generated each time Tulip crashes. " OFF)
 ENDIF()
-
-IF(USE_GOOGLE_BREAKPAD)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
-  ADD_DEFINITIONS(-DUSE_GOOGLE_BREAKPAD)
-ENDIF(USE_GOOGLE_BREAKPAD)
 
 ## -----------------------------------------------------------------------------------------------
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in

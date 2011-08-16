@@ -10,7 +10,7 @@ TulipPerspectiveCrashHandler::TulipPerspectiveCrashHandler(QWidget *parent)
   : QDialog(parent), _ui(new Ui::TulipPerspectiveCrashHandlerData), _isDetailedView(false) {
   _ui->setupUi(this);
   setDetailedView(false);
-#ifndef USE_GOOGLE_BREAKPAD
+#ifndef USE_CRASH_HANDLING
   _ui->errorReportTitle->setVisible(false);
   _ui->sendReportButton->setVisible(false);
   _ui->detailsLink->setVisible(false);
@@ -45,7 +45,7 @@ void TulipPerspectiveCrashHandler::sendReport() {
   if (_reportPath.isNull())
     return;
 
-#ifdef USE_GOOGLE_BREAKPAD
+#ifdef USE_CRASH_HANDLING
   _poster = new FormPost;
   _poster->addField("platform",_ui->plateformValue->text());
   _poster->addField("compiler",_ui->compilerValue->text());
@@ -61,7 +61,7 @@ void TulipPerspectiveCrashHandler::sendReport() {
 
 void TulipPerspectiveCrashHandler::reportPosted() {
   _ui->sendReportButton->setText(trUtf8("Report sent"));
-#ifdef USE_GOOGLE_BREAKPAD
+#ifdef USE_CRASH_HANDLING
   _ui->errorReportTitle->setText(trUtf8("<b>Report has been sent. Thank you for supporting Tulip !</b>"));
   sender()->deleteLater();
   _poster->deleteLater();
@@ -72,18 +72,13 @@ void TulipPerspectiveCrashHandler::saveData() {
 
 }
 
-#ifdef USE_GOOGLE_BREAKPAD
-void TulipPerspectiveCrashHandler::setEnvData(const QString &plateform, const QString &arch, const QString &compiler, const QString &version, const QString &dumpFile) {
+#ifdef USE_CRASH_HANDLING
+void TulipPerspectiveCrashHandler::setEnvData(const QString &plateform, const QString &arch, const QString &compiler, const QString &version, const QString &dumpFile, const QString &stackTrace) {
   _ui->plateformValue->setText(plateform);
   _ui->archValue->setText(arch);
   _ui->compilerValue->setText(compiler);
   _ui->versionValue->setText(version);
-  QFile f(dumpFile);
-  f.open(QIODevice::ReadOnly);
-
-  while (!f.atEnd())
-    _ui->dumpEdit->setPlainText(_ui->dumpEdit->toPlainText() + f.read(512));
-
+  _ui->dumpEdit->setPlainText(stackTrace);
   _reportPath=dumpFile;
 }
 #endif
