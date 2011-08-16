@@ -66,7 +66,7 @@ class GlCompositeHierarchyManager;
  *
  */
 
-class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
+class TLP_QT_SCOPE GlMainWidget : public QGLWidget {
   Q_OBJECT
 
 public:
