@@ -6,7 +6,11 @@
 #include <QtGui/QFileDialog>
 #include <QtGui/QPainter>
 #include <tulip/TulipProject.h>
-#include <tulip/CrashHandling.h>
+
+#ifdef USE_CRASH_HANDLING
+#include <CrashHandling.h>
+#endif
+
 #include "TulipPerspectiveCrashHandler.h"
 
 #ifdef _WIN32
@@ -66,12 +70,12 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError e
 
   TulipPerspectiveCrashHandler crashHandler;
 
-#ifdef USE_GOOGLE_BREAKPAD
-  QRegExp plateform("^" + QString(BREAKPAD_PLATEFORM_HEADER) + " (.*)\n"),
-          arch("^" + QString(BREAKPAD_ARCH_HEADER) + " (.*)\n"),
-          compiler("^" + QString(BREAKPAD_COMPILER_HEADER) + " (.*)\n"),
-          version("^" + QString(BREAKPAD_VERSION_HEADER) + " (.*)\n"),
-          dump("^" + QString(BREAKPAD_DUMP_HEADER) + " (.*)\n");
+#ifdef USE_CRASH_HANDLING
+  QRegExp plateform("^" + QString(TLP_PLATEFORM_HEADER) + " (.*)\n"),
+          arch("^" + QString(TLP_ARCH_HEADER) + " (.*)\n"),
+          compiler("^" + QString(TLP_COMPILER_HEADER) + " (.*)\n"),
+          version("^" + QString(TLP_VERSION_HEADER) + " (.*)\n"),
+          dump("^" + QString(TLP_DUMP_HEADER) + " (.*)\n");
 
   QMap<QRegExp *,QString> envInfos;
   envInfos[&plateform] = "";
@@ -80,18 +84,32 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError e
   envInfos[&version] = "";
   envInfos[&dump] = "";
 
+  QString stackTrace;
+  bool grabStackTrace = false;
+  
   while (!process->atEnd()) {
     QString line(process->readLine());
-    QRegExp *re;
-    foreach(re,envInfos.keys()) {
-      if (re->exactMatch(line)) {
-        envInfos[re] = re->cap(1);
-        break;
-      }
-    }
+	if (line.startsWith(TLP_STACK_BEGIN_HEADER)) {
+		grabStackTrace = true;
+		continue;
+	} else if (line.startsWith(TLP_STACK_END_HEADER)) {
+		grabStackTrace = false;
+		continue;
+	}
+	if (grabStackTrace) {
+		stackTrace += line;
+	} else {
+		QRegExp *re;
+		foreach(re,envInfos.keys()) {
+			if (re->exactMatch(line)) {
+				envInfos[re] = re->cap(1);
+				break;
+			}
+		}	
+	}
   }
 
-  crashHandler.setEnvData(envInfos[&plateform],envInfos[&arch],envInfos[&compiler],envInfos[&version],envInfos[&dump]);
+  crashHandler.setEnvData(envInfos[&plateform],envInfos[&arch],envInfos[&compiler],envInfos[&version],envInfos[&dump], stackTrace);
 #endif
   crashHandler.setPerspectiveData(infos);
   crashHandler.exec();

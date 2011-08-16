@@ -24,6 +24,10 @@
 #include <signal.h>
 #endif
 
+#ifdef interface
+#undef interface
+#endif
+
 int main(int argc, char **argv) {
   QApplication tulip_agent(argc, argv);
   tulip_agent.setApplicationName(QObject::trUtf8("Tulip"));

@@ -1,9 +1,12 @@
 ADD_SUBDIRECTORY(bitmaps)
+IF(USE_CRASH_HANDLING)
+ADD_SUBDIRECTORY(crash_handling)
+ENDIF(USE_CRASH_HANDLING)
 ADD_SUBDIRECTORY(tulip)
 ADD_SUBDIRECTORY(tulip_perspective)
 ADD_SUBDIRECTORY(plugin_server)
 
-#ADD_SUBDIRECTORY(tlprender)
 
+#ADD_SUBDIRECTORY(tlprender)
 # Tulip 3 executables
 #ADD_SUBDIRECTORY(tulip3)
