@@ -2,6 +2,7 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
 
 SET(TULIP_LIBRARY_TESTS_SRCS
   tuliplibtest.cpp
+  importexporttest.cpp
   ExtendedClusterOperationTest.cpp
   VectorTest.cpp
   MatrixTest.cpp
