@@ -254,6 +254,15 @@ IF(${TULIP_DISABLE_QT_PICTURE_OUTPUT})
 ENDIF()
 
 ## -----------------------------------------------------------------------------------------------
+## Use debug mode weith GLIBC
+## this is only useful when using a GNU CXX compiler.
+## The second test is for the case where ccache is used (CMAKE_CXX_COMPILER_ARG1 contains the path to the g++ compiler)
+## -----------------------------------------------------------------------------------------------
+IF(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ARG1}" MATCHES ".*[g][+][+].*")
+  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DGLIBCXX")
+ENDIF()
+
+## -----------------------------------------------------------------------------------------------
 ## Define NDEBUG when we are in release mode
 ## -----------------------------------------------------------------------------------------------
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
