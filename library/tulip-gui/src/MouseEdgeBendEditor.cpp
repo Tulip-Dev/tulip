@@ -355,9 +355,9 @@ void MouseEdgeBendEditor::mMouseDelete() {
     int tmp=0;
 
     while(tmp!=i) {
-      tmp++;
-      CoordIt++;
-      circleIt++;
+      ++tmp;
+      ++CoordIt;
+      ++circleIt;
     }
 
     if(!edgeSelected && coordinates.size() <= 3)
@@ -404,7 +404,7 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlMainWidget *glMainW
       bool midSeg;
       vector<Coord>::iterator CoordIt=coordinates.begin();
       last=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
-      CoordIt++;
+      ++CoordIt;
 
       while(CoordIt!=coordinates.end()) {
         first=last;
@@ -416,7 +416,7 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlMainWidget *glMainW
           break;
         }
 
-        CoordIt++;
+        ++CoordIt;
       }
     }
   }
@@ -560,7 +560,7 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
       tmp=glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DScreen(tmp);
       basicCircle.set(tmp, 5, 0.);
       circles.push_back(basicCircle);
-      CoordIt++;
+      ++CoordIt;
     }
   }
   else {
@@ -604,7 +604,7 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
           Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DScreen(*coordIt));
           basicCircle.set(tmp, 5, 0.);
           circles.push_back(basicCircle);
-          coordIt++;
+          ++coordIt;
         }
       }
     }
@@ -612,7 +612,7 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
 
 
 
-  for(unsigned int i=0; i<circles.size(); i++)
+  for(unsigned int i=0; i<circles.size(); ++i)
     circleString->addGlEntity(&circles[i], IntegerType::toString(i));
 
   return hasSelection;

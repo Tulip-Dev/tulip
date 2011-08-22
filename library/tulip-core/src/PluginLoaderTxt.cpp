@@ -40,7 +40,7 @@ void PluginLoaderTxt::loaded(const AbstractPluginInfo* infos, const std::list <D
     cout << "depending on ";
     list<Dependency>::const_iterator itD = deps.begin();
 
-    for (i--; itD != deps.end(); itD++, i--) {
+    for (i--; itD != deps.end(); ++itD, --i) {
       std::string factoryDepName = (*itD).factoryName;
       std::string pluginDepName = (*itD).pluginName;
       cout << factoryDepName << " " << pluginDepName;

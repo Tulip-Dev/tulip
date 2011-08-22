@@ -18,16 +18,17 @@
  */
 #include "RectanglePacking.h"
 #include <cstring>
+#include <float.h> //FLT_MAX
+#include <limits.h> //INT_MAX
 
 using namespace std;
 using namespace tlp;
 
-RectanglePacking::RectanglePacking(int numberRects) {
-
-  firstSequence = new RectangleRelativePositionList();
-  numberOfPositionnedRectangles = 0;
-  numberOfRectangles = numberRects;
-  placesOfRectanglesInSecondSequence = new int[numberOfRectangles];
+RectanglePacking::RectanglePacking(int numberRects) : firstSequence(new RectangleRelativePositionList()), placesOfRectanglesInSecondSequence(new int[numberOfRectangles]),
+  numberOfPositionnedRectangles(0), numberOfRectangles(numberRects), bestPlaceInFirstSequence(INT_MAX), bestPlaceInSecondSequence(INT_MAX),
+  newRectangleWidth(FLT_MAX), newRectangleHeight(FLT_MAX), newRectangleLeftAbscissa(FLT_MAX),
+  newRectangleLowOrdinate(FLT_MAX), bestRectangleLeftAbscissa(FLT_MAX), bestRectangleLowOrdinate(FLT_MAX), maxWidthOfBoundingBox(FLT_MAX),
+  maxHeightOfBoundingBox(FLT_MAX), bestWidthOfBoundingBox(FLT_MAX), bestHeightOfBoundingBox(FLT_MAX) {
 }
 
 RectanglePacking::~RectanglePacking() {

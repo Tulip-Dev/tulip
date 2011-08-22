@@ -218,7 +218,7 @@ const char * paramHelp[] = {
 #define REGISTERS 1
 #define STACKS 2
 //==============================================================================
-StrahlerMetric::StrahlerMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {
+StrahlerMetric::StrahlerMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context), allNodes(false) {
   addParameter<bool>("All nodes", paramHelp[0], "false");
   addParameter<StringCollection>(COMPUTATION_TYPE, paramHelp[1], COMPUTATION_TYPES);
 }

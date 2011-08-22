@@ -148,7 +148,7 @@ void PlanarityTestImpl::sortNodesIncreasingOrder(Graph *g, MutableContainer<int>
   //array<int, numberOfNodes + 1> c;
   vector<int> c(numberOfNodes + 1);
 
-  for (int i = 1 ; i <= numberOfNodes ; i++)
+  for (int i = 1 ; i <= numberOfNodes ; ++i)
     c[i] = 0;
 
   //array<node, numberOfNodes + 1> a;
@@ -165,12 +165,12 @@ void PlanarityTestImpl::sortNodesIncreasingOrder(Graph *g, MutableContainer<int>
 
   delete it;
 
-  for (int i = 1 ; i <= numberOfNodes ; i++) {
+  for (int i = 1 ; i <= numberOfNodes ; ++i) {
     unsigned int tmp = value.get(a[i].id);
-    c[tmp]++;
+    ++c[tmp];
   }
 
-  for (int i = 2 ; i <= numberOfNodes ; i++)
+  for (int i = 2 ; i <= numberOfNodes ; ++i)
     c[i] += c[i-1];
 
   for (int i = numberOfNodes ; i > 0 ; i--) {
@@ -202,7 +202,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
 
   //forall(e, edgeInT0) {
   //  cerr << "Edge in T0: " ;
-  for (list<edge>::iterator it = edgeInT0.begin(); it != edgeInT0.end(); it++) {
+  for (list<edge>::iterator it = edgeInT0.begin(); it != edgeInT0.end(); ++it) {
     edge e = *it;
     //    cerr << e.id << ",";
     node n = g->source(e);
@@ -215,7 +215,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
 
 #ifndef NDEBUG
 
-  for (list<edge>::iterator it = edgeInT0.begin(); it != edgeInT0.end(); it++) {
+  for (list<edge>::iterator it = edgeInT0.begin(); it != edgeInT0.end(); ++it) {
     edge e = *it;
     assert (!(isBackEdge(g, e) || isBackEdge(g, edgeReversal(e))));
   }
@@ -248,7 +248,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
   delete it1;
   //  cerr << endl;
 
-  for (int i = 1 ; i <= numberOfNodes ; i++) {
+  for (int i = 1 ; i <= numberOfNodes ; ++i) {
     node n = nodeWithDfsPos.get(i);
     //forall_out_edges (e, n) {
     Iterator<edge> *it = g->getOutEdges(n);
@@ -311,7 +311,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
     } delete it;
   */
   if (embed) // needed to calculate obstruction edges;
-    for (int i = 1 ; i <= numberOfNodes ; i++) {
+    for (int i = 1 ; i <= numberOfNodes ; ++i) {
       node n = nodeWithDfsPos.get(i);
 
       if (labelB.get(n.id) == largestNeighbor.get(n.id))
@@ -757,7 +757,7 @@ node PlanarityTestImpl::findNodeWithLabelBGreaterThanDfsN(bool saveLastNodeTrave
 
   // restores parent;
   //forall(v, nl)
-  for (list<node>::iterator it1 = nl.begin(); it1 != nl.end(); it1++)
+  for (list<node>::iterator it1 = nl.begin(); it1 != nl.end(); ++it1)
     parent.set((*it1).id, p[*it1]);
 
 
@@ -766,7 +766,7 @@ node PlanarityTestImpl::findNodeWithLabelBGreaterThanDfsN(bool saveLastNodeTrave
 
   // restores info if result is nil;
   //forall(v, nl2) {
-  for (list<node>::iterator it2 = nl2.begin(); it2 != nl2.end(); it2++) {
+  for (list<node>::iterator it2 = nl2.begin(); it2 != nl2.end(); ++it2) {
     labelB.set((*it2).id, b[*it2]);
 
     if (embed) // needed to calculate obstruction edges;
@@ -829,7 +829,7 @@ bool PlanarityTestImpl::testCNodeCounter(Graph*,
   while (labelB.get(jl.id) <= dfsPosNum.get(n.id)) {
     if (labelB.get(jl.id) == dfsPosNum.get(n.id)) {
       ul = jl;
-      count++;
+      ++count;
     }
 
     a = it1l;
@@ -844,7 +844,7 @@ bool PlanarityTestImpl::testCNodeCounter(Graph*,
   while (labelB.get(jr.id) <= dfsPosNum.get(n.id)) {
     if (labelB.get(jr.id) == dfsPosNum.get(n.id)) {
       ur = jr;
-      count++;
+      ++count;
     }
 
     a = it1r;
@@ -854,10 +854,10 @@ bool PlanarityTestImpl::testCNodeCounter(Graph*,
   }
 
   if (jl == n1 || jl == n2)
-    count++;
+    ++count;
 
   if (jr != jl && (jr == n1 || jr == n2))
-    count++;
+    ++count;
 
   if (count != counter.get(cNode.id))
     return true;
@@ -1010,7 +1010,7 @@ node PlanarityTestImpl::findActiveCNode(node u, node w, list<node>& nl) {
 
   // path compression;
   //forall(v, traversedNodesInRBC)
-  for (list<node>::iterator it = traversedNodesInRBC.begin(); it != traversedNodesInRBC.end(); it++) {
+  for (list<node>::iterator it = traversedNodesInRBC.begin(); it != traversedNodesInRBC.end(); ++it) {
     if (*it != first) {
       if (*it != u)
         nl.push_back(v);

@@ -171,7 +171,7 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
 //===============================================================
 class MouseRotXRotY:public InteractorComponent {
 public:
-  MouseRotXRotY() {}
+  MouseRotXRotY() : x(INT_MAX), y(INT_MAX) {}
   ~MouseRotXRotY() {}
   int x,y;
   bool eventFilter(QObject *, QEvent *);
@@ -214,7 +214,7 @@ bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
 //===============================================================
 class MouseZoomRotZ:public InteractorComponent {
 public:
-  MouseZoomRotZ():inRotation(false),inZoom(false) {}
+  MouseZoomRotZ(): x(INT_MAX), y(INT_MAX), inRotation(false), inZoom(false) {}
   ~MouseZoomRotZ() {}
   int x,y;
   bool inRotation, inZoom;
@@ -282,7 +282,7 @@ bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
 class MouseMove:public InteractorComponent {
 public:
   int x,y;
-  MouseMove() {}
+  MouseMove() : x(INT_MAX), y(INT_MAX) {}
   ~MouseMove() {}
   bool eventFilter(QObject *, QEvent *);
   InteractorComponent *clone() {

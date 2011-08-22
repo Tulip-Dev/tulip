@@ -40,7 +40,7 @@ static void tokenize(const string& str, vector<string>& tokens, const string& de
 namespace tlp {
 
 SpreadView::SpreadView() :
-  AbstractView(),configurationWidget(NULL) {
+  AbstractView(), mainWidget(NULL), configurationWidget(NULL) {
 }
 SpreadView::~SpreadView() {
   if(configurationWidget)

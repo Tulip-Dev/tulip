@@ -65,7 +65,6 @@ public:
     unsigned int depth;
     Iterator<node>* neighbours;
 
-    dfsNodeRadiiStruct() {}
     dfsNodeRadiiStruct(node n, float r, unsigned int d, Iterator<node>* it):
       current(n), radius(r), depth(d), neighbours(it) {}
   };
@@ -175,7 +174,6 @@ public:
     unsigned int depth;
     Iterator<node>* neighbours;
 
-    dfsAngularSpreadStruct() {}
     dfsAngularSpreadStruct(node n, unsigned int d, Iterator<node>* it):
       current(n), cAngle(0), depth(d), neighbours(it) {}
   };
@@ -269,7 +267,6 @@ public:
     unsigned int depth;
     Iterator<node>* neighbours;
 
-    dfsDoLayoutStruct() {}
     dfsDoLayoutStruct(node n, double bAngle, double eAngle, double spread,
                       bool flag, unsigned int d, Iterator<node>* it):
       current(n), startAngle(bAngle), endAngle(eAngle),
@@ -342,8 +339,7 @@ public:
     }
   }
 
-
-  TreeRadial(const PropertyContext &context):LayoutAlgorithm(context) {
+  TreeRadial(const PropertyContext &context):LayoutAlgorithm(context), tree(NULL) {
     addNodeSizePropertyParameter(this);
     addSpacingParameters(this);
     addDependency<LayoutAlgorithm>("Tree Leaf", "1.0");
