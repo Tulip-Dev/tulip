@@ -51,7 +51,7 @@ void usage(const QString &error) {
 int main(int argc,char **argv) {
 #ifdef USE_CRASH_HANDLING
   start_crash_handler();
-#endif  
+#endif
   QApplication tulip_perspective(argc, argv);
   tulip_perspective.setApplicationName(QObject::trUtf8("Tulip"));
   QLocale::setDefault(QLocale(QLocale::English));

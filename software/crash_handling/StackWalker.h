@@ -22,41 +22,46 @@
 
 #ifdef WIN32
 #include <windows.h>
-#endif 
- 
+#endif
+
 class StackWalker {
 
 public:
 
-	virtual ~StackWalker() {}
+  virtual ~StackWalker() {}
 
-	virtual void printCallStack(std::ostream &os, unsigned int maxDepth = 50) = 0;
+  virtual void printCallStack(std::ostream &os, unsigned int maxDepth = 50) = 0;
 
-	void printCallStackToStdErr(unsigned int maxDepth = 50) {
-		printCallStack(std::cerr, maxDepth);
-	}
+  void printCallStackToStdErr(unsigned int maxDepth = 50) {
+    printCallStack(std::cerr, maxDepth);
+  }
 
-	virtual void printFrameInfos(std::ostream &os, unsigned int frameId, int64_t pcAddress, std::string moduleName, std::string funcName="", int64_t symbolOffset=0, std::string fileName="", unsigned int line=0) {
-		os << std::dec << std::setfill('0') << "#" << std::setw(2) << frameId
-		   << " 0x" << std::hex << std::setw(16) << pcAddress << " in ";
-		if (funcName != "") {
-			os << funcName;
-		} else {
-			os << "??";
-		}
-		if (symbolOffset != 0) {
-			os << " (+0x" << std::hex << symbolOffset << ")";
-		}		
-		if (fileName != "") {
-			os << " at " << fileName << ":" << std::dec << line;
-		}
+  virtual void printFrameInfos(std::ostream &os, unsigned int frameId, int64_t pcAddress, std::string moduleName, std::string funcName="", int64_t symbolOffset=0, std::string fileName="", unsigned int line=0) {
+    os << std::dec << std::setfill('0') << "#" << std::setw(2) << frameId
+       << " 0x" << std::hex << std::setw(16) << pcAddress << " in ";
 
-		if (moduleName != "") {
-			os << " from " << moduleName << std::endl;
-		} else {
-			os << " from ??" << std::endl;
-		}
-	}
+    if (funcName != "") {
+      os << funcName;
+    }
+    else {
+      os << "??";
+    }
+
+    if (symbolOffset != 0) {
+      os << " (+0x" << std::hex << symbolOffset << ")";
+    }
+
+    if (fileName != "") {
+      os << " at " << fileName << ":" << std::dec << line;
+    }
+
+    if (moduleName != "") {
+      os << " from " << moduleName << std::endl;
+    }
+    else {
+      os << " from ??" << std::endl;
+    }
+  }
 
 };
 
@@ -69,19 +74,21 @@ class StackWalkerGCC : public StackWalker {
 
 public:
 
-	StackWalkerGCC();
+  StackWalkerGCC();
 
-	~StackWalkerGCC();
+  ~StackWalkerGCC();
 
-	void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
+  void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
 
-	void setCallerAddress(void *callerAddress) {this->callerAddress = callerAddress;}
+  void setCallerAddress(void *callerAddress) {
+    this->callerAddress = callerAddress;
+  }
 
 private:
 
-	void *callerAddress;
+  void *callerAddress;
 #ifdef HAVE_BFD
-	std::map<std::string, BfdWrapper *> bfdMap;
+  std::map<std::string, BfdWrapper *> bfdMap;
 #endif
 
 };
@@ -91,21 +98,23 @@ private:
 #include <map>
 
 class StackWalkerMinGW : public StackWalker {
-	
-	public:
-	
-		StackWalkerMinGW();
-		~StackWalkerMinGW();
 
-		void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
-		
-		void setContext(LPCONTEXT context) {this->context = context;}
-		
+public:
+
+  StackWalkerMinGW();
+  ~StackWalkerMinGW();
+
+  void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
+
+  void setContext(LPCONTEXT context) {
+    this->context = context;
+  }
+
 private:
 
-	LPCONTEXT context;
+  LPCONTEXT context;
 #ifdef HAVE_BFD
-	std::map<std::string, BfdWrapper *> bfdMap;		
+  std::map<std::string, BfdWrapper *> bfdMap;
 #endif
 };
 
@@ -113,19 +122,21 @@ private:
 
 class StackWalkerMSVC : public StackWalker {
 
-	public:
-	
-		StackWalkerMSVC();
-		~StackWalkerMSVC();
-		
-		void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
-		
-		void setContext(CONTEXT *context) {this->context = context;}
-		
-	private :
+public:
 
-		CONTEXT *context;
-		
+  StackWalkerMSVC();
+  ~StackWalkerMSVC();
+
+  void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
+
+  void setContext(CONTEXT *context) {
+    this->context = context;
+  }
+
+private :
+
+  CONTEXT *context;
+
 };
 
 #endif
