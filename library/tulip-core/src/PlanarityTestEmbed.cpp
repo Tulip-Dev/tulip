@@ -96,7 +96,7 @@ void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
   */
   BmdList<edge> el1, l1;
 
-  for(int i = 1 ; i <= nH ; i++) {
+  for(int i = 1 ; i <= nH ; ++i) {
     e = backEdge[i];
 
     if (e != NULL_EDGE) {
@@ -310,12 +310,12 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG,
   //node u;
   //forall(u, traversedNodes)
   for (list<node>::iterator it = traversedNodes.begin() ;
-       it != traversedNodes.end() ; it++)
+       it != traversedNodes.end() ; ++it)
     state.set((*it).id, NOT_VISITED);
 
   //forall(u, listRepresentants)
   for (list<node>::iterator it = listRepresentants.begin() ;
-       it != listRepresentants.end() ; it++)
+       it != listRepresentants.end() ; ++it)
     hasBackEdge.set((*it).id, false);
 }
 //=================================================================
@@ -562,7 +562,7 @@ void PlanarityTestImpl::addOldCNodeToEmbedding(bool embBackEdgesOutW,
 
   //forall(t, listNodesR)
   for (list<node>::iterator it = listNodesR.begin() ;
-       it != listNodesR.end() ; it++) {
+       it != listNodesR.end() ; ++it) {
     t = *it;
     embedBackEdges(embBackEdgesOutW, sG, t, traversedNodes,
                    bEdgesRepres[t], embList);
@@ -604,7 +604,7 @@ void PlanarityTestImpl::embedBackEdges(bool embBackEdgesOutW,
   vector<edge> backEdge;
   int n = sortBackEdgesByDfs(sG, w, repr, listBackEdges, backEdge);
 
-  for(int i = 1; i <= n; i++) {
+  for(int i = 1; i <= n; ++i) {
     e = backEdge[i];
 
     if (e != NULL_EDGE) {
@@ -673,7 +673,7 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
   nodeInG[nodeInD[repr]] = repr;
 
   // forall(e, listBackEdges)
-  for (list<edge>::iterator it = listBackEdges.begin(); it != listBackEdges.end(); it++) {
+  for (list<edge>::iterator it = listBackEdges.begin(); it != listBackEdges.end(); ++it) {
     edge e = *it;
     node u = sG->source(e);
     node predU = NULL_NODE;
@@ -705,14 +705,14 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
   }
 
   //forall(v, listNodes)
-  for (list<node>::iterator it = listNodes.begin() ; it != listNodes.end() ; it++)
+  for (list<node>::iterator it = listNodes.begin() ; it != listNodes.end() ; ++it)
     state.set((*it).id, NOT_VISITED);
 
   // creates  edges from c-nodes;
   map<node, bool> isInD;
 
   //forall(v, listCNodes)
-  for (list<node>::iterator it = listCNodes.begin(); it != listCNodes.end(); it++) {
+  for (list<node>::iterator it = listCNodes.begin(); it != listCNodes.end(); ++it) {
     node v = *it;
     //    node u;
     BmdListIt<node> bmItn(RBC[v]);
@@ -753,7 +753,7 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
   backEdge.resize(tot + 1); //Warning
   backEdge[0] = NULL_EDGE;
 
-  for (int i = 1 ; i <= tot ; i++)
+  for (int i = 1 ; i <= tot ; ++i)
     backEdge[i] = NULL_EDGE;
 
   //forall(e, listBackEdges)
@@ -824,7 +824,7 @@ bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph* sG) {
         }
         while ((e1 != e)||(n != n_tmp));
 
-        fc++;
+        ++fc;
         //  cerr << endl;
       }
     }

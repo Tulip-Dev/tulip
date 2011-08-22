@@ -536,7 +536,7 @@ struct TLPEdgeBuilder:public TLPFalse {
   TLPGraphBuilder *graphBuilder;
   int parameter[3];
   int nbParameter;
-  TLPEdgeBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder),nbParameter(0) {}
+  TLPEdgeBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder), nbParameter(0) {}
   bool addInt(const int id)  {
     if (nbParameter<3) {
       parameter[nbParameter]=id;
@@ -569,7 +569,7 @@ struct TLPEdgesBuilder:public TLPFalse {
 struct TLPClusterBuilder:public TLPFalse {
   TLPGraphBuilder *graphBuilder;
   int clusterId, supergraphId;
-  TLPClusterBuilder(TLPGraphBuilder *graphBuilder, int supergraph=0):graphBuilder(graphBuilder), supergraphId(supergraph) {}
+  TLPClusterBuilder(TLPGraphBuilder *graphBuilder, int supergraph=0):graphBuilder(graphBuilder), clusterId(INT_MAX), supergraphId(supergraph) {}
   bool addInt(const int id) {
     clusterId = id;
 
@@ -675,15 +675,13 @@ struct TLPDataSetBuilder: public TLPFalse {
   DataSet* currentDataSet;
   char* dataSetName;
 
-  TLPDataSetBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder),currentDataSet((DataSet *) &(graphBuilder->_graph->getAttributes())) {
-    dataSetName = (char *) 0;
+  TLPDataSetBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder),currentDataSet((DataSet *) &(graphBuilder->_graph->getAttributes())), dataSetName(NULL) {
   }
-  TLPDataSetBuilder(TLPGraphBuilder *graphBuilder, char* name):graphBuilder(graphBuilder),currentDataSet(graphBuilder->dataSet) {
-    dataSetName = name;
+  TLPDataSetBuilder(TLPGraphBuilder *graphBuilder, char* name):graphBuilder(graphBuilder),currentDataSet(graphBuilder->dataSet), dataSetName(name) {
     graphBuilder->dataSet->get(dataSetName, dataSet);
     currentDataSet = &dataSet;
   }
-  TLPDataSetBuilder(TLPGraphBuilder *graphBuilder,DataSet *currentDataSet):graphBuilder(graphBuilder),currentDataSet(currentDataSet) {
+  TLPDataSetBuilder(TLPGraphBuilder *graphBuilder,DataSet *currentDataSet):graphBuilder(graphBuilder),currentDataSet(currentDataSet), dataSetName(NULL) {
   }
   virtual ~TLPDataSetBuilder() {
   }
@@ -817,7 +815,7 @@ struct TLPPropertyBuilder:public TLPFalse {
   std::string propertyType,propertyName;
   bool typeOk,nameOk;
   virtual ~TLPPropertyBuilder() {}
-  TLPPropertyBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder),typeOk(false),nameOk(false) {}
+  TLPPropertyBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder), clusterId(INT_MAX), propertyType(std::string()), propertyName(std::string()), typeOk(false), nameOk(false) {}
   bool addInt(const int id)  {
     clusterId = id;
     return true;
@@ -857,7 +855,7 @@ struct TLPPropertyBuilder:public TLPFalse {
 struct TLPNodePropertyBuilder:public TLPFalse {
   TLPPropertyBuilder *propertyBuilder;
   int nodeId;
-  TLPNodePropertyBuilder(TLPPropertyBuilder *propertyBuilder):propertyBuilder(propertyBuilder) {}
+  TLPNodePropertyBuilder(TLPPropertyBuilder *propertyBuilder):propertyBuilder(propertyBuilder), nodeId(INT_MAX) {}
   bool addInt(const int id) {
     nodeId=id;
     return true;
@@ -874,7 +872,7 @@ struct TLPEdgePropertyBuilder:public TLPFalse {
   TLPPropertyBuilder *propertyBuilder;
   int edgeId;
   std::string nodeValue;
-  TLPEdgePropertyBuilder(TLPPropertyBuilder *propertyBuilder):propertyBuilder(propertyBuilder) {}
+  TLPEdgePropertyBuilder(TLPPropertyBuilder *propertyBuilder):propertyBuilder(propertyBuilder), edgeId(INT_MAX) {}
   virtual ~TLPEdgePropertyBuilder() {}
   bool addInt(const int id) {
     edgeId=id;
@@ -892,7 +890,7 @@ struct TLPDefaultPropertyBuilder:public TLPFalse {
   int edgeId;
   std::string nodeValue;
   int i;
-  TLPDefaultPropertyBuilder(TLPPropertyBuilder *propertyBuilder):propertyBuilder(propertyBuilder),i(0) {}
+  TLPDefaultPropertyBuilder(TLPPropertyBuilder *propertyBuilder):propertyBuilder(propertyBuilder), edgeId(INT_MAX), i(0) {}
   virtual ~TLPDefaultPropertyBuilder() {}
   bool addString(const std::string &val) {
     if (i==0) {

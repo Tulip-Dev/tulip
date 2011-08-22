@@ -43,7 +43,7 @@ StringCollection::StringCollection(const string param) {
       if (*itChar == ';') {
         temp += *itChar;
         escapeChar = false;
-        itChar++;
+        ++itChar;
         continue;
       }
       else {
@@ -57,7 +57,7 @@ StringCollection::StringCollection(const string param) {
       escapeChar = false;
       _data.push_back(temp);
       temp = "";
-      itChar++;
+      ++itChar;
       continue;
     }
 
@@ -67,7 +67,7 @@ StringCollection::StringCollection(const string param) {
     else
       temp += *itChar;
 
-    itChar++;
+    ++itChar;
   }
 
   if (temp.size())
@@ -118,7 +118,7 @@ bool StringCollection::setCurrent(unsigned int param) {
 }
 
 bool StringCollection::setCurrent(string param) {
-  for (unsigned int i = 0; i< _data.size(); i++) {
+  for (unsigned int i = 0; i< _data.size(); ++i) {
     if (_data.at(i) == param ) {
       current = i;
       return true;

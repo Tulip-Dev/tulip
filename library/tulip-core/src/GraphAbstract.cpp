@@ -120,7 +120,7 @@ int GraphAbstract::numberOfDescendantGraphs() const {
 
   while(it != subgraphs.end()) {
     result += (*it)->numberOfDescendantGraphs();
-    it++;
+    ++it;
   }
 
   return result;
@@ -240,7 +240,7 @@ bool GraphAbstract::isSubGraph(const Graph* sg) const {
     if (*it == sg)
       return true;
 
-    it++;
+    ++it;
   }
 
   return false;
@@ -256,7 +256,7 @@ bool GraphAbstract::isDescendantGraph(const Graph* sg) const {
     if ((*it)->isDescendantGraph(sg))
       return true;
 
-    it++;
+    ++it;
   }
 
   return false;
@@ -269,7 +269,7 @@ Graph* GraphAbstract::getSubGraph(unsigned int sgId) const {
     if ((*it)->getId() == sgId)
       return *it;
 
-    it++;
+    ++it;
   }
 
   return NULL;
@@ -287,7 +287,7 @@ Graph* GraphAbstract::getDescendantGraph(unsigned int sgId) const {
     if ((sg = (*it)->getDescendantGraph(sgId)))
       return sg;
 
-    it++;
+    ++it;
   }
 
   return NULL;
@@ -529,7 +529,7 @@ unsigned int GraphAbstract::numberOfNodes() const {
 
   while(it->hasNext()) {
     it->next();
-    result++;
+    ++result;
   }
 
   delete it;
@@ -542,7 +542,7 @@ unsigned int GraphAbstract::numberOfEdges() const {
 
   while (it->hasNext()) {
     it->next();
-    result++;
+    ++result;
   }
 
   delete it;

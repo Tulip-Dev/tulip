@@ -167,26 +167,21 @@ struct QParamDialog : public QDialog {
   QWidget *parametersPanel;
   QVBoxLayout *mainLayout;
 
-
-  QParamDialog(const ParameterList *sDef, ParameterList *iDef,
-               QWidget * parent = 0)
-    : QDialog( parent), sysDef(sDef), inDef(iDef) {
-    helpBrowser = 0;
-    curHelpParam = -1;
-
-    mainLayout = new QVBoxLayout;
-    scrollArea = new QScrollArea(this);
-    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    parametersPanel = new QWidget(this);
-    scrollArea->setWidget(parametersPanel);
-    setLayout(mainLayout);
-  }
-
   IParamA iparamA;
   QTextBrowser *helpBrowser;
   QPushButton *setDefB;
   QPushButton *restoreSysDefB;
   int curHelpParam;
+
+  QParamDialog(const ParameterList *sDef, ParameterList *iDef,
+               QWidget * parent = 0)
+    : QDialog( parent), sysDef(sDef), inDef(iDef), scrollArea(new QScrollArea(this)), parametersPanel(new QWidget(this)), mainLayout(new QVBoxLayout()),
+    helpBrowser(NULL), setDefB(NULL), restoreSysDefB(NULL), curHelpParam(-1) {
+    
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollArea->setWidget(parametersPanel);
+    setLayout(mainLayout);
+  }
 
 #define NONE_PROP " None"
 
@@ -935,7 +930,6 @@ struct QParamDialog : public QDialog {
 
     return true;
   }
-
 
   void fillOut( DataSet &     outSet,
                 Graph *   inG     ) {

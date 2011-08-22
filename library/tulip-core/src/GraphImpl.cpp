@@ -111,7 +111,7 @@ GraphImpl::~GraphImpl() {
 
     while(it != recorders.end()) {
       delete (*it);
-      it++;
+      ++it;
     }
 
     recorders.clear();
@@ -485,7 +485,7 @@ void GraphImpl::delPreviousRecorders() {
   // so the lasts created are back in previousRecorders
   while(it != previousRecorders.rend()) {
     delete (*it);
-    it++;
+    ++it;
   }
 
   previousRecorders.clear();
@@ -567,8 +567,8 @@ void GraphImpl::push(bool unpopAllowed) {
       break;
     }
 
-    nb++;
-    it++;
+    ++nb;
+    ++it;
   }
 }
 //----------------------------------------------------------------

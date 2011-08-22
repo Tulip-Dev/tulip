@@ -237,7 +237,7 @@ bool QuotientClustering::run() {
 
   while(itC != prevCalcs.end()) {
     ((PropertyInterface*) (*itC).first)->setMetaValueCalculator((*itC).second);
-    itC++;
+    ++itC;
   }
 
   GraphProperty *metaInfo =
@@ -402,7 +402,7 @@ bool QuotientClustering::run() {
       if (dSet.getAndFree("quotientGraph", sg))
         metaInfo->setNodeValue(mn, sg);
 
-      itn++;
+      ++itn;
     }
   }
 

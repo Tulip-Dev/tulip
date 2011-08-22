@@ -94,7 +94,7 @@ private:
     float heat;        // heat
     float mass;        // weight = nr incident edges
     unsigned int id;
-    GEMparticule(float m = 0) {
+    GEMparticule(float m = 0) : in(0), id(UINT_MAX) {
       pos.fill(0);
       imp.fill(0);
       dir  = 0.0;
@@ -135,24 +135,29 @@ private:
    * from a configuration file.  Here they are hard-wired, but
    * this could be replaced by configuration from a file.
    */
-  float    i_maxtemp;
-  float    i_starttemp;
-  float    i_finaltemp;
-  int      i_maxiter;
-  float    i_gravity;
-  float    i_oscillation;
-  float    i_rotation;
-  float    i_shake;
+  const float    i_maxtemp;
+  const float    a_maxtemp;
 
-  float    a_maxtemp;
-  float    a_starttemp;
-  float    a_finaltemp;
-  int      a_maxiter;
-  float    a_gravity;
-  float    a_oscillation;
-  float    a_rotation;
-  float    a_shake;
+  const float    i_starttemp;
+  const float    a_starttemp;
 
+  const float    i_finaltemp;
+  const float    a_finaltemp;
+
+  const int      i_maxiter;
+  const int      a_maxiter;
+
+  const float    i_gravity;
+  const float    a_gravity;
+
+  const float    i_oscillation;
+  const float    a_oscillation;
+
+  const float    i_rotation;
+  const float    a_rotation;
+
+  const float    i_shake;
+  const float    a_shake;
 
   unsigned int _dim; //2 or 3;
   unsigned int _nbNodes; //number of nodes in the graph

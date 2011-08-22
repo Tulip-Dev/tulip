@@ -25,7 +25,7 @@ using namespace std;
 using namespace tlp;
 
 //=======================================
-PathLengthMetric::PathLengthMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {
+PathLengthMetric::PathLengthMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context), leafMetric(NULL) {
   // Leaf metric needed
   addDependency<DoubleAlgorithm>("Leaf", "1.0");
 }
