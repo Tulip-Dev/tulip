@@ -127,7 +127,6 @@ struct dfsMakeRootedTreeStruct {
   node cameFrom;
   Iterator<edge>* ioEdges;
 
-  dfsMakeRootedTreeStruct() {}
   dfsMakeRootedTreeStruct(node root, node from, Iterator<edge>* it):
     curRoot(root), cameFrom(from), ioEdges(it) {}
 };

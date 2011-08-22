@@ -562,7 +562,7 @@ void MainController::delSubGraph(Graph *g, Graph *sg) {
   vector<Graph *> toCompute;
   toCompute.push_back(sg);
 
-  while(toCompute.size()!=0) {
+  while(!toCompute.empty()) {
     vector<Graph *> newToCompute;
 
     for(vector<Graph*>::iterator it=toCompute.begin(); it!=toCompute.end(); ++it) {

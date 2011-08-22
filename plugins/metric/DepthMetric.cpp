@@ -32,7 +32,6 @@ struct dfsDepthStruct {
   Iterator<node>* outNodes;
   double maxDepth;
 
-  dfsDepthStruct() {}
   dfsDepthStruct(node n, Iterator<node>* nodes):
     current(n), outNodes(nodes), maxDepth(0.0) {}
 };

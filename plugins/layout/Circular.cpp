@@ -73,7 +73,7 @@ void buildDfsOrdering(Graph *sg, vector<node> &vec) {
         if (!nodeVisited.get(current.id))
           visitNode(sg, current, vec, nodeVisited, toVisit);
 
-        itl++;
+        ++itl;
       }
     }
   }

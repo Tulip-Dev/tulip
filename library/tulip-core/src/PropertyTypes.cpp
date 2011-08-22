@@ -118,7 +118,7 @@ string GraphType::toString( const RealType & v ) {
 bool GraphType::fromString(RealType & v, const string & s ) {
   istringstream iss;
   iss.str( s );
-  unsigned long lv;
+  unsigned long lv = 0;
   bool ok = iss >> lv;
 
   if (ok)

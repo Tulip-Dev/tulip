@@ -34,7 +34,6 @@ struct dfsStruct {
   Iterator<node>* outNodes;
   double res;
 
-  dfsStruct() {}
   dfsStruct(node n, Iterator<node>* nodes):
     current(n), outNodes(nodes), res(1.0) {}
 };

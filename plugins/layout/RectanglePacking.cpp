@@ -48,8 +48,8 @@ void RectanglePacking::optimalPositionOfNewRectangle(vector<Rectangle<float> >::
   newRectangleWidth = (*itNewRect)[1][0]-(*itNewRect)[0][0];
   newRectangleHeight = (*itNewRect)[1][1]-(*itNewRect)[0][1];
 
-  for(positionInFirstSequence = 1; positionInFirstSequence<=numberOfPositionnedRectangles+1; positionInFirstSequence++) {
-    for(positionInSecondSequence = 1; positionInSecondSequence<=numberOfPositionnedRectangles+1; positionInSecondSequence++) {
+  for(positionInFirstSequence = 1; positionInFirstSequence<=numberOfPositionnedRectangles+1; ++positionInFirstSequence) {
+    for(positionInSecondSequence = 1; positionInSecondSequence<=numberOfPositionnedRectangles+1; ++positionInSecondSequence) {
       newRectangleLeftAbscissa = 0;
       newRectangleLowOrdinate = 0;
       maxWidthOfBoundingBox = 0;
@@ -104,10 +104,10 @@ list<RectangleRelativePosition>::iterator RectanglePacking::positionOfNewRectang
   list<RectangleRelativePosition>::iterator itRectLeftOrBelowOfNewRect = firstSequence->begin();
   int positionRectLeftOrBelowOfNewRect;
 
-  for(positionRectLeftOrBelowOfNewRect = 1; positionRectLeftOrBelowOfNewRect < positionInFirstSequence; positionRectLeftOrBelowOfNewRect++) {
+  for(positionRectLeftOrBelowOfNewRect = 1; positionRectLeftOrBelowOfNewRect < positionInFirstSequence; ++positionRectLeftOrBelowOfNewRect) {
     coordinatesOfNewRectangle(itRectLeftOrBelowOfNewRect, positionInFirstSequence, positionInSecondSequence);
     dimensionsBoundingBoxOfRectanglesLeftOrBelowNewRectangle(itRectLeftOrBelowOfNewRect);
-    itRectLeftOrBelowOfNewRect++;
+    ++itRectLeftOrBelowOfNewRect;
   }
 
   return  itRectLeftOrBelowOfNewRect;
@@ -131,7 +131,7 @@ void RectanglePacking::repositionOfRectanglesRightOrAboveNewRectangle(list<Recta
 
     dimensionsBoundingBoxOfAllOptimalPositionnedRectangles(itRectOfSequenceToReposition);
 
-    positionRectangleToReposition++;
+    ++positionRectangleToReposition;
   }
 }
 
@@ -139,15 +139,15 @@ void RectanglePacking::modificationOfSequencePair(vector<Rectangle<float> >::ite
 
   list<RectangleRelativePosition>::iterator itRectToReposition;
 
-  for(int k=0; k<numberOfPositionnedRectangles; k++) {
+  for(int k=0; k<numberOfPositionnedRectangles; ++k) {
     if(placesOfRectanglesInSecondSequence[k] >= bestPlaceInSecondSequence) {
-      placesOfRectanglesInSecondSequence[k]++;
+      ++placesOfRectanglesInSecondSequence[k];
     }
   }
 
   placesOfRectanglesInSecondSequence[numberOfPositionnedRectangles] = bestPlaceInSecondSequence;
 
-  numberOfPositionnedRectangles++;
+  ++numberOfPositionnedRectangles;
 
   firstSequence->addRectangleRelativePosition(itNewRect, numberOfPositionnedRectangles , newRectangleWidth, newRectangleHeight, bestRectangleLeftAbscissa, bestRectangleLowOrdinate, itBestPositionInFirstSequence);
 
@@ -523,15 +523,15 @@ void RectanglePacking::optimalPositionOfNewRectangleLimPos(vector<Rectangle<floa
     numberOfLastTestedPosition=numberOfPositionnedRectangles -  numberTestedPositions + 2;
     quotient = (numberOfPositionnedRectangles+1)/numberTestedPositions;
 
-    for(int i=0; i<=numberTestedPositions-1; i++) {
+    for(int i=0; i<=numberTestedPositions-1; ++i) {
       testedPositions[i*quotient] = true;
 
-      for(int j=i*quotient+1; j<=(i+1)*quotient-1; j++) {
+      for(int j=i*quotient+1; j<=(i+1)*quotient-1; ++j) {
         testedPositions[j] = false;
       }
     }
 
-    for(int i=numberTestedPositions*quotient; i<=numberOfPositionnedRectangles; i++) {
+    for(int i=numberTestedPositions*quotient; i<=numberOfPositionnedRectangles; ++i) {
       testedPositions[i] = false;
     }
   }
@@ -540,7 +540,7 @@ void RectanglePacking::optimalPositionOfNewRectangleLimPos(vector<Rectangle<floa
   }
 
   for(positionInFirstSequence = numberOfPositionnedRectangles+1; positionInFirstSequence>=numberOfLastTestedPosition; positionInFirstSequence--) {
-    for(positionInSecondSequence = 1; positionInSecondSequence<=numberOfPositionnedRectangles+1; positionInSecondSequence++) {
+    for(positionInSecondSequence = 1; positionInSecondSequence<=numberOfPositionnedRectangles+1; ++positionInSecondSequence) {
       if((testedPositions[positionInSecondSequence-1])||(numberOfLastTestedPosition==1 )) {
         itPositionInFirstSequence = testOfPositionOfNewRectangle(positionInFirstSequence, positionInSecondSequence);
         ratio = calculateRatio();

@@ -33,7 +33,6 @@ struct dfsLeafStruct {
   Iterator<node>* outNodes;
   double res;
 
-  dfsLeafStruct() {}
   dfsLeafStruct(node n, Iterator<node>* nodes):
     current(n), outNodes(nodes), res(0.0) {}
 };

@@ -300,6 +300,7 @@ void RoundedBox::draw(node n, float lod) {
     GlPolygon *polygon = roundedSquare;
 
     if (size[0] != size[1]) {
+      //FIXME memory leak: createRoundedRect() creates a new GlPolygon
       polygon = createRoundedRect(size);
     }
 

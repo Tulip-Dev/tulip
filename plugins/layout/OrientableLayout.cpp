@@ -78,7 +78,7 @@ convertEdgeLinetype(const std::vector<tlp::Coord>& v) {
   std::vector<OrientableCoord>  orientableLine;
   CoordLineType::const_iterator itCoordLineType = v.begin();
 
-  for ( ; itCoordLineType < v.end() ; itCoordLineType++ )  {
+  for ( ; itCoordLineType < v.end() ; ++itCoordLineType )  {
     OrientableCoord newOrientableCoord(this, *itCoordLineType);
     orientableLine.push_back(newOrientableCoord);
   }
