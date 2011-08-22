@@ -86,27 +86,31 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError e
 
   QString stackTrace;
   bool grabStackTrace = false;
-  
+
   while (!process->atEnd()) {
     QString line(process->readLine());
-	if (line.startsWith(TLP_STACK_BEGIN_HEADER)) {
-		grabStackTrace = true;
-		continue;
-	} else if (line.startsWith(TLP_STACK_END_HEADER)) {
-		grabStackTrace = false;
-		continue;
-	}
-	if (grabStackTrace) {
-		stackTrace += line;
-	} else {
-		QRegExp *re;
-		foreach(re,envInfos.keys()) {
-			if (re->exactMatch(line)) {
-				envInfos[re] = re->cap(1);
-				break;
-			}
-		}	
-	}
+
+    if (line.startsWith(TLP_STACK_BEGIN_HEADER)) {
+      grabStackTrace = true;
+      continue;
+    }
+    else if (line.startsWith(TLP_STACK_END_HEADER)) {
+      grabStackTrace = false;
+      continue;
+    }
+
+    if (grabStackTrace) {
+      stackTrace += line;
+    }
+    else {
+      QRegExp *re;
+      foreach(re,envInfos.keys()) {
+        if (re->exactMatch(line)) {
+          envInfos[re] = re->cap(1);
+          break;
+        }
+      }
+    }
   }
 
   crashHandler.setEnvData(envInfos[&plateform],envInfos[&arch],envInfos[&compiler],envInfos[&version],envInfos[&dump], stackTrace);

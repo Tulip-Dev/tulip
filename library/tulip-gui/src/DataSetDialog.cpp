@@ -176,8 +176,8 @@ struct QParamDialog : public QDialog {
   QParamDialog(const ParameterList *sDef, ParameterList *iDef,
                QWidget * parent = 0)
     : QDialog( parent), sysDef(sDef), inDef(iDef), scrollArea(new QScrollArea(this)), parametersPanel(new QWidget(this)), mainLayout(new QVBoxLayout()),
-    helpBrowser(NULL), setDefB(NULL), restoreSysDefB(NULL), curHelpParam(-1) {
-    
+      helpBrowser(NULL), setDefB(NULL), restoreSysDefB(NULL), curHelpParam(-1) {
+
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollArea->setWidget(parametersPanel);
     setLayout(mainLayout);

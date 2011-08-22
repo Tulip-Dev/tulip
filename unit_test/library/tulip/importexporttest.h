@@ -5,7 +5,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 namespace tlp {
-  class Graph;
+class Graph;
 }
 
 class ImportExportTest : public CppUnit::TestFixture {
@@ -20,11 +20,11 @@ public:
   void testgridImportExport();
   void testSubGraphsImportExport();
   void testAttributes();
-  
+
 private:
   tlp::Graph* createSimpleGraph() const;
   void importExportGraph(tlp::Graph* original);
-  
+
   void testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Graph* second);
   void testGraphPropertiesAreEqual(tlp::Graph* first, tlp::Graph* second);
   void testGraphsAreEqual(tlp::Graph* first, tlp::Graph* second);
