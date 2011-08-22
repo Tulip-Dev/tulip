@@ -173,7 +173,7 @@ private:
 
 
 public:
-  ColorMapping(const PropertyContext &context):ColorAlgorithm(context),eltTypes(ELT_TYPES) {
+  ColorMapping(const PropertyContext &context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES) {
     addParameter<DoubleProperty>("linear/uniform\nproperty",paramHelp[0],"viewMetric");
     addParameter<PropertyInterface*>("enumerated\nproperty",paramHelp[1],"viewMetric");
     addParameter<StringCollection>(ELT_TYPE, paramHelp[2], ELT_TYPES);

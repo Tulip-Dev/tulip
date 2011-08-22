@@ -588,7 +588,7 @@ node PlanarityTestImpl::lcaBetween(node n1,
 
   node u = NULL_NODE;
 
-  if (nl.size() > 0) {
+  if (!nl.empty()) {
     u = nl.front();
     nl.pop_front();
   }

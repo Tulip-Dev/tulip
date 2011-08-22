@@ -60,7 +60,6 @@ private:
   std::vector<Point> vertices;
   GLfloat avgZ;
 public:
-  unsigned int nodeNum;
   Shape();
   ~Shape();
   bool isValid() const;

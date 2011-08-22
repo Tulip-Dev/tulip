@@ -67,7 +67,6 @@ struct dfsBicoTestStruct {
   node opp;
   Iterator<edge>* ite;
 
-  dfsBicoTestStruct() {}
   dfsBicoTestStruct(node n, node o, Iterator<edge> *it):
     v(n), opp(o), ite(it) {}
 };

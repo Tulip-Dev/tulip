@@ -498,7 +498,7 @@ void GlLabel::draw(float lod, Camera *camera) {
 
       borderFont->Render((*it).c_str(),-1,shift);
       yShift-=fontSize+5;
-      itW++;
+      ++itW;
     }
   }
 

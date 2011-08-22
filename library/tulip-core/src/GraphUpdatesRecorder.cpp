@@ -221,7 +221,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       if (oldNodeDefaultValues.find(p) == oldNodeDefaultValues.end())
         recordNewNodeValues(p);
 
-      itov++;
+      ++itov;
     }
 
     // loop on updatedPropsAddedNodes
@@ -256,7 +256,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
           hasNewValues = true;
         }
 
-        itn++;
+        ++itn;
       }
 
       if (created) {
@@ -266,7 +266,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
           delete nv;
       }
 
-      itan++;
+      ++itan;
     }
 
     // loop on oldEdgeDefaultValues
@@ -276,7 +276,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       PropertyInterface* p = itdv->first;
       newEdgeDefaultValues[p] = p->getEdgeDefaultDataMemValue();
       recordNewEdgeValues(p);
-      itdv++;
+      ++itdv;
     }
 
     // loop on oldEdgeValues
@@ -288,7 +288,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       if (oldEdgeDefaultValues.find(p) == oldEdgeDefaultValues.end())
         recordNewEdgeValues(p);
 
-      itov++;
+      ++itov;
     }
 
     // loop on updatedPropsAddedEdges
@@ -323,7 +323,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
           hasNewValues = true;
         }
 
-        ite++;
+        ++ite;
       }
 
       if (created) {
@@ -333,7 +333,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
           delete nv;
       }
 
-      iten++;
+      ++iten;
     }
 
     // record graph attribute new values

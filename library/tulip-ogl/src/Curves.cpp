@@ -415,7 +415,7 @@ void computeCleanVertices(const vector<Coord> &bends,
                           const Coord &startPoint, const Coord& endPoint,
                           Coord &startN, Coord &endN,
                           vector<Coord> &result) {
-  if (bends.size() > 0) {
+  if (!bends.empty()) {
     result.push_back(startPoint);
     Coord lastPoint = bends[0];
 

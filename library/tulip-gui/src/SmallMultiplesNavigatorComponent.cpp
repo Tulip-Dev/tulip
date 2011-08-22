@@ -54,7 +54,7 @@ bool SmallMultiplesNavigatorComponent::eventFilter(QObject *o, QEvent *e) {
       vector<ulong> entities;
       scene->selectEntities(RenderingNodes, mouseEv->x(), mouseEv->y(), 1, 1, smView->overviewLayer(), entities);
 
-      if (entities.size() > 0) {
+      if (!entities.empty()) {
         int id = smView->nodeItemId(node(entities[0]));
 
         if (id != -1) {

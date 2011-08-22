@@ -197,7 +197,7 @@ void PythonShellWidget::keyPressEvent(QKeyEvent * e) {
       setSelection(lines()-1, 0, lines()-1, lineLength(lines()-1));
       removeSelectedText();
 
-      if (currentHistoryPos < static_cast<int>(history.size() -  1) && history.size() > 0) {
+      if (currentHistoryPos < static_cast<int>(history.size() -  1) && !history.empty()) {
         ++currentHistoryPos;
         insert(currentPs + history[currentHistoryPos]);
       }

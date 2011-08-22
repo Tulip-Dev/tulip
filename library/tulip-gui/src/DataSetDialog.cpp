@@ -793,7 +793,7 @@ struct QParamDialog : public QDialog {
         ip.wA.push_back(button);
       }
 
-      if( ip.wA.size() )
+      if( !ip.wA.empty() )
         iparamA.push_back( ip );
       else
         delete ip.label;
@@ -801,7 +801,7 @@ struct QParamDialog : public QDialog {
 
     delete defIt;
 
-    if( iparamA.size() == 0 )
+    if( iparamA.empty() )
       return false;
 
 
