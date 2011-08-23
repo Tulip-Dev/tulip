@@ -15,8 +15,8 @@ class GraphHierarchiesEditor : public QWidget {
 
 public:
   explicit GraphHierarchiesEditor(QWidget *parent = 0);
+  virtual ~GraphHierarchiesEditor();
   void setModel(GraphHierarchiesModel *model);
-  ~GraphHierarchiesEditor();
 
 private:
 };

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>988</width>
-    <height>732</height>
+    <width>976</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,26 +27,26 @@
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QToolButton, QPushButton, QComboBox {
+   <string notr="true">QPushButton, QComboBox {
     border-image: url(:/tulip/gui/ui/btn_26.png) 4;
     border-width: 4;
     padding: 0px 6px;
     font-size: 12px;
 }
 
-QToolButton, QPushButton, QComboBox, QLabel {
+QPushButton, QComboBox, QLabel {
     color: black;
 }
 
-QToolButton:hover, QPushButton:hover, QComboBox:hover {
+QPushButton:hover, QComboBox:hover {
     border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
 }
 
-QToolButton:disabled, QPushButton:disabled, QComboBox::disabled {
+QPushButton:disabled, QComboBox::disabled {
 	color:gray;
 }
 
-QToolButton:pressed, QPushButton:pressed{
+QPushButton:pressed{
     border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
 }
 
@@ -68,8 +68,8 @@ QToolButton:pressed, QPushButton:pressed{
  QComboBox::down-arrow {
      image: url(:/tulip/gui/ui/combobox_arrow.png);
  }
-QComboBox:drop-down
-{
+
+QComboBox:drop-down {
      subcontrol-origin: padding;
      subcontrol-position: top right;
      border-left-style: none; 
@@ -194,6 +194,9 @@ QToolButton:pressed {
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="expandable" stdset="0">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -244,7 +247,7 @@ QToolButton:pressed {
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="editModeButton">
+        <widget class="QToolButton" name="chartsModeButton">
          <property name="minimumSize">
           <size>
            <width>75</width>
@@ -390,6 +393,9 @@ QToolButton:pressed {
             <string>Ctrl+H</string>
            </property>
            <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
             <bool>true</bool>
            </property>
            <property name="toolButtonStyle">
@@ -645,9 +651,6 @@ QPushButton::menu-indicator {
              <property name="handleWidth">
               <number>1</number>
              </property>
-             <property name="childrenCollapsible">
-              <bool>false</bool>
-             </property>
              <widget class="QWidget" name="docksWidget" native="true">
               <layout class="QVBoxLayout" name="verticalLayout">
                <property name="spacing">
@@ -657,13 +660,7 @@ QPushButton::menu-indicator {
                 <number>0</number>
                </property>
                <item>
-                <widget class="GraphHierarchiesEditor" name="graphHierarchiesEditor" native="true"/>
-               </item>
-               <item>
                 <widget class="QSplitter" name="docksSplitter">
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>
@@ -673,8 +670,30 @@ QPushButton::menu-indicator {
                  <property name="childrenCollapsible">
                   <bool>false</bool>
                  </property>
-                 <widget class="AlgorithmRunner" name="algorithmRunner" native="true"/>
-                 <widget class="QWidget" name="filtersManager" native="true"/>
+                 <widget class="AlgorithmRunner" name="algorithmRunner" native="true">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                 </widget>
+                 <widget class="FiltersManager" name="filtersManager" native="true">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                 </widget>
+                 <widget class="GraphHierarchiesEditor" name="graphHierarchiesEditor" native="true">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                 </widget>
                 </widget>
                </item>
               </layout>
@@ -713,7 +732,7 @@ QPushButton::menu-indicator {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>988</width>
+     <width>976</width>
      <height>22</height>
     </rect>
    </property>
@@ -759,6 +778,7 @@ QPushButton::menu-indicator {
     <addaction name="separator"/>
     <addaction name="actionTile"/>
     <addaction name="actionMinimize_All"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -995,6 +1015,49 @@ QPushButton::menu-indicator {
     <string>Plugins Center</string>
    </property>
   </action>
+  <action name="actionCharts">
+   <property name="text">
+    <string>Charts</string>
+   </property>
+  </action>
+  <action name="actionDevelop">
+   <property name="text">
+    <string>Develop</string>
+   </property>
+  </action>
+  <action name="actionAlgorithms">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Algorithms</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle algorithm runner dock panel</string>
+   </property>
+  </action>
+  <action name="actionGraph_hierarchies">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Graph hierarchies</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle graph hierarchies editor dock panel</string>
+   </property>
+  </action>
+  <action name="actionFilters">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Filters</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle filtering panel</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1015,6 +1078,12 @@ QPushButton::menu-indicator {
    <header>GraphHierarchiesEditor.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>FiltersManager</class>
+   <extends>QWidget</extends>
+   <header>FiltersManager.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
@@ -1031,38 +1100,6 @@ QPushButton::menu-indicator {
     <hint type="destinationlabel">
      <x>79</x>
      <y>197</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>graphsHierarchyManagerButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>viewSelectorButton</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>38</x>
-     <y>422</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>19</x>
-     <y>460</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>graphsHierarchyManagerButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>setAllViewsButton</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>38</x>
-     <y>422</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>56</x>
-     <y>460</y>
     </hint>
    </hints>
   </connection>

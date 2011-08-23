@@ -7,9 +7,6 @@
 
 #include <tulip/TulipProject.h>
 
-//FIXME: remove me
-#include <QtCore/QDebug>
-
 using namespace std;
 using namespace tlp;
 

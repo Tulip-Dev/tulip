@@ -21,7 +21,7 @@ public:
   virtual void construct(tlp::PluginProgress *);
 
 protected slots:
-  void graphHierarchiesEditorDisplayed(bool);
+  void refreshDockExpandControls();
 };
 
 #endif // GRAPHPERSPECTIVE_H

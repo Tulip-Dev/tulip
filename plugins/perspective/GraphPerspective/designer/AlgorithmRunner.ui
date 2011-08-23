@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>390</width>
-    <height>716</height>
+    <width>386</width>
+    <height>712</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -136,8 +136,8 @@ QPushButton:pressed{
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>390</width>
-        <height>684</height>
+        <width>386</width>
+        <height>680</height>
        </rect>
       </property>
      </widget>

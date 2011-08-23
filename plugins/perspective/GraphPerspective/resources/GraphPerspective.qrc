@@ -25,5 +25,7 @@
         <file>down_arrow-white.png</file>
         <file>down_arrow-black.png</file>
         <file>right_arrow-black.png</file>
+	<file>arrowup.png</file>
+	<file>arrowdown.png</file>
     </qresource>
 </RCC>

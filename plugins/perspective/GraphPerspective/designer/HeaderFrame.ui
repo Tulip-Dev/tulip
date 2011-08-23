@@ -6,23 +6,57 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>725</width>
-    <height>23</height>
+    <width>717</width>
+    <height>25</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>25</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>25</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QComboBox, QLabel {
+   <string notr="true">QComboBox, QLabel, QToolButton {
 	border-image:none;
 	background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
 	stop: 0 #838383,
 	stop: 0.4 #707070,
 	stop: 0.401 #636363,
 	stop: 1 #4a4a4a);
-	border: 0px solid black;
+	border: 0px;
 	color: white;
+}
+
+QComboBox:hover, QToolButton:hover {
+	border-image:none;
+	background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+	stop: 0 #8F8F8F,
+	stop: 0.4 #7C7C7C,
+	stop: 0.401 #6F6F6F,
+	stop: 1 #565656);
+	border: 0px;
+	color: white;
+}
+
+QToolButton {
+  image: url(&quot;:/tulip/graphperspective/ui/arrowup.png&quot;);
+}
+
+QToolButton:checked {
+  image: url(&quot;:/tulip/graphperspective/ui/arrowdown.png&quot;);
+}
+
+QComboBox,QLabel {
 	height:20px;
 }
 
@@ -80,6 +114,40 @@ QComboBox:drop-down {
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QToolButton" name="expandButton">
+     <property name="minimumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

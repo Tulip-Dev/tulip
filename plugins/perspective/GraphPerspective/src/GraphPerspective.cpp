@@ -15,7 +15,7 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
   _ui->workspaceSplitter->setSizes(QList<int>() << 200 << 1000);
-  _ui->docksSplitter->setSizes(QList<int>() << 500 << 300);
+  _ui->docksSplitter->setSizes(QList<int>() << 500 << 300 << 300);
 
   _mainWindow->show();
   // Open project with model
@@ -25,15 +25,34 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
     _graphs->addGraph(tlp::newGraph());
 
   _ui->graphHierarchiesEditor->setModel(_graphs);
-  _ui->graphHierarchiesEditor->hide();
-  connect(_ui->graphsHierarchyManagerButton,SIGNAL(toggled(bool)),this,SLOT(graphHierarchiesEditorDisplayed(bool)));
+
+  foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>())
+    connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
+
+  connect(_ui->graphsHierarchyManagerButton,SIGNAL(toggled(bool)),this,SLOT(refreshDockExpandControls()));
 }
 
-void GraphPerspective::graphHierarchiesEditorDisplayed(bool f) {
-  _ui->algorithmRunner->setVisible(!f);
-  _ui->filtersManager->setVisible(!f);
+void GraphPerspective::refreshDockExpandControls() {
+  QList<HeaderFrame *> expandedHeaders, collapsedHeaders;
+  foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
+    h->expandControl()->setEnabled(true);
+
+    if (h->parentWidget() == _ui->graphHierarchiesEditor)
+      continue;
+
+    if (h->isExpanded())
+      expandedHeaders.push_back(h);
+    else
+      collapsedHeaders.push_back(h);
+  }
+
+  if (expandedHeaders.size() == 1 && !_ui->graphHierarchiesEditor->isVisible())
+    expandedHeaders[0]->expandControl()->setEnabled(false);
+
+  if (expandedHeaders.size() == 0 && !_ui->graphHierarchiesEditor->isVisible()) {
+    collapsedHeaders[0]->expand(true);
+    collapsedHeaders[0]->expandControl()->setEnabled(false);
+  }
 }
-
-
 
 PERSPECTIVEPLUGIN(GraphPerspective,"Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0")

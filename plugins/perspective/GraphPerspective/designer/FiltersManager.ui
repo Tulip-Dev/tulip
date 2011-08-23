@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>GraphHierarchiesEditorData</class>
- <widget class="QWidget" name="GraphHierarchiesEditorData">
+ <class>FiltersManagerData</class>
+ <widget class="QWidget" name="FiltersManagerData">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>237</width>
-    <height>419</height>
+    <width>396</width>
+    <height>296</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout">
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -26,38 +29,24 @@
       </sizepolicy>
      </property>
      <property name="title" stdset="0">
-      <string>Graphs</string>
-     </property>
-     <property name="expandable" stdset="0">
-      <bool>false</bool>
+      <string>Filtering</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QTreeView" name="hierarchiesTree">
+    <widget class="QFrame" name="frame">
      <property name="styleSheet">
-      <string notr="true">QTreeView  {
-  border: 0px;
+      <string notr="true">#frame {
+  background-color: white;
+  border: 1px solid &quot;#C9C9C9&quot;;
 }</string>
      </property>
-     <property name="alternatingRowColors">
-      <bool>true</bool>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
      </property>
-     <property name="indentation">
-      <number>10</number>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
-     <property name="uniformRowHeights">
-      <bool>true</bool>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-     <attribute name="headerCascadingSectionResizes">
-      <bool>true</bool>
-     </attribute>
-     <attribute name="headerDefaultSectionSize">
-      <number>50</number>
-     </attribute>
     </widget>
    </item>
   </layout>
