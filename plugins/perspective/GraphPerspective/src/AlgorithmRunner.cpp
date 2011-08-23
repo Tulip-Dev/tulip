@@ -29,6 +29,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &na
 }
 
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {
+  delete _ui;
 }
 
 template<typename ALG,typename PROPTYPE>

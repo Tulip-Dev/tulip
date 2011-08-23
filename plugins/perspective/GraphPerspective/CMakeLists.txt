@@ -3,6 +3,7 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclu
 SET(LIB_SRCS
 src/AlgorithmRunner.cpp
 src/ExpandableGroupBox.cpp
+src/FiltersManager.cpp
 src/GraphHierarchiesEditor.cpp
 src/GraphHierarchiesModel.cpp
 src/GraphPerspective.cpp
@@ -14,12 +15,14 @@ resources/GraphPerspective.qrc)
 QT4_WRAP_UI(UI_SRCS
 designer/AlgorithmRunner.ui
 designer/AlgorithmRunnerItem.ui
+designer/FiltersManager.ui
 designer/GraphHierarchiesEditor.ui
 designer/GraphPerspectiveMainWindow.ui
 designer/HeaderFrame.ui)
 
 QT4_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
+include/FiltersManager.h
 include/GraphHierarchiesEditor.h
 include/GraphHierarchiesModel.h
 include/GraphPerspective.h
