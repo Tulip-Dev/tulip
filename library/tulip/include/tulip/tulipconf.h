@@ -21,7 +21,7 @@
 
 /**
  * @brief this file contains various helper macros and functions to have a true cross-platform compilation.
- * 
+ *
  */
 
 #define STRINGIFY(PARAM) STRINGIFY_INTERNAL(PARAM)
@@ -33,12 +33,12 @@
 #endif
 
 #if defined(_MSC_VER)
-// disable some annoying Visual Studio warnings 
+// disable some annoying Visual Studio warnings
 #pragma warning(disable: 4251)
 #pragma warning(disable: 4275)
 #pragma warning(disable: 4503)
-// disable deprecated warnings when compiling the tulip dlls 
-#if defined(DLL_TULIP) || defined(DLL_TULIP_GL) || defined(DLL_TULIP_QT) || defined(DLL_TULIP_QT2) 
+// disable deprecated warnings when compiling the tulip dlls
+#if defined(DLL_TULIP) || defined(DLL_TULIP_GL) || defined(DLL_TULIP_QT) || defined(DLL_TULIP_QT2)
 #pragma warning(disable: 4996)
 #endif
 //MSVC 2010 has a different keyword for typeof, and deprecated
@@ -51,32 +51,32 @@
 #    define TYPEOF BOOST_TYPEOF
 #  endif
 
-  //MSVC needs explicit casting of ints ot double, float or long double. Let's just pretend he does not.
-  #include <math.h>
-  static double sqrt(int i) {
-    return sqrt((double)i);
-  }
-  static double sqrt(unsigned int i) {
-    return sqrt((double)i);
-  }
-  
-  static double log(int i) {
-    return log((double)i);
-  }
-  static double log(unsigned int i) {
-    return log((double)i);
-  }
-  
-  static double floor(int i) {
-    return floor((double)i);
-  }
-  static double floor(unsigned int i) {
-    return floor((double)i);
-  }
+//MSVC needs explicit casting of ints ot double, float or long double. Let's just pretend he does not.
+#include <math.h>
+static double sqrt(int i) {
+  return sqrt((double)i);
+}
+static double sqrt(unsigned int i) {
+  return sqrt((double)i);
+}
 
-  static double round(double d) {
-    return floor(d + 0.5);
-  }
+static double log(int i) {
+  return log((double)i);
+}
+static double log(unsigned int i) {
+  return log((double)i);
+}
+
+static double floor(int i) {
+  return floor((double)i);
+}
+static double floor(unsigned int i) {
+  return floor((double)i);
+}
+
+static double round(double d) {
+  return floor(d + 0.5);
+}
 
 #  define __PRETTY_FUNCTION__ __FUNCTION__ //MSVC has a different name for pretty_function
 #  define strcasecmp stricmp  //strcasecmp does not exists for VC, workaround
@@ -108,66 +108,66 @@
 
 //WIN32 specific defines: dllimport and dllexport stuff
 #ifdef _WIN32
-# 	ifdef DLL_TULIP
-#		define TLP_SCOPE         __declspec(dllexport)
-# 	else
-#		define TLP_SCOPE       __declspec(dllimport)
-# 	endif
+#   ifdef DLL_TULIP
+#   define TLP_SCOPE         __declspec(dllexport)
+#   else
+#   define TLP_SCOPE       __declspec(dllimport)
+#   endif
 #endif
 #ifndef TLP_SCOPE
-#define TLP_SCOPE 
+#define TLP_SCOPE
 #endif
 
 #ifdef _WIN32
-# 	ifdef DLL_TULIP_GL
-#		define TLP_GL_SCOPE         __declspec(dllexport)
-# 	else
-#		define TLP_GL_SCOPE       __declspec(dllimport)
-# 	endif
+#   ifdef DLL_TULIP_GL
+#   define TLP_GL_SCOPE         __declspec(dllexport)
+#   else
+#   define TLP_GL_SCOPE       __declspec(dllimport)
+#   endif
 #endif
 #ifndef TLP_GL_SCOPE
-#define TLP_GL_SCOPE           
-#endif
-
-#ifdef _WIN32
-# 	ifdef DLL_TULIP_QT2
-#		define TLP_QT_SCOPE       __declspec(dllimport)
-#	else
-# 		ifdef DLL_TULIP_QT
-#			define TLP_QT_SCOPE         __declspec(dllexport)
-# 		else
-#			define TLP_QT_SCOPE       __declspec(dllimport)
-# 		endif
-#	endif
-#endif
-#ifndef TLP_QT_SCOPE
-#define TLP_QT_SCOPE           
+#define TLP_GL_SCOPE
 #endif
 
 #ifdef _WIN32
 #   ifdef DLL_TULIP_QT2
-#		define TLP_QT_SIMPLE_SCOPE 
-#	else 
-# 		ifdef DLL_TULIP_QT
-#			define TLP_QT_SIMPLE_SCOPE  __declspec(dllexport)
-# 		else
-#			define TLP_QT_SIMPLE_SCOPE       
-# 		endif
-#	endif
+#   define TLP_QT_SCOPE       __declspec(dllimport)
+# else
+#     ifdef DLL_TULIP_QT
+#     define TLP_QT_SCOPE         __declspec(dllexport)
+#     else
+#     define TLP_QT_SCOPE       __declspec(dllimport)
+#     endif
+# endif
 #endif
-#ifndef TLP_QT_SIMPLE_SCOPE
-#define TLP_QT_SIMPLE_SCOPE           
+#ifndef TLP_QT_SCOPE
+#define TLP_QT_SCOPE
 #endif
 
 #ifdef _WIN32
-# 	ifdef DLL_TULIP_OGDF
-#		define TLP_OGDF_SCOPE         __declspec(dllexport)
-# 	else
-#		define TLP_OGDF_SCOPE       __declspec(dllimport)
-# 	endif
+#   ifdef DLL_TULIP_QT2
+#   define TLP_QT_SIMPLE_SCOPE
+# else
+#     ifdef DLL_TULIP_QT
+#     define TLP_QT_SIMPLE_SCOPE  __declspec(dllexport)
+#     else
+#     define TLP_QT_SIMPLE_SCOPE
+#     endif
+# endif
+#endif
+#ifndef TLP_QT_SIMPLE_SCOPE
+#define TLP_QT_SIMPLE_SCOPE
+#endif
+
+#ifdef _WIN32
+#   ifdef DLL_TULIP_OGDF
+#   define TLP_OGDF_SCOPE         __declspec(dllexport)
+#   else
+#   define TLP_OGDF_SCOPE       __declspec(dllimport)
+#   endif
 #endif
 #ifndef TLP_OGDF_SCOPE
-#define TLP_OGDF_SCOPE           
+#define TLP_OGDF_SCOPE
 #endif
 
 #endif //TULIPCONF_H

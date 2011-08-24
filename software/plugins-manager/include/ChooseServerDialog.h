@@ -30,30 +30,30 @@
 
 namespace tlp {
 
-  class ChooseServerDialog : public QDialog{
-    Q_OBJECT
-    
-    public:
-    ChooseServerDialog(QStringList * serverNames);
-    void getSelectedServer(std::string &server);
+class ChooseServerDialog : public QDialog {
+  Q_OBJECT
 
-  private:
-    
-    QLabel* label;
-    QPushButton* ok;
-    QPushButton* cancel;
-    QListWidget * serverList;
-    std::string selectedServer;
-    std::vector<std::string> names;
-    void closeEvent(QCloseEvent *e);
-  
-  
-  private slots:
-    
-    void cancelSelection();
-    void selectServer();
-  
-  };
+public:
+  ChooseServerDialog(QStringList * serverNames);
+  void getSelectedServer(std::string &server);
+
+private:
+
+  QLabel* label;
+  QPushButton* ok;
+  QPushButton* cancel;
+  QListWidget * serverList;
+  std::string selectedServer;
+  std::vector<std::string> names;
+  void closeEvent(QCloseEvent *e);
+
+
+private slots:
+
+  void cancelSelection();
+  void selectServer();
+
+};
 
 }
 #endif

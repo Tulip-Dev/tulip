@@ -26,8 +26,10 @@ using namespace tlp;
 
 void GraphObserver::RealGraphObserver::treatEvent(const Event& ev) {
   const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&ev);
+
   if (gEvt) {
     Graph* graph = gEvt->getGraph();
+
     switch(gEvt->getType()) {
     case GraphEvent::TLP_ADD_NODE:
       visibleObserver->addNode(graph, gEvt->getNode());
@@ -52,14 +54,18 @@ void GraphObserver::RealGraphObserver::treatEvent(const Event& ev) {
       break;
     case GraphEvent::TLP_ADD_NODES: {
       const std::vector<node>& nodes = gEvt->getNodes();
+
       for (unsigned int i = 0; i < nodes.size(); ++i)
-	visibleObserver->addNode(graph, nodes[i]);
+        visibleObserver->addNode(graph, nodes[i]);
+
       break;
     }
     case GraphEvent::TLP_ADD_EDGES: {
       const std::vector<edge>& edges = gEvt->getEdges();
+
       for (unsigned int i = 0; i < edges.size(); ++i)
-	visibleObserver->addEdge(graph, edges[i]);
+        visibleObserver->addEdge(graph, edges[i]);
+
       break;
     }
     case GraphEvent::TLP_ADD_SUBGRAPH:
@@ -99,11 +105,13 @@ void GraphObserver::RealGraphObserver::treatEvent(const Event& ev) {
       // this should not happen
       assert(false);
     }
-  } else {
+  }
+  else {
     Graph* graph =
       // From my point of view the use of dynamic_cast should be correct
       // but it fails, so I use reinterpret_cast (pm)
       reinterpret_cast<Graph *>(ev.sender());
+
     if (graph && ev.type() == Event::TLP_DELETE)
       visibleObserver->destroy(graph);
   }

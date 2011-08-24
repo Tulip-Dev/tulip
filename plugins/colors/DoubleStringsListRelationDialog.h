@@ -30,7 +30,7 @@ namespace tlp {
 
 class DoubleStringsListRelationDialog : public QDialog, public Ui::DoubleStringsListRelationDialogData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 

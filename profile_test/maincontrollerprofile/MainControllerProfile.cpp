@@ -40,7 +40,7 @@
 using namespace std;
 using namespace tlp;
 
-MainWindowFacade initMainWindow(QMainWindow &mainWindow){
+MainWindowFacade initMainWindow(QMainWindow &mainWindow) {
   QMenuBar *menuBar=mainWindow.menuBar();
   menuBar->addMenu("&Windows");
   QToolBar *mainToolBar=new QToolBar(&mainWindow);
@@ -53,7 +53,7 @@ MainWindowFacade initMainWindow(QMainWindow &mainWindow){
 }
 
 /*******************************************************************/
-int main(int argc,char ** argv ){
+int main(int argc,char ** argv ) {
 
   if (argc<2) {
     cerr << "usage :" << endl;

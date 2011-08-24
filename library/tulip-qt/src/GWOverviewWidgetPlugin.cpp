@@ -52,7 +52,7 @@ QWidget* GWOverviewWidgetPlugin::createWidget(QWidget *parent) {
 QString GWOverviewWidgetPlugin::name() const {
   return "GWOverviewWidget";
 }
-  
+
 QString GWOverviewWidgetPlugin::domXml() const {
   return "<widget class=\"GWOverviewWidget\" name=\"overviewWidget\">\n"
          "</widget>\n";
@@ -83,7 +83,7 @@ bool GWOverviewWidgetPlugin::isContainer() const {
 }
 
 QString GWOverviewWidgetPlugin::codeTemplate() const {
-    return "";
+  return "";
 }
 
 Q_EXPORT_PLUGIN(GWOverviewWidgetPlugin)

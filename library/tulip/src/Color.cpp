@@ -31,11 +31,14 @@ static void HSVtoRGB(int h, int s, int v, unsigned char &r, unsigned char &g, un
 std::ostream& tlp::operator<<(std::ostream &os,const tlp::Color &a) {
   const unsigned int SIZE =4;
   os << "(" ;
+
   for ( unsigned int i=0 ; i<SIZE ; ++i ) {
     if( i>0 )
       os << ",";
+
     os << (unsigned int)a[i];
   }
+
   os << ")" ;
   return os;
 }
@@ -48,39 +51,45 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Color & outA) {
   char c;
   std::streampos pos = is.tellg();
   is.clear();
+
   if( !(is >> c) || c!='(' ) {
     is.seekg(pos);
     is.setstate( std::ios::failbit );
-    return is;  
+    return is;
   }
-  for( unsigned int i=0;i<SIZE;++i ) {
+
+  for( unsigned int i=0; i<SIZE; ++i ) {
     if( i>0 && ( !(is >> c) || c!=',' ) ) {
       is.seekg(pos);
       is.setstate( std::ios::failbit );
-      return is;  
+      return is;
     }
+
     bool done = true;
     unsigned int vi;
-	done = !( is >> vi ).fail();
+    done = !( is >> vi ).fail();
     outA.array[i] = vi;
+
     if( !done ) {
       is.seekg(pos);
       is.setstate( std::ios::failbit );
       return is;
     }
   }
+
   if( (is >> c).fail() || c!=')' ) {
     is.seekg(pos);
     is.setstate( std::ios::failbit );
-    return is;  
+    return is;
   }
-  return is;  
+
+  return is;
 }
 //=================================================================
 
-long tlp::Color::getTrueColor()
-{
-  long ret=0;long tmp;
+long tlp::Color::getTrueColor() {
+  long ret=0;
+  long tmp;
   unsigned int RR=array[0],BB=array[1],GG=array[2];
   tmp=RR << 16;
   ret=tmp;
@@ -122,25 +131,25 @@ void RGBtoHSV(unsigned char r, unsigned char g, unsigned char b, int &h, int &s,
   int theMin, theMax, delta;
   theMin = std::min(std::min(r, g), b); //  r <? g <? b
   theMax = std::max(std::max(r, g), b); //  r >? g >? b
-  v = theMax;				// v
+  v = theMax;       // v
 
   delta = theMax - theMin;
 
   if((theMax != 0) && (delta != 0))
-    s = 255 * delta / theMax;		// s
+    s = 255 * delta / theMax;   // s
   else {
-    // r=g=b = 0		// s = 0, v is undefined
+    // r=g=b = 0    // s = 0, v is undefined
     s = 0;
     h = -1;
     return;
   }
 
   if(r == theMax)
-    h = (int) (60 * (float)(g - b) / (float)delta);		// between yellow & magenta
+    h = (int) (60 * (float)(g - b) / (float)delta);   // between yellow & magenta
   else if(g == theMax)
-    h = (int) (60 * (2.0f + (float)(b - r) / (float)delta));	// between cyan & yellow
+    h = (int) (60 * (2.0f + (float)(b - r) / (float)delta));  // between cyan & yellow
   else
-    h = (int) (60 * (4.0f + (float)(r - g) / (float)delta));	// between magenta & cyan
+    h = (int) (60 * (4.0f + (float)(r - g) / (float)delta));  // between magenta & cyan
 
   if(h < 0)
     h += 360;
@@ -159,15 +168,15 @@ void HSVtoRGB(int h, int s, int v, unsigned char &r, unsigned char &g, unsigned 
 
 //   h %= 360;
 //   if (h<0) h+=360;
-  
+
   if(s == 0) {
     // achromatic (grey)
     r = g = b = v;
     return;
   }
 
-  i = h/60;			// sector 0 to 5
-  f = (h/60.0f - i);			// factorial part of h
+  i = h/60;     // sector 0 to 5
+  f = (h/60.0f - i);      // factorial part of h
   p = (int) (v * (1 - sf));
   q = (int) (v * (1 - sf * f));
   t = (int) (v * (1 - sf * (1 - f)));
@@ -198,7 +207,7 @@ void HSVtoRGB(int h, int s, int v, unsigned char &r, unsigned char &g, unsigned 
     g = p;
     b = v;
     break;
-  default:		// case 5:
+  default:    // case 5:
     r = v;
     g = p;
     b = q;

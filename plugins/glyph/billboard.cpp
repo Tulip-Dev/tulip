@@ -59,9 +59,9 @@ GlRect* Billboard::rect=0;
 GLYPHPLUGIN(Billboard, "2D - Billboard", "Gerald Gainant", "08/03/2004", "Textured billboard", "1.0", 7);
 
 //===================================================================================
-Billboard::Billboard(GlyphContext *gc): Glyph(gc){
-	if(!rect)
-		rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
+Billboard::Billboard(GlyphContext *gc): Glyph(gc) {
+  if(!rect)
+    rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
 }
 //========================================================
 Billboard::~Billboard() {
@@ -73,25 +73,32 @@ void Billboard::draw(node n,float lod) {
   rect->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
 
   string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
+
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     rect->setTextureName(texturePath+texFile);
-  }else{
+  }
+  else {
     rect->setTextureName("");
   }
+
   double borderWidth=glGraphInputData->getElementBorderWidth()->getNodeValue(n);
+
   if (borderWidth < 1e-6)
     borderWidth=1e-6;
+
   rect->setOutlineSize(static_cast<float>(borderWidth));
-  
+
   // setup orientation
   float mdlM[16];
   glGetFloatv( GL_MODELVIEW_MATRIX, mdlM );
   glMatrixMode( GL_MODELVIEW );
   glPushMatrix();
   Size sz(1,1,1);
+
   if( glGraphInputData->getElementSize() )
     sz = glGraphInputData->getElementSize()->getNodeValue(n);
+
   float nx = sz.getW();
   float ny = sz.getH();
   float nz = sz.getD();
@@ -112,6 +119,7 @@ Coord Billboard::getAnchor(const Coord & vector ) const {
   v.get(x,y,z);
   v.setZ( 0.0f );
   fmax = std::max(fabsf(x), fabsf(y));// fmax = fabsf(x) >? fabsf(y);
+
   if( fmax > 0.0f )
     return v * (0.5f/fmax);
   else

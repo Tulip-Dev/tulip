@@ -40,9 +40,9 @@ int main( int argc, char **argv ) {
   QString interactorsPath = QDir(tlpPath).absoluteFilePath("interactors");
   QString viewPath = QDir(tlpPath).absoluteFilePath("view");
   env.insert("PATH", QDir::toNativeSeparators(tlpPath) + ';'
-	     + QDir::toNativeSeparators(interactorsPath) + ';'
-	     + QDir::toNativeSeparators(viewPath) + ';'
-	     + env.value("Path"));
+             + QDir::toNativeSeparators(interactorsPath) + ';'
+             + QDir::toNativeSeparators(viewPath) + ';'
+             + env.value("Path"));
   proc.setProcessEnvironment(env);
 #else
   QString program = appDir.absoluteFilePath("tulip_app");
@@ -51,7 +51,8 @@ int main( int argc, char **argv ) {
 
   proc.setReadChannelMode(QProcess::ForwardedChannels);
   bool needStart=true;
-  while(needStart){
+
+  while(needStart) {
     proc.start(program,arguments);
     proc.waitForFinished(-1);
     QSettings settings("TulipSoftware","Tulip");

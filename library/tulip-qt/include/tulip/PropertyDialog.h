@@ -37,7 +37,7 @@ class GlMainWidget;
 class PropertyInterface;
 
 class TLP_QT_SCOPE PropertyDialog: public QWidget, public Ui::PropertyDialogData {
-Q_OBJECT
+  Q_OBJECT
   ;
 
 public:

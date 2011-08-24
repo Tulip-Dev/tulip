@@ -32,18 +32,18 @@ using namespace tlp;
 namespace {
 
 void rotate(Coord &vec, double alpha) {
-	Coord backupVec(vec);
-	double zRot = -2.0 * M_PI * alpha / 360.0;
-	float cosz = static_cast<float>(cos(zRot));
-	float sinz = static_cast<float>(sin(zRot));
-	vec[0] = backupVec[0] * cosz - backupVec[1] * sinz;
-	vec[1] = backupVec[0] * sinz + backupVec[1] * cosz;
+  Coord backupVec(vec);
+  double zRot = -2.0 * M_PI * alpha / 360.0;
+  float cosz = static_cast<float>(cos(zRot));
+  float sinz = static_cast<float>(sin(zRot));
+  vec[0] = backupVec[0] * cosz - backupVec[1] * sinz;
+  vec[1] = backupVec[0] * sinz + backupVec[1] * cosz;
 }
 
 class HullBuilder {
 public:
-	virtual ~HullBuilder(){}
-	virtual void addPoint(const Coord &) = 0;
+  virtual ~HullBuilder() {}
+  virtual void addPoint(const Coord &) = 0;
 };
 
 /**
@@ -52,151 +52,162 @@ public:
  * @todo create unit test to automatically chack that function
  */
 void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE, const LayoutProperty *layout, const SizeProperty *size, const DoubleProperty *rotation,
-		const BooleanProperty *selection, HullBuilder &builder) {
+                        const BooleanProperty *selection, HullBuilder &builder) {
 
-	if (itN != NULL) {
+  if (itN != NULL) {
 
-		node itn;
-		forEach(itn, itN) {
-			if (!selection || selection->getNodeValue(itn)) {
-				Vec3f nSize(size->getNodeValue(itn));
-				Vec3f point(layout->getNodeValue(itn));
-				double rot(rotation->getNodeValue(itn));
-				vector<Coord> points(4);
-				points[0].set( nSize[0]/2.f,  nSize[1]/2.f,  nSize[2]/2.f);
-				points[1].set(-nSize[0]/2.f, -nSize[1]/2.f, -nSize[2]/2.f);
-				points[2].set(+nSize[0]/2.f, -nSize[1]/2.f, -nSize[2]/2.f);
-				points[3].set(-nSize[0]/2.f, +nSize[1]/2.f, +nSize[2]/2.f);
-				for (unsigned int i = 0; i < 4; ++i) {
-					rotate(points[i], rot);
-					points[i] += point;
-					builder.addPoint(points[i]);
-				}
-			}
-		}
+    node itn;
+    forEach(itn, itN) {
+      if (!selection || selection->getNodeValue(itn)) {
+        Vec3f nSize(size->getNodeValue(itn));
+        Vec3f point(layout->getNodeValue(itn));
+        double rot(rotation->getNodeValue(itn));
+        vector<Coord> points(4);
+        points[0].set( nSize[0]/2.f,  nSize[1]/2.f,  nSize[2]/2.f);
+        points[1].set(-nSize[0]/2.f, -nSize[1]/2.f, -nSize[2]/2.f);
+        points[2].set(+nSize[0]/2.f, -nSize[1]/2.f, -nSize[2]/2.f);
+        points[3].set(-nSize[0]/2.f, +nSize[1]/2.f, +nSize[2]/2.f);
 
-	}
+        for (unsigned int i = 0; i < 4; ++i) {
+          rotate(points[i], rot);
+          points[i] += point;
+          builder.addPoint(points[i]);
+        }
+      }
+    }
 
-	if (itE != NULL) {
+  }
 
-		edge ite;
-		forEach(ite, itE) {
-			if (!selection || selection->getEdgeValue(ite)) {
-				LineType::RealType::const_iterator itCoord;
-				const LineType::RealType &bends = layout->getEdgeValue(ite);
-				for (itCoord = bends.begin(); itCoord != bends.end(); ++itCoord)
-					builder.addPoint(*itCoord);
-			}
-		}
+  if (itE != NULL) {
 
-	}
+    edge ite;
+    forEach(ite, itE) {
+      if (!selection || selection->getEdgeValue(ite)) {
+        LineType::RealType::const_iterator itCoord;
+        const LineType::RealType &bends = layout->getEdgeValue(ite);
+
+        for (itCoord = bends.begin(); itCoord != bends.end(); ++itCoord)
+          builder.addPoint(*itCoord);
+      }
+    }
+
+  }
 }
 }
 //===========================================================================
 class BoundingBoxCalculator: public HullBuilder {
 public:
-	inline virtual void addPoint(const Coord &point) {
-		result.expand(point);
-	}
-	BoundingBox getResult() {
-		return result;
-	}
+  inline virtual void addPoint(const Coord &point) {
+    result.expand(point);
+  }
+  BoundingBox getResult() {
+    return result;
+  }
 private:
-	BoundingBox result;
+  BoundingBox result;
 };
 //===========================================================================
 BoundingBox tlp::computeBoundingBox(const Graph *graph, const LayoutProperty *layout, const SizeProperty *size, const DoubleProperty *rotation, const BooleanProperty *selection) {
-	BoundingBoxCalculator calc;
-	computeGraphPoints(graph->getNodes(), graph->getEdges(), layout, size, rotation, selection, calc);
-	return calc.getResult();
+  BoundingBoxCalculator calc;
+  computeGraphPoints(graph->getNodes(), graph->getEdges(), layout, size, rotation, selection, calc);
+  return calc.getResult();
 }
 //===========================================================================
 BoundingBox tlp::computeBoundingBox(Iterator<node> *itN, Iterator<edge> *itE, const LayoutProperty *layout, const SizeProperty *size, const DoubleProperty *rotation, const BooleanProperty *selection) {
-	BoundingBoxCalculator calc;
-	computeGraphPoints(itN, itE, layout, size, rotation, selection, calc);
-	return calc.getResult();
+  BoundingBoxCalculator calc;
+  computeGraphPoints(itN, itE, layout, size, rotation, selection, calc);
+  return calc.getResult();
 }
 //===========================================================================
 pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutProperty *layout, const SizeProperty *size,
-		const DoubleProperty *rotation, const BooleanProperty *selection) {
-	pair<Coord, Coord> result;
-	result.first.set(0, 0, 0);
-	result.second.set(0, 0, 0);
-	if (graph->numberOfNodes() == 0)
-		return result;
-	BoundingBox boundingBox(tlp::computeBoundingBox(graph, layout, size, rotation, selection));
-	Coord centre(boundingBox.center());
-	result.first = result.second = centre;
+    const DoubleProperty *rotation, const BooleanProperty *selection) {
+  pair<Coord, Coord> result;
+  result.first.set(0, 0, 0);
+  result.second.set(0, 0, 0);
 
-	double maxRad = 0;
-	node itn;
-	forEach(itn, graph->getNodes()) {
-		const Coord& curCoord = layout->getNodeValue(itn);
-		Size curSize(size->getNodeValue(itn) / 2.0f);
-		if (selection == 0 || selection->getNodeValue(itn)) {
-			double nodeRad = sqrt(curSize.getW() * curSize.getW() + curSize.getH() * curSize.getH());
-			Coord  radDir = curCoord - centre;
-			double curRad = nodeRad + radDir.norm();
-			if (radDir.norm() < 1e-6) {
-				curRad = nodeRad;
-				radDir = Coord(1.0, 0.0, 0.0);
-			}
-			if (curRad > maxRad) {
-				maxRad = curRad;
-				radDir /= radDir.norm();
-				radDir *= static_cast<float>(curRad);
-				result.second = radDir + centre;
-			}
-		}//end if
-	}
+  if (graph->numberOfNodes() == 0)
+    return result;
 
-	edge ite;
-	forEach(ite, graph->getEdges()) {
-		if (selection == 0 || selection->getEdgeValue(ite)) {
-			LineType::RealType::const_iterator itCoord;
-			const LineType::RealType &bends = layout->getEdgeValue(ite);
-			for (itCoord = bends.begin(); itCoord != bends.end(); ++itCoord) {
-				double curRad = (*itCoord - centre).norm();
-				if (curRad > maxRad) {
-					maxRad = curRad;
-					result.second = *itCoord;
-				}//end if
-			}//end for
-		}//end if
-	}
+  BoundingBox boundingBox(tlp::computeBoundingBox(graph, layout, size, rotation, selection));
+  Coord centre(boundingBox.center());
+  result.first = result.second = centre;
 
-	return result;
+  double maxRad = 0;
+  node itn;
+  forEach(itn, graph->getNodes()) {
+    const Coord& curCoord = layout->getNodeValue(itn);
+    Size curSize(size->getNodeValue(itn) / 2.0f);
+
+    if (selection == 0 || selection->getNodeValue(itn)) {
+      double nodeRad = sqrt(curSize.getW() * curSize.getW() + curSize.getH() * curSize.getH());
+      Coord  radDir = curCoord - centre;
+      double curRad = nodeRad + radDir.norm();
+
+      if (radDir.norm() < 1e-6) {
+        curRad = nodeRad;
+        radDir = Coord(1.0, 0.0, 0.0);
+      }
+
+      if (curRad > maxRad) {
+        maxRad = curRad;
+        radDir /= radDir.norm();
+        radDir *= static_cast<float>(curRad);
+        result.second = radDir + centre;
+      }
+    }//end if
+  }
+
+  edge ite;
+  forEach(ite, graph->getEdges()) {
+    if (selection == 0 || selection->getEdgeValue(ite)) {
+      LineType::RealType::const_iterator itCoord;
+      const LineType::RealType &bends = layout->getEdgeValue(ite);
+
+      for (itCoord = bends.begin(); itCoord != bends.end(); ++itCoord) {
+        double curRad = (*itCoord - centre).norm();
+
+        if (curRad > maxRad) {
+          maxRad = curRad;
+          result.second = *itCoord;
+        }//end if
+      }//end for
+    }//end if
+  }
+
+  return result;
 }
 //======================================================================================
 class ConvexHullCalculator: public HullBuilder {
 public:
 
-	inline virtual void addPoint(const Coord &point) {
-		allPoints.push_back(point);
-	}
+  inline virtual void addPoint(const Coord &point) {
+    allPoints.push_back(point);
+  }
 
-	vector<Coord> getResult() {
-		vector<unsigned int> hullIndices;
-		convexHull(allPoints, hullIndices); //compute the convex hull
-		vector<unsigned int>::const_iterator it;
-		vector<Coord> finalResult(hullIndices.size());
-		vector<Coord>::iterator itR = finalResult.begin();
-		for(it = hullIndices.begin(); it != hullIndices.end(); ++it, ++itR) {
-			(*itR) = allPoints[*it];
-			(*itR)[2] = 0;
-		}
-		return finalResult;
-	}
+  vector<Coord> getResult() {
+    vector<unsigned int> hullIndices;
+    convexHull(allPoints, hullIndices); //compute the convex hull
+    vector<unsigned int>::const_iterator it;
+    vector<Coord> finalResult(hullIndices.size());
+    vector<Coord>::iterator itR = finalResult.begin();
+
+    for(it = hullIndices.begin(); it != hullIndices.end(); ++it, ++itR) {
+      (*itR) = allPoints[*it];
+      (*itR)[2] = 0;
+    }
+
+    return finalResult;
+  }
 
 private:
-	vector<Coord> allPoints;
+  vector<Coord> allPoints;
 };
 //======================================================================================
 
 std::vector<Coord> tlp::computeConvexHull(const Graph *graph, const LayoutProperty *layout, const SizeProperty *size, const DoubleProperty *rotation,
-		const BooleanProperty *selection) {
+    const BooleanProperty *selection) {
 
-	ConvexHullCalculator calc;
-	computeGraphPoints(graph->getNodes(), graph->getEdges(), layout, size, rotation, selection, calc);
-	return calc.getResult();
+  ConvexHullCalculator calc;
+  computeGraphPoints(graph->getNodes(), graph->getEdges(), layout, size, rotation, selection, calc);
+  return calc.getResult();
 }

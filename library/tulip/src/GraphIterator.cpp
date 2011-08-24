@@ -44,7 +44,7 @@ void NodeIteratorObserver::delNode(Graph*, node) {
   if (hasNext())
     std::cerr << "Warning: node deleted while iterating !!!" << std::endl;
 }
-   
+
 void EdgeIteratorObserver::addEdge(Graph*, edge) {
   if (hasNext())
     std::cerr << "Warning: edge added while iterating !!!" << std::endl;
@@ -76,7 +76,7 @@ int getNumIterators() {
 
 //============================================================
 SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val)
- :FactorNodeIterator(sG,filter), sg(sG), value(val) {
+  :FactorNodeIterator(sG,filter), sg(sG), value(val) {
   it=_parentGraph->getNodes();
 #ifndef NDEBUG
   _parentGraph->addGraphObserver(this);
@@ -90,10 +90,12 @@ SGraphNodeIterator::~SGraphNodeIterator() {
 void SGraphNodeIterator::prepareNext() {
   while(it->hasNext()) {
     curNode = it->next();
+
     if (_filter.get(curNode) == value &&
-	sg->isElement(curNode))
+        sg->isElement(curNode))
       return;
   }
+
   // set curNode as invalid
   curNode = node();
 }
@@ -105,7 +107,7 @@ node SGraphNodeIterator::next() {
   prepareNext();
   return tmp;
 }
-bool SGraphNodeIterator::hasNext(){ 
+bool SGraphNodeIterator::hasNext() {
   return (curNode.isValid());
 }
 //===================================================================
@@ -133,14 +135,14 @@ bool OutNodesIterator::hasNext() {
 }
 //===================================================================
 InNodesIterator::InNodesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n):FactorNodeIterator(sG,filter),
-										   it(new InEdgesIterator(sG,filter,n)) {
+  it(new InEdgesIterator(sG,filter,n)) {
 #ifndef NDEBUG
   sg = sG;
   _parentGraph->addGraphObserver(this);
 #endif
 }
-InNodesIterator::~InNodesIterator() { 
-  delete it; 
+InNodesIterator::~InNodesIterator() {
+  delete it;
 }
 node InNodesIterator:: next() {
 #ifndef NDEBUG
@@ -156,8 +158,8 @@ bool InNodesIterator::hasNext() {
 }
 //===================================================================
 InOutNodesIterator::InOutNodesIterator(const Graph *sG, const MutableContainer<bool>& filter,node n):FactorNodeIterator(sG,filter),
-											 it(new InOutEdgesIterator(sG,filter,n)),
-											 n(n) {
+  it(new InOutEdgesIterator(sG,filter,n)),
+  n(n) {
 #ifndef NDEBUG
   sg = sG;
   _parentGraph->addGraphObserver(this);
@@ -194,10 +196,12 @@ SGraphEdgeIterator::~SGraphEdgeIterator() {
 void SGraphEdgeIterator::prepareNext() {
   while(it->hasNext()) {
     curEdge=it->next();
+
     if (_filter.get(curEdge.id) == value &&
-	sg->isElement(curEdge))
+        sg->isElement(curEdge))
       return;
   }
+
   // set curEdge as invalid
   curEdge = edge();
 }
@@ -228,9 +232,11 @@ OutEdgesIterator::~OutEdgesIterator() {
 void OutEdgesIterator::prepareNext() {
   while(it->hasNext()) {
     curEdge=it->next();
+
     if (_filter.get(curEdge.id))
       return;
   }
+
   // set curEdge as invalid
   curEdge = edge();
 }
@@ -246,7 +252,7 @@ bool OutEdgesIterator::hasNext() {
   return (curEdge.isValid());
 }
 //===================================================================
-  InEdgesIterator::InEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n):FactorEdgeIterator(sG,filter) {
+InEdgesIterator::InEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n):FactorEdgeIterator(sG,filter) {
   assert(sG->isElement(n));
   it=_parentGraph->getInEdges(n);
 #ifndef NDEBUG
@@ -261,9 +267,11 @@ InEdgesIterator::~InEdgesIterator() {
 void InEdgesIterator::prepareNext() {
   while (it->hasNext()) {
     curEdge=it->next();
+
     if (_filter.get(curEdge.id))
       return;
   }
+
   // set curEdge as invalid
   curEdge = edge();
 }
@@ -279,7 +287,7 @@ bool InEdgesIterator::hasNext() {
   return (curEdge.isValid());
 }
 //===================================================================
-  InOutEdgesIterator::InOutEdgesIterator(const Graph *sG,const MutableContainer<bool>& filter, node n):FactorEdgeIterator(sG,filter) {
+InOutEdgesIterator::InOutEdgesIterator(const Graph *sG,const MutableContainer<bool>& filter, node n):FactorEdgeIterator(sG,filter) {
   assert(sG->isElement(n));
   it=_parentGraph->getInOutEdges(n);
 #ifndef NDEBUG
@@ -294,9 +302,11 @@ InOutEdgesIterator::~InOutEdgesIterator() {
 void InOutEdgesIterator::prepareNext() {
   while(it->hasNext()) {
     curEdge=it->next();
+
     if (_filter.get(curEdge.id))
       return;
   }
+
   // set curEdge as invalid
   curEdge = edge();
 }
@@ -315,18 +325,18 @@ bool InOutEdgesIterator::hasNext() {
 //************************************************************
 //************************************************************
 //============================================================
-  GraphImplNodeIterator::GraphImplNodeIterator(const Graph*
+GraphImplNodeIterator::GraphImplNodeIterator(const Graph*
 #ifndef NDEBUG
-					       g
+    g
 #endif
-					       , Iterator<node>* it):
+    , Iterator<node>* it):
   itId(it) {
 #ifndef NDEBUG
   graph = (GraphImpl *) g;
   graph->addGraphObserver(this);
 #endif
 }
-GraphImplNodeIterator::~GraphImplNodeIterator(){
+GraphImplNodeIterator::~GraphImplNodeIterator() {
   delete itId;
 }
 node GraphImplNodeIterator::next() {
@@ -339,16 +349,16 @@ bool GraphImplNodeIterator::hasNext() {
 //===============================================================
 GraphImplEdgeIterator::GraphImplEdgeIterator(const Graph*
 #ifndef NDEBUG
-					       g
+    g
 #endif
-					     , Iterator<edge>* it):
+    , Iterator<edge>* it):
   itId(it) {
 #ifndef NDEBUG
   graph = (GraphImpl *) g;
   graph->addGraphObserver(this);
 #endif
 }
-GraphImplEdgeIterator::~GraphImplEdgeIterator(){
+GraphImplEdgeIterator::~GraphImplEdgeIterator() {
   delete itId;
 }
 edge GraphImplEdgeIterator::next() {

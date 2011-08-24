@@ -5,41 +5,41 @@
 namespace {
 
 const char * paramHelp[] = {
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"Sets the value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped. "
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"If set to true, the given layout is used for the initial positions."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"If set != 0, value zerolength is used to determine the desirable edge length by L = zerolength / max distance_ij. Otherwise, zerolength is determined using the node number and sizes."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"Sets desirable edge length directly."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"f set to true, number of iterations is computed depending on G."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "int" )
-		HTML_HELP_BODY()
-		"Sets the number of global iterations to i."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "int" )
-		HTML_HELP_BODY()
-		"Sets the number of local iterations to i."
-		HTML_HELP_CLOSE()
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "Sets the value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped. "
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "If set to true, the given layout is used for the initial positions."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "If set != 0, value zerolength is used to determine the desirable edge length by L = zerolength / max distance_ij. Otherwise, zerolength is determined using the node number and sizes."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "Sets desirable edge length directly."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "f set to true, number of iterations is computed depending on G."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "Sets the number of global iterations to i."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "Sets the number of local iterations to i."
+  HTML_HELP_CLOSE()
 };
 }
 
@@ -90,40 +90,48 @@ class OGDFKamadaKawai : public OGDFLayoutPluginBase {
 
 public:
 
-	OGDFKamadaKawai(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderKK()) {
-		addParameter<double>("stop tolerance", paramHelp[0], "0.001");
-		addParameter<bool>("used layout", paramHelp[1], "true");
-		addParameter<double>("zero length", paramHelp[2], "0");
-		addParameter<double>("edge length", paramHelp[3], "0");
-		addParameter<bool>("compute max iterations", paramHelp[4], "true");
-		addParameter<int>("global iterations", paramHelp[5], "50");
-		addParameter<int>("local iterations", paramHelp[6], "50");
-	}
-	~OGDFKamadaKawai() {}
+  OGDFKamadaKawai(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderKK()) {
+    addParameter<double>("stop tolerance", paramHelp[0], "0.001");
+    addParameter<bool>("used layout", paramHelp[1], "true");
+    addParameter<double>("zero length", paramHelp[2], "0");
+    addParameter<double>("edge length", paramHelp[3], "0");
+    addParameter<bool>("compute max iterations", paramHelp[4], "true");
+    addParameter<int>("global iterations", paramHelp[5], "50");
+    addParameter<int>("local iterations", paramHelp[6], "50");
+  }
+  ~OGDFKamadaKawai() {}
 
-	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
-		ogdf::SpringEmbedderKK *kamada = static_cast<ogdf::SpringEmbedderKK*>(ogdfLayoutAlgo);
-		if (dataSet != 0) {
-			double dval = 0;
-			int ival = 0;
-			bool bval = false;
-			if (dataSet->get("stop tolerance", dval))
-				kamada->setStopTolerance(dval);
-			if (dataSet->get("use layout", bval))
-				kamada->setUseLayout(bval);
-			if (dataSet->get("zero length", dval))
-				kamada->setZeroLength(dval);
-			if (dataSet->get("edge length", dval))
-				kamada->setDesLength(dval);
-			if (dataSet->get("compute max iterations", bval))
-				kamada->computeMaxIterations(bval);
-			if (dataSet->get("global iterations", ival))
-				kamada->setMaxGlobalIterations(ival);
-			if (dataSet->get("local iterations", ival))
-				kamada->setMaxLocalIterations(ival);
+  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+    ogdf::SpringEmbedderKK *kamada = static_cast<ogdf::SpringEmbedderKK*>(ogdfLayoutAlgo);
 
-		}
-	}
+    if (dataSet != 0) {
+      double dval = 0;
+      int ival = 0;
+      bool bval = false;
+
+      if (dataSet->get("stop tolerance", dval))
+        kamada->setStopTolerance(dval);
+
+      if (dataSet->get("use layout", bval))
+        kamada->setUseLayout(bval);
+
+      if (dataSet->get("zero length", dval))
+        kamada->setZeroLength(dval);
+
+      if (dataSet->get("edge length", dval))
+        kamada->setDesLength(dval);
+
+      if (dataSet->get("compute max iterations", bval))
+        kamada->computeMaxIterations(bval);
+
+      if (dataSet->get("global iterations", ival))
+        kamada->setMaxGlobalIterations(ival);
+
+      if (dataSet->get("local iterations", ival))
+        kamada->setMaxLocalIterations(ival);
+
+    }
+  }
 
 };
 /*@}*/

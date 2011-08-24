@@ -29,232 +29,242 @@ using namespace std;
 namespace tlp {
 
 GlPolyQuad::GlPolyQuad(const string &textureName, const bool outlined, const int outlineWidth, const Color &outlineColor)
-: textureName(textureName), outlined(outlined), outlineWidth(outlineWidth), outlineColor(outlineColor) {}
+  : textureName(textureName), outlined(outlined), outlineWidth(outlineWidth), outlineColor(outlineColor) {}
 
 GlPolyQuad::GlPolyQuad(const vector<Coord> &polyQuadEdges, const vector<Color> &polyQuadEdgesColors, const string &textureName,
-		const bool outlined, const int outlineWidth, const Color &outlineColor)
-: textureName(textureName), outlined(outlined), outlineWidth(outlineWidth), outlineColor(outlineColor) {
+                       const bool outlined, const int outlineWidth, const Color &outlineColor)
+  : textureName(textureName), outlined(outlined), outlineWidth(outlineWidth), outlineColor(outlineColor) {
 
-	assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
+  assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
 
-	for (size_t i = 0 ; i < (polyQuadEdges.size() / 2) ; ++i) {
-		addQuadEdge(polyQuadEdges[2*i], polyQuadEdges[2*i + 1], polyQuadEdgesColors[i]);
-	}
+  for (size_t i = 0 ; i < (polyQuadEdges.size() / 2) ; ++i) {
+    addQuadEdge(polyQuadEdges[2*i], polyQuadEdges[2*i + 1], polyQuadEdgesColors[i]);
+  }
 }
 
 GlPolyQuad::GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const Color &polyQuadColor, const std::string &textureName,
-		const bool outlined, const int outlineWidth, const Color &outlineColor)
-: textureName(textureName), outlined(outlined), outlineWidth(outlineWidth), outlineColor(outlineColor) {
+                       const bool outlined, const int outlineWidth, const Color &outlineColor)
+  : textureName(textureName), outlined(outlined), outlineWidth(outlineWidth), outlineColor(outlineColor) {
 
-	assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2);
+  assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2);
 
-	for (size_t i = 0 ; i < (polyQuadEdges.size() / 2) ; ++i) {
-		addQuadEdge(polyQuadEdges[2*i], polyQuadEdges[2*i + 1], polyQuadColor);
-	}
+  for (size_t i = 0 ; i < (polyQuadEdges.size() / 2) ; ++i) {
+    addQuadEdge(polyQuadEdges[2*i], polyQuadEdges[2*i + 1], polyQuadColor);
+  }
 }
 
 void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge, const Color &edgeColor) {
-	polyQuadEdges.push_back(startEdge);
-	polyQuadEdges.push_back(endEdge);
-	boundingBox.expand(startEdge);
-	boundingBox.expand(endEdge);
-	polyQuadEdgesColors.push_back(edgeColor);
+  polyQuadEdges.push_back(startEdge);
+  polyQuadEdges.push_back(endEdge);
+  boundingBox.expand(startEdge);
+  boundingBox.expand(endEdge);
+  polyQuadEdgesColors.push_back(edgeColor);
 }
 
 void GlPolyQuad::draw(float, Camera *) {
 
-	assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
+  assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
 
-	vector<Coord> vertexArray;
-	vector<float> texCoordsArray;
-	vector<Vector<float, 4> >colorsArray;
-	vector<unsigned short> quadIndices;
-	vector<unsigned short> outlineIndices;
+  vector<Coord> vertexArray;
+  vector<float> texCoordsArray;
+  vector<Vector<float, 4> >colorsArray;
+  vector<unsigned short> quadIndices;
+  vector<unsigned short> outlineIndices;
 
-	unsigned int nbSubdivisionsPerSegment = 1;
-	unsigned int nbVertices = polyQuadEdges.size();
-	vector<Coord> *vertices = &polyQuadEdges;
-	GlShaderProgram *currentShader = GlShaderProgram::getCurrentActiveShader();
-	if (currentShader != NULL && currentShader->getName() == "fisheye") {
-		nbSubdivisionsPerSegment = 20;
-		vertices = &vertexArray;
-		nbVertices = ((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment * 2;
-		vertexArray.reserve(nbVertices);
-	}
+  unsigned int nbSubdivisionsPerSegment = 1;
+  unsigned int nbVertices = polyQuadEdges.size();
+  vector<Coord> *vertices = &polyQuadEdges;
+  GlShaderProgram *currentShader = GlShaderProgram::getCurrentActiveShader();
 
-	texCoordsArray.reserve(nbVertices * 2);
-	colorsArray.reserve(nbVertices);
-	quadIndices.reserve(nbVertices);
-	outlineIndices.resize(nbVertices);
+  if (currentShader != NULL && currentShader->getName() == "fisheye") {
+    nbSubdivisionsPerSegment = 20;
+    vertices = &vertexArray;
+    nbVertices = ((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment * 2;
+    vertexArray.reserve(nbVertices);
+  }
 
-	for (size_t i = 0 ; i < (polyQuadEdges.size() / 2) - 1 ; ++i) {
-		Vector<float, 4> startColor;
-		Vector<float, 4> endColor;
-		startColor[0] = polyQuadEdgesColors[i].getRGL();
-		startColor[1] = polyQuadEdgesColors[i].getGGL();
-		startColor[2] = polyQuadEdgesColors[i].getBGL();
-		startColor[3] = polyQuadEdgesColors[i].getAGL();
-		endColor[0] = polyQuadEdgesColors[i+1].getRGL();
-		endColor[1] = polyQuadEdgesColors[i+1].getGGL();
-		endColor[2] = polyQuadEdgesColors[i+1].getBGL();
-		endColor[3] = polyQuadEdgesColors[i+1].getAGL();
+  texCoordsArray.reserve(nbVertices * 2);
+  colorsArray.reserve(nbVertices);
+  quadIndices.reserve(nbVertices);
+  outlineIndices.resize(nbVertices);
 
-		if (nbSubdivisionsPerSegment == 1) {
+  for (size_t i = 0 ; i < (polyQuadEdges.size() / 2) - 1 ; ++i) {
+    Vector<float, 4> startColor;
+    Vector<float, 4> endColor;
+    startColor[0] = polyQuadEdgesColors[i].getRGL();
+    startColor[1] = polyQuadEdgesColors[i].getGGL();
+    startColor[2] = polyQuadEdgesColors[i].getBGL();
+    startColor[3] = polyQuadEdgesColors[i].getAGL();
+    endColor[0] = polyQuadEdgesColors[i+1].getRGL();
+    endColor[1] = polyQuadEdgesColors[i+1].getGGL();
+    endColor[2] = polyQuadEdgesColors[i+1].getBGL();
+    endColor[3] = polyQuadEdgesColors[i+1].getAGL();
 
-			texCoordsArray.push_back(static_cast<GLfloat>(i));
-			texCoordsArray.push_back(0.0f);
-			texCoordsArray.push_back(static_cast<GLfloat>(i));
-			texCoordsArray.push_back(1.0f);
-			colorsArray.push_back(startColor);
-			colorsArray.push_back(startColor);
+    if (nbSubdivisionsPerSegment == 1) {
 
-			quadIndices.push_back(2*i);
-			quadIndices.push_back(2*i+1);
+      texCoordsArray.push_back(static_cast<GLfloat>(i));
+      texCoordsArray.push_back(0.0f);
+      texCoordsArray.push_back(static_cast<GLfloat>(i));
+      texCoordsArray.push_back(1.0f);
+      colorsArray.push_back(startColor);
+      colorsArray.push_back(startColor);
 
-			outlineIndices[i] = 2*i;
-			outlineIndices[nbVertices - (i+1)] = 2*i+1;
+      quadIndices.push_back(2*i);
+      quadIndices.push_back(2*i+1);
 
-		} else {
+      outlineIndices[i] = 2*i;
+      outlineIndices[nbVertices - (i+1)] = 2*i+1;
 
-			for (unsigned int j = 0 ; j < nbSubdivisionsPerSegment ; ++j) {
+    }
+    else {
 
-				unsigned int n = i * nbSubdivisionsPerSegment + j;
+      for (unsigned int j = 0 ; j < nbSubdivisionsPerSegment ; ++j) {
 
-				Coord v1 = polyQuadEdges[2*i] + (j / static_cast<float>(nbSubdivisionsPerSegment - 1)) * (polyQuadEdges[2*(i+1)] - polyQuadEdges[2*i]);
-				Coord v2 = polyQuadEdges[2*i+1] + (j / static_cast<float>(nbSubdivisionsPerSegment - 1)) * (polyQuadEdges[2*(i+1)+1] - polyQuadEdges[2*i+1]);
-				vertexArray.push_back(v1);
-				vertexArray.push_back(v2);
+        unsigned int n = i * nbSubdivisionsPerSegment + j;
 
-				float texCoordFactor = ((polyQuadEdges[2*i].dist(polyQuadEdges[2*i+2])) / (nbSubdivisionsPerSegment - 1)) / (polyQuadEdges[2*i].dist(polyQuadEdges[2*i+1]));
-				texCoordsArray.push_back(static_cast<GLfloat>(i) + static_cast<GLfloat>(j) * texCoordFactor);
-				texCoordsArray.push_back(0.0f);
-				texCoordsArray.push_back(static_cast<GLfloat>(i) + static_cast<GLfloat>(j) * texCoordFactor);
-				texCoordsArray.push_back(1.0f);
+        Coord v1 = polyQuadEdges[2*i] + (j / static_cast<float>(nbSubdivisionsPerSegment - 1)) * (polyQuadEdges[2*(i+1)] - polyQuadEdges[2*i]);
+        Coord v2 = polyQuadEdges[2*i+1] + (j / static_cast<float>(nbSubdivisionsPerSegment - 1)) * (polyQuadEdges[2*(i+1)+1] - polyQuadEdges[2*i+1]);
+        vertexArray.push_back(v1);
+        vertexArray.push_back(v2);
 
-				Vector<float, 4> color = startColor + (j / static_cast<float>(nbSubdivisionsPerSegment - 1)) * (endColor - startColor);
-				colorsArray.push_back(color);
-				colorsArray.push_back(color);
+        float texCoordFactor = ((polyQuadEdges[2*i].dist(polyQuadEdges[2*i+2])) / (nbSubdivisionsPerSegment - 1)) / (polyQuadEdges[2*i].dist(polyQuadEdges[2*i+1]));
+        texCoordsArray.push_back(static_cast<GLfloat>(i) + static_cast<GLfloat>(j) * texCoordFactor);
+        texCoordsArray.push_back(0.0f);
+        texCoordsArray.push_back(static_cast<GLfloat>(i) + static_cast<GLfloat>(j) * texCoordFactor);
+        texCoordsArray.push_back(1.0f);
 
-				quadIndices.push_back(2*n);
-				quadIndices.push_back(2*n+1);
+        Vector<float, 4> color = startColor + (j / static_cast<float>(nbSubdivisionsPerSegment - 1)) * (endColor - startColor);
+        colorsArray.push_back(color);
+        colorsArray.push_back(color);
 
-				outlineIndices[n] = 2*n;
-				outlineIndices[nbVertices - (n+1)] = 2*n+1;
-			}
-		}
+        quadIndices.push_back(2*n);
+        quadIndices.push_back(2*n+1);
 
-		if (nbSubdivisionsPerSegment == 1 && i == (polyQuadEdges.size() / 2) - 2) {
+        outlineIndices[n] = 2*n;
+        outlineIndices[nbVertices - (n+1)] = 2*n+1;
+      }
+    }
 
-			quadIndices.push_back(2*(i+1));
-			quadIndices.push_back(2*(i+1)+1);
-			outlineIndices[i+1] = 2*(i+1);
-			outlineIndices[nbVertices - (i+2)] = 2*(i+1)+1;
-			texCoordsArray.push_back(static_cast<GLfloat>(i+1));
-			texCoordsArray.push_back(0.0f);
-			texCoordsArray.push_back(static_cast<GLfloat>(i+1));
-			texCoordsArray.push_back(1.0f);
-			colorsArray.push_back(endColor);
-			colorsArray.push_back(endColor);
+    if (nbSubdivisionsPerSegment == 1 && i == (polyQuadEdges.size() / 2) - 2) {
 
-		}
+      quadIndices.push_back(2*(i+1));
+      quadIndices.push_back(2*(i+1)+1);
+      outlineIndices[i+1] = 2*(i+1);
+      outlineIndices[nbVertices - (i+2)] = 2*(i+1)+1;
+      texCoordsArray.push_back(static_cast<GLfloat>(i+1));
+      texCoordsArray.push_back(0.0f);
+      texCoordsArray.push_back(static_cast<GLfloat>(i+1));
+      texCoordsArray.push_back(1.0f);
+      colorsArray.push_back(endColor);
+      colorsArray.push_back(endColor);
 
-	}
+    }
 
-	outlineIndices.push_back(0);
+  }
 
-	if (textureName != "") {
-		GlTextureManager::getInst().activateTexture(textureName);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	}
+  outlineIndices.push_back(0);
 
-	glDisable(GL_CULL_FACE);
+  if (textureName != "") {
+    GlTextureManager::getInst().activateTexture(textureName);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  }
 
-	glDisable(GL_LIGHTING);
+  glDisable(GL_CULL_FACE);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
+  glDisable(GL_LIGHTING);
 
-	glVertexPointer(3, GL_FLOAT, 3 * sizeof(float), &((*vertices)[0][0]));
-	glTexCoordPointer(2, GL_FLOAT, 2 * sizeof(float), &texCoordsArray[0]);
-	glColorPointer(4, GL_FLOAT, 4 * sizeof(float), &colorsArray[0][0]);
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glEnableClientState(GL_COLOR_ARRAY);
+
+  glVertexPointer(3, GL_FLOAT, 3 * sizeof(float), &((*vertices)[0][0]));
+  glTexCoordPointer(2, GL_FLOAT, 2 * sizeof(float), &texCoordsArray[0]);
+  glColorPointer(4, GL_FLOAT, 4 * sizeof(float), &colorsArray[0][0]);
 
 
-	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-	if (nbSubdivisionsPerSegment > 1) {
-		glDrawElements(GL_QUAD_STRIP, vertexArray.size(), GL_UNSIGNED_SHORT, &quadIndices[0]);
-	} else {
-		glDrawElements(GL_QUAD_STRIP, polyQuadEdges.size(), GL_UNSIGNED_SHORT, &quadIndices[0]);
-	}
-	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
+  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
+  if (nbSubdivisionsPerSegment > 1) {
+    glDrawElements(GL_QUAD_STRIP, vertexArray.size(), GL_UNSIGNED_SHORT, &quadIndices[0]);
+  }
+  else {
+    glDrawElements(GL_QUAD_STRIP, polyQuadEdges.size(), GL_UNSIGNED_SHORT, &quadIndices[0]);
+  }
 
-	if (textureName != "") {
-		GlTextureManager::getInst().desactivateTexture();
-	}
+  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
-	if (outlined) {
-		OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-		glLineWidth(static_cast<float>(outlineWidth));
-		setMaterial(outlineColor);
-		if (nbSubdivisionsPerSegment > 1) {
-			glDrawElements(GL_LINE_LOOP, vertexArray.size(), GL_UNSIGNED_SHORT, &outlineIndices[0]);
-		} else {
-			glDrawElements(GL_LINE_LOOP, polyQuadEdges.size(), GL_UNSIGNED_SHORT, &outlineIndices[0]);
-		}
-		if (outlineWidth != 1) {
-			glLineWidth(1);
-		}
-		OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
-	}
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+  glDisableClientState(GL_COLOR_ARRAY);
 
-	glDisableClientState(GL_VERTEX_ARRAY);
+  if (textureName != "") {
+    GlTextureManager::getInst().desactivateTexture();
+  }
 
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_LIGHTING);
+  if (outlined) {
+    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+    glLineWidth(static_cast<float>(outlineWidth));
+    setMaterial(outlineColor);
+
+    if (nbSubdivisionsPerSegment > 1) {
+      glDrawElements(GL_LINE_LOOP, vertexArray.size(), GL_UNSIGNED_SHORT, &outlineIndices[0]);
+    }
+    else {
+      glDrawElements(GL_LINE_LOOP, polyQuadEdges.size(), GL_UNSIGNED_SHORT, &outlineIndices[0]);
+    }
+
+    if (outlineWidth != 1) {
+      glLineWidth(1);
+    }
+
+    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+  }
+
+  glDisableClientState(GL_VERTEX_ARRAY);
+
+  glEnable(GL_CULL_FACE);
+  glEnable(GL_LIGHTING);
 
 }
 
 void GlPolyQuad::translate(const Coord& move) {
-	boundingBox.translate(move);
+  boundingBox.translate(move);
 
-	for (unsigned int i = 0 ; i < polyQuadEdges.size() ; ++i) {
-		polyQuadEdges[i]+=move;
-	}
+  for (unsigned int i = 0 ; i < polyQuadEdges.size() ; ++i) {
+    polyQuadEdges[i]+=move;
+  }
 }
 
 void GlPolyQuad::setColor(const Color &color) {
-	for (unsigned int i = 0 ; i < polyQuadEdgesColors.size() ; ++i) {
-		polyQuadEdgesColors[i] = color;
-	}
+  for (unsigned int i = 0 ; i < polyQuadEdgesColors.size() ; ++i) {
+    polyQuadEdgesColors[i] = color;
+  }
 }
 
 void GlPolyQuad::getXML(xmlNodePtr rootNode) {
-	xmlNodePtr dataNode=NULL;
-	GlXMLTools::createProperty(rootNode, "type", "GlPolyQuad");
-	GlXMLTools::getDataNode(rootNode,dataNode);
-	GlXMLTools::getXML(dataNode,"polyQuadEdges", polyQuadEdges);
-	GlXMLTools::getXML(dataNode,"polyQuadEdgesColors", polyQuadEdgesColors);
-	GlXMLTools::getXML(dataNode,"textureName", textureName);
+  xmlNodePtr dataNode=NULL;
+  GlXMLTools::createProperty(rootNode, "type", "GlPolyQuad");
+  GlXMLTools::getDataNode(rootNode,dataNode);
+  GlXMLTools::getXML(dataNode,"polyQuadEdges", polyQuadEdges);
+  GlXMLTools::getXML(dataNode,"polyQuadEdgesColors", polyQuadEdgesColors);
+  GlXMLTools::getXML(dataNode,"textureName", textureName);
 }
 
 void GlPolyQuad::setWithXML(xmlNodePtr rootNode) {
-	xmlNodePtr dataNode=NULL;
-	GlXMLTools::getDataNode(rootNode,dataNode);
+  xmlNodePtr dataNode=NULL;
+  GlXMLTools::getDataNode(rootNode,dataNode);
 
-	// Parse Data
-	if(dataNode) {
-		GlXMLTools::setWithXML(dataNode,"polyQuadEdges", polyQuadEdges);
-		GlXMLTools::setWithXML(dataNode,"polyQuadEdgesColors", polyQuadEdgesColors);
-		GlXMLTools::setWithXML(dataNode,"textureName", textureName);
-	}
+  // Parse Data
+  if(dataNode) {
+    GlXMLTools::setWithXML(dataNode,"polyQuadEdges", polyQuadEdges);
+    GlXMLTools::setWithXML(dataNode,"polyQuadEdgesColors", polyQuadEdgesColors);
+    GlXMLTools::setWithXML(dataNode,"textureName", textureName);
+  }
 
-	vector<Coord>::iterator it;
-	for (it = polyQuadEdges.begin() ; it != polyQuadEdges.end() ; ++it) {
-		boundingBox.expand(*it);
-	}
+  vector<Coord>::iterator it;
+
+  for (it = polyQuadEdges.begin() ; it != polyQuadEdges.end() ; ++it) {
+    boundingBox.expand(*it);
+  }
 }
 
 }

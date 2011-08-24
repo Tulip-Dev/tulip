@@ -44,9 +44,12 @@ void SuperGraphTest::build(unsigned int nbNodes, unsigned int edgeRatio) {
   vector<edge> edges;
   unsigned int NB_ADD  = nbNodes;
   unsigned int EDGE_RATIO = edgeRatio;
+
   for (unsigned int i=0; i<NB_ADD; ++i)
     nodes.push_back(graph->addNode());
+
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
+
   for (unsigned int i=0; i< NB_EDGES; ++i)
     graph->addEdge(nodes[rand()%NB_ADD], nodes[rand()%NB_ADD]);
 }
@@ -57,35 +60,45 @@ void SuperGraphTest::testIterators() {
   vector<edge> edges;
   unsigned int NB_NODES  = 100;
   unsigned int EDGE_RATIO = 100;
+
   for (unsigned int i=0; i<NB_NODES; ++i)
     nodes.push_back(graph->addNode());
+
   unsigned int NB_EDGES = EDGE_RATIO * NB_NODES;
+
   for (unsigned int i=0; i< NB_EDGES; ++i)
     edges.push_back(graph->addEdge(nodes[rand()%NB_NODES], nodes[rand()%NB_NODES]));
+
   {
-  Iterator<node> *itN = graph->getNodes();
-  unsigned int i = 0;
-  while(itN->hasNext()){
-    CPPUNIT_ASSERT_EQUAL( nodes[i].id , itN->next().id );
-    ++i;
-  }delete itN;
-  CPPUNIT_ASSERT_EQUAL( i , NB_NODES );
+    Iterator<node> *itN = graph->getNodes();
+    unsigned int i = 0;
+
+    while(itN->hasNext()) {
+      CPPUNIT_ASSERT_EQUAL( nodes[i].id , itN->next().id );
+      ++i;
+    }
+
+    delete itN;
+    CPPUNIT_ASSERT_EQUAL( i , NB_NODES );
   }
   {
-  Iterator<edge> *itE = graph->getEdges();
-  unsigned int i = 0;
-  while(itE->hasNext()){
-    CPPUNIT_ASSERT_EQUAL( edges[i].id , itE->next().id );
-    ++i;
-  }delete itE;
-  CPPUNIT_ASSERT_EQUAL( i , NB_EDGES );
+    Iterator<edge> *itE = graph->getEdges();
+    unsigned int i = 0;
+
+    while(itE->hasNext()) {
+      CPPUNIT_ASSERT_EQUAL( edges[i].id , itE->next().id );
+      ++i;
+    }
+
+    delete itE;
+    CPPUNIT_ASSERT_EQUAL( i , NB_EDGES );
   }
   graph->clear();
   node n1 = graph->addNode();
   node n2 = graph->addNode();
   node n3 = graph->addNode();
   edge e1 = graph->addEdge(n1, n1); //loop
-  edge e2 = graph->addEdge(n1, n2); 
+  edge e2 = graph->addEdge(n1, n2);
   edge e3 = graph->addEdge(n2, n1);//parallel edge
   edge e4 = graph->addEdge(n1, n3);
 
@@ -132,28 +145,37 @@ void SuperGraphTest::testIterators() {
 //==========================================================
 void degreeCheck(Graph *graph) {
   Iterator<node> *itN = graph->getNodes();
+
   while (itN->hasNext()) {
     node n = itN->next();
     unsigned int outdeg = 0;
     unsigned int indeg = 0;
     unsigned int deg = 0;
     Iterator<edge> *it = graph->getOutEdges(n);
-    for (;it->hasNext();it->next())
+
+    for (; it->hasNext(); it->next())
       ++outdeg;
+
     delete it;
     it = graph->getInEdges(n);
-    for (;it->hasNext();it->next())
+
+    for (; it->hasNext(); it->next())
       ++indeg;
+
     delete it;
     it = graph->getInOutEdges(n);
-    for (;it->hasNext();it->next())
+
+    for (; it->hasNext(); it->next())
       ++deg;
+
     delete it;
     CPPUNIT_ASSERT_EQUAL(graph->indeg(n) , indeg);
     CPPUNIT_ASSERT_EQUAL(graph->outdeg(n), outdeg);
     CPPUNIT_ASSERT_EQUAL(graph->deg(n)   , deg);
     CPPUNIT_ASSERT_EQUAL(indeg + outdeg  , deg);
-  } delete itN;  
+  }
+
+  delete itN;
 }
 //==========================================================
 void SuperGraphTest::testDegree() {
@@ -169,17 +191,23 @@ void SuperGraphTest::testDegree() {
   degreeCheck(gr1);
   degreeCheck(gr2);
   Iterator<edge> *it = graph->getEdges();
+
   while(it->hasNext()) {
     graph->reverse(it->next());
-  } delete it;
+  }
+
+  delete it;
   degreeCheck(graph);
   degreeCheck(gr);
   degreeCheck(gr1);
   degreeCheck(gr2);
   it = gr2->getEdges();
+
   while(it->hasNext()) {
     gr2->reverse(it->next());
-  } delete it;
+  }
+
+  delete it;
   degreeCheck(graph);
   degreeCheck(gr);
   degreeCheck(gr1);
@@ -270,19 +298,22 @@ void SuperGraphTest::testAddDel() {
     CPPUNIT_ASSERT(graph->isElement(nodes[i]));
     nodePresent[i] = true;
   }
+
   CPPUNIT_ASSERT(graph->numberOfNodes() == NB_ADD);
 
   StlIterator<node, std::vector<node>::const_iterator> itn(nodes.begin(),
-							   nodes.end());
+      nodes.end());
   graph->delNodes(&itn);
 
   CPPUNIT_ASSERT(graph->numberOfNodes() == 0);
 
   graph->addNodes(NB_ADD, nodes);
+
   for (unsigned int i=0; i<NB_ADD; ++i) {
     CPPUNIT_ASSERT(graph->isElement(nodes[i]));
     nodePresent[i] = true;
   }
+
   CPPUNIT_ASSERT(graph->numberOfNodes() == NB_ADD);
 
   for (unsigned int i=0; i< NB_EDGES; ++i) {
@@ -290,12 +321,14 @@ void SuperGraphTest::testAddDel() {
     CPPUNIT_ASSERT(graph->isElement(edges[i]));
     edgePresent[i] = true;
   }
+
   CPPUNIT_ASSERT(graph->numberOfEdges() == NB_EDGES);
 
   for (unsigned int i=0; i < NB_EDGES; ++i) {
     graph->delEdge(edges[i]);
     CPPUNIT_ASSERT(!graph->isElement(edges[i]));
   }
+
   CPPUNIT_ASSERT(graph->numberOfEdges() == 0);
 
   vector<pair<node, node> > ends;
@@ -303,18 +336,22 @@ void SuperGraphTest::testAddDel() {
   for (unsigned int i=0; i< NB_EDGES; ++i) {
     ends.push_back(pair<node, node>(nodes[rand()%NB_ADD],nodes[rand()%NB_ADD]));
   }
+
   graph->addEdges(ends, edges);
   CPPUNIT_ASSERT(graph->numberOfEdges() == NB_EDGES);
 
 
   for (unsigned int i=0; i<NB_ADD; ++i) {
     Iterator<edge> *itE = graph->getInOutEdges(nodes[i]);
+
     while (itE->hasNext())
       CPPUNIT_ASSERT(graph->isElement(itE->next()));
+
     delete itE;
     graph->delNode(nodes[i]);
     CPPUNIT_ASSERT(!graph->isElement(nodes[i]));
   }
+
   CPPUNIT_ASSERT(graph->numberOfNodes() == 0);
   CPPUNIT_ASSERT(graph->numberOfEdges() == 0);
 }
@@ -331,38 +368,51 @@ void SuperGraphTest::testOrderEdgeAndSwap() {
   vector<node> nodes;
   vector<edge> edges;
   unsigned int NB_NODES = 1000;
+
   for (unsigned int i=0; i<NB_NODES; ++i)
     nodes.push_back(graph->addNode());
+
   unsigned int NB_EDGES = NB_NODES - 1;
+
   for (unsigned int i=0; i<NB_EDGES; ++i)
     edges.push_back(graph->addEdge(nodes[0],nodes[i+1]));
+
   {
     Iterator<edge> *it = graph->getInOutEdges(nodes[0]);
     unsigned int i = 0;
+
     while(it->hasNext()) {
       CPPUNIT_ASSERT( it->next() == edges[i]);
       ++i;
-    }delete it;
+    }
+
+    delete it;
   }
+
   //change order
-  for (unsigned int j=0;j < NB_EDGES; ++j) {
+  for (unsigned int j=0; j < NB_EDGES; ++j) {
     unsigned int u = rand()%NB_EDGES;
     unsigned int v = rand()%NB_EDGES;
     edge tmp = edges[u];
     edges[u] = edges[v];
     edges[v] = tmp;
   }
+
   graph->setEdgeOrder(nodes[0],edges);
   {
     Iterator<edge> *it = graph->getInOutEdges(nodes[0]);
     unsigned int i = 0;
+
     while(it->hasNext()) {
       CPPUNIT_ASSERT(it->next() == edges[i]);
       ++i;
-    }delete it;
+    }
+
+    delete it;
   }
+
   //Swap two edge
-  for (unsigned int j=0;j < NB_EDGES; ++j) {
+  for (unsigned int j=0; j < NB_EDGES; ++j) {
     unsigned int u = rand()%NB_EDGES;
     unsigned int v = rand()%NB_EDGES;
     graph->swapEdgeOrder(nodes[0],edges[u],edges[v]);
@@ -370,14 +420,19 @@ void SuperGraphTest::testOrderEdgeAndSwap() {
     edges[u] = edges[v];
     edges[v] = tmp;
   }
+
   {
     Iterator<edge> *it = graph->getInOutEdges(nodes[0]);
     unsigned int i = 0;
+
     while(it->hasNext()) {
       CPPUNIT_ASSERT(it->next() == edges[i]);
       ++i;
-    }delete it;
+    }
+
+    delete it;
   }
+
   graph->clear();
 }
 //==========================================================
@@ -427,11 +482,13 @@ void SuperGraphTest::testSubgraphId() {
   BooleanProperty sel(graph);
   Graph *g1 = graph->addSubGraph(&sel);
   unsigned int id = g1->getId();
+
   for (unsigned int i = 1; i<1000; ++i) {
     g1 = graph->addSubGraph(&sel);
     CPPUNIT_ASSERT(g1->getId() == id + i);
     CPPUNIT_ASSERT(graph->getSubGraph(id + i) == g1);
   }
+
   Graph *g;
   unsigned int i = 0; //if the graph are not ordered that test can fail.
   forEach(g, graph->getSubGraphs()) {
@@ -453,7 +510,7 @@ void SuperGraphTest::testSubgraph() {
   CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
   CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
   CPPUNIT_ASSERT(g3->getSuperGraph()==g2);
-  CPPUNIT_ASSERT(g4->getSuperGraph()==g2);  
+  CPPUNIT_ASSERT(g4->getSuperGraph()==g2);
   CPPUNIT_ASSERT(graph->getSubGraph(g1->getId()) == g1);
   CPPUNIT_ASSERT(graph->getSubGraph(g2->getId()) == g2);
   CPPUNIT_ASSERT(graph->getSubGraph(g3->getId()) == NULL);
@@ -478,7 +535,7 @@ void SuperGraphTest::testSubgraph() {
   CPPUNIT_ASSERT(graph->isDescendantGraph(g4));
   CPPUNIT_ASSERT(g2->isDescendantGraph(g3));
   CPPUNIT_ASSERT(g2->isDescendantGraph(g4));
-  
+
 
   CPPUNIT_ASSERT(graph->getRoot()==graph);
   CPPUNIT_ASSERT(g1->getRoot()==graph);
@@ -501,15 +558,15 @@ void SuperGraphTest::testSubgraph() {
   delete it;
 
   g3 = g2->addSubGraph();
-  g4 = g2->addSubGraph();  
+  g4 = g2->addSubGraph();
   node n1 = g3->addNode();
   node n2 = g3->addNode();
   CPPUNIT_ASSERT(g3->isElement(n1) && g3->isElement(n2));
   CPPUNIT_ASSERT(g2->isElement(n1) && graph->isElement(n1));
   CPPUNIT_ASSERT(g2->isElement(n2) && graph->isElement(n2));
-  CPPUNIT_ASSERT(!g4->isElement(n1) && !g1->isElement(n1));  
-  CPPUNIT_ASSERT(!g4->isElement(n2) && !g1->isElement(n2));  
-  
+  CPPUNIT_ASSERT(!g4->isElement(n1) && !g1->isElement(n1));
+  CPPUNIT_ASSERT(!g4->isElement(n2) && !g1->isElement(n2));
+
   edge e = g2->addEdge(n1,n2);
   CPPUNIT_ASSERT(!g3->isElement(e) && !g4->isElement(e) && !g1->isElement(e));
   CPPUNIT_ASSERT(g2->isElement(e) && graph->isElement(e) && g2->isElement(n2));
@@ -599,61 +656,93 @@ void SuperGraphTest::testPropertiesIteration() {
   g4 = g2->addSubGraph();
 
   set<string>::const_iterator it;
-  for (it=propList1.begin();it!=propList1.end();++it) {
+
+  for (it=propList1.begin(); it!=propList1.end(); ++it) {
     graph->getProperty<IntegerProperty>(*it);
     CPPUNIT_ASSERT(g4->existProperty(*it));
   }
-  Iterator<string> *itS = graph->getProperties();
-  while(itS->hasNext()) {
-    CPPUNIT_ASSERT(propList1.find(itS->next())!=propList1.end());
-  } delete itS;
-  itS = g2->getProperties();
-  while(itS->hasNext()) {
-    CPPUNIT_ASSERT(propList1.find(itS->next())!=propList1.end());
-  } delete itS;
-  itS = g1->getLocalProperties();
-  while(itS->hasNext()) {
-    CPPUNIT_ASSERT(propList1.find(itS->next())==propList1.end());
-  } delete itS;
-  itS = g1->getLocalProperties();
-  while(itS->hasNext()) {
-    CPPUNIT_ASSERT(propList1.find(itS->next())==propList1.end());
-  } delete itS;
-  itS = g4->getInheritedProperties();
-  while(itS->hasNext()) {
-    CPPUNIT_ASSERT(propList1.find(itS->next())!=propList1.end());
-  } delete itS;
 
-  for (it=propList2.begin();it!=propList2.end();++it) {
+  Iterator<string> *itS = graph->getProperties();
+
+  while(itS->hasNext()) {
+    CPPUNIT_ASSERT(propList1.find(itS->next())!=propList1.end());
+  }
+
+  delete itS;
+  itS = g2->getProperties();
+
+  while(itS->hasNext()) {
+    CPPUNIT_ASSERT(propList1.find(itS->next())!=propList1.end());
+  }
+
+  delete itS;
+  itS = g1->getLocalProperties();
+
+  while(itS->hasNext()) {
+    CPPUNIT_ASSERT(propList1.find(itS->next())==propList1.end());
+  }
+
+  delete itS;
+  itS = g1->getLocalProperties();
+
+  while(itS->hasNext()) {
+    CPPUNIT_ASSERT(propList1.find(itS->next())==propList1.end());
+  }
+
+  delete itS;
+  itS = g4->getInheritedProperties();
+
+  while(itS->hasNext()) {
+    CPPUNIT_ASSERT(propList1.find(itS->next())!=propList1.end());
+  }
+
+  delete itS;
+
+  for (it=propList2.begin(); it!=propList2.end(); ++it) {
     g2->getProperty<IntegerProperty>(*it);
     CPPUNIT_ASSERT(g4->existProperty(*it));
   }
 
   itS = graph->getProperties();
+
   while(itS->hasNext()) {
     string str = itS->next();
     CPPUNIT_ASSERT(propList1.find(str)!=propList1.end()  && propList2.find(str)==propList2.end());
-  } delete itS;
+  }
+
+  delete itS;
   itS = g1->getProperties();
+
   while(itS->hasNext()) {
     string str = itS->next();
     CPPUNIT_ASSERT(propList1.find(str)!=propList1.end()  && propList2.find(str)==propList2.end());
-  } delete itS;
+  }
+
+  delete itS;
   itS = g2->getProperties();
+
   while(itS->hasNext()) {
     string str = itS->next();
     CPPUNIT_ASSERT(propList1.find(str)!=propList1.end()  || propList2.find(str)!=propList2.end());
-  } delete itS;
+  }
+
+  delete itS;
   itS = g3->getProperties();
+
   while(itS->hasNext()) {
     string str = itS->next();
     CPPUNIT_ASSERT(propList1.find(str)!=propList1.end()  || propList2.find(str)!=propList2.end());
-  } delete itS;
+  }
+
+  delete itS;
   itS = g4->getProperties();
+
   while(itS->hasNext()) {
     string str = itS->next();
     CPPUNIT_ASSERT(propList1.find(str)!=propList1.end()  || propList2.find(str)!=propList2.end());
-  } delete itS;
+  }
+
+  delete itS;
   graph->clear();
 }
 
@@ -682,6 +771,7 @@ void SuperGraphTest::testGetNodesEqualTo() {
   for (int i = 0; i != 10; ++i) {
     graph->addNode();
   }
+
   BooleanProperty property(graph);
   property.setAllNodeValue(false);
   Graph* subGraph = graph->addSubGraph();
@@ -693,10 +783,12 @@ void SuperGraphTest::testGetNodesEqualTo() {
   delete it;
 
   it = property.getNodesEqualTo(false, subGraph);
+
   while(it->hasNext()) {
     node n = it->next();
     CPPUNIT_ASSERT(subGraph->isElement(n));
   }
+
   delete it;
 }
 
@@ -704,30 +796,30 @@ void SuperGraphTest::testGetNodesEqualTo() {
 //==========================================================
 CppUnit::Test * SuperGraphTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Add/Del operations (Simple Graph)", 
-								  &SuperGraphTest::testAddDel) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Clean operations (Simple Graph)", 
-								  &SuperGraphTest::testClear) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Graph structure Iterators", 
-								  &SuperGraphTest::testIterators) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Edge ordering and swap(Simple Graph)", 
-								  &SuperGraphTest::testOrderEdgeAndSwap) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Outdeg, indeg, deg on graph and sub-graph", 
-								  &SuperGraphTest::testDegree) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Sub Graph operations (add/del/clean/iterators)", 
-								  &SuperGraphTest::testSubgraph) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test Sub Graph delete", 
-								  &SuperGraphTest::testDeleteSubgraph) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Inheritance of properties", 
-								  &SuperGraphTest::testInheritance) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Iteration of properties", 
-								  &SuperGraphTest::testPropertiesIteration) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test subgraph id", 
-								  &SuperGraphTest::testSubgraphId) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test attributes", 
-								  &SuperGraphTest::testAttributes) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test getNodesEqualTo", 
-								  &SuperGraphTest::testGetNodesEqualTo) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Add/Del operations (Simple Graph)",
+                         &SuperGraphTest::testAddDel) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Clean operations (Simple Graph)",
+                         &SuperGraphTest::testClear) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Graph structure Iterators",
+                         &SuperGraphTest::testIterators) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Edge ordering and swap(Simple Graph)",
+                         &SuperGraphTest::testOrderEdgeAndSwap) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Outdeg, indeg, deg on graph and sub-graph",
+                         &SuperGraphTest::testDegree) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Sub Graph operations (add/del/clean/iterators)",
+                         &SuperGraphTest::testSubgraph) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test Sub Graph delete",
+                         &SuperGraphTest::testDeleteSubgraph) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Inheritance of properties",
+                         &SuperGraphTest::testInheritance) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Iteration of properties",
+                         &SuperGraphTest::testPropertiesIteration) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test subgraph id",
+                         &SuperGraphTest::testSubgraphId) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test attributes",
+                         &SuperGraphTest::testAttributes) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test getNodesEqualTo",
+                         &SuperGraphTest::testGetNodesEqualTo) );
   return suiteOfTests;
 }
 //==========================================================

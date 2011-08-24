@@ -25,65 +25,65 @@ using namespace std;
 
 namespace tlp {
 
-    //=====================================
-    QtProgress::QtProgress(QWidget* parent,string text,View *view,int updateInterval):
-            QDialog(parent),progressWidget(new PluginProgressWidget(view,updateInterval,parent)),firstCall(true){
-        resize(QSize(417,92));
-        setWindowTitle(tlpStringToQString(text));
-        setModal(true);
-        QVBoxLayout *vblayout = new QVBoxLayout(this);
-        vblayout->setMargin(0);
-        setLayout(vblayout);
-        vblayout->addWidget(progressWidget);
-        show();
+//=====================================
+QtProgress::QtProgress(QWidget* parent,string text,View *view,int updateInterval):
+  QDialog(parent),progressWidget(new PluginProgressWidget(view,updateInterval,parent)),firstCall(true) {
+  resize(QSize(417,92));
+  setWindowTitle(tlpStringToQString(text));
+  setModal(true);
+  QVBoxLayout *vblayout = new QVBoxLayout(this);
+  vblayout->setMargin(0);
+  setLayout(vblayout);
+  vblayout->addWidget(progressWidget);
+  show();
 
-        connect(this, SIGNAL(sendProgress(int, int)), progressWidget, SLOT(progress(int,int)));
-    }
-    //=====================================
-    QtProgress::~QtProgress() {
-    }
-    ProgressState QtProgress::progress(int step, int max_step){
+  connect(this, SIGNAL(sendProgress(int, int)), progressWidget, SLOT(progress(int,int)));
+}
+//=====================================
+QtProgress::~QtProgress() {
+}
+ProgressState QtProgress::progress(int step, int max_step) {
 //         return progressWidget->progress(step,max_step);
-        emit(sendProgress(step, max_step));
-        return progressWidget->state();
-    }
+  emit(sendProgress(step, max_step));
+  return progressWidget->state();
+}
 
-    //=====================================
+//=====================================
 
-    void QtProgress::cancel(){
-        progressWidget->cancel();
-    }
-    //=====================================
-    void QtProgress::stop(){
-        progressWidget->stop();
-    }
-    //=====================================
-    bool QtProgress::isPreviewMode() const {
-        return progressWidget->isPreviewMode();
-    }
-    //=====================================
-    void QtProgress::setPreviewMode(bool mode){
-        progressWidget->setPreviewMode(mode);
-    }
+void QtProgress::cancel() {
+  progressWidget->cancel();
+}
+//=====================================
+void QtProgress::stop() {
+  progressWidget->stop();
+}
+//=====================================
+bool QtProgress::isPreviewMode() const {
+  return progressWidget->isPreviewMode();
+}
+//=====================================
+void QtProgress::setPreviewMode(bool mode) {
+  progressWidget->setPreviewMode(mode);
+}
 
-    //=====================================
-    void QtProgress::showPreview(bool show){
-        progressWidget->showPreview(show);
-    }
-    //=====================================
-    ProgressState QtProgress::state() const{
-        return progressWidget->state();
-    }
-    //=====================================
-    string QtProgress::getError(){
-        return progressWidget->getError();
-    }
-    //=====================================
-    void QtProgress::setError(string error){
-        progressWidget->setError(error);
-    }
-    //=====================================
-    void QtProgress::setComment(string msg) {
-        progressWidget->setComment(msg);
-    }
+//=====================================
+void QtProgress::showPreview(bool show) {
+  progressWidget->showPreview(show);
+}
+//=====================================
+ProgressState QtProgress::state() const {
+  return progressWidget->state();
+}
+//=====================================
+string QtProgress::getError() {
+  return progressWidget->getError();
+}
+//=====================================
+void QtProgress::setError(string error) {
+  progressWidget->setError(error);
+}
+//=====================================
+void QtProgress::setComment(string msg) {
+  progressWidget->setComment(msg);
+}
 }

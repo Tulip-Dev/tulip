@@ -32,14 +32,14 @@ using namespace std;
 using namespace tlp;
 
 namespace {
-  static const char * paramHelp[] = {
-    // directory
-    HTML_HELP_OPEN()				    \
-    HTML_HELP_DEF( "type", "directory pathname" )		    \
-    HTML_HELP_BODY()						      \
-    "This parameter indicates the directory to import."	      \
-    HTML_HELP_CLOSE(),
-  };
+static const char * paramHelp[] = {
+  // directory
+  HTML_HELP_OPEN()            \
+  HTML_HELP_DEF( "type", "directory pathname" )       \
+  HTML_HELP_BODY()                  \
+  "This parameter indicates the directory to import."       \
+  HTML_HELP_CLOSE(),
+};
 }
 
 /** \addtogroup import */
@@ -53,7 +53,7 @@ public:
   FileSystem(AlgorithmContext context):ImportModule(context) {
     addParameter<string>("dir::directory", paramHelp[0]);
   }
-  ~FileSystem(){}
+  ~FileSystem() {}
 
   DoubleProperty *size,*gid,*uid,*lastaccess,*lastmodif,*lastchange;
   StringProperty *label;
@@ -64,47 +64,58 @@ public:
 
 
   ProgressState readDir(node n, string directory, unsigned int &x, unsigned int y) {
-    if (pluginProgress->progress(progress,100)!=TLP_CONTINUE) { 
+    if (pluginProgress->progress(progress,100)!=TLP_CONTINUE) {
       return pluginProgress->state();
     }
+
     progress++;
     progress = progress%100;
-    #ifndef _WIN32
+#ifndef _WIN32
     DIR *dir=opendir(directory.c_str());
+
     if (dir == 0) {
       pluginProgress->stop();
       return pluginProgress->state();
     }
+
     dirent *entry;
-    #else
-    HANDLE hFind; 
-    WIN32_FIND_DATA FindData; 
-    SetCurrentDirectory (directory.c_str()); 
-    hFind=FindFirstFile ("*.*", &FindData); 
+#else
+    HANDLE hFind;
+    WIN32_FIND_DATA FindData;
+    SetCurrentDirectory (directory.c_str());
+    hFind=FindFirstFile ("*.*", &FindData);
     bool endOfDirectory = (hFind == NULL) || (hFind == INVALID_HANDLE_VALUE);
+
     if (endOfDirectory) {
       pluginProgress->stop();
       return pluginProgress->state();
     }
-    #endif
+
+#endif
     struct stat infoEntry;
-    #ifdef _WIN32
-     while (!endOfDirectory) {
-       if (!strcmp("..",FindData.cFileName) || !strcmp(".",FindData.cFileName)) {
-   	 endOfDirectory = !(FindNextFile (hFind, &FindData));
-   	 continue;
-       }
-       string entryName=FindData.cFileName;
-       string pathEntry=directory+entryName;
-       stat(pathEntry.c_str(),&infoEntry);
-     #else
+#ifdef _WIN32
+
+    while (!endOfDirectory) {
+      if (!strcmp("..",FindData.cFileName) || !strcmp(".",FindData.cFileName)) {
+        endOfDirectory = !(FindNextFile (hFind, &FindData));
+        continue;
+      }
+
+      string entryName=FindData.cFileName;
+      string pathEntry=directory+entryName;
+      stat(pathEntry.c_str(),&infoEntry);
+#else
+
     while ((entry = readdir(dir))!=0) {
       if (!strcmp("..",entry->d_name) || !strcmp(".",entry->d_name)) continue;
+
       string entryName=entry->d_name;
       string pathEntry=directory+entryName;
       lstat(pathEntry.c_str(),&infoEntry);
-    #endif
+#endif
+
       if (infoEntry.st_dev==0) continue;
+
       node newNode=graph->addNode();
       graph->addEdge(n,newNode);
       label->setNodeValue(newNode,entryName);
@@ -115,52 +126,61 @@ public:
       path->setNodeValue(newNode,pathEntry);
 
       if (infoEntry.st_size<1)
-	size->setNodeValue(newNode,1);
+        size->setNodeValue(newNode,1);
       else
-	size->setNodeValue(newNode,infoEntry.st_size);
+        size->setNodeValue(newNode,infoEntry.st_size);
+
       uid->setNodeValue(newNode,infoEntry.st_uid);
       gid->setNodeValue(newNode,infoEntry.st_gid);
       lastaccess->setNodeValue(newNode,static_cast<double>(infoEntry.st_atime));
       lastmodif->setNodeValue(newNode,static_cast<double>(infoEntry.st_mtime));
       lastchange->setNodeValue(newNode,static_cast<double>(infoEntry.st_ctime));
-      
+
       if ((infoEntry.st_mode & S_IFMT) == S_IFDIR) {
-	x += 2;
-	if (readDir(newNode,pathEntry+"/", x , x ) == TLP_CANCEL)
-	  graph->delNode(newNode);
-	else {
-	  double newSize=0;
-	  Coord tmp(0,0,0);
-	  Iterator<node> *itN=graph->getOutNodes(newNode);
-	  for (;itN->hasNext();) {
-	    node itn=itN->next();
-	    newSize+=size->getNodeValue(itn);
-	    tmp += layout->getNodeValue(itn);
-	  }
-	  delete itN;
-	  size->setNodeValue(newNode,newSize/1024.0);
-	  if (graph->outdeg(newNode) == 0) {
-	    layout->setNodeValue(newNode, Coord(static_cast<float>(x), static_cast<float>(y), 0));
-	    x += 2;
-	  } else {
-	    tmp[0] /= graph->outdeg(newNode);
-	    tmp[1] = static_cast<float>(y);
-	    layout->setNodeValue(newNode, tmp);
-	  }
-	}
-      } else {
-	layout->setNodeValue(newNode, Coord(static_cast<float>(x), static_cast<float>(y), 0));
-	x += 2;
+        x += 2;
+
+        if (readDir(newNode,pathEntry+"/", x , x ) == TLP_CANCEL)
+          graph->delNode(newNode);
+        else {
+          double newSize=0;
+          Coord tmp(0,0,0);
+          Iterator<node> *itN=graph->getOutNodes(newNode);
+
+          for (; itN->hasNext();) {
+            node itn=itN->next();
+            newSize+=size->getNodeValue(itn);
+            tmp += layout->getNodeValue(itn);
+          }
+
+          delete itN;
+          size->setNodeValue(newNode,newSize/1024.0);
+
+          if (graph->outdeg(newNode) == 0) {
+            layout->setNodeValue(newNode, Coord(static_cast<float>(x), static_cast<float>(y), 0));
+            x += 2;
+          }
+          else {
+            tmp[0] /= graph->outdeg(newNode);
+            tmp[1] = static_cast<float>(y);
+            layout->setNodeValue(newNode, tmp);
+          }
+        }
       }
-       #ifdef _WIN32
+      else {
+        layout->setNodeValue(newNode, Coord(static_cast<float>(x), static_cast<float>(y), 0));
+        x += 2;
+      }
+
+#ifdef _WIN32
       endOfDirectory = !(FindNextFile (hFind, &FindData));
-      #endif 
-    } 
-    #ifdef _WIN32
-    FindClose (hFind); 
-    #else
+#endif
+    }
+
+#ifdef _WIN32
+    FindClose (hFind);
+#else
     closedir(dir);
-    #endif
+#endif
     return TLP_CONTINUE;
   }
 
@@ -178,28 +198,36 @@ public:
     layout->setAllNodeValue(Coord(0,0,0));
     node newNode=graph->addNode();
     string dirName;
+
     if (!dataSet->get("dir::directory", dirName) || dirName.empty()) {
       pluginProgress->setError("No directory");
       return false;
     }
 
     struct stat infoEntry;
+
     int result;
-    #ifdef _WIN32
+
+#ifdef _WIN32
     result = stat(dirName.c_str(),&infoEntry);
-    #else
+
+#else
     result = lstat(dirName.c_str(),&infoEntry);
-    #endif
+
+#endif
     if (result == -1) {
       pluginProgress->setError(strerror(errno));
       return false;
     }
+
     if (infoEntry.st_dev!=0)  {
       label->setNodeValue(newNode,dirName.c_str());
+
       if (infoEntry.st_size<1)
-	size->setNodeValue(newNode,1);
+        size->setNodeValue(newNode,1);
       else
-	size->setNodeValue(newNode,infoEntry.st_size);
+        size->setNodeValue(newNode,infoEntry.st_size);
+
       uid->setNodeValue(newNode,infoEntry.st_uid);
       gid->setNodeValue(newNode,infoEntry.st_gid);
       lastaccess->setNodeValue(newNode,static_cast<double>(infoEntry.st_atime));
@@ -213,24 +241,29 @@ public:
     readDir(newNode,string(dirName.c_str())+"/", x , y);
     double newSize=0;
     Coord tmp(0,0,0);
+
     if (pluginProgress->state()!=TLP_CANCEL) {
       Iterator<node> *itN=graph->getOutNodes(newNode);
+
       while (itN->hasNext()) {
-	node itn=itN->next();
-	newSize+=size->getNodeValue(itn);
-	tmp += layout->getNodeValue(itn);
-      } delete itN;
+        node itn=itN->next();
+        newSize+=size->getNodeValue(itn);
+        tmp += layout->getNodeValue(itn);
+      }
+
+      delete itN;
       size->setNodeValue(newNode,newSize);
       tmp /= static_cast<float>(graph->outdeg(newNode));
       tmp[1] = 0;
       layout->setNodeValue(newNode, tmp);
       node itn;
       forEach(itn, graph->getNodes()) {
-	tmp = layout->getNodeValue(itn);
-	tmp[1] = -tmp[1];
-	layout->setNodeValue(itn, tmp);
+        tmp = layout->getNodeValue(itn);
+        tmp[1] = -tmp[1];
+        layout->setNodeValue(itn, tmp);
       }
     }
+
     return pluginProgress->state()!=TLP_CANCEL;
   }
 };

@@ -30,47 +30,54 @@ using namespace tlp;
 //============================================================
 // PlanarConMapTest
 //============================================================
-void PlanarConMapTest::build(){                                             
-  graph->clear();edges.clear();nodes.clear();
+void PlanarConMapTest::build() {
+  graph->clear();
+  edges.clear();
+  nodes.clear();
 
-  for(unsigned int i = 0; i < 4;++i)
+  for(unsigned int i = 0; i < 4; ++i)
     nodes.push_back(graph->addNode());
 
   edges.push_back(graph->addEdge(nodes[0], nodes[1]));
   edges.push_back(graph->addEdge(nodes[1], nodes[2]));
   edges.push_back(graph->addEdge(nodes[2], nodes[3]));
-  edges.push_back(graph->addEdge(nodes[3], nodes[0])); 
-  
+  edges.push_back(graph->addEdge(nodes[3], nodes[0]));
+
   delete carte;
   carte = computePlanarConMap(graph);
 }
 
 //============================================================
-void PlanarConMapTest::build2(){                                
-  graph->clear();edges.clear();nodes.clear();
+void PlanarConMapTest::build2() {
+  graph->clear();
+  edges.clear();
+  nodes.clear();
 
   for(unsigned int i = 0; i<6; ++i)
     nodes.push_back(graph->addNode());
-    
+
   for(unsigned int i = 1; i <6; ++i)
-    edges.push_back(graph->addEdge(nodes[0], nodes[i])); 
+    edges.push_back(graph->addEdge(nodes[0], nodes[i]));
 
   delete carte;
   carte = computePlanarConMap(graph);
 }
 
 //============================================================
-void PlanarConMapTest::build3(){                                             
-  graph->clear();edges.clear();nodes.clear();
+void PlanarConMapTest::build3() {
+  graph->clear();
+  edges.clear();
+  nodes.clear();
+
   for(unsigned int i = 0; i < 4 ; ++i)
     nodes.push_back(graph->addNode());
-    
-  edges.push_back(graph->addEdge(nodes[0], nodes[1])); 
-  edges.push_back(graph->addEdge(nodes[1], nodes[2])); 
-  edges.push_back(graph->addEdge(nodes[2], nodes[3])); 
-  edges.push_back(graph->addEdge(nodes[3], nodes[0])); 
-  edges.push_back(graph->addEdge(nodes[0], nodes[2])); 
-  edges.push_back(graph->addEdge(nodes[1], nodes[3])); 
+
+  edges.push_back(graph->addEdge(nodes[0], nodes[1]));
+  edges.push_back(graph->addEdge(nodes[1], nodes[2]));
+  edges.push_back(graph->addEdge(nodes[2], nodes[3]));
+  edges.push_back(graph->addEdge(nodes[3], nodes[0]));
+  edges.push_back(graph->addEdge(nodes[0], nodes[2]));
+  edges.push_back(graph->addEdge(nodes[1], nodes[3]));
 
   delete carte;
   carte = computePlanarConMap(graph);
@@ -78,26 +85,29 @@ void PlanarConMapTest::build3(){
 
 //============================================================
 void PlanarConMapTest::build4() {
-  graph->clear();edges.clear();nodes.clear();
+  graph->clear();
+  edges.clear();
+  nodes.clear();
+
   for(unsigned int i = 0; i < 10 ; ++i)
     nodes.push_back(graph->addNode());
-  
-  edges.push_back(graph->addEdge(nodes[0], nodes[1])); 
-  edges.push_back(graph->addEdge(nodes[0], nodes[2])); 
-  edges.push_back(graph->addEdge(nodes[0], nodes[3])); 
-  edges.push_back(graph->addEdge(nodes[2], nodes[4])); 
-  edges.push_back(graph->addEdge(nodes[2], nodes[5])); 
-  edges.push_back(graph->addEdge(nodes[1], nodes[6])); 
-  edges.push_back(graph->addEdge(nodes[6], nodes[7])); 
-  edges.push_back(graph->addEdge(nodes[4], nodes[8])); 
-  edges.push_back(graph->addEdge(nodes[4], nodes[9])); 
+
+  edges.push_back(graph->addEdge(nodes[0], nodes[1]));
+  edges.push_back(graph->addEdge(nodes[0], nodes[2]));
+  edges.push_back(graph->addEdge(nodes[0], nodes[3]));
+  edges.push_back(graph->addEdge(nodes[2], nodes[4]));
+  edges.push_back(graph->addEdge(nodes[2], nodes[5]));
+  edges.push_back(graph->addEdge(nodes[1], nodes[6]));
+  edges.push_back(graph->addEdge(nodes[6], nodes[7]));
+  edges.push_back(graph->addEdge(nodes[4], nodes[8]));
+  edges.push_back(graph->addEdge(nodes[4], nodes[9]));
 
   delete carte;
   carte = computePlanarConMap(graph);
 }
 
 //============================================================
-void PlanarConMapTest::testAddEdgeMap(){                                               
+void PlanarConMapTest::testAddEdgeMap() {
 
   /* test 1 */
   build();
@@ -107,29 +117,39 @@ void PlanarConMapTest::testAddEdgeMap(){
   edge e = carte->addEdgeMap(nodes[0],nodes[2],f1,edges[0],edges[2]);
   Face f3 = carte->faces[2];
   vector<vector<edge> > cycles(5);
-  cycles[0].push_back(edges[1]);      cycles[1].push_back(edges[2]);
-  cycles[0].push_back(edges[0]);      cycles[1].push_back(edges[3]);
-  cycles[0].push_back(e);             cycles[1].push_back(edges[0]);
-                                      cycles[1].push_back(edges[1]);
-  cycles[2].push_back(edges[3]);    
-  cycles[2].push_back(edges[2]);    
-  cycles[2].push_back(e);    
+  cycles[0].push_back(edges[1]);
+  cycles[1].push_back(edges[2]);
+  cycles[0].push_back(edges[0]);
+  cycles[1].push_back(edges[3]);
+  cycles[0].push_back(e);
+  cycles[1].push_back(edges[0]);
+  cycles[1].push_back(edges[1]);
+  cycles[2].push_back(edges[3]);
+  cycles[2].push_back(edges[2]);
+  cycles[2].push_back(e);
 
-  for(unsigned int i = 0; i< 3; i++){
+  for(unsigned int i = 0; i< 3; i++) {
     vector<edge> tmp;
     Iterator<edge>* it;
+
     if(i==0)
       it = carte->getFaceEdges(f1);
+
     if(i==1)
       it = carte->getFaceEdges(f2);
+
     if(i==2)
       it = carte->getFaceEdges(f3);
-    while(it->hasNext()){
+
+    while(it->hasNext()) {
       edge e_tmp = it->next();
       tmp.push_back(e_tmp);
-    } delete it;
+    }
+
+    delete it;
     CPPUNIT_ASSERT_MESSAGE(" test 1 AddEdgeMap cycle ",tmp == cycles[i]);
   }
+
   CPPUNIT_ASSERT_MESSAGE(" test 1 AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
 
   /* test 2 */
@@ -144,27 +164,33 @@ void PlanarConMapTest::testAddEdgeMap(){
   cycles2[0].push_back(edges[4]);
   cycles2[0].push_back(edges[4]);
   cycles2[0].push_back(edges[0]);
-  cycles2[0].push_back(e);       
-                                
-  cycles2[1].push_back(edges[0]);    
-  cycles2[1].push_back(edges[1]);    
-  cycles2[1].push_back(edges[1]);    
-  cycles2[1].push_back(edges[2]);    
-  cycles2[1].push_back(e);    
+  cycles2[0].push_back(e);
 
-  for(unsigned int i = 0; i< 2; i++){
+  cycles2[1].push_back(edges[0]);
+  cycles2[1].push_back(edges[1]);
+  cycles2[1].push_back(edges[1]);
+  cycles2[1].push_back(edges[2]);
+  cycles2[1].push_back(e);
+
+  for(unsigned int i = 0; i< 2; i++) {
     vector<edge> tmp;
     Iterator<edge>* it;
+
     if(i==0)
       it = carte->getFaceEdges(f1);
+
     if(i==1)
       it = carte->getFaceEdges(f2);
-    while(it->hasNext()){
+
+    while(it->hasNext()) {
       edge e_tmp = it->next();
       tmp.push_back(e_tmp);
-    } delete it;
+    }
+
+    delete it;
     CPPUNIT_ASSERT_MESSAGE(" test 2 AddEdgeMap cycle ",tmp == cycles2[i]);
   }
+
   CPPUNIT_ASSERT_MESSAGE(" test 2 AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
 
   /* test 3 */
@@ -207,29 +233,37 @@ void PlanarConMapTest::testAddEdgeMap(){
   cycles3[3].push_back(edges[9]);
   cycles3[3].push_back(edges[3]);
   cycles3[3].push_back(edges[11]);
-  for(unsigned int i = 0; i< 4; ++i){
+
+  for(unsigned int i = 0; i< 4; ++i) {
     vector<edge> tmp;
     Iterator<edge>* it;
+
     if(i==0)
       it = carte->getFaceEdges(f1);
+
     if(i==1)
       it = carte->getFaceEdges(f2);
+
     if(i==2)
       it = carte->getFaceEdges(f3);
+
     if(i==3)
       it = carte->getFaceEdges(f4);
-    while(it->hasNext()){
+
+    while(it->hasNext()) {
       edge e_tmp = it->next();
       tmp.push_back(e_tmp);
-    } delete it;
+    }
+
+    delete it;
     CPPUNIT_ASSERT_MESSAGE(" test 2 AddEdgeMap cycle ",tmp == cycles3[i]);
   }
-  
+
   CPPUNIT_ASSERT_MESSAGE(" test 2 AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
 }
 
 //============================================================
-void PlanarConMapTest::testDelEdgeMap(){
+void PlanarConMapTest::testDelEdgeMap() {
   build();
   Face f1, f2;
   f1 = carte->faces[0];
@@ -241,31 +275,40 @@ void PlanarConMapTest::testDelEdgeMap(){
   f2 = carte->faces[1];
 
   vector<vector<edge> > cycles(2);
-  cycles[1].push_back(edges[3]);      cycles[0].push_back(edges[2]);
-  cycles[1].push_back(edges[2]);      cycles[0].push_back(edges[3]);
-  cycles[1].push_back(edges[1]);      cycles[0].push_back(edges[0]);
-  cycles[1].push_back(edges[0]);      cycles[0].push_back(edges[1]);
+  cycles[1].push_back(edges[3]);
+  cycles[0].push_back(edges[2]);
+  cycles[1].push_back(edges[2]);
+  cycles[0].push_back(edges[3]);
+  cycles[1].push_back(edges[1]);
+  cycles[0].push_back(edges[0]);
+  cycles[1].push_back(edges[0]);
+  cycles[0].push_back(edges[1]);
 
-  for(unsigned int i = 0; i< 2; i++){
+  for(unsigned int i = 0; i< 2; i++) {
     vector<edge> tmp;
     Iterator<edge>* it;
+
     if(i==0)
       it = carte->getFaceEdges(f1);
+
     if(i==1)
       it = carte->getFaceEdges(f2);
-    while(it->hasNext()){
+
+    while(it->hasNext()) {
       edge e_tmp = it->next();
       tmp.push_back(e_tmp);
-    } delete it;
+    }
+
+    delete it;
     CPPUNIT_ASSERT_MESSAGE(" test DelEdgeMap cycle ",tmp == cycles[i]);
   }
-  
+
   CPPUNIT_ASSERT_MESSAGE(" test AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
-  carte->clear();  
+  carte->clear();
 }
 
 //============================================================
-void PlanarConMapTest::testNbFaces(){                                                    
+void PlanarConMapTest::testNbFaces() {
 
   build();
   CPPUNIT_ASSERT_MESSAGE(" test nbFaces ",2 == carte->nbFaces());
@@ -273,54 +316,63 @@ void PlanarConMapTest::testNbFaces(){
 }
 
 //============================================================
-void PlanarConMapTest::testUpdate(){                                                  
+void PlanarConMapTest::testUpdate() {
 
   build();
-  
+
   unsigned int tmp = carte->nbFaces();
   edge e = graph->addEdge(nodes[0],nodes[2]);
   carte->update();
-  CPPUNIT_ASSERT_MESSAGE(" test update() ", (tmp+1) == carte->nbFaces());   
+  CPPUNIT_ASSERT_MESSAGE(" test update() ", (tmp+1) == carte->nbFaces());
 }
 
 //============================================================
-void PlanarConMapTest::testMergeFaces(){
+void PlanarConMapTest::testMergeFaces() {
   build();
   Face f1, f2;
   f1 = carte->faces[0];
   f2 = carte->faces[1];
   edge e = carte->addEdgeMap(nodes[0],nodes[2],f1,edges[0],edges[2]);
-  
+
   carte->mergeFaces(carte->edgesFaces[e][0],carte->edgesFaces[e][1]);
   f1 = carte->faces[0];
   f2 = carte->faces[1];
-  
+
   vector<vector<edge> > cycles(2);
-  cycles[1].push_back(edges[3]);      cycles[0].push_back(edges[2]);
-  cycles[1].push_back(edges[2]);      cycles[0].push_back(edges[3]);
-  cycles[1].push_back(edges[1]);      cycles[0].push_back(edges[0]);
-  cycles[1].push_back(edges[0]);      cycles[0].push_back(edges[1]);
-  
-  for(unsigned int i = 0; i< 2; i++){
+  cycles[1].push_back(edges[3]);
+  cycles[0].push_back(edges[2]);
+  cycles[1].push_back(edges[2]);
+  cycles[0].push_back(edges[3]);
+  cycles[1].push_back(edges[1]);
+  cycles[0].push_back(edges[0]);
+  cycles[1].push_back(edges[0]);
+  cycles[0].push_back(edges[1]);
+
+  for(unsigned int i = 0; i< 2; i++) {
     vector<edge> tmp;
     Iterator<edge>* it;
+
     if(i==0)
       it = carte->getFaceEdges(f1);
+
     if(i==1)
       it = carte->getFaceEdges(f2);
-    while(it->hasNext()){
+
+    while(it->hasNext()) {
       edge e_tmp = it->next();
       tmp.push_back(e_tmp);
-    } delete it;
+    }
+
+    delete it;
     CPPUNIT_ASSERT_MESSAGE(" test DelEdgeMap cycle ",tmp == cycles[i]);
   }
-  
+
   CPPUNIT_ASSERT_MESSAGE(" test AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
-  carte->clear();  
+  carte->clear();
 
 }
 //============================================================
-void PlanarConMapTest::testSplitFace(){
+void PlanarConMapTest::testSplitFace() {
 
   /* test 1 */
   build();
@@ -330,31 +382,41 @@ void PlanarConMapTest::testSplitFace(){
   Face f3 = carte->splitFace(f1,nodes[0],nodes[2]);
   edge e = carte->existEdge(nodes[0],nodes[2]).isValid() ? carte->existEdge(nodes[0],nodes[2]) : carte->existEdge(nodes[2],nodes[0]);
   vector<vector<edge> > cycles(5);
-  cycles[0].push_back(edges[1]);      cycles[1].push_back(edges[2]);
-  cycles[0].push_back(edges[0]);      cycles[1].push_back(edges[3]);
-  cycles[0].push_back(e);             cycles[1].push_back(edges[0]);
-                                      cycles[1].push_back(edges[1]);
-  cycles[2].push_back(edges[3]);    
-  cycles[2].push_back(edges[2]);    
-  cycles[2].push_back(e);    
+  cycles[0].push_back(edges[1]);
+  cycles[1].push_back(edges[2]);
+  cycles[0].push_back(edges[0]);
+  cycles[1].push_back(edges[3]);
+  cycles[0].push_back(e);
+  cycles[1].push_back(edges[0]);
+  cycles[1].push_back(edges[1]);
+  cycles[2].push_back(edges[3]);
+  cycles[2].push_back(edges[2]);
+  cycles[2].push_back(e);
 
-  for(unsigned int i = 0; i< 3; i++){
+  for(unsigned int i = 0; i< 3; i++) {
     vector<edge> tmp;
     Iterator<edge>* it;
+
     if(i==0)
       it = carte->getFaceEdges(f1);
+
     if(i==1)
       it = carte->getFaceEdges(f2);
+
     if(i==2)
       it = carte->getFaceEdges(f3);
-    while(it->hasNext()){
+
+    while(it->hasNext()) {
       edge e_tmp = it->next();
       tmp.push_back(e_tmp);
-    } delete it;
+    }
+
+    delete it;
     CPPUNIT_ASSERT_MESSAGE(" test AddEdgeMap cycle ",tmp == cycles[i]);
   }
+
   CPPUNIT_ASSERT_MESSAGE(" test AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
-    
+
   /* test 2 */
   build4();
   //  cout << carte<< endl;
@@ -399,30 +461,38 @@ void PlanarConMapTest::testSplitFace(){
   cycles3[3].push_back(edges[9]);
   cycles3[3].push_back(edges[3]);
   cycles3[3].push_back(edges[11]);
-  for(unsigned int i = 0; i< 4; ++i){
+
+  for(unsigned int i = 0; i< 4; ++i) {
     vector<edge> tmp;
     Iterator<edge>* it;
+
     if(i==0)
       it = carte->getFaceEdges(f1);
+
     if(i==1)
       it = carte->getFaceEdges(f2);
+
     if(i==2)
       it = carte->getFaceEdges(f3);
+
     if(i==3)
       it = carte->getFaceEdges(f4);
-    while(it->hasNext()){
+
+    while(it->hasNext()) {
       edge e_tmp = it->next();
       tmp.push_back(e_tmp);
-    } delete it;
+    }
+
+    delete it;
     CPPUNIT_ASSERT_MESSAGE(" test 2 AddEdgeMap cycle ",tmp == cycles3[i]);
   }
-  
+
   CPPUNIT_ASSERT_MESSAGE(" test 2 AddEdgeMap dispositif decorateur ",carte->numberOfEdges() == graph->numberOfEdges());
 
 }
 
 //============================================================
-void PlanarConMapTest::testSuccCycleEdge(){                                       
+void PlanarConMapTest::testSuccCycleEdge() {
 
   build2();
 
@@ -431,25 +501,27 @@ void PlanarConMapTest::testSuccCycleEdge(){
   cycles.push_back(edges[1]);
   cycles.push_back(edges[2]);
   cycles.push_back(edges[3]);
-  cycles.push_back(edges[4]); 
+  cycles.push_back(edges[4]);
 
-  
+
   unsigned int i = 0;
   Iterator<edge>* it = carte->getInOutEdges(nodes[0]);
   edge e = it->next();
-  delete it;  
+  delete it;
   CPPUNIT_ASSERT_MESSAGE(" test SuccCycleEdge deb",e == cycles[0]);
-  do{
+
+  do {
     e = carte->succCycleEdge(e,nodes[0]);
     i++;
     CPPUNIT_ASSERT_MESSAGE(string(" test SuccCycleEdge cycle "),e == cycles[i]);
   }
   while(e != edges[0] && i<4);
+
   carte->clear();
 }
-   
+
 //============================================================
-void PlanarConMapTest::testPrecCycleEdge(){                                     
+void PlanarConMapTest::testPrecCycleEdge() {
 
   build2();
 
@@ -459,23 +531,25 @@ void PlanarConMapTest::testPrecCycleEdge(){
   cycles.push_back(edges[3]);
   cycles.push_back(edges[2]);
   cycles.push_back(edges[1]);
-  
+
   unsigned int i = 0;
   Iterator<edge>* it = carte->getInOutEdges(nodes[0]);
   edge e = it->next();
   delete it;
   CPPUNIT_ASSERT_MESSAGE(" test predCycleEdge deb",e == cycles[0]);
-  do{
+
+  do {
     e = carte->predCycleEdge(e,nodes[0]);
     i++;
     CPPUNIT_ASSERT_MESSAGE(string(" test predCycleEdge cycle "),e == cycles[i]);
   }
   while((e != edges[0]) && (i<4));
-  carte->clear();
-}  
 
-//============================================================                         
-void PlanarConMapTest::testComputeFaces(){
+  carte->clear();
+}
+
+//============================================================
+void PlanarConMapTest::testComputeFaces() {
 
   build();
   int fc = carte->nbFaces();
@@ -500,7 +574,7 @@ void PlanarConMapTest::testComputeFaces(){
 }
 
 //============================================================
-CppUnit::Test* PlanarConMapTest::suite(){                    
+CppUnit::Test* PlanarConMapTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite;
   suiteOfTests->addTest(new CppUnit::TestCaller<PlanarConMapTest>("testComputeFaces", &PlanarConMapTest::testComputeFaces));
   suiteOfTests->addTest(new CppUnit::TestCaller<PlanarConMapTest>("testNbFaces", &PlanarConMapTest::testNbFaces));

@@ -19,17 +19,17 @@
 #include <QtGui/qtooltip.h>
 
 namespace tlp {
-  class GlMainWidget;
+class GlMainWidget;
 }
 
 class TulipApp;
 
 struct ElementInfoToolTip : public QToolTip {
-  virtual ~ElementInfoToolTip(){}
+  virtual ~ElementInfoToolTip() {}
   ElementInfoToolTip(tlp::GlMainWidget *glWidget, TulipApp *viewWidget);
   void maybeTip ( const QPoint & );
 
- private:
+private:
   tlp:: GlMainWidget *glWidget;
   TulipApp *viewWidget;
 };

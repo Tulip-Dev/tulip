@@ -31,175 +31,177 @@ class QAction;
 
 namespace tlp {
 
-  class GlMainWidget;
-  class View;
-  class Interactor;
+class GlMainWidget;
+class View;
+class Interactor;
 
-  /** \brief InteractorAction extend QAction to provide Interactor information
-   *
+/** \brief InteractorAction extend QAction to provide Interactor information
+ *
+ */
+class TLP_QT_SCOPE InteractorAction : public QAction {
+
+  Q_OBJECT
+
+public:
+
+  InteractorAction(Interactor *interactor,const QIcon &icon, const QString &text);
+
+  Interactor *getInteractor() {
+    return interactor;
+  }
+
+protected :
+
+  Interactor *interactor;
+
+};
+
+/** \brief Tulip interactor main class
+ *
+ */
+class TLP_QT_SCOPE Interactor  : public QObject, public WithParameter, public WithDependency {
+
+protected :
+
+  int priority;
+
+  QString configurationWidgetText;
+
+public:
+  /**
+   * Default constructor
    */
-  class TLP_QT_SCOPE InteractorAction : public QAction {
+  Interactor():priority(0) {}
 
-    Q_OBJECT
-
-  public:
-
-    InteractorAction(Interactor *interactor,const QIcon &icon, const QString &text);
-
-    Interactor *getInteractor() {return interactor;}
-
-  protected :
-
-    Interactor *interactor;
-
-  };
-
-  /** \brief Tulip interactor main class
-   *
+  /*
+   * Default destructor
    */
-  class TLP_QT_SCOPE Interactor  : public QObject, public WithParameter, public WithDependency {
+  virtual ~Interactor() {}
 
-  protected :
+  /**
+   * Set the view attached with this interactor
+   */
+  virtual void setView(View *view) = 0;
 
-    int priority;
-    
-    QString configurationWidgetText;
+  /**
+   * Install eventFilters of interactor on given widget
+   */
+  virtual void install(QWidget *) = 0;
 
-  public:
-    /**
-     * Default constructor
-     */
-    Interactor():priority(0) {}
+  /**
+   * Remove eventFilters of interactor
+   */
+  virtual void remove() = 0;
 
-    /*
-     * Default destructor
-     */
-    virtual ~Interactor() {}
+  /**
+   * set html text displayed by configuration widget
+   */
+  virtual void setConfigurationWidgetText(const QString &text);
 
-    /**
-     * Set the view attached with this interactor
-     */
-    virtual void setView(View *view) = 0;
+  /**
+   * return widget of configuration of this interactor
+   * if you previouly call setHtmlText, getConfigurationWidget return a QTextEdit with this text
+   */
+  virtual QWidget *getConfigurationWidget();
 
-    /**
-     * Install eventFilters of interactor on given widget
-     */
-    virtual void install(QWidget *) = 0;
+  /**
+   * return if this interactor is compatible with given View
+   */
+  virtual bool isCompatible(const std::string &viewName) = 0;
 
-    /**
-     * Remove eventFilters of interactor
-     */
-    virtual void remove() = 0;
+  /**
+   * Return the menu display priority
+   */
+  int getPriority() {
+    return priority;
+  }
 
-    /**
-     * set html text displayed by configuration widget
-     */
-    virtual void setConfigurationWidgetText(const QString &text);
+  /**
+   * Set the menu display priority
+   */
+  void setPriority(int number) {
+    priority=number;
+  }
 
-    /**
-     * return widget of configuration of this interactor
-     * if you previouly call setHtmlText, getConfigurationWidget return a QTextEdit with this text
-     */
-    virtual QWidget *getConfigurationWidget();
+  /**
+   * return QAction of this interactor
+   */
+  virtual InteractorAction* getAction() = 0;
 
-    /**
-     * return if this interactor is compatible with given View
-     */
-    virtual bool isCompatible(const std::string &viewName) = 0;
+  /**
+   * Compute InteractorComponents include in this interactor
+   */
+  virtual void compute(GlMainWidget *) = 0;
 
-    /**
-     * Return the menu display priority
-     */
-    int getPriority() {
-      return priority;
+  /**
+   * Draw InteractorComponents include in this interactor
+   */
+  virtual void draw(GlMainWidget *) = 0;
+
+  /**
+   * This function is call when an undo is perform by the controller
+   */
+  virtual void undoIsDone() {}
+
+
+};
+
+class TLP_QT_SCOPE InteractorContext {
+
+public :
+  InteractorContext() {}
+
+};
+
+class TLP_QT_SCOPE InteractorFactory: public PluginInfoInterface {
+public:
+  virtual ~InteractorFactory() {}
+  ///
+  virtual Interactor *createPluginObject(InteractorContext *ic)=0;
+
+  virtual  std::string getMajor() const {
+    return tlp::getMajor(getRelease());
+  }
+  virtual  std::string getMinor() const  {
+    return tlp::getMinor(getRelease());
+  }
+  virtual  std::string getTulipMajor() const {
+    return tlp::getMajor(getTulipRelease());
+  }
+  virtual  std::string getTulipMinor() const  {
+    return tlp::getMinor(getTulipRelease());
+  }
+
+  static TemplateFactory<InteractorFactory,Interactor,InteractorContext *> *factory;
+  static void initFactory() {
+    if (!factory) {
+      factory = new TemplateFactory<InteractorFactory,Interactor,InteractorContext *>;
     }
-
-    /**
-     * Set the menu display priority
-     */
-    void setPriority(int number) {
-      priority=number;
-    }
-
-    /**
-     * return QAction of this interactor
-     */
-    virtual InteractorAction* getAction() = 0;
-
-    /**
-     * Compute InteractorComponents include in this interactor
-     */
-    virtual void compute(GlMainWidget *) = 0;
-
-    /**
-     * Draw InteractorComponents include in this interactor
-     */
-    virtual void draw(GlMainWidget *) = 0;
-
-    /**
-     * This function is call when an undo is perform by the controller
-     */
-    virtual void undoIsDone() {}
-
-
-  };
-
-  class TLP_QT_SCOPE InteractorContext {
-
-  public :
-    InteractorContext(){}
-
-  };
-
-  class TLP_QT_SCOPE InteractorFactory: public PluginInfoInterface {
-  public:
-    virtual ~InteractorFactory() {}
-    ///
-    virtual Interactor *createPluginObject(InteractorContext *ic)=0;
-
-    virtual  std::string getMajor() const {
-      return tlp::getMajor(getRelease());
-    }
-    virtual  std::string getMinor() const  {
-      return tlp::getMinor(getRelease());
-    }
-    virtual  std::string getTulipMajor() const {
-      return tlp::getMajor(getTulipRelease());
-    }
-    virtual  std::string getTulipMinor() const  {
-      return tlp::getMinor(getTulipRelease());
-    }
-
-    static TemplateFactory<InteractorFactory,Interactor,InteractorContext *> *factory;
-    static void initFactory() {
-      if (!factory) {
-	factory = new TemplateFactory<InteractorFactory,Interactor,InteractorContext *>;
-      }
-    }
-  };
+  }
+};
 
 }
 
 #define INTERACTORPLUGINFACTORY(T,C,N,A,D,I,R,G)     \
-class C##T##Factory:public T##Factory	 \
+class C##T##Factory:public T##Factory  \
 {                                                \
 public:                                          \
-  C##T##Factory(){				 \
-    initFactory(); 			         \
-    factory->registerPlugin(this);	         \
-  }       					 \
-  std::string getName() const { return std::string(N);}	 \
-  std::string getGroup() const { return std::string(G);}	 \
-  std::string getAuthor() const {return std::string(A);}	 \
-  std::string getDate() const {return std::string(D);}	 \
-  std::string getInfo() const {return std::string(I);}	 \
+  C##T##Factory(){         \
+    initFactory();               \
+    factory->registerPlugin(this);           \
+  }                  \
+  std::string getName() const { return std::string(N);}  \
+  std::string getGroup() const { return std::string(G);}   \
+  std::string getAuthor() const {return std::string(A);}   \
+  std::string getDate() const {return std::string(D);}   \
+  std::string getInfo() const {return std::string(I);}   \
   std::string getRelease() const {return std::string(R);}\
   std::string getTulipRelease() const {return std::string(TULIP_RELEASE);} \
-  T * createPluginObject(tlp::InteractorContext *)		     \
-  {						 \
-    C *tmp = new C();				 \
-    return ((T *) tmp);			 \
-  }						 \
+  T * createPluginObject(tlp::InteractorContext *)         \
+  {            \
+    C *tmp = new C();        \
+    return ((T *) tmp);      \
+  }            \
 };                                               \
 extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \

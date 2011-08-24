@@ -29,9 +29,9 @@ ColorButton::ColorButton(QWidget *parent): QPushButton(parent) {
   connect(this, SIGNAL(clicked()), this, SLOT(askColor()));
 }
 
-ColorButton::ColorButton(const QRgb &c, QWidget *parent, const char *, Qt::WFlags ):QPushButton(parent){
-    connect(this, SIGNAL(clicked()), this, SLOT(askColor()));
-    setColor(QColor::fromRgb(c));
+ColorButton::ColorButton(const QRgb &c, QWidget *parent, const char *, Qt::WFlags ):QPushButton(parent) {
+  connect(this, SIGNAL(clicked()), this, SLOT(askColor()));
+  setColor(QColor::fromRgb(c));
 }
 
 ColorButton::~ColorButton() {
@@ -60,8 +60,10 @@ void ColorButton::paintEvent(QPaintEvent *event) {
 
 void ColorButton::askColor() {
   QColor newColor(QColorDialog::getColor(_color, this,tr("Choose a color"), QColorDialog::ShowAlphaChannel));
+
   if (!newColor.isValid())
     return;
+
   setColor(newColor);
   repaint();
 }

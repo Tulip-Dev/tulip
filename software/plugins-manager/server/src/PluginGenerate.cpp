@@ -36,14 +36,14 @@ class AddToDomDocument {
 
 public :
 
- AddToDomDocument(xmlNodePtr rootNode):rootNode(rootNode){};
+  AddToDomDocument(xmlNodePtr rootNode):rootNode(rootNode) {};
 
   void operator() (const tlp::PluginDependency& dep) {
     xmlNodePtr depNode = xmlNewChild(rootNode,NULL, BAD_CAST "dependency",NULL);
     xmlNewProp(depNode, BAD_CAST "name", BAD_CAST dep.name.c_str());
     xmlNewProp(depNode, BAD_CAST "type", BAD_CAST dep.type.c_str());
     xmlNewProp(depNode, BAD_CAST "version", BAD_CAST dep.version.c_str());
-    
+
   }
 
 };
@@ -51,12 +51,12 @@ public :
 bool generatePluginInfoFile(LocalPluginInfo& pInfo, QDir& dstDir) {
   xmlDocPtr doc = NULL;       /* document pointer */
   xmlNodePtr rootNode = NULL;
-    
+
   doc = xmlNewDoc(BAD_CAST "1.0");
-    
+
   rootNode = xmlNewNode(NULL, BAD_CAST "pluginInfo");
   xmlDocSetRootElement(doc, rootNode);
-    
+
   xmlNewProp(rootNode, BAD_CAST "name", BAD_CAST pInfo.name.c_str());
   xmlNewProp(rootNode, BAD_CAST "type", BAD_CAST pInfo.type.c_str());
   xmlNewProp(rootNode, BAD_CAST "displayType", BAD_CAST pInfo.displayType.c_str());
@@ -65,7 +65,7 @@ bool generatePluginInfoFile(LocalPluginInfo& pInfo, QDir& dstDir) {
   xmlNewProp(rootNode, BAD_CAST "info", BAD_CAST pInfo.info.c_str());
   xmlNewProp(rootNode, BAD_CAST "fileName", BAD_CAST pInfo.fileName.c_str());
   xmlNewProp(rootNode, BAD_CAST "version", BAD_CAST pInfo.version.c_str());
-    
+
   AddToDomDocument mapf(rootNode);
   for_each(pInfo.dependencies.begin(),pInfo.dependencies.end(),mapf);
 
@@ -76,16 +76,17 @@ bool generatePluginInfoFile(LocalPluginInfo& pInfo, QDir& dstDir) {
   xmlFreeDoc(doc);
 
   QFile pluginXmlFile(dstDir.absolutePath() + "/" + pInfo.fileName.c_str() + ".xml");
+
   if(!pluginXmlFile.open(QIODevice::WriteOnly)) {
     cerr << "Error in write file : " << pluginXmlFile.fileName().toStdString() << endl;
     return false;
   }
-  
+
   pluginXmlFile.write((char *)xmlbuff, buffersize);
   pluginXmlFile.close();
   cout << QFileInfo(pluginXmlFile).fileName().toAscii().data() << " generated" << endl;
   xmlFree(xmlbuff);
-  
+
   return true;
 }
 
@@ -98,7 +99,7 @@ void generatePluginDocFile(QString& pFileName, QString&, QFile& pDoxFile, QDir& 
   QString endStr("</detaileddescription>");
   int beginPos = srcStr.lastIndexOf("<briefdescription>");
   int endPos = srcStr.lastIndexOf(endStr);
-	
+
   QTextStream out(&dstFile);
   out << "<?xml version='1.0' encoding='UTF-8' standalone='no'?>" << "\n" << "<doc>" << "\n";
   out << srcStr.mid(beginPos,(endPos+endStr.length())-beginPos);

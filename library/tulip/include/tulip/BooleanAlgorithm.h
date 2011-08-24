@@ -29,11 +29,11 @@ class BooleanProperty;
 
 /**
  * \addtogroup plugins
- */ 
+ */
 /*@{*/
 
 /// Interface for selection plug-ins
-class TLP_SCOPE BooleanAlgorithm:public PropertyAlgorithm { 
+class TLP_SCOPE BooleanAlgorithm:public PropertyAlgorithm {
   ///
   friend class BooleanProperty;
 public:
@@ -42,7 +42,7 @@ public:
    **/
   BooleanProperty *booleanResult;
   ///
-  virtual ~BooleanAlgorithm(){}
+  virtual ~BooleanAlgorithm() {}
 
 protected:
   ///

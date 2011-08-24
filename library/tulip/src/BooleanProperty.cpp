@@ -33,68 +33,89 @@ const string BooleanVectorProperty::propertyTypename = "vector<bool>";
 //=================================================================================
 Iterator<node>* BooleanProperty::getNodesEqualTo(const bool val, Graph *sg) {
   if (sg == 0) sg = graph;
+
   Iterator<unsigned int> *it = 0;
+
   if (sg == graph)
     it = nodeProperties.findAll(val);
+
   if (it == 0)
     return new SGraphNodeIterator(sg, nodeProperties, val);
+
   return (new UINTIterator<node>(it));
 }
 //=================================================================================
 Iterator<edge>* BooleanProperty::getEdgesEqualTo(const bool val, Graph *sg) {
   if (sg == 0) sg = graph;
+
   Iterator<unsigned int> *it=0;
+
   if (sg == graph)
     it = edgeProperties.findAll(val);
+
   if (it == 0)
     return new SGraphEdgeIterator(sg, edgeProperties, val);
+
   return (new UINTIterator<edge>(it));
 }
 //=================================================================================
-//Fonctionnalite supplementaire ajoute au selection 
+//Fonctionnalite supplementaire ajoute au selection
 void BooleanProperty::reverse() {
   Observable::holdObservers();
   Iterator<node> *itN=graph->getNodes();
+
   while (itN->hasNext()) {
     node itn=itN->next();
+
     if (getNodeValue(itn)==true)
       setNodeValue(itn,false);
     else
       setNodeValue(itn,true);
-  } delete itN;
+  }
+
+  delete itN;
   Iterator<edge> *itE=graph->getEdges();
+
   while (itE->hasNext()) {
     edge ite=itE->next();
+
     if (getEdgeValue(ite)==true)
       setEdgeValue(ite,false);
     else
       setEdgeValue(ite,true);
-  } delete itE;
+  }
+
+  delete itE;
   Observable::unholdObservers();
 }
 //=================================================================================
 void BooleanProperty::reverseEdgeDirection() {
   Iterator<edge> *itE=graph->getEdges();
+
   while (itE->hasNext()) {
     edge ite=itE->next();
+
     if (getEdgeValue(ite))
       graph->reverse(ite);
-  } delete itE;
+  }
+
+  delete itE;
 }
 //=================================================================================
-PropertyInterface* BooleanProperty::clonePrototype(Graph * g, const std::string& n)
-{
-	if( !g )
-		return 0;
-	BooleanProperty * p = g->getLocalProperty<BooleanProperty>( n );
-	p->setAllNodeValue( getNodeDefaultValue() );
-	p->setAllEdgeValue( getEdgeDefaultValue() );
-	return p;
+PropertyInterface* BooleanProperty::clonePrototype(Graph * g, const std::string& n) {
+  if( !g )
+    return 0;
+
+  BooleanProperty * p = g->getLocalProperty<BooleanProperty>( n );
+  p->setAllNodeValue( getNodeDefaultValue() );
+  p->setAllEdgeValue( getEdgeDefaultValue() );
+  return p;
 }
 //=================================================================================
 PropertyInterface* BooleanVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
+
   BooleanVectorProperty * p = g->getLocalProperty<BooleanVectorProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );

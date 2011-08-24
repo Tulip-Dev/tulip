@@ -24,43 +24,49 @@ tlp::ViewPluginsManager* tlp::ViewPluginsManager::inst=0;
 
 using namespace std;
 
-namespace tlp
-{
+namespace tlp {
 
-  ViewPluginsManager::ViewPluginsManager() {
-    ViewFactory::initFactory();
-  }
-  //====================================================
-  void ViewPluginsManager::loadPlugins(PluginLoader *plug) {
-    ViewFactory::initFactory();
-    string::const_iterator begin=tlp::TulipPluginsPath.begin();
-    string::const_iterator end=begin;
-    while (end!=tlp::TulipPluginsPath.end())
-      if ((*end)==tlp::PATH_DELIMITER) {
-	if (begin!=end)
-	  tlp::loadViewPluginsFromDir(string(begin,end)+"/view", plug);
-	++end;
-	begin=end;
-      } else
-	++end;
-    if (begin!=end) {
-      tlp::loadViewPluginsFromDir(string(begin,end)+"/view", plug);
+ViewPluginsManager::ViewPluginsManager() {
+  ViewFactory::initFactory();
+}
+//====================================================
+void ViewPluginsManager::loadPlugins(PluginLoader *plug) {
+  ViewFactory::initFactory();
+  string::const_iterator begin=tlp::TulipPluginsPath.begin();
+  string::const_iterator end=begin;
+
+  while (end!=tlp::TulipPluginsPath.end())
+    if ((*end)==tlp::PATH_DELIMITER) {
+      if (begin!=end)
+        tlp::loadViewPluginsFromDir(string(begin,end)+"/view", plug);
+
+      ++end;
+      begin=end;
     }
-  }
-  //====================================================
-  void ViewPluginsManager::initViewPluginsList(MutableContainer<View *> &views) {
-    ViewContext ic;
-    views.setAll(0);
+    else
+      ++end;
 
-    Iterator<string> *itS = ViewFactory::factory->availablePlugins();
-    while (itS->hasNext()) {
-      string viewPluginName=itS->next();
-      ViewFactory::factory->getPluginObject(viewPluginName, &ic);
-    } delete itS;
+  if (begin!=end) {
+    tlp::loadViewPluginsFromDir(string(begin,end)+"/view", plug);
   }
-  //====================================================
-  View* ViewPluginsManager::createView(const string &name) {
-  	ViewContext ic;
-  	return ViewFactory::factory->getPluginObject(name, &ic);
+}
+//====================================================
+void ViewPluginsManager::initViewPluginsList(MutableContainer<View *> &views) {
+  ViewContext ic;
+  views.setAll(0);
+
+  Iterator<string> *itS = ViewFactory::factory->availablePlugins();
+
+  while (itS->hasNext()) {
+    string viewPluginName=itS->next();
+    ViewFactory::factory->getPluginObject(viewPluginName, &ic);
   }
+
+  delete itS;
+}
+//====================================================
+View* ViewPluginsManager::createView(const string &name) {
+  ViewContext ic;
+  return ViewFactory::factory->getPluginObject(name, &ic);
+}
 }

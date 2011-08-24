@@ -29,162 +29,181 @@
 
 namespace tlp {
 
-  class GlScene;
-  class GlSceneVisitor;
+class GlScene;
+class GlSceneVisitor;
+
+/**
+ * Layer class
+ * A layer is an entity with a camera and a GlComposite
+ * Layers are used with GlScene : you can add a layer to a scene and a scene can have many layers
+ * You have two constructor for GlLayer : one with a camera pointer and one without
+ *  The constructor without camera pointer create a layer with a new camera and delete this camera at the destruction
+ *  The constructor with camera pointer create a layer and use the camera pointer but you have the responsibility of camera destruction
+ */
+class TLP_GL_SCOPE GlLayer {
+
+public:
 
   /**
-   * Layer class
-   * A layer is an entity with a camera and a GlComposite
-   * Layers are used with GlScene : you can add a layer to a scene and a scene can have many layers
-   * You have two constructor for GlLayer : one with a camera pointer and one without
-   *  The constructor without camera pointer create a layer with a new camera and delete this camera at the destruction
-   *  The constructor with camera pointer create a layer and use the camera pointer but you have the responsibility of camera destruction
+   * Layer constructor : construct a layer with his name
+   *  A new camera is created for this layer and this camera will be deleted in the GlLayer destructor
    */
-  class TLP_GL_SCOPE GlLayer {
+  GlLayer(const std::string& name,bool workingLayer=false);
 
-  public:
+  /**
+   * Layer constructor : construct a layer with his name and use the camera : camera
+   *  You have the responsibility of camera destruction
+   */
+  GlLayer(const std::string& name,Camera *camera,bool workingLayer=false);
 
-    /**
-     * Layer constructor : construct a layer with his name
-     *  A new camera is created for this layer and this camera will be deleted in the GlLayer destructor
-     */
-    GlLayer(const std::string& name,bool workingLayer=false);
+  /**
+   * Destructor
+   */
+  ~GlLayer();
 
-    /**
-     * Layer constructor : construct a layer with his name and use the camera : camera
-     *  You have the responsibility of camera destruction
-     */
-    GlLayer(const std::string& name,Camera *camera,bool workingLayer=false);
+  /**
+   * Set the scene where the layer is
+   */
+  void setScene(GlScene *scene) {
+    this->scene=scene;
+    camera->setScene(scene);
+  }
 
-    /**
-     * Destructor
-     */
-    ~GlLayer();
+  /**
+   * Return the scene where the layer is
+   */
+  GlScene *getScene() {
+    return scene;
+  }
 
-    /**
-     * Set the scene where the layer is
-     */
-    void setScene(GlScene *scene) {this->scene=scene;camera->setScene(scene);}
+  /**
+   * Return the layer's name
+   */
+  std::string getName() {
+    return name;
+  }
 
-    /**
-     * Return the scene where the layer is
-     */
-    GlScene *getScene() {return scene;}
+  /**
+   * Set the layer's camera
+   * GlLayer now use a copy of the camera parameters
+   */
+  void setCamera(const Camera& camera);
 
-    /**
-     * Return the layer's name
-     */
-    std::string getName() {return name;}
+  /**
+   * Set the layer's camera
+   * GlLayer now use camera parameters and you have the resposibility of camera destruction
+   */
+  void setSharedCamera(Camera *camera);
 
-    /**
-     * Set the layer's camera
-     * GlLayer now use a copy of the camera parameters
-     */
-    void setCamera(const Camera& camera);
+  /**
+   * Replace the layer's camera with a new 2D one
+   */
+  void set2DMode();
 
-    /**
-     * Set the layer's camera
-     * GlLayer now use camera parameters and you have the resposibility of camera destruction
-     */
-    void setSharedCamera(Camera *camera);
+  /**
+   * Return the layer's camera
+   */
+  Camera &getCamera() {
+    return *camera;
+  }
 
-    /**
-     * Replace the layer's camera with a new 2D one
-     */
-    void set2DMode();
+  /**
+   * Set if the layer is visible
+   */
+  void setVisible(bool visible);
 
-    /**
-     * Return the layer's camera
-     */
-    Camera &getCamera() {return *camera;}
+  /**
+   * Return if the layer is visible
+   */
+  bool isVisible() {
+    return composite.isVisible();
+  }
 
-    /**
-     * Set if the layer is visible
-     */
-    void setVisible(bool visible);
+  /**
+   * Add an entity to GlComposite of the layer
+   */
+  void addGlEntity(GlSimpleEntity *entity,const std::string& name);
 
-    /**
-     * Return if the layer is visible
-     */
-    bool isVisible() {return composite.isVisible();}
+  /**
+   * Remove entity with name : key
+   * This entity is not deleted
+   */
+  void deleteGlEntity(const std::string &key);
 
-    /**
-     * Add an entity to GlComposite of the layer
-     */
-    void addGlEntity(GlSimpleEntity *entity,const std::string& name);
+  /**
+   * Remove entity
+   * This entity is not deleted
+   */
+  void deleteGlEntity(GlSimpleEntity *entity);
 
-    /**
-     * Remove entity with name : key
-     * This entity is not deleted
-     */
-    void deleteGlEntity(const std::string &key);
+  /**
+   * Return entity with name : key
+   */
+  GlSimpleEntity* findGlEntity(const std::string &key);
 
-    /**
-     * Remove entity
-     * This entity is not deleted
-     */
-    void deleteGlEntity(GlSimpleEntity *entity);
+  /**
+   * Return the map of layer's entities
+   */
+  std::map<std::string, GlSimpleEntity*> *getDisplays();
 
-    /**
-     * Return entity with name : key
-     */
-    GlSimpleEntity* findGlEntity(const std::string &key);
+  /**
+   * function used by visitors to visit this layer
+   */
+  void acceptVisitor(GlSceneVisitor *visitor);
 
-    /**
-     * Return the map of layer's entities
-     */
-    std::map<std::string, GlSimpleEntity*> *getDisplays();
+  /**
+   * Return the GlComposite used by the layer
+   */
+  GlComposite *getComposite() {
+    return &composite;
+  }
 
-    /**
-     * function used by visitors to visit this layer
-     */
-    void acceptVisitor(GlSceneVisitor *visitor);
+  /**
+   * Remove all entities of the layer
+   * Entities are not deleted
+   */
+  void clear() {
+    composite.reset(false);
+  }
 
-    /**
-     * Return the GlComposite used by the layer
-     */
-    GlComposite *getComposite() {return &composite;}
+  /**
+   * return if this layer is a working layer
+   *  this property doesn't change the layer, but for example working layers are not displayed in LayerManagerWidget
+   */
+  bool isAWorkingLayer() {
+    return workingLayer;
+  }
 
-    /**
-     * Remove all entities of the layer
-     * Entities are not deleted
-     */
-    void clear() {composite.reset(false);}
+  /**
+   * return if this layer use a shared camera
+   */
+  bool useSharedCamera() {
+    return sharedCamera;
+  }
 
-    /**
-     * return if this layer is a working layer
-     *  this property doesn't change the layer, but for example working layers are not displayed in LayerManagerWidget
-     */
-    bool isAWorkingLayer(){return workingLayer;}
+  /**
+   * Return the layer's data in XML
+   */
+  void getXML(xmlNodePtr rootNode);
 
-    /**
-     * return if this layer use a shared camera
-     */
-    bool useSharedCamera(){return sharedCamera;}
+  /**
+   * Set the layer's data with XML
+   */
+  void setWithXML(xmlNodePtr rootNode);
 
-    /**
-     * Return the layer's data in XML
-     */
-    void getXML(xmlNodePtr rootNode);
+private:
 
-    /**
-     * Set the layer's data with XML
-     */
-    void setWithXML(xmlNodePtr rootNode);
+  std::string name;
 
-  private:
+  GlComposite composite;
+  GlScene *scene;
 
-    std::string name;
+  Camera *camera;
+  bool sharedCamera;
 
-    GlComposite composite;
-    GlScene *scene;
+  bool workingLayer;
 
-    Camera *camera;
-    bool sharedCamera;
-
-    bool workingLayer;
-
-  };
+};
 
 }
 

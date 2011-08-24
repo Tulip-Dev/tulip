@@ -27,26 +27,26 @@
 
 namespace tlp {
 
-  class NewTulipVersionAvailableDialog : public QDialog, public Ui::NewTulipVersionAvailableDialogData {
+class NewTulipVersionAvailableDialog : public QDialog, public Ui::NewTulipVersionAvailableDialogData {
 
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
+public:
 
-    NewTulipVersionAvailableDialog(const QString &version,QWidget* parent=NULL);
+  NewTulipVersionAvailableDialog(const QString &version,QWidget* parent=NULL);
 
-    static bool needDisplayDialog(const QString &version);
+  static bool needDisplayDialog(const QString &version);
 
-  protected slots :
+protected slots :
 
-    void okClicked();
-    void askMeAgainStateChanged(int);
+  void okClicked();
+  void askMeAgainStateChanged(int);
 
-  protected :
+protected :
 
-    QString version;
+  QString version;
 
-  };
+};
 
 }
 

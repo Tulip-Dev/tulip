@@ -23,7 +23,7 @@
 
 namespace tlp {
 
-/** \addtogroup plugins */ 
+/** \addtogroup plugins */
 /*@{*/
 
 /**
@@ -32,14 +32,14 @@ namespace tlp {
  * It is mainly used by algorithms to display options to the user, e.g. a clustering algorithm can let the user choose which measure to use.
  **/
 struct TLP_SCOPE WithParameter {
-  
+
   /**
    * @brief Retrieves the parameters.
    *
    * @return :StructDef the parameters of the plug-in.
    **/
   tlp::StructDef getParameters();
-  
+
   /**
    * @brief Adds a parameter to the plug-in.
    *
@@ -50,12 +50,13 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T> void addParameter(const char* str,
-					 const char* inHelp=0,
-					 const char* inDefValue = 0,
-					 bool isMandatory = true)
-  { parameters.template add<T>(str,inHelp,inDefValue,isMandatory); }
+                                         const char* inHelp=0,
+                                         const char* inDefValue = 0,
+                                         bool isMandatory = true) {
+    parameters.template add<T>(str,inHelp,inDefValue,isMandatory);
+  }
 protected:
-  
+
   /**
    * @brief The internal structure storing the parameters.
    **/

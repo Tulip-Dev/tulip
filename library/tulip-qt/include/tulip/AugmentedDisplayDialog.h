@@ -25,27 +25,27 @@
 
 namespace tlp {
 
-  class Graph;
+class Graph;
 
-  class TLP_QT_SCOPE AugmentedDisplayDialog : public QDialog, public Ui::AugmentedDisplayDialogData {
+class TLP_QT_SCOPE AugmentedDisplayDialog : public QDialog, public Ui::AugmentedDisplayDialogData {
 
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
+public:
 
-    AugmentedDisplayDialog(QWidget* parent,Graph *graph,const std::string &viewType);
+  AugmentedDisplayDialog(QWidget* parent,Graph *graph,const std::string &viewType);
 
-    void getRemovedList(std::vector<std::string> &toRemove);
+  void getRemovedList(std::vector<std::string> &toRemove);
 
-  protected slots:
+protected slots:
 
-    void removeClicked();
+  void removeClicked();
 
-  private :
+private :
 
-    std::vector<std::string> removedList;
+  std::vector<std::string> removedList;
 
-  };
+};
 
 }
 

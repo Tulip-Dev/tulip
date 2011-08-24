@@ -30,30 +30,29 @@
 
 namespace tlp {
 
-  class ModifyServerDialog : public QDialog
-  {
-    Q_OBJECT
-    
-    protected :
-    QLineEdit* textAddr;
-    QLabel* labelAddr;
-    QPushButton* valid;
-    QPushButton* cancel;
-    
-    QBoxLayout* boxVLayout;
-    QBoxLayout* boxHLayout1;
-    QBoxLayout* boxHLayout2;
-    
-    
-  public : 
-    
-    ModifyServerDialog(QWidget *parent=0);
-    virtual ~ModifyServerDialog();
-    
-    std::string getAddr() const;
-    void setAddr(const std::string& s);
+class ModifyServerDialog : public QDialog {
+  Q_OBJECT
 
-  };
+protected :
+  QLineEdit* textAddr;
+  QLabel* labelAddr;
+  QPushButton* valid;
+  QPushButton* cancel;
+
+  QBoxLayout* boxVLayout;
+  QBoxLayout* boxHLayout1;
+  QBoxLayout* boxHLayout2;
+
+
+public :
+
+  ModifyServerDialog(QWidget *parent=0);
+  virtual ~ModifyServerDialog();
+
+  std::string getAddr() const;
+  void setAddr(const std::string& s);
+
+};
 
 }
 #endif //_MODIFYSERVERDIALOG_H_

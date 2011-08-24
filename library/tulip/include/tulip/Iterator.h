@@ -27,7 +27,7 @@ namespace tlp {
 /**
  * @addtogroup iterators
  */
- /*@{*/
+/*@{*/
 #ifndef DOXYGEN_NOTFOR_DEVEL
 extern TLP_SCOPE void incrNumIterators();
 extern TLP_SCOPE void decrNumIterators();
@@ -41,11 +41,11 @@ extern TLP_SCOPE int getNumIterators();
 **/
 template<class itType> struct Iterator {
   ///
-  Iterator(){
+  Iterator() {
 #ifndef NDEBUG
     incrNumIterators();
 #endif
-}
+  }
   ///
   virtual ~Iterator() {
 #ifndef NDEBUG
@@ -58,7 +58,7 @@ template<class itType> struct Iterator {
   * @return The current element pointed by the Iterator.
   **/
   virtual itType next()=0;
-  
+
   /**
   * @brief Tells if the sequence is at its end.
   *
@@ -73,7 +73,7 @@ template<typename TYPE> class UINTIterator : public Iterator<TYPE> {
 public:
   UINTIterator(Iterator<unsigned int> *it):it(it) {
   }
-  ~UINTIterator(){
+  ~UINTIterator() {
     delete it;
   }
   bool hasNext() {
@@ -88,8 +88,8 @@ private:
 #endif // DOXYGEN_NOTFOR_DEVEL
 /*@}*/
 #ifdef _MSC_VER
-  template struct TLP_SCOPE Iterator<edge>;
-  template struct TLP_SCOPE Iterator<node>;
+template struct TLP_SCOPE Iterator<edge>;
+template struct TLP_SCOPE Iterator<node>;
 #endif
 
 }

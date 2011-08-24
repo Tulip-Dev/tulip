@@ -22,26 +22,26 @@
 #include <QtGui/QStyledItemDelegate>
 #include <tulip/tulipconf.h>
 
-    /**
-    * @brief QItemDelegate to display and edit Tulip data in the Qt model/view architecture.
-    **/
-    class TulipItemDelegate: public QStyledItemDelegate {
-        Q_OBJECT
-    public:
-        TulipItemDelegate(QObject* parent=NULL) :
-                QStyledItemDelegate(parent) {
-        }
-        virtual ~TulipItemDelegate() {
-        }
-        QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem & option,
-                              const QModelIndex& index) const;
-        void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
+/**
+* @brief QItemDelegate to display and edit Tulip data in the Qt model/view architecture.
+**/
+class TulipItemDelegate: public QStyledItemDelegate {
+  Q_OBJECT
+public:
+  TulipItemDelegate(QObject* parent=NULL) :
+    QStyledItemDelegate(parent) {
+  }
+  virtual ~TulipItemDelegate() {
+  }
+  QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem & option,
+                        const QModelIndex& index) const;
+  void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
 
-        void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+  void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
-    protected:
-        QWidget* createFileNameEditor(QWidget* parent , const QString& defaultFileName,const QString& filenameFilter=QString()) const;
+protected:
+  QWidget* createFileNameEditor(QWidget* parent , const QString& defaultFileName,const QString& filenameFilter=QString()) const;
 
-    };
+};
 
 #endif /* TULIPTABLEWIDGETITEMDELEGATE_H_ */

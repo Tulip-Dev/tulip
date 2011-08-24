@@ -42,7 +42,7 @@
 using namespace std;
 
 void zoomOnScreenRegion(tlp::GlMainWidget *glWidget, const tlp::BoundingBox &boundingBox, const std::string &layerName="Main", const bool optimalPath = true, const double velocity = 1.1, const double p = sqrt(1.6)) {
-  if(boundingBox.isValid()){
+  if(boundingBox.isValid()) {
     tlp::QtGlSceneZoomAndPanAnimator animator(glWidget, boundingBox, layerName, optimalPath, velocity, p);
     animator.animateZoomAndPan();
   }
@@ -94,6 +94,7 @@ QWidget *SmallMultiplesView::construct(QWidget *parent) {
 void SmallMultiplesView::setActiveInteractor(Interactor *interactor) {
   if (activeInteractor)
     activeInteractor->remove();
+
   interactor->install(_glMainWidget);
   activeInteractor = interactor;
 }
@@ -103,9 +104,11 @@ void SmallMultiplesView::setActiveInteractor(Interactor *interactor) {
 //===========================================
 void SmallMultiplesView::dataChanged(int from, int to, Roles dataRoles) {
   refreshItems();
+
   for (int i=from; i <= to; ++i) {
     if (i >= _items.size())
       return;
+
     dataChanged(i, dataRoles);
   }
 }
@@ -114,6 +117,7 @@ template<typename T, typename Proptype>
 void applyVariant(QVariant v, Proptype *prop, tlp::node n) {
   if (!v.isValid() || v.isNull())
     return;
+
   T val = v.value<T>();
   prop->setNodeValue(n, val);
 }
@@ -122,33 +126,40 @@ template<>
 void applyVariant<QString, StringProperty>(QVariant v, StringProperty *prop, tlp::node n) {
   if (!v.isValid() || v.isNull())
     return;
+
   prop->setNodeValue(n, v.toString().toStdString());
 }
 
 void SmallMultiplesView::dataChanged(int id, SmallMultiplesView::Roles dataRoles) {
   if (id >= _items.size())
     return;
+
   Observable::holdObservers();
   node n = _items[id];
 
   GlGraphInputData *inputData = _glMainWidget->getScene()->getGlGraphComposite()->getInputData();
+
   if (dataRoles.testFlag(SmallMultiplesView::Texture))
     applyVariant<QString, StringProperty>(data(id, SmallMultiplesView::Texture), inputData->getElementTexture(), n);
 
   if (dataRoles.testFlag(SmallMultiplesView::Label)) {
     QVariant v = data(id, SmallMultiplesView::Label);
+
     if (v.isValid() && !v.isNull()) {
       QString str = v.toString();
+
       if (_maxLabelSize != -1 && str.size() > _maxLabelSize) {
         str.resize(_maxLabelSize);
         str.append("...");
       }
+
       inputData->getElementLabel()->setNodeValue(n, str.toStdString());
     }
   }
 
   if (dataRoles.testFlag(SmallMultiplesView::Position))
     applyVariant<tlp::Coord, LayoutProperty>(data(id, SmallMultiplesView::Position), inputData->getElementLayout(), n);
+
   Observable::unholdObservers();
 }
 
@@ -159,6 +170,7 @@ void SmallMultiplesView::refreshItems() {
 
   for (int i=itemsCount; i < nodesCount; ++i)
     delItem(_items.size()-1);
+
   for (int i=itemsCount; i > nodesCount; --i)
     addItem();
 
@@ -173,8 +185,10 @@ void SmallMultiplesView::addItem() {
 
 void SmallMultiplesView::delItem(int id) {
   Observable::holdObservers();
+
   if (id >= _items.size())
     return;
+
   node n = _items[id];
   _items.erase(_items.begin() + id);
   _glMainWidget->getGraph()->delNode(n);
@@ -185,12 +199,14 @@ int SmallMultiplesView::nodeItemId(node n) {
   for (int i=0; i < _items.size(); ++i)
     if (_items[i] == n)
       return i;
+
   return -1;
 }
 
 void SmallMultiplesView::itemsReversed(int a, int b) {
   if (a >= _items.size() || b >= _items.size())
     return;
+
   node na = _items[a];
   _items[a] = _items[b];
   _items[b] = na;
@@ -204,17 +220,20 @@ void SmallMultiplesView::itemsReversed(int a, int b) {
 void SmallMultiplesView::selectItem(int i) {
   if (i > _items.size())
     return;
+
   if (_zoomAnimationActivated) {
     zoomOnItem(i);
   }
+
   emit itemSelected(i);
 }
 
-void SmallMultiplesView::zoomOnItem(int i){
-    if (i > _items.size())
-      return;
-    GlNode glNode(_items[i]);
-    zoomOnScreenRegion(_glMainWidget, glNode.getBoundingBox(_glMainWidget->getScene()->getGlGraphComposite()->getInputData()), "overview");
+void SmallMultiplesView::zoomOnItem(int i) {
+  if (i > _items.size())
+    return;
+
+  GlNode glNode(_items[i]);
+  zoomOnScreenRegion(_glMainWidget, glNode.getBoundingBox(_glMainWidget->getScene()->getGlGraphComposite()->getInputData()), "overview");
 }
 
 GlMainWidget *SmallMultiplesView::overview() const {
@@ -257,6 +276,7 @@ QVariant SmallMultiplesView::data(int id, SmallMultiplesDataRole role) {
     v.setValue<Coord>(c);
     return v;
   }
+
   return QVariant();
 }
 
@@ -267,9 +287,11 @@ QVariant SmallMultiplesView::data(int id, SmallMultiplesDataRole role) {
 void SmallMultiplesView::toggleInteractors(bool f) {
   list<Interactor *> interactors = getInteractors();
   int i=0;
+
   for (list<Interactor *>::iterator it = interactors.begin(); it != interactors.end(); ++it) {
     if (i++ > 0) { // FIXME: Find another way to detect the SmallMultiplesView navigation interactor.
       (*it)->getAction()->setEnabled(f);
+
       if (!f)
         (*it)->getAction()->setChecked(f);
     }
@@ -290,21 +312,21 @@ public:
   SmallMultiplesNavigationInteractor(): InteractorChainOfResponsibility(":/i_select.png", "Navigator") {
     setPriority(1);
     setConfigurationWidgetText(trUtf8("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-    "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-    "p, li { white-space: pre-wrap; }\n"
-    "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-    "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">Small Multiples View navigation</span></p>\n"
-    "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; font-weight:600;\"></p>\n"
-    "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">This tool provides a way to move around in small multiples views.</span></p>\n"
-    "<p style="
-                            "\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"></p>\n"
-    "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">Overview mode: </span><span style=\" font-size:8pt;\">Use the mouse left click button or the arrow keys to translate the point of view. Double click on a specific item to display it.</span></p>\n"
-    "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"></p>\n"
-    "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">Specifc view: </span><span style=\" font-size:8pt;\">If the view provides a camera, you can move the camera the same way you did in overview mode. Double cl"
-                            "ick to switch back to the overview mode.</span></p></body></html>"));
+                                      "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                      "p, li { white-space: pre-wrap; }\n"
+                                      "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+                                      "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">Small Multiples View navigation</span></p>\n"
+                                      "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; font-weight:600;\"></p>\n"
+                                      "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">This tool provides a way to move around in small multiples views.</span></p>\n"
+                                      "<p style="
+                                      "\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"></p>\n"
+                                      "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">Overview mode: </span><span style=\" font-size:8pt;\">Use the mouse left click button or the arrow keys to translate the point of view. Double click on a specific item to display it.</span></p>\n"
+                                      "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"></p>\n"
+                                      "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt; font-weight:600;\">Specifc view: </span><span style=\" font-size:8pt;\">If the view provides a camera, you can move the camera the same way you did in overview mode. Double cl"
+                                      "ick to switch back to the overview mode.</span></p></body></html>"));
   }
 
-  void construct(){
+  void construct() {
     pushInteractorComponent(new SmallMultiplesNavigatorComponent());
   }
 

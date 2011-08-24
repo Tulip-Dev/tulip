@@ -23,32 +23,34 @@
 
 namespace tlp {
 
-  class GlSimpleEntity;
-  class GlNode;
-  class GlEdge;
-  class GlLayer;
+class GlSimpleEntity;
+class GlNode;
+class GlEdge;
+class GlLayer;
 
-  class TLP_GL_SCOPE GlSceneVisitor {
+class TLP_GL_SCOPE GlSceneVisitor {
 
-  public:
+public:
 
-    GlSceneVisitor():threadSafe(false){}
-    virtual ~GlSceneVisitor() {}
+  GlSceneVisitor():threadSafe(false) {}
+  virtual ~GlSceneVisitor() {}
 
-    virtual void visit(GlSimpleEntity *) {}
-    virtual void visit(GlNode *) {}
-    virtual void visit(GlEdge *) {}
-    virtual void visit(GlLayer *) {}
-    virtual void reserveMemoryForNodes(unsigned int) {}
-    virtual void reserveMemoryForEdges(unsigned int) {}
-    bool isThreadSafe(){return threadSafe;}
+  virtual void visit(GlSimpleEntity *) {}
+  virtual void visit(GlNode *) {}
+  virtual void visit(GlEdge *) {}
+  virtual void visit(GlLayer *) {}
+  virtual void reserveMemoryForNodes(unsigned int) {}
+  virtual void reserveMemoryForEdges(unsigned int) {}
+  bool isThreadSafe() {
+    return threadSafe;
+  }
 
-  protected :
+protected :
 
-    bool threadSafe;
+  bool threadSafe;
 
-  };
-  
+};
+
 }
 
 #endif // Tulip_GLSCENEVISITOR_H

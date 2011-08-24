@@ -32,7 +32,7 @@ LAYOUTPLUGINOFGROUP(Random,"Random","David Auber","01/12/1999","Ok","1.1","Basic
 using namespace std;
 using namespace tlp;
 
-Random::Random(const tlp::PropertyContext &context):LayoutAlgorithm(context){
+Random::Random(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
   addParameter<bool>("3D layout", paramHelp[0], "true");
 }
 
@@ -40,6 +40,7 @@ Random::~Random() {}
 
 bool Random::run() {
   bool is3D = true ;
+
   if ( dataSet!=0 ) {
     dataSet->get("3D layout", is3D);
   }
@@ -47,13 +48,17 @@ bool Random::run() {
   layoutResult->setAllEdgeValue(vector<Coord>(0));
   graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
   Iterator<node> *itN=graph->getNodes();
+
   while (itN->hasNext()) {
     node itn=itN->next();
+
     if(is3D)
       layoutResult->setNodeValue(itn,Coord(static_cast<float>(rand()%1024),static_cast<float>(rand()%1024),static_cast<float>(rand()%1024)));
     else
       layoutResult->setNodeValue(itn,Coord(static_cast<float>(rand()%1024),static_cast<float>(rand()%1024),0));
-  } delete itN;
+  }
+
+  delete itN;
   return true;
 }
 

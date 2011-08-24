@@ -17,9 +17,11 @@ void ComputePropertyThread::run() {
 
 bool ComputePropertyThread::computeProperty() {
   start();
+
   while(isRunning()) {
     QCoreApplication::processEvents();
   }
+
   return _result;
 }
 

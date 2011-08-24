@@ -30,10 +30,10 @@ class MutableConatainer;
 /**
  * This selection plugins enables to find a subgraph of G that is acyclic.
  *
- *  \author David Auber, LaBRI University Bordeaux I France: 
+ *  \author David Auber, LaBRI University Bordeaux I France:
  *   auber@tulip-software.org
  */
-class SpanningDagSelection:public tlp::BooleanAlgorithm { 
+class SpanningDagSelection:public tlp::BooleanAlgorithm {
 
 public:
   SpanningDagSelection(const tlp::PropertyContext &);

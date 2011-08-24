@@ -51,7 +51,7 @@ QString GlMainWidgetPlugin::name() const {
 
 QString GlMainWidgetPlugin::domXml() const {
   return "<widget class=\"tlp::GlMainWidget\" name=\"glMainWidget\">\n"
-	 "</widget>\n";
+         "</widget>\n";
 }
 
 QString GlMainWidgetPlugin::includeFile() const {
@@ -79,7 +79,7 @@ bool GlMainWidgetPlugin::isContainer() const {
 }
 
 QString GlMainWidgetPlugin::codeTemplate() const {
-    return "";
+  return "";
 }
 
 Q_EXPORT_PLUGIN(GlMainWidgetPlugin)

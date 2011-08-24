@@ -33,10 +33,12 @@ namespace tlp {
  */
 class TLP_QT_SCOPE MousePanNZoomNavigator:public InteractorComponent {
 public:
-  MousePanNZoomNavigator():cameraScaleFactor(1), isGesturing(false){}
-  ~MousePanNZoomNavigator(){}
+  MousePanNZoomNavigator():cameraScaleFactor(1), isGesturing(false) {}
+  ~MousePanNZoomNavigator() {}
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() { return new MousePanNZoomNavigator(); }
+  InteractorComponent *clone() {
+    return new MousePanNZoomNavigator();
+  }
 protected:
   float cameraScaleFactor;
   bool isGesturing;
@@ -46,10 +48,12 @@ protected:
  */
 class TLP_QT_SCOPE MouseElementDeleter:public InteractorComponent {
 public:
-  MouseElementDeleter(){}
-  ~MouseElementDeleter(){}
+  MouseElementDeleter() {}
+  ~MouseElementDeleter() {}
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() { return new MouseElementDeleter(); }
+  InteractorComponent *clone() {
+    return new MouseElementDeleter();
+  }
 };
 
 /** An interactor class to translate/rotate using keys or mouse movements,
@@ -61,10 +65,12 @@ private:
 
   QCursor oldCursor;
 public:
-  MouseNKeysNavigator() : currentSpecInteractorComponent(NULL){}
-  ~MouseNKeysNavigator(){}
+  MouseNKeysNavigator() : currentSpecInteractorComponent(NULL) {}
+  ~MouseNKeysNavigator() {}
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() { return new MouseNKeysNavigator(); }
+  InteractorComponent *clone() {
+    return new MouseNKeysNavigator();
+  }
 };
 /*@}*/
 

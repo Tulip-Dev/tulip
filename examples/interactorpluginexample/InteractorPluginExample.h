@@ -28,11 +28,11 @@
 //   In this case if first interactorComponent don't treat the event, this event is passed to second interactorComponent ...
 class InteractorPluginExample  : public tlp::InteractorChainOfResponsibility {
 
-  public :
+public :
 
   InteractorPluginExample();
 
-  // This function is call when the interactor is activate 
+  // This function is call when the interactor is activate
   //   Construct the interactor chain of responsibility
   void construct();
 
@@ -41,6 +41,7 @@ class InteractorPluginExample  : public tlp::InteractorChainOfResponsibility {
   virtual bool isCompatible(const std::string &viewName) {
     if(viewName=="Node Link Diagram view")
       return true;
+
     return false;
   }
 
@@ -49,12 +50,14 @@ class InteractorPluginExample  : public tlp::InteractorChainOfResponsibility {
 // Interactor Component class
 class InteractorPluginComponent : public tlp::InteractorComponent {
 
- public :
+public :
 
   // Main function of this class
   bool eventFilter(QObject *, QEvent *);
   // This function must be implemented
-  InteractorComponent *clone() { return new InteractorPluginComponent(); }
+  InteractorComponent *clone() {
+    return new InteractorPluginComponent();
+  }
 
 };
 

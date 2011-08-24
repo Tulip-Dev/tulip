@@ -52,20 +52,24 @@ void BasicPluginsTest::initializeGraph(const string& type) {
 }
 //==========================================================
 template<typename PropType>
-  bool BasicPluginsTest::computeProperty(const std::string &algorithm,
-				    const std::string & graphType,
-                                    PropType* prop) {
+bool BasicPluginsTest::computeProperty(const std::string &algorithm,
+                                       const std::string & graphType,
+                                       PropType* prop) {
   initializeGraph(graphType);
   bool deleteProp = prop == NULL;
+
   if (prop == NULL)
     prop = new PropType(graph);
+
   string errorMsg;
   DataSet ds;
   bool result = graph->computeProperty(algorithm, prop, errorMsg);
+
   if (deleteProp)
     delete prop;
+
   return result;
-}  
+}
 //==========================================================
 void BasicPluginsTest::testImportCompleteGraph() {
   DataSet ds;
@@ -125,20 +129,20 @@ void BasicPluginsTest::testImportDot() {
   DataSet ds;
   ds.set("file::filename", string("toto.dot"));
   Graph* g = importGraph("dot (graphviz)", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == NULL);  
+  CPPUNIT_ASSERT(g == NULL);
   ds.set("file::filename", string("graph.dot"));
   g = importGraph("dot (graphviz)", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == graph);  
+  CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportGml() {
   DataSet ds;
   ds.set("file::filename", string("toto.gml"));
   Graph* g = importGraph("GML", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == NULL);  
+  CPPUNIT_ASSERT(g == NULL);
   ds.set("file::filename", string("CMPb.gml"));
   g = importGraph("GML", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == graph);  
+  CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testExportGml() {
@@ -153,20 +157,20 @@ void BasicPluginsTest::testImportFileSystem() {
   DataSet ds;
   ds.set("dir::directory", string("toto"));
   Graph* g = importGraph("File System Directory", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == NULL);  
+  CPPUNIT_ASSERT(g == NULL);
   ds.set("dir::directory", string(".."));
   g = importGraph("File System Directory", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == graph);  
+  CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportAdjacencyMatrix() {
   DataSet ds;
   ds.set("file::name", string("toto.txt"));
   Graph* g = importGraph("Adjacency Matrix", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == NULL);  
+  CPPUNIT_ASSERT(g == NULL);
   ds.set("file::name", string("adj_mat.txt"));
   g = importGraph("Adjacency Matrix", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == graph);  
+  CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testArityMetric() {
@@ -241,7 +245,7 @@ void BasicPluginsTest::testPathLengthMetric() {
   CPPUNIT_ASSERT(result == false);
   graph->clear();
   result = computeProperty<DoubleProperty>("Path Length",
-					   "Random General Tree");
+           "Random General Tree");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -276,7 +280,7 @@ void BasicPluginsTest::testMetricColorMapping() {
   ColorProperty color(graph);
   ds.set("property", &metric);
   result = graph->computeProperty("Color Mapping", &color,
-				  errorMsg, NULL, &ds); 
+                                  errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 
@@ -317,7 +321,7 @@ void BasicPluginsTest::testGEMLayout() {
   DataSet ds;
   ds.set("file::filename", string("unconnected.tlp"));
   Graph* g = importGraph("tlp", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == graph);  
+  CPPUNIT_ASSERT(g == graph);
   LayoutProperty prop(graph);
   string errorMsg;
   bool result = graph->computeProperty("GEM (Frick)", &prop, errorMsg);
@@ -362,7 +366,7 @@ void BasicPluginsTest::testSquarifiedTreeMap() {
   LayoutProperty layout(graph);
   ds.set("metric", &metric);
   result = graph->computeProperty("Squarified Tree Map", &layout,
-				  errorMsg, NULL, &ds); 
+                                  errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -393,7 +397,7 @@ void BasicPluginsTest::testTreeReingoldAndTilfordExtended() {
 //==========================================================
 void BasicPluginsTest::testTutte() {
   bool result = computeProperty<LayoutProperty>("3-Connected (Tutte)",
-						"Complete General Graph");
+                "Complete General Graph");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -405,7 +409,7 @@ void BasicPluginsTest::testInducedSubGraphSelection() {
 void BasicPluginsTest::testKruskal() {
   BooleanProperty selection(graph);
   bool result = computeProperty<BooleanProperty>("Kruskal", "Planar Graph",
-                                                 &selection);
+                &selection);
   CPPUNIT_ASSERT(result);
   node n;
   forEach(n, graph->getNodes()) {
@@ -416,8 +420,8 @@ void BasicPluginsTest::testKruskal() {
 void BasicPluginsTest::testLoopSelection() {
   BooleanProperty selection(graph);
   bool result = computeProperty<BooleanProperty>("Loop Selection",
-                                                 "Planar Graph",
-                                                 &selection);
+                "Planar Graph",
+                &selection);
   CPPUNIT_ASSERT(result);
   node n;
   forEach(n, graph->getNodes()) {
@@ -428,8 +432,8 @@ void BasicPluginsTest::testLoopSelection() {
 void BasicPluginsTest::testMultipleEdgeSelection() {
   BooleanProperty selection(graph);
   bool result = computeProperty<BooleanProperty>("Multiple Edge",
-                                                 "Planar Graph",
-                                                 &selection);
+                "Planar Graph",
+                &selection);
   CPPUNIT_ASSERT(result);
   node n;
   forEach(n, graph->getNodes()) {
@@ -445,8 +449,8 @@ void BasicPluginsTest::testReachableSubGraphSelection() {
 void BasicPluginsTest::testSpanningDagSelection() {
   BooleanProperty selection(graph);
   bool result = computeProperty<BooleanProperty>("Spanning Dag",
-                                                 "Planar Graph",
-                                                 &selection);
+                "Planar Graph",
+                &selection);
   CPPUNIT_ASSERT(result);
   node n;
   forEach(n, graph->getNodes()) {
@@ -457,8 +461,8 @@ void BasicPluginsTest::testSpanningDagSelection() {
 void BasicPluginsTest::testSpanningTreeSelection() {
   BooleanProperty selection(graph);
   bool result = computeProperty<BooleanProperty>("Spanning Forest",
-                                                 "Planar Graph",
-                                                 &selection);
+                "Planar Graph",
+                &selection);
   CPPUNIT_ASSERT(result);
   node n;
   forEach(n, graph->getNodes()) {
@@ -489,7 +493,7 @@ void BasicPluginsTest::testMetricSizeMapping() {
   SizeProperty size(graph);
   ds.set("property", &metric);
   result = graph->computeProperty("Metric Mapping", &size,
-				  errorMsg, NULL, &ds); 
+                                  errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -501,7 +505,7 @@ void BasicPluginsTest::testEqualValueClustering() {
   bool result = graph->computeProperty("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
   ds.set("Property", &metric);
-  result = tlp::applyAlgorithm(graph, errorMsg, &ds, "Equal Value", NULL); 
+  result = tlp::applyAlgorithm(graph, errorMsg, &ds, "Equal Value", NULL);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -511,7 +515,7 @@ void BasicPluginsTest::testHierarchicalClustering() {
   string errorMsg;
   bool result = graph->computeProperty("Degree", metric, errorMsg);
   CPPUNIT_ASSERT(result);
-  result = tlp::applyAlgorithm(graph, errorMsg, NULL, "Hierarchical", NULL); 
+  result = tlp::applyAlgorithm(graph, errorMsg, NULL, "Hierarchical", NULL);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -523,10 +527,10 @@ void BasicPluginsTest::testQuotientClustering() {
   bool result = graph->computeProperty("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
   ds.set("Property", &metric);
-  result = tlp::applyAlgorithm(graph, errorMsg, &ds, "Equal Value", NULL); 
+  result = tlp::applyAlgorithm(graph, errorMsg, &ds, "Equal Value", NULL);
   CPPUNIT_ASSERT(result);
   result = tlp::applyAlgorithm(graph, errorMsg, NULL,
-			       "Quotient Clustering", NULL); 
+                               "Quotient Clustering", NULL);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -540,7 +544,7 @@ void BasicPluginsTest::testStrengthClustering() {
   ds.set("metric", &metric);
   DoubleProperty resultMetric(graph);
   result = graph->computeProperty("Strength Clustering", &resultMetric,
-				       errorMsg); 
+                                  errorMsg);
   CPPUNIT_ASSERT(result);
 }
 

@@ -50,7 +50,7 @@ public:
   virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
   virtual void draw(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod);
   virtual Coord getAnchor(const Coord &vector) const;
-  
+
 protected :
 
   static GlComplexPolygon *cross;
@@ -64,7 +64,7 @@ GLYPHPLUGIN(Cross, "2D - Cross", "Patrick Mary", "23/06/2011", "Textured Cross",
 EEGLYPHPLUGIN(Cross,"2D - Cross", "David Auber", "23/06/2011", "Textured Cross", "1.0", 8)
 //===================================================================================
 /*
- * 
+ *
      0---1                       (-bWidth, 0.5)  (bWidth, 0.5)
      |   |
      |   |
@@ -77,12 +77,12 @@ EEGLYPHPLUGIN(Cross,"2D - Cross", "David Auber", "23/06/2011", "Textured Cross",
 */
 
 Cross::Cross(GlyphContext *gc) :
-	Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
+  Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
   initCross();
 }
 
 Cross::Cross(EdgeExtremityGlyphContext *gc) :
-	Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
+  Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
   initCross();
 }
 void Cross::initCross() {
@@ -109,13 +109,14 @@ Cross::~Cross() {
 }
 //=====================================================
 void Cross::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-        boundingBox[0] = Coord(-0.5, -0.5, 0);
-        boundingBox[1] = Coord(0.5, 0.5, 0);
+  boundingBox[0] = Coord(-0.5, -0.5, 0);
+  boundingBox[1] = Coord(0.5, 0.5, 0);
 }
 //=====================================================
 void Cross::draw(node n, float lod) {
   //cross->setLightingMode(true);
   string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
+
   if(textureName!="")
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
@@ -127,11 +128,12 @@ void Cross::draw(node n, float lod) {
 }
 
 void Cross::draw(edge e, node,
-		 const Color & glyphColor,
-		 const Color &borderColor,
-		 float lod) {
+                 const Color & glyphColor,
+                 const Color &borderColor,
+                 float lod) {
   //cross->setLightingMode(false);
   string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+
   if(textureName!="")
     textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
@@ -143,10 +145,10 @@ void Cross::draw(edge e, node,
 }
 //=====================================================
 void Cross::draw(const Color &fillColor,
-                    const Color &borderColor,
-                    float borderWidth,
-                    const std::string &textureName,
-                    float lod){
+                 const Color &borderColor,
+                 float borderWidth,
+                 const std::string &textureName,
+                 float lod) {
   if(borderWidth<1e-6)
     borderWidth=1e-6;
 
@@ -167,19 +169,24 @@ Coord Cross::getAnchor(const Coord &vector) const {
   float distMin = x*x + ((y - 0.5) * (y - 0.5));
   // check with the middle of segment points[3], points[4]
   float dist = ((x - 0.5) * (x - 0.5)) + y*y;
+
   if (distMin > dist) {
     distMin = dist;
     anchor = Coord(0.5, 0, 0);
   }
+
   // check with the middle of segment points[7], points[6]
   dist = x*x + ((y + 0.5)*(y + 0.5));
+
   if (distMin > dist) {
     distMin = dist;
     anchor = Coord(0, -0.5, 0);
   }
+
   // check with the middle of segment points[9], points[10]
   if (distMin > ((x + 0.5) * (x + 0.5)) + y*y)
     return Coord(-0.5, 0, 0);
+
   return anchor;
 }
 /*@}*/

@@ -35,43 +35,47 @@ class ViewProfile : public QObject {
 
 public :
 
-  ViewProfile(tlp::Graph *graph,tlp::View *view):number(0),graph(graph),view(view){
+  ViewProfile(tlp::Graph *graph,tlp::View *view):number(0),graph(graph),view(view) {
 
   }
 
-  public slots :
+public slots :
 
-    void addNodes() {
-      for(int i=0;i<1000;++i){
-        graph->addNode();
-      }
-      view->init();
-      QTimer::singleShot(0, this, SLOT(delNodes()));
+  void addNodes() {
+    for(int i=0; i<1000; ++i) {
+      graph->addNode();
     }
 
-    void delNodes() {
-      std::vector<tlp::node> nodes;
-      tlp::node n;
-      forEach(n, graph->getNodes()) {
-        nodes.push_back(n);
-      }
-      for(std::vector<tlp::node>::iterator it=nodes.begin();it!=nodes.end();++it){
-        graph->delNode(*it);
-      }
-      view->init();
-      if(number==10)
-        QCoreApplication::exit(0);
-      else
-        QTimer::singleShot(0, this, SLOT(addNodes()));
+    view->init();
+    QTimer::singleShot(0, this, SLOT(delNodes()));
+  }
 
-      ++number;
+  void delNodes() {
+    std::vector<tlp::node> nodes;
+    tlp::node n;
+    forEach(n, graph->getNodes()) {
+      nodes.push_back(n);
     }
 
-  protected :
+    for(std::vector<tlp::node>::iterator it=nodes.begin(); it!=nodes.end(); ++it) {
+      graph->delNode(*it);
+    }
 
-    int number;
-    tlp::Graph *graph;
-    tlp::View *view;
+    view->init();
+
+    if(number==10)
+      QCoreApplication::exit(0);
+    else
+      QTimer::singleShot(0, this, SLOT(addNodes()));
+
+    ++number;
+  }
+
+protected :
+
+  int number;
+  tlp::Graph *graph;
+  tlp::View *view;
 };
 
 #endif

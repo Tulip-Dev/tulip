@@ -27,39 +27,39 @@
   * Display a QColorDialog when clicking on it to let user select a new color.
   **/
 
-namespace tlp{
-    class TLP_QT_SCOPE ColorButton: public QPushButton {
-        Q_OBJECT
-        Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
-    public:
-        ColorButton(QWidget *parent=0);
-        /**
-          * Use ColorButton instead.
-          */
-        _DEPRECATED ColorButton(const QRgb &c, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
-        ~ColorButton();
-        QColor color() const;
+namespace tlp {
+class TLP_QT_SCOPE ColorButton: public QPushButton {
+  Q_OBJECT
+  Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
+public:
+  ColorButton(QWidget *parent=0);
+  /**
+    * Use ColorButton instead.
+    */
+  _DEPRECATED ColorButton(const QRgb &c, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
+  ~ColorButton();
+  QColor color() const;
 
-        /**
-          * Use color function instead
-          **/
-        QRgb _DEPRECATED getColor() const;
+  /**
+    * Use color function instead
+    **/
+  QRgb _DEPRECATED getColor() const;
 
-    public slots:
-        void setColor(const QColor &);
+public slots:
+  void setColor(const QColor &);
 
-    protected slots:
-        void askColor();
+protected slots:
+  void askColor();
 
-    signals:
-        void colorChanged(const QColor &);
+signals:
+  void colorChanged(const QColor &);
 
-    protected:
-        void paintEvent(QPaintEvent* event);
+protected:
+  void paintEvent(QPaintEvent* event);
 
-    private:
-        QColor _color;
-    };
+private:
+  QColor _color;
+};
 }
 
 #endif // COLORBUTTON_H

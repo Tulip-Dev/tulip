@@ -31,145 +31,154 @@
 
 namespace tlp {
 
-  class OpenGlErrorViewer;
+class OpenGlErrorViewer;
 
-  struct GlTexture {
-    GLuint *id;
-    int height;
-    int width;
-    unsigned int spriteNumber;
-  };
+struct GlTexture {
+  GLuint *id;
+  int height;
+  int width;
+  unsigned int spriteNumber;
+};
 
-  struct TextureInfo{
-    bool hasAlpha;
-    unsigned int  width;
-    unsigned int  height;
-    unsigned char *data;
-  };
+struct TextureInfo {
+  bool hasAlpha;
+  unsigned int  width;
+  unsigned int  height;
+  unsigned char *data;
+};
 
-  /** \brief Class to manage textures
-   * Singleton class to load/store textures need by OpenGL rendering
+/** \brief Class to manage textures
+ * Singleton class to load/store textures need by OpenGL rendering
+ */
+class TLP_GL_SCOPE GlTextureManager {
+
+  typedef std::map<std::string,GlTexture> TextureUnit;
+  typedef std::map<unsigned long,TextureUnit> ContextAndTextureMap;
+
+public:
+
+  /**
+   * Create the texture manager singleton
    */
-  class TLP_GL_SCOPE GlTextureManager {
+  static void createInst();
+  /**
+   * Return the texture manager singleton, il singleton doesn't exist this function create it
+   */
+  static GlTextureManager &getInst() {
+    if(!inst)
+      inst=new GlTextureManager();
 
-    typedef std::map<std::string,GlTexture> TextureUnit;
-    typedef std::map<unsigned long,TextureUnit> ContextAndTextureMap;
+    return *inst;
+  }
 
-  public:
+  /**
+   * Change the error viewer and return the old one
+   */
+  OpenGlErrorViewer *setErrorViewer(OpenGlErrorViewer *errorViewer) {
+    OpenGlErrorViewer *oldErrorViewer=this->errorViewer;
+    this->errorViewer=errorViewer;
+    return oldErrorViewer;
+  }
 
-    /**
-     * Create the texture manager singleton
-     */
-    static void createInst();
-    /**
-     * Return the texture manager singleton, il singleton doesn't exist this function create it
-     */
-    static GlTextureManager &getInst() {
-      if(!inst)
-        inst=new GlTextureManager();
-      return *inst;
-    }
+  /**
+   * Change the current OpenGl context (each OpenGl window have a different OpenGl context)
+   */
+  void changeContext(unsigned long context);
+  /**
+   * Remove all textures of an OpenGl context and remove this context
+   */
+  void removeContext(unsigned long context);
 
-    /**
-     * Change the error viewer and return the old one
-     */
-    OpenGlErrorViewer *setErrorViewer(OpenGlErrorViewer *errorViewer){
-      OpenGlErrorViewer *oldErrorViewer=this->errorViewer;
-      this->errorViewer=errorViewer;
-      return oldErrorViewer;
-    }
+  /**
+   * Return texture info (id, width and height) for the given name
+   */
+  GlTexture getTextureInfo(const std::string&);
 
-    /**
-     * Change the current OpenGl context (each OpenGl window have a different OpenGl context)
-     */
-    void changeContext(unsigned long context);
-    /**
-     * Remove all textures of an OpenGl context and remove this context
-     */
-    void removeContext(unsigned long context);
+  /**
+   * Check if a texture fo the given name exists in the current context
+   */
+  bool existsTexture(const std::string& filename);
 
-    /**
-     * Return texture info (id, width and height) for the given name
-     */
-    GlTexture getTextureInfo(const std::string&);
-
-    /**
-     * Check if a texture fo the given name exists in the current context
-     */
-    bool existsTexture(const std::string& filename);
-
-    /**
-     * Load texture with textureName from Raw data
-     */
-    bool loadTextureFromRawData(const std::string &textureName, int width, int height, bool hasAlpha, unsigned char *data);
-    /**
-     * Load texture with given name
-     */
-    bool loadTexture(const std::string&);
-    /**
-     * Remove texture with given name
-     */
-    void deleteTexture(const std::string &);
-    /**
-     * Begin a new texture with given name
-     */
-    void beginNewTexture(const std::string&);
-    /**
-     * Activate a texture with given name
-     */
-    bool activateTexture(const std::string&,unsigned int);
-    /**
-     * Activate a texture with given name
-     */
-    bool activateTexture(const std::string&);
-    /**
-     * Disable texture with given name
-     */
-    void desactivateTexture();
-    /**
-     * Set animationStep for next textures (for next activateTexture)
-     */
-    void setAnimationFrame(unsigned int id) {animationFrame=id;}
-    /**
-     * Get animationStep of next textures
-     */
-    unsigned int getAnimationFrame() {return animationFrame;}
-    /**
-     * Clear vector of textures with error
-     */
-    void clearErrorVector() {texturesWithError.clear();}
-    /**
-     * Remove an entry of vector of textures with error
-     */
-    void removeEntryOfErrorVector(const std::string &name) {texturesWithError.erase(name);}
+  /**
+   * Load texture with textureName from Raw data
+   */
+  bool loadTextureFromRawData(const std::string &textureName, int width, int height, bool hasAlpha, unsigned char *data);
+  /**
+   * Load texture with given name
+   */
+  bool loadTexture(const std::string&);
+  /**
+   * Remove texture with given name
+   */
+  void deleteTexture(const std::string &);
+  /**
+   * Begin a new texture with given name
+   */
+  void beginNewTexture(const std::string&);
+  /**
+   * Activate a texture with given name
+   */
+  bool activateTexture(const std::string&,unsigned int);
+  /**
+   * Activate a texture with given name
+   */
+  bool activateTexture(const std::string&);
+  /**
+   * Disable texture with given name
+   */
+  void desactivateTexture();
+  /**
+   * Set animationStep for next textures (for next activateTexture)
+   */
+  void setAnimationFrame(unsigned int id) {
+    animationFrame=id;
+  }
+  /**
+   * Get animationStep of next textures
+   */
+  unsigned int getAnimationFrame() {
+    return animationFrame;
+  }
+  /**
+   * Clear vector of textures with error
+   */
+  void clearErrorVector() {
+    texturesWithError.clear();
+  }
+  /**
+   * Remove an entry of vector of textures with error
+   */
+  void removeEntryOfErrorVector(const std::string &name) {
+    texturesWithError.erase(name);
+  }
 
 
-    /**
-     * Register an external texture is GlTextureManager
-     */
-    void registerExternalTexture(const std::string &textureName, const GLuint textureId);
+  /**
+   * Register an external texture is GlTextureManager
+   */
+  void registerExternalTexture(const std::string &textureName, const GLuint textureId);
 
-  private:
+private:
 
-    /**
-     * empty private constructor for singleton
-     */
-    GlTextureManager();
+  /**
+   * empty private constructor for singleton
+   */
+  GlTextureManager();
 
-    bool loadTexture(const std::string&,const TextureInfo &,GlTexture &);
+  bool loadTexture(const std::string&,const TextureInfo &,GlTexture &);
 
-    static GlTextureManager* inst;
+  static GlTextureManager* inst;
 
-    OpenGlErrorViewer *errorViewer;
+  OpenGlErrorViewer *errorViewer;
 
-    unsigned long currentContext;
+  unsigned long currentContext;
 
-    ContextAndTextureMap texturesMap;
-    std::set<std::string> texturesWithError;
+  ContextAndTextureMap texturesMap;
+  std::set<std::string> texturesWithError;
 
-    unsigned int animationFrame;
+  unsigned int animationFrame;
 
-  };
+};
 
 }
 

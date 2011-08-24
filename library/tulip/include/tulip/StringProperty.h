@@ -27,10 +27,10 @@ namespace tlp {
 
 class PropertyContext;
 
-  typedef AbstractProperty<tlp::StringType, tlp::StringType, tlp::StringAlgorithm> AbstractStringProperty;
-/** \addtogroup properties */ 
+typedef AbstractProperty<tlp::StringType, tlp::StringType, tlp::StringAlgorithm> AbstractStringProperty;
+/** \addtogroup properties */
 /*\@{*/
-class TLP_SCOPE StringProperty:public AbstractStringProperty{ 
+class TLP_SCOPE StringProperty:public AbstractStringProperty {
 
   friend class StringAlgorithm;
 
@@ -55,7 +55,7 @@ public :
   int compare(const edge e1, const edge e2) const;
 };
 
-  class TLP_SCOPE StringVectorProperty:public AbstractVectorProperty<tlp::StringVectorType, tlp::StringType>{ 
+class TLP_SCOPE StringVectorProperty:public AbstractVectorProperty<tlp::StringVectorType, tlp::StringType> {
 public :
   StringVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<StringVectorType, tlp::StringType>(g, n) {}
 

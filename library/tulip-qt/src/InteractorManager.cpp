@@ -26,66 +26,77 @@ tlp::InteractorManager* tlp::InteractorManager::inst=0;
 
 using namespace std;
 
-namespace tlp
-{
+namespace tlp {
 
-  InteractorManager::InteractorManager() {
-    InteractorFactory::initFactory();
-  }
-  //====================================================
-  void InteractorManager::loadPlugins(PluginLoader *plug) {
-    InteractorFactory::initFactory();
-    string::const_iterator begin=tlp::TulipPluginsPath.begin();
-    string::const_iterator end=begin;
-    while (end!=tlp::TulipPluginsPath.end())
-      if ((*end)==tlp::PATH_DELIMITER) {
-        if (begin!=end)
-          tlp::loadInteractorPluginsFromDir(string(begin,end)+"/interactors",plug);
-        ++end;
-        begin=end;
-      } else
-        ++end;
-    if (begin!=end) {
-      tlp::loadInteractorPluginsFromDir(string(begin,end)+"/interactors",plug);
+InteractorManager::InteractorManager() {
+  InteractorFactory::initFactory();
+}
+//====================================================
+void InteractorManager::loadPlugins(PluginLoader *plug) {
+  InteractorFactory::initFactory();
+  string::const_iterator begin=tlp::TulipPluginsPath.begin();
+  string::const_iterator end=begin;
+
+  while (end!=tlp::TulipPluginsPath.end())
+    if ((*end)==tlp::PATH_DELIMITER) {
+      if (begin!=end)
+        tlp::loadInteractorPluginsFromDir(string(begin,end)+"/interactors",plug);
+
+      ++end;
+      begin=end;
     }
+    else
+      ++end;
 
-    // if interactorMap is empty, put all interactors in the Map
-    interactorsMap.clear();
-    InteractorContext ic;
-
-    Iterator<string> *itS = InteractorFactory::factory->availablePlugins();
-    while (itS->hasNext()) {
-      string interactorName=itS->next();
-      interactorsMap[interactorName]=InteractorFactory::factory->getPluginObject(interactorName, &ic);
-    } delete itS;
-  }
-  //====================================================
-  Interactor *InteractorManager::getInteractor(const string &name){
-    InteractorContext ic;
-    return InteractorFactory::factory->getPluginObject(name, &ic);
-  }
-  //====================================================
-  list<string> InteractorManager::getCompatibleInteractors(const string &viewName) {
-    loadPlugins();
-    list<string> compatibleInteractors;
-    for(map<string,Interactor*>::iterator it=interactorsMap.begin();it!=interactorsMap.end();++it){
-      if((*it).second->isCompatible(viewName))
-        compatibleInteractors.push_back((*it).first);
-    }
-    return compatibleInteractors;
+  if (begin!=end) {
+    tlp::loadInteractorPluginsFromDir(string(begin,end)+"/interactors",plug);
   }
 
-  //====================================================
-  list<string> InteractorManager::getSortedCompatibleInteractors(const string &viewName) {
-    multimap<int,string> sortedInteractors;
-    list<string> result;
-    list<string> compatibleInteractors=getCompatibleInteractors(viewName);
-    for(list<string>::iterator it=compatibleInteractors.begin();it!=compatibleInteractors.end();++it){
-    	sortedInteractors.insert(pair<int,string>(interactorsMap[*it]->getPriority(),(*it)));
-    }
-    for(multimap<int,string>::reverse_iterator it=sortedInteractors.rbegin();it!=sortedInteractors.rend();++it){
-    	result.push_back(it->second);
-    }
-    return result;
+  // if interactorMap is empty, put all interactors in the Map
+  interactorsMap.clear();
+  InteractorContext ic;
+
+  Iterator<string> *itS = InteractorFactory::factory->availablePlugins();
+
+  while (itS->hasNext()) {
+    string interactorName=itS->next();
+    interactorsMap[interactorName]=InteractorFactory::factory->getPluginObject(interactorName, &ic);
   }
+
+  delete itS;
+}
+//====================================================
+Interactor *InteractorManager::getInteractor(const string &name) {
+  InteractorContext ic;
+  return InteractorFactory::factory->getPluginObject(name, &ic);
+}
+//====================================================
+list<string> InteractorManager::getCompatibleInteractors(const string &viewName) {
+  loadPlugins();
+  list<string> compatibleInteractors;
+
+  for(map<string,Interactor*>::iterator it=interactorsMap.begin(); it!=interactorsMap.end(); ++it) {
+    if((*it).second->isCompatible(viewName))
+      compatibleInteractors.push_back((*it).first);
+  }
+
+  return compatibleInteractors;
+}
+
+//====================================================
+list<string> InteractorManager::getSortedCompatibleInteractors(const string &viewName) {
+  multimap<int,string> sortedInteractors;
+  list<string> result;
+  list<string> compatibleInteractors=getCompatibleInteractors(viewName);
+
+  for(list<string>::iterator it=compatibleInteractors.begin(); it!=compatibleInteractors.end(); ++it) {
+    sortedInteractors.insert(pair<int,string>(interactorsMap[*it]->getPriority(),(*it)));
+  }
+
+  for(multimap<int,string>::reverse_iterator it=sortedInteractors.rbegin(); it!=sortedInteractors.rend(); ++it) {
+    result.push_back(it->second);
+  }
+
+  return result;
+}
 }

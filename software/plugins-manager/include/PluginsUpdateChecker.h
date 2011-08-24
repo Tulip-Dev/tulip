@@ -31,41 +31,41 @@
 
 namespace tlp {
 
-  class MultiServerManager;
+class MultiServerManager;
 
-  class PluginsUpdateChecker : public QObject {
+class PluginsUpdateChecker : public QObject {
 
-    Q_OBJECT
+  Q_OBJECT
 
-    QWidget *parent;
-    MultiServerManager *msm;
-    int serverNumber;
-    UpdatePlugin *updatePlugin;
-    int numberOfPluginsToUpdate;
-    bool newVersionFound;
+  QWidget *parent;
+  MultiServerManager *msm;
+  int serverNumber;
+  UpdatePlugin *updatePlugin;
+  int numberOfPluginsToUpdate;
+  bool newVersionFound;
 
-  public :
+public :
 
-    PluginsUpdateChecker(std::vector<LocalPluginInfo> &pluginsList,QWidget *parent);
-    ~PluginsUpdateChecker();
-    MultiServerManager *getMultiServerManager();
+  PluginsUpdateChecker(std::vector<LocalPluginInfo> &pluginsList,QWidget *parent);
+  ~PluginsUpdateChecker();
+  MultiServerManager *getMultiServerManager();
 
-  private slots :
+private slots :
 
-    void getResponse();
-    void pluginInstalled();
-    void pluginUninstalled();
-    void versionReceived(std::string);
+  void getResponse();
+  void pluginInstalled();
+  void pluginUninstalled();
+  void versionReceived(std::string);
 
-  private :
+private :
 
-    void displayPopup(const std::vector<DistPluginInfo*> &pluginsOutOfDate);
+  void displayPopup(const std::vector<DistPluginInfo*> &pluginsOutOfDate);
 
-  signals :
+signals :
 
-    void updateFinished();
+  void updateFinished();
 
-  };
+};
 
 }
 #endif //_Tulip_PLUGINSUPDATECHECKER_H_

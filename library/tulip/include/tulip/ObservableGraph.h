@@ -90,33 +90,33 @@ private:
 
 public:
   GraphObserver() :hiddenObserver(this) {}
-  virtual ~GraphObserver(){}
+  virtual ~GraphObserver() {}
   // no copy for hiddenObserver
   GraphObserver(const GraphObserver&) :hiddenObserver(this) {}
   GraphObserver& operator=(const GraphObserver &) {
     return *this;
   }
 
-  virtual void addNode(Graph *, const node ){}
-  virtual void addEdge(Graph *, const edge ){}
-  virtual void beforeSetEnds(Graph *, const edge){}
-  virtual void afterSetEnds(Graph *, const edge){}
-  virtual void delNode(Graph *,const node ){}
-  virtual void delEdge(Graph *,const edge ){}
-  virtual void reverseEdge(Graph *,const edge ){}
-  virtual void destroy(Graph *){}
-  virtual void addSubGraph(Graph *, Graph *){}
-  virtual void delSubGraph(Graph *, Graph *){}
-  virtual void addLocalProperty(Graph*, const std::string&){}
+  virtual void addNode(Graph *, const node ) {}
+  virtual void addEdge(Graph *, const edge ) {}
+  virtual void beforeSetEnds(Graph *, const edge) {}
+  virtual void afterSetEnds(Graph *, const edge) {}
+  virtual void delNode(Graph *,const node ) {}
+  virtual void delEdge(Graph *,const edge ) {}
+  virtual void reverseEdge(Graph *,const edge ) {}
+  virtual void destroy(Graph *) {}
+  virtual void addSubGraph(Graph *, Graph *) {}
+  virtual void delSubGraph(Graph *, Graph *) {}
+  virtual void addLocalProperty(Graph*, const std::string&) {}
   virtual void beforeDelLocalProperty(Graph* g, const std::string& pName) {
     // to ensure compatibility
     delLocalProperty(g, pName);
   }
-  virtual void afterDelLocalProperty(Graph*, const std::string&){}
-  virtual void delLocalProperty(Graph*, const std::string&){}
-  virtual void addInheritedProperty(Graph*, const std::string&){}
-  virtual void beforeDelInheritedProperty(Graph*, const std::string&){}
-  virtual void afterDelInheritedProperty(Graph*, const std::string&){}
+  virtual void afterDelLocalProperty(Graph*, const std::string&) {}
+  virtual void delLocalProperty(Graph*, const std::string&) {}
+  virtual void addInheritedProperty(Graph*, const std::string&) {}
+  virtual void beforeDelInheritedProperty(Graph*, const std::string&) {}
+  virtual void afterDelInheritedProperty(Graph*, const std::string&) {}
   virtual void beforeSetAttribute(Graph*, const std::string&) {}
   virtual void afterSetAttribute(Graph*, const std::string&) {}
   virtual void removeAttribute(Graph*, const std::string&) {}

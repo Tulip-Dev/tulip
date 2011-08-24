@@ -22,8 +22,8 @@
 ///
 namespace tlp {
 
-class TLP_SCOPE Color : public tlp::Vector<unsigned char,4>{
- public:
+class TLP_SCOPE Color : public tlp::Vector<unsigned char,4> {
+public:
   ///
   inline Color(const tlp::Vector<unsigned char,4>&);
   ///
@@ -72,8 +72,8 @@ class TLP_SCOPE Color : public tlp::Vector<unsigned char,4>{
   void setV(int );
 };
 
-  TLP_SCOPE std::ostream& operator<<(std::ostream &os,const tlp::Color &);
-  TLP_SCOPE std::istream& operator>>(std::istream &is, tlp::Color &);
+TLP_SCOPE std::ostream& operator<<(std::ostream &os,const tlp::Color &);
+TLP_SCOPE std::istream& operator>>(std::istream &is, tlp::Color &);
 
 }
 
@@ -92,16 +92,32 @@ void tlp::Color::set(unsigned char red,unsigned char green,unsigned char blue, u
   array[3]=alpha;
 }
 
-unsigned char tlp::Color::getR()const{return array[0];}
-unsigned char tlp::Color::getG()const{return array[1];}
-unsigned char tlp::Color::getB()const{return array[2];}
-unsigned char tlp::Color::getA()const{return array[3];}
+unsigned char tlp::Color::getR()const {
+  return array[0];
+}
+unsigned char tlp::Color::getG()const {
+  return array[1];
+}
+unsigned char tlp::Color::getB()const {
+  return array[2];
+}
+unsigned char tlp::Color::getA()const {
+  return array[3];
+}
 
-float tlp::Color::getRGL()const{return (float)array[0]/255.0f;}
-float tlp::Color::getGGL()const{return (float)array[1]/255.0f;}
-float tlp::Color::getBGL()const{return (float)array[2]/255.0f;}
-float tlp::Color::getAGL()const{return (float)array[3]/255.0f;}
-float* tlp::Color::getGL()const{
+float tlp::Color::getRGL()const {
+  return (float)array[0]/255.0f;
+}
+float tlp::Color::getGGL()const {
+  return (float)array[1]/255.0f;
+}
+float tlp::Color::getBGL()const {
+  return (float)array[2]/255.0f;
+}
+float tlp::Color::getAGL()const {
+  return (float)array[3]/255.0f;
+}
+float* tlp::Color::getGL()const {
   float *result=new float[4];
   result[0]=getRGL();
   result[1]=getGGL();
@@ -110,9 +126,17 @@ float* tlp::Color::getGL()const{
   return result;
 }
 
-void tlp::Color::setR(unsigned char red){array[0]=red;}
-void tlp::Color::setG(unsigned char green){array[1]=green;}
-void tlp::Color::setB(unsigned char blue){array[2]=blue;}
-void tlp::Color::setA(unsigned char alpha){array[3]=alpha;}
+void tlp::Color::setR(unsigned char red) {
+  array[0]=red;
+}
+void tlp::Color::setG(unsigned char green) {
+  array[1]=green;
+}
+void tlp::Color::setB(unsigned char blue) {
+  array[2]=blue;
+}
+void tlp::Color::setA(unsigned char alpha) {
+  array[3]=alpha;
+}
 #endif
 

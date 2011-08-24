@@ -28,26 +28,26 @@
 
 namespace tlp {
 
-  class UpdatePluginsDialog : public QDialog, public Ui::UpdatePluginsDialogData {
+class UpdatePluginsDialog : public QDialog, public Ui::UpdatePluginsDialogData {
 
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
+public:
 
-    UpdatePluginsDialog(const std::vector<DistPluginInfo*> &pluginsOutOfDate,QWidget* parent);
+  UpdatePluginsDialog(const std::vector<DistPluginInfo*> &pluginsOutOfDate,QWidget* parent);
 
-    void getPluginsToUpdate(std::set<DistPluginInfo,PluginCmp> &pluginsToUpdate);
+  void getPluginsToUpdate(std::set<DistPluginInfo,PluginCmp> &pluginsToUpdate);
 
-  protected slots :
-    void itemChangedSlot(QListWidgetItem *);
-    void okSlot();
+protected slots :
+  void itemChangedSlot(QListWidgetItem *);
+  void okSlot();
 
-  protected :
+protected :
 
-    const std::vector<DistPluginInfo *> *pluginsOutOfDate;
-    std::set<std::string> pluginsToNoUpdate;
+  const std::vector<DistPluginInfo *> *pluginsOutOfDate;
+  std::set<std::string> pluginsToNoUpdate;
 
-  };
+};
 
 }
 

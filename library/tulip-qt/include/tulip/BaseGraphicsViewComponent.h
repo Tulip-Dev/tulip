@@ -26,12 +26,12 @@ class QFrame;
 
 namespace tlp {
 
-  class GlMainWidgetGraphicsView;
-  class GlMainWidgetItem;
-  class GWOverviewWidget;
-  class TabWidgetHidableMenuGraphicsProxy;
+class GlMainWidgetGraphicsView;
+class GlMainWidgetItem;
+class GWOverviewWidget;
+class TabWidgetHidableMenuGraphicsProxy;
 
-class TLP_QT_SCOPE BaseGraphicsViewComponent : public AbstractView{
+class TLP_QT_SCOPE BaseGraphicsViewComponent : public AbstractView {
 
   Q_OBJECT
 
@@ -43,27 +43,45 @@ public :
 
   virtual QWidget *construct(QWidget *parent);
 
-  virtual void setData(Graph *graph,DataSet dataSet) {baseView->setData(graph,dataSet);}
+  virtual void setData(Graph *graph,DataSet dataSet) {
+    baseView->setData(graph,dataSet);
+  }
 
-  virtual void getData(Graph **graph,DataSet *dataSet) {baseView->getData(graph,dataSet);}
+  virtual void getData(Graph **graph,DataSet *dataSet) {
+    baseView->getData(graph,dataSet);
+  }
 
-  virtual Graph *getGraph() {return baseView->getGraph();}
+  virtual Graph *getGraph() {
+    return baseView->getGraph();
+  }
 
-  virtual void setInteractors(const std::list<Interactor *> &interactors) {baseView->setInteractors(interactors);}
+  virtual void setInteractors(const std::list<Interactor *> &interactors) {
+    baseView->setInteractors(interactors);
+  }
 
-  virtual std::list<Interactor *> getInteractors() {return baseView->getInteractors();}
+  virtual std::list<Interactor *> getInteractors() {
+    return baseView->getInteractors();
+  }
 
-  virtual void setActiveInteractor(Interactor *interactor) {baseView->setActiveInteractor(interactor);}
+  virtual void setActiveInteractor(Interactor *interactor) {
+    baseView->setActiveInteractor(interactor);
+  }
 
-  virtual void createPicture(const std::string &pictureName,int width=0, int height=0) {baseView->createPicture(pictureName, width, height, false);}
+  virtual void createPicture(const std::string &pictureName,int width=0, int height=0) {
+    baseView->createPicture(pictureName, width, height, false);
+  }
 
-  virtual bool createPicture(const std::string &pictureName,int width, int height, bool center, int zoom=1, int xOffset=0, int yOffset = 0) {return baseView->createPicture(pictureName, width, height, center, zoom, xOffset, yOffset);}
+  virtual bool createPicture(const std::string &pictureName,int width, int height, bool center, int zoom=1, int xOffset=0, int yOffset = 0) {
+    return baseView->createPicture(pictureName, width, height, center, zoom, xOffset, yOffset);
+  }
 
   virtual std::string getRealViewName() const;
 
 public slots:
 
-  virtual void setGraph(Graph *graph) {baseView->setGraph(graph);}
+  virtual void setGraph(Graph *graph) {
+    baseView->setGraph(graph);
+  }
 
   virtual void draw();
 

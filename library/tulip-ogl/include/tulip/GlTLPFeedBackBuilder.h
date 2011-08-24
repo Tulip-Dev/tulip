@@ -27,65 +27,65 @@
 
 namespace tlp {
 
-  enum TLP_FB_TROUGHTOKENTYPE {
-    TLP_FB_COLOR_INFO,
-    TLP_FB_BEGIN_ENTITY,
-    TLP_FB_END_ENTITY,
-    TLP_FB_BEGIN_GRAPH,
-    TLP_FB_END_GRAPH,
-    TLP_FB_BEGIN_NODE,
-    TLP_FB_END_NODE,
-    TLP_FB_BEGIN_EDGE,
-    TLP_FB_END_EDGE
-  };
-  
-  class TLP_GL_SCOPE GlTLPFeedBackBuilder : public GlFeedBackBuilder {
-  
-  public:
-  
-    GlTLPFeedBackBuilder()
-      :inGlEntity(false),
-      inGlGraph(false),
-      inNode(false),
-      inEdge(false),
-      inColorInfo(false),
-      needData(false){}
+enum TLP_FB_TROUGHTOKENTYPE {
+  TLP_FB_COLOR_INFO,
+  TLP_FB_BEGIN_ENTITY,
+  TLP_FB_END_ENTITY,
+  TLP_FB_BEGIN_GRAPH,
+  TLP_FB_END_GRAPH,
+  TLP_FB_BEGIN_NODE,
+  TLP_FB_END_NODE,
+  TLP_FB_BEGIN_EDGE,
+  TLP_FB_END_EDGE
+};
 
-    virtual ~GlTLPFeedBackBuilder() {}
+class TLP_GL_SCOPE GlTLPFeedBackBuilder : public GlFeedBackBuilder {
 
-    virtual void begin(Vector<float,4>&) {}
-    virtual void colorInfo(GLfloat *) {}
-    virtual void beginGlEntity(GLfloat) {}
-    virtual void endGlEntity() {}
-    virtual void beginGlGraph(GLfloat) {}
-    virtual void endGlGraph() {}
-    virtual void beginNode(GLfloat) {}
-    virtual void endNode() {}
-    virtual void beginEdge(GLfloat) {}
-    virtual void endEdge() {}
-    virtual void passThroughToken(GLfloat *);
-    virtual void pointToken(GLfloat *) {}
-    virtual void lineToken(GLfloat *) {}
-    virtual void lineResetToken(GLfloat *) {}
-    virtual void polygonToken(GLfloat *) {}
-    virtual void bitmapToken(GLfloat *) {}
-    virtual void drawPixelToken(GLfloat *) {}
-    virtual void copyPixelToken(GLfloat *) {}
-    virtual void end() {}
+public:
 
-  private:
-    
-    bool inGlEntity;
-    bool inGlGraph;
-    bool inNode;
-    bool inEdge;
-    bool inColorInfo;
-    bool needData;
+  GlTLPFeedBackBuilder()
+    :inGlEntity(false),
+     inGlGraph(false),
+     inNode(false),
+     inEdge(false),
+     inColorInfo(false),
+     needData(false) {}
 
-    std::vector<GLfloat> dataBuffer; 
+  virtual ~GlTLPFeedBackBuilder() {}
 
-  };
-  
+  virtual void begin(Vector<float,4>&) {}
+  virtual void colorInfo(GLfloat *) {}
+  virtual void beginGlEntity(GLfloat) {}
+  virtual void endGlEntity() {}
+  virtual void beginGlGraph(GLfloat) {}
+  virtual void endGlGraph() {}
+  virtual void beginNode(GLfloat) {}
+  virtual void endNode() {}
+  virtual void beginEdge(GLfloat) {}
+  virtual void endEdge() {}
+  virtual void passThroughToken(GLfloat *);
+  virtual void pointToken(GLfloat *) {}
+  virtual void lineToken(GLfloat *) {}
+  virtual void lineResetToken(GLfloat *) {}
+  virtual void polygonToken(GLfloat *) {}
+  virtual void bitmapToken(GLfloat *) {}
+  virtual void drawPixelToken(GLfloat *) {}
+  virtual void copyPixelToken(GLfloat *) {}
+  virtual void end() {}
+
+private:
+
+  bool inGlEntity;
+  bool inGlGraph;
+  bool inNode;
+  bool inEdge;
+  bool inColorInfo;
+  bool needData;
+
+  std::vector<GLfloat> dataBuffer;
+
+};
+
 }
 
 #endif // Tulip_GLFEEDBACKBUILDER_H

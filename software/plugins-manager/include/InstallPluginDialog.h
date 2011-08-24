@@ -34,40 +34,40 @@
 
 namespace tlp {
 
-  class InstallPluginDialog : public QDialog, public Ui::InstallPluginDialogData  {
-    Q_OBJECT
+class InstallPluginDialog : public QDialog, public Ui::InstallPluginDialogData  {
+  Q_OBJECT
 
-  public:
-    InstallPluginDialog(const std::vector<std::string> &namePluginsInstall,const std::vector<std::string> &namePluginsRemove,QWidget *parent=0);
+public:
+  InstallPluginDialog(const std::vector<std::string> &namePluginsInstall,const std::vector<std::string> &namePluginsRemove,QWidget *parent=0);
 
-    void installStart(const std::string &name);
-    void installFinished(const std::string &name, bool loadCheckOK);
+  void installStart(const std::string &name);
+  void installFinished(const std::string &name, bool loadCheckOK);
 
-    void stopInstall();
-    void addPlugin(bool install,const std::string &name);
+  void stopInstall();
+  void addPlugin(bool install,const std::string &name);
 
-  private:
+private:
 
-    std::map<std::string, unsigned int> pluginsInstallIndex;
-    std::map<std::string, unsigned int> pluginsRemoveIndex;
+  std::map<std::string, unsigned int> pluginsInstallIndex;
+  std::map<std::string, unsigned int> pluginsRemoveIndex;
 
-    InstallExitDialog *exitDialog;
+  InstallExitDialog *exitDialog;
 
-    unsigned int processNumber;
-    unsigned int totalProcess;
-    std::string installErrors;
+  unsigned int processNumber;
+  unsigned int totalProcess;
+  std::string installErrors;
 
-    void closeEvent(QCloseEvent *e);
-    void terminated();
+  void closeEvent(QCloseEvent *e);
+  void terminated();
 
-  public slots:
+public slots:
 
-    void installPart(const std::string&, int,int);
+  void installPart(const std::string&, int,int);
 
-  private slots:
-    void cancelInstall();
+private slots:
+  void cancelInstall();
 
-  };
+};
 
 }
 

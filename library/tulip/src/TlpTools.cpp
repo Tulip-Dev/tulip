@@ -85,6 +85,7 @@ void tlp::initTulipLib(const char* appDirPath) {
   string::size_type pos;
 
   getEnvTlp=getenv("TLP_DIR");
+
   if (getEnvTlp==0) {
     if (appDirPath) {
 #ifdef _WIN32
@@ -92,50 +93,61 @@ void tlp::initTulipLib(const char* appDirPath) {
 #else
       // one dir up to initialize the lib dir
       TulipLibDir.append(appDirPath,
-			 strlen(appDirPath) -
-			 strlen(strrchr(appDirPath, '/') + 1));
+                         strlen(appDirPath) -
+                         strlen(strrchr(appDirPath, '/') + 1));
 #ifdef I64
       // check for lib64
       string tlpPath64 = TulipLibDir + "lib64/tulip";
       struct stat statInfo;
+
       if (stat(tlpPath64.c_str(), &statInfo) == 0)
-	TulipLibDir.append("lib64");
+        TulipLibDir.append("lib64");
       else
 #endif
-	TulipLibDir.append("lib");
+        TulipLibDir.append("lib");
+
 #endif
-    } else
+    }
+    else
       TulipLibDir=string(_TULIP_LIB_DIR);
   }
   else
     TulipLibDir=string(getEnvTlp);
+
 #ifdef _WIN32
   // ensure it is a unix-style path
   pos = TulipLibDir.find('\\', 0);
+
   while(pos != string::npos) {
     TulipLibDir[pos] = '/';
     pos = TulipLibDir.find('\\', pos);
   }
- #endif
+
+#endif
+
   // ensure it is '/' terminated
   if (TulipLibDir[TulipLibDir.length() - 1] != '/')
     TulipLibDir+='/';
-  
+
   getEnvTlp=getenv(TULIP_PLUGINS_PATH_VARIABLE);
+
   if (getEnvTlp!=0) {
     TulipPluginsPath=string(getEnvTlp);
 #ifdef _WIN32
     // ensure it is a unix-style path
     pos = TulipPluginsPath.find('\\', 0);
+
     while(pos != string::npos) {
       TulipPluginsPath[pos] = '/';
       pos = TulipPluginsPath.find('\\', pos);
     }
+
 #endif
     TulipPluginsPath= TulipLibDir + "tulip" + PATH_DELIMITER + TulipPluginsPath;
-  } else
+  }
+  else
     TulipPluginsPath= TulipLibDir + "tulip";
-    
+
 
   // one dir up to initialize the doc dir
   pos = TulipLibDir.length() - 2;
@@ -178,8 +190,8 @@ TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext > *ExportModul
 // our different kinds of plugins
 #if !defined( __APPLE__) || __GNUC__ > 3
 template <class Tnode, class Tedge, class TPROPERTY>
-  TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > *AbstractProperty<Tnode,Tedge,TPROPERTY>::factory = 0;
- #else
+TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > *AbstractProperty<Tnode,Tedge,TPROPERTY>::factory = 0;
+#else
 TemplateFactory<PropertyFactory<ColorAlgorithm>, ColorAlgorithm, PropertyContext> *AbstractProperty<ColorType, ColorType, ColorAlgorithm>::factory = 0;
 TemplateFactory<PropertyFactory<IntegerAlgorithm>, IntegerAlgorithm, PropertyContext> *AbstractProperty<IntegerType, IntegerType, IntegerAlgorithm>::factory = 0;
 TemplateFactory<PropertyFactory<LayoutAlgorithm>, LayoutAlgorithm, PropertyContext> *AbstractProperty<PointType, LineType, LayoutAlgorithm>::factory = 0;
@@ -198,85 +210,106 @@ void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *lo
   tlp::PluginLibraryLoader plLoader(dir, loader);
 
   TemplateFactoryInterface::currentLoader = loader;
+
   if (plLoader.hasPluginLibraryToLoad()) {
     while(plLoader.loadNextPluginLibrary(loader)) {
     }
+
     if (loader)
       loader->finished(true, plLoader.msg);
-  } else {
+  }
+  else {
     if (loader)
       loader->finished(false, plLoader.msg);
   }
-}  
+}
 
 void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
   // plugins dependencies loop
   bool depsNeedCheck;
+
   do {
     map<string, TemplateFactoryInterface *>::const_iterator it =
       TemplateFactoryInterface::allFactories->begin();
     depsNeedCheck = false;
+
     // loop over factories
     for (; it != TemplateFactoryInterface::allFactories->end(); ++it) {
       TemplateFactoryInterface *tfi = (*it).second;
       // loop over plugins
       Iterator<string> *itP = tfi->availablePlugins();
+
       while(itP->hasNext()) {
-	string pluginName = itP->next();
-	list<Dependency> dependencies = tfi->getPluginDependencies(pluginName);
-	list<Dependency>::const_iterator itD = dependencies.begin();
-	// loop over dependencies
-	for (; itD != dependencies.end(); ++itD) {
-	  string factoryDepName = (*itD).factoryName;
-	  string pluginDepName = (*itD).pluginName;
-	  if (!TemplateFactoryInterface::pluginExists(factoryDepName, pluginDepName)) {
-	    if (loader)
-	      loader->aborted(pluginName, tfi->getPluginsClassName() +
-			      " '" + pluginName + "' will be removed, it depends on missing " +
-			      factoryDepName + " '" + pluginDepName + "'.");
-	    tfi->removePlugin(pluginName);
-	    depsNeedCheck = true;
-	    break;
-	  }
-	  string release = (*TemplateFactoryInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
-	  string releaseDep = (*itD).pluginRelease;
-	  if (getMajor(release) != getMajor(releaseDep) ||
-	      getMinor(release) != getMinor(releaseDep)) {
-	    if (loader)
-	      loader->aborted(pluginName, tfi->getPluginsClassName() +
-			      " '" + pluginName + "' will be removed, it depends on release " +
-			      releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
-			      release + " is loaded.");
-	    tfi->removePlugin(pluginName);
-	    depsNeedCheck = true;
-	    break;
-	  }
-	}
-      } delete itP;
+        string pluginName = itP->next();
+        list<Dependency> dependencies = tfi->getPluginDependencies(pluginName);
+        list<Dependency>::const_iterator itD = dependencies.begin();
+
+        // loop over dependencies
+        for (; itD != dependencies.end(); ++itD) {
+          string factoryDepName = (*itD).factoryName;
+          string pluginDepName = (*itD).pluginName;
+
+          if (!TemplateFactoryInterface::pluginExists(factoryDepName, pluginDepName)) {
+            if (loader)
+              loader->aborted(pluginName, tfi->getPluginsClassName() +
+                              " '" + pluginName + "' will be removed, it depends on missing " +
+                              factoryDepName + " '" + pluginDepName + "'.");
+
+            tfi->removePlugin(pluginName);
+            depsNeedCheck = true;
+            break;
+          }
+
+          string release = (*TemplateFactoryInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
+          string releaseDep = (*itD).pluginRelease;
+
+          if (getMajor(release) != getMajor(releaseDep) ||
+              getMinor(release) != getMinor(releaseDep)) {
+            if (loader)
+              loader->aborted(pluginName, tfi->getPluginsClassName() +
+                              " '" + pluginName + "' will be removed, it depends on release " +
+                              releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
+                              release + " is loaded.");
+
+            tfi->removePlugin(pluginName);
+            depsNeedCheck = true;
+            break;
+          }
+        }
+      }
+
+      delete itP;
     }
-  } while (depsNeedCheck);
+  }
+  while (depsNeedCheck);
 }
 
 //=========================================================
 void tlp::loadPlugins(PluginLoader *plug) {
   string::const_iterator begin=TulipPluginsPath.begin();
   string::const_iterator end=begin;
+
   while (end!=TulipPluginsPath.end())
     if ((*end)==PATH_DELIMITER) {
-      if (begin!=end) 
-	loadPluginsFromDir(string(begin,end), "Algorithm", plug);
+      if (begin!=end)
+        loadPluginsFromDir(string(begin,end), "Algorithm", plug);
+
       ++end;
       begin=end;
-    } else
+    }
+    else
       ++end;
-  if (begin!=end) 
+
+  if (begin!=end)
     loadPluginsFromDir(string(begin,end), "Algorithm", plug);
 }
 //=========================================================
 bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {
   TemplateFactoryInterface::currentLoader = plug;
+
   if (plug)
     plug->loading(filename);
+
   return PluginLibraryLoader::loadPluginLibrary(filename, plug);
 }
 
@@ -289,21 +322,23 @@ std::string tlp::demangleTlpClassName(const char* className) {
   int status;
   size_t length = 256;
   abi::__cxa_demangle((char *) className, (char *) demangleBuffer,
-		      &length, &status);
+                      &length, &status);
+
   // skip tlp::
   // if needed
   if (strncmp(demangleBuffer, "tlp::", 5))
     return std::string(demangleBuffer);
+
   return std::string(demangleBuffer + 5);
 }
 #elif _MSC_VER
 
 std::string tlp::demangleTlpClassName(const char* className) {
-	std::string result;
-	static char demangleBuffer[256];
-	UnDecorateSymbolName(className, demangleBuffer, 256, UNDNAME_32_BIT_DECODE);
-	result = std::string(demangleBuffer + 5);
-	return result;
+  std::string result;
+  static char demangleBuffer[256];
+  UnDecorateSymbolName(className, demangleBuffer, 256, UNDNAME_32_BIT_DECODE);
+  result = std::string(demangleBuffer + 5);
+  return result;
 }
 #else
 #error define symbols demangling function
@@ -318,11 +353,15 @@ std::string tlp::getMajor(const std::string& v) {
 //=========================================================
 std::string tlp::getMinor(const std::string& v) {
   size_t pos = v.find('.');
+
   if (pos == string::npos)
     return string("0");
+
   unsigned int rpos = v.rfind('.');
+
   if (pos == rpos)
     return v.substr(pos+1);
+
   return v.substr(pos + 1, rpos - pos - 1);
 }
 //=========================================================

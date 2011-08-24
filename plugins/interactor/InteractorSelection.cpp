@@ -34,27 +34,29 @@ public:
   /**
    * Default constructor
    */
-  InteractorSelection():NodeLinkDiagramComponentInteractor(":/i_selection.png","Select nodes/edges in a rectangle"){
+  InteractorSelection():NodeLinkDiagramComponentInteractor(":/i_selection.png","Select nodes/edges in a rectangle") {
     setPriority(3);
     setConfigurationWidgetText(QString("<h3>Selection interactor</h3>")+
-                   "Select on rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner.<br/><br/>"+
-  #if !defined(__APPLE__)
-                   "Add to selection: <ul><li><b>Ctrl + Mouse left</b> click on an element</li></ul>" +
-  #else
-                   "Add/Remove from selection: <ul><li><b>Alt + Mouse left</b> click</li></ul>"+
-  #endif
-                   "Remove from selection: <ul><li><b>Shift + Mouse</b> click</li></ul>");
+                               "Select on rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner.<br/><br/>"+
+#if !defined(__APPLE__)
+                               "Add to selection: <ul><li><b>Ctrl + Mouse left</b> click on an element</li></ul>" +
+#else
+                               "Add/Remove from selection: <ul><li><b>Alt + Mouse left</b> click</li></ul>"+
+#endif
+                               "Remove from selection: <ul><li><b>Shift + Mouse</b> click</li></ul>");
   }
 
   /**
    * Construct chain of responsibility
    */
-  void construct(){
+  void construct() {
     pushInteractorComponent(new MousePanNZoomNavigator);
     pushInteractorComponent(new MouseSelector);
   }
 
-  QCursor getCursor(){return Qt::CrossCursor;}
+  QCursor getCursor() {
+    return Qt::CrossCursor;
+  }
 };
 
 INTERACTORPLUGIN(InteractorSelection, "InteractorSelection", "Tulip Team", "01/04/2009", "Selection Interactor", "1.0");

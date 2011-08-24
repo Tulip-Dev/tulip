@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
@@ -44,40 +44,40 @@ using namespace ogdf;
 using namespace std;
 
 namespace tlp {
-  class DoubleProperty;
-  class SizeProperty;
+class DoubleProperty;
+class SizeProperty;
 }
 
 class TLP_OGDF_SCOPE TulipToOGDF {
 public:
 
-    TulipToOGDF(tlp::Graph *g);
-    ~TulipToOGDF();
+  TulipToOGDF(tlp::Graph *g);
+  ~TulipToOGDF();
 
-    void saveToGML(const char * fileName);
+  void saveToGML(const char * fileName);
 
-    tlp::Graph &getTlp();
-    ogdf::GraphAttributes &getOGDFGraphAttr();
-    ogdf::Graph &getOGDFGraph();
+  tlp::Graph &getTlp();
+  ogdf::GraphAttributes &getOGDFGraphAttr();
+  ogdf::Graph &getOGDFGraph();
 
-    ogdf::node getOGDFGraphNode(unsigned int nodeIndex);
-    ogdf::edge getOGDFGraphEdge(unsigned int edgeIndex);
+  ogdf::node getOGDFGraphNode(unsigned int nodeIndex);
+  ogdf::edge getOGDFGraphEdge(unsigned int edgeIndex);
 
-    tlp::Coord getNodeCoordFromOGDFGraphAttr(unsigned int nodeIndex);
+  tlp::Coord getNodeCoordFromOGDFGraphAttr(unsigned int nodeIndex);
 
-    void copyTlpDoublePropertyToOGDFEdgeLength(tlp::DoubleProperty *);
-    void copyTlpDoublePropertyToOGDFNodeWeight(tlp::DoubleProperty *);
-    void copyTlpNodeSizeToOGDF(tlp::SizeProperty *);
+  void copyTlpDoublePropertyToOGDFEdgeLength(tlp::DoubleProperty *);
+  void copyTlpDoublePropertyToOGDFNodeWeight(tlp::DoubleProperty *);
+  void copyTlpNodeSizeToOGDF(tlp::SizeProperty *);
 
-    vector<tlp::Coord> getEdgeCoordFromOGDFGraphAttr(unsigned int edgeIndex);
+  vector<tlp::Coord> getEdgeCoordFromOGDFGraphAttr(unsigned int edgeIndex);
 
 private:
-    tlp::Graph *tulipGraph;
-    ogdf::Graph ogdfGraph;
-    ogdf::GraphAttributes ogdfAttributes;
+  tlp::Graph *tulipGraph;
+  ogdf::Graph ogdfGraph;
+  ogdf::GraphAttributes ogdfAttributes;
 
-    MutableContainer<ogdf::node> ogdfNodes;
-    MutableContainer<ogdf::edge> ogdfEdges;
+  MutableContainer<ogdf::node> ogdfNodes;
+  MutableContainer<ogdf::edge> ogdfEdges;
 };
 
 #endif      /* !TULIPTOOGDF_H_ */

@@ -28,11 +28,11 @@ namespace tlp {
 class PropertyContext;
 class IntegerProperty;
 
-/** \addtogroup plugins */ 
+/** \addtogroup plugins */
 /*@{*/
 
 /// Interface for int plug-ins
-class TLP_SCOPE IntegerAlgorithm:public PropertyAlgorithm { 
+class TLP_SCOPE IntegerAlgorithm:public PropertyAlgorithm {
   ///
   friend class IntegerProperty;
 public:
@@ -40,7 +40,7 @@ public:
       The data should be store in it*/
   IntegerProperty *integerResult;
   ///
-  virtual ~IntegerAlgorithm(){}
+  virtual ~IntegerAlgorithm() {}
 
 protected:
   ///

@@ -22,16 +22,16 @@ class ComparePictureMainWindow : public QMainWindow,public Ui::MainWindow {
 
   Q_OBJECT
 
- public :
+public :
 
   ComparePictureMainWindow();
 
- protected slots:
+protected slots:
 
   void differentButtonClicked();
   void sameAndRejectButtonClicked();
 
- protected :
+protected :
 
   void checkPicture();
 

@@ -27,25 +27,25 @@
 
 namespace tlp {
 
-  class MultiServerManager;
- 
-  class CheckUpdate : public QObject {
+class MultiServerManager;
 
-    Q_OBJECT
+class CheckUpdate : public QObject {
 
-    MultiServerManager *msm;
-    int serverNumber;
- 
-  public : 
-    
-    CheckUpdate(std::vector<LocalPluginInfo> &pluginsList);
+  Q_OBJECT
 
-  private slots :
+  MultiServerManager *msm;
+  int serverNumber;
 
-    void getResponse();
+public :
 
-  };
-  
+  CheckUpdate(std::vector<LocalPluginInfo> &pluginsList);
+
+private slots :
+
+  void getResponse();
+
+};
+
 }
 #endif //_Tulip_MULTISERVERMANAGER_H_
 

@@ -27,7 +27,7 @@ ATTRIBUTETYPE tlp::Graph::getAttribute(const std::string &name) const {
 }
 //================================================================================
 template<typename ATTRIBUTETYPE>
-bool tlp::Graph::getAttribute(const std::string &name, ATTRIBUTETYPE& value) const{
+bool tlp::Graph::getAttribute(const std::string &name, ATTRIBUTETYPE& value) const {
   return getAttributes().get(name, value);
 }
 //================================================================================
@@ -40,7 +40,7 @@ void tlp::Graph::setAttribute(const std::string &name,const ATTRIBUTETYPE&value)
 }
 //================================================================================
 template<typename PropertyType>
-PropertyType* tlp::Graph::getLocalProperty(const std::string &name) { 
+PropertyType* tlp::Graph::getLocalProperty(const std::string &name) {
   if (existLocalProperty(name)) {
     PropertyInterface* prop = getProperty(name);
     assert (dynamic_cast<PropertyType *>(prop)!=0);
@@ -67,26 +67,30 @@ PropertyType* tlp::Graph::getProperty(const std::string &name) {
 //====================================================================================
 template<typename PropertyType>
 bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* prop,
-				 std::string &msg,  tlp::PluginProgress *progress,
-				 tlp::DataSet *data) {
+                                 std::string &msg,  tlp::PluginProgress *progress,
+                                 tlp::DataSet *data) {
   bool result;
   tlp::PropertyContext context;
 
   // check if this is a subgraph of prop->graph
   if (getRoot() != prop->graph) {
     tlp::Graph *currentGraph = this;
+
     while(currentGraph->getSuperGraph() != currentGraph) {
       if (currentGraph == prop->graph)
-	break;
+        break;
+
       currentGraph = currentGraph->getSuperGraph();
     }
+
     if (currentGraph != prop->graph)
       return false;
-  }    
+  }
 
 #ifndef NDEBUG
   std::cerr << __PRETTY_FUNCTION__ << std::endl;
 #endif
+
   if(circularCalls.find(prop) != circularCalls.end()) {
 #ifndef NDEBUG
     std::cerr << "Circular call of " << __PRETTY_FUNCTION__ << " " << msg << std::endl;
@@ -101,37 +105,42 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
   }
 
   tlp::PluginProgress *tmpProgress;
-  if (progress==0) 
+
+  if (progress==0)
     tmpProgress=new tlp::SimplePluginProgress();
-  else 
+  else
     tmpProgress=progress;
 
   context.pluginProgress = tmpProgress;
   context.graph = this;
   context.dataSet = data;
-  
+
   tlp::Observable::holdObservers();
   circularCalls.insert(prop);
   tlp::PropertyContext tmpContext(context);
   tmpContext.propertyProxy = prop;
   typename PropertyType::PAlgorithm *tmpAlgo =
     PropertyType::factory->getPluginObject(algorithm, tmpContext);
+
   if (tmpAlgo != 0) {
     result = tmpAlgo->check(msg);
+
     if (result) {
       tmpAlgo->run();
     }
+
     delete tmpAlgo;
   }
   else {
     msg = "No algorithm available with this name";
     result=false;
   }
+
   circularCalls.erase(prop);
   tlp::Observable::unholdObservers();
 
   if (progress==0) delete tmpProgress;
-  
+
   return result;
 }
 //====================================================================================

@@ -26,15 +26,18 @@
 namespace tlp {
 
 class TLP_SCOPE GraphDecorator : public Graph {  // non-orient�, planaire
- public:
-  GraphDecorator(Graph* s){assert(s); graph_component = s;}
-  virtual ~GraphDecorator(){
+public:
+  GraphDecorator(Graph* s) {
+    assert(s);
+    graph_component = s;
+  }
+  virtual ~GraphDecorator() {
     notifyDestroy();
   }
 
   virtual void clear();
   virtual Graph *addSubGraph(BooleanProperty *selection=0,
-			     unsigned int id = 0);
+                             unsigned int id = 0);
   virtual void delSubGraph(Graph * s);
   virtual void delAllSubGraphs(Graph *s);
   virtual Graph* getSuperGraph()const;
@@ -66,7 +69,7 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orient�, planaire
   virtual node getInNode(const node n,unsigned int i)const;
   virtual node getOutNode(const node n,unsigned int i) const;
   virtual edge getOneEdge() const;
-  
+
   virtual unsigned int numberOfNodes()const;
   virtual unsigned int numberOfEdges()const;
 
@@ -86,7 +89,7 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orient�, planaire
   virtual void addNodes(Iterator<node>* nodes);
   virtual edge addEdge(const node n1, const node n2);
   virtual void addEdges(const std::vector<std::pair<node, node> >& edges,
-			std::vector<edge>& addedEdges);
+                        std::vector<edge>& addedEdges);
   virtual void addEdge(const edge);
   virtual void addEdges(Iterator<edge>* edges);
   virtual void delNode(const tlp::node n, bool deleteInAllGraphs = false);
@@ -138,7 +141,7 @@ protected:
   virtual edge restoreEdge(edge, node source, node target);
   virtual void restoreNodes(const std::vector<node>&);
   virtual void restoreEdges(const std::vector<edge>& edges,
-			    const std::vector<std::pair<node, node> >& ends);
+                            const std::vector<std::pair<node, node> >& ends);
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);

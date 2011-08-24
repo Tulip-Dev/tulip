@@ -29,12 +29,12 @@ using namespace std;
 
 namespace tlp {
 
-  void GlVertexArrayVisitor::visit(GlEdge *glEdge) {
-    inputData->getGlVertexArrayManager()->addEdge(glEdge);
-  }
+void GlVertexArrayVisitor::visit(GlEdge *glEdge) {
+  inputData->getGlVertexArrayManager()->addEdge(glEdge);
+}
 
-  void GlVertexArrayVisitor::visit(GlNode *glNode) {
-    inputData->getGlVertexArrayManager()->addNode(glNode);
-  }
+void GlVertexArrayVisitor::visit(GlNode *glNode) {
+  inputData->getGlVertexArrayManager()->addNode(glNode);
+}
 
 }

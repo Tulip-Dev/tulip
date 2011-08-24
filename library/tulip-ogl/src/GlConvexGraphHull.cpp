@@ -36,8 +36,9 @@ namespace tlp {
 int GlConvexGraphHull::bezierValue = 1;
 
 GlConvexGraphHull::GlConvexGraphHull(GlComposite* parent, const std::string& name, const tlp::Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation)       :
-      _parent(parent), _name(name), _fcolor(fcolor), _polygon(NULL), graph(graph), layout(layout), size(size), rotation(rotation) {
+  _parent(parent), _name(name), _fcolor(fcolor), _polygon(NULL), graph(graph), layout(layout), size(size), rotation(rotation) {
   assert(graph);
+
   if (graph->numberOfNodes() > 0) {
     _polygon = new GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, 0), fcolor, GlConvexGraphHull::bezierValue);
     _parent->addGlEntity(_polygon, _name);
@@ -71,5 +72,5 @@ void GlConvexGraphHull::setVisible(bool visible) {
     _polygon->setVisible(visible);
 }
 
-  
+
 }

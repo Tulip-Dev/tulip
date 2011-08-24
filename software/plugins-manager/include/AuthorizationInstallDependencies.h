@@ -27,28 +27,28 @@
 
 namespace tlp {
 
-  class AuthorizationInstallDependencies : public QDialog{
-    Q_OBJECT
-    
-    private :
-    bool install;
-    std::set<DistPluginInfo,PluginCmp> *depToInstall;
-    std::set<DistPluginInfo,PluginCmp> *toInstall;
-    std::set<LocalPluginInfo,PluginCmp> *depToRemove;
-    std::set<LocalPluginInfo,PluginCmp> *toRemove;
+class AuthorizationInstallDependencies : public QDialog {
+  Q_OBJECT
 
-    QVBoxLayout box;
-    QHBoxLayout subBox;
+private :
+  bool install;
+  std::set<DistPluginInfo,PluginCmp> *depToInstall;
+  std::set<DistPluginInfo,PluginCmp> *toInstall;
+  std::set<LocalPluginInfo,PluginCmp> *depToRemove;
+  std::set<LocalPluginInfo,PluginCmp> *toRemove;
 
-  public :
-    AuthorizationInstallDependencies(std::set<DistPluginInfo,PluginCmp> *depToInstall,std::set<DistPluginInfo,PluginCmp> *toInstall);
-    AuthorizationInstallDependencies(std::set<LocalPluginInfo,PluginCmp> *depToRemove,std::set<LocalPluginInfo,PluginCmp> *toRemove);
+  QVBoxLayout box;
+  QHBoxLayout subBox;
 
-  public slots :
-    void valid();
-    void annule();
-    
-  };
+public :
+  AuthorizationInstallDependencies(std::set<DistPluginInfo,PluginCmp> *depToInstall,std::set<DistPluginInfo,PluginCmp> *toInstall);
+  AuthorizationInstallDependencies(std::set<LocalPluginInfo,PluginCmp> *depToRemove,std::set<LocalPluginInfo,PluginCmp> *toRemove);
+
+public slots :
+  void valid();
+  void annule();
+
+};
 
 }
 #endif //_AUTHORIZATIONINSTALLDEPENDENCIES_H_

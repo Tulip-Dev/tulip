@@ -22,8 +22,8 @@
  Email : auber@labri.fr
  Last modification : 20/08/2001
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 
@@ -42,9 +42,9 @@ namespace tlp {
  * This class is one the implementation of the Graph Interface
  * It only filters the elements of its parents.
  */
- class GraphView:public GraphAbstract {
-    
-   friend class GraphImpl;
+class GraphView:public GraphAbstract {
+
+  friend class GraphImpl;
 public:
   GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int id = 0);
   ~GraphView();
@@ -55,7 +55,7 @@ public:
   void addNodes(Iterator<node>* nodes);
   edge addEdge(const node n1,const node n2);
   void addEdges(const std::vector<std::pair<node, node> >& edges,
-		std::vector<edge>& addedEdges);
+                std::vector<edge>& addedEdges);
   void addEdge(const edge);
   void addEdges(Iterator<edge>* edges);
   void delNode(const tlp::node n, bool deleteInAllGraphs = false);
@@ -103,7 +103,7 @@ protected:
   virtual void restoreNodes(const std::vector<node>&);
   virtual edge restoreEdge(edge, node source, node target);
   virtual void restoreEdges(const std::vector<edge>& edges,
-			    const std::vector<std::pair<node, node> >& ends);
+                            const std::vector<std::pair<node, node> >& ends);
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);
@@ -121,7 +121,7 @@ private:
   void delNodeInternal(const node);
   void reverse(const edge, const node src, const node tgt);
   void setEnds(const edge, const node src, const node tgt,
-	       const node newSrc, const node newTgt);
+               const node newSrc, const node newTgt);
 };
 
 }

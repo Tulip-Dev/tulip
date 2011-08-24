@@ -54,20 +54,20 @@ namespace tlp {
  * @brief This interface lists functions used to regroup plug-ins.
  *
  * It is used to list plug-ins that register themselves into it.
- * 
+ *
  * The TemplateFactory's role is to list plug-ins, and retrive their dependencies for Tulip to check if they are met.
  * The only check performed should be the unicity of a plug-in in the system.
- * 
+ *
  * Each Tulip plug-in has a factory, which needs to be registered into a TemplateFactory.
  * TemplateFactories register themselves in the Tulip plug-in system, and Tulip lists the plug-ins of each TemplateFactory.
- * 
+ *
  **/
 class TemplateFactoryInterface {
 public:
   static TLP_SCOPE std::map< std::string, TemplateFactoryInterface* > *allFactories;
   static TLP_SCOPE PluginLoader *currentLoader;
 
-  virtual ~TemplateFactoryInterface(){}
+  virtual ~TemplateFactoryInterface() {}
 
   /**
    * @brief Gets the list of plug-ins that registered themselves in this factory.
@@ -75,7 +75,7 @@ public:
    * @return :Iterator< std::string >* An iterator over the names of the plug-ins registered in this factory.
    **/
   virtual Iterator<std::string>* availablePlugins()=0;
-  
+
   /**
    * @brief Checks if a given name is registered in this factory.
    *
@@ -83,7 +83,7 @@ public:
    * @return bool Whether there is a plug-in with the given name registered in this factory.
    **/
   virtual bool pluginExists(const std::string &pluginName)=0;
-  
+
   /**
    * @brief Gets the list of parameters for the given plug-in.
    *
@@ -130,12 +130,13 @@ public:
    * This map is then used to list all the factories, and all the plug-ins for each factory.
    *
    * @param factory The factory to add.
-   * @param name The name of the factory to add, used as key.   
+   * @param name The name of the factory to add, used as key.
    * @return void
    **/
   static void addFactory(TemplateFactoryInterface *factory, const std::string &name)  {
     if (!allFactories)
       allFactories = new std::map<std::string, TemplateFactoryInterface*>();
+
     //std::cerr << name.c_str() << " factory added" << std::endl;
     (*allFactories)[name] = factory;
   }
@@ -143,7 +144,7 @@ public:
   /**
    * @brief Checks if a plug-in exists in a specific factory.
    * In debug mode, an assert checks the factory is registered in the factory map before accessing it.
-   * 
+   *
    * @param factoryName The name of the factory to look into.
    * @param pluginName The name of the plugin to look for.
    * @return bool Whether the plug-in exists in the specified factory.
@@ -156,11 +157,11 @@ public:
 
 /**
  * @brief This template class takes 3 parameters :
- * 
+ *
  * * The type of factory that it will list,
- * 
+ *
  * * The type of object said factories build,
- * 
+ *
  * * The type of object to pass as parameter to the objects when building them.
  *
  * When constructed it registers itself into the factories map automatically.
@@ -217,7 +218,7 @@ public:
 
 template <class T> class PropertyFactory:public PluginInfoInterface {
 public:
-  PropertyFactory(){}
+  PropertyFactory() {}
   virtual ~PropertyFactory() {}
   virtual T* createPluginObject(const PropertyContext &context)=0;
   virtual  std::string getMajor() const {

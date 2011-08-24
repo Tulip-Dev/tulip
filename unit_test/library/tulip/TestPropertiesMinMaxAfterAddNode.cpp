@@ -55,10 +55,10 @@ void TestPropertiesMinMaxAfterAddNode::testDoublePropertyMinMaxAfterAddNode() {
 
   // add a new node, the value associated to doubleProp property is the default one 0
   node n3 = graph->addNode();
-	
+
   // min should be 0
   CPPUNIT_ASSERT(doubleProp->getNodeMin(graph) == 0);
-  CPPUNIT_ASSERT(doubleProp->getNodeMax(graph) == d2);	
+  CPPUNIT_ASSERT(doubleProp->getNodeMax(graph) == d2);
 }
 
 void TestPropertiesMinMaxAfterAddNode::testIntegerPropertyMinMaxAfterAddNode() {
@@ -76,7 +76,7 @@ void TestPropertiesMinMaxAfterAddNode::testIntegerPropertyMinMaxAfterAddNode() {
 
   // add a new node, the value associated to doubleProp property is the default one 0
   node n3 = graph->addNode();
-	
+
   // min should be 0
   CPPUNIT_ASSERT(intProp->getNodeMin(graph) == 0);
   CPPUNIT_ASSERT(intProp->getNodeMax(graph) == i2);
@@ -84,9 +84,9 @@ void TestPropertiesMinMaxAfterAddNode::testIntegerPropertyMinMaxAfterAddNode() {
 
 CppUnit::Test *TestPropertiesMinMaxAfterAddNode::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Properties Min Max after addNode tests" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestPropertiesMinMaxAfterAddNode>( "DoubleProperty Min Max after addNode test", 
-										    &TestPropertiesMinMaxAfterAddNode::testDoublePropertyMinMaxAfterAddNode));
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestPropertiesMinMaxAfterAddNode>( "IntegerProperty Min Max after addNode test", 
-										    &TestPropertiesMinMaxAfterAddNode::testIntegerPropertyMinMaxAfterAddNode));
+  suiteOfTests->addTest( new CppUnit::TestCaller<TestPropertiesMinMaxAfterAddNode>( "DoubleProperty Min Max after addNode test",
+                         &TestPropertiesMinMaxAfterAddNode::testDoublePropertyMinMaxAfterAddNode));
+  suiteOfTests->addTest( new CppUnit::TestCaller<TestPropertiesMinMaxAfterAddNode>( "IntegerProperty Min Max after addNode test",
+                         &TestPropertiesMinMaxAfterAddNode::testIntegerPropertyMinMaxAfterAddNode));
   return suiteOfTests;
 }

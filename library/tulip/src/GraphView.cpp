@@ -30,7 +30,7 @@ using namespace std;
 namespace tlp {
 //----------------------------------------------------------------
 GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
-		     unsigned int sgId):
+                     unsigned int sgId):
   GraphAbstract(supergraph, sgId),
   nNodes(0),
   nEdges(0) {
@@ -38,24 +38,31 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
   edgeAdaptativeFilter.setAll(false);
   inDegree.setAll(0);
   outDegree.setAll(0);
+
   if (filter == 0) return;
+
   Iterator<unsigned int> *it=0;
   it = filter->nodeProperties.findAll(true);
 
   Iterator<node> *iteN;
+
   if (it==0)
     iteN =getSuperGraph()->getNodes();
   else
     iteN = new UINTIterator<node>(it);
-  
+
   while (iteN->hasNext()) {
     node n=iteN->next();
+
     if (filter->getNodeValue(n)) addNode(n);
-  } delete iteN;
+  }
+
+  delete iteN;
 
   it = filter->edgeProperties.findAll(true);
 
   Iterator<edge> *iteE;
+
   if (it==0)
     iteE = getSuperGraph()->getEdges();
   else
@@ -63,8 +70,11 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 
   while (iteE->hasNext()) {
     edge e=iteE->next();
+
     if (filter->getEdgeValue(e)) addEdge(e);
-  } delete iteE;
+  }
+
+  delete iteE;
 }
 //----------------------------------------------------------------
 GraphView::~GraphView() {
@@ -110,25 +120,28 @@ void GraphView::reverse(const edge e, const node src, const node tgt) {
 }
 //----------------------------------------------------------------
 void GraphView::setEnds(const edge e, const node src, const node tgt,
-			const node newSrc, const node newTgt) {
+                        const node newSrc, const node newTgt) {
   if (isElement(e)) {
     if (isElement(newSrc) && isElement(newTgt)) {
       notifyBeforeSetEnds(e);
+
       if (src != newSrc) {
-	outDegree.set(src.id, outDegree.get(src.id)-1);
-	outDegree.set(newSrc.id, outDegree.get(newSrc.id) + 1);
+        outDegree.set(src.id, outDegree.get(src.id)-1);
+        outDegree.set(newSrc.id, outDegree.get(newSrc.id) + 1);
       }
+
       if (tgt != newTgt) {
-	inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
-	inDegree.set(newTgt.id, inDegree.get(newTgt.id)+1);
+        inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
+        inDegree.set(newTgt.id, inDegree.get(newTgt.id)+1);
       }
+
       // notification
       notifyAfterSetEnds(e);
-      
+
       // propagate edge ends update on subgraphs
       Graph* sg;
       forEach(sg, getSubGraphs()) {
-	((GraphView*) sg)->setEnds(e, src, tgt, newSrc, newTgt);
+        ((GraphView*) sg)->setEnds(e, src, tgt, newSrc, newTgt);
       }
     }
     else
@@ -159,41 +172,51 @@ node GraphView::restoreNode(node n) {
 void GraphView::restoreNodes(const std::vector<node>& nodes) {
   std::vector<node>::const_iterator it = nodes.begin();
   std::vector<node>::const_iterator ite = nodes.end();
+
   for (; it != ite; ++it) {
     assert(getRoot()->isElement(*it));
     nodeAdaptativeFilter.set(*it, true);
   }
+
   nNodes += nodes.size();
+
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODES, nodes));
 }
 //----------------------------------------------------------------
 void GraphView::addNode(const node n) {
   assert(getRoot()->isElement(n));
+
   if (!isElement(n)) {
     if (!getSuperGraph()->isElement(n)) getSuperGraph()->addNode(n);
+
     restoreNode(n);
   }
 }
 //----------------------------------------------------------------
-  void GraphView::addNodes(Iterator<node>* addedNodes) {
+void GraphView::addNodes(Iterator<node>* addedNodes) {
   std::vector<node> nodes;
   std::vector<node> superNodes;
   Graph* super = getSuperGraph();
   bool superIsRoot = (super == getRoot());
+
   while(addedNodes->hasNext()) {
     node n = addedNodes->next();
+
     if (!isElement(n)) {
       nodes.push_back(n);
+
       if (!superIsRoot && !super->isElement(n))
-	superNodes.push_back(n);
+        superNodes.push_back(n);
     }
   }
+
   if (!superNodes.empty()) {
     StlIterator<node, std::vector<node>::iterator> it(superNodes.begin(),
-						      superNodes.end());
+        superNodes.end());
     super->addNodes(&it);
   }
+
   if (!nodes.empty())
     restoreNodes(nodes);
 }
@@ -215,11 +238,12 @@ edge GraphView::restoreEdge(edge e, const node, const node) {
 }
 //----------------------------------------------------------------
 void GraphView::restoreEdges(const std::vector<edge>& edges,
-			     const std::vector<std::pair<node, node> >&ends) {
+                             const std::vector<std::pair<node, node> >&ends) {
   bool hasEnds = !ends.empty();
   unsigned int i = 0;
   std::vector<edge>::const_iterator it = edges.begin();
   std::vector<edge>::const_iterator ite = edges.end();
+
   for (; it != ite; ++it, ++i) {
     edge e = *it;
     assert(getRoot()->isElement(e));
@@ -230,7 +254,9 @@ void GraphView::restoreEdges(const std::vector<edge>& edges,
     outDegree.set(src.id, outDegree.get(src.id)+1);
     inDegree.set(tgt.id, inDegree.get(tgt.id)+1);
   }
+
   nEdges += edges.size();
+
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_EDGES, edges));
 }
@@ -245,41 +271,48 @@ void GraphView::addEdge(const edge e) {
   assert(getRoot()->isElement(e));
   assert(isElement(source(e)));
   assert(isElement(target(e)));
+
   if (!edgeAdaptativeFilter.get(e.id)) {
     if (!getSuperGraph()->isElement(e))
       getSuperGraph()->addEdge(e);
+
     addEdgeInternal(e);
   }
 }
 //----------------------------------------------------------------
 void GraphView::addEdges(const std::vector<std::pair<node, node> >& ends,
-			 std::vector<edge>& addedEdges) {
+                         std::vector<edge>& addedEdges) {
   assert(ends.size() == addedEdges.size());
   getSuperGraph()->addEdges(ends, addedEdges);
   restoreEdges(addedEdges, ends);
 }
 //----------------------------------------------------------------
-  void GraphView::addEdges(Iterator<edge>* addedEdges) {
+void GraphView::addEdges(Iterator<edge>* addedEdges) {
   std::vector<edge> edges;
   std::vector<edge> superEdges;
   Graph* super = getSuperGraph();
   bool superIsRoot = (super == getRoot());
+
   while(addedEdges->hasNext()) {
     edge e = addedEdges->next();
     assert(getRoot()->isElement(e));
     assert(isElement(source(e)));
     assert(isElement(target(e)));
+
     if (!edgeAdaptativeFilter.get(e.id)) {
       edges.push_back(e);
+
       if (!superIsRoot && !super->isElement(e))
-	superEdges.push_back(e);
+        superEdges.push_back(e);
     }
   }
+
   if (!superEdges.empty()) {
     StlIterator<edge, std::vector<edge>::iterator> it(superEdges.begin(),
-						      superEdges.end());
+        superEdges.end());
     super->addEdges(&it);
   }
+
   if (!edges.empty())
     restoreEdges(edges, std::vector<pair<node, node> >());
 }
@@ -304,32 +337,41 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
     notifyDelNode(n);
     // propagate to subgraphs
     Iterator<Graph *>*itS = getSubGraphs();
+
     while (itS->hasNext()) {
       Graph *subGraph = itS->next();
+
       if (subGraph->isElement(n))
-	subGraph->delNode(n);
-    } delete itS;
+        subGraph->delNode(n);
+    }
+
+    delete itS;
     // remove node's edges
     set<edge> loops;
     bool haveLoops = false;
     StableIterator<edge> itE(getInOutEdges(n));
+
     while(itE.hasNext()) {
       edge e = itE.next();
       node s = opposite(e, n);
+
       if (s!=n) {
-	removeEdge(e);
+        removeEdge(e);
       }
       else {
-	loops.insert(e);
-	haveLoops = true;
+        loops.insert(e);
+        haveLoops = true;
       }
     }
+
     if (haveLoops) {
       set<edge>::const_iterator it;
+
       for ( it = loops.begin(); it!=loops.end(); ++it) {
-	removeEdge(*it);
+        removeEdge(*it);
       }
     }
+
     delNodeInternal(n);
   }
 }
@@ -360,20 +402,24 @@ void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
     notifyDelEdge(e);
     // propagate to subgraphs
     Iterator<Graph *>*itS=getSubGraphs();
+
     while (itS->hasNext()) {
       Graph *subGraph = itS->next();
+
       if (subGraph->isElement(e))
-	subGraph->delEdge(e);
-    } delete itS;
+        subGraph->delEdge(e);
+    }
+
+    delete itS;
     delEdgeInternal(e);
   }
 }
 //----------------------------------------------------------------
-void GraphView::delAllNode(const node n){
+void GraphView::delAllNode(const node n) {
   delNode(n, true);
 }
 //----------------------------------------------------------------
-void GraphView::delAllEdge(const edge e){
+void GraphView::delAllEdge(const edge e) {
   delEdge(e, true);
 }
 //----------------------------------------------------------------
@@ -388,38 +434,46 @@ void GraphView::swapEdgeOrder(const node n,const edge e1 , const edge e2) {
 Iterator<node>* GraphView::getNodes() const {
   Iterator<unsigned int> *it=0;
   it = nodeAdaptativeFilter.findAll(true);
+
   if (it==0)
     return new SGraphNodeIterator(this, nodeAdaptativeFilter);
   else
     return (new UINTIterator<node>(it));
 }
 //----------------------------------------------------------------
-Iterator<node>* GraphView::getInNodes(const node n) const 
-{return (new InNodesIterator(this, edgeAdaptativeFilter,n));}
+Iterator<node>* GraphView::getInNodes(const node n) const {
+  return (new InNodesIterator(this, edgeAdaptativeFilter,n));
+}
 //----------------------------------------------------------------
-Iterator<node>* GraphView::getOutNodes(const node n)const 
-{return (new OutNodesIterator(this, edgeAdaptativeFilter,n));}
+Iterator<node>* GraphView::getOutNodes(const node n)const {
+  return (new OutNodesIterator(this, edgeAdaptativeFilter,n));
+}
 //----------------------------------------------------------------
-Iterator<node>* GraphView::getInOutNodes(const node n)const 
-{return (new InOutNodesIterator(this, edgeAdaptativeFilter,n));}
+Iterator<node>* GraphView::getInOutNodes(const node n)const {
+  return (new InOutNodesIterator(this, edgeAdaptativeFilter,n));
+}
 //----------------------------------------------------------------
 Iterator<edge>* GraphView::getEdges()const {
   Iterator<unsigned int> *it=0;
   it = edgeAdaptativeFilter.findAll(true);
+
   if (it==0)
     return new SGraphEdgeIterator(this, edgeAdaptativeFilter);
   else
     return (new UINTIterator<edge>(it));
 }
 //----------------------------------------------------------------
-Iterator<edge>* GraphView::getInEdges(const node n)const 
-{return (new InEdgesIterator(this, edgeAdaptativeFilter,n));}
+Iterator<edge>* GraphView::getInEdges(const node n)const {
+  return (new InEdgesIterator(this, edgeAdaptativeFilter,n));
+}
 //----------------------------------------------------------------
-Iterator<edge>* GraphView::getOutEdges(const node n)const 
-{return (new OutEdgesIterator(this, edgeAdaptativeFilter,n));}
+Iterator<edge>* GraphView::getOutEdges(const node n)const {
+  return (new OutEdgesIterator(this, edgeAdaptativeFilter,n));
+}
 //----------------------------------------------------------------
-Iterator<edge>* GraphView::getInOutEdges(const node n)const
-{return (new InOutEdgesIterator(this, edgeAdaptativeFilter,n));}
+Iterator<edge>* GraphView::getInOutEdges(const node n)const {
+  return (new InOutEdgesIterator(this, edgeAdaptativeFilter,n));
+}
 //----------------------------------------------------------------
 unsigned int GraphView::numberOfNodes()const {
   return nNodes;

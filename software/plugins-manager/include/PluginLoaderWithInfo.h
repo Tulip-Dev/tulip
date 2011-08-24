@@ -29,57 +29,55 @@
 
 namespace tlp {
 
-  //==============================================================
-  struct PluginLoaderWithInfo:public PluginLoader {
-    std::vector<LocalPluginInfo> pluginsList;
-    std::string currentType;
-    std::string currentDisplayType;
-    std::string currentPath;
-    std::string currentFileName;
-    std::string errorMsgs;
+//==============================================================
+struct PluginLoaderWithInfo:public PluginLoader {
+  std::vector<LocalPluginInfo> pluginsList;
+  std::string currentType;
+  std::string currentDisplayType;
+  std::string currentPath;
+  std::string currentFileName;
+  std::string errorMsgs;
 
-    virtual void start(const std::string &path,const std::string &type) {
-      currentType=type;
-      currentPath=path;
+  virtual void start(const std::string &path,const std::string &type) {
+    currentType=type;
+    currentPath=path;
+  }
+
+  virtual void loading(const std::string &filename) {
+    currentFileName = QFileInfo(filename.c_str()).fileName().toStdString();
+  }
+
+  virtual void loaded(const std::string &name,
+                      const std::string &author,
+                      const std::string &date,
+                      const std::string &info,
+                      const std::string &release,
+                      const std::string &version,
+                      const std::list <Dependency> &deps) {
+    LocalPluginInfo plugin;
+    plugin.name=name;
+    plugin.type=currentType;
+    plugin.version=version+" "+release;
+    plugin.fileName=currentFileName.substr(0,currentFileName.rfind("."));
+    plugin.author=author;
+    plugin.date=date;
+    plugin.info=info;
+    plugin.server="Installed";
+
+    for(std::list<Dependency>::const_iterator it=deps.begin(); it!=deps.end(); ++it) {
+      PluginDependency dep((*it).pluginName,(*it).factoryName,version+" "+(*it).pluginRelease);
+      plugin.dependencies.push_back(dep);
     }
 
-    virtual void loading(const std::string &filename)
-    {
-      currentFileName = QFileInfo(filename.c_str()).fileName().toStdString();
-    }
+    pluginsList.push_back(plugin);
+  }
 
-    virtual void loaded(const std::string &name,
-			const std::string &author,
-			const std::string &date, 
-			const std::string &info,
-			const std::string &release,
-			const std::string &version,
-			const std::list <Dependency> &deps)
-    {
-      LocalPluginInfo plugin;
-      plugin.name=name;
-      plugin.type=currentType;
-      plugin.version=version+" "+release;
-      plugin.fileName=currentFileName.substr(0,currentFileName.rfind("."));
-      plugin.author=author;
-      plugin.date=date;
-      plugin.info=info;
-      plugin.server="Installed";
-      
-      for(std::list<Dependency>::const_iterator it=deps.begin();it!=deps.end();++it) {
-        PluginDependency dep((*it).pluginName,(*it).factoryName,version+" "+(*it).pluginRelease);
-        plugin.dependencies.push_back(dep);
-      }
-      
-      pluginsList.push_back(plugin);
-    }
+  virtual void aborted(const std::string& filename,const std::string &errormsg) {
+    errorMsgs += filename + ":\n    " + errormsg + '\n';
+  }
 
-    virtual void aborted(const std::string& filename,const std::string &errormsg) {
-      errorMsgs += filename + ":\n    " + errormsg + '\n';
-    }
+  virtual void finished(bool,const std::string&) {}
+};
 
-    virtual void finished(bool,const std::string&){}
-  };
-  
 }
 #endif

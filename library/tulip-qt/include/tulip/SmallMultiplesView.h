@@ -134,7 +134,9 @@ public:
     * @brief When set, the zoomAnimationActivated provides smooth camera transitions when selecting an item in the overview mode or when centering the overview's camera.
     * Default value is true.
     */
-  bool isZoomAnimationActivated() const { return _zoomAnimationActivated; }
+  bool isZoomAnimationActivated() const {
+    return _zoomAnimationActivated;
+  }
 
   /**
     * @brief Defines a maximum size for items' labels in overview mode.
@@ -142,13 +144,17 @@ public:
     * If set to -1, then labels will never be wrapped.
     * Default value is -1.
     */
-  int maxLabelSize() const { return _maxLabelSize; }
+  int maxLabelSize() const {
+    return _maxLabelSize;
+  }
 
   /**
     * @brief By default, the data method organizes items position in a square shape in the overview mode. This value defines the spacing between to items in this square.
     * @warning When overriding the data method for the Position role, this value has no effect.
     */
-  double spacing() const { return _spacing; }
+  double spacing() const {
+    return _spacing;
+  }
 
   /**
     * @brief Shows or hides the "overview" layer in the GlMainWidget, making the overview visible or not.
@@ -166,7 +172,9 @@ public:
     * @brief Indicates if the view is currently in overview mode or not. This will affect the behavior of the Small multiples navigation interactor (see class description)
     * This method can be subclassed. By default, we consider that we are in overview mode when the overview layer is visible.
     */
-  virtual bool isOverview() const { return isOverviewVisible(); }
+  virtual bool isOverview() const {
+    return isOverviewVisible();
+  }
 
   /**
     * @brief Check if the overview layer is visible.
@@ -203,7 +211,9 @@ public slots:
     * @brief When set, the zoomAnimationActivated provides smooth camera transitions when selecting an item in the overview mode or when centering the overview's camera.
     * Default value is true.
     */
-  void setZoomAnimationActivated(bool f) { _zoomAnimationActivated = f; }
+  void setZoomAnimationActivated(bool f) {
+    _zoomAnimationActivated = f;
+  }
 
   /**
     * @brief Defines a maximum size for items' labels in overview mode.
@@ -211,13 +221,17 @@ public slots:
     * If set to -1, then labels will never be wrapped.
     * Default value is -1.
     */
-  void setMaxLabelSize(int s) { _maxLabelSize = s; }
+  void setMaxLabelSize(int s) {
+    _maxLabelSize = s;
+  }
 
   /**
     * @brief By default, the data method organizes items position in a square shape in the overview mode. This value defines the spacing between to items in this square.
     * @warning When overriding the data method for the Position role, this value has no effect.
     */
-  void setSpacing(double s) { _spacing = s; }
+  void setSpacing(double s) {
+    _spacing = s;
+  }
 
   /**
     * @brief Toggles specific interactors for this view.

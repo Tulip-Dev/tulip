@@ -28,19 +28,19 @@
 class IntegerPropertyMinMaxUpdateTest : public CppUnit::TestFixture {
 public:
 
-	void setUp();
-	void tearDown();
-	void testIntegerPropertyMinUpdate();
-	void testIntegerPropertyMaxUpdate();
-	void testIntegerPropertyMinUpdateFromString();
-	void testIntegerPropertyMaxUpdateFromString();
+  void setUp();
+  void tearDown();
+  void testIntegerPropertyMinUpdate();
+  void testIntegerPropertyMaxUpdate();
+  void testIntegerPropertyMinUpdateFromString();
+  void testIntegerPropertyMaxUpdateFromString();
 
-	static CppUnit::Test *suite();
+  static CppUnit::Test *suite();
 
 private :
 
-	tlp::Graph *graph;
-	tlp::node n1, n4;
+  tlp::Graph *graph;
+  tlp::node n1, n4;
 };
 
 #endif /* INTEGERPROPERTYMINMAXUPDATETEST_H_ */

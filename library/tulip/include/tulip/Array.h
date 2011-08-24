@@ -26,30 +26,30 @@
 #include <tulip/tulipconf.h>
 
 namespace tlp {
-  /**
-   * @addtogroup basic
-   */ 
-  /*@{*/
-  /**
-   * @brief Fixed-size array encapsulation.
-   * In debug mode, a bound check is performed at each access.
-   * 
-   * @author : David Auber auber@tulip-software.org
-   * @version 0.0.1 24/01/2003 
-   */
-  template <typename Obj,unsigned int SIZE>
-  struct TLP_SCOPE Array {
-    Obj array[SIZE];
-    inline Obj  operator[](const unsigned int i) const;
-    inline Obj& operator[](const unsigned int i);
-  };
-  
-  template <typename Obj,unsigned int SIZE>
-  std::ostream& operator<<(std::ostream &os,const Array<Obj,SIZE> &array);
-  template <typename Obj,unsigned int SIZE>
-  std::istream& operator>>(std::istream &is, Array<Obj,SIZE> &);
+/**
+ * @addtogroup basic
+ */
+/*@{*/
+/**
+ * @brief Fixed-size array encapsulation.
+ * In debug mode, a bound check is performed at each access.
+ *
+ * @author : David Auber auber@tulip-software.org
+ * @version 0.0.1 24/01/2003
+ */
+template <typename Obj,unsigned int SIZE>
+struct TLP_SCOPE Array {
+  Obj array[SIZE];
+  inline Obj  operator[](const unsigned int i) const;
+  inline Obj& operator[](const unsigned int i);
+};
 
-  /*@}*/
+template <typename Obj,unsigned int SIZE>
+std::ostream& operator<<(std::ostream &os,const Array<Obj,SIZE> &array);
+template <typename Obj,unsigned int SIZE>
+std::istream& operator>>(std::istream &is, Array<Obj,SIZE> &);
+
+/*@}*/
 }
 
 #include "cxx/Array.cxx"

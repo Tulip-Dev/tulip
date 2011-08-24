@@ -31,23 +31,23 @@ class TLP_GL_SCOPE GlCubicBSplineInterpolation : public GlOpenUniformCubicBSplin
 
 public :
 
-	/**
-	 * GlCubicBSplineInterpolation constructor
-	 *
-	 * \param pointsToInterpolate the set of points to interpolate
-	 * \param startColor the color at the start of the curve
-	 * \param endColor the color at the end of the curve
-	 * \param startSize the width at the start of the curve
-	 * \param endSize the width at the end of the curve
-	 * \param nbCurvePoints the number of curve points to generate
-	 */
-	GlCubicBSplineInterpolation(const std::vector<Coord> &pointsToInterpolate, const Color &startColor, const Color &endColor,
-								const float startSize, const float endSize, const unsigned int nbCurvePoints = 100);
+  /**
+   * GlCubicBSplineInterpolation constructor
+   *
+   * \param pointsToInterpolate the set of points to interpolate
+   * \param startColor the color at the start of the curve
+   * \param endColor the color at the end of the curve
+   * \param startSize the width at the start of the curve
+   * \param endSize the width at the end of the curve
+   * \param nbCurvePoints the number of curve points to generate
+   */
+  GlCubicBSplineInterpolation(const std::vector<Coord> &pointsToInterpolate, const Color &startColor, const Color &endColor,
+                              const float startSize, const float endSize, const unsigned int nbCurvePoints = 100);
 
 
 private :
 
-	std::vector<Coord> constructInterpolatingCubicBSpline(const std::vector<Coord> &pointsToInterpolate);
+  std::vector<Coord> constructInterpolatingCubicBSpline(const std::vector<Coord> &pointsToInterpolate);
 
 };
 

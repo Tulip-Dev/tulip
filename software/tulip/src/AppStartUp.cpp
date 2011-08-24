@@ -67,11 +67,12 @@ void AppStartUp::initTulip(TulipPluginLoader *loader, std::string &errors) {
   // free memory
   errorMsgs.resize(0);
 
-  if(dontClose){
+  if(dontClose) {
     closeButton->setEnabled(true);
     setTotalSteps(100);
     setProgress(100);
-  }else{
+  }
+  else {
     close();
   }
 }
@@ -85,7 +86,7 @@ void AppStartUp::addErrorMsg(const std::string& errMsg) {
  *  Constructs a AppStartUp which is a child of 'parent'
  */
 AppStartUp::AppStartUp(QWidget* parent) :
-	QDialog(parent), currentFrame(0) {
+  QDialog(parent), currentFrame(0) {
 
   setupUi(this);
   setModal(true);
@@ -107,6 +108,7 @@ AppStartUp::AppStartUp(QWidget* parent) :
 
   // compute tipsNumber
   while(tips[tipsNumber]) ++tipsNumber;
+
   srand ( time(NULL) );
   currentTipNumber=rand() % tipsNumber;
   textBrowser->setHtml(tips[currentTipNumber]);
@@ -115,8 +117,10 @@ AppStartUp::AppStartUp(QWidget* parent) :
   settings.beginGroup("Preference");
   dontClose=settings.value("dontCloseStartUp",true).toBool();
   settings.endGroup();
+
   if(!dontClose)
     showAgain->setCheckState(Qt::Unchecked);
+
   closeButton->setEnabled(false);
 
   connect(closeButton,SIGNAL(clicked()),this,SLOT(close()));
@@ -135,11 +139,14 @@ AppStartUp::~AppStartUp() {
 
 void AppStartUp::setProgress(int progress) {
   progressBar->setValue(progress);
+
   if (progress != 0 && currentFrame != 99) {
     currentFrame = (int) (((float) progress / ((float) totalSteps * 0.75))
                           * 100);
+
     if (currentFrame > 99)
       currentFrame = 99;
+
     movie->jumpToFrame(currentFrame);
   }
 }

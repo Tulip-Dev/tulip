@@ -30,126 +30,136 @@ using namespace std;
 
 namespace tlp {
 
-  GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),rootGraph(graph->getRoot()),haveToSort(true),nodesModified(true) {
-    graph->addGraphObserver(this);
-    graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addPropertyObserver(this);
+GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),rootGraph(graph->getRoot()),haveToSort(true),nodesModified(true) {
+  graph->addGraphObserver(this);
+  graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addPropertyObserver(this);
+
+  Iterator<node>* nodesIterator = graph->getNodes();
+
+  while (nodesIterator->hasNext()) {
+    node n=nodesIterator->next();
+
+    if(graph->getNodeMetaInfo(n))
+      metaNodes.insert(n);
+  }
+
+  delete nodesIterator;
+}
+
+GlGraphComposite::~GlGraphComposite() {
+  if(inputData.getGraph()) {
+    inputData.getGraph()->removeGraphObserver(this);
+    inputData.getGraph()->getProperty<GraphProperty>("viewMetaGraph")->removePropertyObserver(this);
+  }
+}
+
+void GlGraphComposite::acceptVisitorForNodes(Graph *graph,GlSceneVisitor *visitor) {
+  if(isDisplayNodes() || isDisplayMetaNodes()) {
+    visitor->reserveMemoryForNodes(graph->numberOfNodes());
+    GlNode glNode(0);
+    bool isMetaNode;
 
     Iterator<node>* nodesIterator = graph->getNodes();
-    while (nodesIterator->hasNext()){
+
+    while (nodesIterator->hasNext()) {
       node n=nodesIterator->next();
-      if(graph->getNodeMetaInfo(n))
-        metaNodes.insert(n);
+      isMetaNode = inputData.getGraph()->isMetaNode(n);
+
+      if((isDisplayNodes() && !isMetaNode) || (isDisplayMetaNodes() && isMetaNode)) {
+        glNode.id=n.id;
+        glNode.acceptVisitor(visitor);
+      }
     }
+
     delete nodesIterator;
   }
+}
 
-  GlGraphComposite::~GlGraphComposite(){
-    if(inputData.getGraph()){
-      inputData.getGraph()->removeGraphObserver(this);
-      inputData.getGraph()->getProperty<GraphProperty>("viewMetaGraph")->removePropertyObserver(this);
+void GlGraphComposite::acceptVisitorForEdges(Graph *graph,GlSceneVisitor *visitor) {
+  if(isDisplayEdges()) {
+    visitor->reserveMemoryForEdges(graph->numberOfEdges());
+
+    GlEdge glEdge(0);
+    Iterator<edge>* edgesIterator = graph->getEdges();
+
+    while (edgesIterator->hasNext()) {
+      glEdge.id=edgesIterator->next().id;
+      glEdge.acceptVisitor(visitor);
     }
+
+    delete edgesIterator;
   }
+}
 
-  void GlGraphComposite::acceptVisitorForNodes(Graph *graph,GlSceneVisitor *visitor){
-    if(isDisplayNodes() || isDisplayMetaNodes()){
-      visitor->reserveMemoryForNodes(graph->numberOfNodes());
-      GlNode glNode(0);
-      bool isMetaNode;
+void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor) {
+  Graph *graph=inputData.getGraph();
 
-      Iterator<node>* nodesIterator = graph->getNodes();
-      while (nodesIterator->hasNext()){
-        node n=nodesIterator->next();
-        isMetaNode = inputData.getGraph()->isMetaNode(n);
-        if((isDisplayNodes() && !isMetaNode) || (isDisplayMetaNodes() && isMetaNode)){
-          glNode.id=n.id;
-          glNode.acceptVisitor(visitor);
-        }
-      }
-      delete nodesIterator;
-    }
-  }
+  if(!graph)
+    return;
 
-  void GlGraphComposite::acceptVisitorForEdges(Graph *graph,GlSceneVisitor *visitor){
-    if(isDisplayEdges()) {
-      visitor->reserveMemoryForEdges(graph->numberOfEdges());
+  // Check if the current graph are in the hierarchy
+  assert((rootGraph==graph) || (rootGraph->isDescendantGraph(graph)));
 
-      GlEdge glEdge(0);
-      Iterator<edge>* edgesIterator = graph->getEdges();
-      while (edgesIterator->hasNext()){
-        glEdge.id=edgesIterator->next().id;
-        glEdge.acceptVisitor(visitor);
-      }
-      delete edgesIterator;
-    }
-  }
-
-  void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor)
-  {
-    Graph *graph=inputData.getGraph();
-    if(!graph)
-      return;
-
-    // Check if the current graph are in the hierarchy
-    assert((rootGraph==graph) || (rootGraph->isDescendantGraph(graph)));
-
-    if(visitor->isThreadSafe()){
+  if(visitor->isThreadSafe()) {
 #ifdef HAVE_OMP
 #pragma omp parallel
 #endif
+    {
+#ifdef HAVE_OMP
+#pragma omp sections nowait
+#endif
       {
-#ifdef HAVE_OMP
-#pragma omp sections nowait
-#endif
-        {
-          acceptVisitorForNodes(graph,visitor);
-        }
-#ifdef HAVE_OMP
-#pragma omp sections nowait
-#endif
-        {
-          acceptVisitorForEdges(graph,visitor);
-        }
+        acceptVisitorForNodes(graph,visitor);
       }
-    }else{
-      acceptVisitorForNodes(graph,visitor);
-      acceptVisitorForEdges(graph,visitor);
+#ifdef HAVE_OMP
+#pragma omp sections nowait
+#endif
+      {
+        acceptVisitorForEdges(graph,visitor);
+      }
     }
   }
-  //===================================================================
-  void GlGraphComposite::destroy(Graph *g){
-    if(inputData.getGraph()==g){
-      inputData.getGraph()->removeGraphObserver(this);
-      inputData.getGraph()->getProperty<GraphProperty>("viewMetaGraph")->removePropertyObserver(this);
-      inputData.graph=NULL;
-    }
+  else {
+    acceptVisitorForNodes(graph,visitor);
+    acceptVisitorForEdges(graph,visitor);
   }
+}
+//===================================================================
+void GlGraphComposite::destroy(Graph *g) {
+  if(inputData.getGraph()==g) {
+    inputData.getGraph()->removeGraphObserver(this);
+    inputData.getGraph()->getProperty<GraphProperty>("viewMetaGraph")->removePropertyObserver(this);
+    inputData.graph=NULL;
+  }
+}
 
-  //===================================================================
-  const GlGraphRenderingParameters& GlGraphComposite::getRenderingParameters() {
-    return parameters;
+//===================================================================
+const GlGraphRenderingParameters& GlGraphComposite::getRenderingParameters() {
+  return parameters;
+}
+//===================================================================
+void GlGraphComposite::setRenderingParameters(const GlGraphRenderingParameters &parameter) {
+  if(parameters.isElementOrdered() != parameter.isElementOrdered()) {
+    parameters = parameter;
+    haveToSort=true;
   }
-  //===================================================================
-  void GlGraphComposite::setRenderingParameters(const GlGraphRenderingParameters &parameter) {
-    if(parameters.isElementOrdered() != parameter.isElementOrdered()) {
-      parameters = parameter;
-      haveToSort=true;
-    }else{
-      parameters = parameter;
-    }
+  else {
+    parameters = parameter;
   }
-  //===================================================================
-  GlGraphRenderingParameters* GlGraphComposite::getRenderingParametersPointer() {
-    return &parameters;
-  }
-  //===================================================================
-  GlGraphInputData* GlGraphComposite::getInputData() {
-    return &inputData;
-  }
-  //====================================================
-  void GlGraphComposite::getXML(xmlNodePtr rootNode){
-    GlXMLTools::createProperty(rootNode, "type", "GlGraphComposite");
-  }
-   //====================================================
-  void GlGraphComposite::setWithXML(xmlNodePtr){
-  }
+}
+//===================================================================
+GlGraphRenderingParameters* GlGraphComposite::getRenderingParametersPointer() {
+  return &parameters;
+}
+//===================================================================
+GlGraphInputData* GlGraphComposite::getInputData() {
+  return &inputData;
+}
+//====================================================
+void GlGraphComposite::getXML(xmlNodePtr rootNode) {
+  GlXMLTools::createProperty(rootNode, "type", "GlGraphComposite");
+}
+//====================================================
+void GlGraphComposite::setWithXML(xmlNodePtr) {
+}
 }

@@ -30,193 +30,195 @@
 
 namespace tlp {
 
-  class Request {
+class Request {
 
-  public : 
-    virtual ~Request() {}
+public :
+  virtual ~Request() {}
 
-    bool post;
-    
-  protected :  
-    Request():post(false){};
+  bool post;
 
+protected :
+  Request():post(false) {};
+
+};
+
+class GetRequest : public Request {
+
+protected :
+
+  RequestFinish* requestFinish;
+
+public :
+  GetRequest(RequestFinish* requestFinish,const std::string &getFileName,const std::string &outFileName):requestFinish(requestFinish),getFileName(getFileName),outFileName(outFileName) {};
+  virtual ~GetRequest();
+  virtual void applyRequestFinish() const;
+
+  std::string getFileName;
+  std::string outFileName;
+
+};
+
+class  SOAPRequest : public Request {
+
+protected :
+  ResponseTreatment* respTreatment;
+
+public :
+  virtual ~SOAPRequest();
+
+  virtual void getXml(std::string &xml) const = 0;
+  virtual void applyResponseTreatment(const std::string &data) const;
+
+protected :
+  SOAPRequest():respTreatment(0) {
+    post=true;
   };
 
-  class GetRequest : public Request {
+};
 
-  protected :
+class DownloadPluginRequest : public SOAPRequest {
 
-    RequestFinish* requestFinish;
+  std::string name;
 
-  public :  
-    GetRequest(RequestFinish* requestFinish,const std::string &getFileName,const std::string &outFileName):requestFinish(requestFinish),getFileName(getFileName),outFileName(outFileName){};
-    virtual ~GetRequest();
-    virtual void applyRequestFinish() const;
+public:
+  DownloadPluginRequest(const std::string &name);
 
-    std::string getFileName;
-    std::string outFileName;
+  void getXml(std::string &xml) const;
 
-  };
-  
-  class  SOAPRequest : public Request{
-    
-  protected :
-    ResponseTreatment* respTreatment;
+};
 
-  public : 
-    virtual ~SOAPRequest();
+class ConnectServerRequest : public SOAPRequest {
 
-    virtual void getXml(std::string &xml) const = 0;
-    virtual void applyResponseTreatment(const std::string &data) const;
-    
-  protected :  
-    SOAPRequest():respTreatment(0){post=true;};
-    
-  };
+public:
 
-  class DownloadPluginRequest : public SOAPRequest{
-    
-    std::string name;
+  void getXml(std::string &xml) const;
 
-  public:   
-    DownloadPluginRequest(const std::string &name);
-    
-    void getXml(std::string &xml) const;
-    
-  };
+};
 
-  class ConnectServerRequest : public SOAPRequest{
+class GetServerNameRequest: public SOAPRequest {
 
-  public:   
-    
-    void getXml(std::string &xml) const;
-    
-  };
+public:
 
-  class GetServerNameRequest: public SOAPRequest{
+  GetServerNameRequest(ResponseTreatment* resp);
 
-  public: 
-    
-    GetServerNameRequest(ResponseTreatment* resp);
-    
-    void getXml(std::string &xml) const;
-    
-  };
-  
-  
-  class ServerNameTreatment : public QObject, public ResponseTreatment{
-    Q_OBJECT
-    
-  private:
-    std::string addr;
-    
-  public :
-    ServerNameTreatment(std::string addr);
-    
-  void operator()(const std::string &data);
-    
-  signals:
-    void nameReceived(ServerNameTreatment*,std::string,std::string);
-    
-  };
+  void getXml(std::string &xml) const;
 
-  class GetTulipLastVersionNumberRequest: public SOAPRequest{
-
-  public:
-
-    GetTulipLastVersionNumberRequest(ResponseTreatment* resp);
-
-    void getXml(std::string &xml) const;
-
-  };
+};
 
 
-  class TulipLastVersionNumberTreatment : public QObject, public ResponseTreatment{
-    Q_OBJECT
+class ServerNameTreatment : public QObject, public ResponseTreatment {
+  Q_OBJECT
 
-  public :
-      TulipLastVersionNumberTreatment(){}
+private:
+  std::string addr;
+
+public :
+  ServerNameTreatment(std::string addr);
 
   void operator()(const std::string &data);
 
-  signals:
-    void versionReceived(TulipLastVersionNumberTreatment*,std::string);
+signals:
+  void nameReceived(ServerNameTreatment*,std::string,std::string);
 
+};
+
+class GetTulipLastVersionNumberRequest: public SOAPRequest {
+
+public:
+
+  GetTulipLastVersionNumberRequest(ResponseTreatment* resp);
+
+  void getXml(std::string &xml) const;
+
+};
+
+
+class TulipLastVersionNumberTreatment : public QObject, public ResponseTreatment {
+  Q_OBJECT
+
+public :
+  TulipLastVersionNumberTreatment() {}
+
+  void operator()(const std::string &data);
+
+signals:
+  void versionReceived(TulipLastVersionNumberTreatment*,std::string);
+
+};
+
+class GetPluginsListRequest: public SOAPRequest {
+
+public:
+  GetPluginsListRequest(ResponseTreatment* respT);
+
+  void getXml(std::string &xml) const;
+
+};
+
+class GetPluginRequest: public GetRequest {
+
+public:
+
+  GetPluginRequest(RequestFinish* requestFinish,const std::string& pluginName,const std::string &outFileName)
+    :GetRequest(requestFinish,std::string("/pluginsV2/")+pluginName,outFileName) {};
+
+};
+
+class GetPluginInfoRequest: public SOAPRequest {
+
+public:
+
+  GetPluginInfoRequest(const std::string& pluginFileName, const std::string& pluginVersion, ResponseTreatment* treatment)
+    :pluginFileName(pluginFileName), pluginVersion(pluginVersion) {
+    respTreatment=treatment;
   };
 
-  class GetPluginsListRequest: public SOAPRequest{
-    
-  public:   
-    GetPluginsListRequest(ResponseTreatment* respT);
-    
-    void getXml(std::string &xml) const;
-    
+  void getXml(std::string &xml) const {
+    SoapRequestBuilder request;
+
+    request.setFunctionName("getPluginXMLInfo_v2");
+
+    request.addFunctionParameter("pluginFileName","string",pluginFileName);
+    request.addFunctionParameter("pluginVersion","string",pluginVersion);
+
+    request.getXML(xml);
   };
 
-  class GetPluginRequest: public GetRequest {
-  
-  public: 
-    
-    GetPluginRequest(RequestFinish* requestFinish,const std::string& pluginName,const std::string &outFileName)
-      :GetRequest(requestFinish,std::string("/pluginsV2/")+pluginName,outFileName){};
-    
+private :
+
+  std::string pluginFileName;
+  std::string pluginVersion;
+  Platform platform;
+
+};
+
+class GetPluginDocRequest: public SOAPRequest {
+
+public:
+
+  GetPluginDocRequest(const std::string& pluginFileName, const std::string& pluginVersion, ResponseTreatment* treatment)
+    :pluginFileName(pluginFileName), pluginVersion(pluginVersion) {
+    respTreatment=treatment;
   };
 
-  class GetPluginInfoRequest: public SOAPRequest {
-  
-  public: 
-    
-    GetPluginInfoRequest(const std::string& pluginFileName, const std::string& pluginVersion, ResponseTreatment* treatment)
-      :pluginFileName(pluginFileName), pluginVersion(pluginVersion){
-      respTreatment=treatment;
-    };
-    
-    void getXml(std::string &xml) const {
-      SoapRequestBuilder request;
-      
-      request.setFunctionName("getPluginXMLInfo_v2");
-      
-      request.addFunctionParameter("pluginFileName","string",pluginFileName);
-      request.addFunctionParameter("pluginVersion","string",pluginVersion);
-      
-      request.getXML(xml);
+  void getXml(std::string &xml) const {
+    SoapRequestBuilder request;
+
+    request.setFunctionName("getPluginXMLDoc_v2");
+
+    request.addFunctionParameter("pluginFileName","string",pluginFileName);
+    request.addFunctionParameter("pluginVersion","string",pluginVersion);
+
+    request.getXML(xml);
   };
 
-  private :
-    
-    std::string pluginFileName;
-    std::string pluginVersion;
-    Platform platform;
-    
-  };
+private :
 
-  class GetPluginDocRequest: public SOAPRequest {
-  
-  public: 
-    
-    GetPluginDocRequest(const std::string& pluginFileName, const std::string& pluginVersion, ResponseTreatment* treatment)
-      :pluginFileName(pluginFileName), pluginVersion(pluginVersion){
-      respTreatment=treatment;
-    };
-    
-    void getXml(std::string &xml) const {
-      SoapRequestBuilder request;
-      
-      request.setFunctionName("getPluginXMLDoc_v2");
-      
-      request.addFunctionParameter("pluginFileName","string",pluginFileName);
-      request.addFunctionParameter("pluginVersion","string",pluginVersion);
-      
-      request.getXML(xml);
-  };
+  std::string pluginFileName;
+  std::string pluginVersion;
+  Platform platform;
 
-  private :
-    
-    std::string pluginFileName;
-    std::string pluginVersion;
-    Platform platform;
-    
-  };
+};
 
 }
 

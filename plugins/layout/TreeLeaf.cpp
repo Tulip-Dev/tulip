@@ -29,50 +29,61 @@ using namespace tlp;
 
 
 void TreeLeaf::computeLevelHeights(tlp::Graph *tree, tlp::node n, unsigned int depth,
-				   OrientableSizeProxy *oriSize) {
+                                   OrientableSizeProxy *oriSize) {
   if (levelHeights.size() == depth)
     levelHeights.push_back(0);
+
   float nodeHeight = oriSize->getNodeValue(n).getH();
+
   if (nodeHeight > levelHeights[depth])
     levelHeights[depth] = nodeHeight;
+
   node on;
   forEach(on, tree->getOutNodes(n))
-    computeLevelHeights(tree, on, depth + 1, oriSize);
+  computeLevelHeights(tree, on, depth + 1, oriSize);
 }
-  
+
 float TreeLeaf::dfsPlacement(tlp::Graph* tree, tlp::node n, float x, float y, unsigned int depth,
-			     OrientableLayout *oriLayout, OrientableSizeProxy *oriSize) {
+                             OrientableLayout *oriLayout, OrientableSizeProxy *oriSize) {
   float minX = 0;
   float maxX = 0;
   float nodeWidth = oriSize->getNodeValue(n).getW();
+
   if (tree->outdeg(n) == 0) {
     oriLayout->setNodeValue(n, OrientableCoord(oriLayout, x + nodeWidth/2, y, 0));
     return x + nodeWidth;
   }
+
   Iterator<node> *itN=tree->getOutNodes(n);
+
   if (itN->hasNext()) {
     node itn = itN->next();
     minX = x;
     maxX = x = dfsPlacement(tree, itn, x, y + spacing, depth + 1, oriLayout, oriSize);
+
     if (minX + nodeWidth > maxX)
       maxX = minX + nodeWidth;
   }
-  for (;itN->hasNext();) {
+
+  for (; itN->hasNext();) {
     node itn = itN->next();
     x += nodeSpacing;
     x = dfsPlacement(tree, itn, x, y + spacing, depth + 1, oriLayout, oriSize);
+
     if (x > maxX)
       maxX = x;
+
     if (x < minX)
       minX = x;
   }
+
   delete itN;
   x = (minX + maxX)/2;
   oriLayout->setNodeValue(n, OrientableCoord(oriLayout, x, y, 0));
   return maxX;
 }
 
-TreeLeaf::TreeLeaf(const tlp::PropertyContext &context):LayoutAlgorithm(context){
+TreeLeaf::TreeLeaf(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addOrientationParameters(this);
   addSpacingParameters(this);
@@ -84,8 +95,10 @@ bool TreeLeaf::run() {
   orientationType mask = getMask(dataSet);
   OrientableLayout oriLayout(layoutResult, mask);
   SizeProperty* size;
+
   if (!getNodeSizePropertyParameter(dataSet, size))
     size = graph->getProperty<SizeProperty>("viewSize");
+
   OrientableSizeProxy oriSize(size, mask);
   getSpacingParameters(dataSet, nodeSpacing, spacing);
 
@@ -94,32 +107,38 @@ bool TreeLeaf::run() {
 
   // push a temporary graph state (not redoable)
   graph->push(false);
+
   // but ensure layoutResult will be preserved
   if (layoutResult->getName() != "")
     preservePropertyUpdates(layoutResult);
 
   Graph *tree = TreeTest::computeTree(graph, pluginProgress);
+
   if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
     graph->pop();
     return false;
   }
 
   node root;
+
   if (!tlp::getSource(tree, root))
     // graph is empty
     return true;
 
   computeLevelHeights(tree, root, 0, &oriSize);
+
   // check if the specified layer spacing is greater
   // than the max of the minimum layer spacing of the tree
   for (unsigned int i = 0; i < levelHeights.size() - 1;  ++i) {
     float minLayerSpacing = (levelHeights[i] + levelHeights[i + 1]) / 2;
+
     if (minLayerSpacing + nodeSpacing > spacing)
       spacing = minLayerSpacing + nodeSpacing;
   }
+
   dfsPlacement(tree, root, 0, 0, 0, &oriLayout, &oriSize);
 
-  // forget last temporary graph state 
+  // forget last temporary graph state
   graph->pop();
 
   return true;

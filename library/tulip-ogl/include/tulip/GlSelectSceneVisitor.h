@@ -29,51 +29,51 @@
 
 namespace tlp {
 
-  enum SelectionFlag {
-    SelectSimpleEntities=1,
-    SelectNodes=2,
-    SelectEdges=4
-  };
+enum SelectionFlag {
+  SelectSimpleEntities=1,
+  SelectNodes=2,
+  SelectEdges=4
+};
+
+/**
+ * This visitor is use when we want to select an entity in scene
+ */
+class TLP_GL_SCOPE GlSelectSceneVisitor : public GlSceneVisitor {
+
+public:
 
   /**
-   * This visitor is use when we want to select an entity in scene
+   * Constructor with SelectionFlac (SelectSimpleEntity, SelectNodes and SelectEdges), GlGraphInputData and GlLODCalculator
    */
-  class TLP_GL_SCOPE GlSelectSceneVisitor : public GlSceneVisitor{
+  GlSelectSceneVisitor(SelectionFlag flag,GlGraphInputData* inputData,GlLODCalculator *calculator)
+    :selectionFlag(flag),inputData(inputData),calculator(calculator) {}
 
-  public:
+  /**
+   * Visit a simple entity
+   */
+  virtual void visit(GlSimpleEntity *entity);
+  /**
+   * Visit a node
+   */
+  virtual void visit(GlNode *glNode);
+  /**
+   * Visit an edge
+   */
+  virtual void visit(GlEdge *glEdge);
+  /**
+   * Visit a layer
+   */
+  virtual void visit(GlLayer *layer);
 
-    /**
-     * Constructor with SelectionFlac (SelectSimpleEntity, SelectNodes and SelectEdges), GlGraphInputData and GlLODCalculator
-     */
-    GlSelectSceneVisitor(SelectionFlag flag,GlGraphInputData* inputData,GlLODCalculator *calculator)
-      :selectionFlag(flag),inputData(inputData),calculator(calculator) {}
+private:
 
-    /**
-     * Visit a simple entity
-     */
-    virtual void visit(GlSimpleEntity *entity);
-    /**
-     * Visit a node
-     */
-    virtual void visit(GlNode *glNode);
-    /**
-     * Visit an edge
-     */
-    virtual void visit(GlEdge *glEdge);
-    /**
-     * Visit a layer
-     */
-    virtual void visit(GlLayer *layer);
+  SelectionFlag selectionFlag;
 
-  private:
+  GlGraphInputData* inputData;
 
-    SelectionFlag selectionFlag;
+  GlLODCalculator* calculator;
 
-    GlGraphInputData* inputData;
-
-    GlLODCalculator* calculator;
-
-  };
+};
 
 }
 

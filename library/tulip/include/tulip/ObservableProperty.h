@@ -39,13 +39,13 @@ namespace tlp {
 class PropertyInterface;
 //=========================================================
 
-/** \addtogroup properties */ 
+/** \addtogroup properties */
 /*@{*/
 /// Observer for Property
 /**
- * The Observer pattern is described in the lecture notes and pp293-304 
- * of Design Patterns by Gamma, Helm, Johnson, and Vlissides. It is a 
- * framework for handling state dependency between observer and observed 
+ * The Observer pattern is described in the lecture notes and pp293-304
+ * of Design Patterns by Gamma, Helm, Johnson, and Vlissides. It is a
+ * framework for handling state dependency between observer and observed
  * object.
  */
 class  TLP_SCOPE PropertyObserver {
@@ -65,22 +65,22 @@ private:
   RealPropertyObserver hiddenPObserver;
 public:
   PropertyObserver() :hiddenPObserver(this) {}
-  virtual ~PropertyObserver(){}
+  virtual ~PropertyObserver() {}
   // no copy for hiddenObserver
   PropertyObserver(const PropertyObserver&) :hiddenPObserver(this) {}
   PropertyObserver& operator=(const PropertyObserver &) {
     return *this;
   }
 
-  virtual void beforeSetNodeValue(PropertyInterface*, const node){}
-  virtual void afterSetNodeValue(PropertyInterface*, const node){}
-  virtual void beforeSetEdgeValue(PropertyInterface*, const edge){}
-  virtual void afterSetEdgeValue(PropertyInterface*, const edge){}
-  virtual void beforeSetAllNodeValue(PropertyInterface*){}
-  virtual void afterSetAllNodeValue(PropertyInterface*){}
-  virtual void beforeSetAllEdgeValue(PropertyInterface*){}
-  virtual void afterSetAllEdgeValue(PropertyInterface*){}
-  virtual void destroy(PropertyInterface*){}
+  virtual void beforeSetNodeValue(PropertyInterface*, const node) {}
+  virtual void afterSetNodeValue(PropertyInterface*, const node) {}
+  virtual void beforeSetEdgeValue(PropertyInterface*, const edge) {}
+  virtual void afterSetEdgeValue(PropertyInterface*, const edge) {}
+  virtual void beforeSetAllNodeValue(PropertyInterface*) {}
+  virtual void afterSetAllNodeValue(PropertyInterface*) {}
+  virtual void beforeSetAllEdgeValue(PropertyInterface*) {}
+  virtual void afterSetAllEdgeValue(PropertyInterface*) {}
+  virtual void destroy(PropertyInterface*) {}
 };
 /*@}*/
 }

@@ -25,24 +25,24 @@
 
 namespace tlp {
 
-  class GlSceneVisitor;
-  class GlLayout;
+class GlSceneVisitor;
+class GlLayout;
+
+/**
+ * Abstract class used to represent all entity of a scene
+ */
+class TLP_GL_SCOPE GlEntity {
+
+public:
+
+  virtual ~GlEntity() {}
 
   /**
-   * Abstract class used to represent all entity of a scene
+   * Accpet visitor function
    */
-  class TLP_GL_SCOPE GlEntity {
+  virtual void acceptVisitor(GlSceneVisitor *visitor)=0;
 
-  public:
-
-    virtual ~GlEntity() {}
-
-    /**
-     * Accpet visitor function
-     */
-    virtual void acceptVisitor(GlSceneVisitor *visitor)=0;
-
-  };
+};
 
 }
 

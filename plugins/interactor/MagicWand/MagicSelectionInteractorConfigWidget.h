@@ -24,8 +24,8 @@
 #include <tulip/Observable.h>
 
 namespace tlp {
-  class Graph;
-  class PropertyInterface;
+class Graph;
+class PropertyInterface;
 }
 
 enum Selectionbehavior {
@@ -37,27 +37,27 @@ enum Selectionbehavior {
 
 class MagicSelectionInteractorConfigWidget : public QWidget, public Ui_MagicSelectionInteractorConfigWidget, public tlp::Observable {
   Q_OBJECT
-  public:
-    MagicSelectionInteractorConfigWidget(QWidget* parent = 0);
-    
-    void setGraph(tlp::Graph* graph);
-    
-    virtual void observableDestroyed(tlp::Observable* ) {}
-    virtual void update(std::set< tlp::Observable* >::iterator, std::set< tlp::Observable* >::iterator);
-    
-    QString propertyName() const;
-    Selectionbehavior selectionBehavior() const;
-    bool directedSelection() const;
-    double upperBound() const;
-    double lowerBound() const;
-    
-  private:
-    tlp::Graph* _graph;
-    tlp::PropertyInterface* _currentProperty;
-    void updateAvailableProperties();
+public:
+  MagicSelectionInteractorConfigWidget(QWidget* parent = 0);
+
+  void setGraph(tlp::Graph* graph);
+
+  virtual void observableDestroyed(tlp::Observable* ) {}
+  virtual void update(std::set< tlp::Observable* >::iterator, std::set< tlp::Observable* >::iterator);
+
+  QString propertyName() const;
+  Selectionbehavior selectionBehavior() const;
+  bool directedSelection() const;
+  double upperBound() const;
+  double lowerBound() const;
+
+private:
+  tlp::Graph* _graph;
+  tlp::PropertyInterface* _currentProperty;
+  void updateAvailableProperties();
 public slots:
-    void pushButtontoggled(bool);
-    void selectedPropertyChanged(const QString&);
+  void pushButtontoggled(bool);
+  void selectedPropertyChanged(const QString&);
 };
 
 #endif // MAGICSELECTIONINTERACTORCONFIGWIDGET_H

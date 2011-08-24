@@ -34,59 +34,55 @@
 
 using namespace tlp;
 
-/* 
- *  Constructs a ElementPropertiesWidgetUI as a child of 'parent', with the 
+/*
+ *  Constructs a ElementPropertiesWidgetUI as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  */
 ElementPropertiesWidgetUI::ElementPropertiesWidgetUI( QWidget* parent)
-    : QWidget(parent)
-{
-    ElementPropertiesWidgetUILayout = new QGridLayout(this); 
-    
-    ElementPropertiesWidgetUILayout->setSpacing(6);
-    label = new QLabel(this);
-    /*label->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)0, 0, 0, label->sizePolicy().hasHeightForWidth() ) );*/
-    label->setFrameShape( QLabel::NoFrame );
-    label->setScaledContents( FALSE );
-    label->setAlignment(Qt::AlignCenter);
-    label->setIndent( -1 );
+  : QWidget(parent) {
+  ElementPropertiesWidgetUILayout = new QGridLayout(this);
 
-    ElementPropertiesWidgetUILayout->addWidget( label, 0, 0 );
+  ElementPropertiesWidgetUILayout->setSpacing(6);
+  label = new QLabel(this);
+  /*label->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)0, 0, 0, label->sizePolicy().hasHeightForWidth() ) );*/
+  label->setFrameShape( QLabel::NoFrame );
+  label->setScaledContents( FALSE );
+  label->setAlignment(Qt::AlignCenter);
+  label->setIndent( -1 );
 
-    propertyTable = new PropertyWidget( this, "propertyTable" );
-    /* propertyTable->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, propertyTable->sizePolicy().hasHeightForWidth() ) ); */
-    // propertyTable->setVScrollBarMode( PropertyWidget::Auto );
-    propertyTable->setRowCount( 7 );
-    propertyTable->setColumnCount( 2 );
-    propertyTable->setSelectionMode(QAbstractItemView::NoSelection);
+  ElementPropertiesWidgetUILayout->addWidget( label, 0, 0 );
 
-    ElementPropertiesWidgetUILayout->addWidget( propertyTable, 1, 0 );
-    languageChange();
-    resize( QSize(220, 352).expandedTo(minimumSizeHint()) );
+  propertyTable = new PropertyWidget( this, "propertyTable" );
+  /* propertyTable->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, propertyTable->sizePolicy().hasHeightForWidth() ) ); */
+  // propertyTable->setVScrollBarMode( PropertyWidget::Auto );
+  propertyTable->setRowCount( 7 );
+  propertyTable->setColumnCount( 2 );
+  propertyTable->setSelectionMode(QAbstractItemView::NoSelection);
 
-    // signals and slots connections
-    //    connect( propertyTable, SIGNAL( valueChanged(int,int) ), this, SLOT( propertyTableValueChanged(int,int) ) );
+  ElementPropertiesWidgetUILayout->addWidget( propertyTable, 1, 0 );
+  languageChange();
+  resize( QSize(220, 352).expandedTo(minimumSizeHint()) );
+
+  // signals and slots connections
+  //    connect( propertyTable, SIGNAL( valueChanged(int,int) ), this, SLOT( propertyTableValueChanged(int,int) ) );
 }
 
 /*
  *  Destroys the object and frees any allocated resources
  */
-ElementPropertiesWidgetUI::~ElementPropertiesWidgetUI()
-{
-    // no need to delete child widgets, Qt does it all for us
+ElementPropertiesWidgetUI::~ElementPropertiesWidgetUI() {
+  // no need to delete child widgets, Qt does it all for us
 }
 
 /*
  *  Sets the strings of the subwidgets using the current
  *  language.
  */
-void ElementPropertiesWidgetUI::languageChange()
-{
-    label->setText( tr( "Node" ) );
+void ElementPropertiesWidgetUI::languageChange() {
+  label->setText( tr( "Node" ) );
 }
 
-void ElementPropertiesWidgetUI::propertyTableValueChanged(int,int)
-{
-    qWarning( "ElementPropertiesWidgetUI::propertyTableValueChanged(int,int): Not implemented yet" );
+void ElementPropertiesWidgetUI::propertyTableValueChanged(int,int) {
+  qWarning( "ElementPropertiesWidgetUI::propertyTableValueChanged(int,int): Not implemented yet" );
 }
 

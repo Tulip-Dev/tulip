@@ -24,20 +24,20 @@
 
 namespace tlp {
 
-  class  ResponseTreatment {  
+class  ResponseTreatment {
 
-  public:
-    virtual ~ResponseTreatment(){};
-    virtual void operator()(const std::string &data)= 0;
-  };
+public:
+  virtual ~ResponseTreatment() {};
+  virtual void operator()(const std::string &data)= 0;
+};
 
-  class RequestFinish {
-   
-  public :
-    virtual ~RequestFinish(){};
-    virtual void operator()()= 0;
-  };
+class RequestFinish {
+
+public :
+  virtual ~RequestFinish() {};
+  virtual void operator()()= 0;
+};
 
 }
-  
+
 #endif //_RESPONSE_TREATMENT_H

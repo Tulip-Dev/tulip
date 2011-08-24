@@ -4,8 +4,8 @@
 #include "tulip/GlLabel.h"
 
 namespace tlp {
-  class TextRenderer {
-  };
+class TextRenderer {
+};
 }
 
 #endif

@@ -46,40 +46,40 @@ class GlComplexPolygon;
  * reported to the user in debug mode, raising an assertion.
  */
 class TLP_GL_SCOPE GlConvexGraphHull {
-  public:
-    
-    /**
-     * @brief ...
-     *
-     * @param parent ...
-     * @param name ...
-     * @param fcolor The color used to fill the hull.
-     * @param graph The graph whose elements should be inside the hull.
-     * @param layout The property used to layout the elements in the graph.
-     * @param size The property defining the graph's elements' sizes.
-     * @param rotation The property defining the graph's elements' rotation.
-     **/
-    GlConvexGraphHull(GlComposite* parent, const std::string& name, const tlp::Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation);
+public:
 
-    ~GlConvexGraphHull();
+  /**
+   * @brief ...
+   *
+   * @param parent ...
+   * @param name ...
+   * @param fcolor The color used to fill the hull.
+   * @param graph The graph whose elements should be inside the hull.
+   * @param layout The property used to layout the elements in the graph.
+   * @param size The property defining the graph's elements' sizes.
+   * @param rotation The property defining the graph's elements' rotation.
+   **/
+  GlConvexGraphHull(GlComposite* parent, const std::string& name, const tlp::Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation);
 
-    /**
-    * Recomputes the whole Hull
-    */
-    void updateHull();
+  ~GlConvexGraphHull();
 
-    void setVisible(bool visible);
-    bool isVisible();
-  private:
-    GlComposite* _parent;
-    std::string _name;
-    Color _fcolor;
-    GlComplexPolygon* _polygon;
-    Graph *graph;
-    LayoutProperty *layout;
-    SizeProperty *size;
-    DoubleProperty *rotation;
-    static int bezierValue;
+  /**
+  * Recomputes the whole Hull
+  */
+  void updateHull();
+
+  void setVisible(bool visible);
+  bool isVisible();
+private:
+  GlComposite* _parent;
+  std::string _name;
+  Color _fcolor;
+  GlComplexPolygon* _polygon;
+  Graph *graph;
+  LayoutProperty *layout;
+  SizeProperty *size;
+  DoubleProperty *rotation;
+  static int bezierValue;
 };
 }
 

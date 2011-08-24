@@ -33,86 +33,86 @@
 
 namespace tlp {
 
-  enum PluginAttributePosition {
-    PLUGIN_NAME_POSITION=0,
-    PLUGIN_TYPE_POSITION,
-    PLUGIN_VERSION_POSITION,
-    PLUGIN_FILENAME_POSITION,
-    PLUGIN_LOCAL_VERSION_POSITION,
-    PLUGIN_GLOBAL_VERSION_POSITION
-  };
+enum PluginAttributePosition {
+  PLUGIN_NAME_POSITION=0,
+  PLUGIN_TYPE_POSITION,
+  PLUGIN_VERSION_POSITION,
+  PLUGIN_FILENAME_POSITION,
+  PLUGIN_LOCAL_VERSION_POSITION,
+  PLUGIN_GLOBAL_VERSION_POSITION
+};
 
 
-  class PluginsViewWidget : public QTreeWidget {
+class PluginsViewWidget : public QTreeWidget {
 
-    Q_OBJECT
+  Q_OBJECT
 
-    QTreeWidgetItem *getNthParent(QTreeWidgetItem *twi,int n);
+  QTreeWidgetItem *getNthParent(QTreeWidgetItem *twi,int n);
 
-  protected :
-    QDomDocument xmlDoc;
-    MultiServerManager* _msm;
-    UpdatePlugin updatePlugin;
-    std::set<DistPluginInfo,PluginCmp> pluginsToInstall;
-    std::set<LocalPluginInfo,PluginCmp> pluginsToRemove;
-    bool lastVersion ,compatibleVersion, notInstalledVersion;
-    bool listIsChanging;
-    bool pluginsDirIsWritable;
+protected :
+  QDomDocument xmlDoc;
+  MultiServerManager* _msm;
+  UpdatePlugin updatePlugin;
+  std::set<DistPluginInfo,PluginCmp> pluginsToInstall;
+  std::set<LocalPluginInfo,PluginCmp> pluginsToRemove;
+  bool lastVersion ,compatibleVersion, notInstalledVersion;
+  bool listIsChanging;
+  bool pluginsDirIsWritable;
 
-    bool activate;
+  bool activate;
 
-    void init(QWidget * parent = 0);
+  void init(QWidget * parent = 0);
 
-    // Check if the plugin is installed
-    //bool isInstalled(const std::string &typeName,const std::string &pluginName);
+  // Check if the plugin is installed
+  //bool isInstalled(const std::string &typeName,const std::string &pluginName);
 
-    //check if we have write permission on the plugin
-    //bool isWritable(const std::string & plugFileName);
-    void applyFilter(QTreeWidgetItem * tree);
-    bool isMoreRecent(const std::string  & version1, const std::string  &version2);
-    bool isCompatible(const std::string  & version);
-    std::vector<int> getArrangementGlobalListPositions();
+  //check if we have write permission on the plugin
+  //bool isWritable(const std::string & plugFileName);
+  void applyFilter(QTreeWidgetItem * tree);
+  bool isMoreRecent(const std::string  & version1, const std::string  &version2);
+  bool isCompatible(const std::string  & version);
+  std::vector<int> getArrangementGlobalListPositions();
 
-    void updateCheckBox(QTreeWidgetItem*,std::string,std::string,std::string,Qt::CheckState, int, int);
-    void updateToInstallList(QTreeWidgetItem*);
+  void updateCheckBox(QTreeWidgetItem*,std::string,std::string,std::string,Qt::CheckState, int, int);
+  void updateToInstallList(QTreeWidgetItem*);
 
-    void hideChild(QTreeWidgetItem *parent);
-    void removeHiddenChild(QTreeWidgetItem *parent);
-    QTreeWidgetItem *findChildrenWithText(QTreeWidgetItem *parent,const std::string &text);
-    void setItemCheckability(const PluginInfo *pluginInfo,bool created,QTreeWidgetItem *twi);
+  void hideChild(QTreeWidgetItem *parent);
+  void removeHiddenChild(QTreeWidgetItem *parent);
+  QTreeWidgetItem *findChildrenWithText(QTreeWidgetItem *parent,const std::string &text);
+  void setItemCheckability(const PluginInfo *pluginInfo,bool created,QTreeWidgetItem *twi);
 
-  public :
-    PluginsViewWidget(MultiServerManager* msm, QWidget * parent=0 );
-    virtual ~PluginsViewWidget();
+public :
+  PluginsViewWidget(MultiServerManager* msm, QWidget * parent=0 );
+  virtual ~PluginsViewWidget();
 
-    void changeList();
-    void setLastVersion(bool version);
-    void setCompatiblesVersion(bool version);
-    void setNotinstalledVersion(bool version);
-    bool setPluginDisplayInTree(const PluginInfo *pluginInfo,QTreeWidgetItem *twi);
-    
-    //void installAllDependencies(std::vector<DistPluginInfo> depNoInstall);
-    bool isAVersionItem(QTreeWidgetItem *item);
+  void changeList();
+  void setLastVersion(bool version);
+  void setCompatiblesVersion(bool version);
+  void setNotinstalledVersion(bool version);
+  bool setPluginDisplayInTree(const PluginInfo *pluginInfo,QTreeWidgetItem *twi);
 
-  public slots:
-    void applyChange();
-    void restore();
-    
-  protected slots :
-    void pluginInstalledSlot();
-    void pluginUninstalledSlot();
-    //ajout a micka
-    void getPluginInfoSlot();
-    void changed(QTreeWidgetItem*);
-    //TMP -> SAB
-    void serverNameReceived(MultiServerManager*,std::string,std::string);
+  //void installAllDependencies(std::vector<DistPluginInfo> depNoInstall);
+  bool isAVersionItem(QTreeWidgetItem *item);
 
-  signals :
-    void pluginInstalled();
-    void pluginClicked(PluginInfo pi);
+public slots:
+  void applyChange();
+  void restore();
 
-    void pluginInfoSignal(const PluginInfo *pi);
-  };
+protected slots :
+  void pluginInstalledSlot();
+  void pluginUninstalledSlot();
+  //ajout a micka
+  void getPluginInfoSlot();
+  void changed(QTreeWidgetItem*);
+  //TMP -> SAB
+  void serverNameReceived(MultiServerManager*,std::string,std::string);
+
+signals :
+  void pluginInstalled();
+  void pluginClicked(PluginInfo pi);
+
+  void pluginInfoSignal(const PluginInfo *pi);
+};
 
 }
 #endif //_Tulip_PLUGINVIEWWIDGET_H_

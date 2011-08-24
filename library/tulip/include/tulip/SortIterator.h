@@ -38,14 +38,14 @@ struct LessThan {
   DoubleProperty* metric;
   bool operator() (node n1,node n2) {
     return (metric->getNodeValue(n1) < metric->getNodeValue(n2));
-  } 
+  }
 };
 
 struct LessThanEdgeTargetMetric {
   LessThanEdgeTargetMetric(Graph *sg, DoubleProperty* metric):
     metric(metric), sg(sg) {
   }
-  bool operator() (edge e1,edge e2){
+  bool operator() (edge e1,edge e2) {
     return (metric->getNodeValue(sg->target(e1)) < metric->getNodeValue(sg->target(e2)));
   }
 private:
@@ -66,7 +66,7 @@ struct SortNodeIterator : public StableIterator<node> {
     copyIterator=sequenceCopy.begin();
   }
   ///
-  ~SortNodeIterator(){};
+  ~SortNodeIterator() {};
 };
 
 /**
@@ -80,7 +80,7 @@ struct SortTargetEdgeIterator : public StableIterator<edge> {
     copyIterator=sequenceCopy.begin();
   }
   ///
-  ~SortTargetEdgeIterator(){};
+  ~SortTargetEdgeIterator() {};
 };
 /*@}*/
 }

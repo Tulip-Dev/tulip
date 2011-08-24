@@ -48,7 +48,7 @@ QWidget* ElementPropertiesWidgetPlugin::createWidget(QWidget *parent) {
 QString ElementPropertiesWidgetPlugin::name() const {
   return "ElementPropertiesWidget";
 }
-  
+
 QString ElementPropertiesWidgetPlugin::domXml() const {
   return "<widget class=\"ElementPropertiesWidget\" name=\"tulipElementProperties\">\n"
          "</widget>\n";
@@ -79,7 +79,7 @@ bool ElementPropertiesWidgetPlugin::isContainer() const {
 }
 
 QString ElementPropertiesWidgetPlugin::codeTemplate() const {
-    return "";
+  return "";
 }
 
 Q_EXPORT_PLUGIN(ElementPropertiesWidgetPlugin)

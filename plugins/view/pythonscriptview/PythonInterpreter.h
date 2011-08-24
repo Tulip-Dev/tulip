@@ -23,8 +23,8 @@
 // thanks to the VTK project for this patch for Visual Studio in debug mode
 #if defined(_MSC_VER) && defined(_DEBUG)
 // Include these low level headers before undefing _DEBUG. Otherwise when doing
-// a debug build against a release build of python the compiler will end up 
-// including these low level headers without DEBUG enabled, causing it to try 
+// a debug build against a release build of python the compiler will end up
+// including these low level headers without DEBUG enabled, causing it to try
 // and link release versions of this low level C api.
 # include <basetsd.h>
 # include <assert.h>
@@ -66,33 +66,34 @@
 #include <set>
 
 namespace tlp {
-	class Graph;
+class Graph;
 }
 
 class ConsoleOutputDialog : public QDialog {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	ConsoleOutputDialog(QWidget *parent = 0);
+  ConsoleOutputDialog(QWidget *parent = 0);
 
-	QPlainTextEdit *consoleWidget;
+  QPlainTextEdit *consoleWidget;
 
 public slots:
 
-	void showOnOutputWrite();
-	void hideConsoleOutputDialog();
+  void showOnOutputWrite();
+  void hideConsoleOutputDialog();
 
 private:
 
-	QPoint lastPos;
+  QPoint lastPos;
 
 };
 
 const char pythonReservedCharacters[] = {'#', '%', '/', '+', '-', '&', '*', '<', '>',
-		'|', '~', '^', '=', '!', '\'', '\"', '{', '}',
-		'(', ')', '[', ']', '.', 0};
+                                        '|', '~', '^', '=', '!', '\'', '\"', '{', '}',
+                                        '(', ')', '[', ']', '.', 0
+                                        };
 
 class PythonShellWidget;
 
@@ -100,58 +101,62 @@ class PythonInterpreter {
 
 public :
 
-	static PythonInterpreter *getInstance();
+  static PythonInterpreter *getInstance();
 
-	bool interpreterInit() ;
+  bool interpreterInit() ;
 
-	void registerNewModule(const std::string &moduleName, PyMethodDef *moduleDef);
-	void registerNewModuleFromString(const std::string &moduleName, const std::string &moduleSrcCode);
-	void setTraceFunction(Py_tracefunc tracefunc);
-	bool runString(const std::string &pyhtonCode);
-	bool runGraphScript(const std::string &module, const std::string &function, tlp::Graph *graph);
-	bool functionExists(const std::string &moduleName, const std::string &functionName);
-	void addModuleSearchPath(const std::string &path, const bool beforeOtherPaths = false);
-	void deleteModule(const std::string &moduleName);
-	void reloadModule(const std::string &moduleName);
-	void stopCurrentScript();
-	bool isRunningScript() const {return runningScript;}
-	std::string getPythonVersion() const {return pythonVersion;}
-	std::string getPythonShellBanner();
-	void setDefaultSIGINTHandler();
-	
+  void registerNewModule(const std::string &moduleName, PyMethodDef *moduleDef);
+  void registerNewModuleFromString(const std::string &moduleName, const std::string &moduleSrcCode);
+  void setTraceFunction(Py_tracefunc tracefunc);
+  bool runString(const std::string &pyhtonCode);
+  bool runGraphScript(const std::string &module, const std::string &function, tlp::Graph *graph);
+  bool functionExists(const std::string &moduleName, const std::string &functionName);
+  void addModuleSearchPath(const std::string &path, const bool beforeOtherPaths = false);
+  void deleteModule(const std::string &moduleName);
+  void reloadModule(const std::string &moduleName);
+  void stopCurrentScript();
+  bool isRunningScript() const {
+    return runningScript;
+  }
+  std::string getPythonVersion() const {
+    return pythonVersion;
+  }
+  std::string getPythonShellBanner();
+  void setDefaultSIGINTHandler();
 
-	std::vector<std::string> getGlobalDictEntries(const std::string &prefixFilter = "");
-	std::vector<std::string> getObjectDictEntries(const std::string &objectName, const std::string &prefixFilter = "");
 
-	void setDefaultConsoleWidget();
-	void setConsoleWidget(QPlainTextEdit *consoleWidget);
-	void setPythonShellWidget(PythonShellWidget *shellWidget);
+  std::vector<std::string> getGlobalDictEntries(const std::string &prefixFilter = "");
+  std::vector<std::string> getObjectDictEntries(const std::string &objectName, const std::string &prefixFilter = "");
 
-	void initConsoleOutput();
-	void loadTulipPythonPlugins();
+  void setDefaultConsoleWidget();
+  void setConsoleWidget(QPlainTextEdit *consoleWidget);
+  void setPythonShellWidget(PythonShellWidget *shellWidget);
+
+  void initConsoleOutput();
+  void loadTulipPythonPlugins();
 
 private :
 
-	PythonInterpreter();
-	~PythonInterpreter();
+  PythonInterpreter();
+  ~PythonInterpreter();
 
-	void holdGIL();
-	void releaseGIL();
+  void holdGIL();
+  void releaseGIL();
 
-	static PythonInterpreter instance;
-	
-	bool runningScript;
+  static PythonInterpreter instance;
 
-	std::set<std::string> currentImportPaths;
+  bool runningScript;
 
-	ConsoleOutputDialog *consoleDialog;
-	
-	std::string pythonVersion;
+  std::set<std::string> currentImportPaths;
+
+  ConsoleOutputDialog *consoleDialog;
+
+  std::string pythonVersion;
 
 #ifndef WIN32
-	PyThreadState*  mainThreadState;
-#endif 
-	PyGILState_STATE gilState;
+  PyThreadState*  mainThreadState;
+#endif
+  PyGILState_STATE gilState;
 
 };
 

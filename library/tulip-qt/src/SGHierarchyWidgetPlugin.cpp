@@ -53,7 +53,7 @@ QWidget* SGHierarchyWidgetPlugin::createWidget(QWidget *parent) {
 QString SGHierarchyWidgetPlugin::name() const {
   return "SGHierarchyWidget";
 }
-  
+
 QString SGHierarchyWidgetPlugin::domXml() const {
   return "<widget class=\"SGHierarchyWidget\" name=\"hierarchyWidget\">\n"
          "</widget>\n";
@@ -84,7 +84,7 @@ bool SGHierarchyWidgetPlugin::isContainer() const {
 }
 
 QString SGHierarchyWidgetPlugin::codeTemplate() const {
-    return "";
+  return "";
 }
 
 Q_EXPORT_PLUGIN(SGHierarchyWidgetPlugin)

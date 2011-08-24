@@ -35,11 +35,13 @@ private:
   Qt::KeyboardModifier kModifier;
 public:
   MouseBoxZoomer(Qt::MouseButton button = Qt::LeftButton,
-		 Qt::KeyboardModifier modifier = Qt::NoModifier);
+                 Qt::KeyboardModifier modifier = Qt::NoModifier);
   ~MouseBoxZoomer();
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() { return new MouseBoxZoomer(mButton, kModifier); }
+  InteractorComponent *clone() {
+    return new MouseBoxZoomer(mButton, kModifier);
+  }
 private:
   unsigned int x, y;
   int w, h;

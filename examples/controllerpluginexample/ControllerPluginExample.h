@@ -23,7 +23,7 @@
 #include <tulip/DataSet.h>
 #include <tulip/Graph.h>
 #include <tulip/AbstractProperty.h>
-#include <tulip/Observable.h> 
+#include <tulip/Observable.h>
 
 // For this example we construct an simple controller who display a simple node link diagram view
 // This Controller use implementation of ControllerViewsManager
@@ -37,7 +37,7 @@ public:
   // This function is call when tulip want to open it
   virtual void attachMainWindow(tlp::MainWindowFacade facade);
 
-  // This function is call when tulip want to attach data on this controller 
+  // This function is call when tulip want to attach data on this controller
   virtual void setData(tlp::Graph *graph=0,tlp::DataSet dataSet=tlp::DataSet());
 
   // This function is call when tulip want to save this controller
@@ -54,9 +54,9 @@ protected :
   virtual void update( std::set< tlp::Observable * >::iterator begin, std::set< tlp::Observable * >::iterator end);
 
   // This function is need by Oberver class
-  virtual void observableDestroyed(tlp::Observable*){}
+  virtual void observableDestroyed(tlp::Observable*) {}
 
- private:
+private:
   tlp::Graph *graph;
   tlp::View *nodeLinkView;
 };

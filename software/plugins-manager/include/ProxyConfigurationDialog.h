@@ -27,21 +27,21 @@
 
 namespace tlp {
 
-  class ProxyConfigurationDialog : public QDialog, public Ui::ProxyConfigurationDialogData {
+class ProxyConfigurationDialog : public QDialog, public Ui::ProxyConfigurationDialogData {
 
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
+public:
 
-    ProxyConfigurationDialog(QWidget* parent);
-    void saveProxy();
+  ProxyConfigurationDialog(QWidget* parent);
+  void saveProxy();
 
-  protected slots:
-    void proxyStateChange(int);
-    void useUsernamePasswordStateChange(int);
+protected slots:
+  void proxyStateChange(int);
+  void useUsernamePasswordStateChange(int);
 
 
-  };
+};
 
 }
 

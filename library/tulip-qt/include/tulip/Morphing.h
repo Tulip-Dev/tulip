@@ -31,56 +31,56 @@
 
 namespace tlp {
 
-  class GlMainWidget;
-  class Graph;
-  class LayoutProperty;
-  class SizeProperty;
-  class ColorProperty;
-  //=====================================
-  class TLP_QT_SCOPE GraphState {
-  public:
-    Graph *g;
-    LayoutProperty *layout;
-    SizeProperty *size;
-    ColorProperty *color;
-    Camera *camera;
-    std::vector<std::vector<Coord> > augPoints;
-    std::vector<Coord> augCenters;
-    std::vector<std::vector<Coord> > curInterpolation;
-    std::vector<Coord> interpolateCenters;
+class GlMainWidget;
+class Graph;
+class LayoutProperty;
+class SizeProperty;
+class ColorProperty;
+//=====================================
+class TLP_QT_SCOPE GraphState {
+public:
+  Graph *g;
+  LayoutProperty *layout;
+  SizeProperty *size;
+  ColorProperty *color;
+  Camera *camera;
+  std::vector<std::vector<Coord> > augPoints;
+  std::vector<Coord> augCenters;
+  std::vector<std::vector<Coord> > curInterpolation;
+  std::vector<Coord> interpolateCenters;
 
-    GraphState( GlMainWidget * glgw );
-    GraphState(Graph *graph, LayoutProperty *layout, SizeProperty *size, ColorProperty *color, Camera *camera);
-    ~GraphState();
-    static bool setupDiff( Graph * inG, GraphState * inGS0, GraphState * inGS1 );
-    void EdgeEnds( Coord & outC0, Coord & outC1, edge e );
-  };
-  //=====================================
-  class TLP_QT_SCOPE Morphing : public QObject {
-	  Q_OBJECT
-  public:
-    Morphing();
-    bool init(GlMainWidget * outGlgw, 
-	      GraphState * inG0, 
-	      GraphState * inG1);
-    void interpolate( GlMainWidget *, float inT);
-    bool start(GlMainWidget * outGlgw, unsigned int morphingDurationSeconds = 10);
+  GraphState( GlMainWidget * glgw );
+  GraphState(Graph *graph, LayoutProperty *layout, SizeProperty *size, ColorProperty *color, Camera *camera);
+  ~GraphState();
+  static bool setupDiff( Graph * inG, GraphState * inGS0, GraphState * inGS1 );
+  void EdgeEnds( Coord & outC0, Coord & outC1, edge e );
+};
+//=====================================
+class TLP_QT_SCOPE Morphing : public QObject {
+  Q_OBJECT
+public:
+  Morphing();
+  bool init(GlMainWidget * outGlgw,
+            GraphState * inG0,
+            GraphState * inG1);
+  void interpolate( GlMainWidget *, float inT);
+  bool start(GlMainWidget * outGlgw, unsigned int morphingDurationSeconds = 10);
 
-  public slots:
+public slots:
 
-	void interpolationSlot(qreal t);
-    
-  protected:
-    void stop();
+  void interpolationSlot(qreal t);
 
-  private: 
-    GraphState *g0, *g1;
-    LayoutProperty *e0, *e1;
-    GlMainWidget *glWidget;
-    int frameCpt; 
-    float t;
-  };
-  //=====================================
+protected:
+  void stop();
+
+private:
+  GraphState *g0, *g1;
+  LayoutProperty *e0, *e1;
+  GlMainWidget *glWidget;
+  int frameCpt;
+  float t;
+};
+//=====================================
 }
 
 #endif //DOXYGEN_NOTFOR_USER

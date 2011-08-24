@@ -29,7 +29,7 @@ using namespace std;
  *  TRUE to construct a modal dialog.
  */
 InfoDialog::InfoDialog( QWidget* parent)
-    : QDialog( parent) {
+  : QDialog( parent) {
   setupUi(this);
   QString tmp="Tulip ";
   tmp+=TULIP_RELEASE;
@@ -39,8 +39,7 @@ InfoDialog::InfoDialog( QWidget* parent)
 /*
  *  Destroys the object and frees any allocated resources
  */
-InfoDialog::~InfoDialog()
-{
-    // no need to delete child widgets, Qt does it all for us
+InfoDialog::~InfoDialog() {
+  // no need to delete child widgets, Qt does it all for us
 }
 

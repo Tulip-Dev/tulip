@@ -22,7 +22,7 @@
 #include "ChooseControllerDialogData.h"
 
 class ChooseControllerDialog : public QDialog, public Ui::ChooseControllerDialogData {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
   ChooseControllerDialog( QWidget* parent = 0);

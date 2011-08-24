@@ -39,7 +39,7 @@ class BooleanProperty;
 class Graph;
 }
 
-/** \addtogroup Tulip_Widgets */ 
+/** \addtogroup Tulip_Widgets */
 /*@{*/
 /* this table handle displaying and editing node or edge properties */
 class TLP_QT_SIMPLE_SCOPE PropertyWidget : public tlp::TulipTableWidget {
@@ -69,11 +69,11 @@ private :
   tlp::PropertyInterface *editedProperty;
   std::string editedPropertyName;
   bool inUpdate;
-  
-private slots:
-  void showContextMenu(const QPoint & pos); 
 
-public slots:  
+private slots:
+  void showContextMenu(const QPoint & pos);
+
+public slots:
   void changeProperty(tlp::Graph *,const std::string &name);
   void selectNodeOrEdge(bool );
   void changePropertyValue(int,int);
@@ -106,25 +106,28 @@ public :
     connect(fileOpenButton,SIGNAL(clicked()),this,SLOT(openFile()));
   }
 
-ChooseFileNameDialog(const QString &filter,const QString &basePath,QWidget *parent=NULL):QDialog(parent), filter(filter),basePath(basePath) {
+  ChooseFileNameDialog(const QString &filter,const QString &basePath,QWidget *parent=NULL):QDialog(parent), filter(filter),basePath(basePath) {
     setupUi(this);
     connect(fileOpenButton,SIGNAL(clicked()),this,SLOT(openFile()));
   }
 
-QString getText(){return fileName->text();}
+  QString getText() {
+    return fileName->text();
+  }
 
 protected slots:
 
   void openFile() {
     QString fileNameText = QFileDialog::getOpenFileName(this, tr("Open File"),basePath,filter);
+
     if(fileNameText!="")
       fileName->setText(fileNameText);
   }
 
 protected :
 
-    QString filter;
-    QString basePath;
+  QString filter;
+  QString basePath;
 
 };
 /*@}*/

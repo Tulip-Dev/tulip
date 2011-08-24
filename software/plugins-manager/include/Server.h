@@ -28,47 +28,47 @@
 #include "HttpRequest.h"
 
 namespace tlp {
-  enum ResultType { 
-    csvGetNbRows,
-    csvGetNbColumns,
-    csvGetNbElements,
-    receiveBinaryFile,
-    getPluginXMLList,
-    receivePlugin,
-    unknowMessage
-  };
+enum ResultType {
+  csvGetNbRows,
+  csvGetNbColumns,
+  csvGetNbElements,
+  receiveBinaryFile,
+  getPluginXMLList,
+  receivePlugin,
+  unknowMessage
+};
 
-  enum Platform {
-    WINDOWS,
-    LINUX,
-    MACOSX
-  };
+enum Platform {
+  WINDOWS,
+  LINUX,
+  MACOSX
+};
 
-  class Request;
-  
-  class Server : public QObject {  
-  
-    Q_OBJECT
+class Request;
 
-  public:
-    
-    Server(const std::string& serverAddress, QObject* parent = 0);
-    virtual ~Server();
-    
-    virtual void send(Request* request);
-    virtual void getAddress(std::string &address);
-				    
-  public slots :
-    void requestDone();
-    void timeout();
-    
-  private:
-    HttpRequest *http; 
-    std::string serverAddress;
-    std::list<Request *> requests;
-    QTimer timer;
+class Server : public QObject {
 
-  };
+  Q_OBJECT
+
+public:
+
+  Server(const std::string& serverAddress, QObject* parent = 0);
+  virtual ~Server();
+
+  virtual void send(Request* request);
+  virtual void getAddress(std::string &address);
+
+public slots :
+  void requestDone();
+  void timeout();
+
+private:
+  HttpRequest *http;
+  std::string serverAddress;
+  std::list<Request *> requests;
+  QTimer timer;
+
+};
 
 }
 

@@ -28,80 +28,82 @@
 
 namespace tlp {
 
-  struct OcclusionTest;
-  class TextRenderer;
-  class GlSceneVisitor;
-  class GlLabel;
+struct OcclusionTest;
+class TextRenderer;
+class GlSceneVisitor;
+class GlLabel;
+
+/**
+ * Class to represent a node of a graph
+ */
+class TLP_GL_SCOPE GlNode : public GlComplexeEntity {
+
+public:
 
   /**
-   * Class to represent a node of a graph
+   * Default constructor with id
+   * id must be the id of the node in graph
    */
-  class TLP_GL_SCOPE GlNode : public GlComplexeEntity{
+  GlNode(unsigned int id);
 
-  public:
+  /**
+   * Virtual function to accept GlSceneVisitor on this class
+   */
+  virtual void acceptVisitor(GlSceneVisitor *visitor);
 
-    /**
-     * Default constructor with id
-     * id must be the id of the node in graph
-     */
-    GlNode(unsigned int id);
+  /**
+   * Return the node bounding box
+   */
+  virtual BoundingBox getBoundingBox(GlGraphInputData* data);
 
-    /**
-     * Virtual function to accept GlSceneVisitor on this class
-     */
-    virtual void acceptVisitor(GlSceneVisitor *visitor);
+  /**
+   * Draw the node with level of detail : lod and Camera : camera
+   */
+  virtual void draw(float lod,GlGraphInputData *data,Camera* camera);
 
-    /**
-     * Return the node bounding box
-     */
-    virtual BoundingBox getBoundingBox(GlGraphInputData* data);
+  /**
+   * Draw the label of the node if drawNodesLabel is true and if label selection is equal to drawSelect
+   * Use TextRenderer : renderer to draw the label
+   */
+  virtual void drawLabel(bool drawSelect,OcclusionTest* test,GlGraphInputData* data,float lod);
 
-    /**
-     * Draw the node with level of detail : lod and Camera : camera
-     */
-    virtual void draw(float lod,GlGraphInputData *data,Camera* camera);
+  /**
+   * Draw the label of the node if drawEdgesLabel is true
+   * Use TextRenderer : renderer to draw the label
+   */
+  virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data);
 
-    /**
-     * Draw the label of the node if drawNodesLabel is true and if label selection is equal to drawSelect
-     * Use TextRenderer : renderer to draw the label
-     */
-    virtual void drawLabel(bool drawSelect,OcclusionTest* test,GlGraphInputData* data,float lod);
+  /**
+   * Draw the label of the node if drawEdgesLabel is true
+   * Use TextRenderer : renderer to draw the label
+   */
+  virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data,float lod, Camera *camera=NULL);
 
-    /**
-     * Draw the label of the node if drawEdgesLabel is true
-     * Use TextRenderer : renderer to draw the label
-     */
-    virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data);
+  /**
+   * Deprecate function : see others drawLabel functions
+  */
+  virtual _DEPRECATED void drawLabel(OcclusionTest *test, TextRenderer*, GlGraphInputData* data) {
+    drawLabel(test,data);
+  }
 
-    /**
-     * Draw the label of the node if drawEdgesLabel is true
-     * Use TextRenderer : renderer to draw the label
-     */
-    virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data,float lod, Camera *camera=NULL);
+  unsigned int id;
 
-    /**
-     * Deprecate function : see others drawLabel functions
-    */
-    virtual _DEPRECATED void drawLabel(OcclusionTest *test, TextRenderer*, GlGraphInputData* data) {drawLabel(test,data);}
+  /**
+   * This function is used by the engine to get point coordinate and color of the node
+   */
+  void getPointAndColor(GlGraphInputData *inputData,std::vector<Coord> &pointsCoordsArray,std::vector<Color> &pointsColorsArray);
 
-    unsigned int id;
+  /**
+   * This function is used by the engine to get color of the node
+   */
+  void getColor(GlGraphInputData *inputData,std::vector<Color> &pointsColorsArray);
 
-    /**
-     * This function is used by the engine to get point coordinate and color of the node
-     */
-    void getPointAndColor(GlGraphInputData *inputData,std::vector<Coord> &pointsCoordsArray,std::vector<Color> &pointsColorsArray);
+protected :
 
-    /**
-     * This function is used by the engine to get color of the node
-     */
-    void getColor(GlGraphInputData *inputData,std::vector<Color> &pointsColorsArray);
+  static GlLabel *label;
+  static GlBox* selectionBox;
 
-  protected :
-
-    static GlLabel *label;
-    static GlBox* selectionBox;
-
-  };
+};
 
 }
 

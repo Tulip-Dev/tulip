@@ -27,20 +27,19 @@
 #include <tulip/Plugin.h>
 #include <tulip/TemplateFactory.h>
 
-/** \addtogroup plugins */ 
+/** \addtogroup plugins */
 
 namespace tlp {
 class Graph;
 class PluginProgress;
 /*@{*/
 /// Interface for exportModule plug-ins
-class ExportModule:public WithParameter, public WithDependency
-{
+class ExportModule:public WithParameter, public WithDependency {
 public:
   ///
-  ExportModule (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet){}
+  ExportModule (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet) {}
   ///
-  virtual ~ExportModule(){};
+  virtual ~ExportModule() {};
   ///
   virtual bool exportGraph(std::ostream &,Graph *)=0;
   /** It is the root graph*/
@@ -50,14 +49,14 @@ public:
   DataSet *dataSet;
 };
 
-class ExportModuleFactory:public PluginInfoInterface{
+class ExportModuleFactory:public PluginInfoInterface {
 public:
   static TLP_SCOPE TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext > *factory;
   static void initFactory() {
     if (!factory) {
       factory = new TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext >;
-     }
-  }    
+    }
+  }
   virtual ~ExportModuleFactory() {}
   virtual ExportModule * createPluginObject(AlgorithmContext)=0;
   virtual  std::string getMajor() const {

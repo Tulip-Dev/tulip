@@ -22,7 +22,7 @@
 #include "PreferenceDialogData.h"
 
 class PreferenceDialog : public QDialog, public Ui::PreferenceDialogData {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
   PreferenceDialog( QWidget* parent = 0);
@@ -30,7 +30,9 @@ public:
 
   static void loadPreference();
   void savePreference();
-  bool preferencesAreModified() {return modified;}
+  bool preferencesAreModified() {
+    return modified;
+  }
 
 protected slots:
 

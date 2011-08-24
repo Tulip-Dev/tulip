@@ -20,16 +20,15 @@
 #define TULIPELEMENTPROPERTIESPLUGIN_H
 
 #include <customwidget.h>
-    
+
 namespace tlp {
 
-class ElementPropertiesWidgetPlugin : public QObject, public QDesignerCustomWidgetInterface
-{
+class ElementPropertiesWidgetPlugin : public QObject, public QDesignerCustomWidgetInterface {
   Q_OBJECT
   Q_INTERFACES(QDesignerCustomWidgetInterface)
 public:
   ElementPropertiesWidgetPlugin(QObject *parent = 0);
-    
+
   bool isContainer() const;
   bool isInitialized() const;
   QIcon icon() const;

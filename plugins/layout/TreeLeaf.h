@@ -45,7 +45,7 @@ class OrientableSizeProxy;
  *
  * \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class TreeLeaf:public tlp::LayoutAlgorithm { 
+class TreeLeaf:public tlp::LayoutAlgorithm {
 public:
   TreeLeaf(const tlp::PropertyContext &);
   ~TreeLeaf();
@@ -56,9 +56,9 @@ private:
   float nodeSpacing;
   std::vector<float> levelHeights;
   float dfsPlacement(tlp::Graph* tree, tlp::node n, float x, float y, unsigned int depth,
-		     OrientableLayout *oriLayout, OrientableSizeProxy *oriSize);
+                     OrientableLayout *oriLayout, OrientableSizeProxy *oriSize);
   void computeLevelHeights(tlp::Graph* tree, tlp::node n, unsigned int depth,
-			   OrientableSizeProxy *oriSize);
+                           OrientableSizeProxy *oriSize);
 };
 /*@}*/
 #endif

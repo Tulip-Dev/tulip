@@ -48,7 +48,7 @@ QWidget* PropertyWidgetPlugin::createWidget(QWidget *parent) {
 QString PropertyWidgetPlugin::name() const {
   return "PropertyWidget";
 }
-  
+
 QString PropertyWidgetPlugin::domXml() const {
   return "<widget class=\"PropertyWidget\" name=\"propertyWidget\">\n"
          "</widget>\n";
@@ -79,7 +79,7 @@ bool PropertyWidgetPlugin::isContainer() const {
 }
 
 QString PropertyWidgetPlugin::codeTemplate() const {
-    return "";
+  return "";
 }
 
 Q_EXPORT_PLUGIN(PropertyWidgetPlugin)

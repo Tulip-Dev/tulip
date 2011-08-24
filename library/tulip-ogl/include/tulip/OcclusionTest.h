@@ -42,7 +42,7 @@ struct TLP_GL_SCOPE OcclusionTest {
   }
   /**
   * Add a new 2D AABB to the set of non overlapping AABB
-  * if that AABB intersect with AABB already inserted, 
+  * if that AABB intersect with AABB already inserted,
   * the AABB is not inserted.
   *
   * @return true if the AABB is inserted else false.
@@ -53,6 +53,7 @@ struct TLP_GL_SCOPE OcclusionTest {
       data.push_back(rec);
       return false;
     }
+
     return true;
   }
   /**
@@ -63,12 +64,14 @@ struct TLP_GL_SCOPE OcclusionTest {
   bool testRectangle(const RectangleInt2D &rec) {
     bool intersect=false;
     std::vector<RectangleInt2D>::const_iterator it;
+
     for (it=data.begin(); it!=data.end(); ++it) {
       if (rec.intersect(*it)) {
-	intersect=true;
-	break;
+        intersect=true;
+        break;
       }
     }
+
     return intersect;
   }
 

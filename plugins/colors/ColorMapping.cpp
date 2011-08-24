@@ -37,6 +37,7 @@ void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v ) {
   theMax = std::max(std::max(r, g), b); //MAX( MAX( r, g) , b );
   *v = theMax;                               // v
   delta = theMax - theMin;
+
   if( theMax != 0 )
     *s = delta / theMax;               // s
   else {
@@ -45,90 +46,108 @@ void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v ) {
     *h = -1;
     return;
   }
+
   if( r == theMax )
     *h = ( g - b ) / delta;         // between yellow & magenta
   else if( g == theMax )
     *h = 2 + ( b - r ) / delta;     // between cyan & yellow
   else
     *h = 4 + ( r - g ) / delta;     // between magenta & cyan
+
   *h *= 60;                               // degreesxk
+
   if( *h < 0 )
     *h += 360;
 }
 
 void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v ) {
-        int i;
-        float f, p, q, t;
-        if( s == 0 ) { // achromatic (grey)
-	  *r = *g = *b = v;
-	  return;
-        }
-        h /= 60;               // sector 0 to 5
-        i = (int)floor( h );
-        f = h - (float)i;      // factorial part of h
-        p = v * ( 1 - s );
-        q = v * ( 1 - s * f );
-        t = v * ( 1 - s * ( 1 - f ) );
-        switch( i ) {
-	case 0:
-	  *r = v;*g = t;*b = p;
-	  break;
-	case 1:
-	  *r = q;*g = v;*b = p;
-	  break;
-	case 2:
-	  *r = p;*g = v;*b = t;
-	  break;
-	case 3:
-	  *r = p;*g = q;*b = v;
-	  break;
-	case 4:
-	  *r = t;*g = p;*b = v;
-	  break;
-	default:                // case 5:
-	  *r = v;*g = p;*b = q;
-	  break;
-        }
+  int i;
+  float f, p, q, t;
+
+  if( s == 0 ) { // achromatic (grey)
+    *r = *g = *b = v;
+    return;
+  }
+
+  h /= 60;               // sector 0 to 5
+  i = (int)floor( h );
+  f = h - (float)i;      // factorial part of h
+  p = v * ( 1 - s );
+  q = v * ( 1 - s * f );
+  t = v * ( 1 - s * ( 1 - f ) );
+
+  switch( i ) {
+  case 0:
+    *r = v;
+    *g = t;
+    *b = p;
+    break;
+  case 1:
+    *r = q;
+    *g = v;
+    *b = p;
+    break;
+  case 2:
+    *r = p;
+    *g = v;
+    *b = t;
+    break;
+  case 3:
+    *r = p;
+    *g = q;
+    *b = v;
+    break;
+  case 4:
+    *r = t;
+    *g = p;
+    *b = v;
+    break;
+  default:                // case 5:
+    *r = v;
+    *g = p;
+    *b = q;
+    break;
+  }
 }
 
 namespace {
-  const char * paramHelp[] = {
-    // property
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "DoubleProperty" ) \
-    HTML_HELP_BODY() \
-    "This metric is used to affect scalar values to graph items." \
-    "The meaning of theses values depends of the choosen color model." \
-    HTML_HELP_CLOSE(),
-    // property
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "PropertyInterface*" ) \
-    HTML_HELP_BODY() \
-    "This metric is used to affect scalar values to graph items." \
-    "The meaning of theses values depends of the choosen color model." \
-    HTML_HELP_CLOSE(),
-    HTML_HELP_OPEN()				 \
-    HTML_HELP_DEF( "type", "String Collection" ) \
-    HTML_HELP_DEF("values", "linear <BR> uniform <BR> enumerated") \
-    HTML_HELP_DEF( "default", "linear" )	 \
-    HTML_HELP_BODY() \
-    "This parameter enables to choose the type of color mapping"	\
-    HTML_HELP_CLOSE(),
-    HTML_HELP_OPEN()				 \
-    HTML_HELP_DEF( "type", "String Collection" ) \
-    HTML_HELP_DEF("values", "nodes <BR> edges") \
-    HTML_HELP_DEF( "default", "nodes" )	 \
-    HTML_HELP_BODY() \
-    "This parameter enables to choose the target of the color mapping"	\
-    HTML_HELP_CLOSE(),
-    // color1
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "ColorScale" ) \
-    HTML_HELP_BODY() \
-    "This is the color scale used." \
-    HTML_HELP_CLOSE(),
+const char * paramHelp[] = {
+  // property
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "DoubleProperty" ) \
+  HTML_HELP_BODY() \
+  "This metric is used to affect scalar values to graph items." \
+  "The meaning of theses values depends of the choosen color model." \
+  HTML_HELP_CLOSE(),
+  // property
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "PropertyInterface*" ) \
+  HTML_HELP_BODY() \
+  "This metric is used to affect scalar values to graph items." \
+  "The meaning of theses values depends of the choosen color model." \
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()         \
+  HTML_HELP_DEF( "type", "String Collection" ) \
+  HTML_HELP_DEF("values", "linear <BR> uniform <BR> enumerated") \
+  HTML_HELP_DEF( "default", "linear" )   \
+  HTML_HELP_BODY() \
+  "This parameter enables to choose the type of color mapping"  \
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()         \
+  HTML_HELP_DEF( "type", "String Collection" ) \
+  HTML_HELP_DEF("values", "nodes <BR> edges") \
+  HTML_HELP_DEF( "default", "nodes" )  \
+  HTML_HELP_BODY() \
+  "This parameter enables to choose the target of the color mapping"  \
+  HTML_HELP_CLOSE(),
+  // color1
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "ColorScale" ) \
+  HTML_HELP_BODY() \
+  "This is the color scale used." \
+  HTML_HELP_CLOSE(),
 
-  };
+};
 }
 
 #define ELT_TYPE "type"
@@ -154,7 +173,7 @@ private:
 
 
 public:
-  ColorMapping(const PropertyContext &context):ColorAlgorithm(context),eltTypes(ELT_TYPES){
+  ColorMapping(const PropertyContext &context):ColorAlgorithm(context),eltTypes(ELT_TYPES) {
     addParameter<DoubleProperty>("linear/uniform\nproperty",paramHelp[0],"viewMetric");
     addParameter<PropertyInterface*>("enumerated\nproperty",paramHelp[1],"viewMetric");
     addParameter<StringCollection>(ELT_TYPE, paramHelp[2], ELT_TYPES);
@@ -163,10 +182,11 @@ public:
   }
 
   //=========================================================
-  ~ColorMapping(){}
+  ~ColorMapping() {}
   //=========================================================
   Color getColor(double value, double range) {
     if (range==0) range = 1;
+
     return colorScale.getColorAtPos(value/range);
   }
   //=========================================================
@@ -175,11 +195,14 @@ public:
     minE = entryMetric->getEdgeMin(graph);
     maxE = entryMetric->getEdgeMax(graph);
     Iterator<edge> *itE=graph->getEdges();
+
     while(itE->hasNext()) {
       edge ite=itE->next();
       double dd=entryMetric->getEdgeValue(ite)-minE;
       colorResult->setEdgeValue(ite, getColor(dd,maxE-minE));
-    } delete itE;
+    }
+
+    delete itE;
   }
   //=========================================================
   void computeNodeColor() {
@@ -187,11 +210,14 @@ public:
     minN=entryMetric->getNodeMin(graph);
     maxN=entryMetric->getNodeMax(graph);
     Iterator<node> *itN=graph->getNodes();
+
     while(itN->hasNext()) {
       node itn=itN->next();
       double dd=entryMetric->getNodeValue(itn)-minN;
       colorResult->setNodeValue(itn, getColor(dd,maxN-minN));
-    } delete itN;
+    }
+
+    delete itN;
   }
   //=========================================================
   bool run() {
@@ -201,6 +227,7 @@ public:
     DoubleProperty* metricS = graph->getProperty<DoubleProperty>("viewMetric");
 
     PropertyInterface *metric = graph->getProperty("viewMetric");
+
     if ( dataSet!=0 ) {
       dataSet->get("linear/uniform\nproperty", metricS);
       dataSet->get("enumerated\nproperty", metric);
@@ -210,9 +237,10 @@ public:
     }
 
     if (eltTypes.getCurrent()==LINEAR_ELT || eltTypes.getCurrent()==UNIFORM_ELT) {
-      if (eltTypes.getCurrent()==LINEAR_ELT){
+      if (eltTypes.getCurrent()==LINEAR_ELT) {
         entryMetric = metricS;
-      }else{
+      }
+      else {
         DoubleProperty *tmp= new DoubleProperty(graph);
         *tmp = *metricS;
         tmp->uniformQuantification(300);
@@ -221,74 +249,92 @@ public:
 
       if(targetType.getCurrent()==NODES_TARGET && graph->numberOfNodes()!=0)
         computeNodeColor();
+
       if(targetType.getCurrent()==EDGES_TARGET && graph->numberOfEdges()!=0)
         computeEdgeColor();
 
-    } else {
-        for(vector<pair<string,Color> >::iterator it =
-	      enumeratedMappingResultVector.begin();
-	    it!=enumeratedMappingResultVector.end(); ++it){
-          vector<unsigned int> *elements=&mapMetricElements[(*it).first];
-          for(vector<unsigned>::iterator itE=elements->begin();itE!=elements->end();++itE){
-            if(targetType.getCurrent()==NODES_TARGET)
-              colorResult->setNodeValue(node(*itE),(*it).second);
-            else
-              colorResult->setEdgeValue(edge(*itE),(*it).second);
-          }
+    }
+    else {
+      for(vector<pair<string,Color> >::iterator it =
+            enumeratedMappingResultVector.begin();
+          it!=enumeratedMappingResultVector.end(); ++it) {
+        vector<unsigned int> *elements=&mapMetricElements[(*it).first];
+
+        for(vector<unsigned>::iterator itE=elements->begin(); itE!=elements->end(); ++itE) {
+          if(targetType.getCurrent()==NODES_TARGET)
+            colorResult->setNodeValue(node(*itE),(*it).second);
+          else
+            colorResult->setEdgeValue(edge(*itE),(*it).second);
         }
       }
+    }
 
     if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
+
     return true;
   }
   //=========================================================
   bool check(string &errorMsg) {
     //    cerr << __PRETTY_FUNCTION__ << endl;
     PropertyInterface *metric = graph->getProperty("viewMetric");
+
     if (dataSet!=0) {
       dataSet->get("enumerated\nproperty", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
       dataSet->get("colorScale", colorScale);
     }
+
     if (eltTypes.getCurrent() == ENUMERATED_ELT) {
-      if(targetType.getCurrent()==NODES_TARGET){
+      if(targetType.getCurrent()==NODES_TARGET) {
         StableIterator<node> itN(graph->getNodes());
+
         while (itN.hasNext()) {
           node n=itN.next();
           string tmp = metric->getNodeStringValue(n);
+
           if(mapMetricElements.count(tmp)==0)
             mapMetricElements[tmp]=vector<unsigned int>();
+
           mapMetricElements[tmp].push_back(n.id);
         }
-      } else {
+      }
+      else {
         StableIterator<edge> itE(graph->getEdges());
+
         while (itE.hasNext()) {
           edge e=itE.next();
           string tmp = metric->getEdgeStringValue(e);
+
           if(mapMetricElements.count(tmp)==0)
             mapMetricElements[tmp]=vector<unsigned int>();
+
           mapMetricElements[tmp].push_back(e.id);
         }
       }
 
       vector<string> enumeratedValues;
-      for(map<string, vector<unsigned int> >::iterator it=mapMetricElements.begin();it!=mapMetricElements.end();++it){
+
+      for(map<string, vector<unsigned int> >::iterator it=mapMetricElements.begin(); it!=mapMetricElements.end(); ++it) {
         enumeratedValues.push_back((*it).first);
       }
 
       vector<Color> enumeratedColors;
-      for(unsigned int i=0;i<enumeratedValues.size();++i){
+
+      for(unsigned int i=0; i<enumeratedValues.size(); ++i) {
         enumeratedColors.push_back(colorScale.getColorAtPos(((float)i)/((float)((enumeratedValues.size()-1)))));
       }
 
       DoubleStringsListRelationDialog dialog(enumeratedValues,enumeratedColors);
+
       if(!dialog.exec()) {
-	errorMsg += "Cancelled by user";
-	return false;
+        errorMsg += "Cancelled by user";
+        return false;
       }
+
       dialog.getResult(enumeratedMappingResultVector);
     }
+
     return true;
   }
 };

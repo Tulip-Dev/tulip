@@ -23,36 +23,36 @@ using namespace tlp;
 BOOLEANPLUGIN(ReachableSubGraphSelection,"Reachable Sub-Graph","David Auber","01/12/1999","Alpha","1.0");
 
 namespace {
-  const char * paramHelp[] = {
-    // direction
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "int" ) \
-    HTML_HELP_DEF( "values", "{0,1,2}" ) \
-    HTML_HELP_DEF( "default", "0" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the navigation direction. Following values are corrects :" \
-    "<ul><li>0: follow ouput edges (directed);</li>" \
-    "<li>1: follow input edges (reverse-directed);</li>" \
-    "<li>2: all edges (undirected).</li></ul>" \
-    HTML_HELP_CLOSE(),
+const char * paramHelp[] = {
+  // direction
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "int" ) \
+  HTML_HELP_DEF( "values", "{0,1,2}" ) \
+  HTML_HELP_DEF( "default", "0" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the navigation direction. Following values are corrects :" \
+  "<ul><li>0: follow ouput edges (directed);</li>" \
+  "<li>1: follow input edges (reverse-directed);</li>" \
+  "<li>2: all edges (undirected).</li></ul>" \
+  HTML_HELP_CLOSE(),
 
-    // startingNodes
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Selection" ) \
-    HTML_HELP_DEF( "default", "\"viewSelection\"" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the starting set of nodes used to walk in the graph." \
-    HTML_HELP_CLOSE(),
+  // startingNodes
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Selection" ) \
+  HTML_HELP_DEF( "default", "\"viewSelection\"" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the starting set of nodes used to walk in the graph." \
+  HTML_HELP_CLOSE(),
 
-    // maxdepth
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "int" ) \
-    HTML_HELP_DEF( "values", "[0,1000000]" ) \
-    HTML_HELP_DEF( "default", "10" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the maximal distance of reachable nodes." \
-    HTML_HELP_CLOSE(),
-  };
+  // maxdepth
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "int" ) \
+  HTML_HELP_DEF( "values", "[0,1000000]" ) \
+  HTML_HELP_DEF( "default", "10" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the maximal distance of reachable nodes." \
+  HTML_HELP_CLOSE(),
+};
 }
 
 
@@ -69,6 +69,7 @@ bool ReachableSubGraphSelection::run() {
   unsigned int maxDistance = 5;
   unsigned int direction = 0;
   BooleanProperty * startNodes=graph->getProperty<BooleanProperty>("viewSelection");
+
   if ( dataSet!=0) {
     dataSet->get("distance", maxDistance);
     dataSet->get("direction", direction);
@@ -81,16 +82,20 @@ bool ReachableSubGraphSelection::run() {
   if (startNodes) {
     Iterator<node>* itN = startNodes->getNodesEqualTo(true);
     std::set<node> reachables;
+
     // iterate on startNodes add them and their reachables
     while (itN->hasNext()) {
       node current = itN->next();
       reachables.insert(current);
       reachableNodes(graph, current, reachables, maxDistance,
-		     (EDGE_TYPE) direction);
-    } delete itN;
+                     (EDGE_TYPE) direction);
+    }
+
+    delete itN;
 
     std::set<node>::const_iterator itr = reachables.begin();
     std::set<node>::const_iterator ite = reachables.end();
+
     // select nodes
     while (itr != ite) {
       booleanResult->setNodeValue((*itr), true);
@@ -99,15 +104,19 @@ bool ReachableSubGraphSelection::run() {
 
     // select corresponding edges
     Iterator<edge> *itE = graph->getEdges();
+
     while(itE->hasNext()) {
       edge e = itE->next();
       const std::pair<node, node>& ends = graph->ends(e);
+
       if (booleanResult->getNodeValue(ends.first) &&
-	  booleanResult->getNodeValue(ends.second))
-	booleanResult->setEdgeValue(e, true);
-    }delete itE;
+          booleanResult->getNodeValue(ends.second))
+        booleanResult->setEdgeValue(e, true);
+    }
+
+    delete itE;
   }
- 
+
   return true;
 }
 

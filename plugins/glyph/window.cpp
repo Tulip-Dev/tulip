@@ -34,33 +34,32 @@ using namespace std;
 const string texture(TulipBitmapDir + "halfCylinderTexture.png");
 const string gradient(TulipBitmapDir + "titlebarGradient.png");
 
-class Window : public Glyph
-{
+class Window : public Glyph {
 public:
-    Window(GlyphContext* context);
-    virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
-    virtual void getTextBoundingBox(BoundingBox &boundingBox,node);
-    virtual void draw(node n, float lod);
-    virtual Coord getAnchor(const Coord &vector) const;
+  Window(GlyphContext* context);
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+  virtual void getTextBoundingBox(BoundingBox &boundingBox,node);
+  virtual void draw(node n, float lod);
+  virtual Coord getAnchor(const Coord &vector) const;
 
 private:
-    Color _rectColor;
-    Color _textColor;
-    const float _titleBarSize;
-    const float _borderWidth;
-    GlPolyQuad _border;
-    GlQuad _center;
-    GlQuad _titleRec;
-    BoundingBox _bb;
-    BoundingBox _textbb;
+  Color _rectColor;
+  Color _textColor;
+  const float _titleBarSize;
+  const float _borderWidth;
+  GlPolyQuad _border;
+  GlQuad _center;
+  GlQuad _titleRec;
+  BoundingBox _bb;
+  BoundingBox _textbb;
 };
 
 /*
- * 
+ *
 0------------1 -0.5, 0.5      0.5, 0.5
-|\          /|  
+|\          /|
 | 4--------5 |
-| |  TXT   | |  
+| |  TXT   | |
 | 9--------8 |-0.5 + _borderWith   0.5, 0.5-bo
 | |  FREE  | |
 | 7--------6 |
@@ -70,17 +69,16 @@ private:
 
 GLYPHPLUGIN(Window, "2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0", 17);
 
-Window::Window(GlyphContext* context): 
-  Glyph(context), 
-  _rectColor(205, 205, 205, 255), 
-  _textColor(205, 205, 205, 255), 
-  _titleBarSize(0.1f), 
-  _borderWidth(0.02f), 
-  _border(texture)
-{
-  
+Window::Window(GlyphContext* context):
+  Glyph(context),
+  _rectColor(205, 205, 205, 255),
+  _textColor(205, 205, 205, 255),
+  _titleBarSize(0.1f),
+  _borderWidth(0.02f),
+  _border(texture) {
+
   const float textheight = 0.05f;
-  
+
   Coord v[10];
   v[0].set(-0.5f, 0.5f, 0);
   v[1].set( 0.5f, 0.5f, 0);
@@ -97,31 +95,31 @@ Window::Window(GlyphContext* context):
   _bb.expand(v[9]);
   _bb.expand(v[8]);
   _bb.expand(v[7]);
-	
+
   _border.addQuadEdge(v[0], v[4], _textColor);
   _border.addQuadEdge(v[1], v[5], _textColor);
   _border.addQuadEdge(v[2], v[6], _textColor);
   _border.addQuadEdge(v[3], v[7], _textColor);
   _border.addQuadEdge(v[0], v[4], _textColor);
-	 
+
   _titleRec.setPosition(0, v[4]);
   _titleRec.setPosition(1, v[5]);
   _titleRec.setPosition(2, v[8]);
   _titleRec.setPosition(3, v[9]);
   _titleRec.setTextureName(gradient);
-  
-	 
+
+
   _textbb.expand(v[4]);
   _textbb.expand(v[8]);
   _textbb.expand(v[5]);
   _textbb.expand(v[9]);
-	
+
   _center.setPosition(0, v[9]);
   _center.setPosition(1, v[8]);
   _center.setPosition(2, v[6]);
   _center.setPosition(3, v[7]);
 
- 
+
 }
 //=====================================================
 void Window::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
@@ -133,32 +131,34 @@ void Window::getTextBoundingBox(BoundingBox &boundingBox,node) {
 }
 //=====================================================
 void Window::draw(node n, float lod) {
-	ColorProperty* color = glGraphInputData->getElementColor();
-	ColorProperty* colorBorder = glGraphInputData->getElementBorderColor();
-	string textureName = glGraphInputData->getElementTexture()->getNodeValue(n);
-	if(textureName!="")
-	  textureName=glGraphInputData->parameters->getTexturePath()+textureName;
+  ColorProperty* color = glGraphInputData->getElementColor();
+  ColorProperty* colorBorder = glGraphInputData->getElementBorderColor();
+  string textureName = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-	_border.setColor(colorBorder->getNodeValue(n));	
-	_titleRec.setColor(colorBorder->getNodeValue(n));	
+  if(textureName!="")
+    textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
-	_center.setFillColor(color->getNodeValue(n));
-	_center.setTextureName(textureName);	
-	_center.draw(lod, NULL);
-	_titleRec.draw(lod, NULL);
-	_border.draw(lod, NULL);
+  _border.setColor(colorBorder->getNodeValue(n));
+  _titleRec.setColor(colorBorder->getNodeValue(n));
+
+  _center.setFillColor(color->getNodeValue(n));
+  _center.setTextureName(textureName);
+  _center.draw(lod, NULL);
+  _titleRec.draw(lod, NULL);
+  _border.draw(lod, NULL);
 }
 //=====================================================
 Coord Window::getAnchor(const Coord &vector) const {
-	Coord v(vector);
-	float x, y, z, fmax;
-	v.get(x, y, z);
-	v.setZ(0.0f);
-	fmax = std::max(fabsf(x), fabsf(y));
-	if (fmax > 0.0f)
-		return v * (0.5f / fmax);
-	else
-		return v;
+  Coord v(vector);
+  float x, y, z, fmax;
+  v.get(x, y, z);
+  v.setZ(0.0f);
+  fmax = std::max(fabsf(x), fabsf(y));
+
+  if (fmax > 0.0f)
+    return v * (0.5f / fmax);
+  else
+    return v;
 }
 
 #endif // WINDOWGLYPH_H

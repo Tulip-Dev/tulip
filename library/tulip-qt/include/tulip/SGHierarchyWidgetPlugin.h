@@ -24,14 +24,13 @@
 namespace tlp {
 class Graph;
 
-class SGHierarchyWidgetPlugin : public QObject, public QDesignerCustomWidgetInterface
-{
+class SGHierarchyWidgetPlugin : public QObject, public QDesignerCustomWidgetInterface {
   Q_OBJECT
   Q_INTERFACES(QDesignerCustomWidgetInterface)
 public:
   SGHierarchyWidgetPlugin(QObject *parent = 0);
   ~SGHierarchyWidgetPlugin();
-    
+
   bool isContainer() const;
   bool isInitialized() const;
   QIcon icon() const;

@@ -29,8 +29,7 @@ namespace tlp {
 class Graph;
 /** \addtogroup Mouse_interactor */
 /*@{*/
-class TLP_QT_SCOPE MouseSelector:public InteractorComponent
-{
+class TLP_QT_SCOPE MouseSelector:public InteractorComponent {
 protected:
   Qt::MouseButton mButton;
   Qt::KeyboardModifier kModifier;
@@ -41,11 +40,13 @@ protected:
   Graph *graph;
 public:
   MouseSelector(Qt::MouseButton button = Qt::LeftButton,
-		Qt::KeyboardModifier modifier = Qt::NoModifier);
+                Qt::KeyboardModifier modifier = Qt::NoModifier);
   ~MouseSelector() {}
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() { return new MouseSelector(mButton, kModifier); }
+  InteractorComponent *clone() {
+    return new MouseSelector(mButton, kModifier);
+  }
 };
 /*@}*/
 

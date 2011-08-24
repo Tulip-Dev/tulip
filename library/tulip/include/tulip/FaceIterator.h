@@ -28,41 +28,41 @@
 /// Face iterator for PlanarConMap
 namespace tlp {
 
-class FaceIterator : public Iterator<Face>{
+class FaceIterator : public Iterator<Face> {
 public:
   FaceIterator(PlanarConMap* m);
-  virtual ~FaceIterator(){}
-  
+  virtual ~FaceIterator() {}
+
   Face next();
   bool hasNext();
 
 private:
   unsigned int i;
   PlanarConMap* mgraph;
-}; 
+};
 
 //============================================================
 /// Adjacente Face iterator for PlanarConMap
-class FaceAdjIterator : public Iterator<Face>{
+class FaceAdjIterator : public Iterator<Face> {
 public:
   FaceAdjIterator(PlanarConMap* m, const node n);
-  virtual ~FaceAdjIterator(){}
-  
+  virtual ~FaceAdjIterator() {}
+
   Face next();
   bool hasNext();
 
 private:
-    std::vector<Face> facesAdj;
-    unsigned int i;
-}; 
+  std::vector<Face> facesAdj;
+  unsigned int i;
+};
 
 //============================================================
 /// Node of face iterator for PlanarConMap
-class NodeFaceIterator : public Iterator<node>{
+class NodeFaceIterator : public Iterator<node> {
 public :
   NodeFaceIterator(PlanarConMap *m, const Face );
-  virtual ~NodeFaceIterator(){}
-  
+  virtual ~NodeFaceIterator() {}
+
   node next();
   bool hasNext();
 
@@ -75,11 +75,11 @@ private :
 
 //============================================================
 /// Edge of face iterator for PlanarConMap
-class EdgeFaceIterator : public Iterator<edge>{
+class EdgeFaceIterator : public Iterator<edge> {
 public :
   EdgeFaceIterator(PlanarConMap *m, const Face );
-  virtual ~EdgeFaceIterator(){}
-  
+  virtual ~EdgeFaceIterator() {}
+
   edge next();
   bool hasNext();
 

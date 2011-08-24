@@ -29,12 +29,15 @@ CONTROLLERPLUGIN(ControllerPluginExample, "ControllerPluginExample", "Author","1
 
 ControllerPluginExample::~ControllerPluginExample() {
   // when we delete this controller, we remove it of observer
-  if(graph){
+  if(graph) {
     Iterator<PropertyInterface*> *it = graph->getObjectProperties();
+
     while (it->hasNext()) {
       PropertyInterface* tmp = it->next();
       tmp->removeObserver(this);
-    } delete it;
+    }
+
+    delete it;
 
     graph->removeObserver(this);
   }
@@ -52,10 +55,13 @@ void ControllerPluginExample::setData(Graph *graph, DataSet dataSet) {
 
   // We set observer to observe properties and graph
   Iterator<PropertyInterface*> *it = graph->getObjectProperties();
+
   while (it->hasNext()) {
     PropertyInterface* tmp = it->next();
     tmp->addObserver(this);
-  } delete it;
+  }
+
+  delete it;
 
   graph->addObserver(this);
 }

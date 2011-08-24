@@ -37,7 +37,7 @@
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
 
-/** \addtogroup plugins */ 
+/** \addtogroup plugins */
 /*@{*/
 
 //===========================================================
@@ -45,27 +45,27 @@
 //===========================================================
 /// Macro for factorization of source code pf Properties plugin mechanism
 #define PROPERTYPLUGINFACTORY(T,C,N,A,D,I,R,G)          \
-class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>	\
+class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>  \
 {                                                       \
- public:						\
-  C##T##Factory(){					\
-    tlp::T##Property::initFactory();			\
+ public:            \
+  C##T##Factory(){          \
+    tlp::T##Property::initFactory();      \
     tlp::T##Property::factory->registerPlugin((tlp::PropertyFactory<tlp::T##Algorithm> *) this); \
-  }							\
-  ~C##T##Factory(){}					\
+  }             \
+  ~C##T##Factory(){}          \
   std::string getClassName() const { return std::string(#T);} \
-  std::string getName() const { return std::string(N);}	\
+  std::string getName() const { return std::string(N);} \
   std::string getGroup() const { return std::string(G);}\
   std::string getAuthor() const {return std::string(A);}\
-  std::string getDate() const {return std::string(D);}	\
-  std::string getInfo() const {return std::string(I);}	\
+  std::string getDate() const {return std::string(D);}  \
+  std::string getInfo() const {return std::string(I);}  \
   std::string getRelease() const {return std::string(R);}\
   std::string getTulipRelease() const {return std::string(TULIP_RELEASE);}\
   tlp::T##Algorithm * createPluginObject(const tlp::PropertyContext &context)\
-   {							\
-     C *tmp=new C(context);				\
-     return ((tlp::T##Algorithm *) tmp);		\
-   }							\
+   {              \
+     C *tmp=new C(context);       \
+     return ((tlp::T##Algorithm *) tmp);    \
+   }              \
 };                                                      \
 extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
@@ -91,28 +91,28 @@ extern "C" {                                            \
 //===========================================================
 // Declaration of Graph modification plug-in Mechanism
 //===========================================================
-/// Macro for factorization of source code of Graph modification plugin mechanism 
-#define GRAPHPLUGINFACTORY(T,C,N,A,D,I,R,G)	\
+/// Macro for factorization of source code of Graph modification plugin mechanism
+#define GRAPHPLUGINFACTORY(T,C,N,A,D,I,R,G) \
 class C##T##Factory:public tlp::T##Factory              \
 {                                                       \
- public:						\
-  C##T##Factory(){					\
-    initFactory();					\
-    factory->registerPlugin(this);			\
-  }							\
-  ~C##T##Factory(){}					\
-  std::string getName() const { return std::string(N);}	\
+ public:            \
+  C##T##Factory(){          \
+    initFactory();          \
+    factory->registerPlugin(this);      \
+  }             \
+  ~C##T##Factory(){}          \
+  std::string getName() const { return std::string(N);} \
   std::string getGroup() const { return std::string(G);}\
   std::string getAuthor() const {return std::string(A);}\
-  std::string getDate() const {return std::string(D);}	\
-  std::string getInfo() const {return std::string(I);}	\
+  std::string getDate() const {return std::string(D);}  \
+  std::string getInfo() const {return std::string(I);}  \
   std::string getRelease() const {return std::string(R);}\
   std::string getTulipRelease() const {return std::string(TULIP_RELEASE);}\
-  tlp::T * createPluginObject(tlp::AlgorithmContext context)		\
-   {							\
-     C *tmp=new C(context);				\
-     return ((tlp::T *) tmp);				\
-   }							\
+  tlp::T * createPluginObject(tlp::AlgorithmContext context)    \
+   {              \
+     C *tmp=new C(context);       \
+     return ((tlp::T *) tmp);       \
+   }              \
 };                                                      \
 extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
@@ -121,7 +121,7 @@ extern "C" {                                            \
 #define ALGORITHMPLUGINOFGROUP(C,N,A,D,I,R,G) GRAPHPLUGINFACTORY(Algorithm,C,N,A,D,I,R,G)
 #define ALGORITHMPLUGIN(C,N,A,D,I,R) ALGORITHMPLUGINOFGROUP(C,N,A,D,I,R,"")
 #define EXPORTPLUGINOFGROUP(C,N,A,D,I,R,G) GRAPHPLUGINFACTORY(ExportModule,C,N,A,D,I,R,G)
-#define EXPORTPLUGIN(C,N,A,D,I,R) EXPORTPLUGINOFGROUP(C,N,A,D,I,R,"") 
+#define EXPORTPLUGIN(C,N,A,D,I,R) EXPORTPLUGINOFGROUP(C,N,A,D,I,R,"")
 #define IMPORTPLUGINOFGROUP(C,N,A,D,I,R,G) GRAPHPLUGINFACTORY(ImportModule,C,N,A,D,I,R,G)
 #define IMPORTPLUGIN(C,N,A,D,I,R) IMPORTPLUGINOFGROUP(C,N,A,D,I,R,"")
 /*@}*/

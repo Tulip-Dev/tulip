@@ -29,16 +29,16 @@ class SizeProperty;
 
 /**
  * \addtogroup plugins
- */ 
+ */
 /*@{*/
 /// Interface for sizes plug-ins
-class TLP_SCOPE SizeAlgorithm:public PropertyAlgorithm { 
+class TLP_SCOPE SizeAlgorithm:public PropertyAlgorithm {
   ///
   friend class SizeProperty;
 public:
   SizeProperty *sizeResult;
   ///
-  virtual ~SizeAlgorithm(){}
+  virtual ~SizeAlgorithm() {}
 
 protected:
   ///

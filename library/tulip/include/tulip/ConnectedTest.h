@@ -29,13 +29,13 @@ namespace tlp {
 
 class Graph;
 
-/** \addtogroup graph_test */ 
+/** \addtogroup graph_test */
 /*@{*/
 /// class for testing if the graph is connected
 class TLP_SCOPE ConnectedTest : private GraphObserver {
 public:
   /**
-   * Returns true if the graph is connected (ie. it exists an undirected path 
+   * Returns true if the graph is connected (ie. it exists an undirected path
    * between each pair of nodes), false otherwise.
    */
   static bool isConnected(const Graph* const graph);
@@ -52,7 +52,7 @@ public:
    * Computes the sets of connected components and stores the result in the components vector.
    */
   static void computeConnectedComponents(Graph *graph, std::vector< std::set<node> >& components);
-    
+
 private:
   void connect(const Graph * const, std::vector<node>& toLink);
   bool compute(const Graph * const);

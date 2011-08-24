@@ -26,40 +26,41 @@ using namespace std;
 
 namespace tlp {
 
-  NewTulipVersionAvailableDialog::NewTulipVersionAvailableDialog(const QString &version,QWidget* parent) : QDialog(parent),version(version) {
-    setupUi(this);
+NewTulipVersionAvailableDialog::NewTulipVersionAvailableDialog(const QString &version,QWidget* parent) : QDialog(parent),version(version) {
+  setupUi(this);
 
-    tulipVersion->setText(QString("Tulip ")+version);
-    connect(okButton,SIGNAL(clicked()),this,SLOT(okClicked()));
-    connect(askMeAgain,SIGNAL(stateChanged(int)),this,SLOT(askMeAgainStateChanged(int)));
-  }
+  tulipVersion->setText(QString("Tulip ")+version);
+  connect(okButton,SIGNAL(clicked()),this,SLOT(okClicked()));
+  connect(askMeAgain,SIGNAL(stateChanged(int)),this,SLOT(askMeAgainStateChanged(int)));
+}
 
-  bool NewTulipVersionAvailableDialog::needDisplayDialog(const QString &version){
-    bool result;
+bool NewTulipVersionAvailableDialog::needDisplayDialog(const QString &version) {
+  bool result;
+  QSettings settings("TulipSoftware","Tulip");
+  settings.beginGroup("Preference");
+  result=settings.value("AskAgainForVersion_"+version,true).toBool();
+  settings.endGroup();
+  return result;
+}
+
+void NewTulipVersionAvailableDialog::okClicked() {
+  accept();
+}
+
+void NewTulipVersionAvailableDialog::askMeAgainStateChanged(int state) {
+  if(state==Qt::Unchecked) {
     QSettings settings("TulipSoftware","Tulip");
     settings.beginGroup("Preference");
-    result=settings.value("AskAgainForVersion_"+version,true).toBool();
+    settings.setValue("AskAgainForVersion_"+version,false);
     settings.endGroup();
-    return result;
+  }
+  else {
+    QSettings settings("TulipSoftware","Tulip");
+    settings.beginGroup("Preference");
+    settings.setValue("AskAgainForVersion_"+version,true);
+    settings.endGroup();
   }
 
-  void NewTulipVersionAvailableDialog::okClicked() {
-    accept();
-  }
-
-  void NewTulipVersionAvailableDialog::askMeAgainStateChanged(int state){
-    if(state==Qt::Unchecked){
-      QSettings settings("TulipSoftware","Tulip");
-      settings.beginGroup("Preference");
-      settings.setValue("AskAgainForVersion_"+version,false);
-      settings.endGroup();
-    }else{
-      QSettings settings("TulipSoftware","Tulip");
-      settings.beginGroup("Preference");
-      settings.setValue("AskAgainForVersion_"+version,true);
-      settings.endGroup();
-    }
-
-  }
+}
 
 }

@@ -23,14 +23,13 @@
 
 namespace tlp {
 
-class GWOverviewWidgetPlugin : public QObject, public QDesignerCustomWidgetInterface
-{
+class GWOverviewWidgetPlugin : public QObject, public QDesignerCustomWidgetInterface {
   Q_OBJECT
   Q_INTERFACES(QDesignerCustomWidgetInterface)
 public:
   GWOverviewWidgetPlugin(QObject *parent = 0);
   ~GWOverviewWidgetPlugin();
-    
+
   bool isContainer() const;
   bool isInitialized() const;
   QIcon icon() const;

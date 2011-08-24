@@ -29,88 +29,88 @@
 
 namespace tlp {
 
-  class MultiServerManager;
-  class InstallPluginDialog;
+class MultiServerManager;
+class InstallPluginDialog;
 
-  class UpdatePlugin : public QObject {
+class UpdatePlugin : public QObject {
 
-    Q_OBJECT
+  Q_OBJECT
 
-    Server *serverWS;
-    Server *serverGet;
-    DistPluginInfo distPluginInfo;
-    LocalPluginInfo localPluginInfo;
-    InstallPluginDialog *pluginDialog;
-    QList<UpdatePlugin*> pluginUpdaters;
-    MultiServerManager *msm;
-    bool openDialog;
-    std::string version;
-    std::string installPath;
-    int partNumber;
-    int currentPart;
+  Server *serverWS;
+  Server *serverGet;
+  DistPluginInfo distPluginInfo;
+  LocalPluginInfo localPluginInfo;
+  InstallPluginDialog *pluginDialog;
+  QList<UpdatePlugin*> pluginUpdaters;
+  MultiServerManager *msm;
+  bool openDialog;
+  std::string version;
+  std::string installPath;
+  int partNumber;
+  int currentPart;
 
-    UpdatePlugin(UpdatePlugin &);
+  UpdatePlugin(UpdatePlugin &);
 
-  public :
+public :
 
-    virtual void endInstallation();
-    virtual void endUninstallation(){
-      emit pluginUninstalled(this,localPluginInfo);
-    }
+  virtual void endInstallation();
+  virtual void endUninstallation() {
+    emit pluginUninstalled(this,localPluginInfo);
+  }
 
-    UpdatePlugin(QObject *parent=0);
+  UpdatePlugin(QObject *parent=0);
 
-    int pluginsCheckAndUpdate(MultiServerManager *msm,std::set<DistPluginInfo,PluginCmp> &pluginsToInstall, std::set<LocalPluginInfo,PluginCmp> &pluginsToRemove,QWidget *parent);
-    static void windowToDisplayError(std::string pluginName,QWidget *parent);
-    std::string getAddr(std::string name);
+  int pluginsCheckAndUpdate(MultiServerManager *msm,std::set<DistPluginInfo,PluginCmp> &pluginsToInstall, std::set<LocalPluginInfo,PluginCmp> &pluginsToRemove,QWidget *parent);
+  static void windowToDisplayError(std::string pluginName,QWidget *parent);
+  std::string getAddr(std::string name);
 
-    void install(const std::string &serverAddr,const DistPluginInfo &pluginInfo); // Asynchronous
-    void updatePartNumber();
-    bool uninstall(const LocalPluginInfo &pluginInfo); // Synchronous
+  void install(const std::string &serverAddr,const DistPluginInfo &pluginInfo); // Asynchronous
+  void updatePartNumber();
+  bool uninstall(const LocalPluginInfo &pluginInfo); // Synchronous
 
-    static void moveFile(const QDir& oldDir,const QString& oldName,const QDir& newDir,const QString& newName);
-    static void copyFile(const QDir& oldDir,const QString& oldName,const QDir& newDir,const QString& newName, bool deleteOld = false);
-    static void installWhenRestartTulip();
-    static bool isInstallDirWritable();
-    static bool pluginUpdatesPending();
+  static void moveFile(const QDir& oldDir,const QString& oldName,const QDir& newDir,const QString& newName);
+  static void copyFile(const QDir& oldDir,const QString& oldName,const QDir& newDir,const QString& newName, bool deleteOld = false);
+  static void installWhenRestartTulip();
+  static bool isInstallDirWritable();
+  static bool pluginUpdatesPending();
 
-  protected slots:
+protected slots:
 
-    void terminatePluginInstall(UpdatePlugin*,const DistPluginInfo &);
-    void terminatePluginUninstall(UpdatePlugin*,const LocalPluginInfo &);
+  void terminatePluginInstall(UpdatePlugin*,const DistPluginInfo &);
+  void terminatePluginUninstall(UpdatePlugin*,const LocalPluginInfo &);
 
-  signals :
+signals :
 
-    void pluginInstalled();
-    void pluginUninstalled();
-    void pluginInstalled(UpdatePlugin*,const DistPluginInfo &);
-    void installPart(const std::string&,int,int);
-    void pluginUninstalled(UpdatePlugin*,const LocalPluginInfo &);
+  void pluginInstalled();
+  void pluginUninstalled();
+  void pluginInstalled(UpdatePlugin*,const DistPluginInfo &);
+  void installPart(const std::string&,int,int);
+  void pluginUninstalled(UpdatePlugin*,const LocalPluginInfo &);
 
-  };
+};
 
-  class PluginDownloadFinish : public RequestFinish {
-    UpdatePlugin* up;
+class PluginDownloadFinish : public RequestFinish {
+  UpdatePlugin* up;
 
-  public :
-    PluginDownloadFinish(UpdatePlugin* up) : up(up){};
+public :
+  PluginDownloadFinish(UpdatePlugin* up) : up(up) {};
 
-    void operator()(){
-      up->updatePartNumber();
-    }
-  };
+  void operator()() {
+    up->updatePartNumber();
+  }
+};
 
-  class EndPluginDownloadFinish : public RequestFinish {
-    UpdatePlugin* up;
+class EndPluginDownloadFinish : public RequestFinish {
+  UpdatePlugin* up;
 
-  public :
-    EndPluginDownloadFinish(UpdatePlugin* up) : up(up){};
+public :
+  EndPluginDownloadFinish(UpdatePlugin* up) : up(up) {};
 
-    void operator()(){
-      up->updatePartNumber();
-      up->endInstallation();
-    }
-  };
+  void operator()() {
+    up->updatePartNumber();
+    up->endInstallation();
+  }
+};
 
 }
 

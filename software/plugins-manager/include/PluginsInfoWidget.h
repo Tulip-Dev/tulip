@@ -32,68 +32,68 @@ class QDomElement;
 
 namespace tlp {
 
-  static std::string htmlBegin = "<html><body>";
-  static std::string htmlEnd = "</html></body>";
+static std::string htmlBegin = "<html><body>";
+static std::string htmlEnd = "</html></body>";
 
-  class MultiServerManager;
+class MultiServerManager;
 
-  class PluginsInfoWidget : public QWidget, public Ui::PluginsInfoWidgetData {
-    Q_OBJECT
+class PluginsInfoWidget : public QWidget, public Ui::PluginsInfoWidgetData {
+  Q_OBJECT
 
-  protected:
-    void initPIW();
-    void addPluginInfoXML(std::string xml);
-    void addPluginDocXML(std::string xml);
-    void formatInfo(const std::string &name,const std::string &author,const std::string &type,const std::string &date,const std::string &info,const std::string &version,const std::vector<std::string> &dependencies);
+protected:
+  void initPIW();
+  void addPluginInfoXML(std::string xml);
+  void addPluginDocXML(std::string xml);
+  void formatInfo(const std::string &name,const std::string &author,const std::string &type,const std::string &date,const std::string &info,const std::string &version,const std::vector<std::string> &dependencies);
 
-    std::string pluginInfoXML;
-    std::string pluginDocXML;
-    MultiServerManager *multiServerManager;
+  std::string pluginInfoXML;
+  std::string pluginDocXML;
+  MultiServerManager *multiServerManager;
 
-  public :
-    friend class GetPluginInfoTreatment;
-    friend class GetPluginDocTreatment;
+public :
+  friend class GetPluginInfoTreatment;
+  friend class GetPluginDocTreatment;
 
-    PluginsInfoWidget(MultiServerManager *multiServerManager,QWidget *parent=0);
-    void setPluginInfo(const PluginInfo *pluginInfo, std::string addrWS);
+  PluginsInfoWidget(MultiServerManager *multiServerManager,QWidget *parent=0);
+  void setPluginInfo(const PluginInfo *pluginInfo, std::string addrWS);
 
-    static bool haveInfo(const PluginInfo *pluginInfo);
+  static bool haveInfo(const PluginInfo *pluginInfo);
 
-  private:
-    std::string formatXMLDoc(QDomElement elt);
-  };
+private:
+  std::string formatXMLDoc(QDomElement elt);
+};
 
-  class GetPluginInfoTreatment : public ResponseTreatment {
+class GetPluginInfoTreatment : public ResponseTreatment {
 
-  private:
-    PluginsInfoWidget *piw;
+private:
+  PluginsInfoWidget *piw;
 
-  public :
-    GetPluginInfoTreatment(PluginsInfoWidget *p):piw(p){
-    }
+public :
+  GetPluginInfoTreatment(PluginsInfoWidget *p):piw(p) {
+  }
 
-    void operator()(const std::string &data){
-      piw->addPluginInfoXML(data);
-      piw->textBrowser->setText((htmlBegin+piw->pluginInfoXML+htmlEnd).c_str());
-    }
-  };
+  void operator()(const std::string &data) {
+    piw->addPluginInfoXML(data);
+    piw->textBrowser->setText((htmlBegin+piw->pluginInfoXML+htmlEnd).c_str());
+  }
+};
 
-  class GetPluginDocTreatment : public ResponseTreatment {
+class GetPluginDocTreatment : public ResponseTreatment {
 
-  private:
-    PluginsInfoWidget *piw;
+private:
+  PluginsInfoWidget *piw;
 
-  public :
+public :
 
-    GetPluginDocTreatment(PluginsInfoWidget *p):piw(p){
-    }
+  GetPluginDocTreatment(PluginsInfoWidget *p):piw(p) {
+  }
 
-    void operator()(const std::string &data){
-      piw->addPluginDocXML(data);
-      piw->textBrowser->setText((htmlBegin+piw->pluginInfoXML+piw->pluginDocXML+htmlEnd).c_str());
-    }
+  void operator()(const std::string &data) {
+    piw->addPluginDocXML(data);
+    piw->textBrowser->setText((htmlBegin+piw->pluginInfoXML+piw->pluginDocXML+htmlEnd).c_str());
+  }
 
-  };
+};
 }
 
 #endif //_PLUGINSINFOWIDGET_H_

@@ -28,7 +28,7 @@
 
 #include <string>
 
-using namespace std; 
+using namespace std;
 
 using namespace tlp;
 
@@ -262,23 +262,23 @@ void TlpImportExportTest::testExportAttributes() {
 //==========================================================
 CppUnit::Test * TlpImportExportTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Tlp Import/Export mechanism" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>( 
-							      "Load test", 
-							      &TlpImportExportTest::testLoad ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>( 
-							      "Import test", 
-							      &TlpImportExportTest::testImport ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>( 
-							      "Save test", 
-							      &TlpImportExportTest::testSave ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>( 
-							      "Export test", 
-							      &TlpImportExportTest::testExport ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>( 
-							      "Export Cluster test", 
-							      &TlpImportExportTest::testExportCluster ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>( 
-							      "Export Attributes test", 
-							      &TlpImportExportTest::testExportAttributes ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>(
+                           "Load test",
+                           &TlpImportExportTest::testLoad ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>(
+                           "Import test",
+                           &TlpImportExportTest::testImport ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>(
+                           "Save test",
+                           &TlpImportExportTest::testSave ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>(
+                           "Export test",
+                           &TlpImportExportTest::testExport ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>(
+                           "Export Cluster test",
+                           &TlpImportExportTest::testExportCluster ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>(
+                           "Export Attributes test",
+                           &TlpImportExportTest::testExportAttributes ) );
   return suiteOfTests;
 }

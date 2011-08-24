@@ -29,48 +29,48 @@ class QAbstractButton;
 class QDialogButtonBox;
 
 namespace tlp {
-  class PluginInfo;
-  class MultiServerManager;
-  class PluginsInfoWidget;
-  class ServersOptionDialog;
-  class PluginsViewWidget;
+class PluginInfo;
+class MultiServerManager;
+class PluginsInfoWidget;
+class ServersOptionDialog;
+class PluginsViewWidget;
 
-  class PluginsManager : public QDialog {
-    Q_OBJECT
+class PluginsManager : public QDialog {
+  Q_OBJECT
 
-  public:
-    PluginsManager(MultiServerManager *msm,QWidget *parent=0);
-    virtual ~PluginsManager();
-    
-  protected:
-    void createActions(QWidget *parent);
-    void createMenus();
+public:
+  PluginsManager(MultiServerManager *msm,QWidget *parent=0);
+  virtual ~PluginsManager();
 
-    QMenuBar* menuBar;
-    QDialogButtonBox* buttons;
-    QWidget* pluginsWidget;
-    QAction* lastPluginsAct;
-    QAction* compatiblesPluginsAct;
-    QAction* notinstalledPluginsAct;
-    int currentView;
-    
-    PluginsInfoWidget* pluginsInfo;
-    PluginsViewWidget* pluginsList;
-    MultiServerManager* serverManager;
-    ServersOptionDialog* serverDialog;
- 
-  private slots:
-    void modifyTreeView();
-    virtual void updatePluginsTree();
-    virtual void serverPopup();
-    void clickOnPluginSlot(const PluginInfo* pi);
-    
-    void serverView();
-    void groupView();
-    void pluginView();
-    void proxy();
-    void clicked (QAbstractButton*);
-  };
+protected:
+  void createActions(QWidget *parent);
+  void createMenus();
+
+  QMenuBar* menuBar;
+  QDialogButtonBox* buttons;
+  QWidget* pluginsWidget;
+  QAction* lastPluginsAct;
+  QAction* compatiblesPluginsAct;
+  QAction* notinstalledPluginsAct;
+  int currentView;
+
+  PluginsInfoWidget* pluginsInfo;
+  PluginsViewWidget* pluginsList;
+  MultiServerManager* serverManager;
+  ServersOptionDialog* serverDialog;
+
+private slots:
+  void modifyTreeView();
+  virtual void updatePluginsTree();
+  virtual void serverPopup();
+  void clickOnPluginSlot(const PluginInfo* pi);
+
+  void serverView();
+  void groupView();
+  void pluginView();
+  void proxy();
+  void clicked (QAbstractButton*);
+};
 }
 
 #endif

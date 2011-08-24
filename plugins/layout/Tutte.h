@@ -37,7 +37,7 @@ class Tutte:public tlp::LayoutAlgorithm {
 public:
   Tutte(const tlp::PropertyContext &);
   ~Tutte();
-  
+
   bool run();
   bool check(std::string &);
 };

@@ -31,6 +31,7 @@ PropertyInterface::~PropertyInterface() {
     std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Serious bug; you have deleted a registered graph property named '"  << name.c_str() << "'" << std::endl;
     abort();
   }
+
   // notification of destruction
   observableDeleted();
 }
@@ -46,53 +47,53 @@ void PropertyInterface::removePropertyObserver(PropertyObserver *pObs) {
 void PropertyInterface::notifyBeforeSetNodeValue(const node n) {
   if (hasOnlookers())
     sendEvent(PropertyEvent(*this, PropertyEvent::TLP_BEFORE_SET_NODE_VALUE,
-			    Event::TLP_INFORMATION, n));
+                            Event::TLP_INFORMATION, n));
 }
 
 void PropertyInterface::notifyAfterSetNodeValue(const node n) {
   if (hasOnlookers())
     sendEvent(PropertyEvent(*this, PropertyEvent::TLP_AFTER_SET_NODE_VALUE,
-			    Event::TLP_MODIFICATION, n));
+                            Event::TLP_MODIFICATION, n));
 }
 
 void PropertyInterface::notifyBeforeSetEdgeValue(const edge e) {
   if (hasOnlookers())
     sendEvent(PropertyEvent(*this, PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE,
-			    Event::TLP_INFORMATION, e));
+                            Event::TLP_INFORMATION, e));
 }
 
 void PropertyInterface::notifyAfterSetEdgeValue(const edge e) {
   if (hasOnlookers())
     sendEvent(PropertyEvent(*this, PropertyEvent::TLP_AFTER_SET_EDGE_VALUE,
-			    Event::TLP_MODIFICATION, e));
+                            Event::TLP_MODIFICATION, e));
 }
 
 void PropertyInterface::notifyBeforeSetAllNodeValue() {
   if (hasOnlookers())
     sendEvent(PropertyEvent(*this,
-			    PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE,
-			    Event::TLP_INFORMATION));
+                            PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE,
+                            Event::TLP_INFORMATION));
 }
 
 void PropertyInterface::notifyAfterSetAllNodeValue() {
   if (hasOnlookers())
     sendEvent(PropertyEvent(*this,
-			    PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE,
-			    Event::TLP_MODIFICATION));
+                            PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE,
+                            Event::TLP_MODIFICATION));
 }
 
 void PropertyInterface::notifyBeforeSetAllEdgeValue() {
   if (hasOnlookers())
     sendEvent(PropertyEvent(*this,
-			    PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE,
-			    Event::TLP_INFORMATION));
+                            PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE,
+                            Event::TLP_INFORMATION));
 }
 
 void PropertyInterface::notifyAfterSetAllEdgeValue() {
   if (hasOnlookers())
     sendEvent(PropertyEvent(*this,
-			    PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE,
-			    Event::TLP_MODIFICATION));
+                            PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE,
+                            Event::TLP_MODIFICATION));
 }
 
 void PropertyInterface::notifyDestroy() {

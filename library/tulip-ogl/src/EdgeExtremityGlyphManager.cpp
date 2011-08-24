@@ -31,102 +31,115 @@ static TLP_HASH_MAP<std::string, int> nameToEeGlyphId;
 const int EdgeExtremityGlyphManager::NoEdgeExtremetiesId = UINT_MAX;
 
 EdgeExtremityGlyphManager::EdgeExtremityGlyphManager() {
-	EdgeExtremityGlyphFactory::initFactory();
+  EdgeExtremityGlyphFactory::initFactory();
 }
 //====================================================
 string EdgeExtremityGlyphManager::glyphName(int id) {
-	if (id == NoEdgeExtremetiesId){
-		return string("NONE");
-	}
-	if (eeglyphIdToName.find(id) != eeglyphIdToName.end()){
-		return eeglyphIdToName[id];
-	}
-	else {
-		cerr << __PRETTY_FUNCTION__ << endl;
-		cerr << "Invalid glyph id" << endl;
-		return string("invalid");
-	}
+  if (id == NoEdgeExtremetiesId) {
+    return string("NONE");
+  }
+
+  if (eeglyphIdToName.find(id) != eeglyphIdToName.end()) {
+    return eeglyphIdToName[id];
+  }
+  else {
+    cerr << __PRETTY_FUNCTION__ << endl;
+    cerr << "Invalid glyph id" << endl;
+    return string("invalid");
+  }
 }
 //====================================================
 int EdgeExtremityGlyphManager::glyphId(string name) {
-	if (name.compare("NONE") == 0){
-		return NoEdgeExtremetiesId;
-	}
-	if (nameToEeGlyphId.find(name) != nameToEeGlyphId.end()){
-		return nameToEeGlyphId[name];
-	}
-	else {
-		cerr << __PRETTY_FUNCTION__ << endl;
-		cerr << "Invalid glyph name" << endl;
-		return 0;
-	}
+  if (name.compare("NONE") == 0) {
+    return NoEdgeExtremetiesId;
+  }
+
+  if (nameToEeGlyphId.find(name) != nameToEeGlyphId.end()) {
+    return nameToEeGlyphId[name];
+  }
+  else {
+    cerr << __PRETTY_FUNCTION__ << endl;
+    cerr << "Invalid glyph name" << endl;
+    return 0;
+  }
 }
 //====================================================
 void EdgeExtremityGlyphManager::loadGlyphPlugins() {
-		Iterator<string> *itS =
-			EdgeExtremityGlyphFactory::factory->availablePlugins();
-	while (itS->hasNext()) {
-		string pluginName = itS->next();
-		int pluginId =
-				EdgeExtremityGlyphFactory::factory->objMap[pluginName]->getId();
-		eeglyphIdToName[pluginId] = pluginName;
-		nameToEeGlyphId[pluginName] = pluginId;
-	}
-	delete itS;
+  Iterator<string> *itS =
+    EdgeExtremityGlyphFactory::factory->availablePlugins();
+
+  while (itS->hasNext()) {
+    string pluginName = itS->next();
+    int pluginId =
+      EdgeExtremityGlyphFactory::factory->objMap[pluginName]->getId();
+    eeglyphIdToName[pluginId] = pluginName;
+    nameToEeGlyphId[pluginName] = pluginId;
+  }
+
+  delete itS;
 
 }
 //====================================================
 void EdgeExtremityGlyphManager::loadPlugins(PluginLoader *plug) {
-		EdgeExtremityGlyphFactory::initFactory();
-	string::const_iterator begin = tlp::TulipPluginsPath.begin();
-	string::const_iterator end = begin;
-	eeglyphIdToName.clear();
-	nameToEeGlyphId.clear();
-	while (end != tlp::TulipPluginsPath.end())
-		if ((*end) == tlp::PATH_DELIMITER) {
-			if (begin != end)
-				tlp::loadPluginsFromDir(string(begin, end) + "/glyphs",
-						"Glyph", plug);
-			++end;
-			begin = end;
-		} else
-			++end;
-	if (begin != end) {
-		tlp::loadPluginsFromDir(string(begin, end) + "/glyphs", "Glyph", plug);
-	}
-	loadGlyphPlugins();
+  EdgeExtremityGlyphFactory::initFactory();
+  string::const_iterator begin = tlp::TulipPluginsPath.begin();
+  string::const_iterator end = begin;
+  eeglyphIdToName.clear();
+  nameToEeGlyphId.clear();
+
+  while (end != tlp::TulipPluginsPath.end())
+    if ((*end) == tlp::PATH_DELIMITER) {
+      if (begin != end)
+        tlp::loadPluginsFromDir(string(begin, end) + "/glyphs",
+                                "Glyph", plug);
+
+      ++end;
+      begin = end;
+    }
+    else
+      ++end;
+
+  if (begin != end) {
+    tlp::loadPluginsFromDir(string(begin, end) + "/glyphs", "Glyph", plug);
+  }
+
+  loadGlyphPlugins();
 }
 //
 void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
-		GlGraphInputData* glGraphInputData, MutableContainer<
-				EdgeExtremityGlyph *>& glyphs) {
-		EdgeExtremityGlyphContext gc = EdgeExtremityGlyphContext(graph,
-				glGraphInputData);
-		glyphs.setAll(0);
-		Iterator<string> *itS =
-				EdgeExtremityGlyphFactory::factory->availablePlugins();
-		while (itS->hasNext()) {
-			string glyphName = itS->next();
-			EdgeExtremityGlyph *newGlyph =
-					EdgeExtremityGlyphFactory::factory->getPluginObject(glyphName,
-							&gc);
-			glyphs.set(
-					EdgeExtremityGlyphFactory::factory->objMap[glyphName]->getId(),
-					newGlyph);
-		}
-		delete itS;
+    GlGraphInputData* glGraphInputData, MutableContainer<
+    EdgeExtremityGlyph *>& glyphs) {
+  EdgeExtremityGlyphContext gc = EdgeExtremityGlyphContext(graph,
+                                 glGraphInputData);
+  glyphs.setAll(0);
+  Iterator<string> *itS =
+    EdgeExtremityGlyphFactory::factory->availablePlugins();
+
+  while (itS->hasNext()) {
+    string glyphName = itS->next();
+    EdgeExtremityGlyph *newGlyph =
+      EdgeExtremityGlyphFactory::factory->getPluginObject(glyphName,
+          &gc);
+    glyphs.set(
+      EdgeExtremityGlyphFactory::factory->objMap[glyphName]->getId(),
+      newGlyph);
+  }
+
+  delete itS;
 }
 
 void EdgeExtremityGlyphManager::clearGlyphList(Graph **,
-		GlGraphInputData*, MutableContainer<
-				EdgeExtremityGlyph *>& glyphs) {
-		Iterator<string> *itS =
-			EdgeExtremityGlyphFactory::factory->availablePlugins();
-	while (itS->hasNext()) {
-		string glyphName = itS->next();
-		delete glyphs.get(
-				EdgeExtremityGlyphFactory::factory->objMap[glyphName]->getId());
-	}
-	delete itS;
+    GlGraphInputData*, MutableContainer<
+    EdgeExtremityGlyph *>& glyphs) {
+  Iterator<string> *itS =
+    EdgeExtremityGlyphFactory::factory->availablePlugins();
+
+  while (itS->hasNext()) {
+    string glyphName = itS->next();
+    delete glyphs.get(
+      EdgeExtremityGlyphFactory::factory->objMap[glyphName]->getId());
+  }
+
+  delete itS;
 }
 }

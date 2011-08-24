@@ -63,8 +63,10 @@ static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::st
   static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > > paramMaps;
   TLP_HASH_MAP<std::string, StructDef *>::const_iterator it;
   it = paramMaps[(unsigned long) factory].find(name);
+
   if (it == paramMaps[(unsigned long) factory].end())
     paramMaps[(unsigned long) factory][name] = new StructDef(factory->getPluginParameters(name));
+
   return paramMaps[(unsigned long) factory][name];
 }
 
@@ -105,23 +107,27 @@ void TulipApp::startTulip() {
   QRect fRect(this->frameGeometry());
   int deltaWidth = fRect.width() - wRect.width();
   int deltaHeight = fRect.height() - wRect.height();
+
   // adjust width
   if (fRect.width() > sRect.width()) {
     wRect.setWidth(sRect.width() - deltaWidth);
   }
+
   // screen width centering
   wRect.moveLeft(sRect.left() +
-		 (sRect.width() - wRect.width())/2);
+                 (sRect.width() - wRect.width())/2);
+
   // adjust height
   if (fRect.height() > sRect.height()) {
     wRect.setHeight(sRect.height() - deltaHeight);
   }
+
   // screen height centering
   wRect.moveTop(sRect.top() + (deltaHeight - deltaWidth)/2 +
-		(sRect.height() - wRect.height())/2);
+                (sRect.height() - wRect.height())/2);
   // adjust geometry
   this->setGeometry(wRect.x(), wRect.y(),
-		    wRect.width(), wRect.height());
+                    wRect.width(), wRect.height());
 
   UpdatePlugin::installWhenRestartTulip();
 
@@ -130,35 +136,38 @@ void TulipApp::startTulip() {
   std::string errors;
   appStart->show();
   appStart->initTulip(&pluginLoader,errors);
+
   //delete appStart;
   if (errors.size() > 0) {
-      errorDlg = new QDialog(this);
-      errorDlg->setWindowTitle("Errors when loading Tulip plugins !!!");
-      QVBoxLayout* errorDlgLayout = new QVBoxLayout(errorDlg);
-      errorDlgLayout->setMargin(11);
-      errorDlgLayout->setSpacing(6);
-      QFrame *frame = new QFrame(errorDlg);
-      QHBoxLayout* frameLayout = new QHBoxLayout(frame);
-      frameLayout->setMargin(0);
-      frameLayout->setSpacing(0);
-      QSpacerItem* spacer  = new QSpacerItem( 180, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-      frameLayout->addItem( spacer );
-      QTextEdit* textWidget = new QTextEdit(QString(""),errorDlg);
-      textWidget->setReadOnly(true);
-      textWidget->setLineWrapMode(QTextEdit::NoWrap);
-      errorDlgLayout->addWidget( textWidget );
-      QPushButton * closeB = new QPushButton( "Close", frame);
-      frameLayout->addWidget( closeB );
-      errorDlgLayout->addWidget( frame );
-      QWidget::connect(closeB, SIGNAL(clicked()), errorDlg, SLOT(hide()));
-      errorDlg->resize( QSize(400, 250).expandedTo(errorDlg->minimumSizeHint()) );
-      textWidget->setText(QString(errors.c_str()));
-      errorDlg->exec();
-    }
-  if(ControllerFactory::factory->objMap.empty()){
+    errorDlg = new QDialog(this);
+    errorDlg->setWindowTitle("Errors when loading Tulip plugins !!!");
+    QVBoxLayout* errorDlgLayout = new QVBoxLayout(errorDlg);
+    errorDlgLayout->setMargin(11);
+    errorDlgLayout->setSpacing(6);
+    QFrame *frame = new QFrame(errorDlg);
+    QHBoxLayout* frameLayout = new QHBoxLayout(frame);
+    frameLayout->setMargin(0);
+    frameLayout->setSpacing(0);
+    QSpacerItem* spacer  = new QSpacerItem( 180, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    frameLayout->addItem( spacer );
+    QTextEdit* textWidget = new QTextEdit(QString(""),errorDlg);
+    textWidget->setReadOnly(true);
+    textWidget->setLineWrapMode(QTextEdit::NoWrap);
+    errorDlgLayout->addWidget( textWidget );
+    QPushButton * closeB = new QPushButton( "Close", frame);
+    frameLayout->addWidget( closeB );
+    errorDlgLayout->addWidget( frame );
+    QWidget::connect(closeB, SIGNAL(clicked()), errorDlg, SLOT(hide()));
+    errorDlg->resize( QSize(400, 250).expandedTo(errorDlg->minimumSizeHint()) );
+    textWidget->setText(QString(errors.c_str()));
+    errorDlg->exec();
+  }
+
+  if(ControllerFactory::factory->objMap.empty()) {
     QMessageBox::critical(this,tr("No controller found"),tr("No controller was found in Tulip plugins directory.\n Tulip cannot work without a controller."));
     exit(-1);
   }
+
   buildMenus();
   this->show();
   enableElements(false);
@@ -169,11 +178,12 @@ void TulipApp::startTulip() {
   OpenGlErrorViewer *oldErrorViewer=OpenGlConfigManager::getInst().setErrorViewer(new QtOpenGlErrorViewer);
   delete oldErrorViewer;
 
-  if(PreferenceManager::getInst().getNetworkConnection()){
+  if(PreferenceManager::getInst().getNetworkConnection()) {
     pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
     connect(pluginsUpdateChecker,SIGNAL(updateFinished()),this,SLOT(displayRestartForPlugins()));
     multiServerManager = pluginsUpdateChecker->getMultiServerManager();
-  }else{
+  }
+  else {
     pluginsUpdateChecker=NULL;
   }
 
@@ -196,15 +206,16 @@ void TulipApp::startTulip() {
 
   // Window Menu
   connect(windowsMenu, SIGNAL( aboutToShow() ),
-	  this, SLOT( windowsMenuAboutToShow() ) );
+          this, SLOT( windowsMenuAboutToShow() ) );
   connect(windowsMenu, SIGNAL(triggered(QAction*)),
-	  this, SLOT( windowsMenuActivated(QAction*)));
+          this, SLOT( windowsMenuActivated(QAction*)));
 
   assistantProcess= new QProcess(this);
   std::string assistantPath(tlp::TulipLibDir);
   assistantPath += string("../");
 #if defined(__linux__)
   assistantPath += string("bin");
+
   // check if we are in a bundle
   if (QDir(assistantPath.c_str()).exists("assistant"))
     // assistant is in the bundle bin directory
@@ -212,6 +223,7 @@ void TulipApp::startTulip() {
   else
     // assistant is in the Qt binaries install directory
     assistantProcessApp = QLibraryInfo::location(QLibraryInfo::BinariesPath)+ "/assistant";
+
 #else
 #if defined(_WIN32)
   assistantPath.append("bin/assistant.exe");
@@ -232,49 +244,58 @@ void TulipApp::startTulip() {
   it=ControllerFactory::factory->objMap.begin();
   string name=(*it).first;
   ++it;
-  if(it==ControllerFactory::factory->objMap.end()){
+
+  if(it==ControllerFactory::factory->objMap.end()) {
     controllerAutoLoad=false;
     createController(name,newName());
     currentTabIndex=0;
     Controller::currentActiveController(tabIndexToController[currentTabIndex]);
     controllerAutoLoad=true;
-  }else{
+  }
+  else {
     controllerAutoLoad=false;
   }
 
   int argc = qApp->argc();
+
   if (argc>1) {
     char ** argv = qApp->argv();
-    for (int i=1;i<argc;++i) {
+
+    for (int i=1; i<argc; ++i) {
       if(string(argv[i])=="--width") {
         int width = atoi(argv[i+1]);
         wRect.setWidth(width);
         ++i;
         continue;
       }
+
       if(string(argv[i])=="--height") {
         int height = atoi(argv[i+1]);
         wRect.setHeight(height);
         ++i;
         continue;
       }
+
       if(string(argv[i])=="--x") {
         int x = atoi(argv[i+1]);
         wRect.setX(x);
         ++i;
         continue;
       }
+
       if(string(argv[i])=="--y") {
         int y = atoi(argv[i+1]);
         wRect.setY(y);
         ++i;
         continue;
       }
+
       QFileInfo info(argv[i]);
       QString s = info.absoluteFilePath();
       fileOpen(0, s);
     }
   }
+
   this->setGeometry(wRect.x(), wRect.y(),wRect.width(), wRect.height());
 
 }
@@ -323,11 +344,12 @@ void TulipApp::fileNew(QAction *action) {
 }
 //**********************************************************************
 bool TulipApp::fileNew(bool fromMenu) {
-string name;
+  string name;
+
   if(fromMenu) {
     TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it=ControllerFactory::factory->objMap.begin();
     name=it->first;
-}
+  }
   else {
     name=defaultControllerName;
   }
@@ -336,25 +358,29 @@ string name;
   initializeGraph(graph);
   string graphName;
   graph->getAttribute("name",graphName);
+
   if(createController(name,graphName)) {
     tabIndexToController[tabWidget->currentIndex()]->setData(graph);
     GraphNeedsSavingObserver* observer = new GraphNeedsSavingObserver(tabWidget, tabWidget->currentIndex(), graph);
     observer->doNeedSaving();
     controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]] = observer;
     enableElements(true);
-  } else
+  }
+  else
     return false;
+
   return true;
 }
 //**********************************************************************
-void TulipApp::fileCloseTab(){
+void TulipApp::fileCloseTab() {
   if(controllerAutoLoad)
     return;
+
   int index=tabWidget->currentIndex();
   closeTab(index);
 }
 //**********************************************************************
-void TulipApp::closeTab(int index){
+void TulipApp::closeTab(int index) {
   if(controllerAutoLoad)
     return;
 
@@ -365,17 +391,19 @@ void TulipApp::closeTab(int index){
 
   QMessageBox::StandardButton answer =askSaveGraph(graph->getAttribute<string>("name"),index);
 
-  if(answer != QMessageBox::Cancel){
+  if(answer != QMessageBox::Cancel) {
     Controller *controller=tabIndexToController[index];
     tabWidget->setCurrentIndex(index-1);
 
     map<int,Controller *> newTabIndexToController;
-    for(map<int,Controller *>::const_iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
+
+    for(map<int,Controller *>::const_iterator it=tabIndexToController.begin(); it!=tabIndexToController.end(); ++it) {
       if(it->first<index)
         newTabIndexToController[it->first]=it->second;
       else if((*it).first>index)
         newTabIndexToController[it->first-1]=it->second;
     }
+
     tabIndexToController=newTabIndexToController;
 
     controllerToWorkspace.erase(controller);
@@ -389,6 +417,7 @@ void TulipApp::closeTab(int index){
     currentTabIndex=-1;
 
     int newIndex=tabWidget->currentIndex();
+
     if(index<tabWidget->currentIndex())
       newIndex--;
 
@@ -403,7 +432,7 @@ void TulipApp::closeTab(int index){
 }
 //**********************************************************************
 bool TulipApp::createController(const string &name,const string &graphName) {
-  if(!controllerAutoLoad){
+  if(!controllerAutoLoad) {
     /*if(currentController) {
       Graph *graph=currentController->getGraph();
       if(askSaveGraph(graph->getAttribute<string>("name")))
@@ -435,20 +464,24 @@ bool TulipApp::createController(const string &name,const string &graphName) {
     tab->setObjectName(QString("ControllerMainWidget ")+QString::number(index));
     newWorkspace->setObjectName(QString("ControllerWorkspace ")+QString::number(index));
 
-  }else{
+  }
+  else {
     controllerAutoLoad=false;
     tabWidget->setTabText(0, QString::fromUtf8(graphName.c_str()));
   }
+
   Controller::currentActiveController(tabIndexToController[tabWidget->currentIndex()]);
   return true;
 }
 //**********************************************************************
 bool TulipApp::doFileSave(int index) {
   Controller *controller=tabIndexToController[index];
+
   if (openFiles.find(controller)==openFiles.end() ||
       (openFiles[controller].name == "")) {
     return doFileSaveAs();
   }
+
   FileInfo &vFile = openFiles[controller];
   return doFileSave(controller,"tlp", vFile.name, vFile.author, vFile.comments);
 }
@@ -458,7 +491,7 @@ void TulipApp::fileSave() {
 }
 //**********************************************************************
 bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string filename,
-			  string author, string comments) {
+                          string author, string comments) {
 
   DataSet dataSet;
   StructDef parameter = ExportModuleFactory::factory->getPluginParameters(plugin);
@@ -467,8 +500,10 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
   DataSet controllerData;
   Graph *graph;
   controllerToSave->getData(&graph,&controllerData);
+
   if (graph == NULL)
     return false;
+
   controller.set<DataSet>(controllerToControllerName[controllerToSave],controllerData);
   dataSet.set<DataSet>("controller",controller);
 
@@ -478,37 +513,47 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
     dataSet.set<string>("name", graphName);
   else
     dataSet.set<string>("name", filename);
+
   if (!author.empty())
     dataSet.set<string>("author", author);
+
   if (!comments.empty())
     dataSet.set<string>("text::comments", comments);
+
   string title = string("Enter Export parameters: ") + plugin;
+
   if (!tlp::openDataSetDialog(dataSet, 0, &parameter,
-			      &dataSet, title.c_str(), NULL,
-			      this))
+                              &dataSet, title.c_str(), NULL,
+                              this))
     return false;
 
   if (filename.empty()) {
     QString name;
+
     if (plugin == "tlp")
       name =
-	QFileDialog::getSaveFileName(this, tr("Choose a file to save" ),
-				     QString(),
-				     tr("Tulip graph (*.tlp *.tlp.gz)"));
+        QFileDialog::getSaveFileName(this, tr("Choose a file to save" ),
+                                     QString(),
+                                     tr("Tulip graph (*.tlp *.tlp.gz)"));
     else
       name =
-	QFileDialog::getSaveFileName(this,
-				     this->windowTitle().toUtf8().data());
+        QFileDialog::getSaveFileName(this,
+                                     this->windowTitle().toUtf8().data());
+
     if (name == QString::null) return false;
+
     filename = name.toUtf8().data();
   }
+
   bool result;
   ostream *os;
+
   if (filename.rfind(".gz") == (filename.length() - 3))
     os = tlp::getOgzstream(filename.c_str());
   else {
     if ((plugin == "tlp") && (filename.rfind(".tlp") == std::string::npos))
       filename += ".tlp";
+
     os = new ofstream(filename.c_str());
   }
 
@@ -520,13 +565,16 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
   dataSet.get<string>("name", graphName);
 
   PluginProgress* progress = new QtProgress(NULL, "saving Graph");
+
   if (!(result=tlp::exportGraph(graph, *os, plugin, dataSet, progress))) {
     QMessageBox::critical( 0, "Tulip export Failed",
-			   "The file has not been saved"
-			   );
-  } else {
+                           "The file has not been saved"
+                         );
+  }
+  else {
     statusBar()->showMessage(QString::fromUtf8((filename + " saved.").c_str()));
   }
+
   delete progress;
 
   tabWidget->setTabText(tabWidget->currentIndex(), QString::fromUtf8(filename.c_str()));
@@ -554,22 +602,26 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
   DataSet dataSet;
   string tmpStr="tlp";
   bool cancel=false, noPlugin = true;
+
   if (s == QString::null) {
     if (plugin==0) {
       plugin = &tmpStr;
       s = QFileDialog::getOpenFileName(this, tr("Choose a file to open" ),
-				       QString(),
-				       tr("Tulip graph (*.tlp *.tlp.gz)"));
+                                       QString(),
+                                       tr("Tulip graph (*.tlp *.tlp.gz)"));
+
       if (s == QString::null)
-	cancel=true;
+        cancel=true;
       else  {
-	if (QFileInfo(s).isDir()) {
-	  QMessageBox::critical(this, "Error", s + " is a directory.");
-	  cancel = true;
-	} else
-	dataSet.set("file::filename", string(s.toUtf8().data()));
+        if (QFileInfo(s).isDir()) {
+          QMessageBox::critical(this, "Error", s + " is a directory.");
+          cancel = true;
+        }
+        else
+          dataSet.set("file::filename", string(s.toUtf8().data()));
       }
-    }else {
+    }
+    else {
       noPlugin = false;
       s = QString::null;
       StructDef sysDef = ImportModuleFactory::factory->getPluginParameters(*plugin);
@@ -577,20 +629,24 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       params->buildDefaultDataSet( dataSet );
       string title = string("Enter Import parameters: ") + plugin->c_str();
       cancel = !tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
-				       title.c_str(), NULL, this);
+                                       title.c_str(), NULL, this);
     }
-  } else {
+  }
+  else {
     plugin = &tmpStr;
     dataSet.set("file::filename", string(s.toUtf8().data()));
     noPlugin = true;
   }
+
   if (!cancel) {
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     Graph *newGraph = tlp::newGraph();
     initializeGraph(newGraph);
+
     if (s == QString::null)
       s = newGraph->getAttribute<string>("name").c_str();
+
     bool result=true;
     QFileInfo tmp(s);
     QDir::setCurrent(tmp.dir().path() + "/");
@@ -603,18 +659,21 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     DataSet controllerData;
     bool haveControllerData=false;
     string controllerName;
+
     // now ensure notification
     if (progressBar->state()==TLP_CANCEL || !result ) {
       errorMessage = progressBar->getError();
       delete progressBar;
       QApplication::restoreOverrideCursor();
-    }else{
+    }
+    else {
       delete progressBar;
       QApplication::restoreOverrideCursor();
 
       TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
       vector<string> controllersName;
-      for (it=ControllerFactory::factory->objMap.begin();it != ControllerFactory::factory->objMap.end();++it) {
+
+      for (it=ControllerFactory::factory->objMap.begin(); it != ControllerFactory::factory->objMap.end(); ++it) {
         controllersName.push_back(it->first);
       }
 
@@ -637,11 +696,11 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       if(controllerName=="MainController" || controllerName.empty())
         controllerName="Tulip Classic";
 
-      if(controllersName.size()==1){
+      if(controllersName.size()==1) {
         // if we have only one controller : auto load it
 
         // If controller doesn't exist : open a popup
-        if(!ControllerPluginsManager::getInst().controllerExists(controllerName)){
+        if(!ControllerPluginsManager::getInst().controllerExists(controllerName)) {
           QMessageBox::critical(this,"Error",QString("The \"")+controllerName.c_str()+"\" perspective associated to the file\n"
                                 "you are trying to load in currently not\n"+
                                 "installed in your copy of Tulip.\n"+
@@ -649,37 +708,40 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
                                 "Default perspective will be used.");
           controllerName=defaultControllerName;
         }
-      }else{
+      }
+      else {
         bool displayDialog=true;
 
         // if auto load controller setting is set
-        if(haveControllerData && PreferenceManager::getInst().getAutoLoadController()){
+        if(haveControllerData && PreferenceManager::getInst().getAutoLoadController()) {
           // check if this controller is in available controllers
-          for(vector<string>::const_iterator it=controllersName.begin();it!=controllersName.end();++it){
-            if((*it)==controllerName){
+          for(vector<string>::const_iterator it=controllersName.begin(); it!=controllersName.end(); ++it) {
+            if((*it)==controllerName) {
               displayDialog=false;
               break;
             }
           }
         }
 
-        if(displayDialog){
+        if(displayDialog) {
           // If we find controller name : display this name is ChooseControllerDialog (replace None)
           if(haveControllerData)
             chooseControllerDialog.setDefaultControllerName(controllerName);
 
           chooseControllerDialog.setDefaultCheckedControllerName(controllerName);
           chooseControllerDialog.setControllersAvailable(controllersName);
-          if(chooseControllerDialog.exec()==QDialog::Rejected){
+
+          if(chooseControllerDialog.exec()==QDialog::Rejected) {
             return;
-          }else{
+          }
+          else {
             controllerName = chooseControllerDialog.getCheckedControllerName();
           }
         }
       }
     }
 
-    if(errorMessage!=""){
+    if(errorMessage!="") {
       delete newGraph;
       QApplication::restoreOverrideCursor();
       std::string errorTitle("Canceled import/Open: ");
@@ -699,6 +761,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
         dataSet.get<string>("scene", sceneDataStr);
         newDataSet.set<string>("scene",sceneDataStr);
       }
+
       if(dataSet.exist("displaying")) {
         // Tlp file with old system
         DataSet glGraphData;
@@ -714,9 +777,11 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     GraphNeedsSavingObserver* observer = new GraphNeedsSavingObserver(tabWidget, tabWidget->currentIndex(), newGraph);
     newGraph->addGraphObserver(observer);
     controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]] = observer;
+
     if (!noPlugin) {
       observer->doNeedSaving();
     }
+
     enableElements(true);
 
     if(noPlugin) {
@@ -731,6 +796,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
 
     // synchronize overview display parameters
   } /*else {
+
     qWarning("Canceled  Open/import");
     }*/
 }
@@ -746,60 +812,69 @@ void TulipApp::importGraph(QAction* action) {
   fileOpen(&name,s);
 }
 //*********************************************************************
-  static std::vector<std::string> getItemGroupNames(std::string itemGroup) {
-    std::string::size_type start = 0;
-    std::string::size_type end = 0;
-    std::vector<std::string> groupNames;
-    const char * separator = "::";
+static std::vector<std::string> getItemGroupNames(std::string itemGroup) {
+  std::string::size_type start = 0;
+  std::string::size_type end = 0;
+  std::vector<std::string> groupNames;
+  const char * separator = "::";
 
-    while(true) {
-      start = itemGroup.find_first_not_of(separator, end);
-      if (start == std::string::npos) {
-	return groupNames;
-      }
-      end = itemGroup.find_first_of(separator, start);
-      if (end == std::string::npos)
-	end = itemGroup.length();
-      groupNames.push_back(itemGroup.substr(start, end - start));
+  while(true) {
+    start = itemGroup.find_first_not_of(separator, end);
+
+    if (start == std::string::npos) {
+      return groupNames;
     }
+
+    end = itemGroup.find_first_of(separator, start);
+
+    if (end == std::string::npos)
+      end = itemGroup.length();
+
+    groupNames.push_back(itemGroup.substr(start, end - start));
   }
+}
 //**********************************************************************
-  static void insertInMenu(QMenu &menu, string itemName, string itemGroup,
-			   std::vector<QMenu*> &groupMenus, std::string::size_type &nGroups,QObject *receiver, const char *slot) {
-    std::vector<std::string> itemGroupNames = getItemGroupNames(itemGroup);
-    QMenu *subMenu = &menu;
-    std::string::size_type nGroupNames = itemGroupNames.size();
-    for (std::string::size_type i = 0; i < nGroupNames; i++) {
-      QMenu *groupMenu = (QMenu *) 0;
-      for (std::string::size_type j = 0; j < nGroups; j++) {
-	if (itemGroupNames[i] == groupMenus[j]->objectName().toAscii().data()) {
-	  subMenu = groupMenu = groupMenus[j];
-	  break;
-	}
-      }
-      if (!groupMenu) {
-	groupMenu = new QMenu(itemGroupNames[i].c_str(), subMenu);
-	groupMenu->setObjectName(QString(itemGroupNames[i].c_str()));
-	subMenu->addMenu(groupMenu);
-	groupMenus.push_back(groupMenu);
-	nGroups++;
-	subMenu = groupMenu;
+static void insertInMenu(QMenu &menu, string itemName, string itemGroup,
+                         std::vector<QMenu*> &groupMenus, std::string::size_type &nGroups,QObject *receiver, const char *slot) {
+  std::vector<std::string> itemGroupNames = getItemGroupNames(itemGroup);
+  QMenu *subMenu = &menu;
+  std::string::size_type nGroupNames = itemGroupNames.size();
+
+  for (std::string::size_type i = 0; i < nGroupNames; i++) {
+    QMenu *groupMenu = (QMenu *) 0;
+
+    for (std::string::size_type j = 0; j < nGroups; j++) {
+      if (itemGroupNames[i] == groupMenus[j]->objectName().toAscii().data()) {
+        subMenu = groupMenu = groupMenus[j];
+        break;
       }
     }
-    //cout << subMenu->name() << "->" << itemName << endl;
 
-    QAction *action = subMenu->addAction(itemName.c_str());
-    QObject::connect(action,SIGNAL(triggered()),receiver,slot);
+    if (!groupMenu) {
+      groupMenu = new QMenu(itemGroupNames[i].c_str(), subMenu);
+      groupMenu->setObjectName(QString(itemGroupNames[i].c_str()));
+      subMenu->addMenu(groupMenu);
+      groupMenus.push_back(groupMenu);
+      nGroups++;
+      subMenu = groupMenu;
+    }
   }
+
+  //cout << subMenu->name() << "->" << itemName << endl;
+
+  QAction *action = subMenu->addAction(itemName.c_str());
+  QObject::connect(action,SIGNAL(triggered()),receiver,slot);
+}
 //**********************************************************************
 template <typename TFACTORY, typename TMODULE>
-  void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
-    typename TemplateFactory<TFACTORY, TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
-    std::vector<QMenu*> groupMenus;
-    std::string::size_type nGroups = 0;
-    for (it=TFACTORY::factory->objMap.begin();it != TFACTORY::factory->objMap.end();++it)
-      insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
-  }
+void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
+  typename TemplateFactory<TFACTORY, TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
+  std::vector<QMenu*> groupMenus;
+  std::string::size_type nGroups = 0;
+
+  for (it=TFACTORY::factory->objMap.begin(); it != TFACTORY::factory->objMap.end(); ++it)
+    insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
+}
 //**********************************************************************
 void TulipApp::buildMenus() {
   TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
@@ -807,15 +882,18 @@ void TulipApp::buildMenus() {
   // In this case doesn't add sub menu in new menu
   it=ControllerFactory::factory->objMap.begin();
   ++it;
+
   if(it!=ControllerFactory::factory->objMap.end()) {
     //Add new menu in File menu
     newMenu=new QMenu("New");
     connect(newMenu, SIGNAL(triggered(QAction *)), SLOT(fileNew(QAction*)));
     fileMenu->insertMenu(fileOpenAction,newMenu);
-    for (it=ControllerFactory::factory->objMap.begin();it != ControllerFactory::factory->objMap.end();++it) {
+
+    for (it=ControllerFactory::factory->objMap.begin(); it != ControllerFactory::factory->objMap.end(); ++it) {
       newMenu->addAction(it->first.c_str());
     }
-  }else{
+  }
+  else {
     newAction = new QAction("New",fileMenu);
     newAction->setShortcut(QKeySequence(tr("Ctrl+N")));
     connect(newAction,SIGNAL(triggered(bool)), SLOT(fileNew(bool)));
@@ -829,14 +907,17 @@ void TulipApp::buildMenus() {
 
   buildMenuWithContext<ExportModuleFactory, ExportModule>(*exportGraphMenu, this, SLOT(exportGraph()));
   buildMenuWithContext<ImportModuleFactory, ImportModule>(*importGraphMenu, this, SLOT(importGraph()));
+
   //connect(&exportGraphMenu, SIGNAL(triggered(QAction*)), SLOT(exportGraph(QAction*)));
   //connect(&importGraphMenu, SIGNAL(triggered(QAction*)), SLOT(importGraph(QAction*)));
   if (importGraphMenu->actions().count()>0) {
     fileMenu->insertMenu(filePrintAction,importGraphMenu);
   }
+
   if (exportGraphMenu->actions().count()>0) {
     fileMenu->insertMenu(filePrintAction,exportGraphMenu);
   }
+
   fileMenu->insertSeparator(filePrintAction);
 }
 //**********************************************************************
@@ -851,31 +932,38 @@ void TulipApp::exportGraph(QAction* action) {
 }
 //**********************************************************************
 void TulipApp::windowsMenuActivated(QAction* action) {
-    int id = action->data().toInt();
-    if(!controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]]->windowList().empty()) {
-        QWidget* w = controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]]->windowList().at(id);
-        if ( w ) {
-            w->setFocus();
-            w->show();
-        }
+  int id = action->data().toInt();
+
+  if(!controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]]->windowList().empty()) {
+    QWidget* w = controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]]->windowList().at(id);
+
+    if ( w ) {
+      w->setFocus();
+      w->show();
     }
+  }
 }
 //**********************************************************************
 void TulipApp::windowsMenuAboutToShow() {
   windowsMenu->clear();
+
   if(tabWidget->currentIndex()==-1)
     return;
+
   QWorkspace *currentWorkspace=controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]];
   QAction* cascadeAction = windowsMenu->addAction("&Cascade", this, SLOT(cascade() ) );
   QAction* tileAction = windowsMenu->addAction("&Tile", currentWorkspace, SLOT(tile() ) );
   QAction* closeallAction = windowsMenu->addAction("Close All", this, SLOT(closeAll()));
+
   if ( currentWorkspace->windowList().isEmpty() ) {
     cascadeAction->setEnabled(false);
     tileAction->setEnabled(false);
     closeallAction->setEnabled(false);
-  }else{
+  }
+  else {
     windowsMenu->addSeparator();
     QWidgetList windows = currentWorkspace->windowList();
+
     for ( int i = 0; i < int(windows.count()); ++i ) {
       QAction* action = windowsMenu->addAction(windows.at(i)->windowTitle());
       action->setChecked(currentWorkspace->activeWindow() == windows.at(i));
@@ -889,51 +977,60 @@ QMessageBox::StandardButton TulipApp::askSaveGraph(const std::string &name,int i
   if(!controllerToGraphObserver[tabIndexToController[index]]->needSaving()) {
     return QMessageBox::No;
   }
+
   string message = "Do you want to save this graph: " + name + "?";
   QMessageBox::StandardButton answer;
+
   if(activateNoToAll) {
     answer = QMessageBox::question(this, "Save", QString::fromUtf8(message.c_str()),
-    QMessageBox::Yes | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel | QMessageBox::Escape
-    ,QMessageBox::Yes);
-  }else{
-    answer = QMessageBox::question(this, "Save", QString::fromUtf8(message.c_str()),
-    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape
-    ,QMessageBox::Yes);
+                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel | QMessageBox::Escape
+                                   ,QMessageBox::Yes);
   }
+  else {
+    answer = QMessageBox::question(this, "Save", QString::fromUtf8(message.c_str()),
+                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape
+                                   ,QMessageBox::Yes);
+  }
+
   //If the register step fail send the cancel button to stop the process.
-  if(answer == QMessageBox::Yes){
+  if(answer == QMessageBox::Yes) {
     return doFileSave(index)?QMessageBox::Yes:QMessageBox::Cancel;
   }
+
   return answer;
 }
 //**********************************************************************
 /* returns true if window agrees to be closed */
 bool TulipApp::closeWin() {
   QMessageBox::StandardButton answer = QMessageBox::No;
-  if(!controllerAutoLoad){
-    for(map<int,Controller *>::const_iterator it=tabIndexToController.begin();it!=tabIndexToController.end() && answer != QMessageBox::NoToAll;++it){
-      if(it->second){
+
+  if(!controllerAutoLoad) {
+    for(map<int,Controller *>::const_iterator it=tabIndexToController.begin(); it!=tabIndexToController.end() && answer != QMessageBox::NoToAll; ++it) {
+      if(it->second) {
         Graph *graph=(it->second)->getGraph();
         assert(graph);
         //while(graph->getRoot()!=graph){
-          graph=graph->getRoot();
+        graph=graph->getRoot();
         //}
         answer = askSaveGraph(graph->getAttribute<string>("name"),it->first,true);
+
         //If user cancel or click on cancel stop the process
-        if(answer == QMessageBox::Cancel){
+        if(answer == QMessageBox::Cancel) {
           return false;
         }
+
         if (answer == QMessageBox::NoToAll)
           return true;
       }
     }
 
-    for(map<int,Controller *>::const_iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
-      if(it->second){
+    for(map<int,Controller *>::const_iterator it=tabIndexToController.begin(); it!=tabIndexToController.end(); ++it) {
+      if(it->second) {
         delete it->second;
       }
     }
   }
+
   return true;
 }
 //**********************************************************************
@@ -945,7 +1042,7 @@ void TulipApp::closeEvent(QCloseEvent *e) {
 }
 //==============================================================
 void TulipApp::plugins() {
-  if(!pluginsUpdateChecker){
+  if(!pluginsUpdateChecker) {
     pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
     connect(pluginsUpdateChecker,SIGNAL(updateFinished()),this,SLOT(displayRestartForPlugins()));
     multiServerManager = pluginsUpdateChecker->getMultiServerManager();
@@ -956,6 +1053,7 @@ void TulipApp::plugins() {
   PluginsManager *pluginsManager=new PluginsManager(multiServerManager,this);
 
   pluginsManager->exec();
+
   if (UpdatePlugin::pluginUpdatesPending()) {
     displayRestartForPlugins();
   }
@@ -963,11 +1061,12 @@ void TulipApp::plugins() {
 //==============================================================
 void TulipApp::displayRestartForPlugins() {
   int result = QMessageBox::warning(this,
-      tr("Update plugins"),
-      tr("To finish installing/removing plugins, \nTulip must be restarted.\nDo you want to restart Tulip now?"),
-      QMessageBox::Yes | QMessageBox::Default,
-      QMessageBox::No);
-  if(result == QMessageBox::Yes){
+                                    tr("Update plugins"),
+                                    tr("To finish installing/removing plugins, \nTulip must be restarted.\nDo you want to restart Tulip now?"),
+                                    QMessageBox::Yes | QMessageBox::Default,
+                                    QMessageBox::No);
+
+  if(result == QMessageBox::Yes) {
     // Store that tulip must be auto restarted
     enableRestart();
 
@@ -975,16 +1074,17 @@ void TulipApp::displayRestartForPlugins() {
   }
 }
 //==============================================================
-void TulipApp::deletePluginsUpdateChecker(){
+void TulipApp::deletePluginsUpdateChecker() {
   disconnect(pluginsUpdateChecker,SIGNAL(updateFinished()),this,SLOT(displayRestartForPlugins()));
   delete pluginsUpdateChecker;
   plugins();
 }
 //==============================================================
-void TulipApp::saveActions(QWidget *widget,Controller *controller,map<Controller *,vector<QAction *> > &mapToSave){
+void TulipApp::saveActions(QWidget *widget,Controller *controller,map<Controller *,vector<QAction *> > &mapToSave) {
   mapToSave[controller].clear();
   QList<QAction *> actions=widget->actions();
-  for(QList<QAction *>::iterator it=actions.begin();it!=actions.end();++it){
+
+  for(QList<QAction *>::iterator it=actions.begin(); it!=actions.end(); ++it) {
     mapToSave[controller].push_back(*it);
   }
 }
@@ -992,14 +1092,17 @@ void TulipApp::saveActions(QWidget *widget,Controller *controller,map<Controller
 void TulipApp::clearInterface() {
   //Dock widgets
   QObjectList objectList=this->children();
-  for(QObjectList::iterator it=objectList.begin();it!=objectList.end();++it){
+
+  for(QObjectList::iterator it=objectList.begin(); it!=objectList.end(); ++it) {
     QDockWidget *widget=dynamic_cast<QDockWidget *>(*it);
-    if(widget){
+
+    if(widget) {
       removeDockWidget(widget);
       widget->hide();
     }
 
     QToolBar *tb = dynamic_cast<QToolBar *>(*it);
+
     if (tb && tb != toolBar && tb != graphToolBar) {
       removeToolBar(tb);
       tb->hide();
@@ -1022,60 +1125,71 @@ void TulipApp::saveInterface(int index) {
   controllerToCustomToolBar[controller].clear();
   controllerToWidgetVisible[controller].clear();
   QObjectList objectList=this->children();
-  for(QObjectList::iterator it=objectList.begin();it!=objectList.end();++it){
+
+  for(QObjectList::iterator it=objectList.begin(); it!=objectList.end(); ++it) {
     QDockWidget *widget=dynamic_cast<QDockWidget *>(*it);
-    if(widget){
+
+    if(widget) {
       Qt::DockWidgetArea area=dockWidgetArea(widget);
-      if(area!=Qt::NoDockWidgetArea){
+
+      if(area!=Qt::NoDockWidgetArea) {
         controllerToDockWidget[controller].push_back(pair<Qt::DockWidgetArea,QDockWidget *>(area,widget));
         controllerToWidgetVisible[controller].push_back(pair<QWidget *, bool>(widget, widget->isVisible()));
       }
     }
 
     QToolBar *tb = dynamic_cast<QToolBar *>(*it);
+
     if (tb && tb != toolBar && tb != graphToolBar) {
       Qt::ToolBarArea area = toolBarArea(tb);
       controllerToCustomToolBar[controller].push_back(pair<Qt::ToolBarArea, QToolBar *>(area, tb));
       controllerToWidgetVisible[controller].push_back(pair<QWidget *, bool>(tb, tb->isVisible()));
     }
   }
+
   controllerToWidgetVisible[controller].push_back(pair<QWidget *, bool>(graphToolBar, graphToolBar->isVisible()));
   controllerToWidgetVisible[controller].push_back(pair<QWidget *, bool>(toolBar, toolBar->isVisible()));
 
   pair<string,string > tmp(statusBar()->currentMessage().toStdString(),string());
   objectList=statusBar()->children();
-  for(QObjectList::iterator it=objectList.begin();it!=objectList.end();++it){
+
+  for(QObjectList::iterator it=objectList.begin(); it!=objectList.end(); ++it) {
     QLabel *widget=dynamic_cast<QLabel*>(*it);
+
     if(widget)
       tmp.second=widget->text().toStdString();
   }
+
   controllerToStatusBar[tabIndexToController[index]]=tmp;
 }
 //==============================================================
-void TulipApp::loadInterface(int index){
+void TulipApp::loadInterface(int index) {
   if(tabIndexToController.count(index)==0)
-      return;
+    return;
 
   Controller *controller=tabIndexToController[index];
 
   clearInterface();
 
-  if(controllerToWorkspace.count(controller)!=0){
+  if(controllerToWorkspace.count(controller)!=0) {
     controllerToWorkspace[controller]->setActiveWindow(controllerToWorkspace[controller]->activeWindow());
   }
 
-  if(controllerToDockWidget.count(controller)!=0){
+  if(controllerToDockWidget.count(controller)!=0) {
     vector<pair<Qt::DockWidgetArea,QDockWidget*> > tmp=controllerToDockWidget[controller];
     vector<pair<Qt::DockWidgetArea,QDockWidget*> >::const_iterator it=tmp.end();
 
 #if QT_MINOR_REL > 3
     it=tmp.begin();
-    while(it!=tmp.end()){
+
+    while(it!=tmp.end()) {
       restoreDockWidget((*it).second);
       ++it;
     }
+
 #else
-    while(it!=tmp.begin()){
+
+    while(it!=tmp.begin()) {
       --it;
       addDockWidget(it->first,it->second);
       (it->second)->show();
@@ -1083,15 +1197,18 @@ void TulipApp::loadInterface(int index){
 
     if(controller) {
       vector<pair<QDockWidget *,QDockWidget*> > tabifiedDockWidget=controller->getMainWindowFacade()->getTabifiedDockWidget();
-      for(vector<pair<QDockWidget *,QDockWidget*> >::const_iterator it=tabifiedDockWidget.begin();it!=tabifiedDockWidget.end();++it) {
-	tabifyDockWidget(it->first,it->second);
+
+      for(vector<pair<QDockWidget *,QDockWidget*> >::const_iterator it=tabifiedDockWidget.begin(); it!=tabifiedDockWidget.end(); ++it) {
+        tabifyDockWidget(it->first,it->second);
       }
     }
+
 #endif
   }
 
-  if(controllerToCustomToolBar.count(controller)!=0){
+  if(controllerToCustomToolBar.count(controller)!=0) {
     vector<pair<Qt::ToolBarArea, QToolBar *> > toolBarsToAdd = controllerToCustomToolBar[controller];
+
     if (!toolBarsToAdd.empty()) {
       for (vector<pair<Qt::ToolBarArea, QToolBar *> >::const_iterator it = toolBarsToAdd.begin(); it != toolBarsToAdd.end(); ++it) {
         addToolBar(it->first, it->second);
@@ -1100,41 +1217,47 @@ void TulipApp::loadInterface(int index){
     }
   }
 
-  if(controllerToMenu.count(controller)!=0){
+  if(controllerToMenu.count(controller)!=0) {
     vector<QAction *> actionsToAdd=controllerToMenu[controller];
-    if(!actionsToAdd.empty()){
-      for(vector<QAction *>::const_iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
+
+    if(!actionsToAdd.empty()) {
+      for(vector<QAction *>::const_iterator it=actionsToAdd.begin(); it!=actionsToAdd.end(); ++it) {
         menuBar()->addAction(*it);
       }
     }
   }
 
-  if(controllerToToolBar.count(controller)!=0){
+  if(controllerToToolBar.count(controller)!=0) {
     vector<QAction *> actionsToAdd=controllerToToolBar[controller];
-    if(!actionsToAdd.empty()){
-      for(vector<QAction *>::const_iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
+
+    if(!actionsToAdd.empty()) {
+      for(vector<QAction *>::const_iterator it=actionsToAdd.begin(); it!=actionsToAdd.end(); ++it) {
         toolBar->addAction(*it);
       }
     }
   }
 
-  if(controllerToGraphToolBar.count(controller)!=0){
+  if(controllerToGraphToolBar.count(controller)!=0) {
     vector<QAction *> actionsToAdd=controllerToGraphToolBar[controller];
-    if(!actionsToAdd.empty()){
-      for(vector<QAction *>::const_iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
+
+    if(!actionsToAdd.empty()) {
+      for(vector<QAction *>::const_iterator it=actionsToAdd.begin(); it!=actionsToAdd.end(); ++it) {
         graphToolBar->addAction(*it);
-        if((*it)->isChecked()){
+
+        if((*it)->isChecked()) {
           (*it)->activate(QAction::Trigger);
         }
       }
     }
   }
 
-  if(controllerToStatusBar.count(controller)!=0){
+  if(controllerToStatusBar.count(controller)!=0) {
     statusBar()->showMessage(controllerToStatusBar[controller].first.c_str());
     QObjectList objectList=statusBar()->children();
-    for(QObjectList::iterator it=objectList.begin();it!=objectList.end();++it){
+
+    for(QObjectList::iterator it=objectList.begin(); it!=objectList.end(); ++it) {
       QLabel *widget=dynamic_cast<QLabel*>(*it);
+
       if(widget)
         widget->setText(controllerToStatusBar[controller].second.c_str());
     }
@@ -1142,13 +1265,14 @@ void TulipApp::loadInterface(int index){
 
   if (controllerToWidgetVisible.count(controller) != 0) {
     vector<pair<QWidget *,bool> > tmp = controllerToWidgetVisible[controller];
+
     for(vector<pair<QWidget *,bool> >::const_iterator it = tmp.begin(); it != tmp.end(); ++it)
       it->first->setVisible(it->second);
   }
 }
 //==============================================================
-void TulipApp::tabChanged(int index){
-  if(index==-1){
+void TulipApp::tabChanged(int index) {
+  if(index==-1) {
     fileNew(false);
     return;
   }
@@ -1165,11 +1289,13 @@ void TulipApp::tabChanged(int index){
 void TulipApp::helpAbout() {
   if (aboutWidget==0)
     aboutWidget = new InfoDialog(this);
+
   aboutWidget->show();
 }
 //==============================================================
 void TulipApp::preference() {
   PreferenceDialog pref(this);
+
   if(pref.exec()!=QDialog::Accepted)
     return;
 
@@ -1177,10 +1303,11 @@ void TulipApp::preference() {
     return;
 
   int result = QMessageBox::warning(this,
-				    tr(""),
-                    tr("To apply preferences modifications, \nTulip must be restarted.\nDo you want to restart Tulip now?"),
-				    QMessageBox::Yes | QMessageBox::Default,
-				    QMessageBox::No);
+                                    tr(""),
+                                    tr("To apply preferences modifications, \nTulip must be restarted.\nDo you want to restart Tulip now?"),
+                                    QMessageBox::Yes | QMessageBox::Default,
+                                    QMessageBox::No);
+
   if(result == QMessageBox::Yes) {
 
     // Store that tulip must be auto restarted
@@ -1194,6 +1321,7 @@ void TulipApp::helpDocumentation() {
   QStringList args;
   args << "-collectionFile" << tlp::TulipDocProfile.c_str();
   assistantProcess->start(assistantProcessApp, args);
+
   if (!assistantProcess->waitForStarted()) {
     QMessageBox::critical(this, tr("Remote Control"),
                           tr("Could not start Qt Assistant from %1.").arg(assistantProcessApp));
@@ -1212,14 +1340,17 @@ void TulipApp::fileExit() {
 //==============================================================
 void TulipApp::filePrint() {
   Graph *graph= tabIndexToController[tabWidget->currentIndex()]->getGraph();
+
   if (graph==0) return;
 
   NodeLinkDiagramComponent *nldc = NULL;
   QWidget *widget=tabWidget->widget(tabWidget->currentIndex());
   QObjectList tmp=widget->children();
-  for(QObjectList::iterator it=tmp.begin();it!=tmp.end();++it){
+
+  for(QObjectList::iterator it=tmp.begin(); it!=tmp.end(); ++it) {
     QWorkspace *workspace=dynamic_cast<QWorkspace*>(*it);
-    if(workspace){
+
+    if(workspace) {
       QWidget *viewWidget=workspace->activeWindow();
       MainController *mainController=(MainController*)tabIndexToController[tabWidget->currentIndex()];
       View *view=mainController->getViewOfWidget(viewWidget);
@@ -1227,41 +1358,46 @@ void TulipApp::filePrint() {
     }
   }
 
-  if(nldc){
+  if(nldc) {
     GlMainWidget *glWidget=nldc->getGlMainWidget();
     QPrinter printer;
     QPrintDialog dialog(&printer, this);
+
     if (!dialog.exec())
       return;
+
     int width,height;
     width = glWidget->width();
     height = glWidget->height();
 
     unsigned char* image= glWidget->getImage();
     QPainter painter(&printer);
+
     for (int y=0; y<height; y++)
       for (int x=0; x<width; x++) {
         painter.setPen(QColor(image[(height-y-1)*width*3+(x)*3],
-            image[(height-y-1)*width*3+(x)*3+1],
-            image[(height-y-1)*width*3+(x)*3+2]));
+                              image[(height-y-1)*width*3+(x)*3+1],
+                              image[(height-y-1)*width*3+(x)*3+2]));
         painter.drawPoint(x,y);
       }
+
     painter.end();
     delete image;
   }
 }
 //==============================================================
-void TulipApp::cascade(){
+void TulipApp::cascade() {
   QWorkspace *currentWorkspace=controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]];
   currentWorkspace->cascade();
   QWidgetList widgetList=currentWorkspace->windowList();
-  for(QWidgetList::iterator it=widgetList.begin();it!=widgetList.end();++it){
+
+  for(QWidgetList::iterator it=widgetList.begin(); it!=widgetList.end(); ++it) {
     (*it)->resize(QSize(512,512));
   }
 }
 
 //==============================================================
-void TulipApp::closeAll(){
+void TulipApp::closeAll() {
   QWorkspace *currentWorkspace=controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]];
   currentWorkspace->closeAllWindows();
 }

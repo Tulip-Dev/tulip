@@ -26,25 +26,25 @@
 
 namespace tlp {
 
-  class SoapRequestBuilder {
+class SoapRequestBuilder {
 
-  private :
-    // Document Structure
-    QDomDocument xmlDoc;
-    QDomElement soapEnvelopeNode;
-    QDomElement soapBodyNode;
-    
-    // Function remote call
-    QDomElement soapFunctionNode;
-    bool isFunctionNameSpecified;
-    
-  public : 
-    SoapRequestBuilder();  
-    void setFunctionName(const std::string &name);
-    bool addFunctionParameter(const std::string &name,const std::string &type,const std::string &data);
-    void getXML(std::string &result);
-    
-  };
+private :
+  // Document Structure
+  QDomDocument xmlDoc;
+  QDomElement soapEnvelopeNode;
+  QDomElement soapBodyNode;
+
+  // Function remote call
+  QDomElement soapFunctionNode;
+  bool isFunctionNameSpecified;
+
+public :
+  SoapRequestBuilder();
+  void setFunctionName(const std::string &name);
+  bool addFunctionParameter(const std::string &name,const std::string &type,const std::string &data);
+  void getXML(std::string &result);
+
+};
 
 }
 

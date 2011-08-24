@@ -26,64 +26,66 @@
 
 class ConsoleOutputHandler : public QObject {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public:
 
-	ConsoleOutputHandler() {}
+  ConsoleOutputHandler() {}
 
 public slots :
 
-void writeToConsole(QPlainTextEdit *consoleWidget, const QString &output, bool errorOutput) {
+  void writeToConsole(QPlainTextEdit *consoleWidget, const QString &output, bool errorOutput) {
 
-	if (!consoleWidget)
-		return;
+    if (!consoleWidget)
+      return;
 
-	QBrush brush(Qt::SolidPattern);
-	if (errorOutput) {
-		brush.setColor(Qt::red);
-	} else {
-		brush.setColor(Qt::black);
-	}
+    QBrush brush(Qt::SolidPattern);
 
-	QTextCharFormat formt;
-	formt.setForeground(brush);
-	consoleWidget->moveCursor(QTextCursor::End);
-	QTextCursor cursor = consoleWidget->textCursor();
-	cursor.insertText(output, formt);
-}
+    if (errorOutput) {
+      brush.setColor(Qt::red);
+    }
+    else {
+      brush.setColor(Qt::black);
+    }
+
+    QTextCharFormat formt;
+    formt.setForeground(brush);
+    consoleWidget->moveCursor(QTextCursor::End);
+    QTextCursor cursor = consoleWidget->textCursor();
+    cursor.insertText(output, formt);
+  }
 
 };
 
 class ConsoleOutputEmitter : public QObject {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public:
 
-	ConsoleOutputEmitter() : consoleWidget(NULL), outputActivated(true) {}
+  ConsoleOutputEmitter() : consoleWidget(NULL), outputActivated(true) {}
 
-	void sendOutputToConsole(const QString &output, bool errorOutput) {
-		if (outputActivated)
-			emit consoleOutput(consoleWidget, output, errorOutput);
-	}
+  void sendOutputToConsole(const QString &output, bool errorOutput) {
+    if (outputActivated)
+      emit consoleOutput(consoleWidget, output, errorOutput);
+  }
 
-	void setConsoleWidget(QPlainTextEdit *consoleWidget) {
-		this->consoleWidget = consoleWidget;
-	}
+  void setConsoleWidget(QPlainTextEdit *consoleWidget) {
+    this->consoleWidget = consoleWidget;
+  }
 
-	void setOutputActivated(bool outputActivated) {
-		this->outputActivated = outputActivated;
-	}
+  void setOutputActivated(bool outputActivated) {
+    this->outputActivated = outputActivated;
+  }
 
 signals:
 
-	void consoleOutput(QPlainTextEdit *consoleWidget, const QString &output, bool errorOutput);
+  void consoleOutput(QPlainTextEdit *consoleWidget, const QString &output, bool errorOutput);
 
 private :
 
-	QPlainTextEdit *consoleWidget;
-	bool outputActivated;
+  QPlainTextEdit *consoleWidget;
+  bool outputActivated;
 };
 
 #endif /* CONSOLEOUTPUTHANDLER_H_ */

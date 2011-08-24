@@ -29,11 +29,11 @@
 /** This plugin computes the number of nodes in the subtree induced by each node.
  *
  *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the same
- *  connected component they have the same value else they have a 
+ *  connected component they have the same value else they have a
  *  different value.
  *
  */
-class NodeMetric:public tlp::DoubleAlgorithm { 
+class NodeMetric:public tlp::DoubleAlgorithm {
 public:
   NodeMetric(const tlp::PropertyContext &);
   bool run();

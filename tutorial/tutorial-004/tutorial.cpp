@@ -78,10 +78,13 @@ int main() {
   strings->setAllEdgeValue("first");
   cout << "List of the properties present in the graph:" << endl;
   Iterator<string> *it=graph->getLocalProperties();
+
   while (it->hasNext()) {
     cout << it->next() << endl;
-  } delete it;
-  
+  }
+
+  delete it;
+
   delete graph;
   return EXIT_SUCCESS;
 }

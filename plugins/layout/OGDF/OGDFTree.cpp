@@ -5,43 +5,43 @@
 namespace {
 
 const char * paramHelp[] = {
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"The minimal required horizontal distance between siblings."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"The minimal required horizontal distance between subtrees."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"the minimal required vertical distance between levels."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"Returns the minimal required horizontal distance between trees in the forest."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"Set whether orthogonal edge routing style is used or not."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_DEF( "type", "StringCollection")
-		HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> topToBottom : <FONT COLOR=\"black\"> Edges are oriented from top to bottom. <BR> <FONT COLOR=\"red\"> bottomToTop : <FONT COLOR=\"black\">  Edges are oriented from bottom to top. <BR> <FONT COLOR=\"red\"> leftToRight : <FONT COLOR=\"black\"> Edges are oriented from left to right. <BR> <FONT COLOR=\"red\"> rightToLeft : <FONT COLOR=\"black\"> Edges are oriented from right to left.")
-		HTML_HELP_DEF( "default", "topToBottom " )
-		HTML_HELP_BODY()
-		"The option that determines the orientation of the layout."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_DEF( "type", "StringCollection")
-		HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> rootIsSource  : <FONT COLOR=\"black\"> Select a source in the graph.  <BR> <FONT COLOR=\"red\"> rootIsSink : <FONT COLOR=\"black\"> Select a sink in the graph. <BR> <FONT COLOR=\"red\"> rootByCoord : <FONT COLOR=\"black\"> Use the coordinates, e.g., select the topmost node if orientation is topToBottom.")
-		HTML_HELP_DEF( "default", "rootIsSource " )
-		HTML_HELP_BODY()
-		"The option that determines how the root is selected."
-		HTML_HELP_CLOSE()
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "The minimal required horizontal distance between siblings."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "The minimal required horizontal distance between subtrees."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "the minimal required vertical distance between levels."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "Returns the minimal required horizontal distance between trees in the forest."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "Set whether orthogonal edge routing style is used or not."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_DEF( "type", "StringCollection")
+  HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> topToBottom : <FONT COLOR=\"black\"> Edges are oriented from top to bottom. <BR> <FONT COLOR=\"red\"> bottomToTop : <FONT COLOR=\"black\">  Edges are oriented from bottom to top. <BR> <FONT COLOR=\"red\"> leftToRight : <FONT COLOR=\"black\"> Edges are oriented from left to right. <BR> <FONT COLOR=\"red\"> rightToLeft : <FONT COLOR=\"black\"> Edges are oriented from right to left.")
+  HTML_HELP_DEF( "default", "topToBottom " )
+  HTML_HELP_BODY()
+  "The option that determines the orientation of the layout."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_DEF( "type", "StringCollection")
+  HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> rootIsSource  : <FONT COLOR=\"black\"> Select a source in the graph.  <BR> <FONT COLOR=\"red\"> rootIsSink : <FONT COLOR=\"black\"> Select a sink in the graph. <BR> <FONT COLOR=\"red\"> rootByCoord : <FONT COLOR=\"black\"> Use the coordinates, e.g., select the topmost node if orientation is topToBottom.")
+  HTML_HELP_DEF( "default", "rootIsSource " )
+  HTML_HELP_BODY()
+  "The option that determines how the root is selected."
+  HTML_HELP_CLOSE()
 };
 }
 
@@ -108,56 +108,69 @@ class OGDFTree : public OGDFLayoutPluginBase {
 
 public:
 
-	OGDFTree(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::TreeLayout()) {
-		addParameter<double>("siblings distance", paramHelp[0], "20");
-		addParameter<double>("subtrees distance", paramHelp[1], "20");
-		addParameter<double>("levels distance", paramHelp[2], "50");
-		addParameter<double>("trees distance", paramHelp[3], "50");
-		addParameter<bool>("orthogonal layout", paramHelp[4], "false");
-		addParameter<StringCollection>(ELT_ORIENTATION, paramHelp[5], ELT_ORIENTATIONLIST);
-		addParameter<StringCollection>(ELT_ROOTSELECTION, paramHelp[6], ELT_ROOTSELECTIONLIST);
-	}
+  OGDFTree(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::TreeLayout()) {
+    addParameter<double>("siblings distance", paramHelp[0], "20");
+    addParameter<double>("subtrees distance", paramHelp[1], "20");
+    addParameter<double>("levels distance", paramHelp[2], "50");
+    addParameter<double>("trees distance", paramHelp[3], "50");
+    addParameter<bool>("orthogonal layout", paramHelp[4], "false");
+    addParameter<StringCollection>(ELT_ORIENTATION, paramHelp[5], ELT_ORIENTATIONLIST);
+    addParameter<StringCollection>(ELT_ROOTSELECTION, paramHelp[6], ELT_ROOTSELECTIONLIST);
+  }
 
-	~OGDFTree() {}
+  ~OGDFTree() {}
 
-	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
-		ogdf::TreeLayout *tree = static_cast<ogdf::TreeLayout*>(ogdfLayoutAlgo);
-		if (dataSet != 0) {
-			double dval = 0;
-			bool bval = false;
-			StringCollection sc;
-			if (dataSet->get("siblings distance", dval))
-				tree->siblingDistance(dval);
-			if (dataSet->get("subtrees distance", dval))
-				tree->subtreeDistance(dval);
-			if (dataSet->get("levels distance", dval))
-				tree->levelDistance(dval);
-			if (dataSet->get("trees distance", dval))
-				tree->treeDistance(dval);
-			if (dataSet->get("orthogonal layout", bval))
-				tree->orthogonalLayout(bval);
-			if (dataSet->get(ELT_ORIENTATION, sc)) {
-				if (sc.getCurrent() == ELT_TOPTOBOTTOM) {
-					tree->orientation(ogdf::topToBottom);
-				} else if (sc.getCurrent() == ELT_BOTTOMTOTOP) {
-					tree->orientation(ogdf::bottomToTop);
-				} else if (sc.getCurrent() == ELT_LEFTTORIGHT) {
-					tree->orientation(ogdf::leftToRight);
-				} else {
-					tree->orientation(ogdf::rightToLeft);
-				}
-			}
-			if (dataSet->get(ELT_ROOTSELECTION, sc)) {
-				if (sc.getCurrent() == ELT_ROOTSOURCE) {
-					tree->rootSelection(ogdf::TreeLayout::rootIsSource);
-				} else if (sc.getCurrent() == ELT_ROOTSINK) {
-					tree->rootSelection(ogdf::TreeLayout::rootIsSink);
-				} else {
-					tree->rootSelection(ogdf::TreeLayout::rootByCoord);
-				}
-			}
-		}
-	}
+  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+    ogdf::TreeLayout *tree = static_cast<ogdf::TreeLayout*>(ogdfLayoutAlgo);
+
+    if (dataSet != 0) {
+      double dval = 0;
+      bool bval = false;
+      StringCollection sc;
+
+      if (dataSet->get("siblings distance", dval))
+        tree->siblingDistance(dval);
+
+      if (dataSet->get("subtrees distance", dval))
+        tree->subtreeDistance(dval);
+
+      if (dataSet->get("levels distance", dval))
+        tree->levelDistance(dval);
+
+      if (dataSet->get("trees distance", dval))
+        tree->treeDistance(dval);
+
+      if (dataSet->get("orthogonal layout", bval))
+        tree->orthogonalLayout(bval);
+
+      if (dataSet->get(ELT_ORIENTATION, sc)) {
+        if (sc.getCurrent() == ELT_TOPTOBOTTOM) {
+          tree->orientation(ogdf::topToBottom);
+        }
+        else if (sc.getCurrent() == ELT_BOTTOMTOTOP) {
+          tree->orientation(ogdf::bottomToTop);
+        }
+        else if (sc.getCurrent() == ELT_LEFTTORIGHT) {
+          tree->orientation(ogdf::leftToRight);
+        }
+        else {
+          tree->orientation(ogdf::rightToLeft);
+        }
+      }
+
+      if (dataSet->get(ELT_ROOTSELECTION, sc)) {
+        if (sc.getCurrent() == ELT_ROOTSOURCE) {
+          tree->rootSelection(ogdf::TreeLayout::rootIsSource);
+        }
+        else if (sc.getCurrent() == ELT_ROOTSINK) {
+          tree->rootSelection(ogdf::TreeLayout::rootIsSink);
+        }
+        else {
+          tree->rootSelection(ogdf::TreeLayout::rootByCoord);
+        }
+      }
+    }
+  }
 
 };
 /*@}*/

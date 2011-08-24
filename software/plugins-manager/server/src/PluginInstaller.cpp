@@ -57,12 +57,15 @@ int main(int argc,char **argv) {
   cout << "target path : " << targetPath.toStdString() << endl;
 
   bool generateDoc=true;
+
   if(QString(argv[4])=="no")
     generateDoc=false;
+
   QString subDir("i386");
+
   if(argc>=6)
     subDir=QString(argv[5]);
-    
+
   QFileInfo fileInfo(pluginPath);
   QDir srcDir = fileInfo.dir();
   QString suffix = fileInfo.suffix();
@@ -88,95 +91,109 @@ int main(int argc,char **argv) {
   }
 
 #if defined(_WIN32)
+
   if (getEnvTlp)
     putenv((string("TLP_DIR=") + getEnvTlp).c_str());
   else
     putenv("TLP_DIR=");
+
 #else
+
   if (getEnvTlp)
     setenv("TLP_DIR",getEnvTlp,true);
   else
     unsetenv("TLP_DIR");
+
 #endif
 
   TemplateFactory<GlyphFactory, Glyph, GlyphContext>::ObjectCreator::const_iterator itGlyphs;
   vector<string> glyphsName;
-  for (itGlyphs=GlyphFactory::factory->objMap.begin();itGlyphs != GlyphFactory::factory->objMap.end();++itGlyphs) {
+
+  for (itGlyphs=GlyphFactory::factory->objMap.begin(); itGlyphs != GlyphFactory::factory->objMap.end(); ++itGlyphs) {
     glyphsName.push_back((itGlyphs)->first);
   }
 
   TemplateFactory<InteractorFactory, Interactor, InteractorContext>::ObjectCreator::const_iterator itInteractors;
   vector<string> interactorsName;
-  for (itInteractors=InteractorFactory::factory->objMap.begin();itInteractors != InteractorFactory::factory->objMap.end();++itInteractors) {
+
+  for (itInteractors=InteractorFactory::factory->objMap.begin(); itInteractors != InteractorFactory::factory->objMap.end(); ++itInteractors) {
     interactorsName.push_back((itInteractors)->first);
   }
 
   TemplateFactory<ViewFactory, View, ViewContext>::ObjectCreator::const_iterator itViews;
   vector<string> viewsName;
-  for (itViews=ViewFactory::factory->objMap.begin();itViews != ViewFactory::factory->objMap.end();++itViews) {
+
+  for (itViews=ViewFactory::factory->objMap.begin(); itViews != ViewFactory::factory->objMap.end(); ++itViews) {
     viewsName.push_back((itViews)->first);
   }
 
 
-  for(size_t i=0;i<plug.pluginsList.size();++i){
-    for(vector<string>::iterator it=glyphsName.begin();it!=glyphsName.end();++it){
-      if(plug.pluginsList[i].name==(*it)){
-	plug.pluginsList[i].type="Glyph";
+  for(size_t i=0; i<plug.pluginsList.size(); ++i) {
+    for(vector<string>::iterator it=glyphsName.begin(); it!=glyphsName.end(); ++it) {
+      if(plug.pluginsList[i].name==(*it)) {
+        plug.pluginsList[i].type="Glyph";
       }
     }
-    for(vector<string>::iterator it=interactorsName.begin();it!=interactorsName.end();++it){
-      if(plug.pluginsList[i].name==(*it)){
-	plug.pluginsList[i].type="Interactor";
+
+    for(vector<string>::iterator it=interactorsName.begin(); it!=interactorsName.end(); ++it) {
+      if(plug.pluginsList[i].name==(*it)) {
+        plug.pluginsList[i].type="Interactor";
       }
     }
-    for(vector<string>::iterator it=viewsName.begin();it!=viewsName.end();++it){
-      if(plug.pluginsList[i].name==(*it)){
-	plug.pluginsList[i].type="View";
+
+    for(vector<string>::iterator it=viewsName.begin(); it!=viewsName.end(); ++it) {
+      if(plug.pluginsList[i].name==(*it)) {
+        plug.pluginsList[i].type="View";
       }
     }
+
     if(plug.pluginsList[i].type=="")
       plug.pluginsList[i].type="Algorithm";
   }
 
   LocalPluginInfo pluginInfo;
+
   if(plug.pluginsList.size()>1)  {
     bool equal=true;
-    for(size_t i=0;i<plug.pluginsList.size()-1;++i){
-      if(plug.pluginsList[i].type!=plug.pluginsList[i+1].type){
-	equal=false;
-	break;
+
+    for(size_t i=0; i<plug.pluginsList.size()-1; ++i) {
+      if(plug.pluginsList[i].type!=plug.pluginsList[i+1].type) {
+        equal=false;
+        break;
       }
     }
 
-    if(!equal){
-      for(size_t i=0;i<plug.pluginsList.size();++i){
-	if(plug.pluginsList[i].type=="View"){
-	  pluginInfo = plug.pluginsList[i];
-	  break;
-	}  
+    if(!equal) {
+      for(size_t i=0; i<plug.pluginsList.size(); ++i) {
+        if(plug.pluginsList[i].type=="View") {
+          pluginInfo = plug.pluginsList[i];
+          break;
+        }
       }
-    }else{
+    }
+    else {
       pluginInfo = plug.pluginsList[0];
     }
   }
 
-  
-  if(plug.pluginsList.size()==1){
+
+  if(plug.pluginsList.size()==1) {
     pluginInfo = plug.pluginsList[0];
   }
 
   pluginInfo.displayType= PluginInfo::getPluginDisplayType(pluginInfo.name);
+
   if(pluginInfo.displayType == "Glyph")
     pluginInfo.type = "Glyph";
 
   QString path= pluginInfo.fileName.c_str()+QString(".")+(QString(pluginInfo.version.c_str()).split(" "))[1];
-  
+
   QDir dir;
   dir.mkpath(targetPath);
   dir.mkpath(targetPath+"/pluginsV2/");
   dir.mkpath(targetPath+"/pluginsV2/"+path);
   dir.mkpath(targetPath+"/pluginsV2/"+path+"/"+subDir);
-  
+
   QDir dstDir(targetPath+"/pluginsV2/"+path);
   QDir dstSubDir(targetPath+"/pluginsV2/"+path+"/"+subDir);
 
@@ -186,27 +203,27 @@ int main(int argc,char **argv) {
 
   if (suffix == "so")
     UpdatePlugin::copyFile(srcDir,
-			   QString(pluginInfo.fileName.c_str())+".so",
-			   dstSubDir,
-			   QString(pluginInfo.fileName.c_str())+".so");
+                           QString(pluginInfo.fileName.c_str())+".so",
+                           dstSubDir,
+                           QString(pluginInfo.fileName.c_str())+".so");
   else if (suffix == "dylib")
     UpdatePlugin::copyFile(srcDir,
-			   QString(pluginInfo.fileName.c_str())+".dylib",
-			   dstSubDir,
-			   QString(pluginInfo.fileName.c_str())+".dylib");
+                           QString(pluginInfo.fileName.c_str())+".dylib",
+                           dstSubDir,
+                           QString(pluginInfo.fileName.c_str())+".dylib");
   else if (suffix == "dll")
     UpdatePlugin::copyFile(srcDir,
-			   QString(pluginInfo.fileName.c_str())+".dll",
-			   dstSubDir,
-			   QString(pluginInfo.fileName.c_str())+".dll");
+                           QString(pluginInfo.fileName.c_str())+".dll",
+                           dstSubDir,
+                           QString(pluginInfo.fileName.c_str())+".dll");
 
   // Documentation
-  if(generateDoc){
+  if(generateDoc) {
     QString fileName(pluginInfo.fileName.c_str());
     QString version(pluginInfo.version.c_str());
     QFile docFile(pluginDocPath);
     generatePluginDocFile(fileName, version, docFile, dstDir);
-  }    
+  }
 
   return EXIT_SUCCESS;
 }

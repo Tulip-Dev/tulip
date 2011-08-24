@@ -30,47 +30,47 @@ namespace tlp {
 
 class TLP_QT_SCOPE ColorScaleConfigDialog : public QDialog, public Ui::ColorScaleDialog {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	ColorScaleConfigDialog(ColorScale *colorScale, QWidget *parent = 0);
+  ColorScaleConfigDialog(ColorScale *colorScale, QWidget *parent = 0);
 
-	void setColorScale(ColorScale *colorScale);
+  void setColorScale(ColorScale *colorScale);
 
 protected :
 
-	void resizeEvent(QResizeEvent * event);
-	void showEvent(QShowEvent * event);
+  void resizeEvent(QResizeEvent * event);
+  void showEvent(QShowEvent * event);
 
 private slots :
 
-	void accept();
-	void pressButtonBrowse();
-	void nbColorsValueChanged(int value);
-	void colorTableItemDoubleClicked(QTableWidgetItem *item);
-	void displaySavedGradientPreview();
-	void displayUserGradientPreview();
-	void saveCurrentColorScale();
-	void deleteSavedColorScale();
-	void reeditSaveColorScale(QListWidgetItem *savedColorScaleItem);
-	void importColorScaleFromImageFile();
-	void invertEditedColorScale();
+  void accept();
+  void pressButtonBrowse();
+  void nbColorsValueChanged(int value);
+  void colorTableItemDoubleClicked(QTableWidgetItem *item);
+  void displaySavedGradientPreview();
+  void displayUserGradientPreview();
+  void saveCurrentColorScale();
+  void deleteSavedColorScale();
+  void reeditSaveColorScale(QListWidgetItem *savedColorScaleItem);
+  void importColorScaleFromImageFile();
+  void invertEditedColorScale();
 
 private :
 
-	void setColorScaleFromImage(const QString &imageFilePath);
+  void setColorScaleFromImage(const QString &imageFilePath);
 
-	void loadUserSavedColorScales();
-	void displayGradientPreview(const QList<QColor> &colorsVector, bool gradient, QLabel *displayLabel);
+  void loadUserSavedColorScales();
+  void displayGradientPreview(const QList<QColor> &colorsVector, bool gradient, QLabel *displayLabel);
 
-	ColorScale *colorScale;
-	std::string gradientsImageDirectory;
+  ColorScale *colorScale;
+  std::string gradientsImageDirectory;
 
 
-	static std::map<QString, std::vector<Color> > tulipImageColorScales;
-	static void loadTulipImageColorScales();
-	static std::vector<Color> getColorScaleFromImage(const QString &imageFilePath);
+  static std::map<QString, std::vector<Color> > tulipImageColorScales;
+  static void loadTulipImageColorScales();
+  static std::vector<Color> getColorScaleFromImage(const QString &imageFilePath);
 };
 
 }

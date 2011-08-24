@@ -28,9 +28,9 @@
 #include "ToolBar.h"
 #include "Application.h"
 
-/* 
- *  Constructs a ToolBar which is a child of 'parent', with the 
- *  name 'name' and widget flags set to 'f' 
+/*
+ *  Constructs a ToolBar which is a child of 'parent', with the
+ *  name 'name' and widget flags set to 'f'
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
@@ -40,14 +40,16 @@ ToolBar::ToolBar( QWidget* parent,  const char* name, Qt::WFlags fl )
   currentMouse = new MouseGraphNavigate();
 }
 
-/*  
+/*
  *  Destroys the object and frees any allocated resources
  */
 ToolBar::~ToolBar() {
   if (currentMouse != NULL) delete currentMouse;
 }
 
-MouseInterface *ToolBar::getCurrentMouse() const {return currentMouse;}
+MouseInterface *ToolBar::getCurrentMouse() const {
+  return currentMouse;
+}
 
 void ToolBar::setCurrentMouse(MouseInterface *m) {
   if (currentMouse != NULL) {
@@ -58,19 +60,38 @@ void ToolBar::setCurrentMouse(MouseInterface *m) {
     else
       delete currentMouse;
   }
+
   currentMouse = m;
   emit mouseChanged(currentMouse);
 }
-/* 
+/*
  * public slots
  */
-void ToolBar::setSelect() { setCurrentMouse(new MouseSelect()); }
-void ToolBar::setAddEdge() { setCurrentMouse(new MouseAddEdge()); }
-void ToolBar::setAddNode() { setCurrentMouse(new MouseAddNode()); }
-void ToolBar::setDel() { setCurrentMouse(new MouseDel()); }
-void ToolBar::setZoomBox() { setCurrentMouse(new MouseZoomBox()); }
+void ToolBar::setSelect() {
+  setCurrentMouse(new MouseSelect());
+}
+void ToolBar::setAddEdge() {
+  setCurrentMouse(new MouseAddEdge());
+}
+void ToolBar::setAddNode() {
+  setCurrentMouse(new MouseAddNode());
+}
+void ToolBar::setDel() {
+  setCurrentMouse(new MouseDel());
+}
+void ToolBar::setZoomBox() {
+  setCurrentMouse(new MouseZoomBox());
+}
 //void ToolBar::setDelSelection() { setCurrentMouse(new MouseTreeFishEyes()); }
-void ToolBar::setMoveSelection() { setCurrentMouse(new MouseMoveSelection()); }
-void ToolBar::setSelection() { setCurrentMouse(new MouseSelection()); }
-void ToolBar::setMagicSelection() { setCurrentMouse(new MouseMagicSelection()); }
-void ToolBar::setGraphNavigate() { setCurrentMouse(new MouseGraphNavigate()); }
+void ToolBar::setMoveSelection() {
+  setCurrentMouse(new MouseMoveSelection());
+}
+void ToolBar::setSelection() {
+  setCurrentMouse(new MouseSelection());
+}
+void ToolBar::setMagicSelection() {
+  setCurrentMouse(new MouseMagicSelection());
+}
+void ToolBar::setGraphNavigate() {
+  setCurrentMouse(new MouseGraphNavigate());
+}

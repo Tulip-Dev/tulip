@@ -27,10 +27,10 @@ namespace tlp {
 class PropertyContext;
 class ColorProperty;
 
-/** \addtogroup plugins */ 
+/** \addtogroup plugins */
 /*@{*/
 /// Interface for color plug-ins
-class TLP_SCOPE ColorAlgorithm:public PropertyAlgorithm { 
+class TLP_SCOPE ColorAlgorithm:public PropertyAlgorithm {
   ///
   friend class ColorProperty;
 public:

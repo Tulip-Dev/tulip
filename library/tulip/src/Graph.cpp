@@ -44,39 +44,51 @@ ostream & operator << (ostream &os,const Graph *sp) {
   os << "(nodes ";
   node beginNode, previousNode;
   Iterator<node> *itn=sp->getNodes();
+
   while (itn->hasNext()) {
     node current = itn->next();
+
     if (!beginNode.isValid()) {
       beginNode = previousNode = current;
       os << beginNode.id;
-    } else {
+    }
+    else {
       if (current.id == previousNode.id + 1) {
-	previousNode = current;
-	if (!itn->hasNext())
-	  os << ".." << current.id;
-      } else {
-	if (previousNode != beginNode) {
-	  os << ".." << previousNode.id;
-	}
-	os  << " " << current.id;
-	beginNode = previousNode = current;
+        previousNode = current;
+
+        if (!itn->hasNext())
+          os << ".." << current.id;
+      }
+      else {
+        if (previousNode != beginNode) {
+          os << ".." << previousNode.id;
+        }
+
+        os  << " " << current.id;
+        beginNode = previousNode = current;
       }
     }
-  } delete itn;
+  }
+
+  delete itn;
   os << ")" << endl;
   os << ";(edge <edge_id> <source_id> <target_id>)" << endl;
   Iterator<edge> *ite=sp->getEdges();
-  for (;ite->hasNext();) {
+
+  for (; ite->hasNext();) {
     edge e=ite->next();
     os << "(edge " << e.id << " " << sp->source(e).id << " " << sp->target(e).id << ")";
+
     if (ite->hasNext()) os << endl;
-  } delete ite;
+  }
+
+  delete ite;
   os << endl;
   return os;
 }
 
 //=========================================================
-Graph * tlp::newGraph(){
+Graph * tlp::newGraph() {
   return new GraphImpl();
 }
 //=========================================================
@@ -104,10 +116,12 @@ Graph * tlp::loadGraph(const string &filename) {
 //=========================================================
 bool tlp::saveGraph(Graph *sg, const string &filename) {
   ostream *os;
+
   if (filename.rfind(".gz") == (filename.length() - 3))
     os = tlp::getOgzstream(filename.c_str());
   else
     os = new ofstream(filename.c_str());
+
   bool result;
   DataSet data;
   result=tlp::exportGraph(sg, *os, "tlp", data, 0);
@@ -115,14 +129,16 @@ bool tlp::saveGraph(Graph *sg, const string &filename) {
   return result;
 }
 //=========================================================
-Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *plugProgress, Graph *newGraph){
+Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *plugProgress, Graph *newGraph) {
 
   if (!ImportModuleFactory::factory->pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": import plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
     return NULL;
   }
+
   bool newGraphP=false;
+
   if (newGraph==0) {
     newGraph=new GraphImpl();
     newGraphP=true;
@@ -133,29 +149,35 @@ Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *pl
   tmp.dataSet = &dataSet;
   PluginProgress *tmpProgress;
   bool deletePluginProgress=false;
+
   if (plugProgress==0) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
   else tmpProgress=plugProgress;
+
   tmp.pluginProgress=tmpProgress;
   ImportModule *newImportModule=ImportModuleFactory::factory->getPluginObject(alg, tmp);
   assert(newImportModule!=0);
   bool result;
+
   if (!(result=newImportModule->import(""))) {
     if (newGraphP) delete newGraph;
   }
+
   if (deletePluginProgress) delete tmpProgress;
+
   delete newImportModule;
   dataSet = *tmp.dataSet;
-  if (!result) 
+
+  if (!result)
     return 0;
   else
     return newGraph;
 }
 //=========================================================
 bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
-		      DataSet &dataSet, PluginProgress *plugProgress) {
+                      DataSet &dataSet, PluginProgress *plugProgress) {
   if (!ExportModuleFactory::factory->pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": export plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
@@ -168,23 +190,26 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
   tmp.graph=sg;
   tmp.dataSet=&dataSet;
   PluginProgress *tmpProgress=NULL;
+
   if (plugProgress==0) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
   else tmpProgress=plugProgress;
+
   tmp.pluginProgress=tmpProgress;
   ExportModule *newExportModule=ExportModuleFactory::factory->getPluginObject(alg, tmp);
   assert(newExportModule!=0);
   result=newExportModule->exportGraph(os,sg);
 
   if (deletePluginProgress) delete tmpProgress;
+
   delete newExportModule;
   return result;
 }
 //=========================================================
 bool tlp::applyAlgorithm(Graph *sg,string &errorMsg,DataSet *dataSet,
-			  const string &alg, PluginProgress *plugProgress) {
+                         const string &alg, PluginProgress *plugProgress) {
   if (!AlgorithmFactory::factory->pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
@@ -197,29 +222,39 @@ bool tlp::applyAlgorithm(Graph *sg,string &errorMsg,DataSet *dataSet,
   tmp.graph=sg;
   tmp.dataSet=dataSet;
   PluginProgress *tmpProgress;
+
   if (plugProgress==0) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
   else tmpProgress=plugProgress;
-  tmp.pluginProgress=tmpProgress; 
+
+  tmp.pluginProgress=tmpProgress;
   Algorithm *newAlgo=AlgorithmFactory::factory->getPluginObject(alg, tmp);
+
   if ((result=newAlgo->check(errorMsg)))
     newAlgo->run();
+
   delete newAlgo;
+
   if (deletePluginProgress) delete tmpProgress;
+
   return result;
 }
 //=========================================================
 bool tlp::getSource(const Graph *graph, node &n) {
   Iterator<node> *it=graph->getNodes();
+
   while (it->hasNext()) {
     n=it->next();
-    if (graph->indeg(n)==0){
+
+    if (graph->indeg(n)==0) {
       delete it;
       return true;
     }
-  }delete it;
+  }
+
+  delete it;
   return false;
 }
 //=========================================================
@@ -227,17 +262,20 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
   if( !ioG )
     return;
 
-  vector<node>	nodeA;
-  vector<edge>	edgeA;
+  vector<node>  nodeA;
+  vector<edge>  edgeA;
 
   // Get edges
   Iterator<edge> * edgeIt = ioG->getEdges();
+
   while( edgeIt->hasNext() ) {
     edge e = edgeIt->next();
+
     if( !inSel || inSel->getEdgeValue(e) ) {
       // selected edge -> remove it !
       edgeA.push_back( e );
-    } else {
+    }
+    else {
       // unselected edge -> don't remove node ends !
       node n0 = ioG->source( e );
       node n1 = ioG->target( e );
@@ -246,27 +284,35 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
       inSel->setNodeValue( n1, false );
     }
   }
+
   delete edgeIt;
 
   // Get nodes
   Iterator<node> * nodeIt = ioG->getNodes();
+
   while( nodeIt->hasNext() ) {
     node n = nodeIt->next();
+
     if( !inSel || inSel->getNodeValue(n) )
       nodeA.push_back( n );
   }
+
   delete nodeIt;
 
   // Clean properties
   Iterator<std::string> * propIt = ioG->getProperties();
+
   while( propIt->hasNext() ) {
     std::string n = propIt->next();
     PropertyInterface * p = ioG->getProperty( n );
+
     for( unsigned int in = 0 ; in < nodeA.size() ; in++ )
       p->erase( nodeA[in] );
+
     for( unsigned int ie = 0 ; ie < edgeA.size() ; ie++ )
       p->erase( edgeA[ie] );
   }
+
   delete propIt;
 
   // Remove edges
@@ -279,7 +325,7 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
 }
 
 void tlp::copyToGraph (Graph *outG, const Graph* inG,
-		       BooleanProperty *inSel, BooleanProperty* outSel) {
+                       BooleanProperty *inSel, BooleanProperty* outSel) {
   if( outSel ) {
     outSel->setAllNodeValue( false );
     outSel->setAllEdgeValue( false );
@@ -291,76 +337,93 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
   // extend the selection to edge ends
   if( inSel ) {
     Iterator<edge> *itE = inSel->getNonDefaultValuatedEdges(inG);
+
     while (itE->hasNext()) {
       edge e = itE->next();
       const pair<node, node>& eEnds = inG->ends(e);
       inSel->setNodeValue(eEnds.first, true);
       inSel->setNodeValue(eEnds.second, true);
-    } delete itE;
+    }
+
+    delete itE;
   }
 
   MutableContainer<node> nodeTrl;
   // loop on selected nodes
   Iterator<node> * nodeIt =
     inSel ? inSel->getNonDefaultValuatedNodes(inG) : inG->getNodes();
+
   while( nodeIt->hasNext() ) {
     node nIn = nodeIt->next();
     // add outG corresponding node
     node nOut = outG->addNode();
-	      
+
     // select added node
     if( outSel )
       outSel->setNodeValue( nOut, true );
-    
+
     // add to translation tab
     nodeTrl.set(nIn.id, nOut);
     // copy node properties
     Iterator<PropertyInterface *>* propIt = inG->getObjectProperties();
+
     while (propIt->hasNext()) {
       PropertyInterface *src = propIt->next();
+
       if (dynamic_cast<GraphProperty *>(src) == 0) {
-	const std::string& pName = src->getName();
-	PropertyInterface *dst =
-	  outG->existProperty(pName) ? outG->getProperty(pName)
-	  : src->clonePrototype(outG, pName);
-	dst->copy( nOut, nIn, src );
+        const std::string& pName = src->getName();
+        PropertyInterface *dst =
+          outG->existProperty(pName) ? outG->getProperty(pName)
+          : src->clonePrototype(outG, pName);
+        dst->copy( nOut, nIn, src );
       }
-    } delete propIt;
-  } delete nodeIt;
+    }
+
+    delete propIt;
+  }
+
+  delete nodeIt;
 
   // loop on selected edges
   Iterator<edge> * edgeIt =
     inSel ? inSel->getNonDefaultValuatedEdges(inG) : inG->getEdges();
-	
+
   edgeIt = inSel ? inSel->getNonDefaultValuatedEdges(inG) : inG->getEdges();
+
   while( edgeIt->hasNext() ) {
     edge eIn = edgeIt->next();
     const pair<node, node>& eEnds = inG->ends(eIn);
     // add outG correponding edge
     edge eOut = outG->addEdge(nodeTrl.get(eEnds.first.id),
-			      nodeTrl.get(eEnds.second.id));
-	      
+                              nodeTrl.get(eEnds.second.id));
+
     // select added edge
     if( outSel )
       outSel->setEdgeValue( eOut, true );
 
     // copy edge properties
     Iterator<PropertyInterface *>* propIt = inG->getObjectProperties();
+
     while (propIt->hasNext()) {
       PropertyInterface *src = propIt->next();
+
       if (dynamic_cast<GraphProperty *>(src) == 0) {
-	const std::string& pName = src->getName();
-	PropertyInterface *dst =
-	  outG->existProperty(pName) ? outG->getProperty(pName)
-	  : src->clonePrototype(outG, pName);
-	dst->copy( eOut, eIn, src );
+        const std::string& pName = src->getName();
+        PropertyInterface *dst =
+          outG->existProperty(pName) ? outG->getProperty(pName)
+          : src->clonePrototype(outG, pName);
+        dst->copy( eOut, eIn, src );
       }
-    } delete propIt;
-  } delete edgeIt;
+    }
+
+    delete propIt;
+  }
+
+  delete edgeIt;
 }
 
 DataType* Graph::getAttribute(const std::string& name) const {
-    return getAttributes().getData(name);
+  return getAttributes().getData(name);
 }
 
 void Graph::setAttribute(const std::string &name, const DataType* value) {
@@ -405,9 +468,9 @@ void Graph::notifyReverseEdge(const edge e) {
 void Graph::notifyBeforeSetEnds(const edge e) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_SET_ENDS, e,
-			 Event::TLP_INFORMATION));
+                         Event::TLP_INFORMATION));
 }
-  
+
 void Graph::notifyAfterSetEnds(const edge e) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_SET_ENDS, e));
@@ -431,31 +494,31 @@ void Graph::notifyAddLocalProperty(const std::string& propName) {
 void Graph::notifyBeforeDelLocalProperty(const std::string& propName) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY,
-			 propName, Event::TLP_INFORMATION));
+                         propName, Event::TLP_INFORMATION));
 }
-  
+
 void Graph::notifyAfterDelLocalProperty(const std::string& propName) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY,
-			 propName));
+                         propName));
 }
-  
+
 void Graph::notifyBeforeSetAttribute(const std::string& attName) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_SET_ATTRIBUTE,
-			 attName, Event::TLP_INFORMATION));
+                         attName, Event::TLP_INFORMATION));
 }
-  
+
 void Graph::notifyAfterSetAttribute(const std::string& attName) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_SET_ATTRIBUTE, attName,
-			 Event::TLP_INFORMATION));
+                         Event::TLP_INFORMATION));
 }
-  
+
 void Graph::notifyRemoveAttribute(const std::string& attName) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_REMOVE_ATTRIBUTE, attName,
-			 Event::TLP_INFORMATION));
+                         Event::TLP_INFORMATION));
 }
 
 void Graph::notifyDestroy() {
@@ -467,98 +530,98 @@ void Graph::notifyDestroy() {
   }
 }
 
-PropertyInterface *Graph::getLocalProperty(const std::string& propertyName, const std::string& propertyType){
-    if (propertyType.compare(DoubleProperty::propertyTypename) == 0) {
-        return getLocalProperty<DoubleProperty> (propertyName);
-    }
-    else if (propertyType.compare(LayoutProperty::propertyTypename)==0) {
-        return getLocalProperty<LayoutProperty> (propertyName);
-    }
-    else if (propertyType.compare(StringProperty::propertyTypename)==0) {
-        return getLocalProperty<StringProperty> (propertyName);
-    }
-    else if (propertyType.compare(IntegerProperty::propertyTypename)==0) {
-        return getLocalProperty<IntegerProperty> (propertyName);
-    }
-    else if (propertyType.compare(ColorProperty::propertyTypename)==0) {
-        return getLocalProperty<ColorProperty> (propertyName);
-    }
-    else if (propertyType.compare(SizeProperty::propertyTypename)==0) {
-        return getLocalProperty<SizeProperty> (propertyName);
-    }
-    else if (propertyType.compare(BooleanProperty::propertyTypename)==0) {
-        return getLocalProperty<BooleanProperty> (propertyName);
-    }
-    else if (propertyType.compare(DoubleVectorProperty::propertyTypename)==0) {
-        return getLocalProperty<DoubleVectorProperty> (propertyName);
-    }
-    else if (propertyType.compare(StringVectorProperty::propertyTypename)==0) {
-        return getLocalProperty<StringVectorProperty> (propertyName);
-    }
-    else if (propertyType.compare(IntegerVectorProperty::propertyTypename)==0) {
-        return getLocalProperty<IntegerVectorProperty> (propertyName);
-    }
-    else if (propertyType.compare(CoordVectorProperty::propertyTypename)==0) {
-        return getLocalProperty<CoordVectorProperty> (propertyName);
-    }
-    else if (propertyType.compare(ColorVectorProperty::propertyTypename)==0) {
-        return getLocalProperty<ColorVectorProperty> (propertyName);
-    }
-    else if (propertyType.compare(BooleanVectorProperty::propertyTypename)==0) {
-        return getLocalProperty<BooleanVectorProperty> (propertyName);
-    }
-    else if (propertyType.compare(SizeVectorProperty::propertyTypename)==0) {
-        return getLocalProperty<SizeVectorProperty> (propertyName);
-    }
-    else {
-        return NULL;
-    }
+PropertyInterface *Graph::getLocalProperty(const std::string& propertyName, const std::string& propertyType) {
+  if (propertyType.compare(DoubleProperty::propertyTypename) == 0) {
+    return getLocalProperty<DoubleProperty> (propertyName);
+  }
+  else if (propertyType.compare(LayoutProperty::propertyTypename)==0) {
+    return getLocalProperty<LayoutProperty> (propertyName);
+  }
+  else if (propertyType.compare(StringProperty::propertyTypename)==0) {
+    return getLocalProperty<StringProperty> (propertyName);
+  }
+  else if (propertyType.compare(IntegerProperty::propertyTypename)==0) {
+    return getLocalProperty<IntegerProperty> (propertyName);
+  }
+  else if (propertyType.compare(ColorProperty::propertyTypename)==0) {
+    return getLocalProperty<ColorProperty> (propertyName);
+  }
+  else if (propertyType.compare(SizeProperty::propertyTypename)==0) {
+    return getLocalProperty<SizeProperty> (propertyName);
+  }
+  else if (propertyType.compare(BooleanProperty::propertyTypename)==0) {
+    return getLocalProperty<BooleanProperty> (propertyName);
+  }
+  else if (propertyType.compare(DoubleVectorProperty::propertyTypename)==0) {
+    return getLocalProperty<DoubleVectorProperty> (propertyName);
+  }
+  else if (propertyType.compare(StringVectorProperty::propertyTypename)==0) {
+    return getLocalProperty<StringVectorProperty> (propertyName);
+  }
+  else if (propertyType.compare(IntegerVectorProperty::propertyTypename)==0) {
+    return getLocalProperty<IntegerVectorProperty> (propertyName);
+  }
+  else if (propertyType.compare(CoordVectorProperty::propertyTypename)==0) {
+    return getLocalProperty<CoordVectorProperty> (propertyName);
+  }
+  else if (propertyType.compare(ColorVectorProperty::propertyTypename)==0) {
+    return getLocalProperty<ColorVectorProperty> (propertyName);
+  }
+  else if (propertyType.compare(BooleanVectorProperty::propertyTypename)==0) {
+    return getLocalProperty<BooleanVectorProperty> (propertyName);
+  }
+  else if (propertyType.compare(SizeVectorProperty::propertyTypename)==0) {
+    return getLocalProperty<SizeVectorProperty> (propertyName);
+  }
+  else {
+    return NULL;
+  }
 }
 
-PropertyInterface *Graph::getProperty(const std::string& propertyName, const std::string& propertyType){
-    if (propertyType.compare(DoubleProperty::propertyTypename) == 0) {
-        return getProperty<DoubleProperty> (propertyName);
-    }
-    else if (propertyType.compare(LayoutProperty::propertyTypename)==0) {
-        return getProperty<LayoutProperty> (propertyName);
-    }
-    else if (propertyType.compare(StringProperty::propertyTypename)==0) {
-        return getProperty<StringProperty> (propertyName);
-    }
-    else if (propertyType.compare(IntegerProperty::propertyTypename)==0) {
-        return getProperty<IntegerProperty> (propertyName);
-    }
-    else if (propertyType.compare(ColorProperty::propertyTypename)==0) {
-        return getProperty<ColorProperty> (propertyName);
-    }
-    else if (propertyType.compare(SizeProperty::propertyTypename)==0) {
-        return getProperty<SizeProperty> (propertyName);
-    }
-    else if (propertyType.compare(BooleanProperty::propertyTypename)==0) {
-        return getProperty<BooleanProperty> (propertyName);
-    }
-    else if (propertyType.compare(DoubleVectorProperty::propertyTypename)==0) {
-        return getProperty<DoubleVectorProperty> (propertyName);
-    }
-    else if (propertyType.compare(StringVectorProperty::propertyTypename)==0) {
-        return getProperty<StringVectorProperty> (propertyName);
-    }
-    else if (propertyType.compare(IntegerVectorProperty::propertyTypename)==0) {
-        return getProperty<IntegerVectorProperty> (propertyName);
-    }
-    else if (propertyType.compare(CoordVectorProperty::propertyTypename)==0) {
-        return getProperty<CoordVectorProperty> (propertyName);
-    }
-    else if (propertyType.compare(ColorVectorProperty::propertyTypename)==0) {
-        return getProperty<ColorVectorProperty> (propertyName);
-    }
-    else if (propertyType.compare(BooleanVectorProperty::propertyTypename)==0) {
-        return getProperty<BooleanVectorProperty> (propertyName);
-    }
-    else if (propertyType.compare(SizeVectorProperty::propertyTypename)==0) {
-        return getProperty<SizeVectorProperty> (propertyName);
-    }
-    else {
-        return NULL;
-    }
+PropertyInterface *Graph::getProperty(const std::string& propertyName, const std::string& propertyType) {
+  if (propertyType.compare(DoubleProperty::propertyTypename) == 0) {
+    return getProperty<DoubleProperty> (propertyName);
+  }
+  else if (propertyType.compare(LayoutProperty::propertyTypename)==0) {
+    return getProperty<LayoutProperty> (propertyName);
+  }
+  else if (propertyType.compare(StringProperty::propertyTypename)==0) {
+    return getProperty<StringProperty> (propertyName);
+  }
+  else if (propertyType.compare(IntegerProperty::propertyTypename)==0) {
+    return getProperty<IntegerProperty> (propertyName);
+  }
+  else if (propertyType.compare(ColorProperty::propertyTypename)==0) {
+    return getProperty<ColorProperty> (propertyName);
+  }
+  else if (propertyType.compare(SizeProperty::propertyTypename)==0) {
+    return getProperty<SizeProperty> (propertyName);
+  }
+  else if (propertyType.compare(BooleanProperty::propertyTypename)==0) {
+    return getProperty<BooleanProperty> (propertyName);
+  }
+  else if (propertyType.compare(DoubleVectorProperty::propertyTypename)==0) {
+    return getProperty<DoubleVectorProperty> (propertyName);
+  }
+  else if (propertyType.compare(StringVectorProperty::propertyTypename)==0) {
+    return getProperty<StringVectorProperty> (propertyName);
+  }
+  else if (propertyType.compare(IntegerVectorProperty::propertyTypename)==0) {
+    return getProperty<IntegerVectorProperty> (propertyName);
+  }
+  else if (propertyType.compare(CoordVectorProperty::propertyTypename)==0) {
+    return getProperty<CoordVectorProperty> (propertyName);
+  }
+  else if (propertyType.compare(ColorVectorProperty::propertyTypename)==0) {
+    return getProperty<ColorVectorProperty> (propertyName);
+  }
+  else if (propertyType.compare(BooleanVectorProperty::propertyTypename)==0) {
+    return getProperty<BooleanVectorProperty> (propertyName);
+  }
+  else if (propertyType.compare(SizeVectorProperty::propertyTypename)==0) {
+    return getProperty<SizeVectorProperty> (propertyName);
+  }
+  else {
+    return NULL;
+  }
 }

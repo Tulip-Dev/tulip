@@ -30,10 +30,10 @@ class GraphAbstract;
 
 typedef AbstractProperty<tlp::GraphType, tlp::EdgeSetType> AbstractGraphProperty;
 
-/** \addtogroup properties */ 
+/** \addtogroup properties */
 /*@{*/
-  class TLP_SCOPE GraphProperty:public AbstractGraphProperty,
-  public GraphObserver { 
+class TLP_SCOPE GraphProperty:public AbstractGraphProperty,
+  public GraphObserver {
   friend class GraphAbstract;
 
 public :
@@ -52,7 +52,7 @@ public :
     return propertyTypename;
   }
 
-  // redefinition of some AbstractProperty methods 
+  // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node n, const GraphType::RealType& g);
   virtual void setAllNodeValue(const GraphType::RealType& g);
 

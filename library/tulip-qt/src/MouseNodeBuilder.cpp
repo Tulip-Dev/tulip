@@ -37,25 +37,30 @@ using namespace std;
 
 bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent * qMouseEv = (QMouseEvent *) e;
+
   if(qMouseEv != NULL) {
     node tmpNode;
     edge tmpEdge;
     ElementType type;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
-    if(e->type() == QEvent::MouseMove) {    
+
+    if(e->type() == QEvent::MouseMove) {
       if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == NODE) {
         glMainWidget->setCursor(Qt::ForbiddenCursor);
       }
       else {
         glMainWidget->setCursor(Qt::ArrowCursor);
       }
+
       return false;
     }
+
     if (e->type() == _eventType) {
       if (qMouseEv->button() == Qt::LeftButton) {
         if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == NODE) {
           return true;
         }
+
         Graph*_graph=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
         LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
         // allow to undo
@@ -68,6 +73,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
         // This code is here to block z coordinate to 0 when we are in "2D mode"
         Coord cameraDirection=glMainWidget->getScene()->getCamera().getEyes()-glMainWidget->getScene()->getCamera().getCenter();
+
         if(cameraDirection[0]==0 && cameraDirection[1]==0)
           point[2]=0;
 
@@ -80,5 +86,6 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
       }
     }
   }
+
   return false;
 }

@@ -28,13 +28,13 @@ namespace tlp {
 
 class PropertyContext;
 
- typedef AbstractProperty<tlp::SizeType, tlp::SizeType, tlp::SizeAlgorithm> AbstractSizeProperty;
+typedef AbstractProperty<tlp::SizeType, tlp::SizeType, tlp::SizeAlgorithm> AbstractSizeProperty;
 
 /**
  * \addtogroup properties
- */ 
+ */
 /*@{*/
-  class TLP_SCOPE SizeProperty:public AbstractSizeProperty { 
+class TLP_SCOPE SizeProperty:public AbstractSizeProperty {
 
   friend class SizeAlgorithm;
 
@@ -71,7 +71,7 @@ private:
   void computeMinMax(Graph * sg=NULL);
 };
 
-class TLP_SCOPE SizeVectorProperty:public AbstractVectorProperty<tlp::SizeVectorType, tlp::SizeType> { 
+class TLP_SCOPE SizeVectorProperty:public AbstractVectorProperty<tlp::SizeVectorType, tlp::SizeType> {
 public :
   SizeVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<SizeVectorType, SizeType>(g, n) {}
 

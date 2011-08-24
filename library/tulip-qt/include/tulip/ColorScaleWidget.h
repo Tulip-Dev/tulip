@@ -23,9 +23,9 @@
  *      Author: Jonathan Dubois
  *       Email: jonathan.dubois@labri.fr
  *
- *	This program is free software; you can redistribute it and/or modify  *
- *  it under the terms of the GNU Lesser General Public License as published by  
- *  the Free Software Foundation; either version 2 of the License, or     
+ *  This program is free software; you can redistribute it and/or modify  *
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  */
 
@@ -37,13 +37,13 @@
 
 #include <tulip/tulipconf.h>
 
-namespace tlp{
+namespace tlp {
 class ColorScale;
 }
 /**
  *  @brief Widget used to display and edit color scale.
  */
-class TLP_QT_SCOPE ColorScaleWidget : public QWidget{
+class TLP_QT_SCOPE ColorScaleWidget : public QWidget {
 public:
   ColorScaleWidget(QWidget* parent=NULL);
   virtual ~ColorScaleWidget();
@@ -52,7 +52,7 @@ public:
    * @brief Set the color scale to display.
    */
   void setColorScale(tlp::ColorScale *colorScale);
-  tlp::ColorScale* getColorScale()const{
+  tlp::ColorScale* getColorScale()const {
     return colorScale;
   }
 

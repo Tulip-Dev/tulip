@@ -30,10 +30,10 @@
 #include <tulip/BmdList.h>
 
 namespace tlp {
-  class Graph;
-  enum { NOT_VISITED, VISITED, TERMINAL, VISITED_IN_RBC };
-  static const node NULL_NODE = node(); 
-  static const edge NULL_EDGE = edge();
+class Graph;
+enum { NOT_VISITED, VISITED, TERMINAL, VISITED_IN_RBC };
+static const node NULL_NODE = node();
+static const edge NULL_EDGE = edge();
 
 class TLP_SCOPE PlanarityTestImpl {
 
@@ -51,10 +51,10 @@ private:
   void makeBidirected(Graph *sG);
   void swapNode(node &n1, node &n2);
   void findTerminalNodes(Graph *sG, node n, std::list<node>& listOfComponents,
- 			 std::map<node, std::list<node> > &terminalNodes);
+                         std::map<node, std::list<node> > &terminalNodes);
   bool findObstruction(Graph *sG, node n, std::list<node>& terminalNodes);
   void setInfoForNewCNode(Graph *sG, node n, node newCNode,
- 			  std::list<node>& terminalNodes);
+                          std::list<node>& terminalNodes);
   node findActiveCNode(node, node, std::list<node>&);
   void preProcessing(Graph *);
   tlp::BmdLink<node>* searchRBC(int,  tlp::BmdLink<node>*, node, std::list<node>&);
@@ -91,31 +91,31 @@ private:
   void obstructionEdgesK5(Graph *sG, node w, node cNode, node t1, node t2, node t3);
   void obstructionEdgesPossibleObstrConfirmed(Graph *sG, node w, node t, node v);
   void obstructionEdgesCNodeCounter(Graph *sG, node cNode, node w, node jl, node jr, node t1, node t2);
-  
+
   // functions PlanarityTestEmbed.cpp
   void embedRoot(Graph *sG, int n);
   void calculatePartialEmbedding(Graph *sG, node w, node newCNode, std::list<edge>& listBackEdges, std::list<node>& terminalNodes);
   void markPathInT(node t, node w, std::map<node, node>& backEdgeRepresentant, std::list<node>& traversedNodes);
   std::map< node, std::list<edge> > groupBackEdgesByRepr(Graph *sG, std::list<edge>& listBackEdges,
-							 std::map<node, node>& backEdgeRepresentant,
-							 std::list<node>& traversedNodes,
-							 std::list<node>& listRepresentants);
+      std::map<node, node>& backEdgeRepresentant,
+      std::list<node>& traversedNodes,
+      std::list<node>& listRepresentants);
   std::list<node> embedUpwardT(bool embBackEdgesOutW, node t1, node t2, Graph *sG, node w,
- 			       std::map< node, std::list<edge> > &bEdgesRepres,
- 			       std::list<node>& traversedNodes,
- 			       BmdList<edge>& embList);
+                               std::map< node, std::list<edge> > &bEdgesRepres,
+                               std::list<node>& traversedNodes,
+                               BmdList<edge>& embList);
   void addOldCNodeToEmbedding(bool embBackEdgesOutW, Graph *sG, node w, node oldCNode, node u,
- 			      std::map<node,std::list<edge> >& bEdgesRepres,
- 			      std::list<node>& traversedNodes,
- 			      std::list<node>& toEmbedLater,
- 			      BmdList<edge>& embList);
+                              std::map<node,std::list<edge> >& bEdgesRepres,
+                              std::list<node>& traversedNodes,
+                              std::list<node>& toEmbedLater,
+                              BmdList<edge>& embList);
   void embedBackEdges(bool embBackEdgesOutW, Graph *sG, node repr,
- 		      std::list<node>& traversedNodes,
- 		      std::list<edge>& listBackEdges,
- 		      BmdList<edge>& embList);
+                      std::list<node>& traversedNodes,
+                      std::list<edge>& listBackEdges,
+                      BmdList<edge>& embList);
   int sortBackEdgesByDfs(Graph *sG, node w, node repr,
- 			 std::list<edge>& listBackEdges,
- 			 std::vector<edge>& backEdge);
+                         std::list<edge>& listBackEdges,
+                         std::vector<edge>& backEdge);
 
 //   void cleanPtrItem (node n,  tlp::BmdLink<node>* item);
 
@@ -144,9 +144,9 @@ private:
   std::map<node, std::list<edge> > listBackEdges;
 
 //   // the Representative Boundary Cycle for each c-node;
-//   //std::map<node, BmdList<node> > RBC; 
+//   //std::map<node, BmdList<node> > RBC;
   std::map<node, BmdList<node> > RBC;
-  
+
 //   // for each node u in G, the algorithm calculates the
 //   // clockwise ordering of edges with source u around u, such that
 //   // G.sort_edges(embed_list) is a plane map, if it exists
@@ -166,9 +166,9 @@ private:
 //   // list of edges in an obstruction found int G if G is not planar;
   std::list<edge> obstructionEdges;
 
-  
+
 //   //node_array<edge> backEdgeOut; NON UTILISE
-  
+
 //   //node_map<BmdListItem> ptrItem;
   MutableContainer< tlp::BmdLink<node>*> ptrItem;
 
@@ -187,7 +187,7 @@ private:
   MutableContainer<node> parent;
   MutableContainer<node> p0;
 
-//   // for each node u in T, 
+//   // for each node u in T,
 //   // largest_neighbor[u] = max{dfspos_num[v] : v is a neighbor of u in G};
 //   //node_map<int> largestNeighbor;
   MutableContainer<int> largestNeighbor;
@@ -195,12 +195,12 @@ private:
 //   // for each node u in T,
 //   // label_b[u] = max{largest_neighbor[v] : v is a descendat of u in T_u}
 //   // where T_u is the subtree of T rooted at u;
-//   //node_map<int> labelB; 
+//   //node_map<int> labelB;
   MutableContainer<int> labelB;
 
 //   // for each node u in T, node_label_b[u] = v
 //   // where v is a descendant of u in T and largest_neighbor[v] == label_b[u]
-//   // (it helps to find an obstruction in G, if G is not planar); 
+//   // (it helps to find an obstruction in G, if G is not planar);
 //   //node_map<node> nodeLabelB;
   MutableContainer<node> nodeLabelB;
 
@@ -208,19 +208,19 @@ private:
 //   //node_map<node> lastVisited;
   MutableContainer<node> lastVisited;
 
-//   // given w, for each terminal node u of w, neighbor_w_terminal[u] is 
+//   // given w, for each terminal node u of w, neighbor_w_terminal[u] is
 //   // a descendant of u that is a neighbor of w in G;
 //   //node_map<node> neighborWTerminal;
   MutableContainer<node> neighborWTerminal;
 
 //   // to help search for terminal nodes and calculate an embedding of G if G is
 //   // planar (states: VISITED, NOT_VISITED, TERMINAL);
-//   //node_map<int> state; 
+//   //node_map<int> state;
   MutableContainer<int> state;
 
 //   // for each (active) c-node d, counter[d] is the number of children of d
 //   // with a descendant that are neighbor of w in G;
-  MutableContainer<int> counter;    
+  MutableContainer<int> counter;
 
 //   // (it helps to calculate an embedding of G, if G is planar);
 //   //node_array<bool> hasBackEdge;

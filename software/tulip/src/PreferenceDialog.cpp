@@ -28,7 +28,7 @@ using namespace std;
 using namespace tlp;
 
 PreferenceDialog::PreferenceDialog( QWidget* parent)
-    : QDialog( parent),modified(false) {
+  : QDialog( parent),modified(false) {
   setupUi(this);
 
   PreferenceManager &preferenceManager=PreferenceManager::getInst();
@@ -43,12 +43,11 @@ PreferenceDialog::PreferenceDialog( QWidget* parent)
 }
 
 
-PreferenceDialog::~PreferenceDialog()
-{
+PreferenceDialog::~PreferenceDialog() {
 
 }
 
-void PreferenceDialog::loadPreference(){
+void PreferenceDialog::loadPreference() {
   QSettings settings("TulipSoftware","Tulip");
   settings.beginGroup("Preference");
 
@@ -70,7 +69,7 @@ void PreferenceDialog::loadPreference(){
   preferenceManager.setAutoLoadController(autoLoadController);
   preferenceManager.setUseSpecificMetric(useSpecificMetric);
 }
-void PreferenceDialog::savePreference(){
+void PreferenceDialog::savePreference() {
   QSettings settings("TulipSoftware","Tulip");
   settings.beginGroup("Preference");
 

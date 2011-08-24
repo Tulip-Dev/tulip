@@ -33,9 +33,8 @@ namespace tlp {
  * \date 23/07/2005
  * \version 1.0
  */
-class TLP_SCOPE Plane
-{ 
- public:
+class TLP_SCOPE Plane {
+public:
 
   float a, b, c, d;
 

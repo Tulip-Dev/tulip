@@ -27,10 +27,10 @@ namespace tlp {
 class PropertyContext;
 class DoubleProperty;
 
-/** \addtogroup plugins */ 
+/** \addtogroup plugins */
 /*@{*/
 /// Interface for metric plug-ins
-class TLP_SCOPE DoubleAlgorithm:public PropertyAlgorithm { 
+class TLP_SCOPE DoubleAlgorithm:public PropertyAlgorithm {
   ///
   friend class DoubleProperty;
 public:

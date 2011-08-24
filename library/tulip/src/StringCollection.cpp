@@ -25,9 +25,9 @@ using namespace tlp;
 StringCollection::StringCollection() {
   current = 0;
 }
-    
-StringCollection::StringCollection(const vector<string> &vectorParam) 
-  : _data(vectorParam)  {     
+
+StringCollection::StringCollection(const vector<string> &vectorParam)
+  : _data(vectorParam)  {
   current = 0;
 }
 
@@ -35,21 +35,23 @@ StringCollection::StringCollection(const string param) {
   string temp;
   string::const_iterator itChar = param.begin();
   bool escapeChar = false;
+
   while (itChar != param.end()) {
     if (escapeChar) {
       // when it escaped
       // semi colon can be added to the string
       if (*itChar == ';') {
-	temp += *itChar;
-	escapeChar = false;
-	itChar++;
-	continue;
+        temp += *itChar;
+        escapeChar = false;
+        itChar++;
+        continue;
       }
       else {
-	escapeChar = false;
-	temp += '\\';
+        escapeChar = false;
+        temp += '\\';
       }
     }
+
     // check string separator
     if (*itChar == ';') {
       escapeChar = false;
@@ -58,43 +60,50 @@ StringCollection::StringCollection(const string param) {
       itChar++;
       continue;
     }
+
     // check escape char
     if (*itChar == '\\')
       escapeChar = true;
     else
       temp += *itChar;
-    itChar++;        
+
+    itChar++;
   }
+
   if (temp.size())
     _data.push_back(temp);
+
   current = 0;
 }
-     
-StringCollection::StringCollection(const vector<string>&  vectorParam, 
-				   int currentParam)
+
+StringCollection::StringCollection(const vector<string>&  vectorParam,
+                                   int currentParam)
   : _data(vectorParam) {
-  if (currentParam < int(_data.size())) 
+  if (currentParam < int(_data.size()))
     current = currentParam;
-  else 
+  else
     current = 0;
 }
 
-StringCollection::StringCollection(const vector<string>& vectorParam, 
-                        string currentString) 
+StringCollection::StringCollection(const vector<string>& vectorParam,
+                                   string currentString)
   : _data(vectorParam) {
   current = 0;
+
   for (vector<string>::const_iterator itS = _data.begin();
        itS != _data.end(); ++itS, ++current) {
     if ((*itS) == currentString)
       return;
   }
+
   current = 0;
 }
 
-    
+
 string StringCollection::getCurrentString() {
   if (current < _data.size())
     return _data.at(current);
+
   return string();
 }
 
@@ -104,6 +113,7 @@ bool StringCollection::setCurrent(unsigned int param) {
     current =  param;
     return true;
   }
+
   return false;
 }
 
@@ -114,9 +124,10 @@ bool StringCollection::setCurrent(string param) {
       return true;
     }
   }
+
   return false;
 }
 
 int StringCollection::getCurrent() {
   return current;
-} 
+}

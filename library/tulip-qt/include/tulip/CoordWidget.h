@@ -5,36 +5,35 @@
 #include <tulip/tulipconf.h>
 
 namespace Ui {
-    class CoordWidget;
+class CoordWidget;
 }
 
-namespace tlp{
+namespace tlp {
 
+/**
+* @brief Simple Coord edition widget.
+**/
+class TLP_QT_SCOPE CoordWidget : public QWidget {
+  Q_OBJECT
+public:
+  CoordWidget(QWidget* parent = NULL);
+  ~CoordWidget();
+  tlp::Coord coord()const;
+public slots:
   /**
-  * @brief Simple Coord edition widget.
-  **/
-    class TLP_QT_SCOPE CoordWidget : public QWidget
-    {
-        Q_OBJECT
-    public:
-        CoordWidget(QWidget* parent = NULL);
-        ~CoordWidget();
-        tlp::Coord coord()const;
-    public slots:
-        /**
-          * @brief Set the Coord displayed by this widget. Emit the coordChanged signals.
-          **/
-        void setCoord(const tlp::Coord& coord);
+    * @brief Set the Coord displayed by this widget. Emit the coordChanged signals.
+    **/
+  void setCoord(const tlp::Coord& coord);
 
-    signals:
-        void coordChanged(tlp::Coord coord);
+signals:
+  void coordChanged(tlp::Coord coord);
 
-    private slots:
-        void coordUpdated();
+private slots:
+  void coordUpdated();
 
-    private:
-        Ui::CoordWidget *ui;
-    };
+private:
+  Ui::CoordWidget *ui;
+};
 }
 
 #endif // COORDWIDGET_H

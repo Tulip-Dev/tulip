@@ -23,7 +23,7 @@
 #include <tulip/tulipconf.h>
 /**
  * \addtogroup plugins
- */ 
+ */
 namespace tlp {
 /*@{*/
 /**
@@ -38,7 +38,7 @@ namespace tlp {
 
 class PluginInfoInterface {
 public:
-  virtual ~PluginInfoInterface(){}
+  virtual ~PluginInfoInterface() {}
   /**
    * @brief Returns the name of the plug-in, as registered in the Tulip plug-in system.
    * This name must be unique, and if multiple plug-ins have the same name,

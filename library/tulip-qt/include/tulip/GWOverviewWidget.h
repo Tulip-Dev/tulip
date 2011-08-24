@@ -32,16 +32,16 @@
 class QEvent;
 
 namespace tlp {
-  class GlGraph;
+class GlGraph;
 
-  class GlMainWidget;
-  struct RectPosition;
-  class GWOverviewWidget;
+class GlMainWidget;
+struct RectPosition;
+class GWOverviewWidget;
 
 /** \addtogroup Tulip_Widgets */
 /*@{*/
-  class TLP_QT_SIMPLE_SCOPE GWOverviewWidget :
-    public QWidget,public Ui::GWOverviewWidgetData {
+class TLP_QT_SIMPLE_SCOPE GWOverviewWidget :
+  public QWidget,public Ui::GWOverviewWidgetData {
   Q_OBJECT
 
 public:
@@ -51,7 +51,9 @@ public:
   GlMainWidget *getObservedView();
   GlMainWidget *getView();
 
-  void setDrawIfNotVisible(bool drawIfNotVisible){this->drawIfNotVisible=drawIfNotVisible;}
+  void setDrawIfNotVisible(bool drawIfNotVisible) {
+    this->drawIfNotVisible=drawIfNotVisible;
+  }
 
 signals:
 

@@ -26,20 +26,20 @@ namespace tlp {
 class Graph;
 class BooleanProperty;
 class TLP_SCOPE Bfs {
- public :
-  
+public :
+
   Bfs(Graph * G, BooleanProperty* resultatAlgoSelection);
   ~Bfs();
 
   Graph *graph;
 
- private :
+private :
 
-  void computeBfs(Graph * G, BooleanProperty* resultatAlgoSelection, node root);  
+  void computeBfs(Graph * G, BooleanProperty* resultatAlgoSelection, node root);
 
   unsigned int nbNodes;
   MutableContainer<bool> selectedNodes;
   MutableContainer<bool> selectedEdges;
 
- };  
+};
 }

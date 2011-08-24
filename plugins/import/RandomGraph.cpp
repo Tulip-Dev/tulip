@@ -27,37 +27,41 @@ struct edgeS {
 };
 
 namespace std {
-  template<>
-  struct less<edgeS> {
-    bool operator()(const edgeS &c,const edgeS &d) const {
-      if (c.source<d.source) return true;
-      if (c.source>d.source) return false;
-      if (c.target<d.target) return true;
-      if (c.target>d.target) return false;
-      return false;
-    }
-  };
+template<>
+struct less<edgeS> {
+  bool operator()(const edgeS &c,const edgeS &d) const {
+    if (c.source<d.source) return true;
+
+    if (c.source>d.source) return false;
+
+    if (c.target<d.target) return true;
+
+    if (c.target>d.target) return false;
+
+    return false;
+  }
+};
 };
 
 
 namespace {
-  const char * paramHelp[] = {
-    // nodes
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "unsigned int" ) \
-    HTML_HELP_DEF( "default", "5" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the amount of node used to build the randomized graph." \
-    HTML_HELP_CLOSE(),
+const char * paramHelp[] = {
+  // nodes
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "unsigned int" ) \
+  HTML_HELP_DEF( "default", "5" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the amount of node used to build the randomized graph." \
+  HTML_HELP_CLOSE(),
 
-    // edges
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "unsigned int" ) \
-    HTML_HELP_DEF( "default", "9" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the amount of edge used to build the randomized graph." \
-    HTML_HELP_CLOSE(),
-  };
+  // edges
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "unsigned int" ) \
+  HTML_HELP_DEF( "default", "9" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the amount of edge used to build the randomized graph." \
+  HTML_HELP_CLOSE(),
+};
 }
 
 
@@ -74,20 +78,23 @@ public:
     addParameter<unsigned int>("nodes",paramHelp[0],"5");
     addParameter<unsigned int>("edges",paramHelp[1],"9");
   }
-  ~RandomGraph(){
+  ~RandomGraph() {
   }
-  
+
   bool import(const string &) {
     srand(clock());
     unsigned int nbNodes  = 5;
     unsigned int nbEdges  = 9;
+
     if (dataSet!=0) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("edges", nbEdges);
     }
+
     if (nbNodes == 0) {
       if (pluginProgress)
-	pluginProgress->setError(string("Error: the number of nodes cannot be null"));
+        pluginProgress->setError(string("Error: the number of nodes cannot be null"));
+
       return false;
     }
 
@@ -99,27 +106,32 @@ public:
       pluginProgress->showPreview(false);
 
     while (ite>0) {
-      if (ite%nbNodes==1) if (pluginProgress->progress(nbIteration-ite,nbIteration)!=TLP_CONTINUE) 
-	return pluginProgress->state()!=TLP_CANCEL;
+      if (ite%nbNodes==1) if (pluginProgress->progress(nbIteration-ite,nbIteration)!=TLP_CONTINUE)
+          return pluginProgress->state()!=TLP_CANCEL;
+
       edgeS tmp;
       tmp.source=rand()%nbNodes;
       tmp.target=rand()%nbNodes;
+
       if (myGraph.find(tmp)!=myGraph.end())
-	myGraph.erase(tmp);
-      else 
-	if (myGraph.size()<nbEdges) myGraph.insert(tmp);
+        myGraph.erase(tmp);
+      else if (myGraph.size()<nbEdges) myGraph.insert(tmp);
+
       ite--;
     }
-    
+
     vector<node> tmpVect(nbNodes);
+
     for (unsigned int i=0; i<nbNodes; ++i) {
       tmpVect[i]=graph->addNode();
     }
-    
+
     set<edgeS>::const_iterator it;
+
     for (it=myGraph.begin(); it!=myGraph.end(); ++it)   {
       graph->addEdge(tmpVect[(*it).source],tmpVect[(*it).target]);
     }
+
     return true;
   }
 };

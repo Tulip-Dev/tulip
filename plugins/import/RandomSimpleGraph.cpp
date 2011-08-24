@@ -27,53 +27,62 @@ struct edgeS {
 };
 
 namespace std {
-  template<>
-  struct less<edgeS> {
-    bool operator()(const edgeS &c,const edgeS &d) const {
-      int cs,ct,ds,dt;
-      if (c.source<=c.target) { 
-	cs=c.source;ct=c.target;
-      }
-      else {
-	ct=c.source;cs=c.target;
-      }
-      if (d.source<=d.target) {
-	ds=d.source;dt=d.target;
-      }
-      else {
-	dt=d.source;ds=d.target;
-      }
-      if (cs<ds) return true;
-      if (cs>ds) return false;
-      if (ct<dt) return true;
-      if (ct>dt) return false;
-      return false;
+template<>
+struct less<edgeS> {
+  bool operator()(const edgeS &c,const edgeS &d) const {
+    int cs,ct,ds,dt;
+
+    if (c.source<=c.target) {
+      cs=c.source;
+      ct=c.target;
     }
-  };
+    else {
+      ct=c.source;
+      cs=c.target;
+    }
+
+    if (d.source<=d.target) {
+      ds=d.source;
+      dt=d.target;
+    }
+    else {
+      dt=d.source;
+      ds=d.target;
+    }
+
+    if (cs<ds) return true;
+
+    if (cs>ds) return false;
+
+    if (ct<dt) return true;
+
+    if (ct>dt) return false;
+
+    return false;
+  }
+};
 };
 
 
-namespace
-{
+namespace {
 
-	const char * paramHelp[] =
-	{
-		// nodes
-		HTML_HELP_OPEN() \
-		HTML_HELP_DEF( "type", "unsigned int" ) \
-		HTML_HELP_DEF( "default", "5" ) \
-		HTML_HELP_BODY() \
-		"This parameter defines the amount of node used to build the randomized graph." \
-		HTML_HELP_CLOSE(),
+const char * paramHelp[] = {
+  // nodes
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "unsigned int" ) \
+  HTML_HELP_DEF( "default", "5" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the amount of node used to build the randomized graph." \
+  HTML_HELP_CLOSE(),
 
-		// edges
-		HTML_HELP_OPEN() \
-		HTML_HELP_DEF( "type", "unsigned int" ) \
-		HTML_HELP_DEF( "default", "9" ) \
-		HTML_HELP_BODY() \
-		"This parameter defines the amount of edge used to build the randomized graph." \
-		HTML_HELP_CLOSE(),
-	};
+  // edges
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "unsigned int" ) \
+  HTML_HELP_DEF( "default", "9" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the amount of edge used to build the randomized graph." \
+  HTML_HELP_CLOSE(),
+};
 
 }
 
@@ -92,12 +101,13 @@ public:
     addParameter<unsigned int>("nodes",paramHelp[0],"5");
     addParameter<unsigned int>("edges",paramHelp[1],"9");
   }
-  ~RandomSimpleGraph(){}
-  
+  ~RandomSimpleGraph() {}
+
   bool import(const string &) {
     srand(clock());
     unsigned int nbNodes  = 5;
     unsigned int nbEdges  = 9;
+
     if (dataSet!=0) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("edges", nbEdges);
@@ -105,7 +115,8 @@ public:
 
     if (nbNodes == 0) {
       if (pluginProgress)
-	pluginProgress->setError(string("Error: the number of nodes cannot be null"));
+        pluginProgress->setError(string("Error: the number of nodes cannot be null"));
+
       return false;
     }
 
@@ -117,30 +128,40 @@ public:
       pluginProgress->showPreview(false);
 
     while (ite>0) {
-      if (ite%nbNodes==1) if (pluginProgress->progress(nbIteration-ite,nbIteration)!=TLP_CONTINUE) 
-	return pluginProgress->state()!=TLP_CANCEL;
+      if (ite%nbNodes==1) if (pluginProgress->progress(nbIteration-ite,nbIteration)!=TLP_CONTINUE)
+          return pluginProgress->state()!=TLP_CANCEL;
+
       edgeS tmp;
       tmp.source=rand()%nbNodes;
       tmp.target=rand()%nbNodes;
+
       while (tmp.source==tmp.target) {
-	tmp.source=rand()%nbNodes;
-	tmp.target=rand()%nbNodes;
+        tmp.source=rand()%nbNodes;
+        tmp.target=rand()%nbNodes;
       }
+
       if (myGraph.find(tmp)==myGraph.end()) {
-	myGraph.insert(tmp);
-	if (myGraph.size() == nbEdges)
-	  break;
+        myGraph.insert(tmp);
+
+        if (myGraph.size() == nbEdges)
+          break;
       }
+
       ite--;
     }
+
     vector<node> tmpVect(nbNodes);
+
     for (unsigned int i=0; i<nbNodes; ++i) {
       tmpVect[i]=graph->addNode();
     }
+
     set<edgeS>::iterator it;
+
     for (it=myGraph.begin(); it!=myGraph.end(); ++it)   {
       graph->addEdge(tmpVect[(*it).source],tmpVect[(*it).target]);
     }
+
     return true;
   }
 };

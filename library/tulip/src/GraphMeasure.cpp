@@ -30,55 +30,62 @@
 using namespace std;
 using namespace tlp;
 namespace {
-  inline Iterator<node> *getIt(const Graph *sg, node n, EDGE_TYPE direction) {
-    switch(direction) {
-    case DIRECTED:
-      return sg->getOutNodes(n);
-    case INV_DIRECTED:
-      return sg->getInNodes(n);
-    case UNDIRECTED:
-      return sg->getInOutNodes(n);
-    default:
-      cerr << __PRETTY_FUNCTION__ << "serious bug...";
-      return 0;
-    }
-    return NULL;
+inline Iterator<node> *getIt(const Graph *sg, node n, EDGE_TYPE direction) {
+  switch(direction) {
+  case DIRECTED:
+    return sg->getOutNodes(n);
+  case INV_DIRECTED:
+    return sg->getInNodes(n);
+  case UNDIRECTED:
+    return sg->getInOutNodes(n);
+  default:
+    cerr << __PRETTY_FUNCTION__ << "serious bug...";
+    return 0;
   }
+
+  return NULL;
+}
 }
 //================================================================
 unsigned int tlp::maxDistance(const Graph *sg, const node n,
-			      MutableContainer<unsigned int> &distance,
-			      EDGE_TYPE direction) {
+                              MutableContainer<unsigned int> &distance,
+                              EDGE_TYPE direction) {
   deque<node> fifo;
   distance.setAll(UINT_MAX);
   fifo.push_back(n);
   distance.set(n.id, 0);
   unsigned int maxDist = 0;
+
   while(!fifo.empty()) {
     node current = fifo.front();
     fifo.pop_front();
     unsigned int nDist = distance.get(current.id) + 1;
     Iterator<node>* itn;
     itn = getIt(sg, current, direction);
+
     while (itn->hasNext()) {
       node n = itn->next();
+
       if (distance.get(n.id) == UINT_MAX) {
-	fifo.push_back(n);
-	distance.set(n.id, nDist);
-	maxDist = std::max(maxDist, nDist);
+        fifo.push_back(n);
+        distance.set(n.id, nDist);
+        maxDist = std::max(maxDist, nDist);
       }
     }
+
     delete itn;
   }
+
   return maxDist;
 }
 //================================================================
 //Warning the algorithm is not optimal
 double tlp::averagePathLength(const Graph *graph,
-			      PluginProgress *pluginProgress) {
+                              PluginProgress *pluginProgress) {
   double result = 0;
-  
+
   size_t nbNodes = graph->numberOfNodes();
+
   if (nbNodes < 2) return result;
 
   node n;
@@ -93,62 +100,75 @@ double tlp::averagePathLength(const Graph *graph,
 #ifdef _OPENMP
 #pragma omp parallel for private(i) schedule(dynamic, 1)
 #endif
+
   for (i = 0; i < static_cast<int>(nbNodes); ++i) {
     if (stopfor) continue;
+
     // check if we are in the main thread.
     // Qt calls can't be done outside of the master thread
 #ifdef _OPENMP
+
     if (omp_get_thread_num() == 0) {
 #endif
-     if (pluginProgress && ((++steps % 100) == 0)) {
-	 pluginProgress->progress(steps, nbNodes);
-	 if (pluginProgress->state() != TLP_CONTINUE) {
+
+      if (pluginProgress && ((++steps % 100) == 0)) {
+        pluginProgress->progress(steps, nbNodes);
+
+        if (pluginProgress->state() != TLP_CONTINUE) {
 #ifdef _OPENMP
-	   #pragma omp critical(STOPFOR)
+#pragma omp critical(STOPFOR)
 #endif
-	   stopfor = true;
-	 }
+          stopfor = true;
+        }
       }
+
 #ifdef _OPENMP
     }
+
 #endif
     node n = nodes[i];
     MutableContainer<unsigned int> distance;
     maxDistance(graph, n, distance, UNDIRECTED);
+
     for (size_t j = 0; j < nbNodes; ++j) {
       node itn = nodes[j];
       unsigned int d =  distance.get(itn.id);
+
       if (itn != n && d != UINT_MAX) {
 #ifdef _OPENMP
-	#pragma omp critical(SUMPATH)
+#pragma omp critical(SUMPATH)
 #endif
-	result += d;
+        result += d;
       }
     }
   }
+
   if (pluginProgress)
     pluginProgress->progress(nbNodes, nbNodes);
+
   double nbN = nbNodes;
   result /= (nbN * (nbN - 1.));
   return result;
 }
 //================================================================
 double tlp::averageClusteringCoefficient(const Graph *sg,
-					 PluginProgress * pluginProgress) {
+    PluginProgress * pluginProgress) {
   double sum=0;
   MutableContainer<double> clusters;
   tlp::clusteringCoefficient(sg, clusters, UINT_MAX, pluginProgress);
   node n;
   forEach(n, sg->getNodes())
-    sum += clusters.get(n.id);
+  sum += clusters.get(n.id);
   return sum / double(sg->numberOfNodes());
 }
 //================================================================
 unsigned int tlp::maxDegree(const Graph *sg) {
   unsigned int maxdeg = 0;
   Iterator<node> *itN=sg->getNodes();
+
   while (itN->hasNext())
     maxdeg = std::max(maxdeg , sg->deg(itN->next()));
+
   delete itN;
   return maxdeg;
 }
@@ -156,15 +176,17 @@ unsigned int tlp::maxDegree(const Graph *sg) {
 unsigned int tlp::minDegree(const Graph *sg) {
   unsigned int mindeg = sg->numberOfNodes();
   Iterator<node> *itN=sg->getNodes();
+
   while (itN->hasNext())
     mindeg = std::min(mindeg , sg->deg(itN->next()));
+
   delete itN;
   return mindeg;
 }
 //================================================================
 void tlp::reachableNodes(const Graph *graph, const node startNode,
-			 set<node> &result, unsigned int maxDistance,
-			 EDGE_TYPE direction) {
+                         set<node> &result, unsigned int maxDistance,
+                         EDGE_TYPE direction) {
   deque<node> fifo;
   MutableContainer<bool> visited;
   MutableContainer<unsigned int> distance;
@@ -173,20 +195,26 @@ void tlp::reachableNodes(const Graph *graph, const node startNode,
   fifo.push_back(startNode);
   visited.set(startNode.id, true);
   distance.set(startNode.id, 0);
+
   while(!fifo.empty()) {
     node current = fifo.front();
     fifo.pop_front();
+
     if (distance.get(current.id) < maxDistance) {
       Iterator<node> *itN = getIt(graph, current, direction);
+
       while(itN->hasNext()) {
-	node itn = itN->next();
-	if (!visited.get(itn.id)) {
-	  fifo.push_back(itn);
-	  result.insert(itn);
-	  visited.set(itn.id,true);
-	  distance.set(itn.id, distance.get(current.id) + 1);
-	}
-      } delete itN;
+        node itn = itN->next();
+
+        if (!visited.get(itn.id)) {
+          fifo.push_back(itn);
+          result.insert(itn);
+          visited.set(itn.id,true);
+          distance.set(itn.id, distance.get(current.id) + 1);
+        }
+      }
+
+      delete itN;
     }
   }
 }
@@ -201,13 +229,13 @@ void tlp::reachableNodes(const Graph *graph, const node startNode,
     Iterator<edge> *itE=graph->getInOutEdges(itn);
     while (itE->hasNext()) {
       pair<node, node> eEnds = graph->ends(itE->next());
-      if ( (reachables.find(eEnds.first)!=reachables.end()) && 
-	   (reachables.find(eEnds.second)!=reachables.end())) {
-	nbEdge++;
+      if ( (reachables.find(eEnds.first)!=reachables.end()) &&
+     (reachables.find(eEnds.second)!=reachables.end())) {
+  nbEdge++;
       }
     } delete itE;
   }
-  
+
   double nNode= reachables.size(); //$|N_v|$
   if (reachables.size()>1) {
     double result = double(nbEdge)/(nNode*(nNode-1));
@@ -218,8 +246,8 @@ void tlp::reachableNodes(const Graph *graph, const node startNode,
     }*/
 //=================================================
 void tlp::clusteringCoefficient(const Graph *graph,
-				MutableContainer<double>& clusters,
-				unsigned int maxDepth, PluginProgress *) {
+                                MutableContainer<double>& clusters,
+                                unsigned int maxDepth, PluginProgress *) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   node n;
   forEach(n, graph->getNodes()) {
@@ -227,19 +255,25 @@ void tlp::clusteringCoefficient(const Graph *graph,
     reachableNodes(graph, n, reachables, maxDepth);
     double nbEdge=0; //e(N_v)*2$
     set<node>::iterator itSN=reachables.begin();
-    for (;itSN !=reachables.end(); ++itSN) {
+
+    for (; itSN !=reachables.end(); ++itSN) {
       node itn = *itSN;
       Iterator<edge> *itE = graph->getInOutEdges(itn);
+
       while (itE->hasNext()) {
-	pair<node, node> eEnds = graph->ends(itE->next());
-	if ( (reachables.find(eEnds.first)!=reachables.end()) && 
-	     (reachables.find(eEnds.second)!=reachables.end())) {
+        pair<node, node> eEnds = graph->ends(itE->next());
+
+        if ( (reachables.find(eEnds.first)!=reachables.end()) &&
+             (reachables.find(eEnds.second)!=reachables.end())) {
           ++nbEdge;
-	}
-      } delete itE;
+        }
+      }
+
+      delete itE;
     }
-  
+
     double nNode = reachables.size(); //$|N_v|$
+
     if (reachables.size()>1) {
       //$e(N_v)/(\frac{k*(k-1)}{2}}$
       clusters.set(n.id, double(nbEdge)/(nNode*(nNode-1)));
@@ -250,13 +284,14 @@ void tlp::clusteringCoefficient(const Graph *graph,
 }
 //==================================================
 void tlp::dagLevel (const Graph *graph, MutableContainer<unsigned int>& level,
-		    PluginProgress*) {
+                    PluginProgress*) {
   MutableContainer<unsigned int> totreat;
   deque<node> fifo;
   //===============================================
   node itn;
   forEach(itn, graph->getNodes()) {
     unsigned int indegree = graph->indeg(itn);
+
     if (indegree==0) {
       fifo.push_back(itn);
       level.set(itn.id, 0);
@@ -264,6 +299,7 @@ void tlp::dagLevel (const Graph *graph, MutableContainer<unsigned int>& level,
     else
       totreat.set(itn.id, indegree - 1);
   }
+
   //==============================================
   while (!fifo.empty()) {
     node current = fifo.front();
@@ -272,12 +308,13 @@ void tlp::dagLevel (const Graph *graph, MutableContainer<unsigned int>& level,
     unsigned int curLevel = level.get(current.id) + 1;
     forEach(child, graph->getOutNodes(current)) {
       if (totreat.get(child.id) > 0)
-	totreat.set(child.id, totreat.get(child.id)-1);
+        totreat.set(child.id, totreat.get(child.id)-1);
       else {
-	level.set(child.id, curLevel);
-	fifo.push_back(child);
+        level.set(child.id, curLevel);
+        fifo.push_back(child);
       }
     }
   }
+
   //==============================================
 }

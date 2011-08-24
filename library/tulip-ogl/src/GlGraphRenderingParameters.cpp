@@ -59,7 +59,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _edgesMaxSizeToNodesSize = true;
   _feedbackRender=false;
   _selectionColor=PreferenceManager::getInst().getSelectionColor();
-	_displayFilteringProperty=NULL;
+  _displayFilteringProperty=NULL;
 }
 //This function should rewriten completly
 DataSet GlGraphRenderingParameters::getParameters() const {
@@ -103,70 +103,104 @@ DataSet GlGraphRenderingParameters::getParameters() const {
 void GlGraphRenderingParameters::setParameters(const DataSet &data) {
   bool b = false;
   Color c;
+
   if (data.get<bool>("antialiased", b))
     setAntialiasing(b);
+
   if (data.get<bool>("arrow", b))
     setViewArrow(b);
+
   if (data.get<bool>("displayNodes", b))
     setDisplayNodes(b);
+
   if (data.get<bool>("displayMetaNodes", b))
     setDisplayMetaNodes(b);
+
   if (data.get<bool>("displayEdges", b))
     setDisplayEdges(b);
+
   if (data.get<bool>("nodeLabel", b))
     setViewNodeLabel(b);
+
   if (data.get<bool>("edgeLabel", b))
     setViewEdgeLabel(b);
+
   if (data.get<bool>("metaLabel", b))
     setViewMetaLabel(b);
+
   if (data.get<bool>("outScreenLabel", b))
     setViewOutScreenLabel(b);
+
   if (data.get<bool>("elementOrdered", b))
     setElementOrdered(b);
+
   if (data.get<bool>("elementZOrdered", b))
     setElementZOrdered(b);
+
   if (data.get<bool>("edgeColorInterpolation", b))
     setEdgeColorInterpolate(b);
+
   if (data.get<bool>("edgeSizeInterpolation", b))
     setEdgeSizeInterpolate(b);
+
   if (data.get<bool>("edge3D", b))
     setEdge3D(b);
+
   if (data.get<bool>("autoScale",b))
     setLabelScaled(b);
+
   if (data.get<bool>("labelScaled", b))
     setLabelScaled(b);
+
   if (data.get<bool>("labelOverlaped", b))
     setLabelOverlaped(b);
+
   unsigned int ui = 0;
+
   if (data.get<unsigned int>("fontType", ui))
     setFontsType(ui);
+
   int i  = 0;
+
   if (data.get<int>("labelMinSize", i))
     setMinSizeOfLabel(i);
+
   if (data.get<int>("labelMaxSize", i))
     setMaxSizeOfLabel(i);
+
   if (data.get<int>("selectedNodesStencil", i))
     setSelectedNodesStencil(i);
+
   if (data.get<int>("selectedMetaNodesStencil", i))
     setSelectedMetaNodesStencil(i);
+
   if (data.get<int>("selectedEdgesStencil", i))
     setSelectedEdgesStencil(i);
+
   if (data.get<int>("nodesStencil", i))
     setNodesStencil(i);
+
   if (data.get<int>("metaNodesStencil", i))
     setMetaNodesStencil(i);
+
   if (data.get<int>("edgesStencil", i))
     setEdgesStencil(i);
+
   if (data.get<int>("nodesLabelStencil", i))
     setNodesLabelStencil(i);
+
   if (data.get<int>("metaNodesLabelStencil", i))
     setMetaNodesLabelStencil(i);
+
   if (data.get<int>("edgesLabelStencil", i))
     setEdgesLabelStencil(i);
+
   if (data.get<int>("labelsDensity", i))
     setLabelsDensity(i);
+
   if (data.get<bool>("edgesMaxSizeToNodesSize", b))
     setEdgesMaxSizeToNodesSize(b);
+
   if(data.get<Color>("selectionColor", c))
     setSelectionColor(c);
 }
@@ -184,7 +218,7 @@ void GlGraphRenderingParameters::setLabelsBorder(const unsigned int border) {
 bool GlGraphRenderingParameters::isViewMetaLabel()const {
   return (_viewMetaLabel);
 }
-void GlGraphRenderingParameters::setViewMetaLabel(bool b){
+void GlGraphRenderingParameters::setViewMetaLabel(bool b) {
   _viewMetaLabel=b;
 }
 //====================================================
@@ -285,7 +319,7 @@ void GlGraphRenderingParameters::setViewEdgeLabel(const bool b) {
   _viewEdgeLabel=b;
 }
 //====================================================
-void GlGraphRenderingParameters::setViewOutScreenLabel(const bool state){
+void GlGraphRenderingParameters::setViewOutScreenLabel(const bool state) {
   _viewOutScreenLabel=state;
 }
 bool GlGraphRenderingParameters::isViewOutScreenLabel() const {
@@ -330,7 +364,7 @@ int GlGraphRenderingParameters::getMetaNodesStencil() {
 void GlGraphRenderingParameters::setEdgesStencil(const int stencil) {
   _edgesStencil=stencil;
 }
-int GlGraphRenderingParameters::getEdgesStencil(){
+int GlGraphRenderingParameters::getEdgesStencil() {
   return _edgesStencil;
 }
 //====================================================
@@ -351,7 +385,7 @@ int GlGraphRenderingParameters::getMetaNodesLabelStencil() {
 void GlGraphRenderingParameters::setEdgesLabelStencil(const int stencil) {
   _edgesLabelStencil=stencil;
 }
-int GlGraphRenderingParameters::getEdgesLabelStencil(){
+int GlGraphRenderingParameters::getEdgesLabelStencil() {
   return _edgesLabelStencil;
 }
 //====================================================
@@ -365,72 +399,72 @@ void GlGraphRenderingParameters::setEdgeColorInterpolate(const bool b) {
 bool GlGraphRenderingParameters::isEdgeSizeInterpolate()const {
   return (_edgeSizeInterpolate);
 }
-void GlGraphRenderingParameters::setEdgeSizeInterpolate(const bool b){
+void GlGraphRenderingParameters::setEdgeSizeInterpolate(const bool b) {
   _edgeSizeInterpolate=b;
 }
 //====================================================
 bool GlGraphRenderingParameters::getEdgesMaxSizeToNodesSize()const {
   return (_edgesMaxSizeToNodesSize);
 }
-void GlGraphRenderingParameters::setEdgesMaxSizeToNodesSize(const bool b){
+void GlGraphRenderingParameters::setEdgesMaxSizeToNodesSize(const bool b) {
   _edgesMaxSizeToNodesSize=b;
 }
 //====================================================
-void GlGraphRenderingParameters::setFeedbackRender(bool feedback){
+void GlGraphRenderingParameters::setFeedbackRender(bool feedback) {
   _feedbackRender=feedback;
 }
 //====================================================
-bool GlGraphRenderingParameters::getFeedbackRender(){
+bool GlGraphRenderingParameters::getFeedbackRender() {
   return _feedbackRender;
 }
 //====================================================
-void GlGraphRenderingParameters::setSelectionColor(const Color &color){
+void GlGraphRenderingParameters::setSelectionColor(const Color &color) {
   _selectionColor=color;
 }
 //====================================================
-Color GlGraphRenderingParameters::getSelectionColor(){
-return _selectionColor;
+Color GlGraphRenderingParameters::getSelectionColor() {
+  return _selectionColor;
 }
 //====================================================
-bool GlGraphRenderingParameters::isLabelScaled(){
+bool GlGraphRenderingParameters::isLabelScaled() {
   return _labelScaled;
 }
 //====================================================
-void GlGraphRenderingParameters::setLabelScaled(bool state){
+void GlGraphRenderingParameters::setLabelScaled(bool state) {
   _labelScaled=state;
 }
 //====================================================
-bool GlGraphRenderingParameters::isLabelOverlaped(){
+bool GlGraphRenderingParameters::isLabelOverlaped() {
   return _labelsDensity==100;
 }
 //====================================================
-void GlGraphRenderingParameters::setLabelOverlaped(bool state){
+void GlGraphRenderingParameters::setLabelOverlaped(bool state) {
   if(state)
     _labelsDensity=100;
   else
     _labelsDensity=0;
 }
 //====================================================
-int GlGraphRenderingParameters::getLabelsDensity(){
+int GlGraphRenderingParameters::getLabelsDensity() {
   return _labelsDensity;
 }
 //====================================================
-void GlGraphRenderingParameters::setLabelsDensity(int density){
+void GlGraphRenderingParameters::setLabelsDensity(int density) {
   _labelsDensity=density;
 }
 //====================================================
-int GlGraphRenderingParameters::getMinSizeOfLabel(){
+int GlGraphRenderingParameters::getMinSizeOfLabel() {
   return _labelMinSize;
 }
 //====================================================
-void GlGraphRenderingParameters::setMinSizeOfLabel(int size){
+void GlGraphRenderingParameters::setMinSizeOfLabel(int size) {
   _labelMinSize=size;
 }
 //====================================================
-int GlGraphRenderingParameters::getMaxSizeOfLabel(){
+int GlGraphRenderingParameters::getMaxSizeOfLabel() {
   return _labelMaxSize;
 }
 //====================================================
-void GlGraphRenderingParameters::setMaxSizeOfLabel(int size){
+void GlGraphRenderingParameters::setMaxSizeOfLabel(int size) {
   _labelMaxSize=size;
 }

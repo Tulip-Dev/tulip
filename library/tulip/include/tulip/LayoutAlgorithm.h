@@ -29,14 +29,14 @@ class LayoutProperty;
 
 /**
  * \addtogroup plugins
- */ 
+ */
 /*@{*/
 ///Interface for layout plug-ins
 class TLP_SCOPE LayoutAlgorithm:public PropertyAlgorithm {
   ///
   friend class LayoutProperty;
 public:
-  /** 
+  /**
    * This layout is the one associated to the plug-ins,
    * The data should be store in it
    */
@@ -44,7 +44,7 @@ public:
   ///
   virtual ~LayoutAlgorithm();
 
-protected: 
+protected:
   ///
   LayoutAlgorithm (const PropertyContext &context);
 };

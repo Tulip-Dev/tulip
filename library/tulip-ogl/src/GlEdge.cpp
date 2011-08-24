@@ -57,728 +57,791 @@ using namespace std;
 
 namespace tlp {
 
-  GlEdge::GlEdge(unsigned int id):id(id) {
-    if(!label)
-      label=new GlLabel();
-  }
+GlEdge::GlEdge(unsigned int id):id(id) {
+  if(!label)
+    label=new GlLabel();
+}
 
 BoundingBox GlEdge::getBoundingBox(GlGraphInputData* data) {
-	edge e = edge(id);
-	BoundingBox bb;
+  edge e = edge(id);
+  BoundingBox bb;
 
-	const std::pair<node, node>& eEnds = data->graph->ends(e);
-	const node source = eEnds.first;
-	const node target = eEnds.second;
-	const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
-	const Coord& tgtCoord = data->getElementLayout()->getNodeValue(target);
+  const std::pair<node, node>& eEnds = data->graph->ends(e);
+  const node source = eEnds.first;
+  const node target = eEnds.second;
+  const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
+  const Coord& tgtCoord = data->getElementLayout()->getNodeValue(target);
 
-	const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
+  const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
 
-	if (bends.size() != 0) {
+  if (bends.size() != 0) {
 
-		const Size &srcSize = data->getElementSize()->getNodeValue(source);
-		const Size &tgtSize = data->getElementSize()->getNodeValue(target);
-		double srcRot = data->getElementRotation()->getNodeValue(source);
-		double tgtRot = data->getElementRotation()->getNodeValue(target);
+    const Size &srcSize = data->getElementSize()->getNodeValue(source);
+    const Size &tgtSize = data->getElementSize()->getNodeValue(target);
+    double srcRot = data->getElementRotation()->getNodeValue(source);
+    double tgtRot = data->getElementRotation()->getNodeValue(target);
 
-		// set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
-		Coord srcAnchor, tgtAnchor, endLineAnchor, tmpAnchor;
+    // set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
+    Coord srcAnchor, tgtAnchor, endLineAnchor, tmpAnchor;
 
-		int srcGlyphId = data->getElementShape()->getNodeValue(source);
-		Glyph *sourceGlyph = data->glyphs.get(srcGlyphId);
-		tmpAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
-		srcAnchor = sourceGlyph->getAnchor(srcCoord, tmpAnchor, srcSize, srcRot);
+    int srcGlyphId = data->getElementShape()->getNodeValue(source);
+    Glyph *sourceGlyph = data->glyphs.get(srcGlyphId);
+    tmpAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
+    srcAnchor = sourceGlyph->getAnchor(srcCoord, tmpAnchor, srcSize, srcRot);
 
-		int tgtGlyphId = 1; //cube outlined
-		if (!data->getGraph()->isMetaNode(target))
-			tgtGlyphId = data->getElementShape()->getNodeValue(target);
-		Glyph *targetGlyph = data->glyphs.get(tgtGlyphId);
-		//this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
-		tmpAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
-		tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);
+    int tgtGlyphId = 1; //cube outlined
 
-		vector<Coord> tmp;
-		tlp::computeCleanVertices(bends, srcCoord, tgtCoord, srcAnchor,tgtAnchor, tmp);
+    if (!data->getGraph()->isMetaNode(target))
+      tgtGlyphId = data->getElementShape()->getNodeValue(target);
 
-		for (vector<Coord>::iterator it = tmp.begin(); it != tmp.end(); ++it)
-			bb.expand(*it);
-	}
+    Glyph *targetGlyph = data->glyphs.get(tgtGlyphId);
+    //this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
+    tmpAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
+    tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);
 
-	bb.expand(srcCoord);
-	bb.expand(tgtCoord);
+    vector<Coord> tmp;
+    tlp::computeCleanVertices(bends, srcCoord, tgtCoord, srcAnchor,tgtAnchor, tmp);
 
-	return bb;
+    for (vector<Coord>::iterator it = tmp.begin(); it != tmp.end(); ++it)
+      bb.expand(*it);
+  }
+
+  bb.expand(srcCoord);
+  bb.expand(tgtCoord);
+
+  return bb;
 }
 
 void GlEdge::acceptVisitor(GlSceneVisitor *visitor) {
-	visitor->visit(this);
+  visitor->visit(this);
 }
 
 void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
-	edge e = edge(id);
+  edge e = edge(id);
 
-	const std::pair<node, node>& eEnds = data->graph->ends(e);
-	const node source = eEnds.first;
-	const node target = eEnds.second;
+  const std::pair<node, node>& eEnds = data->graph->ends(e);
+  const node source = eEnds.first;
+  const node target = eEnds.second;
 
 
-	const Size &srcSize = data->getElementSize()->getNodeValue(source);
-	const Size &tgtSize = data->getElementSize()->getNodeValue(target);
+  const Size &srcSize = data->getElementSize()->getNodeValue(source);
+  const Size &tgtSize = data->getElementSize()->getNodeValue(target);
 
-	Size edgeSize;
-	float maxSrcSize, maxTgtSize;
-	if(srcSize[0]>=srcSize[1])
-		maxSrcSize=srcSize[0];
-	else
-		maxSrcSize=srcSize[1];
-	if(tgtSize[0]>=tgtSize[1])
-		maxTgtSize=tgtSize[0];
-	else
-		maxTgtSize=tgtSize[1];
+  Size edgeSize;
+  float maxSrcSize, maxTgtSize;
 
-	getEdgeSize(data,e,srcSize,tgtSize,maxSrcSize,maxTgtSize,edgeSize);
+  if(srcSize[0]>=srcSize[1])
+    maxSrcSize=srcSize[0];
+  else
+    maxSrcSize=srcSize[1];
 
-	float lodSize;
-	if(!orthoProjection)
-		lodSize = getEdgeWidthLod(Coord(0,0,0),edgeSize,camera);
-	else
-		lodSize = getEdgeWidthLod(data->getElementLayout()->getNodeValue(source),edgeSize,camera);
+  if(tgtSize[0]>=tgtSize[1])
+    maxTgtSize=tgtSize[0];
+  else
+    maxTgtSize=tgtSize[1];
 
-	bool selected = data->getElementSelected()->getEdgeValue(e);
+  getEdgeSize(data,e,srcSize,tgtSize,maxSrcSize,maxTgtSize,edgeSize);
 
-	if (lod < 5) {
-		if(data->getGlVertexArrayManager()->renderingIsBegin()){
-			data->getGlVertexArrayManager()->activatePointEdgeDisplay(this,selected);
-		}else{
-			const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
-			Color srcCol, tgtCol;
-			getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
+  float lodSize;
 
-			OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+  if(!orthoProjection)
+    lodSize = getEdgeWidthLod(Coord(0,0,0),edgeSize,camera);
+  else
+    lodSize = getEdgeWidthLod(data->getElementLayout()->getNodeValue(source),edgeSize,camera);
 
-			setColor(srcCol);
-			glPointSize(1);
-			glBegin(GL_POINTS);
-			glVertex3f(srcCoord[0], srcCoord[1], srcCoord[2]);
-			glEnd();
+  bool selected = data->getElementSelected()->getEdgeValue(e);
 
-			OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+  if (lod < 5) {
+    if(data->getGlVertexArrayManager()->renderingIsBegin()) {
+      data->getGlVertexArrayManager()->activatePointEdgeDisplay(this,selected);
+    }
+    else {
+      const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
+      Color srcCol, tgtCol;
+      getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
 
-		}
-		return;
-	}
+      OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
-	std::string edgeTexture = data->getElementTexture()->getEdgeValue(e);
+      setColor(srcCol);
+      glPointSize(1);
+      glBegin(GL_POINTS);
+      glVertex3f(srcCoord[0], srcCoord[1], srcCoord[2]);
+      glEnd();
 
-	if(lodSize>-5 && lodSize<5 && data->getGlVertexArrayManager()->renderingIsBegin() && (!data->parameters->getFeedbackRender()) && data->getElementShape()->getEdgeValue(e)==POLYLINESHAPE){
-		data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
-		return;
-	} else if (data->getGlVertexArrayManager()->renderingIsBegin()
-			   && !data->parameters->isEdge3D()
-			   && !data->parameters->getFeedbackRender()
-			   && !data->parameters->isViewArrow()
-			   && data->getElementShape()->getEdgeValue(e) == POLYLINESHAPE
-			   && edgeTexture == "") {
-		data->getGlVertexArrayManager()->activateQuadEdgeDisplay(this,selected);
-		return;
-	}
+      OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
-	const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
-	const Coord& tgtCoord = data->getElementLayout()->getNodeValue(target);
+    }
 
-	if (selected) {
-		glDisable(GL_DEPTH_TEST);
-		glStencilFunc(GL_LEQUAL, data->parameters->getSelectedEdgesStencil(), 0xFFFF);
-	} else {
-		glEnable(GL_DEPTH_TEST);
-		glStencilFunc(GL_LEQUAL, data->parameters->getEdgesStencil(), 0xFFFF);
-	}
+    return;
+  }
 
-	glEnable(GL_COLOR_MATERIAL);
+  std::string edgeTexture = data->getElementTexture()->getEdgeValue(e);
 
-	const Color& fillColor = data->getElementColor()->getEdgeValue(e);
-	const Color& strokeColor = data->getElementBorderColor()->getEdgeValue(e);
-	const Color& textColor = data->getElementLabelColor()->getEdgeValue(e);
+  if(lodSize>-5 && lodSize<5 && data->getGlVertexArrayManager()->renderingIsBegin() && (!data->parameters->getFeedbackRender()) && data->getElementShape()->getEdgeValue(e)==POLYLINESHAPE) {
+    data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
+    return;
+  }
+  else if (data->getGlVertexArrayManager()->renderingIsBegin()
+           && !data->parameters->isEdge3D()
+           && !data->parameters->getFeedbackRender()
+           && !data->parameters->isViewArrow()
+           && data->getElementShape()->getEdgeValue(e) == POLYLINESHAPE
+           && edgeTexture == "") {
+    data->getGlVertexArrayManager()->activateQuadEdgeDisplay(this,selected);
+    return;
+  }
 
-	if (data->parameters->getFeedbackRender()) {
-		glPassThrough(TLP_FB_COLOR_INFO);
-		glPassThrough(fillColor[0]);
-		glPassThrough(fillColor[1]);
-		glPassThrough(fillColor[2]);
-		glPassThrough(fillColor[3]);
-		glPassThrough(strokeColor[0]);
-		glPassThrough(strokeColor[1]);
-		glPassThrough(strokeColor[2]);
-		glPassThrough(strokeColor[3]);
-		glPassThrough(textColor[0]);
-		glPassThrough(textColor[1]);
-		glPassThrough(textColor[2]);
-		glPassThrough(textColor[3]);
+  const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
 
-		glPassThrough(TLP_FB_BEGIN_EDGE);
-		glPassThrough(static_cast<float>(id)); //id of the node for the feed back mode
-	}
+  const Coord& tgtCoord = data->getElementLayout()->getNodeValue(target);
 
-	Color srcCol, tgtCol;
-	getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
+  if (selected) {
+    glDisable(GL_DEPTH_TEST);
+    glStencilFunc(GL_LEQUAL, data->parameters->getSelectedEdgesStencil(), 0xFFFF);
+  }
+  else {
+    glEnable(GL_DEPTH_TEST);
+    glStencilFunc(GL_LEQUAL, data->parameters->getEdgesStencil(), 0xFFFF);
+  }
 
-	const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
-	unsigned nbBends = bends.size();
+  glEnable(GL_COLOR_MATERIAL);
 
-	if (nbBends == 0 && (source == target)) { //a loop without bends
-		//draw a nice loop;
-		//TODO !!
-		return;
-	}
+  const Color& fillColor = data->getElementColor()->getEdgeValue(e);
+  const Color& strokeColor = data->getElementBorderColor()->getEdgeValue(e);
+  const Color& textColor = data->getElementLabelColor()->getEdgeValue(e);
 
-	if (bends.size() == 0 && (srcCoord - tgtCoord).norm() < 1E-4)
-		return; //two nodes very closed
+  if (data->parameters->getFeedbackRender()) {
+    glPassThrough(TLP_FB_COLOR_INFO);
+    glPassThrough(fillColor[0]);
+    glPassThrough(fillColor[1]);
+    glPassThrough(fillColor[2]);
+    glPassThrough(fillColor[3]);
+    glPassThrough(strokeColor[0]);
+    glPassThrough(strokeColor[1]);
+    glPassThrough(strokeColor[2]);
+    glPassThrough(strokeColor[3]);
+    glPassThrough(textColor[0]);
+    glPassThrough(textColor[1]);
+    glPassThrough(textColor[2]);
+    glPassThrough(textColor[3]);
 
-	//Get added transformations
-	vector<Coord> objectScale, objectTranslate, objectCoord;
-	camera->getObjectTransformation(objectTranslate, objectScale, objectCoord);
+    glPassThrough(TLP_FB_BEGIN_EDGE);
+    glPassThrough(static_cast<float>(id)); //id of the node for the feed back mode
+  }
 
-	Matrix<float, 4> transformMatrix;
-	camera->getTransformMatrix(transformMatrix);
+  Color srcCol, tgtCol;
+  getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
 
-	// set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
-	Coord srcAnchor, tgtAnchor, beginLineAnchor, endLineAnchor;
+  const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
+  unsigned nbBends = bends.size();
 
-	getEdgeAnchor(data,source,target,bends,srcCoord,tgtCoord,srcSize,tgtSize,srcAnchor,tgtAnchor);
+  if (nbBends == 0 && (source == target)) { //a loop without bends
+    //draw a nice loop;
+    //TODO !!
+    return;
+  }
 
-        float selectionOutlineSize= 0.f;
-	if (selected) {
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
+  if (bends.size() == 0 && (srcCoord - tgtCoord).norm() < 1E-4)
+    return; //two nodes very closed
 
-		Coord p1=camera->screenTo3DWorld(Coord(0,0,0));
-		Coord p2=camera->screenTo3DWorld(Coord(2,0,0));
-                selectionOutlineSize = (p2-p1).norm();
-                edgeSize[0] += selectionOutlineSize;
-                edgeSize[1] += selectionOutlineSize;
+  //Get added transformations
+  vector<Coord> objectScale, objectTranslate, objectCoord;
+  camera->getObjectTransformation(objectTranslate, objectScale, objectCoord);
 
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
-	}
+  Matrix<float, 4> transformMatrix;
+  camera->getTransformMatrix(transformMatrix);
 
-	double lineWidth=data->getElementBorderWidth()->getEdgeValue(e);
+  // set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
+  Coord srcAnchor, tgtAnchor, beginLineAnchor, endLineAnchor;
 
-	unsigned int startEdgeGlyph = data->getElementSrcAnchorShape()->getEdgeValue(e);
-	unsigned int endEdgeGlyph = data->getElementTgtAnchorShape()->getEdgeValue(e);
+  getEdgeAnchor(data,source,target,bends,srcCoord,tgtCoord,srcSize,tgtSize,srcAnchor,tgtAnchor);
 
-	if (startEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
-                                                                displayArrow(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),srcCol,maxSrcSize,selected,selectionOutlineSize,startEdgeGlyph,endEdgeGlyph,
-				bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
-	} else {
-		beginLineAnchor = srcAnchor;
-	}
+  float selectionOutlineSize= 0.f;
 
-	if (endEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
-                                                                displayArrow(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),tgtCol,maxTgtSize,selected,selectionOutlineSize,endEdgeGlyph,startEdgeGlyph,
-				bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
-	} else {
-		endLineAnchor = tgtAnchor;
-	}
+  if (selected) {
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
 
-	//Reset in case of drawing extremity glyph that can alterate value
+    Coord p1=camera->screenTo3DWorld(Coord(0,0,0));
+    Coord p2=camera->screenTo3DWorld(Coord(2,0,0));
+    selectionOutlineSize = (p2-p1).norm();
+    edgeSize[0] += selectionOutlineSize;
+    edgeSize[1] += selectionOutlineSize;
 
-	GlTextureManager::getInst().setAnimationFrame(data->getElementAnimationFrame()->getEdgeValue(e));
-	//draw Edge
-	drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, srcCol, tgtCol,camera->getCenter()-camera->getEyes(),data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
-			data->getElementShape()->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, edgeTexture, static_cast<float>(lineWidth));
-	GlTextureManager::getInst().setAnimationFrame(0);
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+  }
 
-	if (data->parameters->getFeedbackRender()) {
-		glPassThrough(TLP_FB_END_EDGE);
-	}
+  double lineWidth=data->getElementBorderWidth()->getEdgeValue(e);
 
-	glEnable(GL_LIGHTING);
+  unsigned int startEdgeGlyph = data->getElementSrcAnchorShape()->getEdgeValue(e);
+  unsigned int endEdgeGlyph = data->getElementTgtAnchorShape()->getEdgeValue(e);
+
+  if (startEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
+    displayArrow(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),srcCol,maxSrcSize,selected,selectionOutlineSize,startEdgeGlyph,endEdgeGlyph,
+                 bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
+  }
+  else {
+    beginLineAnchor = srcAnchor;
+  }
+
+  if (endEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
+    displayArrow(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),tgtCol,maxTgtSize,selected,selectionOutlineSize,endEdgeGlyph,startEdgeGlyph,
+                 bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
+  }
+  else {
+    endLineAnchor = tgtAnchor;
+  }
+
+  //Reset in case of drawing extremity glyph that can alterate value
+
+  GlTextureManager::getInst().setAnimationFrame(data->getElementAnimationFrame()->getEdgeValue(e));
+  //draw Edge
+  drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, srcCol, tgtCol,camera->getCenter()-camera->getEyes(),data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
+           data->getElementShape()->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, edgeTexture, static_cast<float>(lineWidth));
+  GlTextureManager::getInst().setAnimationFrame(0);
+
+  if (data->parameters->getFeedbackRender()) {
+    glPassThrough(TLP_FB_END_EDGE);
+  }
+
+  glEnable(GL_LIGHTING);
 
 }
 
 #define L3D_BIT (1<<9)
 void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Coord &startPoint,
-		const Coord &endPoint, const LineType::RealType &bends, const Color &startColor,
-		const Color &endColor, const Coord &lookDir, bool colorInterpolate, const Color &borderColor,
-		const Size &size, int shape, bool edge3D, float lod,const string &textureName, const float outlineWidth) {
+                      const Coord &endPoint, const LineType::RealType &bends, const Color &startColor,
+                      const Color &endColor, const Coord &lookDir, bool colorInterpolate, const Color &borderColor,
+                      const Size &size, int shape, bool edge3D, float lod,const string &textureName, const float outlineWidth) {
 
-	glDisable(GL_CULL_FACE);
-	glDepthFunc(GL_LEQUAL);
-
-
-	Coord srcDir(srcNodePos);
-	Coord tgtDir(tgtNodePos);
-	vector<Coord> tmp;
-	computeCleanVertices(bends, startPoint, endPoint, srcDir, tgtDir,tmp);
-
-	if (tmp.size() < 2) {
-		return;
-	}
-
-	if (edge3D){
-		shape |= L3D_BIT;
-		glEnable(GL_LIGHTING);
-	}else{
-		glDisable(GL_LIGHTING);
-	}
+  glDisable(GL_CULL_FACE);
+  glDepthFunc(GL_LEQUAL);
 
 
-	switch (shape) {
-	case POLYLINESHAPE:
-		if (lod > 1000 || lod < -1000){
-			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,colorInterpolate,borderColor,textureName, outlineWidth);
-		}else{
-			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,true,borderColor,textureName, outlineWidth);
-		}
-		break;
-	case L3D_BIT + POLYLINESHAPE: {
-		glDisable(GL_LIGHTING);
-		simpleQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
-		glEnable(GL_LIGHTING);
-		break;
-	}
-	case BEZIERSHAPE :
-	case SPLINESHAPE :
-	case CUBICBSPLINE :
-	case BEZIERSHAPE + L3D_BIT:
-	case SPLINESHAPE + L3D_BIT:
-	case CUBICBSPLINE + L3D_BIT: {
-		static GlBezierCurve bezier;
-		static GlCatmullRomCurve catmull;
-		static GlOpenUniformCubicBSpline bspline;
-		AbstractGlCurve *curve = NULL;
-		unsigned int nbCurvePoints = 100;
+  Coord srcDir(srcNodePos);
+  Coord tgtDir(tgtNodePos);
+  vector<Coord> tmp;
+  computeCleanVertices(bends, startPoint, endPoint, srcDir, tgtDir,tmp);
 
-		if (shape == BEZIERSHAPE || shape == BEZIERSHAPE + L3D_BIT) {
-			curve = &bezier;
-		} else if (shape == SPLINESHAPE || shape == SPLINESHAPE + L3D_BIT) {
-			curve = &catmull;
-			nbCurvePoints = 200;
-		} else {
-			curve = &bspline;
-			nbCurvePoints = 200;
-		}
+  if (tmp.size() < 2) {
+    return;
+  }
 
-		curve->setOutlined(false);
-		curve->setBillboardCurve(false);
-		curve->setTexture(textureName);
-		if (edge3D) {
-			curve->setBillboardCurve(true);
-			curve->setLookDir(lookDir);
-		}
-		float startSize = size[0]*0.5f, endSize = size[1]*0.5f;
-		if (lod > -5 && lod < 5) {
-			startSize = 1;
-			endSize = 1;
-		} else if (lod > 1000 || lod < -1000) {
-			if(!colorInterpolate){
-				curve->setOutlined(true);
-				curve->setOutlineColor(borderColor);
-			}
-		}
-		curve->drawCurve(tmp, startColor, endColor, startSize, endSize, nbCurvePoints);
-		break;
-	}
-	default:
-		if (lod > 1000 || lod < -1000){
-			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,colorInterpolate,borderColor);
-		}else{
-			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,true,borderColor);
-		}
-		break;
-	}
+  if (edge3D) {
+    shape |= L3D_BIT;
+    glEnable(GL_LIGHTING);
+  }
+  else {
+    glDisable(GL_LIGHTING);
+  }
 
-	glDepthFunc(GL_LEQUAL);
+
+  switch (shape) {
+  case POLYLINESHAPE:
+
+    if (lod > 1000 || lod < -1000) {
+      tlp::polyQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,colorInterpolate,borderColor,textureName, outlineWidth);
+    }
+    else {
+      tlp::polyQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,true,borderColor,textureName, outlineWidth);
+    }
+
+    break;
+  case L3D_BIT + POLYLINESHAPE: {
+    glDisable(GL_LIGHTING);
+    simpleQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
+    glEnable(GL_LIGHTING);
+    break;
+  }
+  case BEZIERSHAPE :
+  case SPLINESHAPE :
+  case CUBICBSPLINE :
+  case BEZIERSHAPE + L3D_BIT:
+  case SPLINESHAPE + L3D_BIT:
+  case CUBICBSPLINE + L3D_BIT: {
+    static GlBezierCurve bezier;
+    static GlCatmullRomCurve catmull;
+    static GlOpenUniformCubicBSpline bspline;
+    AbstractGlCurve *curve = NULL;
+    unsigned int nbCurvePoints = 100;
+
+    if (shape == BEZIERSHAPE || shape == BEZIERSHAPE + L3D_BIT) {
+      curve = &bezier;
+    }
+    else if (shape == SPLINESHAPE || shape == SPLINESHAPE + L3D_BIT) {
+      curve = &catmull;
+      nbCurvePoints = 200;
+    }
+    else {
+      curve = &bspline;
+      nbCurvePoints = 200;
+    }
+
+    curve->setOutlined(false);
+    curve->setBillboardCurve(false);
+    curve->setTexture(textureName);
+
+    if (edge3D) {
+      curve->setBillboardCurve(true);
+      curve->setLookDir(lookDir);
+    }
+
+    float startSize = size[0]*0.5f, endSize = size[1]*0.5f;
+
+    if (lod > -5 && lod < 5) {
+      startSize = 1;
+      endSize = 1;
+    }
+    else if (lod > 1000 || lod < -1000) {
+      if(!colorInterpolate) {
+        curve->setOutlined(true);
+        curve->setOutlineColor(borderColor);
+      }
+    }
+
+    curve->drawCurve(tmp, startColor, endColor, startSize, endSize, nbCurvePoints);
+    break;
+  }
+  default:
+
+    if (lod > 1000 || lod < -1000) {
+      tlp::polyQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,colorInterpolate,borderColor);
+    }
+    else {
+      tlp::polyQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,true,borderColor);
+    }
+
+    break;
+  }
+
+  glDepthFunc(GL_LEQUAL);
 }
 
 void GlEdge::drawLabel(bool drawSelect,OcclusionTest* test, GlGraphInputData* data,float lod) {
-	edge e = edge(id);
-	bool select = data->getElementSelected()->getEdgeValue(e);
-	if(select!=drawSelect)
-		return;
+  edge e = edge(id);
+  bool select = data->getElementSelected()->getEdgeValue(e);
 
-	drawLabel(test, data, lod);
+  if(select!=drawSelect)
+    return;
+
+  drawLabel(test, data, lod);
 }
 
 void GlEdge::drawLabel(OcclusionTest* test, GlGraphInputData* data) {
-	drawLabel(test,data,0.);
+  drawLabel(test,data,0.);
 }
 
 void GlEdge::drawLabel(OcclusionTest* test, GlGraphInputData* data, float lod, Camera *camera) {
 
-	edge e = edge(id);
+  edge e = edge(id);
 
-	const string &tmp = data->getElementLabel()->getEdgeValue(e);
-	if (tmp.length() < 1) {
-		return;
-	}
+  const string &tmp = data->getElementLabel()->getEdgeValue(e);
 
-	bool select = data->getElementSelected()->getEdgeValue(e);
+  if (tmp.length() < 1) {
+    return;
+  }
 
-	Color fontColor;
-	if (data->getElementSelected()->getEdgeValue(e))
-		fontColor= data->parameters->getSelectionColor();
-	else {
-		fontColor = data->getElementLabelColor()->getEdgeValue(e);
-	}
-	if(fontColor.getA()==0)
-		return;
+  bool select = data->getElementSelected()->getEdgeValue(e);
 
-	int fontSize=data->getElementFontSize()->getEdgeValue(e);
-	if(select)
-		fontSize+=2;
+  Color fontColor;
 
-	if(select)
-		label->setStencil(data->parameters->getSelectedEdgesStencil());
-	else
-		label->setStencil(data->parameters->getEdgesLabelStencil());
+  if (data->getElementSelected()->getEdgeValue(e))
+    fontColor= data->parameters->getSelectionColor();
+  else {
+    fontColor = data->getElementLabelColor()->getEdgeValue(e);
+  }
 
-	label->setText(tmp);
-	label->setFontNameSizeAndColor(data->getElementFont()->getEdgeValue(e),fontSize,fontColor);
+  if(fontColor.getA()==0)
+    return;
 
-	const std::pair<node, node>& eEnds = data->graph->ends(e);
-	const node source = eEnds.first;
-	const node target = eEnds.second;
+  int fontSize=data->getElementFontSize()->getEdgeValue(e);
 
-	const Size &srcSize = data->getElementSize()->getNodeValue(source);
-	const Size &tgtSize = data->getElementSize()->getNodeValue(target);
-	Size edgeSize;
-	float maxSrcSize, maxTgtSize;
-	if(srcSize[0]>=srcSize[1])
-		maxSrcSize=srcSize[0];
-	else
-		maxSrcSize=srcSize[1];
-	if(tgtSize[0]>=tgtSize[1])
-		maxTgtSize=tgtSize[0];
-	else
-		maxTgtSize=tgtSize[1];
+  if(select)
+    fontSize+=2;
 
-	getEdgeSize(data,e,srcSize,tgtSize,maxSrcSize,maxTgtSize,edgeSize);
+  if(select)
+    label->setStencil(data->parameters->getSelectedEdgesStencil());
+  else
+    label->setStencil(data->parameters->getEdgesLabelStencil());
 
-	if(edgeSize[0]>edgeSize[1])
-		label->setTranslationAfterRotation(Coord(0,edgeSize[0]*2,0));
-	else
-		label->setTranslationAfterRotation(Coord(0,edgeSize[1]*2,0));
+  label->setText(tmp);
+  label->setFontNameSizeAndColor(data->getElementFont()->getEdgeValue(e),fontSize,fontColor);
 
-	const Coord & srcCoord = data->getElementLayout()->getNodeValue(source);
-	const Coord & tgtCoord = data->getElementLayout()->getNodeValue(target);
-	const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
-	Coord position;
-	float angle;
-	if (bends.empty()) {
-		position = (srcCoord + tgtCoord) / 2.f;
-		angle=atan((tgtCoord[1]-srcCoord[1])/(tgtCoord[0]-srcCoord[0]))*static_cast<float>(180./M_PI);
-	} else {
-		if (bends.size() % 2 == 0){
-			position = (bends[bends.size() / 2 - 1] + bends[bends.size() / 2]) / 2.f;
-			angle=atan((bends[bends.size() / 2][1]-bends[bends.size() / 2 - 1][1])/(bends[bends.size() / 2][0]-bends[bends.size() / 2 - 1][0]))*static_cast<float>(180./M_PI);
-		}else{
-			position = bends[bends.size() / 2];
-			Coord firstVector;
-			Coord secondVector;
+  const std::pair<node, node>& eEnds = data->graph->ends(e);
+  const node source = eEnds.first;
+  const node target = eEnds.second;
 
-			if(bends.size()>1){
-				firstVector=bends[bends.size() / 2]-bends[bends.size() / 2 - 1];
-				secondVector=bends[bends.size() / 2]-bends[bends.size() / 2+1];
-			}else{
-				firstVector=bends[bends.size() / 2]-srcCoord;
-				secondVector=bends[bends.size() / 2]-tgtCoord;
-			}
+  const Size &srcSize = data->getElementSize()->getNodeValue(source);
+  const Size &tgtSize = data->getElementSize()->getNodeValue(target);
+  Size edgeSize;
+  float maxSrcSize, maxTgtSize;
 
-			float firstAngle=atan(firstVector[1]/firstVector[0])*static_cast<float>(180./M_PI);
-			float secondAngle=atan(secondVector[1]/secondVector[0])*static_cast<float>(180./M_PI);
+  if(srcSize[0]>=srcSize[1])
+    maxSrcSize=srcSize[0];
+  else
+    maxSrcSize=srcSize[1];
 
-			Coord textDirection=firstVector+secondVector;
-			if(textDirection[1]<0)
-				label->setTranslationAfterRotation(Coord(0,-label->getTranslationAfterRotation()[1],0));
+  if(tgtSize[0]>=tgtSize[1])
+    maxTgtSize=tgtSize[0];
+  else
+    maxTgtSize=tgtSize[1];
 
-			angle=(firstAngle+secondAngle)/2.f;
-			if(firstVector[0] *secondVector[0]>=0)
-				angle+=90;
+  getEdgeSize(data,e,srcSize,tgtSize,maxSrcSize,maxTgtSize,edgeSize);
 
-			if(angle>=90)
-				angle=-180+angle;
+  if(edgeSize[0]>edgeSize[1])
+    label->setTranslationAfterRotation(Coord(0,edgeSize[0]*2,0));
+  else
+    label->setTranslationAfterRotation(Coord(0,edgeSize[1]*2,0));
 
-		}
-	}
+  const Coord & srcCoord = data->getElementLayout()->getNodeValue(source);
+  const Coord & tgtCoord = data->getElementLayout()->getNodeValue(target);
+  const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
+  Coord position;
+  float angle;
 
-	BoundingBox bb=getBoundingBox(data);
+  if (bends.empty()) {
+    position = (srcCoord + tgtCoord) / 2.f;
+    angle=atan((tgtCoord[1]-srcCoord[1])/(tgtCoord[0]-srcCoord[0]))*static_cast<float>(180./M_PI);
+  }
+  else {
+    if (bends.size() % 2 == 0) {
+      position = (bends[bends.size() / 2 - 1] + bends[bends.size() / 2]) / 2.f;
+      angle=atan((bends[bends.size() / 2][1]-bends[bends.size() / 2 - 1][1])/(bends[bends.size() / 2][0]-bends[bends.size() / 2 - 1][0]))*static_cast<float>(180./M_PI);
+    }
+    else {
+      position = bends[bends.size() / 2];
+      Coord firstVector;
+      Coord secondVector;
 
-    label->setSize(Size(0.001f,0.001f,0.0f));
-	label->rotate(0,0,angle);
-	label->setAlignment(ON_TOP);
-	label->setScaleToSize(false);
-	label->setLabelsDensity(data->parameters->getLabelsBorder());
-	if(!data->parameters->isLabelOverlaped())
-		label->setOcclusionTester(test);
-	else
-		label->setOcclusionTester(NULL);
-	label->setPosition(position);
+      if(bends.size()>1) {
+        firstVector=bends[bends.size() / 2]-bends[bends.size() / 2 - 1];
+        secondVector=bends[bends.size() / 2]-bends[bends.size() / 2+1];
+      }
+      else {
+        firstVector=bends[bends.size() / 2]-srcCoord;
+        secondVector=bends[bends.size() / 2]-tgtCoord;
+      }
 
-	label->setUseLODOptimisation(true,bb);
-	label->setUseMinMaxSize(true);
-	label->setMinSize(data->parameters->getMinSizeOfLabel());
-	label->setMaxSize(data->parameters->getMaxSizeOfLabel());
+      float firstAngle=atan(firstVector[1]/firstVector[0])*static_cast<float>(180./M_PI);
+      float secondAngle=atan(secondVector[1]/secondVector[0])*static_cast<float>(180./M_PI);
 
-	label->drawWithStencil(lod,camera);
+      Coord textDirection=firstVector+secondVector;
+
+      if(textDirection[1]<0)
+        label->setTranslationAfterRotation(Coord(0,-label->getTranslationAfterRotation()[1],0));
+
+      angle=(firstAngle+secondAngle)/2.f;
+
+      if(firstVector[0] *secondVector[0]>=0)
+        angle+=90;
+
+      if(angle>=90)
+        angle=-180+angle;
+
+    }
+  }
+
+  BoundingBox bb=getBoundingBox(data);
+
+  label->setSize(Size(0.001f,0.001f,0.0f));
+  label->rotate(0,0,angle);
+  label->setAlignment(ON_TOP);
+  label->setScaleToSize(false);
+  label->setLabelsDensity(data->parameters->getLabelsBorder());
+
+  if(!data->parameters->isLabelOverlaped())
+    label->setOcclusionTester(test);
+  else
+    label->setOcclusionTester(NULL);
+
+  label->setPosition(position);
+
+  label->setUseLODOptimisation(true,bb);
+  label->setUseMinMaxSize(true);
+  label->setMinSize(data->parameters->getMinSizeOfLabel());
+  label->setMaxSize(data->parameters->getMaxSizeOfLabel());
+
+  label->drawWithStencil(lod,camera);
 }
 
 void GlEdge::getVertices(GlGraphInputData *data,
-		std::vector<Coord> &linesCoordsArray){
-	edge e = edge(id);
+                         std::vector<Coord> &linesCoordsArray) {
+  edge e = edge(id);
 
-	const std::pair<node, node>& eEnds = data->graph->ends(e);
-	const node source = eEnds.first;
-	const node target = eEnds.second;
-	const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
-	const Coord& tgtCoord = data->getElementLayout()->getNodeValue(target);
+  const std::pair<node, node>& eEnds = data->graph->ends(e);
+  const node source = eEnds.first;
+  const node target = eEnds.second;
+  const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
+  const Coord& tgtCoord = data->getElementLayout()->getNodeValue(target);
 
-	const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
-	unsigned nbBends = bends.size();
-	if (nbBends == 0 && (source == target)) { //a loop without bends
-		return;
-	}
+  const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
+  unsigned nbBends = bends.size();
 
-	if (bends.size() == 0 && (srcCoord - tgtCoord).norm() < 1E-4)
-		return;
+  if (nbBends == 0 && (source == target)) { //a loop without bends
+    return;
+  }
 
-	const Size &srcSize = data->getElementSize()->getNodeValue(source);
-	const Size &tgtSize = data->getElementSize()->getNodeValue(target);
+  if (bends.size() == 0 && (srcCoord - tgtCoord).norm() < 1E-4)
+    return;
 
-	Coord srcAnchor, tgtAnchor;
-	getEdgeAnchor(data,source,target,bends,srcCoord,tgtCoord,srcSize,tgtSize,srcAnchor,tgtAnchor);
+  const Size &srcSize = data->getElementSize()->getNodeValue(source);
+  const Size &tgtSize = data->getElementSize()->getNodeValue(target);
 
-	vector<Coord> vertices;
-	Coord srcCoordTmp=srcCoord;
-	Coord tgtCoordTmp=tgtCoord;
-	computeCleanVertices(bends, srcAnchor, tgtAnchor, srcCoordTmp, tgtCoordTmp, vertices);
-	if(vertices.empty())
-		return ;
+  Coord srcAnchor, tgtAnchor;
+  getEdgeAnchor(data,source,target,bends,srcCoord,tgtCoord,srcSize,tgtSize,srcAnchor,tgtAnchor);
 
-	size_t numberOfVertices=vertices.size();
-	for(size_t i=0;i<numberOfVertices;++i){
-		linesCoordsArray.push_back(vertices[i]);
-	}
+  vector<Coord> vertices;
+  Coord srcCoordTmp=srcCoord;
+  Coord tgtCoordTmp=tgtCoord;
+  computeCleanVertices(bends, srcAnchor, tgtAnchor, srcCoordTmp, tgtCoordTmp, vertices);
+
+  if(vertices.empty())
+    return ;
+
+  size_t numberOfVertices=vertices.size();
+
+  for(size_t i=0; i<numberOfVertices; ++i) {
+    linesCoordsArray.push_back(vertices[i]);
+  }
 }
 
 void GlEdge::getColors(GlGraphInputData *data,
-		const Coord *vertices,unsigned int numberOfVertices,
-		std::vector<Color> &linesColorsArray) {
+                       const Coord *vertices,unsigned int numberOfVertices,
+                       std::vector<Color> &linesColorsArray) {
 
-	edge e = edge(id);
+  edge e = edge(id);
 
-	const std::pair<node, node>& eEnds = data->graph->ends(e);
-	const node source = eEnds.first;
-	const node target = eEnds.second;
+  const std::pair<node, node>& eEnds = data->graph->ends(e);
+  const node source = eEnds.first;
+  const node target = eEnds.second;
 
-	Color selectionColor=data->parameters->getSelectionColor();
-	Color srcCol, tgtCol;
-	if (data->parameters->isEdgeColorInterpolate()) {
-		srcCol = data->getElementColor()->getNodeValue(source);
-		tgtCol = data->getElementColor()->getNodeValue(target);
-	} else {
-		srcCol = tgtCol = data->getElementColor()->getEdgeValue(e);
-	}
+  Color selectionColor=data->parameters->getSelectionColor();
+  Color srcCol, tgtCol;
 
-	vector<Color> colors;
-	tlp::getColors(vertices,numberOfVertices,srcCol,tgtCol,colors);
+  if (data->parameters->isEdgeColorInterpolate()) {
+    srcCol = data->getElementColor()->getNodeValue(source);
+    tgtCol = data->getElementColor()->getNodeValue(target);
+  }
+  else {
+    srcCol = tgtCol = data->getElementColor()->getEdgeValue(e);
+  }
 
-	size_t numberOfColors=colors.size();
-	for(size_t i=0;i<numberOfColors;++i){
-		linesColorsArray.push_back(colors[i]);
-	}
+  vector<Color> colors;
+  tlp::getColors(vertices,numberOfVertices,srcCol,tgtCol,colors);
+
+  size_t numberOfColors=colors.size();
+
+  for(size_t i=0; i<numberOfColors; ++i) {
+    linesColorsArray.push_back(colors[i]);
+  }
 }
 
 void GlEdge::getColors(GlGraphInputData *data,
-		const vector<Coord> &vertices,
-		std::vector<Color> &linesColorsArray) {
+                       const vector<Coord> &vertices,
+                       std::vector<Color> &linesColorsArray) {
 
-	getColors(data,&vertices[0],vertices.size(),linesColorsArray);
+  getColors(data,&vertices[0],vertices.size(),linesColorsArray);
 }
 
 
-void GlEdge::getEdgeColor(GlGraphInputData *data,edge e,node source, node target, bool selected,Color &srcCol, Color &tgtCol){
-	Color selectionColor=data->parameters->getSelectionColor();
-	if (selected) {
-		srcCol = selectionColor;
-		tgtCol = selectionColor;
-	} else {
-		if (data->parameters->isEdgeColorInterpolate()) {
-			srcCol = data->getElementColor()->getNodeValue(source);
-			tgtCol = data->getElementColor()->getNodeValue(target);
-		} else {
-			srcCol = tgtCol = data->getElementColor()->getEdgeValue(e);
-		}
-	}
+void GlEdge::getEdgeColor(GlGraphInputData *data,edge e,node source, node target, bool selected,Color &srcCol, Color &tgtCol) {
+  Color selectionColor=data->parameters->getSelectionColor();
+
+  if (selected) {
+    srcCol = selectionColor;
+    tgtCol = selectionColor;
+  }
+  else {
+    if (data->parameters->isEdgeColorInterpolate()) {
+      srcCol = data->getElementColor()->getNodeValue(source);
+      tgtCol = data->getElementColor()->getNodeValue(target);
+    }
+    else {
+      srcCol = tgtCol = data->getElementColor()->getEdgeValue(e);
+    }
+  }
 }
 
-void GlEdge::getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,const float maxSrcSize,const float maxTgtSize,Size &edgeSize){
+void GlEdge::getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,const float maxSrcSize,const float maxTgtSize,Size &edgeSize) {
 
-	if (data->parameters->isEdgeSizeInterpolate()) {
-		if(srcSize[0]<srcSize[1])
-			edgeSize[0]=srcSize[0]/8.f;
-		else
-			edgeSize[0]=srcSize[1]/8.f;
+  if (data->parameters->isEdgeSizeInterpolate()) {
+    if(srcSize[0]<srcSize[1])
+      edgeSize[0]=srcSize[0]/8.f;
+    else
+      edgeSize[0]=srcSize[1]/8.f;
 
-		if(tgtSize[0]<tgtSize[1])
-			edgeSize[1]=tgtSize[0]/8.f;
-		else
-			edgeSize[1]=tgtSize[1]/8.f;
-	} else {
-		const Size &size = data->getElementSize()->getEdgeValue(e);
-		edgeSize[0]=size[0];
-		edgeSize[1]=size[1];
-		if(data->parameters->getEdgesMaxSizeToNodesSize()){
-			edgeSize[0] = std::min(maxSrcSize, size[0]);
-			edgeSize[1] = std::min(maxTgtSize, size[1]);
-		}
-		edgeSize[0]=edgeSize[0]/2.f;
-		edgeSize[1]=edgeSize[1]/2.f;
-	}
+    if(tgtSize[0]<tgtSize[1])
+      edgeSize[1]=tgtSize[0]/8.f;
+    else
+      edgeSize[1]=tgtSize[1]/8.f;
+  }
+  else {
+    const Size &size = data->getElementSize()->getEdgeValue(e);
+    edgeSize[0]=size[0];
+    edgeSize[1]=size[1];
+
+    if(data->parameters->getEdgesMaxSizeToNodesSize()) {
+      edgeSize[0] = std::min(maxSrcSize, size[0]);
+      edgeSize[1] = std::min(maxTgtSize, size[1]);
+    }
+
+    edgeSize[0]=edgeSize[0]/2.f;
+    edgeSize[1]=edgeSize[1]/2.f;
+  }
 }
 
-void GlEdge::getEdgeAnchor(GlGraphInputData *data,node source,node target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor){
-	double srcRot = data->getElementRotation()->getNodeValue(source);
-	double tgtRot = data->getElementRotation()->getNodeValue(target);
+void GlEdge::getEdgeAnchor(GlGraphInputData *data,node source,node target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor) {
+  double srcRot = data->getElementRotation()->getNodeValue(source);
+  double tgtRot = data->getElementRotation()->getNodeValue(target);
 
-	//compute anchor, (clip line with the glyph)
-			int srcGlyphId = data->getElementShape()->getNodeValue(source);
-		  Glyph *sourceGlyph = data->glyphs.get(srcGlyphId);
-		  srcAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
-		  srcAnchor = sourceGlyph->getAnchor(srcCoord, srcAnchor, srcSize, srcRot);
+  //compute anchor, (clip line with the glyph)
+  int srcGlyphId = data->getElementShape()->getNodeValue(source);
+  Glyph *sourceGlyph = data->glyphs.get(srcGlyphId);
+  srcAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
+  srcAnchor = sourceGlyph->getAnchor(srcCoord, srcAnchor, srcSize, srcRot);
 
-		  //compute anchor, (clip line with the glyph)
-			int tgtGlyphId = data->getElementShape()->getNodeValue(target);
-		  Glyph *targetGlyph = data->glyphs.get(tgtGlyphId);
-		  tgtAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
-		  tgtAnchor = targetGlyph->getAnchor(tgtCoord, tgtAnchor, tgtSize, tgtRot);
+  //compute anchor, (clip line with the glyph)
+  int tgtGlyphId = data->getElementShape()->getNodeValue(target);
+  Glyph *targetGlyph = data->glyphs.get(tgtGlyphId);
+  tgtAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
+  tgtAnchor = targetGlyph->getAnchor(tgtCoord, tgtAnchor, tgtSize, tgtRot);
 }
 
 float GlEdge::getEdgeWidthLod(const Coord &edgeCoord,
-		const Size &edgeSize,Camera *camera){
-	if(!orthoProjection){
-		if(haveToComputeEdgeWidthBaseLod){
-			// This code is here because screenTo3DWorld function modify current projection
-			// ==>
-			Matrix<float, 4> transformMatrix;
-			Vector<int, 4> viewport = camera->getViewport();
-			camera->getTransformMatrix(transformMatrix);
-			Coord pScr = projectPoint(Coord(0,0,0), transformMatrix, viewport);
-			pScr[0] = static_cast<float>(viewport[2]);
-			pScr[1] = static_cast<float>(viewport[3]) - 1.0f;
-			MatrixGL tmp(transformMatrix);
-			tmp.inverse();
-			Coord worldPosition=unprojectPoint(pScr, tmp, viewport);
-			// <==
+                              const Size &edgeSize,Camera *camera) {
+  if(!orthoProjection) {
+    if(haveToComputeEdgeWidthBaseLod) {
+      // This code is here because screenTo3DWorld function modify current projection
+      // ==>
+      Matrix<float, 4> transformMatrix;
+      Vector<int, 4> viewport = camera->getViewport();
+      camera->getTransformMatrix(transformMatrix);
+      Coord pScr = projectPoint(Coord(0,0,0), transformMatrix, viewport);
+      pScr[0] = static_cast<float>(viewport[2]);
+      pScr[1] = static_cast<float>(viewport[3]) - 1.0f;
+      MatrixGL tmp(transformMatrix);
+      tmp.inverse();
+      Coord worldPosition=unprojectPoint(pScr, tmp, viewport);
+      // <==
 
-					Matrix<float, 4u> projectionMatrix;
-					Matrix<float, 4u> modelviewMatrix;
-					camera->getProjectionMatrix(projectionMatrix);
-					camera->getModelviewMatrix(modelviewMatrix);
-					edgeWidthBaseLod=projectSize(worldPosition, Size(1, 1, 1), projectionMatrix, modelviewMatrix,camera->getViewport());
-					haveToComputeEdgeWidthBaseLod=false;
-		}
+      Matrix<float, 4u> projectionMatrix;
+      Matrix<float, 4u> modelviewMatrix;
+      camera->getProjectionMatrix(projectionMatrix);
+      camera->getModelviewMatrix(modelviewMatrix);
+      edgeWidthBaseLod=projectSize(worldPosition, Size(1, 1, 1), projectionMatrix, modelviewMatrix,camera->getViewport());
+      haveToComputeEdgeWidthBaseLod=false;
+    }
 
-		float size=edgeSize[0];
-		if(edgeSize[1]>edgeSize[0])
-			size=edgeSize[1];
+    float size=edgeSize[0];
 
-		return edgeWidthBaseLod*size;
-	}else{
-		Matrix<float, 4u> projectionMatrix;
-		Matrix<float, 4u> modelviewMatrix;
-		camera->getProjectionMatrix(projectionMatrix);
-		camera->getModelviewMatrix(modelviewMatrix);
-		return projectSize(edgeCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), projectionMatrix, modelviewMatrix,camera->getViewport());
-	}
+    if(edgeSize[1]>edgeSize[0])
+      size=edgeSize[1];
+
+    return edgeWidthBaseLod*size;
+  }
+  else {
+    Matrix<float, 4u> projectionMatrix;
+    Matrix<float, 4u> modelviewMatrix;
+    camera->getProjectionMatrix(projectionMatrix);
+    camera->getModelviewMatrix(modelviewMatrix);
+    return projectSize(edgeCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), projectionMatrix, modelviewMatrix,camera->getViewport());
+  }
 }
 
 void GlEdge::displayArrow(GlGraphInputData *data,
-		edge e,
-		node source,
-                const Size& sizeRatio,
-		float edgeSize,
-		const Color &color,
-		float maxSize,
-		bool selected,
-                float selectionOutlineSize,
-		int srcEdgeGlyph,
-		int tgtEdgeGlyph,
-		size_t numberOfBends,
-		const Coord &anchor,
-		const Coord &tgtCoord,
-		const Coord &srcAnchor,
-		const Coord &tgtAnchor,
-		Coord &lineAnchor){
+                          edge e,
+                          node source,
+                          const Size& sizeRatio,
+                          float edgeSize,
+                          const Color &color,
+                          float maxSize,
+                          bool selected,
+                          float selectionOutlineSize,
+                          int srcEdgeGlyph,
+                          int tgtEdgeGlyph,
+                          size_t numberOfBends,
+                          const Coord &anchor,
+                          const Coord &tgtCoord,
+                          const Coord &srcAnchor,
+                          const Coord &tgtAnchor,
+                          Coord &lineAnchor) {
 
-	//Correct begin tmp Anchor
-	Coord beginTmpAnchor = anchor;
-	if (beginTmpAnchor == tgtCoord) {
-		beginTmpAnchor = tgtAnchor;
-	}
+  //Correct begin tmp Anchor
+  Coord beginTmpAnchor = anchor;
 
-	lineAnchor = beginTmpAnchor - srcAnchor;
-	float nrm = lineAnchor.norm();
-	float maxGlyphSize;
-	if (tgtEdgeGlyph != 0 && numberOfBends == 0)
-		maxGlyphSize = nrm * .5f;
-	else
-		maxGlyphSize = nrm;
+  if (beginTmpAnchor == tgtCoord) {
+    beginTmpAnchor = tgtAnchor;
+  }
 
-	Size size;
-	if (data->parameters->isEdgeSizeInterpolate()) {
-                size[0] = edgeSize / 4.0f;
-                size[1] = edgeSize / 4.0f;
-                size[2] = edgeSize / 4.0f;
+  lineAnchor = beginTmpAnchor - srcAnchor;
+  float nrm = lineAnchor.norm();
+  float maxGlyphSize;
 
-	} else {            
-            size[0] = sizeRatio[0];
-            size[1] = sizeRatio[1];
-            size[2] = sizeRatio[2];
-            if(data->parameters->getEdgesMaxSizeToNodesSize()){
-                 size[0] = std::min(maxSize, sizeRatio[0]);
-                 size[1] = std::min(maxSize, sizeRatio[1]);
-                 size[2] = std::min(maxSize, sizeRatio[2]);
-            }
-	}
-        if (selected){
-                size[1] += selectionOutlineSize;
-                size[2] += selectionOutlineSize;
-        }
+  if (tgtEdgeGlyph != 0 && numberOfBends == 0)
+    maxGlyphSize = nrm * .5f;
+  else
+    maxGlyphSize = nrm;
 
-        size[0] = std::min(maxGlyphSize, size[0]);
+  Size size;
 
-	EdgeExtremityGlyph *extremityGlyph = data->extremityGlyphs.get(srcEdgeGlyph);
-	assert(extremityGlyph);
+  if (data->parameters->isEdgeSizeInterpolate()) {
+    size[0] = edgeSize / 4.0f;
+    size[1] = edgeSize / 4.0f;
+    size[2] = edgeSize / 4.0f;
 
-	MatrixGL srcTransformationMatrix;
-        MatrixGL srcScalingMatrix;
+  }
+  else {
+    size[0] = sizeRatio[0];
+    size[1] = sizeRatio[1];
+    size[2] = sizeRatio[2];
 
-	extremityGlyph->getTransformationMatrix(beginTmpAnchor, srcAnchor, size,
-			srcTransformationMatrix, srcScalingMatrix);
+    if(data->parameters->getEdgesMaxSizeToNodesSize()) {
+      size[0] = std::min(maxSize, sizeRatio[0]);
+      size[1] = std::min(maxSize, sizeRatio[1]);
+      size[2] = std::min(maxSize, sizeRatio[2]);
+    }
+  }
+
+  if (selected) {
+    size[1] += selectionOutlineSize;
+    size[2] += selectionOutlineSize;
+  }
+
+  size[0] = std::min(maxGlyphSize, size[0]);
+
+  EdgeExtremityGlyph *extremityGlyph = data->extremityGlyphs.get(srcEdgeGlyph);
+  assert(extremityGlyph);
+
+  MatrixGL srcTransformationMatrix;
+  MatrixGL srcScalingMatrix;
+
+  extremityGlyph->getTransformationMatrix(beginTmpAnchor, srcAnchor, size,
+                                          srcTransformationMatrix, srcScalingMatrix);
 
 
-	glPushMatrix();
-	glMultMatrixf((GLfloat *) &srcTransformationMatrix);
-	glMultMatrixf((GLfloat *) &srcScalingMatrix);
-	glDisable(GL_CULL_FACE);
-	extremityGlyph->draw(e, source, color,(data->parameters->isEdgeColorInterpolate() ? color : data->getElementBorderColor()->getEdgeValue(e)), 100.);
-	glEnable(GL_CULL_FACE);
-	glPopMatrix();
+  glPushMatrix();
+  glMultMatrixf((GLfloat *) &srcTransformationMatrix);
+  glMultMatrixf((GLfloat *) &srcScalingMatrix);
+  glDisable(GL_CULL_FACE);
+  extremityGlyph->draw(e, source, color,(data->parameters->isEdgeColorInterpolate() ? color : data->getElementBorderColor()->getEdgeValue(e)), 100.);
+  glEnable(GL_CULL_FACE);
+  glPopMatrix();
 
-	//Compute new Anchor
+  //Compute new Anchor
 
-	if (nrm > 0.00000001f) {
-		lineAnchor /= nrm;
-		lineAnchor *= size[0];
-		lineAnchor += srcAnchor;
-	} else {
-		lineAnchor = srcAnchor;
-	}
+  if (nrm > 0.00000001f) {
+    lineAnchor /= nrm;
+    lineAnchor *= size[0];
+    lineAnchor += srcAnchor;
+  }
+  else {
+    lineAnchor = srcAnchor;
+  }
 }
 
 }

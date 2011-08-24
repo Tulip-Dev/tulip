@@ -5,10 +5,11 @@
 namespace {
 
 const char * paramHelp[] = { HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"Subtrees may be assigned even angles or angles depending on their size."
-		HTML_HELP_CLOSE()};
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "Subtrees may be assigned even angles or angles depending on their size."
+                             HTML_HELP_CLOSE()
+                           };
 }
 
 // comments below have been extracted from OGDF/src/misclayout/BallonLayout.cpp
@@ -59,22 +60,24 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 class OGDFBalloon : public OGDFLayoutPluginBase {
-  
- public:
+
+public:
 
   OGDFBalloon(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::BalloonLayout()) {
-	  addParameter<bool> ("Even angles", paramHelp[0], "false", false);
+    addParameter<bool> ("Even angles", paramHelp[0], "false", false);
   }
   ~OGDFBalloon() {}
-  
+
   void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
-  		ogdf::BalloonLayout *balloon = static_cast<ogdf::BalloonLayout*>(ogdfLayoutAlgo);
-  		if (dataSet != 0) {
-  			bool val = false;
-  			if (dataSet->get("Even angles", val))
-  				balloon->setEvenAngles(val);
-  		}
-  	}
+    ogdf::BalloonLayout *balloon = static_cast<ogdf::BalloonLayout*>(ogdfLayoutAlgo);
+
+    if (dataSet != 0) {
+      bool val = false;
+
+      if (dataSet->get("Even angles", val))
+        balloon->setEvenAngles(val);
+    }
+  }
 
 };
 /*@}*/

@@ -28,7 +28,7 @@
 // Warning SelectionProxy has been renamed in BooleanAlgorithm
 
 namespace tlp {
-  class BooleanProperty;
+class BooleanProperty;
 }
 
 class SelectionProxyTest : public CppUnit::TestFixture {

@@ -33,7 +33,7 @@ public:
   /**
    * Default constructor
    */
-  InteractorNavigation():NodeLinkDiagramComponentInteractor(":/i_navigation.png","Navigate in graph"){
+  InteractorNavigation():NodeLinkDiagramComponentInteractor(":/i_navigation.png","Navigate in graph") {
     setPriority(5);
     setConfigurationWidgetText(QString("<h3>Navigation interactor</h3>")+
                                "3D Navigation in the graph<br><br>"+
@@ -46,17 +46,19 @@ public:
                                "Z rotation: <ul><li><b>Alt + Mouse left</b> down + left/right moves</li><li> or <b>Insert</b> key</li></ul>" +
                                "Zoom/Unzoom: <ul><li><b>Alt + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
 #endif
-                               );
+                              );
   }
 
   /**
    * Construct chain of responsibility
    */
-  void construct(){
+  void construct() {
     pushInteractorComponent(new MouseNKeysNavigator);
   }
 
-  QCursor getCursor(){return QCursor(Qt::OpenHandCursor);}
+  QCursor getCursor() {
+    return QCursor(Qt::OpenHandCursor);
+  }
 
 };
 

@@ -30,55 +30,56 @@
 
 namespace tlp {
 
-  /** \ brief Singleton class use to store Glyphs plugins
-   * This class is a singleton use to sore Glyphs plugins
+/** \ brief Singleton class use to store Glyphs plugins
+ * This class is a singleton use to sore Glyphs plugins
+ */
+class TLP_GL_SCOPE GlyphManager {
+
+public:
+
+  /**
+   * Return the singleton (if the singleton doesn't exist this function create it)
    */
-  class TLP_GL_SCOPE GlyphManager {
+  static GlyphManager &getInst() {
+    if(!inst)
+      inst=new GlyphManager();
 
-  public:
+    return *inst;
+  }
 
-    /**
-     * Return the singleton (if the singleton doesn't exist this function create it)
-     */
-    static GlyphManager &getInst() {
-      if(!inst)
-	inst=new GlyphManager();
-      return *inst;
-    }
+  /**
+   * Return the name of glyph with given id
+   */
+  std::string glyphName(int id);
+  /**
+   * Return the id if glyph with given name
+   */
+  int glyphId(std::string name);
+  /**
+   * Load glyphs plugins
+   */
+  void loadGlyphPlugins();
+  /**
+   * Load glyphs plugins with given PluginLoader
+   */
+  void loadPlugins(PluginLoader *plug=0);
 
-    /**
-     * Return the name of glyph with given id
-     */
-    std::string glyphName(int id);
-    /**
-     * Return the id if glyph with given name
-     */
-    int glyphId(std::string name);
-    /**
-     * Load glyphs plugins
-     */
-    void loadGlyphPlugins();
-    /**
-     * Load glyphs plugins with given PluginLoader
-     */
-    void loadPlugins(PluginLoader *plug=0);
+  /**
+   * Create the glyph list and store it in glyphs parameter
+   */
+  void initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs);
+  /**
+   * Clear the glyph list
+   */
+  void clearGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs);
 
-    /**
-     * Create the glyph list and store it in glyphs parameter
-     */
-    void initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs);
-    /**
-     * Clear the glyph list
-     */
-    void clearGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs);
+private:
 
-  private:
+  GlyphManager();
 
-    GlyphManager();
+  static GlyphManager* inst;
 
-    static GlyphManager* inst;
-
-  };
+};
 
 }
 

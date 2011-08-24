@@ -22,16 +22,22 @@
 #include "ConvolutionClustering.h"
 
 class ConvolutionClusteringSetup
-: public QDialog, public Ui::ConvolutionClusteringSetupData { 
-    Q_OBJECT
+    : public QDialog, public Ui::ConvolutionClusteringSetupData {
+  Q_OBJECT
 
 public:
   ConvolutionClusteringSetup(ConvolutionClustering *convolPlugin,QWidget* parent = 0);
-    ~ConvolutionClusteringSetup();
+  ~ConvolutionClusteringSetup();
 
-  ConvolutionClustering *getPlugin() { return convolPlugin; }
-  bool getLogarithmicScale() { return useLogarithmicScale; }
-  void abort() { reject(); }
+  ConvolutionClustering *getPlugin() {
+    return convolPlugin;
+  }
+  bool getLogarithmicScale() {
+    return useLogarithmicScale;
+  }
+  void abort() {
+    reject();
+  }
 
 public slots:
   void update();

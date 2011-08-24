@@ -31,50 +31,51 @@
 
 namespace tlp {
 
-  /** \brief Manager of view's plugins
-   *
-   * Class to manage view's plugins
+/** \brief Manager of view's plugins
+ *
+ * Class to manage view's plugins
+ */
+class TLP_QT_SCOPE ViewPluginsManager {
+
+public:
+
+  /**
+   * Singleton system
    */
-  class TLP_QT_SCOPE ViewPluginsManager {
+  static ViewPluginsManager &getInst() {
+    if(!inst)
+      inst=new ViewPluginsManager();
 
-  public:
-
-    /**
-     * Singleton system
-     */
-    static ViewPluginsManager &getInst() {
-      if(!inst)
-	inst=new ViewPluginsManager();
-      return *inst;
-    }
+    return *inst;
+  }
 
 
-    /**
-     * Load all view's plugins available
-     * \param plug : Use this plugin loader
-     */
-    void loadPlugins(PluginLoader *plug=0);
+  /**
+   * Load all view's plugins available
+   * \param plug : Use this plugin loader
+   */
+  void loadPlugins(PluginLoader *plug=0);
 
-    /**
-     * Get available plugins list
-     */
-    void initViewPluginsList(MutableContainer<View *> &views);
-    /**
-     * Create view with given name
-     * \return The view
-     */
-    View *createView(const std::string &name);
+  /**
+   * Get available plugins list
+   */
+  void initViewPluginsList(MutableContainer<View *> &views);
+  /**
+   * Create view with given name
+   * \return The view
+   */
+  View *createView(const std::string &name);
 
-  private:
+private:
 
-    /**
-     * Singleton system
-     */
-    ViewPluginsManager();
+  /**
+   * Singleton system
+   */
+  ViewPluginsManager();
 
-    static ViewPluginsManager* inst;
+  static ViewPluginsManager* inst;
 
-  };
+};
 
 }
 

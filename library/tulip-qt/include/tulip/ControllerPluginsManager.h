@@ -31,39 +31,40 @@
 
 namespace tlp {
 
-  /** \brief Controller plugins manager
-   *
-   * Controller plugins manager
+/** \brief Controller plugins manager
+ *
+ * Controller plugins manager
+ */
+class TLP_QT_SCOPE ControllerPluginsManager {
+
+public:
+
+  static ControllerPluginsManager &getInst() {
+    if(!inst)
+      inst=new ControllerPluginsManager();
+
+    return *inst;
+  }
+
+  void loadPlugins(PluginLoader *plug=0);
+
+  /**
+   * return if the Controller with given name exist
    */
-  class TLP_QT_SCOPE ControllerPluginsManager {
+  bool controllerExists(const std::string &name);
 
-  public:
+  /**
+   * return Controller with given name
+   */
+  Controller *createController(const std::string &name);
 
-    static ControllerPluginsManager &getInst() {
-      if(!inst)
-	inst=new ControllerPluginsManager();
-      return *inst;
-    }
+private:
 
-    void loadPlugins(PluginLoader *plug=0);
+  ControllerPluginsManager();
 
-    /**
-     * return if the Controller with given name exist
-     */
-    bool controllerExists(const std::string &name);
+  static ControllerPluginsManager* inst;
 
-    /**
-     * return Controller with given name
-     */
-    Controller *createController(const std::string &name);
-
-  private:
-
-    ControllerPluginsManager();
-
-    static ControllerPluginsManager* inst;
-
-  };
+};
 
 }
 

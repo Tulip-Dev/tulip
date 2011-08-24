@@ -35,6 +35,7 @@ using namespace tlp;
 
 int main(int argc,char **argv) {
   QApplication app(argc, argv);
+
   if(argc < 5 || argc > 7)  {
     cout << "How to use :" << endl;
     cout << " 1st arg : plugin folder" << endl;
@@ -53,10 +54,12 @@ int main(int argc,char **argv) {
   QString base64credentials = argv[4];
 
   QString pluginDocRootPath("");
-  
+
   QString architectureDir("i386");
+
   if(argc>5)
     architectureDir=QString(argv[5]);
+
   if(argc>6)
     pluginDocRootPath = argv[6];
 
@@ -65,62 +68,68 @@ int main(int argc,char **argv) {
 
   initTulipLib(NULL);
   WebDavManager manager(serverURL, pluginServerURL, base64credentials);
-  
+
   foreach(const QString& file, pluginsDir.entryList(filters)) {
     std::cout << "treating plugin library: " << file.toStdString() << std::endl;
 
     QString filepath = pluginPath + file;
-    
+
     //make sure that Tulip will not try to load plugins from the TLP_DIR env variable (legacy behavior)
     char *getEnvTlp=getenv("TLP_DIR");
-    #if defined(_WIN32)
+#if defined(_WIN32)
     putenv("TLP_DIR=");
-    #else
+#else
     setenv("TLP_DIR","",true);
-    #endif
+#endif
 
     /** load the plugin in Tulip to retrieve a pluginInfo **/
     PluginLoaderWithInfo plug;
     bool res = tlp::loadPlugin(filepath.toStdString(), &plug);
+
     if(!res) {
       std::cout << "failed to load plugin: " << plug.errorMsgs << std::endl;
       continue;
     }
+
     //GlyphManager::getInst().loadPlugins(&plug); //Glyph plugins
 //     InteractorManager::getInst().loadPlugins(&plug);
 //     ViewPluginsManager::getInst().loadPlugins(&plug);
 //     ControllerPluginsManager::getInst().loadPlugins(&plug);
 
-    #if defined(_WIN32)
+#if defined(_WIN32)
+
     if (getEnvTlp)
       putenv((string("TLP_DIR=") + getEnvTlp).c_str());
     else
       putenv("TLP_DIR=");
-  #else
+
+#else
+
     if (getEnvTlp)
       setenv("TLP_DIR",getEnvTlp,true);
     else
       unsetenv("TLP_DIR");
-  #endif
-    
+
+#endif
+
 //     TemplateFactory<GlyphFactory, Glyph, GlyphContext>::ObjectCreator::const_iterator itGlyphs;
 //     vector<string> glyphsName;
 //     for (itGlyphs=GlyphFactory::factory->objMap.begin();itGlyphs != GlyphFactory::factory->objMap.end();++itGlyphs) {
 //       glyphsName.push_back((itGlyphs)->first);
 //     }
-// 
+//
 //     TemplateFactory<InteractorFactory, Interactor, InteractorContext>::ObjectCreator::const_iterator itInteractors;
 //     vector<string> interactorsName;
 //     for (itInteractors=InteractorFactory::factory->objMap.begin();itInteractors != InteractorFactory::factory->objMap.end();++itInteractors) {
 //       interactorsName.push_back((itInteractors)->first);
 //     }
-// 
+//
 //     TemplateFactory<ViewFactory, View, ViewContext>::ObjectCreator::const_iterator itViews;
 //     vector<string> viewsName;
 //     for (itViews=ViewFactory::factory->objMap.begin();itViews != ViewFactory::factory->objMap.end();++itViews) {
 //       viewsName.push_back((itViews)->first);
 //     }
-// 
+//
 //     for(size_t i=0;i<plug.pluginsList.size();++i){
 //       for(vector<string>::iterator it=glyphsName.begin();it!=glyphsName.end();++it){
 //         if(plug.pluginsList[i].name==(*it)){
@@ -150,7 +159,7 @@ int main(int argc,char **argv) {
 //           break;
 //         }
 //       }
-// 
+//
 //       if(!equal){
 //         for(size_t i=0;i<plug.pluginsList.size();++i){
 //           if(plug.pluginsList[i].type=="View"){
@@ -165,7 +174,7 @@ int main(int argc,char **argv) {
 //     }
 
 
-    if(plug.pluginsList.size()==1){
+    if(plug.pluginsList.size()==1) {
       pluginInfo = plug.pluginsList[0];
     }
     else {
@@ -174,6 +183,7 @@ int main(int argc,char **argv) {
     }
 
     pluginInfo.displayType= PluginInfo::getPluginDisplayType(pluginInfo.name);
+
     if(pluginInfo.displayType == "Glyph")
       pluginInfo.type = "Glyph";
 
@@ -184,7 +194,7 @@ int main(int argc,char **argv) {
     manager.mkdir(pluginFolderName);
 //     std::cout << "mkdir pluginFolder/" << architectureDir.toStdString() << std::endl;
     manager.mkdir(pluginFolderName + "/" + architectureDir);
-    
+
     QFile pluginFile(filepath);
     bool isOpen = pluginFile.open(QIODevice::ReadOnly);
 
@@ -192,6 +202,7 @@ int main(int argc,char **argv) {
       std::cout << "could not open file for reading: " << filepath.toStdString() << std::endl;
       continue;
     }
+
     QFileInfo fileInfo(filepath);
     manager.putFile(pluginFolderName + "/" + architectureDir + "/" + fileInfo.fileName(), &pluginFile);
 
@@ -208,14 +219,14 @@ int main(int argc,char **argv) {
       infoElement.setAttribute("info", QString::fromStdString(pluginInfo.info));
       infoElement.setAttribute("fileName", QString::fromStdString(pluginInfo.fileName));
       infoElement.setAttribute("version", QString::fromStdString(pluginInfo.version));
-      
+
       for(vector<PluginDependency>::const_iterator it = pluginInfo.dependencies.begin(); it != pluginInfo.dependencies.end(); ++it) {
         QDomElement dependencyElement = pluginInfoDocument.createElement("dependency");
         dependencyElement.setAttribute("name", QString::fromStdString(it->name));
         dependencyElement.setAttribute("type", QString::fromStdString(it->type));
         dependencyElement.setAttribute("version", QString::fromStdString(it->version));
       }
-      
+
       QString fileName = QString::fromStdString(pluginInfo.fileName);
       QString libName = fileName.split("-").first();
       libName=libName.split("lib").last();
@@ -227,14 +238,15 @@ int main(int argc,char **argv) {
       QStringList pluginsDocs = pluginsDocDir.entryList(filters);
       QList<QString>::iterator iter = pluginsDocs.begin();
 
-      while(iter != pluginsDocs.end()){
+      while(iter != pluginsDocs.end()) {
 
         QString docFile(*iter);
         docFile = (docFile.mid(5,docFile.size()-9));
 
-        if(docFile.compare(libName,Qt::CaseInsensitive)==0){
+        if(docFile.compare(libName,Qt::CaseInsensitive)==0) {
           documentName = QString(pluginDocRootPath + "/" + (*iter));
         }
+
         ++iter;
       }
 
@@ -245,18 +257,18 @@ int main(int argc,char **argv) {
 
       documentationFile.close();
 
-    //   std::cout << documentName.toStdString() << std::endl;
+      //   std::cout << documentName.toStdString() << std::endl;
       QDomNodeList tempList = pluginClassDocumentationDocument.elementsByTagName("compounddef");
-    //   std::cout << pluginClassDocumentationDocument.toString().toStdString() << std::endl;
+      //   std::cout << pluginClassDocumentationDocument.toString().toStdString() << std::endl;
       QDomNode classElement = tempList.at(0);
-    //   std::cout << classElement.nodeName().toStdString() << ": " << classElement.nodeValue().toStdString() << std::endl;
+      //   std::cout << classElement.nodeName().toStdString() << ": " << classElement.nodeValue().toStdString() << std::endl;
       QDomNode briefDescriptionElement = classElement.firstChildElement("briefdescription");
       QDomNode detailedDescriptionElement = classElement.firstChildElement("detaileddescription");
 
       QDomDocument pluginDocDocument;
       QDomElement docElement = pluginDocDocument.createElement("doc");
       pluginDocDocument.appendChild(docElement);
-    //   std::cout << briefDescriptionElement.nodeName().toStdString() << ": " << briefDescriptionElement.nodeValue().toStdString() << std::endl;
+      //   std::cout << briefDescriptionElement.nodeName().toStdString() << ": " << briefDescriptionElement.nodeValue().toStdString() << std::endl;
       docElement.appendChild(briefDescriptionElement);
       docElement.appendChild(detailedDescriptionElement);
 
@@ -273,7 +285,7 @@ int main(int argc,char **argv) {
     }
   }
   manager.finish();
-  
+
   return 0;
 }
 

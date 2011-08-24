@@ -29,38 +29,37 @@
 
 namespace tlp {
 
-  class ServersOptionDialog : public QDialog
-  {
-    Q_OBJECT
-    
-  protected :
-    
-    MultiServerManager* serverManager;
-    ModifyServerDialog* modifDialog;
-    QPushButton* addButton;
-    QPushButton* removeButton;
-    QPushButton* propertiesButton;
-    QPushButton* exitButton;
-    QBoxLayout* boxLayout;
-    QBoxLayout* subBoxLayout;
-    QListWidget* serversList;
-    QWidget* buttonsWidget;
-    
-    void showPropertiesDialog(int i = -1);
-    virtual void modifyPopup();
-    void updateList();
-    virtual void closeEvent(QCloseEvent* event);
-    
-  public : 
-    ServersOptionDialog(MultiServerManager* msm,QWidget *parent=0);
-    virtual ~ServersOptionDialog();
-				  
-  public slots :
-    void removeServer();
-    virtual void addServer();
-    void serverProperties();
-    void serverNameReceived(MultiServerManager*,std::string,std::string);
-  };
+class ServersOptionDialog : public QDialog {
+  Q_OBJECT
+
+protected :
+
+  MultiServerManager* serverManager;
+  ModifyServerDialog* modifDialog;
+  QPushButton* addButton;
+  QPushButton* removeButton;
+  QPushButton* propertiesButton;
+  QPushButton* exitButton;
+  QBoxLayout* boxLayout;
+  QBoxLayout* subBoxLayout;
+  QListWidget* serversList;
+  QWidget* buttonsWidget;
+
+  void showPropertiesDialog(int i = -1);
+  virtual void modifyPopup();
+  void updateList();
+  virtual void closeEvent(QCloseEvent* event);
+
+public :
+  ServersOptionDialog(MultiServerManager* msm,QWidget *parent=0);
+  virtual ~ServersOptionDialog();
+
+public slots :
+  void removeServer();
+  virtual void addServer();
+  void serverProperties();
+  void serverNameReceived(MultiServerManager*,std::string,std::string);
+};
 
 }
 #endif

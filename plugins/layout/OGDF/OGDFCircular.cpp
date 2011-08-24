@@ -5,26 +5,27 @@
 namespace {
 
 const char * paramHelp[] = { HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"The minimal distance between nodes on a circle."
-		HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"The minimal distance between father and child circle. "
-		HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"The minimal distance between circles on same level. "
-		HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"The minimal distance between connected components."
-		HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"The page ratio used for packing connected components."
-		HTML_HELP_CLOSE()};
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The minimal distance between nodes on a circle."
+                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The minimal distance between father and child circle. "
+                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The minimal distance between circles on same level. "
+                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The minimal distance between connected components."
+                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The page ratio used for packing connected components."
+                             HTML_HELP_CLOSE()
+                           };
 }
 
 // comments below have been extracted from OGDF/src/misclayout/CircularLayout.cpp
@@ -76,31 +77,37 @@ class OGDFCircular : public OGDFLayoutPluginBase {
 
 public:
 
-	OGDFCircular(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::CircularLayout()) {
-		addParameter<double> ("minDistCircle", paramHelp[0], "20.0", false);
-		addParameter<double> ("minDistLevel", paramHelp[1], "20.0", false);
-		addParameter<double> ("minDistSibling", paramHelp[2], "10.0", false);
-		addParameter<double> ("minDistCC", paramHelp[3], "20.0", false);
-		addParameter<double> ("pageRatio", paramHelp[4], "1.0", false);
-	}
-	~OGDFCircular() {}
+  OGDFCircular(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::CircularLayout()) {
+    addParameter<double> ("minDistCircle", paramHelp[0], "20.0", false);
+    addParameter<double> ("minDistLevel", paramHelp[1], "20.0", false);
+    addParameter<double> ("minDistSibling", paramHelp[2], "10.0", false);
+    addParameter<double> ("minDistCC", paramHelp[3], "20.0", false);
+    addParameter<double> ("pageRatio", paramHelp[4], "1.0", false);
+  }
+  ~OGDFCircular() {}
 
-	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
-		ogdf::CircularLayout *circular = static_cast<ogdf::CircularLayout*>(ogdfLayoutAlgo);
-		if (dataSet != 0) {
-			double val = 0;
-			if (dataSet->get("minDistCircle", val))
-				circular->minDistCircle(val);
-			if (dataSet->get("minDistLevel", val))
-				circular->minDistLevel(val);
-			if (dataSet->get("minDistSibling", val))
-				circular->minDistSibling(val);
-			if (dataSet->get("minDistCC", val))
-				circular->minDistCC(val);
-			if (dataSet->get("pageRatio", val))
-				circular->pageRatio(val);
-		}
-	}
+  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+    ogdf::CircularLayout *circular = static_cast<ogdf::CircularLayout*>(ogdfLayoutAlgo);
+
+    if (dataSet != 0) {
+      double val = 0;
+
+      if (dataSet->get("minDistCircle", val))
+        circular->minDistCircle(val);
+
+      if (dataSet->get("minDistLevel", val))
+        circular->minDistLevel(val);
+
+      if (dataSet->get("minDistSibling", val))
+        circular->minDistSibling(val);
+
+      if (dataSet->get("minDistCC", val))
+        circular->minDistCC(val);
+
+      if (dataSet->get("pageRatio", val))
+        circular->pageRatio(val);
+    }
+  }
 
 };
 /*@}*/

@@ -29,107 +29,119 @@
 
 namespace tlp {
 
-  class GlComposite;
+class GlComposite;
+
+/**
+ * Base class for all simple entity (entity who not need GraphInputData
+ */
+class TLP_GL_SCOPE GlSimpleEntity : public GlEntity {
+
+public:
+
+  GlSimpleEntity():visible(true),stencil(0xFFFF),checkByBoundingBoxVisitor(true) {}
+
+  virtual ~GlSimpleEntity();
 
   /**
-   * Base class for all simple entity (entity who not need GraphInputData
+   * Draw function
    */
-  class TLP_GL_SCOPE GlSimpleEntity : public GlEntity {
+  virtual void draw(float lod,Camera* camera) = 0;
 
-  public:
+  /**
+   * Accept visitor function
+   */
+  virtual void acceptVisitor(GlSceneVisitor *visitor) {
+    visitor->visit(this);
+  }
 
-    GlSimpleEntity():visible(true),stencil(0xFFFF),checkByBoundingBoxVisitor(true) {}
+  /**
+   * Set if entity is visible
+   */
+  virtual void setVisible(bool visible);
+  /**
+   * Return if entity is visible
+   */
+  bool isVisible() {
+    return visible;
+  }
+  /**
+   * Set stencil number of the entity
+   */
+  virtual void setStencil(int stencil) {
+    this->stencil=stencil;
+  }
+  /**
+   * Return stencil number of entity
+   */
+  int getStencil() {
+    return stencil;
+  }
+  /**
+   * Set if the entity is check by boundingbox visitor
+   */
+  void setCheckByBoundingBoxVisitor(bool check) {
+    checkByBoundingBoxVisitor=check;
+  }
+  /**
+   * Return if entity is check by boudingbox visitor
+   */
+  bool isCheckByBoundingBoxVisitor() {
+    return checkByBoundingBoxVisitor;
+  }
 
-    virtual ~GlSimpleEntity();
+  /**
+   * Return the entity boundingbox
+   */
+  virtual BoundingBox getBoundingBox() {
+    return boundingBox;
+  }
 
-    /**
-     * Draw function
-     */
-    virtual void draw(float lod,Camera* camera) = 0;
+  /**
+   * Add a layer parent to this entity
+   */
+  virtual void addLayerParent(GlLayer *) {}
 
-    /**
-     * Accept visitor function
-     */
-    virtual void acceptVisitor(GlSceneVisitor *visitor) {
-      visitor->visit(this);
-    }
+  /**
+   * remove a layer parent to this entity
+   */
+  virtual void removeLayerParent(GlLayer *) {}
 
-    /**
-     * Set if entity is visible
-     */
-    virtual void setVisible(bool visible);
-    /**
-     * Return if entity is visible
-     */
-    bool isVisible() {return visible;}
-    /**
-     * Set stencil number of the entity
-     */
-    virtual void setStencil(int stencil) {this->stencil=stencil;}
-    /**
-     * Return stencil number of entity
-     */
-    int getStencil() {return stencil;}
-    /**
-     * Set if the entity is check by boundingbox visitor
-     */
-    void setCheckByBoundingBoxVisitor(bool check) {checkByBoundingBoxVisitor=check;}
-    /**
-     * Return if entity is check by boudingbox visitor
-     */
-    bool isCheckByBoundingBoxVisitor() {return checkByBoundingBoxVisitor;}
+  /**
+   * Add a parent to this entity
+   */
+  void addParent(GlComposite *composite);
 
-    /**
-     * Return the entity boundingbox
-     */
-    virtual BoundingBox getBoundingBox() {return boundingBox;}
+  /**
+   * remove a parent to this entity
+   */
+  void removeParent(GlComposite *composite);
 
-    /**
-     * Add a layer parent to this entity
-     */
-    virtual void addLayerParent(GlLayer *) {}
+  /**
+   * virtual fucntion : Translate entity of vector translation
+   */
+  virtual void translate(const Coord &) {};
 
-    /**
-     * remove a layer parent to this entity
-     */
-    virtual void removeLayerParent(GlLayer *) {}
+  /**
+   * Save the entity in Xml
+   */
+  virtual void getXML(xmlNodePtr rootNode) =0;
 
-    /**
-     * Add a parent to this entity
-     */
-    void addParent(GlComposite *composite);
+  /**
+   * Load entity with Xml
+   */
+  virtual void setWithXML(xmlNodePtr rootNode) =0;
 
-    /**
-     * remove a parent to this entity
-     */
-    void removeParent(GlComposite *composite);
+protected:
 
-    /**
-     * virtual fucntion : Translate entity of vector translation
-     */
-    virtual void translate(const Coord &){};
+  bool visible;
+  int stencil;
+  bool checkByBoundingBoxVisitor;
 
-    /**
-     * Save the entity in Xml
-     */
-    virtual void getXML(xmlNodePtr rootNode) =0;
+  BoundingBox boundingBox;
 
-    /**
-     * Load entity with Xml
-     */
-    virtual void setWithXML(xmlNodePtr rootNode) =0;
+  std::vector<GlComposite*> parents;
 
-  protected:
-
-    bool visible;
-    int stencil;
-    bool checkByBoundingBoxVisitor;
-
-    BoundingBox boundingBox;
-
-    std::vector<GlComposite*> parents;
-
-  };
+};
 
 }
 

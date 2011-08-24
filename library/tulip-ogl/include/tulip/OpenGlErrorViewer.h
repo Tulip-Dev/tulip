@@ -26,29 +26,29 @@
 
 namespace tlp {
 
-  /** \brief Class used to display OpenGl errors
-   *
-   * Class used to display OpenGl errors
+/** \brief Class used to display OpenGl errors
+ *
+ * Class used to display OpenGl errors
+ */
+class TLP_GL_SCOPE OpenGlErrorViewer {
+
+public :
+
+  /**
+   * Simple error display with cerr output
    */
-  class TLP_GL_SCOPE OpenGlErrorViewer {
+  virtual void displayError(const std::string &title,const std::string &errorMsg) {
+    std::cerr << title << " : " << errorMsg << std::endl;
+  }
 
-  public :
+  /**
+   * Simple error display with cerr output
+   */
+  virtual void displayErrorWithAskAgain(const std::string &title,const std::string &errorMsg) {
+    displayError(title,errorMsg);
+  }
 
-    /**
-     * Simple error display with cerr output
-     */
-    virtual void displayError(const std::string &title,const std::string &errorMsg){
-      std::cerr << title << " : " << errorMsg << std::endl;
-    }
-
-    /**
-     * Simple error display with cerr output
-     */
-    virtual void displayErrorWithAskAgain(const std::string &title,const std::string &errorMsg){
-      displayError(title,errorMsg);
-    }
-
-  };
+};
 
 }
 

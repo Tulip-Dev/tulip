@@ -32,9 +32,9 @@ class Graph;
 class PropertyContext;
 
 typedef AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> AbstractIntegerProperty;
-/** \addtogroup properties */ 
+/** \addtogroup properties */
 /*@{*/
- class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public GraphObserver { 
+class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public GraphObserver {
 
   friend class IntegerAlgorithm;
 
@@ -52,7 +52,7 @@ public :
     return propertyTypename;
   }
 
-  // redefinition of some AbstractProperty methods 
+  // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node n, const int &v);
   virtual void setEdgeValue(const edge e, const int &v);
   virtual void setAllNodeValue(const int &v);
@@ -87,7 +87,7 @@ private:
   void computeMinMaxEdge(Graph *sg=0);
 };
 
-class TLP_SCOPE IntegerVectorProperty:public AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType> { 
+class TLP_SCOPE IntegerVectorProperty:public AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType> {
 public :
   IntegerVectorProperty(Graph *g, std::string n =""):AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>(g, n) {}
   // redefinition of some PropertyInterface methods

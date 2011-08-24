@@ -11,59 +11,59 @@
 namespace {
 
 const char * paramHelp[] = { HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "int" )
-		HTML_HELP_BODY()
-		"Sets the option fails to nFails."
-		HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "int" )
-		HTML_HELP_BODY()
-		"Sets the option runs to nRuns."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"Sets the option for transposing layout vertically ."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"Sets the options arrangeCCs."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"The minimal distance between connected components."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"The page ratio used for packing connected components."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"Sets the option alignBaseClasses."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"Sets the option alignSiblings."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "StringCollection")
-		HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> LongestPathRanking : <FONT COLOR=\"black\"> the well-known longest-path ranking algorithm. <BR> <FONT COLOR=\"red\"> OptimalRanking : <FONT COLOR=\"black\"> the LP-based algorithm for computing a node ranking with minimal edge lengths. <BR> <FONT COLOR=\"red\"> SplitHeuristic : <FONT COLOR=\"black\"> the split heuristic for 2-layer crossing minimization.")
-		HTML_HELP_DEF( "default", "LongestPathRanking " )
-		HTML_HELP_BODY()
-		"Sets the option for the node ranking (layer assignment)."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "StringCollection")
-		HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> BarycenterHeuristic : <FONT COLOR=\"black\"> the barycenter heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> MedianHeuristic : <FONT COLOR=\"black\"> the median heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> SplitHeuristic : <FONT COLOR=\"black\"> the split heuristic for 2-layer crossing minimization.")
-		HTML_HELP_DEF( "default", "BarycenterHeuristic " )
-		HTML_HELP_BODY()
-		"Sets the module option for the two-layer crossing minimization."
-		HTML_HELP_CLOSE()
-};
+                             HTML_HELP_DEF( "type", "int" )
+                             HTML_HELP_BODY()
+                             "Sets the option fails to nFails."
+                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "int" )
+                             HTML_HELP_BODY()
+                             "Sets the option runs to nRuns."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "Sets the option for transposing layout vertically ."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "Sets the options arrangeCCs."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The minimal distance between connected components."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The page ratio used for packing connected components."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "Sets the option alignBaseClasses."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "Sets the option alignSiblings."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "StringCollection")
+                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> LongestPathRanking : <FONT COLOR=\"black\"> the well-known longest-path ranking algorithm. <BR> <FONT COLOR=\"red\"> OptimalRanking : <FONT COLOR=\"black\"> the LP-based algorithm for computing a node ranking with minimal edge lengths. <BR> <FONT COLOR=\"red\"> SplitHeuristic : <FONT COLOR=\"black\"> the split heuristic for 2-layer crossing minimization.")
+                             HTML_HELP_DEF( "default", "LongestPathRanking " )
+                             HTML_HELP_BODY()
+                             "Sets the option for the node ranking (layer assignment)."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "StringCollection")
+                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> BarycenterHeuristic : <FONT COLOR=\"black\"> the barycenter heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> MedianHeuristic : <FONT COLOR=\"black\"> the median heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> SplitHeuristic : <FONT COLOR=\"black\"> the split heuristic for 2-layer crossing minimization.")
+                             HTML_HELP_DEF( "default", "BarycenterHeuristic " )
+                             HTML_HELP_BODY()
+                             "Sets the module option for the two-layer crossing minimization."
+                             HTML_HELP_CLOSE()
+                           };
 }
 
 
@@ -128,71 +128,85 @@ class OGDFSugiyama : public OGDFLayoutPluginBase {
 
 public:
 
-	OGDFSugiyama(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::SugiyamaLayout()) {
-		addParameter<int>("fails", paramHelp[0], "4");
-		addParameter<int>("runs", paramHelp[1], "15");
-		addParameter<bool>("transpose", paramHelp[2], "false");
-		addParameter<bool>("arrangeCCs", paramHelp[3], "true");
-		addParameter<double>("minDistCC", paramHelp[4], "20");
-		addParameter<double>("pageRatio", paramHelp[5], "1.0");
-		addParameter<bool>("alignBaseClasses", paramHelp[6], "false");
-		addParameter<bool>("alignSiblings", paramHelp[7], "false");
-		addParameter<StringCollection>(ELT_RANKING, paramHelp[8], ELT_RANKINGLIST);
-		addParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[9], ELT_TWOLAYERCROSSLIST);
-	}
+  OGDFSugiyama(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::SugiyamaLayout()) {
+    addParameter<int>("fails", paramHelp[0], "4");
+    addParameter<int>("runs", paramHelp[1], "15");
+    addParameter<bool>("transpose", paramHelp[2], "false");
+    addParameter<bool>("arrangeCCs", paramHelp[3], "true");
+    addParameter<double>("minDistCC", paramHelp[4], "20");
+    addParameter<double>("pageRatio", paramHelp[5], "1.0");
+    addParameter<bool>("alignBaseClasses", paramHelp[6], "false");
+    addParameter<bool>("alignSiblings", paramHelp[7], "false");
+    addParameter<StringCollection>(ELT_RANKING, paramHelp[8], ELT_RANKINGLIST);
+    addParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[9], ELT_TWOLAYERCROSSLIST);
+  }
 
-	~OGDFSugiyama() {}
+  ~OGDFSugiyama() {}
 
-	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
-		ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
-		if (dataSet != 0) {
-			int ival = 0;
-			double dval = 0;
-			bool bval = false;
-			StringCollection sc;
-			if (dataSet->get("fails", ival))
-				sugiyama->fails(ival);
-			if (dataSet->get("runs", ival))
-				sugiyama->runs(ival);
-			if (dataSet->get("arrangeCCS", bval))
-				sugiyama->arrangeCCs(bval);
-			if (dataSet->get("minDistCC", dval))
-				sugiyama->minDistCC(dval);
-			if (dataSet->get("pageRatio", dval))
-				sugiyama->pageRatio(dval);
-			if (dataSet->get("alignBaseClasses", bval))
-				sugiyama->alignBaseClasses(bval);
-			if (dataSet->get("alignSiblings", bval))
-				sugiyama->alignSiblings(bval);
-			if (dataSet->get(ELT_RANKING, sc)) {
-				if (sc.getCurrent() == ELT_LONGESTPATHRANKING) {
-					sugiyama->setRanking(new ogdf::LongestPathRanking());
-				} else {
-					sugiyama->setRanking(new ogdf::OptimalRanking());
-				}
-			}
-			if (dataSet->get(ELT_TWOLAYERCROSS, sc)) {
-				if (sc.getCurrent() == ELT_BARYCENTER) {
-					sugiyama->setCrossMin(new ogdf::BarycenterHeuristic());
-				} else if (sc.getCurrent() == ELT_MEDIAN) {
-					sugiyama->setCrossMin(new ogdf::MedianHeuristic());
-				} else {
-					sugiyama->setCrossMin(new ogdf::SplitHeuristic());
-				}
-			}
-		}
-	}
+  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+    ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
 
-	void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
-		if (dataSet != 0) {
-		bool bval = false;
-		if (dataSet->get("transpose", bval)) {
-			if (bval) {
-				transposeLayoutVertically();
-			}
-		}
-		}
-	}
+    if (dataSet != 0) {
+      int ival = 0;
+      double dval = 0;
+      bool bval = false;
+      StringCollection sc;
+
+      if (dataSet->get("fails", ival))
+        sugiyama->fails(ival);
+
+      if (dataSet->get("runs", ival))
+        sugiyama->runs(ival);
+
+      if (dataSet->get("arrangeCCS", bval))
+        sugiyama->arrangeCCs(bval);
+
+      if (dataSet->get("minDistCC", dval))
+        sugiyama->minDistCC(dval);
+
+      if (dataSet->get("pageRatio", dval))
+        sugiyama->pageRatio(dval);
+
+      if (dataSet->get("alignBaseClasses", bval))
+        sugiyama->alignBaseClasses(bval);
+
+      if (dataSet->get("alignSiblings", bval))
+        sugiyama->alignSiblings(bval);
+
+      if (dataSet->get(ELT_RANKING, sc)) {
+        if (sc.getCurrent() == ELT_LONGESTPATHRANKING) {
+          sugiyama->setRanking(new ogdf::LongestPathRanking());
+        }
+        else {
+          sugiyama->setRanking(new ogdf::OptimalRanking());
+        }
+      }
+
+      if (dataSet->get(ELT_TWOLAYERCROSS, sc)) {
+        if (sc.getCurrent() == ELT_BARYCENTER) {
+          sugiyama->setCrossMin(new ogdf::BarycenterHeuristic());
+        }
+        else if (sc.getCurrent() == ELT_MEDIAN) {
+          sugiyama->setCrossMin(new ogdf::MedianHeuristic());
+        }
+        else {
+          sugiyama->setCrossMin(new ogdf::SplitHeuristic());
+        }
+      }
+    }
+  }
+
+  void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
+    if (dataSet != 0) {
+      bool bval = false;
+
+      if (dataSet->get("transpose", bval)) {
+        if (bval) {
+          transposeLayoutVertically();
+        }
+      }
+    }
+  }
 
 };
 /*@}*/

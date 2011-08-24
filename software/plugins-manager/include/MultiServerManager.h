@@ -27,93 +27,94 @@
 
 #include "Server.h"
 #include "Request.h"
-#include "ResponseTreatment.h" 
+#include "ResponseTreatment.h"
 #include "PluginsListManager.h"
 
 namespace tlp {
 
-  struct PluginsServer{
-    std::string name;
-    Server* serv;
-    std::string xmlPluginList;
+struct PluginsServer {
+  std::string name;
+  Server* serv;
+  std::string xmlPluginList;
 
-    PluginsServer():serv(NULL) {}
-    ~PluginsServer() {
-      delete serv;
-    }
-  
+  PluginsServer():serv(NULL) {}
+  ~PluginsServer() {
+    delete serv;
+  }
+
+};
+
+class MultiServerManager : public QObject, public PluginsListManager {
+
+  Q_OBJECT
+
+public :
+  friend class GetXmlListTreatment;
+
+  MultiServerManager(std::vector<LocalPluginInfo> &pluginsList);
+  ~MultiServerManager();
+  void addServer(const std::string &addr);
+  void removeServer(int i);
+  void modifyServer(int i, const std::string &name, const std::string &addr);
+  void getNames(std::vector<std::string> &names);
+  std::string getName(const std::string &addr);
+  void getAddrs(std::vector<std::string> &address);
+  void getAddr(const std::string &name, std::string &address);
+  void modifyTreeView(int viewNumber);
+  void sendServerConnect();
+  bool requestTulipLastVersionNumber();
+
+  void getResponse();
+
+public slots:
+  void changeName(ServerNameTreatment* treat,std::string addr,std::string name);
+  void tulipLastVersionNumberReceived(TulipLastVersionNumberTreatment*,std::string);
+
+signals:
+
+  void newPluginList();
+  void nameReceived(MultiServerManager*,std::string,std::string);
+  void versionReceived(std::string);
+
+private :
+
+  std::list<PluginsServer*> pluginsServersList;
+
+  bool requestPluginList(Server* serv);
+  bool requestServerName(Server* serv);
+  bool requestTulipLastVersionNumber(Server* serv);
+  bool requestServerConnect(Server* serv);
+  bool requestPluginLists();
+
+};
+
+
+class GetXmlListTreatment : public ResponseTreatment {
+
+  MultiServerManager* msm;
+  std::string serverAddr;
+
+public :
+
+  GetXmlListTreatment(MultiServerManager* msm, std::string serverAddr) : msm(msm), serverAddr(serverAddr) {
   };
- 
-  class MultiServerManager : public QObject, public PluginsListManager {
 
-    Q_OBJECT
- 
-  public : 
-    friend class GetXmlListTreatment;
-    
-    MultiServerManager(std::vector<LocalPluginInfo> &pluginsList);
-    ~MultiServerManager();
-    void addServer(const std::string &addr);
-    void removeServer(int i);
-    void modifyServer(int i, const std::string &name, const std::string &addr);
-    void getNames(std::vector<std::string> &names);
-    std::string getName(const std::string &addr);
-    void getAddrs(std::vector<std::string> &address);
-    void getAddr(const std::string &name, std::string &address);
-    void modifyTreeView(int viewNumber);
-    void sendServerConnect();
-    bool requestTulipLastVersionNumber();
-    
-    void getResponse();
-		      
-  public slots:
-    void changeName(ServerNameTreatment* treat,std::string addr,std::string name); 
-    void tulipLastVersionNumberReceived(TulipLastVersionNumberTreatment*,std::string);
-    
-  signals:
-    
-    void newPluginList();
-    void nameReceived(MultiServerManager*,std::string,std::string);
-    void versionReceived(std::string);
+  void operator()(const std::string &data) {
+    std::string serverName;
+    foreach(PluginsServer *ps,msm->pluginsServersList) {
+      std::string address;
+      ps->serv->getAddress(address);
 
-  private :
-    
-    std::list<PluginsServer*> pluginsServersList;
-
-    bool requestPluginList(Server* serv);
-    bool requestServerName(Server* serv);
-    bool requestTulipLastVersionNumber(Server* serv);
-    bool requestServerConnect(Server* serv);
-    bool requestPluginLists();
-    
-  };
-  
-
-  class GetXmlListTreatment : public ResponseTreatment {
-    
-    MultiServerManager* msm;
-    std::string serverAddr;
-    
-  public :
-    
-    GetXmlListTreatment(MultiServerManager* msm, std::string serverAddr) : msm(msm), serverAddr(serverAddr){
-    };
-    
-    void operator()(const std::string &data){
-      std::string serverName;
-      foreach(PluginsServer *ps,msm->pluginsServersList){
-	std::string address;
-	ps->serv->getAddress(address);
-	if(address.compare(serverAddr)==0){
-	  serverName=ps->name;
-	}
+      if(address.compare(serverAddr)==0) {
+        serverName=ps->name;
       }
-      msm->addServerList(serverName,data);
-      msm->getResponse();
-    };
-    
+    }
+    msm->addServerList(serverName,data);
+    msm->getResponse();
   };
-  
+
+};
+
 }
 #endif //_Tulip_MULTISERVERMANAGER_H_
 

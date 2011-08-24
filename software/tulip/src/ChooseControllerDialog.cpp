@@ -26,21 +26,22 @@ using namespace std;
 using namespace tlp;
 
 ChooseControllerDialog::ChooseControllerDialog( QWidget* parent)
-    : QDialog( parent) {
+  : QDialog( parent) {
   setupUi(this);
   PreferenceManager &preferenceManager=PreferenceManager::getInst();
   bool autoLoadController=preferenceManager.getAutoLoadController();
   askAgain->setChecked(autoLoadController);
   connect(listWidget,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(accept()));
-  
+
   listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
-void ChooseControllerDialog::setControllersAvailable(const vector<string> &controllersName){
-  for(vector<string>::const_iterator it=controllersName.begin();it!=controllersName.end();++it){
+void ChooseControllerDialog::setControllersAvailable(const vector<string> &controllersName) {
+  for(vector<string>::const_iterator it=controllersName.begin(); it!=controllersName.end(); ++it) {
     QListWidgetItem *item=new QListWidgetItem((*it).c_str());
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     listWidget->addItem(item);
+
     if((*it)==defaultControllerName) {
       QFont f = item->font();
       f.setWeight(QFont::Bold);
@@ -49,21 +50,22 @@ void ChooseControllerDialog::setControllersAvailable(const vector<string> &contr
       listWidget->setCurrentItem(item);
     }
   }
+
   //Perform default selection if no item are selected.
-  if(listWidget->selectedItems().isEmpty() && listWidget->count()!=0){
-      listWidget->item(0)->setSelected(true);
+  if(listWidget->selectedItems().isEmpty() && listWidget->count()!=0) {
+    listWidget->item(0)->setSelected(true);
   }
 }
 
-void ChooseControllerDialog::setDefaultCheckedControllerName(const string &controllerName){
+void ChooseControllerDialog::setDefaultCheckedControllerName(const string &controllerName) {
   defaultControllerName=controllerName;
 }
 
-void ChooseControllerDialog::setDefaultControllerName(const string &controllerName){
+void ChooseControllerDialog::setDefaultControllerName(const string &controllerName) {
   savedControllerLabel->setText(controllerName.c_str());
 }
 
-string ChooseControllerDialog::getCheckedControllerName(){
+string ChooseControllerDialog::getCheckedControllerName() {
   assert(!listWidget->selectedItems().isEmpty());
   return listWidget->selectedItems().front()->text().toStdString();
 }

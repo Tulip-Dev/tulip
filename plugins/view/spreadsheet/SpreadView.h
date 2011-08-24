@@ -58,40 +58,40 @@ class BooleanProperty;
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  */
-class SpreadView: public tlp::AbstractView , public tlp::PropertyObserver, public tlp::Observable{
-    Q_OBJECT
+class SpreadView: public tlp::AbstractView , public tlp::PropertyObserver, public tlp::Observable {
+  Q_OBJECT
 public:
 
-    SpreadView();
-    virtual ~SpreadView();
+  SpreadView();
+  virtual ~SpreadView();
 
-    QWidget *construct(QWidget *parent);
-    void setData(tlp::Graph *graph, tlp::DataSet dataSet);
-    void getData(tlp::Graph **graph, tlp::DataSet *dataSet);
-    tlp::Graph *getGraph();
+  QWidget *construct(QWidget *parent);
+  void setData(tlp::Graph *graph, tlp::DataSet dataSet);
+  void getData(tlp::Graph **graph, tlp::DataSet *dataSet);
+  tlp::Graph *getGraph();
 
-    void installInteractor(QAction*) {
-    }
+  void installInteractor(QAction*) {
+  }
 
-    QImage createPicture(int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
+  QImage createPicture(int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
 
-    bool eventFilter(QObject *object, QEvent *event);
+  bool eventFilter(QObject *object, QEvent *event);
 
 public slots :
 
-    void draw();
-    void refresh();
-    void init();
-    void setGraph(tlp::Graph *graph);
+  void draw();
+  void refresh();
+  void init();
+  void setGraph(tlp::Graph *graph);
 
 private:
 
-    /**
-      * @brief Get the current displayed table.
-      **/
-    SpreadViewTableWidget* currentTable()const;
-    Ui::SpreadViewWidget *ui;
-    tlp::Graph* _graph;
+  /**
+    * @brief Get the current displayed table.
+    **/
+  SpreadViewTableWidget* currentTable()const;
+  Ui::SpreadViewWidget *ui;
+  tlp::Graph* _graph;
 
 };
 

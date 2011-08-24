@@ -8,19 +8,19 @@ using namespace std;
 */
 
 ElementCollection::ElementCollection(QObject *parent)
-    : QAbstractListModel(parent)
-{
+  : QAbstractListModel(parent) {
 }
 
-ElementCollection::ElementCollection(const ElementCollection& other):QAbstractListModel(NULL),_data(other._data){
+ElementCollection::ElementCollection(const ElementCollection& other):QAbstractListModel(NULL),_data(other._data) {
 
 }
 
-ElementCollection & ElementCollection::operator=( const ElementCollection & other){
-    if(this != &other){
-        _data= other._data;
-    }
-    return *this;
+ElementCollection & ElementCollection::operator=( const ElementCollection & other) {
+  if(this != &other) {
+    _data= other._data;
+  }
+
+  return *this;
 }
 
 /**
@@ -29,17 +29,16 @@ ElementCollection & ElementCollection::operator=( const ElementCollection & othe
 */
 
 ElementCollection::ElementCollection(const QStringList &strings, QObject *parent)
-    : QAbstractListModel(parent)
-{
-    for(QStringList::const_iterator it = strings.begin();it != strings.end();++it){
-        addElement(*it);
-    }
+  : QAbstractListModel(parent) {
+  for(QStringList::const_iterator it = strings.begin(); it != strings.end(); ++it) {
+    addElement(*it);
+  }
 }
 
-void ElementCollection::addElement(const QString& label){
-    QMap<int,QVariant> element;
-    element.insert(Qt::DisplayRole,label);
-    _data.push_back(element);
+void ElementCollection::addElement(const QString& label) {
+  QMap<int,QVariant> element;
+  element.insert(Qt::DisplayRole,label);
+  _data.push_back(element);
 }
 
 /**
@@ -53,12 +52,11 @@ void ElementCollection::addElement(const QString& label){
     \sa insertRows(), removeRows(), QAbstractItemModel::rowCount()
 */
 
-int ElementCollection::rowCount(const QModelIndex &parent) const
-{
-    if (parent.isValid())
-        return 0;
+int ElementCollection::rowCount(const QModelIndex &parent) const {
+  if (parent.isValid())
+    return 0;
 
-    return _data.count();
+  return _data.count();
 }
 
 /**
@@ -70,26 +68,28 @@ int ElementCollection::rowCount(const QModelIndex &parent) const
     \sa setData()
 */
 
-QVariant ElementCollection::data(const QModelIndex &index, int role) const
-{
-    if (index.row() < 0 || index.row() >= _data.size())
-        return QVariant();
-
-    if (role == Qt::DisplayRole || role == Qt::EditRole){
-        if(_data.at(index.row()).contains(Qt::DisplayRole)){
-            return _data.at(index.row()).value(Qt::DisplayRole);
-        }else{
-            return QVariant();
-        }
-    }else{
-        if(_data.at(index.row()).contains(role)){
-            return _data.at(index.row()).value(role);
-        }else{
-            return QVariant();
-        }
-    }
-
+QVariant ElementCollection::data(const QModelIndex &index, int role) const {
+  if (index.row() < 0 || index.row() >= _data.size())
     return QVariant();
+
+  if (role == Qt::DisplayRole || role == Qt::EditRole) {
+    if(_data.at(index.row()).contains(Qt::DisplayRole)) {
+      return _data.at(index.row()).value(Qt::DisplayRole);
+    }
+    else {
+      return QVariant();
+    }
+  }
+  else {
+    if(_data.at(index.row()).contains(role)) {
+      return _data.at(index.row()).value(role);
+    }
+    else {
+      return QVariant();
+    }
+  }
+
+  return QVariant();
 }
 
 /**
@@ -100,12 +100,11 @@ QVariant ElementCollection::data(const QModelIndex &index, int role) const
     \sa QAbstractItemModel::flags()
 */
 
-Qt::ItemFlags ElementCollection::flags(const QModelIndex &index) const
-{
-    if (!index.isValid())
-        return QAbstractItemModel::flags(index) | Qt::ItemIsDropEnabled;
+Qt::ItemFlags ElementCollection::flags(const QModelIndex &index) const {
+  if (!index.isValid())
+    return QAbstractItemModel::flags(index) | Qt::ItemIsDropEnabled;
 
-    return QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsUserCheckable;
+  return QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsUserCheckable;
 }
 
 /**
@@ -117,18 +116,20 @@ Qt::ItemFlags ElementCollection::flags(const QModelIndex &index) const
     \sa Qt::ItemDataRole, data()
 */
 
-bool ElementCollection::setData(const QModelIndex &index, const QVariant &value, int role)
-{    
-    if (index.row() >= 0 && index.row() < _data.size()){ 
-        if(role == Qt::EditRole || role == Qt::DisplayRole) {
-            _data[index.row()].insert(Qt::DisplayRole,  value);
-        }else{            
-            _data[index.row()].insert(role, value);
-        }
-        emit dataChanged(index, index);
-        return true;
+bool ElementCollection::setData(const QModelIndex &index, const QVariant &value, int role) {
+  if (index.row() >= 0 && index.row() < _data.size()) {
+    if(role == Qt::EditRole || role == Qt::DisplayRole) {
+      _data[index.row()].insert(Qt::DisplayRole,  value);
     }
-    return false;
+    else {
+      _data[index.row()].insert(role, value);
+    }
+
+    emit dataChanged(index, index);
+    return true;
+  }
+
+  return false;
 }
 
 /**
@@ -142,19 +143,18 @@ bool ElementCollection::setData(const QModelIndex &index, const QVariant &value,
     \sa QAbstractItemModel::insertRows()
 */
 
-bool ElementCollection::insertRows(int row, int count, const QModelIndex &parent)
-{
-    if (count < 1 || row < 0 || row > rowCount(parent))
-        return false;
+bool ElementCollection::insertRows(int row, int count, const QModelIndex &parent) {
+  if (count < 1 || row < 0 || row > rowCount(parent))
+    return false;
 
-    beginInsertRows(QModelIndex(), row, row + count - 1);
+  beginInsertRows(QModelIndex(), row, row + count - 1);
 
-    for (int r = 0; r < count; ++r)
-        _data.insert(row, QMap<int,QVariant>() );
+  for (int r = 0; r < count; ++r)
+    _data.insert(row, QMap<int,QVariant>() );
 
-    endInsertRows();
+  endInsertRows();
 
-    return true;
+  return true;
 }
 
 /**
@@ -168,40 +168,42 @@ bool ElementCollection::insertRows(int row, int count, const QModelIndex &parent
     \sa QAbstractItemModel::removeRows()
 */
 
-bool ElementCollection::removeRows(int row, int count, const QModelIndex &parent)
-{
-    if (count <= 0 || row < 0 || (row + count) > rowCount(parent))
-        return false;
+bool ElementCollection::removeRows(int row, int count, const QModelIndex &parent) {
+  if (count <= 0 || row < 0 || (row + count) > rowCount(parent))
+    return false;
 
-    beginRemoveRows(QModelIndex(), row, row + count - 1);
+  beginRemoveRows(QModelIndex(), row, row + count - 1);
 
-    for (int r = 0; r < count; ++r)
-        _data.removeAt(row);
+  for (int r = 0; r < count; ++r)
+    _data.removeAt(row);
 
-    endRemoveRows();
+  endRemoveRows();
 
-    return true;
+  return true;
 }
 
-void ElementCollection::setAllElementSelection(bool selected){
-    for(int i = 0 ; i < rowCount(); ++i){
-        setData(index(i,0),QVariant(selected),SelectionType);
+void ElementCollection::setAllElementSelection(bool selected) {
+  for(int i = 0 ; i < rowCount(); ++i) {
+    setData(index(i,0),QVariant(selected),SelectionType);
+  }
+}
+
+void ElementCollection::setElementSelection(int element,bool selected) {
+  setData(index(element,0),QVariant(selected),SelectionType);
+}
+
+QList<int> ElementCollection::selectedElement()const {
+  QList<int> selectedElements;
+
+  for(int i = 0 ; i < rowCount(); ++i) {
+    QVariant value = data(index(i,0),SelectionType);
+
+    if(value.isValid() && value.toBool()) {
+      selectedElements.push_back(i);
     }
-}
+  }
 
-void ElementCollection::setElementSelection(int element,bool selected){
-    setData(index(element,0),QVariant(selected),SelectionType);
-}
-
-QList<int> ElementCollection::selectedElement()const{
-    QList<int> selectedElements;
-    for(int i = 0 ; i < rowCount(); ++i){
-        QVariant value = data(index(i,0),SelectionType);
-        if(value.isValid() && value.toBool()){
-            selectedElements.push_back(i);
-        }
-    }
-    return selectedElements;
+  return selectedElements;
 }
 
 /**

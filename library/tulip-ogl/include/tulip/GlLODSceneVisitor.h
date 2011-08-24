@@ -30,58 +30,58 @@
 
 namespace tlp {
 
-  class GlGraphInputData;
-  class GlLODCalculator;
+class GlGraphInputData;
+class GlLODCalculator;
+
+/**
+ * Visitor to colect the Bounding box of entities in the scene
+ */
+class TLP_GL_SCOPE GlLODSceneVisitor : public GlSceneVisitor {
+
+public:
 
   /**
-   * Visitor to colect the Bounding box of entities in the scene
+   * Basic constructor
    */
-  class TLP_GL_SCOPE GlLODSceneVisitor : public GlSceneVisitor{
+  GlLODSceneVisitor(GlLODCalculator *calculator,GlGraphInputData* inputData)
+    : calculator(calculator),inputData(inputData) {
+    threadSafe=true;
+  }
 
-  public:
+  /**
+   * Visit a GlSimpleEntity
+   */
+  virtual void visit(GlSimpleEntity *entity);
+  /**
+   * Visit a node
+   */
+  virtual void visit(GlNode *glNode);
+  /**
+   * Visit an Edge
+   */
+  virtual void visit(GlEdge *glEdge);
+  /**
+   * Visit a layer
+   */
+  virtual void visit(GlLayer *layer);
 
-    /**
-     * Basic constructor 
-     */
-    GlLODSceneVisitor(GlLODCalculator *calculator,GlGraphInputData* inputData)
-      : calculator(calculator),inputData(inputData) {
-      threadSafe=true;
-    }
+  /**
+   * Reserve memory to store nodes LOD
+   */
+  virtual void reserveMemoryForNodes(unsigned int numberOfNodes);
 
-    /**
-     * Visit a GlSimpleEntity
-     */
-    virtual void visit(GlSimpleEntity *entity);
-    /**
-     * Visit a node
-     */
-    virtual void visit(GlNode *glNode);
-    /**
-     * Visit an Edge
-     */
-    virtual void visit(GlEdge *glEdge);
-    /**
-     * Visit a layer
-     */
-    virtual void visit(GlLayer *layer);
+  /**
+   * Reserve memory to store edges LOD
+   */
+  virtual void reserveMemoryForEdges(unsigned int numberOfEdges);
 
-    /**
-     * Reserve memory to store nodes LOD
-     */
-    virtual void reserveMemoryForNodes(unsigned int numberOfNodes);
+private:
 
-    /**
-     * Reserve memory to store edges LOD
-     */
-    virtual void reserveMemoryForEdges(unsigned int numberOfEdges);
+  GlLODCalculator* calculator;
+  GlGraphInputData* inputData;
 
-  private:
-    
-    GlLODCalculator* calculator;
-    GlGraphInputData* inputData;
+};
 
-  };
-  
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

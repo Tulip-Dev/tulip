@@ -28,34 +28,34 @@
 
 namespace tlp {
 
-  class HttpRequest : public QObject{
-    Q_OBJECT
-    std::string result;
-    QHttp http;
-    QFile *outFile;
-    std::string server;
-    QObject *mainWindow;
+class HttpRequest : public QObject {
+  Q_OBJECT
+  std::string result;
+  QHttp http;
+  QFile *outFile;
+  std::string server;
+  QObject *mainWindow;
 
-  public:
+public:
 
-    HttpRequest(const std::string &serverName,QObject *parent=0);
+  HttpRequest(const std::string &serverName,QObject *parent=0);
 
-    void request(const std::string &msg);
-    void get(const std::string &getFileName, const std::string &outFileName);
+  void request(const std::string &msg);
+  void get(const std::string &getFileName, const std::string &outFileName);
 
-    void getResponse(std::string &response);
+  void getResponse(std::string &response);
 
-    void getServerName(std::string &serverName);
+  void getServerName(std::string &serverName);
 
-    static QNetworkProxy getProxy();
+  static QNetworkProxy getProxy();
 
-  signals:
-    void done();
+signals:
+  void done();
 
-  private slots:
-    void requestDone(bool error);
+private slots:
+  void requestDone(bool error);
 
-  };
+};
 
 }
 

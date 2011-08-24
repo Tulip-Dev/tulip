@@ -27,25 +27,25 @@
 #include <tulip/tulipconf.h>
 
 namespace tlp {
-  class InstallPluginDialog;
-  
-  class InstallExitDialog : public QDialog{
-    Q_OBJECT
-    
-  public:
-    InstallExitDialog(InstallPluginDialog* parent);
-    
-  private:
-    InstallPluginDialog* dialogParent;
-    QLabel* label;
-    QPushButton* yes;
-    QPushButton* no;
-    void closeEvent(QCloseEvent* e);
-				   
-  private slots:
-    void stopped();
- 
-  };
+class InstallPluginDialog;
+
+class InstallExitDialog : public QDialog {
+  Q_OBJECT
+
+public:
+  InstallExitDialog(InstallPluginDialog* parent);
+
+private:
+  InstallPluginDialog* dialogParent;
+  QLabel* label;
+  QPushButton* yes;
+  QPushButton* no;
+  void closeEvent(QCloseEvent* e);
+
+private slots:
+  void stopped();
+
+};
 
 }
 

@@ -42,8 +42,10 @@ public:
 
 bool HierarchicalClustering::split(DoubleProperty *metric,list<node> &orderedNode) {
   Iterator<node> *itN=graph->getNodes();
-  for (;itN->hasNext();)
+
+  for (; itN->hasNext();)
     orderedNode.push_back(itN->next());
+
   delete itN;
 
   LessThan comp;
@@ -56,18 +58,22 @@ bool HierarchicalClustering::split(DoubleProperty *metric,list<node> &orderedNod
   //We split the sorted list in two part
   int nbElement=orderedNode.size();
   nbElement/=2;
+
   if (nbElement<10) return (true);
+
   itListNode=orderedNode.begin();
   tmpDbl=metric->getNodeValue(*itListNode);
   int n=0;
   ++itListNode;
   nbElement--;
+
   while ((itListNode!=orderedNode.end()) && ((nbElement>0) || (tmpDbl==metric->getNodeValue(*itListNode))) ) {
     tmpDbl=metric->getNodeValue(*itListNode);
     ++itListNode;
     n++;
     nbElement--;
   }
+
   orderedNode.erase(itListNode,orderedNode.end());
   return false;
 }
@@ -79,10 +85,11 @@ bool HierarchicalClustering::run() {
   tmp1="Hierar Sup";
   tmp2="Hierar Inf";
   bool result=false;
-  
+
   while (!result) {
     list<node> badNodeList;
     result = split(metric,badNodeList);
+
     if (!result) {
       BooleanProperty sel1(graph);
       BooleanProperty sel2(graph);
@@ -96,29 +103,40 @@ bool HierarchicalClustering::run() {
       splitRes.setAllEdgeValue(true);
 
       list<node>::iterator itl;
-      for (itl=badNodeList.begin();itl!=badNodeList.end();++itl)
-	splitRes.setNodeValue(*itl, false);
+
+      for (itl=badNodeList.begin(); itl!=badNodeList.end(); ++itl)
+        splitRes.setNodeValue(*itl, false);
 
       Iterator<node> *itN=graph->getNodes();
-      for (;itN->hasNext();) {
-	node nit=itN->next();
-	if (splitRes.getNodeValue(nit)) {
-	  sel2.setNodeValue(nit, false);
-	  Iterator<edge> *itE=graph->getInOutEdges(nit);
-	  for (;itE->hasNext();) {
-	    edge ite=itE->next();
-	    sel2.setEdgeValue(ite, false);
-	  }delete itE;
-	}
-	else {
-	  sel1.setNodeValue(nit,false);
-	  Iterator<edge> *itE=graph->getInOutEdges(nit);
-	  for (;itE->hasNext();) {
-	    edge ite=itE->next();
-	    sel1.setEdgeValue(ite, false);
-	  } delete itE;
-	}
-      }delete itN;
+
+      for (; itN->hasNext();) {
+        node nit=itN->next();
+
+        if (splitRes.getNodeValue(nit)) {
+          sel2.setNodeValue(nit, false);
+          Iterator<edge> *itE=graph->getInOutEdges(nit);
+
+          for (; itE->hasNext();) {
+            edge ite=itE->next();
+            sel2.setEdgeValue(ite, false);
+          }
+
+          delete itE;
+        }
+        else {
+          sel1.setNodeValue(nit,false);
+          Iterator<edge> *itE=graph->getInOutEdges(nit);
+
+          for (; itE->hasNext();) {
+            edge ite=itE->next();
+            sel1.setEdgeValue(ite, false);
+          }
+
+          delete itE;
+        }
+      }
+
+      delete itN;
 
       Graph * tmpSubGraph;
       tmpSubGraph = graph->addSubGraph(&sel1);
@@ -127,16 +145,15 @@ bool HierarchicalClustering::run() {
       graph=tmpSubGraph;
     }
   }
+
   return true;
 }
 //================================================================================
-bool HierarchicalClustering::check(string &erreurMsg)
-{
+bool HierarchicalClustering::check(string &erreurMsg) {
   erreurMsg="";
   return true;
 }
 //================================================================================
-void HierarchicalClustering::reset()
-{
+void HierarchicalClustering::reset() {
 }
 //================================================================================

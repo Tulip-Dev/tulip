@@ -35,7 +35,7 @@ public:
   };
 
   GlColorScale(ColorScale *colorScale, const Coord &baseCoord, const float length,
-			   const float thickness, Orientation orientation);
+               const float thickness, Orientation orientation);
 
   ~GlColorScale();
 
@@ -49,17 +49,27 @@ public:
 
   void setWithXML(xmlNodePtr) {}
 
-  Coord getBaseCoord() const {return baseCoord;}
+  Coord getBaseCoord() const {
+    return baseCoord;
+  }
 
-  float getThickness() const {return thickness;}
+  float getThickness() const {
+    return thickness;
+  }
 
-  float getLength() const {return length;}
+  float getLength() const {
+    return length;
+  }
 
-  GlPolyQuad *getColorScalePolyQuad() const {return colorScalePolyQuad;}
+  GlPolyQuad *getColorScalePolyQuad() const {
+    return colorScalePolyQuad;
+  }
 
   void setColorScale(ColorScale * scale);
 
-  ColorScale *getColorScale() {return colorScale;}
+  ColorScale *getColorScale() {
+    return colorScale;
+  }
 
 protected :
 

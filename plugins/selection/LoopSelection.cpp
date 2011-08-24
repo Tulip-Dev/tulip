@@ -30,8 +30,8 @@ bool LoopSelection::run() {
   booleanResult->setAllNodeValue(false);
   edge e;
   forEach(e, graph->getEdges())
-    booleanResult->setEdgeValue(e, 
-			       graph->source(e)==graph->target(e));
+  booleanResult->setEdgeValue(e,
+                              graph->source(e)==graph->target(e));
   return true;
 }
 //============================================

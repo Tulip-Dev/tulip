@@ -27,93 +27,107 @@ tlp::GlyphManager* tlp::GlyphManager::inst=0;
 
 using namespace std;
 
-namespace tlp
-{
-  static TLP_HASH_MAP<int,std::string>   glyphIdToName;
-  static TLP_HASH_MAP<std::string, int>  nameToGlyphId;
+namespace tlp {
+static TLP_HASH_MAP<int,std::string>   glyphIdToName;
+static TLP_HASH_MAP<std::string, int>  nameToGlyphId;
 
-  GlyphManager::GlyphManager() {
-    GlyphFactory::initFactory();
+GlyphManager::GlyphManager() {
+  GlyphFactory::initFactory();
+}
+//====================================================
+string GlyphManager::glyphName(int id) {
+  if (glyphIdToName.find(id)!=glyphIdToName.end())
+    return glyphIdToName[id];
+  else {
+    cerr << __PRETTY_FUNCTION__ << endl;
+    cerr << "Invalid glyph id" << endl;
+    return string("invalid");
   }
-  //====================================================
-  string GlyphManager::glyphName(int id) {
-    if (glyphIdToName.find(id)!=glyphIdToName.end())
-      return glyphIdToName[id];
-    else {
-      cerr << __PRETTY_FUNCTION__ << endl;
-      cerr << "Invalid glyph id" << endl;
-      return string("invalid");
-    }
+}
+//====================================================
+int GlyphManager::glyphId(string name) {
+  if (nameToGlyphId.find(name)!=nameToGlyphId.end())
+    return nameToGlyphId[name];
+  else {
+    cerr << __PRETTY_FUNCTION__ << endl;
+    cerr << "Invalid glyph name" << endl;
+    return 0;
   }
-  //====================================================
-  int GlyphManager::glyphId(string name) {
-    if (nameToGlyphId.find(name)!=nameToGlyphId.end())
-      return nameToGlyphId[name];
-    else {
-      cerr << __PRETTY_FUNCTION__ << endl;
-      cerr << "Invalid glyph name" << endl;
-      return 0;
-    }
-  }
-  //====================================================
-  void GlyphManager::loadGlyphPlugins() {
-    Iterator<string> *itS=GlyphFactory::factory->availablePlugins();
-    while (itS->hasNext()) {
-      string pluginName=itS->next();
-      int pluginId=GlyphFactory::factory->objMap[pluginName]->getId();
-      glyphIdToName[pluginId]=pluginName;
-      nameToGlyphId[pluginName]=pluginId;
-    } delete itS;
-  }
-  //====================================================
-  void GlyphManager::loadPlugins(PluginLoader *plug) {
-    GlyphFactory::initFactory();
-    string::const_iterator begin=tlp::TulipPluginsPath.begin();
-    string::const_iterator end=begin;
-    glyphIdToName.clear();
-    nameToGlyphId.clear();
-    while (end!=tlp::TulipPluginsPath.end())
-      if ((*end)==tlp::PATH_DELIMITER) {
-	if (begin!=end)
-	  tlp::loadPluginsFromDir(string(begin,end)+"/glyphs", "Glyph", plug);
-	++end;
-	begin=end;
-      } else
-	++end;
-    if (begin!=end) {
-      tlp::loadPluginsFromDir(string(begin,end)+"/glyphs", "Glyph", plug);
-    }
-    loadGlyphPlugins();
-  }
-  //
-  void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs) {
-    // first destroy current default glyph
-    Glyph* defaultGlyph = glyphs.getDefault();
-    if (defaultGlyph)
-      delete defaultGlyph;
+}
+//====================================================
+void GlyphManager::loadGlyphPlugins() {
+  Iterator<string> *itS=GlyphFactory::factory->availablePlugins();
 
-    // then set a new one
-    GlyphContext gc = GlyphContext(graph,glGraphInputData);
-    glyphs.setAll(GlyphFactory::factory->getPluginObject("3D - Cube OutLined", &gc));
-    Iterator<string> *itS = GlyphFactory::factory->availablePlugins();
-    while (itS->hasNext()) {
-      string glyphName=itS->next();
-      //cerr << "loading : " << glyphName << endl;
-      Glyph *newGlyph = GlyphFactory::factory->getPluginObject(glyphName, &gc);
-      //    cerr << newGlyph << endl;
-      //if (GlyphFactory::factory->objMap[glyphName]->getId() == 0) 
-      //  glyphs.setAll(newGlyph);
-      //    cerr << " id:" << GlyphFactory::factory->objMap[glyphName]->getId() << endl;
-      glyphs.set(GlyphFactory::factory->objMap[glyphName]->getId(), newGlyph);
+  while (itS->hasNext()) {
+    string pluginName=itS->next();
+    int pluginId=GlyphFactory::factory->objMap[pluginName]->getId();
+    glyphIdToName[pluginId]=pluginName;
+    nameToGlyphId[pluginName]=pluginId;
+  }
+
+  delete itS;
+}
+//====================================================
+void GlyphManager::loadPlugins(PluginLoader *plug) {
+  GlyphFactory::initFactory();
+  string::const_iterator begin=tlp::TulipPluginsPath.begin();
+  string::const_iterator end=begin;
+  glyphIdToName.clear();
+  nameToGlyphId.clear();
+
+  while (end!=tlp::TulipPluginsPath.end())
+    if ((*end)==tlp::PATH_DELIMITER) {
+      if (begin!=end)
+        tlp::loadPluginsFromDir(string(begin,end)+"/glyphs", "Glyph", plug);
+
+      ++end;
+      begin=end;
+    }
+    else
+      ++end;
+
+  if (begin!=end) {
+    tlp::loadPluginsFromDir(string(begin,end)+"/glyphs", "Glyph", plug);
+  }
+
+  loadGlyphPlugins();
+}
+//
+void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs) {
+  // first destroy current default glyph
+  Glyph* defaultGlyph = glyphs.getDefault();
+
+  if (defaultGlyph)
+    delete defaultGlyph;
+
+  // then set a new one
+  GlyphContext gc = GlyphContext(graph,glGraphInputData);
+  glyphs.setAll(GlyphFactory::factory->getPluginObject("3D - Cube OutLined", &gc));
+  Iterator<string> *itS = GlyphFactory::factory->availablePlugins();
+
+  while (itS->hasNext()) {
+    string glyphName=itS->next();
+    //cerr << "loading : " << glyphName << endl;
+    Glyph *newGlyph = GlyphFactory::factory->getPluginObject(glyphName, &gc);
+    //    cerr << newGlyph << endl;
+    //if (GlyphFactory::factory->objMap[glyphName]->getId() == 0)
+    //  glyphs.setAll(newGlyph);
+    //    cerr << " id:" << GlyphFactory::factory->objMap[glyphName]->getId() << endl;
+    glyphs.set(GlyphFactory::factory->objMap[glyphName]->getId(), newGlyph);
     //    cerr << glyphs.get(GlyphFactory::factory->objMap[glyphName]->getId()) << endl;
-    } delete itS;
   }
 
-  void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Glyph *>& glyphs) {
-    Iterator<string> *itS = GlyphFactory::factory->availablePlugins();
-    while (itS->hasNext()) {
-      string glyphName=itS->next();
-      delete glyphs.get(GlyphFactory::factory->objMap[glyphName]->getId());
-    } delete itS;
+  delete itS;
+}
+
+void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Glyph *>& glyphs) {
+  Iterator<string> *itS = GlyphFactory::factory->availablePlugins();
+
+  while (itS->hasNext()) {
+    string glyphName=itS->next();
+    delete glyphs.get(GlyphFactory::factory->objMap[glyphName]->getId());
   }
-} 
+
+  delete itS;
+}
+}

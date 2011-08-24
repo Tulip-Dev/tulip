@@ -26,22 +26,22 @@
 
 namespace tlp {
 
-  class SoapResponseReader{
+class SoapResponseReader {
 
-    QDomDocument doc;
- 
-  public : 
-    SoapResponseReader(const std::string &XML);
-    
-    void attachXML();
-    bool getFunctionName(std::string &functionName);
-    bool getReturnedData(std::string &data);
-    
-  private :
-    void extractSoapEnv(const std::string &XML,std::string &result);
-    
-  };
-  
+  QDomDocument doc;
+
+public :
+  SoapResponseReader(const std::string &XML);
+
+  void attachXML();
+  bool getFunctionName(std::string &functionName);
+  bool getReturnedData(std::string &data);
+
+private :
+  void extractSoapEnv(const std::string &XML,std::string &result);
+
+};
+
 }
 
 #endif //_SOAPRESPONSEREADER_H_

@@ -27,22 +27,24 @@
 
 namespace tlp {
 
-  class TLP_QT_SCOPE TextEditDialog : public QDialog,public Ui::TextEditDialogData {
+class TLP_QT_SCOPE TextEditDialog : public QDialog,public Ui::TextEditDialogData {
 
-    Q_OBJECT
+  Q_OBJECT
 
-  public :
+public :
 
-    TextEditDialog(const QString &text,QWidget *parent=NULL):QDialog(parent) {
-      setupUi(this);
-      // don't break focus chain
-      textEdit->setTabChangesFocus(true);
-      textEdit->setText(text);
-    }
+  TextEditDialog(const QString &text,QWidget *parent=NULL):QDialog(parent) {
+    setupUi(this);
+    // don't break focus chain
+    textEdit->setTabChangesFocus(true);
+    textEdit->setText(text);
+  }
 
-    QString getText(){return textEdit->toPlainText();}
+  QString getText() {
+    return textEdit->toPlainText();
+  }
 
-  };
+};
 
 }
 

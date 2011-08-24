@@ -28,6 +28,6 @@
 extern bool generatePluginInfoFile(tlp::LocalPluginInfo& pInfo, QDir& dstDir);
 
 extern void generatePluginDocFile(QString& pFileName, QString& pVersion,
-				  QFile& pDoxFile, QDir& dstDir);
+                                  QFile& pDoxFile, QDir& dstDir);
 
 #endif

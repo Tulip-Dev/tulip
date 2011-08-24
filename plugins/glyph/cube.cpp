@@ -42,12 +42,12 @@ using namespace tlp;
  */
 class Cube: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
-	Cube(GlyphContext *gc = NULL);
-	Cube(EdgeExtremityGlyphContext *gc);
-	virtual ~Cube();
-	virtual void draw(node n, float lod);
-	virtual Coord getAnchor(const Coord & vector) const;
-	virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod);
+  Cube(GlyphContext *gc = NULL);
+  Cube(EdgeExtremityGlyphContext *gc);
+  virtual ~Cube();
+  virtual void draw(node n, float lod);
+  virtual Coord getAnchor(const Coord & vector) const;
+  virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod);
   virtual void draw(const Color &fillColor,const std::string &textureName, float lod);
 
 protected:
@@ -62,13 +62,13 @@ GLYPHPLUGIN(Cube, "3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube"
 EEGLYPHPLUGIN(Cube,"3D - Cube","Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)
 //===================================================================================
 Cube::Cube(GlyphContext *gc) :
-	Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
+  Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
   if(!box)
     box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
 }
 
 Cube::Cube(EdgeExtremityGlyphContext *gc) :
-	Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
+  Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
   if(!box)
     box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
 }
@@ -89,11 +89,12 @@ void Cube::draw(edge, node n, const Color& glyphColor,const Color&, float lod) {
        lod);
 }
 
-void Cube::draw(const Color &fillColor,const std::string &textureName, float lod){
-  if (textureName.size() != 0){
+void Cube::draw(const Color &fillColor,const std::string &textureName, float lod) {
+  if (textureName.size() != 0) {
     const string& texturePath=glGraphInputData->parameters->getTexturePath();
     box->setTextureName(texturePath+textureName);
-  }else
+  }
+  else
     box->setTextureName("");
 
   box->setFillColor(fillColor);
@@ -105,12 +106,13 @@ void Cube::draw(const Color &fillColor,const std::string &textureName, float lod
 
 //=======================================================
 Coord Cube::getAnchor(const Coord & vector) const {
-	float x, y, z, fmax;
-	vector.get(x, y, z);
-	fmax = std::max(std::max(fabsf(x), fabsf(y)), fabsf(z));
-	if (fmax > 0.0f)
-		return vector * (0.5f / fmax);
-	else
-		return vector;
+  float x, y, z, fmax;
+  vector.get(x, y, z);
+  fmax = std::max(std::max(fabsf(x), fabsf(y)), fabsf(z));
+
+  if (fmax > 0.0f)
+    return vector * (0.5f / fmax);
+  else
+    return vector;
 }
 /*@}*/

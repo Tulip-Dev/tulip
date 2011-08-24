@@ -33,404 +33,419 @@ class FTOutlineFont;
 
 namespace tlp {
 
-  class Camera;
-  struct OcclusionTest;
+class Camera;
+struct OcclusionTest;
 
-  enum LabelPosition {ON_CENTER = 0, ON_TOP = 1, ON_BOTTOM = 2, ON_LEFT = 3, ON_RIGHT = 4};
+enum LabelPosition {ON_CENTER = 0, ON_TOP = 1, ON_BOTTOM = 2, ON_LEFT = 3, ON_RIGHT = 4};
+
+/**
+ * \addtogroup GlEntities
+ */
+/*@{*/
+/**
+ * Create a entity Label
+ */
+class TLP_GL_SCOPE GlLabel : public GlSimpleEntity {
+public :
+
+  GlLabel();
 
   /**
-   * \addtogroup GlEntities
+   * Contructor with fontPath, centerPosition, size, fontColor and alignment
+   * Use GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign=false) instead.
    */
-  /*@{*/
+  _DEPRECATED GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
+
   /**
-   * Create a entity Label
+   * Contructor with fontPath, centerPosition, size, fontColor and alignment
    */
-  class TLP_GL_SCOPE GlLabel : public GlSimpleEntity
-  {
-  public :
+  GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign=false);
 
-    GlLabel();
+  /**
+   * Contructor with fontPath, centerPosition, size, fontColor and alignment
+   * \deprecate this constructor will be remove on Tulip 4 version
+   */
+  _DEPRECATED GlLabel(const std::string &fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
 
-    /**
-     * Contructor with fontPath, centerPosition, size, fontColor and alignment
-     * Use GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign=false) instead.
-     */
-    _DEPRECATED GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
+  ~GlLabel();
 
-    /**
-     * Contructor with fontPath, centerPosition, size, fontColor and alignment
-     */
-    GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign=false);
+  /**
+   * Set default parameters of GlLabel
+   */
+  void init();
 
-    /**
-     * Contructor with fontPath, centerPosition, size, fontColor and alignment
-     * \deprecate this constructor will be remove on Tulip 4 version
-     */
-    _DEPRECATED GlLabel(const std::string &fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
+  /**
+   * Set the text of the label
+   */
+  void setText(const std::string& text);
 
-    ~GlLabel();
+  /**
+   * Set the position used to render the label
+   */
+  void setPosition(const Coord &position);
 
-    /**
-     * Set default parameters of GlLabel
-     */
-    void init();
+  /**
+   * Return the position of the label
+   */
+  Coord getPosition();
 
-    /**
-     * Set the text of the label
-     */
-    void setText(const std::string& text);
+  /**
+   * Set the translation used after rotation of the label
+   */
+  virtual void setTranslationAfterRotation(Coord translation) {
+    translationAfterRotation=translation;
+  }
 
-    /**
-     * Set the position used to render the label
-     */
-    void setPosition(const Coord &position);
+  /**
+   * return the translation used after rotation of the label
+   */
+  virtual Coord getTranslationAfterRotation() {
+    return translationAfterRotation;
+  }
 
-    /**
-     * Return the position of the label
-     */
-    Coord getPosition();
+  /**
+   * Set the alignment of the label : ON_CENTER, ON_TOP, ON_BOTTOM, ON_LEFT, ON_RIGHT
+   */
+  virtual void setAlignment(int alignment) {
+    this->alignment=alignment;
+  }
 
-    /**
-     * Set the translation used after rotation of the label
-     */
-    virtual void setTranslationAfterRotation(Coord translation){
-      translationAfterRotation=translation;
-    }
+  /**
+   * Return the bounding box of the label
+   */
+  virtual BoundingBox getBoundingBox();
 
-    /**
-     * return the translation used after rotation of the label
-     */
-    virtual Coord getTranslationAfterRotation(){
-      return translationAfterRotation;
-    }
+  /**
+   * Return the bounding box of the text of the label
+   */
+  virtual BoundingBox getTextBoundingBox();
 
-    /**
-     * Set the alignment of the label : ON_CENTER, ON_TOP, ON_BOTTOM, ON_LEFT, ON_RIGHT
-     */
-    virtual void setAlignment(int alignment){
-      this->alignment=alignment;
-    }
+  /**
+    * Use setSize(const Size& size instead)
+    **/
+  virtual _DEPRECATED void setSize(const Coord& size);
 
-    /**
-     * Return the bounding box of the label
-     */
-    virtual BoundingBox getBoundingBox();
+  /**
+   * Set the size of the label
+   */
+  virtual void setSize(const Size &size);
 
-    /**
-     * Return the bounding box of the text of the label
-     */
-    virtual BoundingBox getTextBoundingBox();
+  /**
+   * return the size of the text.
+   * Deprecated use getLabelSize instead.
+   */
+  virtual Coord _DEPRECATED getSize();
 
-    /**
-      * Use setSize(const Size& size instead)
-      **/
-    virtual _DEPRECATED void setSize(const Coord& size);
+  /**
+    * return the size of the text.
+    **/
+  virtual Size getLabelSize() const;
 
-    /**
-     * Set the size of the label
-     */
-    virtual void setSize(const Size &size);
+  /**
+   * Set the size for alignment outside (left/right/top/bottom)
+   *  Warning : this size is reinit when you call setSize
+   */
+  virtual void setSizeForOutAlign(const Size &size);
 
-    /**
-     * return the size of the text.
-     * Deprecated use getLabelSize instead.
-     */
-    virtual Coord _DEPRECATED getSize();
+  /**
+   * Set the size for alignment outside (left/right/top/bottom)
+   *  Warning : this size is reinit when you call setSize
+   * Deprecated use setSizeForOutAlign(const Size &size) instead
+   */
+  virtual void _DEPRECATED setSizeForOutAlign(const Coord &size);
 
-    /**
-      * return the size of the text.
-      **/
-    virtual Size getLabelSize() const;
+  /**
+   * return the size for alignment outside (left/right/top/bottom)
+   * Deprecated use getLabelSizeForOutAlign() instead
+   */
+  virtual Coord _DEPRECATED getSizeForOutAlign();
 
-    /**
-     * Set the size for alignment outside (left/right/top/bottom)
-     *  Warning : this size is reinit when you call setSize
-     */
-    virtual void setSizeForOutAlign(const Size &size);
+  /**
+   * return the size for alignment outside (left/right/top/bottom)
+   */
+  virtual Size getLabelSizeForOutAlign()const;
 
-    /**
-     * Set the size for alignment outside (left/right/top/bottom)
-     *  Warning : this size is reinit when you call setSize
-     * Deprecated use setSizeForOutAlign(const Size &size) instead
-     */
-    virtual void _DEPRECATED setSizeForOutAlign(const Coord &size);
+  /**
+   * Set color of label
+   */
+  virtual void setColor(const Color &color) {
+    this->color=color;
+  }
 
-    /**
-     * return the size for alignment outside (left/right/top/bottom)
-     * Deprecated use getLabelSizeForOutAlign() instead
-     */
-    virtual Coord _DEPRECATED getSizeForOutAlign();
+  /**
+   * Get color use to render the label
+   */
+  virtual Color getColor() {
+    return color;
+  }
 
-    /**
-     * return the size for alignment outside (left/right/top/bottom)
-     */
-    virtual Size getLabelSizeForOutAlign()const;
+  /**
+   * Enable/disable the depth test for the label (default depth test is enable)
+   */
+  virtual void enableDepthTest(bool state) {
+    depthTestEnabled=state;
+  }
 
-    /**
-     * Set color of label
-     */
-    virtual void setColor(const Color &color) {
-      this->color=color;
-    }
+  /**
+   * Enable/disable if label is scaled to size
+   */
+  virtual void setScaleToSize(bool state) {
+    scaleToSize=state;
+  }
 
-    /**
-     * Get color use to render the label
-     */
-    virtual Color getColor() {
-      return color;
-    }
+  /**
+   * Set the stencil and draw the Label, this function is usefull when we directly call draw without tulip engine
+   */
+  void drawWithStencil(float lod, Camera *camera=NULL);
 
-    /**
-     * Enable/disable the depth test for the label (default depth test is enable)
-     */
-    virtual void enableDepthTest(bool state){
-      depthTestEnabled=state;
-    }
+  /**
+   * Draw the Label
+   */
+  virtual void draw(float lod, Camera *camera=NULL);
 
-    /**
-     * Enable/disable if label is scaled to size
-     */
-    virtual void setScaleToSize(bool state){
-      scaleToSize=state;
-    }
+  /**
+   * Translate entity
+   */
+  virtual void translate(const Coord& mouvement);
 
-    /**
-     * Set the stencil and draw the Label, this function is usefull when we directly call draw without tulip engine
-     */
-    void drawWithStencil(float lod, Camera *camera=NULL);
+  /**
+   * Rotate Label
+   */
+  virtual void rotate(float xRot, float yRot, float zRot);
 
-    /**
-     * Draw the Label
-     */
-    virtual void draw(float lod, Camera *camera=NULL);
+  /**
+   * Function to export data in XML
+   */
+  virtual void getXML(xmlNodePtr rootNode);
 
-    /**
-     * Translate entity
-     */
-    virtual void translate(const Coord& mouvement);
+  /**
+   * Function to set data with XML
+   */
+  virtual void setWithXML(xmlNodePtr rootNode);
 
-    /**
-     * Rotate Label
-     */
-    virtual void rotate(float xRot, float yRot, float zRot);
+  /**
+   * Switch to bold font
+   */
+  virtual void setBoldFont();
 
-    /**
-     * Function to export data in XML
-     */
-    virtual void getXML(xmlNodePtr rootNode);
+  /**
+   * Switch to plain font
+   */
+  virtual void setPlainFont();
 
-    /**
-     * Function to set data with XML
-     */
-    virtual void setWithXML(xmlNodePtr rootNode);
+  /**
+   * Change font name
+   */
+  virtual void setFontName(const std::string &name);
 
-    /**
-     * Switch to bold font
-     */
-    virtual void setBoldFont();
+  /**
+   * Change font name, size and color of the text
+   */
+  virtual void setFontNameSizeAndColor(const std::string &name, const int &size, const Color &color);
 
-    /**
-     * Switch to plain font
-     */
-    virtual void setPlainFont();
+  /**
+   * Switch rendering mode to polygon- or texture-based rendering
+   */
+  virtual void setRenderingMode(int mode);
 
-    /**
-     * Change font name
-     */
-    virtual void setFontName(const std::string &name);
+  /**
+   * Set the occlusion tester
+   *  If occlusionTester is NULL : deactivate occlusion test
+   */
+  virtual void setOcclusionTester(OcclusionTest *tester) {
+    occlusionTester=tester;
+  }
 
-    /**
-     * Change font name, size and color of the text
-     */
-    virtual void setFontNameSizeAndColor(const std::string &name, const int &size, const Color &color);
+  /**
+   * Set if the label is otimized with the lod
+   */
+  virtual void setUseLODOptimisation(bool state,BoundingBox bb=BoundingBox()) {
+    useLOD=state;
+    lodBoundingBox=bb;
+  }
 
-    /**
-     * Switch rendering mode to polygon- or texture-based rendering
-     */
-    virtual void setRenderingMode(int mode);
+  /**
+   * Return label border for occlusion test
+   */
+  virtual bool getUseLODOptimisation() {
+    return useLOD;
+  }
 
-    /**
-     * Set the occlusion tester
-     *  If occlusionTester is NULL : deactivate occlusion test
-     */
-    virtual void setOcclusionTester(OcclusionTest *tester){
-      occlusionTester=tester;
-    }
+  /**
+   * Set label border for occlusion test
+   * \deprecated Use setLabelsDensity instead
+   */
+  virtual void setLabelOcclusionBorder(int size) {
+    labelsDensity=-size;
+  }
 
-    /**
-     * Set if the label is otimized with the lod
-     */
-    virtual void setUseLODOptimisation(bool state,BoundingBox bb=BoundingBox()){
-      useLOD=state;
-      lodBoundingBox=bb;
-    }
+  /**
+   * Return label border for occlusion test
+   * \deprecated Use getLabelsDensity instead
+   */
+  virtual int getLabelOcclusionBorder() {
+    return -labelsDensity;
+  }
 
-    /**
-     * Return label border for occlusion test
-     */
-    virtual bool getUseLODOptimisation(){
-      return useLOD;
-    }
+  /**
+   * Set labels density of occlusion test
+   * This density must be in interval -100 100
+   */
+  virtual void setLabelsDensity(int density) {
+    if(density<-100)
+      labelsDensity=-100;
+    else if(density>100)
+      labelsDensity=100;
+    else
+      labelsDensity=density;
+  }
 
-    /**
-     * Set label border for occlusion test
-     * \deprecated Use setLabelsDensity instead
-     */
-    virtual void setLabelOcclusionBorder(int size){
-      labelsDensity=-size;
-    }
+  /**
+   * Return label density of occlusion test
+   * This density must be in interval -100 100
+   */
+  virtual int getLabelDensity() {
+    return labelsDensity;
+  }
 
-    /**
-     * Return label border for occlusion test
-     * \deprecated Use getLabelsDensity instead
-     */
-    virtual int getLabelOcclusionBorder(){
-      return -labelsDensity;
-    }
+  /**
+   * Set min screen size (in pixel) of the label : this size is used in not scaled mode
+   */
+  void setMinSize(int size) {
+    minSize=size;
+  }
 
-    /**
-     * Set labels density of occlusion test
-     * This density must be in interval -100 100
-     */
-    virtual void setLabelsDensity(int density){
-      if(density<-100)
-        labelsDensity=-100;
-      else if(density>100)
-        labelsDensity=100;
-      else
-        labelsDensity=density;
-    }
+  /**
+   * Get min screen size (in pixel) of the label : this size is used in not scaled mode
+   */
+  int getMinSize() {
+    return minSize;
+  }
 
-    /**
-     * Return label density of occlusion test
-     * This density must be in interval -100 100
-     */
-    virtual int getLabelDensity(){
-      return labelsDensity;
-    }
+  /**
+   * Set max screen size (in pixel) of the label : this size is used in not scaled mode
+   */
+  void setMaxSize(int size) {
+    maxSize=size;
+  }
 
-    /**
-     * Set min screen size (in pixel) of the label : this size is used in not scaled mode
-     */
-    void setMinSize(int size){
-      minSize=size;
-    }
+  /**
+   * Get max screen size (in pixel) of the label : this size is used in not scaled mode
+   */
+  int getMaxSize() {
+    return maxSize;
+  }
 
-    /**
-     * Get min screen size (in pixel) of the label : this size is used in not scaled mode
-     */
-    int getMinSize(){
-      return minSize;
-    }
+  /**
+   * Set if the label use min/max screen size in not scaled mode
+   */
+  void setUseMinMaxSize(bool state) {
+    useMinMaxSize=state;
+  }
 
-    /**
-     * Set max screen size (in pixel) of the label : this size is used in not scaled mode
-     */
-    void setMaxSize(int size){
-      maxSize=size;
-    }
+  /**
+   * Return if the label using min/max screen size in not scaled mode
+   */
+  bool isUsingMinMaxSize() {
+    return useMinMaxSize;
+  }
 
-    /**
-     * Get max screen size (in pixel) of the label : this size is used in not scaled mode
-     */
-    int getMaxSize(){
-      return maxSize;
-    }
+  /**
+   * @return the font size
+   */
+  int getFontSize() const {
+    return fontSize;
+  }
 
-    /**
-     * Set if the label use min/max screen size in not scaled mode
-     */
-    void setUseMinMaxSize(bool state){
-      useMinMaxSize=state;
-    }
+  /**
+   * @brief Sets the font size used when rendering the label.
+   */
+  void setFontSize(int size) {
+    fontSize = size;
+  }
 
-    /**
-     * Return if the label using min/max screen size in not scaled mode
-     */
-    bool isUsingMinMaxSize(){
-      return useMinMaxSize;
-    }
+  /**
+   * @return the outline color
+   */
+  Color getOutlineColor() const {
+    return outlineColor;
+  }
 
-    /**
-     * @return the font size
-     */
-    int getFontSize() const { return fontSize; }
+  /**
+   * @brief Sets the outline color used when rendering the label.
+   */
+  void setOutlineColor(const Color &color) {
+    outlineColor = color;
+  }
 
-    /**
-     * @brief Sets the font size used when rendering the label.
-     */
-    void setFontSize(int size) { fontSize = size; }
+  /**
+   * @return the outline size
+   */
+  float getOutlineSize() const {
+    return outlineSize;
+  }
 
-    /**
-     * @return the outline color
-     */
-    Color getOutlineColor() const { return outlineColor; }
+  /**
+   * @brief Sets the outline size used when rendering the label.
+   */
+  void setOutlineSize(float size) {
+    outlineSize = size;
+  }
 
-    /**
-     * @brief Sets the outline color used when rendering the label.
-     */
-    void setOutlineColor(const Color &color) { outlineColor = color; }
+  /**
+   * @return the texture name used to render the label
+   */
+  std::string getTextureName() const {
+    return textureName;
+  }
 
-    /**
-     * @return the outline size
-     */
-    float getOutlineSize() const { return outlineSize; }
+  /**
+   * @brief Sets the texture name used when rendering the label.
+   */
+  void setTextureName(const std::string &name) {
+    textureName=name;
+  }
 
-    /**
-     * @brief Sets the outline size used when rendering the label.
-     */
-    void setOutlineSize(float size) { outlineSize = size; }
+private :
 
-    /**
-     * @return the texture name used to render the label
-     */
-    std::string getTextureName() const { return textureName; }
+  void setTextBeforeRendering(const std::string& text);
 
-    /**
-     * @brief Sets the texture name used when rendering the label.
-     */
-    void setTextureName(const std::string &name) { textureName=name; }
+  std::string text;
+  std::string fontName;
+  int fontSize;
+  int renderingMode;
+  FTGLPolygonFont *font;
+  FTOutlineFont *borderFont;
+  Coord centerPosition;
+  Coord translationAfterRotation;
+  Size size;
+  Size sizeForOutAlign;
+  Color color;
+  Color outlineColor;
+  float outlineSize;
+  std::string textureName;
+  int alignment;
+  bool scaleToSize;
+  bool useMinMaxSize;
+  int minSize;
+  int maxSize;
+  bool depthTestEnabled;
+  bool leftAlign;
+  float xRot;
+  float yRot;
+  float zRot;
+  bool useLOD;
+  BoundingBox lodBoundingBox;
+  int labelsDensity;
+  OcclusionTest *occlusionTester;
 
-  private :
+  std::vector<std::string> textVector;
+  std::vector<float> textWidthVector;
+  BoundingBox textBoundingBox;
 
-    void setTextBeforeRendering(const std::string& text);
-
-    std::string text;
-    std::string fontName;
-    int fontSize;
-    int renderingMode;
-    FTGLPolygonFont *font;
-    FTOutlineFont *borderFont;
-    Coord centerPosition;
-    Coord translationAfterRotation;
-    Size size;
-    Size sizeForOutAlign;
-    Color color;
-    Color outlineColor;
-    float outlineSize;
-    std::string textureName;
-    int alignment;
-    bool scaleToSize;
-    bool useMinMaxSize;
-    int minSize;
-    int maxSize;
-    bool depthTestEnabled;
-    bool leftAlign;
-    float xRot;
-    float yRot;
-    float zRot;
-    bool useLOD;
-    BoundingBox lodBoundingBox;
-    int labelsDensity;
-    OcclusionTest *occlusionTester;
-
-    std::vector<std::string> textVector;
-    std::vector<float> textWidthVector;
-    BoundingBox textBoundingBox;
-
-	static std::map<std::string, FTGLPolygonFont*> fontMap;
-	static std::map<std::string, FTOutlineFont*> borderFontMap;
-  };
-  /*@}*/
+  static std::map<std::string, FTGLPolygonFont*> fontMap;
+  static std::map<std::string, FTOutlineFont*> borderFontMap;
+};
+/*@}*/
 }
 #endif

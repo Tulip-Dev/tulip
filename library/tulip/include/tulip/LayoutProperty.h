@@ -32,9 +32,9 @@ class Graph;
 
 typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> AbstractLayoutProperty;
 
-/** \addtogroup properties */ 
+/** \addtogroup properties */
 /*@{*/
-  class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, public GraphObserver {
+class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, public GraphObserver {
   friend class LayoutAlgorithm;
 
 public:
@@ -82,7 +82,7 @@ public:
   //======================================================================
   /**
    * Returns the length of an edge, the bends are taken into account.
-   * Thus, it measure the length of a polyline. Warning this function 
+   * Thus, it measure the length of a polyline. Warning this function
    * only measure the length of the polyline between bends, when using
    * curves like bezier etc... the result will not be the length of the curve.
    */
@@ -142,7 +142,7 @@ private:
   void reverseEdge(Graph *, const edge);
 };
 
-class TLP_SCOPE CoordVectorProperty:public AbstractVectorProperty<tlp::CoordVectorType, tlp::PointType> { 
+class TLP_SCOPE CoordVectorProperty:public AbstractVectorProperty<tlp::CoordVectorType, tlp::PointType> {
 public :
   CoordVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<CoordVectorType, tlp::PointType>(g, n) {}
   // redefinition of some PropertyInterface methods

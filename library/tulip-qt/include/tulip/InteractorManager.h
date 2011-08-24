@@ -32,51 +32,52 @@
 
 namespace tlp {
 
-  class Interactor;
+class Interactor;
 
-  /** \brief Interactor plugins manager
-   *
-   * Interactor plugins manager
+/** \brief Interactor plugins manager
+ *
+ * Interactor plugins manager
+ */
+class TLP_QT_SCOPE InteractorManager {
+
+public:
+
+  static InteractorManager &getInst() {
+    if(!inst)
+      inst=new InteractorManager();
+
+    return *inst;
+  }
+
+  /**
+   * Loads interactor plugins
    */
-  class TLP_QT_SCOPE InteractorManager {
+  void loadPlugins(PluginLoader *plug=0);
 
-  public:
+  /**
+   * Gets interactor with given name
+   */
+  Interactor* getInteractor(const std::string &name);
 
-    static InteractorManager &getInst() {
-      if(!inst)
-	inst=new InteractorManager();
-      return *inst;
-    }
+  /**
+   * Returns a list of compatible interactors with the view identified by viewName
+   */
+  std::list<std::string> getCompatibleInteractors(const std::string &viewName);
 
-    /**
-     * Loads interactor plugins
-     */
-    void loadPlugins(PluginLoader *plug=0);
+  /**
+   * Returns list sorted map of compatible interactor with give View
+   */
+  std::list<std::string> getSortedCompatibleInteractors(const std::string &viewName);
 
-    /**
-     * Gets interactor with given name
-     */
-    Interactor* getInteractor(const std::string &name);
+private:
 
-    /**
-     * Returns a list of compatible interactors with the view identified by viewName
-     */
-    std::list<std::string> getCompatibleInteractors(const std::string &viewName);
+  InteractorManager();
 
-    /**
-     * Returns list sorted map of compatible interactor with give View
-     */
-    std::list<std::string> getSortedCompatibleInteractors(const std::string &viewName);
+  std::map<std::string,Interactor *> interactorsMap;
 
-  private:
+  static InteractorManager* inst;
 
-    InteractorManager();
-
-    std::map<std::string,Interactor *> interactorsMap;
-
-    static InteractorManager* inst;
-
-  };
+};
 
 }
 

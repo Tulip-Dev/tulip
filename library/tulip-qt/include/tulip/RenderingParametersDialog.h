@@ -27,42 +27,42 @@
 
 namespace tlp {
 
-  class GlScene;
-  class GlLayer;
-  class GlComposite;
-  class GlGraphComposite;
-  class GlMainView;
-  class GlMainWidget;
+class GlScene;
+class GlLayer;
+class GlComposite;
+class GlGraphComposite;
+class GlMainView;
+class GlMainWidget;
 
-  class TLP_QT_SCOPE RenderingParametersDialog : public QWidget, public Ui::RenderingParametersDialogData {
-    Q_OBJECT
+class TLP_QT_SCOPE RenderingParametersDialog : public QWidget, public Ui::RenderingParametersDialogData {
+  Q_OBJECT
 
-    GlMainWidget* glWidget;
-    bool holdUpdateView;
+  GlMainWidget* glWidget;
+  bool holdUpdateView;
 
-  public:
-    RenderingParametersDialog(QWidget* parent=0);
+public:
+  RenderingParametersDialog(QWidget* parent=0);
 
-    void setGlMainWidget(GlMainWidget *glWidget);
+  void setGlMainWidget(GlMainWidget *glWidget);
 
-  public slots:
+public slots:
 
-    void updateView();
-    void backColor();
-    void selectionColor();
-    void selectionSaveAtDefaultColor();
-    void setButtonColor(QColor tmp,QPushButton *button);
-    void labelSizeChanged(int);
+  void updateView();
+  void backColor();
+  void selectionColor();
+  void selectionSaveAtDefaultColor();
+  void setButtonColor(QColor tmp,QPushButton *button);
+  void labelSizeChanged(int);
 
-  signals :
+signals :
 
-    void viewNeedDraw();
+  void viewNeedDraw();
 
-  protected :
+protected :
 
-    void updateDensityLabels();
+  void updateDensityLabels();
 
-  };
+};
 
 }
 

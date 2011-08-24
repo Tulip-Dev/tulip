@@ -30,12 +30,12 @@ class PluginProgress;
 
 /**
  * \defgroup plugins
- */ 
+ */
 /*@{*/
 
 ///Parameter for calling clustering plugins
 class AlgorithmContext {
-  public :
+public :
   ///
   Graph *graph;
   PluginProgress *pluginProgress;
@@ -43,7 +43,7 @@ class AlgorithmContext {
   ///
   AlgorithmContext ():graph(0),pluginProgress(0), dataSet(0) {}
   ///
-  ~AlgorithmContext(){}
+  ~AlgorithmContext() {}
 };
 
 
@@ -52,7 +52,7 @@ class AlgorithmContext {
  * It contains a Graph on whyich to run the plug-in, a PropertyInterface which will hold the result of the plug-in, and a PluginProgress to give feedback on the plug-in's progress.
  **/
 class PropertyContext {
-  public :
+public :
   ///
   /**
    * @brief The Graph on which the plug-in will run.
@@ -74,9 +74,9 @@ class PropertyContext {
    **/
   DataSet *dataSet;
   ///
-  PropertyContext ():graph(0),propertyProxy(0),pluginProgress(0),dataSet(0){}
+  PropertyContext ():graph(0),propertyProxy(0),pluginProgress(0),dataSet(0) {}
   ///
-  ~PropertyContext(){}
+  ~PropertyContext() {}
 };
 /*@}*/
 

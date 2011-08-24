@@ -40,12 +40,12 @@ class Graph;
 
 /**
  * \defgroup types
- */ 
+ */
 /*@{*/
 
 ///
 #ifndef SWIG
- DECL_STORED_STRUCT(std::set<tlp::node>)
+DECL_STORED_STRUCT(std::set<tlp::node>)
 #endif
 
 class TLP_SCOPE GraphType {
@@ -58,11 +58,10 @@ public:
 };
 
 #ifndef SWIG
- DECL_STORED_STRUCT(std::set<tlp::edge>)
+DECL_STORED_STRUCT(std::set<tlp::edge>)
 #endif
 
-class TLP_SCOPE EdgeSetType
-{
+class TLP_SCOPE EdgeSetType {
 public:
   typedef std::set<edge> RealType;
   static std::set<edge> undefinedValue();
@@ -99,8 +98,7 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
-class TLP_SCOPE IntegerType
-{
+class TLP_SCOPE IntegerType {
 public:
   typedef int RealType;
   static int undefinedValue();
@@ -115,8 +113,7 @@ public:
 DECL_STORED_STRUCT(std::vector<int>)
 #endif
 
-class TLP_SCOPE IntegerVectorType
-{
+class TLP_SCOPE IntegerVectorType {
 public:
   typedef std::vector<int> RealType;
   static std::vector<int> undefinedValue();
@@ -155,11 +152,10 @@ public:
 };
 
 #ifndef SWIG
- DECL_STORED_STRUCT(std::vector<tlp::Coord>)
+DECL_STORED_STRUCT(std::vector<tlp::Coord>)
 #endif
 
-class TLP_SCOPE LineType
-{
+class TLP_SCOPE LineType {
 public:
   typedef std::vector<Coord> RealType;
   static std::vector<Coord> undefinedValue();
@@ -170,7 +166,7 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
- DECL_STORED_STRUCT(tlp::Coord)
+DECL_STORED_STRUCT(tlp::Coord)
 
 class TLP_SCOPE PointType {
 public:
@@ -184,7 +180,7 @@ public:
 };
 
 #ifndef SWIG
- DECL_STORED_STRUCT(tlp::Size)
+DECL_STORED_STRUCT(tlp::Size)
 #endif
 
 class TLP_SCOPE SizeType {
@@ -199,7 +195,7 @@ public:
 };
 
 #ifndef SWIG
- DECL_STORED_STRUCT(std::vector<tlp::Size>)
+DECL_STORED_STRUCT(std::vector<tlp::Size>)
 #endif
 
 class TLP_SCOPE SizeVectorType {
@@ -255,7 +251,7 @@ public:
 };
 
 #ifndef SWIG
- DECL_STORED_STRUCT(std::vector<tlp::Color>)
+DECL_STORED_STRUCT(std::vector<tlp::Color>)
 #endif
 
 class TLP_SCOPE ColorVectorType {
@@ -282,13 +278,13 @@ public:
 
 extern TLP_SCOPE void initTypeSerializers();
 #ifdef _MSC_VER
-	template class TLP_SCOPE AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>;
-	template class TLP_SCOPE AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>;
-	template class TLP_SCOPE AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>;
-	template class TLP_SCOPE AbstractVectorProperty<StringVectorType, tlp::StringType>;
-	template class TLP_SCOPE AbstractVectorProperty<ColorVectorType, tlp::ColorType>;
-	template class TLP_SCOPE AbstractVectorProperty<SizeVectorType, tlp::SizeType>;
-	template class TLP_SCOPE AbstractVectorProperty<CoordVectorType, tlp::PointType>;
+template class TLP_SCOPE AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>;
+template class TLP_SCOPE AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>;
+template class TLP_SCOPE AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>;
+template class TLP_SCOPE AbstractVectorProperty<StringVectorType, tlp::StringType>;
+template class TLP_SCOPE AbstractVectorProperty<ColorVectorType, tlp::ColorType>;
+template class TLP_SCOPE AbstractVectorProperty<SizeVectorType, tlp::SizeType>;
+template class TLP_SCOPE AbstractVectorProperty<CoordVectorType, tlp::PointType>;
 #endif
 }
 

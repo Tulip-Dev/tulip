@@ -22,7 +22,7 @@
 #include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
 struct Strahler {
-  Strahler(int stra=1,int sta=0,int used=0):strahler(stra),stacks(sta),usedStack(used){}
+  Strahler(int stra=1,int sta=0,int used=0):strahler(stra),stacks(sta),usedStack(used) {}
   int strahler;
   int stacks;
   int usedStack;
@@ -54,7 +54,7 @@ struct Strahler {
  *  the starting nodes.
  *
  */
-class StrahlerMetric:public tlp::DoubleAlgorithm { 
+class StrahlerMetric:public tlp::DoubleAlgorithm {
 public:
   StrahlerMetric(const tlp::PropertyContext &);
   bool run();
@@ -62,11 +62,11 @@ public:
 
 private:
   Strahler topSortStrahler(tlp::node n,int &curPref,
-			   TLP_HASH_MAP<tlp::node,int> &tofree,
-			   TLP_HASH_MAP<tlp::node,int> &prefix,
-			   TLP_HASH_MAP<tlp::node,bool> &visited,
-			   TLP_HASH_MAP<tlp::node,bool> &finished,
-			   TLP_HASH_MAP<tlp::node,Strahler> &cachedValues);
+                           TLP_HASH_MAP<tlp::node,int> &tofree,
+                           TLP_HASH_MAP<tlp::node,int> &prefix,
+                           TLP_HASH_MAP<tlp::node,bool> &visited,
+                           TLP_HASH_MAP<tlp::node,bool> &finished,
+                           TLP_HASH_MAP<tlp::node,Strahler> &cachedValues);
   bool allNodes;
 };
 /*@}*/

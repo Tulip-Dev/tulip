@@ -62,11 +62,11 @@ class FactorNodeIterator
 #else
   :public NodeIteratorObserver
 #endif
- {
- protected:
+{
+protected:
   Graph *_parentGraph;
   const MutableContainer<bool>& _filter;
- public:
+public:
   FactorNodeIterator(const Graph *sG,const MutableContainer<bool>& filter):
     _parentGraph(sG->getSuperGraph()),
     _filter(filter)
@@ -79,11 +79,11 @@ class FactorEdgeIterator
 #else
   :public EdgeIteratorObserver
 #endif
- {
- protected:
+{
+protected:
   Graph *_parentGraph;
   const MutableContainer<bool>& _filter;
- public:
+public:
   FactorEdgeIterator(const Graph *sG,const MutableContainer<bool>& filter):
     _parentGraph(sG->getSuperGraph()),
     _filter(filter)
@@ -92,30 +92,30 @@ class FactorEdgeIterator
 //============================================================
 ///Node iterator for GraphView
 class SGraphNodeIterator:public FactorNodeIterator, public MemoryPool<SGraphNodeIterator> {
- private:
+private:
   const Graph* sg;
   Iterator<node> *it;
   node curNode;
   bool value;
 
- public:
+public:
   SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter,
-		     bool value=true);
+                     bool value=true);
   ~SGraphNodeIterator();
   node next();
   bool hasNext();
-  protected:
+protected:
   void prepareNext();
 };
 //============================================================
 ///Out node iterator for GraphView
 class OutNodesIterator:public FactorNodeIterator, public MemoryPool<OutNodesIterator> {
- private:
+private:
   Iterator<edge> *it;
-  #ifndef NDEBUG
+#ifndef NDEBUG
   const Graph *sg;
-  #endif
- public:
+#endif
+public:
   OutNodesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n);
   ~OutNodesIterator();
   node next();
@@ -124,12 +124,12 @@ class OutNodesIterator:public FactorNodeIterator, public MemoryPool<OutNodesIter
 //============================================================
 ///In node iterator for GraphView
 class InNodesIterator:public FactorNodeIterator, public MemoryPool<InNodesIterator> {
- private:
+private:
   Iterator<edge> *it;
-  #ifndef NDEBUG
+#ifndef NDEBUG
   const Graph *sg;
-  #endif
- public:
+#endif
+public:
   InNodesIterator(const Graph *sG, const MutableContainer<bool>& filter ,node n);
   ~InNodesIterator();
   node next();
@@ -138,13 +138,13 @@ class InNodesIterator:public FactorNodeIterator, public MemoryPool<InNodesIterat
 //============================================================
 ///In Out node iterator for GraphView
 class InOutNodesIterator:public FactorNodeIterator, public MemoryPool<InOutNodesIterator> {
- private:
+private:
   Iterator<edge> *it;
   node n;
-  #ifndef NDEBUG
+#ifndef NDEBUG
   const Graph *sg;
-  #endif
- public:
+#endif
+public:
   InOutNodesIterator(const Graph *sG,const MutableContainer<bool>& filter,node n);
   ~InOutNodesIterator();
   node next();
@@ -152,66 +152,65 @@ class InOutNodesIterator:public FactorNodeIterator, public MemoryPool<InOutNodes
 };
 //=============================================================
 ///Edge iterator for GraphView
-class SGraphEdgeIterator:public FactorEdgeIterator, public MemoryPool<SGraphEdgeIterator>
-{
- private:
+class SGraphEdgeIterator:public FactorEdgeIterator, public MemoryPool<SGraphEdgeIterator> {
+private:
   const Graph* sg;
   Iterator<edge> *it;
   edge curEdge;
   bool value;
 
- public:
+public:
   SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter,
-		     bool value = true);
+                     bool value = true);
   ~SGraphEdgeIterator();
   edge next();
   bool hasNext();
- protected:
+protected:
   void prepareNext();
 };
 //============================================================
 ///Out edge iterator for GraphView
 class OutEdgesIterator:public FactorEdgeIterator, public MemoryPool<OutEdgesIterator> {
- private:
+private:
   Iterator<edge> *it;
   edge curEdge;
 
- public:
+public:
   OutEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n);
   ~OutEdgesIterator();
   edge next();
   bool hasNext();
-  protected:
+protected:
   void prepareNext();
 };
 //============================================================
 ///In edge iterator for GraphView
 class InEdgesIterator:public FactorEdgeIterator, public MemoryPool<InEdgesIterator> {
- private:
+private:
   Iterator<edge> *it;
   edge curEdge;
 
- public:
+public:
   InEdgesIterator(const Graph *sG,const MutableContainer<bool>& filter,node n);
   ~InEdgesIterator();
   edge next();
   bool hasNext();
-  protected:
+protected:
   void prepareNext();
 };
 //============================================================
 ///In Out edge iterator for GraphView
 class InOutEdgesIterator:public FactorEdgeIterator, public MemoryPool<InOutEdgesIterator> {
- private:
+private:
   Iterator<edge> *it;
   edge curEdge;
 
- public:
+public:
   InOutEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n);
   ~InOutEdgesIterator();
   edge next();
   bool hasNext();
-  protected:
+protected:
   void prepareNext();
 };
 
@@ -224,13 +223,13 @@ class GraphImplNodeIterator
 #else
   :public NodeIteratorObserver
 #endif
- {
- private:
+{
+private:
 #ifndef NDEBUG
   GraphImpl *graph;
 #endif
   Iterator<node> *itId;
- public:
+public:
   GraphImplNodeIterator(const Graph *g, Iterator<node>* it);
   ~GraphImplNodeIterator();
   node next();
@@ -244,13 +243,13 @@ class GraphImplEdgeIterator
 #else
   :public EdgeIteratorObserver
 #endif
- {
- private:
+{
+private:
 #ifndef NDEBUG
   GraphImpl *graph;
 #endif
   Iterator<edge> *itId;
- public:
+public:
   GraphImplEdgeIterator(const Graph *g, Iterator<edge>* it);
   ~GraphImplEdgeIterator();
   edge next();

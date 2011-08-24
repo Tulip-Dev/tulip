@@ -30,8 +30,8 @@
 #ifndef DOXYGEN_NOTFOR_USER
 
 class TLP_SCOPE Ordering : public std::vector<std::vector<node> > {
- class PluginProgress;  
- public :
+  class PluginProgress;
+public :
 
   typedef struct FaceAndPos_ {
     Face face;
@@ -39,15 +39,17 @@ class TLP_SCOPE Ordering : public std::vector<std::vector<node> > {
     node n_last;
   } FaceAndPos;
 
-  std::vector<edge> getDummyEdges(){ return dummy_edge; }
-  
+  std::vector<edge> getDummyEdges() {
+    return dummy_edge;
+  }
+
   Ordering(PlanarConMap * G, PluginProgress* pluginProgress = 0,
-	   int minProgress = 0, int deltaProgress = 0, int maxProgress = 0);
+           int minProgress = 0, int deltaProgress = 0, int maxProgress = 0);
   ~Ordering();
   std::vector<std::vector<node> > computeCanonicalOrdering(PluginProgress* pluginProgress = 0, int minProgress = 0, int deltaProgress = 0, int maxProgress = 0);
 
- private :
- 
+private :
+
   PlanarConMap::PlanarConMap * Gp;
   MutableContainer<int>::MutableContainer oute;
   MutableContainer<int>::MutableContainer outv;
@@ -64,38 +66,38 @@ class TLP_SCOPE Ordering : public std::vector<std::vector<node> > {
   MutableContainer<node>::MutableContainer left;
   MutableContainer<node>::MutableContainer right;
   bool existMarkedF;
-  FaceAndPos minMarkedFace ; 
+  FaceAndPos minMarkedFace ;
   Face ext;
   std::vector<node> v1;
   std::vector<edge> dummy_edge;
 
-  node getLastOfQ(Face f, node prec, node n, edge e);  
-  node getLastOfP(Face f, node prec, node n,edge e);  
-  std::vector<node> getPathFrom(std::vector<node> fn, int from); 
-  int infFaceSize();                              
+  node getLastOfQ(Face f, node prec, node n, edge e);
+  node getLastOfP(Face f, node prec, node n,edge e);
+  std::vector<node> getPathFrom(std::vector<node> fn, int from);
+  int infFaceSize();
 
-  void updateOutAndVisitedFaces(Face f); 
-  void updateContourLeftRight(node prec, node n, edge e, node last); 
+  void updateOutAndVisitedFaces(Face f);
+  void updateContourLeftRight(node prec, node n, edge e, node last);
   void updateNewSelectableNodes(node node_f, node no_tmp2,edge ed_tmp, node node_last,std::vector<Face> v_faces, bool one_face = false, bool was_visited = false, bool selection_face = false);
-  void updateSelectableFaces(std::vector<Face> v_faces); 
- 
-  int seqp(Face f);                             
-  void minMarkedf();                             
-  void setMinMarkedFace(Face f);                 
-  
-  struct augmentableAndNodes_ getAugAndNodes(Face f);
-  void augment(Face f, node prec, node n, node prec_last, node last, int nbNewFace, bool pair);   
-  void selectAndUpdate(Face f); 
-  void selectAndUpdate(node n);  
-  bool isSelectable(node n);                       
+  void updateSelectableFaces(std::vector<Face> v_faces);
 
-  void init();      
-  void init_v1(std::vector<node> fn); 
-  void init_selectableNodes(); 
-  void init_selectableFaces(); 
-  void init_outv_oute();  
-  void init_seqP();  
-  void init_outerface(); 
+  int seqp(Face f);
+  void minMarkedf();
+  void setMinMarkedFace(Face f);
+
+  struct augmentableAndNodes_ getAugAndNodes(Face f);
+  void augment(Face f, node prec, node n, node prec_last, node last, int nbNewFace, bool pair);
+  void selectAndUpdate(Face f);
+  void selectAndUpdate(node n);
+  bool isSelectable(node n);
+
+  void init();
+  void init_v1(std::vector<node> fn);
+  void init_selectableNodes();
+  void init_selectableFaces();
+  void init_outv_oute();
+  void init_seqP();
+  void init_outerface();
 
 };
 

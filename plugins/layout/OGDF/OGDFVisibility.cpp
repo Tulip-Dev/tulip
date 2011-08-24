@@ -4,16 +4,16 @@
 namespace {
 
 const char * paramHelp[] = {
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "int" )
-		HTML_HELP_BODY()
-		"the minimum grid distance."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"Sets the option for transposing layout vertically ."
-		HTML_HELP_CLOSE()
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "the minimum grid distance."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "Sets the option for transposing layout vertically ."
+  HTML_HELP_CLOSE()
 };
 }
 
@@ -66,32 +66,35 @@ class OGDFVisibility : public OGDFLayoutPluginBase {
 
 public:
 
-	OGDFVisibility(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::VisibilityLayout()) {
-		addParameter<int>("minimum grid distance", paramHelp[0], "1");
-		addParameter<bool>("transpose", paramHelp[1], "false");
-	}
+  OGDFVisibility(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::VisibilityLayout()) {
+    addParameter<int>("minimum grid distance", paramHelp[0], "1");
+    addParameter<bool>("transpose", paramHelp[1], "false");
+  }
 
-	~OGDFVisibility() {}
+  ~OGDFVisibility() {}
 
-	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
-		ogdf::VisibilityLayout *visibility = static_cast<ogdf::VisibilityLayout*>(ogdfLayoutAlgo);
-		if (dataSet != 0) {
-			int ival = 0;
-			if (dataSet->get("minimum grid distance", ival))
-				visibility->setMinGridDistance(ival);
-		}
-	}
+  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+    ogdf::VisibilityLayout *visibility = static_cast<ogdf::VisibilityLayout*>(ogdfLayoutAlgo);
 
-	void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
-		if (dataSet != 0) {
-			bool bval = false;
-			if (dataSet->get("transpose", bval)) {
-				if (bval) {
-					transposeLayoutVertically();
-				}
-			}
-		}
-	}
+    if (dataSet != 0) {
+      int ival = 0;
+
+      if (dataSet->get("minimum grid distance", ival))
+        visibility->setMinGridDistance(ival);
+    }
+  }
+
+  void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
+    if (dataSet != 0) {
+      bool bval = false;
+
+      if (dataSet->get("transpose", bval)) {
+        if (bval) {
+          transposeLayoutVertically();
+        }
+      }
+    }
+  }
 
 };
 /*@}*/

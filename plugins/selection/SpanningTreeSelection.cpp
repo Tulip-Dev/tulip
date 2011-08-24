@@ -27,26 +27,29 @@ BOOLEANPLUGIN(SpanningTreeSelection,"Spanning Forest","David Auber","01/12/1999"
 using namespace std;
 using namespace tlp;
 
-SpanningTreeSelection::SpanningTreeSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context) 
+SpanningTreeSelection::SpanningTreeSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context)
 {}
 
 SpanningTreeSelection::~SpanningTreeSelection() {}
 
 ///===========================================================
 ///Calcul l'arbre couvrant
-bool SpanningTreeSelection::run()
-{
+bool SpanningTreeSelection::run() {
   if (graph->existProperty("viewSelection")) {
     BooleanProperty *viewSelection=graph->getProperty<BooleanProperty>("viewSelection");
     Iterator<node> *itN=graph->getNodes();
-    for (;itN->hasNext();) { 
+
+    for (; itN->hasNext();) {
       node itn=itN->next();
+
       if (viewSelection->getNodeValue(itn)==true) {
-	booleanResult->setNodeValue(itn, true);
+        booleanResult->setNodeValue(itn, true);
       }
-    } delete itN;
+    }
+
+    delete itN;
   }
 
-  selectSpanningForest(graph, booleanResult, pluginProgress); 
+  selectSpanningForest(graph, booleanResult, pluginProgress);
   return true;
 }

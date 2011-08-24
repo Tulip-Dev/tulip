@@ -26,11 +26,13 @@ using namespace std;
 namespace tlp {
 
 DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(const std::vector<std::string> &firstValues,const std::vector<Color> &secondValues,QWidget *parent) : QDialog(parent) {
-	setupUi(this);
-  for(vector<string>::const_iterator it=firstValues.begin();it!=firstValues.end();++it){
+  setupUi(this);
+
+  for(vector<string>::const_iterator it=firstValues.begin(); it!=firstValues.end(); ++it) {
     firstListWidget->addItem((*it).c_str());
   }
-  for(vector<Color>::const_iterator it=secondValues.begin();it!=secondValues.end();++it){
+
+  for(vector<Color>::const_iterator it=secondValues.begin(); it!=secondValues.end(); ++it) {
     QListWidgetItem *item=new QListWidgetItem;
     item->setBackground(QBrush(QColor((*it)[0],(*it)[1],(*it)[2],(*it)[3])));
     secondListWidget->addItem(item);
@@ -44,34 +46,39 @@ DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(const std::vect
   connect(((QAbstractSlider*)(secondListWidget->verticalScrollBar())),SIGNAL(valueChanged(int)),this,SLOT(scrollBarValueChanged(int)));
 }
 
-void DoubleStringsListRelationDialog::getResult(std::vector<std::pair<std::string,Color> > &result){
-  for(int i=0;i<firstListWidget->count();++i){
+void DoubleStringsListRelationDialog::getResult(std::vector<std::pair<std::string,Color> > &result) {
+  for(int i=0; i<firstListWidget->count(); ++i) {
     QColor color=secondListWidget->item(i)->background().color();
     result.push_back(pair<string,Color>(firstListWidget->item(i)->text().toStdString(),Color(color.red(),color.green(),color.blue(),color.alpha())));
   }
 }
 
-void DoubleStringsListRelationDialog::upButtonClicked(){
+void DoubleStringsListRelationDialog::upButtonClicked() {
   int currentRow=firstListWidget->currentRow();
+
   if(currentRow==0)
     return;
+
   QListWidgetItem *item=firstListWidget->takeItem(currentRow);
   firstListWidget->insertItem(currentRow-1,item);
   firstListWidget->setCurrentItem(item);
 }
 
-void DoubleStringsListRelationDialog::downButtonClicked(){
+void DoubleStringsListRelationDialog::downButtonClicked() {
   int currentRow=firstListWidget->currentRow();
+
   if(currentRow==firstListWidget->count()+1)
     return;
+
   QListWidgetItem *item=firstListWidget->takeItem(currentRow);
   firstListWidget->insertItem(currentRow+1,item);
   firstListWidget->setCurrentItem(item);
 }
 
-void DoubleStringsListRelationDialog::scrollBarValueChanged(int value){
+void DoubleStringsListRelationDialog::scrollBarValueChanged(int value) {
   if(firstListWidget->verticalScrollBar()->value()!=value)
     firstListWidget->verticalScrollBar()->setSliderPosition(value);
+
   if(secondListWidget->verticalScrollBar()->value()!=value)
     secondListWidget->verticalScrollBar()->setSliderPosition(value);
 }

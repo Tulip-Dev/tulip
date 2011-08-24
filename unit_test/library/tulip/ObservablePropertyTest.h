@@ -27,7 +27,7 @@
 #include <cppunit/TestSuite.h>
 
 class ObservablePropertyTest : public CppUnit::TestFixture {
- private:
+private:
   tlp::Graph *graph;
   tlp::PropertyInterface *props[7];
 

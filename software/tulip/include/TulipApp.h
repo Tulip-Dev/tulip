@@ -29,10 +29,10 @@
 #include "GraphNeedsSavingObserver.h"
 
 namespace tlp {
-  class Controller;
-  class Graph;
-  class PluginsUpdateChecker;
-  class MultiServerManager;
+class Controller;
+class Graph;
+class PluginsUpdateChecker;
+class MultiServerManager;
 }
 
 class QProgressDialog;
@@ -144,7 +144,7 @@ private:
     * @param activateNoToAll Allow user to select the "no to all" button.
     * @return The button clicked by the user.
     */
-   QMessageBox::StandardButton askSaveGraph(const std::string &name,int index, bool activateNoToAll=false );
+  QMessageBox::StandardButton askSaveGraph(const std::string &name,int index, bool activateNoToAll=false );
   bool closeWin();
   void saveActions(QWidget *widget,tlp::Controller *controller,std::map<tlp::Controller *,std::vector<QAction *> > &mapToSave);
   void clearInterface();
@@ -161,7 +161,7 @@ private:
   QProcess *assistantProcess;
   QString assistantProcessApp;
 
-	/*std::string currentControllerName;
+  /*std::string currentControllerName;
   tlp::Controller *currentController;*/
   bool controllerAutoLoad;
   int currentTabIndex;
@@ -177,7 +177,7 @@ private:
   std::map<tlp::Controller *,std::vector<std::pair<QWidget *, bool> > > controllerToWidgetVisible;
   std::map<tlp::Controller *,std::pair<std::string,std::string > > controllerToStatusBar;
   std::map<tlp::Controller *,FileInfo> openFiles;
- };
+};
 
 #endif // viewGl_included
 

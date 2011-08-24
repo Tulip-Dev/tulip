@@ -29,7 +29,7 @@ class Graph;
 }
 
 void setOrthogonalEdge(OrientableLayout* oriLayout, const tlp::Graph* tree,
-					   float interNodeDistance);
+                       float interNodeDistance);
 
 void addControlPoints(OrientableLayout* oriLayout,
                       const tlp::Graph* tree, OrientableCoord fatherCoord,

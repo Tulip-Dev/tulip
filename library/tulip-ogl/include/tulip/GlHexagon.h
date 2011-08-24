@@ -22,32 +22,32 @@
 #include <tulip/GlRegularPolygon.h>
 
 namespace tlp {
+/**
+ * \addtogroup GlEntities
+ */
+/*@{*/
+/**
+ * class to create an hexagon
+ */
+class TLP_GL_SCOPE GlHexagon : public GlRegularPolygon {
+public:
   /**
-   * \addtogroup GlEntities
+   * Constructor
    */
-  /*@{*/
+  GlHexagon(const Coord &position,
+            const Size &size,
+            const Color &outlineColor = Color(255, 0 , 0 , 255),
+            const Color &fillColor = Color (0, 0, 255,255),
+            bool filled = true,
+            bool outlined =true,
+            const std::string &textureName="",
+            float outlineSize=1.);
   /**
-   * class to create an hexagon
+   * Default empty destructor
    */
-  class TLP_GL_SCOPE GlHexagon : public GlRegularPolygon {
-  public:
-    /**
-     * Constructor
-     */
-    GlHexagon(const Coord &position,
-               const Size &size,
-               const Color &outlineColor = Color(255, 0 , 0 , 255),
-               const Color &fillColor = Color (0, 0, 255,255),
-               bool filled = true,
-               bool outlined =true,
-               const std::string &textureName="",
-               float outlineSize=1.);
-    /**
-     * Default empty destructor
-     */
-    virtual ~GlHexagon();
+  virtual ~GlHexagon();
 
-  };
-  /*@}*/
+};
+/*@}*/
 }
 #endif

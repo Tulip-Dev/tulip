@@ -30,17 +30,17 @@ using namespace tlp;
 static const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "false" )	 \
+  HTML_HELP_DEF( "default", "false" )  \
   HTML_HELP_BODY() \
   "indicate if the graph should be considered as directed or not" \
   HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()				 \
+  HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "false" )	 \
+  HTML_HELP_DEF( "default", "false" )  \
   HTML_HELP_BODY() \
-  "If true the node mesure will be normalized unweight not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2) "	\
+  "If true the node mesure will be normalized unweight not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2) "  \
   "If true the node mesure will be normalized unweight directed     : m(n) = c(n) / (#V - 1)(#V - 2) " \
-  "If true the edge mesure will be normalized unweight not directed : m(e) = 2*c(n) / (#V / 2)(#V / 2) "	\
+  "If true the edge mesure will be normalized unweight not directed : m(e) = 2*c(n) / (#V / 2)(#V / 2) "  \
   "If true the edge mesure will be normalized unweight directed     : m(n) = c(n) / (#V / 2)(#V / 2) " \
   HTML_HELP_CLOSE()
 };
@@ -76,17 +76,18 @@ static const char * paramHelp[] = {
  *  - 03/01/05 Version 1.0: Initial release
  *
  */
-class BetweennessCentrality:public DoubleAlgorithm { 
+class BetweennessCentrality:public DoubleAlgorithm {
 public:
-  BetweennessCentrality(const PropertyContext &context):DoubleAlgorithm(context){
-  addParameter<bool>("directed", paramHelp[0], "false");  
-  addParameter<bool>("norm", paramHelp[1], "false", false);
+  BetweennessCentrality(const PropertyContext &context):DoubleAlgorithm(context) {
+    addParameter<bool>("directed", paramHelp[0], "false");
+    addParameter<bool>("norm", paramHelp[1], "false", false);
   };
   bool run() {
     doubleResult->setAllNodeValue(0.0);
     doubleResult->setAllEdgeValue(0.0);
     bool directed = false;
     bool norm = false;
+
     if ( dataSet!=0 ) {
       dataSet->get("directed",directed);
       dataSet->get("norm", norm);
@@ -97,8 +98,10 @@ public:
 
     Iterator<node> *it = graph->getNodes();
     unsigned int count = 0;
+
     while(it->hasNext()) {
       if (pluginProgress->progress(count++,graph->numberOfNodes())!=TLP_CONTINUE) break;
+
       node s = it->next();
       stack<node> S;
       TLP_HASH_MAP<node, list<node> > P;
@@ -110,68 +113,90 @@ public:
       d.set(s.id, 0);
       queue<node> Q;
       Q.push(s);
+
       while(!Q.empty()) {
-	node v = Q.front();
-	Q.pop();
-	S.push(v);
-	Iterator<node> *it2;
-	if (directed)
-	  it2 = graph->getOutNodes(v);
-	else 
-	  it2 = graph->getInOutNodes(v);
-	while (it2->hasNext()) {
-	  node w = it2->next();
-	  if (d.get(w.id)<0) {
-	    Q.push(w);
-	    d.set(w.id, d.get(v.id)+1);
-	  }
-	  if (d.get(w.id) == d.get(v.id)+1) {
-	    sigma.set(w.id, sigma.get(w.id) + sigma.get(v.id));
-	    P[w].push_back(v);
-	  }
-	} delete it2;
+        node v = Q.front();
+        Q.pop();
+        S.push(v);
+        Iterator<node> *it2;
+
+        if (directed)
+          it2 = graph->getOutNodes(v);
+        else
+          it2 = graph->getInOutNodes(v);
+
+        while (it2->hasNext()) {
+          node w = it2->next();
+
+          if (d.get(w.id)<0) {
+            Q.push(w);
+            d.set(w.id, d.get(v.id)+1);
+          }
+
+          if (d.get(w.id) == d.get(v.id)+1) {
+            sigma.set(w.id, sigma.get(w.id) + sigma.get(v.id));
+            P[w].push_back(v);
+          }
+        }
+
+        delete it2;
       }
+
       MutableContainer<double> delta;
       delta.setAll(0.0);
+
       while(!S.empty()) {
-	node w = S.top();
-	S.pop();
-	list<node>::const_iterator itn = P[w].begin();
-	for (;itn!=P[w].end();++itn){
-	  node v = *itn;
-	  delta.set(v.id, delta.get(v.id) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
+        node w = S.top();
+        S.pop();
+        list<node>::const_iterator itn = P[w].begin();
+
+        for (; itn!=P[w].end(); ++itn) {
+          node v = *itn;
+          delta.set(v.id, delta.get(v.id) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
           edge e  = graph->existEdge(v,w,directed);
+
           if(e.isValid())
-              doubleResult->setEdgeValue(e, doubleResult->getEdgeValue(e) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
-	}
+            doubleResult->setEdgeValue(e, doubleResult->getEdgeValue(e) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
+        }
+
         if (w != s) doubleResult->setNodeValue(w, doubleResult->getNodeValue(w) + delta.get(w.id));
       }
-    } delete it;
+    }
+
+    delete it;
+
     //Normalization
     if(norm || !directed) {
       double n = graph->numberOfNodes();
       it = graph->getNodes();
-      while(it->hasNext()){
+
+      while(it->hasNext()) {
         node s = it->next();
+
         //In the undirected case, the metric must be divided by two, then
         if(norm)
           doubleResult->setNodeValue(s,doubleResult->getNodeValue(s)/((n-1.0)*(n-2.0)));
-        else{
+        else {
           if(!directed) doubleResult->setNodeValue(s,doubleResult->getNodeValue(s)/2.0);
         }
-      } delete it;
+      }
+
+      delete it;
 
       Iterator<edge> *itE = graph->getEdges();
-      while(itE->hasNext()){
-          edge e = itE->next();          
-          if(norm){
-              if(directed)
-                doubleResult->setEdgeValue(e,4.0*doubleResult->getEdgeValue(e)/(n*n));
-              else
-                doubleResult->setEdgeValue(e,2.0*doubleResult->getEdgeValue(e)/(n*n));
-          }else
-            if(!directed) doubleResult->setEdgeValue(e,doubleResult->getEdgeValue(e)/(2.0));
+
+      while(itE->hasNext()) {
+        edge e = itE->next();
+
+        if(norm) {
+          if(directed)
+            doubleResult->setEdgeValue(e,4.0*doubleResult->getEdgeValue(e)/(n*n));
+          else
+            doubleResult->setEdgeValue(e,2.0*doubleResult->getEdgeValue(e)/(n*n));
+        }
+        else if(!directed) doubleResult->setEdgeValue(e,doubleResult->getEdgeValue(e)/(2.0));
       }
+
       delete itE;
     }
 

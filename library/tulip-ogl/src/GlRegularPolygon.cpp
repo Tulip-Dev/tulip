@@ -24,74 +24,76 @@ using namespace std;
 
 namespace tlp {
 
-  GlRegularPolygon::GlRegularPolygon(const Coord &position,
-                                     const Size &size,
-                                     unsigned int numberOfSides,
-                                     const Color &fillColor,
-                                     const Color &outlineColor,
-                                     bool filled,
-                                     bool outlined,
-                                     const string &textureName,
-                                     float outlineSize):
+GlRegularPolygon::GlRegularPolygon(const Coord &position,
+                                   const Size &size,
+                                   unsigned int numberOfSides,
+                                   const Color &fillColor,
+                                   const Color &outlineColor,
+                                   bool filled,
+                                   bool outlined,
+                                   const string &textureName,
+                                   float outlineSize):
   position(position),
   size(size),
   numberOfSides(numberOfSides),
-  startAngle(static_cast<float>(M_PI/2.))
-  {
-    computePolygon();
+  startAngle(static_cast<float>(M_PI/2.)) {
+  computePolygon();
 
-    invertYTexture=false;
+  invertYTexture=false;
 
-    setFillColor(fillColor);
-    setOutlineColor(outlineColor);
-    setFillMode(filled);
-    setOutlineMode(outlined);
-    setTextureName(textureName);
-    setOutlineSize(outlineSize);
-  }
-  //=====================================================
-  GlRegularPolygon::~GlRegularPolygon() {
-  }
-  //=====================================================
-  void GlRegularPolygon::setStartAngle(float angle){
-    startAngle=angle;
-    computePolygon();
-  }
-  //=====================================================
-  unsigned int GlRegularPolygon::getNumberOfSides(){
-    return numberOfSides;
-  }
-  //=====================================================
-  void GlRegularPolygon::setNumberOfSides(unsigned int number){
-    numberOfSides=number;
-    computePolygon();
-  }
-  //=====================================================
-  void GlRegularPolygon::resizePoints(const unsigned int number){
-    setNumberOfSides(number);
-  }
-  //=====================================================
-  void GlRegularPolygon::computePolygon() {
-    boundingBox = BoundingBox();
+  setFillColor(fillColor);
+  setOutlineColor(outlineColor);
+  setFillMode(filled);
+  setOutlineMode(outlined);
+  setTextureName(textureName);
+  setOutlineSize(outlineSize);
+}
+//=====================================================
+GlRegularPolygon::~GlRegularPolygon() {
+}
+//=====================================================
+void GlRegularPolygon::setStartAngle(float angle) {
+  startAngle=angle;
+  computePolygon();
+}
+//=====================================================
+unsigned int GlRegularPolygon::getNumberOfSides() {
+  return numberOfSides;
+}
+//=====================================================
+void GlRegularPolygon::setNumberOfSides(unsigned int number) {
+  numberOfSides=number;
+  computePolygon();
+}
+//=====================================================
+void GlRegularPolygon::resizePoints(const unsigned int number) {
+  setNumberOfSides(number);
+}
+//=====================================================
+void GlRegularPolygon::computePolygon() {
+  boundingBox = BoundingBox();
 
-    BoundingBox box;
-    vector<Coord> points;
-    float delta = static_cast<float>((2.0 * M_PI) / numberOfSides);
-    for (unsigned int i=0; i < numberOfSides; ++i) {
-      float deltaX = cos(i * delta + startAngle);
-      float deltaY = sin(i * delta + startAngle);
-      points.push_back(Coord(deltaX,deltaY,0));
-      box.expand(points.back());
-    }
-    for(vector<Coord>::iterator it=points.begin();it!=points.end();++it){
-      (*it)[0]=position[0]+(((*it)[0]-((box[1][0]+box[0][0])/2.f))/((box[1][0]-box[0][0])/2.f))*size[0];
-      (*it)[1]=position[1]+(((*it)[1]-((box[1][1]+box[0][1])/2.f))/((box[1][1]-box[0][1])/2.f))*size[1];
-    }
-    boundingBox.expand(position+size/2.f);
-    boundingBox.expand(position-size/2.f);
+  BoundingBox box;
+  vector<Coord> points;
+  float delta = static_cast<float>((2.0 * M_PI) / numberOfSides);
 
-    setPoints(points);
-
-    clearGenerated();
+  for (unsigned int i=0; i < numberOfSides; ++i) {
+    float deltaX = cos(i * delta + startAngle);
+    float deltaY = sin(i * delta + startAngle);
+    points.push_back(Coord(deltaX,deltaY,0));
+    box.expand(points.back());
   }
+
+  for(vector<Coord>::iterator it=points.begin(); it!=points.end(); ++it) {
+    (*it)[0]=position[0]+(((*it)[0]-((box[1][0]+box[0][0])/2.f))/((box[1][0]-box[0][0])/2.f))*size[0];
+    (*it)[1]=position[1]+(((*it)[1]-((box[1][1]+box[0][1])/2.f))/((box[1][1]-box[0][1])/2.f))*size[1];
+  }
+
+  boundingBox.expand(position+size/2.f);
+  boundingBox.expand(position-size/2.f);
+
+  setPoints(points);
+
+  clearGenerated();
+}
 }

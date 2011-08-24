@@ -3,11 +3,11 @@
 
 namespace {
 const char * paramHelp[] = {
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"Sets the option for transposing layout vertically ."
-		HTML_HELP_CLOSE()
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "Sets the option for transposing layout vertically ."
+  HTML_HELP_CLOSE()
 };
 }
 
@@ -58,22 +58,23 @@ class OGDFUpwardPlanarization : public OGDFLayoutPluginBase {
 
 public:
 
-	OGDFUpwardPlanarization(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::UpwardPlanarizationLayout()) {
-		addParameter<bool>("transpose", paramHelp[0], "false");
-	}
+  OGDFUpwardPlanarization(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::UpwardPlanarizationLayout()) {
+    addParameter<bool>("transpose", paramHelp[0], "false");
+  }
 
-	~OGDFUpwardPlanarization() {}
+  ~OGDFUpwardPlanarization() {}
 
-	void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
-		if (dataSet != 0) {
-			bool bval = false;
-			if (dataSet->get("transpose", bval)) {
-				if (bval) {
-					transposeLayoutVertically();
-				}
-			}
-		}
-	}
+  void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
+    if (dataSet != 0) {
+      bool bval = false;
+
+      if (dataSet->get("transpose", bval)) {
+        if (bval) {
+          transposeLayoutVertically();
+        }
+      }
+    }
+  }
 
 };
 /*@}*/

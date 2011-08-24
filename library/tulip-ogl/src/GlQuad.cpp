@@ -32,41 +32,43 @@ GlQuad::GlQuad() : GlPolygon(4,4,4,true,false) {
 }
 
 GlQuad::GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4,
-		       const Color &color) : GlPolygon(4,4,4,true,false) {
-	points[0] = p1;
-	points[1] = p2;
-	points[2] = p3;
-	points[3] = p4;
-	setFillColor(color);
-	recomputeBoundingBox();
+               const Color &color) : GlPolygon(4,4,4,true,false) {
+  points[0] = p1;
+  points[1] = p2;
+  points[2] = p3;
+  points[3] = p4;
+  setFillColor(color);
+  recomputeBoundingBox();
 }
 
 GlQuad::GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4,
-		       const Color &c1, const Color &c2, const Color &c3, const Color &c4) {
-	points[0] = p1;
-	points[1] = p2;
-	points[2] = p3;
-	points[3] = p4;
-	fillColors[0] = c1;
-	fillColors[1] = c2;
-	fillColors[2] = c3;
-	fillColors[3] = c4;
-	recomputeBoundingBox();
+               const Color &c1, const Color &c2, const Color &c3, const Color &c4) {
+  points[0] = p1;
+  points[1] = p2;
+  points[2] = p3;
+  points[3] = p4;
+  fillColors[0] = c1;
+  fillColors[1] = c2;
+  fillColors[2] = c3;
+  fillColors[3] = c4;
+  recomputeBoundingBox();
 }
 
 GlQuad::GlQuad(const Coord positions[4], const Color &color):GlPolygon(4,4,4,true,false) {
   for(int i=0; i < 4; ++i) {
     points[i] = positions[i];
   }
+
   setFillColor(color);
   recomputeBoundingBox();
 }
 
-GlQuad::GlQuad(const Coord positions[4], const Color colors[4]){
+GlQuad::GlQuad(const Coord positions[4], const Color colors[4]) {
   for(int i=0; i < 4; ++i) {
     points[i] = positions[i];
     fillColors[i]    = colors[i];
   }
+
   recomputeBoundingBox();
 }
 

@@ -4,32 +4,31 @@
 #include <QPushButton>
 #include <QStyleOptionButton>
 
-class OrientedPushButton : public QPushButton
-{
+class OrientedPushButton : public QPushButton {
 public:
-        OrientedPushButton(QWidget* parent = 0);
-        OrientedPushButton(const QString& text, QWidget* parent = 0);
-        OrientedPushButton(const QIcon& icon, const QString& text, QWidget* parent = 0);
-        ~OrientedPushButton();
+  OrientedPushButton(QWidget* parent = 0);
+  OrientedPushButton(const QString& text, QWidget* parent = 0);
+  OrientedPushButton(const QIcon& icon, const QString& text, QWidget* parent = 0);
+  ~OrientedPushButton();
 
-	Qt::Orientation orientation() const;
-	void setOrientation(Qt::Orientation orientation);
+  Qt::Orientation orientation() const;
+  void setOrientation(Qt::Orientation orientation);
 
-	bool mirrored() const;
-	void setMirrored(bool mirrored);
+  bool mirrored() const;
+  void setMirrored(bool mirrored);
 
-	QSize sizeHint() const;
-	QSize minimumSizeHint() const;
+  QSize sizeHint() const;
+  QSize minimumSizeHint() const;
 
 protected:
-	void paintEvent(QPaintEvent* event);
+  void paintEvent(QPaintEvent* event);
 
 private:
-	QStyleOptionButton getStyleOption() const;
-	void init();
+  QStyleOptionButton getStyleOption() const;
+  void init();
 
-        Qt::Orientation _orientation;
-        bool _mirrored;
+  Qt::Orientation _orientation;
+  bool _mirrored;
 };
 
 #endif // ORIENTEDPUSHNBUTTON_H

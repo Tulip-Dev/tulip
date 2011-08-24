@@ -52,12 +52,12 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 class OGDFMMMExampleFastLayout : public OGDFLayoutPluginBase {
-  
- public:
 
-	OGDFMMMExampleFastLayout(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleFastLayout()) {}
-   ~OGDFMMMExampleFastLayout() {}
-  
+public:
+
+  OGDFMMMExampleFastLayout(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleFastLayout()) {}
+  ~OGDFMMMExampleFastLayout() {}
+
 };
 /*@}*/
 

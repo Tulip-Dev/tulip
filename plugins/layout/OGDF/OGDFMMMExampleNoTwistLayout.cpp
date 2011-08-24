@@ -54,12 +54,12 @@
  ***************************************************************/
 
 class OGDFMMMExampleNoTwistLayout : public OGDFLayoutPluginBase {
-  
- public:
 
-	OGDFMMMExampleNoTwistLayout(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleNoTwistLayout()) {}
-   ~OGDFMMMExampleNoTwistLayout() {}
-  
+public:
+
+  OGDFMMMExampleNoTwistLayout(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleNoTwistLayout()) {}
+  ~OGDFMMMExampleNoTwistLayout() {}
+
 };
 /*@}*/
 

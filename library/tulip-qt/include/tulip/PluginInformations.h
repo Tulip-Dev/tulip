@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
@@ -31,19 +31,19 @@
  * This is a WIP for Tulip 4.0 and serves no real purpose as of now.
  **/
 class PluginInformations {
-  public:   
-    QString identifier() const;
-    QString name() const;
+public:
+  QString identifier() const;
+  QString name() const;
 
-    QString shortDescription() const;
-    QString longDescriptionPath() const;
+  QString shortDescription() const;
+  QString longDescriptionPath() const;
 
-    QString iconPath() const;
-    QDate installDate() const;
-    
-    QString type() const;
-    QStringList dependencies() const;
-    QString version() const;
+  QString iconPath() const;
+  QDate installDate() const;
+
+  QString type() const;
+  QStringList dependencies() const;
+  QString version() const;
 };
 
 #endif //PLUGININFORMATIONS_H

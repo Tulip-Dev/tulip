@@ -5,11 +5,11 @@
 namespace {
 
 const char * paramHelp[] = {
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "int" )
-		HTML_HELP_BODY()
-		"The number of threads to use during the computation of the layout."
-		HTML_HELP_CLOSE()
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "The number of threads to use during the computation of the layout."
+  HTML_HELP_CLOSE()
 };
 }
 
@@ -60,21 +60,23 @@ class OGDFFastMultipoleMultiLevelEmbedder : public OGDFLayoutPluginBase {
 
 public:
 
-	OGDFFastMultipoleMultiLevelEmbedder(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleMultilevelEmbedder()) {
-		addParameter<int>("number of threads", paramHelp[0], "2");
-	}
+  OGDFFastMultipoleMultiLevelEmbedder(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleMultilevelEmbedder()) {
+    addParameter<int>("number of threads", paramHelp[0], "2");
+  }
 
-	~OGDFFastMultipoleMultiLevelEmbedder() {}
+  ~OGDFFastMultipoleMultiLevelEmbedder() {}
 
-	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
-		ogdf::FastMultipoleMultilevelEmbedder *fmme = static_cast<ogdf::FastMultipoleMultilevelEmbedder*>(ogdfLayoutAlgo);
-		if (dataSet != 0) {
-			int ival = 0;
-			if (dataSet->get("number of threads", ival))
-				fmme->maxNumThreads(ival);
+  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+    ogdf::FastMultipoleMultilevelEmbedder *fmme = static_cast<ogdf::FastMultipoleMultilevelEmbedder*>(ogdfLayoutAlgo);
 
-		}
-	}
+    if (dataSet != 0) {
+      int ival = 0;
+
+      if (dataSet->get("number of threads", ival))
+        fmme->maxNumThreads(ival);
+
+    }
+  }
 
 };
 /*@}*/

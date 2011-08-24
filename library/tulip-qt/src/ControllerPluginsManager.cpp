@@ -24,36 +24,39 @@ tlp::ControllerPluginsManager* tlp::ControllerPluginsManager::inst=0;
 
 using namespace std;
 
-namespace tlp
-{
+namespace tlp {
 
-  ControllerPluginsManager::ControllerPluginsManager() {
-    ControllerFactory::initFactory();
-  }
-  //====================================================
-  void ControllerPluginsManager::loadPlugins(PluginLoader *plug) {
-    ControllerFactory::initFactory();
-    string::const_iterator begin=tlp::TulipPluginsPath.begin();
-    string::const_iterator end=begin;
-    while (end!=tlp::TulipPluginsPath.end())
-      if ((*end)==tlp::PATH_DELIMITER) {
-	if (begin!=end)
-	  tlp::loadControllerPluginsFromDir(string(begin,end)+"/controller", plug);
-	++end;
-	begin=end;
-      } else
-	++end;
-    if (begin!=end) {
-      tlp::loadControllerPluginsFromDir(string(begin,end)+"/controller", plug);
+ControllerPluginsManager::ControllerPluginsManager() {
+  ControllerFactory::initFactory();
+}
+//====================================================
+void ControllerPluginsManager::loadPlugins(PluginLoader *plug) {
+  ControllerFactory::initFactory();
+  string::const_iterator begin=tlp::TulipPluginsPath.begin();
+  string::const_iterator end=begin;
+
+  while (end!=tlp::TulipPluginsPath.end())
+    if ((*end)==tlp::PATH_DELIMITER) {
+      if (begin!=end)
+        tlp::loadControllerPluginsFromDir(string(begin,end)+"/controller", plug);
+
+      ++end;
+      begin=end;
     }
+    else
+      ++end;
+
+  if (begin!=end) {
+    tlp::loadControllerPluginsFromDir(string(begin,end)+"/controller", plug);
   }
-  //====================================================
-  bool ControllerPluginsManager::controllerExists(const string &name) {
-    return ControllerFactory::factory->pluginExists(name);
-  }
-  //====================================================
-  Controller* ControllerPluginsManager::createController(const string &name) {
-    ControllerContext ic;
-    return ControllerFactory::factory->getPluginObject(name, &ic);
-  }
+}
+//====================================================
+bool ControllerPluginsManager::controllerExists(const string &name) {
+  return ControllerFactory::factory->pluginExists(name);
+}
+//====================================================
+Controller* ControllerPluginsManager::createController(const string &name) {
+  ControllerContext ic;
+  return ControllerFactory::factory->getPluginObject(name, &ic);
+}
 }

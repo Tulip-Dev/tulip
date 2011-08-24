@@ -30,27 +30,33 @@
 #include <tulip/ColorProperty.h>
 namespace tlp {
 
-  class GlGraphInputData;
-  class Camera;
+class GlGraphInputData;
+class Camera;
 
-  /**
-   * Class use to render a meta node, this version render nothing
-   */
-  class TLP_GL_SCOPE GlMetaNodeRenderer {
+/**
+ * Class use to render a meta node, this version render nothing
+ */
+class TLP_GL_SCOPE GlMetaNodeRenderer {
 
-  public:
+public:
 
-    virtual ~GlMetaNodeRenderer() {}
+  virtual ~GlMetaNodeRenderer() {}
 
-    virtual void prerender(node,float,Camera*) {}
-    virtual void render(node,float,Camera*) {}
-    virtual bool havePrerender() {return false;}
-    virtual bool glMetaNodeHaveToRenderLabels(){return true;}
+  virtual void prerender(node,float,Camera*) {}
+  virtual void render(node,float,Camera*) {}
+  virtual bool havePrerender() {
+    return false;
+  }
+  virtual bool glMetaNodeHaveToRenderLabels() {
+    return true;
+  }
 
-    virtual void setInputData(GlGraphInputData *) {}
-    virtual GlGraphInputData *getInputData() {return NULL;}
+  virtual void setInputData(GlGraphInputData *) {}
+  virtual GlGraphInputData *getInputData() {
+    return NULL;
+  }
 
-  };
+};
 
 }
 

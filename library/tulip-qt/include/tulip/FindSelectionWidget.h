@@ -36,7 +36,7 @@ class TLP_QT_SCOPE FindSelectionWidget : public QDialog,
   Q_OBJECT
 public:
   FindSelectionWidget(Graph *graph, std::string &currentProperty,
-		      QWidget *parent = 0);
+                      QWidget *parent = 0);
   // returns -1 if cancelled, the number of found items if accepted
   int exec();
   std::string getCurrentProperty();
@@ -53,7 +53,7 @@ private:
 
   PropertyInterface *getProperty();
   void find(BooleanProperty *);
-  
+
 protected slots:
   virtual void propertyChanged( int no );
   virtual void accept();

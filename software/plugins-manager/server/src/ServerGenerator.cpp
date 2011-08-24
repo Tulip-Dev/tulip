@@ -50,7 +50,7 @@ int main(int argc,char **argv) {
   PluginLoaderWithInfo plug;
   initTulipLib(NULL);
   loadPlugins(&plug);    // library side plugins
-  GlyphManager::getInst().loadPlugins(&plug); //Glyph plugins 
+  GlyphManager::getInst().loadPlugins(&plug); //Glyph plugins
   InteractorManager::getInst().loadPlugins(&plug);
   ViewPluginsManager::getInst().loadPlugins(&plug);
   ControllerPluginsManager::getInst().loadPlugins(&plug);
@@ -63,10 +63,11 @@ int main(int argc,char **argv) {
 
   vector<LocalPluginInfo> pluginsList=plug.pluginsList;
 
-  for(vector<LocalPluginInfo>::iterator it=pluginsList.begin();it!=pluginsList.end();++it) {
-    if((*it).type!="Glyph"){
+  for(vector<LocalPluginInfo>::iterator it=pluginsList.begin(); it!=pluginsList.end(); ++it) {
+    if((*it).type!="Glyph") {
       (*it).displayType=PluginInfo::getPluginDisplayType((*it).name);
-    }else{
+    }
+    else {
       (*it).displayType=(*it).type;
     }
   }
@@ -75,12 +76,12 @@ int main(int argc,char **argv) {
   dir.mkpath(targetPath);
 
 #if defined(I64)
-    QString archSubDir("i64");
+  QString archSubDir("i64");
 #else
-    QString archSubDir("i386");
+  QString archSubDir("i386");
 #endif
 
-  for(vector<LocalPluginInfo>::iterator it=pluginsList.begin();it!=pluginsList.end();++it) {
+  for(vector<LocalPluginInfo>::iterator it=pluginsList.begin(); it!=pluginsList.end(); ++it) {
     QString path((*it).fileName.c_str());
 
     cout << "*** " << it->fileName.c_str() << " of type " << it->displayType << " found : " << endl;
@@ -97,6 +98,7 @@ int main(int argc,char **argv) {
 
     QDir srcDir;
     string subDir;
+
     if((*it).type=="Glyph")
       subDir="glyphs/";
     else if((*it).type=="Interactor")
@@ -106,28 +108,33 @@ int main(int argc,char **argv) {
 
     srcDir = QDir((TulipLibDir+"tlp/"+subDir).c_str());
     QDir secondSrcDir;
+
     if(argc==4) {
       secondSrcDir=QDir((string(argv[3])+subDir).c_str());
     }
 
     if(srcDir.exists(QString((*it).fileName.c_str())+".so")) {
       UpdatePlugin::copyFile(srcDir,QString((*it).fileName.c_str())+".so",
-			     QDir(dstDir.filePath(archSubDir)),
-			     QString((*it).fileName.c_str())+".so");
+                             QDir(dstDir.filePath(archSubDir)),
+                             QString((*it).fileName.c_str())+".so");
     }
+
     if(argc==4) {
       dstDir.mkpath(targetPath+"/pluginsV2/"+path + "/i386");
+
       if(secondSrcDir.exists(QString((*it).fileName.c_str())+".dylib")) {
         UpdatePlugin::copyFile(secondSrcDir,QString((*it).fileName.c_str())+".dylib",
-			       QDir(dstDir.filePath("i386")),
-			       QString((*it).fileName.c_str())+".dylib");
+                               QDir(dstDir.filePath("i386")),
+                               QString((*it).fileName.c_str())+".dylib");
       }
+
       if(secondSrcDir.exists(QString((*it).fileName.c_str())+".dll")) {
         UpdatePlugin::copyFile(secondSrcDir,QString((*it).fileName.c_str())+".dll",
-			       QDir(dstDir.filePath("i386")),
-			       QString((*it).fileName.c_str())+".dll");
+                               QDir(dstDir.filePath("i386")),
+                               QString((*it).fileName.c_str())+".dll");
       }
     }
+
     if (!docPath.isEmpty()) {
       // Documentation :
       QDir pluginsDocDir(docPath+"/doxygen/xml");
@@ -139,28 +146,31 @@ int main(int argc,char **argv) {
       QString libName = fileName.split("-").first();
       libName=libName.split("lib").last();
       //cout << "lib name : " << libName.toStdString() << endl;
-  
-      QList<QString>::iterator iter = pluginsDocs.begin();
-    
-      bool xmlDocFound = false;
-      while(iter != pluginsDocs.end()){
-      
-	QString docFile(*iter);
-	docFile = (docFile.mid(5,docFile.size()-9));
 
-	if(docFile.compare(libName, Qt::CaseInsensitive)==0){
-	  QFile srcFile(docPath+"/doxygen/xml/" + (*iter));
-	  QString version((*it).version.c_str());
-	  generatePluginDocFile(fileName, version, srcFile, dstDir);
-	  xmlDocFound = true;
-	}
-	++iter;
+      QList<QString>::iterator iter = pluginsDocs.begin();
+
+      bool xmlDocFound = false;
+
+      while(iter != pluginsDocs.end()) {
+
+        QString docFile(*iter);
+        docFile = (docFile.mid(5,docFile.size()-9));
+
+        if(docFile.compare(libName, Qt::CaseInsensitive)==0) {
+          QFile srcFile(docPath+"/doxygen/xml/" + (*iter));
+          QString version((*it).version.c_str());
+          generatePluginDocFile(fileName, version, srcFile, dstDir);
+          xmlDocFound = true;
+        }
+
+        ++iter;
       }
-      if (xmlDocFound == false)	
-	cout << "no xml doc file found" << endl;
+
+      if (xmlDocFound == false)
+        cout << "no xml doc file found" << endl;
     }
   }
-    
-    
+
+
   return EXIT_SUCCESS;
 }
