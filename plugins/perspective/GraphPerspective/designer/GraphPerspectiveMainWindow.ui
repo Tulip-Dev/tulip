@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>976</width>
-    <height>720</height>
+    <width>974</width>
+    <height>718</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -395,9 +395,6 @@ QToolButton:pressed {
            <property name="checkable">
             <bool>true</bool>
            </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
            <property name="toolButtonStyle">
             <enum>Qt::ToolButtonTextUnderIcon</enum>
            </property>
@@ -732,7 +729,7 @@ QPushButton::menu-indicator {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>976</width>
+     <width>974</width>
      <height>22</height>
     </rect>
    </property>

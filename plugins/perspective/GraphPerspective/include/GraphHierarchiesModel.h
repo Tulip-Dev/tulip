@@ -15,8 +15,10 @@ class GraphHierarchiesModel : public QAbstractItemModel, public tlp::Observable 
   Q_OBJECT
 
   QList<tlp::Graph *> _graphs;
-
   QString generateName(tlp::Graph *) const;
+
+  tlp::Graph *_currentGraph;
+
 public:
   explicit GraphHierarchiesModel(QObject *parent=0);
   GraphHierarchiesModel(const GraphHierarchiesModel &);
@@ -63,8 +65,12 @@ public:
   // Methods inherited from the observable system
   void treatEvent(const tlp::Event &);
 
+  // active graph handling
+  void setCurrentGraph(tlp::Graph *);
+  tlp::Graph *currentGraph() const;
 
 signals:
+  void currentGraphChanged(tlp::Graph *);
 
 public slots:
   void addGraph(tlp::Graph *);
