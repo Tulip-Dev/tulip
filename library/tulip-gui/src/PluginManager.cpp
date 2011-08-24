@@ -6,11 +6,24 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QCoreApplication>
+#include <tulip/DownloadManager.h>
 
 using namespace std;
 using namespace tlp;
 
 QMap<QString, LocationPlugins> PluginManager::_remoteLocations;
+QMap<QNetworkReply*, QString> PluginManager::replyLocations;
+PluginManager* PluginManager::_instance = NULL;
+
+PluginManager::PluginManager() {
+}
+
+PluginManager* PluginManager::getInstance() {
+  if(_instance == NULL) {
+    _instance = new PluginManager();
+  }
+  return _instance;
+}
 
 QList<tlp::PluginInformations*> PluginManager::pluginsList(Location list) {
   QMap<QString, tlp::PluginInformations*> result;
@@ -51,24 +64,6 @@ QList<tlp::PluginInformations*> PluginManager::pluginsList(Location list) {
   return result.values();
 }
 
-QString PluginManager::getPluginServerDescription(const QString& location) {
-
-  QNetworkAccessManager manager;
-  QNetworkReply* reply = manager.get(QNetworkRequest(QUrl(location + "/serverDescription.xml")));
-
-  while(!reply->isFinished()) {
-    QCoreApplication::processEvents();
-  }
-
-  if(reply->error() != QNetworkReply::NoError) {
-    std::cout << "error while retrieving server description (" << location.toStdString() << ") : " << reply->errorString().toStdString() << std::endl;
-    return QString::null;
-  }
-
-  QString content(reply->readAll());
-  return content;
-}
-
 LocationPlugins PluginManager::parseDescription(const QString& xmlDescription, const QString& location) {
   QDomDocument description;
   description.setContent(xmlDescription);
@@ -107,27 +102,34 @@ LocationPlugins PluginManager::parseDescription(const QString& xmlDescription, c
   return remotePlugins;
 }
 
-bool PluginManager::addRemoteLocation(const QString& location) {
+void PluginManager::addRemoteLocation(const QString& location) {
+  QNetworkAccessManager* manager = DownloadManager::getInstance();
+  QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(location + "/serverDescription.xml")));
+  replyLocations[reply] = location;
 
-  QString xmlDocument(getPluginServerDescription(location));
+  connect(manager, SIGNAL(finished(QNetworkReply*)), getInstance(), SLOT(serverDescriptionDownloaded(QNetworkReply*)));
+}
 
-  if(xmlDocument.isEmpty() || _remoteLocations.contains(location)) {
-    return false;
+void PluginManager::serverDescriptionDownloaded(QNetworkReply* reply) {
+  const QString location = replyLocations[reply];
+  if(reply->error() != QNetworkReply::NoError) {
+    std::cout << "error while retrieving server description (" << location.toStdString() << ") : " << reply->errorString().toStdString() << std::endl;
   }
 
+  QString content(reply->readAll());
+  QString xmlDocument(content);
   QDomDocument description;
   description.setContent(xmlDocument);
   QDomElement elm = description.documentElement();
 
   _remoteLocations[location] = parseDescription(xmlDocument, location);
-  return true;
+
+  replyLocations.remove(reply);
+  reply->deleteLater();
+
+  emit(remoteLocationAdded());
 }
 
 void PluginManager::removeRemoteLocation(const QString& location) {
-  QString xmlDocument(getPluginServerDescription(location));
-  QDomDocument description;
-  description.setContent(xmlDocument);
-  QDomElement elm = description.documentElement();
-
   _remoteLocations.remove(location);
 }

@@ -6,6 +6,7 @@
 #include <QtCore/QList>
 #include <QtCore/QMap>
 
+class QNetworkReply;
 static const QString PROPERTY_ALGORITHM_PLUGIN_NAME = "PropertyAlgorithm";
 static const QString ALGORITHM_PLUGIN_NAME = "Algorithm";
 static const QString TEMPLATE_ALGORITHM_PLUGIN_NAME = "TemplateAlgorithm";
@@ -32,8 +33,8 @@ typedef QMap<QString, tlp::DistantPluginInfo*> LocationPlugins;
  *
  * For now only listing is available, the rest is coming soon.
  **/
-class TLP_QT_SCOPE PluginManager :QObject {
-  Q_OBJECT
+class TLP_QT_SCOPE PluginManager : public QObject {
+Q_OBJECT
 public:
 
   enum PluginLocation {
@@ -42,7 +43,7 @@ public:
     Remote = 2
   };
   Q_DECLARE_FLAGS(Location, PluginLocation)
-
+  
   /**
    * @brief Lists plugins from the specified locations.
    *
@@ -56,9 +57,9 @@ public:
    *
    * @param location The URL of the remote location (e.g. http://www.labri.fr/perso/huet/archive/ for testing purposes)
    * @return bool whether the adding of the remote location suceeded.
-   * TODO This needs to be chan ged to an enum or whatever so what happened can be known (could not contact remote server, location already in list, ...)
+   * TODO This needs to be changed to an enum or whatever so what happened can be known (could not contact remote server, location already in list, ...)
    **/
-  static bool addRemoteLocation(const QString& location);
+  static void addRemoteLocation(const QString& location);
 
   /**
    * @brief Removes a remote location from which to list plugins.
@@ -69,14 +70,6 @@ public:
   static void removeRemoteLocation(const QString& location);
 
   /**
-   * @brief Retrieves the serverDescription.xml file from the specified location and returns its contents.
-   *
-   * @param location The location from which to retrieve the serverDescription.xml file.
-   * @return QString The contents of the serverDescription.xml file.
-   **/
-  static QString getPluginServerDescription(const QString& location);
-
-  /**
    * @brief Parses the a server description's xml file and creates a list of PluginInformations from it.
    *
    * @param description The contents of a serverDescvription.xml file.
@@ -84,11 +77,24 @@ public:
    **/
   static LocationPlugins parseDescription(const QString& xmlDescription, const QString& location);
 
+  static PluginManager* getInstance();
+
+signals:
+  void remoteLocationAdded();
+  
 private:
   /**
    * @brief Contains all the remote locations added, and for each of them the list of plugins on the location.
    **/
   static QMap<QString, LocationPlugins> _remoteLocations;
+
+  PluginManager();
+  static PluginManager* _instance;
+
+  static QMap<QNetworkReply*, QString> replyLocations;
+  
+protected slots:
+  void serverDescriptionDownloaded(QNetworkReply* reply);
 
 };
 
