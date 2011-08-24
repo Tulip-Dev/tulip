@@ -31,12 +31,19 @@ namespace tlp {
 /*@{*/
 /**
  * @brief Base interface for plug-in description.
+ * 
  * This class is not intented to be subclassed by plug-ins themselves, but by the factories who create the plug-ins.
+ *
  * This class holds user informations, such as name of the author, date of creation, and miscellaneous informations.
+ *
  * It also holds informations for the Tulip plug-in system, such as the version (used to know when there is an update for a plug-in),
  * the name (used as unique identifier to register the plug-in),
  * the Tulip version the plug-in was built with (to know whether the plug-in is compatible with the currently running version of TUlip),
  * and the group this plug-in belongs to (e.g. trees).
+ *
+ * The function that actually creates the plugin is in the FactoryInterface class in order to keep AbstractPluginInfo clean of template parameters, making it easier to use.
+ *
+ * @see FactoryInterface for more advanced operation such as plugin creation and retrieving dependencies.
  */
 
 class AbstractPluginInfo {
@@ -131,6 +138,12 @@ public:
     return tlp::getMinor(getTulipRelease());
   }
 
+  /**
+  * @brief Returns the ID of the glyph this factory builds.
+  * @TODO this member should be removed once there is a system in Tulip to handle glyphs.
+  *
+  * @return int the id of the glyph.
+  **/
   virtual int getId() const {
     return 0;
   }
@@ -145,6 +158,10 @@ public:
 
 template<class ObjectType, class Context> class StaticPluginLister;
 
+/**
+ * @brief This abstract class provides a more complete interface for plugin factories, including plugin creation.
+ * 
+ **/
 template <class PluginObject, class PluginContext>
 class FactoryInterface : public AbstractPluginInfo {
 public:
@@ -162,7 +179,8 @@ public:
   }
 
   /**
-  * @brief Forwards the call to the appropriate PluginLister.
+  * @brief Convenience function to retrieve the dependencies of a plugin from its factory.
+  * Forwards the call to the appropriate PluginLister.
   *
   * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > >
   **/

@@ -6,21 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>936</width>
-    <height>99</height>
+    <width>840</width>
+    <height>94</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+   <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <property name="focusPolicy">
    <enum>Qt::ClickFocus</enum>
-  </property>
-  <property name="windowTitle">
-   <string>Form</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -83,8 +80,56 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
              <widget class="QLabel" name="name">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QProgressBar" name="downloadProgress">
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>10</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>10</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">#downloadProgress {
+border: 1px solid &quot;#C9C9C9&quot;;
+background-color: white;
+}
+QProgressBar::chunk {
+background-color: rgba(150,180,210);
+width: 20px;
+}</string>
+              </property>
+              <property name="textVisible">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -95,6 +140,18 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>16</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16777215</height>
+               </size>
               </property>
               <property name="text">
                <string/>
@@ -121,6 +178,17 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
           <number>-1</number>
          </property>
          <item>
+          <widget class="QPushButton" name="installButton">
+           <property name="text">
+            <string>Install</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../resources/TulipAgent.qrc">
+             <normaloff>:/tulip/app/icons/list-add.svg</normaloff>:/tulip/app/icons/list-add.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="removeButton">
            <property name="text">
             <string>Remove</string>
@@ -132,13 +200,13 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="installButton">
+          <widget class="QPushButton" name="upgradeButton">
            <property name="text">
-            <string>Install</string>
+            <string>Upgrade</string>
            </property>
            <property name="icon">
             <iconset resource="../resources/TulipAgent.qrc">
-             <normaloff>:/tulip/app/icons/list-add.svg</normaloff>:/tulip/app/icons/list-add.svg</iconset>
+             <normaloff>:/tulip/app/icons/package-upgrade.svg</normaloff>:/tulip/app/icons/package-upgrade.svg</iconset>
            </property>
           </widget>
          </item>

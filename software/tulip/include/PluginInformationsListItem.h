@@ -28,6 +28,8 @@ signals:
   void remove();
 
 public slots:
+  void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
+  void downloadFinished();
   void expand();
   void collapse();
   void markedForRemoval();
