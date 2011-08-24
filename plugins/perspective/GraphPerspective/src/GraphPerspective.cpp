@@ -15,7 +15,8 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
   _ui->workspaceSplitter->setSizes(QList<int>() << 200 << 1000);
-  _ui->docksSplitter->setSizes(QList<int>() << 500 << 300 << 300);
+  _ui->docksSplitter->setSizes(QList<int>() << 500 << 800);
+  _ui->graphHierarchiesEditor->hide();
 
   _mainWindow->show();
   // Open project with model

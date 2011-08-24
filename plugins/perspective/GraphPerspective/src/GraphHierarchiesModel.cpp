@@ -99,6 +99,9 @@ QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
     if (index.column() == NAME_SECTION && graph == graph->getRoot())
       f.setItalic(true);
 
+    if (graph == _currentGraph)
+      f.setBold(true);
+
     return f;
   }
 
@@ -143,7 +146,12 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
     if (i->isDescendantGraph(g))
       return;
   }
+
+
   _graphs.push_back(g);
+  if (_graphs.size() == 1)
+    setCurrentGraph(g);
+
   g->addListener(this);
   emit layoutChanged();
 }
@@ -224,4 +232,24 @@ QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
     return trUtf8("untitled_") + QString::number(graph->getId());
 
   return name.c_str();
+}
+
+void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
+  bool inHierarchy = false;
+  foreach(Graph *i,_graphs) {
+    if (i->isDescendantGraph(g) || g == i) {
+      inHierarchy = true;
+      break;
+    }
+  }
+  if (!inHierarchy)
+    return;
+
+  _currentGraph = g;
+  emit currentGraphChanged(g);
+  emit layoutChanged();
+}
+
+Graph *GraphHierarchiesModel::currentGraph() const {
+  return _currentGraph;
 }
