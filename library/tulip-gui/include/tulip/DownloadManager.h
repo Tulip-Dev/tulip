@@ -4,6 +4,7 @@
 #include <QMap>
 
 class QNetworkReply;
+class QNetworkReply;
 
 class DownloadManager: public QObject {
   Q_OBJECT
@@ -15,7 +16,7 @@ class DownloadManager: public QObject {
   DownloadManager();
 public:
   static DownloadManager* getInstance();
-  void downloadPlugin(const QUrl &url, const QString& destination);
+  QNetworkReply* downloadPlugin(const QUrl &url, const QString& destination);
   bool saveToDisk(const QString &filename, QIODevice *data);
 
 public slots:

@@ -109,7 +109,9 @@ QString PluginInformations::latestVersion() const {
 bool PluginInformations::fetch() const {
   bool result = false;
   const QString archiveName = tlp::getPluginPackageName(name());
-  DownloadManager::getInstance()->downloadPlugin(_remoteArchive, tlp::getPluginStagingDirectory() + archiveName);
+  QNetworkReply* reply = DownloadManager::getInstance()->downloadPlugin(_remoteArchive, tlp::getPluginStagingDirectory() + archiveName);
+  emit(DownloadStarted(reply));
+  
   std::cout << isInstalled() << ": " << installedVersion().toStdString() << ";" << _installedVersion.isEmpty() << std::endl;
 
   if(!isInstalled()) {
