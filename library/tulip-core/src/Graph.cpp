@@ -391,8 +391,6 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
   Iterator<edge> * edgeIt =
     inSel ? inSel->getNonDefaultValuatedEdges(inG) : inG->getEdges();
 
-  edgeIt = inSel ? inSel->getNonDefaultValuatedEdges(inG) : inG->getEdges();
-
   while( edgeIt->hasNext() ) {
     edge eIn = edgeIt->next();
     const pair<node, node>& eEnds = inG->ends(eIn);
