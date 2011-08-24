@@ -375,10 +375,10 @@ void buildCurvePoints (const vector<Coord> &vertices,
   }
 
   if (endN != vertices[vertices.size()-1]) {
-    inversion = computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], endN, sizes[sizes.size() - 1], inversion, result);
+    computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], endN, sizes[sizes.size() - 1], inversion, result);
   }
   else {
-    inversion = computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], vertices[vertices.size()-1] + (vertices[vertices.size()-1] - vertices[vertices.size()-2]), sizes[sizes.size() - 1], inversion, result);
+    computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], vertices[vertices.size()-1] + (vertices[vertices.size()-1] - vertices[vertices.size()-2]), sizes[sizes.size() - 1], inversion, result);
   }
 }
 //==============================================
