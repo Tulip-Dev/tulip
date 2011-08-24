@@ -160,16 +160,12 @@ void PluginsCenter::addRemoteLocation() {
   const QString remoteLocation = _ui->remoteLocationText->text();
   std::cout << remoteLocation.toStdString() << std::endl;
 
-  if(tlp::PluginManager::addRemoteLocation(remoteLocation)) {
-    TulipSettings::instance().addRemoteLocation(remoteLocation);
-    _ui->remoteLocationsList->addItem(remoteLocation);
-    _ui->remoteLocationText->clear();
-    _ui->pluginsSearchList->initPluginsCache();
-    _ui->pluginsSearchList->refreshResults();
-  }
-  else {
-    //TODO error
-  }
+  tlp::PluginManager::addRemoteLocation(remoteLocation);
+  TulipSettings::instance().addRemoteLocation(remoteLocation);
+  _ui->remoteLocationsList->addItem(remoteLocation);
+  _ui->remoteLocationText->clear();
+  _ui->pluginsSearchList->initPluginsCache();
+  _ui->pluginsSearchList->refreshResults();
 }
 
 void PluginsCenter::removeRemoteLocation() {

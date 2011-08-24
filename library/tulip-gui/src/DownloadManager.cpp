@@ -24,14 +24,14 @@ DownloadManager* DownloadManager::getInstance() {
 }
 
 DownloadManager::DownloadManager()  {
-  connect(&manager, SIGNAL(finished(QNetworkReply*)), SLOT(downloadFinished(QNetworkReply*)));
+  connect(this, SIGNAL(finished(QNetworkReply*)), SLOT(downloadFinished(QNetworkReply*)));
 }
 
 QNetworkReply* DownloadManager::downloadPlugin(const QUrl &url, const QString& destination) {
   downloadDestinations[url] = destination;
   
   QNetworkRequest request(url);
-  QNetworkReply* reply = manager.get(request);
+  QNetworkReply* reply = get(request);
   currentDownloads.append(reply);
   return reply;
 }

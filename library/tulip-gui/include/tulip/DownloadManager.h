@@ -6,9 +6,8 @@
 class QNetworkReply;
 class QNetworkReply;
 
-class DownloadManager: public QObject {
+class DownloadManager: public QNetworkAccessManager {
   Q_OBJECT
-  QNetworkAccessManager manager;
   QList<QNetworkReply *> currentDownloads;
   QMap<QUrl, QString> downloadDestinations;
 

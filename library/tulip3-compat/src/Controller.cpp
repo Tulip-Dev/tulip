@@ -123,8 +123,7 @@ void Controller::_buildUi() {
 }
 
 void Controller::updateImportExportMenus() {
-  tlp::PluginManager manager;
-  QList<tlp::PluginInformations *> localPlugins = manager.pluginsList(PluginManager::Local);
+  QList<tlp::PluginInformations *> localPlugins = PluginManager::pluginsList(PluginManager::Local);
   tlp::PluginInformations *infos;
   QMap<QString,QMenu *> groupMenus;
   foreach(infos,localPlugins) {

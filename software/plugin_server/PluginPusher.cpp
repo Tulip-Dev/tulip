@@ -61,7 +61,13 @@ int main(int argc, char** argv) {
 
   QString location = "http://www." + serverURL + "/perso/huet/" + destinationPath;
 
-  QString remoteDescription = tlp::PluginManager::getPluginServerDescription(location);
+  QNetworkAccessManager networkManager;
+  QNetworkReply* reply = networkManager.get(QNetworkRequest(QUrl(location + "/serverDescription.xml")));
+  
+  while(!reply->isFinished()) {
+    QCoreApplication::processEvents();
+  }
+  QString remoteDescription(reply->readAll());
 
   QStringList pluginList;
 
