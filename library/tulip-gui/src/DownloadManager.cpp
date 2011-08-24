@@ -27,13 +27,13 @@ DownloadManager::DownloadManager()  {
   connect(&manager, SIGNAL(finished(QNetworkReply*)), SLOT(downloadFinished(QNetworkReply*)));
 }
 
-void DownloadManager::downloadPlugin(const QUrl &url, const QString& destination) {
-  QNetworkRequest request(url);
-  QNetworkReply *reply = manager.get(request);
-
+QNetworkReply* DownloadManager::downloadPlugin(const QUrl &url, const QString& destination) {
   downloadDestinations[url] = destination;
-
+  
+  QNetworkRequest request(url);
+  QNetworkReply* reply = manager.get(request);
   currentDownloads.append(reply);
+  return reply;
 }
 
 bool DownloadManager::saveToDisk(const QString &filename, QIODevice *data) {
@@ -53,14 +53,14 @@ bool DownloadManager::saveToDisk(const QString &filename, QIODevice *data) {
 void DownloadManager::downloadFinished(QNetworkReply *reply) {
   QUrl url = reply->url();
 
-  if (reply->error()) {
-    fprintf(stderr, "Download of %s failed: %s\n", url.toEncoded().constData(), qPrintable(reply->errorString()));
-  }
-  else {
+  if (reply->error() == QNetworkReply::NoError) {
     QString filename = downloadDestinations[url];
-
+    
     if (saveToDisk(filename, reply))
       printf("Download of %s succeeded (saved to %s)\n", url.toEncoded().constData(), qPrintable(filename));
+  }
+  else {
+    fprintf(stderr, "Download of %s failed: %s\n", url.toEncoded().constData(), qPrintable(reply->errorString()));
   }
 
   currentDownloads.removeAll(reply);

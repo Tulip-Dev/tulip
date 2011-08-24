@@ -28,6 +28,7 @@
 #include <tulip/WithDependency.h>
 #include <QMap>
 
+class QNetworkReply;
 namespace tlp {
 
 /**
@@ -93,7 +94,8 @@ private:
 /**
  * @brief Simple wrapper around AbstractPluginInfo to provide informations about updates and installation/removal functions.
  **/
-class TLP_QT_SCOPE PluginInformations {
+class TLP_QT_SCOPE PluginInformations : public QObject {
+  Q_OBJECT
 public:
   /**
     * @brief This constructor is used for local plugin description, and the library is used to determine the path of the icon and long description.
@@ -160,6 +162,8 @@ public:
    * @return void
    **/
   void remove() const;
+signals:
+  void DownloadStarted(QNetworkReply* reply) const;
 private:
   QString _lastVersion;
   const QString _type;

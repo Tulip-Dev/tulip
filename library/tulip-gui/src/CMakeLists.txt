@@ -125,6 +125,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/PluginManager.h
   ../include/tulip/SimplePluginProgressWidget.h
   ../include/tulip/Perspective.h
+  ../include/tulip/PluginInformations.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

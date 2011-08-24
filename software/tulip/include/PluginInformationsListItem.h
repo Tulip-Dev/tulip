@@ -3,6 +3,7 @@
 
 #include <QtGui/QWidget>
 
+class QNetworkReply;
 namespace Ui {
 class PluginInformationsListItemData;
 }
@@ -33,6 +34,7 @@ public slots:
   void expand();
   void collapse();
   void markedForRemoval();
+  void DownloadStarted(QNetworkReply*);
 
 private:
   Ui::PluginInformationsListItemData *_ui;
