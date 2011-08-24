@@ -54,7 +54,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
          <string>Results</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipAgent.qrc">
           <normaloff>:/tulip/app/icons/arrow-left.png</normaloff>:/tulip/app/icons/arrow-left.png</iconset>
         </property>
         <property name="flat">
@@ -172,13 +172,37 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <widget class="QPushButton" name="instalButton">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="installButton">
           <property name="text">
-           <string/>
+           <string>Install </string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../resources/TulipAgent.qrc">
             <normaloff>:/tulip/app/icons/list-add.svg</normaloff>:/tulip/app/icons/list-add.svg</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="upgradeButton">
+          <property name="text">
+           <string>Upgrade to </string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/TulipAgent.qrc">
+            <normaloff>:/tulip/app/icons/package-upgrade.svg</normaloff>:/tulip/app/icons/package-upgrade.svg</iconset>
           </property>
          </widget>
         </item>
@@ -188,7 +212,7 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
            <string>Remove</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../resources/TulipAgent.qrc">
             <normaloff>:/tulip/app/icons/package-purge.svg</normaloff>:/tulip/app/icons/package-purge.svg</iconset>
           </property>
          </widget>
@@ -225,6 +249,8 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
    <header>QtWebKit/QWebView</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources/TulipAgent.qrc"/>
+ </resources>
  <connections/>
 </ui>

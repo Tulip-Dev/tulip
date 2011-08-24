@@ -147,7 +147,18 @@ public:
 
   QString latestVersion() const;
 
+  /**
+   * @brief Downloads the plugin and marks it for installation
+   *
+   * @return bool Whether the download was successful.
+   **/
   bool fetch() const;
+
+  /**
+   * @brief Marks the plugin for removal (the plugin can only be removed once unloaded, so it will be removed at Tulip's next startup).
+   *
+   * @return void
+   **/
   void remove() const;
 private:
   QString _lastVersion;
