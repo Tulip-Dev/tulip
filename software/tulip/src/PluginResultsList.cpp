@@ -11,9 +11,6 @@
 
 PluginResultsList::PluginResultsList(QWidget *parent)
   : QScrollArea(parent), _focusedItem(0), _resultsListCache(0) {
-  foreach(const QString& remoteLocation, TulipSettings::instance().remoteLocations()) {
-    tlp::PluginManager::addRemoteLocation(remoteLocation);
-  }
   initPluginsCache();
 }
 

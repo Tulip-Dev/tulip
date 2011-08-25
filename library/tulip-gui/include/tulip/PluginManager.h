@@ -77,6 +77,10 @@ public:
    **/
   static LocationPlugins parseDescription(const QString& xmlDescription, const QString& location);
 
+  static void RemovePlugins(const QStringList& plugins);
+
+  static void UnpackPlugins(const QString& inputFolder);
+  
   static PluginManager* getInstance();
 
 signals:

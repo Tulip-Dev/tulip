@@ -177,6 +177,8 @@ private:
   const QString _version;
   const tlp::AbstractPluginInfo* _infos;
   const QString _library;
+public slots:
+    void downloadFinished();
 };
 
 }
