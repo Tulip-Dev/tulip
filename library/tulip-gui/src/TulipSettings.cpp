@@ -2,6 +2,10 @@
 
 TulipSettings *TulipSettings::_instance = 0;
 
+const QString TulipSettings::RemoteLocationsConfigEntry = "app/remote_locations";
+const QString TulipSettings::RecentDocumentsConfigEntry = "app/recent_documents";
+const QString TulipSettings::PluginsToRemoveConfigEntry = "app/pluginsToRemove";
+
 TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }
 
@@ -13,11 +17,11 @@ TulipSettings &TulipSettings::instance() {
 }
 
 QStringList TulipSettings::recentDocuments() const {
-  return value("app/recent_documents").toStringList();
+  return value(RecentDocumentsConfigEntry).toStringList();
 }
 
 void TulipSettings::addToRecentDocuments(const QString &name) {
-  QList<QVariant> recentDocumentsValue = value("app/recent_documents").toList();
+  QList<QVariant> recentDocumentsValue = value(RecentDocumentsConfigEntry).toList();
 
   if (recentDocumentsValue.contains(name))
     recentDocumentsValue.removeAll(name);
@@ -27,53 +31,56 @@ void TulipSettings::addToRecentDocuments(const QString &name) {
   while (recentDocumentsValue.size() > 5)
     recentDocumentsValue.pop_back();
 
-  setValue("app/recent_documents",recentDocumentsValue);
+  setValue(RecentDocumentsConfigEntry,recentDocumentsValue);
 }
 
 void TulipSettings::addRemoteLocation(const QString& remoteLocation) {
-  QStringList remoteLocations = value("app/remote_locations").toStringList();
+  QStringList remoteLocations = value(TulipSettings::RemoteLocationsConfigEntry).toStringList();
 
   if(!remoteLocations.contains(remoteLocation)) {
     remoteLocations.append(remoteLocation);
   }
 
-  setValue("app/remote_locations", remoteLocations);
+  setValue(TulipSettings::RemoteLocationsConfigEntry, remoteLocations);
 }
 
 void TulipSettings::removeRemoteLocation(const QString& remoteLocation) {
-  QStringList remoteLocations = value("app/remote_locations").toStringList();
+  QStringList remoteLocations = value(TulipSettings::RemoteLocationsConfigEntry).toStringList();
 
   if(remoteLocations.contains(remoteLocation)) {
     remoteLocations.removeOne(remoteLocation);
   }
 
-  setValue("app/remote_locations", remoteLocations);
+  setValue(TulipSettings::RemoteLocationsConfigEntry, remoteLocations);
 }
 
 const QStringList TulipSettings::remoteLocations() const {
-  return value("app/remote_locations").toStringList();
+  return value(TulipSettings::RemoteLocationsConfigEntry).toStringList();
 }
 
 const QStringList TulipSettings::pluginsToRemove() const {
-  return value("app/pluginsToRemove").toStringList();
+//   QStringList result = value(PluginsToRemoveConfigEntry).toStringList();
+//   result.removeAll("");
+//   return result;
+  return value(PluginsToRemoveConfigEntry).toStringList();
 }
 
 void TulipSettings::markPluginForRemoval(const QString& pluginLibrary) {
-  QStringList markedPlugins = value("app/pluginsToRemove").toStringList();
+  QStringList markedPlugins = value(PluginsToRemoveConfigEntry).toStringList();
 
   if(!markedPlugins.contains(pluginLibrary)) {
     markedPlugins.append(pluginLibrary);
   }
 
-  setValue("app/pluginsToRemove", markedPlugins);
+  setValue(PluginsToRemoveConfigEntry, markedPlugins);
 }
 
 void TulipSettings::unmarkPluginForRemoval(const QString& pluginLibrary) {
-  QStringList markedPlugins = value("app/pluginsToRemove").toStringList();
+  QStringList markedPlugins = value(PluginsToRemoveConfigEntry).toStringList();
 
   if(markedPlugins.contains(pluginLibrary)) {
     markedPlugins.removeAll(pluginLibrary);
   }
 
-  setValue("app/pluginsToRemove", markedPlugins);
+  setValue(PluginsToRemoveConfigEntry, markedPlugins);
 }
