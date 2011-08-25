@@ -19,7 +19,6 @@
         <file>plugin_glyph.svg</file>
         <file>help-contents.svg</file>
         <file>plugin_import_export.svg</file>
-	<file>emblem-danger.svg</file>
-	<file>view-refresh.svg</file>
+        <file>view-refresh.svg</file>
     </qresource>
 </RCC>
