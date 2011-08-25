@@ -10,6 +10,7 @@
 PluginsCenter::PluginsCenter(QWidget *parent) :
   QWidget(parent), _ui(new Ui::PluginsCenterData()) {
   _ui->setupUi(this);
+  _ui->pluginsListTopFrame->hide();
   connect(_ui->repoButton,SIGNAL(clicked()),this,SLOT(showReposPage()));
   connect(_ui->homeButton,SIGNAL(clicked()),this,SLOT(showHomePage()));
   connect(_ui->pluginsSideList,SIGNAL(itemSelectionChanged()),this,SLOT(listItemSelected()));
@@ -24,6 +25,9 @@ PluginsCenter::PluginsCenter(QWidget *parent) :
   connect(_ui->pluginsSearchList,SIGNAL(remove(tlp::PluginInformations*)),this,SLOT(remove(tlp::PluginInformations*)));
   connect(_ui->addRemoteLocation, SIGNAL(clicked()), this, SLOT(addRemoteLocation()));
   connect(_ui->removeRemoteLocation, SIGNAL(clicked()), this, SLOT(removeRemoteLocation()));
+  connect(tlp::PluginManager::getInstance(),SIGNAL(remoteLocationAdded()),this,SLOT(remoteLocationAdded()));
+  connect(_ui->reloadListButton,SIGNAL(clicked()),_ui->pluginsSearchList,SLOT(initPluginsCache()));
+  connect(_ui->reloadListButton,SIGNAL(clicked()),_ui->pluginsListTopFrame,SLOT(hide()));
 
   foreach(const QString& remoteLocation, TulipSettings::instance().remoteLocations()) {
     _ui->remoteLocationsList->addItem(remoteLocation);
@@ -177,3 +181,11 @@ void PluginsCenter::removeRemoteLocation() {
     delete item;
   }
 }
+
+void PluginsCenter::remoteLocationAdded() {
+  if (_ui->pluginsListPage->isVisible())
+    _ui->pluginsListTopFrame->show();
+  else
+    _ui->pluginsSearchList->initPluginsCache();
+}
+

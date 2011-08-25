@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>875</width>
-    <height>478</height>
+    <width>873</width>
+    <height>476</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -227,7 +227,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Algorithms</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../resources/TulipAgent.qrc">
             <normaloff>:/tulip/app/icons/plugin_algorithm.svg</normaloff>:/tulip/app/icons/plugin_algorithm.svg</iconset>
           </property>
          </item>
@@ -236,7 +236,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Import/Export</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../resources/TulipAgent.qrc">
             <normaloff>:/tulip/app/icons/plugin_import_export.svg</normaloff>:/tulip/app/icons/plugin_import_export.svg</iconset>
           </property>
          </item>
@@ -245,7 +245,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Glyphs</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../resources/TulipAgent.qrc">
             <normaloff>:/tulip/app/icons/plugin_glyph.svg</normaloff>:/tulip/app/icons/plugin_glyph.svg</iconset>
           </property>
          </item>
@@ -254,7 +254,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Views</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../resources/TulipAgent.qrc">
             <normaloff>:/tulip/app/icons/plugin_view.svg</normaloff>:/tulip/app/icons/plugin_view.svg</iconset>
           </property>
          </item>
@@ -263,7 +263,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Interactors</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../resources/TulipAgent.qrc">
             <normaloff>:/tulip/app/icons/plugin_interactor.svg</normaloff>:/tulip/app/icons/plugin_interactor.svg</iconset>
           </property>
          </item>
@@ -272,7 +272,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Perspectives</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../resources/TulipAgent.qrc">
             <normaloff>:/tulip/app/icons/plugin_controller.svg</normaloff>:/tulip/app/icons/plugin_controller.svg</iconset>
           </property>
          </item>
@@ -289,7 +289,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Errors</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../resources/TulipAgent.qrc">
             <normaloff>:/tulip/app/icons/error.svg</normaloff>:/tulip/app/icons/error.svg</iconset>
           </property>
           <property name="flags">
@@ -301,7 +301,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Downloads</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../resources/TulipAgent.qrc">
             <normaloff>:/tulip/app/icons/network-receive.svg</normaloff>:/tulip/app/icons/network-receive.svg</iconset>
           </property>
          </item>
@@ -441,7 +441,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                  <string>Algorithms</string>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../resources/TulipAgent.qrc">
                   <normaloff>:/tulip/app/icons/plugin_algorithm.svg</normaloff>:/tulip/app/icons/plugin_algorithm.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -464,7 +464,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                  <string>Views</string>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../resources/TulipAgent.qrc">
                   <normaloff>:/tulip/app/icons/plugin_view.svg</normaloff>:/tulip/app/icons/plugin_view.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -487,7 +487,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                  <string>Perspectives</string>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../resources/TulipAgent.qrc">
                   <normaloff>:/tulip/app/icons/plugin_controller.svg</normaloff>:/tulip/app/icons/plugin_controller.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -510,7 +510,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                  <string>Interactors</string>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../resources/TulipAgent.qrc">
                   <normaloff>:/tulip/app/icons/plugin_interactor.svg</normaloff>:/tulip/app/icons/plugin_interactor.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -533,7 +533,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                  <string>Glyphs</string>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../resources/TulipAgent.qrc">
                   <normaloff>:/tulip/app/icons/plugin_glyph.svg</normaloff>:/tulip/app/icons/plugin_glyph.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -556,7 +556,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                  <string>Import/Export</string>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../resources/TulipAgent.qrc">
                   <normaloff>:/tulip/app/icons/plugin_import_export.svg</normaloff>:/tulip/app/icons/plugin_import_export.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -654,8 +654,8 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>709</width>
-                <height>199</height>
+                <width>707</width>
+                <height>188</height>
                </rect>
               </property>
               <property name="styleSheet">
@@ -690,6 +690,50 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
          <property name="bottomMargin">
           <number>0</number>
          </property>
+         <item>
+          <widget class="QFrame" name="pluginsListTopFrame">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="pluginsListTopLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">#pluginsListTopLabel {
+color: rgba(80,110,140);
+}</string>
+              </property>
+              <property name="text">
+               <string>Plugins remote locations list has been updated.</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="reloadListButton">
+              <property name="text">
+               <string>Reload</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../resources/TulipAgent.qrc">
+                <normaloff>:/tulip/app/icons/view-refresh.svg</normaloff>:/tulip/app/icons/view-refresh.svg</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
          <item>
           <widget class="PluginResultsList" name="pluginsSearchList">
            <property name="sizePolicy">
@@ -727,8 +771,8 @@ background-color: white;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>709</width>
-              <height>427</height>
+              <width>707</width>
+              <height>400</height>
              </rect>
             </property>
            </widget>
@@ -909,7 +953,7 @@ p, li { white-space: pre-wrap; }
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../resources/TulipAgent.qrc">
                   <normaloff>:/tulip/app/icons/list-add.svg</normaloff>:/tulip/app/icons/list-add.svg</iconset>
                 </property>
                </widget>
@@ -935,7 +979,7 @@ p, li { white-space: pre-wrap; }
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../resources/TulipAgent.qrc">
                   <normaloff>:/tulip/app/icons/list-del.svg</normaloff>:/tulip/app/icons/list-del.svg</iconset>
                 </property>
                </widget>
@@ -994,8 +1038,8 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>692</width>
-              <height>346</height>
+              <width>83</width>
+              <height>28</height>
              </rect>
             </property>
             <property name="styleSheet">
@@ -1031,7 +1075,7 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
               <string>Reinstall all</string>
              </property>
              <property name="icon">
-              <iconset>
+              <iconset resource="../resources/TulipAgent.qrc">
                <normaloff>:/tulip/app/icons/emblem-downloads.svg</normaloff>:/tulip/app/icons/emblem-downloads.svg</iconset>
              </property>
             </widget>
@@ -1042,7 +1086,7 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
               <string>Remove all</string>
              </property>
              <property name="icon">
-              <iconset>
+              <iconset resource="../resources/TulipAgent.qrc">
                <normaloff>:/tulip/app/icons/edit-delete.svg</normaloff>:/tulip/app/icons/edit-delete.svg</iconset>
              </property>
             </widget>
@@ -1087,8 +1131,8 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>711</width>
-              <height>429</height>
+              <width>100</width>
+              <height>30</height>
              </rect>
             </property>
            </widget>
@@ -1110,6 +1154,8 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources/TulipAgent.qrc"/>
+ </resources>
  <connections/>
 </ui>

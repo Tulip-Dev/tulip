@@ -5,6 +5,7 @@
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/TlpTools.h>
+#include <QtGui/QMessageBox>
 
 #include "TulipAgentServiceAdaptor.h"
 #include "TulipMainWindow.h"
@@ -83,6 +84,8 @@ int main(int argc, char **argv) {
   // To ensure that no agent is already running, we check the existence of an org.labri.Tulip service on the session bus.
   if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.labri.Tulip").value()) {
     qWarning("Tulip agent is already running. Note that you can only have one at a time on your system. Please check your system tray to display the tulip agent window.");
+    QMessageBox::critical(0,QObject::trUtf8("Error when starting Tulip"),
+                          QObject::trUtf8("Tulip agent is already running. Note that you can only have one at a time on your system. Please check your system tray to display the tulip agent window."));
     exit(1);
   }
 

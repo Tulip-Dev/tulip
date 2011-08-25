@@ -49,6 +49,7 @@ protected slots:
   void browsePerspectives();
 
   void setPluginNameFilter(const QString &);
+  void remoteLocationAdded();
 
 private:
   QVector<const char *> _typeSlots;
