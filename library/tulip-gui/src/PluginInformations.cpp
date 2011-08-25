@@ -111,7 +111,7 @@ bool PluginInformations::fetch() const {
   const QString archiveName = tlp::getPluginPackageName(name());
   QNetworkReply* reply = DownloadManager::getInstance()->downloadPlugin(_remoteArchive, tlp::getPluginStagingDirectory() + archiveName);
   emit(DownloadStarted(reply));
-  
+
   std::cout << isInstalled() << ": " << installedVersion().toStdString() << ";" << _installedVersion.isEmpty() << std::endl;
 
   if(!isInstalled()) {

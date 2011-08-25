@@ -149,6 +149,7 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
 
 
   _graphs.push_back(g);
+
   if (_graphs.size() == 1)
     setCurrentGraph(g);
 
@@ -242,6 +243,7 @@ void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
       break;
     }
   }
+
   if (!inHierarchy)
     return;
 

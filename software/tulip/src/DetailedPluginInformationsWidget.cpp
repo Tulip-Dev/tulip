@@ -16,7 +16,7 @@ DetailedPluginInformationsWidget::DetailedPluginInformationsWidget(tlp::PluginIn
   _ui->removeButton->setVisible(infos->isInstalled());
   _ui->installButton->setText(_ui->installButton->text() + "v" + infos->latestVersion());
   _ui->upgradeButton->setText(_ui->upgradeButton->text() + "v" + infos->latestVersion());
-  
+
   _ui->detailedDescriptionView->setUrl(infos->longDescriptionPath());
   _ui->detailedDescriptionView->adjustSize();
   _ui->detailedDescriptionView->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);

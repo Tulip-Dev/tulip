@@ -29,7 +29,7 @@ DownloadManager::DownloadManager()  {
 
 QNetworkReply* DownloadManager::downloadPlugin(const QUrl &url, const QString& destination) {
   downloadDestinations[url] = destination;
-  
+
   QNetworkRequest request(url);
   QNetworkReply* reply = get(request);
   currentDownloads.append(reply);
@@ -55,7 +55,7 @@ void DownloadManager::downloadFinished(QNetworkReply *reply) {
 
   if (reply->error() == QNetworkReply::NoError) {
     QString filename = downloadDestinations[url];
-    
+
     if (saveToDisk(filename, reply))
       printf("Download of %s succeeded (saved to %s)\n", url.toEncoded().constData(), qPrintable(filename));
   }

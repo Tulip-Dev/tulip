@@ -22,6 +22,7 @@ PluginManager* PluginManager::getInstance() {
   if(_instance == NULL) {
     _instance = new PluginManager();
   }
+
   return _instance;
 }
 
@@ -112,6 +113,7 @@ void PluginManager::addRemoteLocation(const QString& location) {
 
 void PluginManager::serverDescriptionDownloaded(QNetworkReply* reply) {
   const QString location = replyLocations[reply];
+
   if(reply->error() != QNetworkReply::NoError) {
     std::cout << "error while retrieving server description (" << location.toStdString() << ") : " << reply->errorString().toStdString() << std::endl;
   }

@@ -63,10 +63,11 @@ int main(int argc, char** argv) {
 
   QNetworkAccessManager networkManager;
   QNetworkReply* reply = networkManager.get(QNetworkRequest(QUrl(location + "/serverDescription.xml")));
-  
+
   while(!reply->isFinished()) {
     QCoreApplication::processEvents();
   }
+
   QString remoteDescription(reply->readAll());
 
   QStringList pluginList;
