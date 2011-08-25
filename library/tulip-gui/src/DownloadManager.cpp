@@ -53,16 +53,18 @@ bool DownloadManager::saveToDisk(const QString &filename, QIODevice *data) {
 void DownloadManager::downloadFinished(QNetworkReply *reply) {
   QUrl url = reply->url();
 
-  if (reply->error() == QNetworkReply::NoError) {
-    QString filename = downloadDestinations[url];
+  if(currentDownloads.contains(reply)) {
+  
+    if (reply->error() == QNetworkReply::NoError) {
+      QString filename = downloadDestinations[url];
 
-    if (saveToDisk(filename, reply))
-      printf("Download of %s succeeded (saved to %s)\n", url.toEncoded().constData(), qPrintable(filename));
+      if (saveToDisk(filename, reply))
+        printf("Download of %s succeeded (saved to %s)\n", url.toEncoded().constData(), qPrintable(filename));
+    }
+    else {
+      fprintf(stderr, "Download of %s failed: %s\n", url.toEncoded().constData(), qPrintable(reply->errorString()));
+    }
+    currentDownloads.removeAll(reply);
   }
-  else {
-    fprintf(stderr, "Download of %s failed: %s\n", url.toEncoded().constData(), qPrintable(reply->errorString()));
-  }
-
-  currentDownloads.removeAll(reply);
   reply->deleteLater();
 }
