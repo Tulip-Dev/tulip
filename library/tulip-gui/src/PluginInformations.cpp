@@ -15,11 +15,6 @@
 
 using namespace tlp;
 
-template <class T, class U>
-static std::list<tlp::Dependency> getPluginDependencies(T* factory, U context) {
-  return StaticPluginLister<T, U>::getPluginDependencies(factory->getName());
-}
-
 PluginInformations::PluginInformations(const tlp::AbstractPluginInfo& info, const std::string& type, const std::string& library)
   :_lastVersion(info.getRelease().c_str()), _type(type.c_str()), _iconPath(":/tulip/gui/icons/logo32x32.png"), _longDescriptionPath("http://www.perdu.com"), _isLocal(true),
    _installedVersion(info.getRelease().c_str()), _updateAvailable(false), _version(info.getRelease().c_str()), _infos(&info), _library(library.c_str()) {
