@@ -108,7 +108,6 @@ void PluginResultsList::pluginFetch() {
 
   if (listItem) {
     emit fetch(listItem->pluginInformations());
-//     listItem->set
   }
   else {
     emit fetch(dynamic_cast<DetailedPluginInformationsWidget *>(sender())->pluginInformations());
@@ -139,4 +138,6 @@ void PluginResultsList::initPluginsCache() {
     connect(item,SIGNAL(remove()),this,SLOT(pluginRemove()));
     _pluginWidgetsCache[i] = item;
   }
+  if (isVisible())
+    refreshResults();
 }
