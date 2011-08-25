@@ -19,6 +19,7 @@
 #include <QDesktopServices>
 #include <QtCore/QDir>
 #include <tulip/TulipSettings.h>
+#include <tulip/PluginManager.h>
 
 #if defined(__APPLE__)
 #include <sys/types.h>
@@ -40,17 +41,12 @@ int main(int argc, char **argv) {
     stagingDirectory.mkpath(tlp::getPluginStagingDirectory());
   }
 
-  foreach(const QString& plugin, TulipSettings::instance().pluginsToRemove()) {
-    QFile pluginToRemove(plugin);
-    bool removed = pluginToRemove.remove();
-
-    if(removed) {
-      TulipSettings::instance().unmarkPluginForRemoval(plugin);
-    }
-    else {
-      //TODO error reporting on removal failure
-    }
+  foreach(const QString& remoteLocation, TulipSettings::instance().remoteLocations()) {
+    tlp::PluginManager::addRemoteLocation(remoteLocation);
   }
+
+  tlp::PluginManager::RemovePlugins(TulipSettings::instance().pluginsToRemove());
+  tlp::PluginManager::UnpackPlugins(tlp::getPluginStagingDirectory());
 
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin

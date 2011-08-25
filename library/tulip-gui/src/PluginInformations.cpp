@@ -12,6 +12,7 @@
 #include <tulip/QuaZIPFacade.h>
 #include <qtextstream.h>
 #include <tulip/TulipSettings.h>
+#include <QNetworkReply>
 
 using namespace tlp;
 
@@ -103,22 +104,39 @@ QString PluginInformations::latestVersion() const {
 
 bool PluginInformations::fetch() const {
   bool result = false;
-  const QString archiveName = tlp::getPluginPackageName(name());
-  QNetworkReply* reply = DownloadManager::getInstance()->downloadPlugin(_remoteArchive, tlp::getPluginStagingDirectory() + archiveName);
+  const QString fullArchivePath = tlp::getPluginStagingDirectory() + "/" + tlp::getPluginPackageName(name());
+  QNetworkReply* reply = DownloadManager::getInstance()->downloadPlugin(_remoteArchive, fullArchivePath);
+
+  connect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
+  
   emit(DownloadStarted(reply));
-
-  std::cout << isInstalled() << ": " << installedVersion().toStdString() << ";" << _installedVersion.isEmpty() << std::endl;
-
-  if(!isInstalled()) {
-    tlp::SimplePluginProgress* progress = new tlp::SimplePluginProgress();
-    result = QuaZIPFacade::unzip(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins", tlp::getPluginStagingDirectory() + "/" + archiveName, progress);
-//     std::cout << archiveName.toStdString() << ":" << result << "; " << progress->getError() << std::endl;
-//     PluginLibraryLoader::loadPlugins();
-  }
 
   return result;
 }
 
 void PluginInformations::remove() const {
   TulipSettings::instance().markPluginForRemoval(_library);
+}
+
+void PluginInformations::downloadFinished() {
+  bool result = false;
+
+  //TODO if the error reporting and/or plugin unpacking gets any bigger, move it to the PluginManager class
+  
+  //if this is a plugin upgrade, it will be performed at Tulip's next startup, otherwise it can be done now
+  if(!isInstalled()) {
+    const QString fullArchivePath = tlp::getPluginStagingDirectory() + "/" + tlp::getPluginPackageName(name());
+    tlp::SimplePluginProgress* progress = new tlp::SimplePluginProgress();
+    result = QuaZIPFacade::unzip(tlp::getPluginLocalInstallationDir(), fullArchivePath, progress);
+
+    //if the extraction was successfull, remove the archive
+    if(result) {
+      QFile::remove(fullArchivePath);
+    }
+    else {
+      //TODO proper error reporting
+      std::cout << "error while extracting plugin: " << progress->getError() << std::endl;
+    }
+    //TODO load plugin ? should not be necessary as the PluginCenter does not need it. usefull for error reporting ?
+  }
 }

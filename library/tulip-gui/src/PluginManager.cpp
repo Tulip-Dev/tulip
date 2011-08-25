@@ -5,8 +5,14 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
-#include <QCoreApplication>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QFile>
+#include <QtCore/QDir>
 #include <tulip/DownloadManager.h>
+#include <tulip/TulipSettings.h>
+#include <tulip/QuaZIPFacade.h>
+#include <tulip/SimplePluginProgress.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -107,7 +113,6 @@ void PluginManager::addRemoteLocation(const QString& location) {
   QNetworkAccessManager* manager = DownloadManager::getInstance();
   QNetworkReply* reply = manager->get(QNetworkRequest(QUrl(location + "/serverDescription.xml")));
   replyLocations[reply] = location;
-
   connect(manager, SIGNAL(finished(QNetworkReply*)), getInstance(), SLOT(serverDescriptionDownloaded(QNetworkReply*)));
 }
 
@@ -117,21 +122,50 @@ void PluginManager::serverDescriptionDownloaded(QNetworkReply* reply) {
   if(reply->error() != QNetworkReply::NoError) {
     std::cout << "error while retrieving server description (" << location.toStdString() << ") : " << reply->errorString().toStdString() << std::endl;
   }
-
   QString content(reply->readAll());
   QString xmlDocument(content);
   QDomDocument description;
   description.setContent(xmlDocument);
   QDomElement elm = description.documentElement();
-
   _remoteLocations[location] = parseDescription(xmlDocument, location);
 
   replyLocations.remove(reply);
   reply->deleteLater();
-
   emit(remoteLocationAdded());
 }
 
 void PluginManager::removeRemoteLocation(const QString& location) {
   _remoteLocations.remove(location);
+}
+
+void PluginManager::RemovePlugins(const QStringList& plugins) {
+  foreach(const QString& plugin, plugins) {
+    QFile pluginToRemove(plugin);
+    bool removed = pluginToRemove.remove();
+    
+    if(removed) {
+      TulipSettings::instance().unmarkPluginForRemoval(plugin);
+    }
+    else {
+      //TODO proper error reporting
+      std::cout << plugin.toStdString() << " could not be removed" << std::endl;
+    }
+  }
+}
+
+void PluginManager::UnpackPlugins(const QString& inputFolder) {
+  QDir input(inputFolder);
+  PluginProgress* progress = new SimplePluginProgress();
+  QStringList filters;
+  filters << "*.zip";
+  foreach(const QFileInfo& pluginArchive, input.entryInfoList(filters)) {
+    QuaZIPFacade::unzip(tlp::getPluginLocalInstallationDir(), pluginArchive.absoluteFilePath(), progress);
+    if(!progress->getError().empty()) {
+      //TODO proper error reporting
+      std::cout << progress->getError() << std::endl;
+    }
+    else {
+      QFile::remove(pluginArchive.absoluteFilePath());
+    }
+  }
 }
