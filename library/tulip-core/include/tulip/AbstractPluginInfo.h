@@ -31,7 +31,7 @@ namespace tlp {
 /*@{*/
 /**
  * @brief Base interface for plug-in description.
- * 
+ *
  * This class is not intented to be subclassed by plug-ins themselves, but by the factories who create the plug-ins.
  *
  * This class holds user informations, such as name of the author, date of creation, and miscellaneous informations.
@@ -160,7 +160,7 @@ template<class ObjectType, class Context> class StaticPluginLister;
 
 /**
  * @brief This abstract class provides a more complete interface for plugin factories, including plugin creation.
- * 
+ *
  **/
 template <class PluginObject, class PluginContext>
 class FactoryInterface : public AbstractPluginInfo {

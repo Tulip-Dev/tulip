@@ -28,7 +28,7 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui->graphHierarchiesEditor->setModel(_graphs);
 
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>())
-    connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
+  connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
 
   connect(_ui->graphsHierarchyManagerButton,SIGNAL(toggled(bool)),this,SLOT(refreshDockExpandControls()));
 }

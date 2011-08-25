@@ -65,10 +65,13 @@ void HeaderFrame::setExpanded(bool e) {
   _expanded = e;
 
   QWidget *pw = parentWidget();
+
   if (!pw)
     return;
+
   foreach(QObject *obj, pw->children()) {
     QWidget *w = dynamic_cast<QWidget *>(obj);
+
     if (w && w != this)
       w->setVisible(e);
   }

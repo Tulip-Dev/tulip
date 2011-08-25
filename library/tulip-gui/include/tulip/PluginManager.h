@@ -34,7 +34,7 @@ typedef QMap<QString, tlp::DistantPluginInfo*> LocationPlugins;
  * For now only listing is available, the rest is coming soon.
  **/
 class TLP_QT_SCOPE PluginManager : public QObject {
-Q_OBJECT
+  Q_OBJECT
 public:
 
   enum PluginLocation {
@@ -43,7 +43,7 @@ public:
     Remote = 2
   };
   Q_DECLARE_FLAGS(Location, PluginLocation)
-  
+
   /**
    * @brief Lists plugins from the specified locations.
    *
@@ -81,7 +81,7 @@ public:
 
 signals:
   void remoteLocationAdded();
-  
+
 private:
   /**
    * @brief Contains all the remote locations added, and for each of them the list of plugins on the location.
@@ -92,7 +92,7 @@ private:
   static PluginManager* _instance;
 
   static QMap<QNetworkReply*, QString> replyLocations;
-  
+
 protected slots:
   void serverDescriptionDownloaded(QNetworkReply* reply);
 
