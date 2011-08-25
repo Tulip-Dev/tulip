@@ -121,7 +121,7 @@ TLP_QT_SCOPE QString getPluginPackageName(const QString& pluginName);
 
 TLP_QT_SCOPE QString getPluginStagingDirectory();
 
-TLP_QT_SCOPE QString getPluginRemovalList();
+TLP_QT_SCOPE QString getPluginLocalInstallationDir();
 
 }
 
