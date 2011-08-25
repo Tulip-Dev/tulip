@@ -140,11 +140,11 @@ QString getPluginPackageName(const QString& pluginName) {
 }
 
 QString getPluginStagingDirectory() {
-  return QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/staging/";
+  return QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/staging";
 }
 
-QString getPluginRemovalList() {
-  return QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/pluginsRemovalList.txt";
+QString getPluginLocalInstallationDir() {
+  return QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins";
 }
 
 }
