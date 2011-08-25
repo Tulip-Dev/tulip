@@ -107,7 +107,7 @@ public:
    */
   void push_back(const std::string& element) {
     _data.push_back(element);
-  };
+  }
 
   /**
    * Returns true if the collection is empty.
