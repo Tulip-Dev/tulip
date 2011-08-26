@@ -117,33 +117,33 @@ void PluginManager::addRemoteLocation(const QString& location) {
 }
 
 void PluginManager::serverDescriptionDownloaded(QNetworkReply* reply) {
-  const QString location = replyLocations[reply];
+  //only perform these actions if the reply concerns a pluginserver description download
+  if(replyLocations.contains(reply)) {
+    const QString location = replyLocations[reply];
 
-  if(reply->error() != QNetworkReply::NoError) {
-    std::cout << "error while retrieving server description (" << location.toStdString() << ") : " << reply->errorString().toStdString() << std::endl;
+    if(reply->error() != QNetworkReply::NoError) {
+      std::cout << "error while retrieving server description (" << location.toStdString() << ") : " << reply->errorString().toStdString() << std::endl;
+    }
+    QString content(reply->readAll());
+    QString xmlDocument(content);
+    QDomDocument description;
+    description.setContent(xmlDocument);
+    QDomElement elm = description.documentElement();
+    _remoteLocations[location] = parseDescription(xmlDocument, location);
+
+    replyLocations.remove(reply);
+    reply->deleteLater();
+    emit(remoteLocationAdded());
   }
-  QString content(reply->readAll());
-  QString xmlDocument(content);
-  QDomDocument description;
-  description.setContent(xmlDocument);
-  QDomElement elm = description.documentElement();
-  _remoteLocations[location] = parseDescription(xmlDocument, location);
-
-  replyLocations.remove(reply);
-  reply->deleteLater();
-  emit(remoteLocationAdded());
 }
 
 void PluginManager::removeRemoteLocation(const QString& location) {
   _remoteLocations.remove(location);
 }
 
-void PluginManager::RemovePlugins(const QStringList& plugins) {
-  foreach(const QString& plugin, plugins) {
-    QFile pluginToRemove(plugin);
-    bool removed = pluginToRemove.remove();
-    
-    if(removed) {
+void PluginManager::RemovePlugins() {
+  foreach(const QString& plugin, TulipSettings::instance().pluginsToRemove()) {
+    if(QFile::remove(plugin)) {
       TulipSettings::instance().unmarkPluginForRemoval(plugin);
     }
     else {
