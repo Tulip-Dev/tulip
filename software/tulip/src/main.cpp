@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
     tlp::PluginManager::addRemoteLocation(remoteLocation);
   }
 
-  tlp::PluginManager::RemovePlugins(TulipSettings::instance().pluginsToRemove());
+  tlp::PluginManager::RemovePlugins();
   tlp::PluginManager::UnpackPlugins(tlp::getPluginStagingDirectory());
 
 #if defined(__APPLE__)

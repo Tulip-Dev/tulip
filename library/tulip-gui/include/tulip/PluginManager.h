@@ -77,13 +77,32 @@ public:
    **/
   static LocationPlugins parseDescription(const QString& xmlDescription, const QString& location);
 
-  static void RemovePlugins(const QStringList& plugins);
+  /**
+   * @brief Removes the plugins marked for removal from the filesystem.
+   *
+   * Plugins are marked for removal as loaded plug-ins may be difficult to remove at run-time.
+   * They are removed before the plugin loading occurs at the next Tulip startup.
+   *
+   * @return void
+   **/
+  static void RemovePlugins();
 
+  /**
+   * @brief Unpacks the plugins in the specified folder to Tulip's custom folder directory.
+   *
+   * @param inputFolder The folder from which to unpack the plugins.
+   * @return void
+   **/
   static void UnpackPlugins(const QString& inputFolder);
   
   static PluginManager* getInstance();
 
 signals:
+  /**
+   * @brief Emitted when a new remote location has been sucessfully added (the plugin server description has been downloaded and parsed).
+   *
+   * @return void
+   **/
   void remoteLocationAdded();
 
 private:
@@ -98,6 +117,13 @@ private:
   static QMap<QNetworkReply*, QString> replyLocations;
 
 protected slots:
+  /**
+   * @brief This slot is called when the pluginserver description file has finished downloading.
+   * This allows for asynchronous calls, and does not blocks the UI while downloading (e.g. for slow connections).
+   *
+   * @param reply The QNetworkReply associated with the description download request.
+   * @return void
+   **/
   void serverDescriptionDownloaded(QNetworkReply* reply);
 
 };
