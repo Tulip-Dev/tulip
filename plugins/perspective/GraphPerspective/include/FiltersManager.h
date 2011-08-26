@@ -12,6 +12,7 @@ class FiltersManager: public QWidget {
 
 public:
   explicit FiltersManager(QWidget *parent=0);
+  virtual ~FiltersManager();
 };
 
 #endif // FILTERSMANAGER_H
