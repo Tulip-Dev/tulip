@@ -20,6 +20,7 @@
         <file>database.svg</file>
         <file>view-setall.svg</file>
         <file>view-open.svg</file>
+	<file>list-add.svg</file>
     </qresource>
     <qresource prefix="/tulip/graphperspective/ui">
         <file>down_arrow-white.png</file>
