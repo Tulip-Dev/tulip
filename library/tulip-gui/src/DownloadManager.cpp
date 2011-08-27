@@ -54,7 +54,7 @@ void DownloadManager::downloadFinished(QNetworkReply *reply) {
   QUrl url = reply->url();
 
   if(currentDownloads.contains(reply)) {
-  
+
     if (reply->error() == QNetworkReply::NoError) {
       QString filename = downloadDestinations[url];
 
@@ -64,7 +64,9 @@ void DownloadManager::downloadFinished(QNetworkReply *reply) {
     else {
       fprintf(stderr, "Download of %s failed: %s\n", url.toEncoded().constData(), qPrintable(reply->errorString()));
     }
+
     currentDownloads.removeAll(reply);
   }
+
   reply->deleteLater();
 }

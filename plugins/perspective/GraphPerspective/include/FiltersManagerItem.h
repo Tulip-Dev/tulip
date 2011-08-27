@@ -20,7 +20,9 @@ public:
   explicit FiltersManagerItem(QWidget *parent=0);
   virtual ~FiltersManagerItem();
 
-  bool isRemovable() const { return _removable; }
+  bool isRemovable() const {
+    return _removable;
+  }
 
 public slots:
   void setRemovable(bool f);

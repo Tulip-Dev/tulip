@@ -16,7 +16,7 @@ public:
   static const QString RemoteLocationsConfigEntry;
   static const QString RecentDocumentsConfigEntry;
   static const QString PluginsToRemoveConfigEntry;
-  
+
   static TulipSettings &instance();
 
   /**

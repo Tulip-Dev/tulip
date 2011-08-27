@@ -124,6 +124,7 @@ void PluginManager::serverDescriptionDownloaded(QNetworkReply* reply) {
     if(reply->error() != QNetworkReply::NoError) {
       std::cout << "error while retrieving server description (" << location.toStdString() << ") : " << reply->errorString().toStdString() << std::endl;
     }
+
     QString content(reply->readAll());
     QString xmlDocument(content);
     QDomDocument description;
@@ -160,6 +161,7 @@ void PluginManager::UnpackPlugins(const QString& inputFolder) {
   filters << "*.zip";
   foreach(const QFileInfo& pluginArchive, input.entryInfoList(filters)) {
     QuaZIPFacade::unzip(tlp::getPluginLocalInstallationDir(), pluginArchive.absoluteFilePath(), progress);
+
     if(!progress->getError().empty()) {
       //TODO proper error reporting
       std::cout << progress->getError() << std::endl;
