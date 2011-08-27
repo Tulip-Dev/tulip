@@ -94,7 +94,7 @@ public:
    * @return void
    **/
   static void UnpackPlugins(const QString& inputFolder);
-  
+
   static PluginManager* getInstance();
 
 signals:

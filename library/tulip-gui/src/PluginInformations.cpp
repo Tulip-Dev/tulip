@@ -108,7 +108,7 @@ bool PluginInformations::fetch() const {
   QNetworkReply* reply = DownloadManager::getInstance()->downloadPlugin(_remoteArchive, fullArchivePath);
 
   connect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
-  
+
   emit(DownloadStarted(reply));
 
   return result;
@@ -122,7 +122,7 @@ void PluginInformations::downloadFinished() {
   bool result = false;
 
   //TODO if the error reporting and/or plugin unpacking gets any bigger, move it to the PluginManager class
-  
+
   //if this is a plugin upgrade, it will be performed at Tulip's next startup, otherwise it can be done now
   if(!isInstalled()) {
     const QString fullArchivePath = tlp::getPluginStagingDirectory() + "/" + tlp::getPluginPackageName(name());
@@ -137,6 +137,7 @@ void PluginInformations::downloadFinished() {
       //TODO proper error reporting
       std::cout << "error while extracting plugin: " << progress->getError() << std::endl;
     }
+
     //TODO load plugin ? should not be necessary as the PluginCenter does not need it. usefull for error reporting ?
   }
 }

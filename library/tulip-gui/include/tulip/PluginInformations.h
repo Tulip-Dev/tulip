@@ -178,7 +178,7 @@ private:
   const tlp::AbstractPluginInfo* _infos;
   const QString _library;
 public slots:
-    void downloadFinished();
+  void downloadFinished();
 };
 
 }

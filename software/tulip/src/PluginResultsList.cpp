@@ -135,6 +135,7 @@ void PluginResultsList::initPluginsCache() {
     connect(item,SIGNAL(remove()),this,SLOT(pluginRemove()));
     _pluginWidgetsCache[i] = item;
   }
+
   if (isVisible())
     refreshResults();
 }
