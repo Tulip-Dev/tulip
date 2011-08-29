@@ -1,15 +1,14 @@
 SET(tulip_LIB_SRCS ${tulip_LIB_SRCS}
-PluginLibraryLoader.cpp
 AcyclicTest.cpp
 Bfs.cpp
 BiconnectedTest.cpp
 BooleanProperty.cpp
-CMakeLists.txt
 Color.cpp
 ColorProperty.cpp
 ColorScale.cpp
 ConnectedTest.cpp
 ConvexHull.cpp
+DataSet.cpp
 Delaunay.cpp
 DoubleProperty.cpp
 DrawingTools.cpp
@@ -41,13 +40,13 @@ PlanarityTestImpl.cpp
 PlanarityTestObstr.cpp
 PlanarityTestTools.cpp
 Plane.cpp
+PluginLibraryLoader.cpp
 PluginLoaderTxt.cpp
 Polynome.cpp
 PreferenceManager.cpp
 PropertyInterface.cpp
 PropertyManager.cpp
 PropertyTypes.cpp
-Reflect.cpp
 SimplePluginProgress.cpp
 SimpleTest.cpp
 SizeProperty.cpp
