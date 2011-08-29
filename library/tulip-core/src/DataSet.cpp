@@ -29,7 +29,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
 
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 
 using namespace std;
 using namespace tlp;
@@ -42,9 +42,9 @@ DataSet & DataSet::operator=(const DataSet &set) {
   if (this != &set) {
     data.clear();
 
-    for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
+    for (std::map<std::string, tlp::DataType*>::const_iterator it =
            set.data.begin(); it != set.data.end(); ++it) {
-      data.push_back(std::pair<std::string, tlp::DataType*>((*it).first, (*it).second->clone()));
+      data.insert(std::pair<std::string, tlp::DataType*>((*it).first, (*it).second->clone()));
     }
   }
 
@@ -52,7 +52,7 @@ DataSet & DataSet::operator=(const DataSet &set) {
 }
 
 DataSet::~DataSet() {
-  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
+  for (std::map<std::string, tlp::DataType*>::iterator it =
          data.begin(); it != data.end(); ++it) {
     if (it->second)
       delete it->second;
@@ -60,55 +60,21 @@ DataSet::~DataSet() {
 }
 
 bool DataSet::exist(const string &str) const {
-  for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
-         data.begin(); it != data.end(); ++it) {
-    if ((*it).first == str)
-      return true;
-  }
-
-  return false;
+  return data.find(str) != data.end();
 }
 
 void DataSet::remove(const string &str) {
-  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
-         data.begin(); it != data.end(); ++it) {
-    if ((*it).first == str) {
-      if (it->second)
-        delete it->second;
-
-      data.erase(it);
-      break;
-    }
-  }
+  data.erase(str);
 }
 
 DataType* DataSet::getData(const string &str) const {
-  for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
-         data.begin(); it != data.end(); ++it) {
-    if ((*it).first == str)
-      return it->second ? it->second->clone() : NULL;
-  }
-
-  return NULL;
+  std::map<std::string, tlp::DataType*>::const_iterator it = data.find(str);
+  return it != data.end() ? it->second->clone() : NULL;
 }
 
 void DataSet::setData(const std::string &str, const DataType* value) {
   DataType* val = value ? value->clone() : NULL;
-
-  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
-         data.begin(); it != data.end(); ++it) {
-    std::pair<std::string, tlp::DataType*> &p = *it;
-
-    if (p.first == str) {
-      if (p.second)
-        delete p.second;
-
-      p.second = val;
-      return;
-    }
-  }
-
-  data.push_back(std::pair<std::string, tlp::DataType*>(str, val));
+  data[str] = val;
 }
 
 unsigned int DataSet::size() const {
@@ -120,10 +86,10 @@ bool DataSet::empty() const {
 }
 
 Iterator< pair<string, DataType*> >* DataSet::getValues() const {
-  list< pair<string, DataType*> >::const_iterator begin = data.begin();
-  list< pair<string, DataType*> >::const_iterator end = data.end();
+  std::map<std::string, tlp::DataType*>::const_iterator begin = data.begin();
+  std::map<std::string, tlp::DataType*>::const_iterator end = data.end();
 
-  return new StlIterator<pair<string, DataType*>, list< pair<string, DataType*> >::const_iterator>(begin, end);
+  return new StlIterator<pair<string, DataType*>, std::map<std::string, tlp::DataType*>::const_iterator>(begin, end);
 }
 
 // management of the serialization
@@ -196,9 +162,9 @@ bool DataSet::readData(std::istream& is, const std::string& prop,
 
   if (dt) {
     // replace any prexisting value associated to prop
-    for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
+    for (std::map<std::string, tlp::DataType*>::iterator it =
            data.begin(); it != data.end(); ++it) {
-      std::pair<std::string, tlp::DataType*> &p = *it;
+      std::pair<std::string, tlp::DataType*> p = *it;
 
       if (p.first == prop) {
         if (p.second)
@@ -210,7 +176,7 @@ bool DataSet::readData(std::istream& is, const std::string& prop,
     }
 
     // no prexisting value
-    data.push_back(std::pair<std::string, tlp::DataType*>(prop, dt));
+    data.insert(std::pair<std::string, tlp::DataType*>(prop, dt));
     return true;
   }
 

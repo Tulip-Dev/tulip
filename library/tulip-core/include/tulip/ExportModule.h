@@ -23,7 +23,7 @@
 #include <iostream>
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/PluginLister.h>
 

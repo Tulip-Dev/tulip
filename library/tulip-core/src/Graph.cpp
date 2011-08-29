@@ -31,7 +31,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 #include <tulip/ExportModule.h>
 #include <tulip/Algorithm.h>
 #include <tulip/ImportModule.h>

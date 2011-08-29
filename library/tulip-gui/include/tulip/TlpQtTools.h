@@ -20,7 +20,6 @@
 #define _TLPQTTOOLS_H
 
 #include "tulip/Color.h"
-#include "tulip/Reflect.h"
 #include "tulip/Graph.h"
 #include "tulip/GlMainWidget.h"
 #include "tulip/DataSet.h"

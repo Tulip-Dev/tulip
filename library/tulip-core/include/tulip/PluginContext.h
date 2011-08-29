@@ -20,7 +20,7 @@
 #ifndef _PLUGINCONTEXT
 #define _PLUGINCONTEXT
 
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 
 namespace tlp {
 
