@@ -20,6 +20,7 @@
 #include <QtCore/QDir>
 #include <tulip/TulipSettings.h>
 #include <tulip/PluginManager.h>
+#include <tulip/QuaZIPFacade.h>
 
 #if defined(__APPLE__)
 #include <sys/types.h>
@@ -48,6 +49,37 @@ int main(int argc, char **argv) {
   tlp::PluginManager::RemovePlugins();
   tlp::PluginManager::UnpackPlugins(tlp::getPluginStagingDirectory());
 
+  //update the updater
+  const QString updaterLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/updater";
+
+  //run the updater
+  QDir upgradeDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/update");
+  if(!upgradeDir.entryList(QDir::NoDotAndDotDot).empty()) {
+    //we unpack the archives in-place, the contents will be copied later by a script
+    tlp::PluginProgress* progress = new tlp::SimplePluginProgress();
+    QStringList filters;
+    filters << "*.zip";
+    foreach(const QFileInfo& pluginArchive, upgradeDir.entryInfoList(filters)) {
+      QuaZIPFacade::unzip(tlp::getPluginLocalInstallationDir(), pluginArchive.absoluteFilePath(), progress);
+      if(!progress->getError().empty()) {
+        //TODO proper error reporting
+        std::cout << progress->getError() << std::endl;
+      }
+      else {
+        QFile::remove(pluginArchive.absoluteFilePath());
+      }
+    }
+    
+    //launch the updater and quit, the updater will re-launch Tulip
+    QFileInfo tulipExecutable(argv[0]);
+#ifdef WIN32
+    int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.bat");
+#else
+    int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.sh");
+#endif
+    exit(0); 
+  }
+  
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
