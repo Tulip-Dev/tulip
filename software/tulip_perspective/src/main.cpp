@@ -167,6 +167,7 @@ int main(int argc,char **argv) {
   QObject::connect(perspective,SIGNAL(createPerspective(QString,const QVariantMap&)),communicator,SLOT(CreatePerspective(QString,const QVariantMap&)));
   QObject::connect(perspective,SIGNAL(addPluginRepository(QString)),communicator,SLOT(AddPluginRepository(QString)));
   QObject::connect(perspective,SIGNAL(removePluginRepository(QString)),communicator,SLOT(RemovePluginRepository(QString)));
+  QObject::connect(perspective,SIGNAL(showTrayMessage(QString,QString,uint,uint)),communicator,SLOT(ShowTrayMessage(QString,QString,uint,uint)));
   QObject::connect(communicator,SIGNAL(Terminate()),perspective,SLOT(terminated()));
   QObject::connect(qApp,SIGNAL(aboutToQuit()),perspective,SLOT(terminated()));
 

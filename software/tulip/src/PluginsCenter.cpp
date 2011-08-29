@@ -1,5 +1,6 @@
 #include "PluginsCenter.h"
 #include "PluginErrorReport.h"
+#include "TulipMainWindow.h"
 
 #include "ui_PluginsCenter.h"
 
@@ -101,13 +102,21 @@ void PluginsCenter::listItemSelected() {
   }
 }
 
-void PluginsCenter::reportPluginError(const QString &filename, const QString &errormsg) {
-  _ui->errorsLogAreaLayout->addWidget(new PluginErrorReport(filename,errormsg));
-  QListWidgetItem *errorsItem = _ui->pluginsSideList->item(8);
-  errorsItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-  QFont f = errorsItem->font();
-  f.setBold(true);
-  errorsItem->setFont(f);
+void PluginsCenter::reportPluginErrors(const QMap<QString,QString> &errors) {
+  QString message;
+
+  foreach(QString k,errors.keys()) {
+    QString filename(k),errormsg(errors[k]);
+    _ui->errorsLogAreaLayout->addWidget(new PluginErrorReport(filename,errormsg));
+    QListWidgetItem *errorsItem = _ui->pluginsSideList->item(8);
+    errorsItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+    QFont f = errorsItem->font();
+    f.setBold(true);
+    errorsItem->setFont(f);
+    message += filename + ": " + errormsg;
+  }
+
+  TulipMainWindow::instance()->pluginErrorMessage(message);
 }
 
 void PluginsCenter::browseAll() {
