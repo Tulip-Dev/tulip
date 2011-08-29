@@ -184,7 +184,7 @@ unsigned int tlp::minDegree(const Graph *sg) {
 }
 //================================================================
 void tlp::reachableNodes(const Graph *graph, const node startNode,
-                         set<node> &result, unsigned int maxDistance,
+                         std::set<node> &result, unsigned int maxDistance,
                          EDGE_TYPE direction) {
   deque<node> fifo;
   MutableContainer<bool> visited;

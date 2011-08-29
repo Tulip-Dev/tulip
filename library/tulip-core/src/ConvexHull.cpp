@@ -135,7 +135,7 @@ inline unsigned int findP0(const vector<Coord> &points,
 }//end findP0
 
 //==============================================================
-void tlp::convexHull (const vector<Coord> &points,
+void tlp::convexHull (const std::vector<Coord> &points,
                       std::vector<unsigned int> &convexHull) {
 
   //clear the input vector
@@ -198,10 +198,10 @@ void tlp::convexHull (const vector<Coord> &points,
 
 
 //==============================================================
-void tlp::mergeHulls (const vector<Coord> &points,
-                      const vector<unsigned int> &hull1,
-                      const vector<unsigned int> &hull2,
-                      vector<unsigned int> &mergedConvexHull) {
+void tlp::mergeHulls (const std::vector<Coord> &points,
+                      const std::vector<unsigned int> &hull1,
+                      const std::vector<unsigned int> &hull2,
+                      std::vector<unsigned int> &mergedConvexHull) {
   //clear the input vector
   mergedConvexHull.clear();
 
@@ -293,8 +293,8 @@ void tlp::mergeHulls (const vector<Coord> &points,
 //helper function to advance calipers for intersecting hulls
 inline unsigned int advance (unsigned int caliper, unsigned int &adv,
                              bool inside,
-                             const vector<unsigned int> &hull,
-                             vector<unsigned int> &intersection) {
+                             const std::vector<unsigned int> &hull,
+                             std::vector<unsigned int> &intersection) {
   if (inside)
     intersection.push_back (hull[caliper]);
 
@@ -306,10 +306,10 @@ inline unsigned int advance (unsigned int caliper, unsigned int &adv,
 //A function to intersect hull1 and hull2 and place the result
 //in intersection.  Points will be inserted into the points list
 //if the hulls intersect.
-void tlp::intersectHulls (vector<Coord> &points,
-                          const vector<unsigned int> &hull1,
-                          const vector<unsigned int> &hull2,
-                          vector<unsigned int> &intersection) {
+void tlp::intersectHulls (std::vector<Coord> &points,
+                          const std::vector<unsigned int> &hull1,
+                          const std::vector<unsigned int> &hull2,
+                          std::vector<unsigned int> &intersection) {
   intersection.clear();
 
   //no second hull to compute intersection empty intersection
@@ -414,8 +414,8 @@ void tlp::intersectHulls (vector<Coord> &points,
 //==============================================================
 //Function to compute the area of the passed hull using
 //convex combinations of its boundary.
-double tlp::areaOfHull (const vector<Coord> &points,
-                        const vector<unsigned int> &hull) {
+double tlp::areaOfHull (const std::vector<Coord> &points,
+                        const std::vector<unsigned int> &hull) {
   if (hull.size() < 3) return 0.0;
 
   double area = 0;
@@ -437,8 +437,8 @@ double tlp::areaOfHull (const vector<Coord> &points,
 //It does so by making sure that point is in the left
 //halfspace of hull edges on a counterclockwise traversal
 //of the boundary.
-bool tlp::insideHull (const vector<Coord> &points,
-                      const vector<unsigned int> &hull,
+bool tlp::insideHull (const std::vector<Coord> &points,
+                      const std::vector<unsigned int> &hull,
                       const Coord &point) {
   if (hull.size() < 3) return false;
 

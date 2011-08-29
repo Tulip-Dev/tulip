@@ -19,8 +19,8 @@
 
 //=======================================================================
 //DataSet implementation
-template<typename T> bool tlp::DataSet::get(const std::string& str,T& value) const {
-  std::map<std::string, tlp::DataType*>::const_iterator it = data.find(str);
+template<typename T> bool tlp::DataSet::get(const std::string& key,T& value) const {
+  std::map<std::string, tlp::DataType*>::const_iterator it = data.find(key);
   if(it != data.end()) {
     value = *((T*)it->second->value);
   }
@@ -28,8 +28,8 @@ template<typename T> bool tlp::DataSet::get(const std::string& str,T& value) con
   return it != data.end();
 }
 
-template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& value) {
-  std::map<std::string, tlp::DataType*>::iterator it = data.find(str);
+template<typename T> bool tlp::DataSet::getAndFree(const std::string &key,T& value) {
+  std::map<std::string, tlp::DataType*>::iterator it = data.find(key);
   if(it != data.end()) {
     value = *((T*)it->second->value);
     delete it->second;
@@ -39,9 +39,9 @@ template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& val
   return it != data.end();
 }
 
-template<typename T> void tlp::DataSet::set(const std::string &str,
+template<typename T> void tlp::DataSet::set(const std::string &key,
     const T& value) {
   TypedData<T> dtc(new T(value));
-  setData(str, &dtc);
+  setData(key, &dtc);
 }
 //=======================================================================

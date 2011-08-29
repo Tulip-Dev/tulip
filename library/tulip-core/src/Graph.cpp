@@ -95,13 +95,13 @@ Graph * tlp::newGraph() {
   return new GraphImpl();
 }
 //=========================================================
-Graph * tlp::newSubGraph(Graph *sg,string name) {
+Graph * tlp::newSubGraph(Graph *sg, std::string name) {
   Graph *newGraph = sg->addSubGraph();
   newGraph->setAttribute("name", name);
   return newGraph;
 }
 //=========================================================
-Graph * tlp::newCloneSubGraph(Graph *sg, string name) {
+Graph * tlp::newCloneSubGraph(Graph *sg, std::string name) {
   BooleanProperty sel1(sg);
   sel1.setAllNodeValue(true);
   sel1.setAllEdgeValue(true);
@@ -110,14 +110,14 @@ Graph * tlp::newCloneSubGraph(Graph *sg, string name) {
   return newGraph;
 }
 //=========================================================
-Graph * tlp::loadGraph(const string &filename) {
+Graph * tlp::loadGraph(const std::string &filename) {
   DataSet dataSet;
   dataSet.set("file::filename", filename);
   Graph *sg = tlp::importGraph("tlp", dataSet);
   return sg;
 }
 //=========================================================
-bool tlp::saveGraph(Graph *sg, const string &filename) {
+bool tlp::saveGraph(Graph *sg, const std::string &filename) {
   ostream *os;
 
   if (filename.rfind(".gz") == (filename.length() - 3))
@@ -132,7 +132,7 @@ bool tlp::saveGraph(Graph *sg, const string &filename) {
   return result;
 }
 //=========================================================
-Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *plugProgress, Graph *newGraph) {
+Graph * tlp::importGraph(const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress, Graph *newGraph) {
 
   if (!ImportModuleLister::pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": import plugin \"" << alg
@@ -179,7 +179,7 @@ Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *pl
     return newGraph;
 }
 //=========================================================
-bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
+bool tlp::exportGraph(Graph *sg, std::ostream &os, const std::string &alg,
                       DataSet &dataSet, PluginProgress *plugProgress) {
   if (!ExportModuleLister::pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": export plugin \"" << alg
@@ -211,8 +211,8 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
   return result;
 }
 //=========================================================
-bool tlp::applyAlgorithm(Graph *sg,string &errorMsg,DataSet *dataSet,
-                         const string &alg, PluginProgress *plugProgress) {
+bool tlp::applyAlgorithm(Graph *sg, std::string &errorMsg, DataSet *dataSet,
+                         const std::string &alg, PluginProgress *plugProgress) {
   if (!AlgorithmLister::pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
