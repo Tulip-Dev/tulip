@@ -1,68 +1,68 @@
 INSTALL(FILES
-  tulip/DownloadManager.h
-  tulip/GlMainWidget.h
-  tulip/CopyPropertyDialog.h
-  tulip/RenderingParametersDialog.h
-  tulip/LayerManagerWidget.h
-  tulip/AugmentedDisplayDialog.h
-  tulip/GridOptionsWidget.h
-  tulip/GlMainView.h
-  tulip/NodeLinkDiagramComponent.h
-  tulip/InteractorManager.h
-  tulip/Interactor.h
-  tulip/InteractorChainOfResponsibility.h
-  tulip/InteractorComponent.h
-  tulip/ForegroundEntity.h
-  tulip/MouseSelector.h
-  tulip/MouseBoxZoomer.h
-  tulip/MouseEdgeBuilder.h
-  tulip/MouseInteractors.h
-  tulip/MouseNodeBuilder.h
-  tulip/MouseSelectionEditor.h
-  tulip/MouseEdgeSelector.h
-  tulip/MouseEdgeBendEditor.h
-  tulip/MouseShowElementInfos.h
-  tulip/SGHierarchyWidget.h
-  tulip/GWOverviewWidget.h
-  tulip/TlpQtTools.h
-  tulip/View.h
   tulip/AbstractView.h
-  tulip/GraphPropertiesSelectionWidget.h
-  tulip/ItemsListWidget.h
-  tulip/StringsListSelectionWidget.h
+  tulip/AugmentedDisplayDialog.h
+  tulip/BaseGraphicsViewComponent.h
+  tulip/BaseGraphicsViewComponentMacro.h
   tulip/ColorScaleConfigDialog.h
   tulip/ColorScaleWidget.h
-  tulip/StringsListSelectionWidgetInterface.h
-  tulip/SimpleStringsListSelectionWidget.h
-  tulip/DoubleStringsListSelectionWidget.h
-  tulip/QGlBufferManager.h
-  tulip/QGlPixelBufferManager.h
-  tulip/GlCompositeHierarchyManager.h
-  tulip/BaseGraphicsViewComponentMacro.h
-  tulip/QtOpenGlErrorViewer.h
+  tulip/CopyPropertyDialog.h
   tulip/CSVContentHandler.h
   tulip/CSVGraphImport.h
   tulip/CSVGraphMappingConfigurationWidget.h
   tulip/CSVImportConfigurationWidget.h
-  tulip/CSVParser.h
-  tulip/CSVParserConfigurationWidget.h
   tulip/CSVImportWizard.h
-  tulip/QtGlSceneZoomAndPanAnimator.h
-  tulip/Morphing.h
-  tulip/GraphPropertiesTableWidget.h
-  tulip/SmallMultiplesView.h
-  tulip/SmallMultiplesNavigatorComponent.h
-  tulip/GlOffscreenRenderer.h
-  tulip/PropertyCreationDialog.h
-  tulip/TulipSettings.h
-  tulip/BaseGraphicsViewComponent.h
+  tulip/CSVParserConfigurationWidget.h
+  tulip/CSVParser.h
+  tulip/DoubleStringsListSelectionWidget.h
+  tulip/DownloadManager.h
+  tulip/ForegroundEntity.h
+  tulip/GlCompositeHierarchyManager.h
+  tulip/GlMainView.h
   tulip/GlMainWidgetGraphicsView.h
+  tulip/GlMainWidget.h
   tulip/GlMainWidgetItem.h
-  tulip/TabWidgetHidableMenuGraphicsProxy.h
+  tulip/GlOffscreenRenderer.h
   tulip/GraphicsWidgetBase.h
-  tulip/TulipProject.h
-  tulip/SimplePluginProgressWidget.h
+  tulip/GraphPropertiesSelectionWidget.h
+  tulip/GraphPropertiesTableWidget.h
+  tulip/GridOptionsWidget.h
+  tulip/GWOverviewWidget.h
+  tulip/InteractorChainOfResponsibility.h
+  tulip/InteractorComponent.h
+  tulip/Interactor.h
+  tulip/InteractorManager.h
+  tulip/ItemsListWidget.h
+  tulip/LayerManagerWidget.h
+  tulip/Morphing.h
+  tulip/MouseBoxZoomer.h
+  tulip/MouseEdgeBendEditor.h
+  tulip/MouseEdgeBuilder.h
+  tulip/MouseEdgeSelector.h
+  tulip/MouseInteractors.h
+  tulip/MouseNodeBuilder.h
+  tulip/MouseSelectionEditor.h
+  tulip/MouseSelector.h
+  tulip/MouseShowElementInfos.h
+  tulip/NodeLinkDiagramComponent.h
   tulip/Perspective.h
+  tulip/PropertyCreationDialog.h
+  tulip/QGlBufferManager.h
+  tulip/QGlPixelBufferManager.h
+  tulip/QtGlSceneZoomAndPanAnimator.h
+  tulip/QtOpenGlErrorViewer.h
+  tulip/RenderingParametersDialog.h
+  tulip/SGHierarchyWidget.h
+  tulip/SimplePluginProgressWidget.h
+  tulip/SimpleStringsListSelectionWidget.h
+  tulip/SmallMultiplesNavigatorComponent.h
+  tulip/SmallMultiplesView.h
+  tulip/StringsListSelectionWidget.h
+  tulip/StringsListSelectionWidgetInterface.h
+  tulip/TabWidgetHidableMenuGraphicsProxy.h
+  tulip/TlpQtTools.h
+  tulip/TulipProject.h
+  tulip/TulipSettings.h
+  tulip/View.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

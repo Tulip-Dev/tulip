@@ -3,129 +3,129 @@ IF(ENABLE_RENDERING_TIME_DISPLAY)
 ENDIF(ENABLE_RENDERING_TIME_DISPLAY)
 
 SET(SRCS
-  DownloadManager.cpp
-  GlMainWidget.cpp
-  GlMainView.cpp
-  NodeLinkDiagramComponent.cpp
-  CopyPropertyDialog.cpp
-  SGHierarchyWidget.cpp
-  GWOverviewWidget.cpp
-  Morphing.cpp
-  GraphState.cpp
-  MouseSelector.cpp
-  MouseBoxZoomer.cpp
-  MouseEdgeBuilder.cpp
-  MouseInteractors.cpp
-  MouseNodeBuilder.cpp
-  MouseSelectionEditor.cpp
-  MouseEdgeSelector.cpp
-  MouseEdgeBendEditor.cpp
-  MouseShowElementInfos.cpp
-  DataSetDialog.cpp
-  TlpQtTools.cpp
-  InteractorManager.cpp
-  Interactor.cpp
-  InteractorChainOfResponsibility.cpp
-  View.cpp
   AbstractView.cpp
-  RenderingParametersDialog.cpp
-  LayerManagerWidget.cpp
   AugmentedDisplayDialog.cpp
-  GridOptionsWidget.cpp
-  GraphPropertiesSelectionWidget.cpp
-  ItemsListWidget.cpp
-  StringsListSelectionWidget.cpp
-  SimpleStringsListSelectionWidget.cpp
-  DoubleStringsListSelectionWidget.cpp
+  BaseGraphicsViewComponent.cpp
   ColorScaleConfigDialog.cpp
   ColorScaleWidget.cpp
-  QGlBufferManager.cpp
-  QtOpenGlErrorViewer.cpp
-  CSVParser.cpp
-  QtGlSceneZoomAndPanAnimator.cpp
-  GlCompositeHierarchyManager.cpp
-  GraphPropertiesTableWidget.cpp
+  CopyPropertyDialog.cpp
   CSVGraphImport.cpp
-  CSVParserConfigurationWidget.cpp
   CSVGraphMappingConfigurationWidget.cpp
   CSVImportConfigurationWidget.cpp
   CSVImportWizard.cpp
-  SmallMultiplesView.cpp
-  SmallMultiplesNavigatorComponent.cpp
-  GlOffscreenRenderer.cpp
-  ThreadedComputeProperty.cpp
-  PropertyCreationDialog.cpp
-  TulipSettings.cpp
+  CSVParserConfigurationWidget.cpp
+  CSVParser.cpp
+  DataSetDialog.cpp
+  DoubleStringsListSelectionWidget.cpp
+  DownloadManager.cpp
+  GlCompositeHierarchyManager.cpp
+  GlMainView.cpp
+  GlMainWidget.cpp
   GlMainWidgetGraphicsView.cpp
-  BaseGraphicsViewComponent.cpp
-  TabWidgetHidableMenuGraphicsProxy.cpp
-  GraphicsWidgetBase.cpp
   GlMainWidgetItem.cpp
+  GlOffscreenRenderer.cpp
+  GraphicsWidgetBase.cpp
+  GraphPropertiesSelectionWidget.cpp
+  GraphPropertiesTableWidget.cpp
+  GraphState.cpp
+  GridOptionsWidget.cpp
+  GWOverviewWidget.cpp
+  InteractorChainOfResponsibility.cpp
+  Interactor.cpp
+  InteractorManager.cpp
+  ItemsListWidget.cpp
+  LayerManagerWidget.cpp
+  Morphing.cpp
+  MouseBoxZoomer.cpp
+  MouseEdgeBendEditor.cpp
+  MouseEdgeBuilder.cpp
+  MouseEdgeSelector.cpp
+  MouseInteractors.cpp
+  MouseNodeBuilder.cpp
+  MouseSelectionEditor.cpp
+  MouseSelector.cpp
+  MouseShowElementInfos.cpp
+  NodeLinkDiagramComponent.cpp
+  Perspective.cpp
   PluginInformations.cpp
   PluginManager.cpp
-  TulipProject.cpp
+  PropertyCreationDialog.cpp
+  QGlBufferManager.cpp
+  QtGlSceneZoomAndPanAnimator.cpp
+  QtOpenGlErrorViewer.cpp
   QuaZIPFacade.cpp
+  RenderingParametersDialog.cpp
+  SGHierarchyWidget.cpp
   SimplePluginProgressWidget.cpp
-  Perspective.cpp
+  SimpleStringsListSelectionWidget.cpp
+  SmallMultiplesNavigatorComponent.cpp
+  SmallMultiplesView.cpp
+  StringsListSelectionWidget.cpp
+  TabWidgetHidableMenuGraphicsProxy.cpp
+  ThreadedComputeProperty.cpp
+  TlpQtTools.cpp
+  TulipProject.cpp
+  TulipSettings.cpp
+  View.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
-  ../designer/CopyPropertyDialog.ui
-  ../designer/RenderingParametersDialog.ui
-  ../designer/LayerManagerWidget.ui
   ../designer/AugmentedDisplayDialog.ui
-  ../designer/GWOverviewWidget.ui
-  ../designer/GridOptions.ui
   ../designer/ColorScaleConfigDialog.ui
-  ../designer/SimpleStringsListSelectionWidget.ui
-  ../designer/DoubleStringsListSelectionWidget.ui
-  ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui
+  ../designer/CopyPropertyDialog.ui
   ../designer/CSVGraphMappingConfigurationWidget.ui
   ../designer/CSVImportConfigurationWidget.ui
-  ../designer/CSVParserConfigurationWidget.ui
   ../designer/CSVImportWizard.ui
+  ../designer/CSVParserConfigurationWidget.ui
+  ../designer/DoubleStringsListSelectionWidget.ui
+  ../designer/GridOptions.ui
+  ../designer/GWOverviewWidget.ui
+  ../designer/LayerManagerWidget.ui
   ../designer/PropertyCreationDialog.ui
+  ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui
+  ../designer/RenderingParametersDialog.ui
   ../designer/SimplePluginProgressWidget.ui
+  ../designer/SimpleStringsListSelectionWidget.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
-  ../include/tulip/DownloadManager.h
-  ../include/tulip/GlMainWidget.h
-  ../include/tulip/GlMainView.h
-  ../include/tulip/NodeLinkDiagramComponent.h
-  ../include/tulip/CopyPropertyDialog.h
-  ../include/tulip/RenderingParametersDialog.h
-  ../include/tulip/LayerManagerWidget.h
-  ../include/tulip/AugmentedDisplayDialog.h
-  ../include/tulip/SGHierarchyWidget.h
-  ../include/tulip/GWOverviewWidget.h
-  ../include/tulip/Interactor.h
-  ../include/tulip/GridOptionsWidget.h
-  ../include/tulip/View.h
   ../include/tulip/AbstractView.h
-  ../include/tulip/ItemsListWidget.h
-  ../include/tulip/SimpleStringsListSelectionWidget.h
-  ../include/tulip/DoubleStringsListSelectionWidget.h
+  ../include/tulip/AugmentedDisplayDialog.h
+  ../include/tulip/BaseGraphicsViewComponent.h
   ../include/tulip/ColorScaleConfigDialog.h
-  ../include/tulip/QtGlSceneZoomAndPanAnimator.h
-  ../include/tulip/Morphing.h
-  ../include/tulip/GraphPropertiesTableWidget.h
+  ../include/tulip/CopyPropertyDialog.h
   ../include/tulip/CSVGraphMappingConfigurationWidget.h
   ../include/tulip/CSVImportConfigurationWidget.h
-  ../include/tulip/CSVParserConfigurationWidget.h
   ../include/tulip/CSVImportWizard.h
-  ../include/tulip/SmallMultiplesView.h
-  ../include/tulip/PropertyCreationDialog.h
+  ../include/tulip/CSVParserConfigurationWidget.h
+  ../include/tulip/DoubleStringsListSelectionWidget.h
+  ../include/tulip/DownloadManager.h
+  ../include/tulip/GlMainView.h
   ../include/tulip/GlMainWidgetGraphicsView.h
-  ../include/tulip/BaseGraphicsViewComponent.h
+  ../include/tulip/GlMainWidget.h
   ../include/tulip/GlMainWidgetItem.h
+  ../include/tulip/GraphPropertiesTableWidget.h
+  ../include/tulip/GridOptionsWidget.h
+  ../include/tulip/GWOverviewWidget.h
+  ../include/tulip/Interactor.h
+  ../include/tulip/ItemsListWidget.h
+  ../include/tulip/LayerManagerWidget.h
+  ../include/tulip/Morphing.h
+  ../include/tulip/NodeLinkDiagramComponent.h
+  ../include/tulip/Perspective.h
+  ../include/tulip/PluginInformations.h
+  ../include/tulip/PluginManager.h
+  ../include/tulip/PropertyCreationDialog.h
+  ../include/tulip/QtGlSceneZoomAndPanAnimator.h
+  ../include/tulip/RenderingParametersDialog.h
+  ../include/tulip/SGHierarchyWidget.h
+  ../include/tulip/SimplePluginProgressWidget.h
+  ../include/tulip/SimpleStringsListSelectionWidget.h
+  ../include/tulip/SmallMultiplesView.h
   ../include/tulip/TabWidgetHidableMenuGraphicsProxy.h
   ../include/tulip/ThreadedComputeProperty.h
   ../include/tulip/TulipProject.h
-  ../include/tulip/PluginManager.h
-  ../include/tulip/SimplePluginProgressWidget.h
-  ../include/tulip/Perspective.h
-  ../include/tulip/PluginInformations.h
+  ../include/tulip/View.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
