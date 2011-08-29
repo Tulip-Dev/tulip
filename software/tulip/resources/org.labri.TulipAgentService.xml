@@ -36,6 +36,12 @@
       <arg name="folder" type="s" direction="in"/>
       <arg name="pid" type="x" direction="in"/>
     </method>
+    <method name="ShowTrayMessage">
+      <arg name="title" type="s" direction="in"/>
+      <arg name="message" type="s" direction="in"/>
+      <arg name="icon" type="u" direction="in"/>
+      <arg name="duration" type="u" direction="in"/>
+    </method>
     <signal name="Terminate"/>
   </interface>
 </node>

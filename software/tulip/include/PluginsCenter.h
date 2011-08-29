@@ -30,7 +30,7 @@ public slots:
   void showErrorsPage();
   void showDownloadsPage();
   void showReposPage();
-  void reportPluginError(const QString &filename, const QString &errormsg);
+  void reportPluginErrors(const QMap<QString,QString> &);
   void fetch(tlp::PluginInformations *);
   void remove(tlp::PluginInformations *);
   void addRemoteLocation();

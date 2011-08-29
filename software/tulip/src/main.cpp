@@ -31,9 +31,28 @@
 #undef interface
 #endif
 
+#include <QtGui/QTableView>
+#include <tulip/PluginLister.h>
+#include <tulip/ParameterListModel.h>
+#include <QtGui/QStyledItemDelegate>
+#include <QtGui/QItemEditorFactory>
+#include <QtGui/QSpinBox>
+#include <QtGui/QItemEditorCreatorBase>
+
+class ColorEditor: public QItemEditorCreatorBase {
+public:
+  virtual QWidget *	createWidget ( QWidget * parent ) const {
+    return new QSpinBox();
+  }
+  virtual QByteArray	valuePropertyName () const {
+    return "value";
+  }
+};
+
 int main(int argc, char **argv) {
   QApplication tulip_agent(argc, argv);
   tulip_agent.setApplicationName(QObject::trUtf8("Tulip"));
+
   QLocale::setDefault(QLocale(QLocale::English));
 
   QDir stagingDirectory(tlp::getPluginStagingDirectory());
@@ -137,11 +156,9 @@ int main(int argc, char **argv) {
   delete dispatcher;
   delete splashScreen;
 
-  TulipMainWindow *mainWindow = new TulipMainWindow;
-  QMap<QString,QString> errorsMap(errorReport->errors());
+  TulipMainWindow *mainWindow = TulipMainWindow::instance();
 
-  for(QMap<QString,QString>::iterator it = errorsMap.begin(); it != errorsMap.end(); ++it)
-    mainWindow->pluginsCenter()->reportPluginError(it.key(), it.value());
+  mainWindow->pluginsCenter()->reportPluginErrors(errorReport->errors());
 
   delete errorReport;
 
@@ -156,7 +173,7 @@ int main(int argc, char **argv) {
   if (!dbusRegisterObjectOk)
     qWarning() << "D-Bus registration of object / over service org.labri.Tulip failed.";
 
-  mainWindow->startApp();
+  mainWindow->show();
 
   int result = tulip_agent.exec();
 #if defined(__APPLE__)

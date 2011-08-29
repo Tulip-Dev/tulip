@@ -18,6 +18,21 @@
 #include "TulipWelcomePage.h"
 #include "PerspectiveItemWidget.h"
 
+// Helper classes
+PerspectiveSelectionDialog::PerspectiveSelectionDialog(QWidget *parent): QDialog(parent) {
+  Ui::PerspectiveSelectionDialogData *ui = new Ui::PerspectiveSelectionDialogData;
+  ui->setupUi(this);
+  ui->perspectiveDialogScrollContents->setLayout(TulipWelcomePage::buildPerspectiveListLayout(this,SLOT(perspectiveSelected())));
+}
+
+void PerspectiveSelectionDialog::perspectiveSelected() {
+  PerspectiveItemWidget *item = static_cast<PerspectiveItemWidget *>(sender());
+  selectedPerspectiveName = item->perspectiveId();
+  close();
+}
+
+TulipMainWindow* TulipMainWindow::_instance = NULL;
+
 TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new Ui::TulipMainWindowData()), _systemTrayIcon(0) {
   _ui->setupUi(this);
   _pageChoosers.clear();
@@ -49,14 +64,10 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   connect(_ui->pages,SIGNAL(currentChanged(int)),this,SLOT(pageSwitched(int)));
   connect(_ui->welcomePage,SIGNAL(openPerspective(QString)),this,SLOT(CreatePerspective(QString)));
   connect(_ui->welcomePage,SIGNAL(openProject()),this,SLOT(ShowOpenProjectWindow()));
+  _systemTrayIcon->show();
 }
 
 TulipMainWindow::~TulipMainWindow() {
-}
-
-void TulipMainWindow::startApp() {
-  show();
-  _systemTrayIcon->show();
 }
 
 void TulipMainWindow::closeApp() {
@@ -92,6 +103,9 @@ void TulipMainWindow::systemTrayRequest(QSystemTrayIcon::ActivationReason reason
 void TulipMainWindow::systemTrayMessageClicked() {
   if (_currentTrayMessage == PluginErrorMessage)
     _ui->pluginsPage->showErrorsPage();
+  else
+    _ui->welcomePageChooser->click();
+  show();
 
   _currentTrayMessage = NoMessage;
 }
@@ -184,14 +198,13 @@ void TulipMainWindow::EnableCrashHandling(const QString &folder, qlonglong pid) 
   TulipPerspectiveProcessHandler::instance().enableCrashHandling(pid,folder);
 }
 
-PerspectiveSelectionDialog::PerspectiveSelectionDialog(QWidget *parent): QDialog(parent) {
-  Ui::PerspectiveSelectionDialogData *ui = new Ui::PerspectiveSelectionDialogData;
-  ui->setupUi(this);
-  ui->perspectiveDialogScrollContents->setLayout(TulipWelcomePage::buildPerspectiveListLayout(this,SLOT(perspectiveSelected())));
+void TulipMainWindow::ShowTrayMessage(const QString &title, const QString &message, uint icon, uint duration) {
+  if (!_systemTrayIcon)
+    return;
+  _systemTrayIcon->showMessage(title,message,(QSystemTrayIcon::MessageIcon)icon,duration);
 }
 
-void PerspectiveSelectionDialog::perspectiveSelected() {
-  PerspectiveItemWidget *item = static_cast<PerspectiveItemWidget *>(sender());
-  selectedPerspectiveName = item->perspectiveId();
-  close();
+void TulipMainWindow::pluginErrorMessage(const QString &message) {
+  _currentTrayMessage = PluginErrorMessage;
+  ShowTrayMessage(trUtf8("Error while loading plugins"),message + "\n\n" + trUtf8("Click on this message to see detailed informations"),(uint)QSystemTrayIcon::Critical,10000);
 }
