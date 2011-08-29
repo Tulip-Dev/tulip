@@ -26,12 +26,12 @@ StringCollection::StringCollection() {
   current = 0;
 }
 
-StringCollection::StringCollection(const vector<string> &vectorParam)
+StringCollection::StringCollection(const std::vector<string> &vectorParam)
   : _data(vectorParam)  {
   current = 0;
 }
 
-StringCollection::StringCollection(const string param) {
+StringCollection::StringCollection(const std::string param) {
   string temp;
   string::const_iterator itChar = param.begin();
   bool escapeChar = false;
@@ -76,7 +76,7 @@ StringCollection::StringCollection(const string param) {
   current = 0;
 }
 
-StringCollection::StringCollection(const vector<string>&  vectorParam,
+StringCollection::StringCollection(const std::vector<string>&  vectorParam,
                                    int currentParam)
   : _data(vectorParam) {
   if (currentParam < int(_data.size()))
@@ -85,8 +85,8 @@ StringCollection::StringCollection(const vector<string>&  vectorParam,
     current = 0;
 }
 
-StringCollection::StringCollection(const vector<string>& vectorParam,
-                                   string currentString)
+StringCollection::StringCollection(const std::vector<string>& vectorParam,
+                                   std::string currentString)
   : _data(vectorParam) {
   current = 0;
 
@@ -100,7 +100,7 @@ StringCollection::StringCollection(const vector<string>& vectorParam,
 }
 
 
-string StringCollection::getCurrentString() {
+std::string StringCollection::getCurrentString() {
   if (current < _data.size())
     return _data.at(current);
 
@@ -117,7 +117,7 @@ bool StringCollection::setCurrent(unsigned int param) {
   return false;
 }
 
-bool StringCollection::setCurrent(string param) {
+bool StringCollection::setCurrent(std::string param) {
   for (unsigned int i = 0; i< _data.size(); ++i) {
     if (_data.at(i) == param ) {
       current = i;
