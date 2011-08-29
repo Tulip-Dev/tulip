@@ -83,6 +83,8 @@ signals:
   void addPluginRepository(QString);
 
   void removePluginRepository(QString);
+
+  void showTrayMessage(QString title,QString message,uint icon=0,uint duration=10000);
 };
 
 typedef StaticPluginLister<Perspective, PerspectiveContext> PerspectivePluginLister;
