@@ -17,7 +17,7 @@
  *
  */
 #include <tulip/WithParameter.h>
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 #include <tulip/PropertyTypes.h>
 
 #include <tulip/BooleanProperty.h>

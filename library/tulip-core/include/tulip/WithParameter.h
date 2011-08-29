@@ -23,7 +23,7 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/Iterator.h>
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 
 namespace tlp {
 /** \addtogroup plugins */

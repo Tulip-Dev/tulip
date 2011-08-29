@@ -28,7 +28,7 @@
 #include <tulip/PropertyInterface.h>
 #include <tulip/Iterator.h>
 #include <tulip/PropertyAlgorithm.h>
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 
 namespace tlp {
 

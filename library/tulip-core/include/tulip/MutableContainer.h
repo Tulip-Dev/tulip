@@ -26,7 +26,7 @@
 #include <tulip/tulipconf.h>
 #include <tulip/tuliphash.h>
 #include <tulip/StoredType.h>
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 #include <tulip/Iterator.h>
 
 namespace tlp {

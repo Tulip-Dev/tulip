@@ -21,7 +21,7 @@
 
 #include <string>
 #include <tulip/Color.h>
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 #include <tulip/DoubleProperty.h>
 
 namespace tlp {

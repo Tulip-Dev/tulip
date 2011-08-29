@@ -21,7 +21,7 @@
 
 #include <string>
 #include <tulip/Graph.h>
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 #include <cppunit/extensions/HelperMacros.h>

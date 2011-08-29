@@ -21,7 +21,7 @@
 
 #include "tulip/TlpQtTools.h"
 
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 
 #include "tulip/Interactor.h"
 #include "tulip/View.h"

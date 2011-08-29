@@ -20,7 +20,7 @@
 #ifndef Tulip_MAINCONTROLLER_H
 #define Tulip_MAINCONTROLLER_H
 
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 #include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 

@@ -32,7 +32,7 @@
 
 #include <tulip/PluginContext.h>
 #include <tulip/Graph.h>
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
 #include <tulip/PluginLister.h>
