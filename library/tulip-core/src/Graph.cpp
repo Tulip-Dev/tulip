@@ -95,17 +95,17 @@ Graph * tlp::newGraph() {
   return new GraphImpl();
 }
 //=========================================================
-Graph * tlp::newSubGraph(Graph *sg, std::string name) {
-  Graph *newGraph = sg->addSubGraph();
+Graph * tlp::newSubGraph(Graph *graph, std::string name) {
+  Graph *newGraph = graph->addSubGraph();
   newGraph->setAttribute("name", name);
   return newGraph;
 }
 //=========================================================
-Graph * tlp::newCloneSubGraph(Graph *sg, std::string name) {
-  BooleanProperty sel1(sg);
+Graph * tlp::newCloneSubGraph(Graph *graph, std::string name) {
+  BooleanProperty sel1(graph);
   sel1.setAllNodeValue(true);
   sel1.setAllEdgeValue(true);
-  Graph *newGraph = sg->addSubGraph(&sel1);
+  Graph *newGraph = graph->addSubGraph(&sel1);
   newGraph->setAttribute("name", name);
   return newGraph;
 }
@@ -117,7 +117,7 @@ Graph * tlp::loadGraph(const std::string &filename) {
   return sg;
 }
 //=========================================================
-bool tlp::saveGraph(Graph *sg, const std::string &filename) {
+bool tlp::saveGraph(Graph* graph, const std::string& filename) {
   ostream *os;
 
   if (filename.rfind(".gz") == (filename.length() - 3))
@@ -127,15 +127,15 @@ bool tlp::saveGraph(Graph *sg, const std::string &filename) {
 
   bool result;
   DataSet data;
-  result=tlp::exportGraph(sg, *os, "tlp", data, 0);
+  result=tlp::exportGraph(graph, *os, "tlp", data, 0);
   delete os;
   return result;
 }
 //=========================================================
-Graph * tlp::importGraph(const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress, Graph *newGraph) {
+Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress, Graph *newGraph) {
 
-  if (!ImportModuleLister::pluginExists(alg)) {
-    cerr << "libtulip: " << __FUNCTION__ << ": import plugin \"" << alg
+  if (!ImportModuleLister::pluginExists(format)) {
+    cerr << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format
          << "\" doesn't exists (or is not loaded)" << endl;
     return NULL;
   }
@@ -153,36 +153,37 @@ Graph * tlp::importGraph(const std::string &alg, DataSet &dataSet, PluginProgres
   PluginProgress *tmpProgress;
   bool deletePluginProgress=false;
 
-  if (plugProgress==0) {
+  if (progress==0) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
-  else tmpProgress=plugProgress;
+  else tmpProgress=progress;
 
   tmp.pluginProgress=tmpProgress;
-  ImportModule *newImportModule=ImportModuleLister::getPluginObject(alg, tmp);
+  ImportModule *newImportModule=ImportModuleLister::getPluginObject(format, tmp);
   assert(newImportModule!=0);
-  bool result;
+  
+  bool importSucessfull = newImportModule->import();
 
-  if (!(result=newImportModule->import())) {
-    if (newGraphP) delete newGraph;
-  }
-
+  //If the import failed and we created the graph then delete the graph
+  if (!importSucessfull && newGraphP)
+      delete newGraph;
+  
   if (deletePluginProgress) delete tmpProgress;
 
   delete newImportModule;
   dataSet = *tmp.dataSet;
 
-  if (!result)
-    return 0;
-  else
+  if (importSucessfull)
     return newGraph;
+  else
+    return NULL;
 }
 //=========================================================
-bool tlp::exportGraph(Graph *sg, std::ostream &os, const std::string &alg,
-                      DataSet &dataSet, PluginProgress *plugProgress) {
-  if (!ExportModuleLister::pluginExists(alg)) {
-    cerr << "libtulip: " << __FUNCTION__ << ": export plugin \"" << alg
+bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &format,
+                      DataSet &dataSet, PluginProgress *progress) {
+  if (!ExportModuleLister::pluginExists(format)) {
+    cerr << "libtulip: " << __FUNCTION__ << ": export plugin \"" << format
          << "\" doesn't exists (or is not loaded)" << endl;
     return false;
   }
@@ -194,16 +195,16 @@ bool tlp::exportGraph(Graph *sg, std::ostream &os, const std::string &alg,
   tmp.dataSet=&dataSet;
   PluginProgress *tmpProgress=NULL;
 
-  if (plugProgress==0) {
+  if (progress==0) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
-  else tmpProgress=plugProgress;
+  else tmpProgress=progress;
 
   tmp.pluginProgress=tmpProgress;
-  ExportModule *newExportModule=ExportModuleLister::getPluginObject(alg, tmp);
+  ExportModule *newExportModule=ExportModuleLister::getPluginObject(format, tmp);
   assert(newExportModule!=0);
-  result=newExportModule->exportGraph(os,sg);
+  result=newExportModule->exportGraph(outputStream,sg);
 
   if (deletePluginProgress) delete tmpProgress;
 
@@ -211,10 +212,10 @@ bool tlp::exportGraph(Graph *sg, std::ostream &os, const std::string &alg,
   return result;
 }
 //=========================================================
-bool tlp::applyAlgorithm(Graph *sg, std::string &errorMsg, DataSet *dataSet,
-                         const std::string &alg, PluginProgress *plugProgress) {
-  if (!AlgorithmLister::pluginExists(alg)) {
-    cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << alg
+bool tlp::applyAlgorithm(Graph *sg, std::string &errorMessage, DataSet *dataSet,
+                         const std::string &algorithm, PluginProgress *progress) {
+  if (!AlgorithmLister::pluginExists(algorithm)) {
+    cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << algorithm
          << "\" doesn't exists (or is not loaded)" << endl;
     return false;
   }
@@ -226,16 +227,16 @@ bool tlp::applyAlgorithm(Graph *sg, std::string &errorMsg, DataSet *dataSet,
   tmp.dataSet=dataSet;
   PluginProgress *tmpProgress;
 
-  if (plugProgress==0) {
+  if (progress==0) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
-  else tmpProgress=plugProgress;
+  else tmpProgress=progress;
 
   tmp.pluginProgress=tmpProgress;
-  Algorithm *newAlgo=AlgorithmLister::getPluginObject(alg, tmp);
+  Algorithm *newAlgo=AlgorithmLister::getPluginObject(algorithm, tmp);
 
-  if ((result=newAlgo->check(errorMsg)))
+  if ((result=newAlgo->check(errorMessage)))
     newAlgo->run();
 
   delete newAlgo;
