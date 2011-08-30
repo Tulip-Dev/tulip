@@ -196,17 +196,31 @@ public:
   //=========================================================================
   // Graph hierarchy access and building
   //=========================================================================
+  
   /**
-   *  Removes all nodes, edges and sub-graphs of the supergraph.
-   */
+   * @brief Removes all nodes, edges and sub-graphs from this graph.
+   * 
+   * Contrarily to creating a new Graph, this keeps attributes and properties.
+   *
+   * @return void
+   **/
   virtual  void clear()=0;
+  
   /**
-   * Creates and returns a new sub-graph of the graph
-   * The elements of the new sub-graph are those selected in the selection
-   * if there is no selection an empty sub-graph is returned.
-   */
-  virtual Graph *addSubGraph(BooleanProperty *selection=0,
-                             unsigned int id = 0)=0;
+   * @brief Creates and returns a new sub-graph of this graph.
+   *
+   * If a BooleanProperty is provided, all the nodes and edges for which it is true will be added to the subgraph.
+   * If none is provided, then the subgraph will be empty.
+   *
+   * The id parameter should only be provided if you know exactly what you are doing; as Tulip will manage the subgraphs IDs when left to 0.
+   * It is only used by the Graph loading as subgraphs ids are preserved when saving/loading a Graph.
+   *
+   * @param selection The elements to add to the new subgraph. Defaults to 0.
+   * @param id The ID you wish to assign to the Graph. It is strongly advised to leave this as default and let Tulip manage subgraph IDs. Defaults to 0.
+   * @return :Graph* The newly created subgraph.
+   **/
+  virtual Graph *addSubGraph(BooleanProperty *selection=0, unsigned int id = 0)=0;
+  
   /**
    *  Creates and returns a new sub-graph of the graph
    *  induced by a set of nodes. The sub-graph contains all
