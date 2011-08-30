@@ -212,40 +212,6 @@ bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &
   return result;
 }
 //=========================================================
-bool tlp::applyAlgorithm(Graph *sg, std::string &errorMessage, DataSet *dataSet,
-                         const std::string &algorithm, PluginProgress *progress) {
-  if (!AlgorithmLister::pluginExists(algorithm)) {
-    cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << algorithm
-         << "\" doesn't exists (or is not loaded)" << endl;
-    return false;
-  }
-
-  bool result;
-  bool deletePluginProgress=false;
-  AlgorithmContext tmp;
-  tmp.graph=sg;
-  tmp.dataSet=dataSet;
-  PluginProgress *tmpProgress;
-
-  if (progress==0) {
-    tmpProgress=new SimplePluginProgress();
-    deletePluginProgress=true;
-  }
-  else tmpProgress=progress;
-
-  tmp.pluginProgress=tmpProgress;
-  Algorithm *newAlgo=AlgorithmLister::getPluginObject(algorithm, tmp);
-
-  if ((result=newAlgo->check(errorMessage)))
-    newAlgo->run();
-
-  delete newAlgo;
-
-  if (deletePluginProgress) delete tmpProgress;
-
-  return result;
-}
-//=========================================================
 void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
   if( !ioG )
     return;
@@ -406,6 +372,41 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
   }
 
   delete edgeIt;
+}
+
+//=========================================================
+bool Graph::applyAlgorithm(std::string &errorMessage, DataSet *dataSet,
+                         const std::string &algorithm, PluginProgress *progress) {
+  if (!AlgorithmLister::pluginExists(algorithm)) {
+    cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << algorithm
+    << "\" doesn't exists (or is not loaded)" << endl;
+    return false;
+  }
+  
+  bool result;
+  bool deletePluginProgress=false;
+  AlgorithmContext tmp;
+  tmp.graph = this;
+  tmp.dataSet = dataSet;
+  PluginProgress *tmpProgress;
+  
+  if (progress == 0) {
+    tmpProgress = new SimplePluginProgress();
+    deletePluginProgress = true;
+  }
+  else tmpProgress = progress;
+  
+  tmp.pluginProgress=tmpProgress;
+  Algorithm *newAlgo=AlgorithmLister::getPluginObject(algorithm, tmp);
+  
+  if ((result=newAlgo->check(errorMessage)))
+    newAlgo->run();
+  
+  delete newAlgo;
+  
+  if (deletePluginProgress) delete tmpProgress;
+  
+  return result;
 }
 
 tlp::node Graph::getSource() const {

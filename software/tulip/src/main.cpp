@@ -33,7 +33,6 @@
 
 #include <QtGui/QTableView>
 #include <tulip/PluginLister.h>
-#include <tulip/ParameterListModel.h>
 #include <QtGui/QStyledItemDelegate>
 #include <QtGui/QItemEditorFactory>
 #include <QtGui/QSpinBox>

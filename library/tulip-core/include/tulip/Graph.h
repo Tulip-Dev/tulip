@@ -72,7 +72,7 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename);
  * @param filename The file to save the graph to.
  * @return bool Whether the export was successfull or not.
  **/
-TLP_SCOPE bool _DEPRECATED saveGraph(Graph* graph, const std::string &filename);
+TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename);
 
 /**
  * @brief Exports a graph using the specified export plugin with parameters stored in the DataSet.
@@ -86,7 +86,7 @@ TLP_SCOPE bool _DEPRECATED saveGraph(Graph* graph, const std::string &filename);
  * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
  * @return bool Whether the export was successfull or not.
  **/
-TLP_SCOPE bool _DEPRECATED exportGraph(Graph *graph, std::ostream &outputStream, const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL);
+TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream, const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL);
 
 /**
  * @brief Imports a graph using the specified import plugin with the parameters stored in the DataSet.
@@ -101,31 +101,6 @@ TLP_SCOPE bool _DEPRECATED exportGraph(Graph *graph, std::ostream &outputStream,
  * @return :Graph* The graph containing the imported data, or NULL in case of failure.
  **/
 TLP_SCOPE Graph* importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL,Graph *newGraph=NULL);
-
-/**
- * @brief Applies an algorithm plugin, identified by its name.
- * Algorithm plugins are subclasses of the tlp::Algorithm interface.
- * Parameters are transmitted to the algorithm trough the DataSet.
- * To determine a plugin's parameters, you can either:
- * 
- * * refer to its documentation
- * 
- * * use buildDefaultDataSet on the plugin object if you have an instance of it
- * 
- * * call getPluginParameters() with the name of the plugin on the right PluginLister
- * (there cannot be a static method that directly returns this from the plugin name as a name can be used for plugins of different types).
- *
- *
- * If an error occurs, a message describing the error should be stored in errorMessage.
- *
- * @param graph The graph to apply the algorithm on.
- * @param errorMessage A string that will be modified to contain an error message should an error occur.
- * @param dataSet The parameters to the algorithm. Defaults to NULL.
- * @param algorithm The algorithm to apply. Defaults to "any".
- * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
- * @return bool Whether the algorithm was successfully applied.
- **/
-TLP_SCOPE bool _DEPRECATED applyAlgorithm(Graph *graph, std::string &errorMessage, DataSet *dataSet=NULL,const std::string &algorithm="any", PluginProgress *progress=NULL);
 
 /**
  * @brief Creates a new, empty graph.
@@ -193,6 +168,31 @@ class TLP_SCOPE Graph : public Observable {
 public:
   Graph():id(0) {}
   virtual ~Graph() {}
+
+  /**
+   * @brief Applies an algorithm plugin, identified by its name.
+   * Algorithm plugins are subclasses of the tlp::Algorithm interface.
+   * Parameters are transmitted to the algorithm trough the DataSet.
+   * To determine a plugin's parameters, you can either:
+   *
+   * * refer to its documentation
+   *
+   * * use buildDefaultDataSet on the plugin object if you have an instance of it
+   *
+   * * call getPluginParameters() with the name of the plugin on the right PluginLister
+   * (there cannot be a static method that directly returns this from the plugin name as a name can be used for plugins of different types).
+   *
+   *
+   * If an error occurs, a message describing the error should be stored in errorMessage.
+   *
+   * @param errorMessage A string that will be modified to contain an error message should an error occur.
+   * @param dataSet The parameters to the algorithm. Defaults to NULL.
+   * @param algorithm The algorithm to apply. Defaults to "any".
+   * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
+   * @return bool Whether the algorithm was successfully applied.
+  **/
+  bool applyAlgorithm(std::string &errorMessage, DataSet *dataSet=NULL,const std::string &algorithm="any", PluginProgress *progress=NULL);
+
   //=========================================================================
   // Graph hierarchy access and building
   //=========================================================================

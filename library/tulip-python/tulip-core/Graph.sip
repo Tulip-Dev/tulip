@@ -72,6 +72,43 @@ public:
 	
 //===========================================================================================
 
+bool applyAlgorithm(std::string &errMsg /Out/, tlp::DataSet *dataSet, const std::string &alg);
+%Docstring
+tlp.Graph.applyAlgorithm(dataSet, algoName)
+
+Applies an algorithm plugin (must be loaded) on a graph . Algorithm plugins are objects
+implementing the tlp::Algorithm interface in C++ or the :class:`tlp.Algorithm` interface in Python.
+Parameters can be transmit to the algorithm trough a DataSet object (refer to the plugin
+documentation to get its parameters list).
+
+Returns a tuple whose first member is a boolean indicating if the algorithm has been successfully applied
+and second member is a string that can contain an error message if the algorithms fails during
+its execution.
+
+:param dataSet: a dataset filled with parameters to transmit to the algorithm
+:type dataSet: :class:`tlp.DataSet`
+:param algoName: the name of the algorithm plugin to call
+:type algoName: string
+:rtype: (boolean, string)
+:throws: an exception if the requested algorithm plugin is not registered in the plugins database.
+
+%End
+
+%MethodCode
+if (pluginExists<tlp::Algorithm>(*a2)) {
+  sipRes = sipCpp->applyAlgorithm(*a0, a1, *a2);
+} else {
+  sipIsErr = 1;
+  std::string msg = "No Tulip algorithm plugin named  ";
+  msg += *a2;
+  msg += ".";
+  PyErr_SetString(PyExc_Exception, msg.c_str());
+}
+%End
+
+
+//===========================================================================================
+  
 	void clear();
 %Docstring
 tlp.Graph.clear()
@@ -2656,45 +2693,6 @@ Returns a new graph or None if the import fails.
 		sipIsErr = 1;
 		std::string msg = "No Tulip import plugin named  ";
 		msg += *a0;
-		msg += ".";
-		PyErr_SetString(PyExc_Exception, msg.c_str());
-	}	
-%End
-
-
-//===========================================================================================
-
-bool applyAlgorithm(tlp::Graph *graph, std::string &errMsg /Out/, tlp::DataSet *dataSet, const std::string &alg);
-%Docstring
-tlp.applyAlgorithm(graph, dataSet, algoName)
-
-Applies an algorithm plugin (must be loaded) on a graph . Algorithm plugins are objects
-implementing the tlp::Algorithm interface in C++ or the :class:`tlp.Algorithm` interface in Python. 
-Parameters can be transmit to the algorithm trough a DataSet object (refer to the plugin 
-documentation to get its parameters list). 
-
-Returns a tuple whose first member is a boolean indicating if the algorithm has been successfully applied
-and second member is a string that can contain an error message if the algorithms fails during
-its execution.
-
-:param graph: the graph on which to apply the algorithm
-:type graph: :class:`tlp.Graph`
-:param dataSet: a dataset filled with parameters to transmit to the algorithm
-:type dataSet: :class:`tlp.DataSet`
-:param algoName: the name of the algorithm plugin to call
-:type algoName: string
-:rtype: (boolean, string)
-:throws: an exception if the requested algorithm plugin is not registered in the plugins database.
-
-%End
-
-%MethodCode
-	if (pluginExists<tlp::Algorithm>(*a3)) {
-		sipRes = tlp::applyAlgorithm(a0, *a1, a2, *a3);
-	} else {
-		sipIsErr = 1;
-		std::string msg = "No Tulip algorithm plugin named  ";
-		msg += *a3;
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());
 	}	
