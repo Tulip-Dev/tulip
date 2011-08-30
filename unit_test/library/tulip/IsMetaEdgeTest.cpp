@@ -77,7 +77,7 @@ void IsMetaEdgeTest::setUp() {
   }
 
   // Create our quotient graph, should contain two meta-nodes and one meta-edge
-  quotientGraph = tlp::newSubGraph(graph);
+  quotientGraph = graph->addSubGraph();
   Iterator<Graph *> *itS = graph->getSubGraphs();
   vector<node> mNodes;
   graph->createMetaNodes(itS, quotientGraph, mNodes);
