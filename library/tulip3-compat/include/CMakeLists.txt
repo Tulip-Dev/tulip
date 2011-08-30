@@ -3,6 +3,7 @@ INSTALL(FILES
   tulip3/Controller.h
   tulip3/ControllerViewsManager.h
   tulip3/ControllerViewsTools.h
+  tulip3/Graph.h
   tulip3/PropertyWidget.h
   tulip3/ListPropertyWidget.h
   tulip3/MainController.h

@@ -383,8 +383,7 @@ bool BubbleTree::run() {
     return false;
   }
 
-  node startNode;
-  tlp::getSource(tree, startNode);
+  node startNode = tree->getSource();
   TLP_HASH_MAP<node,Vector<double,5> > relativePosition;
   computeRelativePosition(startNode, &relativePosition);
   calcLayout(startNode, &relativePosition);

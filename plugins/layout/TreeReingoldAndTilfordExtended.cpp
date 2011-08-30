@@ -453,8 +453,7 @@ bool TreeReingoldAndTilfordExtended::run() {
     return false;
   }
 
-  node startNode;
-  tlp::getSource(tree, startNode);
+  node startNode = tree->getSource();
 
   map<int,double> maxSizeLevel;
   map<node, int> levels;

@@ -88,7 +88,7 @@ bool Dendrogram::run() {
     return false;
   }
 
-  tlp::getSource(tree, root);
+  root = tree->getSource();
   computeLevelHeights(tree, root, 0, &oriSize);
 
   // check if the specified layer spacing is greater

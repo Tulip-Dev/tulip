@@ -213,8 +213,7 @@ bool ConeTreeExtended::run() {
     return false;
   }
 
-  node root;
-  tlp::getSource(tree, root);
+  node root = tree->getSource();
   TLP_HASH_MAP<node,double> posX;
   TLP_HASH_MAP<node,double> posY;
   treePlace3D(root,&posX,&posY);

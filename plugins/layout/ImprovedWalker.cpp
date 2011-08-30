@@ -98,8 +98,7 @@ bool ImprovedWalker::run() {
     return false;
   }
 
-  node root;
-  tlp::getSource(tree, root);
+  node root = tree->getSource();
   orientationType mask = getMask(dataSet);
   oriLayout = new OrientableLayout(result, mask);
   SizeProperty* size;

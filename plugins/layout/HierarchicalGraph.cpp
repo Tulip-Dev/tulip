@@ -180,8 +180,7 @@ void HierarchicalGraph::crossReduction(tlp::Graph *sg) {
   //  cerr << __PRETTY_FUNCTION__  << endl;
   MutableContainer<bool> visited;
   visited.setAll(false);
-  node root;
-  tlp::getSource(sg,root);
+  node root = sg->getSource();
   initCross(sg, root, visited, 1);
 
   for (unsigned int a=0; a<grid.size(); ++a) {
