@@ -48,6 +48,8 @@ public:
   virtual bool isDescendantGraph(const Graph* sg) const;
   virtual Graph* getSubGraph(unsigned int id) const;
   virtual Graph* getDescendantGraph(unsigned int id) const;
+  virtual int numberOfSubGraphs() const;
+  virtual int numberOfDescendantGraphs() const;
 
   //============================================================
   virtual node source(const edge e)const;

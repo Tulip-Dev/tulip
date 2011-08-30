@@ -625,3 +625,21 @@ PropertyInterface *Graph::getProperty(const std::string& propertyName, const std
     return NULL;
   }
 }
+
+Graph *Graph::getNthSubGraph(unsigned int n) const {
+  unsigned int i=0;
+  Iterator<Graph *> *it = getSubGraphs();
+
+  while (it->hasNext()) {
+    Graph *result = it->next();
+
+    if (i++ == n) {
+      delete it;
+      return result;
+    }
+  }
+
+  delete it;
+  return NULL;
+}
+

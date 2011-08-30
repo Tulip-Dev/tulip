@@ -38,7 +38,14 @@ void GraphDecorator::delSubGraph(Graph *s) {
   notifyDelSubGraph(s);
   graph_component->delSubGraph(s);
 }
-
+//============================================================
+int GraphDecorator::numberOfSubGraphs() const {
+  return graph_component->numberOfSubGraphs();
+}
+//============================================================
+int GraphDecorator::numberOfDescendantGraphs() const {
+  return graph_component->numberOfDescendantGraphs();
+}
 //============================================================
 void GraphDecorator::restoreSubGraph(Graph *, bool) {
   std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
