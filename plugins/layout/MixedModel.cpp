@@ -194,7 +194,7 @@ bool MixedModel::run() {
       BooleanProperty resultatAlgoSelection(currentGraph);
       Bfs sp(currentGraph, &resultatAlgoSelection);
       currentGraph->delSubGraph(sp.graph);
-      G = tlp::newSubGraph(currentGraph);
+      G = currentGraph->addSubGraph();
       Iterator<edge> * ite = currentGraph->getEdges();
 
       while(ite->hasNext()) {

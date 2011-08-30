@@ -175,7 +175,7 @@ bool QuotientClustering::run() {
   delete itS;
 
   IntegerProperty *opProp = 0, *cardProp = 0;
-  Graph *quotientGraph = tlp::newSubGraph(graph->getRoot());
+  Graph *quotientGraph = graph->getRoot()->addSubGraph();
   stringstream sstr;
   sstr << "quotient of ";
   string graphName = graph->getAttribute<string>("name");
