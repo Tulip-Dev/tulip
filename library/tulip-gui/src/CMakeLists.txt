@@ -67,6 +67,10 @@ SET(SRCS
   TulipProject.cpp
   TulipSettings.cpp
   View.cpp
+  ParameterListModel.cpp
+  TulipItemDelegate.cpp
+  TulipMetaTypes.cpp
+  TulipItemEditorCreators.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS

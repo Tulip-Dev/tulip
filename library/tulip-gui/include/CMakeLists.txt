@@ -63,6 +63,10 @@ INSTALL(FILES
   tulip/TulipProject.h
   tulip/TulipSettings.h
   tulip/View.h
+  tulip/ParameterListModel.h
+  tulip/TulipItemDelegate.h
+  tulip/TulipMetaTypes.h
+  tulip/TulipItemEditorCreators.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

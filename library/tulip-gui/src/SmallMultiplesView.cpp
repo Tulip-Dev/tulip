@@ -18,6 +18,7 @@
  */
 #include "tulip/SmallMultiplesView.h"
 
+#include "tulip/TulipMetaTypes.h"
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlGraphInputData.h"
 #include "tulip/ForEach.h"
