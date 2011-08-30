@@ -22,6 +22,7 @@
 template<typename T> bool tlp::DataSet::get(const std::string& key,T& value) const {
   std::map<std::string, tlp::DataType*>::const_iterator it = data.find(key);
   if(it != data.end()) {
+    assert(typeid(T).name() == it->second->getTypeName());
     value = *((T*)it->second->value);
   }
 
@@ -31,6 +32,7 @@ template<typename T> bool tlp::DataSet::get(const std::string& key,T& value) con
 template<typename T> bool tlp::DataSet::getAndFree(const std::string &key,T& value) {
   std::map<std::string, tlp::DataType*>::iterator it = data.find(key);
   if(it != data.end()) {
+    assert(typeid(T).name() == it->second->getTypeName());
     value = *((T*)it->second->value);
     delete it->second;
     data.erase(it);

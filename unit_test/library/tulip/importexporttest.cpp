@@ -112,8 +112,8 @@ void ImportExportTest::testSubGraphsImportExport() {
 
 Graph* ImportExportTest::createSimpleGraph() const {
   DataSet params;
-  params.set<int>("width", 10);
-  params.set<int>("height", 10);
+  params.set<uint>("width", 10);
+  params.set<uint>("height", 10);
   Graph* original = tlp::importGraph("Grid", params);
 
   DoubleProperty* id = original->getProperty<DoubleProperty>("id");
