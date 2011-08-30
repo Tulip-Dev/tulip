@@ -394,7 +394,7 @@ bool QuotientClustering::run() {
       node mn = *itn;
       Graph* sg = quotientGraph->getNodeMetaInfo(mn);
       string eMsg;
-      tlp::applyAlgorithm(sg, eMsg, &dSet, "Quotient Clustering",
+      sg->applyAlgorithm(eMsg, &dSet, "Quotient Clustering",
                           pluginProgress);
 
       // if a quotient graph has been computed

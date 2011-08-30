@@ -86,7 +86,7 @@ bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const
   bool ok=true;
   string erreurMsg;
 
-  if (!tlp::applyAlgorithm(graph, erreurMsg, dataSet, name, &myProgress  )) {
+  if (!graph->applyAlgorithm(erreurMsg, dataSet, name, &myProgress  )) {
     QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + ":\n" + erreurMsg).c_str()));
     // no possible redo
     graph->pop(false);
