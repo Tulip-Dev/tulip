@@ -3,6 +3,7 @@ SET(SRCS
   Controller.cpp
   ControllerViewsManager.cpp
   ControllerViewsTools.cpp
+  Graph.cpp
   ListPropertyWidget.cpp
   PropertyWidget.cpp
   MainController.cpp

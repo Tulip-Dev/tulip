@@ -72,7 +72,21 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename);
  * @param filename The file to save the graph to.
  * @return bool Whether the export was successfull or not.
  **/
-TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename);
+TLP_SCOPE bool _DEPRECATED saveGraph(Graph* graph, const std::string &filename);
+
+/**
+ * @brief Exports a graph using the specified export plugin with parameters stored in the DataSet.
+ *
+ * You determine the destination, whether by using a fstream, or by saving the contents of the stream to the destination of your choice.
+ *
+ * @param graph The graph to export.
+ * @param outputStream The stream to export to. Can be a standard ostream, an ofstream, or even a gzipped ostream.
+ * @param format The format to use to export the Graph.
+ * @param dataSet The parameters to pass to the export plugin (e.g. additional data, options for the format)
+ * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
+ * @return bool Whether the export was successfull or not.
+ **/
+TLP_SCOPE bool _DEPRECATED exportGraph(Graph *graph, std::ostream &outputStream, const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL);
 
 /**
  * @brief Imports a graph using the specified import plugin with the parameters stored in the DataSet.
@@ -86,21 +100,7 @@ TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename);
  * @param newGraph The graph to import the data into. This can be usefull to import data into a subgraph. Defaults to NULL.
  * @return :Graph* The graph containing the imported data, or NULL in case of failure.
  **/
-TLP_SCOPE Graph * importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL,Graph *newGraph=NULL);
-
-/**
- * @brief Exports a graph using the specified export plugin with parameters stored in the DataSet.
- *
- * You determine the destination, whether by using a fstream, or by saving the contents of the stream to the destination of your choice.
- * 
- * @param graph The graph to export.
- * @param outputStream The stream to export to. Can be a standard ostream, an ofstream, or even a gzipped ostream.
- * @param format The format to use to export the Graph.
- * @param dataSet The parameters to pass to the export plugin (e.g. additional data, options for the format)
- * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
- * @return bool Whether the export was successfull or not.
- **/
-TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream, const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL);
+TLP_SCOPE Graph* importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL,Graph *newGraph=NULL);
 
 /**
  * @brief Applies an algorithm plugin, identified by its name.
@@ -125,7 +125,7 @@ TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream, const std::
  * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
  * @return bool Whether the algorithm was successfully applied.
  **/
-TLP_SCOPE bool applyAlgorithm(Graph *graph, std::string &errorMessage, DataSet *dataSet=NULL,const std::string &algorithm="any", PluginProgress *progress=NULL);
+TLP_SCOPE bool _DEPRECATED applyAlgorithm(Graph *graph, std::string &errorMessage, DataSet *dataSet=NULL,const std::string &algorithm="any", PluginProgress *progress=NULL);
 
 /**
  * @brief Creates a new, empty graph.
@@ -159,17 +159,6 @@ TLP_SCOPE Graph* _DEPRECATED newSubGraph(Graph *graph, std::string name = "unnam
  * @return :Graph* The newly created clone subgraph.
  **/
 TLP_SCOPE Graph* _DEPRECATED newCloneSubGraph(Graph *graph, std::string name = "unnamed");
-
-/**
- * @brief Finds the first node whose input degree equals 0.
- *
- * @deprecated not object-oriented, should be moved into Graph. Also, return an invalid node if no such node is found to simplify function.
- * 
- * @param graph The graph on which to look for such a node.
- * @param n The first node with input degree of 0.
- * @return bool Whether such a node exists.
- **/
-TLP_SCOPE bool _DEPRECATED getSource(const Graph *graph, node &n);
 
 /**
  * Appends the selected part of the graph inG (properties, nodes and edges) into the graph outG.
@@ -425,6 +414,13 @@ public:
   //================================================================================
   //Iterators on the graph structure.
   //================================================================================
+  /**
+   * @brief Finds the first node whose input degree equals 0.
+   *
+   * @return tlp::node The first encountered node with input degree of 0, or an invalid node if none was found.
+   **/
+  virtual tlp::node getSource() const;
+  
   /// Returns an existing node of the graph.
   virtual node getOneNode() const =0;
   /// Returns an iterator on the nodes.

@@ -135,8 +135,7 @@ bool SquarifiedTreeMap::run() {
 
   Rectangle<double> initialSpace(0, 0, DEFAULT_WIDTH * aspectRatio, DEFAULT_HEIGHT);
 
-  node root;
-  tlp::getSource(graph, root);
+  node root = graph->getSource();
   computeNodesSize(root);
 
   Vec2d center = initialSpace.center();

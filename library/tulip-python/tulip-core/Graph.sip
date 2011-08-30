@@ -543,6 +543,18 @@ Thus, by changing the ordering in a graph you change the ordering in the hierarc
 
 //===========================================================================================
 
+tlp::node getSource();
+%Docstring
+tlp.Graph.getSource()
+
+Finds the first node whose input degree equals 0.
+Returns an invalid node if there is no node whose input degree is 0.
+
+:rtype: (boolean, :class:`tlp.node`)
+%End
+
+//===========================================================================================
+
 	tlp::node getOneNode() const ;
 %Docstring
 tlp.Graph.getOneNode()
@@ -2717,21 +2729,6 @@ Creates and returns a subgraph of a graph root that is equal to that graph (a cl
 :param name: the subgraph name
 :type name: string
 :rtype: :class:`tlp.Graph`
-%End
-
-//===========================================================================================
-
-bool getSource(tlp::Graph *, tlp::node &n);
-%Docstring
-tlp.getSource(graph)
-
-Finds the first node whose input degree equals 0.
-Returns a tuple whose first member is a boolean indicating if such node exists and
-second member is the found node (invalid if there is no source);
-
-:param graph: the graph on which to find a source
-:type graph: :class:`tlp.Graph`
-:rtype: (boolean, :class:`tlp.node`)
 %End
 
 //===========================================================================================
