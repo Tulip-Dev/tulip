@@ -23,10 +23,74 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 #include <tulip/Graph.h>
 
 class BasicPluginsTest : public CppUnit::TestFixture {
+  CPPUNIT_TEST_SUITE(BasicPluginsTest);
+  CPPUNIT_TEST(testImportCompleteGraph);
+  CPPUNIT_TEST(testImportCompleteTree);
+  CPPUNIT_TEST(testImportRandomGraph);
+  CPPUNIT_TEST(testImportRandomTree);
+  CPPUNIT_TEST(testImportRandomTreeGeneral);
+  CPPUNIT_TEST(testImportRandomSimpleGraph);
+  CPPUNIT_TEST(testImportPlanarGraph);
+  CPPUNIT_TEST(testImportGrid);
+  CPPUNIT_TEST(testImportGridApproximation);
+  CPPUNIT_TEST(testImportDot);
+  CPPUNIT_TEST(testImportGml);
+  CPPUNIT_TEST(testExportGml);
+  CPPUNIT_TEST(testImportFileSystem);
+  CPPUNIT_TEST(testImportAdjacencyMatrix);
+  CPPUNIT_TEST(testArityMetric);
+  CPPUNIT_TEST(testBetweennessCentrality);
+  CPPUNIT_TEST(testBiconnectedComponent);
+  CPPUNIT_TEST(testClusterMetric);
+  CPPUNIT_TEST(testConnectedComponent);
+  CPPUNIT_TEST(testDagLevelMetric);
+  CPPUNIT_TEST(testDepthMetric);
+  CPPUNIT_TEST(testEccentricity);
+  CPPUNIT_TEST(testIdMetric);
+  CPPUNIT_TEST(testLeafMetric);
+  CPPUNIT_TEST(testNodeMetric);
+  CPPUNIT_TEST(testPathLengthMetric);
+  CPPUNIT_TEST(testRandomMetric);
+  CPPUNIT_TEST(testStrahlerMetric);
+  CPPUNIT_TEST(testStrengthMetric);
+  CPPUNIT_TEST(testStrongComponent);
+  CPPUNIT_TEST(testMetricColorMapping);
+  CPPUNIT_TEST(testBubbleTree);
+  CPPUNIT_TEST(testCircular);
+  CPPUNIT_TEST(testConeTreeExtended);
+  CPPUNIT_TEST(testConnectedComponentPacking);
+  CPPUNIT_TEST(testDendrogram);
+  CPPUNIT_TEST(testGEMLayout);
+  CPPUNIT_TEST(testHierarchicalGraph);
+  CPPUNIT_TEST(testImprovedWalker);
+  CPPUNIT_TEST(testMixedModel);
+  CPPUNIT_TEST(testRandomLayout);
+  CPPUNIT_TEST(testSquarifiedTreeMap);
+  CPPUNIT_TEST(testTreeLeaf);
+  CPPUNIT_TEST(testTreeMap);
+  CPPUNIT_TEST(testTreeRadial);
+  CPPUNIT_TEST(testTreeReingoldAndTilfordExtended);
+  CPPUNIT_TEST(testTutte);
+  CPPUNIT_TEST(testInducedSubGraphSelection);
+  CPPUNIT_TEST(testKruskal);
+  CPPUNIT_TEST(testLoopSelection);
+  CPPUNIT_TEST(testMultipleEdgeSelection);
+  CPPUNIT_TEST(testReachableSubGraphSelection);
+  CPPUNIT_TEST(testSpanningDagSelection);
+  CPPUNIT_TEST(testSpanningTreeSelection);
+  CPPUNIT_TEST(testAutoSize);
+  CPPUNIT_TEST(testFitToLabel);
+  CPPUNIT_TEST(testMetricSizeMapping);
+  CPPUNIT_TEST(testEqualValueClustering);
+  CPPUNIT_TEST(testHierarchicalClustering);
+  CPPUNIT_TEST(testQuotientClustering);
+  CPPUNIT_TEST(testStrengthClustering);
+  CPPUNIT_TEST_SUITE_END();
 private:
   tlp::Graph *graph;
 
@@ -69,13 +133,11 @@ public:
   void testStrengthMetric();
   void testStrongComponent();
   void testMetricColorMapping();
-  void testEnumeratedColorValuesMapping();
   void testBubbleTree();
   void testCircular();
   void testConeTreeExtended();
   void testConnectedComponentPacking();
   void testDendrogram();
-  void testEmbedder();
   void testGEMLayout();
   void testHierarchicalGraph();
   void testImprovedWalker();
@@ -101,7 +163,6 @@ public:
   void testHierarchicalClustering();
   void testQuotientClustering();
   void testStrengthClustering();
-  static CppUnit::Test *suite();
 };
 
 #endif

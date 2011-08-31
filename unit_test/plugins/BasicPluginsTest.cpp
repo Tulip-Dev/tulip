@@ -32,7 +32,6 @@
 using namespace std;
 using namespace tlp;
 
-#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( BasicPluginsTest );
 
 //==========================================================
@@ -577,70 +576,4 @@ void BasicPluginsTest::testStrengthClustering() {
   result = graph->computeProperty("Strength Clustering", &resultMetric,
                                   errorMsg);
   CPPUNIT_ASSERT(result);
-}
-
-CppUnit::Test * BasicPluginsTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite("Tulip lib : Plugins mechanism" );
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import CompleteGraph", &BasicPluginsTest::testImportCompleteGraph));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import CompleteTree", &BasicPluginsTest::testImportCompleteTree));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import RandomGraph", &BasicPluginsTest::testImportRandomGraph));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import RandomTree", &BasicPluginsTest::testImportRandomTree));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import RandomTreeGeneral", &BasicPluginsTest::testImportRandomTreeGeneral));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import RandomSimpleGraph", &BasicPluginsTest::testImportRandomSimpleGraph));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import PlanarGraph", &BasicPluginsTest::testImportPlanarGraph));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import Grid", &BasicPluginsTest::testImportGrid));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import GridApproximation", &BasicPluginsTest::testImportGridApproximation));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import Dot", &BasicPluginsTest::testImportDot));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import Gml", &BasicPluginsTest::testImportGml));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import FileSystem", &BasicPluginsTest::testImportFileSystem));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import AdjacencyMatrix", &BasicPluginsTest::testImportAdjacencyMatrix));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ArityMetric", &BasicPluginsTest::testArityMetric));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("BetweennessCentrality", &BasicPluginsTest::testBetweennessCentrality));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("BiconnectedComponent", &BasicPluginsTest::testBiconnectedComponent));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ClusterMetric", &BasicPluginsTest::testClusterMetric));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ConnectedComponent", &BasicPluginsTest::testConnectedComponent));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("DagLevelMetric", &BasicPluginsTest::testDagLevelMetric));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("DepthMetric", &BasicPluginsTest::testDepthMetric));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Eccentricity", &BasicPluginsTest::testEccentricity));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("IdMetric", &BasicPluginsTest::testIdMetric));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("LeafMetric", &BasicPluginsTest::testLeafMetric));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("NodeMetric", &BasicPluginsTest::testNodeMetric));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("PathLengthMetric", &BasicPluginsTest::testPathLengthMetric));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Random Metric", &BasicPluginsTest::testRandomMetric));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("StrahlerMetric", &BasicPluginsTest::testStrahlerMetric));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("StrengthMetric", &BasicPluginsTest::testStrengthMetric));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("StrongComponent", &BasicPluginsTest::testStrongComponent));;
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("MetricColorMapping", &BasicPluginsTest::testMetricColorMapping));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("BubbleTree", &BasicPluginsTest::testBubbleTree));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Circular", &BasicPluginsTest::testCircular));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ConeTreeExtended", &BasicPluginsTest::testConeTreeExtended));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ConnectedComponentPacking", &BasicPluginsTest::testConnectedComponentPacking));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Dendrogram", &BasicPluginsTest::testDendrogram));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("GEMLayout", &BasicPluginsTest::testGEMLayout));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("HierarchicalGraph", &BasicPluginsTest::testHierarchicalGraph));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ImprovedWalker", &BasicPluginsTest::testImprovedWalker));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("MixedModel", &BasicPluginsTest::testMixedModel));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Random Layout", &BasicPluginsTest::testRandomLayout));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("SquarifiedTreeMap", &BasicPluginsTest::testSquarifiedTreeMap));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("TreeLeaf", &BasicPluginsTest::testTreeLeaf));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("TreeMap", &BasicPluginsTest::testTreeMap));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("TreeRadial", &BasicPluginsTest::testTreeRadial));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("TreeReingoldAndTilfordExtended", &BasicPluginsTest::testTreeReingoldAndTilfordExtended));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Tutte", &BasicPluginsTest::testTutte));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("InducedSubGraphSelection", &BasicPluginsTest::testInducedSubGraphSelection));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Kruskal", &BasicPluginsTest::testKruskal));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("LoopSelection", &BasicPluginsTest::testLoopSelection));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("MultipleEdgeSelection", &BasicPluginsTest::testMultipleEdgeSelection));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ReachableSubGraphSelection", &BasicPluginsTest::testReachableSubGraphSelection));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("SpanningDagSelection", &BasicPluginsTest::testSpanningDagSelection));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("SpanningTreeSelection", &BasicPluginsTest::testSpanningTreeSelection));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("AutoSize", &BasicPluginsTest::testAutoSize));
-  //suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("FitToLabel", &BasicPluginsTest::testFitToLabel));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("MetricSizeMapping", &BasicPluginsTest::testMetricSizeMapping));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("EqualValueClustering", &BasicPluginsTest::testEqualValueClustering));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("HierarchicalClustering", &BasicPluginsTest::testHierarchicalClustering));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("QuotientClustering", &BasicPluginsTest::testQuotientClustering));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("StrengthClustering", &BasicPluginsTest::testStrengthClustering));
-
-  return suiteOfTests;
 }
