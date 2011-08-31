@@ -16,17 +16,17 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifndef _TEMPLATEFACTORY_H
-#define _TEMPLATEFACTORY_H
+#ifndef TULIP_PLUGINLISTER_H
+#define TULIP_PLUGINLISTER_H
 
 #include <list>
 #include <string>
 #include <set>
 
+#include <tulip/AbstractPluginInfo.h>
 #include <tulip/PluginLoader.h>
 #include <tulip/Iterator.h>
 #include <tulip/StlIterator.h>
-#include <tulip/AbstractPluginInfo.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PluginContext.h>
 #include <tulip/PluginLibraryLoader.h>
@@ -134,13 +134,7 @@ public:
    * @param name The name of the factory to add, used as key.
    * @return void
    **/
-  static void addFactory(PluginListerInterface *factory, const std::string &name)  {
-    if (!allFactories)
-      allFactories = new std::map<std::string, PluginListerInterface*>();
-
-    //std::cerr << name.c_str() << " factory added" << std::endl;
-    (*allFactories)[name] = factory;
-  }
+  static void addFactory(PluginListerInterface *factory, const std::string &name);
 
   /**
    * @brief Checks if a plug-in exists in a specific factory.
@@ -150,10 +144,7 @@ public:
    * @param pluginName The name of the plugin to look for.
    * @return bool Whether the plug-in exists in the specified factory.
    **/
-  static bool pluginExists(const std::string& factoryName, const std::string& pluginName) {
-    assert(allFactories->find(factoryName) != allFactories->end());
-    return (*allFactories)[factoryName]->pluginExists(pluginName);
-  }
+  static bool pluginExists(const std::string& factoryName, const std::string& pluginName);
 
   /**
    * @brief Checks if all registered plug-ins have their dependencies met.
@@ -161,65 +152,7 @@ public:
    * @param loader If there are errors, the loader is informed about them so they can be displayed.
    * @return void
    **/
-  static void checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
-    // plugins dependencies loop
-    bool depsNeedCheck;
-
-    do {
-      std::map<std::string, PluginListerInterface *>::const_iterator it = PluginListerInterface::allFactories->begin();
-      depsNeedCheck = false;
-
-      // loop over factories
-      for (; it != PluginListerInterface::allFactories->end(); ++  it) {
-        PluginListerInterface *tfi = (*it).second;
-        // loop over plugins
-        Iterator<std::string> *itP = tfi->availablePlugins();
-
-        while(itP->hasNext()) {
-          std::string pluginName = itP->next();
-          std::list<Dependency> dependencies = tfi->getPluginDependencies(pluginName);
-          std::list<Dependency>::const_iterator itD = dependencies.begin();
-
-          // loop over dependencies
-          for (; itD != dependencies.end(); ++itD) {
-            std::string factoryDepName = (*itD).factoryName;
-            std::string pluginDepName = (*itD).pluginName;
-
-            if (!PluginListerInterface::pluginExists(factoryDepName, pluginDepName)) {
-              if (loader)
-                loader->aborted(pluginName, tfi->getPluginsClassName() +
-                                " '" + pluginName + "' will be removed, it depends on missing " +
-                                factoryDepName + " '" + pluginDepName + "'.");
-
-              tfi->removePlugin(pluginName);
-              depsNeedCheck = true;
-              break;
-            }
-
-            std::string release = (*PluginListerInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
-            std::string releaseDep = (*itD).pluginRelease;
-
-            if (getMajor(release) != getMajor(releaseDep) ||
-                getMinor(release) != getMinor(releaseDep)) {
-              if (loader) {
-                loader->aborted(pluginName, tfi->getPluginsClassName() +
-                                " '" + pluginName + "' will be removed, it depends on release " +
-                                releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
-                                release + " is loaded.");
-              }
-
-              tfi->removePlugin(pluginName);
-              depsNeedCheck = true;
-              break;
-            }
-          }
-        }
-
-        delete itP;
-      }
-    }
-    while (depsNeedCheck);
-  }
+  static void checkLoadedPluginsDependencies(tlp::PluginLoader* loader);
 
   /**
    * @brief Removes a plug-in from this factory.
@@ -228,7 +161,7 @@ public:
    * @param name The name of the plug-in to remove.
    * @return void
    **/
-  virtual void removePlugin(const std::string& name)=0;
+  virtual void removePlugin(const std::string& name) = 0;
 
 protected:
   /**
@@ -364,4 +297,5 @@ public:
 
 }
 #include "cxx/PluginLister.cxx"
-#endif
+
+#endif //TULIP_PLUGINLISTER_H

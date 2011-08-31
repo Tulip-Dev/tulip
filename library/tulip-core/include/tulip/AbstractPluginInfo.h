@@ -17,18 +17,37 @@
  *
  */
 
-#ifndef TULIPPLUGIN_H
-#define TULIPPLUGIN_H
+#ifndef TULIP_ABSTRACTPLUGININFO_H
+#define TULIP_ABSTRACTPLUGININFO_H
 #include <assert.h>
 #include <string>
 #include <tulip/tulipconf.h>
 #include <tulip/TlpTools.h>
-#include <tulip/PluginLister.h>
+// #include <tulip/PluginLister.h>
 /**
  * \addtogroup plugins
  */
 namespace tlp {
 /*@{*/
+
+/**
+ * @brief Splits the string and returns everything befor the first dot ('.').
+ * This is used to return major version number, as version numbers are formatted as X.Y.Z,
+ * X being the major, Y the minor, and Z the patch version.
+ *
+ * @return string The part of the string befor the first dot.
+ */
+TLP_SCOPE std::string getMajor(const std::string &release);
+
+/**
+ * @brief Splits the string and return the minor version.
+ * If the string does not contain any dot, then 0 is returned.
+ * If the string contains only one dot (X.Y), then everything after the first dot is returned (Y).
+ * If the string is a full version with two dots (X.Y.Z), everything between the first and last dots is returned (Y).
+ * If there are more than two dots, everything between the first and last dots is returned.
+ */
+TLP_SCOPE std::string getMinor(const std::string &release);
+
 /**
  * @brief Base interface for plug-in description.
  *
@@ -45,7 +64,6 @@ namespace tlp {
  *
  * @see FactoryInterface for more advanced operation such as plugin creation and retrieving dependencies.
  */
-
 class AbstractPluginInfo {
 public:
   virtual ~AbstractPluginInfo() {}
@@ -56,7 +74,7 @@ public:
    * only the latest encountered will be considered.
    * @return string the name of the plug-in.
    */
-  virtual  std::string getName() const=0;
+  virtual std::string getName() const=0;
 
   /**
    * @brief Returns the name of the group this plug-in belongs to.
@@ -71,7 +89,7 @@ public:
    *
    * @return the name of the author.
    */
-  virtual  std::string getAuthor() const=0;
+  virtual std::string getAuthor() const=0;
 
   /**
    * @brief The creation date of the plug-in.
@@ -79,7 +97,7 @@ public:
    *
    * @return the creation date.
    */
-  virtual  std::string getDate() const=0;
+  virtual std::string getDate() const=0;
 
   /**
    * @brief Informations about the plug-in, from the plug-in author.
@@ -87,14 +105,14 @@ public:
    * Most plug-ins by the Tulip team use an html format to generate help from these informations.
    * @return string The informations associated with this plug-in.
    */
-  virtual  std::string getInfo() const=0;
+  virtual std::string getInfo() const=0;
 
   /**
    * @brief The release version of the plug-in, including major and minor.
    * The version should be X.Y, X being the major, and Y the minor.
    * @return string The release version.
    */
-  virtual  std::string getRelease() const=0;
+  virtual std::string getRelease() const=0;
 
   /**
    * @brief The version of Tulip this plug-in was built with.
@@ -102,7 +120,7 @@ public:
    *
    * @return The Tulip version the plug-in was built with.
    */
-  virtual  std::string getTulipRelease() const=0;
+  virtual std::string getTulipRelease() const=0;
 
   /**
    * @brief Only the major of the plug-in version.
@@ -110,9 +128,7 @@ public:
    *
    * @return The major part of the plug-in version.
    */
-  virtual  std::string getMajor() const {
-    return tlp::getMajor(getRelease());
-  }
+  virtual std::string getMajor() const;
 
   /**
    * @brief Only the minor of the plug-in version.
@@ -120,23 +136,17 @@ public:
    *
    * @return The minor part of the plug-in version.
    */
-  virtual  std::string getMinor() const {
-    return tlp::getMinor(getRelease());
-  }
+  virtual std::string getMinor() const;
 
   /**
    * @return The major Tulip version the plug-in was built with.
    */
-  virtual  std::string getTulipMajor() const {
-    return tlp::getMajor(getTulipRelease());
-  }
+  virtual std::string getTulipMajor() const;
 
   /**
    * @return Return the minor Tulip version this plug-in was built with.
    */
-  virtual  std::string getTulipMinor() const  {
-    return tlp::getMinor(getTulipRelease());
-  }
+  virtual std::string getTulipMinor() const;
 
   /**
   * @brief Returns the ID of the glyph this factory builds.
@@ -144,9 +154,7 @@ public:
   *
   * @return int the id of the glyph.
   **/
-  virtual int getId() const {
-    return 0;
-  }
+  virtual int getId() const;
 
   /**
   * @brief Returns the dependencies of this factory.
@@ -191,4 +199,5 @@ public:
 
 /*@}*/
 }
-#endif
+
+#endif //TULIP_ABSTRACTPLUGININFO_H

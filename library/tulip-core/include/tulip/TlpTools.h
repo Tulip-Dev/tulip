@@ -47,39 +47,7 @@ extern TLP_SCOPE void initTulipLib(const char* appDirPath = 0);
  * @return string The demangled name of a Tulip C++ class.
  */
 TLP_SCOPE std::string demangleTlpClassName(const char *className);
-/**
- * @brief Returns an istream to read from a gzipped file (uses gzstream lib).
- * The stream has to be deleted after use.
- * @param name The name of the file to read from.
- * @param open_mode The mode to open the file with. Defaults to std::ios::in.
- * @return istream gzipped input stream from a file.
- */
-TLP_SCOPE std::istream *getIgzstream(const char *name, int open_mode = std::ios::in);
-/**
- * @brief Returns an ostream to write to a gzipped file (uses gzstream lib).
- * The stream has to be deleted after use.
- * @warning Don't forget to check the stream with ios::bad()!
- * @param name The name of the file to write to.
- * @param open_mode The mode to open the file with. Defaults to std::ios::out.
- * @return ostream gzipped output stream to a file.
- */
-TLP_SCOPE std::ostream *getOgzstream(const char *name, int open_mode = std::ios::out);
-/**
- * @brief Splits the string and returns everything befor the first dot ('.').
- * This is used to return major version number, as version numbers are formatted as X.Y.Z,
- * X being the major, Y the minor, and Z the patch version.
- *
- * @return string The part of the string befor the first dot.
- */
-TLP_SCOPE std::string getMajor(const std::string &release);
-/**
- * @brief Splits the string and return the minor version.
- * If the string does not contain any dot, then 0 is returned.
- * If the string contains only one dot (X.Y), then everything after the first dot is returned (Y).
- * If the string is a full version with two dots (X.Y.Z), everything between the first and last dots is returned (Y).
- * If there are more than two dots, everything between the first and last dots is returned.
- */
-TLP_SCOPE std::string getMinor(const std::string &release);
+
 }
 
 #endif
