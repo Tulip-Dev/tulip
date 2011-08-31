@@ -277,11 +277,11 @@ public:
   /**
     Return the number of direct sub-graphs
     */
-  virtual int numberOfSubGraphs() const=0;
+  virtual unsigned int numberOfSubGraphs() const=0;
   /**
     Return the number of descendant graphs
     */
-  virtual int numberOfDescendantGraphs() const=0;
+  virtual unsigned int numberOfDescendantGraphs() const=0;
   /**
    * Indicates if the graph argument is a direct sub-graph.
    */

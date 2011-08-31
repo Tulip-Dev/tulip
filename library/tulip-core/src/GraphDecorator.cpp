@@ -39,11 +39,11 @@ void GraphDecorator::delSubGraph(Graph *s) {
   graph_component->delSubGraph(s);
 }
 //============================================================
-int GraphDecorator::numberOfSubGraphs() const {
+unsigned int GraphDecorator::numberOfSubGraphs() const {
   return graph_component->numberOfSubGraphs();
 }
 //============================================================
-int GraphDecorator::numberOfDescendantGraphs() const {
+unsigned int GraphDecorator::numberOfDescendantGraphs() const {
   return graph_component->numberOfDescendantGraphs();
 }
 //============================================================
