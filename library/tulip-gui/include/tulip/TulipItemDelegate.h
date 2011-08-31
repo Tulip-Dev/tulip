@@ -12,6 +12,19 @@ class TLP_QT_SCOPE TulipItemDelegate : public QStyledItemDelegate {
 public:
   explicit TulipItemDelegate(QObject* parent=0);
 
+  virtual ~TulipItemDelegate();
+
+  template<typename T>
+  void registerCreator(tlp::TulipItemEditorCreator*);
+
+  void unregisterCreator(tlp::TulipItemEditorCreator*);
+  template<typename T>
+  void unregisterCreator();
+
+  template<typename T>
+  tlp::TulipItemEditorCreator* creator() const;
+
+  tlp::TulipItemEditorCreator* creator(int) const;
 };
 
 }
