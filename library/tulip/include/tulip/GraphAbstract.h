@@ -53,8 +53,8 @@ public:
   virtual Graph* getSubGraph(unsigned int id) const;
   virtual Graph* getDescendantGraph(unsigned int id) const;
   virtual Graph *getNthSubGraph(int n) const;
-  virtual int numberOfSubGraphs() const;
-  virtual int numberOfDescendantGraphs() const;
+  virtual unsigned int numberOfSubGraphs() const;
+  virtual unsigned int numberOfDescendantGraphs() const;
   //=======================================
   virtual unsigned int deg(const node) const;
   virtual unsigned int indeg(const node) const;

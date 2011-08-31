@@ -111,11 +111,11 @@ Graph *GraphAbstract::getNthSubGraph(int n) const {
   return subgraphs[n];
 }
 //=========================================================================
-int GraphAbstract::numberOfSubGraphs() const {
+unsigned int GraphAbstract::numberOfSubGraphs() const {
   return subgraphs.size();
 }
 //=========================================================================
-int GraphAbstract::numberOfDescendantGraphs() const {
+unsigned int GraphAbstract::numberOfDescendantGraphs() const {
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
   int result = 0;
 
