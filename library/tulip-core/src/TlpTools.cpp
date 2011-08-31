@@ -140,19 +140,7 @@ void tlp::initTulipLib(const char* appDirPath) {
   initTypeSerializers();
 }
 //=========================================================
-istream *tlp::getIgzstream(const char *name, int open_mode) {
-  return new igzstream(name, open_mode);
-}
 
-ostream *tlp::getOgzstream(const char *name, int open_mode) {
-  return new ogzstream(name, open_mode);
-}
-//=========================================================
-map<string, PluginListerInterface* > *PluginListerInterface::allFactories = 0;
-//==========================================================
-PluginLoader *PluginListerInterface::currentLoader = NULL;
-
-//=========================================================
 // tlp class names demangler
 #if defined(__GNUC__)
 #include <cxxabi.h>
@@ -175,25 +163,3 @@ std::string tlp::demangleTlpClassName(const char* className) {
 #else
 #error define symbols demangling function
 #endif
-
-//=========================================================
-std::string tlp::getMajor(const std::string& v) {
-  unsigned int pos = v.find('.');
-  return v.substr(0, pos);
-}
-
-//=========================================================
-std::string tlp::getMinor(const std::string& v) {
-  size_t pos = v.find('.');
-
-  if (pos == string::npos)
-    return string("0");
-
-  unsigned int rpos = v.rfind('.');
-
-  if (pos == rpos)
-    return v.substr(pos+1);
-
-  return v.substr(pos + 1, rpos - pos - 1);
-}
-

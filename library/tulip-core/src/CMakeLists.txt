@@ -1,4 +1,5 @@
 SET(tulip_LIB_SRCS ${tulip_LIB_SRCS}
+AbstractPluginInfo.cpp
 AcyclicTest.cpp
 Bfs.cpp
 BiconnectedTest.cpp
@@ -41,6 +42,7 @@ PlanarityTestObstr.cpp
 PlanarityTestTools.cpp
 Plane.cpp
 PluginLibraryLoader.cpp
+PluginLister.cpp
 PluginLoaderTxt.cpp
 Polynome.cpp
 PreferenceManager.cpp
