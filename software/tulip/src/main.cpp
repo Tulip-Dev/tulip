@@ -31,23 +31,6 @@
 #undef interface
 #endif
 
-#include <QtGui/QTableView>
-#include <tulip/PluginLister.h>
-#include <QtGui/QStyledItemDelegate>
-#include <QtGui/QItemEditorFactory>
-#include <QtGui/QSpinBox>
-#include <QtGui/QItemEditorCreatorBase>
-
-class ColorEditor: public QItemEditorCreatorBase {
-public:
-  virtual QWidget *	createWidget ( QWidget * parent ) const {
-    return new QSpinBox();
-  }
-  virtual QByteArray	valuePropertyName () const {
-    return "value";
-  }
-};
-
 int main(int argc, char **argv) {
   QApplication tulip_agent(argc, argv);
   tulip_agent.setApplicationName(QObject::trUtf8("Tulip"));
