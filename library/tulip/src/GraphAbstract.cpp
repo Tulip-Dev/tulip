@@ -105,9 +105,10 @@ Graph *GraphAbstract::addSubGraph(BooleanProperty *selection, unsigned int id) {
 }
 //=========================================================================
 Graph *GraphAbstract::getNthSubGraph(int n) const {
-if (n >= subgraphs.size() || n < 0)
+  if (n >= subgraphs.size() || n < 0)
     return NULL;
-return subgraphs[n];
+
+  return subgraphs[n];
 }
 //=========================================================================
 int GraphAbstract::numberOfSubGraphs() const {
@@ -117,10 +118,12 @@ int GraphAbstract::numberOfSubGraphs() const {
 int GraphAbstract::numberOfDescendantGraphs() const {
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
   int result = 0;
+
   while(it != subgraphs.end()) {
     result += (*it)->numberOfDescendantGraphs();
     it++;
   }
+
   return result;
 }
 //=========================================================================
