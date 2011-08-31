@@ -23,7 +23,6 @@ SET(TULIP_LIBRARY_TESTS_SRCS
   TestPropertiesMinMaxAfterAddNode.cpp
   IsMetaEdgeTest.cpp
   StringVectorPropertyTest.cpp
-  GraphToolsTest.cpp
   DoublePropertyTest.cpp
   PlanarityTestTest.cpp
 #   FaceIteratorTest.cpp

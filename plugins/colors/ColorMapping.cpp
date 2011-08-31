@@ -276,7 +276,7 @@ public:
   //=========================================================
   bool check(string &errorMsg) {
     //    cerr << __PRETTY_FUNCTION__ << endl;
-    PropertyInterface *metric = graph->getProperty("viewMetric");
+    PropertyInterface *metric = graph->getProperty<DoubleProperty>("viewMetric");
 
     if (dataSet!=0) {
       dataSet->get("enumerated\nproperty", metric);
