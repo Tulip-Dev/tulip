@@ -245,7 +245,9 @@ FOREACH(RELEASE ${CPACK_UBUNTU_DISTRIBUTION_RELEASES})
   ##############################################################################
   # debian/source/format
   FILE(WRITE ${DEBIAN_SOURCE_DIR}/debian/source/format "3.0 (quilt)")
-
+  
+  # calling accidentally cmake in the source directory can generate the sip binary in the source tree
+  # add it to debian/source/include-binaries to prevent package upload rejection
   FILE(WRITE ${DEBIAN_SOURCE_DIR}/debian/source/include-binaries "thirdparty/sip-4.12.1/sipgen/sip")
 
   ##############################################################################
@@ -254,7 +256,6 @@ FOREACH(RELEASE ${CPACK_UBUNTU_DISTRIBUTION_RELEASES})
   
   FILE(WRITE ${DEBIAN_CHANGELOG}
     "${CPACK_DEBIAN_PACKAGE_NAME} (${CPACK_PACKAGE_VERSION}${CPACK_DEBIAN_PACKAGE_REVISION}~${RELEASE}1) ${RELEASE}; urgency=medium\n\n"
-    "  * Package built with CMake\n\n"
     "  ${CPACK_DEBIAN_CHANGELOG}\n\n"
     " -- ${CPACK_DEBIAN_PACKAGE_MAINTAINER}  ${DATE_TIME}\n")
 

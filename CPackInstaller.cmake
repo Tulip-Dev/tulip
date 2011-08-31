@@ -28,7 +28,8 @@ SET(CPACK_PROJECT_CONFIG_FILE ${PROJECT_SOURCE_DIR}/CPackOptions.cmake)
 IF(LINUX)
 SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Tulip Dev Team <tulipdev@labri.fr>")
 SET(CPACK_DEBIAN_PACKAGE_SECTION "science")
-SET(CPACK_DEBIAN_CHANGELOG "* initial tulip 3.6.1 ubuntu packaging (snapshot of tulip_3_6_maint branch)")
+SET(CPACK_DEBIAN_CHANGELOG 
+"* upgrade to revision 5660 and change package uploader name")
 ENDIF()
 
 # Defines plateform-specific generators to be used
