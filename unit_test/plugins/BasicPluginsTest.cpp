@@ -278,10 +278,10 @@ void BasicPluginsTest::testMetricColorMapping() {
 
   ColorProperty color(graph);
   ds.set("property", &metric);
-  result = graph->computeProperty("Color Mapping", &color,
-                                  errorMsg, NULL, &ds);
+  result = graph->computeProperty("Color Mapping", &color, errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
+//==========================================================
 void BasicPluginsTest::testBubbleTree() {
   bool result = computeProperty<LayoutProperty>("Bubble Tree");
   CPPUNIT_ASSERT(result);
@@ -495,15 +495,49 @@ void BasicPluginsTest::testMetricSizeMapping() {
 }
 //==========================================================
 void BasicPluginsTest::testEqualValueClustering() {
-  initializeGraph("Planar Graph");
-  DoubleProperty metric(graph);
   string errorMsg;
   DataSet ds;
-  bool result = graph->computeProperty("Degree", &metric, errorMsg);
-  CPPUNIT_ASSERT(result);
-  ds.set("Property", &metric);
-  result = graph->applyAlgorithm(errorMsg, &ds, "Equal Value", NULL);
-  CPPUNIT_ASSERT(result);
+  bool result;
+  const std::string algorithmName = "Equal Value";
+  
+  // check minimum call to computeEqualValueClustering
+  // with an empty graph
+  graph = tlp::newGraph();
+
+  DoubleProperty* metric = graph->getProperty<DoubleProperty>("metric");
+  ds.set("Property", metric);
+  
+  result = graph->applyAlgorithm(errorMsg, &ds, algorithmName, NULL);
+  CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
+  
+  // fill graph & metric
+  vector<node> nodes;
+  vector<edge> edges;
+  unsigned int NB_ADD  = 100;
+  unsigned int EDGE_RATIO = 100;
+
+  for (unsigned int i=0; i<NB_ADD; ++i) {
+      nodes.push_back(graph->addNode());
+      metric->setNodeValue(nodes[i], (double) (rand()%NB_ADD));
+  }
+
+  unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
+
+  for (unsigned int i=0; i< NB_EDGES; ++i)
+    graph->addEdge(nodes[rand()%NB_ADD], nodes[rand()%NB_ADD]);
+
+  // check dcall to computeEqualValueClustering
+  result = graph->applyAlgorithm(errorMsg, &ds, algorithmName, NULL);
+  CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
+
+  graph->clear();
+
+  PluginProgress* progress = new SimplePluginProgress();
+  initializeGraph("Planar Graph");
+  result = graph->computeProperty("Degree", metric, errorMsg, progress);
+  CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
+  result = graph->applyAlgorithm(errorMsg, &ds, algorithmName, NULL);
+  CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
 }
 //==========================================================
 void BasicPluginsTest::testHierarchicalClustering() {
