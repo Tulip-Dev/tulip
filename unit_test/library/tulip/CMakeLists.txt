@@ -25,6 +25,7 @@ SET(TULIP_LIBRARY_TESTS_SRCS
   StringVectorPropertyTest.cpp
   DoublePropertyTest.cpp
   PlanarityTestTest.cpp
+  withparametertest.cpp
 #   FaceIteratorTest.cpp
   )
 

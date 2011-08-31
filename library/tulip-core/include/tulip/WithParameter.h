@@ -41,17 +41,17 @@ struct TLP_SCOPE ParameterList {
     * @brief Adds a new parameter of type T to the list.
     *
     * @param parameterName The name of the parameter.
-    * @param inHelp The help string of this parameter. Defaults to std::string().
-    * @param inDefValue The default value of this parameter. Defaults to std::string().
+    * @param help The help string of this parameter. Defaults to std::string().
+    * @param defaultValue The default value of this parameter. Defaults to std::string().
     * @param isMandatory Whether this parameter is mandatory or optional. Defaults to true.
     * @return void
     **/
   template<typename T> void add(const std::string parameterName,
-                                const std::string inHelp = std::string(),
-                                const std::string inDefValue = std::string(),
+                                const std::string help = std::string(),
+                                const std::string defaultValue = std::string(),
                                 bool isMandatory = true) {
     if (parameters.find(parameterName) == parameters.end()) {
-      Parameter newParameter(std::string(typeid(T).name()), inHelp, inDefValue, isMandatory);
+      Parameter newParameter(std::string(typeid(T).name()), help, defaultValue, isMandatory);
       parameters[parameterName] = newParameter;
     }
 
@@ -211,17 +211,17 @@ struct TLP_SCOPE WithParameter {
   /**
    * @brief Adds a parameter to the plug-in.
    *
-   * @param str The name of the parameter to add.
-   * @param inHelp A description of the parameter, that will de displayed to the user. Defaults to 0.
-   * @param inDefValue The default value the parameter should take, to be the initial value in the GUI. Defaults to 0.
+   * @param parameterName The name of the parameter to add.
+   * @param help A description of the parameter, that will de displayed to the user. Defaults to 0.
+   * @param defaultValue The default value the parameter should take, to be the initial value in the GUI. Defaults to 0.
    * @param isMandatory Whether this parameter requires a value or not. Defaults to true.
    * @return void
    **/
-  template<typename T> void addParameter(const std::string &str,
-                                         const std::string &inHelp=std::string(),
-                                         const std::string &inDefValue = std::string(),
+  template<typename T> void addParameter(const std::string &parameterName,
+                                         const std::string &help=std::string(),
+                                         const std::string &defaultValue = std::string(),
                                          bool isMandatory = true) {
-    parameters.template add<T>(str,inHelp,inDefValue,isMandatory);
+    parameters.template add<T>(parameterName, help, defaultValue, isMandatory);
   }
 protected:
 
