@@ -5,6 +5,8 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/pluginstest.cpp.in" "${CMAKE_CURRENT
 
 SET(TULIP_PLUGINS_TESTS_SRCS
   BasicPluginsTest.cpp
+  basicmetrictest.cpp
+  basiclayouttest.cpp
   pluginstest.cpp)
 
 ADD_EXECUTABLE(tulip_plugins_tests  ${TULIP_PLUGINS_TESTS_SRCS})
