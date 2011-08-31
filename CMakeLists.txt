@@ -14,7 +14,9 @@ PROJECT(tulip)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-IF(NOT MSVC) #visual studio does not recognize these options
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR})
+
+IF(CMAKE_COMPILER_IS_GNUCXX) #visual studio does not recognize these options
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused")
 ENDIF()
 
@@ -91,10 +93,17 @@ SET(LibStlPythonName "stlpython")
 SET(LibTulipPythonName "tulippython")
 
 ## -----------------------------------------------------------------------------------------------
+## Special compilation mode when building Ubuntu packages through a PPA
+## -----------------------------------------------------------------------------------------------
+
+SET(UBUNTU_PPA_BUILD OFF CACHE INTERNAL "")
+
+
+## -----------------------------------------------------------------------------------------------
 ## Find need packages
 ## -----------------------------------------------------------------------------------------------
 FIND_PACKAGE(Freetype REQUIRED)
-FIND_PACKAGE(Qt4 4.7.0 REQUIRED)
+FIND_PACKAGE(Qt4 4.5.0 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 IF(DEFINED CMAKE_VERSION)
   SET(HAVE_QT4_GET_MOC_FLAGS TRUE)
@@ -189,26 +198,53 @@ FIND_PACKAGE(PythonLibs)
 FIND_PACKAGE(PythonInterp)
 
 IF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
-  SET(SIP_LIB sip)
-  TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.12.1/sipgen sip CMAKE_FLAGS -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})
-  IF(SIP_OK)
-    IF(WIN32 AND EXISTS "${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen/Debug/sip.exe")
-      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen/Debug/sip.exe)
-    ELSE()
-      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen/sip)
+  IF(NOT UBUNTU_PPA_BUILD)
+    SET(SIP_LIB sip)
+    TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.12.1/sipgen sip CMAKE_FLAGS -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})
+    IF(SIP_OK)
+      IF(WIN32 AND EXISTS "${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen/Debug/sip.exe")
+	SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen/Debug/sip.exe)
+      ELSE()
+	SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen/sip)
+      ENDIF()
+      SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.12.1/siplib/)
+    ENDIF(SIP_OK)
+  ELSE()
+    FIND_PACKAGE(SIP)
+    SET(SIP_OK ${SIP_FOUND})
+    IF (SIP_OK)
+      SET(SIP_EXE "${SIP_EXECUTABLE}")
     ENDIF()
-    SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.12.1/siplib/)
-  ENDIF(SIP_OK)
+  ENDIF()
+
+  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import sys;print str(sys.version_info[0])+\".\"+str(sys.version_info[1])"
+		  OUTPUT_VARIABLE PYTHON_VERSION)
+  STRING(REPLACE "\n" "" PYTHON_VERSION "${PYTHON_VERSION}")
 ENDIF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+
+IF(UBUNTU_PPA_BUILD)
+  FIND_PACKAGE(QScintilla)
+  SET(QSCINTILLA_OK ${QSCINTILLA_FOUND})
+  SET(qscintilla2Include ${QSCINTILLA_INCLUDE_DIR})
+ELSE()
+  SET(QSCINTILLA_OK TRUE)
+  SET(qscintilla2Include ${PROJECT_SOURCE_DIR}/thirdparty/QScintilla-gpl-2.4.6/Qt4/)
+ENDIF()
 
 ## -----------------------------------------------------------------------------------------------
 ## Include file paths
 ## -----------------------------------------------------------------------------------------------
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
-SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
-SET(qscintilla2Include ${PROJECT_SOURCE_DIR}/thirdparty/QScintilla-gpl-2.4.6/Qt4/)
+SET(GZStreamLibrary gzstream)
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF)
 SET(OGDFLibrary OGDF)
+IF(UBUNTU_PPA_BUILD)
+  FIND_PACKAGE(FTGL)  
+  SET(FTGLInclude ${FTGL_INCLUDE_DIR})
+ELSE()
+  SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
+ENDIF()
+
 SET(TulipInclude ${PROJECT_SOURCE_DIR}/library/tulip/include/)
 SET(TulipBuildInclude ${PROJECT_BINARY_DIR}/library/tulip/include/)
 SET(TulipOGLInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogl/include/)
@@ -421,18 +457,34 @@ CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 ## -----------------------------------------------------------------------------------------------
 INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config
         DESTINATION ${TulipBinInstallDir}
-	COMPONENT libtulip_dev)
+	COMPONENT libtulip-dev)
 INSTALL(FILES FindTULIP3.cmake 
         DESTINATION ${TulipShareInstallDir})
 INSTALL(FILES FindGLEW.cmake 
         DESTINATION ${TulipShareInstallDir})
 INSTALL(FILES FindXML2.cmake 
         DESTINATION ${TulipShareInstallDir})
+
+IF(UBUNTU_PPA_BUILD)
+INSTALL(FILES FindTULIP3.cmake 
+        DESTINATION share/cmake-${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/Modules
+	COMPONENT libtulip-dev)
+INSTALL(FILES tulip.desktop 
+        DESTINATION share/applications
+	COMPONENT tulip)
+INSTALL(FILES TulipIcon.png 
+        DESTINATION share/pixmaps
+	COMPONENT tulip)
+ENDIF()
+
+
+
 ## -----------------------------------------------------------------------------------------------
 ## Script for linux Tulip bundle building
 IF(LINUX)
 CONFIGURE_FILE("make_tulip_linux_bundle.sh.in" "make_tulip_linux_bundle.sh" @ONLY)
 ENDIF(LINUX)
+
 ## -----------------------------------------------------------------------------------------------
 ## CPack packaging directives
 ## -----------------------------------------------------------------------------------------------
@@ -472,5 +524,9 @@ IF(NOT CPACK_CUSTOM_INSTALLER)
   INCLUDE(CPackInstaller.cmake)
 ENDIF()
 
+SET(ENABLE_DPUT_TARGET OFF CACHE INTERNAL "")
 
 INCLUDE(CPack)
+IF(LINUX AND ENABLE_DPUT_TARGET)
+INCLUDE(UploadPPA.cmake)
+ENDIF()

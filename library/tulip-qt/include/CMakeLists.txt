@@ -84,7 +84,7 @@ INSTALL(FILES
   tulip/SizeWidget.h
   tulip/FileNameEditorWidget.h        
 DESTINATION ${TulipIncludeInstallDir}/tulip/
-COMPONENT libtulip_qt_dev
+COMPONENT libtulip-qt-dev
 )
 
 IF(QT_VERSION_MINOR GREATER 3)
@@ -95,6 +95,6 @@ INSTALL(FILES
 	tulip/TabWidgetHidableMenuGraphicsProxy.h	
 	tulip/GraphicsWidgetBase.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
-COMPONENT libtulip_qt_dev
+COMPONENT libtulip-qt-dev
 )
 ENDIF(QT_VERSION_MINOR GREATER 3)

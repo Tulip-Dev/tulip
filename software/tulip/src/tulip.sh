@@ -19,8 +19,6 @@ case "`uname -s`" in
 	# make some additional stuff if we are in the bundle (Qt libs in ../lib)
 	QT_LIBS=$(ls ${THISDIR}/../lib/libQt*.* 2>&1 >/dev/null)
 	if [ $? -eq 0 ]; then
-	  # define PYTHONHOME
-	  export PYTHONHOME=${THISDIR}/../lib
           # check tulip_app 32/64 bits version
 	  uname -m | grep x86_64 2>&1 >/dev/null
 	  if [ $? -eq 0 ]; then

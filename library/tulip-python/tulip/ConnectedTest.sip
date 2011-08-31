@@ -27,6 +27,8 @@
 typedef std::set<tlp::node> std_set_0100tlp_node;
 %End
 
+typedef std::set<tlp::node> std_set_0100tlp_node;
+
 namespace tlp {
 
 class ConnectedTest {

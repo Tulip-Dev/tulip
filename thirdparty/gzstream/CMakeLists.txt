@@ -13,10 +13,15 @@ IF(MSVC)
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGZSTREAM_DLL")
 ENDIF()
 
-ADD_LIBRARY(gzstream SHARED ${gzstream_SRCS})
-TARGET_LINK_LIBRARIES(gzstream ${ZLIB_LIBRARY})
+ADD_LIBRARY(${GZStreamLibrary} SHARED ${gzstream_SRCS})
+TARGET_LINK_LIBRARIES(${GZStreamLibrary} ${ZLIB_LIBRARY})
 
-INSTALL(TARGETS gzstream
-       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT gzstream
-       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT gzstream
-       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT gzstream)
+IF(UBUNTU_PPA_BUILD)
+SET_TARGET_PROPERTIES(${GZStreamLibrary} 
+		      PROPERTIES SUFFIX "-tulip${TulipVersion}.so")
+ENDIF(UBUNTU_PPA_BUILD)
+
+INSTALL(TARGETS ${GZStreamLibrary}
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip)

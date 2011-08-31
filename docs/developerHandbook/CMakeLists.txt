@@ -12,8 +12,8 @@ ADD_CUSTOM_TARGET(dev_keywords java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/
 
 ADD_DEPENDENCIES(dev_keywords dev_html)
 
-#INSTALL(DIRECTORY
-#  ${CMAKE_CURRENT_BINARY_DIR}/html
-#  ${CMAKE_CURRENT_BINARY_DIR}/images
-#DESTINATION share/tulip/developerHandbook
-#COMPONENT tulip_doc)
+INSTALL(DIRECTORY
+ ${CMAKE_CURRENT_BINARY_DIR}/html
+ ${CMAKE_CURRENT_BINARY_DIR}/images
+DESTINATION share/doc/tulip/developerHandbook
+COMPONENT tulip-doc)

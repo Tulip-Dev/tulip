@@ -497,7 +497,7 @@ Sets the value in the list attached to a particular node at the given index.
 
 //===========================================================================================
  
- 	const @CPP_TYPE@& getNodeEltValue(const tlp::node n, unsigned int i) const;
+ 	const @CPP_TYPE@ getNodeEltValue(const tlp::node n, unsigned int i) const;
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeEltValue(node, index)
 
@@ -670,7 +670,7 @@ Sets the value in the list attached to a particular edge at the given index.
   
 //===========================================================================================  
   
-	const @CPP_TYPE@& getEdgeEltValue(const tlp::edge n, unsigned int i) const;
+	const @CPP_TYPE@ getEdgeEltValue(const tlp::edge n, unsigned int i) const;
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeEltValue(edge, index)
 

@@ -33,7 +33,7 @@ IF(LINUX)
     ADD_CUSTOM_TARGET(tulip_qch qhelpgenerator ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhp -o ${CMAKE_CURRENT_BINARY_DIR}/tulip${TulipIntVersion}.qch)
     ADD_CUSTOM_TARGET(doc qcollectiongenerator ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhcp -o ${CMAKE_CURRENT_BINARY_DIR}/tulip${TulipIntVersion}.qhc WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
-    ADD_DEPENDENCIES(tulip_qhp common_copy dev_toc dev_keywords dox_toc dox_keywords user_toc user_keywords allPlugins-html tulip-libs-html)
+    ADD_DEPENDENCIES(tulip_qhp dev_toc dev_keywords dox_toc dox_keywords user_toc user_keywords allPlugins-html tulip-libs-html)
     ADD_DEPENDENCIES(tulip_qch tulip_qhp)
     ADD_DEPENDENCIES(doc tulip_qch tulip_qhcp)
   ELSE()
@@ -51,4 +51,9 @@ COMMENT "Checking if documentation files are present")
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip${TulipIntVersion}.qhc ${CMAKE_CURRENT_BINARY_DIR}/tulip${TulipIntVersion}.qch
   DESTINATION ${TulipShareInstallDir}
-  COMPONENT tulip_doc)
+  COMPONENT tulip-doc)
+
+
+INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/common 
+  DESTINATION share/doc/tulip
+  COMPONENT tulip-doc)

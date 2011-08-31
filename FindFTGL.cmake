@@ -1,189 +1,138 @@
-########################################################################
+# - Find FTGL
+# Find the native FTGL headers and libraries.
 #
-# Copyright (c) 2008, Lawrence Livermore National Security, LLC.  
-# Produced at the Lawrence Livermore National Laboratory  
-# Written by bremer5@llnl.gov,pascucci@sci.utah.edu.  
-# LLNL-CODE-406031.  
-# All rights reserved.  
-#   
-# This file is part of "Simple and Flexible Scene Graph Version 2.0."
-# Please also read BSD_ADDITIONAL.txt.
-#   
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are
-# met:
-#   
-# @ Redistributions of source code must retain the above copyright
-#   notice, this list of conditions and the disclaimer below.
-# @ Redistributions in binary form must reproduce the above copyright
-#   notice, this list of conditions and the disclaimer (as noted below) in
-#   the documentation and/or other materials provided with the
-#   distribution.
-# @ Neither the name of the LLNS/LLNL nor the names of its contributors
-#   may be used to endorse or promote products derived from this software
-#   without specific prior written permission.
-#   
-#  
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-# A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL LAWRENCE
-# LIVERMORE NATIONAL SECURITY, LLC, THE U.S. DEPARTMENT OF ENERGY OR
-# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-# LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-# NEGLIGENCE OR OTHERWISE) ARISING
-#
-########################################################################
+#  FTGL_INCLUDE_DIR -  where to find FTGL.h, etc.
+#  FTGL_LIBRARIES    - List of libraries when using FTGL.
+#  FTGL_FOUND        - True if FTGL found.
+#  FTGL_INCLUDE_IS_UPPER - True if the include file to use is FTGL.h.
 
+GET_FILENAME_COMPONENT(module_file_path ${CMAKE_CURRENT_LIST_FILE} PATH )
 
-#
-#
-# Try to find the FTGL libraries
-# Once done this will define
-#
-# FTGL_FOUND          - system has ftgl
-# FTGL_INCLUDE_DIR    - path to FTGL/FTGL.h
-# FTGL_LIBRARIES      - the library that must be included
-#
-#
+IF( CMAKE_CL_64 )
+  SET( LIB "lib64" )
+ELSE( CMAKE_CL_64 )
+  SET( LIB "lib32" )
+ENDIF( CMAKE_CL_64 )
 
+# Look for the header file.
+FIND_PATH(FTGL_INCLUDE_DIR NAMES FTGL/ftgl.h 
+                           PATHS $ENV{H3D_EXTERNAL_ROOT}/include
+                                 $ENV{H3D_ROOT}/../External/include
+                                 ../../External/include
+                                 ${module_file_path}/../../../External/include
+                                 $ENV{H3D_EXTERNAL_ROOT}/include/FTGL
+                                 $ENV{H3D_ROOT}/../External/include/FTGL
+                                 ../../External/include/FTGL
+                                 ${module_file_path}/../../../External/include/FTGL
+                           DOC "Path in which the file FTGL/ftgl.h is located." )
 
-FIND_PATH(FTGL_INCLUDE_DIR FTGL/FTGL.h
-       ${ADDITIONAL_INCLUDE_PATH}
-      /usr/include
-      /usr/X11/include
-      /usr/X11R6/include
-      ${VISUS_INCLUDE}  
-)
+# This variable needs to be cached to know what the previous value was. The reason for this
+# is because otherwise it would be set to 0 the second time FINDFTGL was run. Other solutions
+# to find the file directly does not work since the FIND_FILE and IF( EXISTS file_name ) are not
+# case sensitive.
+SET( FTGL_INCLUDE_IS_UPPER "NO" CACHE BOOL "Variable used to check if FTGL include is upper. Must be changed to the correct value if FTGL_INCLUDE_DIR is set manually." )
 
-IF (NOT WIN32)
+IF( NOT FTGL_INCLUDE_DIR )
+  FIND_PATH(FTGL_INCLUDE_DIR NAMES FTGL/FTGL.h 
+                           PATHS $ENV{H3D_EXTERNAL_ROOT}/include
+                                 $ENV{H3D_ROOT}/../External/include
+                                 ../../External/include
+                                 ${module_file_path}/../../../External/include
+                                 $ENV{H3D_EXTERNAL_ROOT}/include/FTGL
+                                 $ENV{H3D_ROOT}/../External/include/FTGL
+                                 ../../External/include/FTGL
+                                 ${module_file_path}/../../../External/include/FTGL
+                           DOC "Path in which the file FTGL/FTGL.h is located." )
+  # This code is only run if FTGL_INCLUDE_DIR was empty but now is not.
+  IF( FTGL_INCLUDE_DIR )
+    SET( FTGL_INCLUDE_IS_UPPER "YES" CACHE BOOL "Variable used to check if FTGL include is upper. Must be changed to the correct value if FTGL_INCLUDE_DIR is set manually." FORCE )
+  ENDIF( FTGL_INCLUDE_DIR )
+ENDIF( NOT FTGL_INCLUDE_DIR )
 
-FIND_FILE(FTGL_LIBRARIES libftgl.a  
-       ${ADDITIONAL_LIBRARY_PATH}
-      /usr/lib
-      /usr/X11/lib
-      /usr/X11R6/lib
-      /sw/lib
-      ${VISUS_LIBRARIES}  
-)
+MARK_AS_ADVANCED(FTGL_INCLUDE_DIR)
+MARK_AS_ADVANCED(FTGL_INCLUDE_IS_UPPER)
 
-ELSE (NOT WIN32)
+# Look for the library.
+FIND_LIBRARY(FTGL_LIBRARY NAMES ftgl ftgl_dynamic_213rc5 ftgl_dynamic_MTD
+                          PATHS $ENV{H3D_EXTERNAL_ROOT}/${LIB}
+                                $ENV{H3D_ROOT}/../External/${LIB}
+                                ../../External/${LIB}
+                                ${module_file_path}/../../../External/${LIB}
+                          DOC "Path to ftgl library." )
+MARK_AS_ADVANCED(FTGL_LIBRARY)
 
-FIND_LIBRARY(FTGL_LIBRARIES ftgl_static_MT
-       ${ADDITIONAL_LIBRARY_PATH}
-      /usr/lib
-      /usr/X11/lib
-      /usr/X11R6/lib
-      /sw/lib
-      ${VISUS_LIBRARIES}  
-)
+IF( WIN32 AND PREFER_STATIC_LIBRARIES )
+  SET( FTGL_STATIC_LIBRARY_NAME ftgl_static_MTD )
+  IF( MSVC80 )
+    SET( FTGL_STATIC_LIBRARY_NAME ftgl_static_MTD_vc8 )
+  ELSEIF( MSVC90 )
+    SET( FTGL_STATIC_LIBRARY_NAME ftgl_static_MTD_vc9 )
+  ENDIF( MSVC80 )
+  
+  FIND_LIBRARY( FTGL_STATIC_LIBRARY NAMES ${FTGL_STATIC_LIBRARY_NAME}
+                                         PATHS $ENV{H3D_EXTERNAL_ROOT}/${LIB}
+                                         $ENV{H3D_ROOT}/../External/${LIB}
+                                         ../../External/${LIB}
+                                         ${module_file_path}/../../../External/${LIB}
+                                    DOC "Path to ftgl static library." )
+  MARK_AS_ADVANCED(FTGL_STATIC_LIBRARY)
+  
+  FIND_LIBRARY( FTGL_STATIC_DEBUG_LIBRARY NAMES ${FTGL_STATIC_LIBRARY_NAME}_d
+                                                PATHS $ENV{H3D_EXTERNAL_ROOT}/${LIB}
+                                                $ENV{H3D_ROOT}/../External/${LIB}
+                                                ../../External/${LIB}
+                                                ${module_file_path}/../../../External/${LIB}
+                                          DOC "Path to ftgl static debug library." )
+  MARK_AS_ADVANCED(FTGL_STATIC_DEBUG_LIBRARY)
+  
+  IF( FTGL_STATIC_LIBRARY OR FTGL_STATIC_DEBUG_LIBRARY )
+    SET( FTGL_STATIC_LIBRARIES_FOUND 1 )
+  ENDIF( FTGL_STATIC_LIBRARY OR FTGL_STATIC_DEBUG_LIBRARY )
+ENDIF( WIN32 AND PREFER_STATIC_LIBRARIES )
 
-ENDIF (NOT WIN32)
+IF( FTGL_LIBRARY OR FTGL_STATIC_LIBRARIES_FOUND )
+  SET( FTGL_LIBRARIES_FOUND 1 )
+ENDIF( FTGL_LIBRARY OR FTGL_STATIC_LIBRARIES_FOUND )
 
+# Copy the results to the output variables.
+IF(FTGL_INCLUDE_DIR AND FTGL_LIBRARIES_FOUND)
+  SET(FTGL_FOUND 1)
+  
+  IF( WIN32 AND PREFER_STATIC_LIBRARIES AND FTGL_STATIC_LIBRARIES_FOUND )
+    IF(FTGL_STATIC_LIBRARY)
+      SET(FTGL_LIBRARIES optimized ${FTGL_STATIC_LIBRARY} )
+    ELSE(FTGL_STATIC_LIBRARY)
+      SET(FTGL_LIBRARIES optimized ${FTGL_STATIC_LIBRARY_NAME} )
+      MESSAGE( STATUS "FTGL static release libraries not found. Release build might not work." )
+    ENDIF(FTGL_STATIC_LIBRARY)
 
-IF (FTGL_INCLUDE_DIR AND FTGL_LIBRARIES)
+    IF(FTGL_STATIC_DEBUG_LIBRARY)
+      SET(FTGL_LIBRARIES ${FTGL_LIBRARIES} debug ${FTGL_STATIC_DEBUG_LIBRARY} )
+    ELSE(FTGL_STATIC_DEBUG_LIBRARY)
+      SET(FTGL_LIBRARIES ${FTGL_LIBRARIES} debug ${FTGL_STATIC_LIBRARY_NAME}_d )
+      MESSAGE( STATUS "FTGL static debug libraries not found. Debug build might not work." )
+    ENDIF(FTGL_STATIC_DEBUG_LIBRARY)
+    
+    SET( FTGL_LIBRARY_STATIC 1 )
+  ELSE( WIN32 AND PREFER_STATIC_LIBRARIES AND FTGL_STATIC_LIBRARIES_FOUND )
+    SET(FTGL_LIBRARIES ${FTGL_LIBRARY})
+  ENDIF( WIN32 AND PREFER_STATIC_LIBRARIES AND FTGL_STATIC_LIBRARIES_FOUND )
 
-   SET(FTGL_FOUND "YES")
-   IF (CMAKE_VERBOSE_MAKEFILE)
-      MESSAGE("Using FTGL_INCLUDE_DIR = " ${FTGL_INCLUDE_DIR}) 
-      MESSAGE("Using FTGL_LIBRARIES   = " ${FTGL_LIBRARIES}) 
-   ENDIF (CMAKE_VERBOSE_MAKEFILE)
+  SET(FTGL_INCLUDE_DIR ${FTGL_INCLUDE_DIR})
+ELSE(FTGL_INCLUDE_DIR AND FTGL_LIBRARIES_FOUND)
+  SET(FTGL_FOUND 0)
+  SET(FTGL_LIBRARIES)
+  SET(FTGL_INCLUDE_DIR)
+ENDIF(FTGL_INCLUDE_DIR AND FTGL_LIBRARIES_FOUND)
 
-ELSE (FTGL_INCLUDE_DIR AND FTGL_LIBRARIES)
-   
-   IF (CMAKE_VERBOSE_MAKEFILE)
-      MESSAGE("************************************")
-      MESSAGE("  Necessary libftgl files not found")
-      MESSAGE("  FTGL_INCLUDE_DIR = " ${FTGL_INCLUDE_DIR})
-      MESSAGE("  FTGL_LIBRARIES   = " ${FTGL_LIBRARIES})
-      MESSAGE("  libftgl will be build locally")
-      MESSAGE("************************************")
-   ENDIF (CMAKE_VERBOSE_MAKEFILE)
-   
-   IF (APPLE_NATIVE_GL)
-      INCLUDE(CheckCXXSourceCompiles)
-      SET(CMAKE_REQUIRED_INCLUDES ${OPENGL_INCLUDE_DIR})
-      SET(CMAKE_REQUIRED_LIBRARIES ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
-      CHECK_CXX_SOURCE_COMPILES( "
-           #include <OpenGL/glu.h>
-           typedef GLvoid (*TF)(); 
-           int main() { 
-           gluTessCallback(0,GLU_TESS_END_DATA,(TF)0);
-           return 1;
-           }" FTGL_GLU_EMPTY)
-      CHECK_CXX_SOURCE_COMPILES( "
-           #include <OpenGL/glu.h>
-           typedef GLvoid (*TF)(...); 
-           int main() { 
-           gluTessCallback(0,GLU_TESS_END_DATA,(TF)0);return 1;
-           }" FTGL_GLU_DOTS)
-   
-      IF (CMAKE_VERBOSE_MAKEFILE AND NOT FTGL_GLU_EMPTY AND NOT FTGL_GLU_DOTS)
-           MESSAGE("************************************")
-           MESSAGE(" Could not compile glu test code    ")
-           MESSAGE(" using default behavior    ")
-           MESSAGE(" FTGL_GLU_EMPTY " ${FTGL_GLU_EMPTY})
-           MESSAGE(" FTGL_GLU_DOTS " ${FTGL_GLU_DOTS})
-           MESSAGE("************************************")
-      ENDIF (CMAKE_VERBOSE_MAKEFILE AND NOT FTGL_GLU_EMPTY AND NOT FTGL_GLU_DOTS)
-      
-      IF (FTGL_GLU_EMPTY)
-         SET(FTLG_GLU_FLAGS "CXXFLAGS=-DFTGL_GLU_EMPTY=1")
-      ELSEIF (FTGL_GLU_DOTS)
-         SET(FTLG_GLU_FLAGS "CXXFLAGS=-DFTGL_GLU_DOTS=1")
-      ENDIF (FTGL_GLU_EMPTY)
-   ENDIF (APPLE_NATIVE_GL)
-            
-
-   IF (NOT EXISTS ${VISUS_EXTLIBS}/FTGL)    
-      EXECUTE_PROCESS(                                        
-	    COMMAND gzip -cd ${VISUS_SOURCE_DIR}/ext-libs/ftgl-2.1.2.tar.gz 
-	    COMMAND tar xv
-	    WORKING_DIRECTORY ${VISUS_EXTLIBS}
-      )	
-   ENDIF (NOT EXISTS ${VISUS_EXTLIBS}/FTGL)      
-   
-   # 
-   # On some Macs the -with-gl-lib=xxx/OpenGL.framework flag does not work 
-   # as a quick hack around this issue we append the standard name of the 
-   # necessary library
-   #
-   IF (APPLE_NATIVE_GL)
-      SET(OPENGL_gl_LIBRARY ${OPENGL_gl_LIBRARY}/Libraries)
-   ENDIF (APPLE_NATIVE_GL)
-
-   EXECUTE_PROCESS(                                    
-      COMMAND ./configure ${FTLG_GLU_FLAGS} --prefix=${VISUS_BINARY_DIR} --with-freetype-prefix=${FREETYPE2_FT_CONFIG} --with-gl-inc=${OPENGL_INCLUDE_DIR} --with-gl-lib=${OPENGL_gl_LIBRARY} --enable-shared=yes
-      WORKING_DIRECTORY ${VISUS_EXTLIBS}/FTGL/unix  
-   )
-
-   EXECUTE_PROCESS(                                        
-      COMMAND make install
-      WORKING_DIRECTORY ${VISUS_EXTLIBS}/FTGL/unix    
-   )
-
-   FIND_PATH(FTGL_INCLUDE_DIR FTGL/FTGL.h
-        ${VISUS_INCLUDE}
-       NO_DEFAULT_PATH
-   )
-
-   FIND_FILE(FTGL_LIBRARIES libftgl.a
-       ${VISUS_LIBRARIES}
-       NO_DEFAULT_PATH
-   )
-
-   IF (FTGL_LIBRARIES AND  FTGL_INCLUDE_DIR)
-      SET(FTGL_FOUND "YES")
-      IF (CMAKE_VERBOSE_MAKEFILE)
-         MESSAGE("Using FTGL_INCLUDE_DIR = " ${FTGL_INCLUDE_DIR}) 
-         MESSAGE("Using FTGL_LIBRARIES   = " ${FTGL_LIBRARIES}) 
-      ENDIF (CMAKE_VERBOSE_MAKEFILE)
-   ELSE (FTGL_LIBRARIES AND  FTGL_INCLUDE_DIR)
-      MESSAGE("ERROR ftgl library not found on the system and could not be build")
-   ENDIF (FTGL_LIBRARIES AND  FTGL_INCLUDE_DIR)
-
-ENDIF (FTGL_INCLUDE_DIR AND FTGL_LIBRARIES)
-                         
+# Report the results.
+IF(NOT FTGL_FOUND)
+  SET(FTGL_DIR_MESSAGE
+    "FTGL was not found. Make sure FTGL_LIBRARY and FTGL_INCLUDE_DIR are set to the directories containing the include and lib files for FTGL. If you do not have the library you will not be able to use the Text node.")
+  IF(FTGL_FIND_REQUIRED)
+      MESSAGE(FATAL_ERROR "${FTGL_DIR_MESSAGE}")
+  ELSEIF(NOT FTGL_FIND_QUIETLY)
+    MESSAGE(STATUS "${FTGL_DIR_MESSAGE}")
+  ELSE(NOT FTGL_FIND_QUIETLY)
+  ENDIF(FTGL_FIND_REQUIRED)
+ENDIF(NOT FTGL_FOUND)

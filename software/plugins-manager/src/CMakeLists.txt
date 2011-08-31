@@ -77,22 +77,22 @@ IF(WIN32)
   IF(MSVC)
     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip_check_pl.exe 
             DESTINATION "${TulipBinInstallDir}"
-            COMPONENT tulip_pluginsmanager)
+            COMPONENT tulip)
   ELSE()
     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl.exe 
             DESTINATION "${TulipBinInstallDir}"
-            COMPONENT tulip_pluginsmanager)
+            COMPONENT tulip)
   ENDIF()
 ENDIF(WIN32)
 
 IF(APPLE)
   INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl
           DESTINATION "${TulipBinInstallDir}"
-          COMPONENT tulip_pluginsmanager)
+          COMPONENT tulip)
 ENDIF(APPLE)
 
 IF(LINUX)
   INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl
           DESTINATION "${TulipBinInstallDir}"
-          COMPONENT tulip_pluginsmanager)
+          COMPONENT tulip)
 ENDIF(LINUX)

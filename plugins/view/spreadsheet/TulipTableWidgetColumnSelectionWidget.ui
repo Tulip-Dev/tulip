@@ -105,11 +105,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="customPatternLineEdit">
-          <property name="placeholderText">
-           <string>Input a custom filter</string>
-          </property>
-         </widget>
+         <widget class="QLineEdit" name="customPatternLineEdit"/>
         </item>
        </layout>
       </item>

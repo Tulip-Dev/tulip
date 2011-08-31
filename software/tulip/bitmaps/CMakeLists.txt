@@ -9,7 +9,7 @@ INSTALL(FILES
   logolabri.jpg
   tex_back.png
 DESTINATION ${TulipBitmapInstallDir}
-COMPONENT tulip_app
+COMPONENT tulip
 )
 
 ADD_SUBDIRECTORY(colorscales)

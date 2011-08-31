@@ -12,4 +12,4 @@ TARGET_LINK_LIBRARIES(GMLExport-${TulipVersion} ${LibTulipName})
 INSTALL(TARGETS 
 	GMLExport-${TulipVersion}	
   DESTINATION ${TulipPluginsInstallDir}/
-  COMPONENT libtulip_plugins)
+  COMPONENT tulip-plugins)

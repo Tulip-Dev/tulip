@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=Tulip
+Comment=Data Visualization software
+Exec=tulip
+Icon=TulipIcon.png
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Categories=Education;Math;Science;Motif;
+StartupNotify=false

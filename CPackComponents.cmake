@@ -6,50 +6,105 @@ SET(CPACK_COMPONENT_GROUP_PLUGINS_DESCRIPTION "Tulip base plugins set.")
 SET(CPACK_COMPONENT_GROUP_EXTRAS_DESCRIPTION "Tulip extra files and documentation.")
 
 #thirdparty
-DEFINE_COMPONENT(ftgl "FTGL" "A library to render freetype fonts in openGL scenes." "" ${THIRDPARTY_GROUP_NAME})
-DEFINE_COMPONENT(qscintilla2 "QScintilla 2" "A library to provide source code edition facility in Qt." "" ${THIRDPARTY_GROUP_NAME})
-DEFINE_COMPONENT(gzstream "Gzstream" "A library to provide zlib facilities in a C++ iostream." "" ${THIRDPARTY_GROUP_NAME})
-DEFINE_COMPONENT(sip "SIP library" "A library providing python bindings for C++." "libtulip;libtulip_ogl;libtulip_qt" ${THIRDPARTY_GROUP_NAME})
+DEFINE_COMPONENT(ftgl "FTGL" "A library to render freetype fonts in openGL scenes." "" "" ${THIRDPARTY_GROUP_NAME})
+DEFINE_COMPONENT(qscintilla2 "QScintilla 2" "A library to provide source code edition facility in Qt." "" "" ${THIRDPARTY_GROUP_NAME})
+DEFINE_COMPONENT(sip "SIP library" "A library providing python bindings for C++." "" "" ${THIRDPARTY_GROUP_NAME})
 
 # library/tulip
-DEFINE_COMPONENT(libtulip "Core library" "Tulip core library provides a framework for huge graph manipulation." "gzstream" ${LIBS_GROUP_NAME})
-DEFINE_COMPONENT(libtulip_dev "Core library - Development files" "Tulip core library provides a framework for huge graph manipulation." "libtulip" ${HEADERS_GROUP_NAME})
-DEFINE_COMPONENT(pythonbindings "Python bindings" "Python bindings for Tulip." "sip" ${LIBS_GROUP_NAME})
+DEFINE_COMPONENT(libtulip "Core library" "Tulip core library provides a framework for huge graph manipulation." ""  ${LIBS_GROUP_NAME})
+DEFINE_COMPONENT(libtulip-dev "Core library - Development files" "Tulip core library provides a framework for huge graph manipulation." "libtulip"  ${HEADERS_GROUP_NAME})
 
 # library/tulip-ogl
-DEFINE_COMPONENT(libtulip_ogl "OpenGL bindings" "Tulip-ogl provides opengl bindings for 3D visualization of graphs created with the Tulip core library. " "libtulip;ftgl" ${LIBS_GROUP_NAME})
-DEFINE_COMPONENT(libtulip_ogl_dev "OpenGL bindings - Development files" "Tulip OpenGL provides opengl bindings for 3D visualization of graphs created with the Tulip core library." "libtulip_ogl" ${HEADERS_GROUP_NAME})
+DEFINE_COMPONENT(libtulip-ogl "OpenGL library" "Tulip OpenGL provides a library for 3D visualization of graphs created with the Tulip core library. " "libtulip;ftgl" ${LIBS_GROUP_NAME})
+DEFINE_COMPONENT(libtulip-ogl-dev "OpenGL libary - Development files" "Tulip OpenGL provides a library for for 3D visualization of graphs created with the Tulip core library." "libtulip-dev;libtulip-ogl"  ${HEADERS_GROUP_NAME})
 
 #library/tulip-qt
-DEFINE_COMPONENT(libtulip_qt "Qt bindings" "Tulip Qt provides binding for the Qt4 framework. Helping user to design user interfaces to integrate Tulip 3D visualizations into a GUI." "libtulip;libtulip_ogl" ${LIBS_GROUP_NAME})
-DEFINE_COMPONENT(libtulip_qt_dev "Qt bindings - Development files" "Tulip-qt provides binding for the Qt4 framework. Helping user to design user interfaces to integrate Tulip 3D visualizations into a GUI." "libtulip_qt" ${HEADERS_GROUP_NAME})
+DEFINE_COMPONENT(libtulip-qt "Qt library" "Tulip Qt provides a library for the Qt4 framework helping the design of graphical interfaces to integrate Tulip 3D visualizations into a Qt application." "libtulip;libtulip-ogl"  ${LIBS_GROUP_NAME})
+DEFINE_COMPONENT(libtulip-qt-dev "Qt library - Development files" "Tulip Qt provides a library for the Qt4 framework helping the design of graphical interfaces to integrate Tulip 3D visualizations into a Qt application." "libtulip-qt;libtulip-ogl-dev" ${HEADERS_GROUP_NAME})
 
-#library/tulip-ogdf
-DEFINE_COMPONENT(libtulip_ogdf "OGDF library bridge" "Tulip OGDF provides a bridge to use the powerful OGDF library inside of Tulip." "" ${LIBS_GROUP_NAME})
+#Extra features
+DEFINE_COMPONENT(tulip-ogdf "OGDF library bridge" "Tulip OGDF provides a bridge to use the powerful OGDF library (Open Graph Drawing Framework) inside Tulip." "libtulip" ${LIBS_GROUP_NAME})
+DEFINE_COMPONENT(tulip-python "Python bindings" "Python bindings for Tulip." "sip;qscintilla2"  ${LIBS_GROUP_NAME})
 
-# plugins/*
-DEFINE_COMPONENT(libtulip_plugins "Core plugins" "Plugins for Tulip core" "libtulip" ${PLUGINS_GROUP_NAME})
-DEFINE_COMPONENT(libtulip_ogl_plugins "OpenGL plugins" "Plugins for Tulip OpenGL" "libtulip;libtulip_ogl" ${PLUGINS_GROUP_NAME})
-DEFINE_COMPONENT(libtulip_qt_plugins "Qt plugins" "Plugins for Tulip Qt" "libtulip;libtulip_ogl;libtulip_qt" ${PLUGINS_GROUP_NAME})
-DEFINE_COMPONENT(tulip_plugins_spreadsheetview "Spreadsheet view" "Spreadsheet view plugin" "libtulip;libtulip_ogl;libtulip_qt" ${PLUGINS_GROUP_NAME})
-DEFINE_COMPONENT(tulip_plugins_pythonscriptview "Python view" "Python view plugin" "pythonbindings" ${PLUGINS_GROUP_NAME})
-DEFINE_COMPONENT(libtulip_ogdf_plugins "OGDF plugins" "Plugins using the Tulip OGDF bridge" "libtulip" ${PLUGINS_GROUP_NAME})
-
-# software/pluginsmanager
-DEFINE_COMPONENT(tulip_pluginsmanager "Plugins manager" "A software to manage plugins installation from external sources." "libtulip;libtulip_ogl;libtulip_qt" ${SOFTWARE_GROUP_NAME})
-DEFINE_COMPONENT(tulip_app "Tulip software" "The main Tulip software. Provides a complete interface and a set of tools to easily create, manage and visualize huge graphs in 3D scenes." "libtulip;libtulip_ogl;libtulip_qt;tulip_pluginsmanager" ${SOFTWARE_GROUP_NAME})
-DEFINE_COMPONENT(tulip_textures "Additional textures" "Additional textures for the Tulip software" "" ${EXTRAS_GROUP_NAME})
+# plugins
+DEFINE_COMPONENT(tulip-plugins "Tulip Base plugins" "Base Tulip Plugins from trunk" "libtulip;libtulip-ogl;libtulip-qt"  ${PLUGINS_GROUP_NAME})
+DEFINE_COMPONENT(tulip "Tulip software" "The main Tulip software. Provides a complete interface and a set of tools to easily create, manage and visualize huge graphs in 3D scenes." "libtulip;libtulip-ogl;libtulip-qt;tulip-plugins" ${SOFTWARE_GROUP_NAME})
 
 # doc/
 # must be always present because it may be installed by hand
 # even it is not generated
-DEFINE_COMPONENT(tulip_doc "Framework documentation" "Manuals and doxygen for the Tulip framework." "libtulip" ${EXTRAS_GROUP_NAME})
+DEFINE_COMPONENT(tulip-doc "Framework documentation" "Manuals and doxygen for the Tulip framework." "tulip" "tulip" ${EXTRAS_GROUP_NAME})
+DEFINE_COMPONENT(tulip-python-doc "Python bindings documentation" "Manual and API description for the Tulip Python bindings." "tulip-python" "tulip-python" ${EXTRAS_GROUP_NAME})
 
 IF(LINUX)
-  SET(META_DEPS "ftgl;qscintilla2;gzstream;sip;libtulip;libtulip_ogl;libtulip_qt;tulip_app;tulip_pluginsmanager;tulip_textures;libtulip_plugins;libtulip_qt_plugins;libtulip_ogl_plugins;tulip_plugins_spreadsheetview")
+  SET(META_DEPS "ftgl;qscintilla2;gzstream;sip;libtulip;libtulip-ogl;libtulip-qt;tulip;tulip-plugins")
   # meta package (Linux only)
   IF(GENERATE_DOC)
-    SET(META_DEPS "${META_DEPS};tulip_doc")
+    SET(META_DEPS "${META_DEPS};tulip-doc")
   ENDIF()
-  DEFINE_COMPONENT(tulip "Meta package" "Meta package containing tulip application, libraries, documentation and base plugins" "${META_DEPS}" ${EXTRAS_GROUP_NAME})
+  DEFINE_COMPONENT(tulip-all "Meta package" "Meta package containing tulip application, libraries, documentation and base plugins" "${META_DEPS}" "" ${EXTRAS_GROUP_NAME})
+
+  SET(CPACK_DEBIAN_EXCLUDE_COMPONENTS "ftgl;sip;qscintilla2;tulip-all")
+  
+  SET(CPACK_UBUNTU_DISTRIBUTION_RELEASES lucid maverick natty)
+
+  SET(CPACK_UBUNTU_COMMON_BUILD_DEPENDS "libgl1-mesa-dev;libglu1-mesa-dev;libglew1.5-dev;libftgl-dev;libjpeg62-dev;libpng12-dev;libxml2-dev;libqt4-dev;libqt4-opengl-dev;zlib1g-dev;libstdc++6;python-dev;python-sip-dev;libqscintilla2-dev;doxygen;gcj-jdk;libxml-commons-resolver1.1-java-gcj;qt4-dev-tools;python-sphinx;docbook-xsl;graphviz;texlive-font-utils")
+
+  SET(CPACK_COMPONENT_LIBTULIP_UBUNTU_COMMON_DEPENDS "zlib1g, libstdc++6")
+  SET(CPACK_COMPONENT_LIBTULIP-DEV_UBUNTU_COMMON_DEPENDS "libtulip, zlib1g-dev, libstdc++6")
+  SET(CPACK_COMPONENT_LIBTULIP-OGL_UBUNTU_COMMON_DEPENDS "libtulip, libgl1-mesa-glx, libglu1-mesa, libglew1.5, libftgl2, libjpeg62, libpng12-0, libxml2")
+  SET(CPACK_COMPONENT_LIBTULIP-OGL-DEV_UBUNTU_COMMON_DEPENDS "libtulip-dev, libtulip-ogl, libgl1-mesa-dev, libglu1-mesa-dev, libglew1.5-dev, libftgl-dev, libjpeg62-dev, libpng12-dev, libxml2-dev")
+  SET(CPACK_COMPONENT_LIBTULIP-QT_UBUNTU_COMMON_DEPENDS "libtulip, libtulip-ogl, libqt4-core, libqt4-gui, libqt4-opengl")
+  SET(CPACK_COMPONENT_LIBTULIP-QT-DEV_UBUNTU_COMMON_DEPENDS "libtulip-qt, libtulip-ogl-dev, libqt4-dev, libqt4-opengl-dev")
+  SET(CPACK_COMPONENT_TULIP-OGDF_UBUNTU_COMMON_DEPENDS "tulip, libtulip") 
+  SET(CPACK_COMPONENT_TULIP-PYTHON_UBUNTU_COMMON_DEPENDS "tulip, python, python-sip, libqscintilla2-5")
+  SET(CPACK_COMPONENT_TULIP-PLUGINS_UBUNTU_COMMON_DEPENDS "tulip, libtulip, libtulip-ogl, libtulip-qt")
+  SET(CPACK_COMPONENT_TULIP_UBUNTU_COMMON_DEPENDS "libtulip, libtulip-ogl, libtulip-qt, tulip-plugins")
+  SET(CPACK_COMPONENT_TULIP-DOC_UBUNTU_COMMON_DEPENDS "tulip, qt4-dev-tools")
+  SET(CPACK_COMPONENT_TULIP-PYTHON-DOC_UBUNTU_COMMON_DEPENDS "tulip-python")  
+
+  SET(CPACK_LUCID_BUILD_DEPENDS ${CPACK_UBUNTU_COMMON_BUILD_DEPENDS})
+  SET(CPACK_MAVERICK_BUILD_DEPENDS ${CPACK_UBUNTU_COMMON_BUILD_DEPENDS})
+  SET(CPACK_NATTY_BUILD_DEPENDS ${CPACK_UBUNTU_COMMON_BUILD_DEPENDS})
+
+  SET(CPACK_COMPONENT_LIBTULIP_LUCID_DEPENDS ${CPACK_COMPONENT_LIBTULIP_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-DEV_LUCID_DEPENDS ${CPACK_COMPONENT_LIBTULIP-DEV_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-OGL_LUCID_DEPENDS ${CPACK_COMPONENT_LIBTULIP-OGL_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-OGL-DEV_LUCID_DEPENDS ${CPACK_COMPONENT_LIBTULIP-OGL-DEV_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-QT_LUCID_DEPENDS ${CPACK_COMPONENT_LIBTULIP-QT_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-QT-DEV_LUCID_DEPENDS ${CPACK_COMPONENT_LIBTULIP-QT-DEV_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP-OGDF_LUCID_DEPENDS ${CPACK_COMPONENT_LIBTULIP-OGDF_UBUNTU_COMMON_DEPENDS}) 
+  SET(CPACK_COMPONENT_TULIP-PYTHON_LUCID_DEPENDS ${CPACK_COMPONENT_TULIP-PYTHON_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP-PLUGINS_LUCID_DEPENDS ${CPACK_COMPONENT_TULIP-PLUGINS_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP_LUCID_DEPENDS ${CPACK_COMPONENT_TULIP_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP-DOC_LUCID_DEPENDS ${CPACK_COMPONENT_TULIP-DOC_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP-PYTHON-DOC_LUCID_DEPENDS ${CPACK_COMPONENT_TULIP-PYTHON-DOC_UBUNTU_COMMON_DEPENDS})
+
+  SET(CPACK_COMPONENT_LIBTULIP_MAVERICK_DEPENDS ${CPACK_COMPONENT_LIBTULIP_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-DEV_MAVERICK_DEPENDS ${CPACK_COMPONENT_LIBTULIP-DEV_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-OGL_MAVERICK_DEPENDS ${CPACK_COMPONENT_LIBTULIP-OGL_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-OGL-DEV_MAVERICK_DEPENDS ${CPACK_COMPONENT_LIBTULIP-OGL-DEV_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-QT_MAVERICK_DEPENDS ${CPACK_COMPONENT_LIBTULIP-QT_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-QT-DEV_MAVERICK_DEPENDS ${CPACK_COMPONENT_LIBTULIP-QT-DEV_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP-OGDF_MAVERICK_DEPENDS ${CPACK_COMPONENT_LIBTULIP-OGDF_UBUNTU_COMMON_DEPENDS}) 
+  SET(CPACK_COMPONENT_TULIP-PYTHON_MAVERICK_DEPENDS ${CPACK_COMPONENT_TULIP-PYTHON_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP-PLUGINS_MAVERICK_DEPENDS ${CPACK_COMPONENT_TULIP-PLUGINS_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP_MAVERICK_DEPENDS ${CPACK_COMPONENT_TULIP_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP-DOC_MAVERICK_DEPENDS ${CPACK_COMPONENT_TULIP-DOC_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP-PYTHON-DOC_MAVERICK_DEPENDS ${CPACK_COMPONENT_TULIP-PYTHON-DOC_UBUNTU_COMMON_DEPENDS})
+
+  SET(CPACK_COMPONENT_LIBTULIP_NATTY_DEPENDS ${CPACK_COMPONENT_LIBTULIP_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-DEV_NATTY_DEPENDS ${CPACK_COMPONENT_LIBTULIP-DEV_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-OGL_NATTY_DEPENDS ${CPACK_COMPONENT_LIBTULIP-OGL_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-OGL-DEV_NATTY_DEPENDS ${CPACK_COMPONENT_LIBTULIP-OGL-DEV_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-QT_NATTY_DEPENDS ${CPACK_COMPONENT_LIBTULIP-QT_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_LIBTULIP-QT-DEV_NATTY_DEPENDS ${CPACK_COMPONENT_LIBTULIP-QT-DEV_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP-OGDF_NATTY_DEPENDS ${CPACK_COMPONENT_LIBTULIP-OGDF_UBUNTU_COMMON_DEPENDS}) 
+  SET(CPACK_COMPONENT_TULIP-PYTHON_NATTY_DEPENDS ${CPACK_COMPONENT_TULIP-PYTHON_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP-PLUGINS_NATTY_DEPENDS ${CPACK_COMPONENT_TULIP-PLUGINS_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP_NATTY_DEPENDS ${CPACK_COMPONENT_TULIP_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP-DOC_NATTY_DEPENDS ${CPACK_COMPONENT_TULIP-DOC_UBUNTU_COMMON_DEPENDS})
+  SET(CPACK_COMPONENT_TULIP-PYTHON-DOC_NATTY_DEPENDS ${CPACK_COMPONENT_TULIP-PYTHON-DOC_UBUNTU_COMMON_DEPENDS})
+  
+
 ENDIF()

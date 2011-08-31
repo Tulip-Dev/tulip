@@ -186,7 +186,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 #ifdef __APPLE__
     libPythonName += string(".dylib");
 #else
-    libPythonName += string(".so");
+    libPythonName += string(".so.1.0");
 #endif
     dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
 #endif
@@ -196,7 +196,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 #endif
 
     if (interpreterInit()) {
-
+ 
       addModuleSearchPath(pythonPluginsPath, true);
 
 #ifdef __APPLE__
@@ -204,6 +204,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 #else
       addModuleSearchPath(tlp::TulipLibDir, true);
 #endif
+
       initscriptengine();
       _PyImport_FixupExtension(const_cast<char *>("scriptengine"), const_cast<char *>("scriptengine"));
 

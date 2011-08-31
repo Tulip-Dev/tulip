@@ -4,18 +4,19 @@ SET(CPACK_INCLUDE_TOPLEVEL_DIRECTORY 1)
 SET(CPACK_PACKAGE_DESCRIPTION_FILE ${PROJECT_SOURCE_DIR}/README)
 SET(CPACK_RESOURCE_FILE_LICENSE ${PROJECT_SOURCE_DIR}/COPYING.LESSER)
 
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Tulip: A software for huge graphs 3D visualization.")
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Tulip: A software for huge graphs visualization.")
 SET(CPACK_PACKAGE_DESCRIPTION "Tulip is an information visualization framework dedicated to the analysis and visualization of relational data. Tulip aims to provide the developer with a complete library, supporting the design of interactive information visualization applications for relational data that can be tailored to the problems he or she is addressing.\nWritten in C++ the framework enables the development of algorithms, visual encodings, interaction techniques, data models, and domain-specific visualizations. One of the goal of Tulip is to facilitates the reuse of components and allows the developers to focus on programming their application. This development pipeline makes the framework efficient for research prototyping as well as the development of end-user applications.")
-SET(CPACK_PACKAGE_VENDOR "Tulip Dev Team, LaBRI <tulipdev@labri.fr>")
+SET(CPACK_PACKAGE_VENDOR "http://www.tulip-software.org")
+SET(CPACK_PACKAGE_CONTACT "Tulip Dev Team <tulipdev@labri.fr>")
 
 SET(CPACK_PACKAGE_VERSION_MAJOR ${TulipMajorVersion})
 SET(CPACK_PACKAGE_VERSION_MINOR ${TulipMinorVersion})
 SET(CPACK_PACKAGE_VERSION_PATCH ${TulipReleaseVersion})
 
 # Source package
-SET(CPACK_SOURCE_GENERATOR "TGZ;ZIP")
+SET(CPACK_SOURCE_GENERATOR "TGZ")
 # Files excluded of the source package
-SET(CPACK_SOURCE_IGNORE_FILES ".svn" "~$" "^${PROJECT_SOURCE_DIR}/unit_test/" "^${PROJECT_SOURCE_DIR}/docs/doxygen/xml/" "^${PROJECT_SOURCE_DIR}/profile_test/")
+SET(CPACK_SOURCE_IGNORE_FILES ".svn" "~$" "^${PROJECT_SOURCE_DIR}/unit_test/" "${CMAKE_BINARY_DIR}" "^${PROJECT_SOURCE_DIR}/docs/doxygen/xml/" "^${PROJECT_SOURCE_DIR}/profile_test/")
 # name of the source package (+ extentions .tar.gz or .zip)
 SET(CPACK_SOURCE_PACKAGE_FILE_NAME "tulip-${TulipVersion}-src")
 SET(CPACK_PACKAGE_NAME "tulip")
@@ -24,23 +25,14 @@ SET(CPACK_PACKAGE_NAME "tulip")
 SET(CPACK_COMPONENTS_ALL_GROUPS_IN_ONE_PACKAGE 1)
 SET(CPACK_PROJECT_CONFIG_FILE ${PROJECT_SOURCE_DIR}/CPackOptions.cmake)
 
-# Defines plateform-specific generators to be used
 IF(LINUX)
-  SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Tulip Dev Team <tulipdev@labri.fr>")
-  SET(CPACK_DEBIAN_PACKAGE_SECTION "science")
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Tulip Dev Team <tulipdev@labri.fr>")
+SET(CPACK_DEBIAN_PACKAGE_SECTION "science")
+SET(CPACK_DEBIAN_CHANGELOG "* initial tulip 3.6.1 ubuntu packaging (snapshot of tulip_3_6_maint branch)")
+ENDIF()
 
-  IF(I64)
-    SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
-  ELSE()
-    SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "i386")
-  ENDIF()
-
-  SET(CPACK_GENERATOR ";")
-  # Note: With CMake 2.8, we must introduce a hack to force generation of one deb per component. See CPackOptions.cmake for additional informations.
-  FOREACH(ITC ${CPACK_COMPONENTS_ALL})
-    SET(CPACK_GENERATOR "${CPACK_GENERATOR}DEB;")
-  ENDFOREACH()
-ELSEIF(WIN32)
+# Defines plateform-specific generators to be used
+IF(WIN32)
   SET(CPACK_GENERATOR "NSIS")
   SET(CPACK_NSIS_DISPLAY_NAME "Tulip ${TulipVersion}")
   SET(CPACK_NSIS_HELP_LINK "http://tulip.labri.fr")

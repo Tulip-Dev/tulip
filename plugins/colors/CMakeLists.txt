@@ -26,4 +26,4 @@ TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipQtName})
 INSTALL(TARGETS 
   ColorMapping-${TulipVersion}
   DESTINATION ${TulipPluginsInstallDir}/
-  COMPONENT libtulip_qt_plugins)
+  COMPONENT tulip-plugins)

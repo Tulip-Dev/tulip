@@ -293,11 +293,7 @@ p, li { white-space: pre-wrap; }
               <number>2</number>
              </property>
              <item>
-              <widget class="QLineEdit" name="fileName">
-               <property name="placeholderText">
-                <string>Enter the filename or use the browse button</string>
-               </property>
-              </widget>
+              <widget class="QLineEdit" name="fileName"/>
              </item>
              <item>
               <widget class="QPushButton" name="browseButton">

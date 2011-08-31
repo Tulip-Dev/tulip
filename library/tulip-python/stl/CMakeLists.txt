@@ -51,12 +51,17 @@ ADD_CUSTOM_TARGET(touchStlPythonCMakeLists ALL
                   COMMENT "touching CMakeLists.txt for Stl Python Bindings (force configure before next build to keep source files list updated)"
                   DEPENDS ${LibStlPythonName})
 
+IF(NOT UBUNTU_PPA_BUILD)
 INSTALL(TARGETS ${LibStlPythonName}
-        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT pythonbindings
-        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings
-        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings)
-
-
+        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip-python
+        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip-python
+        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip-python)
+ELSE()
+INSTALL(TARGETS ${LibStlPythonName}
+        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages COMPONENT tulip-python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip-python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip-python)
+ENDIF()
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)

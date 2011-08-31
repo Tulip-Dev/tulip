@@ -87,4 +87,4 @@ INSTALL(TARGETS
         InteractorAddEdge-${TulipVersion}
         InteractorEditEdgeBends-${TulipVersion}
         DESTINATION ${TulipPluginsInstallDir}/interactors/
-        COMPONENT libtulip_qt_plugins)
+        COMPONENT tulip-plugins)

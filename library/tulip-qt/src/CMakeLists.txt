@@ -203,9 +203,9 @@ TARGET_LINK_LIBRARIES(${LibTulipQtName} ${LibTulipOglName})
 ADD_DEPENDENCIES(${LibTulipQtName} ${LibTulipName} ${LibTulipOglName})
 
 INSTALL(TARGETS ${LibTulipQtName}
-       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_qt
-       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_qt
-       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_qt)
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip-qt
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip-qt
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip-qt)
 INSTALL(FILES ${tulip-qt_UI_SRCS} DESTINATION ${TulipIncludeInstallDir}/tulip/)
 
 IF(WIN32)
@@ -213,27 +213,27 @@ IF(WIN32)
   set(QT_LIBS phonon QtCLucene QtCore QtHelp QtGui QtNetwork QtOpenGL QtScript QtSql QtSvg QtWebKit QtXml QtXmlPatterns)
   FOREACH(QT_LIB ${QT_LIBS})
     FIND_LIBRARY_GLOB(QT_LIB_FILE "${QT_LIB}4.dll")
-    INSTALL_EXTERNAL_LIB(QT_LIB_FILE libtulip_qt)
+    INSTALL_EXTERNAL_LIB(QT_LIB_FILE libtulip-qt)
   ENDFOREACH()
 ELSEIF(APPLE)
   #Copy Qt libs
   set(QT_LIBS phonon QtAssistant QtCore QtDBus QtHelp QtGui QtNetwork QtOpenGL QtScript QtSql QtSvg QtWebKit QtXml QtXmlPatterns)
   FOREACH(QT_LIB ${QT_LIBS})
     FIND_LIBRARY_GLOB_DIR(QT_LIB_FILE "${QT_LIB}.framework/${QT_LIB}" "/Library/Frameworks")
-    INSTALL_EXTERNAL_LIB(QT_LIB_FILE libtulip_qt)
+    INSTALL_EXTERNAL_LIB(QT_LIB_FILE libtulip-qt)
   ENDFOREACH()
 
   FIND_LIBRARY_GLOB_DIR(QTLUCENE_INSTALL_PATH "libQtCLucene.4.dylib" "/usr/lib")
-  INSTALL_EXTERNAL_LIB(QTLUCENE_INSTALL_PATH libtulip_qt)  
+  INSTALL_EXTERNAL_LIB(QTLUCENE_INSTALL_PATH libtulip-qt)  
 
   #Copy Qt image plugins.
-  INSTALL(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" DESTINATION ${TulipAppleContentsDir} COMPONENT libtulip_qt)
+  INSTALL(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" DESTINATION ${TulipAppleContentsDir} COMPONENT libtulip-qt)
   #Copy Qt image plugins dependancies
   FILE(GLOB PLUGINS "${QT_PLUGINS_DIR}/imageformats/*${CMAKE_SHARED_LIBRARY_SUFFIX}")
   FOREACH(PLUGIN ${PLUGINS})
     FIND_LIBRARY_DEPENDANCIES(QT_PLUGINS_DEPENDENCIES "${PLUGIN}")
-    INSTALL_EXTERNAL_LIB(QT_PLUGINS_DEPENDENCIES libtulip_qt)
+    INSTALL_EXTERNAL_LIB(QT_PLUGINS_DEPENDENCIES libtulip-qt)
   ENDFOREACH()
   #Copy Qt menu.
-  INSTALL(DIRECTORY "${QT_LIBRARY_DIR}/QtGui.framework/Versions/Current/Resources/qt_menu.nib" DESTINATION "${TulipAppleResourcesDir}" COMPONENT libtulip_qt OPTIONAL)
+  INSTALL(DIRECTORY "${QT_LIBRARY_DIR}/QtGui.framework/Versions/Current/Resources/qt_menu.nib" DESTINATION "${TulipAppleResourcesDir}" COMPONENT libtulip-qt OPTIONAL)
 ENDIF()

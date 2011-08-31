@@ -97,7 +97,6 @@ QsciLexerPython *PythonCodeEditor::pythonLexer(NULL);
 
 PythonCodeEditor::PythonCodeEditor(QWidget *parent, int fontZoom) : QsciScintilla(parent) {
   installEventFilter(new GragKeyboardFocusEventFilter());
-
   if (pythonLexer == NULL) {
     pythonLexer = new CustomLexerPython;
     QsciAPIs *api = new QsciAPIs(pythonLexer);
@@ -106,6 +105,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent, int fontZoom) : QsciScintill
     nameFilter << "*.api";
     QFileInfoList fileList = apiDir.entryInfoList(nameFilter);
 
+	
     for (int i = 0 ; i < fileList.size() ; ++i) {
       QFileInfo fileInfo = fileList.at(i);
       loadApiFile(fileInfo.absoluteFilePath(), api);
@@ -127,8 +127,10 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent, int fontZoom) : QsciScintill
   setFolding(QsciScintilla::CircledTreeFoldStyle);
   setIndentationGuides(true);
 
+#if QSCINTILLA_VERSION  >= 0x020406	
   errorIndicator = indicatorDefine(QsciScintilla::SquiggleIndicator);
   setIndicatorForegroundColor(QColor(255,0,0), errorIndicator);
+#endif	
 
   if (fontZoom > 0) {
     for (int i = 0 ; i < fontZoom ; ++i) {
@@ -143,11 +145,15 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent, int fontZoom) : QsciScintill
 }
 
 void PythonCodeEditor::indicateScriptCurrentError(int lineNumber) {
+#if QSCINTILLA_VERSION  >= 0x020406	  
   fillIndicatorRange(lineNumber, 0, lineNumber, text(lineNumber).length(), errorIndicator);
+#endif	
 }
 
 void PythonCodeEditor::clearErrorIndicator() {
+#if QSCINTILLA_VERSION  >= 0x020406	  
   clearIndicatorRange(0, 0, lines(), text(lines()).length(), errorIndicator);
+#endif	
 }
 
 void PythonCodeEditor::showEvent(QShowEvent *) {

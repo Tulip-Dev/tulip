@@ -5,5 +5,5 @@ INSTALL(FILES
   edgeSpring.png
   titlebarGradient.png
 DESTINATION ${TulipBitmapInstallDir}
-COMPONENT tulip_textures
+COMPONENT tulip
 )

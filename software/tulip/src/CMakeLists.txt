@@ -81,47 +81,47 @@ IF(WIN32)
   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip.exe
             DESTINATION "${TulipBinInstallDir}"
-            COMPONENT tulip_app)
+            COMPONENT tulip)
     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip_app.exe
             DESTINATION "${TulipBinInstallDir}"
-            COMPONENT tulip_app)
+            COMPONENT tulip)
   ELSE()
     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip.exe
             DESTINATION "${TulipBinInstallDir}"
-            COMPONENT tulip_app)
+            COMPONENT tulip)
     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_app.exe
             DESTINATION "${TulipBinInstallDir}"
-            COMPONENT tulip_app)
+            COMPONENT tulip)
   ENDIF()
 ELSE(WIN32)
   INSTALL(PROGRAMS
     ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sh
     DESTINATION ${TulipBinInstallDir}
     RENAME tulip
-    COMPONENT tulip_app)
+    COMPONENT tulip)
   INSTALL(PROGRAMS
     ${CMAKE_CURRENT_BINARY_DIR}/tulip_app
     DESTINATION ${TulipBinInstallDir}
-    COMPONENT tulip_app)
+    COMPONENT tulip)
   INSTALL(PROGRAMS
     ${CMAKE_CURRENT_BINARY_DIR}/tulip_need_restart
     DESTINATION ${TulipBinInstallDir}
-    COMPONENT tulip_app)
+    COMPONENT tulip)
 ENDIF(WIN32)
 
 #Copy QtAssistant apps
 IF(APPLE)
   FIND_LIBRARY_GLOB(QTASSISTANT_INSTALL_PATH "QtAssistant.framework/QtAssistant")
   IF(QTASSISTANT_INSTALL_PATH)
-    INSTALL_EXTERNAL_LIB(QTASSISTANT_INSTALL_PATH tulip_app)
+    INSTALL_EXTERNAL_LIB(QTASSISTANT_INSTALL_PATH tulip)
   ENDIF()
-  INSTALL(DIRECTORY "/Developer/Applications/Qt/Assistant.app" DESTINATION ${TulipAppleContentsDir} USE_SOURCE_PERMISSIONS COMPONENT tulip_app OPTIONAL)
+  INSTALL(DIRECTORY "/Developer/Applications/Qt/Assistant.app" DESTINATION ${TulipAppleContentsDir} USE_SOURCE_PERMISSIONS COMPONENT tulip OPTIONAL)
 
 ELSEIF(WIN32)
-  INSTALL(FILES ${QT_BINARY_DIR}/assistant.exe DESTINATION "${TulipBinInstallDir}" COMPONENT tulip_app)
+  INSTALL(FILES ${QT_BINARY_DIR}/assistant.exe DESTINATION "${TulipBinInstallDir}" COMPONENT tulip)
   #the sqldriver is needed to show the documentation
   #because the docs/tulip.qhc generated file is an embedded sql database
-  INSTALL(FILES ${QT_PLUGINS_DIR}/sqldrivers/qsqlite4.dll DESTINATION "${TulipBinInstallDir}/plugins/sqldrivers" COMPONENT tulip_app)
+  INSTALL(FILES ${QT_PLUGINS_DIR}/sqldrivers/qsqlite4.dll DESTINATION "${TulipBinInstallDir}/plugins/sqldrivers" COMPONENT tulip)
 ENDIF()
 
 

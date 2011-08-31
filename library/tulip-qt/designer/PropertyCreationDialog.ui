@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>293</width>
+    <width>294</width>
     <height>123</height>
    </rect>
   </property>
@@ -56,9 +56,6 @@
          <width>183</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="placeholderText">
-        <string>Enter the property name</string>
        </property>
       </widget>
      </item>

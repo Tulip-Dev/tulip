@@ -9,11 +9,17 @@ ENDIF(WIN32)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
 
 ADD_LIBRARY(${OGDFLibrary} SHARED ${OGDF_SOURCES} )
+
+IF(UBUNTU_PPA_BUILD)
+SET_TARGET_PROPERTIES(${OGDFLibrary} 
+		      PROPERTIES SUFFIX "-tulip${TulipVersion}.so")
+ENDIF(UBUNTU_PPA_BUILD)
+
 IF(WIN32)
   TARGET_LINK_LIBRARIES(${OGDFLibrary} psapi)
 ENDIF(WIN32)
 
 INSTALL(TARGETS ${OGDFLibrary}
-       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_ogdf
-       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_ogdf
-       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_ogdf)
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip-ogdf
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip-ogdf
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip-ogdf)

@@ -15,6 +15,6 @@ TARGET_LINK_LIBRARIES(${LibTulipOGDFName} ${LibTulipName})
 TARGET_LINK_LIBRARIES(${LibTulipOGDFName} ${OGDFLibrary})
 
 INSTALL(TARGETS ${LibTulipOGDFName}
-       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_ogdf
-       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_ogdf
-       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_ogdf)
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip-ogdf
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip-ogdf
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip-ogdf)
