@@ -205,7 +205,7 @@ void FindReplaceDialog::doReplaceAll() {
 			editor->getCursorPosition(&line, &index);
 			// when replacing a pattern P by a pattern following this regexp .*P.*
 			// this can lead to an infinite loop, handle this case
-			if (line == startLine && ((index - replaceText->text().length()) == startIndex))
+			if (line == startLine && index >= startIndex)
 			  break;
 		}
 		searchStatusLabel->setText(QString::number(nbReplacements) + QString(" matches replaced"));
