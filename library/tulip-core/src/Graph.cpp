@@ -163,13 +163,13 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   tmp.pluginProgress=tmpProgress;
   ImportModule *newImportModule=ImportModuleLister::getPluginObject(format, tmp);
   assert(newImportModule!=0);
-  
+
   bool importSucessfull = newImportModule->import();
 
   //If the import failed and we created the graph then delete the graph
   if (!importSucessfull && newGraphP)
-      delete newGraph;
-  
+    delete newGraph;
+
   if (deletePluginProgress) delete tmpProgress;
 
   delete newImportModule;
@@ -377,52 +377,54 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
 
 //=========================================================
 bool Graph::applyAlgorithm(std::string &errorMessage, DataSet *dataSet,
-                         const std::string &algorithm, PluginProgress *progress) {
+                           const std::string &algorithm, PluginProgress *progress) {
   if (!AlgorithmLister::pluginExists(algorithm)) {
     cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << algorithm
-    << "\" doesn't exists (or is not loaded)" << endl;
+         << "\" doesn't exists (or is not loaded)" << endl;
     return false;
   }
-  
+
   bool result;
   bool deletePluginProgress=false;
   AlgorithmContext tmp;
   tmp.graph = this;
   tmp.dataSet = dataSet;
   PluginProgress *tmpProgress;
-  
+
   if (progress == 0) {
     tmpProgress = new SimplePluginProgress();
     deletePluginProgress = true;
   }
   else tmpProgress = progress;
-  
+
   tmp.pluginProgress=tmpProgress;
   Algorithm *newAlgo=AlgorithmLister::getPluginObject(algorithm, tmp);
-  
+
   if ((result=newAlgo->check(errorMessage)))
     newAlgo->run();
-  
+
   delete newAlgo;
-  
+
   if (deletePluginProgress) delete tmpProgress;
-  
+
   return result;
 }
 
 tlp::node Graph::getSource() const {
   node source(UINT_MAX);
-  
+
   Iterator<node> *it = getNodes();
+
   while (it->hasNext()) {
     source=it->next();
-    
+
     if (indeg(source) == 0) {
       break;
     }
   }
+
   delete it;
-  
+
   return source;
 }
 

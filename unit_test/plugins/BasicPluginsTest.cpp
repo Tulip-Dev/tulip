@@ -270,17 +270,17 @@ void BasicPluginsTest::testEqualValueClustering() {
   DataSet ds;
   bool result;
   const std::string algorithmName = "Equal Value";
-  
+
   // check minimum call to computeEqualValueClustering
   // with an empty graph
   graph = tlp::newGraph();
 
   DoubleProperty* metric = graph->getProperty<DoubleProperty>("metric");
   ds.set("Property", metric);
-  
+
   result = graph->applyAlgorithm(errorMsg, &ds, algorithmName, NULL);
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
-  
+
   // fill graph & metric
   vector<node> nodes;
   vector<edge> edges;
@@ -288,8 +288,8 @@ void BasicPluginsTest::testEqualValueClustering() {
   unsigned int EDGE_RATIO = 100;
 
   for (unsigned int i=0; i<NB_ADD; ++i) {
-      nodes.push_back(graph->addNode());
-      metric->setNodeValue(nodes[i], (double) (rand()%NB_ADD));
+    nodes.push_back(graph->addNode());
+    metric->setNodeValue(nodes[i], (double) (rand()%NB_ADD));
   }
 
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
@@ -332,7 +332,7 @@ void BasicPluginsTest::testQuotientClustering() {
   result = graph->applyAlgorithm(errorMsg, &ds, "Equal Value", NULL);
   CPPUNIT_ASSERT(result);
   result = graph->applyAlgorithm(errorMsg, NULL,
-                               "Quotient Clustering", NULL);
+                                 "Quotient Clustering", NULL);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================

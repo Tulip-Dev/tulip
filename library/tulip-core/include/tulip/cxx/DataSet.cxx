@@ -21,6 +21,7 @@
 //DataSet implementation
 template<typename T> bool tlp::DataSet::get(const std::string& key,T& value) const {
   std::map<std::string, tlp::DataType*>::const_iterator it = data.find(key);
+
   if(it != data.end()) {
     //no assert can be done here on the type, as we might have stored a DoubleProperty and want only to retrieve a PropertyInterface
     value = *((T*)it->second->value);
@@ -31,13 +32,14 @@ template<typename T> bool tlp::DataSet::get(const std::string& key,T& value) con
 
 template<typename T> bool tlp::DataSet::getAndFree(const std::string &key,T& value) {
   std::map<std::string, tlp::DataType*>::iterator it = data.find(key);
+
   if(it != data.end()) {
     //no assert can be done here on the type, as we might have stored a DoubleProperty and want only to retrieve a PropertyInterface
     value = *((T*)it->second->value);
     delete it->second;
     data.erase(it);
   }
-  
+
   return it != data.end();
 }
 

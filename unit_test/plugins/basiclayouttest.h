@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
@@ -53,27 +53,27 @@ private:
   template<typename PropType>
   bool computeProperty(const std::string &algorithm, const std::string& graphType = "Planar Graph", PropType* prop = NULL);
 public:
-    virtual void setUp();
-    virtual void tearDown();
+  virtual void setUp();
+  virtual void tearDown();
 
-    void testBubbleTree();
-    void testCircular();
-    void testConeTreeExtended();
-    void testConnectedComponentPacking();
-    void testDendrogram();
-    void testGEMLayout();
-    void testHierarchicalGraph();
-    void testImprovedWalker();
-    void testMixedModel();
-    void testRandomLayout();
-    void testSquarifiedTreeMap();
-    void testTreeLeaf();
-    void testTreeMap();
-    void testTreeRadial();
-    void testTreeReingoldAndTilfordExtended();
-    void testTutte();
-    void testInducedSubGraphSelection();
-    void testKruskal();
+  void testBubbleTree();
+  void testCircular();
+  void testConeTreeExtended();
+  void testConnectedComponentPacking();
+  void testDendrogram();
+  void testGEMLayout();
+  void testHierarchicalGraph();
+  void testImprovedWalker();
+  void testMixedModel();
+  void testRandomLayout();
+  void testSquarifiedTreeMap();
+  void testTreeLeaf();
+  void testTreeMap();
+  void testTreeRadial();
+  void testTreeReingoldAndTilfordExtended();
+  void testTutte();
+  void testInducedSubGraphSelection();
+  void testKruskal();
 };
 
 #endif // BASICLAYOUTTEST_H

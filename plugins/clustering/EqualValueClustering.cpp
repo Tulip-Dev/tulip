@@ -77,33 +77,33 @@ bool EqualValueClustering::run() {
     property = graph->getProperty("viewMetric");
 
   const bool onNodes = eltTypes.getCurrent() == NODE_ELT;
-  
+
   StableIterator<node> itN(graph->getNodes());
   StableIterator<edge> itE(graph->getEdges());
   int step = 0, maxSteps = graph->numberOfNodes();
-  
+
   // property name is used when naming created sub graphs
   const string pName = property->getName();
-  
+
   if (maxSteps < 100)
     maxSteps = 100;
-  
+
   if (pluginProgress)
     pluginProgress->setComment(onNodes ? "Partitioning nodes..." : "Partitioning edges");
-  
+
   vector<Graph *> subGraphs;
-  
+
   // try to work with double value if it's a DoubleProperty
   if (typeid(*property) == typeid(DoubleProperty)) {
     TLP_HASH_MAP<double, Graph *> partitions;
     DoubleProperty *metric = (DoubleProperty *) property;
-    
+
     if (onNodes) {
       while (itN.hasNext()) {
         Graph *sg;
         node n = itN.next();
         const double& tmp = metric->getNodeValue(n);
-        
+
         if (partitions.find(tmp) == partitions.end()) {
           sg = graph->addSubGraph();
           stringstream sstr;
@@ -114,38 +114,38 @@ bool EqualValueClustering::run() {
         }
         else
           sg = partitions[tmp];
-        
+
         sg->addNode(n);
-        
+
         if (pluginProgress && ((++step % (maxSteps/100)) == 0)) {
           pluginProgress->progress(step, maxSteps);
-          
+
           if (pluginProgress->state() !=TLP_CONTINUE)
             return pluginProgress->state()!= TLP_CANCEL;
         }
       }
-      
+
       step = 0;
       maxSteps = graph->numberOfEdges();
-      
+
       if (maxSteps < 100)
         maxSteps = 100;
-      
+
       if (pluginProgress)
         pluginProgress->setComment("Partitioning edges...");
-      
+
       while(itE.hasNext()) {
         edge ite = itE.next();
         pair<node, node> eEnds = graph->ends(ite);
         const double& tmp = metric->getNodeValue(eEnds.first);
-        
+
         if (tmp == metric->getNodeValue(eEnds.second)) {
           partitions[tmp]->addEdge(ite);
         }
-        
+
         if (pluginProgress && ((++step % (maxSteps/100)) == 0)) {
           pluginProgress->progress(step, maxSteps);
-          
+
           if (pluginProgress->state() !=TLP_CONTINUE)
             return pluginProgress->state()!= TLP_CANCEL;
         }
@@ -156,7 +156,7 @@ bool EqualValueClustering::run() {
         Graph *sg;
         edge e = itE.next();
         const double& tmp = metric->getEdgeValue(e);
-        
+
         if (partitions.find(tmp) == partitions.end()) {
           sg = graph->addSubGraph();
           stringstream sstr;
@@ -167,15 +167,15 @@ bool EqualValueClustering::run() {
         }
         else
           sg = partitions[tmp];
-        
+
         pair<node, node> eEnds = graph->ends(e);
         sg->addNode(eEnds.first);
         sg->addNode(eEnds.second);
         sg->addEdge(e);
-        
+
         if (pluginProgress && ((++step % (maxSteps/100)) == 0)) {
           pluginProgress->progress(step, maxSteps);
-          
+
           if (pluginProgress->state() !=TLP_CONTINUE)
             return pluginProgress->state()!= TLP_CANCEL;
         }
@@ -184,13 +184,13 @@ bool EqualValueClustering::run() {
   }
   else {
     TLP_HASH_MAP<string, Graph *> partitions;
-    
+
     if (onNodes) {
       while (itN.hasNext()) {
         Graph *sg;
         node n = itN.next();
         string tmp=property->getNodeStringValue(n);
-        
+
         if (partitions.find(tmp)==partitions.end()) {
           sg = graph->addSubGraph();
           stringstream sstr;
@@ -201,38 +201,38 @@ bool EqualValueClustering::run() {
         }
         else
           sg = partitions[tmp];
-        
+
         sg->addNode(n);
-        
+
         if (pluginProgress && ((++step % (maxSteps/100)) == 0)) {
           pluginProgress->progress(step, maxSteps);
-          
+
           if (pluginProgress->state() !=TLP_CONTINUE)
             return pluginProgress->state()!= TLP_CANCEL;
         }
       }
-      
+
       step = 0;
       maxSteps = graph->numberOfEdges();
-      
+
       if (maxSteps < 100)
         maxSteps = 100;
-      
+
       if (pluginProgress)
         pluginProgress->setComment("Partitioning edges...");
-      
+
       while(itE.hasNext()) {
         edge ite = itE.next();
         pair<node, node> eEnds = graph->ends(ite);
         string tmp = property->getNodeStringValue(eEnds.first);
-        
+
         if (tmp == property->getNodeStringValue(eEnds.second)) {
           partitions[tmp]->addEdge(ite);
         }
-        
+
         if (pluginProgress && ((++step % (maxSteps/100)) == 0)) {
           pluginProgress->progress(step, maxSteps);
-          
+
           if (pluginProgress->state() !=TLP_CONTINUE)
             return pluginProgress->state()!= TLP_CANCEL;
         }
@@ -243,7 +243,7 @@ bool EqualValueClustering::run() {
         Graph *sg;
         edge e = itE.next();
         string tmp = property->getEdgeStringValue(e);
-        
+
         if (partitions.find(tmp) == partitions.end()) {
           sg = graph->addSubGraph();
           stringstream sstr;
@@ -254,22 +254,22 @@ bool EqualValueClustering::run() {
         }
         else
           sg = partitions[tmp];
-        
+
         pair<node, node> eEnds = graph->ends(e);
         sg->addNode(eEnds.first);
         sg->addNode(eEnds.second);
         sg->addEdge(e);
-        
+
         if (pluginProgress && ((++step % (maxSteps/100)) == 0)) {
           pluginProgress->progress(step, maxSteps);
-          
+
           if (pluginProgress->state() !=TLP_CONTINUE)
             return pluginProgress->state()!= TLP_CANCEL;
         }
       }
     }
   }
-  
+
   if (connected) {
     // loop on subgraphs to only have connected components
     for (unsigned int i = 0; i < subGraphs.size(); ++i) {
@@ -277,12 +277,12 @@ bool EqualValueClustering::run() {
       std::vector<std::set<node> > components;
       // compute the connected components's subgraph
       ConnectedTest::computeConnectedComponents(sg, components);
-      
+
       if (components.size() > 1) {
         string name = sg->getAttribute<string>("name");
         // remove the orginal subgraph
         graph->delSubGraph(sg);
-        
+
         // create new subgraphs with same name
         for (unsigned int i = 0; i < components.size(); ++i) {
           sg = graph->inducedSubGraph(components[i]);
@@ -293,7 +293,7 @@ bool EqualValueClustering::run() {
       }
     }
   }
-  
+
   return true;
 }
 

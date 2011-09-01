@@ -47,7 +47,7 @@ enum ElementType {
   /** This element describes a node **/
   NODE = 0,
   /** This element describes an edge **/
-  EDGE = 1 
+  EDGE = 1
 };
 
 /**
@@ -68,7 +68,7 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename);
  *
  * This function uses the "tlp" import plugin, and will fail if it is not loaded (By default this plugin is linked into the library and should be loaded).
  *
- * @param  The graph to save. 
+ * @param  The graph to save.
  * @param filename The file to save the graph to.
  * @return bool Whether the export was successfull or not.
  **/
@@ -128,7 +128,7 @@ TLP_SCOPE Graph* _DEPRECATED newSubGraph(Graph *graph, std::string name = "unnam
  * @brief Creates and returns a subgraph of the graph that is equal to root (a clone subgraph).
  *
  * @deprecated A new method should be added to Graph to perform this, because object-oriented programming and stuff.
- * 
+ *
  * @param graph The Graph on which to create a clone subgraph.
  * @param name The name of the newly created subgraph. Defaults to "unnamed".
  * @return :Graph* The newly created clone subgraph.
@@ -196,16 +196,16 @@ public:
   //=========================================================================
   // Graph hierarchy access and building
   //=========================================================================
-  
+
   /**
    * @brief Removes all nodes, edges and sub-graphs from this graph.
-   * 
+   *
    * Contrarily to creating a new Graph, this keeps attributes and properties.
    *
    * @return void
    **/
   virtual  void clear()=0;
-  
+
   /**
    * @brief Creates and returns a new sub-graph of this graph.
    *
@@ -220,7 +220,7 @@ public:
    * @return :Graph* The newly created subgraph.
    **/
   virtual Graph *addSubGraph(BooleanProperty *selection=0, unsigned int id = 0)=0;
-  
+
   /**
    *  Creates and returns a new sub-graph of the graph
    *  induced by a set of nodes. The sub-graph contains all
@@ -434,7 +434,7 @@ public:
    * @return tlp::node The first encountered node with input degree of 0, or an invalid node if none was found.
    **/
   virtual tlp::node getSource() const;
-  
+
   /// Returns an existing node of the graph.
   virtual node getOneNode() const =0;
   /// Returns an iterator on the nodes.

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
@@ -37,27 +37,27 @@ void BasicLayoutTest::initializeGraph(const string& type) {
 //==========================================================
 template<typename PropType>
 bool BasicLayoutTest::computeProperty(const std::string &algorithm,
-                                       const std::string & graphType,
-                                       PropType* prop) {
+                                      const std::string & graphType,
+                                      PropType* prop) {
   initializeGraph(graphType);
   bool deleteProp = prop == NULL;
-  
+
   if (prop == NULL)
     prop = new PropType(graph);
-  
+
   string errorMsg;
   DataSet ds;
   bool result = graph->computeProperty(algorithm, prop, errorMsg);
-  
+
   if (deleteProp)
     delete prop;
-  
+
   return result;
 }
 //==========================================================
 
 void BasicLayoutTest::setUp() {
- graph = tlp::newGraph();
+  graph = tlp::newGraph();
 }
 
 void BasicLayoutTest::tearDown() {
@@ -92,7 +92,7 @@ void BasicLayoutTest::testDendrogram() {
   LayoutProperty layout(graph);
   string errorMsg;
   bool result =
-  graph->computeProperty("Dendrogram", &layout, errorMsg, NULL, &ds);
+    graph->computeProperty("Dendrogram", &layout, errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -125,7 +125,7 @@ void BasicLayoutTest::testMixedModel() {
   LayoutProperty layout(graph);
   string errorMsg;
   bool result =
-  graph->computeProperty("Mixed Model", &layout, errorMsg, NULL, &ds);
+    graph->computeProperty("Mixed Model", &layout, errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -141,7 +141,7 @@ void BasicLayoutTest::testSquarifiedTreeMap() {
   DataSet ds;
   bool result = graph->computeProperty("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
-  
+
   LayoutProperty layout(graph);
   ds.set("metric", &metric);
   result = graph->computeProperty("Squarified Tree Map", &layout,
@@ -157,7 +157,7 @@ void BasicLayoutTest::testTreeLeaf() {
   LayoutProperty layout(graph);
   string errorMsg;
   bool result =
-  graph->computeProperty("Tree Leaf", &layout, errorMsg, NULL, &ds);
+    graph->computeProperty("Tree Leaf", &layout, errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -176,7 +176,7 @@ void BasicLayoutTest::testTreeReingoldAndTilfordExtended() {
 //==========================================================
 void BasicLayoutTest::testTutte() {
   bool result = computeProperty<LayoutProperty>("3-Connected (Tutte)",
-                                                "Complete General Graph");
+                "Complete General Graph");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -188,7 +188,7 @@ void BasicLayoutTest::testInducedSubGraphSelection() {
 void BasicLayoutTest::testKruskal() {
   BooleanProperty selection(graph);
   bool result = computeProperty<BooleanProperty>("Kruskal", "Planar Graph",
-                                                 &selection);
+                &selection);
   CPPUNIT_ASSERT(result);
   node n;
   forEach(n, graph->getNodes()) {

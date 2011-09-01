@@ -105,6 +105,7 @@ void TulipMainWindow::systemTrayMessageClicked() {
     _ui->pluginsPage->showErrorsPage();
   else
     _ui->welcomePageChooser->click();
+
   show();
 
   _currentTrayMessage = NoMessage;
@@ -201,6 +202,7 @@ void TulipMainWindow::EnableCrashHandling(const QString &folder, qlonglong pid) 
 void TulipMainWindow::ShowTrayMessage(const QString &title, const QString &message, uint icon, uint duration) {
   if (!_systemTrayIcon)
     return;
+
   _systemTrayIcon->showMessage(title,message,(QSystemTrayIcon::MessageIcon)icon,duration);
 }
 
