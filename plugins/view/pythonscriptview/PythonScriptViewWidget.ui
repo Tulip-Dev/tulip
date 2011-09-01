@@ -273,6 +273,23 @@
          </widget>
         </item>
         <item>
+         <widget class="QToolButton" name="pauseScriptButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Pause script</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="PythonScriptViewResource.qrc">
+            <normaloff>:/icons/playback_pause.png</normaloff>:/icons/playback_pause.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QToolButton" name="stopScriptButton">
           <property name="enabled">
            <bool>false</bool>

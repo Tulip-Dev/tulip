@@ -21,6 +21,7 @@
 #define TULIPUTILSMODULE_H_
 
 #include "PythonInterpreter.h"
+#include "PythonScriptView.h"
 
 #include <tulip/MainController.h>
 #include <tulip/ControllerAlgorithmTools.h>
@@ -54,6 +55,27 @@ tuliputils_updateVisualization(PyObject *, PyObject *args) {
       }
 
       tulipViews[i]->draw();
+    }
+  }
+
+  Py_RETURN_NONE;
+}
+
+static PyObject *
+tuliputils_pauseRunningScript(PyObject *, PyObject *) {
+
+  tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
+
+  if (mainController) {
+    std::vector<tlp::View*> tulipViews = mainController->getViewsOfGraph(mainController->getGraph());
+
+    for (size_t i = 0 ; i < tulipViews.size() ; ++i) {
+      PythonScriptView *pythonView = dynamic_cast<PythonScriptView *>(tulipViews[i]);
+
+      if (pythonView && pythonView->isRunningScript()) {
+        pythonView->pauseCurrentScript();
+      }
+
     }
   }
 
@@ -181,6 +203,7 @@ tuliputils_updatePluginsMenus(PyObject *, PyObject *) {
 
 static PyMethodDef TulipUtilsMethods[] = {
   {"updateVisualization",  tuliputils_updateVisualization, METH_VARARGS, "Update views on current graph."},
+  {"pauseRunningScript",  tuliputils_pauseRunningScript, METH_VARARGS, "Pause the execution of the current running script."},
   {"updatePluginsMenus",  tuliputils_updatePluginsMenus, METH_VARARGS, "Update the plugins menus entries in the Tulip GUI."},
   {NULL, NULL, 0, NULL}        /* Sentinel */
 };

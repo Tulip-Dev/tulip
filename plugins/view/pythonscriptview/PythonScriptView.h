@@ -81,6 +81,14 @@ public :
 
   bool eventFilter(QObject *obj, QEvent *event);
 
+  bool isRunningScript() const {
+	  return runningScript;
+  }
+
+public slots:
+
+  void pauseCurrentScript();
+
 private slots :
 
   void newScript();
@@ -128,6 +136,7 @@ private :
 
   tlp::SGHierarchyWidget *clusterTreeWidget;
   bool scriptStopped;
+  bool runningScript;
 
 };
 
