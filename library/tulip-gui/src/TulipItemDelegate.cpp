@@ -8,7 +8,7 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
 
 TulipItemDelegate::~TulipItemDelegate() {
   foreach(tlp::TulipItemEditorCreator* v,_creators.values())
-    delete v;
+  delete v;
 }
 
 template<typename T>
@@ -18,6 +18,7 @@ void TulipItemDelegate::registerCreator(tlp::TulipItemEditorCreator* c) {
 
 void TulipItemDelegate::unregisterCreator(tlp::TulipItemEditorCreator* c) {
   int k = _creators.key(c,INT_MIN);
+
   if (k != INT_MIN)
     _creators.remove(k);
 }
@@ -34,8 +35,10 @@ tlp::TulipItemEditorCreator* TulipItemDelegate::creator() const {
 
 tlp::TulipItemEditorCreator* TulipItemDelegate::creator(int typeId) const {
   tlp::TulipItemEditorCreator *result = NULL;
+
   if (_creators.contains(typeId))
     result = _creators[typeId];
+
   return result;
 }
 

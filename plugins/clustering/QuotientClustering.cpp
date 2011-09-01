@@ -395,7 +395,7 @@ bool QuotientClustering::run() {
       Graph* sg = quotientGraph->getNodeMetaInfo(mn);
       string eMsg;
       sg->applyAlgorithm(eMsg, &dSet, "Quotient Clustering",
-                          pluginProgress);
+                         pluginProgress);
 
       // if a quotient graph has been computed
       // update metaInfo of current meta node

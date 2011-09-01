@@ -55,6 +55,7 @@ int main(int argc, char **argv) {
 
   //run the updater
   QDir upgradeDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/update");
+
   if(!upgradeDir.entryList(QDir::NoDotAndDotDot).empty()) {
     //we unpack the archives in-place, the contents will be copied later by a script
     tlp::PluginProgress* progress = new tlp::SimplePluginProgress();
@@ -62,6 +63,7 @@ int main(int argc, char **argv) {
     filters << "*.zip";
     foreach(const QFileInfo& pluginArchive, upgradeDir.entryInfoList(filters)) {
       QuaZIPFacade::unzip(tlp::getPluginLocalInstallationDir(), pluginArchive.absoluteFilePath(), progress);
+
       if(!progress->getError().empty()) {
         //TODO proper error reporting
         std::cout << progress->getError() << std::endl;
@@ -70,7 +72,7 @@ int main(int argc, char **argv) {
         QFile::remove(pluginArchive.absoluteFilePath());
       }
     }
-    
+
     //launch the updater and quit, the updater will re-launch Tulip
     QFileInfo tulipExecutable(argv[0]);
 #ifdef WIN32
@@ -78,9 +80,9 @@ int main(int argc, char **argv) {
 #else
     int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.sh");
 #endif
-    exit(0); 
+    exit(0);
   }
-  
+
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
@@ -27,24 +27,24 @@ CPPUNIT_TEST_SUITE_REGISTRATION(BasicMetricTest);
 
 template<typename PropType>
 bool BasicMetricTest::computeProperty(const std::string &algorithm,
-                                       const std::string & graphType,
-                                       PropType* prop) {
-  
+                                      const std::string & graphType,
+                                      PropType* prop) {
+
   DataSet ds;
   tlp::Graph* g = tlp::importGraph(graphType, ds, NULL, graph);
   CPPUNIT_ASSERT(g == graph);
-  
+
   bool deleteProp = prop == NULL;
-  
+
   if (prop == NULL)
     prop = new PropType(graph);
-  
+
   std::string errorMsg;
   bool result = graph->computeProperty(algorithm, prop, errorMsg);
-  
+
   if (deleteProp)
     delete prop;
-  
+
   return result;
 }
 
@@ -128,7 +128,7 @@ void BasicMetricTest::testPathLengthMetric() {
   CPPUNIT_ASSERT(result == false);
   graph->clear();
   result = computeProperty<DoubleProperty>("Path Length",
-                                           "Random General Tree");
+           "Random General Tree");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================

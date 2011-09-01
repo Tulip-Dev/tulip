@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
@@ -52,7 +52,7 @@ private:
 public:
   void setUp();
   void tearDown();
-  
+
   void testArityMetric();
   void testBetweennessCentrality();
   void testBiconnectedComponent();

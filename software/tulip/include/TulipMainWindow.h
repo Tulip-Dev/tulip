@@ -28,6 +28,7 @@ public:
   static TulipMainWindow* instance() {
     if (!_instance)
       _instance = new TulipMainWindow;
+
     return _instance;
   }
 
@@ -62,25 +63,25 @@ private:
 
 // Methods and properties coming from the D-Bus service implementation
 public: // PROPERTIES
-    Q_PROPERTY(qlonglong pid READ pid)
-    qlonglong pid() const;
+  Q_PROPERTY(qlonglong pid READ pid)
+  qlonglong pid() const;
 
 public Q_SLOTS: // METHODS
-    void AddPluginRepository(const QString &url);
-    void CreatePerspective(const QString &name);
-    void CreatePerspective(const QString &name, const QVariantMap &parameters);
-    void EnableCrashHandling(const QString &folder, qlonglong pid);
-    QStringList GetCompatiblePerspectives(const QString &file);
-    void OpenProject(const QString &file);
-    void OpenProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters);
-    void RemovePluginRepository(const QString &url);
-    void ShowAboutPage();
-    void ShowOpenProjectWindow();
-    void ShowPluginsCenter();
-    void ShowTrayMessage(const QString &title, const QString &message, uint icon, uint duration);
-    void ShowWelcomeScreen();
+  void AddPluginRepository(const QString &url);
+  void CreatePerspective(const QString &name);
+  void CreatePerspective(const QString &name, const QVariantMap &parameters);
+  void EnableCrashHandling(const QString &folder, qlonglong pid);
+  QStringList GetCompatiblePerspectives(const QString &file);
+  void OpenProject(const QString &file);
+  void OpenProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters);
+  void RemovePluginRepository(const QString &url);
+  void ShowAboutPage();
+  void ShowOpenProjectWindow();
+  void ShowPluginsCenter();
+  void ShowTrayMessage(const QString &title, const QString &message, uint icon, uint duration);
+  void ShowWelcomeScreen();
 Q_SIGNALS: // SIGNALS
-    void Terminate();
+  void Terminate();
 };
 
 class PerspectiveSelectionDialog: public QDialog {

@@ -14,6 +14,7 @@ bool ParameterListModel::ParamInfosSorter::operator()(ParameterListModel::ParamI
     return true;
   else if (!a.mandatory && b.mandatory)
     return false;
+
   return a.name.compare(b.name) < 0;
 }
 
@@ -21,7 +22,7 @@ ParameterListModel::ParameterListModel(const tlp::ParameterList &params, tlp::Gr
   : QAbstractItemModel(parent) {
   std::string name;
   forEach(name,params.getParametersNames())
-    _params.push_back(ParamInfos(params.isMandatory(name),name.c_str(),params.getHelp(name).c_str()));
+  _params.push_back(ParamInfos(params.isMandatory(name),name.c_str(),params.getHelp(name).c_str()));
   std::sort(_params.begin(),_params.end(),ParamInfosSorter());
   params.buildDefaultDataSet(_data,graph);
 
@@ -45,6 +46,7 @@ int ParameterListModel::columnCount(const QModelIndex &parent) const {
 
 QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
   ParamInfos infos = _params[index.row()];
+
   if (role == Qt::ToolTipRole)
     return infos.name;
   else if (role == Qt::WhatsThisRole)
@@ -77,13 +79,16 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
     else
       return QObject::trUtf8("Value");
   }
+
   return QAbstractItemModel::headerData(section,orientation,role);
 }
 
 Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
   Qt::ItemFlags result = QAbstractItemModel::flags(index);
+
   if (index.column() == 1)
     result |= Qt::ItemIsEditable;
+
   return result;
 }
 
