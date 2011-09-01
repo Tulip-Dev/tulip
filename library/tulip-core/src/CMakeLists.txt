@@ -44,7 +44,6 @@ Plane.cpp
 PluginLibraryLoader.cpp
 PluginLister.cpp
 PluginLoaderTxt.cpp
-Polynome.cpp
 PreferenceManager.cpp
 PropertyInterface.cpp
 PropertyManager.cpp
