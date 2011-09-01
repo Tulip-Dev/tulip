@@ -64,7 +64,7 @@ TLP_SCOPE std::string getMinor(const std::string &release);
  *
  * @see FactoryInterface for more advanced operation such as plugin creation and retrieving dependencies.
  */
-class AbstractPluginInfo {
+class TLP_SCOPE AbstractPluginInfo {
 public:
   virtual ~AbstractPluginInfo() {}
 
