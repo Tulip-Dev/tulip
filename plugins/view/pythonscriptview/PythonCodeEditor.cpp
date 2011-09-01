@@ -194,11 +194,19 @@ void FindReplaceDialog::doReplaceAll() {
 		return;
 	bool ret = editor->findFirst(text, regexpCB->isChecked(), caseSensitiveCB->isChecked(), wholeWordCB->isChecked(), true, forwardRB->isChecked());
 	if (ret) {
+		int startLine, startIndex;
+		editor->getCursorPosition(&startLine, &startIndex);
 		int nbReplacements = 0;
 		while(ret) {
 			doReplace();
 			ret = editor->findNext();
 			++nbReplacements;
+			int line, index;
+			editor->getCursorPosition(&line, &index);
+			// when replacing a pattern P by a pattern following this regexp .*P.*
+			// this can lead to an infinite loop, handle this case
+			if (line == startLine && ((index - replaceText->text().length()) == startIndex))
+			  break;
 		}
 		searchStatusLabel->setText(QString::number(nbReplacements) + QString(" matches replaced"));
 		resetSearch = true;
