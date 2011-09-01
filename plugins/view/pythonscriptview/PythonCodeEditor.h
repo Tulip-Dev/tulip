@@ -25,6 +25,8 @@
 
 #include <QtCore/QEvent>
 
+#include "FindReplaceDialogData.h"
+
 static std::string kw;
 
 class CustomLexerPython : public QsciLexerPython {
@@ -54,6 +56,45 @@ public :
 
 };
 
+class FindReplaceDialog : public QDialog, public Ui::FindReplaceDialogData {
+
+	Q_OBJECT
+
+public :
+
+	FindReplaceDialog(QsciScintilla *editor, QWidget *parent=0);
+
+	void setFindMode(const bool findMode);
+
+	void setTextToFind(const QString &text);
+
+
+public slots:
+
+	void textToFindChanged();
+	bool doFind();
+	bool doReplace();
+	void doReplaceFind();
+	void doReplaceAll();
+	void setResetSearch() {
+		this->resetSearch = true;
+	}
+	void regexpToggled(bool toggled);
+
+
+protected:
+
+	void hideEvent(QHideEvent * event);
+
+private :
+
+	void setSearchResult(const bool result);
+
+	QsciScintilla *editor;
+	QString lastSearch;
+	bool resetSearch;
+};
+
 class PythonCodeEditor : public QsciScintilla {
 
 public :
@@ -66,11 +107,13 @@ public :
 protected:
 
   void showEvent(QShowEvent * event);
+  void keyPressEvent(QKeyEvent * event);
 
 private :
 
   int errorIndicator;
 
+  FindReplaceDialog *findReplaceDialog;
   static QsciLexerPython *pythonLexer;
 };
 

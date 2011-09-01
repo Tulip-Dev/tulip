@@ -30,6 +30,7 @@ SET(pythonscriptview_LIB_SRCS
 SET(pythonscriptview_UI
     PythonScriptViewWidget.ui
     PluginCreationDialog.ui
+    FindReplaceDialog.ui
 )
 
 SET(pythonscriptview_MOC
@@ -39,6 +40,7 @@ SET(pythonscriptview_MOC
     PythonShellWidget.h
     PluginCreationDialog.h
     ConsoleOutputHandler.h
+    PythonCodeEditor.h
 )
 
 SET(pythonscriptview_RCC
