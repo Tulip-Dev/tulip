@@ -122,7 +122,7 @@ TLP_SCOPE Graph* newGraph();
  * @param name The name of the new subgraph. Defaults to "unnamed".
  * @return :Graph* The newly created subgraph.
  **/
-TLP_SCOPE Graph* _DEPRECATED newSubGraph(Graph *graph, std::string name = "unnamed");
+TLP_SCOPE _DEPRECATED Graph* newSubGraph(Graph *graph, std::string name = "unnamed");
 
 /**
  * @brief Creates and returns a subgraph of the graph that is equal to root (a clone subgraph).
@@ -133,7 +133,7 @@ TLP_SCOPE Graph* _DEPRECATED newSubGraph(Graph *graph, std::string name = "unnam
  * @param name The name of the newly created subgraph. Defaults to "unnamed".
  * @return :Graph* The newly created clone subgraph.
  **/
-TLP_SCOPE Graph* _DEPRECATED newCloneSubGraph(Graph *graph, std::string name = "unnamed");
+TLP_SCOPE _DEPRECATED Graph* newCloneSubGraph(Graph *graph, std::string name = "unnamed");
 
 /**
  * Appends the selected part of the graph inG (properties, nodes and edges) into the graph outG.
