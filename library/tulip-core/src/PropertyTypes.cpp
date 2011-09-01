@@ -23,80 +23,7 @@
 using namespace std;
 using namespace tlp;
 
-namespace {
-template<typename T, int openParen>
-static bool readVector(istream& is, vector<T>& v) {
-  v.clear();
-
-  char c =' ';
-  T val;
-  bool firstVal = true;
-  bool sepFound = false;
-
-  // go to first '('
-  while((is >> c) && isspace(c)) {}
-
-  if (c != '(')
-    return false;
-
-  for(;;) {
-    if( !(is >> c) )
-      return false;
-
-    if (isspace(c))
-      continue;
-
-    if(c == ')') {
-      if (sepFound)
-        return false;
-
-      return true;
-    }
-
-    if (c == ',') {
-      if (firstVal || sepFound)
-        return false;
-
-      sepFound = true;
-    }
-    else {
-      if (firstVal || sepFound) {
-        if (openParen && c != '(')
-          return false;
-
-        is.unget();
-
-        if( !(is >> val) )
-          return false;
-
-        v.push_back(val);
-        firstVal = false;
-        sepFound = false;
-      }
-      else
-        return false;
-    }
-  }
-}
-
-template<typename T>
-static void writeVector(ostream& os, const vector<T>& v) {
-  os << '(';
-
-  for( unsigned int i = 0 ; i < v.size() ; i++ ) {
-    if (i)
-      os << ", ";
-
-    os << v[i];
-  }
-
-  os << ')';
-}
-}
-
-//
 // GraphType
-
 GraphType::RealType GraphType::undefinedValue() {
   return 0;
 }
@@ -105,41 +32,22 @@ GraphType::RealType GraphType::defaultValue() {
   return 0;
 }
 
-string GraphType::toString( const RealType & v ) {
-  // NULL ?
-  if( !v )
-    return string();
-
-  ostringstream oss;
-  oss << v->getId();
-  return oss.str();
+void GraphType::write(std::ostream &oss, const RealType &v) {
+  if (v)
+    oss << v->getId();
 }
 
-bool GraphType::fromString(RealType & v, const string & s ) {
-  istringstream iss;
-  iss.str( s );
+bool GraphType::read(std::istream& iss, RealType& v) {
   unsigned long lv = 0;
   bool ok = iss >> lv;
-
   if (ok)
     v = (RealType) lv;
   else
     v = 0;
-
   return ok;
 }
 
-//
 // EdgeSetType
-
-set<edge> EdgeSetType::undefinedValue() {
-  return set<edge>();
-}
-
-set<edge> EdgeSetType::defaultValue() {
-  return set<edge>();
-}
-
 void EdgeSetType::write(ostream& os, const RealType & v ) {
   os << '(';
   set<edge>::const_iterator it;
@@ -148,12 +56,6 @@ void EdgeSetType::write(ostream& os, const RealType & v ) {
     os << (*it).id << ' ';
 
   os << ')';
-}
-
-string EdgeSetType::toString( const RealType & v ) {
-  ostringstream oss;
-  write(oss, v);
-  return oss.str();
 }
 
 bool EdgeSetType::read(istream& is, RealType & v) {
@@ -189,14 +91,7 @@ bool EdgeSetType::read(istream& is, RealType & v) {
   }
 }
 
-bool EdgeSetType::fromString( RealType & v, const string & s ) {
-  istringstream iss(s);
-  return read(iss, v);
-}
-
-//
 // DoubleType
-
 double DoubleType::undefinedValue() {
   return -DBL_MAX;
 }
@@ -205,56 +100,6 @@ double DoubleType::defaultValue() {
   return 0;
 }
 
-void DoubleType::write(ostream& os, const RealType & v) {
-  os << v;
-}
-
-string DoubleType::toString( const RealType & v ) {
-  ostringstream oss;
-  oss << v;
-  return oss.str();
-}
-
-bool DoubleType::read(istream& iss, RealType & v) {
-  return (iss >> v);
-}
-
-bool DoubleType::fromString( RealType & v, const string & s ) {
-  istringstream iss(s);
-  return (iss >> v);
-}
-
-//
-// DoubleVectorType
-
-vector<double> DoubleVectorType::undefinedValue() {
-  return vector<double>();
-}
-
-vector<double> DoubleVectorType::defaultValue() {
-  return vector<double>();
-}
-
-void DoubleVectorType::write(ostream& os, const RealType & v) {
-  writeVector<double>(os, v);
-}
-
-string DoubleVectorType::toString( const RealType & v ) {
-  ostringstream oss;
-  write(oss, v);
-  return oss.str();
-}
-
-bool DoubleVectorType::read(istream& iss, RealType & v) {
-  return readVector<double, false>(iss, v);
-}
-
-bool DoubleVectorType::fromString( RealType & v, const string & s ) {
-  istringstream iss(s);
-  return read(iss, v);
-}
-
-//
 // IntegerType
 int IntegerType::undefinedValue() {
   return INT_MIN;
@@ -264,58 +109,7 @@ int IntegerType::defaultValue() {
   return 0;
 }
 
-void IntegerType::write(ostream& os, const RealType & v) {
-  os << v;
-}
-
-string IntegerType::toString( const RealType & v ) {
-  ostringstream oss;
-  oss << v;
-  return oss.str();
-}
-
-bool IntegerType::read(istream& iss, RealType & v) {
-  return (iss >> v);
-}
-
-bool IntegerType::fromString( RealType & v, const string & s ) {
-  istringstream iss(s);
-  return (iss >> v);
-}
-
-//
-// IntegerVectorType
-
-vector<int> IntegerVectorType::undefinedValue() {
-  return vector<int>();
-}
-
-vector<int> IntegerVectorType::defaultValue() {
-  return vector<int>();
-}
-
-void IntegerVectorType::write(ostream& os, const RealType & v) {
-  writeVector<int>(os, v);
-}
-
-string IntegerVectorType::toString( const RealType & v ) {
-  ostringstream oss;
-  write(oss, v);
-  return oss.str();
-}
-
-bool IntegerVectorType::read(istream& iss, RealType & v) {
-  return readVector<int,false>(iss, v);
-}
-
-bool IntegerVectorType::fromString( RealType & v, const string & s ) {
-  istringstream iss(s);
-  return read(iss, v);
-}
-
-//
 // BooleanType
-
 bool BooleanType::undefinedValue() {
   return false;
 }
@@ -329,12 +123,6 @@ void BooleanType::write(ostream& os, const RealType &v) {
     os << "true";
   else
     os << "false";
-}
-
-string BooleanType::toString( const RealType & v ) {
-  ostringstream oss;
-  write(oss, v);
-  return oss.str();
 }
 
 bool BooleanType::read(istream& is, RealType & v) {
@@ -371,22 +159,7 @@ bool BooleanType::read(istream& is, RealType & v) {
   return true;
 }
 
-bool BooleanType::fromString( RealType & v, const string & s ) {
-  istringstream iss(s);
-  return read(iss, v);
-}
-
-//
 // BooleanVectorType
-
-vector<bool> BooleanVectorType::undefinedValue() {
-  return vector<bool>();
-}
-
-vector<bool> BooleanVectorType::defaultValue() {
-  return vector<bool>();
-}
-
 void BooleanVectorType::write(ostream& os, const RealType & v) {
   os << '(';
 
@@ -398,12 +171,6 @@ void BooleanVectorType::write(ostream& os, const RealType & v) {
   }
 
   os << ')';
-}
-
-string BooleanVectorType::toString( const RealType & v ) {
-  ostringstream oss;
-  write(oss, v);
-  return oss.str();
 }
 
 bool BooleanVectorType::read(istream& is,  RealType & v) {
@@ -446,32 +213,7 @@ bool BooleanVectorType::read(istream& is,  RealType & v) {
   }
 }
 
-bool BooleanVectorType::fromString( RealType & v, const string & s ) {
-  istringstream iss(s);
-  return read(iss, v);
-}
-
-//
 // LineType
-
-vector<Coord> LineType::undefinedValue() {
-  return vector<Coord>();
-}
-
-vector<Coord> LineType::defaultValue() {
-  return vector<Coord>();
-}
-
-void LineType::write(ostream& os, const RealType & v) {
-  writeVector<Coord>(os, v);
-}
-
-string LineType::toString( const RealType & v ) {
-  ostringstream oss;
-  write(oss, v);
-  return oss.str();
-}
-
 bool LineType::read(istream& is, RealType& v) {
   v.clear();
 
@@ -539,12 +281,6 @@ bool LineType::read(istream& is, RealType& v) {
   }
 }
 
-bool LineType::fromString( RealType & v, const string & s ) {
-  istringstream iss(s);
-  return read(iss, v);
-}
-
-//
 // PointType
 Coord PointType::undefinedValue() {
   Coord tmp;
@@ -554,16 +290,6 @@ Coord PointType::undefinedValue() {
 
 Coord PointType::defaultValue() {
   return Coord(0, 0, 0);
-}
-
-void PointType::write(ostream& os, const RealType & v) {
-  os << v;
-}
-
-string PointType::toString( const RealType & v ) {
-  ostringstream oss;
-  oss << v;
-  return oss.str();
 }
 
 bool PointType::read(istream& is, RealType & v) {
@@ -602,23 +328,12 @@ bool PointType::fromString( RealType & v, const string & s ) {
 
 //
 // SizeType
-
 Size SizeType::undefinedValue() {
   return Size(-FLT_MAX,-FLT_MAX,-FLT_MAX);
 }
 
 Size SizeType::defaultValue() {
   return Size(1,1,0);
-}
-
-void SizeType::write(ostream& os, const RealType & v) {
-  os << v;
-}
-
-string SizeType::toString( const RealType & v ) {
-  ostringstream oss;
-  oss << v;
-  return oss.str();
 }
 
 bool SizeType::read(istream& is, RealType & v) {
@@ -655,39 +370,7 @@ bool SizeType::fromString( RealType & v, const string & s ) {
   return iss >> v;
 }
 
-//
-// SizeVectorType
-
-vector<Size> SizeVectorType::undefinedValue() {
-  return vector<Size>();
-}
-
-vector<Size> SizeVectorType::defaultValue() {
-  return vector<Size>();
-}
-
-void SizeVectorType::write(ostream& os, const RealType & v) {
-  writeVector<Size>(os, v);
-}
-
-string SizeVectorType::toString( const RealType & v ) {
-  ostringstream oss;
-  write(oss, v);
-  return oss.str();
-}
-
-bool SizeVectorType::read(istream& is, RealType& v) {
-  return readVector<Size, true>(is, v);
-}
-
-bool SizeVectorType::fromString( RealType & v, const string & s ) {
-  istringstream iss(s);
-  return readVector<Size, true>(iss, v);
-}
-
-//
 // StringType
-
 string StringType::undefinedValue() {
   return string("");
 }
@@ -756,17 +439,7 @@ bool StringType::fromString( RealType & v, const string & s ) {
   return true;
 }
 
-//
 // StringVectorType
-
-vector<string> StringVectorType::undefinedValue() {
-  return vector<string>();
-}
-
-vector<string> StringVectorType::defaultValue() {
-  return vector<string>();
-}
-
 void StringVectorType::write(ostream& os, const RealType & v) {
   os << '(';
 
@@ -778,12 +451,6 @@ void StringVectorType::write(ostream& os, const RealType & v) {
   }
 
   os << ')';
-}
-
-string StringVectorType::toString( const RealType & v ) {
-  ostringstream oss;
-  write(oss, v);
-  return oss.str();
 }
 
 bool StringVectorType::read(istream& is, RealType & v) {
@@ -843,20 +510,9 @@ bool StringVectorType::read(istream& is, RealType & v) {
   }
 }
 
-bool StringVectorType::fromString( RealType & v, const string & s ) {
-  istringstream iss(s);
-  return read(iss, v);
-}
-
-//
 // ColorType
-
 Color ColorType::undefinedValue() {
   return Color(255,255,255,255);
-}
-
-Color ColorType::defaultValue() {
-  return Color();
 }
 
 void ColorType::write(ostream& os, const RealType & v) {
@@ -902,66 +558,6 @@ bool ColorType::read(istream& is, RealType & v) {
 bool ColorType::fromString( RealType & v, const string & s ) {
   istringstream iss(s);
   return iss >> v;
-}
-
-//
-// ColorVectorType
-
-vector<Color> ColorVectorType::undefinedValue() {
-  return vector<Color>();
-}
-
-vector<Color> ColorVectorType::defaultValue() {
-  return vector<Color>();
-}
-
-void ColorVectorType::write(ostream& os, const RealType & v) {
-  writeVector<Color>(os, v);
-}
-
-string ColorVectorType::toString( const RealType & v ) {
-  ostringstream oss;
-  write(oss, v);
-  return oss.str();
-}
-
-bool ColorVectorType::read(istream& is, RealType& v) {
-  return readVector<Color, true>(is, v);
-}
-
-bool ColorVectorType::fromString( RealType & v, const string & s ) {
-  istringstream iss(s);
-  return readVector<Color, true>(iss, v);
-}
-
-//
-// CoordVectorType
-
-vector<Coord> CoordVectorType::undefinedValue() {
-  return vector<Coord>();
-}
-
-vector<Coord> CoordVectorType::defaultValue() {
-  return vector<Coord>();
-}
-
-void CoordVectorType::write(ostream& os, const RealType & v) {
-  writeVector<Coord>(os, v);
-}
-
-string CoordVectorType::toString( const RealType & v ) {
-  ostringstream oss;
-  write(oss, v);
-  return oss.str();
-}
-
-bool CoordVectorType::read(istream& is, RealType& v) {
-  return readVector<Coord, true>(is, v);
-}
-
-bool CoordVectorType::fromString( RealType & v, const string & s ) {
-  istringstream iss(s);
-  return readVector<Coord, true>(iss, v);
 }
 
 // template class to automatize definition of serializers
