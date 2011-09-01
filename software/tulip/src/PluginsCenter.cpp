@@ -116,7 +116,8 @@ void PluginsCenter::reportPluginErrors(const QMap<QString,QString> &errors) {
     message += filename + ": " + errormsg;
   }
 
-  TulipMainWindow::instance()->pluginErrorMessage(message);
+  if (!errors.empty())
+    TulipMainWindow::instance()->pluginErrorMessage(message);
 }
 
 void PluginsCenter::browseAll() {
