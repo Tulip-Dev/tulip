@@ -244,6 +244,9 @@ Sets the value component of the color in the HSV color space (must be in the ran
 		sipIsErr = 1;	
 %End
 
+	bool operator!=(const tlp::Color &) const;
+    bool operator==(const tlp::Color &) const;
+
 	SIP_PYOBJECT __repr__() const;
 %MethodCode
 		std::ostringstream oss;
