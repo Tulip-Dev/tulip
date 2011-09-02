@@ -22,7 +22,7 @@ SET(TULIP_LIBRARY_TESTS_SRCS
   IntegerPropertyMinMaxUpdateTest.cpp
   TestPropertiesMinMaxAfterAddNode.cpp
   IsMetaEdgeTest.cpp
-  StringVectorPropertyTest.cpp
+  stringpropertytest.cpp
   DoublePropertyTest.cpp
   PlanarityTestTest.cpp
   withparametertest.cpp
