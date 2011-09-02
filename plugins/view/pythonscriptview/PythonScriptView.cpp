@@ -583,6 +583,7 @@ void PythonScriptView::executeCurrentScript() {
 
 		pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
 		viewWidget->consoleOutputWidget->clear();
+		pythonInterpreter->clearOutputBuffers();
 
 
 		int curMainScriptId = viewWidget->mainScriptsTabWidget->currentIndex();
@@ -645,7 +646,7 @@ void PythonScriptView::executeCurrentScript() {
 				QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
 
 				map<string, vector<int> > errorLines;
-				QString consoleOutput = viewWidget->consoleOutputWidget->toPlainText();
+				QString consoleOutput = pythonInterpreter->getStandardErrorOutput().c_str();
 				QStringList outputLines = consoleOutput.split("\n");
 
 				for (int i = 0 ; i < outputLines.count() - 1 ; ++i) {

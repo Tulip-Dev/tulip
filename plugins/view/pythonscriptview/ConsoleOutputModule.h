@@ -36,6 +36,7 @@ static ConsoleOutputHandler *consoleOuputHandler = NULL;
 static ConsoleOutputEmitter *consoleOuputEmitter = NULL;
 static PythonShellWidget *shellWidget = NULL;
 static std::string consoleOuputString = "";
+static std::string consoleErrorOuputString = "";
 static bool outputActivated = true;
 
 typedef struct {
@@ -80,7 +81,11 @@ scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
   if(!PyArg_ParseTuple(o, "s", &buf))
     return NULL;
 
-  consoleOuputString += buf;
+  if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
+	  consoleErrorOuputString += buf;
+  } else {
+	  consoleOuputString += buf;
+  }
 
   if (outputActivated) {
 

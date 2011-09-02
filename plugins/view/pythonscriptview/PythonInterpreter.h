@@ -135,6 +135,11 @@ public :
   void initConsoleOutput();
   void loadTulipPythonPlugins();
 
+  std::string getStandardOutput() const;
+  std::string getStandardErrorOutput() const;
+  void clearOutputBuffers();
+
+
 private :
 
   PythonInterpreter();

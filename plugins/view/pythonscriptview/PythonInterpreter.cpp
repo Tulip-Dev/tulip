@@ -585,3 +585,16 @@ void PythonInterpreter::holdGIL() {
 void PythonInterpreter::releaseGIL() {
   PyGILState_Release(gilState);
 }
+
+std::string PythonInterpreter::getStandardOutput() const {
+	return consoleOuputString;
+}
+
+std::string PythonInterpreter::getStandardErrorOutput() const {
+	return consoleErrorOuputString;
+}
+
+void PythonInterpreter::clearOutputBuffers() {
+	consoleOuputString = "";
+	consoleErrorOuputString = "";
+}
