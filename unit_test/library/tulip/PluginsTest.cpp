@@ -20,7 +20,8 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
 #include "PluginsTest.h"
-#include <tulip/TlpTools.h>
+
+#include <tulip/TulipRelease.h>
 #include <tulip/ForEach.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
@@ -68,18 +69,100 @@ void PluginsTest::testCircularPlugin() {
 }
 //==========================================================
 void PluginsTest::testAncestorGraph() {
-  string name = "Test";
-  string err = "Error";
-  PluginLibraryLoader::loadPluginLibrary("testPlugin2.so");
-  Graph *child = graph->addSubGraph();
+  PluginLibraryLoader::loadPluginLibrary("./testPlugin2.so");
+  string simpleAlgorithm = "Test2";
+  string invalidAlgorithm = "Test3";
+  string err;
+
+  /**
+   * The graph Hierarchy is as follows
+   * graph --------- child1* ------- grandchild
+   *          \_____ child2
+   *
+   * The property belongs to child1, so only him and grandchild can use it
+   **/
+  Graph *child1 = graph->addSubGraph();
+  Graph *grandchild = child1->addSubGraph();
+  BooleanProperty sel(child1);
+  
   Graph *child2 = graph->addSubGraph();
-  // ensure child2 is not empty
-  child2->addNode();
-  Graph *child3 = child->addSubGraph();
-  // ensure child3 is not empty
-  child3->addNode();
-  BooleanProperty sel(child);
-  CPPUNIT_ASSERT(!graph->computeProperty(name, &sel, err));
-  CPPUNIT_ASSERT(!child2->computeProperty(name, &sel, err));
-  CPPUNIT_ASSERT(child3->computeProperty(name, &sel, err));
+  
+  //since the property belongs to a descendant graph, this fails
+  bool result = graph->computeProperty(simpleAlgorithm, &sel, err);
+  CPPUNIT_ASSERT_MESSAGE(err, !result);
+  
+  //since the property belongs to a descendant of a sibling graph, this fails
+  result = child2->computeProperty(simpleAlgorithm, &sel, err);
+  CPPUNIT_ASSERT_MESSAGE(err, !result);
+
+  //These will fail because the graph is empty
+  result = child1->computeProperty(simpleAlgorithm, &sel, err);
+  CPPUNIT_ASSERT_MESSAGE(err, !result);
+
+  result = grandchild->computeProperty(simpleAlgorithm, &sel, err);
+  CPPUNIT_ASSERT_MESSAGE(err, !result);
+
+  grandchild->addNode();
+
+  //now the graph is not empty they will pass
+  result = child1->computeProperty(simpleAlgorithm, &sel, err);
+  CPPUNIT_ASSERT_MESSAGE(err, result);
+  
+  result = grandchild->computeProperty(simpleAlgorithm, &sel, err);
+  CPPUNIT_ASSERT_MESSAGE(err, result);
+
+  //now testing with an algorithm that does not exists
+  result = child1->computeProperty(invalidAlgorithm, &sel, err);
+  CPPUNIT_ASSERT_MESSAGE(err, !result);
+  
+  result = grandchild->computeProperty(invalidAlgorithm, &sel, err);
+  CPPUNIT_ASSERT_MESSAGE(err, !result);
+}
+
+void PluginsTest::availablePlugins() {
+  std::set<std::string> testBooleanPlugins;
+  testBooleanPlugins.insert("Test");
+  testBooleanPlugins.insert("Test2");
+  
+  std::string pluginName;
+  forEach(pluginName, BooleanPluginLister::availablePlugins()) {
+    if(testBooleanPlugins.find(pluginName) != testBooleanPlugins.end()) {
+      testBooleanPlugins.erase(pluginName);
+    }
+  }
+
+  CPPUNIT_ASSERT_MESSAGE("The test plugins were not listed by the PluginLister", testBooleanPlugins.empty());
+}
+
+void PluginsTest::pluginInformations() {
+  CPPUNIT_ASSERT_MESSAGE("'Test' plugin must be loaded", BooleanPluginLister::pluginExists("Test"));
+
+  std::list<Dependency> dependencies = BooleanPluginLister::getPluginDependencies("Test");
+  CPPUNIT_ASSERT_EQUAL(size_t(1), dependencies.size());
+  CPPUNIT_ASSERT_EQUAL(string("Test"), dependencies.begin()->pluginName);
+  CPPUNIT_ASSERT_EQUAL(string("TemplateAlgorithm<tlp::BooleanProperty>"), dependencies.begin()->factoryName);
+  CPPUNIT_ASSERT_EQUAL(string("1.0"), dependencies.begin()->pluginRelease);
+
+  tlp::ParameterList parameters = BooleanPluginLister::getPluginParameters("Test");
+
+  Iterator<string>* it = parameters.getParametersNames();
+  CPPUNIT_ASSERT_MESSAGE("Test plugin has no parameters", it->hasNext());
+  string parameterName = it->next();
+  CPPUNIT_ASSERT_EQUAL(string("testParameter"), parameterName);
+  CPPUNIT_ASSERT_MESSAGE("test parameter should not be mandatory", !parameters.isMandatory(parameterName));
+  CPPUNIT_ASSERT_EQUAL(string("0"), parameters.getDefaultValue(parameterName));
+  CPPUNIT_ASSERT_EQUAL(string("i"), parameters.getTypeName(parameterName));
+
+  const AbstractPluginInfo& factory(BooleanPluginLister::pluginInformations("Test"));
+  CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory.getAuthor());
+  CPPUNIT_ASSERT_EQUAL(string("03/11/2004"), factory.getDate());
+  CPPUNIT_ASSERT_EQUAL(string(""), factory.getGroup());
+  CPPUNIT_ASSERT_EQUAL(0, factory.getId());
+  CPPUNIT_ASSERT_EQUAL(string("1"), factory.getMajor());
+  CPPUNIT_ASSERT_EQUAL(string("0"), factory.getMinor());
+  CPPUNIT_ASSERT_EQUAL(string("Test"), factory.getName());
+  CPPUNIT_ASSERT_EQUAL(string("1.0"), factory.getRelease());
+  CPPUNIT_ASSERT_EQUAL(tlp::getMajor(TULIP_RELEASE), factory.getTulipMajor());
+  CPPUNIT_ASSERT_EQUAL(tlp::getMinor(TULIP_RELEASE), factory.getTulipMinor());
+  CPPUNIT_ASSERT_EQUAL(string(TULIP_RELEASE), factory.getTulipRelease());
 }
