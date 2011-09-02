@@ -519,14 +519,14 @@ int main (int argc, char **argv) {
     usage();
 
   tlp::initTulipLib();
-  PluginLoaderTxt plug;
-  GlyphManager::getInst().loadPlugins(&plug);
-  EdgeExtremityGlyphManager::getInst().loadPlugins(&plug);
+  GlyphManager::getInst().loadGlyphPlugins();
+  EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
 
   graph = tlp::loadGraph(argv[1]);
 
-  if (graph == 0) {
+  if (graph == NULL) {
     cout << "can't load the graph" << argv[1] << endl;
+    exit(1);
   }
 
   name = "untitled";

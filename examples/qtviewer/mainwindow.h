@@ -31,7 +31,7 @@ using namespace tlp;
 
 typedef std::set< tlp::Observable * >::iterator ObserverIterator;
 
-class QtViewerMainWindow : public QMainWindow, public Observer {
+class QtViewerMainWindow : public QMainWindow, public Observable {
 
   Q_OBJECT
 
