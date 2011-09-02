@@ -42,14 +42,24 @@ template<typename T>
 class TLP_SCOPE TypeInterface {
 public:
   typedef T RealType;
-  static RealType undefinedValue() { return T(); }
-  static RealType defaultValue() { return T(); }
+  static RealType undefinedValue() {
+    return T();
+  }
+  static RealType defaultValue() {
+    return T();
+  }
 
   static void write(std::ostream&, const RealType&) {}
-  static bool read(std::istream&, RealType&) { return false; }
+  static bool read(std::istream&, RealType&) {
+    return false;
+  }
 
-  static std::string toString(const RealType &) { return ""; }
-  static bool fromString(RealType &, const std::string &) { return false; }
+  static std::string toString(const RealType &) {
+    return "";
+  }
+  static bool fromString(RealType &, const std::string &) {
+    return false;
+  }
 };
 
 #define FORWARD_TOSTRING(T) static std::string toString(const T::RealType &v) { std::ostringstream oss;  write(oss, v); return oss.str(); }
@@ -59,8 +69,12 @@ public:
 template<typename T>
 class TLP_SCOPE SerializableType: public TypeInterface<T> {
 public:
-  static void write(std::ostream& oss, const typename TypeInterface<T>::RealType& v) { oss << v; }
-  static bool read(std::istream& iss, typename TypeInterface<T>::RealType& v) { return (iss >> v); }
+  static void write(std::ostream& oss, const typename TypeInterface<T>::RealType& v) {
+    oss << v;
+  }
+  static bool read(std::istream& iss, typename TypeInterface<T>::RealType& v) {
+    return (iss >> v);
+  }
   FORWARD_STRING_METHODS(typename TypeInterface<T>)
 };
 
@@ -121,17 +135,24 @@ class TLP_SCOPE SerializableVectorType: public TypeInterface<std::vector<VT> > {
   }
   static void writeVector(std::ostream& os, const std::vector<VT>& v) {
     os << '(';
+
     for( unsigned int i = 0 ; i < v.size() ; i++ ) {
       if (i)
         os << ", ";
+
       os << v[i];
     }
+
     os << ')';
   }
 
 public:
-  static void write(std::ostream& oss, const typename TypeInterface<std::vector<VT> >::RealType& v) { writeVector(oss, v); }
-  static bool read(std::istream& iss, typename TypeInterface<std::vector<VT> >::RealType& v) { return readVector(iss, v); }
+  static void write(std::ostream& oss, const typename TypeInterface<std::vector<VT> >::RealType& v) {
+    writeVector(oss, v);
+  }
+  static bool read(std::istream& iss, typename TypeInterface<std::vector<VT> >::RealType& v) {
+    return readVector(iss, v);
+  }
   FORWARD_STRING_METHODS(typename TypeInterface<std::vector<VT> >)
 };
 
