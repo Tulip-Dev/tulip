@@ -40,10 +40,12 @@ void GraphType::write(std::ostream &oss, const RealType &v) {
 bool GraphType::read(std::istream& iss, RealType& v) {
   unsigned long lv = 0;
   bool ok = iss >> lv;
+
   if (ok)
     v = (RealType) lv;
   else
     v = 0;
+
   return ok;
 }
 
