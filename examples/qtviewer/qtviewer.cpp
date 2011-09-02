@@ -45,9 +45,9 @@ int main(int argc,char ** argv ) {
 
   tlp::initTulipLib();
   PluginLoaderTxt txtPlug;
-  tlp::loadPlugins(&txtPlug);   // library side plugins
-  InteractorManager::getInst().loadPlugins(&txtPlug);
-  GlyphManager::getInst().loadPlugins(&txtPlug);   // software side plugins, i.e. glyphs
+  PluginLibraryLoader::loadPlugins(&txtPlug);   // library side plugins
+  InteractorManager::getInst().loadInteractorPlugins();
+  GlyphManager::getInst().loadGlyphPlugins();   // software side plugins, i.e. glyphs
 
   QtViewerMainWindow mainWin(argv[1]);
   mainWin.show();

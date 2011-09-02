@@ -37,7 +37,7 @@ QtViewerMainWindow::QtViewerMainWindow(const string &filename) : QMainWindow(), 
   list<Interactor *> interactorsList;
 
   for(list<string>::reverse_iterator it=interactors.rbegin(); it!=interactors.rend(); ++it) {
-    interactorsList.push_back(InteractorManager::getInst().getInteractor((*it)));
+    interactorsList.push_back(InteractorLister::getPluginObject(*it, NULL));
   }
 
   nodeLinkView->setInteractors(interactorsList);
