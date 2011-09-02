@@ -121,6 +121,14 @@ typedef TemplateAlgorithm<DoubleProperty> DoubleAlgorithm;
 typedef TemplateAlgorithm<StringProperty> StringAlgorithm;
 typedef TemplateAlgorithm<BooleanProperty> BooleanAlgorithm;
 
+typedef PropertyPluginLister<SizeAlgorithm> SizePluginLister;
+typedef PropertyPluginLister<IntegerAlgorithm> IntegerPluginLister;
+typedef PropertyPluginLister<LayoutAlgorithm> LayoutPluginLister;
+typedef PropertyPluginLister<ColorAlgorithm> ColorPluginLister;
+typedef PropertyPluginLister<DoubleAlgorithm> DoublePluginLister;
+typedef PropertyPluginLister<StringAlgorithm> StringPluginLister;
+typedef PropertyPluginLister<BooleanAlgorithm> BooleanPluginLister;
+
 #ifdef WIN32
 
 #ifdef _MSC_VER //MSVC needs explicit instantiations of the templates

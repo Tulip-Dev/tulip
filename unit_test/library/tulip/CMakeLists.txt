@@ -36,7 +36,13 @@ ADD_LIBRARY(testPlugin SHARED testPlugin.cpp)
 SET_TARGET_PROPERTIES(testPlugin 
    PROPERTIES
    PREFIX "")
-TARGET_LINK_LIBRARIES(tulip_tests ${LibTulipCoreName})
+TARGET_LINK_LIBRARIES(testPlugin ${LibTulipCoreName})
+
+ADD_LIBRARY(testPlugin2 SHARED testPlugin2.cpp)
+SET_TARGET_PROPERTIES(testPlugin2
+   PROPERTIES
+   PREFIX "")
+TARGET_LINK_LIBRARIES(testPlugin2 ${LibTulipCoreName})
 
 ADD_CUSTOM_TARGET(copyTestData ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/DATA ${CMAKE_CURRENT_BINARY_DIR}/DATA )
 ADD_CUSTOM_TARGET(copyTestData2 ALL ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/TlpImportExportTest.cpp ${CMAKE_CURRENT_BINARY_DIR}/TlpImportExportTest.cpp )
