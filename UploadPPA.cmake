@@ -248,7 +248,12 @@ FOREACH(RELEASE ${CPACK_UBUNTU_DISTRIBUTION_RELEASES})
   
   # calling accidentally cmake in the source directory can generate the sip binary in the source tree
   # add it to debian/source/include-binaries to prevent package upload rejection
-  FILE(WRITE ${DEBIAN_SOURCE_DIR}/debian/source/include-binaries "thirdparty/sip-4.12.1/sipgen/sip")
+  # FILE(WRITE ${DEBIAN_SOURCE_DIR}/debian/source/include-binaries "thirdparty/sip-4.12.1/sipgen/sip")
+
+  # when a new binary file is added to the source tree and the .orig.tar.gz has already been uploaded
+  # we have to add it to /debian/source/include-binaries in order to upload it in the .debian.tar.gz 
+  FILE(APPEND ${DEBIAN_SOURCE_DIR}/debian/source/include-binaries "plugins/view/pythonscriptview/icons/playback_pause.png")
+    
 
   ##############################################################################
   # debian/changelog
