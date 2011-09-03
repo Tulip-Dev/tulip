@@ -84,13 +84,13 @@ void PluginsTest::testAncestorGraph() {
   Graph *child1 = graph->addSubGraph();
   Graph *grandchild = child1->addSubGraph();
   BooleanProperty sel(child1);
-  
+
   Graph *child2 = graph->addSubGraph();
-  
+
   //since the property belongs to a descendant graph, this fails
   bool result = graph->computeProperty(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
-  
+
   //since the property belongs to a descendant of a sibling graph, this fails
   result = child2->computeProperty(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
@@ -107,14 +107,14 @@ void PluginsTest::testAncestorGraph() {
   //now the graph is not empty they will pass
   result = child1->computeProperty(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, result);
-  
+
   result = grandchild->computeProperty(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, result);
 
   //now testing with an algorithm that does not exists
   result = child1->computeProperty(invalidAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
-  
+
   result = grandchild->computeProperty(invalidAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 }
@@ -123,7 +123,7 @@ void PluginsTest::availablePlugins() {
   std::set<std::string> testBooleanPlugins;
   testBooleanPlugins.insert("Test");
   testBooleanPlugins.insert("Test2");
-  
+
   std::string pluginName;
   forEach(pluginName, BooleanPluginLister::availablePlugins()) {
     if(testBooleanPlugins.find(pluginName) != testBooleanPlugins.end()) {

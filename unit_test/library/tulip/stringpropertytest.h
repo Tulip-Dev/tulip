@@ -40,7 +40,7 @@ public:
 
   void simpleVectorTest();
   void complexVectorTest();
-  
+
 };
 
 #endif // STRINGPROPERTYTEST_H
