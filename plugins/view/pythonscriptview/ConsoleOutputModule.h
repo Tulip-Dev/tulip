@@ -82,9 +82,10 @@ scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
     return NULL;
 
   if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
-	  consoleErrorOuputString += buf;
-  } else {
-	  consoleOuputString += buf;
+    consoleErrorOuputString += buf;
+  }
+  else {
+    consoleOuputString += buf;
   }
 
   if (outputActivated) {

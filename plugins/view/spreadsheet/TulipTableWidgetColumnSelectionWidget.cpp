@@ -50,7 +50,7 @@ TulipTableWidgetColumnSelectionWidget::TulipTableWidgetColumnSelectionWidget(QWi
   ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(ui->listView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showContextMenu(QPoint)));
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
-    ui->customPatternLineEdit->setPlaceholderText(QApplication::translate("TableColumnSelectionWidget", "Input a custom filter", 0, QApplication::UnicodeUTF8));
+  ui->customPatternLineEdit->setPlaceholderText(QApplication::translate("TableColumnSelectionWidget", "Input a custom filter", 0, QApplication::UnicodeUTF8));
 #endif
 }
 

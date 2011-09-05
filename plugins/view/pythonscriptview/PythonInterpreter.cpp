@@ -196,7 +196,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 #endif
 
     if (interpreterInit()) {
- 
+
       addModuleSearchPath(pythonPluginsPath, true);
 
 #ifdef __APPLE__
@@ -587,14 +587,14 @@ void PythonInterpreter::releaseGIL() {
 }
 
 std::string PythonInterpreter::getStandardOutput() const {
-	return consoleOuputString;
+  return consoleOuputString;
 }
 
 std::string PythonInterpreter::getStandardErrorOutput() const {
-	return consoleErrorOuputString;
+  return consoleErrorOuputString;
 }
 
 void PythonInterpreter::clearOutputBuffers() {
-	consoleOuputString = "";
-	consoleErrorOuputString = "";
+  consoleOuputString = "";
+  consoleErrorOuputString = "";
 }

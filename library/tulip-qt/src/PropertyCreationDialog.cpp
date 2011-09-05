@@ -44,8 +44,8 @@ void PropertyCreationDialog::initGui() {
   connect(ui->propertyNameLineEdit,SIGNAL(textChanged(QString)),this,SLOT(checkValidity()));
   checkValidity();
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
-    ui->propertyNameLineEdit->setPlaceholderText(QApplication::translate("PropertyCreationDialog", "Enter the property name", 0, QApplication::UnicodeUTF8));
-#endif    
+  ui->propertyNameLineEdit->setPlaceholderText(QApplication::translate("PropertyCreationDialog", "Enter the property name", 0, QApplication::UnicodeUTF8));
+#endif
 }
 
 PropertyCreationDialog::~PropertyCreationDialog() {

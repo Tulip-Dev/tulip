@@ -80,10 +80,10 @@ SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),view(&v)
 
   lockLabel=new LockLabel();
   lockLayout->addWidget(lockLabel);
-  
+
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
   fileName->setPlaceholderText(QApplication::translate("SnapshotDialogData", "Enter the filename or use the browse button", 0, QApplication::UnicodeUTF8));
-#endif  
+#endif
 }
 
 SnapshotDialog::~SnapshotDialog() {

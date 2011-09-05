@@ -39,10 +39,10 @@ SpreadViewTableWidget::SpreadViewTableWidget(QWidget *parent) :
   //Filtering
   connect(ui->showOnlySelectedElementsCheckBox,SIGNAL(stateChanged(int)),this,SLOT(filterElements()));
   connect(ui->filterPatternLineEdit,SIGNAL(returnPressed()),this,SLOT(filterElements()));
-  connect(ui->filterPushButton,SIGNAL(clicked()),this,SLOT(filterElements())); 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))    
+  connect(ui->filterPushButton,SIGNAL(clicked()),this,SLOT(filterElements()));
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
   ui->filterPatternLineEdit->setPlaceholderText(QApplication::translate("SpreadViewTableWidget", "Input a filter pattern", 0, QApplication::UnicodeUTF8));
-#endif    
+#endif
 
 }
 

@@ -82,7 +82,7 @@ public :
   bool eventFilter(QObject *obj, QEvent *event);
 
   bool isRunningScript() const {
-	  return runningScript;
+    return runningScript;
   }
 
 public slots:

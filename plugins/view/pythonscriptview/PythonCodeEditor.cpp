@@ -33,280 +33,309 @@
 using namespace std;
 
 static void loadApiFile(const QString &path, QsciAPIs *api) {
-	QFile apiFile(path);
-	apiFile.open(QIODevice::ReadOnly | QIODevice::Text);
-	QTextStream in(&apiFile);
+  QFile apiFile(path);
+  apiFile.open(QIODevice::ReadOnly | QIODevice::Text);
+  QTextStream in(&apiFile);
 
-	while (!in.atEnd()) {
-		QString line = in.readLine();
-		api->add(line);
+  while (!in.atEnd()) {
+    QString line = in.readLine();
+    api->add(line);
 
-		if (line.startsWith("tulip.tlp.Graph.")) {
-			api->add(line.replace("tulip.tlp.Graph", "graph"));
-		}
+    if (line.startsWith("tulip.tlp.Graph.")) {
+      api->add(line.replace("tulip.tlp.Graph", "graph"));
+    }
 
-		if (line.startsWith("tulip.tlp.LayoutProperty.")) {
-			api->add(line.replace("tulip.tlp.LayoutProperty", "viewLayout"));
-		}
+    if (line.startsWith("tulip.tlp.LayoutProperty.")) {
+      api->add(line.replace("tulip.tlp.LayoutProperty", "viewLayout"));
+    }
 
-		if (line.startsWith("tulip.tlp.DoubleProperty.")) {
-			api->add(line.replace("tulip.tlp.DoubleProperty", "viewMetric"));
-			api->add(line.replace("tulip.tlp.DoubleProperty", "viewBorderWidth"));
-			api->add(line.replace("tulip.tlp.DoubleProperty", "viewRotation"));
-		}
+    if (line.startsWith("tulip.tlp.DoubleProperty.")) {
+      api->add(line.replace("tulip.tlp.DoubleProperty", "viewMetric"));
+      api->add(line.replace("tulip.tlp.DoubleProperty", "viewBorderWidth"));
+      api->add(line.replace("tulip.tlp.DoubleProperty", "viewRotation"));
+    }
 
-		if (line.startsWith("tulip.tlp.ColorProperty.")) {
-			api->add(line.replace("tulip.tlp.ColorProperty", "viewColor"));
-			api->add(line.replace("tulip.tlp.ColorProperty", "viewBorderColor"));
-			api->add(line.replace("tulip.tlp.ColorProperty", "viewLabelColor"));
-		}
+    if (line.startsWith("tulip.tlp.ColorProperty.")) {
+      api->add(line.replace("tulip.tlp.ColorProperty", "viewColor"));
+      api->add(line.replace("tulip.tlp.ColorProperty", "viewBorderColor"));
+      api->add(line.replace("tulip.tlp.ColorProperty", "viewLabelColor"));
+    }
 
-		if (line.startsWith("tulip.tlp.StringProperty.")) {
-			api->add(line.replace("tulip.tlp.StringProperty", "viewLabel"));
-			api->add(line.replace("tulip.tlp.StringProperty", "viewTexture"));
-			api->add(line.replace("tulip.tlp.StringProperty", "viewFont"));
-		}
+    if (line.startsWith("tulip.tlp.StringProperty.")) {
+      api->add(line.replace("tulip.tlp.StringProperty", "viewLabel"));
+      api->add(line.replace("tulip.tlp.StringProperty", "viewTexture"));
+      api->add(line.replace("tulip.tlp.StringProperty", "viewFont"));
+    }
 
-		if (line.startsWith("tulip.tlp.BooleanProperty.")) {
-			api->add(line.replace("tulip.tlp.BooleanProperty", "viewSelection"));
-		}
+    if (line.startsWith("tulip.tlp.BooleanProperty.")) {
+      api->add(line.replace("tulip.tlp.BooleanProperty", "viewSelection"));
+    }
 
-		if (line.startsWith("tulip.tlp.GraphProperty.")) {
-			api->add(line.replace("tulip.tlp.GraphProperty", "viewMetaGraph"));
-		}
+    if (line.startsWith("tulip.tlp.GraphProperty.")) {
+      api->add(line.replace("tulip.tlp.GraphProperty", "viewMetaGraph"));
+    }
 
-		if (line.startsWith("tulip.tlp.IntegerProperty.")) {
-			api->add(line.replace("tulip.tlp.IntegerProperty", "viewShape"));
-			api->add(line.replace("tulip.tlp.IntegerProperty", "viewFontSize"));
-			api->add(line.replace("tulip.tlp.IntegerProperty", "viewLabelPosition"));
-			api->add(line.replace("tulip.tlp.IntegerProperty", "viewSrcAnchorShape"));
-			api->add(line.replace("tulip.tlp.IntegerProperty", "viewTgtAnchorShape"));
-		}
+    if (line.startsWith("tulip.tlp.IntegerProperty.")) {
+      api->add(line.replace("tulip.tlp.IntegerProperty", "viewShape"));
+      api->add(line.replace("tulip.tlp.IntegerProperty", "viewFontSize"));
+      api->add(line.replace("tulip.tlp.IntegerProperty", "viewLabelPosition"));
+      api->add(line.replace("tulip.tlp.IntegerProperty", "viewSrcAnchorShape"));
+      api->add(line.replace("tulip.tlp.IntegerProperty", "viewTgtAnchorShape"));
+    }
 
-		if (line.startsWith("tulip.tlp.SizeProperty.")) {
-			api->add(line.replace("tulip.tlp.SizeProperty", "viewSize"));
-			api->add(line.replace("tulip.tlp.SizeProperty", "viewSrcAnchorSize"));
-			api->add(line.replace("tulip.tlp.SizeProperty", "viewTgtAnchorSize"));
-		}
-	}
+    if (line.startsWith("tulip.tlp.SizeProperty.")) {
+      api->add(line.replace("tulip.tlp.SizeProperty", "viewSize"));
+      api->add(line.replace("tulip.tlp.SizeProperty", "viewSrcAnchorSize"));
+      api->add(line.replace("tulip.tlp.SizeProperty", "viewTgtAnchorSize"));
+    }
+  }
 
-	apiFile.close();
+  apiFile.close();
 }
 
 FindReplaceDialog::FindReplaceDialog(QsciScintilla *editor, QWidget *parent) :
-				QDialog(parent), editor(editor) {
-	setupUi(this);
-	connect(findButton, SIGNAL(clicked()), this, SLOT(doFind()));
-	connect(replaceButton, SIGNAL(clicked()), this, SLOT(doReplace()));
-	connect(replaceFindButton, SIGNAL(clicked()), this, SLOT(doReplaceFind()));
-	connect(replaceAllButton, SIGNAL(clicked()), this, SLOT(doReplaceAll()));
-	connect(closeButton, SIGNAL(clicked()), this, SLOT(hide()));
-	connect(forwardRB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
-	connect(backwardRB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
-	connect(regexpCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
-	connect(regexpCB, SIGNAL(toggled(bool)), this, SLOT(regexpToggled(bool)));
-	connect(wholeWordCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
-	connect(wrapSearchCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
-	connect(caseSensitiveCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
-	connect(textToFind, SIGNAL(textChanged(const QString &)), this, SLOT(textToFindChanged()));
+  QDialog(parent), editor(editor) {
+  setupUi(this);
+  connect(findButton, SIGNAL(clicked()), this, SLOT(doFind()));
+  connect(replaceButton, SIGNAL(clicked()), this, SLOT(doReplace()));
+  connect(replaceFindButton, SIGNAL(clicked()), this, SLOT(doReplaceFind()));
+  connect(replaceAllButton, SIGNAL(clicked()), this, SLOT(doReplaceAll()));
+  connect(closeButton, SIGNAL(clicked()), this, SLOT(hide()));
+  connect(forwardRB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
+  connect(backwardRB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
+  connect(regexpCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
+  connect(regexpCB, SIGNAL(toggled(bool)), this, SLOT(regexpToggled(bool)));
+  connect(wholeWordCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
+  connect(wrapSearchCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
+  connect(caseSensitiveCB, SIGNAL(toggled(bool)), this, SLOT(setResetSearch()));
+  connect(textToFind, SIGNAL(textChanged(const QString &)), this, SLOT(textToFindChanged()));
 
 }
 
 void FindReplaceDialog::setTextToFind(const QString &text) {
-	textToFind->setText(text);
+  textToFind->setText(text);
 }
 
 void FindReplaceDialog::textToFindChanged() {
-	replaceButton->setEnabled(false);
-	replaceFindButton->setEnabled(false);
-	QString text = textToFind->text();
-	if (text == "") {
-		findButton->setEnabled(false);
-		replaceAllButton->setEnabled(false);
-	} else {
-		findButton->setEnabled(true);
-		replaceAllButton->setEnabled(true);
-	}
+  replaceButton->setEnabled(false);
+  replaceFindButton->setEnabled(false);
+  QString text = textToFind->text();
+
+  if (text == "") {
+    findButton->setEnabled(false);
+    replaceAllButton->setEnabled(false);
+  }
+  else {
+    findButton->setEnabled(true);
+    replaceAllButton->setEnabled(true);
+  }
 }
 
 void FindReplaceDialog::regexpToggled(bool toggled) {
-	wholeWordCB->setEnabled(!toggled);
+  wholeWordCB->setEnabled(!toggled);
 }
 
 void FindReplaceDialog::setFindMode(const bool findMode) {
-	if (findMode) {
-		textToFind->setFocus();
-	} else {
-		replaceText->setFocus();
-	}
+  if (findMode) {
+    textToFind->setFocus();
+  }
+  else {
+    replaceText->setFocus();
+  }
 }
 
 void FindReplaceDialog::setSearchResult(const bool result) {
-	replaceButton->setEnabled(result);
-	replaceFindButton->setEnabled(result);
-	if (!result) {
-		searchStatusLabel->setText("String Not Found");
-	} else {
-		searchStatusLabel->setText("");
-	}
+  replaceButton->setEnabled(result);
+  replaceFindButton->setEnabled(result);
+
+  if (!result) {
+    searchStatusLabel->setText("String Not Found");
+  }
+  else {
+    searchStatusLabel->setText("");
+  }
 }
 
 bool FindReplaceDialog::doFind() {
-	QString text = textToFind->text();
-	if (text == "")
-		return false;
-	bool ret = false;
-	if (lastSearch == "" || lastSearch != text || resetSearch) {
-		ret = editor->findFirst(text, regexpCB->isChecked(), caseSensitiveCB->isChecked(), wholeWordCB->isChecked(), wrapSearchCB->isChecked(), forwardRB->isChecked());
-		resetSearch = false;
-	} else {
-		ret = editor->findNext();
-	}
-	setSearchResult(ret);
-	lastSearch = text;
-	return ret;
+  QString text = textToFind->text();
+
+  if (text == "")
+    return false;
+
+  bool ret = false;
+
+  if (lastSearch == "" || lastSearch != text || resetSearch) {
+    ret = editor->findFirst(text, regexpCB->isChecked(), caseSensitiveCB->isChecked(), wholeWordCB->isChecked(), wrapSearchCB->isChecked(), forwardRB->isChecked());
+    resetSearch = false;
+  }
+  else {
+    ret = editor->findNext();
+  }
+
+  setSearchResult(ret);
+  lastSearch = text;
+  return ret;
 }
 
 bool FindReplaceDialog::doReplace() {
-	QString text = textToFind->text();
-	if (text == "")
-		return false;
-	QString selection = editor->selectedText();
-	if (!caseSensitiveCB->isChecked()) {
-		selection = selection.toLower();
-		text = text.toLower();
-	}
-	if (selection == text || regexpCB->isChecked()) {
-		editor->replace(replaceText->text());
-		return true;
-	}
-	return false;
+  QString text = textToFind->text();
+
+  if (text == "")
+    return false;
+
+  QString selection = editor->selectedText();
+
+  if (!caseSensitiveCB->isChecked()) {
+    selection = selection.toLower();
+    text = text.toLower();
+  }
+
+  if (selection == text || regexpCB->isChecked()) {
+    editor->replace(replaceText->text());
+    return true;
+  }
+
+  return false;
 }
 
 void FindReplaceDialog::doReplaceFind() {
-	if (doReplace())
-		doFind();
+  if (doReplace())
+    doFind();
 }
 
 void FindReplaceDialog::doReplaceAll() {
-	QString text = textToFind->text();
-	if (text == "")
-		return;
-	bool ret = editor->findFirst(text, regexpCB->isChecked(), caseSensitiveCB->isChecked(), wholeWordCB->isChecked(), true, forwardRB->isChecked());
-	if (ret) {
-		int startLine, startIndex;
-		editor->getCursorPosition(&startLine, &startIndex);
-		int nbReplacements = 0;
-		while(ret) {
-			doReplace();
-			ret = editor->findNext();
-			++nbReplacements;
-			int line, index;
-			editor->getCursorPosition(&line, &index);
-			// when replacing a pattern P by a pattern following this regexp .*P.*
-			// this can lead to an infinite loop, handle this case
-			if (line == startLine && index >= startIndex)
-			  break;
-		}
-		searchStatusLabel->setText(QString::number(nbReplacements) + QString(" matches replaced"));
-		resetSearch = true;
-	} else {
-		setSearchResult(ret);
-	}
+  QString text = textToFind->text();
+
+  if (text == "")
+    return;
+
+  bool ret = editor->findFirst(text, regexpCB->isChecked(), caseSensitiveCB->isChecked(), wholeWordCB->isChecked(), true, forwardRB->isChecked());
+
+  if (ret) {
+    int startLine, startIndex;
+    editor->getCursorPosition(&startLine, &startIndex);
+    int nbReplacements = 0;
+
+    while(ret) {
+      doReplace();
+      ret = editor->findNext();
+      ++nbReplacements;
+      int line, index;
+      editor->getCursorPosition(&line, &index);
+
+      // when replacing a pattern P by a pattern following this regexp .*P.*
+      // this can lead to an infinite loop, handle this case
+      if (line == startLine && index >= startIndex)
+        break;
+    }
+
+    searchStatusLabel->setText(QString::number(nbReplacements) + QString(" matches replaced"));
+    resetSearch = true;
+  }
+  else {
+    setSearchResult(ret);
+  }
 }
 
 void FindReplaceDialog::hideEvent(QHideEvent *) {
-	editor->setFocus();
+  editor->setFocus();
 }
 
 QsciLexerPython *PythonCodeEditor::pythonLexer(NULL);
 
 PythonCodeEditor::PythonCodeEditor(QWidget *parent, int fontZoom) : QsciScintilla(parent) {
-	installEventFilter(new GragKeyboardFocusEventFilter());
-	if (pythonLexer == NULL) {
-		pythonLexer = new CustomLexerPython;
-		QsciAPIs *api = new QsciAPIs(pythonLexer);
-		QDir apiDir(QString(tlp::TulipBitmapDir.c_str()) + "../apiFiles");
-		QStringList nameFilter;
-		nameFilter << "*.api";
-		QFileInfoList fileList = apiDir.entryInfoList(nameFilter);
+  installEventFilter(new GragKeyboardFocusEventFilter());
+
+  if (pythonLexer == NULL) {
+    pythonLexer = new CustomLexerPython;
+    QsciAPIs *api = new QsciAPIs(pythonLexer);
+    QDir apiDir(QString(tlp::TulipBitmapDir.c_str()) + "../apiFiles");
+    QStringList nameFilter;
+    nameFilter << "*.api";
+    QFileInfoList fileList = apiDir.entryInfoList(nameFilter);
 
 
-		for (int i = 0 ; i < fileList.size() ; ++i) {
-			QFileInfo fileInfo = fileList.at(i);
-			loadApiFile(fileInfo.absoluteFilePath(), api);
-		}
+    for (int i = 0 ; i < fileList.size() ; ++i) {
+      QFileInfo fileInfo = fileList.at(i);
+      loadApiFile(fileInfo.absoluteFilePath(), api);
+    }
 
-		loadApiFile(QString(tlp::TulipBitmapDir.c_str()) + "../apiFiles/Python-" + QString(PythonInterpreter::getInstance()->getPythonVersion().c_str()) + ".api", api);
-		api->add("updateVisualization()");
-		api->prepare();
-	}
+    loadApiFile(QString(tlp::TulipBitmapDir.c_str()) + "../apiFiles/Python-" + QString(PythonInterpreter::getInstance()->getPythonVersion().c_str()) + ".api", api);
+    api->add("updateVisualization()");
+    api->prepare();
+  }
 
-	setUtf8(true);
-	setLexer(pythonLexer);
-	setBraceMatching(QsciScintilla::SloppyBraceMatch);
-	setAutoIndent(true);
-	setAutoCompletionSource(QsciScintilla::AcsAll);
-	setAutoCompletionThreshold(1);
-	setMarginLineNumbers(1, true);
-	setMarginWidth(1, "---------");
-	setFolding(QsciScintilla::CircledTreeFoldStyle);
-	setIndentationGuides(true);
+  setUtf8(true);
+  setLexer(pythonLexer);
+  setBraceMatching(QsciScintilla::SloppyBraceMatch);
+  setAutoIndent(true);
+  setAutoCompletionSource(QsciScintilla::AcsAll);
+  setAutoCompletionThreshold(1);
+  setMarginLineNumbers(1, true);
+  setMarginWidth(1, "---------");
+  setFolding(QsciScintilla::CircledTreeFoldStyle);
+  setIndentationGuides(true);
 
-#if QSCINTILLA_VERSION  >= 0x020406	
-	errorIndicator = indicatorDefine(QsciScintilla::SquiggleIndicator);
-	setIndicatorForegroundColor(QColor(255,0,0), errorIndicator);
-#endif	
+#if QSCINTILLA_VERSION  >= 0x020406
+  errorIndicator = indicatorDefine(QsciScintilla::SquiggleIndicator);
+  setIndicatorForegroundColor(QColor(255,0,0), errorIndicator);
+#endif
 
-	if (fontZoom > 0) {
-		for (int i = 0 ; i < fontZoom ; ++i) {
-			zoomIn();
-		}
-	}
-	else if (fontZoom < 0) {
-		for (int i = 0 ; i > fontZoom ; --i) {
-			zoomOut();
-		}
-	}
+  if (fontZoom > 0) {
+    for (int i = 0 ; i < fontZoom ; ++i) {
+      zoomIn();
+    }
+  }
+  else if (fontZoom < 0) {
+    for (int i = 0 ; i > fontZoom ; --i) {
+      zoomOut();
+    }
+  }
 
-	findReplaceDialog = new FindReplaceDialog(this, this);
+  findReplaceDialog = new FindReplaceDialog(this, this);
 }
 
 void PythonCodeEditor::indicateScriptCurrentError(int lineNumber) {
-#if QSCINTILLA_VERSION  >= 0x020406	  
-	fillIndicatorRange(lineNumber, 0, lineNumber, text(lineNumber).length(), errorIndicator);
-#endif	
+#if QSCINTILLA_VERSION  >= 0x020406
+  fillIndicatorRange(lineNumber, 0, lineNumber, text(lineNumber).length(), errorIndicator);
+#endif
 }
 
 void PythonCodeEditor::clearErrorIndicator() {
-#if QSCINTILLA_VERSION  >= 0x020406	  
-	clearIndicatorRange(0, 0, lines(), text(lines()).length(), errorIndicator);
-#endif	
+#if QSCINTILLA_VERSION  >= 0x020406
+  clearIndicatorRange(0, 0, lines(), text(lines()).length(), errorIndicator);
+#endif
 }
 
 void PythonCodeEditor::showEvent(QShowEvent *) {
-	setFocus();
+  setFocus();
 }
 
 void PythonCodeEditor::keyPressEvent(QKeyEvent * event) {
-	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F) {
-		QString selection = selectedText();
-		if (selection != "")
-			findReplaceDialog->setTextToFind(selection);
-		findReplaceDialog->show();
-		findReplaceDialog->raise();
-		findReplaceDialog->activateWindow();
-		findReplaceDialog->setFindMode(true);
-	} else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_R) {
-		QString selection = selectedText();
-		if (selection != "")
-			findReplaceDialog->setTextToFind(selection);
-		findReplaceDialog->show();
-		findReplaceDialog->raise();
-		findReplaceDialog->activateWindow();
-		findReplaceDialog->setFindMode(false);
-	} else {
-		QsciScintilla::keyPressEvent(event);
-	}
+  if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F) {
+    QString selection = selectedText();
+
+    if (selection != "")
+      findReplaceDialog->setTextToFind(selection);
+
+    findReplaceDialog->show();
+    findReplaceDialog->raise();
+    findReplaceDialog->activateWindow();
+    findReplaceDialog->setFindMode(true);
+  }
+  else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_R) {
+    QString selection = selectedText();
+
+    if (selection != "")
+      findReplaceDialog->setTextToFind(selection);
+
+    findReplaceDialog->show();
+    findReplaceDialog->raise();
+    findReplaceDialog->activateWindow();
+    findReplaceDialog->setFindMode(false);
+  }
+  else {
+    QsciScintilla::keyPressEvent(event);
+  }
 }
 

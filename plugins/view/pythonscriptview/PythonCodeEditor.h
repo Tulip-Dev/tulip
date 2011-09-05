@@ -58,41 +58,41 @@ public :
 
 class FindReplaceDialog : public QDialog, public Ui::FindReplaceDialogData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	FindReplaceDialog(QsciScintilla *editor, QWidget *parent=0);
+  FindReplaceDialog(QsciScintilla *editor, QWidget *parent=0);
 
-	void setFindMode(const bool findMode);
+  void setFindMode(const bool findMode);
 
-	void setTextToFind(const QString &text);
+  void setTextToFind(const QString &text);
 
 
 public slots:
 
-	void textToFindChanged();
-	bool doFind();
-	bool doReplace();
-	void doReplaceFind();
-	void doReplaceAll();
-	void setResetSearch() {
-		this->resetSearch = true;
-	}
-	void regexpToggled(bool toggled);
+  void textToFindChanged();
+  bool doFind();
+  bool doReplace();
+  void doReplaceFind();
+  void doReplaceAll();
+  void setResetSearch() {
+    this->resetSearch = true;
+  }
+  void regexpToggled(bool toggled);
 
 
 protected:
 
-	void hideEvent(QHideEvent * event);
+  void hideEvent(QHideEvent * event);
 
 private :
 
-	void setSearchResult(const bool result);
+  void setSearchResult(const bool result);
 
-	QsciScintilla *editor;
-	QString lastSearch;
-	bool resetSearch;
+  QsciScintilla *editor;
+  QString lastSearch;
+  bool resetSearch;
 };
 
 class PythonCodeEditor : public QsciScintilla {
