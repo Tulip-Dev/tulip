@@ -54,7 +54,6 @@ public:
   PropertyInterface* getInheritedProperty(const std::string&);
   void delLocalProperty(const std::string&);
   void notifyBeforeDelInheritedProperty(const std::string&);
-//  void delInheritedProperty(const std::string&);
   void erase(const node );
   void erase(const edge );
   //======================================================================================

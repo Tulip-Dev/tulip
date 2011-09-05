@@ -261,24 +261,6 @@ void PropertyManager::notifyBeforeDelInheritedProperty(const string& str) {
   }
 }
 
-//==============================================================
-//void PropertyManager::delInheritedProperty(const string &str) {
-//  map<string,PropertyInterface *>::iterator it;
-//  it = inheritedProperties.find(str);
-//  // if found remove from inherited properties
-//  if (it != inheritedProperties.end()) {
-
-//      // loop on subgraphs
-//      Graph* sg;
-//      forEach(sg, graph->getSubGraphs()) {
-//        // to remove as inherited property
-//        (((GraphAbstract *) sg)->propertyContainer)->delInheritedProperty(str);
-//      }
-//     inheritedProperties.erase(it);
-//     // graph observers notification
-//    ((GraphAbstract *) graph)->notifyAfterDelInheritedProperty(str);
-//  }
-//}
 Iterator<string>*  PropertyManager::getLocalProperties() {
   return (new PropertyNamesIterator(localProperties.begin(),
                                     localProperties.end()));
