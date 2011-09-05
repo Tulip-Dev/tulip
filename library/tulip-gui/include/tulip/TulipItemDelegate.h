@@ -11,7 +11,6 @@ class TLP_QT_SCOPE TulipItemDelegate : public QStyledItemDelegate {
 
 public:
   explicit TulipItemDelegate(QObject* parent=0);
-
   virtual ~TulipItemDelegate();
 
   template<typename T>
@@ -25,8 +24,14 @@ public:
   tlp::TulipItemEditorCreator* creator() const;
 
   tlp::TulipItemEditorCreator* creator(int) const;
+
+  QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+  QString displayText(const QVariant &value, const QLocale &locale) const;
 };
 
 }
+
+#include "cxx/TulipItemDelegate.cxx"
 
 #endif // TULIPITEMDELEGATE_H

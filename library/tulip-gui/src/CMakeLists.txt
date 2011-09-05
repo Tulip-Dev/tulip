@@ -130,6 +130,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/ThreadedComputeProperty.h
   ../include/tulip/TulipProject.h
   ../include/tulip/View.h
+  ../include/tulip/TulipItemEditorCreators.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
