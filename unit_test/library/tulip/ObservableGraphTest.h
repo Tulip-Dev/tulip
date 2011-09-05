@@ -35,6 +35,7 @@ class ObservableGraphTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testReverse);
   CPPUNIT_TEST(testObserverWhenRemoveObservable);
   CPPUNIT_TEST(testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend);
+  CPPUNIT_TEST(testNotifyDelInheritedPropertyIsSendWhenLocalPropertyIsDeleted);
   CPPUNIT_TEST_SUITE_END();
 private:
   tlp::Graph *graph;
@@ -51,6 +52,7 @@ public:
   void testReverse();
   void testObserverWhenRemoveObservable();
   void testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend();
+  void testNotifyDelInheritedPropertyIsSendWhenLocalPropertyIsDeleted();
 };
 
 #endif

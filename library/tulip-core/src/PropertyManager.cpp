@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #include <tulip/ForEach.h>
 #include <tulip/GraphAbstract.h>
 #include <tulip/PropertyManager.h>
@@ -111,20 +112,31 @@ bool PropertyManager::existInheritedProperty(const string &str) {
 //==============================================================
 void PropertyManager::setLocalProperty(const string &str,
                                        PropertyInterface *p) {
+  bool hasInheritedProperty=false;
+
   if (existLocalProperty(str))
     // delete previously existing local property
     delete localProperties[str];
   else {
     // remove previously existing inherited property
     map<string, PropertyInterface *>::iterator it;
-    it = inheritedProperties.find(str);
+    hasInheritedProperty = ((it = inheritedProperties.find(str))!= inheritedProperties.end());
 
-    if (it != inheritedProperties.end())
+    if (hasInheritedProperty) {
+      //Notify property destruction old state.
+      notifyBeforeDelInheritedProperty(str);
+      //Erase old inherited property
       inheritedProperties.erase(it);
+    }
   }
 
   // register property as local
   localProperties[str] = p;
+
+  //If we had an inherited property notify it's destruction.
+  if(hasInheritedProperty) {
+    ((GraphAbstract *) graph)->notifyAfterDelInheritedProperty(str);
+  }
 
   // loop on subgraphs
   Graph* sg;
@@ -137,13 +149,26 @@ void PropertyManager::setLocalProperty(const string &str,
 void PropertyManager::setInheritedProperty(const string &str,
     PropertyInterface *p) {
   if (!existLocalProperty(str)) {
-    inheritedProperties[str] = p;
+    bool hasInheritedProperty = inheritedProperties.find(str)!=inheritedProperties.end();
 
-    if (str == metaGraphPropertyName)
-      ((GraphAbstract *) graph)->metaGraphProperty = (GraphProperty *) p;
+    if( p != NULL) {
+      inheritedProperties[str] = p;
+
+      if (str == metaGraphPropertyName)
+        ((GraphAbstract *) graph)->metaGraphProperty = (GraphProperty *) p;
+    }
+    else {
+      inheritedProperties.erase(str);
+    }
+
+    if(hasInheritedProperty) {
+      ((GraphAbstract *) graph)->notifyAfterDelInheritedProperty(str);
+    }
 
     // graph observers notification
-    ((GraphAbstract *) graph)->notifyAddInheritedProperty(str);
+    if( p != NULL) {
+      ((GraphAbstract *) graph)->notifyAddInheritedProperty(str);
+    }
 
     // loop on subgraphs
     Graph* sg;
@@ -198,22 +223,16 @@ void PropertyManager::delLocalProperty(const string &str) {
       }
     }
 
-    if (newProp == NULL) {
-      (((GraphAbstract *) g)->notifyBeforeDelInheritedProperty(str));
+    //Warn subgraphs.
+    Graph* sg;
+    forEach(sg, graph->getSubGraphs()) {
+      (((GraphAbstract *) sg)->propertyContainer)->notifyBeforeDelInheritedProperty(str);
     }
 
     //Remove property from map.
     localProperties.erase(it);
-
-    if (newProp)
-      setInheritedProperty(str, newProp);
-    else {
-      // loop on subgraphs
-      forEach(g, graph->getSubGraphs()) {
-        // to remove old inherited property
-        (((GraphAbstract *) g)->propertyContainer)->delInheritedProperty(str);
-      }
-    }
+    //Set the inherited property int this graph and all it's subgraphs.
+    (((GraphAbstract *) graph)->propertyContainer)->setInheritedProperty(str, newProp);
 
     //Delete property
     //Need to be done after subgraph notification.
@@ -225,25 +244,23 @@ void PropertyManager::delLocalProperty(const string &str) {
   }
 }
 //==============================================================
-void PropertyManager::delInheritedProperty(const string &str) {
+void PropertyManager::notifyBeforeDelInheritedProperty(const string& str) {
   map<string,PropertyInterface *>::iterator it;
   it = inheritedProperties.find(str);
 
   // if found remove from inherited properties
   if (it != inheritedProperties.end()) {
     // graph observers notification
-    ((GraphAbstract *) graph)->notifyAfterDelInheritedProperty(str);
-
+    ((GraphAbstract *) graph)->notifyBeforeDelInheritedProperty(str);
     // loop on subgraphs
     Graph* sg;
     forEach(sg, graph->getSubGraphs()) {
       // to remove as inherited property
-      (((GraphAbstract *) sg)->propertyContainer)->delInheritedProperty(str);
+      (((GraphAbstract *) sg)->propertyContainer)->notifyBeforeDelInheritedProperty(str);
     }
-
-    inheritedProperties.erase(it);
   }
 }
+
 Iterator<string>*  PropertyManager::getLocalProperties() {
   return (new PropertyNamesIterator(localProperties.begin(),
                                     localProperties.end()));
