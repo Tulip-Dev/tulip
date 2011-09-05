@@ -177,12 +177,30 @@ public:
   static double defaultValue();
 };
 
+class TLP_SCOPE FloatType: public SerializableType<float> {
+public:
+  static float undefinedValue();
+  static float defaultValue();
+};
+
 typedef SerializableVectorType<double,false> DoubleVectorType;
 
 class TLP_SCOPE IntegerType: public SerializableType<int> {
 public:
   static int undefinedValue();
   static int defaultValue();
+};
+
+class TLP_SCOPE LongType: public SerializableType<long> {
+public:
+  static long undefinedValue();
+  static long defaultValue();
+};
+
+class TLP_SCOPE UnsignedIntegerType: public SerializableType<unsigned int> {
+public:
+  static unsigned int undefinedValue();
+  static unsigned int defaultValue();
 };
 
 typedef SerializableVectorType<int,false> IntegerVectorType;

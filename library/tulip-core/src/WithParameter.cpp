@@ -119,136 +119,66 @@ bool ParameterList::isMandatory(string parameterName) const {
   }
 }
 
-#undef TYPE_NAME
-#define TYPE_NAME( T ) typeid(T).name()
+template<typename TYPEINTERFACE>
+void ParameterList::insertData(tlp::DataSet &dataSet,const std::string &param,const std::string &defaultValue) const {
+  if (dataSet.exist(param))
+    return;
 
-void ParameterList::buildDefaultDataSet(DataSet &ioDataSet, Graph *inG) const {
-  Iterator<string> * parameterNames = getParametersNames();
+  typename TYPEINTERFACE::RealType value;
 
-  while( parameterNames->hasNext() ) {
-    const string & parameterName  = parameterNames->next();
-    const string & parameterTypename = getTypeName(parameterName);
+  if (defaultValue.size()==0)
+    value = TYPEINTERFACE::defaultValue();
 
-    // Already defined ?
-    if( ioDataSet.exist(parameterName) )
-      continue;
-
-    // Has def value ?
-    const string & defaultValue = getDefaultValue(parameterName);
-
-    if( defaultValue.size() == 0 )
-      continue;
-
-    // bool
-    if( parameterTypename == TYPE_NAME(bool) ) {
-      bool v;
-      bool res = BooleanType::fromString( v, defaultValue );
-      assert( res );
-
-      if( res )
-        ioDataSet.set( parameterName, v );
-    }
-    // int
-    else if( parameterTypename == TYPE_NAME(int) ) {
-      int v;
-      bool res = IntegerType::fromString( v, defaultValue );
-      assert( res );
-
-      if( res )
-        ioDataSet.set( parameterName, v );
-    }
-    // unsigned int
-    else if( parameterTypename == TYPE_NAME(unsigned int) ) {
-      unsigned int v = atol( defaultValue.c_str() );
-      ioDataSet.set( parameterName, v );
-    }
-    // unsigned int
-    else if( parameterTypename == TYPE_NAME(long) ) {
-      long v = atol( defaultValue.c_str() );
-      ioDataSet.set( parameterName, v );
-    }
-    // fp
-    else if( parameterTypename == TYPE_NAME(double) ) {
-      double v;
-      bool res = DoubleType::fromString( v, defaultValue );
-      assert( res );
-
-      if( res )
-        ioDataSet.set( parameterName, (double)v );
-    }
-    else if( parameterTypename == TYPE_NAME(float) ) {
-      double v;
-      bool res = DoubleType::fromString( v, defaultValue );
-      assert( res );
-
-      if( res )
-        ioDataSet.set( parameterName, (float)v );
-    }
-    // string
-    else if( parameterTypename == TYPE_NAME(string) ) {
-      ioDataSet.set( parameterName, defaultValue );
-    }
-    // Color
-    else if( parameterTypename == TYPE_NAME(Color) ) {
-      Color v;
-      bool res = ColorType::fromString( v, defaultValue );
-      assert( res );
-
-      if( res ) {
-        ioDataSet.set( parameterName, v );
-        //cout << v;
-      }
-    }
-    // Size
-    else if( parameterTypename == TYPE_NAME(Size) ) {
-      Size v;
-      bool res = SizeType::fromString( v, defaultValue );
-      assert( res );
-
-      if( res )
-        ioDataSet.set( parameterName, v );
-    }
-    else
-
-      // look for an already existing property
-      if (inG && (inG->existProperty(defaultValue))) {
-        // BooleanProperty
-        if( parameterTypename == TYPE_NAME(BooleanProperty) ) {
-          ioDataSet.set( parameterName, inG->getProperty<BooleanProperty>(defaultValue) );
-        }
-        // DoubleProperty
-        else if( parameterTypename == TYPE_NAME(DoubleProperty) ) {
-          // look for an already existing property
-          if (inG->existProperty(defaultValue))
-            ioDataSet.set( parameterName, inG->getProperty<DoubleProperty>(defaultValue) );
-        }
-        // LayoutProperty
-        else if( parameterTypename == TYPE_NAME(LayoutProperty) ) {
-          ioDataSet.set( parameterName, inG->getProperty<LayoutProperty>(defaultValue) );
-        }
-        // StringProperty
-        else if( parameterTypename == TYPE_NAME(StringProperty) ) {
-          ioDataSet.set( parameterName, inG->getProperty<StringProperty>(defaultValue) );
-        }
-        // IntegerProperty
-        else if( parameterTypename == TYPE_NAME(IntegerProperty) ) {
-          ioDataSet.set( parameterName, inG->getProperty<IntegerProperty>(defaultValue) );
-        }
-        // SizeProperty
-        else if( parameterTypename == TYPE_NAME(SizeProperty) ) {
-          ioDataSet.set( parameterName, inG->getProperty<SizeProperty>(defaultValue) );
-        }
-        // ColorProperty
-        else if( parameterTypename == TYPE_NAME(ColorProperty) ) {
-          ioDataSet.set( parameterName, inG->getProperty<ColorProperty>(defaultValue) );
-        }
-        //
-        else if ( parameterTypename == TYPE_NAME(PropertyInterface*) ) {
-          ioDataSet.set( parameterName, inG->getProperty(defaultValue) );
-        }
-      }
+  else {
+    bool result = TYPEINTERFACE::fromString(value,defaultValue);
+    assert(result);
+    if (!result)
+      value = TYPEINTERFACE::defaultValue();
   }
 
-  delete parameterNames;
+  dataSet.set<typename TYPEINTERFACE::RealType>(param,value);
+}
+
+#define CHECK_TYPE(T)\
+if (type.compare(typeid(T::RealType).name()) == 0)\
+  insertData<T>(dataSet,name,defaultValue);
+
+#define CHECK_PROPERTY(T)\
+if (type.compare(typeid(T*).name()) == 0 && pi->getTypename().compare(typeid(T*).name()) == 0) {\
+  dataSet.set<T*>(name,(T*)pi);\
+  continue;\
+}
+
+void ParameterList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
+  string name;
+  forEach(name,getParametersNames()) {
+    string type = getTypeName(name);
+    string defaultValue = getDefaultValue(name);
+
+    CHECK_TYPE(tlp::BooleanType);
+    CHECK_TYPE(tlp::IntegerType);
+    CHECK_TYPE(tlp::UnsignedIntegerType);
+    CHECK_TYPE(tlp::LongType);
+    CHECK_TYPE(tlp::DoubleType);
+    CHECK_TYPE(tlp::FloatType);
+    CHECK_TYPE(tlp::StringType);
+    CHECK_TYPE(tlp::ColorType);
+    CHECK_TYPE(tlp::SizeType);
+
+    if (defaultValue.size()==0 || !g || !g->existProperty(defaultValue))
+      continue;
+
+    tlp::PropertyInterface *pi = g->getProperty(defaultValue);
+
+    CHECK_PROPERTY(tlp::BooleanProperty);
+    CHECK_PROPERTY(tlp::DoubleProperty);
+    CHECK_PROPERTY(tlp::LayoutProperty);
+    CHECK_PROPERTY(tlp::StringProperty);
+    CHECK_PROPERTY(tlp::IntegerProperty);
+    CHECK_PROPERTY(tlp::SizeProperty);
+    CHECK_PROPERTY(tlp::ColorProperty);
+
+    dataSet.set(name,pi);
+  }
 }
 
