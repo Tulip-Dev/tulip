@@ -42,7 +42,11 @@ IF(LINUX)
         ADD_DEPENDENCIES(tulip_qhp dev_toc dev_keywords dox_toc dox_keywords user_toc user_keywords allPlugins-html tulip-libs-html)
         ADD_DEPENDENCIES(tulip_qch tulip_qhp)
         ADD_DEPENDENCIES(doc ALL tulip_qch tulip_qhcp)
-    ENDIF()
+
+        INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/common
+            DESTINATION share/doc/tulip
+            COMPONENT tulip-doc)
+    ENDIF(BUILD_DOC)
   ELSE()
   	MESSAGE("Doxygen not found: unable to generate documentation")
   ENDIF()
@@ -55,12 +59,7 @@ ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/tulip${TulipIntVersion}.qh
 COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/tulip${TulipIntVersion}.qch
 COMMENT "Checking if documentation files are present")
 
-
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip${TulipIntVersion}.qhc ${CMAKE_CURRENT_BINARY_DIR}/tulip${TulipIntVersion}.qch
   DESTINATION ${TulipShareInstallDir}
   COMPONENT tulip-doc)
 
-
-INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/common 
-  DESTINATION share/doc/tulip
-  COMPONENT tulip-doc)
