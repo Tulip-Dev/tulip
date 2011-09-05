@@ -70,3 +70,9 @@ INSTALL(FILES
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
+
+INSTALL(FILES
+  tulip/cxx/TulipItemDelegate.cxx
+DESTINATION ${TulipIncludeInstallDir}/tulip/cxx/
+COMPONENT tulip_core_dev
+)

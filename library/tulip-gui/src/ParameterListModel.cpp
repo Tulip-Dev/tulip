@@ -7,6 +7,8 @@
 #include <tulip/Color.h>
 #include <tulip/TlpQtTools.h>
 
+#include <QtCore/QDebug>
+
 namespace tlp {
 
 bool ParameterListModel::ParamInfosSorter::operator()(ParameterListModel::ParamInfos a, ParameterListModel::ParamInfos b) {
@@ -66,7 +68,10 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
     if (index.column() == 0)
       return infos.name;
 
-    return TulipMetaTypes::dataMemToQvariant(_data.getData(infos.name.toStdString()));
+    tlp::DataType *dataType = _data.getData(infos.name.toStdString());
+    QVariant result = TulipMetaTypes::dataTypeToQvariant(dataType);
+    delete dataType;
+    return result;
   }
 
   return QVariant();
