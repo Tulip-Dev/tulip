@@ -17,6 +17,7 @@ public:
   void registerCreator(tlp::TulipItemEditorCreator*);
 
   void unregisterCreator(tlp::TulipItemEditorCreator*);
+
   template<typename T>
   void unregisterCreator();
 
