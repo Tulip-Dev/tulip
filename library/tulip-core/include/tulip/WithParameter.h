@@ -37,6 +37,9 @@ namespace tlp {
   **/
 struct TLP_SCOPE ParameterList {
 
+  template<typename TYPEINTERFACE>
+  void insertData(tlp::DataSet &,const std::string &param,const std::string &defaultValue) const;
+
   /**
     * @brief Adds a new parameter of type T to the list.
     *

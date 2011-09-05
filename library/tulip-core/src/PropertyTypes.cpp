@@ -102,12 +102,39 @@ double DoubleType::defaultValue() {
   return 0;
 }
 
+// FloatType
+float FloatType::undefinedValue() {
+  return -FLT_MAX;
+}
+
+float FloatType::defaultValue() {
+  return 0;
+}
+
 // IntegerType
 int IntegerType::undefinedValue() {
   return INT_MIN;
 }
 
 int IntegerType::defaultValue() {
+  return 0;
+}
+
+// LongType
+long LongType::undefinedValue() {
+  return LONG_MIN;
+}
+
+long LongType::defaultValue() {
+  return 0;
+}
+
+// UnsignedIntegerType
+unsigned int UnsignedIntegerType::undefinedValue() {
+  return UINT_MAX;
+}
+
+unsigned int UnsignedIntegerType::defaultValue() {
   return 0;
 }
 
