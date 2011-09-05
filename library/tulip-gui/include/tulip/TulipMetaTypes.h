@@ -61,9 +61,18 @@ namespace tlp {
 class TLP_QT_SCOPE TulipMetaTypes {
   TulipMetaTypes() {}
 
+  template<typename T>
+  inline static QVariant typedVariant(tlp::DataType *dm) {
+    T result;
+    if (dm)
+      result = *((T*)dm->value);
+    return QVariant::fromValue<T>(result);
+  }
+
 public:
-  static tlp::DataMem *qVariantToDataMem(const QVariant &);
-  static QVariant dataMemToQvariant(tlp::DataMem *);
+  static tlp::DataType *qVariantToDataType(const QVariant &);
+  static QVariant dataTypeToQvariant(tlp::DataType *);
+
 };
 }
 
