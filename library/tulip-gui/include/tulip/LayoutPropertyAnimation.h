@@ -1,33 +1,14 @@
-/**
- *
- * This file is part of Tulip (www.tulip-software.org)
- *
- * Authors: David Auber and the Tulip development Team
- * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
- *
- * Tulip is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * Tulip is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 #ifndef LAYOUTPROPERTYANIMATION_H_
 #define LAYOUTPROPERTYANIMATION_H_
 
 #include <tulip/Coord.h>
+#include "tulip/CachedPropertyAnimation.h"
+#include <vector>
 
 namespace tlp {
   class LayoutProperty;
   class Graph;
   class BooleanProperty;
-}
-#include "CachedPropertyAnimation.h"
-#include <vector>
 
 class LayoutPropertyAnimation: public CachedPropertyAnimation<tlp::LayoutProperty, tlp::Coord, std::vector<tlp::Coord> > {
 public:
@@ -44,5 +25,7 @@ protected:
 private:
   std::map<std::pair<tlp::Coord,tlp::Coord>, tlp::Vector<double, 3> > steps;
 };
+
+}
 
 #endif /* LAYOUTPROPERTYANIMATION_H_ */

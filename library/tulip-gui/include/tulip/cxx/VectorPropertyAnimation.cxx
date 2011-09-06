@@ -5,9 +5,7 @@ VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::VectorPropertyAni
     PropType *out, tlp::BooleanProperty *selection, int frameCount, bool computeNodes, bool computeEdges) :
   CachedPropertyAnimation<PropType, RealType, RealType> (graph, start, end, out, selection, frameCount, computeNodes, computeEdges) {
 
-#ifndef NDEBUG
   assert(frameCount > 1);
-#endif /* NDEBUG */
 
   if (this->computeNodes) {
     tlp::node n;
