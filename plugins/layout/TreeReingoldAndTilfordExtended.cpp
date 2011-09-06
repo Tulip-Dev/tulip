@@ -339,7 +339,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::n
 
   if(!compactLayout)
     tmpCoord.set(static_cast<float>(x+(*p)[n]), -static_cast<float>(y), 0);
-  else tmpCoord.set(static_cast<float>(x+(*p)[n]), - static_cast<float>(y+maxLevelSize[level])/2.f, 0);
+  else tmpCoord.set(static_cast<float>(x+(*p)[n]), - static_cast<float>(y+maxLevelSize[level]/2.f), 0);
 
   layoutResult->setNodeValue(n,tmpCoord);
 
