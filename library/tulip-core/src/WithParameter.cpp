@@ -132,6 +132,7 @@ void ParameterList::insertData(tlp::DataSet &dataSet,const std::string &param,co
   else {
     bool result = TYPEINTERFACE::fromString(value,defaultValue);
     assert(result);
+
     if (!result)
       value = TYPEINTERFACE::defaultValue();
   }
