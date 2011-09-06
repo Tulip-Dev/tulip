@@ -14,10 +14,13 @@ VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::VectorPropertyAni
         continue;
 
       std::pair<PropVector, PropVector> values(PropVector(this->start->getNodeValue(n)), PropVector(this->end->getNodeValue(n)));
+
       if (steps.find(values) == steps.end()) {
         tlp::Vector<double, SIZE> stepsVector;
+
         for (unsigned int i = 0; i < SIZE; ++i)
           stepsVector[i] = ((double)values.second[i] - (double)values.first[i]) * 1. / (frameCount - 1);
+
         steps[values] = stepsVector;
       }
     }
@@ -28,11 +31,15 @@ VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::VectorPropertyAni
     forEach(e, this->graph->getEdges()) {
       if (this->selection && !this->selection->getEdgeValue(e))
         continue;
+
       std::pair<PropVector, PropVector> values(PropVector(this->start->getEdgeValue(e)), PropVector(this->end->getEdgeValue(e)));
+
       if (steps.find(values) == steps.end()) {
         tlp::Vector<double, SIZE> stepsVector;
+
         for (unsigned int i = 0; i < SIZE; ++i)
           stepsVector[i] = ((double) (values.second[i] - (double)values.first[i])) * 1. / (frameCount - 1);
+
         steps[values] = stepsVector;
       }
     }
@@ -45,8 +52,10 @@ RealType VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::getNodeF
   PropVector result((PropVector)startValue);
   std::pair<PropVector, PropVector> values(result, (PropVector) endValue);
   tlp::Vector<double, SIZE> stepVal(steps[values]);
+
   for (unsigned i=0; i < SIZE; ++i)
     result[i] += stepVal[i] * frame;
+
   return RealType(result);
 }
 
