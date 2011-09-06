@@ -701,12 +701,14 @@ void GlVertexArrayManager::addNode(Graph *,const node) {
 }
 
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
-  if(inputData->getElementLayout()==property || inputData->getElementSize()==property || inputData->getElementShape()==property) {
+  if(inputData->getElementLayout()==property || inputData->getElementSize()==property ||
+     inputData->getElementShape()==property || inputData->getElementRotation()==property) {
     setHaveToComputeLayout(true);
     clearLayoutData();
     inputData->getElementLayout()->removePropertyObserver(this);
     inputData->getElementSize()->removePropertyObserver(this);
     inputData->getElementShape()->removePropertyObserver(this);
+    inputData->getElementRotation()->removePropertyObserver(this);
     layoutObserverActivated=false;
   }
 
@@ -830,6 +832,7 @@ void GlVertexArrayManager::initObservers() {
     inputData->getElementLayout()->addPropertyObserver(this);
     inputData->getElementSize()->addPropertyObserver(this);
     inputData->getElementShape()->addPropertyObserver(this);
+    inputData->getElementRotation()->addPropertyObserver(this);
     layoutObserverActivated=true;
   }
 
@@ -851,6 +854,7 @@ void GlVertexArrayManager::clearObservers() {
     inputData->getElementLayout()->removePropertyObserver(this);
     inputData->getElementSize()->removePropertyObserver(this);
     inputData->getElementShape()->removePropertyObserver(this);
+    inputData->getElementRotation()->removePropertyObserver(this);
     layoutObserverActivated=false;
   }
 
