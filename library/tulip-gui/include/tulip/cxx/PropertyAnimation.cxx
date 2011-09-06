@@ -2,9 +2,10 @@
 
 template<typename PropType, typename NodeType, typename EdgeType>
 PropertyAnimation<PropType, NodeType, EdgeType>::PropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out,
-    tlp::BooleanProperty *selection, int frameCount, bool computeNodes, bool computeEdges) :
-  AbstractAnimation(frameCount), graph(graph), start(0), end(0), out(out), computeNodes(computeNodes), computeEdges(computeEdges) {
-#ifndef NDEBUG
+    tlp::BooleanProperty *selection, int frameCount, bool computeNodes, bool computeEdges, QObject* parent) :
+
+  Animation(frameCount,parent), graph(graph), start(0), end(0), out(out), computeNodes(computeNodes), computeEdges(computeEdges) {
+
   assert(out);
   assert(start);
   assert(end);
@@ -12,7 +13,6 @@ PropertyAnimation<PropType, NodeType, EdgeType>::PropertyAnimation(tlp::Graph *g
   assert(end->getGraph()->getRoot() == out->getGraph()->getRoot());
   assert(graph);
   assert(frameCount > 0);
-#endif /* NDEBUG */
 
   this->start = new PropType(start->getGraph());
   *(this->start) = *start;

@@ -71,6 +71,14 @@ SET(SRCS
   TulipItemDelegate.cpp
   TulipMetaTypes.cpp
   TulipItemEditorCreators.cpp
+  Animation.cpp
+  CachedPropertyAnimation.cpp
+  ColorPropertyAnimation.cpp
+  DoublePropertyAnimation.cpp
+  LayoutPropertyAnimation.cpp
+  PropertyAnimation.cpp
+  SizePropertyAnimation.cpp
+  VectorPropertyAnimation.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -131,6 +139,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/TulipProject.h
   ../include/tulip/View.h
   ../include/tulip/TulipItemEditorCreators.h
+  ../include/tulip/Animation.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

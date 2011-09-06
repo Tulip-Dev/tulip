@@ -67,12 +67,23 @@ INSTALL(FILES
   tulip/TulipItemDelegate.h
   tulip/TulipMetaTypes.h
   tulip/TulipItemEditorCreators.h
+  tulip/Animation.h
+  tulip/CachedPropertyAnimation.h
+  tulip/ColorPropertyAnimation.h
+  tulip/DoublePropertyAnimation.h
+  tulip/LayoutPropertyAnimation.h
+  tulip/PropertyAnimation.h
+  tulip/SizePropertyAnimation.h
+  tulip/VectorPropertyAnimation.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
 
 INSTALL(FILES
   tulip/cxx/TulipItemDelegate.cxx
+  tulip/cxx/CachedPropertyAnimation.cxx
+  tulip/cxx/PropertyAnimation.cxx
+  tulip/cxx/VectorPropertyAnimation.cxx
 DESTINATION ${TulipIncludeInstallDir}/tulip/cxx/
 COMPONENT tulip_core_dev
 )
