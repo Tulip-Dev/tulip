@@ -424,16 +424,7 @@ bool TreeReingoldAndTilfordExtended::run() {
     sizes = circleSizes;
   }//end if
 
-  //=========================================================
-  //rotate size if necessary
-  if (orientation == "horizontal") {
-    node n;
-    forEach(n, graph->getNodes()) {
-      const Size& tmp = sizes->getNodeValue(n);
-      sizes->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-    }
-  }
-
+  
   //===========================================================
 
   if (pluginProgress)
@@ -484,8 +475,8 @@ bool TreeReingoldAndTilfordExtended::run() {
       node tgt = tree->target(e);
       const Coord& srcPos = result->getNodeValue(src);
       const Coord& tgtPos = result->getNodeValue(tgt);
-      tmp.push_back(Coord(srcPos[0], srcPos[1], 0));
-      tmp.push_back(Coord(tgtPos[0], srcPos[1], 0));
+      if (srcPos[0] != tgtPos[0])
+	tmp.push_back(Coord(tgtPos[0], srcPos[1], 0));
       result->setEdgeValue(e, tmp);
     }
 
@@ -493,8 +484,8 @@ bool TreeReingoldAndTilfordExtended::run() {
       forEach(e, tree->getEdges()) {
         LineType::RealType tmp = result->getEdgeValue(e);
         LineType::RealType tmp2;
-        tmp2.push_back(Coord(-tmp[0][1], tmp[0][0], tmp[0][2]));
-        tmp2.push_back(Coord(-tmp[1][1], tmp[1][0], tmp[1][2]));
+        if (!tmp.empty())
+	  tmp2.push_back(Coord(-tmp[0][1], tmp[0][0], tmp[0][2]));
         result->setEdgeValue(e, tmp2);
       }
     }
@@ -504,8 +495,6 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (orientation == "horizontal") {
     node n;
     forEach(n, tree->getNodes()) {
-      const Size&  tmp = sizes->getNodeValue(n);
-      sizes->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
       const Coord& tmpC = result->getNodeValue(n);
       result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
