@@ -41,10 +41,10 @@ Glyph::~Glyph() {
 Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale, const double zRotation) const {
   Coord anchor = from - nodeCenter;
 
-  if( anchor.getX() == 0.0f && anchor.getY() == 0.0f && anchor.getZ() == 0.0f )
+  if( anchor.getX() == 0.0f && anchor.getY() == 0.0f)
     return nodeCenter;
 
-  if( scale.getW() == 0.0f || scale.getH() == 0.0f || scale.getD() == 0.0f )
+  if( scale.getW() == 0.0f || scale.getH() == 0.0f)
     return nodeCenter;
 
   if(zRotation!=0) {
