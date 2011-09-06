@@ -6,16 +6,16 @@
 #include <vector>
 
 namespace tlp {
-  class LayoutProperty;
-  class Graph;
-  class BooleanProperty;
+class LayoutProperty;
+class Graph;
+class BooleanProperty;
 
 class LayoutPropertyAnimation: public CachedPropertyAnimation<tlp::LayoutProperty, tlp::Coord, std::vector<tlp::Coord> > {
 public:
   LayoutPropertyAnimation(tlp::Graph *g, tlp::LayoutProperty *start, tlp::LayoutProperty *end, tlp::LayoutProperty *out,
-      tlp::BooleanProperty *selection = 0, int frameCount = 1, bool computeNodes = true, bool computeEdges = true);
+                          tlp::BooleanProperty *selection = 0, int frameCount = 1, bool computeNodes = true, bool computeEdges = true);
 
-  virtual ~LayoutPropertyAnimation(){}
+  virtual ~LayoutPropertyAnimation() {}
 
 protected:
   virtual tlp::Coord getNodeFrameValue(const tlp::Coord &startValue, const tlp::Coord &endValue, int frame);
