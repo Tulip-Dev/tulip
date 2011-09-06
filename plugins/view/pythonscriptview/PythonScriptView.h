@@ -118,7 +118,9 @@ private :
   void saveModule();
   void saveModule(int tabIdx);
   void saveAllModules();
-  void reloadAllModules();
+  bool reloadAllModules();
+  void indicateErrors();
+  void clearErrorIndicators();
 
 
 

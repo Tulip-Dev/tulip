@@ -105,15 +105,14 @@ public :
 
   bool interpreterInit() ;
 
-  void registerNewModule(const std::string &moduleName, PyMethodDef *moduleDef);
-  void registerNewModuleFromString(const std::string &moduleName, const std::string &moduleSrcCode);
+  bool registerNewModuleFromString(const std::string &moduleName, const std::string &moduleSrcCode);
   void setTraceFunction(Py_tracefunc tracefunc);
   bool runString(const std::string &pyhtonCode);
   bool runGraphScript(const std::string &module, const std::string &function, tlp::Graph *graph);
   bool functionExists(const std::string &moduleName, const std::string &functionName);
   void addModuleSearchPath(const std::string &path, const bool beforeOtherPaths = false);
   void deleteModule(const std::string &moduleName);
-  void reloadModule(const std::string &moduleName);
+  bool reloadModule(const std::string &moduleName);
   void stopCurrentScript();
   bool isRunningScript() const {
     return runningScript;

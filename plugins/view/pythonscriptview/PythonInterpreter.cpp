@@ -290,13 +290,8 @@ bool PythonInterpreter::interpreterInit() {
   return ret;
 }
 
-void PythonInterpreter::registerNewModule(const string &moduleName, PyMethodDef *moduleDef) {
-  holdGIL();
-  Py_InitModule(moduleName.c_str(), moduleDef);
-  releaseGIL();
-}
-
-void PythonInterpreter::registerNewModuleFromString(const std::string &moduleName, const std::string &moduleSrcCode) {
+bool PythonInterpreter::registerNewModuleFromString(const std::string &moduleName, const std::string &moduleSrcCode) {
+  bool ret = true;
   holdGIL();
   ostringstream oss;
   oss << moduleName << ".py";
@@ -305,7 +300,7 @@ void PythonInterpreter::registerNewModuleFromString(const std::string &moduleNam
   if (pycomp == NULL) {
     PyErr_Print();
     PyErr_Clear();
-    return;
+    ret = false;
   }
 
   PyObject *pmod = PyImport_ExecCodeModule(const_cast<char *>(moduleName.c_str()),pycomp);
@@ -313,9 +308,11 @@ void PythonInterpreter::registerNewModuleFromString(const std::string &moduleNam
   if (pmod == NULL) {
     PyErr_Print();
     PyErr_Clear();
+    ret = false;
   }
 
   releaseGIL();
+  return ret;
 }
 
 bool PythonInterpreter::functionExists(const string &moduleName, const string &functionName) {
@@ -446,11 +443,11 @@ void PythonInterpreter::deleteModule(const std::string &moduleName) {
   runString(oss.str());
 }
 
-void PythonInterpreter::reloadModule(const std::string &moduleName) {
+bool PythonInterpreter::reloadModule(const std::string &moduleName) {
   ostringstream oss;
   oss << "import " << moduleName << endl;
   oss << "reload(" << moduleName << ")" << endl;
-  runString(oss.str());
+  return runString(oss.str());
 }
 
 void PythonInterpreter::setConsoleWidget(QPlainTextEdit *console) {
