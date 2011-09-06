@@ -1,1 +1,0 @@
-#include "tulip/SizePropertyAnimation.h"

@@ -1,3 +1,0 @@
-#include "tulip/VectorPropertyAnimation.h"
-
-
