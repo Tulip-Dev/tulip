@@ -74,86 +74,87 @@ public:
 static ObserverGTest* observer;
 
 class PropertiesDeletedObserver :public Observable {
-                 public:
-                     PropertiesDeletedObserver():inheritedPropertyExist(false),initialized(false){
+public:
+  PropertiesDeletedObserver():inheritedPropertyExist(false),initialized(false) {
 
-                     }
-                     bool inheritedPropertyExist;
-                     bool initialized;
+  }
+  bool inheritedPropertyExist;
+  bool initialized;
 
-                     vector<PropertyInterface*> _inheritedProperties;
-                     vector<PropertyInterface*> _localProperties;
-                     void beforeDelLocalProperty(Graph *g, const std::string &pName){
-                        CPPUNIT_ASSERT(g->existLocalProperty(pName));
-                        beforeDelLocalPropertyCalledGraphs.push_back(g);
-                     }
+  vector<PropertyInterface*> _inheritedProperties;
+  vector<PropertyInterface*> _localProperties;
+  void beforeDelLocalProperty(Graph *g, const std::string &pName) {
+    CPPUNIT_ASSERT(g->existLocalProperty(pName));
+    beforeDelLocalPropertyCalledGraphs.push_back(g);
+  }
 
-                     void afterDelInheritedProperty(Graph *g, const std::string &pName){
-                         afterDelInheritedPropertyCalledGraphs.push_back(g);
-                     }
+  void afterDelInheritedProperty(Graph *g, const std::string &pName) {
+    afterDelInheritedPropertyCalledGraphs.push_back(g);
+  }
 
-                     void afterDelLocalProperty(Graph *g, const std::string &pName){
-                         CPPUNIT_ASSERT(!g->existLocalProperty(pName));
-                         afterDelLocalPropertyCalledGraphs.push_back(g);
-                     }
+  void afterDelLocalProperty(Graph *g, const std::string &pName) {
+    CPPUNIT_ASSERT(!g->existLocalProperty(pName));
+    afterDelLocalPropertyCalledGraphs.push_back(g);
+  }
 
-                     void beforeDelInheritedProperty(Graph *g, const std::string &pName){
-                         CPPUNIT_ASSERT(!g->existLocalProperty(pName));
-                         CPPUNIT_ASSERT(g->existProperty(pName));
-                         beforeDelInheritedPropertyCalledGraphs.push_back(g);
-                     }
+  void beforeDelInheritedProperty(Graph *g, const std::string &pName) {
+    CPPUNIT_ASSERT(!g->existLocalProperty(pName));
+    CPPUNIT_ASSERT(g->existProperty(pName));
+    beforeDelInheritedPropertyCalledGraphs.push_back(g);
+  }
 
-                     void addLocalProperty(Graph *g, const std::string & pName){
-                         CPPUNIT_ASSERT(g->existLocalProperty(pName));
-                         addLocalPropertyCalledGraphs.push_back(g);
-                     }
+  void addLocalProperty(Graph *g, const std::string & pName) {
+    CPPUNIT_ASSERT(g->existLocalProperty(pName));
+    addLocalPropertyCalledGraphs.push_back(g);
+  }
 
-                     void addInheritedProperty(Graph *g, const std::string &pName){
-                         CPPUNIT_ASSERT(!g->existLocalProperty(pName));
-                         CPPUNIT_ASSERT(g->existProperty(pName));
-                         addInheritedPropertyCalledGraphs.push_back(g);
-                     }
+  void addInheritedProperty(Graph *g, const std::string &pName) {
+    CPPUNIT_ASSERT(!g->existLocalProperty(pName));
+    CPPUNIT_ASSERT(g->existProperty(pName));
+    addInheritedPropertyCalledGraphs.push_back(g);
+  }
 
-                     virtual void treatEvent(const Event& evt) {
+  virtual void treatEvent(const Event& evt) {
 
-                         const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+    const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
 
-                         if (gEvt) {
-                         Graph* graph = gEvt->getGraph();
-                         switch (gEvt->getType()) {
-                         case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY:
-                           beforeDelLocalProperty(graph, gEvt->getPropertyName());
-                           return;
-                         case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
-                           afterDelInheritedProperty(graph, gEvt->getPropertyName());
-                           return;
-                         case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
-                           afterDelLocalProperty(graph, gEvt->getPropertyName());
-                           return;
-                         case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
-                           beforeDelInheritedProperty(graph, gEvt->getPropertyName());
-                           return;
-                         case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
-                           addLocalProperty(graph, gEvt->getPropertyName());
-                           return;
-                         case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
-                           addInheritedProperty(graph, gEvt->getPropertyName());
-                           return;
-                         default:
-                           break;
-                         }
-                       }
-                     }
+    if (gEvt) {
+      Graph* graph = gEvt->getGraph();
+
+      switch (gEvt->getType()) {
+      case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY:
+        beforeDelLocalProperty(graph, gEvt->getPropertyName());
+        return;
+      case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
+        afterDelInheritedProperty(graph, gEvt->getPropertyName());
+        return;
+      case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
+        afterDelLocalProperty(graph, gEvt->getPropertyName());
+        return;
+      case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
+        beforeDelInheritedProperty(graph, gEvt->getPropertyName());
+        return;
+      case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
+        addLocalProperty(graph, gEvt->getPropertyName());
+        return;
+      case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
+        addInheritedProperty(graph, gEvt->getPropertyName());
+        return;
+      default:
+        break;
+      }
+    }
+  }
 
 
-                     vector<Graph*> beforeDelLocalPropertyCalledGraphs;
-                     vector<Graph*> beforeDelInheritedPropertyCalledGraphs;
-                     vector<Graph*> afterDelLocalPropertyCalledGraphs;
-                     vector<Graph*> afterDelInheritedPropertyCalledGraphs;
+  vector<Graph*> beforeDelLocalPropertyCalledGraphs;
+  vector<Graph*> beforeDelInheritedPropertyCalledGraphs;
+  vector<Graph*> afterDelLocalPropertyCalledGraphs;
+  vector<Graph*> afterDelInheritedPropertyCalledGraphs;
 
-                     vector<Graph*> addInheritedPropertyCalledGraphs;
-                     vector<Graph*> addLocalPropertyCalledGraphs;
-                 };
+  vector<Graph*> addInheritedPropertyCalledGraphs;
+  vector<Graph*> addLocalPropertyCalledGraphs;
+};
 
 class GraphObserverTest :public GraphObserver, public Observable {
 public:

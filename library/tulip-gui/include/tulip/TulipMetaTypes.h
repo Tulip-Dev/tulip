@@ -64,8 +64,10 @@ class TLP_QT_SCOPE TulipMetaTypes {
   template<typename T>
   inline static QVariant typedVariant(tlp::DataType *dm) {
     T result;
+
     if (dm)
       result = *((T*)dm->value);
+
     return QVariant::fromValue<T>(result);
   }
 

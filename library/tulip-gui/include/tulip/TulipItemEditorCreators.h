@@ -14,14 +14,20 @@ namespace tlp {
 
 class TLP_QT_SCOPE TulipItemEditorCreator: public QItemEditorCreatorBase {
 public:
-  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant &) const { return false; }
-  virtual QString displayText(const QVariant &) const { return ""; }
+  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant &) const {
+    return false;
+  }
+  virtual QString displayText(const QVariant &) const {
+    return "";
+  }
 };
 
 template<typename T>
 class TLP_QT_SCOPE StringDisplayEditorCreator: public TulipItemEditorCreator {
 public:
-  inline QString displayText(const QVariant &v) const { return T::toString(v.value<typename T::RealType>()).c_str(); }
+  inline QString displayText(const QVariant &v) const {
+    return T::toString(v.value<typename T::RealType>()).c_str();
+  }
 };
 
 class TLP_QT_SCOPE ColorEditorCreator: public tlp::TulipItemEditorCreator {
