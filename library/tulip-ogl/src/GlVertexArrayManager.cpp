@@ -702,7 +702,7 @@ void GlVertexArrayManager::addNode(Graph *,const node) {
 
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
   if(inputData->getElementLayout()==property || inputData->getElementSize()==property ||
-     inputData->getElementShape()==property || inputData->getElementRotation()==property) {
+      inputData->getElementShape()==property || inputData->getElementRotation()==property) {
     setHaveToComputeLayout(true);
     clearLayoutData();
     inputData->getElementLayout()->removePropertyObserver(this);
