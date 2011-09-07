@@ -233,7 +233,7 @@ bool tlp::applyAlgorithm(Graph *sg,string &errorMsg,DataSet *dataSet,
   Algorithm *newAlgo=AlgorithmFactory::factory->getPluginObject(alg, tmp);
 
   if ((result=newAlgo->check(errorMsg)))
-    newAlgo->run();
+    result = newAlgo->run();
 
   delete newAlgo;
 
