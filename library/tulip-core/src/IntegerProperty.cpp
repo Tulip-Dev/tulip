@@ -28,48 +28,12 @@ const string IntegerVectorProperty::propertyTypename="vector<int>";
 
 //==============================
 ///Constructeur d'un IntegerProperty
-IntegerProperty::IntegerProperty (Graph *sg, std::string n):AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm>(sg, n), IntegerMinMaxCalculator(this, -INT_MAX, INT_MAX, -INT_MAX, INT_MAX) {
+IntegerProperty::IntegerProperty (Graph *sg, std::string n):IntegerMinMaxProperty(sg, n, -INT_MAX, INT_MAX, -INT_MAX, INT_MAX) {
   // the property observes the graph
   sg->addListener(this);
 }
 //====================================================================
-///Renvoie le minimum de la m�trique associ� aux noeuds du IntegerProperty
-int IntegerProperty::getNodeMin(Graph *sg) {
-  if (sg == NULL) {
-    sg = graph;
-  }
-
-  return IntegerMinMaxCalculator::getNodeMin(sg);
-}
-//====================================================================
-///Renvoie le maximum de la m�trique associ� aux noeuds du IntegerProperty
-int IntegerProperty::getNodeMax(Graph *sg) {
-  if (sg == NULL) {
-    sg = graph;
-  }
-
-  return IntegerMinMaxCalculator::getNodeMax(sg);
-}
-//====================================================================
-///Renvoie le Minimum de la m�trique associ� aux ar�tes du IntegerProperty
-int IntegerProperty::getEdgeMin(Graph *sg) {
-  if (sg == NULL) {
-    sg = graph;
-  }
-
-  return IntegerMinMaxCalculator::getEdgeMin(sg);
-}
-//====================================================================
-///Renvoie le Maximum de la m�trique associ� aux ar�tes du IntegerProperty
-int IntegerProperty::getEdgeMax(Graph *sg) {
-  if (sg == NULL) {
-    sg = graph;
-  }
-
-  return IntegerMinMaxCalculator::getEdgeMax(sg);
-}
-//=================================================================================
-void IntegerProperty::clone_handler(AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> &proxyC) {
+void IntegerProperty::clone_handler(IntegerMinMaxProperty&proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
     IntegerProperty *proxy=(IntegerProperty *)&proxyC;
     nodeValueUptodate = proxy->nodeValueUptodate;
@@ -92,27 +56,27 @@ PropertyInterface* IntegerProperty::clonePrototype(Graph * g, const std::string&
 }
 //=================================================================================
 void IntegerProperty::setNodeValue(const node n, const int &v) {
-  IntegerMinMaxCalculator::updateNodeValue(n, v);
-  AbstractIntegerProperty::setNodeValue(n, v);
+  IntegerMinMaxProperty::updateNodeValue(n, v);
+  IntegerMinMaxProperty::setNodeValue(n, v);
 }
 //=================================================================================
 void IntegerProperty::setEdgeValue(const edge e, const int &v) {
-  IntegerMinMaxCalculator::updateEdgeValue(e, v);
-  AbstractIntegerProperty::setEdgeValue(e, v);
+  IntegerMinMaxProperty::updateEdgeValue(e, v);
+  IntegerMinMaxProperty::setEdgeValue(e, v);
 }
 //=================================================================================
 void IntegerProperty::setAllNodeValue(const int &v) {
-  IntegerMinMaxCalculator::updateAllNodesValues(v);
-  AbstractIntegerProperty::setAllNodeValue(v);
+  IntegerMinMaxProperty::updateAllNodesValues(v);
+  IntegerMinMaxProperty::setAllNodeValue(v);
 }
 //=================================================================================
 void IntegerProperty::setAllEdgeValue(const int &v) {
-  IntegerMinMaxCalculator::updateAllEdgesValues(v);
-  AbstractIntegerProperty::setAllEdgeValue(v);
+  IntegerMinMaxProperty::updateAllEdgesValues(v);
+  IntegerMinMaxProperty::setAllEdgeValue(v);
 }
 //=============================================================
 void IntegerProperty::treatEvent(const Event& evt) {
-  IntegerMinMaxCalculator::treatEvent(evt);
+  IntegerMinMaxProperty::treatEvent(evt);
 }
 //=================================================================================
 int IntegerProperty::compare(const node n1, const node n2)const {

@@ -24,25 +24,24 @@
 #include <tulip/Observable.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/PropertyAlgorithm.h>
-#include <tulip/MinMaxCalculator.h>
+#include <tulip/minmaxproperty.h>
 
 namespace tlp {
 
 template <>
-void tlp::MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue);
+void tlp::MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue);
 
 template <>
-void tlp::MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::computeMinMaxNode(Graph *sg);
+void tlp::MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::computeMinMaxNode(Graph *sg);
 
 class PropertyContext;
 class Graph;
 
-typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> AbstractLayoutProperty;
-typedef MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> LayoutMinMaxCalculator;
+typedef MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> LayoutMinMaxProperty;
 
 /** \addtogroup properties */
 /*@{*/
-class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, private LayoutMinMaxCalculator {
+class TLP_SCOPE LayoutProperty : public LayoutMinMaxProperty {
 public:
   LayoutProperty(Graph *, std::string n="", bool updateOnEdgeReversal = true);
 
@@ -52,7 +51,6 @@ public:
   std::string getTypename() const {
     return propertyTypename;
   }
-
 
   //=======================================
   //Functions for extra layout information
@@ -137,7 +135,7 @@ public:
   virtual void setAllEdgeValue(const std::vector<Coord> &v);
 
 protected:
-  virtual void clone_handler(AbstractProperty<PointType,LineType, LayoutAlgorithm> &);
+  virtual void clone_handler(LayoutMinMaxProperty&);
 
 private:
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);

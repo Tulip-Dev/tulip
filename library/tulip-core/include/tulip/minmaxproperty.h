@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifndef MINMAXCALCULATOR_H
-#define MINMAXCALCULATOR_H
+#ifndef MINMAXPROPERTY_H
+#define MINMAXPROPERTY_H
 
 #include <tulip/tuliphash.h>
 #include <tulip/Observable.h>
@@ -34,10 +34,10 @@ template<typename nodeType, typename edgeType, typename algorithmType>
  * The value is lazily computed on first request..
  * The value is cached, and the cache is invalidated whenever it cannot be simply updated.
  **/
-class MinMaxCalculator {
+class MinMaxProperty : public tlp::AbstractProperty<nodeType, edgeType, algorithmType> {
 public:
   /**
-   * @brief Constructs a MinMaxCalculator.
+   * @brief Constructs a MinMaxProperty.
    *
    * @param property The property on which to compute minimum and maximum values.
    * @param NodeMin The minimal value the property can take for nodes (e.g. INT_MIN)
@@ -45,7 +45,7 @@ public:
    * @param EdgeMin The minimal value the property can take for edges (e.g. INT_MIN)
    * @param EdgeMax The maximal value the property can take for edges (e.g. INT_MIN)
    **/
-  MinMaxCalculator(tlp::AbstractProperty<nodeType, edgeType, algorithmType>* property, typename nodeType::RealType NodeMin,
+  MinMaxProperty(tlp::Graph* graph, std::string name, typename nodeType::RealType NodeMin,
                    typename nodeType::RealType NodeMax, typename edgeType::RealType EdgeMin, typename edgeType::RealType EdgeMax);
 
   /**
@@ -62,28 +62,28 @@ public:
    * @param graph The graph on which to compute.
    * @return :RealType The minimal value on this graph for this property.
    **/
-  typename nodeType::RealType getNodeMin(Graph* graph);
+  typename nodeType::RealType getNodeMin(Graph* graph = NULL);
   /**
    * @brief Computes the maximum value on the nodes.
    *
    * @param graph The graph on which to compute.
    * @return :RealType The maximal value on this graph for this property.
    **/
-  typename nodeType::RealType getNodeMax(Graph* graph);
+  typename nodeType::RealType getNodeMax(Graph* graph = NULL);
   /**
    * @brief Computes the minimum value on the edges.
    *
    * @param graph The graph on which to compute.
    * @return :RealType The minimal value on this graph for this property.
    **/
-  typename edgeType::RealType getEdgeMin(Graph* graph);
+  typename edgeType::RealType getEdgeMin(Graph* graph = NULL);
   /**
    * @brief Computes the maximum value on the edges.
    *
    * @param graph The graph on which to compute.
    * @return :RealType The maximal value on this graph for this property.
    **/
-  typename edgeType::RealType getEdgeMax(Graph* graph);
+  typename edgeType::RealType getEdgeMax(Graph* graph = NULL);
 
   /**
    * @brief Updates the value on a node, and updates the minimal/maximal cached values if necessary.
@@ -118,7 +118,6 @@ public:
   void updateAllEdgesValues(typename edgeType::RealType newValue);
 
 protected:
-  tlp::AbstractProperty<nodeType, edgeType, algorithmType>* _property;
   TLP_HASH_MAP<unsigned int, typename nodeType::RealType> maxNode, minNode;
   TLP_HASH_MAP<unsigned int, typename edgeType::RealType> maxEdge, minEdge;
   TLP_HASH_MAP<unsigned int, bool> nodeValueUptodate;
@@ -135,6 +134,6 @@ protected:
 
 }
 
-#include "cxx/MinMaxCalculator.cxx"
+#include "cxx/minmaxproperty.cxx"
 
-#endif //MINMAXCALCULATOR_H
+#endif //MINMAXPROPERTY_H

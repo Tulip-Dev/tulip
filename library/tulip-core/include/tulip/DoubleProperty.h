@@ -23,28 +23,24 @@
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/PropertyAlgorithm.h>
-#include <tulip/MinMaxCalculator.h>
+#include <tulip/minmaxproperty.h>
 
 namespace tlp {
 
 class PropertyContext;
 
-typedef AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> AbstractDoubleProperty;
-typedef MinMaxCalculator<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> DoubleMinMaxCalculator;
+typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> DoubleMinMaxProperty;
+
 /** \addtogroup properties */
 /*\@{*/
-class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, private DoubleMinMaxCalculator {
+class TLP_SCOPE DoubleProperty : public DoubleMinMaxProperty {
 public :
   DoubleProperty (Graph *, std::string n="");
-  DoubleType::RealType  getNodeMin(Graph *sg=0);
-  DoubleType::RealType  getNodeMax(Graph *sg=0);
-  DoubleType::RealType  getEdgeMin(Graph *sg=0);
-  DoubleType::RealType  getEdgeMax(Graph *sg=0);
   void uniformQuantification(unsigned int);
   void nodesUniformQuantification(unsigned int);
   void edgesUniformQuantification(unsigned int);
 
-  void clone_handler(AbstractProperty<DoubleType,DoubleType, DoubleAlgorithm> &);
+  void clone_handler(DoubleMinMaxProperty&);
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );

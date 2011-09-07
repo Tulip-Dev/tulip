@@ -40,7 +40,7 @@ INSTALL(FILES
   tulip/Matrix.h
   tulip/memorypool.h
   tulip/MethodFactory.h
-  tulip/MinMaxCalculator.h
+  tulip/minmaxproperty.h
   tulip/MutableContainer.h
   tulip/Node.h
   tulip/ObservableGraph.h
@@ -99,7 +99,7 @@ INSTALL(FILES
   tulip/cxx/DataSet.cxx
   tulip/cxx/Graph.cxx
   tulip/cxx/Matrix.cxx
-  tulip/cxx/MinMaxCalculator.cxx
+  tulip/cxx/minmaxproperty.cxx
   tulip/cxx/MutableContainer.cxx
   tulip/cxx/PluginLister.cxx
   tulip/cxx/Vector.cxx

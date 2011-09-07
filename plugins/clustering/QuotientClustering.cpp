@@ -128,9 +128,9 @@ public:
 };
 
 // define a specific calculator for edgeCardinality
-class EdgeCardinalityCalculator :public AbstractIntegerProperty::MetaValueCalculator {
+class EdgeCardinalityCalculator :public IntegerMinMaxProperty::MetaValueCalculator {
 public:
-  void computeMetaValue(AbstractIntegerProperty* card, edge mE,
+  void computeMetaValue(IntegerMinMaxProperty* card, edge mE,
                         Iterator<edge>* itE, Graph*) {
     unsigned int nbEdges = 0;
 
