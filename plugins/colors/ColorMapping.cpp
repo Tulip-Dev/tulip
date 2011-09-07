@@ -224,9 +224,9 @@ public:
     //    cerr << __PRETTY_FUNCTION__ << endl;
     eltTypes.setCurrent(LINEAR_ELT);
     targetType.setCurrent(NODES_TARGET);
-    DoubleProperty* metricS = graph->getProperty<DoubleProperty>("viewMetric");
+    DoubleProperty* metricS = NULL;
 
-    PropertyInterface *metric = graph->getProperty("viewMetric");
+    PropertyInterface *metric = NULL;
 
     if ( dataSet!=0 ) {
       dataSet->get("linear/uniform\nproperty", metricS);
@@ -235,6 +235,12 @@ public:
       dataSet->get(TARGET_TYPE, targetType);
       dataSet->get("colorScale", colorScale);
     }
+
+    if (metricS == NULL)
+      metricS = graph->getProperty<DoubleProperty>("viewMetric");
+
+    if (metric == NULL)
+      metric = graph->getProperty<DoubleProperty>("viewMetric");
 
     if (eltTypes.getCurrent()==LINEAR_ELT || eltTypes.getCurrent()==UNIFORM_ELT) {
       if (eltTypes.getCurrent()==LINEAR_ELT) {
@@ -276,7 +282,7 @@ public:
   //=========================================================
   bool check(string &errorMsg) {
     //    cerr << __PRETTY_FUNCTION__ << endl;
-    PropertyInterface *metric = graph->getProperty("viewMetric");
+    PropertyInterface *metric = NULL;
 
     if (dataSet!=0) {
       dataSet->get("enumerated\nproperty", metric);
@@ -284,6 +290,9 @@ public:
       dataSet->get(TARGET_TYPE, targetType);
       dataSet->get("colorScale", colorScale);
     }
+
+    if (metric == NULL)
+      metric = graph->getProperty<DoubleProperty>("viewMetric");
 
     if (eltTypes.getCurrent() == ENUMERATED_ELT) {
       if(targetType.getCurrent()==NODES_TARGET) {
