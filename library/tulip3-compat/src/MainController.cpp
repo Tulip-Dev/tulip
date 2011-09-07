@@ -296,9 +296,9 @@ public:
 };
 
 // viewLayout
-class ViewLayoutCalculator :public AbstractLayoutProperty::MetaValueCalculator {
+class ViewLayoutCalculator :public LayoutMinMaxProperty::MetaValueCalculator {
 public:
-  void computeMetaValue(AbstractLayoutProperty* layout,
+  void computeMetaValue(LayoutMinMaxProperty* layout,
                         node mN, Graph* sg, Graph* mg) {
     SizeProperty* size = mg->getProperty<SizeProperty>("viewSize");
     DoubleProperty* rot = mg->getProperty<DoubleProperty>("viewRotation");

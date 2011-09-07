@@ -24,25 +24,20 @@
 #include <tulip/AbstractProperty.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/Observable.h>
-#include <tulip/MinMaxCalculator.h>
+#include <tulip/minmaxproperty.h>
 
 namespace tlp {
 
 class Graph;
 class PropertyContext;
 
-typedef AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> AbstractIntegerProperty;
-typedef MinMaxCalculator<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> IntegerMinMaxCalculator;
+typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> IntegerMinMaxProperty;
 /** \addtogroup properties */
 /*@{*/
-class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, private IntegerMinMaxCalculator {
+class TLP_SCOPE IntegerProperty : public IntegerMinMaxProperty {
 
 public :
   IntegerProperty(Graph *, std::string n = "");
-  IntegerType::RealType  getNodeMin(Graph *sg=0);
-  IntegerType::RealType  getNodeMax(Graph *sg=0);
-  IntegerType::RealType  getEdgeMin(Graph *sg=0);
-  IntegerType::RealType  getEdgeMax(Graph *sg=0);
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
@@ -69,7 +64,7 @@ public :
   int compare(const edge e1, const edge e2) const;
 
 protected:
-  virtual void clone_handler(AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> &);
+  virtual void clone_handler(IntegerMinMaxProperty&);
 
 private:
   // override Observable::treatEvent

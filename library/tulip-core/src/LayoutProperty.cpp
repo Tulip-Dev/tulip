@@ -42,7 +42,7 @@ void minV(tlp::Coord &res, const tlp::Coord &cmp) {
  * @brief This template specialization provides specific computation for min and max values of Layout properties (they are specific in that they use the control points of the edges)
  **/
 template <>
-void tlp::MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::computeMinMaxNode(Graph *sg) {
+void tlp::MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::computeMinMaxNode(Graph *sg) {
 #ifndef NDEBUG
   std::cerr << __PRETTY_FUNCTION__ << std::endl;
 #endif
@@ -53,14 +53,14 @@ void tlp::MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>:
 
   if  (itN->hasNext()) {
     node itn=itN->next();
-    const Coord& tmpCoord = _property->getNodeValue(itn);
+    const Coord& tmpCoord = this->getNodeValue(itn);
     maxV(maxT, tmpCoord);
     minV(minT, tmpCoord);
   }
 
   while (itN->hasNext()) {
     node itn=itN->next();
-    const Coord& tmpCoord = _property->getNodeValue(itn);
+    const Coord& tmpCoord = this->getNodeValue(itn);
     maxV(maxT, tmpCoord);
     minV(minT, tmpCoord);
   }
@@ -70,7 +70,7 @@ void tlp::MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>:
 
   while (itE->hasNext()) {
     edge ite=itE->next();
-    const LineType::RealType& value = _property->getEdgeValue(ite);
+    const LineType::RealType& value = this->getEdgeValue(ite);
     LineType::RealType::const_iterator itCoord;
 
     for (itCoord=value.begin(); itCoord!=value.end(); ++itCoord) {
@@ -92,11 +92,11 @@ void tlp::MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>:
  * @brief This template specialization provides specific computation for min and max values of Layout properties (they are specific in that they use the control points of the edges)
  **/
 template <>
-void tlp::MinMaxCalculator<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue) {
+void tlp::MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue) {
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = nodeValueUptodate.begin();
 
   if (it != nodeValueUptodate.end()) {
-    const std::vector<Coord>& oldV = _property->getEdgeValue(e);
+    const std::vector<Coord>& oldV = this->getEdgeValue(e);
 
     if (newValue != oldV) {
       // loop on subgraph min/max
@@ -167,9 +167,9 @@ const string CoordVectorProperty::propertyTypename="vector<coord>";
 
 // define a specific MetaValueCalculator
 class LayoutMetaValueCalculator
-    :public AbstractLayoutProperty::MetaValueCalculator {
+    :public LayoutMinMaxProperty::MetaValueCalculator {
 public:
-  void computeMetaValue(AbstractLayoutProperty* layout,
+  void computeMetaValue(LayoutMinMaxProperty* layout,
                         node mN, Graph* sg, Graph*) {
     switch(sg->numberOfNodes()) {
     case 0:
@@ -190,8 +190,8 @@ public:
 static LayoutMetaValueCalculator mvLayoutCalculator;
 
 //======================================================
-LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeReversal):AbstractLayoutProperty(sg, n),
-  LayoutMinMaxCalculator(this, Coord(FLT_MAX, FLT_MAX, FLT_MAX), Coord(-FLT_MAX, -FLT_MAX, -FLT_MAX), tlp::LineType::RealType(), tlp::LineType::RealType()) {
+LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeReversal) : LayoutMinMaxProperty(sg, n,
+                      Coord(FLT_MAX, FLT_MAX, FLT_MAX), Coord(-FLT_MAX, -FLT_MAX, -FLT_MAX), tlp::LineType::RealType(), tlp::LineType::RealType()) {
 // if needed the property observes the graph (see reverseEdge)
   if (updateOnEdgeReversal)
     graph->addListener(this);
@@ -201,15 +201,11 @@ LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeRevers
 }
 //======================================================
 Coord LayoutProperty::getMax(Graph *sg) {
-  if (sg==0) sg=graph;
-
-  return LayoutMinMaxCalculator::getNodeMax(sg);
+  return LayoutMinMaxProperty::getNodeMax(sg);
 }
 //======================================================
 Coord  LayoutProperty::getMin(Graph *sg) {
-  if (sg==0) sg=graph;
-
-  return LayoutMinMaxCalculator::getNodeMin(sg);
+  return LayoutMinMaxProperty::getNodeMin(sg);
 }
 //=================================================================================
 #define X_ROT 0
@@ -458,7 +454,7 @@ void LayoutProperty::perfectAspectRatio() {
 }
 
 //=================================================================================
-void LayoutProperty::clone_handler(AbstractProperty<PointType,LineType, LayoutAlgorithm> &proxyC) {
+void LayoutProperty::clone_handler(LayoutMinMaxProperty& proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
     LayoutProperty *proxy=(LayoutProperty *)&proxyC;
     nodeValueUptodate = proxy->nodeValueUptodate;
@@ -474,23 +470,23 @@ void LayoutProperty::resetBoundingBox() {
 }
 //================================================================================
 void LayoutProperty::setNodeValue(const node n, const Coord& v) {
-  LayoutMinMaxCalculator::updateNodeValue(n, v);
-  AbstractLayoutProperty::setNodeValue(n, v);
+  LayoutMinMaxProperty::updateNodeValue(n, v);
+  LayoutMinMaxProperty::setNodeValue(n, v);
 }
 //================================================================================
 void LayoutProperty::setEdgeValue(const edge e, const std::vector<Coord>& v) {
-  LayoutMinMaxCalculator::updateEdgeValue(e, v);
-  AbstractLayoutProperty::setEdgeValue(e, v);
+  LayoutMinMaxProperty::updateEdgeValue(e, v);
+  LayoutMinMaxProperty::setEdgeValue(e, v);
 }
 //=================================================================================
 void LayoutProperty::setAllNodeValue(const Coord &v) {
   resetBoundingBox();
-  AbstractLayoutProperty::setAllNodeValue(v);
+  LayoutMinMaxProperty::setAllNodeValue(v);
 }
 //=================================================================================
 void LayoutProperty::setAllEdgeValue(const std::vector<Coord> &v) {
   resetBoundingBox();
-  AbstractLayoutProperty::setAllEdgeValue(v);
+  LayoutMinMaxProperty::setAllEdgeValue(v);
 }
 //=================================================================================
 double LayoutProperty::averageAngularResolution(const Graph *sg) const {
@@ -730,7 +726,7 @@ PropertyInterface* LayoutProperty::clonePrototype(Graph * g, const std::string& 
 }
 //=============================================================
 void LayoutProperty::treatEvent(const Event& evt) {
-  LayoutMinMaxCalculator::treatEvent(evt);
+  LayoutMinMaxProperty::treatEvent(evt);
 
   const GraphEvent* graphEvent = dynamic_cast<const tlp::GraphEvent*>(&evt);
 
