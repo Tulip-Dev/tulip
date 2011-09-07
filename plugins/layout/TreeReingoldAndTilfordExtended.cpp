@@ -424,7 +424,7 @@ bool TreeReingoldAndTilfordExtended::run() {
     sizes = circleSizes;
   }//end if
 
-  
+
   //===========================================================
 
   if (pluginProgress)
@@ -475,8 +475,10 @@ bool TreeReingoldAndTilfordExtended::run() {
       node tgt = tree->target(e);
       const Coord& srcPos = result->getNodeValue(src);
       const Coord& tgtPos = result->getNodeValue(tgt);
+
       if (srcPos[0] != tgtPos[0])
-	tmp.push_back(Coord(tgtPos[0], srcPos[1], 0));
+        tmp.push_back(Coord(tgtPos[0], srcPos[1], 0));
+
       result->setEdgeValue(e, tmp);
     }
 
@@ -484,8 +486,10 @@ bool TreeReingoldAndTilfordExtended::run() {
       forEach(e, tree->getEdges()) {
         LineType::RealType tmp = result->getEdgeValue(e);
         LineType::RealType tmp2;
+
         if (!tmp.empty())
-	  tmp2.push_back(Coord(-tmp[0][1], tmp[0][0], tmp[0][2]));
+          tmp2.push_back(Coord(-tmp[0][1], tmp[0][0], tmp[0][2]));
+
         result->setEdgeValue(e, tmp2);
       }
     }
