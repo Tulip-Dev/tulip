@@ -12,14 +12,14 @@
 
 namespace tlp {
 
-class TLP_QT_SCOPE TulipItemEditorCreator: public QItemEditorCreatorBase {
+class TLP_QT_SCOPE TulipItemEditorCreator {
 public:
-  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant &) const {
-    return false;
-  }
-  virtual QString displayText(const QVariant &) const {
-    return "";
-  }
+  virtual QWidget* createWidget(QWidget *parent) const=0;
+  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant &) const { return false; }
+  virtual QString displayText(const QVariant &) const { return ""; }
+
+  virtual void setEditorData(QWidget* editor, const QVariant &data)=0;
+  virtual QVariant editorData(QWidget* editor)=0;
 };
 
 template<typename T>
@@ -32,9 +32,10 @@ public:
 
 class TLP_QT_SCOPE ColorEditorCreator: public tlp::TulipItemEditorCreator {
 public:
-  QWidget *createWidget(QWidget *parent) const;
-  QByteArray valuePropertyName() const;
+  QWidget* createWidget(QWidget *parent) const;
   bool paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant &v) const;
+  virtual void setEditorData(QWidget* editor, const QVariant &data);
+  virtual QVariant editorData(QWidget* editor);
 };
 
 }
