@@ -12,6 +12,7 @@ typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType, algorithmTyp
   if(!graph) {
     graph = this->graph;
   }
+
   unsigned int graphID = graph->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = nodeValueUptodate.find(graphID);
 
@@ -26,6 +27,7 @@ typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType, algorithmTyp
   if(!graph) {
     graph = this->graph;
   }
+
   unsigned int graphID = graph->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = nodeValueUptodate.find(graphID);
 
@@ -40,6 +42,7 @@ typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType, algorithmTyp
   if(!graph) {
     graph = this->graph;
   }
+
   unsigned int graphID = graph->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = edgeValueUptodate.find(graphID);
 
@@ -65,6 +68,7 @@ void tlp::MinMaxProperty<nodeType, edgeType, algorithmType>::computeMinMaxNode(G
   if(!graph) {
     graph = this->graph;
   }
+
   typename nodeType::RealType maxN2 = _nodeMin, minN2 = _nodeMax;
 
   Iterator<node>* nodeIterator = graph->getNodes();

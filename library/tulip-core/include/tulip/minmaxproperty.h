@@ -46,7 +46,7 @@ public:
    * @param EdgeMax The maximal value the property can take for edges (e.g. INT_MIN)
    **/
   MinMaxProperty(tlp::Graph* graph, std::string name, typename nodeType::RealType NodeMin,
-                   typename nodeType::RealType NodeMax, typename edgeType::RealType EdgeMin, typename edgeType::RealType EdgeMax);
+                 typename nodeType::RealType NodeMax, typename edgeType::RealType EdgeMin, typename edgeType::RealType EdgeMax);
 
   /**
    * @brief A bridge to Observable's treatEvent() so this class can easily be delegated to.
