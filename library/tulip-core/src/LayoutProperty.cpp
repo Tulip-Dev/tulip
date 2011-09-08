@@ -166,10 +166,9 @@ const string LayoutProperty::propertyTypename="layout";
 const string CoordVectorProperty::propertyTypename="vector<coord>";
 
 // define a specific MetaValueCalculator
-class LayoutMetaValueCalculator
-    :public LayoutMinMaxProperty::MetaValueCalculator {
+class LayoutMetaValueCalculator : public AbstractLayoutProperty::MetaValueCalculator {
 public:
-  void computeMetaValue(LayoutMinMaxProperty* layout,
+  void computeMetaValue(AbstractLayoutProperty* layout,
                         node mN, Graph* sg, Graph*) {
     switch(sg->numberOfNodes()) {
     case 0:

@@ -37,6 +37,7 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::c
 class PropertyContext;
 class Graph;
 
+typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> AbstractLayoutProperty;
 typedef MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> LayoutMinMaxProperty;
 
 /** \addtogroup properties */
