@@ -17,13 +17,13 @@ public:
   virtual void frameChanged(int f);
 
 protected:
-  tlp::Graph *graph;
-  PropType *start;
-  PropType *end;
-  PropType *out;
-  tlp::BooleanProperty *selection;
-  bool computeNodes;
-  bool computeEdges;
+  tlp::Graph *_graph;
+  PropType *_start;
+  PropType *_end;
+  PropType *_out;
+  tlp::BooleanProperty *_selection;
+  bool _computeNodes;
+  bool _computeEdges;
 
   virtual NodeType getNodeFrameValue(const NodeType &startValue, const NodeType &endValue, int frame)=0;
   virtual EdgeType getEdgeFrameValue(const EdgeType &startValue, const EdgeType &endValue, int frame)=0;

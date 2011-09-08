@@ -7,13 +7,13 @@ VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::VectorPropertyAni
 
   assert(frameCount > 1);
 
-  if (this->computeNodes) {
+  if (this->_computeNodes) {
     tlp::node n;
-    forEach(n, this->graph->getNodes()) {
-      if (this->selection && !this->selection->getNodeValue(n))
+    forEach(n, this->_graph->getNodes()) {
+      if (this->_selection && !this->_selection->getNodeValue(n))
         continue;
 
-      std::pair<PropVector, PropVector> values(PropVector(this->start->getNodeValue(n)), PropVector(this->end->getNodeValue(n)));
+      std::pair<PropVector, PropVector> values(PropVector(this->_start->getNodeValue(n)), PropVector(this->_end->getNodeValue(n)));
 
       if (steps.find(values) == steps.end()) {
         tlp::Vector<double, SIZE> stepsVector;
@@ -26,13 +26,13 @@ VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::VectorPropertyAni
     }
   }
 
-  if (this->computeEdges) {
+  if (this->_computeEdges) {
     tlp::edge e;
-    forEach(e, this->graph->getEdges()) {
-      if (this->selection && !this->selection->getEdgeValue(e))
+    forEach(e, this->_graph->getEdges()) {
+      if (this->_selection && !this->_selection->getEdgeValue(e))
         continue;
 
-      std::pair<PropVector, PropVector> values(PropVector(this->start->getEdgeValue(e)), PropVector(this->end->getEdgeValue(e)));
+      std::pair<PropVector, PropVector> values(PropVector(this->_start->getEdgeValue(e)), PropVector(this->_end->getEdgeValue(e)));
 
       if (steps.find(values) == steps.end()) {
         tlp::Vector<double, SIZE> stepsVector;

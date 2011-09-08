@@ -75,6 +75,7 @@ SET(SRCS
   DoublePropertyAnimation.cpp
   LayoutPropertyAnimation.cpp
   PropertyAnimation.cpp
+  TulipParallelAnimationGroup.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
