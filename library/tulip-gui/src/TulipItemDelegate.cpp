@@ -3,7 +3,7 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TulipItemEditorCreators.h>
 
-namespace tlp {
+using namespace tlp;
 
 TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(parent) {
   registerCreator<tlp::Color>(new ColorEditorCreator);
@@ -77,4 +77,18 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
   QStyledItemDelegate::paint(painter,option,index);
 }
 
+void TulipItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
+  QVariant data = index.data();
+  TulipItemEditorCreator *c = creator(data.userType());
+  if (!c)
+    return;
+  c->setEditorData(editor,data);
+}
+
+void TulipItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
+  QVariant data = index.data();
+  TulipItemEditorCreator *c = creator(data.userType());
+  if (!c)
+    return;
+  model->setData(index,c->editorData(editor));
 }

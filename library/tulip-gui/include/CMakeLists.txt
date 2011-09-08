@@ -76,6 +76,7 @@ INSTALL(FILES
   tulip/SizePropertyAnimation.h
   tulip/VectorPropertyAnimation.h
   tulip/TulipParallelAnimationGroup.h
+  tulip/ColorButton.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

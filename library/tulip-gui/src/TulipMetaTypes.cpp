@@ -1,8 +1,8 @@
 #include "tulip/TulipMetaTypes.h"
 
-namespace tlp {
-#define CHECK_QVARIANT(TYPE) if (std::string(v.typeName()).compare(typeid(TYPE).name()) == 0) return new TypedData<TYPE>(new TYPE(v.value<TYPE>()));
-#define CHECK_QVARIANT_PTR(TYPE) if (std::string(v.typeName()).compare(typeid(TYPE*).name()) == 0) return new TypedData<TYPE*>(v.value<TYPE*>());
+using namespace tlp;
+
+#define CHECK_QVARIANT(TYPE) if (v.userType() == qMetaTypeId<TYPE>()) return new TypedData<TYPE>(new TYPE(v.value<TYPE>()));
 
 tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   CHECK_QVARIANT(tlp::GraphType::RealType);
@@ -18,13 +18,13 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   CHECK_QVARIANT(tlp::StringType::RealType);
   CHECK_QVARIANT(tlp::ColorType::RealType);
 
-  CHECK_QVARIANT_PTR(tlp::BooleanProperty);
-  CHECK_QVARIANT_PTR(tlp::DoubleProperty);
-  CHECK_QVARIANT_PTR(tlp::LayoutProperty);
-  CHECK_QVARIANT_PTR(tlp::StringProperty);
-  CHECK_QVARIANT_PTR(tlp::IntegerProperty);
-  CHECK_QVARIANT_PTR(tlp::SizeProperty);
-  CHECK_QVARIANT_PTR(tlp::ColorProperty);
+  CHECK_QVARIANT(tlp::BooleanProperty*);
+  CHECK_QVARIANT(tlp::DoubleProperty*);
+  CHECK_QVARIANT(tlp::LayoutProperty*);
+  CHECK_QVARIANT(tlp::StringProperty*);
+  CHECK_QVARIANT(tlp::IntegerProperty*);
+  CHECK_QVARIANT(tlp::SizeProperty*);
+  CHECK_QVARIANT(tlp::ColorProperty*);
 
 //  CHECK_DATATYPE(tlp::EdgeSetType::RealType);
 //  CHECK_DATATYPE(tlp::DoubleVectorType::RealType);
@@ -73,5 +73,4 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm) {
 //  CHECK_DATATYPE(tlp::CoordVectorType::RealType);
 
   return QVariant();
-}
 }

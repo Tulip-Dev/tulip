@@ -97,4 +97,16 @@ Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
   return result;
 }
 
+bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+  if (role == Qt::EditRole) {
+    ParamInfos infos = _params[index.row()];
+
+    DataType *dataType = TulipMetaTypes::qVariantToDataType(value);
+    assert(dataType);
+    _data.setData(infos.name.toStdString(),dataType);
+    return true;
+  }
+  return QAbstractItemModel::setData(index,value,role);
+}
+
 }

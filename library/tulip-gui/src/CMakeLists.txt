@@ -76,6 +76,7 @@ SET(SRCS
   LayoutPropertyAnimation.cpp
   PropertyAnimation.cpp
   TulipParallelAnimationGroup.cpp
+  ColorButton.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -137,6 +138,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/View.h
   ../include/tulip/TulipItemEditorCreators.h
   ../include/tulip/Animation.h
+  ../include/tulip/ColorButton.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

@@ -1,17 +1,13 @@
 #include "tulip/TulipItemEditorCreators.h"
 
-#include <QtGui/QSpinBox>
 #include <tulip/TlpQtTools.h>
 #include <QtCore/QDebug>
+#include <tulip/ColorButton.h>
 
-namespace tlp {
+using namespace tlp;
 
 QWidget* ColorEditorCreator::createWidget(QWidget *parent) const {
-  return new QSpinBox(parent);
-}
-
-QByteArray ColorEditorCreator::valuePropertyName() const {
-  return "";
+  return new ColorButton(parent);
 }
 
 bool ColorEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem &option, const QVariant &v) const {
@@ -20,4 +16,11 @@ bool ColorEditorCreator::paint(QPainter *painter, const QStyleOptionViewItem &op
   painter->drawRect(option.rect.x()+6,option.rect.y()+6,option.rect.width()-12,option.rect.height()-12);
   return true;
 }
+
+void ColorEditorCreator::setEditorData(QWidget *editor, const QVariant &data) {
+  static_cast<ColorButton*>(editor)->setTulipColor(data.value<tlp::Color>());
+}
+
+QVariant ColorEditorCreator::editorData(QWidget *editor) {
+  return QVariant::fromValue<tlp::Color>(static_cast<ColorButton*>(editor)->tulipColor());
 }
