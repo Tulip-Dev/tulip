@@ -5,24 +5,24 @@ CachedPropertyAnimation<PropType, NodeType, EdgeType>::CachedPropertyAnimation(t
     tlp::BooleanProperty *selection, int frameCount, bool computeNodes, bool computeEdges) :
   PropertyAnimation<PropType, NodeType, EdgeType> (graph, start, end, out, selection, frameCount, computeNodes, computeEdges) {
 
-  if (this->computeNodes) {
+  if (this->_computeNodes) {
     tlp::node n;
-    forEach (n, this->graph->getNodes()) {
-      if (this->equalNodes(this->end->getNodeValue(n), this->start->getNodeValue(n))) {
-        this->selection->setNodeValue(n, false);
+    forEach (n, this->_graph->getNodes()) {
+      if (this->equalNodes(this->_end->getNodeValue(n), this->_start->getNodeValue(n))) {
+        this->_selection->setNodeValue(n, false);
         //Init the out properties with the default value.
-        this->out->setNodeValue(n,this->end->getNodeValue(n));
+        this->_out->setNodeValue(n,this->_end->getNodeValue(n));
       }
     }
   }
 
-  if (this->computeEdges) {
+  if (this->_computeEdges) {
     tlp::edge e;
-    forEach (e, this->graph->getEdges()) {
-      if (this->equalEdges(this->end->getEdgeValue(e), this->start->getEdgeValue(e))) {
-        this->selection->setEdgeValue(e, false);
+    forEach (e, this->_graph->getEdges()) {
+      if (this->equalEdges(this->_end->getEdgeValue(e), this->_start->getEdgeValue(e))) {
+        this->_selection->setEdgeValue(e, false);
         //Init the out properties with the default value.
-        this->out->setEdgeValue(e,end->getEdgeValue(e));
+        this->_out->setEdgeValue(e,end->getEdgeValue(e));
       }
     }
   }
@@ -34,14 +34,14 @@ CachedPropertyAnimation<PropType, NodeType, EdgeType>::~CachedPropertyAnimation(
 
 template<typename PropType, typename NodeType, typename EdgeType>
 void CachedPropertyAnimation<PropType, NodeType, EdgeType>::frameChanged(int f) {
-  if (this->computeNodes) {
+  if (this->_computeNodes) {
     computedNodeSteps.clear();
     tlp::node n;
-    forEach(n, this->graph->getNodes()) {
-      if (this->selection && !this->selection->getNodeValue(n))
+    forEach(n, this->_graph->getNodes()) {
+      if (this->_selection && !this->_selection->getNodeValue(n))
         continue;
 
-      std::pair<NodeType, NodeType> values(this->start->getNodeValue(n), this->end->getNodeValue(n));
+      std::pair<NodeType, NodeType> values(this->_start->getNodeValue(n), this->_end->getNodeValue(n));
       NodeType frameValue;
 
       if (computedNodeSteps.find(values) == computedNodeSteps.end()) {
@@ -51,18 +51,18 @@ void CachedPropertyAnimation<PropType, NodeType, EdgeType>::frameChanged(int f) 
       else
         frameValue = computedNodeSteps[values];
 
-      this->out->setNodeValue(n, frameValue);
+      this->_out->setNodeValue(n, frameValue);
     }
   }
 
-  if (this->computeEdges) {
+  if (this->_computeEdges) {
     computedEdgeSteps.clear();
     tlp::edge e;
-    forEach(e, this->graph->getEdges()) {
-      if (this->selection && !this->selection->getEdgeValue(e))
+    forEach(e, this->_graph->getEdges()) {
+      if (this->_selection && !this->_selection->getEdgeValue(e))
         continue;
 
-      std::pair<EdgeType, EdgeType> values(this->start->getEdgeValue(e), this->end->getEdgeValue(e));
+      std::pair<EdgeType, EdgeType> values(this->_start->getEdgeValue(e), this->_end->getEdgeValue(e));
       EdgeType frameValue;
 
       if (computedEdgeSteps.find(values) == computedEdgeSteps.end()) {
@@ -72,7 +72,7 @@ void CachedPropertyAnimation<PropType, NodeType, EdgeType>::frameChanged(int f) 
       else
         frameValue = computedEdgeSteps[values];
 
-      this->out->setEdgeValue(e, frameValue);
+      this->_out->setEdgeValue(e, frameValue);
     }
   }
 }
