@@ -78,7 +78,7 @@ void SpreadViewTableWidget::setData(Graph* graph,const DataSet &data,ElementType
       DataSet columnData = *static_cast<DataSet*>(columnDataSet.second->value);
 
       if(columnData.exist("hidden")) {
-        bool hidden;
+        bool hidden=false;
         columnData.get("hidden",hidden);
         headerView->setSectionHidden(column,hidden);
       }
