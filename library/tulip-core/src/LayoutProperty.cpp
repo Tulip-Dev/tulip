@@ -191,7 +191,7 @@ static LayoutMetaValueCalculator mvLayoutCalculator;
 
 //======================================================
 LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeReversal) : LayoutMinMaxProperty(sg, n,
-                      Coord(FLT_MAX, FLT_MAX, FLT_MAX), Coord(-FLT_MAX, -FLT_MAX, -FLT_MAX), tlp::LineType::RealType(), tlp::LineType::RealType()) {
+      Coord(FLT_MAX, FLT_MAX, FLT_MAX), Coord(-FLT_MAX, -FLT_MAX, -FLT_MAX), tlp::LineType::RealType(), tlp::LineType::RealType()) {
 // if needed the property observes the graph (see reverseEdge)
   if (updateOnEdgeReversal)
     graph->addListener(this);
