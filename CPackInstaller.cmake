@@ -29,7 +29,7 @@ IF(LINUX)
 SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Tulip Dev Team <tulipdev@labri.fr>")
 SET(CPACK_DEBIAN_PACKAGE_SECTION "science")
 SET(CPACK_DEBIAN_CHANGELOG 
-"* upgrade to revision 5681 and add missing font files")
+"* upgrade to revision 5733")
 ENDIF()
 
 # Defines plateform-specific generators to be used
