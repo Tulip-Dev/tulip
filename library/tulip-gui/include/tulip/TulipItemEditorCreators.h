@@ -15,8 +15,12 @@ namespace tlp {
 class TLP_QT_SCOPE TulipItemEditorCreator {
 public:
   virtual QWidget* createWidget(QWidget *parent) const=0;
-  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant &) const { return false; }
-  virtual QString displayText(const QVariant &) const { return ""; }
+  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant &) const {
+    return false;
+  }
+  virtual QString displayText(const QVariant &) const {
+    return "";
+  }
 
   virtual void setEditorData(QWidget* editor, const QVariant &data)=0;
   virtual QVariant editorData(QWidget* editor)=0;
