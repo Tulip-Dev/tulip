@@ -69,13 +69,11 @@ public:
   void testStrengthMetric();
   void testStrongComponent();
   void testMetricColorMapping();
-  void testEnumeratedColorValuesMapping();
   void testBubbleTree();
   void testCircular();
   void testConeTreeExtended();
   void testConnectedComponentPacking();
   void testDendrogram();
-  void testEmbedder();
   void testGEMLayout();
   void testHierarchicalGraph();
   void testImprovedWalker();
