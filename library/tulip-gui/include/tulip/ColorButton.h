@@ -20,7 +20,7 @@ public:
   QColor color() const;
   Color tulipColor() const;
 
- protected:
+protected:
   void paintEvent(QPaintEvent *);
 
 signals:

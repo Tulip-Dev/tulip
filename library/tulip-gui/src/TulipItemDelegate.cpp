@@ -80,15 +80,19 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 void TulipItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
   QVariant data = index.data();
   TulipItemEditorCreator *c = creator(data.userType());
+
   if (!c)
     return;
+
   c->setEditorData(editor,data);
 }
 
 void TulipItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
   QVariant data = index.data();
   TulipItemEditorCreator *c = creator(data.userType());
+
   if (!c)
     return;
+
   model->setData(index,c->editorData(editor));
 }
