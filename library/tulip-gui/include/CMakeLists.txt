@@ -77,6 +77,7 @@ INSTALL(FILES
   tulip/VectorPropertyAnimation.h
   tulip/TulipParallelAnimationGroup.h
   tulip/ColorButton.h
+  tulip/TulipModel.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
@@ -86,6 +87,7 @@ INSTALL(FILES
   tulip/cxx/CachedPropertyAnimation.cxx
   tulip/cxx/PropertyAnimation.cxx
   tulip/cxx/VectorPropertyAnimation.cxx
+  tulip/cxx/TulipItemEditorCreators.cxx
 DESTINATION ${TulipIncludeInstallDir}/tulip/cxx/
 COMPONENT tulip_core_dev
 )

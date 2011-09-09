@@ -1,14 +1,14 @@
 #ifndef PARAMETERLISTMODEL_H
 #define PARAMETERLISTMODEL_H
 
-#include <QtCore/QAbstractItemModel>
+#include "tulip/TulipModel.h"
 #include <tulip/WithParameter.h>
 #include <tulip/DataSet.h>
 #include <tulip/TulipMetaTypes.h>
 
 namespace tlp {
 
-class TLP_QT_SCOPE ParameterListModel : public QAbstractItemModel {
+class TLP_QT_SCOPE ParameterListModel : public TulipModel {
   struct ParamInfos {
     inline ParamInfos(bool m,const QString &n,const QString &d): mandatory(m), name(n),desc(d) {}
     bool mandatory;
@@ -22,6 +22,7 @@ class TLP_QT_SCOPE ParameterListModel : public QAbstractItemModel {
 
   std::vector<ParamInfos> _params;
   tlp::DataSet _data;
+  tlp::Graph* _graph;
 
 public:
   explicit ParameterListModel(const tlp::ParameterList &params, tlp::Graph *graph=0, QObject *parent=0);

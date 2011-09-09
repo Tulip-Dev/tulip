@@ -14,34 +14,54 @@ namespace tlp {
 
 class TLP_QT_SCOPE TulipItemEditorCreator {
 public:
-  virtual QWidget* createWidget(QWidget *parent) const=0;
-  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant &) const {
+  virtual QWidget* createWidget(QWidget*) const=0;
+  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const {
     return false;
   }
   virtual QString displayText(const QVariant &) const {
     return "";
   }
 
-  virtual void setEditorData(QWidget* editor, const QVariant &data)=0;
-  virtual QVariant editorData(QWidget* editor)=0;
+  virtual void setEditorData(QWidget*,const QVariant&,tlp::Graph* g=NULL)=0;
+  virtual QVariant editorData(QWidget*,tlp::Graph* g=NULL)=0;
 };
 
 template<typename T>
 class TLP_QT_SCOPE StringDisplayEditorCreator: public TulipItemEditorCreator {
 public:
-  inline QString displayText(const QVariant &v) const {
+  inline QString displayText(const QVariant& v) const {
     return T::toString(v.value<typename T::RealType>()).c_str();
   }
 };
 
 class TLP_QT_SCOPE ColorEditorCreator: public tlp::TulipItemEditorCreator {
 public:
-  QWidget* createWidget(QWidget *parent) const;
-  bool paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant &v) const;
-  virtual void setEditorData(QWidget* editor, const QVariant &data);
-  virtual QVariant editorData(QWidget* editor);
+  QWidget* createWidget(QWidget*) const;
+  bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
+  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual QVariant editorData(QWidget*,tlp::Graph*);
 };
 
+template<typename T>
+class TLP_QT_SCOPE LineEditEditorCreator: public StringDisplayEditorCreator<T> {
+public:
+  QWidget* createWidget(QWidget*) const;
+  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual QVariant editorData(QWidget*,tlp::Graph*);
+};
+
+class TLP_QT_SCOPE BooleanEditorCreator: public TulipItemEditorCreator {
+public:
+  virtual QWidget* createWidget(QWidget*) const;
+  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant &) const;
+  virtual void setEditorData(QWidget*,const QVariant&,tlp::Graph*);
+  virtual QVariant editorData(QWidget*,tlp::Graph*);
+};
+
+
+
 }
+
+#include "cxx/TulipItemEditorCreators.cxx"
 
 #endif // TULIPITEMEDITORCREATORS_H
