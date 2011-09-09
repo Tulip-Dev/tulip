@@ -1,12 +1,32 @@
 #include "tulip/TulipItemDelegate.h"
 
+#include <QtCore/QDebug>
+#include <tulip/TulipModel.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TulipItemEditorCreators.h>
 
 using namespace tlp;
 
 TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(parent) {
+  registerCreator<bool>(new BooleanEditorCreator);
+  registerCreator<int>(new LineEditEditorCreator<tlp::IntegerType>);
+  registerCreator<unsigned int>(new LineEditEditorCreator<tlp::UnsignedIntegerType>);
+  registerCreator<long>(new LineEditEditorCreator<tlp::LongType>);
+  registerCreator<double>(new LineEditEditorCreator<tlp::DoubleType>);
+  registerCreator<float>(new LineEditEditorCreator<tlp::FloatType>);
+  registerCreator<std::string>(new LineEditEditorCreator<tlp::StringType>);
   registerCreator<tlp::Color>(new ColorEditorCreator);
+  //    CHECK_TYPE(tlp::SizeType);
+
+  //    CHECK_PROPERTY(tlp::BooleanProperty);
+  //    CHECK_PROPERTY(tlp::DoubleProperty);
+  //    CHECK_PROPERTY(tlp::LayoutProperty);
+  //    CHECK_PROPERTY(tlp::StringProperty);
+  //    CHECK_PROPERTY(tlp::IntegerProperty);
+  //    CHECK_PROPERTY(tlp::SizeProperty);
+  //    CHECK_PROPERTY(tlp::ColorProperty);
+
+
 }
 
 TulipItemDelegate::~TulipItemDelegate() {
@@ -79,20 +99,20 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
 void TulipItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
   QVariant data = index.data();
+  tlp::Graph* g = index.data(TulipModel::GraphRole).value<tlp::Graph*>();
   TulipItemEditorCreator *c = creator(data.userType());
-
   if (!c)
     return;
-
-  c->setEditorData(editor,data);
+  c->setEditorData(editor,data,g);
 }
 
 void TulipItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
   QVariant data = index.data();
+  tlp::Graph* g = index.data(TulipModel::GraphRole).value<tlp::Graph*>();
   TulipItemEditorCreator *c = creator(data.userType());
 
   if (!c)
     return;
 
-  model->setData(index,c->editorData(editor));
+  model->setData(index,c->editorData(editor,g));
 }

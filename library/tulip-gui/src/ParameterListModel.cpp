@@ -21,7 +21,7 @@ bool ParameterListModel::ParamInfosSorter::operator()(ParameterListModel::ParamI
 }
 
 ParameterListModel::ParameterListModel(const tlp::ParameterList &params, tlp::Graph *graph, QObject *parent)
-  : QAbstractItemModel(parent) {
+: TulipModel(parent), _graph(graph) {
   std::string name;
   forEach(name,params.getParametersNames())
   _params.push_back(ParamInfos(params.isMandatory(name),name.c_str(),params.getHelp(name).c_str()));
@@ -47,6 +47,9 @@ int ParameterListModel::columnCount(const QModelIndex &parent) const {
 }
 
 QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
+  if (role == GraphRole)
+    return QVariant::fromValue<tlp::Graph*>(_graph);
+
   ParamInfos infos = _params[index.row()];
 
   if (role == Qt::ToolTipRole)
@@ -102,9 +105,9 @@ bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value
     ParamInfos infos = _params[index.row()];
 
     DataType *dataType = TulipMetaTypes::qVariantToDataType(value);
-    assert(dataType);
-    _data.setData(infos.name.toStdString(),dataType);
-    return true;
+    if (dataType)
+      _data.setData(infos.name.toStdString(),dataType);
+    return (dataType != NULL);
   }
 
   return QAbstractItemModel::setData(index,value,role);
