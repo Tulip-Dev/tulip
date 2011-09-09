@@ -95,6 +95,7 @@ void GlLabel::init() {
   zRot=0;
   useLOD=false;
   labelsDensity=100;
+  billboarded=false;
 }
 //============================================================
 void GlLabel::setText(const string& text) {
@@ -431,6 +432,20 @@ void GlLabel::draw(float lod, Camera *camera) {
     break;
   default:
     break;
+  }
+
+  if(billboarded){
+    float mdlM[16];
+    glGetFloatv( GL_MODELVIEW_MATRIX, mdlM );
+    glMatrixMode( GL_MODELVIEW );
+
+    mdlM[0]  = 1.;
+    mdlM[5]  = 1.;
+    mdlM[10] = 1.;
+    mdlM[1] = mdlM[2] = 0.0f;
+    mdlM[4] = mdlM[6] = 0.0f;
+    mdlM[8] = mdlM[9] = 0.0f;
+    glLoadMatrixf( mdlM );
   }
 
   glScalef(scaleToApply,scaleToApply,1);

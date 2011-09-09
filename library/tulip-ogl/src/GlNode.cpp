@@ -303,6 +303,7 @@ void GlNode::drawLabel(OcclusionTest* test,GlGraphInputData* data,float lod, Cam
   label->setMinSize(data->parameters->getMinSizeOfLabel());
   label->setMaxSize(data->parameters->getMaxSizeOfLabel());
   label->setOcclusionTester(test);
+  label->setBillboarded(data->parameters->getLabelsAreBillboarded());
 
   if(includeBB[1][2]!=0)
     label->setPosition(Coord(nodeCoord[0],nodeCoord[1],nodeCoord[2]+nodeSize[2]/2.f));

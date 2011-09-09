@@ -340,6 +340,18 @@ public:
    * Set max size of label : this max size is only used if labels aren't be scaled
    */
   void setMaxSizeOfLabel(int size);
+  /**
+   * return if labels are billboarded
+   */
+  bool getLabelsAreBillboarded() {
+    return _labelsAreBillboarded;
+  }
+  /**
+   * Set if labels are billboarded
+   */
+  void setLabelsAreBillboarded(bool billboarded){
+    _labelsAreBillboarded=billboarded;
+  }
 
   /**
    * This property is use to filter nodes/edges display, for a node/edge if this property is false : the node/edge will not be diplayed
@@ -385,6 +397,7 @@ private:
   int _labelMinSize;
   int _labelMaxSize;
   int _labelsDensity;
+  bool _labelsAreBillboarded;
   std::string _fontsPath;
   std::string _texturePath;
   bool _edgesMaxSizeToNodesSize;
