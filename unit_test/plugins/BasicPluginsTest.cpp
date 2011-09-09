@@ -273,12 +273,12 @@ void BasicPluginsTest::testMetricColorMapping() {
   initializeGraph("Planar Graph");
   DoubleProperty metric(graph);
   string errorMsg;
-  DataSet ds;
   bool result = graph->computeProperty("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
 
+  DataSet ds;
+  ds.set("linear/uniform\nproperty", &metric);
   ColorProperty color(graph);
-  ds.set("property", &metric);
   result = graph->computeProperty("Color Mapping", &color,
                                   errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
