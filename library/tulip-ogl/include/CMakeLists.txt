@@ -77,5 +77,5 @@ INSTALL(FILES
 	tulip/GlVertexArrayVisitor.h
         tulip/TextRenderer.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
-COMPONENT libtulip-ogl-dev
+COMPONENT libtulip_ogl_dev
 )

@@ -15,4 +15,4 @@ ADD_DEPENDENCIES(user_keywords user_html)
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
 		  ${CMAKE_CURRENT_BINARY_DIR}/images 
  DESTINATION share/doc/tulip/userHandbook
- COMPONENT tulip-doc)
+ COMPONENT tulip_doc)

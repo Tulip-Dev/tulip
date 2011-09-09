@@ -61,11 +61,11 @@ TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
 ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipQtName} qscintilla2)
 
-INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}/view/ COMPONENT tulip-python)
+INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}/view/ COMPONENT tulip_python)
 
 IF(WIN32)
 	FIND_LIBRARY_GLOB(PYTHON_INSTALL_PATH "python2*.dll")
-	INSTALL_EXTERNAL_LIB(PYTHON_INSTALL_PATH tulip-python)
+	INSTALL_EXTERNAL_LIB(PYTHON_INSTALL_PATH tulip_python)
 ENDIF()
 
 ENDIF(QSCINTILLA_OK)

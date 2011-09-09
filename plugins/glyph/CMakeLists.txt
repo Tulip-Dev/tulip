@@ -130,4 +130,4 @@ INSTALL(TARGETS
 	Diamond-${TulipVersion}
 	Cross-${TulipVersion}
   DESTINATION ${TulipPluginsInstallDir}/glyphs/
-  COMPONENT tulip-plugins)
+  COMPONENT tulip_plugins)

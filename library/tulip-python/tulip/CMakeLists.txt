@@ -113,14 +113,14 @@ ADD_CUSTOM_TARGET(touchTulipPythonCMakeLists ALL
 
 IF(NOT UBUNTU_PPA_BUILD)
 INSTALL(TARGETS ${LibTulipPythonName}
-        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip-python
-        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip-python
-        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip-python)
+        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
 ELSE()
 INSTALL(TARGETS ${LibTulipPythonName}
-        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages COMPONENT tulip-python
-        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip-python
-        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip-python)
+        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
 ENDIF()
 
 ADD_CUSTOM_COMMAND(TARGET ${LibTulipPythonName}
@@ -129,12 +129,12 @@ ADD_CUSTOM_COMMAND(TARGET ${LibTulipPythonName}
                    COMMENT "Generating QScintilla API file for Tulip Python bindings"
 		   VERBATIM)
 				   
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip-python)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
 
 IF(NOT UBUNTU_PPA_BUILD)
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipLibInstallDir} COMPONENT tulip-python)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
 ELSE()
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip-python)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
 ENDIF()
 
 ENDIF(SIP_OK)

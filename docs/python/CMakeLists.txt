@@ -13,7 +13,7 @@ SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "doc;doctrees")
 
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html 
   DESTINATION share/doc/tulip-python
-  COMPONENT tulip-python-doc)
+  COMPONENT tulip_python_doc)
 																 
 ELSE(SPHINX_FOUND)
 	MESSAGE("Sphinx not found : unable to generate the documentation for the Python bindings.")

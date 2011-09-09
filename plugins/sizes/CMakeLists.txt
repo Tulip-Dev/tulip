@@ -22,4 +22,4 @@ INSTALL(TARGETS
 	AutoSize-${TulipVersion}
 	FitToLabels-${TulipVersion}
   DESTINATION ${TulipPluginsInstallDir}/
-  COMPONENT tulip-plugins)
+  COMPONENT tulip_plugins)

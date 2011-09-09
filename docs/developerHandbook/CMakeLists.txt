@@ -16,4 +16,4 @@ INSTALL(DIRECTORY
  ${CMAKE_CURRENT_BINARY_DIR}/html
  ${CMAKE_CURRENT_BINARY_DIR}/images
 DESTINATION share/doc/tulip/developerHandbook
-COMPONENT tulip-doc)
+COMPONENT tulip_doc)

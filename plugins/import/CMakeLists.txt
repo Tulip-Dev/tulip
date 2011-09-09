@@ -97,4 +97,4 @@ INSTALL(TARGETS
 	FileSystem-${TulipVersion}
 	WebImport-${TulipVersion}
   DESTINATION ${TulipPluginsInstallDir}/
-  COMPONENT tulip-plugins)
+  COMPONENT tulip_plugins)

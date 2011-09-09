@@ -71,4 +71,4 @@ INSTALL(TARGETS StrengthClustering-${TulipVersion}
 		EqualValueClustering-${TulipVersion}
 		QuotientClustering-${TulipVersion}
     DESTINATION ${TulipPluginsInstallDir}/
-    COMPONENT tulip-plugins)
+    COMPONENT tulip_plugins)

@@ -45,7 +45,7 @@ IF(LINUX)
 
         INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/common
             DESTINATION share/doc/tulip
-            COMPONENT tulip-doc)
+            COMPONENT tulip_doc)
     ENDIF(BUILD_DOC)
   ELSE()
   	MESSAGE("Doxygen not found: unable to generate documentation")
@@ -61,5 +61,5 @@ COMMENT "Checking if documentation files are present")
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip${TulipIntVersion}.qhc ${CMAKE_CURRENT_BINARY_DIR}/tulip${TulipIntVersion}.qch
   DESTINATION ${TulipShareInstallDir}
-  COMPONENT tulip-doc)
+  COMPONENT tulip_doc)
 

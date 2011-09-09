@@ -35,10 +35,10 @@ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.html
 	      ${CMAKE_CURRENT_BINARY_DIR}/allPlugins.html
 	      ${CMAKE_CURRENT_BINARY_DIR}/tulipPlugins.html
  DESTINATION share/doc/tulip/doxygen
- COMPONENT tulip-doc)
+ COMPONENT tulip_doc)
 
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tulip-lib
 		  ${CMAKE_CURRENT_BINARY_DIR}/tulip-ogl-lib
 		  ${CMAKE_CURRENT_BINARY_DIR}/tulip-qt-lib
  DESTINATION share/doc/tulip/doxygen
- COMPONENT tulip-doc)
+ COMPONENT tulip_doc)

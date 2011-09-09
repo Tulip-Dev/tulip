@@ -457,7 +457,7 @@ CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 ## -----------------------------------------------------------------------------------------------
 INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config
         DESTINATION ${TulipBinInstallDir}
-	COMPONENT libtulip-dev)
+	COMPONENT libtulip_dev)
 INSTALL(FILES FindTULIP3.cmake 
         DESTINATION ${TulipShareInstallDir})
 INSTALL(FILES FindGLEW.cmake 
@@ -468,7 +468,7 @@ INSTALL(FILES FindXML2.cmake
 IF(UBUNTU_PPA_BUILD)
 INSTALL(FILES FindTULIP3.cmake 
         DESTINATION share/cmake-${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/Modules
-	COMPONENT libtulip-dev)
+	COMPONENT libtulip_dev)
 INSTALL(FILES tulip.desktop 
         DESTINATION share/applications
 	COMPONENT tulip)

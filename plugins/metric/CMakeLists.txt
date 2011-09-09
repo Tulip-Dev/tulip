@@ -99,5 +99,5 @@ INSTALL(TARGETS
 	RandomMetric-${TulipVersion}
 	BetweennessCentrality-${TulipVersion}
   DESTINATION ${TulipPluginsInstallDir}/
-  COMPONENT tulip-plugins
+  COMPONENT tulip_plugins
   )

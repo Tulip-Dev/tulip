@@ -6,45 +6,48 @@ SET(CPACK_COMPONENT_GROUP_PLUGINS_DESCRIPTION "Tulip base plugins set.")
 SET(CPACK_COMPONENT_GROUP_EXTRAS_DESCRIPTION "Tulip extra files and documentation.")
 
 #thirdparty
-DEFINE_COMPONENT(ftgl "FTGL" "A library to render freetype fonts in openGL scenes." "" "" ${THIRDPARTY_GROUP_NAME})
-DEFINE_COMPONENT(qscintilla2 "QScintilla 2" "A library to provide source code edition facility in Qt." "" "" ${THIRDPARTY_GROUP_NAME})
-DEFINE_COMPONENT(sip "SIP library" "A library providing python bindings for C++." "" "" ${THIRDPARTY_GROUP_NAME})
+DEFINE_COMPONENT(ftgl "FTGL" "A library to render freetype fonts in openGL scenes." ""  ${THIRDPARTY_GROUP_NAME})
+DEFINE_COMPONENT(qscintilla2 "QScintilla 2" "A library to provide source code edition facility in Qt." ""  ${THIRDPARTY_GROUP_NAME})
+DEFINE_COMPONENT(sip "SIP library" "A library providing python bindings for C++." ""  ${THIRDPARTY_GROUP_NAME})
 
 # library/tulip
 DEFINE_COMPONENT(libtulip "Core library" "Tulip core library provides a framework for huge graph manipulation." ""  ${LIBS_GROUP_NAME})
-DEFINE_COMPONENT(libtulip-dev "Core library - Development files" "Tulip core library provides a framework for huge graph manipulation." "libtulip"  ${HEADERS_GROUP_NAME})
+DEFINE_COMPONENT(libtulip_dev "Core library - Development files" "Tulip core library provides a framework for huge graph manipulation." "libtulip"  ${HEADERS_GROUP_NAME})
 
 # library/tulip-ogl
-DEFINE_COMPONENT(libtulip-ogl "OpenGL library" "Tulip OpenGL provides a library for 3D visualization of graphs created with the Tulip core library. " "libtulip;ftgl" ${LIBS_GROUP_NAME})
-DEFINE_COMPONENT(libtulip-ogl-dev "OpenGL libary - Development files" "Tulip OpenGL provides a library for for 3D visualization of graphs created with the Tulip core library." "libtulip-dev;libtulip-ogl"  ${HEADERS_GROUP_NAME})
+DEFINE_COMPONENT(libtulip_ogl "OpenGL library" "Tulip OpenGL provides a library for 3D visualization of graphs created with the Tulip core library. " "libtulip;ftgl" ${LIBS_GROUP_NAME})
+DEFINE_COMPONENT(libtulip_ogl_dev "OpenGL libary - Development files" "Tulip OpenGL provides a library for for 3D visualization of graphs created with the Tulip core library." "libtulip_dev;libtulip_ogl"  ${HEADERS_GROUP_NAME})
 
 #library/tulip-qt
-DEFINE_COMPONENT(libtulip-qt "Qt library" "Tulip Qt provides a library for the Qt4 framework helping the design of graphical interfaces to integrate Tulip 3D visualizations into a Qt application." "libtulip;libtulip-ogl"  ${LIBS_GROUP_NAME})
-DEFINE_COMPONENT(libtulip-qt-dev "Qt library - Development files" "Tulip Qt provides a library for the Qt4 framework helping the design of graphical interfaces to integrate Tulip 3D visualizations into a Qt application." "libtulip-qt;libtulip-ogl-dev" ${HEADERS_GROUP_NAME})
+DEFINE_COMPONENT(libtulip_qt "Qt library" "Tulip Qt provides a library for the Qt4 framework helping the design of graphical interfaces to integrate Tulip 3D visualizations into a Qt application." "libtulip;libtulip_ogl"  ${LIBS_GROUP_NAME})
+DEFINE_COMPONENT(libtulip_qt_dev "Qt library - Development files" "Tulip Qt provides a library for the Qt4 framework helping the design of graphical interfaces to integrate Tulip 3D visualizations into a Qt application." "libtulip_qt;libtulip_ogl_dev" ${HEADERS_GROUP_NAME})
 
 #Extra features
-DEFINE_COMPONENT(tulip-ogdf "OGDF library bridge" "Tulip OGDF provides a bridge to use the powerful OGDF library (Open Graph Drawing Framework) inside Tulip." "libtulip" ${LIBS_GROUP_NAME})
-DEFINE_COMPONENT(tulip-python "Python bindings" "Python bindings for Tulip." "sip;qscintilla2"  ${LIBS_GROUP_NAME})
+DEFINE_COMPONENT(tulip_ogdf "OGDF library bridge" "Tulip OGDF provides a bridge to use the powerful OGDF library (Open Graph Drawing Framework) inside Tulip." "libtulip" ${LIBS_GROUP_NAME})
+DEFINE_COMPONENT(tulip_python "Python bindings" "Python bindings for Tulip." "sip;qscintilla2"  ${LIBS_GROUP_NAME})
 
 # plugins
-DEFINE_COMPONENT(tulip-plugins "Tulip Base plugins" "Base Tulip Plugins from trunk" "libtulip;libtulip-ogl;libtulip-qt"  ${PLUGINS_GROUP_NAME})
-DEFINE_COMPONENT(tulip "Tulip software" "The main Tulip software. Provides a complete interface and a set of tools to easily create, manage and visualize huge graphs in 3D scenes." "libtulip;libtulip-ogl;libtulip-qt;tulip-plugins" ${SOFTWARE_GROUP_NAME})
+DEFINE_COMPONENT(tulip_plugins "Tulip Base plugins" "Base Tulip Plugins from trunk" "libtulip;libtulip_ogl;libtulip_qt"  ${PLUGINS_GROUP_NAME})
+DEFINE_COMPONENT(tulip "Tulip software" "The main Tulip software. Provides a complete interface and a set of tools to easily create, manage and visualize huge graphs in 3D scenes." "libtulip;libtulip_ogl;libtulip_qt;tulip_plugins" ${SOFTWARE_GROUP_NAME})
 
 # doc/
 # must be always present because it may be installed by hand
 # even it is not generated
-DEFINE_COMPONENT(tulip-doc "Framework documentation" "Manuals and doxygen for the Tulip framework." "tulip" "tulip" ${EXTRAS_GROUP_NAME})
-DEFINE_COMPONENT(tulip-python-doc "Python bindings documentation" "Manual and API description for the Tulip Python bindings." "tulip-python" "tulip-python" ${EXTRAS_GROUP_NAME})
+DEFINE_COMPONENT(tulip_doc "Framework documentation" "Manuals and doxygen for the Tulip framework." "tulip" ${EXTRAS_GROUP_NAME})
+
+IF(SPHINX_FOUND)
+DEFINE_COMPONENT(tulip_python_doc "Python bindings documentation" "Manual and API description for the Tulip Python bindings." "tulip_python"  ${EXTRAS_GROUP_NAME})
+ENDIF(SPHINX_FOUND)
 
 IF(LINUX)
-  SET(META_DEPS "ftgl;qscintilla2;gzstream;sip;libtulip;libtulip-ogl;libtulip-qt;tulip;tulip-plugins")
+  SET(META_DEPS "ftgl;qscintilla2;gzstream;sip;libtulip;libtulip_ogl;libtulip_qt;tulip;tulip_plugins")
   # meta package (Linux only)
   IF(GENERATE_DOC)
     SET(META_DEPS "${META_DEPS};tulip-doc")
   ENDIF()
-  DEFINE_COMPONENT(tulip-all "Meta package" "Meta package containing tulip application, libraries, documentation and base plugins" "${META_DEPS}" "" ${EXTRAS_GROUP_NAME})
+  DEFINE_COMPONENT(tulip_all "Meta package" "Meta package containing tulip application, libraries, documentation and base plugins" "${META_DEPS}" "" ${EXTRAS_GROUP_NAME})
 
-  SET(CPACK_DEBIAN_EXCLUDE_COMPONENTS "ftgl;sip;qscintilla2;tulip-all")
+  SET(CPACK_DEBIAN_EXCLUDE_COMPONENTS "ftgl;sip;qscintilla2;tulip_all")
   
   SET(CPACK_UBUNTU_DISTRIBUTION_RELEASES lucid maverick natty)
 
