@@ -585,7 +585,7 @@ Returns the ith predecessor of a node.
 	 
 %MethodCode
 	if (sipCpp->isElement(*a0)) {
-		if (a1 < sipCpp->indeg(*a0)) {
+		if (a1 <= sipCpp->indeg(*a0)) {
 			sipRes = new tlp::node(sipCpp->getInNode(*a0, a1));
 		} else {
 			std::ostringstream oss;
