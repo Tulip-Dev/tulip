@@ -52,7 +52,7 @@
 #  endif
 
 //MSVC needs explicit casting of ints ot double, float or long double. Let's just pretend he does not.
-#include <math.h>
+#include <cmath>
 static double sqrt(int i) {
   return sqrt((double)i);
 }
