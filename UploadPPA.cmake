@@ -68,6 +68,9 @@ STRING(REPLACE "\n" "" PACKAGE_VERSION "${PACKAGE_VERSION}")
 
 SET(CPACK_DEBIAN_PACKAGE_REVISION "-0ubuntu${PACKAGE_VERSION}")
 
+EXECUTE_PROCESS(COMMAND bash ${CMAKE_SOURCE_DIR}/get_package_changelog.sh
+		ERROR_VARIABLE PACKAGE_CHANGELOG)
+
 ######################################################################################
 # copy the source tree (list of directories to copy must be provided in the SOURCE_DIRS_TO_COPY variable)
 FILE(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/Debian)
@@ -264,7 +267,7 @@ FOREACH(RELEASE ${CPACK_UBUNTU_DISTRIBUTION_RELEASES})
   
   FILE(WRITE ${DEBIAN_CHANGELOG}
     "${CPACK_DEBIAN_PACKAGE_NAME} (${CPACK_PACKAGE_VERSION}${CPACK_DEBIAN_PACKAGE_REVISION}~${RELEASE}1) ${RELEASE}; urgency=medium\n\n"
-    "  ${CPACK_DEBIAN_CHANGELOG}\n\n"
+    "  ${PACKAGE_CHANGELOG}\n\n"
     " -- ${CPACK_DEBIAN_PACKAGE_MAINTAINER}  ${DATE_TIME}\n")
 
   ##############################################################################
