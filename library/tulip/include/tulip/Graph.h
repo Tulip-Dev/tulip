@@ -198,7 +198,7 @@ public:
   /**
    * Returns an iterator on all the sub-graphs of the graph.
    */
-  virtual Iterator<Graph *> * getSubGraphs() const=0;  
+  virtual Iterator<Graph *> * getSubGraphs() const=0;
   /**
    * Indicates if the graph argument is a direct sub-graph.
    */

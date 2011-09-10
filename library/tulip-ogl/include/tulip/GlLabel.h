@@ -416,7 +416,7 @@ public :
   /**
    * @brief Set if the label is billboarded
    */
-  void setBillboarded(bool billboarded){
+  void setBillboarded(bool billboarded) {
     this->billboarded=billboarded;
   }
 

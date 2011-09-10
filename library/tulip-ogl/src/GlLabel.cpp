@@ -434,7 +434,7 @@ void GlLabel::draw(float lod, Camera *camera) {
     break;
   }
 
-  if(billboarded){
+  if(billboarded) {
     float mdlM[16];
     glGetFloatv( GL_MODELVIEW_MATRIX, mdlM );
     glMatrixMode( GL_MODELVIEW );

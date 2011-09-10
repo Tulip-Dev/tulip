@@ -54,7 +54,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _labelMinSize(10),
   _labelMaxSize(30),
   _labelsDensity(100),
-  _labelsAreBillboarded(false){
+  _labelsAreBillboarded(false) {
   _fontsPath = tlp::TulipBitmapDir;
   _texturePath = "";
   _edgesMaxSizeToNodesSize = true;
