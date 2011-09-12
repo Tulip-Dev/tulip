@@ -499,12 +499,6 @@ ENDIF(LINUX)
 # When making your own installer, please be sure to set at least all the variables present in the CPackInstaller.cmake file.
 # Consult CPack documentation for additional information.
 
-# Include external plugins configuration file.
-# Note: this is done before setting group names variables. User can set the CPACK_CUSTOM_INSTALLER to true and setup its own installer in this file.
-IF(EXISTS externalplugins/ExternalPlugins.cmake)
-  INCLUDE(externalplugins/ExternalPlugins.cmake)
-ENDIF()
-
 IF(NOT CPACK_CUSTOM_INSTALLER)
   SET(LIBS_GROUP_NAME "Libraries")
   SET(HEADERS_GROUP_NAME "Headers")
@@ -524,6 +518,13 @@ ENDIF()
 
 # Defines specific software components from tulip.
 INCLUDE(CPackComponents.cmake)
+
+# Include external plugins configuration file.
+# Note: this is done before setting group names variables. User can set the CPACK_CUSTOM_INSTALLER to true and setup its own installer in this file.
+  FILE(GLOB CM_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/externalplugins ${CMAKE_CURRENT_SOURCE_DIR}/externalplugins/*/ExternalPlugins.cmake)  
+  FOREACH(CM_FILE ${CM_FILES})
+	INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/externalplugins/${CM_FILES})
+  ENDFOREACH(CM_FILE)
 
 IF(NOT CPACK_CUSTOM_INSTALLER)
   INCLUDE(CPackInstaller.cmake)
