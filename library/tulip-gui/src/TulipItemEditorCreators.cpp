@@ -5,6 +5,7 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QStylePainter>
 #include <QtGui/QApplication>
+#include "tulip/SizeEditor.h"
 
 using namespace tlp;
 
@@ -62,4 +63,19 @@ void BooleanEditorCreator::setEditorData(QWidget* editor, const QVariant &data,t
 
 QVariant BooleanEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
   return static_cast<QCheckBox*>(editor)->isChecked();
+}
+
+/*
+  SizeEditorCreator
+*/
+QWidget* SizeEditorCreator::createWidget(QWidget* parent) const {
+  return new SizeEditor(parent);
+}
+
+void SizeEditorCreator::setEditorData(QWidget* w, const QVariant& v,tlp::Graph*) {
+  static_cast<SizeEditor*>(w)->setSize(v.value<tlp::Size>());
+}
+
+QVariant SizeEditorCreator::editorData(QWidget* w,tlp::Graph*) {
+  return QVariant::fromValue<tlp::Size>(static_cast<SizeEditor*>(w)->size());
 }

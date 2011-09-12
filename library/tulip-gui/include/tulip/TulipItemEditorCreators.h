@@ -58,7 +58,21 @@ public:
   virtual QVariant editorData(QWidget*,tlp::Graph*);
 };
 
+class TLP_QT_SCOPE SizeEditorCreator: public StringDisplayEditorCreator<tlp::SizeType> {
+public:
+  QWidget* createWidget(QWidget*) const;
+  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual QVariant editorData(QWidget*,tlp::Graph*);
+};
 
+template<typename PROP>
+class TLP_QT_SCOPE PropertyEditorCreator: public tlp::TulipItemEditorCreator {
+public:
+  QWidget* createWidget(QWidget*) const;
+  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual QVariant editorData(QWidget*,tlp::Graph*);
+  virtual QString displayText(const QVariant &) const;
+};
 
 }
 

@@ -16,17 +16,14 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<float>(new LineEditEditorCreator<tlp::FloatType>);
   registerCreator<std::string>(new LineEditEditorCreator<tlp::StringType>);
   registerCreator<tlp::Color>(new ColorEditorCreator);
-  //    CHECK_TYPE(tlp::SizeType);
-
-  //    CHECK_PROPERTY(tlp::BooleanProperty);
-  //    CHECK_PROPERTY(tlp::DoubleProperty);
-  //    CHECK_PROPERTY(tlp::LayoutProperty);
-  //    CHECK_PROPERTY(tlp::StringProperty);
-  //    CHECK_PROPERTY(tlp::IntegerProperty);
-  //    CHECK_PROPERTY(tlp::SizeProperty);
-  //    CHECK_PROPERTY(tlp::ColorProperty);
-
-
+  registerCreator<tlp::Size>(new SizeEditorCreator);
+  registerCreator<tlp::BooleanProperty*>(new PropertyEditorCreator<tlp::BooleanProperty>);
+  registerCreator<tlp::DoubleProperty*>(new PropertyEditorCreator<tlp::DoubleProperty>);
+  registerCreator<tlp::LayoutProperty*>(new PropertyEditorCreator<tlp::LayoutProperty>);
+  registerCreator<tlp::StringProperty*>(new PropertyEditorCreator<tlp::StringProperty>);
+  registerCreator<tlp::IntegerProperty*>(new PropertyEditorCreator<tlp::IntegerProperty>);
+  registerCreator<tlp::SizeProperty*>(new PropertyEditorCreator<tlp::SizeProperty>);
+  registerCreator<tlp::ColorProperty*>(new PropertyEditorCreator<tlp::ColorProperty>);
 }
 
 TulipItemDelegate::~TulipItemDelegate() {

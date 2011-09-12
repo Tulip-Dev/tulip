@@ -1,4 +1,7 @@
 #include <QtGui/QLineEdit>
+#include <QtGui/QComboBox>
+#include <tulip/ForEach.h>
+#include <QtCore/QSet>
 
 namespace tlp {
 
@@ -23,6 +26,78 @@ QVariant LineEditEditorCreator<T>::editorData(QWidget* editor,tlp::Graph*) {
     result.setValue<typename T::RealType>(val);
 
   return result;
+}
+
+template<typename PROPTYPE>
+QWidget* PropertyEditorCreator<PROPTYPE>::createWidget(QWidget* parent) const {
+  return new QComboBox(parent);
+}
+
+template<typename PROPTYPE>
+void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& val,tlp::Graph* g) {
+  PROPTYPE* prop = val.value<PROPTYPE*>();
+
+  QSet<QString> locals,inherited;
+  std::string name;
+  forEach(name,g->getProperties()) {
+    PropertyInterface* pi = g->getProperty(name);
+    if (dynamic_cast<PROPTYPE*>(pi) == NULL)
+      continue;
+    if (g->existLocalProperty(name))
+      locals.insert(name.c_str());
+    else
+      inherited.insert(name.c_str());
+  }
+
+  QFont f;
+  f.setBold(true);
+  QComboBox* combo = static_cast<QComboBox*>(w);
+  combo->clear();
+
+  int index=0;
+  foreach(QString s,inherited) {
+    combo->addItem(s);
+    combo->setItemData(index,f,Qt::FontRole);
+    combo->setItemData(index,QObject::trUtf8("Inherited"),Qt::ToolTipRole);
+
+    if (prop && s == prop->getName().c_str())
+      combo->setCurrentIndex(index);
+
+    index++;
+  }
+
+  foreach(QString s,locals) {
+    combo->addItem(s);
+    combo->setItemData(index,QObject::trUtf8("Local"),Qt::ToolTipRole);
+
+    if (prop && s == prop->getName().c_str())
+      combo->setCurrentIndex(index);
+
+    index++;
+  }
+
+  if (!prop)
+    combo->setCurrentIndex(0);
+}
+
+template<typename PROPTYPE>
+QVariant PropertyEditorCreator<PROPTYPE>::editorData(QWidget* w,tlp::Graph* g) {
+  QComboBox* combo = static_cast<QComboBox*>(w);
+  std::string propName = combo->currentText().toStdString();
+  PROPTYPE *prop = NULL;
+
+  if (g->existProperty(propName))
+    prop = g->getProperty<PROPTYPE>(propName);
+
+  return QVariant::fromValue<PROPTYPE*>(prop);
+}
+
+template<typename PROPTYPE>
+QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant& v) const {
+  PROPTYPE *prop = v.value<PROPTYPE*>();
+  if (prop==NULL)
+    return "";
+  return prop->getName().c_str();
 }
 
 }
