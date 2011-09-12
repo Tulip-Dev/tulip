@@ -78,6 +78,7 @@ SET(SRCS
   TulipParallelAnimationGroup.cpp
   ColorButton.cpp
   TulipModel.cpp
+  SizeEditor.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -97,6 +98,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/RenderingParametersDialog.ui
   ../designer/SimplePluginProgressWidget.ui
   ../designer/SimpleStringsListSelectionWidget.ui
+  ../designer/SizeEditor.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -140,6 +142,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/Animation.h
   ../include/tulip/ColorButton.h
   ../include/tulip/TulipModel.h
+  ../include/tulip/SizeEditor.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

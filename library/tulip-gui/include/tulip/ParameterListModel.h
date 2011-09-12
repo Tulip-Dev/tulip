@@ -10,10 +10,11 @@ namespace tlp {
 
 class TLP_QT_SCOPE ParameterListModel : public TulipModel {
   struct ParamInfos {
-    inline ParamInfos(bool m,const QString &n,const QString &d): mandatory(m), name(n),desc(d) {}
+    inline ParamInfos(bool m,const QString &n,const QString &d, const std::string& t): mandatory(m), name(n),desc(d), type(t) {}
     bool mandatory;
     QString name;
     QString desc;
+    std::string type;
   };
 
   struct ParamInfosSorter {

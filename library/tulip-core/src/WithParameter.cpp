@@ -29,6 +29,8 @@
 #include <tulip/StringProperty.h>
 #include <tulip/StlIterator.h>
 
+#include <QtCore/QDebug>
+
 using namespace tlp;
 using namespace std;
 
@@ -145,15 +147,19 @@ if (type.compare(typeid(T::RealType).name()) == 0)\
   insertData<T>(dataSet,name,defaultValue);
 
 #define CHECK_PROPERTY(T)\
-if (type.compare(typeid(T*).name()) == 0 && pi->getTypename().compare(typeid(T*).name()) == 0) {\
-  dataSet.set<T*>(name,(T*)pi);\
+if (type.compare(typeid(T).name()) == 0) {\
+  if (!g || defaultValue.size()==0 || !g->existProperty(defaultValue))\
+    dataSet.set<T*>(name,NULL);\
+  else\
+    dataSet.set<T*>(name,g->getProperty<T>(defaultValue));\
   continue;\
-}
+}\
 
 void ParameterList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
   string name;
   forEach(name,getParametersNames()) {
     string type = getTypeName(name);
+
     string defaultValue = getDefaultValue(name);
 
     CHECK_TYPE(tlp::BooleanType);
@@ -166,11 +172,6 @@ void ParameterList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
     CHECK_TYPE(tlp::ColorType);
     CHECK_TYPE(tlp::SizeType);
 
-    if (defaultValue.size()==0 || !g || !g->existProperty(defaultValue))
-      continue;
-
-    tlp::PropertyInterface *pi = g->getProperty(defaultValue);
-
     CHECK_PROPERTY(tlp::BooleanProperty);
     CHECK_PROPERTY(tlp::DoubleProperty);
     CHECK_PROPERTY(tlp::LayoutProperty);
@@ -178,8 +179,6 @@ void ParameterList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
     CHECK_PROPERTY(tlp::IntegerProperty);
     CHECK_PROPERTY(tlp::SizeProperty);
     CHECK_PROPERTY(tlp::ColorProperty);
-
-    dataSet.set(name,pi);
   }
 }
 

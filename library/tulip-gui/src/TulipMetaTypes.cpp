@@ -39,6 +39,8 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
 
 #define CHECK_DATATYPE(TYPE) if (type.compare(typeid(TYPE).name()) == 0) return typedVariant<TYPE>(dm);
 
+#include <QtCore/QDebug>
+
 QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm) {
   std::string type = dm->getTypeName();
 
