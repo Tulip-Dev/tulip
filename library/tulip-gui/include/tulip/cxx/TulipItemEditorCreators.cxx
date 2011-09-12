@@ -18,8 +18,10 @@ QVariant LineEditEditorCreator<T>::editorData(QWidget* editor,tlp::Graph*) {
   std::string strVal = static_cast<QLineEdit*>(editor)->text().toStdString();
   QVariant result;
   typename T::RealType val;
+
   if (T::fromString(val,strVal))
     result.setValue<typename T::RealType>(val);
+
   return result;
 }
 

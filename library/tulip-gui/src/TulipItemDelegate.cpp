@@ -101,8 +101,10 @@ void TulipItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index)
   QVariant data = index.data();
   tlp::Graph* g = index.data(TulipModel::GraphRole).value<tlp::Graph*>();
   TulipItemEditorCreator *c = creator(data.userType());
+
   if (!c)
     return;
+
   c->setEditorData(editor,data,g);
 }
 

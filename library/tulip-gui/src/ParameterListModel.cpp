@@ -21,7 +21,7 @@ bool ParameterListModel::ParamInfosSorter::operator()(ParameterListModel::ParamI
 }
 
 ParameterListModel::ParameterListModel(const tlp::ParameterList &params, tlp::Graph *graph, QObject *parent)
-: TulipModel(parent), _graph(graph) {
+  : TulipModel(parent), _graph(graph) {
   std::string name;
   forEach(name,params.getParametersNames())
   _params.push_back(ParamInfos(params.isMandatory(name),name.c_str(),params.getHelp(name).c_str()));
@@ -105,8 +105,10 @@ bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value
     ParamInfos infos = _params[index.row()];
 
     DataType *dataType = TulipMetaTypes::qVariantToDataType(value);
+
     if (dataType)
       _data.setData(infos.name.toStdString(),dataType);
+
     return (dataType != NULL);
   }
 
