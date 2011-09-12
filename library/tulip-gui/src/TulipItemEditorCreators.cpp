@@ -63,8 +63,3 @@ void BooleanEditorCreator::setEditorData(QWidget* editor, const QVariant &data,t
 QVariant BooleanEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
   return static_cast<QCheckBox*>(editor)->isChecked();
 }
-
-};
-
-
-
