@@ -267,40 +267,6 @@ ENDIF()
 ## -----------------------------------------------------------------------------------------------
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 
-
-## -----------------------------------------------------------------------------------------------
-## Enable memory checks (disable openmp)
-## -----------------------------------------------------------------------------------------------
-OPTION(CHECK_MEMORY "Overload new and delete operators to check for memory leaks (This option can't be enabled along with OpenMP debugging)" OFF)
-IF(CHECK_MEMORY)
-  SET(CHECK_MEMORY_FLAGS "-include ${CMAKE_SOURCE_DIR}/library/tulip-core/include/tulip/MemoryChecker.h")
-ENDIF(CHECK_MEMORY)
-
-## -----------------------------------------------------------------------------------------------
-## Enable debugging of OpenMP
-## -----------------------------------------------------------------------------------------------
-IF(OPENMP_FOUND AND CMAKE_DEBUG_MODE AND NOT CHECK_MEMORY)
-  SET(DEBUG_OPENMP OFF CACHE BOOL "Do you want to enable OpenMP in Debug mode ? [OFF|ON]")
-  IF(DEBUG_OPENMP)
-    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${OPENMP_CXX_FLAGS}")
-    SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OPENMP_LINKER_FLAGS}")
-    SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} ${OPENMP_LIBRARIES}")
-  ENDIF(DEBUG_OPENMP)
-ENDIF(OPENMP_FOUND AND CMAKE_DEBUG_MODE AND NOT CHECK_MEMORY)
-
-## -----------------------------------------------------------------------------------------------
-## Enable output of rendering time
-## only if OpenMP is enabled
-## -----------------------------------------------------------------------------------------------
-IF(OPENMP_FOUND AND ((NOT CMAKE_DEBUG_MODE) OR DEBUG_OPENMP))
-  SET(ENABLE_RENDERING_TIME_DISPLAY OFF CACHE BOOL "Do you want to enable the rendering time display ? [OFF|ON]")
-ENDIF(OPENMP_FOUND AND ((NOT CMAKE_DEBUG_MODE) OR DEBUG_OPENMP))
-
-## -----------------------------------------------------------------------------------------------
-## Builds the unit tests
-## -----------------------------------------------------------------------------------------------
-SET(BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
-
 ## -----------------------------------------------------------------------------------------------
 ## Check 64 bits
 ## -----------------------------------------------------------------------------------------------
@@ -334,22 +300,22 @@ ENDIF(LINUX)
 IF(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DQT_ASSISTANT='\"assistant\"'")
    IF(MSVC)
-	  #tells VS to use multiple threads to compile
+    #tells VS to use multiple threads to compile
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
-	  #makes VS define M_PI
+    #makes VS define M_PI
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_USE_MATH_DEFINES")
-	  #prevents VS to define min and max macros (name clash with std::min and std::max)
-	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOMINMAX")
+    #prevents VS to define min and max macros (name clash with std::min and std::max)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOMINMAX")
 
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
     SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
-	SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBCMTD")
+  SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBCMTD")
     SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /MACHINE:X86")
 
     #allows for link time optimization
     #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
-	  #link time optimization
-	  #SET(CMAKE_SHARED_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /LTCG")
+    #link time optimization
+    #SET(CMAKE_SHARED_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /LTCG")
    ENDIF()
 ENDIF(WIN32)
 IF(APPLE)
@@ -358,6 +324,41 @@ ENDIF(APPLE)
 IF(LINUX)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_ASSISTANT='\"assistant\"'")
 ENDIF(LINUX)
+
+## -----------------------------------------------------------------------------------------------
+## Enable memory checks (disable openmp)
+## -----------------------------------------------------------------------------------------------
+IF(LINUX)
+  OPTION(CHECK_MEMORY "Overload new and delete operators to check for memory leaks (This option can't be enabled along with OpenMP debugging)" OFF)
+  IF(CHECK_MEMORY)
+    SET(CHECK_MEMORY_FLAGS "-include ${CMAKE_SOURCE_DIR}/library/tulip-core/include/tulip/MemoryChecker.h")
+  ENDIF(CHECK_MEMORY)
+ENDIF(LINUX)
+
+## -----------------------------------------------------------------------------------------------
+## Enable debugging of OpenMP
+## -----------------------------------------------------------------------------------------------
+IF(OPENMP_FOUND AND CMAKE_DEBUG_MODE AND NOT CHECK_MEMORY)
+  SET(DEBUG_OPENMP OFF CACHE BOOL "Do you want to enable OpenMP in Debug mode ? [OFF|ON]")
+  IF(DEBUG_OPENMP)
+    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${OPENMP_CXX_FLAGS}")
+    SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OPENMP_LINKER_FLAGS}")
+    SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} ${OPENMP_LIBRARIES}")
+  ENDIF(DEBUG_OPENMP)
+ENDIF(OPENMP_FOUND AND CMAKE_DEBUG_MODE AND NOT CHECK_MEMORY)
+
+## -----------------------------------------------------------------------------------------------
+## Enable output of rendering time
+## only if OpenMP is enabled
+## -----------------------------------------------------------------------------------------------
+IF(OPENMP_FOUND AND ((NOT CMAKE_DEBUG_MODE) OR DEBUG_OPENMP))
+  SET(ENABLE_RENDERING_TIME_DISPLAY OFF CACHE BOOL "Do you want to enable the rendering time display ? [OFF|ON]")
+ENDIF(OPENMP_FOUND AND ((NOT CMAKE_DEBUG_MODE) OR DEBUG_OPENMP))
+
+## -----------------------------------------------------------------------------------------------
+## Builds the unit tests
+## -----------------------------------------------------------------------------------------------
+SET(BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
 
 ## -----------------------------------------------------------------------------------------------
 ## Google breakpad
