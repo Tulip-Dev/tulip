@@ -33,12 +33,15 @@
 using namespace std;
 using namespace tlp;
 
+MouseSelector::MouseSelector(Qt::MouseButton button, Qt::KeyboardModifier modifier):
+  mButton(button), kModifier(modifier), x(0),y(0),w(0),h(0),
+  started(false),graph(0), _mode(EdgesAndNodes) {
+}
 //==================================================================
 MouseSelector::MouseSelector(Qt::MouseButton button,
 			     Qt::KeyboardModifier modifier, SelectionMode mode):
-  _mode(mode),
   mButton(button), kModifier(modifier), x(0),y(0),w(0),h(0),
-  started(false),graph(0) {
+  started(false),graph(0), _mode(mode) {
 }
 //==================================================================
 bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
