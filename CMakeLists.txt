@@ -267,17 +267,26 @@ ENDIF()
 ## -----------------------------------------------------------------------------------------------
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 
+
+## -----------------------------------------------------------------------------------------------
+## Enable memory checks (disable openmp)
+## -----------------------------------------------------------------------------------------------
+OPTION(CHECK_MEMORY "Overload new and delete operators to check for memory leaks (This option can't be enabled along with OpenMP debugging)" OFF)
+IF(CHECK_MEMORY)
+
+ENDIF(CHECK_MEMORY)
+
 ## -----------------------------------------------------------------------------------------------
 ## Enable debugging of OpenMP
 ## -----------------------------------------------------------------------------------------------
-IF(OPENMP_FOUND AND CMAKE_DEBUG_MODE)
+IF(OPENMP_FOUND AND CMAKE_DEBUG_MODE AND NOT CHECK_MEMORY)
   SET(DEBUG_OPENMP OFF CACHE BOOL "Do you want to enable OpenMP in Debug mode ? [OFF|ON]")
   IF(DEBUG_OPENMP)
     SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${OPENMP_CXX_FLAGS}")
     SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OPENMP_LINKER_FLAGS}")
     SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} ${OPENMP_LIBRARIES}")
   ENDIF(DEBUG_OPENMP)
-ENDIF(OPENMP_FOUND AND CMAKE_DEBUG_MODE)
+ENDIF(OPENMP_FOUND AND CMAKE_DEBUG_MODE AND NOT CHECK_MEMORY)
 
 ## -----------------------------------------------------------------------------------------------
 ## Enable output of rendering time
@@ -337,7 +346,7 @@ IF(WIN32)
 	SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBCMTD")
     SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /MACHINE:X86")
 
-    #allows for link time optimization²
+    #allows for link time optimization
     #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
 	  #link time optimization
 	  #SET(CMAKE_SHARED_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /LTCG")
