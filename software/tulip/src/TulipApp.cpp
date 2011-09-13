@@ -693,14 +693,14 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       }
 
       // Hack after we have changed the name of the MainController
-      if(controllerName=="MainController" || controllerName.empty())
+      if(controllerName=="MainController")
         controllerName="Tulip Classic";
 
       if(controllersName.size()==1) {
         // if we have only one controller : auto load it
 
         // If controller doesn't exist : open a popup
-        if(!ControllerPluginsManager::getInst().controllerExists(controllerName)) {
+        if(!controllerName.empty() && !ControllerPluginsManager::getInst().controllerExists(controllerName)){
           QMessageBox::critical(this,"Error",QString("The \"")+controllerName.c_str()+"\" perspective associated to the file\n"
                                 "you are trying to load in currently not\n"+
                                 "installed in your copy of Tulip.\n"+
