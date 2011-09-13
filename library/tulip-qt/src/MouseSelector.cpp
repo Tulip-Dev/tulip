@@ -35,7 +35,8 @@ using namespace tlp;
 
 //==================================================================
 MouseSelector::MouseSelector(Qt::MouseButton button,
-                             Qt::KeyboardModifier modifier):
+			     Qt::KeyboardModifier modifier, SelectionMode mode):
+  _mode(mode),
   mButton(button), kModifier(modifier), x(0),y(0),w(0),h(0),
   started(false),graph(0) {
 }
@@ -187,31 +188,29 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         if (result) {
           switch(type) {
           case NODE:
-            result = selection->getNodeValue(tmpNode);
-
-            if (revertSelection || boolVal != result) {
-              if (needPush) {
-                graph->push();
-                needPush = false;
-              }
-
-              selection->setNodeValue(tmpNode, !result);
-            }
-
+	    if(_mode == EdgesAndNodes || _mode == NodesOnly) {
+	      result = selection->getNodeValue(tmpNode);
+	      if (revertSelection || boolVal != result) {
+		if (needPush) {
+		  graph->push();
+		  needPush = false;
+		}
+		selection->setNodeValue(tmpNode, !result);
+	      }
+	    }
             break;
           case EDGE:
-            result = selection->getEdgeValue(tmpEdge);
-
-            if (revertSelection || boolVal != result) {
-              if (needPush) {
-                graph->push();
-                needPush = false;
-              }
-
-              selection->setEdgeValue(tmpEdge, !result);
-            }
-
-            break;
+	    if(_mode == EdgesAndNodes || _mode == EdgesOnly) {
+	      result = selection->getEdgeValue(tmpEdge);
+	      if (revertSelection || boolVal != result) {
+		if (needPush) {
+		  graph->push();
+		  needPush = false;
+		}
+		selection->setEdgeValue(tmpEdge, !result);
+	      }
+	    }
+	    break;
           }
         }
       }
@@ -233,24 +232,24 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 
         if (needPush)
           graph->push();
-
-        vector<node>::const_iterator it;
-
-        for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
-          selection->setNodeValue(*it,
-                                  revertSelection ?
-                                  !selection->getNodeValue(*it)
-                                  : boolVal);
-        }
-
-        vector<edge>::const_iterator ite;
-
-        for (ite=tmpSetEdge.begin(); ite!=tmpSetEdge.end(); ++ite) {
-          selection->setEdgeValue(*ite,
-                                  revertSelection ?
-                                  !selection->getEdgeValue(*ite)
-                                  : boolVal);
-        }
+	if(_mode == EdgesAndNodes || _mode == NodesOnly) {
+	  vector<node>::const_iterator it;
+	  for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
+	    selection->setNodeValue(*it,
+		revertSelection ?
+		    !selection->getNodeValue(*it)
+		    : boolVal);
+	  }
+	}
+	if(_mode == EdgesAndNodes || _mode == EdgesOnly) {
+	  vector<edge>::const_iterator ite;
+	  for (ite=tmpSetEdge.begin(); ite!=tmpSetEdge.end(); ++ite) {
+	    selection->setEdgeValue(*ite,
+		revertSelection ?
+		    !selection->getEdgeValue(*ite)
+		    : boolVal);
+	  }
+	}
       }
 
       started = false;

@@ -183,7 +183,7 @@ public:
 }
 
 #define INTERACTORPLUGINFACTORY(T,C,N,A,D,I,R,G)     \
-class C##T##Factory:public T##Factory  \
+class C##T##Factory:public tlp::T##Factory	 \
 {                                                \
 public:                                          \
   C##T##Factory(){         \
@@ -197,11 +197,11 @@ public:                                          \
   std::string getInfo() const {return std::string(I);}   \
   std::string getRelease() const {return std::string(R);}\
   std::string getTulipRelease() const {return std::string(TULIP_RELEASE);} \
-  T * createPluginObject(tlp::InteractorContext *)         \
-  {            \
-    C *tmp = new C();        \
-    return ((T *) tmp);      \
-  }            \
+  tlp::T * createPluginObject(tlp::InteractorContext *)		     \
+  {						 \
+    C *tmp = new C();				 \
+    return ((tlp::T *) tmp);			 \
+  }						 \
 };                                               \
 extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
