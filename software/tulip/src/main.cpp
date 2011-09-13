@@ -165,5 +165,10 @@ int main(int argc, char **argv) {
   qWarning() << "Terminating D-Bus at PID: " << dbusPid;
   kill(dbusPid,SIGKILL);
 #endif
+
+#ifdef MEMORYCHECKER_ON
+  memory_checker_print_report();
+#endif // MEMORYCHECKER_ON
+
   return result;
 }
