@@ -626,7 +626,7 @@ Returns the ith predecessor of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:param i: the position in the predecessor nodes list
+:param i: the position in the predecessor nodes list (warning : first index is 1 not 0)
 :type i: integer
 :throws: an exception if the node does not belong to the graph or if the requested index is lesser than the number of predecessor nodes
 %End	
@@ -634,7 +634,10 @@ Returns the ith predecessor of a node.
 	 
 %MethodCode
 	if (sipCpp->isElement(*a0)) {
-		if (a1 < sipCpp->indeg(*a0)) {
+		if (a1 == 0) {
+			PyErr_SetString(PyExc_Exception, "Error : first index for tlp.Graph.getInNode is 1 not 0");
+			sipIsErr = -1;
+		} else if (a1 <= sipCpp->indeg(*a0)) {
 			sipRes = new tlp::node(sipCpp->getInNode(*a0, a1));
 		} else {
 			std::ostringstream oss;
@@ -681,17 +684,30 @@ Returns the ith successor of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:param i: the position in the successor nodes list
+:param i: the position in the successor nodes list (warning : first index is 1 not 0)
 :type i: integer
 :throws: an exception if the node does not belong to the graph or if the requested index is lesser than the number of successor nodes
 %End	
 	
 %MethodCode
 	if (sipCpp->isElement(*a0)) {
-		sipRes = new tlp::node(sipCpp->getOutNode(*a0, a1));
+		if (a1 == 0) {
+			PyErr_SetString(PyExc_Exception, "Error : first index for tlp.Graph.getOutNode is 1 not 0");
+			sipIsErr = -1;
+		}else if (a1 <= sipCpp->outdeg(*a0)) {
+			sipRes = new tlp::node(sipCpp->getOutNode(*a0, a1));
+		} else {
+			std::ostringstream oss;
+			std::string graphName;
+			sipCpp->getAttribute("name", graphName);
+			oss << "node with id " << a0->id << " belonging to graph \"" << graphName << "\" (id " << sipCpp->getId() << ") has " << sipCpp->outdeg(*a0) << " successor nodes and the requested index is " << a1; 
+			PyErr_SetString(PyExc_Exception, oss.str().c_str());
+			sipIsErr = -1;
+		}
 	} else {
 		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
 	}
+	
 %End
 
 //===========================================================================================
