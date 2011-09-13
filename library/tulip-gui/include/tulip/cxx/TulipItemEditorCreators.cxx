@@ -41,8 +41,10 @@ void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& 
   std::string name;
   forEach(name,g->getProperties()) {
     PropertyInterface* pi = g->getProperty(name);
+
     if (dynamic_cast<PROPTYPE*>(pi) == NULL)
       continue;
+
     if (g->existLocalProperty(name))
       locals.insert(name.c_str());
     else
@@ -95,8 +97,10 @@ QVariant PropertyEditorCreator<PROPTYPE>::editorData(QWidget* w,tlp::Graph* g) {
 template<typename PROPTYPE>
 QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant& v) const {
   PROPTYPE *prop = v.value<PROPTYPE*>();
+
   if (prop==NULL)
     return "";
+
   return prop->getName().c_str();
 }
 
