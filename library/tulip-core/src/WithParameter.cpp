@@ -154,7 +154,7 @@ if (type.compare(typeid(T).name()) == 0) {\
     dataSet.set<T*>(name,g->getProperty<T>(defaultValue));\
   continue;\
 }\
-
+ 
 void ParameterList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
   string name;
   forEach(name,getParametersNames()) {
