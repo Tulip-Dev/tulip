@@ -273,7 +273,7 @@ SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 ## -----------------------------------------------------------------------------------------------
 OPTION(CHECK_MEMORY "Overload new and delete operators to check for memory leaks (This option can't be enabled along with OpenMP debugging)" OFF)
 IF(CHECK_MEMORY)
-
+  SET(CHECK_MEMORY_FLAGS "-include ${CMAKE_SOURCE_DIR}/library/tulip-core/include/tulip/MemoryChecker.h")
 ENDIF(CHECK_MEMORY)
 
 ## -----------------------------------------------------------------------------------------------

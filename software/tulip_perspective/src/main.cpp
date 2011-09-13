@@ -191,5 +191,8 @@ int main(int argc,char **argv) {
 
   int result = tulip_perspective.exec();
   delete perspective;
+#ifdef MEMORYCHECKER_ON
+  memory_checker_print_report();
+#endif // MEMORYCHECKER_ON
   return result;
 }

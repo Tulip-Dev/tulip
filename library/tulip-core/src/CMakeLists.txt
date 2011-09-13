@@ -62,6 +62,10 @@ TriconnectedTest.cpp
 vectorgraph.cpp
 WithParameter.cpp)
 
+IF(CHECK_MEMORY)
+SET(tulip_LIB_SRCS ${tulip_LIB_SRCS} MemoryChecker.cpp)
+ENDIF(CHECK_MEMORY)
+
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_TULIP_LIB_DIR=\"\\\"${CMAKE_INSTALL_PREFIX}/lib/\\\"\"")
 INCLUDE_DIRECTORIES(../include/ ${TulipCoreBuildInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR} ${QT_INCLUDE_DIR})
 
