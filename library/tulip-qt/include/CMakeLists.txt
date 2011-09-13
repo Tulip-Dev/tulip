@@ -1,6 +1,7 @@
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tulip)
 
 INSTALL(FILES
+	tulip/ThreadedComputeProperty.h
 	tulip/TulipTableWidget.h 
 	tulip/GlMainWidget.h 
 	tulip/TabWidget.h 
