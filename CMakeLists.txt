@@ -337,7 +337,7 @@ IF(WIN32)
 	SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBCMTD")
     SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /MACHINE:X86")
 
-    #allows for link time optimization²
+    #allows for link time optimizationÂ²
     #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
 	  #link time optimization
 	  #SET(CMAKE_SHARED_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /LTCG")
