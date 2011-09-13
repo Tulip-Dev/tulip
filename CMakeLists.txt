@@ -433,7 +433,7 @@ INSTALL(FILES FindTULIP.cmake FindGLEW.cmake FindXML2.cmake TulipUseFile.cmake D
 ## Script for linux Tulip bundle building
 IF(LINUX)
   CONFIGURE_FILE("make_tulip_linux_bundle.sh.in" "make_tulip_linux_bundle.sh" @ONLY)
-  CONFIGURE_FILE("enable_breakpad_linux.sh.in" "enable_breakpad_linux.sh" @ONLY)
+  CONFIGURE_FILE("strip_debug_linux.sh.in" "strip_debug_linux.sh" @ONLY)
 ENDIF(LINUX)
 
 ## -----------------------------------------------------------------------------------------------
@@ -459,6 +459,7 @@ INCLUDE(CPackComponents.cmake)
 INCLUDE(CPackInstaller.cmake)
 
 INCLUDE(CPack)
+
 
 IF(APPLE)
 
