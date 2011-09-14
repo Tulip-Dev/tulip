@@ -296,6 +296,26 @@ DECL_STORED_STRUCT(tlp::ColorVectorType::RealType)
 
 extern TLP_SCOPE void initTypeSerializers();
 #ifdef _MSC_VER
+template class SerializableType<double>;
+template class SerializableType<float>;
+template class SerializableType<int>;
+template class SerializableType<long>;
+template class SerializableType<unsigned int>;
+template class SerializableType<tlp::Coord>;
+template class SerializableType<tlp::Size>;
+template class SerializableVectorType<double,false>;
+template class SerializableVectorType<int,false>;
+template class SerializableVectorType<tlp::Coord,false>;
+template class SerializableVectorType<tlp::Size,true>;
+template class SerializableVectorType<tlp::Color,true>;
+template class SerializableVectorType<tlp::Coord,true>;
+template class TypeInterface<tlp::Graph*>;
+template class TypeInterface<std::set<edge> >;
+template class TypeInterface<bool>;
+template class TypeInterface<std::vector<bool> >;
+template class TypeInterface<std::vector<std::string> >;
+template class TypeInterface<tlp::Color>;
+
 template class AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>;
 template class AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>;
 template class AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>;
