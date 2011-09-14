@@ -25,11 +25,8 @@
 #endif
 
 class StackWalker {
-
 public:
-
   virtual ~StackWalker() {}
-
   virtual void printCallStack(std::ostream &os, unsigned int maxDepth = 50) = 0;
 
   void printCallStackToStdErr(unsigned int maxDepth = 50) {
@@ -71,26 +68,16 @@ public:
 #include <map>
 
 class StackWalkerGCC : public StackWalker {
-
 public:
-
   StackWalkerGCC();
-
   ~StackWalkerGCC();
-
   void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
 
-  void setCallerAddress(void *callerAddress) {
-    this->callerAddress = callerAddress;
-  }
-
 private:
-
   void *callerAddress;
 #ifdef HAVE_BFD
   std::map<std::string, BfdWrapper *> bfdMap;
 #endif
-
 };
 
 #elif defined(__MINGW32__)
@@ -98,9 +85,7 @@ private:
 #include <map>
 
 class StackWalkerMinGW : public StackWalker {
-
 public:
-
   StackWalkerMinGW();
   ~StackWalkerMinGW();
 
@@ -111,7 +96,6 @@ public:
   }
 
 private:
-
   LPCONTEXT context;
 #ifdef HAVE_BFD
   std::map<std::string, BfdWrapper *> bfdMap;
@@ -121,22 +105,17 @@ private:
 #elif defined(_MSC_VER)
 
 class StackWalkerMSVC : public StackWalker {
-
 public:
-
   StackWalkerMSVC();
   ~StackWalkerMSVC();
 
   void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
-
   void setContext(CONTEXT *context) {
     this->context = context;
   }
 
 private :
-
   CONTEXT *context;
-
 };
 
 #endif

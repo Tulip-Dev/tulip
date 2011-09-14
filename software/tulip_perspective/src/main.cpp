@@ -191,6 +191,9 @@ int main(int argc,char **argv) {
 
   delete progress;
 
+  QMainWindow *test = NULL;
+  test->show();
+
   int result = tulip_perspective.exec();
   delete perspective;
 #ifdef MEMORYCHECKER_ON
