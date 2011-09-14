@@ -364,7 +364,7 @@ SET(BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
 ## Google breakpad
 ## -----------------------------------------------------------------------------------------------
 IF(WIN32 OR LINUX)
-  OPTION(USE_CRASH_HANDLING "Activate the generation of error reports through the use of Google breakpad. A stack trace will also be generated each time Tulip crashes. " OFF)
+  OPTION(USE_CRASH_HANDLING "Enable sending error reports when a perspective crashes" OFF)
 ENDIF()
 
 ## -----------------------------------------------------------------------------------------------
