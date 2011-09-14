@@ -1,10 +1,12 @@
 SET(SRCS
   src/main.cpp
   src/TulipAgentCommunicator.cpp
+  src/TulipMainWindow.cpp
 )
 
 QT4_WRAP_CPP(MOC_SRCS
   include/TulipAgentCommunicator.h
+  include/TulipMainWindow.h
 )
 
 IF(USE_CRASH_HANDLING)

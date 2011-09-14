@@ -44,6 +44,16 @@ public:
       std::cerr << " ======================== " << std::endl << std::endl;
     }
   }
+
+  inline void clear() {
+    int entries = _stacks.size();
+    foreach(void* ptr,_stacks.keys()) {
+      StackInfo infos = _stacks[ptr];
+      delete infos._strings;
+    }
+    _stacks.clear();
+    std::cerr << "Removed " << entries << " into the memory checker" << std::endl;
+  }
 };
 
 static MemoryChecker* memory_checker = NULL;
@@ -69,5 +79,11 @@ void memchecker_remove_stack(void* ptr) {
 void memory_checker_print_report() {
   block_inserts = true;
   memory_checker->print();
+  block_inserts = false;
+}
+
+void memory_checker_clear_report() {
+  block_inserts = true;
+  memory_checker->clear();
   block_inserts = false;
 }
