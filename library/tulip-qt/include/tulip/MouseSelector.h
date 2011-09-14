@@ -43,8 +43,10 @@ public:
   ~MouseSelector() {}
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() { return new MouseSelector(mButton, kModifier, _mode); }
-  
+  InteractorComponent *clone() {
+    return new MouseSelector(mButton, kModifier, _mode);
+  }
+
   //all of this stands here to keep binary compatibility. here should be only one constructor on the next minor version bump.
   enum SelectionMode {
     EdgesAndNodes = 0,
