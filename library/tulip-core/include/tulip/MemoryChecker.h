@@ -10,6 +10,7 @@
 void memchecker_insert_stack(void* ptr,char** strings, size_t size);
 void memchecker_remove_stack(void* ptr);
 void memory_checker_print_report();
+void memory_checker_clear_report();
 
 inline void* operator new(size_t size) throw(std::bad_alloc) {
   void *ptr = (void *)malloc(size);

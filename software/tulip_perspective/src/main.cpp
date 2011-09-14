@@ -17,6 +17,8 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 
+#include "TulipMainWindow.h"
+
 #ifdef USE_CRASH_HANDLING
 #include <CrashHandling.h>
 #endif
@@ -147,7 +149,7 @@ int main(int argc,char **argv) {
   // Initialize main window.
   progress->progress(100,100);
   progress->setComment("Setting up GUI (this can take some time)");
-  QMainWindow *mainWindow = new QMainWindow();
+  TulipPerspectiveMainWindow *mainWindow = new TulipPerspectiveMainWindow();
   mainWindow->setVisible(false);
   context.mainWindow = mainWindow;
 
