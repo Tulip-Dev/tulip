@@ -74,15 +74,13 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError e
   QRegExp plateform("^" + QString(TLP_PLATEFORM_HEADER) + " (.*)\n"),
           arch("^" + QString(TLP_ARCH_HEADER) + " (.*)\n"),
           compiler("^" + QString(TLP_COMPILER_HEADER) + " (.*)\n"),
-          version("^" + QString(TLP_VERSION_HEADER) + " (.*)\n"),
-          dump("^" + QString(TLP_DUMP_HEADER) + " (.*)\n");
+          version("^" + QString(TLP_VERSION_HEADER) + " (.*)\n");
 
   QMap<QRegExp *,QString> envInfos;
   envInfos[&plateform] = "";
   envInfos[&arch] = "";
   envInfos[&compiler] = "";
   envInfos[&version] = "";
-  envInfos[&dump] = "";
 
   QString stackTrace;
   bool grabStackTrace = false;
@@ -113,7 +111,7 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError e
     }
   }
 
-  crashHandler.setEnvData(envInfos[&plateform],envInfos[&arch],envInfos[&compiler],envInfos[&version],envInfos[&dump], stackTrace);
+  crashHandler.setEnvData(envInfos[&plateform],envInfos[&arch],envInfos[&compiler],envInfos[&version],stackTrace);
 #endif
   crashHandler.setPerspectiveData(infos);
   crashHandler.exec();
@@ -130,10 +128,8 @@ void TulipPerspectiveProcessHandler::enableCrashHandling(qlonglong perspectivePi
   QProcess *p;
   foreach(p,_processInfos.keys()) {
 #ifdef _WIN32
-
     if (p->pid()->dwProcessId == perspectivePid) {
 #else
-
     if (p->pid() == perspectivePid) {
 #endif
       PerspectiveProcessInfos infos = _processInfos[p];

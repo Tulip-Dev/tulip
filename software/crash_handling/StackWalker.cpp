@@ -35,22 +35,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   if (messages == NULL)
     return;
 
-  std::ostringstream oss;
-  oss << callerAddress;
-  std::string callerAddressStr = oss.str();
-
   int i = 1;
-
-  while (i < size) {
-    std::string msg(messages[i]);
-
-    if (msg.find(callerAddressStr) != std::string::npos) {
-      break;
-    }
-
-    ++i;
-  }
-
   int offset = i;
 
   for (; i < size ; ++i) {

@@ -11,90 +11,53 @@
 #include <tulip/SystemDefinition.h>
 #include <tulip/TulipRelease.h>
 
+/*
+  Linux-specific handling
+  */
 #if defined(__linux)
+
 #include <iostream>
 #include <signal.h>
-#include <cstring>
-#include <client/linux/handler/exception_handler.h>
 
-typedef struct _sig_ucontext {
-  unsigned long     uc_flags;
-  struct ucontext   *uc_link;
-  stack_t           uc_stack;
-  struct sigcontext uc_mcontext;
-  sigset_t          uc_sigmask;
-} sig_ucontext_t;
-
-
-typedef struct _crash_infos {
-  int signum;
-  void *fault_addr;
-  void * caller_address;
-} crash_infos;
-
-static bool handlerCallback(const void* crash_context,
-                            size_t,
-                            void* context) {
-
-  const google_breakpad::ExceptionHandler::CrashContext *crashContext = reinterpret_cast<const google_breakpad::ExceptionHandler::CrashContext*>(crash_context);
-  const sig_ucontext_t * uc = reinterpret_cast<const sig_ucontext_t *>(&(crashContext->context));
-  const siginfo_t *siginfo = reinterpret_cast<const siginfo_t *>(&(crashContext->siginfo));
-
-  crash_infos *ci = reinterpret_cast<crash_infos*>(context);
-  ci->signum = siginfo->si_signo;
-  ci->fault_addr = siginfo->si_addr;
-
-#ifdef I64
-  ci->caller_address = reinterpret_cast<void *>(uc->uc_mcontext.rip); // x86_64 specific;
-#else
-  ci->caller_address = reinterpret_cast<void *>(uc->uc_mcontext.eip); // x86 specific;
-#endif
-
-  return false;
-}
-
-static bool dumpCallback(const char* dump_path, const char* minidump_id, void* context, bool succeeded) {
-  std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
-            << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
-            << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-            << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl
-            << TLP_DUMP_HEADER << " " << dump_path << "/" << minidump_id << ".dmp" << std::endl;
-
-  crash_infos *ci = reinterpret_cast<crash_infos*>(context);
-
-  std::cerr << "signal " << ci->signum
-            << " (" << strsignal(ci->signum) << "), address is "
-            << ci->fault_addr << " from " << ci->caller_address
-            << std::endl;
-
+static void dumpStack(int signum) {
   StackWalkerGCC sw;
-  sw.setCallerAddress(ci->caller_address);
+  std::cerr << "Caught signal " << (int)signum << std::endl;
+
+  std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
+  << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
+  << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
+  << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+
   std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
   sw.printCallStackToStdErr();
   std::cerr << TLP_STACK_END_HEADER << std::endl;
   std::cerr << std::flush;
-  return succeeded;
+  signal(signum, SIG_DFL);
 }
 
 void start_crash_handler() {
-  google_breakpad::ExceptionHandler *exceptionHandler = new google_breakpad::ExceptionHandler("/tmp", NULL, dumpCallback, new crash_infos(), true);
-  exceptionHandler->set_crash_handler(handlerCallback);
+  signal(SIGSEGV,dumpStack);
+  signal(SIGABRT,dumpStack);
+  signal(SIGFPE,dumpStack);
+  signal(SIGILL,dumpStack);
+  signal(SIGBUS,dumpStack);
+  signal(-1,dumpStack);
 }
 
+/*
+  MinGW-specific handling
+  */
 #elif defined(__MINGW32__)
-
-
 
 static LONG WINAPI
 exception_filter(LPEXCEPTION_POINTERS info) {
-
-  std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
-            << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
-            << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-            << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
-
   StackWalkerMinGW sw;
   sw.setContext(info->ContextRecord);
+
+  std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
+  << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
+  << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
+  << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
   std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
   sw.printCallStackToStdErr();
   std::cerr << TLP_STACK_END_HEADER << std::endl;
