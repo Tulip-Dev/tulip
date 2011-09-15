@@ -4,9 +4,7 @@
 #include <QtGui/QDialog>
 #include "TulipPerspectiveProcessHandler.h"
 
-#ifdef USE_CRASH_HANDLING
 class FormPost;
-#endif
 
 namespace Ui {
 class TulipPerspectiveCrashHandlerData;
@@ -18,11 +16,7 @@ class TulipPerspectiveCrashHandler : public QDialog {
   Ui::TulipPerspectiveCrashHandlerData *_ui;
   PerspectiveProcessInfos _perspectiveInfos;
   bool _isDetailedView;
-
-#ifdef USE_CRASH_HANDLING
   FormPost *_poster;
-#endif
-
   void adjustHeight();
 
 public:
@@ -38,9 +32,7 @@ public slots:
   void toggleDetailedView();
   void sendReport();
   void saveData();
-#ifdef USE_CRASH_HANDLING
   void setEnvData(const QString &plateform, const QString &arch, const QString &compiler, const QString &version, const QString &stackTrace);
-#endif
   void setPerspectiveData(PerspectiveProcessInfos infos);
 };
 

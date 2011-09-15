@@ -7,9 +7,7 @@
 #include <QtGui/QPainter>
 #include <tulip/TulipProject.h>
 
-#ifdef USE_CRASH_HANDLING
 #include <CrashHandling.h>
-#endif
 
 #include "TulipPerspectiveCrashHandler.h"
 
@@ -70,7 +68,6 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError e
 
   TulipPerspectiveCrashHandler crashHandler;
 
-#ifdef USE_CRASH_HANDLING
   QRegExp plateform("^" + QString(TLP_PLATEFORM_HEADER) + " (.*)\n"),
           arch("^" + QString(TLP_ARCH_HEADER) + " (.*)\n"),
           compiler("^" + QString(TLP_COMPILER_HEADER) + " (.*)\n"),
@@ -112,7 +109,6 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError e
   }
 
   crashHandler.setEnvData(envInfos[&plateform],envInfos[&arch],envInfos[&compiler],envInfos[&version],stackTrace);
-#endif
   crashHandler.setPerspectiveData(infos);
   crashHandler.exec();
 
