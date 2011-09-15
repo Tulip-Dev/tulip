@@ -85,7 +85,7 @@ public:
    *
    * @return void
    **/
-  static void RemovePlugins();
+  static void removePlugins();
 
   /**
    * @brief Unpacks the plugins in the specified folder to Tulip's custom folder directory.
@@ -93,7 +93,7 @@ public:
    * @param inputFolder The folder from which to unpack the plugins.
    * @return void
    **/
-  static void UnpackPlugins(const QString& inputFolder);
+  static void unpackPlugins(const QString& inputFolder);
 
   static PluginManager* getInstance();
 

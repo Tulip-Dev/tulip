@@ -162,12 +162,10 @@ void PluginsCenter::setPluginNameFilter(const QString &f) {
 
 void PluginsCenter::fetch(tlp::PluginInformations *infos) {
   infos->fetch();
-  qWarning() << "Fetch " << infos->name();
 }
 
 void PluginsCenter::remove(tlp::PluginInformations *infos) {
   infos->remove();
-  qWarning() << "remove " << infos->name();
 }
 
 void PluginsCenter::addRemoteLocation() {
