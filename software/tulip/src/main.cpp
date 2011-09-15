@@ -31,46 +31,42 @@
 #undef interface
 #endif
 
-void updatePlateform() {
-//  tlp::PluginManager::removePlugins();
-
-//  QDir stagingDirectory(tlp::getPluginStagingDirectory());
-//  if(!stagingDirectory.exists())
-//    stagingDirectory.mkpath(tlp::getPluginStagingDirectory());
-//  tlp::PluginManager::unpackPlugins(tlp::getPluginStagingDirectory());
+void updatePlateform(char* tulipPath) {
+  tlp::PluginManager::removePlugins();
+  tlp::PluginManager::unpackPlugins(tlp::getPluginStagingDirectory());
 
   //update the updater
-//  const QString updaterLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/updater";
+  const QString updaterLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/updater";
 
-//  //run the updater
-//  QDir upgradeDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/update");
+  //run the updater
+  QDir upgradeDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/update");
 
-//  if(!upgradeDir.entryList(QDir::NoDotAndDotDot).empty()) {
-//    //we unpack the archives in-place, the contents will be copied later by a script
-//    tlp::PluginProgress* progress = new tlp::SimplePluginProgress();
-//    QStringList filters;
-//    filters << "*.zip";
-//    foreach(const QFileInfo& pluginArchive, upgradeDir.entryInfoList(filters)) {
-//      QuaZIPFacade::unzip(tlp::getPluginLocalInstallationDir(), pluginArchive.absoluteFilePath(), progress);
+  if(!upgradeDir.entryList(QDir::NoDotAndDotDot).empty()) {
+    //we unpack the archives in-place, the contents will be copied later by a script
+    tlp::PluginProgress* progress = new tlp::SimplePluginProgress();
+    QStringList filters;
+    filters << "*.zip";
+    foreach(const QFileInfo& pluginArchive, upgradeDir.entryInfoList(filters)) {
+      QuaZIPFacade::unzip(tlp::getPluginLocalInstallationDir(), pluginArchive.absoluteFilePath(), progress);
 
-//      if(!progress->getError().empty()) {
-//        //TODO proper error reporting
-//        std::cout << progress->getError() << std::endl;
-//      }
-//      else {
-//        QFile::remove(pluginArchive.absoluteFilePath());
-//      }
-//    }
+      if(!progress->getError().empty()) {
+        //TODO proper error reporting
+        std::cout << progress->getError() << std::endl;
+      }
+      else {
+        QFile::remove(pluginArchive.absoluteFilePath());
+      }
+    }
 
-//    //launch the updater and quit, the updater will re-launch Tulip
-//    QFileInfo tulipExecutable(argv[0]);
-//#ifdef WIN32
-//    int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.bat");
-//#else
-//    int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.sh");
-//#endif
-//    exit(0);
-//  }
+    //launch the updater and quit, the updater will re-launch Tulip
+    QFileInfo tulipExecutable(tulipPath);
+#ifdef WIN32
+    int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.bat");
+#else
+    int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.sh");
+#endif
+    exit(0);
+  }
 }
 
 #if defined(__APPLE__)
@@ -113,10 +109,6 @@ void checkTulipRunning() {
   }
 }
 
-void loadPlugins() {
-
-}
-
 int main(int argc, char **argv) {
   QApplication tulip_agent(argc, argv);
   tulip_agent.setApplicationName(QObject::trUtf8("Tulip"));
@@ -126,7 +118,7 @@ int main(int argc, char **argv) {
   foreach(const QString& remoteLocation, TulipSettings::instance().remoteLocations())
     tlp::PluginManager::addRemoteLocation(remoteLocation);
 
-  updatePlateform();
+  updatePlateform(argv[0]);
 
 #if defined(__APPLE__)
   appleInit()

@@ -79,7 +79,6 @@ SET(SRCS
   ColorButton.cpp
   TulipModel.cpp
   SizeEditor.cpp
-  TulipUpdatesManager.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS

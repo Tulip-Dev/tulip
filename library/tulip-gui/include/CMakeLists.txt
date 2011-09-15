@@ -78,7 +78,6 @@ INSTALL(FILES
   tulip/TulipParallelAnimationGroup.h
   tulip/ColorButton.h
   tulip/TulipModel.h
-  tulip/TulipUpdatesManager.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
