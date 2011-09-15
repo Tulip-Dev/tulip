@@ -142,7 +142,7 @@ void PluginManager::removeRemoteLocation(const QString& location) {
   _remoteLocations.remove(location);
 }
 
-void PluginManager::RemovePlugins() {
+void PluginManager::removePlugins() {
   foreach(const QString& plugin, TulipSettings::instance().pluginsToRemove()) {
     if(QFile::remove(plugin)) {
       TulipSettings::instance().unmarkPluginForRemoval(plugin);
@@ -154,7 +154,7 @@ void PluginManager::RemovePlugins() {
   }
 }
 
-void PluginManager::UnpackPlugins(const QString& inputFolder) {
+void PluginManager::unpackPlugins(const QString& inputFolder) {
   QDir input(inputFolder);
   PluginProgress* progress = new SimplePluginProgress();
   QStringList filters;
@@ -170,4 +170,5 @@ void PluginManager::UnpackPlugins(const QString& inputFolder) {
       QFile::remove(pluginArchive.absoluteFilePath());
     }
   }
+  delete progress;
 }
