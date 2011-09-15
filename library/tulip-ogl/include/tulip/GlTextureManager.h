@@ -23,11 +23,11 @@
 
 #include <tulip/tulipconf.h>
 
-#include <cassert>
+// #include <cassert>
 #include <tulip/OpenGlConfigManager.h>
 #include <string>
 #include <set>
-#include <iostream>
+// #include <iostream>
 
 namespace tlp {
 

@@ -70,13 +70,13 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
 #endif
 
   if (file == NULL) {
-    errorMsg = "File not found : " + filename;
+    errorMsg = "File not found: " + filename;
     //cerr << __PRETTY_FUNCTION__ << ": File not found :" << filename << endl;
     return false;
   }
 
   if(!fread(&bfType, sizeof(short int), 1, file)) {
-    errorMsg = "Error reading : " + filename;
+    errorMsg = "Error reading: " + filename;
     //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
     fclose(file);
     return false;
@@ -84,7 +84,7 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
 
   /* check if file is a bitmap */
   if (bfType != 19778) {
-    errorMsg = "Not a Bitmap-File : " + filename;
+    errorMsg = "Not a Bitmap-File: " + filename;
     //cerr << __PRETTY_FUNCTION__ << ": Not a Bitmap-File: " << filename << endl;
     fclose(file);
     return false;
@@ -96,7 +96,7 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
 
   /* get the position of the actual bitmap data */
   if (!fread(&bfOffBits, sizeof(int), 1, file)) {
-    errorMsg = "Error reading : " + filename;
+    errorMsg = "Error reading: " + filename;
     //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
     fclose(file);
     return false;
@@ -106,14 +106,14 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
   fseek(file, 4, SEEK_CUR);
 
   if (!fread(&texture->width, sizeof(int), 1, file)) {
-    errorMsg = "Error reading : " + filename;
+    errorMsg = "Error reading: " + filename;
     //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
     fclose(file);
     return false;
   }
 
   if (!fread(&texture->height, sizeof(int), 1, file)) {
-    errorMsg = "Error reading : " + filename;
+    errorMsg = "Error reading: " + filename;
     //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
     fclose(file);
     return false;
@@ -121,7 +121,7 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
 
   /* get the number of planes (must be set to 1) */
   if (!fread(&biPlanes, sizeof(short int), 1, file)) {
-    errorMsg = "Error reading : " + filename;
+    errorMsg = "Error reading: " + filename;
     //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
     fclose(file);
     return false;
@@ -136,14 +136,14 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
 
   /* get the number of bits per pixel */
   if (!fread(&biBitCount, sizeof(short int), 1, file)) {
-    errorMsg = "Error reading file : " + filename;
+    errorMsg = "Error reading file: " + filename;
     //cerr << __PRETTY_FUNCTION__ << ": Error reading file: " << filename << endl;
     fclose(file);
     return false;
   }
 
   if (biBitCount != 24) {
-    errorMsg = "Error : Bits per Pixel not 24 : " + filename;
+    errorMsg = "Error: Bits per Pixel not 24: " + filename;
     //cerr << __PRETTY_FUNCTION__ << ": Bits per Pixel not 24: " << filename << endl;
     fclose(file);
     return false;
@@ -253,7 +253,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture,string &errorMs
 #endif
 
   if (file == NULL) {
-    errorMsg = "File not found : " + filename;
+    errorMsg = "File not found: " + filename;
     //cerr << __PRETTY_FUNCTION__ << ": File not found:" << filename << endl;
     return false;
   }
@@ -389,7 +389,7 @@ bool GlTextureManager::loadTexture(const string& filename) {
 
 #endif
   else {
-    errorViewer->displayError("Texture manager","Warning : don't know extension "+extension+" for file : "+filename);
+    errorViewer->displayError("Texture manager","Warning: extension "+extension+" unknown for file : "+filename);
     //cerr << "Warning: don't know extension \"" << extension << "\"" << endl;
   }
 
@@ -428,7 +428,7 @@ bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo
   unsigned int height=texti.height;
 
   if((texti.height-(texti.height/texti.width)*texti.width)!=0 && (texti.width-(texti.width/texti.height)*texti.height)!=0) {
-    errorViewer->displayError("Texture manager","Texture size is not valid\nTexture size should be of the form :\n - width=height or\n - height=N*width (for animated textures)\nfor file :"+filename);
+    errorViewer->displayError("Texture manager","Texture size is not valid\nTexture size should be of the form:\n - width=height or\n - height=N*width (for animated textures)\nfor file:"+filename);
     return false;
   }
   else {
@@ -457,7 +457,7 @@ bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo
       }
 
       if(!formatOk) {
-        errorViewer->displayError("Texture manager","Texture size is not valid\nTexture width should be a power of two\nfor file :"+filename);
+        errorViewer->displayError("Texture manager","Texture size is not valid\nTexture width should be a power of 2\nfor file:"+filename);
         return false;
       }
 
@@ -469,7 +469,7 @@ bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo
       }
 
       if(!formatOk) {
-        errorViewer->displayError("Texture manager","Texture size is not valid\nTexture height should be a power of two\nfor file :"+filename);
+        errorViewer->displayError("Texture manager","Texture size is not valid\nTexture height should be a power of 2\nfor file:"+filename);
         return false;
       }
     }
