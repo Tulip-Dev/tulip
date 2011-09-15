@@ -20,3 +20,19 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/google-breakpad/src)
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
 
 ADD_LIBRARY(crash_handling STATIC ${LIB_SRCS})
+
+IF(LINUX)
+  IF(HAVE_BFD)
+    TARGET_LINK_LIBRARIES(crash_handling bfd)
+  ENDIF(HAVE_BFD)
+
+ELSEIF(MINGW)
+  TARGET_LINK_LIBRARIES(crash_handling imagehlp)
+
+  IF(HAVE_BFD)
+    TARGET_LINK_LIBRARIES(crash_handling bfd intl iberty)
+  ENDIF(HAVE_BFD)
+
+ELSEIF(MSVC)
+  TARGET_LINK_LIBRARIES(crash_handling dbghelp)
+ENDIF(MSVC)
