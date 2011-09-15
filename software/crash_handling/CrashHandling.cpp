@@ -12,9 +12,9 @@
 #include <tulip/TulipRelease.h>
 
 /*
-  Linux-specific handling
+  Linux/MacOS-specific handling
   */
-#if defined(__linux)
+#if defined(__linux) || defined(__APPLE__)
 
 #include <iostream>
 #include <signal.h>

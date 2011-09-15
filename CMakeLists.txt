@@ -23,7 +23,10 @@ ENDIF(APPLE)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 IF(NOT MSVC) #visual studio does not recognize these options
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -pedantic -Wno-long-long")
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -Wno-long-long")
+  IF(NOT APPLE)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+  ENDIF(NOT APPLE)
 ENDIF()
 
 IF(WIN32)
@@ -359,13 +362,6 @@ ENDIF(OPENMP_FOUND AND ((NOT CMAKE_DEBUG_MODE) OR DEBUG_OPENMP))
 ## Builds the unit tests
 ## -----------------------------------------------------------------------------------------------
 SET(BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
-
-## -----------------------------------------------------------------------------------------------
-## Google breakpad
-## -----------------------------------------------------------------------------------------------
-IF(WIN32 OR LINUX)
-  OPTION(USE_CRASH_HANDLING "Enable sending error reports when a perspective crashes" OFF)
-ENDIF()
 
 ## -----------------------------------------------------------------------------------------------
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in

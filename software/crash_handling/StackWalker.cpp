@@ -9,7 +9,7 @@
 
 #include <sstream>
 
-#if defined(__linux)
+#if defined(__linux) || defined(__APPLE__)
 
 #include <execinfo.h>
 #include <cxxabi.h>
