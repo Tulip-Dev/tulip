@@ -425,7 +425,7 @@ bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo
     }
 
 
-    static bool canUseNpotTextures = glewIsSupported("GL_ARB_texture_non_power_of_two");
+    static bool canUseNpotTextures = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_texture_non_power_of_two");
 
     if (!canUseNpotTextures) {
       bool formatOk=false;

@@ -26,11 +26,6 @@
 
 using namespace std;
 
-static bool checkVboSupport() {
-  static bool vboOk = glewIsSupported("GL_ARB_vertex_buffer_object");
-  return vboOk;
-}
-
 namespace tlp {
 
 static string fisheyeDistortionVertexShaderSrc =
@@ -260,7 +255,7 @@ void AbstractGlCurve::draw(float, Camera *) {
 
 void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode) {
   // restrict shaders compilation on compatible hardware, crashs can happened when using the Mesa software rasterizer
-  static string glVendor(reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
+  static string glVendor(OpenGlConfigManager::getInst().getOpenGLVendor());
   static bool glVendorOk = (glVendor.find("NVIDIA")!=string::npos) || (glVendor.find("ATI")!=string::npos);
 
   if (glVendorOk && GlShaderProgram::shaderProgramsSupported()) {
@@ -343,7 +338,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
   if (curveShaderProgram != NULL && controlPoints.size() <= (size_t)MAX_SHADER_CONTROL_POINTS && renderMode != GL_SELECT) {
 
-    static bool vboOk = checkVboSupport();
+    static bool vboOk = OpenGlConfigManager::getInst().hasVertexBufferObject();
 
     if (curveVertexBuffersData.find(nbCurvePoints) == curveVertexBuffersData.end()) {
       buildCurveVertexBuffers(nbCurvePoints, vboOk);

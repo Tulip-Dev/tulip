@@ -274,26 +274,13 @@ void GlShaderProgram::desactivate() {
 }
 
 bool GlShaderProgram::shaderProgramsSupported() {
-  OpenGlConfigManager::getInst().initGlew();
-
-  if (!OpenGlConfigManager::getInst().canUseGlew()) {
-    return false;
-  }
-
-  static bool vertexShaderExtOk = glewIsSupported("GL_ARB_vertex_shader");
-  static bool fragmentShaderExtOk = glewIsSupported("GL_ARB_fragment_shader");
+  static bool vertexShaderExtOk = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_vertex_shader");
+  static bool fragmentShaderExtOk = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_fragment_shader");
   return (vertexShaderExtOk && fragmentShaderExtOk);
 }
 
 bool GlShaderProgram::geometryShaderSupported() {
-  OpenGlConfigManager::getInst().initGlew();
-
-  if (!OpenGlConfigManager::getInst().canUseGlew()) {
-    return false;
-  }
-
-  static bool geometryShaderExtOk = glewIsSupported("GL_EXT_geometry_shader4");
-  return geometryShaderExtOk;
+  return OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_geometry_shader4");
 }
 
 GlShaderProgram *GlShaderProgram::getCurrentActiveShader() {

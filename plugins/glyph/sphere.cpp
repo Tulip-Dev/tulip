@@ -184,12 +184,12 @@ void Sphere::generateBuffers(int space) {
 /*@}*/
 void Sphere::drawGlyph(const Color& glyphColor, const string& texture,
                        const string& texturePath, float) {
-  bool canUseGlew = OpenGlConfigManager::getInst().canUseGlew();
+  bool canUseVBO = OpenGlConfigManager::getInst().hasVertexBufferObject();
 
   int space = 9;
   int vertexCount = (90 / space) * (360 / space) * 4;
 
-  if (canUseGlew) {
+  if (canUseVBO) {
     if (buffers[0] == 0) {
       generateBuffers(space);
     }
@@ -214,7 +214,7 @@ void Sphere::drawGlyph(const Color& glyphColor, const string& texture,
 
   OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 
-  if (canUseGlew) {
+  if (canUseVBO) {
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
 
