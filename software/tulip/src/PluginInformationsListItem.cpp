@@ -19,15 +19,6 @@ PluginInformationsListItem::PluginInformationsListItem(tlp::PluginInformations *
 
   _ui->errorFrame->hide();
   _ui->downloadProgress->hide();
-
-  _ui->installButton->setVisible(!infos->isInstalled() || infos->updateAvailable());
-  if (infos->isInstalled() && infos->updateAvailable()) {
-    _ui->installButton->setIcon(QIcon(":/tulip/app/icons/package-upgrade.svg"));
-    _ui->installButton->setText(trUtf8("Upgrade to ") + infos->latestVersion());
-  }
-
-  _ui->removeButton->setVisible(infos->isInstalled());
-
   _ui->icon->setPixmap(QPixmap(infos->iconPath()));
   _ui->name->setText("<p><span style=\"font-size:large;\"><b>" + infos->name() + "</b></span>");
   _ui->shortDescription->setText("<p><span style=\"font-size:small; color:#626262;\">" + infos->shortDescription() + "</span>");
@@ -53,6 +44,22 @@ void PluginInformationsListItem::expand() {
   if(!_ui->errorLabel->text().isEmpty()) {
     _ui->errorFrame->show();
   }
+
+  _ui->installButton->setVisible(!_pluginInformations->isInstalled() || _pluginInformations->updateAvailable());
+  _ui->removeButton->setVisible(_pluginInformations->isInstalled());
+
+  if (_pluginInformations->isInstalled()) {
+    if (_pluginInformations->updateAvailable()) {
+      _ui->installButton->setIcon(QIcon(":/tulip/app/icons/package-upgrade.svg"));
+      _ui->installButton->setText(trUtf8("Upgrade to ") + _pluginInformations->latestVersion());
+    }
+    else
+      _ui->installButton->setIcon(QIcon(":/tulip/app/icons/list-add.svg"));
+  }
+  _ui->infosButton->setIcon(QIcon(":/tulip/app/icons/help-contents.svg"));
+
+  if (_pluginInformations->isInstalled())
+    _ui->removeButton->setIcon(QIcon(":/tulip/app/icons/package-purge.svg"));
 }
 
 void PluginInformationsListItem::collapse() {
