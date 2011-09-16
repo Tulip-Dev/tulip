@@ -44,27 +44,6 @@ IF(WIN32)
   SET(CPACK_NSIS_INSTALLED_ICON_NAME ${TULIP_ICO})
   SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\software\\\\tulip\\\\bitmaps\\\\headerlogo.bmp")
   
-  IF(MSVC)
-  #install msvc redist
-  SET(CMAKE_MSVC_ARCH "x86")
-  #If not set try to find automatically the package
-  IF(NOT MSVC_REDIST)			
-	FIND_PROGRAM(MSVC_REDIST NAMES
-		vcredist_${CMAKE_MSVC_ARCH}/vcredist_${CMAKE_MSVC_ARCH}.exe
-		PATHS $ENV{WindowsSdkDir}/Bootstrapper/Packages	
-		)
-	ENDIF()
-		
-	IF(MSVC_REDIST)
-	    #If the redistribuable package is found integrate it to installer.
-		INSTALL(PROGRAMS ${MSVC_REDIST} COMPONENT libtulip DESTINATION ${TulipBinInstallDir})
-		SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "ExecWait '\\\"$INSTDIR\\\\bin\\\\vcredist_x86.exe\\\" /passive'")
-		message(STATUS "MSVC_REDIST: ${MSVC_REDIST}")
-	ELSE()
-	MESSAGE(STATUS "vcredist_${CMAKE_MSVC_ARCH} not found cannot integrate it to installer")
-	ENDIF()	
-  ENDIF()
-  
   SET(CPACK_NSIS_CREATE_ICONS_EXTRA "
     CreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Tulip ${TulipVersion}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\tulip.exe\\\" \\\"\\\" \\\"$INSTDIR\\\\share\\\\tulip\\\\bitmaps\\\\logo32x32.ico\\\"
     CreateShortCut \\\"$DESKTOP\\\\Tulip ${TulipVersion}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\tulip.exe\\\" \\\"\\\" \\\"$INSTDIR\\\\share\\\\tulip\\\\bitmaps\\\\logo32x32.ico\\\"
@@ -73,6 +52,27 @@ IF(WIN32)
     Delete \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Tulip ${TulipVersion}.lnk\\\"
     Delete \\\"$DESKTOP\\\\Tulip ${TulipVersion}.lnk\\\"
   ")
+
+  IF(MSVC)
+  #install msvc redist
+  SET(CMAKE_MSVC_ARCH "x86")
+  #If not set try to find automatically the package
+  IF(NOT MSVC_REDIST)
+        FIND_PROGRAM(MSVC_REDIST NAMES
+                vcredist_${CMAKE_MSVC_ARCH}/vcredist_${CMAKE_MSVC_ARCH}.exe
+                PATHS $ENV{WindowsSdkDir}/Bootstrapper/Packages
+                )
+        ENDIF()
+
+        IF(MSVC_REDIST)
+            #If the redistribuable package is found integrate it to installer.
+                INSTALL(PROGRAMS ${MSVC_REDIST} COMPONENT libtulip DESTINATION ${TulipBinInstallDir})
+                SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "ExecWait '\\\"$INSTDIR\\\\bin\\\\vcredist_x86.exe\\\" /passive'")
+                message(STATUS "MSVC_REDIST: ${MSVC_REDIST}")
+        ELSE()
+        MESSAGE(STATUS "vcredist_${CMAKE_MSVC_ARCH} not found cannot integrate it to installer")
+        ENDIF()
+  ENDIF()
 
   SET(CPACK_COMPONENT_GROUP_LIBRARIES_BOLD_TITLE TRUE)
   SET(CPACK_COMPONENT_GROUP_LIBRARIES_EXPANDED TRUE)
