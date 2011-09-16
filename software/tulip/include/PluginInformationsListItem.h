@@ -41,6 +41,7 @@ private:
   Ui::PluginInformationsListItemData *_ui;
   tlp::PluginInformations *_pluginInformations;
 
+  QString backgroundCode();
 };
 
 #endif // PLUGININFORMATIONSLISTITEM_H

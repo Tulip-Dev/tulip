@@ -5,6 +5,7 @@
 
 #include <QtCore/QList>
 #include <QtCore/QMap>
+#include <QtNetwork/QNetworkReply>
 
 class QNetworkReply;
 static const QString PROPERTY_ALGORITHM_PLUGIN_NAME = "PropertyAlgorithm";
@@ -103,7 +104,8 @@ signals:
    *
    * @return void
    **/
-  void remoteLocationAdded();
+  void remoteLocationAdded(QString);
+  void errorAddRemoteLocation(QNetworkReply::NetworkError,QString);
 
 private:
   /**

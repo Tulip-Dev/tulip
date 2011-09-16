@@ -3,6 +3,7 @@
 
 #include <QtGui/QWidget>
 #include <QtCore/QMap>
+#include <QtNetwork/QNetworkReply>
 
 namespace Ui {
 class PluginsCenterData;
@@ -28,13 +29,13 @@ public slots:
   void showHomePage();
   void showSearchPage();
   void showErrorsPage();
-  void showDownloadsPage();
   void showReposPage();
   void reportPluginErrors(const QMap<QString,QString> &);
   void fetch(tlp::PluginInformations *);
   void remove(tlp::PluginInformations *);
-  void addRemoteLocation();
+  void addRemoteLocation(const QString &url=QString::null);
   void removeRemoteLocation();
+  void removeRemoteLocation(const QString &url);
 
 protected slots:
   void showPage(QWidget *page);
@@ -49,7 +50,8 @@ protected slots:
   void browsePerspectives();
 
   void setPluginNameFilter(const QString &);
-  void remoteLocationAdded();
+  void remoteLocationAdded(const QString &);
+  void remoteLocationError(QNetworkReply::NetworkError,const QString &);
 
 private:
   QVector<const char *> _typeSlots;

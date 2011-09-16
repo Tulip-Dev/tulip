@@ -36,9 +36,15 @@ signals:
   void remove(tlp::PluginInformations *);
 
 private:
+  //Used to sort plugin informations into the cache
+  struct PluginInformationsSorter {
+    bool operator()(const tlp::PluginInformations*, const tlp::PluginInformations*);
+  };
+
   QWidget *_focusedItem;
   QWidget *_resultsListCache;
-  QMap<tlp::PluginInformations *,PluginInformationsListItem *> _pluginWidgetsCache;
+  typedef std::map<tlp::PluginInformations *,PluginInformationsListItem *,PluginInformationsSorter> cache;
+  cache _pluginWidgetsCache;
 
   QStringList _typeFilter;
   QString _nameFilter;

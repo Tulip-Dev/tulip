@@ -121,20 +121,21 @@ void PluginManager::serverDescriptionDownloaded(QNetworkReply* reply) {
   if(replyLocations.contains(reply)) {
     const QString location = replyLocations[reply];
 
-    if(reply->error() != QNetworkReply::NoError) {
-      std::cout << "error while retrieving server description (" << location.toStdString() << ") : " << reply->errorString().toStdString() << std::endl;
+    if(reply->error() != QNetworkReply::NoError)
+      emit errorAddRemoteLocation(reply->error(),reply->errorString());
+
+    else {
+      QString content(reply->readAll());
+      QString xmlDocument(content);
+      QDomDocument description;
+      description.setContent(xmlDocument);
+      QDomElement elm = description.documentElement();
+      _remoteLocations[location] = parseDescription(xmlDocument, location);
+
+      replyLocations.remove(reply);
+      reply->deleteLater();
+      emit(remoteLocationAdded(location));
     }
-
-    QString content(reply->readAll());
-    QString xmlDocument(content);
-    QDomDocument description;
-    description.setContent(xmlDocument);
-    QDomElement elm = description.documentElement();
-    _remoteLocations[location] = parseDescription(xmlDocument, location);
-
-    replyLocations.remove(reply);
-    reply->deleteLater();
-    emit(remoteLocationAdded());
   }
 }
 

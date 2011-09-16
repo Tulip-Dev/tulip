@@ -146,11 +146,11 @@ void TulipMainWindow::ShowWelcomeScreen() {
 }
 
 void TulipMainWindow::AddPluginRepository(const QString &url) {
-
+  _ui->pluginsPage->addRemoteLocation(url);
 }
 
 void TulipMainWindow::RemovePluginRepository(const QString &url) {
-
+  _ui->pluginsPage->removeRemoteLocation(url);
 }
 
 void TulipMainWindow::CreatePerspective(const QString &name,const QVariantMap &parameters) {

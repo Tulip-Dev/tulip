@@ -20,6 +20,10 @@ class PluginErrorReport: public QWidget {
 public:
   explicit PluginErrorReport(const QString &fileName, const QString &errorMsg, QWidget *parent=0);
 
+protected:
+  virtual void focusInEvent(QFocusEvent *);
+  virtual void focusOutEvent(QFocusEvent *);
+
 private:
   Ui::PluginErrorReportData *_ui;
 };
