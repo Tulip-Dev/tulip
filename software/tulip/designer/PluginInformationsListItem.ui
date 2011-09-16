@@ -19,9 +19,6 @@
   <property name="focusPolicy">
    <enum>Qt::ClickFocus</enum>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
     <number>3</number>
@@ -248,14 +245,6 @@ border: 1px solid &quot;#C9C9C9&quot;;
              <width>0</width>
              <height>0</height>
             </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">#errorLabel {
-color: &quot;#dc4d4f&quot;;
-}</string>
-           </property>
-           <property name="text">
-            <string/>
            </property>
            <property name="textFormat">
             <enum>Qt::RichText</enum>
