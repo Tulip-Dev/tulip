@@ -3,6 +3,7 @@
 #include "PluginInformationsListItem.h"
 #include "DetailedPluginInformationsWidget.h"
 
+#include <time.h>
 #include <tulip/PluginManager.h>
 #include <tulip/PluginInformations.h>
 #include <QtGui/QVBoxLayout>
@@ -138,4 +139,16 @@ void PluginResultsList::initPluginsCache() {
 
   if (isVisible())
     refreshResults();
+}
+
+tlp::PluginInformations* PluginResultsList::featuredPlugin() {
+  srand(time(NULL));
+  int i=0,rnd=rand()%_pluginWidgetsCache.size();
+  bool returnNext=false;
+  foreach(tlp::PluginInformations* infos,_pluginWidgetsCache.keys()) {
+    returnNext = i++>=rnd;
+    if (returnNext && (!infos->isInstalled() || i == _pluginWidgetsCache.size()-1))
+      return infos;
+  }
+  return NULL;
 }

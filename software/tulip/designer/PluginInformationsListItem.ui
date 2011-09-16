@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>840</width>
-    <height>94</height>
+    <height>115</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -183,7 +183,7 @@ width: 20px;
             <string>Install</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources/TulipAgent.qrc">
+            <iconset>
              <normaloff>:/tulip/app/icons/list-add.svg</normaloff>:/tulip/app/icons/list-add.svg</iconset>
            </property>
           </widget>
@@ -194,19 +194,8 @@ width: 20px;
             <string>Remove</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources/TulipAgent.qrc">
+            <iconset>
              <normaloff>:/tulip/app/icons/package-purge.svg</normaloff>:/tulip/app/icons/package-purge.svg</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="upgradeButton">
-           <property name="text">
-            <string>Upgrade</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../resources/TulipAgent.qrc">
-             <normaloff>:/tulip/app/icons/package-upgrade.svg</normaloff>:/tulip/app/icons/package-upgrade.svg</iconset>
            </property>
           </widget>
          </item>
@@ -229,7 +218,7 @@ width: 20px;
             <string>More infos</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources/TulipAgent.qrc">
+            <iconset>
              <normaloff>:/tulip/app/icons/help-contents.svg</normaloff>:/tulip/app/icons/help-contents.svg</iconset>
            </property>
           </widget>
@@ -299,8 +288,6 @@ color: &quot;#dc4d4f&quot;;
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources/TulipAgent.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

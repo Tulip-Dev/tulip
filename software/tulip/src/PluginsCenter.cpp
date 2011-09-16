@@ -7,6 +7,7 @@
 #include <tulip/PluginManager.h>
 #include <QtCore/QDebug>
 #include <tulip/TulipSettings.h>
+#include "DetailedPluginInformationsWidget.h"
 
 PluginsCenter::PluginsCenter(QWidget *parent) :
   QWidget(parent), _ui(new Ui::PluginsCenterData()) {
@@ -34,6 +35,13 @@ PluginsCenter::PluginsCenter(QWidget *parent) :
     _ui->remoteLocationsList->addItem(remoteLocation);
   }
 
+  tlp::PluginInformations* infos = _ui->pluginsSearchList->featuredPlugin();
+  DetailedPluginInformationsWidget *featuredWidget = new DetailedPluginInformationsWidget(infos);
+  featuredWidget->hideNavigationBar();
+  _ui->featuredFrame->setWidget(featuredWidget);
+  featuredWidget->setObjectName("featuredWidget");
+  featuredWidget->setStyleSheet("#headerFrame {\nbackground-color: #ECECEC;\nborder-left: 1px solid \"#C9C9C9\";\nborder-right: 1px solid \"#C9C9C9\";\nborder-bottom: 1px solid \"#C9C9C9\";\n}");
+  connect(featuredWidget,SIGNAL(fetch(tlp::PluginInformations*)),this,SLOT(fetch(tlp::PluginInformations*)));
 }
 
 void PluginsCenter::showDownloadsPage() {

@@ -22,6 +22,21 @@ DetailedPluginInformationsWidget::DetailedPluginInformationsWidget(tlp::PluginIn
   _ui->detailedDescriptionView->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
   _ui->detailedDescriptionView->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
   connect(_ui->backButton,SIGNAL(clicked()),this,SIGNAL(goBack()));
+
   connect(_ui->installButton,SIGNAL(clicked()),this,SIGNAL(fetch()));
   connect(_ui->removeButton,SIGNAL(clicked()),this,SIGNAL(remove()));
+  connect(_ui->installButton,SIGNAL(clicked()),this,SLOT(fetchButtonClicked()));
+  connect(_ui->removeButton,SIGNAL(clicked()),this,SLOT(removeButtonClicked()));
+}
+
+void DetailedPluginInformationsWidget::hideNavigationBar() {
+  _ui->topFrame->hide();
+}
+
+void DetailedPluginInformationsWidget::fetchButtonClicked() {
+  emit fetch(_pluginInformations);
+}
+
+void DetailedPluginInformationsWidget::removeButtonClicked() {
+  emit remove(_pluginInformations);
 }
