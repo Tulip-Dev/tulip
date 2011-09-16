@@ -2,7 +2,7 @@
 #include <QtGui/QPainter>
 #include <tulip/PluginInformations.h>
 #include "ui_PluginInformationsListItem.h"
-#include <QNetworkReply>
+#include <QtNetwork/QNetworkReply>
 
 using namespace tlp;
 
@@ -20,8 +20,12 @@ PluginInformationsListItem::PluginInformationsListItem(tlp::PluginInformations *
   _ui->errorFrame->hide();
   _ui->downloadProgress->hide();
 
-  _ui->installButton->setVisible(!infos->isInstalled());
-  _ui->upgradeButton->setVisible(infos->isInstalled() && infos->updateAvailable());
+  _ui->installButton->setVisible(!infos->isInstalled() || infos->updateAvailable());
+  if (infos->isInstalled() && infos->updateAvailable()) {
+    _ui->installButton->setIcon(QIcon(":/tulip/app/icons/package-upgrade.svg"));
+    _ui->installButton->setText(trUtf8("Upgrade to ") + infos->latestVersion());
+  }
+
   _ui->removeButton->setVisible(infos->isInstalled());
 
   _ui->icon->setPixmap(QPixmap(infos->iconPath()));

@@ -14,6 +14,7 @@ class PluginResultsList : public QScrollArea {
   Q_OBJECT
 public:
   explicit PluginResultsList(QWidget *parent=0);
+  tlp::PluginInformations* featuredPlugin();
 
 public slots:
   void setTypeFilter(const QStringList &,bool autoRefresh=true);
