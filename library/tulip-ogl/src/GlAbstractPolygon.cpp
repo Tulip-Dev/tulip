@@ -146,7 +146,7 @@ void GlAbstractPolygon::setHideOutlineLod(float lod) {
 //=====================================================
 void GlAbstractPolygon::draw(float lod,Camera *) {
 
-  bool canUseGlew=OpenGlConfigManager::getInst().canUseGlew();
+  bool canUseVBO=OpenGlConfigManager::getInst().hasVertexBufferObject();
 
   glDisable(GL_CULL_FACE);
 
@@ -246,7 +246,7 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
       }
     }
 
-    if(canUseGlew) {
+    if(canUseVBO) {
 
       // Generate buffers
       glGenBuffers(7,buffers);
@@ -290,10 +290,12 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
     generated=true;
   }
 
+
+
   // Coord array
   glEnableClientState(GL_VERTEX_ARRAY);
 
-  if(canUseGlew) {
+  if(canUseVBO) {
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
     glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), BUFFER_OFFSET(0));
   }
@@ -301,12 +303,14 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
     glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), &points[0]);
   }
 
+
+
   // Fill
   if (filled) {
     // Normal array
     glEnableClientState(GL_NORMAL_ARRAY);
 
-    if(canUseGlew) {
+    if(canUseVBO) {
       glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
       glNormalPointer(GL_FLOAT, 3*sizeof(GLfloat), BUFFER_OFFSET(0));
     }
@@ -318,7 +322,7 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
       // fillColor array
       glEnableClientState(GL_COLOR_ARRAY);
 
-      if(canUseGlew) {
+      if(canUseVBO) {
         glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
         glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), BUFFER_OFFSET(0));
       }
@@ -335,7 +339,7 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
       GlTextureManager::getInst().activateTexture(textureName);
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-      if(canUseGlew) {
+      if(canUseVBO) {
         glBindBuffer(GL_ARRAY_BUFFER, buffers[4]);
         glTexCoordPointer(2,GL_FLOAT, 2*sizeof(GLfloat), BUFFER_OFFSET(0));
       }
@@ -359,10 +363,13 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
 
     OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 
+
+
     // Draw
-    if(canUseGlew) {
+    if(canUseVBO) {
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
       glDrawElements(fillMode, points.size(), GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
+
     }
     else {
       glDrawElements(fillMode, points.size(), GL_UNSIGNED_BYTE, indices);
@@ -380,6 +387,8 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
     }
   }
 
+
+
   // Outline
   if(outlined && outlineSize!=0) {
     if((outlineSize<1 && lod>=hideOutlineLod) || (lod>=(hideOutlineLod/outlineSize))) {
@@ -391,7 +400,7 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
         // outlineColor
         glEnableClientState(GL_COLOR_ARRAY);
 
-        if(canUseGlew) {
+        if(canUseVBO) {
           glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
           glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), BUFFER_OFFSET(0));
         }
@@ -407,7 +416,7 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
 
       // Draw
       if(polygonMode!=QUAD_STRIP) {
-        if(canUseGlew) {
+        if(canUseVBO) {
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
           glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
         }
@@ -416,7 +425,7 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
         }
       }
       else {
-        if(canUseGlew) {
+        if(canUseVBO) {
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[6]);
           glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
         }
@@ -439,10 +448,12 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
 
   glDisableClientState(GL_VERTEX_ARRAY);
 
-  if(canUseGlew) {
+  if(canUseVBO) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   }
+
+
 
   glTest(__PRETTY_FUNCTION__);
 }
@@ -534,7 +545,7 @@ void GlAbstractPolygon::clearGenerated() {
   texArray=NULL;
   normalArray.clear();
 
-  if(OpenGlConfigManager::getInst().canUseGlew()) {
+  if(OpenGlConfigManager::getInst().hasVertexBufferObject()) {
     if(generated)
       glDeleteBuffers(6,buffers);
   }

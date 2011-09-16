@@ -176,9 +176,9 @@ GlBox::~GlBox() {
 //===========================================================
 void GlBox::draw(float lod,Camera *) {
 
-  bool canUseGlew=OpenGlConfigManager::getInst().canUseGlew();
+  bool canUseVBO=OpenGlConfigManager::getInst().hasVertexBufferObject();
 
-  if(canUseGlew) {
+  if(canUseVBO) {
     if(!generated) {
       GLfloat newCubeCoordArrays[72];
 
@@ -220,7 +220,7 @@ void GlBox::draw(float lod,Camera *) {
 
   glEnableClientState(GL_VERTEX_ARRAY);
 
-  if(canUseGlew) {
+  if(canUseVBO) {
     glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
     glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), BUFFER_OFFSET(0));
   }
@@ -233,7 +233,7 @@ void GlBox::draw(float lod,Camera *) {
 
     glEnableClientState(GL_NORMAL_ARRAY);
 
-    if(canUseGlew) {
+    if(canUseVBO) {
       glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
       glNormalPointer(GL_FLOAT, 3*sizeof(GLfloat), BUFFER_OFFSET(0));
     }
@@ -245,7 +245,7 @@ void GlBox::draw(float lod,Camera *) {
       GlTextureManager::getInst().activateTexture(textureName);
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-      if(canUseGlew) {
+      if(canUseVBO) {
         glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
         glTexCoordPointer(2,GL_FLOAT, 2*sizeof(GLfloat), BUFFER_OFFSET(0));
       }
@@ -256,7 +256,7 @@ void GlBox::draw(float lod,Camera *) {
 
     OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 
-    if(canUseGlew) {
+    if(canUseVBO) {
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
       glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
     }
@@ -283,7 +283,7 @@ void GlBox::draw(float lod,Camera *) {
 
       OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
-      if(canUseGlew) {
+      if(canUseVBO) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[4]);
         glDrawElements(GL_LINES, 24, GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
       }
@@ -414,7 +414,7 @@ void GlBox::clearGenerated() {
   delete[] newCubeCoordArrays;
   newCubeCoordArrays=NULL;
 
-  if(OpenGlConfigManager::getInst().canUseGlew()) {
+  if(OpenGlConfigManager::getInst().hasVertexBufferObject()) {
     if(generated)
       glDeleteBuffers(5,buffers);
   }

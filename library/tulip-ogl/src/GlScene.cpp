@@ -108,13 +108,10 @@ GlScene::~GlScene() {
 }
 
 void GlScene::initGlParameters() {
+  OpenGlConfigManager::getInst().initGlew();
   OpenGlConfigManager::getInst().checkDrivers();
 
-  if(!OpenGlConfigManager::getInst().glewIsInit())
-    OpenGlConfigManager::getInst().initGlew();
-
   glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
-
 
   bool antialiased = true;
 
@@ -468,6 +465,7 @@ void GlScene::draw() {
 
             glNode.id=(*it).id;
             glNode.draw((*it).lod,glGraphComposite->getInputData(),camera);
+
           }
           else {
             if(!displayMetaNodes)

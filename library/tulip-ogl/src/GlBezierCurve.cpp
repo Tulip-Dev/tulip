@@ -115,7 +115,7 @@ Coord GlBezierCurve::computeCurvePointOnCPU(const std::vector<Coord> &controlPoi
 
 void GlBezierCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
 
-  static bool floatTextureOk = glewIsSupported("GL_ARB_texture_float");
+  static bool floatTextureOk = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_texture_float");
 
   if (pascalTriangleTextureId == 0 && floatTextureOk) {
     buildPascalTriangleTexture();

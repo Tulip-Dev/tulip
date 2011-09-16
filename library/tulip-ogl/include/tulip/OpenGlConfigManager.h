@@ -21,6 +21,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <map>
 
 #if defined(_MSC_VER)
 #include <Windows.h>
@@ -35,6 +36,10 @@
 # if defined(__WIN32__)
 # include <GL/glext.h>
 # endif
+#endif
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
 #endif
 
 #include <tulip/tulipconf.h>
@@ -53,74 +58,90 @@ class TLP_GL_SCOPE OpenGlConfigManager {
 
 public:
 
-  /**
-   * Return the current instance. If instance doesn't exist, create it.
-   */
-  static OpenGlConfigManager &getInst() {
-    if(!inst)
-      inst=new OpenGlConfigManager();
+	/**
+	 * Return the current instance. If instance doesn't exist, create it.
+	 */
+	static OpenGlConfigManager &getInst();
 
-    return *inst;
-  }
+	/**
+	 * Change the error viewer and return the old one.
+	 */
+	OpenGlErrorViewer *setErrorViewer(OpenGlErrorViewer *errorViewer);
 
-  /**
-   * Change the error viewer and return the old one
-   */
-  OpenGlErrorViewer *setErrorViewer(OpenGlErrorViewer *errorViewer);
+	/**
+	 * Check if system has good graphics card drivers.
+	 */
+	void checkDrivers();
 
-  /**
-   * Check if system has good graphics card drivers
-   */
-  void checkDrivers();
+	/**
+	 * Returns the OpenGL version number supported by the host system.
+	 */
+	double getOpenGLVersion();
 
-  /**
-   * Init Glew
-   */
-  void initGlew();
+	/*
+	 * Return the vendor name of the OpenGL driver installed on the host system.
+	 */
+	std::string getOpenGLVendor();
 
-  /**
-   * Glew is init
-   */
-  bool glewIsInit() {
-    return glewIsChecked;
-  }
+	/*
+	 * Checks if an OpenGL extension is supported by the driver installed on the host system.
+	 * \param extensionName the name of the OpenGL extension to check in the form "GL_.*" (for instance "GL_ARB_vertex_buffer_object")
+	 */
+	bool isExtensionSupported(const std::string &extensionName);
 
-  /**
-   * Return if glew can be used
-   */
-  bool canUseGlew() {
-    if(!glewIsChecked)
-      return false;
+	/**
+	 * Returns if vertex buffer objects can be used on the host system.
+	 */
+	bool hasVertexBufferObject();
 
-    return glewIsOk;
-  }
+	/**
+	 * Enables / disables anti-aliasing rendering.
+	 */
+	void setAntiAliasing(const bool antialiasing) {antialiased = antialiasing;}
 
-  void setAntiAliasing(const bool antialiasing) {
-    antialiased = antialiasing;
-  }
+	/*
+	 * Activates the anti-aliasing of lines and points primitives.
+	 * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+	 */
+	void activateLineAndPointAntiAliasing();
 
-  void activateLineAndPointAntiAliasing();
-  void desactivateLineAndPointAntiAliasing();
+	/*
+	 * Desactivates the anti-aliasing of lines and points primitives.
+	 * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+	 */
+	void desactivateLineAndPointAntiAliasing();
 
-  void activatePolygonAntiAliasing();
-  void desactivatePolygonAntiAliasing();
+	/*
+	 * Activates the anti-aliasing of polygons primitives.
+	 * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+	 */
+	void activatePolygonAntiAliasing();
+	/*
+	 * Desactivates the anti-aliasing of polygons primitives.
+	 * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+	 */
+	void desactivatePolygonAntiAliasing();
 
+	void initGlew();
 
 private:
 
-  /**
-   * Private constructor for singleton
-   */
-  OpenGlConfigManager();
 
-  static OpenGlConfigManager* inst;
 
-  OpenGlErrorViewer *errorViewer;
+	/**
+	 * Private constructor for singleton
+	 */
+	OpenGlConfigManager();
 
-  bool glewIsChecked;
-  bool driversAreChecked;
-  bool glewIsOk;
-  bool antialiased;
+	static OpenGlConfigManager* inst;
+
+	OpenGlErrorViewer *errorViewer;
+
+	bool glewIsInit;
+	bool driversAreChecked;
+	bool antialiased;
+
+	std::map<std::string, bool> checkedExtensions;
 
 };
 
