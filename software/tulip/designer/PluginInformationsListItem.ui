@@ -182,20 +182,12 @@ width: 20px;
            <property name="text">
             <string>Install</string>
            </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>:/tulip/app/icons/list-add.svg</normaloff>:/tulip/app/icons/list-add.svg</iconset>
-           </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="removeButton">
            <property name="text">
             <string>Remove</string>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>:/tulip/app/icons/package-purge.svg</normaloff>:/tulip/app/icons/package-purge.svg</iconset>
            </property>
           </widget>
          </item>
@@ -216,10 +208,6 @@ width: 20px;
           <widget class="QPushButton" name="infosButton">
            <property name="text">
             <string>More infos</string>
-           </property>
-           <property name="icon">
-            <iconset>
-             <normaloff>:/tulip/app/icons/help-contents.svg</normaloff>:/tulip/app/icons/help-contents.svg</iconset>
            </property>
           </widget>
          </item>
