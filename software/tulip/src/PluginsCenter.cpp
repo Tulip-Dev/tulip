@@ -26,8 +26,10 @@ PluginsCenter::PluginsCenter(QWidget *parent) :
   connect(_ui->pluginsSearchList,SIGNAL(fetch(tlp::PluginInformations*)),this,SLOT(fetch(tlp::PluginInformations*)));
   connect(_ui->pluginsSearchList,SIGNAL(remove(tlp::PluginInformations*)),this,SLOT(remove(tlp::PluginInformations*)));
   connect(_ui->addRemoteLocation, SIGNAL(clicked()), this, SLOT(addRemoteLocation()));
+  connect(_ui->remoteLocationText, SIGNAL(editingFinished()), this, SLOT(addRemoteLocation()));
   connect(_ui->removeRemoteLocation, SIGNAL(clicked()), this, SLOT(removeRemoteLocation()));
-  connect(tlp::PluginManager::getInstance(),SIGNAL(remoteLocationAdded()),this,SLOT(remoteLocationAdded()));
+  connect(tlp::PluginManager::getInstance(),SIGNAL(remoteLocationAdded(QString)),this,SLOT(remoteLocationAdded(QString)));
+  connect(tlp::PluginManager::getInstance(),SIGNAL(errorAddRemoteLocation(QNetworkReply::NetworkError,QString)),this,SLOT(remoteLocationError(QNetworkReply::NetworkError,QString)));
   connect(_ui->reloadListButton,SIGNAL(clicked()),_ui->pluginsSearchList,SLOT(initPluginsCache()));
   connect(_ui->reloadListButton,SIGNAL(clicked()),_ui->pluginsListTopFrame,SLOT(hide()));
 
@@ -42,10 +44,6 @@ PluginsCenter::PluginsCenter(QWidget *parent) :
   featuredWidget->setObjectName("featuredWidget");
   featuredWidget->setStyleSheet("#headerFrame {\nbackground-color: #ECECEC;\nborder-left: 1px solid \"#C9C9C9\";\nborder-right: 1px solid \"#C9C9C9\";\nborder-bottom: 1px solid \"#C9C9C9\";\n}");
   connect(featuredWidget,SIGNAL(fetch(tlp::PluginInformations*)),this,SLOT(fetch(tlp::PluginInformations*)));
-}
-
-void PluginsCenter::showDownloadsPage() {
-  showPage(_ui->downloadsPage);
 }
 
 void PluginsCenter::showErrorsPage() {
@@ -104,9 +102,6 @@ void PluginsCenter::listItemSelected() {
   case 8:
     showErrorsPage();
     break;
-  case 9:
-    showDownloadsPage();
-    break;
   }
 }
 
@@ -123,6 +118,8 @@ void PluginsCenter::reportPluginErrors(const QMap<QString,QString> &errors) {
     errorsItem->setFont(f);
     message += filename + ": " + errormsg;
   }
+
+  _ui->errorsLogAreaLayout->addItem(new QSpacerItem(0,0,QSizePolicy::Maximum,QSizePolicy::Expanding));
 
   if (!errors.empty())
     TulipMainWindow::instance()->pluginErrorMessage(message);
@@ -176,16 +173,30 @@ void PluginsCenter::remove(tlp::PluginInformations *infos) {
   infos->remove();
 }
 
-void PluginsCenter::addRemoteLocation() {
-  const QString remoteLocation = _ui->remoteLocationText->text();
-  std::cout << remoteLocation.toStdString() << std::endl;
+void PluginsCenter::addRemoteLocation(const QString &url) {
+  QString remoteLocation = url;
+  if (url.isNull())
+    remoteLocation = _ui->remoteLocationText->text();
 
   tlp::PluginManager::addRemoteLocation(remoteLocation);
-  TulipSettings::instance().addRemoteLocation(remoteLocation);
-  _ui->remoteLocationsList->addItem(remoteLocation);
-  _ui->remoteLocationText->clear();
-  _ui->pluginsSearchList->initPluginsCache();
-  _ui->pluginsSearchList->refreshResults();
+
+  _ui->remoteLocationText->setEnabled(false);
+  _ui->addRemoteLocation->setEnabled(false);
+  _ui->removeRemoteLocation->setEnabled(false);
+  _ui->repoLocationsErrorLabel->hide();
+}
+
+void PluginsCenter::removeRemoteLocation(const QString& url) {
+  foreach(QListWidgetItem* item, _ui->remoteLocationsList->findItems("",Qt::MatchContains)) {
+    if (item->text() != url)
+      continue;
+
+    TulipSettings::instance().removeRemoteLocation(item->text());
+    tlp::PluginManager::removeRemoteLocation(item->text());
+    _ui->pluginsSearchList->initPluginsCache();
+    _ui->pluginsSearchList->refreshResults();
+    delete item;
+  }
 }
 
 void PluginsCenter::removeRemoteLocation() {
@@ -198,10 +209,27 @@ void PluginsCenter::removeRemoteLocation() {
   }
 }
 
-void PluginsCenter::remoteLocationAdded() {
+void PluginsCenter::remoteLocationAdded(const QString &remoteLocation) {
   if (_ui->pluginsListPage->isVisible())
     _ui->pluginsListTopFrame->show();
   else
     _ui->pluginsSearchList->initPluginsCache();
+
+  TulipSettings::instance().addRemoteLocation(remoteLocation);
+  _ui->remoteLocationsList->addItem(remoteLocation);
+  _ui->remoteLocationText->clear();
+  _ui->pluginsSearchList->initPluginsCache();
+  _ui->pluginsSearchList->refreshResults();
+
+  _ui->remoteLocationText->setEnabled(true);
+  _ui->addRemoteLocation->setEnabled(true);
+  _ui->removeRemoteLocation->setEnabled(true);
 }
 
+void PluginsCenter::remoteLocationError(QNetworkReply::NetworkError error, const QString& errorMsg) {
+  _ui->repoLocationsErrorLabel->show();
+  _ui->repoLocationsErrorLabel->setText("<span style=\"color:#dc4d4f;\">" + trUtf8("Error #") + QString::number((int)error) + ": " + errorMsg + "</span></p>");
+  _ui->remoteLocationText->setEnabled(true);
+  _ui->addRemoteLocation->setEnabled(true);
+  _ui->removeRemoteLocation->setEnabled(true);
+}

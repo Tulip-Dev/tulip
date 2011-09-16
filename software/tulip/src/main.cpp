@@ -22,6 +22,8 @@
 #include <tulip/PluginManager.h>
 #include <tulip/QuaZIPFacade.h>
 
+#include <CrashHandling.h>
+
 #if defined(__APPLE__)
 #include <sys/types.h>
 #include <signal.h>
@@ -110,6 +112,7 @@ void checkTulipRunning() {
 }
 
 int main(int argc, char **argv) {
+  start_crash_handler();
   QApplication tulip_agent(argc, argv);
   tulip_agent.setApplicationName(QObject::trUtf8("Tulip"));
   QLocale::setDefault(QLocale(QLocale::English));

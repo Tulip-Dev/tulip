@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>840</width>
-    <height>115</height>
+    <width>838</width>
+    <height>125</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -29,8 +29,16 @@
    <item>
     <widget class="QFrame" name="mainFrame">
      <property name="styleSheet">
-      <string notr="true">#mainFrame {
+      <string notr="true">/*#mainFrame {
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(245, 245, 245, 255), stop:1 rgba(225,225,225, 255)); 
+border-top: 1px solid &quot;#C9C9C9&quot;;
+border-right: 1px solid &quot;#C9C9C9&quot;;
+border-left: 1px solid &quot;#C9C9C9&quot;;
+border-bottom: 1px solid &quot;#C9C9C9&quot;;
+}*/
+
+#mainFrame {
+background-color: white; 
 border-top: 1px solid &quot;#C9C9C9&quot;;
 border-right: 1px solid &quot;#C9C9C9&quot;;
 border-left: 1px solid &quot;#C9C9C9&quot;;

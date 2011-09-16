@@ -8,6 +8,7 @@ using namespace tlp;
 
 PluginInformationsListItem::PluginInformationsListItem(tlp::PluginInformations *infos, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationsListItemData), _pluginInformations(infos) {
   _ui->setupUi(this);
+  _ui->mainFrame->setStyleSheet("#mainFrame { background-color:" + backgroundCode() + ";  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
 
   if(infos->isInstalled()) {
     _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/package-installed-updated.svg"));
@@ -38,7 +39,8 @@ void PluginInformationsListItem::focusInEvent(QFocusEvent *) {
 }
 
 void PluginInformationsListItem::expand() {
-  _ui->mainFrame->setStyleSheet("#mainFrame { background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(225, 225, 225, 255), stop:1 rgba(205,205,205, 255));  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
+  _ui->mainFrame->setStyleSheet("#mainFrame { background-color:" + backgroundCode() + ";  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
+
   _ui->bottomFrame->show();
 
   if(!_ui->errorLabel->text().isEmpty()) {
@@ -48,22 +50,20 @@ void PluginInformationsListItem::expand() {
   _ui->installButton->setVisible(!_pluginInformations->isInstalled() || _pluginInformations->updateAvailable());
   _ui->removeButton->setVisible(_pluginInformations->isInstalled());
 
-  if (_pluginInformations->isInstalled()) {
-    if (_pluginInformations->updateAvailable()) {
+  _ui->infosButton->setIcon(QIcon(":/tulip/app/icons/help-contents.svg"));
+  if (_pluginInformations->isInstalled() && _pluginInformations->updateAvailable()) {
       _ui->installButton->setIcon(QIcon(":/tulip/app/icons/package-upgrade.svg"));
       _ui->installButton->setText(trUtf8("Upgrade to ") + _pluginInformations->latestVersion());
-    }
-    else
-      _ui->installButton->setIcon(QIcon(":/tulip/app/icons/list-add.svg"));
   }
-  _ui->infosButton->setIcon(QIcon(":/tulip/app/icons/help-contents.svg"));
+  else
+    _ui->installButton->setIcon(QIcon(":/tulip/app/icons/list-add.svg"));
 
-  if (_pluginInformations->isInstalled())
-    _ui->removeButton->setIcon(QIcon(":/tulip/app/icons/package-purge.svg"));
+  _ui->removeButton->setIcon(QIcon(":/tulip/app/icons/package-purge.svg"));
 }
 
 void PluginInformationsListItem::collapse() {
-  _ui->mainFrame->setStyleSheet("#mainFrame { background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(245, 245, 245, 255), stop:1 rgba(225,225,225, 255));  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
+  _ui->mainFrame->setStyleSheet("#mainFrame { background-color:" + backgroundCode() + ";  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
+
   _ui->bottomFrame->hide();
   _ui->errorFrame->hide();
 }
@@ -101,4 +101,12 @@ void PluginInformationsListItem::downloadFinished() {
       _ui->errorLabel->setText(qPrintable(reply->errorString()));
     }
   }
+}
+
+QString PluginInformationsListItem::backgroundCode() {
+  if (hasFocus())
+      return "rgb(232, 238, 244)";
+  else if (_pluginInformations->isInstalled() && !_pluginInformations->updateAvailable())
+    return "#E9E9E9";
+  return "white";
 }
