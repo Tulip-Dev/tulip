@@ -464,11 +464,11 @@ INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config
         DESTINATION ${TulipBinInstallDir}
 	COMPONENT libtulip_dev)
 INSTALL(FILES FindTULIP3.cmake 
-        DESTINATION ${TulipShareInstallDir})
+        DESTINATION ${TulipShareInstallDir} COMPONENT libtulip_dev)
 INSTALL(FILES FindGLEW.cmake 
-        DESTINATION ${TulipShareInstallDir})
+        DESTINATION ${TulipShareInstallDir} COMPONENT libtulip_dev)
 INSTALL(FILES FindXML2.cmake 
-        DESTINATION ${TulipShareInstallDir})
+        DESTINATION ${TulipShareInstallDir} COMPONENT libtulip_dev)
 
 IF(UBUNTU_PPA_BUILD)
 INSTALL(FILES FindTULIP3.cmake 
