@@ -89,9 +89,18 @@ bool PlanarityTest::compute(Graph *graph) {
 
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     return resultsBuffer[(unsigned long)graph];
-  else if(graph->numberOfNodes()==0) {
+  
+  unsigned int nbOfNodes = graph->numberOfNodes();
+
+  if (nbOfNodes==0) {
     resultsBuffer[(unsigned long)graph] = true;
     return true;
+  }
+
+  // quick test
+  if ((nbOfNodes >= 3) && (graph->numberOfEdges() > ((3 * nbOfNodes) - 6))) {
+    graph->addGraphObserver(this);
+    return resultsBuffer[(unsigned long)graph] = false;
   }
 
   vector<edge> addedEdges;
