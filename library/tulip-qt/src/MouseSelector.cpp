@@ -21,7 +21,9 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <QtGui/qevent.h>
+
+#include <QEvent>
+#include <QMouseEvent>
 
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
@@ -45,13 +47,13 @@ MouseSelector::MouseSelector(Qt::MouseButton button,
 }
 //==================================================================
 bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
-  if (e->type() == QEvent::MouseButtonPress) {
-    QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
+    QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
+    if (e->type() == QEvent::MouseButtonPress) {
 
     if (qMouseEv->buttons()== mButton &&
         (kModifier == Qt::NoModifier ||
-         ((QMouseEvent *) e)->modifiers() & kModifier)) {
+         qMouseEv->modifiers() & kModifier)) {
       if (!started) {
         x = qMouseEv->x();
         y = qMouseEv->y();
@@ -68,7 +70,6 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
           return false;
         }
       }
-
       return true;
     }
 
@@ -80,11 +81,9 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if  (e->type() == QEvent::MouseMove &&
-       ((((QMouseEvent *) e)->buttons() & mButton) &&
+       ((qMouseEv->buttons() & mButton) &&
         (kModifier == Qt::NoModifier ||
-         ((QMouseEvent *) e)->modifiers() & kModifier))) {
-    QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+         qMouseEv->modifiers() & kModifier))) {
 
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
       graph=0;
@@ -112,12 +111,10 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       glMainWidget->redraw();
       return true;
     }
-
     return false;
   }
 
   if  (e->type() == QEvent::MouseButtonRelease) {
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
 
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
       graph=0;
@@ -269,10 +266,10 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 
       started = false;
       Observable::unholdObservers();
+      glMainWidget->redraw();
       return true;
     }
   }
-
   return false;
 }
 //==================================================================
