@@ -284,8 +284,17 @@ void GlLabel::draw(float lod, Camera *camera) {
   if(textVector.size()>1)
     multiLineH=(h-(textVector.size()-1)*10)/textVector.size();
 
-  screenH=static_cast<float>(multiLineH*(lod/sqrt((lodBoundingBox[1][0]-lodBoundingBox[0][0])*(lodBoundingBox[1][0]-lodBoundingBox[0][0])+(lodBoundingBox[1][1]-lodBoundingBox[0][1])*(lodBoundingBox[1][1]-lodBoundingBox[0][1]))))/2.f;
+  float a=acos(camera->getUp()[1]/sqrt(camera->getUp()[0]*camera->getUp()[0]+camera->getUp()[1]*camera->getUp()[1]));
+  //float b=acos(camera->getUp()[1]/sqrt(camera->getUp()[1]*camera->getUp()[1]+camera->getUp()[2]*camera->getUp()[2]));
 
+
+  a=M_PI/4-a;
+  if(a<-M_PI/4)
+    a=-M_PI/2-a;
+
+  //b=M_PI/4-b;
+
+  screenH=static_cast<float>(multiLineH*(lod/(cos(a)*sqrt((lodBoundingBox[1][0]-lodBoundingBox[0][0])*(lodBoundingBox[1][0]-lodBoundingBox[0][0])+(lodBoundingBox[1][1]-lodBoundingBox[0][1])*(lodBoundingBox[1][1]-lodBoundingBox[0][1])+(lodBoundingBox[1][2]-lodBoundingBox[0][2])*(lodBoundingBox[1][2]-lodBoundingBox[0][2])))))/2.f;
 
   float scaleToApply=1.;
 
