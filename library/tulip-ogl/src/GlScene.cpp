@@ -194,7 +194,7 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
   Graph *graph=glGraphComposite->getInputData()->getGraph();
   BooleanProperty *selectionProperty=glGraphComposite->getInputData()->getElementSelected();
   bool viewOutScreenLabel=glGraphComposite->getRenderingParameters().isViewOutScreenLabel();
-  DoubleProperty *metric=NULL;
+  DoubleProperty *metric = NULL;
 
   if(graph->existProperty("viewMetric"))
     metric=graph->getProperty<DoubleProperty>("viewMetric");
@@ -258,6 +258,11 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
     // If not Metric ordered : a this point selected nodes are draw
     if(glGraphComposite->getInputData()->parameters->isElementOrdered()) {
       // Draw selected nodes label with metric ordering
+      
+      if(glGraphComposite->getInputData()->parameters->getElementOrderingProperty()) {
+        metric = glGraphComposite->getInputData()->parameters->getElementOrderingProperty();
+      }
+      
       GreatThanNode ltn;
       ltn.metric=metric;
       sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
@@ -301,6 +306,11 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
     // If not Metric ordered : a this point selected edges are draw
     if(glGraphComposite->getInputData()->parameters->isElementOrdered()) {
       // Draw selected edges label with metric ordering
+      
+      if(glGraphComposite->getInputData()->parameters->getElementOrderingProperty()) {
+        metric = glGraphComposite->getInputData()->parameters->getElementOrderingProperty();
+      }
+      
       GreatThanEdge lte;
       lte.metric=metric;
       sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);

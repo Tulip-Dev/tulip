@@ -54,13 +54,15 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _labelMinSize(10),
   _labelMaxSize(30),
   _labelsDensity(100),
-  _labelsAreBillboarded(false) {
-  _fontsPath = tlp::TulipBitmapDir;
-  _texturePath = "";
-  _edgesMaxSizeToNodesSize = true;
-  _feedbackRender=false;
-  _selectionColor=PreferenceManager::getInst().getSelectionColor();
-  _displayFilteringProperty=NULL;
+  _labelsAreBillboarded(false),
+  _fontsPath(tlp::TulipBitmapDir),
+  _texturePath(""),
+  _edgesMaxSizeToNodesSize(true),
+  _feedbackRender(false),
+  _selectionColor(PreferenceManager::getInst().getSelectionColor()),
+  _displayFilteringProperty(NULL),
+  _elementOrderingProperty(NULL)
+{
 }
 //This function should rewriten completly
 DataSet GlGraphRenderingParameters::getParameters() const {
@@ -472,4 +474,12 @@ int GlGraphRenderingParameters::getMaxSizeOfLabel() {
 //====================================================
 void GlGraphRenderingParameters::setMaxSizeOfLabel(int size) {
   _labelMaxSize=size;
+}
+
+void GlGraphRenderingParameters::setElementOrderingProperty(tlp::DoubleProperty* property) {
+  _elementOrderingProperty = property;
+}
+
+tlp::DoubleProperty* GlGraphRenderingParameters::getElementOrderingProperty() const {
+  return _elementOrderingProperty;
 }

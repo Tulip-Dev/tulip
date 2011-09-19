@@ -514,6 +514,7 @@ void MainController::update (ObserverIterator, ObserverIterator) {
   if(propertiesListUpdated) {
     eltProperties->setGraph(getCurrentGraph());
     propertiesWidget->setGraph(getCurrentGraph());
+    
     propertiesListUpdated=false;
   }
 

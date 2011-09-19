@@ -21,6 +21,7 @@
 
 #include <tulip/tulipconf.h>
 
+#include <tulip/GlGraphRenderingParameters.h>
 #include "tulip/RenderingParametersDialogData.h"
 
 #include <QtGui/QTreeWidgetItem>
@@ -53,6 +54,7 @@ public slots:
   void selectionSaveAtDefaultColor();
   void setButtonColor(QColor tmp,QPushButton *button);
   void labelSizeChanged(int);
+  void updateOrderingProperty(QString propertyName);
 
 signals :
 
@@ -60,6 +62,7 @@ signals :
 
 protected :
 
+  void recreateOrderingPropertyCombobox(GlGraphRenderingParameters& param);
   void updateDensityLabels();
 
 };

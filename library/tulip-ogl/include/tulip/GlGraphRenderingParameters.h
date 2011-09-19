@@ -237,6 +237,19 @@ public:
    */
   bool isElementOrdered() const;
   /**
+   * @brief Defines which property is used for the element ordering.
+   *
+   * @param property The property to use to order the elements.
+   * @return void
+   **/
+  void setElementOrderingProperty(tlp::DoubleProperty* property);
+  /**
+   * @brief Gets the property used for element ordering. Setting it to NULL will use viewMetric if the ordering is enabled.
+   *
+   * @return :DoubleProperty* The Property curretly used.
+   **/
+  tlp::DoubleProperty* getElementOrderingProperty() const;
+  /**
    * If true node and edges are ordered according to the distance with camera
    */
   void setElementZOrdered(const bool state);
@@ -404,7 +417,7 @@ private:
   bool _feedbackRender;
   Color _selectionColor;
   BooleanProperty *_displayFilteringProperty;
-
+  DoubleProperty* _elementOrderingProperty;
 };
 }
 

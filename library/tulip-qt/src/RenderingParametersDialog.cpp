@@ -40,7 +40,6 @@ RenderingParametersDialog::RenderingParametersDialog(QWidget* parent) : QWidget(
 }
 
 void RenderingParametersDialog::setGlMainWidget(GlMainWidget *glWidget) {
-
   this->glWidget = glWidget;
 
   GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
@@ -50,6 +49,11 @@ void RenderingParametersDialog::setGlMainWidget(GlMainWidget *glWidget) {
   colorInterpolation->setChecked( param.isEdgeColorInterpolate());
   sizeInterpolation->setChecked( param.isEdgeSizeInterpolate());
   ordering->setChecked( param.isElementOrdered());
+  orderingProperty->setEnabled(param.isElementOrdered());
+  
+  recreateOrderingPropertyCombobox(param);
+  connect(orderingProperty, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateOrderingProperty(QString)));
+  
   orthogonal->setChecked(glWidget->getScene()->isViewOrtho());
   edge3D->setChecked( param.isEdge3D());
   Color backgroundC = glWidget->getScene()->getBackgroundColor();
@@ -85,6 +89,9 @@ void RenderingParametersDialog::updateView() {
   param.setEdgeColorInterpolate(colorInterpolation->isChecked());
   param.setEdgeSizeInterpolate(sizeInterpolation->isChecked());
   param.setElementOrdered(ordering->isChecked());
+  orderingProperty->setEnabled(param.isElementOrdered());
+  recreateOrderingPropertyCombobox(param);
+  
   glWidget->getScene()->setViewOrtho(orthogonal->isChecked());
   param.setEdge3D(edge3D->isChecked());
   param.setLabelScaled(scaled->isChecked());
@@ -205,4 +212,45 @@ void RenderingParametersDialog::labelSizeChanged(int) {
 
   updateView();
 }
+
+void RenderingParametersDialog::recreateOrderingPropertyCombobox(GlGraphRenderingParameters& param) {
+  //TODO there is a slightly annoying behavior when checking and unchecking the checkbox if the user did not select any property (index changing)
+  //if the elements are ordered, fill the combobox
+  if(param.isElementOrdered()) {
+    orderingProperty->clear();
+    
+    if(!glWidget->getGraph()->existProperty("viewMetric")){
+      orderingProperty->addItem("viewMetric");
+    }
+    
+    PropertyInterface* property;
+    forEach(property, glWidget->getGraph()->getObjectProperties()) {
+      if(property->getTypename() == "double") {
+        orderingProperty->addItem(property->getName().c_str());
+      }
+    }
+        
+    //if there is a property defined, try to select it
+    if(param.getElementOrderingProperty()) {
+      QString propertyName = QString::fromStdString(param.getElementOrderingProperty()->getName());
+      int index = orderingProperty->findText(propertyName);
+      if(index >= 0) {
+        orderingProperty->setCurrentIndex(index);
+      }
+    }
+  }
+  //if the elements are not ordered, display viewMetric as default
+  else {
+    orderingProperty->addItem("viewMetric");
+  }
+}
+
+void RenderingParametersDialog::updateOrderingProperty(QString propertyName) {
+  if(!propertyName.isEmpty()) {
+    GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+    param.setElementOrderingProperty(glWidget->getGraph()->getProperty<DoubleProperty>(propertyName.toStdString()));
+    glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+  }
+}
+
 }
