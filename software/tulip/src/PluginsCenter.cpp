@@ -175,6 +175,7 @@ void PluginsCenter::remove(tlp::PluginInformations *infos) {
 
 void PluginsCenter::addRemoteLocation(const QString &url) {
   QString remoteLocation = url;
+
   if (url.isNull())
     remoteLocation = _ui->remoteLocationText->text();
 

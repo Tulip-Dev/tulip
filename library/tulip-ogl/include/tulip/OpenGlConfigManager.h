@@ -58,90 +58,92 @@ class TLP_GL_SCOPE OpenGlConfigManager {
 
 public:
 
-	/**
-	 * Return the current instance. If instance doesn't exist, create it.
-	 */
-	static OpenGlConfigManager &getInst();
+  /**
+   * Return the current instance. If instance doesn't exist, create it.
+   */
+  static OpenGlConfigManager &getInst();
 
-	/**
-	 * Change the error viewer and return the old one.
-	 */
-	OpenGlErrorViewer *setErrorViewer(OpenGlErrorViewer *errorViewer);
+  /**
+   * Change the error viewer and return the old one.
+   */
+  OpenGlErrorViewer *setErrorViewer(OpenGlErrorViewer *errorViewer);
 
-	/**
-	 * Check if system has good graphics card drivers.
-	 */
-	void checkDrivers();
+  /**
+   * Check if system has good graphics card drivers.
+   */
+  void checkDrivers();
 
-	/**
-	 * Returns the OpenGL version number supported by the host system.
-	 */
-	double getOpenGLVersion();
+  /**
+   * Returns the OpenGL version number supported by the host system.
+   */
+  double getOpenGLVersion();
 
-	/*
-	 * Return the vendor name of the OpenGL driver installed on the host system.
-	 */
-	std::string getOpenGLVendor();
+  /*
+   * Return the vendor name of the OpenGL driver installed on the host system.
+   */
+  std::string getOpenGLVendor();
 
-	/*
-	 * Checks if an OpenGL extension is supported by the driver installed on the host system.
-	 * \param extensionName the name of the OpenGL extension to check in the form "GL_.*" (for instance "GL_ARB_vertex_buffer_object")
-	 */
-	bool isExtensionSupported(const std::string &extensionName);
+  /*
+   * Checks if an OpenGL extension is supported by the driver installed on the host system.
+   * \param extensionName the name of the OpenGL extension to check in the form "GL_.*" (for instance "GL_ARB_vertex_buffer_object")
+   */
+  bool isExtensionSupported(const std::string &extensionName);
 
-	/**
-	 * Returns if vertex buffer objects can be used on the host system.
-	 */
-	bool hasVertexBufferObject();
+  /**
+   * Returns if vertex buffer objects can be used on the host system.
+   */
+  bool hasVertexBufferObject();
 
-	/**
-	 * Enables / disables anti-aliasing rendering.
-	 */
-	void setAntiAliasing(const bool antialiasing) {antialiased = antialiasing;}
+  /**
+   * Enables / disables anti-aliasing rendering.
+   */
+  void setAntiAliasing(const bool antialiasing) {
+    antialiased = antialiasing;
+  }
 
-	/*
-	 * Activates the anti-aliasing of lines and points primitives.
-	 * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
-	 */
-	void activateLineAndPointAntiAliasing();
+  /*
+   * Activates the anti-aliasing of lines and points primitives.
+   * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+   */
+  void activateLineAndPointAntiAliasing();
 
-	/*
-	 * Desactivates the anti-aliasing of lines and points primitives.
-	 * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
-	 */
-	void desactivateLineAndPointAntiAliasing();
+  /*
+   * Desactivates the anti-aliasing of lines and points primitives.
+   * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+   */
+  void desactivateLineAndPointAntiAliasing();
 
-	/*
-	 * Activates the anti-aliasing of polygons primitives.
-	 * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
-	 */
-	void activatePolygonAntiAliasing();
-	/*
-	 * Desactivates the anti-aliasing of polygons primitives.
-	 * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
-	 */
-	void desactivatePolygonAntiAliasing();
+  /*
+   * Activates the anti-aliasing of polygons primitives.
+   * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+   */
+  void activatePolygonAntiAliasing();
+  /*
+   * Desactivates the anti-aliasing of polygons primitives.
+   * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+   */
+  void desactivatePolygonAntiAliasing();
 
-	void initGlew();
+  void initGlew();
 
 private:
 
 
 
-	/**
-	 * Private constructor for singleton
-	 */
-	OpenGlConfigManager();
+  /**
+   * Private constructor for singleton
+   */
+  OpenGlConfigManager();
 
-	static OpenGlConfigManager* inst;
+  static OpenGlConfigManager* inst;
 
-	OpenGlErrorViewer *errorViewer;
+  OpenGlErrorViewer *errorViewer;
 
-	bool glewIsInit;
-	bool driversAreChecked;
-	bool antialiased;
+  bool glewIsInit;
+  bool driversAreChecked;
+  bool antialiased;
 
-	std::map<std::string, bool> checkedExtensions;
+  std::map<std::string, bool> checkedExtensions;
 
 };
 

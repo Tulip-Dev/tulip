@@ -51,9 +51,10 @@ void PluginInformationsListItem::expand() {
   _ui->removeButton->setVisible(_pluginInformations->isInstalled());
 
   _ui->infosButton->setIcon(QIcon(":/tulip/app/icons/help-contents.svg"));
+
   if (_pluginInformations->isInstalled() && _pluginInformations->updateAvailable()) {
-      _ui->installButton->setIcon(QIcon(":/tulip/app/icons/package-upgrade.svg"));
-      _ui->installButton->setText(trUtf8("Upgrade to ") + _pluginInformations->latestVersion());
+    _ui->installButton->setIcon(QIcon(":/tulip/app/icons/package-upgrade.svg"));
+    _ui->installButton->setText(trUtf8("Upgrade to ") + _pluginInformations->latestVersion());
   }
   else
     _ui->installButton->setIcon(QIcon(":/tulip/app/icons/list-add.svg"));
@@ -105,8 +106,9 @@ void PluginInformationsListItem::downloadFinished() {
 
 QString PluginInformationsListItem::backgroundCode() {
   if (hasFocus())
-      return "rgb(232, 238, 244)";
+    return "rgb(232, 238, 244)";
   else if (_pluginInformations->isInstalled() && !_pluginInformations->updateAvailable())
     return "#E9E9E9";
+
   return "white";
 }

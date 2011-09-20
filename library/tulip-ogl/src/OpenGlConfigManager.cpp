@@ -33,107 +33,111 @@ using namespace std;
 namespace tlp {
 
 OpenGlConfigManager& OpenGlConfigManager::getInst() {
-	if(!inst)
-		inst=new OpenGlConfigManager();
-	inst->initGlew();
-	return *inst;
+  if(!inst)
+    inst=new OpenGlConfigManager();
+
+  inst->initGlew();
+  return *inst;
 }
 
 OpenGlConfigManager::OpenGlConfigManager():
-						errorViewer(new OpenGlErrorViewer()),glewIsInit(false),
-						driversAreChecked(false), antialiased(true) {
+  errorViewer(new OpenGlErrorViewer()),glewIsInit(false),
+  driversAreChecked(false), antialiased(true) {
 }
 
 void OpenGlConfigManager::initGlew() {
-	if (!glewIsInit) {
-		glewIsInit = (glewInit() == GLEW_OK);
-	}
+  if (!glewIsInit) {
+    glewIsInit = (glewInit() == GLEW_OK);
+  }
 }
 
-OpenGlErrorViewer *OpenGlConfigManager::setErrorViewer(OpenGlErrorViewer *errorViewer){
-	OpenGlErrorViewer *oldErrorViewer=this->errorViewer;
-	this->errorViewer=errorViewer;
-	return oldErrorViewer;
+OpenGlErrorViewer *OpenGlConfigManager::setErrorViewer(OpenGlErrorViewer *errorViewer) {
+  OpenGlErrorViewer *oldErrorViewer=this->errorViewer;
+  this->errorViewer=errorViewer;
+  return oldErrorViewer;
 }
 
 void OpenGlConfigManager::checkDrivers() {
-	if(driversAreChecked)
-		return;
-	driversAreChecked=true;
+  if(driversAreChecked)
+    return;
 
-	bool nvidia=false;
-	bool ati=false;
-	string vendor(getOpenGLVendor());
-	if(vendor.find("NVIDIA")!=string::npos)
-		nvidia=true;
-	if(vendor.find("ATI")!=string::npos)
-		ati=true;
+  driversAreChecked=true;
 
-	if(!nvidia && !ati) {
-		errorViewer->displayErrorWithAskAgain("Graphics card warning","Warning :\n\n"
-				"Your graphics card is not powerful enough\n"
-				"or it is not configured with the correct driver\n"
-				"to suit the Tulip graphics rendering needs.\n\n"
-				"If you have an ATI or NVIDIA graphics card,\n"
-				"we recommend to install the official driver\n"
-				"to benefit from an optimal graphics rendering.");
-	}
+  bool nvidia=false;
+  bool ati=false;
+  string vendor(getOpenGLVendor());
+
+  if(vendor.find("NVIDIA")!=string::npos)
+    nvidia=true;
+
+  if(vendor.find("ATI")!=string::npos)
+    ati=true;
+
+  if(!nvidia && !ati) {
+    errorViewer->displayErrorWithAskAgain("Graphics card warning","Warning :\n\n"
+                                          "Your graphics card is not powerful enough\n"
+                                          "or it is not configured with the correct driver\n"
+                                          "to suit the Tulip graphics rendering needs.\n\n"
+                                          "If you have an ATI or NVIDIA graphics card,\n"
+                                          "we recommend to install the official driver\n"
+                                          "to benefit from an optimal graphics rendering.");
+  }
 }
 
 double OpenGlConfigManager::getOpenGLVersion() {
-	return atof(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
+  return atof(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
 }
 
 string OpenGlConfigManager::getOpenGLVendor() {
-	return string(reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
+  return string(reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
 }
 
 bool OpenGlConfigManager::isExtensionSupported(const string &extensionName) {
-	if (!glewIsInit)
-		return false;
+  if (!glewIsInit)
+    return false;
 
-	if (checkedExtensions.find(extensionName) == checkedExtensions.end()) {
-		checkedExtensions[extensionName] = (glewIsSupported(extensionName.c_str()) == GL_TRUE);
-	}
+  if (checkedExtensions.find(extensionName) == checkedExtensions.end()) {
+    checkedExtensions[extensionName] = (glewIsSupported(extensionName.c_str()) == GL_TRUE);
+  }
 
-	return checkedExtensions[extensionName];
+  return checkedExtensions[extensionName];
 }
 
 bool OpenGlConfigManager::hasVertexBufferObject() {
-	return isExtensionSupported("GL_ARB_vertex_buffer_object");
+  return isExtensionSupported("GL_ARB_vertex_buffer_object");
 }
 
 void OpenGlConfigManager::activateLineAndPointAntiAliasing() {
-	if (antialiased) {
-		glDisable(GL_MULTISAMPLE);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable(GL_LINE_SMOOTH);
-		glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
-		glEnable(GL_POINT_SMOOTH);
-		glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
-	}
+  if (antialiased) {
+    glDisable(GL_MULTISAMPLE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_LINE_SMOOTH);
+    glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
+    glEnable(GL_POINT_SMOOTH);
+    glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
+  }
 }
 
 void OpenGlConfigManager::desactivateLineAndPointAntiAliasing() {
-	if (antialiased) {
-		glDisable(GL_LINE_SMOOTH);
-		glDisable(GL_POINT_SMOOTH);
-	}
+  if (antialiased) {
+    glDisable(GL_LINE_SMOOTH);
+    glDisable(GL_POINT_SMOOTH);
+  }
 }
 
 void OpenGlConfigManager::activatePolygonAntiAliasing() {
-	if (antialiased) {
-		glDisable(GL_LINE_SMOOTH);
-		glDisable(GL_POINT_SMOOTH);
-		glEnable(GL_MULTISAMPLE);
-	}
+  if (antialiased) {
+    glDisable(GL_LINE_SMOOTH);
+    glDisable(GL_POINT_SMOOTH);
+    glEnable(GL_MULTISAMPLE);
+  }
 }
 
 void OpenGlConfigManager::desactivatePolygonAntiAliasing() {
-	if (antialiased) {
-		glDisable(GL_MULTISAMPLE);
-	}
+  if (antialiased) {
+    glDisable(GL_MULTISAMPLE);
+  }
 }
 
 }

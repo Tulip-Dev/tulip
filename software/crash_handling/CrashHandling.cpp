@@ -24,9 +24,9 @@ static void dumpStack(int signum) {
   std::cerr << "Caught signal " << (int)signum << std::endl;
 
   std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
-  << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
-  << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-  << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+            << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
+            << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
+            << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
 
   std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
   sw.printCallStackToStdErr();
@@ -55,9 +55,9 @@ exception_filter(LPEXCEPTION_POINTERS info) {
   sw.setContext(info->ContextRecord);
 
   std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
-  << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
-  << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-  << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+            << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
+            << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
+            << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
   std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
   sw.printCallStackToStdErr();
   std::cerr << TLP_STACK_END_HEADER << std::endl;
@@ -78,9 +78,9 @@ exception_filter(LPEXCEPTION_POINTERS info) {
   sw.setContext(info->ContextRecord);
 
   std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
-  << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
-  << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-  << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+            << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
+            << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
+            << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
   std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
   sw.printCallStackToStdErr();
   std::cerr << TLP_STACK_END_HEADER << std::endl;

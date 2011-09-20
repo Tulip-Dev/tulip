@@ -12,21 +12,27 @@
 
 bool PluginResultsList::PluginInformationsSorter::operator ()(const tlp::PluginInformations* i1,const tlp::PluginInformations* i2) {
   int score1 = 0,score2 = 0;
+
   if (i1->isInstalled())
     score1=2;
+
   if (i1->updateAvailable())
     score1=1;
+
   if (i2->isInstalled())
     score2=2;
+
   if (i2->updateAvailable())
     score2=1;
+
   if (score1 == score2)
     return i1->name() < i2->name();
+
   return score1 < score2;
 }
 
 PluginResultsList::PluginResultsList(QWidget *parent)
-: QScrollArea(parent), _focusedItem(0), _resultsListCache(0), _pluginWidgetsCache(std::map<tlp::PluginInformations *,PluginInformationsListItem *,PluginInformationsSorter>(PluginInformationsSorter())) {
+  : QScrollArea(parent), _focusedItem(0), _resultsListCache(0), _pluginWidgetsCache(std::map<tlp::PluginInformations *,PluginInformationsListItem *,PluginInformationsSorter>(PluginInformationsSorter())) {
   initPluginsCache();
 }
 
@@ -79,6 +85,7 @@ void PluginResultsList::refreshResults() {
     searchLayout->addWidget(item);
     item->setVisible(true);
   }
+
   searchLayout->addItem(new QSpacerItem(1,1,QSizePolicy::Maximum,QSizePolicy::Expanding));
   setWidget(mainWidget);
 
@@ -139,11 +146,13 @@ void PluginResultsList::pluginRemove() {
 
 void PluginResultsList::initPluginsCache() {
   tlp::PluginInformations *i;
-  for(cache::iterator it = _pluginWidgetsCache.begin();it != _pluginWidgetsCache.end(); ++it) {
-   i = it->first;
+
+  for(cache::iterator it = _pluginWidgetsCache.begin(); it != _pluginWidgetsCache.end(); ++it) {
+    i = it->first;
     delete i;
     delete _pluginWidgetsCache[i];
   }
+
   _pluginWidgetsCache.clear();
   foreach(i, tlp::PluginManager::pluginsList(tlp::PluginManager::All)) {
     PluginInformationsListItem *item = new PluginInformationsListItem(i);
@@ -163,11 +172,13 @@ tlp::PluginInformations* PluginResultsList::featuredPlugin() {
   int i=0,rnd=rand()%_pluginWidgetsCache.size();
   bool returnNext=false;
 
-  for(cache::iterator it = _pluginWidgetsCache.begin();it != _pluginWidgetsCache.end(); ++it) {
+  for(cache::iterator it = _pluginWidgetsCache.begin(); it != _pluginWidgetsCache.end(); ++it) {
     tlp::PluginInformations* infos = it->first;
     returnNext = i++>=rnd;
+
     if (returnNext && (!infos->isInstalled() || i == _pluginWidgetsCache.size()-1))
       return infos;
   }
+
   return NULL;
 }

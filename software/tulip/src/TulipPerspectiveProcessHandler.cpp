@@ -124,8 +124,10 @@ void TulipPerspectiveProcessHandler::enableCrashHandling(qlonglong perspectivePi
   QProcess *p;
   foreach(p,_processInfos.keys()) {
 #ifdef _WIN32
+
     if (p->pid()->dwProcessId == perspectivePid) {
 #else
+
     if (p->pid() == perspectivePid) {
 #endif
       PerspectiveProcessInfos infos = _processInfos[p];
