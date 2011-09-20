@@ -39,8 +39,10 @@ public:
 
       std::cerr << " ======================== " << std::endl;
       std::cerr << "Possible memory leak at " << ptr << ": " << std::endl;
-      for (size_t i=0;i<infos._size;++i)
+
+      for (size_t i=0; i<infos._size; ++i)
         std::cerr << infos._strings[i] << std::endl;
+
       std::cerr << " ======================== " << std::endl << std::endl;
     }
   }
@@ -62,10 +64,12 @@ static bool block_inserts = false;
 void memchecker_insert_stack(void* ptr,char** strings, size_t size) {
   if (block_inserts)
     return;
+
   block_inserts=true;
 
   if (!memory_checker)
     memory_checker = new MemoryChecker;
+
   memory_checker->insert(ptr,strings,size);
   block_inserts=false;
 }

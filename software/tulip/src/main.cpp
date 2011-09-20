@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
 
   // revert previous remote locations
   foreach(const QString& remoteLocation, TulipSettings::instance().remoteLocations())
-    tlp::PluginManager::addRemoteLocation(remoteLocation);
+  tlp::PluginManager::addRemoteLocation(remoteLocation);
 
   updatePlateform(argv[0]);
 
@@ -162,6 +162,7 @@ int main(int argc, char **argv) {
 
   if (!dbusRegisterServiceOk)
     qWarning() << "D-Bus registration of service org.labri.Tulip failed.";
+
   if (!dbusRegisterObjectOk)
     qWarning() << "D-Bus registration of object / over service org.labri.Tulip failed.";
 
