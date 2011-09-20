@@ -100,8 +100,6 @@ void GlLabel::init() {
 //============================================================
 void GlLabel::setText(const string& text) {
   this->text=text;
-
-
 }
 //============================================================
 void GlLabel::setTextBeforeRendering(const std::string& text) {
@@ -110,6 +108,7 @@ void GlLabel::setTextBeforeRendering(const std::string& text) {
     borderFont->FaceSize(fontSize);
   }
 
+  // split each line
   textVector.clear();
   textWidthVector.clear();
   size_t lastPos=0;
@@ -121,13 +120,25 @@ void GlLabel::setTextBeforeRendering(const std::string& text) {
     pos=text.find_first_of("\n",pos+1);
   }
 
-  textVector.push_back(text.substr(lastPos));
+  textVector.push_back(text.substr(lastPos)+" ");
 
+  //Text bounding box computation
   textBoundingBox=BoundingBox();
-  float x1,y1,z1,x2,y2,z2;
 
+  float x1,y1,z1,x2,y2,z2,w1,w2;
+
+  //Here we compute height of the text based on the char |
+  stringstream strstr;
+  strstr << "|" ;
+  for(unsigned int i=0;i<textVector.size();++i)
+    strstr << endl << "|" ;
+
+  font->BBox(strstr.str().c_str(),x1,y1,z1,x2,y2,z2);
+
+  // After we compute width of text
   for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
-    font->BBox((*it).c_str(),x1,y1,z1,x2,y2,z2);
+    font->BBox((*it).c_str(),x1,w1,z1,x2,w2,z2);
+
     textWidthVector.push_back(x2-x1);
 
     if(it==textVector.begin()) {
@@ -161,6 +172,8 @@ BoundingBox GlLabel::getBoundingBox() {
 }
 //============================================================
 BoundingBox GlLabel::getTextBoundingBox() {
+  setTextBeforeRendering(text);
+
   return textBoundingBox;
 }
 //============================================================
@@ -271,9 +284,11 @@ void GlLabel::draw(float lod, Camera *camera) {
   glDisable(GL_LIGHTING);
   glDisable(GL_BLEND);
 
+  //Store width and height of the text
   float w=textBoundingBox[1][0]-textBoundingBox[0][0];
   float h=textBoundingBox[1][1]-textBoundingBox[0][1];
 
+  //Compute scale of the text if text is scaled to a size
   float div_w, div_h;
   div_w = size[0]/w;
   div_h = size[1]/h;
@@ -284,21 +299,18 @@ void GlLabel::draw(float lod, Camera *camera) {
   if(textVector.size()>1)
     multiLineH=(h-(textVector.size()-1)*10)/textVector.size();
 
+  //Here we compute the deformation of the bounding box when we have a rotation on the camera
   float a=acos(camera->getUp()[1]/sqrt(camera->getUp()[0]*camera->getUp()[0]+camera->getUp()[1]*camera->getUp()[1]));
-  //float b=acos(camera->getUp()[1]/sqrt(camera->getUp()[1]*camera->getUp()[1]+camera->getUp()[2]*camera->getUp()[2]));
-
-
   a=M_PI/4-a;
 
   if(a<-M_PI/4)
     a=-M_PI/2-a;
 
-  //b=M_PI/4-b;
-
+  //We compute the size of the text on the screen
   screenH=static_cast<float>(multiLineH*(lod/(cos(a)*sqrt((lodBoundingBox[1][0]-lodBoundingBox[0][0])*(lodBoundingBox[1][0]-lodBoundingBox[0][0])+(lodBoundingBox[1][1]-lodBoundingBox[0][1])*(lodBoundingBox[1][1]-lodBoundingBox[0][1])+(lodBoundingBox[1][2]-lodBoundingBox[0][2])*(lodBoundingBox[1][2]-lodBoundingBox[0][2])))))/2.f;
 
+  //Scale of the text
   float scaleToApply=1.;
-
   if(scaleToSize) {
     if(div_h * w > size[0]) {
       scaleToApply=div_w;
@@ -322,6 +334,7 @@ void GlLabel::draw(float lod, Camera *camera) {
     }
   }
 
+  //Occlusion part of the label
   if(occlusionTester && camera && labelsDensity!=100) {
     BoundingBox labelBoundingBox;
     Coord baseCoord=centerPosition;
@@ -413,8 +426,8 @@ void GlLabel::draw(float lod, Camera *camera) {
 
   glPushMatrix();
 
+  //Translation and rotation
   glTranslatef(centerPosition[0],centerPosition[1], centerPosition[2]);
-
   if(xRot!=0.)
     glRotatef(xRot,1.,0.,0.);
 
@@ -424,6 +437,7 @@ void GlLabel::draw(float lod, Camera *camera) {
   if(zRot!=0.)
     glRotatef(zRot,0.,0.,1.);
 
+  //Alignement translation
   switch(alignment) {
   case ON_CENTER:
     glTranslatef(translationAfterRotation[0],translationAfterRotation[1],translationAfterRotation[2]);
@@ -444,6 +458,7 @@ void GlLabel::draw(float lod, Camera *camera) {
     break;
   }
 
+  //Billboard computation
   if(billboarded) {
     float mdlM[16];
     glGetFloatv( GL_MODELVIEW_MATRIX, mdlM );
@@ -464,6 +479,7 @@ void GlLabel::draw(float lod, Camera *camera) {
   if(screenH<0)
     screenH=-screenH;
 
+  //The label is too small to be readed, draw a line
   if(screenH < 4 && useLOD) {
     float wAlign=0;
     float hAlign=0;
@@ -497,6 +513,7 @@ void GlLabel::draw(float lod, Camera *camera) {
     glLineWidth(1);
   }
   else {
+    //Draw labels
     glDisable(GL_DEPTH_TEST);
     glBlendFunc(GL_ONE_MINUS_DST_COLOR,GL_ONE_MINUS_SRC_COLOR);
 
@@ -538,11 +555,13 @@ void GlLabel::draw(float lod, Camera *camera) {
     // space between lines
     float yShift=0.;
 
-    float x1,y1,z1,x2,y2,z2;
+    float x1,y1,z1,x2,y2,z2,w1,w2;
+    font->BBox("|",x1,y1,z1,x2,y2,z2);
+
     vector<float>::iterator itW=textWidthVector.begin();
 
     for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
-      font->BBox((*it).c_str(),x1,y1,z1,x2,y2,z2);
+      font->BBox((*it).c_str(),x1,w1,z1,x2,w2,z2);
 
       FTPoint shift(-(textBoundingBox[1][0]-textBoundingBox[0][0])/2.-x1+((textBoundingBox[1][0]-textBoundingBox[0][0])-(*itW))*xAlignFactor+(textBoundingBox[1][0]-textBoundingBox[0][0])*xShiftFactor,
                     -textBoundingBox[1][1]+(textBoundingBox[1][1]-textBoundingBox[0][1])/2.+yShift+(textBoundingBox[1][1]-textBoundingBox[0][1])*yShiftFactor);
