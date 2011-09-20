@@ -20,6 +20,7 @@
 
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
 
 #include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( TestPropertiesMinMaxAfterAddNode );
@@ -82,11 +83,36 @@ void TestPropertiesMinMaxAfterAddNode::testIntegerPropertyMinMaxAfterAddNode() {
   CPPUNIT_ASSERT(intProp->getNodeMax(graph) == i2);
 }
 
+void TestPropertiesMinMaxAfterAddNode::testLayoutPropertyMinMaxAfterAddNode() {
+  LayoutProperty *property = graph->getProperty<LayoutProperty>("testLayout");
+
+  // add two nodes
+  node n1 = graph->addNode();
+  node n2 = graph->addNode();
+
+  const Coord firstNodePos(1.0f, 2.0f);
+  const Coord secondNodePos(3.0f, 4.0f);
+
+  property->setNodeValue(n1, firstNodePos);
+  property->setNodeValue(n2, secondNodePos);
+  CPPUNIT_ASSERT_EQUAL(firstNodePos, property->getMin(graph));
+  CPPUNIT_ASSERT_EQUAL(secondNodePos, property->getMax(graph));
+
+  // add a new node, the value associated to the layout property is the default one 0
+  node n3 = graph->addNode();
+
+  // min should be 0
+  CPPUNIT_ASSERT_EQUAL(Coord(), property->getMin(graph));
+  CPPUNIT_ASSERT_EQUAL(secondNodePos, property->getMax(graph));
+}
+
 CppUnit::Test *TestPropertiesMinMaxAfterAddNode::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Properties Min Max after addNode tests" );
   suiteOfTests->addTest( new CppUnit::TestCaller<TestPropertiesMinMaxAfterAddNode>( "DoubleProperty Min Max after addNode test",
                          &TestPropertiesMinMaxAfterAddNode::testDoublePropertyMinMaxAfterAddNode));
   suiteOfTests->addTest( new CppUnit::TestCaller<TestPropertiesMinMaxAfterAddNode>( "IntegerProperty Min Max after addNode test",
                          &TestPropertiesMinMaxAfterAddNode::testIntegerPropertyMinMaxAfterAddNode));
+  suiteOfTests->addTest( new CppUnit::TestCaller<TestPropertiesMinMaxAfterAddNode>( "LayoutProperty Min Max after addNode test",
+                         &TestPropertiesMinMaxAfterAddNode::testLayoutPropertyMinMaxAfterAddNode));
   return suiteOfTests;
 }

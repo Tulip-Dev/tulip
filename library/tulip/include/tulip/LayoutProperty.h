@@ -140,6 +140,8 @@ private:
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
   // override an GraphObserver method
   void reverseEdge(Graph *, const edge);
+  void addNode(Graph*, const tlp::node);
+  void delNode(Graph* g, const tlp::node n);
 };
 
 class TLP_SCOPE CoordVectorProperty:public AbstractVectorProperty<tlp::CoordVectorType, tlp::PointType> {

@@ -786,3 +786,23 @@ PropertyInterface* CoordVectorProperty::clonePrototype(Graph * g, const std::str
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
 }
+
+void LayoutProperty::addNode(Graph*, const tlp::node) {
+  // invalidate all to avoid time consuming checking
+  // when loading graph
+  minMaxOk.clear();
+}
+//=================================================================================
+void LayoutProperty::delNode(Graph* g, const tlp::node n){
+  unsigned int sgi = g->getId();
+  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOk.find(sgi);
+
+  if (it != minMaxOk.end() && it->second) {
+    Coord oldV = getNodeValue(n);
+
+  // check if min or max has to be updated
+  if ((oldV == min[sgi]) || (oldV == max[sgi]))
+    minMaxOk[sgi] = false;
+  }
+}
+//=================================================================================
