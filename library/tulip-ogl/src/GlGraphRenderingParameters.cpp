@@ -61,8 +61,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _feedbackRender(false),
   _selectionColor(PreferenceManager::getInst().getSelectionColor()),
   _displayFilteringProperty(NULL),
-  _elementOrderingProperty(NULL)
-{
+  _elementOrderingProperty(NULL) {
 }
 //This function should rewriten completly
 DataSet GlGraphRenderingParameters::getParameters() const {

@@ -89,7 +89,7 @@ bool PlanarityTest::compute(Graph *graph) {
 
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     return resultsBuffer[(unsigned long)graph];
-  
+
   unsigned int nbOfNodes = graph->numberOfNodes();
 
   if (nbOfNodes==0) {

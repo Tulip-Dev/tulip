@@ -707,6 +707,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
                                 "You may retrieve it in the Help -> Plugins menu.\n\n"+
                                 "Default perspective will be used.");
         }
+
         //anyways, if there is only one controller, use this one
         controllerName=defaultControllerName;
       }

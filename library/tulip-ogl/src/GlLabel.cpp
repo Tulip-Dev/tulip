@@ -289,6 +289,7 @@ void GlLabel::draw(float lod, Camera *camera) {
 
 
   a=M_PI/4-a;
+
   if(a<-M_PI/4)
     a=-M_PI/2-a;
 

@@ -47,9 +47,10 @@ MouseSelector::MouseSelector(Qt::MouseButton button,
 }
 //==================================================================
 bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
-    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
-    QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
-    if (e->type() == QEvent::MouseButtonPress) {
+  GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
+  QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
+
+  if (e->type() == QEvent::MouseButtonPress) {
 
     if (qMouseEv->buttons()== mButton &&
         (kModifier == Qt::NoModifier ||
@@ -70,6 +71,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
           return false;
         }
       }
+
       return true;
     }
 
@@ -111,6 +113,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       glMainWidget->redraw();
       return true;
     }
+
     return false;
   }
 
@@ -270,6 +273,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       return true;
     }
   }
+
   return false;
 }
 //==================================================================
