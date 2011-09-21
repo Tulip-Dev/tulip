@@ -143,6 +143,13 @@ bool TulipProject::exists(const QString &path) {
   return QFileInfo(toAbsolutePath(path)).exists();
 }
 
+bool TulipProject::touch(const QString &path) {
+  QFile f(toAbsolutePath(path));
+  bool result = f.open(QIODevice::WriteOnly);
+  f.close();
+  return result;
+}
+
 bool TulipProject::removeFile(const QString &path) {
   return QFile::remove(toAbsolutePath(path));
 }
@@ -154,6 +161,10 @@ bool TulipProject::removeDir(const QString &path) {
 
 bool TulipProject::removeAllDir(const QString &path) {
   return removeAllDirPrivate(toAbsolutePath(path));
+}
+
+bool TulipProject::copy(const QString &source, const QString &destination) {
+  return QFile::copy(source,toAbsolutePath(destination));
 }
 
 std::fstream *TulipProject::stdFileStream(const QString &path) {
