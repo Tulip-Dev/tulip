@@ -116,9 +116,9 @@ void GlOffscreenRenderer::clearScene() {
 
 void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antialiased) {
 
-    //Initialize the context avoid segfault when trying to render graph without any initialised gl context.
-    QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
-    firstWidget->makeCurrent();
+  //Initialize the context avoid segfault when trying to render graph without any initialised gl context.
+  QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
+  firstWidget->makeCurrent();
 
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
   antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
@@ -176,7 +176,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
 
   if (zoomFactor != DBL_MAX) {
     camera.setZoomFactor(zoomFactor);
-  }  
+  }
 
   scene.draw();
   glFrameBuf->release();

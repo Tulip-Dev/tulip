@@ -130,7 +130,8 @@ void GlLabel::setTextBeforeRendering(const std::string& text) {
   //Here we compute height of the text based on the char |
   stringstream strstr;
   strstr << "|" ;
-  for(unsigned int i=0;i<textVector.size();++i)
+
+  for(unsigned int i=0; i<textVector.size(); ++i)
     strstr << endl << "|" ;
 
   font->BBox(strstr.str().c_str(),x1,y1,z1,x2,y2,z2);
@@ -311,6 +312,7 @@ void GlLabel::draw(float lod, Camera *camera) {
 
   //Scale of the text
   float scaleToApply=1.;
+
   if(scaleToSize) {
     if(div_h * w > size[0]) {
       scaleToApply=div_w;
@@ -428,6 +430,7 @@ void GlLabel::draw(float lod, Camera *camera) {
 
   //Translation and rotation
   glTranslatef(centerPosition[0],centerPosition[1], centerPosition[2]);
+
   if(xRot!=0.)
     glRotatef(xRot,1.,0.,0.);
 

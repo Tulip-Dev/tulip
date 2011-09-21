@@ -793,16 +793,16 @@ void LayoutProperty::addNode(Graph*, const tlp::node) {
   minMaxOk.clear();
 }
 //=================================================================================
-void LayoutProperty::delNode(Graph* g, const tlp::node n){
+void LayoutProperty::delNode(Graph* g, const tlp::node n) {
   unsigned int sgi = g->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOk.find(sgi);
 
   if (it != minMaxOk.end() && it->second) {
     Coord oldV = getNodeValue(n);
 
-  // check if min or max has to be updated
-  if ((oldV == min[sgi]) || (oldV == max[sgi]))
-    minMaxOk[sgi] = false;
+    // check if min or max has to be updated
+    if ((oldV == min[sgi]) || (oldV == max[sgi]))
+      minMaxOk[sgi] = false;
   }
 }
 //=================================================================================
