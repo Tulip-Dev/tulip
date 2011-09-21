@@ -80,6 +80,7 @@ public:
     */
   static TulipProject *restoreProject(const QString &path);
 
+
   /**
     @brief Writes files in the TulipProject into a packed archive.
     This method packs every file in the project into a single archive.
@@ -149,6 +150,22 @@ public:
     @param path The path to delete. @see TulipProject
     */
   bool removeAllDir(const QString &path);
+
+  /**
+    @brief Copies a file from the local filesystem into the project
+    @param source The absolute path of the file to copy
+    @param destination The project path where to copy the file
+    @return false if copy failed
+    */
+  bool copy(const QString& source, const QString& destination);
+
+  /**
+    @brief Creates a empty file
+    This method is similar to the UNIX's touch shell command. Except it won't renew the file's creation date if the file already exists.
+    @param file the file to create
+    @return true if file creation was sucessful.
+    */
+  bool touch(const QString& path);
 
   /**
     @brief Gets a STL file stream (R/W access mode) to the given path.
