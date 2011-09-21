@@ -1,7 +1,7 @@
 SET(TULIP_DIR ${CMAKE_INSTALL_PREFIX})
 SET(TULIP_FOUND true)
-SET(TULIP_INCLUDE_DIR ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipOGDFInclude} ${TulipGUIInclude}}
-SET(TULIP_LIBRARIES ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTulipOGDFName} ${LibTulipPythonName} ${LibTulipOglPythonName} ${LibTulipGUIPythonName} ${LibTulip3CompatName})
+SET(TULIP_INCLUDE_DIR ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipOGDFInclude} ${TulipGUIInclude})
+SET(TULIP_LIBRARIES ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTulipOGDFName} ${LibTulip3CompatName})
 IF(WIN32)
   SET(TULIP_LIBRARIES_DIR ${CMAKE_INSTALL_PREFIX}/bin)
 ELSEIF(APPLE)
