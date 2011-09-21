@@ -40,8 +40,9 @@ MouseSelector::MouseSelector(Qt::MouseButton button,
 }
 //==================================================================
 bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
-    QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
-      GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
+  QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
+  GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
+
   if (e->type() == QEvent::MouseButtonPress) {
 
     if (qMouseEv->buttons()== mButton &&
