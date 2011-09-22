@@ -565,6 +565,7 @@ void GlEdge::drawLabel(OcclusionTest* test, GlGraphInputData* data, float lod, C
   label->setUseMinMaxSize(true);
   label->setMinSize(data->parameters->getMinSizeOfLabel());
   label->setMaxSize(data->parameters->getMaxSizeOfLabel());
+  label->setBillboarded(data->parameters->getLabelsAreBillboarded());
 
   label->drawWithStencil(lod,camera);
 }

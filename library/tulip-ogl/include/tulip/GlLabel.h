@@ -353,6 +353,20 @@ public :
     textureName=name;
   }
 
+  /**
+   * @return if the label is billboarded
+   */
+  bool isBillboarded() {
+    return billboarded;
+  }
+
+  /**
+   * @brief Set if the label is billboarded
+   */
+  void setBillboarded(bool billboarded){
+    this->billboarded=billboarded;
+  }
+
 private :
 
   std::string text;
@@ -376,6 +390,7 @@ private :
   int maxSize;
   bool depthTestEnabled;
   bool leftAlign;
+  bool billboarded;
   float xRot;
   float yRot;
   float zRot;
