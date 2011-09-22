@@ -86,7 +86,6 @@ public:
     GlLabel label;
     BoundingBox bb;
 
-    result->setAllNodeValue(Size(18, 18, 1));
     node n;
     forEach(n, graph->getNodes()) {
       label.setFontNameSizeAndColor(fonts->getNodeValue(n),fontSizes->getNodeValue(n),Color());
