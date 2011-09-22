@@ -52,7 +52,8 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _labelScaled(false),
   _labelMinSize(10),
   _labelMaxSize(30),
-  _labelsDensity(100) {
+  _labelsDensity(100),
+  _labelsAreBillboarded(false){
   _fontsPath = tlp::TulipBitmapDir;
   _texturePath = "";
   _edgesMaxSizeToNodesSize = true;
@@ -94,6 +95,7 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("edgesMaxSizeToNodesSize", _edgesMaxSizeToNodesSize);
   data.set("selectionColor",_selectionColor);
   data.set("labelsDensity", _labelsDensity);
+  data.set("labelsAreBillboarded", _labelsAreBillboarded);
   //data.set("SupergraphId", _graph->getId());
   return data;
 }
@@ -153,6 +155,9 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
 
   if (data.get<bool>("labelOverlaped", b))
     setLabelsDensity(b ? 100 : 0);
+
+  if (data.get<bool>("labelsAreBillboarded", b))
+    setLabelsAreBillboarded(b);
 
   unsigned int ui = 0;
 
