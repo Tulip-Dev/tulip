@@ -340,7 +340,7 @@ public:
   /**
    * Set if labels are billboarded
    */
-  void setLabelsAreBillboarded(bool billboarded){
+  void setLabelsAreBillboarded(bool billboarded) {
     _labelsAreBillboarded=billboarded;
   }
 
