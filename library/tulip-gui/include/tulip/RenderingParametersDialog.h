@@ -20,6 +20,8 @@
 #define Tulip_RENDERINGPARAMETERSDIALOG_H
 
 #include <tulip/tulipconf.h>
+#include <tulip/GlGraphRenderingParameters.h>
+
 #include <QtGui/QTreeWidgetItem>
 
 class QPushButton;
@@ -56,6 +58,7 @@ public slots:
   void selectionSaveAtDefaultColor();
   void setButtonColor(QColor tmp,QPushButton *button);
   void labelSizeChanged(int);
+  void updateOrderingProperty(QString propertyName);
 
   void toggleEdge3DMenu(bool);
   void toggleScaledLabelsMenu(bool);
@@ -68,7 +71,7 @@ signals :
   void viewNeedDraw();
 
 protected :
-
+  void recreateOrderingPropertyCombobox(GlGraphRenderingParameters& param);
   void updateDensityLabels();
 
 private:
