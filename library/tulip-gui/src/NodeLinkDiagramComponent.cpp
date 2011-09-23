@@ -161,6 +161,7 @@ void NodeLinkDiagramComponent::setGraph(Graph *graph,bool initView) {
   overviewWidget->setObservedView(mainWidget,mainWidget->getScene()->getGlGraphComposite());
 
   mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()));
+  renderingParametersDialog->setGlMainWidget(mainWidget);
 
   if(initView)
     init();
