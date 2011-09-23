@@ -287,6 +287,7 @@ public slots:
    */
   void redraw();
 
+
   void closeEvent(QCloseEvent *e);
 
 protected slots:
@@ -307,6 +308,16 @@ public :
 private :
   static QGLWidget *firstQGLWidget;
 
+  public slots:
+  /**
+    * @brief Convinience function that call center function on the current scene and draw the view.
+    * Same thing than
+    * @code
+    * getScene()->centerScene();
+    * draw();
+    * @endcode
+    **/
+  void centerScene();
 };
 
 }

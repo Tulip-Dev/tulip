@@ -800,4 +800,12 @@ void GlMainWidget::useHulls(bool hasHulls) {
 bool GlMainWidget::hasHulls() const {
   return _hasHulls;
 }
+
+void GlMainWidget::centerScene(){
+    scene.centerScene();
+    draw(false);
 }
+}
+
+
+
