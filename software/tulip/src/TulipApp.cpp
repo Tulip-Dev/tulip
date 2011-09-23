@@ -73,6 +73,20 @@ static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::st
 //**********************************************************************
 ///Constructor of ViewGl
 TulipApp::TulipApp(QWidget* parent): QMainWindow(parent),defaultControllerName("Tulip Classic"),currentTabIndex(-1)  {
+#ifdef MEMORYCHECKER_ON
+  QAction* a1 = new QAction(this);
+  a1->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_C));
+  a1->setShortcutContext(Qt::ApplicationShortcut);
+  connect(a1,SIGNAL(triggered()),this,SLOT(clearMemoryChecker()));
+  addAction(a1);
+
+  QAction* a2 = new QAction(this);
+  a2->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_P));
+  a2->setShortcutContext(Qt::ApplicationShortcut);
+  connect(a2,SIGNAL(triggered()),this,SLOT(printMemoryChecker()));
+  addAction(a2);
+#endif // MEMORYCHECKER_ON
+
   // initialize needRestart setting
   disableRestart();
   setupUi(this);
@@ -84,6 +98,18 @@ TulipApp::TulipApp(QWidget* parent): QMainWindow(parent),defaultControllerName("
   connect(tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(closeTab(int)));
 #endif
 
+}
+
+void TulipApp::printMemoryChecker() {
+#ifdef MEMORYCHECKER_ON
+  memory_checker_print_report();
+#endif // MEMORYCHECKER_ON
+}
+
+void TulipApp::clearMemoryChecker() {
+#ifdef MEMORYCHECKER_ON
+  memory_checker_clear_report();
+#endif // MEMORYCHECKER_ON
 }
 
 //**********************************************************************

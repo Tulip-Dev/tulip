@@ -318,16 +318,65 @@ SET(TULIP_SERVER_GENERATION OFF CACHE BOOL "Enable process to make generation of
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 
 ## -----------------------------------------------------------------------------------------------
+## Windows, Apple and Linux
+## -----------------------------------------------------------------------------------------------
+EXEC_PROGRAM(uname OUTPUT_VARIABLE UNAME_OUT)
+STRING(COMPARE EQUAL "${UNAME_OUT}" "Linux" LINUX)
+IF(NOT LINUX)
+  STRING(COMPARE EQUAL "${UNAME_OUT}" "GNU/kFreeBSD" LINUX)
+ENDIF(NOT LINUX)
+IF(LINUX)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_LINUX")
+ENDIF(LINUX)
+
+IF(WIN32)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DQT_ASSISTANT='\"assistant\"'")
+   IF(MSVC)
+          #tells VS to use multiple threads to compile
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+          #makes VS define M_PI
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_USE_MATH_DEFINES")
+          #prevents VS to define min and max macros (name clash with std::min and std::max)
+          SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOMINMAX")
+
+          #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
+          #SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /NODEFAULTLIB:MSVCRT")
+          #SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /MACHINE:X86")
+
+          #allows for link time optimization
+          #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
+          #link time optimization
+          #SET(CMAKE_SHARED_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /LTCG")
+   ENDIF()
+ENDIF(WIN32)
+IF(APPLE)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__APPLE__ -DQT_ASSISTANT='\"Assistant\"'")
+ENDIF(APPLE)
+IF(LINUX)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_ASSISTANT='\"assistant\"'")
+ENDIF(LINUX)
+
+## -----------------------------------------------------------------------------------------------
+## Enable memory checks (disable openmp)
+## -----------------------------------------------------------------------------------------------
+IF(LINUX)
+  OPTION(CHECK_MEMORY "Overload new and delete operators to check for memory leaks (This option can't be enabled along with OpenMP debugging)" OFF)
+  IF(CHECK_MEMORY)
+    SET(CHECK_MEMORY_FLAGS "-include ${CMAKE_SOURCE_DIR}/library/tulip/include/tulip/MemoryChecker.h")
+  ENDIF(CHECK_MEMORY)
+ENDIF(LINUX)
+
+## -----------------------------------------------------------------------------------------------
 ## Enable debugging of OpenMP
 ## -----------------------------------------------------------------------------------------------
-IF(OPENMP_FOUND AND CMAKE_DEBUG_MODE)
+IF(OPENMP_FOUND AND CMAKE_DEBUG_MODE AND NOT CHECK_MEMORY)
   SET(DEBUG_OPENMP OFF CACHE BOOL "Do you want to enable OpenMP in Debug mode ? [OFF|ON]")
   IF(DEBUG_OPENMP)
     SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${OPENMP_CXX_FLAGS}")
     SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OPENMP_LINKER_FLAGS}")
     SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} ${OPENMP_LIBRARIES}")
   ENDIF(DEBUG_OPENMP)
-ENDIF(OPENMP_FOUND AND CMAKE_DEBUG_MODE)
+ENDIF(OPENMP_FOUND AND CMAKE_DEBUG_MODE AND NOT CHECK_MEMORY)
 
 ## -----------------------------------------------------------------------------------------------
 ## Enable output of rendering time
@@ -359,45 +408,6 @@ ENDIF(I64)
 IF(MACPPC)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DMACPPC")
 ENDIF(MACPPC)
-
-## -----------------------------------------------------------------------------------------------
-## Windows, Apple and Linux
-## -----------------------------------------------------------------------------------------------
-EXEC_PROGRAM(uname OUTPUT_VARIABLE UNAME_OUT)
-STRING(COMPARE EQUAL "${UNAME_OUT}" "Linux" LINUX)
-IF(NOT LINUX)
-  STRING(COMPARE EQUAL "${UNAME_OUT}" "GNU/kFreeBSD" LINUX)
-ENDIF(NOT LINUX)
-IF(LINUX)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_LINUX")
-ENDIF(LINUX)
-
-IF(WIN32)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DQT_ASSISTANT='\"assistant\"'")
-   IF(MSVC)
-	  #tells VS to use multiple threads to compile
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
-	  #makes VS define M_PI
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_USE_MATH_DEFINES")
-	  #prevents VS to define min and max macros (name clash with std::min and std::max)
-	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOMINMAX")
-	  
-	  #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
-	  #SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /NODEFAULTLIB:MSVCRT")
-	  #SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /MACHINE:X86")
-	  
-	  #allows for link time optimization
-	  #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
-	  #link time optimization
-	  #SET(CMAKE_SHARED_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /LTCG")
-   ENDIF()
-ENDIF(WIN32)
-IF(APPLE)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__APPLE__ -DQT_ASSISTANT='\"Assistant\"'")
-ENDIF(APPLE)
-IF(LINUX)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_ASSISTANT='\"assistant\"'")
-ENDIF(LINUX)
 
 ## -----------------------------------------------------------------------------------------------
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in

@@ -52,6 +52,10 @@ struct FileInfo {
 class TulipApp : public QMainWindow, public Ui::TulipData {
   Q_OBJECT;
 
+public slots:
+  void clearMemoryChecker();
+  void printMemoryChecker();
+
 public:
   TulipApp(QWidget *parent=NULL);
   virtual ~TulipApp();
