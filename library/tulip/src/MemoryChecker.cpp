@@ -2,6 +2,7 @@
 
 #include <QtCore/QMap>
 #include <assert.h>
+#include <iostream>
 
 static int miss_count = 0;
 static int hit_count = 0;
