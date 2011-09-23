@@ -513,6 +513,8 @@ void GlMainWidget::resizeGL(int w, int h) {
   }
 
   scene.setViewport(0,0,width,height);
+
+  emit glResized(w,h);
 }
 //==================================================
 void GlMainWidget::makeCurrent() {
