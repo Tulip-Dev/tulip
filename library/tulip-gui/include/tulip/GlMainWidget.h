@@ -290,6 +290,16 @@ public slots:
 
   void closeEvent(QCloseEvent *e);
 
+  /**
+    * @brief Convinience function that call center function on the current scene and draw the view.
+    * Same thing than
+    * @code
+    * getScene()->centerScene();
+    * draw();
+    * @endcode
+    **/
+  void centerScene();
+
 protected slots:
   void paintEvent( QPaintEvent* );
   void viewDrawnSlot(GlMainWidget *glWidget,bool graphChanged) {
