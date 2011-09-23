@@ -301,6 +301,7 @@ signals:
   void graphRedrawn(GlMainWidget *glWidget,bool graphChanged);
   void viewRedrawn(GlMainWidget *glWidget);
   void viewDrawn(GlMainWidget *glWidget,bool graphChanged);
+  void glResized(int w,int h);
 
 public :
   static QGLWidget* getFirstQGLWidget();
