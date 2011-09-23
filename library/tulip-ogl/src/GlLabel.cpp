@@ -114,7 +114,8 @@ void GlLabel::setText(const string& text) {
   //Here we compute height of the text based on the char |
   stringstream strstr;
   strstr << "|" ;
-  for(unsigned int i=0;i<textVector.size();++i)
+
+  for(unsigned int i=0; i<textVector.size(); ++i)
     strstr << endl << "|" ;
 
   font->BBox(strstr.str().c_str(),x1,y1,z1,x2,y2,z2);
@@ -257,11 +258,12 @@ void GlLabel::draw(float lod, Camera *camera) {
   if(textVector.size()>1)
     multiLineH=(h-(textVector.size()-1)*10)/textVector.size();
 
-   //Here we compute the deformation of the bounding box when we have a rotation on the camera
+  //Here we compute the deformation of the bounding box when we have a rotation on the camera
   float a=acos(camera->getUp()[1]/sqrt(camera->getUp()[0]*camera->getUp()[0]+camera->getUp()[1]*camera->getUp()[1]));
 
 
   a=M_PI/4-a;
+
   if(a<-M_PI/4)
     a=-M_PI/2-a;
 
@@ -420,7 +422,7 @@ void GlLabel::draw(float lod, Camera *camera) {
   }
 
   //Billboard computation
-  if(billboarded){
+  if(billboarded) {
     float mdlM[16];
     glGetFloatv( GL_MODELVIEW_MATRIX, mdlM );
     glMatrixMode( GL_MODELVIEW );
