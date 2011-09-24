@@ -259,6 +259,7 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
       if(glGraphComposite->getInputData()->parameters->getElementOrderingProperty()) {
         metric = glGraphComposite->getInputData()->parameters->getElementOrderingProperty();
       }
+
       GreatThanNode ltn;
       ltn.metric=metric;
       sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
@@ -305,6 +306,7 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
       if(glGraphComposite->getInputData()->parameters->getElementOrderingProperty()) {
         metric = glGraphComposite->getInputData()->parameters->getElementOrderingProperty();
       }
+
       GreatThanEdge lte;
       lte.metric=metric;
       sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
