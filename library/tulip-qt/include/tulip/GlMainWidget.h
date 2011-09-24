@@ -308,7 +308,7 @@ public :
 private :
   static QGLWidget *firstQGLWidget;
 
-  public slots:
+public slots:
   /**
     * @brief Convinience function that call center function on the current scene and draw the view.
     * Same thing than
