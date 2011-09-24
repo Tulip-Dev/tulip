@@ -242,22 +242,23 @@ void RenderingParametersDialog::recreateOrderingPropertyCombobox(GlGraphRenderin
   //if the elements are ordered, fill the combobox
   if(param.isElementOrdered()) {
     _ui->orderingProperty->clear();
-    
-    if(!glWidget->getGraph()->existProperty("viewMetric")){
+
+    if(!glWidget->getGraph()->existProperty("viewMetric")) {
       _ui->orderingProperty->addItem("viewMetric");
     }
-    
+
     PropertyInterface* property;
     forEach(property, glWidget->getGraph()->getObjectProperties()) {
       if(property->getTypename() == "double") {
         _ui->orderingProperty->addItem(property->getName().c_str());
       }
     }
-        
+
     //if there is a property defined, try to select it
     if(param.getElementOrderingProperty()) {
       QString propertyName = QString::fromStdString(param.getElementOrderingProperty()->getName());
       int index = _ui->orderingProperty->findText(propertyName);
+
       if(index >= 0) {
         _ui->orderingProperty->setCurrentIndex(index);
       }

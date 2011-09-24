@@ -799,8 +799,8 @@ bool GlMainWidget::hasHulls() const {
   return _hasHulls;
 }
 
-void GlMainWidget::centerScene(){
-    scene.centerScene();
-    draw(false);
+void GlMainWidget::centerScene() {
+  scene.centerScene();
+  draw(false);
 }
 }
