@@ -50,7 +50,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "unsigned int" ) \
   HTML_HELP_DEF( "default", "5" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the amount of node used to build the randomized graph." \
+  "Number of nodes in the final graph." \
   HTML_HELP_CLOSE(),
 
   // edges
@@ -58,7 +58,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "unsigned int" ) \
   HTML_HELP_DEF( "default", "9" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the amount of edge used to build the randomized graph." \
+  "Number of edges in the final graph." \
   HTML_HELP_CLOSE(),
 };
 }

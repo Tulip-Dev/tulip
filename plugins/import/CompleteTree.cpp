@@ -32,7 +32,7 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "unsigned int" )   \
   HTML_HELP_DEF( "default", "5" )     \
   HTML_HELP_BODY()                \
-  "This parameter defines the tree's depth to build."     \
+  "The tree's depth."     \
   HTML_HELP_CLOSE(),
 
   // degree
@@ -40,14 +40,14 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "unsigned int" ) \
   HTML_HELP_DEF( "default", "2" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the tree's degree to build." \
+  "The tree's degree." \
   HTML_HELP_CLOSE(),
   // tree layout
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates if the generated tree has to be drawn with a tree layout algorithm." \
+  "If true the generated tree is drawn with a tree layout algorithm." \
   HTML_HELP_CLOSE(),
 };
 

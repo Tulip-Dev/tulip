@@ -29,7 +29,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF( "default", "InOut" )  \
   HTML_HELP_BODY() \
-  "This parameter indicates the type of degree to compute (in/out/inout)."  \
+  "Type of degree to compute (in/out/inout)."  \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()              \
   HTML_HELP_DEF( "type", "DoubleProperty" )       \

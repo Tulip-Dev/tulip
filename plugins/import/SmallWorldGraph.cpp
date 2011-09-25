@@ -33,7 +33,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "unsigned int" ) \
   HTML_HELP_DEF( "default", "100" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the amount of node used to build the small-world graph." \
+  "Number of nodes in the final graph." \
   HTML_HELP_CLOSE(),
 
   // degree
@@ -41,7 +41,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "unsigned int" ) \
   HTML_HELP_DEF( "default", "10" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the average degree of node used to build the small-world graph." \
+  "Average degree of the nodes in the final graph." \
   HTML_HELP_CLOSE(),
 
   // degree
@@ -49,7 +49,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "If true long distance edges will be added in the grid approximation." \
+  "If true, long distance edges will be added in the grid approximation." \
   HTML_HELP_CLOSE(),
 };
 }

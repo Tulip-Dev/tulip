@@ -59,55 +59,55 @@ namespace {
 const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "int" )
                              HTML_HELP_BODY()
-                             "Sets the option fails to nFails."
+                             "Number of fails."
                              HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "int" )
                              HTML_HELP_BODY()
-                             "Sets the option runs to nRuns."
+                             "Number of runs."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "Sets the option for transposing layout vertically ."
+                             "If true, the layout is transposed vertically ."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "Sets the options arrangeCCs."
+                             "arrangeCCs."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "The minimal distance between connected components."
+                             "Minimal distance between connected components."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "The page ratio used for packing connected components."
+                             "Page ratio used for packing connected components."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "Sets the option alignBaseClasses."
+                             "alignBaseClasses."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "Sets the option alignSiblings."
+                             "alignSiblings."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "StringCollection")
                              HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> LongestPathRanking : <FONT COLOR=\"black\"> the well-known longest-path ranking algorithm. <BR> <FONT COLOR=\"red\"> OptimalRanking : <FONT COLOR=\"black\"> the LP-based algorithm for computing a node ranking with minimal edge lengths. <BR> <FONT COLOR=\"red\"> SplitHeuristic : <FONT COLOR=\"black\"> the split heuristic for 2-layer crossing minimization.")
                              HTML_HELP_DEF( "default", "LongestPathRanking " )
                              HTML_HELP_BODY()
-                             "Sets the option for the node ranking (layer assignment)."
+                             "Node ranking (layer assignment)."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "StringCollection")
                              HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> BarycenterHeuristic : <FONT COLOR=\"black\"> the barycenter heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> MedianHeuristic : <FONT COLOR=\"black\"> the median heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> SplitHeuristic : <FONT COLOR=\"black\"> the split heuristic for 2-layer crossing minimization.")
                              HTML_HELP_DEF( "default", "BarycenterHeuristic " )
                              HTML_HELP_BODY()
-                             "Sets the module option for the two-layer crossing minimization."
+                             "Module for the two-layer crossing minimization."
                              HTML_HELP_CLOSE()
                            };
 }

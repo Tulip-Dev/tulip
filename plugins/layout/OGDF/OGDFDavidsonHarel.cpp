@@ -63,14 +63,14 @@ const char * paramHelp[] = {
   HTML_HELP_DEF("values", "Standard <BR> Repulse <BR> Planar") \
   HTML_HELP_DEF( "default", "Standard" )   \
   HTML_HELP_BODY() \
-  "Easy way to set fixed costs. " \
+  "fixed costs. " \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF("values", "Fast <BR> Medium <BR> HQ") \
   HTML_HELP_DEF( "default", "Medium" )   \
   HTML_HELP_BODY() \
-  "Easy way to set temperature and iterations. "  \
+  "temperature and iterations. "  \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )

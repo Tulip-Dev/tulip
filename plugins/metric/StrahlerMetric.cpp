@@ -200,7 +200,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "true, false" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "If true, for each node the strahler number will be computed from a spanning tree having that node as root: complexity o(n^2). If false the strahler number will be computed from a spanning tree having the heuristicly estimated graph center as root." \
+  "If true, for each node the Strahler number is computed from a spanning tree having that node as root: complexity o(n^2). If false the Strahler number is computed from a spanning tree having the heuristicly estimated graph center as root." \
   HTML_HELP_CLOSE(),
   //Orientation
   HTML_HELP_OPEN()         \
@@ -208,7 +208,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF("Values", "all <BR> ramification<BR> nested cycles") \
   HTML_HELP_DEF( "default", "all" )  \
   HTML_HELP_BODY() \
-  "This parameter enables to choose the type of computation"  \
+  "Type of computation"  \
   HTML_HELP_CLOSE()
 };
 }

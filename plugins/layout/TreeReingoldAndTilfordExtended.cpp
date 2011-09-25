@@ -32,28 +32,28 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "An existing int property" ) \
   HTML_HELP_DEF( "default", "None" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates the property used to compute the length of edges." \
+  "Property used to compute the edge lengths." \
   HTML_HELP_CLOSE(),
   //Orientation
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF( "default", "horizontal" )   \
   HTML_HELP_BODY() \
-  "This parameter enables to choose the orientation of the drawing" \
+  "Orientation of the drawing" \
   HTML_HELP_CLOSE(),
   //Orthogonal
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "true" )          \
   HTML_HELP_BODY()              \
-  "This parameter enables to choose if the tree is drawn orthogonally or not" \
+  "If true, the tree is drawn orthogonally." \
   HTML_HELP_CLOSE(),
   //bounding circles
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )  \
   HTML_HELP_BODY() \
-  "Indicates if the node bounding objects are boxes or bounding circles." \
+  "If true, the node bounding objects are boxes, else they are bounding circles." \
 
   HTML_HELP_CLOSE(),
   //compact layout
@@ -61,7 +61,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "true" )   \
   HTML_HELP_BODY() \
-  "Indicates if a compact layout is computed." \
+  "If true, a compact layout is computed." \
   HTML_HELP_CLOSE()
 };
 }

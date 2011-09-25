@@ -1,3 +1,4 @@
+
 /**
  *
  * This file is part of Tulip (www.tulip-software.org)
@@ -30,10 +31,10 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "{0,1,2}" ) \
   HTML_HELP_DEF( "default", "0" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the navigation direction. Following values are corrects :" \
+  "Computation direction. The following values are allowable:" \
   "<ul><li>0: follow ouput edges (directed);</li>" \
   "<li>1: follow input edges (reverse-directed);</li>" \
-  "<li>2: all edges (undirected).</li></ul>" \
+  "<li>2: all edges (the graph is considered undirected).</li></ul>" \
   HTML_HELP_CLOSE(),
 
   // startingNodes
@@ -41,7 +42,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "Selection" ) \
   HTML_HELP_DEF( "default", "\"viewSelection\"" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the starting set of nodes used to walk in the graph." \
+  "Starting set of nodes." \
   HTML_HELP_CLOSE(),
 
   // maxdepth
@@ -50,7 +51,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[0,1000000]" ) \
   HTML_HELP_DEF( "default", "10" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the maximal distance of reachable nodes." \
+  "Maximal distance: nodes farther than this are not added to the selection." \
   HTML_HELP_CLOSE(),
 };
 }

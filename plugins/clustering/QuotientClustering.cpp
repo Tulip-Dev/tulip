@@ -34,7 +34,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true, false]" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates whether the graph has to be considered as oriented or not." \
+  "If true the graph is considered oriented." \
   HTML_HELP_CLOSE(),
   // recursive
   HTML_HELP_OPEN() \
@@ -42,28 +42,28 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true, false]" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates whether the algorithm has to be applied along the entire hierarchy of subgraphs." \
+  "If true the algorithm is applied along the entire hierarchy of subgraphs." \
   HTML_HELP_CLOSE(),
   // node aggregation function
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF( "default", "none" )   \
   HTML_HELP_BODY() \
-  "This parameter indicates the function used to compute a measure value for a meta-node using the values of its underlying nodes. If 'none' is choosen no value will be computed" \
+  "The function used to compute a measure value for a meta-node using the values of its underlying nodes. If 'none', no value is be computed." \
   HTML_HELP_CLOSE(),
   // edge aggregation function
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF( "default", "none" )   \
   HTML_HELP_BODY() \
-  "This parameter indicates the function used to compute a measure value for a meta-edge using the values of its underlying edges. If 'none' is choosen no value will be computed." \
+  "The function used to compute a measure value for a meta-edge using the values of its underlying edges. If 'none', no value is computed." \
   HTML_HELP_CLOSE(),
   // meta-node label
   HTML_HELP_OPEN()              \
   HTML_HELP_DEF( "type", "StringProperty" )       \
   HTML_HELP_DEF( "value", "An existing string property" )   \
   HTML_HELP_BODY()              \
-  "This parameter defines the property used to compute the label of the meta-nodes. An arbitrary underlying node is choosen and its associated value for the given property becomes the meta-node label."\
+  "The property used to compute the meta-nodes labels. An arbitrary underlying node is choosen and its associated value for the given property becomes the meta-node label."\
   HTML_HELP_CLOSE(),
   // use name of subgraphs
   HTML_HELP_OPEN() \
@@ -71,7 +71,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true, false]" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates whether the meta-node label has to be the same as the name of the subgraph it represents." \
+  "If true the meta-node label has to be the same as the name of the subgraph it represents." \
   HTML_HELP_CLOSE(),
   // edge cardinality
   HTML_HELP_OPEN() \
@@ -79,7 +79,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true, false]" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates whether the cardinality of the underlying edges of the meta-edges has to be computed or not. If yes, the property edgeCardinality will be created for the quotient graph." \
+  "If true the cardinality of the underlying edges of the meta-edges is computed, and the property edgeCardinality is created for the quotient graph." \
   HTML_HELP_CLOSE(),
   // layout quotient graph
   HTML_HELP_OPEN() \
@@ -87,7 +87,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true, false]" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates whether the layout of the quotient graph(s) has to be computed or not." \
+  "If true the layout of the quotient graph(s) is computed." \
   HTML_HELP_CLOSE(),
 };
 }

@@ -54,39 +54,39 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_BODY()
-  "The minimal required horizontal distance between siblings."
+  "Minimal required horizontal distance between siblings."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_BODY()
-  "The minimal required horizontal distance between subtrees."
+  "Minimal required horizontal distance between subtrees."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_BODY()
-  "the minimal required vertical distance between levels."
+  "Minimal required vertical distance between levels."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_BODY()
-  "Returns the minimal required horizontal distance between trees in the forest."
+  "Minimal required horizontal distance between trees in the forest."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "bool" )
   HTML_HELP_BODY()
-  "Set whether orthogonal edge routing style is used or not."
+  "If true, orthogonal edge routing style is used."
   HTML_HELP_CLOSE(),
   HTML_HELP_DEF( "type", "StringCollection")
   HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> topToBottom : <FONT COLOR=\"black\"> Edges are oriented from top to bottom. <BR> <FONT COLOR=\"red\"> bottomToTop : <FONT COLOR=\"black\">  Edges are oriented from bottom to top. <BR> <FONT COLOR=\"red\"> leftToRight : <FONT COLOR=\"black\"> Edges are oriented from left to right. <BR> <FONT COLOR=\"red\"> rightToLeft : <FONT COLOR=\"black\"> Edges are oriented from right to left.")
   HTML_HELP_DEF( "default", "topToBottom " )
   HTML_HELP_BODY()
-  "The option that determines the orientation of the layout."
+  "Orientation of the layout."
   HTML_HELP_CLOSE(),
   HTML_HELP_DEF( "type", "StringCollection")
   HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> rootIsSource  : <FONT COLOR=\"black\"> Select a source in the graph.  <BR> <FONT COLOR=\"red\"> rootIsSink : <FONT COLOR=\"black\"> Select a sink in the graph. <BR> <FONT COLOR=\"red\"> rootByCoord : <FONT COLOR=\"black\"> Use the coordinates, e.g., select the topmost node if orientation is topToBottom.")
   HTML_HELP_DEF( "default", "rootIsSource " )
   HTML_HELP_BODY()
-  "The option that determines how the root is selected."
+  "How the root is selected."
   HTML_HELP_CLOSE()
 };
 }

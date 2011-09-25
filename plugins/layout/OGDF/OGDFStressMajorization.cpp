@@ -1,3 +1,4 @@
+
 #include <ogdf/energybased/StressMajorizationSimple.h>
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
@@ -51,32 +52,32 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "int" )
   HTML_HELP_BODY()
-  "Sets a fixed number of iterations for stress majorization in main step."
+  "Fixed number of iterations for stress majorization in main step."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_BODY()
-  "Sets the value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped. "
+  "Stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped. "
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "bool" )
   HTML_HELP_BODY()
-  "If set to true, the given layout is used for the initial positions."
+  "If set to true, the given layout is used as initial positions."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "bool" )
   HTML_HELP_BODY()
-  "f set to true, number of iterations is computed depending on G."
+  "If set to true, number of iterations is computed depending on G."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "int" )
   HTML_HELP_BODY()
-  "Sets the number of global iterations to i."
+  "Number of global iterations."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "int" )
   HTML_HELP_BODY()
-  "Sets the number of local iterations to i."
+  "Number of local iterations."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "bool" )

@@ -321,16 +321,17 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "DoubleProperty" )       \
   HTML_HELP_DEF( "value", "An existing metric property" )   \
   HTML_HELP_BODY()              \
-  "This parameter defines the metric used in order to multiply strength metric computed values."\
-  "If one is given the complexity will be in o(nlog(n)), o(n) neither." \
+  "The metric used in order to multiply strength metric computed values."\
+  "If one is given, the complexity is O(n log(n)), O(n) neither." \
   HTML_HELP_CLOSE(),
+ // do you mean "else it will be O(n)" instead of "O(n) neither"?
   /*// layout subgraphs
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "values", "[true, false]" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates whether the layout of the newly created subgraphs has to be computed or not." \
+  "If true the layout of the newly created subgraphs is computed." \
   HTML_HELP_CLOSE(),
   // layout quotient graph
   HTML_HELP_OPEN() \
@@ -338,7 +339,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true, false]" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates whether the layout of the quotient graph has to be computed or not." \
+  "If true the layout of the quotient graph is computed." \
   HTML_HELP_CLOSE(),*/
 };
 }

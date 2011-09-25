@@ -1,3 +1,4 @@
+
 /**
  *
  * This file is part of Tulip (www.tulip-software.org)
@@ -45,21 +46,21 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF( "default", "vertical" )   \
   HTML_HELP_BODY() \
-  "This parameter enables to choose the orientation of the drawing" \
+  "Orientation of the drawing" \
   HTML_HELP_CLOSE(),
   // y node-node spacing
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "float" ) \
   HTML_HELP_DEF( "default", "2" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the minimum y-spacing between any two nodes." \
+  "Minimum y-spacing between any two nodes." \
   HTML_HELP_CLOSE(),
   // x node-node and edge-node spacing
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "float" ) \
   HTML_HELP_DEF( "default", "2" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the minimum x-spacing between any two nodes or between a node and an edge." \
+  "Minimum x-spacing between nodes or between a node and an edge." \
   HTML_HELP_CLOSE()
 };
 }

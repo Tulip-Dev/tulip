@@ -57,7 +57,7 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "bool" )
   HTML_HELP_BODY()
-  "Sets the option for transposing layout vertically ."
+  "transpose the layout vertically."
   HTML_HELP_CLOSE()
 };
 }

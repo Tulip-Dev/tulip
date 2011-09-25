@@ -1,3 +1,4 @@
+
 /**
  *
  * This file is part of Tulip (www.tulip-software.org)
@@ -30,7 +31,7 @@ static const char * paramHelp[] = {
   HTML_HELP_OPEN()            \
   HTML_HELP_DEF( "type", "directory pathname" )       \
   HTML_HELP_BODY()                  \
-  "The root directory of the filesystem part to import."        \
+  "The directory that will be scanned recursively."        \
   HTML_HELP_CLOSE(),
 };
 }

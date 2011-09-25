@@ -28,13 +28,13 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "DoubleProperty" ) \
   HTML_HELP_BODY() \
-  "This metric is used to affect scalar values to graph items." \
+  "Metric to map to size." \
   HTML_HELP_CLOSE(),
   // input
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "SizeProperty" ) \
   HTML_HELP_BODY() \
-  "This size property is used to affect values to unselected dimensions (width, height, depth)." \
+  "If not all dimensions (width, height, depth) are checked below, the dimensions not computed are copied from this property." \
   HTML_HELP_CLOSE(),
   // width, height, depth
   HTML_HELP_OPEN() \
@@ -42,19 +42,19 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "true/false" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "Indicates if this parameter will be computed(box is checked) or kept(box is unchecked) from the value of input size property" \
+  "If checked, this parameter is computed, if unchecked, it is copied from the value of input." \
   HTML_HELP_CLOSE(),
   // min
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "double" ) \
   HTML_HELP_BODY() \
-  "Gives the minimum value of the range of computed sizes." \
+  "Minimum value of the range of computed sizes." \
   HTML_HELP_CLOSE(),
   // max
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "double" ) \
   HTML_HELP_BODY() \
-  "Gives the maximum value of the range of computed sizes." \
+  "Maximum value of the range of computed sizes." \
   HTML_HELP_CLOSE(),
   // Mapping type
   HTML_HELP_OPEN() \
@@ -62,8 +62,9 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "true / false" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "This value defines the type of mapping. Following values are valid :" \
-  "<ul><li>true : linear mapping</li><li>false: uniform quantification</li></ul>" \
+  "Type of mapping." \
+  "<ul><li>true: linear mapping (min value of property is mapped to min size, max to max size, and a linear interpolation is used inbetween.)</li>" \
+	"<li>false: uniform quantification (the values of property are sorted, and the same size increment is used between consecutive values).</li></ul>"													\
   HTML_HELP_CLOSE(),
   // Mapping type
   HTML_HELP_OPEN() \
@@ -71,8 +72,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "true / false" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "If true the algorithm will compute the size of nodes else it will compute the size of edges :" \
-  "<ul><li>true : node size</li><li>false: edge size</li></ul>" \
+  "If true, compute the size of nodes, else compute the size of edges." \
   HTML_HELP_CLOSE(),
 };
 }

@@ -31,21 +31,21 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "PropertyInterface*" ) \
   HTML_HELP_BODY() \
-  "Specify the property that will be used to partition the graph" \
+  "The property used to partition the graph" \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF("values", "nodes <BR> edges") \
   HTML_HELP_DEF( "default", "nodes" )  \
   HTML_HELP_BODY() \
-  "This parameter enables to choose the type of graph elements to partition"  \
+  "The graph elements to partition"  \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "values", "[true, false]" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates whether the subgraphs have to be connected." \
+  "whether the subgraphs have to be connected." \
   HTML_HELP_CLOSE()
 };
 }

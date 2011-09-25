@@ -33,7 +33,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "unsigned int" ) \
   HTML_HELP_DEF( "default", "100" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the minimal amount of node used to build the randomized tree." \
+  "Minimal number of nodes in the tree." \
   HTML_HELP_CLOSE(),
 
   // maxsize
@@ -41,7 +41,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "unsigned int" ) \
   HTML_HELP_DEF( "default", "1000" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the maximal amount of node used to build the randomized tree." \
+  "Maximal number of nodes in the tree." \
   HTML_HELP_CLOSE(),
 
   // tree layout
@@ -49,7 +49,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates if the generated tree has to be drawn with a tree layout algorithm." \
+  "If true the generated tree is drawn with a tree layout algorithm." \
   HTML_HELP_CLOSE(),
 };
 }

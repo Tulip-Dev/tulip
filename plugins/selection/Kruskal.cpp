@@ -29,7 +29,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "DoubleProperty" ) \
   HTML_HELP_DEF( "default", "\"viewMetric\"" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the metric used for edges weight." \
+  "Metric containing the edges weights." \
   HTML_HELP_CLOSE(),
 };
 }
