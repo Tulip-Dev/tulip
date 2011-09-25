@@ -33,7 +33,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "unsigned int" ) \
   HTML_HELP_DEF( "default", "30" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the number of nodes used to build the planar graph." \
+  "Number of nodes in the final graph." \
   HTML_HELP_CLOSE(),
 };
 }

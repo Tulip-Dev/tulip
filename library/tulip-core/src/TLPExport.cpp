@@ -58,14 +58,14 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "string" ) \
   HTML_HELP_DEF( "default", "" ) \
   HTML_HELP_BODY() \
-  "Indicates the name of this graph." \
+  "The name of this graph." \
   HTML_HELP_CLOSE(),
   // author
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "string" ) \
   HTML_HELP_DEF( "default", "" ) \
   HTML_HELP_BODY() \
-  "Indicates the author of this graph." \
+  "The author of this graph." \
   HTML_HELP_CLOSE(),
   // comments
   HTML_HELP_OPEN() \
@@ -79,7 +79,7 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "string" ) \
   HTML_HELP_DEF( "default", "2.2" ) \
   HTML_HELP_BODY() \
-  "Indicates the storage format. Choose 2.0 for compatibility if compatibility with older version of Tulip is needed ." \
+  "The storage format. Choose 2.0 for compatibility if compatibility with older version of Tulip is needed ." \
   HTML_HELP_CLOSE(),
 };
 }

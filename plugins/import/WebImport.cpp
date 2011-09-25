@@ -361,63 +361,63 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "string" ) \
   HTML_HELP_DEF( "default", "www.labri.fr" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the web server that you want to inspect. No need for http:// at the beginning; http protocol is always assumed. No need for / at the end." \
+  "The web site to crawl. No need for http:// at the beginning; http protocol is always assumed. No need for / at the end." \
   HTML_HELP_CLOSE(),
   // initial page
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "string" ) \
   HTML_HELP_DEF( "default", "" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the first web page to visit. No need for / at the beginning."\
+  "First web page to visit. No need for / at the beginning."\
   HTML_HELP_CLOSE(),
   // max number of links
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "unsigned int" ) \
   HTML_HELP_DEF( "default", "1000" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the maximum number of nodes (different pages) allowed in the extracted graph." \
+  "Maximum number of nodes (different pages) in the final graph." \
   HTML_HELP_CLOSE(),
   // non http links
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "boolean" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates if non http links (https, ftp, mailto...) have to be extracted." \
+  "If true, non http links (https, ftp, mailto...) are extracted." \
   HTML_HELP_CLOSE(),
   // other server
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "boolean" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates if links or redirection to other server pages have to be followed." \
+  "If true, links or redirection to other server pages are followed." \
   HTML_HELP_CLOSE(),
   // compute layout
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "boolean" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates if a layout of the extracted graph has to be computed." \
+  "If true, a layout of the extracted graph is computed." \
   HTML_HELP_CLOSE(),
   // page color
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "color" ) \
   HTML_HELP_DEF( "default", "red" ) \
   HTML_HELP_BODY() \
-  "This parameter indicated the color used to display nodes." \
+  "color used to display nodes." \
   HTML_HELP_CLOSE(),
   // link color
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "color" ) \
   HTML_HELP_DEF( "default", "blue" ) \
   HTML_HELP_BODY() \
-  "This parameter indicated the color used to display links." \
+  "color used to display links." \
   HTML_HELP_CLOSE(),
   // link color
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "color" ) \
   HTML_HELP_DEF( "default", "yellow" ) \
   HTML_HELP_BODY() \
-  "This parameter indicated the color used to display redirections." \
+  "color used to display redirections." \
   HTML_HELP_CLOSE()
 };
 }

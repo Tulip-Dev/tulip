@@ -51,7 +51,7 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_BODY()
-  "Sets the value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped. "
+  "Stop tolerance, below which the system is considered stable (balanced) and the optimization stopped. "
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "bool" )
@@ -61,27 +61,27 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_BODY()
-  "If set != 0, value zerolength is used to determine the desirable edge length by L = zerolength / max distance_ij. Otherwise, zerolength is determined using the node number and sizes."
+  "If != 0, value zerolength is used to determine the desirable edge length by L = zerolength / max distance_ij. Otherwise, zerolength is determined using the node number and sizes."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_BODY()
-  "Sets desirable edge length directly."
+  "Sets the desirable edge length directly."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "bool" )
   HTML_HELP_BODY()
-  "f set to true, number of iterations is computed depending on G."
+  "If set to true, number of iterations is computed depending on G."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "int" )
   HTML_HELP_BODY()
-  "Sets the number of global iterations to i."
+  "Number of global iterations."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "int" )
   HTML_HELP_BODY()
-  "Sets the number of local iterations to i."
+  "Number of local iterations."
   HTML_HELP_CLOSE()
 };
 }

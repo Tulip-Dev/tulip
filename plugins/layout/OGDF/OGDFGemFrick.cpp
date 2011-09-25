@@ -67,15 +67,15 @@ namespace {
 const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "int" )
                              HTML_HELP_BODY()
-                             "the maximal number of rounds per node."
+                             "maximal number of rounds per node."
                              HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "the minimal temperature ."
+                             "minimal temperature ."
                              HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "Sets the initial temperature to x; must be >= minimalTemperature."
+                             "initial temperature. Must be >= minimalTemperature."
                              HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
@@ -84,49 +84,49 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "Sets the desired edge length to x; must be >= 0."
+                             "desired edge length. Must be >= 0."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "Sets the maximal disturbance to x; must be >= 0."
+                             "Maximal disturbance. Must be >= 0."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "Sets the opening angle for rotations to x (0 <= x <= pi / 2)."
+                             "Opening angle for rotations. Must be between 0 and pi / 2."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "Sets the opening angle for oscillations to x (0 <= x <= pi / 2)."
+                             "Opening angle for oscillations. Must be between 0 and pi / 2."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "Sets the rotation sensitivity to x (0 <= x <= 1)."
+                             "Rotation sensitivity. Must be between 0 and 1."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "Sets the oscillation sensitivity to x (0 <= x <= 1)."
+                             "Oscillation sensitivity. Must be between 0 and 1."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "StringCollection")
                              HTML_HELP_DEF("values", "Fruchterman/Reingold <BR> GEM")
                              HTML_HELP_DEF( "default", "Fruchterman/Reingold" )
                              HTML_HELP_BODY()
-                             "sets the formula for attraction. "
+                             "formula for attraction. "
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "The minimal distance between connected components."
+                             "Minimal distance between connected components."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "The page ratio used for packing connected components."
+                             "Page ratio used for packing connected components."
                              HTML_HELP_CLOSE()
                            };
 }

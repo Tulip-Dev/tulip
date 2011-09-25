@@ -175,7 +175,7 @@ private:
  * HTML_HELP_DEF( "type", "DoubleProperty" ) \
  * HTML_HELP_BODY() \
  * "This metricProxy is used to affect scalar values to graph items." \
- * "The meaning of theses values depends of the choosen color model." \
+ * "The meaning of theses values depends on the chosen color model." \
  * HTML_HELP_CLOSE(),
  *
  * // colormodel
@@ -184,8 +184,8 @@ private:
  * HTML_HELP_DEF( "values", "[0,1]" ) \
  * HTML_HELP_DEF( "default", "0" ) \
  * HTML_HELP_BODY() \
- * "This value defines the type of color interpolation. Following values are valid :" \
- * "<ul><li>0: linear mapping on hue ;</li><li>1: RGB interpolation</li></ul>" \
+ * "This value defines the type of color interpolation. The following values are valid:" \
+ * "<ul><li>0: linear mapping on hue;</li><li>1: RGB interpolation</li></ul>" \
  * HTML_HELP_CLOSE(),
 };
 

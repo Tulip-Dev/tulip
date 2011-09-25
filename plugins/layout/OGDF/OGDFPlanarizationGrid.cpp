@@ -58,19 +58,19 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_BODY()
-  "Sets the option pageRatio."
+  "Pageratio."
   HTML_HELP_CLOSE(),
   HTML_HELP_DEF( "type", "StringCollection")
   HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FastPlanarSubgraph : <FONT COLOR=\"black\"> Computation of a planar subgraph using PQ-trees. <BR> <FONT COLOR=\"red\"> MaximalPlanarSubgraphSimple")
   HTML_HELP_DEF( "default", "FastPlanarSubgraph " )
   HTML_HELP_BODY()
-  "Sets the module option for the computation of the planar subgraph."
+  "Module for computing the planar subgraph."
   HTML_HELP_CLOSE(),
   HTML_HELP_DEF( "type", "StringCollection")
   HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FixedEmbeddingInserter : <FONT COLOR=\"black\"> Edge insertion module that inserts each edge optimally into a fixed embedding. <BR> <FONT COLOR=\"red\"> VariableEmbeddingInserter : <FONT COLOR=\"black\"> optimal edge insertion algorithm, which inserts a single edge with a minum number of crossings into a planar graph. <BR> <FONT COLOR=\"red\"> VariableEmbeddingInserter2 ")
   HTML_HELP_DEF( "default", "FixedEmbeddingInserter " )
   HTML_HELP_BODY()
-  "Sets the module option for edge insertion."
+  "Module for edge insertion."
   HTML_HELP_CLOSE()
 };
 }

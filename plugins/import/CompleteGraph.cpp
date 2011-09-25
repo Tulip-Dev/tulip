@@ -33,14 +33,14 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "int" ) \
   HTML_HELP_DEF( "default", "5" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the amount of nodes composing the completed graph." \
+  "The number of nodes in the final graph." \
   HTML_HELP_CLOSE(),
   // bool
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "This parameter defines wether or not the graph is undirected, if false two edges will be created between each couple of nodes." \
+  "If true the graph is undirected, if false two edges are created between each pair of nodes." \
   HTML_HELP_CLOSE(),
 
 };

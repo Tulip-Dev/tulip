@@ -153,7 +153,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF( "default", "horizontal" )   \
   HTML_HELP_BODY() \
-  "This parameter enables to choose the orientation of the drawing" \
+  "The drawing orientation." \
   HTML_HELP_CLOSE()
 };
 }

@@ -52,12 +52,12 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "int" )
   HTML_HELP_BODY()
-  "the minimum grid distance."
+  "Minimum grid distance."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "bool" )
   HTML_HELP_BODY()
-  "Sets the option for transposing layout vertically ."
+  "If true, the layout is transposed vertically ."
   HTML_HELP_CLOSE()
 };
 }

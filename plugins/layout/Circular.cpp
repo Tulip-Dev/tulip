@@ -30,7 +30,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "true/false" ) \
   HTML_HELP_DEF( "default", "false" )      \
   HTML_HELP_BODY()              \
-  "If true search the maximum length cycle. Be careful, this problem is NP-Complete else order the node using a depth first search" \
+  "If true, search first for the maximum length cycle (be careful, this problem is NP-Complete). If false, nodes are ordered using a depth first search." \
   HTML_HELP_CLOSE()
 };
 }

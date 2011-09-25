@@ -31,19 +31,19 @@ namespace {
 static const char * paramHelp[] = { HTML_HELP_OPEN()
                                     HTML_HELP_DEF( "type", "StringProperty" )
                                     HTML_HELP_BODY()
-                                    "The graph property containing the displayed nodes labels."
+                                    "Nodes labels."
                                     HTML_HELP_CLOSE(),
 
                                     HTML_HELP_OPEN()
                                     HTML_HELP_DEF( "type", "StringProperty" )
                                     HTML_HELP_BODY()
-                                    "The graph property containing the font used to display the label."
+                                    "Font used to display the labels."
                                     HTML_HELP_CLOSE(),
 
                                     HTML_HELP_OPEN()
                                     HTML_HELP_DEF( "type", "IntegerProperty" )
                                     HTML_HELP_BODY()
-                                    "The graph property containing the fonts sizes."
+                                    "Fonts sizes."
                                     HTML_HELP_CLOSE(),
                                   };
 }

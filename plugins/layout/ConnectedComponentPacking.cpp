@@ -39,7 +39,7 @@ const char* paramHelp[] = {
   HTML_HELP_DEF("Values", "Any layout property") \
   HTML_HELP_DEF("Default", "viewLayout") \
   HTML_HELP_BODY() \
-  "Choose the input coordinates of nodes and edges" \
+  "Input coordinates of nodes and edges" \
   HTML_HELP_CLOSE(),
 //Rotation
   HTML_HELP_OPEN() \
@@ -47,14 +47,14 @@ const char* paramHelp[] = {
   HTML_HELP_DEF("Values", "Any double property used for rotation of nodes on z-axis") \
   HTML_HELP_DEF("Default", "viewRotation") \
   HTML_HELP_BODY() \
-  "Choose the input rotation of nodes on z-axis" \
+  "Input rotation of nodes on z-axis" \
   HTML_HELP_CLOSE(),
 //Complexity
   HTML_HELP_OPEN() \
   HTML_HELP_DEF("Type", "StringCollection") \
   HTML_HELP_DEF("Default", "auto") \
   HTML_HELP_BODY() \
-  "Choose the complexity of the algorithm.<br> n is the number of connected components in the graph" \
+  "Complexity of the algorithm.<br> n is the number of connected components in the graph" \
   HTML_HELP_CLOSE()
 };
 }

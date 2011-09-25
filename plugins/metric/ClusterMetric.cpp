@@ -32,7 +32,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[1 , |G|]" ) \
   HTML_HELP_DEF( "default", "1" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the maximal depth of a computed cluster." \
+  "Maximal depth of a computed cluster." \
   HTML_HELP_CLOSE()
 };
 }

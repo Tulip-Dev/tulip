@@ -45,14 +45,14 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "An existing metric property" ) \
   HTML_HELP_DEF( "default", "viewMetric if it exists" ) \
   HTML_HELP_BODY() \
-  "This parameter defines the metric used to estimate the size allocated to each node." \
+  "Metric used to estimate the size of each node." \
   HTML_HELP_CLOSE(),
   // aspect ratio
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "double" ) \
   HTML_HELP_DEF( "default", "1." )   \
   HTML_HELP_BODY() \
-  "This parameter enables to set up the aspect ratio (height/width) for the rectangle corresponding to the root node." \
+  "Aspect ratio (height/width) of the rectangle corresponding to the root node." \
   HTML_HELP_CLOSE(),
   // treemap type
   HTML_HELP_OPEN() \
@@ -61,7 +61,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "false", "J. J. van Wijk" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates to use normal Treemaps (B. Shneiderman) or Squarified Treemaps (van Wijk)" \
+  "If true, use normal Treemaps (B. Shneiderman), else use Squarified Treemaps (van Wijk)" \
   HTML_HELP_CLOSE(),
 };
 }

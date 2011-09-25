@@ -30,16 +30,17 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )  \
   HTML_HELP_BODY() \
-  "indicate if the graph should be considered as directed or not" \
+  "If true, the graph is considered directed." \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )  \
   HTML_HELP_BODY() \
-  "If true the node mesure will be normalized unweight not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2) "  \
-  "If true the node mesure will be normalized unweight directed     : m(n) = c(n) / (#V - 1)(#V - 2) " \
-  "If true the edge mesure will be normalized unweight not directed : m(e) = 2*c(n) / (#V / 2)(#V / 2) "  \
-  "If true the edge mesure will be normalized unweight directed     : m(n) = c(n) / (#V / 2)(#V / 2) " \
+	"If true, the results are normalized in the following way."
+  "For nodes, undirected : m(n) = 2*c(n) / (#V - 1)(#V - 2) "  \
+  "For nodes,   directed : m(n) =   c(n) / (#V - 1)(#V - 2) " \
+  "For edges, undirected : m(e) = 2*c(n) / (#V / 2)(#V / 2) "  \
+  "For edges,   directed : m(n) =   c(n) / (#V / 2)(#V / 2) " \
   HTML_HELP_CLOSE()
 };
 

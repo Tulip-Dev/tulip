@@ -64,17 +64,17 @@ namespace {
 const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "int" )
                              HTML_HELP_BODY()
-                             "Sets the number of iterations to i."
+                             "number of iterations"
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "Sets the parameter noise. "
+                             "noise. "
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "set the use of node weights given in metric.  "
+                             "if true, use metric as node weights.  "
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "DoubleProperty" )
@@ -86,32 +86,32 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_DEF("values", "Factor <BR> Logarithmic")
                              HTML_HELP_DEF( "default", "Factor" )
                              HTML_HELP_BODY()
-                             "Sets the parameter cooling function"
+                             "cooling function"
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "The ideal edge length."
+                             "Ideal edge length."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "The minimal distance between connected components."
+                             "Minimal distance between connected components."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "The page ratio used for packing connected components."
+                             "Page ratio used for packing connected components."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "check convergence option. "
+                             "If true, check convergence. "
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "convergence tolerance parameter."
+                             "Convergence tolerance."
                              HTML_HELP_CLOSE()
                            };
 }

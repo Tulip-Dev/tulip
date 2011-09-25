@@ -36,20 +36,20 @@ static const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "DoubleProperty" ) \
   HTML_HELP_BODY() \
-  "This DoubleProperty is used to compute the length of edges." \
+  "length of the edges." \
   HTML_HELP_CLOSE(),
   // initial layout
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "LayoutProperty" ) \
   HTML_HELP_BODY() \
-  "The layout property used to compute the initial position of the graph elements. If none is given the initial position will be computed by the algorithm." \
+  "Initial position of the graph elements. Optional." \
   HTML_HELP_CLOSE(),
   // max iterations
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "unsigned integer" ) \
   HTML_HELP_DEF( "default", "0" ) \
   HTML_HELP_BODY() \
-  "This parameter allows to limit the number of iterations. The default value of 0 corresponds to 10 * nb_nodes * nb_nodes." \
+  "The default value of 0 corresponds to 10 * nb_nodes * nb_nodes." \
   HTML_HELP_CLOSE(),
 };
 

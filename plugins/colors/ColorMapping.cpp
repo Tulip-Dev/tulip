@@ -116,35 +116,37 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "DoubleProperty" ) \
   HTML_HELP_BODY() \
-  "This metric is used to affect scalar values to graph items." \
-  "The meaning of theses values depends of the choosen color model." \
+  "The metric mapped to a color." \
   HTML_HELP_CLOSE(),
   // property
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "PropertyInterface*" ) \
   HTML_HELP_BODY() \
-  "This metric is used to affect scalar values to graph items." \
-  "The meaning of theses values depends of the choosen color model." \
+  "The metric mapped to a color." \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF("values", "linear <BR> uniform <BR> enumerated") \
   HTML_HELP_DEF( "default", "linear" )   \
   HTML_HELP_BODY() \
-  "This parameter enables to choose the type of color mapping"  \
+  "If linear, the first property above is used. The minimum value is mapped to one end of the color scale," \
+	"the maximum value is mapped to the other end, and a linear interpolation is used between both."					\
+	"If uniform, this is the same except for the interpolation: the value are sorted, numbered, and a linear interpolation is used on those numbers" \
+	"(in other words, only the order is taken into account, not the actual values)." \
+	"Finally, if enumerated, the second property above is used. Each possible value is mapped to a distinct color in no specific order." \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF("values", "nodes <BR> edges") \
   HTML_HELP_DEF( "default", "nodes" )  \
   HTML_HELP_BODY() \
-  "This parameter enables to choose the target of the color mapping"  \
+  "Whether colors are computed for nodes or for edges."  \
   HTML_HELP_CLOSE(),
   // color1
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "ColorScale" ) \
   HTML_HELP_BODY() \
-  "This is the color scale used." \
+  "Color scale used to transform a scalar into a color." \
   HTML_HELP_CLOSE(),
 
 };

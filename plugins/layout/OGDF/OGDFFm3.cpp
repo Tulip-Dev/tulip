@@ -67,7 +67,7 @@ namespace {
 const char * paramHelp[] = {HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "DoubleProperty" )
                             HTML_HELP_BODY()
-                            "A double property containing unit edge length to use."
+                            "The unit edge length."
                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "SizeProperty" )
                             HTML_HELP_BODY()
@@ -81,7 +81,7 @@ const char * paramHelp[] = {HTML_HELP_OPEN()
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "bool" )
                             HTML_HELP_BODY()
-                            "set new initial placement before running algorithm."
+                            "new initial placement before running the algorithm."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
@@ -102,84 +102,84 @@ const char * paramHelp[] = {HTML_HELP_OPEN()
                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> Midpoint : <FONT COLOR=\"black\"> Measure from center point of edge end points. <BR> <FONT COLOR=\"red\"> BoundingCircle : <FONT COLOR=\"black\"> Measure from border of circle s surrounding edge end points. ")
                             HTML_HELP_DEF( "default", "BoundingCircle" )
                             HTML_HELP_BODY()
-                            "Specifies how the length of an edge is measured."
+                            "How the length of an edge is measured."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "All <BR> Integer <BR> Exponent")
                             HTML_HELP_DEF( "default", "Integer" )
                             HTML_HELP_BODY()
-                            "Specifies which positions for a node are allowed."
+                            "Allowed positions for a node."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "None <BR> NoGrowingRow <BR> Always")
                             HTML_HELP_DEF( "default", "NoGrowingRow" )
                             HTML_HELP_BODY()
-                            "Specifies in which case it is allowed to tip over drawings of connected components."
+                            "When it is allowed to tip over drawings of connected components."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> None : <FONT COLOR=\"black\"> Do not presort. <BR> <FONT COLOR=\"red\"> DecreasingHeight :  <FONT COLOR=\"black\"> Presort by decreasing height of components. <BR> <FONT COLOR=\"red\"> DecreasingWidth : <FONT COLOR=\"black\"> Presort by decreasing width of components. ")
                             HTML_HELP_DEF( "default", "DecreasingHeight" )
                             HTML_HELP_BODY()
-                            "Specifies how connected components are sorted before the packing algorithm is applied."
+                            "How connected components are sorted before the packing algorithm is applied."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "UniformProb <BR> NonUniformProbLowerMass <BR> NonUniformProbHigherMass")
                             HTML_HELP_DEF( "default", "NonUniformProbLowerMass" )
                             HTML_HELP_BODY()
-                            "Specifies how sun nodes of galaxies are selected. "
+                            "How sun nodes of galaxies are selected. "
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "Constant <BR> LinearlyDecreasing <BR> RapidlyDecreasing")
                             HTML_HELP_DEF( "default", "LinearlyDecreasing" )
                             HTML_HELP_BODY()
-                            "Specifies how MaxIterations is changed in subsequent multilevels. "
+                            "How MaxIterations is changed in subsequent multilevels. "
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "Simple <BR> Advanced")
                             HTML_HELP_DEF( "default", "Advanced" )
                             HTML_HELP_BODY()
-                            "Specifies how the initial placement is generated."
+                            "How the initial placement is generated."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FruchtermanReingold : <FONT COLOR=\"black\"> The force-model by Fruchterman, Reingold.  <BR> <FONT COLOR=\"red\"> Eades : <FONT COLOR=\"black\"> The force-model by Eades. <BR> <FONT COLOR=\"red\"> New : <FONT COLOR=\"black\"> The new force-model. ")
                             HTML_HELP_DEF( "default", "New" )
                             HTML_HELP_BODY()
-                            "Specifies the force model. "
+                            "Force model. "
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> Exact : <FONT COLOR=\"black\"> Exact calculation. <BR> <FONT COLOR=\"red\"> GridApproximation : <FONT COLOR=\"black\"> Grid approximation. <BR> <FONT COLOR=\"red\"> NMM : <FONT COLOR=\"black\"> Calculation as for new multipole method. ")
                             HTML_HELP_DEF( "default", "NMM" )
                             HTML_HELP_BODY()
-                            "Specifies how to calculate repulsive forces."
+                            "How to calculate repulsive forces."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> UniformGrid : <FONT COLOR=\"black\"> Uniform placement on a grid.  <BR> <FONT COLOR=\"red\"> RandomTime : <FONT COLOR=\"black\"> Random placement (based on current time).  <BR> <FONT COLOR=\"red\"> RandomRandIterNr : <FONT COLOR=\"black\"> Random placement (based on randIterNr()). <BR> <FONT COLOR=\"red\"> KeepPositions : <FONT COLOR=\"black\"> No change in placement. ")
                             HTML_HELP_DEF( "default", "RandomRandIterNr" )
                             HTML_HELP_BODY()
-                            "Specifies how the initial placement is done. "
+                            "Initial placement. "
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "PathByPath <BR> SubtreeBySubtree")
                             HTML_HELP_DEF( "default", "Advanced" )
                             HTML_HELP_BODY()
-                            "Specifies how the reduced bucket quadtree is constructed."
+                            "How the reduced bucket quadtree is constructed."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> Iteratively : <FONT COLOR=\"black\"> 	Iteratively (in constant time). <BR> <FONT COLOR=\"red\"> Aluru : <FONT COLOR=\"black\"> According to formula by Aluru et al. (in constant time).")
                             HTML_HELP_DEF( "default", "Advanced" )
                             HTML_HELP_BODY()
-                            "Specifies how to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
+                            "how to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "int" )
@@ -189,7 +189,7 @@ const char * paramHelp[] = {HTML_HELP_OPEN()
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "double" )
                             HTML_HELP_BODY()
-                            "the threshold for the stop criterion."
+                            "threshold for the stop criterion."
                             HTML_HELP_CLOSE()
                            };
 
