@@ -527,7 +527,7 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()            \
   HTML_HELP_DEF( "type", "pathname" )       \
   HTML_HELP_BODY()                  \
-  "The file to import."       \
+  "File to import."       \
   HTML_HELP_CLOSE(),
 };
 }

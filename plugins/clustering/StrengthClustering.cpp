@@ -321,7 +321,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "DoubleProperty" )       \
   HTML_HELP_DEF( "value", "An existing metric property" )   \
   HTML_HELP_BODY()              \
-  "The metric used in order to multiply strength metric computed values."\
+  "Metric used in order to multiply strength metric computed values."\
   "If one is given, the complexity is O(n log(n)), O(n) neither." \
   HTML_HELP_CLOSE(),
 // do you mean "else it will be O(n)" instead of "O(n) neither"?

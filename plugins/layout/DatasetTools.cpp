@@ -32,7 +32,7 @@ const char* paramHelp[] = {
   HTML_HELP_DEF("Values", "up to down <BR> down to up <BR> right to left <BR> left to right") \
   HTML_HELP_DEF("Default", "up to down") \
   HTML_HELP_BODY() \
-  "orientation" \
+  "Orientation" \
   HTML_HELP_CLOSE(),
 
   //Orthogonal Edge
@@ -65,7 +65,7 @@ const char* paramHelp[] = {
   HTML_HELP_DEF( "values", "An existing size property" ) \
   HTML_HELP_DEF( "default", "viewSize" ) \
   HTML_HELP_BODY() \
-  "Property used for the node's sizes." \
+  "Property used for the nodes' sizes." \
   HTML_HELP_CLOSE(),
 };
 }

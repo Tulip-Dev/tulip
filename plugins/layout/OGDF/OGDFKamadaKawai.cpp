@@ -56,7 +56,7 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "bool" )
   HTML_HELP_BODY()
-  "If set to true, the given layout is used for the initial positions."
+  "If true, the given layout is used as initial positions."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
@@ -71,7 +71,7 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "bool" )
   HTML_HELP_BODY()
-  "If set to true, number of iterations is computed depending on G."
+  "If true, the number of iterations is computed depending on G."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "int" )

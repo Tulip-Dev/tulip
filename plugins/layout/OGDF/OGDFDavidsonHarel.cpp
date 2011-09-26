@@ -63,24 +63,24 @@ const char * paramHelp[] = {
   HTML_HELP_DEF("values", "Standard <BR> Repulse <BR> Planar") \
   HTML_HELP_DEF( "default", "Standard" )   \
   HTML_HELP_BODY() \
-  "fixed costs. " \
+  "Fixed costs " \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF("values", "Fast <BR> Medium <BR> HQ") \
   HTML_HELP_DEF( "default", "Medium" )   \
   HTML_HELP_BODY() \
-  "temperature and iterations. "  \
+  "Temperature and iterations. "  \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_BODY()
-  "the preferred edge length. "
+  "Preferred edge length. "
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_BODY()
-  "the preferred edge length multiplier for attraction. "
+  "Preferred edge length multiplier for attraction. "
   HTML_HELP_CLOSE()
 };
 }

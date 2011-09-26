@@ -31,7 +31,7 @@ static const char * paramHelp[] = {
   HTML_HELP_OPEN()            \
   HTML_HELP_DEF( "type", "directory pathname" )       \
   HTML_HELP_BODY()                  \
-  "The directory that will be scanned recursively."        \
+  "Directory to scan recursively."        \
   HTML_HELP_CLOSE(),
 };
 }

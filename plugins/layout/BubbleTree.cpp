@@ -310,7 +310,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true, false] o(nlog(n)) / o(n)" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "complexity of the algorithm." \
+  "Complexity of the algorithm." \
   HTML_HELP_CLOSE()
 };
 }

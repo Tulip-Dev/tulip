@@ -31,7 +31,7 @@ const char
   HTML_HELP_DEF( "type", "unsigned int" )
   HTML_HELP_DEF( "default", "10" )
   HTML_HELP_BODY()
-  "The grid's node width."
+  "Grid's node width."
   HTML_HELP_CLOSE(),
 
   // height
@@ -39,7 +39,7 @@ const char
   HTML_HELP_DEF( "type", "unsigned int" )
   HTML_HELP_DEF( "default", "10" )
   HTML_HELP_BODY()
-  "The grid's node height."
+  "Grid's node height."
   HTML_HELP_CLOSE(),
   //Connectivity
   HTML_HELP_OPEN()
@@ -47,21 +47,21 @@ const char
   HTML_HELP_DEF( "values", "4 <br> 6 <br> 8" )
   HTML_HELP_DEF( "default", "4" )
   HTML_HELP_BODY()
-  "The connectivity number of each node."
+  "Connectivity number of each node."
   HTML_HELP_CLOSE(),
   // tore
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "bool" )
   HTML_HELP_DEF( "default", "false" )
   HTML_HELP_BODY()
-  "If true the opposite nodes of each sides of the grid are connected. In a 4 connectivity the resulting object is a torus."
+  "If true, opposite nodes on each side of the grid are connected. In a 4 connectivity the resulting object is a torus."
   HTML_HELP_CLOSE(),
   // Line spacing
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_DEF( "default", "1.0" )
   HTML_HELP_BODY()
-  "The spacing between nodes."
+  "Spacing between nodes."
 };
 }
 /** \addtogroup import */
