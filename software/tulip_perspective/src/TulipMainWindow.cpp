@@ -21,14 +21,12 @@ TulipPerspectiveMainWindow::TulipPerspectiveMainWindow(QWidget *parent): QMainWi
 
 void TulipPerspectiveMainWindow::printMemoryChecker() {
 #ifdef MEMORYCHECKER_ON
-  qWarning("prout");
   memory_checker_print_report();
 #endif // MEMORYCHECKER_ON
 }
 
 void TulipPerspectiveMainWindow::clearMemoryChecker() {
 #ifdef MEMORYCHECKER_ON
-  qWarning("meuh");
   memory_checker_clear_report();
 #endif // MEMORYCHECKER_ON
 }
