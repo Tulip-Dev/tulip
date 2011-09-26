@@ -130,10 +130,10 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "default", "linear" )   \
   HTML_HELP_BODY() \
   "If linear, the first property above is used. The minimum value is mapped to one end of the color scale," \
-	"the maximum value is mapped to the other end, and a linear interpolation is used between both."					\
-	"If uniform, this is the same except for the interpolation: the value are sorted, numbered, and a linear interpolation is used on those numbers" \
-	"(in other words, only the order is taken into account, not the actual values)." \
-	"Finally, if enumerated, the second property above is used. Each possible value is mapped to a distinct color in no specific order." \
+  "the maximum value is mapped to the other end, and a linear interpolation is used between both."          \
+  "If uniform, this is the same except for the interpolation: the value are sorted, numbered, and a linear interpolation is used on those numbers" \
+  "(in other words, only the order is taken into account, not the actual values)." \
+  "Finally, if enumerated, the second property above is used. Each possible value is mapped to a distinct color in no specific order." \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "String Collection" ) \

@@ -36,7 +36,7 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )  \
   HTML_HELP_BODY() \
-	"If true, the results are normalized in the following way."
+  "If true, the results are normalized in the following way."
   "For nodes, undirected : m(n) = 2*c(n) / (#V - 1)(#V - 2) "  \
   "For nodes,   directed : m(n) =   c(n) / (#V - 1)(#V - 2) " \
   "For edges, undirected : m(e) = 2*c(n) / (#V / 2)(#V / 2) "  \
