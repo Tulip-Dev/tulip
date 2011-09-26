@@ -49,7 +49,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "If true, long distance edges will be added in the grid approximation." \
+  "If true, long distance edges are added in the grid approximation." \
   HTML_HELP_CLOSE(),
 };
 }

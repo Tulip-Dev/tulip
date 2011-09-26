@@ -64,29 +64,29 @@ namespace {
 const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "int" )
                              HTML_HELP_BODY()
-                             "number of iterations"
+                             "Number of iterations"
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "noise. "
+                             "Noise. "
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "if true, use metric as node weights.  "
+                             "If true, use metric as node weights.  "
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "DoubleProperty" )
                              HTML_HELP_BODY()
-                             "metric containing nodes weights.  "
+                             "Metric containing nodes weights.  "
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "StringCollection")
                              HTML_HELP_DEF("values", "Factor <BR> Logarithmic")
                              HTML_HELP_DEF( "default", "Factor" )
                              HTML_HELP_BODY()
-                             "cooling function"
+                             "Cooling function"
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )

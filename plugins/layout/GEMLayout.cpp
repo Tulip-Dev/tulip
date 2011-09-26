@@ -30,13 +30,13 @@ static const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "Boolean" ) \
   HTML_HELP_BODY() \
-  "If true the layout is in 3D else it is computed in 2D" \
+  "If true, the layout is in 3D else it is computed in 2D." \
   HTML_HELP_CLOSE(),
   // edge length
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "DoubleProperty" ) \
   HTML_HELP_BODY() \
-  "length of the edges." \
+  "Length of the edges." \
   HTML_HELP_CLOSE(),
   // initial layout
   HTML_HELP_OPEN() \
@@ -49,7 +49,7 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "unsigned integer" ) \
   HTML_HELP_DEF( "default", "0" ) \
   HTML_HELP_BODY() \
-  "The default value of 0 corresponds to 10 * nb_nodes * nb_nodes." \
+  "The default value 0 means 10 * nb_nodes * nb_nodes." \
   HTML_HELP_CLOSE(),
 };
 

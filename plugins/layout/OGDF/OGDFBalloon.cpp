@@ -55,7 +55,7 @@ namespace {
 const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "If true subtrees are assigned even angles, if false the angles depends on their size."
+                             "If true, subtrees are assigned even angles. If false, the angles depends on their size."
                              HTML_HELP_CLOSE()
                            };
 }

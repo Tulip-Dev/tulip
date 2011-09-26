@@ -23,7 +23,7 @@ static const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "Boolean" ) \
   HTML_HELP_BODY() \
-  "If true the layout is in 3D else it is computed in 2D" \
+  "If true, the layout is computed in 3D, else it is computed in 2D" \
   HTML_HELP_CLOSE()
 };
 

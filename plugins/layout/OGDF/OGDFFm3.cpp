@@ -67,21 +67,21 @@ namespace {
 const char * paramHelp[] = {HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "DoubleProperty" )
                             HTML_HELP_BODY()
-                            "The unit edge length."
+                            "Unit edge length."
                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "SizeProperty" )
                             HTML_HELP_BODY()
-                            "The nodes size."
+                            "Nodes size."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "double" )
                             HTML_HELP_BODY()
-                            "The unit edge length."
+                            "Unit edge length."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "bool" )
                             HTML_HELP_BODY()
-                            "new initial placement before running the algorithm."
+                            "New initial placement before running the algorithm."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
@@ -179,17 +179,17 @@ const char * paramHelp[] = {HTML_HELP_OPEN()
                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> Iteratively : <FONT COLOR=\"black\"> 	Iteratively (in constant time). <BR> <FONT COLOR=\"red\"> Aluru : <FONT COLOR=\"black\"> According to formula by Aluru et al. (in constant time).")
                             HTML_HELP_DEF( "default", "Advanced" )
                             HTML_HELP_BODY()
-                            "how to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
+                            "How to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "int" )
                             HTML_HELP_BODY()
-                            "the fixed number of iterations for the stop criterion."
+                            "Number of iterations for the stop criterion."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "double" )
                             HTML_HELP_BODY()
-                            "threshold for the stop criterion."
+                            "Threshold for the stop criterion."
                             HTML_HELP_CLOSE()
                            };
 

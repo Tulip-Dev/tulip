@@ -67,24 +67,24 @@ namespace {
 const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "int" )
                              HTML_HELP_BODY()
-                             "maximal number of rounds per node."
+                             "Maximal number of rounds per node."
                              HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "minimal temperature ."
+                             "Minimal temperature"
                              HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "initial temperature. Must be >= minimalTemperature."
+                             "Initial temperature. Must be >= minimalTemperature."
                              HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "gravitational constant parameter."
+                             "Gravitational constant parameter."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "desired edge length. Must be >= 0."
+                             "Desired edge length. Must be >= 0."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
@@ -116,7 +116,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_DEF("values", "Fruchterman/Reingold <BR> GEM")
                              HTML_HELP_DEF( "default", "Fruchterman/Reingold" )
                              HTML_HELP_BODY()
-                             "formula for attraction. "
+                             "Formula for attraction. "
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )

@@ -52,12 +52,12 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "int" )
   HTML_HELP_BODY()
-  "The maximum number of iterations."
+  "Maximum number of iterations."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "int" )
   HTML_HELP_BODY()
-  "The number of coefficients for the expansions."
+  "Number of coefficients for the expansions."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "bool" )
@@ -67,17 +67,17 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_BODY()
-  "the default node size."
+  "Default node size."
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "double" )
   HTML_HELP_BODY()
-  "the default edge length. "
+  "Default edge length. "
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "int" )
   HTML_HELP_BODY()
-  "The number of threads to use during the computation of the layout."
+  "Number of threads."
   HTML_HELP_CLOSE()
 };
 }

@@ -32,7 +32,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "An existing int property" ) \
   HTML_HELP_DEF( "default", "None" ) \
   HTML_HELP_BODY() \
-  "Property used to compute the edge lengths." \
+  "Property used to compute edge lengths." \
   HTML_HELP_CLOSE(),
   //Orientation
   HTML_HELP_OPEN() \

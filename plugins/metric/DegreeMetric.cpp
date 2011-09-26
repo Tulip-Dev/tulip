@@ -39,14 +39,15 @@ const char * paramHelp[] = {
   "The weighted degree of a node is the sum of weights of "\
   "all its in/out/inout edges. "\
   "If no metric is specified, using a uniform metric value of 1 for all edges " \
-  "returns the usual degree for nodes (number of in/out/inout neighbors)."\
+  "returns the usual degree for nodes (number of neighbors)."\
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )  \
   HTML_HELP_BODY() \
-  "If true the mesure will be normalized unweight: m(n) = deg(n) / (#V - 1) " \
-  "If true the mesure will be normalized unweight: m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)] " \
+  "If true, the mesure is normalized in the following way." \
+	"<ul><li>Unweighted case: m(n) = deg(n) / (#V - 1)</li> "								\
+  "<li>Weighted case: m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)] </li></ul>" \
   HTML_HELP_CLOSE(),
 
 };

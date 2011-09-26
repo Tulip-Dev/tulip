@@ -51,7 +51,7 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "int" )
   HTML_HELP_BODY()
-  "The number of threads to use during the computation of the layout."
+  "Number of threads"
   HTML_HELP_CLOSE()
 };
 }

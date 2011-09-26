@@ -54,7 +54,7 @@ const char* paramHelp[] = {
   HTML_HELP_DEF("Type", "StringCollection") \
   HTML_HELP_DEF("Default", "auto") \
   HTML_HELP_BODY() \
-  "Complexity of the algorithm.<br> n is the number of connected components in the graph" \
+  "Complexity of the algorithm.<br> n is the number of connected components in the graph." \
   HTML_HELP_CLOSE()
 };
 }

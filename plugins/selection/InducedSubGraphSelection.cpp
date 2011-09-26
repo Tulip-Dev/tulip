@@ -30,7 +30,7 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "Selection" ) \
   HTML_HELP_BODY() \
-  "original set of nodes for which the induced sub-graph is computed." \
+  "Set of nodes for which the induced sub-graph is computed." \
   HTML_HELP_CLOSE(),
 };
 }

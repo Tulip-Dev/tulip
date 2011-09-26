@@ -52,23 +52,23 @@ namespace {
 const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "The minimal distance between nodes on a circle."
+                             "Minimal distance between nodes on a circle."
                              HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "The minimal distance between father and child circle. "
+                             "Minimal distance between father and child circle. "
                              HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "The minimal distance between circles on same level. "
+                             "Minimal distance between circles on same level. "
                              HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "The minimal distance between connected components."
+                             "Minimal distance between connected components."
                              HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "double" )
                              HTML_HELP_BODY()
-                             "The page ratio used for packing connected components."
+                             "Page ratio used for packing connected components."
                              HTML_HELP_CLOSE()
                            };
 }

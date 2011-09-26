@@ -42,7 +42,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "true/false" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "If checked, this parameter is computed, if unchecked, it is copied from the value of input." \
+  "Each checked dimension is adjusted to represent property, each unchecked dimension is copied from input." \
   HTML_HELP_CLOSE(),
   // min
   HTML_HELP_OPEN() \

@@ -361,7 +361,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "string" ) \
   HTML_HELP_DEF( "default", "www.labri.fr" ) \
   HTML_HELP_BODY() \
-  "The web site to crawl. No need for http:// at the beginning; http protocol is always assumed. No need for / at the end." \
+  "Web site to crawl. http protocol is always assumed: no need for http:// at the beginning nor / at the end." \
   HTML_HELP_CLOSE(),
   // initial page
   HTML_HELP_OPEN() \
@@ -403,21 +403,21 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "color" ) \
   HTML_HELP_DEF( "default", "red" ) \
   HTML_HELP_BODY() \
-  "color used to display nodes." \
+  "Color used to display nodes." \
   HTML_HELP_CLOSE(),
   // link color
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "color" ) \
   HTML_HELP_DEF( "default", "blue" ) \
   HTML_HELP_BODY() \
-  "color used to display links." \
+  "Color used to display links." \
   HTML_HELP_CLOSE(),
   // link color
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "color" ) \
   HTML_HELP_DEF( "default", "yellow" ) \
   HTML_HELP_BODY() \
-  "color used to display redirections." \
+  "Color used to display redirections." \
   HTML_HELP_CLOSE()
 };
 }

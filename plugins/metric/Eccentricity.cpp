@@ -36,7 +36,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true , false]" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "If true the closeness centrality is computed (i.e. the average distance from the node to all others)."\
+  "If true, the closeness centrality is computed (i.e. the average distance from the node to all others)."\
   HTML_HELP_CLOSE(),
   // norm
   HTML_HELP_OPEN() \
@@ -44,7 +44,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true , false]" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "If true the returned values are normalized. " \
+  "If true, the returned values are normalized. " \
   "For the closeness centrality, the reciprocal of the sum of distances is returned. " \
   "The eccentricity values are divided by the graph diameter. " \
   "<b> Warning : </b> The normalized eccentricity values sould be computed on a (strongly) connected graph."
@@ -55,7 +55,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true , false]" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "If true the graph is considered directed."\
+  "If true, the graph is considered directed."\
   HTML_HELP_CLOSE(),
 };
 }
