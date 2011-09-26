@@ -64,7 +64,7 @@ const char * paramHelp[] = {
   HTML_HELP_BODY() \
   "Type of mapping." \
   "<ul><li>true: linear mapping (min value of property is mapped to min size, max to max size, and a linear interpolation is used inbetween.)</li>" \
-	"<li>false: uniform quantification (the values of property are sorted, and the same size increment is used between consecutive values).</li></ul>"													\
+  "<li>false: uniform quantification (the values of property are sorted, and the same size increment is used between consecutive values).</li></ul>"                          \
   HTML_HELP_CLOSE(),
   // Mapping type
   HTML_HELP_OPEN() \

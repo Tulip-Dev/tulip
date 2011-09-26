@@ -324,7 +324,7 @@ const char * paramHelp[] = {
   "The metric used in order to multiply strength metric computed values."\
   "If one is given, the complexity is O(n log(n)), O(n) neither." \
   HTML_HELP_CLOSE(),
- // do you mean "else it will be O(n)" instead of "O(n) neither"?
+// do you mean "else it will be O(n)" instead of "O(n) neither"?
   /*// layout subgraphs
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "bool" ) \
