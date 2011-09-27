@@ -46,7 +46,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "default", "false" )  \
   HTML_HELP_BODY() \
   "If true, the mesure is normalized in the following way." \
-	"<ul><li>Unweighted case: m(n) = deg(n) / (#V - 1)</li> "								\
+  "<ul><li>Unweighted case: m(n) = deg(n) / (#V - 1)</li> "               \
   "<li>Weighted case: m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)] </li></ul>" \
   HTML_HELP_CLOSE(),
 
