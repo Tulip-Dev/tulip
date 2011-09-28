@@ -17,7 +17,7 @@ PropertyAnimation<PropType, NodeType, EdgeType>::PropertyAnimation(tlp::Graph *g
   this->_start = new PropType(start->getGraph());
   *(this->_start) = *start;
   this->_end = new PropType(end->getGraph());
-  *(this->_end) = *_end;
+  *(this->_end) = *end;
 
   if (!selection) {
     this->_selection = new tlp::BooleanProperty(graph);
