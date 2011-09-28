@@ -59,5 +59,5 @@ fi
 done
 
 # print the choosen version to stderr instead of stdout (because some echo are preformed above) to retrieve it from a CMake script
-echo $final_version 1>&2
+echo -n $final_version 1>&2
   
