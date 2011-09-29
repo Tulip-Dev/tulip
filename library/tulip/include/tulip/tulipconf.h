@@ -29,7 +29,11 @@
 
 //MSVC is the only compiler we use that does not have typeof
 #if !defined(_MSC_VER)
-#  define TYPEOF typeof
+#  if defined(__GXX_EXPERIMENTAL_CXX0X__)
+#    define TYPEOF decltype
+#  else
+#    define TYPEOF typeof
+#  endif
 #endif
 
 #if defined(_MSC_VER)
