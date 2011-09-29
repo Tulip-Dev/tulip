@@ -256,7 +256,7 @@ public:
   }
 
 public slots:
-  void terminated();
+  bool terminated();
   void runImportPlugin(const QString &name, tlp::Graph *);
 
 protected slots:

@@ -62,7 +62,7 @@ public:
 
 public slots:
 
-  virtual void terminated() {}
+  virtual bool terminated() { return true; }
 
 signals:
 
