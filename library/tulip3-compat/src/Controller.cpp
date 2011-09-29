@@ -217,9 +217,10 @@ void Controller::initializeGraph(Graph *graph) {
   graph->getProperty<SizeProperty>("viewTgtAnchorSize")->setAllEdgeValue(Size(0.25,0.25,0.25));
 }
 
-void Controller::terminated() {
+bool Controller::terminated() {
   if (!isEmpty() && QMessageBox::question(0, trUtf8("Exiting"),trUtf8("Do you want to save your graph?"),QMessageBox::Yes,QMessageBox::No) == QMessageBox::Yes)
     save();
+  return true;
 }
 
 bool Controller::isEmpty() {

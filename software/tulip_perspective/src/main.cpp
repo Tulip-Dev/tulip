@@ -17,7 +17,7 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 
-#include "TulipMainWindow.h"
+#include "TulipPerspectiveMainWindow.h"
 
 #include <CrashHandling.h>
 
@@ -155,6 +155,8 @@ int main(int argc,char **argv) {
   if (!perspective)
     usage("Failed to create perspective: " + perspectiveName);
 
+  mainWindow->setPerspective(perspective);
+
   // Connect perspective and communicator
   QObject::connect(perspective,SIGNAL(showTulipWelcomeScreen()),communicator,SLOT(ShowWelcomeScreen()));
   QObject::connect(perspective,SIGNAL(showTulipPluginsCenter()),communicator,SLOT(ShowPluginsCenter()));
@@ -166,8 +168,7 @@ int main(int argc,char **argv) {
   QObject::connect(perspective,SIGNAL(addPluginRepository(QString)),communicator,SLOT(AddPluginRepository(QString)));
   QObject::connect(perspective,SIGNAL(removePluginRepository(QString)),communicator,SLOT(RemovePluginRepository(QString)));
   QObject::connect(perspective,SIGNAL(showTrayMessage(QString,QString,uint,uint)),communicator,SLOT(ShowTrayMessage(QString,QString,uint,uint)));
-  QObject::connect(communicator,SIGNAL(Terminate()),perspective,SLOT(terminated()));
-  QObject::connect(qApp,SIGNAL(aboutToQuit()),perspective,SLOT(terminated()));
+  QObject::connect(communicator,SIGNAL(Terminate()),mainWindow,SLOT(close()));
 
   communicator->EnableCrashHandling(project->absoluteRootPath(),QApplication::applicationPid());
 

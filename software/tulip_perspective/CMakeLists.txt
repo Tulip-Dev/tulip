@@ -1,12 +1,12 @@
 SET(SRCS
   src/main.cpp
   src/TulipAgentCommunicator.cpp
-  src/TulipMainWindow.cpp
+  src/TulipPerspectiveMainWindow.cpp
 )
 
 QT4_WRAP_CPP(MOC_SRCS
   include/TulipAgentCommunicator.h
-  include/TulipMainWindow.h
+  include/TulipPerspectiveMainWindow.h
 )
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../crash_handling)

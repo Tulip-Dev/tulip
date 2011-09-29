@@ -1,7 +1,9 @@
-#include "TulipMainWindow.h"
+#include "TulipPerspectiveMainWindow.h"
 
+#include <QtGui/QCloseEvent>
 #include <QtGui/QShortcut>
 #include <QtGui/QAction>
+#include <tulip/Perspective.h>
 
 TulipPerspectiveMainWindow::TulipPerspectiveMainWindow(QWidget *parent): QMainWindow(parent) {
 #ifdef MEMORYCHECKER_ON
@@ -29,4 +31,12 @@ void TulipPerspectiveMainWindow::clearMemoryChecker() {
 #ifdef MEMORYCHECKER_ON
   memory_checker_clear_report();
 #endif // MEMORYCHECKER_ON
+}
+
+void TulipPerspectiveMainWindow::closeEvent(QCloseEvent* event) {
+  if (_perspective->terminated()) {
+    QMainWindow::closeEvent(event);
+  }
+  else
+    event->ignore();
 }
