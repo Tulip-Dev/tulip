@@ -1063,9 +1063,9 @@ bool TulipApp::closeWin() {
 }
 //**********************************************************************
 void TulipApp::closeEvent(QCloseEvent *e) {
-  if (closeWin()){
+  if (closeWin()) {
     printMemoryChecker();
-    e->accept();  
+    e->accept();
   }
   else
     e->ignore();
@@ -1364,7 +1364,7 @@ void TulipApp::helpAssistantError(const QString &msg) {
 }
 //==============================================================
 void TulipApp::fileExit() {
-  if (closeWin()){
+  if (closeWin()) {
     printMemoryChecker();
     exit(EXIT_SUCCESS);
   }
