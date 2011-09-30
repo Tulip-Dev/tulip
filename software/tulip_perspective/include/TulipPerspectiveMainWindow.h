@@ -17,7 +17,9 @@ class TulipPerspectiveMainWindow : public QMainWindow {
 
 public:
   explicit TulipPerspectiveMainWindow(QWidget *parent = 0);
-  void setPerspective(tlp::Perspective* perspective) { _perspective = perspective; }
+  void setPerspective(tlp::Perspective* perspective) {
+    _perspective = perspective;
+  }
 
 signals:
 
