@@ -300,15 +300,19 @@ void GlLabel::draw(float lod, Camera *camera) {
   if(textVector.size()>1)
     multiLineH=(h-(textVector.size()-1)*10)/textVector.size();
 
-  //Here we compute the deformation of the bounding box when we have a rotation on the camera
-  float a=acos(camera->getUp()[1]/sqrt(camera->getUp()[0]*camera->getUp()[0]+camera->getUp()[1]*camera->getUp()[1]));
-  a=M_PI/4-a;
+  if(camera){
+    //Here we compute the deformation of the bounding box when we have a rotation on the camera
+    float a=acos(camera->getUp()[1]/sqrt(camera->getUp()[0]*camera->getUp()[0]+camera->getUp()[1]*camera->getUp()[1]));
+    a=M_PI/4-a;
 
-  if(a<-M_PI/4)
-    a=-M_PI/2-a;
+    if(a<-M_PI/4)
+      a=-M_PI/2-a;
 
-  //We compute the size of the text on the screen
-  screenH=static_cast<float>(multiLineH*(lod/(cos(a)*sqrt((lodBoundingBox[1][0]-lodBoundingBox[0][0])*(lodBoundingBox[1][0]-lodBoundingBox[0][0])+(lodBoundingBox[1][1]-lodBoundingBox[0][1])*(lodBoundingBox[1][1]-lodBoundingBox[0][1])+(lodBoundingBox[1][2]-lodBoundingBox[0][2])*(lodBoundingBox[1][2]-lodBoundingBox[0][2])))))/2.f;
+    //We compute the size of the text on the screen
+    screenH=static_cast<float>(multiLineH*(lod/(cos(a)*sqrt((lodBoundingBox[1][0]-lodBoundingBox[0][0])*(lodBoundingBox[1][0]-lodBoundingBox[0][0])+(lodBoundingBox[1][1]-lodBoundingBox[0][1])*(lodBoundingBox[1][1]-lodBoundingBox[0][1])+(lodBoundingBox[1][2]-lodBoundingBox[0][2])*(lodBoundingBox[1][2]-lodBoundingBox[0][2])))))/2.f;
+  }else{
+    screenH=static_cast<float>(multiLineH)/2.f;
+  }
 
   //Scale of the text
   float scaleToApply=1.;
