@@ -220,6 +220,7 @@ void Controller::initializeGraph(Graph *graph) {
 bool Controller::terminated() {
   if (!isEmpty() && QMessageBox::question(0, trUtf8("Exiting"),trUtf8("Do you want to save your graph?"),QMessageBox::Yes,QMessageBox::No) == QMessageBox::Yes)
     save();
+
   return true;
 }
 
