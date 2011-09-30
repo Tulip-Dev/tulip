@@ -753,10 +753,13 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
 
         if(displayDialog) {
           // If we find controller name : display this name is ChooseControllerDialog (replace None)
-          if(haveControllerData)
+          if(haveControllerData) {
             chooseControllerDialog.setDefaultControllerName(controllerName);
+            chooseControllerDialog.setDefaultCheckedControllerName(controllerName);
+          }
+          else
+              chooseControllerDialog.setDefaultCheckedControllerName(defaultControllerName);
 
-          chooseControllerDialog.setDefaultCheckedControllerName(controllerName);
           chooseControllerDialog.setControllersAvailable(controllersName);
 
           if(chooseControllerDialog.exec()==QDialog::Rejected) {
