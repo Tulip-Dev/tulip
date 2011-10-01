@@ -758,7 +758,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
             chooseControllerDialog.setDefaultCheckedControllerName(controllerName);
           }
           else
-              chooseControllerDialog.setDefaultCheckedControllerName(defaultControllerName);
+            chooseControllerDialog.setDefaultCheckedControllerName(defaultControllerName);
 
           chooseControllerDialog.setControllersAvailable(controllersName);
 
