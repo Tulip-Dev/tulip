@@ -4,6 +4,9 @@
 #include <QtGui/QWidget>
 #include <QtCore/QMap>
 
+#include <tulip/WithParameter.h>
+#include "GraphHierarchiesModel.h"
+
 namespace tlp {
 class Graph;
 class PluginProgress;
@@ -18,8 +21,9 @@ class PluginListWidgetManagerInterface {
 public:
   virtual QMap<QString,QStringList> algorithms()=0;
   virtual bool computeProperty(tlp::Graph *,const QString &alg, const QString &outPropertyName, QString &msg, tlp::PluginProgress *progress=0, tlp::DataSet *data=0)=0;
+  virtual tlp::ParameterList parameters(const QString& alg)=0;
 };
-
+// **********************************************
 class AlgorithmRunner : public QWidget {
   Q_OBJECT
 
@@ -29,10 +33,11 @@ class AlgorithmRunner : public QWidget {
   Ui::AlgorithmRunnerData *_ui;
   PluginListWidgetManagerInterface *_pluginsListMgr;
   QMap<QString,QStringList> _currentAlgorithmsList;
+
+  GraphHierarchiesModel* _model;
 public:
   explicit AlgorithmRunner(QWidget *parent = 0);
-
-signals:
+  void setModel(GraphHierarchiesModel* model);
 
 public slots:
   void buildListWidget();
@@ -40,19 +45,21 @@ public slots:
 protected slots:
   void algorithmTypeChanged(const QString &);
   void setFilter(const QString &);
+  void computeProperty(const QString& name,tlp::DataSet* data);
+  void currentGraphChanged(tlp::Graph* g);
 };
-
+// **********************************************
 class AlgorithmRunnerItem: public QWidget {
   Q_OBJECT
-
   Ui::AlgorithmRunnerItemData *_ui;
 
   Q_PROPERTY(QString group READ group)
   QString _group;
-
   Q_PROPERTY(QString name READ name)
+
+  tlp::ParameterList _params;
 public:
-  explicit AlgorithmRunnerItem(const QString &group,const QString &name, QWidget *parent=0);
+  explicit AlgorithmRunnerItem(const QString &group,const QString &name, const tlp::ParameterList& params, QWidget *parent=0);
   virtual ~AlgorithmRunnerItem();
 
   QString group() const {
@@ -61,6 +68,9 @@ public:
   QString name() const {
     return "";
   }
+
+  void setGraph(tlp::Graph*);
+
 };
 
 #endif // ALGORITHMRUNNER_H

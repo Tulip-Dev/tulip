@@ -25,15 +25,9 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   CHECK_QVARIANT(tlp::IntegerProperty*);
   CHECK_QVARIANT(tlp::SizeProperty*);
   CHECK_QVARIANT(tlp::ColorProperty*);
+  CHECK_QVARIANT(tlp::PropertyInterface*);
 
-//  CHECK_DATATYPE(tlp::EdgeSetType::RealType);
-//  CHECK_DATATYPE(tlp::DoubleVectorType::RealType);
-//  CHECK_DATATYPE(tlp::IntegerVectorType::RealType);
-//  CHECK_DATATYPE(tlp::LineType::RealType);
-//  CHECK_DATATYPE(tlp::SizeVectorType::RealType);
-//  CHECK_DATATYPE(tlp::StringVectorType::RealType);
-//  CHECK_DATATYPE(tlp::ColorVectorType::RealType);
-//  CHECK_DATATYPE(tlp::CoordVectorType::RealType);
+  CHECK_QVARIANT(ColorScale);
   return NULL;
 }
 
@@ -64,15 +58,9 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm) {
   CHECK_DATATYPE(tlp::IntegerProperty*);
   CHECK_DATATYPE(tlp::SizeProperty*);
   CHECK_DATATYPE(tlp::ColorProperty*);
+  CHECK_DATATYPE(tlp::PropertyInterface*);
 
-//  CHECK_DATATYPE(tlp::EdgeSetType::RealType);
-//  CHECK_DATATYPE(tlp::DoubleVectorType::RealType);
-//  CHECK_DATATYPE(tlp::IntegerVectorType::RealType);
-//  CHECK_DATATYPE(tlp::LineType::RealType);
-//  CHECK_DATATYPE(tlp::SizeVectorType::RealType);
-//  CHECK_DATATYPE(tlp::StringVectorType::RealType);
-//  CHECK_DATATYPE(tlp::ColorVectorType::RealType);
-//  CHECK_DATATYPE(tlp::CoordVectorType::RealType);
+  CHECK_DATATYPE(tlp::ColorScale)
 
   return QVariant();
 }

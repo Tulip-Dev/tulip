@@ -4,7 +4,6 @@ SET(LIB_SRCS
 src/AlgorithmRunner.cpp
 src/ExpandableGroupBox.cpp
 src/FiltersManager.cpp
-src/FiltersManagerItem.cpp
 src/GraphHierarchiesEditor.cpp
 src/GraphHierarchiesModel.cpp
 src/GraphPerspective.cpp
@@ -25,7 +24,6 @@ designer/HeaderFrame.ui)
 QT4_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
 include/FiltersManager.h
-include/FiltersManagerItem.h
 include/GraphHierarchiesEditor.h
 include/GraphHierarchiesModel.h
 include/GraphPerspective.h

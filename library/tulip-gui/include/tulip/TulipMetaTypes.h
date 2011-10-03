@@ -16,6 +16,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/IntegerProperty.h>
+#include <tulip/ColorScale.h>
 
 #include <vector>
 
@@ -56,6 +57,10 @@ Q_DECLARE_METATYPE(std::vector<int>)
 Q_DECLARE_METATYPE(tlp::BooleanProperty*)
 Q_DECLARE_METATYPE(tlp::BooleanVectorProperty*)
 Q_DECLARE_METATYPE(std::vector<bool>)
+
+Q_DECLARE_METATYPE(tlp::PropertyInterface*)
+
+Q_DECLARE_METATYPE(tlp::ColorScale)
 
 namespace tlp {
 class TLP_QT_SCOPE TulipMetaTypes {

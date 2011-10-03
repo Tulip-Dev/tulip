@@ -5,6 +5,7 @@
 #include "GraphHierarchiesEditor.h"
 #include "GraphHierarchiesModel.h"
 #include <tulip/Graph.h>
+#include <QtCore/QDebug>
 
 using namespace tlp;
 
@@ -14,9 +15,9 @@ GraphPerspective::GraphPerspective(PerspectiveContext &c): Perspective(c), _ui(0
 void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
+  connect(_ui->actionFull_screen,SIGNAL(toggled(bool)),this,SLOT(showFullScreen(bool)));
   _ui->workspaceSplitter->setSizes(QList<int>() << 200 << 1000);
   _ui->docksSplitter->setSizes(QList<int>() << 500 << 800);
-  _ui->graphHierarchiesEditor->hide();
 
   _mainWindow->show();
   // Open project with model
@@ -26,11 +27,10 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
     _graphs->addGraph(tlp::newGraph());
 
   _ui->graphHierarchiesEditor->setModel(_graphs);
+  _ui->algorithmRunner->setModel(_graphs);
 
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>())
-  connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
-
-  connect(_ui->graphsHierarchyManagerButton,SIGNAL(toggled(bool)),this,SLOT(refreshDockExpandControls()));
+    connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
 }
 
 void GraphPerspective::refreshDockExpandControls() {
@@ -38,21 +38,25 @@ void GraphPerspective::refreshDockExpandControls() {
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     h->expandControl()->setEnabled(true);
 
-    if (h->parentWidget() == _ui->graphHierarchiesEditor)
-      continue;
-
     if (h->isExpanded())
       expandedHeaders.push_back(h);
     else
       collapsedHeaders.push_back(h);
   }
 
-  if (expandedHeaders.size() == 1 && !_ui->graphHierarchiesEditor->isVisible())
+  if (expandedHeaders.size() == 1)
     expandedHeaders[0]->expandControl()->setEnabled(false);
+}
 
-  if (expandedHeaders.size() == 0 && !_ui->graphHierarchiesEditor->isVisible()) {
-    collapsedHeaders[0]->expand(true);
-    collapsedHeaders[0]->expandControl()->setEnabled(false);
+void GraphPerspective::showFullScreen(bool f) {
+  if (f) {
+    _maximised = _mainWindow->isMaximized();
+    _mainWindow->showFullScreen();
+  }
+  else {
+    _mainWindow->showNormal();
+    if (_maximised)
+      _mainWindow->showMaximized();
   }
 }
 

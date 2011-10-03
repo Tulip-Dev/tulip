@@ -416,6 +416,15 @@ void ColorScaleConfigDialog::reeditSaveColorScale(QListWidgetItem *savedColorSca
   _ui->tabWidget->setCurrentIndex(0);
 }
 
+void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
+  ColorScale* cs = new ColorScale(colorScale);
+  setColorScale(cs);
+}
+
+ColorScale ColorScaleConfigDialog::getColorScale() const {
+  return *colorScale;
+}
+
 void ColorScaleConfigDialog::setColorScale(ColorScale *colorScale) {
 
   disconnect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
