@@ -30,6 +30,7 @@ extern TLP_SCOPE std::string TulipPluginsPath;
 extern TLP_SCOPE std::string TulipDocProfile;
 extern TLP_SCOPE std::string TulipUserHandBookIndex;
 extern TLP_SCOPE std::string TulipBitmapDir;
+extern TLP_SCOPE std::string TulipShareDir;
 
 /**
  * @brief Initializes the Tulip library.
