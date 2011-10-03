@@ -74,6 +74,21 @@ public:
   virtual QString displayText(const QVariant &) const;
 };
 
+class TLP_QT_SCOPE PropertyInterfaceEditorCreator: public tlp::TulipItemEditorCreator {
+public:
+  QWidget* createWidget(QWidget*) const;
+  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual QVariant editorData(QWidget*,tlp::Graph*);
+  virtual QString displayText(const QVariant &) const;
+};
+
+class TLP_QT_SCOPE ColorScaleEditorCreator: public tlp::TulipItemEditorCreator {
+public:
+  QWidget* createWidget(QWidget*) const;
+  bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
+  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual QVariant editorData(QWidget*,tlp::Graph*);
+};
 }
 
 #include "cxx/TulipItemEditorCreators.cxx"

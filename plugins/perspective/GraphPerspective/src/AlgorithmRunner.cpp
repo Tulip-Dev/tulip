@@ -4,6 +4,8 @@
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/Algorithm.h>
 #include <tulip/PluginLister.h>
+#include <tulip/ParameterListModel.h>
+#include <tulip/TulipItemDelegate.h>
 
 #include "ui_AlgorithmRunner.h"
 #include "ui_AlgorithmRunnerItem.h"
@@ -15,29 +17,38 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QPushButton>
 
+using namespace tlp;
+
 // **********************************************
 // Helper classes
 // **********************************************
-
-AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &name, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItemData), _group(group) {
+AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &name, const tlp::ParameterList& params, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItemData), _group(group), _params(params) {
   _ui->setupUi(this);
   _ui->algNameLabel->setText(name);
   _ui->algNameLabel->setToolTip(_ui->algNameLabel->text());
   _ui->settingsButton->setToolTip(trUtf8("Set up ") + name);
   _ui->playButton->setToolTip(trUtf8("Run ") + name);
+  _ui->parameters->hide();
+
+  _ui->parameters->setItemDelegate(new TulipItemDelegate);
   setObjectName(name);
+}
+
+void AlgorithmRunnerItem::setGraph(tlp::Graph* graph) {
+  assert(graph != NULL);
+  _ui->parameters->setModel(new ParameterListModel(_params,graph));
 }
 
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {
   delete _ui;
 }
-
+// **********************************************
 template<typename ALG,typename PROPTYPE>
 class TemplatePluginListWidgetManager: public PluginListWidgetManagerInterface {
+  typedef tlp::StaticPluginLister<ALG,tlp::PropertyContext> Lister;
 public:
   QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
-    typedef tlp::StaticPluginLister<ALG,tlp::PropertyContext> Lister;
     std::string name;
     tlp::Iterator<std::string> *it = Lister::availablePlugins();
 
@@ -55,6 +66,10 @@ public:
 
   bool computeProperty(tlp::Graph *, const QString &alg, const QString &outPropertyName, QString &msg, tlp::PluginProgress *progress, tlp::DataSet *data) {
     return false;
+  }
+
+  tlp::ParameterList parameters(const QString &alg) {
+    return Lister::getPluginParameters(alg.toStdString());
   }
 };
 // **********************************************
@@ -74,7 +89,7 @@ void AlgorithmRunner::staticInit() {
   }
 }
 
-AlgorithmRunner::AlgorithmRunner(QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerData), _pluginsListMgr(0) {
+AlgorithmRunner::AlgorithmRunner(QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerData), _pluginsListMgr(0), _model(NULL) {
   staticInit();
   _ui->setupUi(this);
   connect(_ui->header,SIGNAL(menuChanged(QString)),this,SLOT(algorithmTypeChanged(QString)));
@@ -120,7 +135,7 @@ void AlgorithmRunner::buildListWidget() {
 
       QString algName;
       foreach(algName,_currentAlgorithmsList[group]) {
-        AlgorithmRunnerItem *item = new AlgorithmRunnerItem(group,algName);
+        AlgorithmRunnerItem *item = new AlgorithmRunnerItem(group,algName,_pluginsListMgr->parameters(algName));
         groupLayout->addWidget(item);
       }
 
@@ -148,15 +163,25 @@ void AlgorithmRunner::setFilter(const QString &filter) {
   ExpandableGroupBox *gi;
   foreach(gi, findChildren<ExpandableGroupBox *>())
   gi->setVisible(gi->objectName().contains(filter,Qt::CaseInsensitive));
-  AlgorithmRunnerItem *it;
-  foreach(it, findChildren<AlgorithmRunnerItem *>()) {
+  foreach(AlgorithmRunnerItem* it, findChildren<AlgorithmRunnerItem *>()) {
     if (!it->parentWidget()->isVisible())
       it->hide();
   }
-  foreach(it, findChildren<AlgorithmRunnerItem *>()) {
+  foreach(AlgorithmRunnerItem* it, findChildren<AlgorithmRunnerItem *>()) {
     if (it->objectName().contains(filter,Qt::CaseInsensitive)) {
       it->show();
       it->parentWidget()->parentWidget()->show();
     }
   }
+}
+
+void AlgorithmRunner::currentGraphChanged(tlp::Graph* g) {
+  foreach(AlgorithmRunnerItem* it, findChildren<AlgorithmRunnerItem *>())
+    it->setGraph(g);
+}
+
+void AlgorithmRunner::setModel(GraphHierarchiesModel *model) {
+  _model = model;
+  connect(_model,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
+  currentGraphChanged(_model->currentGraph());
 }

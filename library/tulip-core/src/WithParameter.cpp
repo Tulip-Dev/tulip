@@ -28,6 +28,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/StlIterator.h>
+#include <tulip/ColorScale.h>
 
 #include <QtCore/QDebug>
 
@@ -172,6 +173,12 @@ void ParameterList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
     CHECK_TYPE(tlp::ColorType);
     CHECK_TYPE(tlp::SizeType);
 
+    if (type.compare(typeid(tlp::ColorScale).name()) == 0) {
+      vector<Color> colors;
+      ColorVectorType::fromString(colors,defaultValue);
+      dataSet.set<ColorScale>(name,ColorScale(colors));
+    }
+
     CHECK_PROPERTY(tlp::BooleanProperty);
     CHECK_PROPERTY(tlp::DoubleProperty);
     CHECK_PROPERTY(tlp::LayoutProperty);
@@ -179,6 +186,14 @@ void ParameterList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
     CHECK_PROPERTY(tlp::IntegerProperty);
     CHECK_PROPERTY(tlp::SizeProperty);
     CHECK_PROPERTY(tlp::ColorProperty);
+
+    if (type.compare(typeid(PropertyInterface*).name()) == 0) {
+      if (!g || defaultValue.size()==0 || !g->existProperty(defaultValue))
+        dataSet.set<PropertyInterface*>(name,NULL);
+      else
+        dataSet.set<PropertyInterface*>(name,g->getProperty(defaultValue));
+      continue;
+    }
   }
 }
 

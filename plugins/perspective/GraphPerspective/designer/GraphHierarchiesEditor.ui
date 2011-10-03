@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>237</width>
-    <height>419</height>
+    <width>235</width>
+    <height>417</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -29,7 +29,7 @@
       <string>Graphs</string>
      </property>
      <property name="expandable" stdset="0">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
     </widget>
    </item>

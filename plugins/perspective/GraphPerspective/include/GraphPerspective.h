@@ -12,16 +12,16 @@ class GraphPerspectiveMainWindowData;
 
 class GraphPerspective : public tlp::Perspective {
   Q_OBJECT
-
   Ui::GraphPerspectiveMainWindowData *_ui;
-
   GraphHierarchiesModel *_graphs;
+  bool _maximised;
 public:
   GraphPerspective(tlp::PerspectiveContext &c);
   virtual void construct(tlp::PluginProgress *);
 
 protected slots:
   void refreshDockExpandControls();
+  void showFullScreen(bool);
 };
 
 #endif // GRAPHPERSPECTIVE_H
