@@ -47,6 +47,7 @@ string tlp::TulipPluginsPath;
 string tlp::TulipDocProfile;
 string tlp::TulipUserHandBookIndex;
 string tlp::TulipBitmapDir;
+string tlp::TulipShareDir;
 #ifdef _WIN32
 const char tlp::PATH_DELIMITER = ';';
 #else
@@ -58,8 +59,7 @@ void tlp::initTulipLib(const char* appDirPath) {
   // doest not depend on locale
   setlocale(LC_NUMERIC, "C");
 
-  char *getEnvTlp;
-  std::string tulipDocDir;
+  char *getEnvTlp;  
   string::size_type pos;
 
   getEnvTlp=getenv("TLP_DIR");
@@ -127,14 +127,14 @@ void tlp::initTulipLib(const char* appDirPath) {
     TulipPluginsPath= TulipLibDir + "tulip";
 
 
-  // one dir up to initialize the doc dir
+  // one dir up to initialize the share dir
   pos = TulipLibDir.length() - 2;
   pos = TulipLibDir.rfind("/", pos);
-  tulipDocDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/";
-  TulipDocProfile=tulipDocDir+"tulip.qhc";
-  TulipUserHandBookIndex=tulipDocDir+"userHandbook/html/index.html";
+  TulipShareDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/";
+  TulipDocProfile=TulipShareDir+"tulip.qhc";
+  TulipUserHandBookIndex=TulipShareDir+"userHandbook/html/index.html";
 
-  TulipBitmapDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/bitmaps/";
+  TulipBitmapDir=TulipShareDir+"bitmaps/";
 
   // initialize serializers
   initTypeSerializers();

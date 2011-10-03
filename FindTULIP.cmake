@@ -31,6 +31,7 @@
 # TULIP_GUI_PYTHON_LIBRARY: The path to the TulipPython for TulipGUI library.
 # TULIP_OGDF_LIBRARY: The path to the TulipOGDF module library.
 # TULIP3_COMPAT_LIBRARY: The path to the Tulip3 compatibility layer library.
+# TULIP_SHARE_DIR: Installation path for resources
 # TULIP_VERSION: Complete version string.
 # TULIP_MAJOR_VERSION: Major version digit.
 # TULIP_MINOR_VERSION: Minor version digit.
