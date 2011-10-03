@@ -15,7 +15,7 @@
 # TULIP_OGL_LIBRARY: Absolute path of libtulip-ogl
 # TULIP_PLUGINS_MANAGER_LIBRARY: Absolute path of libtulip-pluginsmanager
 # TULIP_LIBS: Convenience variable containing all the previously mentioned Tulip libraries
-# TULIP_SHARE_PATH: Installation path for resources
+# TULIP_SHARE_DIR: Installation path for resources
 # TULIP_VERSION: Tulip release version number: A.B
 # TULIP_PLUGIN_VERSION: Tulip plugins release version number: A.B.x
 #
@@ -113,16 +113,16 @@ IF(TULIP_DIR)
     ENDIF()
   ENDIF()
 
-  IF(NOT TULIP_SHARE_PATH)
+  IF(NOT TULIP_SHARE_DIR)
     IF(APPLE)
-      SET(TULIP_SHARE_PATH ${TULIP_DIR}/Contents/share/tulip)
+      SET(TULIP_SHARE_DIR ${TULIP_DIR}/Contents/share/tulip)
     ELSE()
-      SET(TULIP_SHARE_PATH ${TULIP_DIR}/share/tulip)
+      SET(TULIP_SHARE_DIR ${TULIP_DIR}/share/tulip)
     ENDIF()
   ENDIF()
 ENDIF()
 
-IF(TULIP_INCLUDE_DIR AND TULIP_DIR AND TULIP_LIBRARY AND TULIP_PLUGIN_VERSION AND TULIP_VERSION AND TULIP_PLUGINS_PATH AND TULIP_SHARE_PATH)
+IF(TULIP_INCLUDE_DIR AND TULIP_DIR AND TULIP_LIBRARY AND TULIP_PLUGIN_VERSION AND TULIP_VERSION AND TULIP_PLUGINS_PATH AND TULIP_SHARE_DIR)
   SET(TULIP_FOUND "YES")
   MARK_AS_ADVANCED(TULIP_DIR)
   MARK_AS_ADVANCED(TULIP_INCLUDE_DIR)
