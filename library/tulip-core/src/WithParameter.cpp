@@ -192,6 +192,7 @@ void ParameterList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
         dataSet.set<PropertyInterface*>(name,NULL);
       else
         dataSet.set<PropertyInterface*>(name,g->getProperty(defaultValue));
+
       continue;
     }
   }

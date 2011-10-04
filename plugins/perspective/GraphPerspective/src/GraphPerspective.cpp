@@ -30,7 +30,7 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui->algorithmRunner->setModel(_graphs);
 
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>())
-    connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
+  connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
 }
 
 void GraphPerspective::refreshDockExpandControls() {
@@ -55,6 +55,7 @@ void GraphPerspective::showFullScreen(bool f) {
   }
   else {
     _mainWindow->showNormal();
+
     if (_maximised)
       _mainWindow->showMaximized();
   }
