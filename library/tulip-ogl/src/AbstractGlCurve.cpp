@@ -32,9 +32,10 @@ static bool checkVboSupport() {
 }
 
 static bool checkTBOSupport() {
+  static string glVendor(reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
   static bool tboOk = glewIsSupported("GL_ARB_texture_buffer_object") == GL_TRUE;
   static bool gpuShader4Ok = glewIsSupported("GL_EXT_gpu_shader4") == GL_TRUE;
-  return tboOk && gpuShader4Ok;
+  return glVendor.find("ATI") == string::npos && tboOk && gpuShader4Ok;
 }
 
 namespace tlp {
@@ -394,7 +395,6 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     }
 
     vector<float> controlPointsData(1024*4, 0);
-
     for (size_t i = 0 ; i < controlPoints.size() ; ++i) {
       controlPointsData[4*i] = controlPoints[i][0];
       controlPointsData[4*i+1] = controlPoints[i][1];
