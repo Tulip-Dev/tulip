@@ -59,7 +59,7 @@ void tlp::initTulipLib(const char* appDirPath) {
   // doest not depend on locale
   setlocale(LC_NUMERIC, "C");
 
-  char *getEnvTlp;  
+  char *getEnvTlp;
   string::size_type pos;
 
   getEnvTlp=getenv("TLP_DIR");
