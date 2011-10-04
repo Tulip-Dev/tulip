@@ -76,6 +76,7 @@ GWOverviewWidget::~GWOverviewWidget() {
   if (_observedView) {
     disconnect(this, 0, 0, 0);
   }
+  delete _glDraw;
 }
 //=============================================================================
 GlMainWidget *GWOverviewWidget::getObservedView() {

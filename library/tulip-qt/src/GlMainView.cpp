@@ -30,10 +30,10 @@ namespace tlp {
 
 //==================================================
 GlMainView::GlMainView() :
-  AbstractView() {
+    AbstractView(){
 }
 //==================================================
-GlMainView::~GlMainView() {
+GlMainView::~GlMainView() {    
 }
 //==================================================
 QWidget *GlMainView::construct(QWidget *parent) {
@@ -56,7 +56,7 @@ QWidget *GlMainView::construct(QWidget *parent) {
   gridLayout_2->addWidget(overviewWidget, 0, 0, 1, 1);
   connect(overviewWidget, SIGNAL(hideOverview(bool)), this, SLOT(hideOverview(bool)));
 
-  dialogMenu=new QMenu("Dialog");
+  dialogMenu=new QMenu("Dialog",mainWidget);
   connect(dialogMenu, SIGNAL(triggered(QAction*)), SLOT(showDialog(QAction*)));
   overviewAction=dialogMenu->addAction("3D &Overview");
   overviewAction->setCheckable(true);

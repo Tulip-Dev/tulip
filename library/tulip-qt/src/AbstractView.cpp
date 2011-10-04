@@ -64,7 +64,7 @@ QWidget *AbstractView::construct(QWidget *parent) {
   new QGLWidget(frame);
 
   //Build output image list
-  exportImageMenu = new QMenu("&Export in EPS or SVG ");
+  exportImageMenu = new QMenu("&Export in EPS or SVG ",widget);
 
   set<string> imgFormats;
   imgFormats.insert("EPS");
