@@ -30,10 +30,10 @@ namespace tlp {
 
 //==================================================
 GlMainView::GlMainView() :
-    AbstractView(){
+  AbstractView() {
 }
 //==================================================
-GlMainView::~GlMainView() {    
+GlMainView::~GlMainView() {
 }
 //==================================================
 QWidget *GlMainView::construct(QWidget *parent) {

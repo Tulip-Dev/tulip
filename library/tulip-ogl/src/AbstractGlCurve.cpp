@@ -395,6 +395,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     }
 
     vector<float> controlPointsData(1024*4, 0);
+
     for (size_t i = 0 ; i < controlPoints.size() ; ++i) {
       controlPointsData[4*i] = controlPoints[i][0];
       controlPointsData[4*i+1] = controlPoints[i][1];
