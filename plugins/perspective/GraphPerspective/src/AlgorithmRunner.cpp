@@ -30,6 +30,8 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &na
   _ui->playButton->setToolTip(trUtf8("Run ") + name);
   _ui->parameters->hide();
 
+  _ui->settingsButton->setVisible(params.size()>0);
+
   _ui->parameters->setItemDelegate(new TulipItemDelegate);
   setObjectName(name);
 }
@@ -37,6 +39,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &na
 void AlgorithmRunnerItem::setGraph(tlp::Graph* graph) {
   assert(graph != NULL);
   _ui->parameters->setModel(new ParameterListModel(_params,graph));
+  adjustSize();
 }
 
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {
@@ -157,6 +160,8 @@ void AlgorithmRunner::buildListWidget() {
   listWidget->setLayout(layout);
 
   _ui->algorithmList->setWidget(listWidget);
+  if (_model)
+    currentGraphChanged(_model->currentGraph());
 }
 
 void AlgorithmRunner::setFilter(const QString &filter) {
@@ -177,7 +182,7 @@ void AlgorithmRunner::setFilter(const QString &filter) {
 
 void AlgorithmRunner::currentGraphChanged(tlp::Graph* g) {
   foreach(AlgorithmRunnerItem* it, findChildren<AlgorithmRunnerItem *>())
-  it->setGraph(g);
+    it->setGraph(g);
 }
 
 void AlgorithmRunner::setModel(GraphHierarchiesModel *model) {

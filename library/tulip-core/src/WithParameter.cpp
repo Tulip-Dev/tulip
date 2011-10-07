@@ -35,6 +35,10 @@
 using namespace tlp;
 using namespace std;
 
+ParameterList::ParameterList(const ParameterList& p) {
+  parameters = p.parameters;
+}
+
 ParameterList tlp::WithParameter::getParameters() {
   return parameters;
 }

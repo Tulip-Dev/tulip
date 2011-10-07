@@ -76,6 +76,11 @@ public:
   virtual ~ColorScale();
 
   /**
+    @brief Gets the number of stops into the color scale.
+    */
+  unsigned int getStopsCount() { return colorMap.size(); }
+
+  /**
    * @brief Configures the color scale.
    * This method configures the color scale. If the scale was previously configured the old configuration is lost.
    * @param colors The colors to use in the color scale.
@@ -107,7 +112,7 @@ public:
   }
   /**
    * @brief Returns a map corresponding to the color scale.
-   * The index of the map is the position for the corresponding color in the color scale.
+   * The index of the map is the position for the corresponding color in the color scale. The index is comprised between 0 and 1.
    */
   std::map<float, Color> getColorMap() const {
     return colorMap;
