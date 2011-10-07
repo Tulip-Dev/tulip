@@ -827,7 +827,11 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 				}
 			}
 			else {
-				glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][0]);
+				if (geometryShaderActivated) {
+					glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][1]);
+				} else {
+					glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][0]);
+				}
 			}
 
 			OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
@@ -889,7 +893,11 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 					}
 				}
 				else {
-					glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][2]);
+					if (geometryShaderActivated) {
+						glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][2]);
+					} else {
+						glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][2]);
+					}
 				}
 
 				if (canUseGeometryShader && nbCurvePoints > 3 && geometryShaders.second) {
@@ -906,7 +914,11 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 					}
 				}
 				else {
-					glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][3]);
+					if (geometryShaderActivated) {
+						glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][3]);
+					} else {
+						glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][3]);
+					}
 				}
 
 				OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
