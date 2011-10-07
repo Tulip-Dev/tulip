@@ -39,6 +39,7 @@
 #include "tulip/NodeLinkDiagramComponent.h"
 #include "tulip3/QtProgress.h"
 #include "tulip/TlpQtTools.h"
+#include <tulip3/Tlp3Tools.h>
 
 #include "tulip/ThreadedComputeProperty.h"
 
@@ -103,7 +104,7 @@ bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const
   ParameterList sysDef = AlgorithmLister::getPluginParameters(name);
   params->buildDefaultDataSet(dataSet, graph );
   string title = string("Tulip Parameter Editor: ") + name;
-  bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
+  bool ok = tlp3::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
                                    title.c_str(), graph, parent);
 
   if (ok) {
@@ -137,7 +138,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,strin
     ParameterList sysDef = PropertyPluginLister<TemplateAlgorithm<PROPERTY> >::getPluginParameters(name);
     params->buildDefaultDataSet(dataSet, graph );
     string title = string("Tulip Parameter Editor: ") + name;
-    resultBool = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
+    resultBool = tlp3::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
                                         title.c_str(), graph, parent);
   }
 

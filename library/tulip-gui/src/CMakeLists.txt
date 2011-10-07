@@ -15,7 +15,6 @@ SET(SRCS
   CSVImportWizard.cpp
   CSVParserConfigurationWidget.cpp
   CSVParser.cpp
-  DataSetDialog.cpp
   DoubleStringsListSelectionWidget.cpp
   DownloadManager.cpp
   GlCompositeHierarchyManager.cpp
