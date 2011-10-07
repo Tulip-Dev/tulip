@@ -494,6 +494,10 @@ public :
   void getUniformVec3BoolVariableValue(const std::string &variableName, bool *value);
   void getUniformVec4BoolVariableValue(const std::string &variableName, bool *value);
 
+  // This method must be called before calling the link method to
+  // set the max number of vertices a geometry shader can output
+  // If not called, the maximum value is set when linking the shader program (not recommended for performance).
+  void setMaxGeometryShaderOutputVertices(const int maxOutputVertices);
 
 private :
 
@@ -509,6 +513,9 @@ private :
   std::vector<GlShader *> attachedShaders;
 
   static GlShaderProgram *currentActiveShaderProgram;
+  // TODO : turn this class variable into an instance variable in Tulip 3.7
+  // force to make it static to not break binary compatibility with Tulip 3.6
+  static int maxGeometryShaderOutputVertices;
 
 };
 

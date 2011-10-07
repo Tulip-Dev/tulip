@@ -92,7 +92,12 @@ protected:
   static GlShader *curveVertexShaderNormalMain;
   static GlShader *curveVertexShaderBillboardMain;
   static GlShader *fisheyeDistortionVertexShader;
+  //TODO : remove this static variable in Tulip 3.7
   static bool canUseTBO;
+  static bool canUseGeometryShader;
+  static std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> > curvesGeometryShadersMap;
+  static GlShader *curveVertexGeometryShaderNormalMain;
+  static std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> > curvesBillboardGeometryShadersMap;
 
   std::string shaderProgramName;
   GlShaderProgram *curveShaderProgramNormal;
