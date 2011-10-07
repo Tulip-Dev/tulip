@@ -45,7 +45,6 @@ public slots:
 protected slots:
   void algorithmTypeChanged(const QString &);
   void setFilter(const QString &);
-  void computeProperty(const QString& name,tlp::DataSet* data);
   void currentGraphChanged(tlp::Graph* g);
 };
 // **********************************************
