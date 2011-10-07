@@ -700,6 +700,11 @@ void GlVertexArrayManager::addNode(Graph *,const node) {
   clearObservers();
 }
 
+void GlVertexArrayManager::afterSetEnds(Graph *, const edge) {
+  clearData();
+  clearObservers();
+}
+
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
   if(inputData->getElementLayout()==property || inputData->getElementSize()==property ||
       inputData->getElementShape()==property || inputData->getElementRotation()==property) {
