@@ -38,7 +38,7 @@ namespace tlp {
 
 map<QString, vector<Color> > ColorScaleConfigDialog::tulipImageColorScales;
 
-ColorScaleConfigDialog::ColorScaleConfigDialog(ColorScale *colorScale,
+ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale& colorScale,
     QWidget *parent) : QDialog(parent), _ui(new Ui::ColorScaleDialog), colorScale(colorScale) {
   _ui->setupUi(this);
   _ui->colorsTable->setColumnWidth(0, _ui->colorsTable->width());
@@ -109,7 +109,7 @@ void ColorScaleConfigDialog::accept() {
   }
 
   if (!colors.empty()) {
-    colorScale->setColorScale(colors, gradient);
+    colorScale.setColorScale(colors, gradient);
   }
 
   QDialog::accept();
@@ -417,86 +417,158 @@ void ColorScaleConfigDialog::reeditSaveColorScale(QListWidgetItem *savedColorSca
 }
 
 void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
-  ColorScale* cs = new ColorScale(colorScale);
-  setColorScale(cs);
-}
-
-ColorScale ColorScaleConfigDialog::getColorScale() const {
-  return *colorScale;
-}
-
-void ColorScaleConfigDialog::setColorScale(ColorScale *colorScale) {
-
   disconnect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
 
   _ui->colorsTable->clear();
 
-  if (colorScale->colorScaleInitialized()) {
+  if (colorScale.colorScaleInitialized()) {
     //init dialog with colors in the color Scale
-    std::map<float, tlp::Color> colorMap = colorScale->getColorMap();
+    std::map<float, tlp::Color> colorMap = colorScale.getColorMap();
     unsigned int row = 0;
 
-    if (colorScale->isGradient()) {
-      _ui->colorsTable->setRowCount(colorMap.size());
-      _ui->nbColors->setValue(colorMap.size());
-      _ui->gradientCB->setChecked(true);
-      row = colorMap.size() - 1;
-    }
-    else {
-      _ui->colorsTable->setRowCount(colorMap.size() / 2);
-      _ui->nbColors->setValue(colorMap.size() / 2);
-      _ui->gradientCB->setChecked(false);
-      row = (colorMap.size() / 2) - 1;
-    }
-
-    for (std::map<float, tlp::Color>::iterator it = colorMap.begin(); it
-         != colorMap.end();) {
-      QTableWidgetItem *item = new QTableWidgetItem();
-      item->setFlags(Qt::ItemIsEnabled);
-      item->setBackgroundColor(QColor(it->second.getR(), it->second.getG(),
-                                      it->second.getB(), it->second.getA()));
-      _ui->colorsTable->setItem(row, 0, item);
-      --row;
-
-      if (colorScale->isGradient()) {
-        ++it;
-      }
-      else {
-        ++it;
-        ++it;
-      }
-    }
-
+  if (colorScale.isGradient()) {
+    _ui->colorsTable->setRowCount(colorMap.size());
+    _ui->nbColors->setValue(colorMap.size());
+    _ui->gradientCB->setChecked(true);
+    row = colorMap.size() - 1;
   }
   else {
-
-    //init dialog with default colors
-    _ui->colorsTable->setRowCount(5);
-    QTableWidgetItem *item1 = new QTableWidgetItem();
-    item1->setBackgroundColor(QColor(229, 40, 0, 200));
-    item1->setFlags(Qt::ItemIsEnabled);
-    QTableWidgetItem *item2 = new QTableWidgetItem();
-    item2->setBackgroundColor(QColor(255, 170, 0, 200));
-    item2->setFlags(Qt::ItemIsEnabled);
-    QTableWidgetItem *item3 = new QTableWidgetItem();
-    item3->setBackgroundColor(QColor(255, 255, 127, 200));
-    item3->setFlags(Qt::ItemIsEnabled);
-    QTableWidgetItem *item4 = new QTableWidgetItem();
-    item4->setBackgroundColor(QColor(156, 161, 255, 200));
-    item4->setFlags(Qt::ItemIsEnabled);
-    QTableWidgetItem *item5 = new QTableWidgetItem();
-    item5->setBackgroundColor(QColor(75, 75, 255, 200));
-    item5->setFlags(Qt::ItemIsEnabled);
-    _ui->colorsTable->setItem(0, 0, item1);
-    _ui->colorsTable->setItem(1, 0, item2);
-    _ui->colorsTable->setItem(2, 0, item3);
-    _ui->colorsTable->setItem(3, 0, item4);
-    _ui->colorsTable->setItem(4, 0, item5);
-    _ui->nbColors->setValue(5);
-    _ui->gradientCB->setChecked(true);
+    _ui->colorsTable->setRowCount(colorMap.size() / 2);
+    _ui->nbColors->setValue(colorMap.size() / 2);
+    _ui->gradientCB->setChecked(false);
+    row = (colorMap.size() / 2) - 1;
   }
 
-  connect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
+  for (std::map<float, tlp::Color>::iterator it = colorMap.begin(); it
+       != colorMap.end();) {
+    QTableWidgetItem *item = new QTableWidgetItem();
+    item->setFlags(Qt::ItemIsEnabled);
+    item->setBackgroundColor(QColor(it->second.getR(), it->second.getG(),
+                                    it->second.getB(), it->second.getA()));
+    _ui->colorsTable->setItem(row, 0, item);
+    --row;
+
+    if (colorScale.isGradient()) {
+      ++it;
+    }
+    else {
+      ++it;
+      ++it;
+    }
+  }
+
 }
+else {
+  //init dialog with default colors
+  _ui->colorsTable->setRowCount(5);
+  QTableWidgetItem *item1 = new QTableWidgetItem();
+  item1->setBackgroundColor(QColor(229, 40, 0, 200));
+  item1->setFlags(Qt::ItemIsEnabled);
+  QTableWidgetItem *item2 = new QTableWidgetItem();
+  item2->setBackgroundColor(QColor(255, 170, 0, 200));
+  item2->setFlags(Qt::ItemIsEnabled);
+  QTableWidgetItem *item3 = new QTableWidgetItem();
+  item3->setBackgroundColor(QColor(255, 255, 127, 200));
+  item3->setFlags(Qt::ItemIsEnabled);
+  QTableWidgetItem *item4 = new QTableWidgetItem();
+  item4->setBackgroundColor(QColor(156, 161, 255, 200));
+  item4->setFlags(Qt::ItemIsEnabled);
+  QTableWidgetItem *item5 = new QTableWidgetItem();
+  item5->setBackgroundColor(QColor(75, 75, 255, 200));
+  item5->setFlags(Qt::ItemIsEnabled);
+  _ui->colorsTable->setItem(0, 0, item1);
+  _ui->colorsTable->setItem(1, 0, item2);
+  _ui->colorsTable->setItem(2, 0, item3);
+  _ui->colorsTable->setItem(3, 0, item4);
+  _ui->colorsTable->setItem(4, 0, item5);
+  _ui->nbColors->setValue(5);
+  _ui->gradientCB->setChecked(true);
+}
+
+connect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
+
+
+
+//  ColorScale* cs = new ColorScale(colorScale);
+//  setColorScale(cs);
+}
+
+ColorScale ColorScaleConfigDialog::getColorScale() const {
+  return colorScale;
+}
+
+//void ColorScaleConfigDialog::setColorScale(ColorScale *colorScale) {
+
+//  disconnect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
+
+//  _ui->colorsTable->clear();
+
+//  if (colorScale->colorScaleInitialized()) {
+//    //init dialog with colors in the color Scale
+//    std::map<float, tlp::Color> colorMap = colorScale->getColorMap();
+//    unsigned int row = 0;
+
+//    if (colorScale->isGradient()) {
+//      _ui->colorsTable->setRowCount(colorMap.size());
+//      _ui->nbColors->setValue(colorMap.size());
+//      _ui->gradientCB->setChecked(true);
+//      row = colorMap.size() - 1;
+//    }
+//    else {
+//      _ui->colorsTable->setRowCount(colorMap.size() / 2);
+//      _ui->nbColors->setValue(colorMap.size() / 2);
+//      _ui->gradientCB->setChecked(false);
+//      row = (colorMap.size() / 2) - 1;
+//    }
+
+//    for (std::map<float, tlp::Color>::iterator it = colorMap.begin(); it
+//         != colorMap.end();) {
+//      QTableWidgetItem *item = new QTableWidgetItem();
+//      item->setFlags(Qt::ItemIsEnabled);
+//      item->setBackgroundColor(QColor(it->second.getR(), it->second.getG(),
+//                                      it->second.getB(), it->second.getA()));
+//      _ui->colorsTable->setItem(row, 0, item);
+//      --row;
+
+//      if (colorScale->isGradient()) {
+//        ++it;
+//      }
+//      else {
+//        ++it;
+//        ++it;
+//      }
+//    }
+
+//  }
+//  else {
+
+//    //init dialog with default colors
+//    _ui->colorsTable->setRowCount(5);
+//    QTableWidgetItem *item1 = new QTableWidgetItem();
+//    item1->setBackgroundColor(QColor(229, 40, 0, 200));
+//    item1->setFlags(Qt::ItemIsEnabled);
+//    QTableWidgetItem *item2 = new QTableWidgetItem();
+//    item2->setBackgroundColor(QColor(255, 170, 0, 200));
+//    item2->setFlags(Qt::ItemIsEnabled);
+//    QTableWidgetItem *item3 = new QTableWidgetItem();
+//    item3->setBackgroundColor(QColor(255, 255, 127, 200));
+//    item3->setFlags(Qt::ItemIsEnabled);
+//    QTableWidgetItem *item4 = new QTableWidgetItem();
+//    item4->setBackgroundColor(QColor(156, 161, 255, 200));
+//    item4->setFlags(Qt::ItemIsEnabled);
+//    QTableWidgetItem *item5 = new QTableWidgetItem();
+//    item5->setBackgroundColor(QColor(75, 75, 255, 200));
+//    item5->setFlags(Qt::ItemIsEnabled);
+//    _ui->colorsTable->setItem(0, 0, item1);
+//    _ui->colorsTable->setItem(1, 0, item2);
+//    _ui->colorsTable->setItem(2, 0, item3);
+//    _ui->colorsTable->setItem(3, 0, item4);
+//    _ui->colorsTable->setItem(4, 0, item5);
+//    _ui->nbColors->setValue(5);
+//    _ui->gradientCB->setChecked(true);
+//  }
+
+//  connect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
+//}
 
 }

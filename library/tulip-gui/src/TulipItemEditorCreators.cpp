@@ -1,12 +1,15 @@
 #include "tulip/TulipItemEditorCreators.h"
+
 #include <QtCore/QDebug>
-#include <tulip/TlpQtTools.h>
-#include <tulip/ColorButton.h>
 #include <QtGui/QCheckBox>
 #include <QtGui/QStylePainter>
 #include <QtGui/QApplication>
+#include <QtGui/QLinearGradient>
+#include <QtGui/QPaintEvent>
+#include <tulip/TlpQtTools.h>
+#include <tulip/ColorButton.h>
+#include <tulip/ColorScaleButton.h>
 #include "tulip/SizeEditor.h"
-#include <tulip/ColorScaleConfigDialog.h>
 
 using namespace tlp;
 
@@ -94,8 +97,6 @@ void PropertyInterfaceEditorCreator::setEditorData(QWidget* w, const QVariant& v
   QSet<QString> locals,inherited;
   std::string name;
   forEach(name,g->getProperties()) {
-    PropertyInterface* pi = g->getProperty(name);
-
     if (g->existLocalProperty(name))
       locals.insert(name.c_str());
     else
@@ -156,30 +157,21 @@ QString PropertyInterfaceEditorCreator::displayText(const QVariant& v) const {
 /*
   ColorScaleEditorCreator
 */
+
+
 QWidget* ColorScaleEditorCreator::createWidget(QWidget* parent) const {
-  ColorScale cs;
-  return new ColorScaleConfigDialog(&cs,parent);
+  return new ColorScaleButton(ColorScale(),parent);
 }
 
 bool ColorScaleEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& var) const {
-  ColorScale cs = var.value<ColorScale>();
-  /*
-  QCheckBox cb;
-  QStyleOptionViewItem opt(option);
-  opt.rect = checkRect(option,option.rect,&cb);
-  opt.state |= variant.toBool() ? QStyle::State_On : QStyle::State_Off;
-  opt.state = opt.state & ~QStyle::State_HasFocus;
-  QStyle* style = cb.style();
-  style->drawPrimitive(QStyle::PE_IndicatorViewItemCheck,&opt,p,&cb);
-  return true;
-  */
   return true;
 }
 
 void ColorScaleEditorCreator::setEditorData(QWidget* w, const QVariant& var,tlp::Graph*) {
-  static_cast<ColorScaleConfigDialog*>(w)->setColorScale(var.value<ColorScale>());
+  static_cast<ColorScaleButton*>(w)->setColorScale(var.value<ColorScale>());
 }
 
 QVariant ColorScaleEditorCreator::editorData(QWidget* w,tlp::Graph*) {
-  return QVariant::fromValue<ColorScale>(static_cast<ColorScaleConfigDialog*>(w)->getColorScale());
+  return QVariant::fromValue<ColorScale>(static_cast<ColorScaleButton*>(w)->colorScale());
 }
+

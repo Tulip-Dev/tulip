@@ -40,8 +40,7 @@ class TLP_QT_SCOPE ColorScaleConfigDialog : public QDialog {
   Q_OBJECT
 
 public :
-  ColorScaleConfigDialog(ColorScale *colorScale, QWidget *parent = 0);
-  void setColorScale(ColorScale *colorScale);
+  ColorScaleConfigDialog(const ColorScale &colorScale = ColorScale(), QWidget *parent = 0);
   void setColorScale(const ColorScale &colorScale);
   ColorScale getColorScale() const;
 
@@ -72,7 +71,7 @@ private :
   void loadUserSavedColorScales();
   void displayGradientPreview(const QList<QColor> &colorsVector, bool gradient, QLabel *displayLabel);
 
-  ColorScale *colorScale;
+  ColorScale colorScale;
   std::string gradientsImageDirectory;
 
   static std::map<QString, std::vector<Color> > tulipImageColorScales;

@@ -37,6 +37,9 @@ namespace tlp {
   **/
 struct TLP_SCOPE ParameterList {
 
+  ParameterList() {}
+  ParameterList(const ParameterList& p);
+
   template<typename TYPEINTERFACE>
   void insertData(tlp::DataSet &,const std::string &param,const std::string &defaultValue) const;
 
@@ -140,6 +143,8 @@ struct TLP_SCOPE ParameterList {
    * @return void
    **/
   void buildDefaultDataSet( DataSet & ioDataSet, Graph * inG = 0 ) const;
+
+  unsigned int size() const { return parameters.size(); }
 private:
 
   /**
