@@ -16,7 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/TlpQtTools.h"
+#include "tulip3/Tlp3Tools.h"
+#include <tulip/TlpQtTools.h>
 #include <tulip/DataSet.h>
 #include "tulip/Color.h"
 #include "tulip/DoubleProperty.h"
@@ -47,8 +48,8 @@
 #include <QtGui/QHBoxLayout>
 
 
+using namespace tlp3;
 using namespace tlp;
-
 
 #define INFO_MSG        "The following parameters are requested :"
 #define NO_HELP_AVAILABLE_MSG "No help is available for this parameter."
@@ -1052,8 +1053,7 @@ struct QParamDialog : public QDialog {
 
 }
 
-bool
-tlp::openDataSetDialog( DataSet & outSet,
+bool tlp3::openDataSetDialog( DataSet & outSet,
                         const ParameterList *sysDef,
                         ParameterList *inDef,
                         const DataSet *inSet,

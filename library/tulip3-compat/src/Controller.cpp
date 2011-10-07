@@ -33,6 +33,7 @@
 #include <tulip/SimplePluginProgressWidget.h>
 #include "tulip3/QtProgress.h"
 #include <QtCore/QDebug>
+#include <tulip3/Tlp3Tools.h>
 
 #include "ui_Tulip.h"
 
@@ -162,7 +163,7 @@ void Controller::runImportPlugin(const QString &name, Graph *g) {
   ParameterList sysDef = ImportModuleLister::getPluginParameters(name.toStdString());
   params->buildDefaultDataSet(dataSet,g);
   string title = string("Tulip Parameter Editor: ") + name.toStdString();
-  bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet, title.c_str(), g, _mainWindow);
+  bool ok = tlp3::openDataSetDialog(dataSet, &sysDef, params, &dataSet, title.c_str(), g, _mainWindow);
 
   if (ok) {
     Observable::holdObservers();

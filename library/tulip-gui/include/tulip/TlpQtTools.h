@@ -31,22 +31,6 @@ class QWidget;
 namespace tlp {
 
 /**
- * Open a QT Dialog Box to fill-up an user DataSet according to a required
- * StructDef
- * inDef    : Input-variable informations
- * outSet   : Output (filled) set
- * [inSet   : Input (optional) set, containing some default values]
- */
-
-TLP_QT_SCOPE bool openDataSetDialog (DataSet & outSet,
-                                     const ParameterList *sysDef,
-                                     ParameterList *inDef,
-                                     const DataSet *inSet = NULL,
-                                     const char *inName = NULL,
-                                     Graph *inG = NULL,
-                                     QWidget *parent = NULL);
-
-/**
  * Create a main layout in GlMainWidget and display the graph on it
  */
 

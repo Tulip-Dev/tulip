@@ -17,6 +17,7 @@ INSTALL(FILES
   tulip3/SnapshotDialog.h
   tulip3/QtProgress.h
   tulip3/PluginProgressWidget.h
+  tulip3/Tlp3Tools.h
 DESTINATION ${TulipIncludeInstallDir}/tulip3/
 COMPONENT tulip3_compat
 )

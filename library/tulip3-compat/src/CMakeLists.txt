@@ -15,6 +15,7 @@ SET(SRCS
   SnapshotDialog.cpp
   QtProgress.cpp
   PluginProgressWidget.cpp
+  DataSetDialog.cpp
 )
 
 QT4_WRAP_CPP(MOC_SRCS
