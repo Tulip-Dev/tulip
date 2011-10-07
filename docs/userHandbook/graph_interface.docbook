@@ -9,7 +9,7 @@
       <itemizedlist>
         <listitem>
           <para><code>File</code>: usual file operations
-						(<code>New</code>, <code>Open</code>, <code>Save</code>, <code>Save as</code>, <code>Print</code>, <code>Close Tab</code>,
+                                                (<code>New</code>, <code>Open</code>, <code>Save</code>, <code>Save as</code>, <code>Close Tab</code>,
 						<code>Exit</code>)
 						<!-- Note: keyboard shortcuts are already visible in the menus.
 								 A shorter text means a more attentive reader. -->

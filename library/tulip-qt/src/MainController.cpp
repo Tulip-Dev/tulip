@@ -27,6 +27,8 @@
 #include <QtGui/QInputDialog>
 #include <QtGui/QClipboard>
 #include <QtGui/QTabWidget>
+#include <QtGui/QPrinter>
+#include <QtGui/QPrintDialog>
 
 #include <tulip/tuliphash.h>
 #include <tulip/Graph.h>
@@ -224,7 +226,7 @@ CONTROLLERPLUGIN(MainController, "Tulip Classic", "Tulip Team", "16/04/2008", "T
 MainController::MainController():
   currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),propertiesListUpdated(false),blockUpdate(false),inAlgorithm(false),clusterTreeWidget(NULL),
   editMenu(NULL), algorithmMenu(NULL), viewMenu(NULL), optionsMenu(NULL),
-  graphMenu(NULL), undoAction(NULL), redoAction(NULL), snapshotAction(NULL),
+    graphMenu(NULL), undoAction(NULL), redoAction(NULL), snapshotAction(NULL),printAction(NULL),
   intMenu(NULL), stringMenu(NULL), sizesMenu(NULL), colorsMenu(NULL),
   layoutMenu(NULL), metricMenu(NULL), selectMenu(NULL), generalMenu(NULL) {
   morph = new Morphing();
@@ -348,6 +350,7 @@ void MainController::setData(Graph *graph,DataSet dataSet) {
   viewMenu->setEnabled(true);
   optionsMenu->setEnabled(true);
   graphMenu->setEnabled(true);
+  printAction->setEnabled(true);
   snapshotAction->setEnabled(true);
   tabWidgetDock->setEnabled(true);
   configWidgetDock->setEnabled(true);
@@ -712,8 +715,9 @@ void MainController::buildMenu() {
   QList<QAction *> menuBarActions=mainWindowFacade.getMenuBar()->actions();
 
   for(QList<QAction *>::iterator it=menuBarActions.begin(); it!=menuBarActions.end(); ++it) {
-    if((*it)->text()=="&Windows")
+    if((*it)->text()=="&Windows"){
       windowAction=*it;
+    }
   }
 
   assert(windowAction);
@@ -927,14 +931,19 @@ void MainController::buildMenu() {
     redoAction=new QAction(QIcon(":/i_redo.png"),"redo",mainWindowFacade.getParentWidget());
     undoAction=new QAction(QIcon(":/i_undo.png"),"undo",mainWindowFacade.getParentWidget());
     snapshotAction = new QAction(QIcon(":/i_snapshot.png"),"snapshot",mainWindowFacade.getParentWidget());
+    printAction = new QAction(QIcon(":/i_print.png"),"&Print...",mainWindowFacade.getParentWidget());
+    printAction->setShortcut(QKeySequence(QKeySequence::Print));
     undoAction->setEnabled(false);
     redoAction->setEnabled(false);
+    printAction->setEnabled(false);
     snapshotAction->setEnabled(false);
+    mainWindowFacade.getToolBar()->addAction(printAction);
     mainWindowFacade.getToolBar()->addAction(undoAction);
     mainWindowFacade.getToolBar()->addAction(redoAction);
-    mainWindowFacade.getToolBar()->addAction(snapshotAction);
+    mainWindowFacade.getToolBar()->addAction(snapshotAction);  
     connect(undoAction,SIGNAL(triggered()),this,SLOT(undo()));
     connect(redoAction,SIGNAL(triggered()),this,SLOT(redo()));
+    connect(printAction,SIGNAL(triggered()),this,SLOT(filePrint()));
     connect(snapshotAction,SIGNAL(triggered()),this,SLOT(snapshot()));
   }
 }
@@ -1806,5 +1815,24 @@ void MainController::snapshot() {
   }
 }
 
+void MainController::filePrint() {
+    View* toPrint = getCurrentView();
+    if(toPrint != NULL){
+        QWidget *widget = getWidgetOfView(toPrint);
+        QImage image = toPrint->createPicture(widget->width(),widget->height(),false);
+        QPrinter printer;
+        QPrintDialog dialog(&printer);
+
+        if (!dialog.exec())
+              return;
+
+        QPainter painter(&printer);
+        QRect pageRect = printer.pageRect();
+        int xShift = pageRect.width()>image.width()?(pageRect.width()-image.width())/2:0;
+        int yShift = pageRect.height()>image.height()?(pageRect.height()-image.height())/2:0;
+        painter.drawImage(QPoint(xShift,yShift),image);
+        painter.end();
+    }
+}
 }
 

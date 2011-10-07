@@ -124,7 +124,6 @@ protected slots:
   void closeTab(int index);
   bool createController(const std::string &name,const std::string &graphName);
   void fileOpen();
-  void filePrint();
   void importGraph();
   void exportGraph();
   void importGraph(QAction*);

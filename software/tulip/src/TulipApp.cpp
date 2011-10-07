@@ -115,8 +115,7 @@ void TulipApp::clearMemoryChecker() {
 //**********************************************************************
 void TulipApp::enableElements(bool enabled) {
   fileSaveAction->setEnabled(enabled);
-  fileSaveAsAction->setEnabled(enabled);
-  filePrintAction->setEnabled(enabled);
+  fileSaveAsAction->setEnabled(enabled);  
   fileCloseTabAction->setEnabled(enabled);
   mouseActionGroup->setEnabled(enabled);
   exportGraphMenu->menuAction()->setEnabled(enabled);
@@ -942,14 +941,14 @@ void TulipApp::buildMenus() {
   //connect(&exportGraphMenu, SIGNAL(triggered(QAction*)), SLOT(exportGraph(QAction*)));
   //connect(&importGraphMenu, SIGNAL(triggered(QAction*)), SLOT(importGraph(QAction*)));
   if (importGraphMenu->actions().count()>0) {
-    fileMenu->insertMenu(filePrintAction,importGraphMenu);
+    fileMenu->insertMenu(fileCloseTabAction,importGraphMenu);
   }
 
   if (exportGraphMenu->actions().count()>0) {
-    fileMenu->insertMenu(filePrintAction,exportGraphMenu);
+    fileMenu->insertMenu(fileCloseTabAction,exportGraphMenu);
   }
 
-  fileMenu->insertSeparator(filePrintAction);
+  fileMenu->insertSeparator(fileCloseTabAction);
 }
 //**********************************************************************
 void TulipApp::exportGraph() {
@@ -1370,54 +1369,6 @@ void TulipApp::fileExit() {
   if (closeWin()) {
     printMemoryChecker();
     exit(EXIT_SUCCESS);
-  }
-}
-//==============================================================
-void TulipApp::filePrint() {
-  Graph *graph= tabIndexToController[tabWidget->currentIndex()]->getGraph();
-
-  if (graph==0) return;
-
-  NodeLinkDiagramComponent *nldc = NULL;
-  QWidget *widget=tabWidget->widget(tabWidget->currentIndex());
-  QObjectList tmp=widget->children();
-
-  for(QObjectList::iterator it=tmp.begin(); it!=tmp.end(); ++it) {
-    QWorkspace *workspace=dynamic_cast<QWorkspace*>(*it);
-
-    if(workspace) {
-      QWidget *viewWidget=workspace->activeWindow();
-      MainController *mainController=(MainController*)tabIndexToController[tabWidget->currentIndex()];
-      View *view=mainController->getViewOfWidget(viewWidget);
-      nldc=dynamic_cast<NodeLinkDiagramComponent*>(view);
-    }
-  }
-
-  if(nldc) {
-    GlMainWidget *glWidget=nldc->getGlMainWidget();
-    QPrinter printer;
-    QPrintDialog dialog(&printer, this);
-
-    if (!dialog.exec())
-      return;
-
-    int width,height;
-    width = glWidget->width();
-    height = glWidget->height();
-
-    unsigned char* image= glWidget->getImage();
-    QPainter painter(&printer);
-
-    for (int y=0; y<height; y++)
-      for (int x=0; x<width; x++) {
-        painter.setPen(QColor(image[(height-y-1)*width*3+(x)*3],
-                              image[(height-y-1)*width*3+(x)*3+1],
-                              image[(height-y-1)*width*3+(x)*3+2]));
-        painter.drawPoint(x,y);
-      }
-
-    painter.end();
-    delete image;
   }
 }
 //==============================================================

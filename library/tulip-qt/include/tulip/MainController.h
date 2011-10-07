@@ -191,6 +191,7 @@ protected :
   QAction *undoAction;
   QAction *redoAction;
   QAction *snapshotAction;
+  QAction *printAction;
   QAction *editUndoAction;
   QAction *editRedoAction;
 
@@ -242,6 +243,11 @@ protected slots:
    * This slot is call went a view will be closed
    */
   virtual void widgetWillBeClosed(QObject *object);
+
+  /**
+    * Print the current view
+    **/
+  void filePrint();
 
   void isAcyclic();
   void isSimple();

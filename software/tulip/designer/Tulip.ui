@@ -51,7 +51,6 @@
    </attribute>
    <addaction name="fileOpenAction"/>
    <addaction name="fileSaveAction"/>
-   <addaction name="filePrintAction"/>
   </widget>
   <widget class="QToolBar" name="graphToolBar">
    <property name="orientation">
@@ -85,8 +84,6 @@
     <addaction name="fileOpenAction"/>
     <addaction name="fileSaveAction"/>
     <addaction name="fileSaveAsAction"/>
-    <addaction name="separator"/>
-    <addaction name="filePrintAction"/>
     <addaction name="separator"/>
     <addaction name="fileCloseTabAction"/>
     <addaction name="fileExitAction"/>
@@ -156,21 +153,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
-   </property>
-  </action>
-  <action name="filePrintAction">
-   <property name="icon">
-    <iconset resource="TulipResource.qrc">
-     <normaloff>:/i_print.png</normaloff>:/i_print.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Print...</string>
-   </property>
-   <property name="iconText">
-    <string>Print</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="fileExitAction">
@@ -872,22 +854,6 @@
    <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>fileSaveAs()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>filePrintAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>filePrint()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
