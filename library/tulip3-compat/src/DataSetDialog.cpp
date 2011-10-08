@@ -1054,12 +1054,12 @@ struct QParamDialog : public QDialog {
 }
 
 bool tlp3::openDataSetDialog( DataSet & outSet,
-                        const ParameterList *sysDef,
-                        ParameterList *inDef,
-                        const DataSet *inSet,
-                        const char * inName,
-                        Graph * inG,
-                        QWidget* parent) {
+                              const ParameterList *sysDef,
+                              ParameterList *inDef,
+                              const DataSet *inSet,
+                              const char * inName,
+                              Graph * inG,
+                              QWidget* parent) {
 
   if( inSet && inSet != &outSet )
     outSet = *inSet;

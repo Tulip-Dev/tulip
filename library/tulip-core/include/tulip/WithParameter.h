@@ -144,7 +144,9 @@ struct TLP_SCOPE ParameterList {
    **/
   void buildDefaultDataSet( DataSet & ioDataSet, Graph * inG = 0 ) const;
 
-  unsigned int size() const { return parameters.size(); }
+  unsigned int size() const {
+    return parameters.size();
+  }
 private:
 
   /**

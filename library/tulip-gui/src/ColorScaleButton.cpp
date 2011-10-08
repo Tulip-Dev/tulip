@@ -19,6 +19,7 @@ ColorScale ColorScaleButton::colorScale() const {
 
 void ColorScaleButton::setColorScale(const ColorScale& colorScale) {
   _colorScale = colorScale;
+
   if (_dlg)
     _dlg->setColorScale(colorScale);
 }
@@ -35,8 +36,10 @@ void ColorScaleButton::paintEvent(QPaintEvent *event) {
   if (colorScale().isGradient()) {
     QLinearGradient grad(QPointF(rect.x(),rect.y()),QPointF(rect.x()+rect.width(),rect.y()));
     std::map<float,Color> stops = colorScale().getColorMap();
+
     for (std::map<float,Color>::iterator it = stops.begin(); it != stops.end(); ++it)
       grad.setColorAt(it->first,colorToQColor(it->second));
+
     painter.setBrush(QBrush(grad));
   }
 

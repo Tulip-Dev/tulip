@@ -105,7 +105,7 @@ bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const
   params->buildDefaultDataSet(dataSet, graph );
   string title = string("Tulip Parameter Editor: ") + name;
   bool ok = tlp3::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
-                                   title.c_str(), graph, parent);
+                                    title.c_str(), graph, parent);
 
   if (ok) {
     return applyAlgorithm(graph,parent,name,&dataSet);
@@ -139,7 +139,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,strin
     params->buildDefaultDataSet(dataSet, graph );
     string title = string("Tulip Parameter Editor: ") + name;
     resultBool = tlp3::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
-                                        title.c_str(), graph, parent);
+                                         title.c_str(), graph, parent);
   }
 
   QtProgress *myProgress=new QtProgress(parent, name,redraw ? view : 0);

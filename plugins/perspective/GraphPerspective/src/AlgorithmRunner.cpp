@@ -160,6 +160,7 @@ void AlgorithmRunner::buildListWidget() {
   listWidget->setLayout(layout);
 
   _ui->algorithmList->setWidget(listWidget);
+
   if (_model)
     currentGraphChanged(_model->currentGraph());
 }
@@ -182,7 +183,7 @@ void AlgorithmRunner::setFilter(const QString &filter) {
 
 void AlgorithmRunner::currentGraphChanged(tlp::Graph* g) {
   foreach(AlgorithmRunnerItem* it, findChildren<AlgorithmRunnerItem *>())
-    it->setGraph(g);
+  it->setGraph(g);
 }
 
 void AlgorithmRunner::setModel(GraphHierarchiesModel *model) {

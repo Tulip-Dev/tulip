@@ -19,12 +19,12 @@ namespace tlp3 {
  */
 
 TLP3_COMPAT_SCOPE bool openDataSetDialog (tlp::DataSet & outSet,
-                                     const tlp::ParameterList *sysDef,
-                                     tlp::ParameterList *inDef,
-                                     const tlp::DataSet *inSet = NULL,
-                                     const char *inName = NULL,
-                                     tlp::Graph *inG = NULL,
-                                     QWidget *parent = NULL);
+    const tlp::ParameterList *sysDef,
+    tlp::ParameterList *inDef,
+    const tlp::DataSet *inSet = NULL,
+    const char *inName = NULL,
+    tlp::Graph *inG = NULL,
+    QWidget *parent = NULL);
 
 }
 

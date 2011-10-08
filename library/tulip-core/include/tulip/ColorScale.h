@@ -78,7 +78,9 @@ public:
   /**
     @brief Gets the number of stops into the color scale.
     */
-  unsigned int getStopsCount() { return colorMap.size(); }
+  unsigned int getStopsCount() {
+    return colorMap.size();
+  }
 
   /**
    * @brief Configures the color scale.
