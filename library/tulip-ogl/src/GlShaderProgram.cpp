@@ -230,8 +230,10 @@ void GlShaderProgram::link() {
       glProgramParameteriEXT(programObjectId, GL_GEOMETRY_OUTPUT_TYPE_EXT, attachedShaders[i]->getOutputPrimitiveType());
 
       GLint maxOutputVertices = maxGeometryShaderOutputVertices;
+
       if (maxOutputVertices == 0)
-    	  glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT, &maxOutputVertices);
+        glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT, &maxOutputVertices);
+
       glProgramParameteriEXT(programObjectId, GL_GEOMETRY_VERTICES_OUT_EXT, maxOutputVertices);
       maxGeometryShaderOutputVertices = 0;
     }
@@ -805,7 +807,7 @@ void GlShaderProgram::getUniformVec4BoolVariableValue(const std::string &variabl
 }
 
 void GlShaderProgram::setMaxGeometryShaderOutputVertices(const int maxOutputVertices) {
-	maxGeometryShaderOutputVertices = maxOutputVertices;
+  maxGeometryShaderOutputVertices = maxOutputVertices;
 }
 
 }

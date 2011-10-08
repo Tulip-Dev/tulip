@@ -226,7 +226,7 @@ CONTROLLERPLUGIN(MainController, "Tulip Classic", "Tulip Team", "16/04/2008", "T
 MainController::MainController():
   currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),propertiesListUpdated(false),blockUpdate(false),inAlgorithm(false),clusterTreeWidget(NULL),
   editMenu(NULL), algorithmMenu(NULL), viewMenu(NULL), optionsMenu(NULL),
-    graphMenu(NULL), undoAction(NULL), redoAction(NULL), snapshotAction(NULL),printAction(NULL),
+  graphMenu(NULL), undoAction(NULL), redoAction(NULL), snapshotAction(NULL),printAction(NULL),
   intMenu(NULL), stringMenu(NULL), sizesMenu(NULL), colorsMenu(NULL),
   layoutMenu(NULL), metricMenu(NULL), selectMenu(NULL), generalMenu(NULL) {
   morph = new Morphing();
@@ -715,7 +715,7 @@ void MainController::buildMenu() {
   QList<QAction *> menuBarActions=mainWindowFacade.getMenuBar()->actions();
 
   for(QList<QAction *>::iterator it=menuBarActions.begin(); it!=menuBarActions.end(); ++it) {
-    if((*it)->text()=="&Windows"){
+    if((*it)->text()=="&Windows") {
       windowAction=*it;
     }
   }
@@ -940,7 +940,7 @@ void MainController::buildMenu() {
     mainWindowFacade.getToolBar()->addAction(printAction);
     mainWindowFacade.getToolBar()->addAction(undoAction);
     mainWindowFacade.getToolBar()->addAction(redoAction);
-    mainWindowFacade.getToolBar()->addAction(snapshotAction);  
+    mainWindowFacade.getToolBar()->addAction(snapshotAction);
     connect(undoAction,SIGNAL(triggered()),this,SLOT(undo()));
     connect(redoAction,SIGNAL(triggered()),this,SLOT(redo()));
     connect(printAction,SIGNAL(triggered()),this,SLOT(filePrint()));
@@ -1816,23 +1816,24 @@ void MainController::snapshot() {
 }
 
 void MainController::filePrint() {
-    View* toPrint = getCurrentView();
-    if(toPrint != NULL){
-        QWidget *widget = getWidgetOfView(toPrint);
-        QImage image = toPrint->createPicture(widget->width(),widget->height(),false);
-        QPrinter printer;
-        QPrintDialog dialog(&printer);
+  View* toPrint = getCurrentView();
 
-        if (!dialog.exec())
-              return;
+  if(toPrint != NULL) {
+    QWidget *widget = getWidgetOfView(toPrint);
+    QImage image = toPrint->createPicture(widget->width(),widget->height(),false);
+    QPrinter printer;
+    QPrintDialog dialog(&printer);
 
-        QPainter painter(&printer);
-        QRect pageRect = printer.pageRect();
-        int xShift = pageRect.width()>image.width()?(pageRect.width()-image.width())/2:0;
-        int yShift = pageRect.height()>image.height()?(pageRect.height()-image.height())/2:0;
-        painter.drawImage(QPoint(xShift,yShift),image);
-        painter.end();
-    }
+    if (!dialog.exec())
+      return;
+
+    QPainter painter(&printer);
+    QRect pageRect = printer.pageRect();
+    int xShift = pageRect.width()>image.width()?(pageRect.width()-image.width())/2:0;
+    int yShift = pageRect.height()>image.height()?(pageRect.height()-image.height())/2:0;
+    painter.drawImage(QPoint(xShift,yShift),image);
+    painter.end();
+  }
 }
 }
 

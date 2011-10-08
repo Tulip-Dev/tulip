@@ -115,7 +115,7 @@ void TulipApp::clearMemoryChecker() {
 //**********************************************************************
 void TulipApp::enableElements(bool enabled) {
   fileSaveAction->setEnabled(enabled);
-  fileSaveAsAction->setEnabled(enabled);  
+  fileSaveAsAction->setEnabled(enabled);
   fileCloseTabAction->setEnabled(enabled);
   mouseActionGroup->setEnabled(enabled);
   exportGraphMenu->menuAction()->setEnabled(enabled);
