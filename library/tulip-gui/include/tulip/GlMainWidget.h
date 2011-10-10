@@ -37,7 +37,7 @@
 #include <QtGui/qaction.h>
 #include <QtOpenGL/QGLFramebufferObject>
 
-#include "tulip/AbstractView.h"
+#include "tulip/View.h"
 #include "tulip/ForegroundEntity.h"
 
 class QGLFramebufferObject;
