@@ -34,6 +34,7 @@ class SizeProperty;
 class DoubleProperty;
 class CoordVectorProperty;
 class IntegerProperty;
+class Graph;
 
 /// This interactor allows to move/add/delete EdgeBends
 class TLP_QT_SCOPE MouseEdgeBendEditor:public InteractorComponent {
