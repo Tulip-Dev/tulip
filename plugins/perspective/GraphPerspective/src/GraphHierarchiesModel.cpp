@@ -6,6 +6,10 @@
 #include <fstream>
 
 #include <tulip/TulipProject.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/TulipSettings.h>
 
 using namespace std;
 using namespace tlp;
@@ -14,6 +18,25 @@ using namespace tlp;
 #define ID_SECTION 1
 #define NODES_SECTION 2
 #define EDGES_SECTION 3
+
+void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
+  const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize";
+
+  if (!g->existProperty(shapes)) {
+    g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipSettings::instance().defaultShape(tlp::NODE));
+    g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(TulipSettings::instance().defaultShape(tlp::EDGE));
+  }
+
+  if (!g->existProperty(colors)) {
+    g->getProperty<ColorProperty>(colors)->setAllNodeValue(TulipSettings::instance().defaultColor(tlp::NODE));
+    g->getProperty<ColorProperty>(colors)->setAllEdgeValue(TulipSettings::instance().defaultColor(tlp::EDGE));
+  }
+
+  if (!g->existProperty(sizes)) {
+    g->getProperty<SizeProperty>(sizes)->setAllNodeValue(TulipSettings::instance().defaultSize(tlp::NODE));
+    g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(TulipSettings::instance().defaultSize(tlp::EDGE));
+  }
+}
 
 GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): QAbstractItemModel(parent) {
 }
@@ -153,6 +176,7 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   if (_graphs.size() == 1)
     setCurrentGraph(g);
 
+  setApplicationDefaults(g);
   g->addListener(this);
   emit layoutChanged();
 }

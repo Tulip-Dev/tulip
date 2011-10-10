@@ -2,8 +2,11 @@
 #define TULIPSETTINGS_H
 
 #include <QtCore/QSettings>
+#include <QtCore/QStringList>
 #include <tulip/tulipconf.h>
-#include <QStringList>
+#include <tulip/Graph.h>
+#include <tulip/Color.h>
+#include <tulip/Size.h>
 
 /**
   * @brief This class provides convenience functions to access the Tulip settings file (using QSettings)
@@ -11,11 +14,17 @@
   * This object does not mask any method from the QSettings class, which mean that the user can still access custom keys by invoking the QSettings::value method.
   */
 class TLP_QT_SCOPE TulipSettings: public QSettings {
+  Q_OBJECT
+  Q_ENUMS(DisplayProperty)
+
 public:
 
   static const QString RemoteLocationsConfigEntry;
   static const QString RecentDocumentsConfigEntry;
   static const QString PluginsToRemoveConfigEntry;
+  static const QString DefaultColorConfigEntry;
+  static const QString DefaultSizeConfigEntry;
+  static const QString DefaultShapeConfigEntry;
 
   static TulipSettings &instance();
 
@@ -57,6 +66,13 @@ public:
 
   void markPluginForRemoval(const QString& pluginLibrary);
   void unmarkPluginForRemoval(const QString& pluginLibrary);
+
+  tlp::Color defaultColor(tlp::ElementType elem);
+  void setDefaultColor(tlp::ElementType elem, const tlp::Color& color);
+  tlp::Size defaultSize(tlp::ElementType elem);
+  void setDefaultSize(tlp::ElementType elem, const tlp::Size& size);
+  int defaultShape(tlp::ElementType elem);
+  void setDefaultShape(tlp::ElementType elem, int shape);
 
 private:
   TulipSettings();

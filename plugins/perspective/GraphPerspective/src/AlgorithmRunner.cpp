@@ -29,12 +29,11 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &na
   _ui->settingsButton->setToolTip(trUtf8("Set up ") + name);
   _ui->playButton->setToolTip(trUtf8("Run ") + name);
   _ui->parameters->hide();
-
   _ui->settingsButton->setVisible(params.size()>0);
-
   _ui->parameters->setItemDelegate(new TulipItemDelegate);
-  setObjectName(name);
+  connect(_ui->settingsButton,SIGNAL(toggled(bool)),this,SLOT(settingsButtonToggled(bool)));
 
+  setObjectName(name);
 }
 
 void AlgorithmRunnerItem::setGraph(tlp::Graph* graph) {
@@ -52,6 +51,16 @@ void AlgorithmRunnerItem::setGraph(tlp::Graph* graph) {
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {
   delete _ui;
 }
+
+void AlgorithmRunnerItem::toggleParameters(bool f) {
+  _ui->settingsButton->setChecked(f);
+}
+
+void AlgorithmRunnerItem::settingsButtonToggled(bool f) {
+  _ui->parameters->setVisible(f);
+  emit settingsToggled(f);
+}
+
 // **********************************************
 template<typename ALG,typename PROPTYPE>
 class TemplatePluginListWidgetManager: public PluginListWidgetManagerInterface {
@@ -146,6 +155,7 @@ void AlgorithmRunner::buildListWidget() {
       QString algName;
       foreach(algName,_currentAlgorithmsList[group]) {
         AlgorithmRunnerItem *item = new AlgorithmRunnerItem(group,algName,_pluginsListMgr->parameters(algName));
+        connect(item,SIGNAL(settingsToggled(bool)),this,SLOT(itemSettingsToggled(bool)));
         groupLayout->addWidget(item);
       }
 
@@ -197,4 +207,13 @@ void AlgorithmRunner::setModel(GraphHierarchiesModel *model) {
   _model = model;
   connect(_model,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
   currentGraphChanged(_model->currentGraph());
+}
+
+void AlgorithmRunner::itemSettingsToggled(bool f) {
+  if (!f)
+    return;
+  foreach(AlgorithmRunnerItem* it, findChildren<AlgorithmRunnerItem *>()) {
+    if (it != sender())
+      it->toggleParameters(false);
+  }
 }
