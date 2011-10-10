@@ -1,8 +1,5 @@
 INSTALL(FILES
-  tulip/AbstractView.h
   tulip/AugmentedDisplayDialog.h
-  tulip/BaseGraphicsViewComponent.h
-  tulip/BaseGraphicsViewComponentMacro.h
   tulip/ColorScaleConfigDialog.h
   tulip/ColorScaleWidget.h
   tulip/CopyPropertyDialog.h
@@ -18,9 +15,7 @@ INSTALL(FILES
   tulip/ForegroundEntity.h
   tulip/GlCompositeHierarchyManager.h
   tulip/GlMainView.h
-  tulip/GlMainWidgetGraphicsView.h
   tulip/GlMainWidget.h
-  tulip/GlMainWidgetItem.h
   tulip/GlOffscreenRenderer.h
   tulip/GraphicsWidgetBase.h
   tulip/GraphPropertiesSelectionWidget.h
@@ -62,7 +57,6 @@ INSTALL(FILES
   tulip/TlpQtTools.h
   tulip/TulipProject.h
   tulip/TulipSettings.h
-  tulip/View.h
   tulip/ParameterListModel.h
   tulip/TulipItemDelegate.h
   tulip/TulipMetaTypes.h
@@ -79,6 +73,7 @@ INSTALL(FILES
   tulip/ColorButton.h
   tulip/TulipModel.h
   tulip/ColorScaleButton.h
+  tulip/View.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

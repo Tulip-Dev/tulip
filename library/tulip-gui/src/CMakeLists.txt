@@ -3,9 +3,7 @@ IF(ENABLE_RENDERING_TIME_DISPLAY)
 ENDIF(ENABLE_RENDERING_TIME_DISPLAY)
 
 SET(SRCS
-  AbstractView.cpp
   AugmentedDisplayDialog.cpp
-  BaseGraphicsViewComponent.cpp
   ColorScaleConfigDialog.cpp
   ColorScaleWidget.cpp
   CopyPropertyDialog.cpp
@@ -20,8 +18,6 @@ SET(SRCS
   GlCompositeHierarchyManager.cpp
   GlMainView.cpp
   GlMainWidget.cpp
-  GlMainWidgetGraphicsView.cpp
-  GlMainWidgetItem.cpp
   GlOffscreenRenderer.cpp
   GraphicsWidgetBase.cpp
   GraphPropertiesSelectionWidget.cpp
@@ -65,7 +61,6 @@ SET(SRCS
   TlpQtTools.cpp
   TulipProject.cpp
   TulipSettings.cpp
-  View.cpp
   ParameterListModel.cpp
   TulipItemDelegate.cpp
   TulipMetaTypes.cpp
@@ -79,6 +74,7 @@ SET(SRCS
   TulipModel.cpp
   SizeEditor.cpp
   ColorScaleButton.cpp
+  View.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -102,9 +98,7 @@ QT4_WRAP_UI(UI_HEADERS
 )
 
 QT4_WRAP_CPP(MOC_SRCS
-  ../include/tulip/AbstractView.h
   ../include/tulip/AugmentedDisplayDialog.h
-  ../include/tulip/BaseGraphicsViewComponent.h
   ../include/tulip/ColorScaleConfigDialog.h
   ../include/tulip/CopyPropertyDialog.h
   ../include/tulip/CSVGraphMappingConfigurationWidget.h
@@ -114,9 +108,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/DoubleStringsListSelectionWidget.h
   ../include/tulip/DownloadManager.h
   ../include/tulip/GlMainView.h
-  ../include/tulip/GlMainWidgetGraphicsView.h
   ../include/tulip/GlMainWidget.h
-  ../include/tulip/GlMainWidgetItem.h
   ../include/tulip/GraphPropertiesTableWidget.h
   ../include/tulip/GridOptionsWidget.h
   ../include/tulip/GWOverviewWidget.h
@@ -138,13 +130,13 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/TabWidgetHidableMenuGraphicsProxy.h
   ../include/tulip/ThreadedComputeProperty.h
   ../include/tulip/TulipProject.h
-  ../include/tulip/View.h
   ../include/tulip/Animation.h
   ../include/tulip/ColorButton.h
   ../include/tulip/TulipModel.h
   ../include/tulip/SizeEditor.h
   ../include/tulip/ColorScaleButton.h
   ../include/tulip/TulipSettings.h
+  ../include/tulip/View.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
