@@ -62,6 +62,8 @@ Q_DECLARE_METATYPE(tlp::PropertyInterface*)
 
 Q_DECLARE_METATYPE(tlp::ColorScale)
 
+Q_DECLARE_METATYPE(tlp::StringCollection)
+
 namespace tlp {
 class TLP_QT_SCOPE TulipMetaTypes {
   TulipMetaTypes() {}

@@ -6,6 +6,24 @@
 
 using namespace tlp;
 
+void ColorScaleButton::paintScale(QPainter *painter, const QRect &baseRect, const ColorScale &colorScale) {
+  QRect rect = baseRect;
+  rect.setX(rect.x()+2);
+  rect.setY(rect.y()+2);
+  rect.setWidth(rect.width()-4);
+  rect.setHeight(rect.height()-4);
+
+  if (colorScale.isGradient()) {
+    QLinearGradient grad(QPointF(rect.x(),rect.y()),QPointF(rect.x()+rect.width(),rect.y()));
+    std::map<float,Color> stops = colorScale.getColorMap();
+    for (std::map<float,Color>::iterator it = stops.begin(); it != stops.end(); ++it)
+      grad.setColorAt(it->first,colorToQColor(it->second));
+    painter->setBrush(QBrush(grad));
+  }
+
+  painter->drawRect(rect);
+}
+
 ColorScaleButton::ColorScaleButton(ColorScale colorScale, QWidget* parent): QPushButton(parent), _colorScale(colorScale), _dlg(NULL) {
   connect(this,SIGNAL(clicked()),this,SLOT(showDialog()));
 }

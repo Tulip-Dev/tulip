@@ -30,6 +30,9 @@
 #include <tulip/StlIterator.h>
 #include <tulip/ColorScale.h>
 
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+
 #include <QtCore/QDebug>
 
 using namespace tlp;
@@ -181,6 +184,13 @@ void ParameterList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
       vector<Color> colors;
       ColorVectorType::fromString(colors,defaultValue);
       dataSet.set<ColorScale>(name,ColorScale(colors));
+    }
+
+    if (type.compare(typeid(tlp::StringCollection).name()) == 0) {
+      StringCollection col;
+      foreach(QString token,QString(defaultValue.c_str()).split(';'))
+        col.push_back(token.toStdString());
+      dataSet.set<StringCollection>(name,col);
     }
 
     CHECK_PROPERTY(tlp::BooleanProperty);

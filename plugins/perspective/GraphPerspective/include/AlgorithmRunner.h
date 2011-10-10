@@ -70,6 +70,9 @@ public:
 
   void setGraph(tlp::Graph*);
 
+signals:
+  void expanded(bool);
+
 };
 
 #endif // ALGORITHMRUNNER_H

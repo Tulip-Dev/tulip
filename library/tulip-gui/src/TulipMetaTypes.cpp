@@ -28,6 +28,8 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   CHECK_QVARIANT(tlp::PropertyInterface*);
 
   CHECK_QVARIANT(ColorScale);
+
+  CHECK_QVARIANT(StringCollection);
   return NULL;
 }
 
@@ -61,6 +63,8 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm) {
   CHECK_DATATYPE(tlp::PropertyInterface*);
 
   CHECK_DATATYPE(tlp::ColorScale)
+
+  CHECK_DATATYPE(tlp::StringCollection)
 
   return QVariant();
 }
