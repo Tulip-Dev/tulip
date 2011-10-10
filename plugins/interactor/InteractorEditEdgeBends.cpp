@@ -41,8 +41,8 @@ public:
                                "Modify edge bends<br/><br/>"+
                                "Select edge: <ul><li>use rectangle selection</li></ul>" +
                                "Translate bend: <ul><li><b>Mouse left</b> down on a selected bend + moves</li></ul>" +
-                               "Change source node: <ul><li><b>Drag and drop circle on source node</li></ul>"+
-                               "Change target node: <ul><li><b>Drag and drop triangle on target node</li></ul>"+
+                               "Change source node: <ul><li><b>Drag and drop</b> circle on source node</li></ul>"+
+                               "Change target node: <ul><li><b>Drag and drop</b> triangle on target node</li></ul>"+
                                "Add bend: <ul><li><b>Double click with mouse left</b> click on the selected edge</li></ul>"+
 #if !defined(__APPLE__)
                                "Delete bend: <ul><li><b>Ctrl + Mouse left</b> click on a selected bend</li></ul>"
