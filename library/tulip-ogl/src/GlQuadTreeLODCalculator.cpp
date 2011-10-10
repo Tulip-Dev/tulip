@@ -91,6 +91,7 @@ bool GlQuadTreeLODCalculator::needEntities() {
     return true;
 
   // Check if a camera have changed (diff between old backup camera and current camera)
+  // If the camera have changed : we need to recompute LOD
   for(map<GlLayer *,pair<Camera*, Camera> >::iterator it=layerToCamera.begin(); it!=layerToCamera.end(); ++it) {
     if(((*it).first->getCamera()).is3D()) {
       Camera camera      = (*it).first->getCamera();
