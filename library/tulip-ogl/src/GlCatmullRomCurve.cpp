@@ -32,7 +32,7 @@ static string catmullRomSpecificShaderCode=
   "uniform float totalLength;"
   "uniform float alpha;"
 
-  "vec3 bezierControlPoints[4] = vec3[4](vec3(0.0), vec3(0.0), vec3(0.0), vec3(0.0));"
+  "vec3 bezierControlPoints[4];"
 
   "float parameter[2];"
 
