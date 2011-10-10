@@ -50,34 +50,90 @@ class TLP_GL_SCOPE GlVertexArrayManager :
 
 public:
 
+  /**
+   * Constructor
+   * \param inputData : input data to use for this GlVertexArrayManager
+   */
   GlVertexArrayManager(GlGraphInputData *inputData);
 
   ~GlVertexArrayManager();
 
+  /**
+   * Call this function when you want to change input data used by this GlVertexArrayManager
+   */
   void setInputData(GlGraphInputData *inputData);
 
+  /**
+   * Return if this GlVertexArrayManager is used to render entities of the scene
+   */
   inline bool renderingIsBegin() {
     return isBegin;
   }
 
+  /**
+   * Return if this GlVertexArrayManager have to compute its data
+   */
   bool haveToCompute();
 
+  /**
+   * Call this function if this GlVertexArrayManager have to compute colors and layout properties
+   */
   void setHaveToComputeAll(bool compute);
+  /**
+   * Call this function if this GlVertexArrayManager have to compute layout propertie
+   */
   void setHaveToComputeLayout(bool compute);
+  /**
+   * Call this function if this GlVertexArrayManager have to compute colors propertie
+   */
   void setHaveToComputeColor(bool compute);
 
+  /**
+   * Call this function at the begining of the rendering
+   * This function clear entities to render
+   */
   void beginRendering();
+  /**
+   * Call this funtion at the end of rendering
+   * This function draw needed entities
+   */
   void endRendering();
 
+  /**
+   * This function is call by GlVertexArraySceneVisitor to inform GlVertexArrayManager that we need to render an edge
+   */
   void addEdge(GlEdge *edge);
+  /**
+   * This function is call by GlVertexArraySceneVisitor to inform GlVertexArrayManager that we need to render a node
+   */
   void addNode(GlNode *node);
 
+  /**
+   * You can call this function to pause rendering
+   * For example this function is call in GlMetaNodeTrueRenderer to don't use GlVertexArrayManager
+   */
   void pauseRendering(bool pause);
+
+  /**
+   * You can call this function to deactivate/activate GlVertexArrayManager
+   */
   void activate(bool act);
 
+  /**
+   * This function is call when you want to activate line rendering of a specific edge
+   */
   void activateLineEdgeDisplay(GlEdge *edge, bool selected);
+  /**
+   * This function is call when you want to activate quad rendering of a specific edge
+   */
   void activateQuadEdgeDisplay(GlEdge *edge, bool selected);
+  /**
+   * This function is call when you want to activate point rendering of a specific edge
+   */
   void activatePointEdgeDisplay(GlEdge *edge, bool selected);
+  /**
+   * This function is call when you want to activate point rendering of a specific node
+   */
   void activatePointNodeDisplay(GlNode *node, bool onePixel, bool selected);
 
 protected:
