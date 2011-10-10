@@ -199,7 +199,6 @@ QVariant StringCollectionEditorCreator::editorData(QWidget* widget, tlp::Graph*)
 }
 
 QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
-  qWarning() << __PRETTY_FUNCTION__;
   StringCollection col = var.value<StringCollection>();
   return col[col.getCurrent()].c_str();
 }
