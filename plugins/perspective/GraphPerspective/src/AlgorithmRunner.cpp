@@ -34,12 +34,19 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &na
 
   _ui->parameters->setItemDelegate(new TulipItemDelegate);
   setObjectName(name);
+
 }
 
 void AlgorithmRunnerItem::setGraph(tlp::Graph* graph) {
   assert(graph != NULL);
   _ui->parameters->setModel(new ParameterListModel(_params,graph));
-  adjustSize();
+
+  int h=0;
+  for (int i=0;i<_ui->parameters->model()->rowCount();++i)
+    h += _ui->parameters->rowHeight(i);
+
+  _ui->parameters->setMaximumHeight(h);
+  _ui->parameters->setMinimumHeight(h);
 }
 
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {

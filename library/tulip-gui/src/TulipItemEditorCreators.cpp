@@ -157,13 +157,12 @@ QString PropertyInterfaceEditorCreator::displayText(const QVariant& v) const {
 /*
   ColorScaleEditorCreator
 */
-
-
 QWidget* ColorScaleEditorCreator::createWidget(QWidget* parent) const {
   return new ColorScaleButton(ColorScale(),parent);
 }
 
 bool ColorScaleEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& var) const {
+  ColorScaleButton::paintScale(painter,option.rect,var.value<ColorScale>());
   return true;
 }
 
@@ -174,4 +173,35 @@ void ColorScaleEditorCreator::setEditorData(QWidget* w, const QVariant& var,tlp:
 QVariant ColorScaleEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   return QVariant::fromValue<ColorScale>(static_cast<ColorScaleButton*>(w)->colorScale());
 }
+
+/*
+  StringCollectionEditorCreator
+*/
+QWidget* StringCollectionEditorCreator::createWidget(QWidget* parent) const {
+  return new QComboBox(parent);
+}
+
+void StringCollectionEditorCreator::setEditorData(QWidget* widget, const QVariant& var, tlp::Graph*) {
+  StringCollection col = var.value<StringCollection>();
+  QComboBox* combo = static_cast<QComboBox*>(widget);
+  for(int i=0;i<col.size();++i)
+    combo->addItem(col[i].c_str());
+  combo->setCurrentIndex(col.getCurrent());
+}
+
+QVariant StringCollectionEditorCreator::editorData(QWidget* widget, tlp::Graph*) {
+  QComboBox* combo = static_cast<QComboBox*>(widget);
+  StringCollection col;
+  for(int i=0;i < combo->count();++i)
+    col.push_back(combo->itemText(i).toStdString());
+  col.setCurrent(combo->currentIndex());
+  return QVariant::fromValue<StringCollection>(col);
+}
+
+QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
+  qWarning() << __PRETTY_FUNCTION__;
+  StringCollection col = var.value<StringCollection>();
+  return col[col.getCurrent()].c_str();
+}
+
 

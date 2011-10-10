@@ -89,6 +89,15 @@ public:
   virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
 };
+
+class TLP_QT_SCOPE StringCollectionEditorCreator: public tlp::TulipItemEditorCreator {
+public:
+  QWidget* createWidget(QWidget*) const;
+  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual QVariant editorData(QWidget*,tlp::Graph*);
+  virtual QString displayText(const QVariant &) const;
+};
+
 }
 
 #include "cxx/TulipItemEditorCreators.cxx"
