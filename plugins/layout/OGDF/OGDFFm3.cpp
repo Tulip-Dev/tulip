@@ -225,7 +225,7 @@ const char * paramHelp[] = {HTML_HELP_OPEN()
 #define ELT_NONE 2
 
 #define ELT_PRESORT "Pre Sort"
-#define ELT_PRESORTLIST "DecreasingHeight;DecreasingWidth;None;"
+#define ELT_PRESORTLIST "DecreasingHeight;DecreasingWidth;None"
 #define ELT_DECREASINGHEIGHT 0
 #define ELT_DECREASINGWDTH 1
 
