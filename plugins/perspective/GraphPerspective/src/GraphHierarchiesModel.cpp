@@ -9,6 +9,7 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/SizeProperty.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/TulipSettings.h>
 
 using namespace std;
@@ -20,7 +21,7 @@ using namespace tlp;
 #define EDGES_SECTION 3
 
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
-  const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize";
+  const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric";
 
   if (!g->existProperty(shapes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipSettings::instance().defaultShape(tlp::NODE));
@@ -35,6 +36,11 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   if (!g->existProperty(sizes)) {
     g->getProperty<SizeProperty>(sizes)->setAllNodeValue(TulipSettings::instance().defaultSize(tlp::NODE));
     g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(TulipSettings::instance().defaultSize(tlp::EDGE));
+  }
+
+  if (!g->existProperty(metrics)) {
+    g->getProperty<DoubleProperty>(metrics)->setAllNodeValue(0);
+    g->getProperty<DoubleProperty>(metrics)->setAllEdgeValue(0);
   }
 }
 

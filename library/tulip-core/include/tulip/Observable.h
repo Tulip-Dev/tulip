@@ -165,7 +165,7 @@ class  TLP_SCOPE Event {
   friend class Graph;
   friend class PropertyInterface;
 public:
-  enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID};
+  enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID, TLP_ALL_EVENTS};
   virtual ~Event();
   Observable* sender() const;
   Event(const Observable &sender, EventType type);
