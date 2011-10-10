@@ -29,8 +29,8 @@ public:
   virtual void setActiveInteractor(tlp::Interactor*);
   virtual tlp::Interactor* activeInteractor() const;
 
-  virtual void setData(const tlp::DataSet&,tlp::Graph*)=0;
-  virtual void data(tlp::DataSet*,tlp::Graph*) const=0;
+  virtual void setData(const tlp::DataSet&)=0;
+  virtual tlp::DataSet data() const=0;
   virtual void setGraph(tlp::Graph*)=0;
   virtual tlp::Graph* graph() const=0;
 
