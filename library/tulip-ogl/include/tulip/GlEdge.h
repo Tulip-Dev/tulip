@@ -138,9 +138,10 @@ private :
                                  const Matrix<float, 4>& transformation, const Matrix<float, 4>& size);
 
   /**
-   * Compute the edge color
+   * Compute the edge colors and store these colors in srcCol and tgtCol
+   * \param data : input data used to compute edge colors
    */
-  void getEdgeColor(GlGraphInputData *data,edge e,node source, node target, bool selected,Color &srcCol, Color &tgtCol);
+  void getEdgeColor(GlGraphInputData *data,const edge &e,const node &source,const node &target, bool selected,Color &srcCol, Color &tgtCol);
 
 
 
@@ -153,12 +154,12 @@ private :
   /**
    * Compute edge anchor
    */
-  void getEdgeAnchor(GlGraphInputData *data,node source,node target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor);
+  void getEdgeAnchor(GlGraphInputData *data,const node &source,const node &target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor);
 
   /**
    * Thgis function is used to render edge arrows
    */
-  void displayArrow(GlGraphInputData *data,edge e,node source,const Size &sizeRatio,float edgeSize,const Color &color,float maxSize,bool selected,float selectionOutlineSize,
+  void displayArrow(GlGraphInputData *data,const edge &e,const node &source,const Size &sizeRatio,float edgeSize,const Color &color,float maxSize,bool selected,float selectionOutlineSize,
                     int srcEdgeGlyph,int tgtEdgeGlyph,size_t numberOfBends,const Coord &anchor,const Coord &tgtCoord,
                     const Coord &srcAnchor,const Coord &tgtAnchor,Coord &lineAnchor);
 

@@ -652,7 +652,7 @@ void GlEdge::getColors(GlGraphInputData *data,
 }
 
 
-void GlEdge::getEdgeColor(GlGraphInputData *data,edge e,node source, node target, bool selected,Color &srcCol, Color &tgtCol) {
+void GlEdge::getEdgeColor(GlGraphInputData *data,const edge &e,const node &source,const node &target, bool selected,Color &srcCol, Color &tgtCol) {
   Color selectionColor=data->parameters->getSelectionColor();
 
   if (selected) {
@@ -698,7 +698,7 @@ void GlEdge::getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, cons
   }
 }
 
-void GlEdge::getEdgeAnchor(GlGraphInputData *data,node source,node target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor) {
+void GlEdge::getEdgeAnchor(GlGraphInputData *data,const node &source,const node &target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor) {
   double srcRot = data->getElementRotation()->getNodeValue(source);
   double tgtRot = data->getElementRotation()->getNodeValue(target);
 
@@ -757,8 +757,8 @@ float GlEdge::getEdgeWidthLod(const Coord &edgeCoord,
 }
 
 void GlEdge::displayArrow(GlGraphInputData *data,
-                          edge e,
-                          node source,
+                          const edge &e,
+                          const node &source,
                           const Size& sizeRatio,
                           float edgeSize,
                           const Color &color,
