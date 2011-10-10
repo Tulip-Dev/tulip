@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>250</width>
-    <height>217</height>
+    <width>248</width>
+    <height>215</height>
    </rect>
   </property>
   <property name="styleSheet">
@@ -177,22 +177,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>settingsButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>parameters</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>41</x>
-     <y>13</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>189</x>
-     <y>71</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

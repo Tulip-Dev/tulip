@@ -20,6 +20,8 @@ class GraphHierarchiesModel : public QAbstractItemModel, public tlp::Observable 
   tlp::Graph *_currentGraph;
 
 public:
+  static void setApplicationDefaults(tlp::Graph*);
+
   explicit GraphHierarchiesModel(QObject *parent=0);
   GraphHierarchiesModel(const GraphHierarchiesModel &);
   virtual ~GraphHierarchiesModel();

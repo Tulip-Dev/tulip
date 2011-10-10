@@ -1,10 +1,19 @@
 #include "tulip/TulipSettings.h"
 
+#include <tulip/TulipMetaTypes.h>
+#include <tulip/PropertyTypes.h>
+#include <tulip/GlGraphStaticData.h>
+
+using namespace tlp;
+
 TulipSettings *TulipSettings::_instance = 0;
 
 const QString TulipSettings::RemoteLocationsConfigEntry = "app/remote_locations";
 const QString TulipSettings::RecentDocumentsConfigEntry = "app/recent_documents";
 const QString TulipSettings::PluginsToRemoveConfigEntry = "app/pluginsToRemove";
+const QString TulipSettings::DefaultColorConfigEntry = "graph/defaults/color/";
+const QString TulipSettings::DefaultSizeConfigEntry = "graph/defaults/size/";
+const QString TulipSettings::DefaultShapeConfigEntry = "graph/defaults/shape/";
 
 TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }
@@ -59,9 +68,6 @@ const QStringList TulipSettings::remoteLocations() const {
 }
 
 const QStringList TulipSettings::pluginsToRemove() const {
-//   QStringList result = value(PluginsToRemoveConfigEntry).toStringList();
-//   result.removeAll("");
-//   return result;
   return value(PluginsToRemoveConfigEntry).toStringList();
 }
 
@@ -83,4 +89,42 @@ void TulipSettings::unmarkPluginForRemoval(const QString& pluginLibrary) {
   }
 
   setValue(PluginsToRemoveConfigEntry, markedPlugins);
+}
+
+
+QString elementKey(const QString& configEntry, tlp::ElementType elem) {
+  return configEntry + (elem == tlp::NODE ? "node" : "edge");
+}
+
+tlp::Color TulipSettings::defaultColor(tlp::ElementType elem) {
+  QString val = value(elementKey(DefaultColorConfigEntry,elem),(elem == tlp::NODE ? "(0,0,0,255)" : "(150,150,150)")).toString();
+  Color result;
+  ColorType::fromString(result,val.toStdString());
+  return result;
+}
+
+void TulipSettings::setDefaultColor(tlp::ElementType elem, const tlp::Color& color) {
+  QString value = tlp::ColorType::toString(color).c_str();
+  setValue(elementKey(DefaultColorConfigEntry,elem),value);
+}
+
+tlp::Size TulipSettings::defaultSize(tlp::ElementType elem) {
+  QString val = value(elementKey(DefaultSizeConfigEntry,elem),(elem == tlp::NODE ? "(1,1,1)" : "(0.125,0.125,0.5)")).toString();
+  Size result;
+  SizeType::fromString(result,val.toStdString());
+  return result;
+}
+
+void TulipSettings::setDefaultSize(tlp::ElementType elem, const tlp::Size& size) {
+  QString value = tlp::SizeType::toString(size).c_str();
+  setValue(elementKey(DefaultSizeConfigEntry,elem),value);
+}
+
+int TulipSettings::defaultShape(tlp::ElementType elem) {
+  const int CIRCLE_GLYPH_ID = 14;
+  return value(elementKey(DefaultShapeConfigEntry,elem),(elem == tlp::NODE ? CIRCLE_GLYPH_ID : SPLINESHAPE)).toInt();
+}
+
+void TulipSettings::setDefaultShape(tlp::ElementType elem, int shape) {
+  setValue(elementKey(DefaultShapeConfigEntry,elem),shape);
 }

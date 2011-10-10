@@ -46,6 +46,8 @@ protected slots:
   void algorithmTypeChanged(const QString &);
   void setFilter(const QString &);
   void currentGraphChanged(tlp::Graph* g);
+
+  void itemSettingsToggled(bool);
 };
 // **********************************************
 class AlgorithmRunnerItem: public QWidget {
@@ -70,8 +72,14 @@ public:
 
   void setGraph(tlp::Graph*);
 
+public slots:
+  void toggleParameters(bool);
+
+protected slots:
+  void settingsButtonToggled(bool);
+
 signals:
-  void expanded(bool);
+  void settingsToggled(bool);
 
 };
 
