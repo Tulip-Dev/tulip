@@ -9,15 +9,23 @@ class GlMainWidget;
 
 class GlMainWidgetGraphicsItem : public QGraphicsObject {
   Q_OBJECT
+
+  Q_PROPERTY(QSize size READ size WRITE resize)
+  QSize _size;
+
+  tlp::GlMainWidget *glMainWidget;
+  bool redrawNeeded;
+
+  unsigned char *renderingStore;
+
 public:
-  GlMainWidgetGraphicsItem(tlp::GlMainWidget *glMainWidget, int width, int height);
+  GlMainWidgetGraphicsItem(tlp::GlMainWidget *glMainWidget, const QSize& size);
   virtual ~GlMainWidgetGraphicsItem();
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
   QRectF boundingRect() const;
-
-  void resize(int width, int height);
+  QSize size() const { return _size; }
 
   void setRedrawNeeded(bool redrawNeeded){
     this->redrawNeeded=redrawNeeded;
@@ -26,6 +34,9 @@ public:
   tlp::GlMainWidget *getGlMainWidget() { return glMainWidget;}
 
   bool eventFilter(QObject *, QEvent *evt);
+
+public slots:
+  void resize(const QSize& size);
 
 protected :
   void wheelEvent(QGraphicsSceneWheelEvent *event);
@@ -40,11 +51,6 @@ protected slots:
   void glMainWidgetDraw(GlMainWidget *,bool);
   void glMainWidgetRedraw(GlMainWidget *);
 
-private :
-  tlp::GlMainWidget *glMainWidget;
-  bool redrawNeeded;
-  int width, height;
-  unsigned char *renderingStore;
 };
 
 }
