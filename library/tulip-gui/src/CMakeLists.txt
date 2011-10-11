@@ -75,6 +75,7 @@ SET(SRCS
   SizeEditor.cpp
   ColorScaleButton.cpp
   View.cpp
+  GlMainWidgetGraphicsItem.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -137,6 +138,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/ColorScaleButton.h
   ../include/tulip/TulipSettings.h
   ../include/tulip/View.h
+  ../include/tulip/GlMainWidgetGraphicsItem.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
