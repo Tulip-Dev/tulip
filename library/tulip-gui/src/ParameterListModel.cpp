@@ -74,6 +74,7 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
     tlp::DataType *dataType = _data.getData(infos.name.toStdString());
 
     assert(dataType);
+
     if (!dataType)
       return infos.type.c_str();
 
