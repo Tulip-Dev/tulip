@@ -74,6 +74,7 @@ INSTALL(FILES
   tulip/TulipModel.h
   tulip/ColorScaleButton.h
   tulip/View.h
+  tulip/GlMainWidgetGraphicsItem.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
