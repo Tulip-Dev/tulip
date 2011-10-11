@@ -6,6 +6,8 @@
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QGraphicsScene>
+#include <QtGui/QGraphicsView>
+#include <QtCore/QDebug>
 
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlQuad.h>
@@ -24,11 +26,10 @@ static void setRasterPosition(unsigned int x, unsigned int y) {
   tlp::glTest(__PRETTY_FUNCTION__);
 }
 
-GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, int width, int height):
+GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, const QSize& size)://, int width, int height):
     QGraphicsObject(),
     glMainWidget(glMainWidget), redrawNeeded(true), renderingStore(NULL) {
 
-//  setFlag(QGraphicsItem::ItemIsMovable, true);
   setFlag(QGraphicsItem::ItemIsSelectable, true);
   setFlag(QGraphicsItem::ItemIsFocusable, true);
   setAcceptHoverEvents(true);
@@ -37,7 +38,7 @@ GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, i
   connect(glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(glMainWidgetDraw(GlMainWidget *,bool)));
   connect(glMainWidget,SIGNAL(viewRedrawn(GlMainWidget *)),this,SLOT(glMainWidgetRedraw(GlMainWidget *)));
 
-  resize(width, height);
+  resize(size);
   glMainWidget->installEventFilter(this);
   setHandlesChildEvents(false);
 }
@@ -48,17 +49,16 @@ GlMainWidgetGraphicsItem::~GlMainWidgetGraphicsItem() {
 }
 
 QRectF GlMainWidgetGraphicsItem::boundingRect() const {
-  return QRectF(0, 0, width, height);
+  return QRectF(pos().x(), pos().y(), _size.width(), _size.height());
 }
 
-void GlMainWidgetGraphicsItem::resize(int width, int height) {
-  this->width = width;
-  this->height = height;
-  glMainWidget->resize(width,height);
-  glMainWidget->resizeGL(width,height);
+void GlMainWidgetGraphicsItem::resize(const QSize& size) {
+  _size = size;
+  glMainWidget->resize(size.width(),size.height());
+  glMainWidget->resizeGL(size.width(),size.height());
   redrawNeeded = true;
   delete [] renderingStore;
-  renderingStore = new unsigned char[width*height*4];
+  renderingStore = new unsigned char[_size.width()*_size.height()*4];
   prepareGeometryChange();
 }
 
@@ -99,10 +99,11 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
 
   rect = rect.translated(pos());
 
-  float vpX = rect.x();
-  float vpY = scene()->height() - (rect.y() + rect.height());
-  float vpW = rect.width();
-  float vpH = rect.height();
+  QGraphicsView* view = scene()->views()[0];
+  QPointF vpPoint = view->mapFromScene(rect.x(),rect.y());
+
+  glMainWidget->getScene()->setViewport(vpPoint.x(),vpPoint.y(),rect.width(),rect.height());
+  float vpX = vpPoint.x(), vpY = vpPoint.y(), vpW = rect.width(), vpH = rect.height();
 
   glMainWidget->getScene()->setViewport(vpX,vpY,vpW,vpH);
   glMainWidget->getScene()->setNoClearBackground(true);
