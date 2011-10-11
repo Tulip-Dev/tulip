@@ -8,15 +8,13 @@
 #include <tulip/PluginLister.h>
 
 #include <QtCore/QObject>
-#include <QtCore/QList>
+#include <QtCore/QSet>
 
 class QGraphicsItem;
 class QWidget;
 
 namespace tlp {
-
 class Interactor;
-
 
 /**
   @class View
@@ -51,8 +49,10 @@ class TLP_QT_SCOPE View: public QObject, public tlp::WithDependency, public tlp:
   bool _hasInteractorsResponsibility;
   bool _hasConfigurationWidgetsResponsibility;
 
-  QList<tlp::Interactor*> _interactors;
+  QSet<tlp::Interactor*> _interactors;
   tlp::Interactor* _activeInteractor;
+
+  QSet<tlp::Observable*> _triggers;
 
   tlp::Graph* _graph;
 
@@ -71,12 +71,12 @@ public:
     The list of interactors can then be retrieved using the View::interactors() method.
     After this method is called, the callback slot View::interactorsInstalled() is also called to provide custom implementation.
     */
-  void setInteractors(const QList<tlp::Interactor*>&);
+  void setInteractors(const QSet<tlp::Interactor*>&);
 
   /**
     @return The list of installed interactors.
     */
-  QList<tlp::Interactor*> interactors() const;
+  QSet<tlp::Interactor*> interactors() const;
 
   /**
     @brief Sets the active interactor.
@@ -125,7 +125,7 @@ public:
     @return The graph set on the View.
     @see setGraph()
     */
-  tlp::Graph* graph() const=0;
+  tlp::Graph* graph() const;
 
 public slots:
   /**
@@ -187,7 +187,7 @@ protected slots:
     @brief Custom user callback when a set of interactors has been installed.
     At this point, user can check the View::hasInteractorsResponsibility() and View::hasConfigurationWidgetsResponsibility() to start building GUI.
     */
-  virtual void interactorsInstalled(const QList<tlp::Interactor*>&);
+  virtual void interactorsInstalled(const QSet<tlp::Interactor*>&);
 
   /**
     @brief Custom user callback when the active interactor has changed.
