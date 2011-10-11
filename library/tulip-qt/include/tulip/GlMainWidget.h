@@ -297,12 +297,31 @@ protected slots:
   }
 
 signals:
+  /**
+   * This signal is emit when the GlMainWidget will be deleted
+   */
   void closing(GlMainWidget *, QCloseEvent *);
+
+  /**
+   * This signal is here for compatibility with old code
+   * This signal is emit when viewDrawn is emit
+   */
   void graphRedrawn(GlMainWidget *glWidget,bool graphChanged);
+  /**
+   * This signal is emit when GlMainWidget::redraw() is call
+   */
   void viewRedrawn(GlMainWidget *glWidget);
+  /**
+   * This signal is emit when GlMainWidget::draw() is call
+   */
   void viewDrawn(GlMainWidget *glWidget,bool graphChanged);
 
 public :
+
+  /**
+   * This function return the first QGLWidget created
+   * This function is use to share OpenGL context
+   */
   static QGLWidget* getFirstQGLWidget();
 
 private :
