@@ -41,7 +41,8 @@ void AlgorithmRunnerItem::setGraph(tlp::Graph* graph) {
   _ui->parameters->setModel(new ParameterListModel(_params,graph));
 
   int h=0;
-  for (int i=0;i<_ui->parameters->model()->rowCount();++i)
+
+  for (int i=0; i<_ui->parameters->model()->rowCount(); ++i)
     h += _ui->parameters->rowHeight(i);
 
   _ui->parameters->setMaximumHeight(h);
@@ -212,6 +213,7 @@ void AlgorithmRunner::setModel(GraphHierarchiesModel *model) {
 void AlgorithmRunner::itemSettingsToggled(bool f) {
   if (!f)
     return;
+
   foreach(AlgorithmRunnerItem* it, findChildren<AlgorithmRunnerItem *>()) {
     if (it != sender())
       it->toggleParameters(false);

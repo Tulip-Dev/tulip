@@ -189,7 +189,7 @@ void ParameterList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
     if (type.compare(typeid(tlp::StringCollection).name()) == 0) {
       StringCollection col;
       foreach(QString token,QString(defaultValue.c_str()).split(';'))
-        col.push_back(token.toStdString());
+      col.push_back(token.toStdString());
       dataSet.set<StringCollection>(name,col);
     }
 

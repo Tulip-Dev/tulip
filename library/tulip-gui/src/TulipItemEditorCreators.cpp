@@ -184,16 +184,20 @@ QWidget* StringCollectionEditorCreator::createWidget(QWidget* parent) const {
 void StringCollectionEditorCreator::setEditorData(QWidget* widget, const QVariant& var, tlp::Graph*) {
   StringCollection col = var.value<StringCollection>();
   QComboBox* combo = static_cast<QComboBox*>(widget);
-  for(int i=0;i<col.size();++i)
+
+  for(int i=0; i<col.size(); ++i)
     combo->addItem(col[i].c_str());
+
   combo->setCurrentIndex(col.getCurrent());
 }
 
 QVariant StringCollectionEditorCreator::editorData(QWidget* widget, tlp::Graph*) {
   QComboBox* combo = static_cast<QComboBox*>(widget);
   StringCollection col;
-  for(int i=0;i < combo->count();++i)
+
+  for(int i=0; i < combo->count(); ++i)
     col.push_back(combo->itemText(i).toStdString());
+
   col.setCurrent(combo->currentIndex());
   return QVariant::fromValue<StringCollection>(col);
 }

@@ -40,7 +40,9 @@ public:
   QList<QWidget*> configurationWidgets() const;
 
   virtual void draw()=0;
-  virtual void refresh() { draw(); }
+  virtual void refresh() {
+    draw();
+  }
 };
 
 struct TLP_QT_SCOPE ViewContext {
