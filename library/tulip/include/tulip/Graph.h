@@ -38,38 +38,64 @@ class BooleanProperty;
 class PluginProgress;
 template<class C>struct Iterator;
 
+/**
+ * @enum This Enum describes the possible types of an element of the graph.
+ *
+ * It is used for instance for functions that can return an edge or a node, to distinguish between the two cases.
+ **/
 enum ElementType {NODE=0, EDGE};
 
 /**
- * Loads a graph in the tlp format from a file (extension can be .tlp or .tlp.gz).
- * Returns NULL if the import fails.
- * Warning : this function uses "tlp" import plugin (must be loaded).
- */
+ * @brief Loads a graph in the tlp format from a file (extension can be .tlp or .tlp.gz).
+ * This function uses the "tlp" import plugin, and will fail if it is not loaded (By default this plugin is linked into the library and should be loaded).
+ *
+ * If the import fails (no such file, parse error, ...) NULL is returned.
+ *
+ * @param filename The file in tlp format to parse.
+ * @return :Graph* The imported Graph, NULL if the import failed.
+ **/
 TLP_SCOPE Graph * loadGraph(const std::string &filename);
 
 /**
- * Saves a graph to a file in the tlp format. Extension of the destination file can be either
- * .tlp (raw export) or .tlp.gz (compressed export).
+ * @brief Saves a graph to a file in the tlp format. Extension of the destination file can be either be .tlp (human-readable text file) or .tlp.gz (gzipped text file).
  *
- * Returns true if the graph was successfully exported.
- * Warning : this function use "tlp" export plugin (must be loaded).
- */
+ * This function checks the file name for the '.gz' extension and uses a compressed output if found.
+ *
+ * This function uses the "tlp" import plugin, and will fail if it is not loaded (By default this plugin is linked into the library and should be loaded).
+ *
+ * @param  The graph to save.
+ * @param filename The file to save the graph to.
+ * @return bool Whether the export was successfull or not.
+ **/
 TLP_SCOPE bool saveGraph(Graph *, const std::string &filename);
 
 /**
- * Imports a graph using the Tulip import plugin named alg (must be loaded) with parameters stored in dataSet.
- * If newGraph is not NULL, imported graph elements will be added to it. Otherwise, returns a new graph
- * or NULL if the import fails.
- */
-TLP_SCOPE Graph * importGraph(const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0,Graph *newGraph=0);
+ * @brief Exports a graph using the specified export plugin with parameters stored in the DataSet.
+ *
+ * You determine the destination, whether by using a fstream, or by saving the contents of the stream to the destination of your choice.
+ *
+ * @param graph The graph to export.
+ * @param outputStream The stream to export to. Can be a standard ostream, an ofstream, or even a gzipped ostream.
+ * @param format The format to use to export the Graph.
+ * @param dataSet The parameters to pass to the export plugin (e.g. additional data, options for the format)
+ * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
+ * @return bool Whether the export was successfull or not.
+ **/
+TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream, const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL);
 
 /**
- * Exports a graph using the Tulip export plugin named alg (must be loaded) with parameters stored in dataSet.
- * An output stream os (can be file stream, string stream, ..) has to be provided as parameter and will be used
- * by the export plugin.
- * Returns true if the graph was successfully exported.
- */
-TLP_SCOPE bool exportGraph(Graph *graph,std::ostream  &os,const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0);
+ * @brief Imports a graph using the specified import plugin with the parameters stored in the DataSet.
+ *
+ * If no graph is passed, then a new graph will be created. You can pass a graph in order to import data into it.
+ * Returns the graph with imported data, or NULL if the import failed. In this case, the Pluginprogress should have an error that can be displayed.
+ *
+ * @param format The format to use to import the graph.
+ * @param dataSet The parameters to pass to the import plugin (file to read, ...)
+ * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
+ * @param newGraph The graph to import the data into. This can be usefull to import data into a subgraph. Defaults to NULL.
+ * @return :Graph* The graph containing the imported data, or NULL in case of failure.
+ **/
+TLP_SCOPE Graph* importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL,Graph *newGraph=NULL);
 
 /**
  * Applies an algorithm plugin named alg (must be loaded) on graph . Algorithm plugins are objects
@@ -78,27 +104,68 @@ TLP_SCOPE bool exportGraph(Graph *graph,std::ostream  &os,const std::string &alg
  * If an error occurs, a message may have been stored by the algorithm in the errosMsg variable.
  * Returns true if the algorithm has been successfully applied.
  */
-TLP_SCOPE bool applyAlgorithm(Graph *graph,std::string &errorMsg, DataSet *dataSet =0,const std::string &alg="any", PluginProgress *plugProgress=0);
+  /**
+   * @brief Applies an algorithm plugin, identified by its name.
+   * Algorithm plugins are subclasses of the tlp::Algorithm interface.
+   * Parameters are transmitted to the algorithm trough the DataSet.
+   * To determine a plugin's parameters, you can either:
+   *
+   * * refer to its documentation
+   *
+   * * use buildDefaultDataSet on the plugin object if you have an instance of it
+   *
+   * * call getPluginParameters() with the name of the plugin on the right PluginLister
+   * (there cannot be a static method that directly returns this from the plugin name as a name can be used for plugins of different types).
+   *
+   *
+   * If an error occurs, a message describing the error should be stored in errorMessage.
+   *
+   * @param errorMessage A string that will be modified to contain an error message should an error occur.
+   * @param dataSet The parameters to the algorithm. Defaults to NULL.
+   * @param algorithm The algorithm to apply. Defaults to "any".
+   * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
+   * @return bool Whether the algorithm was successfully applied.
+  **/
+TLP_SCOPE bool applyAlgorithm(Graph *graph, std::string &errorMsg, DataSet *dataSet =0, const std::string &algorithm="any", PluginProgress *progress=0);
 
 /**
- * Returns a new empty graph.
- */
+ * @brief Creates and returns a new empty graph.
+ *
+ * This is a simple method factory to create a Graph implementation (remember, Graph is only an interface).
+ *
+ * This is the recommended way to create a new Graph.
+ *
+ * @return :Graph* A new, empty graph.
+ **/
 TLP_SCOPE Graph* newGraph();
 
 /**
- *  Creates and returns an empty subgraph of root.
- */
+ * @brief Creates and returns an empty subgraph of the given graph.
+ *
+ * @deprecated this functions should not be used anymore, please use Graph::addSubGraph() instead.
+ *
+ * @param graph The graph to add an empty subgraph to.
+ * @param name The name of the new subgraph. Defaults to "unnamed".
+ * @return :Graph* The newly created subgraph.
+ **/
 TLP_SCOPE Graph *newSubGraph(Graph *root, std::string name = "unnamed");
 
 /**
- *  Creates and returns a subgraph of root that is equal to root (a clone subgraph).
- */
+ * @brief Creates and returns a subgraph of the graph that is equal to root (a clone subgraph).
+ *
+ * @deprecated A new method should be added to Graph to perform this, because object-oriented programming and stuff.
+ *
+ * @param graph The Graph on which to create a clone subgraph.
+ * @param name The name of the newly created subgraph. Defaults to "unnamed".
+ * @return :Graph* The newly created clone subgraph.
+ **/
 TLP_SCOPE Graph *newCloneSubGraph(Graph *root, std::string name = "unnamed");
 
 /**
- *  Finds the first node whose input degree equals 0.
- *  If no node exists, returns false else true.
- */
+ * @brief Finds the first node whose input degree equals 0.
+ *
+ * @return tlp::node The first encountered node with input degree of 0, or an invalid node if none was found.
+ **/
 TLP_SCOPE bool getSource(const Graph *, node &n);
 
 /**
@@ -138,14 +205,22 @@ public:
   // Graph hierarchy access and building
   //=========================================================================
   /**
-   *  Removes all nodes, edges and sub-graphs of the supergraph.
+   * @brief Removes all nodes, edges and sub-graphs of the supergraph.
    */
   virtual  void clear()=0;
   /**
-   * Creates and returns a new sub-graph of the graph
-   * The elements of the new sub-graph are those selected in the selection
-   * if there is no selection an empty sub-graph is returned.
-   */
+   * @brief Creates and returns a new sub-graph of this graph.
+   *
+   * If a BooleanProperty is provided, all the nodes and edges for which it is true will be added to the subgraph.
+   * If none is provided, then the subgraph will be empty.
+   *
+   * The id parameter should only be provided if you know exactly what you are doing; as Tulip will manage the subgraphs IDs when left to 0.
+   * It is only used by the Graph loading as subgraphs ids are preserved when saving/loading a Graph.
+   *
+   * @param selection The elements to add to the new subgraph. Defaults to 0.
+   * @param id The ID you wish to assign to the Graph. It is strongly advised to leave this as default and let Tulip manage subgraph IDs. Defaults to 0.
+   * @return :Graph* The newly created subgraph.
+   **/
   virtual Graph *addSubGraph(BooleanProperty *selection=0,
                              unsigned int id = 0)=0;
   /**
