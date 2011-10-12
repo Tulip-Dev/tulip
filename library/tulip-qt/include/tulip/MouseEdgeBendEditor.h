@@ -50,8 +50,15 @@ public:
     return new MouseEdgeBendEditor();
   }
 
+protected:
+    enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
+    EditOperation operation;
+    void stopEdition();
+
+    edge mEdge;
+
 private:
-  enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
+
   enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
 
   Graph *_graph;
@@ -71,9 +78,7 @@ private:
   void restoreInfo();
   void initEdition();
   void undoEdition();
-  void stopEdition();
 
-  EditOperation operation;
   OperationTarget mode;
 
   Coord editPosition;
@@ -87,7 +92,6 @@ private:
   GlComposite *circleString;
   std::vector <GlSimpleEntity * > select;
   bool edgeSelected;
-  edge mEdge;
   node mNode;
   Coord start, end;
   std::string selectedEntity;
