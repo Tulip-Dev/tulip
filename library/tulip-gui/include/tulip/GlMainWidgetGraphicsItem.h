@@ -25,13 +25,17 @@ public:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
   QRectF boundingRect() const;
-  QSize size() const { return _size; }
+  QSize size() const {
+    return _size;
+  }
 
-  void setRedrawNeeded(bool redrawNeeded){
+  void setRedrawNeeded(bool redrawNeeded) {
     this->redrawNeeded=redrawNeeded;
   }
 
-  tlp::GlMainWidget *getGlMainWidget() { return glMainWidget;}
+  tlp::GlMainWidget *getGlMainWidget() {
+    return glMainWidget;
+  }
 
   bool eventFilter(QObject *, QEvent *evt);
 

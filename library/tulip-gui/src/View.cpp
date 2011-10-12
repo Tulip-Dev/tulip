@@ -29,6 +29,7 @@ Interactor* View::activeInteractor() const {
 void View::registerTrigger(tlp::Observable *obs) {
   if (_triggers.contains(obs))
     return;
+
   _triggers.insert(obs);
   obs->addObserver(this);
 }
