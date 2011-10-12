@@ -32,12 +32,16 @@ class LayoutProperty;
 /*@{*/
 class TLP_QT_SCOPE MouseEdgeBuilder:public InteractorComponent, public GraphObserver, public PropertyObserver {
 private:
-  node source;
   bool started;
   Coord startPos,curPos;
-  std::vector<Coord> bends;
   Graph *graph;
   LayoutProperty *layoutProperty;
+
+protected:
+//Adds a link between a source and destination nodes. Adds an edge by default
+  virtual void addLink(QObject *, const node source, const node dest);
+  node source;
+  std::vector<Coord> bends;
 
 public:
   MouseEdgeBuilder();

@@ -37,7 +37,7 @@
 using namespace std;
 using namespace tlp;
 
-MouseEdgeBuilder::MouseEdgeBuilder():source(node()),started(false),graph(NULL),layoutProperty(NULL) {}
+MouseEdgeBuilder::MouseEdgeBuilder():started(false),graph(NULL),layoutProperty(NULL),source(node()) {}
 
 MouseEdgeBuilder::~MouseEdgeBuilder() {
   if(graph)
@@ -81,13 +81,8 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
           clearObserver();
           // allow to undo
           _graph->push();
-          edge newEdge = _graph->addEdge(source, tmpNode);
-          mLayout->setEdgeValue(newEdge, bends);
-
-          bends.clear();
+          addLink(widget, source, tmpNode);
           Observable::unholdObservers();
-          NodeLinkDiagramComponent *nodeLinkView=static_cast<NodeLinkDiagramComponent *>(view);
-          nodeLinkView->elementSelectedSlot(newEdge.id, false);
         }
         else {
           Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
@@ -131,6 +126,18 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
   }
 
   return false;
+}
+
+void MouseEdgeBuilder::addLink(QObject *widget, const node source, const node target) {
+    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
+    Graph * g = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+
+    LayoutProperty* mLayout = g->getProperty<LayoutProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
+    edge newEdge = g->addEdge(source, target);
+    mLayout->setEdgeValue(newEdge, bends);
+    bends.clear();
+    NodeLinkDiagramComponent *nodeLinkView=static_cast<NodeLinkDiagramComponent *>(view);
+    nodeLinkView->elementSelectedSlot(newEdge.id, false);
 }
 
 bool MouseEdgeBuilder::draw(GlMainWidget *glMainWidget) {
