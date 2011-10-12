@@ -26,7 +26,7 @@ StringCollection::StringCollection() {
   current = 0;
 }
 
-StringCollection::StringCollection(const vector<string> &vectorParam)
+StringCollection::StringCollection(const std::vector<string> &vectorParam)
   : _data(vectorParam)  {
   current = 0;
 }
@@ -76,7 +76,7 @@ StringCollection::StringCollection(const string param) {
   current = 0;
 }
 
-StringCollection::StringCollection(const vector<string>&  vectorParam,
+StringCollection::StringCollection(const std::vector<string>&  vectorParam,
                                    int currentParam)
   : _data(vectorParam) {
   if (currentParam < int(_data.size()))
@@ -85,7 +85,7 @@ StringCollection::StringCollection(const vector<string>&  vectorParam,
     current = 0;
 }
 
-StringCollection::StringCollection(const vector<string>& vectorParam,
+StringCollection::StringCollection(const std::vector<string>& vectorParam,
                                    string currentString)
   : _data(vectorParam) {
   current = 0;

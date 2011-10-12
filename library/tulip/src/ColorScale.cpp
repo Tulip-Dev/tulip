@@ -34,7 +34,7 @@ ColorScale::ColorScale(const bool gradient) :
 
 }
 
-ColorScale::ColorScale(const vector<Color> &colors, const bool gradient) :
+ColorScale::ColorScale(const std::vector<Color> &colors, const bool gradient) :
   gradient(gradient), colorScaleSet(true) {
   setColorScale(colors, gradient);
 }

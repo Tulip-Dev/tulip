@@ -90,7 +90,7 @@ void IdManager::getFreeId(unsigned int id) {
 }
 
 //-----------------------------------------------------------
-ostream& tlp::operator<<(ostream &os,const tlp::IdManager &idM) {
+std::ostream& tlp::operator<<(std::ostream &os,const tlp::IdManager &idM) {
   os << endl << "--------------------------------------" << endl;
   os << "Id Manager Information :" << endl;
   os << "Minimum index :" << idM.state.firstId<< endl;
