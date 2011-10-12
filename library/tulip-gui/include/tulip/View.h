@@ -113,7 +113,9 @@ public:
   /**
     @return The list of configuration widgets.
     */
-  inline virtual QList<QWidget*> configurationWidgets() const { return QList<QWidget*>(); }
+  inline virtual QList<QWidget*> configurationWidgets() const {
+    return QList<QWidget*>();
+  }
 
   /**
     @return the View's context data.
@@ -157,12 +159,16 @@ public slots:
   /**
     @brief Called by the upperleying system to take the interactors management reponsibility
     */
-  void takeInteractorsResponsibility() { _hasInteractorsResponsibility = false; }
+  void takeInteractorsResponsibility() {
+    _hasInteractorsResponsibility = false;
+  }
 
   /**
     @brief Called by the upperleying system to take the configuration widgets management reponsibility
     */
-  void takeConfigurationWidgetsReponsibility() { _hasConfigurationWidgetsResponsibility = false; }
+  void takeConfigurationWidgetsReponsibility() {
+    _hasConfigurationWidgetsResponsibility = false;
+  }
 
 signals:
   /**
@@ -175,12 +181,16 @@ protected:
   /**
     @return true if the View should manage interactors (drawing, switching) or false if this reponsibility is left to the upperleying system.
     */
-  bool hasInteractorsResponsibility() const { return _hasInteractorsResponsibility; }
+  bool hasInteractorsResponsibility() const {
+    return _hasInteractorsResponsibility;
+  }
 
   /**
     @return true if the View should manage configurationj widgets (drawing, switching) or false if this reponsibility is left to the upperleying system.
     */
-  bool hasConfigurationWidgetsResponsibility() const { return _hasConfigurationWidgetsResponsibility; }
+  bool hasConfigurationWidgetsResponsibility() const {
+    return _hasConfigurationWidgetsResponsibility;
+  }
 
 protected slots:
   /**

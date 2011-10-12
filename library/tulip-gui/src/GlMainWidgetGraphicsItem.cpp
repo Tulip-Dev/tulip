@@ -27,8 +27,8 @@ static void setRasterPosition(unsigned int x, unsigned int y) {
 }
 
 GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, const QSize& size)://, int width, int height):
-    QGraphicsObject(),
-    glMainWidget(glMainWidget), redrawNeeded(true), renderingStore(NULL) {
+  QGraphicsObject(),
+  glMainWidget(glMainWidget), redrawNeeded(true), renderingStore(NULL) {
 
   setFlag(QGraphicsItem::ItemIsSelectable, true);
   setFlag(QGraphicsItem::ItemIsFocusable, true);
@@ -109,7 +109,7 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
   glMainWidget->getScene()->setNoClearBackground(true);
   glMainWidget->getScene()->initGlParameters();
 
-  if(redrawNeeded){
+  if(redrawNeeded) {
     glMainWidget->computeInteractors();
     glMainWidget->getScene()->draw();
 
@@ -124,7 +124,8 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
     glFlush();
 
     redrawNeeded=false;
-  } else {
+  }
+  else {
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_STENCIL_TEST);
@@ -176,7 +177,7 @@ void GlMainWidgetGraphicsItem::wheelEvent(QGraphicsSceneWheelEvent *event) {
   QApplication::sendEvent(glMainWidget,eventModif);
 }
 
-void GlMainWidgetGraphicsItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event){
+void GlMainWidgetGraphicsItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event) {
   QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x(),event->pos().y()), Qt::NoButton, Qt::NoButton, event->modifiers());
   QApplication::sendEvent(glMainWidget,eventModif);
 }
@@ -189,5 +190,6 @@ void GlMainWidgetGraphicsItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 bool GlMainWidgetGraphicsItem::eventFilter(QObject *, QEvent *evt) {
   if (evt->type() == QEvent::CursorChange)
     setCursor(glMainWidget->cursor());
+
   return false;
 }
