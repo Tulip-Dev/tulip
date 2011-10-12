@@ -48,7 +48,8 @@ MouseEdgeBendEditor::~MouseEdgeBendEditor() {
 //========================================================================================
 bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
-  QMouseEvent * qMouseEv = (QMouseEvent *) e;
+    QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
+    glMainWidget = static_cast<GlMainWidget *>(widget);
 
   if(qMouseEv == NULL)
     return false;
@@ -61,8 +62,6 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseButtonPress) {
-    if(!glMainWidget)
-      glMainWidget = (GlMainWidget *) widget;
 
     initProxies(glMainWidget);
     bool hasSelection = haveSelection(glMainWidget);
@@ -130,7 +129,6 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonRelease &&
       qMouseEv->button() == Qt::LeftButton &&
       operation != NONE_OP) {
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
 
     if(selectedEntity=="targetTriangle") {
       node tmpNode;
@@ -160,7 +158,6 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
   if  (e->type() == QEvent::MouseMove) {
     if(qMouseEv->buttons() == Qt::LeftButton &&
         operation != NONE_OP) {
-      GlMainWidget *glMainWidget = (GlMainWidget *) widget;
 
       switch (operation) {
       case TRANSLATE_OP:
@@ -174,13 +171,12 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       node tmpNode;
       edge tmpEdge;
       ElementType type;
-      GlMainWidget *g = (GlMainWidget *) widget;
 
-      if (g->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == EDGE) {
-        g->setCursor(Qt::CrossCursor);
+      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == EDGE) {
+        glMainWidget->setCursor(Qt::CrossCursor);
       }
       else {
-        g->setCursor(Qt::ArrowCursor);
+        glMainWidget->setCursor(Qt::ArrowCursor);
       }
 
       return false;
