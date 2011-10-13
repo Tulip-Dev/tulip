@@ -102,8 +102,9 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
   QGraphicsView* view = scene()->views()[0];
   QPointF vpPoint = view->mapFromScene(rect.x(),rect.y());
 
-  glMainWidget->getScene()->setViewport(vpPoint.x(),vpPoint.y(),rect.width(),rect.height());
+  //   glMainWidget->getScene()->setViewport(vpPoint.x(),vpPoint.y(),rect.width(),rect.height());
   float vpX = vpPoint.x(), vpY = vpPoint.y(), vpW = rect.width(), vpH = rect.height();
+//  vpY = view->height() - (rect.y() + rect.height());
 
   glMainWidget->getScene()->setViewport(vpX,vpY,vpW,vpH);
   glMainWidget->getScene()->setNoClearBackground(true);
@@ -192,4 +193,24 @@ bool GlMainWidgetGraphicsItem::eventFilter(QObject *, QEvent *evt) {
     setCursor(glMainWidget->cursor());
 
   return false;
+}
+
+void GlMainWidgetGraphicsItem::setGeometry(const QRectF &rect) {
+  resize(QSize(rect.size().width(),rect.size().height()));
+  setPos(QPointF(rect.x(),rect.y()));
+}
+
+QSizeF GlMainWidgetGraphicsItem::sizeHint(Qt::SizeHint which, const QSizeF &) const {
+  switch(which) {
+  case Qt::MinimumSize:
+    return glMainWidget->minimumSizeHint();
+  case Qt::PreferredSize:
+    return glMainWidget->sizeHint();
+  case Qt::MaximumSize:
+    return glMainWidget->maximumSize();
+  default:
+    return glMainWidget->sizeHint();
+  }
+
+
 }
