@@ -554,7 +554,7 @@ Returns an existing node of the graph.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::node>* getNodes() const;
+	tlp::Iterator<tlp::node>* getNodes() const /TransferBack/;
 %Docstring
 tlp.Graph.getNodes()
 
@@ -605,7 +605,7 @@ Returns the ith predecessor of a node.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::node>* getInNodes(const tlp::node) const;
+	tlp::Iterator<tlp::node>* getInNodes(const tlp::node) const /TransferBack/;
 %Docstring
 tlp.Graph.getInNodes(node)
 
@@ -663,7 +663,7 @@ Returns the ith successor of a node.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::node>* getOutNodes(const tlp::node) const;
+	tlp::Iterator<tlp::node>* getOutNodes(const tlp::node) const /TransferBack/;
 %Docstring
 tlp.Graph.getOutNodes(node)
 
@@ -685,7 +685,7 @@ Returns an iterator on the successors of a node.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::node>* getInOutNodes(const tlp::node) const;
+	tlp::Iterator<tlp::node>* getInOutNodes(const tlp::node) const /TransferBack/;
 %Docstring
 tlp.Graph.getInOutNodes(node)
 
@@ -729,7 +729,7 @@ Returns the underlying graph of a meta node.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getEdges() const;
+	tlp::Iterator<tlp::edge>* getEdges() const /TransferBack/;
 %Docstring
 tlp.Graph.getEdges()
 
@@ -755,7 +755,7 @@ Returns an existing edge of the graph.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getOutEdges(const tlp::node) const;
+	tlp::Iterator<tlp::edge>* getOutEdges(const tlp::node) const /TransferBack/;
 %Docstring
 tlp.Graph.getOutEdges(node)
 
@@ -777,7 +777,7 @@ Returns an iterator on the outgoing edges of a node.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getInOutEdges(const tlp::node) const;
+	tlp::Iterator<tlp::edge>* getInOutEdges(const tlp::node) const /TransferBack/;
 %Docstring
 tlp.Graph.getInOutEdges(node)
 
@@ -799,7 +799,7 @@ Returns an iterator on the incoming and outgoing edges of a node.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getInEdges(const tlp::node) const;
+	tlp::Iterator<tlp::edge>* getInEdges(const tlp::node) const /TransferBack/;
 %Docstring
 tlp.Graph.getInEdges(node)
 
@@ -821,7 +821,7 @@ Returns an iterator on the incoming edges of a node.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getEdgeMetaInfo(const tlp::edge) const;
+	tlp::Iterator<tlp::edge>* getEdgeMetaInfo(const tlp::edge) const /TransferBack/;
 %Docstring
 tlp.Graph.getEdgeMetaInfo(edge)
 
@@ -1765,7 +1765,7 @@ Removes and deletes the property associated to name in the graph properties pool
 
 //===========================================================================================
 
-	tlp::Iterator<std::string>* getLocalProperties();
+	tlp::Iterator<std::string>* getLocalProperties() /TransferBack/;
 %Docstring
 tlp.Graph.getLocalProperties()
 
@@ -1779,7 +1779,7 @@ Returns an iterator on the names of the properties local to the graph.
 
 //===========================================================================================
 
-	tlp::Iterator<std::string>* getInheritedProperties();
+	tlp::Iterator<std::string>* getInheritedProperties() /TransferBack/;
 %Docstring
 tlp.Graph.getInheritedProperties()
 
@@ -1794,7 +1794,7 @@ Returns an iterator on the names of the properties inherited from the graph's an
 
 //===========================================================================================
 
-	tlp::Iterator<std::string>* getProperties();
+	tlp::Iterator<std::string>* getProperties() /TransferBack/;
 %Docstring
 tlp.Graph.getInheritedProperties()
 
@@ -2592,7 +2592,7 @@ namespace tlp {
 
 //===========================================================================================
 
-tlp::Graph *newGraph();
+tlp::Graph *newGraph() /TransferBack/;
 %Docstring
 tlp.newGraph()
 
@@ -2603,7 +2603,7 @@ Creates and returns a new empty graph.
 
 //===========================================================================================
 
-tlp::Graph *loadGraph(const std::string &filename);
+tlp::Graph *loadGraph(const std::string &filename) /TransferBack/;
 %Docstring
 tlp.loadGraph(filename)
 
@@ -2636,7 +2636,7 @@ successfully saved.
 
 //===========================================================================================
 
-tlp::Graph *importGraph(const std::string &alg, tlp::DataSet &dataSet, tlp::Graph *newGraph=0);
+tlp::Graph *importGraph(const std::string &alg, tlp::DataSet &dataSet, tlp::Graph *newGraph=0) /TransferBack/; 
 %Docstring
 tlp.importGraph(importPluginName, dataSet[, newGraph = None])
 
