@@ -195,22 +195,3 @@ bool GlMainWidgetGraphicsItem::eventFilter(QObject *, QEvent *evt) {
   return false;
 }
 
-void GlMainWidgetGraphicsItem::setGeometry(const QRectF &rect) {
-  resize(QSize(rect.size().width(),rect.size().height()));
-  setPos(QPointF(rect.x(),rect.y()));
-}
-
-QSizeF GlMainWidgetGraphicsItem::sizeHint(Qt::SizeHint which, const QSizeF &) const {
-  switch(which) {
-  case Qt::MinimumSize:
-    return glMainWidget->minimumSizeHint();
-  case Qt::PreferredSize:
-    return glMainWidget->sizeHint();
-  case Qt::MaximumSize:
-    return glMainWidget->maximumSize();
-  default:
-    return glMainWidget->sizeHint();
-  }
-
-
-}
