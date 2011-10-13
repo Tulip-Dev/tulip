@@ -17,7 +17,7 @@
  *
  */
 #include <list>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
 using namespace tlp;

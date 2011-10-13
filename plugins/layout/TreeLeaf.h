@@ -19,7 +19,7 @@
 #ifndef _TREELEAFLAYOUT_H
 #define _TREELEAFLAYOUT_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup layout */
 /*@{*/

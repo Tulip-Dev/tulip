@@ -21,7 +21,7 @@
 
 #include <map>
 #include <vector>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 #include "TreeTools.h"
 
 class OrientableLayout;

@@ -19,7 +19,7 @@
 #include <time.h>
 #include <math.h>
 #include <climits>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
 using namespace tlp;

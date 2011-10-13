@@ -19,7 +19,7 @@
 #ifndef _DagLevelMETRIC_H
 #define _DagLevelMETRIC_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 /** \addtogroup metric */
 /*@{*/
 /** This plugin is an implementation of a DAG layer decomposition

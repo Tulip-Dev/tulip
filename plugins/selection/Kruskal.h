@@ -19,7 +19,7 @@
 #ifndef _KRUSKAL_H
 #define _KRUSKAL_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup selection */
 /*@{*/

@@ -20,7 +20,7 @@
 #define _BUBBLETREELAYOUT_H
 
 #include <tulip/tuliphash.h>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup layout */
 /*@{*/

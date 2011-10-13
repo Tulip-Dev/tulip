@@ -19,7 +19,7 @@
 #ifndef Tulip_ParaSelection_H
 #define Tulip_ParaSelection_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 /** \addtogroup selection */
 /*@{*/
 

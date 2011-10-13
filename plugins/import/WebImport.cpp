@@ -19,7 +19,7 @@
 #include <QtGui/qapplication.h>
 #include <QtCore/qtimer.h>
 #include <iostream>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 #include "WebImport.h"
 
 using namespace std;

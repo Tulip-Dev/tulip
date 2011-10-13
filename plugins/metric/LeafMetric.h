@@ -19,7 +19,7 @@
 #ifndef _LEAFMETRIC_H
 #define _LEAFMETRIC_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup metric */
 /*@{*/

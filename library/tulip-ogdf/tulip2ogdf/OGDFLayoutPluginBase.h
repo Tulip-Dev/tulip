@@ -20,7 +20,7 @@
 #define OGDF_LAYOUT_PLUGIN_BASE
 
 #include <tulip/tulipconf.h>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 #include <tulip/PropertyAlgorithm.h>
 
 #include <ogdf/basic/Graph_d.h>

@@ -22,7 +22,7 @@
 #include <vector>
 #include <utility>
 #include <tulip/tuliphash.h>
-#include "tulip/TulipPlugin.h"
+#include "tulip/TulipPluginHeaders.h"
 #include "tulip/Rectangle.h"
 
 typedef std::vector<tlp::node> VecNode;

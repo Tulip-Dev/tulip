@@ -20,7 +20,7 @@
 #ifndef _PATHLENGTHMETRIC_H
 #define _PATHLENGTHMETRIC_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 class PathLengthMetric:public tlp::DoubleAlgorithm {
 public:

@@ -17,7 +17,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 #include <QtCore/QStack>
 #include <QtCore/QPair>

@@ -18,7 +18,7 @@
  *
  */
 #include <algorithm>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 #include <tulip/MapIterator.h>
 #include <tulip/PlanarConMap.h>

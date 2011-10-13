@@ -20,7 +20,7 @@
 #define _TREE3DLAYOUT_H
 
 #include <tulip/tuliphash.h>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 /** \addtogroup layout */
 /*@{*/
 /// ConeTreeExtended.h - An implementation of the cone tree layout.

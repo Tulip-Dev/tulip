@@ -20,7 +20,7 @@
 #define _STRAHLERGRAPH2METRIC_H
 
 #include <tulip/tuliphash.h>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 struct Strahler {
   Strahler(int stra=1,int sta=0,int used=0):strahler(stra),stacks(sta),usedStack(used) {}
   int strahler;

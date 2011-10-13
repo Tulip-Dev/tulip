@@ -19,7 +19,7 @@
 #ifndef Tulip_SpanningDagSelection_H
 #define Tulip_SpanningDagSelection_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 template<typename T>
 class MutableConatainer;

@@ -22,7 +22,7 @@
 #include <fstream>
 #include <sstream>
 #include <math.h>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 #include <vector>
 
 using namespace std;

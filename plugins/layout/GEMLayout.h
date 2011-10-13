@@ -21,7 +21,7 @@
 
 #include <vector>
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup layout */
 /*@{*/
