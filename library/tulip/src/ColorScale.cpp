@@ -39,7 +39,7 @@ ColorScale::ColorScale(const std::vector<Color> &colors, const bool gradient) :
   setColorScale(colors, gradient);
 }
 
-ColorScale::ColorScale(const ColorScale& scale) :OLOObject(), Observable() {
+ColorScale::ColorScale(const ColorScale& scale) :Observable() {
   colorMap = scale.colorMap;
   gradient = scale.gradient;
   colorScaleSet = scale.colorScaleSet;
