@@ -19,7 +19,7 @@
 #include <string.h>
 #include <errno.h>
 #include <tulip/tuliphash.h>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 #include "dotImportCLUT.h"
 
 using namespace std;

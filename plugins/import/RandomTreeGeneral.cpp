@@ -17,7 +17,7 @@
  *
  */
 #include <time.h>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 #include <math.h>
 
 using namespace std;

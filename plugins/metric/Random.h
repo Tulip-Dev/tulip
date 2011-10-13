@@ -19,7 +19,7 @@
 #ifndef _RANDOMMETRIC_H
 #define _RANDOMMETRIC_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup metric */
 /*@{*/

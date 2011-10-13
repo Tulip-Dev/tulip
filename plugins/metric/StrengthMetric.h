@@ -19,7 +19,7 @@
 #ifndef _STRENGTHMETRIC_H
 #define _STRENGTHMETRIC_H
 #include <tulip/tuliphash.h>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup metric */
 /*@{*/

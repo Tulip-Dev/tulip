@@ -19,7 +19,7 @@
 #ifndef _RANDOMLAYOUT_H
 #define _RANDOMLAYOUT_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /// Random.h - An implementation of a random 3D layout.
 /** This plugin is an implementation of a random 3D layout

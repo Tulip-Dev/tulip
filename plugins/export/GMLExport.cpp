@@ -20,7 +20,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 #include <tulip/AbstractProperty.h>
 
 using namespace std;

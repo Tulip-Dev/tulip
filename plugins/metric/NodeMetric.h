@@ -19,7 +19,7 @@
 #ifndef _NODEMETRIC_H
 #define _NODEMETRIC_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 
 

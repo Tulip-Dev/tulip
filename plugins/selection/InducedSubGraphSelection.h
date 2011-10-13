@@ -19,7 +19,7 @@
 #ifndef Tulip_InducedSubGraphSelection_H
 #define Tulip_InducedSubGraphSelection_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup selection */
 /*@{*/

@@ -18,7 +18,7 @@
  */
 #include <cmath>
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 #include <tulip/Color.h>
 #include <tulip/Vector.h>
 #include <tulip/ColorScale.h>

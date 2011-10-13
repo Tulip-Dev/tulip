@@ -21,7 +21,7 @@
 #include <tulip/GlLabel.h>
 
 #include <cmath>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
 using namespace tlp;

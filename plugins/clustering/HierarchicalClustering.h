@@ -22,7 +22,7 @@
 #include <list>
 #include <string>
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup clustering */
 /*@{*/

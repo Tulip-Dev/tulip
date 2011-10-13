@@ -20,7 +20,7 @@
 #ifndef _IDMETRIC_H
 #define _IDMETRIC_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup metric */
 /*@{*/

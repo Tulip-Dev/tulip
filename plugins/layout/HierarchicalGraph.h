@@ -19,7 +19,7 @@
 #ifndef Tulip_HierarchicalGraph_H
 #define Tulip_Hierarchical_H
 #include <tulip/tuliphash.h>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 class LessThanNode2 {
 public:

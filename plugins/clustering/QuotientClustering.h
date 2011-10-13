@@ -19,7 +19,7 @@
 #ifndef _QuotientClustering_H
 #define _QuotientClustering_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup clustering */
 /*@{*/

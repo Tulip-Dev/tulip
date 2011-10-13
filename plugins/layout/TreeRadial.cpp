@@ -18,7 +18,7 @@
  */
 #include <math.h>
 #include <stack>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 #include "DatasetTools.h"
 
 using namespace std;

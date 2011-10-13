@@ -21,7 +21,7 @@
 #define _StrongComponent_H
 #include <stack>
 #include <tulip/tuliphash.h>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 struct NodeInfo {
   NodeInfo(int stra=0,int sta=0):prefixOrder(stra),minAttach(sta) {}
   int prefixOrder;

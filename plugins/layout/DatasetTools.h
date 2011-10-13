@@ -19,7 +19,7 @@
 #ifndef DATASETTOOLS_H
 #define DATASETTOOLS_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include "Orientation.h"

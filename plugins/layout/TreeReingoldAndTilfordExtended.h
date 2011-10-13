@@ -21,7 +21,7 @@
 #include <string>
 #include <math.h>
 #include <tulip/tuliphash.h>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 struct LR {
   double L;

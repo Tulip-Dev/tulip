@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 #include <math.h>
 
 using namespace std;

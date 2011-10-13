@@ -79,7 +79,7 @@ INSTALL(FILES
   tulip/TriconnectedTest.h
   tulip/tulipconf.h
   tulip/tuliphash.h
-  tulip/TulipPlugin.h
+  tulip/TulipPluginHeaders.h
   tulip/uniqueiterator.h
   tulip/VectorCast.h
   tulip/vectorgraph.h

@@ -19,7 +19,7 @@
 #ifndef _ConnectedComponent_H
 #define _ConnectedComponent_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup metric */
 /*@{*/

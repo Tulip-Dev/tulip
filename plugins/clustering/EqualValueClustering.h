@@ -19,7 +19,7 @@
 #ifndef _EqualValueClustering_H
 #define _EqualValueClustering_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 class EqualValueClustering:public tlp::Algorithm {
 public:

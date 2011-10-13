@@ -19,7 +19,7 @@
 #include <iostream>
 #include <stack>
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
 using namespace tlp;
@@ -190,7 +190,7 @@ int biconnectedComponents(const Graph& graph, MutableContainer<int>& compnum) {
   return(count2 + num_isolated);
 }
 //=============================================================================================
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 using namespace std;
 using namespace tlp;
 

@@ -20,7 +20,7 @@
 #include <sys/types.h>
 #include <errno.h>
 #include <fstream>
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 #include <tulip/AbstractProperty.h>
 #include "GMLParser.h"
 

@@ -19,7 +19,7 @@
 #ifndef Tulip_REACHABLESUBGRAPHELECTION_H
 #define Tulip_REACHABLESUBGRAPHELECTION_H
 
-#include <tulip/TulipPlugin.h>
+#include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup selection */
 /*@{*/
