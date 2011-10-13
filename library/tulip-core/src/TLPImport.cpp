@@ -120,8 +120,11 @@ struct TLPGraphBuilder:public TLPTrue {
   bool addString(const std::string& str) {
     // only used to handle the version of tlp file format
     if (!version) {
-      version = (float) atof(str.c_str());
-      return version <= ((float)TLP_VERSION);
+      const char* cptr = str.c_str();
+      char* endptr;
+      version = strtof(cptr, &endptr);
+      // check for correctness of version parsing and value
+      return (endptr != cptr) && (version <= TLP_VERSION);
     }
 
     return false;
