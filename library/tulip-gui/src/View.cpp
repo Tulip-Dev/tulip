@@ -1,10 +1,11 @@
 #include "tulip/View.h"
 
+#include <QtGui/QGraphicsItem>
+
 using namespace tlp;
 
 View::View()
-  : _hasInteractorsResponsibility(true), _hasConfigurationWidgetsResponsibility(true),
-    _interactors(QSet<Interactor*>()), _activeInteractor(NULL),
+  : _interactors(QSet<Interactor*>()), _activeInteractor(NULL),
     _triggers(QSet<Observable*>()),
     _graph(NULL) {
 }
@@ -56,4 +57,21 @@ void View::activeInteractorChanged(tlp::Interactor*) {
 
 void View::graphChanged(tlp::Graph*) {
   emit drawNeeded();
+}
+
+QPointF View::pos() const {
+  return graphicsItem()->pos();
+}
+
+QSizeF View::size() const {
+  return graphicsItem()->boundingRect().size();
+}
+
+void View::setPos(const QPointF &p) {
+  graphicsItem()->setPos(p);
+}
+
+void View::resize(const QSizeF &newSize) {
+  QSizeF originalSize = graphicsItem()->boundingRect().size();
+  graphicsItem()->scale(newSize.width()/originalSize.height(),newSize.height()/originalSize.height());
 }

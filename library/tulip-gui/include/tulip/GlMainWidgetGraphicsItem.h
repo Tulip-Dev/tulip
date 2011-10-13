@@ -2,12 +2,13 @@
 #define GLMAINWIDGETGRAPHICSITEM_H
 
 #include <QtGui/QGraphicsObject>
+#include <QtGui/QGraphicsLayoutItem>
 
 namespace tlp {
 
 class GlMainWidget;
 
-class GlMainWidgetGraphicsItem : public QGraphicsObject {
+class GlMainWidgetGraphicsItem : public QGraphicsObject, public QGraphicsLayoutItem {
   Q_OBJECT
 
   Q_PROPERTY(QSize size READ size WRITE resize)
@@ -37,6 +38,8 @@ public:
     return glMainWidget;
   }
 
+  void setGeometry(const QRectF &rect);
+
   bool eventFilter(QObject *, QEvent *evt);
 
 public slots:
@@ -50,6 +53,8 @@ protected :
   void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
   void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
   void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
+
+  QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const;
 
 protected slots:
   void glMainWidgetDraw(GlMainWidget *,bool);

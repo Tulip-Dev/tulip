@@ -9,8 +9,11 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QSet>
+#include <QtCore/QPointF>
+#include <QtCore/QSizeF>
 
 class QGraphicsItem;
+class QGraphicsLayoutItem;
 class QWidget;
 
 namespace tlp {
@@ -27,27 +30,25 @@ class Interactor;
   A view's panel (where graphical representation is drawn) is a subclass of QGraphicsItem. @see ViewWidget to build views using QWidget.
   @note Views are meant to be managed by some upperleying system. @see tlp::TulipWorkspace for a standard implementation and instructions on how to build your own View-controller class.
 
+  A View's object also provides methods to move/resize its graphics item. Those method are exposed in two Q_PROPERTY pos and size.
+  Note that overloading those methods is strongly recommended since base beahvior could lead to poor-quality rendering.
+
   User-input interactions on views panel are provided by tlp::Interactor subclasses. A View thus contains several interactors and one active interactor.
-  The responsibility of managing interactors can be left to an upperlaying controller system (eg. tlp::TulipWorkspace) or directly to the View.
-  The View::hasInteractorsResponsibility checks if Interactors should be drawn and managed by the View or not.
+  When changing active interactor, a callback function (View::activeInteractorChanged()) is called to providfe custom handling and interactor installation over the view
 
-  Views can be set up using configuration widgets.
-  Like interactors, configuration widgets handling can be done by the view or by the upperleying system.
-
-  When subclassing a View object, the following methods will always be called in this order (those are only methods that can be subclassed):
-  @li The View's constructor
-  @li View::interactorsInstalled() : At this point, the View::hasInteractorsResponsibility() and View::hasConfigurationWidgetsResponsibility() methods can be called to check view's responsibilities
+  When subclassing View, the following methods will always be called in this order (those are only methods that can be subclassed):
+  @li View::interactorsInstalled()
   @li View::activeInteractorChanged() : Only if one or more interactor has been previously installed.
   @li View::setGraph : Defines the graph to be displayed.
-  @li View::setData : Defines startup context or previously saved data.
+  @li View::setState : Defines startup state or previously saved data.
+  @li View::setupUi : Called when view should be completely initialized. Building UI can be made into this method.
 
-  Once View::setData() is called, the View should be able to be drawn. However, the View::draw() slot should never be called by the View itself. Instead, the View should emit the View::drawNeeded() signal and wait for the upperleying controller to call the View::draw() slot.
+  Once View::setupUi() is called, the View should be able to be drawn. However, the View::draw() slot should never be called by the View itself. Instead, the View should emit the View::drawNeeded() signal and wait for the upperleying controller to call the View::draw() slot.
   */
 class TLP_QT_SCOPE View: public QObject, public tlp::WithDependency, public tlp::WithParameter, public tlp::Observable {
   Q_OBJECT
-
-  bool _hasInteractorsResponsibility;
-  bool _hasConfigurationWidgetsResponsibility;
+  Q_PROPERTY(QPointF pos READ pos WRITE setPos)
+  Q_PROPERTY(QSizeF size READ size WRITE resize)
 
   QSet<tlp::Interactor*> _interactors;
   tlp::Interactor* _activeInteractor;
@@ -63,6 +64,7 @@ public:
   /**
     @brief Returns the panel where drawing is done.
     The View does not have ownership on its panel. When closing a View, the panel will be destroyed before the View object is.
+    This method should always return the same item. GUI building should be made into the View::setupUi() method.
     */
   virtual QGraphicsItem* graphicsItem() const=0;
 
@@ -121,13 +123,25 @@ public:
     @return the View's context data.
     This method can be called by an upperleying system to restore the View's internal data.
     */
-  virtual tlp::DataSet data() const=0;
+  virtual tlp::DataSet state() const=0;
 
   /**
     @return The graph set on the View.
     @see setGraph()
     */
   tlp::Graph* graph() const;
+
+  /**
+    @return the position of the graphics item
+    By default, this method returns graphicsItem()->pos()
+    */
+  virtual QPointF pos() const;
+
+  /**
+    @return the size of the graphics item
+    By default, this method returns the graphicsItem's bounding rect, scaled to graphicsItem()->scale()
+    */
+  virtual QSizeF size() const;
 
 public slots:
   /**
@@ -140,7 +154,7 @@ public slots:
     @brief Set the context data.
     If the View previously gave data to the upperleying system (eg. On a previous instance of the application), this method could be used to restore View's state.
     */
-  virtual void setData(const tlp::DataSet&)=0;
+  virtual void setState(const tlp::DataSet&)=0;
 
   /**
     @brief Draws the view's panel.
@@ -157,18 +171,23 @@ public slots:
   }
 
   /**
-    @brief Called by the upperleying system to take the interactors management reponsibility
+    @brief Setups the view's gui.
+    Every method setting the view's context (setData, setGraph and so on) has already been called when this method is run.
+    This method is only called once since View::graphicsItem should always return the same pointer.
     */
-  void takeInteractorsResponsibility() {
-    _hasInteractorsResponsibility = false;
-  }
+  virtual void setupUi()=0;
 
   /**
-    @brief Called by the upperleying system to take the configuration widgets management reponsibility
+    @brief Set the item's position
+    By default, this method calls graphicsItem()->setPos()
     */
-  void takeConfigurationWidgetsReponsibility() {
-    _hasConfigurationWidgetsResponsibility = false;
-  }
+  virtual void setPos(const QPointF&);
+
+  /**
+    @brief Set the item's size
+    @warning By default, this method will scale the graphics item (calling QGraphicsItem::scale()). This default behavior may lead to bad-quality rendering in most cases.
+    */
+  virtual void resize(const QSizeF&);
 
 signals:
   /**
@@ -176,21 +195,6 @@ signals:
     The upperleying system may then directly call the draw() method or wait until some events are previously processed.
     */
   void drawNeeded();
-
-protected:
-  /**
-    @return true if the View should manage interactors (drawing, switching) or false if this reponsibility is left to the upperleying system.
-    */
-  bool hasInteractorsResponsibility() const {
-    return _hasInteractorsResponsibility;
-  }
-
-  /**
-    @return true if the View should manage configurationj widgets (drawing, switching) or false if this reponsibility is left to the upperleying system.
-    */
-  bool hasConfigurationWidgetsResponsibility() const {
-    return _hasConfigurationWidgetsResponsibility;
-  }
 
 protected slots:
   /**
