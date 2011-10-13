@@ -169,7 +169,7 @@ Sets the parent of the graph (use very carefully). Standard users should never u
 
 //===========================================================================================
 	
-	tlp::IteratorGraph *getSubGraphs() const;
+	tlp::IteratorGraph *getSubGraphs() const /TransferBack/;
 %Docstring
 tlp.Graph.getSubGraphs()
 
