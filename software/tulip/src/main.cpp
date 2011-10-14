@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
   QDir::setCurrent(currentPath);
 #endif
 
-  tlp::initTulipLib(QApplication::applicationDirPath().toStdString().c_str());
+  tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   //TODO find a cleaner way to achieve this (QDesktopServices is part of QtGui, so it does not belong in TlpTools)
   tlp::TulipPluginsPath = QString(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins/lib/tulip/").toStdString() + tlp::PATH_DELIMITER + tlp::TulipPluginsPath;
 
