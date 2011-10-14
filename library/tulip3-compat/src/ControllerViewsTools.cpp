@@ -34,14 +34,14 @@ static const string mainViewName="Node Link Diagram view";
 
 QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
 
-void ControllerViewsTools::createView(const string &name,Graph *,DataSet,QWidget *parent,string *createdViewName, View **createdView, QWidget **createdWidget) {
+void ControllerViewsTools::createView(const string &name,Graph *,DataSet,QWidget *parent,string *createdViewName, View3 **createdView, QWidget **createdWidget) {
   string verifiedName=name;
-  View *newView = ViewLister::getPluginObject(name, NULL);
+  View3 *newView = dynamic_cast<View3*>(ViewLister::getPluginObject(name, NULL));
 
   // if we can not create a view with given name : create a Node Link Diagram Component
   if(!newView) {
     verifiedName=mainViewName;
-    newView=ViewLister::getPluginObject(mainViewName, NULL);
+    newView=dynamic_cast<View3*>(ViewLister::getPluginObject(mainViewName, NULL));
   }
 
   // Get interactors for this view and add them to view
@@ -70,12 +70,12 @@ void ControllerViewsTools::createView(const string &name,Graph *,DataSet,QWidget
   *createdWidget=widget;
 }
 //**********************************************************************
-void ControllerViewsTools::createMainView(Graph *graph,DataSet dataSet,QWidget *parent,View **createdView, QWidget **createdWidget) {
+void ControllerViewsTools::createMainView(Graph *graph,DataSet dataSet,QWidget *parent,View3 **createdView, QWidget **createdWidget) {
   string tmp;
   createView(mainViewName,graph,dataSet,parent,&tmp, createdView, createdWidget);
 }
 //**********************************************************************
-void ControllerViewsTools::installInteractors(View *view,QToolBar *toolBar) {
+void ControllerViewsTools::installInteractors(View3 *view,QToolBar *toolBar) {
   toolBar->clear();
 
   list<Interactor *> interactorsList=view->getInteractors();
@@ -89,7 +89,7 @@ void ControllerViewsTools::installInteractors(View *view,QToolBar *toolBar) {
   }
 }
 //**********************************************************************
-void ControllerViewsTools::changeInteractor(View *view,QToolBar *toolBar,QAction* action,QWidget **createdConfigurationWidget) {
+void ControllerViewsTools::changeInteractor(View3 *view,QToolBar *toolBar,QAction* action,QWidget **createdConfigurationWidget) {
   QList<QAction*> actions=toolBar->actions();
 
   for(QList<QAction*>::iterator it=actions.begin(); it!=actions.end(); ++it) {
@@ -100,7 +100,7 @@ void ControllerViewsTools::changeInteractor(View *view,QToolBar *toolBar,QAction
   action->setChecked(true);
 
   InteractorAction *interactorAction=(InteractorAction *)action;
-  view->setActiveInteractor(interactorAction->getInteractor());
+  view->setCurrentInteractor(interactorAction->getInteractor());
 
   QWidget *interactorWidget=interactorAction->getInteractor()->getConfigurationWidget();
   QWidget *containerWidget=new QWidget();

@@ -151,7 +151,7 @@ void MouseMagicWandSelector::setView(View* view) {
   tlp::InteractorComponent::setView(view);
 
   if(view) {
-    configWidget->setGraph(view->getGraph());
+    configWidget->setGraph(view->graph());
   }
 }
 

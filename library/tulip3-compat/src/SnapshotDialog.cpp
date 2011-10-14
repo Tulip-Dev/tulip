@@ -60,7 +60,7 @@ protected :
 
 };
 
-SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),view(&v),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
+SnapshotDialog::SnapshotDialog(View3 &v,QWidget *parent):QDialog(parent),view(&v),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
   setupUi(this);
   scene=new QGraphicsScene();
   scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));

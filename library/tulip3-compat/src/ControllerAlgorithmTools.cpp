@@ -115,12 +115,12 @@ bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const
 }
 //**********************************************************************
 template<typename PROPERTY>
-bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,string name, string destination,View *view, bool query, bool redraw, bool push) {
+bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,string name, string destination,View3 *view, bool query, bool redraw, bool push) {
   return changeProperty<PROPERTY>(graph,parent,name,destination,DataSet(),view,query,redraw,push);
 }
 //**********************************************************************
 template<typename PROPERTY>
-bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,string name, string destination,DataSet dataSet,View *view, bool query, bool redraw, bool push) {
+bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,string name, string destination,DataSet dataSet,View3 *view, bool query, bool redraw, bool push) {
   NodeLinkDiagramComponent *nldc=NULL;
 
   if(view)
@@ -239,15 +239,15 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,strin
   return resultBool;
 }
 //**********************************************************************
-bool ControllerAlgorithmTools::changeString(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View *view) {
+bool ControllerAlgorithmTools::changeString(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View3 *view) {
   return changeProperty<StringProperty>(graph,parent,name,propertyName, view);
 }
 //**********************************************************************
-bool ControllerAlgorithmTools::changeBoolean(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View *view) {
+bool ControllerAlgorithmTools::changeBoolean(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View3 *view) {
   return changeProperty<BooleanProperty>(graph,parent,name,propertyName, view);
 }
 //**********************************************************************
-bool ControllerAlgorithmTools::changeMetric(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View *view,bool mapMetric, const string &colorAlgorithmName, const string &colorPropertyName) {
+bool ControllerAlgorithmTools::changeMetric(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View3 *view,bool mapMetric, const string &colorAlgorithmName, const string &colorPropertyName) {
 
   bool result = changeProperty<DoubleProperty>(graph,parent,name,propertyName, view, true);
 
@@ -258,19 +258,19 @@ bool ControllerAlgorithmTools::changeMetric(Graph *graph,QWidget *parent,const s
   return result;
 }
 //**********************************************************************
-bool ControllerAlgorithmTools::changeLayout(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View *view) {
+bool ControllerAlgorithmTools::changeLayout(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View3 *view) {
   return changeProperty<LayoutProperty>(graph,parent,name, propertyName, view, true, true);
 }
 //**********************************************************************
-bool ControllerAlgorithmTools::changeInt(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View *view) {
+bool ControllerAlgorithmTools::changeInt(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View3 *view) {
   return changeProperty<IntegerProperty>(graph,parent,name, propertyName,view);
 }
 //**********************************************************************
-bool ControllerAlgorithmTools::changeColors(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View *view) {
+bool ControllerAlgorithmTools::changeColors(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View3 *view) {
   return changeProperty<ColorProperty>(graph,parent,name,propertyName,view);
 }
 //**********************************************************************
-bool ControllerAlgorithmTools::changeSizes(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View *view) {
+bool ControllerAlgorithmTools::changeSizes(Graph *graph,QWidget *parent,const string &name,const string &propertyName,View3 *view) {
   return changeProperty<SizeProperty>(graph,parent,name,propertyName,view);
 }
 //**********************************************************************

@@ -33,7 +33,7 @@ QGraphicsItem* ViewWidget::graphicsItem() const {
   return _widgetItem;
 }
 
-void ViewWidget::activeInteractorChanged(tlp::Interactor *i) {
+void ViewWidget::currentInteractorChanged(tlp::Interactor *i) {
 
 }
 

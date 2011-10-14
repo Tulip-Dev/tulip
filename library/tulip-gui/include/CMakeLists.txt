@@ -76,6 +76,8 @@ INSTALL(FILES
   tulip/View.h
   tulip/ViewWidget.h
   tulip/GlMainWidgetGraphicsItem.h
+  tulip/View3.h
+  tulip/AbstractView.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

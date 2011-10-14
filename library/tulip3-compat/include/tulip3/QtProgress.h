@@ -20,7 +20,7 @@
 #define QtProgress_TULIP
 #include <string>
 #include <tulip/PluginProgress.h>
-#include <tulip/View.h>
+#include <tulip/View3.h>
 #include <QtGui/QDialog>
 
 namespace tlp {
@@ -33,7 +33,7 @@ class PluginProgressWidget;
 class TLP3_COMPAT_SCOPE QtProgress : public QDialog, public tlp::PluginProgress {
   Q_OBJECT
 public:
-  QtProgress(QWidget* parent, std::string text, tlp::View *view=NULL,int updateInterval=200);
+  QtProgress(QWidget* parent, std::string text, tlp::View3 *view=NULL,int updateInterval=200);
   virtual ~QtProgress();
 signals:
   void sendProgress(int, int);

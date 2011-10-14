@@ -34,7 +34,7 @@ public:
   /**
     @see tlp::View
     */
-  virtual tlp::DataSet data() const=0;
+  virtual tlp::DataSet state() const=0;
 
 public slots:
   /**
@@ -54,11 +54,16 @@ public slots:
     */
   virtual void resize(const QSizeF &);
 
+  /**
+    @see tlp::View
+  */
+  virtual void setState(const tlp::DataSet&)=0;
+
 protected:
   /**
     @see tlp::View
     */
-  virtual void activeInteractorChanged(tlp::Interactor*);
+  virtual void currentInteractorChanged(tlp::Interactor*);
 
   /**
     @brief Constructs the view's widget.

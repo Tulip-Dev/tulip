@@ -72,7 +72,7 @@ public :
     return graph;
   }
   void createPicture(const std::string&, int, int) {}
-  void setGraph(tlp::Graph* graph) {
+  void changeGraph(tlp::Graph* graph) {
     setData(graph, tlp::DataSet());
   }
   void draw() {}

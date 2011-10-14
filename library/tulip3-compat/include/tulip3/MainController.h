@@ -33,7 +33,7 @@ class QTabWidget;
 namespace tlp {
 
 class Graph;
-class View;
+class View3;
 class SGHierarchyWidget;
 class PropertyDialog;
 class ElementPropertiesWidget;
@@ -94,11 +94,11 @@ protected :
   /**
    * Create and init the main view (NodeLinkDiagramComponent)
    */
-  View* initMainView(DataSet dataSet);
+  View3* initMainView(DataSet dataSet);
   /**
    * Create a view with name : name
    */
-  virtual View* createView(const std::string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize=true,const QRect &rect=QRect(0,0,0,0),bool maximized=false);
+  virtual View3* createView(const std::string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize=true,const QRect &rect=QRect(0,0,0,0),bool maximized=false);
 
   typedef std::set< tlp::Observable * >::iterator ObserverIterator;
 
@@ -166,7 +166,7 @@ protected :
    */
   void applyMorphing(GraphState *graphState);
 
-  std::map<View *, int> lastConfigTabIndexOnView;
+  std::map<View3 *, int> lastConfigTabIndexOnView;
   unsigned int currentGraphNbNodes;
   unsigned int currentGraphNbEdges;
   Graph *graphToReload;
@@ -241,7 +241,7 @@ protected slots:
   /**
    * This slot is call when a view want to change its graph
    */
-  void viewRequestChangeGraph(tlp::View *view,tlp::Graph *graph);
+  void viewRequestChangeGraph(tlp::View3 *view,tlp::Graph *graph);
   /**
    * This slot is call went a view will be closed
    */

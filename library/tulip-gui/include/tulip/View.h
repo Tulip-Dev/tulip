@@ -85,12 +85,12 @@ public:
     The active interactor is the one that should handle user inputs until another active interactor is set.
     The callback slot View::activeInteractorChanged() is called at this point to provide custom implementation.
     */
-  void setActiveInteractor(tlp::Interactor*);
+  void setCurrentInteractor(tlp::Interactor*);
 
   /**
     @return The currently active interactor.
     */
-  tlp::Interactor* activeInteractor() const;
+  tlp::Interactor* currentInteractor() const;
 
   /**
     @brief Register a trigger for automatic redraw.
@@ -207,7 +207,7 @@ protected slots:
     @brief Custom user callback when the active interactor has changed.
     @see Interactor::install()
     */
-  virtual void activeInteractorChanged(tlp::Interactor*);
+  virtual void currentInteractorChanged(tlp::Interactor*);
 
   /**
     @brief Custom user callback when a new graph is set on the view.

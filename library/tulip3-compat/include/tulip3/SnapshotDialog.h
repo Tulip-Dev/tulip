@@ -28,7 +28,7 @@
 
 #include "ui_SnapshotDialog.h"
 
-#include "tulip/View.h"
+#include "tulip/View3.h"
 
 namespace tlp {
 
@@ -40,7 +40,7 @@ class TLP3_COMPAT_SCOPE SnapshotDialog : public QDialog,public Ui::SnapshotDialo
 
 public :
 
-  SnapshotDialog(View &v,QWidget *parent=NULL);
+  SnapshotDialog(View3 &v,QWidget *parent=NULL);
   ~SnapshotDialog();
 
 public slots :
@@ -61,7 +61,7 @@ protected :
 
   void sizeSpinBoxValueChanged();
 
-  View *view;
+  View3 *view;
 
   QGraphicsScene *scene;
   QGraphicsPixmapItem *pixmapItem;
