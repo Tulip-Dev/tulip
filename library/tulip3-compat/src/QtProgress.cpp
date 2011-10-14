@@ -26,7 +26,7 @@ using namespace std;
 namespace tlp {
 
 //=====================================
-QtProgress::QtProgress(QWidget* parent,string text,View *view,int updateInterval):
+QtProgress::QtProgress(QWidget* parent,string text,View3 *view,int updateInterval):
   QDialog(parent),progressWidget(new PluginProgressWidget(view,updateInterval,parent)),firstCall(true) {
   resize(QSize(417,92));
   setWindowTitle(tlpStringToQString(text));

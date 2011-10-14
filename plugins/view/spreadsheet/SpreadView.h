@@ -66,7 +66,7 @@ public slots :
   void draw();
   void refresh();
   void init();
-  void setGraph(Graph *graph);
+  void changeGraph(Graph *graph);
 
 
 protected slots:

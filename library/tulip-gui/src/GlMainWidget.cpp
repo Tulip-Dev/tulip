@@ -457,7 +457,7 @@ void GlMainWidget::computeInteractors() {
   if(!view)
     return;
 
-  Interactor *interactor=view->activeInteractor();
+  Interactor *interactor=view->currentInteractor();
 
   if(!interactor)
     return;
@@ -469,7 +469,7 @@ void GlMainWidget::drawInteractors() {
   if(!view)
     return;
 
-  Interactor *interactor=view->activeInteractor();
+  Interactor *interactor=view->currentInteractor();
 
   if(!interactor)
     return;

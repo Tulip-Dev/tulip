@@ -43,7 +43,7 @@ tuliputils_updateVisualization(PyObject *, PyObject *args) {
   tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
 
   if (mainController) {
-    std::vector<tlp::View*> tulipViews = mainController->getViewsOfGraph(mainController->getGraph());
+    std::vector<tlp::View3*> tulipViews = mainController->getViewsOfGraph(mainController->getGraph());
 
     for (size_t i = 0 ; i < tulipViews.size() ; ++i) {
       tlp::GlMainView *glView = dynamic_cast<tlp::GlMainView *>(tulipViews[i]);

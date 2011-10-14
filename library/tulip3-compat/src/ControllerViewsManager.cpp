@@ -23,7 +23,7 @@
 
 #include <tulip/Graph.h>
 
-#include <tulip/View.h>
+#include <tulip/View3.h>
 #include "tulip3/ControllerViewsTools.h"
 
 using namespace std;
@@ -34,7 +34,7 @@ ControllerViewsManager::ControllerViewsManager(PerspectiveContext &c) :
   Controller(c), currentView(NULL), currentGraph(NULL) {
 }
 ControllerViewsManager::~ControllerViewsManager() {
-  for(map<QWidget *,View*>::iterator it=viewWidget.begin(); it!=viewWidget.end(); ++it) {
+  for(map<QWidget *,View3*>::iterator it=viewWidget.begin(); it!=viewWidget.end(); ++it) {
     delete (*it).first;
     delete (*it).second;
   }
@@ -63,7 +63,7 @@ void ControllerViewsManager::setCurrentGraph(Graph *graph) {
   currentGraph = graph;
 }
 //**********************************************************************
-View *ControllerViewsManager::getCurrentView() {
+View3 *ControllerViewsManager::getCurrentView() {
   return currentView;
 }
 //**********************************************************************
@@ -71,37 +71,37 @@ unsigned int ControllerViewsManager::getViewsNumber()const {
   return viewWidget.size();
 }
 //**********************************************************************
-Graph *ControllerViewsManager::getGraphOfView(View *view) {
+Graph *ControllerViewsManager::getGraphOfView(View3 *view) {
   if (viewGraph.count(view) != 0)
     return viewGraph[view];
 
   return NULL;
 }
 //**********************************************************************
-void ControllerViewsManager::setGraphOfView(View *view, Graph *graph) {
+void ControllerViewsManager::setGraphOfView(View3 *view, Graph *graph) {
   view->setGraph(graph);
   viewGraph[view] = graph;
 }
 //**********************************************************************
-void ControllerViewsManager::setDataOfView(View* view, Graph* graph, const DataSet& dataSet) {
+void ControllerViewsManager::setDataOfView(View3* view, Graph* graph, const DataSet& dataSet) {
   view->setData(graph,dataSet);
   viewGraph[view]= graph;
 }
 
 //**********************************************************************
-View *ControllerViewsManager::getViewOfWidget(QWidget *widget) {
+View3 *ControllerViewsManager::getViewOfWidget(QWidget *widget) {
   if (viewWidget.count(widget) != 0)
     return viewWidget[widget];
 
   return NULL;
 }
 //**********************************************************************
-void ControllerViewsManager::setViewOfWidget(QWidget *widget, View *view) {
+void ControllerViewsManager::setViewOfWidget(QWidget *widget, View3 *view) {
   viewWidget[widget] = view;
 }
 //**********************************************************************
-QWidget *ControllerViewsManager::getWidgetOfView(View *view) {
-  for (map<QWidget *, View *>::iterator it = viewWidget.begin(); it != viewWidget.end(); ++it) {
+QWidget *ControllerViewsManager::getWidgetOfView(View3 *view) {
+  for (map<QWidget *, View3 *>::iterator it = viewWidget.begin(); it != viewWidget.end(); ++it) {
     if ((*it).second == view)
       return (*it).first;
   }
@@ -109,14 +109,14 @@ QWidget *ControllerViewsManager::getWidgetOfView(View *view) {
   return NULL;
 }
 //**********************************************************************
-void ControllerViewsManager::getViews(vector<View *> &views) {
-  for(map<View *,string>::iterator it=viewNames.begin(); it!=viewNames.end(); ++it) {
+void ControllerViewsManager::getViews(vector<View3 *> &views) {
+  for(map<View3 *,string>::iterator it=viewNames.begin(); it!=viewNames.end(); ++it) {
     views.push_back((*it).first);
   }
 }
 //**********************************************************************
-string ControllerViewsManager::getNameOfView(View *view) const {
-  map<View *,string>::const_iterator it = viewNames.find(view);
+string ControllerViewsManager::getNameOfView(View3 *view) const {
+  map<View3 *,string>::const_iterator it = viewNames.find(view);
 
   if(it!=viewNames.end()) {
     return it->second;
@@ -126,11 +126,11 @@ string ControllerViewsManager::getNameOfView(View *view) const {
   }
 }
 //**********************************************************************
-void ControllerViewsManager::setNameOfView(View *view, const string &name) {
+void ControllerViewsManager::setNameOfView(View3 *view, const string &name) {
   viewNames[view] = name;
 }
 //**********************************************************************
-QWidget *ControllerViewsManager::getInteractorConfigurationWidgetOfView(View *view) {
+QWidget *ControllerViewsManager::getInteractorConfigurationWidgetOfView(View3 *view) {
   if(lastInteractorConfigurationWidgetOnView.count(view)!=0)
     return lastInteractorConfigurationWidgetOnView[view];
   else
@@ -141,7 +141,7 @@ QWidget *ControllerViewsManager::getInteractorConfigurationWidgetOfView(View *vi
 // Main functions
 //**********************************************************************
 //**********************************************************************
-void ControllerViewsManager::addView(View *createdView, Graph *graph, DataSet dataSet, bool forceWidgetSize, const QRect &rect, bool maximized, const string &createdViewName, QWidget *createdWidget) {
+void ControllerViewsManager::addView(View3 *createdView, Graph *graph, DataSet dataSet, bool forceWidgetSize, const QRect &rect, bool maximized, const string &createdViewName, QWidget *createdWidget) {
   connect(createdWidget, SIGNAL(destroyed(QObject *)), this,
           SLOT(widgetWillBeClosed(QObject *)));
 
@@ -189,10 +189,10 @@ void ControllerViewsManager::addView(View *createdView, Graph *graph, DataSet da
   windowActivated(createdWidget);
 }
 
-View* ControllerViewsManager::createView(const string &name, Graph *graph, DataSet dataSet,
+View3* ControllerViewsManager::createView(const string &name, Graph *graph, DataSet dataSet,
     bool forceWidgetSize, const QRect &rect, bool maximized) {
   string createdViewName;
-  View *createdView;
+  View3 *createdView;
   QWidget *createdWidget;
   ControllerViewsTools::createView(name, graph, dataSet, mainWindowFacade.getWorkspace(),
                                    &createdViewName, &createdView, &createdWidget);
@@ -202,7 +202,7 @@ View* ControllerViewsManager::createView(const string &name, Graph *graph, DataS
   return createdView;
 }
 //**********************************************************************
-void ControllerViewsManager::installInteractors(View *view) {
+void ControllerViewsManager::installInteractors(View3 *view) {
   //remove connection of old actions
   QList<QAction *> oldActions = mainWindowFacade.getInteractorsToolBar()->actions();
 
@@ -211,7 +211,7 @@ void ControllerViewsManager::installInteractors(View *view) {
   }
 
   QAction *lastAction = NULL;
-  map<View*, QAction *>::iterator it = lastInteractorOnView.find(view);
+  map<View3*, QAction *>::iterator it = lastInteractorOnView.find(view);
 
   if (it != lastInteractorOnView.end())
     lastAction = (*it).second;
@@ -234,7 +234,7 @@ void ControllerViewsManager::installInteractors(View *view) {
 }
 //**********************************************************************
 void ControllerViewsManager::updateViewsOfGraph(Graph *graph) {
-  for (map<View *, Graph*>::iterator it = viewGraph.begin(); it != viewGraph.end(); ++it) {
+  for (map<View3 *, Graph*>::iterator it = viewGraph.begin(); it != viewGraph.end(); ++it) {
     if ((*it).second == graph) {
       (*it).first->setGraph(graph);
     }
@@ -242,7 +242,7 @@ void ControllerViewsManager::updateViewsOfGraph(Graph *graph) {
 }
 //**********************************************************************
 void ControllerViewsManager::updateViewsOfSubGraphs(Graph *graph) {
-  for (map<View *, Graph*>::iterator it = viewGraph.begin(); it != viewGraph.end(); ++it) {
+  for (map<View3 *, Graph*>::iterator it = viewGraph.begin(); it != viewGraph.end(); ++it) {
     assert(graph);
     Graph *subGraph = (*it).second;
 
@@ -255,9 +255,9 @@ void ControllerViewsManager::updateViewsOfSubGraphs(Graph *graph) {
 void ControllerViewsManager::changeGraphOfViews(Graph *oldGraph, Graph *newGraph) {
   string name = newGraph->getAttribute<string>("name");
 
-  for (map<View *, Graph*>::iterator it = viewGraph.begin(); it != viewGraph.end(); ++it) {
+  for (map<View3 *, Graph*>::iterator it = viewGraph.begin(); it != viewGraph.end(); ++it) {
     if ((*it).second == oldGraph) {
-      View* view = (*it).first;
+      View3* view = (*it).first;
       view->setGraph(newGraph);
       // update view title
       QWidget *widget = getWidgetOfView(view);
@@ -282,7 +282,7 @@ void ControllerViewsManager::drawViews(bool init) {
 void ControllerViewsManager::saveViewsGraphsHierarchies() {
   viewsGraphsHierarchy.clear();
 
-  for (map<View *, Graph*>::iterator itView = viewGraph.begin(); itView != viewGraph.end(); ++itView) {
+  for (map<View3 *, Graph*>::iterator itView = viewGraph.begin(); itView != viewGraph.end(); ++itView) {
     viewsGraphsHierarchy[(*itView).first] = list<unsigned int> ();
     Graph *father = (*itView).second;
 
@@ -296,7 +296,7 @@ void ControllerViewsManager::saveViewsGraphsHierarchies() {
 }
 //**********************************************************************
 void ControllerViewsManager::checkViewsGraphsHierarchy() {
-  for (map<View *, Graph*>::iterator itView = viewGraph.begin(); itView != viewGraph.end(); ++itView) {
+  for (map<View3 *, Graph*>::iterator itView = viewGraph.begin(); itView != viewGraph.end(); ++itView) {
     Graph *newGraph = NULL;
 
     for (list<unsigned int>::iterator it = viewsGraphsHierarchy[(*itView).first].begin(); it
@@ -330,12 +330,12 @@ void ControllerViewsManager::createView(QAction *action) {
 bool ControllerViewsManager::windowActivated(QWidget *widget) {
   //check if that widget (view) is closed
   QWidgetList widgets = mainWindowFacade.getWorkspace()->windowList();
-  std::map<QWidget *, View*>::iterator it = viewWidget.find(widget);
+  std::map<QWidget *, View3*>::iterator it = viewWidget.find(widget);
 
   if (it == viewWidget.end())
     return false;
 
-  View *view = getViewOfWidget(widget);
+  View3 *view = getViewOfWidget(widget);
 
   if(currentView==view)
     return false;
@@ -384,7 +384,7 @@ bool ControllerViewsManager::changeInteractor(QAction* action, QWidget **configu
 }
 //**********************************************************************
 void ControllerViewsManager::changeWindowTitle(Graph *graph) {
-  for(std::map<View *,Graph* >::iterator it=viewGraph.begin(); it!=viewGraph.end(); ++it) {
+  for(std::map<View3 *,Graph* >::iterator it=viewGraph.begin(); it!=viewGraph.end(); ++it) {
     if((*it).second==graph) {
       string windowTitle = viewNames[(*it).first] + " : " + graph->getAttribute<string> ("name");
 
@@ -416,7 +416,7 @@ bool ControllerViewsManager::changeGraph(Graph *graph) {
 //**********************************************************************
 void ControllerViewsManager::widgetWillBeClosed(QObject *object) {
   QWidget *widget = (QWidget*) object;
-  View *view = viewWidget[widget];
+  View3 *view = viewWidget[widget];
   //  widgetWillBeClosed(widget, view);
   delete viewWidget[widget];
   viewWidget.erase(widget);
@@ -440,7 +440,7 @@ void ControllerViewsManager::closeAllViews() {
 
 //**********************************************************************
 
-void ControllerViewsManager::closeView(View *view) {
+void ControllerViewsManager::closeView(View3 *view) {
   //Need to activate windows before closing it.(see QWorkspace documentation).
   mainWindowFacade.getWorkspace()->setActiveWindow(getWidgetOfView(view));
   mainWindowFacade.getWorkspace()->closeActiveWindow();
@@ -448,19 +448,19 @@ void ControllerViewsManager::closeView(View *view) {
 
 //**********************************************************************
 void ControllerViewsManager::closeViewsRelatedToGraph(Graph* graph) {
-  vector<View*> views = getViewsOfGraph(graph);
+  vector<View3*> views = getViewsOfGraph(graph);
 
-  for (vector<View*>::iterator it = views.begin(); it != views.end(); ++it) {
+  for (vector<View3*>::iterator it = views.begin(); it != views.end(); ++it) {
     closeView(*it);
   }
 }
 
 //**********************************************************************
 
-vector<View*> ControllerViewsManager::getViewsOfGraph(Graph *graph) {
-  vector<View*> views;
+vector<View3*> ControllerViewsManager::getViewsOfGraph(Graph *graph) {
+  vector<View3*> views;
 
-  for (map<View*, Graph*>::iterator it = viewGraph.begin(); it != viewGraph.end(); ++it) {
+  for (map<View3*, Graph*>::iterator it = viewGraph.begin(); it != viewGraph.end(); ++it) {
     if (it->second == graph)
       views.push_back(it->first);
   }

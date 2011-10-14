@@ -100,7 +100,7 @@ Graph* SpreadView::getGraph() {
   return mainWidget->getGraph();
 }
 
-void SpreadView::setGraph(Graph *graph) {
+void SpreadView::changeGraph(Graph *graph) {
   mainWidget->setData(graph, DataSet());
 }
 

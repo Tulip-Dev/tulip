@@ -21,7 +21,7 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/SimplePluginProgress.h>
-#include <tulip/View.h>
+#include <tulip/View3.h>
 #include <QtGui/QWidget>
 #include <QtCore/QTime>
 #include <string>
@@ -48,7 +48,7 @@ public:
     * @param updateInterval The minimum time interval (in msec) between two update the progress bar. Avoid to perform too many call to progressBar redraw function that can slow down the process.
     * @parma parent The parent widget.
     **/
-  PluginProgressWidget(View *view,int updateInterval=200,QWidget *parent = 0);
+  PluginProgressWidget(View3 *view,int updateInterval=200,QWidget *parent = 0);
 
   ~PluginProgressWidget();
   /**
@@ -76,7 +76,7 @@ protected:
   void preview_handler(bool b);
 
 private:
-  View *view;
+  View3 *view;
   int updateIterval;
   QTime time;
   Ui::PluginProgressWidget *ui;

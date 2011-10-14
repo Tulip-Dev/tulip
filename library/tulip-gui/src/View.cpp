@@ -18,12 +18,12 @@ void View::setInteractors(const QSet<tlp::Interactor *> &inters) {
   interactorsInstalled(inters);
 }
 
-void View::setActiveInteractor(tlp::Interactor *i) {
+void View::setCurrentInteractor(tlp::Interactor *i) {
   _activeInteractor = i;
-  activeInteractorChanged(i);
+  currentInteractorChanged(i);
 }
 
-Interactor* View::activeInteractor() const {
+Interactor* View::currentInteractor() const {
   return _activeInteractor;
 }
 
@@ -52,7 +52,7 @@ void View::setGraph(tlp::Graph *g) {
 void View::interactorsInstalled(const QSet<tlp::Interactor*>&) {
 }
 
-void View::activeInteractorChanged(tlp::Interactor*) {
+void View::currentInteractorChanged(tlp::Interactor*) {
 }
 
 void View::graphChanged(tlp::Graph*) {

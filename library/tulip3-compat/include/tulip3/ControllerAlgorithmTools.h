@@ -28,7 +28,7 @@ class QWidget;
 namespace tlp {
 class Graph;
 class PluginListerInterface;
-class View;
+class View3;
 class DataSet;
 struct ParameterList;
 
@@ -65,55 +65,55 @@ public :
    * if push is at true, save graph before modify it with push/pop system
    * if algorithm has a problem : display it in a QDialog in parent widget
    */
-  template<typename PROPERTY> static bool changeProperty(Graph *graph,QWidget *parent,std::string name, std::string destination,View *view=NULL, bool query=true, bool redraw=false, bool push=true);
+  template<typename PROPERTY> static bool changeProperty(Graph *graph,QWidget *parent,std::string name, std::string destination,View3 *view=NULL, bool query=true, bool redraw=false, bool push=true);
   /**
    * Change a property on graph with algorithm with given name and store result in destination property
    * Similar to previous changeProperty function but in this one you have to pass a dataset, this dataset is use by the algorithm
    */
-  template<typename PROPERTY> static bool changeProperty(Graph *graph,QWidget *parent,std::string name, std::string destination,DataSet dataSet,View *view=NULL, bool query=true, bool redraw=false, bool push=true);
+  template<typename PROPERTY> static bool changeProperty(Graph *graph,QWidget *parent,std::string name, std::string destination,DataSet dataSet,View3 *view=NULL, bool query=true, bool redraw=false, bool push=true);
   /**
    * Apply a string property algorithm with given name on property with name : propertyName on graph
    * if algorithm has a problem : display it in a QDialog in parent widget
    * view is use to preview result
    */
-  static bool changeString(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL);
+  static bool changeString(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View3 *view=NULL);
   /**
    * Apply a boolean property algorithm with given name on property with name : propertyName on graph
    * if algorithm has a problem : display it in a QDialog in parent widget
    * view is use to preview result
    */
-  static bool changeBoolean(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL);
+  static bool changeBoolean(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View3 *view=NULL);
   /**
    * Apply a metric property algorithm with given name on property with name : propertyName on graph
    * if algorithm has a problem : display it in a QDialog in parent widget
    * view is use to preview result
    * if mapMetric is at true : apply a color algoritm after metric algorithm
    */
-  static bool changeMetric(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL,bool mapMetric=false, const std::string &colorAlgorithmName="", const std::string &colorPropertyName="");
+  static bool changeMetric(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View3 *view=NULL,bool mapMetric=false, const std::string &colorAlgorithmName="", const std::string &colorPropertyName="");
   /**
    * Apply a layout property algorithm with given name on property with name : propertyName on graph
    * if algorithm has a problem : display it in a QDialog in parent widget
    * view is use to preview result
    */
-  static bool changeLayout(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL);
+  static bool changeLayout(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View3 *view=NULL);
   /**
    * Apply an integer property algorithm with given name on property with name : propertyName on graph
    * if algorithm has a problem : display it in a QDialog in parent widget
    * view is use to preview result
    */
-  static bool changeInt(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL);
+  static bool changeInt(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View3 *view=NULL);
   /**
    * Apply a color property algorithm with given name on property with name : propertyName on graph
    * if algorithm has a problem : display it in a QDialog in parent widget
    * view is use to preview result
    */
-  static bool changeColors(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL);
+  static bool changeColors(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View3 *view=NULL);
   /**
    * Apply a size property algorithm with given name on property with name : propertyName on graph
    * if algorithm has a problem : display it in a QDialog in parent widget
    * view is use to preview result
    */
-  static bool changeSizes(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL);
+  static bool changeSizes(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View3 *view=NULL);
 
   /**
    * Test if graph is acyclic and display result in a QWidget in parent widget

@@ -32,7 +32,7 @@ class QAction;
 namespace tlp {
 
 class Graph;
-class View;
+class View3;
 
 /** \brief Views manager for Controller
  *
@@ -72,7 +72,7 @@ public :
   /**
    * Return the current view in the controller
    */
-  virtual View *getCurrentView();
+  virtual View3 *getCurrentView();
 
   /**
    * Return the number of opened view
@@ -82,55 +82,55 @@ public :
   /**
    * Get the graph associated with the given view
    */
-  virtual Graph *getGraphOfView(View *view);
+  virtual Graph *getGraphOfView(View3 *view);
 
   /**
    * return the views for the given graph.
    */
-  virtual std::vector<View*> getViewsOfGraph(Graph *graph);
+  virtual std::vector<View3*> getViewsOfGraph(Graph *graph);
 
   /**
    * Set the graph associated with the given view
    */
-  virtual void setGraphOfView(View *view,Graph *graph);
+  virtual void setGraphOfView(View3 *view,Graph *graph);
   /**
     * Set the data of the given view.
     */
-  virtual void setDataOfView(tlp::View* view, tlp::Graph* graph, const tlp::DataSet& dataSet);
+  virtual void setDataOfView(tlp::View3* view, tlp::Graph* graph, const tlp::DataSet& dataSet);
   /**
    * Get the view associated with the given widget
    */
-  virtual View *getViewOfWidget(QWidget *widget);
+  virtual View3 *getViewOfWidget(QWidget *widget);
 
   /**
    * Set the view associated with the given widget
    */
-  virtual void setViewOfWidget(QWidget *widget,View *view);
+  virtual void setViewOfWidget(QWidget *widget,View3 *view);
 
   /**
    * Get views
    */
-  virtual void getViews(std::vector<View*> &views);
+  virtual void getViews(std::vector<View3*> &views);
 
   /**
    * Get the widget associated with the given view
    */
-  virtual QWidget *getWidgetOfView(View *view);
+  virtual QWidget *getWidgetOfView(View3 *view);
 
   /**
    * Get the name of the given view
    */
-  virtual std::string getNameOfView(View *view) const;
+  virtual std::string getNameOfView(View3 *view) const;
 
   /**
    * Set the name of the given view
    */
-  virtual void setNameOfView(View *view,const std::string &name);
+  virtual void setNameOfView(View3 *view,const std::string &name);
 
   /**
    * Get the configuration widget of interactor activated for this view
    */
-  virtual QWidget *getInteractorConfigurationWidgetOfView(View *view);
+  virtual QWidget *getInteractorConfigurationWidgetOfView(View3 *view);
 
   /**
    * \brief Change the title of views of graph : graph
@@ -147,7 +147,7 @@ public :
   /**
    * Close the given view.
    */
-  virtual void closeView(View *view);
+  virtual void closeView(View3 *view);
 
   /**
    * Close all the views for the given graph.
@@ -161,18 +161,18 @@ public :
    * if forceWidgetSize is false : use rect size only if created widget have a size smaller than (10,10)
    * Return new created view
    */
-  virtual View* createView(const std::string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize,const QRect &rect,bool maximized);
+  virtual View3* createView(const std::string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize,const QRect &rect,bool maximized);
 
   /**
    * Initialize an already created view and set it into the workspace with the specified position, size, etc
    * See ControllerViewsManager::createView() for details.
    */
-  void addView(View *view, Graph *graph, DataSet dataSet, bool forceWidgetSize, const QRect &rect, bool maximized, const std::string &viewName, QWidget *viewWidget);
+  void addView(View3 *view, Graph *graph, DataSet dataSet, bool forceWidgetSize, const QRect &rect, bool maximized, const std::string &viewName, QWidget *viewWidget);
 
   /**
    * Put interactors of the given view in graphToolBar
    */
-  virtual void installInteractors(View *view);
+  virtual void installInteractors(View3 *view);
 
   /**
    * Update view that use given graph (call setGraph on these views)
@@ -238,17 +238,17 @@ protected slots:
   virtual void widgetWillBeClosed(QObject *object);
 
 protected:
-  View *currentView;
-  std::map<View *, QAction *> lastInteractorOnView;
+  View3 *currentView;
+  std::map<View3 *, QAction *> lastInteractorOnView;
 
   Graph *currentGraph;
 
-  std::map<View *,std::string> viewNames;
-  std::map<QWidget *,View*> viewWidget;
-  std::map<View *,Graph* > viewGraph;
+  std::map<View3 *,std::string> viewNames;
+  std::map<QWidget *,View3*> viewWidget;
+  std::map<View3 *,Graph* > viewGraph;
 
-  std::map<View *, QWidget *> lastInteractorConfigurationWidgetOnView;
-  std::map<View *,std::list<unsigned int> > viewsGraphsHierarchy;
+  std::map<View3 *, QWidget *> lastInteractorConfigurationWidgetOnView;
+  std::map<View3 *,std::list<unsigned int> > viewsGraphsHierarchy;
 
 };
 

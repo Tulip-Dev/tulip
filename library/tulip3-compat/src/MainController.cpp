@@ -411,7 +411,7 @@ void MainController::setData(Graph *graph,DataSet dataSet) {
     }
   }
   else {
-    View *view=initMainView(dataSet);
+    View3 *view=initMainView(dataSet);
     lastViewedGraph=view->getGraph();
   }
 
@@ -446,7 +446,7 @@ void MainController::getData(Graph **graph,DataSet *dataSet) {
     str << "view" << i ;
     DataSet viewData;
     Graph *graph;
-    View *view = getViewOfWidget(widgetList[i]);
+    View3 *view = getViewOfWidget(widgetList[i]);
 
     if(view) {
       view->getData(&graph,&viewData);
@@ -919,12 +919,12 @@ void MainController::buildMenu() {
 
 }
 //**********************************************************************
-View* MainController::initMainView(DataSet dataSet) {
-  View* newView=createView("Node Link Diagram view",getCurrentGraph(),dataSet);
+View3* MainController::initMainView(DataSet dataSet) {
+  View3* newView=createView("Node Link Diagram view",getCurrentGraph(),dataSet);
   return newView;
 }
 //**********************************************************************
-View* MainController::createView(const string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize,const QRect &rect,bool maximized) {
+View3* MainController::createView(const string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize,const QRect &rect,bool maximized) {
   QRect newRect=rect;
   forceWidgetSize=true;
   unsigned int viewsNumber=getViewsNumber();
@@ -936,7 +936,7 @@ View* MainController::createView(const string &name,Graph *graph,DataSet dataSet
 
   unsigned int holdCount=Observable::observersHoldCounter();
 
-  View *createdView=ControllerViewsManager::createView(name,graph,dataSet,forceWidgetSize,newRect,maximized);
+  View3 *createdView=ControllerViewsManager::createView(name,graph,dataSet,forceWidgetSize,newRect,maximized);
 
   assert(holdCount==Observable::observersHoldCounter());
 
@@ -945,7 +945,7 @@ View* MainController::createView(const string &name,Graph *graph,DataSet dataSet
   }
 
   connect(createdView, SIGNAL(elementSelected(unsigned int, bool)),this,SLOT(showElementProperties(unsigned int, bool)));
-  connect(createdView, SIGNAL(requestChangeGraph(tlp::View*,tlp::Graph*)), this, SLOT(viewRequestChangeGraph(tlp::View*,tlp::Graph*)));
+  connect(createdView, SIGNAL(requestChangeGraph(tlp::View3*,tlp::Graph*)), this, SLOT(viewRequestChangeGraph(tlp::View3*,tlp::Graph*)));
 
   return createdView;
 }
@@ -963,7 +963,7 @@ bool MainController::windowActivated(QWidget *widget) {
   }
 
   // Find view and graph of this widget
-  View *view=getViewOfWidget(widget);
+  View3 *view=getViewOfWidget(widget);
   Graph *graph=getGraphOfView(view);
 
   // Update left part of tulip
@@ -1116,7 +1116,7 @@ void MainController::showViewEditor() {
   }
 }
 //==================================================
-void MainController::viewRequestChangeGraph(View *view,Graph *graph) {
+void MainController::viewRequestChangeGraph(View3 *view,Graph *graph) {
   assert(view==getCurrentView());
   (void) view; //to remove unused param warning
   changeGraph(graph);
@@ -1736,10 +1736,10 @@ void MainController::undo() {
   eltProperties->setGraph(newGraph,false);
 
   // views and interactors informed that undo has been made
-  vector<View *> views;
+  vector<View3 *> views;
   getViews(views);
 
-  for(vector<View*>::iterator it=views.begin(); it!=views.end(); ++it) {
+  for(vector<View3*>::iterator it=views.begin(); it!=views.end(); ++it) {
     (*it)->undoIsDone();
     Interactor *interactor=(*it)->getActiveInteractor();
 

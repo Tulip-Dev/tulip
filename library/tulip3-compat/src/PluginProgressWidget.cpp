@@ -31,7 +31,7 @@ PluginProgressWidget::PluginProgressWidget(QWidget *parent):QWidget(parent),Simp
   connect(ui->preview,SIGNAL(toggled(bool)),this,SLOT(changePreview(bool)));
 }
 
-PluginProgressWidget::PluginProgressWidget(View *view,int updateInterval,QWidget *parent) :
+PluginProgressWidget::PluginProgressWidget(View3 *view,int updateInterval,QWidget *parent) :
   QWidget(parent),SimplePluginProgress(),view(view),updateIterval(updateInterval),time(QTime::currentTime()),
   ui(new Ui::PluginProgressWidget) {
   ui->setupUi(this);

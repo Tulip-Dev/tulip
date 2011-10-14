@@ -20,7 +20,7 @@
 #define Tulip_CONTROLLERVIEWSTOOLS_H
 
 #include <tulip/tulipconf.h>
-#include <tulip/View.h>
+#include <tulip/View3.h>
 
 #include <QtGui/QWidget>
 
@@ -39,21 +39,21 @@ public :
    * if given name isn't be valid : return a new name in createViewName
    * return created view and created widget in createdView and createdWidget
    */
-  static void createView(const std::string &name,Graph *graph,DataSet dataSet,QWidget *parent,std::string *createdViewName, View **createdView, QWidget **createdWidget);
+  static void createView(const std::string &name,Graph *graph,DataSet dataSet,QWidget *parent,std::string *createdViewName, View3 **createdView, QWidget **createdWidget);
   /**
    * Create a Node Link Diagram Component view with given graph, given dataSet and set view's widget parent
    * return created view and created widget in createdView and createdWidget
    */
-  static void createMainView(Graph *graph,DataSet dataSet,QWidget *parent,View **createdView, QWidget **createdWidget);
+  static void createMainView(Graph *graph,DataSet dataSet,QWidget *parent,View3 **createdView, QWidget **createdWidget);
   /**
    * Install available interactors for given view in toolBar
    */
-  static void installInteractors(View *view,QToolBar *toolBar);
+  static void installInteractors(View3 *view,QToolBar *toolBar);
   /**
    * Change active interactor on toolBar
    * Return configuration widget of this interactor in createdConfigurationWidget argument
    */
-  static void changeInteractor(View *view,QToolBar *toolBar,QAction* action,QWidget **createdConfigurationWidget);
+  static void changeInteractor(View3 *view,QToolBar *toolBar,QAction* action,QWidget **createdConfigurationWidget);
   /**
    * Return a default interactor's configuration widget
    */
