@@ -39,6 +39,7 @@ void ViewWidget::activeInteractorChanged(tlp::Interactor *i) {
 
 void ViewWidget::resize(const QSizeF& size) {
   GlMainWidgetGraphicsItem* glMainWidgetItem = dynamic_cast<GlMainWidgetGraphicsItem*>(_widgetItem);
+
   if (glMainWidgetItem != NULL)
     glMainWidgetItem->resize(QSize(size.width(),size.height()));
   else {
