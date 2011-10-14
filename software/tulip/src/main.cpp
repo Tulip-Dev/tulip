@@ -33,7 +33,7 @@ int main( int argc, char **argv ) {
   // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
 #endif
-  tlp::initTulipLib((char *) QApplication::applicationDirPath().toAscii().data());
+  tlp::initTulipLib((char *) QApplication::applicationDirPath().toUtf8().data());
 
   //add local plugins installation path. This is an application behavior, not a library one, and should stay here.
   tlp::TulipPluginsPath = tlp::PluginInfo::pluginsDirName + tlp::PATH_DELIMITER + tlp::TulipPluginsPath;
