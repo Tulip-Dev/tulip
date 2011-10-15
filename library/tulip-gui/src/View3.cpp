@@ -30,7 +30,7 @@ View3::View3() {
   */
 
 QWidget* View3::widget() const {
-    View3* v = const_cast<View3*>(this);
+  View3* v = const_cast<View3*>(this);
   return v->getWidget();
 }
 

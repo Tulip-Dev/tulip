@@ -32,9 +32,9 @@ public:
   View3();
   virtual ~View3() {}
 
-/*
-  Methods from ViewWidget
-  */
+  /*
+    Methods from ViewWidget
+    */
   virtual QWidget* widget() const;
   virtual tlp::DataSet state() const;
   virtual void setState(const tlp::DataSet&);
