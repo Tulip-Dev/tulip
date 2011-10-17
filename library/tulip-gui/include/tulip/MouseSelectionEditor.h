@@ -24,7 +24,7 @@
 #include <tulip/GlRect.h>
 #include <tulip/GlComposite.h>
 #include <tulip/Observable.h>
-#include <tulip/InteractorComponent.h>
+#include <tulip/InteractorComposite.h>
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>

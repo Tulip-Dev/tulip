@@ -20,6 +20,8 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseShowElementInfos.h>
 
+#include <QtGui/QLabel>
+
 #include "NodeLinkDiagramComponentInteractor.h"
 
 using namespace tlp;
@@ -36,16 +38,19 @@ public:
    */
   InteractorGetInformation():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Get information on nodes/edges") {
     setPriority(4);
-    setConfigurationWidgetText(QString("<h3>Get information interactor</h3>")+
-                               "<b>Mouse left</b> click on an element to display its properties");
   }
 
   /**
    * Construct chain of responsibility
    */
   void construct() {
-    pushInteractorComponent(new MousePanNZoomNavigator);
-    pushInteractorComponent(new MouseShowElementInfos);
+    push_back(new MousePanNZoomNavigator);
+    push_back(new MouseShowElementInfos);
+  }
+
+  QWidget* configurationWidget() const {
+    return new QLabel(QString("<h3>Get information interactor</h3>")+
+                  "<b>Mouse left</b> click on an element to display its properties");
   }
 };
 

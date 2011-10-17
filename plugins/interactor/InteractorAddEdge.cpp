@@ -21,6 +21,8 @@
 #include <tulip/MouseNodeBuilder.h>
 #include <tulip/MouseEdgeBuilder.h>
 
+#include <QtGui/QLabel>
+
 #include "NodeLinkDiagramComponentInteractor.h"
 
 using namespace tlp;
@@ -37,21 +39,23 @@ public:
    */
   InteractorAddEdge():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addedge.png","Add edges") {
     setPriority(1);
-    setConfigurationWidgetText(QString("<h3>Add edge interactor</h3>")+
-                               "<b>Mouse left</b> click on the source node,<br/>then <b>Mouse left</b> click on the target node.<br/>Any <b>Mouse left</b> click outside a node will add an edge bend.<br/><br/>If you want to cancel the current edge construction, click on the middle mouse button");
   }
 
   /**
    * Construct chain of responsibility
    */
   void construct() {
-    pushInteractorComponent(new MousePanNZoomNavigator);
-    pushInteractorComponent(new MouseNodeBuilder);
-    pushInteractorComponent(new MouseEdgeBuilder);
+    push_back(new MousePanNZoomNavigator);
+    push_back(new MouseNodeBuilder);
+    push_back(new MouseEdgeBuilder);
   }
 
-  QCursor getCursor() {
+  QCursor cursor() {
     return QCursor(Qt::PointingHandCursor);
+  }
+
+  QWidget* configurationWidget() const {
+    return new QLabel("<h3>Add edge interactor</h3><b>Mouse left</b> click on the source node,<br/>then <b>Mouse left</b> click on the target node.<br/>Any <b>Mouse left</b> click outside a node will add an edge bend.<br/><br/>If you want to cancel the current edge construction, click on the middle mouse button");
   }
 };
 

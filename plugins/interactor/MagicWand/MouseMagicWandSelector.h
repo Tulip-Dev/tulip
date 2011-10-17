@@ -19,7 +19,7 @@
 #ifndef MOUSEMAGICWANDSELECTOR_H
 #define MOUSEMAGICWANDSELECTOR_H
 
-#include <tulip/InteractorComponent.h>
+#include <tulip/InteractorComposite.h>
 
 class MagicSelectionInteractorConfigWidget;
 

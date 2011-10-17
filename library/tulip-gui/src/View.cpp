@@ -5,7 +5,7 @@
 using namespace tlp;
 
 View::View()
-  : _interactors(QSet<Interactor*>()), _activeInteractor(NULL),
+  : _interactors(QList<Interactor*>()), _activeInteractor(NULL),
     _triggers(QSet<Observable*>()),
     _graph(NULL) {
 }
@@ -13,9 +13,13 @@ View::View()
 View::~View() {
 }
 
-void View::setInteractors(const QSet<tlp::Interactor *> &inters) {
+void View::setInteractors(const QList<tlp::Interactor *> &inters) {
   _interactors = inters;
   interactorsInstalled(inters);
+}
+
+QList<Interactor*> View::interactors() const {
+  return _interactors;
 }
 
 void View::setCurrentInteractor(tlp::Interactor *i) {
@@ -49,7 +53,7 @@ void View::setGraph(tlp::Graph *g) {
   graphChanged(g);
 }
 
-void View::interactorsInstalled(const QSet<tlp::Interactor*>&) {
+void View::interactorsInstalled(const QList<tlp::Interactor*>&) {
 }
 
 void View::currentInteractorChanged(tlp::Interactor*) {
