@@ -19,7 +19,7 @@
 #ifndef MOUSESELECTION_H
 #define MOUSESELECTION_H
 
-#include <tulip/InteractorComponent.h>
+#include <tulip/GLInteractor.h>
 
 class QMouseEvent;
 class QKeyEvent;
@@ -29,7 +29,7 @@ namespace tlp {
 class Graph;
 /** \addtogroup Mouse_interactor */
 /*@{*/
-class TLP_QT_SCOPE MouseSelector:public InteractorComponent {
+class TLP_QT_SCOPE MouseSelector:public GLInteractorComponent {
 protected:
   Qt::MouseButton mButton;
   Qt::KeyboardModifier kModifier;

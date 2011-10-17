@@ -20,6 +20,8 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseBoxZoomer.h>
 
+#include <QtGui/QLabel>
+
 #include "NodeLinkDiagramComponentInteractor.h"
 
 using namespace tlp;
@@ -36,20 +38,23 @@ public:
    */
   InteractorRectangleZoom():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_zoom.png","Zoom on rectangle") {
     setPriority(2);
-    setConfigurationWidgetText(QString("<h3>Rectangle zoom interactor</h3>")+
-                               "Zoom on selected rectangle.<br><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner.");
   }
 
   /**
    * Construct chain of responsibility
    */
   void construct() {
-    pushInteractorComponent(new MousePanNZoomNavigator);
-    pushInteractorComponent(new MouseBoxZoomer);
+    push_back(new MousePanNZoomNavigator);
+    push_back(new MouseBoxZoomer);
   }
 
-  QCursor getCursor() {
+  QCursor cursor() {
     return QCursor(Qt::CrossCursor);
+  }
+
+  QWidget* configurationWidget() const {
+    return new QLabel(QString("<h3>Rectangle zoom interactor</h3>")+
+                                   "Zoom on selected rectangle.<br><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner.");
   }
 };
 

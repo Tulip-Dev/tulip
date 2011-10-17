@@ -80,7 +80,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
           bends.clear();
           Observable::unholdObservers();
-          NodeLinkDiagramComponent *nodeLinkView=static_cast<NodeLinkDiagramComponent *>(view);
+          NodeLinkDiagramComponent *nodeLinkView=static_cast<NodeLinkDiagramComponent *>(view());
           nodeLinkView->elementSelectedSlot(newEdge.id, false);
         }
         else {

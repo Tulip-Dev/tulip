@@ -22,9 +22,6 @@ INSTALL(FILES
   tulip/GraphPropertiesTableWidget.h
   tulip/GridOptionsWidget.h
   tulip/GWOverviewWidget.h
-  tulip/InteractorChainOfResponsibility.h
-  tulip/InteractorComponent.h
-  tulip/Interactor.h
   tulip/InteractorManager.h
   tulip/ItemsListWidget.h
   tulip/LayerManagerWidget.h
@@ -78,6 +75,8 @@ INSTALL(FILES
   tulip/GlMainWidgetGraphicsItem.h
   tulip/View3.h
   tulip/AbstractView.h
+  tulip/Interactor.h
+  tulip/InteractorComposite.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

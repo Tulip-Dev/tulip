@@ -25,8 +25,6 @@ SET(SRCS
   GraphState.cpp
   GridOptionsWidget.cpp
   GWOverviewWidget.cpp
-  InteractorChainOfResponsibility.cpp
-  Interactor.cpp
   InteractorManager.cpp
   ItemsListWidget.cpp
   LayerManagerWidget.cpp
@@ -79,6 +77,8 @@ SET(SRCS
   ViewWidget.cpp
   View3.cpp
   AbstractView.cpp
+  InteractorComposite.cpp
+  GLInteractor.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -116,7 +116,6 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/GraphPropertiesTableWidget.h
   ../include/tulip/GridOptionsWidget.h
   ../include/tulip/GWOverviewWidget.h
-  ../include/tulip/Interactor.h
   ../include/tulip/ItemsListWidget.h
   ../include/tulip/LayerManagerWidget.h
   ../include/tulip/Morphing.h
@@ -145,6 +144,9 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/GlMainWidgetGraphicsItem.h
   ../include/tulip/View3.h
   ../include/tulip/AbstractView.h
+  ../include/tulip/Interactor.h
+  ../include/tulip/InteractorComposite.h
+  ../include/tulip/GLInteractor.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

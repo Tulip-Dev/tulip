@@ -18,6 +18,7 @@
  */
 
 #include <tulip/MouseInteractors.h>
+#include <QtGui/QLabel>
 
 #include "NodeLinkDiagramComponentInteractor.h"
 
@@ -35,29 +36,32 @@ public:
    */
   InteractorNavigation():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_navigation.png","Navigate in graph") {
     setPriority(5);
-    setConfigurationWidgetText(QString("<h3>Navigation interactor</h3>")+
-                               "3D Navigation in the graph<br><br>"+
-                               "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys down</li></ul>" +
-                               "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right moves</li></ul>" +
-#if !defined(__APPLE__)
-                               "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or <b>Insert</b> key</li></ul>" +
-                               "Zoom/Unzoom: <ul><li><b>Ctrl + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
-#else
-                               "Z rotation: <ul><li><b>Alt + Mouse left</b> down + left/right moves</li><li> or <b>Insert</b> key</li></ul>" +
-                               "Zoom/Unzoom: <ul><li><b>Alt + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
-#endif
-                              );
   }
 
   /**
    * Construct chain of responsibility
    */
   void construct() {
-    pushInteractorComponent(new MouseNKeysNavigator);
+    push_back(new MouseNKeysNavigator);
   }
 
-  QCursor getCursor() {
+  QCursor cursor() {
     return QCursor(Qt::OpenHandCursor);
+  }
+
+  QWidget* configurationWidget() const {
+    return new QLabel(QString("<h3>Navigation interactor</h3>")+
+                      "3D Navigation in the graph<br><br>"+
+                      "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys down</li></ul>" +
+                      "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right moves</li></ul>" +
+#if !defined(__APPLE__)
+                      "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or <b>Insert</b> key</li></ul>" +
+                      "Zoom/Unzoom: <ul><li><b>Ctrl + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
+#else
+                      "Z rotation: <ul><li><b>Alt + Mouse left</b> down + left/right moves</li><li> or <b>Insert</b> key</li></ul>" +
+                      "Zoom/Unzoom: <ul><li><b>Alt + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
+#endif
+                      );
   }
 
 };

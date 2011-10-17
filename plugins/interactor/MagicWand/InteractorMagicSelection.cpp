@@ -18,7 +18,7 @@
  */
 
 #include <tulip/MouseInteractors.h>
-#include <tulip/InteractorChainOfResponsibility.h>
+#include <tulip/InteractorComposite.h>
 
 #include "MagicSelectionInteractorConfigWidget.h"
 #include "MouseMagicWandSelector.h"
@@ -30,28 +30,23 @@ using namespace tlp;
 /** \brief Tulip interactor to do a magic selection
  *
  */
-class InteractorMagicSelection  : public InteractorChainOfResponsibility {
+class InteractorMagicSelection  : public InteractorComposite {
 public:
 
   /**
   * Default constructor
   */
-  InteractorMagicSelection():InteractorChainOfResponsibility(":/tulip/gui/icons/i_magic.png","Fuzzy selection: select neighboring nodes based on their value of a metric."), configWidget(NULL) {
+  InteractorMagicSelection():InteractorComposite(QIcon(":/tulip/gui/icons/i_magic.png"),"Fuzzy selection: select neighboring nodes based on their value of a metric."), configWidget(NULL) {
     setPriority(3);
-    setConfigurationWidgetText(QString("<h3>Magic selection interactor</h3>")+
-                               "Select neighbour elements which have the same value on a metric");
-  }
-
-  ~InteractorMagicSelection() {
-    delete configWidget;
   }
 
   virtual bool isCompatible(const std::string &viewName) {
     return viewName=="Node Link Diagram view";
   }
 
-  QWidget* getConfigurationWidget() {
-    return configWidget;
+  QWidget* configurationWidget() const {
+    return new QLabel(QString("<h3>Magic selection interactor</h3>")+
+                      "Select neighbour elements which have the same value on a metric");
   }
 
   /**
@@ -59,12 +54,8 @@ public:
   */
   void construct() {
     configWidget = new MagicSelectionInteractorConfigWidget();
-    pushInteractorComponent(new MousePanNZoomNavigator);
-    pushInteractorComponent(new MouseMagicWandSelector(configWidget));
-  }
-
-  virtual void setView(View* view) {
-    InteractorChainOfResponsibility::setView(view);
+    push_back(new MousePanNZoomNavigator);
+    push_back(new MouseMagicWandSelector(configWidget));
   }
 
 private:

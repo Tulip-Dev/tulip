@@ -19,18 +19,18 @@
 #ifndef NODELINKDIAGRAMCOMPONENTINTERACTOR_H
 #define NODELINKDIAGRAMCOMPONENTINTERACTOR_H
 
-#include <tulip/InteractorChainOfResponsibility.h>
+#include <tulip/GLInteractor.h>
 
 namespace tlp {
 
 /** \brief Tulip interactor abstract class for NodeLinkDiagramComponent
  *
  */
-class NodeLinkDiagramComponentInteractor  : public InteractorChainOfResponsibility {
+class NodeLinkDiagramComponentInteractor  : public GLInteractorComposite {
 
 public :
 
-  NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text):InteractorChainOfResponsibility(iconPath,text) {
+  NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text):GLInteractorComposite(QIcon(iconPath),text) {
   }
 
   /**

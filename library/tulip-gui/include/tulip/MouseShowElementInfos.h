@@ -21,7 +21,7 @@
 
 #include <QtGui/QMouseEvent>
 
-#include <tulip/InteractorComponent.h>
+#include <tulip/InteractorComposite.h>
 
 #include "tulip/GlMainWidget.h"
 #include "tulip/NodeLinkDiagramComponent.h"

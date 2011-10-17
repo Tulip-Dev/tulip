@@ -23,7 +23,7 @@
 
 #include <QtGui/qcursor.h>
 
-#include "tulip/InteractorComponent.h"
+#include "tulip/InteractorComposite.h"
 
 namespace tlp {
 

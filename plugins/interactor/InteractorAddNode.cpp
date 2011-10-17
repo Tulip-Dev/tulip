@@ -19,7 +19,7 @@
 
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseNodeBuilder.h>
-
+#include <QtGui/QLabel>
 #include "NodeLinkDiagramComponentInteractor.h"
 
 using namespace tlp;
@@ -36,20 +36,23 @@ public:
    */
   InteractorAddNode():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addnode.png","Add nodes") {
     setPriority(1);
-    setConfigurationWidgetText(QString("<h3>Add node interactor</h3>")+
-                               "<b>Mouse left</b> click to add a node in the graph");
   }
 
   /**
    * Construct chain of responsibility
    */
   void construct() {
-    pushInteractorComponent(new MousePanNZoomNavigator);
-    pushInteractorComponent(new MouseNodeBuilder);
+    push_back(new MousePanNZoomNavigator);
+    push_back(new MouseNodeBuilder);
   }
 
   QCursor getCursor() {
     return QCursor(Qt::PointingHandCursor);
+  }
+
+  QWidget* configurationWidget() const {
+    return new QLabel(QString("<h3>Add node interactor</h3>")+
+                      "<b>Mouse left</b> click to add a node in the graph");
   }
 };
 

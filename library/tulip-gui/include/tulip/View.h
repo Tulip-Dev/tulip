@@ -50,7 +50,7 @@ class TLP_QT_SCOPE View: public QObject, public tlp::WithDependency, public tlp:
   Q_PROPERTY(QPointF pos READ pos WRITE setPos)
   Q_PROPERTY(QSizeF size READ size WRITE resize)
 
-  QSet<tlp::Interactor*> _interactors;
+  QList<tlp::Interactor*> _interactors;
   tlp::Interactor* _activeInteractor;
 
   QSet<tlp::Observable*> _triggers;
@@ -73,12 +73,12 @@ public:
     The list of interactors can then be retrieved using the View::interactors() method.
     After this method is called, the callback slot View::interactorsInstalled() is also called to provide custom implementation.
     */
-  void setInteractors(const QSet<tlp::Interactor*>&);
+  void setInteractors(const QList<tlp::Interactor*>&);
 
   /**
     @return The list of installed interactors.
     */
-  QSet<tlp::Interactor*> interactors() const;
+  QList<tlp::Interactor*> interactors() const;
 
   /**
     @brief Sets the active interactor.
@@ -201,7 +201,7 @@ protected slots:
     @brief Custom user callback when a set of interactors has been installed.
     At this point, user can check the View::hasInteractorsResponsibility() and View::hasConfigurationWidgetsResponsibility() to start building GUI.
     */
-  virtual void interactorsInstalled(const QSet<tlp::Interactor*>&);
+  virtual void interactorsInstalled(const QList<tlp::Interactor*>&);
 
   /**
     @brief Custom user callback when the active interactor has changed.

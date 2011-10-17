@@ -78,7 +78,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
         mLayout->setNodeValue(newNode, point);
         Observable::unholdObservers();
-        NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view;
+        NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view();
         nodeLinkView->elementSelectedSlot(newNode.id, true);
         //glMainWidget->redraw();
         return true;

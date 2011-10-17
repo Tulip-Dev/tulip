@@ -98,7 +98,7 @@ void AbstractView::setActiveInteractor(Interactor *interactor) {
   activeInteractor = NULL;
 
   if (currentInteractor)
-    currentInteractor->remove();
+    currentInteractor->uninstall();
 
   interactor->install(centralWidget);
   activeInteractor = interactor;

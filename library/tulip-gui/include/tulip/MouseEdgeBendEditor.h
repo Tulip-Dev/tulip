@@ -21,7 +21,7 @@
 
 #include <tulip/GlCircle.h>
 #include <tulip/GlTriangle.h>
-#include <tulip/InteractorComponent.h>
+#include <tulip/InteractorComposite.h>
 
 /** \addtogroup Mouse_interactor */
 /*@{*/

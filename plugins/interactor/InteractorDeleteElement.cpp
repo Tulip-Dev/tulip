@@ -18,7 +18,7 @@
  */
 
 #include <tulip/MouseInteractors.h>
-
+#include <QtGui/QLabel>
 #include "NodeLinkDiagramComponentInteractor.h"
 
 using namespace tlp;
@@ -35,16 +35,19 @@ public:
    */
   InteractorDeleteElement():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_del.png","Delete nodes or edges") {
     setPriority(1);
-    setConfigurationWidgetText(QString("<h3>Delete interactor</h3>")+
-                               "<b>Mouse left</b> click on an element to delete it");
+    ;
   }
 
   /**
    * Construct chain of responsibility
    */
   void construct() {
-    pushInteractorComponent(new MousePanNZoomNavigator);
-    pushInteractorComponent(new MouseElementDeleter);
+    push_back(new MousePanNZoomNavigator);
+    push_back(new MouseElementDeleter);
+  }
+
+  QWidget* configurationWidget() const {
+    return new QLabel("<h3>Delete interactor</h3><b>Mouse left</b> click on an element to delete it");
   }
 };
 

@@ -19,7 +19,7 @@
 #ifndef MOUSEEDGESELECTION_H
 #define MOUSEEDGESELECTION_H
 
-#include <tulip/InteractorComponent.h>
+#include <tulip/InteractorComposite.h>
 
 class QMouseEvent;
 class QKeyEvent;

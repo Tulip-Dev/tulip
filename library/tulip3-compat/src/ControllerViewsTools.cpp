@@ -82,7 +82,7 @@ void ControllerViewsTools::installInteractors(View3 *view,QToolBar *toolBar) {
   list<QAction *> interactorsActionList;
 
   for(list<Interactor *>::iterator it=interactorsList.begin(); it!=interactorsList.end(); ++it)
-    interactorsActionList.push_back((*it)->getAction());
+    interactorsActionList.push_back((*it)->action());
 
   for(list<QAction *>::iterator it=interactorsActionList.begin(); it!=interactorsActionList.end(); ++it) {
     toolBar->addAction(*it);
@@ -99,10 +99,9 @@ void ControllerViewsTools::changeInteractor(View3 *view,QToolBar *toolBar,QActio
   action->setCheckable(true);
   action->setChecked(true);
 
-  InteractorAction *interactorAction=(InteractorAction *)action;
-  view->setCurrentInteractor(interactorAction->getInteractor());
+  view->setCurrentInteractor(static_cast<Interactor*>(action->parent()));
 
-  QWidget *interactorWidget=interactorAction->getInteractor()->getConfigurationWidget();
+  QWidget *interactorWidget=static_cast<Interactor*>(action->parent())->configurationWidget();
   QWidget *containerWidget=new QWidget();
   QGridLayout *gridLayout = new QGridLayout(containerWidget);
   gridLayout->setSpacing(0);

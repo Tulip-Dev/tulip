@@ -19,7 +19,7 @@
 #ifndef MOUSEZOOMBOX_H
 #define MOUSEZOOMBOX_H
 
-#include <tulip/InteractorComponent.h>
+#include <tulip/GLInteractor.h>
 
 class QMouseEvent;
 class QKeyEvent;
@@ -29,7 +29,7 @@ namespace tlp {
 class Graph;
 /** \addtogroup Mouse_interactor */
 /*@{*/
-class TLP_QT_SCOPE MouseBoxZoomer : public InteractorComponent {
+class TLP_QT_SCOPE MouseBoxZoomer : public GLInteractorComponent {
 private:
   Qt::MouseButton mButton;
   Qt::KeyboardModifier kModifier;

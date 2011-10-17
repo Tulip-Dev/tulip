@@ -20,7 +20,7 @@
 #define MOUSEADDEDGE_H
 #include <vector>
 #include <tulip/Coord.h>
-#include <tulip/InteractorComponent.h>
+#include <tulip/GLInteractor.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/Observable.h>
 #include <tulip/ObservableProperty.h>
@@ -31,7 +31,7 @@ class LayoutProperty;
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
-class TLP_QT_SCOPE MouseEdgeBuilder:public InteractorComponent, private Observable {
+class TLP_QT_SCOPE MouseEdgeBuilder:public GLInteractorComponent, private Observable {
 private:
   node source;
   bool started;

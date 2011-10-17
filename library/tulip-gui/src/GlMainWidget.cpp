@@ -38,6 +38,7 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlQuadTreeLODCalculator.h>
+#include <tulip/GLInteractor.h>
 
 #include "tulip/QGlPixelBufferManager.h"
 #include "tulip/Interactor.h"
@@ -457,9 +458,9 @@ void GlMainWidget::computeInteractors() {
   if(!view)
     return;
 
-  Interactor *interactor=view->currentInteractor();
+  GLInteractorComposite *interactor=dynamic_cast<GLInteractorComposite*>(view->currentInteractor());
 
-  if(!interactor)
+  if(interactor == NULL)
     return;
 
   interactor->compute(this);
@@ -469,7 +470,7 @@ void GlMainWidget::drawInteractors() {
   if(!view)
     return;
 
-  Interactor *interactor=view->currentInteractor();
+  GLInteractorComposite *interactor=dynamic_cast<GLInteractorComposite*>(view->currentInteractor());
 
   if(!interactor)
     return;
