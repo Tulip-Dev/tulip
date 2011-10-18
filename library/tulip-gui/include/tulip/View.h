@@ -207,7 +207,7 @@ protected slots:
     @brief Custom user callback when the active interactor has changed.
     @see Interactor::install()
     */
-  virtual void currentInteractorChanged(tlp::Interactor*);
+  virtual void currentInteractorChanged(tlp::Interactor*)=0;
 
   /**
     @brief Custom user callback when a new graph is set on the view.

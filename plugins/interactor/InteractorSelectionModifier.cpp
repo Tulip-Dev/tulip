@@ -38,6 +38,18 @@ public:
    */
   InteractorSelectionModifier():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_move.png","Move/Reshape selection") {
     setPriority(3);
+    setConfigurationWidgetText(QString("<h3>Selection modifier interactor</h3>")+
+                               "Modify selection<br/><br/>"+
+                               "Resize : <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
+                               "<ul><li><b>Mouse left</b> down on square + moves</li></ul>" +
+                               "Only change node size : <ul><li><b>Ctrl + Mouse left</b> down on triangle + moves</li></ul>" +
+                               "Only change selection size : <ul><li><b>Shift + Mouse left</b> down on triangle + moves</li></ul>" +
+                               "Rotate : <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
+                               "Only rotate nodes : <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
+                               "Only rotate selection : <ul><li><b>Shift + Mouse left</b> down on circle + moves</li></ul>" +
+                               "Translate : <ul><li><b>Mouse left</b> down inside rectangle + moves</li></ul>"+
+                               "Align vertically/horizontally : <ul><li><b>Mouse left</b> click on two arrows icon in top right zone</li></ul>"+
+                               "Align left/right/top/bottom : <ul><li><b>Mouse left</b> click on simple arrow icon in top right zone</li></ul>");
   }
 
   /**
@@ -53,20 +65,6 @@ public:
     return QCursor(Qt::CrossCursor);
   }
 
-  QWidget* configurationWidget() const {
-    return new QLabel(QString("<h3>Selection modifier interactor</h3>")+
-                      "Modify selection<br/><br/>"+
-                      "Resize : <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
-                      "<ul><li><b>Mouse left</b> down on square + moves</li></ul>" +
-                      "Only change node size : <ul><li><b>Ctrl + Mouse left</b> down on triangle + moves</li></ul>" +
-                      "Only change selection size : <ul><li><b>Shift + Mouse left</b> down on triangle + moves</li></ul>" +
-                      "Rotate : <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
-                      "Only rotate nodes : <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
-                      "Only rotate selection : <ul><li><b>Shift + Mouse left</b> down on circle + moves</li></ul>" +
-                      "Translate : <ul><li><b>Mouse left</b> down inside rectangle + moves</li></ul>"+
-                      "Align vertically/horizontally : <ul><li><b>Mouse left</b> click on two arrows icon in top right zone</li></ul>"+
-                      "Align left/right/top/bottom : <ul><li><b>Mouse left</b> click on simple arrow icon in top right zone</li></ul>");
-  }
 };
 
 INTERACTORPLUGIN(InteractorSelectionModifier, "InteractorSelectionModifier", "Tulip Team", "01/04/2009", "Selection Modifier Interactor", "1.0")

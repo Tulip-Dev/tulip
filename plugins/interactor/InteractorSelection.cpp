@@ -37,6 +37,14 @@ public:
    */
   InteractorSelection():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_selection.png","Select nodes/edges in a rectangle") {
     setPriority(3);
+    setConfigurationWidgetText(QString("<h3>Selection interactor</h3>")+
+                               "Select on rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner.<br/><br/>"+
+             #if !defined(__APPLE__)
+                               "Add to selection: <ul><li><b>Ctrl + Mouse left</b> click on an element</li></ul>" +
+             #else
+                               "Add/Remove from selection: <ul><li><b>Alt + Mouse left</b> click</li></ul>"+
+             #endif
+                               "Remove from selection: <ul><li><b>Shift + Mouse</b> click</li></ul>");
   }
 
   /**
@@ -51,16 +59,6 @@ public:
     return Qt::CrossCursor;
   }
 
-  QWidget* configurationWidget() const {
-    return new QLabel(QString("<h3>Selection interactor</h3>")+
-                  "Select on rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner.<br/><br/>"+
-#if !defined(__APPLE__)
-                  "Add to selection: <ul><li><b>Ctrl + Mouse left</b> click on an element</li></ul>" +
-#else
-                  "Add/Remove from selection: <ul><li><b>Alt + Mouse left</b> click</li></ul>"+
-#endif
-                  "Remove from selection: <ul><li><b>Shift + Mouse</b> click</li></ul>");
-  }
 };
 
 INTERACTORPLUGIN(InteractorSelection, "InteractorSelection", "Tulip Team", "01/04/2009", "Selection Interactor", "1.0")

@@ -62,6 +62,7 @@ public slots:
 protected:
   /**
     @see tlp::View
+    By default, this method installs the interactor on the widget instead of the graphics item.
     */
   virtual void currentInteractorChanged(tlp::Interactor*);
 

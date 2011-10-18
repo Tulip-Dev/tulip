@@ -3,6 +3,7 @@
 #include <QtGui/QGraphicsProxyWidget>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlMainWidgetGraphicsItem.h>
+#include <tulip/Interactor.h>
 
 using namespace tlp;
 
@@ -32,9 +33,8 @@ void ViewWidget::setupUi() {
 QGraphicsItem* ViewWidget::graphicsItem() const {
   return _widgetItem;
 }
-
 void ViewWidget::currentInteractorChanged(tlp::Interactor *i) {
-
+  i->install(widget());
 }
 
 void ViewWidget::resize(const QSizeF& size) {

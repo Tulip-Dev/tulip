@@ -35,7 +35,7 @@ public:
    */
   InteractorDeleteElement():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_del.png","Delete nodes or edges") {
     setPriority(1);
-    ;
+    setConfigurationWidgetText("<h3>Delete interactor</h3><b>Mouse left</b> click on an element to delete it");
   }
 
   /**
@@ -46,9 +46,6 @@ public:
     push_back(new MouseElementDeleter);
   }
 
-  QWidget* configurationWidget() const {
-    return new QLabel("<h3>Delete interactor</h3><b>Mouse left</b> click on an element to delete it");
-  }
 };
 
 INTERACTORPLUGIN(InteractorDeleteElement, "InteractorDeleteElement", "Tulip Team", "01/04/2009", "Delete Element Interactor", "1.0")
