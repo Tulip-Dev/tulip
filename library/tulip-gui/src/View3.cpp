@@ -49,7 +49,6 @@ void View3::setState(const tlp::DataSet& data) {
 void View3::setupWidget() {
   construct(NULL);
 }
-
 void View3::currentInteractorChanged(tlp::Interactor *i) {
   setActiveInteractor(i);
 }

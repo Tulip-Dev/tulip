@@ -39,6 +39,7 @@ public:
    */
   InteractorAddEdge():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addedge.png","Add edges") {
     setPriority(1);
+    setConfigurationWidgetText("<h3>Add edge interactor</h3><b>Mouse left</b> click on the source node,<br/>then <b>Mouse left</b> click on the target node.<br/>Any <b>Mouse left</b> click outside a node will add an edge bend.<br/><br/>If you want to cancel the current edge construction, click on the middle mouse button");
   }
 
   /**
@@ -54,9 +55,6 @@ public:
     return QCursor(Qt::PointingHandCursor);
   }
 
-  QWidget* configurationWidget() const {
-    return new QLabel("<h3>Add edge interactor</h3><b>Mouse left</b> click on the source node,<br/>then <b>Mouse left</b> click on the target node.<br/>Any <b>Mouse left</b> click outside a node will add an edge bend.<br/><br/>If you want to cancel the current edge construction, click on the middle mouse button");
-  }
 };
 
 INTERACTORPLUGIN(InteractorAddEdge, "InteractorAddEdge", "Tulip Team", "01/04/2009", "Add Edge Interactor", "1.0")

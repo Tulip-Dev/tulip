@@ -19,6 +19,7 @@
 #ifndef NODELINKDIAGRAMCOMPONENTINTERACTOR_H
 #define NODELINKDIAGRAMCOMPONENTINTERACTOR_H
 
+#include <QtGui/QLabel>
 #include <tulip/GLInteractor.h>
 
 namespace tlp {
@@ -27,20 +28,29 @@ namespace tlp {
  *
  */
 class NodeLinkDiagramComponentInteractor  : public GLInteractorComposite {
+  QLabel* _label;
 
 public :
 
-  NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text):GLInteractorComposite(QIcon(iconPath),text) {
+  NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text):GLInteractorComposite(QIcon(iconPath),text), _label(NULL) {
   }
 
-  /**
-   * return if this interactor is compatible with given View
-   */
+  void setConfigurationWidgetText(const QString& text) {
+    _label = new QLabel(text);
+    _label->setWordWrap(true);
+    _label->setAlignment(Qt::AlignTop);
+    _label->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+  }
+
   virtual bool isCompatible(const std::string &viewName) {
     if(viewName=="Node Link Diagram view")
       return true;
 
     return false;
+  }
+
+  virtual QWidget* configurationWidget() const {
+    return _label;
   }
 
 };

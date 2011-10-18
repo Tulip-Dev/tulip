@@ -36,6 +36,8 @@ public:
    */
   InteractorAddNode():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addnode.png","Add nodes") {
     setPriority(1);
+    setConfigurationWidgetText(QString("<h3>Add node interactor</h3>")+
+                               "<b>Mouse left</b> click to add a node in the graph");
   }
 
   /**
@@ -46,14 +48,10 @@ public:
     push_back(new MouseNodeBuilder);
   }
 
-  QCursor getCursor() {
+  QCursor cursor() {
     return QCursor(Qt::PointingHandCursor);
   }
 
-  QWidget* configurationWidget() const {
-    return new QLabel(QString("<h3>Add node interactor</h3>")+
-                      "<b>Mouse left</b> click to add a node in the graph");
-  }
 };
 
 INTERACTORPLUGIN(InteractorAddNode, "InteractorAddNode", "Tulip Team", "01/04/2009", "Add Node Interactor", "1.0")

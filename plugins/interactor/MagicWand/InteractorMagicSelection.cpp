@@ -20,6 +20,7 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/InteractorComposite.h>
 
+#include "../NodeLinkDiagramComponentInteractor.h"
 #include "MagicSelectionInteractorConfigWidget.h"
 #include "MouseMagicWandSelector.h"
 #include <tulip/View.h>
@@ -30,23 +31,16 @@ using namespace tlp;
 /** \brief Tulip interactor to do a magic selection
  *
  */
-class InteractorMagicSelection  : public InteractorComposite {
+class InteractorMagicSelection  : public NodeLinkDiagramComponentInteractor {
 public:
 
   /**
   * Default constructor
   */
-  InteractorMagicSelection():InteractorComposite(QIcon(":/tulip/gui/icons/i_magic.png"),"Fuzzy selection: select neighboring nodes based on their value of a metric."), configWidget(NULL) {
+  InteractorMagicSelection():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_magic.png","Fuzzy selection: select neighboring nodes based on their value of a metric."), configWidget(NULL) {
     setPriority(3);
-  }
-
-  virtual bool isCompatible(const std::string &viewName) {
-    return viewName=="Node Link Diagram view";
-  }
-
-  QWidget* configurationWidget() const {
-    return new QLabel(QString("<h3>Magic selection interactor</h3>")+
-                      "Select neighbour elements which have the same value on a metric");
+    setConfigurationWidgetText(QString("<h3>Magic selection interactor</h3>")+
+                               "Select neighbour elements which have the same value on a metric");
   }
 
   /**

@@ -56,9 +56,6 @@ void View::setGraph(tlp::Graph *g) {
 void View::interactorsInstalled(const QList<tlp::Interactor*>&) {
 }
 
-void View::currentInteractorChanged(tlp::Interactor*) {
-}
-
 void View::graphChanged(tlp::Graph*) {
   emit drawNeeded();
 }

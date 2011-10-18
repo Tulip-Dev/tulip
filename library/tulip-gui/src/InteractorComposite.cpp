@@ -52,6 +52,7 @@ QObject* InteractorComposite::lastTarget() const {
 
 void InteractorComposite::setView(tlp::View *view) {
   _view = view;
+  construct();
   foreach(InteractorComponent* i, _components)
     i->setView(view);
 }
@@ -74,7 +75,6 @@ void InteractorComposite::push_back(InteractorComponent *i) {
 void InteractorComposite::push_front(InteractorComponent *i) {
   _components.push_front(i);
 }
-
 void InteractorComposite::install(QObject* target) {
   setLastTarget(target);
   if (target != NULL)
@@ -82,7 +82,6 @@ void InteractorComposite::install(QObject* target) {
       target->installEventFilter(i);
 }
 void InteractorComposite::uninstall() {
-  if (lastTarget() != NULL)
     foreach(InteractorComponent* i, _components)
       lastTarget()->removeEventFilter(i);
 

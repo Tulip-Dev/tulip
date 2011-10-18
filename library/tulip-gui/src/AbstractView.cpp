@@ -28,6 +28,7 @@
 #include <QtGui/QMenuBar>
 #include <QtGui/QImageWriter>
 #include <QtGui/QFileDialog>
+#include <QtCore/QDebug>
 
 #include "tulip/Interactor.h"
 
