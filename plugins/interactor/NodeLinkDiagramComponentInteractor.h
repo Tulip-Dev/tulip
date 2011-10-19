@@ -29,10 +29,11 @@ namespace tlp {
  */
 class NodeLinkDiagramComponentInteractor  : public GLInteractorComposite {
   QLabel* _label;
+  unsigned int _priority;
 
 public :
 
-  NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text):GLInteractorComposite(QIcon(iconPath),text), _label(NULL) {
+  NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text):GLInteractorComposite(QIcon(iconPath),text), _label(NULL), _priority(0) {
   }
 
   void setConfigurationWidgetText(const QString& text) {
@@ -51,6 +52,14 @@ public :
 
   virtual QWidget* configurationWidget() const {
     return _label;
+  }
+
+  unsigned int priority() const {
+    return _priority;
+  }
+
+  void setPriority(unsigned int p) {
+    _priority = p;
   }
 
 };

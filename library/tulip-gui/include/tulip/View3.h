@@ -35,6 +35,9 @@ public:
   tlp::DataSet state() const;
   void setState(const tlp::DataSet& data);
 
+public slots:
+  void draw(tlp::PluginProgress*);
+
 protected:
   void currentInteractorChanged(tlp::Interactor *i);
   void graphChanged(tlp::Graph *g);
