@@ -16,19 +16,12 @@ bool InteractorComponent::eventFilter(QObject *, QEvent *) {
 // *******************************
 
 InteractorComposite::InteractorComposite(const QIcon &icon, const QString &text)
-  : Interactor(), _priority(0), _action(new QAction(icon,text,this)), _view(NULL), _lastTarget(NULL) {
+  : Interactor(), _action(new QAction(icon,text,this)), _view(NULL), _lastTarget(NULL) {
 }
 
 InteractorComposite::~InteractorComposite() {
   foreach(InteractorComponent* i, _components)
     delete i;
-}
-
-unsigned int InteractorComposite::priority() const {
-  return _priority;
-}
-void InteractorComposite::setPriority(unsigned int p) {
-  _priority = p;
 }
 
 QCursor InteractorComposite::cursor() const {
@@ -44,6 +37,12 @@ void InteractorComposite::undoIsDone() {
 
 void InteractorComposite::setLastTarget(QObject *target) {
   _lastTarget = target;
+  connect(_lastTarget,SIGNAL(destroyed()),this,SLOT(lastTargetDestroyed()));
+}
+
+void InteractorComposite::lastTargetDestroyed() {
+  if (sender() == lastTarget())
+    _lastTarget = NULL;
 }
 
 QObject* InteractorComposite::lastTarget() const {
@@ -82,9 +81,9 @@ void InteractorComposite::install(QObject* target) {
       target->installEventFilter(i);
 }
 void InteractorComposite::uninstall() {
+  if (lastTarget() != NULL)
     foreach(InteractorComponent* i, _components)
       lastTarget()->removeEventFilter(i);
-
   install(NULL);
 }
 

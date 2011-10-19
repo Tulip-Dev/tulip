@@ -67,3 +67,7 @@ bool View3::savePicture(const std::string& , int , int , bool , int , int , int 
 QImage View3::createPicture(int, int, bool, int, int, int) {
   return QImage();
 }
+
+void View3::draw(tlp::PluginProgress *) {
+  draw();
+}

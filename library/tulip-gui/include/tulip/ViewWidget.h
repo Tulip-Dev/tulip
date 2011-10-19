@@ -8,6 +8,17 @@ class QGraphicsItem;
 
 namespace tlp {
 
+/**
+  @class ViewWidget provides convenience functions to allow the user to build a view plugin that displays a QWidget as its main element.
+
+  The ViewWidget class will build a QGraphicsView that sets a widget as the background of the whole panel.
+  Sublassing ViewWidget means that you'll have to provide a centralWidget (@see setCentralWidget) that will take up the whole panel and be drawn in the background.
+  You can use the addToScene() and removeFromScene() methods to edit the QGraphicsItems that will drawn over the widget.
+
+  By default, when an interactor gets active on a ViewWidget, it gets installed on the centralWidget (@see Interactor::install)
+
+  @note When creating a ViewWidget, you should overload setupWidget instead of setupUi. If you still want to implement setupUi, you must call the ViewWidget::setupUi() method first.
+  */
 class ViewWidget : public tlp::View {
   Q_OBJECT
 
@@ -16,26 +27,63 @@ class ViewWidget : public tlp::View {
   QWidget* _centralWidget;
   QGraphicsItem* _centralWidgetItem;
 
+  void refreshItemsParenthood();
+
 public:
   ViewWidget();
   virtual ~ViewWidget();
+
+  /**
+    @see View::graphicsView()
+    @note This method should not be reimplemented as a subclass of ViewWidget
+    */
   virtual QGraphicsView* graphicsView() const;
 
 public slots:
+  /**
+    @see View::setupUi
+    @note This method should not be reimplemented as a subclass of ViewWidget
+    */
   virtual void setupUi();
 
 protected slots:
+  /**
+    @see View::currentInteractorChanged()
+    By default, the current interactor gets installed over the central widget.
+    */
   virtual void currentInteractorChanged(tlp::Interactor*);
-  virtual void graphChanged(tlp::Graph*)=0;
 
 protected:
+  /**
+    @brief sets up the central widget.
+    This is similar to View::setupUi in the sense that the purpose of setupWidget is to construct the GUI element.
+    @warning This method MUST call the setCentralWidget to provide the ViewWidget with a valid widget.
+    */
   virtual void setupWidget()=0;
 
-  void addToScene(QGraphicsItem*);
-  void removeFromScene(QGraphicsItem*);
-  void refreshItemsParenthood();
+  /**
+    @brief Adds an item to the graphicsView that will be drawn on top of the widget
+    This is a convenience function for the user to avoid taking care of item parenthood.
+    */
+  void addToScene(QGraphicsItem* item);
+
+  /**
+    @brief Removes a graphics item from the view.
+    This is a convenience function for the user to avoid taking care of item parenthood.
+    */
+  void removeFromScene(QGraphicsItem* item);
+
+  /**
+    @brief Sets the widget to be drawn as the view's background.
+    This method may be called several times. Parenthood between the widget and items added using addToScene will be automatically updated.
+    @note The ViewWidget takes ownership of the central widget. The previous central widget gets deleted in the process.
+    */
   void setCentralWidget(QWidget*);
 
+  /**
+    @brief Qt event filtering for internal purpose.
+    @warning If you are to overload the eventFilter method in your subclass. You'll have to call the ViewWidget::eventFilter first.
+    */
   virtual bool eventFilter(QObject *, QEvent *);
 };
 
