@@ -279,7 +279,11 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
   double lineWidth=data->getElementBorderWidth()->getEdgeValue(e);
 
   unsigned int startEdgeGlyph = data->getElementSrcAnchorShape()->getEdgeValue(e);
+  //Check if the plugin exists.
+  startEdgeGlyph = data->extremityGlyphs.get(startEdgeGlyph) != NULL?startEdgeGlyph:UINT_MAX;
   unsigned int endEdgeGlyph = data->getElementTgtAnchorShape()->getEdgeValue(e);
+  //Check if the plugin exists.
+  endEdgeGlyph = data->extremityGlyphs.get(endEdgeGlyph)!=NULL ? endEdgeGlyph:UINT_MAX;
 
   if (startEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
     displayArrow(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),srcCol,maxSrcSize,selected,selectionOutlineSize,startEdgeGlyph,endEdgeGlyph,
