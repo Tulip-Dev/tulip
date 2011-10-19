@@ -22,16 +22,11 @@ using namespace std;
 using namespace tlp;
 
 View3::View3() {
-
 }
 
-/*
-  Methods from ViewWidget
-  */
-
-QWidget* View3::widget() const {
-  View3* v = const_cast<View3*>(this);
-  return v->getWidget();
+void View3::setupWidget() {
+  construct(NULL);
+  setCentralWidget(getWidget());
 }
 
 tlp::DataSet View3::state() const {
@@ -46,15 +41,16 @@ void View3::setState(const tlp::DataSet& data) {
   setData(graph(),data);
 }
 
-void View3::setupWidget() {
-  construct(NULL);
-}
 void View3::currentInteractorChanged(tlp::Interactor *i) {
   setActiveInteractor(i);
 }
 
 void View3::graphChanged(tlp::Graph *g) {
   changeGraph(g);
+}
+
+void View3::interactorsInstalled(const QList<tlp::Interactor *> &lst) {
+  setInteractors(lst.toStdList());
 }
 
 /*

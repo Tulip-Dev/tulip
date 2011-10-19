@@ -38,9 +38,6 @@ public:
   InteractorComposite(const QIcon& icon, const QString& text="");
   virtual ~InteractorComposite();
 
-  virtual bool isCompatible(const std::string& viewName)=0;
-  virtual QWidget* configurationWidget() const=0;
-
   virtual unsigned int priority() const;
   virtual tlp::View* view() const;
 
@@ -57,7 +54,6 @@ public:
   void push_front(InteractorComponent*);
 
 public slots:
-  virtual void construct()=0;
   virtual void undoIsDone();
 
   virtual void setPriority(unsigned int);
