@@ -30,11 +30,11 @@ public:
   virtual QAction* action() const=0;
   virtual tlp::View* view() const=0;
   virtual QCursor cursor() const=0;
+  virtual void construct()=0;
 
 public slots:
   virtual void setPriority(unsigned int)=0;
   virtual void setView(tlp::View*)=0;
-  virtual void construct()=0;
   virtual void install(QObject*)=0;
   virtual void uninstall()=0;
   virtual void undoIsDone()=0;

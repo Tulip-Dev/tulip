@@ -32,18 +32,14 @@ public:
   View3();
   virtual ~View3() {}
 
-  /*
-    Methods from ViewWidget
-    */
-  virtual QWidget* widget() const;
-  virtual tlp::DataSet state() const;
-  virtual void setState(const tlp::DataSet&);
+  tlp::DataSet state() const;
+  void setState(const tlp::DataSet& data);
 
 protected:
-  virtual void setupWidget();
-  virtual void currentInteractorChanged(tlp::Interactor *);
-  virtual void graphChanged(tlp::Graph *);
-
+  void currentInteractorChanged(tlp::Interactor *i);
+  void graphChanged(tlp::Graph *g);
+  void interactorsInstalled(const QList<tlp::Interactor *> &lst);
+  void setupWidget();
   /*
     Methods from Tulip 3
     */
