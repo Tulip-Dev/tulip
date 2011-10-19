@@ -268,7 +268,9 @@ void SpreadViewTableWidget::copyColumnToOther() {
     int index = action->data().toInt();
     GraphTableWidget* table = ui->tableView;
     PropertyInterface* property = table->graphModel()->propertyForIndex(index);
+    Observable::holdObservers();
     CopyPropertyDialog::copyProperty(ui->tableView->graph(),property,true,table);
+    Observable::unholdObservers();
   }
 }
 
