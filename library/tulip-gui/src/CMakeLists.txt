@@ -79,6 +79,8 @@ SET(SRCS
   AbstractView.cpp
   InteractorComposite.cpp
   GLInteractor.cpp
+  TulipWorkspace.cpp
+  WorkspacePanel.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -99,6 +101,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/SimplePluginProgressWidget.ui
   ../designer/SimpleStringsListSelectionWidget.ui
   ../designer/SizeEditor.ui
+  ../designer/WorkspacePanel.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -147,6 +150,8 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/Interactor.h
   ../include/tulip/InteractorComposite.h
   ../include/tulip/GLInteractor.h
+  ../include/tulip/WorkspacePanel.h
+  ../include/tulip/TulipWorkspace.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

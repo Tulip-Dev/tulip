@@ -61,7 +61,7 @@ QComboBox,QLabel {
 }
 
  QComboBox::down-arrow {
-     image: url(:/tulip/graphperspective/ui/down_arrow-white.png);
+     image: url(&quot;:/tulip/gui/ui/down_arrow-white.png&quot;);
  }
 
 QComboBox:drop-down {
