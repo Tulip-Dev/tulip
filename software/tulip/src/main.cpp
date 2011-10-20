@@ -22,13 +22,17 @@
 #include <QtGui/QDesktopWidget>
 
 #include <PluginInfo.h>
+#include <CrashHandling.h>
 #include "TulipApp.h"
+
 
 using namespace std;
 int main( int argc, char **argv ) {
   QApplication tulip(argc, argv);
   QLocale::setDefault(QLocale(QLocale::English));
 
+  start_crash_handler();
+  
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");

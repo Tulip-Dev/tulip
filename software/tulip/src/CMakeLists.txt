@@ -34,6 +34,7 @@ TULIP_QT4_WRAP_CPP(tulip_MOC_SRCS ${tulip_MOC} OPTIONS "-DQT_MINOR_REL=${QT_VERS
 QT4_ADD_RESOURCES(tulip_RCC_SRCS ${tulip_RCC})
 
 INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${TulipQtBuildInclude} ${PROJECT_BINARY_DIR}/library/tulip-qt/include/tulip ${PROJECT_BINARY_DIR}/software/tulip/include ${TulipInclude} ${TulipQtInclude} ${TulipOGLInclude} ${TulipPluginsManagerInclude})
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/software/crash_handling)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_MINOR_REL=${QT_VERSION_MINOR}")
 
@@ -76,6 +77,7 @@ TARGET_LINK_LIBRARIES( tulip_app ${QT_QTXML_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipName})
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipOglName})
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipQtName})
+TARGET_LINK_LIBRARIES( tulip_app crash_handling)
 
 IF(WIN32)
   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
