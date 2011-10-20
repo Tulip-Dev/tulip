@@ -32,7 +32,7 @@ int main( int argc, char **argv ) {
   QLocale::setDefault(QLocale(QLocale::English));
 
   start_crash_handler();
-  
+
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
