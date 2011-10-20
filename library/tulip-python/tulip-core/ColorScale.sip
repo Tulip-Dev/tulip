@@ -97,7 +97,8 @@ This method adds a color to the color scale at a specific position.
 %Docstring
 tlp.ColorScale.getColorAtPos(pos)
 
- This method computes the color associated to a specific position in the color scale and returns it.
+This method computes the color associated to a specific position in the color scale and returns it.
+
 :param pos: This value defines the position of the color in the scale and must be between 0.0 and 1.0 (it will be clamped otherwise).
 :type pos: float
 :rtype: :class:`tlp.Color`
