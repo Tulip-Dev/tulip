@@ -129,9 +129,9 @@ void GlShader::compileShaderObject(const char *shaderSrc) {
 }
 
 GlShaderProgram *GlShaderProgram::currentActiveShaderProgram(NULL);
-int GlShaderProgram::maxGeometryShaderOutputVertices(0);
 
-GlShaderProgram::GlShaderProgram(const std::string &name) : programName(name), programObjectId(0), programLinked(false) {
+GlShaderProgram::GlShaderProgram(const std::string &name) :
+		programName(name), programObjectId(0), programLinked(false), maxGeometryShaderOutputVertices(0) {
   programObjectId = glCreateProgram();
 }
 
@@ -235,7 +235,6 @@ void GlShaderProgram::link() {
         glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT, &maxOutputVertices);
 
       glProgramParameteriEXT(programObjectId, GL_GEOMETRY_VERTICES_OUT_EXT, maxOutputVertices);
-      maxGeometryShaderOutputVertices = 0;
     }
   }
 

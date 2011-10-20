@@ -84,16 +84,11 @@ protected:
   static std::map<unsigned int, GLfloat *> curveVertexBuffersData;
   static std::map<unsigned int, std::vector<GLushort *> > curveVertexBuffersIndices;
   static std::map<unsigned int, GLuint* > curveVertexBuffersObject;
-  // TODO : remove this static variable in Tulip 3.7 (if there is such a release in the future)
-  // can not remove it in Tulip 3.6.1 otherwise binary compatibility will be broken
-  static GLint MAX_SHADER_CONTROL_POINTS;
   static std::map<std::string, GlShaderProgram *> curvesShadersMap;
   static std::map<std::string, GlShaderProgram *> curvesBillboardShadersMap;
   static GlShader *curveVertexShaderNormalMain;
   static GlShader *curveVertexShaderBillboardMain;
   static GlShader *fisheyeDistortionVertexShader;
-  //TODO : remove this static variable in Tulip 3.7
-  static bool canUseTBO;
   static bool canUseGeometryShader;
   static std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> > curvesGeometryShadersMap;
   static GlShader *curveVertexGeometryShaderNormalMain;

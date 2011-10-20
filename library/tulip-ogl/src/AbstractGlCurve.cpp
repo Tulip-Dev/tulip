@@ -460,11 +460,9 @@ map<unsigned int, vector<GLushort *> > AbstractGlCurve::curveVertexBuffersIndice
 map<unsigned int, GLuint* > AbstractGlCurve::curveVertexBuffersObject;
 map<string, GlShaderProgram *> AbstractGlCurve::curvesShadersMap;
 map<string, GlShaderProgram *> AbstractGlCurve::curvesBillboardShadersMap;
-GLint AbstractGlCurve::MAX_SHADER_CONTROL_POINTS(0);
 GlShader *AbstractGlCurve::fisheyeDistortionVertexShader(NULL);
 GlShader *AbstractGlCurve::curveVertexShaderNormalMain(NULL);
 GlShader *AbstractGlCurve::curveVertexShaderBillboardMain(NULL);
-bool AbstractGlCurve::canUseTBO = false;
 bool AbstractGlCurve::canUseGeometryShader = false;
 std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> > AbstractGlCurve::curvesGeometryShadersMap;
 GlShader *AbstractGlCurve::curveVertexGeometryShaderNormalMain(NULL);

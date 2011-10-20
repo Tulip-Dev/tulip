@@ -511,11 +511,11 @@ private :
   bool programLinked;
 
   std::vector<GlShader *> attachedShaders;
+  int maxGeometryShaderOutputVertices;
 
   static GlShaderProgram *currentActiveShaderProgram;
-  // TODO : turn this class variable into an instance variable in Tulip 3.7
-  // force to make it static to not break binary compatibility with Tulip 3.6
-  static int maxGeometryShaderOutputVertices;
+
+
 
 };
 
