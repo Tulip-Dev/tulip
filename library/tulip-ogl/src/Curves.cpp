@@ -250,6 +250,10 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
   float newSize=size;
   float angle = 0;
   
+  if (!result.empty() && !lastPoint && bi_xu_xv.norm() < 0.003f) {
+    return inversion;
+  }
+  
   if (bi_xu_xv.norm() != 0) {
     bi_xu_xv /= bi_xu_xv.norm();
   }
@@ -267,8 +271,11 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
     else
       bi_xu_xv = xu;
 
-  }
-  else {
+    if (bi_xu_xv[0] == 0 && bi_xu_xv[1] == 0 && fabs(bi_xu_xv[2]) == 1) {
+      bi_xu_xv[0] = bi_xu_xv[2];
+      bi_xu_xv[2] = 0;
+    }
+  } else {
     newSize=newSize/static_cast<float>(cos(angle/2.0));
   }
 
@@ -411,24 +418,7 @@ void computeCleanVertices(const vector<Coord> &bends,
     if ((endN - lastPoint).norm()<1E-4) {
       endN = lastPoint + lastPoint - result[result.size()-2];
     }
-
-    // Remove any aligned points that can remain
-    std::vector<Coord> resultCp(result);
-    result.clear();
-    result.push_back(resultCp[0]);
-
-    for (size_t i = 1 ; i < resultCp.size()-1 ; ++i) {
-      Coord xu = (resultCp[i-1] - resultCp[i]) / (resultCp[i-1] - resultCp[i]).norm();
-      Coord xv = (resultCp[i+1] - resultCp[i]) / (resultCp[i+1] - resultCp[i]).norm();
-      Coord bi_xu_xv = xu+xv;
-
-      if (bi_xu_xv.norm() > 1E-3) {
-        result.push_back(resultCp[i]);
-      }
-    }
-
-    result.push_back(resultCp[resultCp.size()-1]);
-
+    
     return;
   }
   else {
