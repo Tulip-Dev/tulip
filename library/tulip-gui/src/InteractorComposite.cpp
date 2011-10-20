@@ -21,7 +21,7 @@ InteractorComposite::InteractorComposite(const QIcon &icon, const QString &text)
 
 InteractorComposite::~InteractorComposite() {
   foreach(InteractorComponent* i, _components)
-    delete i;
+  delete i;
 }
 
 QCursor InteractorComposite::cursor() const {
@@ -53,7 +53,7 @@ void InteractorComposite::setView(tlp::View *view) {
   _view = view;
   construct();
   foreach(InteractorComponent* i, _components)
-    i->setView(view);
+  i->setView(view);
 }
 
 InteractorComposite::iterator InteractorComposite::begin() {
@@ -76,14 +76,16 @@ void InteractorComposite::push_front(InteractorComponent *i) {
 }
 void InteractorComposite::install(QObject* target) {
   setLastTarget(target);
+
   if (target != NULL)
     foreach(InteractorComponent* i, _components)
-      target->installEventFilter(i);
+    target->installEventFilter(i);
 }
 void InteractorComposite::uninstall() {
   if (lastTarget() != NULL)
     foreach(InteractorComponent* i, _components)
-      lastTarget()->removeEventFilter(i);
+    lastTarget()->removeEventFilter(i);
+
   install(NULL);
 }
 

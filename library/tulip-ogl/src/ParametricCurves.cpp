@@ -161,17 +161,20 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
   case 2:
     computeLinearBezierPoints(controlPoints[0], controlPoints[1], curvePoints, nbCurvePoints);
     break;
+
   case 3:
     computeQuadraticBezierPoints(controlPoints[0], controlPoints[1], controlPoints[2], curvePoints, nbCurvePoints);
     break;
+
   case 4:
     computeCubicBezierPoints(controlPoints[0], controlPoints[1], controlPoints[2], controlPoints[3], curvePoints, nbCurvePoints);
     break;
+
   default:
     buildPascalTriangle(controlPoints.size(), pascalTriangle);
     curvePoints.resize(nbCurvePoints);
     float h = 1.0 / static_cast<float>(nbCurvePoints - 1);
-#pragma omp parallel for
+    #pragma omp parallel for
 
     for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
       float curStep = i * h;
@@ -293,7 +296,7 @@ void computeCatmullRomPoints(const vector<Coord> &controlPoints, vector<Coord> &
 
   computeCatmullRomGlobalParameter(controlPointsCp, globalParameter, alpha);
   curvePoints.resize(nbCurvePoints);
-#pragma omp parallel for
+  #pragma omp parallel for
 
   for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
     curvePoints[i] = computeCatmullRomPointImpl(controlPointsCp, i / static_cast<float>(nbCurvePoints - 1), globalParameter, closedCurve, alpha);
@@ -356,7 +359,7 @@ Coord computeOpenUniformBsplinePoint(const vector<Coord> &controlPoints, const f
 
 void computeOpenUniformBsplinePoints(const vector<Coord> &controlPoints, vector<Coord> &curvePoints, const unsigned int curveDegree, const unsigned int nbCurvePoints) {
   curvePoints.resize(nbCurvePoints);
-#pragma omp parallel for
+  #pragma omp parallel for
 
   for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
     curvePoints[i] = computeOpenUniformBsplinePoint(controlPoints, i / static_cast<float>(nbCurvePoints - 1), curveDegree);

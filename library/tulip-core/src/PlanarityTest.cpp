@@ -131,6 +131,7 @@ void PlanarityTest::treatEvent(const Event& evt) {
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     case GraphEvent::TLP_ADD_EDGE:
 
       if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
@@ -139,6 +140,7 @@ void PlanarityTest::treatEvent(const Event& evt) {
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     case GraphEvent::TLP_DEL_EDGE:
 
       if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
@@ -147,6 +149,7 @@ void PlanarityTest::treatEvent(const Event& evt) {
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     default:
       break;
     }

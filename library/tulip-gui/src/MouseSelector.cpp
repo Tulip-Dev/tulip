@@ -196,6 +196,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
             }
 
             break;
+
           case EDGE:
             result = selection->getEdgeValue(tmpEdge);
 

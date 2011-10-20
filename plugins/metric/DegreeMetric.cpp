@@ -90,10 +90,12 @@ bool DegreeMetric::run() {
       forEach(n, graph->getNodes())
       result->setNodeValue(n, double(graph->deg(n))/normalization);
       break;
+
     case IN:
       forEach(n, graph->getNodes())
       result->setNodeValue(n, double(graph->indeg(n))/normalization);
       break;
+
     case OUT:
       forEach(n, graph->getNodes())
       result->setNodeValue(n, double(graph->outdeg(n))/normalization);
@@ -125,6 +127,7 @@ bool DegreeMetric::run() {
         result->setNodeValue(n, nWeight / normalization);
       }
       break;
+
     case IN:
       forEach(n, graph->getNodes()) {
         edge e;
@@ -135,6 +138,7 @@ bool DegreeMetric::run() {
         result->setNodeValue(n, nWeight / normalization);
       }
       break;
+
     case OUT:
       forEach(n, graph->getNodes()) {
         edge e;

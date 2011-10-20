@@ -140,16 +140,19 @@ void SimpleTest::treatEvent(const Event& evt) {
         deleteResult(graph);
 
       break;
+
     case GraphEvent::TLP_DEL_EDGE:
 
       if (!resultsBuffer[(unsigned long)graph])
         deleteResult(graph);
 
       break;
+
     case GraphEvent::TLP_REVERSE_EDGE:
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     default:
       break;
     }

@@ -96,11 +96,13 @@ void GlCompositeHierarchyManager::treatEvent(const Event& evt) {
       }
 
       break;
+
     case GraphEvent::TLP_ADD_SUBGRAPH:
     case GraphEvent::TLP_DEL_SUBGRAPH:
       _shouldRecreate = true;
       _shouldRecreate = true;
       break;
+
     case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE: {
       const std::string attributeName = gEvt->getAttributeName();
 
@@ -113,6 +115,7 @@ void GlCompositeHierarchyManager::treatEvent(const Event& evt) {
 
       break;
     }
+
     case GraphEvent::TLP_AFTER_SET_ATTRIBUTE: {
       const std::string attributeName = gEvt->getAttributeName();
 
@@ -133,6 +136,7 @@ void GlCompositeHierarchyManager::treatEvent(const Event& evt) {
 
       break;
     }
+
     default:
       //we don't care about other events
       break;

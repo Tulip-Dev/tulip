@@ -67,9 +67,11 @@ struct TLPTokenParser {
           curLine++;
           val.str+=ch;
           break;
+
         case '\t':
           val.str+="    ";
           break;
+
         case '\\':
 
           if (!slashMode) {
@@ -81,6 +83,7 @@ struct TLPTokenParser {
           }
 
           break;
+
         case '"':
 
           if (!slashMode)  {
@@ -92,6 +95,7 @@ struct TLPTokenParser {
           }
 
           break;
+
         case 'n':
 
           if (slashMode)   {
@@ -117,6 +121,7 @@ struct TLPTokenParser {
           stop=true;
           return COMMENTTOKEN;
           break;
+
         default:
           curChar++;
           val.str+=ch;
@@ -130,6 +135,7 @@ struct TLPTokenParser {
           if (started) stop=true;
 
           break;
+
         case 13 :
         case '\n':
           curChar=0;
@@ -138,6 +144,7 @@ struct TLPTokenParser {
           if (started) stop=true;
 
           break;
+
         case '(':
 
           if (!started) return OPENTOKEN;
@@ -148,6 +155,7 @@ struct TLPTokenParser {
           }
 
           break;
+
         case ')':
 
           if (!started) return CLOSETOKEN;
@@ -158,6 +166,7 @@ struct TLPTokenParser {
           }
 
           break;
+
         case '"':
           strGet=true;
 
@@ -169,6 +178,7 @@ struct TLPTokenParser {
           else started=true;
 
           break;
+
         case ';':
           strComment=true;
 
@@ -180,6 +190,7 @@ struct TLPTokenParser {
           else started=true;
 
           break;
+
         default :
           val.str+=ch;
           started=true;
@@ -388,18 +399,21 @@ struct TLPParser {
           return formatError();
 
         break;
+
       case BOOLTOKEN:
 
         if (!builderStack.front()->addBool(currentValue.boolean))
           return formatError();
 
         break;
+
       case INTTOKEN:
 
         if (!builderStack.front()->addInt(currentValue.integer))
           return formatError();
 
         break;
+
       case RANGETOKEN:
 
         if (!builderStack.front()->addRange(currentValue.range.first,
@@ -407,18 +421,21 @@ struct TLPParser {
           return formatError();
 
         break;
+
       case DOUBLETOKEN:
 
         if (!builderStack.front()->addDouble(currentValue.real))
           return formatError();
 
         break;
+
       case STRINGTOKEN:
 
         if (!builderStack.front()->addString(currentValue.str))
           return formatError();
 
         break;
+
       case CLOSETOKEN:
 
         if (builderStack.front()->close()) {
@@ -432,15 +449,19 @@ struct TLPParser {
           return formatError();
 
         break;
+
       case ERRORINFILE:
         return formatError();
+
       case ENDOFSTREAM:
         return true;
+
       case COMMENTTOKEN:
 
         if (displayComment) std::cout << "Comment line:" << tokenParser->curLine << "->" <<  currentValue.str << std::endl;
 
         break;
+
       default:
         break;
       }

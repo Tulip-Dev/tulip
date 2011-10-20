@@ -316,18 +316,23 @@ void GlLabel::draw(float lod, Camera *camera) {
     switch(alignment) {
     case ON_CENTER:
       break;
+
     case ON_LEFT:
       baseCoord[0]-=sizeForOutAlign[0]/2+wModified*scaleToApply/2.;
       break;
+
     case ON_RIGHT:
       baseCoord[0]+=sizeForOutAlign[0]/2+wModified*scaleToApply/2.;
       break;
+
     case ON_TOP:
       baseCoord[1]+=sizeForOutAlign[1]/2+hModified*scaleToApply/2.;
       break;
+
     case ON_BOTTOM:
       baseCoord[1]-=sizeForOutAlign[1]/2+hModified*scaleToApply/2.;
       break;
+
     default:
       break;
     }
@@ -405,18 +410,23 @@ void GlLabel::draw(float lod, Camera *camera) {
   case ON_CENTER:
     glTranslatef(translationAfterRotation[0],translationAfterRotation[1],translationAfterRotation[2]);
     break;
+
   case ON_LEFT:
     glTranslatef(-sizeForOutAlign[0]/2,0,0);
     break;
+
   case ON_RIGHT:
     glTranslatef(sizeForOutAlign[0]/2,0,0);
     break;
+
   case ON_TOP:
     glTranslatef(0,sizeForOutAlign[1]/2,0);
     break;
+
   case ON_BOTTOM:
     glTranslatef(0,-sizeForOutAlign[1]/2,0);
     break;
+
   default:
     break;
   }
@@ -451,15 +461,19 @@ void GlLabel::draw(float lod, Camera *camera) {
     case ON_TOP:
       hAlign=h/2.;
       break;
+
     case ON_BOTTOM:
       hAlign=-(h/2.);
       break;
+
     case ON_LEFT:
       wAlign = -(w/2.);
       break;
+
     case ON_RIGHT:
       wAlign = w/2.;
       break;
+
     default:
       break;
     }
@@ -488,9 +502,11 @@ void GlLabel::draw(float lod, Camera *camera) {
     case ON_LEFT:
       xAlignFactor = 1.;
       break;
+
     case ON_RIGHT:
       xAlignFactor = .0;
       break;
+
     default:
       break;
     }
@@ -503,15 +519,19 @@ void GlLabel::draw(float lod, Camera *camera) {
     case ON_LEFT:
       xShiftFactor = -0.5;
       break;
+
     case ON_RIGHT:
       xShiftFactor = 0.5;
       break;
+
     case ON_TOP:
       yShiftFactor = 0.5;
       break;
+
     case ON_BOTTOM:
       yShiftFactor = -0.5;
       break;
+
     default:
       break;
     }

@@ -10,8 +10,12 @@ class GlMainWidget;
 class TLP_QT_SCOPE GLInteractorComponent: public tlp::InteractorComponent {
   Q_OBJECT
 public slots:
-  virtual bool draw(tlp::GlMainWidget*) { return false; }
-  virtual bool compute(tlp::GlMainWidget*) { return false; }
+  virtual bool draw(tlp::GlMainWidget*) {
+    return false;
+  }
+  virtual bool compute(tlp::GlMainWidget*) {
+    return false;
+  }
 };
 
 class TLP_QT_SCOPE GLInteractorComposite: public tlp::InteractorComposite {

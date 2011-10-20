@@ -67,8 +67,10 @@ QStringList ElementPropertiesWidget::getCurrentListedProperties() const {
   switch(displayMode) {
   case NODE:
     return nodeListedProperties;
+
   case EDGE:
     return edgeListedProperties;
+
   default:
     std::string str(__PRETTY_FUNCTION__);
     str += ": current displayMode is invalid!";
@@ -106,6 +108,7 @@ bool ElementPropertiesWidget::isElementDisplayed() const {
   case NODE:
     return nodeSet;
     break;
+
   case EDGE:
     return edgeSet;
     break;
@@ -168,6 +171,7 @@ void ElementPropertiesWidget::setCurrentListedProperties(const QStringList &l) {
   switch(displayMode) {
   case NODE:
     return setNodeListedProperties(l);
+
   case EDGE:
     return setEdgeListedProperties(l);
   }
@@ -204,6 +208,7 @@ void ElementPropertiesWidget::updateTable() {
         return;
 
       break;
+
     case EDGE:
 
       if (!edgeSet)
@@ -241,6 +246,7 @@ void ElementPropertiesWidget::updateTable() {
       case NODE:
         propertyTable->setTulipNodeItem(editedProperty, pname, currentNode, i, 1);
         break;
+
       case EDGE:
         propertyTable->setTulipEdgeItem(editedProperty, pname, currentEdge, i, 1);
         break;
@@ -263,6 +269,7 @@ void ElementPropertiesWidget::updateTable() {
       case NODE:
         propertyTable->setTulipNodeItem(editedProperty, pname, currentNode, i, 1);
         break;
+
       case EDGE:
         propertyTable->setTulipEdgeItem(editedProperty, pname, currentEdge, i, 1);
         break;
@@ -282,6 +289,7 @@ void ElementPropertiesWidget::updateTable() {
         return;
 
       break;
+
     case EDGE:
 
       if (!edgeSet)
@@ -294,6 +302,7 @@ void ElementPropertiesWidget::updateTable() {
     case NODE:
       listedProperties = &nodeListedProperties;
       break;
+
     case EDGE:
       listedProperties = &edgeListedProperties;
       break;
@@ -314,6 +323,7 @@ void ElementPropertiesWidget::updateTable() {
         case NODE:
           propertyTable->setTulipNodeItem(editedProperty, pname, currentNode, i, 1);
           break;
+
         case EDGE:
           propertyTable->setTulipEdgeItem(editedProperty, pname, currentEdge, i, 1);
         }
@@ -352,6 +362,7 @@ void ElementPropertiesWidget::propertyTableValueChanged(int row, int col) {
     graph->push();
     result=editedProperty->setNodeStringValue(currentNode, value.toUtf8().data());
     break;
+
   case EDGE:
     // allow to undo
     graph->push();
@@ -371,6 +382,7 @@ void ElementPropertiesWidget::propertyTableValueChanged(int row, int col) {
     case NODE:
       emit tulipNodePropertyChanged(graph, currentNode, property, value);
       break;
+
     case EDGE:
       emit tulipEdgePropertyChanged(graph, currentEdge, property, value);
       break;

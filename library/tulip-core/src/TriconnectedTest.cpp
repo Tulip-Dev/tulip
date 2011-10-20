@@ -86,17 +86,21 @@ void TriconnectedTest::treatEvent(const Event& evt) {
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     case GraphEvent::TLP_DEL_EDGE:
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     case GraphEvent::TLP_DEL_NODE:
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     case GraphEvent::TLP_ADD_NODE:
       resultsBuffer[(unsigned long)graph]=false;
       break;
+
     default:
       //we don't care about other events
       break;

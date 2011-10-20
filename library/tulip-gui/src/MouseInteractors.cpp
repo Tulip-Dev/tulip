@@ -154,6 +154,7 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
         case NODE:
           graph->delNode(tmpNode);
           break;
+
         case EDGE:
           graph->delEdge(tmpEdge);
           break;
@@ -374,33 +375,43 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
     case Qt::Key_Left:
       g->getScene()->translateCamera(delta * 2,0,0);
       break;
+
     case Qt::Key_Right:
       g->getScene()->translateCamera(-1 * delta * 2,0,0);
       break;
+
     case Qt::Key_Up:
       g->getScene()->translateCamera(0,-1 * delta * 2,0);
       break;
+
     case Qt::Key_Down:
       g->getScene()->translateCamera(0,delta * 2,0);
       break;
+
     case Qt::Key_PageUp:
       g->getScene()->zoom(delta);
       break;
+
     case Qt::Key_PageDown:
       g->getScene()->zoom(-1 * delta);
       break;
+
     case Qt::Key_Home:
       g->getScene()->translateCamera(0,0,-1 * delta * 2);
       break;
+
     case Qt::Key_End:
       g->getScene()->translateCamera(0,0,delta * 2);
       break;
+
     case Qt::Key_Insert:
       g->getScene()->rotateScene(0,0,-1 * delta * 2);
       break;
+
     case Qt::Key_Delete :
       g->getScene()->rotateScene(0,0,delta * 2);
       break;
+
     default:
       return false;
     }
@@ -422,6 +433,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
     case Qt::Key_Insert:
     case Qt::Key_Delete:
       break;
+
     default:
       return false;
     }

@@ -69,6 +69,7 @@ void ViewWidget::setCentralWidget(QWidget* w) {
     _graphicsView->scene()->removeItem(_centralWidgetItem);
 
   GlMainWidget *glMainWidget = dynamic_cast<GlMainWidget *>(w);
+
   if (glMainWidget) {
     _centralWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, QSize(_graphicsView->width(), _graphicsView->height()));
     _graphicsView->scene()->addItem(_centralWidgetItem);
@@ -79,6 +80,7 @@ void ViewWidget::setCentralWidget(QWidget* w) {
     _centralWidgetItem = _graphicsView->scene()->addWidget(w);
     _centralWidget->resize(_graphicsView->width(),_graphicsView->height());
   }
+
   _centralWidgetItem->setPos(0,0);
   _centralWidgetItem->setZValue(0);
 
@@ -90,11 +92,13 @@ void ViewWidget::setCentralWidget(QWidget* w) {
 
 bool ViewWidget::eventFilter(QObject *obj, QEvent *e) {
   QResizeEvent *event = dynamic_cast<QResizeEvent *>(e);
+
   if (event && obj == _graphicsView) {
     if (_graphicsView->scene())
       _graphicsView->scene()->setSceneRect(QRect(QPoint(0, 0), _graphicsView->size()));
 
     GlMainWidgetGraphicsItem *glMainWidgetItem = dynamic_cast<GlMainWidgetGraphicsItem *>(_centralWidgetItem);
+
     if (glMainWidgetItem)
       glMainWidgetItem->resize(QSize(_graphicsView->width(), _graphicsView->height()));
 
@@ -109,6 +113,7 @@ bool ViewWidget::eventFilter(QObject *obj, QEvent *e) {
     QApplication::sendEvent(_graphicsView, eventModif);
     return true;
   }
+
   return false;
 }
 
@@ -119,6 +124,7 @@ void ViewWidget::addToScene(QGraphicsItem *item) {
 #endif
     return;
   }
+
   _items.insert(item);
   item->setParentItem(_centralWidgetItem);
 }
@@ -126,7 +132,9 @@ void ViewWidget::addToScene(QGraphicsItem *item) {
 void ViewWidget::removeFromScene(QGraphicsItem *item) {
   if (!_items.contains(item))
     return;
+
   _items.remove(item);
+
   if (_graphicsView->scene())
     _graphicsView->scene()->removeItem(item);
 }

@@ -117,6 +117,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       undoEdition();
       break;
     }
+
     default: {
       return false;
     }
@@ -165,6 +166,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       case TRANSLATE_OP:
         mMouseTranslate(qMouseEv->x(), qMouseEv->y(), glMainWidget);
         return true;
+
       default:
         return false;
       }

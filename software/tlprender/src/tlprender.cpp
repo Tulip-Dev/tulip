@@ -455,6 +455,7 @@ void parseCommandLine(int argc, char **argv) {
 
       break;
     }
+
     case 'f':
       imageFormat = optarg;
 #ifdef HAVE_LIBPNG
@@ -477,20 +478,25 @@ void parseCommandLine(int argc, char **argv) {
     case ':':
       help();
       break;
+
     case 'l':
       layoutSpecified = true;
       layoutName = optarg;
       break;
+
     case 'o':
       filename = optarg;
       break;
+
     case 's':
       saveTLP = true;
       saveTLPFile = optarg;
       break;
+
     case 't':
       importPluginName = optarg;
       break;
+
     case '?':
     default:
       cerr << programName << ": unknown option: " << c << endl;

@@ -136,12 +136,16 @@ orientationType getMask(DataSet* dataSet) {
   switch (current) {
   case 0  :
     return ORI_DEFAULT;
+
   case 1  :
     return ORI_INVERSION_VERTICAL;
+
   case 2  :
     return ORI_ROTATION_XY;
+
   case 3  :
     return orientationType(ORI_ROTATION_XY | ORI_INVERSION_HORIZONTAL);
+
   default :
     return ORI_DEFAULT;
   }

@@ -111,7 +111,9 @@ protected:
     @brief Provides input filtering for the interactor
     @see QObject::eventFilter()
     */
-  inline virtual bool eventFilter(QObject* obj, QEvent* ev) { return QObject::eventFilter(obj,ev); }
+  inline virtual bool eventFilter(QObject* obj, QEvent* ev) {
+    return QObject::eventFilter(obj,ev);
+  }
 };
 
 class TLP_QT_SCOPE InteractorContext {

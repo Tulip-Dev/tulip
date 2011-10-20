@@ -79,26 +79,34 @@ void PluginsCenter::listItemSelected() {
   case 0:
     browseAll();
     break;
+
   case 1:
     browseAlgorithms();
     break;
+
   case 2:
     browseImportExport();
     break;
+
   case 3:
     browseGlyphs();
     break;
+
   case 4:
     browseViews();
     break;
+
   case 5:
     browseInteractors();
     break;
+
   case 6:
     browsePerspectives();
     break;
+
   case 7: // separator
     break;
+
   case 8:
     showErrorsPage();
     break;

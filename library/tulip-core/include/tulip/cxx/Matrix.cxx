@@ -164,11 +164,13 @@ Obj MATRIX::determinant() const {
   case 2:
     return (*this)[0][0] * (*this)[1][1] - (*this)[1][0] * (*this)[0][1];
     break;
+
   case 3:
     return (*this)[0][0] * ((*this)[1][1]*(*this)[2][2] - (*this)[1][2] * (*this)[2][1])
            - (*this)[0][1] * ((*this)[1][0]*(*this)[2][2] - (*this)[1][2] * (*this)[2][0])
            + (*this)[0][2] * ((*this)[1][0]*(*this)[2][1] - (*this)[1][1] * (*this)[2][0]) ;
     break;
+
   default:
     int j2;
     Obj det = 0;
@@ -209,6 +211,7 @@ MATRIX MATRIX::cofactor() const {
     (result)[1][0] = - (*this)[0][1];
     (result)[1][1] = (*this)[0][0];
     break;
+
   case 3:
     (result)[0][0] = (*this)[1][1]*(*this)[2][2] - (*this)[1][2]*(*this)[2][1];
     (result)[0][1] = - ((*this)[1][0]*(*this)[2][2] - (*this)[2][0]*(*this)[1][2]);
@@ -220,6 +223,7 @@ MATRIX MATRIX::cofactor() const {
     (result)[2][1] = - ((*this)[0][0]*(*this)[1][2] - (*this)[0][2]*(*this)[1][0]);
     (result)[2][2] = (*this)[0][0]*(*this)[1][1] - (*this)[0][1]*(*this)[1][0];
     break;
+
   default :
     int i1,j1;
     tlp::Matrix<Obj,SIZE - 1> c;

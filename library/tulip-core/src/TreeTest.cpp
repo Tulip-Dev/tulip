@@ -410,22 +410,27 @@ void TreeTest::treatEvent(const Event& evt) {
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     case GraphEvent::TLP_DEL_NODE:
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     case GraphEvent::TLP_ADD_EDGE:
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     case GraphEvent::TLP_DEL_EDGE:
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     case GraphEvent::TLP_REVERSE_EDGE:
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     default:
       break;
     }

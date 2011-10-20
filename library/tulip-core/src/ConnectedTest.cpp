@@ -198,10 +198,12 @@ void ConnectedTest::treatEvent(const Event& evt) {
     case GraphEvent::TLP_ADD_NODE:
       resultsBuffer[(unsigned long)graph]=false;
       break;
+
     case GraphEvent::TLP_DEL_NODE:
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     case GraphEvent::TLP_ADD_EDGE:
 
       if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
@@ -210,6 +212,7 @@ void ConnectedTest::treatEvent(const Event& evt) {
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     case GraphEvent::TLP_DEL_EDGE:
 
       if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
@@ -218,6 +221,7 @@ void ConnectedTest::treatEvent(const Event& evt) {
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     default:
       break;
     }
