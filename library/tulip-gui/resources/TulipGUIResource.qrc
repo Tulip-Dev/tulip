@@ -1,33 +1,20 @@
 <RCC>
     <qresource prefix="/tulip/gui/icons">
-        <file>i_addedge.png</file>
-        <file>i_addnode.png</file>
-        <file>i_bends.png</file>
-        <file>i_del.png</file>
-        <file>i_magic.png</file>
-        <file>i_move.png</file>
-        <file>i_navigation.png</file>
-        <file>i_select.png</file>
-        <file>i_selection.png</file>
-        <file>i_zoom.png</file>
-        <file>i_redo.png</file>
-        <file>i_undo.png</file>
-        <file>i_snapshot.png</file>
-        <file>i_locked.png</file>
-        <file>i_unlocked.png</file>
         <file>logo32x32.png</file>
     </qresource>
     <qresource prefix="/tulip/gui/ui">
-        <file>arrow_two_head.png</file>
-        <file>down.png</file>
-        <file>left.png</file>
-        <file>right.png</file>
-        <file>up.png</file>
+        <file>arrowdown.png</file>
+	<file>arrowup.png</file>
         <file>btn_26.png</file>
         <file>btn_26_hover.png</file>
         <file>btn_26_pressed.png</file>
         <file>combobox_arrow.png</file>
-        <file>list_bullet_arrow.png</file>
+	<file>darkclosebutton.png</file>
+	<file>darkminimizebutton.png</file>
+	<file>down_arrow-black.png</file>
 	<file>down_arrow-white.png</file>
+	<file>editclear.png</file>
+        <file>list_bullet_arrow.png</file>
+	<file>right_arrow-black.png</file>
     </qresource>
 </RCC>

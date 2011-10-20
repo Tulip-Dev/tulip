@@ -36,7 +36,7 @@ public:
   /**
    * Default constructor
    */
-  InteractorSelectionModifier():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_move.png","Move/Reshape selection") {
+  InteractorSelectionModifier():NodeLinkDiagramComponentInteractor(":/i_move.png","Move/Reshape selection") {
     setPriority(3);
     setConfigurationWidgetText(QString("<h3>Selection modifier interactor</h3>")+
                                "Modify selection<br/><br/>"+

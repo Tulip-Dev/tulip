@@ -86,11 +86,11 @@ ExpandableGroupBox::title {
 }
 
 ExpandableGroupBox::indicator:unchecked {
-  image: url(:/tulip/graphperspective/ui/right_arrow-black.png);
+  image: url(:/tulip/gui/ui/right_arrow-black.png);
 }
 
 ExpandableGroupBox::indicator:checked {
-  image: url(:/tulip/graphperspective/ui/down_arrow-black.png);
+  image: url(:/tulip/gui/ui/down_arrow-black.png);
 }
 
 QToolButton, QComboBox {
