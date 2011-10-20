@@ -69,9 +69,9 @@ public :
 
 protected:
 
-  virtual void setCurveVertexShaderRenderingSpecificParameters() {}
+  virtual void setCurveVertexShaderRenderingSpecificParameters() {};
 
-  virtual void cleanupAfterCurveVertexShaderRendering() {}
+  virtual void cleanupAfterCurveVertexShaderRendering() {};
 
   virtual Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) = 0;
 
@@ -84,12 +84,15 @@ protected:
   static std::map<unsigned int, GLfloat *> curveVertexBuffersData;
   static std::map<unsigned int, std::vector<GLushort *> > curveVertexBuffersIndices;
   static std::map<unsigned int, GLuint* > curveVertexBuffersObject;
-  static GLint MAX_SHADER_CONTROL_POINTS;
   static std::map<std::string, GlShaderProgram *> curvesShadersMap;
   static std::map<std::string, GlShaderProgram *> curvesBillboardShadersMap;
   static GlShader *curveVertexShaderNormalMain;
   static GlShader *curveVertexShaderBillboardMain;
   static GlShader *fisheyeDistortionVertexShader;
+  static bool canUseGeometryShader;
+  static std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> > curvesGeometryShadersMap;
+  static GlShader *curveVertexGeometryShaderNormalMain;
+  static std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> > curvesBillboardGeometryShadersMap;
 
   std::string shaderProgramName;
   GlShaderProgram *curveShaderProgramNormal;

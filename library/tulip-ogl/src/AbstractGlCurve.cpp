@@ -60,12 +60,16 @@ static string fisheyeDistortionVertexShaderSrc =
   "		}"
   "}";
 
-static string genCommonUniformVariables(const unsigned int maxNbControlPoints) {
+static string genCommonUniformVariables() {
   ostringstream oss;
 
   oss << "#version 120" << endl;
-  oss << "uniform vec3 controlPoints[" << maxNbControlPoints << "];" << endl;
+  oss << "uniform sampler1D controlPoints;" << endl;
   oss << "uniform int nbControlPoints;" << endl;
+  oss << "const int controlPointsTexSize = 1024;" << endl;
+  oss << "vec3 getControlPoint(int index) {" << endl;
+  oss << "	return texture1D(controlPoints, float(index) / float(nbControlPoints - 1)).xyz;" << endl;
+  oss << "}" << endl;
 
   return oss.str();
 }
@@ -115,6 +119,276 @@ static string curveVertexShaderNormalMainSrc =
   "		gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 0.0);"
   "	}"
   "}"
+  ;
+
+static string curveVertexShaderGeometryNormalMainSrc =
+  "#version 120\n"
+  "uniform float startSize;"
+  "uniform float endSize;"
+  "uniform vec4 startColor;"
+  "uniform vec4 endColor;"
+
+
+  "varying float size;"
+
+  "vec3 computeCurvePoint(float t);"
+
+  "void main () {"
+  "	float t = gl_Vertex.x;"
+  "	size = mix(startSize, endSize, t);"
+  "	gl_Position = vec4(computeCurvePoint(t), t);"
+  "	gl_FrontColor =  mix(startColor, endColor, t);"
+  "}"
+  ;
+
+static const string curveExtrusionGeometryShaderSrc =
+  "#version 120\n"
+  "#extension GL_EXT_geometry_shader4 : enable\n"
+
+  "const float M_PI = 3.141592653589793238462643;"
+
+  "uniform bool topOutline;"
+  "uniform bool bottomOutline;"
+
+  "uniform int nbCurvePoints;"
+  "uniform float texCoordFactor;"
+  "uniform bool fisheye;"
+
+  "varying in float size[4];"
+
+  "uniform vec4 center;"
+  "uniform float radius;"
+  "uniform float height;"
+  "uniform int fisheyeType;"
+
+  "vec4 fisheyeDistortion(vec3 glScenePoint) {"
+  "		vec4 position = gl_ModelViewMatrix * vec4(glScenePoint, 1.0);"
+  "		float dist = distance(center, position);"
+  "		if (fisheyeType == 1) {"
+  "			if (dist < radius) {"
+  "				float coeff = (height + 1.) * dist / (height * dist/ radius + 1.);"
+  "				vec4 dir = normalize(position - center) * coeff;"
+  "				return gl_ProjectionMatrix * (center + dir);"
+  "			} else {"
+  "				return gl_ProjectionMatrix * position;"
+  "			}"
+  "		} else if (fisheyeType == 2) {"
+  "			float coeff = dist+dist*radius/(dist*dist+1.0+radius/height);"
+  "			vec4 dir = normalize(position - center) * coeff;"
+  "			return gl_ProjectionMatrix * (center + dir);"
+  "		} else {"
+  "			if (dist < radius) {"
+  "				return gl_ProjectionMatrix * (center + height * (position - center));"
+  "			} else {"
+  "				return gl_ProjectionMatrix * (center + (1. + radius * (height - 1.) / dist) * (position - center));"
+  "			}"
+  "		}"
+  "}"
+
+  "void computeExtrusionAndEmitVertices(vec3 pBefore, vec3 pCurrent, vec3 pAfter, float size, float t) {"
+  "	vec3 u = pBefore - pCurrent;"
+  "	vec3 v = pAfter - pCurrent;"
+  "	vec3 xu = normalize(u);"
+  "	vec3 xv = normalize(v);"
+  "	vec3 bi_xu_xv = normalize(xu+xv);"
+  "	float angle = M_PI - acos(dot(u,v)/(length(u)*length(v)));"
+
+
+  //Nan check
+  "	if(angle != angle) {"
+  "		angle = 0.0;"
+  "	}"
+
+  "	float newSize = size;"
+
+  "	float cosA = cos(angle / 2.0);"
+
+  "	bool parallel = false;"
+
+  "	if (cosA > 1e-1) {"
+  "		newSize = size / cosA;"
+  "	}"
+
+  "	if (cosA < 1e-1 || angle < 1e-3) {"
+  "		vec3 tmp = vec3(0.0);"
+  "		tmp = normalize(pAfter - pCurrent);"
+  "		bi_xu_xv = tmp;"
+  "		bi_xu_xv.x = -tmp.y;"
+  "		bi_xu_xv.y = tmp.x;"
+  "		parallel = true;"
+  "		angle = 0.0;"
+  "	} "
+
+  "	gl_TexCoord[0] = vec4(1.0);"
+
+  "	if (parallel || cross(xu, xv)[2] < 0) {"
+  "		if (topOutline) {"
+  "			gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 1.0);"
+  "			if (!fisheye)"
+  "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
+  "			else"
+  "				gl_Position = fisheyeDistortion(pCurrent + bi_xu_xv * newSize);"
+  "			EmitVertex();"
+  "		}"
+
+  "		if (bottomOutline) {"
+  "			gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 0.0);"
+  "			if (!fisheye)"
+  "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - bi_xu_xv * newSize, 1.0);"
+  "			else"
+  "				gl_Position = fisheyeDistortion(pCurrent - bi_xu_xv * newSize);"
+  "			EmitVertex();"
+  "		}"
+
+  "	} else {"
+  "		if (topOutline) {"
+  "			gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 1.0);"
+  "			if (!fisheye)"
+  "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - bi_xu_xv * newSize, 1.0);"
+  "			else"
+  "				gl_Position = fisheyeDistortion(pCurrent - bi_xu_xv * newSize);"
+  "			EmitVertex();"
+  "		}"
+
+  "		if (bottomOutline) {"
+  "			gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 0.0);"
+  "			if (!fisheye)"
+  "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
+  "			else"
+  "				gl_Position = fisheyeDistortion(pCurrent + bi_xu_xv * newSize);"
+  "			EmitVertex();"
+  "		}"
+  "	}"
+  "}"
+
+  "void main() {"
+
+  "	if (gl_PositionIn[0].w == 0.0) {"
+  "		gl_FrontColor = gl_FrontColorIn[0];"
+  "		computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz - (gl_PositionIn[1].xyz - gl_PositionIn[0].xyz), gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, size[0], gl_PositionIn[0].w);"
+  "	}"
+
+  "	gl_FrontColor = gl_FrontColorIn[1];"
+  "	computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, size[1], gl_PositionIn[1].w);"
+  "	gl_FrontColor = gl_FrontColorIn[2];"
+  "	computeExtrusionAndEmitVertices(gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, size[2], gl_PositionIn[2].w);"
+
+  "	if (gl_PositionIn[3].w == 1.0) {"
+  "		gl_FrontColor = gl_FrontColorIn[3];"
+  "		computeExtrusionAndEmitVertices(gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, gl_PositionIn[3].xyz + (gl_PositionIn[3].xyz - gl_PositionIn[2].xyz), size[3], gl_PositionIn[3].w);"
+  "	}"
+  "}"
+  ;
+
+static const string curveExtrusionBillboardGeometryShaderSrc =
+  "#version 120\n"
+  "#extension GL_EXT_geometry_shader4 : enable\n"
+
+  "const float M_PI = 3.141592653589793238462643;"
+
+  "uniform bool topOutline;"
+  "uniform bool bottomOutline;"
+
+  "uniform int nbCurvePoints;"
+  "uniform float texCoordFactor;"
+  "uniform bool fisheye;"
+  "uniform vec3 lookDir;"
+
+  "varying in float size[4];"
+
+  "uniform vec4 center;"
+  "uniform float radius;"
+  "uniform float height;"
+  "uniform int fisheyeType;"
+
+  "vec4 fisheyeDistortion(vec3 glScenePoint) {"
+  "		vec4 position = gl_ModelViewMatrix * vec4(glScenePoint, 1.0);"
+  "		float dist = distance(center, position);"
+  "		if (fisheyeType == 1) {"
+  "			if (dist < radius) {"
+  "				float coeff = (height + 1.) * dist / (height * dist/ radius + 1.);"
+  "				vec4 dir = normalize(position - center) * coeff;"
+  "				return gl_ProjectionMatrix * (center + dir);"
+  "			} else {"
+  "				return gl_ProjectionMatrix * position;"
+  "			}"
+  "		} else if (fisheyeType == 2) {"
+  "			float coeff = dist+dist*radius/(dist*dist+1.0+radius/height);"
+  "			vec4 dir = normalize(position - center) * coeff;"
+  "			return gl_ProjectionMatrix * (center + dir);"
+  "		} else {"
+  "			if (dist < radius) {"
+  "				return gl_ProjectionMatrix * (center + height * (position - center));"
+  "			} else {"
+  "				return gl_ProjectionMatrix * (center + (1. + radius * (height - 1.) / dist) * (position - center));"
+  "			}"
+  "		}"
+  "}"
+
+  "void computeExtrusionAndEmitVertices(vec3 pBefore, vec3 pCurrent, vec3 pAfter, float size, float t) {"
+  "	vec3 dir = vec3(0.0);"
+  "	float angle = 0.0;"
+  "	if (t == 0.0) {"
+  "		vec3 xu = normalize(pCurrent - pAfter);"
+  "		dir = normalize(cross(xu, lookDir));"
+  "	} else if (t == 1.0) {"
+  "		vec3 xu = normalize(pBefore - pCurrent);"
+  "		dir = normalize(cross(xu, lookDir));"
+  "	} else {"
+  "		vec3 u = normalize(pBefore - pCurrent);"
+  "		vec3 v = normalize(pAfter - pCurrent);"
+  "		vec3 xu = cross(u, lookDir);"
+  "		vec3 xv = cross(v,-lookDir);"
+  "		dir = normalize(xu+xv);"
+  " 		float angle = M_PI - acos(dot(u,v));"
+  //  Check to see if angle == NaN (GLSL Spec NaN != NaN) because the isnan builtin function is available since version 130 of GLSL
+  "		if (angle != angle) angle = 0;"
+  "	}"
+
+  "	gl_TexCoord[0] = vec4(1.0);"
+  "	gl_TexCoord[1] = vec4(1.0);"
+
+  "	float newSize = size/cos(angle/2.0);"
+
+  "	if (topOutline) {"
+  "		gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 1.0);"
+  "		gl_TexCoord[1].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 1.0);"
+  "		if (!fisheye)"
+  "			gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + dir * newSize, 1.0);"
+  "		else"
+  "			gl_Position = fisheyeDistortion(pCurrent + dir * newSize);"
+  "		EmitVertex();"
+  "	}"
+
+  "	if (bottomOutline) {"
+  "		gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 0.0);"
+  "		gl_TexCoord[1].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 0.0);"
+  "		if (!fisheye)"
+  "			gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - dir * newSize, 1.0);"
+  "		else"
+  "			gl_Position = fisheyeDistortion(pCurrent - dir * newSize);"
+  "		EmitVertex();"
+  "	}"
+  "}"
+
+  "void main() {"
+
+  "	if (gl_PositionIn[0].w == 0.0) {"
+  "		gl_FrontColor = gl_FrontColorIn[0];"
+  "		computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz - (gl_PositionIn[1].xyz - gl_PositionIn[0].xyz), gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, size[0], gl_PositionIn[0].w);"
+  "	}"
+
+  "	gl_FrontColor = gl_FrontColorIn[1];"
+  "	computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, size[1], gl_PositionIn[1].w);"
+  "	gl_FrontColor = gl_FrontColorIn[2];"
+  "	computeExtrusionAndEmitVertices(gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, size[2], gl_PositionIn[2].w);"
+
+  "	if (gl_PositionIn[3].w == 1.0) {"
+  "		gl_FrontColor = gl_FrontColorIn[3];"
+  "		computeExtrusionAndEmitVertices(gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, gl_PositionIn[3].xyz + (gl_PositionIn[3].xyz - gl_PositionIn[2].xyz), size[3], gl_PositionIn[3].w);"
+  "	}"
+  "}"
+
   ;
 
 static string curveVertexShaderBillboardMainSrc =
@@ -181,14 +455,18 @@ map<unsigned int, vector<GLushort *> > AbstractGlCurve::curveVertexBuffersIndice
 map<unsigned int, GLuint* > AbstractGlCurve::curveVertexBuffersObject;
 map<string, GlShaderProgram *> AbstractGlCurve::curvesShadersMap;
 map<string, GlShaderProgram *> AbstractGlCurve::curvesBillboardShadersMap;
-GLint AbstractGlCurve::MAX_SHADER_CONTROL_POINTS(0);
 GlShader *AbstractGlCurve::fisheyeDistortionVertexShader(NULL);
 GlShader *AbstractGlCurve::curveVertexShaderNormalMain(NULL);
 GlShader *AbstractGlCurve::curveVertexShaderBillboardMain(NULL);
+bool AbstractGlCurve::canUseGeometryShader = false;
+std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> > AbstractGlCurve::curvesGeometryShadersMap;
+GlShader *AbstractGlCurve::curveVertexGeometryShaderNormalMain(NULL);
+std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> > AbstractGlCurve::curvesBillboardGeometryShadersMap;
 
 AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &curveSpecificShaderCode) :
   curveShaderProgramNormal(NULL), curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
   outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)) {
+  canUseGeometryShader = GlShaderProgram::geometryShaderSupported();
   initShader(shaderProgramName, curveSpecificShaderCode);
 }
 
@@ -198,6 +476,7 @@ AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &
   controlPoints(controlPoints), startColor(startColor), endColor(endColor), startSize(startSize), endSize(endSize), nbCurvePoints(nbCurvePoints),
   outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)) {
 
+  canUseGeometryShader = GlShaderProgram::geometryShaderSupported();
   initShader(shaderProgramName, curveSpecificShaderCode);
 
   for (size_t i = 0 ; i < controlPoints.size() ; ++i) {
@@ -259,14 +538,6 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
   static bool glVendorOk = (glVendor.find("NVIDIA")!=string::npos) || (glVendor.find("ATI")!=string::npos);
 
   if (glVendorOk && GlShaderProgram::shaderProgramsSupported()) {
-    if (MAX_SHADER_CONTROL_POINTS == 0) {
-      // has been determined experimentally by testing the implementation
-      // on several graphic cards with different video memory size and graphics drivers
-      //FIXME  try and determine this number in a more reliabhle way
-      glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS_ARB, &MAX_SHADER_CONTROL_POINTS);
-      MAX_SHADER_CONTROL_POINTS /= 4;
-      MAX_SHADER_CONTROL_POINTS -= 100;
-    }
 
     if (curveVertexShaderNormalMain == NULL) {
       curveVertexShaderNormalMain = new GlShader(Vertex);
@@ -283,22 +554,88 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
       fisheyeDistortionVertexShader->compileFromSourceCode(fisheyeDistortionVertexShaderSrc);
     }
 
+    if (curveVertexGeometryShaderNormalMain == NULL) {
+      curveVertexGeometryShaderNormalMain = new GlShader(Vertex);
+      curveVertexGeometryShaderNormalMain->compileFromSourceCode(curveVertexShaderGeometryNormalMainSrc);
+    }
+
     if (curvesShadersMap.find(shaderProgramName) == curvesShadersMap.end()) {
       curvesShadersMap[shaderProgramName] = new GlShaderProgram(shaderProgramName);
-      curvesShadersMap[shaderProgramName]->addShaderFromSourceCode(Vertex, genCommonUniformVariables(MAX_SHADER_CONTROL_POINTS) + curveSpecificShaderCode);
+      curvesShadersMap[shaderProgramName]->addShaderFromSourceCode(Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
       curvesShadersMap[shaderProgramName]->addShader(curveVertexShaderNormalMain);
       curvesShadersMap[shaderProgramName]->addShader(fisheyeDistortionVertexShader);
       curvesShadersMap[shaderProgramName]->link();
       curvesShadersMap[shaderProgramName]->printInfoLog();
     }
 
+    if (canUseGeometryShader && curvesGeometryShadersMap.find(shaderProgramName) == curvesGeometryShadersMap.end()) {
+      GlShaderProgram *polygonShader = new GlShaderProgram(shaderProgramName);
+      polygonShader->addShaderFromSourceCode(Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
+      polygonShader->addShader(curveVertexGeometryShaderNormalMain);
+      polygonShader->addGeometryShaderFromSourceCode(curveExtrusionGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_TRIANGLE_STRIP);
+      polygonShader->setMaxGeometryShaderOutputVertices(6);
+      polygonShader->link();
+      polygonShader->printInfoLog();
+
+      if (!polygonShader->isLinked()) {
+        delete polygonShader;
+        polygonShader = NULL;
+      }
+
+      GlShaderProgram *lineShader = new GlShaderProgram(shaderProgramName);
+      lineShader->addShaderFromSourceCode(Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
+      lineShader->addShader(curveVertexGeometryShaderNormalMain);
+      lineShader->addGeometryShaderFromSourceCode(curveExtrusionGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_LINE_STRIP);
+      lineShader->setMaxGeometryShaderOutputVertices(6);
+      lineShader->link();
+      lineShader->printInfoLog();
+
+      if (!lineShader->isLinked()) {
+        delete lineShader;
+        lineShader = NULL;
+      }
+
+      curvesGeometryShadersMap[shaderProgramName] = make_pair(polygonShader, lineShader);
+    }
+
     if (curvesBillboardShadersMap.find(shaderProgramName) == curvesBillboardShadersMap.end()) {
       curvesBillboardShadersMap[shaderProgramName] = new GlShaderProgram(shaderProgramName);
-      curvesBillboardShadersMap[shaderProgramName]->addShaderFromSourceCode(Vertex, genCommonUniformVariables(MAX_SHADER_CONTROL_POINTS) + curveSpecificShaderCode);
+      curvesBillboardShadersMap[shaderProgramName]->addShaderFromSourceCode(Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
+
       curvesBillboardShadersMap[shaderProgramName]->addShader(curveVertexShaderBillboardMain);
       curvesBillboardShadersMap[shaderProgramName]->addShader(fisheyeDistortionVertexShader);
       curvesBillboardShadersMap[shaderProgramName]->link();
       curvesBillboardShadersMap[shaderProgramName]->printInfoLog();
+    }
+
+    if (canUseGeometryShader && curvesBillboardGeometryShadersMap.find(shaderProgramName) == curvesBillboardGeometryShadersMap.end()) {
+      GlShaderProgram *polygonShader = new GlShaderProgram(shaderProgramName);
+      polygonShader->addShaderFromSourceCode(Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
+      polygonShader->addShader(curveVertexGeometryShaderNormalMain);
+      polygonShader->addGeometryShaderFromSourceCode(curveExtrusionBillboardGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_TRIANGLE_STRIP);
+      polygonShader->setMaxGeometryShaderOutputVertices(6);
+      polygonShader->link();
+      polygonShader->printInfoLog();
+
+      if (!polygonShader->isLinked()) {
+        delete polygonShader;
+        polygonShader = NULL;
+      }
+
+      GlShaderProgram *lineShader = new GlShaderProgram(shaderProgramName);
+      lineShader->addShaderFromSourceCode(Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
+      lineShader->addShader(curveVertexGeometryShaderNormalMain);
+      lineShader->addGeometryShaderFromSourceCode(curveExtrusionBillboardGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_LINE_STRIP);
+      lineShader->setMaxGeometryShaderOutputVertices(6);
+      lineShader->link();
+      lineShader->printInfoLog();
+
+      if (!lineShader->isLinked()) {
+        delete lineShader;
+        lineShader = NULL;
+      }
+
+      curvesBillboardGeometryShadersMap[shaderProgramName] = make_pair(polygonShader, lineShader);
     }
 
     if (curvesShadersMap[shaderProgramName]->isLinked()) {
@@ -319,8 +656,6 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
   glDisable(GL_LIGHTING);
   glDisable(GL_CULL_FACE);
 
-  glLineWidth(1.4f);
-
   if (texture != "") {
     unsigned int i = nbCurvePoints / 2;
     Coord firstCurvePoint(computeCurvePointOnCPU(controlPoints, i / static_cast<float>(nbCurvePoints - 1)));
@@ -336,7 +671,17 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     curveShaderProgram = curveShaderProgramNormal;
   }
 
-  if (curveShaderProgram != NULL && controlPoints.size() <= (size_t)MAX_SHADER_CONTROL_POINTS && renderMode != GL_SELECT) {
+  pair<GlShaderProgram *, GlShaderProgram *> geometryShaders = std::make_pair((GlShaderProgram*)NULL,(GlShaderProgram*)NULL);
+  pair<GlShaderProgram *, GlShaderProgram *> geometryBillboardShaders = std::make_pair((GlShaderProgram*)NULL,(GlShaderProgram*)NULL);
+
+  if (canUseGeometryShader && curvesGeometryShadersMap.find(curveShaderProgram->getName()) != curvesGeometryShadersMap.end()) {
+    geometryShaders = curvesGeometryShadersMap[curveShaderProgram->getName()];
+    geometryBillboardShaders = curvesBillboardGeometryShadersMap[curveShaderProgram->getName()];
+  }
+
+  static bool canUseFloatTextures = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_texture_float");
+
+  if (curveShaderProgram != NULL && canUseFloatTextures && renderMode != GL_SELECT) {
 
     static bool vboOk = OpenGlConfigManager::getInst().hasVertexBufferObject();
 
@@ -360,15 +705,59 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
       currentActiveShader->desactivate();
     }
 
+    static GLuint controlPointsTexId = 0;
+
+    if (controlPointsTexId == 0) {
+      glGenTextures(1, &controlPointsTexId);
+    }
+
+    vector<float> controlPointsData(1024*4, 0);
+
+
+    glEnable(GL_TEXTURE_1D);
+    glBindTexture(GL_TEXTURE_1D, controlPointsTexId);
+    glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB32F_ARB, controlPoints.size(), 0, GL_RGB, GL_FLOAT, &controlPoints[0][0]);
+    glBindTexture(GL_TEXTURE_1D, 0);
+    glDisable(GL_TEXTURE_1D);
+
+
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_1D, controlPointsTexId);
+
+
+    bool geometryShaderActivated = false;
+
+    if (canUseGeometryShader && nbCurvePoints > 3 && !(startSize == 1 && endSize == 1) && geometryShaders.first) {
+      if (!billboardCurve) {
+        curveShaderProgram = geometryShaders.first;
+      }
+      else {
+        curveShaderProgram = geometryBillboardShaders.first;
+      }
+
+      geometryShaderActivated = true;
+    }
+
     curveShaderProgram->activate();
-    curveShaderProgram->setUniformVec3FloatArray("controlPoints", controlPoints.size(), &controlPoints[0][0]);
+    curveShaderProgram->setUniformTextureSampler("controlPoints", 3);
     curveShaderProgram->setUniformInt("nbControlPoints", controlPoints.size());
     curveShaderProgram->setUniformInt("nbCurvePoints", nbCurvePoints);
     curveShaderProgram->setUniformFloat("startSize", startSize);
     curveShaderProgram->setUniformFloat("endSize", endSize);
     curveShaderProgram->setUniformColor("startColor", startColor);
     curveShaderProgram->setUniformColor("endColor", endColor);
-    curveShaderProgram->setUniformFloat("step", 1.0f / (static_cast<float>(nbCurvePoints) - 1.0f));
+
+    if (!geometryShaderActivated) {
+      curveShaderProgram->setUniformFloat("step", 1.0f / (static_cast<float>(nbCurvePoints) - 1.0f));
+    }
+    else {
+      curveShaderProgram->setUniformBool("topOutline", true);
+      curveShaderProgram->setUniformBool("bottomOutline", true);
+    }
+
     curveShaderProgram->setUniformFloat("texCoordFactor", texCoordFactor);
 
     if (billboardCurve) {
@@ -428,11 +817,22 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
       OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 
       if (vboOk) {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
-        glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, 0);
+        if (geometryShaderActivated) {
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
+          glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+        }
+        else {
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
+          glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, 0);
+        }
       }
       else {
-        glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][0]);
+        if (geometryShaderActivated) {
+          glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][1]);
+        }
+        else {
+          glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][0]);
+        }
       }
 
       OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
@@ -449,29 +849,94 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
       }
 
       if (outlined) {
+
+        if (canUseGeometryShader && nbCurvePoints > 3 && geometryShaders.second) {
+          curveShaderProgram->desactivate();
+
+          if (billboardCurve) {
+            curveShaderProgram = geometryBillboardShaders.second;
+          }
+          else {
+            curveShaderProgram = geometryShaders.second;
+          }
+
+          curveShaderProgram->activate();
+          curveShaderProgram->setUniformTextureSampler("controlPoints", 3);
+          curveShaderProgram->setUniformInt("nbControlPoints", controlPoints.size());
+          curveShaderProgram->setUniformInt("nbCurvePoints", nbCurvePoints);
+          curveShaderProgram->setUniformFloat("startSize", startSize);
+          curveShaderProgram->setUniformFloat("endSize", endSize);
+          curveShaderProgram->setUniformBool("topOutline", true);
+          curveShaderProgram->setUniformBool("bottomOutline", false);
+          curveShaderProgram->setUniformFloat("texCoordFactor", texCoordFactor);
+
+          if (billboardCurve) {
+            curveShaderProgram->setUniformVec3Float("lookDir", lookDir);
+          }
+
+          curveShaderProgram->setUniformBool("fisheye", fisheyeActivated);
+
+          if (fisheyeActivated) {
+            curveShaderProgram->setUniformVec4Float("center", fisheyeCenter[0], fisheyeCenter[1], fisheyeCenter[2], fisheyeCenter[3]);
+            curveShaderProgram->setUniformFloat("radius", fisheyeRadius);
+            curveShaderProgram->setUniformFloat("height", fisheyeHeight);
+            curveShaderProgram->setUniformInt("fisheyeType", fisheyeType);
+          }
+
+          setCurveVertexShaderRenderingSpecificParameters();
+        }
+
         curveShaderProgram->setUniformColor("startColor", outlineColor);
         curveShaderProgram->setUniformColor("endColor", outlineColor);
-      }
 
-      OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
-      if (vboOk) {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
-        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
-      }
-      else {
-        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][2]);
-      }
+        OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
-      if (vboOk) {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[4]);
-        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
-      }
-      else {
-        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][3]);
-      }
+        if (vboOk) {
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
 
-      OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+          if (geometryShaderActivated) {
+            glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+          }
+          else {
+            glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+          }
+        }
+        else {
+          if (geometryShaderActivated) {
+            glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][2]);
+          }
+          else {
+            glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][2]);
+          }
+        }
+
+        if (canUseGeometryShader && nbCurvePoints > 3 && geometryShaders.second) {
+          curveShaderProgram->setUniformBool("topOutline", false);
+          curveShaderProgram->setUniformBool("bottomOutline", true);
+        }
+
+        if (vboOk) {
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[4]);
+
+          if (geometryShaderActivated) {
+            glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+          }
+          else {
+            glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+          }
+        }
+        else {
+          if (geometryShaderActivated) {
+            glDrawElements(GL_LINE_STRIP_ADJACENCY_EXT, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][3]);
+          }
+          else {
+            glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][3]);
+          }
+        }
+
+        OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+      }
     }
 
 
@@ -483,6 +948,11 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     glDisableClientState(GL_VERTEX_ARRAY);
 
     curveShaderProgram->desactivate();
+
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_1D, 0);
+
+    glActiveTexture(GL_TEXTURE0);
 
     cleanupAfterCurveVertexShaderRendering();
 

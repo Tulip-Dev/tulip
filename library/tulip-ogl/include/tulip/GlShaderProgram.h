@@ -385,7 +385,7 @@ public :
 
   void setUniformInt(const std::string &variableName, const int f);
   void setUniformVec2Int(const std::string &variableName, const Vector<int, 2> &vec2i);
-  void setUniformVec2Int(const std::string &variableName, const float i1, const float i2);
+  void setUniformVec2Int(const std::string &variableName, const int i1, const int i2);
   void setUniformVec3Int(const std::string &variableName, const Vector<int, 3> &vec3i);
   void setUniformVec3Int(const std::string &variableName, const int i1, const int i2, const int i3);
   void setUniformVec4Int(const std::string &variableName, const Vector<int, 4> &vec4i);
@@ -409,7 +409,7 @@ public :
 
   void setAttributeInt(const std::string &variableName, const int f);
   void setAttributeVec2Int(const std::string &variableName, const Vector<int, 2> &vec2i);
-  void setAttributeVec2Int(const std::string &variableName, const float i1, const float i2);
+  void setAttributeVec2Int(const std::string &variableName, const int i1, const int i2);
   void setAttributeVec3Int(const std::string &variableName, const Vector<int, 3> &vec3i);
   void setAttributeVec3Int(const std::string &variableName, const int i1, const int i2, const int i3);
   void setAttributeVec4Int(const std::string &variableName, const Vector<int, 4> &vec4i);
@@ -494,6 +494,10 @@ public :
   void getUniformVec3BoolVariableValue(const std::string &variableName, bool *value);
   void getUniformVec4BoolVariableValue(const std::string &variableName, bool *value);
 
+  // This method must be called before calling the link method to
+  // set the max number of vertices a geometry shader can output
+  // If not called, the maximum value is set when linking the shader program (not recommended for performance).
+  void setMaxGeometryShaderOutputVertices(const int maxOutputVertices);
 
 private :
 
@@ -507,8 +511,11 @@ private :
   bool programLinked;
 
   std::vector<GlShader *> attachedShaders;
+  int maxGeometryShaderOutputVertices;
 
   static GlShaderProgram *currentActiveShaderProgram;
+
+
 
 };
 

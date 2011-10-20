@@ -34,15 +34,15 @@ static string bezierSpecificVertexShaderSrc =
 
   "vec3 computeCurvePoint(float t) {"
   "	if (t == 0.0) {"
-  "		return controlPoints[0];"
+  "		return getControlPoint(0);"
   "	} else if (t == 1.0) {"
-  "		return controlPoints[nbControlPoints - 1];"
+  "		return getControlPoint(nbControlPoints - 1);"
   "	} else {"
   "		float s = (1.0 - t);"
   "		vec3 bezierPoint = vec3(0.0);"
   "		for (int i = 0 ; i < nbControlPoints ; ++i) { "
   "			vec2 pascalTriangleTexIdx = vec2(float(i) * pascalTriangleTexStep, (nbControlPoints-1.0) * pascalTriangleTexStep);"
-  "			bezierPoint += controlPoints[i].xyz * texture2D(pascalTriangleTex, pascalTriangleTexIdx).r * pow(t, float(i)) * pow(s, nbControlPoints - 1.0 - float(i));"
+  "			bezierPoint += getControlPoint(i).xyz * texture2D(pascalTriangleTex, pascalTriangleTexIdx).r * pow(t, float(i)) * pow(s, nbControlPoints - 1.0 - float(i));"
   "		}"
   "		return bezierPoint;"
   "	}"
@@ -71,7 +71,7 @@ void GlBezierCurve::buildPascalTriangleTexture() {
 
   for (unsigned int i = 0 ; i < CONTROL_POINTS_LIMIT ; ++i) {
     for (unsigned int j = 0 ; j <= i ; ++j) {
-      pascalTriangleTextureData[i * CONTROL_POINTS_LIMIT + j] = pascalTriangle[i][j];
+      pascalTriangleTextureData[i * CONTROL_POINTS_LIMIT + j] = static_cast<float>(pascalTriangle[i][j]);
     }
   }
 

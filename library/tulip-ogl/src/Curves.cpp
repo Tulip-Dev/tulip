@@ -234,7 +234,7 @@ GLfloat* buildCurvePoints (const vector<Coord> &vertices,
 }
 
 static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const Coord &pAfter,
-                            float size, int inversion, vector<Coord> &result) {
+                            float size, int inversion, vector<Coord> &result, bool lastPoint = false) {
 
   Coord u = pBefore - pCurrent;
   Coord v = pAfter - pCurrent;
@@ -245,54 +245,42 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
 
   Coord xu = u / u.norm();
   Coord xv = v / v.norm();
-
   Coord bi_xu_xv = xu+xv;
-
-  if(bi_xu_xv == Coord(0,0,0)) {
-    if (result.empty()) {
-      xv = Coord(0,0,1.);
-      Coord dir = xu^xv;
-
-      // if dir = (0,0,0) => edge have a direction only in z
-      if(dir[0]==0 && dir[1]==0 && dir[2]==0)
-        dir[0]=1.;
-
-      if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
-
-      result.push_back(pCurrent - dir*size);
-      result.push_back(pCurrent + dir*size);
-    }
-    else {
-      xu = xv;
-      xv = Coord(0,0,-1);
-      Coord dir = xu^xv;
-
-      // if dir = (0,0,0) => edge have a direction only in z
-      if(dir[0]==0 && dir[1]==0 && dir[2]==0)
-        dir[0]=1.;
-
-      if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
-
-      result.push_back(pCurrent - dir*static_cast<float>(inversion)*size);
-      result.push_back(pCurrent + dir*static_cast<float>(inversion)*size);
-    }
-
-    return inversion;
-  }
 
   float newSize=size;
   float angle = 0;
 
-  bi_xu_xv /= bi_xu_xv.norm();
+  if (!result.empty() && !lastPoint && bi_xu_xv.norm() < 0.003f) {
+    return inversion;
+  }
+
+  if (bi_xu_xv.norm() != 0) {
+    bi_xu_xv /= bi_xu_xv.norm();
+  }
 
   angle=static_cast<float>(M_PI-acos(u.dotProduct(v)/(u.norm()*v.norm())));
 
-  if(isnan(angle) || fabs(angle) < 1e-5)
-    angle=0;
+  bool angleOk = true;
 
-  newSize=newSize/static_cast<float>(cos(angle/2.0));
 
-  if(angle<M_PI/2+M_PI/4) {
+  if(isnan(angle) || fabs(angle) < 1e-3) {
+    angleOk = false;
+
+    if (!lastPoint)
+      bi_xu_xv = xv;
+    else
+      bi_xu_xv = xu;
+
+    if (bi_xu_xv[0] == 0 && bi_xu_xv[1] == 0 && fabs(bi_xu_xv[2]) == 1) {
+      bi_xu_xv[0] = bi_xu_xv[2];
+      bi_xu_xv[2] = 0;
+    }
+  }
+  else {
+    newSize=newSize/static_cast<float>(cos(angle/2.0));
+  }
+
+  if(angleOk && angle<M_PI/2+M_PI/4) {
     //normal form
     if ((xu^xv)[2] > 0) {
       result.push_back(pCurrent + bi_xu_xv*newSize*static_cast<float>(inversion));
@@ -302,54 +290,30 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
       result.push_back(pCurrent - bi_xu_xv*newSize*static_cast<float>(inversion));
       result.push_back(pCurrent + bi_xu_xv*newSize*static_cast<float>(inversion));
     }
-
   }
   else {
     //broken form
 
     Coord vectUnit(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);
 
-    if(!(newSize>u.norm() || newSize>v.norm() || fabs(angle-M_PI)<1E-5)) {
+    if(angleOk && !(newSize>u.norm() || newSize>v.norm() || fabs(angle-M_PI)<1E-3)) {
       if ((xu^xv)[2] > 0) {
-        if (inversion > 0) {
-          result.push_back(pCurrent + bi_xu_xv*newSize);
-          result.push_back(pCurrent - vectUnit*size);
-          result.push_back(pCurrent + bi_xu_xv*newSize);
-          result.push_back(pCurrent + vectUnit*size);
-        }
-        else {
-          result.push_back(pCurrent - vectUnit*size);
-          result.push_back(pCurrent + bi_xu_xv*newSize);
-          result.push_back(pCurrent + vectUnit*size);
-          result.push_back(pCurrent + bi_xu_xv*newSize);
-        }
+        result.push_back(pCurrent + bi_xu_xv*newSize*inversion);
+        result.push_back(pCurrent - vectUnit*size*inversion);
+        result.push_back(pCurrent + bi_xu_xv*newSize*inversion);
+        result.push_back(pCurrent + vectUnit*size*inversion);
       }
       else {
-        if (inversion > 0) {
-          result.push_back(pCurrent + vectUnit*size);
-          result.push_back(pCurrent + bi_xu_xv*newSize);
-          result.push_back(pCurrent - vectUnit*size);
-          result.push_back(pCurrent + bi_xu_xv*newSize);
-        }
-        else {
-          result.push_back(pCurrent + bi_xu_xv*newSize);
-          result.push_back(pCurrent + vectUnit*size);
-          result.push_back(pCurrent + bi_xu_xv*newSize);
-          result.push_back(pCurrent - vectUnit*size);
-        }
+        result.push_back(pCurrent + vectUnit*size*inversion);
+        result.push_back(pCurrent + bi_xu_xv*newSize*inversion);
+        result.push_back(pCurrent - vectUnit*size*inversion);
+        result.push_back(pCurrent + bi_xu_xv*newSize*inversion);
       }
     }
     else {
-      if ((xu^xv)[2] > 0) {
-        result.push_back(pCurrent + vectUnit*size*static_cast<float>(inversion));
-        result.push_back(pCurrent - vectUnit*size*static_cast<float>(inversion));
-        inversion*=-1;
-      }
-      else {
-        result.push_back(pCurrent - vectUnit*size*static_cast<float>(inversion));
-        result.push_back(pCurrent + vectUnit*size*static_cast<float>(inversion));
-        inversion*=-1;
-      }
+      result.push_back(pCurrent + vectUnit*size*static_cast<float>(inversion));
+      result.push_back(pCurrent - vectUnit*size*static_cast<float>(inversion));
+      inversion*=-1;
     }
   }
 
@@ -361,6 +325,7 @@ void buildCurvePoints (const vector<Coord> &vertices,
                        const Coord &startN,
                        const Coord &endN,
                        vector<Coord> &result) {
+
   int inversion=1;
 
   if (startN != vertices[0]) {
@@ -375,10 +340,10 @@ void buildCurvePoints (const vector<Coord> &vertices,
   }
 
   if (endN != vertices[vertices.size()-1]) {
-    computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], endN, sizes[sizes.size() - 1], inversion, result);
+    inversion = computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], endN, sizes[sizes.size() - 1], inversion, result, true);
   }
   else {
-    computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], vertices[vertices.size()-1] + (vertices[vertices.size()-1] - vertices[vertices.size()-2]), sizes[sizes.size() - 1], inversion, result);
+    inversion = computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], vertices[vertices.size()-1] + (vertices[vertices.size()-1] - vertices[vertices.size()-2]), sizes[sizes.size() - 1], inversion, result, true);
   }
 }
 //==============================================
@@ -415,7 +380,9 @@ void computeCleanVertices(const vector<Coord> &bends,
                           const Coord &startPoint, const Coord& endPoint,
                           Coord &startN, Coord &endN,
                           vector<Coord> &result) {
-  if (!bends.empty()) {
+
+
+  if (bends.size() > 0) {
     result.push_back(startPoint);
     Coord lastPoint = bends[0];
 
