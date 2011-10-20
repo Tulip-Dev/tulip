@@ -68,7 +68,7 @@ static void readShaderSourceFile(const string &vertexShaderSourceFilePath, char 
   }
 
   ifs.seekg (0, ios::end);
-  unsigned int length = ifs.tellg();
+  unsigned int length = static_cast<unsigned int>(ifs.tellg());
   ifs.seekg (0, ios::beg);
 
   *shader = new char[length+1];
@@ -130,7 +130,8 @@ void GlShader::compileShaderObject(const char *shaderSrc) {
 
 GlShaderProgram *GlShaderProgram::currentActiveShaderProgram(NULL);
 
-GlShaderProgram::GlShaderProgram(const std::string &name) : programName(name), programObjectId(0), programLinked(false) {
+GlShaderProgram::GlShaderProgram(const std::string &name) :
+  programName(name), programObjectId(0), programLinked(false), maxGeometryShaderOutputVertices(0) {
   programObjectId = glCreateProgram();
 }
 
@@ -228,8 +229,11 @@ void GlShaderProgram::link() {
       glProgramParameteriEXT(programObjectId, GL_GEOMETRY_INPUT_TYPE_EXT, attachedShaders[i]->getInputPrimitiveType());
       glProgramParameteriEXT(programObjectId, GL_GEOMETRY_OUTPUT_TYPE_EXT, attachedShaders[i]->getOutputPrimitiveType());
 
-      GLint maxOutputVertices;
-      glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT, &maxOutputVertices);
+      GLint maxOutputVertices = maxGeometryShaderOutputVertices;
+
+      if (maxOutputVertices == 0)
+        glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT, &maxOutputVertices);
+
       glProgramParameteriEXT(programObjectId, GL_GEOMETRY_VERTICES_OUT_EXT, maxOutputVertices);
     }
   }
@@ -274,13 +278,15 @@ void GlShaderProgram::desactivate() {
 }
 
 bool GlShaderProgram::shaderProgramsSupported() {
+  
   static bool vertexShaderExtOk = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_vertex_shader");
   static bool fragmentShaderExtOk = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_fragment_shader");
   return (vertexShaderExtOk && fragmentShaderExtOk);
 }
 
 bool GlShaderProgram::geometryShaderSupported() {
-  return OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_geometry_shader4");
+  static bool geometryShaderExtOk = OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_geometry_shader4");
+  return geometryShaderExtOk;
 }
 
 GlShaderProgram *GlShaderProgram::getCurrentActiveShader() {
@@ -375,7 +381,7 @@ void GlShaderProgram::setUniformVec2Int(const std::string &variableName, const V
   setUniformVec2IntArray(variableName, 1, (int *) &vec2i);
 }
 
-void GlShaderProgram::setUniformVec2Int(const std::string &variableName, const float i1, const float i2) {
+void GlShaderProgram::setUniformVec2Int(const std::string &variableName, const int i1, const int i2) {
   GLint loc = getUniformVariableLocation(variableName);
   glUniform2i(loc, i1, i2);
 }
@@ -475,7 +481,7 @@ void GlShaderProgram::setAttributeVec2Int(const std::string &variableName, const
   setAttributeVec2Int(variableName, vec2i[0], vec2i[1]);
 }
 
-void GlShaderProgram::setAttributeVec2Int(const std::string &variableName, const float i1, const float i2) {
+void GlShaderProgram::setAttributeVec2Int(const std::string &variableName, const int i1, const int i2) {
   GLint loc = getAttributeVariableLocation(variableName);
   glVertexAttrib2s(loc, i1, i2);
 }
@@ -786,6 +792,10 @@ void GlShaderProgram::getUniformVec4BoolVariableValue(const std::string &variabl
   for (unsigned int i = 0 ; i < 4 ; ++i) {
     value[i] = (valueInt[i] > 0);
   }
+}
+
+void GlShaderProgram::setMaxGeometryShaderOutputVertices(const int maxOutputVertices) {
+  maxGeometryShaderOutputVertices = maxOutputVertices;
 }
 
 }
