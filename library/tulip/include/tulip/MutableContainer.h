@@ -126,6 +126,7 @@ MutableContainer<TYPE>::~MutableContainer() {
     delete vData;
     vData=0;
     break;
+
   case HASH:
 
     if (StoredType<TYPE>::isPointer) {
@@ -141,6 +142,7 @@ MutableContainer<TYPE>::~MutableContainer() {
     delete hData;
     hData=0;
     break;
+
   default:
     assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
@@ -171,6 +173,7 @@ void MutableContainer<TYPE>::setAll(const TYPE &value) {
 
     vData->clear();
     break;
+
   case HASH:
 
     if (StoredType<TYPE>::isPointer) {
@@ -187,6 +190,7 @@ void MutableContainer<TYPE>::setAll(const TYPE &value) {
     hData=0;
     vData = new std::deque<typename StoredType<TYPE>::Value>();
     break;
+
   default:
     assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
@@ -317,9 +321,11 @@ IteratorValue* MutableContainer<TYPE>::findAllValues(const TYPE &value,
     case VECT:
       return new IteratorVect<TYPE>(value, equal, vData, minIndex);
       break;
+
     case HASH:
       return new IteratorHash<TYPE>(value, equal, hData);
       break;
+
     default:
       assert(false);
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
@@ -364,6 +370,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
       }
 
       break;
+
     case HASH :
 
       if ((it=hData->find(i)) != hData->end()) {
@@ -373,6 +380,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
       }
 
       break;
+
     default:
       assert(false);
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
@@ -418,6 +426,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
       }
 
       break;
+
     case HASH :
 
       if ((it=hData->find(i)) != hData->end())
@@ -427,6 +436,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 
       (*hData)[i]= newVal;
       break;
+
     default:
       assert(false);
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
@@ -490,6 +500,7 @@ typename StoredType<TYPE>::ReturnedConstValue MutableContainer<TYPE>::get(const 
       return StoredType<TYPE>::get((*vData)[i - minIndex]);
 
     break;
+
   case HASH:
 
     if ((it=hData->find(i))!=hData->end())
@@ -498,6 +509,7 @@ typename StoredType<TYPE>::ReturnedConstValue MutableContainer<TYPE>::get(const 
       return StoredType<TYPE>::get(defaultValue);
 
     break;
+
   default:
     assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
@@ -514,8 +526,10 @@ bool MutableContainer<TYPE>::hasNonDefaultValue(const unsigned int i) const {
   case VECT:
     return (i<=maxIndex && i>=minIndex &&
             (((*vData)[i - minIndex]) != defaultValue));
+
   case HASH:
     return ((hData->find(i))!=hData->end());
+
   default:
     assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
@@ -642,6 +656,7 @@ void MutableContainer<TYPE>::compress(unsigned int min, unsigned int max, unsign
     }
 
     break;
+
   case HASH:
 
     if ( double(nbElements) > limitValue*1.5) {
@@ -662,6 +677,7 @@ void MutableContainer<TYPE>::compress(unsigned int min, unsigned int max, unsign
     }
 
     break;
+
   default:
     assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;

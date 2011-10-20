@@ -1274,10 +1274,12 @@ void MainController::editFind() {
     mainWindowFacade.getStatusBar()->showMessage("No item found.");
     //no item found does not mean we want to undo.
     break;
+
   case -1:
     // forget the current graph state
     graph->pop(false);
     break;
+
   default:
     stringstream sstr;
     sstr << nbItemsFound << " item(s) found.";

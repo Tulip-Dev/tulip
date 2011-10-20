@@ -175,6 +175,7 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
          buffer is 7 GLfloats. */
 
     break;
+
   case GL_POLYGON_TOKEN:
     nvertices =(int) *loc;
     loc++;
@@ -229,6 +230,7 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
     loc += nvertices * 7;  /* Each vertex element in the
             feedback buffer is 7 GLfloats. */
     break;
+
   case GL_POINT_TOKEN:
     vertex = (Feedback3Dcolor *) loc;
     fprintf(file, "%g %g %g setrgbcolor\n", vertex[0].red, vertex[0].green, vertex[0].blue);
@@ -236,9 +238,11 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
     loc += 7;           /* Each vertex element in the feedback
          buffer is 7 GLfloats. */
     break;
+
   case GL_PASS_THROUGH_TOKEN:
     loc++;
     break;
+
   default:
     /* XXX Left as an excersie to the reader. */
     printf("Incomplete implementation.  Unexpected token (%d).\n", token);
@@ -304,19 +308,23 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
       loc += 14;
       nprimitives++;
       break;
+
     case GL_POLYGON_TOKEN:
       nvertices = (int)*loc;
       loc++;
       loc += (7 * nvertices);
       nprimitives++;
       break;
+
     case GL_POINT_TOKEN:
       loc += 7;
       nprimitives++;
       break;
+
     case GL_PASS_THROUGH_TOKEN:
       loc++;
       break;
+
     default:
       /* XXX Left as an excersie to the reader. */
       printf("Incomplete implementation.  Unexpected token (%d).\n",
@@ -348,6 +356,7 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
       loc += 14;
       item++;
       break;
+
     case GL_POLYGON_TOKEN:
       nvertices = (int)*loc;
       loc++;
@@ -362,12 +371,14 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
       loc += (7 * nvertices);
       item++;
       break;
+
     case GL_POINT_TOKEN:
       vertex = (Feedback3Dcolor *) loc;
       prims[item].depth = vertex[0].z;
       loc += 7;
       item++;
       break;
+
     case GL_PASS_THROUGH_TOKEN:
       loc++;
       break;
@@ -492,20 +503,24 @@ void tlp::printBuffer(GLint size, GLfloat * buffer) {
       printf("  %4.2f\n", buffer[size - count]);
       count--;
       break;
+
     case GL_POINT_TOKEN:
       printf("GL_POINT_TOKEN\n");
       print3DcolorVertex(size, &count, buffer);
       break;
+
     case GL_LINE_TOKEN:
       printf("GL_LINE_TOKEN\n");
       print3DcolorVertex(size, &count, buffer);
       print3DcolorVertex(size, &count, buffer);
       break;
+
     case GL_LINE_RESET_TOKEN:
       printf("GL_LINE_RESET_TOKEN\n");
       print3DcolorVertex(size, &count, buffer);
       print3DcolorVertex(size, &count, buffer);
       break;
+
     case GL_POLYGON_TOKEN:
       printf("GL_POLYGON_TOKEN\n");
       nvertices = (int)buffer[size - count];

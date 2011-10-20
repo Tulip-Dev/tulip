@@ -351,6 +351,7 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
       fillMode=GL_POLYGON;
       break;
     }
+
     case(QUAD_STRIP): {
       fillMode=GL_QUAD_STRIP;
       break;

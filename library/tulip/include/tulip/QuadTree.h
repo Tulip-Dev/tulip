@@ -221,14 +221,18 @@ private:
     case 0:
       return Rectangle<float>(_box[0], F);
       break;
+
     case 1:
       return Rectangle<float>(I, G);
       break;
+
     case 2:
       return Rectangle<float>(F, _box[1]);
       break;
+
     case 3:
       return Rectangle<float>(E, H);
+
     default:
       std::cerr << "ERROR" << __PRETTY_FUNCTION__ << std::endl;
       exit(1);

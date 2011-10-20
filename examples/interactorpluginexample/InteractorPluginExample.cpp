@@ -89,6 +89,7 @@ bool InteractorPluginComponent::eventFilter(QObject *widget, QEvent *e) {
           // Set selection at true for selected node
           selection->setNodeValue(tmpNode, true);
           break;
+
         case EDGE:
           // Set selection at false for selected edge
           selection->setEdgeValue(tmpEdge, true);

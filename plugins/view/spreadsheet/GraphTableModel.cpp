@@ -207,6 +207,7 @@ bool GraphTableModel::useProperty(PropertyInterface* property) const {
   case INVALID_PROPERTY_RTTI:
     return false;
     break;
+
   default:
     return true;
   }
@@ -284,6 +285,7 @@ QVariant GraphTableModel::headerData(int section, Qt::Orientation orientation, i
     }
 
     break;
+
   case Qt::ToolTipRole:
 
     if(orientation == Qt::Horizontal) {
@@ -315,6 +317,7 @@ QVariant GraphTableModel::headerData(int section, Qt::Orientation orientation, i
     }
 
     break;
+
   case Qt::DecorationRole: {
     if(orientation == Qt::Horizontal) {
       PropertyInterface* property = _propertiesTable[section];

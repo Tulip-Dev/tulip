@@ -283,11 +283,11 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
     size_t nbNodes=layerLODUnit->nodesLODVector.size();
     size_t nbEdges=layerLODUnit->edgesLODVector.size();
 #ifdef _OPENMP
-#pragma omp parallel
+    #pragma omp parallel
 #endif
     {
 #ifdef _OPENMP
-#pragma omp sections nowait
+      #pragma omp sections nowait
 #endif
       {
         for(size_t i=0; i<nbSimples; ++i) {
@@ -295,7 +295,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
         }
       }
 #ifdef _OPENMP
-#pragma omp sections nowait
+      #pragma omp sections nowait
 #endif
       {
         for(size_t i=0; i<nbNodes; ++i) {
@@ -303,7 +303,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
         }
       }
 #ifdef _OPENMP
-#pragma omp sections nowait
+      #pragma omp sections nowait
 #endif
       {
         for(size_t i=0; i<nbEdges; ++i) {
@@ -356,15 +356,15 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
 
   // Get result of quadtrees
 #ifdef _OPENMP
-#pragma omp parallel
+  #pragma omp parallel
 #endif
   {
 #ifdef _OPENMP
-#pragma omp sections nowait
+    #pragma omp sections nowait
 #endif
     {
 #ifdef _OPENMP
-#pragma omp section
+      #pragma omp section
 #endif
       {
         if((renderingEntitiesFlag & RenderingNodes)!=0) {
@@ -393,7 +393,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
         }
       }
 #ifdef _OPENMP
-#pragma omp section
+      #pragma omp section
 #endif
       {
         if((renderingEntitiesFlag & RenderingEdges)!=0) {
@@ -423,7 +423,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
       }
     }
 #ifdef _OPENMP
-#pragma omp master
+    #pragma omp master
 #endif
     {
       if((renderingEntitiesFlag & RenderingSimpleEntities)!=0 && entitiesQuadTree[quadTreesVectorPosition]!=NULL) {

@@ -287,21 +287,25 @@ bool QuotientClustering::run() {
               case DoubleProperty::AVG_CALC:
                 value = (value + metric->getEdgeValue(op))/2;
                 break;
+
               case DoubleProperty::SUM_CALC:
                 value += metric->getEdgeValue(op);
                 break;
+
               case DoubleProperty::MAX_CALC:
 
                 if (value < metric->getEdgeValue(op))
                   value = metric->getEdgeValue(op);
 
                 break;
+
               case DoubleProperty::MIN_CALC:
 
                 if (value > metric->getEdgeValue(op))
                   value = metric->getEdgeValue(op);
 
                 break;
+
               case DoubleProperty::NO_CALC:
                 break;
               }

@@ -34,27 +34,35 @@ void PropertyObserver::RealPropertyObserver::treatEvent(const Event& ev) {
     case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
       visibleObserver->beforeSetNodeValue(prop, propEvt->getNode());
       break;
+
     case PropertyEvent::TLP_AFTER_SET_NODE_VALUE:
       visibleObserver->afterSetNodeValue(prop, propEvt->getNode());
       break;
+
     case PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE:
       visibleObserver->beforeSetAllNodeValue(prop);
       break;
+
     case PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE:
       visibleObserver->afterSetAllNodeValue(prop);
       break;
+
     case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
       visibleObserver->beforeSetAllEdgeValue(prop);
       break;
+
     case PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE:
       visibleObserver->afterSetAllEdgeValue(prop);
       break;
+
     case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
       visibleObserver->beforeSetEdgeValue(prop, propEvt->getEdge());
       break;
+
     case PropertyEvent::TLP_AFTER_SET_EDGE_VALUE:
       visibleObserver->afterSetEdgeValue(prop, propEvt->getEdge());
       break;
+
     default:
       // this should not happen
       assert(false);

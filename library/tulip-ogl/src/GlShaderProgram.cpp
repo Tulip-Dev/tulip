@@ -131,7 +131,7 @@ void GlShader::compileShaderObject(const char *shaderSrc) {
 GlShaderProgram *GlShaderProgram::currentActiveShaderProgram(NULL);
 
 GlShaderProgram::GlShaderProgram(const std::string &name) :
-		programName(name), programObjectId(0), programLinked(false), maxGeometryShaderOutputVertices(0) {
+  programName(name), programObjectId(0), programLinked(false), maxGeometryShaderOutputVertices(0) {
   programObjectId = glCreateProgram();
 }
 

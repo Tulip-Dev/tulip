@@ -27,6 +27,7 @@ QVariant TulipTableWidgetColumnSelectionModel::data( const QModelIndex & index, 
       return _tableView->isColumnHidden(index.row())?QVariant(Qt::Unchecked):QVariant(Qt::Checked);
     }
     break;
+
     default:
       return _tableModel->headerData(index.row(),Qt::Horizontal,role);
       break;
@@ -46,6 +47,7 @@ bool TulipTableWidgetColumnSelectionModel::setData( const QModelIndex & index, c
       return true;
     }
     break;
+
     default:
       return false;
     }

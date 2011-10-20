@@ -195,7 +195,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,strin
       }
     }
 
-      resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
+    resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
 
     graph->pop();
 
@@ -225,6 +225,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,strin
 
         *dest = *tmp;
         break;
+
       case TLP_CANCEL:
         resultBool=false;
       };

@@ -106,6 +106,7 @@ VECTORTLP & VECTORTLP::operator^=(const VECTORTLP &v) {
     (*this)[1] = tmp[2]*v[0] - tmp[0]*v[2];
     (*this)[2] = tmp[0]*v[1] - tmp[1]*v[0];
     break;
+
   default :
     std::cerr << "cross product not implemented for dimension :" << SIZE << std::endl;
     break;
@@ -272,10 +273,13 @@ TYPE  VECTORTLP::norm() const {
   switch(SIZE) {
   case 1:
     return VECTORTLP::array[0];
+
   case 2:
     return static_cast<TYPE>(sqrt(VECTORTLP::array[0]*VECTORTLP::array[0]+VECTORTLP::array[1]*VECTORTLP::array[1]));
+
   case 3:
     return static_cast<TYPE>(sqrt(VECTORTLP::array[0]*VECTORTLP::array[0]+VECTORTLP::array[1]*VECTORTLP::array[1]+VECTORTLP::array[2]*VECTORTLP::array[2]));
+
   default :
     TYPE tmp=0;
 
@@ -291,10 +295,13 @@ TYPE  VECTORTLP::dist(const VECTOR &c) const {
   switch(SIZE) {
   case 1:
     return 0;
+
   case 2:
     return static_cast<TYPE>(sqrt((VECTORTLP::array[0]-c.VECTORTLP::array[0])*(VECTORTLP::array[0]-c.VECTORTLP::array[0])+(VECTORTLP::array[1]-c.VECTORTLP::array[1])*(VECTORTLP::array[1]-c.VECTORTLP::array[1])));
+
   case 3:
     return static_cast<TYPE>(sqrt((VECTORTLP::array[0]-c.VECTORTLP::array[0])*(VECTORTLP::array[0]-c.VECTORTLP::array[0])+(VECTORTLP::array[1]-c.VECTORTLP::array[1])*(VECTORTLP::array[1]-c.VECTORTLP::array[1])+(VECTORTLP::array[2]-c.VECTORTLP::array[2])*(VECTORTLP::array[2]-c.VECTORTLP::array[2])));
+
   default :
     TYPE tmp=0;
 

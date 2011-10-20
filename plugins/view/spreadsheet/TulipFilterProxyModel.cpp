@@ -120,6 +120,7 @@ void TulipFilterProxyModel::treatEvent(const Event &ev) {
       }
 
       break;
+
     case PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE:
 
       if(_tableModel->elementType() == NODE) {
@@ -127,6 +128,7 @@ void TulipFilterProxyModel::treatEvent(const Event &ev) {
       }
 
       break;
+
     case PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE:
 
       if(_tableModel->elementType() == EDGE) {
@@ -134,6 +136,7 @@ void TulipFilterProxyModel::treatEvent(const Event &ev) {
       }
 
       break;
+
     case PropertyEvent::TLP_AFTER_SET_EDGE_VALUE:
 
       if(_tableModel->elementType() == EDGE) {
@@ -141,6 +144,7 @@ void TulipFilterProxyModel::treatEvent(const Event &ev) {
       }
 
       break;
+
     default:
       break;
     }
@@ -170,6 +174,7 @@ void TulipFilterProxyModel::treatEvent(const Event &ev) {
         }
       }
       break;
+
       default:
         break;
       }

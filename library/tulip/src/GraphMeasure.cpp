@@ -34,10 +34,13 @@ inline Iterator<node> *getIt(const Graph *sg, node n, EDGE_TYPE direction) {
   switch(direction) {
   case DIRECTED:
     return sg->getOutNodes(n);
+
   case INV_DIRECTED:
     return sg->getInNodes(n);
+
   case UNDIRECTED:
     return sg->getInOutNodes(n);
+
   default:
     cerr << __PRETTY_FUNCTION__ << "serious bug...";
     return 0;
@@ -98,7 +101,7 @@ double tlp::averagePathLength(const Graph *graph,
   }
   bool stopfor = false;
 #ifdef _OPENMP
-#pragma omp parallel for private(i) schedule(dynamic, 1)
+  #pragma omp parallel for private(i) schedule(dynamic, 1)
 #endif
 
   for (i = 0; i < static_cast<int>(nbNodes); ++i) {
@@ -116,7 +119,7 @@ double tlp::averagePathLength(const Graph *graph,
 
         if (pluginProgress->state() != TLP_CONTINUE) {
 #ifdef _OPENMP
-#pragma omp critical(STOPFOR)
+          #pragma omp critical(STOPFOR)
 #endif
           stopfor = true;
         }
@@ -136,7 +139,7 @@ double tlp::averagePathLength(const Graph *graph,
 
       if (itn != n && d != UINT_MAX) {
 #ifdef _OPENMP
-#pragma omp critical(SUMPATH)
+        #pragma omp critical(SUMPATH)
 #endif
         result += d;
       }

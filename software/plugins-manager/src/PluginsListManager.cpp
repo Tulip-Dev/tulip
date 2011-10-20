@@ -162,10 +162,12 @@ vector<int> PluginsListManager::getListPosition() {
     return PluginsListTransformerByServer::getListArrangement();
     break;
   }
+
   case ARRANGEMENT_METHOD_BY_TYPE : {
     return PluginsListTransformerByType::getListArrangement();
     break;
   }
+
   case ARRANGEMENT_METHOD_BY_NAME : {
     return PluginsListTransformerByName::getListArrangement();
     break;
@@ -184,6 +186,7 @@ void PluginsListManager::getPluginsList(CompletePluginsList &list) {
     for_each(pluginsList.begin(), pluginsList.end(),PluginsListTransformerByServer(&list));
     break;
   }
+
   case ARRANGEMENT_METHOD_BY_TYPE : {
     PluginsGlobalOrder pgo;
     sort(pluginsList.begin(), pluginsList.end(), pgo);
@@ -191,6 +194,7 @@ void PluginsListManager::getPluginsList(CompletePluginsList &list) {
     for_each(pluginsList.begin(), pluginsList.end(),plt);
     break;
   }
+
   case ARRANGEMENT_METHOD_BY_NAME : {
     PluginsNameDefaultOrder pndo;
     sort(pluginsList.begin(), pluginsList.end(), pndo);

@@ -86,65 +86,82 @@ static void changeOption(const int key) {
   case '1':
     glutFullScreen();
     break;
+
   case 27:
     exit(EXIT_SUCCESS);
+
   case '+':
     scene.zoom(2);
     break;
+
   case '-':
     scene.zoom(-2);
     break;
+
   case 'x':
     rx = (rx+1)%2;
     break;
+
   case 'y':
     ry = (ry+1)%2;
     break;
+
   case 'z':
     rz = (rz+1)%2;
     break;
+
   case 'e':
     param.setEdge3D(!param.isEdge3D());
     printMessage("3D edges", param.isEdge3D());
     break;
+
   case 'c':
     param.setEdgeColorInterpolate(!param.isEdgeColorInterpolate());
     printMessage("Edge color interpolate", param.isEdgeColorInterpolate());
     break;
+
   case 'a':
     param.setViewArrow(!param.isViewArrow());
     printMessage("Arrow ",param.isViewArrow());
     break;
+
   case 'o':
     scene.setViewOrtho(!scene.isViewOrtho());
     printMessage("Projection orthogonal", scene.isViewOrtho());
     break;
+
   case 'l':
     param.setViewNodeLabel(!param.isViewNodeLabel());
     printMessage("Labels", param.isViewNodeLabel());
     param.setFontsType(1);
     break;
+
   case 'm':
     param.setElementOrdered(!param.isElementOrdered());
     printMessage("Metric ordering",param.isElementOrdered());
     break;
+
   case 'E':
     param.setDisplayEdges(!param.isDisplayEdges());
     printMessage("Edge displaying", param.isDisplayEdges());
     break;
+
   case 'f':
     drawElm = !drawElm;
     printMessage("Fast renddering", drawElm);
     break;
+
   case 'v':
     vbo =! vbo;
     buildVBO = true;
     printMessage("rebuild VBO each time", vbo);
     break;
+
   case 'w':
     size->scale(Size(2,2,1))  ;
     buildVBO = true;
     break;
+
   case 'd':
     size->scale(Size(0.5,0.5,1));
     buildVBO = true;

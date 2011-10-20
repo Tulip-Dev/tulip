@@ -104,28 +104,28 @@ TLP_SCOPE Graph* importGraph(const std::string &format, DataSet &dataSet, Plugin
  * If an error occurs, a message may have been stored by the algorithm in the errosMsg variable.
  * Returns true if the algorithm has been successfully applied.
  */
-  /**
-   * @brief Applies an algorithm plugin, identified by its name.
-   * Algorithm plugins are subclasses of the tlp::Algorithm interface.
-   * Parameters are transmitted to the algorithm trough the DataSet.
-   * To determine a plugin's parameters, you can either:
-   *
-   * * refer to its documentation
-   *
-   * * use buildDefaultDataSet on the plugin object if you have an instance of it
-   *
-   * * call getPluginParameters() with the name of the plugin on the right PluginLister
-   * (there cannot be a static method that directly returns this from the plugin name as a name can be used for plugins of different types).
-   *
-   *
-   * If an error occurs, a message describing the error should be stored in errorMessage.
-   *
-   * @param errorMessage A string that will be modified to contain an error message should an error occur.
-   * @param dataSet The parameters to the algorithm. Defaults to NULL.
-   * @param algorithm The algorithm to apply. Defaults to "any".
-   * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
-   * @return bool Whether the algorithm was successfully applied.
-  **/
+/**
+ * @brief Applies an algorithm plugin, identified by its name.
+ * Algorithm plugins are subclasses of the tlp::Algorithm interface.
+ * Parameters are transmitted to the algorithm trough the DataSet.
+ * To determine a plugin's parameters, you can either:
+ *
+ * * refer to its documentation
+ *
+ * * use buildDefaultDataSet on the plugin object if you have an instance of it
+ *
+ * * call getPluginParameters() with the name of the plugin on the right PluginLister
+ * (there cannot be a static method that directly returns this from the plugin name as a name can be used for plugins of different types).
+ *
+ *
+ * If an error occurs, a message describing the error should be stored in errorMessage.
+ *
+ * @param errorMessage A string that will be modified to contain an error message should an error occur.
+ * @param dataSet The parameters to the algorithm. Defaults to NULL.
+ * @param algorithm The algorithm to apply. Defaults to "any".
+ * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
+ * @return bool Whether the algorithm was successfully applied.
+**/
 TLP_SCOPE bool applyAlgorithm(Graph *graph, std::string &errorMsg, DataSet *dataSet =0, const std::string &algorithm="any", PluginProgress *progress=0);
 
 /**

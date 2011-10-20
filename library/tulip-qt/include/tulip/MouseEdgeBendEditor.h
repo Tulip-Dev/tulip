@@ -51,11 +51,11 @@ public:
   }
 
 protected:
-    enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
-    EditOperation operation;
-    void stopEdition();
+  enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
+  EditOperation operation;
+  void stopEdition();
 
-    edge mEdge;
+  edge mEdge;
 
 private:
 

@@ -16,14 +16,17 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
     case NODEGLYPHPROPERTY_RTTI:
       return QVariant(QString::fromUtf8(GlyphManager::getInst().glyphName(((IntegerProperty*)property)->getNodeValue(node(elementId))).c_str()));
       break;
+
     case EDGESHAPEPROPERTY_RTTI:
       return QVariant(QString::fromUtf8(GlGraphStaticData::edgeShapeName(
                                           ((IntegerProperty*)property)->getEdgeValue(edge(elementId))).c_str()));
       break;
+
     case EDGEEXTREMITYGLYPHPROPERTY_RTTI:
       return QVariant(QString::fromUtf8(EdgeExtremityGlyphManager::getInst().glyphName(
                                           ((IntegerProperty*)property)->getEdgeValue(edge(elementId))).c_str()));
       break;
+
     default: {
       if(elementType == NODE)
         return QVariant(QString::fromUtf8(property->getNodeStringValue(node(elementId)).c_str()));
@@ -34,6 +37,7 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
     break;
   }
   break;
+
   case Qt::EditRole: {
     switch(propertyType) {
     case NODEGLYPHPROPERTY_RTTI: {
@@ -55,6 +59,7 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
       return QVariant::fromValue<ElementCollection>(collection);
     }
     break;
+
     case EDGESHAPEPROPERTY_RTTI: {
       ElementCollection collection;
       int value = elementType==NODE?((IntegerProperty*)property)->getNodeValue(node(elementId)):((IntegerProperty*)property)->getEdgeValue(edge(elementId));
@@ -71,6 +76,7 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
       return QVariant::fromValue<ElementCollection>(collection);
     }
     break;
+
     case EDGEEXTREMITYGLYPHPROPERTY_RTTI: {
       EdgeExtremityGlyphFactory::initFactory();
       int value = elementType==NODE?((IntegerProperty*)property)->getNodeValue(node(elementId)):((IntegerProperty*)property)->getEdgeValue(edge(elementId));
@@ -93,45 +99,59 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
       return QVariant::fromValue<ElementCollection>(collection);
     }
     break;
+
     case INTEGER_PROPERTY_RTTI:
       return createQVariantFromTulipProperty<IntegerProperty,int,int >(elementType,elementId,(IntegerProperty*)property);
       break;
+
     case BOOLEAN_PROPERTY_RTTI:
       return createQVariantFromTulipProperty<BooleanProperty,bool,bool>(elementType,elementId,(BooleanProperty*)property);
       break;
+
     case DOUBLEPROPERTY_RTTI:
       return createQVariantFromTulipProperty<DoubleProperty,double,double>(elementType,elementId,(DoubleProperty*)property);
       break;
+
     case LAYOUTPROPERTY_RTTI:
       return createQVariantFromTulipProperty<LayoutProperty,Coord,vector<Coord> >(elementType,elementId,(LayoutProperty*)property);
       break;
+
     case COLORPROPERTY_RTTI:
       return createQVariantFromTulipProperty<ColorProperty,Color,Color>(elementType,elementId,(ColorProperty*)property);
       break;
+
     case SIZEPROPERTY_RTTI:
       return createQVariantFromTulipProperty<SizeProperty,Size,Size>(elementType,elementId,(SizeProperty*)property);
       break;
+
     case BOOLEANVECTORPROPERTY_RTTI:
       return createQVariantFromTulipProperty<BooleanVectorProperty,vector<bool>,vector<bool> >(elementType,elementId,(BooleanVectorProperty*)property);
       break;
+
     case COLORVECTORPROPERTY_RTTI:
       return createQVariantFromTulipProperty<ColorVectorProperty,vector<Color>,vector<Color> >(elementType,elementId,(ColorVectorProperty*)property);
       break;
+
     case COORDVECTORPROPERTY_RTTI:
       return createQVariantFromTulipProperty<CoordVectorProperty,vector<Coord>,vector<Coord> >(elementType,elementId,(CoordVectorProperty*)property);
       break;
+
     case DOUBLEVECTORPROPERTY_RTTI:
       return createQVariantFromTulipProperty<DoubleVectorProperty,vector<double>,vector<double> >(elementType,elementId,(DoubleVectorProperty*)property);
       break;
+
     case INTEGERVECTORPROPERTY_RTTI:
       return createQVariantFromTulipProperty<IntegerVectorProperty,vector<int>,vector<int> >(elementType,elementId,(IntegerVectorProperty*)property);
       break;
+
     case SIZEVECTORPROPERTY_RTTI:
       return createQVariantFromTulipProperty<SizeVectorProperty,vector<Size>,vector<Size> >(elementType,elementId,(SizeVectorProperty*)property);
       break;
+
     case STRINGVECTORPROPERTY_RTTI:
       return createQVariantFromTulipProperty<StringVectorProperty,vector<string>,vector<string> >(elementType,elementId,(StringVectorProperty*)property);
       break;
+
     case FONTFILEPROPERTY_RTTI: {
       string value = (elementType==NODE?((StringProperty*)property)->getNodeValue(node(elementId)):((StringProperty*)property)->getEdgeValue(edge(elementId)));
       //Create an object containing the original file and the filter options.
@@ -139,12 +159,14 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
       return QVariant::fromValue<FilteredUrl>(url);
     }
     break;
+
     case TEXTUREPROPERTY_RTTI: {
       string value = (elementType==NODE?((StringProperty*)property)->getNodeValue(node(elementId)):((StringProperty*)property)->getEdgeValue(edge(elementId)));
       FilteredUrl url(tlpStringToQString(value),QString("Images (*.png *.jpeg *.jpg *.bmp)"));
       return QVariant::fromValue<FilteredUrl>(url);
     }
     break;
+
     default:
 
       if(elementType == NODE) {
@@ -158,6 +180,7 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
     }
   }
   break;
+
   case Qt::DecorationRole: {
     switch(propertyType) {
     case COLORPROPERTY_RTTI: {
@@ -165,18 +188,22 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
       return QVariant(QColor(colorToQColor(color)));
     }
     break;
+
     case NODEGLYPHPROPERTY_RTTI:
       return QVariant(GlyphPreviewGenerator::getInst().getPreview(((IntegerProperty*)property)->getNodeValue(node(elementId))));
       break;
+
     case EDGEEXTREMITYGLYPHPROPERTY_RTTI:
       return QVariant(EdgeExtremityGlyphPreviewGenerator::getInst().getPreview(((IntegerProperty*)property)->getEdgeValue(edge(elementId))));
       break;
+
     default:
       return QVariant();
       break;
     }
   }
   break;
+
   //If we can compute
   case NormalizedValueRole: {
     switch(propertyType) {
@@ -207,11 +234,13 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
 
     }
     break;
+
     default:
       return QVariant();
     }
   }
   break;
+
   default:
     return QVariant();
   }
@@ -298,9 +327,11 @@ bool TulipQVariantBuilder::setData(const QVariant& value, ElementType elementTyp
   case BOOLEAN_PROPERTY_RTTI:
     return setValueToTulipPropertyFromQVariant<BooleanProperty,bool,bool>(value,elementType,elementId,(BooleanProperty*)property);
     break;
+
   case DOUBLEPROPERTY_RTTI:
     return setValueToTulipPropertyFromQVariant<DoubleProperty,double,double>(value,elementType,elementId,(DoubleProperty*)property);
     break;
+
   case NODEGLYPHPROPERTY_RTTI:
   case EDGESHAPEPROPERTY_RTTI:
   case EDGEEXTREMITYGLYPHPROPERTY_RTTI: {
@@ -317,39 +348,51 @@ bool TulipQVariantBuilder::setData(const QVariant& value, ElementType elementTyp
     }
   }
   break;
+
   case INTEGER_PROPERTY_RTTI:
     return setValueToTulipPropertyFromQVariant<IntegerProperty,int,int>(value,elementType,elementId,(IntegerProperty*)property);
     break;
+
   case LAYOUTPROPERTY_RTTI:
     return setValueToTulipPropertyFromQVariant<LayoutProperty,Coord,vector<Coord> >(value,elementType,elementId,(LayoutProperty*)property);
     break;
+
   case COLORPROPERTY_RTTI:
     return setValueToTulipPropertyFromQVariant<ColorProperty,Color,Color >(value,elementType,elementId,(ColorProperty*)property);
     break;
+
   case SIZEPROPERTY_RTTI:
     return setValueToTulipPropertyFromQVariant<SizeProperty,Size,Size >(value,elementType,elementId,(SizeProperty*)property);
     break;
+
   case BOOLEANVECTORPROPERTY_RTTI:
     return setValueToTulipPropertyFromQVariant<BooleanVectorProperty,vector<bool>,vector<bool> >(value,elementType,elementId,(BooleanVectorProperty*)property);
     break;
+
   case COLORVECTORPROPERTY_RTTI:
     return setValueToTulipPropertyFromQVariant<ColorVectorProperty,vector<Color>,vector<Color> >(value,elementType,elementId,(ColorVectorProperty*)property);
     break;
+
   case COORDVECTORPROPERTY_RTTI:
     return setValueToTulipPropertyFromQVariant<CoordVectorProperty,vector<Coord>,vector<Coord> >(value,elementType,elementId,(CoordVectorProperty*)property);
     break;
+
   case DOUBLEVECTORPROPERTY_RTTI:
     return setValueToTulipPropertyFromQVariant<DoubleVectorProperty,vector<double>,vector<double> >(value,elementType,elementId,(DoubleVectorProperty*)property);
     break;
+
   case INTEGERVECTORPROPERTY_RTTI:
     return setValueToTulipPropertyFromQVariant<IntegerVectorProperty,vector<int>,vector<int> >(value,elementType,elementId,(IntegerVectorProperty*)property);
     break;
+
   case SIZEVECTORPROPERTY_RTTI:
     return setValueToTulipPropertyFromQVariant<SizeVectorProperty,vector<Size>,vector<Size> >(value,elementType,elementId,(SizeVectorProperty*)property);
     break;
+
   case STRINGVECTORPROPERTY_RTTI:
     return setValueToTulipPropertyFromQVariant<StringVectorProperty,vector<string>,vector<string> >(value,elementType,elementId,(StringVectorProperty*)property);
     break;
+
   case FONTFILEPROPERTY_RTTI:
   case TEXTUREPROPERTY_RTTI: {
     FilteredUrl url = value.value<FilteredUrl>();
@@ -357,6 +400,7 @@ bool TulipQVariantBuilder::setData(const QVariant& value, ElementType elementTyp
     return true;
   }
   break;
+
   default:
 
     if(elementType == NODE) {
@@ -390,9 +434,11 @@ bool TulipQVariantBuilder::setAllElementData(const QVariant& value,tlp::ElementT
   case BOOLEAN_PROPERTY_RTTI:
     return setAllValuesToTulipPropertyFromQVariant<BooleanProperty,bool,bool>(value,elementType,(BooleanProperty*)property);
     break;
+
   case DOUBLEPROPERTY_RTTI:
     return setAllValuesToTulipPropertyFromQVariant<DoubleProperty,double,double>(value,elementType,(DoubleProperty*)property);
     break;
+
   case NODEGLYPHPROPERTY_RTTI:
   case EDGESHAPEPROPERTY_RTTI:
   case EDGEEXTREMITYGLYPHPROPERTY_RTTI: {
@@ -409,39 +455,51 @@ bool TulipQVariantBuilder::setAllElementData(const QVariant& value,tlp::ElementT
     }
   }
   break;
+
   case INTEGER_PROPERTY_RTTI:
     return setAllValuesToTulipPropertyFromQVariant<IntegerProperty,int,int>(value,elementType,(IntegerProperty*)property);
     break;
+
   case LAYOUTPROPERTY_RTTI:
     return setAllValuesToTulipPropertyFromQVariant<LayoutProperty,Coord,vector<Coord> >(value,elementType,(LayoutProperty*)property);
     break;
+
   case COLORPROPERTY_RTTI:
     return setAllValuesToTulipPropertyFromQVariant<ColorProperty,Color,Color >(value,elementType,(ColorProperty*)property);
     break;
+
   case SIZEPROPERTY_RTTI:
     return setAllValuesToTulipPropertyFromQVariant<SizeProperty,Size,Size >(value,elementType,(SizeProperty*)property);
     break;
+
   case BOOLEANVECTORPROPERTY_RTTI:
     return setAllValuesToTulipPropertyFromQVariant<BooleanVectorProperty,vector<bool>,vector<bool> >(value,elementType,(BooleanVectorProperty*)property);
     break;
+
   case COLORVECTORPROPERTY_RTTI:
     return setAllValuesToTulipPropertyFromQVariant<ColorVectorProperty,vector<Color>,vector<Color> >(value,elementType,(ColorVectorProperty*)property);
     break;
+
   case COORDVECTORPROPERTY_RTTI:
     return setAllValuesToTulipPropertyFromQVariant<CoordVectorProperty,vector<Coord>,vector<Coord> >(value,elementType,(CoordVectorProperty*)property);
     break;
+
   case DOUBLEVECTORPROPERTY_RTTI:
     return setAllValuesToTulipPropertyFromQVariant<DoubleVectorProperty,vector<double>,vector<double> >(value,elementType,(DoubleVectorProperty*)property);
     break;
+
   case INTEGERVECTORPROPERTY_RTTI:
     return setAllValuesToTulipPropertyFromQVariant<IntegerVectorProperty,vector<int>,vector<int> >(value,elementType,(IntegerVectorProperty*)property);
     break;
+
   case SIZEVECTORPROPERTY_RTTI:
     return setAllValuesToTulipPropertyFromQVariant<SizeVectorProperty,vector<Size>,vector<Size> >(value,elementType,(SizeVectorProperty*)property);
     break;
+
   case STRINGVECTORPROPERTY_RTTI:
     return setAllValuesToTulipPropertyFromQVariant<StringVectorProperty,vector<string>,vector<string> >(value,elementType,(StringVectorProperty*)property);
     break;
+
   case FONTFILEPROPERTY_RTTI:
   case TEXTUREPROPERTY_RTTI: {
     FilteredUrl url = value.value<FilteredUrl>();
@@ -449,6 +507,7 @@ bool TulipQVariantBuilder::setAllElementData(const QVariant& value,tlp::ElementT
     return true;
   }
   break;
+
   default:
 
     if(elementType == NODE) {
@@ -479,6 +538,7 @@ Qt::ItemFlags TulipQVariantBuilder::flags(Qt::ItemFlags defaultFlags,ElementType
   case INVALID_PROPERTY_RTTI:
     return Qt::NoItemFlags;
     break;
+
   default:
     return defaultFlags | Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
     break;

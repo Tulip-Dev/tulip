@@ -102,17 +102,17 @@ void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor) {
 
   if(visitor->isThreadSafe()) {
 #ifdef HAVE_OMP
-#pragma omp parallel
+    #pragma omp parallel
 #endif
     {
 #ifdef HAVE_OMP
-#pragma omp sections nowait
+      #pragma omp sections nowait
 #endif
       {
         acceptVisitorForNodes(graph,visitor);
       }
 #ifdef HAVE_OMP
-#pragma omp sections nowait
+      #pragma omp sections nowait
 #endif
       {
         acceptVisitorForEdges(graph,visitor);

@@ -255,12 +255,15 @@ public:
         case 0:
           os << "(nodes)" << endl;
           break;
+
         case 1:
           os << "(nodes 0)" << endl;
           break;
+
         case 2:
           os << "(nodes 0 1)" << endl;
           break;
+
         default:
           os << "(nodes 0.." << nbElts - 1 << ")" << endl;
         }

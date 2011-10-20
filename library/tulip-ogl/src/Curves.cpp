@@ -249,11 +249,11 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
 
   float newSize=size;
   float angle = 0;
-  
+
   if (!result.empty() && !lastPoint && bi_xu_xv.norm() < 0.003f) {
     return inversion;
   }
-  
+
   if (bi_xu_xv.norm() != 0) {
     bi_xu_xv /= bi_xu_xv.norm();
   }
@@ -275,7 +275,8 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
       bi_xu_xv[0] = bi_xu_xv[2];
       bi_xu_xv[2] = 0;
     }
-  } else {
+  }
+  else {
     newSize=newSize/static_cast<float>(cos(angle/2.0));
   }
 
@@ -418,7 +419,7 @@ void computeCleanVertices(const vector<Coord> &bends,
     if ((endN - lastPoint).norm()<1E-4) {
       endN = lastPoint + lastPoint - result[result.size()-2];
     }
-    
+
     return;
   }
   else {

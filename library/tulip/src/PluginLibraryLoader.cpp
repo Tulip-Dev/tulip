@@ -199,8 +199,8 @@ int __tulip_select_libs(struct dirent *ent) {
   const char *suffix = ".so";
   const unsigned long suffix_len = 3;
 #else
-const char *suffix = ".dylib";
-const unsigned long suffix_len = 6;
+  const char *suffix = ".dylib";
+  const unsigned long suffix_len = 6;
 #endif
   int idx = strlen(ent->d_name) - suffix_len;
 

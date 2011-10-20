@@ -206,6 +206,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
             }
 
             break;
+
           case EDGE:
 
             if(_mode == EdgesAndNodes || _mode == EdgesOnly) {

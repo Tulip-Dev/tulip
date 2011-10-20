@@ -129,15 +129,15 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 }
 
 void MouseEdgeBuilder::addLink(QObject *widget, const node source, const node target) {
-    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
-    Graph * g = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
+  Graph * g = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
-    LayoutProperty* mLayout = g->getProperty<LayoutProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
-    edge newEdge = g->addEdge(source, target);
-    mLayout->setEdgeValue(newEdge, bends);
-    bends.clear();
-    NodeLinkDiagramComponent *nodeLinkView=static_cast<NodeLinkDiagramComponent *>(view);
-    nodeLinkView->elementSelectedSlot(newEdge.id, false);
+  LayoutProperty* mLayout = g->getProperty<LayoutProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
+  edge newEdge = g->addEdge(source, target);
+  mLayout->setEdgeValue(newEdge, bends);
+  bends.clear();
+  NodeLinkDiagramComponent *nodeLinkView=static_cast<NodeLinkDiagramComponent *>(view);
+  nodeLinkView->elementSelectedSlot(newEdge.id, false);
 }
 
 bool MouseEdgeBuilder::draw(GlMainWidget *glMainWidget) {

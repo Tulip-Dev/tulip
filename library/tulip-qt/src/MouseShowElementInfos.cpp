@@ -49,6 +49,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent *e) {
         case NODE:
           nodeLinkView->elementSelectedSlot(tmpNode.id, true);
           break;
+
         case EDGE:
           nodeLinkView->elementSelectedSlot(tmpEdge.id, false);
           break;

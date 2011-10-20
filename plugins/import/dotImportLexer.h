@@ -868,11 +868,13 @@ do_action:  /* This label is used only to access EOF actions. */
 #line 38 "dotImportLexer.l"
       line_num++;
       YY_BREAK
+
     case 3:
       YY_RULE_SETUP
 #line 39 "dotImportLexer.l"
       BEGIN(comment);
       YY_BREAK
+
     case 4:
       YY_RULE_SETUP
 #line 40 "dotImportLexer.l"
@@ -888,6 +890,7 @@ do_action:  /* This label is used only to access EOF actions. */
 #line 42 "dotImportLexer.l"
       BEGIN(INITIAL);
       YY_BREAK
+
     case 7:
       YY_RULE_SETUP
 #line 43 "dotImportLexer.l"
@@ -904,83 +907,97 @@ do_action:  /* This label is used only to access EOF actions. */
       yylval.s = yytext;
       return _STRICT;
       YY_BREAK
+
     case 10:
       YY_RULE_SETUP
 #line 46 "dotImportLexer.l"
       yylval.s = yytext;
       return _DIGRAPH;
       YY_BREAK
+
     case 11:
       YY_RULE_SETUP
 #line 47 "dotImportLexer.l"
       yylval.s = yytext;
       return _GRAPH;
       YY_BREAK
+
     case 12:
       YY_RULE_SETUP
 #line 48 "dotImportLexer.l"
       yylval.s = yytext;
       return _NODE;
       YY_BREAK
+
     case 13:
       YY_RULE_SETUP
 #line 49 "dotImportLexer.l"
       yylval.s = yytext;
       return _EDGE;
       YY_BREAK
+
     case 14:
       YY_RULE_SETUP
 #line 50 "dotImportLexer.l"
       yylval.s = yytext;
       return _SUBGRAPH;
       YY_BREAK
+
     case 15:
       YY_RULE_SETUP
 #line 51 "dotImportLexer.l"
       yylval.s = yytext;
       return _EDGEOP;
       YY_BREAK
+
     case 16:
       YY_RULE_SETUP
 #line 52 "dotImportLexer.l"
       yylval.s = yytext;
       return NUMBER;
       YY_BREAK
+
     case 17:
       YY_RULE_SETUP
 #line 53 "dotImportLexer.l"
       yylval.s = yytext;
       return IDENT;
       YY_BREAK
+
     case 18:
       YY_RULE_SETUP
 #line 54 "dotImportLexer.l"
       BEGIN(qstring);
       yylval.s.resize(0);
       YY_BREAK
+
     case 19:
       YY_RULE_SETUP
 #line 55 "dotImportLexer.l"
       BEGIN(INITIAL);
       return STRING;
       YY_BREAK
+
     case 20:
       /* rule 20 can match eol */
       YY_RULE_SETUP
 #line 56 "dotImportLexer.l"
       line_num++;
       YY_BREAK
+
     case 21:
       /* rule 21 can match eol */
       YY_RULE_SETUP
 #line 57 "dotImportLexer.l"
       yylval.s += yytext;
       YY_BREAK
+
     case 22:
       YY_RULE_SETUP
 #line 58 "dotImportLexer.l"
       yylval.s += yytext;
       YY_BREAK
+
     case 23:
       YY_RULE_SETUP
 #line 59 "dotImportLexer.l"
@@ -988,6 +1005,7 @@ do_action:  /* This label is used only to access EOF actions. */
       html_nest = 1;
       yylval.s.resize(0);
       YY_BREAK
+
     case 24:
       YY_RULE_SETUP
 #line 60 "dotImportLexer.l"
@@ -1000,46 +1018,54 @@ do_action:  /* This label is used only to access EOF actions. */
       }
 
       YY_BREAK
+
     case 25:
       YY_RULE_SETUP
 #line 61 "dotImportLexer.l"
       html_nest++;
       yylval.s+=yytext;
       YY_BREAK
+
     case 26:
       YY_RULE_SETUP
 #line 62 "dotImportLexer.l"
       yylval.s+="<";
       YY_BREAK
+
     case 27:
       YY_RULE_SETUP
 #line 63 "dotImportLexer.l"
       yylval.s+=">";
       YY_BREAK
+
     case 28:
       /* rule 28 can match eol */
       YY_RULE_SETUP
 #line 64 "dotImportLexer.l"
       line_num++;
       YY_BREAK
+
     case 29:
       /* rule 29 can match eol */
       YY_RULE_SETUP
 #line 65 "dotImportLexer.l"
       yylval.s+=yytext;
       YY_BREAK
+
     case 30:
       YY_RULE_SETUP
 #line 66 "dotImportLexer.l"
       yylval.s = yytext;
       return yytext[0];
       YY_BREAK
+
     case 31:
       YY_RULE_SETUP
 #line 68 "dotImportLexer.l"
       ECHO;
       YY_BREAK
 #line 1001 "dotImportLexer.h"
+
     case YY_STATE_EOF(INITIAL):
     case YY_STATE_EOF(comment):
     case YY_STATE_EOF(qstring):
@@ -1140,7 +1166,7 @@ do_action:  /* This label is used only to access EOF actions. */
 
         case EOB_ACT_CONTINUE_SCAN:
           (yy_c_buf_p) =
-          (yytext_ptr) + yy_amount_of_matched_text;
+            (yytext_ptr) + yy_amount_of_matched_text;
 
           yy_current_state = yy_get_previous_state(  );
 
@@ -1150,7 +1176,7 @@ do_action:  /* This label is used only to access EOF actions. */
 
         case EOB_ACT_LAST_MATCH:
           (yy_c_buf_p) =
-          &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[(yy_n_chars)];
+            &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[(yy_n_chars)];
 
           yy_current_state = yy_get_previous_state(  );
 

@@ -44,9 +44,11 @@ public:
     case 0:
       layout->setNodeValue(mN, Coord(0, 0, 0));
       return;
+
     case 1:
       layout->setNodeValue(mN,((LayoutProperty *)layout)->getMax(sg));
       return;
+
     default:
       // between the min and max computed values
       layout->setNodeValue(mN,
@@ -113,10 +115,12 @@ static void rotateVector(Coord &vec, double alpha, int rot) {
     vec[0] = backupVec[0]*cosA - backupVec[1]*sinA;
     vec[1] = backupVec[0]*sinA + backupVec[1]*cosA;
     break;
+
   case Y_ROT:
     vec[0] = backupVec[0]*cosA + backupVec[2]*sinA;
     vec[2] = backupVec[2]*cosA - backupVec[0]*sinA;
     break;
+
   case X_ROT:
     vec[1] = backupVec[1]*cosA - backupVec[2]*sinA;
     vec[2] = backupVec[1]*sinA + backupVec[2]*cosA;

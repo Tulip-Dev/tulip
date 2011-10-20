@@ -183,9 +183,11 @@ public:
             case TLP_DOUBLE:
               metric->setNodeValue(nodes[curNode],valDouble);
               break;
+
             case TLP_STRING:
               stringP->setNodeValue(nodes[curNode],valString);
               break;
+
             default:
               return formatError(valString.c_str(), curLine);
             }
@@ -199,6 +201,7 @@ public:
 
               metric->setEdgeValue(e,valDouble);
               break;
+
             case TLP_STRING:
 
               if (!andFound)
@@ -206,11 +209,14 @@ public:
 
               stringP->setEdgeValue(e,valString);
               break;
+
             case TLP_NOVAL:
               e=graph->addEdge(nodes[curLine],nodes[curNode]);
               break;
+
             case TLP_NOTHING:
               break;
+
             default:
               return formatError(valString.c_str(), curLine);
             }

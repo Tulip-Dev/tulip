@@ -222,6 +222,7 @@ void NodeLinkDiagramComponent::specificEventFilter(QObject *,QEvent *event) {
 
         QToolTip::showText(he->globalPos(), ttip);
         break;
+
       case EDGE:
         label = labels->getEdgeValue(tmpEdge);
 

@@ -269,9 +269,11 @@ bool StrahlerMetric::run() {
         doubleResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
                                             +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
         break;
+
       case REGISTERS:
         doubleResult->setNodeValue(itn, (double)cachedValues[itn].strahler);
         break;
+
       case STACKS:
         doubleResult->setNodeValue(itn, (double)cachedValues[itn].stacks);
       }
@@ -298,9 +300,11 @@ bool StrahlerMetric::run() {
         doubleResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
                                             +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
         break;
+
       case REGISTERS:
         doubleResult->setNodeValue(itn, (double)cachedValues[itn].strahler);
         break;
+
       case STACKS:
         doubleResult->setNodeValue(itn, (double)cachedValues[itn].stacks);
       }

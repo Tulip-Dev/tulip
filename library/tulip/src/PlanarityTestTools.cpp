@@ -694,6 +694,7 @@ void PlanarityTestImpl::calculateNewRBC(Graph*,
     RBC[newCNode].conc(auxNodeList);
   }
   break;
+
   default:
     assert(false);
   }

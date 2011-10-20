@@ -58,11 +58,13 @@ struct GMLTokenParser {
         switch (ch) {
         case 13 :
           break;
+
         case '\n':
           curChar=0;
           curLine++;
           val.str+=ch;
           break;
+
         case '\\':
 
           if (!slashMode) {
@@ -74,6 +76,7 @@ struct GMLTokenParser {
           }
 
           break;
+
         case '"':
 
           if (!slashMode) {
@@ -85,6 +88,7 @@ struct GMLTokenParser {
           }
 
           break;
+
         default:
           slashMode=false;
           val.str+=ch;
@@ -94,16 +98,19 @@ struct GMLTokenParser {
         switch (ch) {
         case 13 :
           break;
+
         case ' ' :
 
           if (started) stop=true;
 
           break;
+
         case '\t':
 
           if (started) stop=true;
 
           break;
+
         case '\n':
           curChar=0;
           curLine++;
@@ -111,6 +118,7 @@ struct GMLTokenParser {
           if (started) stop=true;
 
           break;
+
         case '[':
 
           if (!started) return OPENTOKEN;
@@ -120,6 +128,7 @@ struct GMLTokenParser {
           }
 
           break;
+
         case ']':
 
           if (!started) return CLOSETOKEN;
@@ -129,6 +138,7 @@ struct GMLTokenParser {
           }
 
           break;
+
         case '"':
           strGet=true;
 
@@ -139,6 +149,7 @@ struct GMLTokenParser {
           else started=true;
 
           break;
+
         default :
           val.str+=ch;
           started=true;
@@ -301,6 +312,7 @@ struct GMLParser {
           }
 
           break;
+
         case BOOLTOKEN:
 
           if (!builderStack.front()->addBool(currentValue.str,nextValue.boolean)) {
@@ -309,6 +321,7 @@ struct GMLParser {
           }
 
           break;
+
         case INTTOKEN:
 
           if (!builderStack.front()->addInt(currentValue.str,nextValue.integer)) {
@@ -317,6 +330,7 @@ struct GMLParser {
           }
 
           break;
+
         case DOUBLETOKEN:
 
           if (!builderStack.front()->addDouble(currentValue.str,nextValue.real)) {
@@ -325,6 +339,7 @@ struct GMLParser {
           }
 
           break;
+
         case STRINGTOKEN:
 
           if (!builderStack.front()->addString(currentValue.str,nextValue.str)) {
@@ -333,17 +348,21 @@ struct GMLParser {
           }
 
           break;
+
         case ERRORINFILE:
           return false;
           break;
+
         case ENDOFSTREAM:
           return true;
           break;
+
         default:
           break;
         }
 
         break;
+
       case CLOSETOKEN:
 
         if (builderStack.front()->close())
@@ -355,6 +374,7 @@ struct GMLParser {
 
         builderStack.pop_front();
         break;
+
       default:
         std::cerr << "Error parsing stream line :" << tokenParser.curLine << " char : " << tokenParser.curChar << std::endl;
         return false;
