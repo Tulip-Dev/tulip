@@ -138,7 +138,7 @@ bool EccentricityMetric::run() {
   double diameter = 1.0;
   bool stopfor = false;
 #ifdef _OPENMP
-#pragma omp parallel for
+  #pragma omp parallel for
 #endif
 
   for (int ni = 0; ni < static_cast<int>(nbElem) ; ++ni) {
@@ -151,7 +151,7 @@ bool EccentricityMetric::run() {
 
       if (pluginProgress->progress(ni , graph->numberOfNodes() / nbThreads )!=TLP_CONTINUE) {
 #ifdef _OPENMP
-#pragma omp critical(STOPFOR)
+        #pragma omp critical(STOPFOR)
 #endif
         stopfor = true;
       }

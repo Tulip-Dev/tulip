@@ -1688,303 +1688,303 @@ yyreduce:
   switch (yyn) {
   case 6:
 #line 496 "dotImportParser.y"
-    { dotyy->isDirected = true; dotyy->isStrict = false; ;}
-    break;
+  { dotyy->isDirected = true; dotyy->isStrict = false; ;}
+  break;
 
   case 7:
 #line 497 "dotImportParser.y"
-    { dotyy->isDirected = false; dotyy->isStrict = false; ;}
-    break;
+  { dotyy->isDirected = false; dotyy->isStrict = false; ;}
+  break;
 
   case 8:
 #line 498 "dotImportParser.y"
-    { dotyy->isDirected = true; dotyy->isStrict = true; ;}
-    break;
+  { dotyy->isDirected = true; dotyy->isStrict = true; ;}
+  break;
 
   case 9:
 #line 499 "dotImportParser.y"
-    { dotyy->isDirected = false; dotyy->isStrict = true; ;}
-    break;
+  { dotyy->isDirected = false; dotyy->isStrict = true; ;}
+  break;
 
   case 12:
 #line 506 "dotImportParser.y"
-    { (yyval).clear(); ;}
-    break;
+  { (yyval).clear(); ;}
+  break;
 
   case 13:
 #line 507 "dotImportParser.y"
-    { (yyval.attr) = (yyvsp[-2].attr) + (yyvsp[0].attr); ;}
-    break;
+  { (yyval.attr) = (yyvsp[-2].attr) + (yyvsp[0].attr); ;}
+  break;
 
   case 16:
 #line 514 "dotImportParser.y"
-    { (yyval) = (yyvsp[-1]); ;}
-    break;
+  { (yyval) = (yyvsp[-1]); ;}
+  break;
 
   case 17:
 #line 517 "dotImportParser.y"
-    { (yyval).clear(); ;}
-    break;
+  { (yyval).clear(); ;}
+  break;
 
   case 18:
 #line 518 "dotImportParser.y"
-    { (yyval.attr) = (yyvsp[-1].attr) + (yyvsp[0].attr); ;}
-    break;
+  { (yyval.attr) = (yyvsp[-1].attr) + (yyvsp[0].attr); ;}
+  break;
 
   case 19:
 #line 521 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); ;}
-    break;
+  { (yyval) = (yyvsp[0]); ;}
+  break;
 
   case 20:
 #line 524 "dotImportParser.y"
-    { (yyval).clear(); (yyval.attr).setValue( (yyvsp[-2].s), (yyvsp[0].s) ); ;}
-    break;
+  { (yyval).clear(); (yyval.attr).setValue( (yyvsp[-2].s), (yyvsp[0].s) ); ;}
+  break;
 
   case 21:
 #line 527 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); ;}
-    break;
+  { (yyval) = (yyvsp[0]); ;}
+  break;
 
   case 22:
 #line 528 "dotImportParser.y"
-    { (yyval).clear(); ;}
-    break;
+  { (yyval).clear(); ;}
+  break;
 
   case 23:
 #line 531 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); dotyy->subgAttr += (yyvsp[0].attr); ;}
-    break;
+  { (yyval) = (yyvsp[0]); dotyy->subgAttr += (yyvsp[0].attr); ;}
+  break;
 
   case 24:
 #line 532 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); dotyy->nodeAttr += (yyvsp[0].attr); ;}
-    break;
+  { (yyval) = (yyvsp[0]); dotyy->nodeAttr += (yyvsp[0].attr); ;}
+  break;
 
   case 25:
 #line 533 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); dotyy->edgeAttr += (yyvsp[0].attr); ;}
-    break;
+  { (yyval) = (yyvsp[0]); dotyy->edgeAttr += (yyvsp[0].attr); ;}
+  break;
 
   case 26:
 #line 534 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); ;}
-    break;
+  { (yyval) = (yyvsp[0]); ;}
+  break;
 
   case 27:
 #line 537 "dotImportParser.y"
-    { (yyval).clear(); ;}
-    break;
+  { (yyval).clear(); ;}
+  break;
 
   case 28:
 #line 538 "dotImportParser.y"
-    {
-      (yyval) = (yyvsp[-1]);
-      (yyval.nodeA) += (yyvsp[0].nodeA);
-      (yyval.edgeA) += (yyvsp[0].edgeA);
-      ;
-    }
-    break;
+  {
+    (yyval) = (yyvsp[-1]);
+    (yyval.nodeA) += (yyvsp[0].nodeA);
+    (yyval.edgeA) += (yyvsp[0].edgeA);
+    ;
+  }
+  break;
 
   case 29:
 #line 545 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); ;}
-    break;
+  { (yyval) = (yyvsp[0]); ;}
+  break;
 
   case 30:
 #line 546 "dotImportParser.y"
-    { (yyval) = (yyvsp[-1]); ;}
-    break;
+  { (yyval) = (yyvsp[-1]); ;}
+  break;
 
   case 32:
 #line 550 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); ;}
-    break;
+  { (yyval) = (yyvsp[0]); ;}
+  break;
 
   case 33:
 #line 551 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); ;}
-    break;
+  { (yyval) = (yyvsp[0]); ;}
+  break;
 
   case 34:
 #line 552 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); ;}
-    break;
+  { (yyval) = (yyvsp[0]); ;}
+  break;
 
   case 35:
 #line 553 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); ;}
-    break;
+  { (yyval) = (yyvsp[0]); ;}
+  break;
 
   case 36:
 #line 556 "dotImportParser.y"
-    { (yyval) = (yyvsp[-1]); ;}
-    break;
+  { (yyval) = (yyvsp[-1]); ;}
+  break;
 
   case 37:
 #line 559 "dotImportParser.y"
-    {
-      (yyval) = (yyvsp[0]);
-      node n = dotyy->bindNode( (yyval.s), (yyval.created) );
-      (yyval.nodeA).clear();
-      (yyval.nodeA).push_back( n );
-      (yyval.attr) = dotyy->nodeAttr;
+  {
+    (yyval) = (yyvsp[0]);
+    node n = dotyy->bindNode( (yyval.s), (yyval.created) );
+    (yyval.nodeA).clear();
+    (yyval.nodeA).push_back( n );
+    (yyval.attr) = dotyy->nodeAttr;
 
-      if( (yyval.created) ) {
-        if( !((yyval.attr).mask & DOT_ATTR::LABEL) || (yyval.attr).label.size()==0 )
-          (yyval.attr).setValue( "label", (yyval.s) );
+    if( (yyval.created) ) {
+      if( !((yyval.attr).mask & DOT_ATTR::LABEL) || (yyval.attr).label.size()==0 )
+        (yyval.attr).setValue( "label", (yyval.s) );
 
-        dotyy->SetupNode( (yyval.nodeA), (yyval.attr) );
-      }
-
-      ;
+      dotyy->SetupNode( (yyval.nodeA), (yyval.attr) );
     }
-    break;
+
+    ;
+  }
+  break;
 
   case 46:
 #line 587 "dotImportParser.y"
-    {
-      (yyval) = (yyvsp[-1]);
-      (yyval.attr) += (yyvsp[0].attr);
-      // if( $<created>$ )
-      dotyy->SetupNode( (yyval.nodeA), (yyval.attr) );
-      ;
-    }
-    break;
+  {
+    (yyval) = (yyvsp[-1]);
+    (yyval.attr) += (yyvsp[0].attr);
+    // if( $<created>$ )
+    dotyy->SetupNode( (yyval.nodeA), (yyval.attr) );
+    ;
+  }
+  break;
 
   case 47:
 #line 595 "dotImportParser.y"
-    {
-      (yyval).clear();
-      (yyval.nodeA) = (yyvsp[-3].nodeA);
-      (yyval.nodeA) += (yyvsp[-1].nodeA);
-      (yyval.edgeA) = (yyvsp[-3].edgeA);
-      (yyval.edgeA) += (yyvsp[-1].edgeA);
+  {
+    (yyval).clear();
+    (yyval.nodeA) = (yyvsp[-3].nodeA);
+    (yyval.nodeA) += (yyvsp[-1].nodeA);
+    (yyval.edgeA) = (yyvsp[-3].edgeA);
+    (yyval.edgeA) += (yyvsp[-1].edgeA);
 
-      if( (yyvsp[-1].subg) )
-        (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-2].s), (yyvsp[-3].nodeA), (yyvsp[-1].nodeA) );
-      else if( (yyvsp[-1].nodeA).size() )
-        (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-2].s), (yyvsp[-3].nodeA), (yyvsp[-1].nodeA)[0]);
+    if( (yyvsp[-1].subg) )
+      (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-2].s), (yyvsp[-3].nodeA), (yyvsp[-1].nodeA) );
+    else if( (yyvsp[-1].nodeA).size() )
+      (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-2].s), (yyvsp[-3].nodeA), (yyvsp[-1].nodeA)[0]);
 
-      dotyy->SetupEdge( (yyval.edgeA), dotyy->edgeAttr + (yyvsp[0].attr) );
-      ;
-    }
-    break;
+    dotyy->SetupEdge( (yyval.edgeA), dotyy->edgeAttr + (yyvsp[0].attr) );
+    ;
+  }
+  break;
 
   case 48:
 #line 607 "dotImportParser.y"
-    {
-      (yyval).clear();
-      (yyval.nodeA) = (yyvsp[-3].nodeA);
-      (yyval.nodeA) += (yyvsp[-1].nodeA);
-      (yyval.edgeA) = (yyvsp[-3].edgeA);
-      (yyval.edgeA) += (yyvsp[-1].edgeA);
+  {
+    (yyval).clear();
+    (yyval.nodeA) = (yyvsp[-3].nodeA);
+    (yyval.nodeA) += (yyvsp[-1].nodeA);
+    (yyval.edgeA) = (yyvsp[-3].edgeA);
+    (yyval.edgeA) += (yyvsp[-1].edgeA);
 
-      if( (yyvsp[-1].subg) )
-        (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-2].s), (yyvsp[-3].nodeA), (yyvsp[-1].nodeA) );
-      else if( (yyvsp[-1].nodeA).size() )
-        (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-2].s), (yyvsp[-3].nodeA), (yyvsp[-1].nodeA)[0]);
+    if( (yyvsp[-1].subg) )
+      (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-2].s), (yyvsp[-3].nodeA), (yyvsp[-1].nodeA) );
+    else if( (yyvsp[-1].nodeA).size() )
+      (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-2].s), (yyvsp[-3].nodeA), (yyvsp[-1].nodeA)[0]);
 
-      dotyy->SetupEdge( (yyval.edgeA), dotyy->edgeAttr + (yyvsp[0].attr) );
-      ;
-    }
-    break;
+    dotyy->SetupEdge( (yyval.edgeA), dotyy->edgeAttr + (yyvsp[0].attr) );
+    ;
+  }
+  break;
 
   case 49:
 #line 621 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); ;}
-    break;
+  { (yyval) = (yyvsp[0]); ;}
+  break;
 
   case 50:
 #line 622 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); ;}
-    break;
+  { (yyval) = (yyvsp[0]); ;}
+  break;
 
   case 51:
 #line 623 "dotImportParser.y"
-    {
-      (yyval).clear();
-      (yyval.nodeA) = (yyvsp[-2].nodeA);
-      (yyval.nodeA) += (yyvsp[0].nodeA);
-      (yyval.edgeA) = (yyvsp[-2].edgeA);
-      (yyval.edgeA) += (yyvsp[0].edgeA);
+  {
+    (yyval).clear();
+    (yyval.nodeA) = (yyvsp[-2].nodeA);
+    (yyval.nodeA) += (yyvsp[0].nodeA);
+    (yyval.edgeA) = (yyvsp[-2].edgeA);
+    (yyval.edgeA) += (yyvsp[0].edgeA);
 
-      if( (yyvsp[0].subg) )
-        (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-1].s), (yyvsp[-2].nodeA), (yyvsp[0].nodeA) );
-      else if( (yyvsp[0].nodeA).size() )
-        (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-1].s), (yyvsp[-2].nodeA), (yyvsp[0].nodeA)[0]);
+    if( (yyvsp[0].subg) )
+      (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-1].s), (yyvsp[-2].nodeA), (yyvsp[0].nodeA) );
+    else if( (yyvsp[0].nodeA).size() )
+      (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-1].s), (yyvsp[-2].nodeA), (yyvsp[0].nodeA)[0]);
 
-      ;
-    }
-    break;
+    ;
+  }
+  break;
 
   case 52:
 #line 634 "dotImportParser.y"
-    {
-      (yyval).clear();
-      (yyval.nodeA) = (yyvsp[-2].nodeA);
-      (yyval.nodeA) += (yyvsp[0].nodeA);
-      (yyval.edgeA) = (yyvsp[-2].edgeA);
-      (yyval.edgeA) += (yyvsp[0].edgeA);
+  {
+    (yyval).clear();
+    (yyval.nodeA) = (yyvsp[-2].nodeA);
+    (yyval.nodeA) += (yyvsp[0].nodeA);
+    (yyval.edgeA) = (yyvsp[-2].edgeA);
+    (yyval.edgeA) += (yyvsp[0].edgeA);
 
-      if( (yyvsp[0].subg) )
-        (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-1].s), (yyvsp[-2].nodeA), (yyvsp[0].nodeA) );
-      else if( (yyvsp[0].nodeA).size() )
-        (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-1].s), (yyvsp[-2].nodeA), (yyvsp[0].nodeA)[0]);
+    if( (yyvsp[0].subg) )
+      (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-1].s), (yyvsp[-2].nodeA), (yyvsp[0].nodeA) );
+    else if( (yyvsp[0].nodeA).size() )
+      (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-1].s), (yyvsp[-2].nodeA), (yyvsp[0].nodeA)[0]);
 
-      ;
-    }
-    break;
+    ;
+  }
+  break;
 
   case 53:
 #line 647 "dotImportParser.y"
-    { (yyval) = (yyvsp[-1]); (yyval.subg) = true; ;}
-    break;
+  { (yyval) = (yyvsp[-1]); (yyval.subg) = true; ;}
+  break;
 
   case 54:
 #line 648 "dotImportParser.y"
-    { (yyval) = (yyvsp[-1]); (yyval.subg) = true; ;}
-    break;
+  { (yyval) = (yyvsp[-1]); (yyval.subg) = true; ;}
+  break;
 
   case 55:
 #line 649 "dotImportParser.y"
-    { (yyval) = (yyvsp[-1]); (yyval.subg) = true; ;}
-    break;
+  { (yyval) = (yyvsp[-1]); (yyval.subg) = true; ;}
+  break;
 
   case 56:
 #line 650 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); (yyval.subg) = true; ;}
-    break;
+  { (yyval) = (yyvsp[0]); (yyval.subg) = true; ;}
+  break;
 
   case 57:
 #line 653 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); ;}
-    break;
+  { (yyval) = (yyvsp[0]); ;}
+  break;
 
   case 58:
 #line 656 "dotImportParser.y"
-    { (yyval).clear(); (yyval.s) = (yyvsp[0].s); ;}
-    break;
+  { (yyval).clear(); (yyval.s) = (yyvsp[0].s); ;}
+  break;
 
   case 59:
 #line 657 "dotImportParser.y"
-    { (yyval).clear(); (yyval.s) = (yyvsp[0].s); ;}
-    break;
+  { (yyval).clear(); (yyval.s) = (yyvsp[0].s); ;}
+  break;
 
   case 60:
 #line 658 "dotImportParser.y"
-    { (yyval) = (yyvsp[0]); ;}
-    break;
+  { (yyval) = (yyvsp[0]); ;}
+  break;
 
   case 61:
 #line 661 "dotImportParser.y"
-    { (yyval).clear(); (yyval.s) = (yyvsp[0].s); ;}
-    break;
+  { (yyval).clear(); (yyval.s) = (yyvsp[0].s); ;}
+  break;
 
   case 62:
 #line 662 "dotImportParser.y"
-    { (yyval.s) = (yyvsp[-2].s) + (yyvsp[0].s); ;}
-    break;
+  { (yyval.s) = (yyvsp[-2].s) + (yyvsp[0].s); ;}
+  break;
 
 
   }
@@ -2058,7 +2058,7 @@ yyerrlab:
         }
 
       yysize += (sizeof ("syntax error, unexpected ")
-      + yystrlen (yytname[yytype]));
+                 + yystrlen (yytname[yytype]));
       yymsg = (char *) YYSTACK_ALLOC (yysize);
 
       if (yymsg != 0) {
@@ -2105,7 +2105,7 @@ yyerrlab:
             YYABORT;
 
           yydestruct ("Error: popping",
-          yystos[*yyssp], yyvsp);
+                      yystos[*yyssp], yyvsp);
         }
     }
     else {
@@ -2195,7 +2195,7 @@ yyacceptlab:
   `-----------------------------------*/
 yyabortlab:
   yydestruct ("Error: discarding lookahead",
-  yytoken, &yylval);
+              yytoken, &yylval);
   yychar = YYEMPTY;
   yyresult = 1;
   goto yyreturn;

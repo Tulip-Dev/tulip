@@ -220,6 +220,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,strin
 
         *dest = *tmp;
         break;
+
       case TLP_CANCEL:
         resultBool=false;
       };

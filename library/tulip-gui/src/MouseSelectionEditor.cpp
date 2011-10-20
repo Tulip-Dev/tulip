@@ -245,6 +245,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
         case ALIGN_HORIZONTALLY:
           mAlign(operation,glMainWidget);
           return true;
+
         case ROTATE_Z:
         case ROTATE_XY:
         case NONE:
@@ -290,10 +291,12 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       initEdition();
       break;
     }
+
     case Qt::MidButton :
       undoEdition();
       glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
       break;
+
     default:
       return false;
     }
@@ -333,13 +336,16 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     case STRETCH_XY:
       mMouseStretchAxis(newX, newY, glMainWidget);
       return true;
+
     case ROTATE_Z:
     case ROTATE_XY:
       mMouseRotate(newX, newY, glMainWidget);
       return true;
+
     case TRANSLATE:
       mMouseTranslate(newX, newY, glMainWidget);
       return true;
+
     case NONE:
     case ALIGN_TOP:
     case ALIGN_BOTTOM:
@@ -669,23 +675,29 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*) {
     case ALIGN_TOP:
       valueMax=_layout->getNodeValue(n)[1]+_sizes->getNodeValue(n)[1]/2.;
       break;
+
     case ALIGN_BOTTOM:
       valueMin=_layout->getNodeValue(n)[1]-_sizes->getNodeValue(n)[1]/2.;
       break;
+
     case ALIGN_HORIZONTALLY:
       valueMax=_layout->getNodeValue(n)[1]+_sizes->getNodeValue(n)[1]/2.;
       valueMin=_layout->getNodeValue(n)[1]-_sizes->getNodeValue(n)[1]/2.;
       break;
+
     case ALIGN_LEFT:
       valueMin=_layout->getNodeValue(n)[0]-_sizes->getNodeValue(n)[0]/2.;
       break;
+
     case ALIGN_RIGHT:
       valueMax=_layout->getNodeValue(n)[0]+_sizes->getNodeValue(n)[0]/2.;
       break;
+
     case ALIGN_VERTICALLY:
       valueMax=_layout->getNodeValue(n)[0]-_sizes->getNodeValue(n)[0]/2.;
       valueMin=_layout->getNodeValue(n)[0]+_sizes->getNodeValue(n)[0]/2.;
       break;
+
     case STRETCH_X:
     case STRETCH_Y:
     case STRETCH_XY:
@@ -711,6 +723,7 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*) {
           max=valueMax;
 
         break;
+
       case ALIGN_BOTTOM:
       case ALIGN_LEFT:
 
@@ -718,6 +731,7 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*) {
           min=valueMin;
 
         break;
+
       case ALIGN_HORIZONTALLY:
       case ALIGN_VERTICALLY:
 
@@ -726,6 +740,7 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*) {
         if(valueMin<min) min=valueMin;
 
         break;
+
       case STRETCH_X:
       case STRETCH_Y:
       case STRETCH_XY:
@@ -749,21 +764,27 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*) {
     case ALIGN_TOP:
       old[1]=max-_sizes->getNodeValue(n)[1]/2.;
       break;
+
     case ALIGN_BOTTOM:
       old[1]=min+_sizes->getNodeValue(n)[1]/2.;
       break;
+
     case ALIGN_HORIZONTALLY:
       old[1]=(max+min)/2;
       break;
+
     case ALIGN_LEFT:
       old[0]=min+_sizes->getNodeValue(n)[0]/2.;
       break;
+
     case ALIGN_RIGHT:
       old[0]=max-_sizes->getNodeValue(n)[0]/2.;
       break;
+
     case ALIGN_VERTICALLY:
       old[0]=(max+min)/2;
       break;
+
     case STRETCH_X:
     case STRETCH_Y:
     case STRETCH_XY:

@@ -32,24 +32,31 @@ void GraphObserver::treatEvent(const Event& ev) {
     case GraphEvent::TLP_ADD_NODE:
       addNode(graph, gEvt->getNode());
       break;
+
     case GraphEvent::TLP_DEL_NODE:
       delNode(graph, gEvt->getNode());
       break;
+
     case GraphEvent::TLP_ADD_EDGE:
       addEdge(graph, gEvt->getEdge());
       break;
+
     case GraphEvent::TLP_DEL_EDGE:
       delEdge(graph, gEvt->getEdge());
       break;
+
     case GraphEvent::TLP_REVERSE_EDGE:
       reverseEdge(graph, gEvt->getEdge());
       break;
+
     case GraphEvent::TLP_BEFORE_SET_ENDS:
       beforeSetEnds(graph, gEvt->getEdge());
       break;
+
     case GraphEvent::TLP_AFTER_SET_ENDS:
       afterSetEnds(graph, gEvt->getEdge());
       break;
+
     case GraphEvent::TLP_ADD_NODES: {
       const std::vector<node>& nodes = gEvt->getNodes();
 
@@ -58,6 +65,7 @@ void GraphObserver::treatEvent(const Event& ev) {
 
       break;
     }
+
     case GraphEvent::TLP_ADD_EDGES: {
       const std::vector<edge>& edges = gEvt->getEdges();
 
@@ -66,26 +74,34 @@ void GraphObserver::treatEvent(const Event& ev) {
 
       break;
     }
+
     case GraphEvent::TLP_ADD_SUBGRAPH:
       addSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
       break;
+
     case GraphEvent::TLP_DEL_SUBGRAPH:
       delSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
       break;
+
     case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
       addLocalProperty(graph, gEvt->getPropertyName());
       break;
+
     case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY:
       delLocalProperty(graph, gEvt->getPropertyName());
       break;
+
     case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE:
       beforeSetAttribute(graph, gEvt->getAttributeName());
       break;
+
     case GraphEvent::TLP_AFTER_SET_ATTRIBUTE:
       afterSetAttribute(graph, gEvt->getAttributeName());
       break;
+
     case GraphEvent::TLP_REMOVE_ATTRIBUTE:
       removeAttribute(graph, gEvt->getAttributeName());
+
     case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
     case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
     case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
@@ -93,6 +109,7 @@ void GraphObserver::treatEvent(const Event& ev) {
     case GraphEvent::TLP_ADD_DESCENDANTGRAPH:
     case GraphEvent::TLP_DEL_DESCENDANTGRAPH:
       break;
+
     default:
       // this should not happen
       assert(false);

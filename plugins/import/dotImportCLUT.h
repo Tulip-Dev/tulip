@@ -696,26 +696,31 @@ void HSBtoRGB(  float  inH,  float  inS,  float  inB,
       outG = _3*255.0f;
       outB = _1*255.0f;
       break;
+
     case 1 :
       outR = _2*255.0f;
       outG = inB*255.0f;
       outB = _1*255.0f;
       break;
+
     case 2 :
       outR = _1*255.0f;
       outG = inB*255.0f;
       outB = _3*255.0f;
       break;
+
     case 3 :
       outR = _1*255.0f;
       outG = _2*255.0f;
       outB = inB*255.0f;
       break;
+
     case 4 :
       outR = _3*255.0f;
       outG = _1*255.0f;
       outB = inB*255.0f;
       break;
+
     default :
       outR = inB*255.0f;
       outG = _1*255.0f;

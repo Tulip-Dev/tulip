@@ -299,9 +299,11 @@ struct GMLNodeGraphicsBuilder:public GMLTrue {
           case 0:
             color.setR(value);
             break;
+
           case 1:
             color.setG(value);
             break;
+
           case 2:
             color.setB(value);
           }

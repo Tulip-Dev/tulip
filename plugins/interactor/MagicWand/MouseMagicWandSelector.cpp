@@ -78,6 +78,7 @@ bool tlp::MouseMagicWandSelector::eventFilter(QObject* widget, QEvent* e) {
           selection->setAllNodeValue(false);
           selection->setAllEdgeValue(false);
           break;
+
         default:
           break;
         }
@@ -95,9 +96,11 @@ bool tlp::MouseMagicWandSelector::eventFilter(QObject* widget, QEvent* e) {
           case Replace:
             selection->setNodeValue(itn, true);
             break;
+
           case Remove:
             selection->setNodeValue(itn, false);
             break;
+
           case Intersect:
             break;
           }

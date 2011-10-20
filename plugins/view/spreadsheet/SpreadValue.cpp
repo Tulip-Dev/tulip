@@ -250,14 +250,17 @@ SpreadValue SpreadValue::computeOpp2EqualValueType(const QChar &opp,const Spread
       result.doubleV=arg1.doubleV+arg2.doubleV;
       break;
     }
+
     case SpreadValue::coordv : {
       result.coordV=arg1.coordV+arg2.coordV;
       break;
     }
+
     case SpreadValue::colorv : {
       result.colorV=arg1.colorV+arg2.colorV;
       break;
     }
+
     case SpreadValue::none : {
       break;
     }
@@ -269,14 +272,17 @@ SpreadValue SpreadValue::computeOpp2EqualValueType(const QChar &opp,const Spread
       result.doubleV=arg1.doubleV-arg2.doubleV;
       break;
     }
+
     case SpreadValue::coordv : {
       result.coordV=arg1.coordV-arg2.coordV;
       break;
     }
+
     case SpreadValue::colorv : {
       result.colorV=arg1.colorV-arg2.colorV;
       break;
     }
+
     case SpreadValue::none : {
       break;
     }
@@ -288,14 +294,17 @@ SpreadValue SpreadValue::computeOpp2EqualValueType(const QChar &opp,const Spread
       result.doubleV=arg1.doubleV*arg2.doubleV;
       break;
     }
+
     case SpreadValue::coordv : {
       result.coordV=arg1.coordV*arg2.coordV;
       break;
     }
+
     case SpreadValue::colorv : {
       result.colorV=arg1.colorV*arg2.colorV;
       break;
     }
+
     case SpreadValue::none : {
       break;
     }
@@ -307,14 +316,17 @@ SpreadValue SpreadValue::computeOpp2EqualValueType(const QChar &opp,const Spread
       result.doubleV=arg1.doubleV/arg2.doubleV;
       break;
     }
+
     case SpreadValue::coordv : {
       result.coordV=arg1.coordV/arg2.coordV;
       break;
     }
+
     case SpreadValue::colorv : {
       result.colorV=arg1.colorV/arg2.colorV;
       break;
     }
+
     case SpreadValue::none : {
       break;
     }

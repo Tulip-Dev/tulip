@@ -93,7 +93,7 @@ bool                      Observable::eventQueued = false;
 //----------------------------------
 OLOObject::OLOObject() {
 #ifdef _OPENMP
-#pragma omp critical(OLOGraphUpdate)
+  #pragma omp critical(OLOGraphUpdate)
 #endif
   {
     n = oGraph.addNode();
@@ -108,7 +108,7 @@ OLOObject::OLOObject() {
 //----------------------------------
 OLOObject::OLOObject(const OLOObject &) {
 #ifdef _OPENMP
-#pragma omp critical(OLOGraphUpdate)
+  #pragma omp critical(OLOGraphUpdate)
 #endif
   {
     n = oGraph.addNode();
@@ -130,7 +130,7 @@ OLOObject& OLOObject::operator=(const OLOObject &) {
 //----------------------------------
 OLOObject::~OLOObject() {
 #ifdef _OPENMP
-#pragma omp critical(OLOGraphUpdate)
+  #pragma omp critical(OLOGraphUpdate)
 #endif
   {
     if (!oAlive[n])
@@ -335,7 +335,7 @@ Iterator<Observable *> *Observable::getOnlookers() const {
 //----------------------------------------
 void Observable::addOnlooker(const Observable &obs, OLOEDGETYPE type) const {
 #ifdef _OPENMP
-#pragma omp critical(OLOGraphUpdate)
+  #pragma omp critical(OLOGraphUpdate)
 #endif
   {
     if (!oAlive[n]) {
@@ -496,7 +496,7 @@ void Observable::updateObserverGraph() {
 //----------------------------------------
 void Observable::removeOnlooker(const Observable &obs, OLOEDGETYPE type) const {
 #ifdef _OPENMP
-#pragma omp critical(OLOGraphUpdate)
+  #pragma omp critical(OLOGraphUpdate)
 #endif
   {
     if (!oAlive[n]) {

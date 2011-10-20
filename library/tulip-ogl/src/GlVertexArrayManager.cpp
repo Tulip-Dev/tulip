@@ -764,6 +764,7 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
       clearData();
       clearObservers();
       break;
+
     case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
     case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
       const std::string name = graphEvent->getPropertyName();
@@ -775,6 +776,7 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
 
       break;
     }
+
     default:
       break;
     }
@@ -792,6 +794,7 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
     case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
       propertyValueChanged(property);
       break;
+
     case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
     case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
 
@@ -801,6 +804,7 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
 
       propertyValueChanged(property);
       break;
+
     default:
       break;
     }

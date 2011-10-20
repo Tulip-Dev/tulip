@@ -913,26 +913,37 @@ QWidget* TulipTableItemDelegate::createEditor(QWidget* p, const QStyleOptionView
   switch (item->type()) {
   case COLORTABLEITEM_RTTI:
     return ((ColorTableItem *) item)->createEditor(table);
+
   case COORDTABLEITEM_RTTI:
     return ((CoordTableItem *) item)->createEditor(table);
+
   case LABELTABLEITEM_RTTI:
     return ((LabelTableItem *) item)->createEditor(table);
+
   case EDGESHAPETABLEITEM_RTTI:
     return ((EdgeShapeTableItem *) item)->createEditor(table);
+
   case FILETABLEITEM_RTTI:
     return ((FileTableItem *) item)->createEditor(table);
+
   case FILETABLEFONTITEM_RTTI:
     return ((FileTableFontItem *) item)->createEditor(table);
+
   case GLYPHTABLEITEM_RTTI:
     return ((GlyphTableItem *) item)->createEditor(table);
+
   case LABELPOSITIONTABLEITEM_RTTI:
     return ((LabelPositionTableItem *) item)->createEditor(table);
+
   case SIZETABLEITEM_RTTI:
     return ((SizeTableItem *) item)->createEditor(table->viewport());
+
   case LISTTABLEITEM_RTTI:
     return ((ListItem *) item)->createEditor(table);
+
   case EDGEEXTREMITYGLYPHTABLEITEM_RTTI:
     return ((EdgeExtremityGlyphTableItem *) item)->createEditor(table);
+
   default:
     return QItemDelegate::createEditor(p, option, index);
   }
@@ -952,6 +963,7 @@ void TulipTableItemDelegate::paint(QPainter * painter, const QStyleOptionViewIte
   case COLORTABLEITEM_RTTI:
     painter->fillRect(option.rect, QColor(((ColorTableItem*) item)->getColor()));
     break;
+
   default:
     QItemDelegate::paint(painter, option, index);
   }
@@ -966,34 +978,45 @@ void TulipTableItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* m
   case COLORTABLEITEM_RTTI:
     ((ColorTableItem*) item)->setContentFromEditor(editor);
     break;
+
   case COORDTABLEITEM_RTTI:
     ((CoordTableItem *) item)->setContentFromEditor(editor);
     break;
+
   case LABELTABLEITEM_RTTI:
     ((LabelTableItem *) item)->setContentFromEditor(editor);
     break;
+
   case EDGESHAPETABLEITEM_RTTI:
     ((EdgeShapeTableItem *) item)->setContentFromEditor(editor);
     break;
+
   case FILETABLEITEM_RTTI:
     ((FileTableItem *) item)->setContentFromEditor(editor);
     break;
+
   case FILETABLEFONTITEM_RTTI:
     ((FileTableFontItem *) item)->setContentFromEditor(editor);
     break;
+
   case GLYPHTABLEITEM_RTTI:
     ((GlyphTableItem *) item)->setContentFromEditor(editor);
     break;
+
   case LABELPOSITIONTABLEITEM_RTTI:
     ((LabelPositionTableItem *) item)->setContentFromEditor(editor);
     break;
+
   case SIZETABLEITEM_RTTI:
     ((SizeTableItem*) item)->setContentFromEditor(editor);
     break;
+
   case LISTTABLEITEM_RTTI:
     return ((ListItem *) item)->setContentFromEditor(editor);
+
   case EDGEEXTREMITYGLYPHTABLEITEM_RTTI:
     ((EdgeExtremityGlyphTableItem *) item)->setContentFromEditor(editor);
+
   default:
     QItemDelegate::setModelData(editor, model, index);
   }

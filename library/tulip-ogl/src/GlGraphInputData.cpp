@@ -97,7 +97,7 @@ void GlGraphInputData::reloadAllProperties() {
   elementShape = graph->getProperty<IntegerProperty> (elementShapePropName);
   elementSize = graph->getProperty<SizeProperty> (elementSizePropName);
   elementTexture
-  = graph->getProperty<StringProperty> (elementTexturePropName);
+    = graph->getProperty<StringProperty> (elementTexturePropName);
   elementBorderColor = graph->getProperty<ColorProperty> (
                          elementBorderColorPropName);
   elementBorderWidth = graph->getProperty<DoubleProperty> (

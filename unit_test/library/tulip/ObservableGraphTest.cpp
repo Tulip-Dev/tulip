@@ -125,21 +125,27 @@ public:
       case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY:
         beforeDelLocalProperty(graph, gEvt->getPropertyName());
         return;
+
       case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
         afterDelInheritedProperty(graph, gEvt->getPropertyName());
         return;
+
       case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
         afterDelLocalProperty(graph, gEvt->getPropertyName());
         return;
+
       case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
         beforeDelInheritedProperty(graph, gEvt->getPropertyName());
         return;
+
       case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
         addLocalProperty(graph, gEvt->getPropertyName());
         return;
+
       case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
         addInheritedProperty(graph, gEvt->getPropertyName());
         return;
+
       default:
         break;
       }
@@ -260,9 +266,11 @@ public:
       case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
         addInheritedProperty(graph, gEvt->getPropertyName());
         return;
+
       case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
         afterDelInheritedProperty(graph, gEvt->getPropertyName());
         return;
+
       default:
         break;
       }

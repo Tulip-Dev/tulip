@@ -186,6 +186,7 @@ void AcyclicTest::treatEvent(const Event& evt) {
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     case GraphEvent::TLP_DEL_EDGE:
 
       if (resultsBuffer[(unsigned long)graph]==true) return;
@@ -193,10 +194,12 @@ void AcyclicTest::treatEvent(const Event& evt) {
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     case GraphEvent::TLP_REVERSE_EDGE:
       graph->removeListener(this);
       resultsBuffer.erase((unsigned long)graph);
       break;
+
     default:
       //we don't care about other events
       break;

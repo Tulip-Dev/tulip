@@ -277,15 +277,15 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
     size_t nbNodes=layerLODUnit->nodesLODVector.size();
     size_t nbEdges=layerLODUnit->edgesLODVector.size();
 #ifdef _OPENMP
-#pragma omp parallel
+    #pragma omp parallel
 #endif
     {
 #ifdef _OPENMP
-#pragma omp sections nowait
+      #pragma omp sections nowait
 #endif
       {
 #ifdef _OPENMP
-#pragma omp section
+        #pragma omp section
 #endif
         {
           for(size_t i=0; i<nbSimples; ++i) {
@@ -293,7 +293,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
           }
         }
 #ifdef _OPENMP
-#pragma omp section
+        #pragma omp section
 #endif
         {
           for(size_t i=0; i<nbNodes; ++i) {
@@ -301,7 +301,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
           }
         }
 #ifdef _OPENMP
-#pragma omp section
+        #pragma omp section
 #endif
         {
           for(size_t i=0; i<nbEdges; ++i) {
@@ -349,15 +349,15 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
 
   // Get result of quadtrees
 #ifdef _OPENMP
-#pragma omp parallel
+  #pragma omp parallel
 #endif
   {
 #ifdef _OPENMP
-#pragma omp sections nowait
+    #pragma omp sections nowait
 #endif
     {
 #ifdef _OPENMP
-#pragma omp section
+      #pragma omp section
 #endif
       {
         if((renderingEntitiesFlag & RenderingNodes)!=0) {
@@ -386,7 +386,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
         }
       }
 #ifdef _OPENMP
-#pragma omp section
+      #pragma omp section
 #endif
       {
         if((renderingEntitiesFlag & RenderingEdges)!=0) {
@@ -416,7 +416,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
       }
     }
 #ifdef _OPENMP
-#pragma omp master
+    #pragma omp master
 #endif
     {
       if((renderingEntitiesFlag & RenderingSimpleEntities)!=0 && entitiesQuadTree[quadTreesVectorPosition]!=NULL) {
@@ -513,6 +513,7 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
     case GraphEvent::TLP_DEL_EDGE:
       setHaveToCompute();
       break;
+
     case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
     case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
       const std::string name = graphEvent->getPropertyName();
@@ -524,6 +525,7 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
 
       break;
     }
+
     default:
       break;
     }
@@ -539,6 +541,7 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
     case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
       update(property);
       break;
+
     default:
       break;
     }

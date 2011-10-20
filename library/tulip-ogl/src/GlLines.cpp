@@ -399,12 +399,15 @@ void GlLines::glEnableLineStipple(unsigned int stippleType) {
     case 1:
       glLineStipple (1, 0x0101);  /*  dotted  */
       break;
+
     case 2:
       glLineStipple (1, 0x00FF);  /*  dashed  */
       break;
+
     case 3:
       glLineStipple (1, 0x1C47);  /*  dash/dot/dash  */
       break;
+
     default:
       glDisable(GL_LINE_STIPPLE);
       cerr << "unrecognizedStippleType" << endl;

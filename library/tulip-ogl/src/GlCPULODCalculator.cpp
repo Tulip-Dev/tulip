@@ -125,7 +125,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
 #endif
 
 #ifdef _OPENMP
-#pragma omp parallel for
+  #pragma omp parallel for
 #endif
 
   for(int i = 0 ; i < static_cast<int>(nb) ; ++i) {
@@ -134,7 +134,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
 
   nb=layerLODUnit->nodesLODVector.size();
 #ifdef _OPENMP
-#pragma omp parallel for
+  #pragma omp parallel for
 #endif
 
   for(int i = 0 ; i < static_cast<int>(nb) ; ++i) {
@@ -145,7 +145,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
 
   if(computeEdgesLOD) {
 #ifdef _OPENMP
-#pragma omp parallel for
+    #pragma omp parallel for
 #endif
 
     for(int i = 0 ; i < static_cast<int>(nb) ; ++i) {
@@ -154,7 +154,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
   }
   else {
 #ifdef _OPENMP
-#pragma omp parallel for
+    #pragma omp parallel for
 #endif
 
     for(int i = 0 ; i < static_cast<int>(nb) ; ++i) {

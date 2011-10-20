@@ -32,12 +32,16 @@ string GlGraphStaticData::edgeShapeName(int id) {
   switch(id) {
   case POLYLINESHAPE:
     return string("Polyline");
+
   case BEZIERSHAPE:
     return string("Bezier Curve");
+
   case SPLINESHAPE:
     return string("Catmull-Rom Spline");
+
   case CUBICBSPLINE:
     return string("Cubic B-Spline");
+
   default:
     cerr << __PRETTY_FUNCTION__ << endl;
     cerr << "Invalid edge shape id" << endl;

@@ -216,6 +216,7 @@ void tlp::MinMaxProperty<nodeType, edgeType, algorithmType>::treatEvent(const tl
     case GraphEvent::TLP_ADD_NODE:
       nodeValueUptodate.clear();
       break;
+
     case GraphEvent::TLP_DEL_NODE: {
       unsigned int sgi = graph->getId();
       TLP_HASH_MAP<unsigned int, bool>::const_iterator it = nodeValueUptodate.find(sgi);
@@ -230,9 +231,11 @@ void tlp::MinMaxProperty<nodeType, edgeType, algorithmType>::treatEvent(const tl
 
       break;
     }
+
     case GraphEvent::TLP_ADD_EDGE:
       edgeValueUptodate.clear();
       break;
+
     case GraphEvent::TLP_DEL_EDGE: {
       unsigned int sgi = graph->getId();
       TLP_HASH_MAP<unsigned int, bool>::const_iterator it = edgeValueUptodate.find(sgi);
@@ -248,12 +251,15 @@ void tlp::MinMaxProperty<nodeType, edgeType, algorithmType>::treatEvent(const tl
 
       break;
     }
+
     case GraphEvent::TLP_ADD_SUBGRAPH:
       graphEvent->getSubGraph()->addListener(this);
       break;
+
     case GraphEvent::TLP_DEL_SUBGRAPH:
       graphEvent->getSubGraph()->removeListener(this);
       break;
+
     default:
       // we don't care about the rest
       break;

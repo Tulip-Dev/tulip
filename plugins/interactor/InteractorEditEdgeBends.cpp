@@ -45,11 +45,11 @@ public:
                                "Change source node: <ul><li><b>Drag and drop circle on source node</li></ul>"+
                                "Change target node: <ul><li><b>Drag and drop triangle on target node</li></ul>"+
                                "Add bend: <ul><li><b>Double click with mouse left</b> click on the selected edge</li></ul>"+
-         #if !defined(__APPLE__)
+#if !defined(__APPLE__)
                                "Delete bend: <ul><li><b>Ctrl + Mouse left</b> click on a selected bend</li></ul>"
-         #else
+#else
                                "Delete bend: <ul><li><b>Alt + Mouse left</b> click on a selected bend</li></ul>"
-         #endif
+#endif
                               );
   }
 

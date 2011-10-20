@@ -239,6 +239,7 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG,
     //    delete bEdgesRepres;
   }
   break;
+
   case 2: {
     map<node, node> backEdgeRepresentant;
     node
@@ -302,6 +303,7 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG,
     //    delete bEdgesRepres;
   }
   break;
+
   default: // sg is not planar (abort procedure);
     return;
   }

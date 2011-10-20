@@ -33,27 +33,35 @@ void PropertyObserver::treatEvent(const Event& ev) {
     case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
       beforeSetNodeValue(prop, propEvt->getNode());
       break;
+
     case PropertyEvent::TLP_AFTER_SET_NODE_VALUE:
       afterSetNodeValue(prop, propEvt->getNode());
       break;
+
     case PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE:
       beforeSetAllNodeValue(prop);
       break;
+
     case PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE:
       afterSetAllNodeValue(prop);
       break;
+
     case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
       beforeSetAllEdgeValue(prop);
       break;
+
     case PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE:
       afterSetAllEdgeValue(prop);
       break;
+
     case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
       beforeSetEdgeValue(prop, propEvt->getEdge());
       break;
+
     case PropertyEvent::TLP_AFTER_SET_EDGE_VALUE:
       afterSetEdgeValue(prop, propEvt->getEdge());
       break;
+
     default:
       // this should not happen
       assert(false);
