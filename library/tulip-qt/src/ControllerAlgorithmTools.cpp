@@ -195,28 +195,8 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,strin
       }
     }
 
-    // The algorithm is applied
-    // There is a bug in the openmp version distributed with MinGW < 4.5, so for these versions fall back to simple threaded mechanism
-    //on other OS's it works fine with any version though
-#if  (!defined(WIN32) || (defined(__GNUC_MINOR__) && (__GNUC_MINOR__ >= 5 && __GNUC__ == 4)))
-
-    // Because QtGui calls are not allowed outside de main thread
-    // I just add this ugly hack to avoid crash of convolution plugin
-    if ((name == "Convolution") || (name == "Color Mapping"))
       resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
-    else  {
-      AbstractComputeProperty* param = new ComputePropertyTemplate<PROPERTY>(graph, name, tmp, erreurMsg, myProgress, &dataSet);
-      ComputePropertyThread* thread = new ComputePropertyThread(param);
 
-      resultBool = thread->computeProperty();
-
-      delete param;
-      delete thread;
-    }
-
-#else
-    resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
-#endif
     graph->pop();
 
     if (updateLayout) {
