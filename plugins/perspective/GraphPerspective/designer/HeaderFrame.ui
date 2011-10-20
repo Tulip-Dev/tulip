@@ -49,11 +49,11 @@ QComboBox:hover, QToolButton:hover {
 }
 
 QToolButton {
-  image: url(&quot;:/tulip/graphperspective/ui/arrowup.png&quot;);
+  image: url(&quot;:/tulip/gui/ui/arrowup.png&quot;);
 }
 
 QToolButton:checked {
-  image: url(&quot;:/tulip/graphperspective/ui/arrowdown.png&quot;);
+  image: url(&quot;:/tulip/gui/ui/arrowdown.png&quot;);
 }
 
 QComboBox,QLabel {

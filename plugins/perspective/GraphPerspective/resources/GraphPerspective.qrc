@@ -22,10 +22,4 @@
         <file>view-open.svg</file>
 	<file>list-add.svg</file>
     </qresource>
-    <qresource prefix="/tulip/graphperspective/ui">
-        <file>down_arrow-black.png</file>
-        <file>right_arrow-black.png</file>
-	<file>arrowup.png</file>
-	<file>arrowdown.png</file>
-    </qresource>
 </RCC>

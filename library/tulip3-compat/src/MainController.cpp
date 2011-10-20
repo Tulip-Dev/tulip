@@ -901,9 +901,9 @@ void MainController::buildMenu() {
   mainWindowFacade.getMenuBar()->insertMenu(windowAction,optionsMenu);
 
   if (redoAction == NULL) {
-    redoAction=new QAction(QIcon(":/tulip/gui/icons/i_redo.png"),"redo",mainWindowFacade.getParentWidget());
-    undoAction=new QAction(QIcon(":/tulip/gui/icons/i_undo.png"),"undo",mainWindowFacade.getParentWidget());
-    snapshotAction = new QAction(QIcon(":/tulip/gui/icons/i_snapshot.png"),"snapshot",mainWindowFacade.getParentWidget());
+    redoAction=new QAction(QIcon(":/i_redo.png"),"redo",mainWindowFacade.getParentWidget());
+    undoAction=new QAction(QIcon(":/i_undo.png"),"undo",mainWindowFacade.getParentWidget());
+    snapshotAction = new QAction(QIcon(":/i_snapshot.png"),"snapshot",mainWindowFacade.getParentWidget());
     undoAction->setEnabled(false);
     redoAction->setEnabled(false);
     snapshotAction->setEnabled(false);
