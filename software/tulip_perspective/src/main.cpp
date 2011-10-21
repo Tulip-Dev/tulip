@@ -13,7 +13,7 @@
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/PluginLister.h>
 #include <tulip/Perspective.h>
-#include <tulip/InteractorManager.h>
+#include <tulip/Interactor.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 
@@ -29,6 +29,20 @@
 
 using namespace std;
 using namespace tlp;
+
+#include <tulip/WorkspacePanel.h>
+#include <tulip/View.h>
+#include <tulip/GlMainView.h>
+#include <tulip/GlMainWidget.h>
+void prout() {
+  tlp::Graph* g = newGraph();
+  for(int i=0;i<100;++i)
+    g->addNode();
+  std::string msg;
+  g->computeProperty<LayoutProperty>("Random",g->getProperty<LayoutProperty>("viewLayout"),msg);
+  WorkspacePanel* panel = new WorkspacePanel(g);
+  panel->show();
+}
 
 void usage(const QString &error) {
   int returnCode = 0;
@@ -85,7 +99,8 @@ int main(int argc,char **argv) {
   tlp::initTulipLib(QApplication::applicationDirPath().toStdString().c_str());
   tlp::PluginLibraryLoader::loadPlugins();
   tlp::PluginListerInterface::checkLoadedPluginsDependencies(0);
-  tlp::InteractorManager::getInst().loadInteractorPlugins();
+//  tlp::InteractorManager::getInst().loadInteractorPlugins();
+  tlp::InteractorLister::initInteractorsDependencies();
   tlp::GlyphManager::getInst().loadGlyphPlugins();
   tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
 
@@ -187,6 +202,8 @@ int main(int argc,char **argv) {
   mainWindow->setWindowTitle(title);
 
   delete progress;
+
+  prout();
 
   int result = tulip_perspective.exec();
   delete perspective;

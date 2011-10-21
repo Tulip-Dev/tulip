@@ -119,7 +119,13 @@ protected:
 class TLP_QT_SCOPE InteractorContext {
 };
 
-typedef StaticPluginLister<Interactor, InteractorContext*> InteractorLister;
+//typedef StaticPluginLister<Interactor, InteractorContext*> InteractorLister;
+class TLP_QT_SCOPE InteractorLister: public StaticPluginLister<Interactor, InteractorContext*> {
+  static QMap<std::string,QList<std::string> > _compatibilityMap;
+public:
+  static void initInteractorsDependencies();
+  static QList<std::string> compatibleInteractors(const std::string& viewName);
+};
 
 #ifdef WIN32
 template class TLP_QT_SCOPE PluginLister<Interactor,InteractorContext*>;
