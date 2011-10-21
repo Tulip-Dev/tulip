@@ -36,8 +36,10 @@ using namespace tlp;
 #include <tulip/GlMainWidget.h>
 void prout() {
   tlp::Graph* g = newGraph();
-  for(int i=0;i<100;++i)
+
+  for(int i=0; i<100; ++i)
     g->addNode();
+
   std::string msg;
   g->computeProperty<LayoutProperty>("Random",g->getProperty<LayoutProperty>("viewLayout"),msg);
   WorkspacePanel* panel = new WorkspacePanel(g);
