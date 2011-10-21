@@ -17,7 +17,7 @@ void InteractorLister::initInteractorsDependencies() {
 
   string it;
   forEach(it,availablePlugins())
-    interactorName[getPluginObject(it,NULL)] = it;
+  interactorName[getPluginObject(it,NULL)] = it;
 
   string viewName;
   forEach(viewName, ViewLister::availablePlugins()) {
@@ -29,12 +29,12 @@ void InteractorLister::initInteractorsDependencies() {
     qSort(sortedList.begin(),sortedList.end(),interactorLessThan);
     QList<string> compatibleNames;
     foreach(Interactor* i,sortedList)
-      compatibleNames << interactorName[i];
+    compatibleNames << interactorName[i];
     _compatibilityMap[viewName] = compatibleNames;
   }
 
   foreach(Interactor* i, interactorName.keys())
-    delete i;
+  delete i;
 }
 
 QList<string> InteractorLister::compatibleInteractors(const std::string &viewName) {

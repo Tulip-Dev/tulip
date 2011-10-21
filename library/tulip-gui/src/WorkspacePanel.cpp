@@ -20,10 +20,11 @@ WorkspacePanel::WorkspacePanel(tlp::Graph* graph, const QString& viewName, const
   QStringList installedViewNames;
   std::string name;
   forEach(name, ViewLister::availablePlugins())
-    installedViewNames << name.c_str();
+  installedViewNames << name.c_str();
   _ui->viewCombo->addItems(installedViewNames);
 
   QString selectedViewName = viewName;
+
   if (!installedViewNames.contains(selectedViewName))
     selectedViewName = "Node Link Diagram view";
 
@@ -39,6 +40,7 @@ View* WorkspacePanel::view() const {
 void WorkspacePanel::setView(const QString &viewName,const tlp::DataSet& state) {
   if (!ViewLister::pluginExists(viewName.toStdString()))
     return;
+
   _ui->viewCombo->setCurrentIndex(_ui->viewCombo->findText(viewName));
   internalSetView(viewName,state);
 }
@@ -65,7 +67,7 @@ void WorkspacePanel::internalSetView(const QString &name,const DataSet& state) {
   QList<Interactor*> interactors;
   QList<std::string> interactorNames = InteractorLister::compatibleInteractors(name.toStdString());
   foreach(std::string name,interactorNames)
-    interactors << InteractorLister::getPluginObject(name,NULL);
+  interactors << InteractorLister::getPluginObject(name,NULL);
   _view->setInteractors(interactors);
 
   _view->setupUi();
