@@ -89,7 +89,7 @@ bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const
   string erreurMsg;
 
   if (!tlp::applyAlgorithm(graph, erreurMsg, dataSet, name, &myProgress  )) {
-    QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + ":\n" + erreurMsg).c_str()));
+    QMessageBox::critical( 0, "Tulip Algorithm Check Failed", QString::fromUtf8((name + ":\n" + erreurMsg).c_str()));
     // no possible redo
     graph->pop(false);
     ok=false;
@@ -196,7 +196,6 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,strin
     }
 
     resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
-
     graph->pop();
 
     if (updateLayout) {
@@ -211,7 +210,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,strin
     }
 
     if (!resultBool) {
-      QMessageBox::critical(parent, "Tulip Algorithm Check Failed", QString((name + ":\n" + erreurMsg).c_str()) );
+      QMessageBox::critical(parent, "Tulip Algorithm Check Failed", QString::fromUtf8((name + ":\n" + erreurMsg).c_str()) );
       // no possible redo
       graph->pop(false);
     }
@@ -225,7 +224,6 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,strin
 
         *dest = *tmp;
         break;
-
       case TLP_CANCEL:
         resultBool=false;
       };

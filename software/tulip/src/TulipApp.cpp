@@ -184,7 +184,7 @@ void TulipApp::startTulip() {
     errorDlgLayout->addWidget( frame );
     QWidget::connect(closeB, SIGNAL(clicked()), errorDlg, SLOT(hide()));
     errorDlg->resize( QSize(400, 250).expandedTo(errorDlg->minimumSizeHint()) );
-    textWidget->setText(QString(errors.c_str()));
+    textWidget->setText(QString::fromUtf8(errors.c_str()));
     errorDlg->exec();
   }
 
@@ -244,7 +244,8 @@ void TulipApp::startTulip() {
   // check if we are in a bundle
   if (QDir(assistantPath.c_str()).exists("assistant"))
     // assistant is in the bundle bin directory
-    assistantProcessApp = QString(assistantPath.c_str()) + "/assistant";
+    assistantProcessApp = QString::fromUtf8(assistantPath.c_str()) +
+      "/assistant";
   else
     // assistant is in the Qt binaries install directory
     assistantProcessApp = QLibraryInfo::location(QLibraryInfo::BinariesPath)+ "/assistant";
@@ -776,7 +777,8 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       QApplication::restoreOverrideCursor();
       std::string errorTitle("Canceled import/Open: ");
       errorTitle += s.section('/',-1).toUtf8().data();
-      QMessageBox::critical(this, errorTitle.c_str(), errorMessage.c_str());
+      QMessageBox::critical(this, errorTitle.c_str(),
+			    QString::fromUtf8(errorMessage.c_str()));
       QApplication::restoreOverrideCursor();
       return;
     }
