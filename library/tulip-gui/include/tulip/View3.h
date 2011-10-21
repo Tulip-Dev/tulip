@@ -25,8 +25,9 @@ namespace tlp {
 class Interactor;
 
 class TLP_QT_SCOPE View3 : public ViewWidget {
-
   Q_OBJECT
+
+  bool _dataInitialized;
 
 public:
   View3();

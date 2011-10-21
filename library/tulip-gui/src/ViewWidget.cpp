@@ -37,7 +37,7 @@ QGraphicsView* ViewWidget::graphicsView() const {
 }
 
 void ViewWidget::setupUi() {
-  _graphicsView = new QGraphicsView();
+  _graphicsView = new QGraphicsView(new QGraphicsScene());
   _graphicsView->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
   _graphicsView->setViewport(new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget()));
   _graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);

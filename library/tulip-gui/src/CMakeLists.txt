@@ -81,6 +81,7 @@ SET(SRCS
   GLInteractor.cpp
   TulipWorkspace.cpp
   WorkspacePanel.cpp
+  Interactor.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
