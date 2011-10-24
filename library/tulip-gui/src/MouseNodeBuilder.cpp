@@ -78,8 +78,12 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
         mLayout->setNodeValue(newNode, point);
         Observable::unholdObservers();
-        NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view();
-        nodeLinkView->elementSelectedSlot(newNode.id, true);
+
+        GlMainView* glMainView = static_cast<GlMainView*>(view());
+        glMainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSelected()->setNodeValue(newNode,true);
+
+//        NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view();
+//        nodeLinkView->elementSelectedSlot(newNode.id, true);
         //glMainWidget->redraw();
         return true;
       }

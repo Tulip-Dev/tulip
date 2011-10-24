@@ -18,8 +18,9 @@
  */
 #include "tulip/WorkspacePanel.h"
 
-#include <QtGui/QGraphicsView>
 #include <QtCore/QDebug>
+#include <QtGui/QGraphicsView>
+#include <QtGui/QPushButton>
 
 #include <tulip/Interactor.h>
 #include <tulip/ForEach.h>
@@ -31,25 +32,23 @@ using namespace tlp;
 
 WorkspacePanel::WorkspacePanel(tlp::Graph* graph, const QString& viewName, const tlp::DataSet& state, QWidget *parent)
   : QWidget(parent), _ui(new Ui::WorkspacePanel), _graph(graph), _view(NULL) {
-  assert(graph);
-
   _ui->setupUi(this);
 
   QStringList installedViewNames;
   std::string name;
-  forEach(name, ViewLister::availablePlugins())
-  installedViewNames << name.c_str();
+  forEach(name, ViewLister::availablePlugins()) {
+    installedViewNames << name.c_str();
+  }
   _ui->viewCombo->addItems(installedViewNames);
 
   QString selectedViewName = viewName;
-
   if (!installedViewNames.contains(selectedViewName))
     selectedViewName = "Node Link Diagram view";
-
   setView(selectedViewName,state);
 }
 
 WorkspacePanel::~WorkspacePanel() {
+  delete _ui;
 }
 
 View* WorkspacePanel::view() const {
@@ -79,21 +78,57 @@ void WorkspacePanel::internalSetView(const QString &name,const DataSet& state) {
 
   _view = ViewLister::getPluginObject(name.toStdString(),NULL);
   assert(_view);
+  _view->setupUi();
   _view->setGraph(graph());
   _view->setState(state);
 
-  QList<Interactor*> interactors;
+  QList<Interactor*> compatibleInteractors;
   QList<std::string> interactorNames = InteractorLister::compatibleInteractors(name.toStdString());
-  foreach(std::string name,interactorNames)
-  interactors << InteractorLister::getPluginObject(name,NULL);
-  _view->setInteractors(interactors);
+  foreach(std::string name,interactorNames) {
+    compatibleInteractors << InteractorLister::getPluginObject(name,NULL);
+  }
+  _view->setInteractors(compatibleInteractors);
 
-  _view->setupUi();
+  delete _ui->interactorsFrame->layout();
+  bool interactorsUiShown = compatibleInteractors.size() > 0;
+  _ui->currentInteractorButton->setVisible(interactorsUiShown);
+  _ui->interactorsFrame->setVisible(interactorsUiShown);
+  _ui->sep1->setVisible(interactorsUiShown);
+  _ui->sep2->setVisible(interactorsUiShown);
 
-
-
-//  _ui->viewFrame->layout()->addWidget(_view->graphicsView());
-  _view->graphicsView()->show();
+  if (interactorsUiShown) {
+    QHBoxLayout* interactorsLayout = new QHBoxLayout;
+    interactorsLayout->setContentsMargins(0,0,0,0);
+    interactorsLayout->setSpacing(4);
+    foreach(Interactor* i, compatibleInteractors) {
+      QPushButton* button = new QPushButton();
+      button->setMinimumSize(22,22);
+      button->setMaximumSize(22,22);
+      button->setIcon(i->action()->icon());
+      button->setToolTip(i->action()->text());
+      interactorsLayout->addWidget(button);
+      connect(button,SIGNAL(clicked()),i->action(),SLOT(trigger()));
+      connect(i->action(),SIGNAL(triggered()),this,SLOT(interactorActionTriggered()));
+    }
+    _ui->interactorsFrame->setLayout(interactorsLayout);
+    internalSetCurrentInteractor(compatibleInteractors[0]);
+  }
+  _view->graphicsView()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+  layout()->addWidget(_view->graphicsView());
 }
 
+void WorkspacePanel::internalSetCurrentInteractor(tlp::Interactor *i) {
+  view()->setCurrentInteractor(i);
+  _ui->currentInteractorButton->setText(i->action()->text());
+  _ui->currentInteractorButton->setIcon(i->action()->icon());
+  _ui->currentInteractorButton->setChecked(false);
+}
+
+void WorkspacePanel::interactorActionTriggered() {
+  QAction* action = static_cast<QAction*>(sender());
+  Interactor* interactor = static_cast<Interactor*>(action->parent());
+  if (interactor == view()->currentInteractor())
+    return;
+  internalSetCurrentInteractor(interactor);
+}
 

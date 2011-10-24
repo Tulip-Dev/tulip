@@ -27,6 +27,35 @@
 
 using namespace tlp;
 
+struct MyGraphicsView: public QGraphicsView {
+  QGraphicsItem* _centralItem;
+
+  MyGraphicsView(): QGraphicsView(new QGraphicsScene()), _centralItem(NULL) {
+  }
+
+  void resizeEvent(QResizeEvent *event) {
+    QGraphicsView::resizeEvent(event);
+
+    if (scene()) {
+      scene()->setSceneRect(QRect(QPoint(0, 0), size()));
+    }
+
+    GlMainWidgetGraphicsItem* glMainWidgetItem = dynamic_cast<GlMainWidgetGraphicsItem*>(_centralItem);
+    QGraphicsProxyWidget* proxyWidget = dynamic_cast<QGraphicsProxyWidget*>(_centralItem);
+    if (glMainWidgetItem)
+      glMainWidgetItem->resize(width(),height());
+    else if (proxyWidget)
+      proxyWidget->resize(width(),height());
+
+    if (scene())
+      scene()->update();
+
+    // Hack : send a mouse event to force redraw of the scene (otherwise artifacts was displayed when maximizing or minimizing the graphics view)
+    QMouseEvent *eventModif = new QMouseEvent(QEvent::MouseMove,QPoint(size().width()/2, size().height()/2), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+    QApplication::sendEvent(this, eventModif);
+  }
+};
+
 static QGLFormat GlInit() {
   QGLFormat tmpFormat;
   tmpFormat.setDirectRendering(true);
@@ -55,12 +84,12 @@ QGraphicsView* ViewWidget::graphicsView() const {
 }
 
 void ViewWidget::setupUi() {
-  _graphicsView = new QGraphicsView(new QGraphicsScene());
+  _graphicsView = new MyGraphicsView();
   _graphicsView->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
   _graphicsView->setViewport(new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget()));
   _graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   _graphicsView->setFrameStyle(QFrame::NoFrame);
-  _graphicsView->scene()->setBackgroundBrush(Qt::white);
+  _graphicsView->scene()->setBackgroundBrush(Qt::green);
   _graphicsView->installEventFilter(this);
   setupWidget();
   assert(_centralWidget);
@@ -89,8 +118,10 @@ void ViewWidget::setCentralWidget(QWidget* w) {
   GlMainWidget *glMainWidget = dynamic_cast<GlMainWidget *>(w);
 
   if (glMainWidget) {
-    _centralWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, QSize(_graphicsView->width(), _graphicsView->height()));
+     GlMainWidgetGraphicsItem* glMainWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, _graphicsView->width(), _graphicsView->height());
+    _centralWidgetItem = glMainWidgetItem;
     _graphicsView->scene()->addItem(_centralWidgetItem);
+    glMainWidgetItem->resize(_graphicsView->width(),_graphicsView->height());
   }
   else {
     _graphicsView->setViewport(new QGLWidget(GlInit(), 0, 0));
@@ -99,6 +130,8 @@ void ViewWidget::setCentralWidget(QWidget* w) {
     _centralWidget->resize(_graphicsView->width(),_graphicsView->height());
   }
 
+  static_cast<MyGraphicsView*>(_graphicsView)->_centralItem = _centralWidgetItem;
+
   _centralWidgetItem->setPos(0,0);
   _centralWidgetItem->setZValue(0);
 
@@ -106,33 +139,6 @@ void ViewWidget::setCentralWidget(QWidget* w) {
 
   delete oldCentralItem;
   delete oldCentralWidget;
-}
-
-bool ViewWidget::eventFilter(QObject *obj, QEvent *e) {
-  QResizeEvent *event = dynamic_cast<QResizeEvent *>(e);
-
-  if (event && obj == _graphicsView) {
-    if (_graphicsView->scene())
-      _graphicsView->scene()->setSceneRect(QRect(QPoint(0, 0), _graphicsView->size()));
-
-    GlMainWidgetGraphicsItem *glMainWidgetItem = dynamic_cast<GlMainWidgetGraphicsItem *>(_centralWidgetItem);
-
-    if (glMainWidgetItem)
-      glMainWidgetItem->resize(QSize(_graphicsView->width(), _graphicsView->height()));
-
-    else if (_centralWidget)
-      _centralWidget->resize(_graphicsView->size());
-
-    if (_graphicsView->scene())
-      _graphicsView->scene()->update();
-
-    // Hack : send a mouse event to force redraw of the scene (otherwise artifacts was displayed when maximizing or minimizing the graphics view)
-    QMouseEvent *eventModif = new QMouseEvent(QEvent::MouseMove,QPoint(_graphicsView->size().width()/2, _graphicsView->size().height()/2), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-    QApplication::sendEvent(_graphicsView, eventModif);
-    return true;
-  }
-
-  return false;
 }
 
 void ViewWidget::addToScene(QGraphicsItem *item) {

@@ -47,6 +47,8 @@ Interactor* View::currentInteractor() const {
   return _currentInteractor;
 }
 void View::setCurrentInteractor(tlp::Interactor *i) {
+  if (_currentInteractor)
+    _currentInteractor->uninstall();
   _currentInteractor = i;
   currentInteractorChanged(i);
 }
@@ -64,4 +66,7 @@ void View::setGraph(tlp::Graph *g) {
 
 QList<QWidget*> View::configurationWidgets() const {
   return QList<QWidget*>();
+}
+
+void View::interactorsInstalled(const QList<tlp::Interactor *> &) {
 }

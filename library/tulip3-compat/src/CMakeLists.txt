@@ -16,6 +16,8 @@ SET(SRCS
   QtProgress.cpp
   PluginProgressWidget.cpp
   DataSetDialog.cpp
+  InteractorManager.cpp
+  GlMainView3.cpp
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -33,6 +35,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip3/TextEditDialog.h
   ../include/tulip3/QtProgress.h
   ../include/tulip3/PluginProgressWidget.h
+  ../include/tulip3/GlMainView3.h
 )
 
 QT4_WRAP_UI(UI_HEADERS

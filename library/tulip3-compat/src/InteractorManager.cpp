@@ -16,15 +16,16 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/InteractorManager.h"
+#include "tulip3/InteractorManager.h"
 #include "tulip/Interactor.h"
 
 //====================================================
-tlp::InteractorManager* tlp::InteractorManager::inst=0;
+tlp3::InteractorManager* tlp3::InteractorManager::inst=0;
 
 using namespace std;
+using namespace tlp;
 
-namespace tlp {
+namespace tlp3 {
 
 bool InteractorManager::operator()(std::string first, std::string second) {
   return interactorsMap[second]->priority() < interactorsMap[first]->priority();

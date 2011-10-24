@@ -18,6 +18,7 @@
  */
 #include "tulip3/MainController.h"
 
+#include <tulip3/InteractorManager.h>
 #include <QtGui/QDockWidget>
 #include <QtGui/QWorkspace>
 #include <QtGui/QToolBar>
@@ -218,6 +219,7 @@ MainController::MainController(PerspectiveContext &c):
   layoutMenu(NULL), metricMenu(NULL), selectMenu(NULL), generalMenu(NULL) {
   morph = new Morphing();
   currentActiveController(this);
+  tlp3::InteractorManager::getInst().loadInteractorPlugins();
 }
 //**********************************************************************
 MainController::~MainController() {

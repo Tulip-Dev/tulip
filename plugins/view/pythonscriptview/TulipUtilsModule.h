@@ -25,6 +25,7 @@
 #include <tulip3/MainController.h>
 #include <tulip3/ControllerAlgorithmTools.h>
 #include <tulip/GlMainView.h>
+#include <tulip/View3.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
@@ -46,11 +47,11 @@ tuliputils_updateVisualization(PyObject *, PyObject *args) {
     std::vector<tlp::View3*> tulipViews = mainController->getViewsOfGraph(mainController->getGraph());
 
     for (size_t i = 0 ; i < tulipViews.size() ; ++i) {
-      tlp::GlMainView *glView = dynamic_cast<tlp::GlMainView *>(tulipViews[i]);
+//      tlp::GlMainView *glView = dynamic_cast<tlp::GlMainView *>(tulipViews[i]);
 
-      if (centerViews && glView) {
-        glView->getGlMainWidget()->getScene()->centerScene();
-      }
+//      if (centerViews && glView) {
+//        glView->getGlMainWidget()->getScene()->centerScene();
+//      }
 
       tulipViews[i]->draw();
     }

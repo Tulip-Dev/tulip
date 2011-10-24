@@ -25,6 +25,7 @@ View3::View3(): _dataInitialized(false) {
 }
 
 void View3::setupWidget() {
+  construct(NULL);
   setCentralWidget(getWidget());
 }
 
@@ -46,7 +47,6 @@ void View3::currentInteractorChanged(tlp::Interactor *i) {
 
 void View3::graphChanged(tlp::Graph *g) {
   if (!_dataInitialized) {
-    construct(NULL);
     setData(g,DataSet());
     _dataInitialized = true;
   }

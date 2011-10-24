@@ -25,7 +25,6 @@ SET(SRCS
   GraphState.cpp
   GridOptionsWidget.cpp
   GWOverviewWidget.cpp
-  InteractorManager.cpp
   ItemsListWidget.cpp
   LayerManagerWidget.cpp
   Morphing.cpp

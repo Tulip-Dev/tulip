@@ -55,7 +55,8 @@ void InteractorComposite::undoIsDone() {
 
 void InteractorComposite::setLastTarget(QObject *target) {
   _lastTarget = target;
-  connect(_lastTarget,SIGNAL(destroyed()),this,SLOT(lastTargetDestroyed()));
+  if (_lastTarget)
+    connect(_lastTarget,SIGNAL(destroyed()),this,SLOT(lastTargetDestroyed()));
 }
 
 void InteractorComposite::lastTargetDestroyed() {

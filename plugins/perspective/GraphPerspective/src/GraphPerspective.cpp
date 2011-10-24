@@ -23,7 +23,11 @@
 #include "GraphHierarchiesEditor.h"
 #include "GraphHierarchiesModel.h"
 #include <tulip/Graph.h>
+
+// FIXME: remove me
 #include <QtCore/QDebug>
+#include <tulip/WorkspacePanel.h>
+#include <tulip/LayoutProperty.h>
 
 using namespace tlp;
 
@@ -47,8 +51,24 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui->graphHierarchiesEditor->setModel(_graphs);
   _ui->algorithmRunner->setModel(_graphs);
 
-  foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>())
-  connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
+  foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
+    connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
+  }
+
+
+  // PROUT
+  tlp::Graph* g = newGraph();
+
+  for(int i=0; i<100; ++i)
+    g->addNode();
+
+  std::string msg;
+  g->computeProperty<LayoutProperty>("Random",g->getProperty<LayoutProperty>("viewLayout"),msg);
+  WorkspacePanel* panel = new WorkspacePanel(g);
+  _ui->workspace->setLayout(new QVBoxLayout);
+  _ui->workspace->layout()->setMargin(0);
+  _ui->workspace->layout()->setSpacing(0);
+  _ui->workspace->layout()->addWidget(panel);
 }
 
 void GraphPerspective::refreshDockExpandControls() {

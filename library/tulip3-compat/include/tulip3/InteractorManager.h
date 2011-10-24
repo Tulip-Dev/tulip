@@ -29,9 +29,14 @@
 #include <tulip/tulipconf.h>
 #include <tulip/MutableContainer.h>
 
-namespace tlp {
+using namespace tlp;
 
+namespace tlp {
 class Interactor;
+}
+
+namespace tlp3 {
+
 
 /** \brief Interactor plugins manager
  *

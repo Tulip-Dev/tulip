@@ -23,7 +23,7 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QLabel>
 
-#include <tulip/InteractorManager.h>
+#include <tulip3/InteractorManager.h>
 #include <tulip/Interactor.h>
 
 using namespace std;
@@ -48,9 +48,9 @@ void ControllerViewsTools::createView(const string &name,Graph *,DataSet,QWidget
   list<string> interactorsNameList;
 
   if(newView->getRealViewName()=="")
-    interactorsNameList=InteractorManager::getInst().getSortedCompatibleInteractors(verifiedName);
+    interactorsNameList=tlp3::InteractorManager::getInst().getSortedCompatibleInteractors(verifiedName);
   else
-    interactorsNameList=InteractorManager::getInst().getSortedCompatibleInteractors(newView->getRealViewName());
+    interactorsNameList=tlp3::InteractorManager::getInst().getSortedCompatibleInteractors(newView->getRealViewName());
 
   list<Interactor *> interactorsList;
 
