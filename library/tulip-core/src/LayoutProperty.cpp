@@ -457,7 +457,7 @@ void LayoutProperty::perfectAspectRatio() {
 }
 
 //=================================================================================
-void LayoutProperty::clone_handler(LayoutMinMaxProperty& proxyC) {
+void LayoutProperty::clone_handler(AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>& proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
     LayoutProperty *proxy=(LayoutProperty *)&proxyC;
     nodeValueUptodate = proxy->nodeValueUptodate;

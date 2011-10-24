@@ -40,7 +40,7 @@ public :
   void nodesUniformQuantification(unsigned int);
   void edgesUniformQuantification(unsigned int);
 
-  void clone_handler(DoubleMinMaxProperty&);
+  virtual void clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> &);
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
