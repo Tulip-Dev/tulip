@@ -80,8 +80,11 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
           bends.clear();
           Observable::unholdObservers();
-          NodeLinkDiagramComponent *nodeLinkView=static_cast<NodeLinkDiagramComponent *>(view());
-          nodeLinkView->elementSelectedSlot(newEdge.id, false);
+
+          GlMainView* glMainView = static_cast<GlMainView*>(view());
+          glMainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSelected()->setEdgeValue(newEdge,true);
+//          NodeLinkDiagramComponent *nodeLinkView=static_cast<NodeLinkDiagramComponent *>(view());
+//          nodeLinkView->elementSelectedSlot(newEdge.id, false);
         }
         else {
           Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);

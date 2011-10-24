@@ -1,21 +1,3 @@
-/**
- *
- * This file is part of Tulip (www.tulip-software.org)
- *
- * Authors: David Auber and the Tulip development Team
- * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
- *
- * Tulip is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * Tulip is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 #include "tulip/GlMainWidgetGraphicsItem.h"
 
 #include <QtOpenGL/QGLFramebufferObject>
@@ -24,8 +6,6 @@
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QGraphicsScene>
-#include <QtGui/QGraphicsView>
-#include <QtCore/QDebug>
 
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlQuad.h>
@@ -44,10 +24,11 @@ static void setRasterPosition(unsigned int x, unsigned int y) {
   tlp::glTest(__PRETTY_FUNCTION__);
 }
 
-GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, const QSize& size)://, int width, int height):
-  QGraphicsObject(),
-  glMainWidget(glMainWidget), redrawNeeded(true), renderingStore(NULL) {
+GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, int width, int height):
+    QGraphicsObject(),
+    glMainWidget(glMainWidget), redrawNeeded(true), renderingStore(NULL) {
 
+//  setFlag(QGraphicsItem::ItemIsMovable, true);
   setFlag(QGraphicsItem::ItemIsSelectable, true);
   setFlag(QGraphicsItem::ItemIsFocusable, true);
   setAcceptHoverEvents(true);
@@ -56,7 +37,7 @@ GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, c
   connect(glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(glMainWidgetDraw(GlMainWidget *,bool)));
   connect(glMainWidget,SIGNAL(viewRedrawn(GlMainWidget *)),this,SLOT(glMainWidgetRedraw(GlMainWidget *)));
 
-  resize(size);
+  resize(width, height);
   glMainWidget->installEventFilter(this);
   setHandlesChildEvents(false);
 }
@@ -67,16 +48,17 @@ GlMainWidgetGraphicsItem::~GlMainWidgetGraphicsItem() {
 }
 
 QRectF GlMainWidgetGraphicsItem::boundingRect() const {
-  return QRectF(pos().x(), pos().y(), _size.width(), _size.height());
+  return QRectF(0, 0, width, height);
 }
 
-void GlMainWidgetGraphicsItem::resize(const QSize& size) {
-  _size = size;
-  glMainWidget->resize(size.width(),size.height());
-  glMainWidget->resizeGL(size.width(),size.height());
+void GlMainWidgetGraphicsItem::resize(int width, int height) {
+  this->width = width;
+  this->height = height;
+  glMainWidget->resize(width,height);
+  glMainWidget->resizeGL(width,height);
   redrawNeeded = true;
   delete [] renderingStore;
-  renderingStore = new unsigned char[_size.width()*_size.height()*4];
+  renderingStore = new unsigned char[width*height*4];
   prepareGeometryChange();
 }
 
@@ -117,18 +99,16 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
 
   rect = rect.translated(pos());
 
-  QGraphicsView* view = scene()->views()[0];
-  QPointF vpPoint = view->mapFromScene(rect.x(),rect.y());
-
-  //   glMainWidget->getScene()->setViewport(vpPoint.x(),vpPoint.y(),rect.width(),rect.height());
-  float vpX = vpPoint.x(), vpY = vpPoint.y(), vpW = rect.width(), vpH = rect.height();
-//  vpY = view->height() - (rect.y() + rect.height());
+  float vpX = rect.x();
+  float vpY = scene()->height() - (rect.y() + rect.height());
+  float vpW = rect.width();
+  float vpH = rect.height();
 
   glMainWidget->getScene()->setViewport(vpX,vpY,vpW,vpH);
   glMainWidget->getScene()->setNoClearBackground(true);
   glMainWidget->getScene()->initGlParameters();
 
-  if(redrawNeeded) {
+  if(redrawNeeded){
     glMainWidget->computeInteractors();
     glMainWidget->getScene()->draw();
 
@@ -143,8 +123,7 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
     glFlush();
 
     redrawNeeded=false;
-  }
-  else {
+  } else {
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_STENCIL_TEST);
@@ -196,7 +175,7 @@ void GlMainWidgetGraphicsItem::wheelEvent(QGraphicsSceneWheelEvent *event) {
   QApplication::sendEvent(glMainWidget,eventModif);
 }
 
-void GlMainWidgetGraphicsItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event) {
+void GlMainWidgetGraphicsItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event){
   QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x(),event->pos().y()), Qt::NoButton, Qt::NoButton, event->modifiers());
   QApplication::sendEvent(glMainWidget,eventModif);
 }
@@ -209,7 +188,5 @@ void GlMainWidgetGraphicsItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 bool GlMainWidgetGraphicsItem::eventFilter(QObject *, QEvent *evt) {
   if (evt->type() == QEvent::CursorChange)
     setCursor(glMainWidget->cursor());
-
   return false;
 }
-

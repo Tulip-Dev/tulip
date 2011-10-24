@@ -495,11 +495,10 @@ QImage GlMainWidget::grabFrameBuffer(bool withAlpha) {
 //==================================================
 void GlMainWidget::resizeGL(int w, int h) {
 #ifndef NDEBUG
-  std::cerr << __PRETTY_FUNCTION__ << std::endl;
+  std::cerr << __PRETTY_FUNCTION__ << "(" << w << ";" << h << ")" << std::endl;
 #endif
 
   if (w == 0 || h == 0) {
-    std::cerr << "warning: GlMainWidget::resizeGL(" << w << ", " << h << ")" <<  std::endl;
     return ;
   }
 

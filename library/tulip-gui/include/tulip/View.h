@@ -24,6 +24,7 @@
 #include <tulip/WithParameter.h>
 #include <tulip/Observable.h>
 #include <tulip/PluginLister.h>
+#include <tulip/MethodFactory.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QSet>
@@ -47,10 +48,10 @@ class Interactor;
 
   When a View gets created, the following methods will always be called in the following order:
   @li The constructor. Basically, you don't want to do anything in this method as View instance may be created at Tulip startup when the plugin system gets initialized. Subsequent methods will be called in order for the view to build UI elements
+  @li View::setupUi(). Notifies the view it can now build GUI components since every part of its initial state should be valid by now. Once this method is called, any call to View::graphicsView() is expected to return a valid pointer object.
   @li View::setGraph. Sets the graph that is meant to be visualized in the View's panel.
   @li View::setState(). Sets initial data. This method may be used to restore a previously backed-up state retrieved from the View::state() method.
   @li View::interactorsInstalled(). Notifies the view of the available interactors. Interactors objects taken from the list have already been initialized.
-  @li View::setupUi(). Notifies the view it can now build GUI components since every part of its initial state should be valid by now. Once this method is called, any call to View::graphicsView() is expected to return a valid pointer object.
 
   Once the View is initialized, none of the previously mentioned methods, except View::setGraph(), can be called again.
   View::setGraph method may be called again to notify the view that another graph should be displayed (this may be a sub/parent graph of the previously displayed graph or a graph coming from a totally different hierarchy)
@@ -96,6 +97,7 @@ public:
     @return The currently active interactor.
     The active interactor is the one that currently recieve user inputs.
     @see setCurrentInteractor();
+    @warning This method may return a NULL pointer if no interactor is currently active.
     */
   tlp::Interactor* currentInteractor() const;
 
@@ -126,7 +128,9 @@ public slots:
 
   /**
     @brief defines the active interactor that will recieve user inputs.
+    @note This method will first remove the previously active interactor (if any) using Interactor::uninstall()
     @note Calling this will trigger the View::currentInteractorChanged() callback for custom handling.
+    @note Calling View::setCurrentInteractor(NULL) will only remove the previous current interactor.
   */
   void setCurrentInteractor(tlp::Interactor* currentInteractor);
 
@@ -175,11 +179,12 @@ protected slots:
     @brief Callback method after setInteractors() was called.
     At this point, a call to View::interactors() is considered valid.
     */
-  virtual void interactorsInstalled(const QList<tlp::Interactor*>& interactors)=0;
+  virtual void interactorsInstalled(const QList<tlp::Interactor*>& interactors);
 
   /**
     @brief Callback method after setCurrentInteractor() was called.
     At this point, a call to View::currentInteractor() is considered valid and return the newly active interactor.
+    @warning The interactor passed down to this method MAY BE a NULL pointer ! This means that no current interactor should be set.
     */
   virtual void currentInteractorChanged(tlp::Interactor*);
 
@@ -188,6 +193,7 @@ protected slots:
     At this point, a call to View::graph() is considered valid and return the lastly set graph.
     */
   virtual void graphChanged(tlp::Graph*)=0;
+
 };
 
 struct TLP_QT_SCOPE ViewContext {

@@ -31,6 +31,7 @@ namespace tlp {
 
 class Graph;
 class View;
+class Interactor;
 
 class TLP_QT_SCOPE WorkspacePanel : public QWidget {
   Q_OBJECT
@@ -52,7 +53,11 @@ public slots:
   void setView(const QString& viewName, const tlp::DataSet& state=tlp::DataSet());
 
 protected slots:
+  void interactorActionTriggered();
+//  void currentInteractorButtonToggled(bool);
+
   void internalSetView(const QString&,const tlp::DataSet&);
+  void internalSetCurrentInteractor(tlp::Interactor*);
 };
 
 }

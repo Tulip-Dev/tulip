@@ -26,7 +26,6 @@
 #include <tulip/MethodFactory.h>
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/PluginLister.h>
-#include <tulip/InteractorManager.h>
 #include <tulip/AbstractPluginInfo.h>
 
 namespace tlp {

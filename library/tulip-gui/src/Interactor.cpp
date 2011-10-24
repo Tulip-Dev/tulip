@@ -20,6 +20,7 @@
 
 #include <tulip/ForEach.h>
 #include <tulip/View.h>
+#include <QtCore/QDebug>
 
 using namespace std;
 using namespace tlp;
@@ -31,28 +32,35 @@ bool interactorLessThan(Interactor* a, Interactor* b) {
 }
 
 void InteractorLister::initInteractorsDependencies() {
-  QMap<Interactor*,string> interactorName;
+  _compatibilityMap.clear();
 
-  string it;
-  forEach(it,availablePlugins())
-  interactorName[getPluginObject(it,NULL)] = it;
+  QMap<Interactor*,string> interactorToName;
+
+  string interactorName;
+  forEach(interactorName,availablePlugins()) {
+    interactorToName[getPluginObject(interactorName,NULL)] = interactorName;
+  }
 
   string viewName;
   forEach(viewName, ViewLister::availablePlugins()) {
-    QList<Interactor*> sortedList;
-    foreach(Interactor* i,interactorName.keys()) {
+    QList<Interactor*> compatibleInteractors;
+    foreach(Interactor* i,interactorToName.keys()) {
       if (i->isCompatible(viewName))
-        sortedList << i;
+        compatibleInteractors << i;
     }
-    qSort(sortedList.begin(),sortedList.end(),interactorLessThan);
+    qSort(compatibleInteractors.begin(),compatibleInteractors.end(),interactorLessThan);
+
     QList<string> compatibleNames;
-    foreach(Interactor* i,sortedList)
-    compatibleNames << interactorName[i];
+    foreach(Interactor* i,compatibleInteractors) {
+      compatibleNames << interactorToName[i];
+    }
     _compatibilityMap[viewName] = compatibleNames;
+
   }
 
-  foreach(Interactor* i, interactorName.keys())
-  delete i;
+  foreach(Interactor* i, interactorToName.keys()) {
+    delete i;
+  }
 }
 
 QList<string> InteractorLister::compatibleInteractors(const std::string &viewName) {

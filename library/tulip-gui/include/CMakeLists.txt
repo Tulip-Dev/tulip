@@ -22,7 +22,6 @@ INSTALL(FILES
   tulip/GraphPropertiesTableWidget.h
   tulip/GridOptionsWidget.h
   tulip/GWOverviewWidget.h
-  tulip/InteractorManager.h
   tulip/ItemsListWidget.h
   tulip/LayerManagerWidget.h
   tulip/Morphing.h

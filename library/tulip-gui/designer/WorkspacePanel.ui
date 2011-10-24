@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>670</width>
-    <height>300</height>
+    <width>945</width>
+    <height>597</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -26,7 +26,7 @@
       </sizepolicy>
      </property>
      <property name="styleSheet">
-      <string notr="true">#headerFrame,QComboBox, QLabel, QToolButton {
+      <string notr="true">#headerFrame,QComboBox, QLabel, QToolButton,QPushButton {
 	border-image:none;
 	background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
 	stop: 0 #838383,
@@ -37,7 +37,7 @@
 	color: white;
 }
 
-QComboBox:hover, QToolButton:hover {
+QComboBox:hover, QToolButton:hover,QPushButton:hover {
 	border-image:none;
 	background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
 	stop: 0 #8F8F8F,
@@ -48,7 +48,7 @@ QComboBox:hover, QToolButton:hover {
 	color: white;
 }
 
-QToolButton:pressed {
+QToolButton:pressed, QPushButton:pressed {
 	border-image:none;
 	background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
 	stop: 0 #777777,
@@ -93,6 +93,12 @@ QComboBox:drop-down {
         <property name="minimumSize">
          <size>
           <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
           <height>22</height>
          </size>
         </property>
@@ -218,7 +224,7 @@ background-color: #A9A9A9;
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/lightminimizebutton.png</normaloff>:/tulip/gui/ui/lightminimizebutton.png</iconset>
         </property>
        </widget>
@@ -232,7 +238,7 @@ background-color: #A9A9A9;
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/lightclosebutton.png</normaloff>:/tulip/gui/ui/lightclosebutton.png</iconset>
         </property>
        </widget>
@@ -240,20 +246,8 @@ background-color: #A9A9A9;
      </layout>
     </widget>
    </item>
-   <item>
-    <widget class="QFrame" name="viewFrame">
-     <property name="styleSheet">
-      <string notr="true">#viewFrame {
-border: 1px solid #C9C9C9;
-background-color: white;
-}</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources/TulipGUIResource.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
