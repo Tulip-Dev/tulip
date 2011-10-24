@@ -64,7 +64,7 @@ public :
   int compare(const edge e1, const edge e2) const;
 
 protected:
-  virtual void clone_handler(IntegerMinMaxProperty&);
+  virtual void clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> &);
 
 private:
   // override Observable::treatEvent

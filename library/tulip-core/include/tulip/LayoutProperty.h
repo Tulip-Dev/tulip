@@ -136,7 +136,7 @@ public:
   virtual void setAllEdgeValue(const std::vector<Coord> &v);
 
 protected:
-  virtual void clone_handler(LayoutMinMaxProperty&);
+  virtual void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> &);
 
 private:
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
