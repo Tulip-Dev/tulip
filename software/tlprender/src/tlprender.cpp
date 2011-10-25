@@ -459,15 +459,12 @@ void parseCommandLine(int argc, char **argv) {
 
     case 'f':
       imageFormat = optarg;
-#ifdef HAVE_LIBPNG
 
       if (imageFormat == "png");
       else
-#endif
-#ifdef HAVE_LIBJPEG
         if (imageFormat == "jpeg");
         else
-#endif
+
         {
           cerr << "Error: unsupported image format: " << imageFormat << endl;
           help();

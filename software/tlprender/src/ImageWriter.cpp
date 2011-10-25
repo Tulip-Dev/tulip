@@ -40,15 +40,10 @@ ImageWriter::ImageWriter(const GLubyte *imagebuffer, const int width, const int 
 {}
 
 ImageWriter *ImageWriter::getImageWriter(string &type, const GLubyte *buffer, const int width, const int height) {
-#ifdef HAVE_LIBPNG
-
   if (type=="png") return new tlprender::PNGWriter(buffer, width, height);
   else
-#endif
-#ifdef HAVE_LIBJPEG
     if (type=="jpeg") return new tlprender::JPEGWriter(buffer, width, height);
     else
-#endif
     {
       return NULL;
     }

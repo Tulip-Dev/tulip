@@ -29,12 +29,8 @@ extern "C" {
 
 #include <tulip/OpenGlConfigManager.h>
 
-#ifdef HAVE_LIBJPEG
 #include <jpeglib.h>
-#endif
-#ifdef HAVE_LIBPNG
 #include <png.h>
-#endif
 };
 
 //====================================================
@@ -176,7 +172,6 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
   return true;
 }
 //====================================================================
-#ifdef HAVE_LIBJPEG
 static bool loadJPEG(const string &filename, TextureInfo *texture,string &errorMsg) {
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
@@ -237,9 +232,7 @@ static bool loadJPEG(const string &filename, TextureInfo *texture,string &errorM
   fclose(file);
   return true;
 }
-#endif
 //====================================================================
-#ifdef HAVE_LIBPNG
 static bool loadPNG(const string &filename, TextureInfo *texture,string &errorMsg) {
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
@@ -319,7 +312,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture,string &errorMs
   fclose(file);
   return true;
 }
-#endif
+
 //====================================================================
 GlTextureManager::GlTextureManager():errorViewer(new OpenGlErrorViewer),animationFrame(0) {
 }
@@ -379,15 +372,8 @@ bool GlTextureManager::loadTexture(const string& filename) {
   TextureLoader_t *loader = NULL;
 
   if (extension == "BMP") loader = &loadBMP;
-
-#ifdef HAVE_LIBJPEG
   else if ((extension == "JPG") || (extension == "JPEG")) loader = &loadJPEG;
-
-#endif
-#ifdef HAVE_LIBPNG
   else if (extension == "PNG") loader = &loadPNG;
-
-#endif
   else {
     errorViewer->displayError("Texture manager","Warning: extension "+extension+" unknown for file : "+filename);
     //cerr << "Warning: don't know extension \"" << extension << "\"" << endl;
