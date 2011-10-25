@@ -160,11 +160,11 @@ public:
                                        DoubleProperty::AVG_CALC,
                                      DoubleProperty::PredefinedMetaValueCalculator eCalc =
                                        DoubleProperty::AVG_CALC)
-  :AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>::MetaValueCalculator(),
+    :AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>::MetaValueCalculator(),
      nodeCalc(nodeCalculators[(int) nCalc]),
      edgeCalc(edgeCalculators[(int) eCalc]) {}
 
-     void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, node mN, Graph* sg,
+  void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, node mN, Graph* sg,
                         Graph*) {
     if (nodeCalc)
       nodeCalc(metric, mN, sg);
