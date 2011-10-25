@@ -31,7 +31,7 @@
 using namespace tlp;
 
 WorkspacePanel::WorkspacePanel(tlp::Graph* graph, const QString& viewName, const tlp::DataSet& state, QWidget *parent)
-  : QWidget(parent), _ui(new Ui::WorkspacePanel), _graph(graph), _view(NULL) {
+  : QWidget(parent), _ui(new Ui::WorkspacePanel), _graph(graph), _view(NULL), _progressMode(false) {
   _ui->setupUi(this);
 
   QStringList installedViewNames;
@@ -118,6 +118,7 @@ void WorkspacePanel::internalSetView(const QString &name,const DataSet& state) {
 
   _view->graphicsView()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
   layout()->addWidget(_view->graphicsView());
+  connect(_view->graphicsView()->scene(),SIGNAL(sceneRectChanged(QRectF)),this,SLOT(viewSceneRectChanged(QRectF)));
 }
 
 void WorkspacePanel::internalSetCurrentInteractor(tlp::Interactor *i) {
@@ -137,3 +138,18 @@ void WorkspacePanel::interactorActionTriggered() {
   internalSetCurrentInteractor(interactor);
 }
 
+bool WorkspacePanel::isProgressMode() const {
+  return _progressMode;
+}
+
+void WorkspacePanel::toggleProgressMode(bool p) {
+  _progressMode = p;
+}
+
+void WorkspacePanel::progress_handler(int step, int max_step) {
+  if (!isProgressMode())
+    return;
+}
+
+void WorkspacePanel::viewSceneRectChanged(const QRectF &) {
+}

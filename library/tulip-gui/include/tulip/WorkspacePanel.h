@@ -22,6 +22,7 @@
 #include <QtGui/QWidget>
 #include <tulip/tulipconf.h>
 #include <tulip/DataSet.h>
+#include <tulip/SimplePluginProgress.h>
 
 namespace Ui {
 class WorkspacePanel;
@@ -33,9 +34,12 @@ class Graph;
 class View;
 class Interactor;
 
-class TLP_QT_SCOPE WorkspacePanel : public QWidget {
+class TLP_QT_SCOPE WorkspacePanel : public QWidget, public tlp::SimplePluginProgress {
   Q_OBJECT
   Q_PROPERTY(tlp::Graph* graph READ graph WRITE setGraph)
+
+  Q_PROPERTY(bool progressMode READ isProgressMode WRITE toggleProgressMode)
+  bool _progressMode;
 
   Ui::WorkspacePanel* _ui;
   tlp::Graph* _graph;
@@ -47,17 +51,21 @@ public:
 
   tlp::View* view() const;
   tlp::Graph* graph() const;
+  bool isProgressMode() const;
 
 public slots:
   void setGraph(tlp::Graph* graph);
   void setView(const QString& viewName, const tlp::DataSet& state=tlp::DataSet());
+  void toggleProgressMode(bool p);
 
 protected slots:
   void interactorActionTriggered();
-//  void currentInteractorButtonToggled(bool);
-
   void internalSetView(const QString&,const tlp::DataSet&);
   void internalSetCurrentInteractor(tlp::Interactor*);
+  void viewSceneRectChanged(const QRectF&);
+
+protected:
+  void progress_handler(int step, int max_step);
 };
 
 }
