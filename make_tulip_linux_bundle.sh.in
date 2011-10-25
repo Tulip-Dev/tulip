@@ -75,7 +75,7 @@ echo @QT_LIBRARY_DIR@/libphonon.so.4 copied in $BUNDLE_LIB_DIR
 # Qt3Support is not needed
 rm $BUNDLE_LIB_DIR/libQt3Support*.*
 # other tulip_app needed libs
-for LIB in libicuuc libicudata libaudio libcrypto libk5crypto libgssapi_krb5 libkrb5 libkeyutils libresolv libselinux libssl freetype GLEW GLU gomp jpeg png stdc++ xml2 libz
+for LIB in libicuuc libicudata libicui18n libaudio libcrypto libk5crypto libgssapi_krb5 libkrb5 libkeyutils libresolv libselinux libssl freetype GLEW GLU gomp jpeg png stdc++ xml2 libz libbfd
 do
     copy_linked_lib $LIB $BUNDLE_BIN_DIR/tulip_app
 done;
@@ -84,6 +84,16 @@ LIB_PYTHON_SCRIPT_VIEW=$(ls $BUNDLE_LIB_DIR/tulip/view/libpython*)
 for LIB in libcrypto libk5crypto libgssapi_krb5 libkrb5 libssl libicui18n libpython
 do
     copy_linked_lib $LIB $LIB_PYTHON_SCRIPT_VIEW
+done;
+
+# search if plugins needs common libs
+for PLUGIN in $(find $BUNDLE_LIB_DIR/tulip -name "*.so")
+do
+echo "Search dependencies for $(basename $PLUGIN)"
+for LIB in libicuuc libicui18n libicudata libaudio libcrypto libk5crypto libgssapi_krb5 libkrb5 libkeyutils libresolv libselinux libssl freetype GLEW GLU gomp jpeg png stdc++ xml2 libz
+do
+ copy_linked_lib $LIB $PLUGIN
+done;
 done;
 
 # copy Qt assistant
