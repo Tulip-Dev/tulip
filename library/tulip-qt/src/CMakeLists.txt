@@ -215,6 +215,8 @@ IF(WIN32)
     FIND_LIBRARY_GLOB(QT_LIB_FILE "${QT_LIB}4.dll")
     INSTALL_EXTERNAL_LIB(QT_LIB_FILE libtulip_qt)
   ENDFOREACH()
+  #Copy Qt image plugins.
+  INSTALL(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_qt)
 ELSEIF(APPLE)
   #Copy Qt libs
   set(QT_LIBS phonon QtAssistant QtCore QtDBus QtHelp QtGui QtNetwork QtOpenGL QtScript QtSql QtSvg QtWebKit QtXml QtXmlPatterns)

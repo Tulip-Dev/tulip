@@ -118,12 +118,11 @@ IF(APPLE)
     INSTALL_EXTERNAL_LIB(QTASSISTANT_INSTALL_PATH tulip)
   ENDIF()
   INSTALL(DIRECTORY "/Developer/Applications/Qt/Assistant.app" DESTINATION ${TulipAppleContentsDir} USE_SOURCE_PERMISSIONS COMPONENT tulip OPTIONAL)
-
 ELSEIF(WIN32)
   INSTALL(FILES ${QT_BINARY_DIR}/assistant.exe DESTINATION "${TulipBinInstallDir}" COMPONENT tulip)
   #the sqldriver is needed to show the documentation
   #because the docs/tulip.qhc generated file is an embedded sql database
-  INSTALL(FILES ${QT_PLUGINS_DIR}/sqldrivers/qsqlite4.dll DESTINATION "${TulipBinInstallDir}/plugins/sqldrivers" COMPONENT tulip)
+  INSTALL(FILES ${QT_PLUGINS_DIR}/sqldrivers/qsqlite4.dll DESTINATION "${TulipBinInstallDir}/sqldrivers" COMPONENT tulip)
 ENDIF()
 
 
