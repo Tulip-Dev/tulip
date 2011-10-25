@@ -42,6 +42,7 @@ struct MyGraphicsView: public QGraphicsView {
 
     GlMainWidgetGraphicsItem* glMainWidgetItem = dynamic_cast<GlMainWidgetGraphicsItem*>(_centralItem);
     QGraphicsProxyWidget* proxyWidget = dynamic_cast<QGraphicsProxyWidget*>(_centralItem);
+
     if (glMainWidgetItem)
       glMainWidgetItem->resize(width(),height());
     else if (proxyWidget)
@@ -118,7 +119,7 @@ void ViewWidget::setCentralWidget(QWidget* w) {
   GlMainWidget *glMainWidget = dynamic_cast<GlMainWidget *>(w);
 
   if (glMainWidget) {
-     GlMainWidgetGraphicsItem* glMainWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, _graphicsView->width(), _graphicsView->height());
+    GlMainWidgetGraphicsItem* glMainWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, _graphicsView->width(), _graphicsView->height());
     _centralWidgetItem = glMainWidgetItem;
     _graphicsView->scene()->addItem(_centralWidgetItem);
     glMainWidgetItem->resize(_graphicsView->width(),_graphicsView->height());
@@ -133,11 +134,13 @@ void ViewWidget::setCentralWidget(QWidget* w) {
   static_cast<MyGraphicsView*>(_graphicsView)->_centralItem = _centralWidgetItem;
 
   _centralWidgetItem->setPos(0,0);
+
   _centralWidgetItem->setZValue(0);
 
   refreshItemsParenthood();
 
   delete oldCentralItem;
+
   delete oldCentralWidget;
 }
 

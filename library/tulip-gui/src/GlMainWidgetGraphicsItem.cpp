@@ -1,3 +1,21 @@
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
 #include "tulip/GlMainWidgetGraphicsItem.h"
 
 #include <QtOpenGL/QGLFramebufferObject>
@@ -25,8 +43,8 @@ static void setRasterPosition(unsigned int x, unsigned int y) {
 }
 
 GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, int width, int height):
-    QGraphicsObject(),
-    glMainWidget(glMainWidget), redrawNeeded(true), renderingStore(NULL) {
+  QGraphicsObject(),
+  glMainWidget(glMainWidget), redrawNeeded(true), renderingStore(NULL) {
 
 //  setFlag(QGraphicsItem::ItemIsMovable, true);
   setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -108,7 +126,7 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
   glMainWidget->getScene()->setNoClearBackground(true);
   glMainWidget->getScene()->initGlParameters();
 
-  if(redrawNeeded){
+  if(redrawNeeded) {
     glMainWidget->computeInteractors();
     glMainWidget->getScene()->draw();
 
@@ -123,7 +141,8 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
     glFlush();
 
     redrawNeeded=false;
-  } else {
+  }
+  else {
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_STENCIL_TEST);
@@ -175,7 +194,7 @@ void GlMainWidgetGraphicsItem::wheelEvent(QGraphicsSceneWheelEvent *event) {
   QApplication::sendEvent(glMainWidget,eventModif);
 }
 
-void GlMainWidgetGraphicsItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event){
+void GlMainWidgetGraphicsItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event) {
   QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x(),event->pos().y()), Qt::NoButton, Qt::NoButton, event->modifiers());
   QApplication::sendEvent(glMainWidget,eventModif);
 }
@@ -188,5 +207,6 @@ void GlMainWidgetGraphicsItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 bool GlMainWidgetGraphicsItem::eventFilter(QObject *, QEvent *evt) {
   if (evt->type() == QEvent::CursorChange)
     setCursor(glMainWidget->cursor());
+
   return false;
 }

@@ -42,8 +42,10 @@ WorkspacePanel::WorkspacePanel(tlp::Graph* graph, const QString& viewName, const
   _ui->viewCombo->addItems(installedViewNames);
 
   QString selectedViewName = viewName;
+
   if (!installedViewNames.contains(selectedViewName))
     selectedViewName = "Node Link Diagram view";
+
   setView(selectedViewName,state);
 }
 
@@ -113,6 +115,7 @@ void WorkspacePanel::internalSetView(const QString &name,const DataSet& state) {
     _ui->interactorsFrame->setLayout(interactorsLayout);
     internalSetCurrentInteractor(compatibleInteractors[0]);
   }
+
   _view->graphicsView()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
   layout()->addWidget(_view->graphicsView());
 }
@@ -127,8 +130,10 @@ void WorkspacePanel::internalSetCurrentInteractor(tlp::Interactor *i) {
 void WorkspacePanel::interactorActionTriggered() {
   QAction* action = static_cast<QAction*>(sender());
   Interactor* interactor = static_cast<Interactor*>(action->parent());
+
   if (interactor == view()->currentInteractor())
     return;
+
   internalSetCurrentInteractor(interactor);
 }
 

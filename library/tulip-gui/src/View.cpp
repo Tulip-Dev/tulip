@@ -49,6 +49,7 @@ Interactor* View::currentInteractor() const {
 void View::setCurrentInteractor(tlp::Interactor *i) {
   if (_currentInteractor)
     _currentInteractor->uninstall();
+
   _currentInteractor = i;
   currentInteractorChanged(i);
 }
