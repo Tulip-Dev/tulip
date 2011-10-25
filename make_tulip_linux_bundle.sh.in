@@ -104,7 +104,8 @@ copy_linked_lib sqlite3 $BUNDLE_BIN_DIR/assistant
 # add qt plugins directory
 mkdir $BUNDLE_BIN_DIR/plugins
 # copy sqldrivers (needed by assistant)
-cp -Rp @QT_PLUGINS_DIR@/sqldrivers $BUNDLE_BIN_DIR/plugins
+cp -Rp @QT_PLUGINS_DIR@/sqldrivers $BUNDLE_BIN_DIR
+cp -Rp @QT_PLUGINS_DIR@/imageformats $BUNDLE_BIN_DIR
 echo @QT_PLUGINS_DIR@/sqldrivers copied in $BUNDLE_BIN_DIR/plugins
 
 # tweak OS/ABI header part of libraries (System V instead of Linux)
