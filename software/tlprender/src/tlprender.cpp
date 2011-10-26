@@ -461,14 +461,13 @@ void parseCommandLine(int argc, char **argv) {
       imageFormat = optarg;
 
       if (imageFormat == "png");
+      else if (imageFormat == "jpeg");
       else
-        if (imageFormat == "jpeg");
-        else
 
-        {
-          cerr << "Error: unsupported image format: " << imageFormat << endl;
-          help();
-        }
+      {
+        cerr << "Error: unsupported image format: " << imageFormat << endl;
+        help();
+      }
 
       break;
 

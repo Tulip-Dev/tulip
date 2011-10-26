@@ -41,12 +41,10 @@ ImageWriter::ImageWriter(const GLubyte *imagebuffer, const int width, const int 
 
 ImageWriter *ImageWriter::getImageWriter(string &type, const GLubyte *buffer, const int width, const int height) {
   if (type=="png") return new tlprender::PNGWriter(buffer, width, height);
-  else
-    if (type=="jpeg") return new tlprender::JPEGWriter(buffer, width, height);
-    else
-    {
-      return NULL;
-    }
+  else if (type=="jpeg") return new tlprender::JPEGWriter(buffer, width, height);
+  else {
+    return NULL;
+  }
 }
 
 void ImageWriter::setTitle(const string &s) {
