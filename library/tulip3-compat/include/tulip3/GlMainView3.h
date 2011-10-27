@@ -49,7 +49,7 @@ namespace tlp3 {
  * This class provide an abstract view with OpenGl rendering and overview
  * To do this rendering GlMainView3 class is use
  */
-class TLP_QT_SCOPE GlMainView3 : public tlp::AbstractView {
+class TLP3_COMPAT_SCOPE GlMainView3 : public tlp::AbstractView {
 
   Q_OBJECT
 
