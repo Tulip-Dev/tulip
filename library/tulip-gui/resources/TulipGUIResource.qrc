@@ -4,19 +4,20 @@
     </qresource>
     <qresource prefix="/tulip/gui/ui">
         <file>arrowdown.png</file>
-	<file>arrowup.png</file>
+        <file>arrowup.png</file>
         <file>btn_26.png</file>
         <file>btn_26_hover.png</file>
         <file>btn_26_pressed.png</file>
         <file>combobox_arrow.png</file>
-	<file>darkclosebutton.png</file>
-	<file>darkminimizebutton.png</file>
-	<file>down_arrow-black.png</file>
-	<file>down_arrow-white.png</file>
-	<file>editclear.png</file>
-	<file>lightclosebutton.png</file>
-	<file>lightminimizebutton.png</file>
+        <file>darkclosebutton.png</file>
+        <file>darkminimizebutton.png</file>
+        <file>down_arrow-black.png</file>
+        <file>down_arrow-white.png</file>
+        <file>editclear.png</file>
+        <file>lightclosebutton.png</file>
+        <file>lightminimizebutton.png</file>
         <file>list_bullet_arrow.png</file>
-	<file>right_arrow-black.png</file>
+        <file>right_arrow-black.png</file>
+        <file>process-working.png</file>
     </qresource>
 </RCC>
