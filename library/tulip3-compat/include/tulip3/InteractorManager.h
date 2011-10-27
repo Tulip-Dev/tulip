@@ -42,7 +42,7 @@ namespace tlp3 {
  *
  * Interactor plugins manager
  */
-class TLP_QT_SCOPE InteractorManager {
+class TLP3_COMPAT_SCOPE InteractorManager {
 
 public:
 
