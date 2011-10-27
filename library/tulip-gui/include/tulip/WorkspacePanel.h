@@ -24,12 +24,14 @@
 #include <tulip/DataSet.h>
 #include <tulip/SimplePluginProgress.h>
 
+class QGraphicsObject;
+class QPropertyAnimation;
+
 namespace Ui {
 class WorkspacePanel;
 }
 
 namespace tlp {
-
 class Graph;
 class View;
 class Interactor;
@@ -39,11 +41,14 @@ class TLP_QT_SCOPE WorkspacePanel : public QWidget, public tlp::SimplePluginProg
   Q_PROPERTY(tlp::Graph* graph READ graph WRITE setGraph)
 
   Q_PROPERTY(bool progressMode READ isProgressMode WRITE toggleProgressMode)
-  bool _progressMode;
 
   Ui::WorkspacePanel* _ui;
   tlp::Graph* _graph;
   tlp::View* _view;
+
+  QGraphicsObject* _progressItem;
+  QPropertyAnimation* _progressFadeIn;
+
 
 public:
   explicit WorkspacePanel(tlp::Graph* graph, const QString& viewName="", const tlp::DataSet& state=tlp::DataSet(), QWidget* parent=0);
@@ -54,18 +59,18 @@ public:
   bool isProgressMode() const;
 
 public slots:
+  void toggleProgressMode(bool p);
+
   void setGraph(tlp::Graph* graph);
   void setView(const QString& viewName, const tlp::DataSet& state=tlp::DataSet());
-  void toggleProgressMode(bool p);
+  void setCurrentInteractor(tlp::Interactor*);
 
 protected slots:
   void interactorActionTriggered();
-  void internalSetView(const QString&,const tlp::DataSet&);
-  void internalSetCurrentInteractor(tlp::Interactor*);
-  void viewSceneRectChanged(const QRectF&);
 
 protected:
   void progress_handler(int step, int max_step);
+  void refreshInteractorsToolbar();
 };
 
 }

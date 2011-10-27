@@ -30,8 +30,9 @@ View::View()
 }
 
 View::~View() {
-  foreach(Interactor* i, _interactors)
-  delete i;
+  foreach(Interactor* i, _interactors) {
+    delete i;
+  }
 }
 
 QList<Interactor*> View::interactors() const {

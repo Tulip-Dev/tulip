@@ -81,6 +81,7 @@ SET(SRCS
   TulipWorkspace.cpp
   WorkspacePanel.cpp
   Interactor.cpp
+  ProcessingAnimationItem.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -152,6 +153,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/GLInteractor.h
   ../include/tulip/WorkspacePanel.h
   ../include/tulip/TulipWorkspace.h
+  ../include/tulip/ProcessingAnimationItem.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

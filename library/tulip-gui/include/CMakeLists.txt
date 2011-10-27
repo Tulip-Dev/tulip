@@ -76,6 +76,7 @@ INSTALL(FILES
   tulip/AbstractView.h
   tulip/Interactor.h
   tulip/InteractorComposite.h
+  tulip/ProcessingAnimationItem.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

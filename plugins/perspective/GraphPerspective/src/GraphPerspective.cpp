@@ -28,6 +28,7 @@
 #include <QtCore/QDebug>
 #include <tulip/WorkspacePanel.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/ColorProperty.h>
 
 using namespace tlp;
 
