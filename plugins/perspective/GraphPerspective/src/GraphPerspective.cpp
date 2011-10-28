@@ -24,12 +24,6 @@
 #include "GraphHierarchiesModel.h"
 #include <tulip/Graph.h>
 
-// FIXME: remove me
-#include <QtCore/QDebug>
-#include <tulip/WorkspacePanel.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/ColorProperty.h>
-
 using namespace tlp;
 
 GraphPerspective::GraphPerspective(PerspectiveContext &c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)) {
