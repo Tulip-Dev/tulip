@@ -64,7 +64,7 @@ WorkspacePanel::WorkspacePanel(tlp::Graph* graph, const QString& viewName, const
 
   QString selectedViewName = viewName;
 
-  if (!ViewLister::pluginExists(selectedViewName))
+  if (!ViewLister::pluginExists(selectedViewName.toStdString()))
     selectedViewName = "Node Link Diagram view"; // Always fall back to a Node link diagram view
 
   setView(selectedViewName,state);
@@ -77,8 +77,9 @@ WorkspacePanel::~WorkspacePanel() {
 View* WorkspacePanel::view() const {
   return _view;
 }
-void WorkspacePanel::setView(const QString &viewName,const tlp::DataSet& state) {
-  if (!ViewLister::pluginExists(viewName.toStdString()))
+
+void WorkspacePanel::setView(const QString &name,const tlp::DataSet& state) {
+  if (!ViewLister::pluginExists(name.toStdString()))
     return;
 
   if (_view != NULL) {
@@ -100,6 +101,8 @@ void WorkspacePanel::setView(const QString &viewName,const tlp::DataSet& state) 
   _view->setInteractors(compatibleInteractors);
   _view->graphicsView()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
   layout()->addWidget(_view->graphicsView());
+  refreshInteractorsToolbar();
+  setCurrentInteractor(compatibleInteractors[0]);
 }
 
 tlp::Graph* WorkspacePanel::graph() const {
@@ -112,7 +115,6 @@ void WorkspacePanel::setGraph(tlp::Graph *graph) {
 
 void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
   assert(i);
-
   view()->setCurrentInteractor(i);
   _ui->currentInteractorButton->setText(i->action()->text());
   _ui->currentInteractorButton->setIcon(i->action()->icon());
@@ -159,6 +161,7 @@ void WorkspacePanel::progress_handler(int,int) {
 }
 
 void WorkspacePanel::refreshInteractorsToolbar() {
+  QList<Interactor*> compatibleInteractors = _view->interactors();
   delete _ui->interactorsFrame->layout();
   bool interactorsUiShown = compatibleInteractors.size() > 0;
   _ui->currentInteractorButton->setVisible(interactorsUiShown);
@@ -181,5 +184,6 @@ void WorkspacePanel::refreshInteractorsToolbar() {
       connect(i->action(),SIGNAL(triggered()),this,SLOT(interactorActionTriggered()));
     }
     _ui->interactorsFrame->setLayout(interactorsLayout);
-    internalSetCurrentInteractor(compatibleInteractors[0]);
+    setCurrentInteractor(compatibleInteractors[0]);
   }
+}
