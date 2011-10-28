@@ -63,8 +63,10 @@ WorkspacePanel::WorkspacePanel(tlp::Graph* graph, const QString& viewName, const
   _ui->setupUi(this);
 
   QString selectedViewName = viewName;
+
   if (!ViewLister::pluginExists(selectedViewName))
     selectedViewName = "Node Link Diagram view"; // Always fall back to a Node link diagram view
+
   setView(selectedViewName,state);
 }
 
@@ -152,6 +154,7 @@ void WorkspacePanel::toggleProgressMode(bool p) {
 void WorkspacePanel::progress_handler(int,int) {
   if (!isProgressMode())
     toggleProgressMode(true);
+
   QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
@@ -177,6 +180,6 @@ void WorkspacePanel::refreshInteractorsToolbar() {
       connect(button,SIGNAL(clicked()),i->action(),SLOT(trigger()));
       connect(i->action(),SIGNAL(triggered()),this,SLOT(interactorActionTriggered()));
     }
-  _ui->interactorsFrame->setLayout(interactorsLayout);
-  internalSetCurrentInteractor(compatibleInteractors[0]);
-}
+    _ui->interactorsFrame->setLayout(interactorsLayout);
+    internalSetCurrentInteractor(compatibleInteractors[0]);
+  }
