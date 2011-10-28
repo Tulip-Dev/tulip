@@ -82,6 +82,7 @@ SET(SRCS
   WorkspacePanel.cpp
   Interactor.cpp
   ProcessingAnimationItem.cpp
+  Workspace.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -103,6 +104,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/SimpleStringsListSelectionWidget.ui
   ../designer/SizeEditor.ui
   ../designer/WorkspacePanel.ui
+  ../designer/Workspace.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -154,6 +156,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/WorkspacePanel.h
   ../include/tulip/TulipWorkspace.h
   ../include/tulip/ProcessingAnimationItem.h
+  ../include/tulip/Workspace.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

@@ -19,5 +19,11 @@
         <file>list_bullet_arrow.png</file>
         <file>right_arrow-black.png</file>
         <file>process-working.png</file>
+        <file>previous.png</file>
+        <file>next.png</file>
+        <file>expose.png</file>
+        <file>full_screen.png</file>
+        <file>grid_screen.png</file>
+        <file>split_screen.png</file>
     </qresource>
 </RCC>

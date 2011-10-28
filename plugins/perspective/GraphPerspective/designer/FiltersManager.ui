@@ -35,7 +35,10 @@
      <property name="styleSheet">
       <string notr="true">#filtersListContents {
 background-color: white;
-border: 1px solid &quot;#C9C9C9&quot;;
+border-top: 1px solid &quot;#C9C9C9&quot;;
+border-left: 1px solid &quot;#C9C9C9&quot;;
+border-right: 0px;
+border-bottom: 1px solid black;
 }</string>
      </property>
      <property name="frameShape">
@@ -50,7 +53,7 @@ border: 1px solid &quot;#C9C9C9&quot;;
         <x>0</x>
         <y>0</y>
         <width>386</width>
-        <height>243</height>
+        <height>250</height>
        </rect>
       </property>
      </widget>
@@ -59,12 +62,47 @@ border: 1px solid &quot;#C9C9C9&quot;;
    <item>
     <widget class="QFrame" name="controlsFrame">
      <property name="styleSheet">
-      <string notr="true">#controlsFrame {
+      <string notr="true">/*#controlsFrame {
 background-color: white;
 border-top: 0px;
 border-bottom: 1px solid &quot;#C9C9C9&quot;;
 border-left: 1px solid &quot;#C9C9C9&quot;;
-border-right: 1px solid &quot;#C9C9C9&quot;;
+border-right: 0px;
+}*/
+* {
+color: white;
+font: bold 11px;
+}
+
+#controlsFrame {
+border-top: 1px solid rgba(117,117,117,255);
+border-bottom: 1px solid rgba(117,117,117,255);
+border-right: 1px solid rgba(117,117,117,255);
+border-left: 0px;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(75,75,75),
+stop:1 rgb(60, 60, 60));
+}
+
+QPushButton {
+border: 0px;
+border-image: none;
+}
+
+QPushButton:hover {
+border: 0px;
+border-image: none;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(85,85,85),
+stop:1 rgb(70, 70, 70));
+}
+
+QPushButton:pressed, .QPushButton:checked {
+border: 0px;
+border-image: none;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(65,65,65),
+stop:1 rgb(50, 50, 50));
 }</string>
      </property>
      <property name="frameShape">
@@ -98,7 +136,7 @@ border-right: 1px solid &quot;#C9C9C9&quot;;
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>32</height>
+          <height>24</height>
          </size>
         </property>
         <property name="toolTip">
