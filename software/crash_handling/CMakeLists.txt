@@ -29,7 +29,11 @@ ELSEIF(MINGW)
   TARGET_LINK_LIBRARIES(crash_handling imagehlp)
 
   IF(HAVE_BFD)
-    TARGET_LINK_LIBRARIES(crash_handling bfd intl iberty)
+    TARGET_LINK_LIBRARIES(crash_handling bfd iberty)
+	# don't need to link against libintl when using MinGW 4.4
+	IF(GCXX_VERSION VERSION_GREATER 4.5 OR GCXX_VERSION VERSION_EQUAL 4.5)
+		TARGET_LINK_LIBRARIES(crash_handling intl)
+	ENDIF()	
   ENDIF(HAVE_BFD)
 
 ELSEIF(MSVC)

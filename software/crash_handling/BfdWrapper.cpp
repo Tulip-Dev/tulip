@@ -149,8 +149,6 @@ BfdWrapper::BfdWrapper(const char *dsoName) :
     return;
   }
 
-  abfd->flags |= BFD_DECOMPRESS;
-
   if (!bfd_check_format(abfd, bfd_object)) {
     std::cerr << "Can't open file " << bfd_get_filename(abfd) << std::endl;
     bfd_close(abfd);
