@@ -234,7 +234,7 @@ GLfloat* buildCurvePoints (const vector<Coord> &vertices,
 }
 
 static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const Coord &pAfter,
-                            float size, int inversion, vector<Coord> &result, bool lastPoint = false) {
+                            float size, int inversion, vector<Coord> &result, bool lastPoint = false, bool twoPointsCurve=false) {
 
   Coord u = pBefore - pCurrent;
   Coord v = pAfter - pCurrent;
@@ -296,7 +296,7 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
 
     Coord vectUnit(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);
 
-    if(angleOk && !(newSize>u.norm() || newSize>v.norm() || fabs(angle-M_PI)<1E-3)) {
+    if(angleOk && !twoPointsCurve && !(newSize>u.norm() || newSize>v.norm() || fabs(angle-M_PI)<1E-3)) {
       if ((xu^xv)[2] > 0) {
         result.push_back(pCurrent + bi_xu_xv*newSize*inversion);
         result.push_back(pCurrent - vectUnit*size*inversion);
@@ -327,23 +327,24 @@ void buildCurvePoints (const vector<Coord> &vertices,
                        vector<Coord> &result) {
 
   int inversion=1;
+  bool twoPointsCurve=(vertices.size()==2);
 
   if (startN != vertices[0]) {
-    inversion = computeExtrusion(startN, vertices[0], vertices[1], sizes[0], inversion, result);
+    inversion = computeExtrusion(startN, vertices[0], vertices[1], sizes[0], inversion, result,false,twoPointsCurve);
   }
   else {
-    inversion = computeExtrusion(vertices[0] - (vertices[1] - vertices[0]), vertices[0], vertices[1], sizes[0], inversion, result);
+    inversion = computeExtrusion(vertices[0] - (vertices[1] - vertices[0]), vertices[0], vertices[1], sizes[0], inversion, result,false,twoPointsCurve);
   }
 
   for(unsigned int i=1; i< vertices.size() - 1; ++i) {
-    inversion = computeExtrusion(vertices[i-1], vertices[i], vertices[i+1], sizes[i], inversion, result);
+    inversion = computeExtrusion(vertices[i-1], vertices[i], vertices[i+1], sizes[i], inversion, result,false,twoPointsCurve);
   }
 
   if (endN != vertices[vertices.size()-1]) {
-    inversion = computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], endN, sizes[sizes.size() - 1], inversion, result, true);
+    inversion = computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], endN, sizes[sizes.size() - 1], inversion, result, true,twoPointsCurve);
   }
   else {
-    inversion = computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], vertices[vertices.size()-1] + (vertices[vertices.size()-1] - vertices[vertices.size()-2]), sizes[sizes.size() - 1], inversion, result, true);
+    inversion = computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], vertices[vertices.size()-1] + (vertices[vertices.size()-1] - vertices[vertices.size()-2]), sizes[sizes.size() - 1], inversion, result, true,twoPointsCurve);
   }
 }
 //==============================================
