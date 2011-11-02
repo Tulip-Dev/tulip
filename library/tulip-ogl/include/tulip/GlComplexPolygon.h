@@ -43,7 +43,7 @@
 namespace tlp {
 
 typedef struct {
-  GLdouble x, y, z, r, g, b, a;
+	GLdouble x, y, z, r, g, b, a;
 } VERTEX;
 
 void CALLBACK beginCallback(GLenum which, GLvoid *polygonData);
@@ -102,193 +102,198 @@ void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VE
  */
 class TLP_GL_SCOPE GlComplexPolygon : public GlSimpleEntity {
 
-  friend void CALLBACK beginCallback(GLenum which, GLvoid *polygonData);
-  friend void CALLBACK errorCallback(GLenum errorCode);
-  friend void CALLBACK endCallback(GLvoid *polygonData);
-  friend void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData);
-  friend void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut, GLvoid *polygonData);
+	friend void CALLBACK beginCallback(GLenum which, GLvoid *polygonData);
+	friend void CALLBACK errorCallback(GLenum errorCode);
+	friend void CALLBACK endCallback(GLvoid *polygonData);
+	friend void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData);
+	friend void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut, GLvoid *polygonData);
 
 public:
-  /**
-   * Default constructor
-   * \warning don't use this constructor if you want to create a complex polygon, see others constructors
-   */
-  GlComplexPolygon() {}
-  /**
-   * Constructor with a vector of coords, a fill color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves)
-   * and a textureName if you want
-   */
-  GlComplexPolygon(const std::vector<Coord> &coords,Color fcolor,int polygonEdgesType=0,const std::string &textureName = "");
-  /**
-   *  Constructor with a vector of coords, a fill color, an outline color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves)
-   * and a textureName if you want
-   */
-  GlComplexPolygon(const std::vector<Coord> &coords,Color fcolor,Color ocolor,int polygonEdgesType=0,const std::string &textureName = "");
-  /**
-   * Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill color,
-   * a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
-   */
-  GlComplexPolygon(const std::vector<std::vector<Coord> >&coords,Color fcolor,int polygonEdgesType=0,const std::string &textureName = "");
-  /**
-   * Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill color, an outline color
-   * a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
-   */
-  GlComplexPolygon(const std::vector<std::vector<Coord> >&coords,Color fcolor,Color ocolor,int polygonEdgesType=0,const std::string &textureName = "");
+	/**
+	 * Default constructor
+	 */
+	GlComplexPolygon() {}
 
-  virtual ~GlComplexPolygon() {}
+	/**
+	 * Constructor with a vector of coords, a fill color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves)
+	 * and a textureName if you want
+	 */
+	GlComplexPolygon(const std::vector<Coord> &coords,Color fcolor,int polygonEdgesType=0,const std::string &textureName = "");
 
-  /**
-   * Draw the complex polygon
-   */
-  virtual void draw(float lod,Camera *camera);
+	/**
+	 *  Constructor with a vector of coords, a fill color, an outline color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves)
+	 * and a textureName if you want
+	 */
+	GlComplexPolygon(const std::vector<Coord> &coords,Color fcolor,Color ocolor,int polygonEdgesType=0,const std::string &textureName = "");
 
-  /**
-   * Set if the polygon is outlined or not
-   */
-  void setOutlineMode(const bool);
+	/**
+	 * Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill color,
+	 * a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
+	 */
+	GlComplexPolygon(const std::vector<std::vector<Coord> >&coords,Color fcolor,int polygonEdgesType=0,const std::string &textureName = "");
 
-  /**
-   * Set size of outline
-   */
-  void setOutlineSize(double size);
+	/**
+	 * Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill color, an outline color
+	 * a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
+	 */
+	GlComplexPolygon(const std::vector<std::vector<Coord> >&coords,Color fcolor,Color ocolor,int polygonEdgesType=0,const std::string &textureName = "");
 
-  /**
-   * Get fill color of GlComplexPolygon
-   */
-  Color getFillColor() {
-    return fillColor;
-  }
+	virtual ~GlComplexPolygon() {}
 
-  /**
-   * Set fill color of GlComplexPolygon
-   */
-  void setFillColor(const Color &color) {
-    fillColor=color;
-  }
+	/**
+	 * Define polygon according to one contour and compute tesselation.
+	 *
+	 * Use this method if your polygon is defined by one contour.
+	 * This method resets any previously defined contours and recompute tesselation.
+	 *
+	 * \param contour a vector of tlp::Coord defining the contour.
+	 * \param polygonEdgesType an integer determining the shape of the polygon edges (0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves)
+	 */
+	void setPolygonContour(const std::vector<Coord> &contour, int polygonEdgesType=0);
 
-  /**
-   * Get outline color of GlComplexPolygon
-   */
-  Color getOutlineColor() {
-    return outlineColor;
-  }
+	/**
+	 * Define polygon according to several contours and compute tesselation.
+	 *
+	 * Use this method if your polygon is defined by several contours (e.g. polygon with holes).
+	 * This method resets any previously defined contours and recompute tesselation.
+	 *
+	 * \param contours a vector of vector of tlp::Coord defining the different contours.
+	 * \param polygonEdgesType an integer determining the shape of the polygon edges (0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves)
+	 */
+	void setPolygonContours(const std::vector<std::vector<Coord> > &contours, int polygonEdgesType=0);
 
-  /**
-   * Set outline color of GlComplexPolygon
-   */
-  void setOutlineColor(const Color &color) {
-    outlineColor=color;
-  }
+	/**
+	 * Returns the contours defining the polygon.
+	 */
+	const std::vector<std::vector<Coord> > &getPolygonContours() const;
 
-  /**
-   * Get the texture zoom factor
-   */
-  float getTextureZoom() {
-    return textureZoom;
-  }
+	/**
+	 * Draw the complex polygon
+	 */
+	virtual void draw(float lod,Camera *camera);
 
-  /**
-   * Get the textureName
-   */
-  std::string getTextureName();
+	/**
+	 * Set if the polygon is outlined or not
+	 */
+	void setOutlineMode(const bool);
 
-  /**
-   * Set the textureName
-   */
-  void setTextureName(const std::string &name);
+	/**
+	 * Set size of outline
+	 */
+	void setOutlineSize(double size);
 
-  /**
-   * Set the texture zoom factor
-   * By default if you have a polygon with a size bigger than (1,1,0) the texture will be repeated
-   * If you want to don't have this texture repeat you have to modify texture zoom
-   * For example if you have a polygon with coords ((0,0,0),(5,0,0),(5,5,0),(0,5,0)) you can set texture zoom to 5. to don't have texture repeat
-   */
-  void setTextureZoom(float zoom) {
-    textureZoom=zoom;
-    runTesselation();
-  }
+	/**
+	 * Get fill color of GlComplexPolygon
+	 */
+	Color getFillColor() {
+		return fillColor;
+	}
 
-  /**
-   * Draw a thick (textured) border around the polygon.
-   * The graphic card must support geometry shader to make this feature to work.
-   * The position parameter determines the way the border is drawn (depending on the polygon points ordering):
-   *     - 0 : the border is drawn outside (or inside) the polygon
-   *     - 1 : the border is centered on the polygon outline
-   *     - 2 : the border is drawn inside (or outside) the polygon
-   *
-   * The texCoordFactor parameter determines the way the texture is applied : if < 1, the texture will be expanded and > 1, the texture will be compressed
-   * The polygonId parameter determines on which contour of the polygon, the border will be applied
-   */
-  void activateQuadBorder(const float borderWidth, const Color &color, const std::string &texture = "", const int position = 1,
-                          const float texCoordFactor = 1.f, const int polygonId = 0);
+	/**
+	 * Set fill color of GlComplexPolygon
+	 */
+	void setFillColor(const Color &color) {
+		fillColor=color;
+	}
 
-  /**
-   * Desactivate the textured quad border
-   */
-  void desactivateQuadBorder(const int polygonId = 0);
+	/**
+	 * Get outline color of GlComplexPolygon
+	 */
+	Color getOutlineColor() {
+		return outlineColor;
+	}
 
-  /**
-   * Translate entity
-   */
-  virtual void translate(const Coord& mouvement);
+	/**
+	 * Set outline color of GlComplexPolygon
+	 */
+	void setOutlineColor(const Color &color) {
+		outlineColor=color;
+	}
 
-  /**
-   * Function to export data and type in XML
-   */
-  virtual void getXML(xmlNodePtr rootNode);
+	/**
+	 * Get the texture zoom factor
+	 */
+	float getTextureZoom() {
+		return textureZoom;
+	}
 
-  /**
-   * Function to export data in XML
-   */
-  virtual void getXMLOnlyData(xmlNodePtr rootNode);
+	/**
+	 * Get the textureName
+	 */
+	std::string getTextureName();
 
-  /**
-   * Function to set data with XML
-   */
-  virtual void setWithXML(xmlNodePtr rootNode);
+	/**
+	 * Set the textureName
+	 */
+	void setTextureName(const std::string &name);
+
+	/**
+	 * Set the texture zoom factor
+	 * By default if you have a polygon with a size bigger than (1,1,0) the texture will be repeated
+	 * If you want to don't have this texture repeat you have to modify texture zoom
+	 * For example if you have a polygon with coords ((0,0,0),(5,0,0),(5,5,0),(0,5,0)) you can set texture zoom to 5. to don't have texture repeat
+	 */
+	void setTextureZoom(float zoom) {
+		textureZoom=zoom;
+		runTesselation();
+	}
+
+	/**
+	 * Translate entity
+	 */
+	virtual void translate(const Coord& mouvement);
+
+	/**
+	 * Function to export data and type in XML
+	 */
+	virtual void getXML(xmlNodePtr rootNode);
+
+	/**
+	 * Function to export data in XML
+	 */
+	virtual void getXMLOnlyData(xmlNodePtr rootNode);
+
+	/**
+	 * Function to set data with XML
+	 */
+	virtual void setWithXML(xmlNodePtr rootNode);
 
 
 protected:
 
-  /**
-   * Add a new point in polygon
-   */
-  virtual void addPoint(const Coord& point);
-  /**
-   * Begin a new hole in the polygon
-   */
-  virtual void beginNewHole();
+	/**
+	 * Add a new point in polygon
+	 */
+	virtual void addPoint(const Coord& point);
+	/**
+	 * Begin a new hole in the polygon
+	 */
+	virtual void beginNewHole();
 
-  void runTesselation();
-  void createPolygon(const std::vector<Coord> &coords,int polygonEdgesType);
-  void startPrimitive(GLenum primitive);
-  void endPrimitive();
-  void addVertex(const Coord &vertexCoord, const Vec2f &vertexTexCoord);
-  VERTEX *allocateNewVertex();
+	void runTesselation();
+	void createPolygon(const std::vector<Coord> &coords,int polygonEdgesType);
+	void startPrimitive(GLenum primitive);
+	void endPrimitive();
+	void addVertex(const Coord &vertexCoord, const Vec2f &vertexTexCoord);
+	VERTEX *allocateNewVertex();
 
-  std::vector<std::vector<Coord> > points;
-  std::vector<std::vector<GLfloat> > pointsIdx;
-  std::set<GLenum> primitivesSet;
-  std::map<GLenum, std::vector<Coord> > verticesMap;
-  std::map<GLenum, std::vector<Vec2f> > texCoordsMap;
-  std::map<GLenum, std::vector<int> >startIndicesMap;
-  std::map<GLenum, std::vector<int> >verticesCountMap;
-  std::vector<VERTEX *> allocatedVertices;
-  GLenum currentPrimitive;
-  int nbPrimitiveVertices;
-  int currentVector;
-  bool outlined;
-  Color fillColor;
-  Color outlineColor;
-  double outlineSize;
-  std::string textureName;
-  float textureZoom;
-  std::vector<bool> quadBorderActivated;
-  std::vector<float> quadBorderWidth;
-  std::vector<Color> quadBorderColor;
-  std::vector<std::string> quadBorderTexture;
-  std::vector<int> quadBorderPosition;
-  std::vector<float> quadBorderTexFactor;
+	std::vector<std::vector<Coord> > polygonContours;
+	std::vector<std::vector<Coord> > points;
+	std::set<GLenum> primitivesSet;
+	std::map<GLenum, std::vector<Coord> > verticesMap;
+	std::map<GLenum, std::vector<Vec2f> > texCoordsMap;
+	std::map<GLenum, std::vector<int> > startIndicesMap;
+	std::map<GLenum, std::vector<int> > verticesCountMap;
+	std::vector<VERTEX *> allocatedVertices;
+	GLenum currentPrimitive;
+	int nbPrimitiveVertices;
+	int currentVector;
+	bool outlined;
+	Color fillColor;
+	Color outlineColor;
+	double outlineSize;
+	std::string textureName;
+	float textureZoom;
 };
 /*@}*/
 }
