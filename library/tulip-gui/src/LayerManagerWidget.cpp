@@ -259,6 +259,8 @@ void LayerManagerWidget::applyVisibility() {
     applyVisibility(layerItem,layer->getComposite());
   }
 
+  observedMainWidget->getScene()->getCalculator()->setNeedEntities(true);
+
   observedMainWidget->draw();
   attachMainWidget(observedMainWidget);
 }
