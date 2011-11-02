@@ -23,6 +23,7 @@
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlMainView.h"
+#include "tulip/GlVertexArrayManager.h"
 
 using namespace std;
 
@@ -256,6 +257,8 @@ void LayerManagerWidget::applyVisibility() {
     layer->setVisible(layerItem->checkState(1)==Qt::Checked);
     applyVisibility(layerItem,layer->getComposite());
   }
+
+  observedMainWidget->getScene()->getCalculator()->setNeedEntities(true);
 
   observedMainWidget->draw();
   attachMainWidget(observedMainWidget);
