@@ -13,7 +13,8 @@ template<bool result>
 struct const_condition
 {
 	template<typename A> inline bool operator()(A) { return result; };
-	template<typename A, typename B> inline void operator()(A, B) { return result; };
+//         TODO this was commented because clang sees this as erroneous
+	template<typename A, typename B> inline void operator()(A, B) { /*return result; */};
 };
 
 //! the corresponding typedefs

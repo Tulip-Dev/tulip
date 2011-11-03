@@ -891,7 +891,8 @@ public:
 
 	inline void operator()(void) const
 	{
-		return pGraph->numNodes();
+//              TODO this was commented because clang sees this as erroneous
+// 		return pGraph->numNodes();
 	};
 
 	inline void operator()(__uint32 i)
