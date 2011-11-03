@@ -84,6 +84,12 @@ SmallMultiplesView::SmallMultiplesView()
 SmallMultiplesView::~SmallMultiplesView() {
 }
 
+void SmallMultiplesView::setRenderingParameters(const GlGraphRenderingParameters &parameters) {
+   GlScene *scene = _glMainWidget->getScene();
+   scene->getGlGraphComposite()->setRenderingParameters(parameters);
+   draw();
+}
+
 QWidget *SmallMultiplesView::construct(QWidget *parent) {
   QWidget *centralWidget = AbstractView::construct(parent);
   setCentralWidget(_glMainWidget);

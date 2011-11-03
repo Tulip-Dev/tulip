@@ -20,6 +20,8 @@
 #define SMALLMULTIPLESVIEW_H
 
 #include "tulip/AbstractView.h"
+#include "tulip/GlGraphRenderingParameters.h"
+
 #include <QtCore/QVector>
 class QGraphicsView;
 class QGraphicsItem;
@@ -90,6 +92,7 @@ public:
   virtual ~SmallMultiplesView();
   virtual QWidget *construct(QWidget *parent);
   virtual void setActiveInteractor(Interactor *interactor);
+  void setRenderingParameters(const GlGraphRenderingParameters &parameters);
 
   /**
     * @brief The data method is called to retrieve informations to display items in the overview mode.
