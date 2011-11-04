@@ -281,6 +281,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
   unsigned int startEdgeGlyph = data->getElementSrcAnchorShape()->getEdgeValue(e);
   //Check if the plugin exists.
   startEdgeGlyph = data->extremityGlyphs.get(startEdgeGlyph) != NULL?startEdgeGlyph:UINT_MAX;
+
   unsigned int endEdgeGlyph = data->getElementTgtAnchorShape()->getEdgeValue(e);
   //Check if the plugin exists.
   endEdgeGlyph = data->extremityGlyphs.get(endEdgeGlyph)!=NULL ? endEdgeGlyph:UINT_MAX;
@@ -356,14 +357,12 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
     }
 
     break;
-
   case L3D_BIT + POLYLINESHAPE: {
     glDisable(GL_LIGHTING);
     simpleQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
     glEnable(GL_LIGHTING);
     break;
   }
-
   case BEZIERSHAPE :
   case SPLINESHAPE :
   case CUBICBSPLINE :
@@ -413,7 +412,6 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
     curve->drawCurve(tmp, startColor, endColor, startSize, endSize, nbCurvePoints);
     break;
   }
-
   default:
 
     if (lod > 1000 || lod < -1000) {
@@ -657,7 +655,7 @@ void GlEdge::getColors(GlGraphInputData *data,
 }
 
 
-void GlEdge::getEdgeColor(GlGraphInputData *data,edge e,node source, node target, bool selected,Color &srcCol, Color &tgtCol) {
+void GlEdge::getEdgeColor(GlGraphInputData *data,const edge &e,const node &source,const node &target, bool selected,Color &srcCol, Color &tgtCol) {
   Color selectionColor=data->parameters->getSelectionColor();
 
   if (selected) {
@@ -703,7 +701,7 @@ void GlEdge::getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, cons
   }
 }
 
-void GlEdge::getEdgeAnchor(GlGraphInputData *data,node source,node target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor) {
+void GlEdge::getEdgeAnchor(GlGraphInputData *data,const node &source,const node &target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor) {
   double srcRot = data->getElementRotation()->getNodeValue(source);
   double tgtRot = data->getElementRotation()->getNodeValue(target);
 
@@ -762,8 +760,8 @@ float GlEdge::getEdgeWidthLod(const Coord &edgeCoord,
 }
 
 void GlEdge::displayArrow(GlGraphInputData *data,
-                          edge e,
-                          node source,
+                          const edge &e,
+                          const node &source,
                           const Size& sizeRatio,
                           float edgeSize,
                           const Color &color,
