@@ -31,7 +31,8 @@ class GlGraphInputData;
 /** \brief Visitor to collect boundingBox of all GlEntities
  *
  * Visitor to collect boundingBox of all GlEntities
- * At end, boundingBox member contains the scene boundingBox
+ * At end, boundingBox member contains the scene boundingBox (in 3D coordinates)
+ * This class can be usefull to center the scene in a widget for example
  */
 class TLP_GL_SCOPE GlBoundingBoxSceneVisitor : public GlSceneVisitor {
 
