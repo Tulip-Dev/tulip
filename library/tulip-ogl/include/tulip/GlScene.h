@@ -77,29 +77,30 @@ class TLP_GL_SCOPE GlScene : public Observable {
 
 public:
   /** \brief Constructor
-   * By default GlScene use a GlQuadTreeLODCalculator to compute LOD but you can change this default lod calculator, to do that : put your calculator in constructor parameters
+   * By default GlScene use a GlCPULODCalculator to compute LOD but you can change this default lod calculator, to do that : put your calculator in constructor parameters
+   * Available calculators are : GlCPULODCalculator and GlQuadTreeLODCalculator
    */
   GlScene(GlLODCalculator *calculator=NULL);
 
   ~GlScene();
 
   /**
-   * Init scene's OpenGL parameters
+   * Init scene's OpenGL parameters, this function is call when you do a draw
    */
   void initGlParameters();
 
   /**
-   * Prerender meta nodes
+   * Prerender meta nodes, this function create data structure and render meta nodes to futur use
    */
   void prerenderMetaNodes();
 
   /**
-   * Draw the scene
+   * Draw the scene, this function is the most important function of GlScene. If you want to render a scene into an OpenGL widget : call this function
    */
   void draw();
 
   /**
-   * Center scene
+   * Center scene to have all the visibles entities displayed
    */
   void centerScene();
 
@@ -122,12 +123,13 @@ public:
   void ajustSceneToSize(int width, int height);
 
   /**
-   * Zoom to x,y
+   * Zoom to given x,y screen coordinates
    */
   void zoomXY(int step, const int x, const int y);
 
   /**
-   * Zoom
+   * Zoom to given world coordinate
+   * \warning factor parameter isn't be used
    */
   void zoom(float factor,const Coord& dest);
 
@@ -142,7 +144,10 @@ public:
   void translateCamera(const int x, const int y, const int z);
 
   /**
-   * Rotate camera by (x,y,z)
+   * Rotate camera by (x,y,z) with :
+   *  x : rotation over X axis in degree
+   *  y : rotation over Y axis in degree
+   *  z : rotation over Z axis in degree
    */
   void rotateScene(const int x, const int y, const int z);
 
@@ -171,6 +176,7 @@ public:
 
   /**
    * Set the viewport of the scene with a vector
+   * The viewport must be in many case the size of the widget containing the scene
    */
   void setViewport(Vector<int, 4> &newViewport) {
     viewport=newViewport;
@@ -178,6 +184,7 @@ public:
 
   /**
    * Set the viewport of the scene with 4 int
+   * The viewport must be in many case the size of the widget containing the scene
    */
   void setViewport(int x, int y, int width, int height) {
     viewport[0]=x;
@@ -188,6 +195,7 @@ public:
 
   /**
    * Get the viewport of the scene
+   * The viewport must be in many case the size of the widget containing the scene
    */
   Vector<int, 4> getViewport() {
     return viewport;
@@ -230,6 +238,7 @@ public:
 
   /**
    * Add a layer in the scene
+   * The layer name is contain in the GlLayer object
    */
   void addLayer(GlLayer *layer);
 
@@ -269,6 +278,7 @@ public:
 
   /**
    * Clear layers list
+   * Layers will not be deleted in this function
    */
   void clearLayersList() {
     layersList.clear();
@@ -310,7 +320,7 @@ public:
   }
 
   /**
-   * Return the bouding box of the scene
+   * Return the bouding box of the scene (in 3D coordinates)
    * \warning This bounding box is compute in rendering, so if you add an entity in a layer the bounding box include this entity if a draw is call
    */
   BoundingBox getBoundingBox();
@@ -325,8 +335,9 @@ public:
    */
   void getViewportZoom(int &zoom, int &xDec, int &yDec);
 
-  //************************************************************
-  /* To Remove */
+  /**
+   * This function must be call when you had a glGraphComposite in a layer in the scene
+   */
   void addGlGraphCompositeInfo(GlLayer* layer,GlGraphComposite *glGraphComposite) {
     this->graphLayer=layer;
     this->glGraphComposite=glGraphComposite;
@@ -334,16 +345,33 @@ public:
     if(glGraphComposite)
       lodCalculator->setInputData(glGraphComposite->getInputData());
   }
+
+  /**
+   * Return the current GlGraphComposite used by the scene
+   */
   GlGraphComposite* getGlGraphComposite() {
     return glGraphComposite;
   }
+
+  /**
+   * Return the layer containing the current GlGraphComposite
+   */
   GlLayer* getGraphLayer() {
     return graphLayer;
   }
 
+  /**
+   * At default the most important layer is the layer with name : "main"
+   * This function return the camera of this layer
+   */
   Camera& getCamera() {
     return getLayer("Main")->getCamera();
   }
+
+  /**
+   * At default the most important layer is the layer with name : "main"
+   * This function set the camera of this layer
+   */
   void setCamera(const Camera& camera) {
     getLayer("Main")->setCamera(camera);
   }
