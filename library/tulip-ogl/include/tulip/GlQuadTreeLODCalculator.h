@@ -45,24 +45,56 @@ public:
   GlQuadTreeLODCalculator();
   ~GlQuadTreeLODCalculator();
 
+  /**
+   * Set the SlScene used by this calculator
+   */
   void setScene(GlScene &scene);
 
+  /**
+   * To know if the calculator need to have entities returned by a visitor in GlScene
+   */
   bool needEntities();
+  /**
+   * Set if the calculator need to have entities
+   */
   void setNeedEntities(bool);
 
+  /**
+   * This function is call by GlLODSceneVisitor when a simple entitie is found
+   */
   void addSimpleEntityBoundingBox(GlSimpleEntity * entity,const BoundingBox& bb);
+  /**
+   * This function is call by GlLODSceneVisitor when a node is found
+   */
   void addNodeBoundingBox(unsigned int id,const BoundingBox& bb);
+  /**
+   * This function is call by GlLODSceneVisitor when an edge is found
+   */
   void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb);
 
+  /**
+   * This function compute LOD
+   * See compute function of GlCPULODCalculator for more details
+   * This function do some computation and after call computeFor2DCamera() or computeFor3DCamera()
+   */
   void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
+  /**
+   * Specific function to compute LOD for 3D cameras
+   */
   void computeFor3DCamera(LayerLODUnit *layerLODUnit,const Coord &eye,
                           const Matrix<float, 4> transformMatrix,
                           const Vector<int,4>& globalViewport,
                           const Vector<int,4>& currentViewport);
 
+  /**
+   * Change the input data used by this LOD calculator
+   */
   void setInputData(GlGraphInputData *newInputData);
 
+  /**
+   * Clone the calculator
+   */
   virtual GlLODCalculator *clone() {
     GlQuadTreeLODCalculator *newCalculator=new GlQuadTreeLODCalculator();
     newCalculator->setScene(*glScene);

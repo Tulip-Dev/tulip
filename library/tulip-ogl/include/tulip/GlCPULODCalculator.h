@@ -43,7 +43,9 @@ public:
   GlCPULODCalculator();
   virtual ~GlCPULODCalculator();
   virtual GlLODCalculator *clone() {
-    return new GlCPULODCalculator;
+    GlCPULODCalculator *calculator=new GlCPULODCalculator();
+    calculator->setComputeOutScreenLOD(computeOutScreenLOD);
+    return calculator;
   }
 
   /**
@@ -51,25 +53,25 @@ public:
    */
   virtual void beginNewCamera(Camera* camera);
   /**
-   * Add a bounding box for a simple entity
+   * This function is call by GlLODSceneVisitor when a simple entitie is found
    */
   virtual void addSimpleEntityBoundingBox(GlSimpleEntity * entity, const BoundingBox& bb);
   /**
-   * Add a bounding box for a node
+   * This function is call by GlLODSceneVisitor when a node is found
    */
   virtual void addNodeBoundingBox(unsigned int id,const BoundingBox& bb);
   /**
-   * Add a bounding box for an edge
+   * This function is call by GlLODSceneVisitor when an edge is found
    */
   virtual void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb);
 
   /**
-   * Reserve memory to store nodes LOD
+   * Reserve memory to store nodes LOD, this function is an optimisation function
    */
   virtual void reserveMemoryForNodes(unsigned int numberOfNodes);
 
   /**
-   * Reserve memory to store edges LOD
+   * Reserve memory to store edges LOD, this function is an optimisation function
    */
   virtual void reserveMemoryForEdges(unsigned int numberOfEdges);
 
@@ -97,6 +99,13 @@ public:
     computeEdgesLOD=state;
   }
 
+  /**
+   * Set if the LOD is computed for out screen entities
+   */
+  void setComputeOutScreenLOD(bool state) {
+    computeOutScreenLOD=state;
+  }
+
 
 protected:
 
@@ -105,6 +114,7 @@ protected:
   virtual void computeFor2DCamera(LayerLODUnit *layerLODUnit,const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
   bool computeEdgesLOD;
+  bool computeOutScreenLOD;
 
   BoundingBox sceneBoundingBox;
 
