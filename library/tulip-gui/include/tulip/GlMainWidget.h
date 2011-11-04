@@ -193,21 +193,20 @@ public:
                         tlp::GlLayer* layer=NULL);
 
   /**
-           * Deprecated, see others selectGlEntities functions.
-           */
+   * Deprecated, see others selectGlEntities functions.
+   */
   _DEPRECATED bool selectGlEntities(const int x, const int y,
                                     const int width, const int height,
                                     std::vector<tlp::GlEntity *>
                                     &pickedEntities,
                                     tlp::GlLayer* layer=NULL);
   /**
-           * Deprecated, see others selectGlEntities functions.
-           */
+   * Deprecated, see others selectGlEntities functions.
+   */
   _DEPRECATED bool selectGlEntities(const int x, const int y,
                                     std::vector<tlp::GlEntity *>
                                     &pickedEntities,
                                     tlp::GlLayer* layer=NULL);
-
 
   /**
    * Grab the image of this widget
@@ -288,16 +287,17 @@ public slots:
    */
   void redraw();
 
+
   void closeEvent(QCloseEvent *e);
 
   /**
-    * @brief Convinience function that call center function on the current scene and draw the view.
-    * Same thing than
-    * @code
-    * getScene()->centerScene();
-    * draw();
-    * @endcode
-    **/
+   * @brief Convinience function that call center function on the current scene and draw the view.
+   * Same thing than
+   * @code
+   * getScene()->centerScene();
+   * draw();
+   * @endcode
+  **/
   void centerScene();
 
 protected slots:
@@ -307,13 +307,33 @@ protected slots:
   }
 
 signals:
+  /**
+   * This signal is emit when the GlMainWidget will be deleted
+   */
   void closing(GlMainWidget *, QCloseEvent *);
+
+  /**
+   * This signal is here for compatibility with old code
+   * This signal is emit when viewDrawn is emit
+   */
   void graphRedrawn(GlMainWidget *glWidget,bool graphChanged);
+  /**
+   * This signal is emit when GlMainWidget::redraw() is call
+   */
   void viewRedrawn(GlMainWidget *glWidget);
+  /**
+   * This signal is emit when GlMainWidget::draw() is call
+   */
   void viewDrawn(GlMainWidget *glWidget,bool graphChanged);
+
   void glResized(int w,int h);
 
 public :
+
+  /**
+   * This function return the first QGLWidget created
+   * This function is use to share OpenGL context
+   */
   static QGLWidget* getFirstQGLWidget();
 
 private :
