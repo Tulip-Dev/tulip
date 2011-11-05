@@ -357,12 +357,14 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
     }
 
     break;
+
   case L3D_BIT + POLYLINESHAPE: {
     glDisable(GL_LIGHTING);
     simpleQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
     glEnable(GL_LIGHTING);
     break;
   }
+
   case BEZIERSHAPE :
   case SPLINESHAPE :
   case CUBICBSPLINE :
@@ -412,6 +414,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
     curve->drawCurve(tmp, startColor, endColor, startSize, endSize, nbCurvePoints);
     break;
   }
+
   default:
 
     if (lod > 1000 || lod < -1000) {
