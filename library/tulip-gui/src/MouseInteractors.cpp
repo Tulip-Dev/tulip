@@ -64,7 +64,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 
     if(gesture->gesture(Qt::PinchGesture)) {
       QPinchGesture* pinch = (QPinchGesture*)gesture->gesture(Qt::PinchGesture);
-      Camera& camera = g->getScene()->getCamera();
+      Camera& camera = g->getScene()->getGraphCamera();
 
       //store the camera scale factor when starting the gesture
       if(pinch->state() == Qt::GestureStarted) {

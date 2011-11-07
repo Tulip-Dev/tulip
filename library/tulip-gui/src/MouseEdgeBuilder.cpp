@@ -88,7 +88,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
         }
         else {
           Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
-          bends.push_back(glMainWidget->getScene()->getCamera().screenTo3DWorld(point));
+          bends.push_back(glMainWidget->getScene()->getGraphCamera().screenTo3DWorld(point));
           glMainWidget->redraw();
         }
       }
@@ -119,7 +119,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     }
     else {
       Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
-      point = glMainWidget->getScene()->getCamera().screenTo3DWorld(point);
+      point = glMainWidget->getScene()->getGraphCamera().screenTo3DWorld(point);
       curPos.set(point[0], point[1], point[2]);
       glMainWidget->redraw();
     }
@@ -134,7 +134,7 @@ bool MouseEdgeBuilder::draw(GlMainWidget *glMainWidget) {
   if (!started) return false;
 
   glDisable(GL_STENCIL_TEST);
-  glMainWidget->getScene()->getCamera().initGl();
+  glMainWidget->getScene()->getGraphCamera().initGl();
   vector<Coord> lineVertices;
   lineVertices.push_back(startPos);
   lineVertices.insert(lineVertices.end(), bends.begin(), bends.end());

@@ -158,7 +158,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
 
-  Camera &camera = scene.getCamera();
+  Camera &camera = scene.getGraphCamera();
   glFrameBuf->bind();
 
   if (centerScene) {

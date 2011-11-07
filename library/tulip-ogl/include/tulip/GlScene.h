@@ -365,16 +365,18 @@ public:
    * At default the most important layer is the layer with name : "main"
    * This function return the camera of this layer
    */
-  Camera& getCamera() {
-    return getLayer("Main")->getCamera();
+  Camera& getGraphCamera() {
+    assert(graphLayer!=NULL);
+    return graphLayer->getCamera();
   }
 
   /**
    * At default the most important layer is the layer with name : "main"
    * This function set the camera of this layer
    */
-  void setCamera(const Camera& camera) {
-    getLayer("Main")->setCamera(camera);
+  void setGraphCamera(const Camera& camera) {
+    assert(graphLayer!=NULL);
+    graphLayer->setCamera(camera);
   }
 
   /**
