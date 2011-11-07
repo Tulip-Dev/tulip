@@ -35,8 +35,10 @@ class SGHierarchyWidget;
 class ElementPropertiesWidget;
 class RenderingParametersDialog;
 class LayerManagerWidget;
-class GridOptionsWidget;
 class GlMainWidget;
+}
+namespace tlp3 {
+class GridOptionsWidget;
 }
 
 using namespace tlp;

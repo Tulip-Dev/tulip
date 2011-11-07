@@ -24,16 +24,19 @@
 #include "ui_AugmentedDisplayDialog.h"
 
 namespace tlp {
+  class Graph;
+}
 
-class Graph;
+namespace tlp3 {
 
-class TLP_QT_SCOPE AugmentedDisplayDialog : public QDialog, public Ui::AugmentedDisplayDialogData {
+
+class TLP3_COMPAT_SCOPE AugmentedDisplayDialog : public QDialog, public Ui::AugmentedDisplayDialogData {
 
   Q_OBJECT
 
 public:
 
-  AugmentedDisplayDialog(QWidget* parent,Graph *graph,const std::string &viewType);
+  AugmentedDisplayDialog(QWidget* parent,tlp::Graph *graph,const std::string &viewType);
 
   void getRemovedList(std::vector<std::string> &toRemove);
 

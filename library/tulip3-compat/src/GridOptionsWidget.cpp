@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GridOptionsWidget.h"
+#include "tulip3/GridOptionsWidget.h"
 
 #include <QtGui/qpushbutton.h>
 #include <QtGui/qcheckbox.h>
@@ -32,7 +32,7 @@
 using namespace tlp;
 using namespace std;
 
-namespace tlp {
+namespace tlp3 {
 GridOptionsWidget::GridOptionsWidget(QWidget *parent)
   : QDialog(parent), glMainWidget(0) {
   setupUi(this);

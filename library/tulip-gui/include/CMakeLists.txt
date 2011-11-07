@@ -1,5 +1,4 @@
 INSTALL(FILES
-  tulip/AugmentedDisplayDialog.h
   tulip/ColorScaleConfigDialog.h
   tulip/ColorScaleWidget.h
   tulip/CopyPropertyDialog.h
@@ -20,7 +19,6 @@ INSTALL(FILES
   tulip/GraphicsWidgetBase.h
   tulip/GraphPropertiesSelectionWidget.h
   tulip/GraphPropertiesTableWidget.h
-  tulip/GridOptionsWidget.h
   tulip/GWOverviewWidget.h
   tulip/ItemsListWidget.h
   tulip/LayerManagerWidget.h

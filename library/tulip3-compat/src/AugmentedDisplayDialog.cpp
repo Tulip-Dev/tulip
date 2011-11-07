@@ -16,13 +16,14 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/AugmentedDisplayDialog.h"
+#include "tulip3/AugmentedDisplayDialog.h"
 
 #include <tulip/Graph.h>
 
 using namespace std;
+using namespace tlp;
 
-namespace tlp {
+namespace tlp3 {
 
 AugmentedDisplayDialog::AugmentedDisplayDialog(QWidget* parent,Graph *graph,const string &viewType) : QDialog(parent) {
   setupUi(this);

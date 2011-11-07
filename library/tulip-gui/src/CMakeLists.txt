@@ -3,7 +3,6 @@ IF(ENABLE_RENDERING_TIME_DISPLAY)
 ENDIF(ENABLE_RENDERING_TIME_DISPLAY)
 
 SET(SRCS
-  AugmentedDisplayDialog.cpp
   ColorScaleConfigDialog.cpp
   ColorScaleWidget.cpp
   CopyPropertyDialog.cpp
@@ -23,7 +22,6 @@ SET(SRCS
   GraphPropertiesSelectionWidget.cpp
   GraphPropertiesTableWidget.cpp
   GraphState.cpp
-  GridOptionsWidget.cpp
   GWOverviewWidget.cpp
   ItemsListWidget.cpp
   LayerManagerWidget.cpp
@@ -86,7 +84,6 @@ SET(SRCS
 )
 
 QT4_WRAP_UI(UI_HEADERS
-  ../designer/AugmentedDisplayDialog.ui
   ../designer/ColorScaleConfigDialog.ui
   ../designer/CopyPropertyDialog.ui
   ../designer/CSVGraphMappingConfigurationWidget.ui
@@ -94,8 +91,6 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/CSVImportWizard.ui
   ../designer/CSVParserConfigurationWidget.ui
   ../designer/DoubleStringsListSelectionWidget.ui
-  ../designer/GridOptions.ui
-  ../designer/GWOverviewWidget.ui
   ../designer/LayerManagerWidget.ui
   ../designer/PropertyCreationDialog.ui
   ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui
@@ -108,7 +103,6 @@ QT4_WRAP_UI(UI_HEADERS
 )
 
 QT4_WRAP_CPP(MOC_SRCS
-  ../include/tulip/AugmentedDisplayDialog.h
   ../include/tulip/ColorScaleConfigDialog.h
   ../include/tulip/CopyPropertyDialog.h
   ../include/tulip/CSVGraphMappingConfigurationWidget.h
@@ -120,7 +114,6 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/GlMainView.h
   ../include/tulip/GlMainWidget.h
   ../include/tulip/GraphPropertiesTableWidget.h
-  ../include/tulip/GridOptionsWidget.h
   ../include/tulip/GWOverviewWidget.h
   ../include/tulip/ItemsListWidget.h
   ../include/tulip/LayerManagerWidget.h

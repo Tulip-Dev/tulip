@@ -41,7 +41,7 @@ public :
    */
   static void createView(const std::string &name,Graph *graph,DataSet dataSet,QWidget *parent,std::string *createdViewName, View3 **createdView, QWidget **createdWidget);
   /**
-   * Create a Node Link Diagram Component view with given graph, given dataSet and set view's widget parent
+   * Create a Node Link Diagram view (Tulip 3) view with given graph, given dataSet and set view's widget parent
    * return created view and created widget in createdView and createdWidget
    */
   static void createMainView(Graph *graph,DataSet dataSet,QWidget *parent,View3 **createdView, QWidget **createdWidget);

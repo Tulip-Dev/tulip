@@ -1,0 +1,93 @@
+#ifndef _Tulip_NODELINKDIAGRAMCOMPONENT3_H
+#define _Tulip_NODELINKDIAGRAMCOMPONENT3_H
+
+#include "GlMainView3.h"
+
+
+namespace tlp {
+
+class GlMetaNodeRenderer;
+
+}
+
+namespace tlp3 {
+/** \brief Main view of old Tulip
+ *
+ * This class provide a graph view based to nodes and links
+ * Rendering is do with OpenGl
+ */
+class TLP3_COMPAT_SCOPE NodeLinkDiagramComponent3 : public GlMainView3 {
+
+  Q_OBJECT
+
+public:
+
+  NodeLinkDiagramComponent3();
+  virtual ~NodeLinkDiagramComponent3();
+
+  virtual QWidget *construct(QWidget *parent);
+
+  virtual void setData(Graph *graph,DataSet dataSet);
+  virtual void getData(Graph **graph,DataSet *dataSet);
+
+  virtual std::list<std::pair<QWidget *,std::string> > getConfigurationWidget();
+
+  virtual void specificEventFilter(QObject *object,QEvent *event);
+  virtual void buildContextMenu(QObject* object, QContextMenuEvent* event, QMenu* contextMenu);
+  virtual void computeContextMenuAction(QAction *action);
+
+  void emitRequestChangeGraph(Graph *graph) {
+    emit requestChangeGraph(this,graph);
+  }
+
+protected :
+
+  QMenu *viewMenu;
+  QMenu *optionsMenu;
+  QAction *actionTooltips;
+  QAction *actionsGridOptions;
+  QAction *actionZOrderingOptions;
+  QAction *actionAntialiasingOptions;
+  QAction *augmentedDisplayDialogAction;
+  QAction* addRemoveAction;
+  QAction* selectAction;
+  QAction* deleteAction;
+  QAction* goAction;
+  QAction* ungroupAction;
+  QAction* propAction;
+  bool isNode;
+  bool qtMetaNode;
+  int itemId;
+
+  tlp3::GridOptionsWidget *gridOptionsWidget;
+  RenderingParametersDialog *renderingParametersDialog;
+  LayerManagerWidget *layerManagerWidget;
+
+  std::map<std::string,DataSet> algorithmInfoDataSet;
+
+  GlMetaNodeRenderer *currentMetaNodeRenderer;
+
+  void checkAlgorithmResult();
+
+protected slots:
+  void showDialog(QAction*);
+  void gridOptions();
+
+public slots:
+  void centerView();
+  void drawAfterRenderingParametersChange();
+  virtual void draw();
+  virtual void refresh();
+  virtual void init();
+  void changeGraph(Graph *graph);
+  void setGraph(Graph *graph,bool initView);
+
+  void elementSelectedSlot(unsigned int id,bool isNode) {
+    emit elementSelected(id,isNode);
+  }
+
+};
+
+}
+
+#endif

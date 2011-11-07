@@ -20,6 +20,9 @@ INSTALL(FILES
   tulip3/Tlp3Tools.h
   tulip3/InteractorManager.h
   tulip3/GlMainView3.h
+  tulip3/NodeLinkDiagramComponent3.h
+  tulip3/AugmentedDisplayDialog.h
+  tulip3/GridOptionsWidget.h
 DESTINATION ${TulipIncludeInstallDir}/tulip3/
 COMPONENT tulip3_compat
 )
