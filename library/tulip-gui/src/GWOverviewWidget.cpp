@@ -110,10 +110,10 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
                              0);
       Coord middle = (upperLeftCorner + lowerRightCorner) / 2.f;
       middle[2] = 0.;
-      middle = _observedView->getScene()->getCamera().screenTo3DWorld(middle);
-      Camera cover  = _view->getScene()->getCamera();
-      Camera cview  = _observedView->getScene()->getCamera();
-      middle = _view->getScene()->getCamera().worldTo2DScreen(middle);
+      middle = _observedView->getScene()->getGraphCamera().screenTo3DWorld(middle);
+      Camera cover  = _view->getScene()->getGraphCamera();
+      Camera cview  = _observedView->getScene()->getGraphCamera();
+      middle = _view->getScene()->getGraphCamera().worldTo2DScreen(middle);
       //      cerr << "Square center: " << Coord(x, y, z) << endl;
       float dx, dy;
       int resultViewport;
@@ -175,7 +175,7 @@ void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {
       // If we have an observed view
       if(_initialCamera && !graphChanged) {
         // Check if the camera changed. If no, only redraw overview
-        Camera currentCamera=_observedView->getScene()->getCamera();
+        Camera currentCamera=_observedView->getScene()->getGraphCamera();
 
         if((currentCamera.getUp()==_initialCamera->getUp())) {
           if((currentCamera.getCenter()-currentCamera.getEyes())==(_initialCamera->getCenter()-_initialCamera->getEyes())) {
@@ -189,15 +189,15 @@ void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {
       _view->getScene()->centerScene();
 
       // Init camera and background color
-      _initialCamera = &_view->getScene()->getCamera();
-      Camera cam = _observedView->getScene()->getCamera();
+      _initialCamera = &_view->getScene()->getGraphCamera();
+      Camera cam = _observedView->getScene()->getGraphCamera();
       cam.setScene(_initialCamera->getScene());
       cam.setZoomFactor(1);
       cam.setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
       cam.setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
       cam.setSceneRadius(_initialCamera->getSceneRadius());
-      _view->getScene()->setCamera(cam);
-      _initialCamera = &_view->getScene()->getCamera();
+      _view->getScene()->setGraphCamera(cam);
+      _initialCamera = &_view->getScene()->getGraphCamera();
       _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
 
       // The overview use the observed view inputData but we don't want to see inside metanodes in overview, so :
@@ -300,7 +300,7 @@ void RectPosition::draw(GlMainWidget*) {
   points[3] = Coord(viewport[0]              , viewport[1] + viewport[3], 0.0);
 
   for (int i=0; i<4; ++i)
-    points[i] = _observedView->getScene()->getCamera().screenTo3DWorld(points[i]);
+    points[i] = _observedView->getScene()->getGraphCamera().screenTo3DWorld(points[i]);
 
   //_view->makeCurrent();
   viewport = _view->getScene()->getViewport();
@@ -312,7 +312,7 @@ void RectPosition::draw(GlMainWidget*) {
   points2[3] = Coord(viewport[0]              , viewport[1] + viewport[3], 0.0);
 
   for (int i=0; i<4; ++i)
-    points2[i] = _view->getScene()->getCamera().screenTo3DWorld(points2[i]);
+    points2[i] = _view->getScene()->getGraphCamera().screenTo3DWorld(points2[i]);
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   glDisable(GL_LIGHTING);
