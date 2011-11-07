@@ -102,8 +102,8 @@ public:
 	
 	tlp::GlLayer* getGraphLayer();
 	
-	tlp::Camera& getCamera();
+  tlp::Camera& getGraphCamera();
 	
-	void setCamera(const tlp::Camera& camera);
+  void setGraphCamera(const tlp::Camera& camera);
 };
 };
