@@ -40,4 +40,4 @@ tlp::DataSet NodeLinkDiagramComponent::state() const {
   return getGlMainWidget()->getData();
 }
 
-VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0");
+VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0")
