@@ -92,6 +92,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/CSVParserConfigurationWidget.ui
   ../designer/DoubleStringsListSelectionWidget.ui
   ../designer/LayerManagerWidget.ui
+  ../designer/GWOverviewWidget.ui
   ../designer/PropertyCreationDialog.ui
   ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui
   ../designer/RenderingParametersDialog.ui
