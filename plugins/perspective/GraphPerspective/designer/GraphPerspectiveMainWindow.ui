@@ -348,48 +348,6 @@ QToolButton:pressed {
         </spacer>
        </item>
        <item>
-        <widget class="Line" name="line_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="graphsHierarchyManagerButton">
-         <property name="minimumSize">
-          <size>
-           <width>75</width>
-           <height>75</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>75</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>:/tulip/graphperspective/icons/database.svg</normaloff>:/tulip/graphperspective/icons/database.svg</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="shortcut">
-          <string>Ctrl+H</string>
-         </property>
-         <property name="toolButtonStyle">
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="Line" name="line">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -569,7 +527,7 @@ QToolButton:pressed {
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="workspace" native="true">
+             <widget class="tlp::Workspace" name="workspace" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -943,6 +901,12 @@ QToolButton:pressed {
    <class>FiltersManager</class>
    <extends>QWidget</extends>
    <header>FiltersManager.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tlp::Workspace</class>
+   <extends>QWidget</extends>
+   <header location="global">tulip/Workspace.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -38,32 +38,31 @@ class Interactor;
 
 class TLP_QT_SCOPE WorkspacePanel : public QWidget, public tlp::SimplePluginProgress {
   Q_OBJECT
-  Q_PROPERTY(tlp::Graph* graph READ graph WRITE setGraph)
-
   Q_PROPERTY(bool progressMode READ isProgressMode WRITE toggleProgressMode)
 
   Ui::WorkspacePanel* _ui;
-  tlp::Graph* _graph;
   tlp::View* _view;
+  QString _viewName;
 
   QGraphicsObject* _progressItem;
   QPropertyAnimation* _progressFadeIn;
 
-
 public:
-  explicit WorkspacePanel(tlp::Graph* graph, const QString& viewName="", const tlp::DataSet& state=tlp::DataSet(), QWidget* parent=0);
+  explicit WorkspacePanel(tlp::View* view, const QString& viewName, QWidget* parent=0);
   virtual ~WorkspacePanel();
 
   tlp::View* view() const;
-  tlp::Graph* graph() const;
+  QString viewName() const;
   bool isProgressMode() const;
 
 public slots:
   void toggleProgressMode(bool p);
 
-  void setGraph(tlp::Graph* graph);
-  void setView(const QString& viewName, const tlp::DataSet& state=tlp::DataSet());
+  void setView(tlp::View* view, const QString& viewName);
   void setCurrentInteractor(tlp::Interactor*);
+
+signals:
+  void closeNeeded();
 
 protected slots:
   void interactorActionTriggered();

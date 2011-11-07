@@ -20,22 +20,48 @@
 #define WORKSPACE_H
 
 #include <QtGui/QWidget>
+#include <tulip/tulipconf.h>
+#include <tulip/DataSet.h>
 
 namespace Ui {
 class Workspace;
 }
 
-class Workspace: public QWidget {
+namespace tlp {
+class View;
+class WorkspacePanel;
+class Graph;
+
+class TLP_QT_SCOPE Workspace: public QWidget {
   Q_OBJECT
 
   Ui::Workspace* _ui;
+  QList<tlp::WorkspacePanel*> _panels;
+
 public:
   explicit Workspace(QWidget *parent = 0);
+  virtual ~Workspace();
 
-signals:
+  tlp::View* addView(const QString& viewName, tlp::Graph* g, const tlp::DataSet& data=tlp::DataSet());
+  QList<tlp::View*> views() const;
 
 public slots:
+  void delView(tlp::View* view);
+
+  void switchToFullPage();
+  void switchToSplitPage();
+  void switchToGridPage();
+  void switchToExposePage();
+  void showViewSwitcher();
+
+  void nextPage();
+  void previousPage();
+
+protected slots:
+  void viewNeedsDraw();
+  void panelClosed();
 
 };
+}
 
 #endif // WORKSPACE_H

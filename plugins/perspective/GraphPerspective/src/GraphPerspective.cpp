@@ -24,9 +24,6 @@
 #include "GraphHierarchiesModel.h"
 #include <tulip/Graph.h>
 
-// FIXME: remove me
-#include <tulip/WorkspacePanel.h>
-
 using namespace tlp;
 
 GraphPerspective::GraphPerspective(PerspectiveContext &c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)) {
@@ -52,12 +49,6 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
   }
-
-  _ui->workspace->setLayout(new QVBoxLayout);
-
-  DataSet data;
-  tlp::Graph* g = tlp::importGraph("Grid Approximation",data);
-  _ui->workspace->layout()->addWidget(new WorkspacePanel(g));
 }
 
 void GraphPerspective::refreshDockExpandControls() {

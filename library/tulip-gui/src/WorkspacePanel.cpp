@@ -47,7 +47,7 @@ public:
     return QRectF();
   }
 
-  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
     painter->setPen(QColor(255,255,255));
     painter->setBrush(QColor(0,0,0,70));
     painter->drawRect(scene()->sceneRect());
@@ -58,16 +58,10 @@ public:
 
 // ========================
 
-WorkspacePanel::WorkspacePanel(tlp::Graph* graph, const QString& viewName, const tlp::DataSet& state, QWidget *parent)
-  : QWidget(parent), _ui(new Ui::WorkspacePanel), _graph(graph), _view(NULL), _progressItem(NULL) {
+WorkspacePanel::WorkspacePanel(tlp::View* view, const QString& viewName, QWidget *parent)
+  : QWidget(parent), _ui(new Ui::WorkspacePanel), _view(NULL), _viewName(viewName), _progressItem(NULL) {
   _ui->setupUi(this);
-
-  QString selectedViewName = viewName;
-
-  if (!ViewLister::pluginExists(selectedViewName.toStdString()))
-    selectedViewName = "Node Link Diagram view"; // Always fall back to a Node link diagram view
-
-  setView(selectedViewName,state);
+  setView(view,viewName);
 }
 
 WorkspacePanel::~WorkspacePanel() {
@@ -78,23 +72,23 @@ View* WorkspacePanel::view() const {
   return _view;
 }
 
-void WorkspacePanel::setView(const QString &name,const tlp::DataSet& state) {
-  if (!ViewLister::pluginExists(name.toStdString()))
-    return;
+QString WorkspacePanel::viewName() const {
+  return _viewName;
+}
+
+void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
+  assert(view != NULL);
 
   if (_view != NULL) {
     _view->graphicsView()->deleteLater();
     delete _view;
   }
 
-  _view = ViewLister::getPluginObject(name.toStdString(),NULL);
-  assert(_view);
-  _view->setupUi();
-  _view->setGraph(graph());
-  _view->setState(state);
+  _view = view;
+  _viewName = viewName;
 
   QList<Interactor*> compatibleInteractors;
-  QList<std::string> interactorNames = InteractorLister::compatibleInteractors(name.toStdString());
+  QList<std::string> interactorNames = InteractorLister::compatibleInteractors(viewName.toStdString());
   foreach(std::string name,interactorNames) {
     compatibleInteractors << InteractorLister::getPluginObject(name,NULL);
   }
@@ -103,14 +97,6 @@ void WorkspacePanel::setView(const QString &name,const tlp::DataSet& state) {
   layout()->addWidget(_view->graphicsView());
   refreshInteractorsToolbar();
   setCurrentInteractor(compatibleInteractors[0]);
-}
-
-tlp::Graph* WorkspacePanel::graph() const {
-  return _graph;
-}
-void WorkspacePanel::setGraph(tlp::Graph *graph) {
-  assert(graph);
-  _graph = graph;
 }
 
 void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {

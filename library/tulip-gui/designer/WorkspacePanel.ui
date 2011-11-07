@@ -206,30 +206,6 @@ background-color: #A9A9A9;
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="moveButton">
-        <property name="toolTip">
-         <string>Move</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="minimizeButton">
-        <property name="toolTip">
-         <string>Minimize</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/tulip/gui/ui/lightminimizebutton.png</normaloff>:/tulip/gui/ui/lightminimizebutton.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QToolButton" name="closeButton">
         <property name="toolTip">
          <string>Close</string>
