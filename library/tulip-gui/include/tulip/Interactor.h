@@ -136,7 +136,6 @@ protected:
 class TLP_QT_SCOPE InteractorContext {
 };
 
-//typedef StaticPluginLister<Interactor, InteractorContext*> InteractorLister;
 class TLP_QT_SCOPE InteractorLister: public StaticPluginLister<Interactor, InteractorContext*> {
   static QMap<std::string,QList<std::string> > _compatibilityMap;
 public:
@@ -152,8 +151,5 @@ template class TLP_QT_SCOPE PluginLister<Interactor,InteractorContext*>;
 
 #define INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,G) POINTERCONTEXTPLUGINFACTORY(Interactor,C,N,A,D,I,R,G)
 #define INTERACTORPLUGIN(C,N,A,D,I,R) INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,"")
-
-//#define INTERACTORPLUGINVIEWEXTENSION(CN,CNT,BCNT,VCN,A,D,I,R)
-//#define INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(CN,CNT,BCNT,VCN,A,D,I,R,P)
 
 #endif

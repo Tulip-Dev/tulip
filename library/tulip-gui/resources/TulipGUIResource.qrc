@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/tulip/gui/icons">
         <file>logo32x32.png</file>
+        <file>list-add.svg</file>
     </qresource>
     <qresource prefix="/tulip/gui/ui">
         <file>arrowdown.png</file>

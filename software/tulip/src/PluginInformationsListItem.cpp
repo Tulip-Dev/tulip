@@ -75,7 +75,7 @@ void PluginInformationsListItem::expand() {
     _ui->installButton->setText(trUtf8("Upgrade to ") + _pluginInformations->latestVersion());
   }
   else
-    _ui->installButton->setIcon(QIcon(":/tulip/app/icons/list-add.svg"));
+    _ui->installButton->setIcon(QIcon(":/tulip/gui/icons/list-add.svg"));
 
   _ui->removeButton->setIcon(QIcon(":/tulip/app/icons/package-purge.svg"));
 }

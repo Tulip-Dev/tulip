@@ -872,7 +872,7 @@ p, li { white-space: pre-wrap; }
                 </property>
                 <property name="icon">
                  <iconset>
-                  <normaloff>:/tulip/app/icons/list-add.svg</normaloff>:/tulip/app/icons/list-add.svg</iconset>
+                  <normaloff>:/tulip/gui/icons/list-add.svg</normaloff>:/tulip/gui/icons/list-add.svg</iconset>
                 </property>
                </widget>
               </item>
