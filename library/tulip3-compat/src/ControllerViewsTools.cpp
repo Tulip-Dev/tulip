@@ -30,7 +30,7 @@ using namespace std;
 
 namespace tlp {
 
-static const string mainViewName="Node Link Diagram view";
+static const string mainViewName="Node Link Diagram view (Tulip 3)";
 
 QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
 

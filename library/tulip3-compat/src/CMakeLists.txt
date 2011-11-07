@@ -18,6 +18,9 @@ SET(SRCS
   DataSetDialog.cpp
   InteractorManager.cpp
   GlMainView3.cpp
+  NodeLinkDiagramComponent3.cpp
+  AugmentedDisplayDialog.cpp
+  GridOptionsWidget.cpp
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -36,6 +39,9 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip3/QtProgress.h
   ../include/tulip3/PluginProgressWidget.h
   ../include/tulip3/GlMainView3.h
+  ../include/tulip3/NodeLinkDiagramComponent3.h
+  ../include/tulip3/AugmentedDisplayDialog.h
+  ../include/tulip3/GridOptionsWidget.h
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -48,6 +54,8 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/SnapshotDialog.ui
   ../designer/PluginProgressWidget.ui
   ../designer/Tulip.ui
+  ../designer/AugmentedDisplayDialog.ui
+  ../designer/GridOptions.ui
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipResource.qrc)

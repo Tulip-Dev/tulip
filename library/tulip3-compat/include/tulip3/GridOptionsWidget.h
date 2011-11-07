@@ -25,7 +25,9 @@
 #include <tulip/RenderingParametersDialog.h>
 #include <tulip/GlGrid.h>
 
-namespace tlp {
+using namespace tlp;
+
+namespace tlp3 {
 /** \brief Widget for displaying a grid on the graph.
  *
  * This class is a widget accessible from the interface of Tulip Software.
@@ -40,13 +42,13 @@ namespace tlp {
  *  - Display Dimensions : Allows the user to choose on which dimensions the grid will be displayed.
  *
  */
-class TLP_QT_SCOPE GridOptionsWidget : public QDialog, public Ui::GridOptionsData {
+class TLP3_COMPAT_SCOPE GridOptionsWidget : public QDialog, public Ui::GridOptionsData {
 
   Q_OBJECT
 
 protected:
-  GlMainWidget *glMainWidget; /**< The considered GlMainWidget */
-  RenderingParametersDialog *paramDialog; /**< The considered RenderingParametersDialog */
+  tlp::GlMainWidget *glMainWidget; /**< The considered GlMainWidget */
+  tlp::RenderingParametersDialog *paramDialog; /**< The considered RenderingParametersDialog */
   tlp::GlGrid *grid; /**< The considered GlADGrid */
 
 public:

@@ -922,7 +922,7 @@ void MainController::buildMenu() {
 }
 //**********************************************************************
 View3* MainController::initMainView(DataSet dataSet) {
-  View3* newView=createView("Node Link Diagram view",getCurrentGraph(),dataSet);
+  View3* newView=createView("Node Link Diagram view (Tulip 3)",getCurrentGraph(),dataSet);
   return newView;
 }
 //**********************************************************************
