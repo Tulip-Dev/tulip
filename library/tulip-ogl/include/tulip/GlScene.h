@@ -348,17 +348,6 @@ public:
   void glGraphCompositeRemoved(GlLayer *layer,GlGraphComposite *composite);
 
   /**
-   * This function must be call when you had a glGraphComposite in a layer in the scene
-   */
-  /*void addGlGraphCompositeInfo(GlLayer* layer,GlGraphComposite *glGraphComposite) {
-    this->graphLayer=layer;
-    this->glGraphComposite=glGraphComposite;
-
-    if(glGraphComposite)
-      lodCalculator->setInputData(glGraphComposite->getInputData());
-  }*/
-
-  /**
    * Return the current GlGraphComposite used by the scene
    */
   GlGraphComposite* getGlGraphComposite() {

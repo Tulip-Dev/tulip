@@ -996,9 +996,11 @@ void GlScene::glGraphCompositeAdded(GlLayer* layer,GlGraphComposite *glGraphComp
 }
 //========================================================================================================
 void GlScene::glGraphCompositeRemoved(GlLayer* layer,GlGraphComposite *glGraphComposite) {
-  this->graphLayer=NULL;
-  this->glGraphComposite=NULL;
-
+  if(this->glGraphComposite==glGraphComposite){
+    assert(graphLayer==layer);
+    graphLayer=NULL;
+    this->glGraphComposite=NULL;
+  }
 }
 //========================================================================================================
 bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int h, GlLayer* layer,
