@@ -97,7 +97,6 @@ void GlOffscreenRenderer::addGraphCompositeToScene(GlGraphComposite *graphCompos
   GlVertexArrayManager *vertexArrayManager=graphComposite->getInputData()->getGlVertexArrayManager();
   vertexArrayManager->setHaveToComputeAll(true);
   mainLayer->addGlEntity(graphComposite, "graph");
-  scene.addGlGraphCompositeInfo(mainLayer, graphComposite);
 }
 
 void GlOffscreenRenderer::clearScene() {

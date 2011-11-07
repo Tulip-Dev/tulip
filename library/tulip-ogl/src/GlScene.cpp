@@ -987,6 +987,20 @@ void GlScene::rotateScene(const int x, const int y, const int z) {
   }
 }
 //========================================================================================================
+void GlScene::glGraphCompositeAdded(GlLayer* layer,GlGraphComposite *glGraphComposite) {
+  this->graphLayer=layer;
+  this->glGraphComposite=glGraphComposite;
+
+  if(glGraphComposite)
+    lodCalculator->setInputData(glGraphComposite->getInputData());
+}
+//========================================================================================================
+void GlScene::glGraphCompositeRemoved(GlLayer* layer,GlGraphComposite *glGraphComposite) {
+  this->graphLayer=NULL;
+  this->glGraphComposite=NULL;
+
+}
+//========================================================================================================
 bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int h, GlLayer* layer,
                              vector<unsigned long>& selectedEntities) {
   if(w==0)
@@ -1413,7 +1427,7 @@ void GlScene::setWithXML(string &in, Graph *graph) {
   }
 
   getLayer("Main")->addGlEntity(glGraphComposite,"graph");
-  addGlGraphCompositeInfo(getLayer("Main"),glGraphComposite);
+  //addGlGraphCompositeInfo(getLayer("Main"),glGraphComposite);
 }
 
 void GlScene::setViewportZoom(int zoom,int xDec, int yDec) {

@@ -336,15 +336,27 @@ public:
   void getViewportZoom(int &zoom, int &xDec, int &yDec);
 
   /**
+   * This function is automaticaly call when a GlGraphComposite is added in a layer in the scene
+   * You don't have to call this function
+   */
+  void glGraphCompositeAdded(GlLayer *layer,GlGraphComposite *composite);
+
+  /**
+   * This function is automaticaly call when a GlGraphComposite is added in a layer in the scene
+   * You don't have to call this function
+   */
+  void glGraphCompositeRemoved(GlLayer *layer,GlGraphComposite *composite);
+
+  /**
    * This function must be call when you had a glGraphComposite in a layer in the scene
    */
-  void addGlGraphCompositeInfo(GlLayer* layer,GlGraphComposite *glGraphComposite) {
+  /*void addGlGraphCompositeInfo(GlLayer* layer,GlGraphComposite *glGraphComposite) {
     this->graphLayer=layer;
     this->glGraphComposite=glGraphComposite;
 
     if(glGraphComposite)
       lodCalculator->setInputData(glGraphComposite->getInputData());
-  }
+  }*/
 
   /**
    * Return the current GlGraphComposite used by the scene
