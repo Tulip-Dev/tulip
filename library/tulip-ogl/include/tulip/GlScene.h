@@ -362,7 +362,7 @@ public:
   }
 
   /**
-   * At default the most important layer is the layer with name : "main"
+   * At default the most important layer is the layer where the graph is visualized
    * This function return the camera of this layer
    */
   Camera& getGraphCamera() {
@@ -371,7 +371,7 @@ public:
   }
 
   /**
-   * At default the most important layer is the layer with name : "main"
+   * At default the most important layer is the layer where the graph is visualized
    * This function set the camera of this layer
    */
   void setGraphCamera(const Camera& camera) {
