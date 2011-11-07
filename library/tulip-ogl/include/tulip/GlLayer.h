@@ -26,6 +26,7 @@
 #include <tulip/GlEntity.h>
 #include <tulip/Camera.h>
 #include <tulip/GlComposite.h>
+#include <tulip/GlGraphComposite.h>
 
 namespace tlp {
 
@@ -190,6 +191,18 @@ public:
    * Set the layer's data with XML
    */
   void setWithXML(xmlNodePtr rootNode);
+
+  /**
+   * This function is automaticaly call when a GlGraphComposite is added in this layer
+   * You don't have to call this function
+   */
+  void glGraphCompositeAdded(GlGraphComposite *composite);
+
+  /**
+   * This function is automaticaly call when a GlGraphComposite is removed in this layer
+   * You don't have to call this function
+   */
+  void glGraphCompositeRemoved(GlGraphComposite *composite);
 
 private:
 

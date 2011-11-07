@@ -114,19 +114,35 @@ void GlComposite::addGlEntity(GlSimpleEntity *entity, const string &key) {
         (*it)->getScene()->notifyModifyLayer((*it)->getName(),(*it));
     }
   }
+
+  GlGraphComposite *graphComposite=dynamic_cast<GlGraphComposite *>(entity);
+  if(graphComposite){
+    for(std::vector<GlLayer *>::iterator it=layerParents.begin();it!=layerParents.end();++it){
+      (*it)->glGraphCompositeAdded(graphComposite);
+    }
+  }
+
 }
 //============================================================
 void GlComposite::deleteGlEntity(const string &key,bool informTheEntity) {
   if(elements.count(key)==0)
     return;
 
+  GlSimpleEntity *entity=elements[key];
+
   if(informTheEntity) {
-    GlSimpleEntity *entity=elements[key];
 
     if(informTheEntity)
       for(vector<GlLayer*>::iterator it=layerParents.begin(); it!=layerParents.end(); ++it) {
         entity->removeLayerParent(*it);
       }
+  }
+
+  GlGraphComposite *glGraphComposite=dynamic_cast<GlGraphComposite *>(entity);
+  if(glGraphComposite){
+    for(vector<GlLayer*>::iterator it=layerParents.begin(); it!=layerParents.end(); ++it) {
+      (*it)->glGraphCompositeRemoved(glGraphComposite);
+    }
   }
 
   _sortedElements.remove(elements[key]);

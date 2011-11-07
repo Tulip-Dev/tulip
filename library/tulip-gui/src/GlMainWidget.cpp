@@ -150,7 +150,6 @@ void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
     scene.addLayer(layer);
     scene.addLayer(foregroundLayer);
     GlGraphComposite* graphComposite=new GlGraphComposite(graph);
-    scene.addGlGraphCompositeInfo(scene.getLayer("Main"),graphComposite);
     scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
     scene.centerScene();
   }
@@ -243,8 +242,6 @@ void GlMainWidget::setGraph(Graph *graph) {
     graphComposite->getInputData()->getGlVertexArrayManager()->setInputData(graphComposite->getInputData());
   }
 
-  scene.addGlGraphCompositeInfo(scene.getLayer("Main"),graphComposite);
-  scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
   delete oldGraphComposite;
 }
 //==================================================
