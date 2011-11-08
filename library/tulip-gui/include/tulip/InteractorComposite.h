@@ -52,7 +52,7 @@ public:
   When subclassing InteractorComposite, you should push your components in the construct() method (take care of the order they are pushed in).
   Once the setView() method is called (after construct()), the init() method will be run on every components.
   */
-class InteractorComposite : public tlp::Interactor {
+class TLP_QT_SCOPE InteractorComposite : public tlp::Interactor {
   Q_OBJECT
   QAction* _action;
   tlp::View* _view;
