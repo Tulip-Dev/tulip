@@ -52,16 +52,8 @@ background-color: #505050;
          </property>
          <property name="styleSheet">
           <string notr="true">* {
-color: white;
+color: black;
 font: bold 11px;
-}
-
-#startupMessage {
-border-top: 1px solid rgba(117,117,117,255);
-border-bottom: 1px solid rgba(117,117,117,255);
-border-right: 1px solid rgba(117,117,117,255);
-border-left: 0px;
-background-color: rgb(50,50,50);
 }</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -79,80 +71,58 @@ background-color: rgb(50,50,50);
            </spacer>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="startupLayout">
-            <property name="spacing">
-             <number>6</number>
+           <widget class="QFrame" name="startupMainFrame">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <item>
-             <spacer name="startupSpacer4">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_3">
-              <item>
-               <widget class="QLabel" name="label">
-                <property name="minimumSize">
-                 <size>
-                  <width>64</width>
-                  <height>64</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>64</width>
-                  <height>64</height>
-                 </size>
-                </property>
-                <property name="pixmap">
-                 <pixmap>:/tulip/gui/icons/list-add.svg</pixmap>
-                </property>
-                <property name="scaledContents">
-                 <bool>true</bool>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QLabel" name="startupMessageLabel">
-              <property name="text">
-               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+            <layout class="QVBoxLayout" name="startupLayout">
+             <property name="spacing">
+              <number>20</number>
+             </property>
+             <property name="margin">
+              <number>10</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>64</width>
+                 <height>64</height>
+                </size>
+               </property>
+               <property name="pixmap">
+                <pixmap resource="../resources/TulipGUIResource.qrc">:/tulip/gui/icons/list-add.svg</pixmap>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="startupMessageLabel">
+               <property name="text">
+                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'DejaVu Sans'; font-weight:600; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;There is currently no view loaded into the workspace.&lt;br /&gt;Create a new panel from the hierarchy manager popup menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="startupSpacer3">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </item>
           <item>
            <spacer name="startupSpacer1">
@@ -372,7 +342,7 @@ stop:1 rgb(50, 50, 50));
          <string>Expose</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/expose.png</normaloff>:/tulip/gui/ui/expose.png</iconset>
         </property>
         <property name="shortcut">
@@ -417,7 +387,7 @@ stop:1 rgb(50, 50, 50));
          <string>Previous</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/previous.png</normaloff>:/tulip/gui/ui/previous.png</iconset>
         </property>
         <property name="shortcut">
@@ -452,7 +422,7 @@ stop:1 rgb(50, 50, 50));
          <string/>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/next.png</normaloff>:/tulip/gui/ui/next.png</iconset>
         </property>
         <property name="shortcut">
@@ -497,7 +467,7 @@ stop:1 rgb(50, 50, 50));
          <string/>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/full_screen.png</normaloff>:/tulip/gui/ui/full_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -535,7 +505,7 @@ stop:1 rgb(50, 50, 50));
          <string/>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/split_screen.png</normaloff>:/tulip/gui/ui/split_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -573,7 +543,7 @@ stop:1 rgb(50, 50, 50));
          <string/>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/grid_screen.png</normaloff>:/tulip/gui/ui/grid_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -595,7 +565,9 @@ stop:1 rgb(50, 50, 50));
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>exposeButton</sender>
