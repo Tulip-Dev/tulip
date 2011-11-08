@@ -20,27 +20,27 @@
 #define _Tulip_MOUSESHOWELEMENTINFOS_H
 
 #include <QtGui/QMouseEvent>
+#include <QtGui/QWidget>
 
 #include <tulip/InteractorComposite.h>
-
 #include "tulip/GlMainWidget.h"
 #include "tulip/NodeLinkDiagramComponent.h"
-#include <QtGui/QWidget>
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
 
 namespace tlp {
-class Graph;
 
 /**
  * We define a specific interactor to show element graph infos in eltProperties
  */
 class TLP_QT_SCOPE MouseShowElementInfos : public InteractorComponent {
 public:
-  ~MouseShowElementInfos() {}
-  bool eventFilter(QObject *widget, QEvent *e);
-  InteractorComponent *clone();
+  virtual void init();
+  virtual bool eventFilter(QObject*, QEvent*);
+
+  void setView(tlp::View* view);
+  tlp::View* view() const;
 };
 
 }

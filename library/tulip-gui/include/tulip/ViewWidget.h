@@ -37,7 +37,7 @@ namespace tlp {
 
   @note When creating a ViewWidget, you should overload setupWidget instead of setupUi. If you still want to implement setupUi, you must call the ViewWidget::setupUi() method first.
   */
-class ViewWidget : public tlp::View {
+class TLP_QT_SCOPE ViewWidget : public tlp::View {
   Q_OBJECT
 
   QSet<QGraphicsItem *> _items;
