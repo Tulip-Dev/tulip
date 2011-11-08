@@ -24,7 +24,7 @@
 #include "ui_AugmentedDisplayDialog.h"
 
 namespace tlp {
-  class Graph;
+class Graph;
 }
 
 namespace tlp3 {

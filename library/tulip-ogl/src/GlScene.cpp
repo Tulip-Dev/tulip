@@ -996,7 +996,7 @@ void GlScene::glGraphCompositeAdded(GlLayer* layer,GlGraphComposite *glGraphComp
 }
 //========================================================================================================
 void GlScene::glGraphCompositeRemoved(GlLayer* layer,GlGraphComposite *glGraphComposite) {
-  if(this->glGraphComposite==glGraphComposite){
+  if(this->glGraphComposite==glGraphComposite) {
     assert(graphLayer==layer);
     graphLayer=NULL;
     this->glGraphComposite=NULL;

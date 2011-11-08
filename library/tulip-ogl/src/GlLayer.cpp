@@ -160,11 +160,11 @@ void GlLayer::setWithXML(xmlNodePtr rootNode) {
 
 }
 
-void GlLayer::glGraphCompositeAdded(GlGraphComposite *composite){
+void GlLayer::glGraphCompositeAdded(GlGraphComposite *composite) {
   scene->glGraphCompositeAdded(this,composite);
 }
 
-void GlLayer::glGraphCompositeRemoved(GlGraphComposite *composite){
+void GlLayer::glGraphCompositeRemoved(GlGraphComposite *composite) {
   scene->glGraphCompositeRemoved(this,composite);
 }
 
