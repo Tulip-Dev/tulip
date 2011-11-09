@@ -41,16 +41,6 @@ class TLP_GL_SCOPE GlXMLTools {
 public :
 
   /**
-   *
-   */
-  static void applyIndentation(std::string &outString);
-
-  /**
-   *
-   */
-  static void goToNextCaracter(const std::string &inString, unsigned int &currentPosition);
-
-  /**
    * Create and enter into a new data node
    */
   static void beginDataNode(std::string &outString);
@@ -98,7 +88,8 @@ public :
   static void createProperty(std::string &outString, const std::string &name, const std::string &value, const std::string &parent="");
 
   /**
-   *
+   * Get properties associated with the last opened child
+   * These properties is returned into a map of string/string
    */
   static std::map<std::string,std::string> getProperties(const std::string &inString, unsigned int &currentPosition);
 
@@ -211,6 +202,9 @@ public :
   }
 
 private :
+
+  static void applyIndentation(std::string &outString);
+  static void goToNextCaracter(const std::string &inString, unsigned int &currentPosition);
 
   static unsigned int indentationNumber;
 
