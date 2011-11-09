@@ -73,10 +73,9 @@ class GlComplexPolygon : tlp::GlSimpleEntity {
 
     void desactivateQuadBorder(const int polygonId = 0);
     
-    virtual void getXML(_xmlNode* rootNode);
-    
-    virtual void setWithXML(_xmlNode* rootNode);
+    virtual void getXML(std::string &out /Out/);
 
+    virtual void setWithXML(std::string &in, tlp::Graph *graph);
 
   };
 

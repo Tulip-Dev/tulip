@@ -81,9 +81,9 @@ class GlAbstractPolygon : tlp::GlSimpleEntity {
 
     void setHideOutlineLod(float lod);
 
-	virtual void getXML(_xmlNode* rootNode);
-    
-    virtual void setWithXML(_xmlNode* rootNode);
+    virtual void getXML(std::string &out /Out/);
+
+    virtual void setWithXML(std::string &in, tlp::Graph *graph);
 
   protected:
 
