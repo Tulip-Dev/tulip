@@ -110,7 +110,7 @@ private:
   unsigned int select();
   void vertexdata_init(const float starttemp);
   void insert();
-  void displace(int v, tlp::Coord imp);
+  void displace(unsigned int v, tlp::Coord imp);
   void a_round();
   void arrange();
   void updateLayout();

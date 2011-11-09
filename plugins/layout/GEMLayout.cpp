@@ -279,7 +279,7 @@ void GEMLayout::insert() {
   }
 }
 //==========================================================================
-void GEMLayout::displace(int v, Coord imp) {
+void GEMLayout::displace(unsigned int v, Coord imp) {
 
   float nV = imp.norm();
 
