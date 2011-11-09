@@ -34,6 +34,8 @@
 
 #include <tulip/TlpTools.h>
 
+#include <string.h>
+
 #ifdef __APPLE_CC__
 #if __APPLE_CC__ < 5400
 // Tiger

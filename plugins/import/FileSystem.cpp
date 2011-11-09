@@ -21,6 +21,7 @@
 #include <errno.h>
 #include <sstream>
 #include <tulip/TulipPlugin.h>
+#include <string.h>
 
 #ifdef _WIN32
 #include <windows.h>

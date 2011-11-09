@@ -17,6 +17,7 @@
  *
  */
 #include <tulip/ParametricCurves.h>
+#include <string.h>
 
 using namespace std;
 

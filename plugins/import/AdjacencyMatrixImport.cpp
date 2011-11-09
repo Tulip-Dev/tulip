@@ -21,9 +21,10 @@
 #include <errno.h>
 #include <fstream>
 #include <sstream>
-#include <math.h>
+#include <cmath>
 #include <tulip/TulipPlugin.h>
 #include <vector>
+#include <string.h>
 
 using namespace std;
 using namespace tlp;

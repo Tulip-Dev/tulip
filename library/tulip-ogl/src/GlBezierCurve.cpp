@@ -19,6 +19,8 @@
 
 #include <GL/glew.h>
 
+#include <string.h>
+
 #include <tulip/GlBezierCurve.h>
 #include <tulip/GlCatmullRomCurve.h>
 #include <tulip/ParametricCurves.h>
