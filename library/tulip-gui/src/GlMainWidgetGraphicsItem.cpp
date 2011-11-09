@@ -101,6 +101,7 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
   Color backgroundColor = glMainWidget->getScene()->getBackgroundColor();
 
   painter->setBrush(QColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]));
+  painter->setPen(Qt::transparent);
   painter->setRenderHint(QPainter::Antialiasing, true);
   painter->drawPath(path);
   painter->setRenderHint(QPainter::Antialiasing, false);
