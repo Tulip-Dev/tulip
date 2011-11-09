@@ -42,7 +42,7 @@ background-color: white;
 }</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="startupPage">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -143,7 +143,10 @@ p, li { white-space: pre-wrap; }
           <enum>Qt::Horizontal</enum>
          </property>
          <property name="handleWidth">
-          <number>1</number>
+          <number>3</number>
+         </property>
+         <property name="childrenCollapsible">
+          <bool>true</bool>
          </property>
          <widget class="PlaceHolderWidget" name="splitPagePanel1" native="true"/>
          <widget class="PlaceHolderWidget" name="splitPagePanel2" native="true"/>
@@ -165,26 +168,32 @@ p, li { white-space: pre-wrap; }
           <enum>Qt::Horizontal</enum>
          </property>
          <property name="handleWidth">
-          <number>1</number>
+          <number>3</number>
          </property>
          <widget class="QSplitter" name="gridPageHorizontalSplitter1">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
           <property name="handleWidth">
-           <number>1</number>
+           <number>3</number>
+          </property>
+          <property name="childrenCollapsible">
+           <bool>false</bool>
           </property>
           <widget class="PlaceHolderWidget" name="gridPagePanel1" native="true"/>
-          <widget class="PlaceHolderWidget" name="gridPagePanel2" native="true"/>
+          <widget class="PlaceHolderWidget" name="gridPagePanel3" native="true"/>
          </widget>
          <widget class="QSplitter" name="gridPageHorizontalSplitter2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
           <property name="handleWidth">
-           <number>1</number>
+           <number>3</number>
           </property>
-          <widget class="PlaceHolderWidget" name="gridPagePanel3" native="true"/>
+          <property name="childrenCollapsible">
+           <bool>false</bool>
+          </property>
+          <widget class="PlaceHolderWidget" name="gridPagePanel2" native="true"/>
           <widget class="PlaceHolderWidget" name="gridPagePanel4" native="true"/>
          </widget>
         </widget>
@@ -504,5 +513,95 @@ stop:1 rgb(50, 50, 50));
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>gridModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>switchToGridMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1074</x>
+     <y>623</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>splitModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>switchToSplitMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1046</x>
+     <y>623</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>singleModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>switchToSingleMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1018</x>
+     <y>623</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nextPageButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>nextPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>555</x>
+     <y>623</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>previousPageButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>previousPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>517</x>
+     <y>623</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>delView(tlp::View*)</slot>
+  <slot>switchToStartupMode()</slot>
+  <slot>switchToSingleMode()</slot>
+  <slot>switchToSplitMode()</slot>
+  <slot>switchToGridMode()</slot>
+  <slot>nextPage()</slot>
+  <slot>previousPage()</slot>
+ </slots>
 </ui>

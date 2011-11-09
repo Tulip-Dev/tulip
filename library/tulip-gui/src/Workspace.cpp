@@ -18,6 +18,8 @@
  */
 #include "tulip/Workspace.h"
 
+#include <math.h>
+
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
 
@@ -157,16 +159,28 @@ void Workspace::switchToStartupMode() {
 }
 void Workspace::switchToSingleMode() {
   switchWorkspaceMode(_ui->singlePage);
+  updatePanels();
+}
+void Workspace::switchToSplitMode() {
+  switchWorkspaceMode(_ui->splitPage);
+  updatePanels();
+}
+void Workspace::switchToGridMode() {
+  switchWorkspaceMode(_ui->gridPage);
+  updatePanels();
 }
 
 void Workspace::switchWorkspaceMode(QWidget *page) {
   _ui->workspaceContents->setCurrentWidget(page);
   updatePageCountLabel();
   _ui->bottomFrame->setEnabled(page != _ui->startupPage);
+  _currentPanelIndex -= _currentPanelIndex%currentSlotsCount();
 }
 
 void Workspace::updatePageCountLabel() {
-  _ui->pagesLabel->setText(QString::number(_currentPanelIndex / currentSlotsCount()) + " / " + QString::number(_panels.size() / currentSlotsCount()));
+  unsigned int totalPages = ceil(_panels.size() * 1. /currentSlotsCount());
+  unsigned int currentPage = ceil((_currentPanelIndex+1.)/currentSlotsCount());
+  _ui->pagesLabel->setText(QString::number(currentPage) + " / " + QString::number(totalPages));
 }
 
 QWidget* Workspace::currentModeWidget() const {
@@ -198,9 +212,28 @@ void Workspace::updatePanels() {
   // Fill up slots according to the current index until there is no panel to show
   int i = _currentPanelIndex;
   foreach (PlaceHolderWidget* slt, currentModeSlots()) {
-    if (i==_panels.size())
+    if (i==_panels.size()) {
       break;
+    }
     slt->setWidget(_panels[i]);
     i++;
+  }
+}
+
+void Workspace::nextPage() {
+  int newIndex = _currentPanelIndex + currentSlotsCount();
+  if (newIndex < _panels.size()) {
+    _currentPanelIndex = newIndex;
+    updatePanels();
+    updatePageCountLabel();
+  }
+}
+
+void Workspace::previousPage() {
+  int newIndex = _currentPanelIndex - currentSlotsCount();
+  if (newIndex >= 0) {
+    _currentPanelIndex = newIndex;
+    updatePanels();
+    updatePageCountLabel();
   }
 }

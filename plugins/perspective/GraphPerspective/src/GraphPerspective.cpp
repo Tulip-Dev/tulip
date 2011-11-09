@@ -24,6 +24,10 @@
 #include "GraphHierarchiesModel.h"
 #include <tulip/Graph.h>
 
+//FIXME: remove me
+#include <tulip/StringProperty.h>
+#include <tulip/ColorProperty.h>
+
 using namespace tlp;
 
 GraphPerspective::GraphPerspective(PerspectiveContext &c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)) {
@@ -53,13 +57,13 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   Observable::holdObservers();
   QVector<View*> views;
   for (int i=0;i<10;++i) {
-    DataSet d;
-    Graph* g = importGraph("Grid Approximation", d);
-    GraphHierarchiesModel::setApplicationDefaults(g);
+    Graph* g = newGraph();
+    node n = g->addNode();
+    g->getProperty<ColorProperty>("viewColor")->setNodeValue(n,Color(i*25,i*25,i*25));
     views.push_back(_ui->workspace->addView("Node Link Diagram view",g));
   }
   Observable::unholdObservers();
-
+//  _ui->workspace->switchToGridMode();
 
 }
 
