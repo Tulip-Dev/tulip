@@ -33,32 +33,32 @@ using namespace tlp;
 Workspace::Workspace(QWidget *parent)
   : QWidget(parent), _ui(new Ui::Workspace) {
   _ui->setupUi(this);
+
+  // This map allows us to know how much slots we have for each mode and which widget corresponds to those slots
+  QVector<PlaceHolderWidget*> startupVector(0);
+  QVector<PlaceHolderWidget*> singleVector(1);
+  singleVector[0] = _ui->singlePage;
+  QVector<PlaceHolderWidget*> splitVector(2);
+  splitVector[0] = _ui->splitPagePanel1;
+  splitVector[1] = _ui->splitPagePanel2;
+  QVector<PlaceHolderWidget*> gridVector(4);
+  gridVector[0] = _ui->gridPagePanel1;
+  gridVector[1] = _ui->gridPagePanel2;
+  gridVector[2] = _ui->gridPagePanel3;
+  gridVector[3] = _ui->gridPagePanel4;
+  _modeToSlots[_ui->startupPage] = startupVector;
+  _modeToSlots[_ui->singlePage] = singleVector;
+  _modeToSlots[_ui->splitPage] = splitVector;
+  _modeToSlots[_ui->gridPage] = gridVector;
+
+  // This map allows us to know wich widget can toggle a mode
+  _modeSwitches[_ui->singlePage] = _ui->singleModeButton;
+  _modeSwitches[_ui->splitPage] = _ui->splitModeButton;
+  _modeSwitches[_ui->gridPage] = _ui->gridModeButton;
 }
 
 Workspace::~Workspace() {
   delete _ui;
-}
-
-tlp::View* Workspace::addView(const QString& viewName,Graph* g, const DataSet& data) {
-  assert(ViewLister::pluginExists(viewName.toStdString()));
-  View* view = ViewLister::getPluginObject(viewName.toStdString(),NULL);
-
-  WorkspacePanel* panel = new WorkspacePanel(view,viewName);
-  int viewCounter = 0;
-  foreach(WorkspacePanel* it, _panels) {
-    if (it->viewName() == viewName)
-      viewCounter++;
-  }
-  panel->setWindowTitle(viewName + (viewCounter>0 ? " <" + QString::number(viewCounter) + ">" : ""));
-  _panels.push_back(panel);
-
-  connect(panel->view(),SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
-  connect(panel,SIGNAL(closeNeeded()),this,SLOT(panelClosed()));
-  view->setupUi();
-  view->setGraph(g);
-  view->setState(data);
-
-  return panel->view();
 }
 
 QList<tlp::View*> Workspace::views() const {
@@ -69,53 +69,138 @@ QList<tlp::View*> Workspace::views() const {
   return result;
 }
 
-void Workspace::delView(tlp::View* view) {
-  WorkspacePanel* removedPanel = NULL;
+tlp::View* Workspace::addView(const QString& viewName,Graph* g, const DataSet& data) {
+  // Create view and panel
+  assert(ViewLister::pluginExists(viewName.toStdString()));
+  View* view = ViewLister::getPluginObject(viewName.toStdString(),NULL);
+  view->setupUi();
+  WorkspacePanel* panel = new WorkspacePanel(view,viewName);
+  connect(panel,SIGNAL(closeNeeded()),this,SLOT(panelClosed()));
+  connect(view,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
+  view->setGraph(g);
+  view->setState(data);
 
-  foreach(WorkspacePanel* panel,_panels) {
-    if (panel->view() == view) {
-      removedPanel = panel;
+  // Add it to the list
+  _panels.push_back(panel);
+  // If on startup mode, switch to single
+  if (currentModeWidget() == _ui->startupPage) {
+    switchToSingleMode();
+  }
+  // activate available modes
+  updateAvailableModes();
+
+  updatePanels();
+  return view;
+}
+
+
+void Workspace::delView(tlp::View* view) {
+  WorkspacePanel* panel = NULL;
+  foreach(WorkspacePanel* it, _panels) {
+    if (it->view() == view) {
+      panel = it;
       break;
     }
   }
-
-  assert(removedPanel != NULL);
-
-
+  if (panel != NULL)
+    removePanel(panel);
 }
 
-void Workspace::switchToFullPage() {
+void Workspace::removePanel(WorkspacePanel* panel) {
+  panel->deleteLater();
+  _panels.removeAll(panel);
+  updateAvailableModes();
 
-}
+  if (!_modeSwitches[currentModeWidget()]->isEnabled()) {
+    int maxSize = 0;
+    QWidget* fallbackMode = _ui->startupPage;
 
-void Workspace::switchToSplitPage()  {
+    // Current mode is not available, fallback to the largest available mode
+    foreach(QWidget* it, _modeToSlots.keys()) {
+      if (_panels.size() >= _modeToSlots[it].size() && _modeToSlots[it].size() > maxSize) {
+        maxSize = _modeToSlots[it].size();
+        fallbackMode = it;
+      }
+    }
+    switchWorkspaceMode(fallbackMode);
+  }
 
-}
+  if (currentModeWidget() == _ui->startupPage) {
+    _currentPanelIndex = 0;
+    return;
+  }
 
-void Workspace::switchToGridPage()  {
+  // Adjust current panel index if we were on the last panel
+  else if (_currentPanelIndex == _panels.size()) {
+    if (_panels.size()%currentSlotsCount() == 0) { // go back one page
+      _currentPanelIndex -= currentSlotsCount();
+    }
+    else
+      _currentPanelIndex--;
+    if (_currentPanelIndex < 0)
+      _currentPanelIndex = 0;
+  }
 
-}
-
-void Workspace::switchToExposePage() {
-
-}
-
-void Workspace::showViewSwitcher() {
-
-}
-
-void Workspace::nextPage() {
-
-}
-
-void Workspace::previousPage() {
-
+  updatePageCountLabel();
+  updatePanels();
 }
 
 void Workspace::viewNeedsDraw() {
-
 }
 
 void Workspace::panelClosed() {
+  removePanel(static_cast<WorkspacePanel*>(sender()));
+}
 
+void Workspace::switchToStartupMode() {
+  switchWorkspaceMode(_ui->startupPage);
+}
+void Workspace::switchToSingleMode() {
+  switchWorkspaceMode(_ui->singlePage);
+}
+
+void Workspace::switchWorkspaceMode(QWidget *page) {
+  _ui->workspaceContents->setCurrentWidget(page);
+  updatePageCountLabel();
+  _ui->bottomFrame->setEnabled(page != _ui->startupPage);
+}
+
+void Workspace::updatePageCountLabel() {
+  _ui->pagesLabel->setText(QString::number(_currentPanelIndex / currentSlotsCount()) + " / " + QString::number(_panels.size() / currentSlotsCount()));
+}
+
+QWidget* Workspace::currentModeWidget() const {
+  return _ui->workspaceContents->currentWidget();
+}
+
+QVector<PlaceHolderWidget*> Workspace::currentModeSlots() const {
+  return _modeToSlots[currentModeWidget()];
+}
+
+unsigned int Workspace::currentSlotsCount() const {
+  return currentModeSlots().size();
+}
+
+void Workspace::updateAvailableModes() {
+  foreach(QWidget* page, _modeSwitches.keys()) {
+    _modeSwitches[page]->setEnabled(_panels.size() >= _modeToSlots[page].size());
+  }
+}
+
+void Workspace::updatePanels() {
+  // First: empty all slots
+  foreach(QVector<PlaceHolderWidget*> panelSlots, _modeToSlots.values()) {
+    foreach(PlaceHolderWidget* panel, panelSlots) {
+      panel->takeWidget();
+    }
+  }
+
+  // Fill up slots according to the current index until there is no panel to show
+  int i = _currentPanelIndex;
+  foreach (PlaceHolderWidget* slt, currentModeSlots()) {
+    if (i==_panels.size())
+      break;
+    slt->setWidget(_panels[i]);
+    i++;
+  }
 }

@@ -49,6 +49,18 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
   }
+
+  Observable::holdObservers();
+  QVector<View*> views;
+  for (int i=0;i<10;++i) {
+    DataSet d;
+    Graph* g = importGraph("Grid Approximation", d);
+    GraphHierarchiesModel::setApplicationDefaults(g);
+    views.push_back(_ui->workspace->addView("Node Link Diagram view",g));
+  }
+  Observable::unholdObservers();
+
+
 }
 
 void GraphPerspective::refreshDockExpandControls() {

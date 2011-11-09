@@ -16,7 +16,7 @@ border: 0px;
 }
 
 QSplitter::handle {
-background-color: #505050;
+background-color: #A9A9A9;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -33,116 +33,102 @@ background-color: #505050;
   border-bottom: 1px solid black;
   border-right: 0px;
   border-left: 0px;
-  border-top: 1px solid &quot;#C9C9C9&quot;;
+  border-top: 0px;
   background-color: white;
+}
+
+PlaceHolderWidget {
+background-color: white;
 }</string>
      </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="singlePage">
-      <layout class="QVBoxLayout" name="verticalLayout_6">
-       <property name="margin">
-        <number>0</number>
-       </property>
+     <widget class="QWidget" name="startupPage">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QWidget" name="startupMessage" native="true">
-         <property name="acceptDrops">
-          <bool>true</bool>
+        <spacer name="startupSpacer2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="styleSheet">
-          <string notr="true">* {
-color: black;
-font: bold 11px;
-}</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>295</width>
+           <height>20</height>
+          </size>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
+        </spacer>
+       </item>
+       <item>
+        <widget class="QFrame" name="startupMainFrame">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QVBoxLayout" name="startupLayout">
+          <property name="spacing">
+           <number>20</number>
+          </property>
+          <property name="margin">
+           <number>10</number>
+          </property>
           <item>
-           <spacer name="startupSpacer2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QFrame" name="startupMainFrame">
+           <widget class="QLabel" name="label">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <layout class="QVBoxLayout" name="startupLayout">
-             <property name="spacing">
-              <number>20</number>
-             </property>
-             <property name="margin">
-              <number>10</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="label">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>64</width>
-                 <height>64</height>
-                </size>
-               </property>
-               <property name="pixmap">
-                <pixmap resource="../resources/TulipGUIResource.qrc">:/tulip/gui/icons/list-add.svg</pixmap>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="startupMessageLabel">
-               <property name="text">
-                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+            <property name="minimumSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="pixmap">
+             <pixmap>:/tulip/gui/icons/list-add.svg</pixmap>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="startupMessageLabel">
+            <property name="text">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'DejaVu Sans'; font-weight:600; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;There is currently no view loaded into the workspace.&lt;br /&gt;Create a new panel from the hierarchy manager popup menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
            </widget>
-          </item>
-          <item>
-           <spacer name="startupSpacer1">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </widget>
        </item>
+       <item>
+        <spacer name="startupSpacer1">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="exposePage"/>
+     <widget class="PlaceHolderWidget" name="singlePage"/>
      <widget class="QWidget" name="splitPage">
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="spacing">
@@ -156,25 +142,11 @@ p, li { white-space: pre-wrap; }
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="opaqueResize">
-          <bool>false</bool>
-         </property>
          <property name="handleWidth">
           <number>1</number>
          </property>
-         <property name="childrenCollapsible">
-          <bool>false</bool>
-         </property>
-         <widget class="QWidget" name="splitPanel1" native="true">
-          <property name="styleSheet">
-           <string notr="true">background-color:red;</string>
-          </property>
-         </widget>
-         <widget class="QWidget" name="splitPanel2" native="true">
-          <property name="styleSheet">
-           <string notr="true">background-color:green;</string>
-          </property>
-         </widget>
+         <widget class="PlaceHolderWidget" name="splitPagePanel1" native="true"/>
+         <widget class="PlaceHolderWidget" name="splitPagePanel2" native="true"/>
         </widget>
        </item>
       </layout>
@@ -188,71 +160,32 @@ p, li { white-space: pre-wrap; }
         <number>0</number>
        </property>
        <item>
-        <widget class="QSplitter" name="gridPageVeritcalSplitter">
+        <widget class="QSplitter" name="gridPageVerticalSplitter">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="opaqueResize">
-          <bool>false</bool>
          </property>
          <property name="handleWidth">
           <number>1</number>
          </property>
-         <property name="childrenCollapsible">
-          <bool>false</bool>
-         </property>
-         <widget class="QWidget" name="gridPageLeftSide" native="true">
-          <layout class="QVBoxLayout" name="verticalLayout_4">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <property name="margin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QSplitter" name="gridPageLeftHorizontalSplitter">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="opaqueResize">
-              <bool>false</bool>
-             </property>
-             <property name="handleWidth">
-              <number>1</number>
-             </property>
-             <property name="childrenCollapsible">
-              <bool>false</bool>
-             </property>
-             <widget class="QWidget" name="gridPageView1" native="true"/>
-             <widget class="QWidget" name="gridPageView2" native="true"/>
-            </widget>
-           </item>
-          </layout>
+         <widget class="QSplitter" name="gridPageHorizontalSplitter1">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="handleWidth">
+           <number>1</number>
+          </property>
+          <widget class="PlaceHolderWidget" name="gridPagePanel1" native="true"/>
+          <widget class="PlaceHolderWidget" name="gridPagePanel2" native="true"/>
          </widget>
-         <widget class="QWidget" name="gridPageRightSide" native="true">
-          <layout class="QVBoxLayout" name="verticalLayout_5">
-           <property name="margin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QSplitter" name="gridPageRightHorizontalSplitter">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="opaqueResize">
-              <bool>false</bool>
-             </property>
-             <property name="handleWidth">
-              <number>1</number>
-             </property>
-             <property name="childrenCollapsible">
-              <bool>false</bool>
-             </property>
-             <widget class="QWidget" name="gridPageView3" native="true"/>
-             <widget class="QWidget" name="gridPageView4" native="true"/>
-            </widget>
-           </item>
-          </layout>
+         <widget class="QSplitter" name="gridPageHorizontalSplitter2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="handleWidth">
+           <number>1</number>
+          </property>
+          <widget class="PlaceHolderWidget" name="gridPagePanel3" native="true"/>
+          <widget class="PlaceHolderWidget" name="gridPagePanel4" native="true"/>
          </widget>
         </widget>
        </item>
@@ -262,9 +195,6 @@ p, li { white-space: pre-wrap; }
    </item>
    <item>
     <widget class="QFrame" name="bottomFrame">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
        <horstretch>0</horstretch>
@@ -342,7 +272,7 @@ stop:1 rgb(50, 50, 50));
          <string>Expose</string>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/expose.png</normaloff>:/tulip/gui/ui/expose.png</iconset>
         </property>
         <property name="shortcut">
@@ -387,7 +317,7 @@ stop:1 rgb(50, 50, 50));
          <string>Previous</string>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/previous.png</normaloff>:/tulip/gui/ui/previous.png</iconset>
         </property>
         <property name="shortcut">
@@ -422,7 +352,7 @@ stop:1 rgb(50, 50, 50));
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/next.png</normaloff>:/tulip/gui/ui/next.png</iconset>
         </property>
         <property name="shortcut">
@@ -467,7 +397,7 @@ stop:1 rgb(50, 50, 50));
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/full_screen.png</normaloff>:/tulip/gui/ui/full_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -505,7 +435,7 @@ stop:1 rgb(50, 50, 50));
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/split_screen.png</normaloff>:/tulip/gui/ui/split_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -543,7 +473,7 @@ stop:1 rgb(50, 50, 50));
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/grid_screen.png</normaloff>:/tulip/gui/ui/grid_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -565,117 +495,14 @@ stop:1 rgb(50, 50, 50));
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources/TulipGUIResource.qrc"/>
- </resources>
- <connections>
-  <connection>
-   <sender>exposeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Workspace</receiver>
-   <slot>switchToExposePage()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>32</x>
-     <y>623</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>543</x>
-     <y>318</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>gridModeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Workspace</receiver>
-   <slot>switchToGridPage()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1074</x>
-     <y>623</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>543</x>
-     <y>318</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>nextPageButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Workspace</receiver>
-   <slot>nextPage()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>555</x>
-     <y>623</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>543</x>
-     <y>318</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>previousPageButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Workspace</receiver>
-   <slot>previousPage()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>517</x>
-     <y>623</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>543</x>
-     <y>318</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>splitModeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Workspace</receiver>
-   <slot>switchToSplitPage()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1046</x>
-     <y>623</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>543</x>
-     <y>318</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>singleModeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Workspace</receiver>
-   <slot>switchToFullPage()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1018</x>
-     <y>623</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>543</x>
-     <y>318</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
- <slots>
-  <slot>delView(tlp::View*)</slot>
-  <slot>switchToFullPage()</slot>
-  <slot>switchToSplitPage()</slot>
-  <slot>switchToGridPage()</slot>
-  <slot>switchToExposePage()</slot>
-  <slot>showViewSwitcher()</slot>
-  <slot>previousPage()</slot>
-  <slot>viewNeedsDraw()</slot>
-  <slot>viewNeedsRedraw()</slot>
-  <slot>nextPage()</slot>
- </slots>
+ <customwidgets>
+  <customwidget>
+   <class>PlaceHolderWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">tulip/PlaceHolderWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
 </ui>

@@ -81,6 +81,7 @@ SET(SRCS
   Interactor.cpp
   ProcessingAnimationItem.cpp
   Workspace.cpp
+  PlaceHolderWidget.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
