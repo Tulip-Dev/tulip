@@ -133,14 +133,14 @@ public :
   void translate(const Coord &move);
 
   /**
-   * Function to export data in XML
+   * Function to export data in outString (in XML format)
    */
-  void getXML(xmlNodePtr rootNode);
+  void getXML(std::string &outString);
 
   /**
-   * Function to set data with XML
+   * Function to set data with inString (in XML format)
    */
-  void setWithXML(xmlNodePtr rootNode);
+  void setWithXML(const std::string &inString,unsigned int &currentPosition);
 
 private :
   std::vector<Coord> polyQuadEdges; // vector which contains polyquad edges, an edge being defined by a pair of Coord

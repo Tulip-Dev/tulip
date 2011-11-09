@@ -135,38 +135,30 @@ void Gl2DRect::setCoordinates(float bottom, float left, float height,float width
   this->right=left+width;
 }
 //===========================================================
-void Gl2DRect::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void Gl2DRect::getXML(string &outString) {
 
-  GlXMLTools::createProperty(rootNode, "type", "Gl2DRect");
+  GlXMLTools::createProperty(outString,"type","Gl2DRect","GlEntity");
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
-
-  GlXMLTools::getXML(dataNode,"top",top);
-  GlXMLTools::getXML(dataNode,"bottom",bottom);
-  GlXMLTools::getXML(dataNode,"left",left);
-  GlXMLTools::getXML(dataNode,"right",right);
-  GlXMLTools::getXML(dataNode,"inPercent",inPercent);
-  GlXMLTools::getXML(dataNode,"textureName",textureName);
-  GlXMLTools::getXML(dataNode,"xInv",xInv);
-  GlXMLTools::getXML(dataNode,"yInv",yInv);
+  GlXMLTools::getXML(outString,"top",top);
+  GlXMLTools::getXML(outString,"bottom",bottom);
+  GlXMLTools::getXML(outString,"left",left);
+  GlXMLTools::getXML(outString,"right",right);
+  GlXMLTools::getXML(outString,"inPercent",inPercent);
+  GlXMLTools::getXML(outString,"textureName",textureName);
+  GlXMLTools::getXML(outString,"xInv",xInv);
+  GlXMLTools::getXML(outString,"yInv",yInv);
 }
 //============================================================
-void Gl2DRect::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void Gl2DRect::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
+    GlXMLTools::setWithXML(inString,currentPosition, "top", top);
+    GlXMLTools::setWithXML(inString,currentPosition, "bottom", bottom);
+    GlXMLTools::setWithXML(inString,currentPosition, "left", left);
+    GlXMLTools::setWithXML(inString,currentPosition, "right", right);
+    GlXMLTools::setWithXML(inString,currentPosition, "inPercent", inPercent);
+    GlXMLTools::setWithXML(inString,currentPosition, "textureName", textureName);
+    GlXMLTools::setWithXML(inString,currentPosition,"xInv",xInv,false);
+    GlXMLTools::setWithXML(inString,currentPosition,"yInv",yInv,false);
 
-  // Parse Data
-  if(dataNode) {
-    GlXMLTools::setWithXML(dataNode, "top", top);
-    GlXMLTools::setWithXML(dataNode, "bottom", bottom);
-    GlXMLTools::setWithXML(dataNode, "left", left);
-    GlXMLTools::setWithXML(dataNode, "right", right);
-    GlXMLTools::setWithXML(dataNode, "inPercent", inPercent);
-    GlXMLTools::setWithXML(dataNode, "textureName", textureName);
-    GlXMLTools::setWithXML(dataNode,"xInv",xInv,false);
-    GlXMLTools::setWithXML(dataNode,"yInv",yInv,false);
-  }
 }
 }

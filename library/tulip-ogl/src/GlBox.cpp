@@ -369,45 +369,36 @@ void GlBox::translate(const Coord &mouvement) {
   clearGenerated();
 }
 //===========================================================
-void GlBox::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlBox::getXML(string &outString) {
 
-  GlXMLTools::createProperty(rootNode, "type", "GlBox");
+  GlXMLTools::createProperty(outString,"type","GlBox","GlEntity");
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
-
-  GlXMLTools::getXML(dataNode,"position",position);
-  GlXMLTools::getXML(dataNode,"size",size);
-  GlXMLTools::getXML(dataNode,"fillColors",fillColors);
-  GlXMLTools::getXML(dataNode,"outlineColors",outlineColors);
-  GlXMLTools::getXML(dataNode,"filled",filled);
-  GlXMLTools::getXML(dataNode,"outlined",outlined);
-  GlXMLTools::getXML(dataNode,"textureName",textureName);
-  GlXMLTools::getXML(dataNode,"outlineSize",outlineSize);
+  GlXMLTools::getXML(outString,"position",position);
+  GlXMLTools::getXML(outString,"size",size);
+  GlXMLTools::getXML(outString,"fillColors",fillColors);
+  GlXMLTools::getXML(outString,"outlineColors",outlineColors);
+  GlXMLTools::getXML(outString,"filled",filled);
+  GlXMLTools::getXML(outString,"outlined",outlined);
+  GlXMLTools::getXML(outString,"textureName",textureName);
+  GlXMLTools::getXML(outString,"outlineSize",outlineSize);
 }
 //============================================================
-void GlBox::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlBox::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
+  GlXMLTools::setWithXML(inString, currentPosition,"position",position);
+  GlXMLTools::setWithXML(inString, currentPosition,"size",size);
+  fillColors.clear();
+  GlXMLTools::setWithXML(inString, currentPosition,"fillColors",fillColors);
+  outlineColors.clear();
+  GlXMLTools::setWithXML(inString, currentPosition,"outlineColors",outlineColors);
+  GlXMLTools::setWithXML(inString, currentPosition,"filled",filled);
+  GlXMLTools::setWithXML(inString, currentPosition,"outlined",outlined);
+  GlXMLTools::setWithXML(inString, currentPosition,"textureName",textureName);
+  GlXMLTools::setWithXML(inString, currentPosition,"outlineSize",outlineSize);
 
-  // Parse Data
-  if(dataNode) {
-    GlXMLTools::setWithXML(dataNode,"position",position);
-    GlXMLTools::setWithXML(dataNode,"size",size);
-    fillColors.clear();
-    GlXMLTools::setWithXML(dataNode,"fillColors",fillColors);
-    outlineColors.clear();
-    GlXMLTools::setWithXML(dataNode,"outlineColors",outlineColors);
-    GlXMLTools::setWithXML(dataNode,"filled",filled);
-    GlXMLTools::setWithXML(dataNode,"outlined",outlined);
-    GlXMLTools::setWithXML(dataNode,"textureName",textureName);
-    GlXMLTools::setWithXML(dataNode,"outlineSize",outlineSize);
-
-    boundingBox = BoundingBox();
-    boundingBox.expand(position-size/2.f);
-    boundingBox.expand(position+size/2.f);
-  }
+  boundingBox = BoundingBox();
+  boundingBox.expand(position-size/2.f);
+  boundingBox.expand(position+size/2.f);
 }
 //============================================================
 void GlBox::clearGenerated() {

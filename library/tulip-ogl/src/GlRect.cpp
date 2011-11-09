@@ -137,23 +137,5 @@ bool GlRect::inRect(double x, double y) {
 void GlRect::draw(float lod, Camera *camera) {
   GlPolygon::draw(lod, camera);
 }
-//===========================================================
-void GlRect::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode = NULL;
-
-  GlXMLTools::createProperty(rootNode, "type", "GlRect");
-
-  GlPolygon::getXMLOnlyData(rootNode);
-
-  GlXMLTools::getDataNode(rootNode, dataNode);
-}
-//============================================================
-void GlRect::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode = NULL;
-
-  GlPolygon::setWithXML(rootNode);
-
-  GlXMLTools::getDataNode(rootNode, dataNode);
-}
 }
 

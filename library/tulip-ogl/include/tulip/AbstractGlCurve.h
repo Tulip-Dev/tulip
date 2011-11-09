@@ -61,9 +61,9 @@ public :
     this->lookDir = lookDir;
   }
 
-  void getXML(xmlNodePtr rootNode);
+  void getXML(std::string &outString);
 
-  void setWithXML(xmlNodePtr rootNode);
+  void setWithXML(const std::string &inString,unsigned int &currentPosition);
 
   virtual void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=100);
 

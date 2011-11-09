@@ -112,36 +112,26 @@ void GlCurve::translate(const Coord& mouvement) {
   }
 }
 //=====================================================
-void GlCurve::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlCurve::getXML(string &outString) {
 
-  GlXMLTools::createProperty(rootNode, "type", "GlCurve");
+  GlXMLTools::createProperty(outString,"type","GlCurve","GlEntity");
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
-
-  GlXMLTools::getXML(dataNode,"points",_points);
-  GlXMLTools::getXML(dataNode,"beginFillColor",_beginFillColor);
-  GlXMLTools::getXML(dataNode,"endFillColor",_endFillColor);
-  GlXMLTools::getXML(dataNode,"beginSize",_beginSize);
-  GlXMLTools::getXML(dataNode,"endSize",_endSize);
+  GlXMLTools::getXML(outString,"points",_points);
+  GlXMLTools::getXML(outString,"beginFillColor",_beginFillColor);
+  GlXMLTools::getXML(outString,"endFillColor",_endFillColor);
+  GlXMLTools::getXML(outString,"beginSize",_beginSize);
+  GlXMLTools::getXML(outString,"endSize",_endSize);
 }
 //============================================================
-void GlCurve::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlCurve::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
+  GlXMLTools::setWithXML(inString, currentPosition,"points",_points);
+  GlXMLTools::setWithXML(inString, currentPosition,"beginFillColor",_beginFillColor);
+  GlXMLTools::setWithXML(inString, currentPosition,"endFillColor",_endFillColor);
+  GlXMLTools::setWithXML(inString, currentPosition,"beginSize",_beginSize);
+  GlXMLTools::setWithXML(inString, currentPosition,"endSize",_endSize);
 
-  // Parse Data
-  if(dataNode) {
-
-    GlXMLTools::setWithXML(dataNode,"points",_points);
-    GlXMLTools::setWithXML(dataNode,"beginFillColor",_beginFillColor);
-    GlXMLTools::setWithXML(dataNode,"endFillColor",_endFillColor);
-    GlXMLTools::setWithXML(dataNode,"beginSize",_beginSize);
-    GlXMLTools::setWithXML(dataNode,"endSize",_endSize);
-
-    for(vector<Coord>::iterator it= _points.begin(); it!=_points.end(); ++it)
-      boundingBox.expand(*it);
-  }
+  for(vector<Coord>::iterator it= _points.begin(); it!=_points.end(); ++it)
+    boundingBox.expand(*it);
 }
 }

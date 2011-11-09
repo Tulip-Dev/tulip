@@ -12,19 +12,12 @@ IF(WIN32) # Windows-specific components
 # Those variables point to component dependencies specific to a Win32 environment.
 # To avoid declaring common components 2 times (since dependencies list will be different for Mac OS and Win32), we use those variables that will be void if those components do not exist
   SET(W32_BASE_SYSTEM "base_system")
-  SET(W32_LIBXML2 "libxml2")
   SET(W32_PYTHON "python")
 
   DEFINE_COMPONENT(base_system
     "Base system"
     "Core runtime and libraries."
     ""
-    ${THIRDPARTY_GROUP_NAME})
-
-  DEFINE_COMPONENT(libxml2
-    "Libxml2"
-    "Libxml2 is the XML C parser and toolkit developed for the Gnome project."
-    "base_system"
     ${THIRDPARTY_GROUP_NAME})
 
   DEFINE_COMPONENT(python
@@ -262,7 +255,6 @@ ENDIF(WIN32 OR APPLE)
 IF(WIN32) # NSIS-specific behavior for installation types
 
   SET(CPACK_COMPONENT_BASE_SYSTEM_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_LIBXML2_INSTALL_TYPES Full Framework)
   SET(CPACK_COMPONENT_PYTHON_INSTALL_TYPES Full Framework)
   SET(CPACK_COMPONENT_ZLIB_INSTALL_TYPES Full Framework)
   SET(CPACK_COMPONENT_FREETYPE_INSTALL_TYPES Full Framework)

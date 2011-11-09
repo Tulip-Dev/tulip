@@ -469,48 +469,40 @@ void GlAbstractPolygon::translate(const Coord& vec) {
   clearGenerated();
 }
 //===========================================================
-void GlAbstractPolygon::getXML(xmlNodePtr rootNode) {
+void GlAbstractPolygon::getXML(string &outString) {
 
-  GlXMLTools::createProperty(rootNode, "type", "GlPolygon");
+  GlXMLTools::createProperty(outString, "type", "GlPolygon","GlEntity");
 
-  getXMLOnlyData(rootNode);
+  getXMLOnlyData(outString);
 
 }
 //===========================================================
-void GlAbstractPolygon::getXMLOnlyData(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlAbstractPolygon::getXMLOnlyData(string &outString) {
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
-
-  GlXMLTools::getXML(dataNode,"points",points);
-  GlXMLTools::getXML(dataNode,"fillColors",fillColors);
-  GlXMLTools::getXML(dataNode,"outlineColors",outlineColors);
-  GlXMLTools::getXML(dataNode,"filled",filled);
-  GlXMLTools::getXML(dataNode,"outlined",outlined);
-  GlXMLTools::getXML(dataNode,"textureName",textureName);
-  GlXMLTools::getXML(dataNode,"outlineSize",outlineSize);
+  GlXMLTools::getXML(outString,"points",points);
+  GlXMLTools::getXML(outString,"fillColors",fillColors);
+  GlXMLTools::getXML(outString,"outlineColors",outlineColors);
+  GlXMLTools::getXML(outString,"filled",filled);
+  GlXMLTools::getXML(outString,"outlined",outlined);
+  GlXMLTools::getXML(outString,"textureName",textureName);
+  GlXMLTools::getXML(outString,"outlineSize",outlineSize);
 }
 //============================================================
-void GlAbstractPolygon::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlAbstractPolygon::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
+  points.clear();
+  GlXMLTools::setWithXML(inString,currentPosition,"points",points);
+  fillColors.clear();
+  GlXMLTools::setWithXML(inString,currentPosition,"fillColors",fillColors);
+  outlineColors.clear();
+  GlXMLTools::setWithXML(inString,currentPosition,"outlineColors",outlineColors);
+  GlXMLTools::setWithXML(inString,currentPosition,"filled",filled);
+  GlXMLTools::setWithXML(inString,currentPosition,"outlined",outlined);
+  GlXMLTools::setWithXML(inString,currentPosition,"textureName",textureName);
+  GlXMLTools::setWithXML(inString,currentPosition,"outlineSize",outlineSize);
 
-  // Parse Data
-  if(dataNode) {
-    points.clear();
-    GlXMLTools::setWithXML(dataNode,"points",points);
-    fillColors.clear();
-    GlXMLTools::setWithXML(dataNode,"fillColors",fillColors);
-    outlineColors.clear();
-    GlXMLTools::setWithXML(dataNode,"outlineColors",outlineColors);
-    GlXMLTools::setWithXML(dataNode,"filled",filled);
-    GlXMLTools::setWithXML(dataNode,"outlined",outlined);
-    GlXMLTools::setWithXML(dataNode,"textureName",textureName);
-    GlXMLTools::setWithXML(dataNode,"outlineSize",outlineSize);
-
-    for(vector<Coord>::iterator it= points.begin(); it!=points.end(); ++it)
-      boundingBox.expand(*it);
+  for(vector<Coord>::iterator it= points.begin(); it!=points.end(); ++it){
+    boundingBox.expand(*it);
   }
 }
 //============================================================

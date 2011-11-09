@@ -117,24 +117,47 @@ std::map<std::string, GlSimpleEntity*> *GlLayer::getDisplays() {
   return composite.getDisplays();
 }
 
-void GlLayer::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode= NULL;
-  xmlNodePtr childrenNode= NULL;
-  xmlNodePtr node=NULL;
+void GlLayer::getXML(string &outString) {
+  GlXMLTools::beginDataNode(outString);
 
-  GlXMLTools::createDataAndChildrenNodes(rootNode, dataNode, childrenNode);
+  GlXMLTools::beginChildNode(outString,"camera");
+  camera->getXML(outString);
+  GlXMLTools::endChildNode(outString,"camera");
 
-  GlXMLTools::createChild(dataNode,"camera",node);
-  camera->getXML(node);
   bool visible=composite.isVisible();
-  GlXMLTools::getXML(dataNode,"visible",visible);
+  GlXMLTools::getXML(outString,"visible",visible);
 
-  composite.getXML(childrenNode);
+  GlXMLTools::endDataNode(outString);
+
+  GlXMLTools::beginChildNode(outString,"GlEntity");
+  composite.getXML(outString);
+  GlXMLTools::endChildNode(outString);
 
 }
 
-void GlLayer::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode= NULL;
+void GlLayer::setWithXML(const string &inString, unsigned int &currentPosition) {
+
+  GlXMLTools::enterDataNode(inString,currentPosition);
+  string childName=GlXMLTools::enterChildNode(inString,currentPosition);
+  assert(childName=="camera");
+  camera->setWithXML(inString,currentPosition);
+  GlXMLTools::leaveChildNode(inString,currentPosition,"camera");
+
+  bool visible;
+  GlXMLTools::setWithXML(inString,currentPosition,"visible",visible);
+  composite.setVisible(visible);
+
+  GlXMLTools::leaveDataNode(inString,currentPosition);
+
+  childName=GlXMLTools::enterChildNode(inString,currentPosition);
+  assert(childName=="GlEntity");
+
+  map<string,string> childMap=GlXMLTools::getProperties(inString,currentPosition);
+  assert(childMap["type"]=="GlComposite");
+  composite.setWithXML(inString,currentPosition);
+
+  GlXMLTools::leaveChildNode(inString,currentPosition,"children");
+  /*xmlNodePtr dataNode= NULL;
   xmlNodePtr childrenNode= NULL;
   xmlNodePtr node= NULL;
 
@@ -156,7 +179,7 @@ void GlLayer::setWithXML(xmlNodePtr rootNode) {
   // Parse children
   if(childrenNode) {
     composite.setWithXML(childrenNode);
-  }
+  }*/
 
 }
 

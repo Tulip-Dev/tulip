@@ -131,39 +131,31 @@ void GlGrid::translate(const Coord& vec) {
   backBottomRight += vec;
 }
 //============================================================
-void GlGrid::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode= NULL;
+void GlGrid::getXML(string &outString) {
 
-  GlXMLTools::createProperty(rootNode, "type", "GlGrid");
+  GlXMLTools::createProperty(outString,"type","GlGrid","GlEntity");
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
 
-  GlXMLTools::getXML(dataNode,"displayDim0",displayDim[0]);
-  GlXMLTools::getXML(dataNode,"displayDim1",displayDim[1]);
-  GlXMLTools::getXML(dataNode,"displayDim2",displayDim[2]);
-  GlXMLTools::getXML(dataNode,"frontTopLeft",frontTopLeft);
-  GlXMLTools::getXML(dataNode,"backBottomRight",backBottomRight);
-  GlXMLTools::getXML(dataNode,"color",color);
-  GlXMLTools::getXML(dataNode,"cell",cell);
+  GlXMLTools::getXML(outString,"displayDim0",displayDim[0]);
+  GlXMLTools::getXML(outString,"displayDim1",displayDim[1]);
+  GlXMLTools::getXML(outString,"displayDim2",displayDim[2]);
+  GlXMLTools::getXML(outString,"frontTopLeft",frontTopLeft);
+  GlXMLTools::getXML(outString,"backBottomRight",backBottomRight);
+  GlXMLTools::getXML(outString,"color",color);
+  GlXMLTools::getXML(outString,"cell",cell);
 
 }
 //====================================================
-void GlGrid::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlGrid::setWithXML(const string &inString,unsigned int &currentPosition) {
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
+  GlXMLTools::setWithXML(inString,currentPosition,"displayDim0",displayDim[0]);
+  GlXMLTools::setWithXML(inString,currentPosition,"displayDim1",displayDim[1]);
+  GlXMLTools::setWithXML(inString,currentPosition,"displayDim2",displayDim[2]);
+  GlXMLTools::setWithXML(inString,currentPosition,"frontTopLeft",frontTopLeft);
+  GlXMLTools::setWithXML(inString,currentPosition,"backBottomRight",backBottomRight);
+  GlXMLTools::setWithXML(inString,currentPosition,"color",color);
+  GlXMLTools::setWithXML(inString,currentPosition,"cell",cell);
 
-  // Parse Data
-  if(dataNode) {
-    GlXMLTools::setWithXML(dataNode,"displayDim0",displayDim[0]);
-    GlXMLTools::setWithXML(dataNode,"displayDim1",displayDim[1]);
-    GlXMLTools::setWithXML(dataNode,"displayDim2",displayDim[2]);
-    GlXMLTools::setWithXML(dataNode,"frontTopLeft",frontTopLeft);
-    GlXMLTools::setWithXML(dataNode,"backBottomRight",backBottomRight);
-    GlXMLTools::setWithXML(dataNode,"color",color);
-    GlXMLTools::setWithXML(dataNode,"cell",cell);
-
-    GlGrid(frontTopLeft, backBottomRight,cell, color, displayDim);
-  }
+  GlGrid(frontTopLeft, backBottomRight,cell, color, displayDim);
 }
 }

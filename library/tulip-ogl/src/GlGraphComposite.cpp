@@ -140,11 +140,11 @@ GlGraphInputData* GlGraphComposite::getInputData() {
   return &inputData;
 }
 //====================================================
-void GlGraphComposite::getXML(xmlNodePtr rootNode) {
-  GlXMLTools::createProperty(rootNode, "type", "GlGraphComposite");
+void GlGraphComposite::getXML(string &outString) {
+  GlXMLTools::createProperty(outString, "type", "GlGraphComposite","GlEntity");
 }
 //====================================================
-void GlGraphComposite::setWithXML(xmlNodePtr) {
+void GlGraphComposite::setWithXML(const string &, unsigned int&) {
 }
 
 void GlGraphComposite::treatEvent(const Event& evt) {

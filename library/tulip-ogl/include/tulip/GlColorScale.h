@@ -45,10 +45,6 @@ public:
 
   void translate(const Coord &move);
 
-  void getXML(xmlNodePtr) {}
-
-  void setWithXML(xmlNodePtr) {}
-
   Coord getBaseCoord() const {
     return baseCoord;
   }
