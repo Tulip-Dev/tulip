@@ -1,6 +1,7 @@
 #include "tulip/PlaceHolderWidget.h"
 
 #include <QtGui/QVBoxLayout>
+#include <QtGui/QWidget>
 
 PlaceHolderWidget::PlaceHolderWidget(QWidget *parent): QWidget(parent), _widget(NULL) {
   setLayout(new QVBoxLayout);
@@ -24,7 +25,10 @@ QWidget* PlaceHolderWidget::widget() const {
 
 QWidget* PlaceHolderWidget::takeWidget() {
   layout()->removeWidget(_widget);
+  if (_widget != NULL)
+    _widget->setParent(NULL);
   QWidget* result = _widget;
   _widget = NULL;
   return result;
 }
+

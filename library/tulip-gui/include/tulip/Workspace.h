@@ -57,6 +57,11 @@ public slots:
   void delView(tlp::View* view);
   void switchToStartupMode();
   void switchToSingleMode();
+  void switchToSplitMode();
+  void switchToGridMode();
+
+  void nextPage();
+  void previousPage();
 
 protected slots:
   void viewNeedsDraw();
