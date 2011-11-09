@@ -405,47 +405,43 @@ Vector<int, 4> Camera::getViewport() {
   return scene->getViewport();
 }
 //====================================================
-void Camera::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode= NULL;
-
+void Camera::getXML(string &outString) {
   stringstream strZF;
   stringstream strSR;
   stringstream strD3;
 
-  GlXMLTools::createDataNode(rootNode,dataNode);
-  GlXMLTools::getXML(dataNode,"center",center);
-  GlXMLTools::getXML(dataNode,"eyes",eyes);
-  GlXMLTools::getXML(dataNode,"up",up);
-  GlXMLTools::getXML(dataNode,"zoomFactor",zoomFactor);
-  GlXMLTools::getXML(dataNode,"sceneRadius",sceneRadius);
-  GlXMLTools::getXML(dataNode,"d3",d3);
+  GlXMLTools::beginDataNode(outString);
+  GlXMLTools::getXML(outString,"center",center);
+  GlXMLTools::getXML(outString,"eyes",eyes);
+  GlXMLTools::getXML(outString,"up",up);
+  GlXMLTools::getXML(outString,"zoomFactor",zoomFactor);
+  GlXMLTools::getXML(outString,"sceneRadius",sceneRadius);
+  GlXMLTools::getXML(outString,"d3",d3);
 
   if(sceneBoundingBox.isValid()) {
-    GlXMLTools::getXML(dataNode,"sceneBoundingBox0",Coord(sceneBoundingBox[0]));
-    GlXMLTools::getXML(dataNode,"sceneBoundingBox1",Coord(sceneBoundingBox[1]));
+    GlXMLTools::getXML(outString,"sceneBoundingBox0",Coord(sceneBoundingBox[0]));
+    GlXMLTools::getXML(outString,"sceneBoundingBox1",Coord(sceneBoundingBox[1]));
   }
+
+  GlXMLTools::endDataNode(outString);
 }
 //====================================================
-void Camera::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode= NULL;
+void Camera::setWithXML(const string &inString, unsigned int &currentPosition) {
+  GlXMLTools::enterDataNode(inString,currentPosition);
 
-  GlXMLTools::getDataNodeDirectly(rootNode,dataNode);
+  Coord bbTmp;
 
-  if(dataNode) {
+  GlXMLTools::setWithXML(inString,currentPosition,"center",center);
+  GlXMLTools::setWithXML(inString,currentPosition,"eyes",eyes);
+  GlXMLTools::setWithXML(inString,currentPosition,"up",up);
+  GlXMLTools::setWithXML(inString,currentPosition,"zoomFactor",zoomFactor);
+  GlXMLTools::setWithXML(inString,currentPosition,"sceneRadius",sceneRadius);
+  GlXMLTools::setWithXML(inString,currentPosition,"d3",d3);
+  GlXMLTools::setWithXML(inString,currentPosition,"sceneBoundingBox0",bbTmp);
+  sceneBoundingBox.expand(bbTmp);
+  GlXMLTools::setWithXML(inString,currentPosition,"sceneBoundingBox1",bbTmp);
+  sceneBoundingBox.expand(bbTmp);
 
-    Coord bbTmp;
-
-    GlXMLTools::setWithXML(dataNode,"center",center);
-    GlXMLTools::setWithXML(dataNode,"eyes",eyes);
-    GlXMLTools::setWithXML(dataNode,"up",up);
-    GlXMLTools::setWithXML(dataNode,"zoomFactor",zoomFactor);
-    GlXMLTools::setWithXML(dataNode,"sceneRadius",sceneRadius);
-    GlXMLTools::setWithXML(dataNode,"d3",d3);
-    GlXMLTools::setWithXML(dataNode,"sceneBoundingBox0",bbTmp);
-    sceneBoundingBox.expand(bbTmp);
-    GlXMLTools::setWithXML(dataNode,"sceneBoundingBox1",bbTmp);
-    sceneBoundingBox.expand(bbTmp);
-
-  }
+  GlXMLTools::leaveDataNode(inString,currentPosition);
 }
 }

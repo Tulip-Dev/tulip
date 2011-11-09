@@ -100,14 +100,14 @@ public:
   virtual void translate(const Coord& vec);
 
   /**
-   * Function to export data in XML
+   * Function to export data in outString (in XML format)
    */
-  virtual void getXML(xmlNodePtr rootNode);
+  virtual void getXML(std::string &outString);
 
   /**
-   * Function to set data with XML
+   * Function to set data with inString (in XML format)
    */
-  virtual void setWithXML(xmlNodePtr rootNode);
+  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
 protected:
   std::vector<Coord> _points;

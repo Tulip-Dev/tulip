@@ -346,32 +346,23 @@ void GlConvexHull::translate(const Coord& mouvement) {
   }
 }
 //====================================================
-void GlConvexHull::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode= NULL;
+void GlConvexHull::getXML(string &outString) {
 
-  GlXMLTools::createProperty(rootNode, "type", "GlConvexHull");
+  GlXMLTools::createProperty(outString,"type","GlConvexHull","GlEntity");
 
-  GlXMLTools::createDataNode(rootNode, dataNode);
-
-  GlXMLTools::getXML(dataNode, "points", _points);
-  GlXMLTools::getXML(dataNode, "fillColors", _fillColors);
-  GlXMLTools::getXML(dataNode, "outlineColor", _outlineColors);
-  GlXMLTools::getXML(dataNode, "filled", _filled);
-  GlXMLTools::getXML(dataNode, "outlined", _outlined);
+  GlXMLTools::getXML(outString, "points", _points);
+  GlXMLTools::getXML(outString, "fillColors", _fillColors);
+  GlXMLTools::getXML(outString, "outlineColor", _outlineColors);
+  GlXMLTools::getXML(outString, "filled", _filled);
+  GlXMLTools::getXML(outString, "outlined", _outlined);
 }
 //====================================================
-void GlConvexHull::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode= NULL;
-
-  GlXMLTools::getDataNode(rootNode, dataNode);
-
-  if(dataNode) {
-    GlXMLTools::setWithXML(dataNode, "points",_points);
-    GlXMLTools::setWithXML(dataNode, "fillColors", _fillColors);
-    GlXMLTools::setWithXML(dataNode, "outlineColor", _outlineColors);
-    GlXMLTools::setWithXML(dataNode, "filled", _filled);
-    GlXMLTools::setWithXML(dataNode, "outlined", _outlined);
-  }
+void GlConvexHull::setWithXML(const string &inString, unsigned int &currentPosition) {
+  GlXMLTools::setWithXML(inString,currentPosition, "points",_points);
+  GlXMLTools::setWithXML(inString,currentPosition, "fillColors", _fillColors);
+  GlXMLTools::setWithXML(inString,currentPosition, "outlineColor", _outlineColors);
+  GlXMLTools::setWithXML(inString,currentPosition, "filled", _filled);
+  GlXMLTools::setWithXML(inString,currentPosition, "outlined", _outlined);
 }
 
 }

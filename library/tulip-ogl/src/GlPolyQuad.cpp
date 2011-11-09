@@ -240,25 +240,20 @@ void GlPolyQuad::setColor(const Color &color) {
   }
 }
 
-void GlPolyQuad::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
-  GlXMLTools::createProperty(rootNode, "type", "GlPolyQuad");
-  GlXMLTools::getDataNode(rootNode,dataNode);
-  GlXMLTools::getXML(dataNode,"polyQuadEdges", polyQuadEdges);
-  GlXMLTools::getXML(dataNode,"polyQuadEdgesColors", polyQuadEdgesColors);
-  GlXMLTools::getXML(dataNode,"textureName", textureName);
+void GlPolyQuad::getXML(string &outString) {
+
+  GlXMLTools::createProperty(outString,"type","GlPolyQuad","GlEntity");
+
+  GlXMLTools::getXML(outString,"polyQuadEdges", polyQuadEdges);
+  GlXMLTools::getXML(outString,"polyQuadEdgesColors", polyQuadEdgesColors);
+  GlXMLTools::getXML(outString,"textureName", textureName);
 }
 
-void GlPolyQuad::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
-  GlXMLTools::getDataNode(rootNode,dataNode);
+void GlPolyQuad::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  // Parse Data
-  if(dataNode) {
-    GlXMLTools::setWithXML(dataNode,"polyQuadEdges", polyQuadEdges);
-    GlXMLTools::setWithXML(dataNode,"polyQuadEdgesColors", polyQuadEdgesColors);
-    GlXMLTools::setWithXML(dataNode,"textureName", textureName);
-  }
+  GlXMLTools::setWithXML(inString, currentPosition,"polyQuadEdges", polyQuadEdges);
+  GlXMLTools::setWithXML(inString, currentPosition,"polyQuadEdgesColors", polyQuadEdgesColors);
+  GlXMLTools::setWithXML(inString, currentPosition,"textureName", textureName);
 
   vector<Coord>::iterator it;
 

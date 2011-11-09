@@ -18,6 +18,8 @@
  */
 #include <tulip/GlCircle.h>
 
+using namespace std;
+
 namespace tlp {
 
 //===================================================
@@ -39,10 +41,10 @@ void  GlCircle::set(const Coord &center, float radius, float startAngle) {
   computePolygon();
 }
 //===========================================================
-void GlCircle::getXML(xmlNodePtr rootNode) {
+void GlCircle::getXML(string &outString) {
 
-  GlXMLTools::createProperty(rootNode, "type", "GlCircle");
+  GlXMLTools::createProperty(outString,"type","GlCircle","GlEntity");
 
-  getXMLOnlyData(rootNode);
+  GlPolygon::getXMLOnlyData(outString);
 }
 }

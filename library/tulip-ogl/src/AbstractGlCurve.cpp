@@ -990,8 +990,8 @@ void AbstractGlCurve::translate(const Coord &move) {
   boundingBox.translate(move);
 }
 
-void AbstractGlCurve::getXML(xmlNodePtr) {}
+void AbstractGlCurve::getXML(string &) {}
 
-void AbstractGlCurve::setWithXML(xmlNodePtr) {}
+void AbstractGlCurve::setWithXML(const string &,unsigned int &) {}
 
 }

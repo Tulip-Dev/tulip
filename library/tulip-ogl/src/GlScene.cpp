@@ -17,11 +17,11 @@
  *
  */
 #include <GL/glew.h>
-#include <libxml/parser.h>
 #include <algorithm>
 #include <iostream>
 #include <cstdlib>
 #include <climits>
+#include <stdio.h>
 
 
 #include <tulip/OpenGlConfigManager.h>
@@ -1312,124 +1312,69 @@ GlLayer* GlScene::getLayer(const std::string& name) {
 }
 //====================================================
 void GlScene::getXML(string &out) {
-  xmlDocPtr doc = NULL;       /* document pointer */
-  xmlNodePtr node = NULL;
-  xmlNodePtr rootNode = NULL;
-  xmlNodePtr dataNode= NULL;
-  xmlNodePtr childrenNode = NULL;/* node pointers */
 
-  doc = xmlNewDoc(BAD_CAST "1.0");
-  rootNode = xmlNewNode(NULL, BAD_CAST "scene");
-  xmlDocSetRootElement(doc, rootNode);
+  out.append("<scene>");
 
-  GlXMLTools::createDataAndChildrenNodes(rootNode, dataNode, childrenNode);
+  GlXMLTools::beginDataNode(out);
 
-  GlXMLTools::getXML(dataNode,"viewport",viewport);
-  GlXMLTools::getXML(dataNode,"background",backgroundColor);
+  GlXMLTools::getXML(out,"viewport",viewport);
+  GlXMLTools::getXML(out,"background",backgroundColor);
+
+  GlXMLTools::endDataNode(out);
+
+  GlXMLTools::beginChildNode(out);
 
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
 
     // Don't save working layers
     if((*it).second->isAWorkingLayer())
-      continue;
+      continue; 
 
-    GlXMLTools::createChild(childrenNode, "GlLayer", node);
-    GlXMLTools::createProperty(node, "name", (*it).first);
-    (*it).second->getXML(node);
+    GlXMLTools::beginChildNode(out,"GlLayer");
+
+    GlXMLTools::createProperty(out, "name", (*it).first);
+
+    (*it).second->getXML(out);
+
+    GlXMLTools::endChildNode(out,"GlLayer");
   }
 
-  /*
-     * Dumping document to stdio or file
-     */
-  xmlChar *xmlbuff;
-  int buffersize;
+  GlXMLTools::endChildNode(out);
 
-  xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
-  out.append((char *)xmlbuff);
-
-  xmlFree(xmlbuff);
-
-  /*free the document */
-  xmlFreeDoc(doc);
-
-  /*
-     *Free the global variables that may
-     *have been allocated by the parser.
-     */
-  xmlCleanupParser();
-
-  /*
-     * this is to debug memory for regression tests
-     */
-  xmlMemoryDump();
+  out.append("</scene>");
+  cout << out << endl;
 }
 //====================================================
 void GlScene::setWithXML(string &in, Graph *graph) {
-  xmlDocPtr doc;
-  xmlNodePtr rootNode = NULL;
-  xmlNodePtr dataNode= NULL;
-  xmlNodePtr childrenNode = NULL;
-  xmlNodePtr node = NULL;/* node pointers */
 
   glGraphComposite=new GlGraphComposite(graph);
 
-  doc = xmlReadMemory(&in[0], in.length(), "noname.xml", NULL, 0);
+  assert(in.substr(0,7)=="<scene>");
+  unsigned int currentPosition=7;
+  GlXMLTools::enterDataNode(in,currentPosition);
+  GlXMLTools::setWithXML(in,currentPosition,"viewport",viewport);
+  GlXMLTools::setWithXML(in,currentPosition,"background",backgroundColor);
+  GlXMLTools::leaveDataNode(in,currentPosition);
 
-  rootNode = xmlDocGetRootElement(doc);
+  GlXMLTools::enterChildNode(in,currentPosition);
+  string childName=GlXMLTools::enterChildNode(in,currentPosition);
+  while(childName!=""){
+    assert(childName=="GlLayer");
 
-  string name;
+    map<string,string> properties=GlXMLTools::getProperties(in,currentPosition);
 
-  name=((char*)rootNode->name);
+    assert(properties.count("name")!=0);
 
-  if (rootNode->type == XML_ELEMENT_NODE && name=="scene") {
-    GlXMLTools::getDataAndChildrenNodes(rootNode,dataNode,childrenNode);
-  }
-  else {
-    assert(false);
-  }
+    GlLayer *newLayer=new GlLayer(properties["name"]);
+    addLayer(newLayer);
+    newLayer->setWithXML(in,currentPosition);
 
-  // Parse data
-  if(dataNode) {
-    GlXMLTools::setWithXML(dataNode,"viewport",viewport);
-    GlXMLTools::setWithXML(dataNode,"background",backgroundColor);
-  }
+    GlXMLTools::leaveChildNode(in,currentPosition,"GlLayer");
 
-  // Parse children
-  for (node = childrenNode->children; node; node = node->next) {
-    if(node->type == XML_ELEMENT_NODE) {
-      if(string((char*)node->name)=="GlLayer") {
-        //New version
-        string propName=(char*)node->properties->name;
-        string propValue=(char*)node->properties->children->content;
-
-        if(propName=="name") {
-          GlLayer *newLayer=new GlLayer(propValue);
-          addLayer(newLayer);
-          newLayer->setWithXML(node);
-        }
-        else {
-          assert(false);
-        }
-      }
-      else {
-        //Previous version compatibility
-        string propName=(char*)node->properties->name;
-        string propValue=(char*)node->properties->children->content;
-
-        if(propName=="type" && propValue=="GlLayer") {
-          GlLayer *newLayer=new GlLayer((char*)node->name);
-          addLayer(newLayer);
-          newLayer->setWithXML(node);
-        }
-        else {
-          assert(false);
-        }
-      }
-    }
+    childName=GlXMLTools::enterChildNode(in,currentPosition);
   }
 
   getLayer("Main")->addGlEntity(glGraphComposite,"graph");
-  //addGlGraphCompositeInfo(getLayer("Main"),glGraphComposite);
 }
 
 void GlScene::setViewportZoom(int zoom,int xDec, int yDec) {

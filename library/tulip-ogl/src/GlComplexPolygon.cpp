@@ -656,67 +656,59 @@ void GlComplexPolygon::translate(const Coord& vec) {
   runTesselation();
 }
 //===========================================================
-void GlComplexPolygon::getXML(xmlNodePtr rootNode) {
+void GlComplexPolygon::getXML(string &outString) {
 
-  GlXMLTools::createProperty(rootNode, "type", "GlComplexPolygon");
+  GlXMLTools::createProperty(outString,"type","GlComplexPolygon","GlEntity");
 
-  getXMLOnlyData(rootNode);
+  getXMLOnlyData(outString);
 
 }
 //===========================================================
-void GlComplexPolygon::getXMLOnlyData(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlComplexPolygon::getXMLOnlyData(string &outString) {
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
 
-  GlXMLTools::getXML(dataNode,"numberOfVector",points.size());
+  GlXMLTools::getXML(outString,"numberOfVector",points.size());
 
   for (size_t i = 0 ; i < points.size() ; ++i) {
     stringstream str;
     str << i ;
 
     if(!points[i].empty()) {
-      GlXMLTools::getXML(dataNode,"points"+str.str(),points[i]);
+      GlXMLTools::getXML(outString,"points"+str.str(),points[i]);
     }
     else {
-      GlXMLTools::getXML(dataNode,"points"+str.str(),vector<Coord>());
+      GlXMLTools::getXML(outString,"points"+str.str(),vector<Coord>());
     }
   }
 
-  GlXMLTools::getXML(dataNode,"fillColor",fillColor);
-  GlXMLTools::getXML(dataNode,"outlineColor",outlineColor);
-  GlXMLTools::getXML(dataNode,"outlined",outlined);
-  GlXMLTools::getXML(dataNode,"outlineSize",outlineSize);
-  GlXMLTools::getXML(dataNode,"textureName",textureName);
+  GlXMLTools::getXML(outString,"fillColor",fillColor);
+  GlXMLTools::getXML(outString,"outlineColor",outlineColor);
+  GlXMLTools::getXML(outString,"outlined",outlined);
+  GlXMLTools::getXML(outString,"outlineSize",outlineSize);
+  GlXMLTools::getXML(outString,"textureName",textureName);
 }
 //============================================================
-void GlComplexPolygon::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlComplexPolygon::setWithXML(const string &inString,unsigned int &currentPosition) {
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
+  int numberOfVector;
+  GlXMLTools::setWithXML(inString,currentPosition,"numberOfVector",numberOfVector);
 
-  // Parse Data
-  if(dataNode) {
-    int numberOfVector;
-    GlXMLTools::setWithXML(dataNode,"numberOfVector",numberOfVector);
+  for(int i=0; i<numberOfVector; ++i) {
+    stringstream str;
+    str << i ;
+    points.push_back(vector<Coord>());
+    GlXMLTools::setWithXML(inString,currentPosition,"points"+str.str(),points[i]);
+  }
 
-    for(int i=0; i<numberOfVector; ++i) {
-      stringstream str;
-      str << i ;
-      points.push_back(vector<Coord>());
-      GlXMLTools::setWithXML(dataNode,"points"+str.str(),points[i]);
-    }
+  GlXMLTools::setWithXML(inString,currentPosition,"fillColor",fillColor);
+  GlXMLTools::setWithXML(inString,currentPosition,"outlineColor",outlineColor);
+  GlXMLTools::setWithXML(inString,currentPosition,"outlined",outlined);
+  GlXMLTools::setWithXML(inString,currentPosition,"outlineSize",outlineSize);
+  GlXMLTools::setWithXML(inString,currentPosition,"textureName",textureName);
 
-    GlXMLTools::setWithXML(dataNode,"fillColor",fillColor);
-    GlXMLTools::setWithXML(dataNode,"outlineColor",outlineColor);
-    GlXMLTools::setWithXML(dataNode,"outlined",outlined);
-    GlXMLTools::setWithXML(dataNode,"outlineSize",outlineSize);
-    GlXMLTools::setWithXML(dataNode,"textureName",textureName);
-
-    for(vector<vector<Coord> >::iterator it= points.begin(); it!=points.end(); ++it) {
-      for(vector<Coord>::iterator it2=(*it).begin(); it2!=(*it).end(); ++it2) {
-        boundingBox.expand(*it2);
-      }
+  for(vector<vector<Coord> >::iterator it= points.begin(); it!=points.end(); ++it) {
+    for(vector<Coord>::iterator it2=(*it).begin(); it2!=(*it).end(); ++it2) {
+      boundingBox.expand(*it2);
     }
   }
 }

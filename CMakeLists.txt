@@ -139,10 +139,6 @@ INCLUDE(FindGLEW.cmake)
 IF(NOT GLEW_FOUND)
    message(FATAL_ERROR "Cannot find the GLEW library (required)")
 ENDIF(NOT GLEW_FOUND)
-INCLUDE(FindXML2.cmake)
-IF(NOT LIBXML2_FOUND)
-   message(FATAL_ERROR "Cannot find the XML2 library (required)")
-ENDIF(NOT LIBXML2_FOUND)
 
 ## -----------------------------------------------------------------------------------------------
 ## OpenMP
@@ -432,7 +428,7 @@ CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 ## Installation of files
 ## -----------------------------------------------------------------------------------------------
 INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config DESTINATION ${TulipBinInstallDir} COMPONENT tulip_core_dev)
-INSTALL(FILES FindTULIP.cmake FindGLEW.cmake FindXML2.cmake TulipUseFile.cmake DESTINATION ${TulipShareInstallDir} COMPONENT tulip_core_dev)
+INSTALL(FILES FindTULIP.cmake FindGLEW.cmake TulipUseFile.cmake DESTINATION ${TulipShareInstallDir} COMPONENT tulip_core_dev)
 ## -----------------------------------------------------------------------------------------------
 ## Script for linux Tulip bundle building
 IF(LINUX)

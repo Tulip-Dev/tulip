@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <libxml/tree.h>
 #include <tulip/GlComposite.h>
 
 #include <tulip/GlLayer.h>
@@ -211,30 +210,68 @@ void GlComposite::notifyModified(GlSimpleEntity *entity) {
     layerParents[0]->getScene()->notifyModifyEntity(entity);
 }
 //============================================================
-void GlComposite::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr node=NULL;
-  xmlNodePtr dataNode=NULL;
-  xmlNodePtr childrenNode=NULL;
+void GlComposite::getXML(string &outString) {
+  //TODOXML
 
   string name;
 
-  GlXMLTools::createProperty(rootNode,"type","GlComposite");
+  GlXMLTools::createProperty(outString,"type","GlComposite","GlEntity");
 
-  GlXMLTools::createDataAndChildrenNodes(rootNode, dataNode, childrenNode);
+  GlXMLTools::beginChildNode(outString);
 
   for(list<GlSimpleEntity*>::iterator it=_sortedElements.begin(); it!=_sortedElements.end(); ++it) {
     name=findKey(*it);
-    GlXMLTools::createChild(childrenNode,"GlEntity",node);
-    GlXMLTools::createProperty(node,"name",name);
-    GlXMLTools::createDataNode(node,dataNode);
-    GlXMLTools::getXML(dataNode,"visible",(*it)->isVisible());
-    GlXMLTools::getXML(dataNode,"stencil",(*it)->getStencil());
-    (*it)->getXML(node);
+    GlXMLTools::beginChildNode(outString,"GlEntity");
+    GlXMLTools::createProperty(outString,"name",name);
+    GlXMLTools::beginDataNode(outString);
+    GlXMLTools::getXML(outString,"visible",(*it)->isVisible());
+    GlXMLTools::getXML(outString,"stencil",(*it)->getStencil());
+    (*it)->getXML(outString);
+    GlXMLTools::endDataNode(outString);
+    GlXMLTools::endChildNode(outString,"GlEntity");
   }
+
+  GlXMLTools::endChildNode(outString);
 }
 //============================================================
-void GlComposite::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr node=NULL;
+void GlComposite::setWithXML(const string &inString, unsigned int &currentPosition) {
+
+  string childName=GlXMLTools::enterChildNode(inString,currentPosition);
+  assert(childName=="children");
+
+  childName=GlXMLTools::enterChildNode(inString,currentPosition);
+  while(childName!=""){
+
+    map<string,string> properties=GlXMLTools::getProperties(inString,currentPosition);
+
+    assert(properties.count("name")!=0);
+    assert(properties.count("type")!=0);
+
+    GlSimpleEntity *entity=GlXMLTools::createEntity(properties["type"]);
+
+    if(entity) {
+      bool visible;
+      int stencil;
+
+      GlXMLTools::enterDataNode(inString,currentPosition);
+
+      GlXMLTools::setWithXML(inString,currentPosition, "visible", visible);
+      GlXMLTools::setWithXML(inString,currentPosition, "stencil", stencil);
+      entity->setWithXML(inString,currentPosition);
+      entity->setVisible(visible);
+      entity->setStencil(stencil );
+      addGlEntity(entity,properties["name"]);
+
+      GlXMLTools::leaveDataNode(inString,currentPosition);
+    }
+
+    GlXMLTools::leaveChildNode(inString,currentPosition,childName);
+    childName=GlXMLTools::enterChildNode(inString,currentPosition);
+  }
+
+  GlXMLTools::leaveChildNode(inString,currentPosition,"children");
+
+  /*xmlNodePtr node=NULL;
   xmlNodePtr dataNode=NULL;
   xmlNodePtr childrenNode=NULL;
 
@@ -273,6 +310,6 @@ void GlComposite::setWithXML(xmlNodePtr rootNode) {
         }
       }
     }
-  }
+  }*/
 }
 }

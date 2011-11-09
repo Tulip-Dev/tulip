@@ -20,8 +20,6 @@
 
 #include <string>
 
-#include <libxml/tree.h>
-
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlComposite.h>
 #include <tulip/GlBox.h>
@@ -39,108 +37,102 @@
 
 using namespace std;
 
+unsigned int tlp::GlXMLTools::indentationNumber=0;
+
 namespace tlp {
 
-void GlXMLTools::createDataAndChildrenNodes(xmlNodePtr rootNode,xmlNodePtr &dataNode, xmlNodePtr &childrenNode) {
-  xmlNodePtr data=NULL;
-  xmlNodePtr children=NULL;
-  getDataAndChildrenNodes(rootNode,data,children);
+void GlXMLTools::applyIndentation(string &outString){
+  for(unsigned int i=0;i<indentationNumber;++i)
+    outString.append("  ");
+}
 
-  if(!data)
-    dataNode=xmlNewChild(rootNode, NULL, BAD_CAST "data",NULL);
+void GlXMLTools::goToNextCaracter(const string &inString, unsigned int &currentPosition){
+  while(inString[currentPosition]==' ' || inString[currentPosition]=='\n')
+    currentPosition++;
+}
+
+void GlXMLTools::beginDataNode(string &outString) {
+  applyIndentation(outString);
+  outString.append("<data>\n");
+  indentationNumber++;
+}
+
+void GlXMLTools::endDataNode(string &outString) {
+  indentationNumber--;
+  applyIndentation(outString);
+  outString.append("</data>\n");
+}
+
+void GlXMLTools::enterDataNode(const string &inString, unsigned int &currentPosition){
+  goToNextCaracter(inString, currentPosition);
+  assert(inString.substr(currentPosition,6)=="<data>");
+  currentPosition+=6;
+}
+
+void GlXMLTools::leaveDataNode(const string &inString, unsigned int &currentPosition){
+  goToNextCaracter(inString, currentPosition);
+  assert(inString.substr(currentPosition,7)=="</data>");
+  currentPosition+=7;
+}
+
+void GlXMLTools::beginChildNode(string &outString,const string &name) {
+  applyIndentation(outString);
+  outString.append("<"+name+">\n");
+  indentationNumber++;
+}
+
+void GlXMLTools::endChildNode(string &outString,const string &name) {
+  indentationNumber--;
+  applyIndentation(outString);
+  outString.append("</"+name+">\n");
+}
+
+string GlXMLTools::enterChildNode(const string &inString, unsigned int &currentPosition) {
+  goToNextCaracter(inString, currentPosition);
+  unsigned int beginPosition=currentPosition+1;
+  size_t endPosition = inString.find('>',currentPosition);
+  cout << inString.substr(beginPosition-1,endPosition-beginPosition) << endl;
+  if(inString.substr(beginPosition-1,endPosition-beginPosition).find("</")!=string::npos)
+    return "";
+  size_t childNameEndPosition = inString.find(' ',currentPosition);
+  currentPosition=endPosition+1;
+  if(childNameEndPosition<endPosition)
+    return inString.substr(beginPosition,childNameEndPosition-beginPosition);
   else
-    dataNode=data;
-
-  if(!children)
-    childrenNode = xmlNewChild(rootNode, NULL, BAD_CAST "children",NULL);
-  else
-    childrenNode=children;
+    return inString.substr(beginPosition,endPosition-beginPosition);
 }
 
-void GlXMLTools::getDataAndChildrenNodes(xmlNodePtr rootNode,xmlNodePtr &dataNode, xmlNodePtr &childrenNode) {
-  xmlNodePtr node;
+void GlXMLTools::leaveChildNode(const string &inString, unsigned int &currentPosition,const string &childName) {
+  currentPosition=inString.find("</"+childName+">",currentPosition)+3+childName.size();
+}
 
-  for (node = rootNode->children; node; node = node->next) {
-    if(node->type == XML_ELEMENT_NODE) {
-      string name=(char *)node->name;
-
-      if(name=="data") {
-        dataNode=node;
-      }
-      else if(name=="children") {
-        childrenNode=node;
-      }
-      else {
-        assert(false);
-      }
-    }
+void GlXMLTools::createProperty(string &outString, const string &name, const string &value, const string &parent) {
+  if(parent==""){
+     outString=outString.substr(0,outString.size()-2);
+     outString.append(" "+name+"=\""+value+"\">\n");
+  }else{
+    size_t beginPosition=outString.rfind("<"+parent);
+    beginPosition=outString.find('>',beginPosition);
+    string end=outString.substr(beginPosition);
+    outString.resize(beginPosition);
+    outString.append(" "+name+"=\""+value+"\"");
+    outString.append(end);
   }
 }
 
-void GlXMLTools::createDataNode(xmlNodePtr rootNode,xmlNodePtr &dataNode) {
-  xmlNodePtr node = NULL;
-  getDataNode(rootNode,node);
-
-  if(!node)
-    dataNode = xmlNewChild(rootNode, NULL, BAD_CAST "data",NULL);
-  else
-    dataNode=node;
-}
-
-void GlXMLTools::createChild(xmlNodePtr rootNode, const string &name, xmlNodePtr &childNode) {
-  childNode=xmlNewChild(rootNode, NULL, BAD_CAST name.c_str(),NULL);
-}
-
-void GlXMLTools::createProperty(xmlNodePtr rootNode, const string &name, const string &value) {
-  xmlNewProp(rootNode, BAD_CAST name.c_str(), BAD_CAST value.c_str());
-}
-
-void GlXMLTools::getDataNode(xmlNodePtr rootNode,xmlNodePtr &dataNode) {
-  xmlNodePtr node;
-  node = rootNode->children;
-  getDataNodeDirectly(node,dataNode);
-}
-
-void GlXMLTools::getDataNodeDirectly(xmlNodePtr rootNode,xmlNodePtr &dataNode) {
-  xmlNodePtr node;
-
-  for (node = rootNode; node; node = node->next) {
-    if(node->type == XML_ELEMENT_NODE) {
-      string name=(char *)node->name;
-
-      if(name=="data") {
-        dataNode=node;
-        return;
-      }
-    }
+map<string,string> GlXMLTools::getProperties(const string &inString, unsigned int &currentPosition) {
+  map<string,string> properties;
+  size_t beginPosition=inString.rfind('<',currentPosition);
+  size_t propertyPosition=inString.find('=',beginPosition);
+  while(propertyPosition<currentPosition){
+    size_t propertyNameBegin=inString.rfind(' ',propertyPosition)+1;
+    size_t propertyValueEnd=inString.find('\"',propertyPosition+2);
+    string name=inString.substr(propertyNameBegin,propertyPosition-propertyNameBegin);
+    string value=inString.substr(propertyPosition+2,propertyValueEnd-propertyPosition-2);
+    properties[name]=value;
+    propertyPosition=inString.find('=',propertyPosition+1);
   }
-
-  dataNode=NULL;
-}
-
-void GlXMLTools::getData(const string &name, xmlNodePtr dataNode, xmlNodePtr &outNode) {
-  xmlNodePtr node;
-
-  for (node = dataNode->children; node; node = node->next) {
-    if(node->type == XML_ELEMENT_NODE && (char*)(node->name)==name) {
-      outNode=node->children;
-      return;
-    }
-  }
-
-  outNode=NULL;
-}
-
-std::string GlXMLTools::getProperty(const std::string &name, xmlNodePtr node) {
-  xmlAttrPtr prop;
-
-  for(prop=node->properties; prop; prop=prop->next) {
-    if((char*)prop->name==name) {
-      return (char*)prop->children->content;
-    }
-  }
-
-  return "";
+  return properties;
 }
 
 GlSimpleEntity *GlXMLTools::createEntity(const string &name) {
@@ -196,14 +188,6 @@ GlSimpleEntity *GlXMLTools::createEntity(const string &name) {
   }
 
   return NULL;
-}
-
-void GlXMLTools::addContent(xmlNodePtr rootNode,const std::string &content) {
-  xmlNodeAddContent(rootNode,(xmlChar*)(content.c_str()));
-}
-
-void GlXMLTools::getContent(xmlNodePtr rootNode,std::string &content) {
-  content=(char*)rootNode->content;
 }
 
 }

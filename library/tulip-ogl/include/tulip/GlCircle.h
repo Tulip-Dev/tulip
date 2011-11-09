@@ -58,7 +58,7 @@ public:
   /**
    * Function to export data in XML
    */
-  virtual void getXML(xmlNodePtr rootNode);
+  virtual void getXML(std::string &outString);
 };
 /*@}*/
 }

@@ -74,22 +74,17 @@ const Color& GlQuad::getColor(const int idColor) const {
   return (*(const_cast< vector<Color> * > (&fillColors)))[idColor];
 }
 //===========================================================
-void GlQuad::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode = NULL;
+void GlQuad::getXML(string &outString) {
 
-  GlXMLTools::createProperty(rootNode, "type", "GlQuad");
+  GlXMLTools::createProperty(outString,"type","GlQuad","GlEntity");
 
-  GlPolygon::getXMLOnlyData(rootNode);
+  GlPolygon::getXMLOnlyData(outString);
 
-  GlXMLTools::getDataNode(rootNode, dataNode);
 }
 //============================================================
-void GlQuad::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode = NULL;
+void GlQuad::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  GlPolygon::setWithXML(rootNode);
-
-  GlXMLTools::getDataNode(rootNode, dataNode);
+  GlPolygon::setWithXML(inString,currentPosition);
 }
 
 }

@@ -23,13 +23,11 @@
 
 #include <sstream>
 #include <vector>
+#include <map>
 
 #include <tulip/tulipconf.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-
-typedef struct _xmlNode xmlNode;
-typedef xmlNode * xmlNodePtr;
 
 namespace tlp {
 
@@ -43,49 +41,67 @@ class TLP_GL_SCOPE GlXMLTools {
 public :
 
   /**
-   * Create a data and a child node in rootNode
+   *
    */
-  static void createDataAndChildrenNodes(xmlNodePtr rootNode,xmlNodePtr &dataNode, xmlNodePtr &childrenNode);
+  static void applyIndentation(std::string &outString);
+
   /**
-   * Create a data node in rootNode
+   *
    */
-  static void createDataNode(xmlNodePtr rootNode,xmlNodePtr &dataNode);
+  static void goToNextCaracter(const std::string &inString, unsigned int &currentPosition);
+
   /**
-   * Create a child node with a given name in rootNode
+   * Create and enter into a new data node
    */
-  static void createChild(xmlNodePtr rootNode, const std::string &name, xmlNodePtr &childNode);
+  static void beginDataNode(std::string &outString);
+
+  /**
+   * End last data node
+   */
+  static void endDataNode(std::string &outString);
+
+  /**
+   * Enter into a data node and set the currentPosition integer to the position next the data tag
+   */
+  static void enterDataNode(const std::string &inString, unsigned int &currentPosition);
+
+  /**
+   * Leave a data node and set the currentPosition integer to the position next the data end tag
+   */
+  static void leaveDataNode(const std::string &inString, unsigned int &currentPosition);
+
+  /**
+   * Create and enter into a new children node with name : name
+   */
+  static void beginChildNode(std::string &outString, const std::string &name="children");
+
+  /**
+   * End last children node with name : name
+   */
+  static void endChildNode(std::string &outString, const std::string &name="children");
+
+  /**
+   * Enter into a child node and set the currentPosition integer to the position next the child tag
+   * \return child name
+   */
+  static std::string enterChildNode(const std::string &inString, unsigned int &currentPosition);
+
+  /**
+   * Leave into a child node and set the currentPosition integer to the position next the child end tag
+   * \return child name
+   */
+  static void leaveChildNode(const std::string &inString, unsigned int &currentPosition, const std::string &childName);
+
   /**
    * Create a property with name and value in rootNode
    */
-  static void createProperty(xmlNodePtr rootNode, const std::string &name, const std::string &value);
+  static void createProperty(std::string &outString, const std::string &name, const std::string &value, const std::string &parent="");
+
   /**
-   * Add a text content in rootNode
+   *
    */
-  static void addContent(xmlNodePtr rootNode,const std::string &content);
-  /**
-   * Get the data and child node of rootNode
-   */
-  static void getDataAndChildrenNodes(xmlNodePtr rootNode,xmlNodePtr &dataNode, xmlNodePtr &childrenNode);
-  /**
-   * Get the data node of rootNode
-   */
-  static void getDataNode(xmlNodePtr rootNode,xmlNodePtr &dataNode);
-  /**
-   * Get the data node in the same level of rootNode
-   */
-  static void getDataNodeDirectly(xmlNodePtr rootNode,xmlNodePtr &dataNode);
-  /**
-   * Get the data with name of dataNode
-   */
-  static void getData(const std::string &name, xmlNodePtr dataNode, xmlNodePtr &outNode);
-  /**
-   * Get the property with name of node
-   */
-  static std::string getProperty(const std::string &name, xmlNodePtr node);
-  /**
-   * Get the text content of the rootNode
-   */
-  static void getContent(xmlNodePtr rootNode,std::string &content);
+  static std::map<std::string,std::string> getProperties(const std::string &inString, unsigned int &currentPosition);
+
   /**
    * Create a GlEntity with the given name
    */
@@ -95,9 +111,7 @@ public :
    * Get the XML output for a vector of Object
    */
   template <typename Obj>
-  static void getXML(xmlNodePtr rootNode,const std::string &name,const typename std::vector<Obj> &vect) {
-    xmlNodePtr node;
-    createChild(rootNode,name,node);
+  static void getXML(std::string &outString,const std::string &name,const typename std::vector<Obj> &vect) {
 
     std::stringstream str;
     str << "(" ;
@@ -111,23 +125,25 @@ public :
     }
 
     str << ")" ;
-    addContent(node,str.str());
+    outString.append("<"+name+">"+str.str()+"</"+name+">\n");
   }
 
   /**
    * Set vector of Object with the given XML
    */
   template <typename Obj>
-  static void setWithXML(xmlNodePtr rootNode,const std::string &name,std::vector<Obj> &vect) {
-    xmlNodePtr node;
-    GlXMLTools::getData(name, rootNode, node);
+  static void setWithXML(const std::string &inString, unsigned int &currentPosition,const std::string &name,std::vector<Obj> &vect) {
 
-    if(!node)
-      return;
+    goToNextCaracter(inString,currentPosition);
 
-    std::string tmp;
-    getContent(node,tmp);
-    std::istringstream is(tmp);
+    std::string nameTag=inString.substr(currentPosition,name.size()+2);
+    assert(nameTag=="<"+name+">");
+    currentPosition+=name.size()+2;
+
+    size_t endValuePosition=inString.find("</"+name+">",currentPosition);
+    assert(endValuePosition!=std::string::npos);
+
+    std::istringstream is(inString.substr(currentPosition,endValuePosition-currentPosition));
     Obj data;
     char c=is.get();
 
@@ -136,54 +152,67 @@ public :
       vect.push_back(data);
       c=is.get();
     }
+
+    currentPosition=endValuePosition+name.size()+3;
+
   }
 
   /**
    * Get the XML output for an Object
    */
   template <typename Obj>
-  static void getXML(xmlNodePtr rootNode, const std::string &name, const Obj &value) {
-    xmlNodePtr node;
-    createChild(rootNode,name,node);
+  static void getXML(std::string &outString, const std::string &name, const Obj &value) {
     std::stringstream str;
     str << value ;
-    addContent(node,str.str());
+    applyIndentation(outString);
+    outString.append("<"+name+">"+str.str()+"</"+name+">\n");
   }
 
   /**
    * Set an Object with the given XML
    */
   template <typename Obj>
-  static void setWithXML(xmlNodePtr rootNode, const std::string &name, Obj &value) {
-    xmlNodePtr node;
-    GlXMLTools::getData(name, rootNode, node);
+  static void setWithXML(const std::string &inString, unsigned int &currentPosition, const std::string &name, Obj &value) {
 
-    if (node) {
-      std::string tmp;
-      getContent(node,tmp);
-      std::stringstream str(tmp);
-      str >> value;
-    }
+    goToNextCaracter(inString,currentPosition);
+
+    std::string nameTag=inString.substr(currentPosition,name.size()+2);
+    assert(nameTag=="<"+name+">");
+    currentPosition+=name.size()+2;
+
+    size_t endValuePosition=inString.find("</"+name+">",currentPosition);
+    assert(endValuePosition!=std::string::npos);
+
+    std::stringstream str(inString.substr(currentPosition,endValuePosition-currentPosition));
+    str >> value;
+    currentPosition=endValuePosition+name.size()+3;
   }
 
   /**
    * Set an Object with the given XML and default value
    */
   template <typename Obj>
-  static void setWithXML(xmlNodePtr rootNode, const std::string &name, Obj &value,const Obj &defValue) {
-    xmlNodePtr node;
-    GlXMLTools::getData(name, rootNode, node);
+  static void setWithXML(const std::string &inString, unsigned int &currentPosition, const std::string &name, Obj &value,const Obj &defValue) {
+    goToNextCaracter(inString,currentPosition);
 
-    if (node) {
-      std::string tmp;
-      getContent(node,tmp);
-      std::stringstream str(tmp);
+    std::string nameTag=inString.substr(currentPosition,name.size()+2);
+    if(nameTag=="<"+name+">"){
+      currentPosition+=name.size()+2;
+
+      size_t endValuePosition=inString.find("</"+name+">",currentPosition);
+      assert(endValuePosition!=std::string::npos);
+
+      std::stringstream str(inString.substr(currentPosition,endValuePosition-currentPosition));
       str >> value;
-    }
-    else {
+      currentPosition=endValuePosition+name.size()+3;
+    }else{
       value=defValue;
     }
   }
+
+private :
+
+  static unsigned int indentationNumber;
 
 };
 

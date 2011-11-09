@@ -122,14 +122,14 @@ public:
   virtual void translate(const Coord &) {}
 
   /**
-   * Save the entity in Xml
+   * Save the entity in outString (in XML format)
    */
-  virtual void getXML(xmlNodePtr rootNode) =0;
+  virtual void getXML(std::string &outString) =0;
 
   /**
-   * Load entity with Xml
+   * Load entity with inString (in XML format)
    */
-  virtual void setWithXML(xmlNodePtr rootNode) =0;
+  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition) =0;
 
 protected:
 

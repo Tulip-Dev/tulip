@@ -75,38 +75,28 @@ void GlSphere::translate(const Coord& vec) {
   position += vec;
 }
 //===========================================================
-void GlSphere::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlSphere::getXML(string &outString) {
+  GlXMLTools::createProperty(outString,"type","GlSphere","GlEntity");
 
-  GlXMLTools::createProperty(rootNode, "type", "GlSphere");
-
-  GlXMLTools::getDataNode(rootNode,dataNode);
-
-  GlXMLTools::getXML(dataNode,"position",position);
-  GlXMLTools::getXML(dataNode,"radius",radius);
-  GlXMLTools::getXML(dataNode,"color",color);
-  GlXMLTools::getXML(dataNode,"textureFile",textureFile);
-  GlXMLTools::getXML(dataNode,"rotation",rot);
+  GlXMLTools::getXML(outString,"position",position);
+  GlXMLTools::getXML(outString,"radius",radius);
+  GlXMLTools::getXML(outString,"color",color);
+  GlXMLTools::getXML(outString,"textureFile",textureFile);
+  GlXMLTools::getXML(outString,"rotation",rot);
 
 }
 //============================================================
-void GlSphere::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlSphere::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
+  GlXMLTools::setWithXML(inString, currentPosition,"position",position);
+  GlXMLTools::setWithXML(inString, currentPosition,"radius",radius);
+  GlXMLTools::setWithXML(inString, currentPosition,"color",color);
+  GlXMLTools::setWithXML(inString, currentPosition,"textureFile",textureFile);
+  GlXMLTools::setWithXML(inString, currentPosition,"rotation",rot);
 
-  // Parse Data
-  if(dataNode) {
+  boundingBox[0] = Coord(position[0]-radius,position[1]-radius,position[2]-radius);
+  boundingBox[1] = Coord(position[0]+radius,position[1]+radius,position[2]+radius);
 
-    GlXMLTools::setWithXML(dataNode,"position",position);
-    GlXMLTools::setWithXML(dataNode,"radius",radius);
-    GlXMLTools::setWithXML(dataNode,"color",color);
-    GlXMLTools::setWithXML(dataNode,"textureFile",textureFile);
-    GlXMLTools::setWithXML(dataNode,"rotation",rot);
-
-    boundingBox[0] = Coord(position[0]-radius,position[1]-radius,position[2]-radius);
-    boundingBox[1] = Coord(position[0]+radius,position[1]+radius,position[2]+radius);
-  }
 }
 
 }

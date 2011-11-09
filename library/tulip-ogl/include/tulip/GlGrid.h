@@ -74,14 +74,14 @@ public:
   virtual void translate(const Coord& mouvement);
 
   /**
-   * Get the data in XML form
+   * Function to export data in outString (in XML format)
    */
-  void getXML(xmlNodePtr rootNode);
+  virtual void getXML(std::string &outString);
 
   /**
-   * Set the data with XML
+   * Function to set data with inString (in XML format)
    */
-  void setWithXML(xmlNodePtr rootNode);
+  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
 
 protected:

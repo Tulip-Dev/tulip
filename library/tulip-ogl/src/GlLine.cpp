@@ -113,37 +113,25 @@ void GlLine::translate(const Coord& mouvement) {
   }
 }
 //=====================================================
-void GlLine::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlLine::getXML(string &outString) {
+  GlXMLTools::createProperty(outString,"type","GlLine","GlEntity");
 
-  GlXMLTools::createProperty(rootNode, "type", "GlLine");
-
-  GlXMLTools::getDataNode(rootNode,dataNode);
-
-  GlXMLTools::getXML(dataNode,"points",_points);
-  GlXMLTools::getXML(dataNode,"colors",_colors);
-  GlXMLTools::getXML(dataNode,"width",width);
-  GlXMLTools::getXML(dataNode,"factor",factor);
-  GlXMLTools::getXML(dataNode,"pattern",pattern);
-
+  GlXMLTools::getXML(outString,"points",_points);
+  GlXMLTools::getXML(outString,"colors",_colors);
+  GlXMLTools::getXML(outString,"width",width);
+  GlXMLTools::getXML(outString,"factor",factor);
+  GlXMLTools::getXML(outString,"pattern",pattern);
 }
 //============================================================
-void GlLine::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlLine::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
+  GlXMLTools::setWithXML(inString, currentPosition, "points", _points);
+  GlXMLTools::setWithXML(inString, currentPosition, "colors", _colors);
+  GlXMLTools::setWithXML(inString, currentPosition,"width",width);
+  GlXMLTools::setWithXML(inString, currentPosition,"factor",factor);
+  GlXMLTools::setWithXML(inString, currentPosition,"pattern",pattern);
 
-  // Parse Data
-  if(dataNode) {
-
-    GlXMLTools::setWithXML(dataNode, "points", _points);
-    GlXMLTools::setWithXML(dataNode, "colors", _colors);
-    GlXMLTools::setWithXML(dataNode,"width",width);
-    GlXMLTools::setWithXML(dataNode,"factor",factor);
-    GlXMLTools::setWithXML(dataNode,"pattern",pattern);
-
-    for(vector<Coord>::iterator it= _points.begin(); it!=_points.end(); ++it)
-      boundingBox.expand(*it);
-  }
+  for(vector<Coord>::iterator it= _points.begin(); it!=_points.end(); ++it)
+    boundingBox.expand(*it);
 }
 }

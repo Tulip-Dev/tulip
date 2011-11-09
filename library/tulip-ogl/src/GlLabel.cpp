@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <libxml/parser.h>
 #include <iostream>
 
 #include <FTGL/ftgl.h>
@@ -585,63 +584,54 @@ void GlLabel::rotate(float xRot, float yRot, float zRot) {
   this->zRot=zRot;
 }
 //===========================================================
-void GlLabel::getXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlLabel::getXML(string &outString) {
 
-  xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlLabel");
+  GlXMLTools::createProperty(outString,"type","GlLabel","GlEntity");
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
-
-  GlXMLTools::getXML(dataNode,"text",text);
-  GlXMLTools::getXML(dataNode,"renderingMode",renderingMode);
-  GlXMLTools::getXML(dataNode,"fontName",fontName);
-  GlXMLTools::getXML(dataNode,"centerPosition",centerPosition);
-  GlXMLTools::getXML(dataNode,"translationAfterRotation",translationAfterRotation);
-  GlXMLTools::getXML(dataNode,"size",size);
-  GlXMLTools::getXML(dataNode,"color",color);
-  GlXMLTools::getXML(dataNode,"alignment",alignment);
-  GlXMLTools::getXML(dataNode,"scaleToSize",scaleToSize);
-  GlXMLTools::getXML(dataNode,"useMinMaxSize",useMinMaxSize);
-  GlXMLTools::getXML(dataNode,"minSize",minSize);
-  GlXMLTools::getXML(dataNode,"maxSize",maxSize);
-  GlXMLTools::getXML(dataNode,"depthTestEnabled",depthTestEnabled);
-  GlXMLTools::getXML(dataNode,"leftAlign",leftAlign);
-  GlXMLTools::getXML(dataNode,"xRot",xRot);
-  GlXMLTools::getXML(dataNode,"yRot",yRot);
-  GlXMLTools::getXML(dataNode,"zRot",zRot);
-  GlXMLTools::getXML(dataNode,"outlineColor",outlineColor);
-  GlXMLTools::getXML(dataNode,"outlineSize",outlineSize);
-  GlXMLTools::getXML(dataNode,"textureName",textureName);
+  GlXMLTools::getXML(outString,"text",text);
+  GlXMLTools::getXML(outString,"renderingMode",renderingMode);
+  GlXMLTools::getXML(outString,"fontName",fontName);
+  GlXMLTools::getXML(outString,"centerPosition",centerPosition);
+  GlXMLTools::getXML(outString,"translationAfterRotation",translationAfterRotation);
+  GlXMLTools::getXML(outString,"size",size);
+  GlXMLTools::getXML(outString,"color",color);
+  GlXMLTools::getXML(outString,"alignment",alignment);
+  GlXMLTools::getXML(outString,"scaleToSize",scaleToSize);
+  GlXMLTools::getXML(outString,"useMinMaxSize",useMinMaxSize);
+  GlXMLTools::getXML(outString,"minSize",minSize);
+  GlXMLTools::getXML(outString,"maxSize",maxSize);
+  GlXMLTools::getXML(outString,"depthTestEnabled",depthTestEnabled);
+  GlXMLTools::getXML(outString,"leftAlign",leftAlign);
+  GlXMLTools::getXML(outString,"xRot",xRot);
+  GlXMLTools::getXML(outString,"yRot",yRot);
+  GlXMLTools::getXML(outString,"zRot",zRot);
+  GlXMLTools::getXML(outString,"outlineColor",outlineColor);
+  GlXMLTools::getXML(outString,"outlineSize",outlineSize);
+  GlXMLTools::getXML(outString,"textureName",textureName);
 }
 //============================================================
-void GlLabel::setWithXML(xmlNodePtr rootNode) {
-  xmlNodePtr dataNode=NULL;
+void GlLabel::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  GlXMLTools::getDataNode(rootNode,dataNode);
-
-  // Parse Data
-  if(dataNode) {
-    GlXMLTools::setWithXML(dataNode,"text",text);
-    GlXMLTools::setWithXML(dataNode,"renderingMode",renderingMode);
-    GlXMLTools::setWithXML(dataNode,"fontName",fontName);
-    GlXMLTools::setWithXML(dataNode,"centerPosition",centerPosition);
-    GlXMLTools::setWithXML(dataNode,"translationAfterRotation",translationAfterRotation);
-    GlXMLTools::setWithXML(dataNode, "size", size);
-    GlXMLTools::setWithXML(dataNode,"color",color);
-    GlXMLTools::setWithXML(dataNode,"alignment",alignment);
-    GlXMLTools::setWithXML(dataNode,"scaleToSize",scaleToSize);
-    GlXMLTools::setWithXML(dataNode,"useMinMaxSize",useMinMaxSize);
-    GlXMLTools::setWithXML(dataNode,"minSize",minSize);
-    GlXMLTools::setWithXML(dataNode,"maxSize",maxSize);
-    GlXMLTools::setWithXML(dataNode,"depthTestEnabled",depthTestEnabled);
-    GlXMLTools::setWithXML(dataNode,"leftAlign",leftAlign);
-    GlXMLTools::setWithXML(dataNode,"xRot",xRot);
-    GlXMLTools::setWithXML(dataNode,"yRot",yRot);
-    GlXMLTools::setWithXML(dataNode,"zRot",zRot);
-    GlXMLTools::setWithXML(dataNode,"outlineColor",outlineColor);
-    GlXMLTools::setWithXML(dataNode,"outlineSize",outlineSize);
-    GlXMLTools::setWithXML(dataNode,"textureName",textureName);
-  }
+  GlXMLTools::setWithXML(inString, currentPosition,"text",text);
+  GlXMLTools::setWithXML(inString, currentPosition,"renderingMode",renderingMode);
+  GlXMLTools::setWithXML(inString, currentPosition,"fontName",fontName);
+  GlXMLTools::setWithXML(inString, currentPosition,"centerPosition",centerPosition);
+  GlXMLTools::setWithXML(inString, currentPosition,"translationAfterRotation",translationAfterRotation);
+  GlXMLTools::setWithXML(inString, currentPosition, "size", size);
+  GlXMLTools::setWithXML(inString, currentPosition,"color",color);
+  GlXMLTools::setWithXML(inString, currentPosition,"alignment",alignment);
+  GlXMLTools::setWithXML(inString, currentPosition,"scaleToSize",scaleToSize);
+  GlXMLTools::setWithXML(inString, currentPosition,"useMinMaxSize",useMinMaxSize);
+  GlXMLTools::setWithXML(inString, currentPosition,"minSize",minSize);
+  GlXMLTools::setWithXML(inString, currentPosition,"maxSize",maxSize);
+  GlXMLTools::setWithXML(inString, currentPosition,"depthTestEnabled",depthTestEnabled);
+  GlXMLTools::setWithXML(inString, currentPosition,"leftAlign",leftAlign);
+  GlXMLTools::setWithXML(inString, currentPosition,"xRot",xRot);
+  GlXMLTools::setWithXML(inString, currentPosition,"yRot",yRot);
+  GlXMLTools::setWithXML(inString, currentPosition,"zRot",zRot);
+  GlXMLTools::setWithXML(inString, currentPosition,"outlineColor",outlineColor);
+  GlXMLTools::setWithXML(inString, currentPosition,"outlineSize",outlineSize);
+  GlXMLTools::setWithXML(inString, currentPosition,"textureName",textureName);
 }
 
 }
