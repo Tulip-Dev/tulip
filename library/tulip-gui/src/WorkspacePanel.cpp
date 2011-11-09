@@ -66,6 +66,8 @@ WorkspacePanel::WorkspacePanel(tlp::View* view, const QString& viewName, QWidget
 
 WorkspacePanel::~WorkspacePanel() {
   delete _ui;
+  _view->graphicsView()->deleteLater();
+  delete _view;
 }
 
 View* WorkspacePanel::view() const {

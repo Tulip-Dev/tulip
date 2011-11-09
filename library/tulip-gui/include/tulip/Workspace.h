@@ -19,9 +19,13 @@
 #ifndef WORKSPACE_H
 #define WORKSPACE_H
 
+#include <QtCore/QMap>
+#include <QtCore/QPair>
 #include <QtGui/QWidget>
 #include <tulip/tulipconf.h>
 #include <tulip/DataSet.h>
+
+class PlaceHolderWidget;
 
 namespace Ui {
 class Workspace;
@@ -37,6 +41,10 @@ class TLP_QT_SCOPE Workspace: public QWidget {
 
   Ui::Workspace* _ui;
   QList<tlp::WorkspacePanel*> _panels;
+  int _currentPanelIndex;
+
+  QMap<QWidget*,QVector<PlaceHolderWidget*> > _modeToSlots;
+  QMap<QWidget*,QWidget*> _modeSwitches;
 
 public:
   explicit Workspace(QWidget *parent = 0);
@@ -47,20 +55,22 @@ public:
 
 public slots:
   void delView(tlp::View* view);
-
-  void switchToFullPage();
-  void switchToSplitPage();
-  void switchToGridPage();
-  void switchToExposePage();
-  void showViewSwitcher();
-
-  void nextPage();
-  void previousPage();
+  void switchToStartupMode();
+  void switchToSingleMode();
 
 protected slots:
   void viewNeedsDraw();
   void panelClosed();
+  void switchWorkspaceMode(QWidget* page);
+  void updatePageCountLabel();
+  void updateAvailableModes();
+  void removePanel(WorkspacePanel*);
 
+  void updatePanels();
+
+  QWidget* currentModeWidget() const;
+  QVector<PlaceHolderWidget*> currentModeSlots() const;
+  unsigned int currentSlotsCount() const;
 };
 }
 
