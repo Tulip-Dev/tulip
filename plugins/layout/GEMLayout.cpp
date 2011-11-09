@@ -207,7 +207,6 @@ Coord GEMLayout::computeForces(unsigned int v,
 }
 //==========================================================================
 void GEMLayout::insert() {
-  vector<int>::iterator nodeSet2;
   GEMparticule *gemP, *gemQ;
   int startNode;
 
@@ -277,7 +276,6 @@ void GEMLayout::insert() {
     else
       startNode = i;
 
-    //    cerr << "[insert] round : " << i << " part : " << v << " pos: " <<  gemP->pos << endl;
   }
 }
 //==========================================================================
