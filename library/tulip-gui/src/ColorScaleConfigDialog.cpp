@@ -169,7 +169,7 @@ void ColorScaleConfigDialog::importColorScaleFromImageFile() {
 
   if (!colorsList.empty()) {
     ColorScale scaleTmp(colorsList, true);
-    setColorScale(&scaleTmp);
+    setColorScale(scaleTmp);
     displayUserGradientPreview();
   }
 }
@@ -412,7 +412,7 @@ void ColorScaleConfigDialog::reeditSaveColorScale(QListWidgetItem *savedColorSca
   }
 
   ColorScale scaleTmp(colorsList, gradient);
-  setColorScale(&scaleTmp);
+  setColorScale(scaleTmp);
   _ui->tabWidget->setCurrentIndex(0);
 }
 
