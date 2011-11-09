@@ -23,11 +23,6 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-struct _xmlNode {
-%TypeHeaderCode
-#include <libxml/tree.h>
-%End
-};
 
 namespace tlp {
 
@@ -70,9 +65,9 @@ class GlSimpleEntity {
 
     virtual void translate(const tlp::Coord &);
         
-    virtual void getXML(_xmlNode* rootNode) = 0;
-    
-    virtual void setWithXML(_xmlNode* rootNode) = 0;
+    virtual void getXML(std::string &out /Out/);
+
+    virtual void setWithXML(std::string &in, tlp::Graph *graph);
 
   };
 
