@@ -17,7 +17,7 @@
  *
  */
 //====================================================================================
-#include <iostream>
+
 #include <tulip/StlIterator.h>
 
 #include <tulip/Plugin.h>
