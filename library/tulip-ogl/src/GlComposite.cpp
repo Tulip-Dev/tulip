@@ -228,8 +228,6 @@ void GlComposite::notifyModified(GlSimpleEntity *entity) {
 }
 //============================================================
 void GlComposite::getXML(string &outString) {
-  //TODOXML
-
   string name;
 
   GlXMLTools::createProperty(outString,"type","GlComposite","GlEntity");
@@ -288,46 +286,5 @@ void GlComposite::setWithXML(const string &inString, unsigned int &currentPositi
   }
 
   GlXMLTools::leaveChildNode(inString,currentPosition,"children");
-
-  /*xmlNodePtr node=NULL;
-  xmlNodePtr dataNode=NULL;
-  xmlNodePtr childrenNode=NULL;
-
-  GlXMLTools::getDataAndChildrenNodes(rootNode,dataNode,childrenNode);
-
-  // Parse Children
-  for (node = childrenNode->children; node; node = node->next) {
-    if(node->type == XML_ELEMENT_NODE) {
-      string type = GlXMLTools::getProperty("type",node);
-      string name;
-
-      if(string((char*)node->name)=="GlEntity") {
-        //New version
-        name = GlXMLTools::getProperty("name",node);
-      }
-      else {
-        //previous version compatibility
-        name=(char*)node->name;
-      }
-
-      if(type!="") {
-        GlSimpleEntity *entity=GlXMLTools::createEntity(type);
-
-        if(entity) {
-          bool visible;
-          int stencil;
-
-          entity->setWithXML(node);
-          GlXMLTools::getDataNode(node,dataNode);
-
-          GlXMLTools::setWithXML(dataNode, "visible", visible);
-          GlXMLTools::setWithXML(dataNode, "stencil", stencil);
-          entity->setVisible(visible);
-          entity->setStencil(stencil );
-          addGlEntity(entity,name);
-        }
-      }
-    }
-  }*/
 }
 }
