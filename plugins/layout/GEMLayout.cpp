@@ -49,7 +49,7 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "unsigned integer" ) \
   HTML_HELP_DEF( "default", "0" ) \
   HTML_HELP_BODY() \
-  "This parameter allows to limit the number of iterations. The default value of 0 corresponds to 10 * nb_nodes * nb_nodes." \
+  "This parameter allows to limit the number of iterations. The default value of 0 corresponds to 3 * nb_nodes * nb_nodes." \
   HTML_HELP_CLOSE(),
 };
 
