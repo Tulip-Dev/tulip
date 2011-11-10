@@ -1328,7 +1328,7 @@ void GlScene::getXML(string &out) {
 
     // Don't save working layers
     if((*it).second->isAWorkingLayer())
-      continue; 
+      continue;
 
     GlXMLTools::beginChildNode(out,"GlLayer");
 
@@ -1358,7 +1358,8 @@ void GlScene::setWithXML(string &in, Graph *graph) {
 
   GlXMLTools::enterChildNode(in,currentPosition);
   string childName=GlXMLTools::enterChildNode(in,currentPosition);
-  while(childName!=""){
+
+  while(childName!="") {
     assert(childName=="GlLayer");
 
     map<string,string> properties=GlXMLTools::getProperties(in,currentPosition);

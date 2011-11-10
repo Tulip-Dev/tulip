@@ -56,12 +56,14 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
 
   Observable::holdObservers();
   QVector<View*> views;
-  for (int i=0;i<10;++i) {
+
+  for (int i=0; i<10; ++i) {
     Graph* g = newGraph();
     node n = g->addNode();
     g->getProperty<ColorProperty>("viewColor")->setNodeValue(n,Color(i*25,i*25,i*25));
     views.push_back(_ui->workspace->addView("Node Link Diagram view",g));
   }
+
   Observable::unholdObservers();
 //  _ui->workspace->switchToGridMode();
 

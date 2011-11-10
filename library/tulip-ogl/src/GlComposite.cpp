@@ -240,7 +240,8 @@ void GlComposite::setWithXML(const string &inString, unsigned int &currentPositi
   assert(childName=="children");
 
   childName=GlXMLTools::enterChildNode(inString,currentPosition);
-  while(childName!=""){
+
+  while(childName!="") {
 
     map<string,string> properties=GlXMLTools::getProperties(inString,currentPosition);
 

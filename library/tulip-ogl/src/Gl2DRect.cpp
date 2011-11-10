@@ -151,14 +151,14 @@ void Gl2DRect::getXML(string &outString) {
 //============================================================
 void Gl2DRect::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-    GlXMLTools::setWithXML(inString,currentPosition, "top", top);
-    GlXMLTools::setWithXML(inString,currentPosition, "bottom", bottom);
-    GlXMLTools::setWithXML(inString,currentPosition, "left", left);
-    GlXMLTools::setWithXML(inString,currentPosition, "right", right);
-    GlXMLTools::setWithXML(inString,currentPosition, "inPercent", inPercent);
-    GlXMLTools::setWithXML(inString,currentPosition, "textureName", textureName);
-    GlXMLTools::setWithXML(inString,currentPosition,"xInv",xInv,false);
-    GlXMLTools::setWithXML(inString,currentPosition,"yInv",yInv,false);
+  GlXMLTools::setWithXML(inString,currentPosition, "top", top);
+  GlXMLTools::setWithXML(inString,currentPosition, "bottom", bottom);
+  GlXMLTools::setWithXML(inString,currentPosition, "left", left);
+  GlXMLTools::setWithXML(inString,currentPosition, "right", right);
+  GlXMLTools::setWithXML(inString,currentPosition, "inPercent", inPercent);
+  GlXMLTools::setWithXML(inString,currentPosition, "textureName", textureName);
+  GlXMLTools::setWithXML(inString,currentPosition,"xInv",xInv,false);
+  GlXMLTools::setWithXML(inString,currentPosition,"yInv",yInv,false);
 
 }
 }

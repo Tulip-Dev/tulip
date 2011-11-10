@@ -187,7 +187,8 @@ public :
     goToNextCaracter(inString,currentPosition);
 
     std::string nameTag=inString.substr(currentPosition,name.size()+2);
-    if(nameTag=="<"+name+">"){
+
+    if(nameTag=="<"+name+">") {
       currentPosition+=name.size()+2;
 
       size_t endValuePosition=inString.find("</"+name+">",currentPosition);
@@ -196,7 +197,8 @@ public :
       std::stringstream str(inString.substr(currentPosition,endValuePosition-currentPosition));
       str >> value;
       currentPosition=endValuePosition+name.size()+3;
-    }else{
+    }
+    else {
       value=defValue;
     }
   }

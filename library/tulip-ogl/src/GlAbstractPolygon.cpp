@@ -501,7 +501,7 @@ void GlAbstractPolygon::setWithXML(const string &inString, unsigned int &current
   GlXMLTools::setWithXML(inString,currentPosition,"textureName",textureName);
   GlXMLTools::setWithXML(inString,currentPosition,"outlineSize",outlineSize);
 
-  for(vector<Coord>::iterator it= points.begin(); it!=points.end(); ++it){
+  for(vector<Coord>::iterator it= points.begin(); it!=points.end(); ++it) {
     boundingBox.expand(*it);
   }
 }

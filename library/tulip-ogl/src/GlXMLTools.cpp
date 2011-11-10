@@ -41,12 +41,12 @@ unsigned int tlp::GlXMLTools::indentationNumber=0;
 
 namespace tlp {
 
-void GlXMLTools::applyIndentation(string &outString){
-  for(unsigned int i=0;i<indentationNumber;++i)
+void GlXMLTools::applyIndentation(string &outString) {
+  for(unsigned int i=0; i<indentationNumber; ++i)
     outString.append("  ");
 }
 
-void GlXMLTools::goToNextCaracter(const string &inString, unsigned int &currentPosition){
+void GlXMLTools::goToNextCaracter(const string &inString, unsigned int &currentPosition) {
   while(inString[currentPosition]==' ' || inString[currentPosition]=='\n')
     currentPosition++;
 }
@@ -63,13 +63,13 @@ void GlXMLTools::endDataNode(string &outString) {
   outString.append("</data>\n");
 }
 
-void GlXMLTools::enterDataNode(const string &inString, unsigned int &currentPosition){
+void GlXMLTools::enterDataNode(const string &inString, unsigned int &currentPosition) {
   goToNextCaracter(inString, currentPosition);
   assert(inString.substr(currentPosition,6)=="<data>");
   currentPosition+=6;
 }
 
-void GlXMLTools::leaveDataNode(const string &inString, unsigned int &currentPosition){
+void GlXMLTools::leaveDataNode(const string &inString, unsigned int &currentPosition) {
   goToNextCaracter(inString, currentPosition);
   assert(inString.substr(currentPosition,7)=="</data>");
   currentPosition+=7;
@@ -92,10 +92,13 @@ string GlXMLTools::enterChildNode(const string &inString, unsigned int &currentP
   unsigned int beginPosition=currentPosition+1;
   size_t endPosition = inString.find('>',currentPosition);
   cout << inString.substr(beginPosition-1,endPosition-beginPosition) << endl;
+
   if(inString.substr(beginPosition-1,endPosition-beginPosition).find("</")!=string::npos)
     return "";
+
   size_t childNameEndPosition = inString.find(' ',currentPosition);
   currentPosition=endPosition+1;
+
   if(childNameEndPosition<endPosition)
     return inString.substr(beginPosition,childNameEndPosition-beginPosition);
   else
@@ -107,10 +110,11 @@ void GlXMLTools::leaveChildNode(const string &inString, unsigned int &currentPos
 }
 
 void GlXMLTools::createProperty(string &outString, const string &name, const string &value, const string &parent) {
-  if(parent==""){
-     outString=outString.substr(0,outString.size()-2);
-     outString.append(" "+name+"=\""+value+"\">\n");
-  }else{
+  if(parent=="") {
+    outString=outString.substr(0,outString.size()-2);
+    outString.append(" "+name+"=\""+value+"\">\n");
+  }
+  else {
     size_t beginPosition=outString.rfind("<"+parent);
     beginPosition=outString.find('>',beginPosition);
     string end=outString.substr(beginPosition);
@@ -124,7 +128,8 @@ map<string,string> GlXMLTools::getProperties(const string &inString, unsigned in
   map<string,string> properties;
   size_t beginPosition=inString.rfind('<',currentPosition);
   size_t propertyPosition=inString.find('=',beginPosition);
-  while(propertyPosition<currentPosition){
+
+  while(propertyPosition<currentPosition) {
     size_t propertyNameBegin=inString.rfind(' ',propertyPosition)+1;
     size_t propertyValueEnd=inString.find('\"',propertyPosition+2);
     string name=inString.substr(propertyNameBegin,propertyPosition-propertyNameBegin);
@@ -132,6 +137,7 @@ map<string,string> GlXMLTools::getProperties(const string &inString, unsigned in
     properties[name]=value;
     propertyPosition=inString.find('=',propertyPosition+1);
   }
+
   return properties;
 }
 
