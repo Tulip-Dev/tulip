@@ -83,7 +83,7 @@ class GlAbstractPolygon : tlp::GlSimpleEntity {
 
     virtual void getXML(std::string &out /Out/);
 
-    virtual void setWithXML(std::string &in, tlp::Graph *graph);
+    virtual void setWithXML(std::string &in, unsigned int &currentPosition);
 
   protected:
 
