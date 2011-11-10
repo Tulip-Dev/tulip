@@ -238,4 +238,7 @@ background-color: #A9A9A9;
  </widget>
  <resources/>
  <connections/>
+ <slots>
+  <signal>closed()</signal>
+ </slots>
 </ui>

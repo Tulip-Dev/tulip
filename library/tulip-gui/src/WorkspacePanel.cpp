@@ -61,6 +61,7 @@ public:
 WorkspacePanel::WorkspacePanel(tlp::View* view, const QString& viewName, QWidget *parent)
   : QWidget(parent), _ui(new Ui::WorkspacePanel), _view(NULL), _viewName(viewName), _progressItem(NULL) {
   _ui->setupUi(this);
+  connect(_ui->closeButton,SIGNAL(clicked()),this,SIGNAL(closeNeeded()));
   setView(view,viewName);
 }
 
