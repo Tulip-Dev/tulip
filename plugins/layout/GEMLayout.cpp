@@ -85,7 +85,7 @@ static const float AROTATIONDEF    = 1.f;
 static const float ASHAKEDEF       = 0.3f;
 
 
-LAYOUTPLUGINOFGROUP(GEMLayout,"GEM (Frick)","Tulip Team","16/10/2008","Stable","1.1","Force Directed")
+LAYOUTPLUGINOFGROUP(GEMLayout,"GEM (Frick)","Tulip Team","16/10/2008","Stable","1.2","Force Directed")
 
 GEMLayout::GEMLayout(const tlp::PropertyContext &context) : LayoutAlgorithm(context) {
   addParameter<bool>("3D layout", paramHelp[0], "false");
