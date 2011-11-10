@@ -115,7 +115,8 @@ void Workspace::delView(tlp::View* view) {
 
 void Workspace::removePanel(WorkspacePanel* panel) {
   panel->deleteLater();
-  _panels.removeAll(panel);
+  int removeCount = _panels.removeAll(panel);
+  assert(removeCount>0);
   updateAvailableModes();
 
   if (!_modeSwitches[currentModeWidget()]->isEnabled()) {
@@ -133,7 +134,6 @@ void Workspace::removePanel(WorkspacePanel* panel) {
   }
 
   if (currentModeWidget() == _ui->startupPage) {
-    _currentPanelIndex = 0;
     return;
   }
 
@@ -180,7 +180,10 @@ void Workspace::switchWorkspaceMode(QWidget *page) {
   _ui->workspaceContents->setCurrentWidget(page);
   updatePageCountLabel();
   _ui->bottomFrame->setEnabled(page != _ui->startupPage);
-  _currentPanelIndex -= _currentPanelIndex%currentSlotsCount();
+  if (currentSlotsCount() == 0)
+    _currentPanelIndex = 0;
+  else
+    _currentPanelIndex -= _currentPanelIndex%currentSlotsCount();
 }
 
 void Workspace::updatePageCountLabel() {
@@ -208,8 +211,10 @@ void Workspace::updateAvailableModes() {
 }
 
 void Workspace::updatePanels() {
-  // First: empty all slots
-  foreach(QVector<PlaceHolderWidget*> panelSlots, _modeToSlots.values()) {
+  foreach(QWidget* mode,_modeToSlots.keys()) {
+    if (mode == currentModeWidget())
+      continue;
+    QVector<PlaceHolderWidget*> panelSlots = _modeToSlots[mode];
     foreach(PlaceHolderWidget* panel, panelSlots) {
       panel->takeWidget();
     }
@@ -218,11 +223,24 @@ void Workspace::updatePanels() {
   // Fill up slots according to the current index until there is no panel to show
   int i = _currentPanelIndex;
   foreach (PlaceHolderWidget* slt, currentModeSlots()) {
-    if (i==_panels.size()) {
-      break;
+    if (i>=_panels.size()) {
+      slt->takeWidget();
     }
 
-    slt->setWidget(_panels[i]);
+    else if (slt->widget() != _panels[i]) {
+      slt->takeWidget();
+    }
+    i++;
+  }
+
+  i = _currentPanelIndex;
+  foreach (PlaceHolderWidget* slt, currentModeSlots()) {
+    if (i>=_panels.size())
+      break;
+
+    else if (slt->widget() != _panels[i]) {
+      slt->setWidget(_panels[i]);
+    }
     i++;
   }
 }

@@ -27,6 +27,8 @@
 //FIXME: remove me
 #include <tulip/StringProperty.h>
 #include <tulip/ColorProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/TlpTools.h>
 
 using namespace tlp;
 
@@ -57,10 +59,13 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   Observable::holdObservers();
   QVector<View*> views;
 
-  for (int i=0; i<10; ++i) {
+  for (int i=0; i<50; ++i) {
     Graph* g = newGraph();
     node n = g->addNode();
-    g->getProperty<ColorProperty>("viewColor")->setNodeValue(n,Color(i*25,i*25,i*25));
+    g->getProperty<ColorProperty>("viewColor")->setNodeValue(n,Color(255,255,255));
+    g->getProperty<StringProperty>("viewLabel")->setNodeValue(n,("#" + QString::number(i)).toStdString());
+    g->getProperty<IntegerProperty>("viewFontSize")->setAllNodeValue(18);
+    g->getProperty<StringProperty>("viewFont")->setAllNodeValue(TulipBitmapDir + "font.ttf");
     views.push_back(_ui->workspace->addView("Node Link Diagram view",g));
   }
 
