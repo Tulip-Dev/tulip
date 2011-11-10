@@ -84,10 +84,12 @@ tlp::View* Workspace::addView(const QString& viewName,Graph* g, const DataSet& d
 
   // Add it to the list
   _panels.push_back(panel);
+
   // If on startup mode, switch to single
   if (currentModeWidget() == _ui->startupPage) {
     switchToSingleMode();
   }
+
   // activate available modes
   updateAvailableModes();
 
@@ -104,6 +106,7 @@ void Workspace::delView(tlp::View* view) {
       break;
     }
   }
+
   if (panel != NULL)
     removePanel(panel);
 }
@@ -139,6 +142,7 @@ void Workspace::removePanel(WorkspacePanel* panel) {
     }
     else
       _currentPanelIndex--;
+
     if (_currentPanelIndex < 0)
       _currentPanelIndex = 0;
   }
@@ -215,6 +219,7 @@ void Workspace::updatePanels() {
     if (i==_panels.size()) {
       break;
     }
+
     slt->setWidget(_panels[i]);
     i++;
   }
@@ -222,6 +227,7 @@ void Workspace::updatePanels() {
 
 void Workspace::nextPage() {
   int newIndex = _currentPanelIndex + currentSlotsCount();
+
   if (newIndex < _panels.size()) {
     _currentPanelIndex = newIndex;
     updatePanels();
@@ -231,6 +237,7 @@ void Workspace::nextPage() {
 
 void Workspace::previousPage() {
   int newIndex = _currentPanelIndex - currentSlotsCount();
+
   if (newIndex >= 0) {
     _currentPanelIndex = newIndex;
     updatePanels();
