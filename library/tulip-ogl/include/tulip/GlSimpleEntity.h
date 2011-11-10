@@ -97,16 +97,6 @@ public:
   }
 
   /**
-   * Add a layer parent to this entity
-   */
-  virtual void addLayerParent(GlLayer *) {}
-
-  /**
-   * remove a layer parent to this entity
-   */
-  virtual void removeLayerParent(GlLayer *) {}
-
-  /**
    * Add a parent to this entity
    */
   void addParent(GlComposite *composite);
