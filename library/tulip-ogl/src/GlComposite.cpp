@@ -36,8 +36,11 @@ GlComposite::~GlComposite() {
 void GlComposite::addLayerParent(GlLayer *layer) {
   layerParents.push_back(layer);
 
+  GlComposite *composite;
   for(list<GlSimpleEntity *>::iterator it = _sortedElements.begin(); it != _sortedElements.end(); ++it) {
-    (*it)->addLayerParent(layer);
+    composite=dynamic_cast<GlComposite*>(*it);
+    if(composite)
+      composite->addLayerParent(layer);
   }
 }
 //============================================================
@@ -49,8 +52,11 @@ void GlComposite::removeLayerParent(GlLayer *layer) {
     }
   }
 
+  GlComposite *composite;
   for(list<GlSimpleEntity *>::iterator it = _sortedElements.begin(); it != _sortedElements.end(); ++it) {
-    (*it)->removeLayerParent(layer);
+    composite=dynamic_cast<GlComposite*>(*it);
+    if(composite)
+      composite->removeLayerParent(layer);
   }
 }
 //============================================================
@@ -69,8 +75,11 @@ void GlComposite::reset(bool deleteElems) {
     else {
       (*it)->removeParent(this);
 
+      GlComposite *composite;
       for(vector<GlLayer*>::iterator itLayers=layerParents.begin(); itLayers!=layerParents.end(); ++itLayers) {
-        (*it)->removeLayerParent(*itLayers);
+        composite=dynamic_cast<GlComposite*>(*it);
+        if(composite)
+          composite->removeLayerParent(*itLayers);
       }
     }
   }
@@ -106,8 +115,12 @@ void GlComposite::addGlEntity(GlSimpleEntity *entity, const string &key) {
   if(doSceneTreatment) {
     entity->addParent(this);
 
+    GlComposite *composite;
+    composite=dynamic_cast<GlComposite*>(entity);
+
     for(vector<GlLayer*>::iterator it=layerParents.begin(); it!=layerParents.end(); ++it) {
-      entity->addLayerParent(*it);
+      if(composite)
+        composite->addLayerParent(*it);
 
       if((*it)->getScene())
         (*it)->getScene()->notifyModifyLayer((*it)->getName(),(*it));
@@ -131,11 +144,12 @@ void GlComposite::deleteGlEntity(const string &key,bool informTheEntity) {
   GlSimpleEntity *entity=elements[key];
 
   if(informTheEntity) {
-
-    if(informTheEntity)
+    GlComposite *composite=dynamic_cast<GlComposite *>(entity);
+    if(composite){
       for(vector<GlLayer*>::iterator it=layerParents.begin(); it!=layerParents.end(); ++it) {
-        entity->removeLayerParent(*it);
+        composite->removeLayerParent(*it);
       }
+    }
   }
 
   GlGraphComposite *glGraphComposite=dynamic_cast<GlGraphComposite *>(entity);
@@ -162,8 +176,11 @@ void GlComposite::deleteGlEntity(GlSimpleEntity *entity,bool informTheEntity) {
       if(informTheEntity) {
         entity->removeParent(this);
 
-        for(vector<GlLayer*>::iterator it=layerParents.begin(); it!=layerParents.end(); ++it) {
-          entity->removeLayerParent(*it);
+        GlComposite *composite=dynamic_cast<GlComposite *>(entity);
+        if(composite){
+          for(vector<GlLayer*>::iterator it=layerParents.begin(); it!=layerParents.end(); ++it) {
+            composite->removeLayerParent(*it);
+          }
         }
       }
 
