@@ -33,7 +33,7 @@
 using namespace tlp;
 
 Workspace::Workspace(QWidget *parent)
-  : QWidget(parent), _ui(new Ui::Workspace) {
+  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0) {
   _ui->setupUi(this);
 
   // This map allows us to know how much slots we have for each mode and which widget corresponds to those slots
@@ -57,6 +57,7 @@ Workspace::Workspace(QWidget *parent)
   _modeSwitches[_ui->singlePage] = _ui->singleModeButton;
   _modeSwitches[_ui->splitPage] = _ui->splitModeButton;
   _modeSwitches[_ui->gridPage] = _ui->gridModeButton;
+  updatePageCountLabel();
 }
 
 Workspace::~Workspace() {
@@ -93,6 +94,7 @@ tlp::View* Workspace::addView(const QString& viewName,Graph* g, const DataSet& d
   // activate available modes
   updateAvailableModes();
 
+  updatePageCountLabel();
   updatePanels();
   return view;
 }
