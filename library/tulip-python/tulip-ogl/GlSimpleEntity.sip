@@ -67,7 +67,7 @@ class GlSimpleEntity {
         
     virtual void getXML(std::string &out /Out/);
 
-    virtual void setWithXML(std::string &in, unsigned int &currentPosition);
+    virtual void setWithXML(const std::string &in, unsigned int &currentPosition);
 
   };
 
