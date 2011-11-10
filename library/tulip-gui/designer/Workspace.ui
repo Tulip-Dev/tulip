@@ -42,7 +42,7 @@ background-color: white;
 }</string>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="startupPage">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -200,6 +200,7 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="slideView"/>
     </widget>
    </item>
    <item>
