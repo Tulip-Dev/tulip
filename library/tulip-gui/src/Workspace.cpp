@@ -180,6 +180,7 @@ void Workspace::switchWorkspaceMode(QWidget *page) {
   _ui->workspaceContents->setCurrentWidget(page);
   updatePageCountLabel();
   _ui->bottomFrame->setEnabled(page != _ui->startupPage);
+
   if (currentSlotsCount() == 0)
     _currentPanelIndex = 0;
   else
@@ -214,6 +215,7 @@ void Workspace::updatePanels() {
   foreach(QWidget* mode,_modeToSlots.keys()) {
     if (mode == currentModeWidget())
       continue;
+
     QVector<PlaceHolderWidget*> panelSlots = _modeToSlots[mode];
     foreach(PlaceHolderWidget* panel, panelSlots) {
       panel->takeWidget();
@@ -230,6 +232,7 @@ void Workspace::updatePanels() {
     else if (slt->widget() != _panels[i]) {
       slt->takeWidget();
     }
+
     i++;
   }
 
@@ -241,6 +244,7 @@ void Workspace::updatePanels() {
     else if (slt->widget() != _panels[i]) {
       slt->setWidget(_panels[i]);
     }
+
     i++;
   }
 }
