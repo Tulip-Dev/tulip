@@ -50,7 +50,7 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "default", "0" ) \
   HTML_HELP_BODY() \
   "This parameter allows to choose the number of iterations. The default value of 0 corresponds to (3 * nb_nodes * nb_nodes) if the graph has more than 100 nodes."\
-    " For smaller graph, the number of iterations is set to 30 000." \
+  " For smaller graph, the number of iterations is set to 30 000." \
   HTML_HELP_CLOSE(),
 };
 
