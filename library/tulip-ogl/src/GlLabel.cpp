@@ -81,6 +81,7 @@ void GlLabel::init() {
   useLOD=false;
   labelsDensity=100;
   billboarded=false;
+  sizeForOutAlign = size;
 }
 //============================================================
 void GlLabel::setText(const string& text) {
