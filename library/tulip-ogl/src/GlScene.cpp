@@ -152,41 +152,6 @@ void GlScene::initGlParameters() {
     cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
 }
 
-void GlScene::prerenderMetaNodes() {
-  if(!glGraphComposite)
-    return;
-
-  //prerender metanodes if need
-  set<node> metaNodes=glGraphComposite->getMetaNodes();
-
-  if(!metaNodes.empty() && glGraphComposite->getInputData()->getMetaNodeRenderer()->havePrerender()) {
-
-    initGlParameters();
-
-    GlLODCalculator *newLodCalculator=lodCalculator->clone();
-    newLodCalculator->setRenderingEntitiesFlag(RenderingAll);
-    newLodCalculator->beginNewCamera(&getLayer("Main")->getCamera());
-    GlNode glNode(0);
-
-    for(set<node>::iterator it=metaNodes.begin(); it!=metaNodes.end(); ++it) {
-      glNode.id=(*it).id;
-      newLodCalculator->addNodeBoundingBox((*it).id,glNode.getBoundingBox(glGraphComposite->getInputData()));
-    }
-
-    newLodCalculator->compute(viewport,viewport);
-
-    LayersLODVector &layersLODVector=newLodCalculator->getResult();
-    LayerLODUnit &layerLODUnit=layersLODVector.front();
-
-    for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit.nodesLODVector.begin(); it!=layerLODUnit.nodesLODVector.end(); ++it) {
-      if((*it).lod>=0)
-        glGraphComposite->getInputData()->getMetaNodeRenderer()->prerender(node((*it).id),(*it).lod,&getLayer("Main")->getCamera());
-    }
-
-    delete newLodCalculator;
-  }
-}
-
 void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphComposite,
                                   OcclusionTest *occlusionTest,LayerLODUnit &layerLODUnit) {
   Graph *graph=glGraphComposite->getInputData()->getGraph();

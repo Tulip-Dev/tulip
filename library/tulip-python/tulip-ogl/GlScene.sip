@@ -46,8 +46,6 @@ public:
 	
 	void initGlParameters();
 
-	void prerenderMetaNodes();
-
 	void draw();
 
 	void centerScene();
