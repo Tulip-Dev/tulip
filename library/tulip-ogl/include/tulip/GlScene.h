@@ -90,11 +90,6 @@ public:
   void initGlParameters();
 
   /**
-   * Prerender meta nodes, this function create data structure and render meta nodes to futur use
-   */
-  void prerenderMetaNodes();
-
-  /**
    * Draw the scene, this function is the most important function of GlScene. If you want to render a scene into an OpenGL widget : call this function
    */
   void draw();

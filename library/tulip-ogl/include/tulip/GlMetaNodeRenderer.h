@@ -44,9 +44,7 @@ public:
 
   virtual void prerender(node,float,Camera*) {}
   virtual void render(node,float,Camera*) {}
-  virtual bool havePrerender() {
-    return false;
-  }
+
   virtual bool glMetaNodeHaveToRenderLabels() {
     return true;
   }

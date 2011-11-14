@@ -398,7 +398,6 @@ void GlMainWidget::draw(bool graphChanged) {
     double beginTime=omp_get_wtime();
 #endif
 
-    scene.prerenderMetaNodes();
     scene.draw();
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
@@ -680,8 +679,6 @@ QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName
   scene.setViewport(0,0,width,height);
   scene.ajustSceneToSize(width,height);
 
-  scene.prerenderMetaNodes();
-
   QGLFramebufferObject *glFrameBuf= QGlPixelBufferManager::getInst().getFramebufferObject(width,height);
   assert(glFrameBuf->size()==QSize(width,height));
 
@@ -727,8 +724,6 @@ QImage GlMainWidget::createPicture(int width, int height,bool center, int zoom, 
     scene.ajustSceneToSize(width,height);
 
   scene.setViewportZoom(zoom,xDec,yDec);
-
-  scene.prerenderMetaNodes();
 
   QGLPixelBuffer *glFrameBuf=QGlPixelBufferManager::getInst().getPixelBuffer(width,height);
 
