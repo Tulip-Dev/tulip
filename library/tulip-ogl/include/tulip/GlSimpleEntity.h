@@ -38,7 +38,7 @@ class TLP_GL_SCOPE GlSimpleEntity : public GlEntity {
 
 public:
 
-  GlSimpleEntity():visible(true),stencil(0xFFFF),checkByBoundingBoxVisitor(true) {}
+  GlSimpleEntity():visible(true),stencil(0xFFFF) {}
 
   virtual ~GlSimpleEntity();
 
@@ -75,18 +75,6 @@ public:
    */
   int getStencil() {
     return stencil;
-  }
-  /**
-   * Set if the entity is check by boundingbox visitor
-   */
-  void setCheckByBoundingBoxVisitor(bool check) {
-    checkByBoundingBoxVisitor=check;
-  }
-  /**
-   * Return if entity is check by boudingbox visitor
-   */
-  bool isCheckByBoundingBoxVisitor() {
-    return checkByBoundingBoxVisitor;
   }
 
   /**
@@ -125,7 +113,6 @@ protected:
 
   bool visible;
   int stencil;
-  bool checkByBoundingBoxVisitor;
 
   BoundingBox boundingBox;
 
