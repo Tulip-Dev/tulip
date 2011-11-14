@@ -30,7 +30,7 @@ void GlBoundingBoxSceneVisitor::visit(GlSimpleEntity *entity) {
   if(entity->isVisible()) {
     BoundingBox bb=entity->getBoundingBox();
 
-    if(bb.isValid() && entity->isCheckByBoundingBoxVisitor()) {
+    if(bb.isValid()) {
       boundingBox.expand(bb[0]);
       boundingBox.expand(bb[1]);
     }

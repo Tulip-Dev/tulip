@@ -48,10 +48,6 @@ class GlSimpleEntity {
     virtual void setStencil(int stencil);
     
     int getStencil();
-    
-    void setCheckByBoundingBoxVisitor(bool check);
-    
-    bool isCheckByBoundingBoxVisitor();
 
     virtual tlp::BoundingBox getBoundingBox();
 
