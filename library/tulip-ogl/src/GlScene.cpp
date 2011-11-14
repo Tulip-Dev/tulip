@@ -89,7 +89,7 @@ public:
 //====================================================
 GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
 
-GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),displayEdgesInLastRendering(true),glGraphComposite(NULL), noClearBackground(false) {
+GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),displayEdgesInLastRendering(true),glGraphComposite(NULL), clearBufferAtDraw(true) {
 
   if(calculator!=NULL)
     lodCalculator=calculator;
@@ -138,7 +138,7 @@ void GlScene::initGlParameters() {
   glClearStencil(0xFFFF);
   glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
 
-  if (!noClearBackground) {
+  if (clearBufferAtDraw) {
     glClearColor(backgroundColor.getRGL(), backgroundColor.getGGL(), backgroundColor.getBGL(), backgroundColor.getAGL());
     glClear(GL_COLOR_BUFFER_BIT);
   }
