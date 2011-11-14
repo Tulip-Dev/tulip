@@ -375,15 +375,15 @@ public:
   }
 
   /**
-   * If true, color buffer will not be cleared before drawing the scene.
+   * If false, color buffer will not be cleared before drawing the scene.
    */
-  void setNoClearBackground(bool clear) {
-    noClearBackground = clear;
+  void setClearBufferAtDraw(bool clear) {
+    clearBufferAtDraw = clear;
   }
 
 
-  bool getNoClearBackground() const {
-    return noClearBackground;
+  bool getClearBufferAtDraw() const {
+    return clearBufferAtDraw;
   }
 
 private:
@@ -402,7 +402,7 @@ private:
   GlGraphComposite *glGraphComposite;
   GlLayer *graphLayer;
 
-  bool noClearBackground;
+  bool clearBufferAtDraw;
 
 };
 

@@ -124,7 +124,7 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
   float vpH = rect.height();
 
   glMainWidget->getScene()->setViewport(vpX,vpY,vpW,vpH);
-  glMainWidget->getScene()->setNoClearBackground(true);
+  glMainWidget->getScene()->setClearBufferAtDraw(true);
   glMainWidget->getScene()->initGlParameters();
 
   if(redrawNeeded) {
