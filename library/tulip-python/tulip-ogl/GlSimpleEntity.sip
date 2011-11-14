@@ -55,10 +55,6 @@ class GlSimpleEntity {
 
     virtual tlp::BoundingBox getBoundingBox();
 
-    virtual void addLayerParent(tlp::GlLayer *);
-
-    virtual void removeLayerParent(tlp::GlLayer *);
-
     void addParent(tlp::GlComposite *composite);
 
     void removeParent(tlp::GlComposite *composite);
