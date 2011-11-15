@@ -57,17 +57,17 @@ enum ElementType {NODE=0, EDGE};
 TLP_SCOPE Graph * loadGraph(const std::string &filename);
 
 /**
- * @brief Saves a graph to a file in the tlp format. Extension of the destination file can be either be .tlp (human-readable text file) or .tlp.gz (gzipped text file).
+ * @brief Saves the corresponding root graph and all its subgraphs to a file using the tlp format. Extension of the file can be either .tlp (human-readable text file) or .tlp.gz (gzipped text file).
  *
  * This function checks the file name for the '.gz' extension and uses a compressed output if found.
  *
- * This function uses the "tlp" import plugin, and will fail if it is not loaded (By default this plugin is linked into the library and should be loaded).
+ * This function uses the "tlp" export plugin, and will fail if it is not loaded (by default this plugin is linked into the library and should be loaded).
  *
- * @param  The graph to save.
+ * @param g The graph to save.
  * @param filename The file to save the graph to.
  * @return bool Whether the export was successfull or not.
  **/
-TLP_SCOPE bool saveGraph(Graph *, const std::string &filename);
+TLP_SCOPE bool saveGraph(Graph *g, const std::string &filename);
 
 /**
  * @brief Exports a graph using the specified export plugin with parameters stored in the DataSet.
