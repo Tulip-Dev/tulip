@@ -7,7 +7,8 @@ src/FiltersManager.cpp
 src/GraphHierarchiesEditor.cpp
 src/GraphHierarchiesModel.cpp
 src/GraphPerspective.cpp
-src/HeaderFrame.cpp)
+src/HeaderFrame.cpp
+src/ImportWizard.cpp)
 
 QT4_ADD_RESOURCES(RCC_SRCS
 resources/GraphPerspective.qrc)
@@ -19,7 +20,8 @@ designer/FiltersManager.ui
 designer/FiltersManagerItem.ui
 designer/GraphHierarchiesEditor.ui
 designer/GraphPerspectiveMainWindow.ui
-designer/HeaderFrame.ui)
+designer/HeaderFrame.ui
+designer/ImportWizard.ui)
 
 QT4_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
@@ -28,7 +30,8 @@ include/GraphHierarchiesEditor.h
 include/GraphHierarchiesModel.h
 include/GraphPerspective.h
 include/ExpandableGroupBox.h
-include/HeaderFrame.h)
+include/HeaderFrame.h
+include/ImportWizard.h)
 
 ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
 
