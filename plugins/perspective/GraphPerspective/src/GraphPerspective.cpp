@@ -20,15 +20,11 @@
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
+#include <tulip/ImportModule.h>
+#include "ImportWizard.h"
 #include "GraphHierarchiesEditor.h"
 #include "GraphHierarchiesModel.h"
 #include <tulip/Graph.h>
-
-//FIXME: remove me
-#include <tulip/StringProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/TlpTools.h>
 
 using namespace tlp;
 
@@ -38,7 +34,12 @@ GraphPerspective::GraphPerspective(PerspectiveContext &c): Perspective(c), _ui(0
 void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
-  connect(_ui->actionFull_screen,SIGNAL(toggled(bool)),this,SLOT(showFullScreen(bool)));
+
+  // Connect actions
+  connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
+  connect(_ui->actionImport,SIGNAL(triggered()),this,SLOT(importGraph()));
+
+  // Setting initial sizes for splitters
   _ui->workspaceSplitter->setSizes(QList<int>() << 200 << 1000);
   _ui->docksSplitter->setSizes(QList<int>() << 500 << 800);
 
@@ -55,22 +56,6 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
   }
-
-  Observable::holdObservers();
-  QVector<View*> views;
-
-  for (int i=0; i<50; ++i) {
-    Graph* g = newGraph();
-    node n = g->addNode();
-    g->getProperty<ColorProperty>("viewColor")->setNodeValue(n,Color(255,255,255));
-    g->getProperty<StringProperty>("viewLabel")->setNodeValue(n,("#" + QString::number(i)).toStdString());
-    g->getProperty<IntegerProperty>("viewFontSize")->setAllNodeValue(18);
-    g->getProperty<StringProperty>("viewFont")->setAllNodeValue(TulipBitmapDir + "font.ttf");
-    views.push_back(_ui->workspace->addView("Node Link Diagram view",g));
-  }
-
-  Observable::unholdObservers();
-//  _ui->workspace->switchToGridMode();
 
 }
 
@@ -99,6 +84,22 @@ void GraphPerspective::showFullScreen(bool f) {
 
     if (_maximised)
       _mainWindow->showMaximized();
+  }
+}
+
+void GraphPerspective::importGraph() {
+  ImportWizard wizard(_mainWindow);
+  if (wizard.exec() == QDialog::Accepted) {
+    Graph* g = NULL;
+    if (!wizard.algorithm().isNull()) {
+      DataSet data = wizard.parameters();
+      g = tlp::importGraph(wizard.algorithm().toStdString(),data);
+      g->setAttribute<std::string>("name",wizard.algorithm().toStdString());
+    }
+    else {
+      g = newGraph();
+    }
+    _graphs->addGraph(g);
   }
 }
 

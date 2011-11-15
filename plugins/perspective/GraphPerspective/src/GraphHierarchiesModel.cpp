@@ -143,9 +143,6 @@ QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
   else if (role == Qt::FontRole) {
     QFont f;
 
-    if (index.column() == NAME_SECTION && graph == graph->getRoot())
-      f.setItalic(true);
-
     if (graph == _currentGraph)
       f.setBold(true);
 
@@ -278,7 +275,7 @@ QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
   graph->getAttribute<std::string>("name",name);
 
   if (name == "")
-    return trUtf8("untitled_") + QString::number(graph->getId());
+    return trUtf8("graph_") + QString::number(graph->getId());
 
   return name.c_str();
 }

@@ -37,9 +37,12 @@ public:
   GraphPerspective(tlp::PerspectiveContext &c);
   virtual void construct(tlp::PluginProgress *);
 
+public slots:
+  void showFullScreen(bool);
+  void importGraph();
+
 protected slots:
   void refreshDockExpandControls();
-  void showFullScreen(bool);
 };
 
 #endif // GRAPHPERSPECTIVE_H

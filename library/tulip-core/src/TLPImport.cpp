@@ -1011,7 +1011,7 @@ class TLPImport:public ImportModule {
 public:
   TLPImport(AlgorithmContext context):ImportModule(context) {
     addParameter<std::string>("file::filename", paramHelp[0]);
-    addParameter<DataSet>(DISPLAYING);
+//    addParameter<DataSet>(DISPLAYING);
   }
   ~TLPImport() {}
   bool import() {

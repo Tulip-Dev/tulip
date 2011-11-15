@@ -139,4 +139,8 @@ bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value
   return QAbstractItemModel::setData(index,value,role);
 }
 
+DataSet ParameterListModel::parametersValues() const {
+  return _data;
+}
+
 }
