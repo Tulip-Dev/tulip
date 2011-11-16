@@ -31,7 +31,7 @@ class GlGraphInputData;
 /**
  * Class use to render a meta node, this version render meta node with old OpenGl tulip system
  */
-class TLP_GL_SCOPE ExtendedMetaNodeRenderer : public GlMetaNodeRenderer {
+class TLP_GL_SCOPE ExtendedMetaNodeRenderer : public GlMetaNodeRenderer, private Observable {
 
 public:
 
@@ -47,11 +47,16 @@ public:
     return inputData;
   }
 
+protected :
+
+  void treatEvent(const Event&);
+
 
 private :
 
   GlGraphInputData *inputData;
   std::map<unsigned int,GlMainView *> idToViewMap;
+  std::map<Graph *,unsigned int> graphToIdMap;
 
 };
 
