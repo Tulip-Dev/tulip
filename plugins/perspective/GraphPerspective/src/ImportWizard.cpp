@@ -1,3 +1,21 @@
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
 #include "ImportWizard.h"
 
 #include <QtGui/QAbstractButton>
@@ -35,9 +53,11 @@ void ImportWizard::algorithmSelected(const QString& alg) {
   _ui->parametersFrame->setVisible(!alg.isEmpty());
   QAbstractItemModel* oldModel = _ui->parametersList->model();
   QAbstractItemModel* newModel = NULL;
+
   if (ImportModuleLister::pluginExists(alg.toStdString())) {
     newModel = new ParameterListModel(ImportModuleLister::getPluginParameters(alg.toStdString()));
   }
+
   _ui->parametersList->setModel(newModel);
 
   delete oldModel;
@@ -60,19 +80,23 @@ void ImportWizard::groupSelected(const QString& group) {
 QString ImportWizard::algorithm() const {
   if (_ui->algorithmList->currentItem() != NULL)
     return _ui->algorithmList->currentItem()->text();
+
   return QString::null;
 }
 
 QString ImportWizard::group() const {
   if (_ui->categoryList->currentItem() != NULL)
     return _ui->categoryList->currentItem()->text();
+
   return QString::null;
 }
 
 tlp::DataSet ImportWizard::parameters() const {
   ParameterListModel* model = dynamic_cast<ParameterListModel*>(_ui->parametersList->model());
+
   if (model == NULL)
     return DataSet();
+
   return model->parametersValues();
 }
 

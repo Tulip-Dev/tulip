@@ -89,8 +89,10 @@ void GraphPerspective::showFullScreen(bool f) {
 
 void GraphPerspective::importGraph() {
   ImportWizard wizard(_mainWindow);
+
   if (wizard.exec() == QDialog::Accepted) {
     Graph* g = NULL;
+
     if (!wizard.algorithm().isNull()) {
       DataSet data = wizard.parameters();
       g = tlp::importGraph(wizard.algorithm().toStdString(),data);
@@ -99,6 +101,7 @@ void GraphPerspective::importGraph() {
     else {
       g = newGraph();
     }
+
     _graphs->addGraph(g);
   }
 }
