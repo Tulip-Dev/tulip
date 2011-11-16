@@ -39,19 +39,20 @@ using namespace std;
 namespace tlp {
 
 ExtendedMetaNodeRenderer::ExtendedMetaNodeRenderer(GlGraphInputData *inputData):inputData(inputData) {
-  idToViewMap=new map<unsigned int,GlMainView *>();
 }
 
 ExtendedMetaNodeRenderer::~ExtendedMetaNodeRenderer() {
-  delete idToViewMap;
+  for(map<unsigned int,GlMainView *>::iterator it=idToViewMap.begin();it!=idToViewMap.end();++it){
+    delete (*it).second;
+  }
 }
 
 void ExtendedMetaNodeRenderer::render(node n,float lod,Camera* camera) {
 
   GlMainView *view;
 
-  if(idToViewMap->count(n.id)!=0){
-    view=(*idToViewMap)[n.id];
+  if(idToViewMap.count(n.id)!=0){
+    view=idToViewMap[n.id];
   }else{
     view=new NodeLinkDiagramComponent;
     Graph *metaGraph = inputData->getGraph()->getNodeMetaInfo(n);
@@ -59,7 +60,7 @@ void ExtendedMetaNodeRenderer::render(node n,float lod,Camera* camera) {
     view->setGraph(metaGraph);
     view->setState(DataSet());
     view->getGlMainWidget()->getScene()->setCalculator(new GlCPULODCalculator());
-    (*idToViewMap)[n.id]=view;
+    idToViewMap[n.id]=view;
   }
 
   GlScene *scene=view->getGlMainWidget()->getScene();

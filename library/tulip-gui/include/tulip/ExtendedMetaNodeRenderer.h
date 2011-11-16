@@ -51,7 +51,7 @@ public:
 private :
 
   GlGraphInputData *inputData;
-  std::map<unsigned int,GlMainView *> *idToViewMap;
+  std::map<unsigned int,GlMainView *> idToViewMap;
 
 };
 
