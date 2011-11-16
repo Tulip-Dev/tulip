@@ -18,13 +18,15 @@
  */
 #include "GraphPerspective.h"
 
-#include "ui_GraphPerspectiveMainWindow.h"
+#include <QtGui/QMessageBox>
 
 #include <tulip/ImportModule.h>
+#include <tulip/Graph.h>
+
+#include "ui_GraphPerspectiveMainWindow.h"
 #include "ImportWizard.h"
 #include "GraphHierarchiesEditor.h"
 #include "GraphHierarchiesModel.h"
-#include <tulip/Graph.h>
 
 using namespace tlp;
 
@@ -96,7 +98,16 @@ void GraphPerspective::importGraph() {
     if (!wizard.algorithm().isNull()) {
       DataSet data = wizard.parameters();
       g = tlp::importGraph(wizard.algorithm().toStdString(),data);
-      g->setAttribute<std::string>("name",wizard.algorithm().toStdString());
+      if (g == NULL) {
+        QMessageBox::critical(_mainWindow,trUtf8("Import error"),wizard.algorithm() + trUtf8(" failed to import data"));
+        return;
+      }
+
+      std::string name;
+      if (!g->getAttribute<std::string>("name",name)) {
+        name = (wizard.algorithm() + " - " + wizard.parameters().toString().c_str()).toStdString();
+        g->setAttribute<std::string>("name",name);
+      }
     }
     else {
       g = newGraph();
