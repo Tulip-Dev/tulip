@@ -29,7 +29,6 @@
 #include <tulip/Glyph.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
-#include <tulip/GlMetaNode.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/NodeLinkDiagramComponent.h>
@@ -61,6 +60,9 @@ void ExtendedMetaNodeRenderer::render(node n,float lod,Camera* camera) {
     view->setState(DataSet());
     view->getGlMainWidget()->getScene()->setCalculator(new GlCPULODCalculator());
     idToViewMap[n.id]=view;
+    graphToIdMap[metaGraph]=n.id;
+
+    metaGraph->addGraphObserver(this);
   }
 
   GlScene *scene=view->getGlMainWidget()->getScene();
@@ -112,7 +114,15 @@ void ExtendedMetaNodeRenderer::render(node n,float lod,Camera* camera) {
   camera->getScene()->initGlParameters();
   camera->getScene()->setClearBufferAtDraw(true);
   camera->initGl();
+}
 
+void ExtendedMetaNodeRenderer::treatEvent(const Event &e){
+  if(e.type() == Event::TLP_DELETE){
+    unsigned int id=graphToIdMap[(Graph*)(e.sender())];
+    graphToIdMap.erase((Graph *)(e.sender()));
+    delete idToViewMap[id];
+    idToViewMap.erase(id);
+  }
 }
 
 }
