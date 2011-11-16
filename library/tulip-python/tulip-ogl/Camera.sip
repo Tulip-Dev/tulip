@@ -85,12 +85,6 @@ public:
 
 	tlp::Coord getUp();
 
-	void addObjectTransformation(const tlp::Coord &translation, const tlp::Coord &scale, const tlp::Coord &baseCoord);
-
-	void getObjectTransformation(std::vector<tlp::Coord> &translation, std::vector<tlp::Coord> &scale, std::vector<tlp::Coord> &objectCoord);
-
-	bool haveObjectTransformation();
-
 	void getModelviewMatrix(tlp::Mat4f &modelviewMatrix /Out/);
 	
 	void getProjectionMatrix(tlp::Mat4f &projectionMatrix /Out/);

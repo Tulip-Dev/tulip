@@ -16,12 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifndef Tulip_GLMETANODETRUERENDERER_H
-#define Tulip_GLMETANODETRUERENDERER_H
+#ifndef Tulip_ExtendedMetaNodeRenderer_H
+#define Tulip_ExtendedMetaNodeRenderer_H
 
 #include <tulip/tulipconf.h>
 
 #include <tulip/GlMetaNodeRenderer.h>
+#include <tulip/GlMainView.h>
 
 namespace tlp {
 
@@ -30,12 +31,12 @@ class GlGraphInputData;
 /**
  * Class use to render a meta node, this version render meta node with old OpenGl tulip system
  */
-class TLP_GL_SCOPE GlMetaNodeTrueRenderer : public GlMetaNodeRenderer {
+class TLP_GL_SCOPE ExtendedMetaNodeRenderer : public GlMetaNodeRenderer {
 
 public:
 
-  GlMetaNodeTrueRenderer(GlGraphInputData *inputData);
-  virtual ~GlMetaNodeTrueRenderer() {}
+  ExtendedMetaNodeRenderer(GlGraphInputData *inputData);
+  virtual ~ExtendedMetaNodeRenderer();
 
   virtual void render(node n,float lod,Camera* camera);
 
@@ -50,11 +51,10 @@ public:
 private :
 
   GlGraphInputData *inputData;
-
-  static unsigned int depth;
+  std::map<unsigned int,GlMainView *> *idToViewMap;
 
 };
 
 }
 
-#endif // Tulip_GLMETANODETRUERENDERER_H
+#endif // Tulip_ExtendedMetaNodeRenderer_H

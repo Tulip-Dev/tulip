@@ -82,6 +82,7 @@ SET(SRCS
   ProcessingAnimationItem.cpp
   Workspace.cpp
   PlaceHolderWidget.cpp
+  ExtendedMetaNodeRenderer.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS

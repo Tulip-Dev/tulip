@@ -26,8 +26,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/StringProperty.h>
 
-#include <tulip/GlMetaNodeTrueRenderer.h>
-
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/RenderingParametersDialog.h"
 #include "tulip/LayerManagerWidget.h"
@@ -140,8 +138,6 @@ void NodeLinkDiagramComponent3::setData(Graph *graph,DataSet dataSet) {
     mainWidget->setData(graph,DataSet());
   }
 
-  mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()));
-
   getGlMainWidget()->useHulls(true);
 
   renderingParametersDialog->setGlMainWidget(mainWidget);
@@ -159,7 +155,6 @@ void NodeLinkDiagramComponent3::setGraph(Graph *graph,bool initView) {
   mainWidget->setGraph(graph);
   overviewWidget->setObservedView(mainWidget,mainWidget->getScene()->getGlGraphComposite());
 
-  mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()));
   renderingParametersDialog->setGlMainWidget(mainWidget);
 
   if(initView)
