@@ -53,7 +53,6 @@ void ExtendedMetaNodeRenderer::render(node n,float lod,Camera* camera) {
   if(metaGraphToViewMap.count(metaGraph)!=0){
     view=metaGraphToViewMap[metaGraph];
   }else{
-    cout << "create" << endl;
     view=new NodeLinkDiagramComponent;
     view->setupUi();
     view->setGraph(metaGraph);
