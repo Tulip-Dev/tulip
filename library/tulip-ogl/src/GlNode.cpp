@@ -91,7 +91,7 @@ void GlNode::acceptVisitor(GlSceneVisitor *visitor) {
   visitor->visit(this);
 }
 
-void GlNode::draw(float lod,GlGraphInputData* data,Camera*) {
+void GlNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
   const Color& colorSelect2=data->parameters->getSelectionColor();
 
   glEnable(GL_CULL_FACE);
@@ -117,6 +117,11 @@ void GlNode::draw(float lod,GlGraphInputData* data,Camera*) {
     else {
       glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
     }
+  }
+
+  if(data->getGraph()->isMetaNode(n)){
+    if(!(((data->getElementColor()->getNodeValue(n))[3]==255) && (data->parameters->getNodesStencil()==0xFFFF)))
+      data->getMetaNodeRenderer()->render(n,lod,camera);
   }
 
   const Coord &nodeCoord = data->getElementLayout()->getNodeValue(n);
