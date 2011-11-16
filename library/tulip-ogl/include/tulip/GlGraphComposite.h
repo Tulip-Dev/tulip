@@ -29,7 +29,6 @@
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
-#include <tulip/GlMetaNode.h>
 
 namespace tlp {
 

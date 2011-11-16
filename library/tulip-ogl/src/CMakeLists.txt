@@ -38,7 +38,6 @@ SET(tulip-ogl_LIB_SRCS
   GlLine.cpp
   GlLines.cpp
   GlLODSceneVisitor.cpp
-  GlMetaNode.cpp
   GlNode.cpp
   GlNominativeAxis.cpp
   GlOpenUniformCubicBSpline.cpp

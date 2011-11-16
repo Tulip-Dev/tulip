@@ -38,7 +38,6 @@ INSTALL(FILES
   tulip/GlLines.h
   tulip/GlLODCalculator.h
   tulip/GlLODSceneVisitor.h
-  tulip/GlMetaNode.h
   tulip/GlMetaNodeRenderer.h
   tulip/GlNode.h
   tulip/GlNominativeAxis.h

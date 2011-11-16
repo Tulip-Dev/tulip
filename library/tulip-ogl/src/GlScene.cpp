@@ -166,7 +166,6 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
   vector<pair<edge,float> > edgesMetricOrdered;
   GlNode glNode(0);
   GlEdge glEdge(0);
-  GlMetaNode glMetaNode(0);
 
   Iterator<node> *nonDefaultLabelNodes = glGraphComposite->getInputData()->getElementLabel()->getNonDefaultValuatedNodes();
   Iterator<edge> *nonDefaultLabelEdges = glGraphComposite->getInputData()->getElementLabel()->getNonDefaultValuatedEdges();
@@ -200,13 +199,9 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
       if(selectionProperty->getNodeValue(n)==drawSelected) {
         if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric) {
           // Not metric ordered
-          if(!graph->isMetaNode(n) && viewNodeLabel) {
+          if((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)) {
             glNode.id=n.id;
             glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),lod,(Camera *)(layerLODUnit.camera));
-          }
-          else if(graph->isMetaNode(n)) {
-            glMetaNode.id=n.id;
-            glMetaNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),lod,(Camera *)(layerLODUnit.camera));
           }
         }
         else {
@@ -230,14 +225,8 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
       sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
 
       for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin(); it!=nodesMetricOrdered.end(); ++it) {
-        if(!graph->isMetaNode((*it).first)) {
-          glNode.id=(*it).first.id;
-          glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
-        }
-        else {
-          glMetaNode.id=(*it).first.id;
-          glMetaNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
-        }
+        glNode.id=(*it).first.id;
+        glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
       }
     }
   }
@@ -365,7 +354,6 @@ void GlScene::draw() {
   }
 
   GlNode     glNode(0);
-  GlMetaNode glMetaNode(0);
   GlEdge     glEdge(0);
 
   // Iterate on Camera
@@ -432,21 +420,13 @@ void GlScene::draw() {
               continue;
           }
 
-          if(!graph->isMetaNode(node((*it).id))) {
-            if(!displayNodes)
-              continue;
-
+          if((!graph->isMetaNode(node((*it).id)) && displayNodes) || (graph->isMetaNode(node((*it).id)) && displayMetaNodes)) {
             glNode.id=(*it).id;
             glNode.draw((*it).lod,glGraphComposite->getInputData(),camera);
-
+          }else{
+            continue;
           }
-          else {
-            if(!displayMetaNodes)
-              continue;
 
-            glMetaNode.id = (*it).id;
-            glMetaNode.draw((*it).lod, glGraphComposite->getInputData(), camera);
-          }
         }
 
         //draw edges
@@ -544,19 +524,11 @@ void GlScene::draw() {
           ComplexEntityLODUnit *entity=(ComplexEntityLODUnit*)((*it).entity);
 
           if((*it).isNode) {
-            if(!graph->isMetaNode(node(entity->id))) {
-              if(!displayNodes)
-                continue;
-
+            if((!graph->isMetaNode(node(entity->id)) && displayNodes) || (graph->isMetaNode(node(entity->id)) && displayMetaNodes)) {
               glNode.id=entity->id;
               glNode.draw(entity->lod,glGraphComposite->getInputData(),camera);
-            }
-            else {
-              if(!displayMetaNodes)
-                continue;
-
-              glMetaNode.id=entity->id;
-              glMetaNode.draw(entity->lod,glGraphComposite->getInputData(),camera);
+            }else {
+              continue;
             }
           }
           else {
