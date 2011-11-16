@@ -40,7 +40,6 @@ INSTALL(FILES
   tulip/GlLODSceneVisitor.h
   tulip/GlMetaNode.h
   tulip/GlMetaNodeRenderer.h
-  tulip/GlMetaNodeTrueRenderer.h
   tulip/GlNode.h
   tulip/GlNominativeAxis.h
   tulip/GlOpenUniformCubicBSpline.h

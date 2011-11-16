@@ -44,6 +44,7 @@
 #include "tulip/Interactor.h"
 #include <tulip/GlCompositeHierarchyManager.h>
 #include "tulip/GlVertexArrayManager.h"
+#include "tulip/ExtendedMetaNodeRenderer.h"
 
 using namespace std;
 
@@ -186,6 +187,8 @@ void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
     manager->setVisible(true);
     manager->setData(hullsSet);
   }
+
+  scene.getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new ExtendedMetaNodeRenderer(scene.getGlGraphComposite()->getInputData()));
 }
 //==================================================
 DataSet GlMainWidget::getData() {

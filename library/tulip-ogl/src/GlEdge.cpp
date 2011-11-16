@@ -244,10 +244,6 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
   if (bends.size() == 0 && (srcCoord - tgtCoord).norm() < 1E-4)
     return; //two nodes very closed
 
-  //Get added transformations
-  vector<Coord> objectScale, objectTranslate, objectCoord;
-  camera->getObjectTransformation(objectTranslate, objectScale, objectCoord);
-
   Matrix<float, 4> transformMatrix;
   camera->getTransformMatrix(transformMatrix);
 

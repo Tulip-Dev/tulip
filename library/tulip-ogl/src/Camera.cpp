@@ -37,7 +37,6 @@ Camera::Camera(GlScene* scene,Coord center,Coord eyes, Coord up, double zoomFact
   zoomFactor(zoomFactor),
   sceneRadius(sceneRadius),
   scene(scene),
-  objectTransformation(false),
   d3(true) {}
 //====================================================
 Camera::Camera(GlScene* scene,bool d3) :
@@ -327,24 +326,6 @@ void Camera::setUp(const Coord& up) {
 
   if (hasOnlookers())
     sendEvent(Event(*this, Event::TLP_MODIFICATION));
-}
-//====================================================
-void Camera::addObjectTransformation(const Coord &translation,const Coord &scale,const Coord &baseCoord ) {
-  objectScale.push_back(scale);
-  objectTranslation.push_back(translation);
-  objectCoord.push_back(baseCoord);
-
-  objectTransformation=true;
-}
-//====================================================
-void Camera::getObjectTransformation(vector<Coord> &translation,vector<Coord> &scale,vector<Coord> &objectCoord) {
-  translation=objectTranslation;
-  scale=objectScale;
-  objectCoord=this->objectCoord;
-}
-//====================================================
-bool Camera::haveObjectTransformation() {
-  return objectTransformation;
 }
 //====================================================
 void Camera::getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix) {
