@@ -55,8 +55,7 @@ protected :
 private :
 
   GlGraphInputData *inputData;
-  std::map<unsigned int,GlMainView *> idToViewMap;
-  std::map<Graph *,unsigned int> graphToIdMap;
+  std::map<Graph *,GlMainView *> metaGraphToViewMap;
 
 };
 
