@@ -266,7 +266,6 @@ void NodeLinkDiagramComponent::buildContextMenu(QObject *object,QContextMenuEven
     return;
 
   contextMenu->addSeparator();
-  contextMenu->addSeparator();
   // Display a context menu
   isNode = type == NODE;
   itemId = isNode ? tmpNode.id : tmpEdge.id;
@@ -297,7 +296,7 @@ void NodeLinkDiagramComponent::buildContextMenu(QObject *object,QContextMenuEven
 }
 
 void NodeLinkDiagramComponent::computeContextMenuAction(QAction *action) {
-  Graph *graph=mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  Graph *graph=mainWidget->getGraph();
 
   Observable::holdObservers();
 
@@ -348,7 +347,7 @@ void NodeLinkDiagramComponent::checkAlgorithmResult() {
   if(!mainWidget->getScene()->getGlGraphComposite())
     return;
 
-  Graph *graph=mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  Graph *graph=mainWidget->getGraph();
 
   if(graph->attributeExist("NodeLinkDiagramComponent")) {
     DataSet nodeLinkDiagramComponentDataSet;
@@ -526,7 +525,7 @@ void NodeLinkDiagramComponent::showDialog(QAction* action) {
   std::string name(action->text().toStdString());
 
   if(name =="Augmented Display") {
-    Graph *graph=mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+    Graph *graph=mainWidget->getGraph();
     AugmentedDisplayDialog dialog(widget,graph,"NodeLinkDiagramComponent");
 
     if(dialog.exec()==QDialog::Accepted) {
