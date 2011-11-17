@@ -270,3 +270,18 @@ DataTypeSerializer *DataSet::typenameToSerializer(const std::string &name) {
 
   return tnTodts[name];
 }
+
+string DataSet::toString() const {
+  stringstream ss;
+  pair<string, DataType*> p;
+  forEach(p, getValues()) {
+    DataTypeSerializer *serializer = DataSet::typenameToSerializer(p.second->getTypeName());
+
+    if (serializer) {
+      ss << "\"" << p.first << "\"=";
+      serializer->writeData(ss, p.second);
+      ss << " ";
+    }
+  }
+  return ss.str();
+}
