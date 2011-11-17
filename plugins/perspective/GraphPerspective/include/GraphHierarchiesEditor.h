@@ -49,6 +49,7 @@ protected slots:
   void addSubGraph();
   void cloneSubGraph();
   void delGraph();
+  void delAllGraph();
 };
 
 #endif // GRAPHHIERARCHIESEDITOR_H

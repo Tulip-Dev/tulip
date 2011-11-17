@@ -100,14 +100,26 @@
   </action>
   <action name="actionDelete_graph">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/process-stop.svg</normaloff>:/tulip/graphperspective/icons/process-stop.svg</iconset>
    </property>
    <property name="text">
-    <string>Delete graph</string>
+    <string>Delete</string>
    </property>
    <property name="toolTip">
     <string>Deletes the selected graph</string>
+   </property>
+  </action>
+  <action name="actionDelete_All">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/process-stop.svg</normaloff>:/tulip/graphperspective/icons/process-stop.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Delete All</string>
+   </property>
+   <property name="toolTip">
+    <string>Deletes the selected graph and its subgraphs</string>
    </property>
   </action>
  </widget>
@@ -119,10 +131,7 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../resources/GraphPerspective.qrc"/>
-  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>hierarchiesTree</sender>
@@ -204,6 +213,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionDelete_All</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>delAllGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>activeGraphSelected(QModelIndex)</slot>
@@ -211,5 +236,6 @@
   <slot>addSubGraph()</slot>
   <slot>delGraph()</slot>
   <slot>cloneSubGraph()</slot>
+  <slot>delAllGraph()</slot>
  </slots>
 </ui>

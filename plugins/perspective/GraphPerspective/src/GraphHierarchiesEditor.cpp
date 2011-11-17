@@ -56,6 +56,7 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
     menu.addAction(_ui->actionClone_subgraph);
     menu.addSeparator();
     menu.addAction(_ui->actionDelete_graph);
+    menu.addAction(_ui->actionDelete_All);
     menu.exec(_ui->hierarchiesTree->viewport()->mapToGlobal(p));
     _contextGraph = NULL;
   }
@@ -81,3 +82,12 @@ void GraphHierarchiesEditor::delGraph() {
     _contextGraph->getSuperGraph()->delSubGraph(_contextGraph);
 }
 
+void GraphHierarchiesEditor::delAllGraph() {
+  if (_contextGraph == NULL)
+    return;
+
+  if (_contextGraph->getRoot() == _contextGraph)
+    delete _contextGraph;
+  else
+    _contextGraph->getSuperGraph()->delAllSubGraphs(_contextGraph);
+}
