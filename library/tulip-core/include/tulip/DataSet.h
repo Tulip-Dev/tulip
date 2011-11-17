@@ -201,6 +201,8 @@ public:
   /** Return the data type serializer associated to the given typename.
       Returns NULL if no serializer is found */
   static DataTypeSerializer *typenameToSerializer(const std::string &name);
+
+  std::string toString() const;
 };
 
 }
