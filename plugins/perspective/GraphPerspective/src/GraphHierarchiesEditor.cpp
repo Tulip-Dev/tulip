@@ -23,6 +23,7 @@
 #include <QtCore/QDebug>
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QMenu>
+#include <tulip/BooleanProperty.h>
 
 #include <tulip/TulipMetaTypes.h>
 #include "GraphHierarchiesModel.h"
@@ -65,11 +66,17 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
 void GraphHierarchiesEditor::addSubGraph() {
   if (_contextGraph == NULL)
     return;
+  tlp::BooleanProperty* prop = new tlp::BooleanProperty(_contextGraph);
+  prop->setAllNodeValue(true);
+  prop->setAllEdgeValue(true);
+  _contextGraph->addSubGraph(prop);
+  delete prop;
 }
 
 void GraphHierarchiesEditor::cloneSubGraph() {
   if (_contextGraph == NULL)
     return;
+  _contextGraph->addSubGraph();
 }
 
 void GraphHierarchiesEditor::delGraph() {
