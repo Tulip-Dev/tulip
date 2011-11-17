@@ -39,8 +39,6 @@ using namespace tlp;
 #define NODES_SECTION 2
 #define EDGES_SECTION 3
 
-static bool prout = false;
-
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric";
 
@@ -77,7 +75,6 @@ GraphHierarchiesModel::~GraphHierarchiesModel() {
 }
 
 QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex &parent) const {
-  if (prout) qWarning() << __PRETTY_FUNCTION__ << "row=" << row << " column=" << column << " parent=(" << parent.row() << ";" << parent.column() << ") - " << parent.internalPointer();
   Graph *g = NULL;
   if (parent.isValid())
     g = ((Graph *)(parent.internalPointer()))->getNthSubGraph(row);
@@ -91,7 +88,6 @@ QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex 
 }
 
 QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
-  if (prout) qWarning() << __PRETTY_FUNCTION__ << "child=(" << child.row() << ";" << child.column() << ") - " << child.internalPointer();
   Graph *graph = (Graph *)(child.internalPointer());
 
   if (_graphs.contains(graph))
@@ -119,7 +115,6 @@ QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
 }
 
 int GraphHierarchiesModel::rowCount(const QModelIndex &parent) const {
-  if (prout) qWarning() << __PRETTY_FUNCTION__ << "parent=(" << parent.row() << ";" << parent.column() << ") - " << parent.internalPointer();
   if (!parent.isValid())
     return _graphs.size();
 
@@ -141,7 +136,6 @@ bool GraphHierarchiesModel::setData(const QModelIndex &index, const QVariant &va
 }
 
 QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
-  if (prout) qWarning() << __PRETTY_FUNCTION__ << "index=(" << index.row() << ";" << index.column() << ") - " << index.internalPointer();
   Graph *graph = (Graph *)(index.internalPointer());
   const_cast<GraphHierarchiesModel*>(this)->_indexCache[graph] = index;
 
@@ -237,7 +231,6 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
     endRemoveRows();
   }
   else if (e.type() == Event::TLP_MODIFICATION) {
-    prout=false;
     const GraphEvent *ge = dynamic_cast<const tlp::GraphEvent *>(&e);
     if (!ge)
       return;
@@ -254,13 +247,9 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
       QModelIndex index = _indexCache[sg];
       QModelIndex parentIndex = index.parent();
       int row = index.row();
-      qWarning("================================ START OF REMOVE ================================");
-      qWarning() << "Deleting row " << index.row() << " under " << index.parent().internalPointer();
-      prout=true;
       beginRemoveRows(parentIndex,row,row);
       _indexCache.remove(sg);
       endRemoveRows();
-      qWarning("================================ END OF REMOVE ================================");
     }
   }
 }
