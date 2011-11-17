@@ -172,10 +172,10 @@ void GraphAbstract::removeSubGraph(Graph * toRemove, bool notify) {
     if (*it == toRemove) {
       // when called from GraphUpdatesRecorder
       // we must notify the observers
+      subgraphs.erase(it);
+
       if (notify)
         notifyDelSubGraph(toRemove);
-
-      subgraphs.erase(it);
 
       if (notify) {
         toRemove->notifyDestroy();
@@ -191,8 +191,8 @@ void GraphAbstract::delAllSubGraphsInternal(Graph * toRemove,
   if (this != toRemove->getSuperGraph() || this==toRemove) // this==toRemove : root graph
     return;
 
-  notifyDelSubGraph(toRemove);
   removeSubGraph(toRemove);
+  notifyDelSubGraph(toRemove);
 
   if (deleteSubGraphs)
     delete toRemove;
