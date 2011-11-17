@@ -142,11 +142,11 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
 
   if (it != subgraphs.end()) {
     subGraphToKeep = NULL;
-    notifyDelSubGraph(toRemove);
 
     Iterator<Graph *> *itS = toRemove->getSubGraphs();
     // remove from subgraphs
     subgraphs.erase(it);
+    notifyDelSubGraph(toRemove);
 
     // add toRemove subgraphs
     while (itS->hasNext()) {

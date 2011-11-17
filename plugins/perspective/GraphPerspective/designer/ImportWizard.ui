@@ -254,10 +254,13 @@ border: 0px;
                 <enum>QFrame::NoFrame</enum>
                </property>
                <property name="editTriggers">
-                <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+                <set>QAbstractItemView::AllEditTriggers</set>
                </property>
                <property name="alternatingRowColors">
                 <bool>true</bool>
+               </property>
+               <property name="selectionMode">
+                <enum>QAbstractItemView::SingleSelection</enum>
                </property>
                <attribute name="horizontalHeaderVisible">
                 <bool>false</bool>

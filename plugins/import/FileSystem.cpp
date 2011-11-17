@@ -77,8 +77,12 @@ public:
     dataSet->get("dir::directory",rootPathStr);
     QFileInfo rootInfo(rootPathStr.c_str());
 
-    if (!rootInfo.exists())
+    if (!rootInfo.exists()) {
+#ifndef NDEBUG
+      std::cerr << "Provided directory " << rootInfo.absoluteFilePath().toStdString() << " does not exist." << std::endl;
+#endif
       return false;
+    }
 
     _absolutePaths = graph->getProperty<tlp::StringProperty>("Absolute paths");
     _baseNames = graph->getProperty<tlp::StringProperty>("Base name");

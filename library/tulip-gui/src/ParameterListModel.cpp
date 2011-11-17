@@ -96,7 +96,7 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
     if (!dataType)
       return infos.type.c_str();
 
-    QVariant result = TulipMetaTypes::dataTypeToQvariant(dataType);
+    QVariant result = TulipMetaTypes::dataTypeToQvariant(dataType,infos.name.toStdString());
     delete dataType;
     return result;
   }

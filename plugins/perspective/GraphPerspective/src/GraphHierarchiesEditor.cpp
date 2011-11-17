@@ -18,13 +18,19 @@
  */
 #include "GraphHierarchiesEditor.h"
 
+#include "GraphPerspective.h"
+
+#include <QtCore/QDebug>
+#include <QtGui/QContextMenuEvent>
+#include <QtGui/QMenu>
+
+#include <tulip/TulipMetaTypes.h>
 #include "GraphHierarchiesModel.h"
 #include "ui_GraphHierarchiesEditor.h"
 
-#include <assert.h>
-
 GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData) {
   _ui->setupUi(this);
+  _ui->hierarchiesTree->installEventFilter(this);
 }
 
 void GraphHierarchiesEditor::setModel(GraphHierarchiesModel *model) {
@@ -35,3 +41,43 @@ void GraphHierarchiesEditor::setModel(GraphHierarchiesModel *model) {
 GraphHierarchiesEditor::~GraphHierarchiesEditor() {
   delete _ui;
 }
+
+void GraphHierarchiesEditor::activeGraphSelected(const QModelIndex& index) {
+  tlp::Graph* graph = (tlp::Graph*)(_ui->hierarchiesTree->model()->index(index.row(),0,index.parent()).internalPointer());
+  static_cast<GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(graph);
+}
+
+void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
+  QModelIndex index = _ui->hierarchiesTree->indexAt(p);
+  if (index.isValid()) {
+    _contextGraph = (tlp::Graph*)index.internalPointer();
+    QMenu menu;
+    menu.addAction(_ui->actionAdd_sub_graph);
+    menu.addAction(_ui->actionClone_subgraph);
+    menu.addSeparator();
+    menu.addAction(_ui->actionDelete_graph);
+    menu.exec(_ui->hierarchiesTree->viewport()->mapToGlobal(p));
+    _contextGraph = NULL;
+  }
+}
+
+void GraphHierarchiesEditor::addSubGraph() {
+  if (_contextGraph == NULL)
+    return;
+}
+
+void GraphHierarchiesEditor::cloneSubGraph() {
+  if (_contextGraph == NULL)
+    return;
+}
+
+void GraphHierarchiesEditor::delGraph() {
+  if (_contextGraph == NULL)
+    return;
+
+  if (_contextGraph->getRoot() == _contextGraph)
+    delete _contextGraph;
+  else
+    _contextGraph->getSuperGraph()->delSubGraph(_contextGraph);
+}
+

@@ -83,6 +83,7 @@ SET(SRCS
   Workspace.cpp
   PlaceHolderWidget.cpp
   ExtendedMetaNodeRenderer.cpp
+  TulipFileDescriptorWidget.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -153,6 +154,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/TulipWorkspace.h
   ../include/tulip/ProcessingAnimationItem.h
   ../include/tulip/Workspace.h
+  ../include/tulip/TulipFileDescriptorWidget.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

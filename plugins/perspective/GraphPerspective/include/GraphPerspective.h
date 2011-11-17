@@ -21,6 +21,8 @@
 
 #include <tulip/Perspective.h>
 
+class QAction;
+
 class GraphHierarchiesModel;
 class GraphHierarchiesEditor;
 

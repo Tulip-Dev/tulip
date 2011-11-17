@@ -59,6 +59,9 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
   }
 
+  DataSet data;
+  data.set<std::string>("file::filename","/home/seregon/Desktop/test.tlp");
+  _graphs->addGraph(tlp::importGraph("tlp",data));
 }
 
 void GraphPerspective::refreshDockExpandControls() {

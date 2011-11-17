@@ -20,7 +20,14 @@
 
 namespace tlp {
 
+tlp::Perspective* Perspective::_instance = NULL;
+
+Perspective* Perspective::instance() {
+  return _instance;
+}
+
 Perspective::Perspective(PerspectiveContext &c) {
+  _instance = this;
   _mainWindow = c.mainWindow;
   _project = c.project;
   _externalFile = c.externalFile;

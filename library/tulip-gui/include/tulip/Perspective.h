@@ -45,12 +45,16 @@ public:
 class TLP_QT_SCOPE Perspective : public QObject, public WithParameter, public WithDependency {
   Q_OBJECT
 
+  static tlp::Perspective* _instance;
+
 protected:
   TulipProject *_project;
   QMainWindow *_mainWindow;
   QString _externalFile;
   QVariantMap _parameters;
 public:
+
+  static tlp::Perspective* instance();
 
   Perspective(PerspectiveContext &c);
 

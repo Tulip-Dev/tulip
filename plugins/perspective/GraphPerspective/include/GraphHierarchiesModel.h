@@ -36,6 +36,7 @@ class GraphHierarchiesModel : public QAbstractItemModel, public tlp::Observable 
   QString generateName(tlp::Graph *) const;
 
   tlp::Graph *_currentGraph;
+  QMap<const tlp::Graph*,QModelIndex> _indexCache;
 
 public:
   static void setApplicationDefaults(tlp::Graph*);
@@ -80,6 +81,8 @@ public:
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+  bool setData(const QModelIndex &index, const QVariant &value, int role);
+  Qt::ItemFlags flags(const QModelIndex &index) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
   // Methods inherited from the observable system
