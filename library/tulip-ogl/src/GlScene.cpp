@@ -423,7 +423,8 @@ void GlScene::draw() {
           if((!graph->isMetaNode(node((*it).id)) && displayNodes) || (graph->isMetaNode(node((*it).id)) && displayMetaNodes)) {
             glNode.id=(*it).id;
             glNode.draw((*it).lod,glGraphComposite->getInputData(),camera);
-          }else{
+          }
+          else {
             continue;
           }
 
@@ -527,7 +528,8 @@ void GlScene::draw() {
             if((!graph->isMetaNode(node(entity->id)) && displayNodes) || (graph->isMetaNode(node(entity->id)) && displayMetaNodes)) {
               glNode.id=entity->id;
               glNode.draw(entity->lod,glGraphComposite->getInputData(),camera);
-            }else {
+            }
+            else {
               continue;
             }
           }
