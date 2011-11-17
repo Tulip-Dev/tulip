@@ -255,7 +255,7 @@ void NodeLinkDiagramComponent::buildContextMenu(QObject *object,QContextMenuEven
   //Check if a node/edge is under the mouse pointer
   node tmpNode;
   edge tmpEdge;
-  Graph *graph=mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  Graph *graph=mainWidget->getGraph();
   bool result;
   ElementType type;
   // look if the mouse pointer is over a node or edge
