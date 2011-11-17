@@ -98,12 +98,14 @@ void GraphPerspective::importGraph() {
     if (!wizard.algorithm().isNull()) {
       DataSet data = wizard.parameters();
       g = tlp::importGraph(wizard.algorithm().toStdString(),data);
+
       if (g == NULL) {
         QMessageBox::critical(_mainWindow,trUtf8("Import error"),wizard.algorithm() + trUtf8(" failed to import data"));
         return;
       }
 
       std::string name;
+
       if (!g->getAttribute<std::string>("name",name)) {
         name = (wizard.algorithm() + " - " + wizard.parameters().toString().c_str()).toStdString();
         g->setAttribute<std::string>("name",name);

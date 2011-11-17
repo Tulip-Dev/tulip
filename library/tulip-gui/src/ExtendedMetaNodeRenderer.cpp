@@ -41,7 +41,7 @@ ExtendedMetaNodeRenderer::ExtendedMetaNodeRenderer(GlGraphInputData *inputData):
 }
 
 ExtendedMetaNodeRenderer::~ExtendedMetaNodeRenderer() {
-  for(map<Graph *,GlMainView *>::iterator it=metaGraphToViewMap.begin();it!=metaGraphToViewMap.end();++it){
+  for(map<Graph *,GlMainView *>::iterator it=metaGraphToViewMap.begin(); it!=metaGraphToViewMap.end(); ++it) {
     delete (*it).second;
   }
 }
@@ -50,9 +50,11 @@ void ExtendedMetaNodeRenderer::render(node n,float lod,Camera* camera) {
 
   GlMainView *view;
   Graph *metaGraph = inputData->getGraph()->getNodeMetaInfo(n);
-  if(metaGraphToViewMap.count(metaGraph)!=0){
+
+  if(metaGraphToViewMap.count(metaGraph)!=0) {
     view=metaGraphToViewMap[metaGraph];
-  }else{
+  }
+  else {
     view=new NodeLinkDiagramComponent;
     view->setupUi();
     view->setGraph(metaGraph);
@@ -114,8 +116,8 @@ void ExtendedMetaNodeRenderer::render(node n,float lod,Camera* camera) {
   camera->initGl();
 }
 
-void ExtendedMetaNodeRenderer::treatEvent(const Event &e){
-  if(e.type() == Event::TLP_DELETE){
+void ExtendedMetaNodeRenderer::treatEvent(const Event &e) {
+  if(e.type() == Event::TLP_DELETE) {
     delete metaGraphToViewMap[(Graph*)(e.sender())];
     metaGraphToViewMap.erase((Graph*)(e.sender()));
   }

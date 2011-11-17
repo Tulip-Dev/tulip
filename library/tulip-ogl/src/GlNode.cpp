@@ -119,7 +119,7 @@ void GlNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
     }
   }
 
-  if(data->getGraph()->isMetaNode(n)){
+  if(data->getGraph()->isMetaNode(n)) {
     if(!(((data->getElementColor()->getNodeValue(n))[3]==255) && (data->parameters->getNodesStencil()==0xFFFF)))
       data->getMetaNodeRenderer()->render(n,lod,camera);
   }
