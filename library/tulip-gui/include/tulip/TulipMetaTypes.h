@@ -19,7 +19,9 @@
 #ifndef TULIPMETATYPES_H
 #define TULIPMETATYPES_H
 
+#include <QtCore/QFileInfo>
 #include <QtCore/QVariant>
+
 #include <tulip/DataSet.h>
 #include <tulip/Graph.h>
 #include <tulip/DataSet.h>
@@ -37,6 +39,17 @@
 #include <tulip/ColorScale.h>
 
 #include <vector>
+
+// Helper class for filesystem types handling
+struct TulipFileDescriptor {
+  TulipFileDescriptor() {}
+  TulipFileDescriptor(const TulipFileDescriptor& d) {
+    absolutePath = d.absolutePath;
+    isDir = d.isDir;
+  }
+  QString absolutePath;
+  bool isDir;
+};
 
 //Declare tulip type compatible with QVariant
 Q_DECLARE_METATYPE(tlp::DataSet)
@@ -82,6 +95,8 @@ Q_DECLARE_METATYPE(tlp::ColorScale)
 
 Q_DECLARE_METATYPE(tlp::StringCollection)
 
+Q_DECLARE_METATYPE(TulipFileDescriptor)
+
 namespace tlp {
 class TLP_QT_SCOPE TulipMetaTypes {
   TulipMetaTypes() {}
@@ -98,7 +113,7 @@ class TLP_QT_SCOPE TulipMetaTypes {
 
 public:
   static tlp::DataType *qVariantToDataType(const QVariant &);
-  static QVariant dataTypeToQvariant(tlp::DataType *);
+  static QVariant dataTypeToQvariant(tlp::DataType *,const std::string& paramName);
 
 };
 }

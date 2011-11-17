@@ -18,6 +18,9 @@
  */
 #include "tulip/TulipMetaTypes.h"
 
+//FIXME: remove me
+#include <QtCore/QDebug>
+
 using namespace tlp;
 
 #define CHECK_QVARIANT(TYPE) if (v.userType() == qMetaTypeId<TYPE>()) return new TypedData<TYPE>(new TYPE(v.value<TYPE>()));
@@ -48,6 +51,12 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   CHECK_QVARIANT(ColorScale);
 
   CHECK_QVARIANT(StringCollection);
+
+  if (v.userType() == qMetaTypeId<TulipFileDescriptor>()) {
+    TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
+    return new TypedData<std::string>(new std::string(desc.absolutePath.toStdString()));
+  }
+
   return NULL;
 }
 
@@ -55,8 +64,18 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
 
 #include <QtCore/QDebug>
 
-QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm) {
+QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string& paramName) {
   std::string type = dm->getTypeName();
+
+  // First, we set up some hack to provide custom types for string data whose name starts with file:: or dir::
+  QString name(paramName.c_str());
+  if (type.compare(typeid(std::string).name()) == 0 && (name.startsWith("file::") || name.startsWith("dir::"))) {
+    TulipFileDescriptor desc;
+    desc.absolutePath = (*((std::string*)dm->value)).c_str();
+    desc.isDir = name.startsWith("dir::");
+    return QVariant::fromValue<TulipFileDescriptor>(desc);
+  }
+  // ******
 
   CHECK_DATATYPE(tlp::GraphType::RealType);
   CHECK_DATATYPE(tlp::DoubleType::RealType);
@@ -83,6 +102,5 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm) {
   CHECK_DATATYPE(tlp::ColorScale)
 
   CHECK_DATATYPE(tlp::StringCollection)
-
   return QVariant();
 }

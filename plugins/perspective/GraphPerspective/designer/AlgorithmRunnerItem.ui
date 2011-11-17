@@ -136,7 +136,7 @@
       <enum>Qt::ScrollBarAlwaysOff</enum>
      </property>
      <property name="editTriggers">
-      <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::SelectedClicked</set>
+      <set>QAbstractItemView::AllEditTriggers</set>
      </property>
      <property name="tabKeyNavigation">
       <bool>false</bool>

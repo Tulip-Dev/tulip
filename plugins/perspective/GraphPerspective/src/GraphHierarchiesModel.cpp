@@ -21,6 +21,7 @@
 #include <tulip/Graph.h>
 #include <QtGui/QFont>
 #include <QtCore/QSize>
+#include <QtCore/QDebug>
 #include <fstream>
 
 #include <tulip/TulipProject.h>
@@ -37,6 +38,8 @@ using namespace tlp;
 #define ID_SECTION 1
 #define NODES_SECTION 2
 #define EDGES_SECTION 3
+
+static bool prout = false;
 
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric";
@@ -74,17 +77,21 @@ GraphHierarchiesModel::~GraphHierarchiesModel() {
 }
 
 QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex &parent) const {
-  Graph *g;
-
+  if (prout) qWarning() << __PRETTY_FUNCTION__ << "row=" << row << " column=" << column << " parent=(" << parent.row() << ";" << parent.column() << ") - " << parent.internalPointer();
+  Graph *g = NULL;
   if (parent.isValid())
     g = ((Graph *)(parent.internalPointer()))->getNthSubGraph(row);
-  else
+  else if (row < _graphs.size())
     g = _graphs[row];
+
+  if (g == NULL)
+    return QModelIndex();
 
   return createIndex(row,column,g);
 }
 
 QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
+  if (prout) qWarning() << __PRETTY_FUNCTION__ << "child=(" << child.row() << ";" << child.column() << ") - " << child.internalPointer();
   Graph *graph = (Graph *)(child.internalPointer());
 
   if (_graphs.contains(graph))
@@ -112,21 +119,33 @@ QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
 }
 
 int GraphHierarchiesModel::rowCount(const QModelIndex &parent) const {
+  if (prout) qWarning() << __PRETTY_FUNCTION__ << "parent=(" << parent.row() << ";" << parent.column() << ") - " << parent.internalPointer();
   if (!parent.isValid())
     return _graphs.size();
 
-  return ((Graph *)(parent.internalPointer()))->numberOfSubGraphs();
+  Graph* parentGraph = ((Graph *)(parent.internalPointer()));
+  return parentGraph->numberOfSubGraphs();
 }
 
 int GraphHierarchiesModel::columnCount(const QModelIndex &parent) const {
   return 4;
 }
 
+bool GraphHierarchiesModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+  if (index.column() == NAME_SECTION) {
+    Graph *graph = (Graph *)(index.internalPointer());
+    graph->setAttribute("name",value.toString().toStdString());
+    return true;
+  }
+  return QAbstractItemModel::setData(index,value,role);
+}
+
 QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
+  if (prout) qWarning() << __PRETTY_FUNCTION__ << "index=(" << index.row() << ";" << index.column() << ") - " << index.internalPointer();
   Graph *graph = (Graph *)(index.internalPointer());
+  const_cast<GraphHierarchiesModel*>(this)->_indexCache[graph] = index;
 
-  if (role == Qt::DisplayRole || role == Qt::EditRole) {
-
+  if (role == Qt::DisplayRole || role == Qt::EditRole || role == Qt::ToolTipRole) {
     if (index.column() == NAME_SECTION)
       return generateName(graph);
     else if (index.column() == ID_SECTION)
@@ -180,54 +199,69 @@ QVariant GraphHierarchiesModel::headerData(int section, Qt::Orientation orientat
 }
 
 void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
-  emit layoutAboutToBeChanged();
-
   if (_graphs.contains(g))
     return;
 
+  beginInsertRows(QModelIndex(),rowCount(),rowCount());
   Graph *i;
   foreach(i,_graphs) {
     if (i->isDescendantGraph(g))
       return;
   }
-
-
   _graphs.push_back(g);
-
   if (_graphs.size() == 1)
     setCurrentGraph(g);
 
   setApplicationDefaults(g);
   g->addListener(this);
-  emit layoutChanged();
+  endInsertRows();
 }
 
 void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
-  emit layoutAboutToBeChanged();
-
-  if (_graphs.contains(g))
+  if (_graphs.contains(g)) {
+    int pos = _graphs.indexOf(g);
+    beginRemoveRows(QModelIndex(),pos,pos);
     _graphs.removeAll(g);
-
-  emit layoutChanged();
+    endRemoveRows();
+  }
 }
 
 void GraphHierarchiesModel::treatEvent(const Event &e) {
   Graph *g = dynamic_cast<tlp::Graph *>(e.sender());
   assert(g);
 
-  if (e.type() == Event::TLP_DELETE) {
-    emit layoutAboutToBeChanged();
+  if (e.type() == Event::TLP_DELETE && _graphs.contains(g)) { // A root graph has been deleted
+    int pos = _graphs.indexOf(g);
+    beginRemoveRows(QModelIndex(),pos,pos);
     _graphs.removeAll(g);
-    emit layoutChanged();
+    endRemoveRows();
   }
   else if (e.type() == Event::TLP_MODIFICATION) {
+    prout=false;
     const GraphEvent *ge = dynamic_cast<const tlp::GraphEvent *>(&e);
-
     if (!ge)
       return;
-
-    if (ge->getType() == GraphEvent::TLP_ADD_DESCENDANTGRAPH || ge->getType() == GraphEvent::TLP_DEL_DESCENDANTGRAPH)
-      emit layoutChanged();
+    if (ge->getType() == GraphEvent::TLP_ADD_DESCENDANTGRAPH) {
+      const Graph* sg = ge->getSubGraph();
+      assert(_indexCache.contains(sg->getSuperGraph()));
+      QModelIndex parentIndex = _indexCache[sg->getSuperGraph()];
+      beginInsertRows(parentIndex,sg->getSuperGraph()->numberOfSubGraphs(),sg->getSuperGraph()->numberOfSubGraphs());
+      endInsertRows();
+    }
+    else if (ge->getType() == GraphEvent::TLP_DEL_DESCENDANTGRAPH) {
+      const Graph* sg = ge->getSubGraph();
+      assert(_indexCache.contains(sg));
+      QModelIndex index = _indexCache[sg];
+      QModelIndex parentIndex = index.parent();
+      int row = index.row();
+      qWarning("================================ START OF REMOVE ================================");
+      qWarning() << "Deleting row " << index.row() << " under " << index.parent().internalPointer();
+      prout=true;
+      beginRemoveRows(parentIndex,row,row);
+      _indexCache.remove(sg);
+      endRemoveRows();
+      qWarning("================================ END OF REMOVE ================================");
+    }
   }
 }
 
@@ -299,4 +333,11 @@ void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
 
 Graph *GraphHierarchiesModel::currentGraph() const {
   return _currentGraph;
+}
+
+Qt::ItemFlags GraphHierarchiesModel::flags(const QModelIndex &index) const {
+  Qt::ItemFlags result = QAbstractItemModel::flags(index);
+  if (index.column() == 0)
+    result |= Qt::ItemIsEditable;
+  return result;
 }

@@ -35,10 +35,16 @@
    </item>
    <item>
     <widget class="QTreeView" name="hierarchiesTree">
+     <property name="contextMenuPolicy">
+      <enum>Qt::CustomContextMenu</enum>
+     </property>
      <property name="styleSheet">
       <string notr="true">QTreeView  {
   border: 0px;
 }</string>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::EditKeyPressed</set>
      </property>
      <property name="dragEnabled">
       <bool>true</bool>
@@ -54,6 +60,9 @@
      </property>
      <property name="alternatingRowColors">
       <bool>true</bool>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
      </property>
      <property name="indentation">
       <number>10</number>
@@ -73,6 +82,34 @@
     </widget>
    </item>
   </layout>
+  <action name="actionAdd_sub_graph">
+   <property name="text">
+    <string>Add sub-graph</string>
+   </property>
+   <property name="toolTip">
+    <string>Create an empty sub-graph</string>
+   </property>
+  </action>
+  <action name="actionClone_subgraph">
+   <property name="text">
+    <string>Clone subgraph</string>
+   </property>
+   <property name="toolTip">
+    <string>Clone the selected graph into a sub-graph</string>
+   </property>
+  </action>
+  <action name="actionDelete_graph">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/process-stop.svg</normaloff>:/tulip/graphperspective/icons/process-stop.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Delete graph</string>
+   </property>
+   <property name="toolTip">
+    <string>Deletes the selected graph</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -82,6 +119,97 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
- <connections/>
+ <resources>
+  <include location="../resources/GraphPerspective.qrc"/>
+  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>hierarchiesTree</sender>
+   <signal>clicked(QModelIndex)</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>activeGraphSelected(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>117</x>
+     <y>213</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hierarchiesTree</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>contextMenuRequested(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>117</x>
+     <y>213</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAdd_sub_graph</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>addSubGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClone_subgraph</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>cloneSubGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDelete_graph</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>delGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>activeGraphSelected(QModelIndex)</slot>
+  <slot>contextMenuRequested(QPoint)</slot>
+  <slot>addSubGraph()</slot>
+  <slot>delGraph()</slot>
+  <slot>cloneSubGraph()</slot>
+ </slots>
 </ui>

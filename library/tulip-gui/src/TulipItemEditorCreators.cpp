@@ -27,6 +27,7 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/ColorButton.h>
 #include <tulip/ColorScaleButton.h>
+#include <tulip/TulipFileDescriptorWidget.h>
 #include "tulip/SizeEditor.h"
 
 using namespace tlp;
@@ -225,4 +226,22 @@ QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
   return col[col.getCurrent()].c_str();
 }
 
+/*
+  TulipFileDescriptorEditorCreator
+  */
+QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget* parent) const {
+  return new TulipFileDescriptorWidget(parent);
+}
 
+void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant& v,tlp::Graph*) {
+  static_cast<TulipFileDescriptorWidget*>(w)->setData(v.value<TulipFileDescriptor>());
+}
+
+QVariant TulipFileDescriptorEditorCreator::editorData(QWidget* w,tlp::Graph*) {
+  return QVariant::fromValue<TulipFileDescriptor>(static_cast<TulipFileDescriptorWidget*>(w)->data());
+}
+
+QString TulipFileDescriptorEditorCreator::displayText(const QVariant& v) const {
+  TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
+  return desc.absolutePath;
+}

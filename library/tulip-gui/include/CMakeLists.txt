@@ -78,6 +78,7 @@ INSTALL(FILES
   tulip/Workspace.h
   tulip/PlaceHolderWidget.h
   tulip/ExtendedMetaNodeRenderer.h
+  tulip/TulipFileDescriptorWidget.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

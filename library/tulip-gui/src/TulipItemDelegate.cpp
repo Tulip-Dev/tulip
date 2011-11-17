@@ -45,6 +45,7 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<tlp::PropertyInterface*>(new PropertyInterfaceEditorCreator);
   registerCreator<tlp::ColorScale>(new ColorScaleEditorCreator);
   registerCreator<tlp::StringCollection>(new StringCollectionEditorCreator);
+  registerCreator<TulipFileDescriptor>(new TulipFileDescriptorEditorCreator);
 }
 
 TulipItemDelegate::~TulipItemDelegate() {

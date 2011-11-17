@@ -20,8 +20,13 @@
 #define GRAPHHIERARCHIESEDITOR_H
 
 #include <QtGui/QWidget>
+#include <QtCore/QModelIndex>
 
 class GraphHierarchiesModel;
+
+namespace tlp {
+class Graph;
+}
 
 namespace Ui {
 class GraphHierarchiesEditorData;
@@ -30,13 +35,20 @@ class GraphHierarchiesEditorData;
 class GraphHierarchiesEditor : public QWidget {
   Q_OBJECT
   Ui::GraphHierarchiesEditorData *_ui;
+  tlp::Graph* _contextGraph;
 
 public:
   explicit GraphHierarchiesEditor(QWidget *parent = 0);
   virtual ~GraphHierarchiesEditor();
   void setModel(GraphHierarchiesModel *model);
 
-private:
+protected slots:
+  void activeGraphSelected(const QModelIndex&);
+  void contextMenuRequested(const QPoint&);
+
+  void addSubGraph();
+  void cloneSubGraph();
+  void delGraph();
 };
 
 #endif // GRAPHHIERARCHIESEDITOR_H
