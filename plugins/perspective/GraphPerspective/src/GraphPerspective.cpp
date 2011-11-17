@@ -28,9 +28,14 @@
 #include "GraphHierarchiesEditor.h"
 #include "GraphHierarchiesModel.h"
 
+#include <modeltest.h>
+
 using namespace tlp;
 
 GraphPerspective::GraphPerspective(PerspectiveContext &c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)) {
+#ifndef NDEBUG
+  new ModelTest(_graphs,this);
+#endif /* NDEBUG */
 }
 
 void GraphPerspective::construct(tlp::PluginProgress *progress) {

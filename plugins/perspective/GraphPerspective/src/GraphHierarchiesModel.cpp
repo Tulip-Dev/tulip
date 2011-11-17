@@ -75,48 +75,61 @@ GraphHierarchiesModel::~GraphHierarchiesModel() {
 }
 
 QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex &parent) const {
+  if (!hasIndex(row,column,parent))
+    return QModelIndex();
+
   Graph *g = NULL;
   if (parent.isValid())
     g = ((Graph *)(parent.internalPointer()))->getNthSubGraph(row);
-  else if (row < _graphs.size())
+  else
     g = _graphs[row];
 
-  if (g == NULL)
+  if (g == NULL) {
     return QModelIndex();
+  }
 
   return createIndex(row,column,g);
 }
 
 QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
-  Graph *graph = (Graph *)(child.internalPointer());
-
-  if (_graphs.contains(graph))
+  if (!child.isValid())
     return QModelIndex();
+  Graph* childGraph = (Graph*)(child.internalPointer());
+  if (childGraph == NULL || _graphs.contains(childGraph) || childGraph->getSuperGraph() == childGraph) {
+//    if (childGraph == NULL)
+//      qWarning() << "(childGraph == NULL)";
+//    std::string name;
+//    childGraph->getAttribute<std::string>("name",name);
+//    qWarning() << "child graph name = " << name.c_str();
+//    if (_graphs.contains(childGraph))
+//      qWarning() << "_graphs.contains(childGraph)";
+//    if (childGraph->getSuperGraph() == childGraph)
+//      qWarning() << "childGraph->getSuperGraph() == childGraph";
+//    qWarning("===================================== INVALID MODEL INDEX RETURNED ====================================");
+    return QModelIndex();
+  }
 
   int row=0;
-  Graph *parent = graph->getSuperGraph();
-
+  Graph *parent = childGraph->getSuperGraph();
   if (_graphs.contains(parent))
     row=_graphs.indexOf(parent);
-
   else {
     Graph *ancestor = parent->getSuperGraph();
-
     for (int i=0; i<ancestor->numberOfSubGraphs(); i++) {
       if (ancestor->getNthSubGraph(i) == parent)
         break;
-
       row++;
     }
   }
-
-
   return createIndex(row,0,parent);
 }
 
 int GraphHierarchiesModel::rowCount(const QModelIndex &parent) const {
   if (!parent.isValid())
     return _graphs.size();
+
+  if (parent.column() != 0)
+    return 0;
 
   Graph* parentGraph = ((Graph *)(parent.internalPointer()));
   return parentGraph->numberOfSubGraphs();
@@ -234,15 +247,25 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
     const GraphEvent *ge = dynamic_cast<const tlp::GraphEvent *>(&e);
     if (!ge)
       return;
-    if (ge->getType() == GraphEvent::TLP_DEL_DESCENDANTGRAPH && _graphs.contains(ge->getGraph()->getRoot())) {
-      const Graph* sg = ge->getSubGraph();
-      if (_indexCache.contains(sg)) {
-        QModelIndex index = _indexCache[sg];
-        QModelIndex parentIndex = index.parent();
-        int row = index.row();
-        beginRemoveRows(parentIndex,row,row);
-        _indexCache.remove(sg);
-        endRemoveRows();
+
+    if (_graphs.contains(ge->getGraph()->getRoot())) {
+      if (ge->getType() == GraphEvent::TLP_ADD_SUBGRAPH) {
+        Graph* parentGraph = ge->getSubGraph()->getSuperGraph();
+        QModelIndex parentIndex = _indexCache[parentGraph];
+        assert(parentIndex != QModelIndex());
+        beginInsertRows(parentIndex,parentGraph->numberOfSubGraphs(),parentGraph->numberOfSubGraphs());
+        endInsertRows();
+      }
+      else if (ge->getType() == GraphEvent::TLP_DEL_DESCENDANTGRAPH) {
+        const Graph* sg = ge->getSubGraph();
+        if (_indexCache.contains(sg)) {
+          QModelIndex index = _indexCache[sg];
+          QModelIndex parentIndex = index.parent();
+          int row = index.row();
+          beginRemoveRows(parentIndex,row,row);
+          _indexCache.remove(sg);
+          endRemoveRows();
+        }
       }
     }
   }
