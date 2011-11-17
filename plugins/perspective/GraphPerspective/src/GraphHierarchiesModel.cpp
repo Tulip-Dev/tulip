@@ -234,22 +234,16 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
     const GraphEvent *ge = dynamic_cast<const tlp::GraphEvent *>(&e);
     if (!ge)
       return;
-    if (ge->getType() == GraphEvent::TLP_ADD_DESCENDANTGRAPH) {
+    if (ge->getType() == GraphEvent::TLP_DEL_DESCENDANTGRAPH && _graphs.contains(ge->getGraph()->getRoot())) {
       const Graph* sg = ge->getSubGraph();
-      assert(_indexCache.contains(sg->getSuperGraph()));
-      QModelIndex parentIndex = _indexCache[sg->getSuperGraph()];
-      beginInsertRows(parentIndex,sg->getSuperGraph()->numberOfSubGraphs(),sg->getSuperGraph()->numberOfSubGraphs());
-      endInsertRows();
-    }
-    else if (ge->getType() == GraphEvent::TLP_DEL_DESCENDANTGRAPH) {
-      const Graph* sg = ge->getSubGraph();
-      assert(_indexCache.contains(sg));
-      QModelIndex index = _indexCache[sg];
-      QModelIndex parentIndex = index.parent();
-      int row = index.row();
-      beginRemoveRows(parentIndex,row,row);
-      _indexCache.remove(sg);
-      endRemoveRows();
+      if (_indexCache.contains(sg)) {
+        QModelIndex index = _indexCache[sg];
+        QModelIndex parentIndex = index.parent();
+        int row = index.row();
+        beginRemoveRows(parentIndex,row,row);
+        _indexCache.remove(sg);
+        endRemoveRows();
+      }
     }
   }
 }
