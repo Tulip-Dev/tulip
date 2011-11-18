@@ -97,8 +97,8 @@ void GlCompositeHierarchyManager::treatEvent(const Event& evt) {
 
       break;
 
-    case GraphEvent::TLP_ADD_SUBGRAPH:
-    case GraphEvent::TLP_DEL_SUBGRAPH:
+    case GraphEvent::TLP_AFTER_ADD_SUBGRAPH:
+    case GraphEvent::TLP_AFTER_DEL_SUBGRAPH:
       _shouldRecreate = true;
       _shouldRecreate = true;
       break;

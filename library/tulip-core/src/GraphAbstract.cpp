@@ -74,11 +74,14 @@ void GraphAbstract::clear() {
 }
 //=========================================================================
 void GraphAbstract::restoreSubGraph(Graph* sg, bool undoOrRedo) {
+  if (undoOrRedo) {
+    notifyBeforeAddSubGraph(sg);
+  }
   subgraphs.push_back(sg);
   sg->setSuperGraph(this);
 
   if (undoOrRedo) {
-    notifyAddSubGraph(sg);
+    notifyAfterAddSubGraph(sg);
     Iterator<Graph *> *itS = sg->getSubGraphs();
 
     while (itS->hasNext()) {
@@ -98,8 +101,9 @@ void GraphAbstract::setSubGraphToKeep(Graph* sg) {
 //=========================================================================
 Graph *GraphAbstract::addSubGraph(BooleanProperty *selection, unsigned int id) {
   Graph *tmp = new GraphView(this, selection, id);
+  notifyBeforeAddSubGraph(tmp);
   subgraphs.push_back(tmp);
-  notifyAddSubGraph(tmp);
+  notifyAfterAddSubGraph(tmp);
   return tmp;
 }
 Graph *GraphAbstract::getNthSubGraph(unsigned int n) const {
@@ -145,8 +149,9 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
 
     Iterator<Graph *> *itS = toRemove->getSubGraphs();
     // remove from subgraphs
+    notifyBeforeDelSubGraph(toRemove);
     subgraphs.erase(it);
-    notifyDelSubGraph(toRemove);
+    notifyAfterDelSubGraph(toRemove);
 
     // add toRemove subgraphs
     while (itS->hasNext()) {
@@ -172,10 +177,11 @@ void GraphAbstract::removeSubGraph(Graph * toRemove, bool notify) {
     if (*it == toRemove) {
       // when called from GraphUpdatesRecorder
       // we must notify the observers
-      subgraphs.erase(it);
-
       if (notify)
-        notifyDelSubGraph(toRemove);
+        notifyBeforeDelSubGraph(toRemove);
+      subgraphs.erase(it);
+      if (notify)
+        notifyAfterDelSubGraph(toRemove);
 
       if (notify) {
         toRemove->notifyDestroy();
@@ -191,8 +197,9 @@ void GraphAbstract::delAllSubGraphsInternal(Graph * toRemove,
   if (this != toRemove->getSuperGraph() || this==toRemove) // this==toRemove : root graph
     return;
 
+  notifyBeforeDelSubGraph(toRemove);
   removeSubGraph(toRemove);
-  notifyDelSubGraph(toRemove);
+  notifyAfterDelSubGraph(toRemove);
 
   if (deleteSubGraphs)
     delete toRemove;

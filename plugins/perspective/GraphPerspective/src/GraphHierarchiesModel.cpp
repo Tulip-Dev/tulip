@@ -259,21 +259,27 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
       return;
 
     if (_graphs.contains(ge->getGraph()->getRoot())) {
-      if (ge->getType() == GraphEvent::TLP_ADD_SUBGRAPH) {
+      if (ge->getType() == GraphEvent::TLP_BEFORE_ADD_SUBGRAPH) {
         Graph* parentGraph = ge->getSubGraph()->getSuperGraph();
         QModelIndex parentIndex = _indexCache[parentGraph];
         assert(parentIndex != QModelIndex());
         beginInsertRows(parentIndex,parentGraph->numberOfSubGraphs(),parentGraph->numberOfSubGraphs());
+      }
+      else if (ge->getType() == GraphEvent::TLP_AFTER_ADD_SUBGRAPH) {
         endInsertRows();
       }
-      else if (ge->getType() == GraphEvent::TLP_DEL_DESCENDANTGRAPH) {
+      else if (ge->getType() == GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH) {
         const Graph* sg = ge->getSubGraph();
-
         if (_indexCache.contains(sg)) {
           QModelIndex index = _indexCache[sg];
           QModelIndex parentIndex = index.parent();
           int row = index.row();
           beginRemoveRows(parentIndex,row,row);
+        }
+      }
+      else if (ge->getType() == GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH) {
+        const Graph* sg = ge->getSubGraph();
+        if (_indexCache.contains(sg)) {
           _indexCache.remove(sg);
           endRemoveRows();
         }

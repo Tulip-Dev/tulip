@@ -270,11 +270,11 @@ void tlp::MinMaxProperty<nodeType, edgeType, algorithmType>::treatEvent(const tl
       break;
     }
 
-    case GraphEvent::TLP_ADD_SUBGRAPH:
+    case GraphEvent::TLP_AFTER_ADD_SUBGRAPH:
       graphEvent->getSubGraph()->addListener(this);
       break;
 
-    case GraphEvent::TLP_DEL_SUBGRAPH:
+    case GraphEvent::TLP_BEFORE_DEL_SUBGRAPH:
       graphEvent->getSubGraph()->removeListener(this);
       break;
 

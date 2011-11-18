@@ -29,14 +29,15 @@ void GraphDecorator::clear() {
 Graph *GraphDecorator::addSubGraph(BooleanProperty *selection,
                                    unsigned int id) {
   Graph* sg = graph_component->addSubGraph(selection, id);
-  notifyAddSubGraph(sg);
+  notifyAfterAddSubGraph(sg);
   return sg;
 }
 
 //============================================================
 void GraphDecorator::delSubGraph(Graph *s) {
-  notifyDelSubGraph(s);
+  notifyBeforeDelSubGraph(s);
   graph_component->delSubGraph(s);
+  notifyAfterDelSubGraph(s);
 }
 //============================================================
 unsigned int GraphDecorator::numberOfSubGraphs() const {
@@ -68,8 +69,9 @@ void GraphDecorator::clearSubGraphs() {
 
 //============================================================
 void GraphDecorator::delAllSubGraphs(Graph *s) {
-  notifyDelSubGraph(s);
+  notifyBeforeDelSubGraph(s);
   graph_component->delAllSubGraphs(s);
+  notifyAfterDelSubGraph(s);
 }
 
 //============================================================
