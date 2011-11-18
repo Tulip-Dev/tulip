@@ -158,7 +158,8 @@ bool GraphHierarchiesModel::setData(const QModelIndex &index, const QVariant &va
 
 QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
   Graph *graph = (Graph *)(index.internalPointer());
-  const_cast<GraphHierarchiesModel*>(this)->_indexCache[graph] = index;
+  if (index.column() == 0)
+    const_cast<GraphHierarchiesModel*>(this)->_indexCache[graph] = index;
 
   if (role == Qt::DisplayRole || role == Qt::EditRole || role == Qt::ToolTipRole) {
     if (index.column() == NAME_SECTION)
