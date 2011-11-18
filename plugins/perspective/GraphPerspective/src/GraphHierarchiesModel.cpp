@@ -18,12 +18,13 @@
  */
 #include "GraphHierarchiesModel.h"
 
-#include <tulip/Graph.h>
 #include <QtGui/QFont>
 #include <QtCore/QSize>
 #include <QtCore/QDebug>
 #include <fstream>
 
+#include <tulip/TulipMetaTypes.h>
+#include <tulip/Graph.h>
 #include <tulip/TulipProject.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
@@ -63,10 +64,10 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   }
 }
 
-GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): QAbstractItemModel(parent) {
+GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): TulipModel(parent) {
 }
 
-GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy): QAbstractItemModel(copy.QObject::parent()), tlp::Observable() {
+GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy): TulipModel(copy.QObject::parent()), tlp::Observable() {
   for (int i=0; i < copy.size(); ++i)
     addGraph(copy[i]);
 }
@@ -160,6 +161,10 @@ QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
       return graph->numberOfNodes();
     else if (index.column() == EDGES_SECTION)
       return graph->numberOfEdges();
+  }
+
+  else if (role == GraphRole) {
+    return QVariant::fromValue<Graph*>((Graph*)(index.internalPointer()));
   }
 
   else if (role == Qt::TextAlignmentRole && index.column() != NAME_SECTION)

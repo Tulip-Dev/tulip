@@ -42,6 +42,7 @@ public:
 public slots:
   void showFullScreen(bool);
   void importGraph();
+  void createPanel(tlp::Graph*);
 
 protected slots:
   void refreshDockExpandControls();
