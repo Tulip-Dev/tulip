@@ -501,10 +501,12 @@ void Graph::notifyDelSubGraph(const Graph* sg) {
     sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_SUBGRAPH, sg));
 
   Graph *g = this;
+
   while (g != getRoot()) {
     g->notifyDelDescendantGraph(sg);
     g = g->getSuperGraph();
   }
+
   getRoot()->notifyDelDescendantGraph(sg);
 }
 

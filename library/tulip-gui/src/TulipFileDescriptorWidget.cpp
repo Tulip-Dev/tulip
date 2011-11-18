@@ -1,3 +1,21 @@
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
 #include "tulip/TulipFileDescriptorWidget.h"
 
 #include <QtGui/QKeyEvent>
@@ -24,12 +42,15 @@ TulipFileDescriptorWidget::TulipFileDescriptorWidget(QWidget* parent): QWidget(p
 
 void TulipFileDescriptorWidget::browse() {
   QString result;
+
   if (_data.isDir)
     result = QFileDialog::getExistingDirectory(parentWidget(),trUtf8("Choose directory"),_data.absolutePath);
   else
     result = QFileDialog::getOpenFileName(parentWidget(),trUtf8("Choose file"),_data.absolutePath);
+
   if (!result.isEmpty())
     _data.absolutePath = result;
+
   setData(_data);
   QKeyEvent* ev1 = new QKeyEvent(QEvent::KeyPress,Qt::Key_Enter,Qt::NoModifier);
   QKeyEvent* ev2 = new QKeyEvent(QEvent::KeyRelease,Qt::Key_Enter,Qt::NoModifier);
