@@ -99,16 +99,6 @@ QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
   Graph* childGraph = (Graph*)(child.internalPointer());
 
   if (childGraph == NULL || _graphs.contains(childGraph) || childGraph->getSuperGraph() == childGraph) {
-//    if (childGraph == NULL)
-//      qWarning() << "(childGraph == NULL)";
-//    std::string name;
-//    childGraph->getAttribute<std::string>("name",name);
-//    qWarning() << "child graph name = " << name.c_str();
-//    if (_graphs.contains(childGraph))
-//      qWarning() << "_graphs.contains(childGraph)";
-//    if (childGraph->getSuperGraph() == childGraph)
-//      qWarning() << "childGraph->getSuperGraph() == childGraph";
-//    qWarning("===================================== INVALID MODEL INDEX RETURNED ====================================");
     return QModelIndex();
   }
 
@@ -255,18 +245,18 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
   }
   else if (e.type() == Event::TLP_MODIFICATION) {
     const GraphEvent *ge = dynamic_cast<const tlp::GraphEvent *>(&e);
-
     if (!ge)
       return;
-
     if (_graphs.contains(ge->getGraph()->getRoot())) {
-      if (ge->getType() == GraphEvent::TLP_BEFORE_ADD_SUBGRAPH) {
+      if (ge->getType() == GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH) {
+        string pName;
         Graph* parentGraph = ge->getSubGraph()->getSuperGraph();
+        parentGraph->getAttribute<string>("name",pName);
         QModelIndex parentIndex = _indexCache[parentGraph];
         assert(parentIndex != QModelIndex());
         beginInsertRows(parentIndex,parentGraph->numberOfSubGraphs(),parentGraph->numberOfSubGraphs());
       }
-      else if (ge->getType() == GraphEvent::TLP_AFTER_ADD_SUBGRAPH) {
+      else if (ge->getType() == GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH) {
         endInsertRows();
       }
       else if (ge->getType() == GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH) {

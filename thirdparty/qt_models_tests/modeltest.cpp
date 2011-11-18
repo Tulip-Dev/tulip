@@ -504,7 +504,8 @@ void ModelTest::rowsInserted ( const QModelIndex & parent, int start, int end )
 //    }
 //    qDebug();
 
-    qDebug() << c.oldSize + ( end - start + 1 ) << " == " << model->rowCount ( parent );
+    if (c.oldSize + ( end - start + 1 ) != model->rowCount ( parent ))
+      qDebug() << c.oldSize + ( end - start + 1 ) << " != " << model->rowCount ( parent );
     Q_ASSERT ( c.oldSize + ( end - start + 1 ) == model->rowCount ( parent ) );
     Q_ASSERT ( c.last == model->data ( model->index ( start - 1, 0, c.parent ) ) );
 
