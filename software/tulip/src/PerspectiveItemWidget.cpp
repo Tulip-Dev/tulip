@@ -41,7 +41,7 @@ PerspectiveItemWidget::PerspectiveItemWidget(tlp::PluginInformations *infos,QWid
 }
 
 void PerspectiveItemWidget::focusInEvent(QFocusEvent *) {
-  _ui->frame->setStyleSheet("QFrame#frame { background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(225, 225, 225, 255), stop:1 rgba(205,205,205, 255));  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
+  _ui->frame->setStyleSheet("QFrame#frame { background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(243, 249, 255, 255), stop:1 rgba(232, 238, 244, 255));  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
 }
 
 void PerspectiveItemWidget::focusOutEvent(QFocusEvent *) {
