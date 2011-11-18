@@ -97,6 +97,11 @@ DWORD GetModuleBase(DWORD dwAddress) {
 
 #define PATH_MAX 1024
 
+// may not exist on old versions
+#if !defined(BFD_DECOMPRESS)
+#define BFD_DECOMPRESS 0x10000
+#endif
+
 static bool bfdInit = false;
 
 BfdWrapper::BfdWrapper(const char *dsoName) :
