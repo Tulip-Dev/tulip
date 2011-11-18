@@ -75,11 +75,11 @@ void GraphObserver::treatEvent(const Event& ev) {
       break;
     }
 
-    case GraphEvent::TLP_ADD_SUBGRAPH:
+    case GraphEvent::TLP_AFTER_ADD_SUBGRAPH:
       addSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
       break;
 
-    case GraphEvent::TLP_DEL_SUBGRAPH:
+    case GraphEvent::TLP_AFTER_DEL_SUBGRAPH:
       delSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
       break;
 
@@ -106,8 +106,10 @@ void GraphObserver::treatEvent(const Event& ev) {
     case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
     case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
     case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
-    case GraphEvent::TLP_ADD_DESCENDANTGRAPH:
-    case GraphEvent::TLP_DEL_DESCENDANTGRAPH:
+    case GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH:
+    case GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH:
+    case GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH:
+    case GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH:
       break;
 
     default:

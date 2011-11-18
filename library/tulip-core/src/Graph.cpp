@@ -482,42 +482,66 @@ void Graph::notifyAfterSetEnds(const edge e) {
     sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_SET_ENDS, e));
 }
 
-void Graph::notifyAddSubGraph(const Graph* sg) {
+void Graph::notifyBeforeAddSubGraph(const Graph* sg) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_SUBGRAPH, sg));
-
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_SUBGRAPH, sg));
   Graph *g = this;
-
   while (g != getRoot()) {
-    g->notifyAddDescendantGraph(sg);
+    g->notifyBeforeAddDescendantGraph(sg);
     g = g->getSuperGraph();
   }
 
-  getRoot()->notifyAddDescendantGraph(sg);
+  getRoot()->notifyBeforeAddDescendantGraph(sg);
 }
 
-void Graph::notifyDelSubGraph(const Graph* sg) {
+void Graph::notifyAfterAddSubGraph(const Graph* sg) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_SUBGRAPH, sg));
-
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_ADD_SUBGRAPH, sg));
   Graph *g = this;
-
   while (g != getRoot()) {
-    g->notifyDelDescendantGraph(sg);
+    g->notifyAfterAddDescendantGraph(sg);
     g = g->getSuperGraph();
   }
-
-  getRoot()->notifyDelDescendantGraph(sg);
+  getRoot()->notifyAfterAddDescendantGraph(sg);
 }
 
-void Graph::notifyAddDescendantGraph(const Graph* sg) {
+void Graph::notifyBeforeDelSubGraph(const Graph* sg) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_DESCENDANTGRAPH, sg));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_SUBGRAPH, sg));
+  Graph *g = this;
+  while (g != getRoot()) {
+    g->notifyBeforeDelDescendantGraph(sg);
+    g = g->getSuperGraph();
+  }
+  getRoot()->notifyBeforeDelDescendantGraph(sg);
+}
+void Graph::notifyAfterDelSubGraph(const Graph* sg) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_SUBGRAPH, sg));
+  Graph *g = this;
+  while (g != getRoot()) {
+    g->notifyAfterDelDescendantGraph(sg);
+    g = g->getSuperGraph();
+  }
+  getRoot()->notifyAfterDelDescendantGraph(sg);
 }
 
-void Graph::notifyDelDescendantGraph(const Graph* sg) {
+void Graph::notifyBeforeAddDescendantGraph(const Graph* sg) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_DESCENDANTGRAPH, sg));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH, sg));
+}
+void Graph::notifyAfterAddDescendantGraph(const Graph* sg) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH, sg));
+}
+
+void Graph::notifyBeforeDelDescendantGraph(const Graph* sg) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH, sg));
+}
+void Graph::notifyAfterDelDescendantGraph(const Graph* sg) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH, sg));
 }
 
 void Graph::notifyAddLocalProperty(const std::string& propName) {

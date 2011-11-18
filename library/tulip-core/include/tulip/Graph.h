@@ -793,17 +793,27 @@ protected:
   void notifyReverseEdge(Graph*, const edge e) {
     notifyReverseEdge(e);
   }
-  void notifyAddSubGraph(const Graph*);
-  void notifyAddSubGraph(Graph*, const Graph* sg) {
-    notifyAddSubGraph(sg);
+  void notifyBeforeAddSubGraph(const Graph*);
+  void notifyAfterAddSubGraph(const Graph*);
+  void notifyBeforeAddSubGraph(Graph*, const Graph* sg) {
+    notifyBeforeAddSubGraph(sg);
   }
-  void notifyDelSubGraph(const Graph*);
-  void notifyDelSubGraph(Graph*, const Graph* sg) {
-    notifyDelSubGraph(sg);
+  void notifyAfterAddSubGraph(Graph*, const Graph* sg) {
+    notifyAfterAddSubGraph(sg);
+  }
+  void notifyBeforeDelSubGraph(const Graph*);
+  void notifyAfterDelSubGraph(const Graph*);
+  void notifyBeforeDelSubGraph(Graph*, const Graph* sg) {
+    notifyBeforeDelSubGraph(sg);
+  }
+  void notifyAfterDelSubGraph(Graph*, const Graph* sg) {
+    notifyAfterDelSubGraph(sg);
   }
 
-  void notifyAddDescendantGraph(const Graph*);
-  void notifyDelDescendantGraph(const Graph*);
+  void notifyBeforeAddDescendantGraph(const Graph*);
+  void notifyAfterAddDescendantGraph(const Graph*);
+  void notifyBeforeDelDescendantGraph(const Graph*);
+  void notifyAfterDelDescendantGraph(const Graph*);
 
   void notifyAddLocalProperty(const std::string&);
   void notifyAddLocalProperty(Graph*, const std::string& name) {
@@ -852,19 +862,23 @@ public:
     TLP_AFTER_SET_ENDS = 6,
     TLP_ADD_NODES = 7,
     TLP_ADD_EDGES = 8,
-    TLP_ADD_DESCENDANTGRAPH = 9,
-    TLP_DEL_DESCENDANTGRAPH = 10,
-    TLP_ADD_SUBGRAPH = 11,
-    TLP_DEL_SUBGRAPH = 12,
-    TLP_ADD_LOCAL_PROPERTY = 13,
-    TLP_BEFORE_DEL_LOCAL_PROPERTY = 14,
-    TLP_AFTER_DEL_LOCAL_PROPERTY = 15,
-    TLP_ADD_INHERITED_PROPERTY = 16,
-    TLP_BEFORE_DEL_INHERITED_PROPERTY = 17,
-    TLP_AFTER_DEL_INHERITED_PROPERTY = 18,
-    TLP_BEFORE_SET_ATTRIBUTE = 19,
-    TLP_AFTER_SET_ATTRIBUTE = 20,
-    TLP_REMOVE_ATTRIBUTE = 21
+    TLP_BEFORE_ADD_DESCENDANTGRAPH = 9,
+    TLP_AFTER_ADD_DESCENDANTGRAPH = 10,
+    TLP_BEFORE_DEL_DESCENDANTGRAPH = 11,
+    TLP_AFTER_DEL_DESCENDANTGRAPH = 12,
+    TLP_BEFORE_ADD_SUBGRAPH = 13,
+    TLP_AFTER_ADD_SUBGRAPH = 14,
+    TLP_BEFORE_DEL_SUBGRAPH = 15,
+    TLP_AFTER_DEL_SUBGRAPH = 16,
+    TLP_ADD_LOCAL_PROPERTY = 17,
+    TLP_BEFORE_DEL_LOCAL_PROPERTY = 18,
+    TLP_AFTER_DEL_LOCAL_PROPERTY = 19,
+    TLP_ADD_INHERITED_PROPERTY = 20,
+    TLP_BEFORE_DEL_INHERITED_PROPERTY = 21,
+    TLP_AFTER_DEL_INHERITED_PROPERTY = 22,
+    TLP_BEFORE_SET_ATTRIBUTE = 23,
+    TLP_AFTER_SET_ATTRIBUTE = 24,
+    TLP_REMOVE_ATTRIBUTE = 25
   };
 
   // constructor for node/edge events
@@ -904,7 +918,7 @@ public:
 
   // destructor needed to cleanup name if any
   ~GraphEvent() {
-    if (evtType > TLP_DEL_SUBGRAPH)
+    if (evtType > TLP_AFTER_DEL_SUBGRAPH)
       delete info.name;
   }
 
@@ -943,7 +957,7 @@ public:
   }
 
   const std::string& getPropertyName() const {
-    assert(evtType > TLP_DEL_SUBGRAPH && evtType < TLP_BEFORE_SET_ATTRIBUTE);
+    assert(evtType > TLP_AFTER_DEL_SUBGRAPH && evtType < TLP_BEFORE_SET_ATTRIBUTE);
     return *(info.name);
   }
 
