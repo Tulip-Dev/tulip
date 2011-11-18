@@ -25,10 +25,13 @@
 
 #include "ui_GraphPerspectiveMainWindow.h"
 #include "ImportWizard.h"
+#include "PanelSelectionWizard.h"
 #include "GraphHierarchiesEditor.h"
 #include "GraphHierarchiesModel.h"
 
+#ifndef NDEBUG
 #include <modeltest.h>
+#endif
 
 using namespace tlp;
 
@@ -121,6 +124,14 @@ void GraphPerspective::importGraph() {
 
     _graphs->addGraph(g);
   }
+}
+
+void GraphPerspective::createPanel(tlp::Graph* g) {
+  PanelSelectionWizard wizard(_graphs,_mainWindow);
+  if (wizard.exec() == QDialog::Rejected)
+    return;
+  if (!wizard.panelName().isNull())
+    _ui->workspace->addView(wizard.panelName(),wizard.graph());
 }
 
 PERSPECTIVEPLUGIN(GraphPerspective,"Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0")

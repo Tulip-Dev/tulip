@@ -19,7 +19,7 @@
 #ifndef GRAPHHIERARCHIESMODEL_H
 #define GRAPHHIERARCHIESMODEL_H
 
-#include <QtCore/QAbstractItemModel>
+#include <tulip/TulipModel.h>
 #include <tulip/Observable.h>
 #include <QtCore/QList>
 
@@ -29,7 +29,7 @@ class TulipProject;
 class PluginProgress;
 }
 
-class GraphHierarchiesModel : public QAbstractItemModel, public tlp::Observable {
+class GraphHierarchiesModel : public tlp::TulipModel, public tlp::Observable {
   Q_OBJECT
 
   QList<tlp::Graph *> _graphs;

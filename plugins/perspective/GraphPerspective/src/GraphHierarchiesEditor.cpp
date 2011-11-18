@@ -54,6 +54,8 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
   if (index.isValid()) {
     _contextGraph = (tlp::Graph*)index.internalPointer();
     QMenu menu;
+    menu.addAction(_ui->actionCreate_panel);
+    menu.addSeparator();
     menu.addAction(_ui->actionAdd_sub_graph);
     menu.addAction(_ui->actionClone_subgraph);
     menu.addSeparator();
@@ -99,4 +101,8 @@ void GraphHierarchiesEditor::delAllGraph() {
     delete _contextGraph;
   else
     _contextGraph->getSuperGraph()->delAllSubGraphs(_contextGraph);
+}
+
+void GraphHierarchiesEditor::createPanel() {
+  static_cast<GraphPerspective*>(GraphPerspective::instance())->createPanel(_contextGraph);
 }
