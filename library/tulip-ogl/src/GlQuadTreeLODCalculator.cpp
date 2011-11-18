@@ -135,7 +135,7 @@ void GlQuadTreeLODCalculator::compute(const Vector<int,4>& globalViewport,const 
   if(haveToCompute) {
     // if have to compute : rebuild quadtree
 
-    if(haveToInitObservers){
+    if(haveToInitObservers) {
       addObservers();
       haveToInitObservers=false;
     }

@@ -50,6 +50,7 @@ void GraphHierarchiesEditor::activeGraphSelected(const QModelIndex& index) {
 
 void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
   QModelIndex index = _ui->hierarchiesTree->indexAt(p);
+
   if (index.isValid()) {
     _contextGraph = (tlp::Graph*)index.internalPointer();
     QMenu menu;
@@ -66,6 +67,7 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
 void GraphHierarchiesEditor::addSubGraph() {
   if (_contextGraph == NULL)
     return;
+
   tlp::BooleanProperty* prop = new tlp::BooleanProperty(_contextGraph);
   prop->setAllNodeValue(true);
   prop->setAllEdgeValue(true);
@@ -76,6 +78,7 @@ void GraphHierarchiesEditor::addSubGraph() {
 void GraphHierarchiesEditor::cloneSubGraph() {
   if (_contextGraph == NULL)
     return;
+
   _contextGraph->addSubGraph();
 }
 

@@ -79,6 +79,7 @@ QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex 
     return QModelIndex();
 
   Graph *g = NULL;
+
   if (parent.isValid())
     g = ((Graph *)(parent.internalPointer()))->getNthSubGraph(row);
   else
@@ -94,7 +95,9 @@ QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex 
 QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
   if (!child.isValid())
     return QModelIndex();
+
   Graph* childGraph = (Graph*)(child.internalPointer());
+
   if (childGraph == NULL || _graphs.contains(childGraph) || childGraph->getSuperGraph() == childGraph) {
 //    if (childGraph == NULL)
 //      qWarning() << "(childGraph == NULL)";
@@ -111,16 +114,20 @@ QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
 
   int row=0;
   Graph *parent = childGraph->getSuperGraph();
+
   if (_graphs.contains(parent))
     row=_graphs.indexOf(parent);
   else {
     Graph *ancestor = parent->getSuperGraph();
+
     for (int i=0; i<ancestor->numberOfSubGraphs(); i++) {
       if (ancestor->getNthSubGraph(i) == parent)
         break;
+
       row++;
     }
   }
+
   return createIndex(row,0,parent);
 }
 
@@ -145,6 +152,7 @@ bool GraphHierarchiesModel::setData(const QModelIndex &index, const QVariant &va
     graph->setAttribute("name",value.toString().toStdString());
     return true;
   }
+
   return QAbstractItemModel::setData(index,value,role);
 }
 
@@ -216,6 +224,7 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
       return;
   }
   _graphs.push_back(g);
+
   if (_graphs.size() == 1)
     setCurrentGraph(g);
 
@@ -245,6 +254,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
   }
   else if (e.type() == Event::TLP_MODIFICATION) {
     const GraphEvent *ge = dynamic_cast<const tlp::GraphEvent *>(&e);
+
     if (!ge)
       return;
 
@@ -258,6 +268,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
       }
       else if (ge->getType() == GraphEvent::TLP_DEL_DESCENDANTGRAPH) {
         const Graph* sg = ge->getSubGraph();
+
         if (_indexCache.contains(sg)) {
           QModelIndex index = _indexCache[sg];
           QModelIndex parentIndex = index.parent();
@@ -343,7 +354,9 @@ Graph *GraphHierarchiesModel::currentGraph() const {
 
 Qt::ItemFlags GraphHierarchiesModel::flags(const QModelIndex &index) const {
   Qt::ItemFlags result = QAbstractItemModel::flags(index);
+
   if (index.column() == 0)
     result |= Qt::ItemIsEditable;
+
   return result;
 }
