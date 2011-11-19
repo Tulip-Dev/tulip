@@ -485,7 +485,9 @@ void Graph::notifyAfterSetEnds(const edge e) {
 void Graph::notifyBeforeAddSubGraph(const Graph* sg) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_SUBGRAPH, sg));
+
   Graph *g = this;
+
   while (g != getRoot()) {
     g->notifyBeforeAddDescendantGraph(sg);
     g = g->getSuperGraph();
@@ -497,32 +499,41 @@ void Graph::notifyBeforeAddSubGraph(const Graph* sg) {
 void Graph::notifyAfterAddSubGraph(const Graph* sg) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_ADD_SUBGRAPH, sg));
+
   Graph *g = this;
+
   while (g != getRoot()) {
     g->notifyAfterAddDescendantGraph(sg);
     g = g->getSuperGraph();
   }
+
   getRoot()->notifyAfterAddDescendantGraph(sg);
 }
 
 void Graph::notifyBeforeDelSubGraph(const Graph* sg) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_SUBGRAPH, sg));
+
   Graph *g = this;
+
   while (g != getRoot()) {
     g->notifyBeforeDelDescendantGraph(sg);
     g = g->getSuperGraph();
   }
+
   getRoot()->notifyBeforeDelDescendantGraph(sg);
 }
 void Graph::notifyAfterDelSubGraph(const Graph* sg) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_SUBGRAPH, sg));
+
   Graph *g = this;
+
   while (g != getRoot()) {
     g->notifyAfterDelDescendantGraph(sg);
     g = g->getSuperGraph();
   }
+
   getRoot()->notifyAfterDelDescendantGraph(sg);
 }
 

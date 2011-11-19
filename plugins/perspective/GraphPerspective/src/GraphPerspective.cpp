@@ -128,8 +128,10 @@ void GraphPerspective::importGraph() {
 
 void GraphPerspective::createPanel(tlp::Graph* g) {
   PanelSelectionWizard wizard(_graphs,_mainWindow);
+
   if (wizard.exec() == QDialog::Rejected)
     return;
+
   if (!wizard.panelName().isNull())
     _ui->workspace->addView(wizard.panelName(),wizard.graph());
 }

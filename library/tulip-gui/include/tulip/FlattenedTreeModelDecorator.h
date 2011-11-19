@@ -1,3 +1,21 @@
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
 #ifndef FLATTENEDTREEMODELDECORATOR_H
 #define FLATTENEDTREEMODELDECORATOR_H
 
@@ -10,7 +28,10 @@ class TLP_QT_SCOPE FlattenedTreeModelDecorator : public QAbstractItemModel {
   struct ItemInfos {
     ItemInfos(int d, const QModelIndex& idx): depth(d), originalIndex(idx) {}
     ItemInfos() {}
-    ItemInfos(const ItemInfos& cpy) { depth = cpy.depth; originalIndex = cpy.originalIndex; }
+    ItemInfos(const ItemInfos& cpy) {
+      depth = cpy.depth;
+      originalIndex = cpy.originalIndex;
+    }
     int depth;
     QModelIndex originalIndex;
   };
