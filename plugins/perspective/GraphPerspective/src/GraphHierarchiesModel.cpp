@@ -149,6 +149,7 @@ bool GraphHierarchiesModel::setData(const QModelIndex &index, const QVariant &va
 
 QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
   Graph *graph = (Graph *)(index.internalPointer());
+
   if (index.column() == 0)
     const_cast<GraphHierarchiesModel*>(this)->_indexCache[graph] = index;
 
@@ -250,8 +251,10 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
   }
   else if (e.type() == Event::TLP_MODIFICATION) {
     const GraphEvent *ge = dynamic_cast<const tlp::GraphEvent *>(&e);
+
     if (!ge)
       return;
+
     if (_graphs.contains(ge->getGraph()->getRoot())) {
       if (ge->getType() == GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH) {
         string pName;
@@ -266,6 +269,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
       }
       else if (ge->getType() == GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH) {
         const Graph* sg = ge->getSubGraph();
+
         if (_indexCache.contains(sg)) {
           QModelIndex index = _indexCache[sg];
           QModelIndex parentIndex = index.parent();
@@ -275,6 +279,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
       }
       else if (ge->getType() == GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH) {
         const Graph* sg = ge->getSubGraph();
+
         if (_indexCache.contains(sg)) {
           _indexCache.remove(sg);
           endRemoveRows();

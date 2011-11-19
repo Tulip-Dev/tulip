@@ -69,6 +69,7 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
 void GraphHierarchiesEditor::addSubGraph() {
   if (_contextGraph == NULL)
     return;
+
   _contextGraph->addSubGraph();
 }
 

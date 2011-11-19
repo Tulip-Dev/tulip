@@ -77,6 +77,7 @@ void GraphAbstract::restoreSubGraph(Graph* sg, bool undoOrRedo) {
   if (undoOrRedo) {
     notifyBeforeAddSubGraph(sg);
   }
+
   subgraphs.push_back(sg);
   sg->setSuperGraph(this);
 
@@ -179,7 +180,9 @@ void GraphAbstract::removeSubGraph(Graph * toRemove, bool notify) {
       // we must notify the observers
       if (notify)
         notifyBeforeDelSubGraph(toRemove);
+
       subgraphs.erase(it);
+
       if (notify)
         notifyAfterDelSubGraph(toRemove);
 

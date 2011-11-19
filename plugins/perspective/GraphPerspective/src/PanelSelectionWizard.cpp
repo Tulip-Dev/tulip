@@ -1,3 +1,21 @@
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
 #include "PanelSelectionWizard.h"
 #include "ui_PanelSelectionWizard.h"
 #include "ui_PanelSelectionItem.h"
@@ -65,6 +83,7 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
   foreach(info,localPlugins) {
     if (info->type() != "View")
       continue;
+
     PanelSelectionItem* item = new PanelSelectionItem(info);
     panelsLayout->addWidget(item);
     connect(item,SIGNAL(selected()),this,SLOT(panelSelected()));
@@ -84,6 +103,7 @@ void PanelSelectionWizard::graphSelected(int row) {
 void PanelSelectionWizard::panelSelected() {
   if (_activeItem != NULL)
     _activeItem->setFocus(false);
+
   _activeItem = static_cast<PanelSelectionItem*>(sender());
   _activeItem->setFocus(true);
   button(QWizard::FinishButton)->setEnabled(true);

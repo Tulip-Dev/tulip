@@ -99,6 +99,7 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
   _view->graphicsView()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
   layout()->addWidget(_view->graphicsView());
   refreshInteractorsToolbar();
+
   if (compatibleInteractors.size()>0)
     setCurrentInteractor(compatibleInteractors[0]);
 }
