@@ -68,7 +68,7 @@ void GlLabel::init() {
   outlineSize=1.;
   renderingMode=0;
   translationAfterRotation=Coord(0,0,0);
-  //alignment=ON_CENTER;
+  alignment=ON_CENTER;
   scaleToSize=true;
   useMinMaxSize=false;
   minSize=10;
