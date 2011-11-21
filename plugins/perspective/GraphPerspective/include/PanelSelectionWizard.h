@@ -19,6 +19,7 @@
 #ifndef PANELSELECTIONWIZARD_H
 #define PANELSELECTIONWIZARD_H
 
+#include <QtCore/QModelIndex>
 #include <QtGui/QWizard>
 
 namespace tlp {
@@ -70,6 +71,8 @@ public:
 
   tlp::Graph* graph() const;
   QString panelName() const;
+
+  void setGraphCurrentModelIndex(const QModelIndex&);
 
 protected slots:
   void graphSelected(int);

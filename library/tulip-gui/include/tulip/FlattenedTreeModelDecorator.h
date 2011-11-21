@@ -44,6 +44,8 @@ class TLP_QT_SCOPE FlattenedTreeModelDecorator : public QAbstractItemModel {
 public:
   explicit FlattenedTreeModelDecorator(QAbstractItemModel* component, QObject *parent = 0);
 
+  int mapToRow(const QModelIndex& originalIndex) const;
+
   QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
   QModelIndex parent(const QModelIndex &child) const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;

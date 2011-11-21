@@ -19,6 +19,7 @@
 #ifndef GRAPHPERSPECTIVE_H
 #define GRAPHPERSPECTIVE_H
 
+#include <QtCore/QModelIndex>
 #include <tulip/Perspective.h>
 
 class QAction;
@@ -42,7 +43,7 @@ public:
 public slots:
   void showFullScreen(bool);
   void importGraph();
-  void createPanel(tlp::Graph*);
+  void createPanel(tlp::Graph*, const QModelIndex& graphModelCurrentIndex = QModelIndex());
 
 protected slots:
   void refreshDockExpandControls();
