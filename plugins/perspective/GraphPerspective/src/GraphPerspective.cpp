@@ -127,12 +127,14 @@ void GraphPerspective::importGraph() {
   }
 }
 
-void GraphPerspective::createPanel(tlp::Graph* g) {
+void GraphPerspective::createPanel(tlp::Graph* g,const QModelIndex& graphModelCurrentIndex) {
   PanelSelectionWizard wizard(_graphs,_mainWindow);
+  if (graphModelCurrentIndex.isValid() && _graphs->hasIndex(graphModelCurrentIndex.row(),graphModelCurrentIndex.column(),graphModelCurrentIndex.parent()))
+    wizard.setGraphCurrentModelIndex(graphModelCurrentIndex);
 
   if (wizard.exec() == QDialog::Accepted) {
     if (!wizard.panelName().isNull())
-      _ui->workspace->addView(wizard.panelName(),wizard.graph());
+      _ui->workspace->setActivePanel(_ui->workspace->addPanel(wizard.panelName(),wizard.graph()));
   }
 }
 

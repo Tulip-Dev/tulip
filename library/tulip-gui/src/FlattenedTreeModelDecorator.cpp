@@ -75,3 +75,12 @@ void FlattenedTreeModelDecorator::buildCache(const QModelIndex &parent, int dept
     buildCache(index,depth);
   }
 }
+
+
+int FlattenedTreeModelDecorator::mapToRow(const QModelIndex &originalIndex) const {
+  for (int i=0;i<_flattenedItemsCache.size();++i) {
+    if (_flattenedItemsCache[i].originalIndex == originalIndex)
+      return i;
+  }
+  return -1;
+}

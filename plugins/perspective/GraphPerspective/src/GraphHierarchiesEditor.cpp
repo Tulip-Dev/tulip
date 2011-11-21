@@ -49,10 +49,10 @@ void GraphHierarchiesEditor::activeGraphSelected(const QModelIndex& index) {
 }
 
 void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
-  QModelIndex index = _ui->hierarchiesTree->indexAt(p);
+  _contextIndex = _ui->hierarchiesTree->indexAt(p);
 
-  if (index.isValid()) {
-    _contextGraph = (tlp::Graph*)index.internalPointer();
+  if (_contextIndex.isValid()) {
+    _contextGraph = (tlp::Graph*)_contextIndex.internalPointer();
     QMenu menu;
     menu.addAction(_ui->actionCreate_panel);
     menu.addSeparator();
@@ -69,7 +69,6 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
 void GraphHierarchiesEditor::addSubGraph() {
   if (_contextGraph == NULL)
     return;
-
   _contextGraph->addSubGraph();
 }
 
@@ -105,5 +104,5 @@ void GraphHierarchiesEditor::delAllGraph() {
 }
 
 void GraphHierarchiesEditor::createPanel() {
-  static_cast<GraphPerspective*>(GraphPerspective::instance())->createPanel(_contextGraph);
+  static_cast<GraphPerspective*>(GraphPerspective::instance())->createPanel(_contextGraph,_contextIndex);
 }

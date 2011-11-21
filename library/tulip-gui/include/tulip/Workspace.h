@@ -50,8 +50,8 @@ public:
   explicit Workspace(QWidget *parent = 0);
   virtual ~Workspace();
 
-  tlp::View* addView(const QString& viewName, tlp::Graph* g, const tlp::DataSet& data=tlp::DataSet());
-  QList<tlp::View*> views() const;
+  tlp::View* addPanel(const QString& viewName, tlp::Graph* g, const tlp::DataSet& data=tlp::DataSet());
+  QList<tlp::View*> panels() const;
 
 public slots:
   void delView(tlp::View* view);
@@ -62,6 +62,8 @@ public slots:
 
   void nextPage();
   void previousPage();
+
+  void setActivePanel(tlp::View*);
 
 protected slots:
   void viewNeedsDraw();

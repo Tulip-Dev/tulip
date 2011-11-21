@@ -65,7 +65,7 @@ Workspace::~Workspace() {
   delete _ui;
 }
 
-QList<tlp::View*> Workspace::views() const {
+QList<tlp::View*> Workspace::panels() const {
   QList<tlp::View*> result;
   foreach(WorkspacePanel* panel, _panels) {
     result.push_back(panel->view());
@@ -73,7 +73,7 @@ QList<tlp::View*> Workspace::views() const {
   return result;
 }
 
-tlp::View* Workspace::addView(const QString& viewName,Graph* g, const DataSet& data) {
+tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& data) {
   // Create view and panel
   assert(ViewLister::pluginExists(viewName.toStdString()));
   View* view = ViewLister::getPluginObject(viewName.toStdString(),NULL);
@@ -277,4 +277,12 @@ void Workspace::previousPage() {
     updatePanels();
     updatePageCountLabel();
   }
+}
+
+void Workspace::setActivePanel(tlp::View* view) {
+  int newIndex = panels().indexOf(view);
+  newIndex -= newIndex%currentSlotsCount();
+  _currentPanelIndex = newIndex;
+  updatePanels();
+  updatePageCountLabel();
 }

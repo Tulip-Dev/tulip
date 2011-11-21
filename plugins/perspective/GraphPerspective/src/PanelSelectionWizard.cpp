@@ -79,12 +79,17 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
   panelsLayout->setContentsMargins(6,6,6,6);
   QList<tlp::PluginInformations *> localPlugins = tlp::PluginManager::pluginsList(tlp::PluginManager::Local);
   tlp::PluginInformations *info;
+  int i=0;
   foreach(info,localPlugins) {
     if (info->type() != "View")
       continue;
     PanelSelectionItem* item = new PanelSelectionItem(info);
     panelsLayout->addWidget(item);
     connect(item,SIGNAL(selected()),this,SLOT(panelSelected()));
+    if (i++ == 0) {
+      _activeItem = item;
+      _activeItem->setFocus(true);
+    }
   }
   panelsLayout->addItem(new QSpacerItem(10,10,QSizePolicy::Maximum,QSizePolicy::Expanding));
   _ui->panelSelector->setLayout(panelsLayout);
@@ -117,4 +122,10 @@ QString PanelSelectionWizard::panelName() const {
     return _activeItem->viewName();
   else
     return QString::null;
+}
+
+void PanelSelectionWizard::setGraphCurrentModelIndex(const QModelIndex& index) {
+  int flatIndex = _flattenedModel->mapToRow(index);
+  if (flatIndex >= 0)
+    _ui->graphCombo->setCurrentIndex(flatIndex);
 }
