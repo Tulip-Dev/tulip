@@ -39,6 +39,7 @@ GraphPerspective::GraphPerspective(PerspectiveContext &c): Perspective(c), _ui(0
 #ifndef NDEBUG
   new ModelTest(_graphs,this);
 #endif /* NDEBUG */
+  Q_INIT_RESOURCE(GraphPerspective);
 }
 
 void GraphPerspective::construct(tlp::PluginProgress *progress) {
@@ -129,11 +130,10 @@ void GraphPerspective::importGraph() {
 void GraphPerspective::createPanel(tlp::Graph* g) {
   PanelSelectionWizard wizard(_graphs,_mainWindow);
 
-  if (wizard.exec() == QDialog::Rejected)
-    return;
-
-  if (!wizard.panelName().isNull())
-    _ui->workspace->addView(wizard.panelName(),wizard.graph());
+  if (wizard.exec() == QDialog::Accepted) {
+    if (!wizard.panelName().isNull())
+      _ui->workspace->addView(wizard.panelName(),wizard.graph());
+  }
 }
 
 PERSPECTIVEPLUGIN(GraphPerspective,"Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0")

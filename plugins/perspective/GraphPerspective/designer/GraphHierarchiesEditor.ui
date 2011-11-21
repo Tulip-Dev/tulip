@@ -150,7 +150,7 @@
  <connections>
   <connection>
    <sender>hierarchiesTree</sender>
-   <signal>clicked(QModelIndex)</signal>
+   <signal>doubleClicked(QModelIndex)</signal>
    <receiver>GraphHierarchiesEditorData</receiver>
    <slot>activeGraphSelected(QModelIndex)</slot>
    <hints>

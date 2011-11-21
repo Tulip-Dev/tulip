@@ -14,8 +14,11 @@
    <string>Open panel</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -24,15 +27,21 @@
    <enum>QWizard::AeroStyle</enum>
   </property>
   <property name="options">
-   <set>QWizard::HaveFinishButtonOnEarlyPages|QWizard::NoBackButtonOnStartPage</set>
+   <set>QWizard::ExtendedWatermarkPixmap|QWizard::HaveFinishButtonOnEarlyPages|QWizard::NoBackButtonOnStartPage</set>
   </property>
   <property name="titleFormat">
    <enum>Qt::RichText</enum>
   </property>
-  <widget class="QWizardPage" name="page1">
+  <property name="subTitleFormat">
+   <enum>Qt::RichText</enum>
+  </property>
+  <widget class="QWizardPage" name="choosePanelPage">
    <property name="title">
     <string>&lt;img src=&quot;:/tulip/graphperspective/icons/view-open.svg&quot; width=32 height=32/&gt; Panel creation Wizard</string>
    </property>
+   <attribute name="pageId">
+    <string notr="true">0</string>
+   </attribute>
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
      <number>20</number>
@@ -105,18 +114,45 @@ border: 1px solid #C9C9C9;
            <x>0</x>
            <y>0</y>
            <width>720</width>
-           <height>425</height>
+           <height>393</height>
           </rect>
          </property>
         </widget>
        </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="addMorePluginsLink">
+          <property name="text">
+           <string>&lt;a href=&quot;tulip://plugins&quot;&gt;More panels...&lt;/a&gt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+  <include location="../resources/GraphPerspective.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>graphCombo</sender>

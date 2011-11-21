@@ -72,7 +72,6 @@ void PanelSelectionItem::setFocus(bool f) {
 
 PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent): QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _flattenedModel(new FlattenedTreeModelDecorator(_model,this)), _activeItem(NULL) {
   _ui->setupUi(this);
-  button(QWizard::FinishButton)->setEnabled(false);
   _ui->graphCombo->setModel(_flattenedModel);
   _graph = _model->currentGraph();
 
@@ -83,13 +82,14 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
   foreach(info,localPlugins) {
     if (info->type() != "View")
       continue;
-
     PanelSelectionItem* item = new PanelSelectionItem(info);
     panelsLayout->addWidget(item);
     connect(item,SIGNAL(selected()),this,SLOT(panelSelected()));
   }
   panelsLayout->addItem(new QSpacerItem(10,10,QSizePolicy::Maximum,QSizePolicy::Expanding));
   _ui->panelSelector->setLayout(panelsLayout);
+
+  button(QWizard::FinishButton)->setEnabled(false);
 }
 
 PanelSelectionWizard::~PanelSelectionWizard() {
@@ -106,7 +106,6 @@ void PanelSelectionWizard::panelSelected() {
 
   _activeItem = static_cast<PanelSelectionItem*>(sender());
   _activeItem->setFocus(true);
-  button(QWizard::FinishButton)->setEnabled(true);
 }
 
 tlp::Graph* PanelSelectionWizard::graph() const {
