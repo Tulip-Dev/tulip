@@ -32,6 +32,7 @@
 #include <QtCore/QDebug>
 
 #include <QtGui/QLabel>
+#include <QtGui/QMessageBox>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QPushButton>
 
@@ -42,6 +43,7 @@ using namespace tlp;
 // **********************************************
 AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &name, const tlp::ParameterList& params, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItemData), _group(group), _params(params) {
   _ui->setupUi(this);
+  setEnabled(false);
   _ui->algNameLabel->setText(name);
   _ui->algNameLabel->setToolTip(_ui->algNameLabel->text());
   _ui->settingsButton->setToolTip(trUtf8("Set up ") + name);
@@ -49,14 +51,26 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &na
   _ui->parameters->hide();
   _ui->settingsButton->setVisible(params.size()>0);
   _ui->parameters->setItemDelegate(new TulipItemDelegate);
-  connect(_ui->settingsButton,SIGNAL(toggled(bool)),this,SLOT(settingsButtonToggled(bool)));
-
   setObjectName(name);
+  connect(_ui->playButton,SIGNAL(clicked()),this,SIGNAL(run()));
+}
+
+QString AlgorithmRunnerItem::name() const {
+  return objectName();
+}
+
+QString AlgorithmRunnerItem::group() const {
+  return _group;
 }
 
 void AlgorithmRunnerItem::setGraph(tlp::Graph* graph) {
-  assert(graph != NULL);
-  _ui->parameters->setModel(new ParameterListModel(_params,graph));
+  setEnabled(graph != NULL);
+  if (graph != NULL)
+    _ui->parameters->setModel(new ParameterListModel(_params,graph));
+  else {
+    _ui->parameters->setModel(NULL);
+    return;
+  }
 
   int h=0;
 
@@ -80,11 +94,34 @@ void AlgorithmRunnerItem::settingsButtonToggled(bool f) {
   emit settingsToggled(f);
 }
 
+tlp::DataSet AlgorithmRunnerItem::params() const {
+  if (_ui->parameters->model() == NULL)
+    return tlp::DataSet();
+  return static_cast<tlp::ParameterListModel*>(_ui->parameters->model())->parametersValues();
+}
+
 // **********************************************
 template<typename ALG,typename PROPTYPE>
 class TemplatePluginListWidgetManager: public PluginListWidgetManagerInterface {
   typedef tlp::StaticPluginLister<ALG,tlp::PropertyContext> Lister;
+  std::string _defaultPropName;
+
 public:
+  TemplatePluginListWidgetManager(const std::string& defaultPropertyName): _defaultPropName(defaultPropertyName) {
+  }
+
+  PROPTYPE* getProperty(tlp::Graph* g, const std::string& name) {
+    PROPTYPE* result = NULL;
+    if (g->existProperty(name)) {
+      PropertyInterface* interface = g->getProperty(name);
+      result = dynamic_cast<PROPTYPE*>(interface);
+    }
+    else {
+      result = g->getProperty<PROPTYPE>(name);
+    }
+    return result;
+  }
+
   QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
     std::string name;
@@ -102,28 +139,45 @@ public:
     return result;
   }
 
-  bool computeProperty(tlp::Graph *, const QString &alg, const QString &outPropertyName, QString &msg, tlp::PluginProgress *progress, tlp::DataSet *data) {
-    return false;
+  bool computeProperty(tlp::Graph* g, const QString &alg, QString &msg, tlp::PluginProgress *progress, tlp::DataSet *data) {
+    tlp::Observable::holdObservers();
+    PROPTYPE* defaultProperty = getProperty(g,_defaultPropName);
+    QString name = (alg + " " + data->toString().c_str());
+    PROPTYPE* namedProperty = getProperty(g,name.toStdString());
+    if (defaultProperty == NULL && namedProperty == NULL) {
+      msg = trUtf8("Cannot find suitable output property");
+      return false;
+    }
+    PROPTYPE* out = (defaultProperty != NULL ? defaultProperty : namedProperty);
+    std::string errorMsg;
+    bool result = g->computeProperty<PROPTYPE>(alg.toStdString(),out,errorMsg,progress,data);
+    msg = errorMsg.c_str();
+    if (result && out != namedProperty && namedProperty != NULL) {
+      *namedProperty = *out;
+    }
+    tlp::Observable::unholdObservers();
+    return result;
   }
 
   tlp::ParameterList parameters(const QString &alg) {
     return Lister::getPluginParameters(alg.toStdString());
   }
 };
+
 // **********************************************
 
 QMap<QString,PluginListWidgetManagerInterface *> AlgorithmRunner::PLUGIN_LIST_MANAGERS_DISPLAY_NAMES;
 
 void AlgorithmRunner::staticInit() {
   if (PLUGIN_LIST_MANAGERS_DISPLAY_NAMES.empty()) {
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Coloring algorithms")] = new TemplatePluginListWidgetManager<tlp::ColorAlgorithm,tlp::ColorProperty>();
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Filtering algorithms")] = new TemplatePluginListWidgetManager<tlp::BooleanAlgorithm,tlp::BooleanProperty>();
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Metric algorithms (double)")] = new TemplatePluginListWidgetManager<tlp::DoubleAlgorithm,tlp::DoubleProperty>();
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Metric algorithms (integer)")] = new TemplatePluginListWidgetManager<tlp::IntegerAlgorithm,tlp::IntegerProperty>();
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Labeling algorithms")] = new TemplatePluginListWidgetManager<tlp::StringAlgorithm,tlp::StringProperty>();
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Layout algorithms")] = new TemplatePluginListWidgetManager<tlp::LayoutAlgorithm,tlp::LayoutProperty>();
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Resizing algorithms")] = new TemplatePluginListWidgetManager<tlp::SizeAlgorithm,tlp::SizeProperty>();
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("General algorithms")] = new TemplatePluginListWidgetManager<tlp::Algorithm,tlp::DoubleProperty>();
+    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Coloring algorithms")] = new TemplatePluginListWidgetManager<tlp::ColorAlgorithm,tlp::ColorProperty>("viewColor");
+    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Filtering algorithms")] = new TemplatePluginListWidgetManager<tlp::BooleanAlgorithm,tlp::BooleanProperty>("viewSelection");
+    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Metric algorithms (double)")] = new TemplatePluginListWidgetManager<tlp::DoubleAlgorithm,tlp::DoubleProperty>("viewMetric");
+    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Metric algorithms (integer)")] = new TemplatePluginListWidgetManager<tlp::IntegerAlgorithm,tlp::IntegerProperty>("viewInteger");
+    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Labeling algorithms")] = new TemplatePluginListWidgetManager<tlp::StringAlgorithm,tlp::StringProperty>("viewLabel");
+    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Layout algorithms")] = new TemplatePluginListWidgetManager<tlp::LayoutAlgorithm,tlp::LayoutProperty>("viewLayout");
+    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Resizing algorithms")] = new TemplatePluginListWidgetManager<tlp::SizeAlgorithm,tlp::SizeProperty>("viewSize");
+    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("General algorithms")] = new TemplatePluginListWidgetManager<tlp::Algorithm,tlp::DoubleProperty>("viewGeneral");
   }
 }
 
@@ -175,6 +229,7 @@ void AlgorithmRunner::buildListWidget() {
       foreach(algName,_currentAlgorithmsList[group]) {
         AlgorithmRunnerItem *item = new AlgorithmRunnerItem(group,algName,_pluginsListMgr->parameters(algName));
         connect(item,SIGNAL(settingsToggled(bool)),this,SLOT(itemSettingsToggled(bool)));
+        connect(item,SIGNAL(run()),this,SLOT(runAlgorithm()));
         groupLayout->addWidget(item);
       }
 
@@ -218,8 +273,9 @@ void AlgorithmRunner::setFilter(const QString &filter) {
 }
 
 void AlgorithmRunner::currentGraphChanged(tlp::Graph* g) {
+  setEnabled(g != NULL);
   foreach(AlgorithmRunnerItem* it, findChildren<AlgorithmRunnerItem *>())
-  it->setGraph(g);
+    it->setGraph(g);
 }
 
 void AlgorithmRunner::setModel(GraphHierarchiesModel *model) {
@@ -235,5 +291,17 @@ void AlgorithmRunner::itemSettingsToggled(bool f) {
   foreach(AlgorithmRunnerItem* it, findChildren<AlgorithmRunnerItem *>()) {
     if (it != sender())
       it->toggleParameters(false);
+  }
+}
+
+void AlgorithmRunner::runAlgorithm() {
+  if (_model->currentGraph() == NULL)
+    return;
+  AlgorithmRunnerItem* item = static_cast<AlgorithmRunnerItem*>(sender());
+  QString msg;
+  DataSet data = item->params();
+  bool result = _pluginsListMgr->computeProperty(_model->currentGraph(),item->name(),msg,0,&data);
+  if (!result) {
+    QMessageBox::critical(this,trUtf8("Plugin error"),trUtf8("Error while running ") + item->name() + trUtf8(": ") + msg);
   }
 }

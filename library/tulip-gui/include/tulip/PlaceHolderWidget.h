@@ -22,6 +22,8 @@
 #include <QtGui/QWidget>
 
 class PlaceHolderWidget: public QWidget {
+  Q_OBJECT
+
   QWidget* _widget;
 
 public:
@@ -29,6 +31,9 @@ public:
   QWidget* widget() const;
   QWidget* takeWidget();
   void setWidget(QWidget* widget);
+
+protected slots:
+  void widgetDestroyed();
 };
 
 #endif // PLACEHOLDERWIDGET_H

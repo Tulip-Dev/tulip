@@ -156,10 +156,13 @@ if (type.compare(typeid(T::RealType).name()) == 0)\
 
 #define CHECK_PROPERTY(T)\
 if (type.compare(typeid(T).name()) == 0) {\
-  if (!g || defaultValue.size()==0 || !g->existProperty(defaultValue))\
+  if (!g || defaultValue.size()==0)\
     dataSet.set<T*>(name,NULL);\
-  else\
+  else if (!g->existProperty(defaultValue) || dynamic_cast<T*>(g->getProperty(defaultValue)) != NULL)\
     dataSet.set<T*>(name,g->getProperty<T>(defaultValue));\
+  else {\
+    dataSet.set<T*>(name,NULL);\
+  }\
   continue;\
 }\
  

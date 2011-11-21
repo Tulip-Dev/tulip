@@ -34,11 +34,10 @@ namespace Ui {
 class AlgorithmRunnerData;
 class AlgorithmRunnerItemData;
 }
-
-class PluginListWidgetManagerInterface {
+class PluginListWidgetManagerInterface: public QObject {
 public:
   virtual QMap<QString,QStringList> algorithms()=0;
-  virtual bool computeProperty(tlp::Graph *,const QString &alg, const QString &outPropertyName, QString &msg, tlp::PluginProgress *progress=0, tlp::DataSet *data=0)=0;
+  virtual bool computeProperty(tlp::Graph *,const QString &alg, QString &msg, tlp::PluginProgress *progress=0, tlp::DataSet *data=0)=0;
   virtual tlp::ParameterList parameters(const QString& alg)=0;
 };
 // **********************************************
@@ -64,8 +63,8 @@ protected slots:
   void algorithmTypeChanged(const QString &);
   void setFilter(const QString &);
   void currentGraphChanged(tlp::Graph* g);
-
   void itemSettingsToggled(bool);
+  void runAlgorithm();
 };
 // **********************************************
 class AlgorithmRunnerItem: public QWidget {
@@ -81,13 +80,9 @@ public:
   explicit AlgorithmRunnerItem(const QString &group,const QString &name, const tlp::ParameterList& params, QWidget *parent=0);
   virtual ~AlgorithmRunnerItem();
 
-  QString group() const {
-    return _group;
-  }
-  QString name() const {
-    return "";
-  }
-
+  QString group() const;
+  QString name() const;
+  tlp::DataSet params() const;
   void setGraph(tlp::Graph*);
 
 public slots:
@@ -98,6 +93,7 @@ protected slots:
 
 signals:
   void settingsToggled(bool);
+  void run();
 
 };
 

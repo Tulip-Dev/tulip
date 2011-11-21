@@ -58,9 +58,6 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   // Open project with model
   _graphs->readProject(_project,progress);
 
-  if (_graphs->size() == 0)
-    _graphs->addGraph(tlp::newGraph());
-
   _ui->graphHierarchiesEditor->setModel(_graphs);
   _ui->algorithmRunner->setModel(_graphs);
 

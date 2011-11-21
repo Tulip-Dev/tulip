@@ -49,12 +49,14 @@ public:
 
 signals:
   void selected();
+  void doubleClicked();
 
 public slots:
   void setFocus(bool);
 
 protected:
   void focusInEvent(QFocusEvent *);
+  void mouseDoubleClickEvent(QMouseEvent *);
 };
 
 class PanelSelectionWizard : public QWizard {
@@ -77,6 +79,7 @@ public:
 protected slots:
   void graphSelected(int);
   void panelSelected();
+  void panelDoubleClicked();
 };
 
 #endif // PANELSELECTIONWIZARD_H
