@@ -58,6 +58,7 @@ Workspace::Workspace(QWidget *parent)
   _modeSwitches[_ui->splitPage] = _ui->splitModeButton;
   _modeSwitches[_ui->gridPage] = _ui->gridModeButton;
   updatePageCountLabel();
+  updateAvailableModes();
 }
 
 Workspace::~Workspace() {
@@ -190,7 +191,11 @@ void Workspace::switchWorkspaceMode(QWidget *page) {
 void Workspace::updatePageCountLabel() {
   unsigned int totalPages = ceil(_panels.size() * 1. /currentSlotsCount());
   unsigned int currentPage = ceil((_currentPanelIndex+1.)/currentSlotsCount());
-  _ui->pagesLabel->setText(QString::number(currentPage) + " / " + QString::number(totalPages));
+
+  if (totalPages > 0)
+    _ui->pagesLabel->setText(QString::number(currentPage) + " / " + QString::number(totalPages));
+  else
+    _ui->pagesLabel->setText("");
 }
 
 QWidget* Workspace::currentModeWidget() const {
@@ -209,6 +214,11 @@ void Workspace::updateAvailableModes() {
   foreach(QWidget* page, _modeSwitches.keys()) {
     _modeSwitches[page]->setEnabled(_panels.size() >= _modeToSlots[page].size());
   }
+
+  bool enableNavigation = currentModeWidget() != _ui->startupPage;
+  _ui->exposeButton->setEnabled(enableNavigation);
+  _ui->nextPageButton->setEnabled(enableNavigation);
+  _ui->previousPageButton->setEnabled(enableNavigation);
 }
 
 void Workspace::updatePanels() {
