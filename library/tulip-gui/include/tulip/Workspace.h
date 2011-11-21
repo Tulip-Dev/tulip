@@ -65,6 +65,9 @@ public slots:
 
   void setActivePanel(tlp::View*);
 
+signals:
+  void addPanelAtStartupButtonClicked();
+
 protected slots:
   void viewNeedsDraw();
   void panelClosed();
@@ -78,6 +81,9 @@ protected slots:
   QWidget* currentModeWidget() const;
   QVector<PlaceHolderWidget*> currentModeSlots() const;
   unsigned int currentSlotsCount() const;
+
+protected:
+  bool eventFilter(QObject *, QEvent *);
 };
 }
 
