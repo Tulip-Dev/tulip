@@ -260,6 +260,12 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
     int pos = _graphs.indexOf(g);
     beginRemoveRows(QModelIndex(),pos,pos);
     _graphs.removeAll(g);
+    if (_currentGraph == g) {
+      if (_graphs.size() == 0)
+        _currentGraph = NULL;
+      else
+        _currentGraph = _graphs[0];
+    }
     endRemoveRows();
   }
   else if (e.type() == Event::TLP_MODIFICATION) {

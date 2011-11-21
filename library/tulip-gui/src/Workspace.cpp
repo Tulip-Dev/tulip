@@ -35,6 +35,7 @@ using namespace tlp;
 Workspace::Workspace(QWidget *parent)
   : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0) {
   _ui->setupUi(this);
+  _ui->startupIcon->installEventFilter(this);
 
   // This map allows us to know how much slots we have for each mode and which widget corresponds to those slots
   QVector<PlaceHolderWidget*> startupVector(0);
@@ -285,4 +286,11 @@ void Workspace::setActivePanel(tlp::View* view) {
   _currentPanelIndex = newIndex;
   updatePanels();
   updatePageCountLabel();
+}
+
+bool Workspace::eventFilter(QObject *obj, QEvent *ev) {
+  if (obj == _ui->startupIcon && ev->type() == QEvent::MouseButtonPress) {
+    emit addPanelAtStartupButtonClicked();
+  }
+  return false;
 }

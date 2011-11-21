@@ -45,6 +45,7 @@ GraphPerspective::GraphPerspective(PerspectiveContext &c): Perspective(c), _ui(0
 void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
+  connect(_ui->workspace,SIGNAL(addPanelAtStartupButtonClicked()),this,SLOT(createPanel()));
 
   // Connect actions
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
@@ -133,6 +134,12 @@ void GraphPerspective::createPanel(tlp::Graph* g,const QModelIndex& graphModelCu
     if (!wizard.panelName().isNull())
       _ui->workspace->setActivePanel(_ui->workspace->addPanel(wizard.panelName(),wizard.graph()));
   }
+}
+
+void GraphPerspective::createPanel() {
+  if (_graphs->currentGraph() == NULL)
+    return;
+  createPanel(_graphs->currentGraph());
 }
 
 PERSPECTIVEPLUGIN(GraphPerspective,"Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0")
