@@ -229,6 +229,9 @@ background-color: #A9A9A9;
          <iconset>
           <normaloff>:/tulip/gui/ui/lightclosebutton.png</normaloff>:/tulip/gui/ui/lightclosebutton.png</iconset>
         </property>
+        <property name="shortcut">
+         <string>Ctrl+W</string>
+        </property>
        </widget>
       </item>
      </layout>

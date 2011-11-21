@@ -619,7 +619,7 @@ QString elementKey(const QString& configEntry, tlp::ElementType elem) {
 }
 
 tlp::Color TulipSettings::defaultColor(tlp::ElementType elem) {
-  QString val = value(elementKey(DefaultColorConfigEntry,elem),(elem == tlp::NODE ? "(0,0,0,255)" : "(150,150,150)")).toString();
+  QString val = value(elementKey(DefaultColorConfigEntry,elem),(elem == tlp::NODE ? "(255, 95, 95)" : "(180,180,180)")).toString();
   Color result;
   ColorType::fromString(result,val.toStdString());
   return result;

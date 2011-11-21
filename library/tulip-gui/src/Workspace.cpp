@@ -79,7 +79,7 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   View* view = ViewLister::getPluginObject(viewName.toStdString(),NULL);
   view->setupUi();
   WorkspacePanel* panel = new WorkspacePanel(view,viewName);
-  connect(panel,SIGNAL(closeNeeded()),this,SLOT(panelClosed()));
+  connect(panel,SIGNAL(closeNeeded()),this,SLOT(panelClosed()),Qt::DirectConnection);
   connect(view,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
   view->setGraph(g);
   view->setState(data);

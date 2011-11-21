@@ -37,6 +37,7 @@ void PlaceHolderWidget::setWidget(QWidget *widget) {
   if (_widget != NULL) {
     layout()->addWidget(_widget);
     _widget->show();
+    connect(_widget,SIGNAL(destroyed()),this,SLOT(widgetDestroyed()));
   }
 }
 
@@ -48,6 +49,7 @@ QWidget* PlaceHolderWidget::takeWidget() {
   layout()->removeWidget(_widget);
 
   if (_widget != NULL) {
+    disconnect(_widget,SIGNAL(destroyed()),this,SLOT(widgetDestroyed()));
     _widget->hide();
     _widget->setParent(NULL);
   }
@@ -55,5 +57,9 @@ QWidget* PlaceHolderWidget::takeWidget() {
   QWidget* result = _widget;
   _widget = NULL;
   return result;
+}
+
+void PlaceHolderWidget::widgetDestroyed() {
+  _widget = NULL;
 }
 

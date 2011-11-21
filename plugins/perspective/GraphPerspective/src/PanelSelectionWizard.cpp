@@ -68,6 +68,10 @@ void PanelSelectionItem::setFocus(bool f) {
   _ui->frame->setStyleSheet("#frame { background-color: " + background + "border: 1px solid #C9C9C9; }");
 }
 
+void PanelSelectionItem::mouseDoubleClickEvent(QMouseEvent *) {
+  emit doubleClicked();
+}
+
 // ************************************************
 
 PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent): QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _flattenedModel(new FlattenedTreeModelDecorator(_model,this)), _activeItem(NULL) {
@@ -86,6 +90,7 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
     PanelSelectionItem* item = new PanelSelectionItem(info);
     panelsLayout->addWidget(item);
     connect(item,SIGNAL(selected()),this,SLOT(panelSelected()));
+    connect(item,SIGNAL(doubleClicked()),this,SLOT(panelDoubleClicked()));
     if (i++ == 0) {
       _activeItem = item;
       _activeItem->setFocus(true);
@@ -111,6 +116,10 @@ void PanelSelectionWizard::panelSelected() {
 
   _activeItem = static_cast<PanelSelectionItem*>(sender());
   _activeItem->setFocus(true);
+}
+
+void PanelSelectionWizard::panelDoubleClicked() {
+  button(QWizard::FinishButton)->click();
 }
 
 tlp::Graph* PanelSelectionWizard::graph() const {

@@ -41,8 +41,9 @@ bool ParameterListModel::ParamInfosSorter::operator()(ParameterListModel::ParamI
 ParameterListModel::ParameterListModel(const tlp::ParameterList &params, tlp::Graph *graph, QObject *parent)
   : TulipModel(parent), _graph(graph) {
   std::string name;
-  forEach(name,params.getParametersNames())
-  _params.push_back(ParamInfos(params.isMandatory(name),name.c_str(),params.getHelp(name).c_str(),params.getTypeName(name)));
+  forEach(name,params.getParametersNames()) {
+    _params.push_back(ParamInfos(params.isMandatory(name),name.c_str(),params.getHelp(name).c_str(),params.getTypeName(name)));
+  }
   std::sort(_params.begin(),_params.end(),ParamInfosSorter());
   params.buildDefaultDataSet(_data,graph);
 

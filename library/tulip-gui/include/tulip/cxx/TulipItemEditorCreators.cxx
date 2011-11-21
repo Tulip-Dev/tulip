@@ -96,8 +96,9 @@ void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& 
     index++;
   }
 
-  if (!prop)
+  if (!prop) {
     combo->setCurrentIndex(0);
+  }
 }
 
 template<typename PROPTYPE>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>248</width>
-    <height>215</height>
+    <width>739</width>
+    <height>468</height>
    </rect>
   </property>
   <property name="styleSheet">
@@ -177,5 +177,26 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>settingsButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>AlgorithmRunnerItemData</receiver>
+   <slot>settingsButtonToggled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>41</x>
+     <y>13</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>369</x>
+     <y>233</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>run()</signal>
+  <slot>settingsButtonToggled(bool)</slot>
+ </slots>
 </ui>

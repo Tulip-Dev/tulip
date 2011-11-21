@@ -157,6 +157,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/Workspace.h
   ../include/tulip/TulipFileDescriptorWidget.h
   ../include/tulip/FlattenedTreeModelDecorator.h
+  ../include/tulip/PlaceHolderWidget.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
