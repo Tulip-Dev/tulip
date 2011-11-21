@@ -151,6 +151,8 @@ void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
     scene.addLayer(foregroundLayer);
     GlGraphComposite* graphComposite=new GlGraphComposite(graph);
     scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
+    graphComposite->getRenderingParametersPointer()->setViewNodeLabel(true);
+    graphComposite->getRenderingParametersPointer()->setEdgeColorInterpolate(false);
     scene.centerScene();
   }
   else {
