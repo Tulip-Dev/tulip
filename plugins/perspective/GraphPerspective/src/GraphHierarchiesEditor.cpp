@@ -18,16 +18,42 @@
  */
 #include "GraphHierarchiesEditor.h"
 
-#include "GraphPerspective.h"
-
 #include <QtCore/QDebug>
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QMenu>
-#include <tulip/BooleanProperty.h>
+#include <QtGui/QGraphicsEffect>
+#include <QtGui/QPainter>
+#include <QtGui/QTextDocument>
 
+#include <tulip/BooleanProperty.h>
 #include <tulip/TulipMetaTypes.h>
+
+#include "GraphPerspective.h"
 #include "GraphHierarchiesModel.h"
 #include "ui_GraphHierarchiesEditor.h"
+
+// Helper class
+class NoGraphMessageEffect: public QGraphicsEffect {
+  GraphHierarchiesModel* _model;
+public:
+  explicit NoGraphMessageEffect(GraphHierarchiesModel* model, QObject* parent = 0): _model(model), QGraphicsEffect(parent) {
+  }
+
+  void draw(QPainter *painter) {
+    drawSource(painter);
+    if (_model->size() == 0) {
+      QRectF rect = sourceBoundingRect();
+      int iconWidth = 48;
+      painter->drawPixmap((rect.width() - iconWidth)/2, (rect.height() - iconWidth)/2, iconWidth,iconWidth,QPixmap(":/tulip/graphperspective/icons/document-import.svg"));
+      int textY = (rect.height() + iconWidth)/2;
+      painter->setPen(Qt::black);
+      QFont f;
+      f.setBold(true);
+      painter->setFont(f);
+      painter->drawText(0,textY+20,rect.width(),rect.height()-textY-20,Qt::AlignHCenter | Qt::TextWordWrap,trUtf8("Use the \"Import\" button on the left pane to import data."));
+    }
+  }
+};
 
 GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData) {
   _ui->setupUi(this);
@@ -37,6 +63,7 @@ GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent)
 void GraphHierarchiesEditor::setModel(GraphHierarchiesModel *model) {
   _ui->hierarchiesTree->setModel(model);
   _ui->hierarchiesTree->header()->resizeSections(QHeaderView::ResizeToContents);
+  _ui->hierarchiesTree->setGraphicsEffect(new NoGraphMessageEffect(model,_ui->hierarchiesTree));
 }
 
 GraphHierarchiesEditor::~GraphHierarchiesEditor() {
