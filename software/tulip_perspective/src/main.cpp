@@ -104,7 +104,7 @@ int main(int argc,char **argv) {
   // Init Tulip and load plugins
   progress->progress(25,100);
   progress->setComment(QObject::trUtf8("Loading plugins"));
-  tlp::initTulipLib(QApplication::applicationDirPath().toStdString().c_str());
+  tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   tlp::PluginLibraryLoader::loadPlugins();
   tlp::PluginListerInterface::checkLoadedPluginsDependencies(0);
   tlp::InteractorLister::initInteractorsDependencies();
