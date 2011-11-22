@@ -133,5 +133,5 @@ void GraphHierarchiesEditor::delAllGraph() {
 }
 
 void GraphHierarchiesEditor::createPanel() {
-  static_cast<GraphPerspective*>(GraphPerspective::instance())->createPanel(_contextIndex);
+  static_cast<GraphPerspective*>(GraphPerspective::instance())->createPanel(_contextGraph);
 }

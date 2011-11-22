@@ -74,10 +74,13 @@ void PanelSelectionItem::mouseDoubleClickEvent(QMouseEvent *) {
 
 // ************************************************
 
-PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent): QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _flattenedModel(new FlattenedTreeModelDecorator(_model,this)), _activeItem(NULL) {
+PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent, bool canSelectGraph): QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _flattenedModel(new FlattenedTreeModelDecorator(_model,this)), _activeItem(NULL) {
   _ui->setupUi(this);
-  _ui->graphCombo->setModel(_flattenedModel);
-  _graph = _model->currentGraph();
+  _ui->selectGraphFrame->setVisible(canSelectGraph);
+  if (_ui->selectGraphFrame->isVisible()) {
+    _ui->graphCombo->setModel(_flattenedModel);
+    _graph = _model->currentGraph();
+  }
 
   QVBoxLayout *panelsLayout = new QVBoxLayout;
   panelsLayout->setContentsMargins(6,6,6,6);
@@ -135,9 +138,13 @@ QString PanelSelectionWizard::panelName() const {
     return QString::null;
 }
 
-void PanelSelectionWizard::setGraphCurrentModelIndex(const QModelIndex& index) {
-  int flatIndex = _flattenedModel->mapToRow(index);
-
-  if (flatIndex >= 0)
-    _ui->graphCombo->setCurrentIndex(flatIndex);
+void PanelSelectionWizard::setSelectedGraph(tlp::Graph* g) {
+  if (!_ui->selectGraphFrame->isVisible())
+    return;
+  for (int i=0;i<_flattenedModel->rowCount();++i) {
+    if (_flattenedModel->data(_flattenedModel->index(i,0),TulipModel::GraphRole).value<tlp::Graph*>() == g) {
+      _ui->graphCombo->setCurrentIndex(i);
+      break;
+    }
+  }
 }

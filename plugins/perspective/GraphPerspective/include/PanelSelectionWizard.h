@@ -68,13 +68,13 @@ class PanelSelectionWizard : public QWizard {
   tlp::Graph* _graph;
   PanelSelectionItem* _activeItem;
 public:
-  explicit PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent = 0);
+  explicit PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent = 0, bool canSelectGraph = true);
   virtual ~PanelSelectionWizard();
 
   tlp::Graph* graph() const;
   QString panelName() const;
 
-  void setGraphCurrentModelIndex(const QModelIndex&);
+  void setSelectedGraph(tlp::Graph*);
 
 protected slots:
   void graphSelected(int);

@@ -59,7 +59,7 @@ border: 0px;
   </property>
   <widget class="QWizardPage" name="choosePluginPage">
    <property name="title">
-    <string>&lt;img src=&quot;:/tulip/gui/icons/logo32x32.png&quot; width=32 height=32/&gt; Graph importing Wizard</string>
+    <string>&lt;img src=&quot;:/tulip/graphperspective/icons/document-import.svg&quot; width=32 height=32/&gt; Graph importing Wizard</string>
    </property>
    <attribute name="pageId">
     <string notr="true">0</string>
@@ -68,7 +68,7 @@ border: 0px;
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>&lt;br /&gt;Import a new graph hierarchy into your project by selecting one of the graph generation methods listed below:</string>
+       <string>&lt;br /&gt;Import a new graph hierarchy into your project by selecting one of the graph generation methods listed below.&lt;br/&gt;Once you're done, click &lt;b&gt;Next&lt;/b&gt; to proceed to the panel selection or &lt;b&gt;Finish&lt;/b&gt; to import your graph without visualizing it.&lt;br/&gt; </string>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -328,9 +328,26 @@ border: 0px;
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ImportWizard</sender>
+   <signal>currentIdChanged(int)</signal>
+   <receiver>ImportWizard</receiver>
+   <slot>updateFinishButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>439</x>
+     <y>228</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>439</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>groupSelected(QString)</slot>
   <slot>algorithmSelected(QString)</slot>
+  <slot>updateFinishButton()</slot>
  </slots>
 </ui>

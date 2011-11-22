@@ -25,23 +25,28 @@
 namespace Ui {
 class ImportWizard;
 }
+class PanelSelectionWizard;
+class GraphHierarchiesModel;
 
 class ImportWizard: public QWizard {
   Q_OBJECT
 
   Ui::ImportWizard* _ui;
+  PanelSelectionWizard* _panelWizard;
 public:
-  explicit ImportWizard(QWidget *parent = 0);
+  explicit ImportWizard(GraphHierarchiesModel*model, QWidget *parent = 0);
   virtual ~ImportWizard();
 
   QString algorithm() const;
   QString group() const;
   tlp::DataSet parameters() const;
 
+  bool createPanel() const;
+  QString panelName() const;
+
 protected slots:
   void groupSelected(const QString&);
   void algorithmSelected(const QString&);
-
   void updateFinishButton();
 };
 

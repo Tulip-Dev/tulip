@@ -96,7 +96,7 @@ void GraphPerspective::showFullScreen(bool f) {
 }
 
 void GraphPerspective::importGraph() {
-  ImportWizard wizard(_mainWindow);
+  ImportWizard wizard(_graphs,_mainWindow);
 
   if (wizard.exec() == QDialog::Accepted) {
     Graph* g = NULL;
@@ -122,22 +122,21 @@ void GraphPerspective::importGraph() {
     }
 
     _graphs->addGraph(g);
+
+    if (wizard.createPanel() && !wizard.panelName().isNull()) {
+      _ui->workspace->setActivePanel(_ui->workspace->addPanel(wizard.panelName(),g));
+    }
   }
 }
 
-void GraphPerspective::createPanel(const QModelIndex& graphModelCurrentIndex) {
+void GraphPerspective::createPanel(tlp::Graph* g) {
   if (_graphs->size() == 0)
     return;
 
   PanelSelectionWizard wizard(_graphs,_mainWindow);
 
-  if (!graphModelCurrentIndex.isValid())
-    qWarning("not valid");
-  if (!_graphs->hasIndex(graphModelCurrentIndex.row(),graphModelCurrentIndex.column(),graphModelCurrentIndex.parent()))
-    qWarning("not an index");
-
-  if (graphModelCurrentIndex.isValid() && _graphs->hasIndex(graphModelCurrentIndex.row(),graphModelCurrentIndex.column(),graphModelCurrentIndex.parent()))
-    wizard.setGraphCurrentModelIndex(graphModelCurrentIndex);
+  if (g != NULL)
+    wizard.setSelectedGraph(g);
 
   if (wizard.exec() == QDialog::Accepted) {
     if (!wizard.panelName().isNull())
