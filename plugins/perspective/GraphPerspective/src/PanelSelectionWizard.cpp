@@ -74,10 +74,12 @@ void PanelSelectionItem::mouseDoubleClickEvent(QMouseEvent *) {
 
 // ************************************************
 
-PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent, bool canSelectGraph): QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _flattenedModel(new FlattenedTreeModelDecorator(_model,this)), _activeItem(NULL) {
+PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent, bool canSelectGraph)
+  : QWizard(parent), _ui(new Ui::PanelSelectionWizard),
+    _model(model), _flattenedModel(new FlattenedTreeModelDecorator(_model,this)), _activeItem(NULL), _canSelectGraph(canSelectGraph) {
   _ui->setupUi(this);
-  _ui->selectGraphFrame->setVisible(canSelectGraph);
-  if (_ui->selectGraphFrame->isVisible()) {
+  _ui->selectGraphFrame->setVisible(_canSelectGraph);
+  if (_canSelectGraph) {
     _ui->graphCombo->setModel(_flattenedModel);
     _graph = _model->currentGraph();
   }
@@ -139,7 +141,7 @@ QString PanelSelectionWizard::panelName() const {
 }
 
 void PanelSelectionWizard::setSelectedGraph(tlp::Graph* g) {
-  if (!_ui->selectGraphFrame->isVisible())
+  if (!_canSelectGraph)
     return;
   for (int i=0;i<_flattenedModel->rowCount();++i) {
     if (_flattenedModel->data(_flattenedModel->index(i,0),TulipModel::GraphRole).value<tlp::Graph*>() == g) {

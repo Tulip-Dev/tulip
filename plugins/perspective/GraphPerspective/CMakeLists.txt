@@ -2,6 +2,7 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclu
 
 SET(LIB_SRCS
 src/AlgorithmRunner.cpp
+src/ControlFrame.cpp
 src/ExpandableGroupBox.cpp
 src/FiltersManager.cpp
 src/GraphHierarchiesEditor.cpp
@@ -18,6 +19,7 @@ OPTIONS -name GraphPerspective)
 QT4_WRAP_UI(UI_SRCS
 designer/AlgorithmRunner.ui
 designer/AlgorithmRunnerItem.ui
+designer/ControlFrame.ui
 designer/FiltersManager.ui
 designer/FiltersManagerItem.ui
 designer/GraphHierarchiesEditor.ui

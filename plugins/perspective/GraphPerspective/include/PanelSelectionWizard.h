@@ -67,6 +67,7 @@ class PanelSelectionWizard : public QWizard {
   FlattenedTreeModelDecorator* _flattenedModel;
   tlp::Graph* _graph;
   PanelSelectionItem* _activeItem;
+  bool _canSelectGraph;
 public:
   explicit PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent = 0, bool canSelectGraph = true);
   virtual ~PanelSelectionWizard();

@@ -137,6 +137,8 @@ void GraphPerspective::createPanel(tlp::Graph* g) {
 
   if (g != NULL)
     wizard.setSelectedGraph(g);
+  else
+    wizard.setSelectedGraph(_graphs->currentGraph());
 
   if (wizard.exec() == QDialog::Accepted) {
     if (!wizard.panelName().isNull())
