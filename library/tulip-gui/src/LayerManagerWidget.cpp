@@ -110,16 +110,18 @@ void LayerManagerWidget::addComposite(GlComposite *composite,QTreeWidgetItem *pa
 }
 //=============================================================================
 void LayerManagerWidget::createGraphCompositeItem(GlGraphComposite *glGraphComposite,QTreeWidgetItem *item) {
+  const GlGraphRenderingParameters &parameters=glGraphComposite->getRenderingParameters();
+
   //Nodes
   QTreeWidgetItem* nodes=new QTreeWidgetItem(item,QStringList("Nodes"));
   nodes->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-  if(glGraphComposite->isDisplayNodes())
+  if(parameters.isDisplayNodes())
     nodes->setCheckState(1,Qt::Checked);
   else
     nodes->setCheckState(1,Qt::Unchecked);
 
-  if(glGraphComposite->getNodesStencil()!=0xFFFF)
+  if(parameters.getNodesStencil()!=0xFFFF)
     nodes->setCheckState(2,Qt::Checked);
   else
     nodes->setCheckState(2,Qt::Unchecked);
@@ -128,12 +130,12 @@ void LayerManagerWidget::createGraphCompositeItem(GlGraphComposite *glGraphCompo
   QTreeWidgetItem* metaNodes=new QTreeWidgetItem(item,QStringList("Meta-nodes"));
   metaNodes->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-  if(glGraphComposite->isDisplayMetaNodes())
+  if(parameters.isDisplayMetaNodes())
     metaNodes->setCheckState(1,Qt::Checked);
   else
     metaNodes->setCheckState(1,Qt::Unchecked);
 
-  if(glGraphComposite->getMetaNodesStencil()!=0xFFFF)
+  if(parameters.getMetaNodesStencil()!=0xFFFF)
     metaNodes->setCheckState(2,Qt::Checked);
   else
     metaNodes->setCheckState(2,Qt::Unchecked);
@@ -142,12 +144,12 @@ void LayerManagerWidget::createGraphCompositeItem(GlGraphComposite *glGraphCompo
   QTreeWidgetItem* edges=new QTreeWidgetItem(item,QStringList("Edges"));
   edges->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-  if(glGraphComposite->isDisplayEdges())
+  if(parameters.isDisplayEdges())
     edges->setCheckState(1,Qt::Checked);
   else
     edges->setCheckState(1,Qt::Unchecked);
 
-  if(glGraphComposite->getEdgesStencil()!=0xFFFF)
+  if(parameters.getEdgesStencil()!=0xFFFF)
     edges->setCheckState(2,Qt::Checked);
   else
     edges->setCheckState(2,Qt::Unchecked);
@@ -156,12 +158,12 @@ void LayerManagerWidget::createGraphCompositeItem(GlGraphComposite *glGraphCompo
   QTreeWidgetItem* nodesLabel=new QTreeWidgetItem(item,QStringList("Nodes label"));
   nodesLabel->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-  if(glGraphComposite->isDisplayNodesLabel())
+  if(parameters.isViewNodeLabel())
     nodesLabel->setCheckState(1,Qt::Checked);
   else
     nodesLabel->setCheckState(1,Qt::Unchecked);
 
-  if(glGraphComposite->getNodesLabelStencil()!=0xFFFF)
+  if(parameters.getNodesLabelStencil()!=0xFFFF)
     nodesLabel->setCheckState(2,Qt::Checked);
   else
     nodesLabel->setCheckState(2,Qt::Unchecked);
@@ -170,12 +172,12 @@ void LayerManagerWidget::createGraphCompositeItem(GlGraphComposite *glGraphCompo
   QTreeWidgetItem* metaNodesLabel=new QTreeWidgetItem(item,QStringList("Meta-nodes label"));
   metaNodesLabel->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-  if(glGraphComposite->isDisplayMetaNodesLabel())
+  if(parameters.isViewMetaLabel())
     metaNodesLabel->setCheckState(1,Qt::Checked);
   else
     metaNodesLabel->setCheckState(1,Qt::Unchecked);
 
-  if(glGraphComposite->getMetaNodesLabelStencil()!=0xFFFF)
+  if(parameters.getMetaNodesLabelStencil()!=0xFFFF)
     metaNodesLabel->setCheckState(2,Qt::Checked);
   else
     metaNodesLabel->setCheckState(2,Qt::Unchecked);
@@ -184,12 +186,12 @@ void LayerManagerWidget::createGraphCompositeItem(GlGraphComposite *glGraphCompo
   QTreeWidgetItem* edgesLabel=new QTreeWidgetItem(item,QStringList("Edges label"));
   edgesLabel->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-  if(glGraphComposite->isDisplayEdgesLabel())
+  if(parameters.isViewEdgeLabel())
     edgesLabel->setCheckState(1,Qt::Checked);
   else
     edgesLabel->setCheckState(1,Qt::Unchecked);
 
-  if(glGraphComposite->getEdgesLabelStencil()!=0xFFFF)
+  if(parameters.getEdgesLabelStencil()!=0xFFFF)
     edgesLabel->setCheckState(2,Qt::Checked);
   else
     edgesLabel->setCheckState(2,Qt::Unchecked);
@@ -198,7 +200,7 @@ void LayerManagerWidget::createGraphCompositeItem(GlGraphComposite *glGraphCompo
   QTreeWidgetItem* selectedNodes=new QTreeWidgetItem(item,QStringList("Selected nodes"));
   selectedNodes->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-  if(glGraphComposite->getSelectedNodesStencil()!=0xFFFF)
+  if(parameters.getSelectedNodesStencil()!=0xFFFF)
     selectedNodes->setCheckState(2,Qt::Checked);
   else
     selectedNodes->setCheckState(2,Qt::Unchecked);
@@ -207,7 +209,7 @@ void LayerManagerWidget::createGraphCompositeItem(GlGraphComposite *glGraphCompo
   QTreeWidgetItem* selectedMetaNodes=new QTreeWidgetItem(item,QStringList("Selected meta-nodes"));
   selectedMetaNodes->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-  if(glGraphComposite->getSelectedMetaNodesStencil()!=0xFFFF)
+  if(parameters.getSelectedMetaNodesStencil()!=0xFFFF)
     selectedMetaNodes->setCheckState(2,Qt::Checked);
   else
     selectedMetaNodes->setCheckState(2,Qt::Unchecked);
@@ -216,7 +218,7 @@ void LayerManagerWidget::createGraphCompositeItem(GlGraphComposite *glGraphCompo
   QTreeWidgetItem* selectedEdges=new QTreeWidgetItem(item,QStringList("Selected edges"));
   selectedEdges->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-  if(glGraphComposite->getSelectedEdgesStencil()!=0xFFFF)
+  if(parameters.getSelectedEdgesStencil()!=0xFFFF)
     selectedEdges->setCheckState(2,Qt::Checked);
   else
     selectedEdges->setCheckState(2,Qt::Unchecked);
@@ -284,6 +286,7 @@ void LayerManagerWidget::applyVisibility(QTreeWidgetItem *item,GlComposite *comp
         applyVisibility(child,childComposite);
     }
     else {
+      GlGraphRenderingParameters *parameters=graphComposite->getRenderingParametersPointer();
       graphComposite->setVisible(child->checkState(1)==Qt::Checked);
 
       for(int j=0; j<child->childCount(); ++j) {
@@ -291,37 +294,37 @@ void LayerManagerWidget::applyVisibility(QTreeWidgetItem *item,GlComposite *comp
         string graphCompositeChildText=graphCompositeChild->text(0).toStdString();
 
         if(graphCompositeChildText=="Nodes") {
-          graphComposite->setDisplayNodes(graphCompositeChild->checkState(1)==Qt::Checked);
-          graphComposite->setNodesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+          parameters->setDisplayNodes(graphCompositeChild->checkState(1)==Qt::Checked);
+          parameters->setNodesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
         }
         else if(graphCompositeChildText=="Meta-nodes") {
-          graphComposite->setDisplayMetaNodes(graphCompositeChild->checkState(1)==Qt::Checked);
-          graphComposite->setMetaNodesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+          parameters->setDisplayMetaNodes(graphCompositeChild->checkState(1)==Qt::Checked);
+          parameters->setMetaNodesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
         }
         else if(graphCompositeChildText=="Edges") {
-          graphComposite->setDisplayEdges(graphCompositeChild->checkState(1)==Qt::Checked);
-          graphComposite->setEdgesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+          parameters->setDisplayEdges(graphCompositeChild->checkState(1)==Qt::Checked);
+          parameters->setEdgesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
         }
         else if(graphCompositeChildText=="Nodes label") {
-          graphComposite->setDisplayNodesLabel(graphCompositeChild->checkState(1)==Qt::Checked);
-          graphComposite->setNodesLabelStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+          parameters->setViewNodeLabel(graphCompositeChild->checkState(1)==Qt::Checked);
+          parameters->setNodesLabelStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
         }
         else if(graphCompositeChildText=="Meta-nodes label") {
-          graphComposite->setDisplayMetaNodesLabel(graphCompositeChild->checkState(1)==Qt::Checked);
-          graphComposite->setMetaNodesLabelStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+          parameters->setViewMetaLabel(graphCompositeChild->checkState(1)==Qt::Checked);
+          parameters->setMetaNodesLabelStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
         }
         else if(graphCompositeChildText=="Edges label") {
-          graphComposite->setDisplayEdgesLabel(graphCompositeChild->checkState(1)==Qt::Checked);
-          graphComposite->setEdgesLabelStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+          parameters->setViewEdgeLabel(graphCompositeChild->checkState(1)==Qt::Checked);
+          parameters->setEdgesLabelStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
         }
         else if(graphCompositeChildText=="Selected nodes") {
-          graphComposite->setSelectedNodesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+          parameters->setSelectedNodesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
         }
         else if(graphCompositeChildText=="Selected meta-nodes") {
-          graphComposite->setSelectedMetaNodesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+          parameters->setSelectedMetaNodesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
         }
         else if(graphCompositeChildText=="Selected edges") {
-          graphComposite->setSelectedEdgesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+          parameters->setSelectedEdgesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
         }
         else {
           assert(false);
