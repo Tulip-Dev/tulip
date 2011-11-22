@@ -163,7 +163,7 @@ public:
   /**
    * get stencil number for selected nodes
    */
-  int getSelectedNodesStencil();
+  int getSelectedNodesStencil() const;
   /**
    * set stencil number for selected meta-nodes
    */
@@ -171,7 +171,7 @@ public:
   /**
    * get stencil number for selected meta-nodes
    */
-  int getSelectedMetaNodesStencil();
+  int getSelectedMetaNodesStencil() const;
   /**
    * set stencil number for selected edges
    */
@@ -179,7 +179,7 @@ public:
   /**
    * get stencil number for selected edges
    */
-  int getSelectedEdgesStencil();
+  int getSelectedEdgesStencil() const;
   /**
    * set stencil number for nodes
    */
@@ -187,7 +187,7 @@ public:
   /**
    * get stencil number for nodes
    */
-  int getNodesStencil();
+  int getNodesStencil() const;
   /**
    * set stencil number for meta-nodes
    */
@@ -195,7 +195,7 @@ public:
   /**
    * get stencil number for meta-nodes
    */
-  int getMetaNodesStencil();
+  int getMetaNodesStencil() const;
   /**
    * set stencil number for edges
    */
@@ -203,7 +203,7 @@ public:
   /**
    * get stencil number for edges
    */
-  int getEdgesStencil();
+  int getEdgesStencil() const;
   /**
    * set stencil number for nodes label
    */
@@ -211,7 +211,7 @@ public:
   /**
    * get stencil number for nodes label
    */
-  int getNodesLabelStencil();
+  int getNodesLabelStencil() const;
   /**
    * set stencil number for meta-nodes label
    */
@@ -219,7 +219,7 @@ public:
   /**
    * get stencil number for meta-nodes label
    */
-  int getMetaNodesLabelStencil();
+  int getMetaNodesLabelStencil() const;
   /**
    * set stencil number for edges label
    */
@@ -227,7 +227,7 @@ public:
   /**
    * get stencil number for edges label
    */
-  int getEdgesLabelStencil();
+  int getEdgesLabelStencil() const;
   /**
    * If true node and edges are ordered according to the viewMetric property
    */
@@ -294,7 +294,7 @@ public:
   /**
    * return true if the graph is draw with feedback information
    */
-  bool getFeedbackRender();
+  bool getFeedbackRender() const;
   /**
    * Change the selection color
    */
@@ -302,11 +302,11 @@ public:
   /**
    * return the selection color
    */
-  Color getSelectionColor();
+  Color getSelectionColor() const;
   /**
    * return if labels are scaled to node size
    */
-  bool isLabelScaled();
+  bool isLabelScaled() const;
   /**
    * Set if labels are scaled to node size
    */
@@ -318,7 +318,7 @@ public:
    * 0    : No overlap
    * 100  : All labels
    */
-  int getLabelsDensity();
+  int getLabelsDensity() const;
   /**
    * Set labels density
    * This density must be in interval -100 100
@@ -330,7 +330,7 @@ public:
   /**
    * return min size of label : this min size is only used if labels aren't be scaled
    */
-  int getMinSizeOfLabel();
+  int getMinSizeOfLabel() const;
   /**
    * Set min size of label : this min size is only used if labels aren't be scaled
    */
@@ -338,7 +338,7 @@ public:
   /**
    * return max size of label : this max size is only used if labels aren't be scaled
    */
-  int getMaxSizeOfLabel();
+  int getMaxSizeOfLabel() const;
   /**
    * Set max size of label : this max size is only used if labels aren't be scaled
    */
@@ -347,7 +347,7 @@ public:
   /**
    * return if labels are billboarded
    */
-  bool getLabelsAreBillboarded() {
+  bool getLabelsAreBillboarded() const {
     return _labelsAreBillboarded;
   }
   /**

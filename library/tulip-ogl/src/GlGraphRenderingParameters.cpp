@@ -334,63 +334,63 @@ bool GlGraphRenderingParameters::isViewOutScreenLabel() const {
 void GlGraphRenderingParameters::setSelectedNodesStencil(const int stencil) {
   _selectedNodesStencil=stencil;
 }
-int GlGraphRenderingParameters::getSelectedNodesStencil() {
+int GlGraphRenderingParameters::getSelectedNodesStencil() const {
   return _selectedNodesStencil;
 }
 //====================================================
 void GlGraphRenderingParameters::setSelectedMetaNodesStencil(const int stencil) {
   _selectedMetaNodesStencil=stencil;
 }
-int GlGraphRenderingParameters::getSelectedMetaNodesStencil() {
+int GlGraphRenderingParameters::getSelectedMetaNodesStencil() const {
   return _selectedMetaNodesStencil;
 }
 //====================================================
 void GlGraphRenderingParameters::setSelectedEdgesStencil(const int stencil) {
   _selectedEdgesStencil=stencil;
 }
-int GlGraphRenderingParameters::getSelectedEdgesStencil() {
+int GlGraphRenderingParameters::getSelectedEdgesStencil() const {
   return _selectedEdgesStencil;
 }
 //====================================================
 void GlGraphRenderingParameters::setNodesStencil(const int stencil) {
   _nodesStencil=stencil;
 }
-int GlGraphRenderingParameters::getNodesStencil() {
+int GlGraphRenderingParameters::getNodesStencil() const {
   return _nodesStencil;
 }
 //====================================================
 void GlGraphRenderingParameters::setMetaNodesStencil(const int stencil) {
   _metaNodesStencil=stencil;
 }
-int GlGraphRenderingParameters::getMetaNodesStencil() {
+int GlGraphRenderingParameters::getMetaNodesStencil() const {
   return _metaNodesStencil;
 }
 //====================================================
 void GlGraphRenderingParameters::setEdgesStencil(const int stencil) {
   _edgesStencil=stencil;
 }
-int GlGraphRenderingParameters::getEdgesStencil() {
+int GlGraphRenderingParameters::getEdgesStencil() const {
   return _edgesStencil;
 }
 //====================================================
 void GlGraphRenderingParameters::setNodesLabelStencil(const int stencil) {
   _nodesLabelStencil=stencil;
 }
-int GlGraphRenderingParameters::getNodesLabelStencil() {
+int GlGraphRenderingParameters::getNodesLabelStencil() const {
   return _nodesLabelStencil;
 }
 //====================================================
 void GlGraphRenderingParameters::setMetaNodesLabelStencil(const int stencil) {
   _metaNodesLabelStencil=stencil;
 }
-int GlGraphRenderingParameters::getMetaNodesLabelStencil() {
+int GlGraphRenderingParameters::getMetaNodesLabelStencil() const {
   return _metaNodesLabelStencil;
 }
 //====================================================
 void GlGraphRenderingParameters::setEdgesLabelStencil(const int stencil) {
   _edgesLabelStencil=stencil;
 }
-int GlGraphRenderingParameters::getEdgesLabelStencil() {
+int GlGraphRenderingParameters::getEdgesLabelStencil() const {
   return _edgesLabelStencil;
 }
 //====================================================
@@ -401,14 +401,14 @@ void GlGraphRenderingParameters::setEdgeColorInterpolate(const bool b) {
   _edgeColorInterpolate=b;
 }
 //====================================================
-bool GlGraphRenderingParameters::isEdgeSizeInterpolate()const {
+bool GlGraphRenderingParameters::isEdgeSizeInterpolate() const {
   return (_edgeSizeInterpolate);
 }
 void GlGraphRenderingParameters::setEdgeSizeInterpolate(const bool b) {
   _edgeSizeInterpolate=b;
 }
 //====================================================
-bool GlGraphRenderingParameters::getEdgesMaxSizeToNodesSize()const {
+bool GlGraphRenderingParameters::getEdgesMaxSizeToNodesSize() const {
   return (_edgesMaxSizeToNodesSize);
 }
 void GlGraphRenderingParameters::setEdgesMaxSizeToNodesSize(const bool b) {
@@ -418,47 +418,41 @@ void GlGraphRenderingParameters::setEdgesMaxSizeToNodesSize(const bool b) {
 void GlGraphRenderingParameters::setFeedbackRender(bool feedback) {
   _feedbackRender=feedback;
 }
-//====================================================
-bool GlGraphRenderingParameters::getFeedbackRender() {
+bool GlGraphRenderingParameters::getFeedbackRender() const {
   return _feedbackRender;
 }
 //====================================================
 void GlGraphRenderingParameters::setSelectionColor(const Color &color) {
   _selectionColor=color;
 }
-//====================================================
-Color GlGraphRenderingParameters::getSelectionColor() {
+Color GlGraphRenderingParameters::getSelectionColor() const {
   return _selectionColor;
 }
 //====================================================
-bool GlGraphRenderingParameters::isLabelScaled() {
+bool GlGraphRenderingParameters::isLabelScaled() const {
   return _labelScaled;
 }
-//====================================================
 void GlGraphRenderingParameters::setLabelScaled(bool state) {
   _labelScaled=state;
 }
 //====================================================
-int GlGraphRenderingParameters::getLabelsDensity() {
+int GlGraphRenderingParameters::getLabelsDensity() const {
   return _labelsDensity;
 }
-//====================================================
 void GlGraphRenderingParameters::setLabelsDensity(int density) {
   _labelsDensity=density;
 }
 //====================================================
-int GlGraphRenderingParameters::getMinSizeOfLabel() {
+int GlGraphRenderingParameters::getMinSizeOfLabel() const {
   return _labelMinSize;
 }
-//====================================================
 void GlGraphRenderingParameters::setMinSizeOfLabel(int size) {
   _labelMinSize=size;
 }
 //====================================================
-int GlGraphRenderingParameters::getMaxSizeOfLabel() {
+int GlGraphRenderingParameters::getMaxSizeOfLabel() const {
   return _labelMaxSize;
 }
-//====================================================
 void GlGraphRenderingParameters::setMaxSizeOfLabel(int size) {
   _labelMaxSize=size;
 }
@@ -466,7 +460,6 @@ void GlGraphRenderingParameters::setMaxSizeOfLabel(int size) {
 void GlGraphRenderingParameters::setElementOrderingProperty(tlp::DoubleProperty* property) {
   _elementOrderingProperty = property;
 }
-//====================================================
 tlp::DoubleProperty* GlGraphRenderingParameters::getElementOrderingProperty() const {
   return _elementOrderingProperty;
 }
