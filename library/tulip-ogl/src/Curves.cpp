@@ -328,7 +328,7 @@ void buildCurvePoints (const vector<Coord> &vertices,
 		vector<Coord> &result) {
 
 	int inversion=1;
-	bool twoPointsCurve=false;
+	bool twoPointsCurve=(vertices.size() == 2);
 
 	if (startN != vertices[0]) {
 		inversion = computeExtrusion(startN, vertices[0], vertices[1], sizes[0], inversion, result,false,twoPointsCurve);
