@@ -23,6 +23,7 @@
 #include <QtCore/QModelIndex>
 
 class GraphHierarchiesModel;
+class QAbstractButton;
 
 namespace tlp {
 class Graph;
@@ -37,11 +38,13 @@ class GraphHierarchiesEditor : public QWidget {
   Ui::GraphHierarchiesEditorData *_ui;
   tlp::Graph* _contextGraph;
   QModelIndex _contextIndex;
+  QAbstractButton* _linkButton;
 
 public:
   explicit GraphHierarchiesEditor(QWidget *parent = 0);
   virtual ~GraphHierarchiesEditor();
   void setModel(GraphHierarchiesModel *model);
+  bool synchronized() const;
 
 protected slots:
   void activeGraphSelected(const QModelIndex&);

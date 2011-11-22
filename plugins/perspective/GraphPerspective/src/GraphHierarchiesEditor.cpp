@@ -24,6 +24,7 @@
 #include <QtGui/QGraphicsEffect>
 #include <QtGui/QPainter>
 #include <QtGui/QTextDocument>
+#include <QtGui/QToolButton>
 
 #include <tulip/BooleanProperty.h>
 #include <tulip/TulipMetaTypes.h>
@@ -36,7 +37,7 @@
 class NoGraphMessageEffect: public QGraphicsEffect {
   GraphHierarchiesModel* _model;
 public:
-  explicit NoGraphMessageEffect(GraphHierarchiesModel* model, QObject* parent = 0): _model(model), QGraphicsEffect(parent) {
+  explicit NoGraphMessageEffect(GraphHierarchiesModel* model, QObject* parent = 0): QGraphicsEffect(parent), _model(model) {
   }
 
   void draw(QPainter *painter) {
@@ -58,7 +59,22 @@ public:
 
 GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData) {
   _ui->setupUi(this);
+  QToolButton* linkButton = new QToolButton();
+  linkButton->setObjectName("linkButton");
+  linkButton->setIcon(QIcon(":/tulip/graphperspective/icons/link.png"));
+  linkButton->setToolTip(trUtf8("Synchronize with workspace active panel"));
+  linkButton->setIconSize(QSize(22,22));
+  linkButton->setMinimumSize(25,25);
+  linkButton->setMaximumSize(25,25);
+  linkButton->setCheckable(true);
+  linkButton->setChecked(true);
+  _ui->header->layout()->addWidget(linkButton);
+  _linkButton = linkButton;
   _ui->hierarchiesTree->installEventFilter(this);
+}
+
+bool GraphHierarchiesEditor::synchronized() const {
+  return _linkButton->isChecked();
 }
 
 void GraphHierarchiesEditor::setModel(GraphHierarchiesModel *model) {
