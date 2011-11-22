@@ -40,7 +40,8 @@
      </property>
      <property name="styleSheet">
       <string notr="true">QTreeView  {
-  border: 0px;
+border: 0px;
+border-bottom: 1px solid #C9C9C9;
 }</string>
      </property>
      <property name="editTriggers">
