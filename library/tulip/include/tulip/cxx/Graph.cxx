@@ -83,8 +83,10 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
       currentGraph = currentGraph->getSuperGraph();
     }
 
-    if (currentGraph != prop->graph)
+    if (currentGraph != prop->graph) {
+      msg = "The passed property does not belong to the graph";
       return false;
+    }
   }
 
 #ifndef NDEBUG
