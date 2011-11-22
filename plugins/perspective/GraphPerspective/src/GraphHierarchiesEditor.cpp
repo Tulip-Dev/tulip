@@ -41,6 +41,7 @@ public:
 
   void draw(QPainter *painter) {
     drawSource(painter);
+
     if (_model->size() == 0) {
       QRectF rect = sourceBoundingRect();
       int iconWidth = 48;
@@ -96,6 +97,7 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
 void GraphHierarchiesEditor::addSubGraph() {
   if (_contextGraph == NULL)
     return;
+
   _contextGraph->addSubGraph();
 }
 

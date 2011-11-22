@@ -127,6 +127,7 @@ void GraphPerspective::importGraph() {
 
 void GraphPerspective::createPanel(tlp::Graph* g,const QModelIndex& graphModelCurrentIndex) {
   PanelSelectionWizard wizard(_graphs,_mainWindow);
+
   if (graphModelCurrentIndex.isValid() && _graphs->hasIndex(graphModelCurrentIndex.row(),graphModelCurrentIndex.column(),graphModelCurrentIndex.parent()))
     wizard.setGraphCurrentModelIndex(graphModelCurrentIndex);
 
@@ -139,6 +140,7 @@ void GraphPerspective::createPanel(tlp::Graph* g,const QModelIndex& graphModelCu
 void GraphPerspective::createPanel() {
   if (_graphs->currentGraph() == NULL)
     return;
+
   createPanel(_graphs->currentGraph());
 }
 

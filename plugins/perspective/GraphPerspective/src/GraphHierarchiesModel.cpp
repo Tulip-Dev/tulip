@@ -43,26 +43,32 @@ using namespace tlp;
 
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize";
+
   if (!g->existProperty(shapes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipSettings::instance().defaultShape(tlp::NODE));
     g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(TulipSettings::instance().defaultShape(tlp::EDGE));
   }
+
   if (!g->existProperty(colors)) {
     g->getProperty<ColorProperty>(colors)->setAllNodeValue(TulipSettings::instance().defaultColor(tlp::NODE));
     g->getProperty<ColorProperty>(colors)->setAllEdgeValue(TulipSettings::instance().defaultColor(tlp::EDGE));
   }
+
   if (!g->existProperty(sizes)) {
     g->getProperty<SizeProperty>(sizes)->setAllNodeValue(TulipSettings::instance().defaultSize(tlp::NODE));
     g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(TulipSettings::instance().defaultSize(tlp::EDGE));
   }
+
   if (!g->existProperty(metrics)) {
     g->getProperty<DoubleProperty>(metrics)->setAllNodeValue(0);
     g->getProperty<DoubleProperty>(metrics)->setAllEdgeValue(0);
   }
+
   if (!g->existProperty(fonts)) {
     g->getProperty<StringProperty>(fonts)->setAllNodeValue(tlp::TulipBitmapDir + "font.ttf");
     g->getProperty<StringProperty>(fonts)->setAllEdgeValue(tlp::TulipBitmapDir + "font.ttf");
   }
+
   if (!g->existProperty(fontSizes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(18);
     g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(18);
@@ -75,6 +81,7 @@ GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): TulipModel(parent
 GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy): TulipModel(copy.QObject::parent()), tlp::Observable() {
   for (int i=0; i < copy.size(); ++i)
     addGraph(copy[i]);
+
   _currentGraph = NULL;
 }
 
@@ -233,6 +240,7 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
 
   if (_graphs.size() == 1)
     setCurrentGraph(g);
+
   endInsertRows();
 }
 
@@ -260,12 +268,14 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
     int pos = _graphs.indexOf(g);
     beginRemoveRows(QModelIndex(),pos,pos);
     _graphs.removeAll(g);
+
     if (_currentGraph == g) {
       if (_graphs.size() == 0)
         _currentGraph = NULL;
       else
         _currentGraph = _graphs[0];
     }
+
     endRemoveRows();
   }
   else if (e.type() == Event::TLP_MODIFICATION) {
