@@ -273,6 +273,48 @@ Returns the descendant graph with the corresponding id or :const:`None` if there
 
 //===========================================================================================
 
+	tlp::Graph *getNthSubGraph(unsigned int n) const;
+%Docstring
+tlp.Graph.getNthSubGraph(n)
+
+Returns the nth subgraph or :const:`None` if there is no such sub-graph.
+Since order cannot be ensured in every implementation, this method should be equivalent to::
+
+    i = 0
+    for sg in graph.getSubGraphs():
+      if i++ == n:
+        return sg
+    return None    
+       
+:param n: the index of the sub-graph to return
+:type n: integer
+:rtype: :class:`tlp.Graph` or :const:`None`
+%End	
+	
+//===========================================================================================	
+	
+  	unsigned  int numberOfSubGraphs() const;
+%Docstring
+tlp.Graph.numberOfSubGraphs()
+	
+Returns the number of direct sub-graphs.
+
+:rtype: integer
+%End  
+  
+//===========================================================================================  
+  
+  	unsigned int numberOfDescendantGraphs() const;
+%Docstring
+tlp.Graph.numberOfDescendantGraphs()	
+	
+Returns the number of descendant graphs.
+
+:rtype: integer	
+%End  	
+
+//===========================================================================================
+
 	tlp::node addNode();
 %Docstring
 tlp.Graph.addNode()
@@ -2406,12 +2448,6 @@ Returns the name of the graph.
 :rtype: string
 %End
 	
-%MethodCode
-	std::string graphName;
-	sipCpp->getAttribute("name", graphName);
-	sipRes = new std::string(graphName);
-%End
-
 //===========================================================================================
 
 	void setName(const std::string &s) const;
@@ -2424,10 +2460,6 @@ Sets the name of the graph.
 :type name: string
 %End
 	
-%MethodCode
-	sipCpp->setAttribute("name", *a0);
-%End	
-
 //===========================================================================================
 
 void setAttribute(const std::string &name, SIP_PYOBJECT po);
