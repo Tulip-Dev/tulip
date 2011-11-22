@@ -87,10 +87,12 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
   foreach(info,localPlugins) {
     if (info->type() != "View")
       continue;
+
     PanelSelectionItem* item = new PanelSelectionItem(info);
     panelsLayout->addWidget(item);
     connect(item,SIGNAL(selected()),this,SLOT(panelSelected()));
     connect(item,SIGNAL(doubleClicked()),this,SLOT(panelDoubleClicked()));
+
     if (i++ == 0) {
       _activeItem = item;
       _activeItem->setFocus(true);
@@ -135,6 +137,7 @@ QString PanelSelectionWizard::panelName() const {
 
 void PanelSelectionWizard::setGraphCurrentModelIndex(const QModelIndex& index) {
   int flatIndex = _flattenedModel->mapToRow(index);
+
   if (flatIndex >= 0)
     _ui->graphCombo->setCurrentIndex(flatIndex);
 }

@@ -292,5 +292,6 @@ bool Workspace::eventFilter(QObject *obj, QEvent *ev) {
   if (obj == _ui->startupIcon && ev->type() == QEvent::MouseButtonPress) {
     emit addPanelAtStartupButtonClicked();
   }
+
   return false;
 }

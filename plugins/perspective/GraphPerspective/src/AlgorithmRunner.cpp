@@ -65,6 +65,7 @@ QString AlgorithmRunnerItem::group() const {
 
 void AlgorithmRunnerItem::setGraph(tlp::Graph* graph) {
   setEnabled(graph != NULL);
+
   if (graph != NULL)
     _ui->parameters->setModel(new ParameterListModel(_params,graph));
   else {
@@ -97,6 +98,7 @@ void AlgorithmRunnerItem::settingsButtonToggled(bool f) {
 tlp::DataSet AlgorithmRunnerItem::params() const {
   if (_ui->parameters->model() == NULL)
     return tlp::DataSet();
+
   return static_cast<tlp::ParameterListModel*>(_ui->parameters->model())->parametersValues();
 }
 
@@ -112,6 +114,7 @@ public:
 
   PROPTYPE* getProperty(tlp::Graph* g, const std::string& name) {
     PROPTYPE* result = NULL;
+
     if (g->existProperty(name)) {
       PropertyInterface* interface = g->getProperty(name);
       result = dynamic_cast<PROPTYPE*>(interface);
@@ -119,6 +122,7 @@ public:
     else {
       result = g->getProperty<PROPTYPE>(name);
     }
+
     return result;
   }
 
@@ -144,17 +148,21 @@ public:
     PROPTYPE* defaultProperty = getProperty(g,_defaultPropName);
     QString name = (alg + " " + data->toString().c_str());
     PROPTYPE* namedProperty = getProperty(g,name.toStdString());
+
     if (defaultProperty == NULL && namedProperty == NULL) {
       msg = trUtf8("Cannot find suitable output property");
       return false;
     }
+
     PROPTYPE* out = (defaultProperty != NULL ? defaultProperty : namedProperty);
     std::string errorMsg;
     bool result = g->computeProperty<PROPTYPE>(alg.toStdString(),out,errorMsg,progress,data);
     msg = errorMsg.c_str();
+
     if (result && out != namedProperty && namedProperty != NULL) {
       *namedProperty = *out;
     }
+
     tlp::Observable::unholdObservers();
     return result;
   }
@@ -275,7 +283,7 @@ void AlgorithmRunner::setFilter(const QString &filter) {
 void AlgorithmRunner::currentGraphChanged(tlp::Graph* g) {
   setEnabled(g != NULL);
   foreach(AlgorithmRunnerItem* it, findChildren<AlgorithmRunnerItem *>())
-    it->setGraph(g);
+  it->setGraph(g);
 }
 
 void AlgorithmRunner::setModel(GraphHierarchiesModel *model) {
@@ -297,10 +305,12 @@ void AlgorithmRunner::itemSettingsToggled(bool f) {
 void AlgorithmRunner::runAlgorithm() {
   if (_model->currentGraph() == NULL)
     return;
+
   AlgorithmRunnerItem* item = static_cast<AlgorithmRunnerItem*>(sender());
   QString msg;
   DataSet data = item->params();
   bool result = _pluginsListMgr->computeProperty(_model->currentGraph(),item->name(),msg,0,&data);
+
   if (!result) {
     QMessageBox::critical(this,trUtf8("Plugin error"),trUtf8("Error while running ") + item->name() + trUtf8(": ") + msg);
   }
