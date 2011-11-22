@@ -43,7 +43,8 @@ public:
   void draw(QPainter *painter) {
     drawSource(painter);
 
-    if (_model->size() == 0) {
+    painter->save();
+    if (_model && _model->size() == 0) {
       QRectF rect = sourceBoundingRect();
       int iconWidth = 48;
       painter->drawPixmap((rect.width() - iconWidth)/2, (rect.height() - iconWidth)/2, iconWidth,iconWidth,QPixmap(":/tulip/graphperspective/icons/document-import.svg"));
@@ -54,6 +55,7 @@ public:
       painter->setFont(f);
       painter->drawText(0,textY+20,rect.width(),rect.height()-textY-20,Qt::AlignHCenter | Qt::TextWordWrap,trUtf8("Use the \"Import\" button on the left pane to import data."));
     }
+    painter->restore();
   }
 };
 
