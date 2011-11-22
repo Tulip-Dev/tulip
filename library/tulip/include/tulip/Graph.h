@@ -851,10 +851,22 @@ public:
     Return the number of direct sub-graphs
     */
   virtual unsigned  int numberOfSubGraphs() const=0;
+
   /**
     Return the number of descendant graphs
     */
   virtual unsigned int numberOfDescendantGraphs() const=0;
+
+  /**
+   * Sets the string identifier of the graph
+   */
+  virtual void setName(const std::string &name) = 0;
+
+  /**
+   * Returns the string identifier of the graph
+   */
+  virtual std::string getName() const = 0;
+
 };
 
 /// Event class for specific events on Graph

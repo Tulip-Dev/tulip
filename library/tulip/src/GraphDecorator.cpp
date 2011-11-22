@@ -498,3 +498,11 @@ bool GraphDecorator::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
 void GraphDecorator::unpop() {
   return graph_component->unpop();
 }
+
+void GraphDecorator::setName(const std::string &name) {
+	graph_component->setName(name);
+}
+
+std::string GraphDecorator::getName() const {
+	return graph_component->getName();
+}
