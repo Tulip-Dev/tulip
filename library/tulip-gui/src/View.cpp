@@ -62,8 +62,26 @@ Graph* View::graph() const {
   return _graph;
 }
 void View::setGraph(tlp::Graph *g) {
+  if (_graph != NULL)
+    _graph->removeListener(this);
+
   _graph = g;
+  if (_graph != NULL)
+    _graph->addListener(this);
   graphChanged(g);
+}
+
+void View::treatEvent(const Event& ev) {
+  if (ev.type() == Event::TLP_DELETE && ev.sender() == _graph) {
+    Graph* oldGraph = _graph;
+    graphDeleted();
+#ifndef NDEBUG
+    if (_graph == oldGraph) {
+      std::cerr << "The graphChanged() callback associated to this View did not change the current graph pointer. This could lead to undefined behavior. Please read View::graphDeleted() documentation for details." << std::endl;
+    }
+#endif
+    assert(_graph != oldGraph); // Checks that the graph has been changed during the callback
+  }
 }
 
 QList<QWidget*> View::configurationWidgets() const {
@@ -71,4 +89,9 @@ QList<QWidget*> View::configurationWidgets() const {
 }
 
 void View::interactorsInstalled(const QList<tlp::Interactor *> &) {
+}
+
+void View::graphDeleted() {
+  _graph = NULL;
+  this->deleteLater();
 }

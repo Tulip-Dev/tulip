@@ -35,7 +35,7 @@ using namespace tlp;
 Workspace::Workspace(QWidget *parent)
   : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0) {
   _ui->setupUi(this);
-  _ui->startupIcon->installEventFilter(this);
+  connect(_ui->startupButton, SIGNAL(clicked()),this,SIGNAL(addPanelAtStartupButtonClicked()));
 
   // This map allows us to know how much slots we have for each mode and which widget corresponds to those slots
   QVector<PlaceHolderWidget*> startupVector(0);
@@ -80,7 +80,7 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   View* view = ViewLister::getPluginObject(viewName.toStdString(),NULL);
   view->setupUi();
   WorkspacePanel* panel = new WorkspacePanel(view,viewName);
-  connect(panel,SIGNAL(closeNeeded()),this,SLOT(panelClosed()),Qt::DirectConnection);
+  connect(panel,SIGNAL(destroyed()),this,SLOT(panelClosed()),Qt::DirectConnection);
   connect(view,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
   view->setGraph(g);
   view->setState(data);
@@ -116,7 +116,6 @@ void Workspace::delView(tlp::View* view) {
 }
 
 void Workspace::removePanel(WorkspacePanel* panel) {
-  panel->deleteLater();
   int removeCount = _panels.removeAll(panel);
   assert(removeCount>0);
   updateAvailableModes();
@@ -286,12 +285,4 @@ void Workspace::setActivePanel(tlp::View* view) {
   _currentPanelIndex = newIndex;
   updatePanels();
   updatePageCountLabel();
-}
-
-bool Workspace::eventFilter(QObject *obj, QEvent *ev) {
-  if (obj == _ui->startupIcon && ev->type() == QEvent::MouseButtonPress) {
-    emit addPanelAtStartupButtonClicked();
-  }
-
-  return false;
 }

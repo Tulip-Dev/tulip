@@ -19,10 +19,11 @@
 #include "tulip/WorkspacePanel.h"
 
 #include <QtCore/QDebug>
+#include <QtCore/QPropertyAnimation>
 #include <QtGui/QGraphicsView>
+#include <QtGui/QCloseEvent>
 #include <QtGui/QPushButton>
 #include <QtGui/QApplication>
-#include <QtCore/QPropertyAnimation>
 
 #include <tulip/ProcessingAnimationItem.h>
 #include <tulip/Interactor.h>
@@ -61,14 +62,17 @@ public:
 WorkspacePanel::WorkspacePanel(tlp::View* view, const QString& viewName, QWidget *parent)
   : QWidget(parent), _ui(new Ui::WorkspacePanel), _view(NULL), _viewName(viewName), _progressItem(NULL) {
   _ui->setupUi(this);
-  connect(_ui->closeButton,SIGNAL(clicked()),this,SIGNAL(closeNeeded()));
+  setAttribute(Qt::WA_DeleteOnClose,true);
+  connect(_ui->closeButton,SIGNAL(clicked()),this,SLOT(close()));
   setView(view,viewName);
 }
 
 WorkspacePanel::~WorkspacePanel() {
   delete _ui;
-  _view->graphicsView()->deleteLater();
-  delete _view;
+  if (_view != NULL) {
+    disconnect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
+    delete _view;
+  }
 }
 
 View* WorkspacePanel::view() const {
@@ -82,10 +86,9 @@ QString WorkspacePanel::viewName() const {
 void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
   assert(view != NULL);
 
-  if (_view != NULL) {
-    _view->graphicsView()->deleteLater();
-    delete _view;
-  }
+  if (_view != NULL)
+    disconnect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
+  delete _view;
 
   _view = view;
   _viewName = viewName;
@@ -102,6 +105,8 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
 
   if (compatibleInteractors.size()>0)
     setCurrentInteractor(compatibleInteractors[0]);
+
+  connect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
 }
 
 void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
@@ -177,4 +182,9 @@ void WorkspacePanel::refreshInteractorsToolbar() {
     _ui->interactorsFrame->setLayout(interactorsLayout);
     setCurrentInteractor(compatibleInteractors[0]);
   }
+}
+
+void WorkspacePanel::viewDestroyed() {
+  _view = NULL;
+  close();
 }

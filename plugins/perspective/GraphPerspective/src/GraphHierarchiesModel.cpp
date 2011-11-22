@@ -268,12 +268,12 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
     int pos = _graphs.indexOf(g);
     beginRemoveRows(QModelIndex(),pos,pos);
     _graphs.removeAll(g);
-
     if (_currentGraph == g) {
       if (_graphs.size() == 0)
         _currentGraph = NULL;
       else
         _currentGraph = _graphs[0];
+      emit currentGraphChanged(_currentGraph);
     }
 
     endRemoveRows();
@@ -381,7 +381,6 @@ void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
 
   _currentGraph = g;
   emit currentGraphChanged(g);
-  emit layoutChanged();
 }
 
 Graph *GraphHierarchiesModel::currentGraph() const {

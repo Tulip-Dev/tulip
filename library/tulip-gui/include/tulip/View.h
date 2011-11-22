@@ -58,6 +58,9 @@ class Interactor;
 
   Views are meant to be managed by an overleying system. As a consequence, a view may not decide directly when to redraw.
   Thus, you should never call the View::draw() method. To notify the overleying system that your view needs to be redrawn, emit the View::drawNeeded() signal instead.
+
+  A tlp::View subclass automatically inherits from the tlp::Observable interface. The tlp::View interface also automatically listn to its active graph to trigger handling trigger when this graph gets deleted.
+  When the graph associated to a View gets deleted, the View::graphDeleted() callback is triggered. @see graphDeleted() for more informations.
   */
 class TLP_QT_SCOPE View: public QObject, public tlp::WithDependency, public tlp::WithParameter, public tlp::Observable {
   Q_OBJECT
@@ -172,8 +175,11 @@ public slots:
   virtual void setupUi()=0;
 
   /**
-    @brief
-  */
+    @brief This method is inherited from tlp::Observable and allows the view to trigger custom callback when its associated graph gets deleted.
+    @warning When overriding this method. You MUST always make a call to View::treatEvent before doing anything in order to keep this callback working.
+    */
+  virtual void treatEvent(const Event&);
+
 signals:
   /**
     @brief Inform the overleying subsystem that this view needs to be drawn.
@@ -200,6 +206,13 @@ protected slots:
     At this point, a call to View::graph() is considered valid and return the lastly set graph.
     */
   virtual void graphChanged(tlp::Graph*)=0;
+
+  /**
+    @brief Called when the graph associated to the View gets deleted.
+    The default implementation deletes the View.
+    If you override this method. You must make sure the graph associated to the view has been changed when this method finishes.
+    */
+  virtual void graphDeleted();
 
 };
 

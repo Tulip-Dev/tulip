@@ -62,10 +62,11 @@ public slots:
   void setCurrentInteractor(tlp::Interactor*);
 
 signals:
-  void closeNeeded();
+  void closed();
 
 protected slots:
   void interactorActionTriggered();
+  void viewDestroyed();
 
 protected:
   void progress_handler(int step, int max_step);
