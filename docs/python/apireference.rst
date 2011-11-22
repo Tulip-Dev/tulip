@@ -166,6 +166,12 @@ the Graph class
 	.. automethod:: tulip::tlp.Graph.getSubGraph
 
 	.. automethod:: tulip::tlp.Graph.getDescendantGraph
+	
+	.. automethod:: tulip::tlp.Graph.getNthSubGraph
+	
+	.. automethod:: tulip::tlp.Graph.numberOfSubGraphs
+	
+	.. automethod:: tulip::tlp.Graph.numberOfDescendantGraphs	
 
 	.. _graph-class.iterators:
 	
