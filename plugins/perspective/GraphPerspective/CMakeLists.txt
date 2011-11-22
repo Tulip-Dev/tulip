@@ -12,7 +12,8 @@ src/ImportWizard.cpp
 src/PanelSelectionWizard.cpp)
 
 QT4_ADD_RESOURCES(RCC_SRCS
-resources/GraphPerspective.qrc)
+resources/GraphPerspective.qrc
+OPTIONS -name GraphPerspective)
 
 QT4_WRAP_UI(UI_SRCS
 designer/AlgorithmRunner.ui
