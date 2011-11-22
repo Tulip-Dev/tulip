@@ -28,6 +28,14 @@
     font-size: 12px;
 }
 
+QPushButton::flat {
+    border-image: none;
+    border-width: 4;
+    padding: 0px 6px;
+    font-size: 12px;
+	background-color: transparent;
+}
+
 QPushButton, QComboBox, QLabel {
     color: black;
 }

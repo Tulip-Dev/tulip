@@ -82,8 +82,6 @@ protected slots:
   QVector<PlaceHolderWidget*> currentModeSlots() const;
   unsigned int currentSlotsCount() const;
 
-protected:
-  bool eventFilter(QObject *, QEvent *);
 };
 }
 
