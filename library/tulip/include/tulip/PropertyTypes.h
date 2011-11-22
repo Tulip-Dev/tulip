@@ -162,6 +162,7 @@ public:
   static RealType defaultValue();
   static void write(std::ostream &oss, const RealType &v);
   static bool read(std::istream& iss, RealType& v);
+  FORWARD_STRING_METHODS(GraphType)
 };
 
 class TLP_SCOPE EdgeSetType: public TypeInterface<std::set<edge> > {
