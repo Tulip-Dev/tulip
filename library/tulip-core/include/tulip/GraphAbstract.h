@@ -98,6 +98,9 @@ public:
   // to get viewMetaGraph property
   GraphProperty* getMetaGraphProperty();
 
+  virtual void setName(const std::string &name);
+  virtual std::string getName() const;
+
 protected:
   DataSet& getNonConstAttributes();
   void setSuperGraph(Graph *);

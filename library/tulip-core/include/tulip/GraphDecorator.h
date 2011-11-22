@@ -132,6 +132,9 @@ public:
   virtual bool canPopThenUnpop();
   //============================================================
 
+  virtual void setName(const std::string &name);
+  virtual std::string getName() const;
+
 protected:
   virtual DataSet & getNonConstAttributes();
   Graph* graph_component;

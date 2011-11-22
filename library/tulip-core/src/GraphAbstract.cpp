@@ -121,7 +121,7 @@ unsigned int GraphAbstract::numberOfSubGraphs() const {
 //=========================================================================
 unsigned int GraphAbstract::numberOfDescendantGraphs() const {
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
-  int result = 0;
+  int result = numberOfSubGraphs();
 
   while(it != subgraphs.end()) {
     result += (*it)->numberOfDescendantGraphs();
@@ -619,4 +619,14 @@ GraphProperty* GraphAbstract::getMetaGraphProperty() {
 
   return metaGraphProperty =
            getRoot()->getProperty<GraphProperty>(metaGraphPropertyName);
+}
+
+void GraphAbstract::setName(const std::string &name) {
+	setAttribute("name", name);
+}
+
+std::string GraphAbstract::getName() const {
+	std::string name;
+	getAttribute("name", name);
+	return name;
 }
