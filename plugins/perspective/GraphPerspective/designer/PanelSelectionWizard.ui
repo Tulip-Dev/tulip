@@ -57,27 +57,29 @@
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="page1TopLayout">
-      <property name="spacing">
-       <number>10</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="graphComboTitle">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>&lt;b&gt;Selected graph:&lt;/b&gt;</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="graphCombo"/>
-      </item>
-     </layout>
+     <widget class="QFrame" name="selectGraphFrame">
+      <layout class="QHBoxLayout" name="selectGraphLayout">
+       <property name="spacing">
+        <number>10</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="graphComboTitle">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>&lt;b&gt;Selected graph:&lt;/b&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="graphCombo"/>
+       </item>
+      </layout>
+     </widget>
     </item>
     <item>
      <layout class="QVBoxLayout" name="page1BottomLayout">
@@ -153,24 +155,7 @@ border: 1px solid #C9C9C9;
   <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
   <include location="../resources/GraphPerspective.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>graphCombo</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>PanelSelectionWizard</receiver>
-   <slot>graphSelected(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>428</x>
-     <y>127</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>364</x>
-     <y>191</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>graphSelected(int)</slot>
  </slots>

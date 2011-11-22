@@ -43,7 +43,7 @@ public:
 public slots:
   void showFullScreen(bool);
   void importGraph();
-  void createPanel(const QModelIndex& graphModelCurrentIndex = QModelIndex());
+  void createPanel(tlp::Graph* g = NULL);
 
 protected slots:
   void refreshDockExpandControls();
