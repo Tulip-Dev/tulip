@@ -218,7 +218,6 @@ MainController::MainController(PerspectiveContext &c):
   intMenu(NULL), stringMenu(NULL), sizesMenu(NULL), colorsMenu(NULL),
   layoutMenu(NULL), metricMenu(NULL), selectMenu(NULL), generalMenu(NULL) {
   morph = new Morphing();
-  currentActiveController(this);
   tlp3::InteractorManager::getInst().loadInteractorPlugins();
 }
 //**********************************************************************
@@ -248,6 +247,7 @@ MainController::~MainController() {
 void MainController::attachMainWindow(MainWindowFacade facade) {
   ControllerViewsManager::attachMainWindow(facade);
   loadGUI();
+  currentActiveController(this);
 }
 //**********************************************************************
 // define some specific MetaValueCalculator classes
