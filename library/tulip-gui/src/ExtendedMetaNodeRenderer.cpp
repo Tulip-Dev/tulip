@@ -46,7 +46,7 @@ ExtendedMetaNodeRenderer::~ExtendedMetaNodeRenderer() {
   }
 }
 
-void ExtendedMetaNodeRenderer::render(node n,float lod,Camera* camera) {
+void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
 
   GlMainView *view;
   Graph *metaGraph = inputData->getGraph()->getNodeMetaInfo(n);
