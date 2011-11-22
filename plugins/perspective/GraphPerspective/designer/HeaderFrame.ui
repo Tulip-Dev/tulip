@@ -22,11 +22,8 @@
     <height>25</height>
    </size>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <property name="styleSheet">
-   <string notr="true">QComboBox, QLabel, QToolButton {
+   <string notr="true">* {
 	border-image:none;
 	background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
 	stop: 0 #838383,
@@ -48,12 +45,28 @@ QComboBox:hover, QToolButton:hover {
 	color: white;
 }
 
-QToolButton {
+QToolButton:checked {
+	background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+	stop: 0 #939393,
+	stop: 0.4 #808080,
+	stop: 0.401 #737373,
+	stop: 1 #5a5a5a);
+}
+
+#expandButton {
   image: url(&quot;:/tulip/gui/ui/arrowup.png&quot;);
 }
 
-QToolButton:checked {
+#expandButton:checked {
   image: url(&quot;:/tulip/gui/ui/arrowdown.png&quot;);
+  border-image:none;
+  background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+  stop: 0 #838383,
+  stop: 0.4 #707070,
+  stop: 0.401 #636363,
+  stop: 1 #4a4a4a);
+  border: 0px;
+  color: white;
 }
 
 QComboBox,QLabel {
