@@ -125,8 +125,16 @@ void GraphPerspective::importGraph() {
   }
 }
 
-void GraphPerspective::createPanel(tlp::Graph* g,const QModelIndex& graphModelCurrentIndex) {
+void GraphPerspective::createPanel(const QModelIndex& graphModelCurrentIndex) {
+  if (_graphs->size() == 0)
+    return;
+
   PanelSelectionWizard wizard(_graphs,_mainWindow);
+
+  if (!graphModelCurrentIndex.isValid())
+    qWarning("not valid");
+  if (!_graphs->hasIndex(graphModelCurrentIndex.row(),graphModelCurrentIndex.column(),graphModelCurrentIndex.parent()))
+    qWarning("not an index");
 
   if (graphModelCurrentIndex.isValid() && _graphs->hasIndex(graphModelCurrentIndex.row(),graphModelCurrentIndex.column(),graphModelCurrentIndex.parent()))
     wizard.setGraphCurrentModelIndex(graphModelCurrentIndex);
@@ -135,13 +143,6 @@ void GraphPerspective::createPanel(tlp::Graph* g,const QModelIndex& graphModelCu
     if (!wizard.panelName().isNull())
       _ui->workspace->setActivePanel(_ui->workspace->addPanel(wizard.panelName(),wizard.graph()));
   }
-}
-
-void GraphPerspective::createPanel() {
-  if (_graphs->currentGraph() == NULL)
-    return;
-
-  createPanel(_graphs->currentGraph());
 }
 
 PERSPECTIVEPLUGIN(GraphPerspective,"Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0")
