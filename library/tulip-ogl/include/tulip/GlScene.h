@@ -30,23 +30,17 @@
 
 namespace tlp {
 
-/** \brief Storage class for Z ordering
- *
- */
-struct EntityWithDistance {
+struct SelectedEntity {
 
-  EntityWithDistance(const double &dist,EntityLODUnit *entity)
-    :distance(dist),entity(entity),isComplexEntity(false) {
-  }
-  EntityWithDistance(const double &dist,ComplexEntityLODUnit *entity,bool isNode)
-    :distance(dist),entity(entity),isComplexEntity(true),isNode(isNode) {
-  }
+  SelectedEntity():simpleEntity(NULL),complexEntityId((unsigned int)(-1)),complexEntityGraph(NULL){}
+  SelectedEntity(GlSimpleEntity *entity):simpleEntity(entity),complexEntityId((unsigned int)(-1)),complexEntityGraph(NULL){}
+  SelectedEntity(Graph *graph,unsigned int id):simpleEntity(NULL),complexEntityId(id),complexEntityGraph(graph){}
 
-  double distance;
-  EntityLODUnit *entity;
-  bool isComplexEntity;
-  bool isNode;
+  GlSimpleEntity *simpleEntity;
+  unsigned int complexEntityId;
+  Graph *complexEntityGraph;
 };
+
 
 /** \brief Tulip scene class
  *
@@ -151,7 +145,7 @@ public:
    * Select in GlLayer : layer
    * And store result in selectedEntities vector
    */
-  bool selectEntities(RenderingEntitiesFlag type, int x, int y, int h, int w,GlLayer *layer,std::vector<unsigned long>& selectedEntities);
+  bool selectEntities(RenderingEntitiesFlag type, int x, int y, int h, int w,GlLayer *layer,std::vector<SelectedEntity>& selectedEntities);
 
   /**
    * Output the scene in SVG

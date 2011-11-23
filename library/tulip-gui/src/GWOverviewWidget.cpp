@@ -27,6 +27,7 @@
 #include <QtGui/QMenu>
 
 #include <tulip/GlSimpleEntity.h>
+#include <tulip/GlGraphComposite.h>
 
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/GlMainWidget.h"

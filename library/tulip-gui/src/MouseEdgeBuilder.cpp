@@ -30,6 +30,7 @@
 #include <tulip/GlTools.h>
 #include <tulip/GlLine.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/GlGraphComposite.h>
 
 #include <tulip/MouseEdgeBuilder.h>
 

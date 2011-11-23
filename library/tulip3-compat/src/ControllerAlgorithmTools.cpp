@@ -35,6 +35,7 @@
 #include <tulip/OuterPlanarTest.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlCPULODCalculator.h>
+#include <tulip/GlGraphComposite.h>
 
 #include "tulip/NodeLinkDiagramComponent.h"
 #include "tulip3/QtProgress.h"

@@ -30,6 +30,7 @@
 #include <tulip/DrawingTools.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlGraphComposite.h>
 
 #include "tulip/MouseBoxZoomer.h"
 

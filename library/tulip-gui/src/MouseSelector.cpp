@@ -28,6 +28,7 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlTools.h>
 #include <tulip/MouseSelector.h>
+#include <tulip/GlGraphComposite.h>
 
 using namespace std;
 using namespace tlp;

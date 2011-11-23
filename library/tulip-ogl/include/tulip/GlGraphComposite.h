@@ -30,11 +30,11 @@
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
 #include <tulip/GlQuadTreeLODCalculator.h>
+#include <tulip/GlScene.h>
 
 namespace tlp {
 
 class Graph;
-class GlScene;
 
 /** \brief Class use to represent a graph
  *
@@ -77,7 +77,7 @@ public:
 
   virtual void draw(float lod,Camera* camera);
 
-  void initSelectionRendering(RenderingEntitiesFlag type,std::map<unsigned int, unsigned long> &idMap,unsigned int &currentId);
+  void initSelectionRendering(RenderingEntitiesFlag type,std::map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId);
 
   /**
    * Return set of metaNodes
@@ -136,7 +136,7 @@ protected:
   GlScene *fakeScene;
   bool selectionDrawActivate;
   RenderingEntitiesFlag selectionType;
-  std::map<unsigned int, unsigned long> *selectionIdMap;
+  std::map<unsigned int, SelectedEntity> *selectionIdMap;
   unsigned int *selectionCurrentId;
 };
 }

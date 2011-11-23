@@ -22,6 +22,7 @@
 #include "tulip/GlOffscreenRenderer.h"
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlVertexArrayManager.h"
+#include "tulip/GlGraphComposite.h"
 
 using namespace std;
 

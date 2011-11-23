@@ -27,6 +27,7 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/GlGraphComposite.h>
 
 
 #include <tulip/MouseNodeBuilder.h>

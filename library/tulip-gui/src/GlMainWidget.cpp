@@ -39,6 +39,7 @@
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlQuadTreeLODCalculator.h>
 #include <tulip/GLInteractor.h>
+#include <tulip/GlGraphComposite.h>
 
 #include "tulip/QGlPixelBufferManager.h"
 #include "tulip/Interactor.h"
@@ -532,14 +533,15 @@ bool GlMainWidget::selectGlEntities(const int x, const int y,
                                     std::vector<GlSimpleEntity *> &pickedEntities,
                                     GlLayer* layer) {
   makeCurrent();
-  std::vector<unsigned long> entities;
+  std::vector<SelectedEntity> entities;
   unsigned int number=scene.selectEntities((RenderingEntitiesFlag)(RenderingSimpleEntities | RenderingWithoutRemove),x, y,
                       width, height,
                       layer,
                       entities);
 
-  for(std::vector<unsigned long>::iterator it=entities.begin(); it!=entities.end(); ++it) {
-    pickedEntities.push_back((GlSimpleEntity*)(*it));
+  for(std::vector<SelectedEntity>::iterator it=entities.begin(); it!=entities.end(); ++it) {
+    assert((*it).simpleEntity!=NULL);
+    pickedEntities.push_back((*it).simpleEntity);
   }
 
   return number;
@@ -588,18 +590,20 @@ void GlMainWidget::doSelect(const int x, const int y,
   std::cerr << __PRETTY_FUNCTION__ << " x:" << x << ", y:" <<y <<", wi:"<<width<<", height:" << height << std::endl;
 #endif
   makeCurrent();
-  std::vector<unsigned long> selectedElements;
+  std::vector<SelectedEntity> selectedElements;
   scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x, y, width, height, layer, selectedElements);
 
-  for(std::vector<unsigned long>::iterator it=selectedElements.begin(); it!=selectedElements.end(); ++it) {
-    sNode.push_back(node((unsigned int)(*it)));
+  for(std::vector<SelectedEntity>::iterator it=selectedElements.begin(); it!=selectedElements.end(); ++it) {
+    assert((*it).complexEntityId!=(unsigned int)(-1));
+    sNode.push_back(node((*it).complexEntityId));
   }
 
   selectedElements.clear();
   scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x, y, width, height, layer, selectedElements);
 
-  for(std::vector<unsigned long>::iterator it=selectedElements.begin(); it!=selectedElements.end(); ++it) {
-    sEdge.push_back(edge((unsigned int)(*it)));
+  for(std::vector<SelectedEntity>::iterator it=selectedElements.begin(); it!=selectedElements.end(); ++it) {
+    assert((*it).complexEntityId!=(unsigned int)(-1));
+    sEdge.push_back(edge((*it).complexEntityId));
   }
 }
 //=====================================================
@@ -608,12 +612,13 @@ bool GlMainWidget::doSelect(const int x, const int y,tlp::ElementType &type ,nod
   std::cerr << __PRETTY_FUNCTION__ << std::endl;
 #endif
   makeCurrent();
-  std::vector<unsigned long> selectedElements;
+  std::vector<SelectedEntity> selectedElements;
   scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedElements);
 
   if(!selectedElements.empty()) {
     type=NODE;
-    n=node((unsigned int)(selectedElements[0]));
+    assert(selectedElements[0].complexEntityId!=(unsigned int)(-1));
+    n=node(selectedElements[0].complexEntityId);
     return true;
   }
 
@@ -621,7 +626,8 @@ bool GlMainWidget::doSelect(const int x, const int y,tlp::ElementType &type ,nod
 
   if(!selectedElements.empty()) {
     type=EDGE;
-    e=edge((unsigned int)(selectedElements[0]));
+    assert(selectedElements[0].complexEntityId!=(unsigned int)(-1));
+    e=edge(selectedElements[0].complexEntityId);
     return true;
   }
 
