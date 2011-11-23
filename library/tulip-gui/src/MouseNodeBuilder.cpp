@@ -39,13 +39,11 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent * qMouseEv = (QMouseEvent *) e;
 
   if(qMouseEv != NULL) {
-    node tmpNode;
-    edge tmpEdge;
-    ElementType type;
+    SelectedEntity selectedEntity;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
 
     if(e->type() == QEvent::MouseMove) {
-      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == NODE) {
+      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getComplexEntityType() == NODE_SELECTED) {
         glMainWidget->setCursor(Qt::ForbiddenCursor);
       }
       else {
@@ -57,7 +55,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
     if (e->type() == _eventType) {
       if (qMouseEv->button() == Qt::LeftButton) {
-        if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == NODE) {
+        if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getComplexEntityType() == NODE_SELECTED) {
           return true;
         }
 

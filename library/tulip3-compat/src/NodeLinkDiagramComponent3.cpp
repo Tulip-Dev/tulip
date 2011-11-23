@@ -190,27 +190,25 @@ void NodeLinkDiagramComponent3::specificEventFilter(QObject *,QEvent *event) {
   }
 
   if (event->type() == QEvent::ToolTip && actionTooltips->isChecked()) {
-    node tmpNode;
-    edge tmpEdge;
-    ElementType type;
+    SelectedEntity selectedEntity;
     QString tmp;
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
     QRect rect=mainWidget->frameGeometry();
 
-    if (mainWidget->doSelect(he->pos().x()-rect.x(), he->pos().y()-rect.y(), type, tmpNode, tmpEdge)) {
+    if (mainWidget->doSelect(he->pos().x()-rect.x(), he->pos().y()-rect.y(), selectedEntity)) {
       // try to show the viewLabel if any
       StringProperty *labels = mainWidget->getGraph()->getProperty<StringProperty>("viewLabel");
       std::string label;
       QString ttip;
 
-      switch(type) {
-      case NODE:
-        label = labels->getNodeValue(tmpNode);
+      switch(selectedEntity.getComplexEntityType()) {
+      case NODE_SELECTED:
+        label = labels->getNodeValue(node(selectedEntity.getComplexEntityId()));
 
         if (!label.empty())
           ttip += (label + " (").c_str();
 
-        ttip += QString("node: ")+ tmp.setNum(tmpNode.id);
+        ttip += QString("node: ")+ tmp.setNum(selectedEntity.getComplexEntityId());
 
         if (!label.empty())
           ttip += ")";
@@ -218,13 +216,13 @@ void NodeLinkDiagramComponent3::specificEventFilter(QObject *,QEvent *event) {
         QToolTip::showText(he->globalPos(), ttip);
         break;
 
-      case EDGE:
-        label = labels->getEdgeValue(tmpEdge);
+      case EDGE_SELECTED:
+        label = labels->getEdgeValue(edge(selectedEntity.getComplexEntityId()));
 
         if (!label.empty())
           ttip += (label + "(").c_str();
 
-        ttip += QString("edge: ")+ tmp.setNum(tmpEdge.id);
+        ttip += QString("edge: ")+ tmp.setNum(selectedEntity.getComplexEntityId());
 
         if (!label.empty())
           ttip += ")";
@@ -248,14 +246,12 @@ void NodeLinkDiagramComponent3::buildContextMenu(QObject *object,QContextMenuEve
   actionAntialiasingOptions->setChecked(param.isAntialiased());
 
   //Check if a node/edge is under the mouse pointer
-  node tmpNode;
-  edge tmpEdge;
+  SelectedEntity selectedEntity;
   Graph *graph=mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   bool result;
-  ElementType type;
   // look if the mouse pointer is over a node or edge
   QRect rect=mainWidget->frameGeometry();
-  result = mainWidget->doSelect(event->x()-rect.x(), event->y()-rect.y(), type, tmpNode, tmpEdge);
+  result = mainWidget->doSelect(event->x()-rect.x(), event->y()-rect.y(), selectedEntity);
 
   if (!result)
     return;
@@ -263,8 +259,8 @@ void NodeLinkDiagramComponent3::buildContextMenu(QObject *object,QContextMenuEve
   contextMenu->addSeparator();
   contextMenu->addSeparator();
   // Display a context menu
-  isNode = type == NODE;
-  itemId = isNode ? tmpNode.id : tmpEdge.id;
+  isNode = selectedEntity.getComplexEntityType() == NODE_SELECTED;
+  itemId = selectedEntity.getComplexEntityId();
   std::stringstream sstr;
   sstr << (isNode ? "Node " : "Edge ") << itemId;
   contextMenu->addAction(tr(sstr.str().c_str()))->setEnabled(false);
@@ -277,7 +273,7 @@ void NodeLinkDiagramComponent3::buildContextMenu(QObject *object,QContextMenuEve
   ungroupAction = NULL;
 
   if (isNode) {
-    Graph *metaGraph=graph->getNodeMetaInfo(tmpNode);
+    Graph *metaGraph=graph->getNodeMetaInfo(node(selectedEntity.getComplexEntityId()));
 
     if (metaGraph) {
       goAction = contextMenu->addAction(tr("Go inside"));

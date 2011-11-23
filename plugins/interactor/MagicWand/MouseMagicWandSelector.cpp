@@ -35,11 +35,9 @@ bool tlp::MouseMagicWandSelector::eventFilter(QObject* widget, QEvent* e) {
   QMouseEvent *qMouseEv = (QMouseEvent*)e;
 
   if(qMouseEv != NULL) {
-    node tmpNode;
-    edge tmpEdge;
-    ElementType type;
+    SelectedEntity selectedEntity;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
-    bool hoveringOverNode = glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == NODE;
+    bool hoveringOverNode = glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getComplexEntityType() == NODE_SELECTED;
 
     if(e->type() == QEvent::MouseMove) {
       if (hoveringOverNode) {
@@ -84,9 +82,9 @@ bool tlp::MouseMagicWandSelector::eventFilter(QObject* widget, QEvent* e) {
           break;
         }
 
-        double initValue = metric->getNodeValue(tmpNode);
+        double initValue = metric->getNodeValue(node(selectedEntity.getComplexEntityId()));
         list <node> bfsFifo;
-        bfsFifo.push_back(tmpNode);
+        bfsFifo.push_back(node(selectedEntity.getComplexEntityId()));
 
         while(!bfsFifo.empty()) {
           node itn = bfsFifo.front();

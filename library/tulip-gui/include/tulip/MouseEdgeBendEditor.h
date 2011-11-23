@@ -22,6 +22,7 @@
 #include <tulip/GlCircle.h>
 #include <tulip/GlTriangle.h>
 #include <tulip/InteractorComposite.h>
+#include <tulip/GlScene.h>
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
@@ -84,7 +85,7 @@ private:
   GlTriangle targetTriangle;
   GlCircle sourceCircle;
   GlComposite *circleString;
-  std::vector <GlSimpleEntity * > select;
+  std::vector <SelectedEntity> select;
   bool edgeSelected;
   edge mEdge;
   node mNode;

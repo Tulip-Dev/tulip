@@ -129,13 +129,11 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent *qMouseEv = (QMouseEvent *) e;
 
   if(qMouseEv != NULL) {
-    node tmpNode;
-    edge tmpEdge;
-    ElementType type;
+    SelectedEntity selectedEntity;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
 
     if(e->type() == QEvent::MouseMove) {
-      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
+      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
         glMainWidget->setCursor(QCursor(QPixmap(":/tulip/gui/icons/i_del.png")));
       }
       else {
@@ -145,19 +143,19 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
       return false;
     }
     else if (e->type() == QEvent::MouseButtonPress && qMouseEv->button()==Qt::LeftButton) {
-      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
+      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
         Observable::holdObservers();
         Graph* graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
         // allow to undo
         graph->push();
 
-        switch(type) {
-        case NODE:
-          graph->delNode(tmpNode);
+        switch(selectedEntity.getComplexEntityType()) {
+        case NODE_SELECTED:
+          graph->delNode(node(selectedEntity.getComplexEntityId()));
           break;
 
-        case EDGE:
-          graph->delEdge(tmpEdge);
+        case EDGE_SELECTED:
+          graph->delEdge(edge(selectedEntity.getComplexEntityId()));
           break;
         }
 

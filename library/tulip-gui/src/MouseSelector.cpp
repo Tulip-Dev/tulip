@@ -177,15 +177,13 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       }
 
       if ((w==0) && (h==0)) {
-        node tmpNode;
-        edge tmpEdge;
-        ElementType type;
-        bool result = glMainWidget->doSelect(x, y, type, tmpNode, tmpEdge);
+        SelectedEntity selectedEntity;
+        bool result = glMainWidget->doSelect(x, y, selectedEntity);
 
         if (result) {
-          switch(type) {
-          case NODE:
-            result = selection->getNodeValue(tmpNode);
+          switch(selectedEntity.getComplexEntityType()) {
+          case NODE_SELECTED:
+            result = selection->getNodeValue(node(selectedEntity.getComplexEntityId()));
 
             if (revertSelection || boolVal != result) {
               if (needPush) {
@@ -193,13 +191,13 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
                 needPush = false;
               }
 
-              selection->setNodeValue(tmpNode, !result);
+              selection->setNodeValue(node(selectedEntity.getComplexEntityId()), !result);
             }
 
             break;
 
-          case EDGE:
-            result = selection->getEdgeValue(tmpEdge);
+          case EDGE_SELECTED:
+            result = selection->getEdgeValue(edge(selectedEntity.getComplexEntityId()));
 
             if (revertSelection || boolVal != result) {
               if (needPush) {
@@ -207,7 +205,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
                 needPush = false;
               }
 
-              selection->setEdgeValue(tmpEdge, !result);
+              selection->setEdgeValue(edge(selectedEntity.getComplexEntityId()), !result);
             }
 
             break;
@@ -215,8 +213,8 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         }
       }
       else {
-        vector<node> tmpSetNode;
-        vector<edge> tmpSetEdge;
+        vector<SelectedEntity> tmpSetNode;
+        vector<SelectedEntity> tmpSetEdge;
 
         if (w < 0) {
           w *= -1;
@@ -233,21 +231,19 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         if (needPush)
           graph->push();
 
-        vector<node>::const_iterator it;
+        vector<SelectedEntity>::const_iterator it;
 
         for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
-          selection->setNodeValue(*it,
+          selection->setNodeValue(node((*it).getComplexEntityId()),
                                   revertSelection ?
-                                  !selection->getNodeValue(*it)
+                                  !selection->getNodeValue(node((*it).getComplexEntityId()))
                                   : boolVal);
         }
 
-        vector<edge>::const_iterator ite;
-
-        for (ite=tmpSetEdge.begin(); ite!=tmpSetEdge.end(); ++ite) {
-          selection->setEdgeValue(*ite,
+        for (it=tmpSetEdge.begin(); it!=tmpSetEdge.end(); ++it) {
+          selection->setEdgeValue(edge((*it).getComplexEntityId()),
                                   revertSelection ?
-                                  !selection->getEdgeValue(*ite)
+                                  !selection->getEdgeValue(edge((*it).getComplexEntityId()))
                                   : boolVal);
         }
       }
