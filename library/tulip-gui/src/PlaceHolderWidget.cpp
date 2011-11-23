@@ -18,6 +18,7 @@
  */
 #include "tulip/PlaceHolderWidget.h"
 
+#include <QtCore/QChildEvent>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 
@@ -31,13 +32,10 @@ void PlaceHolderWidget::setWidget(QWidget *widget) {
   if (_widget != NULL) {
     delete _widget;
   }
-
   _widget = widget;
-
   if (_widget != NULL) {
     layout()->addWidget(_widget);
     _widget->show();
-    connect(_widget,SIGNAL(destroyed()),this,SLOT(widgetDestroyed()));
   }
 }
 
@@ -46,20 +44,20 @@ QWidget* PlaceHolderWidget::widget() const {
 }
 
 QWidget* PlaceHolderWidget::takeWidget() {
-  layout()->removeWidget(_widget);
-
-  if (_widget != NULL) {
-    disconnect(_widget,SIGNAL(destroyed()),this,SLOT(widgetDestroyed()));
-    _widget->hide();
-    _widget->setParent(NULL);
-  }
-
   QWidget* result = _widget;
-  _widget = NULL;
+  layout()->removeWidget(_widget);
+  _widget=NULL;
   return result;
 }
 
-void PlaceHolderWidget::widgetDestroyed() {
-  _widget = NULL;
+bool PlaceHolderWidget::eventFilter(QObject* obj, QEvent* ev) {
+  if (ev->type() == QEvent::ChildRemoved) {
+    QChildEvent* childEvent = static_cast<QChildEvent*>(ev);
+    if (childEvent->child() == _widget) {
+      _widget->hide();
+      _widget->setParent(NULL);
+      _widget = NULL;
+    }
+  }
+  return false;
 }
-

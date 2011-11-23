@@ -27,6 +27,10 @@ class QAction;
 class GraphHierarchiesModel;
 class GraphHierarchiesEditor;
 
+namespace tlp {
+class View;
+}
+
 namespace Ui {
 class GraphPerspectiveMainWindowData;
 }
@@ -47,6 +51,7 @@ public slots:
 
 protected slots:
   void refreshDockExpandControls();
+  void panelFocused(tlp::View*);
 };
 
 #endif // GRAPHPERSPECTIVE_H

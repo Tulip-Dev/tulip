@@ -62,7 +62,8 @@ public slots:
   void setCurrentInteractor(tlp::Interactor*);
 
 signals:
-  void closed();
+  void closed(tlp::WorkspacePanel*);
+  void focused();
 
 protected slots:
   void interactorActionTriggered();

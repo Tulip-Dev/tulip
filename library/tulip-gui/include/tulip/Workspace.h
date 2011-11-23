@@ -67,20 +67,22 @@ public slots:
 
 signals:
   void addPanelAtStartupButtonClicked();
+  void panelFocused(tlp::View*);
 
 protected slots:
   void viewNeedsDraw();
-  void panelClosed();
   void switchWorkspaceMode(QWidget* page);
   void updatePageCountLabel();
   void updateAvailableModes();
-  void removePanel(WorkspacePanel*);
-
+  void removePanel(tlp::WorkspacePanel*);
   void updatePanels();
 
   QWidget* currentModeWidget() const;
   QVector<PlaceHolderWidget*> currentModeSlots() const;
   unsigned int currentSlotsCount() const;
+
+protected:
+  bool eventFilter(QObject *, QEvent *);
 
 };
 }
