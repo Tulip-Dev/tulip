@@ -33,6 +33,9 @@
 using namespace std;
 using namespace tlp;
 
+template class TLP_SCOPE ValArray<double>;
+template class TLP_SCOPE ValArray<node>;
+
 namespace {
 //==================================================================================
 /**
