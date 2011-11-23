@@ -27,6 +27,7 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/ForEach.h>
+#include <tulip/GlGraphComposite.h>
 
 #include <tulip/MouseSelectionEditor.h>
 

@@ -27,6 +27,7 @@
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlMainView.h"
+#include <tulip/GlGraphComposite.h>
 
 #include "ui_RenderingParametersDialog.h"
 

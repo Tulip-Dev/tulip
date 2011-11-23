@@ -20,6 +20,7 @@
 
 #include <tulip/GlLayer.h>
 #include <tulip/GlScene.h>
+#include <tulip/GlGraphComposite.h>
 
 using namespace std;
 

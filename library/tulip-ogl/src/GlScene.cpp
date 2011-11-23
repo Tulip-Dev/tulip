@@ -40,6 +40,7 @@
 #include <tulip/GlFeedBackRecorder.h>
 #include <tulip/GlSVGFeedBackBuilder.h>
 #include <tulip/GlEPSFeedBackBuilder.h>
+#include <tulip/GlGraphComposite.h>
 
 using namespace std;
 
@@ -528,7 +529,7 @@ void GlScene::glGraphCompositeRemoved(GlLayer* layer,GlGraphComposite *glGraphCo
 }
 //========================================================================================================
 bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int h, GlLayer* layer,
-                             vector<unsigned long>& selectedEntities) {
+                             vector<SelectedEntity>& selectedEntities) {
   if(w==0)
     w=1;
   if(h==0)
@@ -641,7 +642,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
     glDisable(GL_BLEND);
     glDisable(GL_STENCIL_TEST);
 
-    map<unsigned int, unsigned long> idToEntity;
+    map<unsigned int, SelectedEntity> idToEntity;
     unsigned int id=1;
 
     if((type & RenderingSimpleEntities)!=0) {
@@ -651,7 +652,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
         if((*it).lod<0)
           continue;
 
-        idToEntity[id] = (unsigned long)((*it).entity);
+        idToEntity[id]=SelectedEntity((*it).entity);
         glLoadName(id);
         id++;
         (((*it).entity))->draw(20.,camera);

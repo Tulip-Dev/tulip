@@ -36,6 +36,25 @@ using namespace std;
 
 namespace tlp {
 
+/** \brief Storage class for Z ordering
+ *
+ */
+struct EntityWithDistance {
+
+  EntityWithDistance(const double &dist,EntityLODUnit *entity)
+    :distance(dist),entity(entity),isComplexEntity(false) {
+  }
+  EntityWithDistance(const double &dist,ComplexEntityLODUnit *entity,bool isNode)
+    :distance(dist),entity(entity),isComplexEntity(true),isNode(isNode) {
+  }
+
+  double distance;
+  EntityLODUnit *entity;
+  bool isComplexEntity;
+  bool isNode;
+};
+
+
 struct entityWithDistanceCompare {
   static GlGraphInputData *inputData;
   bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2 ) const {
@@ -361,7 +380,7 @@ void GlGraphComposite::draw(float,Camera* camera){
         if(selectionDrawActivate){
           if((selectionType & RenderingNodes)==0)
             continue;
-          (*selectionIdMap)[*selectionCurrentId]=(*it).id;
+          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id);
           glLoadName(*selectionCurrentId);
           (*selectionCurrentId)++;
         }
@@ -390,7 +409,7 @@ void GlGraphComposite::draw(float,Camera* camera){
       if(selectionDrawActivate){
         if((selectionType & RenderingEdges)==0)
           continue;
-        (*selectionIdMap)[*selectionCurrentId]=(*it).id;
+        (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id);
         glLoadName(*selectionCurrentId);
         (*selectionCurrentId)++;
       }
@@ -454,7 +473,7 @@ void GlGraphComposite::draw(float,Camera* camera){
       if((*it).isNode && (selectionType & RenderingNodes)!=0) {
         if((!graph->isMetaNode(node(entity->id)) && displayNodes) || (graph->isMetaNode(node(entity->id)) && displayMetaNodes)) {
           if(selectionDrawActivate){
-            (*selectionIdMap)[*selectionCurrentId]=entity->id;
+            (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id);
             glLoadName(*selectionCurrentId);
             (*selectionCurrentId)++;
           }
@@ -470,7 +489,7 @@ void GlGraphComposite::draw(float,Camera* camera){
           continue;
 
         if(selectionDrawActivate){
-          (*selectionIdMap)[*selectionCurrentId]=entity->id;
+          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id);
           glLoadName(*selectionCurrentId);
           (*selectionCurrentId)++;
         }
@@ -512,7 +531,7 @@ void GlGraphComposite::draw(float,Camera* camera){
   selectionDrawActivate=false;
 }
 //===================================================================
-void GlGraphComposite::initSelectionRendering(RenderingEntitiesFlag type,map<unsigned int, unsigned long> &idMap,unsigned int &currentId){
+void GlGraphComposite::initSelectionRendering(RenderingEntitiesFlag type,map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId){
   selectionType=type;
   selectionIdMap=&idMap;
   selectionCurrentId=&currentId;

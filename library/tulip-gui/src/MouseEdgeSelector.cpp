@@ -26,6 +26,7 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlTools.h>
+#include <tulip/GlGraphComposite.h>
 
 #include <tulip/MouseEdgeSelector.h>
 

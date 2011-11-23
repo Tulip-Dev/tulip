@@ -32,6 +32,7 @@
 #include "tulip/GlMainWidget.h"
 #include "tulip/View.h"
 #include <tulip/Observable.h>
+#include <tulip/GlGraphComposite.h>
 
 using namespace tlp;
 using namespace std;

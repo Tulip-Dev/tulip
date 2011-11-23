@@ -25,6 +25,7 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/StringProperty.h>
+#include <tulip/GlGraphComposite.h>
 
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/RenderingParametersDialog.h"

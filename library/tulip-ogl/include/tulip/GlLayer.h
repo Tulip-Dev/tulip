@@ -26,12 +26,12 @@
 #include <tulip/GlEntity.h>
 #include <tulip/Camera.h>
 #include <tulip/GlComposite.h>
-#include <tulip/GlGraphComposite.h>
 
 namespace tlp {
 
 class GlScene;
 class GlSceneVisitor;
+class GlGraphComposite;
 
 /**
  * Layer class

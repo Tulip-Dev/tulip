@@ -22,6 +22,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/Morphing.h>
+#include <tulip/GlGraphComposite.h>
 
 #include <QtCore/QTimeLine>
 #include <QtGui/QApplication>

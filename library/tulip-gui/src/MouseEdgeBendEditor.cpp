@@ -18,6 +18,7 @@
  */
 #include <tulip/GlMainWidget.h>
 #include <tulip/MouseEdgeBendEditor.h>
+#include <tulip/GlGraphComposite.h>
 
 #include <QtGui/qevent.h>
 

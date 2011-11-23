@@ -22,6 +22,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/ColorProperty.h>
+#include <tulip/GlGraphComposite.h>
 
 using namespace std;
 

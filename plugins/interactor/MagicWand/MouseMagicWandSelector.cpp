@@ -21,6 +21,7 @@
 #include <iostream>
 #include <QtGui/QMouseEvent>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlGraphComposite.h>
 #include "MagicSelectionInteractorConfigWidget.h"
 
 using namespace std;
