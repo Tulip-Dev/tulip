@@ -530,104 +530,46 @@ void GlMainWidget::makeCurrent() {
 //==================================================
 bool GlMainWidget::selectGlEntities(const int x, const int y,
                                     const int width, const int height,
-                                    std::vector<GlSimpleEntity *> &pickedEntities,
+                                    std::vector<SelectedEntity> &pickedEntities,
                                     GlLayer* layer) {
   makeCurrent();
-  std::vector<SelectedEntity> entities;
-  unsigned int number=scene.selectEntities((RenderingEntitiesFlag)(RenderingSimpleEntities | RenderingWithoutRemove),x, y,
-                      width, height,
-                      layer,
-                      entities);
-
-  for(std::vector<SelectedEntity>::iterator it=entities.begin(); it!=entities.end(); ++it) {
-    assert((*it).simpleEntity!=NULL);
-    pickedEntities.push_back((*it).simpleEntity);
-  }
-
-  return number;
+  return scene.selectEntities((RenderingEntitiesFlag)(RenderingSimpleEntities | RenderingWithoutRemove),x, y,
+                              width, height,
+                              layer,
+                              pickedEntities);
 }
 //==================================================
 bool GlMainWidget::selectGlEntities(const int x, const int y,
-                                    std::vector <GlSimpleEntity *> &pickedEntities,
+                                    std::vector <SelectedEntity> &pickedEntities,
                                     GlLayer* layer) {
   return selectGlEntities(x,y,2,2,pickedEntities,layer);
 }
 //==================================================
-bool GlMainWidget::selectGlEntities(const int x, const int y,
-                                    const int width, const int height,
-                                    vector<tlp::GlEntity *>
-                                    &pickedEntities,
-                                    tlp::GlLayer* layer) {
-  std::vector<GlSimpleEntity*> entities;
-  bool result = selectGlEntities(x,y,width,height,entities,layer);
-
-  for(std::vector<GlSimpleEntity*>::iterator it = entities.begin() ; it != entities.end() ; ++it) {
-    pickedEntities.push_back(*it);
-  }
-
-  return result;
-}
-//==================================================
-bool GlMainWidget::selectGlEntities(const int x, const int y,
-                                    std::vector<tlp::GlEntity *>
-                                    &pickedEntities,
-                                    GlLayer* layer) {
-  std::vector<GlSimpleEntity*> entities;
-  bool result =selectGlEntities(x,y,entities,layer);
-
-  for(std::vector<GlSimpleEntity*>::iterator it = entities.begin() ; it != entities.end() ; ++it) {
-    pickedEntities.push_back(*it);
-  }
-
-  return result;
-}
-//==================================================
 void GlMainWidget::doSelect(const int x, const int y,
                             const int width ,const int height,
-                            std::vector<node> &sNode, std::vector<edge> &sEdge,
+                            std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
                             GlLayer* layer) {
 #ifndef NDEBUG
   std::cerr << __PRETTY_FUNCTION__ << " x:" << x << ", y:" <<y <<", wi:"<<width<<", height:" << height << std::endl;
 #endif
   makeCurrent();
-  std::vector<SelectedEntity> selectedElements;
-  scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x, y, width, height, layer, selectedElements);
-
-  for(std::vector<SelectedEntity>::iterator it=selectedElements.begin(); it!=selectedElements.end(); ++it) {
-    assert((*it).complexEntityId!=(unsigned int)(-1));
-    sNode.push_back(node((*it).complexEntityId));
-  }
-
-  selectedElements.clear();
-  scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x, y, width, height, layer, selectedElements);
-
-  for(std::vector<SelectedEntity>::iterator it=selectedElements.begin(); it!=selectedElements.end(); ++it) {
-    assert((*it).complexEntityId!=(unsigned int)(-1));
-    sEdge.push_back(edge((*it).complexEntityId));
-  }
+  scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x, y, width, height, layer, selectedNodes);
+  scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x, y, width, height, layer, selectedEdges);
 }
 //=====================================================
-bool GlMainWidget::doSelect(const int x, const int y,tlp::ElementType &type ,node &n,edge &e, GlLayer* layer) {
+bool GlMainWidget::doSelect(const int x, const int y,SelectedEntity &selectedEntity, GlLayer* layer) {
 #ifndef NDEBUG
   std::cerr << __PRETTY_FUNCTION__ << std::endl;
 #endif
   makeCurrent();
-  std::vector<SelectedEntity> selectedElements;
-  scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedElements);
-
-  if(!selectedElements.empty()) {
-    type=NODE;
-    assert(selectedElements[0].complexEntityId!=(unsigned int)(-1));
-    n=node(selectedElements[0].complexEntityId);
+  vector<SelectedEntity> selectedEntities;
+  if(scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedEntities)){
+    selectedEntity=selectedEntities[0];
     return true;
   }
 
-  scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedElements);
-
-  if(!selectedElements.empty()) {
-    type=EDGE;
-    assert(selectedElements[0].complexEntityId!=(unsigned int)(-1));
-    e=edge(selectedElements[0].complexEntityId);
+  if(scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedEntities)){
+    selectedEntity=selectedEntities[0];
     return true;
   }
 

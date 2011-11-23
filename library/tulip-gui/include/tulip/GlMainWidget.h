@@ -126,7 +126,7 @@ public:
    */
   void doSelect(const int x, const int y,
                 const int width, const int height,
-                std::vector<tlp::node> &sNode, std::vector<tlp::edge> &sEdge,
+                std::vector<SelectedEntity> &selectedNode, std::vector<SelectedEntity> &seletedEdge,
                 tlp::GlLayer* layer=NULL);
   /** \brief select a node or edge at a point
    *  select either a node or edge at point (x,y)
@@ -134,8 +134,7 @@ public:
    *  \return true if something has been found, false otherwise
    */
   bool doSelect(const int x, const int y,
-                tlp::ElementType &type,
-                tlp::node &,tlp::edge &,
+                SelectedEntity &selectedEntity,
                 tlp::GlLayer* layer=NULL);
 
   /**
@@ -179,7 +178,7 @@ public:
    */
   bool selectGlEntities(const int x, const int y,
                         const int width, const int height,
-                        std::vector<tlp::GlSimpleEntity *>
+                        std::vector<SelectedEntity>
                         &pickedEntities,
                         tlp::GlLayer* layer=NULL);
   /**
@@ -188,25 +187,9 @@ public:
    * twelve pixels.
    */
   bool selectGlEntities(const int x, const int y,
-                        std::vector<tlp::GlSimpleEntity *>
+                        std::vector<SelectedEntity>
                         &pickedEntities,
                         tlp::GlLayer* layer=NULL);
-
-  /**
-   * Deprecated, see others selectGlEntities functions.
-   */
-  _DEPRECATED bool selectGlEntities(const int x, const int y,
-                                    const int width, const int height,
-                                    std::vector<tlp::GlEntity *>
-                                    &pickedEntities,
-                                    tlp::GlLayer* layer=NULL);
-  /**
-   * Deprecated, see others selectGlEntities functions.
-   */
-  _DEPRECATED bool selectGlEntities(const int x, const int y,
-                                    std::vector<tlp::GlEntity *>
-                                    &pickedEntities,
-                                    tlp::GlLayer* layer=NULL);
 
   /**
    * Grab the image of this widget

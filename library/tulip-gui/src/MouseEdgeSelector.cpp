@@ -109,15 +109,13 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
       selection->setAllEdgeValue(false);
 
       if ((w==0) && (h==0)) {
-        node tmpNode;
-        edge tmpEdge;
-        ElementType type;
-        bool result = glMainWidget->doSelect(x, y, type, tmpNode, tmpEdge);
+        SelectedEntity selectedEntity;
+        bool result = glMainWidget->doSelect(x, y, selectedEntity);
 
         if (result) {
-          switch(type) {
-          case EDGE:
-            selection->setEdgeValue(tmpEdge, true);
+          switch(selectedEntity.getComplexEntityType()) {
+          case EDGE_SELECTED:
+            selection->setEdgeValue(edge(selectedEntity.getComplexEntityId()), true);
             break;
 
           default:
@@ -126,8 +124,8 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
         }
       }
       else {
-        vector<node> tmpSetNode;
-        vector<edge> tmpSetEdge;
+        vector<SelectedEntity> tmpSetNode;
+        vector<SelectedEntity> tmpSetEdge;
 
         if (w < 0) {
           w *= -1;
@@ -140,11 +138,11 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
         }
 
         glMainWidget->doSelect(x, y, w, h, tmpSetNode, tmpSetEdge);
-        vector<edge>::const_iterator ite;
+        vector<SelectedEntity>::const_iterator ite;
         int compt=0;
 
         for (ite=tmpSetEdge.begin(); ite!=tmpSetEdge.end(); ++ite) {
-          selection->setEdgeValue(*ite, true);
+          selection->setEdgeValue(edge((*ite).getComplexEntityId()), true);
           compt++;
         }
 

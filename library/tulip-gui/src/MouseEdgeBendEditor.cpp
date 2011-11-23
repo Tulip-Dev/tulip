@@ -91,7 +91,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       }
 
       if (entityIsSelected) {
-        selectedEntity=circleString->findKey((GlSimpleEntity*)(select[0]));
+        selectedEntity=circleString->findKey(select[0].getSimpleEntity());
 
         if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
@@ -134,21 +134,17 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
 
     if(selectedEntity=="targetTriangle") {
-      node tmpNode;
-      edge tmpEdge;
-      ElementType type;
+      SelectedEntity selectedEntity;
 
-      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == NODE) {
-        glMainWidget->getGraph()->setEnds(mEdge,glMainWidget->getGraph()->ends(mEdge).first,tmpNode);
+      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getComplexEntityType() == NODE_SELECTED) {
+        glMainWidget->getGraph()->setEnds(mEdge,glMainWidget->getGraph()->ends(mEdge).first,node(selectedEntity.getComplexEntityId()));
       }
     }
     else if(selectedEntity=="sourceCircle") {
-      node tmpNode;
-      edge tmpEdge;
-      ElementType type;
+      SelectedEntity selectedEntity;
 
-      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == NODE) {
-        glMainWidget->getGraph()->setEnds(mEdge,tmpNode,glMainWidget->getGraph()->ends(mEdge).second);
+      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getComplexEntityType() == NODE_SELECTED) {
+        glMainWidget->getGraph()->setEnds(mEdge,node(selectedEntity.getComplexEntityId()),glMainWidget->getGraph()->ends(mEdge).second);
       }
     }
 
@@ -173,12 +169,10 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       }
     }
     else if(qMouseEv->buttons() == Qt::NoButton) {
-      node tmpNode;
-      edge tmpEdge;
-      ElementType type;
+      SelectedEntity selectedEntity;
       GlMainWidget *g = (GlMainWidget *) widget;
 
-      if (g->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == EDGE) {
+      if (g->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getComplexEntityType() == NODE_SELECTED) {
         g->setCursor(Qt::CrossCursor);
       }
       else {

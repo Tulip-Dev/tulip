@@ -30,24 +30,44 @@
 
 namespace tlp {
 
-struct SelectedSimpleEntity {
-  SelectedSimpleEntity():simpleEntity(NULL){}
-  SelectedSimpleEntity(GlSimpleEntity *entity):simpleEntity(entity){}
+enum SelectedEntityType {
+  UNKNOW_SELECTED = 0,
+  NODE_SELECTED = 1,
+  EDGE_SELECTED = 2
+};
+
+struct SelectedEntity {
+
+  SelectedEntity():simpleEntity(NULL),complexEntityId((unsigned int)(-1)),complexEntityGraph(NULL){}
+  SelectedEntity(GlSimpleEntity *entity):simpleEntity(entity),complexEntityId((unsigned int)(-1)),complexEntityGraph(NULL){}
+  SelectedEntity(Graph *graph,unsigned int id):simpleEntity(NULL),complexEntityId(id),complexEntityGraph(graph){}
+
+  GlSimpleEntity *getSimpleEntity() const {
+    assert(simpleEntity!=NULL);
+    return simpleEntity;
+  }
+
+  unsigned int getComplexEntityId() const {
+    assert(complexEntityId!=(unsigned int)(-1));
+    return complexEntityId;
+  }
+
+  Graph *getComplexEntityGraph() const {
+    assert(complexEntityGraph!=NULL);
+    return complexEntityGraph;
+  }
+
+  SelectedEntityType getComplexEntityType() const {
+    assert(complexEntityType!=UNKNOW_SELECTED);
+    return complexEntityType;
+  }
+
+protected :
+
   GlSimpleEntity *simpleEntity;
-};
-
-struct SelectedComplexEntity {
-  SelectedComplexEntity():complexEntityId((unsigned int)(-1)),complexEntityGraph(NULL){}
-  SelectedComplexEntity(Graph *graph,unsigned int id):complexEntityId(id),complexEntityGraph(graph){}
   unsigned int complexEntityId;
+  SelectedEntityType complexEntityType;
   Graph *complexEntityGraph;
-};
-
-struct SelectedEntity : public SelectedSimpleEntity, public SelectedComplexEntity {
-
-  SelectedEntity():SelectedSimpleEntity(),SelectedComplexEntity(){}
-  SelectedEntity(GlSimpleEntity *entity):SelectedSimpleEntity(entity),SelectedComplexEntity(){}
-  SelectedEntity(Graph *graph,unsigned int id):SelectedSimpleEntity(),SelectedComplexEntity(graph,id){}
 };
 
 

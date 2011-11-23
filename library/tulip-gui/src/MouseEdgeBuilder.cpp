@@ -46,21 +46,19 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
 
-    ElementType type;
-    node tmpNode;
-    edge tmpEdge;
+    SelectedEntity selectedEntity;
     Graph * _graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
     LayoutProperty* mLayout = _graph->getProperty<LayoutProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
 
     if (qMouseEv->buttons()==Qt::LeftButton) {
       if (!started) {
-        bool result=glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge);
+        bool result=glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity);
 
-        if (result && (type == NODE)) {
+        if (result && (selectedEntity.getComplexEntityType() == NODE_SELECTED)) {
           started=true;
           initObserver(_graph);
-          source=tmpNode;
+          source=node(selectedEntity.getComplexEntityId());
           curPos=startPos=mLayout->getNodeValue(source);
           return true;
         }
@@ -68,15 +66,15 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
         return false;
       }
       else {
-        bool result = glMainWidget->doSelect(qMouseEv->x(),qMouseEv->y(),type,tmpNode,tmpEdge);
+        bool result = glMainWidget->doSelect(qMouseEv->x(),qMouseEv->y(),selectedEntity);
 
-        if (result && (type == NODE)) {
+        if (result && (selectedEntity.getComplexEntityType() == NODE_SELECTED)) {
           Observable::holdObservers();
           started=false;
           clearObserver();
           // allow to undo
           _graph->push();
-          edge newEdge = _graph->addEdge(source, tmpNode);
+          edge newEdge = _graph->addEdge(source, node(selectedEntity.getComplexEntityId()));
           mLayout->setEdgeValue(newEdge, bends);
 
           bends.clear();
@@ -110,10 +108,8 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
 
     if (!started) {
-      node tmpNode;
-      edge tmpEdge;
-      ElementType type;
-      bool hoveringOverNode = glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == NODE;
+      SelectedEntity selectedEntity;
+      bool hoveringOverNode = glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getComplexEntityType() == NODE_SELECTED;
 
       if (!hoveringOverNode)
         return false;
