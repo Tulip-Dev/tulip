@@ -35,6 +35,7 @@ using namespace std;
 ImportWizard::ImportWizard(GraphHierarchiesModel* model, QWidget *parent): QWizard(parent), _ui(new Ui::ImportWizard) {
   _ui->setupUi(this);
   _panelWizard = new PanelSelectionWizard(model,0,false);
+  connect(_panelWizard,SIGNAL(wizardFinished()),this,SLOT(panelDoubleClicked()));
   setPage(1,_panelWizard->page(0));
 
   QSet<QString> groups;
@@ -119,4 +120,8 @@ QString ImportWizard::panelName() const {
   }
   else
     return QString::null;
+}
+
+void ImportWizard::panelDoubleClicked() {
+  button(QWizard::FinishButton)->click();
 }

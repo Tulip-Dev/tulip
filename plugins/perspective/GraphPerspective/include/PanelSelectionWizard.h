@@ -77,6 +77,9 @@ public:
 
   void setSelectedGraph(tlp::Graph*);
 
+signals:
+  void wizardFinished();
+
 protected slots:
   void graphSelected(int);
   void panelSelected();
