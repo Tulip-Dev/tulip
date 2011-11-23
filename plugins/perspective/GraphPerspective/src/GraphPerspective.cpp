@@ -22,8 +22,10 @@
 
 #include <tulip/ImportModule.h>
 #include <tulip/Graph.h>
+#include <tulip/View.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
+
 #include "ImportWizard.h"
 #include "PanelSelectionWizard.h"
 #include "GraphHierarchiesEditor.h"
@@ -50,6 +52,7 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   // Connect actions
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
   connect(_ui->actionImport,SIGNAL(triggered()),this,SLOT(importGraph()));
+  connect(_ui->workspace,SIGNAL(panelFocused(tlp::View*)),this,SLOT(panelFocused(tlp::View*)));
 
   // Setting initial sizes for splitters
   _ui->workspaceSplitter->setSizes(QList<int>() << 200 << 1000);
@@ -122,6 +125,7 @@ void GraphPerspective::importGraph() {
     }
 
     _graphs->addGraph(g);
+//    _graphs->setCurrentGraph(g);
 
     if (wizard.createPanel() && !wizard.panelName().isNull()) {
       _ui->workspace->setActivePanel(_ui->workspace->addPanel(wizard.panelName(),g));
@@ -144,6 +148,11 @@ void GraphPerspective::createPanel(tlp::Graph* g) {
     if (!wizard.panelName().isNull())
       _ui->workspace->setActivePanel(_ui->workspace->addPanel(wizard.panelName(),wizard.graph()));
   }
+}
+
+void GraphPerspective::panelFocused(tlp::View* view) {
+  if (view->graph() != NULL && _ui->graphHierarchiesEditor->synchronized())
+    _graphs->setCurrentGraph(view->graph());
 }
 
 PERSPECTIVEPLUGIN(GraphPerspective,"Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0")

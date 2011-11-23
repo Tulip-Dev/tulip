@@ -869,6 +869,9 @@ QToolButton:pressed {
    <extends>QWidget</extends>
    <header location="global">tulip/Workspace.h</header>
    <container>1</container>
+   <slots>
+    <signal>panelFocused(tlp::View*)</signal>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -922,8 +925,4 @@ QToolButton:pressed {
    </hints>
   </connection>
  </connections>
- <slots>
-  <slot>showFullScreen(bool)</slot>
-  <slot>importGraph()</slot>
- </slots>
 </ui>

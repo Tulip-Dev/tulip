@@ -22,6 +22,7 @@
 
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
+#include <QtGui/QGraphicsView>
 
 #include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>
@@ -80,10 +81,11 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   View* view = ViewLister::getPluginObject(viewName.toStdString(),NULL);
   view->setupUi();
   WorkspacePanel* panel = new WorkspacePanel(view,viewName);
-  connect(panel,SIGNAL(destroyed()),this,SLOT(panelClosed()),Qt::DirectConnection);
   connect(view,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
+  panel->installEventFilter(this);
   view->setGraph(g);
   view->setState(data);
+  connect(panel,SIGNAL(closed(tlp::WorkspacePanel*)),this,SLOT(removePanel(tlp::WorkspacePanel*)));
 
   // Add it to the list
   _panels.push_back(panel);
@@ -93,9 +95,9 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
     switchToSingleMode();
   }
 
+
   // activate available modes
   updateAvailableModes();
-
   updatePageCountLabel();
   updatePanels();
   return view;
@@ -155,10 +157,6 @@ void Workspace::removePanel(WorkspacePanel* panel) {
 }
 
 void Workspace::viewNeedsDraw() {
-}
-
-void Workspace::panelClosed() {
-  removePanel(static_cast<WorkspacePanel*>(sender()));
 }
 
 void Workspace::switchToStartupMode() {
@@ -285,4 +283,22 @@ void Workspace::setActivePanel(tlp::View* view) {
   _currentPanelIndex = newIndex;
   updatePanels();
   updatePageCountLabel();
+}
+
+bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
+  if (ev->type() == QEvent::ChildAdded || ev->type() == 70) {
+    static_cast<QChildEvent*>(ev)->child()->installEventFilter(this);
+  }
+  else if (ev->type() == QEvent::ChildRemoved) {
+    static_cast<QChildEvent*>(ev)->child()->removeEventFilter(this);
+  }
+  if (ev->type() == QEvent::FocusIn) {
+    // FIXME: Pretty much a dirty hack: we are catching QGraphicsView focus event, then go back to its parent (the WorkspacePanel) to emit a focus event
+    if (dynamic_cast<QGraphicsView*>(obj) != NULL) {
+      tlp::WorkspacePanel* panel = static_cast<tlp::WorkspacePanel*>(obj->parent());
+      emit panelFocused(panel->view());
+    }
+  }
+
+  return false;
 }
