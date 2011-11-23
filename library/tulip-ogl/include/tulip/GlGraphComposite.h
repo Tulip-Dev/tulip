@@ -29,10 +29,12 @@
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
+#include <tulip/GlQuadTreeLODCalculator.h>
 
 namespace tlp {
 
 class Graph;
+class GlScene;
 
 /** \brief Class use to represent a graph
  *
@@ -46,6 +48,8 @@ public:
    * Build a GlGraphComposite with the graph data
    */
   GlGraphComposite(Graph* graph);
+
+  ~GlGraphComposite();
 
   /**
    * Return the rendering parameters use for rendering
@@ -70,6 +74,10 @@ public:
    * Function used to visit composite's children
    */
   virtual void acceptVisitor(GlSceneVisitor *visitor);
+
+  virtual void draw(float lod,Camera* camera);
+
+  void initSelectionRendering(RenderingEntitiesFlag type,std::map<unsigned int, unsigned long> &idMap,unsigned int &currentId);
 
   /**
    * Return set of metaNodes
@@ -106,114 +114,30 @@ public:
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
-  //Delegate
-  void setDisplayNodes(bool display) {
-    parameters.setDisplayNodes(display);
-  }
-  void setDisplayMetaNodes(bool display) {
-    parameters.setDisplayMetaNodes(display);
-  }
-  void setDisplayEdges(bool display) {
-    parameters.setDisplayEdges(display);
-  }
-  void setDisplayNodesLabel(bool display) {
-    parameters.setViewNodeLabel(display);
-  }
-  void setDisplayMetaNodesLabel(bool display) {
-    parameters.setViewMetaLabel(display);
-  }
-  void setDisplayEdgesLabel(bool display) {
-    parameters.setViewEdgeLabel(display);
-  }
-  void setSelectedNodesStencil(int stencil) {
-    parameters.setSelectedNodesStencil(stencil);
-  }
-  void setSelectedMetaNodesStencil(int stencil) {
-    parameters.setSelectedMetaNodesStencil(stencil);
-  }
-  void setSelectedEdgesStencil(int stencil) {
-    parameters.setSelectedEdgesStencil(stencil);
-  }
-  void setNodesStencil(int stencil) {
-    parameters.setNodesStencil(stencil);
-  }
-  void setMetaNodesStencil(int stencil) {
-    parameters.setMetaNodesStencil(stencil);
-  }
-  void setEdgesStencil(int stencil) {
-    parameters.setEdgesStencil(stencil);
-  }
-  void setNodesLabelStencil(int stencil) {
-    parameters.setNodesLabelStencil(stencil);
-  }
-  void setMetaNodesLabelStencil(int stencil) {
-    parameters.setMetaNodesLabelStencil(stencil);
-  }
-  void setEdgesLabelStencil(int stencil) {
-    parameters.setEdgesLabelStencil(stencil);
-  }
-
-  bool isDisplayNodes() {
-    return parameters.isDisplayNodes();
-  }
-  bool isDisplayMetaNodes() {
-    return parameters.isDisplayMetaNodes();
-  }
-  bool isDisplayEdges() {
-    return parameters.isDisplayEdges();
-  }
-  bool isDisplayNodesLabel() {
-    return parameters.isViewNodeLabel();
-  }
-  bool isDisplayMetaNodesLabel() {
-    return parameters.isViewMetaLabel();
-  }
-  bool isDisplayEdgesLabel() {
-    return parameters.isViewEdgeLabel();
-  }
-  int getSelectedNodesStencil() {
-    return parameters.getSelectedNodesStencil();
-  }
-  int getSelectedMetaNodesStencil() {
-    return parameters.getSelectedMetaNodesStencil();
-  }
-  int getSelectedEdgesStencil() {
-    return parameters.getSelectedEdgesStencil();
-  }
-  int getNodesStencil() {
-    return parameters.getNodesStencil();
-  }
-  int getMetaNodesStencil() {
-    return parameters.getMetaNodesStencil();
-  }
-  int getEdgesStencil() {
-    return parameters.getEdgesStencil();
-  }
-  int getNodesLabelStencil() {
-    return parameters.getNodesLabelStencil();
-  }
-  int getMetaNodesLabelStencil() {
-    return parameters.getMetaNodesLabelStencil();
-  }
-  int getEdgesLabelStencil() {
-    return parameters.getEdgesLabelStencil();
-  }
-
 protected:
   // override Observable::treatEvent
   void treatEvent(const Event& evt);
 
   void buildSortedList();
-  void acceptVisitorForNodes(Graph *graph,GlSceneVisitor *visitor);
-  void acceptVisitorForEdges(Graph *graph,GlSceneVisitor *visitor);
+  void visitGraph(GlSceneVisitor *visitor,bool visitHiddenEntities=false);
+  void visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
+  void visitEdges(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
 
   GlGraphRenderingParameters parameters;
   GlGraphInputData inputData;
   Graph *rootGraph;
 
+  GlLODCalculator *lodCalculator;
+
   bool haveToSort;
   bool nodesModified;
   std::set<node> metaNodes;
+
+  GlScene *fakeScene;
+  bool selectionDrawActivate;
+  RenderingEntitiesFlag selectionType;
+  std::map<unsigned int, unsigned long> *selectionIdMap;
+  unsigned int *selectionCurrentId;
 };
 }
 

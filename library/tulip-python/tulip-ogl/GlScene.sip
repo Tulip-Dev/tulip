@@ -78,8 +78,6 @@ public:
 
 	bool isViewOrtho();
 
-	void setViewLabel(bool viewLabel);
-
 	void addLayer(tlp::GlLayer *layer /Transfer/);
 	
 	tlp::GlLayer* getLayer(const std::string& name);

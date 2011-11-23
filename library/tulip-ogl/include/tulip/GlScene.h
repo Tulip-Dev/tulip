@@ -23,7 +23,6 @@
 
 #include <tulip/GlSceneObserver.h>
 #include <tulip/GlLayer.h>
-#include <tulip/GlGraphComposite.h>
 #include <tulip/GlSelectSceneVisitor.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlyphManager.h>
@@ -225,13 +224,6 @@ public:
   }
 
   /**
-   * Render the nodes/edges label
-   */
-  void setViewLabel(bool viewLabel) {
-    this->viewLabel=viewLabel;
-  }
-
-  /**
    * Add a layer in the scene
    * The layer name is contain in the GlLayer object
    */
@@ -395,9 +387,7 @@ private:
   int xDecViewport;
   int yDecViewport;
   Color backgroundColor;
-  bool viewLabel;
   bool viewOrtho;
-  bool displayEdgesInLastRendering;
 
   GlGraphComposite *glGraphComposite;
   GlLayer *graphLayer;

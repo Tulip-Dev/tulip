@@ -58,7 +58,6 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent,bool drawIfNotVisible) : QWid
   // Setup the internal view of the overview
   //  This view is a GlMainWidget with only one layer : "Main"
   _view = new GlMainWidget(_ui->frame);
-  _view->setViewLabel(false);
   GlLayer* layer=new GlLayer("Main");
   layer->getComposite()->setDeleteComponentsInDestructor(false);
   _view->getScene()->addLayer(layer);
