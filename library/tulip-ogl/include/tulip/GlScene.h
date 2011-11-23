@@ -30,15 +30,24 @@
 
 namespace tlp {
 
-struct SelectedEntity {
-
-  SelectedEntity():simpleEntity(NULL),complexEntityId((unsigned int)(-1)),complexEntityGraph(NULL){}
-  SelectedEntity(GlSimpleEntity *entity):simpleEntity(entity),complexEntityId((unsigned int)(-1)),complexEntityGraph(NULL){}
-  SelectedEntity(Graph *graph,unsigned int id):simpleEntity(NULL),complexEntityId(id),complexEntityGraph(graph){}
-
+struct SelectedSimpleEntity {
+  SelectedSimpleEntity():simpleEntity(NULL){}
+  SelectedSimpleEntity(GlSimpleEntity *entity):simpleEntity(entity){}
   GlSimpleEntity *simpleEntity;
+};
+
+struct SelectedComplexEntity {
+  SelectedComplexEntity():complexEntityId((unsigned int)(-1)),complexEntityGraph(NULL){}
+  SelectedComplexEntity(Graph *graph,unsigned int id):complexEntityId(id),complexEntityGraph(graph){}
   unsigned int complexEntityId;
   Graph *complexEntityGraph;
+};
+
+struct SelectedEntity : public SelectedSimpleEntity, public SelectedComplexEntity {
+
+  SelectedEntity():SelectedSimpleEntity(),SelectedComplexEntity(){}
+  SelectedEntity(GlSimpleEntity *entity):SelectedSimpleEntity(entity),SelectedComplexEntity(){}
+  SelectedEntity(Graph *graph,unsigned int id):SelectedSimpleEntity(),SelectedComplexEntity(graph,id){}
 };
 
 
