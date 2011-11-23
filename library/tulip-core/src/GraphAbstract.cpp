@@ -622,11 +622,11 @@ GraphProperty* GraphAbstract::getMetaGraphProperty() {
 }
 
 void GraphAbstract::setName(const std::string &name) {
-	setAttribute("name", name);
+  setAttribute("name", name);
 }
 
 std::string GraphAbstract::getName() const {
-	std::string name;
-	getAttribute("name", name);
-	return name;
+  std::string name;
+  getAttribute("name", name);
+  return name;
 }

@@ -66,8 +66,10 @@ void View::setGraph(tlp::Graph *g) {
     _graph->removeListener(this);
 
   _graph = g;
+
   if (_graph != NULL)
     _graph->addListener(this);
+
   graphChanged(g);
 }
 
@@ -76,9 +78,11 @@ void View::treatEvent(const Event& ev) {
     Graph* oldGraph = _graph;
     graphDeleted();
 #ifndef NDEBUG
+
     if (_graph == oldGraph) {
       std::cerr << "The graphChanged() callback associated to this View did not change the current graph pointer. This could lead to undefined behavior. Please read View::graphDeleted() documentation for details." << std::endl;
     }
+
 #endif
     assert(_graph != oldGraph); // Checks that the graph has been changed during the callback
   }
