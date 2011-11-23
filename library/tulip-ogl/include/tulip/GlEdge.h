@@ -101,9 +101,8 @@ public:
   /**
    * This function must be called before each graph rendering
    * This function clears previously compute edgeWidthLod
-   * FIXME remove the unused bool (was named orthoProjection) ?
    */
-  static void clearEdgeWidthLodSystem(bool) {
+  static void clearEdgeWidthLodSystem() {
     haveToComputeEdgeWidthBaseLod=true;
   }
 
