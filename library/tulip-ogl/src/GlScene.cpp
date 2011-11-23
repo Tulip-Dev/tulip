@@ -32,64 +32,22 @@
 #endif
 
 #include <tulip/GlLODSceneVisitor.h>
-#include <tulip/OcclusionTest.h>
 #include <tulip/GlCPULODCalculator.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlSelectSceneVisitor.h>
 #include <tulip/Camera.h>
 #include <tulip/GlSimpleEntity.h>
-#include <tulip/GlComplexeEntity.h>
-#include <tulip/GlNode.h>
-#include <tulip/GlEdge.h>
 #include <tulip/GlFeedBackRecorder.h>
 #include <tulip/GlSVGFeedBackBuilder.h>
 #include <tulip/GlEPSFeedBackBuilder.h>
-#include <tulip/GlVertexArrayManager.h>
-#include <tulip/GlVertexArrayVisitor.h>
 
 using namespace std;
 
 namespace tlp {
 
-struct entityWithDistanceCompare {
-  static GlGraphInputData *inputData;
-  bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2 ) const {
-    if(e1.distance>e2.distance)
-      return true;
-
-    if(e1.distance<e2.distance)
-      return false;
-
-    BoundingBox &bb1 = e1.entity->boundingBox;
-    BoundingBox &bb2 = e2.entity->boundingBox;
-
-    if(bb1[1][0] - bb1[0][0] > bb2[1][0] - bb2[0][0])
-      return false;
-    else
-      return true;
-
-  }
-};
 //====================================================
-class GreatThanNode {
-public:
-  DoubleProperty *metric;
-  bool operator() (pair<node,float> n1,pair<node,float> n2)  {
-    return (metric->getNodeValue(n1.first) > metric->getNodeValue(n2.first));
-  }
-};
-//====================================================
-class GreatThanEdge {
-public:
-  DoubleProperty *metric;
-  bool operator() (pair<edge,float> e1,pair<edge,float> e2) {
-    return (metric->getEdgeValue(e1.first) > metric->getEdgeValue(e2.first));
-  }
-};
-//====================================================
-GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
 
-GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),displayEdgesInLastRendering(true),glGraphComposite(NULL), clearBufferAtDraw(true) {
+GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewOrtho(true),glGraphComposite(NULL), clearBufferAtDraw(true) {
 
   if(calculator!=NULL)
     lodCalculator=calculator;
@@ -114,11 +72,9 @@ void GlScene::initGlParameters() {
   glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
 
   bool antialiased = true;
-
   if(glGraphComposite) {
     antialiased=glGraphComposite->getInputData()->parameters->isAntialiased();
   }
-
   OpenGlConfigManager::getInst().setAntiAliasing(antialiased);
 
   glDisable(GL_POINT_SMOOTH);
@@ -152,140 +108,14 @@ void GlScene::initGlParameters() {
     cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
 }
 
-void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphComposite,
-                                  OcclusionTest *occlusionTest,LayerLODUnit &layerLODUnit) {
-  Graph *graph=glGraphComposite->getInputData()->getGraph();
-  BooleanProperty *selectionProperty=glGraphComposite->getInputData()->getElementSelected();
-  bool viewOutScreenLabel=glGraphComposite->getRenderingParameters().isViewOutScreenLabel();
-  DoubleProperty *metric=NULL;
-
-  if(graph->existProperty("viewMetric"))
-    metric=graph->getProperty<DoubleProperty>("viewMetric");
-
-  vector<pair<node,float> > nodesMetricOrdered;
-  vector<pair<edge,float> > edgesMetricOrdered;
-  GlNode glNode(0);
-  GlEdge glEdge(0);
-
-  Iterator<node> *nonDefaultLabelNodes = glGraphComposite->getInputData()->getElementLabel()->getNonDefaultValuatedNodes();
-  Iterator<edge> *nonDefaultLabelEdges = glGraphComposite->getInputData()->getElementLabel()->getNonDefaultValuatedEdges();
-
-  bool nodeLabelEmpty=(!nonDefaultLabelNodes->hasNext())
-                      && glGraphComposite->getInputData()->getElementLabel()->getNodeDefaultStringValue()=="";
-  bool edgeLabelEmpty=(!nonDefaultLabelEdges->hasNext())
-                      && glGraphComposite->getInputData()->getElementLabel()->getEdgeDefaultStringValue()=="";
-
-  delete nonDefaultLabelNodes;
-  delete nonDefaultLabelEdges;
-
-  bool viewNodeLabel=glGraphComposite->getInputData()->parameters->isViewNodeLabel();
-  bool viewMetaLabel=glGraphComposite->getInputData()->parameters->isViewMetaLabel();
-
-  // Draw Labels for Nodes
-  if((viewNodeLabel || viewMetaLabel) && !nodeLabelEmpty) {
-    node n;
-
-    for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit.nodesLODVector.begin(); it!=layerLODUnit.nodesLODVector.end(); ++it) {
-      if((*it).lod<0 && !viewOutScreenLabel)
-        continue;
-
-      float lod=(*it).lod;
-
-      if(viewOutScreenLabel && lod<0)
-        lod=-lod;
-
-      n.id=(*it).id;
-
-      if(selectionProperty->getNodeValue(n)==drawSelected) {
-        if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric) {
-          // Not metric ordered
-          if((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)) {
-            glNode.id=n.id;
-            glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),lod,(Camera *)(layerLODUnit.camera));
-          }
-        }
-        else {
-          // Metric ordered
-          if((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)) {
-            nodesMetricOrdered.push_back(pair<node,float>(n,lod));
-          }
-        }
-      }
-    }
-
-    // If not Metric ordered : a this point selected nodes are draw
-    if(glGraphComposite->getInputData()->parameters->isElementOrdered()) {
-      // Draw selected nodes label with metric ordering
-      if(glGraphComposite->getInputData()->parameters->getElementOrderingProperty()) {
-        metric = glGraphComposite->getInputData()->parameters->getElementOrderingProperty();
-      }
-
-      GreatThanNode ltn;
-      ltn.metric=metric;
-      sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
-
-      for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin(); it!=nodesMetricOrdered.end(); ++it) {
-        glNode.id=(*it).first.id;
-        glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
-      }
-    }
-  }
-
-  // Draw Labels for Edges
-  if(glGraphComposite->getInputData()->parameters->isViewEdgeLabel() && !edgeLabelEmpty) {
-    edge e;
-
-    for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit.edgesLODVector.begin(); it!=layerLODUnit.edgesLODVector.end(); ++it) {
-      if((*it).lod<0 && !viewOutScreenLabel)
-        continue;
-
-      e.id=(*it).id;
-
-      if(selectionProperty->getEdgeValue(e) == drawSelected) {
-        if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric) {
-          // Not metric ordered
-          glEdge.id=e.id;
-          glEdge.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
-        }
-        else {
-          // Metric ordered
-          edgesMetricOrdered.push_back(pair<edge,float>(e,(*it).lod));
-        }
-      }
-    }
-
-    // If not Metric ordered : a this point selected edges are draw
-    if(glGraphComposite->getInputData()->parameters->isElementOrdered()) {
-      // Draw selected edges label with metric ordering
-      if(glGraphComposite->getInputData()->parameters->getElementOrderingProperty()) {
-        metric = glGraphComposite->getInputData()->parameters->getElementOrderingProperty();
-      }
-
-      GreatThanEdge lte;
-      lte.metric=metric;
-      sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
-
-      for(vector<pair<edge,float> >::iterator it=edgesMetricOrdered.begin(); it!=edgesMetricOrdered.end(); ++it) {
-        glEdge.id=(*it).first.id;
-        glEdge.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
-      }
-    }
-  }
-}
-
-
 void GlScene::draw() {
   initGlParameters();
 
   /**********************************************************************
   LOD Compute
-      **********************************************************************/
+  **********************************************************************/
   lodCalculator->clear();
   lodCalculator->setRenderingEntitiesFlag(RenderingAll);
-
-#ifdef ENABLE_RENDERING_TIME_DISPLAY
-  double lastTime=omp_get_wtime();
-#endif
 
   /**
   * If LOD Calculator need entities to compute LOD, we use visitor system
@@ -293,10 +123,7 @@ void GlScene::draw() {
   if(lodCalculator->needEntities()) {
     GlLODSceneVisitor *lodVisitor;
 
-    if(glGraphComposite)
-      lodVisitor = new GlLODSceneVisitor(lodCalculator, glGraphComposite->getInputData());
-    else
-      lodVisitor = new GlLODSceneVisitor(lodCalculator, NULL);
+    lodVisitor = new GlLODSceneVisitor(lodCalculator, glGraphComposite->getInputData());
 
     for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
       (*it).second->acceptVisitor(lodVisitor);
@@ -305,57 +132,11 @@ void GlScene::draw() {
     delete lodVisitor;
   }
 
-#ifdef ENABLE_RENDERING_TIME_DISPLAY
-  cout << "scene visitor time             : " << (int)((omp_get_wtime()-lastTime)*1000) << " ms" << endl;
-  lastTime=omp_get_wtime();
-#endif
-
   lodCalculator->compute(viewport, viewport);
   LayersLODVector &layersLODVector = lodCalculator->getResult();
   BoundingBox sceneBoundingBox = lodCalculator->getSceneBoundingBox();
 
-#ifdef ENABLE_RENDERING_TIME_DISPLAY
-  cout << "lod time                       : " << (int)((omp_get_wtime()-lastTime)*1000) << " ms" << endl;
-  lastTime=omp_get_wtime();
-#endif
-
-  /**
-   *  VertexArray compute
-   */
-  if(glGraphComposite) {
-    GlVertexArrayManager *vertexArrayManager = glGraphComposite->getInputData()->getGlVertexArrayManager();
-    bool lastDisplayEdge = glGraphComposite->isDisplayEdges();
-
-    if (!displayEdgesInLastRendering && lastDisplayEdge != displayEdgesInLastRendering) {
-      vertexArrayManager->setHaveToComputeAll(true);
-    }
-
-    if(vertexArrayManager->haveToCompute()) {
-      GlVertexArrayVisitor vertexArrayVisitor(glGraphComposite->getInputData());
-      glGraphComposite->acceptVisitor(&vertexArrayVisitor);
-      vertexArrayManager->setHaveToComputeAll(false);
-    }
-
-    displayEdgesInLastRendering = lastDisplayEdge;
-  }
-
-#ifdef ENABLE_RENDERING_TIME_DISPLAY
-  cout << "vertex array construction time : " << (int)((omp_get_wtime()-lastTime)*1000) << " ms" << endl;
-  lastTime=omp_get_wtime();
-#endif
-
-  OcclusionTest occlusionTest;
-
   Camera *camera;
-  Graph  *graph = NULL;
-
-  if(glGraphComposite) {
-    graph = glGraphComposite->getInputData()->graph;
-  }
-
-  GlNode     glNode(0);
-  GlEdge     glEdge(0);
-
   // Iterate on Camera
   Camera *oldCamera = NULL;
 
@@ -370,213 +151,17 @@ void GlScene::draw() {
       oldCamera = camera;
     }
 
-    GlEdge::clearEdgeWidthLodSystem(viewOrtho);
+    // Draw simple entities
+    vector<SimpleEntityLODUnit>::iterator it;
 
-    bool zOrdering = false;
+    for( it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
+      if((*it).lod<0)
+        continue;
 
-    if(glGraphComposite)
-      zOrdering = glGraphComposite->getRenderingParameters().isElementZOrdered();
-
-    BooleanProperty *filteringProperty = NULL;
-    bool displayNodes     = true;
-    bool displayMetaNodes = true;
-    bool displayEdges     = true;
-
-    if(glGraphComposite) {
-      filteringProperty= glGraphComposite->getRenderingParameters().getDisplayFilteringProperty();
-      displayNodes     = glGraphComposite->getRenderingParameters().isDisplayNodes();
-      displayMetaNodes = glGraphComposite->getRenderingParameters().isDisplayMetaNodes();
-      displayEdges     = glGraphComposite->getRenderingParameters().isDisplayEdges();
-    }
-
-    if(!zOrdering) {
-      // If elements are not zOrdered
-
-      if(glGraphComposite)
-        glGraphComposite->getInputData()->getGlVertexArrayManager()->beginRendering();
-
-      // Draw simple entities
-      vector<SimpleEntityLODUnit>::iterator it;
-
-      for( it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
-        if((*it).lod<0)
-          continue;
-
-        glStencilFunc(GL_LEQUAL,(((*it).entity))->getStencil(), 0xFFFF);
-        ((*it).entity)->draw((*it).lod,camera);
-      }
-
-      // Draw complex entities
-      if(glGraphComposite) {
-        vector<ComplexEntityLODUnit>::iterator it;
-
-        //draw nodes and metanodes
-        for( it =(*itLayer).nodesLODVector.begin(); it!=(*itLayer).nodesLODVector.end(); ++it) {
-          if((*it).lod<=0)
-            continue;
-
-          if(filteringProperty) {
-            if(filteringProperty->getNodeValue(node((*it).id)))
-              continue;
-          }
-
-          if((!graph->isMetaNode(node((*it).id)) && displayNodes) || (graph->isMetaNode(node((*it).id)) && displayMetaNodes)) {
-            glNode.id=(*it).id;
-            glNode.draw((*it).lod,glGraphComposite->getInputData(),camera);
-          }
-          else {
-            continue;
-          }
-
-        }
-
-        //draw edges
-        for(it = (*itLayer).edgesLODVector.begin(); it!=(*itLayer).edgesLODVector.end(); ++it) {
-          if((*it).lod<=0)
-            continue;
-
-          if(filteringProperty) {
-            if(filteringProperty->getEdgeValue(edge((*it).id)))
-              continue;
-          }
-
-          if(!displayEdges)
-            continue;
-
-          glEdge.id=(*it).id;
-          glEdge.draw((*it).lod,glGraphComposite->getInputData(),camera);
-        }
-      }
-
-      if(glGraphComposite)
-        glGraphComposite->getInputData()->getGlVertexArrayManager()->endRendering();
-
-    }
-    else {
-      // If elements are zOrdered
-
-      entityWithDistanceCompare::inputData=glGraphComposite->getInputData();
-      multiset<EntityWithDistance,entityWithDistanceCompare> entitiesSet;
-      Coord camPos=camera->getEyes();
-      Coord camCenter=camera->getCenter();
-      BoundingBox bb;
-      double dist;
-
-      // Colect simple entities
-      for(vector<SimpleEntityLODUnit>::iterator it=(*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
-        if((*it).lod<0)
-          continue;
-
-        bb = (*it).boundingBox;
-        Coord middle((bb[1] + bb[0])/2.f);
-        dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-        dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
-        dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
-        entitiesSet.insert(EntityWithDistance(dist,&(*it)));
-      }
-
-      // Colect complex entities
-      if(glGraphComposite) {
-        for(vector<ComplexEntityLODUnit>::iterator it=(*itLayer).nodesLODVector.begin(); it!=(*itLayer).nodesLODVector.end(); ++it) {
-          if((*it).lod<0)
-            continue;
-
-          if(filteringProperty) {
-            if(filteringProperty->getNodeValue(node((*it).id)))
-              continue;
-          }
-
-          bb=(*it).boundingBox;
-          Coord middle((bb[1]+bb[0])/2.f);
-          dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-          dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
-          dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
-          entitiesSet.insert(EntityWithDistance(dist,&(*it),true));
-        }
-
-        for(vector<ComplexEntityLODUnit>::iterator it=(*itLayer).edgesLODVector.begin(); it!=(*itLayer).edgesLODVector.end(); ++it) {
-          if((*it).lod<0)
-            continue;
-
-          if(filteringProperty) {
-            if(filteringProperty->getEdgeValue(edge((*it).id)))
-              continue;
-          }
-
-          bb = (*it).boundingBox;
-          Coord middle((bb[0] + bb[1])/2.f);
-          dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-          dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
-          dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
-          entitiesSet.insert(EntityWithDistance(dist,&(*it),false));
-        }
-      }
-
-      // Draw
-      for(multiset<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin(); it!=entitiesSet.end(); ++it) {
-        if(!(*it).isComplexEntity) {
-          // Simple entities
-          GlSimpleEntity *entity = (((SimpleEntityLODUnit*)((*it).entity))->entity);
-          glStencilFunc(GL_LEQUAL,entity->getStencil(),0xFFFF);
-          entity->draw((*it).entity->lod,camera);
-        }
-        else {
-          // Complex entities
-          ComplexEntityLODUnit *entity=(ComplexEntityLODUnit*)((*it).entity);
-
-          if((*it).isNode) {
-            if((!graph->isMetaNode(node(entity->id)) && displayNodes) || (graph->isMetaNode(node(entity->id)) && displayMetaNodes)) {
-              glNode.id=entity->id;
-              glNode.draw(entity->lod,glGraphComposite->getInputData(),camera);
-            }
-            else {
-              continue;
-            }
-          }
-          else {
-            if(!displayEdges)
-              continue;
-
-            glEdge.id=entity->id;
-            glEdge.draw(entity->lod,glGraphComposite->getInputData(),camera);
-          }
-        }
-      }
-    }
-
-
-    /*
-      Label draw
-    */
-
-    bool labelDensityAtZero=true;
-
-    if(glGraphComposite) {
-      if(glGraphComposite->getInputData()->parameters->getLabelsDensity()!=-100)
-        labelDensityAtZero=false;
-    }
-
-    if(viewLabel && glGraphComposite && !labelDensityAtZero) {
-      glPushAttrib(GL_ALL_ATTRIB_BITS);
-      glDisable(GL_LIGHTING);
-      glDepthFunc(GL_ALWAYS );
-      glDisable(GL_CULL_FACE);
-      glDisable(GL_COLOR_MATERIAL);
-
-      // Draw Labels for selected entities
-      drawLabelsForComplexEntities(true,glGraphComposite,&occlusionTest,*itLayer);
-
-      // Draw Labels for unselected entities
-      drawLabelsForComplexEntities(false,glGraphComposite,&occlusionTest,*itLayer);
-
-      glPopAttrib();
+      glStencilFunc(GL_LEQUAL,(((*it).entity))->getStencil(), 0xFFFF);
+      ((*it).entity)->draw((*it).lod,camera);
     }
   }
-
-#ifdef ENABLE_RENDERING_TIME_DISPLAY
-  cout << "draw time                      : " << (int)((omp_get_wtime()-lastTime)*1000) << " ms" << endl;
-#endif
-
 }
 
 void GlScene::addLayer(GlLayer *layer) {
@@ -946,7 +531,6 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
                              vector<unsigned long>& selectedEntities) {
   if(w==0)
     w=1;
-
   if(h==0)
     h=1;
 
@@ -976,12 +560,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
   selectLODCalculator->clear();
 
   //Collect entities if need
-  GlLODSceneVisitor *lodVisitor;
-
-  if(glGraphComposite)
-    lodVisitor=new GlLODSceneVisitor(selectLODCalculator,glGraphComposite->getInputData());
-  else
-    lodVisitor=new GlLODSceneVisitor(selectLODCalculator,NULL);
+  GlLODSceneVisitor *lodVisitor=new GlLODSceneVisitor(selectLODCalculator,NULL);
 
   if(layerInScene) {
     if(selectLODCalculator->needEntities()) {
@@ -1014,7 +593,17 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
     Vector<int, 4> viewport = camera->getViewport();
 
     unsigned int size;
-    size=(*itLayer).simpleEntitiesLODVector.size()+(*itLayer).nodesLODVector.size()+(*itLayer).edgesLODVector.size();
+    size=(*itLayer).simpleEntitiesLODVector.size();
+
+    vector<SimpleEntityLODUnit>::iterator it;
+    for(it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
+
+      GlGraphComposite *composite=dynamic_cast<GlGraphComposite*>((*it).entity);
+      if(composite){
+        size+=composite->getInputData()->getGraph()->numberOfNodes();
+        size+=composite->getInputData()->getGraph()->numberOfEdges();
+      }
+    }
 
     if(size==0)
       continue;
@@ -1069,39 +658,17 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
       }
     }
 
-    // Draw complex entities
-    if(glGraphComposite) {
-      vector<ComplexEntityLODUnit>::iterator it;
+    if(((type & RenderingNodes)!=0) || ((type & RenderingEdges)!=0)) {
+      vector<SimpleEntityLODUnit>::iterator it;
 
-      if((type & RenderingNodes)!=0) {
-        GlNode glNode(0);
+      for(it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
+        if((*it).lod<0)
+          continue;
 
-        for(it = (*itLayer).nodesLODVector.begin(); it!=(*itLayer).nodesLODVector.end(); ++it) {
-          if((*it).lod<0)
-            continue;
-
-          idToEntity[id]=(*it).id;
-          glLoadName(id);
-          id++;
-
-          glNode.id=(*it).id;
-          glNode.draw(20.,glGraphComposite->getInputData(),camera);
-        }
-      }
-
-      if((type & RenderingEdges)!=0) {
-        GlEdge glEdge(0);
-
-        for(it = (*itLayer).edgesLODVector.begin(); it!=(*itLayer).edgesLODVector.end(); ++it) {
-          if((*it).lod<0)
-            continue;
-
-          idToEntity[id]=(*it).id;
-          glLoadName(id);
-          id++;
-
-          glEdge.id=(*it).id;
-          glEdge.draw(20.,glGraphComposite->getInputData(),camera);
+        GlGraphComposite *composite=dynamic_cast<GlGraphComposite*>((*it).entity);
+        if(composite){
+          composite->initSelectionRendering(type,idToEntity,id);
+          composite->draw(20.,camera);
         }
       }
     }
@@ -1110,7 +677,6 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
 
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
-    //glLoadIdentity();
 
     glFlush();
     GLint hits = glRenderMode(GL_RENDER);

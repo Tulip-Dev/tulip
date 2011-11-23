@@ -213,12 +213,6 @@ public:
    */
   virtual QImage grabFrameBuffer(bool withAlpha = false);
 
-  /**
-   * set if the label is rendered in this widget
-   */
-  void setViewLabel(bool viewLabel) {
-    scene.setViewLabel(viewLabel);
-  }
 
   /**
    * Extend makeCurrent function of QGLWidget to inform TextureManager and DisplayListManager of context changement
