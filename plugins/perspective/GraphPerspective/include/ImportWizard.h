@@ -48,6 +48,7 @@ protected slots:
   void groupSelected(const QString&);
   void algorithmSelected(const QString&);
   void updateFinishButton();
+  void panelDoubleClicked();
 };
 
 #endif // IMPORTWIZARD_H

@@ -98,6 +98,7 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
     panelsLayout->addWidget(item);
     connect(item,SIGNAL(selected()),this,SLOT(panelSelected()));
     connect(item,SIGNAL(doubleClicked()),this,SLOT(panelDoubleClicked()));
+    connect(item,SIGNAL(doubleClicked()),this,SIGNAL(wizardFinished()));
 
     if (i++ == 0) {
       _activeItem = item;
