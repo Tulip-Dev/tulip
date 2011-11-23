@@ -28,7 +28,7 @@ class Graph;
 
 class ImportExportTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE(ImportExportTest);
-//   CPPUNIT_TEST(testgridImportExport);
+  CPPUNIT_TEST(testgridImportExport);
   CPPUNIT_TEST(testAttributes);
   CPPUNIT_TEST(testSubGraphsImportExport);
   CPPUNIT_TEST_SUITE_END();

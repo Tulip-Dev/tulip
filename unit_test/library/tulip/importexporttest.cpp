@@ -31,19 +31,13 @@ using namespace std;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ImportExportTest);
 
-// ImportExportTest::ImportExportTest() :importAlgorithm("tlp"), exportAlgorithm("tlp") {
 ImportExportTest::ImportExportTest() :importAlgorithm("tlp"), exportAlgorithm("tlp") {
+//   ImportExportTest::ImportExportTest() :importAlgorithm("TlpJsonImport"), exportAlgorithm("TlpJsonExport") {
   PluginLibraryLoader::loadPlugins();
 }
 
 void ImportExportTest::setUp() {
   CppUnit::TestFixture::setUp();
-
-//     tlp::initTulipLib();
-//     PluginLoaderTxt loader;
-//     PluginLibraryLoader::loadPlugins();
-
-//     cout << tlp::TulipLibDir << endl;
 
   CPPUNIT_ASSERT_MESSAGE("Export plugin not loaded: " + exportAlgorithm, ExportModuleLister::pluginExists(exportAlgorithm));
   CPPUNIT_ASSERT_MESSAGE("Import plugin not loaded: " + importAlgorithm, ImportModuleLister::pluginExists(importAlgorithm));
@@ -60,7 +54,6 @@ void ImportExportTest::testAttributes() {
 
   const string originalName = "rootGraph";
   original->setAttribute("name", originalName);
-
   //TODO test attributes of type int, double, Coord, Size, ...
 
   importExportGraph(original);
@@ -228,9 +221,9 @@ void ImportExportTest::testGraphPropertiesAreEqual(Graph* first, Graph* second) 
 
 void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Graph* second) {
   stringstream nodesMessage;
-  nodesMessage << "Graphs " << first->getAttribute<string>("name") << " and " << second->getAttribute<string>("name") << " have different number of nodes";
+  nodesMessage << "Graphs '" << first->getAttribute<string>("name") << "' and '" << second->getAttribute<string>("name") << "' have different number of nodes";
   stringstream edgesMessage;
-  edgesMessage << "Graphs " << first->getAttribute("name") << " and " << second->getAttribute("name") << " have different number of edges";
+  edgesMessage << "Graphs " << first->getAttribute<string>("name") << " and " << second->getAttribute<string>("name") << " have different number of edges";
   CPPUNIT_ASSERT_EQUAL_MESSAGE(nodesMessage.str(), first->numberOfNodes(), second->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL_MESSAGE(edgesMessage.str(), first->numberOfEdges(), second->numberOfEdges());
 
@@ -268,5 +261,3 @@ void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Grap
   delete firstIt;
   delete secondIt;
 }
-
-
