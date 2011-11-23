@@ -39,6 +39,10 @@ using namespace tlp;
 
 template class TLP_SCOPE ValArray<double>;
 template class TLP_SCOPE ValArray<node>;
+template class TLP_SCOPE NodeProperty<node>;
+template class TLP_SCOPE NodeProperty<double>;
+template class TLP_SCOPE EdgeProperty<node>;
+template class TLP_SCOPE EdgeProperty<double>;
 
 namespace {
 //==================================================================================
