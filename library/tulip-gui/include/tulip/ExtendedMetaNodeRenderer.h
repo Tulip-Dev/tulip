@@ -31,7 +31,7 @@ class GlGraphInputData;
 /**
  * Class use to render a meta node, this version render meta node with old OpenGl tulip system
  */
-class TLP_GL_SCOPE ExtendedMetaNodeRenderer : public GlMetaNodeRenderer, private Observable {
+class TLP_QT_SCOPE ExtendedMetaNodeRenderer : public GlMetaNodeRenderer, private Observable {
 
 public:
 
