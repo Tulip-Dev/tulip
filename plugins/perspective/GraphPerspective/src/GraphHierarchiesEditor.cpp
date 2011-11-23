@@ -44,6 +44,7 @@ public:
     drawSource(painter);
 
     painter->save();
+
     if (_model && _model->size() == 0) {
       QRectF rect = sourceBoundingRect();
       int iconWidth = 48;
@@ -55,6 +56,7 @@ public:
       painter->setFont(f);
       painter->drawText(0,textY+20,rect.width(),rect.height()-textY-20,Qt::AlignHCenter | Qt::TextWordWrap,trUtf8("Use the \"Import\" button on the left pane to import data."));
     }
+
     painter->restore();
   }
 };

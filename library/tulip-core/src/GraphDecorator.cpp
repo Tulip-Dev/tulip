@@ -492,9 +492,9 @@ void GraphDecorator::unpop() {
 }
 //----------------------------------------------------------------
 void GraphDecorator::setName(const std::string &name) {
-	graph_component->setName(name);
+  graph_component->setName(name);
 }
 //----------------------------------------------------------------
 std::string GraphDecorator::getName() const {
-	return graph_component->getName();
+  return graph_component->getName();
 }

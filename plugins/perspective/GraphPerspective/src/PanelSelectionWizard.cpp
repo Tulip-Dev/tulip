@@ -79,6 +79,7 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
     _model(model), _flattenedModel(new FlattenedTreeModelDecorator(_model,this)), _activeItem(NULL), _canSelectGraph(canSelectGraph) {
   _ui->setupUi(this);
   _ui->selectGraphFrame->setVisible(_canSelectGraph);
+
   if (_canSelectGraph) {
     _ui->graphCombo->setModel(_flattenedModel);
     _graph = _model->currentGraph();
@@ -143,7 +144,8 @@ QString PanelSelectionWizard::panelName() const {
 void PanelSelectionWizard::setSelectedGraph(tlp::Graph* g) {
   if (!_canSelectGraph)
     return;
-  for (int i=0;i<_flattenedModel->rowCount();++i) {
+
+  for (int i=0; i<_flattenedModel->rowCount(); ++i) {
     if (_flattenedModel->data(_flattenedModel->index(i,0),TulipModel::GraphRole).value<tlp::Graph*>() == g) {
       _ui->graphCombo->setCurrentIndex(i);
       break;
