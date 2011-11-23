@@ -381,8 +381,14 @@ void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
   if (!inHierarchy)
     return;
 
+  QModelIndex oldRow1 = _indexCache[_currentGraph];
+  QModelIndex oldRow2 = createIndex(oldRow1.row(),columnCount()-1);
   _currentGraph = g;
+  QModelIndex newRow1 = _indexCache[_currentGraph];
+  QModelIndex newRow2 = createIndex(newRow1.row(),columnCount()-1);
   emit currentGraphChanged(g);
+  emit dataChanged(oldRow1,oldRow2);
+  emit dataChanged(newRow1,newRow2);
 }
 
 Graph *GraphHierarchiesModel::currentGraph() const {
