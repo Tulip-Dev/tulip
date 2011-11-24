@@ -39,7 +39,6 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/SGHierarchyWidget.h>
-#include <tulip3/MainController.h>
 #include <tulip/Algorithm.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
@@ -334,28 +333,7 @@ QWidget *PythonScriptView::construct(QWidget *parent) {
   pythonInterpreter = PythonInterpreter::getInstance();
   pythonInterpreter->runString(updateVisualizationFunc);
 
-  // hack to get a pointer on the cluster hierarchy widget
-  // This way, we can update it after executing a script (there is some refresh issue otherwise)
-  MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
   clusterTreeWidget = NULL;
-
-  if (mainController) {
-    QWidget *mainWindow = mainController->getMainWindowFacade()->getParentWidget();
-    QObjectList childWidgets = mainWindow->children();
-
-    while (!childWidgets.empty()) {
-      QObject *obj = childWidgets.front();
-      clusterTreeWidget = dynamic_cast<SGHierarchyWidget *>(obj);
-
-      if (clusterTreeWidget) {
-        break;
-      }
-      else {
-        childWidgets.pop_front();
-        childWidgets += obj->children();
-      }
-    }
-  }
 
   return widget;
 }

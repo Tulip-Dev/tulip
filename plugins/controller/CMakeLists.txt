@@ -1,7 +1,0 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude})
-IF(TULIP_USE_TULIP3)
-  INCLUDE_DIRECTORIES(${Tulip3CompatInclude})
-  ADD_LIBRARY(maincontroller-${TulipVersion} SHARED MainControllerMacro.cpp)
-  TARGET_LINK_LIBRARIES(maincontroller-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${LibTulip3CompatName})
-  INSTALL(TARGETS maincontroller-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT MainController-${TulipVersion})
-ENDIF(TULIP_USE_TULIP3)

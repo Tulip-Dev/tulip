@@ -6,7 +6,6 @@ SET(SRCS
   Graph.cpp
   ListPropertyWidget.cpp
   PropertyWidget.cpp
-  MainController.cpp
   PropertyDialog.cpp
   TulipTableWidget.cpp
   ElementPropertiesWidget.cpp
@@ -17,8 +16,6 @@ SET(SRCS
   PluginProgressWidget.cpp
   DataSetDialog.cpp
   InteractorManager.cpp
-  GlMainView3.cpp
-  NodeLinkDiagramComponent3.cpp
   AugmentedDisplayDialog.cpp
   GridOptionsWidget.cpp
 )
@@ -28,7 +25,6 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip3/ControllerViewsManager.h
   ../include/tulip3/PropertyWidget.h
   ../include/tulip3/ListPropertyWidget.h
-  ../include/tulip3/MainController.h
   ../include/tulip3/PropertyDialog.h
   ../include/tulip3/TulipTableWidget.h
   ../include/tulip3/ElementPropertiesWidget.h
@@ -38,8 +34,6 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip3/TextEditDialog.h
   ../include/tulip3/QtProgress.h
   ../include/tulip3/PluginProgressWidget.h
-  ../include/tulip3/GlMainView3.h
-  ../include/tulip3/NodeLinkDiagramComponent3.h
   ../include/tulip3/AugmentedDisplayDialog.h
   ../include/tulip3/GridOptionsWidget.h
 )
