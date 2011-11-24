@@ -60,7 +60,7 @@ FILE(MAKE_DIRECTORY ${incDir})
 # generate build-time source
 CONFIGURE_FILE(api/yajl_version.h.cmake ${incDir}/yajl_version.h)
 
-copy public headers to output directory
+# copy public headers to output directory
 FOREACH (header ${PUB_HDRS})
   SET (header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
 
