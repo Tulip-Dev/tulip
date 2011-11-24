@@ -110,6 +110,8 @@ void GraphObserver::treatEvent(const Event& ev) {
     case GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH:
     case GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH:
     case GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH:
+    case GraphEvent::TLP_BEFORE_ADD_SUBGRAPH:
+    case GraphEvent::TLP_BEFORE_DEL_SUBGRAPH:
       break;
 
     default:
