@@ -47,21 +47,11 @@ QWidget* PlaceHolderWidget::widget() const {
 
 QWidget* PlaceHolderWidget::takeWidget() {
   QWidget* result = _widget;
-  layout()->removeWidget(_widget);
+  if (_widget) {
+    layout()->removeWidget(_widget);
+    _widget->hide();
+    _widget->setParent(NULL);
+  }
   _widget=NULL;
   return result;
-}
-
-bool PlaceHolderWidget::eventFilter(QObject* obj, QEvent* ev) {
-  if (ev->type() == QEvent::ChildRemoved) {
-    QChildEvent* childEvent = static_cast<QChildEvent*>(ev);
-
-    if (childEvent->child() == _widget) {
-      _widget->hide();
-      _widget->setParent(NULL);
-      _widget = NULL;
-    }
-  }
-
-  return false;
 }

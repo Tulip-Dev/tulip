@@ -127,7 +127,6 @@ void GraphPerspective::importGraph() {
     }
 
     _graphs->addGraph(g);
-//    _graphs->setCurrentGraph(g);
 
     if (wizard.createPanel() && !wizard.panelName().isNull()) {
       _ui->workspace->setActivePanel(_ui->workspace->addPanel(wizard.panelName(),g));

@@ -32,8 +32,8 @@ public:
   QWidget* takeWidget();
   void setWidget(QWidget* widget);
 
-protected:
-  bool eventFilter(QObject *, QEvent *);
+//protected:
+//  bool eventFilter(QObject *, QEvent *);
 };
 
 #endif // PLACEHOLDERWIDGET_H
