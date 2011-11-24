@@ -24,7 +24,7 @@
 #include <tulip/GlRect.h>
 #include <tulip/GlComposite.h>
 #include <tulip/Observable.h>
-#include <tulip/InteractorComposite.h>
+#include <tulip/GLInteractor.h>
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -36,7 +36,7 @@
 namespace tlp {
 
 /// This interactor allows to move/rotate/stretch the current selection layout
-class TLP_QT_SCOPE MouseSelectionEditor:public InteractorComponent {
+class TLP_QT_SCOPE MouseSelectionEditor:public GLInteractorComponent {
 
 public:
 
