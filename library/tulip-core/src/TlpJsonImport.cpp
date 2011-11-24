@@ -160,6 +160,9 @@ public:
     if(_parsingNodesIds) {
       _parsingNodesIds = false;
     }
+    if(_parsingEdges) {
+      _parsingEdges = false;
+    }
     if(!_parsingSubgraph.empty()) {
       --_parsingSubgraph.top();
 
