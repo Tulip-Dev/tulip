@@ -153,5 +153,7 @@ void GraphHierarchiesEditor::delAllGraph() {
 }
 
 void GraphHierarchiesEditor::createPanel() {
+  std::string prout;
+  _contextGraph->getAttribute<std::string>("name",prout);
   static_cast<GraphPerspective*>(GraphPerspective::instance())->createPanel(_contextGraph);
 }
