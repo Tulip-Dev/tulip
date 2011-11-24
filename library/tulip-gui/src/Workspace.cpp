@@ -292,6 +292,7 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
   else if (ev->type() == QEvent::ChildRemoved) {
     static_cast<QChildEvent*>(ev)->child()->removeEventFilter(this);
   }
+
   if (ev->type() == QEvent::FocusIn) {
     // FIXME: Pretty much a dirty hack: we are catching QGraphicsView focus event, then go back to its parent (the WorkspacePanel) to emit a focus event
     if (dynamic_cast<QGraphicsView*>(obj) != NULL) {

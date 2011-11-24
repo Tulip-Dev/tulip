@@ -239,11 +239,11 @@ GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),ro
   boundingBox=visitor.getBoundingBox();
 }
 
-GlGraphComposite::~GlGraphComposite(){
+GlGraphComposite::~GlGraphComposite() {
   delete fakeScene;
 }
 
-void GlGraphComposite::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntities){
+void GlGraphComposite::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntities) {
   Graph *graph=inputData.getGraph();
 
   // Check if the current graph are in the hierarchy
@@ -251,17 +251,17 @@ void GlGraphComposite::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntit
 
   if(visitor->isThreadSafe()) {
 #ifdef HAVE_OMP
-#pragma omp parallel
+    #pragma omp parallel
 #endif
     {
 #ifdef HAVE_OMP
-#pragma omp sections nowait
+      #pragma omp sections nowait
 #endif
       {
         visitNodes(graph,visitor,visitHiddenEntities);
       }
 #ifdef HAVE_OMP
-#pragma omp sections nowait
+      #pragma omp sections nowait
 #endif
       {
         visitEdges(graph,visitor,visitHiddenEntities);
@@ -317,7 +317,7 @@ void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor) {
     visitor->visit(this);
 }
 //===================================================================
-void GlGraphComposite::draw(float,Camera* camera){
+void GlGraphComposite::draw(float,Camera* camera) {
 
   Graph *graph=inputData.getGraph();
   lodCalculator->clear();
@@ -332,20 +332,23 @@ void GlGraphComposite::draw(float,Camera* camera){
 
   // LOD computation
   lodCalculator->setScene(*fakeScene);
+
   if(lodCalculator->needEntities()) {
     GlLODSceneVisitor visitor(lodCalculator, getInputData());
     visitor.visit(fakeScene->getLayer("fakeLayer"));
     visitGraph(&visitor);
   }
+
   lodCalculator->compute(fakeScene->getViewport(), fakeScene->getViewport());
   LayersLODVector &layersLODVector = lodCalculator->getResult();
 
   GlEdge::clearEdgeWidthLodSystem();
 
-  if(!selectionDrawActivate){
+  if(!selectionDrawActivate) {
     inputData.getGlVertexArrayManager()->activate(true);
     inputData.getGlVertexArrayManager()->beginRendering();
-  }else{
+  }
+  else {
     inputData.getGlVertexArrayManager()->activate(false);
   }
 
@@ -364,7 +367,7 @@ void GlGraphComposite::draw(float,Camera* camera){
   GlNode glNode(0);
   GlEdge glEdge(0);
 
-  if(!parameters.isElementZOrdered()){
+  if(!parameters.isElementZOrdered()) {
 
     //draw nodes and metanodes
     for(vector<ComplexEntityLODUnit>::iterator it =layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
@@ -377,13 +380,15 @@ void GlGraphComposite::draw(float,Camera* camera){
       }
 
       if((!graph->isMetaNode(node((*it).id)) && displayNodes) || (graph->isMetaNode(node((*it).id)) && displayMetaNodes)) {
-        if(selectionDrawActivate){
+        if(selectionDrawActivate) {
           if((selectionType & RenderingNodes)==0)
             continue;
+
           (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id);
           glLoadName(*selectionCurrentId);
           (*selectionCurrentId)++;
         }
+
         glNode.id=(*it).id;
         glNode.draw((*it).lod,&inputData,camera);
       }
@@ -406,18 +411,21 @@ void GlGraphComposite::draw(float,Camera* camera){
       if(!displayEdges)
         continue;
 
-      if(selectionDrawActivate){
+      if(selectionDrawActivate) {
         if((selectionType & RenderingEdges)==0)
           continue;
+
         (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id);
         glLoadName(*selectionCurrentId);
         (*selectionCurrentId)++;
       }
+
       glEdge.id=(*it).id;
       glEdge.draw((*it).lod,&inputData,camera);
     }
 
-  }else{
+  }
+  else {
 
     entityWithDistanceCompare::inputData=&inputData;
     multiset<EntityWithDistance,entityWithDistanceCompare> entitiesSet;
@@ -426,7 +434,7 @@ void GlGraphComposite::draw(float,Camera* camera){
     BoundingBox bb;
     double dist;
 
-    if(!selectionDrawActivate || (selectionDrawActivate && (selectionType & RenderingNodes)!=0)){
+    if(!selectionDrawActivate || (selectionDrawActivate && (selectionType & RenderingNodes)!=0)) {
       // Colect complex entities
       for(vector<ComplexEntityLODUnit>::iterator it=layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
         if((*it).lod<0)
@@ -446,7 +454,7 @@ void GlGraphComposite::draw(float,Camera* camera){
       }
     }
 
-    if(!selectionDrawActivate || (selectionDrawActivate && (selectionType & RenderingEdges)!=0)){
+    if(!selectionDrawActivate || (selectionDrawActivate && (selectionType & RenderingEdges)!=0)) {
       for(vector<ComplexEntityLODUnit>::iterator it=layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
         if((*it).lod<0)
           continue;
@@ -472,11 +480,12 @@ void GlGraphComposite::draw(float,Camera* camera){
 
       if((*it).isNode && (selectionType & RenderingNodes)!=0) {
         if((!graph->isMetaNode(node(entity->id)) && displayNodes) || (graph->isMetaNode(node(entity->id)) && displayMetaNodes)) {
-          if(selectionDrawActivate){
+          if(selectionDrawActivate) {
             (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id);
             glLoadName(*selectionCurrentId);
             (*selectionCurrentId)++;
           }
+
           glNode.id=entity->id;
           glNode.draw(entity->lod,&inputData,camera);
         }
@@ -488,18 +497,19 @@ void GlGraphComposite::draw(float,Camera* camera){
         if(!displayEdges)
           continue;
 
-        if(selectionDrawActivate){
+        if(selectionDrawActivate) {
           (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id);
           glLoadName(*selectionCurrentId);
           (*selectionCurrentId)++;
         }
+
         glEdge.id=entity->id;
         glEdge.draw(entity->lod,&inputData,camera);
       }
     }
   }
 
-  if(!selectionDrawActivate){
+  if(!selectionDrawActivate) {
     inputData.getGlVertexArrayManager()->endRendering();
   }
 
@@ -531,7 +541,7 @@ void GlGraphComposite::draw(float,Camera* camera){
   selectionDrawActivate=false;
 }
 //===================================================================
-void GlGraphComposite::initSelectionRendering(RenderingEntitiesFlag type,map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId){
+void GlGraphComposite::initSelectionRendering(RenderingEntitiesFlag type,map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId) {
   selectionType=type;
   selectionIdMap=&idMap;
   selectionCurrentId=&currentId;

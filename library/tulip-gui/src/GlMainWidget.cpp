@@ -563,12 +563,13 @@ bool GlMainWidget::doSelect(const int x, const int y,SelectedEntity &selectedEnt
 #endif
   makeCurrent();
   vector<SelectedEntity> selectedEntities;
-  if(scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedEntities)){
+
+  if(scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedEntities)) {
     selectedEntity=selectedEntities[0];
     return true;
   }
 
-  if(scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedEntities)){
+  if(scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedEntities)) {
     selectedEntity=selectedEntities[0];
     return true;
   }

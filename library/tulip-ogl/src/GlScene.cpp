@@ -73,9 +73,11 @@ void GlScene::initGlParameters() {
   glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
 
   bool antialiased = true;
+
   if(glGraphComposite) {
     antialiased=glGraphComposite->getInputData()->parameters->isAntialiased();
   }
+
   OpenGlConfigManager::getInst().setAntiAliasing(antialiased);
 
   glDisable(GL_POINT_SMOOTH);
@@ -532,6 +534,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
                              vector<SelectedEntity>& selectedEntities) {
   if(w==0)
     w=1;
+
   if(h==0)
     h=1;
 
@@ -597,10 +600,12 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
     size=(*itLayer).simpleEntitiesLODVector.size();
 
     vector<SimpleEntityLODUnit>::iterator it;
+
     for(it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
 
       GlGraphComposite *composite=dynamic_cast<GlGraphComposite*>((*it).entity);
-      if(composite){
+
+      if(composite) {
         size+=composite->getInputData()->getGraph()->numberOfNodes();
         size+=composite->getInputData()->getGraph()->numberOfEdges();
       }
@@ -667,7 +672,8 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
           continue;
 
         GlGraphComposite *composite=dynamic_cast<GlGraphComposite*>((*it).entity);
-        if(composite){
+
+        if(composite) {
           composite->initSelectionRendering(type,idToEntity,id);
           composite->draw(20.,camera);
         }

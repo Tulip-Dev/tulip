@@ -32,7 +32,9 @@ void PlaceHolderWidget::setWidget(QWidget *widget) {
   if (_widget != NULL) {
     delete _widget;
   }
+
   _widget = widget;
+
   if (_widget != NULL) {
     layout()->addWidget(_widget);
     _widget->show();
@@ -53,11 +55,13 @@ QWidget* PlaceHolderWidget::takeWidget() {
 bool PlaceHolderWidget::eventFilter(QObject* obj, QEvent* ev) {
   if (ev->type() == QEvent::ChildRemoved) {
     QChildEvent* childEvent = static_cast<QChildEvent*>(ev);
+
     if (childEvent->child() == _widget) {
       _widget->hide();
       _widget->setParent(NULL);
       _widget = NULL;
     }
   }
+
   return false;
 }
