@@ -31,8 +31,8 @@ using namespace std;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ImportExportTest);
 
-ImportExportTest::ImportExportTest() :importAlgorithm("tlp"), exportAlgorithm("tlp") {
-//   ImportExportTest::ImportExportTest() :importAlgorithm("TlpJsonImport"), exportAlgorithm("TlpJsonExport") {
+// ImportExportTest::ImportExportTest() :importAlgorithm("tlp"), exportAlgorithm("tlp") {
+ImportExportTest::ImportExportTest() :importAlgorithm("TlpJsonImport"), exportAlgorithm("TlpJsonExport") {
   PluginLibraryLoader::loadPlugins();
 }
 
@@ -122,11 +122,27 @@ void ImportExportTest::testSubGraphsImportExport() {
 }
 
 Graph* ImportExportTest::createSimpleGraph() const {
-  DataSet params;
-  params.set<uint>("width", 10);
-  params.set<uint>("height", 10);
-  Graph* original = tlp::importGraph("Grid", params);
-
+  Graph* original = tlp::newGraph();
+  LayoutProperty* layout = original->getProperty<LayoutProperty>("viewLayout");
+  for(uint i = 0; i < 100; ++i) {
+    node n = original->addNode();
+    layout->setNodeValue(n, Coord(i%11, i/10));
+  }
+  
+  for(int x = 0; x < 10; ++x) {
+    for(int y = 0; y < 10; ++y) {
+      node origin(x+10*y);
+      for(int xDelta = -1; xDelta <= 1; ++xDelta) {
+        for(int yDelta = -1; yDelta <= 1; ++yDelta) {
+          if(x+xDelta >= 0 && x+xDelta <= 9 && y+yDelta >= 0 && y+yDelta <= 9) {
+            node destination(x+xDelta + 10*(y+yDelta));
+            original->addEdge(origin, destination);
+          }
+        }
+      }
+    }
+  }
+  
   DoubleProperty* id = original->getProperty<DoubleProperty>("id");
   string msg;
   original->computeProperty<DoubleProperty>("Id", id, msg);

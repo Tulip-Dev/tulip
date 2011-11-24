@@ -56,21 +56,24 @@ StringCollection.cpp
 StringProperty.cpp
 TLPExport.cpp
 TLPImport.cpp
+TlpJsonExport.cpp
+TlpJsonImport.cpp
 TlpTools.cpp
 TreeTest.cpp
 TriconnectedTest.cpp
 vectorgraph.cpp
-WithParameter.cpp)
+WithParameter.cpp
+YajlFacade.cpp)
 
 IF(CHECK_MEMORY)
 SET(tulip_LIB_SRCS ${tulip_LIB_SRCS} MemoryChecker.cpp)
 ENDIF(CHECK_MEMORY)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_TULIP_LIB_DIR=\"\\\"${CMAKE_INSTALL_PREFIX}/lib/\\\"\"")
-INCLUDE_DIRECTORIES(../include/ ${TulipCoreBuildInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR} ${QT_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(../include/ ${TulipCoreBuildInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR} ${QT_INCLUDE_DIR} ${YAJL_INCLUDE_DIRS})
 
 ADD_LIBRARY(${LibTulipCoreName} SHARED ${tulip_LIB_SRCS} ../include/tulip/TulipRelease.h)
-TARGET_LINK_LIBRARIES(${LibTulipCoreName} gzstream ${QT_QTCORE_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipCoreName} gzstream ${QT_QTCORE_LIBRARY} yajl)
 IF(WIN32)
   IF(MSVC)
     TARGET_LINK_LIBRARIES(${LibTulipCoreName} Dbghelp)
