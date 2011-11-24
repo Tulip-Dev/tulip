@@ -6,7 +6,6 @@ INSTALL(FILES
   tulip3/Graph.h
   tulip3/PropertyWidget.h
   tulip3/ListPropertyWidget.h
-  tulip3/MainController.h
   tulip3/PropertyDialog.h
   tulip3/TabWidget.h
   tulip3/TulipTableWidget.h
@@ -19,8 +18,6 @@ INSTALL(FILES
   tulip3/PluginProgressWidget.h
   tulip3/Tlp3Tools.h
   tulip3/InteractorManager.h
-  tulip3/GlMainView3.h
-  tulip3/NodeLinkDiagramComponent3.h
   tulip3/AugmentedDisplayDialog.h
   tulip3/GridOptionsWidget.h
 DESTINATION ${TulipIncludeInstallDir}/tulip3/
