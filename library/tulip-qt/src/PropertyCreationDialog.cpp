@@ -81,7 +81,7 @@ void PropertyCreationDialog::accept() {
 
   if(!error) {
     _graph->push();
-    _createdProperty = _graph->getProperty(QStringToTlpString(propertyName),propertyTypeLabelToPropertyType(ui->propertyTypeComboBox->currentText()));
+    _createdProperty = _graph->getLocalProperty(QStringToTlpString(propertyName),propertyTypeLabelToPropertyType(ui->propertyTypeComboBox->currentText()));
   }
 
   QDialog::accept();
