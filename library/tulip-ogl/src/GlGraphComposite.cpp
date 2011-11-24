@@ -230,7 +230,7 @@ GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),ro
 
   delete nodesIterator;
 
-  lodCalculator=new GlQuadTreeLODCalculator();
+  lodCalculator=NULL;
   fakeScene = new GlScene;
   fakeScene->addLayer(new GlLayer("fakeLayer"));
 
@@ -320,6 +320,10 @@ void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor) {
 void GlGraphComposite::draw(float,Camera* camera) {
 
   Graph *graph=inputData.getGraph();
+
+
+  if(!lodCalculator)
+    lodCalculator=camera->getScene()->getCalculator()->clone();
   lodCalculator->clear();
   lodCalculator->setRenderingEntitiesFlag(RenderingAll);
   lodCalculator->setInputData(getInputData());
