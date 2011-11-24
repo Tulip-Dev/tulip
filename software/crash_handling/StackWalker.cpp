@@ -1,8 +1,20 @@
-/*
- * StackWalker.cpp
+/**
  *
- *  Created on: Aug 14, 2011
- *      Author: antoine
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
  */
 
 #include "StackWalker.h"
@@ -27,94 +39,97 @@ StackWalkerGCC::~StackWalkerGCC() {
 #endif
 }
 
+#define MAX_BACKTRACE_SIZE 128
+
 void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
-  void * array[128];
-  int size = backtrace(array, 128);
-  char ** messages = backtrace_symbols(array, size);
+	void *array[MAX_BACKTRACE_SIZE];
+	int size = backtrace(array, MAX_BACKTRACE_SIZE);
+	char ** messages = backtrace_symbols(array, size);
 
-  if (messages == NULL)
-    return;
+	if (messages == NULL)
+		return;
 
-  int i = 1;
-  int offset = i;
+	std::ostringstream oss;
+	oss << callerAddress;
+	std::string callerAddressStr = oss.str();
 
-  for (; i < size ; ++i) {
-    char *mangled_name = 0, *runtime_offset = 0,
-          *offset_end = 0, *runtime_addr = 0,
-           *runtime_addr_end = 0;
+	int i = 1;
+	while (i < size) {
+		std::string msg(messages[i]);
+		if (msg.find(callerAddressStr) != std::string::npos) {
+			break;
+		}
+		++i;
+	}
 
-    if (static_cast<unsigned int>(i) > maxDepth)
-      return;
+	int offset = i;
+	for (; i < size ; ++i) {
+		char *mangled_name = 0, *runtime_offset = 0,
+				*offset_end = 0, *runtime_addr = 0,
+				*runtime_addr_end = 0;
 
-    for (char *p = messages[i]; *p; ++p) {
-      if (*p == '(') {
-        mangled_name = p;
-      }
-      else if (*p == '+') {
-        runtime_offset = p;
-      }
-      else if (*p == ')') {
-        offset_end = p;
-      }
-      else if (*p == '[') {
-        runtime_addr = p;
-      }
-      else if (*p == ']') {
-        runtime_addr_end = p;
-      }
-    }
+		if (static_cast<unsigned int>(i) > maxDepth)
+			return;
 
-    if (mangled_name && runtime_offset && offset_end &&
-        mangled_name < runtime_offset) {
-      *mangled_name++ = '\0';
-      *runtime_offset++ = '\0';
-      *offset_end++ = '\0';
-      *runtime_addr++ = '\0';
-      *runtime_addr_end = '\0';
+		for (char *p = messages[i]; *p; ++p) {
+			if (*p == '(') {
+				mangled_name = p;
+			} else if (*p == '+') {
+				runtime_offset = p;
+			} else if (*p == ')') {
+				offset_end = p;
+			} else if (*p == '[') {
+				runtime_addr = p;
+			} else if (*p == ']') {
+				runtime_addr_end = p;
+			}
+		}
 
-      char *dsoName = messages[i];
-      std::string dsoNameStr(dsoName);
+		if (mangled_name && runtime_offset && offset_end &&
+				mangled_name < runtime_offset) {
+			*mangled_name++ = '\0';
+			*runtime_offset++ = '\0';
+			*offset_end++ = '\0';
+			*runtime_addr++ = '\0';
+			*runtime_addr_end = '\0';
 
-      int status;
-      char * real_name = abi::__cxa_demangle(mangled_name, 0, 0, &status);
+			const char *dsoName = messages[i];
+			std::string dsoNameStr(dsoName);
 
-      char *end;
-      int64_t runtimeAddr = static_cast<int64_t>(strtoll(runtime_addr, &end, 16));
-      int64_t runtimeOffset = static_cast<int64_t>(strtoll(runtime_offset, &end, 0));
+			int status;
+			char * real_name = abi::__cxa_demangle(mangled_name, 0, 0, &status);
 
-      std::pair<const char *, unsigned int> infos = std::make_pair("", 0);
+			char *end;
+			int64_t runtimeAddr = static_cast<int64_t>(strtoll(runtime_addr, &end, 16));
+			int64_t runtimeOffset = static_cast<int64_t>(strtoll(runtime_offset, &end, 0));
+
+			std::pair<const char *, unsigned int> infos = std::make_pair("", 0);
 
 #ifdef HAVE_BFD
-
-      if (bfdMap.find(dsoNameStr) == bfdMap.end()) {
-        bfdMap[dsoNameStr] = new BfdWrapper(dsoName);
-      }
-
-      infos =bfdMap[dsoNameStr]->getFileAndLineForAddress(mangled_name, runtimeAddr, runtimeOffset);
+			if (bfdMap.find(dsoNameStr) == bfdMap.end()) {
+				bfdMap[dsoNameStr] = new BfdWrapper(dsoName);
+			}
+			dsoName = bfdMap[dsoNameStr]->getDsoAbsolutePath().c_str();
+			infos =bfdMap[dsoNameStr]->getFileAndLineForAddress(mangled_name, runtimeAddr, runtimeOffset);
 #endif
 
-      if (status == 0) {
-        if (std::string(infos.first) == "") {
-          printFrameInfos(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset);
-        }
-        else {
-          printFrameInfos(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset, infos.first, infos.second);
-        }
-      }
-      else {
-        if (std::string(infos.first) == "") {
-          printFrameInfos(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset);
-        }
-        else {
-          printFrameInfos(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset, infos.first, infos.second);
-        }
-      }
-
-      free(real_name);
-    }
-  }
-
-  free(messages);
+			if (status == 0) {
+				if (std::string(infos.first) == "") {
+					printFrameInfos(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset);
+				} else {
+					printFrameInfos(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset, infos.first, infos.second);
+				}
+			} else {
+				if (std::string(infos.first) == "") {
+					printFrameInfos(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset);
+				} else {
+					printFrameInfos(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset, infos.first, infos.second);
+				}
+			}
+			free(real_name);
+		}
+	}
+	free(messages);
 }
 
 #elif defined(__MINGW32__)

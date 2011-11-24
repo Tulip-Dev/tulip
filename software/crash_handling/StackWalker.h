@@ -1,8 +1,20 @@
-/*
- * StackWalker.h
+/**
  *
- *  Created on: Aug 14, 2011
- *      Author: antoine
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
  */
 
 #ifndef STACKWALKER_H_
@@ -68,16 +80,26 @@ public:
 #include <map>
 
 class StackWalkerGCC : public StackWalker {
+
 public:
-  StackWalkerGCC();
-  ~StackWalkerGCC();
-  void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
+
+	StackWalkerGCC();
+
+	~StackWalkerGCC();
+
+	void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
+
+	void setCallerAddress(void *callerAddress) {this->callerAddress = callerAddress;}
 
 private:
+
+	void *callerAddress;
 #ifdef HAVE_BFD
-  std::map<std::string, BfdWrapper *> bfdMap;
+	std::map<std::string, BfdWrapper *> bfdMap;
 #endif
+
 };
+
 
 #elif defined(__MINGW32__)
 

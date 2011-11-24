@@ -1,95 +1,143 @@
-/*
- * CrashHandling.cpp
+/**
  *
- *  Created on: Aug 14, 2011
- *      Author: antoine
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
  */
-
-#include "CrashHandling.h"
-#include "StackWalker.h"
 
 #include <tulip/SystemDefinition.h>
 #include <tulip/TulipRelease.h>
 
+#include <iostream>
+#include <cstring>
+
+#include "CrashHandling.h"
+#include "StackWalker.h"
+
+using namespace std;
+
+#define TLP_PLATEFORM_HEADER "TLP_PLATEFORM"
+#define TLP_ARCH_HEADER "TLP_ARCH"
+#define TLP_COMPILER_HEADER "TLP_COMPILER"
+#define TLP_VERSION_HEADER "TLP_VERSION"
+#define TLP_DUMP_HEADER "TLP_DUMP"
+#define TLP_STACK_BEGIN_HEADER "TLP_STACK_BEGIN"
+#define TLP_STACK_END_HEADER "TLP_STACK_END"
+
 /*
   Linux/MacOS-specific handling
-  */
+ */
 #if defined(__linux) || defined(__APPLE__)
 
-#include <iostream>
-#include <signal.h>
+#include <csignal>
 
-static void dumpStack(int signum) {
-  StackWalkerGCC sw;
-  std::cerr << "Caught signal " << (int)signum << std::endl;
+// This structure mirrors the one found in /usr/include/asm/ucontext.h
+typedef struct _sig_ucontext {
+	unsigned long     uc_flags;
+	struct ucontext   *uc_link;
+	stack_t           uc_stack;
+	struct sigcontext uc_mcontext;
+	sigset_t          uc_sigmask;
+} sig_ucontext_t;
 
-  std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
-            << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
-            << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-            << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
 
-  std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
-  sw.printCallStackToStdErr();
-  std::cerr << TLP_STACK_END_HEADER << std::endl;
-  std::cerr << std::flush;
-  signal(signum, SIG_DFL);
+void dumpStack(int sig, siginfo_t *, void * ucontext) {
+
+	sig_ucontext_t * uc = reinterpret_cast<sig_ucontext_t *>(ucontext);
+
+	// Get the address at the time the signal was raised from the EIP (x86) or RIP (x86_64)
+#ifdef I64
+	void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.rip); // x86_64 specific;
+#else
+	void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.eip); // x86 specific;
+#endif
+
+	std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
+			<< TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
+			<< TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
+			<< TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+
+	std::cerr << "Caught signal " << sig << " (" << strsignal(sig) << ")" << std::endl;
+
+	std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
+	StackWalkerGCC sw;
+	sw.setCallerAddress(callerAddress);
+	sw.printCallStackToStdErr();
+	std::cerr << TLP_STACK_END_HEADER << std::endl;
+	std::cerr << std::flush;
+	exit(1);
 }
 
 void start_crash_handler() {
-  signal(SIGSEGV,dumpStack);
-  signal(SIGABRT,dumpStack);
-  signal(SIGFPE,dumpStack);
-  signal(SIGILL,dumpStack);
-  signal(SIGBUS,dumpStack);
-  signal(-1,dumpStack);
+	struct sigaction action;
+	sigemptyset(&action.sa_mask);
+	action.sa_flags = SA_RESTART | SA_SIGINFO;
+	action.sa_sigaction = &dumpStack;
+	sigaction(SIGSEGV, &action, NULL);
+	sigaction(SIGABRT, &action, NULL);
+	sigaction(SIGFPE, &action, NULL);
+	sigaction(SIGILL, &action, NULL);
+	sigaction(SIGBUS, &action, NULL);
 }
 
 /*
   MinGW-specific handling
-  */
+ */
 #elif defined(__MINGW32__)
 
 static LONG WINAPI
 exception_filter(LPEXCEPTION_POINTERS info) {
-  StackWalkerMinGW sw;
-  sw.setContext(info->ContextRecord);
+	StackWalkerMinGW sw;
+	sw.setContext(info->ContextRecord);
 
-  std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
-            << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
-            << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-            << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
-  std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
-  sw.printCallStackToStdErr();
-  std::cerr << TLP_STACK_END_HEADER << std::endl;
-  std::cerr << std::flush;
-  return 1;
+	std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
+			<< TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
+			<< TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
+			<< TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+	std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
+	sw.printCallStackToStdErr();
+	std::cerr << TLP_STACK_END_HEADER << std::endl;
+	std::cerr << std::flush;
+	return 1;
 }
 
 
 void start_crash_handler() {
-  SetUnhandledExceptionFilter(exception_filter);
+	SetUnhandledExceptionFilter(exception_filter);
 }
 
 #elif defined(_MSC_VER)
 
 static LONG WINAPI
 exception_filter(LPEXCEPTION_POINTERS info) {
-  StackWalkerMSVC sw;
-  sw.setContext(info->ContextRecord);
+	StackWalkerMSVC sw;
+	sw.setContext(info->ContextRecord);
 
-  std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
-            << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
-            << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-            << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
-  std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
-  sw.printCallStackToStdErr();
-  std::cerr << TLP_STACK_END_HEADER << std::endl;
-  std::cerr << std::flush;
-  return 1;
+	std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
+			<< TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
+			<< TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
+			<< TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+	std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
+	sw.printCallStackToStdErr();
+	std::cerr << TLP_STACK_END_HEADER << std::endl;
+	std::cerr << std::flush;
+	return 1;
 }
 
 
 void start_crash_handler() {
-  SetUnhandledExceptionFilter(exception_filter);
+	SetUnhandledExceptionFilter(exception_filter);
 }
 #endif
