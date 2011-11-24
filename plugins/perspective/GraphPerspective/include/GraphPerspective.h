@@ -49,6 +49,10 @@ public slots:
   void importGraph();
   void createPanel(tlp::Graph* g = NULL);
 
+  void save();
+  void saveAs(const QString& path=QString::null);
+  void open(const QString& path=QString::null);
+
 protected slots:
   void refreshDockExpandControls();
   void panelFocused(tlp::View*);

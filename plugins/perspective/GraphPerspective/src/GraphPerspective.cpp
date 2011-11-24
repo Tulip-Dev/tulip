@@ -19,6 +19,7 @@
 #include "GraphPerspective.h"
 
 #include <QtGui/QMessageBox>
+#include <QtGui/QFileDialog>
 
 #include <tulip/ImportModule.h>
 #include <tulip/Graph.h>
@@ -55,6 +56,9 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
   connect(_ui->actionImport,SIGNAL(triggered()),this,SLOT(importGraph()));
   connect(_ui->workspace,SIGNAL(panelFocused(tlp::View*)),this,SLOT(panelFocused(tlp::View*)));
+  connect(_ui->actionSave_Project,SIGNAL(triggered()),this,SLOT(save()));
+  connect(_ui->actionSave_Project_as,SIGNAL(triggered()),this,SLOT(saveAs()));
+  connect(_ui->actionOpen_Project,SIGNAL(triggered()),this,SLOT(open()));
 
   // Setting initial sizes for splitters
   _ui->workspaceSplitter->setSizes(QList<int>() << 200 << 1000);
@@ -157,6 +161,25 @@ void GraphPerspective::createPanel(tlp::Graph* g) {
 void GraphPerspective::panelFocused(tlp::View* view) {
   if (view->graph() != NULL && _ui->graphHierarchiesEditor->synchronized())
     _graphs->setCurrentGraph(view->graph());
+}
+
+void GraphPerspective::save() {
+  saveAs(_project->projectFile());
+}
+
+void GraphPerspective::saveAs(const QString& path) {
+  if (path.isEmpty()) {
+    QString path = QFileDialog::getSaveFileName(_mainWindow,trUtf8("Select the file you want to save your workspace in."),QString(),"*.tlpx");
+    if (!path.isEmpty()) {
+      saveAs(path);
+    }
+    return;
+  }
+  _graphs->writeProject(_project,0); // FIXME add progress here
+  _project->write(path); // FIXME: add progress here
+}
+
+void GraphPerspective::open(const QString &path) {
 }
 
 PERSPECTIVEPLUGIN(GraphPerspective,"Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0")

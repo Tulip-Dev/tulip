@@ -321,50 +321,42 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 }
 
 static QString GRAPHS_PATH("/graphs/");
-static QString GRAPH_FOLDER_PREFIX("graph_");
-static QString GRAPH_FILE("graph.tlp");
+static QString GRAPH_FILE("graph.json");
 
 void GraphHierarchiesModel::readProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
-  if (!project->exists(GRAPHS_PATH) || !project->isDir(GRAPHS_PATH))
-    return;
-
-  QString e;
-  foreach (e,project->entryList(GRAPHS_PATH,QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs)) {
-    DataSet dataSet;
-    dataSet.set<std::string>("file::filename", project->toAbsolutePath(GRAPHS_PATH + "/" + e + "/" + GRAPH_FILE).toStdString());
-    Graph *g = tlp::importGraph("tlp",dataSet,progress);
-
-    if (g)
-      addGraph(g);
+  foreach(QString entry, project->entryList(GRAPHS_PATH,QDir::Dirs | QDir::NoDotAndDotDot)) {
+    QString file = GRAPHS_PATH + entry + "/graph.json";
+    if (!project->exists(file))
+      continue;
+    QString absolutePath = project->toAbsolutePath(file);
+    DataSet data;
+    data.set<std::string>("file::filename",absolutePath.toStdString());
+    Graph* g = tlp::importGraph("TlpJsonImport",data,progress);
+    addGraph(g);
   }
 }
 
 bool GraphHierarchiesModel::writeProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
-  if (project->exists(GRAPHS_PATH) && !project->isDir(GRAPHS_PATH))
-    return false;
-
   project->removeAllDir(GRAPHS_PATH);
-
+  project->mkpath(GRAPHS_PATH);
   int i=0;
-  Graph *g;
-  foreach (g,_graphs) {
-    QString path = GRAPHS_PATH + "graph_" + QString::number(i++);
-    project->mkpath(path);
-    std::fstream *file = project->stdFileStream(path + "/" + GRAPH_FILE);
-    DataSet dataSet;
-    tlp::exportGraph(g, *file, "tlp", dataSet, progress);
-    delete file;
+  foreach(tlp::Graph* g, _graphs) {
+    QString folder = GRAPHS_PATH + "/" + QString::number(i) + "/";
+    project->mkpath(folder);
+    DataSet data;
+    std::fstream *stream = project->stdFileStream(folder + "graph.json");
+    tlp::exportGraph(g,*stream,"TlpJsonExport",data,progress);
   }
-
-  return true;
 }
 
 QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
   std::string name;
   graph->getAttribute<std::string>("name",name);
 
-  if (name == "")
-    return trUtf8("graph_") + QString::number(graph->getId());
+  if (name == "") {
+    name = (trUtf8("graph_") + QString::number(graph->getId())).toStdString();
+    graph->setAttribute<std::string>("name",name);
+  }
 
   return name.c_str();
 }
