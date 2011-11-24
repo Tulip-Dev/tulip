@@ -221,8 +221,8 @@ void Workspace::updateAvailableModes() {
 
 void Workspace::updatePanels() {
   foreach(QWidget* mode,_modeToSlots.keys()) {
-//    if (mode == currentModeWidget())
-//      continue;
+    if (mode == currentModeWidget())
+      continue;
 
     QVector<PlaceHolderWidget*> panelSlots = _modeToSlots[mode];
     foreach(PlaceHolderWidget* panel, panelSlots) {
@@ -230,38 +230,31 @@ void Workspace::updatePanels() {
     }
   }
 
-  int i=_currentPanelIndex;
+//   Fill up slots according to the current index until there is no panel to show
+  int i = _currentPanelIndex;
   foreach (PlaceHolderWidget* slt, currentModeSlots()) {
-    WorkspacePanel* panel = _panels[i++];
-    qWarning() << (void*)panel;
-    slt->setWidget(panel);
+    if (i>=_panels.size()) {
+      slt->takeWidget();
+    }
+
+    else if (slt->widget() != _panels[i]) {
+      slt->takeWidget();
+    }
+
+    i++;
   }
 
-////   Fill up slots according to the current index until there is no panel to show
-//  int i = _currentPanelIndex;
-//  foreach (PlaceHolderWidget* slt, currentModeSlots()) {
-//    if (i>=_panels.size()) {
-//      slt->takeWidget();
-//    }
+  i = _currentPanelIndex;
+  foreach (PlaceHolderWidget* slt, currentModeSlots()) {
+    if (i>=_panels.size())
+      break;
 
-//    else if (slt->widget() != _panels[i]) {
-//      slt->takeWidget();
-//    }
+    else if (slt->widget() != _panels[i]) {
+      slt->setWidget(_panels[i]);
+    }
 
-//    i++;
-//  }
-
-//  i = _currentPanelIndex;
-//  foreach (PlaceHolderWidget* slt, currentModeSlots()) {
-//    if (i>=_panels.size())
-//      break;
-
-//    else if (slt->widget() != _panels[i]) {
-//      slt->setWidget(_panels[i]);
-//    }
-
-//    i++;
-//  }
+    i++;
+  }
 }
 
 void Workspace::nextPage() {
