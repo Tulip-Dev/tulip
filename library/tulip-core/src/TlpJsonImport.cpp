@@ -92,7 +92,7 @@ public:
     else if(value == "edgesIDs") {
       _parsingEdgesIds = true;
     }
-    else if(value == "edges")  {
+    else if(!_currentProperty && value == "edges")  {
       _parsingEdges = true;
     }
     else if(value == "attributes") {
@@ -245,33 +245,39 @@ public:
         _currentProperty = _graph->getProperty(_propertyName, value);
 
         if(!_currentProperty) {
-          cout << "error, property is null" << endl;
+          cout << "[error] The property '" << _propertyName << "' (of type: '" << value << "' could not be created" << endl;
         }
 
       }
-      if(_parsingPropertyDefaultNodeValue) {
-        _currentProperty->setAllNodeStringValue(value);
-        _parsingPropertyDefaultNodeValue = false;
-  //       std::cout << "of default node value: " << value << std::endl;
-      }
-      if(_parsingPropertyDefaultEdgeValue) {
-        _currentProperty->setAllEdgeStringValue(value);
-        _parsingPropertyDefaultEdgeValue = false;
-  //       std::cout << "of default edge value: " << value << std::endl;
-      }
 
-      if(_parsingPropertyNodeValues) {
-        assert(_currentIdentifier != UINT_MAX);
-        assert(_currentProperty);
-        node n(_currentIdentifier);
-        _currentProperty->setNodeStringValue(n, value);
-  //       cout << "setting node value: " << n.id << " " << value << "; "<< currentProperty->getNodeStringValue(n) << endl;;
+      if(_currentProperty) {
+        if(_parsingPropertyDefaultNodeValue) {
+          _currentProperty->setAllNodeStringValue(value);
+          _parsingPropertyDefaultNodeValue = false;
+    //       std::cout << "of default node value: " << value << std::endl;
+        }
+        if(_parsingPropertyDefaultEdgeValue) {
+          _currentProperty->setAllEdgeStringValue(value);
+          _parsingPropertyDefaultEdgeValue = false;
+    //       std::cout << "of default edge value: " << value << std::endl;
+        }
+
+        if(_parsingPropertyNodeValues) {
+          assert(_currentIdentifier != UINT_MAX);
+          assert(_currentProperty);
+          node n(_currentIdentifier);
+          _currentProperty->setNodeStringValue(n, value);
+    //       cout << "setting node value: " << n.id << " " << value << "; "<< currentProperty->getNodeStringValue(n) << endl;;
+        }
+        if(_parsingPropertyEdgeValues) {
+          assert(_currentIdentifier != UINT_MAX);
+          assert(_currentProperty);
+          edge e(_currentIdentifier);
+          _currentProperty->setEdgeStringValue(e, value);
+        }
       }
-      if(_parsingPropertyEdgeValues) {
-        assert(_currentIdentifier != UINT_MAX);
-        assert(_currentProperty);
-        edge e(_currentIdentifier);
-        _currentProperty->setEdgeStringValue(e, value);
+      else {
+        std::cout << "[error] The property was null when trying to fill it" << std::endl;
       }
     }
     
