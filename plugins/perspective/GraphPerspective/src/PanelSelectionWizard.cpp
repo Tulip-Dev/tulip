@@ -146,6 +146,8 @@ void PanelSelectionWizard::setSelectedGraph(tlp::Graph* g) {
   if (!_canSelectGraph)
     return;
 
+  _graph = g;
+
   for (int i=0; i<_flattenedModel->rowCount(); ++i) {
     if (_flattenedModel->data(_flattenedModel->index(i,0),TulipModel::GraphRole).value<tlp::Graph*>() == g) {
       _ui->graphCombo->setCurrentIndex(i);

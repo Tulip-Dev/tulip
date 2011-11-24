@@ -35,6 +35,8 @@
 #include <modeltest.h>
 #endif
 
+#include <QtCore/QDebug>
+
 using namespace tlp;
 
 GraphPerspective::GraphPerspective(PerspectiveContext &c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)) {
@@ -139,14 +141,17 @@ void GraphPerspective::createPanel(tlp::Graph* g) {
 
   PanelSelectionWizard wizard(_graphs,_mainWindow);
 
-  if (g != NULL)
+  if (g != NULL) {
     wizard.setSelectedGraph(g);
-  else
+  }
+  else {
     wizard.setSelectedGraph(_graphs->currentGraph());
+  }
 
   if (wizard.exec() == QDialog::Accepted) {
-    if (!wizard.panelName().isNull())
+    if (!wizard.panelName().isNull()) {
       _ui->workspace->setActivePanel(_ui->workspace->addPanel(wizard.panelName(),wizard.graph()));
+    }
   }
 }
 
