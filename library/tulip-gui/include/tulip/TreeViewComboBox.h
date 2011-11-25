@@ -11,6 +11,9 @@ class TreeViewComboBox : public QComboBox {
 public:
   explicit TreeViewComboBox(QWidget *parent = 0);
   virtual void showPopup();
+
+public slots:
+  void selectIndex(const QModelIndex&);
 };
 
 #endif // TREEVIEWCOMBOBOX_H
