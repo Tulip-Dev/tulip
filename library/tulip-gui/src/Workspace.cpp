@@ -258,7 +258,7 @@ void Workspace::updatePanels() {
 }
 
 void Workspace::nextPage() {
-  int newIndex = _currentPanelIndex + currentSlotsCount();
+  int newIndex = _currentPanelIndex + ceil(currentSlotsCount()* 1./2.);
 
   if (newIndex < _panels.size()) {
     _currentPanelIndex = newIndex;
@@ -268,7 +268,7 @@ void Workspace::nextPage() {
 }
 
 void Workspace::previousPage() {
-  int newIndex = _currentPanelIndex - currentSlotsCount();
+  int newIndex = _currentPanelIndex - ceil(currentSlotsCount() * 1./2.);
 
   if (newIndex >= 0) {
     _currentPanelIndex = newIndex;
