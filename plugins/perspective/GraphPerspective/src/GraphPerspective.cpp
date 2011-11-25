@@ -170,11 +170,14 @@ void GraphPerspective::save() {
 void GraphPerspective::saveAs(const QString& path) {
   if (path.isEmpty()) {
     QString path = QFileDialog::getSaveFileName(_mainWindow,trUtf8("Select the file you want to save your workspace in."),QString(),"*.tlpx");
+
     if (!path.isEmpty()) {
       saveAs(path);
     }
+
     return;
   }
+
   _graphs->writeProject(_project,0); // FIXME add progress here
   _project->write(path); // FIXME: add progress here
 }

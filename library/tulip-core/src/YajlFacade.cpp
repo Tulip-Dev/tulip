@@ -38,24 +38,24 @@ static int parse_double(void *ctx, double doubleVal) {
 
 static int parse_string(void *ctx, const unsigned char * stringVal, size_t stringLen) {
   YajlFacade* facade = (YajlFacade*) ctx;
-  
+
   char * str = (char *) malloc(stringLen + 1);
   str[stringLen] = 0;
   memcpy(str, stringVal, stringLen);
   std::string key((char*)str);
-  
+
   facade->parseString(key);
   return 1;
 }
 
 static int parse_map_key(void *ctx, const unsigned char * stringVal, size_t stringLen) {
   YajlFacade* facade = (YajlFacade*) ctx;
-  
+
   char * str = (char *) malloc(stringLen + 1);
   str[stringLen] = 0;
   memcpy(str, stringVal, stringLen);
   std::string key((char*)str);
-  
+
   facade->parseMapKey(key);
   return 1;
 }
@@ -88,7 +88,7 @@ void YajlFacade::parse(std::string filename) {
   QFile file(filename.c_str());
   file.open(QIODevice::ReadOnly);
   QByteArray contents = file.readAll();
-  
+
   const yajl_callbacks callbacks = {
     parse_null,
     parse_boolean,
@@ -104,14 +104,15 @@ void YajlFacade::parse(std::string filename) {
   };
   yajl_handle hand = yajl_alloc(&callbacks, NULL, this);
   unsigned char* fileData = (unsigned char*)contents.data();
-  
+
   yajl_status stat  = yajl_parse(hand, fileData, contents.length());
+
   if (stat != yajl_status_ok) {
     unsigned char * str = yajl_get_error(hand, 1, fileData, contents.length());
     std::cout << (const char *)str << std::endl;
     yajl_free_error(hand, str);
   }
-  
+
 //   yajl_gen_free(g);
   yajl_free(hand);
 }

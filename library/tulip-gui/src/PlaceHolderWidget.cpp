@@ -47,11 +47,13 @@ QWidget* PlaceHolderWidget::widget() const {
 
 QWidget* PlaceHolderWidget::takeWidget() {
   QWidget* result = _widget;
+
   if (_widget) {
     layout()->removeWidget(_widget);
     _widget->hide();
     _widget->setParent(NULL);
   }
+
   _widget=NULL;
   return result;
 }
