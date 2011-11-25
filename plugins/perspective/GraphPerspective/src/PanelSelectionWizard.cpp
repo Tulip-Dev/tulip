@@ -141,5 +141,5 @@ void PanelSelectionWizard::setSelectedGraph(tlp::Graph* g) {
   if (!_canSelectGraph)
     return;
   _graph = g;
-//  _ui->graphCombo->setSelectedModelIndex(_model->indexOf(g));
+  _ui->graphCombo->selectIndex(_model->indexOf(g));
 }
