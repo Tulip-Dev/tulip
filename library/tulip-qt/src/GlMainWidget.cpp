@@ -344,8 +344,8 @@ void GlMainWidget::redraw() {
     makeCurrent();
 
     glDisable(GL_TEXTURE_2D);
-    glDisable(GL_DEPTH_TEST);
     glDisable(GL_STENCIL_TEST);
+    glDisable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
     glDisable(GL_LIGHTING);
 
@@ -360,6 +360,9 @@ void GlMainWidget::redraw() {
 
     drawInteractors();
     drawForegroundEntities();
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_STENCIL_TEST);
 
     swapBuffers();
 
@@ -400,8 +403,8 @@ void GlMainWidget::draw(bool graphChanged) {
 #endif
 
     glDisable(GL_TEXTURE_2D);
-    glDisable(GL_DEPTH_TEST);
     glDisable(GL_STENCIL_TEST);
+    glDisable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
     glDisable(GL_LIGHTING);
 
@@ -415,6 +418,9 @@ void GlMainWidget::draw(bool graphChanged) {
 
     drawForegroundEntities();
     drawInteractors();
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_STENCIL_TEST);
 
     swapBuffers();
     inRendering=false;
