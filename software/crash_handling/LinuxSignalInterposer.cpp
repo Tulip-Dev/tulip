@@ -49,27 +49,27 @@ static vector<int> handledSignals;
 static void installSignalHandlers(void) __attribute__((constructor));
 static void installSignalHandlers(void) {
 
-	// fill this vector according to the signals you want to handle
-	handledSignals.push_back(SIGSEGV);
-	handledSignals.push_back(SIGBUS);
-	handledSignals.push_back(SIGABRT);
-	handledSignals.push_back(SIGILL);
-	handledSignals.push_back(SIGFPE);
+  // fill this vector according to the signals you want to handle
+  handledSignals.push_back(SIGSEGV);
+  handledSignals.push_back(SIGBUS);
+  handledSignals.push_back(SIGABRT);
+  handledSignals.push_back(SIGILL);
+  handledSignals.push_back(SIGFPE);
 
-	// the real sigaction function is retrieved
-	if (real_sigaction == NULL) {
-		real_sigaction = reinterpret_cast<SigactionFunc *>(dlsym(RTLD_NEXT, "sigaction"));
-	}
+  // the real sigaction function is retrieved
+  if (real_sigaction == NULL) {
+    real_sigaction = reinterpret_cast<SigactionFunc *>(dlsym(RTLD_NEXT, "sigaction"));
+  }
 
-	// custom signal handler is installed for the signals in the vector
-	struct sigaction action;
-	sigemptyset(&action.sa_mask);
-	action.sa_flags = SA_RESTART | SA_SIGINFO;
-	action.sa_sigaction = &dumpStack;
+  // custom signal handler is installed for the signals in the vector
+  struct sigaction action;
+  sigemptyset(&action.sa_mask);
+  action.sa_flags = SA_RESTART | SA_SIGINFO;
+  action.sa_sigaction = &dumpStack;
 
-	for (size_t i = 0 ; i < handledSignals.size() ; ++i) {
-		real_sigaction(handledSignals[i], &action, NULL);
-	}
+  for (size_t i = 0 ; i < handledSignals.size() ; ++i) {
+    real_sigaction(handledSignals[i], &action, NULL);
+  }
 }
 
 // some typedef on function pointers
@@ -81,34 +81,36 @@ typedef SigHandlerFunc* SignalFunc(int, SigHandlerFunc*);
 // do nothing and return SIG_DFL
 // if the signal is not treated by our custom handler, call the real signal function
 SigHandlerFunc *signal (int sig, SigHandlerFunc *disp) {
-	static SignalFunc *func = NULL;
+  static SignalFunc *func = NULL;
 
-	if (func == NULL) {
-		func = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "signal"));
-	}
+  if (func == NULL) {
+    func = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "signal"));
+  }
 
-	if (std::find(handledSignals.begin(), handledSignals.end(), sig) != handledSignals.end()) {
-		return SIG_DFL;
-	} else {
-		return func(sig, disp);
-	}
+  if (std::find(handledSignals.begin(), handledSignals.end(), sig) != handledSignals.end()) {
+    return SIG_DFL;
+  }
+  else {
+    return func(sig, disp);
+  }
 }
 // redefinition of the sigset function
 // if the signal passed as first parameter is already treated by our custom handler,
 // do nothing and return SIG_DFL
 // if the signal is not treated by our custom handler, call the real sigset function
 SigHandlerFunc *sigset (int sig, SigHandlerFunc *disp) {
-	static SignalFunc *func = NULL;
+  static SignalFunc *func = NULL;
 
-	if (func == NULL) {
-		func = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "sigset"));
-	}
+  if (func == NULL) {
+    func = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "sigset"));
+  }
 
-	if(std::find(handledSignals.begin(), handledSignals.end(), sig) != handledSignals.end()) {
-		return SIG_DFL;
-	} else {
-		return (func(sig, disp));
-	}
+  if(std::find(handledSignals.begin(), handledSignals.end(), sig) != handledSignals.end()) {
+    return SIG_DFL;
+  }
+  else {
+    return (func(sig, disp));
+  }
 }
 
 // redefinition of the sigaction function
@@ -116,9 +118,10 @@ SigHandlerFunc *sigset (int sig, SigHandlerFunc *disp) {
 // do nothing and return 0
 // if the signal is not treated by our custom handler, call the real sigaction function
 int sigaction(int sig, const struct sigaction *act, struct sigaction *oact) {
-	if (std::find(handledSignals.begin(), handledSignals.end(), sig) != handledSignals.end()) {
-		return 0;
-	} else {
-		return real_sigaction(sig, act, oact);
-	}
+  if (std::find(handledSignals.begin(), handledSignals.end(), sig) != handledSignals.end()) {
+    return 0;
+  }
+  else {
+    return real_sigaction(sig, act, oact);
+  }
 }

@@ -38,32 +38,32 @@ class BfdWrapper {
 
 public :
 
-	BfdWrapper(const char *dsoName);
-	~BfdWrapper();
+  BfdWrapper(const char *dsoName);
+  ~BfdWrapper();
 
 #ifndef __MINGW32__
-	std::pair<const char *, unsigned int> getFileAndLineForAddress(const char *unmangledFuncName, const int64_t runtimeAddr, const int64_t runtimeOffset);
+  std::pair<const char *, unsigned int> getFileAndLineForAddress(const char *unmangledFuncName, const int64_t runtimeAddr, const int64_t runtimeOffset);
 #else
-	std::pair<const char *, unsigned int> getFileAndLineForAddress(const int64_t runtimeAddr);
-	const char *getFunctionForAddress(const int64_t runtimeAddr);
+  std::pair<const char *, unsigned int> getFileAndLineForAddress(const int64_t runtimeAddr);
+  const char *getFunctionForAddress(const int64_t runtimeAddr);
 #endif
 
-	const std::string &getDsoAbsolutePath() const {
-		return filePath;
-	}
+  const std::string &getDsoAbsolutePath() const {
+    return filePath;
+  }
 
 private :
 
-	std::string filePath;
-	bfd *abfd;
-	asection *textSection;
-	asymbol **symbolTable;
-	long nSymbols;
-	unsigned int symbolSize;
-	bool isMini;
-	bool isDynamic;
-	asymbol *scratchSymbol;
-	int64_t relocationOffset; // deduced later
+  std::string filePath;
+  bfd *abfd;
+  asection *textSection;
+  asymbol **symbolTable;
+  long nSymbols;
+  unsigned int symbolSize;
+  bool isMini;
+  bool isDynamic;
+  asymbol *scratchSymbol;
+  int64_t relocationOffset; // deduced later
 };
 
 #endif /* BFDWRAPPER_H_ */

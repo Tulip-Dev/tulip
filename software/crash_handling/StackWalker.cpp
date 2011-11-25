@@ -42,94 +42,109 @@ StackWalkerGCC::~StackWalkerGCC() {
 #define MAX_BACKTRACE_SIZE 128
 
 void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
-	void *array[MAX_BACKTRACE_SIZE];
-	int size = backtrace(array, MAX_BACKTRACE_SIZE);
-	char ** messages = backtrace_symbols(array, size);
+  void *array[MAX_BACKTRACE_SIZE];
+  int size = backtrace(array, MAX_BACKTRACE_SIZE);
+  char ** messages = backtrace_symbols(array, size);
 
-	if (messages == NULL)
-		return;
+  if (messages == NULL)
+    return;
 
-	std::ostringstream oss;
-	oss << callerAddress;
-	std::string callerAddressStr = oss.str();
+  std::ostringstream oss;
+  oss << callerAddress;
+  std::string callerAddressStr = oss.str();
 
-	int i = 1;
-	while (i < size) {
-		std::string msg(messages[i]);
-		if (msg.find(callerAddressStr) != std::string::npos) {
-			break;
-		}
-		++i;
-	}
+  int i = 1;
 
-	int offset = i;
-	for (; i < size ; ++i) {
-		char *mangled_name = 0, *runtime_offset = 0,
-				*offset_end = 0, *runtime_addr = 0,
-				*runtime_addr_end = 0;
+  while (i < size) {
+    std::string msg(messages[i]);
 
-		if (static_cast<unsigned int>(i) > maxDepth)
-			return;
+    if (msg.find(callerAddressStr) != std::string::npos) {
+      break;
+    }
 
-		for (char *p = messages[i]; *p; ++p) {
-			if (*p == '(') {
-				mangled_name = p;
-			} else if (*p == '+') {
-				runtime_offset = p;
-			} else if (*p == ')') {
-				offset_end = p;
-			} else if (*p == '[') {
-				runtime_addr = p;
-			} else if (*p == ']') {
-				runtime_addr_end = p;
-			}
-		}
+    ++i;
+  }
 
-		if (mangled_name && runtime_offset && offset_end &&
-				mangled_name < runtime_offset) {
-			*mangled_name++ = '\0';
-			*runtime_offset++ = '\0';
-			*offset_end++ = '\0';
-			*runtime_addr++ = '\0';
-			*runtime_addr_end = '\0';
+  int offset = i;
 
-			const char *dsoName = messages[i];
-			std::string dsoNameStr(dsoName);
+  for (; i < size ; ++i) {
+    char *mangled_name = 0, *runtime_offset = 0,
+          *offset_end = 0, *runtime_addr = 0,
+           *runtime_addr_end = 0;
 
-			int status;
-			char * real_name = abi::__cxa_demangle(mangled_name, 0, 0, &status);
+    if (static_cast<unsigned int>(i) > maxDepth)
+      return;
 
-			char *end;
-			int64_t runtimeAddr = static_cast<int64_t>(strtoll(runtime_addr, &end, 16));
-			int64_t runtimeOffset = static_cast<int64_t>(strtoll(runtime_offset, &end, 0));
+    for (char *p = messages[i]; *p; ++p) {
+      if (*p == '(') {
+        mangled_name = p;
+      }
+      else if (*p == '+') {
+        runtime_offset = p;
+      }
+      else if (*p == ')') {
+        offset_end = p;
+      }
+      else if (*p == '[') {
+        runtime_addr = p;
+      }
+      else if (*p == ']') {
+        runtime_addr_end = p;
+      }
+    }
 
-			std::pair<const char *, unsigned int> infos = std::make_pair("", 0);
+    if (mangled_name && runtime_offset && offset_end &&
+        mangled_name < runtime_offset) {
+      *mangled_name++ = '\0';
+      *runtime_offset++ = '\0';
+      *offset_end++ = '\0';
+      *runtime_addr++ = '\0';
+      *runtime_addr_end = '\0';
+
+      const char *dsoName = messages[i];
+      std::string dsoNameStr(dsoName);
+
+      int status;
+      char * real_name = abi::__cxa_demangle(mangled_name, 0, 0, &status);
+
+      char *end;
+      int64_t runtimeAddr = static_cast<int64_t>(strtoll(runtime_addr, &end, 16));
+      int64_t runtimeOffset = static_cast<int64_t>(strtoll(runtime_offset, &end, 0));
+
+      std::pair<const char *, unsigned int> infos = std::make_pair("", 0);
 
 #ifdef HAVE_BFD
-			if (bfdMap.find(dsoNameStr) == bfdMap.end()) {
-				bfdMap[dsoNameStr] = new BfdWrapper(dsoName);
-			}
-			dsoName = bfdMap[dsoNameStr]->getDsoAbsolutePath().c_str();
-			infos =bfdMap[dsoNameStr]->getFileAndLineForAddress(mangled_name, runtimeAddr, runtimeOffset);
+
+      if (bfdMap.find(dsoNameStr) == bfdMap.end()) {
+        bfdMap[dsoNameStr] = new BfdWrapper(dsoName);
+      }
+
+      dsoName = bfdMap[dsoNameStr]->getDsoAbsolutePath().c_str();
+      infos =bfdMap[dsoNameStr]->getFileAndLineForAddress(mangled_name, runtimeAddr, runtimeOffset);
 #endif
 
-			if (status == 0) {
-				if (std::string(infos.first) == "") {
-					printFrameInfos(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset);
-				} else {
-					printFrameInfos(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset, infos.first, infos.second);
-				}
-			} else {
-				if (std::string(infos.first) == "") {
-					printFrameInfos(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset);
-				} else {
-					printFrameInfos(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset, infos.first, infos.second);
-				}
-			}
-			free(real_name);
-		}
-	}
-	free(messages);
+      if (status == 0) {
+        if (std::string(infos.first) == "") {
+          printFrameInfos(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset);
+        }
+        else {
+          printFrameInfos(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset, infos.first, infos.second);
+        }
+      }
+      else {
+        if (std::string(infos.first) == "") {
+          printFrameInfos(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset);
+        }
+        else {
+          printFrameInfos(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset, infos.first, infos.second);
+        }
+      }
+
+      free(real_name);
+    }
+  }
+
+  free(messages);
 }
 
 #elif defined(__MINGW32__)

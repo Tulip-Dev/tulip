@@ -45,51 +45,51 @@ using namespace std;
 
 // This structure mirrors the one found in /usr/include/asm/ucontext.h
 typedef struct _sig_ucontext {
-	unsigned long     uc_flags;
-	struct ucontext   *uc_link;
-	stack_t           uc_stack;
-	struct sigcontext uc_mcontext;
-	sigset_t          uc_sigmask;
+  unsigned long     uc_flags;
+  struct ucontext   *uc_link;
+  stack_t           uc_stack;
+  struct sigcontext uc_mcontext;
+  sigset_t          uc_sigmask;
 } sig_ucontext_t;
 
 
 void dumpStack(int sig, siginfo_t *, void * ucontext) {
 
-	sig_ucontext_t * uc = reinterpret_cast<sig_ucontext_t *>(ucontext);
+  sig_ucontext_t * uc = reinterpret_cast<sig_ucontext_t *>(ucontext);
 
-	// Get the address at the time the signal was raised from the EIP (x86) or RIP (x86_64)
+  // Get the address at the time the signal was raised from the EIP (x86) or RIP (x86_64)
 #ifdef I64
-	void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.rip); // x86_64 specific;
+  void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.rip); // x86_64 specific;
 #else
-	void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.eip); // x86 specific;
+  void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.eip); // x86 specific;
 #endif
 
-	std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
-			<< TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
-			<< TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-			<< TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+  std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
+            << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
+            << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
+            << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
 
-	std::cerr << "Caught signal " << sig << " (" << strsignal(sig) << ")" << std::endl;
+  std::cerr << "Caught signal " << sig << " (" << strsignal(sig) << ")" << std::endl;
 
-	std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
-	StackWalkerGCC sw;
-	sw.setCallerAddress(callerAddress);
-	sw.printCallStackToStdErr();
-	std::cerr << TLP_STACK_END_HEADER << std::endl;
-	std::cerr << std::flush;
-	exit(1);
+  std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
+  StackWalkerGCC sw;
+  sw.setCallerAddress(callerAddress);
+  sw.printCallStackToStdErr();
+  std::cerr << TLP_STACK_END_HEADER << std::endl;
+  std::cerr << std::flush;
+  exit(1);
 }
 
 void start_crash_handler() {
-	struct sigaction action;
-	sigemptyset(&action.sa_mask);
-	action.sa_flags = SA_RESTART | SA_SIGINFO;
-	action.sa_sigaction = &dumpStack;
-	sigaction(SIGSEGV, &action, NULL);
-	sigaction(SIGABRT, &action, NULL);
-	sigaction(SIGFPE, &action, NULL);
-	sigaction(SIGILL, &action, NULL);
-	sigaction(SIGBUS, &action, NULL);
+  struct sigaction action;
+  sigemptyset(&action.sa_mask);
+  action.sa_flags = SA_RESTART | SA_SIGINFO;
+  action.sa_sigaction = &dumpStack;
+  sigaction(SIGSEGV, &action, NULL);
+  sigaction(SIGABRT, &action, NULL);
+  sigaction(SIGFPE, &action, NULL);
+  sigaction(SIGILL, &action, NULL);
+  sigaction(SIGBUS, &action, NULL);
 }
 
 /*
@@ -99,45 +99,45 @@ void start_crash_handler() {
 
 static LONG WINAPI
 exception_filter(LPEXCEPTION_POINTERS info) {
-	StackWalkerMinGW sw;
-	sw.setContext(info->ContextRecord);
+  StackWalkerMinGW sw;
+  sw.setContext(info->ContextRecord);
 
-	std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
-			<< TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
-			<< TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-			<< TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
-	std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
-	sw.printCallStackToStdErr();
-	std::cerr << TLP_STACK_END_HEADER << std::endl;
-	std::cerr << std::flush;
-	return 1;
+  std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
+            << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
+            << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
+            << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+  std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
+  sw.printCallStackToStdErr();
+  std::cerr << TLP_STACK_END_HEADER << std::endl;
+  std::cerr << std::flush;
+  return 1;
 }
 
 
 void start_crash_handler() {
-	SetUnhandledExceptionFilter(exception_filter);
+  SetUnhandledExceptionFilter(exception_filter);
 }
 
 #elif defined(_MSC_VER)
 
 static LONG WINAPI
 exception_filter(LPEXCEPTION_POINTERS info) {
-	StackWalkerMSVC sw;
-	sw.setContext(info->ContextRecord);
+  StackWalkerMSVC sw;
+  sw.setContext(info->ContextRecord);
 
-	std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
-			<< TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
-			<< TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-			<< TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
-	std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
-	sw.printCallStackToStdErr();
-	std::cerr << TLP_STACK_END_HEADER << std::endl;
-	std::cerr << std::flush;
-	return 1;
+  std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
+            << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
+            << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
+            << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+  std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
+  sw.printCallStackToStdErr();
+  std::cerr << TLP_STACK_END_HEADER << std::endl;
+  std::cerr << std::flush;
+  return 1;
 }
 
 
 void start_crash_handler() {
-	SetUnhandledExceptionFilter(exception_filter);
+  SetUnhandledExceptionFilter(exception_filter);
 }
 #endif
