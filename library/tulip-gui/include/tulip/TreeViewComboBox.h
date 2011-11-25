@@ -11,6 +11,8 @@ public:
   explicit TreeViewComboBox(QWidget *parent = 0);
   virtual void showPopup();
 
+  QModelIndex selectedIndex() const;
+
 public slots:
   void selectIndex(const QModelIndex&);
 };

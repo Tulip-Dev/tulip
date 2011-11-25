@@ -30,3 +30,7 @@ void TreeViewComboBox::selectIndex(const QModelIndex& index) {
   setRootModelIndex(index.parent());
   setCurrentIndex(index.row());
 }
+
+QModelIndex TreeViewComboBox::selectedIndex() const {
+  return model()->index(currentIndex(),0,rootModelIndex());
+}
