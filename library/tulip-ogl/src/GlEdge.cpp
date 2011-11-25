@@ -388,8 +388,12 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
       nbCurvePoints = 200;
     }
 
+    bool fisheyeActivated = GlShaderProgram::getCurrentActiveShader() && GlShaderProgram::getCurrentActiveShader()->getName() == "fisheye";
+
+    curve->setLineCurve(false);
     curve->setOutlined(false);
     curve->setOutlineColor(borderColor);
+    curve->setOutlineColorInterpolation(colorInterpolate);
     curve->setBillboardCurve(false);
     curve->setTexture(textureName);
 
@@ -400,19 +404,17 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 
     float startSize = size[0]*0.5f, endSize = size[1]*0.5f;
 
-    if (lod > -5 && lod < 5) {
-      startSize = 1;
-      endSize = 1;
+    if (!fisheyeActivated && lod > -5 && lod < 5) {
+      curve->setLineCurve(true);
+      curve->setCurveLineWidth(1.4f);
     }
-    else if (lod > 100 || lod < -100) {
+    else if (fisheyeActivated || lod > 100 || lod < -100) {
       curve->setOutlined(outlineWidth > 0);
+      curve->setCurveQuadBordersWidth(outlineWidth);
     }
-
-    if (outlineWidth > 0)
-      glLineWidth(outlineWidth);
 
     curve->drawCurve(tmp, startColor, endColor, startSize, endSize, nbCurvePoints);
-    glLineWidth(1.4f);
+
     break;
   }
 

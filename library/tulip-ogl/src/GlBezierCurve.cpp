@@ -130,7 +130,7 @@ void GlBezierCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &st
   }
 
   if (controlPoints.size() <= CONTROL_POINTS_LIMIT) {
-    AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize, controlPoints.size() > 2 ? nbCurvePoints : 2);
+    AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
   }
   else {
 

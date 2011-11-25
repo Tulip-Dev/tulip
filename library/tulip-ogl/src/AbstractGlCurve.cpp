@@ -470,7 +470,9 @@ std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> > Abstract
 
 AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &curveSpecificShaderCode) :
   curveShaderProgramNormal(NULL), curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
-  outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)) {
+  outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false),
+  lookDir(Coord(0,0,1)), lineCurve(false), curveLineWidth(1.0f), curveQuadBordersWidth(1.0f),
+  outlineColorInterpolation(false) {
   canUseGeometryShader = GlShaderProgram::geometryShaderSupported();
   initShader(shaderProgramName, curveSpecificShaderCode);
 }
@@ -479,7 +481,8 @@ AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &
                                  const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) :
   shaderProgramName(shaderProgramName), curveShaderProgramNormal(NULL), curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
   controlPoints(controlPoints), startColor(startColor), endColor(endColor), startSize(startSize), endSize(endSize), nbCurvePoints(nbCurvePoints),
-  outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)) {
+  outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)),
+  lineCurve(false), curveLineWidth(1.0f), curveQuadBordersWidth(1.0f), outlineColorInterpolation(false) {
 
   canUseGeometryShader = GlShaderProgram::geometryShaderSupported();
   initShader(shaderProgramName, curveSpecificShaderCode);
@@ -658,6 +661,9 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
   GLint renderMode;
   glGetIntegerv(GL_RENDER_MODE, &renderMode);
 
+  float currentLineWidth;
+  glGetFloatv(GL_LINE_WIDTH, &currentLineWidth);
+
   glDisable(GL_LIGHTING);
   glDisable(GL_CULL_FACE);
 
@@ -735,7 +741,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
     bool geometryShaderActivated = false;
 
-    if (canUseGeometryShader && nbCurvePoints > 3 && !(startSize == 1 && endSize == 1) && geometryShaders.first) {
+    if (canUseGeometryShader && nbCurvePoints > 3 && !lineCurve && geometryShaders.first) {
       if (!billboardCurve) {
         curveShaderProgram = geometryShaders.first;
       }
@@ -790,7 +796,8 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
       glVertexPointer(2, GL_FLOAT, 2 * sizeof(GLfloat), curveVertexBuffersData[nbCurvePoints]);
     }
 
-    if (startSize == 1 && endSize == 1) {
+    if (lineCurve) {
+      glLineWidth(curveLineWidth);
       OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
       if (vboOk) {
@@ -891,9 +898,15 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
           setCurveVertexShaderRenderingSpecificParameters();
         }
 
-        curveShaderProgram->setUniformColor("startColor", outlineColor);
-        curveShaderProgram->setUniformColor("endColor", outlineColor);
+        if (outlineColorInterpolation) {
+        	curveShaderProgram->setUniformColor("startColor", startColor);
+            curveShaderProgram->setUniformColor("endColor", endColor);
+        } else {
+        	curveShaderProgram->setUniformColor("startColor", outlineColor);
+        	curveShaderProgram->setUniformColor("endColor", outlineColor);
+        }
 
+        glLineWidth(curveQuadBordersWidth);
 
         OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
@@ -970,17 +983,20 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     vector<Coord> curvePoints;
     computeCurvePointsOnCPU(controlPoints, curvePoints, nbCurvePoints);
 
-    if (startSize == 1 && endSize == 1) {
+    if (lineCurve) {
+      glLineWidth(curveLineWidth);
       polyLine(curvePoints, startColor, endColor);
     }
     else if (!billboardCurve) {
-      polyQuad(curvePoints, startColor, endColor, startSize, endSize, Coord(2.f*curvePoints[0] - curvePoints[1]), Coord(2.f*curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]),!outlined,outlineColor,texture);
+      polyQuad(curvePoints, startColor, endColor, startSize, endSize, Coord(2.f*curvePoints[0] - curvePoints[1]), Coord(2.f*curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]),outlineColorInterpolation,outlineColor,texture,curveQuadBordersWidth);
     }
     else {
       simpleQuad(curvePoints, startColor, endColor, startSize, endSize, Coord(2.f*curvePoints[0] - curvePoints[1]),
                  Coord(2.f*curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]), lookDir, !outlined,outlineColor,texture);
     }
   }
+
+  glLineWidth(currentLineWidth);
 
   glEnable(GL_LIGHTING);
   glEnable(GL_CULL_FACE);
