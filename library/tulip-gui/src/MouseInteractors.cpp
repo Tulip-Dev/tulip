@@ -157,6 +157,8 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
         case SelectedEntity::EDGE_SELECTED:
           graph->delEdge(edge(selectedEntity.getComplexEntityId()));
           break;
+        default :
+          break;
         }
 
         glMainWidget->redraw();
