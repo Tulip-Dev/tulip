@@ -48,6 +48,11 @@ ExtendedMetaNodeRenderer::~ExtendedMetaNodeRenderer() {
 
 void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
 
+  GLint renderMode;
+  glGetIntegerv(GL_RENDER_MODE,&renderMode);
+  if(renderMode==GL_SELECT)
+    return;
+
   GlMainView *view;
   Graph *metaGraph = inputData->getGraph()->getNodeMetaInfo(n);
 
