@@ -263,8 +263,7 @@ private:
   View *view;
   int widthStored;
   int heightStored;
-  char *renderingStore;
-  bool frameBufferStored;
+  char *renderingStore;  
   std::vector<ForegroundEntity *> foregroundEntity;
   GlCompositeHierarchyManager* manager;
   bool _hasHulls;

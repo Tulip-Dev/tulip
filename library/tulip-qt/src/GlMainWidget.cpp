@@ -349,17 +349,14 @@ void GlMainWidget::redraw() {
     glDisable(GL_BLEND);
     glDisable(GL_LIGHTING);
 
-    //#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-    //    if (useFramebufferObject) {
-    //      QGLFramebufferObject::blitFramebuffer(0, QRect(0,0,width, height), glFrameBuf, QRect(0,0,width, height));
-    //    }
-    //#endif
+    glDrawBuffer(GL_BACK);
+    setRasterPosition(0,0);
+    glDrawPixels(width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
 
-    if (!frameBufferStored) {
-      glDrawBuffer(GL_BACK);
-      setRasterPosition(0,0);
-      glDrawPixels(width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
-    }
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glEnable(GL_LIGHTING);
 
     drawInteractors();
     drawForegroundEntities();
@@ -383,12 +380,6 @@ void GlMainWidget::draw(bool graphChanged) {
 
     int width = contentsRect().width();
     int height = contentsRect().height();
-
-    //#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-    //    if(QGlBufferManager::getInst().canUseFramebufferObject() && QGLFramebufferObject::hasOpenGLFramebufferBlit()){
-    //      useFramebufferObject = true;
-    //    }
-    //#endif
 
     createRenderingStore(width,height);
 
@@ -414,24 +405,14 @@ void GlMainWidget::draw(bool graphChanged) {
     glDisable(GL_BLEND);
     glDisable(GL_LIGHTING);
 
-    frameBufferStored=false;
-
-    //#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-    //    if(useFramebufferObject){
-    //      QGLFramebufferObject::blitFramebuffer(glFrameBuf, QRect(0,0,width, height), 0, QRect(0,0,width, height));
-    //      frameBufferStored=true;
-    //    }
-    //#endif
-
-    if (!frameBufferStored) {
-      glReadBuffer(GL_BACK);
-      glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
-      glFlush();
-    }
+    glReadBuffer(GL_BACK);
+    glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+    glFlush();
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glEnable(GL_LIGHTING);
+
     drawForegroundEntities();
     drawInteractors();
 
