@@ -5,10 +5,7 @@
 #include <QtGui/QHeaderView>
 #include <QtCore/QEvent>
 
-//FIXME: remove me
-#include <QtCore/QDebug>
-
-TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _selectedIndex(QModelIndex()), _treeView(NULL) {
+TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeView(NULL) {
   _treeView = new QTreeView(this);
   _treeView->setFrameShape(QFrame::NoFrame);
   _treeView->setEditTriggers(QTreeView::NoEditTriggers);
