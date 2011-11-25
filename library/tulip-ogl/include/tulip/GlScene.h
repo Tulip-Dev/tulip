@@ -35,12 +35,13 @@ struct SelectedEntity {
   enum SelectedEntityType {
     UNKNOW_SELECTED = 0,
     NODE_SELECTED = 1,
-    EDGE_SELECTED = 2
+    EDGE_SELECTED = 2,
+    SIMPLE_ENTITY_SELECTED = 3
   };
 
-  SelectedEntity():simpleEntity(NULL),complexEntityId((unsigned int)(-1)),complexEntityType(UNKNOW_SELECTED),complexEntityGraph(NULL) {}
-  SelectedEntity(GlSimpleEntity *entity):simpleEntity(entity),complexEntityId((unsigned int)(-1)),complexEntityType(UNKNOW_SELECTED),complexEntityGraph(NULL) {}
-  SelectedEntity(Graph *graph,unsigned int id,SelectedEntityType type):simpleEntity(NULL),complexEntityId(id),complexEntityType(type),complexEntityGraph(graph) {}
+  SelectedEntity():simpleEntity(NULL),complexEntityId((unsigned int)(-1)),entityType(UNKNOW_SELECTED),complexEntityGraph(NULL) {}
+  SelectedEntity(GlSimpleEntity *entity):simpleEntity(entity),complexEntityId((unsigned int)(-1)),entityType(SIMPLE_ENTITY_SELECTED),complexEntityGraph(NULL) {}
+  SelectedEntity(Graph *graph,unsigned int id,SelectedEntityType type):simpleEntity(NULL),complexEntityId(id),entityType(type),complexEntityGraph(graph) {}
 
   GlSimpleEntity *getSimpleEntity() const {
     assert(simpleEntity!=NULL);
@@ -57,16 +58,16 @@ struct SelectedEntity {
     return complexEntityGraph;
   }
 
-  SelectedEntityType getComplexEntityType() const {
-    assert(complexEntityType!=UNKNOW_SELECTED);
-    return complexEntityType;
+  SelectedEntityType getEntityType() const {
+    assert(entityType!=UNKNOW_SELECTED);
+    return entityType;
   }
 
 protected :
 
   GlSimpleEntity *simpleEntity;
   unsigned int complexEntityId;
-  SelectedEntityType complexEntityType;
+  SelectedEntityType entityType;
   Graph *complexEntityGraph;
 };
 

@@ -136,14 +136,14 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     if(selectedEntity=="targetTriangle") {
       SelectedEntity selectedEntity;
 
-      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getComplexEntityType() == SelectedEntity::NODE_SELECTED) {
+      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->getGraph()->setEnds(mEdge,glMainWidget->getGraph()->ends(mEdge).first,node(selectedEntity.getComplexEntityId()));
       }
     }
     else if(selectedEntity=="sourceCircle") {
       SelectedEntity selectedEntity;
 
-      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getComplexEntityType() == SelectedEntity::NODE_SELECTED) {
+      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->getGraph()->setEnds(mEdge,node(selectedEntity.getComplexEntityId()),glMainWidget->getGraph()->ends(mEdge).second);
       }
     }
@@ -172,7 +172,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       SelectedEntity selectedEntity;
       GlMainWidget *g = (GlMainWidget *) widget;
 
-      if (g->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getComplexEntityType() == SelectedEntity::NODE_SELECTED) {
+      if (g->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         g->setCursor(Qt::CrossCursor);
       }
       else {

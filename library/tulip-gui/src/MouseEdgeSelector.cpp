@@ -113,7 +113,7 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
         bool result = glMainWidget->doSelect(x, y, selectedEntity);
 
         if (result) {
-          switch(selectedEntity.getComplexEntityType()) {
+          switch(selectedEntity.getEntityType()) {
           case SelectedEntity::EDGE_SELECTED:
             selection->setEdgeValue(edge(selectedEntity.getComplexEntityId()), true);
             break;

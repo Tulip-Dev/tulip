@@ -181,7 +181,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         bool result = glMainWidget->doSelect(x, y, selectedEntity);
 
         if (result) {
-          switch(selectedEntity.getComplexEntityType()) {
+          switch(selectedEntity.getEntityType()) {
           case SelectedEntity::NODE_SELECTED:
             result = selection->getNodeValue(node(selectedEntity.getComplexEntityId()));
 

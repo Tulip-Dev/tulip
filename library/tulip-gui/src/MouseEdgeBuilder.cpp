@@ -55,7 +55,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
       if (!started) {
         bool result=glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity);
 
-        if (result && (selectedEntity.getComplexEntityType() == SelectedEntity::NODE_SELECTED)) {
+        if (result && (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)) {
           started=true;
           initObserver(_graph);
           source=node(selectedEntity.getComplexEntityId());
@@ -68,7 +68,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
       else {
         bool result = glMainWidget->doSelect(qMouseEv->x(),qMouseEv->y(),selectedEntity);
 
-        if (result && (selectedEntity.getComplexEntityType() == SelectedEntity::NODE_SELECTED)) {
+        if (result && (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)) {
           Observable::holdObservers();
           started=false;
           clearObserver();
@@ -109,7 +109,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
     if (!started) {
       SelectedEntity selectedEntity;
-      bool hoveringOverNode = glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getComplexEntityType() == SelectedEntity::NODE_SELECTED;
+      bool hoveringOverNode = glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED;
 
       if (!hoveringOverNode)
         return false;
