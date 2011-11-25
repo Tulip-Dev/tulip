@@ -63,7 +63,6 @@ class PanelSelectionWizard : public QWizard {
 
   Ui::PanelSelectionWizard* _ui;
   GraphHierarchiesModel* _model;
-  tlp::Graph* _graph;
   PanelSelectionItem* _activeItem;
   bool _canSelectGraph;
 public:

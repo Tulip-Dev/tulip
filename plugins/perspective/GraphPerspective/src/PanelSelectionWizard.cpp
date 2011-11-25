@@ -81,7 +81,7 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
 
   if (_canSelectGraph) {
     _ui->graphCombo->setModel(_model);
-    _graph = _model->currentGraph();
+    _ui->graphCombo->selectIndex(_model->indexOf(_model->currentGraph()));
   }
 
   QVBoxLayout *panelsLayout = new QVBoxLayout;
@@ -127,7 +127,7 @@ void PanelSelectionWizard::panelDoubleClicked() {
 }
 
 tlp::Graph* PanelSelectionWizard::graph() const {
-  return _graph;
+  return _model->data(_ui->graphCombo->selectedIndex(),TulipModel::GraphRole).value<tlp::Graph*>();
 }
 
 QString PanelSelectionWizard::panelName() const {
@@ -140,6 +140,5 @@ QString PanelSelectionWizard::panelName() const {
 void PanelSelectionWizard::setSelectedGraph(tlp::Graph* g) {
   if (!_canSelectGraph)
     return;
-  _graph = g;
   _ui->graphCombo->selectIndex(_model->indexOf(g));
 }
