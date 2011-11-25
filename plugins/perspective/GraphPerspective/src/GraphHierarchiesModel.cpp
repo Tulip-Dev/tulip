@@ -326,8 +326,10 @@ static QString GRAPH_FILE("graph.json");
 void GraphHierarchiesModel::readProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
   foreach(QString entry, project->entryList(GRAPHS_PATH,QDir::Dirs | QDir::NoDotAndDotDot)) {
     QString file = GRAPHS_PATH + entry + "/graph.json";
+
     if (!project->exists(file))
       continue;
+
     QString absolutePath = project->toAbsolutePath(file);
     DataSet data;
     data.set<std::string>("file::filename",absolutePath.toStdString());

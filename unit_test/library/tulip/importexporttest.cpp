@@ -124,14 +124,16 @@ void ImportExportTest::testSubGraphsImportExport() {
 Graph* ImportExportTest::createSimpleGraph() const {
   Graph* original = tlp::newGraph();
   LayoutProperty* layout = original->getProperty<LayoutProperty>("viewLayout");
+
   for(uint i = 0; i < 100; ++i) {
     node n = original->addNode();
     layout->setNodeValue(n, Coord(i%11, i/10));
   }
-  
+
   for(int x = 0; x < 10; ++x) {
     for(int y = 0; y < 10; ++y) {
       node origin(x+10*y);
+
       for(int xDelta = -1; xDelta <= 1; ++xDelta) {
         for(int yDelta = -1; yDelta <= 1; ++yDelta) {
           if(x+xDelta >= 0 && x+xDelta <= 9 && y+yDelta >= 0 && y+yDelta <= 9) {
@@ -142,7 +144,7 @@ Graph* ImportExportTest::createSimpleGraph() const {
       }
     }
   }
-  
+
   DoubleProperty* id = original->getProperty<DoubleProperty>("id");
   string msg;
   original->computeProperty<DoubleProperty>("Id", id, msg);

@@ -17,7 +17,7 @@ public:
    * @return void
    **/
   void parse(std::string filename);
-  
+
   virtual void parseNull();
   virtual void parseBoolean(bool boolVal);
   virtual void parseInteger(long long integerVal);

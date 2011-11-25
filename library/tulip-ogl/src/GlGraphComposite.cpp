@@ -324,6 +324,7 @@ void GlGraphComposite::draw(float,Camera* camera) {
 
   if(!lodCalculator)
     lodCalculator=camera->getScene()->getCalculator()->clone();
+
   lodCalculator->clear();
   lodCalculator->setRenderingEntitiesFlag(RenderingAll);
   lodCalculator->setInputData(getInputData());
