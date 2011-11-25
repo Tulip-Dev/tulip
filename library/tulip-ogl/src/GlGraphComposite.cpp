@@ -390,7 +390,7 @@ void GlGraphComposite::draw(float,Camera* camera) {
           if((selectionType & RenderingNodes)==0)
             continue;
 
-          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id,NODE_SELECTED);
+          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id,SelectedEntity::NODE_SELECTED);
           glLoadName(*selectionCurrentId);
           (*selectionCurrentId)++;
         }
@@ -421,7 +421,7 @@ void GlGraphComposite::draw(float,Camera* camera) {
         if((selectionType & RenderingEdges)==0)
           continue;
 
-        (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id,EDGE_SELECTED);
+        (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id,SelectedEntity::EDGE_SELECTED);
         glLoadName(*selectionCurrentId);
         (*selectionCurrentId)++;
       }
@@ -487,7 +487,7 @@ void GlGraphComposite::draw(float,Camera* camera) {
       if((*it).isNode && (selectionType & RenderingNodes)!=0) {
         if((!graph->isMetaNode(node(entity->id)) && displayNodes) || (graph->isMetaNode(node(entity->id)) && displayMetaNodes)) {
           if(selectionDrawActivate) {
-            (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id,NODE_SELECTED);
+            (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id,SelectedEntity::NODE_SELECTED);
             glLoadName(*selectionCurrentId);
             (*selectionCurrentId)++;
           }
@@ -504,7 +504,7 @@ void GlGraphComposite::draw(float,Camera* camera) {
           continue;
 
         if(selectionDrawActivate) {
-          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id,EDGE_SELECTED);
+          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id,SelectedEntity::EDGE_SELECTED);
           glLoadName(*selectionCurrentId);
           (*selectionCurrentId)++;
         }

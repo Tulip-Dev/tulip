@@ -30,13 +30,13 @@
 
 namespace tlp {
 
-enum SelectedEntityType {
-  UNKNOW_SELECTED = 0,
-  NODE_SELECTED = 1,
-  EDGE_SELECTED = 2
-};
-
 struct SelectedEntity {
+
+  enum SelectedEntityType {
+    UNKNOW_SELECTED = 0,
+    NODE_SELECTED = 1,
+    EDGE_SELECTED = 2
+  };
 
   SelectedEntity():simpleEntity(NULL),complexEntityId((unsigned int)(-1)),complexEntityType(UNKNOW_SELECTED),complexEntityGraph(NULL) {}
   SelectedEntity(GlSimpleEntity *entity):simpleEntity(entity),complexEntityId((unsigned int)(-1)),complexEntityType(UNKNOW_SELECTED),complexEntityGraph(NULL) {}

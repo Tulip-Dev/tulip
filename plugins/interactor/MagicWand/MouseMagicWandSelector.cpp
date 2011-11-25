@@ -37,7 +37,7 @@ bool tlp::MouseMagicWandSelector::eventFilter(QObject* widget, QEvent* e) {
   if(qMouseEv != NULL) {
     SelectedEntity selectedEntity;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
-    bool hoveringOverNode = glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getComplexEntityType() == NODE_SELECTED;
+    bool hoveringOverNode = glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getComplexEntityType() == SelectedEntity::NODE_SELECTED;
 
     if(e->type() == QEvent::MouseMove) {
       if (hoveringOverNode) {

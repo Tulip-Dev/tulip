@@ -182,7 +182,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 
         if (result) {
           switch(selectedEntity.getComplexEntityType()) {
-          case NODE_SELECTED:
+          case SelectedEntity::NODE_SELECTED:
             result = selection->getNodeValue(node(selectedEntity.getComplexEntityId()));
 
             if (revertSelection || boolVal != result) {
@@ -196,7 +196,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 
             break;
 
-          case EDGE_SELECTED:
+          case SelectedEntity::EDGE_SELECTED:
             result = selection->getEdgeValue(edge(selectedEntity.getComplexEntityId()));
 
             if (revertSelection || boolVal != result) {
@@ -208,6 +208,8 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
               selection->setEdgeValue(edge(selectedEntity.getComplexEntityId()), !result);
             }
 
+            break;
+          default:
             break;
           }
         }
