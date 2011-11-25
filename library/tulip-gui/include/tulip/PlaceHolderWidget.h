@@ -32,6 +32,9 @@ public:
   QWidget* takeWidget();
   void setWidget(QWidget* widget);
 
+protected slots:
+  void widgetDestroyed();
+
 //protected:
 //  bool eventFilter(QObject *, QEvent *);
 };
