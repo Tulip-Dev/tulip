@@ -57,7 +57,7 @@ public :
      * \param axisColor the color of the axis
    */
   GlAxis(const std::string &axisName, const Coord &axisBaseCoord, const float axisLength,
-         const AxisOrientation &axisOrientation, const Color &axisColor);
+         const AxisOrientation &axisOrientation, const Color &axisColor, const float axisWidth=10);
 
   /**
    * GlAxis destructor
@@ -224,6 +224,7 @@ protected :
   LabelPosition captionPosition;
   float maxCaptionWidth;
   float maxGraduationLabelWidth;
+  float axisWidth;
 };
 /*@}*/
 }

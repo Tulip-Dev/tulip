@@ -24,8 +24,8 @@ using namespace std;
 namespace tlp {
 
 GlNominativeAxis::GlNominativeAxis(const string &axisName, const Coord &axisBaseCoord, const float axisLength,
-                                   const AxisOrientation &axisOrientation, const Color &axisColor)
-  : GlAxis(axisName, axisBaseCoord, axisLength, axisOrientation, axisColor) {}
+                                   const AxisOrientation &axisOrientation, const Color &axisColor, const float axisWidth)
+  : GlAxis(axisName, axisBaseCoord, axisLength, axisOrientation, axisColor, axisWidth) {}
 
 void GlNominativeAxis::setAxisGraduationsLabels(const std::vector<std::string> &axisGradsLabels, const LabelPosition &labelsPos) {
   labelsOrder = axisGradsLabels;

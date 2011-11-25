@@ -45,7 +45,7 @@ public :
    * \ascendingOrder If true, the min value will be at the bottom end and the max will be at the top end if the axis is vertical (min at the left and max at the right if it is horizontal). If false this positions are switched
    */
   GlQuantitativeAxis(const std::string &axisName, const Coord &axisBaseCoord, const float axisLength,
-                     const AxisOrientation &axisOrientation, const Color &axisColor,
+                     const AxisOrientation &axisOrientation, const Color &axisColor, const float axisWidth=10,
                      const bool addArrow = true, const bool ascendingOrder = true);
 
   /**

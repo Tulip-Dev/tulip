@@ -45,7 +45,7 @@ public :
    * \axisColor the color of the axis
    */
   GlNominativeAxis(const std::string &axisName, const Coord &axisBaseCoord, const float axisLength,
-                   const AxisOrientation &axisOrientation, const Color &axisColor);
+                   const AxisOrientation &axisOrientation, const Color &axisColor, const float axisWidth=10);
 
 
   /**
