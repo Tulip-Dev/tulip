@@ -1,9 +1,6 @@
 #include "tulip/TreeViewComboBox.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
 #include <QtGui/QHeaderView>
-#include <QtCore/QEvent>
 
 TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeView(NULL) {
   _treeView = new QTreeView(this);
