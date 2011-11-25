@@ -149,7 +149,7 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
         // allow to undo
         graph->push();
 
-        switch(selectedEntity.getComplexEntityType()) {
+        switch(selectedEntity.getEntityType()) {
         case SelectedEntity::NODE_SELECTED:
           graph->delNode(node(selectedEntity.getComplexEntityId()));
           break;
