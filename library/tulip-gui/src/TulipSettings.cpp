@@ -525,6 +525,7 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/GlGraphStaticData.h>
+#include <tulip/GlyphManager.h>
 
 using namespace tlp;
 
@@ -643,7 +644,7 @@ void TulipSettings::setDefaultSize(tlp::ElementType elem, const tlp::Size& size)
 }
 
 int TulipSettings::defaultShape(tlp::ElementType elem) {
-  const int CIRCLE_GLYPH_ID = 14;
+  const int CIRCLE_GLYPH_ID = tlp::GlyphManager::getInst().glyphId("2D - Circle");
   return value(elementKey(DefaultShapeConfigEntry,elem),(elem == tlp::NODE ? CIRCLE_GLYPH_ID : SPLINESHAPE)).toInt();
 }
 
