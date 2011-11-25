@@ -22,6 +22,23 @@
 
 #include "tulip/QtGlSceneZoomAndPanAnimator.h"
 
+class MouseEventDiscardFilter : public QObject {
+
+public :
+
+    bool eventFilter(QObject*, QEvent *event) {
+        if (event->type() == QEvent::MouseMove ||
+                event->type() == QEvent::MouseButtonDblClick ||
+                event->type() == QEvent::MouseButtonPress ||
+                event->type() == QEvent::ContextMenu ||
+                event->type() == QEvent::MouseButtonRelease) {
+            return true;
+        }
+        return false;
+    }
+
+};
+
 namespace tlp {
 
 QtGlSceneZoomAndPanAnimator::QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const std::string &layerName, const bool optimalPath, const double velocity, const double p) :
@@ -37,7 +54,8 @@ void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
   QTimeLine timeLine(animationDurationMsec);
   timeLine.setFrameRange(0, nbAnimationSteps);
   connect(&timeLine, SIGNAL(frameChanged(int)), this, SLOT(zoomAndPanAnimStepSlot(int)));
-
+  MouseEventDiscardFilter medf;
+  glWidget->installEventFilter(&medf);
   if (doZoomAndPan || (!doZoomAndPan && additionalAnimation != NULL)) {
     timeLine.start();
 
@@ -45,6 +63,7 @@ void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
       QApplication::processEvents(QEventLoop::AllEvents);
     }
   }
+  glWidget->removeEventFilter(&medf);
 }
 
 void QtGlSceneZoomAndPanAnimator::zoomAndPanAnimStepSlot(int animationStep) {
