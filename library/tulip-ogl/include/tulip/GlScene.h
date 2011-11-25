@@ -38,9 +38,9 @@ enum SelectedEntityType {
 
 struct SelectedEntity {
 
-  SelectedEntity():simpleEntity(NULL),complexEntityId((unsigned int)(-1)),complexEntityGraph(NULL) {}
-  SelectedEntity(GlSimpleEntity *entity):simpleEntity(entity),complexEntityId((unsigned int)(-1)),complexEntityGraph(NULL) {}
-  SelectedEntity(Graph *graph,unsigned int id):simpleEntity(NULL),complexEntityId(id),complexEntityGraph(graph) {}
+  SelectedEntity():simpleEntity(NULL),complexEntityId((unsigned int)(-1)),complexEntityType(UNKNOW_SELECTED),complexEntityGraph(NULL) {}
+  SelectedEntity(GlSimpleEntity *entity):simpleEntity(entity),complexEntityId((unsigned int)(-1)),complexEntityType(UNKNOW_SELECTED),complexEntityGraph(NULL) {}
+  SelectedEntity(Graph *graph,unsigned int id,SelectedEntityType type):simpleEntity(NULL),complexEntityId(id),complexEntityType(type),complexEntityGraph(graph) {}
 
   GlSimpleEntity *getSimpleEntity() const {
     assert(simpleEntity!=NULL);
