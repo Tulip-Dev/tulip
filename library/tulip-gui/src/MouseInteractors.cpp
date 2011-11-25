@@ -150,11 +150,11 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
         graph->push();
 
         switch(selectedEntity.getComplexEntityType()) {
-        case NODE_SELECTED:
+        case SelectedEntity::NODE_SELECTED:
           graph->delNode(node(selectedEntity.getComplexEntityId()));
           break;
 
-        case EDGE_SELECTED:
+        case SelectedEntity::EDGE_SELECTED:
           graph->delEdge(edge(selectedEntity.getComplexEntityId()));
           break;
         }

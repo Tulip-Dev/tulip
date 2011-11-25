@@ -114,7 +114,7 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
 
         if (result) {
           switch(selectedEntity.getComplexEntityType()) {
-          case EDGE_SELECTED:
+          case SelectedEntity::EDGE_SELECTED:
             selection->setEdgeValue(edge(selectedEntity.getComplexEntityId()), true);
             break;
 
