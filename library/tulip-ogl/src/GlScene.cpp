@@ -126,7 +126,7 @@ void GlScene::draw() {
   if(lodCalculator->needEntities()) {
     GlLODSceneVisitor *lodVisitor;
 
-    lodVisitor = new GlLODSceneVisitor(lodCalculator, glGraphComposite->getInputData());
+    lodVisitor = new GlLODSceneVisitor(lodCalculator, NULL);
 
     for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
       (*it).second->acceptVisitor(lodVisitor);
@@ -517,9 +517,6 @@ void GlScene::rotateScene(const int x, const int y, const int z) {
 void GlScene::glGraphCompositeAdded(GlLayer* layer,GlGraphComposite *glGraphComposite) {
   this->graphLayer=layer;
   this->glGraphComposite=glGraphComposite;
-
-  if(glGraphComposite)
-    lodCalculator->setInputData(glGraphComposite->getInputData());
 }
 //========================================================================================================
 void GlScene::glGraphCompositeRemoved(GlLayer* layer,GlGraphComposite *glGraphComposite) {

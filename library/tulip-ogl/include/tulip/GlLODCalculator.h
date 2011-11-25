@@ -78,7 +78,7 @@ class TLP_GL_SCOPE GlLODCalculator {
 
 public:
 
-  GlLODCalculator():glScene(NULL),inputData(NULL) {}
+  GlLODCalculator():glScene(NULL),inputData(NULL),attachedLODCalculator(NULL) {}
   virtual ~GlLODCalculator() {}
   virtual GlLODCalculator *clone()=0;
 
@@ -161,6 +161,10 @@ public:
 
   virtual BoundingBox getSceneBoundingBox()=0;
 
+  void setAttachedLODCalculator(GlLODCalculator *calculator){
+    attachedLODCalculator=calculator;
+  }
+
 protected :
 
   GlScene *glScene;
@@ -169,6 +173,8 @@ protected :
   RenderingEntitiesFlag renderingEntitiesFlag;
 
   LayersLODVector layersLODVector;
+
+  GlLODCalculator *attachedLODCalculator;
 };
 
 }

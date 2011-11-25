@@ -156,6 +156,7 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
     }
 
     // If not Metric ordered : a this point selected nodes are draw
+
     if(glGraphComposite->getInputData()->parameters->isElementOrdered()) {
       // Draw selected nodes label with metric ordering
       if(glGraphComposite->getInputData()->parameters->getElementOrderingProperty()) {
@@ -233,10 +234,6 @@ GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),ro
   lodCalculator=NULL;
   fakeScene = new GlScene;
   fakeScene->addLayer(new GlLayer("fakeLayer"));
-
-  GlBoundingBoxSceneVisitor visitor(&inputData);
-  visitGraph(&visitor);
-  boundingBox=visitor.getBoundingBox();
 }
 
 GlGraphComposite::~GlGraphComposite() {
@@ -313,6 +310,10 @@ void GlGraphComposite::visitEdges(Graph *graph,GlSceneVisitor *visitor,bool visi
 }
 
 void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor) {
+  GlBoundingBoxSceneVisitor bbVisitor(&inputData);
+  visitGraph(&bbVisitor);
+  boundingBox=bbVisitor.getBoundingBox();
+
   if(boundingBox.isValid())
     visitor->visit(this);
 }
@@ -322,21 +323,21 @@ void GlGraphComposite::draw(float,Camera* camera) {
   Graph *graph=inputData.getGraph();
 
 
-  if(!lodCalculator)
+  if(!lodCalculator){
     lodCalculator=camera->getScene()->getCalculator()->clone();
+    lodCalculator->setAttachedLODCalculator(camera->getScene()->getCalculator());
+    lodCalculator->setInputData(getInputData());
+    lodCalculator->setScene(*fakeScene);
+  }
 
   lodCalculator->clear();
   lodCalculator->setRenderingEntitiesFlag(RenderingAll);
-  lodCalculator->setInputData(getInputData());
 
   // Fake scene creation
   //  This scene is needed by lod calculator to compute lod
   Camera newCamera=*camera;
   fakeScene->setViewport(camera->getViewport()[0],camera->getViewport()[1],camera->getViewport()[2],camera->getViewport()[3]);
   fakeScene->getLayer("fakeLayer")->setCamera(newCamera);
-
-  // LOD computation
-  lodCalculator->setScene(*fakeScene);
 
   if(lodCalculator->needEntities()) {
     GlLODSceneVisitor visitor(lodCalculator, getInputData());
