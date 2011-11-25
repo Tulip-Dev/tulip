@@ -79,7 +79,7 @@ INSTALL(FILES
   tulip/PlaceHolderWidget.h
   tulip/ExtendedMetaNodeRenderer.h
   tulip/TulipFileDescriptorWidget.h
-  tulip/FlattenedTreeModelDecorator.h
+  tulip/TreeViewComboBox.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

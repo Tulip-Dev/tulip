@@ -397,3 +397,7 @@ Qt::ItemFlags GraphHierarchiesModel::flags(const QModelIndex &index) const {
 
   return result;
 }
+
+QModelIndex GraphHierarchiesModel::indexOf(tlp::Graph* g) const {
+  return _indexCache[g];
+}

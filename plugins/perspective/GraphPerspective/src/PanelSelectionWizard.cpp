@@ -25,7 +25,6 @@
 
 #include <tulip/PluginManager.h>
 #include <tulip/View.h>
-#include <tulip/FlattenedTreeModelDecorator.h>
 #include <tulip/TulipMetaTypes.h>
 
 #include "GraphHierarchiesModel.h"
@@ -76,12 +75,12 @@ void PanelSelectionItem::mouseDoubleClickEvent(QMouseEvent *) {
 
 PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent, bool canSelectGraph)
   : QWizard(parent), _ui(new Ui::PanelSelectionWizard),
-    _model(model), _flattenedModel(new FlattenedTreeModelDecorator(_model,this)), _activeItem(NULL), _canSelectGraph(canSelectGraph) {
+    _model(model), _activeItem(NULL), _canSelectGraph(canSelectGraph) {
   _ui->setupUi(this);
   _ui->selectGraphFrame->setVisible(_canSelectGraph);
 
   if (_canSelectGraph) {
-    _ui->graphCombo->setModel(_flattenedModel);
+    _ui->graphCombo->setModel(_model);
     _graph = _model->currentGraph();
   }
 
@@ -115,10 +114,6 @@ PanelSelectionWizard::~PanelSelectionWizard() {
   delete _ui;
 }
 
-void PanelSelectionWizard::graphSelected(int row) {
-  _graph = _flattenedModel->data(_flattenedModel->index(row,0),tlp::TulipModel::GraphRole).value<tlp::Graph*>();
-}
-
 void PanelSelectionWizard::panelSelected() {
   if (_activeItem != NULL)
     _activeItem->setFocus(false);
@@ -145,13 +140,6 @@ QString PanelSelectionWizard::panelName() const {
 void PanelSelectionWizard::setSelectedGraph(tlp::Graph* g) {
   if (!_canSelectGraph)
     return;
-
   _graph = g;
-
-  for (int i=0; i<_flattenedModel->rowCount(); ++i) {
-    if (_flattenedModel->data(_flattenedModel->index(i,0),TulipModel::GraphRole).value<tlp::Graph*>() == g) {
-      _ui->graphCombo->setCurrentIndex(i);
-      break;
-    }
-  }
+//  _ui->graphCombo->setSelectedModelIndex(_model->indexOf(g));
 }

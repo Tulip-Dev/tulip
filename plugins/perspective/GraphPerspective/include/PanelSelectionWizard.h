@@ -32,7 +32,6 @@ class PanelSelectionWizard;
 class PanelSelectionItem;
 }
 
-class FlattenedTreeModelDecorator;
 class GraphHierarchiesModel;
 
 // Helper class
@@ -64,7 +63,6 @@ class PanelSelectionWizard : public QWizard {
 
   Ui::PanelSelectionWizard* _ui;
   GraphHierarchiesModel* _model;
-  FlattenedTreeModelDecorator* _flattenedModel;
   tlp::Graph* _graph;
   PanelSelectionItem* _activeItem;
   bool _canSelectGraph;
@@ -81,7 +79,6 @@ signals:
   void wizardFinished();
 
 protected slots:
-  void graphSelected(int);
   void panelSelected();
   void panelDoubleClicked();
 };

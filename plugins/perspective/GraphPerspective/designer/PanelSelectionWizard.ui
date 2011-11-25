@@ -76,7 +76,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="graphCombo"/>
+        <widget class="TreeViewComboBox" name="graphCombo" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -116,7 +123,7 @@ border: 1px solid #C9C9C9;
            <x>0</x>
            <y>0</y>
            <width>719</width>
-           <height>224</height>
+           <height>217</height>
           </rect>
          </property>
         </widget>
@@ -151,6 +158,14 @@ border: 1px solid #C9C9C9;
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TreeViewComboBox</class>
+   <extends>QWidget</extends>
+   <header>tulip/TreeViewComboBox.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
   <include location="../resources/GraphPerspective.qrc"/>

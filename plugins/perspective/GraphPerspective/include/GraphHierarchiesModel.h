@@ -85,6 +85,8 @@ public:
   Qt::ItemFlags flags(const QModelIndex &index) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+  QModelIndex indexOf(tlp::Graph*) const;
+
   // Methods inherited from the observable system
   void treatEvent(const tlp::Event &);
 
