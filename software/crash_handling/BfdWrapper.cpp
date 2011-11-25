@@ -227,7 +227,7 @@ BfdWrapper::~BfdWrapper() {
 pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char *mangledSymbol, const int64_t runtimeAddr, const int64_t runtimeOffset) {
   pair<const char *, unsigned int> ret = make_pair("", 0);
 
-  if (!isMini || symbolSize == 0)
+  if (!abfd || !isMini || symbolSize == 0)
     return ret;
 
   bfd_byte *from = (bfd_byte *)symbolTable;
@@ -297,6 +297,10 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char
 
 pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const int64_t runtimeAddr) {
 
+   pair<const char *, unsigned int> ret = make_pair("", 0);
+   if (!abfd)
+    return ret;
+
   const char *funcName = "";
   const char *fileName = "";
   unsigned int lineno = 0;
@@ -311,7 +315,7 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const int6
     bfd_find_nearest_line(abfd, textSection, symbolTable, symbolOffset, &fileName, &funcName, &lineno);
   }
 
-  pair<const char *, unsigned int> ret = make_pair(fileName, lineno);
+  ret = make_pair(fileName, lineno);
   return ret;
 }
 
@@ -321,6 +325,9 @@ const char *BfdWrapper::getFunctionForAddress(const int64_t runtimeAddr) {
   const char *fileName = "";
   unsigned int lineno = 0;
 
+  if (!abfd)
+    return funcName;
+  
   int64_t symbolOffset = runtimeAddr - GetModuleBase(runtimeAddr) - 0x1000 - 1;
   bfd_size_type textSection_size = bfd_section_size(abfd, textSection);
 
