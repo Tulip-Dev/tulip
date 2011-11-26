@@ -140,5 +140,6 @@ QString PanelSelectionWizard::panelName() const {
 void PanelSelectionWizard::setSelectedGraph(tlp::Graph* g) {
   if (!_canSelectGraph)
     return;
+
   _ui->graphCombo->selectIndex(_model->indexOf(g));
 }

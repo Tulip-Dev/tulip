@@ -161,7 +161,7 @@ public:
 
   virtual BoundingBox getSceneBoundingBox()=0;
 
-  void setAttachedLODCalculator(GlLODCalculator *calculator){
+  void setAttachedLODCalculator(GlLODCalculator *calculator) {
     attachedLODCalculator=calculator;
   }
 

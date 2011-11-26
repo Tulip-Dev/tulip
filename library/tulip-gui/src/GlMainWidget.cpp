@@ -320,107 +320,111 @@ void GlMainWidget::createRenderingStore(int width, int height) {
   }
 }
 //==================================================
-void GlMainWidget::render(RenderingOptions options){
-    if (isVisible() && !inRendering) {
-        assert(contentsRect().width()!=0 && contentsRect().height()!=0);
-        //Begin rendering process
-        inRendering=true;
-        makeCurrent();
+void GlMainWidget::render(RenderingOptions options) {
+  if (isVisible() && !inRendering) {
+    assert(contentsRect().width()!=0 && contentsRect().height()!=0);
+    //Begin rendering process
+    inRendering=true;
+    makeCurrent();
 
-        //Get the content width and height
-        int width = contentsRect().width();
-        int height = contentsRect().height();
+    //Get the content width and height
+    int width = contentsRect().width();
+    int height = contentsRect().height();
 
-        //If the rendering store is not valid need to regenerate new one force the RenderGraph flag.
-        if(widthStored!=width || heightStored!=height) {
-            options |= RenderGraph;
-        }
-
-        if(options.testFlag(RenderGraph)){
-            createRenderingStore(width,height);
-
-            widthStored=width;
-            heightStored=height;
-
-            computeInteractors();
-
-#ifdef ENABLE_RENDERING_TIME_DISPLAY
-            double beginTime=omp_get_wtime();
-#endif
-            //Render the graph in the back buffer.
-            scene.draw();
-#ifdef ENABLE_RENDERING_TIME_DISPLAY
-            cout << ">>> rendering time : " << (int)((omp_get_wtime()-beginTime)*1000) << " ms" << endl << endl;
-#endif
-        }
-
-        glDisable(GL_TEXTURE_2D);
-        glDisable(GL_STENCIL_TEST);
-        glDisable(GL_DEPTH_TEST);
-        glDisable(GL_BLEND);
-        glDisable(GL_LIGHTING);
-
-
-        if(options.testFlag(RenderGraph)){
-            //Copy the back buffer (containing the graph render) in the rendering store to reuse it later.
-            glReadBuffer(GL_BACK);
-            glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
-            glFlush();
-        }else{
-            //Copy the rendering store into the back buffer : restore the last graph render.
-            glDrawBuffer(GL_BACK);
-            setRasterPosition(0,0);
-            glDrawPixels(width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
-        }
-
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_BLEND);
-        glEnable(GL_LIGHTING);
-
-        //Draw interactors and foreground entities.
-        drawInteractors();
-        drawForegroundEntities();
-
-        glEnable(GL_TEXTURE_2D);
-        glEnable(GL_STENCIL_TEST);
-
-        if(options.testFlag(SwapBuffers)){
-            swapBuffers();
-        }
-        inRendering=false;
+    //If the rendering store is not valid need to regenerate new one force the RenderGraph flag.
+    if(widthStored!=width || heightStored!=height) {
+      options |= RenderGraph;
     }
+
+    if(options.testFlag(RenderGraph)) {
+      createRenderingStore(width,height);
+
+      widthStored=width;
+      heightStored=height;
+
+      computeInteractors();
+
+#ifdef ENABLE_RENDERING_TIME_DISPLAY
+      double beginTime=omp_get_wtime();
+#endif
+      //Render the graph in the back buffer.
+      scene.draw();
+#ifdef ENABLE_RENDERING_TIME_DISPLAY
+      cout << ">>> rendering time : " << (int)((omp_get_wtime()-beginTime)*1000) << " ms" << endl << endl;
+#endif
+    }
+
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_STENCIL_TEST);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+    glDisable(GL_LIGHTING);
+
+
+    if(options.testFlag(RenderGraph)) {
+      //Copy the back buffer (containing the graph render) in the rendering store to reuse it later.
+      glReadBuffer(GL_BACK);
+      glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+      glFlush();
+    }
+    else {
+      //Copy the rendering store into the back buffer : restore the last graph render.
+      glDrawBuffer(GL_BACK);
+      setRasterPosition(0,0);
+      glDrawPixels(width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+    }
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glEnable(GL_LIGHTING);
+
+    //Draw interactors and foreground entities.
+    drawInteractors();
+    drawForegroundEntities();
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_STENCIL_TEST);
+
+    if(options.testFlag(SwapBuffers)) {
+      swapBuffers();
+    }
+
+    inRendering=false;
+  }
 }
 //==================================================
 void GlMainWidget::redraw() {
 
 #ifdef __APPLE__
-    if (isVisible() && !inRendering) {
-        // This code is here to bug fix black screen problem on MACOSX with Qt 4.7
-        // When we do the first redraw we don't use frame backup but we draw the view
-        // We have to test with next version of Qt to check if the problem exist
-        if(renderingNumber<=4) {
-            return draw(false);
-        }
+
+  if (isVisible() && !inRendering) {
+    // This code is here to bug fix black screen problem on MACOSX with Qt 4.7
+    // When we do the first redraw we don't use frame backup but we draw the view
+    // We have to test with next version of Qt to check if the problem exist
+    if(renderingNumber<=4) {
+      return draw(false);
     }
+  }
+
 #endif
-    render(SwapBuffers);
-    emit viewRedrawn(this);
+  render(SwapBuffers);
+  emit viewRedrawn(this);
 }
 //==================================================
 void GlMainWidget::draw(bool graphChanged) {
-    render(RenderingOptions(RenderGraph|SwapBuffers));
+  render(RenderingOptions(RenderGraph|SwapBuffers));
 #ifdef __APPLE__
 
-        // This code is here to bug fix black screen problem on MACOSX with Qt 4.7
-        // When we do the first redraw we don't use frame backup but we draw the view
-        // We have to test with next version of Qt to check if the problem exist
-        if (isVisible() && !inRendering) {
-        if(renderingNumber<=4)
-            renderingNumber++;
-        }
+  // This code is here to bug fix black screen problem on MACOSX with Qt 4.7
+  // When we do the first redraw we don't use frame backup but we draw the view
+  // We have to test with next version of Qt to check if the problem exist
+  if (isVisible() && !inRendering) {
+    if(renderingNumber<=4)
+      renderingNumber++;
+  }
 
 #endif
-    emit viewDrawn(this,graphChanged);
+  emit viewDrawn(this,graphChanged);
 }
 //==================================================
 void GlMainWidget::computeInteractors() {

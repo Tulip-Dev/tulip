@@ -209,6 +209,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
             }
 
             break;
+
           default:
             break;
           }

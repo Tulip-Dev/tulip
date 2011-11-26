@@ -323,7 +323,7 @@ void GlGraphComposite::draw(float,Camera* camera) {
   Graph *graph=inputData.getGraph();
 
 
-  if(!lodCalculator){
+  if(!lodCalculator) {
     lodCalculator=camera->getScene()->getCalculator()->clone();
     lodCalculator->setAttachedLODCalculator(camera->getScene()->getCalculator());
     lodCalculator->setInputData(getInputData());
