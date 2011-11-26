@@ -47,7 +47,7 @@ BoundingBox computeNewBoundingBox(const BoundingBox &box,const Coord &centerScen
   return BoundingBox(center-size,center+size);
 }
 
-GlQuadTreeLODCalculator::GlQuadTreeLODCalculator() : haveToCompute(true),haveToInitObservers(true),currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL){
+GlQuadTreeLODCalculator::GlQuadTreeLODCalculator() : haveToCompute(true),haveToInitObservers(true),currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL) {
 }
 
 GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
@@ -585,6 +585,7 @@ void GlQuadTreeLODCalculator::setHaveToCompute() {
     return;
 
   GlQuadTreeLODCalculator *attachedQuadTreeLODCalculator=dynamic_cast<GlQuadTreeLODCalculator*>(attachedLODCalculator);
+
   if(attachedQuadTreeLODCalculator)
     attachedQuadTreeLODCalculator->setHaveToCompute();
 
