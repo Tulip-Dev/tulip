@@ -9,11 +9,11 @@ class VectorGraph;
  * @warning never use that class
  */
 class  TLP_SCOPE ValArrayInterface {
-	friend class VectorGraph;
+  friend class VectorGraph;
 protected:
-	virtual void addElement(const unsigned int id) = 0;
-	virtual void reserve(const size_t size) = 0;
-	virtual ~ValArrayInterface() {}
+  virtual void addElement(const unsigned int id) = 0;
+  virtual void reserve(const size_t size) = 0;
+  virtual ~ValArrayInterface() {}
 };
 //===========================================
 /**
@@ -22,25 +22,25 @@ protected:
  */
 template <typename TYPE>
 class  TLP_SCOPE ValArray : public  ValArrayInterface {
-	friend class VectorGraph;
+  friend class VectorGraph;
 protected:
-	ValArray(const unsigned int size = 0, const unsigned int capacity = 0) {
-		_data.reserve(capacity);
-		_data.resize(size);
-	}
-	virtual ~ValArray() {}
-	void addElement(const unsigned int id) {
-		if (id >= _data.size()) {
-			_data.resize(id);
-			_data.push_back(TYPE());
-		}
-	}
-	void reserve(const size_t size) {
-		_data.reserve(size);
-	}
+  ValArray(const unsigned int size = 0, const unsigned int capacity = 0) {
+    _data.reserve(capacity);
+    _data.resize(size);
+  }
+  virtual ~ValArray() {}
+  void addElement(const unsigned int id) {
+    if (id >= _data.size()) {
+      _data.resize(id);
+      _data.push_back(TYPE());
+    }
+  }
+  void reserve(const size_t size) {
+    _data.reserve(size);
+  }
 
 public:
-	std::vector<TYPE> _data; /**< TODO */
+  std::vector<TYPE> _data; /**< TODO */
 };
 /**
  * @class VectorGraphProperty
@@ -51,74 +51,74 @@ public:
  */
 template <typename TYPE>
 class TLP_SCOPE VectorGraphProperty {
-	friend class VectorGraph;
+  friend class VectorGraph;
 public:
 
-	/**
-	 * @brief read accessor
-	 *
-	 * return the value of the ith element.
-	 */
-	typename std::vector<TYPE>::const_reference operator[](const size_t id) const {
-		assert(isValid());
-		assert(id < (*_array)._data.size());
-		return (*_array)._data[id];
-	}
+  /**
+   * @brief read accessor
+   *
+   * return the value of the ith element.
+   */
+  typename std::vector<TYPE>::const_reference operator[](const size_t id) const {
+    assert(isValid());
+    assert(id < (*_array)._data.size());
+    return (*_array)._data[id];
+  }
 
-	/**
-	 * @brief read/write accessor
-	 *
-	 * return the value of the ith element and enables to modify it.
-	 */
-	typename std::vector<TYPE>::reference operator[](const size_t id) {
-		assert(isValid());
-		assert(id < (*_array)._data.size());
-		return (*_array)._data[id];
-	}
-	/**
-	 * @bried Set all the value of the property to the value given in parameter
-	 *
-	 * That function affect the same value to all elements of the vector, there
-	 * is no effect on the future value added in the vector
-	 * @warning There is differences between the setAll of the MutableContainer and
-	 * the setAll of VectorProperty (NodeProperty or EdgeProperty). The MutableContainer,
-	 * ensures that new inserted element will have the value given by the last setAll
-	 *
-	 * @see MutableContainer
-	 */
-	void setAll(const TYPE &obj) {
-		fill(_array->_data.begin(), _array->_data.end(), obj);
-	}
-	/**
-	 * @brief write accessor
-	 *
-	 * change the value of the ith element.
-	 */
-	void set(const size_t id, const TYPE &obj) {
-		(*this)[id] = obj;
-	}
-	/**
-	 * @brief read accessor
-	 *
-	 * return the value of the ith element.
-	 */
-	typename std::vector<TYPE>::const_reference get(const size_t id) const {
-		return (*this)[id];
-	}
+  /**
+   * @brief read/write accessor
+   *
+   * return the value of the ith element and enables to modify it.
+   */
+  typename std::vector<TYPE>::reference operator[](const size_t id) {
+    assert(isValid());
+    assert(id < (*_array)._data.size());
+    return (*_array)._data[id];
+  }
+  /**
+   * @bried Set all the value of the property to the value given in parameter
+   *
+   * That function affect the same value to all elements of the vector, there
+   * is no effect on the future value added in the vector
+   * @warning There is differences between the setAll of the MutableContainer and
+   * the setAll of VectorProperty (NodeProperty or EdgeProperty). The MutableContainer,
+   * ensures that new inserted element will have the value given by the last setAll
+   *
+   * @see MutableContainer
+   */
+  void setAll(const TYPE &obj) {
+    fill(_array->_data.begin(), _array->_data.end(), obj);
+  }
+  /**
+   * @brief write accessor
+   *
+   * change the value of the ith element.
+   */
+  void set(const size_t id, const TYPE &obj) {
+    (*this)[id] = obj;
+  }
+  /**
+   * @brief read accessor
+   *
+   * return the value of the ith element.
+   */
+  typename std::vector<TYPE>::const_reference get(const size_t id) const {
+    return (*this)[id];
+  }
 #ifndef NDEBUG
-	virtual bool isValid() const = 0;
+  virtual bool isValid() const = 0;
 #endif
 
 protected:
-	VectorGraphProperty():_array(0), _graph(0) {
-	}
-	VectorGraphProperty(const VectorGraphProperty &obj): _array(obj._array), _graph(obj._graph) {
-	}
-	VectorGraphProperty(ValArray<TYPE> *array, VectorGraph *graph):_array(array), _graph(graph) {
-	}
+  VectorGraphProperty():_array(0), _graph(0) {
+  }
+  VectorGraphProperty(const VectorGraphProperty &obj): _array(obj._array), _graph(obj._graph) {
+  }
+  VectorGraphProperty(ValArray<TYPE> *array, VectorGraph *graph):_array(array), _graph(graph) {
+  }
 protected:
-	ValArray<TYPE> *_array; /**< TODO */
-	VectorGraph *_graph; /**< TODO */
+  ValArray<TYPE> *_array; /**< TODO */
+  VectorGraph *_graph; /**< TODO */
 };
 
 /**
@@ -158,16 +158,16 @@ protected:
  */
 template <typename TYPE>
 class  TLP_SCOPE EdgeProperty : public VectorGraphProperty<TYPE> {
-	friend class VectorGraph;
+  friend class VectorGraph;
 public:
-	EdgeProperty():VectorGraphProperty<TYPE>() {}
-	EdgeProperty(const EdgeProperty &obj): VectorGraphProperty<TYPE>(obj) {}
+  EdgeProperty():VectorGraphProperty<TYPE>() {}
+  EdgeProperty(const EdgeProperty &obj): VectorGraphProperty<TYPE>(obj) {}
 #ifndef NDEBUG
-	bool isValid() const;
+  bool isValid() const;
 #endif
 
 private:
-	EdgeProperty(ValArray<TYPE> *array, VectorGraph *graph):VectorGraphProperty<TYPE>(array, graph) {}
+  EdgeProperty(ValArray<TYPE> *array, VectorGraph *graph):VectorGraphProperty<TYPE>(array, graph) {}
 
 };
 /**
@@ -206,16 +206,16 @@ private:
  */
 template <typename TYPE>
 class  TLP_SCOPE NodeProperty : public VectorGraphProperty<TYPE> {
-	friend class VectorGraph;
+  friend class VectorGraph;
 public:
-	NodeProperty():VectorGraphProperty<TYPE>() {}
-	NodeProperty(const NodeProperty &obj): VectorGraphProperty<TYPE>(obj) {}
+  NodeProperty():VectorGraphProperty<TYPE>() {}
+  NodeProperty(const NodeProperty &obj): VectorGraphProperty<TYPE>(obj) {}
 #ifndef NDEBUG
-	bool isValid() const;
+  bool isValid() const;
 #endif
 
 private:
-	NodeProperty(ValArray<TYPE> *array, VectorGraph *graph):VectorGraphProperty<TYPE>(array, graph) {}
+  NodeProperty(ValArray<TYPE> *array, VectorGraph *graph):VectorGraphProperty<TYPE>(array, graph) {}
 };
 
 }

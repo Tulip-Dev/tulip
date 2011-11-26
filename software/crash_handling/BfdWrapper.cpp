@@ -297,8 +297,9 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char
 
 pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const int64_t runtimeAddr) {
 
-   pair<const char *, unsigned int> ret = make_pair("", 0);
-   if (!abfd)
+  pair<const char *, unsigned int> ret = make_pair("", 0);
+
+  if (!abfd)
     return ret;
 
   const char *funcName = "";
@@ -327,7 +328,7 @@ const char *BfdWrapper::getFunctionForAddress(const int64_t runtimeAddr) {
 
   if (!abfd)
     return funcName;
-  
+
   int64_t symbolOffset = runtimeAddr - GetModuleBase(runtimeAddr) - 0x1000 - 1;
   bfd_size_type textSection_size = bfd_section_size(abfd, textSection);
 

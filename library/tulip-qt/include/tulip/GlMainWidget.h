@@ -71,14 +71,15 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
 
 public:
 
-    /**
-      * \brief Configure the rendering process ( see render function)
-      * \see render
-      **/
-    enum RenderingOption{
-        RenderGraph=0x1, /** Force to render the graph even if there is a previous buffered render. You need to call this option if the graph is updated to regenerate the buffer. If not set try to use the last buffered graph render, if there is no valid buffer this flag is forced. **/
-        SwapBuffers=0x2 /** Call the swapBuffer functions at the end of the rendering process. If the disabled it's up to you to call the swapBuffer function. **/};
-    Q_DECLARE_FLAGS ( RenderingOptions, RenderingOption );
+  /**
+    * \brief Configure the rendering process ( see render function)
+    * \see render
+    **/
+  enum RenderingOption {
+    RenderGraph=0x1, /** Force to render the graph even if there is a previous buffered render. You need to call this option if the graph is updated to regenerate the buffer. If not set try to use the last buffered graph render, if there is no valid buffer this flag is forced. **/
+    SwapBuffers=0x2 /** Call the swapBuffer functions at the end of the rendering process. If the disabled it's up to you to call the swapBuffer function. **/
+  };
+  Q_DECLARE_FLAGS ( RenderingOptions, RenderingOption );
 
   /**
    * Construct the GlMainWidget
@@ -281,7 +282,7 @@ private:
   View *view;
   int widthStored;
   int heightStored;
-  char *renderingStore;  
+  char *renderingStore;
   std::vector<ForegroundEntity *> foregroundEntity;
   GlCompositeHierarchyManager* manager;
   bool _hasHulls;

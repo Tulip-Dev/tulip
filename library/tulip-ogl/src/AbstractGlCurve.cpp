@@ -899,11 +899,12 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
         }
 
         if (outlineColorInterpolation) {
-        	curveShaderProgram->setUniformColor("startColor", startColor);
-            curveShaderProgram->setUniformColor("endColor", endColor);
-        } else {
-        	curveShaderProgram->setUniformColor("startColor", outlineColor);
-        	curveShaderProgram->setUniformColor("endColor", outlineColor);
+          curveShaderProgram->setUniformColor("startColor", startColor);
+          curveShaderProgram->setUniformColor("endColor", endColor);
+        }
+        else {
+          curveShaderProgram->setUniformColor("startColor", outlineColor);
+          curveShaderProgram->setUniformColor("endColor", outlineColor);
         }
 
         glLineWidth(curveQuadBordersWidth);

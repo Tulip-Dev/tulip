@@ -26,16 +26,17 @@ class MouseEventDiscardFilter : public QObject {
 
 public :
 
-    bool eventFilter(QObject*, QEvent *event) {
-        if (event->type() == QEvent::MouseMove ||
-                event->type() == QEvent::MouseButtonDblClick ||
-                event->type() == QEvent::MouseButtonPress ||
-                event->type() == QEvent::ContextMenu ||
-                event->type() == QEvent::MouseButtonRelease) {
-            return true;
-        }
-        return false;
+  bool eventFilter(QObject*, QEvent *event) {
+    if (event->type() == QEvent::MouseMove ||
+        event->type() == QEvent::MouseButtonDblClick ||
+        event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::ContextMenu ||
+        event->type() == QEvent::MouseButtonRelease) {
+      return true;
     }
+
+    return false;
+  }
 
 };
 
@@ -56,6 +57,7 @@ void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
   connect(&timeLine, SIGNAL(frameChanged(int)), this, SLOT(zoomAndPanAnimStepSlot(int)));
   MouseEventDiscardFilter medf;
   glWidget->installEventFilter(&medf);
+
   if (doZoomAndPan || (!doZoomAndPan && additionalAnimation != NULL)) {
     timeLine.start();
 
@@ -63,6 +65,7 @@ void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
       QApplication::processEvents(QEventLoop::AllEvents);
     }
   }
+
   glWidget->removeEventFilter(&medf);
 }
 
