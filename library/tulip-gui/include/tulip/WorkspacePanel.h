@@ -19,6 +19,7 @@
 #ifndef WORKSPACEPANEL_H
 #define WORKSPACEPANEL_H
 
+#include <QtCore/QAbstractItemModel>
 #include <QtGui/QWidget>
 #include <tulip/tulipconf.h>
 #include <tulip/DataSet.h>
@@ -62,6 +63,7 @@ public slots:
   void setView(tlp::View* view, const QString& viewName);
   void setCurrentInteractor(tlp::Interactor*);
   void setGraphsModel(tlp::GraphHierarchiesModel*);
+  void setPanelsModel(QAbstractItemModel*);
   void viewGraphSet(tlp::Graph*);
 
 signals:

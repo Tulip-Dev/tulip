@@ -22,6 +22,7 @@
 #include <QtCore/QMap>
 #include <QtCore/QPair>
 #include <QtGui/QWidget>
+#include <QtCore/QAbstractItemModel>
 #include <tulip/tulipconf.h>
 #include <tulip/DataSet.h>
 
@@ -40,13 +41,41 @@ class GraphHierarchiesModel;
 class TLP_QT_SCOPE Workspace: public QWidget {
   Q_OBJECT
 
+  // Helper class
+  class PanelsStorage: public QAbstractItemModel {
+    QList<tlp::WorkspacePanel*> _storage;
+  public:
+    PanelsStorage(const PanelsStorage&);
+    PanelsStorage(QObject* parent = 0);
+    void push_back(tlp::WorkspacePanel*);
+    int removeAll(tlp::WorkspacePanel *);
+    // Allows the model to behave like a list and to be iterable
+    typedef QList<tlp::WorkspacePanel *>::iterator iterator;
+    typedef QList<tlp::WorkspacePanel *>::const_iterator const_iterator;
+    tlp::WorkspacePanel *operator[](int i) const;
+    tlp::WorkspacePanel *operator[](int i);
+    int size() const;
+    iterator begin();
+    iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
+    // inherited from QAbstractItemModel
+    QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex &child) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+  };
+
   Ui::Workspace* _ui;
-  QList<tlp::WorkspacePanel*> _panels;
+  PanelsStorage _panels;
   int _currentPanelIndex;
 
   QMap<QWidget*,QVector<PlaceHolderWidget*> > _modeToSlots;
   QMap<QWidget*,QWidget*> _modeSwitches;
   tlp::GraphHierarchiesModel* _model;
+
+  QString panelTitle(tlp::WorkspacePanel*) const;
 
 public:
   explicit Workspace(QWidget *parent = 0);

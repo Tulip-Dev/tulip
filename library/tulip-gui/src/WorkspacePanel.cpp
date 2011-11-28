@@ -201,6 +201,10 @@ void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel* model) {
   connect(_ui->graphCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(graphComboIndexChanged()));
 }
 
+void WorkspacePanel::setPanelsModel(QAbstractItemModel* model) {
+  _ui->viewCombo->setModel(model);
+}
+
 void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
   if (_ui->graphCombo->model() == NULL)
     return;
