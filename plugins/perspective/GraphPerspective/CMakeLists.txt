@@ -6,7 +6,6 @@ src/ControlFrame.cpp
 src/ExpandableGroupBox.cpp
 src/FiltersManager.cpp
 src/GraphHierarchiesEditor.cpp
-src/GraphHierarchiesModel.cpp
 src/GraphPerspective.cpp
 src/HeaderFrame.cpp
 src/ImportWizard.cpp
@@ -34,7 +33,6 @@ QT4_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
 include/FiltersManager.h
 include/GraphHierarchiesEditor.h
-include/GraphHierarchiesModel.h
 include/GraphPerspective.h
 include/ExpandableGroupBox.h
 include/HeaderFrame.h

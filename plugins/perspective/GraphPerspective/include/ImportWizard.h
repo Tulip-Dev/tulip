@@ -26,7 +26,10 @@ namespace Ui {
 class ImportWizard;
 }
 class PanelSelectionWizard;
+
+namespace tlp {
 class GraphHierarchiesModel;
+}
 
 class ImportWizard: public QWizard {
   Q_OBJECT
@@ -34,7 +37,7 @@ class ImportWizard: public QWizard {
   Ui::ImportWizard* _ui;
   PanelSelectionWizard* _panelWizard;
 public:
-  explicit ImportWizard(GraphHierarchiesModel*model, QWidget *parent = 0);
+  explicit ImportWizard(tlp::GraphHierarchiesModel*model, QWidget *parent = 0);
   virtual ~ImportWizard();
 
   QString algorithm() const;

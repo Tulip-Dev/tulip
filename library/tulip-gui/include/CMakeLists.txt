@@ -80,6 +80,7 @@ INSTALL(FILES
   tulip/ExtendedMetaNodeRenderer.h
   tulip/TulipFileDescriptorWidget.h
   tulip/TreeViewComboBox.h
+  tulip/GraphHierarchiesModel.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
