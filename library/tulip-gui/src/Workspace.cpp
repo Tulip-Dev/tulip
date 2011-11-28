@@ -27,16 +27,85 @@
 #include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>
 
-#include "ui_Workspace.h"
-
 #include <QtCore/QDebug>
 
+#ifndef NDEBUG
+#include <modeltest.h>
+#endif /* NDEBUG */
+
+#include "ui_Workspace.h"
+
 using namespace tlp;
+
+/*
+  Helper storage class to ensure synchronization between panels list and model passed down to opened panels
+  */
+Workspace::PanelsStorage::PanelsStorage(QObject* parent): QAbstractItemModel(parent) {
+}
+Workspace::PanelsStorage::PanelsStorage(const PanelsStorage& cpy): QAbstractItemModel(cpy.QObject::parent()) {
+  _storage = cpy._storage;
+}
+void Workspace::PanelsStorage::push_back(tlp::WorkspacePanel* panel) {
+  _storage.push_back(panel);
+}
+int Workspace::PanelsStorage::removeAll(tlp::WorkspacePanel* panel) {
+  return _storage.removeAll(panel);
+}
+tlp::WorkspacePanel* Workspace::PanelsStorage::operator[](int i) const {
+  return _storage[i];
+}
+tlp::WorkspacePanel* Workspace::PanelsStorage::operator[](int i) {
+  return _storage[i];
+}
+int Workspace::PanelsStorage::size() const {
+  return _storage.size();
+}
+Workspace::PanelsStorage::iterator Workspace::PanelsStorage::begin() {
+  return _storage.begin();
+}
+Workspace::PanelsStorage::iterator Workspace::PanelsStorage::end() {
+  return _storage.end();
+}
+Workspace::PanelsStorage::const_iterator Workspace::PanelsStorage::begin() const {
+  return _storage.begin();
+}
+Workspace::PanelsStorage::const_iterator Workspace::PanelsStorage::end() const {
+  return _storage.end();
+}
+QModelIndex Workspace::PanelsStorage::index(int row, int column,const QModelIndex &parent) const {
+  if (!hasIndex(row,column,parent))
+    return QModelIndex();
+  return createIndex(row,column);
+}
+QModelIndex Workspace::PanelsStorage::parent(const QModelIndex &child) const {
+  return QModelIndex();
+}
+int Workspace::PanelsStorage::rowCount(const QModelIndex &parent) const {
+  if (parent != QModelIndex())
+    return 0;
+  return _storage.size();
+}
+int Workspace::PanelsStorage::columnCount(const QModelIndex&) const {
+  return 1;
+}
+QVariant Workspace::PanelsStorage::data(const QModelIndex &index, int role) const {
+  if (!hasIndex(index.row(),index.column(),index.parent()))
+    return QVariant();
+  WorkspacePanel* panel = _storage[index.row()];
+  if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
+    return panel->windowTitle();
+  return QVariant();
+}
+// ***********************************************
 
 Workspace::Workspace(QWidget *parent)
   : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL) {
   _ui->setupUi(this);
   connect(_ui->startupButton, SIGNAL(clicked()),this,SIGNAL(addPanelAtStartupButtonClicked()));
+
+#ifndef NDEBUG
+  new ModelTest(&_panels,this);
+#endif /* NDEBUG */
 
   // This map allows us to know how much slots we have for each mode and which widget corresponds to those slots
   QVector<PlaceHolderWidget*> startupVector(0);
@@ -83,6 +152,27 @@ QList<tlp::View*> Workspace::panels() const {
   return result;
 }
 
+QString Workspace::panelTitle(tlp::WorkspacePanel* panel) const {
+  int digit = 0;
+
+  QRegExp regExp("^.*(?:<([^>])*>){1}$");
+  foreach(WorkspacePanel* other, _panels) {
+    if (other == panel)
+      continue;
+    if (other->viewName() == panel->viewName()) {
+      if (regExp.exactMatch(other->windowTitle()))
+        digit = std::max<int>(digit,regExp.cap(1).toInt());
+      else
+        digit = std::max<int>(digit,1);
+    }
+  }
+
+  if (digit == 0) {
+    return panel->viewName();
+  }
+  return panel->viewName() + " <" + QString::number(digit+1) + ">";
+}
+
 tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& data) {
   // Create view and panel
   assert(ViewLister::pluginExists(viewName.toStdString()));
@@ -91,8 +181,10 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   WorkspacePanel* panel = new WorkspacePanel(view,viewName);
   if (_model != NULL)
     panel->setGraphsModel(_model);
+  panel->setPanelsModel(&_panels);
   connect(view,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
   panel->installEventFilter(this);
+  panel->setWindowTitle(panelTitle(panel));
   view->setGraph(g);
   view->setState(data);
   connect(panel,SIGNAL(closed(tlp::WorkspacePanel*)),this,SLOT(removePanel(tlp::WorkspacePanel*)));
@@ -104,7 +196,6 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   if (currentModeWidget() == _ui->startupPage) {
     switchToSingleMode();
   }
-
 
   // activate available modes
   updateAvailableModes();
