@@ -7,6 +7,7 @@
 class TreeViewComboBox : public QComboBox {
   Q_OBJECT
   QTreeView* _treeView;
+
 public:
   explicit TreeViewComboBox(QWidget *parent = 0);
   virtual void showPopup();

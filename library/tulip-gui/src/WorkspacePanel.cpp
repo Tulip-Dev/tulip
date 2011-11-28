@@ -25,11 +25,13 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QApplication>
 
+#include <tulip/TulipMetaTypes.h>
 #include <tulip/ProcessingAnimationItem.h>
 #include <tulip/Interactor.h>
 #include <tulip/ForEach.h>
 #include <tulip/View.h>
 #include <tulip/Graph.h>
+#include <tulip/GraphHierarchiesModel.h>
 #include "ui_WorkspacePanel.h"
 
 using namespace tlp;
@@ -111,6 +113,7 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
     setCurrentInteractor(compatibleInteractors[0]);
 
   connect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
+  connect(_view,SIGNAL(graphSet(tlp::Graph*)),this,SLOT(viewGraphSet(tlp::Graph*)));
 }
 
 void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
@@ -191,4 +194,35 @@ void WorkspacePanel::refreshInteractorsToolbar() {
 void WorkspacePanel::viewDestroyed() {
   _view = NULL;
   close();
+}
+
+void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel* model) {
+  _ui->graphCombo->setModel(model);
+  connect(_ui->graphCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(graphComboIndexChanged()));
+}
+
+void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
+  if (_ui->graphCombo->model() == NULL)
+    return;
+  tlp::GraphHierarchiesModel* model = static_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model());
+  QModelIndex graphIndex = model->indexOf(g);
+  if (graphIndex == _ui->graphCombo->selectedIndex())
+    return;
+
+
+  _ui->graphCombo->selectIndex(graphIndex);
+}
+
+void WorkspacePanel::graphComboIndexChanged() {
+  tlp::Graph* g = _ui->graphCombo->model()->data(_ui->graphCombo->selectedIndex(),TulipModel::GraphRole).value<tlp::Graph*>();
+#ifndef NDEBUG
+  if (g != NULL) {
+    std::string name;
+    g->getAttribute<std::string>("name",name);
+    std::cerr << "selecting graph " << name << " in view" << std::endl;
+  }
+#endif /* NDEBUG */
+  if (g != NULL && _view != NULL && g != _view->graph()) {
+    _view->setGraph(g);
+  }
 }

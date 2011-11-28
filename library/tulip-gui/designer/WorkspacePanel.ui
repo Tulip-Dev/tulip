@@ -193,9 +193,12 @@ background-color: #A9A9A9;
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="graphCombo">
+       <widget class="TreeViewComboBox" name="graphCombo">
         <property name="toolTip">
          <string>Select the graph to display</string>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToMinimumContentsLength</enum>
         </property>
        </widget>
       </item>
@@ -239,9 +242,17 @@ background-color: #A9A9A9;
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TreeViewComboBox</class>
+   <extends>QComboBox</extends>
+   <header>tulip/TreeViewComboBox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
  <slots>
   <signal>closed()</signal>
+  <slot>graphComboIndexChanged()</slot>
  </slots>
 </ui>
