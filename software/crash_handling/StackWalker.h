@@ -26,7 +26,7 @@
 //#include <stdint.h>
 //#include <cstdlib>
 
-#include <Tulip/StringUtils.h>
+#include <tulip/StringUtils.h>
 
 #ifndef _MSC_VER
 #ifdef HAVE_BFD
