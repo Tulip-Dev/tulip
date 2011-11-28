@@ -34,7 +34,7 @@
 using namespace tlp;
 
 Workspace::Workspace(QWidget *parent)
-  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0) {
+  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL) {
   _ui->setupUi(this);
   connect(_ui->startupButton, SIGNAL(clicked()),this,SIGNAL(addPanelAtStartupButtonClicked()));
 
@@ -67,6 +67,14 @@ Workspace::~Workspace() {
   delete _ui;
 }
 
+void Workspace::setModel(tlp::GraphHierarchiesModel* model) {
+  _model = model;
+  if (_model != NULL) {
+    foreach(WorkspacePanel* panel,_panels)
+      panel->setGraphsModel(_model);
+  }
+}
+
 QList<tlp::View*> Workspace::panels() const {
   QList<tlp::View*> result;
   foreach(WorkspacePanel* panel, _panels) {
@@ -81,6 +89,8 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   View* view = ViewLister::getPluginObject(viewName.toStdString(),NULL);
   view->setupUi();
   WorkspacePanel* panel = new WorkspacePanel(view,viewName);
+  if (_model != NULL)
+    panel->setGraphsModel(_model);
   connect(view,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
   panel->installEventFilter(this);
   view->setGraph(g);
@@ -100,6 +110,9 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   updateAvailableModes();
   updatePageCountLabel();
   updatePanels();
+
+  // Force the first panel's graph combo box update when underleying model has been updated.
+  panel->viewGraphSet(g);
   return view;
 }
 

@@ -35,6 +35,7 @@ namespace tlp {
 class View;
 class WorkspacePanel;
 class Graph;
+class GraphHierarchiesModel;
 
 class TLP_QT_SCOPE Workspace: public QWidget {
   Q_OBJECT
@@ -45,6 +46,7 @@ class TLP_QT_SCOPE Workspace: public QWidget {
 
   QMap<QWidget*,QVector<PlaceHolderWidget*> > _modeToSlots;
   QMap<QWidget*,QWidget*> _modeSwitches;
+  tlp::GraphHierarchiesModel* _model;
 
 public:
   explicit Workspace(QWidget *parent = 0);
@@ -64,6 +66,7 @@ public slots:
   void previousPage();
 
   void setActivePanel(tlp::View*);
+  void setModel(tlp::GraphHierarchiesModel*);
 
 signals:
   void addPanelAtStartupButtonClicked();

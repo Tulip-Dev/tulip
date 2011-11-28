@@ -19,6 +19,7 @@
 #include "tulip/NodeLinkDiagramComponent.h"
 
 #include <tulip/GlMainWidget.h>
+#include <QtCore/QDebug>
 
 using namespace tlp;
 
@@ -33,6 +34,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
+  qWarning() << __PRETTY_FUNCTION__;
   getGlMainWidget()->setGraph(graph);
 }
 

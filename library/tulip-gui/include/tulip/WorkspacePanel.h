@@ -35,6 +35,7 @@ namespace tlp {
 class Graph;
 class View;
 class Interactor;
+class GraphHierarchiesModel;
 
 class TLP_QT_SCOPE WorkspacePanel : public QWidget, public tlp::SimplePluginProgress {
   Q_OBJECT
@@ -60,6 +61,8 @@ public slots:
 
   void setView(tlp::View* view, const QString& viewName);
   void setCurrentInteractor(tlp::Interactor*);
+  void setGraphsModel(tlp::GraphHierarchiesModel*);
+  void viewGraphSet(tlp::Graph*);
 
 signals:
   void closed(tlp::WorkspacePanel*);
@@ -68,6 +71,7 @@ signals:
 protected slots:
   void interactorActionTriggered();
   void viewDestroyed();
+  void graphComboIndexChanged();
 
 protected:
   void progress_handler(int step, int max_step);

@@ -187,6 +187,12 @@ signals:
     */
   void drawNeeded();
 
+  /**
+    @brief Emitted after the setGraph method has been called.
+    @note This signal is emitted from the non-virtual View::setGraph() method thus cannot be prevented.
+    */
+  void graphSet(tlp::Graph*);
+
 protected slots:
   /**
     @brief Callback method after setInteractors() was called.

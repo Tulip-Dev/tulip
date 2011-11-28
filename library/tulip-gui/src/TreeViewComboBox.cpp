@@ -2,6 +2,9 @@
 
 #include <QtGui/QHeaderView>
 
+//FIXME: remove me
+#include <QtCore/QDebug>
+
 TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeView(NULL) {
   _treeView = new QTreeView(this);
   _treeView->setFrameShape(QFrame::NoFrame);
@@ -32,5 +35,13 @@ void TreeViewComboBox::selectIndex(const QModelIndex& index) {
 }
 
 QModelIndex TreeViewComboBox::selectedIndex() const {
-  return model()->index(currentIndex(),0,rootModelIndex());
+  QModelIndex current = model()->index(currentIndex(),0,rootModelIndex());
+  QModelIndex selected = view()->selectionModel()->currentIndex();
+
+  if (!selected.isValid()) {
+    return current;
+  }
+  return selected;
+
 }
+

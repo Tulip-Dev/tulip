@@ -71,6 +71,7 @@ void View::setGraph(tlp::Graph *g) {
     _graph->addListener(this);
 
   graphChanged(g);
+  emit graphSet(g);
 }
 
 void View::treatEvent(const Event& ev) {
