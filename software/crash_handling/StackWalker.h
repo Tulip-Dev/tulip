@@ -23,69 +23,16 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <stdint.h>
-#include <cstdlib>
+//#include <stdint.h>
+//#include <cstdlib>
+
+#include <Tulip/StringUtils.h>
 
 #ifndef _MSC_VER
 #ifdef HAVE_BFD
 #include "BfdWrapper.h"
 #endif
 #endif
-
-#ifdef WIN32
-#include <windows.h>
-#endif
-
-enum FontType {NORMAL=0, BOLD=1};
-
-enum TextColor {BLACK=0, RED=1, GREEN=2, YELLOW=3, BLUE=4,
-                MAGENTA=5, CYAN=6, WHITE=7
-               };
-
-inline std::ostream& defaultColor(std::ostream &s) {
-  if (s == std::cout || s == std::cerr) {
-    s << "\E[0m";
-  }
-
-  return s;
-}
-
-inline std::ostream& setTextColor(std::ostream &s, FontType ft, TextColor fg, TextColor bg) {
-  if (s == std::cout || s == std::cerr) {
-    s << "\E[" << ft << "m\E[3" << fg << "m\E[4" << bg << "m";
-  }
-
-  return s;
-}
-
-inline std::ostream& red(std::ostream &s) {
-  return setTextColor(s, BOLD, RED, BLACK);
-}
-
-inline std::ostream& green(std::ostream &s) {
-  return setTextColor(s, BOLD, GREEN, BLACK);
-}
-
-inline std::ostream& blue(std::ostream &s) {
-  return setTextColor(s, BOLD, BLUE, BLACK);
-}
-
-inline std::ostream& yellow(std::ostream &s) {
-  return setTextColor(s, BOLD, YELLOW, BLACK);
-}
-
-inline std::ostream& white(std::ostream &s) {
-  return setTextColor(s, BOLD, WHITE, BLACK);
-}
-
-inline std::ostream& magenta(std::ostream &s) {
-  return setTextColor(s, BOLD, MAGENTA, BLACK);
-}
-
-inline std::ostream& cyan(std::ostream &s) {
-  return setTextColor(s, BOLD, CYAN, BLACK);
-}
-
 
 class StackWalker {
 public:
@@ -124,7 +71,7 @@ public:
       os << red << " from " << green << "??" << std::endl;
     }
 
-    os << defaultColor;
+    os << defaultTextColor;
 
   }
 

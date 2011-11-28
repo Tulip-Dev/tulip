@@ -76,7 +76,7 @@ void dumpStack(int sig, siginfo_t *, void * ucontext) {
   sw.setCallerAddress(callerAddress);
   sw.printCallStackToStdErr();
   std::cerr << TLP_STACK_END_HEADER << std::endl;
-  std::cerr << std::flush;
+  std::cerr << std::flush; 
   exit(1);
 }
 
@@ -110,6 +110,7 @@ exception_filter(LPEXCEPTION_POINTERS info) {
   sw.printCallStackToStdErr();
   std::cerr << TLP_STACK_END_HEADER << std::endl;
   std::cerr << std::flush;
+  
   return 1;
 }
 
