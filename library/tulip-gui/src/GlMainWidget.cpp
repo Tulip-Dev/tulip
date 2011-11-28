@@ -247,6 +247,8 @@ void GlMainWidget::setGraph(Graph *graph) {
     graphComposite->getInputData()->getGlVertexArrayManager()->setInputData(graphComposite->getInputData());
   }
 
+  scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
+
   delete oldGraphComposite;
 }
 //==================================================
