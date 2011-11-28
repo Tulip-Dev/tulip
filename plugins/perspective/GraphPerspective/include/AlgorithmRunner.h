@@ -23,7 +23,7 @@
 #include <QtCore/QMap>
 
 #include <tulip/WithParameter.h>
-#include "GraphHierarchiesModel.h"
+#include <tulip/GraphHierarchiesModel.h>
 
 namespace tlp {
 class Graph;
@@ -51,10 +51,10 @@ class AlgorithmRunner : public QWidget {
   PluginListWidgetManagerInterface *_pluginsListMgr;
   QMap<QString,QStringList> _currentAlgorithmsList;
 
-  GraphHierarchiesModel* _model;
+  tlp::GraphHierarchiesModel* _model;
 public:
   explicit AlgorithmRunner(QWidget *parent = 0);
-  void setModel(GraphHierarchiesModel* model);
+  void setModel(tlp::GraphHierarchiesModel* model);
 
 public slots:
   void buildListWidget();

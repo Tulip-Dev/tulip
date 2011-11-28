@@ -25,6 +25,7 @@
 namespace tlp {
 class Graph;
 class PluginInformations;
+class GraphHierarchiesModel;
 }
 
 namespace Ui {
@@ -32,7 +33,6 @@ class PanelSelectionWizard;
 class PanelSelectionItem;
 }
 
-class GraphHierarchiesModel;
 
 // Helper class
 class PanelSelectionItem: public QWidget {
@@ -62,11 +62,11 @@ class PanelSelectionWizard : public QWizard {
   Q_OBJECT
 
   Ui::PanelSelectionWizard* _ui;
-  GraphHierarchiesModel* _model;
+  tlp::GraphHierarchiesModel* _model;
   PanelSelectionItem* _activeItem;
   bool _canSelectGraph;
 public:
-  explicit PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent = 0, bool canSelectGraph = true);
+  explicit PanelSelectionWizard(tlp::GraphHierarchiesModel* model, QWidget *parent = 0, bool canSelectGraph = true);
   virtual ~PanelSelectionWizard();
 
   tlp::Graph* graph() const;

@@ -27,7 +27,7 @@
 #include <tulip/ForEach.h>
 
 #include "PanelSelectionWizard.h"
-#include "GraphHierarchiesModel.h"
+#include <tulip/GraphHierarchiesModel.h>
 
 using namespace tlp;
 using namespace std;

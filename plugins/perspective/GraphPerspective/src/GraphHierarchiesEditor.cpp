@@ -30,14 +30,14 @@
 #include <tulip/TulipMetaTypes.h>
 
 #include "GraphPerspective.h"
-#include "GraphHierarchiesModel.h"
+#include <tulip/GraphHierarchiesModel.h>
 #include "ui_GraphHierarchiesEditor.h"
 
 // Helper class
 class NoGraphMessageEffect: public QGraphicsEffect {
-  GraphHierarchiesModel* _model;
+  tlp::GraphHierarchiesModel* _model;
 public:
-  explicit NoGraphMessageEffect(GraphHierarchiesModel* model, QObject* parent = 0): QGraphicsEffect(parent), _model(model) {
+  explicit NoGraphMessageEffect(tlp::GraphHierarchiesModel* model, QObject* parent = 0): QGraphicsEffect(parent), _model(model) {
   }
 
   void draw(QPainter *painter) {
@@ -81,7 +81,7 @@ bool GraphHierarchiesEditor::synchronized() const {
   return _linkButton->isChecked();
 }
 
-void GraphHierarchiesEditor::setModel(GraphHierarchiesModel *model) {
+void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   _ui->hierarchiesTree->setModel(model);
   _ui->hierarchiesTree->header()->resizeSections(QHeaderView::ResizeToContents);
   _ui->hierarchiesTree->setGraphicsEffect(new NoGraphMessageEffect(model,_ui->hierarchiesTree));
@@ -93,7 +93,7 @@ GraphHierarchiesEditor::~GraphHierarchiesEditor() {
 
 void GraphHierarchiesEditor::activeGraphSelected(const QModelIndex& index) {
   tlp::Graph* graph = (tlp::Graph*)(_ui->hierarchiesTree->model()->index(index.row(),0,index.parent()).internalPointer());
-  static_cast<GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(graph);
+  static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(graph);
 }
 
 void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {

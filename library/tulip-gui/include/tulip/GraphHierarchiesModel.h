@@ -19,6 +19,7 @@
 #ifndef GRAPHHIERARCHIESMODEL_H
 #define GRAPHHIERARCHIESMODEL_H
 
+#include <tulip/tulipconf.h>
 #include <tulip/TulipModel.h>
 #include <tulip/Observable.h>
 #include <QtCore/QList>
@@ -27,9 +28,8 @@ namespace tlp {
 class Graph;
 class TulipProject;
 class PluginProgress;
-}
 
-class GraphHierarchiesModel : public tlp::TulipModel, public tlp::Observable {
+class TLP_QT_SCOPE GraphHierarchiesModel : public tlp::TulipModel, public tlp::Observable {
   Q_OBJECT
 
   QList<tlp::Graph *> _graphs;
@@ -104,5 +104,7 @@ public slots:
   void readProject(tlp::TulipProject *,tlp::PluginProgress *);
   bool writeProject(tlp::TulipProject *, tlp::PluginProgress *);
 };
+
+}
 
 #endif // GRAPHHIERARCHIESMODEL_H

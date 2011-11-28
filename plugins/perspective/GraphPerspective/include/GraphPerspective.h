@@ -24,10 +24,10 @@
 
 class QAction;
 
-class GraphHierarchiesModel;
 class GraphHierarchiesEditor;
 
 namespace tlp {
+class GraphHierarchiesModel;
 class View;
 }
 
@@ -38,7 +38,7 @@ class GraphPerspectiveMainWindowData;
 class GraphPerspective : public tlp::Perspective {
   Q_OBJECT
   Ui::GraphPerspectiveMainWindowData *_ui;
-  GraphHierarchiesModel *_graphs;
+  tlp::GraphHierarchiesModel *_graphs;
   bool _maximised;
 public:
   GraphPerspective(tlp::PerspectiveContext &c);

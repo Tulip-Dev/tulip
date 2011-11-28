@@ -26,8 +26,7 @@
 #include <tulip/PluginManager.h>
 #include <tulip/View.h>
 #include <tulip/TulipMetaTypes.h>
-
-#include "GraphHierarchiesModel.h"
+#include <tulip/GraphHierarchiesModel.h>
 
 using namespace tlp;
 

@@ -30,7 +30,7 @@
 #include "ImportWizard.h"
 #include "PanelSelectionWizard.h"
 #include "GraphHierarchiesEditor.h"
-#include "GraphHierarchiesModel.h"
+#include <tulip/GraphHierarchiesModel.h>
 
 #ifndef NDEBUG
 #include <modeltest.h>

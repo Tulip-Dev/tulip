@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "GraphHierarchiesModel.h"
+#include "tulip/GraphHierarchiesModel.h"
 
 #include <QtGui/QFont>
 #include <QtCore/QSize>
