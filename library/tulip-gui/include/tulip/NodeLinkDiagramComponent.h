@@ -23,6 +23,9 @@
 
 namespace tlp {
 class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
+
+  void registerTriggers();
+
 public:
   NodeLinkDiagramComponent();
   virtual ~NodeLinkDiagramComponent();

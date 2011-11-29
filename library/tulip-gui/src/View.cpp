@@ -100,3 +100,32 @@ void View::graphDeleted() {
   _graph = NULL;
   this->deleteLater();
 }
+
+/*
+  Triggers
+  */
+QSet<tlp::Observable*> View::triggers() const {
+  return _triggers;
+}
+
+void View::removeRedrawTrigger(tlp::Observable* obs) {
+  if (_triggers.remove(obs))
+    obs->removeListener(this);
+}
+
+void View::addRedrawTrigger(tlp::Observable* obs) {
+  if (_triggers.contains(obs) || obs == NULL)
+    return;
+  _triggers.insert(obs);
+  obs->addObserver(this);
+}
+
+void View::treatEvents(const std::vector<Event> &events) {
+  for(int i=0;i<events.size();++i) {
+    Event e = events[i];
+    if (_triggers.contains(e.sender())) {
+      emit drawNeeded();
+      break;
+    }
+  }
+}

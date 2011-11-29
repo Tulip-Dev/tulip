@@ -69,6 +69,7 @@ public slots:
 signals:
   void closed(tlp::WorkspacePanel*);
   void focused();
+  void drawNeeded();
 
 protected slots:
   void interactorActionTriggered();

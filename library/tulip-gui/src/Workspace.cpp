@@ -192,12 +192,12 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   if (_model != NULL)
     panel->setGraphsModel(_model);
 
-  connect(view,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
   panel->installEventFilter(this);
   panel->setWindowTitle(panelTitle(panel));
   view->setGraph(g);
   view->setState(data);
   connect(panel,SIGNAL(closed(tlp::WorkspacePanel*)),this,SLOT(removePanel(tlp::WorkspacePanel*)));
+  connect(panel,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
 
   // Add it to the list
   _panels.push_back(panel);
@@ -272,6 +272,7 @@ void Workspace::removePanel(WorkspacePanel* panel) {
 }
 
 void Workspace::viewNeedsDraw() {
+  static_cast<WorkspacePanel*>(sender())->view()->draw(NULL); //FIXME: add progress here
 }
 
 void Workspace::switchToStartupMode() {

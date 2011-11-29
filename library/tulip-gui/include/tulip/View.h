@@ -69,6 +69,8 @@ class TLP_QT_SCOPE View: public QObject, public tlp::WithDependency, public tlp:
   tlp::Interactor* _currentInteractor;
   tlp::Graph* _graph;
 
+  QSet<tlp::Observable*> _triggers;
+
 public:
   /**
     @brief Default constructor
@@ -121,6 +123,18 @@ public:
     @note This method MUST return the same graph pointer that was previously passed down to setGraph.
     */
   tlp::Graph* graph() const;
+
+  /**
+    @return The list of currently registered triggers.
+    @see View::addRedrawTrigger()
+    */
+  QSet<tlp::Observable*> triggers() const;
+
+  /**
+    @brief reimplemented from tlp::Observable to provide the triggers mechanism.
+    @see View::addRedrawTrigger()
+    */
+  void treatEvents(const std::vector<Event> &events);
 
 public slots:
   /**
@@ -179,6 +193,22 @@ public slots:
     @warning When overriding this method. You MUST always make a call to View::treatEvent before doing anything in order to keep this callback working.
     */
   virtual void treatEvent(const Event&);
+
+  /**
+    @brief Registers a new trigger for automatic view drawing.
+    Triggers are tlp::Observable subclasses. Once registered, the view will listen to the trigger's events and emit the drawNeeded signal each time the Observable::treatEvents() callback is run.
+    For more information about the Observable system, @see tlp::Observable
+
+    @note This is a convenience function. However, using triggers prevent from performign extra checks on the data structure to know if a redraw must me made or not. For more control over event handling, you will have to implement your own treatEvent/treatEvents callback.
+    @warning If your tlp::View subclass overloads the treatEvents method. You must make sure to call the View::treatEvents method in order to keep the triggers system working.
+    */
+  void addRedrawTrigger(tlp::Observable*);
+
+  /**
+    @brief Removes a trigger from the list of registered triggers. Event coming from this trigger will no longer trigger the drawNeeded signal.
+    @see View::addRedrawTrigger()
+    */
+  void removeRedrawTrigger(tlp::Observable*);
 
 signals:
   /**

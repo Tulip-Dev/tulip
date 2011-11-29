@@ -114,6 +114,7 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
 
   connect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
   connect(_view,SIGNAL(graphSet(tlp::Graph*)),this,SLOT(viewGraphSet(tlp::Graph*)));
+  connect(_view,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
 }
 
 void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
