@@ -38,6 +38,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
   getGlMainWidget()->setGraph(graph);
   registerTriggers();
+  emit drawNeeded();
 }
 
 tlp::DataSet NodeLinkDiagramComponent::state() const {
