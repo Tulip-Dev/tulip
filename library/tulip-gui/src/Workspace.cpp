@@ -198,6 +198,7 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   view->setState(data);
   connect(panel,SIGNAL(closed(tlp::WorkspacePanel*)),this,SLOT(removePanel(tlp::WorkspacePanel*)));
   connect(panel,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
+  connect(panel,SIGNAL(switchToWorkspacePanel(int)),this,SLOT(panelSwitch(int)));
 
   // Add it to the list
   _panels.push_back(panel);
@@ -408,7 +409,6 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
   else if (ev->type() == QEvent::ChildRemoved) {
     static_cast<QChildEvent*>(ev)->child()->removeEventFilter(this);
   }
-
   if (ev->type() == QEvent::FocusIn) {
     // FIXME: Pretty much a dirty hack: we are catching QGraphicsView focus event, then go back to its parent (the WorkspacePanel) to emit a focus event
     if (dynamic_cast<QGraphicsView*>(obj) != NULL) {
@@ -416,6 +416,26 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
       emit panelFocused(panel->view());
     }
   }
-
   return false;
+}
+
+void Workspace::panelSwitch(int i) {
+  if (i<0 || i >= _panels.size())
+    return;
+
+  WorkspacePanel* sourcePanel = static_cast<WorkspacePanel*>(sender());
+  WorkspacePanel* targetPanel = _panels[i];
+
+  if (sourcePanel == targetPanel)
+    return;
+
+  QString viewName = targetPanel->viewName();
+  assert(ViewLister::pluginExists(viewName.toStdString()));
+  View* view = ViewLister::getPluginObject(viewName.toStdString(),NULL);
+  view->setupUi();
+  sourcePanel->setView(view,viewName);
+  view->setGraph(targetPanel->view()->graph());
+  view->setState(DataSet());
+  sourcePanel->setWindowTitle(panelTitle(sourcePanel));
+  sourcePanel->viewGraphSet(targetPanel->view()->graph());
 }
