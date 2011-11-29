@@ -48,9 +48,9 @@ QToolButton:pressed, QPushButton:pressed{
 	margin: 2
  }
 
- QComboBox QAbstractItemView {
+/*QComboBox QAbstractItemView {
     background-color:white;
-}
+}*/
 
  QComboBox::down-arrow {
      image: url(:/tulip/gui/ui/combobox_arrow.png);
@@ -92,8 +92,8 @@ QComboBox:drop-down
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>669</width>
-        <height>156</height>
+        <width>673</width>
+        <height>162</height>
        </rect>
       </property>
       <property name="styleSheet">
