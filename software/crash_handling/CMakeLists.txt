@@ -18,16 +18,20 @@ ENDIF()
 	
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude})
 
-IF(LINUX)
+IF(UNIX)
 	SET(LIB_SRCS ${LIB_SRCS} UnixSignalInterposer)
-ENDIF(LINUX)
+ENDIF(UNIX)
 
 ADD_LIBRARY(crash_handling STATIC ${LIB_SRCS})
+
+IF(UNIX)
+	TARGET_LINK_LIBRARIES(crash_handling dl)
+ENDIF(UNIX)
 
 IF(LINUX)
 
   IF(HAVE_BFD)
-    TARGET_LINK_LIBRARIES(crash_handling bfd dl)
+    TARGET_LINK_LIBRARIES(crash_handling bfd)
   ENDIF(HAVE_BFD)
   
 ELSEIF(MINGW)
