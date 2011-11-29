@@ -118,8 +118,8 @@ void GlGraphLowDetailsRenderer::visitEdges(Graph *graph,GlSceneVisitor *visitor,
 //====================================================
 void GlGraphLowDetailsRenderer::initEdgesArray() {
   Graph *graph=inputData.getGraph();
-  LayoutProperty *layout=((GlGraphInputData *)&inputData)->getLayoutProperty();
-  ColorProperty *color=graph->getProperty<ColorProperty>(((GlGraphInputData *)&inputData)->getElementColorPropName());
+  LayoutProperty *layout=graph->getProperty<LayoutProperty>(inputData.getElementLayoutPropName());
+  ColorProperty *color=graph->getProperty<ColorProperty>(inputData.getElementColorPropName());
 
   size_t nbEdges = graph->numberOfEdges();
   size_t nbBends = 0;
@@ -176,9 +176,9 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
 //====================================================
 void GlGraphLowDetailsRenderer::initNodesArray() {
   Graph *graph=inputData.getGraph();
-  LayoutProperty *layout=((GlGraphInputData *)&inputData)->getLayoutProperty();
-  ColorProperty *color=graph->getProperty<ColorProperty>(((GlGraphInputData *)&inputData)->getElementColorPropName());
-  SizeProperty *size=graph->getProperty<SizeProperty>(((GlGraphInputData *)&inputData)->getElementSizePropName());
+  LayoutProperty *layout=graph->getProperty<LayoutProperty>(inputData.getElementLayoutPropName());
+  ColorProperty *color=graph->getProperty<ColorProperty>(inputData.getElementColorPropName());
+  SizeProperty *size=graph->getProperty<SizeProperty>(inputData.getElementSizePropName());
 
   size_t nbNodes= graph->numberOfNodes();
   quad_points.resize(nbNodes * 4);
