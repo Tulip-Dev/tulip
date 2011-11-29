@@ -19,7 +19,8 @@
 #include "tulip/NodeLinkDiagramComponent.h"
 
 #include <tulip/GlMainWidget.h>
-#include <QtCore/QDebug>
+#include <tulip/GlGraphComposite.h>
+#include <tulip/GlGraphInputData.h>
 
 using namespace tlp;
 
@@ -31,15 +32,42 @@ NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
 
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   getGlMainWidget()->setData(graph(), data);
+  registerTriggers();
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
-  qWarning() << __PRETTY_FUNCTION__;
   getGlMainWidget()->setGraph(graph);
+  registerTriggers();
 }
 
 tlp::DataSet NodeLinkDiagramComponent::state() const {
   return getGlMainWidget()->getData();
+}
+
+void NodeLinkDiagramComponent::registerTriggers() {
+  foreach (tlp::Observable* obs, triggers()) {
+    removeRedrawTrigger(obs);
+  }
+
+  GlGraphInputData* inputData = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
+  addRedrawTrigger(inputData->getElementBorderColor());
+  addRedrawTrigger(inputData->getElementBorderWidth());
+  addRedrawTrigger(inputData->getElementColor());
+  addRedrawTrigger(inputData->getElementFont());
+  addRedrawTrigger(inputData->getElementFontSize());
+  addRedrawTrigger(inputData->getElementLabel());
+  addRedrawTrigger(inputData->getElementLabelColor());
+  addRedrawTrigger(inputData->getElementLabelPosition());
+  addRedrawTrigger(inputData->getElementLayout());
+  addRedrawTrigger(inputData->getElementRotation());
+  addRedrawTrigger(inputData->getElementSelected());
+  addRedrawTrigger(inputData->getElementShape());
+  addRedrawTrigger(inputData->getElementSize());
+  addRedrawTrigger(inputData->getElementTexture());
+  addRedrawTrigger(inputData->getElementSrcAnchorShape());
+  addRedrawTrigger(inputData->getElementSrcAnchorSize());
+  addRedrawTrigger(inputData->getElementTgtAnchorShape());
+  addRedrawTrigger(inputData->getElementTgtAnchorSize());
 }
 
 VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0")
