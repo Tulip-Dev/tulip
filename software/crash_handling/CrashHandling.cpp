@@ -41,7 +41,7 @@ using namespace std;
  */
 #if defined(__linux) || defined(__APPLE__)
 
-#include <csignal>
+#include "UnixSignalInterposer.h"
 
 // This structure mirrors the one found in /usr/include/asm/ucontext.h
 typedef struct _sig_ucontext {
@@ -80,16 +80,14 @@ void dumpStack(int sig, siginfo_t *, void * ucontext) {
   exit(1);
 }
 
+extern void installSignalHandlers(void);
+
 void start_crash_handler() {
-  struct sigaction action;
-  sigemptyset(&action.sa_mask);
-  action.sa_flags = SA_RESTART | SA_SIGINFO;
-  action.sa_sigaction = &dumpStack;
-  sigaction(SIGSEGV, &action, NULL);
-  sigaction(SIGABRT, &action, NULL);
-  sigaction(SIGFPE, &action, NULL);
-  sigaction(SIGILL, &action, NULL);
-  sigaction(SIGBUS, &action, NULL);
+	installSignalHandler(SIGSEGV, &dumpStack);
+	installSignalHandler(SIGABRT, &dumpStack);
+	installSignalHandler(SIGFPE, &dumpStack);
+	installSignalHandler(SIGILL, &dumpStack);
+	installSignalHandler(SIGBUS, &dumpStack);
 }
 
 /*

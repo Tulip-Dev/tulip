@@ -40,12 +40,6 @@ export LC_NUMERIC=C
 TULIP_NEED_RESTART=TRUE
 while [ "$TULIP_NEED_RESTART" = "TRUE" ];
 do
-  # Preload custom signal handling functions before system ones.
-  # That way, tulip signal handlers can't get overwritten 
-  # by the shared libaries linked against it (e.g. NVIDIA graphics driver).
-  # It ensures that a backtrace will always be printed to stderr when a crash occurs
-  export LD_PRELOAD=$THISDIR/../lib/libSignalInterposer.so
   $THISDIR/tulip_app $@
-  export LD_PRELOAD=""
   TULIP_NEED_RESTART=`$THISDIR/tulip_need_restart`
 done

@@ -18,20 +18,17 @@ ENDIF()
 	
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude})
 
+IF(LINUX)
+	SET(LIB_SRCS ${LIB_SRCS} UnixSignalInterposer)
+ENDIF(LINUX)
+
 ADD_LIBRARY(crash_handling STATIC ${LIB_SRCS})
 
 IF(LINUX)
 
   IF(HAVE_BFD)
-    TARGET_LINK_LIBRARIES(crash_handling bfd)
+    TARGET_LINK_LIBRARIES(crash_handling bfd dl)
   ENDIF(HAVE_BFD)
-    
-  ADD_LIBRARY(SignalInterposer SHARED LinuxSignalInterposer.cpp)
-  
-  INSTALL(TARGETS SignalInterposer
-       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip
-       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip
-       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip)
   
 ELSEIF(MINGW)
   TARGET_LINK_LIBRARIES(crash_handling imagehlp)

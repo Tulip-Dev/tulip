@@ -17,100 +17,103 @@
  *
  */
 
-// This file has to be compiled on Linux hosts into a shared library.
+// This file has to be compiled on Unix hosts into a shared library
+// or has to be linked statically against an executable/shared library.
 // It allows to override the following system functions : sigaction, signal and sigset.
 // The purpose is to prevent custom signal handlers being overwritten by libraries
 // linked against the application (e.g. graphics driver).
-// To make this feature work, the environment variable LD_PRELOAD has to be filled
-// with the path to the resulting shared library before launching the application.
+// When compiled as a shared library the environment variable LD_PRELOAD (DYLD_INSERT_LIBRARIES on MacOS)
+// has to be filled with the path to the resulting shared library before launching the application.
 // For instance : $ LD_PRELOAD=<path to the compiled shared library> <path_to_application_executable> <args>
 
 #include <cstdlib>
 #include <cstdio>
-#include <csignal>
 #include <iostream>
 #include <algorithm>
-#include <vector>
+#include <set>
 
 #include <unistd.h>
 #include <dlfcn.h>
 
+#include "UnixSignalInterposer.h"
+
 using namespace std;
 
-// the custom signal handler defined in an extern source file
-// (rename it according to yours or define another one here)
-extern void dumpStack(int sig, siginfo_t * info, void * ucontext);
-
+// some typedef on function pointers
+typedef SignalHandlerFunc* SignalFunc(int, SignalHandlerFunc*);
 typedef int SigactionFunc(int, const struct sigaction *, struct sigaction *);
+
 static SigactionFunc *real_sigaction = NULL;
-static vector<int> handledSignals;
+static SignalFunc *real_signal = NULL;
+static SignalFunc *real_sigset = NULL;
 
-// this function will be called when the shared libary is loaded
-static void installSignalHandlers(void) __attribute__((constructor));
-static void installSignalHandlers(void) {
+static set<int> handledSignals;
 
-  // fill this vector according to the signals you want to handle
-  handledSignals.push_back(SIGSEGV);
-  handledSignals.push_back(SIGBUS);
-  handledSignals.push_back(SIGABRT);
-  handledSignals.push_back(SIGILL);
-  handledSignals.push_back(SIGFPE);
+// this function will be called when the library is loaded
+static void initSignalInterposer(void) __attribute__((constructor));
 
-  // the real sigaction function is retrieved
-  if (real_sigaction == NULL) {
+static void initSignalInterposer(void) {
     real_sigaction = reinterpret_cast<SigactionFunc *>(dlsym(RTLD_NEXT, "sigaction"));
-  }
+    real_signal = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "signal"));
+    real_sigset = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "sigset"));
+}
 
+void installSignalHandler(int sig, SignalHandlerFunc *handler) {
+  
+  handledSignals.insert(sig);
+  
   // custom signal handler is installed for the signals in the vector
   struct sigaction action;
   sigemptyset(&action.sa_mask);
-  action.sa_flags = SA_RESTART | SA_SIGINFO;
-  action.sa_sigaction = &dumpStack;
+  action.sa_handler = handler;
 
-  for (size_t i = 0 ; i < handledSignals.size() ; ++i) {
-    real_sigaction(handledSignals[i], &action, NULL);
-  }
+  real_sigaction(sig, &action, NULL);
+  
 }
 
-// some typedef on function pointers
-typedef void SigHandlerFunc(int);
-typedef SigHandlerFunc* SignalFunc(int, SigHandlerFunc*);
+void installSignalHandler(int sig, SigactionHandlerFunc *handler) {
+  
+  // fill this vector according to the signals you want to handle
+  handledSignals.insert(sig);
+  
+  // custom signal handler is installed for the signals in the vector
+  struct sigaction action;
+  sigemptyset(&action.sa_mask);
+  action.sa_flags = SA_RESTART | SA_SIGINFO; 
+  action.sa_sigaction = handler;
+
+  real_sigaction(sig, &action, NULL);
+  
+}
 
 // redefinition of the signal function
 // if the signal passed as first parameter is already treated by our custom handler,
 // do nothing and return SIG_DFL
 // if the signal is not treated by our custom handler, call the real signal function
-SigHandlerFunc *signal (int sig, SigHandlerFunc *disp) {
-  static SignalFunc *func = NULL;
+SignalHandlerFunc *signal (int sig, SignalHandlerFunc *handler) {
 
-  if (func == NULL) {
-    func = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "signal"));
-  }
-
-  if (std::find(handledSignals.begin(), handledSignals.end(), sig) != handledSignals.end()) {
+  if (handledSignals.find(sig) != handledSignals.end()) {
     return SIG_DFL;
   }
   else {
-    return func(sig, disp);
+    return real_signal(sig, handler);
   }
+
 }
+
 // redefinition of the sigset function
 // if the signal passed as first parameter is already treated by our custom handler,
 // do nothing and return SIG_DFL
 // if the signal is not treated by our custom handler, call the real sigset function
-SigHandlerFunc *sigset (int sig, SigHandlerFunc *disp) {
-  static SignalFunc *func = NULL;
+SignalHandlerFunc *sigset(int sig, SignalHandlerFunc *handler) {
 
-  if (func == NULL) {
-    func = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "sigset"));
-  }
-
-  if(std::find(handledSignals.begin(), handledSignals.end(), sig) != handledSignals.end()) {
+  if(handledSignals.find(sig) != handledSignals.end()) {
     return SIG_DFL;
   }
   else {
-    return (func(sig, disp));
+    return real_sigset(sig, handler);
   }
+
 }
 
 // redefinition of the sigaction function
@@ -118,10 +121,12 @@ SigHandlerFunc *sigset (int sig, SigHandlerFunc *disp) {
 // do nothing and return 0
 // if the signal is not treated by our custom handler, call the real sigaction function
 int sigaction(int sig, const struct sigaction *act, struct sigaction *oact) {
+
   if (std::find(handledSignals.begin(), handledSignals.end(), sig) != handledSignals.end()) {
     return 0;
   }
   else {
     return real_sigaction(sig, act, oact);
   }
+
 }
