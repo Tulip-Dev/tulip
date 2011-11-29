@@ -75,6 +75,9 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
   }
+
+  //FIXME: alpha release code
+  _ui->filtersManager->hide();
 }
 
 void GraphPerspective::refreshDockExpandControls() {
