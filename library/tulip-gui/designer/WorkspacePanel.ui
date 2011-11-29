@@ -190,6 +190,9 @@ background-color: #A9A9A9;
         <property name="toolTip">
          <string>Select the view to display</string>
         </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+        </property>
        </widget>
       </item>
       <item>
@@ -198,7 +201,7 @@ background-color: #A9A9A9;
          <string>Select the graph to display</string>
         </property>
         <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
         </property>
        </widget>
       </item>

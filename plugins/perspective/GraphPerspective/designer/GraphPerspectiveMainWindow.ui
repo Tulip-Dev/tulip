@@ -63,9 +63,9 @@ outline: none;
 margin: 2
 }
 
-QComboBox QAbstractItemView {
+/*QComboBox QAbstractItemView {
 background-color:white;
-}
+}*/
 
 QComboBox::down-arrow {
 image: url(:/tulip/gui/ui/combobox_arrow.png);

@@ -163,7 +163,7 @@ p, li { white-space: pre-wrap; }
            <bool>false</bool>
           </property>
           <widget class="PlaceHolderWidget" name="gridPagePanel1" native="true"/>
-          <widget class="PlaceHolderWidget" name="gridPagePanel3" native="true"/>
+          <widget class="PlaceHolderWidget" name="gridPagePanel2" native="true"/>
          </widget>
          <widget class="QSplitter" name="gridPageHorizontalSplitter2">
           <property name="orientation">
@@ -175,7 +175,7 @@ p, li { white-space: pre-wrap; }
           <property name="childrenCollapsible">
            <bool>false</bool>
           </property>
-          <widget class="PlaceHolderWidget" name="gridPagePanel2" native="true"/>
+          <widget class="PlaceHolderWidget" name="gridPagePanel3" native="true"/>
           <widget class="PlaceHolderWidget" name="gridPagePanel4" native="true"/>
          </widget>
         </widget>

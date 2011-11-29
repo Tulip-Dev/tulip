@@ -23,6 +23,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
 #include <QtGui/QGraphicsView>
+#include <QtGui/QGraphicsEffect>
 
 #include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>
@@ -191,7 +192,6 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   if (_model != NULL)
     panel->setGraphsModel(_model);
 
-  panel->setPanelsModel(&_panels);
   connect(view,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
   panel->installEventFilter(this);
   panel->setWindowTitle(panelTitle(panel));
@@ -201,6 +201,7 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
 
   // Add it to the list
   _panels.push_back(panel);
+  panel->setPanelsModel(&_panels);
 
   // If on startup mode, switch to single
   if (currentModeWidget() == _ui->startupPage) {
