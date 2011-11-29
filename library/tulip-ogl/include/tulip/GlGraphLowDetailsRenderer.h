@@ -36,7 +36,7 @@ namespace tlp {
 
 class Graph;
 
-class TLP_GL_SCOPE GlGraphLowDetailsRenderer : public GlGraphRenderer {
+class TLP_GL_SCOPE GlGraphLowDetailsRenderer : public GlGraphRenderer, public Observable {
 
 public:
 
@@ -62,6 +62,10 @@ protected:
   void initTexArray(unsigned int glyph, Vec2f tex[4]);
   void initNodesArray();
 
+  void addObservers();
+  void removeObservers();
+  void updateObservers();
+  void treatEvent(const Event &ev);
 
   GlScene *fakeScene;
 
@@ -74,6 +78,12 @@ protected:
   std::vector<Vec2f>   quad_points;
   std::vector<Color>   quad_colors;
   std::vector<GLuint>  quad_indices;
+
+  Graph *observedGraph;
+  LayoutProperty *observedLayoutProperty;
+  ColorProperty *observedColorProperty;
+  SizeProperty *observedSizeProperty;
+  BooleanProperty *observedSelectionProperty;
 };
 }
 
