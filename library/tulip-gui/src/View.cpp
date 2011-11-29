@@ -101,6 +101,9 @@ void View::graphDeleted() {
   this->deleteLater();
 }
 
+void View::centerView() {
+}
+
 /*
   Triggers
   */

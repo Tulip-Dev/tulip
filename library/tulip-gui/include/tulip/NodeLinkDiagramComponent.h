@@ -33,6 +33,8 @@ public:
   void setState(const tlp::DataSet &);
   tlp::DataSet state() const;
 
+  void treatEvents(const std::vector<Event> &events);
+
 protected:
   void graphChanged(tlp::Graph *);
 };

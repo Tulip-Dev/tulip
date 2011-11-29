@@ -37,6 +37,7 @@ public:
 
 public slots:
   virtual void draw(tlp::PluginProgress* pluginProgress);
+  virtual void centerView();
 
 protected:
   virtual void setupWidget();
