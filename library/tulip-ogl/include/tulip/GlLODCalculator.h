@@ -92,7 +92,7 @@ public:
   /**
    * Set input data use to render
    */
-  virtual void setInputData(GlGraphInputData *inputData) {
+  virtual void setInputData(const GlGraphInputData *inputData) {
     this->inputData=inputData;
   }
 
@@ -168,7 +168,7 @@ public:
 protected :
 
   GlScene *glScene;
-  GlGraphInputData *inputData;
+  const GlGraphInputData *inputData;
 
   RenderingEntitiesFlag renderingEntitiesFlag;
 

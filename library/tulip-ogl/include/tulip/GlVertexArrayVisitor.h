@@ -37,7 +37,7 @@ public:
   /**
    * Constructor
    */
-  GlVertexArrayVisitor(GlGraphInputData* inputData):inputData(inputData) {
+  GlVertexArrayVisitor(const GlGraphInputData* inputData):inputData(inputData) {
     threadSafe=true;
   }
 
@@ -56,7 +56,7 @@ public:
 
 private:
 
-  GlGraphInputData* inputData;
+  const GlGraphInputData* inputData;
 
 };
 

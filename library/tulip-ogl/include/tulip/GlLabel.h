@@ -159,12 +159,12 @@ public :
   /**
    * Set the stencil and draw the Label, this function is usefull when we directly call draw without tulip engine
    */
-  void drawWithStencil(float lod, Camera *camera=NULL);
+  void drawWithStencil(float lod,Camera *camera=NULL);
 
   /**
    * Draw the Label
    */
-  virtual void draw(float lod, Camera *camera=NULL);
+  virtual void draw(float lod,Camera *camera=NULL);
 
   /**
    * Translate entity

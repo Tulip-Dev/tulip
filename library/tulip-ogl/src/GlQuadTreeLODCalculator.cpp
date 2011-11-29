@@ -71,7 +71,7 @@ void GlQuadTreeLODCalculator::setScene(GlScene &scene) {
   GlLODCalculator::setScene(scene);
 }
 
-void GlQuadTreeLODCalculator::setInputData(GlGraphInputData *newInputData) {
+void GlQuadTreeLODCalculator::setInputData(const GlGraphInputData *newInputData) {
   setHaveToCompute();
 
   if (newInputData == NULL) {

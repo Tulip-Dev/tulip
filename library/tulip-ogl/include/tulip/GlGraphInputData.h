@@ -90,7 +90,7 @@ public:
   /**
    * Get property name for elementColor
    */
-  std::string getElementColorPropName() {
+  std::string getElementColorPropName() const {
     return elementColorPropName;
   }
   /**
@@ -103,7 +103,7 @@ public:
   /**
    * Get property name for elementLabelColor
    */
-  std::string getElementLabelColorPropName() {
+  std::string getElementLabelColorPropName() const {
     return elementLabelColorPropName;
   }
   /**
@@ -116,7 +116,7 @@ public:
   /**
    * Get property name for elementSize
    */
-  std::string getElementSizePropName() {
+  std::string getElementSizePropName() const {
     return elementSizePropName;
   }
   /**
@@ -129,7 +129,7 @@ public:
   /**
    * Get property name for elementLabelPosition
    */
-  std::string getElementLabelPositionPropName() {
+  std::string getElementLabelPositionPropName() const {
     return elementLabelPositionPropName;
   }
   /**
@@ -142,7 +142,7 @@ public:
   /**
    * Get property name for elementShape
    */
-  std::string getElementShapePropName() {
+  std::string getElementShapePropName() const {
     return elementShapePropName;
   }
   /**
@@ -155,7 +155,7 @@ public:
   /**
    * Get property name for elementRotation
    */
-  std::string getElementRotationPropName() {
+  std::string getElementRotationPropName() const {
     return elementRotationPropName;
   }
   /**
@@ -168,7 +168,7 @@ public:
   /**
    * Get property name for elementSelected
    */
-  std::string getElementSelectedPropName() {
+  std::string getElementSelectedPropName() const {
     return elementSelectedPropName;
   }
   /**
@@ -181,7 +181,7 @@ public:
   /**
    * Get property name for elementFont
    */
-  std::string getElementFontPropName() {
+  std::string getElementFontPropName() const {
     return elementFontPropName;
   }
   /**
@@ -194,7 +194,7 @@ public:
   /**
    * Get property name for elementFontSize
    */
-  std::string getElementFontSizePropName() {
+  std::string getElementFontSizePropName() const {
     return elementFontSizePropName;
   }
   /**
@@ -207,7 +207,7 @@ public:
   /**
    * Get property name for elementLabel
    */
-  std::string getElementLabelPropName() {
+  std::string getElementLabelPropName() const {
     return elementLabelPropName;
   }
   /**
@@ -220,7 +220,7 @@ public:
   /**
    * Get property name for elementTexture
    */
-  std::string getElementTexturePropName() {
+  std::string getElementTexturePropName() const {
     return elementTexturePropName;
   }
   /**
@@ -233,7 +233,7 @@ public:
   /**
    * Get property name for elementBorderColor
    */
-  std::string getElementBorderColorPropName() {
+  std::string getElementBorderColorPropName() const {
     return elementBorderColorPropName;
   }
   /**
@@ -246,7 +246,7 @@ public:
   /**
    * Get property name for elementBorderWidth
    */
-  std::string getElementBorderWidthPropName() {
+  std::string getElementBorderWidthPropName() const {
     return elementBorderWidthPropName;
   }
   /**
@@ -259,7 +259,7 @@ public:
   /**
    * Get property name for elementLayout
    */
-  std::string getElementLayoutPropName() {
+  std::string getElementLayoutPropName() const {
     if (elementLayoutPropName == "")
       return "viewLayout";
     else
@@ -268,7 +268,7 @@ public:
   /**
    * Get property name for elementSourceAnchorShape
    */
-  std::string getElementSourceAnchorShapePropName() {
+  std::string getElementSourceAnchorShapePropName() const {
     return elementSrcAnchorShapePropName;
   }
   /**
@@ -280,7 +280,7 @@ public:
   /**
    * Get property name for elementSourceAnchorSize
    */
-  std::string getElementSourceAnchorSizePropName() {
+  std::string getElementSourceAnchorSizePropName() const {
     return elementSrcAnchorSizePropName;
   }
   /**
@@ -292,7 +292,7 @@ public:
   /**
    * Get property name for elementTargetAnchorShape
    */
-  std::string getElementTargetAnchorShapePropName() {
+  std::string getElementTargetAnchorShapePropName() const {
     return elementTgtAnchorShapePropName;
   }
   /**
@@ -304,7 +304,7 @@ public:
   /**
    * Get property name for elementTargetAnchorSize
    */
-  std::string getElementTargetAnchorSizePropName() {
+  std::string getElementTargetAnchorSizePropName() const {
     return elementTgtAnchorSizePropName;
   }
   /**
@@ -335,7 +335,7 @@ public:
   /**
    * Return metaNode renderer
    */
-  GlMetaNodeRenderer *getMetaNodeRenderer() {
+  GlMetaNodeRenderer *getMetaNodeRenderer() const {
     return metaNodeRenderer;
   }
 

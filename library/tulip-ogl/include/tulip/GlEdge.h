@@ -54,49 +54,49 @@ public:
   /**
    * Return the edge bounding box
    */
-  virtual BoundingBox getBoundingBox(GlGraphInputData* data);
+  virtual BoundingBox getBoundingBox(const GlGraphInputData* data);
 
   /**
    * Draw the edge with level of detail : lod and Camera : camera
    */
-  virtual void draw(float lod,GlGraphInputData *data,Camera* camera);
+  virtual void draw(float lod,const GlGraphInputData *data,Camera* camera);
 
   /**
    * Draw the label of the edge if drawEdgesLabel is true and if label selection is equal to drawSelect
    * Use TextRenderer : renderer to draw the label
    */
-  void drawLabel(bool drawSelect,OcclusionTest* test,GlGraphInputData* data, float lod);
+  void drawLabel(bool drawSelect,OcclusionTest* test,const GlGraphInputData* data, float lod);
 
   /**
    * Draw the label of the edge if drawEdgesLabel is true
    * Use TextRenderer : renderer to draw the label
    */
-  void drawLabel(OcclusionTest* test,GlGraphInputData* data);
+  void drawLabel(OcclusionTest* test,const GlGraphInputData* data);
 
   /**
    * Draw the label of the edge if drawEdgesLabel is true
    * Use TextRenderer : renderer to draw the label
    */
-  void drawLabel(OcclusionTest* test,GlGraphInputData* data, float lod, Camera *camera=NULL);
+  void drawLabel(OcclusionTest* test,const GlGraphInputData* data, float lod, Camera *camera=NULL);
 
   /**
    * This function is used by the engine to get line coordinates of the edge
    */
-  void getVertices(GlGraphInputData *data,std::vector<Coord> &linesCoordsArray);
+  void getVertices(const GlGraphInputData *data,std::vector<Coord> &linesCoordsArray);
 
   /**
    * This function is used by the engine to get line colors of the edge
    */
-  void getColors(GlGraphInputData *data,const Coord *vertices,unsigned int numberOfVertices,std::vector<Color> &linesColorsArray);
+  void getColors(const GlGraphInputData *data,const Coord *vertices,unsigned int numberOfVertices,std::vector<Color> &linesColorsArray);
   /**
    * This function is used by the engine to get line colors of the edge
    */
-  void getColors(GlGraphInputData *data,const std::vector<Coord> &vertices,std::vector<Color> &linesColorsArray);
+  void getColors(const GlGraphInputData *data,const std::vector<Coord> &vertices,std::vector<Color> &linesColorsArray);
 
   /**
    * Compute the edge size
    */
-  void getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,const float maxSrcSize,const float maxTgtSize,Size &edgeSize);
+  void getEdgeSize(const GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,const float maxSrcSize,const float maxTgtSize,Size &edgeSize);
 
   /**
    * This function must be called before each graph rendering
@@ -133,7 +133,7 @@ private :
    * Compute the edge colors and store these colors in srcCol and tgtCol
    * \param data : input data used to compute edge colors
    */
-  void getEdgeColor(GlGraphInputData *data,const edge &e,const node &source,const node &target, bool selected,Color &srcCol, Color &tgtCol);
+  void getEdgeColor(const GlGraphInputData *data,const edge &e,const node &source,const node &target, bool selected,Color &srcCol, Color &tgtCol);
 
 
 
@@ -146,12 +146,12 @@ private :
   /**
    * Compute edge anchor
    */
-  void getEdgeAnchor(GlGraphInputData *data,const node &source,const node &target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor);
+  void getEdgeAnchor(const GlGraphInputData *data,const node &source,const node &target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor);
 
   /**
    * Thgis function is used to render edge arrows
    */
-  void displayArrow(GlGraphInputData *data,const edge &e,const node &source,const Size &sizeRatio,float edgeSize,const Color &color,float maxSize,bool selected,float selectionOutlineSize,
+  void displayArrow(const GlGraphInputData *data,const edge &e,const node &source,const Size &sizeRatio,float edgeSize,const Color &color,float maxSize,bool selected,float selectionOutlineSize,
                     int srcEdgeGlyph,int tgtEdgeGlyph,size_t numberOfBends,const Coord &anchor,const Coord &tgtCoord,
                     const Coord &srcAnchor,const Coord &tgtAnchor,Coord &lineAnchor);
 

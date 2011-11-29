@@ -90,7 +90,7 @@ public:
   /**
    * Change the input data used by this LOD calculator
    */
-  void setInputData(GlGraphInputData *newInputData);
+  void setInputData(const GlGraphInputData *newInputData);
 
   /**
    * Clone the calculator

@@ -213,7 +213,7 @@ public:
    * Get the viewport of the scene
    * The viewport must be in many case the size of the widget containing the scene
    */
-  Vector<int, 4> getViewport() {
+  Vector<int, 4> getViewport() const {
     return viewport;
   }
 
@@ -227,7 +227,7 @@ public:
   /**
    * Get the background color of the scene
    */
-  Color getBackgroundColor() {
+  Color getBackgroundColor() const {
     return backgroundColor;
   }
 
@@ -281,7 +281,7 @@ public:
   /**
    * Return the layer list
    */
-  std::vector<std::pair<std::string, GlLayer*> >* getLayersList() {
+  std::vector<std::pair<std::string, GlLayer*> >* getLayersList(){
     return &layersList;
   }
 
