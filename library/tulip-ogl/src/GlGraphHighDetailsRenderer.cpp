@@ -56,7 +56,7 @@ struct EntityWithDistance {
 
 
 struct entityWithDistanceCompare {
-  static GlGraphInputData *inputData;
+  static const GlGraphInputData *inputData;
   bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2 ) const {
     if(e1.distance>e2.distance)
       return true;
@@ -75,7 +75,7 @@ struct entityWithDistanceCompare {
   }
 };
 
-GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
+const GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
 
 //====================================================
 class GreatThanNode {
@@ -142,7 +142,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
           // Not metric ordered
           if((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)) {
             glNode.id=n.id;
-            glNode.drawLabel(occlusionTest,(GlGraphInputData *)(&inputData),lod,(Camera *)(layerLODUnit.camera));
+            glNode.drawLabel(occlusionTest,&inputData,lod,(Camera *)(layerLODUnit.camera));
           }
         }
         else {
@@ -168,7 +168,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
 
       for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin(); it!=nodesMetricOrdered.end(); ++it) {
         glNode.id=(*it).first.id;
-        glNode.drawLabel(occlusionTest,(GlGraphInputData *)(&inputData),(*it).second,(Camera *)(layerLODUnit.camera));
+        glNode.drawLabel(occlusionTest,&inputData,(*it).second,(Camera *)(layerLODUnit.camera));
       }
     }
   }
@@ -187,7 +187,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
         if(!parameters.isElementOrdered() || !metric) {
           // Not metric ordered
           glEdge.id=e.id;
-          glEdge.drawLabel(occlusionTest,(GlGraphInputData *)(&inputData),(*it).lod,(Camera *)(layerLODUnit.camera));
+          glEdge.drawLabel(occlusionTest,&inputData,(*it).lod,(Camera *)(layerLODUnit.camera));
         }
         else {
           // Metric ordered
@@ -209,7 +209,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
 
       for(vector<pair<edge,float> >::iterator it=edgesMetricOrdered.begin(); it!=edgesMetricOrdered.end(); ++it) {
         glEdge.id=(*it).first.id;
-        glEdge.drawLabel(occlusionTest,(GlGraphInputData *)(&inputData),(*it).second,(Camera *)(layerLODUnit.camera));
+        glEdge.drawLabel(occlusionTest,&inputData,(*it).second,(Camera *)(layerLODUnit.camera));
       }
     }
   }
@@ -302,7 +302,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   if(!lodCalculator) {
     lodCalculator=camera->getScene()->getCalculator()->clone();
     lodCalculator->setAttachedLODCalculator(camera->getScene()->getCalculator());
-    lodCalculator->setInputData((GlGraphInputData *)(&inputData));
+    lodCalculator->setInputData(&inputData);
     lodCalculator->setScene(*fakeScene);
   }
 
@@ -316,13 +316,10 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   fakeScene->getLayer("fakeLayer")->setCamera(newCamera);
 
   if(lodCalculator->needEntities()) {
-    cout << "need entities" << endl;
-    GlLODSceneVisitor visitor(lodCalculator, (GlGraphInputData*)(&inputData));
+    GlLODSceneVisitor visitor(lodCalculator, &inputData);
     visitor.visit(fakeScene->getLayer("fakeLayer"));
     visitGraph(&visitor);
   }
-
-  cout << "compute !!!" << endl;
 
   lodCalculator->compute(fakeScene->getViewport(), fakeScene->getViewport());
   LayersLODVector &layersLODVector = lodCalculator->getResult();
@@ -339,7 +336,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
   // VertexArrayManager update
   if(inputData.getGlVertexArrayManager()->haveToCompute()) {
-    GlVertexArrayVisitor vertexArrayVisitor((GlGraphInputData *)(&inputData));
+    GlVertexArrayVisitor vertexArrayVisitor(&inputData);
     visitGraph(&vertexArrayVisitor,true);
     inputData.getGlVertexArrayManager()->setHaveToComputeAll(false);
   }
@@ -375,7 +372,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
         }
 
         glNode.id=(*it).id;
-        glNode.draw((*it).lod,(GlGraphInputData *)(&inputData),camera);
+        glNode.draw((*it).lod,&inputData,camera);
       }
       else {
         continue;
@@ -406,13 +403,13 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
       }
 
       glEdge.id=(*it).id;
-      glEdge.draw((*it).lod,(GlGraphInputData *)(&inputData),camera);
+      glEdge.draw((*it).lod,&inputData,camera);
     }
 
   }
   else {
 
-    entityWithDistanceCompare::inputData=(GlGraphInputData *)(&inputData);
+    entityWithDistanceCompare::inputData=&inputData;
     multiset<EntityWithDistance,entityWithDistanceCompare> entitiesSet;
     Coord camPos=camera->getEyes();
     Coord camCenter=camera->getCenter();
@@ -472,7 +469,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
           }
 
           glNode.id=entity->id;
-          glNode.draw(entity->lod,(GlGraphInputData *)(&inputData),camera);
+          glNode.draw(entity->lod,&inputData,camera);
         }
         else {
           continue;
@@ -489,7 +486,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
         }
 
         glEdge.id=entity->id;
-        glEdge.draw(entity->lod,(GlGraphInputData *)(&inputData),camera);
+        glEdge.draw(entity->lod,&inputData,camera);
       }
     }
   }

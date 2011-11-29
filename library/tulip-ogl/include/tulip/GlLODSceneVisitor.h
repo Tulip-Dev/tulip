@@ -43,7 +43,7 @@ public:
   /**
    * Basic constructor
    */
-  GlLODSceneVisitor(GlLODCalculator *calculator,GlGraphInputData* inputData)
+  GlLODSceneVisitor(GlLODCalculator *calculator,const GlGraphInputData* inputData)
     : calculator(calculator),inputData(inputData) {
     threadSafe=true;
   }
@@ -78,7 +78,7 @@ public:
 private:
 
   GlLODCalculator* calculator;
-  GlGraphInputData* inputData;
+  const GlGraphInputData* inputData;
 
 };
 

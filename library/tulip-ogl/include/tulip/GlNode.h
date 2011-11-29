@@ -54,30 +54,30 @@ public:
   /**
    * Return the node bounding box
    */
-  virtual BoundingBox getBoundingBox(GlGraphInputData* data);
+  virtual BoundingBox getBoundingBox(const GlGraphInputData* data);
 
   /**
    * Draw the node with level of detail : lod and Camera : camera
    */
-  virtual void draw(float lod,GlGraphInputData *data,Camera* camera);
+  virtual void draw(float lod,const GlGraphInputData *data,Camera* camera);
 
   /**
    * Draw the label of the node if drawNodesLabel is true and if label selection is equal to drawSelect
    * Use TextRenderer : renderer to draw the label
    */
-  virtual void drawLabel(bool drawSelect,OcclusionTest* test,GlGraphInputData* data,float lod);
+  virtual void drawLabel(bool drawSelect,OcclusionTest* test,const GlGraphInputData* data,float lod);
 
   /**
    * Draw the label of the node if drawEdgesLabel is true
    * Use TextRenderer : renderer to draw the label
    */
-  virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data);
+  virtual void drawLabel(OcclusionTest* test,const GlGraphInputData* data);
 
   /**
    * Draw the label of the node if drawEdgesLabel is true
    * Use TextRenderer : renderer to draw the label
    */
-  virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data,float lod, Camera *camera=NULL);
+  virtual void drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lod,Camera *camera=NULL);
 
   unsigned int id;
 

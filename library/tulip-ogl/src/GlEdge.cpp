@@ -62,7 +62,7 @@ GlEdge::GlEdge(unsigned int id):id(id) {
     label=new GlLabel();
 }
 
-BoundingBox GlEdge::getBoundingBox(GlGraphInputData* data) {
+BoundingBox GlEdge::getBoundingBox(const GlGraphInputData* data) {
   edge e = edge(id);
   BoundingBox bb;
 
@@ -116,7 +116,7 @@ void GlEdge::acceptVisitor(GlSceneVisitor *visitor) {
   visitor->visit(this);
 }
 
-void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
+void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
   edge e = edge(id);
 
   const std::pair<node, node>& eEnds = data->graph->ends(e);
@@ -426,7 +426,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
   glDepthFunc(GL_LEQUAL);
 }
 
-void GlEdge::drawLabel(bool drawSelect,OcclusionTest* test, GlGraphInputData* data,float lod) {
+void GlEdge::drawLabel(bool drawSelect,OcclusionTest* test, const GlGraphInputData* data,float lod) {
   edge e = edge(id);
   bool select = data->getElementSelected()->getEdgeValue(e);
 
@@ -436,11 +436,11 @@ void GlEdge::drawLabel(bool drawSelect,OcclusionTest* test, GlGraphInputData* da
   drawLabel(test, data, lod);
 }
 
-void GlEdge::drawLabel(OcclusionTest* test, GlGraphInputData* data) {
+void GlEdge::drawLabel(OcclusionTest* test, const GlGraphInputData* data) {
   drawLabel(test,data,0.);
 }
 
-void GlEdge::drawLabel(OcclusionTest* test, GlGraphInputData* data, float lod, Camera *camera) {
+void GlEdge::drawLabel(OcclusionTest* test, const GlGraphInputData* data, float lod, Camera *camera) {
 
   edge e = edge(id);
 
@@ -574,7 +574,7 @@ void GlEdge::drawLabel(OcclusionTest* test, GlGraphInputData* data, float lod, C
   label->drawWithStencil(lod,camera);
 }
 
-void GlEdge::getVertices(GlGraphInputData *data,
+void GlEdge::getVertices(const GlGraphInputData *data,
                          std::vector<Coord> &linesCoordsArray) {
   edge e = edge(id);
 
@@ -615,7 +615,7 @@ void GlEdge::getVertices(GlGraphInputData *data,
   }
 }
 
-void GlEdge::getColors(GlGraphInputData *data,
+void GlEdge::getColors(const GlGraphInputData *data,
                        const Coord *vertices,unsigned int numberOfVertices,
                        std::vector<Color> &linesColorsArray) {
 
@@ -646,7 +646,7 @@ void GlEdge::getColors(GlGraphInputData *data,
   }
 }
 
-void GlEdge::getColors(GlGraphInputData *data,
+void GlEdge::getColors(const GlGraphInputData *data,
                        const vector<Coord> &vertices,
                        std::vector<Color> &linesColorsArray) {
 
@@ -654,7 +654,7 @@ void GlEdge::getColors(GlGraphInputData *data,
 }
 
 
-void GlEdge::getEdgeColor(GlGraphInputData *data,const edge &e,const node &source,const node &target, bool selected,Color &srcCol, Color &tgtCol) {
+void GlEdge::getEdgeColor(const GlGraphInputData *data,const edge &e,const node &source,const node &target, bool selected,Color &srcCol, Color &tgtCol) {
   Color selectionColor=data->parameters->getSelectionColor();
 
   if (selected) {
@@ -672,7 +672,7 @@ void GlEdge::getEdgeColor(GlGraphInputData *data,const edge &e,const node &sourc
   }
 }
 
-void GlEdge::getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,const float maxSrcSize,const float maxTgtSize,Size &edgeSize) {
+void GlEdge::getEdgeSize(const GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,const float maxSrcSize,const float maxTgtSize,Size &edgeSize) {
 
   if (data->parameters->isEdgeSizeInterpolate()) {
     if(srcSize[0]<srcSize[1])
@@ -700,7 +700,7 @@ void GlEdge::getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, cons
   }
 }
 
-void GlEdge::getEdgeAnchor(GlGraphInputData *data,const node &source,const node &target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor) {
+void GlEdge::getEdgeAnchor(const GlGraphInputData *data,const node &source,const node &target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor) {
   double srcRot = data->getElementRotation()->getNodeValue(source);
   double tgtRot = data->getElementRotation()->getNodeValue(target);
 
@@ -758,7 +758,7 @@ float GlEdge::getEdgeWidthLod(const Coord &edgeCoord,
   }
 }
 
-void GlEdge::displayArrow(GlGraphInputData *data,
+void GlEdge::displayArrow(const GlGraphInputData *data,
                           const edge &e,
                           const node &source,
                           const Size& sizeRatio,

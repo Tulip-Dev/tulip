@@ -57,7 +57,7 @@ GlNode::GlNode(unsigned int id):id(id) {
   }
 }
 
-BoundingBox GlNode::getBoundingBox(GlGraphInputData* data) {
+BoundingBox GlNode::getBoundingBox(const GlGraphInputData* data) {
   node n=node(id);
 
   if(data->getElementRotation()->getNodeValue(n)==0) {
@@ -91,7 +91,7 @@ void GlNode::acceptVisitor(GlSceneVisitor *visitor) {
   visitor->visit(this);
 }
 
-void GlNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
+void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
   const Color& colorSelect2=data->parameters->getSelectionColor();
 
   glEnable(GL_CULL_FACE);
@@ -224,7 +224,7 @@ void GlNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
   }
 }
 
-void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,GlGraphInputData* data,float lod) {
+void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,const GlGraphInputData* data,float lod) {
   node n=node(id);
   bool selected=data->getElementSelected()->getNodeValue(n);
 
@@ -234,11 +234,11 @@ void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,GlGraphInputData* dat
   drawLabel(test,data,lod);
 }
 
-void GlNode::drawLabel(OcclusionTest* test,GlGraphInputData* data) {
+void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data) {
   GlNode::drawLabel(test,data,1000.);
 }
 
-void GlNode::drawLabel(OcclusionTest* test,GlGraphInputData* data,float lod, Camera *camera) {
+void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lod,Camera *camera) {
 
   node n=node(id);
 
