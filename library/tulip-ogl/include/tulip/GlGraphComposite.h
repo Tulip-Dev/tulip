@@ -27,10 +27,8 @@
 
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphInputData.h>
-#include <tulip/GlNode.h>
-#include <tulip/GlEdge.h>
-#include <tulip/GlQuadTreeLODCalculator.h>
 #include <tulip/GlScene.h>
+#include <tulip/GlGraphRenderer.h>
 
 namespace tlp {
 
@@ -118,26 +116,15 @@ protected:
   // override Observable::treatEvent
   void treatEvent(const Event& evt);
 
-  void buildSortedList();
-  void visitGraph(GlSceneVisitor *visitor,bool visitHiddenEntities=false);
-  void visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
-  void visitEdges(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
-
   GlGraphRenderingParameters parameters;
   GlGraphInputData inputData;
   Graph *rootGraph;
 
-  GlLODCalculator *lodCalculator;
+  GlGraphRenderer *graphRenderer;
 
-  bool haveToSort;
   bool nodesModified;
   std::set<node> metaNodes;
 
-  GlScene *fakeScene;
-  bool selectionDrawActivate;
-  RenderingEntitiesFlag selectionType;
-  std::map<unsigned int, SelectedEntity> *selectionIdMap;
-  unsigned int *selectionCurrentId;
 };
 }
 
