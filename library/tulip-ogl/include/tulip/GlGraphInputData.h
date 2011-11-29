@@ -58,7 +58,7 @@ public:
   /**
    * Return the graph of this inputData
    */
-  Graph* getGraph() {
+  Graph* getGraph() const {
     return graph;
   }
 
@@ -342,7 +342,7 @@ public:
   /**
    * Return glEdgeDisplayManager
    */
-  GlVertexArrayManager *getGlVertexArrayManager() {
+  GlVertexArrayManager *getGlVertexArrayManager() const {
     return glVertexArrayManager;
   }
 
@@ -363,7 +363,7 @@ public:
   /**
    * Return a pointer on the property used to elementColor
    */
-  ColorProperty * getElementColor() {
+  ColorProperty * getElementColor() const {
     return elementColor;
   }
   /**
@@ -375,7 +375,7 @@ public:
   /**
    * Return a pointer on the property used to elementLabelColor
    */
-  ColorProperty *getElementLabelColor() {
+  ColorProperty *getElementLabelColor() const {
     return elementLabelColor;
   }
   /**
@@ -387,7 +387,7 @@ public:
   /**
    * Return a pointer on the property used to elementSize
    */
-  SizeProperty *getElementSize() {
+  SizeProperty *getElementSize() const {
     return elementSize;
   }
   /**
@@ -399,7 +399,7 @@ public:
   /**
    * Return a pointer on the property used to elementLabelPosition
    */
-  IntegerProperty *getElementLabelPosition() {
+  IntegerProperty *getElementLabelPosition() const{
     return elementLabelPosition;
   }
   /**
@@ -411,7 +411,7 @@ public:
   /**
    * Return a pointer on the property used to elementShape
    */
-  IntegerProperty *getElementShape() {
+  IntegerProperty *getElementShape() const{
     return elementShape;
   }
   /**
@@ -423,7 +423,7 @@ public:
   /**
    * Return a pointer on the property used to elementRotation
    */
-  DoubleProperty *getElementRotation() {
+  DoubleProperty *getElementRotation() const{
     return elementRotation;
   }
   /**
@@ -435,7 +435,7 @@ public:
   /**
    * Return a pointer on the property used to elementSelected
    */
-  BooleanProperty *getElementSelected() {
+  BooleanProperty *getElementSelected() const {
     return elementSelected;
   }
   /**
@@ -447,7 +447,7 @@ public:
   /**
    * Return a pointer on the property used to elementFont
    */
-  StringProperty   *getElementFont() {
+  StringProperty   *getElementFont() const{
     return elementFont;
   }
   /**
@@ -459,7 +459,7 @@ public:
   /**
    * Return a pointer on the property used to elementFontSize
    */
-  IntegerProperty  *getElementFontSize() {
+  IntegerProperty  *getElementFontSize() const {
     return elementFontSize;
   }
   /**
@@ -471,7 +471,7 @@ public:
   /**
    * Return a pointer on the property used to elementLabel
    */
-  StringProperty *getElementLabel() {
+  StringProperty *getElementLabel() const {
     return elementLabel;
   }
   /**
@@ -483,7 +483,7 @@ public:
   /**
    * Return a pointer on the property used to elementLayout
    */
-  LayoutProperty *getElementLayout() {
+  LayoutProperty *getElementLayout() const {
     return elementLayout;
   }
   /**
@@ -495,7 +495,7 @@ public:
   /**
    * Return a pointer on the property used to elementTexture
    */
-  StringProperty *getElementTexture() {
+  StringProperty *getElementTexture() const {
     return elementTexture;
   }
   /**
@@ -507,7 +507,7 @@ public:
   /**
    * Return a pointer on the property used to elementBorderColor
    */
-  ColorProperty *getElementBorderColor() {
+  ColorProperty *getElementBorderColor() const {
     return elementBorderColor;
   }
   /**
@@ -519,7 +519,7 @@ public:
   /**
    * Return a pointer on the property used to elementBorderWidth
    */
-  DoubleProperty *getElementBorderWidth() {
+  DoubleProperty *getElementBorderWidth() const {
     return elementBorderWidth;
   }
   /**
@@ -531,7 +531,7 @@ public:
   /**
    * Return a pointer on the property used to elementSrcAnchorShape
    */
-  IntegerProperty *getElementSrcAnchorShape() {
+  IntegerProperty *getElementSrcAnchorShape() const {
     return elementSrcAnchorShape;
   }
   /**
@@ -543,7 +543,7 @@ public:
   /**
    * Return a pointer on the property used to elementSrcAnchorSize
    */
-  SizeProperty *getElementSrcAnchorSize() {
+  SizeProperty *getElementSrcAnchorSize() const {
     return elementSrcAnchorSize;
   }
   /**
@@ -555,7 +555,7 @@ public:
   /**
    * Return a pointer on the property used to elementTgtAnchorShape
    */
-  IntegerProperty *getElementTgtAnchorShape() {
+  IntegerProperty *getElementTgtAnchorShape() const {
     return elementTgtAnchorShape;
   }
   /**
@@ -567,7 +567,7 @@ public:
   /**
    * Return a pointer on the property used to elementTgtAnchorSize
    */
-  SizeProperty *getElementTgtAnchorSize() {
+  SizeProperty *getElementTgtAnchorSize() const {
     return elementTgtAnchorSize;
   }
   /**
@@ -579,7 +579,7 @@ public:
   /**
    * Return a pointer on the property used to elementAnimationFrame
    */
-  IntegerProperty *getElementAnimationFrame() {
+  IntegerProperty *getElementAnimationFrame() const {
     return elementAnimationFrame;
   }
   /**
