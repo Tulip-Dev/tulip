@@ -39,10 +39,12 @@ namespace tlp {
 GlGraphLowDetailsRenderer::GlGraphLowDetailsRenderer(Graph* graph, GlGraphInputData &inputData, GlGraphRenderingParameters &parameters):GlGraphRenderer(graph,inputData,parameters),buildVBO(true) {
   fakeScene = new GlScene;
   fakeScene->addLayer(new GlLayer("fakeLayer"));
+  addObservers();
 }
 
 GlGraphLowDetailsRenderer::~GlGraphLowDetailsRenderer() {
   delete fakeScene;
+  removeObservers();
 }
 
 void GlGraphLowDetailsRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntities) {
@@ -211,9 +213,7 @@ void GlGraphLowDetailsRenderer::initNodesArray() {
   }
 }
 //===================================================================
-void GlGraphLowDetailsRenderer::draw(float lod,Camera* camera) {
-
-  Graph *graph=inputData.getGraph();
+void GlGraphLowDetailsRenderer::draw(float ,Camera*) {
 
   if (buildVBO) {
     initEdgesArray();
@@ -260,6 +260,86 @@ void GlGraphLowDetailsRenderer::draw(float lod,Camera* camera) {
   //glDrawElements(GL_QUADS, quad_indices.size(), GL_UNSIGNED_INT, &quad_indices[0]);
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
+}
+
+void GlGraphLowDetailsRenderer::addObservers() {
+  observedGraph = inputData.getGraph();
+  observedGraph->addListener(this);
+  observedLayoutProperty=observedGraph->getProperty<LayoutProperty>(inputData.getElementLayoutPropName());
+  observedLayoutProperty->addPropertyObserver(this);
+  observedSizeProperty=observedGraph->getProperty<SizeProperty>(inputData.getElementSizePropName());
+  observedSizeProperty->addPropertyObserver(this);
+  observedSelectionProperty=observedGraph->getProperty<BooleanProperty>(inputData.getElementSelectedPropName());
+  observedSelectionProperty->addPropertyObserver(this);
+  observedColorProperty=observedGraph->getProperty<ColorProperty>(inputData.getElementColorPropName());
+  observedColorProperty->addPropertyObserver(this);
+}
+
+void GlGraphLowDetailsRenderer::removeObservers() {
+  observedGraph->removeListener(this);
+  observedLayoutProperty->removePropertyObserver(this);
+  observedSizeProperty->removePropertyObserver(this);
+  observedSelectionProperty->removePropertyObserver(this);
+  observedColorProperty->removePropertyObserver(this);
+}
+
+void GlGraphLowDetailsRenderer::updateObservers() {
+  removeObservers();
+  addObservers();
+}
+
+void GlGraphLowDetailsRenderer::treatEvent(const Event &ev) {
+  if (typeid(ev) == typeid(GraphEvent)) {
+    const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&ev);
+
+    switch(graphEvent->getType()) {
+    case GraphEvent::TLP_ADD_NODE:
+    case GraphEvent::TLP_ADD_EDGE:
+    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_DEL_EDGE:
+      buildVBO=true;
+      break;
+
+    case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
+    case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
+      const std::string name = graphEvent->getPropertyName();
+
+      if(name == inputData.getElementLayoutPropName()
+         || name == inputData.getElementSizePropName()
+         || name == inputData.getElementColorPropName()
+         || name == inputData.getElementSelectedPropName()) {
+        buildVBO=true;
+        updateObservers();
+      }
+
+      break;
+    }
+
+    default:
+      break;
+    }
+  }
+  else if(typeid(ev) == typeid(PropertyEvent)) {
+    const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&ev);
+
+    switch(propertyEvent->getType()) {
+    case PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE:
+    case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
+    case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
+    case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
+      buildVBO=true;
+      break;
+
+    default:
+      break;
+    }
+  }
+  else if (ev.type()==Event::TLP_DELETE) {
+
+    if (dynamic_cast<tlp::Graph*>(ev.sender())) {
+      removeObservers();
+    }
+  }
 }
 
 }
