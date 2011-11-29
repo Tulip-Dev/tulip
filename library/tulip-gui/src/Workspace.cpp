@@ -75,6 +75,7 @@ Workspace::PanelsStorage::const_iterator Workspace::PanelsStorage::end() const {
 QModelIndex Workspace::PanelsStorage::index(int row, int column,const QModelIndex &parent) const {
   if (!hasIndex(row,column,parent))
     return QModelIndex();
+
   return createIndex(row,column);
 }
 QModelIndex Workspace::PanelsStorage::parent(const QModelIndex &child) const {
@@ -83,6 +84,7 @@ QModelIndex Workspace::PanelsStorage::parent(const QModelIndex &child) const {
 int Workspace::PanelsStorage::rowCount(const QModelIndex &parent) const {
   if (parent != QModelIndex())
     return 0;
+
   return _storage.size();
 }
 int Workspace::PanelsStorage::columnCount(const QModelIndex&) const {
@@ -91,9 +93,12 @@ int Workspace::PanelsStorage::columnCount(const QModelIndex&) const {
 QVariant Workspace::PanelsStorage::data(const QModelIndex &index, int role) const {
   if (!hasIndex(index.row(),index.column(),index.parent()))
     return QVariant();
+
   WorkspacePanel* panel = _storage[index.row()];
+
   if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
     return panel->windowTitle();
+
   return QVariant();
 }
 // ***********************************************
@@ -138,9 +143,10 @@ Workspace::~Workspace() {
 
 void Workspace::setModel(tlp::GraphHierarchiesModel* model) {
   _model = model;
+
   if (_model != NULL) {
     foreach(WorkspacePanel* panel,_panels)
-      panel->setGraphsModel(_model);
+    panel->setGraphsModel(_model);
   }
 }
 
@@ -159,6 +165,7 @@ QString Workspace::panelTitle(tlp::WorkspacePanel* panel) const {
   foreach(WorkspacePanel* other, _panels) {
     if (other == panel)
       continue;
+
     if (other->viewName() == panel->viewName()) {
       if (regExp.exactMatch(other->windowTitle()))
         digit = std::max<int>(digit,regExp.cap(1).toInt());
@@ -170,6 +177,7 @@ QString Workspace::panelTitle(tlp::WorkspacePanel* panel) const {
   if (digit == 0) {
     return panel->viewName();
   }
+
   return panel->viewName() + " <" + QString::number(digit+1) + ">";
 }
 
@@ -179,8 +187,10 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   View* view = ViewLister::getPluginObject(viewName.toStdString(),NULL);
   view->setupUi();
   WorkspacePanel* panel = new WorkspacePanel(view,viewName);
+
   if (_model != NULL)
     panel->setGraphsModel(_model);
+
   panel->setPanelsModel(&_panels);
   connect(view,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
   panel->installEventFilter(this);

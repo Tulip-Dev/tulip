@@ -208,8 +208,10 @@ void WorkspacePanel::setPanelsModel(QAbstractItemModel* model) {
 void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
   if (_ui->graphCombo->model() == NULL)
     return;
+
   tlp::GraphHierarchiesModel* model = static_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model());
   QModelIndex graphIndex = model->indexOf(g);
+
   if (graphIndex == _ui->graphCombo->selectedIndex())
     return;
 
@@ -220,12 +222,15 @@ void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
 void WorkspacePanel::graphComboIndexChanged() {
   tlp::Graph* g = _ui->graphCombo->model()->data(_ui->graphCombo->selectedIndex(),TulipModel::GraphRole).value<tlp::Graph*>();
 #ifndef NDEBUG
+
   if (g != NULL) {
     std::string name;
     g->getAttribute<std::string>("name",name);
     std::cerr << "selecting graph " << name << " in view" << std::endl;
   }
+
 #endif /* NDEBUG */
+
   if (g != NULL && _view != NULL && g != _view->graph()) {
     _view->setGraph(g);
   }
