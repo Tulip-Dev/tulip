@@ -91,9 +91,14 @@ QString WorkspacePanel::viewName() const {
 void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
   assert(view != NULL);
 
-  if (_view != NULL)
+  if (_view != NULL) {
     disconnect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
+    disconnect(_view,SIGNAL(graphSet(tlp::Graph*)),this,SLOT(viewGraphSet(tlp::Graph*)));
+    disconnect(_view,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
+  }
 
+  if (_view)
+    delete _view->graphicsView();
   delete _view;
 
   _view = view;
@@ -204,14 +209,13 @@ void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel* model) {
 
 void WorkspacePanel::setPanelsModel(QAbstractItemModel* model) {
   _ui->viewCombo->setModel(model);
-  qWarning() << model->rowCount();
   for (int i=0;i<model->rowCount();++i) {
-    qWarning() << i;
     if (model->data(model->index(i,0)).toString() == windowTitle()) {
       _ui->viewCombo->setCurrentIndex(i);
       break;
     }
   }
+  connect(_ui->viewCombo,SIGNAL(currentIndexChanged(int)),this,SIGNAL(switchToWorkspacePanel(int)));
 }
 
 void WorkspacePanel::viewGraphSet(tlp::Graph* g) {

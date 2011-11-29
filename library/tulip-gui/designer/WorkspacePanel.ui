@@ -254,8 +254,4 @@ background-color: #A9A9A9;
  </customwidgets>
  <resources/>
  <connections/>
- <slots>
-  <signal>closed()</signal>
-  <slot>graphComboIndexChanged()</slot>
- </slots>
 </ui>

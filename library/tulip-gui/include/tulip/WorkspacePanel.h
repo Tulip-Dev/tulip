@@ -70,6 +70,7 @@ signals:
   void closed(tlp::WorkspacePanel*);
   void focused();
   void drawNeeded();
+  void switchToWorkspacePanel(int);
 
 protected slots:
   void interactorActionTriggered();
