@@ -28,10 +28,6 @@ TulipPerspectiveCrashHandler::TulipPerspectiveCrashHandler(QWidget *parent)
   : QDialog(parent), _ui(new Ui::TulipPerspectiveCrashHandlerData), _isDetailedView(false) {
   _ui->setupUi(this);
   setDetailedView(false);
-  _ui->errorReportTitle->setVisible(false);
-  _ui->sendReportButton->setVisible(false);
-  _ui->detailsLink->setVisible(false);
-  _ui->detailsIcon->setVisible(false);
   adjustHeight();
   connect(_ui->detailsLink,SIGNAL(linkActivated(QString)),this,SLOT(toggleDetailedView()));
   connect(_ui->sendReportButton,SIGNAL(clicked()),this,SLOT(sendReport()));

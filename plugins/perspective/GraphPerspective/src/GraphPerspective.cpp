@@ -60,6 +60,10 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   connect(_ui->actionSave_Project_as,SIGNAL(triggered()),this,SLOT(saveAs()));
   connect(_ui->actionOpen_Project,SIGNAL(triggered()),this,SLOT(open()));
 
+  // D-BUS actions
+  connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
+  connect(_ui->actionAbout_us,SIGNAL(triggered()),this,SIGNAL(showTulipAboutPage()));
+
   // Setting initial sizes for splitters
   _ui->workspaceSplitter->setSizes(QList<int>() << 200 << 1000);
   _ui->docksSplitter->setSizes(QList<int>() << 500 << 800);
