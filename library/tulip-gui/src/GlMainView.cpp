@@ -41,3 +41,6 @@ GlMainWidget* GlMainView::getGlMainWidget() const {
   return _glMainWidget;
 }
 
+void GlMainView::centerView() {
+  getGlMainWidget()->getScene()->centerScene();
+}

@@ -71,4 +71,15 @@ void NodeLinkDiagramComponent::registerTriggers() {
   addRedrawTrigger(inputData->getElementTgtAnchorSize());
 }
 
+void NodeLinkDiagramComponent::treatEvents(const std::vector<Event> &events) {
+  GlGraphInputData* inputData = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
+
+  for(int i=0;i<events.size();++i) {
+    Event ev = events[i];
+    if (ev.sender() == inputData->getElementLayout())
+      centerView();
+  }
+  View::treatEvents(events);
+}
+
 VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0")
