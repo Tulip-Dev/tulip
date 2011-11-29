@@ -27,6 +27,9 @@ INSTALL(FILES
   tulip/GlFeedBackBuilder.h
   tulip/GlFeedBackRecorder.h
   tulip/GlGraphComposite.h
+  tulip/GlGraphRenderer.h
+  tulip/GlGraphHighDetailsRenderer.h
+  tulip/GlGraphLowDetailsRenderer.h
   tulip/GlGraphInputData.h
   tulip/GlGraphRenderingParameters.h
   tulip/GlGraphStaticData.h
