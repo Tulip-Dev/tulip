@@ -290,6 +290,9 @@ QToolButton:pressed {
        </item>
        <item>
         <widget class="QToolButton" name="aboutPageChooser">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
