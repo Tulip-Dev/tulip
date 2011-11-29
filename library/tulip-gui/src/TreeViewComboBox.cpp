@@ -41,6 +41,7 @@ QModelIndex TreeViewComboBox::selectedIndex() const {
   if (!selected.isValid()) {
     return current;
   }
+
   return selected;
 
 }
