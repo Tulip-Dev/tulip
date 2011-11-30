@@ -53,37 +53,37 @@ static set<int> handledSignals;
 static void initSignalInterposer(void) __attribute__((constructor));
 
 static void initSignalInterposer(void) {
-    real_sigaction = reinterpret_cast<SigactionFunc *>(dlsym(RTLD_NEXT, "sigaction"));
-    real_signal = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "signal"));
-    real_sigset = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "sigset"));
+  real_sigaction = reinterpret_cast<SigactionFunc *>(dlsym(RTLD_NEXT, "sigaction"));
+  real_signal = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "signal"));
+  real_sigset = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "sigset"));
 }
 
 void installSignalHandler(int sig, SignalHandlerFunc *handler) {
-  
+
   handledSignals.insert(sig);
-  
+
   // custom signal handler is installed for the signals in the vector
   struct sigaction action;
   sigemptyset(&action.sa_mask);
   action.sa_handler = handler;
 
   real_sigaction(sig, &action, NULL);
-  
+
 }
 
 void installSignalHandler(int sig, SigactionHandlerFunc *handler) {
-  
+
   // fill this vector according to the signals you want to handle
   handledSignals.insert(sig);
-  
+
   // custom signal handler is installed for the signals in the vector
   struct sigaction action;
   sigemptyset(&action.sa_mask);
-  action.sa_flags = SA_RESTART | SA_SIGINFO; 
+  action.sa_flags = SA_RESTART | SA_SIGINFO;
   action.sa_sigaction = handler;
 
   real_sigaction(sig, &action, NULL);
-  
+
 }
 
 // redefinition of the signal function

@@ -83,11 +83,11 @@ void dumpStack(int sig, siginfo_t *, void * ucontext) {
 extern void installSignalHandlers(void);
 
 void start_crash_handler() {
-	installSignalHandler(SIGSEGV, &dumpStack);
-	installSignalHandler(SIGABRT, &dumpStack);
-	installSignalHandler(SIGFPE, &dumpStack);
-	installSignalHandler(SIGILL, &dumpStack);
-	installSignalHandler(SIGBUS, &dumpStack);
+  installSignalHandler(SIGSEGV, &dumpStack);
+  installSignalHandler(SIGABRT, &dumpStack);
+  installSignalHandler(SIGFPE, &dumpStack);
+  installSignalHandler(SIGILL, &dumpStack);
+  installSignalHandler(SIGBUS, &dumpStack);
 }
 
 /*
