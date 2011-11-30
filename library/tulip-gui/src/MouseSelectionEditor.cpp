@@ -460,9 +460,9 @@ void MouseSelectionEditor::initProxies(GlMainWidget *glMainWidget) {
   GlGraphInputData *inputData=glMainWidget->getScene()->getGlGraphComposite()->getInputData();
   _graph     = inputData->getGraph();
   _layout    = inputData->getLayoutProperty();
-  _selection = _graph->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
-  _rotation  = _graph->getProperty<DoubleProperty>(inputData->getElementRotationPropName());
-  _sizes     = _graph->getProperty<SizeProperty>(inputData->getElementSizePropName());
+  _selection = inputData->getElementSelected();
+  _rotation  = inputData->getElementRotation();
+  _sizes     = inputData->getElementSize();
 }
 //========================================================================================
 void MouseSelectionEditor::mMouseTranslate(double newX, double newY, GlMainWidget *glMainWidget) {

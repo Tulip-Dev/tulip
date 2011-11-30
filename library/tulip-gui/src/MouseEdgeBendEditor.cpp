@@ -280,12 +280,11 @@ void MouseEdgeBendEditor::stopEdition() {
 void MouseEdgeBendEditor::initProxies(GlMainWidget *glMainWidget) {
   GlGraphInputData *inputData=glMainWidget->getScene()->getGlGraphComposite()->getInputData();
   _graph     = inputData->getGraph();
-  _layout    = _graph->getProperty<LayoutProperty>(inputData->getElementLayoutPropName());
-  _selection = _graph->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
-  _rotation  = _graph->getProperty<DoubleProperty>(inputData->getElementRotationPropName());
-  _sizes     = _graph->getProperty<SizeProperty>(inputData->getElementSizePropName());
-  _shape     = _graph->getProperty<IntegerProperty>(inputData->getElementShapePropName());
-
+  _layout    = inputData->getElementLayout();
+  _selection = inputData->getElementSelected();
+  _rotation  = inputData->getElementRotation();
+  _sizes     = inputData->getElementSize();
+  _shape     = inputData->getElementShape();
   if(_graph->existProperty("viewPolygonCoords"))
     _coordsVectorProperty=_graph->getProperty<CoordVectorProperty>("viewPolygonCoords");
   else

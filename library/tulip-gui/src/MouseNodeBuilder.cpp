@@ -59,8 +59,9 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
           return true;
         }
 
-        Graph*_graph=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-        LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
+        GlGraphInputData *inputData=glMainWidget->getScene()->getGlGraphComposite()->getInputData();
+        Graph*_graph=inputData->getGraph();
+        LayoutProperty* mLayout=inputData->getElementLayout();
         // allow to undo
         _graph->push();
         Observable::holdObservers();
@@ -78,9 +79,9 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
         mLayout->setNodeValue(newNode, point);
         Observable::unholdObservers();
 
-        GlMainView* glMainView = static_cast<GlMainView*>(view());
-        glMainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSelected()->setNodeValue(newNode,true);
+        inputData->getElementSelected()->setNodeValue(newNode,true);
 
+//        GlMainView* glMainView = static_cast<GlMainView*>(view());
 //        NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view();
 //        nodeLinkView->elementSelectedSlot(newNode.id, true);
         //glMainWidget->redraw();

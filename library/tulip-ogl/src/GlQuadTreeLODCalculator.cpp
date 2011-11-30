@@ -476,11 +476,11 @@ void GlQuadTreeLODCalculator::addObservers() {
   if(inputData) {
     currentGraph=inputData->getGraph();
     currentGraph->addListener(this);
-    layoutProperty=currentGraph->getProperty(inputData->getElementLayoutPropName());
+    layoutProperty=inputData->getElementLayout();
     layoutProperty->addPropertyObserver(this);
-    sizeProperty=currentGraph->getProperty(inputData->getElementSizePropName());
+    sizeProperty=inputData->getElementSize();
     sizeProperty->addPropertyObserver(this);
-    selectionProperty=currentGraph->getProperty(inputData->getElementSelectedPropName());
+    selectionProperty=inputData->getElementSelected();
     selectionProperty->addPropertyObserver(this);
   }
 
@@ -512,9 +512,9 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
 
     case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
     case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
-      const std::string name = graphEvent->getPropertyName();
+      const PropertyInterface *property = inputData->getGraph()->getProperty(graphEvent->getPropertyName());
 
-      if(name == inputData->getElementLayoutPropName() || name == inputData->getElementSizePropName()) {
+      if(property==inputData->getElementLayout() || property==inputData->getElementSize()) {
         setHaveToCompute();
         addObservers();
       }

@@ -430,7 +430,7 @@ void GlVertexArrayManager::addEdge(GlEdge *edge) {
       quadsIndexArray.push_back(lastQuadIndex);
 
       vector<Coord> quadVertices;
-      buildCurvePoints(vertices, edgeSizes, inputData->elementLayout->getNodeValue(src), inputData->elementLayout->getNodeValue(tgt), quadVertices);
+      buildCurvePoints(vertices, edgeSizes, inputData->getElementLayout()->getNodeValue(src), inputData->getElementLayout()->getNodeValue(tgt), quadVertices);
 
       vector<Coord> centerLine;
       centerLine.reserve(quadVertices.size()/2);
@@ -767,9 +767,11 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
 
     case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
     case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
-      const std::string name = graphEvent->getPropertyName();
-
-      if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName()  || name==inputData->getElementShapePropName()) {
+      const PropertyInterface *property=graph->getProperty(graphEvent->getPropertyName());
+      if(property==inputData->getElementColor() ||
+         property==inputData->getElementLayout() ||
+         property==inputData->getElementSize() ||
+         property==inputData->getElementShape()) {
         clearData();
         clearObservers();
       }
