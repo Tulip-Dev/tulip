@@ -36,6 +36,27 @@ public:
 
 	tlp::LayoutProperty* getLayoutProperty();
 
+  tlp::ColorProperty * getElementColor() const;
+  tlp::ColorProperty *getElementLabelColor() const ;
+  tlp::SizeProperty *getElementSize() const;
+  tlp::IntegerProperty *getElementLabelPosition() const;
+  tlp::IntegerProperty *getElementShape() const ;
+  tlp::DoubleProperty *getElementRotation() const ;
+  tlp::BooleanProperty *getElementSelected() const ;
+  tlp::StringProperty   *getElementFont() const ;
+  tlp::IntegerProperty  *getElementFontSize() const ;
+  tlp::StringProperty *getElementLabel() const ;
+  tlp::LayoutProperty *getElementLayout() const ;
+  tlp::StringProperty *getElementTexture() const ;
+  tlp::ColorProperty *getElementBorderColor() const ;
+  tlp::DoubleProperty *getElementBorderWidth() const ;
+  tlp::IntegerProperty *getElementSrcAnchorShape() const ;
+  tlp::SizeProperty *getElementSrcAnchorSize() const ;
+  tlp::IntegerProperty *getElementTgtAnchorShape() const ;
+  tlp::SizeProperty *getElementTgtAnchorSize() const ;
+  tlp::IntegerProperty *getElementAnimationFrame() const ;
+
+
   tlp::Graph* graph;
 
 
