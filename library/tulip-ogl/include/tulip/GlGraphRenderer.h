@@ -34,10 +34,10 @@ public:
   /**
    * Build a GlGraphComposite with the graph data
    */
-  GlGraphRenderer(Graph* graph,GlGraphInputData &inputData,GlGraphRenderingParameters &parameters):rootGraph(graph->getRoot()),inputData(inputData),parameters(parameters),haveToSort(true),selectionDrawActivate(false),selectionIdMap(NULL),selectionCurrentId(NULL){
+  GlGraphRenderer(Graph* graph,GlGraphInputData &inputData,GlGraphRenderingParameters &parameters):rootGraph(graph->getRoot()),inputData(inputData),parameters(parameters),haveToSort(true),selectionDrawActivate(false),selectionIdMap(NULL),selectionCurrentId(NULL) {
   }
 
-  virtual ~GlGraphRenderer(){}
+  virtual ~GlGraphRenderer() {}
 
   virtual void draw(float lod,Camera* camera) = 0;
 
@@ -45,7 +45,7 @@ public:
 
   virtual void visitGraph(GlSceneVisitor *visitor,bool visitHiddenEntities=false) = 0;
 
-  void setHaveToSort(bool haveToSort){
+  void setHaveToSort(bool haveToSort) {
     this->haveToSort=haveToSort;
   }
 

@@ -74,11 +74,13 @@ void NodeLinkDiagramComponent::registerTriggers() {
 void NodeLinkDiagramComponent::treatEvents(const std::vector<Event> &events) {
   GlGraphInputData* inputData = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
 
-  for(int i=0;i<events.size();++i) {
+  for(int i=0; i<events.size(); ++i) {
     Event ev = events[i];
+
     if (ev.sender() == inputData->getElementLayout())
       centerView();
   }
+
   View::treatEvents(events);
 }
 

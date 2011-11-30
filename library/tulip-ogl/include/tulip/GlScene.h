@@ -281,7 +281,7 @@ public:
   /**
    * Return the layer list
    */
-  std::vector<std::pair<std::string, GlLayer*> >* getLayersList(){
+  std::vector<std::pair<std::string, GlLayer*> >* getLayersList() {
     return &layersList;
   }
 

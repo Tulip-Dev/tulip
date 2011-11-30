@@ -119,13 +119,15 @@ void View::removeRedrawTrigger(tlp::Observable* obs) {
 void View::addRedrawTrigger(tlp::Observable* obs) {
   if (_triggers.contains(obs) || obs == NULL)
     return;
+
   _triggers.insert(obs);
   obs->addObserver(this);
 }
 
 void View::treatEvents(const std::vector<Event> &events) {
-  for(int i=0;i<events.size();++i) {
+  for(int i=0; i<events.size(); ++i) {
     Event e = events[i];
+
     if (_triggers.contains(e.sender())) {
       emit drawNeeded();
       break;

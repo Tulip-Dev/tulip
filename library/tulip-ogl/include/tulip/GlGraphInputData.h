@@ -399,7 +399,7 @@ public:
   /**
    * Return a pointer on the property used to elementLabelPosition
    */
-  IntegerProperty *getElementLabelPosition() const{
+  IntegerProperty *getElementLabelPosition() const {
     return elementLabelPosition;
   }
   /**
@@ -411,7 +411,7 @@ public:
   /**
    * Return a pointer on the property used to elementShape
    */
-  IntegerProperty *getElementShape() const{
+  IntegerProperty *getElementShape() const {
     return elementShape;
   }
   /**
@@ -423,7 +423,7 @@ public:
   /**
    * Return a pointer on the property used to elementRotation
    */
-  DoubleProperty *getElementRotation() const{
+  DoubleProperty *getElementRotation() const {
     return elementRotation;
   }
   /**
@@ -447,7 +447,7 @@ public:
   /**
    * Return a pointer on the property used to elementFont
    */
-  StringProperty   *getElementFont() const{
+  StringProperty   *getElementFont() const {
     return elementFont;
   }
   /**

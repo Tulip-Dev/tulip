@@ -49,7 +49,9 @@ public:
 
   virtual void draw(float lod,Camera* camera);
 
-  void initSelectionRendering(RenderingEntitiesFlag ,std::map<unsigned int, SelectedEntity> &,unsigned int &){assert (false);}
+  void initSelectionRendering(RenderingEntitiesFlag ,std::map<unsigned int, SelectedEntity> &,unsigned int &) {
+    assert (false);
+  }
 
   void visitGraph(GlSceneVisitor *visitor,bool visitHiddenEntities=false);
 
