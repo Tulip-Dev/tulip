@@ -81,240 +81,6 @@ public:
   void reloadAllProperties();
 
   /**
-   * Set property name for elementColor
-   */
-  void setElementColorPropName(const std::string &name) {
-    elementColorPropName = name;
-    elementColor = graph->getProperty<ColorProperty> (elementColorPropName);
-  }
-  /**
-   * Get property name for elementColor
-   */
-  std::string getElementColorPropName() const {
-    return elementColorPropName;
-  }
-  /**
-   * Set property name for elementLabelColor
-   */
-  void setElementLabelColorPropName(const std::string &name) {
-    elementLabelColorPropName = name;
-    elementLabelColor = graph->getProperty<ColorProperty> (elementLabelColorPropName);
-  }
-  /**
-   * Get property name for elementLabelColor
-   */
-  std::string getElementLabelColorPropName() const {
-    return elementLabelColorPropName;
-  }
-  /**
-   * Set property name for elementSize
-   */
-  void setElementSizePropName(const std::string &name) {
-    elementSizePropName = name;
-    elementSize = graph->getProperty<SizeProperty> (elementSizePropName);
-  }
-  /**
-   * Get property name for elementSize
-   */
-  std::string getElementSizePropName() const {
-    return elementSizePropName;
-  }
-  /**
-   * Set property name for elementLabelPosition
-   */
-  void setElementLabelPositionPropName(const std::string &name) {
-    elementLabelPositionPropName = name;
-    elementLabelPosition = graph->getProperty<IntegerProperty> (elementLabelPositionPropName);
-  }
-  /**
-   * Get property name for elementLabelPosition
-   */
-  std::string getElementLabelPositionPropName() const {
-    return elementLabelPositionPropName;
-  }
-  /**
-   * Set property name for elementShape
-   */
-  void setElementShapePropName(const std::string &name) {
-    elementShapePropName = name;
-    elementShape = graph->getProperty<IntegerProperty> (elementShapePropName);
-  }
-  /**
-   * Get property name for elementShape
-   */
-  std::string getElementShapePropName() const {
-    return elementShapePropName;
-  }
-  /**
-   * Set property name for elementRotation
-   */
-  void setElementRotationPropName(const std::string &name) {
-    elementRotationPropName = name;
-    elementLabelColor = graph->getProperty<ColorProperty> (elementLabelColorPropName);
-  }
-  /**
-   * Get property name for elementRotation
-   */
-  std::string getElementRotationPropName() const {
-    return elementRotationPropName;
-  }
-  /**
-   * Set property name for elementSelected
-   */
-  void setElementSelectedPropName(const std::string &name) {
-    elementSelectedPropName = name;
-    elementSelected = graph->getProperty<BooleanProperty> (elementSelectedPropName);
-  }
-  /**
-   * Get property name for elementSelected
-   */
-  std::string getElementSelectedPropName() const {
-    return elementSelectedPropName;
-  }
-  /**
-     * Set property name for elementFont
-     */
-  void setElementFontPropName(const std::string &name) {
-    elementFontPropName=name;
-    elementFont = graph->getProperty<StringProperty>(elementFontPropName);
-  }
-  /**
-   * Get property name for elementFont
-   */
-  std::string getElementFontPropName() const {
-    return elementFontPropName;
-  }
-  /**
-   * Set property name for elementFontSize
-   */
-  void setElementFontSizePropName(const std::string &name) {
-    elementFontSizePropName=name;
-    elementFontSize = graph->getProperty<IntegerProperty>(elementFontSizePropName);
-  }
-  /**
-   * Get property name for elementFontSize
-   */
-  std::string getElementFontSizePropName() const {
-    return elementFontSizePropName;
-  }
-  /**
-     * Set property name for elementLabel
-     */
-  void setElementLabelPropName(const std::string &name) {
-    elementLabelPropName = name;
-    elementLabel = graph->getProperty<StringProperty> (elementLabelPropName);
-  }
-  /**
-   * Get property name for elementLabel
-   */
-  std::string getElementLabelPropName() const {
-    return elementLabelPropName;
-  }
-  /**
-   * Set property name for elementTexture
-   */
-  void setElementTexturePropName(const std::string &name) {
-    elementTexturePropName = name;
-    elementTexture = graph->getProperty<StringProperty> (elementTexturePropName);
-  }
-  /**
-   * Get property name for elementTexture
-   */
-  std::string getElementTexturePropName() const {
-    return elementTexturePropName;
-  }
-  /**
-   * Set property name for elementBorderColor
-   */
-  void setElementBorderColorPropName(const std::string &name) {
-    elementBorderColorPropName = name;
-    elementBorderColor = graph->getProperty<ColorProperty> (elementBorderColorPropName);
-  }
-  /**
-   * Get property name for elementBorderColor
-   */
-  std::string getElementBorderColorPropName() const {
-    return elementBorderColorPropName;
-  }
-  /**
-   * Set property name for elementBorderWidth
-   */
-  void setElementBorderWidthPropName(const std::string &name) {
-    elementBorderWidthPropName = name;
-    elementBorderWidth = graph->getProperty<DoubleProperty> (elementBorderWidthPropName);
-  }
-  /**
-   * Get property name for elementBorderWidth
-   */
-  std::string getElementBorderWidthPropName() const {
-    return elementBorderWidthPropName;
-  }
-  /**
-   * Set property name for elementLayout
-   */
-  void setElementLayoutPropName(const std::string &name) {
-    elementLayoutPropName = name;
-    reloadLayoutProperty();
-  }
-  /**
-   * Get property name for elementLayout
-   */
-  std::string getElementLayoutPropName() const {
-    if (elementLayoutPropName == "")
-      return "viewLayout";
-    else
-      return elementLayoutPropName;
-  }
-  /**
-   * Get property name for elementSourceAnchorShape
-   */
-  std::string getElementSourceAnchorShapePropName() const {
-    return elementSrcAnchorShapePropName;
-  }
-  /**
-   * Set property name for elementSourceAnchorShape
-   */
-  void setElementSourceAnchorShapePropName(const std::string &name) {
-    elementSrcAnchorShapePropName = name;
-  }
-  /**
-   * Get property name for elementSourceAnchorSize
-   */
-  std::string getElementSourceAnchorSizePropName() const {
-    return elementSrcAnchorSizePropName;
-  }
-  /**
-   * Set property name for elementSourceAnchorSize
-   */
-  void setElementSourceAnchorSizePropName(const std::string& name) {
-    elementSrcAnchorSizePropName = name;
-  }
-  /**
-   * Get property name for elementTargetAnchorShape
-   */
-  std::string getElementTargetAnchorShapePropName() const {
-    return elementTgtAnchorShapePropName;
-  }
-  /**
-   * Set property name for elementTargetAnchorShape
-   */
-  void setElementTargetAnchorShapePropName(const std::string &name) {
-    elementTgtAnchorShapePropName = name;
-  }
-  /**
-   * Get property name for elementTargetAnchorSize
-   */
-  std::string getElementTargetAnchorSizePropName() const {
-    return elementTgtAnchorSizePropName;
-  }
-  /**
-   * Set property name for elementTargetAnchorSize
-   */
-  void setElementTargetAnchorSizePropName(const std::string& name) {
-    elementTgtAnchorSizePropName = name;
-  }
-
-  /**
    * Set metaNode renderer
    * If deleteOldMetaNodeRenderer==true : this function delete old meta node renderer
    */
@@ -590,9 +356,18 @@ public:
   }
 
 
+public :
 
+  Graph* graph;
 
-public:
+  GlGraphRenderingParameters* parameters;
+
+  MutableContainer<Glyph *> glyphs;
+  MutableContainer<EdgeExtremityGlyph *> extremityGlyphs;
+
+protected:
+
+  bool deleteGlVertexArrayManager;
 
   ColorProperty *elementColor;
   ColorProperty *elementLabelColor;
@@ -613,20 +388,6 @@ public:
   IntegerProperty *elementTgtAnchorShape;
   SizeProperty *elementTgtAnchorSize;
   IntegerProperty *elementAnimationFrame;
-
-
-public :
-
-  Graph* graph;
-
-  GlGraphRenderingParameters* parameters;
-
-  MutableContainer<Glyph *> glyphs;
-  MutableContainer<EdgeExtremityGlyph *> extremityGlyphs;
-
-protected:
-
-  bool deleteGlVertexArrayManager;
 
   std::string elementColorPropName;
   std::string elementLabelColorPropName;

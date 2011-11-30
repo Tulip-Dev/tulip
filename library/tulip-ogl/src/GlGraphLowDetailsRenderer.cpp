@@ -118,8 +118,8 @@ void GlGraphLowDetailsRenderer::visitEdges(Graph *graph,GlSceneVisitor *visitor,
 //====================================================
 void GlGraphLowDetailsRenderer::initEdgesArray() {
   Graph *graph=inputData.getGraph();
-  LayoutProperty *layout=graph->getProperty<LayoutProperty>(inputData.getElementLayoutPropName());
-  ColorProperty *color=graph->getProperty<ColorProperty>(inputData.getElementColorPropName());
+  LayoutProperty *layout=inputData.getElementLayout();
+  ColorProperty *color=inputData.getElementColor();
 
   size_t nbEdges = graph->numberOfEdges();
   size_t nbBends = 0;
@@ -176,9 +176,9 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
 //====================================================
 void GlGraphLowDetailsRenderer::initNodesArray() {
   Graph *graph=inputData.getGraph();
-  LayoutProperty *layout=graph->getProperty<LayoutProperty>(inputData.getElementLayoutPropName());
-  ColorProperty *color=graph->getProperty<ColorProperty>(inputData.getElementColorPropName());
-  SizeProperty *size=graph->getProperty<SizeProperty>(inputData.getElementSizePropName());
+  LayoutProperty *layout=inputData.getElementLayout();
+  ColorProperty *color=inputData.getElementColor();
+  SizeProperty *size=inputData.getElementSize();
 
   size_t nbNodes= graph->numberOfNodes();
   quad_points.resize(nbNodes * 4);
@@ -265,13 +265,13 @@ void GlGraphLowDetailsRenderer::draw(float ,Camera*) {
 void GlGraphLowDetailsRenderer::addObservers() {
   observedGraph = inputData.getGraph();
   observedGraph->addListener(this);
-  observedLayoutProperty=observedGraph->getProperty<LayoutProperty>(inputData.getElementLayoutPropName());
+  observedLayoutProperty=inputData.getElementLayout();
   observedLayoutProperty->addPropertyObserver(this);
-  observedSizeProperty=observedGraph->getProperty<SizeProperty>(inputData.getElementSizePropName());
+  observedSizeProperty=inputData.getElementSize();
   observedSizeProperty->addPropertyObserver(this);
-  observedSelectionProperty=observedGraph->getProperty<BooleanProperty>(inputData.getElementSelectedPropName());
+  observedSelectionProperty=inputData.getElementSelected();
   observedSelectionProperty->addPropertyObserver(this);
-  observedColorProperty=observedGraph->getProperty<ColorProperty>(inputData.getElementColorPropName());
+  observedColorProperty=inputData.getElementColor();
   observedColorProperty->addPropertyObserver(this);
 }
 
@@ -302,12 +302,12 @@ void GlGraphLowDetailsRenderer::treatEvent(const Event &ev) {
 
     case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
     case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
-      const std::string name = graphEvent->getPropertyName();
+      const PropertyInterface *property=inputData.getGraph()->getProperty(graphEvent->getPropertyName());
 
-      if(name == inputData.getElementLayoutPropName()
-          || name == inputData.getElementSizePropName()
-          || name == inputData.getElementColorPropName()
-          || name == inputData.getElementSelectedPropName()) {
+      if(property == inputData.getElementLayout()
+         || property == inputData.getElementSize()
+         || property == inputData.getElementColor()
+         || property == inputData.getElementSelected()){
         buildVBO=true;
         updateObservers();
       }

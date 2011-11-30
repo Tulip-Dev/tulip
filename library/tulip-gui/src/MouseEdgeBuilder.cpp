@@ -47,9 +47,10 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
 
     SelectedEntity selectedEntity;
-    Graph * _graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+    GlGraphInputData *inputData=glMainWidget->getScene()->getGlGraphComposite()->getInputData();
+    Graph * _graph = inputData->getGraph();
 
-    LayoutProperty* mLayout = _graph->getProperty<LayoutProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
+    LayoutProperty* mLayout = inputData->getElementLayout();
 
     if (qMouseEv->buttons()==Qt::LeftButton) {
       if (!started) {
@@ -81,7 +82,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
           Observable::unholdObservers();
 
           GlMainView* glMainView = static_cast<GlMainView*>(view());
-          glMainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSelected()->setEdgeValue(newEdge,true);
+          inputData->getElementSelected()->setEdgeValue(newEdge,true);
 //          NodeLinkDiagramComponent *nodeLinkView=static_cast<NodeLinkDiagramComponent *>(view());
 //          nodeLinkView->elementSelectedSlot(newEdge.id, false);
         }
