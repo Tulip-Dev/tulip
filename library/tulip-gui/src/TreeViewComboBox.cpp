@@ -18,8 +18,10 @@ TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeVie
 
 void TreeViewComboBox::showPopup() {
   setRootModelIndex(QModelIndex());
+
   for(int i=1; i<model()->columnCount(); ++i)
     _treeView->hideColumn(i);
+
   _treeView->expandAll();
   _treeView->setItemsExpandable(false);
   QComboBox::showPopup();

@@ -99,6 +99,7 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
 
   if (_view)
     delete _view->graphicsView();
+
   delete _view;
 
   _view = view;
@@ -209,12 +210,14 @@ void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel* model) {
 
 void WorkspacePanel::setPanelsModel(QAbstractItemModel* model) {
   _ui->viewCombo->setModel(model);
-  for (int i=0;i<model->rowCount();++i) {
+
+  for (int i=0; i<model->rowCount(); ++i) {
     if (model->data(model->index(i,0)).toString() == windowTitle()) {
       _ui->viewCombo->setCurrentIndex(i);
       break;
     }
   }
+
   connect(_ui->viewCombo,SIGNAL(currentIndexChanged(int)),this,SIGNAL(switchToWorkspacePanel(int)));
 }
 
@@ -234,11 +237,13 @@ void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
 void WorkspacePanel::graphComboIndexChanged() {
   tlp::Graph* g = _ui->graphCombo->model()->data(_ui->graphCombo->selectedIndex(),TulipModel::GraphRole).value<tlp::Graph*>();
 #ifndef NDEBUG
+
   if (g != NULL) {
     std::string name;
     g->getAttribute<std::string>("name",name);
     std::cerr << "selecting graph " << name << " in view" << std::endl;
   }
+
 #endif /* NDEBUG */
 
   if (g != NULL && _view != NULL && g != _view->graph()) {

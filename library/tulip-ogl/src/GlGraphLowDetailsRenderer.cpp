@@ -305,9 +305,9 @@ void GlGraphLowDetailsRenderer::treatEvent(const Event &ev) {
       const std::string name = graphEvent->getPropertyName();
 
       if(name == inputData.getElementLayoutPropName()
-         || name == inputData.getElementSizePropName()
-         || name == inputData.getElementColorPropName()
-         || name == inputData.getElementSelectedPropName()) {
+          || name == inputData.getElementSizePropName()
+          || name == inputData.getElementColorPropName()
+          || name == inputData.getElementSelectedPropName()) {
         buildVBO=true;
         updateObservers();
       }
