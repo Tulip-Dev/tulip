@@ -23,7 +23,7 @@
 #include <QtGui/QAction>
 #include <tulip/Perspective.h>
 
-TulipPerspectiveMainWindow::TulipPerspectiveMainWindow(QWidget *parent): QMainWindow(parent) {
+TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QWidget *parent): QMainWindow(parent) {
 #ifdef MEMORYCHECKER_ON
   QAction* a1 = new QAction(this);
   a1->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_C));
@@ -39,19 +39,19 @@ TulipPerspectiveMainWindow::TulipPerspectiveMainWindow(QWidget *parent): QMainWi
 #endif // MEMORYCHECKER_ON
 }
 
-void TulipPerspectiveMainWindow::printMemoryChecker() {
+void TulipPerspectiveProcessMainWindow::printMemoryChecker() {
 #ifdef MEMORYCHECKER_ON
   memory_checker_print_report();
 #endif // MEMORYCHECKER_ON
 }
 
-void TulipPerspectiveMainWindow::clearMemoryChecker() {
+void TulipPerspectiveProcessMainWindow::clearMemoryChecker() {
 #ifdef MEMORYCHECKER_ON
   memory_checker_clear_report();
 #endif // MEMORYCHECKER_ON
 }
 
-void TulipPerspectiveMainWindow::closeEvent(QCloseEvent* event) {
+void TulipPerspectiveProcessMainWindow::closeEvent(QCloseEvent* event) {
   if (_perspective->terminated()) {
     QMainWindow::closeEvent(event);
   }

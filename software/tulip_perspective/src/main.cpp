@@ -167,7 +167,7 @@ int main(int argc,char **argv) {
   // Initialize main window.
   progress->progress(100,100);
   progress->setComment("Setting up GUI (this can take some time)");
-  TulipPerspectiveMainWindow *mainWindow = new TulipPerspectiveMainWindow();
+  TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow();
   mainWindow->setVisible(false);
   context.mainWindow = mainWindow;
 
