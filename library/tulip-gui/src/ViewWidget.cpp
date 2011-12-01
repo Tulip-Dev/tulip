@@ -86,9 +86,6 @@ QGraphicsView* ViewWidget::graphicsView() const {
 
 void ViewWidget::setupUi() {
   _graphicsView = new MyGraphicsView();
-  _graphicsView->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
-  _graphicsView->setViewport(new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget()));
-  _graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   _graphicsView->setFrameStyle(QFrame::NoFrame);
   _graphicsView->scene()->setBackgroundBrush(Qt::green);
   _graphicsView->installEventFilter(this);
@@ -119,12 +116,17 @@ void ViewWidget::setCentralWidget(QWidget* w) {
   GlMainWidget *glMainWidget = dynamic_cast<GlMainWidget *>(w);
 
   if (glMainWidget) {
+    _graphicsView->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
+    _graphicsView->setViewport(new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget()));
+    _graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+
     GlMainWidgetGraphicsItem* glMainWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, _graphicsView->width(), _graphicsView->height());
     _centralWidgetItem = glMainWidgetItem;
     _graphicsView->scene()->addItem(_centralWidgetItem);
     glMainWidgetItem->resize(_graphicsView->width(),_graphicsView->height());
   }
   else {
+    _graphicsView->setRenderHints(QPainter::TextAntialiasing);
     _graphicsView->setViewport(NULL);
     _graphicsView->setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
     _centralWidgetItem = _graphicsView->scene()->addWidget(w);
