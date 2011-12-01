@@ -253,5 +253,25 @@ background-color: #A9A9A9;
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>currentInteractorButton</sender>
+   <signal>clicked()</signal>
+   <receiver>WorkspacePanel</receiver>
+   <slot>showCurrentInteractorConfiguration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>10</x>
+     <y>297</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>472</x>
+     <y>298</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>showCurrentInteractorConfiguration()</slot>
+ </slots>
 </ui>

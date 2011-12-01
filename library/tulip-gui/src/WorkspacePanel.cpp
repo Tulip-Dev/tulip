@@ -18,7 +18,6 @@
  */
 #include "tulip/WorkspacePanel.h"
 
-#include <QtCore/QDebug>
 #include <QtCore/QPropertyAnimation>
 #include <QtGui/QGraphicsView>
 #include <QtGui/QCloseEvent>
@@ -249,4 +248,9 @@ void WorkspacePanel::graphComboIndexChanged() {
   if (g != NULL && _view != NULL && g != _view->graph()) {
     _view->setGraph(g);
   }
+}
+
+void WorkspacePanel::showCurrentInteractorConfiguration() {
+  if (_view->currentInteractor() == NULL)
+    return;
 }

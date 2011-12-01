@@ -34,9 +34,6 @@ public:
 
 protected slots:
   void widgetDestroyed();
-
-//protected:
-//  bool eventFilter(QObject *, QEvent *);
 };
 
 #endif // PLACEHOLDERWIDGET_H

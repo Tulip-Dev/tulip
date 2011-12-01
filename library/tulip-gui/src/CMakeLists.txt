@@ -86,6 +86,7 @@ SET(SRCS
   TulipFileDescriptorWidget.cpp
   TreeViewComboBox.cpp
   GraphHierarchiesModel.cpp
+  ModalPopup.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -160,6 +161,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/PlaceHolderWidget.h
   ../include/tulip/TreeViewComboBox.h
   ../include/tulip/GraphHierarchiesModel.h
+  ../include/tulip/ModalPopup.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

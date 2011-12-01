@@ -76,6 +76,7 @@ protected slots:
   void interactorActionTriggered();
   void viewDestroyed();
   void graphComboIndexChanged();
+  void showCurrentInteractorConfiguration();
 
 protected:
   void progress_handler(int step, int max_step);
