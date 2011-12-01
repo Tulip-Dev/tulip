@@ -2,6 +2,24 @@
     <qresource prefix="/tulip/gui/icons">
         <file>logo32x32.png</file>
         <file>list-add.svg</file>
+<file>i_addedge.png</file>
+<file>i_addnode.png</file>
+<file>i_bends.png</file>
+<file>i_del.png</file>
+<file>i_locked.png</file>
+<file>i_magic.png</file>
+<file>i_move.png</file>
+<file>i_navigation.png</file>
+<file>i_open.png</file>
+<file>i_print.png</file>
+<file>i_redo.png</file>
+<file>i_save.png</file>
+<file>i_selection.png</file>
+<file>i_select.png</file>
+<file>i_snapshot.png</file>
+<file>i_undo.png</file>
+<file>i_unlocked.png</file>
+<file>i_zoom.png</file>
     </qresource>
     <qresource prefix="/tulip/gui/ui">
         <file>arrowdown.png</file>

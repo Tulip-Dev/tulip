@@ -42,7 +42,7 @@ protected :
   bool eventFilter(QObject *, QEvent *event) {
     if(event->type() == QEvent::MouseButtonRelease) {
       if(locked) {
-        setPixmap(QPixmap(":/i_unlocked.png"));
+        setPixmap(QPixmap(":/tulip/gui/icons/i_unlocked.png"));
         locked=false;
       }
       else {
