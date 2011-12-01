@@ -30,10 +30,6 @@ ENDIF()
 
 TARGET_LINK_LIBRARIES(tulip_perspective ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES} ${QT_QTDBUS_LIBRARY})
 
-IF(TULIP_USE_TULIP3)
-  TARGET_LINK_LIBRARIES(tulip_perspective ${LibTulip3CompatName})
-ENDIF()
-
 TARGET_LINK_LIBRARIES(tulip_perspective crash_handling)
 
 

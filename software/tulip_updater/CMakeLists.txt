@@ -21,10 +21,6 @@ ENDIF()
 
 TARGET_LINK_LIBRARIES(tulip_updater ${QT_LIBRARIES})
 
-IF(TULIP_USE_TULIP3)
-  TARGET_LINK_LIBRARIES(tulip_perspective ${LibTulip3CompatName})
-ENDIF()
-
 TARGET_LINK_LIBRARIES(tulip_perspective crash_handling)
 
 
