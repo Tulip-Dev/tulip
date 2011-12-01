@@ -272,7 +272,10 @@ void Workspace::removePanel(WorkspacePanel* panel) {
 }
 
 void Workspace::viewNeedsDraw() {
-  static_cast<WorkspacePanel*>(sender())->view()->draw(NULL); //FIXME: add progress here
+  WorkspacePanel* panel = static_cast<WorkspacePanel*>(sender());
+  panel->toggleProgressMode(true);
+  panel->view()->draw(panel);
+  panel->toggleProgressMode(false);
 }
 
 void Workspace::switchToStartupMode() {
