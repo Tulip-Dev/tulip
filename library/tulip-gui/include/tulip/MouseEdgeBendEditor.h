@@ -21,7 +21,7 @@
 
 #include <tulip/GlCircle.h>
 #include <tulip/GlTriangle.h>
-#include <tulip/InteractorComposite.h>
+#include <tulip/GLInteractor.h>
 #include <tulip/GlScene.h>
 
 /** \addtogroup Mouse_interactor */
@@ -37,7 +37,7 @@ class CoordVectorProperty;
 class IntegerProperty;
 
 /// This interactor allows to move/add/delete EdgeBends
-class TLP_QT_SCOPE MouseEdgeBendEditor:public InteractorComponent {
+class TLP_QT_SCOPE MouseEdgeBendEditor:public GLInteractorComponent {
 
 public:
 
