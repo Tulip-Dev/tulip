@@ -81,6 +81,7 @@ INSTALL(FILES
   tulip/TulipFileDescriptorWidget.h
   tulip/TreeViewComboBox.h
   tulip/GraphHierarchiesModel.h
+  tulip/ModalPopup.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
