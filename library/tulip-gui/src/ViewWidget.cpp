@@ -125,8 +125,8 @@ void ViewWidget::setCentralWidget(QWidget* w) {
     glMainWidgetItem->resize(_graphicsView->width(),_graphicsView->height());
   }
   else {
-    _graphicsView->setViewport(new QGLWidget(GlInit(), 0, 0));
-    _graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    _graphicsView->setViewport(NULL);
+    _graphicsView->setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
     _centralWidgetItem = _graphicsView->scene()->addWidget(w);
     _centralWidget->resize(_graphicsView->width(),_graphicsView->height());
   }
