@@ -87,6 +87,8 @@ public:
   GlMainWidget(QWidget *parent,View *view=NULL);
   ~GlMainWidget();
 
+  QSize sizeHint()const;
+
   /**
    * Set graph and data of GlMainWidget
    */

@@ -113,6 +113,10 @@ GlMainWidget::~GlMainWidget() {
   delete [] renderingStore;
 }
 //==================================================
+QSize GlMainWidget::sizeHint()const{
+    return QSize(500,500);
+}
+//==================================================
 void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
   std::vector<std::pair<std::string, GlLayer*> >* layerList=scene.getLayersList();
   scene.clearLayersList();
