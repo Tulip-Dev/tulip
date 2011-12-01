@@ -172,6 +172,33 @@ public:
   }
 };
 
+
+class GeneralAlgorithmListWidgetManager: public PluginListWidgetManagerInterface {
+public:
+  virtual QMap<QString,QStringList> algorithms() {
+    QMap<QString,QStringList> result;
+    Iterator<std::string>* it = AlgorithmLister::availablePlugins();
+    while (it->hasNext()) {
+      QString name = it->next().c_str();
+      QString group = AlgorithmLister::pluginInformations(name.toStdString()).getGroup().c_str();
+      QStringList nameList = result[group];
+      nameList << name;
+      result[group] = nameList;
+    }
+    delete it;
+    return result;
+  }
+  virtual bool computeProperty(tlp::Graph* g,const QString& alg, QString& msg, tlp::PluginProgress* progress=0, tlp::DataSet *data=0) {
+    std::string errorMsg;
+    bool result = g->applyAlgorithm(errorMsg,data,alg.toStdString(),progress);
+    msg = errorMsg.c_str();
+    return result;
+  }
+  virtual tlp::ParameterList parameters(const QString& alg) {
+    return AlgorithmLister::getPluginParameters(alg.toStdString());
+  }
+};
+
 // **********************************************
 
 QMap<QString,PluginListWidgetManagerInterface *> AlgorithmRunner::PLUGIN_LIST_MANAGERS_DISPLAY_NAMES;
@@ -185,7 +212,7 @@ void AlgorithmRunner::staticInit() {
     PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Labeling algorithms")] = new TemplatePluginListWidgetManager<tlp::StringAlgorithm,tlp::StringProperty>("viewLabel");
     PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Layout algorithms")] = new TemplatePluginListWidgetManager<tlp::LayoutAlgorithm,tlp::LayoutProperty>("viewLayout");
     PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Resizing algorithms")] = new TemplatePluginListWidgetManager<tlp::SizeAlgorithm,tlp::SizeProperty>("viewSize");
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("General algorithms")] = new TemplatePluginListWidgetManager<tlp::Algorithm,tlp::DoubleProperty>("viewGeneral");
+    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("General algorithms")] = new GeneralAlgorithmListWidgetManager();
   }
 }
 
