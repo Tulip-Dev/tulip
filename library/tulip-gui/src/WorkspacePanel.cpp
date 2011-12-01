@@ -45,6 +45,10 @@ public:
     parentScene->addItem(_animation);
   }
 
+  virtual ~ProgressItem() {
+    delete _animation;
+  }
+
   QRectF boundingRect() const {
     return QRectF();
   }
@@ -158,6 +162,7 @@ void WorkspacePanel::toggleProgressMode(bool p) {
     _progressFadeIn->start(QAbstractAnimation::DeleteWhenStopped);
   }
   else if (!p && _progressItem != NULL) {
+    _view->graphicsView()->scene()->removeItem(_progressItem);
     delete _progressItem;
     _progressItem = NULL;
   }
@@ -166,7 +171,6 @@ void WorkspacePanel::toggleProgressMode(bool p) {
 void WorkspacePanel::progress_handler(int,int) {
   if (!isProgressMode())
     toggleProgressMode(true);
-
   QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
