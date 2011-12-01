@@ -5,7 +5,7 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQSCINTILLA_DLL")
 
 # Force to use SIP and QScintilla headers located in thirdparty and not those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${qscintilla2Include} ${SIP_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${Tulip3CompatInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 
 SET(pythonscriptview_LIB_SRCS
     ConsoleOutputModule.h
@@ -50,12 +50,12 @@ ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${pythonscriptview_LIB_SRCS}
 
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipCoreName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipGUIName})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulip3CompatName})
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} qscintilla2)
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_LIBRARIES})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
-ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipCoreName} ${LibTulipGUIName} ${LibTulip3CompatName} qscintilla2)
+ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipCoreName} ${LibTulipGUIName} qscintilla2)
 
 INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT tulip_plugins_pythonscriptview)
 

@@ -22,7 +22,6 @@
 
 #include "PythonInterpreter.h"
 
-#include <tulip3/ControllerAlgorithmTools.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/ImportModule.h>
