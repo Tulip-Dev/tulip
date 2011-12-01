@@ -198,11 +198,10 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   view->setState(data);
   connect(panel,SIGNAL(closed(tlp::WorkspacePanel*)),this,SLOT(removePanel(tlp::WorkspacePanel*)));
   connect(panel,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
-  connect(panel,SIGNAL(switchToWorkspacePanel(int)),this,SLOT(panelSwitch(int)));
 
   // Add it to the list
   _panels.push_back(panel);
-  panel->setPanelsModel(&_panels);
+//  panel->setPanelsModel(&_panels);
 
   // If on startup mode, switch to single
   if (currentModeWidget() == _ui->startupPage) {
@@ -419,25 +418,4 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
   }
 
   return false;
-}
-
-void Workspace::panelSwitch(int i) {
-  if (i<0 || i >= _panels.size())
-    return;
-
-  WorkspacePanel* sourcePanel = static_cast<WorkspacePanel*>(sender());
-  WorkspacePanel* targetPanel = _panels[i];
-
-  if (sourcePanel == targetPanel)
-    return;
-
-  QString viewName = targetPanel->viewName();
-  assert(ViewLister::pluginExists(viewName.toStdString()));
-  View* view = ViewLister::getPluginObject(viewName.toStdString(),NULL);
-  view->setupUi();
-  sourcePanel->setView(view,viewName);
-  view->setGraph(targetPanel->view()->graph());
-  view->setState(DataSet());
-  sourcePanel->setWindowTitle(panelTitle(sourcePanel));
-  sourcePanel->viewGraphSet(targetPanel->view()->graph());
 }

@@ -186,16 +186,6 @@ background-color: #A9A9A9;
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="viewCombo">
-        <property name="toolTip">
-         <string>Select the view to display</string>
-        </property>
-        <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="TreeViewComboBox" name="graphCombo">
         <property name="toolTip">
          <string>Select the graph to display</string>

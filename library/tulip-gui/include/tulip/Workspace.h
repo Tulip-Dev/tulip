@@ -108,7 +108,6 @@ protected slots:
   void updateAvailableModes();
   void removePanel(tlp::WorkspacePanel*);
   void updatePanels();
-  void panelSwitch(int);
 
   QWidget* currentModeWidget() const;
   QVector<PlaceHolderWidget*> currentModeSlots() const;

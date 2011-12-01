@@ -87,6 +87,7 @@ SET(SRCS
   TreeViewComboBox.cpp
   GraphHierarchiesModel.cpp
   ModalPopup.cpp
+  FramedGraphicsProxyWidget.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
