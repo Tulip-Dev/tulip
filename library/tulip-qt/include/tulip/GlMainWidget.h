@@ -79,7 +79,7 @@ public:
     RenderGraph=0x1, /** Force to render the graph even if there is a previous buffered render. You need to call this option if the graph is updated to regenerate the buffer. If not set try to use the last buffered graph render, if there is no valid buffer this flag is forced. **/
     SwapBuffers=0x2 /** Call the swapBuffer functions at the end of the rendering process. If the disabled it's up to you to call the swapBuffer function. **/
   };
-  Q_DECLARE_FLAGS ( RenderingOptions, RenderingOption );
+  Q_DECLARE_FLAGS ( RenderingOptions, RenderingOption )
 
   /**
    * Construct the GlMainWidget
