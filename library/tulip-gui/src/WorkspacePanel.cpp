@@ -73,6 +73,7 @@ WorkspacePanel::~WorkspacePanel() {
 
   if (_view != NULL) {
     disconnect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
+    delete _view->graphicsView();
     delete _view;
   }
 
@@ -207,19 +208,6 @@ void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel* model) {
   connect(_ui->graphCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(graphComboIndexChanged()));
 }
 
-void WorkspacePanel::setPanelsModel(QAbstractItemModel* model) {
-  _ui->viewCombo->setModel(model);
-
-  for (int i=0; i<model->rowCount(); ++i) {
-    if (model->data(model->index(i,0)).toString() == windowTitle()) {
-      _ui->viewCombo->setCurrentIndex(i);
-      break;
-    }
-  }
-
-  connect(_ui->viewCombo,SIGNAL(currentIndexChanged(int)),this,SIGNAL(switchToWorkspacePanel(int)));
-}
-
 void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
   if (_ui->graphCombo->model() == NULL)
     return;
@@ -250,7 +238,24 @@ void WorkspacePanel::graphComboIndexChanged() {
   }
 }
 
+#include <QtGui/QGraphicsProxyWidget>
+#include <QtGui/QScrollArea>
+
+class ConfigurationArea: public QScrollArea {
+public:
+  explicit ConfigurationArea(QWidget* parent = 0): QScrollArea(parent) {
+  }
+
+  virtual ~ConfigurationArea() {
+    takeWidget();
+  }
+};
+
 void WorkspacePanel::showCurrentInteractorConfiguration() {
   if (_view->currentInteractor() == NULL)
     return;
+
+  ConfigurationArea* configArea = new ConfigurationArea();
+  configArea->setWidget(_view->currentInteractor()->configurationWidget());
+  _view->graphicsView()->scene()->addWidget(configArea);
 }

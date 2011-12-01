@@ -63,14 +63,12 @@ public slots:
   void setView(tlp::View* view, const QString& viewName);
   void setCurrentInteractor(tlp::Interactor*);
   void setGraphsModel(tlp::GraphHierarchiesModel*);
-  void setPanelsModel(QAbstractItemModel*);
   void viewGraphSet(tlp::Graph*);
 
 signals:
   void closed(tlp::WorkspacePanel*);
   void focused();
   void drawNeeded();
-  void switchToWorkspacePanel(int);
 
 protected slots:
   void interactorActionTriggered();
