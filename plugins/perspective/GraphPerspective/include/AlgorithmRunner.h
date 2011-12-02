@@ -34,7 +34,7 @@ namespace Ui {
 class AlgorithmRunnerData;
 class AlgorithmRunnerItemData;
 }
-class PluginListWidgetManagerInterface: public QObject {
+class PluginListManager: public QObject {
 public:
   virtual QMap<QString,QStringList> algorithms()=0;
   virtual bool computeProperty(tlp::Graph *,const QString &alg, QString &msg, tlp::PluginProgress *progress=0, tlp::DataSet *data=0)=0;
@@ -44,11 +44,11 @@ public:
 class AlgorithmRunner : public QWidget {
   Q_OBJECT
 
-  static QMap<QString, PluginListWidgetManagerInterface *> PLUGIN_LIST_MANAGERS_DISPLAY_NAMES;
+  static QMap<QString, PluginListManager *> MANAGERS_UI_NAMES;
   static void staticInit();
 
   Ui::AlgorithmRunnerData *_ui;
-  PluginListWidgetManagerInterface *_pluginsListMgr;
+  PluginListManager *_pluginsListMgr;
   QMap<QString,QStringList> _currentAlgorithmsList;
 
   tlp::GraphHierarchiesModel* _model;

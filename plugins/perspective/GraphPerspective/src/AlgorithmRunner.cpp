@@ -105,17 +105,16 @@ tlp::DataSet AlgorithmRunnerItem::params() const {
 
 // **********************************************
 template<typename ALG,typename PROPTYPE>
-class TemplatePluginListWidgetManager: public PluginListWidgetManagerInterface {
+class PropertyPluginListManager: public PluginListManager {
   typedef tlp::StaticPluginLister<ALG,tlp::PropertyContext> Lister;
   std::string _defaultPropName;
-
+  PROPTYPE* _lastComputedProperty;
 public:
-  TemplatePluginListWidgetManager(const std::string& defaultPropertyName): _defaultPropName(defaultPropertyName) {
+  PropertyPluginListManager(const std::string& defaultPropertyName): _defaultPropName(defaultPropertyName), _lastComputedProperty(NULL) {
   }
-
+  PROPTYPE* lastComputedProperty() const { return _lastComputedProperty; }
   PROPTYPE* getProperty(tlp::Graph* g, const std::string& name) {
     PROPTYPE* result = NULL;
-
     if (g->existProperty(name)) {
       PropertyInterface* interface = g->getProperty(name);
       result = dynamic_cast<PROPTYPE*>(interface);
@@ -123,15 +122,12 @@ public:
     else {
       result = g->getProperty<PROPTYPE>(name);
     }
-
     return result;
   }
-
   QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
     std::string name;
     tlp::Iterator<std::string> *it = Lister::availablePlugins();
-
     while (it->hasNext()) {
       name = it->next();
       QString group = Lister::pluginInformations(name).getGroup().c_str();
@@ -139,11 +135,9 @@ public:
       lst << name.c_str();
       result[group] = lst;
     }
-
     delete it;
     return result;
   }
-
   bool computeProperty(tlp::Graph* g, const QString &alg, QString &msg, tlp::PluginProgress *progress, tlp::DataSet *data) {
     tlp::Observable::holdObservers();
     PROPTYPE* defaultProperty = getProperty(g,_defaultPropName);
@@ -156,6 +150,7 @@ public:
     }
 
     PROPTYPE* out = (defaultProperty != NULL ? defaultProperty : namedProperty);
+    _lastComputedProperty = out;
     std::string errorMsg;
     bool result = g->computeProperty<PROPTYPE>(alg.toStdString(),out,errorMsg,progress,data);
     msg = errorMsg.c_str();
@@ -167,19 +162,17 @@ public:
     tlp::Observable::unholdObservers();
     return result;
   }
-
   tlp::ParameterList parameters(const QString &alg) {
     return Lister::getPluginParameters(alg.toStdString());
   }
 };
 
 
-class GeneralAlgorithmListWidgetManager: public PluginListWidgetManagerInterface {
+class GeneralPluginListManager: public PluginListManager {
 public:
   virtual QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
     Iterator<std::string>* it = AlgorithmLister::availablePlugins();
-
     while (it->hasNext()) {
       QString name = it->next().c_str();
       QString group = AlgorithmLister::pluginInformations(name.toStdString()).getGroup().c_str();
@@ -187,7 +180,6 @@ public:
       nameList << name;
       result[group] = nameList;
     }
-
     delete it;
     return result;
   }
@@ -204,18 +196,18 @@ public:
 
 // **********************************************
 
-QMap<QString,PluginListWidgetManagerInterface *> AlgorithmRunner::PLUGIN_LIST_MANAGERS_DISPLAY_NAMES;
+QMap<QString,PluginListManager *> AlgorithmRunner::MANAGERS_UI_NAMES;
 
 void AlgorithmRunner::staticInit() {
-  if (PLUGIN_LIST_MANAGERS_DISPLAY_NAMES.empty()) {
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Coloring algorithms")] = new TemplatePluginListWidgetManager<tlp::ColorAlgorithm,tlp::ColorProperty>("viewColor");
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Filtering algorithms")] = new TemplatePluginListWidgetManager<tlp::BooleanAlgorithm,tlp::BooleanProperty>("viewSelection");
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Metric algorithms (double)")] = new TemplatePluginListWidgetManager<tlp::DoubleAlgorithm,tlp::DoubleProperty>("viewMetric");
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Metric algorithms (integer)")] = new TemplatePluginListWidgetManager<tlp::IntegerAlgorithm,tlp::IntegerProperty>("viewInteger");
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Labeling algorithms")] = new TemplatePluginListWidgetManager<tlp::StringAlgorithm,tlp::StringProperty>("viewLabel");
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Layout algorithms")] = new TemplatePluginListWidgetManager<tlp::LayoutAlgorithm,tlp::LayoutProperty>("viewLayout");
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Resizing algorithms")] = new TemplatePluginListWidgetManager<tlp::SizeAlgorithm,tlp::SizeProperty>("viewSize");
-    PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("General algorithms")] = new GeneralAlgorithmListWidgetManager();
+  if (MANAGERS_UI_NAMES.empty()) {
+    MANAGERS_UI_NAMES[trUtf8("Coloring algorithms")] = new PropertyPluginListManager<tlp::ColorAlgorithm,tlp::ColorProperty>("viewColor");
+    MANAGERS_UI_NAMES[trUtf8("Filtering algorithms")] = new PropertyPluginListManager<tlp::BooleanAlgorithm,tlp::BooleanProperty>("viewSelection");
+    MANAGERS_UI_NAMES[trUtf8("Metric algorithms (double)")] = new PropertyPluginListManager<tlp::DoubleAlgorithm,tlp::DoubleProperty>("viewMetric");
+    MANAGERS_UI_NAMES[trUtf8("Metric algorithms (integer)")] = new PropertyPluginListManager<tlp::IntegerAlgorithm,tlp::IntegerProperty>("viewInteger");
+    MANAGERS_UI_NAMES[trUtf8("Labeling algorithms")] = new PropertyPluginListManager<tlp::StringAlgorithm,tlp::StringProperty>("viewLabel");
+    MANAGERS_UI_NAMES[trUtf8("Layout algorithms")] = new PropertyPluginListManager<tlp::LayoutAlgorithm,tlp::LayoutProperty>("viewLayout");
+    MANAGERS_UI_NAMES[trUtf8("Resizing algorithms")] = new PropertyPluginListManager<tlp::SizeAlgorithm,tlp::SizeProperty>("viewSize");
+    MANAGERS_UI_NAMES[trUtf8("General algorithms")] = new GeneralPluginListManager();
   }
 }
 
@@ -224,11 +216,11 @@ AlgorithmRunner::AlgorithmRunner(QWidget *parent): QWidget(parent), _ui(new Ui::
   _ui->setupUi(this);
   connect(_ui->header,SIGNAL(menuChanged(QString)),this,SLOT(algorithmTypeChanged(QString)));
   connect(_ui->searchBox,SIGNAL(textEdited(QString)),this,SLOT(setFilter(QString)));
-  _ui->header->setMenus(PLUGIN_LIST_MANAGERS_DISPLAY_NAMES.keys());
+  _ui->header->setMenus(MANAGERS_UI_NAMES.keys());
 }
 
 void AlgorithmRunner::algorithmTypeChanged(const QString &type) {
-  _pluginsListMgr = PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[type];
+  _pluginsListMgr = MANAGERS_UI_NAMES[type];
   assert(_pluginsListMgr);
   buildListWidget();
   _ui->searchBox->setText("");
@@ -332,6 +324,15 @@ void AlgorithmRunner::itemSettingsToggled(bool f) {
   }
 }
 
+
+void propagateViewCentering(PropertyInterface* pi, Graph* g, const std::string &propName, GraphPerspective* perspective) {
+  if (!g->existProperty(propName) || g->getProperty(propName) != pi)
+    return;
+  perspective->centerPanels(g);
+  for (int i=0;i<g->numberOfSubGraphs();++i)
+    propagateViewCentering(pi,g->getNthSubGraph(i),propName,perspective);
+}
+
 void AlgorithmRunner::runAlgorithm() {
   if (_model->currentGraph() == NULL)
     return;
@@ -344,7 +345,24 @@ void AlgorithmRunner::runAlgorithm() {
   if (!result) {
     QMessageBox::critical(this,trUtf8("Plugin error"),trUtf8("Error while running ") + item->name() + trUtf8(": ") + msg);
   }
-  else if (_pluginsListMgr == PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Layout algorithms")]) {
-    static_cast<GraphPerspective*>(Perspective::instance())->centerPanels(_model->currentGraph());
+
+  // if we were applying a layout algorithm, center every view whose graph is layouted using this property
+  else if (_pluginsListMgr == MANAGERS_UI_NAMES[trUtf8("Layout algorithms")]) {
+    PropertyPluginListManager<tlp::LayoutAlgorithm,tlp::LayoutProperty>* layoutManager = static_cast<PropertyPluginListManager<tlp::LayoutAlgorithm,tlp::LayoutProperty> *>(_pluginsListMgr);
+    PropertyInterface* propInterface = layoutManager->lastComputedProperty();
+    if (propInterface == NULL)
+      return;
+    std::string propName = propInterface->getName();
+    GraphPerspective* graphPerspective = static_cast<GraphPerspective*>(Perspective::instance());
+
+    // find the first parent graph where this property appears:
+    Graph* g = _model->currentGraph();
+    Graph* parentGraph;
+    while ((parentGraph = g->getSuperGraph()) != g) {
+      if (!parentGraph->existProperty(propName) || parentGraph->getProperty(propName) != propInterface)
+        break;
+      g = parentGraph;
+    }
+    propagateViewCentering(propInterface,g,propName, graphPerspective);
   }
 }
