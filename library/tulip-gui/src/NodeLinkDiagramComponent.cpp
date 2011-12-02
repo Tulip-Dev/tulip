@@ -22,7 +22,10 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlGraphInputData.h>
 
+#include <QtCore/QDebug>
+
 using namespace tlp;
+using namespace std;
 
 NodeLinkDiagramComponent::NodeLinkDiagramComponent() {
 }
@@ -50,25 +53,10 @@ void NodeLinkDiagramComponent::registerTriggers() {
     removeRedrawTrigger(obs);
   }
   addRedrawTrigger(getGlMainWidget()->getGraph());
-  GlGraphInputData* inputData = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
-  addRedrawTrigger(inputData->getElementBorderColor());
-  addRedrawTrigger(inputData->getElementBorderWidth());
-  addRedrawTrigger(inputData->getElementColor());
-  addRedrawTrigger(inputData->getElementFont());
-  addRedrawTrigger(inputData->getElementFontSize());
-  addRedrawTrigger(inputData->getElementLabel());
-  addRedrawTrigger(inputData->getElementLabelColor());
-  addRedrawTrigger(inputData->getElementLabelPosition());
-  addRedrawTrigger(inputData->getElementLayout());
-  addRedrawTrigger(inputData->getElementRotation());
-  addRedrawTrigger(inputData->getElementSelected());
-  addRedrawTrigger(inputData->getElementShape());
-  addRedrawTrigger(inputData->getElementSize());
-  addRedrawTrigger(inputData->getElementTexture());
-  addRedrawTrigger(inputData->getElementSrcAnchorShape());
-  addRedrawTrigger(inputData->getElementSrcAnchorSize());
-  addRedrawTrigger(inputData->getElementTgtAnchorShape());
-  addRedrawTrigger(inputData->getElementTgtAnchorSize());
+  std::set<tlp::PropertyInterface*> properties = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->properties();
+  for(std::set<tlp::PropertyInterface*>::iterator it = properties.begin();it != properties.end();++it) {
+    addRedrawTrigger(*it);
+  }
 }
 
 bool NodeLinkDiagramComponent::isLayoutProperty(tlp::PropertyInterface* pi) const {

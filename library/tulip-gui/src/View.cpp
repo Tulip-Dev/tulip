@@ -67,10 +67,11 @@ void View::setGraph(tlp::Graph *g) {
 
   _graph = g;
 
+  graphChanged(g);
+
   if (_graph != NULL)
     _graph->addListener(this);
 
-  graphChanged(g);
   emit graphSet(g);
 }
 

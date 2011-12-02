@@ -136,6 +136,8 @@ public:
    * Set the pointer on the property used to elementColor
    */
   void setElementColor(ColorProperty *property) {
+    _properties.erase(elementColor);
+    _properties.insert(property);
     elementColor=property;
   }
   /**
@@ -148,6 +150,8 @@ public:
    * Set the pointer on the property used to elementLabelColor
    */
   void setElementLabelColor(ColorProperty *property) {
+    _properties.erase(elementLabelColor);
+    _properties.insert(property);
     elementLabelColor=property;
   }
   /**
@@ -160,6 +164,8 @@ public:
    * Set the pointer on the property used to elementSize
    */
   void setElementSize(SizeProperty *property) {
+    _properties.erase(elementSize);
+    _properties.insert(property);
     elementSize=property;
   }
   /**
@@ -172,6 +178,8 @@ public:
    * Set the pointer on the property used to elementLabelPosition
    */
   void setElementLabelPosition(IntegerProperty *property) {
+    _properties.erase(elementLabelPosition);
+    _properties.insert(property);
     elementLabelPosition=property;
   }
   /**
@@ -184,6 +192,8 @@ public:
    * Set the pointer on the property used to elementShape
    */
   void setElementShape(IntegerProperty *property) {
+    _properties.erase(elementShape);
+    _properties.insert(property);
     elementShape=property;
   }
   /**
@@ -196,6 +206,8 @@ public:
    * Set the pointer on the property used to elementRotation
    */
   void setElementRotation(DoubleProperty *property) {
+    _properties.erase(elementRotation);
+    _properties.insert(property);
     elementRotation=property;
   }
   /**
@@ -208,6 +220,8 @@ public:
    * Set the pointer on the property used to elementSelected
    */
   void setElementSelected(BooleanProperty *property) {
+    _properties.erase(elementSelected);
+    _properties.insert(property);
     elementSelected=property;
   }
   /**
@@ -220,6 +234,8 @@ public:
    * Set the pointer on the property used to elementFont
    */
   void setElementFont(StringProperty *property) {
+    _properties.erase(elementFont);
+    _properties.insert(property);
     elementFont=property;
   }
   /**
@@ -232,6 +248,8 @@ public:
    * Set the pointer on the property used to elementFontSize
    */
   void setElementFontSize(IntegerProperty *property) {
+    _properties.erase(elementFontSize);
+    _properties.insert(property);
     elementFontSize=property;
   }
   /**
@@ -244,6 +262,8 @@ public:
    * Set the pointer on the property used to elementLabel
    */
   void setElementLabel(StringProperty *property) {
+    _properties.erase(elementLabel);
+    _properties.insert(property);
     elementLabel=property;
   }
   /**
@@ -256,6 +276,8 @@ public:
    * Set the pointer on the property used to elementLayout
    */
   void setElementLayout(LayoutProperty *property) {
+    _properties.erase(elementLayout);
+    _properties.insert(property);
     elementLayout=property;
   }
   /**
@@ -268,6 +290,8 @@ public:
    * Set the pointer on the property used to elementTexture
    */
   void setElementTexture(StringProperty *property) {
+    _properties.erase(elementTexture);
+    _properties.insert(property);
     elementTexture=property;
   }
   /**
@@ -280,6 +304,8 @@ public:
    * Set the pointer on the property used to elementBorderColor
    */
   void setElementBorderColor(ColorProperty *property) {
+    _properties.erase(elementBorderColor);
+    _properties.insert(property);
     elementBorderColor=property;
   }
   /**
@@ -292,6 +318,8 @@ public:
    * Set the pointer on the property used to elementBorderWidth
    */
   void setElementBorderWidth(DoubleProperty *property) {
+    _properties.erase(elementBorderWidth);
+    _properties.insert(property);
     elementBorderWidth=property;
   }
   /**
@@ -304,6 +332,8 @@ public:
    * Set the pointer on the property used to elementSrcAnchorShape
    */
   void setElementSrcAnchorShape(IntegerProperty *property) {
+    _properties.erase(elementSrcAnchorShape);
+    _properties.insert(property);
     elementSrcAnchorShape=property;
   }
   /**
@@ -316,6 +346,8 @@ public:
    * Set the pointer on the property used to elementSrcAnchorSize
    */
   void setElementSrcAnchorSize(SizeProperty *property) {
+    _properties.erase(elementSrcAnchorSize);
+    _properties.insert(property);
     elementSrcAnchorSize=property;
   }
   /**
@@ -328,6 +360,8 @@ public:
    * Set the pointer on the property used to elementTgtAnchorShape
    */
   void setElementTgtAnchorShape(IntegerProperty *property) {
+    _properties.erase(elementTgtAnchorShape);
+    _properties.insert(property);
     elementTgtAnchorShape=property;
   }
   /**
@@ -340,6 +374,8 @@ public:
    * Set the property name for elementSourceAnchorSize
    */
   void setElementTgtAnchorSize(SizeProperty *property) {
+    _properties.erase(elementTgtAnchorSize);
+    _properties.insert(property);
     elementTgtAnchorSize=property;
   }
   /**
@@ -352,9 +388,12 @@ public:
    * Set the pointer on the property used to elementAnimationFrame
    */
   void setElementAnimationFrame(IntegerProperty *property) {
+    _properties.erase(elementAnimationFrame);
+    _properties.insert(property);
     elementAnimationFrame=property;
   }
 
+  std::set<tlp::PropertyInterface*> properties() const { return _properties; }
 
 public :
 
@@ -366,6 +405,8 @@ public :
   MutableContainer<EdgeExtremityGlyph *> extremityGlyphs;
 
 protected:
+
+  std::set<tlp::PropertyInterface*> _properties;
 
   bool deleteGlVertexArrayManager;
 

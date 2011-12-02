@@ -35,28 +35,32 @@ namespace Ui {
 class AlgorithmRunnerData;
 class AlgorithmRunnerItemData;
 }
-class PluginListManager: public QObject {
+class QAbstractButton;
+class PluginFacade: public QObject {
 public:
   virtual tlp::PropertyInterface* lastComputedProperty() const=0;
   virtual QMap<QString,QStringList> algorithms()=0;
-  virtual bool computeProperty(tlp::Graph *,const QString &alg, QString &msg, tlp::PluginProgress *progress=0, tlp::DataSet *data=0)=0;
+  virtual bool computeProperty(tlp::Graph *,const QString &alg, QString &msg, tlp::PluginProgress *progress=0, tlp::DataSet *data=0,bool isLocal=false)=0;
   virtual tlp::ParameterList parameters(const QString& alg)=0;
 };
 // **********************************************
 class AlgorithmRunner : public QWidget {
   Q_OBJECT
 
-  static QMap<QString, PluginListManager *> MANAGERS_UI_NAMES;
+  static QMap<QString, PluginFacade *> FACADES_UI_NAMES;
   static void staticInit();
 
   Ui::AlgorithmRunnerData *_ui;
-  PluginListManager *_pluginsListMgr;
+  QAbstractButton* _localModeButton;
+  PluginFacade *_pluginsListMgr;
   QMap<QString,QStringList> _currentAlgorithmsList;
 
   tlp::GraphHierarchiesModel* _model;
 public:
   explicit AlgorithmRunner(QWidget *parent = 0);
   void setModel(tlp::GraphHierarchiesModel* model);
+
+  bool isLocalMode() const;
 
 public slots:
   void buildListWidget();

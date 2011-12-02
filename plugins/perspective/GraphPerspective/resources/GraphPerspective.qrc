@@ -22,5 +22,6 @@
         <file>view-open.svg</file>
         <file>list-add.svg</file>
         <file>link.png</file>
+        <file>hierarchy_add.png</file>
     </qresource>
 </RCC>
