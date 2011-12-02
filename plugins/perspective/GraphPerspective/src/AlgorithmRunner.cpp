@@ -28,6 +28,7 @@
 #include "ui_AlgorithmRunner.h"
 #include "ui_AlgorithmRunnerItem.h"
 #include "ExpandableGroupBox.h"
+#include "GraphPerspective.h"
 
 #include <QtCore/QDebug>
 
@@ -342,5 +343,8 @@ void AlgorithmRunner::runAlgorithm() {
 
   if (!result) {
     QMessageBox::critical(this,trUtf8("Plugin error"),trUtf8("Error while running ") + item->name() + trUtf8(": ") + msg);
+  }
+  else if (_pluginsListMgr == PLUGIN_LIST_MANAGERS_DISPLAY_NAMES[trUtf8("Layout algorithms")]) {
+    static_cast<GraphPerspective*>(Perspective::instance())->centerPanels(_model->currentGraph());
   }
 }
