@@ -278,7 +278,7 @@ string DataSet::toString() const {
     DataTypeSerializer *serializer = DataSet::typenameToSerializer(p.second->getTypeName());
 
     if (serializer) {
-      ss << "\"" << p.first << "\"=";
+        ss << "'" << p.first << "'=";
       serializer->writeData(ss, p.second);
       ss << " ";
     }
