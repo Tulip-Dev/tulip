@@ -28,6 +28,7 @@ SET(tulip-ogl_LIB_SRCS
   GlEPSFeedBackBuilder.cpp
   GlFeedBackRecorder.cpp
   GlGraphComposite.cpp
+  GlGraphRenderer.cpp
   GlGraphHighDetailsRenderer.cpp
   GlGraphLowDetailsRenderer.cpp
   GlGraphInputData.cpp

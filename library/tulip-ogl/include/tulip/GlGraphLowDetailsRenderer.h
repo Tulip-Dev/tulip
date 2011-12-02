@@ -43,7 +43,7 @@ public:
   /**
    * Build a GlGraphComposite with the graph data
    */
-  GlGraphLowDetailsRenderer(Graph* graph,GlGraphInputData &inputData,GlGraphRenderingParameters &parameters);
+  GlGraphLowDetailsRenderer(GlGraphInputData &inputData,GlGraphRenderingParameters &parameters);
 
   ~GlGraphLowDetailsRenderer();
 
@@ -53,12 +53,7 @@ public:
     assert (false);
   }
 
-  void visitGraph(GlSceneVisitor *visitor,bool visitHiddenEntities=false);
-
 protected:
-
-  void visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
-  void visitEdges(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
 
   void initEdgesArray();
   void initTexArray(unsigned int glyph, Vec2f tex[4]);

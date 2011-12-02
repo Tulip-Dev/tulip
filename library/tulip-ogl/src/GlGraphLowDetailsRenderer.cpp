@@ -36,7 +36,7 @@ using namespace std;
 
 namespace tlp {
 
-GlGraphLowDetailsRenderer::GlGraphLowDetailsRenderer(Graph* graph, GlGraphInputData &inputData, GlGraphRenderingParameters &parameters):GlGraphRenderer(graph,inputData,parameters),buildVBO(true) {
+GlGraphLowDetailsRenderer::GlGraphLowDetailsRenderer(GlGraphInputData &inputData, GlGraphRenderingParameters &parameters):GlGraphRenderer(inputData,parameters),buildVBO(true) {
   fakeScene = new GlScene;
   fakeScene->addLayer(new GlLayer("fakeLayer"));
   addObservers();
@@ -45,75 +45,6 @@ GlGraphLowDetailsRenderer::GlGraphLowDetailsRenderer(Graph* graph, GlGraphInputD
 GlGraphLowDetailsRenderer::~GlGraphLowDetailsRenderer() {
   delete fakeScene;
   removeObservers();
-}
-
-void GlGraphLowDetailsRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntities) {
-  Graph *graph=inputData.getGraph();
-
-  // Check if the current graph are in the hierarchy
-  assert((rootGraph==graph) || (rootGraph->isDescendantGraph(graph)));
-
-  if(visitor->isThreadSafe()) {
-#ifdef HAVE_OMP
-    #pragma omp parallel
-#endif
-    {
-#ifdef HAVE_OMP
-      #pragma omp sections nowait
-#endif
-      {
-        visitNodes(graph,visitor,visitHiddenEntities);
-      }
-#ifdef HAVE_OMP
-      #pragma omp sections nowait
-#endif
-      {
-        visitEdges(graph,visitor,visitHiddenEntities);
-      }
-    }
-  }
-  else {
-    visitNodes(graph,visitor,visitHiddenEntities);
-    visitEdges(graph,visitor,visitHiddenEntities);
-  }
-}
-
-void GlGraphLowDetailsRenderer::visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities) {
-  if(parameters.isDisplayNodes() || parameters.isDisplayMetaNodes() || visitHiddenEntities) {
-    visitor->reserveMemoryForNodes(graph->numberOfNodes());
-    GlNode glNode(0);
-    bool isMetaNode;
-
-    Iterator<node>* nodesIterator = graph->getNodes();
-
-    while (nodesIterator->hasNext()) {
-      node n=nodesIterator->next();
-      isMetaNode = inputData.getGraph()->isMetaNode(n);
-
-      if((parameters.isDisplayNodes() && !isMetaNode) || (parameters.isDisplayMetaNodes() && isMetaNode) || visitHiddenEntities) {
-        glNode.id=n.id;
-        glNode.acceptVisitor(visitor);
-      }
-    }
-
-    delete nodesIterator;
-  }
-}
-
-void GlGraphLowDetailsRenderer::visitEdges(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities) {
-  if(parameters.isDisplayEdges() || visitHiddenEntities) {
-    visitor->reserveMemoryForEdges(graph->numberOfEdges());
-
-    GlEdge glEdge(0);
-    Iterator<edge>* edgesIterator = graph->getEdges();
-
-    while (edgesIterator->hasNext()) {
-      glEdge.id=edgesIterator->next().id;
-      glEdge.acceptVisitor(visitor);
-    }
-
-    delete edgesIterator;
-  }
 }
 //====================================================
 void GlGraphLowDetailsRenderer::initEdgesArray() {

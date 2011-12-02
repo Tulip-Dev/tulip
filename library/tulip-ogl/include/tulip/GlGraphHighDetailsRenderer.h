@@ -43,7 +43,7 @@ public:
   /**
    * Build a GlGraphComposite with the graph data
    */
-  GlGraphHighDetailsRenderer(Graph* graph,GlGraphInputData &inputData,GlGraphRenderingParameters &parameters);
+  GlGraphHighDetailsRenderer(GlGraphInputData &inputData,GlGraphRenderingParameters &parameters);
 
   ~GlGraphHighDetailsRenderer();
 
@@ -51,13 +51,9 @@ public:
 
   void initSelectionRendering(RenderingEntitiesFlag type,std::map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId);
 
-  void visitGraph(GlSceneVisitor *visitor,bool visitHiddenEntities=false);
-
 protected:
 
   void buildSortedList();
-  void visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
-  void visitEdges(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
 
   void drawLabelsForComplexEntities(bool drawSelected,OcclusionTest *occlusionTest,LayerLODUnit &layerLODUnit);
 

@@ -37,7 +37,7 @@ using namespace std;
 
 namespace tlp {
 
-GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),rootGraph(graph->getRoot()),graphRenderer(new GlGraphHighDetailsRenderer(graph,inputData,parameters)),nodesModified(true) {
+GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),rootGraph(graph->getRoot()),graphRenderer(new GlGraphHighDetailsRenderer(inputData,parameters)),nodesModified(true) {
   graph->addListener(this);
   graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addPropertyObserver(this);
 
@@ -81,7 +81,7 @@ const GlGraphRenderingParameters& GlGraphComposite::getRenderingParameters() {
 void GlGraphComposite::setRenderingParameters(const GlGraphRenderingParameters &parameter) {
   if(parameters.isElementOrdered() != parameter.isElementOrdered()) {
     parameters = parameter;
-    graphRenderer->setHaveToSort(true);
+    graphRenderer->setGraphModified(true);
   }
   else {
     parameters = parameter;
@@ -110,20 +110,20 @@ void GlGraphComposite::treatEvent(const Event& evt) {
     switch(graphEvent->getType()) {
     case GraphEvent::TLP_ADD_NODE:
       nodesModified=true;
-      graphRenderer->setHaveToSort(true);
+      graphRenderer->setGraphModified(true);
       break;
 
     case GraphEvent::TLP_DEL_NODE:
       nodesModified=true;
-      graphRenderer->setHaveToSort(true);
+      graphRenderer->setGraphModified(true);
       break;
 
     case GraphEvent::TLP_ADD_EDGE:
-      graphRenderer->setHaveToSort(true);
+      graphRenderer->setGraphModified(true);
       break;
 
     case GraphEvent::TLP_DEL_EDGE:
-      graphRenderer->setHaveToSort(true);
+      graphRenderer->setGraphModified(true);
       break;
 
     default:
