@@ -33,6 +33,7 @@
 #include <QtCore/QDebug>
 
 #include <QtGui/QLabel>
+#include <QtGui/QToolButton>
 #include <QtGui/QMessageBox>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QPushButton>
@@ -105,12 +106,12 @@ tlp::DataSet AlgorithmRunnerItem::params() const {
 
 // **********************************************
 template<typename ALG,typename PROPTYPE>
-class PropertyPluginListManager: public PluginListManager {
+class PropertyPluginFacade: public PluginFacade {
   typedef tlp::StaticPluginLister<ALG,tlp::PropertyContext> Lister;
   std::string _defaultPropName;
   PropertyInterface* _lastComputedProperty;
 public:
-  PropertyPluginListManager(const std::string& defaultPropertyName): _defaultPropName(defaultPropertyName), _lastComputedProperty(NULL) {
+  PropertyPluginFacade(const std::string& defaultPropertyName): _defaultPropName(defaultPropertyName), _lastComputedProperty(NULL) {
   }
   PropertyInterface* lastComputedProperty() const { return _lastComputedProperty; }
   PROPTYPE* getProperty(tlp::Graph* g, const std::string& name) {
@@ -118,6 +119,18 @@ public:
     if (g->existProperty(name)) {
       PropertyInterface* interface = g->getProperty(name);
       result = dynamic_cast<PROPTYPE*>(interface);
+    }
+    else {
+      result = g->getProperty<PROPTYPE>(name);
+    }
+    return result;
+  }
+  PROPTYPE* getLocalProperty(tlp::Graph* g, const std::string& name) {
+    PROPTYPE* result = NULL;
+    if (g->existProperty(name)) {
+      PropertyInterface* interface = g->getProperty(name);
+      if (dynamic_cast<PROPTYPE*>(interface) != NULL)
+        result = g->getLocalProperty<PROPTYPE>(name);
     }
     else {
       result = g->getProperty<PROPTYPE>(name);
@@ -138,11 +151,11 @@ public:
     delete it;
     return result;
   }
-  bool computeProperty(tlp::Graph* g, const QString &alg, QString &msg, tlp::PluginProgress *progress, tlp::DataSet *data) {
+  bool computeProperty(tlp::Graph* g, const QString &alg, QString &msg, tlp::PluginProgress *progress, tlp::DataSet *data, bool isLocal=false) {
     tlp::Observable::holdObservers();
-    PROPTYPE* defaultProperty = getProperty(g,_defaultPropName);
+    PROPTYPE* defaultProperty = (isLocal ? getLocalProperty(g,_defaultPropName) : getProperty(g,_defaultPropName));
     QString name = (alg + " " + data->toString().c_str());
-    PROPTYPE* namedProperty = getProperty(g,name.toStdString());
+    PROPTYPE* namedProperty = (isLocal ? getLocalProperty(g,name.toStdString()) : getProperty(g,name.toStdString()));
 
     if (defaultProperty == NULL && namedProperty == NULL) {
       msg = trUtf8("Cannot find suitable output property");
@@ -168,7 +181,7 @@ public:
 };
 
 
-class GeneralPluginListManager: public PluginListManager {
+class GeneralPluginFacade: public PluginFacade {
 public:
   virtual QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
@@ -183,7 +196,7 @@ public:
     delete it;
     return result;
   }
-  virtual bool computeProperty(tlp::Graph* g,const QString& alg, QString& msg, tlp::PluginProgress* progress=0, tlp::DataSet *data=0) {
+  virtual bool computeProperty(tlp::Graph* g,const QString& alg, QString& msg, tlp::PluginProgress* progress=0, tlp::DataSet *data=0,bool isLocal=false) {
     std::string errorMsg;
     bool result = g->applyAlgorithm(errorMsg,data,alg.toStdString(),progress);
     msg = errorMsg.c_str();
@@ -197,31 +210,44 @@ public:
 
 // **********************************************
 
-QMap<QString,PluginListManager *> AlgorithmRunner::MANAGERS_UI_NAMES;
+QMap<QString,PluginFacade *> AlgorithmRunner::FACADES_UI_NAMES;
 
 void AlgorithmRunner::staticInit() {
-  if (MANAGERS_UI_NAMES.empty()) {
-    MANAGERS_UI_NAMES[trUtf8("Coloring algorithms")] = new PropertyPluginListManager<tlp::ColorAlgorithm,tlp::ColorProperty>("viewColor");
-    MANAGERS_UI_NAMES[trUtf8("Filtering algorithms")] = new PropertyPluginListManager<tlp::BooleanAlgorithm,tlp::BooleanProperty>("viewSelection");
-    MANAGERS_UI_NAMES[trUtf8("Metric algorithms (double)")] = new PropertyPluginListManager<tlp::DoubleAlgorithm,tlp::DoubleProperty>("viewMetric");
-    MANAGERS_UI_NAMES[trUtf8("Metric algorithms (integer)")] = new PropertyPluginListManager<tlp::IntegerAlgorithm,tlp::IntegerProperty>("viewInteger");
-    MANAGERS_UI_NAMES[trUtf8("Labeling algorithms")] = new PropertyPluginListManager<tlp::StringAlgorithm,tlp::StringProperty>("viewLabel");
-    MANAGERS_UI_NAMES[trUtf8("Layout algorithms")] = new PropertyPluginListManager<tlp::LayoutAlgorithm,tlp::LayoutProperty>("viewLayout");
-    MANAGERS_UI_NAMES[trUtf8("Resizing algorithms")] = new PropertyPluginListManager<tlp::SizeAlgorithm,tlp::SizeProperty>("viewSize");
-    MANAGERS_UI_NAMES[trUtf8("General algorithms")] = new GeneralPluginListManager();
+  if (FACADES_UI_NAMES.empty()) {
+    FACADES_UI_NAMES[trUtf8("Coloring algorithms")] = new PropertyPluginFacade<tlp::ColorAlgorithm,tlp::ColorProperty>("viewColor");
+    FACADES_UI_NAMES[trUtf8("Filtering algorithms")] = new PropertyPluginFacade<tlp::BooleanAlgorithm,tlp::BooleanProperty>("viewSelection");
+    FACADES_UI_NAMES[trUtf8("Metric algorithms (double)")] = new PropertyPluginFacade<tlp::DoubleAlgorithm,tlp::DoubleProperty>("viewMetric");
+    FACADES_UI_NAMES[trUtf8("Metric algorithms (integer)")] = new PropertyPluginFacade<tlp::IntegerAlgorithm,tlp::IntegerProperty>("viewInteger");
+    FACADES_UI_NAMES[trUtf8("Labeling algorithms")] = new PropertyPluginFacade<tlp::StringAlgorithm,tlp::StringProperty>("viewLabel");
+    FACADES_UI_NAMES[trUtf8("Layout algorithms")] = new PropertyPluginFacade<tlp::LayoutAlgorithm,tlp::LayoutProperty>("viewLayout");
+    FACADES_UI_NAMES[trUtf8("Resizing algorithms")] = new PropertyPluginFacade<tlp::SizeAlgorithm,tlp::SizeProperty>("viewSize");
+    FACADES_UI_NAMES[trUtf8("General algorithms")] = new GeneralPluginFacade();
   }
 }
 
 AlgorithmRunner::AlgorithmRunner(QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerData), _pluginsListMgr(0), _model(NULL) {
   staticInit();
   _ui->setupUi(this);
+  // Manually setup local mode button (can't do that with designer)
+  QToolButton* localModeButton = new QToolButton(_ui->header);
+  localModeButton->setMaximumSize(25,25);
+  localModeButton->setMinimumSize(25,25);
+  localModeButton->setCheckable(true);
+  localModeButton->setChecked(false);
+  localModeButton->setIcon(QIcon(":/tulip/graphperspective/icons/hierarchy_add.png"));
+  localModeButton->setIconSize(QSize(22,22));
+  localModeButton->setToolTip(trUtf8("Always store result in local property"));
+  localModeButton->setObjectName("localModeButton");
+  _localModeButton = localModeButton;
+
+  _ui->header->layout()->addWidget(localModeButton);
   connect(_ui->header,SIGNAL(menuChanged(QString)),this,SLOT(algorithmTypeChanged(QString)));
   connect(_ui->searchBox,SIGNAL(textEdited(QString)),this,SLOT(setFilter(QString)));
-  _ui->header->setMenus(MANAGERS_UI_NAMES.keys());
+  _ui->header->setMenus(FACADES_UI_NAMES.keys());
 }
 
 void AlgorithmRunner::algorithmTypeChanged(const QString &type) {
-  _pluginsListMgr = MANAGERS_UI_NAMES[type];
+  _pluginsListMgr = FACADES_UI_NAMES[type];
   assert(_pluginsListMgr);
   buildListWidget();
   _ui->searchBox->setText("");
@@ -333,7 +359,7 @@ void AlgorithmRunner::runAlgorithm() {
   AlgorithmRunnerItem* item = static_cast<AlgorithmRunnerItem*>(sender());
   QString msg;
   DataSet data = item->params();
-  bool result = _pluginsListMgr->computeProperty(_model->currentGraph(),item->name(),msg,0,&data);
+  bool result = _pluginsListMgr->computeProperty(_model->currentGraph(),item->name(),msg,0,&data,isLocalMode());
 
   if (!result) {
     QMessageBox::critical(this,trUtf8("Plugin error"),trUtf8("Error while running ") + item->name() + trUtf8(": ") + msg);
@@ -342,4 +368,8 @@ void AlgorithmRunner::runAlgorithm() {
     // Asks the perspective to check if any view needs to be centered after computing this algorithm
     static_cast<GraphPerspective*>(Perspective::instance())->centerPanels(_pluginsListMgr->lastComputedProperty());
   }
+}
+
+bool AlgorithmRunner::isLocalMode() const {
+  return _localModeButton->isChecked();
 }
