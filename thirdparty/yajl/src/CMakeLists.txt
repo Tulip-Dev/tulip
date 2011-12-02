@@ -80,4 +80,9 @@ IF(NOT WIN32)
   INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib${LIB_SUFFIX})
   INSTALL(FILES ${PUB_HDRS} DESTINATION include/yajl)
   INSTALL(FILES ${incDir}/yajl_version.h DESTINATION include/yajl)
+ELSE()
+  INSTALL(TARGETS yajl
+       RUNTIME DESTINATION ${TulipBinInstallDir}
+       LIBRARY DESTINATION ${TulipBinInstallDir}
+       ARCHIVE DESTINATION ${TulipBinInstallDir})
 ENDIF()
