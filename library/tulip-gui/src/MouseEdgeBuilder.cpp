@@ -81,7 +81,6 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
           bends.clear();
           Observable::unholdObservers();
 
-          GlMainView* glMainView = static_cast<GlMainView*>(view());
           inputData->getElementSelected()->setEdgeValue(newEdge,true);
 //          NodeLinkDiagramComponent *nodeLinkView=static_cast<NodeLinkDiagramComponent *>(view());
 //          nodeLinkView->elementSelectedSlot(newEdge.id, false);
