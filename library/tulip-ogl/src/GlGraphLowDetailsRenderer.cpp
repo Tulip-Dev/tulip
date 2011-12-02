@@ -305,9 +305,9 @@ void GlGraphLowDetailsRenderer::treatEvent(const Event &ev) {
       const PropertyInterface *property=inputData.getGraph()->getProperty(graphEvent->getPropertyName());
 
       if(property == inputData.getElementLayout()
-         || property == inputData.getElementSize()
-         || property == inputData.getElementColor()
-         || property == inputData.getElementSelected()){
+          || property == inputData.getElementSize()
+          || property == inputData.getElementColor()
+          || property == inputData.getElementSelected()) {
         buildVBO=true;
         updateObservers();
       }

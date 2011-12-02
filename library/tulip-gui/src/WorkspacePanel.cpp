@@ -171,6 +171,7 @@ void WorkspacePanel::toggleProgressMode(bool p) {
 void WorkspacePanel::progress_handler(int,int) {
   if (!isProgressMode())
     toggleProgressMode(true);
+
   QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 

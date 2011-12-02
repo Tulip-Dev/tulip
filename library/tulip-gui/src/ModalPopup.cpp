@@ -17,6 +17,7 @@ ModalPopup::~ModalPopup() {
 bool ModalPopup::event(QEvent* ev) {
   if (ev->type() == QEvent::KeyPress) {
     QKeyEvent* keyEv = static_cast<QKeyEvent*>(ev);
+
     if (keyEv->key() == Qt::Key_Escape) {
       close();
       return true;
@@ -24,11 +25,13 @@ bool ModalPopup::event(QEvent* ev) {
   }
   else if (ev->type() == QEvent::MouseButtonPress) {
     QMouseEvent* mouseEv = static_cast<QMouseEvent*>(ev);
+
     if (!geometry().contains(mouseEv->pos())) {
       close();
       return true;
     }
   }
+
   return false;
 }
 
