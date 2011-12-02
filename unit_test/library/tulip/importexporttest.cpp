@@ -125,7 +125,7 @@ Graph* ImportExportTest::createSimpleGraph() const {
   Graph* original = tlp::newGraph();
   LayoutProperty* layout = original->getProperty<LayoutProperty>("viewLayout");
 
-  for(uint i = 0; i < 100; ++i) {
+  for(unsigned int i = 0; i < 100; ++i) {
     node n = original->addNode();
     layout->setNodeValue(n, Coord(i%11, i/10));
   }
@@ -202,10 +202,10 @@ void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph
 }
 
 void ImportExportTest::testGraphPropertiesAreEqual(Graph* first, Graph* second) {
-  uint firstPropertiesCount = 0;
-  uint secondPropertiesCount = 0;
-  uint firstLocalPropertiesCount = 0;
-  uint secondLocalPropertiesCount = 0;
+  unsigned int firstPropertiesCount = 0;
+  unsigned int secondPropertiesCount = 0;
+  unsigned int firstLocalPropertiesCount = 0;
+  unsigned int secondLocalPropertiesCount = 0;
 
   PropertyInterface* firstProperty;
   PropertyInterface* secondProperty;

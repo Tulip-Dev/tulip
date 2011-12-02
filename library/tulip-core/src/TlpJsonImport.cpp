@@ -435,4 +435,4 @@ public:
   }
 };
 
-IMPORTPLUGIN(TlpJsonImport,"TlpJsonImport","Charles Huet","18/05/2011","Tulip JSon format","1.0")
+IMPORTPLUGINOFGROUP(TlpJsonImport ,"TlpJsonImport", "Charles Huet", "18/05/2011", "Tulip JSon format", "1.0", "File")

@@ -41,6 +41,8 @@ const std::string CoordParameter = "coordParameter";
 const std::string SizeParameter = "sizeParameter";
 const std::string ColorParameter = "colorParameter";
 
+typedef unsigned int uint;
+
 #define EXPECTED_VALUE(TYPE, VALUE) \
 TYPE TYPE##Value; \
 set.get<TYPE>(TYPE##Parameter, TYPE##Value); \
