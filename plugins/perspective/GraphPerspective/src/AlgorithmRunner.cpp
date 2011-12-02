@@ -108,11 +108,11 @@ template<typename ALG,typename PROPTYPE>
 class PropertyPluginListManager: public PluginListManager {
   typedef tlp::StaticPluginLister<ALG,tlp::PropertyContext> Lister;
   std::string _defaultPropName;
-  PROPTYPE* _lastComputedProperty;
+  PropertyInterface* _lastComputedProperty;
 public:
   PropertyPluginListManager(const std::string& defaultPropertyName): _defaultPropName(defaultPropertyName), _lastComputedProperty(NULL) {
   }
-  PROPTYPE* lastComputedProperty() const { return _lastComputedProperty; }
+  PropertyInterface* lastComputedProperty() const { return _lastComputedProperty; }
   PROPTYPE* getProperty(tlp::Graph* g, const std::string& name) {
     PROPTYPE* result = NULL;
     if (g->existProperty(name)) {
@@ -192,6 +192,7 @@ public:
   virtual tlp::ParameterList parameters(const QString& alg) {
     return AlgorithmLister::getPluginParameters(alg.toStdString());
   }
+  PropertyInterface* lastComputedProperty() const { return NULL; }
 };
 
 // **********************************************
@@ -325,14 +326,6 @@ void AlgorithmRunner::itemSettingsToggled(bool f) {
 }
 
 
-void propagateViewCentering(PropertyInterface* pi, Graph* g, const std::string &propName, GraphPerspective* perspective) {
-  if (!g->existProperty(propName) || g->getProperty(propName) != pi)
-    return;
-  perspective->centerPanels(g);
-  for (int i=0;i<g->numberOfSubGraphs();++i)
-    propagateViewCentering(pi,g->getNthSubGraph(i),propName,perspective);
-}
-
 void AlgorithmRunner::runAlgorithm() {
   if (_model->currentGraph() == NULL)
     return;
@@ -345,24 +338,8 @@ void AlgorithmRunner::runAlgorithm() {
   if (!result) {
     QMessageBox::critical(this,trUtf8("Plugin error"),trUtf8("Error while running ") + item->name() + trUtf8(": ") + msg);
   }
-
-  // if we were applying a layout algorithm, center every view whose graph is layouted using this property
-  else if (_pluginsListMgr == MANAGERS_UI_NAMES[trUtf8("Layout algorithms")]) {
-    PropertyPluginListManager<tlp::LayoutAlgorithm,tlp::LayoutProperty>* layoutManager = static_cast<PropertyPluginListManager<tlp::LayoutAlgorithm,tlp::LayoutProperty> *>(_pluginsListMgr);
-    PropertyInterface* propInterface = layoutManager->lastComputedProperty();
-    if (propInterface == NULL)
-      return;
-    std::string propName = propInterface->getName();
-    GraphPerspective* graphPerspective = static_cast<GraphPerspective*>(Perspective::instance());
-
-    // find the first parent graph where this property appears:
-    Graph* g = _model->currentGraph();
-    Graph* parentGraph;
-    while ((parentGraph = g->getSuperGraph()) != g) {
-      if (!parentGraph->existProperty(propName) || parentGraph->getProperty(propName) != propInterface)
-        break;
-      g = parentGraph;
-    }
-    propagateViewCentering(propInterface,g,propName, graphPerspective);
+  else if (_pluginsListMgr->lastComputedProperty() != NULL){
+    // Asks the perspective to check if any view needs to be centered after computing this algorithm
+    static_cast<GraphPerspective*>(Perspective::instance())->centerPanels(_pluginsListMgr->lastComputedProperty());
   }
 }

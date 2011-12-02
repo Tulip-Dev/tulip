@@ -53,7 +53,7 @@ public slots:
   void saveAs(const QString& path=QString::null);
   void open(const QString& path=QString::null);
 
-  void centerPanels(tlp::Graph*);
+  void centerPanels(tlp::PropertyInterface*);
 
 protected slots:
   void refreshDockExpandControls();

@@ -49,7 +49,7 @@ void NodeLinkDiagramComponent::registerTriggers() {
   foreach (tlp::Observable* obs, triggers()) {
     removeRedrawTrigger(obs);
   }
-
+  addRedrawTrigger(getGlMainWidget()->getGraph());
   GlGraphInputData* inputData = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
   addRedrawTrigger(inputData->getElementBorderColor());
   addRedrawTrigger(inputData->getElementBorderWidth());
@@ -69,6 +69,10 @@ void NodeLinkDiagramComponent::registerTriggers() {
   addRedrawTrigger(inputData->getElementSrcAnchorSize());
   addRedrawTrigger(inputData->getElementTgtAnchorShape());
   addRedrawTrigger(inputData->getElementTgtAnchorSize());
+}
+
+bool NodeLinkDiagramComponent::isLayoutProperty(tlp::PropertyInterface* pi) const {
+  return pi == getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();
 }
 
 VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0")

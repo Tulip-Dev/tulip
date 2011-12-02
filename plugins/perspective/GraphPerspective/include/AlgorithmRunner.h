@@ -29,6 +29,7 @@ namespace tlp {
 class Graph;
 class PluginProgress;
 class DataSet;
+class PropertyInterface;
 }
 namespace Ui {
 class AlgorithmRunnerData;
@@ -36,6 +37,7 @@ class AlgorithmRunnerItemData;
 }
 class PluginListManager: public QObject {
 public:
+  virtual tlp::PropertyInterface* lastComputedProperty() const=0;
   virtual QMap<QString,QStringList> algorithms()=0;
   virtual bool computeProperty(tlp::Graph *,const QString &alg, QString &msg, tlp::PluginProgress *progress=0, tlp::DataSet *data=0)=0;
   virtual tlp::ParameterList parameters(const QString& alg)=0;
