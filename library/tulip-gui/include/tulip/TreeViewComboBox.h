@@ -1,10 +1,12 @@
 #ifndef TREEVIEWCOMBOBOX_H
 #define TREEVIEWCOMBOBOX_H
 
+#include <tulip/tulipconf.h>
+
 #include <QtGui/QComboBox>
 #include <QtGui/QTreeView>
 
-class TreeViewComboBox : public QComboBox {
+class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
   Q_OBJECT
   QTreeView* _treeView;
 
