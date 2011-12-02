@@ -136,6 +136,14 @@ public:
     */
   void treatEvents(const std::vector<Event> &events);
 
+  /**
+    @brief checks uif the given property's values affect the way elements in the view are layouted.
+    This method will be used by the overleying system to check if the view should be re-centered after computing an algorithm.
+    @return true if the view checks values from that property to setup its element's layout
+    @note By default, this method returns false.
+    */
+  virtual bool isLayoutProperty(tlp::PropertyInterface*) const;
+
 public slots:
   /**
     @brief Reset the visualization to the center.

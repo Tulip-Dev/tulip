@@ -193,9 +193,9 @@ void GraphPerspective::saveAs(const QString& path) {
 void GraphPerspective::open(const QString &path) {
 }
 
-void GraphPerspective::centerPanels(tlp::Graph* g) {
+void GraphPerspective::centerPanels(tlp::PropertyInterface* pi) {
   foreach(tlp::View* view, _ui->workspace->panels()) {
-    if (view->graph() == g)
+    if (view->isLayoutProperty(pi))
       view->centerView();
   }
 }

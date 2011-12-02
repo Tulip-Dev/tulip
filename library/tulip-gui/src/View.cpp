@@ -134,3 +134,7 @@ void View::treatEvents(const std::vector<Event> &events) {
     }
   }
 }
+
+bool View::isLayoutProperty(tlp::PropertyInterface *) const {
+  return false;
+}
