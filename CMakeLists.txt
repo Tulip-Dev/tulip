@@ -126,7 +126,8 @@ SET(QT_QTDBUS_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty)
 ENDIF()
 INCLUDE(${QT_USE_FILE})
 
-SET(YAJL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src/api)
+SET(YAJL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src/api ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src/yajl
+    ${CMAKE_CURRENT_BUILD_DIR}/thirdparty/yajl/yajl-2.0.1/include)
 SET(QT_MODELS_TESTS_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/qt_models_tests)
 SET(QT_MODELS_TESTS_LIBRARY qt4_test_models)
 
