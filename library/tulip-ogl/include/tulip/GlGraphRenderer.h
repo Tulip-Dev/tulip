@@ -27,35 +27,70 @@ namespace tlp {
 
 class Graph;
 
+
+/** \brief Class used by GlGraphComposite to display the graph
+ *
+ * This class is used by GlGraphComposite to display into OpenGL the graph contained by the GlGraphComposite
+ */
 class TLP_GL_SCOPE GlGraphRenderer {
 
 public:
 
   /**
-   * Build a GlGraphComposite with the graph data
+   * Constructor
+   * \param inputData : GlGraphInputData used by renderer to display the graph
+   * \param parameters : GlGraphRenderingParameters used by renderer to display the graph
    */
-  GlGraphRenderer(Graph* graph,GlGraphInputData &inputData,GlGraphRenderingParameters &parameters):rootGraph(graph->getRoot()),inputData(inputData),parameters(parameters),haveToSort(true),selectionDrawActivate(false),selectionIdMap(NULL),selectionCurrentId(NULL) {
+  GlGraphRenderer(GlGraphInputData &inputData,GlGraphRenderingParameters &parameters):inputData(inputData),parameters(parameters),graphModified(true),selectionDrawActivate(false),selectionIdMap(NULL),selectionCurrentId(NULL) {
   }
 
   virtual ~GlGraphRenderer() {}
 
+  /**
+   * This function is call by GlGraphComposite to draw the graph
+   * \param lod : lod used to this Rendering
+   * \param camera : camera used to this rendering
+   */
   virtual void draw(float lod,Camera* camera) = 0;
 
+  /**
+   * This function is call by GlGraphComposite to inform renderer that the next rendering will be for a selection
+   * You have the type of the selection and after you have to use and increment currentId, for example you can have this function call with 4 into currentId,
+   * if you graph contains 2 nodes you have to create 2 SelectedEntity object and add these object in the map : idMap.
+   * You will have a code like this :
+   *   idMap[currentId]=SelectedEntity(graph,node1.id,NODE_SELECTED);
+   *   currentId++;
+   *   idMap[currentId]=SelectedEntity(graph,node2.id,NODE_SELECTED);
+   *   currentId++;
+   *
+   * And when you do the rendering (in draw function) of these nodes you have to call glLoadName(...) function
+   *
+   * \param type : type of selection (RenderingSimpleEntities,RenderingNodes,RenderingEdges,RenderingAll,RenderingWithoutRemove)
+   * \param idMap : in this map you have to store SelectedEntity object
+   */
   virtual void initSelectionRendering(RenderingEntitiesFlag type,std::map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId) = 0;
 
-  virtual void visitGraph(GlSceneVisitor *visitor,bool visitHiddenEntities=false) = 0;
+  /**
+   * You can use this funtion if you want to inject a visitor on the graph
+   */
+  virtual void visitGraph(GlSceneVisitor *visitor,bool visitHiddenEntities=false);
 
-  void setHaveToSort(bool haveToSort) {
-    this->haveToSort=haveToSort;
+  /**
+   * This function set if the content of the graph is modified
+   */
+  void setGraphModified(bool graphModified) {
+    this->graphModified=graphModified;
   }
 
 protected:
 
-  Graph *rootGraph;
+  void visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
+  void visitEdges(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
+
   const GlGraphInputData &inputData;
   const GlGraphRenderingParameters &parameters;
 
-  bool haveToSort;
+  bool graphModified;
 
   bool selectionDrawActivate;
   RenderingEntitiesFlag selectionType;
