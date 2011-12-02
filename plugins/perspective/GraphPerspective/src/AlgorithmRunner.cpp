@@ -178,6 +178,7 @@ public:
   virtual QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
     Iterator<std::string>* it = AlgorithmLister::availablePlugins();
+
     while (it->hasNext()) {
       QString name = it->next().c_str();
       QString group = AlgorithmLister::pluginInformations(name.toStdString()).getGroup().c_str();
@@ -185,6 +186,7 @@ public:
       nameList << name;
       result[group] = nameList;
     }
+
     delete it;
     return result;
   }

@@ -15,6 +15,7 @@ void FramedGraphicsProxyWidget::paint(QPainter *painter, const QStyleOptionGraph
   QColor brushColor;
   QColor penColor;
   QWidget* w = widget();
+
   if (w != NULL) {
     brushColor = w->palette().color(QPalette::Window);
     penColor = w->palette().color(QPalette::Shadow);
@@ -23,6 +24,7 @@ void FramedGraphicsProxyWidget::paint(QPainter *painter, const QStyleOptionGraph
     brushColor = QApplication::palette().color(QPalette::Window);
     penColor = QApplication::palette().color(QPalette::Shadow);
   }
+
   painter->setBrush(brushColor);
   QPen pen(penColor);
   pen.setWidth(1);

@@ -768,10 +768,11 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
     case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
     case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
       const PropertyInterface *property=graph->getProperty(graphEvent->getPropertyName());
+
       if(property==inputData->getElementColor() ||
-         property==inputData->getElementLayout() ||
-         property==inputData->getElementSize() ||
-         property==inputData->getElementShape()) {
+          property==inputData->getElementLayout() ||
+          property==inputData->getElementSize() ||
+          property==inputData->getElementShape()) {
         clearData();
         clearObservers();
       }
