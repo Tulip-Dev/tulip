@@ -222,7 +222,7 @@ public:
           _intervalSource = integerVal;
         }
         else {
-          for(uint id = _intervalSource; id <= integerVal; ++id) {
+          for(unsigned int id = _intervalSource; id <= integerVal; ++id) {
             if(_parsingEdgesIds) {
               edge e(id);
               _graph->addEdge(e);
@@ -328,20 +328,20 @@ public:
   }
 
 private:
-  std::stack<uint> _parsingSubgraph;
+  std::stack<unsigned int> _parsingSubgraph;
   bool _parsingEdges;
   bool _parsingNodes;
   /**
    * @brief indicates whether the parser is currently parsing an array representing an edge
    **/
   bool _newEdge;
-  uint _edgeSource;
+  unsigned int _edgeSource;
 
   bool _parsingNodesIds;
   bool _parsingEdgesIds;
   bool _parsingInterval;
   bool _newInterval;
-  uint _intervalSource;
+  unsigned int _intervalSource;
 
   tlp::Graph* _graph;
 
@@ -354,7 +354,7 @@ private:
   bool _parsingProperties;
   PropertyInterface* _currentProperty;
   std::string _propertyName;
-  uint _currentIdentifier;
+  unsigned int _currentIdentifier;
   bool _parsingPropertyType;
   bool _parsingPropertyNodeValues;
   bool _parsingPropertyEdgeValues;
@@ -405,7 +405,7 @@ protected:
 
 class TlpJsonImport : public ImportModule, YajlProxy {
 public:
-  TlpJsonImport(AlgorithmContext context) :ImportModule(context), parsingSubGraphs(false), openMaps(0) {
+  TlpJsonImport(AlgorithmContext context) :ImportModule(context) {
     addParameter<std::string>("file::filename", "");
   }
 
@@ -433,10 +433,6 @@ public:
 
     YajlProxy::parseMapKey(value);
   }
-
-private:
-  bool parsingSubGraphs;
-  uint openMaps;
 };
 
 IMPORTPLUGIN(TlpJsonImport,"TlpJsonImport","Charles Huet","18/05/2011","Tulip JSon format","1.0")

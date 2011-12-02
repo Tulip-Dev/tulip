@@ -28,11 +28,11 @@ SET (PUB_HDRS api/yajl_parse.h api/yajl_gen.h api/yajl_common.h api/yajl_tree.h)
 ADD_DEFINITIONS(-DYAJL_BUILD)
 
 # set up some paths
-SET (libDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/lib)
+#SET (libDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/lib)
 SET (incDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/include/yajl)
 
 # set the output path for libraries
-SET(LIBRARY_OUTPUT_PATH ${libDir})
+#SET(LIBRARY_OUTPUT_PATH ${libDir})
 
 ADD_LIBRARY(yajl_s STATIC ${SRCS} ${HDRS} ${PUB_HDRS})
 
@@ -54,23 +54,24 @@ ENDIF(APPLE)
 #### build up an sdk as a post build step
 
 # create some directories
-FILE(MAKE_DIRECTORY ${libDir})
-FILE(MAKE_DIRECTORY ${incDir})
+#FILE(MAKE_DIRECTORY ${libDir})
+#FILE(MAKE_DIRECTORY ${incDir})
 
 # generate build-time source
 CONFIGURE_FILE(api/yajl_version.h.cmake ${incDir}/yajl_version.h)
 
-# copy public headers to output directory
-FOREACH (header ${PUB_HDRS})
-  SET (header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+## copy public headers to output directory
+#FOREACH (header ${PUB_HDRS})
+#  SET (header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+#
+#  EXEC_PROGRAM(${CMAKE_COMMAND} ARGS "-E copy_if_different '${header}' '${incDir}'")
+#
+#  ADD_CUSTOM_COMMAND(TARGET yajl_s POST_BUILD
+#      COMMAND ${CMAKE_COMMAND} -E copy_if_different "${header}" "${incDir}")
+#ENDFOREACH (header ${PUB_HDRS})
 
-  EXEC_PROGRAM(${CMAKE_COMMAND} ARGS "-E copy_if_different '${header}' '${incDir}'")
-
-  ADD_CUSTOM_COMMAND(TARGET yajl_s POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different "${header}" "${incDir}")
-ENDFOREACH (header ${PUB_HDRS})
-
-INCLUDE_DIRECTORIES(${incDir}/..)
+INCLUDE_DIRECTORIES(${incDir}/.. ${incDir})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 IF(NOT WIN32)
   # at build time you may specify the cmake variable LIB_SUFFIX to handle
