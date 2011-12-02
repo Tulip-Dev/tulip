@@ -113,8 +113,8 @@ GlMainWidget::~GlMainWidget() {
   delete [] renderingStore;
 }
 //==================================================
-QSize GlMainWidget::sizeHint()const{
-    return QSize(500,500);
+QSize GlMainWidget::sizeHint()const {
+  return QSize(500,500);
 }
 //==================================================
 void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
