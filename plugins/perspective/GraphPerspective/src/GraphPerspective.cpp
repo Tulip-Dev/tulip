@@ -193,4 +193,11 @@ void GraphPerspective::saveAs(const QString& path) {
 void GraphPerspective::open(const QString &path) {
 }
 
+void GraphPerspective::centerPanels(tlp::Graph* g) {
+  foreach(tlp::View* view, _ui->workspace->panels()) {
+    if (view->graph() == g)
+      view->centerView();
+  }
+}
+
 PERSPECTIVEPLUGIN(GraphPerspective,"Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0")
