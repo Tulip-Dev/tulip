@@ -113,9 +113,12 @@ class PropertyPluginFacade: public PluginFacade {
 public:
   PropertyPluginFacade(const std::string& defaultPropertyName): _defaultPropName(defaultPropertyName), _lastComputedProperty(NULL) {
   }
-  PropertyInterface* lastComputedProperty() const { return _lastComputedProperty; }
+  PropertyInterface* lastComputedProperty() const {
+    return _lastComputedProperty;
+  }
   PROPTYPE* getProperty(tlp::Graph* g, const std::string& name) {
     PROPTYPE* result = NULL;
+
     if (g->existProperty(name)) {
       PropertyInterface* interface = g->getProperty(name);
       result = dynamic_cast<PROPTYPE*>(interface);
@@ -123,24 +126,29 @@ public:
     else {
       result = g->getProperty<PROPTYPE>(name);
     }
+
     return result;
   }
   PROPTYPE* getLocalProperty(tlp::Graph* g, const std::string& name) {
     PROPTYPE* result = NULL;
+
     if (g->existProperty(name)) {
       PropertyInterface* interface = g->getProperty(name);
+
       if (dynamic_cast<PROPTYPE*>(interface) != NULL)
         result = g->getLocalProperty<PROPTYPE>(name);
     }
     else {
       result = g->getProperty<PROPTYPE>(name);
     }
+
     return result;
   }
   QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
     std::string name;
     tlp::Iterator<std::string> *it = Lister::availablePlugins();
+
     while (it->hasNext()) {
       name = it->next();
       QString group = Lister::pluginInformations(name).getGroup().c_str();
@@ -148,6 +156,7 @@ public:
       lst << name.c_str();
       result[group] = lst;
     }
+
     delete it;
     return result;
   }
@@ -186,6 +195,7 @@ public:
   virtual QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
     Iterator<std::string>* it = AlgorithmLister::availablePlugins();
+
     while (it->hasNext()) {
       QString name = it->next().c_str();
       QString group = AlgorithmLister::pluginInformations(name.toStdString()).getGroup().c_str();
@@ -193,6 +203,7 @@ public:
       nameList << name;
       result[group] = nameList;
     }
+
     delete it;
     return result;
   }
@@ -205,7 +216,9 @@ public:
   virtual tlp::ParameterList parameters(const QString& alg) {
     return AlgorithmLister::getPluginParameters(alg.toStdString());
   }
-  PropertyInterface* lastComputedProperty() const { return NULL; }
+  PropertyInterface* lastComputedProperty() const {
+    return NULL;
+  }
 };
 
 // **********************************************
@@ -364,7 +377,7 @@ void AlgorithmRunner::runAlgorithm() {
   if (!result) {
     QMessageBox::critical(this,trUtf8("Plugin error"),trUtf8("Error while running ") + item->name() + trUtf8(": ") + msg);
   }
-  else if (_pluginsListMgr->lastComputedProperty() != NULL){
+  else if (_pluginsListMgr->lastComputedProperty() != NULL) {
     // Asks the perspective to check if any view needs to be centered after computing this algorithm
     static_cast<GraphPerspective*>(Perspective::instance())->centerPanels(_pluginsListMgr->lastComputedProperty());
   }

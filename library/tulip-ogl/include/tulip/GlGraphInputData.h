@@ -393,7 +393,9 @@ public:
     elementAnimationFrame=property;
   }
 
-  std::set<tlp::PropertyInterface*> properties() const { return _properties; }
+  std::set<tlp::PropertyInterface*> properties() const {
+    return _properties;
+  }
 
 public :
 
