@@ -99,8 +99,8 @@ border-bottom: 1px solid black;
          <string>Apply</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/tulip/graphperspective/icons/media-playback-start.svg</normaloff>:/tulip/graphperspective/icons/media-playback-start.svg</iconset>
+         <iconset resource="../resources/GraphPerspective.qrc">
+          <normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</iconset>
         </property>
        </widget>
       </item>
@@ -123,6 +123,8 @@ border-bottom: 1px solid black;
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources/GraphPerspective.qrc"/>
+ </resources>
  <connections/>
 </ui>

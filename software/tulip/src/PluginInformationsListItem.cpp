@@ -29,10 +29,10 @@ PluginInformationsListItem::PluginInformationsListItem(tlp::PluginInformations *
   _ui->mainFrame->setStyleSheet("#mainFrame { background-color:" + backgroundCode() + ";  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
 
   if(infos->isInstalled()) {
-    _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/package-installed-updated.svg"));
+    _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-installed-updated.png"));
 
     if(infos->updateAvailable()) {
-      _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/package-upgrade.svg"));
+      _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-upgrade.png"));
     }
   }
 
@@ -68,16 +68,16 @@ void PluginInformationsListItem::expand() {
   _ui->installButton->setVisible(!_pluginInformations->isInstalled() || _pluginInformations->updateAvailable());
   _ui->removeButton->setVisible(_pluginInformations->isInstalled());
 
-  _ui->infosButton->setIcon(QIcon(":/tulip/app/icons/help-contents.svg"));
+  _ui->infosButton->setIcon(QIcon(":/tulip/app/icons/16/help-contents.png"));
 
   if (_pluginInformations->isInstalled() && _pluginInformations->updateAvailable()) {
-    _ui->installButton->setIcon(QIcon(":/tulip/app/icons/package-upgrade.svg"));
+    _ui->installButton->setIcon(QIcon(":/tulip/app/icons/16/package-upgrade.png"));
     _ui->installButton->setText(trUtf8("Upgrade to ") + _pluginInformations->latestVersion());
   }
   else
-    _ui->installButton->setIcon(QIcon(":/tulip/gui/icons/list-add.svg"));
+    _ui->installButton->setIcon(QIcon(":/tulip/app/icons/16/list-add.png"));
 
-  _ui->removeButton->setIcon(QIcon(":/tulip/app/icons/package-purge.svg"));
+  _ui->removeButton->setIcon(QIcon(":/tulip/app/icons/16/package-purge.png"));
 }
 
 void PluginInformationsListItem::collapse() {
@@ -110,12 +110,12 @@ void PluginInformationsListItem::downloadFinished() {
     _ui->downloadProgress->hide();
 
     if(reply->error() == QNetworkReply::NoError) {
-      _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/package-installed-updated.svg"));
+      _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-installed-updated.png"));
       _ui->installButton->hide();
       _ui->removeButton->show();
     }
     else {
-      _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/package-purge.svg"));
+      _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-purge.png"));
       _ui->errorFrame->show();
       _ui->errorLabel->setText(qPrintable(reply->errorString()));
     }

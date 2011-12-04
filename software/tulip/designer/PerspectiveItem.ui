@@ -156,8 +156,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
            <string/>
           </property>
           <property name="icon">
-           <iconset>
-            <normaloff>:/tulip/app/icons/start.svg</normaloff>:/tulip/app/icons/start.svg</iconset>
+           <iconset resource="../resources/TulipAgent.qrc">
+            <normaloff>:/tulip/app/icons/16/start.png</normaloff>:/tulip/app/icons/16/start.png</iconset>
           </property>
          </widget>
         </item>
@@ -168,6 +168,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/TulipAgent.qrc"/>
+  <include location="../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections/>
 </ui>

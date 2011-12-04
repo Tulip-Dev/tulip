@@ -1,48 +1,46 @@
 <RCC>
-    <qresource prefix="/tulip/gui/icons">
-        <file>logo32x32.png</file>
-        <file>list-add.svg</file>
-<file>i_addedge.png</file>
-<file>i_addnode.png</file>
-<file>i_bends.png</file>
-<file>i_del.png</file>
-<file>i_locked.png</file>
-<file>i_magic.png</file>
-<file>i_move.png</file>
-<file>i_navigation.png</file>
-<file>i_open.png</file>
-<file>i_print.png</file>
-<file>i_redo.png</file>
-<file>i_save.png</file>
-<file>i_selection.png</file>
-<file>i_select.png</file>
-<file>i_snapshot.png</file>
-<file>i_undo.png</file>
-<file>i_unlocked.png</file>
-<file>i_zoom.png</file>
-    </qresource>
-    <qresource prefix="/tulip/gui/ui">
-        <file>arrowdown.png</file>
-        <file>arrowup.png</file>
-        <file>btn_26.png</file>
-        <file>btn_26_hover.png</file>
-        <file>btn_26_pressed.png</file>
-        <file>combobox_arrow.png</file>
-        <file>darkclosebutton.png</file>
-        <file>darkminimizebutton.png</file>
-        <file>down_arrow-black.png</file>
-        <file>down_arrow-white.png</file>
-        <file>editclear.png</file>
-        <file>lightclosebutton.png</file>
-        <file>lightminimizebutton.png</file>
-        <file>list_bullet_arrow.png</file>
-        <file>right_arrow-black.png</file>
-        <file>process-working.png</file>
-        <file>previous.png</file>
-        <file>next.png</file>
-        <file>expose.png</file>
-        <file>full_screen.png</file>
-        <file>grid_screen.png</file>
-        <file>split_screen.png</file>
+    <qresource prefix="/tulip/gui">
+        <file>icons/i_addedge.png</file>
+        <file>icons/i_addnode.png</file>
+        <file>icons/i_bends.png</file>
+        <file>icons/i_del.png</file>
+        <file>icons/i_locked.png</file>
+        <file>icons/i_magic.png</file>
+        <file>icons/i_move.png</file>
+        <file>icons/i_open.png</file>
+        <file>icons/i_print.png</file>
+        <file>icons/i_redo.png</file>
+        <file>icons/i_save.png</file>
+        <file>icons/i_select.png</file>
+        <file>icons/i_undo.png</file>
+        <file>icons/i_navigation.png</file>
+        <file>icons/i_selection.png</file>
+        <file>icons/i_snapshot.png</file>
+        <file>icons/i_unlocked.png</file>
+        <file>icons/i_zoom.png</file>
+        <file>icons/logo32x32.png</file>
+        <file>ui/arrowdown.png</file>
+        <file>ui/arrowup.png</file>
+        <file>ui/btn_26.png</file>
+        <file>ui/editclear.png</file>
+        <file>ui/expose.png</file>
+        <file>ui/full_screen.png</file>
+        <file>ui/btn_26_hover.png</file>
+        <file>ui/btn_26_pressed.png</file>
+        <file>ui/combobox_arrow.png</file>
+        <file>ui/darkclosebutton.png</file>
+        <file>ui/darkminimizebutton.png</file>
+        <file>ui/down_arrow-black.png</file>
+        <file>ui/down_arrow-white.png</file>
+        <file>ui/grid_screen.png</file>
+        <file>ui/lightclosebutton.png</file>
+        <file>ui/lightminimizebutton.png</file>
+        <file>ui/list_bullet_arrow.png</file>
+        <file>ui/next.png</file>
+        <file>ui/previous.png</file>
+        <file>ui/process-working.png</file>
+        <file>ui/right_arrow-black.png</file>
+        <file>ui/split_screen.png</file>
+        <file>icons/64/list-add.png</file>
     </qresource>
 </RCC>
