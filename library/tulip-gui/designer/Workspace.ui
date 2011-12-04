@@ -75,8 +75,8 @@ background-color: white;
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../../../plugins/perspective/GraphPerspective/resources/GraphPerspective.qrc">
-                <normaloff>:/tulip/graphperspective/icons/list-add.svg</normaloff>:/tulip/graphperspective/icons/list-add.svg</iconset>
+               <iconset resource="../resources/TulipGUIResource.qrc">
+                <normaloff>:/tulip/gui/icons/64/list-add.png</normaloff>:/tulip/gui/icons/64/list-add.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -264,7 +264,7 @@ stop:1 rgb(50, 50, 50));
          <string>Expose</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/expose.png</normaloff>:/tulip/gui/ui/expose.png</iconset>
         </property>
         <property name="shortcut">
@@ -309,7 +309,7 @@ stop:1 rgb(50, 50, 50));
          <string>Previous</string>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/previous.png</normaloff>:/tulip/gui/ui/previous.png</iconset>
         </property>
         <property name="shortcut">
@@ -344,7 +344,7 @@ stop:1 rgb(50, 50, 50));
          <string/>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/next.png</normaloff>:/tulip/gui/ui/next.png</iconset>
         </property>
         <property name="shortcut">
@@ -389,7 +389,7 @@ stop:1 rgb(50, 50, 50));
          <string/>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/full_screen.png</normaloff>:/tulip/gui/ui/full_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -427,7 +427,7 @@ stop:1 rgb(50, 50, 50));
          <string/>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/split_screen.png</normaloff>:/tulip/gui/ui/split_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -465,7 +465,7 @@ stop:1 rgb(50, 50, 50));
          <string/>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/grid_screen.png</normaloff>:/tulip/gui/ui/grid_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -496,7 +496,7 @@ stop:1 rgb(50, 50, 50));
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../plugins/perspective/GraphPerspective/resources/GraphPerspective.qrc"/>
+  <include location="../resources/TulipGUIResource.qrc"/>
  </resources>
  <connections>
   <connection>

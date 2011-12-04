@@ -219,8 +219,8 @@ QToolButton:pressed {
           <string>Analyze</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>:/tulip/graphperspective/icons/desktop.svg</normaloff>:/tulip/graphperspective/icons/desktop.svg</iconset>
+          <iconset resource="../resources/GraphPerspective.qrc">
+           <normaloff>:/tulip/graphperspective/icons/32/desktop.png</normaloff>:/tulip/graphperspective/icons/32/desktop.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -269,8 +269,8 @@ QToolButton:pressed {
           <string>Dataset</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>:/tulip/graphperspective/icons/spreadsheet.svg</normaloff>:/tulip/graphperspective/icons/spreadsheet.svg</iconset>
+          <iconset resource="../resources/GraphPerspective.qrc">
+           <normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -316,8 +316,8 @@ QToolButton:pressed {
           <string>Develop</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>:/tulip/graphperspective/icons/python.svg</normaloff>:/tulip/graphperspective/icons/python.svg</iconset>
+          <iconset resource="../resources/GraphPerspective.qrc">
+           <normaloff>:/tulip/graphperspective/icons/32/python.png</normaloff>:/tulip/graphperspective/icons/32/python.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -380,8 +380,8 @@ QToolButton:pressed {
           <string>Import</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>:/tulip/graphperspective/icons/document-import.svg</normaloff>:/tulip/graphperspective/icons/document-import.svg</iconset>
+          <iconset resource="../resources/GraphPerspective.qrc">
+           <normaloff>:/tulip/graphperspective/icons/32/document-import.png</normaloff>:/tulip/graphperspective/icons/32/document-import.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -412,8 +412,8 @@ QToolButton:pressed {
           <string>Plugins</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>:/tulip/graphperspective/icons/system-software-install.svg</normaloff>:/tulip/graphperspective/icons/system-software-install.svg</iconset>
+          <iconset resource="../resources/GraphPerspective.qrc">
+           <normaloff>:/tulip/graphperspective/icons/32/system-software-install.png</normaloff>:/tulip/graphperspective/icons/32/system-software-install.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -444,8 +444,8 @@ QToolButton:pressed {
           <string>Help</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>:/tulip/graphperspective/icons/help-about.svg</normaloff>:/tulip/graphperspective/icons/help-about.svg</iconset>
+          <iconset resource="../resources/GraphPerspective.qrc">
+           <normaloff>:/tulip/graphperspective/icons/32/help-about.png</normaloff>:/tulip/graphperspective/icons/32/help-about.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -617,8 +617,8 @@ QToolButton:pressed {
   </widget>
   <action name="actionNew">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/document-new.svg</normaloff>:/tulip/graphperspective/icons/document-new.svg</iconset>
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/document-new.png</normaloff>:/tulip/graphperspective/icons/16/document-new.png</iconset>
    </property>
    <property name="text">
     <string>&amp;New Project</string>
@@ -629,8 +629,8 @@ QToolButton:pressed {
   </action>
   <action name="actionOpen_Project">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/document-open.svg</normaloff>:/tulip/graphperspective/icons/document-open.svg</iconset>
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Open Project</string>
@@ -641,8 +641,8 @@ QToolButton:pressed {
   </action>
   <action name="actionSave_Project">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/document-save.svg</normaloff>:/tulip/graphperspective/icons/document-save.svg</iconset>
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
    </property>
    <property name="text">
     <string>Save Project</string>
@@ -653,8 +653,8 @@ QToolButton:pressed {
   </action>
   <action name="actionSave_Project_as">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/document-save-as.svg</normaloff>:/tulip/graphperspective/icons/document-save-as.svg</iconset>
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</iconset>
    </property>
    <property name="text">
     <string>Save Project as</string>
@@ -665,8 +665,8 @@ QToolButton:pressed {
   </action>
   <action name="actionImport">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/document-import.svg</normaloff>:/tulip/graphperspective/icons/document-import.svg</iconset>
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/document-import.png</normaloff>:/tulip/graphperspective/icons/16/document-import.png</iconset>
    </property>
    <property name="text">
     <string>I&amp;mport</string>
@@ -677,8 +677,8 @@ QToolButton:pressed {
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/process-stop.svg</normaloff>:/tulip/graphperspective/icons/process-stop.svg</iconset>
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
    </property>
    <property name="text">
     <string>Exit</string>
@@ -689,8 +689,8 @@ QToolButton:pressed {
   </action>
   <action name="actionUndo">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/edit-undo.svg</normaloff>:/tulip/graphperspective/icons/edit-undo.svg</iconset>
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/edit-undo.png</normaloff>:/tulip/graphperspective/icons/16/edit-undo.png</iconset>
    </property>
    <property name="text">
     <string>Undo</string>
@@ -701,8 +701,8 @@ QToolButton:pressed {
   </action>
   <action name="actionRedo">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/edit-redo.svg</normaloff>:/tulip/graphperspective/icons/edit-redo.svg</iconset>
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/edit-redo.png</normaloff>:/tulip/graphperspective/icons/16/edit-redo.png</iconset>
    </property>
    <property name="text">
     <string>Redo</string>
@@ -736,6 +736,10 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionDelete">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
+   </property>
    <property name="text">
     <string>Delete</string>
    </property>
@@ -769,8 +773,8 @@ QToolButton:pressed {
   </action>
   <action name="actionGroup_elements">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/group.svg</normaloff>:/tulip/graphperspective/icons/group.svg</iconset>
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/group.png</normaloff>:/tulip/graphperspective/icons/16/group.png</iconset>
    </property>
    <property name="text">
     <string>Group elements</string>
@@ -781,8 +785,8 @@ QToolButton:pressed {
   </action>
   <action name="actionCreate_sub_graph">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/hierarchy.png</normaloff>:/tulip/graphperspective/icons/hierarchy.png</iconset>
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
    </property>
    <property name="text">
     <string>Create sub-graph</string>
@@ -793,8 +797,8 @@ QToolButton:pressed {
   </action>
   <action name="actionPreferences">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/preferences-other.svg</normaloff>:/tulip/graphperspective/icons/preferences-other.svg</iconset>
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/preferences-other.png</normaloff>:/tulip/graphperspective/icons/16/preferences-other.png</iconset>
    </property>
    <property name="text">
     <string>Preferences...</string>
@@ -813,8 +817,8 @@ QToolButton:pressed {
   </action>
   <action name="actionAbout_us">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/help-about.svg</normaloff>:/tulip/graphperspective/icons/help-about.svg</iconset>
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/help-about.png</normaloff>:/tulip/graphperspective/icons/16/help-about.png</iconset>
    </property>
    <property name="text">
     <string>About us</string>
@@ -874,7 +878,9 @@ QToolButton:pressed {
    </slots>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources/GraphPerspective.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>showHelpButton</sender>

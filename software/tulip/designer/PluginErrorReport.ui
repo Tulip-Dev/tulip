@@ -84,8 +84,8 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>:/tulip/app/icons/emblem-downloads.svg</normaloff>:/tulip/app/icons/emblem-downloads.svg</iconset>
+        <iconset resource="../resources/TulipAgent.qrc">
+         <normaloff>:/tulip/app/icons/16/emblem-downloads.png</normaloff>:/tulip/app/icons/16/emblem-downloads.png</iconset>
        </property>
       </widget>
      </item>
@@ -110,8 +110,8 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>:/tulip/app/icons/edit-delete.svg</normaloff>:/tulip/app/icons/edit-delete.svg</iconset>
+        <iconset resource="../resources/TulipAgent.qrc">
+         <normaloff>:/tulip/app/icons/16/edit-delete.png</normaloff>:/tulip/app/icons/16/edit-delete.png</iconset>
        </property>
       </widget>
      </item>
@@ -135,6 +135,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/TulipAgent.qrc"/>
+ </resources>
  <connections/>
 </ui>

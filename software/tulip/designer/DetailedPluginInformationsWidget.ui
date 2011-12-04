@@ -191,7 +191,7 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
           </property>
           <property name="icon">
            <iconset resource="../resources/TulipAgent.qrc">
-            <normaloff>:/tulip/gui/icons/list-add.svg</normaloff>:/tulip/app/icons/list-add.svg</iconset>
+            <normaloff>:/tulip/app/icons/16/list-add.png</normaloff>:/tulip/app/icons/16/list-add.png</iconset>
           </property>
          </widget>
         </item>
@@ -202,7 +202,7 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
           </property>
           <property name="icon">
            <iconset resource="../resources/TulipAgent.qrc">
-            <normaloff>:/tulip/app/icons/package-upgrade.svg</normaloff>:/tulip/app/icons/package-upgrade.svg</iconset>
+            <normaloff>:/tulip/app/icons/16/package-upgrade.png</normaloff>:/tulip/app/icons/16/package-upgrade.png</iconset>
           </property>
          </widget>
         </item>
@@ -213,7 +213,7 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
           </property>
           <property name="icon">
            <iconset resource="../resources/TulipAgent.qrc">
-            <normaloff>:/tulip/app/icons/package-purge.svg</normaloff>:/tulip/app/icons/package-purge.svg</iconset>
+            <normaloff>:/tulip/app/icons/16/package-purge.png</normaloff>:/tulip/app/icons/16/package-purge.png</iconset>
           </property>
          </widget>
         </item>
