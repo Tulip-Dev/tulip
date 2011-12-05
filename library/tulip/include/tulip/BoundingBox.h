@@ -166,6 +166,29 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   }
 
   /**
+    * @brief Checks if the given vector is inside the current bounding box. If the bounding box is invalid the result is always false.
+    * @param coord A point in the 3D space.
+    * @return bool Wether coord is in the bounding box.
+    **/
+  bool contains(const tlp::Vec3f& coord) const{
+      if(isValid()){
+          return (coord[0]>=(*this)[0][0] &&  coord[1]>=(*this)[0][1] && coord[2]>=(*this)[0][2] ) && (coord[0]<=(*this)[1][0] &&  coord[1]<=(*this)[1][1] && coord[2]<=(*this)[1][2]);
+      }else{
+          return false;
+      }
+  }
+  /**
+    * @brief Checks if the given BoundingBox intersect the current one. If one of the BoundingBox is invalid return false.
+    * @param boundingBox The BoundingBox to compare with.
+    * @return bool Wether the BoundingBoxes intersect.
+    **/
+  bool intersect(const tlp::BoundingBox& boundingBox)const{
+      if(!boundingBox.isValid())
+          return false;
+      return contains(boundingBox[0]) || contains(boundingBox[1]);
+  }
+
+  /**
    * @brief The vector passed as parameter is modified to contain the 8 points of the bounding box.
    * The points are, in order :
    * 0: lower leftmost closest point (the bounding box's minimum)
