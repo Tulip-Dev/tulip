@@ -26,20 +26,31 @@
 
 namespace tlp {
 GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer):
-  elementAnimationFrame(new IntegerProperty(graph,"viewAnimationFrame")),
   graph(graph),
   parameters(parameters),
   deleteGlVertexArrayManager(true),
-  elementColorPropName("viewColor"), elementLabelColorPropName("viewLabelColor"), elementSizePropName("viewSize"),
-  elementLabelPositionPropName("viewLabelPosition"),elementShapePropName("viewShape"), elementRotationPropName("viewRotation"),
-  elementSelectedPropName("viewSelection"),elementFontPropName("viewFont"),elementFontSizePropName("viewFontSize"),
-  elementLabelPropName("viewLabel"), elementTexturePropName("viewTexture"),
-  elementBorderColorPropName("viewBorderColor"), elementBorderWidthPropName("viewBorderWidth"), elementLayoutPropName(""),
-  elementSrcAnchorShapePropName("viewSrcAnchorShape"),elementSrcAnchorSizePropName("viewSrcAnchorSize"),
-  elementTgtAnchorShapePropName("viewTgtAnchorShape"),elementTgtAnchorSizePropName("viewTgtAnchorSize"),
   deleteMetaNodeRendererAtDestructor(true) {
 
-  reloadAllProperties();
+  propertiesMap[VIEW_COLOR]=graph->getProperty<ColorProperty>("viewColor");
+  propertiesMap[VIEW_LABELCOLOR]=graph->getProperty<ColorProperty>("viewLabelColor");
+  propertiesMap[VIEW_SIZE]=graph->getProperty<SizeProperty>("viewSize");
+  propertiesMap[VIEW_LABEL]=graph->getProperty<StringProperty>("viewLabel");
+  propertiesMap[VIEW_LABELPOSITION]=graph->getProperty<IntegerProperty>("viewLabelPosition");
+  propertiesMap[VIEW_SHAPE]=graph->getProperty<IntegerProperty>("viewShape");
+  propertiesMap[VIEW_ROTATION]=graph->getProperty<DoubleProperty>("viewRotation");
+  propertiesMap[VIEW_SELECTED]=graph->getProperty<BooleanProperty>("viewSelection");
+  propertiesMap[VIEW_FONT]=graph->getProperty<StringProperty>("viewFont");
+  propertiesMap[VIEW_FONTSIZE]=graph->getProperty<IntegerProperty>("viewFontSize");
+  propertiesMap[VIEW_TEXTURE]=graph->getProperty<StringProperty>("viewTexture");
+  propertiesMap[VIEW_BORDERCOLOR]=graph->getProperty<ColorProperty>("viewBorderColor");
+  propertiesMap[VIEW_BORDERWIDTH]=graph->getProperty<DoubleProperty>("viewBorderWidth");
+  propertiesMap[VIEW_LAYOUT]=graph->getProperty<LayoutProperty>("viewLayout");
+  propertiesMap[VIEW_SRCANCHORSHAPE]=graph->getProperty<IntegerProperty>("viewSrcAnchorShape");
+  propertiesMap[VIEW_SRCANCHORSIZE]=graph->getProperty<SizeProperty>("viewSrcAnchorSize");
+  propertiesMap[VIEW_TGTANCHORSHAPE]=graph->getProperty<IntegerProperty>("viewTgtAnchorShape");
+  propertiesMap[VIEW_TGTANCHORSIZE]=graph->getProperty<SizeProperty>("viewTgtAnchorSize");
+  propertiesMap[VIEW_ANIMATIONFRAME]=new IntegerProperty(graph,"viewAnimationFrame");
+
   GlyphManager::getInst().initGlyphList(&this->graph, this, glyphs);
 
   EdgeExtremityGlyphManager::getInst().initGlyphList(&this->graph, this,
@@ -64,53 +75,4 @@ GlGraphInputData::~GlGraphInputData() {
   if(deleteMetaNodeRendererAtDestructor)
     delete metaNodeRenderer;
 }
-
-void GlGraphInputData::reloadLayoutProperty() {
-  if(!graph->attributeExist("viewLayout")) {
-    if(elementLayoutPropName=="") {
-      elementLayout = graph->getProperty<LayoutProperty>("viewLayout");
-    }
-    else {
-      elementLayout = graph->getProperty<LayoutProperty>(elementLayoutPropName);
-    }
-  }
-  else {
-    graph->getAttribute("viewLayout",elementLayout);
-  }
-}
-
-void GlGraphInputData::reloadAllProperties() {
-  reloadLayoutProperty();
-
-  elementRotation = graph->getProperty<DoubleProperty> (
-                      elementRotationPropName);
-  elementFont = graph->getProperty<StringProperty>(elementFontPropName);
-  elementFontSize = graph->getProperty<IntegerProperty>(elementFontSizePropName);
-  elementSelected = graph->getProperty<BooleanProperty> (
-                      elementSelectedPropName);
-  elementLabel = graph->getProperty<StringProperty> (elementLabelPropName);
-  elementLabelColor = graph->getProperty<ColorProperty> (
-                        elementLabelColorPropName);
-  elementLabelPosition = graph->getProperty<IntegerProperty> (
-                           elementLabelPositionPropName);
-  elementColor = graph->getProperty<ColorProperty> (elementColorPropName);
-  elementShape = graph->getProperty<IntegerProperty> (elementShapePropName);
-  elementSize = graph->getProperty<SizeProperty> (elementSizePropName);
-  elementTexture
-    = graph->getProperty<StringProperty> (elementTexturePropName);
-  elementBorderColor = graph->getProperty<ColorProperty> (
-                         elementBorderColorPropName);
-  elementBorderWidth = graph->getProperty<DoubleProperty> (
-                         elementBorderWidthPropName);
-
-  elementSrcAnchorShape = graph->getProperty<IntegerProperty> (
-                            elementSrcAnchorShapePropName);
-  elementSrcAnchorSize = graph->getProperty<SizeProperty> (
-                           elementSrcAnchorSizePropName);
-  elementTgtAnchorShape = graph->getProperty<IntegerProperty> (
-                            elementTgtAnchorShapePropName);
-  elementTgtAnchorSize = graph->getProperty<SizeProperty> (
-                           elementTgtAnchorSizePropName);
-}
-
 }

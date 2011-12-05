@@ -48,6 +48,28 @@ class TLP_GL_SCOPE GlGraphInputData {
 
 public:
 
+  enum PropertyName {
+    VIEW_COLOR=0,
+    VIEW_LABELCOLOR,
+    VIEW_SIZE,
+    VIEW_LABELPOSITION,
+    VIEW_SHAPE,
+    VIEW_ROTATION,
+    VIEW_SELECTED,
+    VIEW_FONT,
+    VIEW_FONTSIZE,
+    VIEW_LABEL,
+    VIEW_LAYOUT,
+    VIEW_TEXTURE,
+    VIEW_BORDERCOLOR,
+    VIEW_BORDERWIDTH,
+    VIEW_SRCANCHORSHAPE,
+    VIEW_SRCANCHORSIZE,
+    VIEW_TGTANCHORSHAPE,
+    VIEW_TGTANCHORSIZE,
+    VIEW_ANIMATIONFRAME
+  };
+
   /**
    * Create the inputData with Graph : graph and GlGraphRenderingParameters : parameters
    */
@@ -62,23 +84,13 @@ public:
     return graph;
   }
 
-  /**
-   * Reload layoutProperty of the graph
-   */
-  void reloadLayoutProperty();
 
   /**
    * Return the layout of this inputData
    */
   LayoutProperty* getLayoutProperty() {
-    reloadLayoutProperty();
-    return elementLayout;
+    return getProperty<LayoutProperty>(VIEW_LAYOUT);
   }
-
-  /**
-   * Reload viewLabel Property of the graph
-   */
-  void reloadAllProperties();
 
   /**
    * Set metaNode renderer
@@ -126,271 +138,246 @@ public:
     deleteGlVertexArrayManager=del;
   }
 
+  template<typename T>
+  T* getProperty(PropertyName propertyName) const {
+    T* property=dynamic_cast<T*>(propertiesMap.find(propertyName)->second);
+    assert(property);
+    return property;
+  }
+
+  void setProperty(PropertyName propertyName,PropertyInterface *property){
+    _properties.erase(propertiesMap[propertyName]);
+    propertiesMap[propertyName]=property;
+    _properties.insert(property);
+  }
+
   /**
    * Return a pointer on the property used to elementColor
    */
   ColorProperty * getElementColor() const {
-    return elementColor;
+    return getProperty<ColorProperty>(VIEW_COLOR);
   }
   /**
    * Set the pointer on the property used to elementColor
    */
   void setElementColor(ColorProperty *property) {
-    _properties.erase(elementColor);
-    _properties.insert(property);
-    elementColor=property;
+    setProperty(VIEW_COLOR,property);
   }
   /**
    * Return a pointer on the property used to elementLabelColor
    */
   ColorProperty *getElementLabelColor() const {
-    return elementLabelColor;
+    return getProperty<ColorProperty>(VIEW_LABELCOLOR);
   }
   /**
    * Set the pointer on the property used to elementLabelColor
    */
   void setElementLabelColor(ColorProperty *property) {
-    _properties.erase(elementLabelColor);
-    _properties.insert(property);
-    elementLabelColor=property;
+    setProperty(VIEW_LABELCOLOR,property);
   }
   /**
    * Return a pointer on the property used to elementSize
    */
   SizeProperty *getElementSize() const {
-    return elementSize;
+    return getProperty<SizeProperty>(VIEW_SIZE);
   }
   /**
    * Set the pointer on the property used to elementSize
    */
   void setElementSize(SizeProperty *property) {
-    _properties.erase(elementSize);
-    _properties.insert(property);
-    elementSize=property;
+    setProperty(VIEW_SIZE,property);
   }
   /**
    * Return a pointer on the property used to elementLabelPosition
    */
   IntegerProperty *getElementLabelPosition() const {
-    return elementLabelPosition;
+    return getProperty<IntegerProperty>(VIEW_LABELPOSITION);
   }
   /**
    * Set the pointer on the property used to elementLabelPosition
    */
   void setElementLabelPosition(IntegerProperty *property) {
-    _properties.erase(elementLabelPosition);
-    _properties.insert(property);
-    elementLabelPosition=property;
+    setProperty(VIEW_LABELPOSITION,property);
   }
   /**
    * Return a pointer on the property used to elementShape
    */
   IntegerProperty *getElementShape() const {
-    return elementShape;
+    return getProperty<IntegerProperty>(VIEW_SHAPE);
   }
   /**
    * Set the pointer on the property used to elementShape
    */
   void setElementShape(IntegerProperty *property) {
-    _properties.erase(elementShape);
-    _properties.insert(property);
-    elementShape=property;
+    setProperty(VIEW_SHAPE,property);
   }
   /**
    * Return a pointer on the property used to elementRotation
    */
   DoubleProperty *getElementRotation() const {
-    return elementRotation;
+    return getProperty<DoubleProperty>(VIEW_ROTATION);
   }
   /**
    * Set the pointer on the property used to elementRotation
    */
   void setElementRotation(DoubleProperty *property) {
-    _properties.erase(elementRotation);
-    _properties.insert(property);
-    elementRotation=property;
+    setProperty(VIEW_ROTATION,property);
   }
   /**
    * Return a pointer on the property used to elementSelected
    */
   BooleanProperty *getElementSelected() const {
-    return elementSelected;
+    return getProperty<BooleanProperty>(VIEW_SELECTED);
   }
   /**
    * Set the pointer on the property used to elementSelected
    */
   void setElementSelected(BooleanProperty *property) {
-    _properties.erase(elementSelected);
-    _properties.insert(property);
-    elementSelected=property;
+    setProperty(VIEW_SELECTED,property);
   }
   /**
    * Return a pointer on the property used to elementFont
    */
-  StringProperty   *getElementFont() const {
-    return elementFont;
+  StringProperty *getElementFont() const {
+    return getProperty<StringProperty>(VIEW_FONT);
   }
   /**
    * Set the pointer on the property used to elementFont
    */
   void setElementFont(StringProperty *property) {
-    _properties.erase(elementFont);
-    _properties.insert(property);
-    elementFont=property;
+    setProperty(VIEW_FONT,property);
   }
   /**
    * Return a pointer on the property used to elementFontSize
    */
   IntegerProperty  *getElementFontSize() const {
-    return elementFontSize;
+    return getProperty<IntegerProperty>(VIEW_FONTSIZE);
   }
   /**
    * Set the pointer on the property used to elementFontSize
    */
   void setElementFontSize(IntegerProperty *property) {
-    _properties.erase(elementFontSize);
-    _properties.insert(property);
-    elementFontSize=property;
+    setProperty(VIEW_FONTSIZE,property);
   }
   /**
    * Return a pointer on the property used to elementLabel
    */
   StringProperty *getElementLabel() const {
-    return elementLabel;
+    return getProperty<StringProperty>(VIEW_LABEL);
   }
   /**
    * Set the pointer on the property used to elementLabel
    */
   void setElementLabel(StringProperty *property) {
-    _properties.erase(elementLabel);
-    _properties.insert(property);
-    elementLabel=property;
+    setProperty(VIEW_LABEL,property);
   }
   /**
    * Return a pointer on the property used to elementLayout
    */
   LayoutProperty *getElementLayout() const {
-    return elementLayout;
+    return getProperty<LayoutProperty>(VIEW_LAYOUT);
   }
   /**
    * Set the pointer on the property used to elementLayout
    */
   void setElementLayout(LayoutProperty *property) {
-    _properties.erase(elementLayout);
-    _properties.insert(property);
-    elementLayout=property;
+    setProperty(VIEW_LAYOUT,property);
   }
   /**
    * Return a pointer on the property used to elementTexture
    */
   StringProperty *getElementTexture() const {
-    return elementTexture;
+    return getProperty<StringProperty>(VIEW_TEXTURE);
   }
   /**
    * Set the pointer on the property used to elementTexture
    */
   void setElementTexture(StringProperty *property) {
-    _properties.erase(elementTexture);
-    _properties.insert(property);
-    elementTexture=property;
+    setProperty(VIEW_TEXTURE,property);
   }
   /**
    * Return a pointer on the property used to elementBorderColor
    */
   ColorProperty *getElementBorderColor() const {
-    return elementBorderColor;
+    return getProperty<ColorProperty>(VIEW_BORDERCOLOR);
   }
   /**
    * Set the pointer on the property used to elementBorderColor
    */
   void setElementBorderColor(ColorProperty *property) {
-    _properties.erase(elementBorderColor);
-    _properties.insert(property);
-    elementBorderColor=property;
+    setProperty(VIEW_BORDERCOLOR,property);
   }
   /**
    * Return a pointer on the property used to elementBorderWidth
    */
   DoubleProperty *getElementBorderWidth() const {
-    return elementBorderWidth;
+    return getProperty<DoubleProperty>(VIEW_BORDERWIDTH);
   }
   /**
    * Set the pointer on the property used to elementBorderWidth
    */
   void setElementBorderWidth(DoubleProperty *property) {
-    _properties.erase(elementBorderWidth);
-    _properties.insert(property);
-    elementBorderWidth=property;
+    setProperty(VIEW_BORDERWIDTH,property);
   }
   /**
    * Return a pointer on the property used to elementSrcAnchorShape
    */
   IntegerProperty *getElementSrcAnchorShape() const {
-    return elementSrcAnchorShape;
+    return getProperty<IntegerProperty>(VIEW_SRCANCHORSHAPE);
   }
   /**
    * Set the pointer on the property used to elementSrcAnchorShape
    */
   void setElementSrcAnchorShape(IntegerProperty *property) {
-    _properties.erase(elementSrcAnchorShape);
-    _properties.insert(property);
-    elementSrcAnchorShape=property;
+    setProperty(VIEW_SRCANCHORSHAPE,property);
   }
   /**
    * Return a pointer on the property used to elementSrcAnchorSize
    */
   SizeProperty *getElementSrcAnchorSize() const {
-    return elementSrcAnchorSize;
+    return getProperty<SizeProperty>(VIEW_SRCANCHORSIZE);
   }
   /**
    * Set the pointer on the property used to elementSrcAnchorSize
    */
   void setElementSrcAnchorSize(SizeProperty *property) {
-    _properties.erase(elementSrcAnchorSize);
-    _properties.insert(property);
-    elementSrcAnchorSize=property;
+    setProperty(VIEW_SRCANCHORSIZE,property);
   }
   /**
    * Return a pointer on the property used to elementTgtAnchorShape
    */
   IntegerProperty *getElementTgtAnchorShape() const {
-    return elementTgtAnchorShape;
+    return getProperty<IntegerProperty>(VIEW_TGTANCHORSHAPE);
   }
   /**
    * Set the pointer on the property used to elementTgtAnchorShape
    */
   void setElementTgtAnchorShape(IntegerProperty *property) {
-    _properties.erase(elementTgtAnchorShape);
-    _properties.insert(property);
-    elementTgtAnchorShape=property;
+    setProperty(VIEW_TGTANCHORSHAPE,property);
   }
   /**
    * Return a pointer on the property used to elementTgtAnchorSize
    */
   SizeProperty *getElementTgtAnchorSize() const {
-    return elementTgtAnchorSize;
+    return getProperty<SizeProperty>(VIEW_TGTANCHORSIZE);
   }
   /**
    * Set the property name for elementSourceAnchorSize
    */
   void setElementTgtAnchorSize(SizeProperty *property) {
-    _properties.erase(elementTgtAnchorSize);
-    _properties.insert(property);
-    elementTgtAnchorSize=property;
+    setProperty(VIEW_TGTANCHORSIZE,property);
   }
   /**
    * Return a pointer on the property used to elementAnimationFrame
    */
   IntegerProperty *getElementAnimationFrame() const {
-    return elementAnimationFrame;
+    return getProperty<IntegerProperty>(VIEW_ANIMATIONFRAME);
   }
   /**
    * Set the pointer on the property used to elementAnimationFrame
    */
   void setElementAnimationFrame(IntegerProperty *property) {
-    _properties.erase(elementAnimationFrame);
-    _properties.insert(property);
-    elementAnimationFrame=property;
+    setProperty(VIEW_ANIMATIONFRAME,property);
   }
 
   std::set<tlp::PropertyInterface*> properties() const {
@@ -408,48 +395,11 @@ public :
 
 protected:
 
-  std::set<tlp::PropertyInterface*> _properties;
+  std::set<PropertyInterface*> _properties;
 
   bool deleteGlVertexArrayManager;
 
-  ColorProperty *elementColor;
-  ColorProperty *elementLabelColor;
-  SizeProperty *elementSize;
-  IntegerProperty *elementLabelPosition;
-  IntegerProperty *elementShape;
-  DoubleProperty *elementRotation;
-  BooleanProperty *elementSelected;
-  StringProperty   *elementFont;
-  IntegerProperty  *elementFontSize;
-  StringProperty *elementLabel;
-  LayoutProperty *elementLayout;
-  StringProperty *elementTexture;
-  ColorProperty *elementBorderColor;
-  DoubleProperty *elementBorderWidth;
-  IntegerProperty *elementSrcAnchorShape;
-  SizeProperty *elementSrcAnchorSize;
-  IntegerProperty *elementTgtAnchorShape;
-  SizeProperty *elementTgtAnchorSize;
-  IntegerProperty *elementAnimationFrame;
-
-  std::string elementColorPropName;
-  std::string elementLabelColorPropName;
-  std::string elementSizePropName;
-  std::string elementLabelPositionPropName;
-  std::string elementShapePropName;
-  std::string elementRotationPropName;
-  std::string elementSelectedPropName;
-  std::string elementFontPropName;
-  std::string elementFontSizePropName;
-  std::string elementLabelPropName;
-  std::string elementTexturePropName;
-  std::string elementBorderColorPropName;
-  std::string elementBorderWidthPropName;
-  std::string elementLayoutPropName;
-  std::string elementSrcAnchorShapePropName;
-  std::string elementSrcAnchorSizePropName;
-  std::string elementTgtAnchorShapePropName;
-  std::string elementTgtAnchorSizePropName;
+  std::map<PropertyName,PropertyInterface*> propertiesMap;
 
   bool deleteMetaNodeRendererAtDestructor;
   GlMetaNodeRenderer *metaNodeRenderer;
