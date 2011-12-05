@@ -48,7 +48,7 @@ public:
     if (_model && _model->size() == 0) {
       QRectF rect = sourceBoundingRect();
       int iconWidth = 48;
-      painter->drawPixmap((rect.width() - iconWidth)/2, (rect.height() - iconWidth)/2, iconWidth,iconWidth,QPixmap(":/tulip/graphperspective/icons/document-import.svg"));
+      painter->drawPixmap((rect.width() - iconWidth)/2, (rect.height() - iconWidth)/2, iconWidth,iconWidth,QPixmap(":/tulip/graphperspective/icons/48/document-import.png"));
       int textY = (rect.height() + iconWidth)/2;
       painter->setPen(Qt::black);
       QFont f;

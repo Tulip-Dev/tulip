@@ -44,7 +44,7 @@ border: 1px solid #C9C9C9;
   </property>
   <widget class="QWizardPage" name="choosePanelPage">
    <property name="title">
-    <string>&lt;img src=&quot;:/tulip/graphperspective/icons/view-open.svg&quot; width=32 height=32/&gt; Panel creation Wizard</string>
+    <string>&lt;img src=&quot;:/tulip/graphperspective/icons/32/view-open.png&quot; width=32 height=32/&gt; Panel creation Wizard</string>
    </property>
    <attribute name="pageId">
     <string notr="true">0</string>
