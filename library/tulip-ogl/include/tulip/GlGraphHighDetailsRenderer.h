@@ -36,13 +36,20 @@ namespace tlp {
 
 class Graph;
 
+
+/** \brief Class to display graph with old rendering engine
+ *
+ * This class display graph with :
+ *  - Nodes and edges shapes
+ *  - LOD system
+ * With this renderer you can perform selection
+ *
+ * See GlGraphRenderer documentation for functions documentations
+ */
 class TLP_GL_SCOPE GlGraphHighDetailsRenderer : public GlGraphRenderer {
 
 public:
 
-  /**
-   * Build a GlGraphComposite with the graph data
-   */
   GlGraphHighDetailsRenderer(GlGraphInputData &inputData,GlGraphRenderingParameters &parameters);
 
   ~GlGraphHighDetailsRenderer();
