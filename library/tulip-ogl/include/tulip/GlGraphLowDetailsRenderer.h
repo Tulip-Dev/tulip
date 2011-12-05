@@ -36,13 +36,20 @@ namespace tlp {
 
 class Graph;
 
+/** \brief Class to display graph with very simple and very fast renderer
+ *
+ * Very high performance renderer
+ * This class display graph with :
+ *  - Nodes : quads
+ *  - Edges : lines
+ * Warning : this renderer doesn't work for selection
+ *
+ * See GlGraphRenderer documentation for functions documentations
+ */
 class TLP_GL_SCOPE GlGraphLowDetailsRenderer : public GlGraphRenderer, public Observable {
 
 public:
 
-  /**
-   * Build a GlGraphComposite with the graph data
-   */
   GlGraphLowDetailsRenderer(GlGraphInputData &inputData,GlGraphRenderingParameters &parameters);
 
   ~GlGraphLowDetailsRenderer();
