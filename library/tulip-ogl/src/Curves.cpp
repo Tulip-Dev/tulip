@@ -329,6 +329,8 @@ void buildCurvePoints (const vector<Coord> &vertices,
   int inversion=1;
   bool twoPointsCurve=(vertices.size()==2);
 
+  result.reserve(vertices.size()*2);
+
   if (startN != vertices[0]) {
     inversion = computeExtrusion(startN, vertices[0], vertices[1], sizes[0], inversion, result,false,twoPointsCurve);
   }
@@ -479,18 +481,22 @@ void polyQuad(const vector<Coord> &vertices,
 
   float length = 0;
   vector<Coord> centerLine;
-  centerLine.reserve(quadVertices.size()/2);
+
+  centerLine.resize(quadVertices.size()/2);
+  bottomOutlineIndices.resize(quadVertices.size()/2);
+  topOutlineIndices.resize(quadVertices.size()/2);
+  texCoords.resize(quadVertices.size()*2);
 
   for (size_t i = 0 ; i < quadVertices.size() / 2 ; ++i) {
-    centerLine.push_back((quadVertices[2*i]+quadVertices[2*i+1])/2);
-    bottomOutlineIndices.push_back(2*i);
-    topOutlineIndices.push_back(2*i+1);
+    centerLine[i]=(quadVertices[2*i]+quadVertices[2*i+1])/2;
+    bottomOutlineIndices[i]=2*i;
+    topOutlineIndices[i]=2*i+1;
 
     if (i == 0) {
-      texCoords.push_back(0);
-      texCoords.push_back(0);
-      texCoords.push_back(0);
-      texCoords.push_back(1);
+      texCoords[0]=0;
+      texCoords[1]=0;
+      texCoords[2]=0;
+      texCoords[3]=1;
     }
     else {
       Coord p1_0 = quadVertices[2*(i-1)];
@@ -498,10 +504,10 @@ void polyQuad(const vector<Coord> &vertices,
       Coord p2_0 = quadVertices[2*(i-1)+1];
       Coord p2_1 = quadVertices[2*i+1];
       length += ((p1_1+p2_1)/2.-(p1_0+p2_0)/2.).norm()/(p1_0-p2_0).norm();
-      texCoords.push_back(length);
-      texCoords.push_back(0);
-      texCoords.push_back(length);
-      texCoords.push_back(1);
+      texCoords[i*4]=length;
+      texCoords[i*4+1]=0;
+      texCoords[i*4+2]=length;
+      texCoords[i*4+3]=1;
     }
   }
 
@@ -509,11 +515,11 @@ void polyQuad(const vector<Coord> &vertices,
   getColors(centerLine, c1, c2,colors);
 
   vector<Color> quadColors;
-  quadColors.reserve(quadVertices.size());
+  quadColors.resize(quadVertices.size());
 
   for (size_t i = 0 ; i < colors.size() ; ++i) {
-    quadColors.push_back(colors[i]);
-    quadColors.push_back(colors[i]);
+    quadColors[i*2]=colors[i];
+    quadColors[i*2+1]=colors[i];
   }
 
   if(textureName!="") {
