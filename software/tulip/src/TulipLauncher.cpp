@@ -48,9 +48,8 @@ int main( int argc, char **argv ) {
   QString program = appDir.absoluteFilePath("tulip_app");
 #endif
   QStringList arguments;
-
-  for(int i = 0 ; i < argc ; ++i) {
-    arguments << argv[i];
+  for(int i = 1 ; i < argc ; ++i){
+  arguments << argv[i];
   }
 
   proc.setReadChannelMode(QProcess::ForwardedChannels);
