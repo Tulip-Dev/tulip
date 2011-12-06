@@ -30,6 +30,15 @@
 
 namespace tlp {
 
+/** \brief Structure to store selected entities
+ *
+ * After a selection, objects of SelectedEntity is returned
+ * To use this object the first thing to do is to call getEntity type to know the type of Entity
+ * After that you can :
+ *   - Get the GlSimpleEnity pointer (getSimpleEntity())
+ *   - Get the id of node/edge and the graph associated (getComplexEntityId() and getComplexEntityGraph())
+ *
+ */
 struct SelectedEntity {
 
   enum SelectedEntityType {
