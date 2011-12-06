@@ -643,7 +643,7 @@ void updatePlateform(char* tulipPath) {
 #else
     int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.sh");
 #endif
-    exit(0);
+    exit(result);
   }
 }
 

@@ -68,7 +68,7 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
     view->getGlMainWidget()->getScene()->setCalculator(new GlCPULODCalculator());
     metaGraphToViewMap[metaGraph]=view;
 
-    metaGraph->addGraphObserver(this);
+    metaGraph->addListener(this);
   }
 
   GlScene *scene=view->getGlMainWidget()->getScene();

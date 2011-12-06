@@ -204,7 +204,7 @@ void StringCollectionEditorCreator::setEditorData(QWidget* widget, const QVarian
   StringCollection col = var.value<StringCollection>();
   QComboBox* combo = static_cast<QComboBox*>(widget);
 
-  for(int i=0; i<col.size(); ++i)
+  for(unsigned int i=0; i<col.size(); ++i)
     combo->addItem(col[i].c_str());
 
   combo->setCurrentIndex(col.getCurrent());
