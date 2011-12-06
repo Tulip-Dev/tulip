@@ -50,13 +50,9 @@ void IdManagerTest::testFragmentation() {
 }
 //==========================================================
 void IdManagerTest::testGetFree() {
-  unsigned int maxId = 0;
-
   for (unsigned int i = 0; i <1000; ++i) {
     CPPUNIT_ASSERT_EQUAL(i, idManager->get());
   }
-
-  maxId = 999;
 
   for (unsigned int i = 0; i <500; ++i) {
     idManager->free(i*2);
