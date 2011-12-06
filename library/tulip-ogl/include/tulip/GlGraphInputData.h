@@ -145,7 +145,7 @@ public:
     return property;
   }
 
-  void setProperty(PropertyName propertyName,PropertyInterface *property){
+  void setProperty(PropertyName propertyName,PropertyInterface *property) {
     _properties.erase(propertiesMap[propertyName]);
     propertiesMap[propertyName]=property;
     _properties.insert(property);
