@@ -32,4 +32,4 @@ public:
     return true;
   }
 };
-BOOLEANPLUGIN(Test2,"Test2","Jezequel","03/11/2004","0","1.0");
+BOOLEANPLUGIN(Test2,"Test2","Jezequel","03/11/2004","0","1.0")
