@@ -117,7 +117,7 @@ public:
     _writer.writeMapOpen();
     //saving properties
     PropertyInterface* property;
-    forEach(property, graph->getObjectProperties()) {
+    forEach(property, graph->getLocalObjectProperties()) {
       _writer.writeString(property->getName());
       _writer.writeMapOpen();
 
