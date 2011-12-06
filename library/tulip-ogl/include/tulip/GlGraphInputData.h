@@ -48,26 +48,29 @@ class TLP_GL_SCOPE GlGraphInputData {
 
 public:
 
+  /**
+   * GlGraphInputData available properties
+   */
   enum PropertyName {
-    VIEW_COLOR=0,
-    VIEW_LABELCOLOR,
-    VIEW_SIZE,
-    VIEW_LABELPOSITION,
-    VIEW_SHAPE,
-    VIEW_ROTATION,
-    VIEW_SELECTED,
-    VIEW_FONT,
-    VIEW_FONTSIZE,
-    VIEW_LABEL,
-    VIEW_LAYOUT,
-    VIEW_TEXTURE,
-    VIEW_BORDERCOLOR,
-    VIEW_BORDERWIDTH,
-    VIEW_SRCANCHORSHAPE,
-    VIEW_SRCANCHORSIZE,
-    VIEW_TGTANCHORSHAPE,
-    VIEW_TGTANCHORSIZE,
-    VIEW_ANIMATIONFRAME
+    VIEW_COLOR=0, /**< color of nodes/edges */
+    VIEW_LABELCOLOR, /**< color of lables */
+    VIEW_SIZE, /**< size of nodes/edges */
+    VIEW_LABELPOSITION, /**< position of labels */
+    VIEW_SHAPE, /**< shape of nodes/edges */
+    VIEW_ROTATION, /**< rotation apply on nodes */
+    VIEW_SELECTED, /**< nodes/edges selected */
+    VIEW_FONT, /**< font name of labels */
+    VIEW_FONTSIZE, /**< font size of labels */
+    VIEW_LABEL, /**< text of labels */
+    VIEW_LAYOUT, /**< position of nodes */
+    VIEW_TEXTURE, /**< texture of nodes/edges */
+    VIEW_BORDERCOLOR, /**< border color of nodes/edges */
+    VIEW_BORDERWIDTH, /**< border width of nodes/edges */
+    VIEW_SRCANCHORSHAPE, /**< shape of source arrow edge extremity */
+    VIEW_SRCANCHORSIZE, /**< size of source arrow edge extremity */
+    VIEW_TGTANCHORSHAPE, /**< shape of target arrow edge extremity */
+    VIEW_TGTANCHORSIZE, /**< size of target arrow edge extremity */
+    VIEW_ANIMATIONFRAME /**< animation frame */
   };
 
   /**
@@ -82,14 +85,6 @@ public:
    */
   Graph* getGraph() const {
     return graph;
-  }
-
-
-  /**
-   * Return the layout of this inputData
-   */
-  LayoutProperty* getLayoutProperty() {
-    return getProperty<LayoutProperty>(VIEW_LAYOUT);
   }
 
   /**
@@ -138,6 +133,10 @@ public:
     deleteGlVertexArrayManager=del;
   }
 
+  /**
+   * Function to get the pointer for propertyName
+   * See PropertyName enum for more details on available properties
+   */
   template<typename T>
   T* getProperty(PropertyName propertyName) const {
     T* property=dynamic_cast<T*>(propertiesMap.find(propertyName)->second);
@@ -145,6 +144,10 @@ public:
     return property;
   }
 
+  /**
+   * Function to set the pointer for propertyName
+   * See PropertyName enum for more details on available properties
+   */
   void setProperty(PropertyName propertyName,PropertyInterface *property) {
     _properties.erase(propertiesMap[propertyName]);
     propertiesMap[propertyName]=property;

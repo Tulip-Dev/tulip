@@ -459,7 +459,7 @@ void MouseSelectionEditor::stopEdition() {
 void MouseSelectionEditor::initProxies(GlMainWidget *glMainWidget) {
   GlGraphInputData *inputData=glMainWidget->getScene()->getGlGraphComposite()->getInputData();
   _graph     = inputData->getGraph();
-  _layout    = inputData->getLayoutProperty();
+  _layout    = inputData->getElementLayout();
   _selection = inputData->getElementSelected();
   _rotation  = inputData->getElementRotation();
   _sizes     = inputData->getElementSize();

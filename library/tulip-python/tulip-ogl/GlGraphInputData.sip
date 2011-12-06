@@ -34,8 +34,6 @@ public:
 
 	tlp::Graph* getGraph();
 
-	tlp::LayoutProperty* getLayoutProperty();
-
   tlp::ColorProperty * getElementColor() const;
   tlp::ColorProperty *getElementLabelColor() const ;
   tlp::SizeProperty *getElementSize() const;
