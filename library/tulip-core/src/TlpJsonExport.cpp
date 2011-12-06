@@ -14,6 +14,12 @@
 using namespace std;
 using namespace tlp;
 
+/**
+ * @brief Helper class to iterate over the new IDs of nodes and edges from the old IDs.
+ *
+ * This class takes an iterator over the nodes or edges of a graph, and the MutableContainer used to map from old ID to new ID.
+ * It iterates over the nodes/edges and returns the new IDs.
+ **/
 template<typename TYPE>
 class NewValueIterator : public tlp::Iterator<uint> {
 public:
@@ -37,43 +43,57 @@ private:
   const MutableContainer<uint>* _newValues;
 };
 
+/**
+ * @brief Exports a Tulip Graph to a JSON format.
+ *
+ * In order to maintain full capabilities of exporting to older format versions, the export of the data is decomposed in two parts:
+ * * The metadata
+ * * The Graph Hierarchy
+ *
+ * The metadata is exported by saveMetaData() and the graph hierarchy saved (recursively) by saveGraph().
+ *
+ * These functions are suffixed by the format version they export to (e.g. saveGraph_V4() as of version 4.0 of the format).
+ * Under no circumstances should these functions be modified for anything besides a simple bugfix.
+ *
+ * Any feature addition should be done by writing a new version of saveMetaData and saveGraph, and switching on the version number in the main function.
+ * 
+ **/
 class TlpJsonExport : public ExportModule {
 public:
+  /**
+   * @brief Mandatory constructor to initialize the AlgorithmContext.
+   *
+   * @param context The context this export algorithm will be initialized with.
+   **/
   TlpJsonExport(AlgorithmContext context) : ExportModule(context) {
   }
 
   virtual bool exportGraph(ostream& fileOut, Graph* graph) {
-
-    std::string comment;
-    dataSet->get<string>("comment", comment);
-
-    _writer.writeMapOpen();
-    
-    _writer.writeString("version");
-    _writer.writeString("4.0");
-
-    _writer.writeString("date");
-    _writer.writeString(QDate::currentDate().toString(Qt::ISODate).toStdString());
-
-    _writer.writeString("comment");
-    _writer.writeString(comment);
-
-    _writer.writeString(GraphToken);
-    _writer.writeMapOpen();
-    
+    //initialization of the maps from old ID to new ID here, before entering saveGraph (as it is recursive).
     node n;
-    edge e;
     int i = 0;
     forEach(n, graph->getNodes()) {
       _newNodeId.set(n.id, i++);
     }
+    
+    edge e;
     i = 0;
     forEach(e, graph->getEdges()) {
       _newEdgeId.set(e.id, i++);
     }
+    
+    _writer.writeMapOpen(); //top-level map
+    
+    _writer.writeString("version");
+    _writer.writeString("4.0");
 
-    saveGraph(graph->getRoot());
-    _writer.writeMapClose(); // graph map
+    saveMetaData_V4();
+    
+    _writer.writeString(GraphToken);
+    _writer.writeMapOpen(); //graph hierarchy map
+    saveGraph_V4(graph->getRoot());
+    _writer.writeMapClose(); // graph hierarchy map
+    
     _writer.writeMapClose(); // top-level map
 
     fileOut << _writer.generatedString();
@@ -81,22 +101,42 @@ public:
     return true;
   }
 
-  void saveGraph(Graph* graph) {
+  /**
+   * @brief Saves the metadata of the graph, such as date and comment.
+   * This version does not save anything else.
+   *
+   * @return void
+   **/
+  void saveMetaData_V4() {
+    _writer.writeString("date");
+    _writer.writeString(QDate::currentDate().toString(Qt::ISODate).toStdString());
+
+    std::string comment;
+    dataSet->get<string>("comment", comment);
+    _writer.writeString("comment");
+    _writer.writeString(comment);
+  }
+
+  /**
+   * @brief Saves the graph recursively.
+   *
+   * @param graph The graph to save.
+   * @return void
+   **/
+  void saveGraph_V4(Graph* graph) {
     node n;
     edge e;
 
     _writer.writeString(GraphIDToken);
     _writer.writeInteger(graph->getId());
 
+    //we need to save all nodes and edges on the root graph
     if(graph == graph->getRoot()) {
+      //saving nodes only requires knowing how many of them there are
       _writer.writeString(NodesNumberToken);
       _writer.writeInteger(graph->numberOfNodes());
-    }
-    else {
-      writeInterval(NodesIDsToken, new NewValueIterator<tlp::node>(graph->getNodes(), _newNodeId));
-    }
 
-    if(graph == graph->getRoot()) {
+      //saving edges requires writing source and target for every edge
       _writer.writeString(EdgesToken);
       _writer.writeArrayOpen();
       forEach(e, graph->getEdges()) {
@@ -111,6 +151,8 @@ public:
       _writer.writeArrayClose();
     }
     else {
+      //only saviong relevant nodes and edges
+      writeInterval(NodesIDsToken, new NewValueIterator<tlp::node>(graph->getNodes(), _newNodeId));
       writeInterval(EdgesIDsToken, new NewValueIterator<tlp::edge>(graph->getEdges(), _newEdgeId));
     }
 
@@ -131,6 +173,7 @@ public:
       _writer.writeString(EdgeDefaultToken);
       _writer.writeString(property->getEdgeDefaultStringValue());
 
+      //TODO instead of this hack, add PropertyInterface::hasNonDefaultValuatedNodes and PropertyInterface::hasNonDefaultValuatedEdges
       Iterator<node>* nodeIt = property->getNonDefaultValuatedNodes();
       Iterator<edge>* edgeIt = property->getNonDefaultValuatedEdges();
       bool hasNonDefaultValuatedNodes = nodeIt->hasNext();
@@ -189,11 +232,20 @@ public:
     _writer.writeMapOpen();
     Graph* sub;
     forEach(sub, graph->getSubGraphs()) {
-      saveGraph(sub);
+      saveGraph_V4(sub);
     }
     _writer.writeMapClose();
   }
 
+  /**
+   * @brief Writes a set of identifiers as contiguous intervals (defined by arrays containing lower and higher bounds).
+   * e.g. the set {0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 15, 17} will be saved as the array:
+   * [ [0, 7], [9, 11], 15, 17]
+   *
+   * @param intervalName The name of the interval.
+   * @param iterator An iterator over the values to save.
+   * @return void
+   **/
   void writeInterval(const std::string& intervalName, Iterator<uint>* iterator) {
     _writer.writeString(intervalName);
     _writer.writeArrayOpen();
