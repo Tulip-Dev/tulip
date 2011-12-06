@@ -682,6 +682,9 @@ PropertyInterface *Graph::getProperty(const std::string& propertyName, const std
   else if (propertyType.compare(SizeVectorProperty::propertyTypename)==0) {
     return getProperty<SizeVectorProperty> (propertyName);
   }
+  else if(propertyType.compare(GraphProperty::propertyTypename)==0) {
+    return getProperty<GraphProperty> (propertyName);
+  }
   else {
     return NULL;
   }
