@@ -88,7 +88,7 @@ public:
     beforeDelLocalPropertyCalledGraphs.push_back(g);
   }
 
-  void afterDelInheritedProperty(Graph *g, const std::string &pName) {
+  void afterDelInheritedProperty(Graph *g, const std::string&) {
     afterDelInheritedPropertyCalledGraphs.push_back(g);
   }
 
@@ -655,9 +655,9 @@ void ObservableGraphTest::testSubgraph() {
 }
 //==========================================================
 void ObservableGraphTest::testDeleteSubgraph() {
-  Graph *g1, *g2, *g3, *g4;
+  Graph *g2, *g3, *g4;
 
-  g1 = graph->addSubGraph();
+  graph->addSubGraph();
   g2 = graph->addSubGraph();
   g2->addListener(gObserver);
   g2->addObserver(observer);
@@ -731,7 +731,7 @@ void ObservableGraphTest::testAddDelProperties() {
   CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getLocalPropertyName());
   CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getInheritedPropertyName());
 
-  BooleanProperty* bp = graph->getProperty<BooleanProperty>("test");
+  graph->getProperty<BooleanProperty>("test");
   CPPUNIT_ASSERT_EQUAL(graph, gObserver->getObservedGraph());
   CPPUNIT_ASSERT_EQUAL(string("test"), gObserver->getLocalPropertyName());
   CPPUNIT_ASSERT(gObserver->sGraphs.empty());
@@ -752,7 +752,7 @@ void ObservableGraphTest::testAddDelProperties() {
   g1->addListener(gObserver);
   gObserver->reset();
 
-  bp = graph->getProperty<BooleanProperty>("test");
+  graph->getProperty<BooleanProperty>("test");
   CPPUNIT_ASSERT_EQUAL(graph, gObserver->getObservedGraph());
   CPPUNIT_ASSERT_EQUAL(string("test"), gObserver->getLocalPropertyName());
   CPPUNIT_ASSERT_EQUAL(g1, gObserver->getObservedSubgraph());
@@ -778,7 +778,7 @@ void ObservableGraphTest::testAddDelProperties() {
   CPPUNIT_ASSERT(gObserver->sGraphs.empty());
   CPPUNIT_ASSERT_EQUAL(string(""), gObserver->getInheritedPropertyName());
 
-  bp = g1->getProperty<BooleanProperty>("test1");
+  g1->getProperty<BooleanProperty>("test1");
   CPPUNIT_ASSERT_EQUAL(g1, gObserver->getObservedGraph());
   CPPUNIT_ASSERT_EQUAL(string("test1"), gObserver->getLocalPropertyName());
   CPPUNIT_ASSERT_EQUAL(g2, gObserver->getObservedSubgraph());
