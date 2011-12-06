@@ -103,12 +103,7 @@ Graph * tlp::newSubGraph(Graph *graph, std::string name) {
 }
 //=========================================================
 Graph * tlp::newCloneSubGraph(Graph *graph, std::string name) {
-  BooleanProperty sel1(graph);
-  sel1.setAllNodeValue(true);
-  sel1.setAllEdgeValue(true);
-  Graph *newGraph = graph->addSubGraph(&sel1);
-  newGraph->setAttribute("name", name);
-  return newGraph;
+  return graph->addCloneSubGraph(name);
 }
 //=========================================================
 Graph * tlp::loadGraph(const std::string &filename) {
@@ -794,6 +789,15 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
 
     delete itE;
   }
+}
+//=========================================================
+Graph* Graph::addCloneSubGraph(std::string name) {
+  BooleanProperty selection(this);
+  selection.setAllNodeValue(true);
+  selection.setAllEdgeValue(true);
+  Graph *newGraph = this->addSubGraph(&selection);
+  newGraph->setAttribute("name", name);
+  return newGraph;
 }
 //=========================================================
 Graph * Graph::inducedSubGraph(const std::set<node> &nodes,

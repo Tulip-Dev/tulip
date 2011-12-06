@@ -111,7 +111,7 @@ double StrengthClustering::computeMQValue(const vector<set<node> > & partition, 
 vector< set<node> > StrengthClustering::computeNodePartition(double threshold) {
   //cerr << __PRETTY_FUNCTION__ << endl;
   string errMsg;
-  Graph *tmpGraph=tlp::newCloneSubGraph(graph);
+  Graph *tmpGraph = graph->addCloneSubGraph();
   StableIterator<edge> itE(graph->getEdges());
 
   while (itE.hasNext()) {

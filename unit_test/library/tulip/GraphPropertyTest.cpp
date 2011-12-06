@@ -47,8 +47,8 @@ void GraphPropertyTest::tearDown() {
 //==========================================================
 void GraphPropertyTest::testDestroyGraph() {
   //build the hierarchy
-  Graph * g1 = tlp::newCloneSubGraph(graph, "G1");
-  Graph * g2 = tlp::newCloneSubGraph(graph, "G2");
+  Graph * g1 = graph->addCloneSubGraph("G1");
+  Graph * g2 = graph->addCloneSubGraph("G2");
   Graph * meta1 = tlp::newSubGraph(graph, "META1");
   GraphProperty * proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
   node mnode1 = meta1->addNode();
@@ -65,9 +65,9 @@ void GraphPropertyTest::testDestroyGraph() {
 //==========================================================
 void GraphPropertyTest::testSetGet() {
   //build the hierarchy
-  Graph * g1 = tlp::newCloneSubGraph(graph, "G1");
-  Graph * g2 = tlp::newCloneSubGraph(graph, "G2");
-  Graph * g3 = tlp::newCloneSubGraph(graph, "G3");
+  Graph * g1 = graph->addCloneSubGraph("G1");
+  Graph * g2 = graph->addCloneSubGraph("G2");
+  Graph * g3 = graph->addCloneSubGraph("G3");
   Graph * meta1 = tlp::newSubGraph(graph, "META1");
   GraphProperty * proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
   node mnode1 = meta1->addNode();
@@ -82,9 +82,9 @@ void GraphPropertyTest::testSetGet() {
 //==========================================================
 void GraphPropertyTest::testSetAll() {
   //build the hierarchy
-  Graph * g1 = tlp::newCloneSubGraph(graph, "G1");
-  Graph * g2 = tlp::newCloneSubGraph(graph, "G2");
-  Graph * g3 = tlp::newCloneSubGraph(graph, "G3");
+  Graph * g1 = graph->addCloneSubGraph("G1");
+  Graph * g2 = graph->addCloneSubGraph("G2");
+  Graph * g3 = graph->addCloneSubGraph("G3");
   Graph * meta1 = tlp::newSubGraph(graph, "META1");
   GraphProperty proxy(meta1);
   node mnode1 = meta1->addNode();

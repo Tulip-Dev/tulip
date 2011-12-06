@@ -129,7 +129,7 @@ void dfs(node n, const Graph * sg, deque<node> &st,vector<node> & maxCycle, Muta
 
 //=======================================================================
 vector<node> findMaxCycle(Graph * sg, PluginProgress *pluginProgress) {
-  Graph * g = tlp::newCloneSubGraph(sg);
+  Graph * g = sg->addCloneSubGraph();
   cerr << __PRETTY_FUNCTION__ << endl;
 
   // compute the connected components's subgraphs

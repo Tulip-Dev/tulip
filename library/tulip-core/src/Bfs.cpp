@@ -25,7 +25,7 @@
 using namespace std;
 using namespace tlp;
 
-Bfs::Bfs(Graph * G, BooleanProperty * resultatAlgoSelection): graph(tlp::newCloneSubGraph(G)),selectedNodes(), selectedEdges() {
+Bfs::Bfs(Graph * G, BooleanProperty * resultatAlgoSelection): graph(G->addCloneSubGraph()),selectedNodes(), selectedEdges() {
   selectedNodes.setAll(false);
   selectedEdges.setAll(false);
   nbNodes = 0;
