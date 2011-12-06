@@ -125,7 +125,7 @@ void PlanarityTestTest::planarGraphsEmbedding() {
 void PlanarityTestTest::planarMetaGraphsEmbedding() {
   cerr << "===========MetaGraphsEmbedding=======================" << endl;
   graph = tlp::loadGraph(GRAPHPATH + "planar/grid1010.tlp");
-  Graph * g= tlp::newCloneSubGraph(graph);
+  Graph * g = graph->addCloneSubGraph();
   set<node> toGroup;
   Iterator<node> * itn = g->getNodes();
 

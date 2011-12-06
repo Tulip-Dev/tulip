@@ -216,7 +216,7 @@ static Graph* computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
   if (!rGraph) {
     // the graph attribute used to store the clone
 #define CLONE_NAME "CloneForTree"
-    rGraph = gClone = tlp::newCloneSubGraph(graph, CLONE_NAME);
+    rGraph = gClone = graph->addCloneSubGraph(CLONE_NAME);
     // the graph attribute used to store added root node
 #define CLONE_ROOT "CloneRoot"
     rGraph->setAttribute(CLONE_ROOT, node());

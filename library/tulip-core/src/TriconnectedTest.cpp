@@ -43,7 +43,7 @@ bool TriconnectedTest::compute(Graph* graph) {
 
   graph->addListener(this);
   bool result = true;
-  Graph *tmp = tlp::newCloneSubGraph(graph);
+  Graph *tmp = graph->addCloneSubGraph();
   Iterator<node> *itN = graph->getNodes();
 
   while(itN->hasNext()) {

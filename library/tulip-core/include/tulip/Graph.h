@@ -222,6 +222,14 @@ public:
   virtual Graph *addSubGraph(BooleanProperty *selection=0, unsigned int id = 0)=0;
 
   /**
+   * @brief Creates and returns a subgraph of this graph that contains all its elements.
+   *
+   * @param name The name of the newly created subgraph. Defaults to "unnamed".
+   * @return :Graph* The newly created clone subgraph.
+   **/
+  virtual Graph* addCloneSubGraph(std::string name = "unnamed");
+  
+  /**
    *  Creates and returns a new sub-graph of the graph
    *  induced by a set of nodes. The sub-graph contains all
    *  the nodes of the set and all the existing edges between
