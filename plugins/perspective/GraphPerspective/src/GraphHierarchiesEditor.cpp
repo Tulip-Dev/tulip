@@ -65,14 +65,14 @@ GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent)
   _ui->setupUi(this);
   QToolButton* linkButton = new QToolButton();
   linkButton->setObjectName("linkButton");
-  linkButton->setIcon(QIcon(":/tulip/graphperspective/icons/link.png"));
+  linkButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/link.png"));
   linkButton->setToolTip(trUtf8("Synchronize with workspace active panel"));
   linkButton->setIconSize(QSize(22,22));
   linkButton->setMinimumSize(25,25);
   linkButton->setMaximumSize(25,25);
   linkButton->setCheckable(true);
   linkButton->setChecked(true);
-  _ui->header->layout()->addWidget(linkButton);
+  _ui->header->insertWidget(linkButton);
   _linkButton = linkButton;
   _ui->hierarchiesTree->installEventFilter(this);
 }

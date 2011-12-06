@@ -57,6 +57,7 @@ public slots:
   void setExpandable(bool f);
 
   void expand(bool e);
+  void insertWidget(QWidget*);
 
 signals:
   void menuChanged(const QString &);

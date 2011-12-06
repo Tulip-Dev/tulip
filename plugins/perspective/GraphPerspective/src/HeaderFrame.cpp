@@ -119,3 +119,7 @@ bool HeaderFrame::isExpanded() const {
 QWidget *HeaderFrame::expandControl() const {
   return _ui->expandButton;
 }
+
+void HeaderFrame::insertWidget(QWidget* w) {
+  _ui->horizontalLayout->insertWidget(_ui->horizontalLayout->indexOf(_ui->expandButton),w);
+}
