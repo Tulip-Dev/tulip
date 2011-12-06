@@ -247,13 +247,13 @@ AlgorithmRunner::AlgorithmRunner(QWidget *parent): QWidget(parent), _ui(new Ui::
   localModeButton->setMinimumSize(25,25);
   localModeButton->setCheckable(true);
   localModeButton->setChecked(false);
-  localModeButton->setIcon(QIcon(":/tulip/graphperspective/icons/hierarchy_add.png"));
+  localModeButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"));
   localModeButton->setIconSize(QSize(22,22));
   localModeButton->setToolTip(trUtf8("Always store result in local property"));
   localModeButton->setObjectName("localModeButton");
   _localModeButton = localModeButton;
 
-  _ui->header->layout()->addWidget(localModeButton);
+  _ui->header->insertWidget(localModeButton);
   connect(_ui->header,SIGNAL(menuChanged(QString)),this,SLOT(algorithmTypeChanged(QString)));
   connect(_ui->searchBox,SIGNAL(textEdited(QString)),this,SLOT(setFilter(QString)));
   _ui->header->setMenus(FACADES_UI_NAMES.keys());
