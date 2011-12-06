@@ -215,10 +215,10 @@ void ImportExportTest::testGraphPropertiesAreEqual(Graph* first, Graph* second) 
   forEach(firstProperty, first->getLocalObjectProperties()) {
     ++firstLocalPropertiesCount;
   }
-  forEach(firstProperty, second->getObjectProperties()) {
+  forEach(secondProperty, second->getObjectProperties()) {
     ++secondPropertiesCount;
   }
-  forEach(firstProperty, second->getLocalObjectProperties()) {
+  forEach(secondProperty, second->getLocalObjectProperties()) {
     ++secondLocalPropertiesCount;
   }
 
