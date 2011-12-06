@@ -12,7 +12,7 @@
 using namespace std;
 using namespace tlp;
 
-class TlpJsonGraphParser : public YajlFacade {
+class TlpJsonGraphParser : public YajlParseFacade {
 public:
   TlpJsonGraphParser(tlp::Graph* parentGraph) :
     _parsingEdges(false),
@@ -364,7 +364,7 @@ private:
   bool _waitingForGraphId;
 };
 
-class YajlProxy : public YajlFacade {
+class YajlProxy : public YajlParseFacade {
 public:
   virtual void parseBoolean(bool boolVal) {
     _proxy->parseBoolean(boolVal);
@@ -400,7 +400,7 @@ public:
     _proxy->parseString(value);
   }
 protected:
-  YajlFacade* _proxy;
+  YajlParseFacade* _proxy;
 };
 
 class TlpJsonImport : public ImportModule, YajlProxy {
@@ -416,13 +416,14 @@ public:
     if(dataSet->exist("file::filename")) {
       dataSet->get<string>("file::filename", filename);
 
-      _proxy = new YajlFacade();
+      _proxy = new YajlParseFacade();
 //       QTime t = QTime::currentTime();
       parse(filename);
 //       cout << "msecs: " << t.msecsTo(QTime::currentTime()) << endl;
     }
 
-    return true;
+    pluginProgress->setError(_proxy->errorMessage());
+    return _proxy->parsingSucceeded();
   }
 
   virtual void parseMapKey(const std::string& value) {

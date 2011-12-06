@@ -8,15 +8,10 @@
 #include <sstream>
 
 #include <QDate>
+#include <tulip/YajlFacade.h>
 
 using namespace std;
 using namespace tlp;
-
-template<typename T, typename U>
-inline ostream& serializeKeyValue(ostream& out, T key, U value) {
-  out << "\"" << key << "\":\"" << value << "\"";
-  return out;
-}
 
 template<typename TYPE>
 class NewValueIterator : public tlp::Iterator<uint> {
@@ -51,15 +46,20 @@ public:
     std::string comment;
     dataSet->get<string>("comment", comment);
 
-    stringstream out;
+    _writer.writeMapOpen();
+    
+    _writer.writeString("version");
+    _writer.writeString("4.0");
 
-    out << "{";
+    _writer.writeString("date");
+    _writer.writeString(QDate::currentDate().toString(Qt::ISODate).toStdString());
 
-    serializeKeyValue(out, "version", "4.0") << "," << endl;
-    serializeKeyValue(out, "date", QDate::currentDate().toString(Qt::ISODate).toStdString()) << "," << endl;
-    serializeKeyValue(out, "comment", comment) << "," << endl;
-    out << "\"graph\": {" << endl;
+    _writer.writeString("comment");
+    _writer.writeString(comment);
 
+    _writer.writeString("graph");
+    _writer.writeMapOpen();
+    
     node n;
     edge e;
     int i = 0;
@@ -71,51 +71,64 @@ public:
       _newEdgeId.set(e.id, i++);
     }
 
-    saveGraph(out, graph->getRoot());
-    out << "}" << endl;
+    saveGraph(graph->getRoot());
+    _writer.writeMapClose(); // graph map
+    _writer.writeMapClose(); // top-level map
 
-    out << "}";
-
-    fileOut << out.str();
+    fileOut << _writer.generatedString();
 
     return true;
   }
 
-  void saveGraph(ostream& out, Graph* graph) {
+  void saveGraph(Graph* graph) {
     node n;
     edge e;
 
-    out << "\"" << "graphID" << "\":" << graph->getId() << "," << endl;
+    _writer.writeString("graphID");
+    _writer.writeInteger(graph->getId());
 
     if(graph == graph->getRoot()) {
-      out << "\"" << "nodesNumber" << "\":" << graph->numberOfNodes() << "," << endl;
+      _writer.writeString("nodesNumber");
+      _writer.writeInteger(graph->numberOfNodes());
     }
     else {
-      writeInterval(out, "nodesIDs", new NewValueIterator<tlp::node>(graph->getNodes(), _newNodeId));
+      writeInterval("nodesIDs", new NewValueIterator<tlp::node>(graph->getNodes(), _newNodeId));
     }
 
     if(graph == graph->getRoot()) {
-      out << "\"edges\":[" << endl;
+      _writer.writeString("edges");
+      _writer.writeArrayOpen();
       forEach(e, graph->getEdges()) {
         uint source = _newNodeId.get(graph->source(e).id);
         uint target = _newNodeId.get(graph->target(e).id);
-        out << "[" << source << "," << target << "]" << (_it_foreach._it->hasNext() ? "," : "") << endl;
+
+        _writer.writeArrayOpen();
+        _writer.writeInteger(source);
+        _writer.writeInteger(target);
+        _writer.writeArrayClose();
       }
-      out << "]," << endl;
+      _writer.writeArrayClose();
     }
     else {
-      writeInterval(out, "edgesIDs", new NewValueIterator<tlp::edge>(graph->getEdges(), _newEdgeId));
+      writeInterval("edgesIDs", new NewValueIterator<tlp::edge>(graph->getEdges(), _newEdgeId));
     }
 
-    out << "\"properties\":{" << endl;
+    _writer.writeString("properties");
+    _writer.writeMapOpen();
     //saving properties
     PropertyInterface* property;
     forEach(property, graph->getObjectProperties()) {
-      out << "\"" << property->getName() << "\":{" << endl;
+      _writer.writeString(property->getName());
+      _writer.writeMapOpen();
 
-      serializeKeyValue(out, "type", property->getTypename()) << "," << endl;
-      serializeKeyValue(out, "nodeDefault", property->getNodeDefaultStringValue()) << "," << endl;
-      serializeKeyValue(out, "edgeDefault", property->getEdgeDefaultStringValue());
+      _writer.writeString("type");
+      _writer.writeString(property->getTypename());
+
+      _writer.writeString("nodeDefault");
+      _writer.writeString(property->getNodeDefaultStringValue());
+
+      _writer.writeString("edgeDefault");
+      _writer.writeString(property->getEdgeDefaultStringValue());
 
       Iterator<node>* nodeIt = property->getNonDefaultValuatedNodes();
       Iterator<edge>* edgeIt = property->getNonDefaultValuatedEdges();
@@ -125,51 +138,64 @@ public:
       delete nodeIt;
 
       if(hasNonDefaultValuatedNodes) {
-        out << ",\"nodes\":{";
+        _writer.writeString("nodes");
+        _writer.writeMapOpen();
         forEach(n, property->getNonDefaultValuatedNodes()) {
-          serializeKeyValue(out, _newNodeId.get(n.id), property->getNodeStringValue(n)) << (_it_foreach._it->hasNext() ? "," : "") << endl;
+          stringstream temp;
+          temp << _newNodeId.get(n.id);
+          _writer.writeString(temp.str());
+          _writer.writeString(property->getNodeStringValue(n));
         }
-        out << "}";
+        _writer.writeMapClose();
       }
 
       if(hasNonDefaultValuatedEdges) {
-        out << ",\"edges\":{";
+        _writer.writeString("edges");
+        _writer.writeMapOpen();
         forEach(e, property->getNonDefaultValuatedEdges()) {
-          serializeKeyValue(out, _newEdgeId.get(e.id), property->getEdgeStringValue(e)) << (_it_foreach._it->hasNext() ? "," : "") << endl;
+          stringstream temp;
+          temp << _newEdgeId.get(e.id);
+          _writer.writeString(temp.str());
+          _writer.writeString(property->getEdgeStringValue(e));
         }
-        out << "}";
+        _writer.writeMapClose();
       }
 
-      out << "}" << (_it_foreach._it->hasNext() ? "," : "");
+      _writer.writeMapClose();
     }
-    out << "},";
+    _writer.writeMapClose();
 
-    out << "\"attributes\":{";
+    _writer.writeString("attributes");
+    _writer.writeMapOpen();
     //saving attributes
     DataSet attributes = graph->getAttributes();
     pair<string, DataType*> attribute;
     forEach(attribute, attributes.getValues()) {
       DataTypeSerializer* serializer = DataSet::typenameToSerializer(attribute.second->getTypeName());
-      out << "\"" << attribute.first << "\":";
-      out << "[ \"" << serializer->outputTypeName << "\" ,";
-      serializer->writeData(out, attribute.second);
-      out << "]";
-      out << (_it_foreach._it->hasNext() ? "," : "") << endl;
+      _writer.writeString(attribute.first);
+      _writer.writeArrayOpen();
+      _writer.writeString(serializer->outputTypeName);
+
+      stringstream temp;
+      serializer->writeData(temp, attribute.second);
+      _writer.writeString(temp.str());
+      _writer.writeArrayClose();
     }
-    out << "},";
+    _writer.writeMapClose();
 
     //saving subgraphs
-    out << "\"subgraphs\":{";
+    _writer.writeString("subgraphs");
+    _writer.writeMapOpen();
     Graph* sub;
     forEach(sub, graph->getSubGraphs()) {
-      saveGraph(out, sub);
-      out << (_it_foreach._it->hasNext() ? "," : "") << endl;
+      saveGraph(sub);
     }
-    out << "}";
+    _writer.writeMapClose();
   }
 
-  void writeInterval(ostream& out, const std::string& intervalName, Iterator<uint>* iterator) {
-    out << "\"" + intervalName + "\":[" << endl;
+  void writeInterval(const std::string& intervalName, Iterator<uint>* iterator) {
+    _writer.writeString(intervalName);
+    _writer.writeArrayOpen();
     uint intervalBegin = UINT_MAX;
     uint intervalEnd = UINT_MAX;
     uint previousId = UINT_MAX;
@@ -191,31 +217,38 @@ public:
         else {
           //if an interval is defined, write it
           if(intervalBegin != UINT_MAX) {
-            out << "[" << intervalBegin << "," << intervalEnd << "]," << endl;
+            _writer.writeArrayOpen();
+            _writer.writeInteger(intervalBegin);
+            _writer.writeInteger(intervalEnd);
+            _writer.writeArrayClose();
             intervalBegin = UINT_MAX;
             intervalEnd = UINT_MAX;
           }
           else {
-            out << previousId << (_it_foreach._it->hasNext() ? "," : "") << endl;
+            _writer.writeInteger(previousId);
           }
         }
 
         if(!_it_foreach._it->hasNext()) {
           if(intervalBegin != UINT_MAX) {
-            out << "[" << intervalBegin << "," << intervalEnd << "]" << endl;
+            _writer.writeArrayOpen();
+            _writer.writeInteger(intervalBegin);
+            _writer.writeInteger(intervalEnd);
+            _writer.writeArrayClose();
           }
           else {
-            out << currentId << (_it_foreach._it->hasNext() ? "," : "") << endl;
+            _writer.writeInteger(currentId);
           }
         }
       }
 
       previousId = currentId;
     }
-    out << "]," << endl;
+    _writer.writeArrayClose();
   }
 
 protected:
+  YajlWriteFacade _writer;
   MutableContainer<uint> _newNodeId;
   MutableContainer<uint> _newEdgeId;
 };
