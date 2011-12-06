@@ -766,10 +766,10 @@ void PushPopTest::testTests() {
   node n1 = graph->addNode();
   node n2 = graph->addNode();
 
-  edge e0 = graph->addEdge(n0, n1);
-  edge e1 = graph->addEdge(n0, n2);
+  graph->addEdge(n0, n1);
+  graph->addEdge(n0, n2);
 
-  node n3 = graph->addNode();
+  graph->addNode();
 
   CPPUNIT_ASSERT(!ConnectedTest::isConnected(graph));
 

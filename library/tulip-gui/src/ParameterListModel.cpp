@@ -49,19 +49,19 @@ ParameterListModel::ParameterListModel(const tlp::ParameterList &params, tlp::Gr
 
 }
 
-QModelIndex ParameterListModel::index(int row, int column,const QModelIndex &parent) const {
+QModelIndex ParameterListModel::index(int row, int column,const QModelIndex&) const {
   return createIndex(row,column);
 }
 
-QModelIndex ParameterListModel::parent(const QModelIndex &child) const {
+QModelIndex ParameterListModel::parent(const QModelIndex&) const {
   return QModelIndex();
 }
 
-int ParameterListModel::rowCount(const QModelIndex &parent) const {
+int ParameterListModel::rowCount(const QModelIndex&) const {
   return _params.size();
 }
 
-int ParameterListModel::columnCount(const QModelIndex &parent) const {
+int ParameterListModel::columnCount(const QModelIndex&) const {
   return 2;
 }
 
