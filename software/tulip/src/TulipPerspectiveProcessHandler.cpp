@@ -79,7 +79,7 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
   _processInfos[process] = PerspectiveProcessInfos(perspective,parameters,file);
 }
 
-void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError e) {
+void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) {
   QProcess *process = static_cast<QProcess *>(sender());
   process->setReadChannel(QProcess::StandardError);
   PerspectiveProcessInfos infos = _processInfos[process];
@@ -132,7 +132,7 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError e
 
 }
 
-void TulipPerspectiveProcessHandler::perspectiveFinished(int exitCode, QProcess::ExitStatus exitStatus) {
+void TulipPerspectiveProcessHandler::perspectiveFinished(int, QProcess::ExitStatus) {
   QProcess *process = static_cast<QProcess *>(sender());
   delete process;
   _processInfos.remove(process);

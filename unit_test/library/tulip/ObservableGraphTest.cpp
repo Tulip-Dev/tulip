@@ -830,9 +830,9 @@ void ObservableGraphTest::testNotifyDelInheritedPropertyIsSendWhenLocalPropertyI
 
   PropertiesDeletedObserver observer;
 
-  graph->addGraphObserver(&observer);
-  g1->addGraphObserver(&observer);
-  g2->addGraphObserver(&observer);
+  graph->addListener(&observer);
+  g1->addListener(&observer);
+  g2->addListener(&observer);
 
   graph->getLocalProperty<BooleanProperty>("test");
   CPPUNIT_ASSERT(observer.afterDelInheritedPropertyCalledGraphs.size()==0);

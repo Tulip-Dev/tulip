@@ -63,7 +63,7 @@ void TestAlgorithmTest::testFreeTree() {
   CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
   node n4 = graph->addNode();
   CPPUNIT_ASSERT(!TreeTest::isFreeTree(graph));
-  edge e2 = graph->addEdge(n4, n1);
+  graph->addEdge(n4, n1);
   CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
   CPPUNIT_ASSERT(!TreeTest::isTree(graph));
   Graph* clone = graph->addCloneSubGraph();
@@ -127,11 +127,11 @@ void TestAlgorithmTest::testAcyclic() {
   node n2 = graph->addNode();
   node n3 = graph->addNode();
   graph->addEdge(n1, n2);
-  edge e0 = graph->addEdge(n1, n3);
+  graph->addEdge(n1, n3);
   Graph* clone = graph->addCloneSubGraph();
   CPPUNIT_ASSERT(AcyclicTest::isAcyclic(graph));
   CPPUNIT_ASSERT(AcyclicTest::isAcyclic(clone));
-  edge e1 = clone->addEdge(n2, n3);
+  clone->addEdge(n2, n3);
   CPPUNIT_ASSERT(AcyclicTest::isAcyclic(graph));
   CPPUNIT_ASSERT(AcyclicTest::isAcyclic(clone));
   edge e2 = clone->addEdge(n3, n1);

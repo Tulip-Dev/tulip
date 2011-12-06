@@ -124,7 +124,7 @@ QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
   else {
     Graph *ancestor = parent->getSuperGraph();
 
-    for (int i=0; i<ancestor->numberOfSubGraphs(); i++) {
+    for (unsigned int i=0; i<ancestor->numberOfSubGraphs(); i++) {
       if (ancestor->getNthSubGraph(i) == parent)
         break;
 
@@ -146,7 +146,7 @@ int GraphHierarchiesModel::rowCount(const QModelIndex &parent) const {
   return parentGraph->numberOfSubGraphs();
 }
 
-int GraphHierarchiesModel::columnCount(const QModelIndex &parent) const {
+int GraphHierarchiesModel::columnCount(const QModelIndex&) const {
   return 4;
 }
 
