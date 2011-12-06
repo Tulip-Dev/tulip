@@ -4,6 +4,7 @@
 #include <tulip/DataSet.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/MethodFactory.h>
+#include <tulip/JsonTokens.h>
 
 #include <sstream>
 
@@ -57,7 +58,7 @@ public:
     _writer.writeString("comment");
     _writer.writeString(comment);
 
-    _writer.writeString("graph");
+    _writer.writeString(GraphToken);
     _writer.writeMapOpen();
     
     node n;
@@ -84,19 +85,19 @@ public:
     node n;
     edge e;
 
-    _writer.writeString("graphID");
+    _writer.writeString(GraphIDToken);
     _writer.writeInteger(graph->getId());
 
     if(graph == graph->getRoot()) {
-      _writer.writeString("nodesNumber");
+      _writer.writeString(NodesNumberToken);
       _writer.writeInteger(graph->numberOfNodes());
     }
     else {
-      writeInterval("nodesIDs", new NewValueIterator<tlp::node>(graph->getNodes(), _newNodeId));
+      writeInterval(NodesIDsToken, new NewValueIterator<tlp::node>(graph->getNodes(), _newNodeId));
     }
 
     if(graph == graph->getRoot()) {
-      _writer.writeString("edges");
+      _writer.writeString(EdgesToken);
       _writer.writeArrayOpen();
       forEach(e, graph->getEdges()) {
         uint source = _newNodeId.get(graph->source(e).id);
@@ -110,10 +111,10 @@ public:
       _writer.writeArrayClose();
     }
     else {
-      writeInterval("edgesIDs", new NewValueIterator<tlp::edge>(graph->getEdges(), _newEdgeId));
+      writeInterval(EdgesIDsToken, new NewValueIterator<tlp::edge>(graph->getEdges(), _newEdgeId));
     }
 
-    _writer.writeString("properties");
+    _writer.writeString(PropertiesToken);
     _writer.writeMapOpen();
     //saving properties
     PropertyInterface* property;
@@ -121,13 +122,13 @@ public:
       _writer.writeString(property->getName());
       _writer.writeMapOpen();
 
-      _writer.writeString("type");
+      _writer.writeString(TypeToken);
       _writer.writeString(property->getTypename());
 
-      _writer.writeString("nodeDefault");
+      _writer.writeString(NodeDefaultToken);
       _writer.writeString(property->getNodeDefaultStringValue());
 
-      _writer.writeString("edgeDefault");
+      _writer.writeString(EdgeDefaultToken);
       _writer.writeString(property->getEdgeDefaultStringValue());
 
       Iterator<node>* nodeIt = property->getNonDefaultValuatedNodes();
@@ -138,7 +139,7 @@ public:
       delete nodeIt;
 
       if(hasNonDefaultValuatedNodes) {
-        _writer.writeString("nodes");
+        _writer.writeString(NodesValuesToken);
         _writer.writeMapOpen();
         forEach(n, property->getNonDefaultValuatedNodes()) {
           stringstream temp;
@@ -150,7 +151,7 @@ public:
       }
 
       if(hasNonDefaultValuatedEdges) {
-        _writer.writeString("edges");
+        _writer.writeString(EdgesValuesToken);
         _writer.writeMapOpen();
         forEach(e, property->getNonDefaultValuatedEdges()) {
           stringstream temp;
@@ -165,7 +166,7 @@ public:
     }
     _writer.writeMapClose();
 
-    _writer.writeString("attributes");
+    _writer.writeString(AttributesToken);
     _writer.writeMapOpen();
     //saving attributes
     DataSet attributes = graph->getAttributes();
@@ -184,7 +185,7 @@ public:
     _writer.writeMapClose();
 
     //saving subgraphs
-    _writer.writeString("subgraphs");
+    _writer.writeString(SubgraphsToken);
     _writer.writeMapOpen();
     Graph* sub;
     forEach(sub, graph->getSubGraphs()) {
