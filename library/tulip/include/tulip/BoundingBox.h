@@ -170,22 +170,24 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
     * @param coord A point in the 3D space.
     * @return bool Wether coord is in the bounding box.
     **/
-  bool contains(const tlp::Vec3f& coord) const{
-      if(isValid()){
-          return (coord[0]>=(*this)[0][0] &&  coord[1]>=(*this)[0][1] && coord[2]>=(*this)[0][2] ) && (coord[0]<=(*this)[1][0] &&  coord[1]<=(*this)[1][1] && coord[2]<=(*this)[1][2]);
-      }else{
-          return false;
-      }
+  bool contains(const tlp::Vec3f& coord) const {
+    if(isValid()) {
+      return (coord[0]>=(*this)[0][0] &&  coord[1]>=(*this)[0][1] && coord[2]>=(*this)[0][2] ) && (coord[0]<=(*this)[1][0] &&  coord[1]<=(*this)[1][1] && coord[2]<=(*this)[1][2]);
+    }
+    else {
+      return false;
+    }
   }
   /**
     * @brief Checks if the given BoundingBox intersect the current one. If one of the BoundingBox is invalid return false.
     * @param boundingBox The BoundingBox to compare with.
     * @return bool Wether the BoundingBoxes intersect.
     **/
-  bool intersect(const tlp::BoundingBox& boundingBox)const{
-      if(!boundingBox.isValid())
-          return false;
-      return contains(boundingBox[0]) || contains(boundingBox[1]);
+  bool intersect(const tlp::BoundingBox& boundingBox)const {
+    if(!boundingBox.isValid())
+      return false;
+
+    return contains(boundingBox[0]) || contains(boundingBox[1]);
   }
 
   /**
