@@ -70,8 +70,8 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   }
 
   if (!g->existProperty(fontSizes)) {
-    g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(18);
-    g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(18);
+    g->getProperty<IntegerProperty>(fontSizes)->setAllNodeValue(18);
+    g->getProperty<IntegerProperty>(fontSizes)->setAllEdgeValue(18);
   }
 }
 
