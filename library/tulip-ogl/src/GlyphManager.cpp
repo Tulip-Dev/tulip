@@ -35,8 +35,10 @@ GlyphManager::GlyphManager() {
 }
 //====================================================
 string GlyphManager::glyphName(int id) {
-  if (glyphIdToName.find(id)!=glyphIdToName.end())
+  if (glyphIdToName.find(id)!=glyphIdToName.end()) {
+    std::cout << glyphIdToName[id] << ": " << id << std::endl;
     return glyphIdToName[id];
+  }
   else {
     cerr << __PRETTY_FUNCTION__ << endl;
     cerr << "Invalid glyph id" << endl;
@@ -45,8 +47,10 @@ string GlyphManager::glyphName(int id) {
 }
 //====================================================
 int GlyphManager::glyphId(string name) {
-  if (nameToGlyphId.find(name)!=nameToGlyphId.end())
+  if (nameToGlyphId.find(name)!=nameToGlyphId.end()) {
+    std::cout << name << ": " << nameToGlyphId[name] << std::endl;
     return nameToGlyphId[name];
+  }
   else {
     cerr << __PRETTY_FUNCTION__ << endl;
     cerr << "Invalid glyph name" << endl;

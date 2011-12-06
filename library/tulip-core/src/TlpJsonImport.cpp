@@ -140,14 +140,14 @@ public:
   }
 
   virtual void parseEndMap() {
-    if(_currentProperty && _propertyName.empty()) {
-      _currentProperty = NULL;
+    if(!_currentProperty && _propertyName.empty()) {
       _parsingProperties = false;
     }
 
     if(!_parsingPropertyNodeValues && !_parsingPropertyEdgeValues && !_propertyName.empty()) {
+//       cout << "finished parsing property '" << _propertyName << "'" << endl;
+      _currentProperty = NULL;
       _propertyName = string();
-//       cout << "finished parsing property " << propertyName << ", popping it" << endl;
     }
 
     if(_parsingPropertyNodeValues) {
@@ -264,7 +264,7 @@ public:
         _currentProperty = _graph->getProperty(_propertyName, value);
 
         if(!_currentProperty) {
-          cout << "[error] The property '" << _propertyName << "' (of type: '" << value << "' could not be created" << endl;
+          cout << "[error] The property '" << _propertyName << "' of type: '" << value << "' could not be created" << endl;
         }
 
       }
@@ -298,7 +298,7 @@ public:
         }
       }
       else {
-        std::cout << "[error] The property was null when trying to fill it" << std::endl;
+        std::cout << "[error] The property '" << _propertyName << "'was null when trying to fill it" << std::endl;
       }
     }
 
@@ -317,14 +317,14 @@ public:
         }
 
         if(_dataSet->exist(_currentAttributeName)) {
-          std::cout << "error, attribute '" << _currentAttributeName << "' already exists" << std::endl;
+          std::cout << "[error] attribute '" << _currentAttributeName << "' already exists" << std::endl;
         }
         else {
           bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
           _currentAttributeTypeName = string();
 
           if(!result) {
-            std::cout << "error reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str() << std::endl;
+            std::cout << "[error] while reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str() << std::endl;
           }
         }
       }
