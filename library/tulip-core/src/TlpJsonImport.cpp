@@ -6,6 +6,7 @@
 #include <tulip/PropertyInterface.h>
 #include <tulip/ForEach.h>
 #include <tulip/MethodFactory.h>
+#include <tulip/JsonTokens.h>
 
 #include <tulip/YajlFacade.h>
 
@@ -85,40 +86,40 @@ public:
 //         std::cout << "now parsing property: " << propertyName << std::endl;
     }
 
-    if(value == "graphID") {
+    if(value == GraphIDToken) {
       _waitingForGraphId = true;
     }
-    else if(value == "nodesIDs") {
+    else if(value == NodesIDsToken) {
       _parsingNodesIds = true;
     }
-    else if(value == "edgesIDs") {
+    else if(value == EdgesIDsToken) {
       _parsingEdgesIds = true;
     }
-    else if(!_currentProperty && value == "edges")  {
+    else if(!_currentProperty && value == EdgesToken)  {
       _parsingEdges = true;
     }
     else if(value == "attributes") {
       _parsingAttributes = true;
     }
-    else if(_currentProperty && value == "nodes") {
+    else if(_currentProperty && value == NodesValuesToken) {
       _parsingPropertyNodeValues = true;
     }
-    else if(_currentProperty && value == "edges") {
+    else if(_currentProperty && value == EdgesValuesToken) {
       _parsingPropertyEdgeValues = true;
     }
-    else if(value == "edgeDefault") {
+    else if(value == EdgeDefaultToken) {
       _parsingPropertyDefaultEdgeValue = true;
     }
-    else if (value == "nodeDefault") {
+    else if (value == NodeDefaultToken) {
       _parsingPropertyDefaultNodeValue = true;
     }
-    else if (value == "properties") {
+    else if (value == PropertiesToken) {
       _parsingProperties = true;
     }
-    else if(value == "type") {
+    else if(value == TypeToken) {
       _parsingPropertyType = true;
     }
-    else if(value == "nodesNumber") {
+    else if(value == NodesNumberToken) {
       _parsingNodes = true;
     }
     else if(_parsingPropertyNodeValues || _parsingPropertyEdgeValues) {
@@ -127,7 +128,7 @@ public:
     else if(_parsingAttributes) {
       _currentAttributeName = value;
     }
-    else if(value == "subgraphs") {
+    else if(value == SubgraphsToken) {
       _parsingSubgraph.push(0);
     }
   }
@@ -427,7 +428,7 @@ public:
   }
 
   virtual void parseMapKey(const std::string& value) {
-    if(value == "graph") {
+    if(value == GraphToken) {
       delete _proxy;
       _proxy = new TlpJsonGraphParser(graph);
     }
