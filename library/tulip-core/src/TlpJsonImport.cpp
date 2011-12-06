@@ -42,30 +42,6 @@ public:
     _waitingForGraphId(false) {
   }
 
-  virtual void parseEndArray() {
-    //if the current array was not an edge but was the array of edges, we are done parsing edges
-    if(!_newEdge && _parsingEdges)  {
-      _parsingEdges = false;
-    }
-
-    if(_newEdge) {
-      _newEdge = false;
-    }
-
-    if((_parsingNodesIds || _parsingEdgesIds) && !_newInterval) {
-      _parsingNodesIds = false;
-      _parsingEdgesIds = false;
-    }
-
-    if(!_newInterval) {
-      _parsingInterval = false;
-    }
-
-    if(_newInterval) {
-      _newInterval = false;
-    }
-  }
-
   virtual void parseStartArray() {
     if(_parsingEdges)  {
       _newEdge = true;
@@ -80,6 +56,30 @@ public:
     }
   }
 
+  virtual void parseEndArray() {
+    //if the current array was not an edge but was the array of edges, we are done parsing edges
+    if(!_newEdge && _parsingEdges)  {
+      _parsingEdges = false;
+    }
+    
+    if(_newEdge) {
+      _newEdge = false;
+    }
+    
+    if((_parsingNodesIds || _parsingEdgesIds) && !_newInterval) {
+      _parsingNodesIds = false;
+      _parsingEdgesIds = false;
+    }
+    
+    if(!_newInterval) {
+      _parsingInterval = false;
+    }
+    
+    if(_newInterval) {
+      _newInterval = false;
+    }
+  }
+  
   virtual void parseMapKey(const std::string& value) {
     if(_parsingProperties && !_parsingPropertyNodeValues && !_parsingPropertyEdgeValues && !_parsingPropertyDefaultEdgeValue && !_parsingPropertyDefaultNodeValue && _propertyName.empty()) {
       _propertyName = value;
@@ -192,6 +192,7 @@ public:
       }
 
       _waitingForGraphId = false;
+      return; //just ignore whatever is next, we've done what we came for.
     }
 
     if(_parsingNodes)  {
@@ -200,6 +201,7 @@ public:
       }
 
       _parsingNodes = false;
+      return; //just ignore whatever is next, we've done what we came for.
     }
 
     //if the int is the source or target of an edge
@@ -215,6 +217,7 @@ public:
         _graph->addEdge(source, target);
         _edgeSource = UINT_MAX;
       }
+      return; //just ignore whatever is next, we've done what we came for.
     }
 
     if(_parsingInterval) {
@@ -365,6 +368,9 @@ private:
   bool _waitingForGraphId;
 };
 
+/**
+ * @brief A simple proxy class for the YajlParseFacade.
+ **/
 class YajlProxy : public YajlParseFacade {
 public:
   virtual void parseBoolean(bool boolVal) {
