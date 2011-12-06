@@ -28,7 +28,7 @@ GlMainView::GlMainView() {
 GlMainView::~GlMainView() {
 }
 
-void GlMainView::draw(tlp::PluginProgress *pluginProgress) {
+void GlMainView::draw(tlp::PluginProgress*) {
   _glMainWidget->draw();
 }
 

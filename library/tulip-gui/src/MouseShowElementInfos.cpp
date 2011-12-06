@@ -22,14 +22,13 @@ using namespace tlp;
 
 
 void MouseShowElementInfos::init() {
-
 }
 
 bool MouseShowElementInfos::eventFilter(QObject*, QEvent*) {
-
+  return false;
 }
 
-void MouseShowElementInfos::setView(tlp::View* view) {
+void MouseShowElementInfos::setView(tlp::View*) {
 
 }
 
