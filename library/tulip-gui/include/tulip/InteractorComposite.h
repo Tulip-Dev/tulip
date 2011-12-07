@@ -37,6 +37,7 @@ class TLP_QT_SCOPE InteractorComponent: public QObject {
 public:
   virtual void init();
   virtual bool eventFilter(QObject*, QEvent*);
+  virtual void clear() {}
 
   void setView(tlp::View* view);
   tlp::View* view() const;
