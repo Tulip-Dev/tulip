@@ -216,9 +216,11 @@ std::string YajlWriteFacade::generatedString() {
   size_t length;
   const unsigned char* buffer;
   yajl_gen_status status = yajl_gen_get_buf(_generator, &buffer, &length);
+
   if(status != yajl_gen_status_ok) {
     std::cout << "oh, shit." << std::endl;
   }
+
   std::string result((const char*)buffer);
   return result;
 }
