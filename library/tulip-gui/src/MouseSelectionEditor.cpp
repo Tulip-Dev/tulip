@@ -89,9 +89,12 @@ MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL),layer(NULL),comp
 //========================================================================================
 MouseSelectionEditor::~MouseSelectionEditor() {
   if(layer) {
-    glMainWidget->getScene()->removeLayer(layer,true);
-    layer=NULL;
+    delete layer;
   }
+}
+//========================================================================================
+void MouseSelectionEditor::clear(){
+  glMainWidget->getScene()->removeLayer(layer,false);
 }
 //========================================================================================
 void MouseSelectionEditor::getOperation(GlEntity *select) {
@@ -368,10 +371,20 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
     if(!layer) {
       layer=new GlLayer("selectionEditorLayer",true);
       layer->setCamera(Camera(glMainWidget->getScene(),false));
-      glMainWidget->getScene()->insertLayerAfter(layer,"Main");
       composite = new GlComposite(false);
       layer->addGlEntity(composite,"selectionComposite");
     }
+
+    bool layerInScene=false;
+    vector<pair<std::string, GlLayer*> >* layersList=glMainWidget->getScene()->getLayersList();
+    for(vector<pair<std::string, GlLayer*> >::iterator it=layersList->begin();it!=layersList->end();++it){
+      if((*it).second==layer){
+        layerInScene=true;
+        break;
+      }
+    }
+    if(!layerInScene)
+      glMainWidget->getScene()->insertLayerAfter(layer,"Main");
 
     composite->addGlEntity(&centerRect, "CenterRectangle");
     composite->addGlEntity(&_controls[0], "left");

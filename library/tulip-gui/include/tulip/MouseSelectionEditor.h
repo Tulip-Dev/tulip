@@ -42,6 +42,7 @@ public:
 
   MouseSelectionEditor();
   ~MouseSelectionEditor();
+  void clear();
   bool compute(GlMainWidget *glMainWidget);
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
