@@ -41,7 +41,6 @@ slurp_symtab(bfd *abfd, bool useMini,
 
   if ((bfd_get_file_flags (abfd) & HAS_SYMS) == 0) {
     *nSymbols = 0;
-    cerr << "No symbol table in " << bfd_get_filename(abfd) << endl;
     return symbol_table;
   }
 
