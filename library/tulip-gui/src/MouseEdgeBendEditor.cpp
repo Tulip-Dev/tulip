@@ -43,7 +43,11 @@ MouseEdgeBendEditor::MouseEdgeBendEditor()
 //========================================================================================
 MouseEdgeBendEditor::~MouseEdgeBendEditor() {
   if(layer)
-    glMainWidget->getScene()->removeLayer(layer,true);
+    delete layer;
+}
+//========================================================================================
+void MouseEdgeBendEditor::clear() {
+  glMainWidget->getScene()->removeLayer(layer,false);
 }
 //========================================================================================
 bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
@@ -194,13 +198,23 @@ bool MouseEdgeBendEditor::compute(GlMainWidget *glMainWidget) {
     if(!layer) {
       layer=new GlLayer("edgeBendEditorLayer",true);
       layer->setCamera(Camera(glMainWidget->getScene(),false));
-      glMainWidget->getScene()->insertLayerAfter(layer,"Main");
 
       if(!circleString)
         circleString = new GlComposite(false);
 
       layer->addGlEntity(circleString,"selectionComposite");
     }
+
+    bool layerInScene=false;
+    vector<pair<std::string, GlLayer*> >* layersList=glMainWidget->getScene()->getLayersList();
+    for(vector<pair<std::string, GlLayer*> >::iterator it=layersList->begin();it!=layersList->end();++it){
+      if((*it).second==layer){
+        layerInScene=true;
+        break;
+      }
+    }
+    if(!layerInScene)
+      glMainWidget->getScene()->insertLayerAfter(layer,"Main");
 
     this->glMainWidget=glMainWidget;
     return true;
