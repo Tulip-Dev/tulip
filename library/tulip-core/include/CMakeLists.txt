@@ -14,6 +14,7 @@ INSTALL(FILES
   tulip/ColorScale.h
   tulip/ConcatIterator.h
   tulip/ConnectedTest.h
+  tulip/ConsoleUtils.h
   tulip/conversioniterator.h
   tulip/ConvexHull.h
   tulip/Coord.h

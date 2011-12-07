@@ -19,12 +19,106 @@
 
 #include "StackWalker.h"
 
+
 #include <sstream>
 
 #if defined(__linux) || defined(__APPLE__)
 
-#include <execinfo.h>
 #include <cxxabi.h>
+#ifndef __APPLE__
+#include <execinfo.h>
+#else
+#include <dlfcn.h>	
+#include <sys/stat.h>
+ 
+int backtrace(void **buffer, int size) {
+	void **frame = reinterpret_cast<void **>(__builtin_frame_address(0));
+	void **bp = reinterpret_cast<void **>(*frame);
+	void *ip = frame[1];
+	int i;
+	for (i = 0; bp && ip && i < size ; ++i) {
+ 		ip = bp[1];
+ 		buffer[i] = ip;
+		bp = reinterpret_cast<void**>(bp[0]);
+	}
+	return i;
+}
+
+char *getStackFrameDetails(void *address) {
+	Dl_info dli;
+	char tmp[1024];
+	if (dladdr(address, &dli)) {
+		int64_t function_offset = reinterpret_cast<int64_t>(address) - reinterpret_cast<int64_t>(dli.dli_saddr);
+		sprintf(tmp, "%s(%s+%p)[%p]", dli.dli_fname, dli.dli_sname, reinterpret_cast<void *>(function_offset), address);
+	} else {
+		sprintf(tmp, "%s(%s+%s)[%p]", "???", "???", "???", address);
+	}
+	char *ret = new char[strlen(tmp)+1];
+	strcpy(ret, tmp);
+	return ret; 
+}	
+
+char **backtrace_symbols(void *const *buffer, int size) {
+	char **ret = new char*[size];
+	for (int i = 0 ; i < size ; ++i) {
+		ret[i] = getStackFrameDetails(buffer[i]);		
+	}
+	return ret;
+}
+
+int64_t getOffsetInExecutable(void *address) {
+	Dl_info dli;
+	int64_t ret = 0;
+	if (dladdr(address, &dli)) {
+		int64_t base = reinterpret_cast<int64_t>(dli.dli_fbase);
+		ret = reinterpret_cast<int64_t>(address);
+		if (base != 0x1000)
+			ret -= base;
+	}
+	return ret;
+}
+
+std::string pOpen(const std::string &cmd) {
+	const int MAX =1024;
+	FILE *cmdPipe = popen(cmd.c_str(), "r+");
+	if (cmdPipe) {
+		char buffer[MAX];
+		char *s = fgets(buffer, MAX - 1, cmdPipe);
+		pclose(cmdPipe);
+		if (s == NULL) {
+			return "";
+		} else {
+			std::string str(buffer);
+			return str.substr(0, str.size() - 1);
+		}
+	}
+	return "";
+}
+
+std::pair<const char *, unsigned int> extractFileAndLine(const std::string &atosOutput) {
+	std::string ext[5] = {".cpp", ".cc", ".c", ".hpp", ".h"};
+	std::pair<const char *, unsigned int> ret = std::make_pair("", 0);
+	for (size_t i = 0 ; i < 5 ; ++i) {
+		size_t pos = atosOutput.find(ext[i]);
+		if (pos != std::string::npos) {
+			size_t pos2 = atosOutput.find(':', pos);
+			size_t pos3 = atosOutput.find(')', pos2);
+			while (atosOutput[pos] != '(') {
+				--pos;
+			}
+			ret = std::make_pair(atosOutput.substr(pos+1, pos2-pos-1).c_str(), atoi(atosOutput.substr(pos2+1, pos3-pos2-1).c_str()));
+			break;
+		}
+	}
+	return ret;
+}
+
+int file_exist(const std::string &filename) {
+  struct stat buffer;
+  return (stat(filename.c_str(), &buffer) == 0);
+}
+	
+#endif
 
 StackWalkerGCC::StackWalkerGCC() {}
 
@@ -39,25 +133,60 @@ StackWalkerGCC::~StackWalkerGCC() {
 #endif
 }
 
-void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
-  void * array[128];
-  int size = backtrace(array, 128);
-  char ** messages = backtrace_symbols(array, size);
+#define MAX_BACKTRACE_SIZE 128
 
+void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
+		
+  void *array[MAX_BACKTRACE_SIZE];
+  int size = backtrace(array, MAX_BACKTRACE_SIZE);
+  char ** messages = backtrace_symbols(array, size);
+    
   if (messages == NULL)
     return;
 
+  std::ostringstream oss;
+  oss << callerAddress;
+  std::string callerAddressStr = oss.str();
+  
   int i = 1;
+
+#ifndef __APPLE__ 
+  while (i < size) {
+    std::string msg(messages[i]);
+
+    if (msg.find(callerAddressStr) != std::string::npos) {
+      break;
+    }
+    ++i;
+  }
+#else
+  while (i < size) {
+    std::string msg(messages[i]);
+
+    if (msg.find("_sigtramp") != std::string::npos) {
+      ++i;	
+      break;
+    }
+        ++i;
+  }	
+  std::string msg(messages[i]);
+  if (msg.find("???") != std::string::npos) {
+  	array[i] = callerAddress;
+  	messages[i] = getStackFrameDetails(callerAddress);  	 	
+  }
+#endif
+
   int offset = i;
 
   for (; i < size ; ++i) {
     char *mangled_name = 0, *runtime_offset = 0,
           *offset_end = 0, *runtime_addr = 0,
-           *runtime_addr_end = 0;
-
+           *runtime_addr_end = 0, *dsoName = 0;       
+          
     if (static_cast<unsigned int>(i) > maxDepth)
       return;
-
+	
+	
     for (char *p = messages[i]; *p; ++p) {
       if (*p == '(') {
         mangled_name = p;
@@ -75,16 +204,17 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
         runtime_addr_end = p;
       }
     }
+    
+    dsoName = messages[i];
+    *mangled_name++ = '\0';
+    *runtime_offset++ = '\0';
+    *offset_end++ = '\0';
+    *runtime_addr++ = '\0';
+    *runtime_addr_end = '\0';
 
-    if (mangled_name && runtime_offset && offset_end &&
+    if (mangled_name && runtime_offset &&
         mangled_name < runtime_offset) {
-      *mangled_name++ = '\0';
-      *runtime_offset++ = '\0';
-      *offset_end++ = '\0';
-      *runtime_addr++ = '\0';
-      *runtime_addr_end = '\0';
-
-      char *dsoName = messages[i];
+            
       std::string dsoNameStr(dsoName);
 
       int status;
@@ -93,16 +223,34 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       char *end;
       int64_t runtimeAddr = static_cast<int64_t>(strtoll(runtime_addr, &end, 16));
       int64_t runtimeOffset = static_cast<int64_t>(strtoll(runtime_offset, &end, 0));
-
+      
+      if (runtimeAddr == 1 && i == (size - 1))
+      	break;	
+       
       std::pair<const char *, unsigned int> infos = std::make_pair("", 0);
 
 #ifdef HAVE_BFD
-
       if (bfdMap.find(dsoNameStr) == bfdMap.end()) {
         bfdMap[dsoNameStr] = new BfdWrapper(dsoName);
       }
-
+      dsoName = const_cast<char*>(bfdMap[dsoNameStr]->getDsoAbsolutePath().c_str());
       infos =bfdMap[dsoNameStr]->getFileAndLineForAddress(mangled_name, runtimeAddr, runtimeOffset);
+#endif
+
+#ifdef __APPLE__
+	  if (file_exist("/usr/bin/atos")) {
+	  	int64_t exOffset = getOffsetInExecutable(array[i]);
+	  	std::ostringstream oss;
+	  	oss << "atos -o " << dsoName;
+	  	#ifdef I64
+	  	oss << " -arch x86_64 ";	
+	  	#else
+	  	oss << " -arch i386 ";
+	  	#endif
+	  	oss << "0x" << std::hex << exOffset;
+	  	std::string atos = pOpen(oss.str());
+	  	infos = extractFileAndLine(atos);
+	  }		  	
 #endif
 
       if (status == 0) {
@@ -113,7 +261,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
           printFrameInfos(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset, infos.first, infos.second);
         }
       }
-      else {
+      else {	
         if (std::string(infos.first) == "") {
           printFrameInfos(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset);
         }

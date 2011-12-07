@@ -23,17 +23,13 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <stdint.h>
-#include <cstdlib>
+
+#include <tulip/ConsoleUtils.h>
 
 #ifndef _MSC_VER
 #ifdef HAVE_BFD
 #include "BfdWrapper.h"
 #endif
-#endif
-
-#ifdef WIN32
-#include <windows.h>
 #endif
 
 class StackWalker {
@@ -46,8 +42,18 @@ public:
   }
 
   virtual void printFrameInfos(std::ostream &os, unsigned int frameId, int64_t pcAddress, std::string moduleName, std::string funcName="", int64_t symbolOffset=0, std::string fileName="", unsigned int line=0) {
-    os << std::dec << std::setfill('0') << "#" << std::setw(2) << frameId
-       << " 0x" << std::hex << std::setw(16) << pcAddress << " in ";
+
+	if (frameId%2 == 0)
+		os << setTextBackgroundColor(DARK_GRAY);
+	else
+		os << setTextBackgroundColor(LIGHT_GRAY);
+
+	os << bold;
+
+    os << lightRed << std::dec << std::setfill('0') << "#" << std::setw(2) << frameId
+       << lightMagenta << " 0x" << std::hex << std::setw(16) << pcAddress << lightRed << " in ";
+
+    os << lightBlue;
 
     if (funcName != "") {
       os << funcName;
@@ -57,40 +63,53 @@ public:
     }
 
     if (symbolOffset != 0) {
-      os << " (+0x" << std::hex << symbolOffset << ")";
+      os << lightMagenta << " (+0x" << std::hex << symbolOffset << ")";
     }
 
     if (fileName != "") {
-      os << " at " << fileName << ":" << std::dec << line;
+      os << lightRed << " at " << lightGreen << fileName << ":" << std::dec << lightYellow << line;
     }
 
     if (moduleName != "") {
-      os << " from " << moduleName << std::endl;
+      os << lightRed << " from " << lightCyan << moduleName;
     }
     else {
-      os << " from ??" << std::endl;
+      os << lightRed << " from " << lightGreen << "??";
     }
+
+    os << fillToEndOfLine << defaultTextColor ;
+
   }
 
 };
-
 
 #if defined(__linux) || defined(__APPLE__)
 
 #include <map>
 
 class StackWalkerGCC : public StackWalker {
+
 public:
+
   StackWalkerGCC();
+
   ~StackWalkerGCC();
+
   void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
 
+  void setCallerAddress(void *callerAddress) {
+    this->callerAddress = callerAddress;
+  }
+
 private:
+
   void *callerAddress;
 #ifdef HAVE_BFD
   std::map<std::string, BfdWrapper *> bfdMap;
 #endif
+
 };
+
 
 #elif defined(__MINGW32__)
 
