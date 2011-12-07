@@ -56,7 +56,7 @@ private:
  * Under no circumstances should these functions be modified for anything besides a simple bugfix.
  *
  * Any feature addition should be done by writing a new version of saveMetaData and saveGraph, and switching on the version number in the main function.
- * 
+ *
  **/
 class TlpJsonExport : public ExportModule {
 public:
@@ -75,25 +75,25 @@ public:
     forEach(n, graph->getNodes()) {
       _newNodeId.set(n.id, i++);
     }
-    
+
     edge e;
     i = 0;
     forEach(e, graph->getEdges()) {
       _newEdgeId.set(e.id, i++);
     }
-    
+
     _writer.writeMapOpen(); //top-level map
-    
+
     _writer.writeString("version");
     _writer.writeString("4.0");
 
     saveMetaData_V4();
-    
+
     _writer.writeString(GraphToken);
     _writer.writeMapOpen(); //graph hierarchy map
     saveGraph_V4(graph->getRoot());
     _writer.writeMapClose(); // graph hierarchy map
-    
+
     _writer.writeMapClose(); // top-level map
 
     fileOut << _writer.generatedString();

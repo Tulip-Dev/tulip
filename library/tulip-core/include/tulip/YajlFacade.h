@@ -11,7 +11,7 @@
 class YajlParseFacade {
 public:
   YajlParseFacade() : _parsingSucceeded(true) {}
-  
+
   /**
    * @brief Parses a JSON file.
    * Once this function is called, the callbacks (all the parse* functions) will get called when the corresponding event happens.
@@ -47,7 +47,7 @@ public:
   ~YajlWriteFacade();
 
   std::string generatedString();
-  
+
   virtual void writeInteger(long long int number);
   virtual void writeDouble(double number);
   virtual void writeNumber(const char* str, size_t len);

@@ -228,7 +228,7 @@ public:
    * @return :Graph* The newly created clone subgraph.
    **/
   virtual Graph* addCloneSubGraph(std::string name = "unnamed");
-  
+
   /**
    *  Creates and returns a new sub-graph of the graph
    *  induced by a set of nodes. The sub-graph contains all
