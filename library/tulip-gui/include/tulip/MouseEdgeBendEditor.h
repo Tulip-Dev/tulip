@@ -45,6 +45,7 @@ public:
   ~MouseEdgeBendEditor();
   bool compute(GlMainWidget *glMainWidget);
   bool draw(GlMainWidget *);
+  void clear();
   bool eventFilter(QObject *, QEvent *);
   InteractorComponent *clone() {
     return new MouseEdgeBendEditor();
