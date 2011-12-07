@@ -2,9 +2,11 @@ SET(LIB_SRCS
     CrashHandling.cpp
     StackWalker.cpp)
 
-IF(NOT MSVC)	
-INCLUDE (CheckIncludeFiles)
+IF(NOT MSVC)
+
 UNSET(HAVE_BFD CACHE)
+IF(LINUX OR MINGW)	
+INCLUDE (CheckIncludeFiles)
 CHECK_INCLUDE_FILES(bfd.h HAVE_BFD)
 
 IF(HAVE_BFD)
@@ -13,8 +15,9 @@ ADD_DEFINITIONS(-DHAVE_BFD)
 ELSE()
 MESSAGE("Install GNU binutils development package to get a detailed stack trace when Tulip crashes.")	
 ENDIF()
+ENDIF(LINUX OR MINGW)
 
-ENDIF()
+ENDIF(NOT MSVC)
 	
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude})
 
@@ -28,17 +31,15 @@ IF(UNIX)
 	TARGET_LINK_LIBRARIES(crash_handling dl)
 ENDIF(UNIX)
 
-IF(LINUX)
-
-  IF(HAVE_BFD)
+IF(HAVE_BFD)
     TARGET_LINK_LIBRARIES(crash_handling bfd)
-  ENDIF(HAVE_BFD)
-  
-ELSEIF(MINGW)
+ENDIF(HAVE_BFD)
+
+IF(MINGW)
   TARGET_LINK_LIBRARIES(crash_handling imagehlp)
 
   IF(HAVE_BFD)
-    TARGET_LINK_LIBRARIES(crash_handling bfd iberty)
+    TARGET_LINK_LIBRARIES(crash_handling iberty)
 	# don't need to link against libintl when using MinGW 4.4
 	IF(GCXX_VERSION VERSION_GREATER 4.5 OR GCXX_VERSION VERSION_EQUAL 4.5)
 		TARGET_LINK_LIBRARIES(crash_handling intl)
@@ -47,4 +48,4 @@ ELSEIF(MINGW)
 
 ELSEIF(MSVC)
   TARGET_LINK_LIBRARIES(crash_handling dbghelp)
-ENDIF(LINUX)
+ENDIF(MINGW)

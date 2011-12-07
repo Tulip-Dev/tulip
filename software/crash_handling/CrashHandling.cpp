@@ -35,6 +35,10 @@ using namespace std;
 
 #include "UnixSignalInterposer.h"
 
+#if defined(__APPLE__)
+#include <sys/ucontext.h>
+#else
+
 // This structure mirrors the one found in /usr/include/asm/ucontext.h
 typedef struct _sig_ucontext {
   unsigned long     uc_flags;
@@ -44,16 +48,30 @@ typedef struct _sig_ucontext {
   sigset_t          uc_sigmask;
 } sig_ucontext_t;
 
+#endif
 
 void dumpStack(int sig, siginfo_t *, void * ucontext) {
 
-  sig_ucontext_t * uc = reinterpret_cast<sig_ucontext_t *>(ucontext);
-
   // Get the address at the time the signal was raised from the EIP (x86) or RIP (x86_64)
+
+#ifndef __APPLE__  
+
+  sig_ucontext_t * uc = reinterpret_cast<sig_ucontext_t *>(ucontext);
 #ifdef I64
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.rip); // x86_64 specific;
 #else
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.eip); // x86 specific;
+#endif
+
+#else
+
+  ucontext_t * uc = reinterpret_cast<ucontext_t *>(ucontext); 
+#ifndef I64
+  void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext->__ss.__eip);
+#else
+  void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext->__ss.__rip);
+#endif
+
 #endif
 
   std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
