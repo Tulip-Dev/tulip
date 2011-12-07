@@ -30,6 +30,7 @@
 #include <cstdarg>
 #include <cstring>
 #include <utility>
+#include <string>
 
 #include <bfd.h>
 
@@ -47,9 +48,13 @@ public :
   const char *getFunctionForAddress(const int64_t runtimeAddr);
 #endif
 
+  const std::string &getDsoAbsolutePath() const {
+    return filePath;
+  }
+
 private :
 
-  const char *filePath;
+  std::string filePath;
   bfd *abfd;
   asection *textSection;
   asymbol **symbolTable;
