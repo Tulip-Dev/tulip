@@ -53,6 +53,9 @@ void View::setCurrentInteractor(tlp::Interactor *i) {
 
   _currentInteractor = i;
   currentInteractorChanged(i);
+
+  //We need a refresh here to clear last interactor displayed and init the next one
+  refresh(NULL);
 }
 void View::currentInteractorChanged(tlp::Interactor *i) {
   i->install(graphicsView());
