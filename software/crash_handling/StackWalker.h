@@ -23,10 +23,8 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-//#include <stdint.h>
-//#include <cstdlib>
 
-#include <tulip/StringUtils.h>
+#include <tulip/ConsoleUtils.h>
 
 #ifndef _MSC_VER
 #ifdef HAVE_BFD
@@ -44,10 +42,18 @@ public:
   }
 
   virtual void printFrameInfos(std::ostream &os, unsigned int frameId, int64_t pcAddress, std::string moduleName, std::string funcName="", int64_t symbolOffset=0, std::string fileName="", unsigned int line=0) {
-    os << red << std::dec << std::setfill('0') << "#" << std::setw(2) << frameId
-       << white << " 0x" << std::hex << std::setw(16) << pcAddress << red << " in ";
 
-    os << blue;
+	if (frameId%2 == 0)
+		os << setTextBackgroundColor(DARK_GRAY);
+	else
+		os << setTextBackgroundColor(LIGHT_GRAY);
+
+	os << bold;
+
+    os << lightRed << std::dec << std::setfill('0') << "#" << std::setw(2) << frameId
+       << lightMagenta << " 0x" << std::hex << std::setw(16) << pcAddress << lightRed << " in ";
+
+    os << lightBlue;
 
     if (funcName != "") {
       os << funcName;
@@ -57,26 +63,25 @@ public:
     }
 
     if (symbolOffset != 0) {
-      os << white << " (+0x" << std::hex << symbolOffset << ")";
+      os << lightMagenta << " (+0x" << std::hex << symbolOffset << ")";
     }
 
     if (fileName != "") {
-      os << red << " at " << green << fileName << ":" << std::dec << yellow << line;
+      os << lightRed << " at " << lightGreen << fileName << ":" << std::dec << lightYellow << line;
     }
 
     if (moduleName != "") {
-      os << red << " from " << cyan << moduleName << std::endl;
+      os << lightRed << " from " << lightCyan << moduleName;
     }
     else {
-      os << red << " from " << green << "??" << std::endl;
+      os << lightRed << " from " << lightGreen << "??";
     }
 
-    os << defaultTextColor;
+    os << fillToEndOfLine << defaultTextColor ;
 
   }
 
 };
-
 
 #if defined(__linux) || defined(__APPLE__)
 

@@ -75,7 +75,7 @@ INSTALL(FILES
 	tulip/StlFunctions.h 
 	tulip/ExtendedClusterOperation.h 
 	tulip/StringCollection.h 
-	tulip/StringUtils.h
+	tulip/ConsoleUtils.h
 	tulip/DrawingTools.h 
 	tulip/Face.h 
 	tulip/PlanarityTest.h 
