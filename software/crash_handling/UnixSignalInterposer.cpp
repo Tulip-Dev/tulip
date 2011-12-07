@@ -49,13 +49,26 @@ static SignalFunc *real_sigset = NULL;
 
 static set<int> handledSignals;
 
+#ifndef __THROW
+#define __THROW
+#endif
+
+template <typename TO, typename FROM> TO nasty_cast(FROM f) {
+    union {
+        FROM f;
+        TO t;
+    } u;
+    u.f = f;
+    return u.t;
+}
+
 // this function will be called when the library is loaded
 static void initSignalInterposer(void) __attribute__((constructor));
 
 static void initSignalInterposer(void) {
-  real_sigaction = reinterpret_cast<SigactionFunc *>(dlsym(RTLD_NEXT, "sigaction"));
-  real_signal = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "signal"));
-  real_sigset = reinterpret_cast<SignalFunc *>(dlsym(RTLD_NEXT, "sigset"));
+  real_sigaction = nasty_cast<SigactionFunc *>(dlsym(RTLD_NEXT, "sigaction"));
+  real_signal = nasty_cast<SignalFunc *>(dlsym(RTLD_NEXT, "signal"));
+  real_sigset = nasty_cast<SignalFunc *>(dlsym(RTLD_NEXT, "sigset"));
 }
 
 void installSignalHandler(int sig, SignalHandlerFunc *handler) {
@@ -90,7 +103,7 @@ void installSignalHandler(int sig, SigactionHandlerFunc *handler) {
 // if the signal passed as first parameter is already treated by our custom handler,
 // do nothing and return SIG_DFL
 // if the signal is not treated by our custom handler, call the real signal function
-SignalHandlerFunc *signal (int sig, SignalHandlerFunc *handler) {
+SignalHandlerFunc *signal (int sig, SignalHandlerFunc *handler) __THROW {
 
   if (handledSignals.find(sig) != handledSignals.end()) {
     return SIG_DFL;
@@ -105,7 +118,7 @@ SignalHandlerFunc *signal (int sig, SignalHandlerFunc *handler) {
 // if the signal passed as first parameter is already treated by our custom handler,
 // do nothing and return SIG_DFL
 // if the signal is not treated by our custom handler, call the real sigset function
-SignalHandlerFunc *sigset(int sig, SignalHandlerFunc *handler) {
+SignalHandlerFunc *sigset(int sig, SignalHandlerFunc *handler) __THROW {
 
   if(handledSignals.find(sig) != handledSignals.end()) {
     return SIG_DFL;
@@ -120,7 +133,7 @@ SignalHandlerFunc *sigset(int sig, SignalHandlerFunc *handler) {
 // if the signal passed as first parameter is already treated by our custom handler,
 // do nothing and return 0
 // if the signal is not treated by our custom handler, call the real sigaction function
-int sigaction(int sig, const struct sigaction *act, struct sigaction *oact) {
+int sigaction(int sig, const struct sigaction *act, struct sigaction *oact) __THROW {
 
   if (std::find(handledSignals.begin(), handledSignals.end(), sig) != handledSignals.end()) {
     return 0;
