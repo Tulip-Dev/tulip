@@ -56,7 +56,6 @@ bool GlMainWidget::inRendering=false;
 
 //==================================================
 static void setRasterPosition(unsigned int x, unsigned int y) {
-  //  std::cerr << __PRETTY_FUNCTION__ << std::endl;
   float val[4];
   unsigned char tmp[10];
   glGetFloatv(GL_CURRENT_RASTER_POSITION, (float*)&val);
@@ -263,7 +262,7 @@ void GlMainWidget::paintEvent( QPaintEvent*) {
   QRegion rect = this->visibleRegion();
 
   //If the visible are changed we need to draw the entire scene
-  //Because the saved snapshot only backup the visibile part of the
+  //Because the saved snapshot only backup the visible part of the
   //Graph
   if (rect.boundingRect() != _visibleArea.boundingRect()) {
     _visibleArea = rect;
@@ -281,7 +280,6 @@ void GlMainWidget::closeEvent(QCloseEvent *e) {
 }
 //==================================================
 void GlMainWidget::setupOpenGlContext() {
-  //  std::cerr << __PRETTY_FUNCTION__ << " (" << (int)this << ")" << std::endl;
   assert(context()->isValid());
   makeCurrent();
 }
@@ -533,7 +531,6 @@ bool GlMainWidget::doSelect(const int x, const int y,SelectedEntity &selectedEnt
 unsigned char * GlMainWidget::getImage() {
   makeCurrent();
   return scene.getImage();
-  //return GlGraph::getImage();
 }
 //=====================================================
 bool GlMainWidget::outputEPS(int size, int, const char *filename) {
