@@ -37,7 +37,7 @@ using namespace std;
 namespace tlp {
 
 /** \brief Storage class for Z ordering
- *
+ * Storage class for Z ordering
  */
 struct EntityWithDistance {
 
@@ -54,7 +54,9 @@ struct EntityWithDistance {
   bool isNode;
 };
 
-
+/** \brief Comparator to order entities with Z
+ * Comparator to order entities with Z
+ */
 struct entityWithDistanceCompare {
   static const GlGraphInputData *inputData;
   bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2 ) const {
@@ -77,7 +79,9 @@ struct entityWithDistanceCompare {
 
 const GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
 
-//====================================================
+/** \brief Comparator to order entities with metric to display labels with metric ordering
+ * Comparator to order entities with metric to display labels with metric ordering
+ */
 class GreatThanNode {
 public:
   DoubleProperty *metric;
@@ -85,7 +89,9 @@ public:
     return (metric->getNodeValue(n1.first) > metric->getNodeValue(n2.first));
   }
 };
-//====================================================
+/** \brief Comparator to order entities with metric to display labels with metric ordering
+ * Comparator to order entities with metric to display labels with metric ordering
+ */
 class GreatThanEdge {
 public:
   DoubleProperty *metric;
@@ -94,6 +100,259 @@ public:
   }
 };
 
+//===================================================================
+//
+// GlGraphHighDetailsRenderer functions implementation
+//
+//===================================================================
+
+GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer( GlGraphInputData &inputData, GlGraphRenderingParameters &parameters):GlGraphRenderer(inputData,parameters) {
+  lodCalculator=NULL;
+  fakeScene = new GlScene;
+  fakeScene->addLayer(new GlLayer("fakeLayer"));
+}
+//===================================================================
+GlGraphHighDetailsRenderer::~GlGraphHighDetailsRenderer() {
+  delete fakeScene;
+}
+//===================================================================
+void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
+
+  Graph *graph=inputData.getGraph();
+
+  // If we don't init lod calculator : clone the scene one
+  if(!lodCalculator) {
+    lodCalculator=camera->getScene()->getCalculator()->clone();
+    lodCalculator->setAttachedLODCalculator(camera->getScene()->getCalculator());
+    lodCalculator->setInputData(&inputData);
+    lodCalculator->setScene(*fakeScene);
+  }
+
+  lodCalculator->clear();
+  lodCalculator->setRenderingEntitiesFlag(RenderingAll);
+
+  // Fake scene creation
+  //  This scene is needed by lod calculator to compute lod
+  Camera newCamera=*camera;
+  fakeScene->setViewport(camera->getViewport()[0],camera->getViewport()[1],camera->getViewport()[2],camera->getViewport()[3]);
+  fakeScene->getLayer("fakeLayer")->setCamera(newCamera);
+
+  // LOD computation
+  if(lodCalculator->needEntities()) {
+    GlLODSceneVisitor visitor(lodCalculator, &inputData);
+    visitor.visit(fakeScene->getLayer("fakeLayer"));
+    visitGraph(&visitor);
+  }
+
+  lodCalculator->compute(fakeScene->getViewport(), fakeScene->getViewport());
+  LayersLODVector &layersLODVector = lodCalculator->getResult();
+
+  GlEdge::clearEdgeWidthLodSystem();
+
+  // VertexArrayManager begin
+  if(!selectionDrawActivate) {
+    inputData.getGlVertexArrayManager()->activate(true);
+    inputData.getGlVertexArrayManager()->beginRendering();
+  }
+  else {
+    inputData.getGlVertexArrayManager()->activate(false);
+  }
+
+  // VertexArrayManager update
+  if(inputData.getGlVertexArrayManager()->haveToCompute()) {
+    GlVertexArrayVisitor vertexArrayVisitor(&inputData);
+    visitGraph(&vertexArrayVisitor,true);
+    inputData.getGlVertexArrayManager()->setHaveToComputeAll(false);
+  }
+
+  BooleanProperty *filteringProperty = parameters.getDisplayFilteringProperty();
+  bool displayNodes = parameters.isDisplayNodes();
+  bool displayMetaNodes = parameters.isDisplayMetaNodes();
+  bool displayEdges = parameters.isDisplayEdges();
+
+  GlNode glNode(0);
+  GlEdge glEdge(0);
+
+  if(!parameters.isElementZOrdered()) {
+
+    //draw nodes and metanodes
+    for(vector<ComplexEntityLODUnit>::iterator it =layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
+      if((*it).lod<=0)
+        continue;
+
+      if(filteringProperty) {
+        if(filteringProperty->getNodeValue(node((*it).id)))
+          continue;
+      }
+
+      if((!graph->isMetaNode(node((*it).id)) && displayNodes) || (graph->isMetaNode(node((*it).id)) && displayMetaNodes)) {
+        if(selectionDrawActivate) {
+          if((selectionType & RenderingNodes)==0)
+            continue;
+
+          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id,SelectedEntity::NODE_SELECTED);
+          glLoadName(*selectionCurrentId);
+          (*selectionCurrentId)++;
+        }
+
+        glNode.id=(*it).id;
+        glNode.draw((*it).lod,&inputData,camera);
+      }
+      else {
+        continue;
+      }
+
+    }
+
+    //draw edges
+    for(vector<ComplexEntityLODUnit>::iterator it = layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
+      if((*it).lod<=0)
+        continue;
+
+      if(filteringProperty) {
+        if(filteringProperty->getEdgeValue(edge((*it).id)))
+          continue;
+      }
+
+      if(!displayEdges)
+        continue;
+
+      if(selectionDrawActivate) {
+        if((selectionType & RenderingEdges)==0)
+          continue;
+
+        (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id,SelectedEntity::EDGE_SELECTED);
+        glLoadName(*selectionCurrentId);
+        (*selectionCurrentId)++;
+      }
+
+      glEdge.id=(*it).id;
+      glEdge.draw((*it).lod,&inputData,camera);
+    }
+
+  }
+  else {
+
+    entityWithDistanceCompare::inputData=&inputData;
+    multiset<EntityWithDistance,entityWithDistanceCompare> entitiesSet;
+    Coord camPos=camera->getEyes();
+    BoundingBox bb;
+    double dist;
+
+    if(!selectionDrawActivate || (selectionDrawActivate && (selectionType & RenderingNodes)!=0)) {
+      // Colect complex entities
+      for(vector<ComplexEntityLODUnit>::iterator it=layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
+        if((*it).lod<0)
+          continue;
+
+        if(filteringProperty) {
+          if(filteringProperty->getNodeValue(node((*it).id)))
+            continue;
+        }
+
+        bb=(*it).boundingBox;
+        Coord middle((bb[1]+bb[0])/2.f);
+        dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
+        dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
+        dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+        entitiesSet.insert(EntityWithDistance(dist,&(*it),true));
+      }
+    }
+
+    if(!selectionDrawActivate || (selectionDrawActivate && (selectionType & RenderingEdges)!=0)) {
+      for(vector<ComplexEntityLODUnit>::iterator it=layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
+        if((*it).lod<0)
+          continue;
+
+        if(filteringProperty) {
+          if(filteringProperty->getEdgeValue(edge((*it).id)))
+            continue;
+        }
+
+        bb = (*it).boundingBox;
+        Coord middle((bb[0] + bb[1])/2.f);
+        dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
+        dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
+        dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+        entitiesSet.insert(EntityWithDistance(dist,&(*it),false));
+      }
+    }
+
+    // Draw
+    for(multiset<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin(); it!=entitiesSet.end(); ++it) {
+      // Complex entities
+      ComplexEntityLODUnit *entity=(ComplexEntityLODUnit*)((*it).entity);
+
+      if((*it).isNode && (selectionType & RenderingNodes)!=0) {
+        if((!graph->isMetaNode(node(entity->id)) && displayNodes) || (graph->isMetaNode(node(entity->id)) && displayMetaNodes)) {
+          if(selectionDrawActivate) {
+            (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id,SelectedEntity::NODE_SELECTED);
+            glLoadName(*selectionCurrentId);
+            (*selectionCurrentId)++;
+          }
+
+          glNode.id=entity->id;
+          glNode.draw(entity->lod,&inputData,camera);
+        }
+        else {
+          continue;
+        }
+      }
+      else if((selectionType & RenderingEdges)!=0) {
+        if(!displayEdges)
+          continue;
+
+        if(selectionDrawActivate) {
+          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id,SelectedEntity::EDGE_SELECTED);
+          glLoadName(*selectionCurrentId);
+          (*selectionCurrentId)++;
+        }
+
+        glEdge.id=entity->id;
+        glEdge.draw(entity->lod,&inputData,camera);
+      }
+    }
+  }
+
+  if(!selectionDrawActivate) {
+    inputData.getGlVertexArrayManager()->endRendering();
+  }
+
+  /*
+    Label draw
+  */
+  OcclusionTest occlusionTest;
+  bool labelDensityAtZero=true;
+
+  if(parameters.getLabelsDensity()!=-100)
+    labelDensityAtZero=false;
+
+  if(!labelDensityAtZero) {
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    glDisable(GL_LIGHTING);
+    glDepthFunc(GL_ALWAYS );
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_COLOR_MATERIAL);
+
+    // Draw Labels for selected entities
+    drawLabelsForComplexEntities(true,&occlusionTest,layersLODVector[0]);
+
+    // Draw Labels for unselected entities
+    drawLabelsForComplexEntities(false,&occlusionTest,layersLODVector[0]);
+
+    glPopAttrib();
+  }
+
+  selectionDrawActivate=false;
+}
+//===================================================================
+void GlGraphHighDetailsRenderer::initSelectionRendering(RenderingEntitiesFlag type,map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId) {
+  selectionType=type;
+  selectionIdMap=&idMap;
+  selectionCurrentId=&currentId;
+  selectionDrawActivate=true;
+}
+//===================================================================
 void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,OcclusionTest *occlusionTest,LayerLODUnit &layerLODUnit) {
   Graph *graph=inputData.getGraph();
   BooleanProperty *selectionProperty=inputData.getElementSelected();
@@ -213,252 +472,6 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       }
     }
   }
-}
-
-GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer( GlGraphInputData &inputData, GlGraphRenderingParameters &parameters):GlGraphRenderer(inputData,parameters) {
-  lodCalculator=NULL;
-  fakeScene = new GlScene;
-  fakeScene->addLayer(new GlLayer("fakeLayer"));
-}
-
-GlGraphHighDetailsRenderer::~GlGraphHighDetailsRenderer() {
-  delete fakeScene;
-}
-//===================================================================
-void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
-
-  Graph *graph=inputData.getGraph();
-
-
-  if(!lodCalculator) {
-    lodCalculator=camera->getScene()->getCalculator()->clone();
-    lodCalculator->setAttachedLODCalculator(camera->getScene()->getCalculator());
-    lodCalculator->setInputData(&inputData);
-    lodCalculator->setScene(*fakeScene);
-  }
-
-  lodCalculator->clear();
-  lodCalculator->setRenderingEntitiesFlag(RenderingAll);
-
-  // Fake scene creation
-  //  This scene is needed by lod calculator to compute lod
-  Camera newCamera=*camera;
-  fakeScene->setViewport(camera->getViewport()[0],camera->getViewport()[1],camera->getViewport()[2],camera->getViewport()[3]);
-  fakeScene->getLayer("fakeLayer")->setCamera(newCamera);
-
-  if(lodCalculator->needEntities()) {
-    GlLODSceneVisitor visitor(lodCalculator, &inputData);
-    visitor.visit(fakeScene->getLayer("fakeLayer"));
-    visitGraph(&visitor);
-  }
-
-  lodCalculator->compute(fakeScene->getViewport(), fakeScene->getViewport());
-  LayersLODVector &layersLODVector = lodCalculator->getResult();
-
-  GlEdge::clearEdgeWidthLodSystem();
-
-  if(!selectionDrawActivate) {
-    inputData.getGlVertexArrayManager()->activate(true);
-    inputData.getGlVertexArrayManager()->beginRendering();
-  }
-  else {
-    inputData.getGlVertexArrayManager()->activate(false);
-  }
-
-  // VertexArrayManager update
-  if(inputData.getGlVertexArrayManager()->haveToCompute()) {
-    GlVertexArrayVisitor vertexArrayVisitor(&inputData);
-    visitGraph(&vertexArrayVisitor,true);
-    inputData.getGlVertexArrayManager()->setHaveToComputeAll(false);
-  }
-
-  BooleanProperty *filteringProperty = parameters.getDisplayFilteringProperty();
-  bool displayNodes = parameters.isDisplayNodes();
-  bool displayMetaNodes = parameters.isDisplayMetaNodes();
-  bool displayEdges = parameters.isDisplayEdges();
-
-  GlNode glNode(0);
-  GlEdge glEdge(0);
-
-  if(!parameters.isElementZOrdered()) {
-
-    //draw nodes and metanodes
-    for(vector<ComplexEntityLODUnit>::iterator it =layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
-      if((*it).lod<=0)
-        continue;
-
-      if(filteringProperty) {
-        if(filteringProperty->getNodeValue(node((*it).id)))
-          continue;
-      }
-
-      if((!graph->isMetaNode(node((*it).id)) && displayNodes) || (graph->isMetaNode(node((*it).id)) && displayMetaNodes)) {
-        if(selectionDrawActivate) {
-          if((selectionType & RenderingNodes)==0)
-            continue;
-
-          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id,SelectedEntity::NODE_SELECTED);
-          glLoadName(*selectionCurrentId);
-          (*selectionCurrentId)++;
-        }
-
-        glNode.id=(*it).id;
-        glNode.draw((*it).lod,&inputData,camera);
-      }
-      else {
-        continue;
-      }
-
-    }
-
-    //draw edges
-    for(vector<ComplexEntityLODUnit>::iterator it = layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
-      if((*it).lod<=0)
-        continue;
-
-      if(filteringProperty) {
-        if(filteringProperty->getEdgeValue(edge((*it).id)))
-          continue;
-      }
-
-      if(!displayEdges)
-        continue;
-
-      if(selectionDrawActivate) {
-        if((selectionType & RenderingEdges)==0)
-          continue;
-
-        (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id,SelectedEntity::EDGE_SELECTED);
-        glLoadName(*selectionCurrentId);
-        (*selectionCurrentId)++;
-      }
-
-      glEdge.id=(*it).id;
-      glEdge.draw((*it).lod,&inputData,camera);
-    }
-
-  }
-  else {
-
-    entityWithDistanceCompare::inputData=&inputData;
-    multiset<EntityWithDistance,entityWithDistanceCompare> entitiesSet;
-    Coord camPos=camera->getEyes();
-    Coord camCenter=camera->getCenter();
-    BoundingBox bb;
-    double dist;
-
-    if(!selectionDrawActivate || (selectionDrawActivate && (selectionType & RenderingNodes)!=0)) {
-      // Colect complex entities
-      for(vector<ComplexEntityLODUnit>::iterator it=layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
-        if((*it).lod<0)
-          continue;
-
-        if(filteringProperty) {
-          if(filteringProperty->getNodeValue(node((*it).id)))
-            continue;
-        }
-
-        bb=(*it).boundingBox;
-        Coord middle((bb[1]+bb[0])/2.f);
-        dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-        dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
-        dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
-        entitiesSet.insert(EntityWithDistance(dist,&(*it),true));
-      }
-    }
-
-    if(!selectionDrawActivate || (selectionDrawActivate && (selectionType & RenderingEdges)!=0)) {
-      for(vector<ComplexEntityLODUnit>::iterator it=layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
-        if((*it).lod<0)
-          continue;
-
-        if(filteringProperty) {
-          if(filteringProperty->getEdgeValue(edge((*it).id)))
-            continue;
-        }
-
-        bb = (*it).boundingBox;
-        Coord middle((bb[0] + bb[1])/2.f);
-        dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-        dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
-        dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
-        entitiesSet.insert(EntityWithDistance(dist,&(*it),false));
-      }
-    }
-
-    // Draw
-    for(multiset<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin(); it!=entitiesSet.end(); ++it) {
-      // Complex entities
-      ComplexEntityLODUnit *entity=(ComplexEntityLODUnit*)((*it).entity);
-
-      if((*it).isNode && (selectionType & RenderingNodes)!=0) {
-        if((!graph->isMetaNode(node(entity->id)) && displayNodes) || (graph->isMetaNode(node(entity->id)) && displayMetaNodes)) {
-          if(selectionDrawActivate) {
-            (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id,SelectedEntity::NODE_SELECTED);
-            glLoadName(*selectionCurrentId);
-            (*selectionCurrentId)++;
-          }
-
-          glNode.id=entity->id;
-          glNode.draw(entity->lod,&inputData,camera);
-        }
-        else {
-          continue;
-        }
-      }
-      else if((selectionType & RenderingEdges)!=0) {
-        if(!displayEdges)
-          continue;
-
-        if(selectionDrawActivate) {
-          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id,SelectedEntity::EDGE_SELECTED);
-          glLoadName(*selectionCurrentId);
-          (*selectionCurrentId)++;
-        }
-
-        glEdge.id=entity->id;
-        glEdge.draw(entity->lod,&inputData,camera);
-      }
-    }
-  }
-
-  if(!selectionDrawActivate) {
-    inputData.getGlVertexArrayManager()->endRendering();
-  }
-
-  /*
-    Label draw
-  */
-  OcclusionTest occlusionTest;
-  bool labelDensityAtZero=true;
-
-  if(parameters.getLabelsDensity()!=-100)
-    labelDensityAtZero=false;
-
-  if(!labelDensityAtZero) {
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glDisable(GL_LIGHTING);
-    glDepthFunc(GL_ALWAYS );
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_COLOR_MATERIAL);
-
-    // Draw Labels for selected entities
-    drawLabelsForComplexEntities(true,&occlusionTest,layersLODVector[0]);
-
-    // Draw Labels for unselected entities
-    drawLabelsForComplexEntities(false,&occlusionTest,layersLODVector[0]);
-
-    glPopAttrib();
-  }
-
-  selectionDrawActivate=false;
-}
-//===================================================================
-void GlGraphHighDetailsRenderer::initSelectionRendering(RenderingEntitiesFlag type,map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId) {
-  selectionType=type;
-  selectionIdMap=&idMap;
-  selectionCurrentId=&currentId;
-  selectionDrawActivate=true;
 }
 
 }
