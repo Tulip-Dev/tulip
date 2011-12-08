@@ -245,12 +245,7 @@ public:
 
 private:
 
-  void  updateGL();
-  void  glInit();
-  void  glDraw();
-  void  paintGL();
   void  setupOpenGlContext();
-  void  initializeGL();
   void createRenderingStore(int width, int height);
 
   tlp::GlScene scene;
