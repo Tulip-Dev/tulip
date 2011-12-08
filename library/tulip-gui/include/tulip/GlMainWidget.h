@@ -124,9 +124,6 @@ public:
     foregroundEntity.push_back(entity);
   }
 
-  /**************************************
-   * inherited methods overloading
-   **************************************/
   /** \brief select nodes and edges in a region of the screen
    *
    *  select all nodes and edges lying in the area of the screen of given width and height,
