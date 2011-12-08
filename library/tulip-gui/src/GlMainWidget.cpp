@@ -285,27 +285,6 @@ void GlMainWidget::setupOpenGlContext() {
   assert(context()->isValid());
   makeCurrent();
 }
-
-//==================================================
-void GlMainWidget::paintGL() {
-  //  std::cerr << __PRETTY_FUNCTION__ << std::endl;
-}
-//==================================================
-void GlMainWidget::glInit() {
-  //  std::cerr << __PRETTY_FUNCTION__ << std::endl;
-}
-//==================================================
-void GlMainWidget::glDraw() {
-  //  std::cerr << __PRETTY_FUNCTION__ << std::endl;
-}
-//==================================================
-void GlMainWidget::updateGL() {
-  //  std::cerr << __PRETTY_FUNCTION__ << std::endl;
-}
-//==================================================
-void GlMainWidget::initializeGL() {
-  //  std::cerr << __PRETTY_FUNCTION__ << std::endl;
-}
 //==================================================
 void GlMainWidget::createRenderingStore(int width, int height) {
 
