@@ -69,8 +69,8 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
   size_t i_col = 0;
   edge e;
   forEach(e, graph->getEdges()) {
-    Color a = color->getNodeValue(graph->source(e));
-    Color b = color->getNodeValue(graph->target(e));
+    Color a = color->getEdgeValue(e);
+    Color b = color->getEdgeValue(e);
     Vec4f ca, cb;
 
     for (size_t i=0; i < 4; ++i) {
