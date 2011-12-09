@@ -106,7 +106,6 @@ GlMainWidget::GlMainWidget(QWidget *parent,View *view):
 #warning Qt fix must be tested with this version of Qt, see GlMainWidget.cpp l.106
 #endif
 #endif
-  connect(this,SIGNAL(viewDrawn(GlMainWidget*,bool)),this,SLOT(viewDrawnSlot(GlMainWidget *,bool)));
 }
 //==================================================
 GlMainWidget::~GlMainWidget() {
