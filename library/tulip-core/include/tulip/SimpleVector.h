@@ -20,6 +20,7 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef _SIMPLE_VECTOR_H_
 #define _SIMPLE_VECTOR_H_
+#include <stdlib.h>
 
 namespace tlp {
 
