@@ -117,7 +117,7 @@ QSet<tlp::Observable*> View::triggers() const {
 
 void View::removeRedrawTrigger(tlp::Observable* obs) {
   if (_triggers.remove(obs))
-    obs->removeListener(this);
+    obs->removeObserver(this);
 }
 
 void View::addRedrawTrigger(tlp::Observable* obs) {
