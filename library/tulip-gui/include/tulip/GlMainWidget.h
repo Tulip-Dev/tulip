@@ -289,9 +289,6 @@ public slots:
 
 protected slots:
   void paintEvent( QPaintEvent* );
-  void viewDrawnSlot(GlMainWidget *glWidget,bool graphChanged) {
-    emit graphRedrawn(glWidget,graphChanged);
-  }
 
 signals:
   /**
@@ -299,11 +296,6 @@ signals:
    */
   void closing(GlMainWidget *, QCloseEvent *);
 
-  /**
-   * This signal is here for compatibility with old code
-   * This signal is emit when viewDrawn is emit
-   */
-  void graphRedrawn(GlMainWidget *glWidget,bool graphChanged);
   /**
    * This signal is emit when GlMainWidget::redraw() is call
    */
