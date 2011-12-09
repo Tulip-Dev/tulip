@@ -12,6 +12,8 @@ target_link_libraries(packagePlugins ${QT_LIBRARIES}
                       ${LibTulipGUIName}
                       ${LibTulipOglName}
                       ${LibTulipOGDFName}
+                      ${OGDFLibrary}
+                      pthread
                       quazip)
 
 target_link_libraries(pushPlugins ${QT_LIBRARIES}
