@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "ColorButton.h"
+#include <tulip/ColorButton.h>
 
 #include <QtGui/QPaintEvent>
 #include <QtGui/QStylePainter>
