@@ -851,7 +851,6 @@ void GlScene::getXML(string &out) {
   GlXMLTools::endChildNode(out);
 
   out.append("</scene>");
-  cout << out << endl;
 }
 //====================================================
 void GlScene::setWithXML(string &in, Graph *graph) {

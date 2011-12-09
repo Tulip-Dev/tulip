@@ -91,7 +91,6 @@ string GlXMLTools::enterChildNode(const string &inString, unsigned int &currentP
   goToNextCaracter(inString, currentPosition);
   unsigned int beginPosition=currentPosition+1;
   size_t endPosition = inString.find('>',currentPosition);
-  cout << inString.substr(beginPosition-1,endPosition-beginPosition) << endl;
 
   if(inString.substr(beginPosition-1,endPosition-beginPosition).find("</")!=string::npos)
     return "";
