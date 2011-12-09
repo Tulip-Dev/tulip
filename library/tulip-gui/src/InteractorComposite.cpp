@@ -103,10 +103,10 @@ void InteractorComposite::install(QObject* target) {
 }
 void InteractorComposite::uninstall() {
   if (lastTarget() != NULL)
-    foreach(InteractorComponent* i, _components){
-      lastTarget()->removeEventFilter(i);
-      i->clear();
-    }
+    foreach(InteractorComponent* i, _components) {
+    lastTarget()->removeEventFilter(i);
+    i->clear();
+  }
 
   install(NULL);
 }

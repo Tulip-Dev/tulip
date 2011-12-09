@@ -43,12 +43,12 @@ public:
 
   virtual void printFrameInfos(std::ostream &os, unsigned int frameId, int64_t pcAddress, std::string moduleName, std::string funcName="", int64_t symbolOffset=0, std::string fileName="", unsigned int line=0) {
 
-	if (frameId%2 == 0)
-		os << setTextBackgroundColor(DARK_GRAY);
-	else
-		os << setTextBackgroundColor(LIGHT_GRAY);
+    if (frameId%2 == 0)
+      os << setTextBackgroundColor(DARK_GRAY);
+    else
+      os << setTextBackgroundColor(LIGHT_GRAY);
 
-	os << bold;
+    os << bold;
 
     os << lightRed << std::dec << std::setfill('0') << "#" << std::setw(2) << frameId
        << lightMagenta << " 0x" << std::hex << std::setw(16) << pcAddress << lightRed << " in ";

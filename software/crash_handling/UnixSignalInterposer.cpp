@@ -54,12 +54,12 @@ static set<int> handledSignals;
 #endif
 
 template <typename TO, typename FROM> TO nasty_cast(FROM f) {
-    union {
-        FROM f;
-        TO t;
-    } u;
-    u.f = f;
-    return u.t;
+  union {
+    FROM f;
+    TO t;
+  } u;
+  u.f = f;
+  return u.t;
 }
 
 // this function will be called when the library is loaded
