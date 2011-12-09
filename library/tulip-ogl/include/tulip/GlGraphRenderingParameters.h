@@ -113,9 +113,9 @@ public:
    */
   void setFontsPath(const std::string& path);
   /**
-   * return the incremental rendering state
+   * return the absolute path used for the fonts loading
    */
-  bool isIncrementalRendering() const;
+  std::string getFontsPath();
   /**
    * If true and if labels are activated label inside meta nodes will be displayed
    */
