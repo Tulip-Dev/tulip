@@ -207,12 +207,14 @@ bool MouseEdgeBendEditor::compute(GlMainWidget *glMainWidget) {
 
     bool layerInScene=false;
     vector<pair<std::string, GlLayer*> >* layersList=glMainWidget->getScene()->getLayersList();
-    for(vector<pair<std::string, GlLayer*> >::iterator it=layersList->begin();it!=layersList->end();++it){
-      if((*it).second==layer){
+
+    for(vector<pair<std::string, GlLayer*> >::iterator it=layersList->begin(); it!=layersList->end(); ++it) {
+      if((*it).second==layer) {
         layerInScene=true;
         break;
       }
     }
+
     if(!layerInScene)
       glMainWidget->getScene()->insertLayerAfter(layer,"Main");
 

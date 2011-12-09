@@ -54,7 +54,7 @@ void dumpStack(int sig, siginfo_t *, void * ucontext) {
 
   // Get the address at the time the signal was raised from the EIP (x86) or RIP (x86_64)
 
-#ifndef __APPLE__  
+#ifndef __APPLE__
 
   sig_ucontext_t * uc = reinterpret_cast<sig_ucontext_t *>(ucontext);
 #ifdef I64
@@ -65,7 +65,7 @@ void dumpStack(int sig, siginfo_t *, void * ucontext) {
 
 #else
 
-  ucontext_t * uc = reinterpret_cast<ucontext_t *>(ucontext); 
+  ucontext_t * uc = reinterpret_cast<ucontext_t *>(ucontext);
 #ifndef I64
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext->__ss.__eip);
 #else

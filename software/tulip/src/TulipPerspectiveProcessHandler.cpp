@@ -69,7 +69,7 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
   QDir appDir(QApplication::applicationDirPath());
 
   QProcess *process = new QProcess;
-#ifdef WIN32  
+#ifdef WIN32
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
   env.insert("STDERR_NO_ANSI_ESCAPES", "1");
   process->setProcessEnvironment(env);
