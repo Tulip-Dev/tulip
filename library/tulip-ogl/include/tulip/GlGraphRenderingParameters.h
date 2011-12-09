@@ -158,6 +158,10 @@ public:
   bool isDisplayMetaNodes() const;
   /**
    * set stencil number for selected nodes
+   * Stencil is an OpenGl system to ensure that other entity can't be displayed above this entity. It's a "guaranted visibility" system.
+   * A small number causes a guaranted visibility
+   * Default value in Tulip is 0xFFFF (greater integer)
+   * And when we have stencil on entity value is 0x2
    */
   void setSelectedNodesStencil(const int stencil);
   /**
@@ -166,6 +170,7 @@ public:
   int getSelectedNodesStencil() const;
   /**
    * set stencil number for selected meta-nodes
+   * See setSelectedNodesStencil() documentation for more details on stencil number
    */
   void setSelectedMetaNodesStencil(const int stencil);
   /**
@@ -174,6 +179,7 @@ public:
   int getSelectedMetaNodesStencil() const;
   /**
    * set stencil number for selected edges
+   * See setSelectedNodesStencil() documentation for more details on stencil number
    */
   void setSelectedEdgesStencil(const int stencil);
   /**
@@ -182,6 +188,7 @@ public:
   int getSelectedEdgesStencil() const;
   /**
    * set stencil number for nodes
+   * See setSelectedNodesStencil() documentation for more details on stencil number
    */
   void setNodesStencil(const int stencil);
   /**
@@ -190,6 +197,7 @@ public:
   int getNodesStencil() const;
   /**
    * set stencil number for meta-nodes
+   * See setSelectedNodesStencil() documentation for more details on stencil number
    */
   void setMetaNodesStencil(const int stencil);
   /**
@@ -198,6 +206,7 @@ public:
   int getMetaNodesStencil() const;
   /**
    * set stencil number for edges
+   * See setSelectedNodesStencil() documentation for more details on stencil number
    */
   void setEdgesStencil(const int stencil);
   /**
@@ -206,6 +215,7 @@ public:
   int getEdgesStencil() const;
   /**
    * set stencil number for nodes label
+   * See setSelectedNodesStencil() documentation for more details on stencil number
    */
   void setNodesLabelStencil(const int stencil);
   /**
@@ -214,6 +224,7 @@ public:
   int getNodesLabelStencil() const;
   /**
    * set stencil number for meta-nodes label
+   * See setSelectedNodesStencil() documentation for more details on stencil number
    */
   void setMetaNodesLabelStencil(const int stencil);
   /**
@@ -222,6 +233,7 @@ public:
   int getMetaNodesLabelStencil() const;
   /**
    * set stencil number for edges label
+   * See setSelectedNodesStencil() documentation for more details on stencil number
    */
   void setEdgesLabelStencil(const int stencil);
   /**
