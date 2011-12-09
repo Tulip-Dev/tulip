@@ -113,14 +113,6 @@ public:
    */
   void setFontsPath(const std::string& path);
   /**
-   * return the absolute path used for the fonts loading
-   */
-  std::string getFontsPath();
-  /**
-   * if true glgraph use the incremental rendering else display all elements in one pass
-   */
-  void setIncrementalRendering(const bool state);
-  /**
    * return the incremental rendering state
    */
   bool isIncrementalRendering() const;
