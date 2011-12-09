@@ -66,6 +66,10 @@ public:
   }
   /**
    * Set stencil number of the entity
+   * Stencil is an OpenGl system to ensure that other entity can't be displayed above this entity; it's a "guaranted visibility" system.
+   * A small number causes a guaranted visibility
+   * Default value in Tulip is 0xFFFF (greater integer)
+   * And when we have stencil on entity value is 0x2
    */
   virtual void setStencil(int stencil) {
     this->stencil=stencil;
