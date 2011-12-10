@@ -24,7 +24,6 @@
 
 namespace tlp {
 
-class PropertyContext;
 class BooleanProperty;
 
 /**
@@ -46,7 +45,7 @@ public:
 
 protected:
   ///
-  BooleanAlgorithm (const PropertyContext &);
+  BooleanAlgorithm (const AlgorithmContext &);
 };
 /*@*/
 

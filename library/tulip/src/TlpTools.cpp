@@ -162,14 +162,7 @@ void tlp::initTulipLib(const char* appDirPath) {
   TulipBitmapDir=TulipShareDir+"bitmaps/";
 
   // initialize factories
-  SizeProperty::initFactory();
-  IntegerProperty::initFactory();
-  LayoutProperty::initFactory();
-  ColorProperty::initFactory();
-  DoubleProperty::initFactory();
-  StringProperty::initFactory();
-  BooleanProperty::initFactory();
-  AlgorithmFactory::initFactory();
+  AlgorithmPlugin::initFactory();
   ImportModuleFactory::initFactory();
   ExportModuleFactory::initFactory();
 
@@ -186,23 +179,9 @@ ostream *tlp::getOgzstream(const char *name, int open_mode) {
 }
 //=========================================================
 map<string, TemplateFactoryInterface* > *TemplateFactoryInterface::allFactories = 0;
-TemplateFactory<AlgorithmFactory, Algorithm,AlgorithmContext > *AlgorithmFactory::factory = 0;
+TemplateFactory<AlgorithmPlugin,Algorithm,AlgorithmContext > *AlgorithmPlugin::factory = 0;
 TemplateFactory<ImportModuleFactory,ImportModule,AlgorithmContext > *ImportModuleFactory::factory = 0;
 TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext > *ExportModuleFactory::factory = 0;
-// initialize and export the factories needed to manage
-// our different kinds of plugins
-#if !defined( __APPLE__) || __GNUC__ > 3
-template <class Tnode, class Tedge, class TPROPERTY>
-TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > *AbstractProperty<Tnode,Tedge,TPROPERTY>::factory = 0;
-#else
-TemplateFactory<PropertyFactory<ColorAlgorithm>, ColorAlgorithm, PropertyContext> *AbstractProperty<ColorType, ColorType, ColorAlgorithm>::factory = 0;
-TemplateFactory<PropertyFactory<IntegerAlgorithm>, IntegerAlgorithm, PropertyContext> *AbstractProperty<IntegerType, IntegerType, IntegerAlgorithm>::factory = 0;
-TemplateFactory<PropertyFactory<LayoutAlgorithm>, LayoutAlgorithm, PropertyContext> *AbstractProperty<PointType, LineType, LayoutAlgorithm>::factory = 0;
-TemplateFactory<PropertyFactory<DoubleAlgorithm>, DoubleAlgorithm, PropertyContext> *AbstractProperty<DoubleType, DoubleType, DoubleAlgorithm>::factory = 0;
-TemplateFactory<PropertyFactory<BooleanAlgorithm>, BooleanAlgorithm, PropertyContext> *AbstractProperty<BooleanType, BooleanType, BooleanAlgorithm>::factory = 0;
-TemplateFactory<PropertyFactory<SizeAlgorithm>, SizeAlgorithm, PropertyContext> *AbstractProperty<SizeType,SizeType, SizeAlgorithm>::factory = 0;
-TemplateFactory<PropertyFactory<StringAlgorithm>, StringAlgorithm, PropertyContext> *AbstractProperty<StringType, StringType, StringAlgorithm>::factory = 0;
-#endif
 //==========================================================
 PluginLoader *TemplateFactoryInterface::currentLoader = NULL;
 //==========================================================

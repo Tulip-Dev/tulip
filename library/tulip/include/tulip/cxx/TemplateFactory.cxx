@@ -28,6 +28,11 @@ tlp::Iterator<std::string>* tlp::TemplateFactory<ObjectFactory, ObjectType, Cont
 }
 
 template<class ObjectFactory, class ObjectType, class Context>
+tlp::Iterator<ObjectFactory*>* tlp::TemplateFactory<ObjectFactory, ObjectType, Context>::availablePluginObjects() {
+  return new tlp::StlMapValueIterator<std::string, ObjectFactory *>(objMap.begin(), objMap.end());
+}
+
+template<class ObjectFactory, class ObjectType, class Context>
 bool tlp::TemplateFactory<ObjectFactory, ObjectType, Context>::pluginExists(const std::string &pluginName) {
   return (objMap.find(pluginName) != objMap.end());
 }
@@ -48,7 +53,7 @@ void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::registerPlugin(Obje
 
     for (; itD != dependencies.end(); itD++) {
       const char *factoryDepName = (*itD).factoryName.c_str();
-      (*itD).factoryName = tlp::demangleTlpClassName(factoryDepName);
+       (*itD).factoryName = standardizeName(factoryDepName);
     }
 
     objDeps[pluginName] = dependencies;

@@ -27,9 +27,6 @@
 #include <tulip/TemplateFactory.h>
 #include <tulip/BooleanAlgorithm.h>
 #include <tulip/BooleanProperty.h>
-namespace tlp {
-typedef tlp::PropertyFactory<tlp::BooleanAlgorithm> BooleanAlgorithmFactory;
-};
 %End
 
 namespace tlp {
@@ -56,33 +53,5 @@ This class is the base interface for selection plugins.
 protected:
 	BooleanAlgorithm(const tlp::PropertyContext &context);
 	
-};
-};
-
-namespace tlp {
-class BooleanAlgorithmFactory : tlp::PluginInfoInterface {
-%TypeHeaderCode
-#include <tulip/TemplateFactory.h>
-%End
-public:
-
-	virtual ~BooleanAlgorithmFactory();
-	
-	virtual tlp::BooleanAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
-
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::BooleanProperty::initFactory();			
-    tlp::BooleanProperty::factory->registerPlugin(sipCpp);
-%End
-
 };
 };

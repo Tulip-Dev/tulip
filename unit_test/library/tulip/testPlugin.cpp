@@ -26,7 +26,7 @@ using namespace std;
 
 class Test : public tlp::BooleanAlgorithm {
 public:
-  Test(const tlp::PropertyContext &context) : tlp::BooleanAlgorithm(context) {
+  Test(const tlp::AlgorithmContext &context) : tlp::BooleanAlgorithm(context) {
     addDependency<BooleanAlgorithm>("Test", "1.0");
   }
   ~Test() {}

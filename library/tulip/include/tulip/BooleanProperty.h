@@ -25,7 +25,6 @@
 
 namespace tlp {
 
-class PropertyContext;
 /** \addtogroup properties */
 /*@{*/
 class TLP_SCOPE BooleanProperty:public AbstractProperty<tlp::BooleanType, tlp::BooleanType, tlp::BooleanAlgorithm> {

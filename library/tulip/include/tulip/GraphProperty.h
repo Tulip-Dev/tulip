@@ -25,7 +25,6 @@
 
 namespace tlp {
 
-class PropertyContext;
 class GraphAbstract;
 
 typedef AbstractProperty<tlp::GraphType, tlp::EdgeSetType> AbstractGraphProperty;

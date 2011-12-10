@@ -27,9 +27,6 @@
 #include <tulip/TemplateFactory.h>
 #include <tulip/SizeAlgorithm.h>
 #include <tulip/SizeProperty.h>
-namespace tlp {
-typedef tlp::PropertyFactory<tlp::SizeAlgorithm> SizeAlgorithmFactory;
-};
 %End
 
 namespace tlp {
@@ -56,32 +53,6 @@ This class is the base interface for size plugins.
 protected:
 	SizeAlgorithm(const tlp::PropertyContext &context);
 	
-};
-
-class SizeAlgorithmFactory : tlp::PluginInfoInterface {
-%TypeHeaderCode
-#include <tulip/TemplateFactory.h>
-%End
-public:
-
-	virtual ~SizeAlgorithmFactory();
-	
-	virtual tlp::SizeAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
-
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::SizeProperty::initFactory();			
-    tlp::SizeProperty::factory->registerPlugin(sipCpp);
-%End
-
 };
 
 };

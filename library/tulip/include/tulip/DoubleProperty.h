@@ -27,8 +27,6 @@
 
 namespace tlp {
 
-class PropertyContext;
-
 typedef AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> AbstractDoubleProperty;
 /** \addtogroup properties */
 /*\@{*/

@@ -47,15 +47,16 @@ void PluginsTest::tearDown() {
 //==========================================================
 void PluginsTest::testloadPlugin() {
   // plugin does not exist yet
-  CPPUNIT_ASSERT(!tlp::BooleanProperty::factory->pluginExists("Test"));
+  CPPUNIT_ASSERT(!tlp::AlgorithmPlugin::factory->pluginExists("Test"));
   PluginLoaderTxt loader;
   tlp::loadPlugin("./testPlugin.so", &loader);
   // plugin should exist now
-  CPPUNIT_ASSERT(tlp::BooleanProperty::factory->pluginExists("Test"));
-  list<Dependency> deps = tlp::BooleanProperty::factory->getPluginDependencies("Test");
+  CPPUNIT_ASSERT(tlp::AlgorithmPlugin::factory->pluginExists("Test"));
+  list<Dependency> deps =
+    tlp::AlgorithmPlugin::factory->getPluginDependencies("Test");
   // only one dependency (see testPlugin.cpp)
   CPPUNIT_ASSERT(deps.size() == 1);
-  CPPUNIT_ASSERT(deps.front().factoryName == tlp::demangleTlpClassName(typeid(BooleanAlgorithm).name()));
+  CPPUNIT_ASSERT(deps.front().factoryName == "Algorithm");
   CPPUNIT_ASSERT(deps.front().pluginName == "Test");
 }
 //==========================================================

@@ -28,6 +28,7 @@
 %ModuleHeaderCode
 #include <tulip/Graph.h>
 #include <tulip/TemplateFactory.h>
+#include <tulip/Algorithm.h>
 #include <string>
 #include <sstream>
 
@@ -71,6 +72,18 @@ std::vector<std::string> getPluginsList() {
 			delete itS;
 		}
 	}
+	return ret;
+}
+
+static std::vector<std::string> getAlgorithmPluginsListOfType(const std::string& type) {
+	std::vector<std::string> ret;
+	tlp::Iterator<tlp::AlgorithmPlugin *> *itP = tlp::AlgorithmPlugin::factory->availablePluginObjects();
+	while (itP->hasNext()) {
+	      tlp::AlgorithmPlugin *plugin = itP->next();
+	      if (type == plugin->getClassName())
+	      	 ret.push_back(plugin->getName());
+	}
+	delete itP;
 	return ret;
 }
 

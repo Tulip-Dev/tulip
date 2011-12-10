@@ -210,7 +210,7 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const std::string &alg,
 //=========================================================
 bool tlp::applyAlgorithm(Graph *sg, std::string &errorMsg,DataSet *dataSet,
                          const std::string &alg, PluginProgress *plugProgress) {
-  if (!AlgorithmFactory::factory->pluginExists(alg)) {
+  if (!AlgorithmPlugin::factory->pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << alg
          << "\" does not exist (or is not loaded)" << endl;
     return false;
@@ -230,7 +230,7 @@ bool tlp::applyAlgorithm(Graph *sg, std::string &errorMsg,DataSet *dataSet,
   else tmpProgress=plugProgress;
 
   tmp.pluginProgress=tmpProgress;
-  Algorithm *newAlgo=AlgorithmFactory::factory->getPluginObject(alg, tmp);
+  Algorithm *newAlgo=AlgorithmPlugin::factory->getPluginObject(alg, tmp);
 
   if ((result=newAlgo->check(errorMsg)))
     result = newAlgo->run();
@@ -641,3 +641,85 @@ Graph *Graph::getNthSubGraph(unsigned int n) const {
   return NULL;
 }
 
+//====================================================================================
+bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
+					PropertyInterface* prop,
+					std::string &msg,
+					tlp::PluginProgress *progress,
+					tlp::DataSet *data) {
+  bool result;
+  tlp::AlgorithmContext context;
+
+  // check if this is a subgraph of prop->graph
+  if (getRoot() != prop->getGraph()) {
+    tlp::Graph *currentGraph = this;
+
+    while(currentGraph->getSuperGraph() != currentGraph) {
+      if (currentGraph == prop->getGraph())
+        break;
+
+      currentGraph = currentGraph->getSuperGraph();
+    }
+
+    if (currentGraph != prop->getGraph()) {
+      msg = "The passed property does not belong to the graph";
+      return false;
+    }
+  }
+
+#ifndef NDEBUG
+  std::cerr << __PRETTY_FUNCTION__ << std::endl;
+#endif
+
+  if(circularCalls.find(prop) != circularCalls.end()) {
+#ifndef NDEBUG
+    std::cerr << "Circular call of " << __PRETTY_FUNCTION__ << " " << msg << std::endl;
+#endif
+    return false;
+  }
+
+  // nothing to do if the graph is empty
+  if (numberOfNodes() == 0) {
+    msg= "The graph is empty";
+    return false;
+  }
+
+  tlp::PluginProgress *tmpProgress;
+
+  if (progress==0)
+    tmpProgress=new tlp::SimplePluginProgress();
+  else
+    tmpProgress=progress;
+
+  context.pluginProgress = tmpProgress;
+  context.graph = this;
+  context.dataSet = data;
+
+  tlp::Observable::holdObservers();
+  circularCalls.insert(prop);
+  tlp::AlgorithmContext tmpContext(context);
+  tmpContext.propertyProxy = prop;
+  Algorithm *tmpAlgo =
+    AlgorithmPlugin::factory->getPluginObject(algorithm, tmpContext);
+
+  if (tmpAlgo != 0) {
+    result = tmpAlgo->check(msg);
+
+    if (result) {
+      tmpAlgo->run();
+    }
+
+    delete tmpAlgo;
+  }
+  else {
+    msg = "No algorithm available with this name";
+    result=false;
+  }
+
+  circularCalls.erase(prop);
+  tlp::Observable::unholdObservers();
+
+  if (progress==0) delete tmpProgress;
+
+  return result;
+}

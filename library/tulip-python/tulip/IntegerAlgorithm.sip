@@ -27,9 +27,6 @@
 #include <tulip/TemplateFactory.h>
 #include <tulip/IntegerAlgorithm.h>
 #include <tulip/IntegerProperty.h>
-namespace tlp {
-typedef tlp::PropertyFactory<tlp::IntegerAlgorithm> IntegerAlgorithmFactory;
-};
 %End
 
 namespace tlp {
@@ -56,32 +53,6 @@ This class is the base interface for integer plugins.
 protected:
 	IntegerAlgorithm(const tlp::PropertyContext &context);
 	
-};
-
-class IntegerAlgorithmFactory : tlp::PluginInfoInterface {
-%TypeHeaderCode
-#include <tulip/TemplateFactory.h>
-%End
-public:
-
-	virtual ~IntegerAlgorithmFactory();
-	
-	virtual tlp::IntegerAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
-
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::IntegerProperty::initFactory();			
-    tlp::IntegerProperty::factory->registerPlugin(sipCpp);
-%End
-
 };
 
 };

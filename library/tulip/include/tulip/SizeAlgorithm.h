@@ -24,7 +24,6 @@
 
 namespace tlp {
 
-class PropertyContext;
 class SizeProperty;
 
 /**
@@ -42,7 +41,7 @@ public:
 
 protected:
   ///
-  SizeAlgorithm (const PropertyContext  &context);
+  SizeAlgorithm (const AlgorithmContext  &context);
 };
 /*@}*/
 

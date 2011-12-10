@@ -21,11 +21,12 @@
 
 #include <list>
 #include <string>
+#include <tulip/TulipRelease.h>
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
+#include <tulip/PluginContext.h>
 #include <tulip/Plugin.h>
 #include <tulip/TemplateFactory.h>
-#include <tulip/MethodFactory.h>
 
 /**
  * \addtogroup plugins
@@ -52,14 +53,16 @@ public :
    * @param context The context this algorithm runs in, containing the graph, a DataSet for the parameters, and a PluginProgress
    * to give feedback to the user about the tasks the algorithm is performing.
    */
-  Algorithm (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet) {}
+  Algorithm(const AlgorithmContext& context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet) {}
   virtual ~Algorithm() {}
   /**
    * @brief Runs the algorithm on the context that was specified during construction.
    *
    * @return bool Whether the algorithm was successful or not.
    */
-  virtual bool run() = 0;
+  virtual bool run() {
+    return true;
+  }
   /**
    * @brief Checks if the algorithm can run on the context it was given.
    *
@@ -85,34 +88,36 @@ public :
 };
 
 /**
- * @brief A base class for algorithm plug-ins factory.
- * Each plug-in declares (through a macro) its own factory.
+ * @brief A class for algorithm plug-ins
  * The factory the registers itself in the Tulip plug-in system (through the static initFactory() method when the library is loaded..
  * The actual registration is delegated to a TemplateFactory for code factorization.
  */
-class AlgorithmFactory:public PluginInfoInterface {
+class AlgorithmPlugin:public PluginInfoInterface {
 public:
   /**
    * @brief A static factory that is initialized when the library is loaded.
    */
-  static TLP_SCOPE TemplateFactory<AlgorithmFactory, Algorithm,AlgorithmContext > *factory;
+  static TLP_SCOPE TemplateFactory<AlgorithmPlugin, Algorithm, AlgorithmContext > *factory;
   /**
    * @brief This static initialization is called when the plug-in library is loaded, and registers the new plug-in in the
    * Tulip plug-in system.
    */
   static void initFactory() {
     if (!factory) {
-      factory = new TemplateFactory<AlgorithmFactory, Algorithm,AlgorithmContext >;
+      factory = new TemplateFactory<AlgorithmPlugin, Algorithm, AlgorithmContext >;
     }
   }
-  virtual ~AlgorithmFactory() {}
+  virtual ~AlgorithmPlugin() {}
   /**
    * @brief Creates a new Algorithm object.
    *
    * @return Algorithm A newly created algorithm plug-in.
    */
-  virtual Algorithm * createPluginObject(AlgorithmContext context)=0;
+  virtual Algorithm * createPluginObject(const AlgorithmContext& context)=0;
 
+  virtual std::string getTulipRelease() const {
+    return std::string(TULIP_RELEASE);
+  }
   virtual  std::string getMajor() const {
     return tlp::getMajor(getRelease());
   }
@@ -125,6 +130,13 @@ public:
   virtual  std::string getTulipMinor() const  {
     return tlp::getMinor(getTulipRelease());
   }
+  virtual std::string getClassName() const = 0;
+  virtual std::string getName() const = 0;
+  virtual std::string getGroup() const = 0;
+  virtual std::string getAuthor() const = 0;
+  virtual std::string getDate() const = 0;
+  virtual std::string getInfo() const = 0;
+  virtual std::string getRelease() const = 0;
 };
 /*@}*/
 

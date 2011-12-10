@@ -30,11 +30,8 @@
 #ifndef TULIP_PROPERTY_H
 #define TULIP_PROPERTY_H
 
-#include <tulip/PluginContext.h>
+#include <tulip/Algorithm.h>
 #include <tulip/Graph.h>
-#include <tulip/Reflect.h>
-#include <tulip/WithParameter.h>
-#include <tulip/WithDependency.h>
 
 namespace tlp {
 
@@ -46,17 +43,14 @@ namespace tlp {
 /**
  * @brief This base class describes plug-ins who only modify one property, e.g. selection.
  **/
-class TLP_SCOPE PropertyAlgorithm: public WithParameter, public WithDependency {
+class TLP_SCOPE PropertyAlgorithm: public Algorithm {
 public :
   /**
    * @brief Builds a new plug-in that modifies a single property.
    *
    * @param context The context containing the Graph and PropertyInterface this plug-in has access to,a s well as a PluginProgress.
    **/
-  PropertyAlgorithm(const tlp::PropertyContext & context) :
-    graph(context.graph),
-    pluginProgress(context.pluginProgress),
-    dataSet(context.dataSet) {
+  PropertyAlgorithm(const AlgorithmContext& context) :Algorithm(context) {
   }
   ///
   virtual ~PropertyAlgorithm() {}
@@ -88,10 +82,6 @@ public :
   bool preservePropertyUpdates(PropertyInterface* prop) {
     return graph->nextPopKeepPropertyUpdates(prop);
   }
-
-  Graph *graph;
-  PluginProgress *pluginProgress;
-  DataSet *dataSet;
 };
 /*@}*/
 

@@ -20,7 +20,7 @@
 #include <tulip/ColorAlgorithm.h>
 #include <tulip/ColorProperty.h>
 
-tlp::ColorAlgorithm::ColorAlgorithm (const tlp::PropertyContext &context):tlp::PropertyAlgorithm(context) {
+tlp::ColorAlgorithm::ColorAlgorithm (const tlp::AlgorithmContext &context):tlp::PropertyAlgorithm(context) {
   colorResult = (tlp::ColorProperty *)context.propertyProxy;
 }
 

@@ -37,47 +37,33 @@ class PluginProgress;
 class AlgorithmContext {
 public :
   ///
-  Graph *graph;
-  PluginProgress *pluginProgress;
-  DataSet *dataSet;
-  ///
-  AlgorithmContext ():graph(0),pluginProgress(0), dataSet(0) {}
-  ///
-  ~AlgorithmContext() {}
-};
-
-
-/**
- * @brief This class is used as only parameter when calling Property plug-ins.
- * It contains a Graph on whyich to run the plug-in, a PropertyInterface which will hold the result of the plug-in, and a PluginProgress to give feedback on the plug-in's progress.
- **/
-class PropertyContext {
-public :
-  ///
   /**
    * @brief The Graph on which the plug-in will run.
    **/
   Graph *graph;
-
-  /**
-   * @brief A property the plug-in can modify freely.
-   * No other property should be modified.
-   **/
-  PropertyInterface *propertyProxy;
   /**
    * @brief A means to give feedback on the progress of the plug-in.
    **/
   PluginProgress *pluginProgress;
-
   /**
    * @brief Additional informations, such as the value of the plug-in's parameters, if any.
    **/
   DataSet *dataSet;
+  /**
+   * @brief A property the property plug-in can modify freely.
+   * No other property should be modified.
+   **/
+  PropertyInterface *propertyProxy;
   ///
-  PropertyContext ():graph(0),propertyProxy(0),pluginProgress(0),dataSet(0) {}
+  AlgorithmContext ():
+  graph(NULL),pluginProgress(NULL), dataSet(NULL), propertyProxy(NULL) {}
   ///
-  ~PropertyContext() {}
+  ~AlgorithmContext() {}
 };
+
+// for compilation compatibility with 3.6
+typedef AlgorithmContext PropertyContext;
+
 /*@}*/
 
 }

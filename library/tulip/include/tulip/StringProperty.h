@@ -25,8 +25,6 @@
 
 namespace tlp {
 
-class PropertyContext;
-
 typedef AbstractProperty<tlp::StringType, tlp::StringType, tlp::StringAlgorithm> AbstractStringProperty;
 /** \addtogroup properties */
 /*\@{*/

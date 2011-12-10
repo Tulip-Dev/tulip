@@ -27,9 +27,6 @@
 #include <tulip/TemplateFactory.h>
 #include <tulip/ColorAlgorithm.h>
 #include <tulip/ColorProperty.h>
-namespace tlp {
-typedef tlp::PropertyFactory<tlp::ColorAlgorithm> ColorAlgorithmFactory;
-};
 %End
 
 namespace tlp {
@@ -56,32 +53,6 @@ This class is the base interface for color plugins.
 protected:
 	ColorAlgorithm(const tlp::PropertyContext &context);
 	
-};
-
-class ColorAlgorithmFactory : tlp::PluginInfoInterface {
-%TypeHeaderCode
-#include <tulip/TemplateFactory.h>
-%End
-public:
-
-	virtual ~ColorAlgorithmFactory();
-	
-	virtual tlp::ColorAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
-
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::ColorProperty::initFactory();			
-    tlp::ColorProperty::factory->registerPlugin(sipCpp);
-%End
-
 };
 
 };

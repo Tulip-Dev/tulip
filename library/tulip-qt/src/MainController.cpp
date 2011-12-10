@@ -116,8 +116,9 @@ static void insertInMenu(QMenu &menu, string itemName, string itemGroup,
     }
 
     if (!groupMenu) {
-      groupMenu = new QMenu(itemGroupNames[i].c_str(), subMenu);
-      groupMenu->setObjectName(QString(itemGroupNames[i].c_str()));
+      QString groupTitle(itemGroupNames[i].c_str());
+      groupMenu = new QMenu(groupTitle, subMenu);
+      groupMenu->setObjectName(groupTitle);
       subMenu->addMenu(groupMenu);
       groupMenus.push_back(groupMenu);
       nGroups++;
@@ -128,26 +129,7 @@ static void insertInMenu(QMenu &menu, string itemName, string itemGroup,
   QAction *action=subMenu->addAction(itemName.c_str());
   QObject::connect(action,SIGNAL(triggered()),receiver,slot);
 }
-//**********************************************************************
-template <typename TYPEN, typename TYPEE, typename TPROPERTY>
-void buildPropertyMenu(QMenu &menu, QObject *receiver, const char *slot) {
-  typename TemplateFactory<PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext>::ObjectCreator::const_iterator it;
-  std::vector<QMenu*> groupMenus;
-  std::string::size_type nGroups = 0;
-  it=AbstractProperty<TYPEN, TYPEE, TPROPERTY>::factory->objMap.begin();
 
-  for (; it!=AbstractProperty<TYPEN,TYPEE, TPROPERTY>::factory->objMap.end(); ++it)
-    insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
-}
-template <typename TFACTORY, typename TMODULE>
-void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
-  typename TemplateFactory<TFACTORY, TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
-  std::vector<QMenu*> groupMenus;
-  std::string::size_type nGroups = 0;
-
-  for (it=TFACTORY::factory->objMap.begin(); it != TFACTORY::factory->objMap.end(); ++it)
-    insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
-}
 typedef std::vector<node> NodeA;
 typedef std::vector<edge> EdgeA;
 
@@ -365,7 +347,10 @@ void MainController::setData(Graph *graph,DataSet dataSet) {
   if (!itn->hasNext() && newGraph->numberOfNodes()>1) {
     DataSet dataSet;
     dataSet.set<bool>("3D layout",false);
-    ControllerAlgorithmTools::changeProperty<LayoutProperty>(newGraph,mainWindowFacade.getParentWidget(),"Random","viewLayout",dataSet,NULL,false,false,false);
+    LayoutProperty tmp(newGraph);
+    ControllerAlgorithmTools::changeProperty(newGraph, mainWindowFacade.getParentWidget(),
+					     "Random", "viewLayout", &tmp, NULL,
+					     dataSet, false, false, false);
   }
 
   delete itn;
@@ -801,14 +786,78 @@ void MainController::buildMenu() {
   else
     generalMenu->clear();
 
-  buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(*intMenu, this, SLOT(changeInt()));
-  buildPropertyMenu<StringType, StringType, StringAlgorithm>(*stringMenu, this, SLOT(changeString()));
-  buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(*sizesMenu, this, SLOT(changeSizes()));
-  buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(*colorsMenu, this, SLOT(changeColors()));
-  buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(*layoutMenu, this, SLOT(changeLayout()));
-  buildPropertyMenu<DoubleType, DoubleType, DoubleAlgorithm>(*metricMenu, this, SLOT(changeMetric()));
-  buildPropertyMenu<BooleanType, BooleanType, BooleanAlgorithm>(*selectMenu, this, SLOT(changeSelection()));
-  buildMenuWithContext<AlgorithmFactory, Algorithm>(*generalMenu, this, SLOT(applyAlgorithm()));
+  std::vector<QMenu*> selectGroupMenus;
+  std::string::size_type nSelectGroups = 0;
+  std::vector<QMenu*> metricGroupMenus;
+  std::string::size_type nMetricGroups = 0;
+  std::vector<QMenu*> colorsGroupMenus;
+  std::string::size_type nColorsGroups = 0;
+  std::vector<QMenu*> intGroupMenus;
+  std::string::size_type nIntGroups = 0;
+  std::vector<QMenu*> layoutGroupMenus;
+  std::string::size_type nLayoutGroups = 0;
+  std::vector<QMenu*> sizesGroupMenus;
+  std::string::size_type nSizesGroups = 0;
+  std::vector<QMenu*> stringGroupMenus;
+  std::string::size_type nStringGroups = 0;
+  std::vector<QMenu*> generalGroupMenus;
+  std::string::size_type nGeneralGroups = 0;
+
+  // only one factory to hold the whole algorithm plugins
+  Iterator<AlgorithmPlugin *>* itp =
+    AlgorithmPlugin::factory->availablePluginObjects();
+  while (itp->hasNext()) {
+    AlgorithmPlugin* plugin = itp->next();
+    string className = plugin->getClassName();
+    if (className == "Boolean") {
+      insertInMenu(*selectMenu, plugin->getName().c_str(), plugin->getGroup(),
+		   selectGroupMenus, nSelectGroups,
+		   this, SLOT(changeSelection()));
+      continue;
+    }
+    if (className == "Double") {
+      insertInMenu(*metricMenu, plugin->getName().c_str(), plugin->getGroup(),
+		   metricGroupMenus, nMetricGroups,
+		   this, SLOT(changeMetric()));
+      continue;
+    }
+    if (className == "Color") {
+      insertInMenu(*colorsMenu, plugin->getName().c_str(), plugin->getGroup(),
+		   colorsGroupMenus, nColorsGroups,
+		   this, SLOT(changeColors()));
+      continue;
+    }
+    if (className == "Integer") {
+      insertInMenu(*intMenu, plugin->getName().c_str(), plugin->getGroup(),
+		   intGroupMenus, nIntGroups,
+		   this, SLOT(changeInt()));
+      continue;
+    }
+    if (className == "Layout") {
+      insertInMenu(*layoutMenu, plugin->getName().c_str(), plugin->getGroup(),
+		   layoutGroupMenus, nLayoutGroups,
+		   this, SLOT(changeLayout()));
+      continue;
+    }
+    if (className == "Size") {
+      insertInMenu(*sizesMenu, plugin->getName().c_str(), plugin->getGroup(),
+		   sizesGroupMenus, nSizesGroups,
+		   this, SLOT(changeSizes()));
+      continue;
+    }
+    if (className == "String") {
+      insertInMenu(*stringMenu, plugin->getName().c_str(), plugin->getGroup(),
+		   stringGroupMenus, nStringGroups,
+		   this, SLOT(changeString()));
+      continue;
+    }
+    if (className == "Algorithm") {
+      insertInMenu(*generalMenu, plugin->getName().c_str(), plugin->getGroup(),
+		   generalGroupMenus, nGeneralGroups,
+		   this, SLOT(applyAlgorithm()));
+      continue;
+    }
+  } delete itp;
 
   if (selectMenu->actions().count()>0)
     algorithmMenu->addMenu(selectMenu);

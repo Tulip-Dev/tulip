@@ -24,7 +24,6 @@
 
 namespace tlp {
 
-class PropertyContext;
 class LayoutProperty;
 
 /**
@@ -46,7 +45,7 @@ public:
 
 protected:
   ///
-  LayoutAlgorithm (const PropertyContext &context);
+  LayoutAlgorithm (const AlgorithmContext &context);
 };
 /*@}*/
 

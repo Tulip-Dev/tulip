@@ -20,7 +20,7 @@
 #include <tulip/LayoutAlgorithm.h>
 #include <tulip/LayoutProperty.h>
 
-tlp::LayoutAlgorithm::LayoutAlgorithm (const tlp::PropertyContext & context):tlp::PropertyAlgorithm(context) {
+tlp::LayoutAlgorithm::LayoutAlgorithm (const tlp::AlgorithmContext & context):tlp::PropertyAlgorithm(context) {
   layoutResult = (tlp::LayoutProperty *)context.propertyProxy;
 }
 

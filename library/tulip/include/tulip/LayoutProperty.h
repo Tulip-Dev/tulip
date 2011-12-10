@@ -27,7 +27,6 @@
 
 namespace tlp {
 
-class PropertyContext;
 class Graph;
 
 typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> AbstractLayoutProperty;

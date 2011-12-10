@@ -24,7 +24,6 @@
 
 namespace tlp {
 
-class PropertyContext;
 class DoubleProperty;
 
 /** \addtogroup plugins */
@@ -42,7 +41,7 @@ public:
 
 protected:
   ///
-  DoubleAlgorithm (const PropertyContext  &context);
+  DoubleAlgorithm (const AlgorithmContext  &context);
 };
 /*@}*/
 

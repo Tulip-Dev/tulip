@@ -27,9 +27,6 @@
 #include <tulip/TemplateFactory.h>
 #include <tulip/DoubleAlgorithm.h>
 #include <tulip/DoubleProperty.h>
-namespace tlp {
-typedef tlp::PropertyFactory<tlp::DoubleAlgorithm> DoubleAlgorithmFactory;
-};
 %End
 
 
@@ -51,32 +48,6 @@ protected:
 
 	DoubleAlgorithm(const tlp::PropertyContext &context);
 	
-};
-
-class DoubleAlgorithmFactory : tlp::PluginInfoInterface {
-%TypeHeaderCode
-#include <tulip/TemplateFactory.h>
-%End
-public:
-
-	virtual ~DoubleAlgorithmFactory();
-	
-	virtual tlp::DoubleAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
-
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::DoubleProperty::initFactory();			
-    tlp::DoubleProperty::factory->registerPlugin(sipCpp);
-%End
-
 };
 
 };

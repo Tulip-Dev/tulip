@@ -27,9 +27,6 @@
 #include <tulip/TemplateFactory.h>
 #include <tulip/LayoutAlgorithm.h>
 #include <tulip/LayoutProperty.h>
-namespace tlp {
-typedef tlp::PropertyFactory<tlp::LayoutAlgorithm> LayoutAlgorithmFactory;
-};
 %End
 
 
@@ -57,32 +54,6 @@ This class is the base interface for layout plugins.
 protected:
 	LayoutAlgorithm(const tlp::PropertyContext &context);
 	
-};
-
-class LayoutAlgorithmFactory : tlp::PluginInfoInterface {
-%TypeHeaderCode
-#include <tulip/TemplateFactory.h>
-%End
-public:
-
-	virtual ~LayoutAlgorithmFactory();
-	
-	virtual tlp::LayoutAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
-
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::LayoutProperty::initFactory();			
-    tlp::LayoutProperty::factory->registerPlugin(sipCpp);
-%End
-
 };
 
 };

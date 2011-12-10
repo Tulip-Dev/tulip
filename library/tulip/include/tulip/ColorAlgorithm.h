@@ -24,7 +24,6 @@
 
 namespace tlp {
 
-class PropertyContext;
 class ColorProperty;
 
 /** \addtogroup plugins */
@@ -40,7 +39,7 @@ public:
 
 protected:
   ///
-  ColorAlgorithm (const PropertyContext & context);
+  ColorAlgorithm (const AlgorithmContext & context);
 };
 /*@}*/
 

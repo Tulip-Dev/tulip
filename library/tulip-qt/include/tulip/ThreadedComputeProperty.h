@@ -34,7 +34,8 @@ public:
     AbstractComputeProperty(graph, name, errorMsg, progress, dataset), _property(result) {
   }
   virtual bool run() {
-    bool res = _graph->computeProperty<PropertyType>(_name, _property, _errorMsg, _progress, _dataset);
+    bool res = _graph->applyPropertyAlgorithm(_name, _property, _errorMsg,
+					      _progress, _dataset);
     return res;
   }
 

@@ -25,8 +25,6 @@
 
 namespace tlp {
 
-class PropertyContext;
-
 typedef AbstractProperty<tlp::ColorType, tlp::ColorType, tlp::ColorAlgorithm> AbstractColorProperty;
 
 /** \addtogroup properties */

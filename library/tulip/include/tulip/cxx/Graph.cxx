@@ -66,83 +66,10 @@ PropertyType* tlp::Graph::getProperty(const std::string &name) {
 }
 //====================================================================================
 template<typename PropertyType>
-bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* prop,
-                                 std::string &msg,  tlp::PluginProgress *progress,
+bool tlp::Graph::computeProperty(const std::string &algorithm,
+				 PropertyType* prop,
+                                 std::string &msg,
+				 tlp::PluginProgress *progress,
                                  tlp::DataSet *data) {
-  bool result;
-  tlp::PropertyContext context;
-
-  // check if this is a subgraph of prop->graph
-  if (getRoot() != prop->graph) {
-    tlp::Graph *currentGraph = this;
-
-    while(currentGraph->getSuperGraph() != currentGraph) {
-      if (currentGraph == prop->graph)
-        break;
-
-      currentGraph = currentGraph->getSuperGraph();
-    }
-
-    if (currentGraph != prop->graph) {
-      msg = "The passed property does not belong to the graph";
-      return false;
-    }
-  }
-
-#ifndef NDEBUG
-  std::cerr << __PRETTY_FUNCTION__ << std::endl;
-#endif
-
-  if(circularCalls.find(prop) != circularCalls.end()) {
-#ifndef NDEBUG
-    std::cerr << "Circular call of " << __PRETTY_FUNCTION__ << " " << msg << std::endl;
-#endif
-    return false;
-  }
-
-  // nothing to do if the graph is empty
-  if (numberOfNodes() == 0) {
-    msg= "The graph is empty";
-    return false;
-  }
-
-  tlp::PluginProgress *tmpProgress;
-
-  if (progress==0)
-    tmpProgress=new tlp::SimplePluginProgress();
-  else
-    tmpProgress=progress;
-
-  context.pluginProgress = tmpProgress;
-  context.graph = this;
-  context.dataSet = data;
-
-  tlp::Observable::holdObservers();
-  circularCalls.insert(prop);
-  tlp::PropertyContext tmpContext(context);
-  tmpContext.propertyProxy = prop;
-  typename PropertyType::PAlgorithm *tmpAlgo =
-    PropertyType::factory->getPluginObject(algorithm, tmpContext);
-
-  if (tmpAlgo != 0) {
-    result = tmpAlgo->check(msg);
-
-    if (result) {
-      tmpAlgo->run();
-    }
-
-    delete tmpAlgo;
-  }
-  else {
-    msg = "No algorithm available with this name";
-    result=false;
-  }
-
-  circularCalls.erase(prop);
-  tlp::Observable::unholdObservers();
-
-  if (progress==0) delete tmpProgress;
-
-  return result;
+  return applyPropertyAlgorithm(algorithm, prop, msg, progress, data);
 }
-//====================================================================================

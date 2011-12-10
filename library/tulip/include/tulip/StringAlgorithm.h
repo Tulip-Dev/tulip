@@ -34,7 +34,6 @@
 
 namespace tlp {
 
-class PropertyContext;
 class StringProperty;
 
 /** \addtogroup plugins */
@@ -53,7 +52,7 @@ public:
 
 protected:
   ///
-  StringAlgorithm (const PropertyContext &context);
+  StringAlgorithm (const AlgorithmContext &context);
 };
 /*@}*/
 

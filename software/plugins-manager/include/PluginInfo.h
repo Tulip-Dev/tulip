@@ -104,32 +104,20 @@ protected :
 public :
 
   static std::string getPluginDisplayType(const std::string &name) {
-    if(SizeProperty::factory && SizeProperty::factory->pluginExists(name))
-      return "Size";
-
-    if(IntegerProperty::factory &&
-        IntegerProperty::factory->pluginExists(name))
-      return "Integer";
-
-    if(LayoutProperty::factory &&
-        LayoutProperty::factory->pluginExists(name))
-      return "Layout";
-
-    if(ColorProperty::factory && ColorProperty::factory->pluginExists(name))
-      return "Color";
-
-    if(DoubleProperty::factory &&
-        DoubleProperty::factory->pluginExists(name))
-      return "Metric";
-
-    if(StringProperty::factory &&
-        StringProperty::factory->pluginExists(name))
-      return "Label";
-
-    if(BooleanProperty::factory &&
-        BooleanProperty::factory->pluginExists(name))
-      return "Selection";
-
+    if (AlgorithmPlugin::factory &&
+	AlgorithmPlugin::factory->pluginExists(name)) {
+      std::string className =
+	AlgorithmPlugin::factory->objMap.find(name)->second->getClassName();
+      if (className == "Double")
+	return "Metric";
+      if (className == "Boolean")
+	return "Selection";
+      if (className == "String")
+	return "Label";
+      if (className == "Algorithm")
+	return "General";
+      return className;
+    }
     if(ImportModuleFactory::factory &&
         ImportModuleFactory::factory->pluginExists(name))
       return "Import";
@@ -137,10 +125,6 @@ public :
     if(ExportModuleFactory::factory &&
         ExportModuleFactory::factory->pluginExists(name))
       return "Export";
-
-    if (AlgorithmFactory::factory &&
-        AlgorithmFactory::factory->pluginExists(name))
-      return "General";
 
     if (InteractorFactory::factory &&
         InteractorFactory::factory->pluginExists(name))

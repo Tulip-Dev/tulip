@@ -26,8 +26,6 @@
 
 namespace tlp {
 
-class PropertyContext;
-
 typedef AbstractProperty<tlp::SizeType, tlp::SizeType, tlp::SizeAlgorithm> AbstractSizeProperty;
 
 /**

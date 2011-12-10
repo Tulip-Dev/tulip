@@ -29,7 +29,6 @@
 namespace tlp {
 
 class Graph;
-class PropertyContext;
 
 typedef AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> AbstractIntegerProperty;
 /** \addtogroup properties */

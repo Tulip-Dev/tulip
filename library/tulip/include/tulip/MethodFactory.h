@@ -41,16 +41,16 @@
 /*@{*/
 
 //===========================================================
-// Declaration of Properties plugin mechanism
+// Declaration of Algorithm plugin mechanism
 //===========================================================
 /// Macro for factorization of source code pf Properties plugin mechanism
-#define PROPERTYPLUGINFACTORY(T,C,N,A,D,I,R,G)          \
-class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>  \
-{                                                       \
+#define PLUGINFACTORY(T,C,N,A,D,I,R,G)          \
+class C##T##Factory:public tlp::AlgorithmPlugin \
+{                                               \
  public:            \
   C##T##Factory(){          \
-    tlp::T##Property::initFactory();      \
-    tlp::T##Property::factory->registerPlugin((tlp::PropertyFactory<tlp::T##Algorithm> *) this); \
+    initFactory();      \
+    factory->registerPlugin(this); \
   }             \
   ~C##T##Factory(){}          \
   std::string getClassName() const { return std::string(#T);} \
@@ -60,39 +60,34 @@ class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>  \
   std::string getDate() const {return std::string(D);}  \
   std::string getInfo() const {return std::string(I);}  \
   std::string getRelease() const {return std::string(R);}\
-  std::string getTulipRelease() const {return std::string(TULIP_RELEASE);}\
-  tlp::T##Algorithm * createPluginObject(const tlp::PropertyContext &context)\
+  tlp::Algorithm * createPluginObject(const tlp::AlgorithmContext &context)\
    {              \
-     C *tmp=new C(context);       \
-     return ((tlp::T##Algorithm *) tmp);    \
+     return new C(context);       \
    }              \
 };                                                      \
 extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define BOOLEANPLUGINOFGROUP(C,N,A,D,I,R,G) PROPERTYPLUGINFACTORY(Boolean,C,N,A,D,I,R,G)
+#define BOOLEANPLUGINOFGROUP(C,N,A,D,I,R,G) PLUGINFACTORY(Boolean,C,N,A,D,I,R,G)
 #define BOOLEANPLUGIN(C,N,A,D,I,R) BOOLEANPLUGINOFGROUP(C,N,A,D,I,R,"")
-#define COLORPLUGINOFGROUP(C,N,A,D,I,R,G) PROPERTYPLUGINFACTORY(Color,C,N,A,D,I,R,G)
+#define COLORPLUGINOFGROUP(C,N,A,D,I,R,G) PLUGINFACTORY(Color,C,N,A,D,I,R,G)
 #define COLORPLUGIN(C,N,A,D,I,R) COLORPLUGINOFGROUP(C,N,A,D,I,R,"")
-#define DOUBLEPLUGINOFGROUP(C,N,A,D,I,R,G)  PROPERTYPLUGINFACTORY(Double,C,N,A,D,I,R,G)
+#define DOUBLEPLUGINOFGROUP(C,N,A,D,I,R,G)  PLUGINFACTORY(Double,C,N,A,D,I,R,G)
 #define DOUBLEPLUGIN(C,N,A,D,I,R)  DOUBLEPLUGINOFGROUP(C,N,A,D,I,R,"")
-#define GRAPHPLUGINOFGROUP(C,N,A,D,I,R,G) PROPERTYPLUGINFACTORY(Graph,C,N,A,D,I,R,G)
-#define GRAPHPLUGIN(C,N,A,D,I,R) GRAPHPLUGINOFGROUP(C,N,A,D,I,R,"")
-#define INTEGERPLUGINOFGROUP(C,N,A,D,I,R,G) PROPERTYPLUGINFACTORY(Integer,C,N,A,D,I,R,G)
+#define INTEGERPLUGINOFGROUP(C,N,A,D,I,R,G) PLUGINFACTORY(Integer,C,N,A,D,I,R,G)
 #define INTEGERPLUGIN(C,N,A,D,I,R) INTEGERPLUGINOFGROUP(C,N,A,D,I,R,"")
-#define LAYOUTPLUGINOFGROUP(C,N,A,D,I,R,G) PROPERTYPLUGINFACTORY(Layout,C,N,A,D,I,R,G)
+#define LAYOUTPLUGINOFGROUP(C,N,A,D,I,R,G) PLUGINFACTORY(Layout,C,N,A,D,I,R,G)
 #define LAYOUTPLUGIN(C,N,A,D,I,R) LAYOUTPLUGINOFGROUP(C,N,A,D,I,R,"")
-#define SIZEPLUGINOFGROUP(C,N,A,D,I,R,G) PROPERTYPLUGINFACTORY(Size,C,N,A,D,I,R,G)
+#define SIZEPLUGINOFGROUP(C,N,A,D,I,R,G) PLUGINFACTORY(Size,C,N,A,D,I,R,G)
 #define SIZEPLUGIN(C,N,A,D,I,R) SIZEPLUGINOFGROUP(C,N,A,D,I,R,"")
-#define STRINGPLUGINOFGROUP(C,N,A,D,I,R,G)  PROPERTYPLUGINFACTORY(String,C,N,A,D,I,R,G)
+#define STRINGPLUGINOFGROUP(C,N,A,D,I,R,G)  PLUGINFACTORY(String,C,N,A,D,I,R,G)
 #define STRINGPLUGIN(C,N,A,D,I,R)  STRINGPLUGINOF(C,N,A,D,I,R,"")
 
-//===========================================================
-// Declaration of Graph modification plug-in Mechanism
-//===========================================================
-/// Macro for factorization of source code of Graph modification plugin mechanism
-#define GRAPHPLUGINFACTORY(T,C,N,A,D,I,R,G) \
+#define ALGORITHMPLUGINOFGROUP(C,N,A,D,I,R,G) PLUGINFACTORY(Algorithm,C,N,A,D,I,R,G)
+#define ALGORITHMPLUGIN(C,N,A,D,I,R) ALGORITHMPLUGINOFGROUP(C,N,A,D,I,R,"")
+
+#define OTHERPLUGINFACTORY(T,C,N,A,D,I,R,G) \
 class C##T##Factory:public tlp::T##Factory              \
 {                                                       \
  public:            \
@@ -118,11 +113,9 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define ALGORITHMPLUGINOFGROUP(C,N,A,D,I,R,G) GRAPHPLUGINFACTORY(Algorithm,C,N,A,D,I,R,G)
-#define ALGORITHMPLUGIN(C,N,A,D,I,R) ALGORITHMPLUGINOFGROUP(C,N,A,D,I,R,"")
-#define EXPORTPLUGINOFGROUP(C,N,A,D,I,R,G) GRAPHPLUGINFACTORY(ExportModule,C,N,A,D,I,R,G)
+#define EXPORTPLUGINOFGROUP(C,N,A,D,I,R,G) OTHERPLUGINFACTORY(ExportModule,C,N,A,D,I,R,G)
 #define EXPORTPLUGIN(C,N,A,D,I,R) EXPORTPLUGINOFGROUP(C,N,A,D,I,R,"")
-#define IMPORTPLUGINOFGROUP(C,N,A,D,I,R,G) GRAPHPLUGINFACTORY(ImportModule,C,N,A,D,I,R,G)
+#define IMPORTPLUGINOFGROUP(C,N,A,D,I,R,G) OTHERPLUGINFACTORY(ImportModule,C,N,A,D,I,R,G)
 #define IMPORTPLUGIN(C,N,A,D,I,R) IMPORTPLUGINOFGROUP(C,N,A,D,I,R,"")
 /*@}*/
 #endif

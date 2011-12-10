@@ -19,7 +19,7 @@
 #include <tulip/DoubleAlgorithm.h>
 #include <tulip/DoubleProperty.h>
 
-tlp::DoubleAlgorithm::DoubleAlgorithm (const tlp::PropertyContext &context):tlp::PropertyAlgorithm(context) {
+tlp::DoubleAlgorithm::DoubleAlgorithm (const tlp::AlgorithmContext &context):tlp::PropertyAlgorithm(context) {
   doubleResult = (tlp::DoubleProperty *)context.propertyProxy;
 }
 

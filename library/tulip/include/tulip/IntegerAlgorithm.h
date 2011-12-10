@@ -25,7 +25,6 @@
 
 namespace tlp {
 
-class PropertyContext;
 class IntegerProperty;
 
 /** \addtogroup plugins */
@@ -44,7 +43,7 @@ public:
 
 protected:
   ///
-  IntegerAlgorithm (const PropertyContext  &context);
+  IntegerAlgorithm (const AlgorithmContext  &context);
 };
 /*@}*/
 

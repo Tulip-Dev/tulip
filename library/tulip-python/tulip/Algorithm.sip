@@ -92,15 +92,15 @@ and the second one can be used to provide an error message
 };
 
 namespace tlp {
-class AlgorithmFactory : tlp::PluginInfoInterface {
+class AlgorithmPlugin : tlp::PluginInfoInterface {
 %TypeHeaderCode
 #include <tulip/Algorithm.h>
 %End
 public:
 	
-	virtual ~AlgorithmFactory();
+	virtual ~AlgorithmPlugin();
 	
-	virtual tlp::Algorithm * createPluginObject(tlp::AlgorithmContext) = 0 /Factory/; 
+	virtual tlp::Algorithm * createPluginObject(const tlp::AlgorithmContext&) = 0 /Plugin/; 
 	
 	virtual  std::string getMajor() const;
 	
@@ -109,6 +109,20 @@ public:
 	virtual  std::string getTulipMajor() const;
 	
 	virtual  std::string getTulipMinor() const;
+	
+	virtual std::string getClassName() const = 0;
+	
+	virtual std::string getName() const = 0;
+	
+	virtual std::string getGroup() const = 0;
+	
+	virtual std::string getAuthor() const = 0;
+	
+	virtual std::string getDate() const = 0;
+	
+	virtual std::string getInfo() const = 0;
+	
+	virtual std::string getRelease() const = 0;
 	
 	void registerPlugin();
 %MethodCode

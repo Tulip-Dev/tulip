@@ -126,6 +126,18 @@ public:
   virtual void removePlugin(const std::string& name)=0;
 
   /**
+   * @brief standardize a factory name
+   *
+   */
+  static std::string standardizeName(const char* name) {
+    std::string standardName = tlp::demangleTlpClassName(name);
+    if (standardName.find("Algorithm") != std::string::npos)
+      // only one factory for all algorithms
+      return "Algorithm";
+    return standardName;
+  }
+ 
+  /**
    * @brief Adds a factory to a static map of factories.
    * This map is then used to list all the factories, and all the plug-ins for each factory.
    *
@@ -169,7 +181,7 @@ public:
 template<class ObjectFactory, class ObjectType, class Context> class TemplateFactory: public TemplateFactoryInterface {
 public:
   TemplateFactory() {
-    TemplateFactoryInterface::addFactory(this, tlp::demangleTlpClassName(typeid(ObjectType).name()));
+    TemplateFactoryInterface::addFactory(this, standardizeName(typeid(ObjectType).name()));
   }
 
   typedef std::map< std::string , ObjectFactory * > ObjectCreator;
@@ -213,28 +225,10 @@ public:
   std::string getPluginsClassName();
   void registerPlugin(ObjectFactory* objectFactory);
   void removePlugin(const std::string &name);
+
+  // add an iterator over real plugin objects
+  Iterator<ObjectFactory *>* availablePluginObjects();
 };
-
-
-template <class T> class PropertyFactory:public PluginInfoInterface {
-public:
-  PropertyFactory() {}
-  virtual ~PropertyFactory() {}
-  virtual T* createPluginObject(const PropertyContext &context)=0;
-  virtual  std::string getMajor() const {
-    return tlp::getMajor(getRelease());
-  }
-  virtual  std::string getMinor() const  {
-    return tlp::getMinor(getRelease());
-  }
-  virtual  std::string getTulipMajor() const {
-    return tlp::getMajor(getTulipRelease());
-  }
-  virtual  std::string getTulipMinor() const  {
-    return tlp::getMinor(getTulipRelease());
-  }
-};
-
 /*@}*/
 
 }

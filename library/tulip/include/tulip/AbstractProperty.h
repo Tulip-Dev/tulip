@@ -57,14 +57,7 @@ class TLP_SCOPE AbstractProperty : public PropertyInterface {
   friend class GraphView;
 
 public:
-  static TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext > *factory;
-  static void initFactory() {
-    if (!factory) {
-      factory = new TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext >;
-    }
-  }
   AbstractProperty(Graph *, std::string n = "");
-
 
   /**
    * @brief Returns the default node value of the property.
@@ -309,7 +302,7 @@ public:
    **/
   virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* g = NULL) const;
   /**
-   * @brief Copies the value help by a property on a node to another node on this property.
+   * @brief Copies the value hold by a property on a node to another node on this property.
    *
    * @param destination The node to copy the value to.
    * @param source The node to copy the value from.
@@ -335,7 +328,7 @@ public:
     setNodeValue(destination, value);
   }
   /**
-   * @brief Copies the value help by a property on an edge to another edge on this property.
+   * @brief Copies the value hold by a property on an edge to another edge on this property.
    *
    * @param destination The edge to copy the value to.
    * @param source The edge to copy the value from.
@@ -360,6 +353,17 @@ public:
 
     setEdgeValue(destination, value);
   }
+  /**
+   * @brief Copies the values hold by a property on this property
+   * @param the property to copy
+   * @return void
+   **/
+  virtual void copy(PropertyInterface* property) {
+    tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* prop =
+    dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(property);
+    assert(prop != NULL);
+    *this = *prop;
+  }    
   // for performance reason and use in GraphUpdatesRecorder
   virtual DataMem* getNodeDefaultDataMemValue() const {
     return new TypedValueContainer<typename Tnode::RealType>(getNodeDefaultValue());

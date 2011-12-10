@@ -166,7 +166,7 @@ in C++ or the :class:`tlp.Algorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::Algorithm>());
+	sipRes = new std::vector<std::string>(getAlgorithmPluginsListOfType("Algorithm"));
 %End
 
 //=====================================================================
@@ -217,7 +217,7 @@ the :class:`tlp.BooleanAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::BooleanAlgorithm>());
+	sipRes = new std::vector<std::string>(getAlgorithmPluginsListOfType("Boolean"));
 %End
 
 //=====================================================================
@@ -234,7 +234,7 @@ the :class:`tlp.IntegerAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::IntegerAlgorithm>());
+	sipRes = new std::vector<std::string>(getAlgorithmPluginsListOfType("Integer"));
 %End
 
 //=====================================================================
@@ -251,7 +251,7 @@ the :class:`tlp.DoubleAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::DoubleAlgorithm>());
+	sipRes = new std::vector<std::string>(getAlgorithmPluginsListOfType("Double"));
 %End
 
 //=====================================================================
@@ -268,7 +268,7 @@ the :class:`tlp.ColorAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::ColorAlgorithm>());
+	sipRes = new std::vector<std::string>(getAlgorithmPluginsListOfType("Color"));
 %End
 
 //=====================================================================
@@ -285,7 +285,7 @@ the :class:`tlp.LayoutAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::LayoutAlgorithm>());
+	sipRes = new std::vector<std::string>(getAlgorithmPluginsListOfType("Color"));
 %End
 
 //=====================================================================
@@ -302,7 +302,7 @@ the :class:`tlp.SizeAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::SizeAlgorithm>());
+	sipRes = new std::vector<std::string>(getAlgorithmPluginsListOfType("Size"));
 %End
 
 //=====================================================================
@@ -319,7 +319,7 @@ the :class:`tlp.StringAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::StringAlgorithm>());
+	sipRes = new std::vector<std::string>(getAlgorithmPluginsListOfType("String"));
 %End
 
 };

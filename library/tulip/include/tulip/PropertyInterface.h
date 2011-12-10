@@ -30,6 +30,8 @@
 
 namespace tlp {
 
+class PropertyFactoryInterface;
+
 /**
  * \defgroup properties
  */
@@ -71,20 +73,23 @@ public:
    * If the fourth argument is set to true, the value will be copied only if
    * it is not the default value.
    */
-  virtual void copy(const edge src, const edge dst , PropertyInterface *prop,
+  virtual void copy(const edge src, const edge dst, PropertyInterface *prop,
                     bool ifNotDefault = false) =0;
+  /**
+   * Copies the values hold by the property argument on this property
+   */
+  virtual void copy(PropertyInterface* prop) = 0;
   /**
     * Creates an object of the same real type of the current property, in the
     * the graph (first parameter) with the name (second parameter).
     * Values are not copied.
     */
-  virtual PropertyInterface* clonePrototype(Graph *, const std::string&) =0;
+  virtual PropertyInterface* clonePrototype(Graph *, const std::string&) = 0;
   /**
     * Returns a string describing the type of the property.
     * i.e. "graph", "double", "layout", "string", "integer", "color", "size", ...
     */
   virtual std::string getTypename() const = 0;
-
   /**
     * Returns the name of the property.
     */

@@ -20,6 +20,6 @@
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 
-tlp::BooleanAlgorithm::BooleanAlgorithm (const tlp::PropertyContext & context):tlp::PropertyAlgorithm(context) {
+tlp::BooleanAlgorithm::BooleanAlgorithm (const tlp::AlgorithmContext & context):tlp::PropertyAlgorithm(context) {
   booleanResult = (tlp::BooleanProperty *)context.propertyProxy;
 }
