@@ -154,15 +154,15 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
     case FONTFILEPROPERTY_RTTI: {
       string value = (elementType==NODE?((StringProperty*)property)->getNodeValue(node(elementId)):((StringProperty*)property)->getEdgeValue(edge(elementId)));
       //Create an object containing the original file and the filter options.
-      FilteredUrl url(tlpStringToQString(value),QString("Font (*.ttf)"));
-      return QVariant::fromValue<FilteredUrl>(url);
+      TulipFileDescriptor url(tlpStringToQString(value),TulipFileDescriptor::File/*,QString("Font (*.ttf)")*/);
+      return QVariant::fromValue<TulipFileDescriptor>(url);
     }
     break;
 
     case TEXTUREPROPERTY_RTTI: {
       string value = (elementType==NODE?((StringProperty*)property)->getNodeValue(node(elementId)):((StringProperty*)property)->getEdgeValue(edge(elementId)));
-      FilteredUrl url(tlpStringToQString(value),QString("Images (*.png *.jpeg *.jpg *.bmp)"));
-      return QVariant::fromValue<FilteredUrl>(url);
+      TulipFileDescriptor url(tlpStringToQString(value),TulipFileDescriptor::File/*,QString("Images (*.png *.jpeg *.jpg *.bmp)")*/);
+      return QVariant::fromValue<TulipFileDescriptor>(url);
     }
     break;
 
@@ -394,8 +394,8 @@ bool TulipQVariantBuilder::setData(const QVariant& value, ElementType elementTyp
 
   case FONTFILEPROPERTY_RTTI:
   case TEXTUREPROPERTY_RTTI: {
-    FilteredUrl url = value.value<FilteredUrl>();
-    (elementType == NODE ?((StringProperty*)property)->setNodeValue(node(elementId),QStringToTlpString(url.path())):((StringProperty*)property)->setEdgeValue(edge(elementId),QStringToTlpString(url.path())));
+    TulipFileDescriptor url = value.value<TulipFileDescriptor>();
+    (elementType == NODE ?((StringProperty*)property)->setNodeValue(node(elementId),QStringToTlpString(url.absolutePath)):((StringProperty*)property)->setEdgeValue(edge(elementId),QStringToTlpString(url.absolutePath)));
     return true;
   }
   break;
@@ -501,8 +501,8 @@ bool TulipQVariantBuilder::setAllElementData(const QVariant& value,tlp::ElementT
 
   case FONTFILEPROPERTY_RTTI:
   case TEXTUREPROPERTY_RTTI: {
-    FilteredUrl url = value.value<FilteredUrl>();
-    (elementType == NODE ?((StringProperty*)property)->setAllNodeValue(QStringToTlpString(url.path())):((StringProperty*)property)->setAllEdgeValue(QStringToTlpString(url.path())));
+    TulipFileDescriptor url = value.value<TulipFileDescriptor>();
+    (elementType == NODE ?(static_cast<StringProperty*>(property))->setAllNodeValue(QStringToTlpString(url.absolutePath)):(static_cast<StringProperty*>(property))->setAllEdgeValue(QStringToTlpString(url.absolutePath)));
     return true;
   }
   break;

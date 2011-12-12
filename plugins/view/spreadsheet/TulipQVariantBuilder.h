@@ -64,33 +64,6 @@ public:
   }
 };
 
-/**
-  * @brief Use this class to edit a file with the TulipItemDelegate.
-  *
-  * Store a file path and filter string compatible with QFileChoose to choose new files.
-  **/
-struct FilteredUrl {
-public:
-  FilteredUrl() {
-  }
-
-  FilteredUrl(const QString& path, const QString& extensionFilters=QString()): _path(path),_extensionsFilters(extensionFilters) {
-  }
-  FilteredUrl(const FilteredUrl& other):_path(other.path()),_extensionsFilters(other.extensionsFilters()) {
-  }
-
-  QString path()const {
-    return _path;
-  }
-  QString extensionsFilters()const {
-    return _extensionsFilters;
-  }
-private:
-  QString _path;
-  QString _extensionsFilters;
-};
-
-Q_DECLARE_METATYPE(FilteredUrl)
 Q_DECLARE_METATYPE(ElementCollection)
 Q_DECLARE_METATYPE(Interval<double>)
 
