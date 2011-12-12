@@ -76,6 +76,13 @@ public:
   virtual QVariant editorData(QWidget*,tlp::Graph*);
 };
 
+class TLP_QT_SCOPE CoordEditorCreator: public StringDisplayEditorCreator<tlp::PointType> {
+public:
+  QWidget* createWidget(QWidget*) const;
+  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual QVariant editorData(QWidget*,tlp::Graph*);
+};
+
 class TLP_QT_SCOPE SizeEditorCreator: public StringDisplayEditorCreator<tlp::SizeType> {
 public:
   QWidget* createWidget(QWidget*) const;

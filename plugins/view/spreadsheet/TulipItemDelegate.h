@@ -21,7 +21,7 @@
 #define TULIPTABLEWIDGETITEMDELEGATE_H_
 #include <QtGui/QStyledItemDelegate>
 #include <tulip/tulipconf.h>
-
+#include <tulip/TulipMetaTypes.h>
 /**
 * @brief QItemDelegate to display and edit Tulip data in the Qt model/view architecture.
 **/
@@ -40,7 +40,7 @@ public:
   void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
 protected:
-  QWidget* createFileNameEditor(QWidget* parent , const QString& defaultFileName,const QString& filenameFilter=QString()) const;
+  QWidget* createFileNameEditor(QWidget* parent , const TulipFileDescriptor& defaultFileName,const QString& filenameFilter=QString()) const;
 
 };
 
