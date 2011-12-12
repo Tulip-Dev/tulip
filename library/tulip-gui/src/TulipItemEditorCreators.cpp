@@ -29,6 +29,7 @@
 #include <tulip/ColorScaleButton.h>
 #include <tulip/TulipFileDescriptorWidget.h>
 #include "tulip/SizeEditor.h"
+#include "tulip/CoordEditor.h"
 
 using namespace tlp;
 
@@ -86,6 +87,21 @@ void BooleanEditorCreator::setEditorData(QWidget* editor, const QVariant &data,t
 
 QVariant BooleanEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
   return static_cast<QCheckBox*>(editor)->isChecked();
+}
+
+/*
+  CoordEditorCreator
+*/
+QWidget* CoordEditorCreator::createWidget(QWidget* parent) const {
+  return new CoordEditor(parent);
+}
+
+void CoordEditorCreator::setEditorData(QWidget* w, const QVariant& v,tlp::Graph*) {
+  static_cast<CoordEditor*>(w)->setCoord(v.value<tlp::Coord>());
+}
+
+QVariant CoordEditorCreator::editorData(QWidget* w,tlp::Graph*) {
+  return QVariant::fromValue<tlp::Coord>(static_cast<CoordEditor*>(w)->coord());
 }
 
 /*

@@ -24,10 +24,8 @@
 #include "tulip/TlpQtTools.h"
 #include "tulip/SizeEditor.h"
 #include "tulip/ColorButton.h"
-
-
-#include "FileNameEditorWidget.h"
-#include "CoordWidget.h"
+#include <tulip/CoordEditor.h>
+#include <tulip/TulipFileDescriptorWidget.h>
 
 #include "VectorEditionWidget.h"
 #include "ElementCollection.h"
@@ -70,7 +68,7 @@ QWidget* TulipItemDelegate::createEditor(QWidget* p, const QStyleOptionViewItem&
         return button;
       }
       else if(data.userType() == qMetaTypeId< Coord >()) {
-        CoordWidget *editor = new CoordWidget(p);
+        CoordEditor *editor = new CoordEditor(p);
         editor->setCoord(data.value<Coord>());
         editor->setAutoFillBackground(true);
         editor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -133,9 +131,9 @@ QWidget* TulipItemDelegate::createEditor(QWidget* p, const QStyleOptionViewItem&
 
         return comboBox;
       }
-      else if(data.userType() == qMetaTypeId< FilteredUrl >()) {
-        FilteredUrl url = data.value<FilteredUrl>();
-        return createFileNameEditor(p,url.path(),url.extensionsFilters());
+      else if(data.userType() == qMetaTypeId< TulipFileDescriptor >()) {
+        TulipFileDescriptor url = data.value<TulipFileDescriptor>();
+        return createFileNameEditor(p,url,"");
       }
       else {
         return QStyledItemDelegate::createEditor(p, option, index);
@@ -159,7 +157,7 @@ void TulipItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* model,
   }
   else if(data.userType() == qMetaTypeId< Coord >()) {
     QVariant v;
-    v.setValue<Coord>(((CoordWidget*)editor)->coord());
+    v.setValue<Coord>((static_cast<CoordEditor*>(editor))->coord());
     model->setData(index,v);
   }
   else if(data.userType() == qMetaTypeId< Size >()) {
@@ -209,20 +207,20 @@ void TulipItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* model,
     collection.setElementSelection(comboBox->currentIndex(),true);
     model->setData(index,QVariant::fromValue<ElementCollection>(collection));
   }
-  else if(data.userType() == qMetaTypeId< FilteredUrl >()) {
-    FileNameEditorWidget *fileEditor = qobject_cast<FileNameEditorWidget*>(editor);
-    FilteredUrl url(fileEditor->fileName());
-    model->setData(index,QVariant::fromValue<FilteredUrl>(url));
+  else if(data.userType() == qMetaTypeId< TulipFileDescriptor >()) {
+    TulipFileDescriptorWidget *fileEditor = qobject_cast<TulipFileDescriptorWidget*>(editor);
+    TulipFileDescriptor url(fileEditor->data());
+    model->setData(index,QVariant::fromValue<TulipFileDescriptor>(url));
   }
   else {
     QStyledItemDelegate::setModelData(editor, model, index);
   }
 }
 
-QWidget* TulipItemDelegate::createFileNameEditor(QWidget* parent, const QString& defaultFileName, const QString& filenameFilter) const {
-  FileNameEditorWidget *editor = new FileNameEditorWidget(parent);
-  editor->setFileName(defaultFileName);
-  editor->setFilter(filenameFilter);
+QWidget* TulipItemDelegate::createFileNameEditor(QWidget* parent, const TulipFileDescriptor& defaultFileName, const QString& filenameFilter) const {
+  TulipFileDescriptorWidget *editor = new TulipFileDescriptorWidget(parent);
+  editor->setData(defaultFileName);
+  editor->setNameFilter(filenameFilter);
   editor->setAutoFillBackground(true);
   return editor;
 }

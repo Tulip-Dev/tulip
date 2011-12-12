@@ -73,7 +73,7 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
   if (type.compare(typeid(std::string).name()) == 0 && (name.startsWith("file::") || name.startsWith("dir::"))) {
     TulipFileDescriptor desc;
     desc.absolutePath = (*((std::string*)dm->value)).c_str();
-    desc.isDir = name.startsWith("dir::");
+    desc.type = name.startsWith("dir::")?TulipFileDescriptor::Directory:TulipFileDescriptor::File;
     return QVariant::fromValue<TulipFileDescriptor>(desc);
   }
 

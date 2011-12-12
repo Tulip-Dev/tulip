@@ -16,9 +16,7 @@ SET(spreadsheet_LIB_SRCS
     OrientedPushButton.cpp
     SpreadViewTableWidget.cpp
     VisibleSectionsModel.cpp
-    TulipFilterProxyModel.cpp
-    CoordWidget.cpp
-    FileNameEditorWidget.cpp
+    TulipFilterProxyModel.cpp    
 )
 
 set(spreadsheet_UI
@@ -26,8 +24,6 @@ set(spreadsheet_UI
     VectorEditionWidget.ui    
     TulipTableWidgetColumnSelectionWidget.ui
     SpreadViewTableWidget.ui
-    FileNameEditorWidget.ui
-    CoordWidget.ui
 )
 
 
@@ -43,8 +39,6 @@ set(spreadsheet_MOC
     SpreadViewTableWidget.h
     VisibleSectionsModel.h
     TulipFilterProxyModel.h
-    CoordWidget.h
-    FileNameEditorWidget.h
 )
 
 
