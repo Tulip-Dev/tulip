@@ -1,40 +1,61 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} .)	
+INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
 
-SET(SRCS
-  SpreadView.h
-  SpreadView.cpp
-  SpreadWidget.cpp
-  SpreadTable.cpp
-  SpreadCell.cpp
-  SpreadCalculator.cpp
-  SpreadValue.cpp
-  SpreadItemDelegate.cpp
-  SpreadCommands.cpp
-  SpreadConfigurationWidget.cpp
-  SpreadWidget.h
-  SpreadTable.h
-  SpreadCell.h
-  SpreadCalculator.h
-  SpreadValue.h
-  SpreadItemDelegate.h
-  SpreadCommands.h
-  SpreadLineEdit.h
-  SpreadConfigurationWidget.h)
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} .)
 
-QT4_WRAP_UI(UI_HEADERS
-  SpreadInsertColumnDialog.ui
-  SpreadMainWidget.ui
-  SpreadConfigurationWidget.ui)
+SET(spreadsheet_LIB_SRCS
+    SpreadView.cpp 
+    GraphTableWidget.cpp
+    GraphTableModel.cpp
+    ElementCollection.cpp
+    TulipItemDelegate.cpp
+    TulipQVariantBuilder.cpp
+    VectorEditionWidget.cpp        
+    GlyphPreviewGenerator.cpp
+    TulipTableWidgetColumnSelectionModel.cpp
+    TulipTableWidgetColumnSelectionWidget.cpp        
+    OrientedPushButton.cpp
+    SpreadViewTableWidget.cpp
+    VisibleSectionsModel.cpp
+    TulipFilterProxyModel.cpp
+    CoordWidget.cpp
+    FileNameEditorWidget.cpp
+)
 
-QT4_WRAP_CPP(MOC_SRCS
-  SpreadView.h
-  SpreadWidget.h
-  SpreadTable.h
-  SpreadItemDelegate.h
-  SpreadLineEdit.h
-  SpreadConfigurationWidget.h)
+set(spreadsheet_UI
+    SpreadViewWidget.ui
+    VectorEditionWidget.ui    
+    TulipTableWidgetColumnSelectionWidget.ui
+    SpreadViewTableWidget.ui
+    FileNameEditorWidget.ui
+    CoordWidget.ui
+)
 
-ADD_LIBRARY(SpreadSheet-${TulipVersion} SHARED ${SRCS} ${MOC_SRCS} ${UI_HEADERS})
+
+set(spreadsheet_MOC
+    SpreadView.h
+    GraphTableWidget.h
+    GraphTableModel.h
+    ElementCollection.h
+    TulipItemDelegate.h
+    VectorEditionWidget.h        
+    TulipTableWidgetColumnSelectionModel.h
+    TulipTableWidgetColumnSelectionWidget.h
+    SpreadViewTableWidget.h
+    VisibleSectionsModel.h
+    TulipFilterProxyModel.h
+    CoordWidget.h
+    FileNameEditorWidget.h
+)
+
+
+SET(spreadsheet_RCC
+    Spreadsheet.qrc
+)
+
+QT4_WRAP_UI(spreadsheet_UI_SRCS ${spreadsheet_UI})
+QT4_WRAP_CPP(spreadsheet_MOC_SRCS ${spreadsheet_MOC})
+QT4_ADD_RESOURCES(spreadsheet_RCC_SRCS ${spreadsheet_RCC})
+
+ADD_LIBRARY(SpreadSheet-${TulipVersion} SHARED ${spreadsheet_UI_SRCS} ${spreadsheet_MOC_SRCS} ${spreadsheet_LIB_SRCS} ${spreadsheet_RCC_SRCS})
 TARGET_LINK_LIBRARIES(SpreadSheet-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
-
 INSTALL(TARGETS SpreadSheet-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT SpreadSheet-${TulipVersion})

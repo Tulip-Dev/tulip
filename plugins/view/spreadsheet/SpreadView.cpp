@@ -20,120 +20,166 @@
 
 #include <iostream>
 #include <sstream>
-
+#include "ui_SpreadViewWidget.h"
 #include <tulip/Graph.h>
-#include "SpreadConfigurationWidget.h"
+#include <tulip/TlpQtTools.h>
+#include <QtGui/QPixmap>
+#include <QtGui/QToolBar>
+#include <QtGui/QKeyEvent>
+#include "GraphTableModel.h"
+#include "TulipTableWidgetColumnSelectionWidget.h"
+#include "GraphTableWidget.h"
 
 using namespace std;
+using namespace tlp;
 
-static void tokenize(const string& str, vector<string>& tokens, const string& delimiters = " ") {
-  string::size_type lastPos = str.find_first_not_of(delimiters, 0);
-  string::size_type pos = str.find_first_of(delimiters, lastPos);
 
-  while (string::npos != pos || string::npos != lastPos) {
-    tokens.push_back(str.substr(lastPos, pos - lastPos));
-    lastPos = str.find_first_not_of(delimiters, pos);
-    pos = str.find_first_of(delimiters, lastPos);
+/**
+  * This class is needed to define a custom SizeHint for the spread view.
+  **/
+class SpreadViewWidget : public QWidget {
+public:
+  SpreadViewWidget(QSize sizeHints,QWidget*parent = NULL):QWidget(parent),_sizeHint(sizeHints) {
+
   }
-}
 
-namespace tlp {
+  QSize sizeHint()const {
+    return _sizeHint;
+  }
+
+  QSize minimumSizeHint()const {
+    return _sizeHint;
+  }
+
+  QSize _sizeHint;
+};
 
 SpreadView::SpreadView() :
-  AbstractView(), mainWidget(NULL), configurationWidget(NULL) {
+  AbstractView(),ui(new Ui::SpreadViewWidget),_graph(NULL) {
 }
 SpreadView::~SpreadView() {
-  if(configurationWidget)
-    delete configurationWidget;
+  delete ui;
 }
 
 QWidget *SpreadView::construct(QWidget *parent) {
   QWidget *widget = AbstractView::construct(parent);
-  mainWidget = new SpreadWidget(this, widget);
-  setCentralWidget(mainWidget);
+  QWidget* mainWidget = new SpreadViewWidget(QSize(640,480),widget);
+  ui->setupUi(mainWidget);
 
-  configurationWidget = new SpreadConfigurationWidget();
-  connect(configurationWidget, SIGNAL(updated()), this, SLOT(updated()));
+  setCentralWidget(mainWidget);
+  installEventFilter(mainWidget);
+
+  //Show hide columns.
+  ui->editColumnPushButton->setMirrored(true);
+  ui->editColumnPushButton->setOrientation(Qt::Vertical);
+  ui->editColumnPushButton->setFlat(true);
+  ui->editColumnPushButton->setCheckable(true);
+  ui->editColumnPushButton->setAutoFillBackground(true);
+  ui->editColumnPushButton->resize(ui->editColumnPushButton->sizeHint());
+  ui->toolBarWidget->resize(ui->editColumnPushButton->width(),ui->toolBarWidget->height());
+  ui->toolBarWidget->setMinimumWidth(ui->editColumnPushButton->sizeHint().width());
+  ui->toolBarWidget->setMaximumWidth(ui->editColumnPushButton->sizeHint().width());
+  ui->editColumnPushButton->updateGeometry();
+  ui->toolBarWidget->updateGeometry();
+
+
+  connect(ui->editColumnPushButton, SIGNAL(toggled(bool)), ui->nodesSpreadViewWidget->columnEditionWidget(), SLOT(setVisible(bool)));
+  connect(ui->editColumnPushButton, SIGNAL(toggled(bool)), ui->edgesSpreadViewWidget->columnEditionWidget(), SLOT(setVisible(bool)));
 
   return widget;
 }
 
-void SpreadView::setData(Graph *graph, DataSet dataSet) {
-  configurationWidget->setGraph(graph);
+void SpreadView::setData(Graph *graph, DataSet data) {
+  if(graph!= _graph) {
+    _graph = graph;
+    DataSet nodesDataset;
 
-  if (dataSet.exist("data")) {
-    DataSet data;
-    dataSet.get("data", data);
-
-    if (data.exist("displayedProperties")) {
-      string properties;
-      data.get("displayedProperties", properties);
-      vector<string> propertiesVector;
-      tokenize(properties, propertiesVector, ";");
-      configurationWidget->setSelectedProperties(propertiesVector);
+    if(data.exist("nodes")) {
+      data.get("nodes",nodesDataset);
     }
-  }
 
-  mainWidget->setData(graph, dataSet);
+    DataSet edgesDataset;
+
+    if(data.exist("edges")) {
+      data.get("edges",edgesDataset);
+    }
+
+    ui->nodesSpreadViewWidget->setData(graph,nodesDataset,NODE);
+    ui->edgesSpreadViewWidget->setData(graph,edgesDataset,EDGE);
+
+  }
+  else {
+    //Refresh models.
+    draw();
+  }
 }
 
-void SpreadView::getData(Graph **graph, DataSet *dataSet) {
+void SpreadView::getData(Graph **graph, DataSet * d) {
+  *graph = _graph;
   DataSet data;
-
-  if (!configurationWidget->allPropertiesSelected()) {
-    ostringstream oss;
-    vector<string> selectedProperties = configurationWidget->getSelectedProperties();
-
-    for (vector<string>::iterator it = selectedProperties.begin(); it
-         != selectedProperties.end(); ++it) {
-      oss << *it << ";";
-    }
-
-    data.set("displayedProperties", oss.str());
-  }
-
-  dataSet->set<DataSet> ("data", data);
-  *graph = mainWidget->getGraph();
+  data.set("nodes",ui->nodesSpreadViewWidget->getData());
+  data.set("edges",ui->edgesSpreadViewWidget->getData());
+  *d = data;
 }
 
 Graph* SpreadView::getGraph() {
-  return mainWidget->getGraph();
+  return _graph;
 }
 
 void SpreadView::changeGraph(Graph *graph) {
-  mainWidget->setData(graph, DataSet());
+  setData(graph,DataSet());
 }
 
 void SpreadView::draw() {
-  mainWidget->redrawView();
+  //Refresh models.
+  ui->nodesSpreadViewWidget->update();
+  ui->edgesSpreadViewWidget->update();
 }
 
 void SpreadView::refresh() {
-  draw();
 }
 
 void SpreadView::init() {
-  draw();
 }
 
-void SpreadView::createPicture(const std::string&, int, int) {
-  cout << "createPicture not implement yet for SpreadView" << endl;
+
+QImage SpreadView::createPicture(int width, int height, bool , int  , int xOffset , int yOffset ) {
+  return QPixmap::grabWidget(getCentralWidget(),xOffset,yOffset,width,height).toImage();
 }
 
-list<pair<QWidget *, string> > SpreadView::getConfigurationWidget() {
-  list<pair<QWidget *, string> > widgets;
-  widgets.push_back(make_pair(configurationWidget, "Properties Selection"));
-  return widgets;
+
+
+bool SpreadView::eventFilter(QObject *, QEvent *event) {
+  //Override default shortcut
+  if(event->type() == QEvent::ShortcutOverride) {
+    QKeyEvent* shortcutOverrideEvent  = static_cast<QKeyEvent*>(event);
+
+    //Highlight all the elements
+    if(shortcutOverrideEvent->modifiers() == Qt::ControlModifier && shortcutOverrideEvent->key() == Qt::Key_A) {
+      currentTable()->graphTableWidget()->selectAll();
+      shortcutOverrideEvent->accept();
+      return true;
+    }
+    else if(shortcutOverrideEvent->key() == Qt::Key_Delete) {
+      //Suppress selected elements
+      Observable::holdObservers();
+      currentTable()->deleteHighlightedElements();
+      Observable::unholdObservers();
+      shortcutOverrideEvent->accept();
+      return true;
+    }
+  }
+
+  return false;
+
 }
 
-std::vector<std::string> SpreadView::getSelectedProperties() const {
-  return configurationWidget->getSelectedProperties();
+SpreadViewTableWidget* SpreadView::currentTable()const {
+  return ui->tabWidget->currentWidget() == ui->nodesTab ? ui->nodesSpreadViewWidget: ui->edgesSpreadViewWidget;
 }
 
-void SpreadView::updated() {
-  //Force to reload
-  mainWidget->redrawView();
-}
-VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "16/04/2008", "Spreadsheet view", "1.0")
+VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "07/06/2011", "Spreadsheet view", "2.0")
 
-}
+
+
+

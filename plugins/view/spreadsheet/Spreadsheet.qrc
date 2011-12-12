@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/spreadsheet">
+        <file>inherited_properties.png</file>
+    </qresource>
+</RCC>
