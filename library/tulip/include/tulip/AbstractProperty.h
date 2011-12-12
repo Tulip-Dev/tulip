@@ -360,10 +360,10 @@ public:
    **/
   virtual void copy(PropertyInterface* property) {
     tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* prop =
-    dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(property);
+      dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(property);
     assert(prop != NULL);
     *this = *prop;
-  }    
+  }
   // for performance reason and use in GraphUpdatesRecorder
   virtual DataMem* getNodeDefaultDataMemValue() const {
     return new TypedValueContainer<typename Tnode::RealType>(getNodeDefaultValue());

@@ -349,8 +349,8 @@ void MainController::setData(Graph *graph,DataSet dataSet) {
     dataSet.set<bool>("3D layout",false);
     LayoutProperty tmp(newGraph);
     ControllerAlgorithmTools::changeProperty(newGraph, mainWindowFacade.getParentWidget(),
-					     "Random", "viewLayout", &tmp, NULL,
-					     dataSet, false, false, false);
+        "Random", "viewLayout", &tmp, NULL,
+        dataSet, false, false, false);
   }
 
   delete itn;
@@ -806,58 +806,69 @@ void MainController::buildMenu() {
   // only one factory to hold the whole algorithm plugins
   Iterator<AlgorithmPlugin *>* itp =
     AlgorithmPlugin::factory->availablePluginObjects();
+
   while (itp->hasNext()) {
     AlgorithmPlugin* plugin = itp->next();
     string className = plugin->getClassName();
+
     if (className == "Boolean") {
       insertInMenu(*selectMenu, plugin->getName().c_str(), plugin->getGroup(),
-		   selectGroupMenus, nSelectGroups,
-		   this, SLOT(changeSelection()));
+                   selectGroupMenus, nSelectGroups,
+                   this, SLOT(changeSelection()));
       continue;
     }
+
     if (className == "Double") {
       insertInMenu(*metricMenu, plugin->getName().c_str(), plugin->getGroup(),
-		   metricGroupMenus, nMetricGroups,
-		   this, SLOT(changeMetric()));
+                   metricGroupMenus, nMetricGroups,
+                   this, SLOT(changeMetric()));
       continue;
     }
+
     if (className == "Color") {
       insertInMenu(*colorsMenu, plugin->getName().c_str(), plugin->getGroup(),
-		   colorsGroupMenus, nColorsGroups,
-		   this, SLOT(changeColors()));
+                   colorsGroupMenus, nColorsGroups,
+                   this, SLOT(changeColors()));
       continue;
     }
+
     if (className == "Integer") {
       insertInMenu(*intMenu, plugin->getName().c_str(), plugin->getGroup(),
-		   intGroupMenus, nIntGroups,
-		   this, SLOT(changeInt()));
+                   intGroupMenus, nIntGroups,
+                   this, SLOT(changeInt()));
       continue;
     }
+
     if (className == "Layout") {
       insertInMenu(*layoutMenu, plugin->getName().c_str(), plugin->getGroup(),
-		   layoutGroupMenus, nLayoutGroups,
-		   this, SLOT(changeLayout()));
+                   layoutGroupMenus, nLayoutGroups,
+                   this, SLOT(changeLayout()));
       continue;
     }
+
     if (className == "Size") {
       insertInMenu(*sizesMenu, plugin->getName().c_str(), plugin->getGroup(),
-		   sizesGroupMenus, nSizesGroups,
-		   this, SLOT(changeSizes()));
+                   sizesGroupMenus, nSizesGroups,
+                   this, SLOT(changeSizes()));
       continue;
     }
+
     if (className == "String") {
       insertInMenu(*stringMenu, plugin->getName().c_str(), plugin->getGroup(),
-		   stringGroupMenus, nStringGroups,
-		   this, SLOT(changeString()));
+                   stringGroupMenus, nStringGroups,
+                   this, SLOT(changeString()));
       continue;
     }
+
     if (className == "Algorithm") {
       insertInMenu(*generalMenu, plugin->getName().c_str(), plugin->getGroup(),
-		   generalGroupMenus, nGeneralGroups,
-		   this, SLOT(applyAlgorithm()));
+                   generalGroupMenus, nGeneralGroups,
+                   this, SLOT(applyAlgorithm()));
       continue;
     }
-  } delete itp;
+  }
+
+  delete itp;
 
   if (selectMenu->actions().count()>0)
     algorithmMenu->addMenu(selectMenu);

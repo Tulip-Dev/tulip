@@ -35,7 +35,7 @@ public:
   }
   virtual bool run() {
     bool res = _graph->applyPropertyAlgorithm(_name, _property, _errorMsg,
-					      _progress, _dataset);
+               _progress, _dataset);
     return res;
   }
 

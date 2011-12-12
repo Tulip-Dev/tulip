@@ -131,12 +131,14 @@ public:
    */
   static std::string standardizeName(const char* name) {
     std::string standardName = tlp::demangleTlpClassName(name);
+
     if (standardName.find("Algorithm") != std::string::npos)
       // only one factory for all algorithms
       return "Algorithm";
+
     return standardName;
   }
- 
+
   /**
    * @brief Adds a factory to a static map of factories.
    * This map is then used to list all the factories, and all the plug-ins for each factory.

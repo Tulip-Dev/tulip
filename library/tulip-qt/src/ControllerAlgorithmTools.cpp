@@ -131,14 +131,14 @@ string dataSetToString(DataSet &dataSet) {
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
-					      const string& name,
-					      const string& destination,
-					      PropertyInterface* tmp,
-					      View *view,
-					      DataSet dataSet,
-					      bool query,
-					      bool redraw,
-					      bool push) {
+    const string& name,
+    const string& destination,
+    PropertyInterface* tmp,
+    View *view,
+    DataSet dataSet,
+    bool query,
+    bool redraw,
+    bool push) {
   NodeLinkDiagramComponent *nldc=NULL;
 
   if(view)
@@ -186,7 +186,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
 
     // If property is a layout property : we change the LOD Calculator to optimise morphing rendering
     bool updateLayout =  (nldc != NULL) &&
-      (tmp->getTypename() == LayoutProperty::propertyTypename);
+                         (tmp->getTypename() == LayoutProperty::propertyTypename);
     GlLODCalculator *oldLODCalculator = NULL;
 
     if (updateLayout) {
@@ -201,7 +201,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
     }
 
     resultBool = graph->applyPropertyAlgorithm(name, tmp, erreurMsg,
-					       myProgress, &dataSet);
+                 myProgress, &dataSet);
     graph->pop();
 
     if (updateLayout) {
@@ -241,8 +241,8 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
 
       if (!graph->existProperty(copyName) || graph->getProperty(copyName)->getTypename() == "double") {
         PropertyInterface*copy =
-	  graph->getProperty(copyName, dest->getTypename());
-	assert(copy != NULL);
+          graph->getProperty(copyName, dest->getTypename());
+        assert(copy != NULL);
         copy->copy(dest);
       }
     }
@@ -261,69 +261,69 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::changeString(Graph *graph, QWidget *parent,
-					    const string &name,
-					    const string &propertyName,
-					    View *view) {
+    const string &name,
+    const string &propertyName,
+    View *view) {
   StringProperty tmp(graph);
   return changeProperty(graph, parent, name, propertyName, &tmp, view);
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::changeBoolean(Graph *graph, QWidget *parent,
-					     const string &name,
-					     const string &propertyName,
-					     View *view) {
+    const string &name,
+    const string &propertyName,
+    View *view) {
   BooleanProperty tmp(graph);
   return changeProperty(graph, parent, name, propertyName, &tmp, view);
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::changeMetric(Graph *graph, QWidget *parent,
-					    const string &name,
-					    const string &propertyName,
-					    View *view, bool mapMetric,
-					    const string &colorAlgorithmName,
-					    const string &colorPropertyName) {
+    const string &name,
+    const string &propertyName,
+    View *view, bool mapMetric,
+    const string &colorAlgorithmName,
+    const string &colorPropertyName) {
   DoubleProperty tmp(graph);
   bool result = changeProperty(graph, parent, name, propertyName, &tmp, view,
-			       DataSet(), true);
+                               DataSet(), true);
 
   if (result && mapMetric) {
     ColorProperty tmpColor(graph);
     return changeProperty(graph, parent, colorAlgorithmName, colorPropertyName,
-			  &tmpColor, view, DataSet(), false, true, false);
+                          &tmpColor, view, DataSet(), false, true, false);
   }
 
   return result;
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::changeLayout(Graph *graph, QWidget *parent,
-					    const string &name,
-					    const string &propertyName,
-					    View *view) {
+    const string &name,
+    const string &propertyName,
+    View *view) {
   LayoutProperty tmp(graph);
   return changeProperty(graph, parent, name, propertyName, &tmp, view,
-			DataSet(), true, true);
+                        DataSet(), true, true);
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::changeInt(Graph *graph, QWidget *parent,
-					 const string &name,
-					 const string &propertyName,
-					 View *view) {
+    const string &name,
+    const string &propertyName,
+    View *view) {
   IntegerProperty tmp(graph);
   return changeProperty(graph, parent, name, propertyName, &tmp, view);
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::changeColors(Graph *graph, QWidget *parent,
-					    const string &name,
-					    const string &propertyName,
-					    View *view) {
+    const string &name,
+    const string &propertyName,
+    View *view) {
   ColorProperty tmp(graph);
   return changeProperty(graph, parent, name, propertyName, &tmp, view);
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::changeSizes(Graph *graph, QWidget *parent,
-					   const string &name,
-					   const string &propertyName,
-					   View *view) {
+    const string &name,
+    const string &propertyName,
+    View *view) {
   SizeProperty tmp(graph);
   return changeProperty(graph, parent, name, propertyName, &tmp, view);
 }

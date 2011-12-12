@@ -84,7 +84,7 @@ bool StlMapIterator<KEY,VALUE>::hasNext() {
 template<typename KEY, typename VALUE>
 struct StlMapValueIterator:public Iterator<VALUE> {
   StlMapValueIterator(typename std::map<KEY,VALUE>::const_iterator startIt, typename std::map<KEY,VALUE>::const_iterator endIt):
-  it(startIt, endIt) {}
+    it(startIt, endIt) {}
   VALUE next() {
     return it.next().second;
   }

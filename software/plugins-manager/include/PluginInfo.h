@@ -105,19 +105,25 @@ public :
 
   static std::string getPluginDisplayType(const std::string &name) {
     if (AlgorithmPlugin::factory &&
-	AlgorithmPlugin::factory->pluginExists(name)) {
+        AlgorithmPlugin::factory->pluginExists(name)) {
       std::string className =
-	AlgorithmPlugin::factory->objMap.find(name)->second->getClassName();
+        AlgorithmPlugin::factory->objMap.find(name)->second->getClassName();
+
       if (className == "Double")
-	return "Metric";
+        return "Metric";
+
       if (className == "Boolean")
-	return "Selection";
+        return "Selection";
+
       if (className == "String")
-	return "Label";
+        return "Label";
+
       if (className == "Algorithm")
-	return "General";
+        return "General";
+
       return className;
     }
+
     if(ImportModuleFactory::factory &&
         ImportModuleFactory::factory->pluginExists(name))
       return "Import";

@@ -67,9 +67,9 @@ PropertyType* tlp::Graph::getProperty(const std::string &name) {
 //====================================================================================
 template<typename PropertyType>
 bool tlp::Graph::computeProperty(const std::string &algorithm,
-				 PropertyType* prop,
+                                 PropertyType* prop,
                                  std::string &msg,
-				 tlp::PluginProgress *progress,
+                                 tlp::PluginProgress *progress,
                                  tlp::DataSet *data) {
   return applyPropertyAlgorithm(algorithm, prop, msg, progress, data);
 }

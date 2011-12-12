@@ -53,7 +53,7 @@ void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::registerPlugin(Obje
 
     for (; itD != dependencies.end(); itD++) {
       const char *factoryDepName = (*itD).factoryName.c_str();
-       (*itD).factoryName = standardizeName(factoryDepName);
+      (*itD).factoryName = standardizeName(factoryDepName);
     }
 
     objDeps[pluginName] = dependencies;

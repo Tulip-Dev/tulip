@@ -643,10 +643,10 @@ Graph *Graph::getNthSubGraph(unsigned int n) const {
 
 //====================================================================================
 bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
-					PropertyInterface* prop,
-					std::string &msg,
-					tlp::PluginProgress *progress,
-					tlp::DataSet *data) {
+                                        PropertyInterface* prop,
+                                        std::string &msg,
+                                        tlp::PluginProgress *progress,
+                                        tlp::DataSet *data) {
   bool result;
   tlp::AlgorithmContext context;
 

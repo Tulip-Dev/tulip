@@ -64,14 +64,14 @@ public :
    * if algorithm has a problem : display it in a QDialog in parent widget
    */
   static bool changeProperty(Graph *graph, QWidget *parent,
-			     const std::string& name,
-			     const std::string& destination,
-			     PropertyInterface* tmp,
-			     View *view = NULL,
-			     DataSet dataSet = DataSet(),
-			     bool query = true,
-			     bool redraw = false,
-			     bool push = true);
+                             const std::string& name,
+                             const std::string& destination,
+                             PropertyInterface* tmp,
+                             View *view = NULL,
+                             DataSet dataSet = DataSet(),
+                             bool query = true,
+                             bool redraw = false,
+                             bool push = true);
   /**
    * Apply a string property algorithm with given name on property with name : propertyName on graph
    * if algorithm has a problem : display it in a QDialog in parent widget

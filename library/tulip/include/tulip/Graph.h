@@ -567,17 +567,17 @@ public:
    * to return some external information (not stored in result).
    */
   bool applyPropertyAlgorithm(const std::string &algorithm,
-			      PropertyInterface* result,
-			      std::string &msg,
-			      PluginProgress *progress=0,
-			      DataSet *data=0);
+                              PropertyInterface* result,
+                              std::string &msg,
+                              PluginProgress *progress=0,
+                              DataSet *data=0);
   /**
    * obsolete version of the previous one
    */
   template<typename PropertyType>
-    bool computeProperty(const std::string &algorithm,
-			 PropertyType* result, std::string &msg,
-			 PluginProgress *progress=0, DataSet *data=0);
+  bool computeProperty(const std::string &algorithm,
+                       PropertyType* result, std::string &msg,
+                       PluginProgress *progress=0, DataSet *data=0);
   /**
    * Returns a pointer to a PropertyInterface which is in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
    * The real type of the PropertyInterface is tested with the template parameter.

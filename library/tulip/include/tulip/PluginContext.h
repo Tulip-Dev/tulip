@@ -56,7 +56,7 @@ public :
   PropertyInterface *propertyProxy;
   ///
   AlgorithmContext ():
-  graph(NULL),pluginProgress(NULL), dataSet(NULL), propertyProxy(NULL) {}
+    graph(NULL),pluginProgress(NULL), dataSet(NULL), propertyProxy(NULL) {}
   ///
   ~AlgorithmContext() {}
 };
