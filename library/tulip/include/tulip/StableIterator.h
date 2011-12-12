@@ -77,7 +77,7 @@ struct StableIterator : public Iterator<itType> {
     copyIterator = sequenceCopy.begin();
   }
   //=============================
-  ~StableIterator() {};
+  ~StableIterator() {}
   //=============================
   itType next() {
     itType tmp(*copyIterator);
