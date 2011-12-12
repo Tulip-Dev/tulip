@@ -627,9 +627,14 @@ void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
   const Coord& center=getNodeValue(n);
   list<pCE>::iterator it;
 
-  for (it=adjCoord.begin(); it!=adjCoord.end(); ++it) {
+  for (it=adjCoord.begin(); it!=adjCoord.end();) {
     it->first  -= center;
-    it->first /= it->first.norm();
+    float norm = it->first.norm();
+    if (norm) {
+      it->first /= norm;
+      ++it;
+    } else // remove null vector
+      it = adjCoord.erase(it);
   }
 
   //Sort the vector to compute angles between two edges
@@ -670,9 +675,9 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
 
     if (getEdgeValue(ite).size()>0) {
       if (sg->source(ite)==n)
-        adjCoord.push_back(getEdgeValue(ite).front());
+	adjCoord.push_back(getEdgeValue(ite).front());
       else
-        adjCoord.push_back(getEdgeValue(ite).back());
+	adjCoord.push_back(getEdgeValue(ite).back());
     }
     else {
       adjCoord.push_back(getNodeValue(sg->opposite(ite,n)));
@@ -685,9 +690,14 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
   const Coord& center=getNodeValue(n);
   list<Coord>::iterator it;
 
-  for (it=adjCoord.begin(); it!=adjCoord.end(); ++it) {
+  for (it=adjCoord.begin(); it!=adjCoord.end();) {
     (*it)-=center;
-    (*it)/=(*it).norm();
+    float norm = (*it).norm();
+    if (norm) {
+      (*it)/=norm;
+      ++it;
+    } else // remove null vector
+      it = adjCoord.erase(it);
   }
 
   //Sort the vector to compute angles between two edges
