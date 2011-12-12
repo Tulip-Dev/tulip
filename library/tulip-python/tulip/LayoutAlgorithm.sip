@@ -52,7 +52,7 @@ This class is the base interface for layout plugins.
 	virtual ~LayoutAlgorithm();
 	tlp::LayoutProperty *layoutResult;
 protected:
-	LayoutAlgorithm(const tlp::PropertyContext &context);
+	LayoutAlgorithm(const tlp::AlgorithmContext &context);
 	
 };
 

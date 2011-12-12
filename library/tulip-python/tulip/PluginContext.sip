@@ -38,21 +38,5 @@ public :
 
 	AlgorithmContext ();
 };
-};
 
-namespace tlp {
-
-class PropertyContext {
-%TypeHeaderCode
-#include <tulip/PluginContext.h>
-%End
-public :
-
-	tlp::Graph *graph;
-	tlp::PropertyInterface *propertyProxy;
-	tlp::PluginProgress *pluginProgress;
-	tlp::DataSet *dataSet;
-
-	PropertyContext ();
-};
 };

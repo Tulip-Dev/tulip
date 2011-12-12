@@ -24,65 +24,21 @@
 // +-------------------------------------------------------------------------+
 
 namespace tlp {
-class PropertyAlgorithm : tlp::WithParameter, tlp::WithDependency /Abstract/{
+class PropertyAlgorithm : tlp::Algorithm, tlp::WithParameter, tlp::WithDependency /Abstract/{
 %TypeHeaderCode
 #include <tulip/PropertyAlgorithm.h>
 %End
 public:
 
 %Docstring
-Bases: :class:`tlp.WithParameter`
+Bases: :class:`tlp.Algorithm`, :class:`tlp.WithParameter`
 
 This base class describes plugins who only modify one property, e.g. selection, layout, ...
-
-.. rubric:: class attributes
-
-.. py:attribute:: graph
-
-	The :class:`tlp.Graph` this property algorithm will be run on.
-
-.. py:attribute:: dataSet
-
-	A :class:`tlp.DataSet` containing parameters for this property algorithm, if any.
-	
-.. py:attribute:: pluginProgress
-
-	A :class:`tlp.PluginProgress` to give feedback to the user. It can be :const:`None`, so use with caution.	 
-
-.. rubric:: class methods
 %End
 
-	PropertyAlgorithm(const tlp::PropertyContext& context);
+	PropertyAlgorithm(const tlp::AlgorithmContext& context);
 	
 	virtual ~PropertyAlgorithm();
 	
-	virtual bool run();
-%Docstring
-tlp.PropertyAlgorithm.run()
-
-This method is called to run the property algorithm. Derived classes must implement it.
-It is a good practice to report progress through the PluginProgress.
-The PluginProgress should also be used to report errors, if any.
-Must return a boolean to indicate if the execution was successful.
-
-:rtype: boolean
-%End
-
-	virtual bool check(std::string & /Out/);
-%Docstring
-tlp.PropertyAlgorithm.check()
-
-Checks whether the algorithm can be applied on this graph or not.
-Derived classes can reimplement it.
-Must return a tuple whose first member indicates if the algorithm can be applied
-and the second one can be used to provide an error message.
-
-:rtype: (boolean, string) 
-%End	
-	
-	tlp::Graph *graph;
-  	tlp::PluginProgress *pluginProgress;
- 	tlp::DataSet *dataSet;
-
 };
 };

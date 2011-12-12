@@ -51,7 +51,7 @@ This class is the base interface for integer plugins.
 	virtual ~IntegerAlgorithm();
 	tlp::IntegerProperty *integerResult;
 protected:
-	IntegerAlgorithm(const tlp::PropertyContext &context);
+	IntegerAlgorithm(const tlp::AlgorithmContext &context);
 	
 };
 

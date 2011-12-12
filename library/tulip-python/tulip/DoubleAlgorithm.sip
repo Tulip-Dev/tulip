@@ -46,7 +46,7 @@ public:
 	
 protected:
 
-	DoubleAlgorithm(const tlp::PropertyContext &context);
+	DoubleAlgorithm(const tlp::AlgorithmContext &context);
 	
 };
 

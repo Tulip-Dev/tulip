@@ -51,7 +51,7 @@ This class is the base interface for selection plugins.
 	virtual ~BooleanAlgorithm();
 	tlp::BooleanProperty *booleanResult;
 protected:
-	BooleanAlgorithm(const tlp::PropertyContext &context);
+	BooleanAlgorithm(const tlp::AlgorithmContext &context);
 	
 };
 };

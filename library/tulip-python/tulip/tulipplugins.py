@@ -63,13 +63,15 @@ def registerAlgorithmPlugin(pluginClassName, pluginName, author, date, info, rel
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.AlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.AlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Algorithm\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
@@ -115,13 +117,15 @@ def registerAlgorithmPluginOfGroup(pluginClassName, pluginName, author, date, in
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.AlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.AlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Algorithm\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
@@ -165,13 +169,15 @@ def registerLayoutPlugin(pluginClassName, pluginName, author, date, info, releas
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.LayoutAlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.LayoutAlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Layout\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
@@ -217,13 +223,15 @@ def registerLayoutPluginOfGroup(pluginClassName, pluginName, author, date, info,
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.LayoutAlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.LayoutAlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Layout\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
@@ -267,13 +275,15 @@ def registerDoublePlugin(pluginClassName, pluginName, author, date, info, releas
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.DoubleAlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.DoubleAlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Double\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
@@ -319,13 +329,15 @@ def registerDoublePluginOfGroup(pluginClassName, pluginName, author, date, info,
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.DoubleAlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.DoubleAlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Double\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
@@ -369,13 +381,15 @@ def registerIntegerPlugin(pluginClassName, pluginName, author, date, info, relea
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.IntegerAlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.IntegerAlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Integer\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
@@ -421,13 +435,15 @@ def registerIntegerPluginOfGroup(pluginClassName, pluginName, author, date, info
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.IntegerAlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.IntegerAlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Integer\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
@@ -471,13 +487,15 @@ def registerBooleanPlugin(pluginClassName, pluginName, author, date, info, relea
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.BooleanAlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.BooleanAlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Boolean\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
@@ -523,13 +541,15 @@ def registerBooleanPluginOfGroup(pluginClassName, pluginName, author, date, info
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.BooleanAlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.BooleanAlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Boolean\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
@@ -573,13 +593,15 @@ def registerSizePlugin(pluginClassName, pluginName, author, date, info, release)
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.SizeAlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.SizeAlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Size\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
@@ -625,13 +647,15 @@ def registerSizePluginOfGroup(pluginClassName, pluginName, author, date, info, r
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.SizeAlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.SizeAlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Size\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
@@ -675,13 +699,15 @@ def registerColorPlugin(pluginClassName, pluginName, author, date, info, release
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.ColorAlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.ColorAlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Color\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"
@@ -727,13 +753,15 @@ def registerColorPluginOfGroup(pluginClassName, pluginName, author, date, info, 
 	  return
         pluginModule = getCallingModuleName()
         pluginModules[pluginName] = pluginModule
-        code = "class " + pluginClassName + "Factory(tlp.ColorAlgorithmFactory):\n"
+        code = "class " + pluginClassName + "Factory(tlp.AlgorithmPlugin):\n"
         code += "\tdef __init__(self):\n"
-        code += "\t\ttlp.ColorAlgorithmFactory.__init__(self)\n"
+        code += "\t\ttlp.AlgorithmPlugin.__init__(self)\n"
         code += "\t\tself.registerPlugin()\n"
         code += "\tdef createPluginObject(self, context):\n"
         code += "\t\timport " + pluginModule + "\n"
         code += "\t\treturn " + pluginModule + "." + pluginClassName + "(context)\n"
+        code += "\tdef getClassName(self):\n"
+        code += "\t\t return \"Color\"\n"
         code += "\tdef getName(self):\n"
         code += "\t\t return \"" + pluginName + "\"\n"
         code += "\tdef getAuthor(self):\n"

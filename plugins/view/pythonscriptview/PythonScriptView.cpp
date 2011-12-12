@@ -43,6 +43,7 @@
 #include <tulip/Algorithm.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
+#include <tulip/TemplateFactory.h>
 
 #include <sstream>
 
@@ -1233,7 +1234,7 @@ static bool pluginExists(std::string pluginName) {
   std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
 
   for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
-    if (it->first == tlp::demangleTlpClassName(typeid(T).name()) && it->second->pluginExists(pluginName)) {
+    if (it->first == tlp::TemplateFactoryInterface::standardizeName(typeid(T).name()) && it->second->pluginExists(pluginName)) {
       return true;
     }
   }
@@ -1246,7 +1247,7 @@ static void removePlugin(std::string pluginName) {
   std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
 
   for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
-    if (it->first == tlp::demangleTlpClassName(typeid(T).name())) {
+    if (it->first == tlp::TemplateFactoryInterface::standardizeName(typeid(T).name())) {
       it->second->removePlugin(pluginName);
       return;
     }
@@ -1320,12 +1321,7 @@ void PythonScriptView::registerPythonPlugin() {
   ostringstream oss;
   string pluginType = editedPluginsType[editedPlugins[tabIdx]];
 
-  if (pluginType == "General" || pluginType == "Import" || pluginType == "Export") {
-    oss << "plugin = " << moduleName.toStdString() << "." << editedPluginsClassName[editedPlugins[tabIdx]] << "(tlp.AlgorithmContext())";
-  }
-  else {
-    oss << "plugin = " << moduleName.toStdString() << "." << editedPluginsClassName[editedPlugins[tabIdx]] << "(tlp.PropertyContext())";
-  }
+  oss << "plugin = " << moduleName.toStdString() << "." << editedPluginsClassName[editedPlugins[tabIdx]] << "(tlp.AlgorithmContext())";
 
   pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
   viewWidget->consoleOutputWidget->clear();

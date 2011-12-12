@@ -51,7 +51,7 @@ This class is the base interface for size plugins.
 	virtual ~SizeAlgorithm();
 	tlp::SizeProperty *sizeResult;
 protected:
-	SizeAlgorithm(const tlp::PropertyContext &context);
+	SizeAlgorithm(const tlp::AlgorithmContext &context);
 	
 };
 

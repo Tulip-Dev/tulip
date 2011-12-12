@@ -51,7 +51,7 @@ This class is the base interface for color plugins.
 	virtual ~ColorAlgorithm();
 	tlp::ColorProperty *colorResult;
 protected:
-	ColorAlgorithm(const tlp::PropertyContext &context);
+	ColorAlgorithm(const tlp::AlgorithmContext &context);
 	
 };
 

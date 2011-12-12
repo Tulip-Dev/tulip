@@ -66,7 +66,8 @@ if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, .
 tlp.Algorithm.run()
 
 This method is the entry point of the algorithm when it is called.
-Derived classes must implement it. A boolean must also be returned
+Derived classes must implement it. It is a good practice to report progress through the PluginProgress.
+The PluginProgress should also be used to report errors, if any. A boolean must also be returned
 to indicate if the algorithm was successful.
 
 :rtype: boolean	
@@ -100,7 +101,7 @@ public:
 	
 	virtual ~AlgorithmPlugin();
 	
-	virtual tlp::Algorithm * createPluginObject(const tlp::AlgorithmContext&) = 0 /Plugin/; 
+	virtual tlp::Algorithm * createPluginObject(const tlp::AlgorithmContext&) = 0 /Factory/; 
 	
 	virtual  std::string getMajor() const;
 	
