@@ -246,9 +246,9 @@ background-color: #A9A9A9;
  <connections>
   <connection>
    <sender>currentInteractorButton</sender>
-   <signal>clicked()</signal>
+   <signal>toggled(bool)</signal>
    <receiver>WorkspacePanel</receiver>
-   <slot>showCurrentInteractorConfiguration()</slot>
+   <slot>setCurrentInteractorConfigurationVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>10</x>
@@ -262,6 +262,6 @@ background-color: #A9A9A9;
   </connection>
  </connections>
  <slots>
-  <slot>showCurrentInteractorConfiguration()</slot>
+  <slot>setCurrentInteractorConfigurationVisible(bool)</slot>
  </slots>
 </ui>

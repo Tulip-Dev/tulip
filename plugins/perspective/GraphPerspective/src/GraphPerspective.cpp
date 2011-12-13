@@ -30,6 +30,7 @@
 #include "ImportWizard.h"
 #include "PanelSelectionWizard.h"
 #include "GraphHierarchiesEditor.h"
+#include "ShadowFilter.h"
 #include <tulip/GraphHierarchiesModel.h>
 
 #ifndef NDEBUG
@@ -50,6 +51,7 @@ GraphPerspective::GraphPerspective(PerspectiveContext &c): Perspective(c), _ui(0
 void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
+  _mainWindow->installEventFilter(new ShadowFilter(this));
   connect(_ui->workspace,SIGNAL(addPanelAtStartupButtonClicked()),this,SLOT(createPanel()));
 
   // Connect actions

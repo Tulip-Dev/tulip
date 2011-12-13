@@ -23,6 +23,7 @@
 #include <QtGui/QCloseEvent>
 #include <QtGui/QPushButton>
 #include <QtGui/QApplication>
+#include <QtGui/QGraphicsProxyWidget>
 
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ProcessingAnimationItem.h>
@@ -65,7 +66,7 @@ public:
 // ========================
 
 WorkspacePanel::WorkspacePanel(tlp::View* view, const QString& viewName, QWidget *parent)
-  : QWidget(parent), _ui(new Ui::WorkspacePanel), _view(NULL), _viewName(viewName), _progressItem(NULL) {
+  : QWidget(parent), _ui(new Ui::WorkspacePanel), _view(NULL), _viewName(viewName), _progressItem(NULL), _currentInteractorConfigurationItem(NULL) {
   _ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose,true);
   connect(_ui->closeButton,SIGNAL(clicked()),this,SLOT(close()));
@@ -94,6 +95,7 @@ QString WorkspacePanel::viewName() const {
 
 void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
   assert(view != NULL);
+  _ui->currentInteractorButton->setChecked(false);
 
   if (_view != NULL) {
     disconnect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
@@ -135,6 +137,37 @@ void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
   _ui->currentInteractorButton->setChecked(false);
 }
 
+void WorkspacePanel::setCurrentInteractorConfigurationVisible(bool toggle) {
+  if (_currentInteractorConfigurationItem != NULL) {
+    static_cast<QScrollArea*>(_currentInteractorConfigurationItem->widget())->takeWidget();
+    delete _currentInteractorConfigurationItem;
+    _currentInteractorConfigurationItem = NULL;
+  }
+
+  if (!toggle || _view->currentInteractor() == NULL || _view->currentInteractor()->configurationWidget() == NULL)
+    return;
+
+  _currentInteractorConfigurationItem = new QGraphicsProxyWidget();
+  _currentInteractorConfigurationItem->setParent(_view->graphicsView());
+  _currentInteractorConfigurationItem->setObjectName("currentInteractorConfigurationItem");
+  _currentInteractorConfigurationItem->setOpacity(0);
+  _currentInteractorConfigurationItem->setPos(0,0);
+  QScrollArea* area = new QScrollArea();
+  area->setFrameShape(QScrollArea::NoFrame);
+  QWidget* interactorWidget = _view->currentInteractor()->configurationWidget();
+  interactorWidget->setObjectName("contents");
+  area->setStyleSheet("#contents { background-color: white; border: 1px solid #C9C9C9; }");
+  area->setWidget(interactorWidget);
+  _currentInteractorConfigurationItem->setWidget(area);
+  _view->graphicsView()->scene()->addItem(_currentInteractorConfigurationItem);
+  QPropertyAnimation* anim = new QPropertyAnimation(_currentInteractorConfigurationItem,"opacity",_currentInteractorConfigurationItem);
+  anim->setStartValue(0);
+  anim->setEndValue(0.85);
+  anim->setDuration(300);
+  anim->setEasingCurve(QEasingCurve::OutQuad);
+  anim->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
 void WorkspacePanel::interactorActionTriggered() {
   QAction* action = static_cast<QAction*>(sender());
   Interactor* interactor = static_cast<Interactor*>(action->parent());
@@ -155,11 +188,11 @@ void WorkspacePanel::toggleProgressMode(bool p) {
   if (p && _progressItem == NULL)  {
     _progressItem = new ProgressItem(_view->graphicsView()->scene());
     _view->graphicsView()->scene()->addItem(_progressItem);
-    _progressFadeIn = new QPropertyAnimation(_progressItem,"opacity",_progressItem);
-    _progressFadeIn->setStartValue(0);
-    _progressFadeIn->setEndValue(1);
-    _progressFadeIn->setDuration(800);
-    _progressFadeIn->start(QAbstractAnimation::DeleteWhenStopped);
+    QPropertyAnimation* progressFadeIn = new QPropertyAnimation(_progressItem,"opacity",_progressItem);
+    progressFadeIn->setStartValue(0);
+    progressFadeIn->setEndValue(1);
+    progressFadeIn->setDuration(800);
+    progressFadeIn->start(QAbstractAnimation::DeleteWhenStopped);
   }
   else if (!p && _progressItem != NULL) {
     _view->graphicsView()->scene()->removeItem(_progressItem);
@@ -241,26 +274,4 @@ void WorkspacePanel::graphComboIndexChanged() {
   if (g != NULL && _view != NULL && g != _view->graph()) {
     _view->setGraph(g);
   }
-}
-
-#include <QtGui/QGraphicsProxyWidget>
-#include <QtGui/QScrollArea>
-
-class ConfigurationArea: public QScrollArea {
-public:
-  explicit ConfigurationArea(QWidget* parent = 0): QScrollArea(parent) {
-  }
-
-  virtual ~ConfigurationArea() {
-    takeWidget();
-  }
-};
-
-void WorkspacePanel::showCurrentInteractorConfiguration() {
-  if (_view->currentInteractor() == NULL)
-    return;
-
-  ConfigurationArea* configArea = new ConfigurationArea();
-  configArea->setWidget(_view->currentInteractor()->configurationWidget());
-  _view->graphicsView()->scene()->addWidget(configArea);
 }
