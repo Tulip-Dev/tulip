@@ -20,7 +20,6 @@
 
 #include <QtCore/QEvent>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QFrame>
 #include <QtOpenGL/QGLWidget>
 #include <QtGui/QMenu>
 #include <QtGui/QGridLayout>
@@ -48,6 +47,7 @@ AbstractView::~AbstractView() {
 
 QWidget *AbstractView::construct(QWidget *parent) {
   widget = new QWidget(parent);
+  widget->setObjectName("AbstractView widget");
   QGridLayout *gridLayout = new QGridLayout(widget);
   gridLayout->setSpacing(0);
   gridLayout->setMargin(0);
@@ -55,13 +55,6 @@ QWidget *AbstractView::construct(QWidget *parent) {
   mainLayout = new QVBoxLayout;
 
   gridLayout->addLayout(mainLayout, 0, 0, 1, 1);
-
-  // Add this to by-pass a bug in Qt 4.4.1
-  // In the QWorkspace if the widget doesn't have a QGLWidget this widget pass below others widget
-  QFrame *frame = new QFrame(widget);
-  frame->setGeometry(QRect(0, 0, 0, 0));
-  new QGridLayout(frame);
-  new QGLWidget(frame);
 
   //Build output image list
   exportImageMenu = new QMenu("&Export in EPS or SVG ",widget);

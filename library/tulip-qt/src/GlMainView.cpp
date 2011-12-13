@@ -40,6 +40,7 @@ QWidget *GlMainView::construct(QWidget *parent) {
   QWidget *widget = AbstractView::construct(parent);
 
   mainWidget = new GlMainWidget(widget, this);
+  mainWidget->setObjectName("GlMainView main widget");
 
   setCentralWidget(mainWidget);
 
@@ -49,6 +50,7 @@ QWidget *GlMainView::construct(QWidget *parent) {
   overviewFrame->setFrameShape(QFrame::StyledPanel);
   overviewFrame->setFrameShadow(QFrame::Raised);
   overviewFrame->setAutoFillBackground(true);
+  overviewFrame->setObjectName("Overview Frame");
   QGridLayout *gridLayout_2 = new QGridLayout(overviewFrame);
   gridLayout_2->setSpacing(6);
   gridLayout_2->setMargin(0);

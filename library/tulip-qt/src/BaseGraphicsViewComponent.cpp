@@ -24,7 +24,6 @@
 #include <QtGui/QInputDialog>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QToolTip>
-#include <QtGui/QFrame>
 
 #include <tulip/ExtendedClusterOperation.h>
 #include <tulip/ColorProperty.h>
@@ -58,7 +57,9 @@ BaseGraphicsViewComponent::~BaseGraphicsViewComponent() {}
 
 QWidget *BaseGraphicsViewComponent::construct(QWidget *parent) {
   QWidget *widget=AbstractView::construct(parent);
-  baseView->construct(parent);
+  QWidget* baseViewWidget = baseView->construct(parent);
+  baseViewWidget->setObjectName("baseView Widget");
+  baseViewWidget->hide();
   connect(baseView,SIGNAL(elementSelected(unsigned int,bool)),this,SLOT(elementSelectedSlot(unsigned int,bool)));
 
   widget->resize(512, 512);

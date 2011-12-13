@@ -50,6 +50,7 @@ NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
 //==================================================
 QWidget *NodeLinkDiagramComponent::construct(QWidget *parent) {
   QWidget *widget=GlMainView::construct(parent);
+  widget->setObjectName("NLDC widget");
 
   //View Menu
   viewMenu=new QMenu("View");
