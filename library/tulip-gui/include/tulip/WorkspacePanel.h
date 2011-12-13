@@ -27,6 +27,7 @@
 
 class QGraphicsObject;
 class QPropertyAnimation;
+class QGraphicsProxyWidget;
 
 namespace Ui {
 class WorkspacePanel;
@@ -46,9 +47,8 @@ class TLP_QT_SCOPE WorkspacePanel : public QWidget, public tlp::SimplePluginProg
   tlp::View* _view;
   QString _viewName;
 
+  QGraphicsProxyWidget* _currentInteractorConfigurationItem;
   QGraphicsObject* _progressItem;
-  QPropertyAnimation* _progressFadeIn;
-
 public:
   explicit WorkspacePanel(tlp::View* view, const QString& viewName, QWidget* parent=0);
   virtual ~WorkspacePanel();
@@ -74,7 +74,7 @@ protected slots:
   void interactorActionTriggered();
   void viewDestroyed();
   void graphComboIndexChanged();
-  void showCurrentInteractorConfiguration();
+  void setCurrentInteractorConfigurationVisible(bool);
 
 protected:
   void progress_handler(int step, int max_step);

@@ -9,7 +9,8 @@ src/GraphHierarchiesEditor.cpp
 src/GraphPerspective.cpp
 src/HeaderFrame.cpp
 src/ImportWizard.cpp
-src/PanelSelectionWizard.cpp)
+src/PanelSelectionWizard.cpp
+src/ShadowFilter.cpp)
 
 QT4_ADD_RESOURCES(RCC_SRCS
 resources/GraphPerspective.qrc
