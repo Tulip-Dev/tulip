@@ -30,6 +30,8 @@
 #ifndef Tulip_FOREGROUNDENTITY_H
 #define Tulip_FOREGROUNDENTITY_H
 
+#include <tulip/tulipconf.h>
+
 namespace tlp {
 
 class GlMainWidget;
