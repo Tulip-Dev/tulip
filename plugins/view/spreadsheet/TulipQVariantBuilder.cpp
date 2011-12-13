@@ -41,7 +41,7 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
 
   case Qt::EditRole: {
     switch(propertyType) {
-    case NODEGLYPHPROPERTY_RTTI: {      
+    case NODEGLYPHPROPERTY_RTTI: {
       int value = elementType==NODE?((IntegerProperty*)property)->getNodeValue(node(elementId)):((IntegerProperty*)property)->getEdgeValue(edge(elementId));
       ElementCollection collection;
       string glyphName;
@@ -77,7 +77,7 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
     }
     break;
 
-    case EDGEEXTREMITYGLYPHPROPERTY_RTTI: {      
+    case EDGEEXTREMITYGLYPHPROPERTY_RTTI: {
       int value = elementType==NODE?((IntegerProperty*)property)->getNodeValue(node(elementId)):((IntegerProperty*)property)->getEdgeValue(edge(elementId));
       ElementCollection collection;
       //Add the no edge extremity shape code to the list.

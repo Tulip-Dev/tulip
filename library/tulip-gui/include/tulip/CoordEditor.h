@@ -13,21 +13,20 @@ namespace tlp {
 /**
 * @brief Simple Coord edition widget.
 **/
-class TLP_QT_SCOPE CoordEditor : public QWidget
-{
-    Q_OBJECT
-    Q_PROPERTY(Coord coord READ coord WRITE setCoord NOTIFY coordChanged)
+class TLP_QT_SCOPE CoordEditor : public QWidget {
+  Q_OBJECT
+  Q_PROPERTY(Coord coord READ coord WRITE setCoord NOTIFY coordChanged)
 
-    Ui::CoordEditor *ui;
+  Ui::CoordEditor *ui;
 public:
-    explicit CoordEditor(QWidget *parent = 0);
-    ~CoordEditor();
+  explicit CoordEditor(QWidget *parent = 0);
+  ~CoordEditor();
 
-    tlp::Coord coord() const;
+  tlp::Coord coord() const;
 
-  public slots:
-    void setCoord(const tlp::Coord& s);
-    
+public slots:
+  void setCoord(const tlp::Coord& s);
+
 signals:
   void coordChanged(tlp::Coord coord);
 
