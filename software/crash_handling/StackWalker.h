@@ -30,6 +30,8 @@
 #ifdef HAVE_BFD
 #include "BfdWrapper.h"
 #endif
+#else // not _MSC_VER
+#include <stdint.h>
 #endif
 
 class StackWalker {
