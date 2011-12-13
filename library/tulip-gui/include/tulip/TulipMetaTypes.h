@@ -42,14 +42,14 @@
 
 // Helper class for filesystem types handling
 struct TulipFileDescriptor {
-  enum FileType{File,Directory};
+  enum FileType {File,Directory};
 
   TulipFileDescriptor() {}
   TulipFileDescriptor(const TulipFileDescriptor& d) {
-    absolutePath = d.absolutePath;    
+    absolutePath = d.absolutePath;
     type = d.type;
   }
-  QString absolutePath;  
+  QString absolutePath;
   FileType type;
 };
 

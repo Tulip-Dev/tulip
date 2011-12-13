@@ -56,7 +56,7 @@ class BooleanProperty;
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  */
-class SpreadView: public tlp::AbstractView , public tlp::PropertyObserver{
+class SpreadView: public tlp::AbstractView , public tlp::PropertyObserver {
   Q_OBJECT
 public:
 

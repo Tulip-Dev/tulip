@@ -4,24 +4,22 @@
 using namespace tlp;
 
 CoordEditor::CoordEditor(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::CoordEditor)
-{
-    ui->setupUi(this);
-    QDoubleValidator *validator = new QDoubleValidator(this);
-    validator->setRange(-FLT_MAX,FLT_MAX,1000);
-    ui->xLineEdit->setValidator(validator);
-    ui->yLineEdit->setValidator(validator);
-    ui->zLineEdit->setValidator(validator);
-    setCoord(Coord());
-    connect(ui->xLineEdit,SIGNAL(textChanged(QString)),this,SLOT(coordUpdated()));
-    connect(ui->yLineEdit,SIGNAL(textChanged(QString)),this,SLOT(coordUpdated()));
-    connect(ui->zLineEdit,SIGNAL(textChanged(QString)),this,SLOT(coordUpdated()));
+  QWidget(parent),
+  ui(new Ui::CoordEditor) {
+  ui->setupUi(this);
+  QDoubleValidator *validator = new QDoubleValidator(this);
+  validator->setRange(-FLT_MAX,FLT_MAX,1000);
+  ui->xLineEdit->setValidator(validator);
+  ui->yLineEdit->setValidator(validator);
+  ui->zLineEdit->setValidator(validator);
+  setCoord(Coord());
+  connect(ui->xLineEdit,SIGNAL(textChanged(QString)),this,SLOT(coordUpdated()));
+  connect(ui->yLineEdit,SIGNAL(textChanged(QString)),this,SLOT(coordUpdated()));
+  connect(ui->zLineEdit,SIGNAL(textChanged(QString)),this,SLOT(coordUpdated()));
 }
 
-CoordEditor::~CoordEditor()
-{
-    delete ui;
+CoordEditor::~CoordEditor() {
+  delete ui;
 }
 
 Coord CoordEditor::coord()const {
