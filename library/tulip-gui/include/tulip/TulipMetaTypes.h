@@ -45,6 +45,7 @@ struct TulipFileDescriptor {
   enum FileType {File,Directory};
 
   TulipFileDescriptor() {}
+  TulipFileDescriptor(const QString& absolutePath,FileType fileType):absolutePath(absolutePath),type(fileType) {}
   TulipFileDescriptor(const TulipFileDescriptor& d) {
     absolutePath = d.absolutePath;
     type = d.type;
