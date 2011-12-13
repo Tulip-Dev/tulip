@@ -47,8 +47,11 @@ class TLP_QT_SCOPE WorkspacePanel : public QWidget, public tlp::SimplePluginProg
   tlp::View* _view;
   QString _viewName;
 
+  QGraphicsProxyWidget* _viewConfigurationWidgets;
   QGraphicsProxyWidget* _currentInteractorConfigurationItem;
   QGraphicsObject* _progressItem;
+
+  QPointF configurationTabPosition(bool expanded) const;
 public:
   explicit WorkspacePanel(tlp::View* view, const QString& viewName, QWidget* parent=0);
   virtual ~WorkspacePanel();
@@ -79,6 +82,7 @@ protected slots:
 protected:
   void progress_handler(int step, int max_step);
   void refreshInteractorsToolbar();
+  bool eventFilter(QObject *, QEvent *);
 };
 
 }

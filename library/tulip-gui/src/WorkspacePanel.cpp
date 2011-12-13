@@ -24,6 +24,7 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QApplication>
 #include <QtGui/QGraphicsProxyWidget>
+#include <QtGui/QTabWidget>
 
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ProcessingAnimationItem.h>
@@ -66,7 +67,7 @@ public:
 // ========================
 
 WorkspacePanel::WorkspacePanel(tlp::View* view, const QString& viewName, QWidget *parent)
-  : QWidget(parent), _ui(new Ui::WorkspacePanel), _view(NULL), _viewName(viewName), _progressItem(NULL), _currentInteractorConfigurationItem(NULL) {
+: QWidget(parent), _ui(new Ui::WorkspacePanel), _view(NULL), _viewName(viewName), _progressItem(NULL), _currentInteractorConfigurationItem(NULL), _viewConfigurationWidgets(NULL) {
   _ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose,true);
   connect(_ui->closeButton,SIGNAL(clicked()),this,SLOT(close()));
@@ -127,6 +128,20 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
   connect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
   connect(_view,SIGNAL(graphSet(tlp::Graph*)),this,SLOT(viewGraphSet(tlp::Graph*)));
   connect(_view,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
+
+  if (_view->configurationWidgets().size()==0)
+      return;
+
+  QTabWidget* viewConfigurationTabs = new QTabWidget();
+  viewConfigurationTabs->setTabPosition(QTabWidget::West);
+  viewConfigurationTabs->setStyleSheet("QTabWidget {\nbackground-color: transparent;\n}\nQTabWidget::pane {\nbackground-color: white;\nborder: 1px solid #C9C9C9;\n}\nQTabBar::tab {\nborder-image:none;\nbackground-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\nstop: 0 #838383,\nstop: 0.4 #707070,\nstop: 0.401 #636363,\nstop: 1 #4a4a4a);\ncolor: white;\nborder: 1px solid #C9C9C9;\nborder-right: 0px;\nborder-top-left-radius: 4px;\nborder-bottom-left-radius: 4px;\nmin-height: 8ex;\npadding: 2px;\nfont: bold;\n}\nQTabBar::tab:selected {\nbackground-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\nstop: 0 #ffffff,\nstop: 0.4 #eeeeee,\nstop: 0.401 #e2e2e2,\nstop: 1 #dddddd);\ncolor: black;\n}\nQTabBar::tab:selected:hover {\nbackground-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\nstop: 0 #ffffff,\nstop: 0.4 #fefefe,\nstop: 0.401 #f2f2f2,\nstop: 1 #ededed);\n}\nQTabBar::tab:!selected {\nmargin-left: 1px;\n}\nQTabBar::tab:!selected:hover {\nbackground-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\nstop: 0 #939393,\nstop: 0.4 #808080,\nstop: 0.401 #737373,\nstop: 1 #5a5a5a);\n}");
+  foreach(QWidget* w, _view->configurationWidgets()) {
+    viewConfigurationTabs->addTab(w,w->windowTitle());
+  }
+  _viewConfigurationWidgets = _view->graphicsView()->scene()->addWidget(viewConfigurationTabs);
+  _view->graphicsView()->installEventFilter(this);
+  _viewConfigurationWidgets->installEventFilter(this);
+  _viewConfigurationWidgets->setOpacity(0.6);
 }
 
 void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
@@ -273,5 +288,33 @@ void WorkspacePanel::graphComboIndexChanged() {
 
   if (g != NULL && _view != NULL && g != _view->graph()) {
     _view->setGraph(g);
+  }
+}
+
+bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
+  if (obj == _viewConfigurationWidgets) {
+    if (ev->type() == QEvent::FocusIn || ev->type() == QEvent::FocusOut) {
+      QPropertyAnimation* anim = new QPropertyAnimation(_viewConfigurationWidgets,"pos",_viewConfigurationWidgets);
+      anim->setDuration(250);
+      anim->setStartValue(_viewConfigurationWidgets->pos());
+      bool expanded = ev->type() == QEvent::FocusIn;
+      anim->setEndValue(configurationTabPosition(expanded));
+      anim->start(QAbstractAnimation::DeleteWhenStopped);
+      _viewConfigurationWidgets->setOpacity(expanded ? 0.9 : 0.6);
+    }
+  }
+  else if (_view != NULL && obj == _view->graphicsView() && _viewConfigurationWidgets != NULL && ev->type() == QEvent::Resize) {
+    _viewConfigurationWidgets->setPos(configurationTabPosition(_viewConfigurationWidgets->hasFocus()));
+  }
+  return false;
+}
+
+QPointF WorkspacePanel::configurationTabPosition(bool expanded) const {
+  if (expanded)
+    return QPointF(width()-_viewConfigurationWidgets->size().width(),10);
+  else {
+    QTabWidget* tabWidget = static_cast<QTabWidget*>(_viewConfigurationWidgets->widget());
+    int tabWidth = _viewConfigurationWidgets->size().width() - tabWidget->widget(0)->width();
+    return QPointF(width() - tabWidth,10);
   }
 }

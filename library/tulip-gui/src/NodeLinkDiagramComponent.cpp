@@ -64,4 +64,15 @@ bool NodeLinkDiagramComponent::isLayoutProperty(tlp::PropertyInterface* pi) cons
   return pi == getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();
 }
 
+#include <QtGui/QLabel>
+QList<QWidget*> NodeLinkDiagramComponent::configurationWidgets() const {
+
+    QLabel* label1 = new QLabel("text 1");
+    label1->setWindowTitle("#1");
+
+    QLabel* label2 = new QLabel("text 2");
+    label2->setWindowTitle("#2");
+    return QList<QWidget*>() << label1 << label2;
+}
+
 VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0")
