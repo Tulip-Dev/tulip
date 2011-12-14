@@ -24,7 +24,9 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QGraphicsView>
 #include <QtGui/QGraphicsEffect>
+#include <QtGui/QGraphicsSceneDragDropEvent>
 
+#include <tulip/TulipMetaTypes.h>
 #include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>
 
@@ -107,7 +109,7 @@ QVariant Workspace::PanelsStorage::data(const QModelIndex &index, int role) cons
 Workspace::Workspace(QWidget *parent)
   : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL) {
   _ui->setupUi(this);
-  connect(_ui->startupButton, SIGNAL(clicked()),this,SIGNAL(addPanelAtStartupButtonClicked()));
+  connect(_ui->startupButton,SIGNAL(clicked()),this,SIGNAL(addPanelRequest()));
 
 #ifndef NDEBUG
   new ModelTest(&_panels,this);
@@ -406,23 +408,55 @@ void Workspace::setActivePanel(tlp::View* view) {
 
 bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
   if (ev->type() == QEvent::ChildAdded || ev->type() == 70) {
-    static_cast<QChildEvent*>(ev)->child()->installEventFilter(this);
+    QObject* childObj = static_cast<QChildEvent*>(ev)->child();
+    childObj->installEventFilter(this);
+    QGraphicsView* graphicsView = dynamic_cast<QGraphicsView*>(childObj);
+    if (graphicsView != NULL && graphicsView->scene() != NULL)  {
+      graphicsView->scene()->installEventFilter(this);
+    }
   }
   else if (ev->type() == QEvent::ChildRemoved) {
-    static_cast<QChildEvent*>(ev)->child()->removeEventFilter(this);
+    QObject* childObj = static_cast<QChildEvent*>(ev)->child();
+    childObj->removeEventFilter(this);
+    QGraphicsView* graphicsView = dynamic_cast<QGraphicsView*>(childObj);
+    if (graphicsView != NULL && graphicsView->scene())  {
+      graphicsView->scene()->removeEventFilter(this);
+    }
   }
-
-  if (ev->type() == QEvent::FocusIn) {
-    // FIXME: Pretty much a dirty hack: we are catching QGraphicsView focus event, then go back to its parent (the WorkspacePanel) to emit a focus event
+  else if (ev->type() == QEvent::FocusIn) {
     if (dynamic_cast<QGraphicsView*>(obj) != NULL) {
       tlp::WorkspacePanel* panel = static_cast<tlp::WorkspacePanel*>(obj->parent());
       emit panelFocused(panel->view());
     }
   }
-
-  return false;
+  else if (ev->type() == QEvent::GraphicsSceneDragEnter || ev->type() == QEvent::GraphicsSceneDragMove) {
+    if (static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData()->hasColor())
+      ev->accept();
+    return true;
+  }
+  else if (ev->type() == QEvent::GraphicsSceneDrop) {
+    addPanelFromDropAction(static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData());
+  }
+  return QWidget::eventFilter(obj,ev);
 }
 
-void Workspace::dropEvent(QDropEvent *)  {
-  qWarning("prout");
+bool Workspace::event(QEvent* e) {
+  if (e->type() == QEvent::DragEnter) {
+    if (static_cast<QDragEnterEvent*>(e)->mimeData()->hasColor())
+      e->accept();
+  }
+  else if (e->type()==QEvent::Drop) {
+    addPanelFromDropAction(static_cast<QDropEvent*>(e)->mimeData());
+  }
+  return QWidget::event(e);
+}
+
+void Workspace::addPanelFromDropAction(const QMimeData* mimeData) {
+  QList<QVariant> colorData = mimeData->colorData().toList();
+  foreach(QVariant v, colorData) {
+    Graph* g = v.value<Graph*>();
+    if (g == NULL)
+      continue;
+    emit addPanelRequest(g);
+  }
 }

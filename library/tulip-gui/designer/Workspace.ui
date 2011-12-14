@@ -10,6 +10,9 @@
     <height>637</height>
    </rect>
   </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
   <property name="styleSheet">
    <string notr="true">#Workspace {
 border: 0px;

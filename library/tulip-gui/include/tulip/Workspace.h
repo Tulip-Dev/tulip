@@ -98,8 +98,8 @@ public slots:
   void setModel(tlp::GraphHierarchiesModel*);
 
 signals:
-  void addPanelAtStartupButtonClicked();
   void panelFocused(tlp::View*);
+  void addPanelRequest(tlp::Graph* g = NULL);
 
 protected slots:
   void viewNeedsDraw();
@@ -108,14 +108,15 @@ protected slots:
   void updateAvailableModes();
   void removePanel(tlp::WorkspacePanel*);
   void updatePanels();
+  void addPanelFromDropAction(const QMimeData* data);
+
+protected:
+  bool eventFilter(QObject *, QEvent *);
+  bool event(QEvent *);
 
   QWidget* currentModeWidget() const;
   QVector<PlaceHolderWidget*> currentModeSlots() const;
   unsigned int currentSlotsCount() const;
-
-protected:
-  bool eventFilter(QObject *, QEvent *);
-  void dropEvent(QDropEvent *);
 };
 }
 
