@@ -99,6 +99,7 @@ void ViewWidget::currentInteractorChanged(tlp::Interactor *i) {
 
 void ViewWidget::setCentralWidget(QWidget* w) {
   assert(w);
+  w->setAcceptDrops(true);
   QGraphicsItem *oldCentralItem = _centralWidgetItem;
   QWidget *oldCentralWidget = _centralWidget;
 

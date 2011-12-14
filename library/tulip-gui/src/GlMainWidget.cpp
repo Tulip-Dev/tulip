@@ -697,4 +697,5 @@ void GlMainWidget::centerScene() {
   scene.centerScene();
   draw(false);
 }
+
 }

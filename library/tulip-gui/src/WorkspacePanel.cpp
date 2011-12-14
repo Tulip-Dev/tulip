@@ -299,11 +299,12 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
       setConfigurationTabExpanded(expand);
     }
   }
-  return false;
+  return QWidget::eventFilter(obj,ev);
 }
 
 void WorkspacePanel::resizeEvent(QResizeEvent* ev) {
-  setConfigurationTabExpanded(_viewConfigurationExpanded,false);
+  if (_viewConfigurationWidgets)
+    setConfigurationTabExpanded(_viewConfigurationExpanded,false);
   QWidget::resizeEvent(ev);
 }
 

@@ -21,6 +21,7 @@
 #include <QtGui/QFont>
 #include <QtCore/QSize>
 #include <QtCore/QDebug>
+#include <QtCore/QMimeData>
 #include <fstream>
 
 #include <tulip/TlpTools.h>
@@ -343,12 +344,13 @@ bool GraphHierarchiesModel::writeProject(tlp::TulipProject *project, tlp::Plugin
   project->mkpath(GRAPHS_PATH);
   int i=0;
   foreach(tlp::Graph* g, _graphs) {
-    QString folder = GRAPHS_PATH + "/" + QString::number(i) + "/";
+    QString folder = GRAPHS_PATH + "/" + QString::number(i++) + "/";
     project->mkpath(folder);
     DataSet data;
     std::fstream *stream = project->stdFileStream(folder + "graph.json");
     tlp::exportGraph(g,*stream,"TlpJsonExport",data,progress);
   }
+  return true;
 }
 
 QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
@@ -393,11 +395,29 @@ Qt::ItemFlags GraphHierarchiesModel::flags(const QModelIndex &index) const {
   Qt::ItemFlags result = QAbstractItemModel::flags(index);
 
   if (index.column() == 0)
-    result |= Qt::ItemIsEditable;
+    result |= Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
 
   return result;
 }
 
 QModelIndex GraphHierarchiesModel::indexOf(tlp::Graph* g) const {
   return _indexCache[g];
+}
+
+QMimeData* GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const {
+  QSet<Graph*> graphs;
+
+  foreach(QModelIndex index, indexes) {
+    Graph *g = data(index,GraphRole).value<Graph*>();
+    if (g != NULL)
+      graphs.insert(g);
+  }
+
+  QList<QVariant> colorData;
+  foreach(Graph* g,graphs)
+    colorData.push_back(QVariant::fromValue<Graph*>(g));
+
+  QMimeData* result = new QMimeData();
+  result->setColorData(colorData);
+  return result;
 }
