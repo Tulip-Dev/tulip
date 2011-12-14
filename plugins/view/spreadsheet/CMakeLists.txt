@@ -1,5 +1,3 @@
-INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
-
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} .)
 
 SET(spreadsheet_LIB_SRCS
