@@ -289,6 +289,7 @@ void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lo
   Vec3f sizeBB = includeBB[1]-includeBB[0];
 
   label->setFontNameSizeAndColor(data->getElementFont()->getNodeValue(n),fontSize,fontColor);
+  label->setOutlineColor(Color(0,0,0,fontColor[3]));
   label->setText(tmp);
   label->setTranslationAfterRotation(centerBB*nodeSize);
   label->setSize(Size(nodeSize[0]*sizeBB[0],nodeSize[1]*sizeBB[1],0));
