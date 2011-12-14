@@ -49,6 +49,13 @@ Camera::~Camera() {
 void Camera::setScene(GlScene* scene) {
   this->scene=scene;
 }
+//===================================================
+BoundingBox Camera::getBoundingBox() {
+  BoundingBox bb;
+  bb.expand(screenTo3DWorld(Coord(scene->getViewport()[0],scene->getViewport()[1],0)));
+  bb.expand(screenTo3DWorld(Coord(scene->getViewport()[0]+scene->getViewport()[2],scene->getViewport()[1]+scene->getViewport()[3],0)));
+  return bb;
+}
 //====================================================
 void Camera::move(float speed) {
   Coord move = eyes - center;
