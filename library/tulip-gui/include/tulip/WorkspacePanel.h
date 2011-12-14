@@ -48,10 +48,13 @@ class TLP_QT_SCOPE WorkspacePanel : public QWidget, public tlp::SimplePluginProg
   QString _viewName;
 
   QGraphicsProxyWidget* _viewConfigurationWidgets;
+  bool _viewConfigurationExpanded;
   QGraphicsProxyWidget* _currentInteractorConfigurationItem;
   QGraphicsObject* _progressItem;
 
   QPointF configurationTabPosition(bool expanded) const;
+  void setConfigurationTabExpanded(bool expanded, bool animate=true);
+
 public:
   explicit WorkspacePanel(tlp::View* view, const QString& viewName, QWidget* parent=0);
   virtual ~WorkspacePanel();
@@ -83,6 +86,7 @@ protected:
   void progress_handler(int step, int max_step);
   void refreshInteractorsToolbar();
   bool eventFilter(QObject *, QEvent *);
+  void resizeEvent(QResizeEvent *);
 };
 
 }

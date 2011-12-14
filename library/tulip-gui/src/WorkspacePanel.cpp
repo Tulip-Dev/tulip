@@ -24,6 +24,7 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QApplication>
 #include <QtGui/QGraphicsProxyWidget>
+#include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QTabWidget>
 
 #include <tulip/TulipMetaTypes.h>
@@ -67,7 +68,7 @@ public:
 // ========================
 
 WorkspacePanel::WorkspacePanel(tlp::View* view, const QString& viewName, QWidget *parent)
-  : QWidget(parent), _ui(new Ui::WorkspacePanel), _view(NULL), _viewName(viewName), _progressItem(NULL), _currentInteractorConfigurationItem(NULL), _viewConfigurationWidgets(NULL) {
+  : QWidget(parent), _ui(new Ui::WorkspacePanel), _view(NULL), _viewName(viewName), _progressItem(NULL), _currentInteractorConfigurationItem(NULL), _viewConfigurationWidgets(NULL), _viewConfigurationExpanded(false) {
   _ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose,true);
   connect(_ui->closeButton,SIGNAL(clicked()),this,SLOT(close()));
@@ -139,9 +140,8 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
     viewConfigurationTabs->addTab(w,w->windowTitle());
   }
   _viewConfigurationWidgets = _view->graphicsView()->scene()->addWidget(viewConfigurationTabs);
-  _view->graphicsView()->installEventFilter(this);
-  _viewConfigurationWidgets->installEventFilter(this);
-  _viewConfigurationWidgets->setOpacity(0.6);
+
+  _view->graphicsView()->scene()->installEventFilter(this);
 }
 
 void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
@@ -292,22 +292,37 @@ void WorkspacePanel::graphComboIndexChanged() {
 }
 
 bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
-  if (obj == _viewConfigurationWidgets) {
-    if (ev->type() == QEvent::FocusIn || ev->type() == QEvent::FocusOut) {
-      QPropertyAnimation* anim = new QPropertyAnimation(_viewConfigurationWidgets,"pos",_viewConfigurationWidgets);
-      anim->setDuration(250);
-      anim->setStartValue(_viewConfigurationWidgets->pos());
-      bool expanded = ev->type() == QEvent::FocusIn;
-      anim->setEndValue(configurationTabPosition(expanded));
-      anim->start(QAbstractAnimation::DeleteWhenStopped);
-      _viewConfigurationWidgets->setOpacity(expanded ? 0.9 : 0.6);
+  if (_viewConfigurationWidgets != NULL && _view != NULL) {
+    if (obj == _view->graphicsView()->scene() && ev->type() == QEvent::GraphicsSceneMousePress) {
+      QGraphicsSceneMouseEvent* mouseEv = static_cast<QGraphicsSceneMouseEvent*>(ev);
+      bool expand = _viewConfigurationWidgets->sceneBoundingRect().contains(mouseEv->scenePos());
+      setConfigurationTabExpanded(expand);
     }
   }
-  else if (_view != NULL && obj == _view->graphicsView() && _viewConfigurationWidgets != NULL && ev->type() == QEvent::Resize) {
-    _viewConfigurationWidgets->setPos(configurationTabPosition(_viewConfigurationWidgets->hasFocus()));
-  }
-
   return false;
+}
+
+void WorkspacePanel::resizeEvent(QResizeEvent* ev) {
+  setConfigurationTabExpanded(_viewConfigurationExpanded,false);
+  QWidget::resizeEvent(ev);
+}
+
+void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
+  QPointF newPos = configurationTabPosition(expanded);
+  if (newPos == _viewConfigurationWidgets->pos())
+    return;
+  if (animate) {
+    QPropertyAnimation* anim = new QPropertyAnimation(_viewConfigurationWidgets,"pos",_viewConfigurationWidgets);
+    anim->setDuration(250);
+    anim->setStartValue(_viewConfigurationWidgets->pos());
+    anim->setEndValue(newPos);
+    anim->start(QAbstractAnimation::DeleteWhenStopped);
+  }
+  else
+    _viewConfigurationWidgets->setPos(newPos);
+
+  _viewConfigurationWidgets->setOpacity((expanded ? 0.9 : 0.6));
+  _viewConfigurationExpanded = expanded;
 }
 
 QPointF WorkspacePanel::configurationTabPosition(bool expanded) const {
