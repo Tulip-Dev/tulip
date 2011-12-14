@@ -91,7 +91,7 @@ template <typename T>
 bool pluginExists(std::string pluginName) {
 	std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
 	for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
-		if (it->first == tlp::demangleTlpClassName(typeid(T).name()) && it->second->pluginExists(pluginName)) {
+		if (it->first == tlp::TemplateFactoryInterface::standardizeName(typeid(T).name()) && it->second->pluginExists(pluginName)) {
 			return true;
 		}
 	}
