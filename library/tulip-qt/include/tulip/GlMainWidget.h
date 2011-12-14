@@ -127,6 +127,11 @@ public:
     foregroundEntity.push_back(entity);
   }
 
+  /**
+    * @brief Remove the given ForegroundEntity. If the entity don't exisits do nothing.
+    **/
+  void removeForegrounEntity(ForegroundEntity *entity);
+
   /**************************************
    * inherited methods overloading
    **************************************/
