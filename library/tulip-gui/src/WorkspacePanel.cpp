@@ -67,7 +67,7 @@ public:
 // ========================
 
 WorkspacePanel::WorkspacePanel(tlp::View* view, const QString& viewName, QWidget *parent)
-: QWidget(parent), _ui(new Ui::WorkspacePanel), _view(NULL), _viewName(viewName), _progressItem(NULL), _currentInteractorConfigurationItem(NULL), _viewConfigurationWidgets(NULL) {
+  : QWidget(parent), _ui(new Ui::WorkspacePanel), _view(NULL), _viewName(viewName), _progressItem(NULL), _currentInteractorConfigurationItem(NULL), _viewConfigurationWidgets(NULL) {
   _ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose,true);
   connect(_ui->closeButton,SIGNAL(clicked()),this,SLOT(close()));
@@ -130,7 +130,7 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
   connect(_view,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
 
   if (_view->configurationWidgets().size()==0)
-      return;
+    return;
 
   QTabWidget* viewConfigurationTabs = new QTabWidget();
   viewConfigurationTabs->setTabPosition(QTabWidget::West);
@@ -306,6 +306,7 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
   else if (_view != NULL && obj == _view->graphicsView() && _viewConfigurationWidgets != NULL && ev->type() == QEvent::Resize) {
     _viewConfigurationWidgets->setPos(configurationTabPosition(_viewConfigurationWidgets->hasFocus()));
   }
+
   return false;
 }
 
