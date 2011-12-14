@@ -71,6 +71,11 @@ public:
   }
 
   /**
+   * Return the camera bounding box : this bounding box is the part of the scene visualized by this camera.
+   */
+  BoundingBox getBoundingBox();
+
+  /**
    * This moves the camera forward or backward depending on the speed
    */
   void move(float speed);
