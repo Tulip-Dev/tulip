@@ -422,3 +422,7 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
 
   return false;
 }
+
+void Workspace::dropEvent(QDropEvent *)  {
+  qWarning("prout");
+}

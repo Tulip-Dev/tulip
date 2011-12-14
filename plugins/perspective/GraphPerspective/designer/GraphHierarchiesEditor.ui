@@ -50,14 +50,11 @@ border-bottom: 1px solid #C9C9C9;
      <property name="dragEnabled">
       <bool>true</bool>
      </property>
-     <property name="dragDropOverwriteMode">
-      <bool>true</bool>
-     </property>
      <property name="dragDropMode">
-      <enum>QAbstractItemView::InternalMove</enum>
+      <enum>QAbstractItemView::DragOnly</enum>
      </property>
      <property name="defaultDropAction">
-      <enum>Qt::TargetMoveAction</enum>
+      <enum>Qt::CopyAction</enum>
      </property>
      <property name="alternatingRowColors">
       <bool>true</bool>
