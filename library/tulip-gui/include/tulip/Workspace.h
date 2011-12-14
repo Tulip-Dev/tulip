@@ -115,6 +115,7 @@ protected slots:
 
 protected:
   bool eventFilter(QObject *, QEvent *);
+  void dropEvent(QDropEvent *);
 };
 }
 
