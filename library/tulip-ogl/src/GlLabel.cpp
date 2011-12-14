@@ -499,6 +499,9 @@ void GlLabel::draw(float lod, Camera *camera) {
   if(screenH<0)
     screenH=-screenH;
 
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  
   //The label is too small to be readed, draw a line
   if(screenH < 4 && useLOD) {
     float wAlign=0;
@@ -525,7 +528,6 @@ void GlLabel::draw(float lod, Camera *camera) {
       break;
     }
 
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glLineWidth(screenH);
     setMaterial(Color(color[0],color[1],color[2],128));
     OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
@@ -539,7 +541,6 @@ void GlLabel::draw(float lod, Camera *camera) {
   else {
     //Draw labels
     glDisable(GL_DEPTH_TEST);
-    glBlendFunc(GL_ONE_MINUS_DST_COLOR,GL_ONE_MINUS_SRC_COLOR);
 
     // For left and right alignment
     float xAlignFactor=.5;
