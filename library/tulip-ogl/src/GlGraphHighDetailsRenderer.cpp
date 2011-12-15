@@ -316,7 +316,8 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
   if(!selectionDrawActivate) {
     inputData.getGlVertexArrayManager()->endRendering();
-  }else{
+  }
+  else {
     selectionDrawActivate=false;
     return;
   }

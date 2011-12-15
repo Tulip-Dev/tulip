@@ -409,13 +409,14 @@ QMimeData* GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const
 
   foreach(QModelIndex index, indexes) {
     Graph *g = data(index,GraphRole).value<Graph*>();
+
     if (g != NULL)
       graphs.insert(g);
   }
 
   QList<QVariant> colorData;
   foreach(Graph* g,graphs)
-    colorData.push_back(QVariant::fromValue<Graph*>(g));
+  colorData.push_back(QVariant::fromValue<Graph*>(g));
 
   QMimeData* result = new QMimeData();
   result->setColorData(colorData);
