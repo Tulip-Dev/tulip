@@ -299,19 +299,23 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
       setConfigurationTabExpanded(expand);
     }
   }
+
   return QWidget::eventFilter(obj,ev);
 }
 
 void WorkspacePanel::resizeEvent(QResizeEvent* ev) {
   if (_viewConfigurationWidgets)
     setConfigurationTabExpanded(_viewConfigurationExpanded,false);
+
   QWidget::resizeEvent(ev);
 }
 
 void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
   QPointF newPos = configurationTabPosition(expanded);
+
   if (newPos == _viewConfigurationWidgets->pos())
     return;
+
   if (animate) {
     QPropertyAnimation* anim = new QPropertyAnimation(_viewConfigurationWidgets,"pos",_viewConfigurationWidgets);
     anim->setDuration(250);

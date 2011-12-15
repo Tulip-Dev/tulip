@@ -411,6 +411,7 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
     QObject* childObj = static_cast<QChildEvent*>(ev)->child();
     childObj->installEventFilter(this);
     QGraphicsView* graphicsView = dynamic_cast<QGraphicsView*>(childObj);
+
     if (graphicsView != NULL && graphicsView->scene() != NULL)  {
       graphicsView->scene()->installEventFilter(this);
     }
@@ -419,6 +420,7 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
     QObject* childObj = static_cast<QChildEvent*>(ev)->child();
     childObj->removeEventFilter(this);
     QGraphicsView* graphicsView = dynamic_cast<QGraphicsView*>(childObj);
+
     if (graphicsView != NULL && graphicsView->scene())  {
       graphicsView->scene()->removeEventFilter(this);
     }
@@ -432,11 +434,13 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
   else if (ev->type() == QEvent::GraphicsSceneDragEnter || ev->type() == QEvent::GraphicsSceneDragMove) {
     if (static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData()->hasColor())
       ev->accept();
+
     return true;
   }
   else if (ev->type() == QEvent::GraphicsSceneDrop) {
     addPanelFromDropAction(static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData());
   }
+
   return QWidget::eventFilter(obj,ev);
 }
 
@@ -448,6 +452,7 @@ bool Workspace::event(QEvent* e) {
   else if (e->type()==QEvent::Drop) {
     addPanelFromDropAction(static_cast<QDropEvent*>(e)->mimeData());
   }
+
   return QWidget::event(e);
 }
 
@@ -455,8 +460,10 @@ void Workspace::addPanelFromDropAction(const QMimeData* mimeData) {
   QList<QVariant> colorData = mimeData->colorData().toList();
   foreach(QVariant v, colorData) {
     Graph* g = v.value<Graph*>();
+
     if (g == NULL)
       continue;
+
     emit addPanelRequest(g);
   }
 }
