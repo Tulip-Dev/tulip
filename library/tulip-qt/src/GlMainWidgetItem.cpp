@@ -342,5 +342,17 @@ bool GlMainWidgetItem::eventFilter(QObject *, QEvent *evt) {
   return false;
 }
 
+void GlMainWidgetItem::setDecoration(bool enabled) {
+  decorate = enabled;
+}
 
+void GlMainWidgetItem::setBorderWidth(float borderWidth) {
+  this->borderWidth = borderWidth;
+}
+
+void GlMainWidgetItem::allowUnlocking(bool allow) {
+  lockedCB->setVisible(allow); 
+}
+
+  
 }
