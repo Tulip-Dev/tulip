@@ -782,9 +782,9 @@ void GlMainWidget::centerScene() {
   draw(false);
 }
 
-void GlMainWidget::removeForegrounEntity(ForegroundEntity *entity){
-    foregroundEntity.erase(remove(foregroundEntity.begin(),foregroundEntity.end(),entity),foregroundEntity.end());
-  }
+void GlMainWidget::removeForegrounEntity(ForegroundEntity *entity) {
+  foregroundEntity.erase(remove(foregroundEntity.begin(),foregroundEntity.end(),entity),foregroundEntity.end());
+}
 }
 
 
