@@ -1,3 +1,5 @@
+add_subdirectory(Delaunay)
+
 FIND_PACKAGE( Qt4 REQUIRED )
 INCLUDE( ${QT_USE_FILE} )
 
