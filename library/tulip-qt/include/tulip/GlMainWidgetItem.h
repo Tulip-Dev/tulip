@@ -103,7 +103,7 @@ public :
   void setDecoration(bool enabled);
   void setBorderWidth(float borderWidth);
   void allowUnlocking(bool allow);
-  
+
 protected :
 
   void wheelEvent(QGraphicsSceneWheelEvent *event);

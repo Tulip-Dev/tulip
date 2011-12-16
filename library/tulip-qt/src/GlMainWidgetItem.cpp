@@ -351,8 +351,8 @@ void GlMainWidgetItem::setBorderWidth(float borderWidth) {
 }
 
 void GlMainWidgetItem::allowUnlocking(bool allow) {
-  lockedCB->setVisible(allow); 
+  lockedCB->setVisible(allow);
 }
 
-  
+
 }
