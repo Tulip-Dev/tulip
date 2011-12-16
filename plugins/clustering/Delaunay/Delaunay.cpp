@@ -12,6 +12,7 @@ public :
   Delaunay(tlp::AlgorithmContext context) : Algorithm(context) {}
   
   bool run() {
+    tlp::Observable::holdObservers();
     tlp::Graph* delaunaySubGraph = tlp::newCloneSubGraph(graph, "Delaunay");
 
     tlp::edge e;
@@ -85,6 +86,8 @@ public :
     delaunaySubGraph->delNode(tempNode1, true);
     delaunaySubGraph->delNode(tempNode2, true);
     delaunaySubGraph->delNode(tempNode3, true);
+
+    tlp::Observable::unholdObservers();
     
     return true;
   }
