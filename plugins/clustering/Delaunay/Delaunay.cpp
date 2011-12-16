@@ -12,20 +12,27 @@ public :
   Delaunay(tlp::AlgorithmContext context) : Algorithm(context) {}
   
   bool run() {
+    tlp::Graph* delaunaySubGraph = tlp::newCloneSubGraph(graph, "Delaunay");
+
+    tlp::edge e;
+    forEach(e, delaunaySubGraph->getEdges()) {
+      delaunaySubGraph->delEdge(e);
+    }
+
     std::vector<p2t::Point*> outline(4);
 
     std::map<p2t::Point*, tlp::node> points;
-    tlp::LayoutProperty* layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
+    tlp::LayoutProperty* layout = delaunaySubGraph->getProperty<tlp::LayoutProperty>("viewLayout");
 
     outline[0] = new p2t::Point(layout->getMin().getX(), layout->getMin().getY());
     outline[1] = new p2t::Point(layout->getMin().getX(), layout->getMax().getY());
     outline[2] = new p2t::Point(layout->getMax().getX(), layout->getMax().getY());
     outline[3] = new p2t::Point(layout->getMax().getX(), layout->getMin().getY());
 
-    tlp::node tempNode0 = graph->addNode();
-    tlp::node tempNode1 = graph->addNode();
-    tlp::node tempNode2 = graph->addNode();
-    tlp::node tempNode3 = graph->addNode();
+    tlp::node tempNode0 = delaunaySubGraph->addNode();
+    tlp::node tempNode1 = delaunaySubGraph->addNode();
+    tlp::node tempNode2 = delaunaySubGraph->addNode();
+    tlp::node tempNode3 = delaunaySubGraph->addNode();
     layout->setNodeValue(tempNode0, tlp::Coord(layout->getMin()));
     layout->setNodeValue(tempNode1, tlp::Coord(layout->getMin().getX(), layout->getMax().getY()));
     layout->setNodeValue(tempNode2, tlp::Coord(layout->getMax()));
@@ -37,7 +44,7 @@ public :
 
     p2t::CDT triangulator(outline);
     tlp::node n;
-    forEach(n, graph->getNodes()) {
+    forEach(n, delaunaySubGraph->getNodes()) {
       tlp::Coord nodeCoord = layout->getNodeValue(n);
 
       if(n != tempNode0 && n != tempNode1 && n != tempNode2 && n != tempNode3) {
@@ -59,14 +66,14 @@ public :
       tlp::node n1 = points.at(p1);
       tlp::node n2 = points.at(p2);
 
-      if(!graph->existEdge(n0, n1).isValid()) {
-        graph->addEdge(n0, n1);
+      if(!delaunaySubGraph->existEdge(n0, n1).isValid()) {
+        delaunaySubGraph->addEdge(n0, n1);
       }
-      if(!graph->existEdge(n0, n2).isValid()) {
-        graph->addEdge(n0, n2);
+      if(!delaunaySubGraph->existEdge(n0, n2).isValid()) {
+        delaunaySubGraph->addEdge(n0, n2);
       }
-      if(!graph->existEdge(n1, n2).isValid()) {
-        graph->addEdge(n1, n2);
+      if(!delaunaySubGraph->existEdge(n1, n2).isValid()) {
+        delaunaySubGraph->addEdge(n1, n2);
       }
     }
 
@@ -74,12 +81,10 @@ public :
       delete it->first;
     }
 
-    graph->delNode(tempNode0, true);
-    graph->delNode(tempNode1, true);
-    graph->delNode(tempNode2, true);
-    graph->delNode(tempNode3, true);
-
-    tlp::newCloneSubGraph(graph, "Delaunay");
+    delaunaySubGraph->delNode(tempNode0, true);
+    delaunaySubGraph->delNode(tempNode1, true);
+    delaunaySubGraph->delNode(tempNode2, true);
+    delaunaySubGraph->delNode(tempNode3, true);
     
     return true;
   }
