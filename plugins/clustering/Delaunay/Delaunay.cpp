@@ -6,11 +6,11 @@
 #include "cdt.h"
 
 class Delaunay : public tlp::Algorithm {
-  
+
 public :
-  
+
   Delaunay(tlp::AlgorithmContext context) : Algorithm(context) {}
-  
+
   bool run() {
     tlp::Observable::holdObservers();
     tlp::Graph* delaunaySubGraph = tlp::newCloneSubGraph(graph, "Delaunay");
@@ -58,6 +58,7 @@ public :
     triangulator.Triangulate();
 
     std::vector<p2t::Triangle*> triangles = triangulator.GetTriangles();
+
     for(std::vector<p2t::Triangle*>::const_iterator it = triangles.begin(); it != triangles.end(); ++it) {
       p2t::Point* p0 = (*it)->GetPoint(0);
       p2t::Point* p1 = (*it)->GetPoint(1);
@@ -70,9 +71,11 @@ public :
       if(!delaunaySubGraph->existEdge(n0, n1).isValid()) {
         delaunaySubGraph->addEdge(n0, n1);
       }
+
       if(!delaunaySubGraph->existEdge(n0, n2).isValid()) {
         delaunaySubGraph->addEdge(n0, n2);
       }
+
       if(!delaunaySubGraph->existEdge(n1, n2).isValid()) {
         delaunaySubGraph->addEdge(n1, n2);
       }
@@ -88,7 +91,7 @@ public :
     delaunaySubGraph->delNode(tempNode3, true);
 
     tlp::Observable::unholdObservers();
-    
+
     return true;
   }
 };

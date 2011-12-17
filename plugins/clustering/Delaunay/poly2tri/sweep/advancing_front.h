@@ -48,12 +48,10 @@ struct Node {
 
   double value;
 
-  Node(Point& p) : point(&p), triangle(NULL), next(NULL), prev(NULL), value(p.x)
-  {
+  Node(Point& p) : point(&p), triangle(NULL), next(NULL), prev(NULL), value(p.x) {
   }
 
-  Node(Point& p, Triangle& t) : point(&p), triangle(&t), next(NULL), prev(NULL), value(p.x)
-  {
+  Node(Point& p, Triangle& t) : point(&p), triangle(&t), next(NULL), prev(NULL), value(p.x) {
   }
 
 };
@@ -62,54 +60,48 @@ struct Node {
 class AdvancingFront {
 public:
 
-AdvancingFront(Node& head, Node& tail);
+  AdvancingFront(Node& head, Node& tail);
 // Destructor
-~AdvancingFront();
+  ~AdvancingFront();
 
-Node* head();
-void set_head(Node* node);
-Node* tail();
-void set_tail(Node* node);
-Node* search();
-void set_search(Node* node);
+  Node* head();
+  void set_head(Node* node);
+  Node* tail();
+  void set_tail(Node* node);
+  Node* search();
+  void set_search(Node* node);
 
 /// Locate insertion point along advancing front
-Node* LocateNode(const double& x);
+  Node* LocateNode(const double& x);
 
-Node* LocatePoint(const Point* point);
+  Node* LocatePoint(const Point* point);
 
 private:
 
-Node* head_, *tail_, *search_node_;
+  Node* head_, *tail_, *search_node_;
 
-Node* FindSearchNode(const double& x);
+  Node* FindSearchNode(const double& x);
 };
 
-inline Node* AdvancingFront::head()
-{
+inline Node* AdvancingFront::head() {
   return head_;
 }
-inline void AdvancingFront::set_head(Node* node)
-{
+inline void AdvancingFront::set_head(Node* node) {
   head_ = node;
 }
 
-inline Node* AdvancingFront::tail()
-{
+inline Node* AdvancingFront::tail() {
   return tail_;
 }
-inline void AdvancingFront::set_tail(Node* node)
-{
+inline void AdvancingFront::set_tail(Node* node) {
   tail_ = node;
 }
 
-inline Node* AdvancingFront::search()
-{
+inline Node* AdvancingFront::search() {
   return search_node_;
 }
 
-inline void AdvancingFront::set_search(Node* node)
-{
+inline void AdvancingFront::set_search(Node* node) {
   search_node_ = node;
 }
 
