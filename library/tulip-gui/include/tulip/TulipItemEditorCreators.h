@@ -133,6 +133,9 @@ public:
 
 }
 
+template class tlp::StringDisplayEditorCreator<tlp::PointType>;
+template class tlp::StringDisplayEditorCreator<tlp::SizeType>;
+
 #include "cxx/TulipItemEditorCreators.cxx"
 
 #endif // TULIPITEMEDITORCREATORS_H
