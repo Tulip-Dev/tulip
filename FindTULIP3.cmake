@@ -109,7 +109,17 @@ IF(TULIP_DIR)
     IF(APPLE)
       SET(TULIP_PLUGINS_PATH ${TULIP_DIR}/Contents/lib/tulip)
     ELSE()
-      SET(TULIP_PLUGINS_PATH ${TULIP_DIR}/lib/tulip)
+      IF(UNIX)
+	# If Tulip is installed in /usr/ or /usr/local
+	# Set TULIP_PLUGINS_PATH to ~/.Tulip-3.X/plugins 
+	IF(NOT "${TULIP_DIR}" MATCHES "/home/*")
+	  SET(TULIP_PLUGINS_PATH $ENV{HOME}/.Tulip-${TULIP_VERSION}/plugins)
+	ELSE()
+	  SET(TULIP_PLUGINS_PATH ${TULIP_DIR}/lib/tulip)
+	ENDIF()
+      ELSE(UNIX)
+	SET(TULIP_PLUGINS_PATH ${TULIP_DIR}/lib/tulip) 
+      ENDIF(UNIX)
     ENDIF()
   ENDIF()
 
