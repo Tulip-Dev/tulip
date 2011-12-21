@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>539</width>
+    <width>550</width>
     <height>638</height>
    </rect>
   </property>
@@ -476,7 +476,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QLabel" name="label_4">
+         <widget class="QLabel" name="pluginInfoLabel">
           <property name="text">
            <string>When the plugin development is finished, you can copy the associated Python file
  to &lt;tulip_dir&gt;/lib/tulip/python and it will be automatically loaded at Tulip startup</string>

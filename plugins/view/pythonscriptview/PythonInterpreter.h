@@ -59,8 +59,10 @@
 
 #include <QtGui/QDialog>
 #include <QtGui/QPlainTextEdit>
+#include <QtCore/QDir>
 
-
+#include <tulip/TulipRelease.h>
+#include <tulip/TlpTools.h>
 
 #include <string>
 #include <set>
@@ -94,6 +96,9 @@ const char pythonReservedCharacters[] = {'#', '%', '/', '+', '-', '&', '*', '<',
                                         '|', '~', '^', '=', '!', '\'', '\"', '{', '}',
                                         '(', ')', '[', ']', '.', 0
                                         };
+
+static std::string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";
+static std::string pythonPluginsPathHome = (QDir::homePath()+"/.Tulip-"+TULIP_MM_RELEASE+"/plugins/python").toStdString();
 
 class PythonShellWidget;
 
@@ -146,6 +151,8 @@ private :
 
   void holdGIL();
   void releaseGIL();
+
+  void loadTulipPythonPlugins(const std::string &pluginsPath);
 
   static PythonInterpreter instance;
 

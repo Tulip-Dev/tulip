@@ -17,11 +17,12 @@
  *
  */
 
-#include <QtGui/QToolBar>
-#include <QtGui/QIcon>
-
+#include "PythonInterpreter.h"
 #include "PythonScriptViewWidget.h"
 #include "PythonScriptView.h"
+
+#include <QtGui/QToolBar>
+#include <QtGui/QIcon>
 
 PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), fontZoom(0) , pythonScriptView(view) {
   setupUi(this);
@@ -54,6 +55,14 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
   splitter->setSizes(sizes);
   splitter->setCollapsible(0, false);
   pluginControlFrame->hide();
+
+  pluginInfoLabel->setTextFormat(Qt::RichText);
+  pluginInfoLabel->setText(QString("When the plugin development is finished, you can copy the associated Python file ")
+  		  	  	  	  	   + "to <br> <b>" + pythonPluginsPath.c_str() + "</b> or <b> "
+  		  	  	  	  	   + pythonPluginsPathHome.c_str() +"</b> <br> and it will be automatically loaded at Tulip startup");
+  QFont font;
+  font.setPointSize(6);
+  pluginInfoLabel->setFont(font);
 
   connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(resizeToolBars()));
   connect(decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
