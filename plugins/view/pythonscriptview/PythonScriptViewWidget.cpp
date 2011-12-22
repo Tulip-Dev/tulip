@@ -58,8 +58,8 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
 
   pluginInfoLabel->setTextFormat(Qt::RichText);
   pluginInfoLabel->setText(QString("When the plugin development is finished, you can copy the associated Python file ")
-  		  	  	  	  	   + "to <br> <b>" + pythonPluginsPath.c_str() + "</b> or <b> "
-  		  	  	  	  	   + pythonPluginsPathHome.c_str() +"</b> <br> and it will be automatically loaded at Tulip startup");
+                           + "to <br> <b>" + pythonPluginsPath.c_str() + "</b> or <b> "
+                           + pythonPluginsPathHome.c_str() +"</b> <br> and it will be automatically loaded at Tulip startup");
   QFont font;
   font.setPointSize(6);
   pluginInfoLabel->setFont(font);
