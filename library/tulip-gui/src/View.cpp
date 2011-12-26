@@ -120,6 +120,10 @@ void View::removeRedrawTrigger(tlp::Observable* obs) {
     obs->removeObserver(this);
 }
 
+void View::emitDrawNeededSignal() {
+  emit drawNeeded();
+}
+
 void View::addRedrawTrigger(tlp::Observable* obs) {
   if (_triggers.contains(obs) || obs == NULL)
     return;

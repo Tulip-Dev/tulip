@@ -227,6 +227,11 @@ public slots:
     */
   void removeRedrawTrigger(tlp::Observable*);
 
+  /**
+    @brief This function emit the signal drawNeeded
+    */
+  void emitDrawNeededSignal();
+
 signals:
   /**
     @brief Inform the overleying subsystem that this view needs to be drawn.
