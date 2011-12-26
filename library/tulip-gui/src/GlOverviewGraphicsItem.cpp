@@ -55,8 +55,6 @@ void GlOverviewGraphicsItem::draw() {
   if (glFrameBuf != NULL && (vPWidth != static_cast<unsigned int>(glFrameBuf->width()) || vPHeight != static_cast<unsigned int>(glFrameBuf->height()))) {
     delete glFrameBuf;
     glFrameBuf = NULL;
-    delete glFrameBuf2;
-    glFrameBuf2 = NULL;
   }
 
   if (glFrameBuf == NULL) {
