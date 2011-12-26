@@ -43,7 +43,7 @@ private :
 
   GlScene &baseScene;
   unsigned int vPWidth, vPHeight;
-  QGLFramebufferObject *glFrameBuf, *glFrameBuf2;
+  QGLFramebufferObject *glFrameBuf;
 
   QGraphicsLineItem *line1;
   QGraphicsLineItem *line2;
