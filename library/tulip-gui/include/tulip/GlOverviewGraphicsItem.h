@@ -26,12 +26,14 @@
 
 namespace tlp {
 
+class GlMainView;
+
 class GlOverviewGraphicsItem : public QObject, public QGraphicsPixmapItem {
 
 Q_OBJECT
 
 public:
-  GlOverviewGraphicsItem(GlScene &scene);
+  GlOverviewGraphicsItem(GlMainView *view,GlScene &scene);
 
 public slots :
 
@@ -39,6 +41,12 @@ public slots :
 
 private :
 
+  void mousePressEvent(QGraphicsSceneMouseEvent* event);
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+  void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+  void setScenePosition(QPointF pos);
+
+  GlMainView *view;
   GlScene &baseScene;
   unsigned int vPWidth, vPHeight;
   QGLFramebufferObject *glFrameBuf;
@@ -51,6 +59,8 @@ private :
   QGraphicsPolygonItem *poly2;
   QGraphicsPolygonItem *poly3;
   QGraphicsPolygonItem *poly4;
+
+  bool mouseClicked;
 
 };
 

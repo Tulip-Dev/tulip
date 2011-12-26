@@ -19,12 +19,15 @@
 #include "tulip/GlOverviewGraphicsItem.h"
 #include "tulip/GlOffscreenRenderer.h"
 #include "tulip/GlMainWidget.h"
+#include "tulip/GlMainView.h"
+
+#include <QtGui/QGraphicsSceneMouseEvent>
 
 using namespace std;
 
 namespace tlp {
 
-GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlScene &scene):QGraphicsPixmapItem(),baseScene(scene),vPWidth(128),vPHeight(128),glFrameBuf(NULL){
+GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsPixmapItem(),view(view),baseScene(scene),vPWidth(128),vPHeight(128),glFrameBuf(NULL),mouseClicked(false){
   setFlag(QGraphicsItem::ItemClipsChildrenToShape);
   line1=new QGraphicsLineItem(this);
   line2=new QGraphicsLineItem(this);
@@ -146,6 +149,75 @@ void GlOverviewGraphicsItem::draw() {
   tmpVect.push_back(QPointF(0,0));
   tmpVect.push_back(QPointF(p1[0],128-p2[1]));
   poly4->setPolygon(QPolygonF(tmpVect));
+}
+
+void GlOverviewGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent* event){
+  if(event->button()==Qt::LeftButton){
+    mouseClicked=true;
+
+    setScenePosition(event->pos());
+  }
+}
+
+void GlOverviewGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event){
+  if(event->button()==Qt::LeftButton){
+    mouseClicked=false;
+  }
+}
+
+void GlOverviewGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
+  if(mouseClicked)
+    setScenePosition(event->pos());
+}
+
+void GlOverviewGraphicsItem::setScenePosition(QPointF pos){
+  Coord position(128-pos.x(),pos.y(),0);
+
+  Vector<int,4> backupViewport=baseScene.getViewport();
+
+  baseScene.setViewport(0,0,vPWidth, vPHeight);
+
+  glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
+
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+
+  vector<Camera> cameras;
+  vector<pair<string, GlLayer*> >* layerList=baseScene.getLayersList();
+  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin();it!=layerList->end();++it){
+    cameras.push_back((*it).second->getCamera());
+  }
+
+  baseScene.centerScene();
+
+  vector<Coord> centerPos;
+  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin();it!=layerList->end();++it){
+    centerPos.push_back((*it).second->getCamera().screenTo3DWorld(position));
+  }
+
+  glMatrixMode(GL_MODELVIEW);
+  glPopMatrix();
+
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+
+  glPopAttrib();
+
+  unsigned int i=0;
+  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin();it!=layerList->end();++it){
+    Coord eyesVector=cameras[i].getEyes()-cameras[i].getCenter();
+    cameras[i].setCenter(centerPos[i]);
+    cameras[i].setEyes(cameras[i].getCenter()+eyesVector);
+    (*it).second->setCamera(cameras[i]);
+    ++i;
+  }
+
+  baseScene.setViewport(backupViewport);
+
+  view->draw(NULL);
 }
 
 }
