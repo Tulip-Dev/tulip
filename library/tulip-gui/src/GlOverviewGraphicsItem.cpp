@@ -75,6 +75,8 @@ void GlOverviewGraphicsItem::draw() {
   Camera camera=baseScene.getGraphCamera();
   BoundingBox bbCam=camera.getBoundingBox();
 
+  Vector<int,4> backupViewport=baseScene.getViewport();
+
   baseScene.setViewport(0,0,vPWidth, vPHeight);
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -114,6 +116,8 @@ void GlOverviewGraphicsItem::draw() {
   glPopMatrix();
 
   glPopAttrib();
+
+  baseScene.setViewport(backupViewport);
 
   QPixmap pixmap;
   pixmap.convertFromImage(glFrameBuf->toImage());
