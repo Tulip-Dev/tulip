@@ -20,6 +20,7 @@
 #define Tulip_GLMAINVIEW_H
 
 #include <tulip/ViewWidget.h>
+#include "tulip/GlOverviewGraphicsItem.h"
 
 namespace tlp {
 
@@ -34,9 +35,11 @@ public:
   virtual ~GlMainView();
 
   tlp::GlMainWidget* getGlMainWidget() const;
+  GlOverviewGraphicsItem *overview;
 
 public slots:
   virtual void draw(tlp::PluginProgress* pluginProgress);
+  virtual void drawOverview();
   virtual void centerView();
 
 protected:

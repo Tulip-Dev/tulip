@@ -24,6 +24,8 @@
 namespace tlp {
 class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
 
+  Q_OBJECT
+
   void registerTriggers();
 
 public:
@@ -37,6 +39,9 @@ public:
 
 protected:
   void graphChanged(tlp::Graph *);
+
+protected slots:
+  void viewDrawnSlot(GlMainWidget *,bool);
 };
 }
 
