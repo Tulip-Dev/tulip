@@ -33,8 +33,6 @@ Q_OBJECT
 public:
   GlOverviewGraphicsItem(GlScene &scene);
 
-  QRectF boundingRect() const;
-
 public slots :
 
   void draw();

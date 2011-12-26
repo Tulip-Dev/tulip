@@ -40,10 +40,6 @@ GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlScene &scene):QGraphicsPixmapIt
   poly4->setBrush(QBrush(QColor(0,0,0,64)));
 }
 
-QRectF GlOverviewGraphicsItem::boundingRect() const{
-  return QRectF(0,0,128,128);
-}
-
 void GlOverviewGraphicsItem::draw() {
 
   if(baseScene.getLayersList()->size()==0)
