@@ -24,7 +24,7 @@ using namespace std;
 
 namespace tlp {
 
-GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlScene &scene):QGraphicsPixmapItem(),baseScene(scene),glFrameBuf(NULL),vPWidth(128),vPHeight(128){
+GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlScene &scene):QGraphicsPixmapItem(),baseScene(scene),vPWidth(128),vPHeight(128),glFrameBuf(NULL){
   line1=new QGraphicsLineItem(this);
   line2=new QGraphicsLineItem(this);
   line3=new QGraphicsLineItem(this);
