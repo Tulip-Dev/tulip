@@ -22,7 +22,7 @@
 
 using namespace tlp;
 
-GlMainView::GlMainView() {
+GlMainView::GlMainView():overview(NULL) {
 }
 
 GlMainView::~GlMainView() {
@@ -32,9 +32,20 @@ void GlMainView::draw(tlp::PluginProgress*) {
   _glMainWidget->draw();
 }
 
+void GlMainView::drawOverview() {
+  if(!overview){
+    overview=new GlOverviewGraphicsItem(*_glMainWidget->getScene());
+    addToScene(overview);
+    overview->setPos(QPointF(0,0));
+  }
+
+  overview->draw();
+}
+
 void GlMainView::setupWidget() {
   _glMainWidget = new GlMainWidget(NULL,this);
   setCentralWidget(_glMainWidget);
+
 }
 
 GlMainWidget* GlMainView::getGlMainWidget() const {

@@ -36,6 +36,7 @@ NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   getGlMainWidget()->setData(graph(), data);
   registerTriggers();
+  connect(getGlMainWidget(),SIGNAL(viewDrawn(GlMainWidget*,bool)),this,SLOT(viewDrawnSlot(GlMainWidget *,bool)));
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
@@ -73,6 +74,10 @@ QList<QWidget*> NodeLinkDiagramComponent::configurationWidgets() const {
   QLabel* label2 = new QLabel("text 2");
   label2->setWindowTitle("#2");
   return QList<QWidget*>() << label1 << label2;
+}
+
+void NodeLinkDiagramComponent::viewDrawnSlot(GlMainWidget *,bool){
+  drawOverview();
 }
 
 VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0")

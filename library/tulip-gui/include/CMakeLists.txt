@@ -83,6 +83,7 @@ INSTALL(FILES
   tulip/GraphHierarchiesModel.h
   tulip/ModalPopup.h
   tulip/FramedGraphicsProxyWidget.h
+  tulip/GlOverviewGraphicsItem.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
