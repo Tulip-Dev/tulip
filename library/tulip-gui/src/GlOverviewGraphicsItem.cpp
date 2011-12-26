@@ -217,7 +217,7 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos){
 
   baseScene.setViewport(backupViewport);
 
-  view->draw(NULL);
+  view->emitDrawNeededSignal();
 }
 
 }
