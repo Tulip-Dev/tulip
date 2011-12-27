@@ -27,7 +27,7 @@ using namespace std;
 
 namespace tlp {
 
-GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsPixmapItem(),view(view),baseScene(scene),vPWidth(128),vPHeight(128),glFrameBuf(NULL),mouseClicked(false){
+GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsPixmapItem(),view(view),baseScene(scene),vPWidth(128),vPHeight(128),glFrameBuf(NULL),mouseClicked(false) {
   setFlag(QGraphicsItem::ItemClipsChildrenToShape);
   line1=new QGraphicsLineItem(this);
   line2=new QGraphicsLineItem(this);
@@ -87,7 +87,8 @@ void GlOverviewGraphicsItem::draw() {
 
   vector<Camera> cameras;
   vector<pair<string, GlLayer*> >* layerList=baseScene.getLayersList();
-  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin();it!=layerList->end();++it){
+
+  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
     cameras.push_back((*it).second->getCamera());
   }
 
@@ -102,7 +103,8 @@ void GlOverviewGraphicsItem::draw() {
   glFrameBuf->release();
 
   unsigned int i=0;
-  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin();it!=layerList->end();++it){
+
+  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
     (*it).second->setCamera(cameras[i]);
     ++i;
   }
@@ -151,26 +153,26 @@ void GlOverviewGraphicsItem::draw() {
   poly4->setPolygon(QPolygonF(tmpVect));
 }
 
-void GlOverviewGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent* event){
-  if(event->button()==Qt::LeftButton){
+void GlOverviewGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+  if(event->button()==Qt::LeftButton) {
     mouseClicked=true;
 
     setScenePosition(event->pos());
   }
 }
 
-void GlOverviewGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event){
-  if(event->button()==Qt::LeftButton){
+void GlOverviewGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+  if(event->button()==Qt::LeftButton) {
     mouseClicked=false;
   }
 }
 
-void GlOverviewGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event){
+void GlOverviewGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
   if(mouseClicked)
     setScenePosition(event->pos());
 }
 
-void GlOverviewGraphicsItem::setScenePosition(QPointF pos){
+void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
   Coord position(128-pos.x(),pos.y(),0);
 
   Vector<int,4> backupViewport=baseScene.getViewport();
@@ -187,14 +189,16 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos){
 
   vector<Camera> cameras;
   vector<pair<string, GlLayer*> >* layerList=baseScene.getLayersList();
-  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin();it!=layerList->end();++it){
+
+  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
     cameras.push_back((*it).second->getCamera());
   }
 
   baseScene.centerScene();
 
   vector<Coord> centerPos;
-  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin();it!=layerList->end();++it){
+
+  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
     centerPos.push_back((*it).second->getCamera().screenTo3DWorld(position));
   }
 
@@ -207,7 +211,8 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos){
   glPopAttrib();
 
   unsigned int i=0;
-  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin();it!=layerList->end();++it){
+
+  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
     Coord eyesVector=cameras[i].getEyes()-cameras[i].getCenter();
     cameras[i].setCenter(centerPos[i]);
     cameras[i].setEyes(cameras[i].getCenter()+eyesVector);
