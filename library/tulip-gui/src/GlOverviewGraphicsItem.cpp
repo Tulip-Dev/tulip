@@ -78,7 +78,7 @@ void GlOverviewGraphicsItem::draw() {
     cameras.push_back((*it).second->getCamera());
   }
 
-  Camera baseCamera=baseScene.getGraphCamera();
+  Camera &baseCamera=baseScene.getGraphCamera();
   vector<Coord> cameraBoundingBox;
 
   cameraBoundingBox.push_back(baseCamera.screenTo3DWorld(Coord(backupViewport[0],backupViewport[1],0)));
@@ -98,11 +98,11 @@ void GlOverviewGraphicsItem::draw() {
 
   baseScene.centerScene();
 
-  baseCamera=baseScene.getGraphCamera();
-  Coord p0=baseCamera.worldTo2DScreen(cameraBoundingBox[0]);
-  Coord p1=baseCamera.worldTo2DScreen(cameraBoundingBox[1]);
-  Coord p2=baseCamera.worldTo2DScreen(cameraBoundingBox[2]);
-  Coord p3=baseCamera.worldTo2DScreen(cameraBoundingBox[3]);
+  Camera &overviewCamera=baseScene.getGraphCamera();
+  Coord p0=overviewCamera.worldTo2DScreen(cameraBoundingBox[0]);
+  Coord p1=overviewCamera.worldTo2DScreen(cameraBoundingBox[1]);
+  Coord p2=overviewCamera.worldTo2DScreen(cameraBoundingBox[2]);
+  Coord p3=overviewCamera.worldTo2DScreen(cameraBoundingBox[3]);
 
   while(p1[0]>p3[0]){
     Coord tmp(p0);
