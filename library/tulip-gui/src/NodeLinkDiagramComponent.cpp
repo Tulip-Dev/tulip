@@ -77,7 +77,7 @@ QList<QWidget*> NodeLinkDiagramComponent::configurationWidgets() const {
   return QList<QWidget*>() << label1 << label2;
 }
 
-void NodeLinkDiagramComponent::viewDrawnSlot(GlMainWidget *,bool){
+void NodeLinkDiagramComponent::viewDrawnSlot(GlMainWidget *,bool) {
   drawOverview();
 }
 

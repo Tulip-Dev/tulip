@@ -33,7 +33,7 @@ void GlMainView::draw(tlp::PluginProgress*) {
 }
 
 void GlMainView::drawOverview() {
-  if(!overview){
+  if(!overview) {
     overview=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
     addToScene(overview);
     overview->setPos(QPointF(0,0));

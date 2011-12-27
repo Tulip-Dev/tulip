@@ -30,7 +30,7 @@ class GlMainView;
 
 class GlOverviewGraphicsItem : public QObject, public QGraphicsPixmapItem {
 
-Q_OBJECT
+  Q_OBJECT
 
 public:
   GlOverviewGraphicsItem(GlMainView *view,GlScene &scene);
