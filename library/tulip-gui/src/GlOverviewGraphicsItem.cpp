@@ -87,6 +87,11 @@ void GlOverviewGraphicsItem::draw() {
   cameraBoundingBox.push_back(baseCamera.screenTo3DWorld(Coord(backupViewport[0]+backupViewport[2],backupViewport[1]+backupViewport[3],0)));
   cameraBoundingBox.push_back(baseCamera.screenTo3DWorld(Coord(backupViewport[0],backupViewport[1]+backupViewport[3],0)));
 
+  Coord eyesVector=baseCamera.getEyes()-baseCamera.getCenter();
+  eyesVector=eyesVector*(1./eyesVector[2]);
+  for(unsigned int i=0;i<4;i++)
+    cameraBoundingBox[i]=cameraBoundingBox[i]-eyesVector*cameraBoundingBox[i][2];
+
   baseScene.setViewport(0,0,vPWidth, vPHeight);
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
