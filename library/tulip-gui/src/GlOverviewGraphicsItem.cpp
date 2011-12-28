@@ -74,7 +74,8 @@ void GlOverviewGraphicsItem::draw() {
 
   vector<Camera> cameras;
   vector<pair<string, GlLayer*> >* layerList=baseScene.getLayersList();
-  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin();it!=layerList->end();++it){
+
+  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
     cameras.push_back((*it).second->getCamera());
   }
 
@@ -104,7 +105,7 @@ void GlOverviewGraphicsItem::draw() {
   Coord p2=overviewCamera.worldTo2DScreen(cameraBoundingBox[2]);
   Coord p3=overviewCamera.worldTo2DScreen(cameraBoundingBox[3]);
 
-  while(p1[0]>p3[0]){
+  while(p1[0]>p3[0]) {
     Coord tmp(p0);
     p0=p1;
     p1=p2;
@@ -112,7 +113,7 @@ void GlOverviewGraphicsItem::draw() {
     p3=tmp;
   }
 
-  while(p1[1]<p3[1]){
+  while(p1[1]<p3[1]) {
     Coord tmp(p0);
     p0=p3;
     p3=p2;
