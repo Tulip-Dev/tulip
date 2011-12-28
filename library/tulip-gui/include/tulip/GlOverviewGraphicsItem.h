@@ -51,14 +51,8 @@ private :
   unsigned int vPWidth, vPHeight;
   QGLFramebufferObject *glFrameBuf;
 
-  QGraphicsLineItem *line1;
-  QGraphicsLineItem *line2;
-  QGraphicsLineItem *line3;
-  QGraphicsLineItem *line4;
-  QGraphicsPolygonItem *poly1;
-  QGraphicsPolygonItem *poly2;
-  QGraphicsPolygonItem *poly3;
-  QGraphicsPolygonItem *poly4;
+  QGraphicsLineItem line[4];
+  QGraphicsPolygonItem poly[4];
 
   bool mouseClicked;
 

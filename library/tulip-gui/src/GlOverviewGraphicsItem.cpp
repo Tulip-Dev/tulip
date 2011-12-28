@@ -28,19 +28,15 @@ using namespace std;
 namespace tlp {
 
 GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsPixmapItem(),view(view),baseScene(scene),vPWidth(128),vPHeight(128),glFrameBuf(NULL),mouseClicked(false) {
+  //This flag is needed to don't display overview rectangle outside overview
   setFlag(QGraphicsItem::ItemClipsChildrenToShape);
-  line1=new QGraphicsLineItem(this);
-  line2=new QGraphicsLineItem(this);
-  line3=new QGraphicsLineItem(this);
-  line4=new QGraphicsLineItem(this);
-  poly1=new QGraphicsPolygonItem(this);
-  poly2=new QGraphicsPolygonItem(this);
-  poly3=new QGraphicsPolygonItem(this);
-  poly4=new QGraphicsPolygonItem(this);
-  poly1->setBrush(QBrush(QColor(0,0,0,64)));
-  poly2->setBrush(QBrush(QColor(0,0,0,64)));
-  poly3->setBrush(QBrush(QColor(0,0,0,64)));
-  poly4->setBrush(QBrush(QColor(0,0,0,64)));
+
+  //Init lines and polygons item
+  for(unsigned int i=0;i<4;++i){
+    line[i].setParentItem(this);
+    poly[i].setParentItem(this);
+    poly[i].setBrush(QBrush(QColor(0,0,0,64)));
+  }
 }
 
 void GlOverviewGraphicsItem::draw() {
@@ -48,15 +44,11 @@ void GlOverviewGraphicsItem::draw() {
   if(baseScene.getLayersList()->size()==0)
     return;
 
-  //Initialize the context avoid segfault when trying to render graph without any initialised gl context.
+  // Initialize the context avoid segfault when trying to render graph without any initialised gl context.
   QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
   firstWidget->makeCurrent();
 
-  if (glFrameBuf != NULL && (vPWidth != static_cast<unsigned int>(glFrameBuf->width()) || vPHeight != static_cast<unsigned int>(glFrameBuf->height()))) {
-    delete glFrameBuf;
-    glFrameBuf = NULL;
-  }
-
+  // Allocate frame buffer object
   if (glFrameBuf == NULL) {
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
     QGLFramebufferObjectFormat fboFmt;
@@ -64,129 +56,127 @@ void GlOverviewGraphicsItem::draw() {
 
     glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
   }
-
 #else
     glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, QGLFramebufferObject::CombinedDepthStencil);
   }
 #endif
 
+  // Backup initial viewport
   Vector<int,4> backupViewport=baseScene.getViewport();
 
+  // Backup initial cameras
   vector<Camera> cameras;
   vector<pair<string, GlLayer*> >* layerList=baseScene.getLayersList();
-
   for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
     cameras.push_back((*it).second->getCamera());
   }
 
+  // Compute visible part of the scene
   Camera &baseCamera=baseScene.getGraphCamera();
   vector<Coord> cameraBoundingBox;
-
   cameraBoundingBox.push_back(baseCamera.screenTo3DWorld(Coord(backupViewport[0],backupViewport[1],0)));
   cameraBoundingBox.push_back(baseCamera.screenTo3DWorld(Coord(backupViewport[0]+backupViewport[2],backupViewport[1],0)));
   cameraBoundingBox.push_back(baseCamera.screenTo3DWorld(Coord(backupViewport[0]+backupViewport[2],backupViewport[1]+backupViewport[3],0)));
   cameraBoundingBox.push_back(baseCamera.screenTo3DWorld(Coord(backupViewport[0],backupViewport[1]+backupViewport[3],0)));
 
+  // This code modify cameraBoundingBox coords to have coords with (x,y,0)
+  // If we don't do this we will have invalid polygon when we do worldTo2DScreen transformations
   Coord eyesVector=baseCamera.getEyes()-baseCamera.getCenter();
   eyesVector=eyesVector*(1./eyesVector[2]);
   for(unsigned int i=0;i<4;i++)
     cameraBoundingBox[i]=cameraBoundingBox[i]-eyesVector*cameraBoundingBox[i][2];
 
+  // Change viewport of the scene to the overview viewport
   baseScene.setViewport(0,0,vPWidth, vPHeight);
 
+  // Backup OpenGL matrix
   glPushAttrib(GL_ALL_ATTRIB_BITS);
-
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
-
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
 
+  // Center the scene
   baseScene.centerScene();
 
+  // Project camera bounding box
   Camera &overviewCamera=baseScene.getGraphCamera();
   Coord p0=overviewCamera.worldTo2DScreen(cameraBoundingBox[0]);
   Coord p1=overviewCamera.worldTo2DScreen(cameraBoundingBox[1]);
   Coord p2=overviewCamera.worldTo2DScreen(cameraBoundingBox[2]);
   Coord p3=overviewCamera.worldTo2DScreen(cameraBoundingBox[3]);
 
+  // Rotation of the coordinates to have no crossing lines
   while(p1[0]>p3[0]) {
     Coord tmp(p0);
-    p0=p1;
-    p1=p2;
-    p2=p3;
-    p3=tmp;
+    p0=p1;p1=p2;p2=p3;p3=tmp;
   }
-
   while(p1[1]<p3[1]) {
     Coord tmp(p0);
-    p0=p3;
-    p3=p2;
-    p2=p1;
-    p1=tmp;
+    p0=p3;p3=p2;p2=p1;p1=tmp;
   }
 
-
+  // Draw the scene
   glFrameBuf->bind();
-
   baseScene.draw();
   glFrameBuf->release();
 
+  // invert applied camera transformations
   unsigned int i=0;
-
   for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
     (*it).second->setCamera(cameras[i]);
     ++i;
   }
 
+  // invert applied OpenGl transformations
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
-
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
-
   glPopAttrib();
 
+  // invert applied viewport
   baseScene.setViewport(backupViewport);
 
+  // Load scene pixmap to the item
   QPixmap pixmap;
   pixmap.convertFromImage(glFrameBuf->toImage());
   setPixmap(pixmap);
 
-  line1->setLine(128,0,p0[0],128-p0[1]);
-  line2->setLine(0,0,p1[0],128-p1[1]);
-  line3->setLine(0,128,p2[0],128-p2[1]);
-  line4->setLine(128,128,p3[0],128-p3[1]);
+  // set lines and polygons coordinates
+  line[0].setLine(128,0,p0[0],128-p0[1]);
+  line[1].setLine(0,0,p1[0],128-p1[1]);
+  line[2].setLine(0,128,p2[0],128-p2[1]);
+  line[3].setLine(128,128,p3[0],128-p3[1]);
   QVector<QPointF> tmpVect;
   tmpVect.push_back(QPointF(128,0));
   tmpVect.push_back(QPointF(p0[0],128-p0[1]));
   tmpVect.push_back(QPointF(p1[0],128-p1[1]));
   tmpVect.push_back(QPointF(0,0));
-  poly1->setPolygon(QPolygonF(tmpVect));
+  poly[0].setPolygon(QPolygonF(tmpVect));
   tmpVect.clear();
   tmpVect.push_back(QPointF(0,0));
   tmpVect.push_back(QPointF(p1[0],128-p1[1]));
   tmpVect.push_back(QPointF(p2[0],128-p2[1]));
   tmpVect.push_back(QPointF(0,128));
-  poly2->setPolygon(QPolygonF(tmpVect));
+  poly[1].setPolygon(QPolygonF(tmpVect));
   tmpVect.clear();
   tmpVect.push_back(QPointF(0,128));
   tmpVect.push_back(QPointF(p2[0],128-p2[1]));
   tmpVect.push_back(QPointF(p3[0],128-p3[1]));
   tmpVect.push_back(QPointF(128,128));
-  poly3->setPolygon(QPolygonF(tmpVect));
+  poly[2].setPolygon(QPolygonF(tmpVect));
   tmpVect.clear();
   tmpVect.push_back(QPointF(128,128));
   tmpVect.push_back(QPointF(p3[0],128-p3[1]));
   tmpVect.push_back(QPointF(p0[0],128-p0[1]));
   tmpVect.push_back(QPointF(128,0));
-  poly4->setPolygon(QPolygonF(tmpVect));
+  poly[3].setPolygon(QPolygonF(tmpVect));
 }
 
 void GlOverviewGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
   if(event->button()==Qt::LeftButton) {
     mouseClicked=true;
-
     setScenePosition(event->pos());
   }
 }
@@ -210,10 +200,8 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
   baseScene.setViewport(0,0,vPWidth, vPHeight);
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
-
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
-
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
 
@@ -234,10 +222,8 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
 
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
-
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
-
   glPopAttrib();
 
   unsigned int i=0;
