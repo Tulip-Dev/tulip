@@ -32,6 +32,7 @@ map<pair<unsigned int,unsigned int>, QGLFramebufferObject *> GlOverviewGraphicsI
 GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsPixmapItem(),view(view),baseScene(scene),width(128),height(128),mouseClicked(false) {
   //This flag is needed to don't display overview rectangle outside overview
   setFlag(QGraphicsItem::ItemClipsChildrenToShape);
+  setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
 
   //Init lines and polygons item
   for(unsigned int i=0; i<4; ++i) {
@@ -130,6 +131,7 @@ void GlOverviewGraphicsItem::draw() {
     p1=tmp;
   }
 
+
   // Draw the scene
   glFrameBuffer->bind();
   baseScene.draw();
@@ -155,7 +157,7 @@ void GlOverviewGraphicsItem::draw() {
 
   // Load scene pixmap to the item
   QPixmap pixmap;
-  pixmap.convertFromImage(glFrameBuffer->toImage());
+  pixmap.convertFromImage(glFrameBuffer->toImage().convertToFormat(QImage::Format_RGB32));
   setPixmap(pixmap);
 
   // set lines and polygons coordinates
