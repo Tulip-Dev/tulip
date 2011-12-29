@@ -37,7 +37,7 @@ public:
 
 public slots :
 
-  void draw();
+  void draw(bool generatePixmap);
 
 private :
 
@@ -49,7 +49,7 @@ private :
   GlMainView *view;
   GlScene &baseScene;
   unsigned int width, height;
-  static std::map< std::pair<unsigned int,unsigned int>, QGLFramebufferObject *> glFrameBufferMap;
+  QGLFramebufferObject *glFrameBuffer;
 
   QGraphicsLineItem line[4];
   QGraphicsPolygonItem poly[4];
