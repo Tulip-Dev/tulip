@@ -48,8 +48,8 @@ private :
 
   GlMainView *view;
   GlScene &baseScene;
-  unsigned int vPWidth, vPHeight;
-  QGLFramebufferObject *glFrameBuf;
+  unsigned int width, height;
+  static std::map< std::pair<unsigned int,unsigned int>, QGLFramebufferObject *> glFrameBufferMap;
 
   QGraphicsLineItem line[4];
   QGraphicsPolygonItem poly[4];
