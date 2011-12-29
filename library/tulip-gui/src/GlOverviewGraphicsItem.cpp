@@ -27,7 +27,9 @@ using namespace std;
 
 namespace tlp {
 
-GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsPixmapItem(),view(view),baseScene(scene),vPWidth(128),vPHeight(128),glFrameBuf(NULL),mouseClicked(false) {
+map<pair<unsigned int,unsigned int>, QGLFramebufferObject *> GlOverviewGraphicsItem::glFrameBufferMap = map<pair<unsigned int,unsigned int>, QGLFramebufferObject *>();
+
+GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsPixmapItem(),view(view),baseScene(scene),width(128),height(128),mouseClicked(false) {
   //This flag is needed to don't display overview rectangle outside overview
   setFlag(QGraphicsItem::ItemClipsChildrenToShape);
 
@@ -48,19 +50,21 @@ void GlOverviewGraphicsItem::draw() {
   QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
   firstWidget->makeCurrent();
 
+  pair<unsigned int,unsigned int> pairWidthHeight(width,height);
+  if(glFrameBufferMap.count(pairWidthHeight)==0){
   // Allocate frame buffer object
-  if (glFrameBuf == NULL) {
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
     QGLFramebufferObjectFormat fboFmt;
     fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
 
-    glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
-  }
+    glFrameBufferMap[pairWidthHeight]=new QGLFramebufferObject(width, height, fboFmt);
 
 #else
-    glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, QGLFramebufferObject::CombinedDepthStencil);
-  }
+    glFrameBufferMap[pairWidthHeight]=new QGLFramebufferObject(width, height, QGLFramebufferObject::CombinedDepthStencil);
 #endif
+  }
+
+  QGLFramebufferObject *glFrameBuffer = glFrameBufferMap[pairWidthHeight];
 
   // Backup initial viewport
   Vector<int,4> backupViewport=baseScene.getViewport();
@@ -90,7 +94,7 @@ void GlOverviewGraphicsItem::draw() {
     cameraBoundingBox[i]=cameraBoundingBox[i]-eyesVector*cameraBoundingBox[i][2];
 
   // Change viewport of the scene to the overview viewport
-  baseScene.setViewport(0,0,vPWidth, vPHeight);
+  baseScene.setViewport(0,0,width, height);
 
   // Backup OpenGL matrix
   glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -127,9 +131,9 @@ void GlOverviewGraphicsItem::draw() {
   }
 
   // Draw the scene
-  glFrameBuf->bind();
+  glFrameBuffer->bind();
   baseScene.draw();
-  glFrameBuf->release();
+  glFrameBuffer->release();
 
   // invert applied camera transformations
   unsigned int i=0;
@@ -151,7 +155,7 @@ void GlOverviewGraphicsItem::draw() {
 
   // Load scene pixmap to the item
   QPixmap pixmap;
-  pixmap.convertFromImage(glFrameBuf->toImage());
+  pixmap.convertFromImage(glFrameBuffer->toImage());
   setPixmap(pixmap);
 
   // set lines and polygons coordinates
@@ -208,7 +212,7 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
 
   Vector<int,4> backupViewport=baseScene.getViewport();
 
-  baseScene.setViewport(0,0,vPWidth, vPHeight);
+  baseScene.setViewport(0,0,width, height);
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   glMatrixMode(GL_PROJECTION);
