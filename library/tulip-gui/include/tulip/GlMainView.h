@@ -39,7 +39,7 @@ public:
 
 public slots:
   virtual void draw(tlp::PluginProgress* pluginProgress);
-  virtual void drawOverview();
+  virtual void drawOverview(bool generatePixmap);
   virtual void centerView();
 
 protected:

@@ -32,14 +32,15 @@ void GlMainView::draw(tlp::PluginProgress*) {
   _glMainWidget->draw();
 }
 
-void GlMainView::drawOverview() {
+void GlMainView::drawOverview(bool generatePixmap) {
   if(!overview) {
     overview=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
     addToScene(overview);
     overview->setPos(QPointF(0,0));
+    generatePixmap=true;
   }
 
-  overview->draw();
+  overview->draw(generatePixmap);
 }
 
 void GlMainView::setupWidget() {

@@ -27,9 +27,7 @@ using namespace std;
 
 namespace tlp {
 
-map<pair<unsigned int,unsigned int>, QGLFramebufferObject *> GlOverviewGraphicsItem::glFrameBufferMap = map<pair<unsigned int,unsigned int>, QGLFramebufferObject *>();
-
-GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsPixmapItem(),view(view),baseScene(scene),width(128),height(128),mouseClicked(false) {
+GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsPixmapItem(),view(view),baseScene(scene),width(128),height(128),glFrameBuffer(NULL),mouseClicked(false) {
   //This flag is needed to don't display overview rectangle outside overview
   setFlag(QGraphicsItem::ItemClipsChildrenToShape);
   setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
@@ -42,30 +40,30 @@ GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):
   }
 }
 
-void GlOverviewGraphicsItem::draw() {
+void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   if(baseScene.getLayersList()->size()==0)
     return;
+
+  if(generatePixmap)
+    cout << "generate" << endl;
 
   // Initialize the context avoid segfault when trying to render graph without any initialised gl context.
   QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
   firstWidget->makeCurrent();
 
-  pair<unsigned int,unsigned int> pairWidthHeight(width,height);
-  if(glFrameBufferMap.count(pairWidthHeight)==0){
+  if(!glFrameBuffer){
   // Allocate frame buffer object
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
     QGLFramebufferObjectFormat fboFmt;
     fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
 
-    glFrameBufferMap[pairWidthHeight]=new QGLFramebufferObject(width, height, fboFmt);
+    glFrameBuffer=new QGLFramebufferObject(width, height, fboFmt);
 
 #else
-    glFrameBufferMap[pairWidthHeight]=new QGLFramebufferObject(width, height, QGLFramebufferObject::CombinedDepthStencil);
+    glFrameBuffer=new QGLFramebufferObject(width, height, QGLFramebufferObject::CombinedDepthStencil);
 #endif
   }
-
-  QGLFramebufferObject *glFrameBuffer = glFrameBufferMap[pairWidthHeight];
 
   // Backup initial viewport
   Vector<int,4> backupViewport=baseScene.getViewport();
@@ -80,6 +78,7 @@ void GlOverviewGraphicsItem::draw() {
 
   // Compute visible part of the scene
   Camera &baseCamera=baseScene.getGraphCamera();
+
   vector<Coord> cameraBoundingBox;
   cameraBoundingBox.push_back(baseCamera.screenTo3DWorld(Coord(backupViewport[0],backupViewport[1],0)));
   cameraBoundingBox.push_back(baseCamera.screenTo3DWorld(Coord(backupViewport[0]+backupViewport[2],backupViewport[1],0)));
@@ -89,6 +88,7 @@ void GlOverviewGraphicsItem::draw() {
   // This code modify cameraBoundingBox coords to have coords with (x,y,0)
   // If we don't do this we will have invalid polygon when we do worldTo2DScreen transformations
   Coord eyesVector=baseCamera.getEyes()-baseCamera.getCenter();
+
   eyesVector=eyesVector*(1./eyesVector[2]);
 
   for(unsigned int i=0; i<4; i++)
@@ -132,10 +132,12 @@ void GlOverviewGraphicsItem::draw() {
   }
 
 
-  // Draw the scene
-  glFrameBuffer->bind();
-  baseScene.draw();
-  glFrameBuffer->release();
+  if(generatePixmap){
+    // Draw the scene
+    glFrameBuffer->bind();
+    baseScene.draw();
+    glFrameBuffer->release();
+  }
 
   // invert applied camera transformations
   unsigned int i=0;
@@ -155,10 +157,12 @@ void GlOverviewGraphicsItem::draw() {
   // invert applied viewport
   baseScene.setViewport(backupViewport);
 
-  // Load scene pixmap to the item
-  QPixmap pixmap;
-  pixmap.convertFromImage(glFrameBuffer->toImage().convertToFormat(QImage::Format_RGB32));
-  setPixmap(pixmap);
+  if(generatePixmap){
+    // Load scene pixmap to the item
+    QPixmap pixmap;
+    pixmap.convertFromImage(glFrameBuffer->toImage().convertToFormat(QImage::Format_RGB32));
+    setPixmap(pixmap);
+  }
 
   // set lines and polygons coordinates
   line[0].setLine(128,0,p0[0],128-p0[1]);
