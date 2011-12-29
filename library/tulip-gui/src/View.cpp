@@ -133,7 +133,7 @@ void View::addRedrawTrigger(tlp::Observable* obs) {
 }
 
 void View::treatEvents(const std::vector<Event> &events) {
-  for(int i=0; i<events.size(); ++i) {
+  for(unsigned int i=0; i<events.size(); ++i) {
     Event e = events[i];
 
     if (_triggers.contains(e.sender())) {
