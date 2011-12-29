@@ -32,7 +32,7 @@ GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):
   setFlag(QGraphicsItem::ItemClipsChildrenToShape);
 
   //Init lines and polygons item
-  for(unsigned int i=0;i<4;++i){
+  for(unsigned int i=0; i<4; ++i) {
     line[i].setParentItem(this);
     poly[i].setParentItem(this);
     poly[i].setBrush(QBrush(QColor(0,0,0,64)));
@@ -56,6 +56,7 @@ void GlOverviewGraphicsItem::draw() {
 
     glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
   }
+
 #else
     glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, QGLFramebufferObject::CombinedDepthStencil);
   }
@@ -67,6 +68,7 @@ void GlOverviewGraphicsItem::draw() {
   // Backup initial cameras
   vector<Camera> cameras;
   vector<pair<string, GlLayer*> >* layerList=baseScene.getLayersList();
+
   for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
     cameras.push_back((*it).second->getCamera());
   }
@@ -83,7 +85,8 @@ void GlOverviewGraphicsItem::draw() {
   // If we don't do this we will have invalid polygon when we do worldTo2DScreen transformations
   Coord eyesVector=baseCamera.getEyes()-baseCamera.getCenter();
   eyesVector=eyesVector*(1./eyesVector[2]);
-  for(unsigned int i=0;i<4;i++)
+
+  for(unsigned int i=0; i<4; i++)
     cameraBoundingBox[i]=cameraBoundingBox[i]-eyesVector*cameraBoundingBox[i][2];
 
   // Change viewport of the scene to the overview viewport
@@ -109,11 +112,18 @@ void GlOverviewGraphicsItem::draw() {
   // Rotation of the coordinates to have no crossing lines
   while(p1[0]>p3[0]) {
     Coord tmp(p0);
-    p0=p1;p1=p2;p2=p3;p3=tmp;
+    p0=p1;
+    p1=p2;
+    p2=p3;
+    p3=tmp;
   }
+
   while(p1[1]<p3[1]) {
     Coord tmp(p0);
-    p0=p3;p3=p2;p2=p1;p1=tmp;
+    p0=p3;
+    p3=p2;
+    p2=p1;
+    p1=tmp;
   }
 
   // Draw the scene
@@ -123,6 +133,7 @@ void GlOverviewGraphicsItem::draw() {
 
   // invert applied camera transformations
   unsigned int i=0;
+
   for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
     (*it).second->setCamera(cameras[i]);
     ++i;
