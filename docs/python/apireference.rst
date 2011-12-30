@@ -164,6 +164,8 @@ the Graph class
 	.. automethod:: tulip::tlp.Graph.isDescendantGraph
 
 	.. automethod:: tulip::tlp.Graph.getSubGraph
+	
+	.. automethod:: tulip::tlp.Graph.getSubGraph
 
 	.. automethod:: tulip::tlp.Graph.getDescendantGraph
 	
