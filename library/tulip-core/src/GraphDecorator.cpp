@@ -107,10 +107,13 @@ Graph* GraphDecorator::getSubGraph(unsigned int sgId) const {
   return graph_component->getSubGraph(sgId);
 }
 //=========================================================================
+Graph* GraphDecorator::getSubGraph(const std::string &name) const {
+  return graph_component->getSubGraph(name);
+}
+//=========================================================================
 Graph* GraphDecorator::getDescendantGraph(unsigned int sgId) const {
   return graph_component->getDescendantGraph(sgId);
 }
-
 //============================================================
 node GraphDecorator::source(const edge e)const {
   return graph_component->source(e);
