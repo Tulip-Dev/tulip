@@ -52,15 +52,19 @@ static void resetConsoleSettings(void) {
   tcsetattr(0, TCSANOW, &stored_settings);
 }
 
-static std::pair<int, int> getConsoleCursorPosition() {
-  int row=1, col=1;
+static bool processInForeground(void) {
+    pid_t fg = tcgetpgrp(STDIN_FILENO);
+    return fg == getpgrp();
+}
 
-  if (isatty(fileno(stdin))) {
+
+static std::pair<int, int> getConsoleCursorPosition() {
+  int row=0, col=0;
+
+  if (isatty(fileno(stdin)) && processInForeground()) {
     setConsoleSettingsForAnsiRequest();
     fprintf(stdout, "\x1b[6n");
-
     if (fscanf(stdin, "\x1b[%d;%dR", &row, &col)) {}
-
     resetConsoleSettings();
   }
 
@@ -486,7 +490,7 @@ inline std::ostream& lightCyan(std::ostream& s) {
 inline std::ostream& fillToEndOfLine(std::ostream& s) {
 #ifndef WIN32
 
-  if ((s == std::cout && isatty(fileno(stdout))) || (s == std::cerr && isatty(fileno(stderr)))) {
+  if (processInForeground() && ((s == std::cout && isatty(fileno(stdout))) || (s == std::cerr && isatty(fileno(stderr))))) {
 #endif
     std::pair<int, int> cursorPos = getConsoleCursorPosition();
     std::pair<int, int> consoleSize = getConsoleSize();
@@ -508,6 +512,12 @@ inline std::ostream& fillToEndOfLine(std::ostream& s) {
   if ((s == std::cout && !isatty(fileno(stdout))) || (s == std::cerr && !isatty(fileno(stderr)))) {
     s << std::endl;
   }
+
+#ifndef WIN32
+  if (!processInForeground()) {
+	  s << defaultTextColor << std::endl;
+  }
+#endif
 
   return s;
 }
