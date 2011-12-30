@@ -233,8 +233,10 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
     }
 
     dsoName = messages[i];
-    *mangled_name++ = '\0';
-    *runtime_offset++ = '\0';
+    if (mangled_name)
+    	*mangled_name++ = '\0';
+    if (runtime_offset)
+    	*runtime_offset++ = '\0';
     *offset_end++ = '\0';
     *runtime_addr++ = '\0';
     *runtime_addr_end = '\0';
@@ -304,6 +306,8 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       free(real_name);
     }
   }
+
+
 
   free(messages);
 }
