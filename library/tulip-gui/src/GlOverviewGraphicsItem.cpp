@@ -52,8 +52,8 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
   firstWidget->makeCurrent();
 
-  if(!glFrameBuffer){
-  // Allocate frame buffer object
+  if(!glFrameBuffer) {
+    // Allocate frame buffer object
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
     QGLFramebufferObjectFormat fboFmt;
     fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
@@ -132,7 +132,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   }
 
 
-  if(generatePixmap){
+  if(generatePixmap) {
     // Draw the scene
     glFrameBuffer->bind();
     baseScene.draw();
@@ -157,7 +157,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   // invert applied viewport
   baseScene.setViewport(backupViewport);
 
-  if(generatePixmap){
+  if(generatePixmap) {
     // Load scene pixmap to the item
     QPixmap pixmap;
     pixmap.convertFromImage(glFrameBuffer->toImage().convertToFormat(QImage::Format_RGB32));
