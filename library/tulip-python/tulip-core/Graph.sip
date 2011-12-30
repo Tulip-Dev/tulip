@@ -260,6 +260,19 @@ Returns the sub-graph with the corresponding id or :const:`None` if there is no 
 
 //===========================================================================================
 
+	tlp::Graph* getSubGraph(const std::string &name) const;
+%Docstring
+tlp.Graph.getSubGraph(name)
+
+Returns the sub-graph with the corresponding name or :const:`None` if there is no sub-graph with that name.
+
+:param name: the name of the sub-graph to return
+:type name: string
+:rtype: :class:`tlp.Graph` or :const:`None` 
+%End
+
+//===========================================================================================
+
 	tlp::Graph* getDescendantGraph(unsigned int id) const;
 %Docstring
 tlp.Graph.getDescendantGraph(id)

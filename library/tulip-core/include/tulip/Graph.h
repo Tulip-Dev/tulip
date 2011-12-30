@@ -304,6 +304,11 @@ public:
    */
   virtual Graph* getSubGraph(unsigned int id) const=0;
   /**
+   * Returns a pointer on the sub-graph with the corresponding name
+   * or NULL if there is no sub-graph with that name.
+   */
+  virtual Graph* getSubGraph(const std::string &name) const=0;
+  /**
    * Returns a pointer on the descendant with the corresponding id
    * or NULL if there is no descendant  with that id.
    */

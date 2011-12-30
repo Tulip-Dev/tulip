@@ -47,6 +47,7 @@ public:
   virtual bool isSubGraph(const Graph* sg) const;
   virtual bool isDescendantGraph(const Graph* sg) const;
   virtual Graph* getSubGraph(unsigned int id) const;
+  virtual Graph* getSubGraph(const std::string &name) const;
   virtual Graph* getDescendantGraph(unsigned int id) const;
   virtual unsigned int numberOfSubGraphs() const;
   virtual unsigned int numberOfDescendantGraphs() const;

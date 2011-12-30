@@ -285,6 +285,19 @@ Graph* GraphAbstract::getSubGraph(unsigned int sgId) const {
   return NULL;
 }
 //=========================================================================
+Graph* GraphAbstract::getSubGraph(const std::string &name) const {
+  GRAPH_SEQ::const_iterator it = subgraphs.begin();
+
+  while(it != subgraphs.end()) {
+    if ((*it)->getName() == name)
+      return *it;
+
+    ++it;
+  }
+
+  return NULL;
+}
+//=========================================================================
 Graph* GraphAbstract::getDescendantGraph(unsigned int sgId) const {
   Graph* sg = getSubGraph(sgId);
 
