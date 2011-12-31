@@ -53,8 +53,8 @@ static void resetConsoleSettings(void) {
 }
 
 static bool processInForeground(void) {
-    pid_t fg = tcgetpgrp(STDIN_FILENO);
-    return fg == getpgrp();
+  pid_t fg = tcgetpgrp(STDIN_FILENO);
+  return fg == getpgrp();
 }
 
 
@@ -64,7 +64,9 @@ static std::pair<int, int> getConsoleCursorPosition() {
   if (isatty(fileno(stdin)) && processInForeground()) {
     setConsoleSettingsForAnsiRequest();
     fprintf(stdout, "\x1b[6n");
+
     if (fscanf(stdin, "\x1b[%d;%dR", &row, &col)) {}
+
     resetConsoleSettings();
   }
 
@@ -514,9 +516,11 @@ inline std::ostream& fillToEndOfLine(std::ostream& s) {
   }
 
 #ifndef WIN32
+
   if (!processInForeground()) {
-	  s << defaultTextColor << std::endl;
+    s << defaultTextColor << std::endl;
   }
+
 #endif
 
   return s;
