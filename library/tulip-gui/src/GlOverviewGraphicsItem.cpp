@@ -45,6 +45,18 @@ GlOverviewGraphicsItem::~GlOverviewGraphicsItem() {
     delete glFrameBuffer;
 }
 
+void GlOverviewGraphicsItem::setSize(unsigned int width, unsigned int height){
+  this->width=width;
+  this->height=height;
+
+  if(glFrameBuffer){
+    delete glFrameBuffer;
+    glFrameBuffer=NULL;
+  }
+
+  draw(true);
+}
+
 void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   if(baseScene.getLayersList()->size()==0)
@@ -159,33 +171,33 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   }
 
   // set lines and polygons coordinates
-  line[0].setLine(128,0,p0[0],128-p0[1]);
-  line[1].setLine(0,0,p1[0],128-p1[1]);
-  line[2].setLine(0,128,p2[0],128-p2[1]);
-  line[3].setLine(128,128,p3[0],128-p3[1]);
+  line[0].setLine(width,0,p0[0],height-p0[1]);
+  line[1].setLine(0,0,p1[0],height-p1[1]);
+  line[2].setLine(0,height,p2[0],height-p2[1]);
+  line[3].setLine(width,height,p3[0],height-p3[1]);
   QVector<QPointF> tmpVect;
-  tmpVect.push_back(QPointF(128,0));
-  tmpVect.push_back(QPointF(p0[0],128-p0[1]));
-  tmpVect.push_back(QPointF(p1[0],128-p1[1]));
+  tmpVect.push_back(QPointF(width,0));
+  tmpVect.push_back(QPointF(p0[0],height-p0[1]));
+  tmpVect.push_back(QPointF(p1[0],height-p1[1]));
   tmpVect.push_back(QPointF(0,0));
   poly[0].setPolygon(QPolygonF(tmpVect));
   tmpVect.clear();
   tmpVect.push_back(QPointF(0,0));
-  tmpVect.push_back(QPointF(p1[0],128-p1[1]));
-  tmpVect.push_back(QPointF(p2[0],128-p2[1]));
-  tmpVect.push_back(QPointF(0,128));
+  tmpVect.push_back(QPointF(p1[0],height-p1[1]));
+  tmpVect.push_back(QPointF(p2[0],height-p2[1]));
+  tmpVect.push_back(QPointF(0,height));
   poly[1].setPolygon(QPolygonF(tmpVect));
   tmpVect.clear();
-  tmpVect.push_back(QPointF(0,128));
-  tmpVect.push_back(QPointF(p2[0],128-p2[1]));
-  tmpVect.push_back(QPointF(p3[0],128-p3[1]));
-  tmpVect.push_back(QPointF(128,128));
+  tmpVect.push_back(QPointF(0,height));
+  tmpVect.push_back(QPointF(p2[0],height-p2[1]));
+  tmpVect.push_back(QPointF(p3[0],height-p3[1]));
+  tmpVect.push_back(QPointF(width,height));
   poly[2].setPolygon(QPolygonF(tmpVect));
   tmpVect.clear();
-  tmpVect.push_back(QPointF(128,128));
-  tmpVect.push_back(QPointF(p3[0],128-p3[1]));
-  tmpVect.push_back(QPointF(p0[0],128-p0[1]));
-  tmpVect.push_back(QPointF(128,0));
+  tmpVect.push_back(QPointF(width,height));
+  tmpVect.push_back(QPointF(p3[0],height-p3[1]));
+  tmpVect.push_back(QPointF(p0[0],height-p0[1]));
+  tmpVect.push_back(QPointF(width,0));
   poly[3].setPolygon(QPolygonF(tmpVect));
 }
 
@@ -208,7 +220,7 @@ void GlOverviewGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
-  Coord position(128-pos.x(),pos.y(),0);
+  Coord position(width-pos.x(),pos.y(),0);
 
   Vector<int,4> backupViewport=baseScene.getViewport();
 
