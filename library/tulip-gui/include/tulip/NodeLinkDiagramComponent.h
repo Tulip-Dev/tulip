@@ -41,7 +41,7 @@ protected:
   void graphChanged(tlp::Graph *);
 
 protected slots:
-  void viewDrawnSlot(GlMainWidget *,bool);
+  void glMainWidgetDrawn(GlMainWidget *,bool);
 };
 }
 
