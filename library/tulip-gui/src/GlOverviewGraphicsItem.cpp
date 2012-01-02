@@ -45,9 +45,6 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   if(baseScene.getLayersList()->size()==0)
     return;
 
-  if(generatePixmap)
-    cout << "generate" << endl;
-
   // Initialize the context avoid segfault when trying to render graph without any initialised gl context.
   QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
   firstWidget->makeCurrent();
