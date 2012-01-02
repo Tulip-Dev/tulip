@@ -70,6 +70,9 @@ QRectF GlMainWidgetGraphicsItem::boundingRect() const {
 }
 
 void GlMainWidgetGraphicsItem::resize(int width, int height) {
+  if(this->width == width && this->height == height)
+    return;
+
   this->width = width;
   this->height = height;
   glMainWidget->resize(width,height);
