@@ -40,6 +40,11 @@ GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):
   }
 }
 
+GlOverviewGraphicsItem::~GlOverviewGraphicsItem() {
+  if(glFrameBuffer)
+    delete glFrameBuffer;
+}
+
 void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   if(baseScene.getLayersList()->size()==0)

@@ -34,6 +34,7 @@ class GlOverviewGraphicsItem : public QObject, public QGraphicsPixmapItem {
 
 public:
   GlOverviewGraphicsItem(GlMainView *view,GlScene &scene);
+  ~GlOverviewGraphicsItem();
 
 public slots :
 
