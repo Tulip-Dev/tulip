@@ -51,15 +51,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   if(!glFrameBuffer) {
     // Allocate frame buffer object
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-    QGLFramebufferObjectFormat fboFmt;
-    fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
-
-    glFrameBuffer=new QGLFramebufferObject(width, height, fboFmt);
-
-#else
     glFrameBuffer=new QGLFramebufferObject(width, height, QGLFramebufferObject::CombinedDepthStencil);
-#endif
   }
 
   // Backup initial viewport
