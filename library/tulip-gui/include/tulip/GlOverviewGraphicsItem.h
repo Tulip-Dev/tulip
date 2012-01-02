@@ -33,8 +33,11 @@ class GlOverviewGraphicsItem : public QObject, public QGraphicsPixmapItem {
   Q_OBJECT
 
 public:
+
   GlOverviewGraphicsItem(GlMainView *view,GlScene &scene);
   ~GlOverviewGraphicsItem();
+
+  void setSize(unsigned int width, unsigned int height);
 
 public slots :
 
