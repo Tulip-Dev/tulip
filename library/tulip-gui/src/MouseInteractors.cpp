@@ -208,7 +208,7 @@ bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
 
     x=qMouseEv->x();
     y=qMouseEv->y();
-    glMainWidget->draw();
+    glMainWidget->draw(false);
     return true;
   }
 
@@ -275,7 +275,7 @@ bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
       x = qMouseEv->x();
     }
 
-    glMainWidget->draw();
+    glMainWidget->draw(false);
     return true;
   }
 
