@@ -36,7 +36,7 @@ NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   getGlMainWidget()->setData(graph(), data);
   registerTriggers();
-  connect(getGlMainWidget(),SIGNAL(viewDrawn(GlMainWidget*,bool)),this,SLOT(viewDrawnSlot(GlMainWidget *,bool)));
+  connect(getGlMainWidget(),SIGNAL(viewDrawn(GlMainWidget*,bool)),this,SLOT(glMainWidgetDrawn(GlMainWidget *,bool)));
   this->drawOverview(true);
 }
 
@@ -66,18 +66,11 @@ bool NodeLinkDiagramComponent::isLayoutProperty(tlp::PropertyInterface* pi) cons
   return pi == getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();
 }
 
-#include <QtGui/QLabel>
 QList<QWidget*> NodeLinkDiagramComponent::configurationWidgets() const {
-
-  QLabel* label1 = new QLabel("text 1");
-  label1->setWindowTitle("#1");
-
-  QLabel* label2 = new QLabel("text 2");
-  label2->setWindowTitle("#2");
-  return QList<QWidget*>() << label1 << label2;
+  return QList<QWidget*>();
 }
 
-void NodeLinkDiagramComponent::viewDrawnSlot(GlMainWidget *,bool graphChanged) {
+void NodeLinkDiagramComponent::glMainWidgetDrawn(GlMainWidget *,bool graphChanged) {
   drawOverview(graphChanged);
 }
 
