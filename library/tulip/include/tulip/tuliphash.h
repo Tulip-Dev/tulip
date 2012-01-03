@@ -37,9 +37,9 @@
 #  define TLP_BEGIN_HASH_NAMESPACE namespace std
 #  define TLP_END_HASH_NAMESPACE
 //clang, and GCC versions prior to the 4.x series do not have tr1; using ext
-#elif  (not defined _MSC_VER && (__GNUC__ < 4 || __GNUC_MINOR__ < 1 || defined __clang__))
+#elif  (! defined _MSC_VER && (__GNUC__ < 4 || __GNUC_MINOR__ < 1 || defined __clang__))
 #  include <tulip/tulipconf.h>
-#  if (__GNUC__ < 3 || __clang__)
+#  if (__GNUC__ < 3 || defined __clang__)
 #    include <hash_map>
 #    include <hash_set>
 #  else
