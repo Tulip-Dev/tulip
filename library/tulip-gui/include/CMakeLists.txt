@@ -19,9 +19,7 @@ INSTALL(FILES
   tulip/GraphicsWidgetBase.h
   tulip/GraphPropertiesSelectionWidget.h
   tulip/GraphPropertiesTableWidget.h
-  tulip/GWOverviewWidget.h
   tulip/ItemsListWidget.h
-  tulip/LayerManagerWidget.h
   tulip/Morphing.h
   tulip/MouseBoxZoomer.h
   tulip/MouseEdgeBendEditor.h
@@ -39,7 +37,6 @@ INSTALL(FILES
   tulip/QGlPixelBufferManager.h
   tulip/QtGlSceneZoomAndPanAnimator.h
   tulip/QtOpenGlErrorViewer.h
-  tulip/RenderingParametersDialog.h
   tulip/SGHierarchyWidget.h
   tulip/SimplePluginProgressWidget.h
   tulip/SimpleStringsListSelectionWidget.h
