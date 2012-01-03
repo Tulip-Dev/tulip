@@ -126,6 +126,14 @@ void GlGraphComposite::treatEvent(const Event& evt) {
       graphRenderer->setGraphModified(true);
       break;
 
+    case GraphEvent::TLP_REVERSE_EDGE:
+      graphRenderer->setGraphModified(true);
+      break;
+
+    case GraphEvent::TLP_AFTER_SET_ENDS:
+      graphRenderer->setGraphModified(true);
+      break;
+
     default:
       break;
     }
