@@ -39,6 +39,7 @@ public:
 
 protected:
   void graphChanged(tlp::Graph *);
+
 };
 }
 
