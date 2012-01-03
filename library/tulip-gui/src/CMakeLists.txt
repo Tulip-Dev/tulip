@@ -22,9 +22,7 @@ SET(SRCS
   GraphPropertiesSelectionWidget.cpp
   GraphPropertiesTableWidget.cpp
   GraphState.cpp
-  GWOverviewWidget.cpp
   ItemsListWidget.cpp
-  LayerManagerWidget.cpp
   Morphing.cpp
   MouseBoxZoomer.cpp
   MouseEdgeBendEditor.cpp
@@ -44,7 +42,6 @@ SET(SRCS
   QtGlSceneZoomAndPanAnimator.cpp
   QtOpenGlErrorViewer.cpp
   QuaZIPFacade.cpp
-  RenderingParametersDialog.cpp
   SGHierarchyWidget.cpp
   SimplePluginProgressWidget.cpp
   SimpleStringsListSelectionWidget.cpp
@@ -100,11 +97,8 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/CSVImportWizard.ui
   ../designer/CSVParserConfigurationWidget.ui
   ../designer/DoubleStringsListSelectionWidget.ui
-  ../designer/LayerManagerWidget.ui
-  ../designer/GWOverviewWidget.ui
   ../designer/PropertyCreationDialog.ui
   ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui
-  ../designer/RenderingParametersDialog.ui
   ../designer/SimplePluginProgressWidget.ui
   ../designer/SimpleStringsListSelectionWidget.ui
   ../designer/SizeEditor.ui
@@ -125,9 +119,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/GlMainView.h
   ../include/tulip/GlMainWidget.h
   ../include/tulip/GraphPropertiesTableWidget.h
-  ../include/tulip/GWOverviewWidget.h
   ../include/tulip/ItemsListWidget.h
-  ../include/tulip/LayerManagerWidget.h
   ../include/tulip/Morphing.h
   ../include/tulip/NodeLinkDiagramComponent.h
   ../include/tulip/Perspective.h
@@ -135,7 +127,6 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/PluginManager.h
   ../include/tulip/PropertyCreationDialog.h
   ../include/tulip/QtGlSceneZoomAndPanAnimator.h
-  ../include/tulip/RenderingParametersDialog.h
   ../include/tulip/SGHierarchyWidget.h
   ../include/tulip/SimplePluginProgressWidget.h
   ../include/tulip/SimpleStringsListSelectionWidget.h
