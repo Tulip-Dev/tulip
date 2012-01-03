@@ -43,7 +43,7 @@ public slots:
   virtual void centerView();
 
 protected slots:
-  void glMainViewDrawn(tlp::GlMainWidget*,bool graphChanged);
+  virtual void glMainViewDrawn(tlp::GlMainWidget*,bool graphChanged);
 
 protected:
   virtual void setupWidget();
