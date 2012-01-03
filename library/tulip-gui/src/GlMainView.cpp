@@ -33,20 +33,19 @@ void GlMainView::draw(tlp::PluginProgress*) {
 }
 
 void GlMainView::drawOverview(bool generatePixmap) {
-  if(!_overview) {
+  if(_overview == NULL) {
     _overview=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
     addToScene(_overview);
     _overview->setPos(QPointF(0,0));
     generatePixmap=true;
   }
-
   _overview->draw(generatePixmap);
 }
 
 void GlMainView::setupWidget() {
   _glMainWidget = new GlMainWidget(NULL,this);
   setCentralWidget(_glMainWidget);
-  connect(_glMainWidget,SIGNAL(viewDrawn(tlp::GlMainWidget*,bool)),this,SLOT(glMainViewDrawn(tlp::GlMainWidget*,bool)));
+  connect(_glMainWidget,SIGNAL(viewDrawn(GlMainWidget*,bool)),this,SLOT(glMainViewDrawn(GlMainWidget*,bool)));
 }
 
 GlMainWidget* GlMainView::getGlMainWidget() const {
