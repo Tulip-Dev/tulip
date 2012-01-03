@@ -27,6 +27,7 @@
 #include <tulip/PluginContext.h>
 #include <tulip/Plugin.h>
 #include <tulip/TemplateFactory.h>
+#include <tulip/TulipException.h>
 
 /**
  * \addtogroup plugins
@@ -102,8 +103,10 @@ public:
    * @brief This static initialization is called when the plug-in library is loaded, and registers the new plug-in in the
    * Tulip plug-in system.
    */
-  static void initFactory() {
+  static void initFactory(bool initing = false) {
     if (!factory) {
+      if (initing == false)
+	throw TulipException("Error: tlp::initTulipLib() has to be called before loading a Tulip algorithm plugin");
       factory = new TemplateFactory<AlgorithmPlugin, Algorithm, AlgorithmContext >;
     }
   }

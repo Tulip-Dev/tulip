@@ -162,7 +162,7 @@ void tlp::initTulipLib(const char* appDirPath) {
   TulipBitmapDir=TulipShareDir+"bitmaps/";
 
   // initialize factories
-  AlgorithmPlugin::initFactory();
+  AlgorithmPlugin::initFactory(true);
   ImportModuleFactory::initFactory();
   ExportModuleFactory::initFactory();
 
