@@ -36,9 +36,7 @@ NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   getGlMainWidget()->setData(graph(), data);
   registerTriggers();
-  connect(getGlMainWidget(),SIGNAL(viewDrawn(GlMainWidget*,bool)),this,SLOT(glMainWidgetDrawn(GlMainWidget *,bool)));
-
-  this->drawOverview(true);
+  drawOverview();
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
@@ -69,10 +67,6 @@ bool NodeLinkDiagramComponent::isLayoutProperty(tlp::PropertyInterface* pi) cons
 
 QList<QWidget*> NodeLinkDiagramComponent::configurationWidgets() const {
   return QList<QWidget*>();
-}
-
-void NodeLinkDiagramComponent::glMainWidgetDrawn(GlMainWidget *,bool graphChanged) {
-  drawOverview(graphChanged);
 }
 
 VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0")

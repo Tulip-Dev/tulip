@@ -35,12 +35,15 @@ public:
   virtual ~GlMainView();
 
   tlp::GlMainWidget* getGlMainWidget() const;
-  GlOverviewGraphicsItem *overview;
+  GlOverviewGraphicsItem *_overview;
 
 public slots:
   virtual void draw(tlp::PluginProgress* pluginProgress);
-  virtual void drawOverview(bool generatePixmap);
+  virtual void drawOverview(bool generatePixmap=true);
   virtual void centerView();
+
+protected slots:
+  void glMainViewDrawn(tlp::GlMainWidget*,bool graphChanged);
 
 protected:
   virtual void setupWidget();
