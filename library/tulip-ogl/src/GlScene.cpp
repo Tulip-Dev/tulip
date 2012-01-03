@@ -114,6 +114,10 @@ void GlScene::initGlParameters() {
 void GlScene::draw() {
   initGlParameters();
 
+#ifdef ENABLE_RENDERING_TIME_DISPLAY
+  double lastTime=omp_get_wtime();
+#endif
+
   /**********************************************************************
   LOD Compute
   **********************************************************************/
@@ -165,6 +169,11 @@ void GlScene::draw() {
       ((*it).entity)->draw((*it).lod,camera);
     }
   }
+
+#ifdef ENABLE_RENDERING_TIME_DISPLAY
+  cout << "scene draw time : " << (int)((omp_get_wtime()-lastTime)*1000) << " ms" << endl;
+  lastTime=omp_get_wtime();
+#endif
 }
 
 void GlScene::addLayer(GlLayer *layer) {
