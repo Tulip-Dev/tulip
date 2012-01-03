@@ -19,6 +19,7 @@
 #ifndef OBSERVABLE_H
 #define OBSERVABLE_H
 
+#include <tulip/TulipException.h>
 #include <tulip/ForEach.h>
 #include <tulip/vectorgraph.h>
 #include <set>
@@ -37,17 +38,10 @@ namespace tlp {
   * @see Observer
   * @see Observable
   **/
-class  TLP_SCOPE OLOException : public std::exception {
+  class  TLP_SCOPE OLOException : public tlp::TulipException {
 public:
-  OLOException(const std::string &desc):desc(desc) {
+  OLOException(const std::string &desc):tlp::TulipException(desc) {
   }
-  virtual ~OLOException() throw () {
-  }
-  virtual const char* what() const throw() {
-    return desc.c_str();
-  }
-private:
-  std::string desc;
 };
 //=======================================
 /**
