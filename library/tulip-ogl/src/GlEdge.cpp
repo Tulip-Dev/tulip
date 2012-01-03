@@ -177,6 +177,9 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
 
   std::string edgeTexture = data->getElementTexture()->getEdgeValue(e);
 
+  const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
+  unsigned nbBends = bends.size();
+
   if(lodSize>-5 && lodSize<5 && data->getGlVertexArrayManager()->renderingIsBegin() && (!data->parameters->getFeedbackRender()) && data->getElementShape()->getEdgeValue(e)==POLYLINESHAPE) {
     data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
     return;
@@ -185,7 +188,7 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
            && !data->parameters->isEdge3D()
            && !data->parameters->getFeedbackRender()
            && !data->parameters->isViewArrow()
-           && data->getElementShape()->getEdgeValue(e) == POLYLINESHAPE
+           && (data->getElementShape()->getEdgeValue(e) == POLYLINESHAPE || nbBends == 0)
            && edgeTexture == "") {
     data->getGlVertexArrayManager()->activateQuadEdgeDisplay(this,selected);
     return;
@@ -231,9 +234,6 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
 
   Color srcCol, tgtCol;
   getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
-
-  const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
-  unsigned nbBends = bends.size();
 
   if (nbBends == 0 && (source == target)) { //a loop without bends
     //draw a nice loop;
