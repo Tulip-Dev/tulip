@@ -39,9 +39,6 @@ public:
 
 protected:
   void graphChanged(tlp::Graph *);
-
-protected slots:
-  void glMainWidgetDrawn(GlMainWidget *,bool);
 };
 }
 

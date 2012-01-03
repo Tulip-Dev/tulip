@@ -303,7 +303,7 @@ signals:
   /**
    * This signal is emit when GlMainWidget::draw() is call
    */
-  void viewDrawn(GlMainWidget *glWidget,bool graphChanged);
+  void viewDrawn(tlp::GlMainWidget *glWidget,bool graphChanged);
 
   void glResized(int w,int h);
 

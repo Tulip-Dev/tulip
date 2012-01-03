@@ -22,7 +22,7 @@
 
 using namespace tlp;
 
-GlMainView::GlMainView():overview(NULL) {
+GlMainView::GlMainView(): _overview(NULL) {
 }
 
 GlMainView::~GlMainView() {
@@ -33,20 +33,20 @@ void GlMainView::draw(tlp::PluginProgress*) {
 }
 
 void GlMainView::drawOverview(bool generatePixmap) {
-  if(!overview) {
-    overview=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
-    addToScene(overview);
-    overview->setPos(QPointF(0,0));
+  if(!_overview) {
+    _overview=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
+    addToScene(_overview);
+    _overview->setPos(QPointF(0,0));
     generatePixmap=true;
   }
 
-  overview->draw(generatePixmap);
+  _overview->draw(generatePixmap);
 }
 
 void GlMainView::setupWidget() {
   _glMainWidget = new GlMainWidget(NULL,this);
   setCentralWidget(_glMainWidget);
-
+  connect(_glMainWidget,SIGNAL(viewDrawn(tlp::GlMainWidget*,bool)),this,SLOT(glMainViewDrawn(tlp::GlMainWidget*,bool)));
 }
 
 GlMainWidget* GlMainView::getGlMainWidget() const {
@@ -55,4 +55,8 @@ GlMainWidget* GlMainView::getGlMainWidget() const {
 
 void GlMainView::centerView() {
   getGlMainWidget()->getScene()->centerScene();
+}
+
+void GlMainView::glMainViewDrawn(GlMainWidget *, bool graphChanged) {
+  drawOverview(graphChanged);
 }
