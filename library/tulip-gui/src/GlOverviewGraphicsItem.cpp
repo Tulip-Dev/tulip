@@ -45,11 +45,11 @@ GlOverviewGraphicsItem::~GlOverviewGraphicsItem() {
     delete glFrameBuffer;
 }
 
-void GlOverviewGraphicsItem::setSize(unsigned int width, unsigned int height){
+void GlOverviewGraphicsItem::setSize(unsigned int width, unsigned int height) {
   this->width=width;
   this->height=height;
 
-  if(glFrameBuffer){
+  if(glFrameBuffer) {
     delete glFrameBuffer;
     glFrameBuffer=NULL;
   }
