@@ -108,28 +108,16 @@ void GlGraphComposite::treatEvent(const Event& evt) {
 
   if (graphEvent) {
     switch(graphEvent->getType()) {
-    case GraphEvent::TLP_ADD_NODE:
-      nodesModified=true;
-      graphRenderer->setGraphModified(true);
-      break;
 
+    case GraphEvent::TLP_ADD_NODE:
     case GraphEvent::TLP_DEL_NODE:
       nodesModified=true;
       graphRenderer->setGraphModified(true);
       break;
 
     case GraphEvent::TLP_ADD_EDGE:
-      graphRenderer->setGraphModified(true);
-      break;
-
     case GraphEvent::TLP_DEL_EDGE:
-      graphRenderer->setGraphModified(true);
-      break;
-
     case GraphEvent::TLP_REVERSE_EDGE:
-      graphRenderer->setGraphModified(true);
-      break;
-
     case GraphEvent::TLP_AFTER_SET_ENDS:
       graphRenderer->setGraphModified(true);
       break;
