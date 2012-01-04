@@ -91,34 +91,17 @@ vector<node>              OLOObject::delayedDelNode;
 bool                      OLOObject::_initialized = OLOObject::init();
 bool                      Observable::eventQueued = false;
 //----------------------------------
-OLOObject::OLOObject() {
-#ifdef _OPENMP
-  #pragma omp critical(OLOGraphUpdate)
-#endif
-  {
-    n = oGraph.addNode();
-    oPointer[n] = this;
-    oAlive[n]   = true;
+  OLOObject::OLOObject() {
 #ifndef NDEBUG
-    sent = received = 0;
+  sent = received = 0;
 #endif
-  }
   //cout << "[OLO node] created:" << n.id << "::" << this << endl;
 }
 //----------------------------------
-OLOObject::OLOObject(const OLOObject &) {
-#ifdef _OPENMP
-  #pragma omp critical(OLOGraphUpdate)
-#endif
-  {
-    n = oGraph.addNode();
-    oPointer[n] = this;
-    oAlive[n]   = true;
-
+  OLOObject::OLOObject(const OLOObject &) {
 #ifndef NDEBUG
-    sent = received = 0;
+  sent = received = 0;
 #endif
-  }
   //cout << "[OLO node] created (copy constructor):" << n.id << "::" << this << endl;
 }
 //----------------------------------
@@ -130,38 +113,51 @@ OLOObject& OLOObject::operator=(const OLOObject &) {
 }
 //----------------------------------
 OLOObject::~OLOObject() {
+  if (_n.isValid() == false)
+    return;
 #ifdef _OPENMP
   #pragma omp critical(OLOGraphUpdate)
 #endif
   {
-    if (!oAlive[n])
+    if (!oAlive[_n])
       throw OLOException("OLO object has already been deleted, possible double free!!!");
 
     //cout << "[OLO node] destructor:" << n.id  << "::" << this << endl;
-    oAlive[n] = false;
+    oAlive[_n] = false;
 
     if (notifying == 0 && unholding == 0 && holdCounter == 0) {
-      oGraph.delNode(n);
+      oGraph.delNode(_n);
       //cout << "[OLO node] deleted:" << n.id << "::" << this << endl;
     }
     else {
-      delayedDelNode.push_back(n);
+      delayedDelNode.push_back(_n);
       //cout << "[OLO node] delayed delete:" << n.id << "::" << this << endl;
-      oGraph.delEdges(n);
+      oGraph.delEdges(_n);
     }
   }
 }
 //----------------------------------
 Iterator<node> * OLOObject::getInObjects() const {
-  return new FilterIterator<node, AliveFilter>(oGraph.getInNodes(n), objectAlive);
+  assert(_n.isValid());
+  return new FilterIterator<node, AliveFilter>(oGraph.getInNodes(_n), objectAlive);
 }
 //----------------------------------
 Iterator<node> * OLOObject::getOutObjects() const {
-  return new FilterIterator<node, AliveFilter>(oGraph.getOutNodes(n), objectAlive);
+  assert(_n.isValid());
+  return new FilterIterator<node, AliveFilter>(oGraph.getOutNodes(_n), objectAlive);
 }
 //----------------------------------
 node OLOObject::getNode() const {
-  return n;
+  return _n;
+}
+//----------------------------------
+node OLOObject::getBoundNode() {
+  if (_n.isValid() == false) {
+    _n = oGraph.addNode();
+    oPointer[_n] = this;
+    oAlive[_n] = true;
+  }
+  return _n;
 }
 //----------------------------------
 unsigned int OLOObject::getSent() const {
@@ -219,8 +215,23 @@ Observable* Event::sender() const {
   return dynamic_cast<Observable*>(OLOObject::getObject(_sender)); /** only Observable can be use to create event */
 }
 //=================================
+// define a class for an empty Iterator of Observable *
+class NoObservableIterator : public Iterator<Observable *> {
+public:
+  Observable* next() {
+    return NULL;
+  }
+  bool hasNext() {
+    return false;
+  }
+};
+//=================================
 Iterator<Observable *> *Observable::getObservables() const {
-  return new ConversionIterator<node, Observable*, Node2Observable>(getOutObjects(), node2Observable);
+  if (isBound())
+    return
+      new ConversionIterator<node, Observable*,
+			     Node2Observable>(getOutObjects(), node2Observable);
+  return new NoObservableIterator();
 }
 //=================================
 void Observable::treatEvents(const  std::vector<Event> &events ) {
@@ -326,11 +337,13 @@ void Observable::unholdObservers() {
 }
 //----------------------------------------
 Iterator<Observable *> *Observable::getOnlookers() const {
-  if (!oAlive[n]) {
-    throw OLOException("getObservers called on a deleted Observable");
+  if (isBound()) {
+    if (!oAlive[_n]) {
+      throw OLOException("getObservers called on a deleted Observable");
+    }
+    return new ConversionIterator<node, Observable*, Node2Onlooker>(getInObjects(), node2Onlooker);
   }
-
-  return new ConversionIterator<node, Observable*, Node2Onlooker>(getInObjects(), node2Onlooker);
+  return new NoObservableIterator();
 }
 //----------------------------------------
 void Observable::addOnlooker(const Observable &obs, OLOEDGETYPE type) const {
@@ -338,16 +351,20 @@ void Observable::addOnlooker(const Observable &obs, OLOEDGETYPE type) const {
   #pragma omp critical(OLOGraphUpdate)
 #endif
   {
-    if (!oAlive[n]) {
+    if (isBound() && !oAlive[_n]) {
       throw OLOException("addObserver called on a deleted Observable");
     }
 
     // check for an existing link
-    edge link(oGraph.existEdge(obs.getNode(), getNode()));
+    edge link;
+    if (isBound() && obs.isBound())
+      link = oGraph.existEdge(obs.getNode(), getNode());
 
     if (!link.isValid()) {
       // add new link
-      link = oGraph.addEdge(obs.getNode(), getNode());
+      // at this time both Observables need to be bound
+      link = oGraph.addEdge(((Observable &) obs).getBoundNode(),
+			    ((Observable *) this)->getBoundNode());
       oType[link] = type;
     }
     else {
@@ -390,7 +407,7 @@ void Observable::observableDeleted() {
 }
 //----------------------------------------
 void Observable::sendEvent(const Event &message) {
-  if (!oGraph.isElement(n) || !oAlive[n]) {
+  if (!oGraph.isElement(_n) || !oAlive[_n]) {
     throw OLOException("Notify called on a deleted Observable");
   }
 
@@ -403,14 +420,14 @@ void Observable::sendEvent(const Event &message) {
     //return;
   }
 
-  node backn = n; /** to keep trace of the node if the observable is deleted during the notification, in that crazy case, (*this) is dead thus n is not accessible*/
+  node backn = _n; /** to keep trace of the node if the observable is deleted during the notification, in that crazy case, (*this) is dead thus n is not accessible*/
   ++notifying;
   //create two separate list of observer & listeners
   //could be extended if we need recorders
   vector< pair<Observable *, node> > observerTonotify;
   vector< pair<Observable *, node> > listenerTonotify;
   edge e;
-  forEach(e, oGraph.getInEdges(n)) {
+  forEach(e, oGraph.getInEdges(_n)) {
     node src(oGraph.source(e));
 
     if (oAlive[src]) {
@@ -436,7 +453,7 @@ void Observable::sendEvent(const Event &message) {
   vector< pair<Observable *, node> >::const_iterator itobs;
 
   for(itobs = listenerTonotify.begin(); itobs != listenerTonotify.end(); ++itobs) {
-    if (itobs->second == n && message.type() == Event::TLP_DELETE) {
+    if (itobs->second == _n && message.type() == Event::TLP_DELETE) {
       cout << "[OLO info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
       continue;
     }
@@ -457,7 +474,7 @@ void Observable::sendEvent(const Event &message) {
   vector<Event> tmp(1, message);
 
   for(itobs = observerTonotify.begin(); itobs != observerTonotify.end(); ++itobs) {
-    if (itobs->second == n && message.type() == Event::TLP_DELETE) {
+    if (itobs->second == _n && message.type() == Event::TLP_DELETE) {
       cout << "[OLO info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
       continue;
     }
@@ -496,11 +513,15 @@ void Observable::updateObserverGraph() {
 }
 //----------------------------------------
 void Observable::removeOnlooker(const Observable &obs, OLOEDGETYPE type) const {
+  // nothing to do if one of the observables is unbound
+  if (!isBound() || !obs.isBound())
+    return;
+
 #ifdef _OPENMP
   #pragma omp critical(OLOGraphUpdate)
 #endif
   {
-    if (!oAlive[n]) {
+    if (!oAlive[_n]) {
       throw OLOException("removeOnlooker called on a deleted Observable");
     }
 
@@ -516,25 +537,20 @@ void Observable::removeOnlooker(const Observable &obs, OLOEDGETYPE type) const {
 }
 //----------------------------------------
 void Observable::removeObserver(Observable  * const obs) const {
-  if (!oAlive[n]) {
-    throw OLOException("removeObserver called on a deleted Observable");
-  }
-
-  assert(obs != 0);
+  assert(obs != NULL);
   removeOnlooker(*obs, OBSERVER);
 }
 //----------------------------------------
 void Observable::removeListener(Observable  * const obs) const {
-  if (!oAlive[n]) {
-    throw OLOException("removeListner called on a deleted Observable");
-  }
-
-  assert(obs != 0);
+  assert(obs != NULL);
   removeOnlooker(*obs, LISTENER);
 }
 //----------------------------------------
 void Observable::notifyObservers() {
-  if (!oAlive[n]) {
+  if (!isBound())
+    return;
+
+  if (!oAlive[_n]) {
     throw OLOException("notifyObservers called on a deleted Observable");
   }
 
@@ -549,6 +565,8 @@ void Observable::notifyDestroy() {
 }
 //----------------------------------------
 unsigned int Observable::countObservers() const {
+  if (!isBound())
+    return 0;
   unsigned int result = 0;
   node n;
   forEach(n, (new FilterIterator<node, LinkFilter<OBSERVER> >(oGraph.getInNodes(getNode()), LinkFilter<OBSERVER>(oGraph, oType, getNode()))))
@@ -565,6 +583,8 @@ unsigned int Observable::countOnLookers() const {
 }
 //----------------------------------------
 unsigned int Observable::countListeners() const {
+  if (!isBound())
+    return 0;
   unsigned int result = 0;
   node n;
   forEach(n, (new FilterIterator<node, LinkFilter<LISTENER> >(oGraph.getInNodes(getNode()), LinkFilter<LISTENER>(oGraph, oType, getNode()))))
@@ -573,11 +593,14 @@ unsigned int Observable::countListeners() const {
 }
 //----------------------------------------
 bool Observable::hasOnlookers() const {
-  if (!oAlive[n]) {
+  if (!isBound())
+    return false;
+
+  if (!oAlive[_n]) {
     throw OLOException("hasOnlookers called on a deleted Observable");
   }
 
-  return oGraph.indeg(getNode()) > 0;
+  return oGraph.indeg(_n) > 0;
 }
 //----------------------------------------
 /* void Observable::removeOnlookers() {
