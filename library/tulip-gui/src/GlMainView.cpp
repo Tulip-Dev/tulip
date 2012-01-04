@@ -39,6 +39,7 @@ void GlMainView::drawOverview(bool generatePixmap) {
     _overview->setPos(QPointF(0,0));
     generatePixmap=true;
   }
+
   _overview->draw(generatePixmap);
 }
 
