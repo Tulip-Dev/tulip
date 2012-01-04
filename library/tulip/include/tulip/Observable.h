@@ -38,7 +38,7 @@ namespace tlp {
   * @see Observer
   * @see Observable
   **/
-  class  TLP_SCOPE OLOException : public tlp::TulipException {
+class  TLP_SCOPE OLOException : public tlp::TulipException {
 public:
   OLOException(const std::string &desc):tlp::TulipException(desc) {
   }

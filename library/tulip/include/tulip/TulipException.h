@@ -23,23 +23,23 @@
 #include <string>
 
 namespace tlp {
-  /*@{*/
-  //=======================================
-  /**
-   * @class TulipException
-   * @brief TulipException is a basic class to build exceptions from string
-   **/
-  class  TLP_SCOPE TulipException : public std::exception {
-  public:
+/*@{*/
+//=======================================
+/**
+ * @class TulipException
+ * @brief TulipException is a basic class to build exceptions from string
+ **/
+class  TLP_SCOPE TulipException : public std::exception {
+public:
   TulipException(const std::string &desc):desc(desc) {
-    }
-    virtual ~TulipException() throw () {
-    }
-    virtual const char* what() const throw() {
-      return desc.c_str();
-    }
-  private:
-    std::string desc;
-  };
+  }
+  virtual ~TulipException() throw () {
+  }
+  virtual const char* what() const throw() {
+    return desc.c_str();
+  }
+private:
+  std::string desc;
+};
 }
 #endif // TULIPEXCEPTION

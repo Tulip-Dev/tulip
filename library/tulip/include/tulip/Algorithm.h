@@ -106,7 +106,8 @@ public:
   static void initFactory(bool initing = false) {
     if (!factory) {
       if (initing == false)
-	throw TulipException("Error: tlp::initTulipLib() has to be called before loading a Tulip algorithm plugin");
+        throw TulipException("Error: tlp::initTulipLib() has to be called before loading a Tulip algorithm plugin");
+
       factory = new TemplateFactory<AlgorithmPlugin, Algorithm, AlgorithmContext >;
     }
   }
