@@ -207,7 +207,9 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
   vector<Coord> boxPoints;
   boxPoints.resize(steps * 4);
 
+#ifdef _OPENMP
   #pragma omp parallel for
+#endif
 
   for (int i = 0 ; i < steps; ++i ) {
     float w = delta + i * delta;
