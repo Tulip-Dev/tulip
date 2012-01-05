@@ -34,7 +34,7 @@ class Graph;
 class PluginProgress;
 /*@{*/
 /// Interface for exportModule plug-ins
-class ExportModule:public WithParameter, public WithDependency {
+class TLP_SCOPE ExportModule:public WithParameter, public WithDependency {
 public:
   ///
   ExportModule (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet) {}

@@ -36,7 +36,7 @@ class DataSet;
 * @brief Base class for import plug-ins.
 *
 **/
-class ImportModule :public WithParameter, public WithDependency {
+class TLP_SCOPE ImportModule :public WithParameter, public WithDependency {
 public:
   /**
   * @brief Initializes the DataSet to the one passed in the context.
