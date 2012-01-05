@@ -32,15 +32,15 @@ namespace tlp {
 class TLP_QT_SCOPE InteractorComponent: public QObject {
   Q_OBJECT
 
-  tlp::View* _view;
+  View* _view;
 
 public:
   virtual void init();
   virtual bool eventFilter(QObject*, QEvent*);
   virtual void clear() {}
 
-  void setView(tlp::View* view);
-  tlp::View* view() const;
+  virtual void setView(View* view);
+  View* view() const;
 };
 
 /**
