@@ -48,7 +48,7 @@ namespace tlp {
 
 //====================================================
 
-GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewOrtho(true),glGraphComposite(NULL), clearBufferAtDraw(true) {
+GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewOrtho(true),glGraphComposite(NULL),graphLayer(NULL), clearBufferAtDraw(true) {
 
   if(calculator!=NULL)
     lodCalculator=calculator;
