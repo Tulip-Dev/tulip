@@ -18,11 +18,12 @@
  */
 #include "tulip/GlMainView.h"
 #include <tulip/GlMainWidget.h>
-
+#include <tulip/SceneConfigWidget.h>
 
 using namespace tlp;
 
-GlMainView::GlMainView(): _overview(NULL) {
+GlMainView::GlMainView(): _overview(NULL), _sceneConfigurationWidget(NULL) {
+
 }
 
 GlMainView::~GlMainView() {
@@ -45,6 +46,9 @@ void GlMainView::drawOverview(bool generatePixmap) {
 
 void GlMainView::setupWidget() {
   _glMainWidget = new GlMainWidget(NULL,this);
+  delete _sceneConfigurationWidget;
+  _sceneConfigurationWidget = new SceneConfigWidget();
+  _sceneConfigurationWidget->setGlMainWidget(_glMainWidget);
   setCentralWidget(_glMainWidget);
   connect(_glMainWidget,SIGNAL(viewDrawn(GlMainWidget*,bool)),this,SLOT(glMainViewDrawn(GlMainWidget*,bool)));
 }
@@ -59,4 +63,8 @@ void GlMainView::centerView() {
 
 void GlMainView::glMainViewDrawn(GlMainWidget *, bool graphChanged) {
   drawOverview(graphChanged);
+}
+
+QList<QWidget*> GlMainView::configurationWidgets() const {
+  return QList<QWidget*>() << _sceneConfigurationWidget;
 }

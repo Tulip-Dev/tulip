@@ -87,6 +87,7 @@ SET(SRCS
   FramedGraphicsProxyWidget.cpp
   CoordEditor.cpp
   GlOverviewGraphicsItem.cpp
+  SceneConfigWidget.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -105,6 +106,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/WorkspacePanel.ui
   ../designer/Workspace.ui
   ../designer/CoordEditor.ui
+  ../designer/SceneConfigWidget.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -159,6 +161,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/ModalPopup.h
   ../include/tulip/CoordEditor.h
   ../include/tulip/GlOverviewGraphicsItem.h
+  ../include/tulip/SceneConfigWidget.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
@@ -166,9 +169,9 @@ QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
 ADD_DEFINITIONS(-DQT_DLL)
 ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
 
-INCLUDE_DIRECTORIES(../include ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${QuazipInclude} ${QT_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(../include ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${QuazipInclude} ${QxtInclude} ${QT_INCLUDE_DIR})
 ADD_LIBRARY(${LibTulipGUIName} SHARED ${SRCS} ${MOC_SRCS} ${RCC_SRCS} ${UI_HEADERS})
-TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOglName} quazip ${QT_MODELS_TESTS_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOglName} quazip ${QT_MODELS_TESTS_LIBRARY} qxt)
 
 INSTALL(TARGETS ${LibTulipGUIName}
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_gui

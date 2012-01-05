@@ -307,6 +307,8 @@ signals:
 
   void glResized(int w,int h);
 
+  void graphChanged(tlp::Graph*);
+
 public :
 
   /**

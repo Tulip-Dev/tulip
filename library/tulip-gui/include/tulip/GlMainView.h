@@ -23,19 +23,21 @@
 #include "tulip/GlOverviewGraphicsItem.h"
 
 namespace tlp {
-
+class SceneConfigWidget;
 class GlMainWidget;
 
 class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   Q_OBJECT
 
   tlp::GlMainWidget* _glMainWidget;
+  tlp::GlOverviewGraphicsItem* _overview;
+  tlp::SceneConfigWidget* _sceneConfigurationWidget;
+
 public:
   GlMainView();
   virtual ~GlMainView();
-
   tlp::GlMainWidget* getGlMainWidget() const;
-  GlOverviewGraphicsItem *_overview;
+  virtual QList<QWidget*> configurationWidgets() const;
 
 public slots:
   virtual void draw(tlp::PluginProgress* pluginProgress);

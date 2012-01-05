@@ -189,6 +189,7 @@ void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
   }
 
   scene.getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new ExtendedMetaNodeRenderer(scene.getGlGraphComposite()->getInputData()));
+  emit graphChanged(graph);
 }
 //==================================================
 DataSet GlMainWidget::getData() {
@@ -248,6 +249,7 @@ void GlMainWidget::setGraph(Graph *graph) {
   scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
 
   delete oldGraphComposite;
+  emit graphChanged(graph);
 }
 //==================================================
 Graph *GlMainWidget::getGraph() {

@@ -109,6 +109,7 @@ public:
   /**
     @return a list of widgets that can be used to set up the view.
     Since several widgets can be retrived, user will be able to select them from a combo box where each widget will be identified by its windowsTitle.
+    @warning This method must not instantiate configuration widgets on the fly.
     */
   virtual QList<QWidget*> configurationWidgets() const;
 

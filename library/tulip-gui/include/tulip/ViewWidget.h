@@ -98,11 +98,6 @@ protected:
     */
   void setCentralWidget(QWidget*);
 
-//  /**
-//    @brief Qt event filtering for internal purpose.
-//    @warning If you are to overload the eventFilter method in your subclass. You'll have to call the ViewWidget::eventFilter first.
-//    */
-//  virtual bool eventFilter(QObject *, QEvent *);
 };
 
 }
