@@ -91,14 +91,14 @@ vector<node>              OLOObject::delayedDelNode;
 bool                      OLOObject::_initialized = OLOObject::init();
 bool                      Observable::eventQueued = false;
 //----------------------------------
-  OLOObject::OLOObject() {
+OLOObject::OLOObject() {
 #ifndef NDEBUG
   sent = received = 0;
 #endif
   //cout << "[OLO node] created:" << n.id << "::" << this << endl;
 }
 //----------------------------------
-  OLOObject::OLOObject(const OLOObject &) {
+OLOObject::OLOObject(const OLOObject &) {
 #ifndef NDEBUG
   sent = received = 0;
 #endif
@@ -115,6 +115,7 @@ OLOObject& OLOObject::operator=(const OLOObject &) {
 OLOObject::~OLOObject() {
   if (_n.isValid() == false)
     return;
+
 #ifdef _OPENMP
   #pragma omp critical(OLOGraphUpdate)
 #endif
@@ -157,6 +158,7 @@ node OLOObject::getBoundNode() {
     oPointer[_n] = this;
     oAlive[_n] = true;
   }
+
   return _n;
 }
 //----------------------------------
@@ -230,7 +232,8 @@ Iterator<Observable *> *Observable::getObservables() const {
   if (isBound())
     return
       new ConversionIterator<node, Observable*,
-			     Node2Observable>(getOutObjects(), node2Observable);
+      Node2Observable>(getOutObjects(), node2Observable);
+
   return new NoObservableIterator();
 }
 //=================================
@@ -341,8 +344,10 @@ Iterator<Observable *> *Observable::getOnlookers() const {
     if (!oAlive[_n]) {
       throw OLOException("getObservers called on a deleted Observable");
     }
+
     return new ConversionIterator<node, Observable*, Node2Onlooker>(getInObjects(), node2Onlooker);
   }
+
   return new NoObservableIterator();
 }
 //----------------------------------------
@@ -357,6 +362,7 @@ void Observable::addOnlooker(const Observable &obs, OLOEDGETYPE type) const {
 
     // check for an existing link
     edge link;
+
     if (isBound() && obs.isBound())
       link = oGraph.existEdge(obs.getNode(), getNode());
 
@@ -364,7 +370,7 @@ void Observable::addOnlooker(const Observable &obs, OLOEDGETYPE type) const {
       // add new link
       // at this time both Observables need to be bound
       link = oGraph.addEdge(((Observable &) obs).getBoundNode(),
-			    ((Observable *) this)->getBoundNode());
+      ((Observable *) this)->getBoundNode());
       oType[link] = type;
     }
     else {
@@ -567,6 +573,7 @@ void Observable::notifyDestroy() {
 unsigned int Observable::countObservers() const {
   if (!isBound())
     return 0;
+
   unsigned int result = 0;
   node n;
   forEach(n, (new FilterIterator<node, LinkFilter<OBSERVER> >(oGraph.getInNodes(getNode()), LinkFilter<OBSERVER>(oGraph, oType, getNode()))))
@@ -585,6 +592,7 @@ unsigned int Observable::countOnLookers() const {
 unsigned int Observable::countListeners() const {
   if (!isBound())
     return 0;
+
   unsigned int result = 0;
   node n;
   forEach(n, (new FilterIterator<node, LinkFilter<LISTENER> >(oGraph.getInNodes(getNode()), LinkFilter<LISTENER>(oGraph, oType, getNode()))))

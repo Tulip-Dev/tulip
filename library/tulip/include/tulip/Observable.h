@@ -130,7 +130,9 @@ private:
     * if _n is not valid it is then bind to a new added node
     */
   tlp::node getBoundNode();
-  bool isBound() const { return _n.isValid(); }
+  bool isBound() const {
+    return _n.isValid();
+  }
 
 #ifndef NDEBUG
   unsigned int sent; /* counter of sent notification */
