@@ -60,8 +60,6 @@ public:
   void addEdges(Iterator<edge>* edges);
   void delNode(const tlp::node n, bool deleteInAllGraphs = false);
   void delEdge(const tlp::edge e, bool deleteInAllGraphs = false);
-  void _DEPRECATED delAllNode(const node);
-  void _DEPRECATED delAllEdge(const edge);
   void setEdgeOrder(const node,const std::vector<edge> & );
   void swapEdgeOrder(const node,const edge , const edge );
   //=========================================================================
@@ -88,7 +86,8 @@ public:
   virtual void reserveEdges(unsigned int nbEdges);
   //=========================================================================
   // updates management
-  virtual void push(bool unpopAllowed = true);
+  virtual void push(bool unpopAllowed = true,
+		    std::vector<PropertyInterface*>* propertiesToPreserveOnPop= NULL);
   virtual void pop(bool unpopAllowed = true);
   virtual bool nextPopKeepPropertyUpdates(PropertyInterface* prop);
   virtual void unpop();

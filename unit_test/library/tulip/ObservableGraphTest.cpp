@@ -213,7 +213,7 @@ public:
     beforeDelLocalPropertyCalledGraphs.push_back(g);
   }
 
-  void afterDelInheritedProperty(Graph *g, const std::string &pName) {
+  void afterDelInheritedProperty(Graph *g, const std::string &) {
     afterDelInheritedPropertyCalledGraphs.push_back(g);
   }
 

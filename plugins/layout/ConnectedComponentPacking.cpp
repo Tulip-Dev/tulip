@@ -75,7 +75,7 @@ bool ConnectedComponentPacking::run() {
   DoubleProperty *rotation = 0;
   string complexity("auto");
 
-  workingGraph = tlp::newCloneSubGraph(graph, "workingGraph");
+  workingGraph = graph->addCloneSubGraph("workingGraph");
 
   if ( dataSet!=0 ) {
     dataSet->get("coordinates", layout);

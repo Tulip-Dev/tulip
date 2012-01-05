@@ -45,7 +45,7 @@ void ExtendedClusterOperationTest::setUp() {
   edges.push_back(graph->addEdge(nodes[1], nodes[4]));
   edges.push_back(graph->addEdge(nodes[2], nodes[3]));
 
-  quotient = tlp::newCloneSubGraph(graph);
+  quotient = graph->addCloneSubGraph();
 
   group.insert(nodes[0]);
   group.insert(nodes[1]);
@@ -128,7 +128,8 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   Graph * subgraph = 0;
   bool find = false;
   forEach(subgraph, graph->getSubGraphs()) {
-    string name = subgraph->getAttribute<string>("name");
+    string name;
+    subgraph->getAttribute<string>("name", name);
 
     if (name == "unnamed") {
       find = true;

@@ -71,7 +71,7 @@ public:
   }
   ~DotImport() {}
 
-  bool import(const string &) {
+  bool importGraph() {
 
     // Open input stream
     string fn;

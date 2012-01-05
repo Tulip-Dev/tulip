@@ -100,7 +100,7 @@ public:
     return false;
   }
 
-  bool import(const string &) {
+  bool importGraph() {
     string name2;
 
     if (!dataSet->get("file::name", name2))

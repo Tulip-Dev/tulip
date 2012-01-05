@@ -412,7 +412,7 @@ bool HierarchicalGraph::run() {
 
   //========================================================================
   // Build a clone of this graph
-  Graph *mySGraph = tlp::newCloneSubGraph(graph,"tmp clone");
+  Graph *mySGraph = graph->addCloneSubGraph("tmp clone");
 
   //if the graph is not acyclic we reverse edges to make it acyclic
   vector<tlp::SelfLoops> listSelfLoops;

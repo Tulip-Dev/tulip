@@ -91,7 +91,7 @@ public:
     return result;
   }
 
-  bool import(const string &) {
+  bool importGraph() {
     srand(clock());
     unsigned int minSize  = 100;
     unsigned int maxSize  = 1000;

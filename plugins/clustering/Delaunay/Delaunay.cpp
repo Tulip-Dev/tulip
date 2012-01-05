@@ -13,7 +13,7 @@ public :
 
   bool run() {
     tlp::Observable::holdObservers();
-    tlp::Graph* delaunaySubGraph = tlp::newCloneSubGraph(graph, "Delaunay");
+    tlp::Graph* delaunaySubGraph = graph->addCloneSubGraph("Delaunay");
 
     tlp::edge e;
     forEach(e, delaunaySubGraph->getEdges()) {

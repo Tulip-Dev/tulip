@@ -991,7 +991,7 @@ void PushPopTest::testMetaNode() {
   graph->push();
 
   // create clone graph
-  Graph* clone = tlp::newCloneSubGraph(graph, "groups");
+  Graph* clone = graph->addCloneSubGraph("groups");
 
   // create meta node
   node metaNode = clone->createMetaNode(tmp);

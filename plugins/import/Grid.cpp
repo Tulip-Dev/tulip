@@ -181,7 +181,7 @@ public:
   }
 
 
-  bool import(const string &) {
+  bool importGraph() {
     unsigned int width = 10;
     unsigned int height = 10;
     bool isTore = false;

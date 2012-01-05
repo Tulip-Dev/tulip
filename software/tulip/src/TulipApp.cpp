@@ -414,8 +414,9 @@ void TulipApp::closeTab(int index) {
     tabWidget->setCurrentIndex(index);
 
   Graph *graph=tabIndexToController[index]->getGraph()->getRoot();
-
-  QMessageBox::StandardButton answer =askSaveGraph(graph->getAttribute<string>("name"),index);
+  string name;
+  graph->getAttribute<string>("name", name);
+  QMessageBox::StandardButton answer =askSaveGraph(name ,index);
 
   if(answer != QMessageBox::Cancel) {
     Controller *controller=tabIndexToController[index];
@@ -670,8 +671,11 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     Graph *newGraph = tlp::newGraph();
     initializeGraph(newGraph);
 
-    if (s == QString::null)
-      s = newGraph->getAttribute<string>("name").c_str();
+    if (s == QString::null) {
+      string name;
+      newGraph->getAttribute<string>("name", name);
+      s = name.c_str();
+    }
 
     bool result=true;
     QFileInfo tmp(s);
@@ -1044,7 +1048,9 @@ bool TulipApp::closeWin() {
         //while(graph->getRoot()!=graph){
         graph=graph->getRoot();
         //}
-        answer = askSaveGraph(graph->getAttribute<string>("name"),it->first,true);
+	string name;
+	graph->getAttribute<string>("name", name);
+        answer = askSaveGraph(name ,it->first,true);
 
         //If user cancel or click on cancel stop the process
         if(answer == QMessageBox::Cancel) {

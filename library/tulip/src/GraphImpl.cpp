@@ -322,14 +322,6 @@ void GraphImpl::delEdge(const edge e, bool) {
   removeEdge(e);
 }
 //----------------------------------------------------------------
-void GraphImpl::delAllNode(const node n) {
-  delNode(n);
-}
-//----------------------------------------------------------------
-void GraphImpl::delAllEdge(const edge e) {
-  delEdge(e);
-}
-//----------------------------------------------------------------
 void GraphImpl::setEdgeOrder(const node n, const vector<edge> &v) {
   storage.setEdgeOrder(n, v);
 }
@@ -549,7 +541,8 @@ void GraphImpl::unobserveUpdates() {
 }
 //----------------------------------------------------------------
 #define NB_MAX_RECORDERS 10
-void GraphImpl::push(bool unpopAllowed) {
+void GraphImpl::push(bool unpopAllowed,
+		     std::vector<PropertyInterface*>* propsToPreserve) {
   // from now if previous recorders exist
   // they cannot be unpop
   // so delete them
@@ -571,14 +564,19 @@ void GraphImpl::push(bool unpopAllowed) {
 
   while(it != recorders.end()) {
     if (nb == NB_MAX_RECORDERS) {
-      GraphUpdatesRecorder* recorder = (*it);
-      delete recorder;
+      delete (*it);
       recorders.erase(it);
       break;
     }
 
     nb++;
     it++;
+  }
+
+  if (propsToPreserve) {
+    // the properties to preserve do not have to be observed
+    for (unsigned int i = 0; i < propsToPreserve->size(); ++i)
+      recorder->dontObserveProperty((*propsToPreserve)[i]);
   }
 }
 //----------------------------------------------------------------

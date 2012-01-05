@@ -27,8 +27,9 @@ void GraphDecorator::clear() {
 
 //============================================================
 Graph *GraphDecorator::addSubGraph(BooleanProperty *selection,
-                                   unsigned int id) {
-  Graph* sg = graph_component->addSubGraph(selection, id);
+                                   unsigned int id,
+				   std::string name) {
+  Graph* sg = graph_component->addSubGraph(selection, id, name);
   notifyAddSubGraph(sg);
   return sg;
 }
@@ -338,11 +339,6 @@ void GraphDecorator::delNodes(Iterator<node>* itN, bool deleteInAllGraphs) {
 }
 
 //============================================================
-void GraphDecorator::delAllNode(const node n) {
-  delNode(n, true);
-}
-
-//============================================================
 void GraphDecorator::delEdge(const edge e, bool deleteInAllGraphs) {
   notifyDelEdge(e);
   graph_component->delEdge(e, deleteInAllGraphs);
@@ -355,11 +351,6 @@ void GraphDecorator::delEdges(Iterator<edge>* itE, bool deleteInAllGraphs) {
   while(itE->hasNext()) {
     delEdge(itE->next(), deleteInAllGraphs);
   }
-}
-
-//============================================================
-void GraphDecorator::delAllEdge(const edge e) {
-  delEdge(e, true);
 }
 
 //============================================================
@@ -487,8 +478,9 @@ bool GraphDecorator::canPopThenUnpop() {
   return graph_component->canPopThenUnpop();
 }
 //----------------------------------------------------------------
-void GraphDecorator::push(bool unpopAllowed) {
-  return graph_component->push(unpopAllowed);
+void GraphDecorator::push(bool unpopAllowed,
+			  std::vector<PropertyInterface*>* propertiesToPreserveOnPop) {
+  return graph_component->push(unpopAllowed, propertiesToPreserveOnPop);
 }
 //----------------------------------------------------------------
 void GraphDecorator::pop(bool unpopAllowed) {

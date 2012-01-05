@@ -114,7 +114,7 @@ bool MixedModel::run() {
   // give some empirical feedback of what we are doing 1 %
   pluginProgress->progress(1, 1000);
 
-  Pere = tlp::newCloneSubGraph(graph, "Father");
+  Pere = graph->addCloneSubGraph("Father");
   // compute the connected components's subgraphs
   std::vector<std::set<node> > components;
   ConnectedTest::computeConnectedComponents(Pere, components);
@@ -194,7 +194,7 @@ bool MixedModel::run() {
       BooleanProperty resultatAlgoSelection(currentGraph);
       Bfs sp(currentGraph, &resultatAlgoSelection);
       currentGraph->delSubGraph(sp.graph);
-      G = tlp::newSubGraph(currentGraph);
+      G = currentGraph->addSubGraph();
       Iterator<edge> * ite = currentGraph->getEdges();
 
       while(ite->hasNext()) {
@@ -230,7 +230,7 @@ bool MixedModel::run() {
       // cout << "... Planar subGraph computed" << endl;
     }
     else {
-      G = tlp::newCloneSubGraph(currentGraph);
+      G = currentGraph->addCloneSubGraph();
       edge e;
       forEach(e,currentGraph->getEdges())
       edge_planar.push_back(e);

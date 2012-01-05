@@ -60,7 +60,7 @@ public:
   }
   ~PlanarGraph() {}
 
-  bool import(const string &) {
+  bool importGraph() {
     unsigned int nbNodes  = 30;
 
     if (dataSet!=0) {

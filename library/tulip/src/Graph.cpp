@@ -92,19 +92,12 @@ Graph * tlp::newGraph() {
   return new GraphImpl();
 }
 //=========================================================
-Graph * tlp::newSubGraph(Graph *sg, std::string name) {
-  Graph *newGraph = sg->addSubGraph();
-  newGraph->setAttribute("name", name);
-  return newGraph;
+Graph * tlp::newSubGraph(Graph *graph, std::string name) {
+  return graph->addSubGraph(NULL, 0, name);
 }
 //=========================================================
-Graph * tlp::newCloneSubGraph(Graph *sg, std::string name) {
-  BooleanProperty sel1(sg);
-  sel1.setAllNodeValue(true);
-  sel1.setAllEdgeValue(true);
-  Graph *newGraph = sg->addSubGraph(&sel1);
-  newGraph->setAttribute("name", name);
-  return newGraph;
+Graph * tlp::newCloneSubGraph(Graph *graph, std::string name) {
+  return graph->addCloneSubGraph(name);
 }
 //=========================================================
 Graph * tlp::loadGraph(const std::string &filename) {
@@ -129,6 +122,15 @@ bool tlp::saveGraph(Graph *sg, const std::string &filename) {
   return result;
 }
 //=========================================================
+// this method is temporary added here
+// while the deprecated method exists.
+// Will be declared as pure virtual after.
+bool ImportModule::importGraph() {
+  // by default calls the deprecated method
+  std::string str;
+  return import(str);
+}
+
 Graph * tlp::importGraph(const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress, Graph *newGraph) {
 
   if (!ImportModuleFactory::factory->pluginExists(alg)) {
@@ -161,7 +163,7 @@ Graph * tlp::importGraph(const std::string &alg, DataSet &dataSet, PluginProgres
   assert(newImportModule!=0);
   bool result;
 
-  if (!(result=newImportModule->import(""))) {
+  if (!(result=newImportModule->importGraph())) {
     if (newGraphP) delete newGraph;
   }
 
@@ -176,6 +178,14 @@ Graph * tlp::importGraph(const std::string &alg, DataSet &dataSet, PluginProgres
     return newGraph;
 }
 //=========================================================
+// this method is temporary added here
+// while the deprecated method exists.
+// Will be declared as pure virtual after.
+bool ExportModule::exportGraph(std::ostream &os) {
+    // by default calls the deprecated method
+    return exportGraph(os, graph);
+ }
+
 bool tlp::exportGraph(Graph *sg,ostream &os, const std::string &alg,
                       DataSet &dataSet, PluginProgress *plugProgress) {
   if (!ExportModuleFactory::factory->pluginExists(alg)) {
@@ -200,7 +210,7 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const std::string &alg,
   tmp.pluginProgress=tmpProgress;
   ExportModule *newExportModule=ExportModuleFactory::factory->getPluginObject(alg, tmp);
   assert(newExportModule!=0);
-  result=newExportModule->exportGraph(os,sg);
+  result=newExportModule->exportGraph(os);
 
   if (deletePluginProgress) delete tmpProgress;
 
@@ -723,3 +733,16 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 
   return result;
 }
+//=========================================================
+Graph* Graph::addSubGraph(std::string name) {
+  return addSubGraph(NULL, 0, name);
+}
+//=========================================================
+Graph* Graph::addCloneSubGraph(std::string name) {
+  BooleanProperty selection(this);
+  selection.setAllNodeValue(true);
+  selection.setAllEdgeValue(true);
+  return addSubGraph(&selection, 0, name);
+}
+
+

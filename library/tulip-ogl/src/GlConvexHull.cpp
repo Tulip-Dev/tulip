@@ -328,7 +328,10 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
         }
       }
       // add a GlConvexHull for this graph in front of convexHulls
-      convexHullItem->hull = new GlConvexHull(gConvexHull, filledColors, outColors, true, true, graph->getAttribute<string>("name"));
+      string name;
+      graph->getAttribute<string>("name", name);
+      convexHullItem->hull = new GlConvexHull(gConvexHull, filledColors,
+					      outColors, true, true, name);
       convexHullItem->hull->_graph = graph;
     }
 

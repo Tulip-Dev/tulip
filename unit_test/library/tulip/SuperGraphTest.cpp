@@ -182,9 +182,9 @@ void SuperGraphTest::testDegree() {
   graph->clear();
   build(100, 100);
   degreeCheck(graph);
-  Graph *gr = tlp::newCloneSubGraph(graph);
-  Graph *gr1 = tlp::newCloneSubGraph(graph);
-  Graph *gr2 = tlp::newCloneSubGraph(gr1);
+  Graph *gr = graph->addCloneSubGraph();
+  Graph *gr1 = graph->addCloneSubGraph();
+  Graph *gr2 = gr1->addCloneSubGraph();
 
   degreeCheck(graph);
   degreeCheck(gr);
@@ -214,8 +214,8 @@ void SuperGraphTest::testDegree() {
   degreeCheck(gr2);
 
   graph->clear();
-  gr1 = tlp::newCloneSubGraph(graph);
-  gr2 = tlp::newCloneSubGraph(gr1);
+  gr1 = graph->addCloneSubGraph();
+  gr2 = gr1->addCloneSubGraph();
   node n1 = graph->addNode();
   node n2 = graph->addNode();
   node n3 = graph->addNode();
@@ -752,7 +752,8 @@ void SuperGraphTest::testAttributes() {
   float f = 12.12;
   CPPUNIT_ASSERT(!graph->getAttribute("f", f));
   graph->setAttribute("name", string("The Graph"));
-  string name = graph->getAttribute<string>("name");
+  string name;
+  graph->getAttribute<string>("name", name);
   CPPUNIT_ASSERT(name == string("The Graph"));
   CPPUNIT_ASSERT(graph->getAttribute("name", name));
   CPPUNIT_ASSERT(name == string("The Graph"));

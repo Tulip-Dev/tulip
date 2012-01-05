@@ -415,14 +415,6 @@ void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
   }
 }
 //----------------------------------------------------------------
-void GraphView::delAllNode(const node n) {
-  delNode(n, true);
-}
-//----------------------------------------------------------------
-void GraphView::delAllEdge(const edge e) {
-  delEdge(e, true);
-}
-//----------------------------------------------------------------
 void GraphView::setEdgeOrder(const node n,const std::vector<edge> &v ) {
   getRoot()->setEdgeOrder(n,v);
 }
@@ -503,8 +495,9 @@ bool GraphView::canPopThenUnpop() {
   return getRoot()->canPopThenUnpop();
 }
 //----------------------------------------------------------------
-void GraphView::push(bool unpopAllowed) {
-  getRoot()->push(unpopAllowed);
+  void GraphView::push(bool unpopAllowed,
+		       std::vector<PropertyInterface*>* propertiesToPreserveOnPop) {
+    getRoot()->push(unpopAllowed, propertiesToPreserveOnPop);
 }
 //----------------------------------------------------------------
 void GraphView::pop(bool unpopAllowed) {

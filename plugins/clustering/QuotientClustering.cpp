@@ -121,8 +121,11 @@ public:
                         Graph*) {
     if (sgLabel)
       label->setNodeValue(mN, sgLabel->getNodeValue(sg->getOneNode()));
-    else if (useSubGraphName)
-      label->setNodeValue(mN, sg->getAttribute<string>("name"));
+    else if (useSubGraphName) {
+      string name;
+      sg->getAttribute<string>("name", name);
+      label->setNodeValue(mN, name);
+    }
   }
 };
 
@@ -174,10 +177,11 @@ bool QuotientClustering::run() {
   delete itS;
 
   IntegerProperty *opProp = 0, *cardProp = 0;
-  Graph *quotientGraph = tlp::newSubGraph(graph->getRoot());
+  Graph *quotientGraph = graph->getRoot()->addSubGraph();
   stringstream sstr;
   sstr << "quotient of ";
-  string graphName = graph->getAttribute<string>("name");
+  string graphName;
+  graph->getAttribute<string>("name", graphName);
 
   if (graphName.size() == 0)
     sstr << graph->getId();

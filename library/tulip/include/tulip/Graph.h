@@ -142,24 +142,24 @@ TLP_SCOPE Graph* newGraph();
 /**
  * @brief Creates and returns an empty subgraph of the given graph.
  *
- * @deprecated this functions should not be used anymore, please use Graph::addSubGraph() instead.
+ * @deprecated this function should not be used anymore, please use Graph::addSubGraph() instead.
  *
  * @param graph The graph to add an empty subgraph to.
  * @param name The name of the new subgraph. Defaults to "unnamed".
  * @return :Graph* The newly created subgraph.
  **/
-TLP_SCOPE Graph *newSubGraph(Graph *root, std::string name = "unnamed");
+TLP_SCOPE _DEPRECATED Graph *newSubGraph(Graph *root, std::string name = "unnamed");
 
 /**
  * @brief Creates and returns a subgraph of the graph that is equal to root (a clone subgraph).
  *
- * @deprecated A new method should be added to Graph to perform this, because object-oriented programming and stuff.
+ * @deprecated this function should not be used anymore, please use Graph::addCloneSubGraph() instead.
  *
  * @param graph The Graph on which to create a clone subgraph.
  * @param name The name of the newly created subgraph. Defaults to "unnamed".
  * @return :Graph* The newly created clone subgraph.
  **/
-TLP_SCOPE Graph *newCloneSubGraph(Graph *root, std::string name = "unnamed");
+TLP_SCOPE _DEPRECATED Graph *newCloneSubGraph(Graph *root, std::string name = "unnamed");
 
 /**
  * @brief Finds the first node whose input degree equals 0.
@@ -218,11 +218,27 @@ public:
    * It is only used by the Graph loading as subgraphs ids are preserved when saving/loading a Graph.
    *
    * @param selection The elements to add to the new subgraph. Defaults to 0.
-   * @param id The ID you wish to assign to the Graph. It is strongly advised to leave this as default and let Tulip manage subgraph IDs. Defaults to 0.
+   * @param id The ID you wish to assign to the Graph. Defaults to 0. It is strongly advised to keep this as default and let Tulip manage subgraph IDs. 
+   * @param name The name of the newly created subgraph. Defaults to "unnamed".
    * @return :Graph* The newly created subgraph.
    **/
   virtual Graph *addSubGraph(BooleanProperty *selection=0,
-                             unsigned int id = 0)=0;
+                             unsigned int id = 0,
+			     std::string name = "unnamed")=0;
+  /**
+   * @brief Creates and returns a new named sub-graph of this graph.
+   *
+   * @param name The name of the newly created subgraph. Defaults to "unnamed".
+   * @return :Graph* The newly created subgraph.
+   **/
+  Graph *addSubGraph(std::string name);
+  /**
+   * @brief Creates and returns a subgraph of this graph that contains all its elements.
+   *
+   * @param name The name of the newly created subgraph. Defaults to "unnamed".
+   * @return :Graph* The newly created clone subgraph.
+   **/
+  Graph* addCloneSubGraph(std::string name = "unnamed");
   /**
    *  Creates and returns a new sub-graph of the graph
    *  induced by a set of nodes. The sub-graph contains all
@@ -248,13 +264,6 @@ public:
    */
   virtual Graph* getSuperGraph()const =0;
   /**
-   * Deprecated function, use getSuperGraph() instead.
-   */
-  Graph* getFather()const {
-    std::cerr << __PRETTY_FUNCTION__ << " is deprecated, use getSuperGraph() instead." << std::endl;
-    return getSuperGraph();
-  }
-  /**
    * Returns the root graph of the graph hierarchy.
    */
   virtual Graph* getRoot() const =0;
@@ -263,13 +272,6 @@ public:
    * Standard users should never use this function.
    */
   virtual void setSuperGraph(Graph *)=0;
-  /**
-   * Deprecated function, use setSuperGraph() instead.
-   */
-  void _DEPRECATED setFather(Graph *g) {
-    std::cerr << __PRETTY_FUNCTION__ << " is deprecated, use setSuperGraph() instead." << std::endl;
-    setSuperGraph(g);
-  }
   /**
    * Returns an iterator on all the sub-graphs of the graph.
    */
@@ -346,10 +348,6 @@ public:
    */
   virtual void delNodes(Iterator<node>* itN, bool deleteInAllGraphs = false)=0;
   /**
-   * Deletes a node in all the hierarchy of graphs.
-   */
-  virtual _DEPRECATED void delAllNode(const node)=0;
-  /**
    * Adds a new edge in the graph and returns it. This edge is also added in all
    * the super-graph of the graph to maintain the sub-graph relation between graphs.
    */
@@ -397,12 +395,6 @@ public:
    * It is the responsibility of the caller to delete the iterator.
    */
   virtual void delEdges(Iterator<edge>* itE, bool deleteInAllGraphs = false)=0;
-  /**
-   * Deletes an edge in all the hierarchy of graphs.
-   * The ordering of edges around the node
-   * is preserved.
-   */
-  virtual _DEPRECATED void delAllEdge(const edge)=0;
   /**
    * Sets the order of the edges around a node. This operation
    * ensures that adjacent edges of a node will
@@ -517,7 +509,7 @@ public:
   bool getAttribute(const std::string &name, ATTRIBUTETYPE& value) const;
   /// Deprecated version of the previous method.
   template<typename ATTRIBUTETYPE>
-  ATTRIBUTETYPE getAttribute(const std::string &name) const;
+  _DEPRECATED ATTRIBUTETYPE getAttribute(const std::string &name) const;
   /// Untyped accessor returning a copy.
   DataType* getAttribute(const std::string& name) const;
   /// Sets an attribute of the graph.
@@ -672,8 +664,12 @@ public:
    * If the argument unpopAllowed is set to false, the next updates
    * could not be replayed after undone. If some previously undone
    * updates exist they could no longer be replayed.
+   * If the argument propertiesToPreserveOnPop is not null, all the updates
+   * occuring for the elements of this vector will be preserved during
+   * the next call of the pop method.
    */
-  virtual void push(bool unpopAllowed = true)=0;
+  virtual void push(bool unpopAllowed = true,
+		    std::vector<PropertyInterface*>* propertiesToPreserveOnPop= NULL)=0;
   /*
    * Restores a previously marked state of the current root graph
    * in the hierarchy. The restored state does not remain marked.

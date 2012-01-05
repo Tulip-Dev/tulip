@@ -139,7 +139,9 @@ public:
       os << "(cluster " << graph->getId();
 
       if (useOldFormat) {
-        os << " \"" << convert(graph->getAttribute<string>("name")) << "\"";
+	string name;
+	graph->getAttribute<string>("name", name);
+        os << " \"" << convert(name) << "\"";
       }
 
       os << endl;
@@ -517,8 +519,8 @@ public:
     os << ")" << endl;
   }
 
-  bool exportGraph(ostream &os,Graph *currentGraph) {
-    graph=currentGraph->getRoot();
+  bool exportGraph(ostream &os) {
+    graph = graph->getRoot();
     string format(TLP_FILE_VERSION);
 
     // reindex nodes/edges

@@ -49,9 +49,9 @@ void MetaGraphProxyTest::tearDown() {
 //==========================================================
 void MetaGraphProxyTest::testDestroyGraph() {
   //build the hierarchy
-  Graph * g1 = tlp::newCloneSubGraph(graph, "G1");
-  Graph * g2 = tlp::newCloneSubGraph(graph, "G2");
-  Graph * meta1 = tlp::newSubGraph(graph, "META1");
+  Graph * g1 = graph->addCloneSubGraph("G1");
+  Graph * g2 = graph->addCloneSubGraph("G2");
+  Graph * meta1 = graph->addSubGraph("META1");
   GraphProperty * proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
@@ -67,10 +67,10 @@ void MetaGraphProxyTest::testDestroyGraph() {
 //==========================================================
 void MetaGraphProxyTest::testSetGet() {
   //build the hierarchy
-  Graph * g1 = tlp::newCloneSubGraph(graph, "G1");
-  Graph * g2 = tlp::newCloneSubGraph(graph, "G2");
-  Graph * g3 = tlp::newCloneSubGraph(graph, "G3");
-  Graph * meta1 = tlp::newSubGraph(graph, "META1");
+  Graph * g1 = graph->addCloneSubGraph("G1");
+  Graph * g2 = graph->addCloneSubGraph("G2");
+  Graph * g3 = graph->addCloneSubGraph("G3");
+  Graph * meta1 = graph->addSubGraph("META1");
   GraphProperty * proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
@@ -84,10 +84,10 @@ void MetaGraphProxyTest::testSetGet() {
 //==========================================================
 void MetaGraphProxyTest::testSetAll() {
   //build the hierarchy
-  Graph * g1 = tlp::newCloneSubGraph(graph, "G1");
-  Graph * g2 = tlp::newCloneSubGraph(graph, "G2");
-  Graph * g3 = tlp::newCloneSubGraph(graph, "G3");
-  Graph * meta1 = tlp::newSubGraph(graph, "META1");
+  Graph * g1 = graph->addCloneSubGraph("G1");
+  Graph * g2 = graph->addCloneSubGraph("G2");
+  Graph * g3 = graph->addCloneSubGraph("G3");
+  Graph * meta1 = graph->addSubGraph("META1");
   GraphProperty proxy(meta1);
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();

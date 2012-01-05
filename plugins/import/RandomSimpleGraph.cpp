@@ -103,7 +103,7 @@ public:
   }
   ~RandomSimpleGraph() {}
 
-  bool import(const string &) {
+  bool importGraph() {
     srand(clock());
     unsigned int nbNodes  = 5;
     unsigned int nbEdges  = 9;

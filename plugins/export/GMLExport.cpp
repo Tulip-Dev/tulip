@@ -77,19 +77,19 @@ public:
     return newStr;
   }
 
-  bool exportGraph(ostream &os,Graph *currentGraph) {
+  bool exportGraph(ostream &os) {
 
     os << "graph [" << endl;
     os << "directed 1" << endl;
     os << "version 2" << endl;
 
-    LayoutProperty *layout = currentGraph->getProperty<LayoutProperty>("viewLayout");
-    StringProperty *label = currentGraph->getProperty<StringProperty>("viewLabel");
-    //    IntegerProperty *shape =getProperty<IntegerProperty>(currentGraph->getPropertyManager(),"viewShape");
-    ColorProperty *colors = currentGraph->getProperty<ColorProperty>("viewColor");
-    SizeProperty  *sizes = currentGraph->getProperty<SizeProperty>("viewSize");
+    LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
+    StringProperty *label = graph->getProperty<StringProperty>("viewLabel");
+    //    IntegerProperty *shape =getProperty<IntegerProperty>(graph->getPropertyManager(),"viewShape");
+    ColorProperty *colors = graph->getProperty<ColorProperty>("viewColor");
+    SizeProperty  *sizes = graph->getProperty<SizeProperty>("viewSize");
     //Save Nodes
-    Iterator<node> *itN=currentGraph->getNodes();
+    Iterator<node> *itN=graph->getNodes();
 
     if (itN->hasNext())  {
 
@@ -120,7 +120,7 @@ public:
     delete itN;
 
     //Save edges
-    Iterator<edge> *itE=currentGraph->getEdges();
+    Iterator<edge> *itE=graph->getEdges();
 
     for (; itE->hasNext();) {
       edge ite=itE->next();
