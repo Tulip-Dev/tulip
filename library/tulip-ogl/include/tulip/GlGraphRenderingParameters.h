@@ -316,7 +316,7 @@ public:
    */
   void setLabelScaled(bool state);
   /**
-   * Return labels density
+   * Return labels -density
    * This density must be in interval -100 100
    * -100 : No labels
    * 0    : No overlap

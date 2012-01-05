@@ -137,6 +137,7 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
   viewConfigurationTabs->setTabPosition(QTabWidget::West);
   viewConfigurationTabs->setStyleSheet("QTabWidget {\nbackground-color: transparent;\n}\nQTabWidget::pane {\nbackground-color: white;\nborder: 1px solid #C9C9C9;\n}\nQTabBar::tab {\nborder-image:none;\nbackground-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\nstop: 0 #838383,\nstop: 0.4 #707070,\nstop: 0.401 #636363,\nstop: 1 #4a4a4a);\ncolor: white;\nborder: 1px solid #C9C9C9;\nborder-right: 0px;\nborder-top-left-radius: 4px;\nborder-bottom-left-radius: 4px;\nmin-height: 8ex;\npadding: 2px;\nfont: bold;\n}\nQTabBar::tab:selected {\nbackground-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\nstop: 0 #ffffff,\nstop: 0.4 #eeeeee,\nstop: 0.401 #e2e2e2,\nstop: 1 #dddddd);\ncolor: black;\n}\nQTabBar::tab:selected:hover {\nbackground-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\nstop: 0 #ffffff,\nstop: 0.4 #fefefe,\nstop: 0.401 #f2f2f2,\nstop: 1 #ededed);\n}\nQTabBar::tab:!selected {\nmargin-left: 1px;\n}\nQTabBar::tab:!selected:hover {\nbackground-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\nstop: 0 #939393,\nstop: 0.4 #808080,\nstop: 0.401 #737373,\nstop: 1 #5a5a5a);\n}");
   foreach(QWidget* w, _view->configurationWidgets()) {
+    w->resize(w->width(),w->sizeHint().height());
     viewConfigurationTabs->addTab(w,w->windowTitle());
   }
   _viewConfigurationWidgets = _view->graphicsView()->scene()->addWidget(viewConfigurationTabs);

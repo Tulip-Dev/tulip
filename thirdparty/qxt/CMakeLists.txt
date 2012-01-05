@@ -1,0 +1,23 @@
+INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} src)
+
+ADD_DEFINITIONS(-DBUILD_QXT_CORE -DBUILD_QXT_GUI)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+
+SET(SRCS
+  src/qxtspanslider.cpp
+  src/qxtglobal.cpp
+)
+
+QT4_WRAP_CPP(MOC_SRCS
+src/qxtspanslider.h
+src/qxtspanslider_p.h
+)
+
+ADD_LIBRARY(qxt SHARED ${SRCS} ${MOC_SRCS})
+
+TARGET_LINK_LIBRARIES(qxt ${QT_LIBRARIES})
+
+INSTALL(TARGETS qxt
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT qxt
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT qxt
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT qxt)

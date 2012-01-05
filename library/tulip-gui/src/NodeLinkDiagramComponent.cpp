@@ -66,8 +66,4 @@ bool NodeLinkDiagramComponent::isLayoutProperty(tlp::PropertyInterface* pi) cons
   return pi == getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();
 }
 
-QList<QWidget*> NodeLinkDiagramComponent::configurationWidgets() const {
-  return QList<QWidget*>();
-}
-
 VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0")
