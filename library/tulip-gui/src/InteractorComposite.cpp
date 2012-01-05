@@ -73,7 +73,7 @@ void InteractorComposite::setView(tlp::View *view) {
   _view = view;
   construct();
   foreach(InteractorComponent* i, _components)
-  i->setView(view);
+    i->setView(view);
 }
 
 InteractorComposite::iterator InteractorComposite::begin() {
