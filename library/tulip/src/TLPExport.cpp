@@ -139,8 +139,8 @@ public:
       os << "(cluster " << graph->getId();
 
       if (useOldFormat) {
-	string name;
-	graph->getAttribute<string>("name", name);
+        string name;
+        graph->getAttribute<string>("name", name);
         os << " \"" << convert(name) << "\"";
       }
 

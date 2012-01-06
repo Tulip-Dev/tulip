@@ -681,7 +681,7 @@ bool computeEqualValueClustering(Graph *graph, PropertyInterface* property,
 
       if (components.size() > 1) {
         string name;
-	sg->getAttribute<string>("name", name);
+        sg->getAttribute<string>("name", name);
         // remove the orginal subgraph
         graph->delSubGraph(sg);
 

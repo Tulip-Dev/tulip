@@ -182,9 +182,9 @@ Graph * tlp::importGraph(const std::string &alg, DataSet &dataSet, PluginProgres
 // while the deprecated method exists.
 // Will be declared as pure virtual after.
 bool ExportModule::exportGraph(std::ostream &os) {
-    // by default calls the deprecated method
-    return exportGraph(os, graph);
- }
+  // by default calls the deprecated method
+  return exportGraph(os, graph);
+}
 
 bool tlp::exportGraph(Graph *sg,ostream &os, const std::string &alg,
                       DataSet &dataSet, PluginProgress *plugProgress) {

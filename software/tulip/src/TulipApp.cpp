@@ -1048,8 +1048,8 @@ bool TulipApp::closeWin() {
         //while(graph->getRoot()!=graph){
         graph=graph->getRoot();
         //}
-	string name;
-	graph->getAttribute<string>("name", name);
+        string name;
+        graph->getAttribute<string>("name", name);
         answer = askSaveGraph(name ,it->first,true);
 
         //If user cancel or click on cancel stop the process

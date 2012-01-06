@@ -542,7 +542,7 @@ void GraphImpl::unobserveUpdates() {
 //----------------------------------------------------------------
 #define NB_MAX_RECORDERS 10
 void GraphImpl::push(bool unpopAllowed,
-		     std::vector<PropertyInterface*>* propsToPreserve) {
+                     std::vector<PropertyInterface*>* propsToPreserve) {
   // from now if previous recorders exist
   // they cannot be unpop
   // so delete them

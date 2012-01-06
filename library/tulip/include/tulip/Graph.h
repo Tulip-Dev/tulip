@@ -218,13 +218,13 @@ public:
    * It is only used by the Graph loading as subgraphs ids are preserved when saving/loading a Graph.
    *
    * @param selection The elements to add to the new subgraph. Defaults to 0.
-   * @param id The ID you wish to assign to the Graph. Defaults to 0. It is strongly advised to keep this as default and let Tulip manage subgraph IDs. 
+   * @param id The ID you wish to assign to the Graph. Defaults to 0. It is strongly advised to keep this as default and let Tulip manage subgraph IDs.
    * @param name The name of the newly created subgraph. Defaults to "unnamed".
    * @return :Graph* The newly created subgraph.
    **/
   virtual Graph *addSubGraph(BooleanProperty *selection=0,
                              unsigned int id = 0,
-			     std::string name = "unnamed")=0;
+                             std::string name = "unnamed")=0;
   /**
    * @brief Creates and returns a new named sub-graph of this graph.
    *
@@ -669,7 +669,7 @@ public:
    * the next call of the pop method.
    */
   virtual void push(bool unpopAllowed = true,
-		    std::vector<PropertyInterface*>* propertiesToPreserveOnPop= NULL)=0;
+                    std::vector<PropertyInterface*>* propertiesToPreserveOnPop= NULL)=0;
   /*
    * Restores a previously marked state of the current root graph
    * in the hierarchy. The restored state does not remain marked.
