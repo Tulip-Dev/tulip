@@ -79,6 +79,7 @@ INSTALL(FILES
   tulip/TreeTest.h
   tulip/TriconnectedTest.h
   tulip/tulipconf.h
+  tulip/TulipException.h
   tulip/tuliphash.h
   tulip/TulipPluginHeaders.h
   tulip/uniqueiterator.h
