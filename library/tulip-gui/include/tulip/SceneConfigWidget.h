@@ -18,13 +18,13 @@ class TLP_QT_SCOPE SceneConfigWidget : public QWidget {
 
 public:
   explicit SceneConfigWidget(QWidget *parent = 0);
-  
+
 signals:
-  
+
 public slots:
   void setGlMainWidget(tlp::GlMainWidget*);
   void resetChanges();
-  
+
 };
 }
 
