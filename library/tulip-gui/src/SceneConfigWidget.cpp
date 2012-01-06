@@ -14,18 +14,23 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new 
 void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
   if (_glMainWidget != NULL)
     disconnect(_glMainWidget,SIGNAL(graphChanged(tlp::Graph*)),this,SLOT(resetChanges()));
+
   _glMainWidget = glMainWidget;
+
   if (_glMainWidget != NULL)
     connect(_glMainWidget,SIGNAL(graphChanged(tlp::Graph*)),this,SLOT(resetChanges()));
+
   resetChanges();
 }
 
 void SceneConfigWidget::resetChanges() {
   _ui->labelsOrderingCombo->clear();
   _ui->scrollArea->setEnabled(_glMainWidget != NULL);
+
   if (_glMainWidget == NULL || _glMainWidget->getGraph() == NULL) {
     return;
   }
+
   Graph* graph = _glMainWidget->getGraph();
   GlGraphRenderingParameters* renderingParameters = _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
 
@@ -35,10 +40,13 @@ void SceneConfigWidget::resetChanges() {
   std::string propName;
   forEach(propName,graph->getProperties()) {
     PropertyInterface* pi = graph->getProperty(propName);
+
     if (dynamic_cast<DoubleProperty*>(pi) != NULL) {
       _ui->labelsOrderingCombo->addItem(propName.c_str());
+
       if (renderingParameters->getElementOrderingProperty() == pi)
         _ui->labelsOrderingCombo->setCurrentIndex(i);
+
       i++;
     }
   }
