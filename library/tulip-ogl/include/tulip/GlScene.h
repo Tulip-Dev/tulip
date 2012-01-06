@@ -68,7 +68,6 @@ struct SelectedEntity {
   }
 
   SelectedEntityType getEntityType() const {
-    assert(entityType!=UNKNOW_SELECTED);
     return entityType;
   }
 
