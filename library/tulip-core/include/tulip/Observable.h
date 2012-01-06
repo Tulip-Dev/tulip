@@ -19,6 +19,7 @@
 #ifndef OBSERVABLE_H
 #define OBSERVABLE_H
 
+#include <tulip/TulipException.h>
 #include <tulip/ForEach.h>
 #include <tulip/vectorgraph.h>
 #include <set>
@@ -37,17 +38,10 @@ namespace tlp {
   * @see Observer
   * @see Observable
   **/
-class  TLP_SCOPE OLOException : public std::exception {
+class  TLP_SCOPE OLOException : public tlp::TulipException {
 public:
-  OLOException(const std::string &desc):desc(desc) {
+  OLOException(const std::string &desc):tlp::TulipException(desc) {
   }
-  virtual ~OLOException() throw () {
-  }
-  virtual const char* what() const throw() {
-    return desc.c_str();
-  }
-private:
-  std::string desc;
 };
 //=======================================
 /**
@@ -78,7 +72,7 @@ public:
   /**
     * @brief return the node representing that OLOObject in the OLOGraph
     */
-  tlp::node   getNode() const;
+  tlp::node getNode() const;
   /**
    * @brief return the number of sent nofication
    */
@@ -130,7 +124,16 @@ private:
   static unsigned int              holdCounter;    /** counter of nested holds */
   static bool                      _initialized;   /** use to initialize oGraph when the library is loaded (nice hack) */
 private:
-  tlp::node n; /** node that represent that object in the OLOGraph.*/
+  tlp::node _n; /** node that represent that object in the OLOGraph.*/
+  /**
+    * @brief return the bound node representing this OLOObject in the OLOGraph,
+    * if _n is not valid it is then bind to a new added node
+    */
+  tlp::node getBoundNode();
+  bool isBound() const {
+    return _n.isValid();
+  }
+
 #ifndef NDEBUG
   unsigned int sent; /* counter of sent notification */
   unsigned int received; /* counter of received notification */
@@ -165,7 +168,7 @@ class  TLP_SCOPE Event {
   friend class Graph;
   friend class PropertyInterface;
 public:
-  enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID, TLP_ALL_EVENTS};
+  enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID};
   virtual ~Event();
   Observable* sender() const;
   Event(const Observable &sender, EventType type);
@@ -333,6 +336,7 @@ private:
   *
   **/
 //=======================================
+#define Observer Observable
 /**
   * @class Observer
   * @brief Observer is the base class for the implementation of an Observbale Observer.
@@ -698,4 +702,17 @@ private:
 /*@}*/
 }
 
+
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
