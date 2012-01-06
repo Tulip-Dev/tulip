@@ -189,6 +189,9 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   assert(ViewLister::pluginExists(viewName.toStdString()));
   View* view = ViewLister::getPluginObject(viewName.toStdString(),NULL);
   view->setupUi();
+  view->setGraph(g);
+  view->setState(data);
+
   WorkspacePanel* panel = new WorkspacePanel(view,viewName);
 
   if (_model != NULL)
@@ -196,8 +199,6 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
 
   panel->installEventFilter(this);
   panel->setWindowTitle(panelTitle(panel));
-  view->setGraph(g);
-  view->setState(data);
   connect(panel,SIGNAL(closed(tlp::WorkspacePanel*)),this,SLOT(removePanel(tlp::WorkspacePanel*)));
   connect(panel,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
 
