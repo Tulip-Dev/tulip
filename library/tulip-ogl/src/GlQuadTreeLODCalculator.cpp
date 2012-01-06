@@ -544,21 +544,15 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
   }
   else if (ev.type()==Event::TLP_DELETE) {
     if (dynamic_cast<Camera*>(ev.sender())) {
-      std::vector<std::pair<std::string, GlLayer*> > *layerList=glScene->getLayersList();
 
-      clearCamerasObservers();
-
-      cameras.clear();
-
-      for(std::vector<std::pair<std::string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
-        if(layerToCamera.find((*it).second)==layerToCamera.end())
-          continue;
-
-        (*layerToCamera.find((*it).second)).second.first=&(*it).second->getCamera();
-        cameras.push_back(&(*it).second->getCamera());
+      for(vector<Camera *>::iterator it=cameras.begin();it!=cameras.end();++it){
+        if(*it == dynamic_cast<Camera*>(ev.sender())){
+          cameras.erase(it);
+          break;
+        }
       }
 
-      initCamerasObservers();
+      haveToCompute=true;
     }
 
     if (dynamic_cast<tlp::Graph*>(ev.sender())) {
