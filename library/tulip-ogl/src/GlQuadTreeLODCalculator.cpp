@@ -545,8 +545,8 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
   else if (ev.type()==Event::TLP_DELETE) {
     if (dynamic_cast<Camera*>(ev.sender())) {
 
-      for(vector<Camera *>::iterator it=cameras.begin();it!=cameras.end();++it){
-        if(*it == dynamic_cast<Camera*>(ev.sender())){
+      for(vector<Camera *>::iterator it=cameras.begin(); it!=cameras.end(); ++it) {
+        if(*it == dynamic_cast<Camera*>(ev.sender())) {
           cameras.erase(it);
           break;
         }
