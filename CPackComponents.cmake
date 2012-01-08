@@ -7,7 +7,6 @@ SET(CPACK_COMPONENT_GROUP_EXTRAS_DESCRIPTION "Tulip extra files and documentatio
 
 #thirdparty
 DEFINE_COMPONENT(ftgl "FTGL" "A library to render freetype fonts in openGL scenes." ""  ${THIRDPARTY_GROUP_NAME})
-DEFINE_COMPONENT(qscintilla2 "QScintilla 2" "A library to provide source code edition facility in Qt." ""  ${THIRDPARTY_GROUP_NAME})
 DEFINE_COMPONENT(sip "SIP library" "A library providing python bindings for C++." ""  ${THIRDPARTY_GROUP_NAME})
 
 # library/tulip
@@ -24,7 +23,7 @@ DEFINE_COMPONENT(libtulip_qt_dev "Qt library - Development files" "Tulip Qt prov
 
 #Extra features
 DEFINE_COMPONENT(tulip_ogdf "OGDF library bridge" "Tulip OGDF provides a bridge to use the powerful OGDF library (Open Graph Drawing Framework) inside Tulip." "libtulip" ${LIBS_GROUP_NAME})
-DEFINE_COMPONENT(tulip_python "Python bindings" "Python bindings for Tulip." "sip;qscintilla2"  ${LIBS_GROUP_NAME})
+DEFINE_COMPONENT(tulip_python "Python bindings" "Python bindings for Tulip." "sip"  ${LIBS_GROUP_NAME})
 
 # plugins
 DEFINE_COMPONENT(tulip_plugins "Tulip Base plugins" "Base Tulip Plugins from trunk" "libtulip;libtulip_ogl;libtulip_qt"  ${PLUGINS_GROUP_NAME})
@@ -40,18 +39,18 @@ DEFINE_COMPONENT(tulip_python_doc "Python bindings documentation" "Manual and AP
 ENDIF(SPHINX_FOUND)
 
 IF(LINUX)
-  SET(META_DEPS "ftgl;qscintilla2;gzstream;sip;libtulip;libtulip_ogl;libtulip_qt;tulip;tulip_plugins")
+  SET(META_DEPS "ftgl;gzstream;sip;libtulip;libtulip_ogl;libtulip_qt;tulip;tulip_plugins")
   # meta package (Linux only)
   IF(GENERATE_DOC)
     SET(META_DEPS "${META_DEPS};tulip-doc")
   ENDIF()
   DEFINE_COMPONENT(tulip_all "Meta package" "Meta package containing tulip application, libraries, documentation and base plugins" "${META_DEPS}" "" ${EXTRAS_GROUP_NAME})
 
-  SET(CPACK_DEBIAN_EXCLUDE_COMPONENTS "ftgl;sip;qscintilla2;tulip_all")
+  SET(CPACK_DEBIAN_EXCLUDE_COMPONENTS "ftgl;sip;tulip_all")
   
   SET(CPACK_UBUNTU_DISTRIBUTION_RELEASES lucid maverick natty oneiric)
 
-  SET(CPACK_UBUNTU_COMMON_BUILD_DEPENDS "libgl1-mesa-dev;libglu1-mesa-dev;libglew1.5-dev;libftgl-dev;libjpeg62-dev;libpng12-dev;libxml2-dev;libqt4-dev;libqt4-opengl-dev;zlib1g-dev;libstdc++6;python-dev;python-sip-dev;libqscintilla2-dev;doxygen;gcj-jdk;libxml-commons-resolver1.1-java-gcj;qt4-dev-tools;python-sphinx;docbook-xsl;graphviz;texlive-font-utils")
+  SET(CPACK_UBUNTU_COMMON_BUILD_DEPENDS "libgl1-mesa-dev;libglu1-mesa-dev;libglew1.5-dev;libftgl-dev;libjpeg62-dev;libpng12-dev;libxml2-dev;libqt4-dev;libqt4-opengl-dev;zlib1g-dev;libstdc++6;python-dev;python-sip-dev;doxygen;gcj-jdk;libxml-commons-resolver1.1-java-gcj;qt4-dev-tools;python-sphinx;docbook-xsl;graphviz;texlive-font-utils")
 
   SET(CPACK_COMPONENT_LIBTULIP_UBUNTU_COMMON_DEPENDS "")
   SET(CPACK_COMPONENT_LIBTULIP_DEV_UBUNTU_COMMON_DEPENDS "zlib1g-dev, libc6-dev")

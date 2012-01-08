@@ -48,7 +48,7 @@ public slots :
       brush.setColor(Qt::black);
     }
 
-    QTextCharFormat formt;
+    QTextCharFormat formt = consoleWidget->textCursor().charFormat();
     formt.setForeground(brush);
     consoleWidget->moveCursor(QTextCursor::End);
     QTextCursor cursor = consoleWidget->textCursor();
@@ -66,8 +66,9 @@ public:
   ConsoleOutputEmitter() : consoleWidget(NULL), outputActivated(true) {}
 
   void sendOutputToConsole(const QString &output, bool errorOutput) {
-    if (outputActivated)
+    if (outputActivated) {
       emit consoleOutput(consoleWidget, output, errorOutput);
+    }
   }
 
   void setConsoleWidget(QPlainTextEdit *consoleWidget) {

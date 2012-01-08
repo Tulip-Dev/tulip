@@ -21,8 +21,10 @@
 #include "PythonScriptViewWidget.h"
 #include "PythonScriptView.h"
 
+#include <QtCore/QFile>
 #include <QtGui/QToolBar>
 #include <QtGui/QIcon>
+#include <QtWebKit/QWebView>
 
 PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), fontZoom(0) , pythonScriptView(view) {
   setupUi(this);
@@ -70,22 +72,32 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
   connect(decreaseFontSizeButton2, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
   connect(increaseFontSizeButton2, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
   connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
+
+  QString docRootPath = QString(tlp::TulipShareDir.c_str()) + "../doc/tulip-python/html/index.html";
+
+  QFile docRoot(docRootPath);
+  if (docRoot.exists()) {
+	  QWebView *webView = new QWebView();
+	  webView->load(QUrl("file://"+docRootPath));
+	  tabWidget->addTab(webView, "Documentation");
+  }
+
 }
 
 std::string PythonScriptViewWidget::getCurrentMainScriptCode() const {
-  return static_cast<PythonCodeEditor *>(mainScriptsTabWidget->currentWidget())->text().replace("\r\n", "\n").toStdString();
+  return static_cast<PythonCodeEditor *>(mainScriptsTabWidget->currentWidget())->toPlainText().replace("\r\n", "\n").toStdString();
 }
 
 std::string PythonScriptViewWidget::getMainScriptCode(int idx) const {
-  return static_cast<PythonCodeEditor *>(mainScriptsTabWidget->widget(idx))->text().replace("\r\n", "\n").toStdString();
+  return static_cast<PythonCodeEditor *>(mainScriptsTabWidget->widget(idx))->toPlainText().replace("\r\n", "\n").toStdString();
 }
 
 std::string PythonScriptViewWidget::getModuleCode(int idx) const {
-  return static_cast<PythonCodeEditor *>(modulesTabWidget->widget(idx))->text().replace("\r\n", "\n").toStdString();
+  return static_cast<PythonCodeEditor *>(modulesTabWidget->widget(idx))->toPlainText().replace("\r\n", "\n").toStdString();
 }
 
 std::string PythonScriptViewWidget::getPluginCode(int idx) const {
-  return static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(idx))->text().replace("\r\n", "\n").toStdString();
+  return static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(idx))->toPlainText().replace("\r\n", "\n").toStdString();
 }
 
 void PythonScriptViewWidget::resizeEvent(QResizeEvent *e) {
@@ -105,8 +117,7 @@ void PythonScriptViewWidget::resizeToolBars() {
 }
 
 int PythonScriptViewWidget::addMainScriptEditor() {
-  PythonCodeEditor *codeEditor = new PythonCodeEditor(this, fontZoom);
-  codeEditor->installEventFilter(this);
+  PythonCodeEditor *codeEditor = new PythonCodeEditor(this);
   codeEditor->installEventFilter(pythonScriptView);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
   connect(codeEditor, SIGNAL(textChanged()), this, SLOT(mainScriptTextChanged()));
@@ -117,7 +128,6 @@ int PythonScriptViewWidget::addMainScriptEditor() {
 
 int PythonScriptViewWidget::addModuleEditor() {
   PythonCodeEditor *codeEditor = new PythonCodeEditor(this);
-  codeEditor->installEventFilter(this);
   codeEditor->installEventFilter(pythonScriptView);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
   connect(codeEditor, SIGNAL(textChanged()), this, SLOT(moduleScriptTextChanged()));
@@ -128,7 +138,6 @@ int PythonScriptViewWidget::addModuleEditor() {
 
 int PythonScriptViewWidget::addPluginEditor() {
   PythonCodeEditor *codeEditor = new PythonCodeEditor(this);
-  codeEditor->installEventFilter(this);
   codeEditor->installEventFilter(pythonScriptView);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
   connect(codeEditor, SIGNAL(textChanged()), this, SLOT(pluginScriptTextChanged()));
@@ -176,73 +185,17 @@ PythonCodeEditor *PythonScriptViewWidget::getCurrentPluginEditor() const {
   return static_cast<PythonCodeEditor *>(pluginsTabWidget->currentWidget());
 }
 
-bool PythonScriptViewWidget::eventFilter(QObject *obj, QEvent *event) {
-  if (event->type() == QEvent::KeyPress) {
-    QKeyEvent *keyEvt = static_cast<QKeyEvent *>(event);
-
-    if (keyEvt->modifiers() == Qt::ControlModifier && keyEvt->key() == Qt::Key_D) {
-      commentSelectedCode(obj);
-      return true;
-    }
-    else if (keyEvt->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && keyEvt->key() == Qt::Key_D) {
-      uncommentSelectedCode(obj);
-      return true;
-    }
-  }
-
-  return false;
-}
-
-void PythonScriptViewWidget::commentSelectedCode(QObject *obj) {
-  QsciScintilla *codeEditor = dynamic_cast<QsciScintilla *>(obj);
-
-  if (codeEditor && codeEditor->hasSelectedText()) {
-    int lineFrom = 0;
-    int indexFrom = 0;
-    int lineTo = 0;
-    int indexTo = 0;
-    codeEditor->getSelection(&lineFrom, &indexFrom, &lineTo, &indexTo);
-
-    for (int i = lineFrom ; i <= lineTo ; ++i) {
-      codeEditor->insertAt("#", i, 0);
-    }
-
-    codeEditor->setSelection(lineFrom, 0, lineTo, codeEditor->text(lineTo).length() - 1);
-  }
-}
-void PythonScriptViewWidget::uncommentSelectedCode(QObject *obj) {
-  QsciScintilla *codeEditor = dynamic_cast<QsciScintilla *>(obj);
-
-  if (codeEditor && codeEditor->hasSelectedText()) {
-    int lineFrom = 0;
-    int indexFrom = 0;
-    int lineTo = 0;
-    int indexTo = 0;
-    codeEditor->getSelection(&lineFrom, &indexFrom, &lineTo, &indexTo);
-
-    for (int i = lineFrom ; i <= lineTo ; ++i) {
-      codeEditor->setSelection(i, 0, i, 1);
-
-      if (codeEditor->selectedText() == "#") {
-        codeEditor->removeSelectedText();
-      }
-    }
-
-    codeEditor->setSelection(lineFrom, 0, lineTo, codeEditor->text(lineTo).length() - 1);
-  }
-}
-
 void PythonScriptViewWidget::decreaseFontSize() {
   for (int i = 0 ; i < mainScriptsTabWidget->count() ; ++i) {
-    static_cast<QsciScintilla *>(mainScriptsTabWidget->widget(i))->zoomOut();
+    static_cast<PythonCodeEditor *>(mainScriptsTabWidget->widget(i))->zoomOut();
   }
 
   for (int i = 0 ; i < modulesTabWidget->count() ; ++i) {
-    static_cast<QsciScintilla *>(modulesTabWidget->widget(i))->zoomOut();
+    static_cast<PythonCodeEditor *>(modulesTabWidget->widget(i))->zoomOut();
   }
 
   for (int i = 0 ; i < pluginsTabWidget->count() ; ++i) {
-    static_cast<QsciScintilla *>(pluginsTabWidget->widget(i))->zoomOut();
+    static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(i))->zoomOut();
   }
 
   pythonShellWidget->zoomOut();
@@ -251,15 +204,15 @@ void PythonScriptViewWidget::decreaseFontSize() {
 
 void PythonScriptViewWidget::increaseFontSize() {
   for (int i = 0 ; i < mainScriptsTabWidget->count() ; ++i) {
-    static_cast<QsciScintilla *>(mainScriptsTabWidget->widget(i))->zoomIn();
+    static_cast<PythonCodeEditor *>(mainScriptsTabWidget->widget(i))->zoomIn();
   }
 
   for (int i = 0 ; i < modulesTabWidget->count() ; ++i) {
-    static_cast<QsciScintilla *>(modulesTabWidget->widget(i))->zoomIn();
+    static_cast<PythonCodeEditor *>(modulesTabWidget->widget(i))->zoomIn();
   }
 
   for (int i = 0 ; i < pluginsTabWidget->count() ; ++i) {
-    static_cast<QsciScintilla *>(pluginsTabWidget->widget(i))->zoomIn();
+    static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(i))->zoomIn();
   }
 
   pythonShellWidget->zoomIn();
@@ -306,13 +259,13 @@ void PythonScriptViewWidget::currentTabChanged(int index) {
   static int lastTabIndex = 0;
   static QList<int> lastSizes = splitter->sizes();
 
-  if (lastTabIndex != 2 && lastTabIndex != 3) {
+  if (lastTabIndex < 2) {
     lastSizes = splitter->sizes();
   }
 
   QList<int> sizes;
 
-  if (index == 2 || index == 3) {
+  if (index >= 2) {
     sizes.push_back(height());
     sizes.push_back(0);
     runScriptButton->setEnabled(false);
@@ -324,9 +277,13 @@ void PythonScriptViewWidget::currentTabChanged(int index) {
 
   splitter->setSizes(sizes);
 
-  if (index == 3) {
+  if (index >= 3) {
     scriptControlFrame->hide();
-    pluginControlFrame->show();
+    if (index == 3) {
+    	pluginControlFrame->show();
+    } else {
+    	pluginControlFrame->hide();
+    }
   }
   else {
     scriptControlFrame->show();

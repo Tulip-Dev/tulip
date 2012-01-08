@@ -1,0 +1,193 @@
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
+
+#include <QtCore/QFile>
+#include <QtCore/QStringList>
+#include <QtCore/QRegExp>
+#include <QtCore/QTextStream>
+
+#include <iostream>
+
+using namespace std;
+
+#include "APIDataBase.h"
+
+APIDataBase::APIDataBase() {
+	addApiEntry("tlp.node.id");
+	addApiEntry("tlp.edge.id");
+
+	addApiEntry("list.append(x)");
+	addApiEntry("list.extend(L)");
+	addApiEntry("list.insert(i, x)");
+	addApiEntry("list.remove(x)");
+	addApiEntry("list.pop([i])");
+	addApiEntry("list.index(x)");
+	addApiEntry("list.count(x)");
+	addApiEntry("list.sort()");
+	addApiEntry("list.reverse()");
+
+	addApiEntry("dict.clear()");
+	addApiEntry("dict.copy()");
+	addApiEntry("dict.fromkeys(seq[,value])");
+	addApiEntry("dict.get(key[,default])");
+	addApiEntry("dict.has_key(key)");
+	addApiEntry("dict.items()");
+	addApiEntry("dict.iteritems()");
+	addApiEntry("dict.iterkeys()");
+	addApiEntry("dict.keys()");
+	addApiEntry("dict.pop(key[,default])");
+	addApiEntry("dict.popitem()");
+	addApiEntry("dict.setdefault(key[,default])");
+	addApiEntry("dict.update([other])");
+	addApiEntry("dict.values()");
+	addApiEntry("dict.viewitems()");
+	addApiEntry("dict.viewkeys()");
+	addApiEntry("dict.viewvalues()");
+
+}
+
+void APIDataBase::loadApiFile(const QString &apiFilePath) {
+	QFile apiFile(apiFilePath);
+	apiFile.open(QIODevice::ReadOnly | QIODevice::Text);
+	QTextStream in(&apiFile);
+
+	while (!in.atEnd()) {
+		QString line = in.readLine();
+		addApiEntry(line);
+	}
+}
+
+void APIDataBase::addApiEntry(const QString &apiEnt) {
+	QString apiEntry(apiEnt);
+	int pos = apiEntry.indexOf('.');
+	if (apiEntry.contains(QRegExp("^tulip.*\\..+"))) {
+
+		apiEntry = apiEntry.mid(pos+1);
+	}
+	apiEntry.replace(QRegExp("\\?[0-9]+"), "");
+	int parenPos = apiEntry.indexOf('(');
+	bool func = parenPos != -1;
+	QString withoutParams = apiEntry;
+	QVector<QString> params;
+	QString retType;
+	if (func) {
+		withoutParams = apiEntry.mid(0, parenPos);
+		QString parameters = apiEntry.mid(parenPos+1, apiEntry.indexOf(')') - parenPos - 1);
+		if (parameters != "") {
+			QStringList paramsList = parameters.split(',');
+			foreach(QString param, paramsList) {
+				params.append(param.trimmed());
+			}
+		}
+		int retPos = apiEntry.indexOf("->");
+		if (retPos != -1) {
+			retType = apiEntry.mid(retPos+2).trimmed();
+		}
+	}
+	pos = withoutParams.indexOf('.');
+
+	while (pos != -1) {
+		QString type = withoutParams.mid(0, pos);
+		if (dictContent.find(type) == dictContent.end()) {
+			dictContent[type] = QSet<QString>();
+		}
+		int newPos = withoutParams.indexOf('.', pos+1);
+
+		QString dictEntry;
+
+		if (newPos != -1) {
+			dictEntry = withoutParams.mid(pos+1, newPos - pos - 1).trimmed();
+		} else if (func) {
+			dictEntry = withoutParams.mid(pos+1).trimmed();
+			QString wholeFuncName = type + "." + dictEntry;
+			if (paramTypes.find(wholeFuncName) == paramTypes.end()) {
+				paramTypes[wholeFuncName] = QVector<QVector<QString> >();
+			}
+			paramTypes[wholeFuncName].append(params);
+
+
+			if (retType != "") {
+				returnType[wholeFuncName] = retType;
+			}
+		}
+
+		if (dictEntry != "" && !dictEntry.startsWith("__")) {
+			dictContent[type].insert(dictEntry);
+		}
+
+		pos = newPos;
+	}
+}
+
+QSet<QString> APIDataBase::getDictContentForType(const QString &type, const QString &prefix) {
+	QSet<QString> ret;
+	if (dictContent.find(type) != dictContent.end()) {
+		foreach(QString s, dictContent[type]) {
+			if (s.startsWith(prefix)) {
+				ret.insert(s);
+			}
+		}
+	}
+	return ret;
+}
+
+QString APIDataBase::getReturnTypeForMethodOrFunction(const QString &funcName) {
+	QString ret;
+	if (returnType.find(funcName) != returnType.end()) {
+		ret = returnType[funcName];
+	}
+	return ret;
+}
+
+QVector<QVector<QString> > APIDataBase::getParamTypesForMethodOrFunction(const QString &funcName) {
+	QVector<QVector<QString> > ret;
+	if (paramTypes.find(funcName) != paramTypes.end()) {
+		ret = paramTypes[funcName];
+	}
+	return ret;
+}
+
+QVector<QString> APIDataBase::findTypesContainingDictEntry(const QString &dictEntry) {
+	QVector<QString> ret;
+	QHashIterator<QString, QSet<QString> > i(dictContent);
+	while (i.hasNext()) {
+		i.next();
+		foreach(QString s, i.value()) {
+			if (s == dictEntry) {
+				ret.append(i.key());
+				break;
+			}
+		}
+	}
+	return ret;
+}
+
+QSet<QString> APIDataBase::getAllDictEntriesStartingWithPrefix(const QString &prefix) {
+	QSet<QString> ret;
+	QHashIterator<QString, QSet<QString> > i(dictContent);
+	while (i.hasNext()) {
+		i.next();
+		foreach(QString s, i.value()) {
+			if (s.startsWith(prefix)) {
+				ret.insert(s);
+			}
+		}
+	}
+	return ret;
+}

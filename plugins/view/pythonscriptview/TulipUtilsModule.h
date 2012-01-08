@@ -20,6 +20,7 @@
 #ifndef TULIPUTILSMODULE_H_
 #define TULIPUTILSMODULE_H_
 
+#include "PythonIncludes.h"
 #include "PythonInterpreter.h"
 #include "PythonScriptView.h"
 

@@ -27,6 +27,7 @@
 
 #include "PythonShellWidget.h"
 #include "ConsoleOutputHandler.h"
+#include "PythonIncludes.h"
 
 #include <iostream>
 
@@ -34,7 +35,6 @@ using namespace std;
 
 static ConsoleOutputHandler *consoleOuputHandler = NULL;
 static ConsoleOutputEmitter *consoleOuputEmitter = NULL;
-static PythonShellWidget *shellWidget = NULL;
 static std::string consoleOuputString = "";
 static std::string consoleErrorOuputString = "";
 static bool outputActivated = true;
@@ -81,7 +81,7 @@ scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
   if(!PyArg_ParseTuple(o, "s", &buf))
     return NULL;
 
-  if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
+  if (reinterpret_cast<scriptengine_ConsoleOutput *>(self)->stderrflag) {
     consoleErrorOuputString += buf;
   }
   else {
@@ -90,16 +90,13 @@ scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
 
   if (outputActivated) {
 
-    if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
+    if (reinterpret_cast<scriptengine_ConsoleOutput *>(self)->stderrflag) {
       cerr << buf << endl;
     }
 
-    if (shellWidget) {
-      shellWidget->insert(buf, true);
-    }
-    else if (consoleOuputEmitter) {
-      if (buf != NULL && ((scriptengine_ConsoleOutput *)self)->writeToConsole) {
-        consoleOuputEmitter->sendOutputToConsole(buf, ((scriptengine_ConsoleOutput *)self)->stderrflag);
+    if (consoleOuputEmitter) {
+      if (buf != NULL && reinterpret_cast<scriptengine_ConsoleOutput *>(self)->writeToConsole) {
+        consoleOuputEmitter->sendOutputToConsole(buf, reinterpret_cast<scriptengine_ConsoleOutput *>(self)->stderrflag);
       }
     }
   }

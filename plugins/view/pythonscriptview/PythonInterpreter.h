@@ -20,56 +20,16 @@
 #ifndef PYTHONINTERPRETER_H_
 #define PYTHONINTERPRETER_H_
 
-// thanks to the VTK project for this patch for Visual Studio in debug mode
-#if defined(_MSC_VER) && defined(_DEBUG)
-// Include these low level headers before undefing _DEBUG. Otherwise when doing
-// a debug build against a release build of python the compiler will end up
-// including these low level headers without DEBUG enabled, causing it to try
-// and link release versions of this low level C api.
-# include <basetsd.h>
-# include <assert.h>
-# include <ctype.h>
-# include <errno.h>
-# include <io.h>
-# include <math.h>
-# include <sal.h>
-# include <stdarg.h>
-# include <stddef.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <sys/stat.h>
-# include <time.h>
-# include <wchar.h>
-#  undef _DEBUG
-#  if _MSC_VER >= 1400
-#    define _CRT_NOFORCE_MANIFEST 1
-#  endif
-#  include <Python.h>
-#  include <frameobject.h>
-#  include <structmember.h>
-#  include <import.h>
-#  define _DEBUG
-# else
-#  include <Python.h>
-#  include <frameobject.h>
-#  include <structmember.h>
-#  include <import.h>
-# endif
-
 #include <QtGui/QDialog>
 #include <QtGui/QPlainTextEdit>
 #include <QtCore/QDir>
 
 #include <tulip/TulipRelease.h>
 #include <tulip/TlpTools.h>
+#include <tulip/Graph.h>
 
 #include <string>
 #include <set>
-
-namespace tlp {
-class Graph;
-}
 
 class ConsoleOutputDialog : public QDialog {
 
@@ -100,8 +60,6 @@ const char pythonReservedCharacters[] = {'#', '%', '/', '+', '-', '&', '*', '<',
 static std::string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";
 static std::string pythonPluginsPathHome = (QDir::homePath()+"/.Tulip-"+TULIP_MM_RELEASE+"/plugins/python").toStdString();
 
-class PythonShellWidget;
-
 class PythonInterpreter {
 
 public :
@@ -111,45 +69,64 @@ public :
   bool interpreterInit() ;
 
   bool registerNewModuleFromString(const std::string &moduleName, const std::string &moduleSrcCode);
-  void setTraceFunction(Py_tracefunc tracefunc);
+
   bool runString(const std::string &pyhtonCode);
+
   bool runGraphScript(const std::string &module, const std::string &function, tlp::Graph *graph);
+
   bool functionExists(const std::string &moduleName, const std::string &functionName);
+
   void addModuleSearchPath(const std::string &path, const bool beforeOtherPaths = false);
+
   void deleteModule(const std::string &moduleName);
+
   bool reloadModule(const std::string &moduleName);
+
   void stopCurrentScript();
+
+  void pauseCurrentScript(const bool pause=true);
+
+  bool isScriptPaused() const;
+
+  void setProcessQtEventsDuringScriptExecution(bool processQtEvents);
+
   bool isRunningScript() const {
     return runningScript;
   }
+
   std::string getPythonVersion() const {
     return pythonVersion;
   }
   std::string getPythonShellBanner();
+
   void setDefaultSIGINTHandler();
 
-
   std::vector<std::string> getGlobalDictEntries(const std::string &prefixFilter = "");
+
   std::vector<std::string> getObjectDictEntries(const std::string &objectName, const std::string &prefixFilter = "");
 
   void setDefaultConsoleWidget();
+
   void setConsoleWidget(QPlainTextEdit *consoleWidget);
-  void setPythonShellWidget(PythonShellWidget *shellWidget);
 
   void initConsoleOutput();
+
   void loadTulipPythonPlugins();
 
   std::string getStandardOutput() const;
-  std::string getStandardErrorOutput() const;
-  void clearOutputBuffers();
 
+  std::string getStandardErrorOutput() const;
+
+  void clearOutputBuffers();
 
 private :
 
   PythonInterpreter();
+
   ~PythonInterpreter();
 
   void holdGIL();
+
   void releaseGIL();
 
   void loadTulipPythonPlugins(const std::string &pluginsPath);
@@ -164,10 +141,6 @@ private :
 
   std::string pythonVersion;
 
-#ifndef WIN32
-  PyThreadState*  mainThreadState;
-#endif
-  PyGILState_STATE gilState;
 
 };
 

@@ -29,10 +29,8 @@
 #include <tulip/Graph.h>
 
 class QKeyEvent;
-class QsciAPIs;
-class QsciLexer;
 
-class PythonShellWidget : public QsciScintilla {
+class PythonShellWidget : public PythonCodeEditor {
 
   Q_OBJECT
 
@@ -55,7 +53,11 @@ protected:
 public slots:
 
   void insert(const QString &txt, const bool atEnd = false);
-  void treatUserListSelection(int id, const QString &text);
+
+protected slots:
+
+  void showAutoCompletionList();
+  void updateAutoCompletionList();
 
 private :
 
@@ -65,8 +67,6 @@ private :
   std::vector<QString> history;
   int currentHistoryPos;
 
-  QsciLexer *pythonLexer;
-  QsciAPIs *api;
 
 };
 

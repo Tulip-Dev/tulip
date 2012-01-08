@@ -1,19 +1,20 @@
 IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
-IF(QSCINTILLA_OK)
+
+SET(QT_USE_QTWEBKIT true)
 
 INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQSCINTILLA_DLL")
-
-# Force to use SIP and QScintilla headers located in thirdparty and not those installed in the system
-INCLUDE_DIRECTORIES(BEFORE ${qscintilla2Include} ${SIP_INCLUDE_DIR})
+# Force to use SIP headers located in thirdparty and not those installed in the system
+INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 
 SET(pythonscriptview_LIB_SRCS
     ConsoleOutputModule.h
     PythonCodeEditor.cpp
     PythonCodeEditor.h
+    PythonCodeHighlighter.cpp
+    ParenMatcherHighlighter.cpp
     PythonInterpreter.cpp
     PythonInterpreter.h
     PythonScriptView.h
@@ -25,6 +26,8 @@ SET(pythonscriptview_LIB_SRCS
     PluginCreationDialog.h
     PluginCreationDialog.cpp
     ConsoleOutputHandler.h
+    APIDataBase.cpp
+    AutoCompletionDataBase.cpp
 )
 
 SET(pythonscriptview_UI
@@ -55,11 +58,14 @@ ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${pythonscriptview_LIB_SRCS}
 
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipQtName})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} qscintilla2)
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
+IF(LINUX)
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY_RELEASE})
+ENDIF(LINUX)
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
-ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipQtName} qscintilla2)
+ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipQtName})
 
 INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}/view/ COMPONENT tulip_python)
 
@@ -68,6 +74,14 @@ IF(WIN32)
 	INSTALL_EXTERNAL_LIB(PYTHON_INSTALL_PATH tulip_python)
 ENDIF()
 
-ENDIF(QSCINTILLA_OK)
+INSTALL(FILES 
+        ${CMAKE_CURRENT_SOURCE_DIR}/api/Python-2.4.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/api/Python-2.5.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/api/Python-2.6.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/api/Python-2.7.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/api/Python-3.1.api
+        DESTINATION ${TulipShareInstallDir}/apiFiles 
+        COMPONENT tulip_python)
+
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)

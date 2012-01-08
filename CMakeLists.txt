@@ -231,15 +231,6 @@ IF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 
 ENDIF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 
-IF(UBUNTU_PPA_BUILD)
-  FIND_PACKAGE(QScintilla)
-  SET(QSCINTILLA_OK ${QSCINTILLA_FOUND})
-  SET(qscintilla2Include ${QSCINTILLA_INCLUDE_DIR})
-ELSE()
-  SET(QSCINTILLA_OK TRUE)
-  SET(qscintilla2Include ${PROJECT_SOURCE_DIR}/thirdparty/QScintilla-gpl-2.4.6/Qt4/)
-ENDIF()
-
 ## -----------------------------------------------------------------------------------------------
 ## Include file paths
 ## -----------------------------------------------------------------------------------------------

@@ -56,9 +56,6 @@ public :
   std::string getModuleCode(int idx) const;
   std::string getPluginCode(int idx) const;
 
-
-  bool eventFilter(QObject *obj, QEvent *event);
-
 public slots :
 
   void decreaseFontSize();
@@ -91,10 +88,6 @@ public :
 private :
 
   int fontZoom;
-
-
-  void commentSelectedCode(QObject *obj);
-  void uncommentSelectedCode(QObject *obj);
 
   PythonScriptView *pythonScriptView;
 };
