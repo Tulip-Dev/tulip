@@ -145,6 +145,10 @@ the Graph class
 
 	.. automethod:: tulip::tlp.Graph.addSubGraph
 
+	.. automethod:: tulip::tlp.Graph.addSubGraph
+	
+	.. automethod:: tulip::tlp.Graph.addCloneSubGraph
+
 	.. automethod:: tulip::tlp.Graph.inducedSubGraph
 
 	.. automethod:: tulip::tlp.Graph.delSubGraph
@@ -210,8 +214,12 @@ the Graph class
 	.. _graph-class.informations:
 
 	.. rubric:: Graph, nodes and edges informations about the graph stucture
-
+	
 	.. automethod:: tulip::tlp.Graph.getId
+
+	.. automethod:: tulip::tlp.Graph.getName
+	
+	.. automethod:: tulip::tlp.Graph.setName
 
 	.. automethod:: tulip::tlp.Graph.numberOfNodes
 

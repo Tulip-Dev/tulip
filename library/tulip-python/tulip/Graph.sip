@@ -95,6 +95,32 @@ selected in the selection. If there is no selection an empty sub-graph is return
 
 //===========================================================================================
 
+	tlp::Graph *addSubGraph(std::string name);
+%Docstring
+tlp.Graph.addSubGraph(name)
+
+Creates and returns a new named sub-graph of this graph.
+
+:param name: The name of the newly created subgraph.
+:type name: string
+:rtype: :class:`tlp.Graph`
+%End	
+
+//===========================================================================================
+
+ 	tlp::Graph* addCloneSubGraph(std::string name = "unnamed");
+%Docstring
+tlp.Graph.addCloneSubGraph(name = "unnamed")
+
+Creates and returns a subgraph of this graph that contains all its elements.
+
+:param name: The name of the newly created subgraph. Defaults to "unnamed".
+:type name: string
+:rtype: :class:`tlp.Graph`
+%End 	
+ 
+//=========================================================================================== 
+
 	tlp::Graph *inducedSubGraph(const std::set<tlp::node>& nodeSet);
 %Docstring
 tlp.Graph.inducedSubGraph(nodes)
