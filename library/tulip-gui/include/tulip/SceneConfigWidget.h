@@ -16,6 +16,8 @@ class TLP_QT_SCOPE SceneConfigWidget : public QWidget {
   Ui::SceneConfigWidget* _ui;
   tlp::GlMainWidget* _glMainWidget;
 
+  bool _resetting;
+
 public:
   explicit SceneConfigWidget(QWidget *parent = 0);
 
@@ -24,6 +26,13 @@ signals:
 public slots:
   void setGlMainWidget(tlp::GlMainWidget*);
   void resetChanges();
+
+protected slots:
+  void settingsChanged();
+  void applySettings();
+
+protected:
+  bool eventFilter(QObject *, QEvent *);
 
 };
 }
