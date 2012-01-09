@@ -72,6 +72,10 @@ public:
    * Function used to visit composite's children
    */
   virtual void acceptVisitor(GlSceneVisitor *visitor);
+  /**
+   * You have to use this function if you want to visit nodes/edges of the graph composite
+   */
+  virtual void acceptVisitorOnGraph(GlSceneVisitor *visitor);
 
   virtual void draw(float lod,Camera* camera);
 

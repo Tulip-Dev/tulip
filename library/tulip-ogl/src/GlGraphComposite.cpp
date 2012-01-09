@@ -65,6 +65,10 @@ void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor) {
   if(boundingBox.isValid())
     visitor->visit(this);
 }
+void GlGraphComposite::acceptVisitorOnGraph(GlSceneVisitor *visitor) {
+  graphRenderer->visitGraph(visitor);
+}
+
 //===================================================================
 void GlGraphComposite::draw(float lod,Camera* camera) {
   graphRenderer->draw(lod,camera);
