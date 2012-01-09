@@ -72,8 +72,6 @@ public :
   virtual bool check(std::string &) {
     return true;
   }
-  virtual void reset() {}
-
   /**
    * @brief The graph this algorithm will be run on. Retrieved from the context at construction.
    */

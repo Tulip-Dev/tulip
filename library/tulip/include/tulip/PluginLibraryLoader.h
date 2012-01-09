@@ -31,9 +31,9 @@ public:
   int n;
   std::string msg;
   std::string pluginPath;
-  PluginLoader *loader;
+  //PluginLoader *loader;
 
-  PluginLibraryLoader(std::string pluginPath, PluginLoader *loader);
+  PluginLibraryLoader(const std::string& pluginPath, PluginLoader *loader);
   bool hasPluginLibraryToLoad() {
     return n >= 0;
   }

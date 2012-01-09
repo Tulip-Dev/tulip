@@ -91,13 +91,10 @@ struct IteratorInfos {
   TCHAR currentDirectory[BUFSIZE];
 };
 
-PluginLibraryLoader::PluginLibraryLoader(std::string _pluginPath, PluginLoader *loader) {
+PluginLibraryLoader::PluginLibraryLoader(const std::string& _pluginPath, PluginLoader *loader)): n(0), pluginPath(_pluginPath) {
   DWORD dwRet;
   IteratorInfos *_infos = new IteratorInfos();
   dwRet = GetCurrentDirectory(BUFSIZE, _infos ->currentDirectory);
-  //printf("Plugins from: %s\n", _pluginPath.c_str());
-  n = 0;
-  pluginPath = _pluginPath;
 
   if(dwRet == 0) {
     n = -1;
@@ -115,7 +112,7 @@ PluginLibraryLoader::PluginLibraryLoader(std::string _pluginPath, PluginLoader *
       return;
     }
 
-    SetCurrentDirectory (_pluginPath.c_str());
+    SetCurrentDirectory (pluginPath.c_str());
     _infos->hFind = FindFirstFile ("*.dll", &_infos->FindData);
 
     if (loader != 0) {
@@ -213,8 +210,9 @@ int __tulip_select_libs(struct dirent *ent) {
   return 1;
 }
 
-PluginLibraryLoader::PluginLibraryLoader(std::string _pluginPath,
-    PluginLoader *loader) {
+PluginLibraryLoader::PluginLibraryLoader(const std::string& _pluginPath,
+					 PluginLoader *loader)
+					 : n(-1), pluginPath(_pluginPath) {
   struct dirent **namelist;
   n = scandir((const char *) _pluginPath.c_str(),
               &namelist,

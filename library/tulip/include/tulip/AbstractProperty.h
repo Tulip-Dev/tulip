@@ -149,12 +149,7 @@ public:
   //=================================================================================
   virtual AbstractProperty<Tnode,Tedge,TPROPERTY>& operator =(AbstractProperty<Tnode,Tedge,TPROPERTY> &prop) {
     if (this!= &prop) {
-      //=============================================================
-      //The backup is necessary, if a proxy is a function which use the value of "*this"
-      //Future implementation should take into account : recursive or not
-      //It will enable to preserve the backup cost in a lot of case.
-      //=============================================================
-      if (graph == 0) graph = prop.graph;
+     if (graph == 0) graph = prop.graph;
 
       if (graph == prop.graph) {
         setAllNodeValue(prop.getNodeDefaultValue());
@@ -177,48 +172,22 @@ public:
         delete itE;
       }
       else {
-        MutableContainer<typename Tnode::RealType> backupNode;
-        MutableContainer<typename Tedge::RealType> backupEdge;
-        backupNode.setAll(prop.nodeDefaultValue);
-        backupEdge.setAll(prop.edgeDefaultValue);
-        Iterator<node> *itN=graph->getNodes();
-
-        while (itN->hasNext()) {
-          node itn=itN->next();
-
-          if (prop.graph->isElement(itn))
-            backupNode.set(itn.id,prop.getNodeValue(itn));
-        }
-
-        delete itN;
-        Iterator<edge> *itE=graph->getEdges();
-
-        while (itE->hasNext()) {
-          edge ite=itE->next();
-
-          if (prop.graph->isElement(ite))
-            backupEdge.set(ite.id,prop.getEdgeValue(ite));
-        }
-
-        delete itE;
         //==============================================================*
-        itN=graph->getNodes();
+        Iterator<node>* itN = graph->getNodes();
 
         while (itN->hasNext()) {
           node itn=itN->next();
 
           if (prop.graph->isElement(itn))
-            setNodeValue(itn,backupNode.get(itn.id));
-        }
-
-        delete itN;
-        itE=graph->getEdges();
+            setNodeValue(itn, prop.getNodeValue(itn));
+        } delete itN;
+        Iterator<edge>*itE = graph->getEdges();
 
         while (itE->hasNext()) {
           edge ite=itE->next();
 
           if (prop.graph->isElement(ite))
-            setEdgeValue(ite,backupEdge.get(ite.id));
+            setEdgeValue(ite, prop.getEdgeValue(ite));
         }
 
         delete itE;
@@ -470,7 +439,6 @@ protected:
   ///Enable to clone part of sub_class
   virtual void clone_handler(AbstractProperty<Tnode,Tedge,TPROPERTY> &) {}
 
-protected:
   MutableContainer<typename Tnode::RealType> nodeProperties;
   MutableContainer<typename Tedge::RealType> edgeProperties;
   typename Tnode::RealType nodeDefaultValue;
