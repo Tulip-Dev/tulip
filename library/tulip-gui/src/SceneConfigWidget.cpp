@@ -7,8 +7,12 @@
 
 using namespace tlp;
 
-SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(NULL) {
+SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(NULL), _resetting(false) {
   _ui->setupUi(this);
+  _ui->labelSizesSpanSlider->setHandleMovementMode(QxtSpanSlider::NoCrossing);
+  _ui->labelsDisabledLabel->installEventFilter(this);
+  _ui->labelsNoOverlapLabel->installEventFilter(this);
+  _ui->labelsShowAllLabel->installEventFilter(this);
 }
 
 void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
@@ -24,6 +28,8 @@ void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
 }
 
 void SceneConfigWidget::resetChanges() {
+  _resetting = true;
+
   _ui->labelsOrderingCombo->clear();
   _ui->scrollArea->setEnabled(_glMainWidget != NULL);
 
@@ -34,7 +40,7 @@ void SceneConfigWidget::resetChanges() {
   Graph* graph = _glMainWidget->getGraph();
   GlGraphRenderingParameters* renderingParameters = _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
 
-  // Metric ordering combo
+  // NODES
   _ui->labelsOrderingCombo->addItem(trUtf8("Disable ordering"));
   int i=1;
   std::string propName;
@@ -52,7 +58,53 @@ void SceneConfigWidget::resetChanges() {
   }
   _ui->labelsFitCheck->setChecked(renderingParameters->isLabelScaled());
   _ui->labelsDensitySlider->setValue(renderingParameters->getLabelsDensity());
-  qWarning() << renderingParameters->getMinSizeOfLabel() << " - " << renderingParameters->getMaxSizeOfLabel();
-  _ui->labelSizesSpanSlider->setMinimum(renderingParameters->getMinSizeOfLabel());
-  _ui->labelSizesSpanSlider->setMaximum(renderingParameters->getMaxSizeOfLabel());
+  _ui->labelSizesSpanSlider->setLowerValue(renderingParameters->getMinSizeOfLabel());
+  _ui->labelSizesSpanSlider->setUpperValue(renderingParameters->getMaxSizeOfLabel());
+
+  // EDGES
+  _ui->edges3DCheck->setChecked(renderingParameters->isEdge3D());
+  _ui->edgesArrowCheck->setChecked(renderingParameters->isViewArrow());
+  _ui->edgesColorInterpolationCheck->setChecked(renderingParameters->isEdgeColorInterpolate());
+  _ui->edgesSizeInterpolationCheck->setChecked(renderingParameters->isEdgeSizeInterpolate());
+
+  QApplication::processEvents();
+  _resetting = false;
+}
+
+bool SceneConfigWidget::eventFilter(QObject* obj, QEvent* ev) {
+  if (ev->type() == QEvent::MouseButtonPress) {
+    if (obj == _ui->labelsDisabledLabel)
+      _ui->labelsDensitySlider->setValue(-100);
+    else if (obj == _ui->labelsNoOverlapLabel)
+      _ui->labelsDensitySlider->setValue(0);
+    else if (obj == _ui->labelsShowAllLabel)
+      _ui->labelsDensitySlider->setValue(100);
+  }
+}
+
+void SceneConfigWidget::settingsChanged() {
+  _ui->applyButton->setEnabled(!_resetting);
+}
+
+void SceneConfigWidget::applySettings() {
+  GlGraphRenderingParameters* renderingParameters = _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
+
+  // NODES
+  DoubleProperty* orderingProperty = NULL;
+  if (_ui->labelsOrderingCombo->currentIndex() != 0)
+    orderingProperty = _glMainWidget->getGraph()->getProperty<DoubleProperty>(_ui->labelsOrderingCombo->currentText().toStdString());
+  renderingParameters->setElementOrderingProperty(orderingProperty);
+  renderingParameters->setLabelScaled(_ui->labelsFitCheck->isChecked());
+  renderingParameters->setLabelsDensity(_ui->labelsDensitySlider->value());
+  renderingParameters->setMinSizeOfLabel(_ui->labelSizesSpanSlider->lowerValue());
+  renderingParameters->setMaxSizeOfLabel(_ui->labelSizesSpanSlider->upperValue());
+
+  // EDGES
+  renderingParameters->setEdge3D(_ui->edges3DCheck->isChecked());
+  renderingParameters->setViewArrow(_ui->edgesArrowCheck->isChecked());
+  renderingParameters->setEdgeColorInterpolate(_ui->edgesColorInterpolationCheck->isChecked());
+  renderingParameters->setEdgeSizeInterpolate(_ui->edgesSizeInterpolationCheck->isChecked());
+
+  _glMainWidget->draw();
+  _ui->applyButton->setEnabled(false);
 }
