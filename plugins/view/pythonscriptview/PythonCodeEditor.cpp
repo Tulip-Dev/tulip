@@ -588,9 +588,11 @@ static int matchRightParenthesis(const QTextBlock &block, const std::pair<char, 
 }
 
 void PythonCodeEditor::matchParens() {
+	blockSignals(true);
 	parenHighlighter->rehighlightBlock(textCursor().block());
 	if (highlighter)
 		highlighter->rehighlightBlock(textCursor().block());
+	blockSignals(false);
 	ParenInfoTextBlockData *data = static_cast<ParenInfoTextBlockData *>(textCursor().block().userData());
 	if (data) {
 		int curPos = textCursor().position();
