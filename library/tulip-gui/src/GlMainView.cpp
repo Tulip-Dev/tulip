@@ -22,8 +22,7 @@
 
 using namespace tlp;
 
-GlMainView::GlMainView(): _overview(NULL), _sceneConfigurationWidget(NULL) {
-
+GlMainView::GlMainView(): _displayOverview(false),_overview(NULL), _sceneConfigurationWidget(NULL) {
 }
 
 GlMainView::~GlMainView() {
@@ -34,6 +33,9 @@ void GlMainView::draw(tlp::PluginProgress*) {
 }
 
 void GlMainView::drawOverview(bool generatePixmap) {
+  if(!_displayOverview)
+    return;
+
   if(_overview == NULL) {
     _overview=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
     addToScene(_overview);
@@ -67,4 +69,8 @@ void GlMainView::glMainViewDrawn(GlMainWidget *, bool graphChanged) {
 
 QList<QWidget*> GlMainView::configurationWidgets() const {
   return QList<QWidget*>() << _sceneConfigurationWidget;
+}
+
+void GlMainView::displayOverview(bool display){
+  _displayOverview=display;
 }

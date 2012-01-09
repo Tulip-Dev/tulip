@@ -30,6 +30,7 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   Q_OBJECT
 
   tlp::GlMainWidget* _glMainWidget;
+  bool _displayOverview;
   tlp::GlOverviewGraphicsItem* _overview;
   tlp::SceneConfigWidget* _sceneConfigurationWidget;
 
@@ -38,6 +39,7 @@ public:
   virtual ~GlMainView();
   tlp::GlMainWidget* getGlMainWidget() const;
   virtual QList<QWidget*> configurationWidgets() const;
+  void displayOverview(bool display);
 
 public slots:
   virtual void draw(tlp::PluginProgress* pluginProgress);
