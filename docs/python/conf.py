@@ -236,7 +236,8 @@ def process_docstring(app, what, name, obj, options, lines):
 	  signaturePos[nbMethods] = pos
 	  pos += len(n)
 	  nbMethods+=1  
-	   
+	
+
 	if not n in methodDocstring.keys():
 	  methodDocstring[n] = [0] * nbMethods
 	     
@@ -248,7 +249,15 @@ def process_docstring(app, what, name, obj, options, lines):
 	    currentSignature = obj.__doc__[signaturePos[i]:obj.__doc__.find(")", signaturePos[i])+1]
 	    methodDocstring[n][i] = 1
 	    break
-	
+		
+	signatureInLines = False
+	for l in lines:
+		if l.find(currentSignature) != -1:
+			signatureInLines = True
+			break
+			
+	if not signatureInLines:
+		lines.insert(0, currentSignature)
 	
 	while len(lines) > 0 and lines[0].find(currentSignature) == -1:
 	  del lines[0]
