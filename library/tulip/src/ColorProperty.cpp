@@ -38,7 +38,9 @@ PropertyInterface* ColorProperty::clonePrototype(Graph * g, const std::string& n
   if( !g )
     return 0;
 
-  ColorProperty * p = g->getLocalProperty<ColorProperty>( n );
+  // allow to get an unregistered property (empty name)
+  ColorProperty * p = n.empty()
+    ? new ColorProperty(g) : g->getLocalProperty<ColorProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
@@ -48,7 +50,9 @@ PropertyInterface* ColorVectorProperty::clonePrototype(Graph * g, const std::str
   if( !g )
     return 0;
 
-  ColorVectorProperty * p = g->getLocalProperty<ColorVectorProperty>( n );
+  // allow to get an unregistered property (empty name)
+  ColorVectorProperty * p = n.empty()
+    ? new ColorVectorProperty(g) : g->getLocalProperty<ColorVectorProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;

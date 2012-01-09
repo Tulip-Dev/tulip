@@ -106,7 +106,9 @@ PropertyInterface* BooleanProperty::clonePrototype(Graph * g, const std::string&
   if( !g )
     return 0;
 
-  BooleanProperty * p = g->getLocalProperty<BooleanProperty>( n );
+  // allow to get an unregistered property (empty name)
+  BooleanProperty * p = n.empty()
+    ? new BooleanProperty(g) : g->getLocalProperty<BooleanProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
@@ -116,7 +118,9 @@ PropertyInterface* BooleanVectorProperty::clonePrototype(Graph * g, const std::s
   if( !g )
     return 0;
 
-  BooleanVectorProperty * p = g->getLocalProperty<BooleanVectorProperty>( n );
+  // allow to get an unregistered property (empty name)
+  BooleanVectorProperty * p = n.empty()
+    ? new BooleanVectorProperty(g) : g->getLocalProperty<BooleanVectorProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;

@@ -182,7 +182,9 @@ PropertyInterface* SizeProperty::clonePrototype(Graph * g, const std::string& n)
   if( !g )
     return 0;
 
-  SizeProperty * p = g->getLocalProperty<SizeProperty>( n );
+  // allow to get an unregistered property (empty name)
+  SizeProperty * p = n.empty()
+    ? new SizeProperty(g) : g->getLocalProperty<SizeProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
@@ -192,7 +194,9 @@ PropertyInterface* SizeVectorProperty::clonePrototype(Graph * g, const std::stri
   if( !g )
     return 0;
 
-  SizeVectorProperty * p = g->getLocalProperty<SizeVectorProperty>( n );
+  // allow to get an unregistered property (empty name)
+  SizeVectorProperty * p = n.empty()
+    ? new SizeVectorProperty(g) : g->getLocalProperty<SizeVectorProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
