@@ -109,8 +109,14 @@ background-color: #F4F4F4;
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>:/tuliplite/camera-photo.svg</normaloff>:/tuliplite/camera-photo.svg</iconset>
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/camera-photo.png</normaloff>:/tulip/gui/icons/20/camera-photo.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
      </property>
      <property name="flat">
       <bool>true</bool>
@@ -195,13 +201,13 @@ background-color: #F4F4F4;
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>:/tuliplite/edge_interpolation.png</normaloff>:/tuliplite/edge_interpolation.png</iconset>
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/color_interpolation.png</normaloff>:/tulip/gui/icons/20/color_interpolation.png</iconset>
      </property>
      <property name="iconSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>20</width>
+       <height>20</height>
       </size>
      </property>
      <property name="checkable">
@@ -235,6 +241,16 @@ background-color: #F4F4F4;
      <property name="text">
       <string/>
      </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/edges_disabled.png</normaloff>:/tulip/gui/icons/20/edges_disabled.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
      <property name="checkable">
       <bool>true</bool>
      </property>
@@ -261,8 +277,14 @@ background-color: #F4F4F4;
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>:/tuliplite/labels.svg</normaloff>:/tuliplite/labels.svg</iconset>
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/edges_label.png</normaloff>:/tulip/gui/icons/20/edges_label.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -369,9 +391,14 @@ background-color: #F4F4F4;
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>:/tuliplite/labels.svg</normaloff>
-       <selectedon>:/tuliplite/edge_interpolation.png</selectedon>:/tuliplite/labels.svg</iconset>
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/labels.png</normaloff>:/tulip/gui/icons/20/labels.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -409,6 +436,12 @@ background-color: #F4F4F4;
      </property>
      <property name="text">
       <string/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
      </property>
      <property name="flat">
       <bool>false</bool>
