@@ -19,6 +19,7 @@
 #include "tulip/GlMainView.h"
 #include <tulip/GlMainWidget.h>
 #include <tulip/SceneConfigWidget.h>
+#include <tulip/GlOverviewGraphicsItem.h>
 
 using namespace tlp;
 
@@ -71,6 +72,13 @@ QList<QWidget*> GlMainView::configurationWidgets() const {
   return QList<QWidget*>() << _sceneConfigurationWidget;
 }
 
-void GlMainView::displayOverview(bool display){
-  _displayOverview=display;
+void GlMainView::setDisplayOverview(bool display) {
+  if (_displayOverview != display) {
+    _displayOverview=display;
+    drawOverview();
+  }
+}
+
+bool GlMainView::displayOverview() const {
+  return _displayOverview;
 }
