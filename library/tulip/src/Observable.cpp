@@ -413,6 +413,10 @@ void Observable::observableDeleted() {
 }
 //----------------------------------------
 void Observable::sendEvent(const Event &message) {
+  // nothing to do if not bound
+  if (!isBound())
+    return;
+
   if (!oGraph.isElement(_n) || !oAlive[_n]) {
     throw OLOException("Notify called on a deleted Observable");
   }
