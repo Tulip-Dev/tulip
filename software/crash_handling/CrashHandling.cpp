@@ -87,7 +87,7 @@ void dumpStack(int sig, siginfo_t *, void * ucontext) {
   sw.printCallStackToStdErr();
   std::cerr << TLP_STACK_END_HEADER << std::endl;
   std::cerr << std::flush;
-  exit(1);
+  installSignalHandler(sig, SIG_DFL);
 }
 
 extern void installSignalHandlers(void);
