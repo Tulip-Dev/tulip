@@ -28,7 +28,7 @@ using namespace tlp;
 using namespace std;
 
 NodeLinkDiagramComponent::NodeLinkDiagramComponent() {
-  displayOverview(true);
+  setDisplayOverview(true);
 }
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {

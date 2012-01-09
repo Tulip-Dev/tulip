@@ -20,17 +20,17 @@
 #define Tulip_GLMAINVIEW_H
 
 #include <tulip/ViewWidget.h>
-#include "tulip/GlOverviewGraphicsItem.h"
 
 namespace tlp {
+class GlOverviewGraphicsItem;
 class SceneConfigWidget;
 class GlMainWidget;
 
 class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   Q_OBJECT
 
-  tlp::GlMainWidget* _glMainWidget;
   bool _displayOverview;
+  tlp::GlMainWidget* _glMainWidget;
   tlp::GlOverviewGraphicsItem* _overview;
   tlp::SceneConfigWidget* _sceneConfigurationWidget;
 
@@ -39,12 +39,13 @@ public:
   virtual ~GlMainView();
   tlp::GlMainWidget* getGlMainWidget() const;
   virtual QList<QWidget*> configurationWidgets() const;
-  void displayOverview(bool display);
+  bool displayOverview() const;
 
 public slots:
   virtual void draw(tlp::PluginProgress* pluginProgress);
   virtual void drawOverview(bool generatePixmap=true);
   virtual void centerView();
+  void setDisplayOverview(bool);
 
 protected slots:
   virtual void glMainViewDrawn(GlMainWidget*,bool graphChanged);
