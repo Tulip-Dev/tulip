@@ -114,6 +114,7 @@ GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer( GlGraphInputData &inputD
 //===================================================================
 GlGraphHighDetailsRenderer::~GlGraphHighDetailsRenderer() {
   delete fakeScene;
+  delete lodCalculator;
 }
 //===================================================================
 void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
