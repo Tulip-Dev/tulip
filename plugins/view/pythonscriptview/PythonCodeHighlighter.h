@@ -32,32 +32,32 @@ class PythonCodeHighlighter : public QSyntaxHighlighter {
 
 public:
 
-     PythonCodeHighlighter(QTextDocument *parent = 0);
+  PythonCodeHighlighter(QTextDocument *parent = 0);
 
-     void setShellMode(const bool shellMode) {
-    	 this->shellMode = shellMode;
-     }
+  void setShellMode(const bool shellMode) {
+    this->shellMode = shellMode;
+  }
 
 protected:
 
-     void highlightBlock(const QString &text);
+  void highlightBlock(const QString &text);
 
 private:
 
-     struct HighlightingRule {
-         QRegExp pattern;
-         QTextCharFormat format;
-     };
-     QVector<HighlightingRule> highlightingRules;
+  struct HighlightingRule {
+    QRegExp pattern;
+    QTextCharFormat format;
+  };
+  QVector<HighlightingRule> highlightingRules;
 
-     QTextCharFormat keywordFormat;
-     QTextCharFormat classFormat;
-     QTextCharFormat commentFormat;
-     QTextCharFormat quotationFormat;
-     QTextCharFormat functionFormat;
-     QTextCharFormat numberFormat;
+  QTextCharFormat keywordFormat;
+  QTextCharFormat classFormat;
+  QTextCharFormat commentFormat;
+  QTextCharFormat quotationFormat;
+  QTextCharFormat functionFormat;
+  QTextCharFormat numberFormat;
 
-     bool shellMode;
+  bool shellMode;
 
 };
 

@@ -24,51 +24,53 @@
 ParenInfoTextBlockData::ParenInfoTextBlockData() {}
 
 QVector<ParenInfo> ParenInfoTextBlockData::parens() {
-	return parenInfos;
+  return parenInfos;
 }
 
 void ParenInfoTextBlockData::insert(const ParenInfo &parenInfo) {
-	parenInfos.append(parenInfo);
+  parenInfos.append(parenInfo);
 }
 
 void ParenInfoTextBlockData::sortParenInfos() {
-	std::sort(parenInfos.begin(), parenInfos.end());
+  std::sort(parenInfos.begin(), parenInfos.end());
 }
 
 ParenMatcherHighlighter::ParenMatcherHighlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
-	leftParensToMatch.append('(');
-	leftParensToMatch.append('[');
-	leftParensToMatch.append('{');
-	rightParensToMatch.append(')');
-	rightParensToMatch.append(']');
-	rightParensToMatch.append('}');
+  leftParensToMatch.append('(');
+  leftParensToMatch.append('[');
+  leftParensToMatch.append('{');
+  rightParensToMatch.append(')');
+  rightParensToMatch.append(']');
+  rightParensToMatch.append('}');
 }
 
 void ParenMatcherHighlighter::highlightBlock(const QString &text) {
-	ParenInfoTextBlockData *data = new ParenInfoTextBlockData;
+  ParenInfoTextBlockData *data = new ParenInfoTextBlockData;
 
-	for (int i = 0 ; i < leftParensToMatch.size() ; ++i) {
-		int leftPos = text.indexOf(leftParensToMatch.at(i));
-		while (leftPos != -1) {
-			ParenInfo info;
-			info.character = leftParensToMatch.at(i);
-			info.position = currentBlock().position() + leftPos;
-			data->insert(info);
-			leftPos = text.indexOf(leftParensToMatch.at(i), leftPos+1);
-		}
-	}
+  for (int i = 0 ; i < leftParensToMatch.size() ; ++i) {
+    int leftPos = text.indexOf(leftParensToMatch.at(i));
 
-	for (int i = 0 ; i < rightParensToMatch.size() ; ++i) {
-		int rightPos = text.indexOf(rightParensToMatch.at(i));
-		while (rightPos != -1) {
-			ParenInfo info;
-			info.character = rightParensToMatch.at(i);
-			info.position = currentBlock().position() + rightPos;
-			data->insert(info);
-			rightPos = text.indexOf(rightParensToMatch.at(i), rightPos+1);
-		}
-	}
+    while (leftPos != -1) {
+      ParenInfo info;
+      info.character = leftParensToMatch.at(i);
+      info.position = currentBlock().position() + leftPos;
+      data->insert(info);
+      leftPos = text.indexOf(leftParensToMatch.at(i), leftPos+1);
+    }
+  }
 
-	data->sortParenInfos();
-	setCurrentBlockUserData(data);
+  for (int i = 0 ; i < rightParensToMatch.size() ; ++i) {
+    int rightPos = text.indexOf(rightParensToMatch.at(i));
+
+    while (rightPos != -1) {
+      ParenInfo info;
+      info.character = rightParensToMatch.at(i);
+      info.position = currentBlock().position() + rightPos;
+      data->insert(info);
+      rightPos = text.indexOf(rightParensToMatch.at(i), rightPos+1);
+    }
+  }
+
+  data->sortParenInfos();
+  setCurrentBlockUserData(data);
 }

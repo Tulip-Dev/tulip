@@ -30,24 +30,24 @@ class AutoCompletionDataBase {
 
 public :
 
-	AutoCompletionDataBase(APIDataBase *apiDb = NULL);
+  AutoCompletionDataBase(APIDataBase *apiDb = NULL);
 
-	void analyseCurrentScriptCode(const QString &code);
+  void analyseCurrentScriptCode(const QString &code);
 
-	QSet<QString> getAutoCompletionListForContext(const QString &context, const QString &editedFunction);
+  QSet<QString> getAutoCompletionListForContext(const QString &context, const QString &editedFunction);
 
-	QString findTypeForExpr(const QString &expr, const QString &funcName);
+  QString findTypeForExpr(const QString &expr, const QString &funcName);
 
 private :
 
-	QString getTypeNameForVar(const QString &varName);
-	QString getTypeNameForExpr(const QString &varName);
+  QString getTypeNameForVar(const QString &varName);
+  QString getTypeNameForExpr(const QString &varName);
 
-	APIDataBase *apiDb;
-	QSet<QString> globalAutoCompletionList;
-	QHash<QString, QSet<QString> > functionAutoCompletionList;
-	QHash<QString, QHash<QString, QString> > varToType;
-	QHash<QString, QString> iteratorType;
+  APIDataBase *apiDb;
+  QSet<QString> globalAutoCompletionList;
+  QHash<QString, QSet<QString> > functionAutoCompletionList;
+  QHash<QString, QHash<QString, QString> > varToType;
+  QHash<QString, QString> iteratorType;
 
 };
 

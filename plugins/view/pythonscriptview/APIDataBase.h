@@ -29,24 +29,24 @@ class APIDataBase {
 
 public :
 
-	APIDataBase();
+  APIDataBase();
 
-	void loadApiFile(const QString &apiFilePath);
+  void loadApiFile(const QString &apiFilePath);
 
-	void addApiEntry(const QString &apiEntry);
+  void addApiEntry(const QString &apiEntry);
 
-	QSet<QString> getDictContentForType(const QString &type, const QString &prefix = "");
-	QString getReturnTypeForMethodOrFunction(const QString &funcName);
-	QVector<QVector<QString> > getParamTypesForMethodOrFunction(const QString &funcName);
-	QVector<QString> findTypesContainingDictEntry(const QString &dictEntry);
-	QSet<QString> getAllDictEntriesStartingWithPrefix(const QString &prefix);
+  QSet<QString> getDictContentForType(const QString &type, const QString &prefix = "");
+  QString getReturnTypeForMethodOrFunction(const QString &funcName);
+  QVector<QVector<QString> > getParamTypesForMethodOrFunction(const QString &funcName);
+  QVector<QString> findTypesContainingDictEntry(const QString &dictEntry);
+  QSet<QString> getAllDictEntriesStartingWithPrefix(const QString &prefix);
 
 
 private :
 
-	QHash<QString, QSet<QString> > dictContent;
-	QHash<QString, QString> returnType;
-	QHash<QString, QVector<QVector<QString> > > paramTypes;
+  QHash<QString, QSet<QString> > dictContent;
+  QHash<QString, QString> returnType;
+  QHash<QString, QVector<QVector<QString> > > paramTypes;
 
 
 };

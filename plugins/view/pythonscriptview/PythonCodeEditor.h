@@ -31,32 +31,33 @@
 
 class GragKeyboardFocusEventFilter : public QObject {
 public :
-	bool eventFilter(QObject *, QEvent *event) {
-		if (event->type() == QEvent::ShortcutOverride) {
-			event->accept();
-			return true;
-		}
-		return false;
-	}
+  bool eventFilter(QObject *, QEvent *event) {
+    if (event->type() == QEvent::ShortcutOverride) {
+      event->accept();
+      return true;
+    }
+
+    return false;
+  }
 };
 
 class AutoCompletionList : public QListWidget {
 
 public :
 
-	AutoCompletionList(QWidget *parent=0);
+  AutoCompletionList(QWidget *parent=0);
 
 protected :
 
-	void keyPressEvent(QKeyEvent *e);
-	void showEvent(QShowEvent * event);
-	void hideEvent(QHideEvent * event);
-	bool eventFilter(QObject *obj, QEvent * event);
+  void keyPressEvent(QKeyEvent *e);
+  void showEvent(QShowEvent * event);
+  void hideEvent(QHideEvent * event);
+  bool eventFilter(QObject *obj, QEvent * event);
 
 private :
 
-	bool activated;
-	bool wasActivated;
+  bool activated;
+  bool wasActivated;
 };
 
 class FindReplaceDialog : public QDialog, public Ui::FindReplaceDialogData {
@@ -100,155 +101,155 @@ private :
 
 class PythonCodeEditor : public QPlainTextEdit {
 
-	Q_OBJECT
+  Q_OBJECT
 
-	friend class LineNumberArea;
+  friend class LineNumberArea;
 
 public :
 
-	PythonCodeEditor(QWidget *parent=0);
+  PythonCodeEditor(QWidget *parent=0);
 
-	int lineNumberAreaWidth();
-	void indicateScriptCurrentError(int lineNumber);
-	void clearErrorIndicator();
+  int lineNumberAreaWidth();
+  void indicateScriptCurrentError(int lineNumber);
+  void clearErrorIndicator();
 
-	void zoomIn();
-	void zoomOut();
+  void zoomIn();
+  void zoomOut();
 
-	void getCursorPosition(int &line, int &col);
-	void setCursorPosition(int line, int col);
-	void getSelection(int &lineFrom, int &indexFrom, int &lineTo, int &indexTo);
-	void setSelection(int startLine, int startCol, int endLine, int endCol);
-	void removeSelectedText();
-	bool hasSelectedText() const;
-	int lines() const;
-	int lineLength(int lineNumber) const;
-	QString selectedText() const;
-	void insertAt(QString text, int line, int col);
+  void getCursorPosition(int &line, int &col);
+  void setCursorPosition(int line, int col);
+  void getSelection(int &lineFrom, int &indexFrom, int &lineTo, int &indexTo);
+  void setSelection(int startLine, int startCol, int endLine, int endCol);
+  void removeSelectedText();
+  bool hasSelectedText() const;
+  int lines() const;
+  int lineLength(int lineNumber) const;
+  QString selectedText() const;
+  void insertAt(QString text, int line, int col);
 
-	void setAutoIndentation(const bool autoIndent) {
-		this->autoIndent = autoIndent;
-	}
+  void setAutoIndentation(const bool autoIndent) {
+    this->autoIndent = autoIndent;
+  }
 
-	bool autoIndentation() const {
-		return autoIndent;
-	}
+  bool autoIndentation() const {
+    return autoIndent;
+  }
 
-	void setIndentationGuides(const bool indentGuides) {
-		this->indentGuides = indentGuides;
-	}
+  void setIndentationGuides(const bool indentGuides) {
+    this->indentGuides = indentGuides;
+  }
 
-	bool indentationGuides() const {
-		return indentGuides;
-	}
+  bool indentationGuides() const {
+    return indentGuides;
+  }
 
-	void setHighlightEditedLine(const bool highlightCurLine) {
-		this->highlightCurLine = highlightCurLine;
-	}
+  void setHighlightEditedLine(const bool highlightCurLine) {
+    this->highlightCurLine = highlightCurLine;
+  }
 
-	bool highlightEditedLine() const {
-		return highlightCurLine;
-	}
+  bool highlightEditedLine() const {
+    return highlightCurLine;
+  }
 
-	void setFindReplaceActivated(const bool activateFindReplace) {
-		findReplaceActivate = activateFindReplace;
-	}
+  void setFindReplaceActivated(const bool activateFindReplace) {
+    findReplaceActivate = activateFindReplace;
+  }
 
-	bool findReplaceActivated() const {
-		return findReplaceActivate;
-	}
+  bool findReplaceActivated() const {
+    return findReplaceActivate;
+  }
 
-	void setCommentShortcutsActivated(const bool activateCommentShortcuts) {
-		commentShortcutsActivate = activateCommentShortcuts;
-	}
+  void setCommentShortcutsActivated(const bool activateCommentShortcuts) {
+    commentShortcutsActivate = activateCommentShortcuts;
+  }
 
-	bool commentShortcutsActivated() const {
-		return commentShortcutsActivate;
-	}
+  bool commentShortcutsActivated() const {
+    return commentShortcutsActivate;
+  }
 
-	void commentSelectedCode();
-	void uncommentSelectedCode();
+  void commentSelectedCode();
+  void uncommentSelectedCode();
 
 protected:
 
-	void resizeEvent(QResizeEvent *event);
-	void showEvent(QShowEvent *);
-	void hideEvent(QHideEvent * event);
-	void paintEvent(QPaintEvent *event);
-	void keyPressEvent (QKeyEvent * e);
-	void wheelEvent(QWheelEvent * event);
-	void mouseDoubleClickEvent(QMouseEvent * event);
-	void mouseMoveEvent(QMouseEvent * event);
-	void mousePressEvent(QMouseEvent * event);
-	void mouseReleaseEvent(QMouseEvent * event);
-	void lineNumberAreaPaintEvent(QPaintEvent *event);
+  void resizeEvent(QResizeEvent *event);
+  void showEvent(QShowEvent *);
+  void hideEvent(QHideEvent * event);
+  void paintEvent(QPaintEvent *event);
+  void keyPressEvent (QKeyEvent * e);
+  void wheelEvent(QWheelEvent * event);
+  void mouseDoubleClickEvent(QMouseEvent * event);
+  void mouseMoveEvent(QMouseEvent * event);
+  void mousePressEvent(QMouseEvent * event);
+  void mouseReleaseEvent(QMouseEvent * event);
+  void lineNumberAreaPaintEvent(QPaintEvent *event);
 
 protected slots:
 
-	void updateLineNumberAreaWidth();
-	void updateLineNumberArea(const QRect &, int);
-	void resetExtraSelections();
-	void matchParens();
-	virtual void highlightCurrentLine();
-	void highlightErrors();
-	virtual void showAutoCompletionList();
-	virtual void updateAutoCompletionList();
+  void updateLineNumberAreaWidth();
+  void updateLineNumberArea(const QRect &, int);
+  void resetExtraSelections();
+  void matchParens();
+  virtual void highlightCurrentLine();
+  void highlightErrors();
+  virtual void showAutoCompletionList();
+  virtual void updateAutoCompletionList();
 
 protected:
 
-	virtual void updateAutoCompletionListPosition();
+  virtual void updateAutoCompletionListPosition();
 
-	void createParenSelection(int pos);
-	void updateTabStopWidth();
+  void createParenSelection(int pos);
+  void updateTabStopWidth();
 
-	QString getEditedFunctionName();
+  QString getEditedFunctionName();
 
-	void showTooltip();
-	void hideTooltip();
-	bool isTooltipActive();
+  void showTooltip();
+  void hideTooltip();
+  bool isTooltipActive();
 
-	QWidget *lineNumberArea;
-	PythonCodeHighlighter *highlighter;
-	ParenMatcherHighlighter *parenHighlighter;
-	QFont currentFont;
-	QVector<int> currentErrorLines;
+  QWidget *lineNumberArea;
+  PythonCodeHighlighter *highlighter;
+  ParenMatcherHighlighter *parenHighlighter;
+  QFont currentFont;
+  QVector<int> currentErrorLines;
 
-	static APIDataBase *apiDb;
-	AutoCompletionList *autoCompletionList;
-	AutoCompletionDataBase *autoCompletionDb;
+  static APIDataBase *apiDb;
+  AutoCompletionList *autoCompletionList;
+  AutoCompletionDataBase *autoCompletionDb;
 
-	FindReplaceDialog *findReplaceDialog;
+  FindReplaceDialog *findReplaceDialog;
 
-	bool autoIndent;
-	bool indentGuides;
-	bool highlightCurLine;
-	bool tooltipActive;
-	bool findReplaceActivate;
-	bool commentShortcutsActivate;
+  bool autoIndent;
+  bool indentGuides;
+  bool highlightCurLine;
+  bool tooltipActive;
+  bool findReplaceActivate;
+  bool commentShortcutsActivate;
 
-	QPoint toolTipPos;
-	QString toolTipText;
-	QString toolTipFunc;
+  QPoint toolTipPos;
+  QString toolTipText;
+  QString toolTipFunc;
 
 };
 
 class LineNumberArea : public QWidget {
 public:
-    LineNumberArea(PythonCodeEditor *editor) : QWidget(editor) {
-        codeEditor = editor;
-    }
+  LineNumberArea(PythonCodeEditor *editor) : QWidget(editor) {
+    codeEditor = editor;
+  }
 
-    QSize sizeHint() const {
-        return QSize(codeEditor->lineNumberAreaWidth(), 0);
-    }
+  QSize sizeHint() const {
+    return QSize(codeEditor->lineNumberAreaWidth(), 0);
+  }
 
 protected:
-    void paintEvent(QPaintEvent *event) {
-        codeEditor->lineNumberAreaPaintEvent(event);
-    }
+  void paintEvent(QPaintEvent *event) {
+    codeEditor->lineNumberAreaPaintEvent(event);
+  }
 
 private:
-    PythonCodeEditor *codeEditor;
+  PythonCodeEditor *codeEditor;
 };
 
 #endif /* PYTHONCODEEDITOR2_H_ */

@@ -76,10 +76,11 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
   QString docRootPath = QString(tlp::TulipShareDir.c_str()) + "../doc/tulip-python/html/index.html";
 
   QFile docRoot(docRootPath);
+
   if (docRoot.exists()) {
-	  QWebView *webView = new QWebView();
-	  webView->load(QUrl("file://"+docRootPath));
-	  tabWidget->addTab(webView, "Documentation");
+    QWebView *webView = new QWebView();
+    webView->load(QUrl("file://"+docRootPath));
+    tabWidget->addTab(webView, "Documentation");
   }
 
 }
@@ -279,10 +280,12 @@ void PythonScriptViewWidget::currentTabChanged(int index) {
 
   if (index >= 3) {
     scriptControlFrame->hide();
+
     if (index == 3) {
-    	pluginControlFrame->show();
-    } else {
-    	pluginControlFrame->hide();
+      pluginControlFrame->show();
+    }
+    else {
+      pluginControlFrame->hide();
     }
   }
   else {

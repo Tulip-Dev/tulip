@@ -77,7 +77,7 @@ std::string cleanPropertyName(const std::string &propertyName) {
   }
 
   if (ret == "class")
-	  ret += "_";
+    ret += "_";
 
   return ret;
 }
