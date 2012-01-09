@@ -30,6 +30,7 @@
 #include <QtCore/QSet>
 
 class QGraphicsView;
+class QGraphicsItem;
 class QWidget;
 
 namespace tlp {
@@ -144,6 +145,13 @@ public:
     @note By default, this method returns false.
     */
   virtual bool isLayoutProperty(tlp::PropertyInterface*) const;
+
+  /**
+    @brief defines which item is considered as the central item in the view.
+    The central item is considered to be a background item that will be set as parent of every graphics item added by the workspace into the view.
+    By default, this method returns NULL, which means that no central item is defined.
+    */
+  virtual QGraphicsItem* centralItem() const;
 
 public slots:
   /**

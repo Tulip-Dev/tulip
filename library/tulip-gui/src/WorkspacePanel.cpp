@@ -140,7 +140,9 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
     w->resize(w->width(),w->sizeHint().height());
     viewConfigurationTabs->addTab(w,w->windowTitle());
   }
-  _viewConfigurationWidgets = _view->graphicsView()->scene()->addWidget(viewConfigurationTabs);
+
+  _viewConfigurationWidgets = new QGraphicsProxyWidget(_view->centralItem());
+  _viewConfigurationWidgets->setWidget(viewConfigurationTabs);
 
   _view->graphicsView()->scene()->installEventFilter(this);
 }

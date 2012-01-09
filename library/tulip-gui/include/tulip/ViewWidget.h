@@ -98,6 +98,12 @@ protected:
     */
   void setCentralWidget(QWidget*);
 
+  /**
+    @return The graphics item associated to the central widget
+    @see setCentralWidget
+    */
+  virtual QGraphicsItem* centralItem() const;
+
 };
 
 }
