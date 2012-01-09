@@ -273,7 +273,7 @@
         <item>
          <widget class="QToolButton" name="runScriptButton">
           <property name="toolTip">
-           <string>Run script (Ctrl + Space)</string>
+           <string>Run script (Ctrl + Return)</string>
           </property>
           <property name="text">
            <string>...</string>

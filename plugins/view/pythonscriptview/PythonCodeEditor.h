@@ -109,16 +109,16 @@ public :
 
   PythonCodeEditor(QWidget *parent=0);
 
-  int lineNumberAreaWidth();
+  int lineNumberAreaWidth() const;
   void indicateScriptCurrentError(int lineNumber);
   void clearErrorIndicator();
 
   void zoomIn();
   void zoomOut();
 
-  void getCursorPosition(int &line, int &col);
+  void getCursorPosition(int &line, int &col) const;
   void setCursorPosition(int line, int col);
-  void getSelection(int &lineFrom, int &indexFrom, int &lineTo, int &indexTo);
+  void getSelection(int &lineFrom, int &indexFrom, int &lineTo, int &indexTo) const;
   void setSelection(int startLine, int startCol, int endLine, int endCol);
   void removeSelectedText();
   bool hasSelectedText() const;
@@ -126,6 +126,10 @@ public :
   int lineLength(int lineNumber) const;
   QString selectedText() const;
   void insertAt(QString text, int line, int col);
+
+  void commentSelectedCode();
+  void uncommentSelectedCode();
+
 
   void setAutoIndentation(const bool autoIndent) {
     this->autoIndent = autoIndent;
@@ -167,14 +171,10 @@ public :
     return commentShortcutsActivate;
   }
 
-  void commentSelectedCode();
-  void uncommentSelectedCode();
-
 protected:
 
   void resizeEvent(QResizeEvent *event);
   void showEvent(QShowEvent *);
-  void hideEvent(QHideEvent * event);
   void paintEvent(QPaintEvent *event);
   void keyPressEvent (QKeyEvent * e);
   void wheelEvent(QWheelEvent * event);
@@ -202,11 +202,11 @@ protected:
   void createParenSelection(int pos);
   void updateTabStopWidth();
 
-  QString getEditedFunctionName();
+  QString getEditedFunctionName() const;
 
-  void showTooltip();
+  void showTooltip(int line, int col, const QString &text);
   void hideTooltip();
-  bool isTooltipActive();
+  bool isTooltipActive() const;
 
   QWidget *lineNumberArea;
   PythonCodeHighlighter *highlighter;

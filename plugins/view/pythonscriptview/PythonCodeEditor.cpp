@@ -281,7 +281,7 @@ void FindReplaceDialog::hideEvent(QHideEvent *) {
 
 APIDataBase*PythonCodeEditor::apiDb(NULL);
 
-PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), highlighter(NULL), autoIndent(true) {
+PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), highlighter(NULL), tooltipActive(false) {
 	installEventFilter(new GragKeyboardFocusEventFilter());
 	setAutoIndentation(true);
 	setIndentationGuides(true);
@@ -354,7 +354,7 @@ void PythonCodeEditor::clearErrorIndicator() {
 	emit cursorPositionChanged();
 }
 
-int PythonCodeEditor::lineNumberAreaWidth() {
+int PythonCodeEditor::lineNumberAreaWidth() const {
 	QFontMetrics fontMetrics(currentFont);
 	int digits = 1;
 	int max = qMax(1, blockCount());
@@ -454,17 +454,8 @@ void PythonCodeEditor::showEvent(QShowEvent *event) {
 	emit cursorPositionChanged();
 }
 
-void PythonCodeEditor::hideEvent(QHideEvent * event) {
-	QPlainTextEdit::hideEvent(event);
-}
-
 void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 	QPlainTextEdit::paintEvent(event);
-
-	QTextBlock block = firstVisibleBlock();
-	int top = static_cast<int>(blockBoundingGeometry(block).translated(contentOffset()).top());
-
-	int bottom = top + static_cast<int>(blockBoundingRect(block).height());
 
 	QFontMetrics fontMetrics(currentFont);
 	QPainter painter(viewport());
@@ -474,9 +465,9 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 
 	if (isTooltipActive()) {
 		QTextBlock tooltipBlock = document()->findBlockByNumber(toolTipPos.x());
-		top = static_cast<int>(blockBoundingGeometry(tooltipBlock).translated(contentOffset()).top());
+		int top = static_cast<int>(blockBoundingGeometry(tooltipBlock).translated(contentOffset()).top());
 		int left = static_cast<int>(blockBoundingGeometry(tooltipBlock).translated(contentOffset()).left());
-		bottom = top + static_cast<int>(blockBoundingRect(tooltipBlock).height());
+		int bottom = top + static_cast<int>(blockBoundingRect(tooltipBlock).height());
 		QString blockText = tooltipBlock.text();
 		for (int i = 0 ; i < toolTipPos.y() ; ++i) {
 			if (blockText[i] == '\t') {
@@ -509,6 +500,12 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 	if (!indentationGuides()) {
 		return;
 	}
+
+	QTextBlock block = firstVisibleBlock();
+	int top = static_cast<int>(blockBoundingGeometry(block).translated(contentOffset()).top());
+
+	int bottom = top + static_cast<int>(blockBoundingRect(block).height());
+
 
 	QPen pen;
 	pen.setStyle(Qt::DotLine);
@@ -785,25 +782,24 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
 					if (retType != "") {
 						retType = " -> " + retType;
 					}
-					toolTipText = "";
+					QString toolTipTxt = "";
 					for (int i = 0 ; i < params.size() ; ++i) {
-						toolTipText += (funcName + "(");
+						toolTipTxt += (funcName + "(");
 						for (int j = 0 ; j < params[i].size() ; ++j) {
-							toolTipText += params[i][j];
+							toolTipTxt += params[i][j];
 							if (j != params[i].size() - 1) {
-								toolTipText += ", ";
+								toolTipTxt += ", ";
 							}
 						}
 
 						if (i == params.size() - 1) {
-							toolTipText += ")"+retType;
+							toolTipTxt += ")"+retType;
 						} else {
-							toolTipText += ")"+retType+"\n";
+							toolTipTxt += ")"+retType+"\n";
 						}
 					}
-					toolTipPos = QPoint(textCursor().blockNumber(), textBeforeCursor.indexOf(funcName));
 					toolTipFunc = funcName;
-					showTooltip();
+					showTooltip(textCursor().blockNumber(), textBeforeCursor.indexOf(funcName), toolTipTxt);
 				}
 			}
 		} else if (e->text() == ")") {
@@ -902,7 +898,7 @@ void PythonCodeEditor::updateAutoCompletionList() {
 		autoCompletionList->setCurrentRow(0);	
 }
 
-QString PythonCodeEditor::getEditedFunctionName() {
+QString PythonCodeEditor::getEditedFunctionName() const {
 
 	QString funcName = "global";
 	QString className = "";
@@ -957,7 +953,7 @@ void PythonCodeEditor::setCursorPosition(int line, int col) {
 	setTextCursor(cursor);
 }
 
-void PythonCodeEditor::getCursorPosition(int &line, int &col) {
+void PythonCodeEditor::getCursorPosition(int &line, int &col) const {
 	QTextCursor cursor = textCursor();
 	line = cursor.blockNumber();
 	col = textCursor().position() - textCursor().block().position();
@@ -970,7 +966,7 @@ void PythonCodeEditor::setSelection(int startLine, int startCol, int endLine, in
 	setTextCursor(cursor);
 }
 
-void PythonCodeEditor::getSelection(int &lineFrom, int &indexFrom, int &lineTo, int &indexTo) {
+void PythonCodeEditor::getSelection(int &lineFrom, int &indexFrom, int &lineTo, int &indexTo) const {
 	QTextCursor cursor = textCursor();
 	QTextBlock blockStart = document()->findBlock(cursor.selectionStart());
 	QTextBlock blockEnd = document()->findBlock(cursor.selectionEnd());
@@ -1005,8 +1001,10 @@ void PythonCodeEditor::insertAt(QString text, int line, int col) {
 	textCursor().insertText(text);
 }
 
-void PythonCodeEditor::showTooltip() {
+void PythonCodeEditor::showTooltip(int line, int col, const QString &text) {
 	tooltipActive = true;
+	toolTipPos = QPoint(line, col);
+	toolTipText = text;
 	viewport()->update();
 }
 
@@ -1016,7 +1014,7 @@ void PythonCodeEditor::hideTooltip() {
 	viewport()->update();
 }
 
-bool PythonCodeEditor::isTooltipActive() {
+bool PythonCodeEditor::isTooltipActive() const {
 	return tooltipActive;
 }
 

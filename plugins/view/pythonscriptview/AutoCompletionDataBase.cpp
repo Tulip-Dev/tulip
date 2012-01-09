@@ -196,15 +196,19 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code) {
 	}
 }
 
-QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QString &funcName) {
+QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QString &funcName) const {
 	QString currentType = "";
 
 	if (expr.indexOf('(') != -1 && expr.indexOf(')') != -1) {
-		QString funcName = expr.mid(0, expr.indexOf('('));
-		if (!funcName.startsWith("tlp.")) {
-			funcName = "tlp." + funcName;
+		QString name = expr.mid(0, expr.indexOf('('));
+		if (!name.startsWith("tlp.")) {
+			name = "tlp." + funcName;
 		}
-		currentType = apiDb->getReturnTypeForMethodOrFunction(funcName);
+		if (apiDb->typeExists(name)) {
+			currentType = name;
+		} else {
+			currentType = apiDb->getReturnTypeForMethodOrFunction(name);
+		}
 	}
 
 	if (currentType == "" && expr.indexOf(".") != -1) {
@@ -255,7 +259,7 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QStri
 	return currentType;
 }
 
-QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QString &context, const QString &editedFunction) {
+QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QString &context, const QString &editedFunction) const {
 
 	QSet<QString> ret;
 

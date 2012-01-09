@@ -34,9 +34,9 @@ public :
 
   void analyseCurrentScriptCode(const QString &code);
 
-  QSet<QString> getAutoCompletionListForContext(const QString &context, const QString &editedFunction);
+  QSet<QString> getAutoCompletionListForContext(const QString &context, const QString &editedFunction) const ;
 
-  QString findTypeForExpr(const QString &expr, const QString &funcName);
+  QString findTypeForExpr(const QString &expr, const QString &funcName) const ;
 
 private :
 

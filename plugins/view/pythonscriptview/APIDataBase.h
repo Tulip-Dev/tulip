@@ -35,11 +35,12 @@ public :
 
   void addApiEntry(const QString &apiEntry);
 
-  QSet<QString> getDictContentForType(const QString &type, const QString &prefix = "");
-  QString getReturnTypeForMethodOrFunction(const QString &funcName);
-  QVector<QVector<QString> > getParamTypesForMethodOrFunction(const QString &funcName);
-  QVector<QString> findTypesContainingDictEntry(const QString &dictEntry);
-  QSet<QString> getAllDictEntriesStartingWithPrefix(const QString &prefix);
+  QSet<QString> getDictContentForType(const QString &type, const QString &prefix = "") const;
+  QString getReturnTypeForMethodOrFunction(const QString &funcName) const;
+  QVector<QVector<QString> > getParamTypesForMethodOrFunction(const QString &funcName) const;
+  QVector<QString> findTypesContainingDictEntry(const QString &dictEntry) const;
+  QSet<QString> getAllDictEntriesStartingWithPrefix(const QString &prefix) const;
+  bool typeExists(const QString &type) const;
 
 
 private :
