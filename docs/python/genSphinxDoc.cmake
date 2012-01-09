@@ -1,2 +1,7 @@
-SET(ENV{PYTHONPATH} ${BIN_DIR}/../../library/tulip-python/tulip:${SRC_DIR}/../../library/tulip-python/tulip:${BIN_DIR}/../../library/tulip-python/stl:${BIN_DIR}/../../thirdparty/sip-4.12.1/siplib:$ENV{PYTHONPATH})
+SET(CHAR_SEP ":")
+IF(WIN32)
+SET(CHAR_SEP ";")
+SET(ENV{PATH} "${BIN_DIR}/../../library/tulip/src;${BIN_DIR}/../../thirdparty/gzstream;$ENV{PATH}")
+ENDIF(WIN32)
+SET(ENV{PYTHONPATH} "${BIN_DIR}/../../library/tulip-python/tulip${CHAR_SEP}${SRC_DIR}/../../library/tulip-python/tulip${CHAR_SEP}${BIN_DIR}/../../library/tulip-python/stl${CHAR_SEP}${BIN_DIR}/../../thirdparty/sip-4.12.1/siplib${CHAR_SEP}$ENV{PYTHONPATH}")
 EXECUTE_PROCESS(COMMAND ${SPHINX_EXECUTABLE} -b html -d ${BIN_DIR}/doctrees ${SOURCE_DIR} ${BIN_DIR}/html)

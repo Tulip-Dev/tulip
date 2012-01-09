@@ -19,19 +19,31 @@
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
 
-find_program(SPHINX_EXECUTABLE NAMES sphinx-build
-  HINTS
-  $ENV{SPHINX_DIR}
+FIND_PACKAGE(PythonInterp)
+
+IF(PYTHONINTERP_FOUND)
+
+IF(WIN32)
+STRING(REPLACE "python.exe" "Scripts/" SPHINX_PATH "${PYTHON_EXECUTABLE}")
+ELSE(WIN32)
+SET(SPHINX_PATH "")
+ENDIF(WIN32)
+
+FIND_PROGRAM(SPHINX_EXECUTABLE NAMES sphinx-build
+  HINTS $ENV{SPHINX_DIR}
+  PATHS ${SPHINX_PATH}
   PATH_SUFFIXES bin
   DOC "Sphinx documentation generator"
 )
 
-include(FindPackageHandleStandardArgs)
+INCLUDE(FindPackageHandleStandardArgs)
 
-find_package_handle_standard_args(Sphinx DEFAULT_MSG
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Sphinx DEFAULT_MSG
   SPHINX_EXECUTABLE
 )
 
-mark_as_advanced(
+MARK_AS_ADVANCED(
   SPHINX_EXECUTABLE
 )
+
+ENDIF(PYTHONINTERP_FOUND)
