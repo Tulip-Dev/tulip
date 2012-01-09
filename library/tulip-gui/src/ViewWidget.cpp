@@ -135,15 +135,10 @@ void ViewWidget::setCentralWidget(QWidget* w) {
   }
 
   static_cast<MyGraphicsView*>(_graphicsView)->_centralItem = _centralWidgetItem;
-
   _centralWidgetItem->setPos(0,0);
-
   _centralWidgetItem->setZValue(0);
-
   refreshItemsParenthood();
-
   delete oldCentralItem;
-
   delete oldCentralWidget;
 }
 
@@ -174,4 +169,8 @@ void ViewWidget::refreshItemsParenthood() {
     QGraphicsItem *item = *it;
     item->setParentItem(_centralWidgetItem);
   }
+}
+
+QGraphicsItem* ViewWidget::centralItem() const {
+  return _centralWidgetItem;
 }
