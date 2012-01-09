@@ -22,6 +22,7 @@ using namespace tlp;
 
 void InteractorComponent::setView(tlp::View *view) {
   _view = view;
+  viewChanged(view);
 }
 tlp::View* InteractorComponent::view() const {
   return _view;

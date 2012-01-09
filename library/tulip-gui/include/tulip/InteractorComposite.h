@@ -39,8 +39,10 @@ public:
   virtual bool eventFilter(QObject*, QEvent*);
   virtual void clear() {}
 
-  virtual void setView(View* view);
+  void setView(View* view);
   View* view() const;
+
+  virtual void viewChanged(View *) {}
 };
 
 /**
