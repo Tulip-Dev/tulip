@@ -63,7 +63,11 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
                            + "to <br> <b>" + pythonPluginsPath.c_str() + "</b> or <b> "
                            + pythonPluginsPathHome.c_str() +"</b> <br> and it will be automatically loaded at Tulip startup");
   QFont font;
+#ifdef WIN32
+  font.setPointSize(7);	
+#else  
   font.setPointSize(6);
+#endif  
   pluginInfoLabel->setFont(font);
 
   connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(resizeToolBars()));
@@ -76,11 +80,14 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
   QString docRootPath = QString(tlp::TulipShareDir.c_str()) + "../doc/tulip-python/html/index.html";
 
   QFile docRoot(docRootPath);
-
   if (docRoot.exists()) {
-    QWebView *webView = new QWebView();
-    webView->load(QUrl("file://"+docRootPath));
-    tabWidget->addTab(webView, "Documentation");
+	  QWebView *webView = new QWebView();
+#ifdef WIN32	  
+	  webView->load(QUrl("file:///"+docRootPath));
+#else	  
+	  webView->load(QUrl("file://"+docRootPath));
+#endif
+	tabWidget->addTab(webView, "Documentation");	
   }
 
 }
@@ -280,12 +287,10 @@ void PythonScriptViewWidget::currentTabChanged(int index) {
 
   if (index >= 3) {
     scriptControlFrame->hide();
-
     if (index == 3) {
-      pluginControlFrame->show();
-    }
-    else {
-      pluginControlFrame->hide();
+    	pluginControlFrame->show();
+    } else {
+    	pluginControlFrame->hide();
     }
   }
   else {

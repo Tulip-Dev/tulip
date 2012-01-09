@@ -22,121 +22,115 @@
 #include "PythonCodeHighlighter.h"
 
 PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
-  : QSyntaxHighlighter(parent), shellMode(false) {
+: QSyntaxHighlighter(parent), shellMode(false) {
 
-  HighlightingRule rule;
+	HighlightingRule rule;
 
-  commentFormat.setForeground(Qt::darkGreen);
+	commentFormat.setForeground(Qt::darkGreen);
 
-  functionFormat.setFontWeight(QFont::Bold);
-  functionFormat.setForeground(Qt::darkCyan);
-  rule.pattern = QRegExp("def [A-Za-z0-9_]+(?=\\()");
-  rule.format = functionFormat;
-  highlightingRules.append(rule);
+	functionFormat.setFontWeight(QFont::Bold);
+	functionFormat.setForeground(Qt::darkCyan);
+	rule.pattern = QRegExp("def [A-Za-z0-9_]+(?=\\()");
+	rule.format = functionFormat;
+	highlightingRules.append(rule);
 
-  classFormat.setFontWeight(QFont::Bold);
-  classFormat.setForeground(Qt::blue);
-  rule.pattern = QRegExp("class [A-Za-z]+");
-  rule.format = classFormat;
-  highlightingRules.append(rule);
+	classFormat.setFontWeight(QFont::Bold);
+	classFormat.setForeground(Qt::blue);
+	rule.pattern = QRegExp("class [A-Za-z]+");
+	rule.format = classFormat;
+	highlightingRules.append(rule);
 
-  keywordFormat.setForeground(Qt::darkBlue);
-  keywordFormat.setFontWeight(QFont::Bold);
-  QStringList keywordPatterns;
-  keywordPatterns << "\\bdef\\b" << "\\bclass\\b" << "\\bfrom\\b"
-                  << "\\bin\\b" << "\\band\\b" << "\\bor\\b" << "\\bnot\\b"
-                  << "\\bfor\\b" << "\\bwhile\\b" << "\\bif\\b" << "\\belif\\b"
-                  << "\\bimport\\b" << "\\bTrue\\b" << "\\bFalse\\b" << "\\bpass\\b"
-                  << "\\belse\\b" << "\\bNone\\b" << "\\bprint\\b" << "\\bglobal\\b"
-                  << "\\breturn\\b" << "\\bbreak\\b" << "\\bcontinue\\b";
+	keywordFormat.setForeground(Qt::darkBlue);
+	keywordFormat.setFontWeight(QFont::Bold);
+	QStringList keywordPatterns;
+	keywordPatterns << "\\bdef\\b" << "\\bclass\\b" << "\\bfrom\\b"
+			<< "\\bin\\b" << "\\band\\b" << "\\bor\\b" << "\\bnot\\b"
+			<< "\\bfor\\b" << "\\bwhile\\b" << "\\bif\\b" << "\\belif\\b"
+			<< "\\bimport\\b" << "\\bTrue\\b" << "\\bFalse\\b" << "\\bpass\\b"
+			<< "\\belse\\b" << "\\bNone\\b" << "\\bprint\\b" << "\\bglobal\\b"
+			<< "\\breturn\\b" << "\\bbreak\\b" << "\\bcontinue\\b" << "\\bas\\b";
 
-  QStringList specialCharsPatterns;
-  specialCharsPatterns << "\\+" << "-" << "=" << "\\(" << "\\)" << "\\[" << "\\]" << "," << "!"
-                       << "\\{" << "\\}" << ":" << "\\." << ">" << "<" << "%" << "&" << "\\^" << "\\|";
+	QStringList specialCharsPatterns;
+	specialCharsPatterns << "\\+" << "-" << "=" << "\\(" << "\\)" << "\\[" << "\\]" << "," << "!"
+			<< "\\{" << "\\}" << ":" << "\\." << ">" << "<" << "%" << "&" << "\\^" << "\\|";
 
-  foreach (const QString &pattern, keywordPatterns) {
-    rule.pattern = QRegExp(pattern);
-    rule.format = keywordFormat;
-    highlightingRules.append(rule);
-  }
+	foreach (const QString &pattern, keywordPatterns) {
+		rule.pattern = QRegExp(pattern);
+		rule.format = keywordFormat;
+		highlightingRules.append(rule);
+	}
 
-  QTextCharFormat format;
-  format.setFontWeight(QFont::Bold);
+	QTextCharFormat format;
+	format.setFontWeight(QFont::Bold);
 
-  foreach (const QString &pattern, specialCharsPatterns) {
-    rule.pattern = QRegExp(pattern);
-    rule.format = format;
-    highlightingRules.append(rule);
-  }
+	foreach (const QString &pattern, specialCharsPatterns) {
+		rule.pattern = QRegExp(pattern);
+		rule.format = format;
+		highlightingRules.append(rule);
+	}
 
-  numberFormat.setForeground(Qt::darkCyan);
-  rule.pattern = QRegExp("\\b[0-9]+[.]*[O-9]*\\b");
-  rule.format = numberFormat;
-  highlightingRules.append(rule);
+	numberFormat.setForeground(Qt::darkCyan);
+	rule.pattern = QRegExp("\\b[0-9]+[.]*[O-9]*\\b");
+	rule.format = numberFormat;
+	highlightingRules.append(rule);
 
-  quotationFormat.setForeground(Qt::darkMagenta);
+	quotationFormat.setForeground(Qt::darkMagenta);
 
 }
 
 void PythonCodeHighlighter::highlightBlock(const QString &text) {
 
-  if (shellMode) {
-    if (!text.startsWith(">>>") && !text.startsWith("...")) {
-      return;
-    }
-  }
+	if (shellMode) {
+		if (currentBlock().blockNumber() > 2 && !text.startsWith(">>>") && !text.startsWith("...")) {
+			return;
+		}
+	}
 
-  QRegExp commentRegexp("#[^\n]*");
-  bool comments = false;
-  int index = commentRegexp.indexIn(text);
+	QRegExp commentRegexp("#[^\n]*");
+	bool comments = false;
+	int index = commentRegexp.indexIn(text);
+	if (index >= 0) {
+		int length = commentRegexp.matchedLength();
+		setFormat(index, length, commentFormat);
+		comments = true;
+	}
 
-  if (index >= 0) {
-    int length = commentRegexp.matchedLength();
-    setFormat(index, length, commentFormat);
-    comments = true;
-  }
+	if (comments)
+		return;
 
-  if (comments)
-    return;
+	foreach (const HighlightingRule &rule, highlightingRules) {
+		QRegExp expression(rule.pattern);
+		int index = expression.indexIn(text);
+		while (index >= 0) {
+			int length = expression.matchedLength();
+			setFormat(index, length, rule.format);
+			index = expression.indexIn(text, index + length);
+		}
+	}
 
-  foreach (const HighlightingRule &rule, highlightingRules) {
-    QRegExp expression(rule.pattern);
-    int index = expression.indexIn(text);
+	int quoteStartPos = -1;
+	for (int i = 0 ; i < text.length() ; ++i) {
+		if (text[i] == '"') {
+			if (quoteStartPos == -1) {
+				quoteStartPos = i;
+			} else {
+				setFormat(quoteStartPos, i-quoteStartPos+1, quotationFormat);
+				quoteStartPos = -1;
+			}
+		}
+	}
 
-    while (index >= 0) {
-      int length = expression.matchedLength();
-      setFormat(index, length, rule.format);
-      index = expression.indexIn(text, index + length);
-    }
-  }
-
-  int quoteStartPos = -1;
-
-  for (int i = 0 ; i < text.length() ; ++i) {
-    if (text[i] == '"') {
-      if (quoteStartPos == -1) {
-        quoteStartPos = i;
-      }
-      else {
-        setFormat(quoteStartPos, i-quoteStartPos+1, quotationFormat);
-        quoteStartPos = -1;
-      }
-    }
-  }
-
-  quoteStartPos = -1;
-
-  for (int i = 0 ; i < text.length() ; ++i) {
-    if (text[i] == '\'') {
-      if (quoteStartPos == -1) {
-        quoteStartPos = i;
-      }
-      else {
-        setFormat(quoteStartPos, i-quoteStartPos+1, quotationFormat);
-        quoteStartPos = -1;
-      }
-    }
-  }
+	quoteStartPos = -1;
+	for (int i = 0 ; i < text.length() ; ++i) {
+		if (text[i] == '\'') {
+			if (quoteStartPos == -1) {
+				quoteStartPos = i;
+			} else {
+				setFormat(quoteStartPos, i-quoteStartPos+1, quotationFormat);
+				quoteStartPos = -1;
+			}
+		}
+	}
 
 
 }
