@@ -35,7 +35,8 @@ class Graph;
 /** \addtogroup Tulip_Widgets */
 /*@{*/
 class TLP_QT_SIMPLE_SCOPE SGHierarchyWidget : public QTreeWidget {
-  Q_OBJECT;
+
+  Q_OBJECT
 
 public:
   SGHierarchyWidget(QWidget* parent = 0, Graph *rootGraph = 0);
@@ -45,6 +46,7 @@ public slots:
   void setGraph(Graph *);
   void update();
   void updateCurrentGraphInfos(Graph *graph);
+  void resizeFirstColumnToContent();
 
 signals:
   void aboutToRemoveView(Graph *);

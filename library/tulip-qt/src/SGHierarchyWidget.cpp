@@ -63,7 +63,11 @@ SGHierarchyWidget::SGHierarchyWidget(QWidget* parent, Graph *graph) :
           this, SLOT(changeGraph(QTreeWidgetItem*, QTreeWidgetItem*)));
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, SIGNAL(customContextMenuRequested (const QPoint &)),
-          SLOT(displayContextMenu(const QPoint &)));
+          this, SLOT(displayContextMenu(const QPoint &)));
+  connect(this, SIGNAL(itemCollapsed(QTreeWidgetItem *)),
+          this, SLOT(resizeFirstColumnToContent()));
+  connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)),
+          this, SLOT(resizeFirstColumnToContent()));
   update();
 }
 //=======================================================
@@ -141,6 +145,9 @@ void SGHierarchyWidget::update() {
   if (_currentGraph != 0) {
     buildTreeView(_currentGraph->getRoot());
     currentGraphChanged(_currentGraph);
+  }
+  for (int i = 0 ; i < 4 ; ++i) {
+	  resizeColumnToContents(i);
   }
 }
 //=======================================================
@@ -285,5 +292,9 @@ void SGHierarchyWidget::changeGraph(QTreeWidgetItem* current, QTreeWidgetItem*) 
   }
 }
 //=======================================================
+
+void SGHierarchyWidget::resizeFirstColumnToContent() {
+	resizeColumnToContents(0);
+}
 
 }
