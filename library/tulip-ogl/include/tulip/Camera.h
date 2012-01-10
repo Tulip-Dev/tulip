@@ -54,6 +54,8 @@ public:
    */
   Camera(GlScene* scene,bool d3);
 
+  Camera& operator=(const Camera& camera);
+
   /**
    * Destructor
    */
@@ -66,14 +68,14 @@ public:
   /**
    * Return the camera's scene
    */
-  GlScene *getScene() {
+  GlScene *getScene() const {
     return scene;
   }
 
   /**
    * Return the camera bounding box : this bounding box is the part of the scene visualized by this camera.
    */
-  BoundingBox getBoundingBox();
+  BoundingBox getBoundingBox() const;
 
   /**
    * This moves the camera forward or backward depending on the speed
@@ -95,14 +97,14 @@ public:
   /**
    * Return if the camera is a 3D one
    */
-  bool is3D() {
+  bool is3D() const{
     return d3;
   }
 
   /**
    * Return the viewport of the attached scene
    */
-  Vector<int, 4> getViewport();
+  Vector<int, 4> getViewport() const;
 
   /**
    * Init Gl parameters
@@ -136,7 +138,7 @@ public:
   /**
    * Return the scene radius
    */
-  double getSceneRadius() {
+  double getSceneRadius() const {
     return sceneRadius;
   }
 
@@ -147,7 +149,7 @@ public:
   /**
    * Return the zoom factor
    */
-  double getZoomFactor() {
+  double getZoomFactor() const {
     return zoomFactor;
   }
 
@@ -158,7 +160,7 @@ public:
   /**
    * Return the eyes
    */
-  Coord getEyes() {
+  Coord getEyes() const {
     return eyes;
   }
 
@@ -169,7 +171,7 @@ public:
   /**
    * Return the center
    */
-  Coord getCenter() {
+  Coord getCenter() const {
     return center;
   }
 
@@ -180,52 +182,52 @@ public:
   /**
    * Return the up vector
    */
-  Coord getUp() {
+  Coord getUp() const {
     return up;
   }
 
   /**
    * Get the modelview matrix
    */
-  void getModelviewMatrix(Matrix<float, 4> &modelviewMatrix) {
+  void getModelviewMatrix(Matrix<float, 4> &modelviewMatrix) const {
     modelviewMatrix=this->modelviewMatrix;
   }
 
   /**
    * Get the projection matrix
    */
-  void getProjectionMatrix(Matrix<float, 4> &projectionMatrix) {
+  void getProjectionMatrix(Matrix<float, 4> &projectionMatrix) const {
     projectionMatrix=this->projectionMatrix;
   }
 
   /**
    * Get the transform matrix : transformMatrix = projectionMatrix * modelviewMatrix
    */
-  void getTransformMatrix(Matrix<float, 4> &transformMatrix) {
+  void getTransformMatrix(Matrix<float, 4> &transformMatrix) const {
     transformMatrix=this->transformMatrix;
   }
 
   /**
    * Get the projection and the modelview matrix generated with the given viewport
    */
-  void getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix);
+  void getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix) const;
 
   /**
    * Get the transform matrix generated with the given viewport
    */
-  void getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &transformMatrix);
+  void getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &transformMatrix) const;
 
   /**
    * Return the 3D world coordinate for the given screen point
    * \warning This function set up the projection and modelview matrix
    */
-  Coord screenTo3DWorld(const Coord &point);
+  Coord screenTo3DWorld(const Coord &point) const;
 
   /**
    * Return the screen position for the given 3D coordinate
    * \warning This function set up the projection and modelview matrix
    */
-  Coord worldTo2DScreen(const Coord &obj);
+  Coord worldTo2DScreen(const Coord &obj) const;
 
   /**
    * Function to export data in outString (in XML format)
