@@ -149,7 +149,7 @@ public:
   //=================================================================================
   virtual AbstractProperty<Tnode,Tedge,TPROPERTY>& operator =(AbstractProperty<Tnode,Tedge,TPROPERTY> &prop) {
     if (this!= &prop) {
-     if (graph == 0) graph = prop.graph;
+      if (graph == 0) graph = prop.graph;
 
       if (graph == prop.graph) {
         setAllNodeValue(prop.getNodeDefaultValue());
@@ -180,7 +180,9 @@ public:
 
           if (prop.graph->isElement(itn))
             setNodeValue(itn, prop.getNodeValue(itn));
-        } delete itN;
+        }
+
+        delete itN;
         Iterator<edge>*itE = graph->getEdges();
 
         while (itE->hasNext()) {

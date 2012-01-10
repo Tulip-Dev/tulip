@@ -211,8 +211,8 @@ int __tulip_select_libs(struct dirent *ent) {
 }
 
 PluginLibraryLoader::PluginLibraryLoader(const std::string& _pluginPath,
-					 PluginLoader *loader)
-					 : n(-1), pluginPath(_pluginPath) {
+    PluginLoader *loader)
+  : n(-1), pluginPath(_pluginPath) {
   struct dirent **namelist;
   n = scandir((const char *) _pluginPath.c_str(),
               &namelist,

@@ -106,7 +106,7 @@ public :
   std::vector<std::string> getObjectDictEntries(const std::string &objectName, const std::string &prefixFilter = "");
 
   std::string getVariableType(const std::string &varName);
-  
+
   void setDefaultConsoleWidget();
 
   void setConsoleWidget(QPlainTextEdit *consoleWidget);

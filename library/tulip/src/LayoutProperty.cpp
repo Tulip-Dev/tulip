@@ -791,7 +791,7 @@ PropertyInterface* LayoutProperty::clonePrototype(Graph * g, const std::string& 
 
   // allow to get an unregistered property (empty name)
   LayoutProperty * p = n.empty()
-    ? new LayoutProperty(g) : g->getLocalProperty<LayoutProperty>( n );
+                       ? new LayoutProperty(g) : g->getLocalProperty<LayoutProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
@@ -803,7 +803,7 @@ PropertyInterface* CoordVectorProperty::clonePrototype(Graph * g, const std::str
 
   // allow to get an unregistered property (empty name)
   CoordVectorProperty * p = n.empty()
-    ? new CoordVectorProperty(g) : g->getLocalProperty<CoordVectorProperty>( n );
+                            ? new CoordVectorProperty(g) : g->getLocalProperty<CoordVectorProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
