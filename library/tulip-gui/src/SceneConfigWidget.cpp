@@ -91,8 +91,10 @@ void SceneConfigWidget::applySettings() {
 
   // NODES
   DoubleProperty* orderingProperty = NULL;
+
   if (_ui->labelsOrderingCombo->currentIndex() != 0)
     orderingProperty = _glMainWidget->getGraph()->getProperty<DoubleProperty>(_ui->labelsOrderingCombo->currentText().toStdString());
+
   renderingParameters->setElementOrderingProperty(orderingProperty);
   renderingParameters->setLabelScaled(_ui->labelsFitCheck->isChecked());
   renderingParameters->setLabelsDensity(_ui->labelsDensitySlider->value());
