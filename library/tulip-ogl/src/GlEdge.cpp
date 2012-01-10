@@ -323,6 +323,8 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
   glDisable(GL_CULL_FACE);
   glDepthFunc(GL_LEQUAL);
 
+  if(bends.size()==0)
+    shape=POLYLINESHAPE;
 
   Coord srcDir(srcNodePos);
   Coord tgtDir(tgtNodePos);
