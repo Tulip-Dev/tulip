@@ -1,5 +1,3 @@
-FIND_PACKAGE( TULIP3 REQUIRED )
-
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipInclude} ${TulipBuildInclude} poly2tri poly2tri/sweep poly2tri/common)
 
 STRING(REGEX REPLACE ".*/" "" PLUGIN_NAME ${CMAKE_CURRENT_SOURCE_DIR})
