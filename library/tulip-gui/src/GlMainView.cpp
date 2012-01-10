@@ -75,7 +75,7 @@ QList<QWidget*> GlMainView::configurationWidgets() const {
 void GlMainView::setDisplayOverview(bool display) {
   if (_displayOverview != display) {
     _displayOverview=display;
-    drawOverview();
+    //drawOverview();
   }
 }
 
