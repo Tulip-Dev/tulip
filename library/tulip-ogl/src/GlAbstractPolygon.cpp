@@ -537,7 +537,7 @@ void GlAbstractPolygon::clearGenerated() {
 
   if(OpenGlConfigManager::getInst().canUseGlew()) {
     if(generated)
-      glDeleteBuffers(6,buffers);
+      glDeleteBuffers(7,buffers);
   }
 
   generated=false;
