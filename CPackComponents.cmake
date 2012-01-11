@@ -50,7 +50,7 @@ IF(LINUX)
   
   SET(CPACK_UBUNTU_DISTRIBUTION_RELEASES lucid maverick natty oneiric)
 
-  SET(CPACK_UBUNTU_COMMON_BUILD_DEPENDS "libgl1-mesa-dev;libglu1-mesa-dev;libglew1.5-dev;libftgl-dev;libjpeg62-dev;libpng12-dev;libxml2-dev;libqt4-dev;libqt4-opengl-dev;zlib1g-dev;libstdc++6;python-dev;python-sip-dev;doxygen;gcj-jdk;libxml-commons-resolver1.1-java-gcj;qt4-dev-tools;python-sphinx;docbook-xsl;graphviz;texlive-font-utils")
+  SET(CPACK_UBUNTU_COMMON_BUILD_DEPENDS "libgl1-mesa-dev;libglu1-mesa-dev;libglew1.5-dev;libftgl-dev;libjpeg62-dev;libpng12-dev;libxml2-dev;libqt4-dev;libqt4-opengl-dev;libqtwebkit-dev;zlib1g-dev;libstdc++6;python-dev;python-sip-dev;doxygen;gcj-jdk;libxml-commons-resolver1.1-java-gcj;qt4-dev-tools;python-sphinx;docbook-xsl;graphviz;texlive-font-utils")
 
   SET(CPACK_COMPONENT_LIBTULIP_UBUNTU_COMMON_DEPENDS "")
   SET(CPACK_COMPONENT_LIBTULIP_DEV_UBUNTU_COMMON_DEPENDS "zlib1g-dev, libc6-dev")
