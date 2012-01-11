@@ -466,8 +466,6 @@ bool MouseEdgeBendEditor::haveSelection(GlMainWidget *glMainWidget) {
 
     if(_selection->getEdgeValue(ite)) {
       if(hasSelection) {
-        _selection->setAllEdgeValue(false);
-        _selection->setAllNodeValue(false);
         hasSelection=false;
         multipleSelection=true;
         break;
@@ -490,8 +488,6 @@ bool MouseEdgeBendEditor::haveSelection(GlMainWidget *glMainWidget) {
 
       if(_selection->getNodeValue(itn)) {
         if(hasSelection) {
-          _selection->setAllEdgeValue(false);
-          _selection->setAllNodeValue(false);
           hasSelection=false;
           break;
         }
