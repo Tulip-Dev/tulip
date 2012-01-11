@@ -47,6 +47,26 @@ Camera::~Camera() {
   observableDeleted();
 }
 //===================================================
+Camera& Camera::operator=(const Camera& camera) {
+  matrixCoherent=false;
+  center=camera.center;
+  eyes=camera.eyes;
+  up=camera.up;
+  zoomFactor=camera.zoomFactor;
+  sceneRadius=camera.sceneRadius;
+  sceneBoundingBox=camera.sceneBoundingBox;
+  scene=camera.scene;
+  modelviewMatrix = camera.modelviewMatrix;
+  projectionMatrix = camera.projectionMatrix;
+  transformMatrix = camera.transformMatrix;
+  objectTranslation = camera.objectTranslation;
+  objectScale = camera.objectScale;
+  objectCoord = camera.objectCoord;
+  objectTransformation = camera.objectTransformation;
+  d3=camera.d3;
+  return *this;
+}
+//===================================================
 void Camera::setScene(GlScene* scene) {
   this->scene=scene;
 }
@@ -342,13 +362,14 @@ bool Camera::haveObjectTransformation() {
   return objectTransformation;
 }
 //====================================================
-void Camera::getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix) {
+void Camera::getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix) const{
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
-  initProjection(viewport);
-  initModelView();
+  // We have a cast to remove const on this
+  ((Camera*)this)->initProjection(viewport);
+  ((Camera*)this)->initModelView();
   projectionMatrix=this->projectionMatrix;
   modelviewMatrix=this->modelviewMatrix;
   glMatrixMode(GL_PROJECTION);
@@ -357,13 +378,14 @@ void Camera::getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> 
   glPopMatrix();
 }
 //====================================================
-void Camera::getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &transformMatrix) {
+void Camera::getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &transformMatrix) const{
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
-  initProjection(viewport);
-  initModelView();
+  // We have a cast to remove const on this
+  ((Camera*)this)->initProjection(viewport);
+  ((Camera*)this)->initModelView();
   transformMatrix=this->transformMatrix;
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
@@ -371,9 +393,10 @@ void Camera::getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> 
   glPopMatrix();
 }
 //====================================================
-Coord Camera::screenTo3DWorld(const Coord &point) {
-  initProjection();
-  initModelView();
+Coord Camera::screenTo3DWorld(const Coord &point) const {
+  // We have a cast to remove const on this
+  ((Camera *)this)->initProjection();
+  ((Camera *)this)->initModelView();
 
   Vector<int, 4> viewport = getViewport();
 
@@ -388,15 +411,16 @@ Coord Camera::screenTo3DWorld(const Coord &point) {
   return unprojectPoint(pScr, tmp, viewport);
 }
 //====================================================
-Coord Camera::worldTo2DScreen(const Coord &obj) {
-  initProjection();
-  initModelView();
+Coord Camera::worldTo2DScreen(const Coord &obj) const {
+  // We have a cast to remove const on this
+  ((Camera *)this)->initProjection();
+  ((Camera *)this)->initModelView();
 
   Vector<int, 4> viewport = getViewport();
   return projectPoint(obj, transformMatrix, viewport) - Coord(static_cast<float>(viewport[0]), static_cast<float>(viewport[1]));
 }
 //====================================================
-Vector<int, 4> Camera::getViewport() {
+Vector<int, 4> Camera::getViewport() const {
   return scene->getViewport();
 }
 //====================================================
