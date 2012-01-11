@@ -21,6 +21,9 @@ public:
   TulipFont font() const;
   int fontSize() const;
 
+public slots:
+  void selectFont(const TulipFont&);
+
 protected slots:
   void fontChanged();
 };

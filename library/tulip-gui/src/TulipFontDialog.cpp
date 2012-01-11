@@ -41,11 +41,7 @@ void TulipFontDialog::fontChanged() {
   }
 
   TulipFont selectedFont = font();
-  QStringList families = QFontDatabase::applicationFontFamilies(selectedFont.fontId());
-  QString fontFamily = "Arial";
-  if (families.size()>0)
-    fontFamily = families[0];
-  _ui->preview->setStyleSheet("font-family: " + fontFamily + "; "
+  _ui->preview->setStyleSheet("font-family: " + selectedFont.fontFamily() + "; "
                               + (selectedFont.isItalic() ? "font-style: italic; " : "")
                               + (selectedFont.isBold() ? "font-weight: bold; " : "")
                               + "font-size: " + QString::number(_ui->sizeSpin->value()) + "px; "
@@ -53,4 +49,21 @@ void TulipFontDialog::fontChanged() {
 }
 int TulipFontDialog::fontSize() const {
   return _ui->sizeSpin->value();
+}
+
+void TulipFontDialog::selectFont(const TulipFont& f) {
+  QList<QListWidgetItem*> items = _ui->nameList->findItems(f.fontName(),Qt::MatchExactly);
+  if (items.size()==0)
+    return;
+  _ui->nameList->setCurrentItem(items[0]);
+  if (f.isBold()) {
+    if (f.isItalic())
+      _ui->styleList->setCurrentRow(3);
+    else
+      _ui->styleList->setCurrentRow(1);
+  }
+  else if (f.isItalic())
+     _ui->styleList->setCurrentRow(2);
+  else
+     _ui->styleList->setCurrentRow(0);
 }
