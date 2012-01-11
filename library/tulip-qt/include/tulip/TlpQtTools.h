@@ -54,9 +54,9 @@ namespace tlp {
  * [inSet   : Input (optional) set, containing some default values]
  */
 
-TLP_QT_SCOPE bool openDataSetDialog (DataSet & outSet,
-                                     const StructDef *sysDef,
-                                     StructDef *inDef,
+TLP_QT_SCOPE bool openDataSetDialog (DataSet& outSet,
+                                     const ParameterDescriptionList& sysDef,
+                                     ParameterDescriptionList& inDef,
                                      const DataSet *inSet = NULL,
                                      const char *inName = NULL,
                                      Graph *inG = NULL,

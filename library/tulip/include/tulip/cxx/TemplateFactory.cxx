@@ -99,19 +99,19 @@ ObjectType * tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginOb
 }
 
 template<class ObjectFactory, class ObjectType, class Context>
-tlp::StructDef tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginParameters(std::string name) {
+const tlp::ParameterDescriptionList & tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginParameters(std::string name) {
   assert(objMap.find(name)!=objMap.end());
   return objParam[name];
 }
 
 template<class ObjectFactory, class ObjectType, class Context>
-std::string tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginRelease(std::string name) {
+const std::string & tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginRelease(std::string name) {
   assert(objMap.find(name)!=objMap.end());
   return objRels[name];
 }
 
 template<class ObjectFactory, class ObjectType, class Context>
-std::list<tlp::Dependency> tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginDependencies(std::string name) {
+const std::list<tlp::Dependency> & tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginDependencies(std::string name) {
   assert(objMap.find(name)!=objMap.end());
   return objDeps[name];
 }

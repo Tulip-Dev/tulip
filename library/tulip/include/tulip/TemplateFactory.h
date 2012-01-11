@@ -85,12 +85,12 @@ public:
   virtual bool pluginExists(const std::string &pluginName)=0;
 
   /**
-   * @brief Gets the list of parameters for the given plug-in.
+   * @brief Gets the whole parameters for the given plug-in.
    *
    * @param name The name of the plug-in to retrieve the parameters of.
-   * @return :StructDef The parameters of the plug-in.
+   * @return :PluginParameters The whole parameters of the plug-in.
    **/
-  virtual StructDef getPluginParameters(std::string name)=0;
+  virtual const ParameterDescriptionList& getPluginParameters(std::string name)=0;
 
   /**
    * @brief Gets the release number of the given plug-in.
@@ -98,7 +98,7 @@ public:
    * @param name The name of the plug-in to retrieve the version number of.
    * @return :string The version number, ussually formatted as X[.Y], where X is the major, and Y the minor.
    **/
-  virtual std::string getPluginRelease(std::string name)=0;
+  virtual const std::string & getPluginRelease(std::string name)=0;
 
   /**
    * @brief Gets the dependencies of a plug-in.
@@ -106,7 +106,7 @@ public:
    * @param name The name of the plug-in to retrieve the dependencies of.
    * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > > The list of dependencies of the plug-in.
    **/
-  virtual std::list<tlp::Dependency> getPluginDependencies(std::string name)=0;
+  virtual const std::list<tlp::Dependency> & getPluginDependencies(std::string name)=0;
 
   /**
    * @brief Gets the class name for the plug-in's registered class.
@@ -195,7 +195,7 @@ public:
   /**
    * @brief Stores the parameters of each registered plug-in.
    **/
-  std::map<std::string,StructDef> objParam;
+  std::map<std::string, ParameterDescriptionList> objParam;
   /**
    * @brief Stores the list of registered plug-ins.
    **/
@@ -221,9 +221,9 @@ public:
   //the following function are inherited from TemplateFactoryInterface, and by default inherit the doc.
   Iterator<std::string>* availablePlugins();
   bool pluginExists(const std::string& pluginName);
-  StructDef getPluginParameters(std::string name);
-  std::string getPluginRelease(std::string name);
-  std::list<tlp::Dependency> getPluginDependencies(std::string name);
+  const ParameterDescriptionList& getPluginParameters(std::string name);
+  const std::string& getPluginRelease(std::string name);
+  const std::list<tlp::Dependency>& getPluginDependencies(std::string name);
   std::string getPluginsClassName();
   void registerPlugin(ObjectFactory* objectFactory);
   void removePlugin(const std::string &name);

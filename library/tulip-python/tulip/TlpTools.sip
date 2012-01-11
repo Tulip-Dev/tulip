@@ -140,7 +140,7 @@ Returns a dataset filled with default parameters (if any) for a given plugin (al
 		}
 	} 
 	if (selectedFactory) {
-		tlp::StructDef parameters = selectedFactory->getPluginParameters(*a0);
+		const tlp::ParameterDescriptionList&  parameters = selectedFactory->getPluginParameters(*a0);
 		parameters.buildDefaultDataSet(result, a1);
 		sipRes = new tlp::DataSet(result);
 	} else {

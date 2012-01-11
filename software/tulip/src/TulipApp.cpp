@@ -59,13 +59,13 @@ using namespace tlp;
 
 //**********************************************************************
 // we use a hash_map to store plugin parameters
-static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
-  static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > > paramMaps;
-  TLP_HASH_MAP<std::string, StructDef *>::const_iterator it;
+static ParameterDescriptionList& getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
+  static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, ParameterDescriptionList> > paramMaps;
+  TLP_HASH_MAP<std::string, ParameterDescriptionList>::const_iterator it;
   it = paramMaps[(unsigned long) factory].find(name);
 
   if (it == paramMaps[(unsigned long) factory].end())
-    paramMaps[(unsigned long) factory][name] = new StructDef(factory->getPluginParameters(name));
+    paramMaps[(unsigned long) factory][name] = factory->getPluginParameters(name);
 
   return paramMaps[(unsigned long) factory][name];
 }
@@ -521,8 +521,8 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
                           string author, string comments) {
 
   DataSet dataSet;
-  StructDef parameter = ExportModuleFactory::factory->getPluginParameters(plugin);
-  parameter.buildDefaultDataSet(dataSet);
+  ParameterDescriptionList params(ExportModuleFactory::factory->getPluginParameters(plugin));
+  params.buildDefaultDataSet(dataSet);
   DataSet controller;
   DataSet controllerData;
   Graph *graph;
@@ -549,7 +549,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
 
   string title = string("Enter Export parameters: ") + plugin;
 
-  if (!tlp::openDataSetDialog(dataSet, 0, &parameter,
+  if (!tlp::openDataSetDialog(dataSet, ParameterDescriptionList(), params,
                               &dataSet, title.c_str(), NULL,
                               this))
     return false;
@@ -651,11 +651,13 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     else {
       noPlugin = false;
       s = QString::null;
-      StructDef sysDef = ImportModuleFactory::factory->getPluginParameters(*plugin);
-      StructDef *params = getPluginParameters(ImportModuleFactory::factory, *plugin);
-      params->buildDefaultDataSet( dataSet );
+      const ParameterDescriptionList& sysDef =
+	ImportModuleFactory::factory->getPluginParameters(*plugin);
+      ParameterDescriptionList& params =
+	getPluginParameters(ImportModuleFactory::factory, *plugin);
+      params.buildDefaultDataSet( dataSet );
       string title = string("Enter Import parameters: ") + plugin->c_str();
-      cancel = !tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
+      cancel = !tlp::openDataSetDialog(dataSet, sysDef, params, &dataSet,
                                        title.c_str(), NULL, this);
     }
   }

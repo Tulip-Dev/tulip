@@ -47,25 +47,25 @@ using namespace std;
 
 namespace tlp {
 
-static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > > paramMaps;
+static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, ParameterDescriptionList> > paramMaps;
 
-StructDef *ControllerAlgorithmTools::getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
-  TLP_HASH_MAP<std::string, StructDef *>::const_iterator it;
+ParameterDescriptionList& ControllerAlgorithmTools::getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
+  TLP_HASH_MAP<std::string, ParameterDescriptionList>::const_iterator it;
   it = paramMaps[(unsigned long) factory].find(name);
 
   if (it == paramMaps[(unsigned long) factory].end()) {
-    paramMaps[(unsigned long) factory][name] = new StructDef(factory->getPluginParameters(name));
+    paramMaps[(unsigned long) factory][name] = factory->getPluginParameters(name);
   }
 
   return paramMaps[(unsigned long) factory][name];
 }
 
 void ControllerAlgorithmTools::cleanPluginParameters() {
-  TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > >::iterator it = paramMaps.begin();
+  TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, ParameterDescriptionList> >::iterator it = paramMaps.begin();
 
   for (; it != paramMaps.end() ; ++it) {
     vector<string> entriesToErase;
-    TLP_HASH_MAP<std::string, StructDef * >::const_iterator it2 = it->second.begin();
+    TLP_HASH_MAP<std::string, ParameterDescriptionList>::const_iterator it2 = it->second.begin();
 
     for (; it2 != it->second.end() ; ++it2) {
       if (!reinterpret_cast<TemplateFactoryInterface *>(it->first)->pluginExists(it2->first)) {
@@ -99,13 +99,15 @@ bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const
   return ok;
 }
 //**********************************************************************
-bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const string &name) {
+bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph, QWidget *parent,
+					      const string &name) {
   DataSet dataSet;
-  StructDef *params = getPluginParameters(AlgorithmPlugin::factory, name);
-  StructDef sysDef = AlgorithmPlugin::factory->getPluginParameters(name);
-  params->buildDefaultDataSet(dataSet, graph );
+  ParameterDescriptionList& params = getPluginParameters(AlgorithmPlugin::factory, name);
+  const ParameterDescriptionList& sysDef =
+    AlgorithmPlugin::factory->getPluginParameters(name);
+  params.buildDefaultDataSet(dataSet, graph);
   string title = string("Tulip Parameter Editor: ") + name;
-  bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
+  bool ok = tlp::openDataSetDialog(dataSet, sysDef, params, &dataSet,
                                    title.c_str(), graph, parent);
 
   if (ok) {
@@ -154,16 +156,17 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
 
   if (query) {
     // plugin parameters dialog
-    StructDef *params =
+    ParameterDescriptionList& params =
       ControllerAlgorithmTools::getPluginParameters(factory, name);
-    StructDef sysDef = factory->getPluginParameters(name);
-    params->buildDefaultDataSet(dataSet, graph );
+    const ParameterDescriptionList& sysDef =
+      factory->getPluginParameters(name);
+    params.buildDefaultDataSet(dataSet, graph );
     string title = string("Tulip Parameter Editor: ") + name;
-    resultBool = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
+    resultBool = tlp::openDataSetDialog(dataSet, sysDef, params, &dataSet,
                                         title.c_str(), graph, parent);
   }
 
-  QtProgress *myProgress=new QtProgress(parent, name,redraw ? view : 0);
+  QtProgress *myProgress=new QtProgress(parent, name, redraw ? view : 0);
 
   if (resultBool) {
     if (push)
@@ -201,7 +204,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
     }
 
     resultBool = graph->applyPropertyAlgorithm(name, tmp, erreurMsg,
-                 myProgress, &dataSet);
+					       myProgress, &dataSet);
     graph->pop();
 
     if (updateLayout) {
@@ -226,7 +229,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
       case TLP_STOP:
 
         if (!dest)
-          dest = graph->getLocalProperty(destination, tmp->getTypename());
+          dest = tmp->clonePrototype(graph, destination);
 
         dest->copy(tmp);
         break;
@@ -240,8 +243,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
       string copyName = name + " " + dataSetToString(dataSet);
 
       if (!graph->existProperty(copyName) || graph->getProperty(copyName)->getTypename() == "double") {
-        PropertyInterface*copy =
-          graph->getProperty(copyName, dest->getTypename());
+        PropertyInterface*copy = graph->getProperty(copyName);
         assert(copy != NULL);
         copy->copy(dest);
       }

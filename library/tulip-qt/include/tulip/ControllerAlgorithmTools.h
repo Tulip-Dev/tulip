@@ -41,7 +41,7 @@ public :
   /**
    * Return parameters need by a plugin
    */
-  static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::string name);
+  static ParameterDescriptionList& getPluginParameters(TemplateFactoryInterface *factory, std::string name);
 
   /**
    * Remove entries from the parameters map if the plugin does not exist anymore
