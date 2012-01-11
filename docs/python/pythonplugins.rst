@@ -355,26 +355,34 @@ A size algorithm must implement the :class:`tlp.SizeAlgorithm` interface as illu
 Writing an export module in Python
 -----------------------------------
 
-An export module must implement the :class:`tlp.PythonExportModule` interface as illustrated below::
+An export module must implement the :class:`tlp.ExportModule` interface as illustrated below::
 
 	from tulip import *
 	import tulipplugins
 	
-	class ExportModuleExample(tlp.PythonExportModule):
+	class ExportModuleExample(tlp.ExportModule):
 		def __init__(self, context):
-			tlp.PythonExportModule.__init__(self, context)
+			tlp.ExportModule.__init__(self, context)
 			# you can add parameters to the plugin here through the following syntax
 			# self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
 			# (see documentation of class tlp.WithParameter to see what types of parameters are supported)
 	
-		def exportGraph(self):
+		def exportGraph(self, os):
 			# This method is called to export a graph.
 			# The graph to export is accessible through the "graph" class attribute
 			# (see documentation of class tlp.Graph).
-	
+			
 			# The parameters provided by the user are stored in a Tulip DataSet 
 			# and can be accessed through the "dataSet" class attribute
 			# (see documentation of class tlp.DataSet).
+	
+			# The os parameter is an output file stream (initialized by the Tulip GUI
+			# or by the tlp.exportGraph function.). 
+			# To write data to the file, you have to use the following syntax :
+
+			# write the number of nodes and edges to the file
+			os << self.graph.numberOfNodes() << "\n"
+			os << self.graph.numberOfEdges() << "\n"
 	
 			# The method must return a boolean indicating if the
 			# graph has been successfully exported.
@@ -387,14 +395,14 @@ An export module must implement the :class:`tlp.PythonExportModule` interface as
 Writing an import module in Python
 -----------------------------------		
 
-An import module must implement the :class:`tlp.PythonImportModule` interface as illustrated below::
+An import module must implement the :class:`tlp.ImportModule` interface as illustrated below::
 
 	from tulip import *
 	import tulipplugins
 	
-	class ImportModuleExample(tlp.PythonImportModule):
+	class ImportModuleExample(tlp.ImportModule):
 		def __init__(self, context):
-			tlp.PythonImportModule.__init__(self, context)
+			tlp.ImportModule.__init__(self, context)
 			# you can add parameters to the plugin here through the following syntax
 			# self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
 			# (see documentation of class tlp.WithParameter to see what types of parameters are supported)

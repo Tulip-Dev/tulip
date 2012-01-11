@@ -17,6 +17,8 @@ Graph management
 
 .. autofunction:: tulip::tlp.importGraph
 
+.. autofunction:: tulip::tlp.exportGraph
+
 .. autofunction:: tulip::tlp.applyAlgorithm
 
 .. autofunction:: tulip::tlp.newSubGraph
@@ -220,7 +222,11 @@ the Graph class
 	.. automethod:: tulip::tlp.Graph.getName
 	
 	.. automethod:: tulip::tlp.Graph.setName
-
+	
+	.. automethod:: tulip::tlp.Graph.getAttribute
+	
+	.. automethod:: tulip::tlp.Graph.setAttribute
+	
 	.. automethod:: tulip::tlp.Graph.numberOfNodes
 
 	.. automethod:: tulip::tlp.Graph.numberOfEdges
@@ -556,11 +562,11 @@ Tulip plugins classes
 	:members:
 	:undoc-members:	
 
-.. autoclass:: tulip::tlp.PythonImportModule
+.. autoclass:: tulip::tlp.ImportModule
 	:members:
 	:undoc-members:
 	
-.. autoclass:: tulip::tlp.PythonExportModule
+.. autoclass:: tulip::tlp.ExportModule
 	:members:
 	:undoc-members:	
 
