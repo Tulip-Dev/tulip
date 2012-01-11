@@ -869,15 +869,32 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
 
 					QString toolTipTxt = "";
 
-					for (int i = 0 ; i < params.size() ; ++i) {
-						toolTipTxt += (funcName + "(");
 
+
+					for (int i = 0 ; i < params.size() ; ++i) {
+						bool optArgs = false;
+						toolTipTxt += (funcName + "(");
 						for (int j = 0 ; j < params[i].size() ; ++j) {
+
+							if (!optArgs && params[i][j].indexOf('=') != -1) {
+								optArgs = true;
+								if (toolTipTxt.indexOf(',') != -1) {
+									toolTipTxt = toolTipTxt.mid(0, toolTipTxt.length() - 2);
+									toolTipTxt += "[, ";
+								} else {
+									toolTipTxt += "[";
+								}
+							}
+
 							toolTipTxt += params[i][j];
 
 							if (j != params[i].size() - 1) {
 								toolTipTxt += ", ";
 							}
+						}
+
+						if (optArgs) {
+							toolTipTxt += "]";
 						}
 
 						if (i == params.size() - 1) {
