@@ -1,5 +1,8 @@
 #include "tulip/QuickAccessBar.h"
 
+#include <QtGui/QFontDatabase>
+
+#include <tulip/TulipFontDialog.h>
 #include <tulip/ForEach.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/GlGraphComposite.h>
@@ -37,7 +40,6 @@ void QuickAccessBar::reset() {
   std::string prop;
   forEach(prop,_mainView->graph()->getProperties())
       _ui->labelPropertyCombo->addItem(prop.c_str());
-
 }
 
 void QuickAccessBar::takeSnapshot() {
@@ -173,4 +175,9 @@ GlGraphInputData* QuickAccessBar::inputData() const {
 
 GlScene* QuickAccessBar::scene() const {
   return _mainView->getGlMainWidget()->getScene();
+}
+
+void QuickAccessBar::selectFont() {
+  TulipFontDialog dlg;
+  dlg.exec();
 }

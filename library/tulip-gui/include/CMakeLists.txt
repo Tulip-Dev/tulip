@@ -82,6 +82,8 @@ INSTALL(FILES
   tulip/FramedGraphicsProxyWidget.h
   tulip/GlOverviewGraphicsItem.h
   tulip/QuickAccessBar.h
+  tulip/TulipFont.h
+  tulip/TulipFontDialog.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

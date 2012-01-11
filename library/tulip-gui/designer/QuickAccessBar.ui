@@ -692,6 +692,22 @@ background-color: rgba(255,255,255,100);
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>fontButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>selectFont()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>605</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>takeSnapshot()</slot>
@@ -705,5 +721,6 @@ background-color: rgba(255,255,255,100);
   <slot>setEdgesVisible(bool)</slot>
   <slot>setEdgesLabelsVisible(bool)</slot>
   <slot>setNodesLabelsVisible(bool)</slot>
+  <slot>selectFont()</slot>
  </slots>
 </ui>
