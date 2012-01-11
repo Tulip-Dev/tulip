@@ -88,6 +88,7 @@ SET(SRCS
   CoordEditor.cpp
   GlOverviewGraphicsItem.cpp
   SceneConfigWidget.cpp
+  QuickAccessBar.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -107,6 +108,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/Workspace.ui
   ../designer/CoordEditor.ui
   ../designer/SceneConfigWidget.ui
+  ../designer/QuickAccessBar.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -162,6 +164,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/CoordEditor.h
   ../include/tulip/GlOverviewGraphicsItem.h
   ../include/tulip/SceneConfigWidget.h
+  ../include/tulip/QuickAccessBar.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

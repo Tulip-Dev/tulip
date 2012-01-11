@@ -20,38 +20,48 @@
 #define Tulip_GLMAINVIEW_H
 
 #include <tulip/ViewWidget.h>
+#include <QtCore/QRectF>
+
+class QGraphicsProxyWidget;
 
 namespace tlp {
 class GlOverviewGraphicsItem;
 class SceneConfigWidget;
 class GlMainWidget;
+class QuickAccessBar;
 
 class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   Q_OBJECT
 
-  bool _displayOverview;
+  bool _overviewVisible;
   tlp::GlMainWidget* _glMainWidget;
-  tlp::GlOverviewGraphicsItem* _overview;
+  tlp::GlOverviewGraphicsItem* _overviewItem;
   tlp::SceneConfigWidget* _sceneConfigurationWidget;
+  tlp::QuickAccessBar* _quickAccessBar;
+  QGraphicsProxyWidget* _quickAccessBarItem;
 
 public:
   GlMainView();
   virtual ~GlMainView();
   tlp::GlMainWidget* getGlMainWidget() const;
   virtual QList<QWidget*> configurationWidgets() const;
-  bool displayOverview() const;
+  bool overviewVisible() const;
 
 public slots:
   virtual void draw(tlp::PluginProgress* pluginProgress);
+  virtual void refresh(PluginProgress *pluginProgress);
   virtual void drawOverview(bool generatePixmap=true);
   virtual void centerView();
-  void setDisplayOverview(bool);
+  void setOverviewVisible(bool);
 
 protected slots:
   virtual void glMainViewDrawn(GlMainWidget*,bool graphChanged);
+  virtual void sceneRectChanged(const QRectF&);
+  void setQuickAccessBarVisible(bool);
 
 protected:
   virtual void setupWidget();
+  bool quickAccessBarVisible() const;
 };
 }
 
