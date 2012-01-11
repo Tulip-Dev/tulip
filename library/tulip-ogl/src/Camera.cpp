@@ -46,7 +46,7 @@ Camera::~Camera() {
   observableDeleted();
 }
 //===================================================
-Camera& Camera::operator=(const Camera& camera){
+Camera& Camera::operator=(const Camera& camera) {
   matrixCoherent=false;
   center=camera.getCenter();
   eyes=camera.getEyes();
@@ -63,7 +63,7 @@ void Camera::setScene(GlScene* scene) {
   this->scene=scene;
 }
 //===================================================
-BoundingBox Camera::getBoundingBox() const{
+BoundingBox Camera::getBoundingBox() const {
   BoundingBox bb;
   bb.expand(screenTo3DWorld(Coord(scene->getViewport()[0],scene->getViewport()[1],0)));
   bb.expand(screenTo3DWorld(Coord(scene->getViewport()[0]+scene->getViewport()[2],scene->getViewport()[1]+scene->getViewport()[3],0)));
@@ -348,7 +348,7 @@ void Camera::setUp(const Coord& up) {
     sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
 //====================================================
-void Camera::getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix) const{
+void Camera::getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix) const {
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glMatrixMode(GL_MODELVIEW);
@@ -379,7 +379,7 @@ void Camera::getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> 
   glPopMatrix();
 }
 //====================================================
-Coord Camera::screenTo3DWorld(const Coord &point) const{
+Coord Camera::screenTo3DWorld(const Coord &point) const {
   // We have a cast to remove const on this
   ((Camera *)this)->initProjection();
   ((Camera *)this)->initModelView();
