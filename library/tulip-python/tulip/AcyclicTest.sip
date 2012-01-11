@@ -92,7 +92,7 @@ of transformed self loops.
 
 //=========================================================================================== 
  
-   static bool acyclicTest(const tlp::Graph *, std::vector<tlp::edge> *obstructionEdges /Out/);
+   static bool acyclicTest(const tlp::Graph *graph, std::vector<tlp::edge> *obstructionEdges /Out/);
 %Docstring
 tlp.AcyclicTest.acyclicTest(graph)
 

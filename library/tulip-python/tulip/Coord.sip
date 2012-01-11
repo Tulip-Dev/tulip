@@ -58,7 +58,7 @@ public:
 	
 	Coord(const tlp::Vec3f &);
 		
-	void set(const float=0,const float=0,const float=0);
+	void set(const float x=0,const float y=0, const float z=0);
 %Docstring
 tlp.Coord.set(x, y, z)
 
@@ -72,7 +72,7 @@ Sets each coordinate of the point.
 :type z: float
 %End
 	
-	void set(const tlp::Coord&);
+	void set(const tlp::Coord& c);
 %Docstring
 tlp.Coord.set(c)
 
@@ -82,7 +82,7 @@ Sets each coordinate of the point from another one.
 :type c: :class:`tlp.Coord`
 %End
 	
-	void setX(float);
+	void setX(float x);
 %Docstring
 tlp.Coord.setX(x)
 
@@ -92,7 +92,7 @@ Sets the x coordinate of the point.
 :type x: float
 %End
 	
-	void setY(float);
+	void setY(float y);
 %Docstring
 tlp.Coord.setY(y)
 
@@ -102,7 +102,7 @@ Sets the y coordinate of the point.
 :type y: float
 %End
 	
-	void setZ(float);
+	void setZ(float z);
 %Docstring
 tlp.Coord.setZ(z)
 

@@ -62,7 +62,7 @@ Sets each component of the color. Each component must be in the range [0, 255].
 :type alpha: integer
 %End
 
-	float getRGL()const;
+	float getRGL() const;
 %Docstring
 tlp.Color.getRGL()
 
@@ -71,7 +71,7 @@ Returns the red component of the color in the OpenGL format (a float value betwe
 :rtype: float
 %End
 
-	float getGGL()const;
+	float getGGL() const;
 %Docstring
 tlp.Color.getGGL()
 
@@ -80,7 +80,7 @@ Returns the green component of the color in the OpenGL format (a float value bet
 :rtype: float
 %End
 
-	float getBGL()const;
+	float getBGL() const;
 %Docstring
 tlp.Color.getBGL()
 
@@ -89,7 +89,7 @@ Returns the blue component of the color in the OpenGL format (a float value betw
 :rtype: float
 %End
 
-	float getAGL()const;
+	float getAGL() const;
 %Docstring
 tlp.Color.getAGL()
 
@@ -98,7 +98,7 @@ Returns the alpha component of the color in the OpenGL format (a float value bet
 :rtype: float
 %End
 
-	unsigned short getR()const;
+	unsigned short getR() const;
 %Docstring
 tlp.Color.getR()
 
@@ -107,7 +107,7 @@ Returns the red component of the color.
 :rtype: integer
 %End
 
-	unsigned short getG()const;
+	unsigned short getG() const;
 %Docstring
 tlp.Color.getG()
 
@@ -116,7 +116,7 @@ Returns the green component of the color.
 :rtype: integer
 %End
 
-	unsigned short getB()const;
+	unsigned short getB() const;
 %Docstring
 tlp.Color.getB()
 
@@ -125,7 +125,7 @@ Returns the blue component of the color.
 :rtype: integer
 %End
 
-	unsigned short getA()const;
+	unsigned short getA() const;
 %Docstring
 tlp.Color.getA()
 
@@ -201,7 +201,7 @@ Returns the value component (in the range [0, 255]) of the color in the HSV colo
 :rtype: integer
 %End
 
-	void setH(int );
+	void setH(int hue);
 %Docstring
 tlp.Color.setH(hue)
 
@@ -212,7 +212,7 @@ Sets the hue component of the color in the HSV color space (must be in the range
 
 %End
 
-	void setS(int );
+	void setS(int saturation);
 %Docstring
 tlp.Color.setS(saturation)
 
@@ -223,7 +223,7 @@ Sets the saturation component of the color in the HSV color space (must be in th
 
 %End
 
-	void setV(int );
+	void setV(int value);
 %Docstring
 tlp.Color.setV(value)
 

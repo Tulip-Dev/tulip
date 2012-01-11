@@ -90,7 +90,7 @@ Returns the depth of the bounding box.
 :rtype: float
 %End
 
-      void expand(const tlp::Vec3f& coord);
+      void expand(const tlp::Vec3f& point);
 %Docstring
 tlp.BoundingBox.expand(point)
 
@@ -102,7 +102,7 @@ If the vector is inside the bounding box, it remains unchanged.
 %End
 
 
-      void translate(const tlp::Vec3f& vec);
+      void translate(const tlp::Vec3f& displacement);
 %Docstring
 tlp.BoundingBox.translate(displacement)
 

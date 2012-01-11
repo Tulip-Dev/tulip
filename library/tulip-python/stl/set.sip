@@ -24,7 +24,7 @@
 // +-------------------------------------------------------------------------+
 
 template<TYPE>
-%MappedType std::set<TYPE> {
+%MappedType std::set<TYPE> /DocType="list-of-TYPE"/{
 %TypeHeaderCode
 #include <set>
 %End
@@ -104,7 +104,7 @@ template<TYPE>
 
 };
 
-%MappedType std::set<double> {
+%MappedType std::set<double> /DocType="list-of-float"/ {
 %TypeHeaderCode
 #include <set>
 %End
@@ -162,7 +162,7 @@ template<TYPE>
 };
 
 
-%MappedType std::set<int> {
+%MappedType std::set<int> /DocType="list-of-int"/ {
 %TypeHeaderCode
 #include <set>
 %End

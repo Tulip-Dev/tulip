@@ -23,26 +23,28 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
+%Include PropertyInterface.sip
+
 namespace tlp {
 
-class GraphProperty  /NoDefaultCtors/ {
+class GraphProperty : tlp::PropertyInterface /NoDefaultCtors/ {
 %TypeHeaderCode
 #include <tulip/GraphProperty.h>
 %End
 public:
 
-	GraphProperty(tlp::Graph *, std::string n="");
+	GraphProperty(tlp::Graph *graph, std::string name="");
 	
 	virtual ~GraphProperty();
 		
 	tlp::Graph* getNodeDefaultValue();
 	
-	std::set<tlp::edge> getEdgeDefaultValue();
+	std::set<tlp::edge> getEdgeDefaultValue() ;
 %Docstring
 tlp.GraphProperty.getEdgeDefaultValue() -> list of tlp.edge
 %End
 
-	tlp::Graph* getNodeValue(const tlp::node n);
+	tlp::Graph* getNodeValue(const tlp::node node);
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipRes = sipCpp->getNodeValue(*a0);
@@ -51,7 +53,7 @@ tlp.GraphProperty.getEdgeDefaultValue() -> list of tlp.edge
 	}
 %End
 
-	const std::set<tlp::edge> getEdgeValue(const tlp::edge e);
+	const std::set<tlp::edge> getEdgeValue(const tlp::edge edge) ;
 %Docstring
 tlp.GraphProperty.getEdgeValue(tlp.edge) -> list of tlp.edge
 %End
@@ -64,7 +66,7 @@ tlp.GraphProperty.getEdgeValue(tlp.edge) -> list of tlp.edge
 	}
 %End	
 
-	void setNodeValue(const tlp::node n, tlp::Graph* v);
+	void setNodeValue(const tlp::node node, tlp::Graph *val);
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipCpp->setNodeValue(*a0, a1);
@@ -74,7 +76,7 @@ tlp.GraphProperty.getEdgeValue(tlp.edge) -> list of tlp.edge
 %End
 
 
-	void setEdgeValue(const tlp::edge e, const std::set<tlp::edge> &v);
+	void setEdgeValue(const tlp::edge edge, const std::set<tlp::edge> &val);
 %Docstring
 tlp.GraphProperty.setEdgeValue(tlp.edge, list of tlp.edge)
 %End
@@ -87,9 +89,9 @@ tlp.GraphProperty.setEdgeValue(tlp.edge, list of tlp.edge)
 	}
 %End	
 
-	void setAllNodeValue(tlp::Graph* v);
+	void setAllNodeValue(tlp::Graph *val);
 
-	void setAllEdgeValue(const std::set<tlp::edge> &v);
+	void setAllEdgeValue(const std::set<tlp::edge> &val);
 %Docstring
 tlp.GraphProperty.setAllEdgeValue(list of tlp.edge)
 %End

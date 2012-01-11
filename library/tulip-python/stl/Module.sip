@@ -42,3 +42,5 @@ static void printErrorMessage(const std::string &errMsg) {
 %Include string.sip
 %Include vector.sip
 %Include map.sip
+%Include ostream.sip
+

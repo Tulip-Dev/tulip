@@ -32,7 +32,7 @@
 // we are forced to provide a specialization.
 
 template<TYPE>
-%MappedType std::vector<TYPE> {
+%MappedType std::vector<TYPE> /DocType="list-of-TYPE"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -108,7 +108,7 @@ template<TYPE>
 };
 
 template<TYPE*>
-%MappedType std::vector<TYPE*> {
+%MappedType std::vector<TYPE*> /DocType="list-of-TYPE"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -186,7 +186,7 @@ template<TYPE*>
 // Specialization for std::vector<double>
 // ****************************************************
 
-%MappedType std::vector<double> {
+%MappedType std::vector<double> /DocType="list-of-float"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -245,7 +245,7 @@ template<TYPE*>
 // Specialization for std::vector<int>
 // ****************************************************
 
-%MappedType std::vector<int> {
+%MappedType std::vector<int> /DocType="list-of-int"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -302,7 +302,7 @@ template<TYPE*>
 // Specialization for std::vector<bool>
 // ****************************************************
 
-%MappedType std::vector<bool> {
+%MappedType std::vector<bool> /DocType="list-of-bool"/{
 %TypeHeaderCode
 #include <vector>
 %End

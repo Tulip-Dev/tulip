@@ -9,6 +9,7 @@ SET(STL_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/set.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/string.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/vector.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/ostream.sip
     CACHE INTERNAL ""
 )
 

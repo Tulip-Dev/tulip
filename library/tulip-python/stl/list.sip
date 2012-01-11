@@ -26,7 +26,7 @@
 
 // std::list
 template<TYPE *>
-%MappedType std::list<TYPE *> {
+%MappedType std::list<TYPE *> /DocType="list-of-TYPE"/ {
 %TypeHeaderCode
 #include <list>
 %End
@@ -100,7 +100,7 @@ template<TYPE *>
 };
 
 template<TYPE>
-%MappedType std::list<TYPE> {
+%MappedType std::list<TYPE> /DocType="list-of-TYPE"/ {
 %TypeHeaderCode
 #include <list>
 %End

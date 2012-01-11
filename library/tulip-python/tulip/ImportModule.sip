@@ -23,41 +23,18 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
+
 %ModuleHeaderCode
 #include <tulip/ImportModule.h>
-namespace tlp {
-class PythonImportModule : public ImportModule {
-public :
-
-	PythonImportModule(AlgorithmContext context) : 
-		ImportModule(context){}
-	
-	bool import(const std::string &) {
-		return importGraph();
-	}
-	
-	virtual bool importGraph() = 0;	
-};
-}
 %End
 
-
 namespace tlp {
-class ImportModule :tlp::WithParameter, tlp::WithDependency /Abstract/ {
+
+class ImportModule :tlp::WithParameter, tlp::WithDependency {
 %TypeHeaderCode
 #include <tulip/ImportModule.h>
 %End
-public:
 
-  ImportModule (tlp::AlgorithmContext context);
-  virtual ~ImportModule();
-    
-  tlp::Graph *graph;
-  tlp::DataSet *dataSet;
-  tlp::PluginProgress *pluginProgress;
-};
-
-class PythonImportModule : tlp::ImportModule {
 public:
 
 %Docstring
@@ -83,11 +60,12 @@ This abstract class describes an import plugin.
 
 %End
 
-  PythonImportModule(tlp::AlgorithmContext context);
+  ImportModule (tlp::AlgorithmContext context);
+  virtual ~ImportModule();
   
-  virtual bool importGraph() = 0;
+   virtual bool importGraph() = 0;
 %Docstring
-tlp.PythonImportModule.importGraph()
+tlp.ImportModule.importGraph()
 
 This method is called to import a graph.
 Derived classes must implement it. A boolean must also be returned
@@ -95,8 +73,10 @@ to indicate if the import was successful.
 
 :rtype: boolean
 %End  
-  
-  
+    
+  tlp::Graph *graph;
+  tlp::DataSet *dataSet;
+  tlp::PluginProgress *pluginProgress;
 };
 
 class ImportModuleFactory : tlp::PluginInfoInterface {
