@@ -37,7 +37,7 @@ TulipFont TulipFont::fromFile(const QString &path) {
   result._fontFile = path;
   result._bold = path.endsWith("_Bold.ttf") || path.endsWith("_Bold_Italic.ttf");
   result._italic = path.endsWith("_Italic.ttf") || path.endsWith("_Bold_Italic.ttf");
-  result._fontName = QFileInfo(path).fileName();
+  result._fontName = QFileInfo(path).fileName().remove("_Bold").remove("_Italic").remove(".ttf");
   return result;
 }
 
@@ -87,6 +87,14 @@ int TulipFont::fontId(const QString& path) {
 
 int TulipFont::fontId() const {
   return fontId(_fontFile);
+}
+
+QString TulipFont::fontFamily() const {
+  QStringList families = QFontDatabase::applicationFontFamilies(fontId());
+  QString family = trUtf8("Unregistered font");
+  if (families.size()>0)
+    family = families[0];
+  return family;
 }
 
 QString TulipFont::fontFile() const {

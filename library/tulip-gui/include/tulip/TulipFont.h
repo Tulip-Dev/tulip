@@ -24,6 +24,7 @@ class TLP_QT_SCOPE TulipFont : public QObject {
   QString _fontFile;
   Q_PROPERTY(bool exists READ exists)
   Q_PROPERTY(int fontId READ fontId)
+  Q_PROPERTY(QString fontFamily READ fontFamily)
 
   void refreshFontFile();
 public:
@@ -43,6 +44,7 @@ public:
   QString fontFile() const;
   bool exists() const;
   int fontId() const;
+  QString fontFamily() const;
 
 public slots:
   void setItalic(bool);

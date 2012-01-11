@@ -40,6 +40,7 @@ void QuickAccessBar::reset() {
   std::string prop;
   forEach(prop,_mainView->graph()->getProperties())
       _ui->labelPropertyCombo->addItem(prop.c_str());
+  updateFontButtonStyle();
 }
 
 void QuickAccessBar::takeSnapshot() {
@@ -179,5 +180,21 @@ GlScene* QuickAccessBar::scene() const {
 
 void QuickAccessBar::selectFont() {
   TulipFontDialog dlg;
-  dlg.exec();
+  dlg.selectFont(TulipFont::fromFile(inputData()->getElementFont()->getNodeDefaultValue().c_str()));
+  if (dlg.exec() != QDialog::Accepted || !dlg.font().exists())
+    return;
+  Observable::holdObservers();
+  inputData()->getElementFont()->setAllNodeValue(dlg.font().fontFile().toStdString());
+  inputData()->getElementFont()->setAllEdgeValue(dlg.font().fontFile().toStdString());
+  Observable::unholdObservers();
+  updateFontButtonStyle();
+}
+
+void QuickAccessBar::updateFontButtonStyle() {
+  QString fontFile = inputData()->getElementFont()->getNodeDefaultValue().c_str();
+  TulipFont selectedFont = TulipFont::fromFile(fontFile);
+  _ui->fontButton->setStyleSheet("font-family: " + selectedFont.fontFamily() + "; "
+                              + (selectedFont.isItalic() ? "font-style: italic; " : "")
+                              + (selectedFont.isBold() ? "font-weight: bold; " : ""));
+  _ui->fontButton->setText(selectedFont.fontName() + (selectedFont.isBold() ? " Bold" : "") + (selectedFont.isItalic() ? " Italic" : ""));
 }

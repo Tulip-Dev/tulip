@@ -25,6 +25,8 @@ class QuickAccessBar : public QWidget {
   tlp::GlScene* scene() const;
   double _oldFontScale;
   double _oldNodeScale;
+
+  void updateFontButtonStyle();
 public:
   explicit QuickAccessBar(QWidget *parent = 0);
   
