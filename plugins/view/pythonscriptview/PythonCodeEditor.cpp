@@ -71,7 +71,8 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
 				int end = 0;
 
 				for (int i = start ; i > 0 ; --i) {
-					if (!(text[i-1] != ' ' && text[i-1] != '\t' && text[i-1] != '.')) {
+					if (!(text[i-1] != ' ' && text[i-1] != '\t' && text[i-1] != '.' && text[i-1] != ','
+						  && text[i-1] != '[' && text[i-1] != '(' && text[i-1] != '{')) {
 						end = i;
 						break;
 					}
