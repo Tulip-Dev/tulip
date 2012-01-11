@@ -20,10 +20,13 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/SceneConfigWidget.h>
 #include <tulip/GlOverviewGraphicsItem.h>
+#include <tulip/QuickAccessBar.h>
+#include <QtGui/QGraphicsProxyWidget>
+#include <QtGui/QGraphicsView>
 
 using namespace tlp;
 
-GlMainView::GlMainView(): _displayOverview(false),_overview(NULL), _sceneConfigurationWidget(NULL) {
+GlMainView::GlMainView(): _overviewVisible(false), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL) {
 }
 
 GlMainView::~GlMainView() {
@@ -33,27 +36,30 @@ void GlMainView::draw(tlp::PluginProgress*) {
   _glMainWidget->draw();
 }
 
-void GlMainView::drawOverview(bool generatePixmap) {
-  if(!_displayOverview)
-    return;
+void GlMainView::refresh(PluginProgress *pluginProgress) {
+  _glMainWidget->draw(false);
+}
 
-  if(_overview == NULL) {
-    _overview=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
-    addToScene(_overview);
-    _overview->setPos(QPointF(0,0));
+void GlMainView::drawOverview(bool generatePixmap) {
+  if(!_overviewVisible)
+    return;
+  if(_overviewItem == NULL) {
+    _overviewItem=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
+    addToScene(_overviewItem);
+    _overviewItem->setPos(QPointF(0,0));
     generatePixmap=true;
   }
-
-  _overview->draw(generatePixmap);
+  _overviewItem->draw(generatePixmap);
 }
 
 void GlMainView::setupWidget() {
   _glMainWidget = new GlMainWidget(NULL,this);
+  setCentralWidget(_glMainWidget);
   delete _sceneConfigurationWidget;
   _sceneConfigurationWidget = new SceneConfigWidget();
   _sceneConfigurationWidget->setGlMainWidget(_glMainWidget);
-  setCentralWidget(_glMainWidget);
   connect(_glMainWidget,SIGNAL(viewDrawn(GlMainWidget*,bool)),this,SLOT(glMainViewDrawn(GlMainWidget*,bool)));
+  connect(graphicsView()->scene(),SIGNAL(sceneRectChanged(QRectF)),this,SLOT(sceneRectChanged(QRectF)));
 }
 
 GlMainWidget* GlMainView::getGlMainWidget() const {
@@ -72,13 +78,42 @@ QList<QWidget*> GlMainView::configurationWidgets() const {
   return QList<QWidget*>() << _sceneConfigurationWidget;
 }
 
-void GlMainView::setDisplayOverview(bool display) {
-  if (_displayOverview != display) {
-    _displayOverview=display;
-    //drawOverview();
+void GlMainView::setOverviewVisible(bool display) {
+  if (!display) {
+    delete _overviewItem;
+    _overviewItem = NULL;
+  }
+  _overviewVisible = display;
+}
+
+bool GlMainView::overviewVisible() const {
+  return _overviewVisible;
+}
+
+void GlMainView::setQuickAccessBarVisible(bool visible) {
+  if (!visible) {
+    delete _quickAccessBar;
+    delete _quickAccessBarItem;
+    _quickAccessBar = NULL;
+    _quickAccessBarItem = NULL;
+  }
+
+  else if (!quickAccessBarVisible()) {
+    _quickAccessBar = new QuickAccessBar();
+    _quickAccessBar->setGlMainView(this);
+    _quickAccessBarItem = new QGraphicsProxyWidget();
+    _quickAccessBarItem->setWidget(_quickAccessBar);
+    addToScene(_quickAccessBarItem);
   }
 }
 
-bool GlMainView::displayOverview() const {
-  return _displayOverview;
+bool GlMainView::quickAccessBarVisible() const {
+  return _quickAccessBarItem != NULL;
+}
+
+void GlMainView::sceneRectChanged(const QRectF& rect) {
+  if (_quickAccessBar != NULL) {
+    _quickAccessBarItem->setPos(0,rect.height()-_quickAccessBarItem->size().height());
+    _quickAccessBarItem->resize(rect.width(),_quickAccessBarItem->size().height());
+  }
 }

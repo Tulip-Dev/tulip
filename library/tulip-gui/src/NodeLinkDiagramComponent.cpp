@@ -28,7 +28,6 @@ using namespace tlp;
 using namespace std;
 
 NodeLinkDiagramComponent::NodeLinkDiagramComponent() {
-  setDisplayOverview(true);
 }
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
@@ -38,7 +37,9 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   getGlMainWidget()->setData(graph(), data);
   registerTriggers();
 
-  this->drawOverview(true);
+  setOverviewVisible(true);
+  setQuickAccessBarVisible(true);
+  drawOverview(true);
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
