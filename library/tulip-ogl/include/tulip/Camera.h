@@ -97,7 +97,7 @@ public:
   /**
    * Return if the camera is a 3D one
    */
-  bool is3D() const{
+  bool is3D() const {
     return d3;
   }
 
