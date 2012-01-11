@@ -146,8 +146,9 @@ void SGHierarchyWidget::update() {
     buildTreeView(_currentGraph->getRoot());
     currentGraphChanged(_currentGraph);
   }
+
   for (int i = 0 ; i < 4 ; ++i) {
-	  resizeColumnToContents(i);
+    resizeColumnToContents(i);
   }
 }
 //=======================================================
@@ -294,7 +295,7 @@ void SGHierarchyWidget::changeGraph(QTreeWidgetItem* current, QTreeWidgetItem*) 
 //=======================================================
 
 void SGHierarchyWidget::resizeFirstColumnToContent() {
-	resizeColumnToContents(0);
+  resizeColumnToContents(0);
 }
 
 }
