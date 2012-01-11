@@ -91,7 +91,7 @@ struct IteratorInfos {
   TCHAR currentDirectory[BUFSIZE];
 };
 
-PluginLibraryLoader::PluginLibraryLoader(const std::string& _pluginPath, PluginLoader *loader)): n(0), pluginPath(_pluginPath) {
+PluginLibraryLoader::PluginLibraryLoader(const std::string& _pluginPath, PluginLoader *loader): n(0), pluginPath(_pluginPath) {
   DWORD dwRet;
   IteratorInfos *_infos = new IteratorInfos();
   dwRet = GetCurrentDirectory(BUFSIZE, _infos ->currentDirectory);
