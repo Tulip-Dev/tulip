@@ -45,6 +45,7 @@ public slots:
   void setEdgesVisible(bool);
   void setEdgesLabelsVisible(bool);
   void setNodesLabelsVisible(bool);
+  void selectFont();
 };
 }
 
