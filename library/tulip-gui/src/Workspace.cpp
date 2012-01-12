@@ -184,14 +184,7 @@ QString Workspace::panelTitle(tlp::WorkspacePanel* panel) const {
   return panel->viewName() + " <" + QString::number(digit+1) + ">";
 }
 
-tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& data) {
-  // Create view and panel
-  assert(ViewLister::pluginExists(viewName.toStdString()));
-  View* view = ViewLister::getPluginObject(viewName.toStdString(),NULL);
-  view->setupUi();
-  view->setGraph(g);
-  view->setState(data);
-
+void Workspace::addPanel(tlp::View* view, const QString& viewName) {
   WorkspacePanel* panel = new WorkspacePanel(view,viewName);
 
   if (_model != NULL)
@@ -217,8 +210,7 @@ tlp::View* Workspace::addPanel(const QString& viewName,Graph* g, const DataSet& 
   updatePanels();
 
   // Force the first panel's graph combo box update when underleying model has been updated.
-  panel->viewGraphSet(g);
-  return view;
+  panel->viewGraphSet(view->graph());
 }
 
 

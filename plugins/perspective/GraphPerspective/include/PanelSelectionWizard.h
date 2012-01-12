@@ -26,6 +26,7 @@ namespace tlp {
 class Graph;
 class PluginInformations;
 class GraphHierarchiesModel;
+class View;
 }
 
 namespace Ui {
@@ -65,12 +66,14 @@ class PanelSelectionWizard : public QWizard {
   tlp::GraphHierarchiesModel* _model;
   PanelSelectionItem* _activeItem;
   bool _canSelectGraph;
+  tlp::View* _view;
 public:
   explicit PanelSelectionWizard(tlp::GraphHierarchiesModel* model, QWidget *parent = 0, bool canSelectGraph = true);
   virtual ~PanelSelectionWizard();
 
   tlp::Graph* graph() const;
   QString panelName() const;
+  tlp::View* panel() const;
 
   void setSelectedGraph(tlp::Graph*);
 
@@ -80,6 +83,9 @@ signals:
 protected slots:
   void panelSelected();
   void panelDoubleClicked();
+
+  void nextButtonClicked();
+  void pageChanged(int);
 };
 
 #endif // PANELSELECTIONWIZARD_H
