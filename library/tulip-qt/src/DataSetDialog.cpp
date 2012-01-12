@@ -169,7 +169,7 @@ struct QParamDialog : public QDialog {
 
 
   QParamDialog(const ParameterDescriptionList& sDef,
-	       ParameterDescriptionList& iDef,
+               ParameterDescriptionList& iDef,
                QWidget * parent = 0)
     : QDialog( parent), sysDef(sDef), inDef(iDef) {
     helpBrowser = 0;

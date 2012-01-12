@@ -362,7 +362,7 @@ bool Camera::haveObjectTransformation() {
   return objectTransformation;
 }
 //====================================================
-void Camera::getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix) const{
+void Camera::getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix) const {
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glMatrixMode(GL_MODELVIEW);
@@ -378,7 +378,7 @@ void Camera::getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> 
   glPopMatrix();
 }
 //====================================================
-void Camera::getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &transformMatrix) const{
+void Camera::getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &transformMatrix) const {
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glMatrixMode(GL_MODELVIEW);

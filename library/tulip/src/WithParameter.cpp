@@ -46,6 +46,7 @@ ParameterDescription* ParameterDescriptionList::getParameter(const std::string& 
     if (name == parameters[i].getName())
       return &parameters[i];
   }
+
 #ifndef NDEBUG
   std::cerr << __PRETTY_FUNCTION__ << name << " does not exists" << std::endl;
 #endif
@@ -58,7 +59,7 @@ const std::string& ParameterDescriptionList::getDefaultValue(const string& name)
 }
 
 void ParameterDescriptionList::setDefaultValue(const string& name,
-					       const string& val) {
+    const string& val) {
   getParameter(name)->setDefaultValue(val);
 }
 
@@ -127,11 +128,13 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
       StringCollection col;
       string::size_type lastPos = defaultValue.find_first_not_of(";");
       string::size_type pos = defaultValue.find_first_of(";", lastPos);
+
       while (string::npos != pos || string::npos != lastPos) {
-	col.push_back(defaultValue.substr(lastPos, pos - lastPos));
-	lastPos = defaultValue.find_first_not_of(";", pos);
-	pos = defaultValue.find_first_of(";", lastPos);
+        col.push_back(defaultValue.substr(lastPos, pos - lastPos));
+        lastPos = defaultValue.find_first_not_of(";", pos);
+        pos = defaultValue.find_first_of(";", lastPos);
       }
+
       dataSet.set<StringCollection>(name,col);
     }
 

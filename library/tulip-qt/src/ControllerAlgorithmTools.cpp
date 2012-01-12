@@ -100,7 +100,7 @@ bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph, QWidget *parent,
-					      const string &name) {
+    const string &name) {
   DataSet dataSet;
   ParameterDescriptionList& params = getPluginParameters(AlgorithmPlugin::factory, name);
   const ParameterDescriptionList& sysDef =
@@ -204,7 +204,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
     }
 
     resultBool = graph->applyPropertyAlgorithm(name, tmp, erreurMsg,
-					       myProgress, &dataSet);
+                 myProgress, &dataSet);
     graph->pop();
 
     if (updateLayout) {

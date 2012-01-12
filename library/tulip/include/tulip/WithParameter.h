@@ -32,47 +32,47 @@ namespace tlp {
 /*
  * @brief indicates the direction type of a parameter
  **/
-  enum ParameterDirection { IN_PARAM=0, OUT_PARAM = 1, INOUT_PARAM = 2 };
+enum ParameterDirection { IN_PARAM=0, OUT_PARAM = 1, INOUT_PARAM = 2 };
 /**
  * @brief Describes a parameter with a type, default value, whether or not is it mandatory and a help string describing what this parameter should be used for.
  **/
-  class TLP_SCOPE ParameterDescription {
- private:
+class TLP_SCOPE ParameterDescription {
+private:
   std::string name;
   std::string type;
   std::string help;
   std::string defaultValue;
   bool mandatory;
   ParameterDirection direction;
- public:
+public:
   ParameterDescription() {}
   ParameterDescription(const std::string& name, const std::string& type,
-		       const std::string& help, const std::string& defaultValue,
-		       bool mandatory, ParameterDirection direction)
-  : name(name), type(type), help(help),
+                       const std::string& help, const std::string& defaultValue,
+                       bool mandatory, ParameterDirection direction)
+    : name(name), type(type), help(help),
       defaultValue(defaultValue), mandatory(mandatory), direction(direction) {
-    }
-    const std::string& getName() const {
-      return name;
-    }
-    const std::string& getTypeName() const {
-      return type;
-    }
-    const std::string& getHelp() const {
-      return help;
-    }
-    const std::string& getDefaultValue() const {
-      return defaultValue;
-    }
-    void setDefaultValue(const std::string& defVal) {
-      defaultValue = defVal;
-    }
-    bool isMandatory() {
-      return mandatory;
-    }
-    ParameterDirection getDirection() const {
-      return direction;
-    }
+  }
+  const std::string& getName() const {
+    return name;
+  }
+  const std::string& getTypeName() const {
+    return type;
+  }
+  const std::string& getHelp() const {
+    return help;
+  }
+  const std::string& getDefaultValue() const {
+    return defaultValue;
+  }
+  void setDefaultValue(const std::string& defVal) {
+    defaultValue = defVal;
+  }
+  bool isMandatory() {
+    return mandatory;
+  }
+  ParameterDirection getDirection() const {
+    return direction;
+  }
 };
 
 /**
@@ -98,20 +98,21 @@ struct TLP_SCOPE ParameterDescriptionList {
                                 const char* help = NULL,
                                 const char* defaultValue = NULL,
                                 bool isMandatory = true,
-				ParameterDirection direction = IN_PARAM) {
+                                ParameterDirection direction = IN_PARAM) {
     for (unsigned int i = 0; i < parameters.size(); ++i) {
       if (parameters[i].getName() == parameterName) {
 #ifndef NDEBUG
-	std::cerr << "ParameterDescriptionList::addVar " << parameterName << " already exists" << std::endl;
+        std::cerr << "ParameterDescriptionList::addVar " << parameterName << " already exists" << std::endl;
 #endif
-	return;
+        return;
       }
     }
+
     ParameterDescription newParameter(parameterName,
-				      typeid(T).name(),
-				      help ? help : "",
-				      defaultValue ? defaultValue : "",
-				      isMandatory, direction);
+                                      typeid(T).name(),
+                                      help ? help : "",
+                                      defaultValue ? defaultValue : "",
+                                      isMandatory, direction);
     parameters.push_back(newParameter);
   }
 
@@ -138,7 +139,7 @@ struct TLP_SCOPE ParameterDescriptionList {
    * @return void
    **/
   void setDefaultValue(const std::string& parameterName,
-		       const std::string& value);
+                       const std::string& value);
 
   /**
    * @brief Retrieves whether a parameter is mandatory or optional.
@@ -231,9 +232,9 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T> void addInParameter(const char* str,
-					   const char* inHelp=0,
-					   const char* inDefValue = 0,
-					   bool isMandatory = true) {
+      const char* inHelp=0,
+      const char* inDefValue = 0,
+      bool isMandatory = true) {
     parameters.template add<T>(str,inHelp,inDefValue,isMandatory, IN_PARAM);
   }
 
@@ -247,9 +248,9 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T> void addOutParameter(const char* str,
-					    const char* inHelp=0,
-					    const char* inDefValue = 0,
-					    bool isMandatory = true) {
+      const char* inHelp=0,
+      const char* inDefValue = 0,
+      bool isMandatory = true) {
     parameters.template add<T>(str,inHelp,inDefValue,isMandatory, OUT_PARAM);
   }
 
@@ -263,9 +264,9 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T> void addInOutParameter(const char* str,
-					      const char* inHelp=0,
-					      const char* inDefValue = 0,
-					      bool isMandatory = true) {
+      const char* inHelp=0,
+      const char* inDefValue = 0,
+      bool isMandatory = true) {
     parameters.template add<T>(str,inHelp,inDefValue,isMandatory, INOUT_PARAM);
   }
 

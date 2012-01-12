@@ -652,9 +652,9 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       noPlugin = false;
       s = QString::null;
       const ParameterDescriptionList& sysDef =
-	ImportModuleFactory::factory->getPluginParameters(*plugin);
+        ImportModuleFactory::factory->getPluginParameters(*plugin);
       ParameterDescriptionList& params =
-	getPluginParameters(ImportModuleFactory::factory, *plugin);
+        getPluginParameters(ImportModuleFactory::factory, *plugin);
       params.buildDefaultDataSet( dataSet );
       string title = string("Enter Import parameters: ") + plugin->c_str();
       cancel = !tlp::openDataSetDialog(dataSet, sysDef, params, &dataSet,
