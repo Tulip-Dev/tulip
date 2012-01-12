@@ -126,7 +126,7 @@ void PanelSelectionWizard::panelSelected() {
 
 void PanelSelectionWizard::panelDoubleClicked() {
   createView();
-  button(QWizard::FinishButton)->click();
+  button(QWizard::NextButton)->click();
 }
 
 tlp::Graph* PanelSelectionWizard::graph() const {
