@@ -115,7 +115,7 @@ void GraphPerspective::showFullScreen(bool f) {
 }
 
 void GraphPerspective::importGraph() {
-  ImportWizard wizard(_graphs,_mainWindow);
+  ImportWizard wizard(_mainWindow);
 
   if (wizard.exec() == QDialog::Accepted) {
     Graph* g = NULL;
@@ -141,10 +141,6 @@ void GraphPerspective::importGraph() {
     }
 
     _graphs->addGraph(g);
-
-    if (wizard.createPanel() && !wizard.panelName().isNull()) {
-      _ui->workspace->setActivePanel(_ui->workspace->addPanel(wizard.panelName(),g));
-    }
   }
 }
 
@@ -153,18 +149,19 @@ void GraphPerspective::createPanel(tlp::Graph* g) {
     return;
 
   PanelSelectionWizard wizard(_graphs,_mainWindow);
-
-  if (g != NULL) {
+  if (g != NULL)
     wizard.setSelectedGraph(g);
-  }
-  else {
+  else
     wizard.setSelectedGraph(_graphs->currentGraph());
-  }
 
-  if (wizard.exec() == QDialog::Accepted) {
-    if (!wizard.panelName().isNull()) {
-      _ui->workspace->setActivePanel(_ui->workspace->addPanel(wizard.panelName(),wizard.graph()));
-    }
+
+  int result = wizard.exec();
+  if (result == QDialog::Accepted && wizard.panel() != NULL) {
+    _ui->workspace->addPanel(wizard.panel(),wizard.panelName());
+    _ui->workspace->setActivePanel(wizard.panel());
+  }
+  else if (result != QDialog::Accepted && wizard.panel() != NULL) {
+    delete wizard.panel();
   }
 }
 

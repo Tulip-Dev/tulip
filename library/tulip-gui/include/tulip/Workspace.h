@@ -81,7 +81,7 @@ public:
   explicit Workspace(QWidget *parent = 0);
   virtual ~Workspace();
 
-  tlp::View* addPanel(const QString& viewName, tlp::Graph* g, const tlp::DataSet& data=tlp::DataSet());
+  void addPanel(tlp::View*,const QString& viewName);
   QList<tlp::View*> panels() const;
 
 public slots:

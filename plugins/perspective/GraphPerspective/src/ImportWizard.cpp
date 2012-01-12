@@ -32,11 +32,8 @@
 using namespace tlp;
 using namespace std;
 
-ImportWizard::ImportWizard(GraphHierarchiesModel* model, QWidget *parent): QWizard(parent), _ui(new Ui::ImportWizard) {
+ImportWizard::ImportWizard(QWidget *parent): QWizard(parent), _ui(new Ui::ImportWizard) {
   _ui->setupUi(this);
-  _panelWizard = new PanelSelectionWizard(model,0,false);
-  connect(_panelWizard,SIGNAL(wizardFinished()),this,SLOT(panelDoubleClicked()));
-  setPage(1,_panelWizard->page(0));
 
   QSet<QString> groups;
   string algName;
@@ -52,7 +49,6 @@ ImportWizard::ImportWizard(GraphHierarchiesModel* model, QWidget *parent): QWiza
 ImportWizard::~ImportWizard() {
   delete _ui->parametersList->model();
   delete _ui;
-  delete _panelWizard;
 }
 
 void ImportWizard::algorithmSelected(const QString& alg) {
@@ -108,20 +104,4 @@ tlp::DataSet ImportWizard::parameters() const {
 
 void ImportWizard::updateFinishButton() {
   button(QWizard::FinishButton)->setEnabled(!algorithm().isNull() || (!_ui->algorithmFrame->isEnabled() && !group().isNull()));
-}
-
-bool ImportWizard::createPanel() const {
-  return currentId() == 1;
-}
-
-QString ImportWizard::panelName() const {
-  if (createPanel()) {
-    return _panelWizard->panelName();
-  }
-  else
-    return QString::null;
-}
-
-void ImportWizard::panelDoubleClicked() {
-  button(QWizard::FinishButton)->click();
 }

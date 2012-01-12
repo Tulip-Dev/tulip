@@ -34,7 +34,7 @@ border: 1px solid #C9C9C9;
    <enum>QWizard::AeroStyle</enum>
   </property>
   <property name="options">
-   <set>QWizard::ExtendedWatermarkPixmap|QWizard::HaveFinishButtonOnEarlyPages|QWizard::NoBackButtonOnStartPage</set>
+   <set>QWizard::ExtendedWatermarkPixmap|QWizard::HaveFinishButtonOnEarlyPages|QWizard::HaveNextButtonOnLastPage|QWizard::NoBackButtonOnStartPage</set>
   </property>
   <property name="titleFormat">
    <enum>Qt::RichText</enum>
