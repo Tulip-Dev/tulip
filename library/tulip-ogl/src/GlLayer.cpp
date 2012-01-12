@@ -184,10 +184,12 @@ void GlLayer::setWithXML(const string &inString, unsigned int &currentPosition) 
 }
 
 void GlLayer::glGraphCompositeAdded(GlGraphComposite *composite) {
+  assert(scene);
   scene->glGraphCompositeAdded(this,composite);
 }
 
 void GlLayer::glGraphCompositeRemoved(GlGraphComposite *composite) {
+  assert(scene);
   scene->glGraphCompositeRemoved(this,composite);
 }
 
