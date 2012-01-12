@@ -39,7 +39,7 @@ void QuickAccessBar::reset() {
   _ui->labelPropertyCombo->addItem(trUtf8("Values on labels"));
   std::string prop;
   forEach(prop,_mainView->graph()->getProperties())
-      _ui->labelPropertyCombo->addItem(prop.c_str());
+  _ui->labelPropertyCombo->addItem(prop.c_str());
   updateFontButtonStyle();
 }
 
@@ -109,11 +109,11 @@ void QuickAccessBar::setLabelProperty(const QString& prop) {
 
     node n;
     forEach(n, _mainView->graph()->getNodes())
-      out->setNodeValue(n, in->getNodeStringValue(n));
+    out->setNodeValue(n, in->getNodeStringValue(n));
 
     edge e;
     forEach(e, _mainView->graph()->getEdges())
-      out->setEdgeValue(e, in->getEdgeStringValue(e));
+    out->setEdgeValue(e, in->getEdgeStringValue(e));
   }
 
   Observable::unholdObservers();
@@ -181,8 +181,10 @@ GlScene* QuickAccessBar::scene() const {
 void QuickAccessBar::selectFont() {
   TulipFontDialog dlg;
   dlg.selectFont(TulipFont::fromFile(inputData()->getElementFont()->getNodeDefaultValue().c_str()));
+
   if (dlg.exec() != QDialog::Accepted || !dlg.font().exists())
     return;
+
   Observable::holdObservers();
   inputData()->getElementFont()->setAllNodeValue(dlg.font().fontFile().toStdString());
   inputData()->getElementFont()->setAllEdgeValue(dlg.font().fontFile().toStdString());
@@ -194,7 +196,7 @@ void QuickAccessBar::updateFontButtonStyle() {
   QString fontFile = inputData()->getElementFont()->getNodeDefaultValue().c_str();
   TulipFont selectedFont = TulipFont::fromFile(fontFile);
   _ui->fontButton->setStyleSheet("font-family: " + selectedFont.fontFamily() + "; "
-                              + (selectedFont.isItalic() ? "font-style: italic; " : "")
-                              + (selectedFont.isBold() ? "font-weight: bold; " : ""));
+                                 + (selectedFont.isItalic() ? "font-style: italic; " : "")
+                                 + (selectedFont.isBold() ? "font-weight: bold; " : ""));
   _ui->fontButton->setText(selectedFont.fontName() + (selectedFont.isBold() ? " Bold" : "") + (selectedFont.isItalic() ? " Italic" : ""));
 }
