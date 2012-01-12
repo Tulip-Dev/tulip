@@ -25,8 +25,10 @@ QStringList TulipFont::installedFontNames() {
     italicFont.setItalic(true);
     boldItalicFont.setBold(true);
     boldItalicFont.setItalic(true);
+
     if (!normalFont.exists() || !boldFont.exists() || !italicFont.exists() || !boldItalicFont.exists())
       continue;
+
     result << fontName;
   }
   return result;
@@ -75,6 +77,7 @@ QString TulipFont::fontName() const {
 
 int TulipFont::fontId(const QString& path) {
   int result = -1;
+
   if (!FONT_IDS.contains(path)) {
     result = QFontDatabase::addApplicationFont(path);
     FONT_IDS[path] = result;
@@ -82,6 +85,7 @@ int TulipFont::fontId(const QString& path) {
   else {
     result = FONT_IDS[path];
   }
+
   return result;
 }
 
@@ -92,8 +96,10 @@ int TulipFont::fontId() const {
 QString TulipFont::fontFamily() const {
   QStringList families = QFontDatabase::applicationFontFamilies(fontId());
   QString family = trUtf8("Unregistered font");
+
   if (families.size()>0)
     family = families[0];
+
   return family;
 }
 
@@ -122,9 +128,12 @@ bool TulipFont::exists() const {
 
 void TulipFont::refreshFontFile() {
   _fontFile = tulipFontsDirectory() + fontName() + "/" + fontName();
+
   if (isBold())
     _fontFile += "_Bold";
+
   if (isItalic())
     _fontFile += "_Italic";
+
   _fontFile += ".ttf";
 }

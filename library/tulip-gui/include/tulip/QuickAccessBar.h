@@ -29,9 +29,9 @@ class QuickAccessBar : public QWidget {
   void updateFontButtonStyle();
 public:
   explicit QuickAccessBar(QWidget *parent = 0);
-  
+
 signals:
-  
+
 public slots:
   void setGlMainView(tlp::GlMainView*);
   void reset();

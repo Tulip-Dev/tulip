@@ -43,12 +43,14 @@ void GlMainView::refresh(PluginProgress *pluginProgress) {
 void GlMainView::drawOverview(bool generatePixmap) {
   if(!_overviewVisible)
     return;
+
   if(_overviewItem == NULL) {
     _overviewItem=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
     addToScene(_overviewItem);
     _overviewItem->setPos(QPointF(0,0));
     generatePixmap=true;
   }
+
   _overviewItem->draw(generatePixmap);
 }
 
@@ -83,6 +85,7 @@ void GlMainView::setOverviewVisible(bool display) {
     delete _overviewItem;
     _overviewItem = NULL;
   }
+
   _overviewVisible = display;
 }
 
