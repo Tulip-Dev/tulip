@@ -135,7 +135,66 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
 
   QTabWidget* viewConfigurationTabs = new QTabWidget();
   viewConfigurationTabs->setTabPosition(QTabWidget::West);
-  viewConfigurationTabs->setStyleSheet("QTabWidget {\nbackground-color: transparent;\n}\nQTabWidget::pane {\nbackground-color: white;\nborder: 1px solid #C9C9C9;\n}\nQTabBar::tab {\nborder-image:none;\nbackground-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\nstop: 0 #838383,\nstop: 0.4 #707070,\nstop: 0.401 #636363,\nstop: 1 #4a4a4a);\ncolor: white;\nborder: 1px solid #C9C9C9;\nborder-right: 0px;\nborder-top-left-radius: 4px;\nborder-bottom-left-radius: 4px;\nmin-height: 8ex;\npadding: 2px;\nfont: bold;\n}\nQTabBar::tab:selected {\nbackground-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\nstop: 0 #ffffff,\nstop: 0.4 #eeeeee,\nstop: 0.401 #e2e2e2,\nstop: 1 #dddddd);\ncolor: black;\n}\nQTabBar::tab:selected:hover {\nbackground-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\nstop: 0 #ffffff,\nstop: 0.4 #fefefe,\nstop: 0.401 #f2f2f2,\nstop: 1 #ededed);\n}\nQTabBar::tab:!selected {\nmargin-left: 1px;\n}\nQTabBar::tab:!selected:hover {\nbackground-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\nstop: 0 #939393,\nstop: 0.4 #808080,\nstop: 0.401 #737373,\nstop: 1 #5a5a5a);\n}");
+  viewConfigurationTabs->setStyleSheet(QString() +
+
+                                       "QTabWidget {\n"
+                                       + "  background-color: transparent;\n"
+                                       + "}\n"
+
+                                       + "QTabWidget::pane {\n"
+                                       + "  background-color: white;\n"
+                                       + "  border: 1px solid #C9C9C9;\n"
+                                       + "}\n"
+
+                                       + "QTabBar::tab {\n"
+                                       + "  border-image:none;\n"
+                                       + "  border: 1px solid #C9C9C9;\n"
+                                       + "  border-right: 0px;\n"
+                                       + "  border-top-left-radius: 4px;\n"
+                                       + "  border-bottom-left-radius: 4px;\n"
+                                       + "  min-height: 8ex;\n"
+                                       + "  padding: 2px;\n"
+                                       + "  font: bold;\n"
+                                       + "}\n"
+
+                                       + "QTabBar::tab:!selected {\n"
+                                       + "  margin-left: 1px;\n"
+                                       + "}\n"
+
+                                       + "QTabBar::tab:!selected {\n"
+                                       + "  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+                                       + "  stop: 0 #ffffff,\n"
+                                       + "  stop: 0.4 #eeeeee,\n"
+                                       + "  stop: 0.401 #e2e2e2,\n"
+                                       + "  stop: 1 #dddddd);\n"
+                                       + "  color: black;\n"
+                                       + "}\n"
+
+                                       + "QTabBar::tab:!selected:hover {\n"
+                                       + "  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+                                       + "  stop: 0 #ffffff,\n"
+                                       + "  stop: 0.4 #fefefe,\n"
+                                       + "  stop: 0.401 #f2f2f2,\n"
+                                       + "  stop: 1 #ededed);\n"
+                                       + "}\n"
+
+                                       + "QTabBar::tab:selected {\n"
+                                       + "  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+                                       + "  stop: 0 #838383,\n"
+                                       + "  stop: 0.4 #707070,\n"
+                                       + "  stop: 0.401 #636363,\n"
+                                       + "  stop: 1 #4a4a4a);\n"
+                                       + "  color: white;\n"
+                                       + "}\n"
+
+                                       + "QTabBar::tab:selected:hover {\n"
+                                       + "  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
+                                       + "  stop: 0 #939393,\n"
+                                       + "  stop: 0.4 #808080,\n"
+                                       + "  stop: 0.401 #737373,\n"
+                                       + "  stop: 1 #5a5a5a);\n"
+                                       + "}");
+
   foreach(QWidget* w, _view->configurationWidgets()) {
     w->resize(w->width(),w->sizeHint().height());
     viewConfigurationTabs->addTab(w,w->windowTitle());
