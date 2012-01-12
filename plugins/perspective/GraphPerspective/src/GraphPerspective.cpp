@@ -139,7 +139,6 @@ void GraphPerspective::importGraph() {
     else {
       g = newGraph();
     }
-
     _graphs->addGraph(g);
   }
 }

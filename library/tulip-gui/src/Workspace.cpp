@@ -264,6 +264,7 @@ void Workspace::removePanel(WorkspacePanel* panel) {
 
   updatePageCountLabel();
   updatePanels();
+  delete panel;
 }
 
 void Workspace::viewNeedsDraw() {

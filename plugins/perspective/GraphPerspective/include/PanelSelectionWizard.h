@@ -67,6 +67,8 @@ class PanelSelectionWizard : public QWizard {
   PanelSelectionItem* _activeItem;
   bool _canSelectGraph;
   tlp::View* _view;
+
+  void createView();
 public:
   explicit PanelSelectionWizard(tlp::GraphHierarchiesModel* model, QWidget *parent = 0, bool canSelectGraph = true);
   virtual ~PanelSelectionWizard();

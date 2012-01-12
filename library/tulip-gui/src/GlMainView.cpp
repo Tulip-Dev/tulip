@@ -30,6 +30,7 @@ GlMainView::GlMainView(): _overviewVisible(false), _overviewItem(NULL), _sceneCo
 }
 
 GlMainView::~GlMainView() {
+  delete _sceneConfigurationWidget;
 }
 
 void GlMainView::draw(tlp::PluginProgress*) {

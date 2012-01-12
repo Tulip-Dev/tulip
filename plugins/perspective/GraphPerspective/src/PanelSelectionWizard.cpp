@@ -125,7 +125,8 @@ void PanelSelectionWizard::panelSelected() {
 }
 
 void PanelSelectionWizard::panelDoubleClicked() {
-  button(QWizard::NextButton)->click();
+  createView();
+  button(QWizard::FinishButton)->click();
 }
 
 tlp::Graph* PanelSelectionWizard::graph() const {
@@ -147,12 +148,8 @@ void PanelSelectionWizard::setSelectedGraph(tlp::Graph* g) {
 }
 
 void PanelSelectionWizard::nextButtonClicked() {
+  createView();
   disconnect(button(QWizard::NextButton),SIGNAL(clicked()),this,SLOT(nextButtonClicked()));
-  _view = ViewLister::getPluginObject(panelName().toStdString(),NULL);
-  _view->setupUi();
-  _view->setGraph(graph());
-  _view->setState(DataSet());
-
   foreach(QWidget* w, _view->configurationWidgets()) {
     QWizardPage* page = new QWizardPage();
     page->setLayout(new QVBoxLayout);
@@ -164,14 +161,19 @@ void PanelSelectionWizard::nextButtonClicked() {
   next();
 }
 
+void PanelSelectionWizard::createView() {
+  _view = ViewLister::getPluginObject(panelName().toStdString(),NULL);
+  _view->setupUi();
+  _view->setGraph(graph());
+  _view->setState(DataSet());
+}
+
 void PanelSelectionWizard::pageChanged(int id) {
   if (id == startId()) {
     foreach(int pageId, pageIds()) {
       if (pageId == startId())
         continue;
-      QWizardPage* p = page(pageId);
       removePage(pageId);
-      delete p;
     }
     button(QWizard::NextButton)->setEnabled(true);
     connect(button(QWizard::NextButton),SIGNAL(clicked()),this,SLOT(nextButtonClicked()));
