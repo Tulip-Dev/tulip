@@ -177,6 +177,15 @@ void GlScene::draw() {
 }
 
 void GlScene::addLayer(GlLayer *layer) {
+  for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it){
+    assert((*it).first!=layer->getName());
+    if((*it).first==layer->getName()){
+      cerr << "Error : You have a layer in the scene with same name : old layer will be deleted" << endl;
+      delete (*it).second;
+      layersList.erase(it);
+      break;
+    }
+  }
   layersList.push_back(std::pair<std::string,GlLayer*>(layer->getName(),layer));
   layer->setScene(this);
 
