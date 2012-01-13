@@ -162,9 +162,6 @@ void GraphPerspective::createPanel(tlp::Graph* g) {
     _ui->workspace->addPanel(wizard.panel(),wizard.panelName());
     _ui->workspace->setActivePanel(wizard.panel());
   }
-  else if (result != QDialog::Accepted && wizard.panel() != NULL) {
-    delete wizard.panel();
-  }
 }
 
 void GraphPerspective::panelFocused(tlp::View* view) {

@@ -197,5 +197,9 @@ void PanelSelectionWizard::done(int result) {
   else if (result == QDialog::Accepted && _view == NULL && currentId() == startId() && !panelName().isNull()) {
     createView();
   }
+  else if (result != QDialog::Accepted) {
+    delete _view;
+    _view = NULL;
+  }
   QWizard::done(result);
 }
