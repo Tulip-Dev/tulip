@@ -79,7 +79,9 @@ bool SceneConfigWidget::eventFilter(QObject* obj, QEvent* ev) {
       _ui->labelsDensitySlider->setValue(0);
     else if (obj == _ui->labelsShowAllLabel)
       _ui->labelsDensitySlider->setValue(100);
+    return true;
   }
+  return false;
 }
 
 void SceneConfigWidget::settingsChanged() {

@@ -96,7 +96,6 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
     panelsLayout->addWidget(item);
     connect(item,SIGNAL(selected()),this,SLOT(panelSelected()));
     connect(item,SIGNAL(doubleClicked()),this,SLOT(panelDoubleClicked()));
-    connect(item,SIGNAL(doubleClicked()),this,SIGNAL(wizardFinished()));
 
     if (i++ == 0) {
       _activeItem = item;
@@ -147,9 +146,15 @@ void PanelSelectionWizard::setSelectedGraph(tlp::Graph* g) {
   _ui->graphCombo->selectIndex(_model->indexOf(g));
 }
 
+void PanelSelectionWizard::createView() {
+  _view = ViewLister::getPluginObject(panelName().toStdString(),NULL);
+  _view->setupUi();
+  _view->setGraph(graph());
+  _view->setState(DataSet());
+}
+
 void PanelSelectionWizard::nextButtonClicked() {
   createView();
-  disconnect(button(QWizard::NextButton),SIGNAL(clicked()),this,SLOT(nextButtonClicked()));
   foreach(QWidget* w, _view->configurationWidgets()) {
     QWizardPage* page = new QWizardPage();
     page->setLayout(new QVBoxLayout);
@@ -157,15 +162,9 @@ void PanelSelectionWizard::nextButtonClicked() {
     page->layout()->addWidget(w);
     addPage(page);
   }
+  disconnect(button(QWizard::NextButton),SIGNAL(clicked()),this,SLOT(nextButtonClicked()));
   connect(this,SIGNAL(currentIdChanged(int)),this,SLOT(pageChanged(int)));
   next();
-}
-
-void PanelSelectionWizard::createView() {
-  _view = ViewLister::getPluginObject(panelName().toStdString(),NULL);
-  _view->setupUi();
-  _view->setGraph(graph());
-  _view->setState(DataSet());
 }
 
 void PanelSelectionWizard::pageChanged(int id) {
@@ -177,13 +176,22 @@ void PanelSelectionWizard::pageChanged(int id) {
       removePage(pageId);
     }
     button(QWizard::NextButton)->setEnabled(true);
-    connect(button(QWizard::NextButton),SIGNAL(clicked()),this,SLOT(nextButtonClicked()));
-    disconnect(this,SIGNAL(currentIdChanged(int)),this,SLOT(pageChanged(int)));
     delete _view;
     _view = NULL;
+
+    connect(button(QWizard::NextButton),SIGNAL(clicked()),this,SLOT(nextButtonClicked()));
+    disconnect(this,SIGNAL(currentIdChanged(int)),this,SLOT(pageChanged(int)));
   }
 }
 
 tlp::View* PanelSelectionWizard::panel() const {
   return _view;
+}
+
+void PanelSelectionWizard::done(int result) {
+  if (result == QDialog::Accepted && _view != NULL) {
+    foreach(QWidget* w, _view->configurationWidgets())
+      QMetaObject::invokeMethod(w,"applySettings",Qt::DirectConnection);
+  }
+  QWizard::done(result);
 }
