@@ -136,7 +136,6 @@ Workspace::Workspace(QWidget *parent)
   _modeSwitches[_ui->singlePage] = _ui->singleModeButton;
   _modeSwitches[_ui->splitPage] = _ui->splitModeButton;
   _modeSwitches[_ui->gridPage] = _ui->gridModeButton;
-  updatePageCountLabel();
   updateAvailableModes();
 }
 
@@ -198,15 +197,16 @@ void Workspace::addPanel(tlp::View* view, const QString& viewName) {
   // Add it to the list
   _panels.push_back(panel);
 
+  // activate available modes
+  updateAvailableModes();
+
   // If on startup mode, switch to single
   if (currentModeWidget() == _ui->startupPage) {
     switchToSingleMode();
   }
-
-  // activate available modes
-  updateAvailableModes();
-  updatePageCountLabel();
-  updatePanels();
+  else {
+    updatePanels();
+  }
 
   // Force the first panel's graph combo box update when underleying model has been updated.
   panel->viewGraphSet(view->graph());
@@ -250,19 +250,6 @@ void Workspace::panelDestroyed(QObject* obj) {
     return;
   }
 
-  // Adjust current panel index if we were on the last panel
-  else if (_currentPanelIndex == _panels.size()) {
-    if (_panels.size()%currentSlotsCount() == 0) { // go back one page
-      _currentPanelIndex -= currentSlotsCount();
-    }
-    else
-      _currentPanelIndex--;
-
-    if (_currentPanelIndex < 0)
-      _currentPanelIndex = 0;
-  }
-
-  updatePageCountLabel();
   updatePanels();
 }
 
@@ -278,36 +265,22 @@ void Workspace::switchToStartupMode() {
 }
 void Workspace::switchToSingleMode() {
   switchWorkspaceMode(_ui->singlePage);
-  updatePanels();
 }
 void Workspace::switchToSplitMode() {
   switchWorkspaceMode(_ui->splitPage);
-  updatePanels();
 }
 void Workspace::switchToGridMode() {
   switchWorkspaceMode(_ui->gridPage);
-  updatePanels();
 }
 
 void Workspace::switchWorkspaceMode(QWidget *page) {
   _ui->workspaceContents->setCurrentWidget(page);
-  updatePageCountLabel();
   _ui->bottomFrame->setEnabled(page != _ui->startupPage);
-
-  if (currentSlotsCount() == 0)
-    _currentPanelIndex = 0;
-  else
-    _currentPanelIndex -= _currentPanelIndex%currentSlotsCount();
+  updatePanels();
 }
 
 void Workspace::updatePageCountLabel() {
-  unsigned int totalPages = ceil(_panels.size() * 1. /currentSlotsCount());
-  unsigned int currentPage = ceil((_currentPanelIndex+1.)/currentSlotsCount());
-
-  if (totalPages > 0)
-    _ui->pagesLabel->setText(QString::number(currentPage) + " / " + QString::number(totalPages));
-  else
-    _ui->pagesLabel->setText("");
+  _ui->pagesLabel->setText(QString::number(_currentPanelIndex+1) + " / " + QString::number(_panels.size() - _panels.size()%currentSlotsCount()));
 }
 
 QWidget* Workspace::currentModeWidget() const {
@@ -337,17 +310,23 @@ void Workspace::updatePanels() {
   foreach(QWidget* mode,_modeToSlots.keys()) {
     if (mode == currentModeWidget())
       continue;
-
     QVector<PlaceHolderWidget*> panelSlots = _modeToSlots[mode];
     foreach(PlaceHolderWidget* panel, panelSlots) {
       panel->setWidget(NULL);
     }
   }
 
+if (_currentPanelIndex<0)
+  _currentPanelIndex=0;
+if (_currentPanelIndex > _panels.size()-currentSlotsCount())
+  _currentPanelIndex = _panels.size()-currentSlotsCount();
+
+  updatePageCountLabel();
+
 //   Fill up slots according to the current index until there is no panel to show
   int i = _currentPanelIndex;
   foreach (PlaceHolderWidget* slt, currentModeSlots()) {
-    if (i>=_panels.size()) {
+    if (i >= _panels.size()) {
       slt->setWidget(NULL);
     }
     else if (slt->widget() != _panels[i]) {
@@ -358,43 +337,30 @@ void Workspace::updatePanels() {
 
   i = _currentPanelIndex;
   foreach (PlaceHolderWidget* slt, currentModeSlots()) {
-    if (i>=_panels.size())
+    if (i >= _panels.size())
       break;
-
     else if (slt->widget() != _panels[i]) {
       slt->setWidget(_panels[i]);
     }
-
     i++;
   }
 }
 
 void Workspace::nextPage() {
-  int newIndex = _currentPanelIndex + ceil(currentSlotsCount()* 1./2.);
-
-  if (newIndex < _panels.size()) {
-    _currentPanelIndex = newIndex;
-    updatePanels();
-    updatePageCountLabel();
-  }
+  _currentPanelIndex++;
+  updatePanels();
 }
 
 void Workspace::previousPage() {
-  int newIndex = _currentPanelIndex - ceil(currentSlotsCount() * 1./2.);
-
-  if (newIndex >= 0) {
-    _currentPanelIndex = newIndex;
-    updatePanels();
-    updatePageCountLabel();
-  }
+  _currentPanelIndex--;
+  updatePanels();
 }
 
 void Workspace::setActivePanel(tlp::View* view) {
   int newIndex = panels().indexOf(view);
-  newIndex -= newIndex%currentSlotsCount();
+//  newIndex -= newIndex%currentSlotsCount();
   _currentPanelIndex = newIndex;
   updatePanels();
-  updatePageCountLabel();
 }
 
 bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
