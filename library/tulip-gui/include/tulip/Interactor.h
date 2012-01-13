@@ -167,7 +167,7 @@ R : Revision
 class CN : public tlp::Interactor {\
   tlp::Interactor* _component;\
 public:\
-  CN() { _component = tlp::InteractorLister::getPluginObject(BCNT); assert(_component != NULL); }\
+  CN() { _component = tlp::InteractorLister::getPluginObject(BCNT,NULL); assert(_component != NULL); }\
   bool isCompatible(const std::string& viewName) { return viewName == VCN; }\
   QWidget* configurationWidget() const { return _component->configurationWidget(); }\
   unsigned int priority() const { return _component->priority(); }\
@@ -186,7 +186,7 @@ INTERACTORPLUGIN(CN, CNT, A , D , I , R)
 class CN : public tlp::Interactor {\
   tlp::Interactor* _component;\
 public:\
-  CN() { _component = tlp::InteractorLister::getPluginObject(BCNT); assert(_component != NULL); }\
+  CN() { _component = tlp::InteractorLister::getPluginObject(BCNT,NULL); assert(_component != NULL); }\
   bool isCompatible(const std::string& viewName) { return viewName == VCN; }\
   QWidget* configurationWidget() const { return _component->configurationWidget(); }\
   unsigned int priority() const { return P; }\
