@@ -192,12 +192,11 @@ void Workspace::addPanel(tlp::View* view, const QString& viewName) {
 
   panel->installEventFilter(this);
   panel->setWindowTitle(panelTitle(panel));
-  connect(panel,SIGNAL(closed(tlp::WorkspacePanel*)),this,SLOT(removePanel(tlp::WorkspacePanel*)));
   connect(panel,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
+  connect(panel,SIGNAL(destroyed(QObject*)),this,SLOT(panelDestroyed(QObject*)));
 
   // Add it to the list
   _panels.push_back(panel);
-//  panel->setPanelsModel(&_panels);
 
   // If on startup mode, switch to single
   if (currentModeWidget() == _ui->startupPage) {
@@ -222,14 +221,15 @@ void Workspace::delView(tlp::View* view) {
       break;
     }
   }
-
-  if (panel != NULL)
-    removePanel(panel);
+  delete panel;
 }
 
-void Workspace::removePanel(WorkspacePanel* panel) {
+void Workspace::panelDestroyed(QObject* obj) {
+  WorkspacePanel* panel = static_cast<WorkspacePanel*>(obj);
   int removeCount = _panels.removeAll(panel);
   assert(removeCount>0);
+  if (removeCount==0)
+    return;
   updateAvailableModes();
 
   if (!_modeSwitches[currentModeWidget()]->isEnabled()) {
@@ -264,7 +264,6 @@ void Workspace::removePanel(WorkspacePanel* panel) {
 
   updatePageCountLabel();
   updatePanels();
-  delete panel;
 }
 
 void Workspace::viewNeedsDraw() {
@@ -341,7 +340,7 @@ void Workspace::updatePanels() {
 
     QVector<PlaceHolderWidget*> panelSlots = _modeToSlots[mode];
     foreach(PlaceHolderWidget* panel, panelSlots) {
-      panel->takeWidget();
+      panel->setWidget(NULL);
     }
   }
 
@@ -349,13 +348,11 @@ void Workspace::updatePanels() {
   int i = _currentPanelIndex;
   foreach (PlaceHolderWidget* slt, currentModeSlots()) {
     if (i>=_panels.size()) {
-      slt->takeWidget();
+      slt->setWidget(NULL);
     }
-
     else if (slt->widget() != _panels[i]) {
-      slt->takeWidget();
+      slt->setWidget(NULL);
     }
-
     i++;
   }
 

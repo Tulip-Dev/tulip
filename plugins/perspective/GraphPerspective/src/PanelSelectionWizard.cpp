@@ -105,7 +105,7 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
   panelsLayout->addItem(new QSpacerItem(10,10,QSizePolicy::Maximum,QSizePolicy::Expanding));
   _ui->panelSelector->setLayout(panelsLayout);
 
-  button(QWizard::FinishButton)->setEnabled(false);
+  button(QWizard::FinishButton)->setEnabled(true);
 }
 
 PanelSelectionWizard::~PanelSelectionWizard() {
@@ -120,7 +120,6 @@ void PanelSelectionWizard::panelSelected() {
   _activeItem->setFocus(true);
 
   button(QWizard::NextButton)->setEnabled(true);
-  button(QWizard::FinishButton)->setEnabled(true);
   connect(button(QWizard::NextButton),SIGNAL(clicked()),this,SLOT(nextButtonClicked()));
 }
 
@@ -169,6 +168,8 @@ void PanelSelectionWizard::nextButtonClicked() {
 }
 
 void PanelSelectionWizard::pageChanged(int id) {
+  button(QWizard::FinishButton)->setEnabled(true);
+
   if (id == startId()) {
     foreach(int pageId, pageIds()) {
       if (pageId == startId())
@@ -193,8 +194,9 @@ void PanelSelectionWizard::done(int result) {
   if (result == QDialog::Accepted && _view != NULL) {
     foreach(QWidget* w, _view->configurationWidgets())
       QMetaObject::invokeMethod(w,"applySettings",Qt::DirectConnection);
+
   }
-  else if (result == QDialog::Accepted && _view == NULL && currentId() == startId() && !panelName().isNull()) {
+  else if (result == QDialog::Accepted && _view == NULL) {
     createView();
   }
   else if (result != QDialog::Accepted) {

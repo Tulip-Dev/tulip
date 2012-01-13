@@ -70,21 +70,22 @@ public:
 WorkspacePanel::WorkspacePanel(tlp::View* view, const QString& viewName, QWidget *parent)
   : QWidget(parent), _ui(new Ui::WorkspacePanel), _view(NULL), _viewName(viewName), _progressItem(NULL), _currentInteractorConfigurationItem(NULL), _viewConfigurationWidgets(NULL), _viewConfigurationExpanded(false) {
   _ui->setupUi(this);
-  setAttribute(Qt::WA_DeleteOnClose,true);
   connect(_ui->closeButton,SIGNAL(clicked()),this,SLOT(close()));
   setView(view,viewName);
+  setAttribute(Qt::WA_DeleteOnClose);
 }
 
 WorkspacePanel::~WorkspacePanel() {
   delete _ui;
-
   if (_view != NULL) {
     disconnect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
     delete _view->graphicsView();
-    delete _view;
   }
-
-  emit closed(this);
+  delete _view;
+}
+void WorkspacePanel::viewDestroyed() {
+  _view = NULL;
+  deleteLater();
 }
 
 View* WorkspacePanel::view() const {
@@ -107,7 +108,6 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
 
   if (_view)
     delete _view->graphicsView();
-
   delete _view;
 
   _view = view;
@@ -311,11 +311,6 @@ void WorkspacePanel::refreshInteractorsToolbar() {
     _ui->interactorsFrame->setLayout(interactorsLayout);
     setCurrentInteractor(compatibleInteractors[0]);
   }
-}
-
-void WorkspacePanel::viewDestroyed() {
-  _view = NULL;
-  close();
 }
 
 void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel* model) {

@@ -78,12 +78,12 @@ INSTALL(FILES
   tulip/TulipFileDescriptorWidget.h
   tulip/TreeViewComboBox.h
   tulip/GraphHierarchiesModel.h
-  tulip/ModalPopup.h
   tulip/FramedGraphicsProxyWidget.h
   tulip/GlOverviewGraphicsItem.h
   tulip/QuickAccessBar.h
   tulip/TulipFont.h
   tulip/TulipFontDialog.h
+  tulip/GLInteractor.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
