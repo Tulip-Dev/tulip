@@ -139,6 +139,7 @@ void GraphPerspective::importGraph() {
     else {
       g = newGraph();
     }
+
     _graphs->addGraph(g);
   }
 }
@@ -148,6 +149,7 @@ void GraphPerspective::createPanel(tlp::Graph* g) {
     return;
 
   PanelSelectionWizard wizard(_graphs,_mainWindow);
+
   if (g != NULL)
     wizard.setSelectedGraph(g);
   else
@@ -155,6 +157,7 @@ void GraphPerspective::createPanel(tlp::Graph* g) {
 
 
   int result = wizard.exec();
+
   if (result == QDialog::Accepted && wizard.panel() != NULL) {
     _ui->workspace->addPanel(wizard.panel(),wizard.panelName());
     _ui->workspace->setActivePanel(wizard.panel());
