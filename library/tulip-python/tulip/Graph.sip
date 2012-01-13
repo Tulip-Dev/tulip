@@ -2533,6 +2533,21 @@ Sets an attribute of the graph.
   } else if (sipCanConvertToType(a1, sipType_tlp_PropertyInterface, SIP_NOT_NONE)) {    
     tlp::PropertyInterface *p = reinterpret_cast<tlp::PropertyInterface *>(sipConvertToType(a1, sipType_tlp_PropertyInterface, NULL, SIP_NOT_NONE, &state, &iserr));
     sipCpp->setAttribute(*a0, p);
+  } else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_node, SIP_NOT_NONE)) {    
+    std::vector<tlp::node> *p = reinterpret_cast<std::vector<tlp::node> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_node, NULL, SIP_NOT_NONE, &state, &iserr));
+    sipCpp->setAttribute(*a0, *p);
+  } else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_edge, SIP_NOT_NONE)) {    
+    std::vector<tlp::edge> *p = reinterpret_cast<std::vector<tlp::edge> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_edge, NULL, SIP_NOT_NONE, &state, &iserr));
+    sipCpp->setAttribute(*a0, *p);
+  } else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_Coord, SIP_NOT_NONE)) {    
+    std::vector<tlp::Coord> *p = reinterpret_cast<std::vector<tlp::Coord> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_Coord, NULL, SIP_NOT_NONE, &state, &iserr));
+    sipCpp->setAttribute(*a0, *p);
+  } else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_Color, SIP_NOT_NONE)) {    
+    std::vector<tlp::Color> *p = reinterpret_cast<std::vector<tlp::Color> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_Color, NULL, SIP_NOT_NONE, &state, &iserr));
+    sipCpp->setAttribute(*a0, *p);
+  } else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_Size, SIP_NOT_NONE)) {    
+    std::vector<tlp::Size> *p = reinterpret_cast<std::vector<tlp::Size> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_Size, NULL, SIP_NOT_NONE, &state, &iserr));
+    sipCpp->setAttribute(*a0, *p);      
   } else {
   	sipIsErr = 1;
 	std::string msg = "Object of type ";
@@ -2659,15 +2674,44 @@ if (sipCpp->getAttributes().exist(*a0)) {
   } else if (dataType->getTypeName() == std::string(typeid(tlp::StringProperty*).name())) {
     ok = true;
     sipRes = sipConvertFromType(*(reinterpret_cast<tlp::StringProperty **>(dataType->value)), sipType_tlp_StringProperty, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::node>).name())) {
+    ok = true;
+    sipRes = sipConvertFromNewType(new std::vector<tlp::node>(*(reinterpret_cast<std::vector<tlp::node> *>(dataType->value))), sipType_std_vector_0100tlp_node, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::set<tlp::node>).name())) {
+    ok = true;
+    sipRes = sipConvertFromNewType(new std::set<tlp::node>(*(reinterpret_cast<std::set<tlp::node> *>(dataType->value))), sipType_std_set_0100tlp_node, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::edge>).name())) {
+    ok = true;
+    sipRes = sipConvertFromNewType(new std::vector<tlp::edge>(*(reinterpret_cast<std::vector<tlp::edge> *>(dataType->value))), sipType_std_vector_0100tlp_edge, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::set<tlp::edge>).name())) {
+    ok = true;
+    sipRes = sipConvertFromNewType(new std::set<tlp::edge>(*(reinterpret_cast<std::set<tlp::edge> *>(dataType->value))), sipType_std_set_0100tlp_edge, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Coord>).name())) {
+    ok = true;
+    sipRes = sipConvertFromNewType(new std::vector<tlp::Coord>(*(reinterpret_cast<std::vector<tlp::Coord> *>(dataType->value))), sipType_std_vector_0100tlp_Coord, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Color>).name())) {
+    ok = true;
+    sipRes = sipConvertFromNewType(new std::vector<tlp::Color>(*(reinterpret_cast<std::vector<tlp::Color> *>(dataType->value))), sipType_std_vector_0100tlp_Color, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Size>).name())) {
+    ok = true;
+    sipRes = sipConvertFromNewType(new std::vector<tlp::Size>(*(reinterpret_cast<std::vector<tlp::Size> *>(dataType->value))), sipType_std_vector_0100tlp_Size, NULL);
+    
   }
 }
 
 if (!ok) {
-  std::ostringstream oss;
-  oss << "Graph attribute named \"" << *a0 << "\" does not exist.";
-  sipRes = NULL;
-  sipIsErr = 1;
-  PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
+	std::ostringstream oss;
+  	oss << "Graph attribute named \"" << *a0 << "\" does not exist.";
+  	sipRes = NULL;
+  	sipIsErr = 1;
+  	PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
 }
 %End  
 
