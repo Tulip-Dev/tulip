@@ -18,9 +18,10 @@
  */
 #include "tulip/PlaceHolderWidget.h"
 
-#include <QtCore/QChildEvent>
+#include <QtGui/QCloseEvent>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
+#include <QtCore/QDebug>
 
 PlaceHolderWidget::PlaceHolderWidget(QWidget *parent): QWidget(parent), _widget(NULL) {
   setLayout(new QVBoxLayout);
@@ -31,12 +32,24 @@ PlaceHolderWidget::PlaceHolderWidget(QWidget *parent): QWidget(parent), _widget(
 void PlaceHolderWidget::setWidget(QWidget *widget) {
   if (_widget != NULL) {
     layout()->removeWidget(_widget);
+    _widget->setParent(NULL);
+    _widget = NULL;
   }
   _widget = widget;
-  if (_widget != NULL)
+  if (_widget != NULL) {
+    _widget->installEventFilter(this);
     layout()->addWidget(_widget);
+  }
 }
 
 QWidget* PlaceHolderWidget::widget() const {
   return _widget;
+}
+
+bool PlaceHolderWidget::eventFilter(QObject* obj, QEvent* ev) {
+  if (obj == _widget && ev->type() == QEvent::Close) {
+    _widget->setParent(NULL);
+    _widget = NULL;
+  }
+  return QWidget::eventFilter(obj,ev);
 }
