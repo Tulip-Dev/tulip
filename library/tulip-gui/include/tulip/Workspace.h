@@ -102,13 +102,13 @@ signals:
   void addPanelRequest(tlp::Graph* g = NULL);
 
 protected slots:
+  void addPanelFromDropAction(const QMimeData* data);
   void viewNeedsDraw();
   void switchWorkspaceMode(QWidget* page);
+  void panelDestroyed(QObject*);
   void updatePageCountLabel();
   void updateAvailableModes();
-  void removePanel(tlp::WorkspacePanel*);
   void updatePanels();
-  void addPanelFromDropAction(const QMimeData* data);
 
 protected:
   bool eventFilter(QObject *, QEvent *);

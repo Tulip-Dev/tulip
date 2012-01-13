@@ -29,11 +29,7 @@ class PlaceHolderWidget: public QWidget {
 public:
   explicit PlaceHolderWidget(QWidget *parent = 0);
   QWidget* widget() const;
-  QWidget* takeWidget();
   void setWidget(QWidget* widget);
-
-protected slots:
-  void widgetDestroyed();
 };
 
 #endif // PLACEHOLDERWIDGET_H

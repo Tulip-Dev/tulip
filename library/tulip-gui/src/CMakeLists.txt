@@ -83,7 +83,6 @@ SET(SRCS
   TulipFileDescriptorWidget.cpp
   TreeViewComboBox.cpp
   GraphHierarchiesModel.cpp
-  ModalPopup.cpp
   FramedGraphicsProxyWidget.cpp
   CoordEditor.cpp
   GlOverviewGraphicsItem.cpp
@@ -163,7 +162,6 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/PlaceHolderWidget.h
   ../include/tulip/TreeViewComboBox.h
   ../include/tulip/GraphHierarchiesModel.h
-  ../include/tulip/ModalPopup.h
   ../include/tulip/CoordEditor.h
   ../include/tulip/GlOverviewGraphicsItem.h
   ../include/tulip/SceneConfigWidget.h

@@ -65,14 +65,12 @@ public:
 
 public slots:
   void toggleProgressMode(bool p);
-
   void setView(tlp::View* view, const QString& viewName);
   void setCurrentInteractor(tlp::Interactor*);
   void setGraphsModel(tlp::GraphHierarchiesModel*);
   void viewGraphSet(tlp::Graph*);
 
 signals:
-  void closed(tlp::WorkspacePanel*);
   void focused();
   void drawNeeded();
 
