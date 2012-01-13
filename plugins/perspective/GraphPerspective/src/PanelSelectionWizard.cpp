@@ -62,7 +62,7 @@ void PanelSelectionItem::focusInEvent(QFocusEvent *) {
 }
 
 void PanelSelectionItem::setFocus(bool f) {
-  QString background = (f ? "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(243, 249, 255, 255), stop:1 rgba(232, 238, 244, 255));" : "white;");
+  QString background = (f ? "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(233, 239, 245, 255), stop:1 rgba(222, 228, 234, 255));" : "white;");
   _ui->frame->setStyleSheet("#frame { background-color: " + background + "border: 1px solid #C9C9C9; }");
 }
 
@@ -120,6 +120,7 @@ void PanelSelectionWizard::panelSelected() {
   _activeItem->setFocus(true);
 
   button(QWizard::NextButton)->setEnabled(true);
+  button(QWizard::FinishButton)->setEnabled(true);
   connect(button(QWizard::NextButton),SIGNAL(clicked()),this,SLOT(nextButtonClicked()));
 }
 
@@ -192,6 +193,9 @@ void PanelSelectionWizard::done(int result) {
   if (result == QDialog::Accepted && _view != NULL) {
     foreach(QWidget* w, _view->configurationWidgets())
       QMetaObject::invokeMethod(w,"applySettings",Qt::DirectConnection);
+  }
+  else if (result == QDialog::Accepted && _view == NULL && currentId() == startId() && !panelName().isNull()) {
+    createView();
   }
   QWizard::done(result);
 }
