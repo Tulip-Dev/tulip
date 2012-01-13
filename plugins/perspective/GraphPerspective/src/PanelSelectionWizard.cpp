@@ -173,6 +173,7 @@ void PanelSelectionWizard::pageChanged(int id) {
     foreach(int pageId, pageIds()) {
       if (pageId == startId())
         continue;
+
       removePage(pageId);
     }
     button(QWizard::NextButton)->setEnabled(true);
