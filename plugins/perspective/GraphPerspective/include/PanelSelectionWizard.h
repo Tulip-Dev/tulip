@@ -67,8 +67,9 @@ class PanelSelectionWizard : public QWizard {
   PanelSelectionItem* _activeItem;
   bool _canSelectGraph;
   tlp::View* _view;
-
   void createView();
+
+
 public:
   explicit PanelSelectionWizard(tlp::GraphHierarchiesModel* model, QWidget *parent = 0, bool canSelectGraph = true);
   virtual ~PanelSelectionWizard();
@@ -79,15 +80,14 @@ public:
 
   void setSelectedGraph(tlp::Graph*);
 
-signals:
-  void wizardFinished();
-
 protected slots:
   void panelSelected();
   void panelDoubleClicked();
-
   void nextButtonClicked();
   void pageChanged(int);
+
+protected:
+  void done(int result);
 };
 
 #endif // PANELSELECTIONWIZARD_H

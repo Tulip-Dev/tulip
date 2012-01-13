@@ -2,6 +2,7 @@
 #define SCENECONFIGWIDGET_H
 
 #include <QtGui/QWidget>
+#include <QtGui/QAbstractButton>
 #include <tulip/tulipconf.h>
 
 namespace Ui {
@@ -13,6 +14,7 @@ class GlMainWidget;
 
 class TLP_QT_SCOPE SceneConfigWidget : public QWidget {
   Q_OBJECT
+
   Ui::SceneConfigWidget* _ui;
   tlp::GlMainWidget* _glMainWidget;
 
@@ -26,10 +28,10 @@ signals:
 public slots:
   void setGlMainWidget(tlp::GlMainWidget*);
   void resetChanges();
+  void applySettings();
 
 protected slots:
   void settingsChanged();
-  void applySettings();
 
 protected:
   bool eventFilter(QObject *, QEvent *);
