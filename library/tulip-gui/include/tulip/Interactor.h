@@ -152,4 +152,53 @@ template class TLP_QT_SCOPE PluginLister<Interactor,InteractorContext*>;
 #define INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,G) POINTERCONTEXTPLUGINFACTORY(Interactor,C,N,A,D,I,R,G)
 #define INTERACTORPLUGIN(C,N,A,D,I,R) INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,"")
 
+
+/*
+CN : New interactor class name
+CNT : New interactor name
+BCNT : Extended interactor name
+VCN : View compatibility name
+A : Author
+D : Date
+I : Infor
+R : Revision
+*/
+#define INTERACTORPLUGINVIEWEXTENSION(CN,CNT,BCNT,VCN,A,D,I,R)\
+class CN : public tlp::Interactor {\
+  tlp::Interactor* _component;\
+public:\
+  CN() { _component = tlp::InteractorLister::getPluginObject(BCNT); assert(_component != NULL); }\
+  bool isCompatible(const std::string& viewName) { return viewName == VCN; }\
+  QWidget* configurationWidget() const { return _component->configurationWidget(); }\
+  unsigned int priority() const { return _component->priority(); }\
+  QAction* action() const { return _component->action(); }\
+  tlp::View* view() const { return _component->view(); }\
+  QCursor cursor() const { return _component->cursor(); }\
+  void construct() { _component->construct(); }\
+  void setView(tlp::View* v) { _component->setView(v); }\
+  void install(QObject* target) { _component->install(target); }\
+  void uninstall() { _component->uninstall(); }\
+  void undoIsDone() { _component->undoIsDone(); }\
+};\
+INTERACTORPLUGIN(CN, CNT, A , D , I , R)
+
+#define INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(CN,CNT,BCNT,VCN,A,D,I,R,P)     \
+class CN : public tlp::Interactor {\
+  tlp::Interactor* _component;\
+public:\
+  CN() { _component = tlp::InteractorLister::getPluginObject(BCNT); assert(_component != NULL); }\
+  bool isCompatible(const std::string& viewName) { return viewName == VCN; }\
+  QWidget* configurationWidget() const { return _component->configurationWidget(); }\
+  unsigned int priority() const { return P; }\
+  QAction* action() const { return _component->action(); }\
+  tlp::View* view() const { return _component->view(); }\
+  QCursor cursor() const { return _component->cursor(); }\
+  void construct() { _component->construct(); }\
+  void setView(tlp::View* v) { _component->setView(v); }\
+  void install(QObject* target) { _component->install(target); }\
+  void uninstall() { _component->uninstall(); }\
+  void undoIsDone() { _component->undoIsDone(); }\
+};\
+INTERACTORPLUGIN(CN, CNT, A , D , I , R)
+
 #endif
