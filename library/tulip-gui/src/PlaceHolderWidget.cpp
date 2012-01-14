@@ -35,7 +35,9 @@ void PlaceHolderWidget::setWidget(QWidget *widget) {
     _widget->setParent(NULL);
     _widget = NULL;
   }
+
   _widget = widget;
+
   if (_widget != NULL) {
     _widget->installEventFilter(this);
     layout()->addWidget(_widget);
@@ -51,5 +53,6 @@ bool PlaceHolderWidget::eventFilter(QObject* obj, QEvent* ev) {
     _widget->setParent(NULL);
     _widget = NULL;
   }
+
   return QWidget::eventFilter(obj,ev);
 }

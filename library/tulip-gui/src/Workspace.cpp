@@ -228,8 +228,10 @@ void Workspace::panelDestroyed(QObject* obj) {
   WorkspacePanel* panel = static_cast<WorkspacePanel*>(obj);
   int removeCount = _panels.removeAll(panel);
   assert(removeCount>0);
+
   if (removeCount==0)
     return;
+
   updateAvailableModes();
 
   if (!_modeSwitches[currentModeWidget()]->isEnabled()) {
@@ -310,16 +312,18 @@ void Workspace::updatePanels() {
   foreach(QWidget* mode,_modeToSlots.keys()) {
     if (mode == currentModeWidget())
       continue;
+
     QVector<PlaceHolderWidget*> panelSlots = _modeToSlots[mode];
     foreach(PlaceHolderWidget* panel, panelSlots) {
       panel->setWidget(NULL);
     }
   }
 
-if (_currentPanelIndex<0)
-  _currentPanelIndex=0;
-if (_currentPanelIndex > _panels.size()-currentSlotsCount())
-  _currentPanelIndex = _panels.size()-currentSlotsCount();
+  if (_currentPanelIndex<0)
+    _currentPanelIndex=0;
+
+  if (_currentPanelIndex > _panels.size()-currentSlotsCount())
+    _currentPanelIndex = _panels.size()-currentSlotsCount();
 
   updatePageCountLabel();
 
@@ -332,6 +336,7 @@ if (_currentPanelIndex > _panels.size()-currentSlotsCount())
     else if (slt->widget() != _panels[i]) {
       slt->setWidget(NULL);
     }
+
     i++;
   }
 
@@ -342,6 +347,7 @@ if (_currentPanelIndex > _panels.size()-currentSlotsCount())
     else if (slt->widget() != _panels[i]) {
       slt->setWidget(_panels[i]);
     }
+
     i++;
   }
 }
