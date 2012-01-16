@@ -107,7 +107,7 @@ QVariant Workspace::PanelsStorage::data(const QModelIndex &index, int role) cons
 // ***********************************************
 
 Workspace::Workspace(QWidget *parent)
-  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL) {
+  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL), _exposeWidget(NULL) {
   _ui->setupUi(this);
   connect(_ui->startupButton,SIGNAL(clicked()),this,SIGNAL(addPanelRequest()));
 
@@ -429,4 +429,31 @@ void Workspace::addPanelFromDropAction(const QMimeData* mimeData) {
 
     emit addPanelRequest(g);
   }
+}
+
+void Workspace::expose(bool f) {
+  if (f)
+    showExposeMode();
+  else
+    hideExposeMode();
+}
+
+void Workspace::showExposeMode() {
+  _ui->workspaceContents->setCurrentWidget(_ui->exposePage);
+  foreach(QWidget* s, _modeSwitches.values())
+    s->setEnabled(false);
+  _ui->nextPageButton->setEnabled(false);
+  _ui->previousPageButton->setEnabled(false);
+
+  QVector<WorkspacePanel*> panels;
+  QMap<WorkspacePanel*,QPixmap> previews;
+  foreach(WorkspacePanel* p, _panels) {
+    panels.push_back(p);
+    previews[p] = p->view()->snapshot(QSize(150,100));
+  }
+  _ui->exposeMode->setData(panels,previews,_currentPanelIndex);
+}
+
+void Workspace::hideExposeMode() {
+
 }

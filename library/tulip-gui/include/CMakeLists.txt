@@ -85,6 +85,7 @@ INSTALL(FILES
   tulip/TulipFontDialog.h
   tulip/GLInteractor.h
   tulip/ScrollPopupButton.h
+  tulip/WorkspaceExposeWidget.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

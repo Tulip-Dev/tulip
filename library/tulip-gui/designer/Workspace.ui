@@ -113,6 +113,26 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="exposePage">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="tlp::WorkspaceExposeWidget" name="exposeMode">
+         <property name="styleSheet">
+          <string notr="true">border: 0px;</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="PlaceHolderWidget" name="singlePage"/>
      <widget class="QWidget" name="splitPage">
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -274,7 +294,7 @@ stop:1 rgb(50, 50, 50));
          <string>Shift+E</string>
         </property>
         <property name="checkable">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="flat">
          <bool>true</bool>
@@ -497,6 +517,11 @@ stop:1 rgb(50, 50, 50));
    <header location="global">tulip/PlaceHolderWidget.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>tlp::WorkspaceExposeWidget</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">tulip/WorkspaceExposeWidget.h</header>
+  </customwidget>
  </customwidgets>
  <resources>
   <include location="../resources/TulipGUIResource.qrc"/>
@@ -582,6 +607,22 @@ stop:1 rgb(50, 50, 50));
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>exposeButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>Workspace</receiver>
+   <slot>expose(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>32</x>
+     <y>623</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>delView(tlp::View*)</slot>
@@ -591,5 +632,6 @@ stop:1 rgb(50, 50, 50));
   <slot>switchToGridMode()</slot>
   <slot>nextPage()</slot>
   <slot>previousPage()</slot>
+  <slot>expose(bool)</slot>
  </slots>
 </ui>

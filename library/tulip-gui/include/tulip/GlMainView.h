@@ -46,6 +46,7 @@ public:
   tlp::GlMainWidget* getGlMainWidget() const;
   virtual QList<QWidget*> configurationWidgets() const;
   bool overviewVisible() const;
+  QPixmap snapshot(const QSize &outputSize=QSize());
 
 public slots:
   virtual void draw(tlp::PluginProgress* pluginProgress);
