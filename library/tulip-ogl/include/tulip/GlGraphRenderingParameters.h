@@ -37,6 +37,22 @@ public:
   //============================================
   DataSet getParameters() const;
   void    setParameters(const DataSet &);
+  
+  /**
+   * @brief Gets the LOD below which the point mode is activated.
+   *
+   * @return float
+   **/
+  float getPointModeLOD() const;
+  
+  /**
+   * @brief Sets the LOD below which the point mode is activated.
+   * If the lod is strictly less than the value, the point mode will be activated.
+   *
+   * @param pointModeLOD The LOD at which to enable point mode.
+   * @return void
+   **/
+  void setPointModeLOD(const float pointModeLOD);
   /**
    * activate or deactivate anlialiasing
    */
@@ -382,7 +398,8 @@ public:
   }
 
 private:
-
+  //The LOD at which the point mode is activated
+  float _pointModeLOD;
   bool _antialiased;
   bool _viewArrow;
   bool _viewNodeLabel;

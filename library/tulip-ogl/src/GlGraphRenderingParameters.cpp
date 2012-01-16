@@ -27,6 +27,7 @@ using namespace tlp;
 
 GlGraphRenderingParameters::GlGraphRenderingParameters() :
   //_graph(0),
+  _pointModeLOD(10.0f),
   _antialiased(true),
   _viewArrow(false),
   _viewNodeLabel(true),
@@ -481,4 +482,12 @@ void GlGraphRenderingParameters::setElementOrderingProperty(tlp::DoubleProperty*
 
 tlp::DoubleProperty* GlGraphRenderingParameters::getElementOrderingProperty() const {
   return _elementOrderingProperty;
+}
+
+float GlGraphRenderingParameters::getPointModeLOD() const {
+  return _pointModeLOD;
+}
+
+void GlGraphRenderingParameters::setPointModeLOD(const float pointModeLOD) {
+  _pointModeLOD = pointModeLOD;
 }

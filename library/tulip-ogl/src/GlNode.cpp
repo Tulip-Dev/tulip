@@ -156,7 +156,7 @@ void GlNode::draw(float lod,GlGraphInputData* data,Camera*) {
 
   bool selected = data->getElementSelected()->getNodeValue(n);
 
-  if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
+  if (lod < data->parameters->getPointModeLOD()) { //less than four pixel on screen, we use points instead of glyphs
     if (lod < 1) lod = 1;
 
     int size= static_cast<int>(sqrt(lod));
