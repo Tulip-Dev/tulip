@@ -91,6 +91,7 @@ SET(SRCS
   TulipFont.cpp
   TulipFontDialog.cpp
   ScrollPopupButton.cpp
+  WorkspaceExposeWidget.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -170,6 +171,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/TulipFont.h
   ../include/tulip/TulipFontDialog.h
   ../include/tulip/ScrollPopupButton.h
+  ../include/tulip/WorkspaceExposeWidget.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

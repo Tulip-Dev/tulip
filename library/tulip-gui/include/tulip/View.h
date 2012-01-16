@@ -28,10 +28,12 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QSet>
+#include <QtCore/QSize>
 
 class QGraphicsView;
 class QGraphicsItem;
 class QWidget;
+class QPixmap;
 
 namespace tlp {
 class Interactor;
@@ -152,6 +154,13 @@ public:
     By default, this method returns NULL, which means that no central item is defined.
     */
   virtual QGraphicsItem* centralItem() const;
+
+  /**
+    @brief Takes a snapshot of the view's screen and saves it into the given pixmap.
+    The snapshot is scaled to outputSize. If a null size is given, the snapshot is to be on a 1:1 ratio
+    @return A non-null pixmap of the snapshot was correctly taken.
+    */
+  virtual QPixmap snapshot(const QSize& outputSize=QSize())=0;
 
 public slots:
   /**

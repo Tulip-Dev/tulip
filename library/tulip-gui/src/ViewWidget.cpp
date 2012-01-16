@@ -179,3 +179,15 @@ void ViewWidget::refreshItemsParenthood() {
 QGraphicsItem* ViewWidget::centralItem() const {
   return _centralWidgetItem;
 }
+
+QPixmap ViewWidget::snapshot(const QSize &outputSize) {
+  if (_centralWidget == NULL)
+    return QPixmap();
+
+  QPixmap result(_centralWidget->size());
+  _centralWidget->render(&result);
+  if (outputSize.isValid()) {
+    return result.scaled(outputSize);
+  }
+  return result;
+}

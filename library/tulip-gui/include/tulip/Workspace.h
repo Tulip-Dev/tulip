@@ -25,6 +25,7 @@
 #include <QtCore/QAbstractItemModel>
 #include <tulip/tulipconf.h>
 #include <tulip/DataSet.h>
+#include <tulip/WorkspaceExposeWidget.h>
 
 class PlaceHolderWidget;
 
@@ -74,6 +75,7 @@ class TLP_QT_SCOPE Workspace: public QWidget {
   QMap<QWidget*,QVector<PlaceHolderWidget*> > _modeToSlots;
   QMap<QWidget*,QWidget*> _modeSwitches;
   tlp::GraphHierarchiesModel* _model;
+  tlp::WorkspaceExposeWidget* _exposeWidget;
 
   QString panelTitle(tlp::WorkspacePanel*) const;
 
@@ -93,6 +95,9 @@ public slots:
 
   void nextPage();
   void previousPage();
+  void expose(bool);
+  void showExposeMode();
+  void hideExposeMode();
 
   void setActivePanel(tlp::View*);
   void setModel(tlp::GraphHierarchiesModel*);

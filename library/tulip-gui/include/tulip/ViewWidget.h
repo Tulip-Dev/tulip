@@ -104,6 +104,8 @@ protected:
     */
   virtual QGraphicsItem* centralItem() const;
 
+
+  QPixmap snapshot(const QSize &outputSize=QSize());
 };
 
 }
