@@ -39,6 +39,11 @@ public:
 
   ~GlColorScale();
 
+  /**
+    * @brief Compute the color corresponding to the position in the color scale.
+    * The orientation of the scale define the coordinate used to compute the color (if the orientation is horizontal use only the X coordinate).
+    * If the position is outside of the entity coordinates returns the nearest extremity value.
+    **/
   Color getColorAtPos(Coord pos);
 
   void draw(float lod, Camera* camera);
