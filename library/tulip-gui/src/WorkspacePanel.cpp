@@ -364,8 +364,9 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
 }
 
 void WorkspacePanel::resizeEvent(QResizeEvent* ev) {
-  if (_viewConfigurationWidgets)
+  if (_viewConfigurationWidgets) {
     setConfigurationTabExpanded(_viewConfigurationExpanded,false);
+  }
 
   QWidget::resizeEvent(ev);
 }

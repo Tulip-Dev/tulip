@@ -32,9 +32,8 @@ void QuickAccessBar::reset() {
   _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
   _ui->showEdgesToggle->setChecked(renderingParameters()->isDisplayEdges());
   _ui->showEdgesToggle->setIcon((renderingParameters()->isDisplayEdges() ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
-//  _ui->showEdgeLabelsToggle->setChecked(scene()->getGlGraphComposite()->);
   _ui->labelColorButton->setTulipColor(inputData()->getElementLabelColor()->getNodeDefaultValue());
-//  _ui->showLabelsToggle->setChecked();
+  _ui->showLabelsToggle->setChecked(renderingParameters()->isViewNodeLabel());
   _ui->labelPropertyCombo->clear();
   _ui->labelPropertyCombo->addItem(trUtf8("Values on labels"));
   std::string prop;
@@ -48,10 +47,12 @@ void QuickAccessBar::takeSnapshot() {
 
 void QuickAccessBar::setBackgroundColor(const QColor& c) {
   scene()->setBackgroundColor(QColorToColor(c));
+  _mainView->emitDrawNeededSignal();
 }
 
 void QuickAccessBar::setColorInterpolation(bool f) {
   renderingParameters()->setEdgeColorInterpolate(f);
+  _mainView->emitDrawNeededSignal();
 }
 void QuickAccessBar::scaleFont(int scale) {
   Observable::holdObservers();
@@ -158,12 +159,12 @@ void QuickAccessBar::scaleNodes(int scale) {
 void QuickAccessBar::setEdgesVisible(bool v) {
   renderingParameters()->setDisplayEdges(v);
   _ui->showEdgesToggle->setIcon((v ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
+  _mainView->emitDrawNeededSignal();
 }
 
-void QuickAccessBar::setEdgesLabelsVisible(bool) {
-}
-
-void QuickAccessBar::setNodesLabelsVisible(bool) {
+void QuickAccessBar::setLabelsVisible(bool v) {
+  renderingParameters()->setViewNodeLabel(v);
+  _mainView->emitDrawNeededSignal();
 }
 
 GlGraphRenderingParameters* QuickAccessBar::renderingParameters() const {

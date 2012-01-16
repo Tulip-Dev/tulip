@@ -156,16 +156,6 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="Line" name="sep1">
-     <property name="toolTip">
-      <string>The cake is a lie !</string>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="tlp::ColorButton" name="nodeColorButton">
      <property name="minimumSize">
       <size>
@@ -187,6 +177,13 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="flat">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="sep1">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
     </widget>
    </item>
@@ -267,7 +264,7 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="showEdgeLabelsToggle">
+    <widget class="ScrollPopupButton" name="nodeSizeScaleButton">
      <property name="maximumSize">
       <size>
        <width>32</width>
@@ -275,75 +272,24 @@ background-color: rgba(255,255,255,100);
       </size>
      </property>
      <property name="toolTip">
-      <string>Edges labels</string>
-     </property>
-     <property name="statusTip">
-      <string>Toggle edges label display</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/edges_label.png</normaloff>:/tulip/gui/icons/20/edges_label.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
+      <string>Scale nodes</string>
      </property>
      <property name="flat">
       <bool>true</bool>
      </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="Line" name="sep2">
-     <property name="toolTip">
-      <string>For science...</string>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QSlider" name="nodeSizeScale">
-     <property name="toolTip">
-      <string>Scale nodes size</string>
-     </property>
-     <property name="statusTip">
-      <string>Scale nodes size</string>
-     </property>
-     <property name="minimum">
+     <property name="minimum" stdset="0">
       <number>1</number>
      </property>
-     <property name="maximum">
+     <property name="maximum" stdset="0">
       <number>100</number>
      </property>
-     <property name="value">
+     <property name="value" stdset="0">
       <number>10</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="tickPosition">
-      <enum>QSlider::NoTicks</enum>
-     </property>
-     <property name="tickInterval">
-      <number>5</number>
      </property>
     </widget>
    </item>
    <item>
     <widget class="Line" name="sep3">
-     <property name="toolTip">
-      <string>you monster.</string>
-     </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -417,57 +363,42 @@ background-color: rgba(255,255,255,100);
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>200</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="toolTip">
       <string>Labels default font</string>
      </property>
      <property name="statusTip">
       <string>Change font for labels</string>
      </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
     </widget>
    </item>
    <item>
-    <widget class="QSlider" name="fontSizeScale">
+    <widget class="ScrollPopupButton" name="fontSizeScaleButton">
+     <property name="maximumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
      <property name="toolTip">
-      <string>Scale labels size</string>
+      <string>Scale labels</string>
      </property>
-     <property name="statusTip">
-      <string>Scale font size</string>
+     <property name="flat">
+      <bool>true</bool>
      </property>
-     <property name="minimum">
+     <property name="minimum" stdset="0">
       <number>1</number>
      </property>
-     <property name="maximum">
+     <property name="maximum" stdset="0">
       <number>100</number>
      </property>
-     <property name="value">
+     <property name="value" stdset="0">
       <number>10</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="invertedAppearance">
-      <bool>false</bool>
-     </property>
-     <property name="invertedControls">
-      <bool>false</bool>
-     </property>
-     <property name="tickPosition">
-      <enum>QSlider::NoTicks</enum>
-     </property>
-     <property name="tickInterval">
-      <number>5</number>
      </property>
     </widget>
    </item>
@@ -500,6 +431,19 @@ background-color: rgba(255,255,255,100);
      </item>
     </widget>
    </item>
+   <item>
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -509,6 +453,14 @@ background-color: rgba(255,255,255,100);
    <header location="global">tulip/ColorButton.h</header>
    <slots>
     <signal>colorChanged(QColor)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>ScrollPopupButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">tulip/ScrollPopupButton.h</header>
+   <slots>
+    <signal>valueChanged(int)</signal>
    </slots>
   </customwidget>
  </customwidgets>
@@ -549,22 +501,6 @@ background-color: rgba(255,255,255,100);
    </hints>
   </connection>
   <connection>
-   <sender>fontSizeScale</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>QuickAccessBar</receiver>
-   <slot>scaleFont(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>719</x>
-     <y>17</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>549</x>
-     <y>17</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>labelColorButton</sender>
    <signal>colorChanged(QColor)</signal>
    <receiver>QuickAccessBar</receiver>
@@ -589,22 +525,6 @@ background-color: rgba(255,255,255,100);
     <hint type="sourcelabel">
      <x>94</x>
      <y>16</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>549</x>
-     <y>17</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>nodeSizeScale</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>QuickAccessBar</receiver>
-   <slot>scaleNodes(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>303</x>
-     <y>17</y>
     </hint>
     <hint type="destinationlabel">
      <x>549</x>
@@ -661,26 +581,10 @@ background-color: rgba(255,255,255,100);
    </hints>
   </connection>
   <connection>
-   <sender>showEdgeLabelsToggle</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>QuickAccessBar</receiver>
-   <slot>setEdgesLabelsVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>202</x>
-     <y>16</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>549</x>
-     <y>17</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>showLabelsToggle</sender>
    <signal>clicked(bool)</signal>
    <receiver>QuickAccessBar</receiver>
-   <slot>setNodesLabelsVisible(bool)</slot>
+   <slot>setLabelsVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>440</x>
@@ -708,6 +612,38 @@ background-color: rgba(255,255,255,100);
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>nodeSizeScaleButton</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>scaleNodes(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>245</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fontSizeScaleButton</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>scaleFont(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>396</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>takeSnapshot()</slot>
@@ -719,8 +655,7 @@ background-color: rgba(255,255,255,100);
   <slot>setNodeColor(QColor)</slot>
   <slot>scaleNodes(int)</slot>
   <slot>setEdgesVisible(bool)</slot>
-  <slot>setEdgesLabelsVisible(bool)</slot>
-  <slot>setNodesLabelsVisible(bool)</slot>
+  <slot>setLabelsVisible(bool)</slot>
   <slot>selectFont()</slot>
  </slots>
 </ui>
