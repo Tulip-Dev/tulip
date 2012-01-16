@@ -112,9 +112,9 @@ public:
   virtual Iterator<edge>* getInEdges(const node n) const;
   virtual Iterator<edge>* getEdgeMetaInfo(const edge) const;
   //============================================================
-  virtual PropertyInterface* getProperty(const std::string &name);
-  virtual bool existProperty(const std::string&name);
-  virtual bool existLocalProperty(const std::string&name);
+  virtual PropertyInterface* getProperty(const std::string &name) const;
+  virtual bool existProperty(const std::string&name) const;
+  virtual bool existLocalProperty(const std::string&name) const;
   virtual void delLocalProperty(const std::string&name);
   virtual void addLocalProperty(const std::string &name, PropertyInterface *prop);
   virtual Iterator<std::string>* getLocalProperties() const;
