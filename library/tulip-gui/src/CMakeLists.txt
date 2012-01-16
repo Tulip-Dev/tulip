@@ -90,6 +90,7 @@ SET(SRCS
   QuickAccessBar.cpp
   TulipFont.cpp
   TulipFontDialog.cpp
+  ScrollPopupButton.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -168,6 +169,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/QuickAccessBar.h
   ../include/tulip/TulipFont.h
   ../include/tulip/TulipFontDialog.h
+  ../include/tulip/ScrollPopupButton.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

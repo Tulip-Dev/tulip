@@ -3,6 +3,7 @@
 
 #include <QtGui/QWidget>
 #include <tulip/tulipconf.h>
+#include <tulip/ScrollPopupButton.h>
 
 namespace Ui {
 class QuickAccessBar;
@@ -25,12 +26,10 @@ class QuickAccessBar : public QWidget {
   tlp::GlScene* scene() const;
   double _oldFontScale;
   double _oldNodeScale;
-
   void updateFontButtonStyle();
+
 public:
   explicit QuickAccessBar(QWidget *parent = 0);
-
-signals:
 
 public slots:
   void setGlMainView(tlp::GlMainView*);
@@ -45,8 +44,7 @@ public slots:
   void takeSnapshot();
   void setLabelProperty(const QString&);
   void setEdgesVisible(bool);
-  void setEdgesLabelsVisible(bool);
-  void setNodesLabelsVisible(bool);
+  void setLabelsVisible(bool);
   void selectFont();
 };
 }
