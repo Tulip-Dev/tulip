@@ -98,15 +98,15 @@ PropertyManager::~PropertyManager() {
   }
 }
 //==============================================================
-bool PropertyManager::existProperty(const string &str) {
+bool PropertyManager::existProperty(const string &str) const {
   return existLocalProperty(str) || existInheritedProperty(str);
 }
 //==============================================================
-bool PropertyManager::existLocalProperty(const string &str) {
+bool PropertyManager::existLocalProperty(const string &str) const {
   return (localProperties.find(str)!=localProperties.end());
 }
 //==============================================================
-bool PropertyManager::existInheritedProperty(const string &str) {
+bool PropertyManager::existInheritedProperty(const string &str) const {
   return (inheritedProperties.find(str)!=inheritedProperties.end());
 }
 //==============================================================
@@ -179,7 +179,7 @@ void PropertyManager::setInheritedProperty(const string &str,
   }
 }
 //==============================================================
-PropertyInterface* PropertyManager::getProperty(const string &str) {
+PropertyInterface* PropertyManager::getProperty(const string &str) const {
   assert(existProperty(str));
 
   if (existLocalProperty(str))
@@ -191,14 +191,14 @@ PropertyInterface* PropertyManager::getProperty(const string &str) {
   return NULL;
 }
 //==============================================================
-PropertyInterface* PropertyManager::getLocalProperty(const string &str) {
+PropertyInterface* PropertyManager::getLocalProperty(const string &str) const {
   assert(existLocalProperty(str));
-  return (localProperties[str]);
+  return (localProperties.at(str));
 }
 //==============================================================
-PropertyInterface* PropertyManager::getInheritedProperty(const string &str) {
+PropertyInterface* PropertyManager::getInheritedProperty(const string &str) const {
   assert(existInheritedProperty(str));
-  return (inheritedProperties[str]);
+  return (inheritedProperties.at(str));
 }
 //==============================================================
 void PropertyManager::delLocalProperty(const string &str) {

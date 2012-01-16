@@ -610,7 +610,7 @@ public:
    * exist return NULL.
    * In DEBUG the existence of a property is checked using an assertion.
    */
-  virtual PropertyInterface* getProperty(const std::string& name)=0;
+  virtual PropertyInterface* getProperty(const std::string& name) const = 0;
   /**
    * Try to returns a pointer to a PropertyInterface PropertyInterface which is in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
    * The real type of the PropertyInterface is tested with the propertyType string parameter.
@@ -624,11 +624,11 @@ public:
    *  Returns true if a property of that name exists
    *  in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
    */
-  virtual  bool existProperty(const std::string& name)=0;
+  virtual  bool existProperty(const std::string& name) const = 0;
   /**
    * Returns true if a property of that name exists in the graph properties pool.
    */
-  virtual  bool existLocalProperty(const std::string& name)=0;
+  virtual  bool existLocalProperty(const std::string& name) const = 0;
   /**
    * Removes and deletes the property associated to name in the graph properties pool.
    */

@@ -84,8 +84,8 @@ public:
   virtual unsigned int numberOfNodes() const;
   virtual unsigned int numberOfEdges() const;
   //========================================
-  bool existProperty(const std::string&);
-  bool existLocalProperty(const std::string&);
+  bool existProperty(const std::string&) const;
+  bool existLocalProperty(const std::string&) const;
   void delLocalProperty(const std::string&);
   void addLocalProperty(const std::string &name, PropertyInterface *prop);
   Iterator<std::string>* getLocalProperties() const;
@@ -94,7 +94,7 @@ public:
   Iterator<PropertyInterface*>* getLocalObjectProperties() const;
   Iterator<PropertyInterface*>* getInheritedObjectProperties() const;
   Iterator<PropertyInterface*>* getObjectProperties() const;
-  PropertyInterface* getProperty(const std::string &);
+  PropertyInterface* getProperty(const std::string &) const;
 
   // to get viewMetaGraph property
   GraphProperty* getMetaGraphProperty();
