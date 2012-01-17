@@ -483,6 +483,8 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
     _ui->colorsTable->setItem(4, 0, item5);
     _ui->nbColors->setValue(5);
     _ui->gradientCB->setChecked(true);
+
+    accept();
   }
 
   connect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
