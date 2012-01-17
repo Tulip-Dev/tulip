@@ -6,28 +6,26 @@
 #include <QtGui/QPixmap>
 #include <tulip/tulipconf.h>
 
-namespace tlp {
+class PreviewItem;
 
+namespace tlp {
 class WorkspacePanel;
 
 class TLP_QT_SCOPE WorkspaceExposeWidget : public QGraphicsView {
   Q_OBJECT
 
-  QVector<WorkspacePanel*> _panels;
-  QMap<WorkspacePanel*,QPixmap> _previewPixmaps;
-  QMap<WorkspacePanel*,QGraphicsItem*> _previewItems;
-  int _currentPanelIndex;
+  QVector<PreviewItem*> _items;
+  void updatePositions();
 
 public:
+  static QSize previewSize();
+
   explicit WorkspaceExposeWidget(QWidget *parent = 0);
   int currentPanelIndex() const;
   QVector<WorkspacePanel*> panels() const;
 
 public slots:
-  void setData(const QVector<WorkspacePanel*>& panels, const QMap<WorkspacePanel*,QPixmap>& previews, int currentPanelIndex);
-
-protected:
-  void resizeEvent(QResizeEvent *event);
+  void setData(const QVector<WorkspacePanel*>& panels, int currentPanelIndex);
 
 };
 

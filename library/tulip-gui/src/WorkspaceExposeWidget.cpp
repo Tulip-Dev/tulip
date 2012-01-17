@@ -1,48 +1,80 @@
 #include "tulip/WorkspaceExposeWidget.h"
 
+#include <QtCore/QPropertyAnimation>
+#include <QtCore/QParallelAnimationGroup>
+#include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>
-#include <QtGui/QGraphicsItemGroup>
-#include <QtGui/QGraphicsPixmapItem>
-#include <QtGui/QGraphicsTextItem>
+#include <QtGui/QGraphicsObject>
 
 using namespace tlp;
+
+// Helper classes
+
+class PreviewItem: public QGraphicsObject {
+  QPixmap _pixmap;
+  WorkspacePanel* _panel;
+
+public:
+  explicit PreviewItem(const QPixmap& pixmap, WorkspacePanel* panel, QGraphicsItem* parent = 0): QGraphicsObject(parent), _pixmap(pixmap), _panel(panel) {
+  }
+
+  QRectF boundingRect() const {
+    QRectF result = QRectF(0,0,WorkspaceExposeWidget::previewSize().width(),WorkspaceExposeWidget::previewSize().height()+30);
+    return result;
+  }
+
+  void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
+    painter->drawPixmap(0,0,WorkspaceExposeWidget::previewSize().width(),WorkspaceExposeWidget::previewSize().height(),_pixmap);
+    QFont f;
+    f.setBold(true);
+    painter->setFont(f);
+    painter->drawText(0,WorkspaceExposeWidget::previewSize().height()+5,WorkspaceExposeWidget::previewSize().width(),30,Qt::AlignHCenter | Qt::TextSingleLine | Qt::TextWordWrap,_panel->windowTitle());
+  }
+
+};
+// *************************
+
+void WorkspaceExposeWidget::updatePositions() {
+  const int spacing = 30;
+  QParallelAnimationGroup* group = new QParallelAnimationGroup(this);
+  int x=0,y=0;
+  foreach(PreviewItem* i, _items) {
+    QPropertyAnimation* moveAnim = new QPropertyAnimation(i,"pos",group);
+    moveAnim->setDuration(300);
+    moveAnim->setStartValue(i->pos());
+    moveAnim->setEndValue(QPointF(x,y));
+    x+=i->boundingRect().width() + spacing;
+    if (x>=width()-i->boundingRect().width()-spacing) {
+      x=0;
+      y+=i->boundingRect().height()+spacing;
+    }
+    group->addAnimation(moveAnim);
+  }
+  group->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+QSize WorkspaceExposeWidget::previewSize() {
+  return QSize(150,100);
+}
 
 WorkspaceExposeWidget::WorkspaceExposeWidget(QWidget *parent): QGraphicsView(parent) {
   setScene(new QGraphicsScene);
 }
 
 int WorkspaceExposeWidget::currentPanelIndex() const {
-  return _currentPanelIndex;
 }
 
 QVector<WorkspacePanel*> WorkspaceExposeWidget::panels() const {
-  return _panels;
 }
 
-void WorkspaceExposeWidget::setData(const QVector<WorkspacePanel *> &panels, const QMap<WorkspacePanel*, QPixmap>& previews, int currentPanelIndex) {
-  foreach(QGraphicsItem* it, _previewItems.values())
-  delete it;
-
-  _panels = panels;
-  _previewPixmaps = previews;
-  _currentPanelIndex = currentPanelIndex;
-
-  _previewItems.clear();
-  foreach(WorkspacePanel* panel, _panels) {
-
-    QGraphicsItemGroup* group = new QGraphicsItemGroup();
-    QGraphicsPixmapItem* pixmap = new QGraphicsPixmapItem(_previewPixmaps[panel]);
-    QGraphicsTextItem* text = new QGraphicsTextItem(panel->windowTitle());
-    group->addToGroup(pixmap);
-    group->addToGroup(text);
-    text->setPos(pixmap->boundingRect().width()/2-text->boundingRect().width()/2,pixmap->boundingRect().height()+5);
-    scene()->addItem(group);
-    group->setFlag(QGraphicsItem::ItemIsMovable);
-    group->setPos(20,20);
+void WorkspaceExposeWidget::setData(const QVector<WorkspacePanel *> &panels, int currentPanelIndex) {
+  scene()->clear();
+  foreach(WorkspacePanel* p, panels) {
+    for (int i=0;i<50;++i) {
+      QPixmap pixmap = p->view()->snapshot(previewSize());
+      PreviewItem* item = new PreviewItem(pixmap,p);
+      scene()->addItem(item);
+      _items << item;
+    }
   }
-}
-
-void WorkspaceExposeWidget::resizeEvent(QResizeEvent *event) {
-  QGraphicsView::resizeEvent(event);
-  scene()->setSceneRect(rect());
 }
