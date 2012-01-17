@@ -124,10 +124,14 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
 
 QPixmap GlMainView::snapshot(const QSize &outputSize) {
   qWarning("prout");
+
   if (_glMainWidget == NULL)
     return QPixmap();
+
   QSize realSize = outputSize;
+
   if (!realSize.isValid())
     realSize = _glMainWidget->size();
+
   return QPixmap::fromImage(_glMainWidget->createPicture(realSize.width(),realSize.height()));
 }

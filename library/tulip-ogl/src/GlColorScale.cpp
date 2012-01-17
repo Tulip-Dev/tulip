@@ -89,19 +89,22 @@ void GlColorScale::draw(float lod, Camera* camera) {
 }
 
 Color GlColorScale::getColorAtPos(Coord pos) {
-    float position = 0;
+  float position = 0;
+
   if (orientation == GlColorScale::Vertical) {
-      position = (pos.getY() - baseCoord.getY()) / length;
+    position = (pos.getY() - baseCoord.getY()) / length;
   }
   else {
-      position = (pos.getX() - baseCoord.getX()) / length;
+    position = (pos.getX() - baseCoord.getX()) / length;
   }
+
   //Ensure to always have a valid position.
-  if(position<0){
-      position=0;
+  if(position<0) {
+    position=0;
   }
-  if(position>1){
-      position=1;
+
+  if(position>1) {
+    position=1;
   }
 
   return colorScale->getColorAtPos(position);
