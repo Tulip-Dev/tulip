@@ -97,14 +97,11 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
   if (pos().x() < 0 || pos().x()+rect.width() > scene()->width() || pos().y() < 0 || pos().y()+rect.height() > scene()->height())
     redrawNeeded = true;
 
-  QPainterPath path;
-  path.addRect(rect.x(),rect.y(),rect.width(),rect.height());
   Color backgroundColor = glMainWidget->getScene()->getBackgroundColor();
-
   painter->setBrush(QColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]));
   painter->setPen(Qt::transparent);
   painter->setRenderHint(QPainter::Antialiasing, true);
-  painter->drawPath(path);
+  painter->drawRect(rect);
   painter->setRenderHint(QPainter::Antialiasing, false);
 
   painter->beginNativePainting();
