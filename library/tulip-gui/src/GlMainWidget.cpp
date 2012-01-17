@@ -622,6 +622,7 @@ void GlMainWidget::createPicture(const std::string &pictureName, int width, int 
 //=====================================================
 QImage GlMainWidget::createPicture(int width, int height,bool center, int zoom, int xDec, int yDec) {
 #ifndef WITHOUT_QT_PICTURE_OUTPUT
+  GlMainWidget::getFirstQGLWidget()->makeCurrent();
   scene.setViewport(0,0,width,height);
 
   if(center)
