@@ -209,11 +209,11 @@ QString getTulipPythonPluginSkeleton(const QString &pluginClassName, const QStri
     tlpType = "Boolean";
   }
   else if (pluginType == "Import") {
-    pluginClass = "tlp.PythonImportModule";
+    pluginClass = "tlp.ImportModule";
     tlpType = "Import";
   }
   else {
-    pluginClass = "tlp.PythonExportModule";
+    pluginClass = "tlp.ExportModule";
     tlpType = "Export";
   }
 
@@ -292,13 +292,19 @@ QString getTulipPythonPluginSkeleton(const QString &pluginClassName, const QStri
     textStream << "\t\treturn True" << endl << endl;
   }
   else if (pluginType == "Export") {
-    textStream << "\tdef exportGraph(self):" << endl;
+    textStream << "\tdef exportGraph(os, self):" << endl;
     textStream << "\t\t# This method is called to export a graph." << endl;
     textStream << "\t\t# The graph to export is accessible through the \"graph\" class attribute" << endl;
     textStream << "\t\t# (see documentation of class tlp.Graph)." << endl << endl;
     textStream << "\t\t# The parameters provided by the user are stored in a Tulip DataSet " << endl;
     textStream << "\t\t# and can be accessed through the \"dataSet\" class attribute" << endl ;
     textStream << "\t\t# (see documentation of class tlp.DataSet)." << endl << endl;
+    textStream << "\t\t# The os parameter is an output file stream (initialized by the Tulip GUI" << endl;
+    textStream << "\t\t# or by the tlp.exportGraph function.)." << endl;
+    textStream << "\t\t# To write data to the file, you have to use the following syntax :" << endl << endl;
+    textStream << "\t\t# write the number of nodes and edges to the file" << endl;
+    textStream << "\t\t# os << self.graph.numberOfNodes() << \"\n\"" << endl;
+    textStream << "\t\t# os << self.graph.numberOfEdges() << \"\n\"" << endl << endl;
     textStream << "\t\t# The method must return a boolean indicating if the" << endl;
     textStream << "\t\t# graph has been successfully exported." << endl;
     textStream << "\t\treturn True" << endl << endl;
