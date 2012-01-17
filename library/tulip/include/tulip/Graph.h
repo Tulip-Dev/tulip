@@ -106,27 +106,18 @@ TLP_SCOPE Graph* importGraph(const std::string &format, DataSet &dataSet, Plugin
  */
 /**
  * @brief Applies an algorithm plugin, identified by its name.
- * Algorithm plugins are subclasses of the tlp::Algorithm interface.
- * Parameters are transmitted to the algorithm trough the DataSet.
- * To determine a plugin's parameters, you can either:
- *
- * * refer to its documentation
- *
- * * use buildDefaultDataSet on the plugin object if you have an instance of it
- *
- * * call getPluginParameters() with the name of the plugin on the right PluginLister
- * (there cannot be a static method that directly returns this from the plugin name as a name can be used for plugins of different types).
- *
+ * @deprecated this function should not be used anymore, please use Graph::applyAlgorithm() instead.
  *
  * If an error occurs, a message describing the error should be stored in errorMessage.
  *
+ * @param graph A graph for which the algorithm must be applied.
  * @param errorMessage A string that will be modified to contain an error message should an error occur.
  * @param dataSet The parameters to the algorithm. Defaults to NULL.
  * @param algorithm The algorithm to apply. Defaults to "any".
  * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
  * @return bool Whether the algorithm was successfully applied.
  **/
-TLP_SCOPE bool applyAlgorithm(Graph *graph, std::string &errorMsg, DataSet *dataSet =0, const std::string &algorithm="any", PluginProgress *progress=0);
+TLP_SCOPE _DEPRECATED bool applyAlgorithm(Graph *graph, std::string &errorMsg, DataSet *dataSet=NULL, const std::string &algorithm="any", PluginProgress *progress=NULL);
 
 /**
  * @brief Creates and returns a new empty graph.
@@ -174,14 +165,14 @@ TLP_SCOPE bool getSource(const Graph *, node &n);
  * The output selection is used to select the appended nodes & edges
  * \warning The input selection is extended to all selected edge ends.
  */
-TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
+TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSelection=NULL, BooleanProperty* outSelection=NULL );
 
 /**
  * Removes the selected part of the graph ioG (properties values, nodes and edges).
  * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
  * \warning The selection is extended to all selected edge ends.
  */
-TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection = 0 );
+TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection=NULL);
 
 /**
  * \defgroup graphs
@@ -201,6 +192,31 @@ class TLP_SCOPE Graph : public Observable {
 public:
   Graph():id(0) {}
   virtual ~Graph() {}
+
+  /**
+   * @brief Applies an algorithm plugin, identified by its name.
+   * Algorithm plugins are subclasses of the tlp::Algorithm interface.
+   * Parameters are transmitted to the algorithm trough the DataSet.
+   * To determine a plugin's parameters, you can either:
+   *
+   * * refer to its documentation
+   *
+   * * use buildDefaultDataSet on the plugin object if you have an instance of it
+   *
+   * * call getPluginParameters() with the name of the plugin on the right PluginLister
+   * (there cannot be a static method that directly returns this from the plugin name as a name can be used for plugins of different types).
+   *
+   *
+   * If an error occurs, a message describing the error should be stored in errorMessage.
+   *
+   * @param algorithm The algorithm to apply.
+   * @param errorMessage A string that will be modified to contain an error message should an error occur.
+   * @param dataSet The parameters to the algorithm. Defaults to NULL.
+   * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
+   * @return bool Whether the algorithm was successfully applied.
+   **/
+  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage, DataSet *dataSet=NULL, PluginProgress *progress=NULL);
+
   //=========================================================================
   // Graph hierarchy access and building
   //=========================================================================
@@ -222,7 +238,7 @@ public:
    * @param name The name of the newly created subgraph. Defaults to "unnamed".
    * @return :Graph* The newly created subgraph.
    **/
-  virtual Graph *addSubGraph(BooleanProperty *selection=0,
+  virtual Graph *addSubGraph(BooleanProperty *selection=NULL,
                              unsigned int id = 0,
                              std::string name = "unnamed")=0;
   /**
@@ -566,15 +582,15 @@ public:
   bool applyPropertyAlgorithm(const std::string &algorithm,
                               PropertyInterface* result,
                               std::string &msg,
-                              PluginProgress *progress=0,
-                              DataSet *data=0);
+                              PluginProgress *progress=NULL,
+                              DataSet *data=NULL);
   /**
    * obsolete version of the previous one
    */
   template<typename PropertyType>
   bool computeProperty(const std::string &algorithm,
                        PropertyType* result, std::string &msg,
-                       PluginProgress *progress=0, DataSet *data=0);
+                       PluginProgress *progress=NULL, DataSet *data=NULL);
   /**
    * Returns a pointer to a PropertyInterface which is in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
    * The real type of the PropertyInterface is tested with the template parameter.
@@ -589,7 +605,7 @@ public:
    * exist return NULL.
    * In DEBUG the existence of a property is checked using an assertion.
    */
-  virtual PropertyInterface* getProperty(const std::string& name)=0;
+  virtual PropertyInterface* getProperty(const std::string& name)const=0;
 
   /**
    * Try to returns a pointer to a PropertyInterface PropertyInterface which is in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
@@ -605,11 +621,11 @@ public:
    *  Returns true if a property of that name exists
    *  in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
    */
-  virtual  bool existProperty(const std::string& name)=0;
+  virtual  bool existProperty(const std::string& name)const=0;
   /**
    * Returns true if a property of that name exists in the graph properties pool.
    */
-  virtual  bool existLocalProperty(const std::string& name)=0;
+  virtual  bool existLocalProperty(const std::string& name)const=0;
   /**
    * Removes and deletes the property associated to name in the graph properties pool.
    */

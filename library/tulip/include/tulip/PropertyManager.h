@@ -44,14 +44,14 @@ public:
   explicit  PropertyManager(Graph*);
   ~PropertyManager();
   //======================================================================================
-  bool existProperty(const std::string&);
-  bool existLocalProperty(const std::string&);
-  bool existInheritedProperty(const std::string&);
+  bool existProperty(const std::string&) const;
+  bool existLocalProperty(const std::string&) const;
+  bool existInheritedProperty(const std::string&) const;
   void setInheritedProperty(const std::string&, PropertyInterface *);
   void setLocalProperty(const std::string&, PropertyInterface *);
-  PropertyInterface* getProperty(const std::string&);
-  PropertyInterface* getLocalProperty(const std::string&);
-  PropertyInterface* getInheritedProperty(const std::string&);
+  PropertyInterface* getProperty(const std::string&) const;
+  PropertyInterface* getLocalProperty(const std::string&) const;
+  PropertyInterface* getInheritedProperty(const std::string&) const;
   void delLocalProperty(const std::string&);
   void notifyBeforeDelInheritedProperty(const std::string&);
   void erase(const node );

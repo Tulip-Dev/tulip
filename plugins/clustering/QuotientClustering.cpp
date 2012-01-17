@@ -401,8 +401,8 @@ bool QuotientClustering::run() {
       node mn = *itn;
       Graph* sg = quotientGraph->getNodeMetaInfo(mn);
       string eMsg;
-      tlp::applyAlgorithm(sg, eMsg, &dSet, "Quotient Clustering",
-                          pluginProgress);
+      sg->applyAlgorithm("Quotient Clustering", eMsg, &dSet, 
+			 pluginProgress);
 
       // if a quotient graph has been computed
       // update metaInfo of current meta node

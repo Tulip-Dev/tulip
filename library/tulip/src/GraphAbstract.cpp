@@ -470,15 +470,15 @@ void GraphAbstract::delEdges(Iterator<edge>* itE, bool deleteInAllGraphs) {
   }
 }
 //=========================================================================
-bool GraphAbstract::existProperty(const std::string &name) {
+bool GraphAbstract::existProperty(const std::string &name) const {
   return propertyContainer->existProperty(name);
 }
 //=========================================================================
-bool GraphAbstract::existLocalProperty(const std::string &name) {
+bool GraphAbstract::existLocalProperty(const std::string &name) const {
   return propertyContainer->existLocalProperty(name);
 }
 //=========================================================================
-PropertyInterface* GraphAbstract::getProperty(const string &str) {
+PropertyInterface* GraphAbstract::getProperty(const string &str) const {
   return propertyContainer->getProperty(str);
 }
 //=========================================================================

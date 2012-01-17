@@ -412,17 +412,17 @@ DataSet& GraphDecorator::getNonConstAttributes() {
   return graph_component->getNonConstAttributes();
 }
 //============================================================
-PropertyInterface* GraphDecorator::getProperty(const std::string &name) {
+PropertyInterface* GraphDecorator::getProperty(const std::string &name) const {
   return graph_component->getProperty(name);
 }
 
 //============================================================
-bool GraphDecorator::existProperty(const std::string&name) {
+bool GraphDecorator::existProperty(const std::string&name) const {
   return graph_component->existProperty(name);
 }
 
 //============================================================
-bool GraphDecorator::existLocalProperty(const std::string&name) {
+bool GraphDecorator::existLocalProperty(const std::string&name) const {
   return graph_component->existLocalProperty(name) ;
 }
 

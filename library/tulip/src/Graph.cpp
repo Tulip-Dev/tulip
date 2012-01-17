@@ -217,9 +217,15 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const std::string &alg,
   delete newExportModule;
   return result;
 }
+
 //=========================================================
-bool tlp::applyAlgorithm(Graph *sg, std::string &errorMsg,DataSet *dataSet,
-                         const std::string &alg, PluginProgress *plugProgress) {
+bool tlp::applyAlgorithm(Graph *graph, std::string &errorMsg,DataSet *dataSet,
+			 const std::string &alg, PluginProgress *progress) {
+  return graph->applyAlgorithm(alg, errorMsg, dataSet, progress);
+}
+//=========================================================
+bool Graph::applyAlgorithm(const std::string &alg, std::string &errorMsg,
+			   DataSet *dataSet, PluginProgress *progress) {
   if (!AlgorithmPlugin::factory->pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << alg
          << "\" does not exist (or is not loaded)" << endl;
@@ -229,15 +235,15 @@ bool tlp::applyAlgorithm(Graph *sg, std::string &errorMsg,DataSet *dataSet,
   bool result;
   bool deletePluginProgress=false;
   AlgorithmContext tmp;
-  tmp.graph=sg;
+  tmp.graph=this;
   tmp.dataSet=dataSet;
   PluginProgress *tmpProgress;
 
-  if (plugProgress==0) {
+  if (progress==NULL) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
-  else tmpProgress=plugProgress;
+  else tmpProgress=progress;
 
   tmp.pluginProgress=tmpProgress;
   Algorithm *newAlgo=AlgorithmPlugin::factory->getPluginObject(alg, tmp);

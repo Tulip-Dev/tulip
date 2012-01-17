@@ -505,7 +505,7 @@ void BasicPluginsTest::testEqualValueClustering() {
   bool result = graph->computeProperty("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
   ds.set("Property", &metric);
-  result = tlp::applyAlgorithm(graph, errorMsg, &ds, "Equal Value", NULL);
+  result = graph->applyAlgorithm("Equal Value", errorMsg, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -515,7 +515,7 @@ void BasicPluginsTest::testHierarchicalClustering() {
   string errorMsg;
   bool result = graph->computeProperty("Degree", metric, errorMsg);
   CPPUNIT_ASSERT(result);
-  result = tlp::applyAlgorithm(graph, errorMsg, NULL, "Hierarchical", NULL);
+  result = graph->applyAlgorithm("Hierarchical", errorMsg);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -527,10 +527,9 @@ void BasicPluginsTest::testQuotientClustering() {
   bool result = graph->computeProperty("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
   ds.set("Property", &metric);
-  result = tlp::applyAlgorithm(graph, errorMsg, &ds, "Equal Value", NULL);
+  result = graph->applyAlgorithm("Equal Value", errorMsg, &ds);
   CPPUNIT_ASSERT(result);
-  result = tlp::applyAlgorithm(graph, errorMsg, NULL,
-                               "Quotient Clustering", NULL);
+  result = graph->applyAlgorithm("Quotient Clustering", errorMsg);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
