@@ -123,8 +123,6 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
 }
 
 QPixmap GlMainView::snapshot(const QSize &outputSize) {
-  qWarning("prout");
-
   if (_glMainWidget == NULL)
     return QPixmap();
 
