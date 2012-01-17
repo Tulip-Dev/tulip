@@ -7,6 +7,7 @@
 #include <tulip/tulipconf.h>
 
 class PreviewItem;
+class QAbstractAnimation;
 
 namespace tlp {
 class WorkspacePanel;
@@ -14,6 +15,7 @@ class WorkspacePanel;
 class TLP_QT_SCOPE WorkspaceExposeWidget : public QGraphicsView {
   Q_OBJECT
 
+  QAbstractAnimation* _positionAnimation;
   QVector<PreviewItem*> _items;
   void updatePositions();
 
@@ -26,6 +28,13 @@ public:
 
 public slots:
   void setData(const QVector<WorkspacePanel*>& panels, int currentPanelIndex);
+
+protected:
+  void resizeEvent(QResizeEvent *event);
+  bool eventFilter(QObject *, QEvent *);
+
+protected slots:
+  void updatePositionsAnimationFinished();
 
 };
 
