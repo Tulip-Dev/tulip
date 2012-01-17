@@ -75,7 +75,6 @@ class TLP_QT_SCOPE Workspace: public QWidget {
   QMap<QWidget*,QVector<PlaceHolderWidget*> > _modeToSlots;
   QMap<QWidget*,QWidget*> _modeSwitches;
   tlp::GraphHierarchiesModel* _model;
-  tlp::WorkspaceExposeWidget* _exposeWidget;
 
   QString panelTitle(tlp::WorkspacePanel*) const;
 

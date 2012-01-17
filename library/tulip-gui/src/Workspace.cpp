@@ -107,7 +107,7 @@ QVariant Workspace::PanelsStorage::data(const QModelIndex &index, int role) cons
 // ***********************************************
 
 Workspace::Workspace(QWidget *parent)
-  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL), _exposeWidget(NULL) {
+  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL) {
   _ui->setupUi(this);
   connect(_ui->startupButton,SIGNAL(clicked()),this,SIGNAL(addPanelRequest()));
 
@@ -282,7 +282,12 @@ void Workspace::switchWorkspaceMode(QWidget *page) {
 }
 
 void Workspace::updatePageCountLabel() {
-  _ui->pagesLabel->setText(QString::number(_currentPanelIndex+1) + " / " + QString::number(_panels.size() - _panels.size()%currentSlotsCount()));
+  int index=0, total=0;
+  if (currentSlotsCount() != 0) {
+    index = _currentPanelIndex+1;
+    total = _panels.size() - _panels.size()%currentSlotsCount();
+  }
+  _ui->pagesLabel->setText(QString::number(index) + " / " + QString::number(total));
 }
 
 QWidget* Workspace::currentModeWidget() const {
@@ -303,7 +308,6 @@ void Workspace::updateAvailableModes() {
   }
 
   bool enableNavigation = currentModeWidget() != _ui->startupPage;
-  _ui->exposeButton->setEnabled(enableNavigation);
   _ui->nextPageButton->setEnabled(enableNavigation);
   _ui->previousPageButton->setEnabled(enableNavigation);
 }
@@ -440,18 +444,17 @@ void Workspace::expose(bool f) {
 
 void Workspace::showExposeMode() {
   _ui->workspaceContents->setCurrentWidget(_ui->exposePage);
-  foreach(QWidget* s, _modeSwitches.values())
-  s->setEnabled(false);
+  foreach(QWidget* s, _modeSwitches.values()) {
+    s->setEnabled(false);
+  }
   _ui->nextPageButton->setEnabled(false);
   _ui->previousPageButton->setEnabled(false);
 
   QVector<WorkspacePanel*> panels;
-  QMap<WorkspacePanel*,QPixmap> previews;
   foreach(WorkspacePanel* p, _panels) {
-    panels.push_back(p);
-    previews[p] = p->view()->snapshot(QSize(150,100));
+    panels << p;
   }
-  _ui->exposeMode->setData(panels,previews,_currentPanelIndex);
+  _ui->exposeMode->setData(panels,_currentPanelIndex);
 }
 
 void Workspace::hideExposeMode() {
