@@ -441,7 +441,7 @@ void Workspace::expose(bool f) {
 void Workspace::showExposeMode() {
   _ui->workspaceContents->setCurrentWidget(_ui->exposePage);
   foreach(QWidget* s, _modeSwitches.values())
-    s->setEnabled(false);
+  s->setEnabled(false);
   _ui->nextPageButton->setEnabled(false);
   _ui->previousPageButton->setEnabled(false);
 

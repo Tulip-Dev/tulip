@@ -186,8 +186,10 @@ QPixmap ViewWidget::snapshot(const QSize &outputSize) {
 
   QPixmap result(_centralWidget->size());
   _centralWidget->render(&result);
+
   if (outputSize.isValid()) {
     return result.scaled(outputSize);
   }
+
   return result;
 }

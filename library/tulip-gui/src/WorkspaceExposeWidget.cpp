@@ -21,7 +21,7 @@ QVector<WorkspacePanel*> WorkspaceExposeWidget::panels() const {
 
 void WorkspaceExposeWidget::setData(const QVector<WorkspacePanel *> &panels, const QMap<WorkspacePanel*, QPixmap>& previews, int currentPanelIndex) {
   foreach(QGraphicsItem* it, _previewItems.values())
-    delete it;
+  delete it;
 
   _panels = panels;
   _previewPixmaps = previews;
