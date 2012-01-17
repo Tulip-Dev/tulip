@@ -64,9 +64,9 @@ public :
       p2t::Point* p1 = (*it)->GetPoint(1);
       p2t::Point* p2 = (*it)->GetPoint(2);
 
-      tlp::node n0 = points.at(p0);
-      tlp::node n1 = points.at(p1);
-      tlp::node n2 = points.at(p2);
+      tlp::node n0 = points[p0];
+      tlp::node n1 = points[p1];
+      tlp::node n2 = points[p2];
 
       if(!delaunaySubGraph->existEdge(n0, n1).isValid()) {
         delaunaySubGraph->addEdge(n0, n1);
