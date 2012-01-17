@@ -37,14 +37,14 @@ public:
   //============================================
   DataSet getParameters() const;
   void    setParameters(const DataSet &);
-  
+
   /**
    * @brief Gets the LOD below which the point mode is activated.
    *
    * @return float
    **/
   float getPointModeLOD() const;
-  
+
   /**
    * @brief Sets the LOD below which the point mode is activated.
    * If the lod is strictly less than the value, the point mode will be activated.
