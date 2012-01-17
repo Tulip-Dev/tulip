@@ -153,6 +153,7 @@ template class TLP_QT_SCOPE PluginLister<Interactor,InteractorContext*>;
 #define INTERACTORPLUGIN(C,N,A,D,I,R) INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,"")
 
 
+// TODO : refactor Interactor/View compatibility check
 /*
 CN : New interactor class name
 CNT : New interactor name
