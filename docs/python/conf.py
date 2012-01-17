@@ -138,13 +138,13 @@ html_theme = 'default'
 #html_additional_pages = {}
 
 # If false, no module index is generated.
-#html_domain_indices = True
+html_domain_indices = False
 
 # If false, no index is generated.
 #html_use_index = True
 
 # If true, the index is split into individual pages for each letter.
-#html_split_index = False
+html_split_index = False
 
 # If true, links to the reST sources are added to the pages.
 #html_show_sourcelink = True
@@ -219,7 +219,6 @@ autoclass_content = "both"
 html_logo = "logo.bmp"
 methodDocstring = {}
 methodSignature = {}
-
 
 def process_docstring(app, what, name, obj, options, lines):
 	if what == "class":
@@ -310,3 +309,4 @@ def setup(app):
 	
     app.connect('autodoc-process-signature', process_signature) 
     app.connect('autodoc-process-docstring', process_docstring) 
+    

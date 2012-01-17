@@ -71,6 +71,34 @@ public:
 
 	Graph();
 	
+//===========================================================================================	
+	
+  	bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage /Out/, tlp::DataSet *dataSet=NULL);
+%Docstring
+tlp.Graph.applyAlgorithm(algoName, dataSet)
+
+.. versionadded:: 3.7
+	
+Applies an algorithm plugin, identified by its name.
+Algorithm plugins are objects implementing the tlp::Algorithm interface 
+in C++ or the :class:`tlp.Algorithm` interface in Python.
+Parameters can be transmit to the algorithm using a :class:`tlp.DataSet`.
+To determine a plugin's parameters, you can either:
+
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
+Returns a tuple whose first member is a boolean indicating if the 
+algorithm terminates successfully and second member is a string 
+which can contain an error message.
+
+:param algoName: The name of the algorithm to apply.
+:type algoName: string
+:param dataSet: The parameters to the algorithm. Defaults to :const:`None`.
+:type dataSet: :class:`tlp.DataSet`
+:rtype: boolean
+%End  	
+
 //===========================================================================================
 
 	void clear();
@@ -1918,6 +1946,11 @@ Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -1963,6 +1996,11 @@ Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -2008,6 +2046,11 @@ Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -2053,6 +2096,11 @@ Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -2097,6 +2145,11 @@ Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -2142,6 +2195,11 @@ Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -2187,6 +2245,11 @@ Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -2865,6 +2928,8 @@ Exports a graph to a file using a Tulip export plugin (must be loaded).
 bool applyAlgorithm(tlp::Graph *graph, std::string &errMsg /Out/, tlp::DataSet *dataSet, const std::string &algoName);
 %Docstring
 tlp.applyAlgorithm(graph, dataSet, algoName)
+
+.. deprecated:: 3.7 use :meth:`tlp.Graph.applyAlgorithm` instead
 
 Applies an algorithm plugin (must be loaded) on a graph . Algorithm plugins are objects
 implementing the tlp::Algorithm interface in C++ or the :class:`tlp.Algorithm` interface in Python. 

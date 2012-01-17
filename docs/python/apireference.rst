@@ -111,6 +111,8 @@ the Graph class
 
 .. autoclass:: tulip::tlp.Graph
 
+	.. automethod:: tulip::tlp.Graph.applyAlgorithm
+
 	.. _graph-class.structure-modif:
 	
 	.. rubric:: Modification of the graph structure

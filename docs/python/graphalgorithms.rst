@@ -22,7 +22,7 @@ but also how to transmit parameters to the algorithms.
 Calling a general algorithm on a graph
 --------------------------------------- 
 
-To call a general algorithm, you must use the :func:`tlp.applyAlgorithm` function. 
+To call a general algorithm, you must use the :meth:`tlp.Graph.applyAlgorithm` method. 
 From the Tulip GUI, you can see all the general algorithms currently loaded by 
 looking at the entries from the *Algorithm -> General* menu. Alternatively, from Python you
 can get a list of the general algorithms names by calling the :func:`tlp.getAlgorithmPluginsList` function.
@@ -64,7 +64,7 @@ is bound to a "graph" variable and this graph contains a double property called 
 	# dataSet["Connected"] = True
 	
 	# now we call the algorithm
-	tlp.applyAlgorithm(graph, dataSet, "Equal Value")
+	graph.applyAlgorithm("Equal Value", dataSet)
 	
 Calling a property algorithm on a graph
 --------------------------------------- 
