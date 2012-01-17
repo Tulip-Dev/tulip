@@ -72,6 +72,10 @@ public:
     return colorScale;
   }
 
+  void getXML(std::string &) {}
+
+  void setWithXML(const std::string &,unsigned int &) {}
+
 protected :
 
   void treatEvent(const Event &);
