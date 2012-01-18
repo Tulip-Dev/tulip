@@ -220,12 +220,12 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const std::string &alg,
 
 //=========================================================
 bool tlp::applyAlgorithm(Graph *graph, std::string &errorMsg,DataSet *dataSet,
-			 const std::string &alg, PluginProgress *progress) {
+                         const std::string &alg, PluginProgress *progress) {
   return graph->applyAlgorithm(alg, errorMsg, dataSet, progress);
 }
 //=========================================================
 bool Graph::applyAlgorithm(const std::string &alg, std::string &errorMsg,
-			   DataSet *dataSet, PluginProgress *progress) {
+                           DataSet *dataSet, PluginProgress *progress) {
   if (!AlgorithmPlugin::factory->pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << alg
          << "\" does not exist (or is not loaded)" << endl;
