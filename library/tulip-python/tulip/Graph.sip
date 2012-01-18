@@ -96,7 +96,7 @@ which can contain an error message.
 :type algoName: string
 :param dataSet: The parameters to the algorithm. Defaults to :const:`None`.
 :type dataSet: :class:`tlp.DataSet`
-:rtype: boolean
+:rtype: (boolean, string)
 %End  	
 
 //===========================================================================================

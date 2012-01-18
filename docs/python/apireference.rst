@@ -522,11 +522,7 @@ Tulip plugins classes
 .. autoclass:: tulip::tlp.Algorithm
 	:members:
 	:undoc-members:
-	
-.. autoclass:: tulip::tlp.PropertyAlgorithm
-	:members:
-	:undoc-members:
-	
+		
 .. autoclass:: tulip::tlp.BooleanAlgorithm
 	:members:
 	:undoc-members:
@@ -542,7 +538,7 @@ Tulip plugins classes
 	
 .. class:: tlp.DoubleAlgorithm
 
-	Bases: :class:`tlp.PropertyAlgorithm`
+	Bases: :class:`tlp.Algorithm`
 
 	This class is the base interface for metric plugins.
 
