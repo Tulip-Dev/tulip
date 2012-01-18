@@ -840,6 +840,14 @@ QToolButton:pressed {
     <string>Develop</string>
    </property>
   </action>
+  <action name="actionAnalyze">
+   <property name="text">
+    <string>Analyze</string>
+   </property>
+   <property name="toolTip">
+    <string>Analyze mode</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -921,6 +929,54 @@ QToolButton:pressed {
     <hint type="sourcelabel">
      <x>37</x>
      <y>584</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>visualizeModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionAnalyze</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>72</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chartsModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionCharts</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>151</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>developModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionDevelop</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>230</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
