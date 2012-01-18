@@ -283,10 +283,12 @@ void Workspace::switchWorkspaceMode(QWidget *page) {
 
 void Workspace::updatePageCountLabel() {
   int index=0, total=0;
+
   if (currentSlotsCount() != 0) {
     index = _currentPanelIndex+1;
     total = _panels.size() - _panels.size()%currentSlotsCount();
   }
+
   _ui->pagesLabel->setText(QString::number(index) + " / " + QString::number(total));
 }
 

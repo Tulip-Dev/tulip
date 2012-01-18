@@ -57,7 +57,7 @@ QVector<WorkspacePanel*> WorkspaceExposeWidget::panels() const {
 void WorkspaceExposeWidget::setData(const QVector<WorkspacePanel *> &panels, int currentPanelIndex) {
   scene()->clear();
   foreach(WorkspacePanel* p, panels) {
-    for (int i=0;i<50;++i) {
+    for (int i=0; i<50; ++i) {
       QPixmap pixmap = p->view()->snapshot(previewSize());
       PreviewItem* item = new PreviewItem(pixmap,p);
       scene()->addItem(item);
@@ -89,10 +89,12 @@ void WorkspaceExposeWidget::updatePositions() {
     moveAnim->setStartValue(i->pos());
     moveAnim->setEndValue(QPointF(x,y));
     x+=i->boundingRect().width() + spacing;
+
     if (x>=width()-i->boundingRect().width()-spacing) {
       x=spacing;
       y+=i->boundingRect().height()+spacing;
     }
+
     group->addAnimation(moveAnim);
   }
 
@@ -105,5 +107,6 @@ bool WorkspaceExposeWidget::eventFilter(QObject* obj, QEvent* ev) {
   if (ev->type() == QEvent::GraphicsSceneMove) {
     qWarning() << "prout";
   }
+
   return false;
 }
