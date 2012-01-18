@@ -16,8 +16,12 @@ class TLP_QT_SCOPE WorkspaceExposeWidget : public QGraphicsView {
   Q_OBJECT
 
   QAbstractAnimation* _positionAnimation;
-  QVector<PreviewItem*> _items;
+  QList<PreviewItem*> _items;
+  PreviewItem* _selectedItem;
+  QGraphicsRectItem* _placeholderItem;
   void updatePositions();
+
+  static const int MARGIN;
 
 public:
   static QSize previewSize();
