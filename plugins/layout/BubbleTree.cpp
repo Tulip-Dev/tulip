@@ -362,19 +362,17 @@ bool BubbleTree::run() {
   if (dataSet == 0 || !dataSet->get("complexity",nAlgo))
     nAlgo = true;
 
-  // ensure size updates will be kept after a pop
-  preservePropertyUpdates(nodeSize);
   layoutResult->setAllEdgeValue(vector<Coord>(0));
 
   if (pluginProgress)
     pluginProgress->showPreview(false);
 
   // push a temporary graph state (not redoable)
-  graph->push(false);
-
-  // but ensure layoutResult will be preserved
+  // preserving layout updates
+  std::vector<PropertyInterface*> propsToPreserve;
   if (layoutResult->getName() != "")
-    preservePropertyUpdates(layoutResult);
+    propsToPreserve.push_back(layoutResult);
+  graph->push(false, &propsToPreserve);
 
   tree = TreeTest::computeTree(graph, pluginProgress);
 

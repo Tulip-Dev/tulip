@@ -387,8 +387,6 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (!getNodeSizePropertyParameter(dataSet, sizes))
     sizes = graph->getProperty<SizeProperty>("viewSize");
 
-  // ensure size updates will be kept after a pop
-  preservePropertyUpdates(sizes);
   getSpacingParameters(dataSet, nodeSpacing, spacing);
   orientation = "horizontal";
   lengthMetric = 0;
@@ -431,11 +429,11 @@ bool TreeReingoldAndTilfordExtended::run() {
     pluginProgress->showPreview(false);
 
   // push a temporary graph state (not redoable)
-  graph->push(false);
-
-  // but ensure layoutResult will be preserved
+  // preserving layout updates
+  std::vector<PropertyInterface*> propsToPreserve;
   if (layoutResult->getName() != "")
-    preservePropertyUpdates(layoutResult);
+    propsToPreserve.push_back(layoutResult);
+  graph->push(false, &propsToPreserve);
 
   tree = TreeTest::computeTree(graph, pluginProgress);
 

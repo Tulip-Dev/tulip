@@ -19,8 +19,20 @@
 #include <tulip/DoubleAlgorithm.h>
 #include <tulip/DoubleProperty.h>
 
-tlp::DoubleAlgorithm::DoubleAlgorithm (const tlp::AlgorithmContext &context):tlp::PropertyAlgorithm(context) {
-  doubleResult = (tlp::DoubleProperty *)context.propertyProxy;
+static const char * paramHelp[] = {
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "DoubleProperty" ) \
+  HTML_HELP_DEF( "default", "\"viewMetric\"" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicates the property to compute." \
+  HTML_HELP_CLOSE(),
+};
+
+tlp::DoubleAlgorithm::DoubleAlgorithm (const tlp::AlgorithmContext &context):tlp::Algorithm(context), doubleResult(NULL) {
+  addOutParameter<tlp::DoubleProperty>("result", paramHelp[0],
+				       "viewMetric");
+  if (dataSet != NULL)
+    dataSet->get("result", doubleResult);
 }
 
 tlp::DoubleAlgorithm::~DoubleAlgorithm() {}

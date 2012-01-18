@@ -30,7 +30,7 @@
 #ifndef TULIP_STRINGALGO_H
 #define TULIP_STRINGALGO_H
 
-#include <tulip/PropertyAlgorithm.h>
+#include <tulip/Algorithm.h>
 
 namespace tlp {
 
@@ -40,7 +40,7 @@ class StringProperty;
 /*@{*/
 
 /// Interface for String plug-ins
-class TLP_SCOPE StringAlgorithm:public PropertyAlgorithm {
+class TLP_SCOPE StringAlgorithm : public tlp::Algorithm {
   ///
   friend class StringProperty;
 public:

@@ -20,7 +20,7 @@
 #ifndef _LAYOUTALGO_H
 #define _LAYOUTALGO_H
 
-#include <tulip/PropertyAlgorithm.h>
+#include <tulip/Algorithm.h>
 
 namespace tlp {
 
@@ -31,7 +31,7 @@ class LayoutProperty;
  */
 /*@{*/
 ///Interface for layout plug-ins
-class TLP_SCOPE LayoutAlgorithm:public PropertyAlgorithm {
+class TLP_SCOPE LayoutAlgorithm : public tlp::Algorithm {
   ///
   friend class LayoutProperty;
 public:

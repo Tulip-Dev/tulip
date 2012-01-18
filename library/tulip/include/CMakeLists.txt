@@ -37,7 +37,6 @@ INSTALL(FILES
 	tulip/ColorProperty.h 
 	tulip/ImportModule.h 
 	tulip/DoubleProperty.h 
-	tulip/PropertyAlgorithm.h 
 	tulip/SizeAlgorithm.h 
 	tulip/ColorAlgorithm.h 
 	tulip/IntegerProperty.h 

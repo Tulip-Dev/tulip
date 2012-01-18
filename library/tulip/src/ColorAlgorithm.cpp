@@ -20,8 +20,20 @@
 #include <tulip/ColorAlgorithm.h>
 #include <tulip/ColorProperty.h>
 
-tlp::ColorAlgorithm::ColorAlgorithm (const tlp::AlgorithmContext &context):tlp::PropertyAlgorithm(context) {
-  colorResult = (tlp::ColorProperty *)context.propertyProxy;
+static const char * paramHelp[] = {
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "ColorProperty" ) \
+  HTML_HELP_DEF( "default", "\"viewColor\"" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicates the property to compute." \
+  HTML_HELP_CLOSE(),
+};
+
+tlp::ColorAlgorithm::ColorAlgorithm (const tlp::AlgorithmContext &context):tlp::Algorithm(context), colorResult(NULL) {
+  addOutParameter<tlp::ColorProperty>("result", paramHelp[0],
+				      "viewColor");
+  if (dataSet != NULL)
+    dataSet->get("result", colorResult);
 }
 
 tlp::ColorAlgorithm::~ColorAlgorithm() {

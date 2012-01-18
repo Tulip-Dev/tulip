@@ -20,8 +20,20 @@
 #include <tulip/LayoutAlgorithm.h>
 #include <tulip/LayoutProperty.h>
 
-tlp::LayoutAlgorithm::LayoutAlgorithm (const tlp::AlgorithmContext & context):tlp::PropertyAlgorithm(context) {
-  layoutResult = (tlp::LayoutProperty *)context.propertyProxy;
+static const char * paramHelp[] = {
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "LayoutProperty" ) \
+  HTML_HELP_DEF( "default", "\"viewLayout\"" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicates the property to compute." \
+  HTML_HELP_CLOSE(),
+};
+
+tlp::LayoutAlgorithm::LayoutAlgorithm (const tlp::AlgorithmContext & context):tlp::Algorithm(context), layoutResult(NULL) {
+  addOutParameter<tlp::LayoutProperty>("result", paramHelp[0],
+				       "viewLayout");
+  if (dataSet != NULL)
+    dataSet->get("result", layoutResult);
 }
 
 tlp::LayoutAlgorithm::~LayoutAlgorithm() {}

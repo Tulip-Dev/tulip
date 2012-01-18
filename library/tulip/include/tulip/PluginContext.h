@@ -49,14 +49,9 @@ public :
    * @brief Additional informations, such as the value of the plug-in's parameters, if any.
    **/
   DataSet *dataSet;
-  /**
-   * @brief A property the property plug-in can modify freely.
-   * No other property should be modified.
-   **/
-  PropertyInterface *propertyProxy;
   ///
   AlgorithmContext ():
-    graph(NULL),pluginProgress(NULL), dataSet(NULL), propertyProxy(NULL) {}
+    graph(NULL),pluginProgress(NULL), dataSet(NULL) {}
   ///
   ~AlgorithmContext() {}
 };

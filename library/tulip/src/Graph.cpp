@@ -707,6 +707,13 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   else
     tmpProgress=progress;
 
+  bool hasData = data != NULL;
+  if (!hasData)
+    data = new tlp::DataSet();
+
+  // add prop as result in dataset
+  data->set<PropertyInterface *>("result", prop);
+
   context.pluginProgress = tmpProgress;
   context.graph = this;
   context.dataSet = data;
@@ -714,7 +721,6 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   tlp::Observable::holdObservers();
   circularCalls.insert(prop);
   tlp::AlgorithmContext tmpContext(context);
-  tmpContext.propertyProxy = prop;
   Algorithm *tmpAlgo =
     AlgorithmPlugin::factory->getPluginObject(algorithm, tmpContext);
 
@@ -736,6 +742,12 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   tlp::Observable::unholdObservers();
 
   if (progress==0) delete tmpProgress;
+
+  if (hasData)
+    // remove result from dataset
+    data->remove("result");
+  else
+    delete data;
 
   return result;
 }

@@ -66,7 +66,7 @@ public :
   static bool changeProperty(Graph *graph, QWidget *parent,
                              const std::string& name,
                              const std::string& destination,
-                             PropertyInterface* tmp,
+                             const std::string& destinationType,
                              View *view = NULL,
                              DataSet dataSet = DataSet(),
                              bool query = true,

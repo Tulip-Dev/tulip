@@ -345,12 +345,12 @@ void MainController::setData(Graph *graph,DataSet dataSet) {
   Iterator<node>* itn = newGraph->getProperty<LayoutProperty>("viewLayout")->getNonDefaultValuatedNodes();
 
   if (!itn->hasNext() && newGraph->numberOfNodes()>1) {
+    string errorMsg;
     DataSet dataSet;
-    dataSet.set<bool>("3D layout",false);
-    LayoutProperty tmp(newGraph);
-    ControllerAlgorithmTools::changeProperty(newGraph, mainWindowFacade.getParentWidget(),
-        "Random", "viewLayout", &tmp, NULL,
-        dataSet, false, false, false);
+    dataSet.set<bool>("3D layout", false);
+    newGraph->applyPropertyAlgorithm("Random",
+				    newGraph->getLocalProperty<LayoutProperty>("viewLayout"),
+				    errorMsg, NULL, &dataSet);
   }
 
   delete itn;

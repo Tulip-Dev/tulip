@@ -20,10 +20,11 @@
 #ifndef TULIP_SIZESALGO_H
 #define TULIP_SIZESALGO_H
 
-#include <tulip/PropertyAlgorithm.h>
+#include <tulip/Algorithm.h>
 
 namespace tlp {
 
+class AlgorithmContext;
 class SizeProperty;
 
 /**
@@ -31,7 +32,7 @@ class SizeProperty;
  */
 /*@{*/
 /// Interface for sizes plug-ins
-class TLP_SCOPE SizeAlgorithm:public PropertyAlgorithm {
+ class TLP_SCOPE SizeAlgorithm : public tlp::Algorithm {
   ///
   friend class SizeProperty;
 public:

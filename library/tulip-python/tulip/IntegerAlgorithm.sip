@@ -30,14 +30,14 @@
 %End
 
 namespace tlp {
-class IntegerAlgorithm : tlp::PropertyAlgorithm {
+class IntegerAlgorithm : tlp::Algorithm {
 %TypeHeaderCode
 #include <tulip/IntegerAlgorithm.h>
 %End
 public:
 
 %Docstring
-Bases: :class:`tlp.PropertyAlgorithm`
+Bases: :class:`tlp.Algorithm`
 
 This class is the base interface for integer plugins.
 

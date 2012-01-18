@@ -67,9 +67,9 @@ public:
   bool run();
 
 private:
-  tlp::SizeProperty*         size;
+  tlp::SizeProperty*         sizeResult;
   tlp::DoubleProperty*       metric;
-  tlp::IntegerProperty*      glyph;
+  tlp::IntegerProperty*      glyphResult;
   tlp::MutableContainer<double>    nodesSize;
   bool shneidermanTreeMap;
   double aspectRatio;

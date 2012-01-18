@@ -106,11 +106,11 @@ bool TreeLeaf::run() {
     pluginProgress->showPreview(false);
 
   // push a temporary graph state (not redoable)
-  graph->push(false);
-
-  // but ensure layoutResult will be preserved
+  // preserving layout updates
+  std::vector<PropertyInterface*> propsToPreserve;
   if (layoutResult->getName() != "")
-    preservePropertyUpdates(layoutResult);
+    propsToPreserve.push_back(layoutResult);
+  graph->push(false, &propsToPreserve);
 
   Graph *tree = TreeTest::computeTree(graph, pluginProgress);
 

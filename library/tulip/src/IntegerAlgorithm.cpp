@@ -20,7 +20,8 @@
 #include <tulip/IntegerAlgorithm.h>
 #include <tulip/IntegerProperty.h>
 
-tlp::IntegerAlgorithm::IntegerAlgorithm (const tlp::AlgorithmContext & context):tlp::PropertyAlgorithm(context) {
-  integerResult =(tlp::IntegerProperty *)context.propertyProxy;
+tlp::IntegerAlgorithm::IntegerAlgorithm (const tlp::PropertyContext & context):tlp::Algorithm(context), integerResult(NULL) {
+  if (dataSet != NULL)
+    dataSet->get("result", integerResult);
 }
 

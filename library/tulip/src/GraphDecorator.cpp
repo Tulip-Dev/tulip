@@ -487,10 +487,6 @@ void GraphDecorator::pop(bool unpopAllowed) {
   return graph_component->pop(unpopAllowed);
 }
 //----------------------------------------------------------------
-bool GraphDecorator::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
-  return graph_component->nextPopKeepPropertyUpdates(prop);
-}
-//----------------------------------------------------------------
 void GraphDecorator::unpop() {
   return graph_component->unpop();
 }

@@ -30,14 +30,14 @@
 %End
 
 namespace tlp {
-class ColorAlgorithm : tlp::PropertyAlgorithm {
+class ColorAlgorithm : tlp::Algorithm {
 %TypeHeaderCode
 #include <tulip/ColorAlgorithm.h>
 %End
 public:
 
 %Docstring
-Bases: :class:`tlp.PropertyAlgorithm`
+Bases: :class:`tlp.Algorithm`
 
 This class is the base interface for color plugins.
 

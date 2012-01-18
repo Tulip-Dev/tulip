@@ -694,13 +694,6 @@ public:
    */
   virtual void pop(bool unpopAllowed = true)=0;
   /*
-   * Indicates that next updates of the property given in argument
-   * will be preserved during the next call of the pop method.
-   * Returns false if updates of that property are already recorded
-   * since the last call of the push method.
-   */
-  virtual bool nextPopKeepPropertyUpdates(PropertyInterface* prop)=0;
-  /*
    * Marks again the current state of the root graph hierarchy
    * and replays the last updates previously undone.
    */

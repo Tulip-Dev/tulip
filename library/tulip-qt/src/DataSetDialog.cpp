@@ -484,11 +484,15 @@ struct QParamDialog : public QDialog {
   bool fillIn(const DataSet *inSet, Graph* inG) {
     //
     // Parse inDef
+    // non input parameters
+    // are display after the input parameters
+    // so store in another vector
+    IParamA outparamA;
 
     Iterator<ParameterDescription> * paramIt = inDef.getParameters();
-
     while( paramIt->hasNext() ) {
       ParameterDescription param = paramIt->next();
+
       IParam ip;
       ip.name     = param.getName();
       ip.typeName = param.getTypeName();
@@ -498,9 +502,9 @@ struct QParamDialog : public QDialog {
       std::string::size_type pos = ip.name.find("::");
 
       if (pos != std::string::npos)
-        ip.label = new QLabel(ip.name.substr(pos + 2, ip.name.length() - pos - 2).c_str(), parametersPanel);
+	ip.label = new QLabel(ip.name.substr(pos + 2, ip.name.length() - pos - 2).c_str(), parametersPanel);
       else
-        ip.label    = new QLabel( ip.name.c_str(), parametersPanel);
+	ip.label    = new QLabel( ip.name.c_str(), parametersPanel);
 
       ip.label->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
       ip.label->installEventFilter( this );
@@ -511,313 +515,318 @@ struct QParamDialog : public QDialog {
 
       // bool
       if(   ip.typeName == TN(bool) ) {
-        QCheckBox * cb = new QCheckBox( parametersPanel);
-        QSize size = cb->size();
-        size.setHeight(size.height() + 5);
-        cb->resize(size);
-        ip.wA.push_back( cb );
-        // no offset
-        ip.offY[ip.offY.size() - 1] = 0;
+	QCheckBox * cb = new QCheckBox( parametersPanel);
+	QSize size = cb->size();
+	size.setHeight(size.height() + 5);
+	cb->resize(size);
+	ip.wA.push_back( cb );
+	// no offset
+	ip.offY[ip.offY.size() - 1] = 0;
 
-        if( inSet ) {
-          bool isOn;
+	if( inSet ) {
+	  bool isOn;
 
-          if( inSet->get
-              (ip.name,isOn) )
-            cb->setChecked( isOn );
-        }
+	  if( inSet->get
+	      (ip.name,isOn) )
+	    cb->setChecked( isOn );
+	}
       }
 
       // int
       if(ip.typeName == TN(int)
-          || ip.typeName == TN(unsigned int)  ) {
-        QIntValidator * intValidator = new QIntValidator( parametersPanel );
+	 || ip.typeName == TN(unsigned int)  ) {
+	QIntValidator * intValidator = new QIntValidator( parametersPanel );
 
-        if( ip.typeName == TN(unsigned int) )
-          intValidator->setBottom( 0 );
+	if( ip.typeName == TN(unsigned int) )
+	  intValidator->setBottom( 0 );
 
-        QLineEdit * le = new QLineEdit( "0", parametersPanel );
-        le->setValidator( intValidator );
-        ip.wA.push_back( le );
+	QLineEdit * le = new QLineEdit( "0", parametersPanel );
+	le->setValidator( intValidator );
+	ip.wA.push_back( le );
 
-        if( inSet ) {
-          if( ip.typeName == TN(unsigned int) ) {
-            unsigned int v;
+	if( inSet ) {
+	  if( ip.typeName == TN(unsigned int) ) {
+	    unsigned int v;
 
-            if( inSet->get(ip.name,v) )
-              le->setText( QString("%1").arg(v) );
-          }
-          else {
-            int v;
+	    if( inSet->get(ip.name,v) )
+	      le->setText( QString("%1").arg(v) );
+	  }
+	  else {
+	    int v;
 
-            if( inSet->get(ip.name,v) )
-              le->setText( QString("%1").arg(v) );
-          }
-        }
+	    if( inSet->get(ip.name,v) )
+	      le->setText( QString("%1").arg(v) );
+	  }
+	}
       }
 
       // fp
       if (ip.typeName == TN(float)
-          || ip.typeName == TN(double)) {
-        QValidator* fpValidator = new QDoubleValidator( parametersPanel );
+	  || ip.typeName == TN(double)) {
+	QValidator* fpValidator = new QDoubleValidator( parametersPanel );
 
-        QLineEdit * le = new QLineEdit( "0", parametersPanel );
-        le->setValidator( fpValidator );
-        ip.wA.push_back( le );
+	QLineEdit * le = new QLineEdit( "0", parametersPanel );
+	le->setValidator( fpValidator );
+	ip.wA.push_back( le );
 
-        if( inSet ) {
-          std::stringstream tmp;
+	if( inSet ) {
+	  std::stringstream tmp;
 
-          if (ip.typeName == TN(float)) {
-            float v;
+	  if (ip.typeName == TN(float)) {
+	    float v;
 
-            if( inSet->get(ip.name,v) ) {
-              tmp << v;
-              le->setText( tmp.str().c_str() );
-            }
-          }
-          else {
-            double d;
+	    if( inSet->get(ip.name,v) ) {
+	      tmp << v;
+	      le->setText( tmp.str().c_str() );
+	    }
+	  }
+	  else {
+	    double d;
 
-            if (inSet->get(ip.name, d)) {
-              tmp << d;
-              le->setText( tmp.str().c_str()  );
-            }
-          }
-        }
+	    if (inSet->get(ip.name, d)) {
+	      tmp << d;
+	      le->setText( tmp.str().c_str()  );
+	    }
+	  }
+	}
       }
       // string
       else if( ip.typeName == TN(std::string) ) {
-        // if text prefixed than create a QTextEdit
-        if (ip.name.find("text::") != std::string::npos) {
-          QTextEdit *te = new QTextEdit(QString(""),
-                                        parametersPanel);
-          te->resize(te->width() * 3, te->height()*3);
-          ip.wA.push_back(te);
+	// if text prefixed than create a QTextEdit
+	if (ip.name.find("text::") != std::string::npos) {
+	  QTextEdit *te = new QTextEdit(QString(""),
+					parametersPanel);
+	  te->resize(te->width() * 3, te->height()*3);
+	  ip.wA.push_back(te);
 
-          if( inSet ) {
-            std::string v;
+	  if( inSet ) {
+	    std::string v;
 
-            if( inSet->get
-                (ip.name, v) )
-              te->setText(QString::fromUtf8(v.c_str()));
-          }
-        }
-        else {
-          QLineEdit * le = new QLineEdit( "", parametersPanel );
-          le->resize( le->width()*3, le->height() );
-          ip.wA.push_back( le );
-          // no offset
-          ip.offY[ip.offY.size() - 1] = 0;
+	    if( inSet->get
+		(ip.name, v) )
+	      te->setText(QString::fromUtf8(v.c_str()));
+	  }
+	}
+	else {
+	  QLineEdit * le = new QLineEdit( "", parametersPanel );
+	  le->resize( le->width()*3, le->height() );
+	  ip.wA.push_back( le );
+	  // no offset
+	  ip.offY[ip.offY.size() - 1] = 0;
 
-          if( inSet ) {
-            std::string v;
+	  if( inSet ) {
+	    std::string v;
 
-            if( inSet->get
-                (ip.name, v) )
-              le->setText(QString::fromUtf8(v.c_str()));
-          }
+	    if( inSet->get
+		(ip.name, v) )
+	      le->setText(QString::fromUtf8(v.c_str()));
+	  }
 
-          if ((ip.name.find("file::") == 0) ||
-              (ip.name.find("dir::") == 0)) {
-            QToolButton * opt = new QToolButton( parametersPanel );
-            opt->setText( "..." );
-            opt->adjustSize();
-            opt->resize( opt->width(), le->height() );
-            ip.opt = opt;
-            // offset
-            ip.offY.push_back(0);
-            opt->installEventFilter( this );
-            ip.wA.push_back( opt );
-          }
-        }
+	  if ((ip.name.find("file::") == 0) ||
+	      (ip.name.find("dir::") == 0)) {
+	    QToolButton * opt = new QToolButton( parametersPanel );
+	    opt->setText( "..." );
+	    opt->adjustSize();
+	    opt->resize( opt->width(), le->height() );
+	    ip.opt = opt;
+	    // offset
+	    ip.offY.push_back(0);
+	    opt->installEventFilter( this );
+	    ip.wA.push_back( opt );
+	  }
+	}
       }
 
       // Color
       else if( ip.typeName == TN(Color) ) {
-        QValidator* intValidator = new QIntValidator( 0, 255, parametersPanel );
-        QLabel    * lbR = new QLabel( "R", parametersPanel );
-        QLabel    * lbG = new QLabel( "G", parametersPanel );
-        QLabel    * lbB = new QLabel( "B", parametersPanel );
-        QLabel    * lbA = new QLabel( "A", parametersPanel );
-        lbR->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        lbG->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        lbB->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        lbA->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        lbR->resize( 16, lbR->height() );
-        lbG->resize( 16, lbG->height() );
-        lbB->resize( 16, lbB->height() );
-        lbA->resize( 16, lbA->height() );
-        QLineEdit * leR = new QLineEdit( 0, parametersPanel );
-        QLineEdit * leG = new QLineEdit( 0, parametersPanel );
-        QLineEdit * leB = new QLineEdit( 0, parametersPanel );
-        QLineEdit * leA = new QLineEdit( 0, parametersPanel );
-        leR->setValidator( intValidator );
-        leG->setValidator( intValidator );
-        leB->setValidator( intValidator );
-        leA->setValidator( intValidator );
-        QToolButton * opt = new QToolButton( parametersPanel );
-        opt->setText( "..." );
-        opt->adjustSize();
-        opt->resize( opt->width(), lbR->height() );
-        ip.wA.push_back( leR );
-        ip.wA.push_back( lbR );
-        ip.offY.push_back(4);
-        ip.wA.push_back( leG );
-        ip.offY.push_back(4);
-        ip.wA.push_back( lbG );
-        ip.offY.push_back(4);
-        ip.wA.push_back( leB );
-        ip.offY.push_back(4);
-        ip.wA.push_back( lbB );
-        ip.offY.push_back(4);
-        ip.wA.push_back( leA );
-        ip.offY.push_back(4);
-        ip.wA.push_back( lbA );
-        ip.offY.push_back(4);
-        ip.wA.push_back( opt );
-        // no offset
-        ip.offY.push_back(0);
-        ip.opt = opt;
-        opt->installEventFilter( this );
-        Color v(255,255,255,255);
+	QValidator* intValidator = new QIntValidator( 0, 255, parametersPanel );
+	QLabel    * lbR = new QLabel( "R", parametersPanel );
+	QLabel    * lbG = new QLabel( "G", parametersPanel );
+	QLabel    * lbB = new QLabel( "B", parametersPanel );
+	QLabel    * lbA = new QLabel( "A", parametersPanel );
+	lbR->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	lbG->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	lbB->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	lbA->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	lbR->resize( 16, lbR->height() );
+	lbG->resize( 16, lbG->height() );
+	lbB->resize( 16, lbB->height() );
+	lbA->resize( 16, lbA->height() );
+	QLineEdit * leR = new QLineEdit( 0, parametersPanel );
+	QLineEdit * leG = new QLineEdit( 0, parametersPanel );
+	QLineEdit * leB = new QLineEdit( 0, parametersPanel );
+	QLineEdit * leA = new QLineEdit( 0, parametersPanel );
+	leR->setValidator( intValidator );
+	leG->setValidator( intValidator );
+	leB->setValidator( intValidator );
+	leA->setValidator( intValidator );
+	QToolButton * opt = new QToolButton( parametersPanel );
+	opt->setText( "..." );
+	opt->adjustSize();
+	opt->resize( opt->width(), lbR->height() );
+	ip.wA.push_back( leR );
+	ip.wA.push_back( lbR );
+	ip.offY.push_back(4);
+	ip.wA.push_back( leG );
+	ip.offY.push_back(4);
+	ip.wA.push_back( lbG );
+	ip.offY.push_back(4);
+	ip.wA.push_back( leB );
+	ip.offY.push_back(4);
+	ip.wA.push_back( lbB );
+	ip.offY.push_back(4);
+	ip.wA.push_back( leA );
+	ip.offY.push_back(4);
+	ip.wA.push_back( lbA );
+	ip.offY.push_back(4);
+	ip.wA.push_back( opt );
+	// no offset
+	ip.offY.push_back(0);
+	ip.opt = opt;
+	opt->installEventFilter( this );
+	Color v(255,255,255,255);
 
-        if( !inSet || !inSet->get
-            (ip.name,v) )
-          v = Color(255,255,255,255);
+	if( !inSet || !inSet->get
+	    (ip.name,v) )
+	  v = Color(255,255,255,255);
 
-        leR->setText( QString("%1").arg(v.getR()) );
-        leG->setText( QString("%1").arg(v.getG()) );
-        leB->setText( QString("%1").arg(v.getB()) );
-        leA->setText( QString("%1").arg(v.getA()) );
-        QPalette palette;
-        palette.setColor(QPalette::Button, QColor(v.getR(), v.getG(), v.getB()));
-        opt->setPalette(palette);
+	leR->setText( QString("%1").arg(v.getR()) );
+	leG->setText( QString("%1").arg(v.getG()) );
+	leB->setText( QString("%1").arg(v.getB()) );
+	leA->setText( QString("%1").arg(v.getA()) );
+	QPalette palette;
+	palette.setColor(QPalette::Button, QColor(v.getR(), v.getG(), v.getB()));
+	opt->setPalette(palette);
       }
 
       // Size
       else if( ip.typeName == TN(Size) ) {
-        QValidator* intValidator = new QDoubleValidator( parametersPanel );
-        QLabel    * lbW = new QLabel( "W", parametersPanel );
-        QLabel    * lbH = new QLabel( "H", parametersPanel );
-        QLabel    * lbD = new QLabel( "D", parametersPanel );
-        lbW->resize( 16, lbW->height() );
-        lbH->resize( 16, lbH->height() );
-        lbD->resize( 16, lbD->height() );
-        QLineEdit * leW = new QLineEdit( 0, parametersPanel );
-        QLineEdit * leH = new QLineEdit( 0, parametersPanel );
-        QLineEdit * leD = new QLineEdit( 0, parametersPanel );
-        leW->setValidator( intValidator );
-        leH->setValidator( intValidator );
-        leD->setValidator( intValidator );
-        ip.wA.push_back( leW );
-        ip.offY.push_back(4);
-        ip.wA.push_back( lbW );
-        ip.offY.push_back(4);
-        ip.wA.push_back( leH );
-        ip.offY.push_back(4);
-        ip.wA.push_back( lbH );
-        ip.offY.push_back(4);
-        ip.wA.push_back( leD );
-        ip.offY.push_back(4);
-        ip.wA.push_back( lbD );
-        ip.offY.push_back(4);
-        Size v(0,0,0);
+	QValidator* intValidator = new QDoubleValidator( parametersPanel );
+	QLabel    * lbW = new QLabel( "W", parametersPanel );
+	QLabel    * lbH = new QLabel( "H", parametersPanel );
+	QLabel    * lbD = new QLabel( "D", parametersPanel );
+	lbW->resize( 16, lbW->height() );
+	lbH->resize( 16, lbH->height() );
+	lbD->resize( 16, lbD->height() );
+	QLineEdit * leW = new QLineEdit( 0, parametersPanel );
+	QLineEdit * leH = new QLineEdit( 0, parametersPanel );
+	QLineEdit * leD = new QLineEdit( 0, parametersPanel );
+	leW->setValidator( intValidator );
+	leH->setValidator( intValidator );
+	leD->setValidator( intValidator );
+	ip.wA.push_back( leW );
+	ip.offY.push_back(4);
+	ip.wA.push_back( lbW );
+	ip.offY.push_back(4);
+	ip.wA.push_back( leH );
+	ip.offY.push_back(4);
+	ip.wA.push_back( lbH );
+	ip.offY.push_back(4);
+	ip.wA.push_back( leD );
+	ip.offY.push_back(4);
+	ip.wA.push_back( lbD );
+	ip.offY.push_back(4);
+	Size v(0,0,0);
 
-        if( !inSet || !inSet->get
-            (ip.name,v) )
-          v = Size(0,0,0);
+	if( !inSet || !inSet->get
+	    (ip.name,v) )
+	  v = Size(0,0,0);
 
-        leW->setText( QString("%1").arg(v.getW()) );
-        leH->setText( QString("%1").arg(v.getH()) );
-        leD->setText( QString("%1").arg(v.getD()) );
+	leW->setText( QString("%1").arg(v.getW()) );
+	leH->setText( QString("%1").arg(v.getH()) );
+	leD->setText( QString("%1").arg(v.getD()) );
       }
 
       // PropertyInterface* or Typed Proxy
       else if (inG &&
-               (ip.typeName == TN(PropertyInterface*)
-                || ip.typeName == TN(BooleanProperty)
-                || ip.typeName == TN(DoubleProperty)
-                || ip.typeName == TN(LayoutProperty)
-                || ip.typeName == TN(StringProperty)
-                || ip.typeName == TN(IntegerProperty)
-                || ip.typeName == TN(SizeProperty)
-                || ip.typeName == TN(ColorProperty))) {
-        stringA proxyA;
-        PropertyInterface * curProxy = 0;
+	       (ip.typeName == TN(PropertyInterface*)
+		|| ip.typeName == TN(BooleanProperty)
+		|| ip.typeName == TN(DoubleProperty)
+		|| ip.typeName == TN(LayoutProperty)
+		|| ip.typeName == TN(StringProperty)
+		|| ip.typeName == TN(IntegerProperty)
+		|| ip.typeName == TN(SizeProperty)
+		|| ip.typeName == TN(ColorProperty))) {
+	stringA proxyA;
+	PropertyInterface * curProxy = 0;
 
-        if( !inSet || !inSet->get
-            (ip.name,curProxy) )
-          curProxy = 0;
+	if( !inSet || !inSet->get
+	    (ip.name,curProxy) )
+	  curProxy = 0;
 
-        int curIdx;
+	int curIdx;
 
-        if (ip.typeName == TN(PropertyInterface*))
-          curIdx = getAllProperties( proxyA, inG, curProxy );
-        else
-          curIdx = getPropertyOf( proxyA, inG, ip.typeName, curProxy );
+	if (ip.typeName == TN(PropertyInterface*))
+	  curIdx = getAllProperties( proxyA, inG, curProxy );
+	else
+	  curIdx = getPropertyOf( proxyA, inG, ip.typeName, curProxy );
 
-        if( !proxyA.empty() ) {
-          QComboBox * cb = new QComboBox( parametersPanel );
+	if( !proxyA.empty() ) {
+	  QComboBox * cb = new QComboBox( parametersPanel );
 
-          for( unsigned int i = 0 ; i < proxyA.size() ; i++ )
-            cb->addItem(QString::fromUtf8(proxyA[i].c_str()));
+	  for( unsigned int i = 0 ; i < proxyA.size() ; i++ )
+	    cb->addItem(QString::fromUtf8(proxyA[i].c_str()));
 
-          ip.wA.push_back( cb );
+	  ip.wA.push_back( cb );
 
-          // if property is not mandatory, insert None
-          if (!param.isMandatory()) {
-            cb->insertItem(0, QString(NONE_PROP));
+	  // if property is not mandatory, insert None
+	  if (!param.isMandatory()) {
+	    cb->insertItem(0, QString(NONE_PROP));
 
-            if ( curIdx >= 0 )
-              ++curIdx;
-          }
+	    if ( curIdx >= 0 )
+	      ++curIdx;
+	  }
 
-          if (curIdx >= 0)
-            cb->setCurrentIndex( curIdx );
-          else
-            cb->setCurrentIndex(0);
-        }
+	  if (curIdx >= 0)
+	    cb->setCurrentIndex( curIdx );
+	  else
+	    cb->setCurrentIndex(0);
+	}
       }
       // StringCollection
       else if(ip.typeName == TN (StringCollection) ) {
-        std::string valueCollection =  param.getDefaultValue();
-        StringCollection stringCol(valueCollection);
-        QComboBox * cb = new QComboBox( parametersPanel );
+	std::string valueCollection =  param.getDefaultValue();
+	StringCollection stringCol(valueCollection);
+	QComboBox * cb = new QComboBox( parametersPanel );
 
-        for(unsigned int i=0; i < stringCol.size(); i++ ) {
-          cb->addItem(QString::fromUtf8(stringCol[i].c_str()));
-        }
+	for(unsigned int i=0; i < stringCol.size(); i++ ) {
+	  cb->addItem(QString::fromUtf8(stringCol[i].c_str()));
+	}
 
-        cb->setCurrentIndex(0);
-        ip.wA.push_back( cb );
+	cb->setCurrentIndex(0);
+	ip.wA.push_back( cb );
       }
 
       // ColorScale
       else if(ip.typeName == TN (ColorScale) ) {
-        ColorScale colorScale;
-        inSet->get(ip.name,colorScale);
-        ColorScalePushButton *button=new ColorScalePushButton("Color Scale", colorScale, parametersPanel);
-        ip.wA.push_back(button);
+	ColorScale colorScale;
+	inSet->get(ip.name,colorScale);
+	ColorScalePushButton *button=new ColorScalePushButton("Color Scale", colorScale, parametersPanel);
+	ip.wA.push_back(button);
       }
 
-      if( ip.wA.size() )
-        iparamA.push_back( ip );
-      else
-        delete ip.label;
+      if( ip.wA.size() ) {
+	if (param.getDirection() == IN_PARAM)
+	  iparamA.push_back(ip);
+	else
+	  outparamA.push_back(ip);
+      } else
+	delete ip.label;
     }
-
     delete paramIt;
+
+    // add non input parameters at the end
+    for (unsigned int i = 0; i < outparamA.size(); ++i)
+      iparamA.push_back(outparamA[i]);
 
     if( iparamA.size() == 0 )
       return false;
-
 
     // Layout'ing
 
     int labelWidthMax = 0;
 
-    for( unsigned int i = 0 ; i < iparamA.size() ; i++ ) {
+    for( unsigned int i = 0 ; i < iparamA.size() ; ++i) {
       iparamA[i].label->adjustSize();
       int lWidth = iparamA[i].label->width();
 

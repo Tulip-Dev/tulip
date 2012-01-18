@@ -30,14 +30,14 @@
 %End
 
 namespace tlp {
-class SizeAlgorithm : tlp::PropertyAlgorithm {
+class SizeAlgorithm : tlp::Algorithm {
 %TypeHeaderCode
 #include <tulip/SizeAlgorithm.h>
 %End
 public:
 
 %Docstring
-Bases: :class:`tlp.PropertyAlgorithm`
+Bases: :class:`tlp.Algorithm`
 
 This class is the base interface for size plugins.
 

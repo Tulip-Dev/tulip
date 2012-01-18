@@ -20,7 +20,7 @@
 #ifndef TULIP_COLORSALGO_H
 #define TULIP_COLORSALGO_H
 
-#include <tulip/PropertyAlgorithm.h>
+#include <tulip/Algorithm.h>
 
 namespace tlp {
 
@@ -29,7 +29,7 @@ class ColorProperty;
 /** \addtogroup plugins */
 /*@{*/
 /// Interface for color plug-ins
-class TLP_SCOPE ColorAlgorithm:public PropertyAlgorithm {
+class TLP_SCOPE ColorAlgorithm : public tlp::Algorithm {
   ///
   friend class ColorProperty;
 public:

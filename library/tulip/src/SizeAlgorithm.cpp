@@ -20,6 +20,18 @@
 #include <tulip/SizeAlgorithm.h>
 #include <tulip/SizeProperty.h>
 
-tlp::SizeAlgorithm::SizeAlgorithm (const tlp::AlgorithmContext &context):tlp::PropertyAlgorithm(context) {
-  sizeResult = (tlp::SizeProperty *)context.propertyProxy;
+static const char * paramHelp[] = {
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "SizeProperty" ) \
+  HTML_HELP_DEF( "default", "\"viewSize\"" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicates the property to compute." \
+  HTML_HELP_CLOSE(),
+};
+
+tlp::SizeAlgorithm::SizeAlgorithm (const tlp::AlgorithmContext &context):tlp::Algorithm(context), sizeResult(NULL) {
+  addOutParameter<tlp::SizeProperty>("result", paramHelp[0],
+				     "viewSize");
+  if (dataSet != NULL)
+    dataSet->get("result", sizeResult);
 }

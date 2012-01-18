@@ -26,7 +26,8 @@
 #include <tulip/MutableContainer.h>
 #include <tulip/PropertyInterface.h>
 #include <tulip/Iterator.h>
-#include <tulip/PropertyAlgorithm.h>
+#include <tulip/Algorithm.h>
+#include <tulip/Graph.h>
 #include <tulip/TemplateFactory.h>
 #include <tulip/Reflect.h>
 
@@ -46,12 +47,12 @@ class GraphView;
  * - Tnode node value
  * - Tedge edge value
  *
- * An AbstractProperty can be connected or not to a PropertyAlgorithm.
+ * An AbstractProperty can be connected or not to a Algorithm.
  * In the first case it can be seen as buffer beetween the property and the user.
  * In the second case it is only a memory area for storing data.
  * An AbstractProperty is an Observable (through PropertyInterface), so it can be observed by others objects.
  */
-template <class Tnode, class Tedge, class TPROPERTY = PropertyAlgorithm >
+template <class Tnode, class Tedge, class TPROPERTY = Algorithm >
 class TLP_SCOPE AbstractProperty : public PropertyInterface {
   friend class Graph;
   friend class GraphView;
@@ -436,7 +437,6 @@ public:
   };
 
 protected:
-  typedef PropertyAlgorithm PAlgorithm;
   //=================================================================================
   ///Enable to clone part of sub_class
   virtual void clone_handler(AbstractProperty<Tnode,Tedge,TPROPERTY> &) {}

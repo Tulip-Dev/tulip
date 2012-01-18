@@ -60,16 +60,26 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "default", "2" ) \
   HTML_HELP_BODY() \
   "This parameter defines the minimum x-spacing between any two nodes or between a node and an edge." \
-  HTML_HELP_CLOSE()
+  HTML_HELP_CLOSE(),
+  // node shape
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Integer" ) \
+  HTML_HELP_DEF( "values", "An existing shape property" ) \
+  HTML_HELP_DEF( "default", "viewShape" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the property used as node's shape." \
+  HTML_HELP_CLOSE(),
 };
 }
 #define ORIENTATION "vertical;horizontal;"
 //====================================================
 MixedModel::MixedModel(const tlp::PropertyContext &context):LayoutAlgorithm(context)  {
-  addNodeSizePropertyParameter(this);
+  addNodeSizePropertyParameter(this, true /* inout */);
   addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
   addParameter<float> ("y node-node spacing",paramHelp[1],"2");
   addParameter<float> ("x node-node and edge-node spacing",paramHelp[2],"2");
+  addOutParameter<IntegerProperty>("node shape", paramHelp[3],
+				   "viewShape");
   addDependency<LayoutAlgorithm>("Connected Component Packing", "1.0");
 }
 //====================================================
@@ -77,11 +87,12 @@ MixedModel::~MixedModel() {
 }
 //====================================================
 bool MixedModel::run() {
-  size = graph->getProperty<SizeProperty>("viewSize");
   string orientation = "vertical";
-
+  sizeResult = NULL;
+  glyphResult = NULL;
+  
   if (dataSet!=0) {
-    getNodeSizePropertyParameter(dataSet, size);
+    getNodeSizePropertyParameter(dataSet, sizeResult);
     StringCollection tmp;
 
     if (dataSet->get("orientation", tmp)) {
@@ -90,26 +101,25 @@ bool MixedModel::run() {
 
     dataSet->get("y node-node spacing",spacing);
     dataSet->get("x node-node and edge-node spacing",edgeNodeSpacing);
+    dataSet->get("node shape", glyphResult);
   }
-
-  // ensure size updates will be kept after a pop
-  preservePropertyUpdates(size);
+  if (sizeResult == NULL)
+    sizeResult = graph->getProperty<SizeProperty>("viewSize");
+  if (glyphResult == NULL)
+    glyphResult = graph->getLocalProperty<IntegerProperty>("viewShape");
+	  
 
   //=========================================================
   //rotate size if necessary
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
-      const Size& tmp = size->getNodeValue(n);
-      size->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      const Size& tmp = sizeResult->getNodeValue(n);
+      sizeResult->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
   }
 
-  //===========================================================
-  IntegerProperty * intProxy = graph->getProperty<IntegerProperty>("viewShape");
-  // ensure shape updates will be kept after a pop
-  preservePropertyUpdates(intProxy);
-  intProxy->setAllEdgeValue(0);
+  glyphResult->setAllEdgeValue(0);
 
   // give some empirical feedback of what we are doing 1 %
   pluginProgress->progress(1, 1000);
@@ -146,15 +156,15 @@ bool MixedModel::run() {
     else if(currentGraph->numberOfNodes() == 2 || currentGraph->numberOfNodes() == 3) {
       Iterator<node> * itn = currentGraph->getNodes();
       node n = itn->next();
-      Coord c(currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n));
+      Coord c(sizeResult->getNodeValue(n));
       layoutResult->setNodeValue(n, Coord(0,0,0));
       node n2 = itn->next();
-      Coord c2(currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n2));
+      Coord c2(sizeResult->getNodeValue(n2));
       layoutResult->setNodeValue(n2, Coord(spacing + c.getX()/2+c2.getX()/2,0,0));
 
       if(currentGraph->numberOfNodes() == 3) {
         node n3 = itn->next();
-        Coord c3(currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n2));
+        Coord c3(sizeResult->getNodeValue(n2));
         layoutResult->setNodeValue(n3, Coord(2.f * spacing + c.getX()/2.f + c2.getX()+c3.getX()/2.f,0,0));
         edge e = currentGraph->existEdge(n,n3, false);
 
@@ -346,8 +356,8 @@ bool MixedModel::run() {
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
-      const Size& tmp = size->getNodeValue(n);
-      size->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      const Size& tmp = sizeResult->getNodeValue(n);
+      sizeResult->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
       const Coord& tmpC = layoutResult->getNodeValue(n);
       layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
@@ -950,7 +960,7 @@ void MixedModel::computeCoords() {
 
   while(itn->hasNext()) {
     node n = itn->next();
-    Coord c(size->getNodeValue(n));
+    Coord c(sizeResult->getNodeValue(n));
     c[0] += edgeNodeSpacing;
     nodeSize.set(n.id, c);
   }

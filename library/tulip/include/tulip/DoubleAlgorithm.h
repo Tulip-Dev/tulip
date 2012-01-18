@@ -20,7 +20,7 @@
 #ifndef _METRICALGO_H
 #define _METRICALGO_H
 
-#include <tulip/PropertyAlgorithm.h>
+#include <tulip/Algorithm.h>
 
 namespace tlp {
 
@@ -29,7 +29,7 @@ class DoubleProperty;
 /** \addtogroup plugins */
 /*@{*/
 /// Interface for metric plug-ins
-class TLP_SCOPE DoubleAlgorithm:public PropertyAlgorithm {
+class TLP_SCOPE DoubleAlgorithm : public tlp::Algorithm {
   ///
   friend class DoubleProperty;
 public:
@@ -41,7 +41,7 @@ public:
 
 protected:
   ///
-  DoubleAlgorithm (const AlgorithmContext  &context);
+  DoubleAlgorithm (const AlgorithmContext &context);
 };
 /*@}*/
 

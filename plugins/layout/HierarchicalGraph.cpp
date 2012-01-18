@@ -48,7 +48,7 @@ const char * paramHelp[] = {
 #define ORIENTATION "horizontal;vertical;"
 //================================================================================
 HierarchicalGraph::HierarchicalGraph(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
-  addNodeSizePropertyParameter(this);
+  addNodeSizePropertyParameter(this, true /* inout */);
   addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
   addSpacingParameters(this);
   addDependency<DoubleAlgorithm>("Dag Level", "1.0");
@@ -379,10 +379,10 @@ bool HierarchicalGraph::run() {
   }
   */
   //=======================================================================
-  nodeSize = graph->getProperty<SizeProperty>("viewSize");
   orientation = "horizontal";
   spacing = 64.0;
   nodeSpacing = 18;
+  nodeSize = NULL;
 
   if (dataSet!=0) {
     getNodeSizePropertyParameter(dataSet, nodeSize);
@@ -393,9 +393,8 @@ bool HierarchicalGraph::run() {
       orientation = tmp.getCurrentString();
     }
   }
-
-  // ensure size updates will be kept after a pop
-  preservePropertyUpdates(nodeSize);
+  if (nodeSize == NULL)
+    nodeSize = graph->getProperty<SizeProperty>("viewSize");
 
   //=========================================================
   //rotate size if necessary

@@ -20,7 +20,7 @@
 #ifndef _SELECTIONALGO_H
 #define _SELECTIONALGO_H
 
-#include <tulip/PropertyAlgorithm.h>
+#include <tulip/Algorithm.h>
 
 namespace tlp {
 
@@ -32,7 +32,7 @@ class BooleanProperty;
 /*@{*/
 
 /// Interface for selection plug-ins
-class TLP_SCOPE BooleanAlgorithm:public PropertyAlgorithm {
+class TLP_SCOPE BooleanAlgorithm : public tlp::Algorithm {
   ///
   friend class BooleanProperty;
 public:

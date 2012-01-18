@@ -17,9 +17,20 @@
  *
  */
 #include <tulip/BooleanAlgorithm.h>
-#include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 
-tlp::BooleanAlgorithm::BooleanAlgorithm (const tlp::AlgorithmContext & context):tlp::PropertyAlgorithm(context) {
-  booleanResult = (tlp::BooleanProperty *)context.propertyProxy;
+static const char * paramHelp[] = {
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "BooleanProperty" ) \
+  HTML_HELP_DEF( "default", "\"viewSelection\"" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicates the property to compute." \
+  HTML_HELP_CLOSE(),
+};
+
+tlp::BooleanAlgorithm::BooleanAlgorithm (const tlp::AlgorithmContext& context):tlp::Algorithm(context), booleanResult(NULL) {
+  addOutParameter<tlp::BooleanProperty>("result", paramHelp[0],
+					"viewSelection");
+  if (dataSet != NULL)
+    dataSet->get("result", booleanResult);
 }

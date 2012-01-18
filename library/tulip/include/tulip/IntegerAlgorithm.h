@@ -21,7 +21,7 @@
 #ifndef TULIP_INTALGO_H
 #define TULIP_INTALGO_H
 
-#include <tulip/PropertyAlgorithm.h>
+#include <tulip/Algorithm.h>
 
 namespace tlp {
 
@@ -31,7 +31,7 @@ class IntegerProperty;
 /*@{*/
 
 /// Interface for int plug-ins
-class TLP_SCOPE IntegerAlgorithm:public PropertyAlgorithm {
+class TLP_SCOPE IntegerAlgorithm : public tlp::Algorithm {
   ///
   friend class IntegerProperty;
 public:

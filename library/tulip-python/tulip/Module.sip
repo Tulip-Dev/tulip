@@ -118,7 +118,6 @@ bool pluginExists(std::string pluginName) {
 %Include PluginContext.sip
 
 %Include Algorithm.sip
-%Include PropertyAlgorithm.sip
 %Include LayoutAlgorithm.sip
 %Include IntegerAlgorithm.sip
 %Include DoubleAlgorithm.sip

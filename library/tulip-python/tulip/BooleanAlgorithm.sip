@@ -30,14 +30,14 @@
 %End
 
 namespace tlp {
-class BooleanAlgorithm : tlp::PropertyAlgorithm {
+class BooleanAlgorithm : tlp::Algorithm {
 %TypeHeaderCode
 #include <tulip/BooleanAlgorithm.h>
 %End
 public:
 
 %Docstring
-Bases: :class:`tlp.PropertyAlgorithm`
+Bases: :class:`tlp.Algorithm`
 
 This class is the base interface for selection plugins.
 

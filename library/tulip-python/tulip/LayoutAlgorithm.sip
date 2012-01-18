@@ -31,14 +31,14 @@
 
 
 namespace tlp {
-class LayoutAlgorithm: tlp::PropertyAlgorithm {
+class LayoutAlgorithm: tlp::Algorithm {
 %TypeHeaderCode
 #include <tulip/LayoutAlgorithm.h>
 %End
 public:
 
 %Docstring
-Bases: :class:`tlp.PropertyAlgorithm`
+Bases: :class:`tlp.Algorithm`
 
 This class is the base interface for layout plugins.
 

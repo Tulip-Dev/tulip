@@ -504,10 +504,6 @@ void GraphView::pop(bool unpopAllowed) {
   getRoot()->pop(unpopAllowed);
 }
 //----------------------------------------------------------------
-bool GraphView::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
-  return getRoot()->nextPopKeepPropertyUpdates(prop);
-}
-//----------------------------------------------------------------
 void GraphView::unpop() {
   getRoot()->unpop();
 }

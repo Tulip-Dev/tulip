@@ -32,7 +32,7 @@
 
 namespace tlp {
 
-class DoubleAlgorithm: tlp::PropertyAlgorithm {
+class DoubleAlgorithm: tlp::Algorithm {
 %TypeHeaderCode
 #include <tulip/DoubleAlgorithm.h>
 %End

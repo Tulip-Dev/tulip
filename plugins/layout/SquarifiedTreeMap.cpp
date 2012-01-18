@@ -63,6 +63,22 @@ const char * paramHelp[] = {
   HTML_HELP_BODY() \
   "This parameter indicates to use normal Treemaps (B. Shneiderman) or Squarified Treemaps (van Wijk)" \
   HTML_HELP_CLOSE(),
+  // node size
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Size" ) \
+  HTML_HELP_DEF( "values", "An existing size property" ) \
+  HTML_HELP_DEF( "default", "viewSize" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the property used as node's size." \
+  HTML_HELP_CLOSE(),
+  // node shape
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Integer" ) \
+  HTML_HELP_DEF( "values", "An existing shape property" ) \
+  HTML_HELP_DEF( "default", "viewShape" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the property used as node's shape." \
+  HTML_HELP_CLOSE(),
 };
 }
 //====================================================================
@@ -71,6 +87,10 @@ SquarifiedTreeMap::SquarifiedTreeMap(const tlp::PropertyContext& context) :Layou
   addParameter<DoubleProperty>("metric", paramHelp[0], 0, false);
   addParameter<double>("Aspect Ratio", paramHelp[1], "1.");
   addParameter<bool>("Treemap Type", paramHelp[2], "false");
+  addOutParameter<SizeProperty>("Node Size", paramHelp[3],
+				"viewSize");
+  addOutParameter<IntegerProperty>("Node Shape", paramHelp[4],
+				   "viewShape");
 }
 
 //====================================================================
@@ -110,26 +130,26 @@ bool SquarifiedTreeMap::check(std::string& errorMsg) {
 bool SquarifiedTreeMap::run() {
   double aspectRatio  = DEFAULT_RATIO;
   shneidermanTreeMap = false;
-  size  = graph->getLocalProperty<SizeProperty>("viewSize");
-
-  // ensure size updates will be kept after a pop
-  preservePropertyUpdates(size);
+  sizeResult = NULL;
+  glyphResult = NULL;
 
   if (dataSet != 0) {
     dataSet->get("Aspect Ratio", aspectRatio);
     dataSet->get("Treemap Type", shneidermanTreeMap);
+    dataSet->get("Node Size", sizeResult);
+    dataSet->get("Node Shape", glyphResult);
   }
-
-  glyph = graph->getLocalProperty<IntegerProperty>("viewShape");
-  // ensure shapes updates will be kept after a pop
-  preservePropertyUpdates(glyph);
+  if (sizeResult == NULL)
+    sizeResult = graph->getProperty<SizeProperty>("viewSize");
+  if (glyphResult == NULL)
+    glyphResult = graph->getLocalProperty<IntegerProperty>("viewShape");
 
   {
     //change the glyph of all internal node to be a window
     node n;
     forEach(n, graph->getNodes()) {
       if (graph->outdeg(n) != 0)
-        glyph->setNodeValue(n, TEXTUREDGLYPHID);
+        glyphResult->setNodeValue(n, TEXTUREDGLYPHID);
     }
   }
 
@@ -142,7 +162,7 @@ bool SquarifiedTreeMap::run() {
   Vec2d center = initialSpace.center();
   layoutResult->setNodeValue(root, Coord(static_cast<float>(center[0]), static_cast<float>(center[1]), 0));
   Size initialSpaceSize(static_cast<float>(initialSpace.width()), static_cast<float>(initialSpace.height()), 0);
-  size->setNodeValue(root, initialSpaceSize);
+  sizeResult->setNodeValue(root, initialSpaceSize);
   vector<node> toTreat(orderedChildren(root));
 
   if (!toTreat.empty()) {
@@ -197,7 +217,7 @@ void SquarifiedTreeMap::layoutRow(const std::vector<tlp::node> &row, const int d
     sum += nodesSize.get(it->id);
     Vec2d center = layoutRec.center();
     layoutResult->setNodeValue(*it, Coord(static_cast<float>(center[0]), static_cast<float>(center[1]), static_cast<float>(depth * SEPARATION_Z)));
-    size->setNodeValue(*it, Size(static_cast<float>(layoutRec.width()), static_cast<float>(layoutRec.height(), 0)));
+    sizeResult->setNodeValue(*it, Size(static_cast<float>(layoutRec.width()), static_cast<float>(layoutRec.height(), 0)));
 
     if (graph->outdeg(*it) > 0) {
       vector<node> toTreat(orderedChildren(*it));
