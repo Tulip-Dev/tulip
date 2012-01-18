@@ -35,17 +35,13 @@ QtProgress::QtProgress(QWidget* parent,string text,View *view,int updateInterval
   vblayout->setMargin(0);
   setLayout(vblayout);
   vblayout->addWidget(progressWidget);
-  show();
-
-  connect(this, SIGNAL(sendProgress(int, int)), progressWidget, SLOT(progress(int,int)));
+  show();  
 }
 //=====================================
 QtProgress::~QtProgress() {
 }
 ProgressState QtProgress::progress(int step, int max_step) {
-//         return progressWidget->progress(step,max_step);
-  emit(sendProgress(step, max_step));
-  return progressWidget->state();
+  return progressWidget->progress(step,max_step);
 }
 
 //=====================================
