@@ -58,6 +58,7 @@ public slots:
 protected slots:
   void refreshDockExpandControls();
   void panelFocused(tlp::View*);
+  void modeSwitch();
 };
 
 #endif // GRAPHPERSPECTIVE_H

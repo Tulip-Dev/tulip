@@ -61,6 +61,9 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   connect(_ui->actionSave_Project,SIGNAL(triggered()),this,SLOT(save()));
   connect(_ui->actionSave_Project_as,SIGNAL(triggered()),this,SLOT(saveAs()));
   connect(_ui->actionOpen_Project,SIGNAL(triggered()),this,SLOT(open()));
+  connect(_ui->actionAnalyze,SIGNAL(triggered()),this,SLOT(modeSwitch()));
+  connect(_ui->actionDevelop,SIGNAL(triggered()),this,SLOT(modeSwitch()));
+  connect(_ui->actionCharts,SIGNAL(triggered()),this,SLOT(modeSwitch()));
 
   // D-BUS actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
@@ -196,6 +199,19 @@ void GraphPerspective::centerPanels(tlp::PropertyInterface* pi) {
     if (view->isLayoutProperty(pi))
       view->centerView();
   }
+}
+
+void GraphPerspective::modeSwitch() {
+  QWidget* mode = NULL;
+  if (sender() == _ui->actionCharts)
+    mode = _ui->datasetModePage;
+  else if (sender() == _ui->actionDevelop) {
+  }
+  else if (sender() == _ui->actionAnalyze)
+    mode = _ui->visualizeModePage;
+
+  if (mode != NULL)
+    _ui->centralWidget->setCurrentWidget(mode);
 }
 
 PERSPECTIVEPLUGIN(GraphPerspective,"Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0")
