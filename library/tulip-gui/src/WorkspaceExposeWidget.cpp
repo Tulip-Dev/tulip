@@ -50,7 +50,7 @@ const int WorkspaceExposeWidget::MARGIN = 50;
 
 WorkspaceExposeWidget::WorkspaceExposeWidget(QWidget *parent): QGraphicsView(parent), _positionAnimation(NULL), _selectedItem(NULL), _placeholderItem(NULL) {
   setScene(new QGraphicsScene);
-  setAlignment(Qt::AlignLeft | Qt::AlignTop);
+  setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
 int WorkspaceExposeWidget::currentPanelIndex() const {
@@ -77,12 +77,8 @@ void WorkspaceExposeWidget::resizeEvent(QResizeEvent *event) {
   updatePositions();
 }
 
-void WorkspaceExposeWidget::updatePositionsAnimationFinished() {
-  setSceneRect(scene()->itemsBoundingRect());
-  _positionAnimation = NULL;
-}
 
-void WorkspaceExposeWidget::updatePositions() {
+void WorkspaceExposeWidget::updatePositions(bool resetScenePos) {
   delete _positionAnimation;
   const int animDuration = 150;
 
@@ -99,8 +95,8 @@ void WorkspaceExposeWidget::updatePositions() {
     else if (_selectedItem != NULL) {
       if (_placeholderItem == NULL) {
         _placeholderItem = new QGraphicsRectItem(0,0,previewSize().width(),previewSize().height());
-        _placeholderItem->setBrush(QColor(230, 230, 230));
-        _placeholderItem->setPen(QColor(200, 200, 200));
+        _placeholderItem->setBrush(QColor(220, 220, 220));
+        _placeholderItem->setPen(QColor(190, 190, 190));
         scene()->addItem(_placeholderItem);
       }
 
@@ -116,8 +112,19 @@ void WorkspaceExposeWidget::updatePositions() {
   }
 
   _positionAnimation = group;
+  if (resetScenePos) {
+    connect(group,SIGNAL(finished()),this,SLOT(resetSceneRect()));
+  }
   connect(group,SIGNAL(finished()),this,SLOT(updatePositionsAnimationFinished()));
   group->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void WorkspaceExposeWidget::updatePositionsAnimationFinished() {
+  _positionAnimation = NULL;
+}
+
+void WorkspaceExposeWidget::resetSceneRect() {
+  setSceneRect(scene()->itemsBoundingRect());
 }
 
 bool WorkspaceExposeWidget::eventFilter(QObject* obj, QEvent* ev) {
@@ -132,16 +139,22 @@ bool WorkspaceExposeWidget::eventFilter(QObject* obj, QEvent* ev) {
   if (item == _selectedItem) {
     if (ev->type() == QEvent::GraphicsSceneMouseMove) {
       QGraphicsSceneMouseEvent* mouseEv = static_cast<QGraphicsSceneMouseEvent*>(ev);
-      int itemPerLine = floor(width()/(WorkspaceExposeWidget::previewSize().width() + MARGIN));
       QPointF itemPos = mouseEv->scenePos();
+      int itemPerLine = floor(width()/(WorkspaceExposeWidget::previewSize().width() + MARGIN));
+      int nbLines = ceil(_items.size()/itemPerLine);
       int line = itemPos.y() / (previewSize().height()+MARGIN);
+      line = std::min<int>(nbLines, line);
       int col = itemPos.x() / (previewSize().width()+MARGIN);
       int index = line*itemPerLine + col;
 
       if (index != _items.indexOf(item)) {
         _items.removeOne(item);
-        _items.insert(std::min<int>(index,_items.size()),item);
-        updatePositions();
+        if (index < 0)
+          index = 0;
+        if (index > _items.size())
+          index = _items.size();
+        _items.insert(index,item);
+        updatePositions(false);
       }
     }
     else if (ev->type() == QEvent::GraphicsSceneMouseRelease) {

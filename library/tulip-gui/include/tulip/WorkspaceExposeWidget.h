@@ -19,7 +19,7 @@ class TLP_QT_SCOPE WorkspaceExposeWidget : public QGraphicsView {
   QList<PreviewItem*> _items;
   PreviewItem* _selectedItem;
   QGraphicsRectItem* _placeholderItem;
-  void updatePositions();
+  void updatePositions(bool resetScenePos=true);
 
   static const int MARGIN;
 
@@ -39,6 +39,7 @@ protected:
 
 protected slots:
   void updatePositionsAnimationFinished();
+  void resetSceneRect();
 
 };
 
