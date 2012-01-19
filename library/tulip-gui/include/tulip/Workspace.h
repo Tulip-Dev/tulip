@@ -50,6 +50,7 @@ class TLP_QT_SCOPE Workspace: public QWidget {
     PanelsStorage(QObject* parent = 0);
     void push_back(tlp::WorkspacePanel*);
     int removeAll(tlp::WorkspacePanel *);
+    void clear();
     // Allows the model to behave like a list and to be iterable
     typedef QList<tlp::WorkspacePanel *>::iterator iterator;
     typedef QList<tlp::WorkspacePanel *>::const_iterator const_iterator;
@@ -71,6 +72,7 @@ class TLP_QT_SCOPE Workspace: public QWidget {
   Ui::Workspace* _ui;
   PanelsStorage _panels;
   int _currentPanelIndex;
+  QWidget* _oldWorkspaceMode;
 
   QMap<QWidget*,QVector<PlaceHolderWidget*> > _modeToSlots;
   QMap<QWidget*,QWidget*> _modeSwitches;
@@ -113,6 +115,8 @@ protected slots:
   void updatePageCountLabel();
   void updateAvailableModes();
   void updatePanels();
+  void uncheckExposeButton();
+  QWidget* suitableMode(QWidget* oldMode);
 
 protected:
   bool eventFilter(QObject *, QEvent *);

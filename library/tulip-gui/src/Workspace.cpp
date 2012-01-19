@@ -104,12 +104,17 @@ QVariant Workspace::PanelsStorage::data(const QModelIndex &index, int role) cons
 
   return QVariant();
 }
+void Workspace::PanelsStorage::clear() {
+  _storage.clear();
+}
+
 // ***********************************************
 
 Workspace::Workspace(QWidget *parent)
   : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL) {
   _ui->setupUi(this);
   connect(_ui->startupButton,SIGNAL(clicked()),this,SIGNAL(addPanelRequest()));
+  connect(_ui->exposeMode,SIGNAL(exposeFinished()),this,SLOT(hideExposeMode()));
 
 #ifndef NDEBUG
   new ModelTest(&_panels,this);
@@ -227,9 +232,11 @@ void Workspace::delView(tlp::View* view) {
 void Workspace::panelDestroyed(QObject* obj) {
   WorkspacePanel* panel = static_cast<WorkspacePanel*>(obj);
   int removeCount = _panels.removeAll(panel);
-  assert(removeCount>0);
 
   if (removeCount==0)
+    return;
+
+  if (currentModeWidget() == _ui->exposePage)
     return;
 
   updateAvailableModes();
@@ -309,9 +316,10 @@ void Workspace::updateAvailableModes() {
     _modeSwitches[page]->setEnabled(_panels.size() >= _modeToSlots[page].size());
   }
 
-  bool enableNavigation = currentModeWidget() != _ui->startupPage;
+  bool enableNavigation = _panels.size()>0;
   _ui->nextPageButton->setEnabled(enableNavigation);
   _ui->previousPageButton->setEnabled(enableNavigation);
+  _ui->exposeButton->setEnabled(enableNavigation);
 }
 
 void Workspace::updatePanels() {
@@ -370,7 +378,6 @@ void Workspace::previousPage() {
 
 void Workspace::setActivePanel(tlp::View* view) {
   int newIndex = panels().indexOf(view);
-//  newIndex -= newIndex%currentSlotsCount();
   _currentPanelIndex = newIndex;
   updatePanels();
 }
@@ -445,7 +452,10 @@ void Workspace::expose(bool f) {
 }
 
 void Workspace::showExposeMode() {
-  _ui->workspaceContents->setCurrentWidget(_ui->exposePage);
+  if (_ui->workspaceContents->currentWidget() == _ui->exposePage)
+    return;
+
+  _oldWorkspaceMode = currentModeWidget();
   foreach(QWidget* s, _modeSwitches.values()) {
     s->setEnabled(false);
   }
@@ -457,8 +467,38 @@ void Workspace::showExposeMode() {
     panels << p;
   }
   _ui->exposeMode->setData(panels,_currentPanelIndex);
+  _ui->workspaceContents->setCurrentWidget(_ui->exposePage);
+}
+
+void Workspace::uncheckExposeButton() {
+  qWarning(__PRETTY_FUNCTION__);
+  _ui->exposeButton->setChecked(false);
 }
 
 void Workspace::hideExposeMode() {
+  _ui->exposeButton->setChecked(false);
+  QVector<WorkspacePanel*> newPanels = _ui->exposeMode->panels();
+  _panels.clear();
+  foreach(WorkspacePanel* p, newPanels)
+    _panels.push_back(p);
+  _currentPanelIndex = _ui->exposeMode->currentPanelIndex();
+  switchWorkspaceMode(suitableMode(_oldWorkspaceMode));
+  updatePageCountLabel();
+}
 
+QWidget* Workspace::suitableMode(QWidget* oldMode) {
+  updateAvailableModes();
+  if (_modeSwitches.contains(oldMode) && _modeSwitches[oldMode]->isEnabled())
+    return oldMode;
+
+  int maxSlots = 0;
+  QWidget* result = _ui->startupPage;
+  foreach(QWidget* mode, _modeToSlots.keys()) {
+    int slotCount = _modeToSlots[mode].size();
+    if (slotCount <= _panels.size() && slotCount > maxSlots) {
+      maxSlots = slotCount;
+      result = mode;
+    }
+  }
+  return result;
 }
