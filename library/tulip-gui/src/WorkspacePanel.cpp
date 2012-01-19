@@ -289,6 +289,7 @@ void WorkspacePanel::progress_handler(int,int) {
 }
 
 void WorkspacePanel::refreshInteractorsToolbar() {
+  _actionTriggers.clear();
   QList<Interactor*> compatibleInteractors = _view->interactors();
   delete _ui->interactorsFrame->layout();
   bool interactorsUiShown = compatibleInteractors.size() > 0;
@@ -310,10 +311,19 @@ void WorkspacePanel::refreshInteractorsToolbar() {
       interactorsLayout->addWidget(button);
       connect(button,SIGNAL(clicked()),i->action(),SLOT(trigger()));
       connect(i->action(),SIGNAL(triggered()),this,SLOT(interactorActionTriggered()));
+      connect(i->action(),SIGNAL(changed()),this,SLOT(actionChanged()));
+      _actionTriggers[i->action()] = button;
     }
     _ui->interactorsFrame->setLayout(interactorsLayout);
     setCurrentInteractor(compatibleInteractors[0]);
   }
+}
+
+void WorkspacePanel::actionChanged() {
+  QAction* action = static_cast<QAction*>(sender());
+  if (!_actionTriggers.contains(action))
+    return;
+  _actionTriggers[action]->setEnabled(action->isEnabled());
 }
 
 void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel* model) {
