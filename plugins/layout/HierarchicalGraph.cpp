@@ -393,6 +393,7 @@ bool HierarchicalGraph::run() {
       orientation = tmp.getCurrentString();
     }
   }
+
   if (nodeSize == NULL)
     nodeSize = graph->getProperty<SizeProperty>("viewSize");
 

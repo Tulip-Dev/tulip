@@ -79,7 +79,7 @@ MixedModel::MixedModel(const tlp::PropertyContext &context):LayoutAlgorithm(cont
   addParameter<float> ("y node-node spacing",paramHelp[1],"2");
   addParameter<float> ("x node-node and edge-node spacing",paramHelp[2],"2");
   addOutParameter<IntegerProperty>("node shape", paramHelp[3],
-				   "viewShape");
+                                   "viewShape");
   addDependency<LayoutAlgorithm>("Connected Component Packing", "1.0");
 }
 //====================================================
@@ -90,7 +90,7 @@ bool MixedModel::run() {
   string orientation = "vertical";
   sizeResult = NULL;
   glyphResult = NULL;
-  
+
   if (dataSet!=0) {
     getNodeSizePropertyParameter(dataSet, sizeResult);
     StringCollection tmp;
@@ -103,11 +103,13 @@ bool MixedModel::run() {
     dataSet->get("x node-node and edge-node spacing",edgeNodeSpacing);
     dataSet->get("node shape", glyphResult);
   }
+
   if (sizeResult == NULL)
     sizeResult = graph->getProperty<SizeProperty>("viewSize");
+
   if (glyphResult == NULL)
     glyphResult = graph->getLocalProperty<IntegerProperty>("viewShape");
-	  
+
 
   //=========================================================
   //rotate size if necessary

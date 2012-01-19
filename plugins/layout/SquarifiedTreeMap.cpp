@@ -88,9 +88,9 @@ SquarifiedTreeMap::SquarifiedTreeMap(const tlp::PropertyContext& context) :Layou
   addParameter<double>("Aspect Ratio", paramHelp[1], "1.");
   addParameter<bool>("Treemap Type", paramHelp[2], "false");
   addOutParameter<SizeProperty>("Node Size", paramHelp[3],
-				"viewSize");
+                                "viewSize");
   addOutParameter<IntegerProperty>("Node Shape", paramHelp[4],
-				   "viewShape");
+                                   "viewShape");
 }
 
 //====================================================================
@@ -139,8 +139,10 @@ bool SquarifiedTreeMap::run() {
     dataSet->get("Node Size", sizeResult);
     dataSet->get("Node Shape", glyphResult);
   }
+
   if (sizeResult == NULL)
     sizeResult = graph->getProperty<SizeProperty>("viewSize");
+
   if (glyphResult == NULL)
     glyphResult = graph->getLocalProperty<IntegerProperty>("viewShape");
 

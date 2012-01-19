@@ -31,7 +31,8 @@ static const char * paramHelp[] = {
 
 tlp::SizeAlgorithm::SizeAlgorithm (const tlp::AlgorithmContext &context):tlp::Algorithm(context), sizeResult(NULL) {
   addOutParameter<tlp::SizeProperty>("result", paramHelp[0],
-				     "viewSize");
+                                     "viewSize");
+
   if (dataSet != NULL)
     dataSet->get("result", sizeResult);
 }

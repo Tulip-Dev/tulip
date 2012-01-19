@@ -32,7 +32,7 @@ class SizeProperty;
  */
 /*@{*/
 /// Interface for sizes plug-ins
- class TLP_SCOPE SizeAlgorithm : public tlp::Algorithm {
+class TLP_SCOPE SizeAlgorithm : public tlp::Algorithm {
   ///
   friend class SizeProperty;
 public:

@@ -708,6 +708,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     tmpProgress=progress;
 
   bool hasData = data != NULL;
+
   if (!hasData)
     data = new tlp::DataSet();
 

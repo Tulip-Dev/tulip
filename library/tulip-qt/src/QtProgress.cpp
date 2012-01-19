@@ -35,7 +35,7 @@ QtProgress::QtProgress(QWidget* parent,string text,View *view,int updateInterval
   vblayout->setMargin(0);
   setLayout(vblayout);
   vblayout->addWidget(progressWidget);
-  show();  
+  show();
 }
 //=====================================
 QtProgress::~QtProgress() {

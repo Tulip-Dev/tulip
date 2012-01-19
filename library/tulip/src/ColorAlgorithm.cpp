@@ -31,7 +31,8 @@ static const char * paramHelp[] = {
 
 tlp::ColorAlgorithm::ColorAlgorithm (const tlp::AlgorithmContext &context):tlp::Algorithm(context), colorResult(NULL) {
   addOutParameter<tlp::ColorProperty>("result", paramHelp[0],
-				      "viewColor");
+                                      "viewColor");
+
   if (dataSet != NULL)
     dataSet->get("result", colorResult);
 }

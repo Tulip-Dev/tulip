@@ -31,7 +31,8 @@ static const char * paramHelp[] = {
 
 tlp::LayoutAlgorithm::LayoutAlgorithm (const tlp::AlgorithmContext & context):tlp::Algorithm(context), layoutResult(NULL) {
   addOutParameter<tlp::LayoutProperty>("result", paramHelp[0],
-				       "viewLayout");
+                                       "viewLayout");
+
   if (dataSet != NULL)
     dataSet->get("result", layoutResult);
 }

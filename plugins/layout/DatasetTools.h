@@ -30,7 +30,7 @@ void addOrthogonalParameters(tlp::LayoutAlgorithm* pLayout);
 void addSpacingParameters(tlp::LayoutAlgorithm* pLayout);
 void getSpacingParameters(tlp::DataSet* dataSet, float& nodeSpacing, float& layerSpacing);
 void addNodeSizePropertyParameter(tlp::LayoutAlgorithm* pLayout,
-				  bool inout = false);
+                                  bool inout = false);
 bool getNodeSizePropertyParameter(tlp::DataSet* dataSet, tlp::SizeProperty *&sizes);
 
 orientationType getMask(tlp::DataSet* dataSet);

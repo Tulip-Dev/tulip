@@ -349,8 +349,8 @@ void MainController::setData(Graph *graph,DataSet dataSet) {
     DataSet dataSet;
     dataSet.set<bool>("3D layout", false);
     newGraph->applyPropertyAlgorithm("Random",
-				    newGraph->getLocalProperty<LayoutProperty>("viewLayout"),
-				    errorMsg, NULL, &dataSet);
+                                     newGraph->getLocalProperty<LayoutProperty>("viewLayout"),
+                                     errorMsg, NULL, &dataSet);
   }
 
   delete itn;

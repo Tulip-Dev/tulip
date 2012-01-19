@@ -31,7 +31,8 @@ static const char * paramHelp[] = {
 
 tlp::StringAlgorithm::StringAlgorithm (const tlp::AlgorithmContext & context):tlp::Algorithm(context), stringResult(NULL) {
   addOutParameter<tlp::StringProperty>("result", paramHelp[0],
-				       "viewLabel");
+                                       "viewLabel");
+
   if (dataSet != NULL)
     dataSet->get("result", stringResult);
 }

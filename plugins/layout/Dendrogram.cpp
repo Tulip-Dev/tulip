@@ -78,8 +78,10 @@ bool Dendrogram::run() {
   // push a temporary graph state (not redoable)
   // preserving layout updates
   std::vector<PropertyInterface*> propsToPreserve;
+
   if (layoutResult->getName() != "")
     propsToPreserve.push_back(layoutResult);
+
   graph->push(false, &propsToPreserve);
 
   tree = TreeTest::computeTree(graph, pluginProgress);

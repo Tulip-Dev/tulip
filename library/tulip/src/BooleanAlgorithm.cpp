@@ -30,7 +30,8 @@ static const char * paramHelp[] = {
 
 tlp::BooleanAlgorithm::BooleanAlgorithm (const tlp::AlgorithmContext& context):tlp::Algorithm(context), booleanResult(NULL) {
   addOutParameter<tlp::BooleanProperty>("result", paramHelp[0],
-					"viewSelection");
+                                        "viewSelection");
+
   if (dataSet != NULL)
     dataSet->get("result", booleanResult);
 }

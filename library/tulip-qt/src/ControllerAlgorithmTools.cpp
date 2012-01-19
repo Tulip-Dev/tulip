@@ -100,7 +100,7 @@ bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph, QWidget *parent,
-					      const string &name) {
+    const string &name) {
   DataSet dataSet;
   ParameterDescriptionList& params = getPluginParameters(AlgorithmPlugin::factory, name);
   const ParameterDescriptionList& sysDef =
@@ -193,25 +193,32 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
     // to ensure only that ones are updated
     vector<OutPropertyParam> outPropertyParams;
     Iterator<ParameterDescription> * paramIt = params.getParameters();
+
     while( paramIt->hasNext() ) {
       ParameterDescription param = paramIt->next();
+
       if (param.getDirection() == IN_PARAM)
-	continue;
+        continue;
+
       OutPropertyParam outPropParam(param.getName());
       // get destination property
       dataSet.get(param.getName(), outPropParam.dest);
       // clone it in a temporary property
       outPropParam.tmp = outPropParam.dest->clonePrototype(graph, "");
+
       if (param.getDirection() == OUT_PARAM) {
-	// get tmpLayout if needed
-	if (updateLayout &&
-	    outPropParam.dest->getTypename() == LayoutProperty::propertyTypename)
-	  tmpLayout = outPropParam.tmp;
-	outPropParam.tmp->setAllNodeDataMemValue(outPropParam.dest->getNodeDefaultDataMemValue());
-	outPropParam.tmp->setAllEdgeDataMemValue(outPropParam.dest->getEdgeDefaultDataMemValue());
-      } else
-	// inout property
-	outPropParam.tmp->copy(outPropParam.dest);
+        // get tmpLayout if needed
+        if (updateLayout &&
+            outPropParam.dest->getTypename() == LayoutProperty::propertyTypename)
+          tmpLayout = outPropParam.tmp;
+
+        outPropParam.tmp->setAllNodeDataMemValue(outPropParam.dest->getNodeDefaultDataMemValue());
+        outPropParam.tmp->setAllEdgeDataMemValue(outPropParam.dest->getEdgeDefaultDataMemValue());
+      }
+      else
+        // inout property
+        outPropParam.tmp->copy(outPropParam.dest);
+
       // set the temporary as the destination property
       dataSet.set(param.getName(), outPropParam.tmp);
       outPropertyParams.push_back(outPropParam);
@@ -234,7 +241,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
       }
     }
 
-    resultBool = graph->applyAlgorithm(name, erreurMsg, &dataSet, myProgress); 
+    resultBool = graph->applyAlgorithm(name, erreurMsg, &dataSet, myProgress);
     // ensure that only out properties are updated
     graph->pop();
 
@@ -256,24 +263,28 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
     }
     else {
       resultBool = myProgress->state() != TLP_CANCEL;
+
       // copy or cleanup out properties
       for (unsigned int i = 0; i < outPropertyParams.size(); ++i) {
-	OutPropertyParam outPropParam(outPropertyParams[i]);
-	if (resultBool)
-	  outPropParam.dest->copy(outPropParam.tmp);
-	delete outPropParam.tmp;
+        OutPropertyParam outPropParam(outPropertyParams[i]);
+
+        if (resultBool)
+          outPropParam.dest->copy(outPropParam.tmp);
+
+        delete outPropParam.tmp;
       }
+
       if (!resultBool)
-	// no possible redo
-	graph->pop(false);
+        // no possible redo
+        graph->pop(false);
     }
 
     if (PreferenceManager::getInst().getUseSpecificMetric() &&
-	destType == DoubleProperty::propertyTypename) {
+        destType == DoubleProperty::propertyTypename) {
       string copyName = name + " " + dataSetToString(dataSet);
 
       if (!graph->existProperty(copyName) ||
-	  graph->getProperty(copyName)->getTypename() == DoubleProperty::propertyTypename) {
+          graph->getProperty(copyName)->getTypename() == DoubleProperty::propertyTypename) {
         PropertyInterface*copy = graph->getProperty(copyName);
         assert(copy != NULL);
         copy->copy(graph->getLocalProperty(destination, destType));
@@ -299,7 +310,7 @@ bool ControllerAlgorithmTools::changeString(Graph *graph, QWidget *parent,
     View *view) {
   StringProperty tmp(graph);
   return changeProperty(graph, parent, name, propertyName,
-			StringProperty::propertyTypename, view);
+                        StringProperty::propertyTypename, view);
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::changeBoolean(Graph *graph, QWidget *parent,
@@ -307,7 +318,7 @@ bool ControllerAlgorithmTools::changeBoolean(Graph *graph, QWidget *parent,
     const string &propertyName,
     View *view) {
   return changeProperty(graph, parent, name, propertyName,
-			StringProperty::propertyTypename, view);
+                        StringProperty::propertyTypename, view);
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::changeMetric(Graph *graph, QWidget *parent,
@@ -317,13 +328,13 @@ bool ControllerAlgorithmTools::changeMetric(Graph *graph, QWidget *parent,
     const string &colorAlgorithmName,
     const string &colorPropertyName) {
   bool result = changeProperty(graph, parent, name, propertyName,
-			       DoubleProperty::propertyTypename, view,
+                               DoubleProperty::propertyTypename, view,
                                DataSet(), true);
 
   if (result && mapMetric)
     return changeProperty(graph, parent, colorAlgorithmName, colorPropertyName,
                           ColorProperty::propertyTypename, view,
-			  DataSet(), false, true, false);
+                          DataSet(), false, true, false);
 
   return result;
 }
@@ -333,7 +344,7 @@ bool ControllerAlgorithmTools::changeLayout(Graph *graph, QWidget *parent,
     const string &propertyName,
     View *view) {
   return changeProperty(graph, parent, name, propertyName,
-			LayoutProperty::propertyTypename, view,
+                        LayoutProperty::propertyTypename, view,
                         DataSet(), true, true);
 }
 //**********************************************************************
@@ -342,7 +353,7 @@ bool ControllerAlgorithmTools::changeInt(Graph *graph, QWidget *parent,
     const string &propertyName,
     View *view) {
   return changeProperty(graph, parent, name, propertyName,
-			IntegerProperty::propertyTypename, view);
+                        IntegerProperty::propertyTypename, view);
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::changeColors(Graph *graph, QWidget *parent,
@@ -350,7 +361,7 @@ bool ControllerAlgorithmTools::changeColors(Graph *graph, QWidget *parent,
     const string &propertyName,
     View *view) {
   return changeProperty(graph, parent, name, propertyName,
-			ColorProperty::propertyTypename, view);
+                        ColorProperty::propertyTypename, view);
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::changeSizes(Graph *graph, QWidget *parent,
@@ -358,7 +369,7 @@ bool ControllerAlgorithmTools::changeSizes(Graph *graph, QWidget *parent,
     const string &propertyName,
     View *view) {
   return changeProperty(graph, parent, name, propertyName,
-			StringProperty::propertyTypename, view);
+                        StringProperty::propertyTypename, view);
 }
 //**********************************************************************
 void ControllerAlgorithmTools::isAcyclic(Graph *graph,QWidget *parent) {

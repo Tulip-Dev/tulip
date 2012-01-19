@@ -30,7 +30,8 @@ static const char * paramHelp[] = {
 
 tlp::DoubleAlgorithm::DoubleAlgorithm (const tlp::AlgorithmContext &context):tlp::Algorithm(context), doubleResult(NULL) {
   addOutParameter<tlp::DoubleProperty>("result", paramHelp[0],
-				       "viewMetric");
+                                       "viewMetric");
+
   if (dataSet != NULL)
     dataSet->get("result", doubleResult);
 }
