@@ -46,6 +46,7 @@ class TLP_QT_SCOPE WorkspacePanel : public QWidget, public tlp::SimplePluginProg
   Ui::WorkspacePanel* _ui;
   tlp::View* _view;
   QString _viewName;
+  QMap<QAction*, QWidget*> _actionTriggers;
 
   QGraphicsProxyWidget* _viewConfigurationWidgets;
   bool _viewConfigurationExpanded;
@@ -79,6 +80,7 @@ protected slots:
   void viewDestroyed();
   void graphComboIndexChanged();
   void setCurrentInteractorConfigurationVisible(bool);
+  void actionChanged();
 
 protected:
   void progress_handler(int step, int max_step);
