@@ -76,6 +76,7 @@ signals:
   void drawNeeded();
 
 protected slots:
+  void hideConfigurationTab();
   void interactorActionTriggered();
   void viewDestroyed();
   void graphComboIndexChanged();

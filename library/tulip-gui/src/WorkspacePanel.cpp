@@ -137,6 +137,8 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
     return;
 
   QTabWidget* viewConfigurationTabs = new QTabWidget();
+  viewConfigurationTabs->setTabsClosable(true);
+  connect(viewConfigurationTabs,SIGNAL(tabCloseRequested(int)),this,SLOT(hideConfigurationTab()));
   viewConfigurationTabs->setTabPosition(QTabWidget::West);
   viewConfigurationTabs->setStyleSheet(QString() +
 
@@ -155,7 +157,7 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
                                        + "  border-right: 0px;\n"
                                        + "  border-top-left-radius: 4px;\n"
                                        + "  border-bottom-left-radius: 4px;\n"
-                                       + "  min-height: 8ex;\n"
+                                       + "  min-height: 10ex;\n"
                                        + "  padding: 2px;\n"
                                        + "  font: bold;\n"
                                        + "}\n"
@@ -279,6 +281,10 @@ void WorkspacePanel::toggleProgressMode(bool p) {
     delete _progressItem;
     _progressItem = NULL;
   }
+}
+
+void WorkspacePanel::hideConfigurationTab() {
+  setConfigurationTabExpanded(false);
 }
 
 void WorkspacePanel::progress_handler(int,int) {
