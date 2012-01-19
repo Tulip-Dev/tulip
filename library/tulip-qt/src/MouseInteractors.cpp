@@ -43,7 +43,11 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 #define WHEEL_DELTA 120
   if (e->type() == QEvent::Wheel &&
       (((QWheelEvent *) e)->orientation() == Qt::Vertical)) {
+
     GlMainWidget *g = (GlMainWidget *) widget;
+    if(((QWheelEvent *) e)->delta() < 0 && g->getScene()->getCamera().getZoomFactor() < 0.5f) {
+      return true;
+    }
     g->getScene()->zoomXY(((QWheelEvent *) e)->delta() / WHEEL_DELTA,
                           ((QWheelEvent *) e)->x(), ((QWheelEvent *) e)->y());
     g->draw(false);
