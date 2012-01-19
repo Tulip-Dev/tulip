@@ -309,6 +309,7 @@ void WorkspacePanel::refreshInteractorsToolbar() {
       button->setIcon(i->action()->icon());
       button->setToolTip(i->action()->text());
       interactorsLayout->addWidget(button);
+      button->setEnabled(i->action()->isEnabled());
       connect(button,SIGNAL(clicked()),i->action(),SLOT(trigger()));
       connect(i->action(),SIGNAL(triggered()),this,SLOT(interactorActionTriggered()));
       connect(i->action(),SIGNAL(changed()),this,SLOT(actionChanged()));
