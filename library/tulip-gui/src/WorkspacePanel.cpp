@@ -406,6 +406,11 @@ void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
 
   _viewConfigurationWidgets->setOpacity((expanded ? 0.9 : 0.6));
   _viewConfigurationExpanded = expanded;
+
+  if (!expanded) {
+    foreach(QWidget*w, view()->configurationWidgets())
+      QMetaObject::invokeMethod(w,"applySettings",Qt::DirectConnection);
+  }
 }
 
 QPointF WorkspacePanel::configurationTabPosition(bool expanded) const {
