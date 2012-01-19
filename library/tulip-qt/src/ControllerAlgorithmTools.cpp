@@ -318,7 +318,7 @@ bool ControllerAlgorithmTools::changeBoolean(Graph *graph, QWidget *parent,
     const string &propertyName,
     View *view) {
   return changeProperty(graph, parent, name, propertyName,
-                        StringProperty::propertyTypename, view);
+                        BooleanProperty::propertyTypename, view);
 }
 //**********************************************************************
 bool ControllerAlgorithmTools::changeMetric(Graph *graph, QWidget *parent,
