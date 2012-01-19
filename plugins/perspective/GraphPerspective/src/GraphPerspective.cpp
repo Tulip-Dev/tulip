@@ -203,6 +203,7 @@ void GraphPerspective::centerPanels(tlp::PropertyInterface* pi) {
 
 void GraphPerspective::modeSwitch() {
   QWidget* mode = NULL;
+
   if (sender() == _ui->actionCharts)
     mode = _ui->datasetModePage;
   else if (sender() == _ui->actionDevelop) {

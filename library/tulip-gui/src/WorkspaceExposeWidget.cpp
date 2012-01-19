@@ -103,9 +103,12 @@ void WorkspaceExposeWidget::updatePositions() {
         _placeholderItem->setPen(QColor(200, 200, 200));
         scene()->addItem(_placeholderItem);
       }
+
       _placeholderItem->setPos(x,y);
     }
+
     x+=WorkspaceExposeWidget::previewSize().width() + MARGIN;
+
     if (x>=width()-WorkspaceExposeWidget::previewSize().width()-MARGIN) {
       x=MARGIN;
       y+=WorkspaceExposeWidget::previewSize().height()+MARGIN;
@@ -119,6 +122,7 @@ void WorkspaceExposeWidget::updatePositions() {
 
 bool WorkspaceExposeWidget::eventFilter(QObject* obj, QEvent* ev) {
   PreviewItem* item = static_cast<PreviewItem*>(obj);
+
   if (ev->type() == QEvent::GraphicsSceneMousePress) {
     _selectedItem = item;
     _selectedItem->setZValue(1);
@@ -133,6 +137,7 @@ bool WorkspaceExposeWidget::eventFilter(QObject* obj, QEvent* ev) {
       int line = itemPos.y() / (previewSize().height()+MARGIN);
       int col = itemPos.x() / (previewSize().width()+MARGIN);
       int index = line*itemPerLine + col;
+
       if (index != _items.indexOf(item)) {
         _items.removeOne(item);
         _items.insert(std::min<int>(index,_items.size()),item);
