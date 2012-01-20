@@ -171,6 +171,8 @@ public :
     return commentShortcutsActivate;
   }
 
+  void setGraph(tlp::Graph *graph);
+
 protected:
 
   void resizeEvent(QResizeEvent *event);

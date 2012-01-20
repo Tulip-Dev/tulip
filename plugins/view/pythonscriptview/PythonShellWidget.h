@@ -44,7 +44,7 @@ public :
 
   void executeCurrentLines();
 
-  void setCurrentGraph(tlp::Graph *graph);
+  void setGraph(tlp::Graph *graph);
 
 protected:
 

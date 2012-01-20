@@ -251,8 +251,9 @@ void PythonShellWidget::executeCurrentLines() {
   insert("", true);
 }
 
-void PythonShellWidget::setCurrentGraph(tlp::Graph *graph) {
+void PythonShellWidget::setGraph(tlp::Graph *graph) {
   PythonInterpreter::getInstance()->runGraphScript("__main__", "setCurrentGraph", graph);
+  PythonCodeEditor::setGraph(graph);
 }
 
 void PythonShellWidget::showEvent(QShowEvent *) {

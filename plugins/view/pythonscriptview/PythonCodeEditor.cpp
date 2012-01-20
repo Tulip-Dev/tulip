@@ -1168,3 +1168,7 @@ void PythonCodeEditor::uncommentSelectedCode() {
     setSelection(lineFrom, 0, lineTo, lineLength(lineTo));
   }
 }
+
+void PythonCodeEditor::setGraph(tlp::Graph *graph) {
+	autoCompletionDb->setGraph(graph);
+}

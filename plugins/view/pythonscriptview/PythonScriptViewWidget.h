@@ -25,6 +25,8 @@
 
 #include "PythonCodeEditor.h"
 
+#include <tulip/Graph.h>
+
 class QToolBar;
 
 class PythonScriptView;
@@ -55,6 +57,8 @@ public :
   std::string getMainScriptCode(int idx) const;
   std::string getModuleCode(int idx) const;
   std::string getPluginCode(int idx) const;
+
+  void setGraph(tlp::Graph *graph);
 
 public slots :
 

@@ -41,7 +41,7 @@ public :
   QVector<QString> findTypesContainingDictEntry(const QString &dictEntry) const;
   QSet<QString> getAllDictEntriesStartingWithPrefix(const QString &prefix) const;
   bool typeExists(const QString &type) const;
-
+  bool dictEntryExists(const QString &type, const QString &dictEntry) const;
 
 private :
 

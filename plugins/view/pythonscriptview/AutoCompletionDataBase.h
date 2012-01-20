@@ -24,6 +24,8 @@
 #include <QtCore/QSet>
 #include <QtCore/QHash>
 
+#include <tulip/Graph.h>
+
 #include "APIDataBase.h"
 
 class AutoCompletionDataBase {
@@ -38,11 +40,18 @@ public :
 
   QString findTypeForExpr(const QString &expr, const QString &funcName) const ;
 
+  void setGraph(tlp::Graph * graph) {
+	  this->graph = graph;
+  }
+
 private :
+
+  QSet<QString> getGraphPropertiesListIfContext(const QString &context, const QString &editedFunction) const ;
 
   QString getTypeNameForVar(const QString &varName);
   QString getTypeNameForExpr(const QString &varName);
 
+  tlp::Graph *graph;
   APIDataBase *apiDb;
   QSet<QString> globalAutoCompletionList;
   QHash<QString, QSet<QString> > functionAutoCompletionList;

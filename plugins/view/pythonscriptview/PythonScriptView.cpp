@@ -403,7 +403,7 @@ string& replaceAll(string& context, const string& from, const string& to) {
 
 void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
 
-  viewWidget->pythonShellWidget->setCurrentGraph(graph);
+
 
   if (viewWidget->mainScriptsTabWidget->count() == 0) {
 
@@ -509,6 +509,7 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
   }
 
   this->graph = graph;
+  viewWidget->setGraph(graph);
 }
 
 void PythonScriptView::getData(Graph **graph,DataSet *dataSet) {
