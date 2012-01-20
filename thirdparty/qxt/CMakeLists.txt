@@ -13,6 +13,10 @@ src/qxtspanslider.h
 src/qxtspanslider_p.h
 )
 
-ADD_LIBRARY(qxt STATIC ${SRCS} ${MOC_SRCS})
+ADD_LIBRARY(qxt SHARED ${SRCS} ${MOC_SRCS})
 
 TARGET_LINK_LIBRARIES(qxt ${QT_LIBRARIES})
+
+INSTALL(TARGETS qxt RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT qxt
+  LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT qxt
+  ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT qxt)
