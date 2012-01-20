@@ -515,7 +515,6 @@ void GlScene::draw() {
       entityWithDistanceCompare::inputData=glGraphComposite->getInputData();
       multiset<EntityWithDistance,entityWithDistanceCompare> entitiesSet;
       Coord camPos=camera->getEyes();
-      Coord camCenter=camera->getCenter();
       BoundingBox bb;
       double dist;
 

@@ -213,11 +213,12 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
 
   //  cerr << endl;
 
+#ifndef NDEBUG
   for (list<edge>::iterator it = edgeInT0.begin(); it != edgeInT0.end(); it++) {
     edge e = *it;
     assert (!(isBackEdge(g, e) || isBackEdge(g, edgeReversal(e))));
   }
-
+#endif
 
   //  cerr << "DFS order :" ;
   //node n;
@@ -608,8 +609,10 @@ node PlanarityTestImpl::lcaBetweenTermNodes(node n1,
     lca = lastVisited.get(n2.id);
 
   //==
+#ifndef NDEBUG
   node lca2 = lcaBetween(n1,n2, parent);
   assert(lca == lca2);
+#endif
   //==
   return lca;
 }

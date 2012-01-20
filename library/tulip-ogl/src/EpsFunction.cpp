@@ -197,11 +197,11 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
 
       if (smooth) {
         /* Smooth shaded polygon; varying colors at vetices. */
-        int triOffset;
+        //int triOffset = 0;
 
         /* Break polygon into "nvertices-2" triangle fans. */
         for (i = 0; i < nvertices - 2; i++) {
-          triOffset = i * 7;
+          //triOffset = i * 7;
           fprintf(file, "[%g %g %g %g %g %g]",
                   vertex[0].x, vertex[i + 1].x, vertex[i + 2].x,
                   vertex[0].y, vertex[i + 1].y, vertex[i + 2].y);

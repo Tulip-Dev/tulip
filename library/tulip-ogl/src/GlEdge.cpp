@@ -633,7 +633,6 @@ void GlEdge::getColors(GlGraphInputData *data,
   const node source = eEnds.first;
   const node target = eEnds.second;
 
-  Color selectionColor=data->parameters->getSelectionColor();
   Color srcCol, tgtCol;
 
   if (data->parameters->isEdgeColorInterpolate()) {

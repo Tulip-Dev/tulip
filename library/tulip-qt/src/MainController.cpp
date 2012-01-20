@@ -1384,7 +1384,7 @@ void MainController::editCreateGroup() {
     haveToChangeGraph=true;
   }
 
-  node metaNode = graphToAddTo->createMetaNode(tmp);
+  graphToAddTo->createMetaNode(tmp);
 
   if(haveToChangeGraph)
     changeGraph(graphToAddTo);

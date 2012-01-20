@@ -389,9 +389,11 @@ public:
     }
     sizes = circleSizes;
 
-    bool resultBool;
     node root;
-    resultBool = tlp::getSource(tree, root);
+ #ifndef NDEBUG
+    bool resultBool =
+#endif
+      tlp::getSource(tree, root);
     assert(resultBool);
 
     dfsComputeNodeRadii(root, sizes);

@@ -165,13 +165,9 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     initProxies(glMainWidget);
     computeFFD(glMainWidget);
 
-    int W, H;
-    W = glMainWidget->width();
-    H = glMainWidget->height();
     editCenter = centerRect.getCenter();
     editCenter[2] = 0;
-    editCenter[1]= H- editCenter[1];
-    //editCenter[0] = W - editCenter[0];
+    editCenter[1]= glMainWidget->height() - editCenter[1];
     editPosition[0] = qMouseEv->x();
     editPosition[1] = qMouseEv->y();
     editPosition[2] = 0;

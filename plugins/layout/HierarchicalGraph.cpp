@@ -421,7 +421,7 @@ bool HierarchicalGraph::run() {
 
   //========================================================================
   //We add a node and edges to force the dag to have only one source.
-  node startNode = tlp::makeSimpleSource(mySGraph);
+  tlp::makeSimpleSource(mySGraph);
 
   //========================================================================
   list<node> properAddedNodes;
@@ -457,7 +457,9 @@ bool HierarchicalGraph::run() {
   }
 
   //We draw the tree using a tree drawing algorithm
+#ifndef NDEBUG
   bool resultBool;
+#endif
   string erreurMsg;
   LayoutProperty tmpLayout(graph);
   DataSet tmp;
@@ -472,7 +474,10 @@ bool HierarchicalGraph::run() {
   StringCollection tmpS("vertical;horizontal;");
   tmpS.setCurrent("vertical");
   tmp.set("orientation", tmpS);
-  resultBool = mySGraph->computeProperty("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg, 0, &tmp);
+#ifndef NDEBUG
+  resultBool = 
+#endif
+    mySGraph->computeProperty("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg, 0, &tmp);
 
   if (edgeLength)
     delete edgeLength;
@@ -485,21 +490,8 @@ bool HierarchicalGraph::run() {
     layoutResult->setNodeValue(n, tmpLayout.getNodeValue(n));
   }
 
-  //  computeEdgeBends(mySGraph, tmpLayout, replacedEdges, reversedEdges);
-  //  computeSelfLoops(mySGraph, tmpLayout, listSelfLoops);
   computeEdgeBends(graph, tmpLayout, replacedEdges, reversedEdges);
   computeSelfLoops(graph, tmpLayout, listSelfLoops);
-  /*
-  for (vector<edge>::const_iterator it=reversedEdges.begin(); it!=reversedEdges.end(); ++it) {
-    graph->reverse(*it);
-  }
-  mySGraph->delAllNode(startNode);
-  while(!properAddedNodes.empty()) {
-    mySGraph->delAllNode(properAddedNodes.back());
-    properAddedNodes.pop_back();
-  }
-  graph->delSubGraph(mySGraph);
-  */
 
   // forget last temporary graph state
   graph->pop();

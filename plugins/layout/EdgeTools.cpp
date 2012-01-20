@@ -47,7 +47,6 @@ void addControlPoints(OrientableLayout* oriLayout,
                       const Graph* tree, OrientableCoord fatherCoord,
                       edge e, float interNodeDistance) {
   node child                  = tree->target(e);
-  node father                 = tree->source(e);
   OrientableCoord childCoord  = oriLayout->getNodeValue(child);
 
   if (fatherCoord.getX() != childCoord.getX()) {

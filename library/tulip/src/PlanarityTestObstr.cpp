@@ -82,7 +82,9 @@ void PlanarityTestImpl::extractBoundaryCycle(Graph *sG, node cNode,
 //=================================================================
 void PlanarityTestImpl::obstrEdgesTerminal(Graph* G, node w, node t, node u) {
   (void)u; //fixes unused parameter warning in release builds
+#ifndef DEBUG
   node mm = lcaBetween(nodeLabelB.get(t.id), neighborWTerminal.get(t.id), p0);
+#endif
   assert((listEdgesUpwardT0(nodeLabelB.get(t.id), mm)));
   assert(listEdgesUpwardT0(neighborWTerminal.get(t.id), mm));
   assert(listEdgesUpwardT0(mm, u));
@@ -405,7 +407,9 @@ void PlanarityTestImpl::obstructionEdgesCountMin23(Graph *sG,
   }
   else {
     obstrEdgesPNode(sG, v, n);
+#ifndef NDEBUG
     node mm = lcaBetween(v, parent.get(cNode.id), p0);
+#endif
     assert(listEdgesUpwardT0(parent.get(cNode.id), mm));
   }
 }
@@ -486,8 +490,9 @@ void PlanarityTestImpl::obstructionEdgesPossibleObstrConfirmed(Graph *sG,
   assert(listEdgesUpwardT0(nodeLabelB.get(jl.id), jl));
   assert(listEdgesUpwardT0(nodeLabelB.get(jr.id), jr));
 
+#ifndef NDEBUG
   node m = lcaBetween(parent.get(cNode.id), v, p0);
-
+#endif
   assert(listEdgesUpwardT0(parent.get(cNode.id), m));
   assert(listEdgesUpwardT0(nodeLabelB.get(v.id), m));
 
@@ -523,7 +528,7 @@ void PlanarityTestImpl::obstructionEdgesCNodeCounter(Graph *sG, node cNode, node
   // seachs for a node f in RBC[cNode] between jl and jr s.t.
   // f has a descendant that is a neighbor of w in G;
   bool flag = false;
-  node v = NULL_NODE, f = NULL_NODE, t12 = NULL_NODE, t22 = NULL_NODE;
+  node f = NULL_NODE, t12 = NULL_NODE, t22 = NULL_NODE;
 
   if (t1 != NULL_NODE && t1 != cNode)
     t12 = lastPNode(t1, cNode);
