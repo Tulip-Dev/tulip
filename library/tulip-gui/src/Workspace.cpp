@@ -480,7 +480,7 @@ void Workspace::hideExposeMode() {
   QVector<WorkspacePanel*> newPanels = _ui->exposeMode->panels();
   _panels.clear();
   foreach(WorkspacePanel* p, newPanels)
-    _panels.push_back(p);
+  _panels.push_back(p);
   _currentPanelIndex = _ui->exposeMode->currentPanelIndex();
   switchWorkspaceMode(suitableMode(_oldWorkspaceMode));
   updatePageCountLabel();
@@ -488,6 +488,7 @@ void Workspace::hideExposeMode() {
 
 QWidget* Workspace::suitableMode(QWidget* oldMode) {
   updateAvailableModes();
+
   if (_modeSwitches.contains(oldMode) && _modeSwitches[oldMode]->isEnabled())
     return oldMode;
 
@@ -495,6 +496,7 @@ QWidget* Workspace::suitableMode(QWidget* oldMode) {
   QWidget* result = _ui->startupPage;
   foreach(QWidget* mode, _modeToSlots.keys()) {
     int slotCount = _modeToSlots[mode].size();
+
     if (slotCount <= _panels.size() && slotCount > maxSlots) {
       maxSlots = slotCount;
       result = mode;

@@ -328,8 +328,10 @@ void WorkspacePanel::refreshInteractorsToolbar() {
 
 void WorkspacePanel::actionChanged() {
   QAction* action = static_cast<QAction*>(sender());
+
   if (!_actionTriggers.contains(action))
     return;
+
   _actionTriggers[action]->setEnabled(action->isEnabled());
 }
 
@@ -409,7 +411,7 @@ void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
 
   if (!expanded) {
     foreach(QWidget*w, view()->configurationWidgets())
-      QMetaObject::invokeMethod(w,"applySettings",Qt::DirectConnection);
+    QMetaObject::invokeMethod(w,"applySettings",Qt::DirectConnection);
   }
 }
 
