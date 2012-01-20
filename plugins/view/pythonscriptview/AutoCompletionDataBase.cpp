@@ -324,9 +324,9 @@ QSet<QString> getGraphPropertiesList(Graph *graph, const QString &prefix, const 
 	QVector<PropertyInterface*> properties = getAllGraphPropertiesFromRoot(graph);
 	foreach(PropertyInterface* prop, properties) {
 		if (type == "" || prop->getTypename() == type.toStdString()) {
-			QString qProp = prop->getName().c_str();
+			QString qProp = "\"" + QString(prop->getName().c_str()) + "\"";
 			if (qProp.startsWith(prefix)) {
-				ret.insert("\""+qProp+"\"");
+				ret.insert(qProp);
 			}
 		}
 	}
