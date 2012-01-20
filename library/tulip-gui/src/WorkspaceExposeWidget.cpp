@@ -24,15 +24,18 @@ PreviewItem::PreviewItem(const QPixmap& pixmap, WorkspacePanel* panel, QGraphics
     _closeButtonPixmap = new QPixmap(":/tulip/gui/ui/darkclosebutton.png");
     _closePixmapRect = QRect(boundingRect().width()-_closeButtonPixmap->width() - 5,-0.5 * _closeButtonPixmap->height(),_closeButtonPixmap->width(),_closeButtonPixmap->height());
   }
+
   setFlag(ItemIsMovable);
   setFlag(ItemIsSelectable);
   setAcceptHoverEvents(true);
 }
 QRectF PreviewItem::boundingRect() const {
   QRectF result = QRectF(0,0,WorkspaceExposeWidget::previewSize().width(),WorkspaceExposeWidget::previewSize().height()+30);
+
   if (_hovered) {
     result.setTop(_closePixmapRect.top());
   }
+
   return result;
 }
 tlp::WorkspacePanel* PreviewItem::panel() const {
@@ -44,6 +47,7 @@ void PreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
   f.setBold(true);
   painter->setFont(f);
   painter->drawText(0,WorkspaceExposeWidget::previewSize().height()+5,WorkspaceExposeWidget::previewSize().width(),30,Qt::AlignHCenter | Qt::TextSingleLine | Qt::TextWordWrap,_panel->windowTitle());
+
   if (_hovered) {
     painter->setOpacity(_closeButtonHovered ? 1 : 0.5);
     painter->drawPixmap(_closePixmapRect,*_closeButtonPixmap);
@@ -59,6 +63,7 @@ void PreviewItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
 }
 void PreviewItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
   bool newCloseButtonHovered = _closePixmapRect.contains(event->pos().toPoint());
+
   if (newCloseButtonHovered != _closeButtonHovered) {
     _closeButtonHovered = newCloseButtonHovered;
     update();
@@ -90,7 +95,7 @@ int WorkspaceExposeWidget::currentPanelIndex() const {
 QVector<WorkspacePanel*> WorkspaceExposeWidget::panels() const {
   QVector<WorkspacePanel*> result;
   foreach(PreviewItem* item, _items)
-    result << item->panel();
+  result << item->panel();
   return result;
 }
 
@@ -144,6 +149,7 @@ void WorkspaceExposeWidget::updatePositions(bool resetScenePos) {
         _placeholderItem->setPen(QColor(190, 190, 190));
         scene()->addItem(_placeholderItem);
       }
+
       _placeholderItem->setPos(x,y);
     }
 
@@ -156,9 +162,11 @@ void WorkspaceExposeWidget::updatePositions(bool resetScenePos) {
   }
 
   _positionAnimation = group;
+
   if (resetScenePos) {
     connect(group,SIGNAL(finished()),this,SLOT(resetSceneRect()));
   }
+
   connect(group,SIGNAL(finished()),this,SLOT(updatePositionsAnimationFinished()));
   group->start(QAbstractAnimation::DeleteWhenStopped);
 }
@@ -179,6 +187,7 @@ bool WorkspaceExposeWidget::eventFilter(QObject* obj, QEvent* ev) {
       _items.removeAll(item);
       item->panel()->close();
       item->deleteLater();
+
       if (_items.size()==0)
         finish();
       else
@@ -188,6 +197,7 @@ bool WorkspaceExposeWidget::eventFilter(QObject* obj, QEvent* ev) {
       _selectedItem = item;
       _selectedItem->setZValue(1);
     }
+
     return false;
   }
 
@@ -201,12 +211,16 @@ bool WorkspaceExposeWidget::eventFilter(QObject* obj, QEvent* ev) {
       line = std::min<int>(nbLines, line);
       int col = itemPos.x() / (previewSize().width()+MARGIN);
       int index = line*itemPerLine + col;
+
       if (index != _items.indexOf(item)) {
         _items.removeOne(item);
+
         if (index < 0)
           index = 0;
+
         if (index > _items.size())
           index = _items.size();
+
         _items.insert(index,item);
         updatePositions(false);
       }
@@ -227,6 +241,7 @@ bool WorkspaceExposeWidget::event(QEvent *event) {
   if (event->type() == QEvent::KeyPress && static_cast<QKeyEvent*>(event)->key() == Qt::Key_Escape) {
     finish();
   }
+
   return QGraphicsView::event(event);
 }
 
