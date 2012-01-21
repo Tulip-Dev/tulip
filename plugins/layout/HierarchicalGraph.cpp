@@ -48,7 +48,7 @@ const char * paramHelp[] = {
 #define ORIENTATION "horizontal;vertical;"
 //================================================================================
 HierarchicalGraph::HierarchicalGraph(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
-  addNodeSizePropertyParameter(this, true /* inout */);
+  addNodeSizePropertyParameter(this);
   addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
   addSpacingParameters(this);
   addDependency<DoubleAlgorithm>("Dag Level", "1.0");
@@ -382,7 +382,7 @@ bool HierarchicalGraph::run() {
   orientation = "horizontal";
   spacing = 64.0;
   nodeSpacing = 18;
-  nodeSize = NULL;
+  SizeProperty* nodeSize = NULL;
 
   if (dataSet!=0) {
     getNodeSizePropertyParameter(dataSet, nodeSize);
@@ -398,13 +398,17 @@ bool HierarchicalGraph::run() {
     nodeSize = graph->getProperty<SizeProperty>("viewSize");
 
   //=========================================================
-  //rotate size if necessary
+  // use a temporary rotated size if necessary
   if (orientation == "horizontal") {
+    SizeProperty* tmpSize = new SizeProperty(graph);
+ 
+    tmpSize->copy(nodeSize);
     node n;
     forEach(n, graph->getNodes()) {
-      const Size& tmp = nodeSize->getNodeValue(n);
-      nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      const Size& tmp = tmpSize->getNodeValue(n);
+      tmpSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
+    nodeSize = tmpSize;
   }
 
   // push a temporary graph state (not redoable)
@@ -517,8 +521,9 @@ bool HierarchicalGraph::run() {
 
   edge e;
   forEach(e, graph->getEdges()) {
-    node src = graph->source(e);
-    node tgt = graph->target(e);
+    std::pair<node, node> eEnds(graph->ends(e));
+    node src = eEnds.first;
+    node tgt = eEnds.second;
 
     if (src == tgt) {
       continue;
@@ -572,12 +577,12 @@ bool HierarchicalGraph::run() {
     layoutResult->setNodeValue(n, tmp);
   }
 
-  //rotate layout and size
+  //rotate layout
   if (orientation == "horizontal") {
+    // delete the temporary allocated SizeProperty (see above)
+    delete nodeSize;
     node n;
     forEach(n, graph->getNodes()) {
-      const Size&  tmp = nodeSize->getNodeValue(n);
-      nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
       const Coord& tmpC = layoutResult->getNodeValue(n);
       layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
