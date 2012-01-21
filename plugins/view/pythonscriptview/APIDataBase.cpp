@@ -222,8 +222,9 @@ bool APIDataBase::typeExists(const QString &type) const {
 }
 
 bool APIDataBase::dictEntryExists(const QString &type, const QString &dictEntry) const {
-	if (dictContent.find(type) == dictContent.end()) {
-		return false;
-	}
-	return dictContent[type].find(dictEntry) != dictContent[type].end();
+  if (dictContent.find(type) == dictContent.end()) {
+    return false;
+  }
+
+  return dictContent[type].find(dictEntry) != dictContent[type].end();
 }

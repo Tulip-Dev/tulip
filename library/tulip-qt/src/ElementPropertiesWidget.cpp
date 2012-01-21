@@ -364,6 +364,7 @@ void ElementPropertiesWidget::propertyTableValueChanged(int row, int col) {
     elementSet = &edgeSet;
     listedProperties = &edgeListedProperties;
     break;
+
   default:
     elementSet = NULL;
     listedProperties = NULL;

@@ -716,6 +716,7 @@ void GraphStorage::delAllEdges() {
   nbEdges = 0;
   outDegree.setAll(0);
   edges.clear();
+
   // loop on nodes to clear adjacency edges
   for (std::vector<EdgeContainer>::iterator it = nodes.begin();
        it != nodes.end(); ++it) {

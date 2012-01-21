@@ -390,7 +390,7 @@ public:
     sizes = circleSizes;
 
     node root;
- #ifndef NDEBUG
+#ifndef NDEBUG
     bool resultBool =
 #endif
       tlp::getSource(tree, root);

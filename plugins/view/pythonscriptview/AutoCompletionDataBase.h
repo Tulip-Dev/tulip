@@ -41,7 +41,7 @@ public :
   QString findTypeForExpr(const QString &expr, const QString &funcName) const ;
 
   void setGraph(tlp::Graph * graph) {
-	  this->graph = graph;
+    this->graph = graph;
   }
 
 private :

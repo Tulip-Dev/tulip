@@ -1170,5 +1170,5 @@ void PythonCodeEditor::uncommentSelectedCode() {
 }
 
 void PythonCodeEditor::setGraph(tlp::Graph *graph) {
-	autoCompletionDb->setGraph(graph);
+  autoCompletionDb->setGraph(graph);
 }

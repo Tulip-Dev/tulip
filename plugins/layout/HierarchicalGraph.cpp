@@ -475,7 +475,7 @@ bool HierarchicalGraph::run() {
   tmpS.setCurrent("vertical");
   tmp.set("orientation", tmpS);
 #ifndef NDEBUG
-  resultBool = 
+  resultBool =
 #endif
     mySGraph->computeProperty("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg, 0, &tmp);
 
