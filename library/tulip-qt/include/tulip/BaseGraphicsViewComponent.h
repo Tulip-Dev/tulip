@@ -68,11 +68,11 @@ public :
   }
 
   virtual void createPicture(const std::string &pictureName,int width=0, int height=0) {
-    baseView->createPicture(pictureName, width, height, false);
+    baseView->savePicture(pictureName, width, height, false);
   }
 
-  virtual bool createPicture(const std::string &pictureName,int width, int height, bool center, int zoom=1, int xOffset=0, int yOffset = 0) {
-    return baseView->createPicture(pictureName, width, height, center, zoom, xOffset, yOffset);
+  virtual bool savePicture(const std::string &pictureName,int width, int height, bool center, int zoom=1, int xOffset=0, int yOffset = 0) {
+    return baseView->savePicture(pictureName, width, height, center, zoom, xOffset, yOffset);
   }
 
   virtual std::string getRealViewName() const;
