@@ -47,7 +47,7 @@ void TulipFileDescriptorWidget::browse() {
     result = QFileDialog::getExistingDirectory(parentWidget(),trUtf8("Choose directory"),_data.absolutePath);
   }
   else {
-    result = QFileDialog::getOpenFileName(parentWidget(),trUtf8("Choose file"),_data.absolutePath,_nameFilter);
+    result = QFileDialog::getOpenFileName(parentWidget(),trUtf8("Choose file"),_data.absolutePath,_data.fileFilterPattern);
   }
 
   if (!result.isEmpty())
@@ -67,8 +67,4 @@ void TulipFileDescriptorWidget::setData(TulipFileDescriptor desc) {
 
 TulipFileDescriptor TulipFileDescriptorWidget::data() const {
   return _data;
-}
-
-void TulipFileDescriptorWidget::setNameFilter(const QString& filter) {
-  _nameFilter = filter;
 }

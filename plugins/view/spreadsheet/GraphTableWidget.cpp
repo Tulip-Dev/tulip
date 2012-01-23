@@ -10,14 +10,14 @@
 #include <QtGui/QKeyEvent>
 
 #include "GraphTableModel.h"
-#include "TulipItemDelegate.h"
+#include "GraphTableItemDelegate.h"
 #include "TulipFilterProxyModel.h"
 
 using namespace tlp;
 using namespace std;
 GraphTableWidget::GraphTableWidget(QWidget* parent):QTableView(parent),_graph(NULL),_type(NODE),_tulipTableModel(NULL),_filterModel(NULL) {
   horizontalHeader()->setMovable(true);
-  setItemDelegate(new TulipItemDelegate(this));
+  setItemDelegate(new GraphTableItemDelegate(this));
 }
 
 void GraphTableWidget::setGraph(Graph* graph,ElementType element) {

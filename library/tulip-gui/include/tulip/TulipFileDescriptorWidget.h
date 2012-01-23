@@ -26,16 +26,12 @@ class TLP_QT_SCOPE TulipFileDescriptorWidget: public QWidget {
   Q_OBJECT
 
   TulipFileDescriptor _data;
-  QWidget* _display;
-  QString _nameFilter;
+  QWidget* _display;  
 public:
   explicit TulipFileDescriptorWidget(QWidget* parent = 0);
 
   void setData(TulipFileDescriptor);
   TulipFileDescriptor data() const;
-
-public slots:
-  void setNameFilter(const QString& fliter);
 
 protected slots:
   void browse();
