@@ -41,8 +41,11 @@
      <property name="styleSheet">
       <string notr="true">QTreeView  {
 border: 0px;
-border-bottom: 1px solid #C9C9C9;
+border-bottom: 1px solid black;
 }</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="editTriggers">
       <set>QAbstractItemView::EditKeyPressed</set>
@@ -80,6 +83,88 @@ border-bottom: 1px solid #C9C9C9;
      <attribute name="headerDefaultSectionSize">
       <number>50</number>
      </attribute>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="bottomFrame">
+     <property name="styleSheet">
+      <string notr="true">* {
+color: white;
+font: bold 11px;
+}
+
+#bottomFrame {
+border-top: 1px solid rgba(117,117,117,255);
+border-bottom: 1px solid rgba(117,117,117,255);
+border-right: 1px solid rgba(117,117,117,255);
+border-left: 0px;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(75,75,75),
+stop:1 rgb(60, 60, 60));
+}
+
+QPushButton {
+border: 0px;
+border-image: none;
+}
+
+QPushButton:hover {
+border: 0px;
+border-image: none;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(85,85,85),
+stop:1 rgb(70, 70, 70));
+}
+
+QPushButton:pressed, .QPushButton:checked {
+border: 0px;
+border-image: none;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(65,65,65),
+stop:1 rgb(50, 50, 50));
+}</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="addPanelButton">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Add panel</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resources/GraphPerspective.qrc">
+          <normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</iconset>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
@@ -254,6 +339,22 @@ border-bottom: 1px solid #C9C9C9;
     <hint type="sourcelabel">
      <x>-1</x>
      <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addPanelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>createPanel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>191</x>
+     <y>403</y>
     </hint>
     <hint type="destinationlabel">
      <x>117</x>

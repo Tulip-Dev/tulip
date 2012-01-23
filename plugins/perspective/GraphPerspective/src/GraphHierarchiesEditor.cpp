@@ -61,7 +61,7 @@ public:
   }
 };
 
-GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData) {
+GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData), _contextGraph(NULL) {
   _ui->setupUi(this);
   QToolButton* linkButton = new QToolButton();
   linkButton->setObjectName("linkButton");
@@ -153,5 +153,11 @@ void GraphHierarchiesEditor::delAllGraph() {
 }
 
 void GraphHierarchiesEditor::createPanel() {
-  static_cast<GraphPerspective*>(GraphPerspective::instance())->createPanel(_contextGraph);
+  tlp::Graph* g = _contextGraph;
+  if (g == NULL) {
+    g = static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->currentGraph();
+    if (g == NULL)
+      return;
+  }
+  static_cast<GraphPerspective*>(GraphPerspective::instance())->createPanel(g);
 }
