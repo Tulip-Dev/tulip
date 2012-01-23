@@ -41,11 +41,13 @@ public :
   }
 };
 
+class PythonCodeEditor;
+
 class AutoCompletionList : public QListWidget {
 
 public :
 
-  AutoCompletionList(QWidget *parent=0);
+  AutoCompletionList(PythonCodeEditor *parent=0);
 
 protected :
 
@@ -55,6 +57,8 @@ protected :
   bool eventFilter(QObject *obj, QEvent * event);
 
 private :
+
+  PythonCodeEditor *codeEditor;
 
   bool activated;
   bool wasActivated;
@@ -104,6 +108,7 @@ class PythonCodeEditor : public QPlainTextEdit {
   Q_OBJECT
 
   friend class LineNumberArea;
+  friend class AutoCompletionList;
 
 public :
 
@@ -185,6 +190,7 @@ protected:
   void mousePressEvent(QMouseEvent * event);
   void mouseReleaseEvent(QMouseEvent * event);
   void lineNumberAreaPaintEvent(QPaintEvent *event);
+
 
 protected slots:
 

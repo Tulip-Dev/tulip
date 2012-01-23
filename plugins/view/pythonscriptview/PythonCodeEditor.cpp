@@ -32,7 +32,7 @@
 
 using namespace std;
 
-AutoCompletionList::AutoCompletionList(QWidget *parent) : QListWidget(parent) {
+AutoCompletionList::AutoCompletionList(PythonCodeEditor *parent) : QListWidget(parent), codeEditor(parent) {
 #if QT_VERSION >= 0x040500
   setWindowFlags(Qt::ToolTip);
 #else
@@ -114,6 +114,7 @@ bool AutoCompletionList::eventFilter(QObject *, QEvent *event) {
       wasActivated = false;
     }
   }
+  codeEditor->updateAutoCompletionListPosition();
 
   return false;
 }
@@ -960,6 +961,10 @@ void PythonCodeEditor::showAutoCompletionList() {
 }
 
 void PythonCodeEditor::updateAutoCompletionListPosition() {
+
+  if (!autoCompletionList->isVisible())
+	  return;
+
   int left = static_cast<int>(blockBoundingGeometry(textCursor().block()).translated(contentOffset()).left());
   int top = static_cast<int>(blockBoundingGeometry(textCursor().block()).translated(contentOffset()).top());
   int bottom = top + static_cast<int>(blockBoundingRect(textCursor().block()).height());
