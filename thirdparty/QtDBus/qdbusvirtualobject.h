@@ -39,15 +39,12 @@
 **
 ****************************************************************************/
 
-#ifndef QDBUSPENDINGCALL_H
-#define QDBUSPENDINGCALL_H
-
-#include <QtCore/qglobal.h>
-#include <QtCore/qobject.h>
-#include <QtCore/qshareddata.h>
+#ifndef QDBUSTREENODE_H
+#define QDBUSTREENODE_H
 
 #include <QtDBus/qdbusmacros.h>
-#include <QtDBus/qdbusmessage.h>
+#include <QtCore/qstring.h>
+#include <QtCore/qobject.h>
 
 #ifndef QT_NO_DBUS
 
@@ -57,64 +54,23 @@ QT_BEGIN_NAMESPACE
 
 QT_MODULE(DBus)
 
+class QDBusMessage;
 class QDBusConnection;
-class QDBusError;
-class QDBusPendingCallWatcher;
 
-class QDBusPendingCallPrivate;
-class Q_DBUS_EXPORT QDBusPendingCall
-{
-public:
-    QDBusPendingCall(const QDBusPendingCall &other);
-    ~QDBusPendingCall();
-    QDBusPendingCall &operator=(const QDBusPendingCall &other);
-
-#ifndef Q_QDOC
-    // pretend that they aren't here
-    bool isFinished() const;
-    void waitForFinished();
-
-    bool isError() const;
-    bool isValid() const;
-    QDBusError error() const;
-    QDBusMessage reply() const;
-#endif
-
-    static QDBusPendingCall fromError(const QDBusError &error);
-    static QDBusPendingCall fromCompletedCall(const QDBusMessage &message);
-
-protected:
-    QExplicitlySharedDataPointer<QDBusPendingCallPrivate> d;
-    friend class QDBusPendingCallPrivate;
-    friend class QDBusPendingCallWatcher;
-    friend class QDBusConnection;
-
-    QDBusPendingCall(QDBusPendingCallPrivate *dd);
-
-private:
-    QDBusPendingCall();         // not defined
-};
-
-class QDBusPendingCallWatcherPrivate;
-class Q_DBUS_EXPORT QDBusPendingCallWatcher: public QObject, public QDBusPendingCall
+class QDBusVirtualObjectPrivate;
+class Q_DBUS_EXPORT QDBusVirtualObject : public QObject
 {
     Q_OBJECT
 public:
-    QDBusPendingCallWatcher(const QDBusPendingCall &call, QObject *parent = 0);
-    ~QDBusPendingCallWatcher();
+    explicit QDBusVirtualObject(QObject *parent = 0);
+    virtual ~QDBusVirtualObject();
 
-#ifdef Q_QDOC
-    // trick qdoc into thinking this method is here
-    bool isFinished() const;
-#endif
-    void waitForFinished();     // non-virtual override
-
-Q_SIGNALS:
-    void finished(QDBusPendingCallWatcher *self);
+    virtual QString introspect(const QString &path) const = 0;
+    virtual bool handleMessage(const QDBusMessage &message, const QDBusConnection &connection) = 0;
 
 private:
-    Q_DECLARE_PRIVATE(QDBusPendingCallWatcher)
-    Q_PRIVATE_SLOT(d_func(), void _q_finished())
+    Q_DECLARE_PRIVATE(QDBusVirtualObject)
+    Q_DISABLE_COPY(QDBusVirtualObject)
 };
 
 QT_END_NAMESPACE

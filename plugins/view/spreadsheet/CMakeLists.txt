@@ -50,4 +50,4 @@ QT4_ADD_RESOURCES(spreadsheet_RCC_SRCS ${spreadsheet_RCC})
 
 ADD_LIBRARY(SpreadSheet-${TulipVersion} SHARED ${spreadsheet_UI_SRCS} ${spreadsheet_MOC_SRCS} ${spreadsheet_LIB_SRCS} ${spreadsheet_RCC_SRCS})
 TARGET_LINK_LIBRARIES(SpreadSheet-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
-INSTALL(TARGETS SpreadSheet-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT SpreadSheet-${TulipVersion})
+INSTALL(TARGETS SpreadSheet-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT SpreadSheet)

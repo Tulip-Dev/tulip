@@ -7,34 +7,34 @@
 ** This file is part of the QtDBus module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
-** Commercial Usage
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
-**
 ** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this
+** file. Please review the following information to ensure the GNU Lesser
+** General Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
 ** In addition, as a special exception, Nokia gives you certain additional
-** rights.  These rights are described in the Nokia Qt LGPL Exception
+** rights. These rights are described in the Nokia Qt LGPL Exception
 ** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
 **
 ** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 3.0 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU General Public License version 3.0 requirements will be
-** met: http://www.gnu.org/copyleft/gpl.html.
+** Alternatively, this file may be used under the terms of the GNU General
+** Public License version 3.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE.GPL included in the packaging of this
+** file. Please review the following information to ensure the GNU General
+** Public License version 3.0 requirements will be met:
+** http://www.gnu.org/copyleft/gpl.html.
 **
-** If you have questions regarding the use of this file, please contact
-** Nokia at qt-info@nokia.com.
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+**
+**
+**
+**
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
@@ -51,6 +51,13 @@
 #include <QtCore/qtextstream.h>
 
 #ifndef QT_NO_DBUS
+
+//#define QDBUS_PARSER_DEBUG
+#ifdef QDBUS_PARSER_DEBUG
+# define qDBusParserError qWarning
+#else
+# define qDBusParserError if (true) {} else qDebug
+#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -69,8 +76,8 @@ parseAnnotations(const QDomElement& elem)
                value = ann.attribute(QLatin1String("value"));
 
         if (!QDBusUtil::isValidInterfaceName(name)) {
-            qWarning("Invalid D-BUS annotation '%s' found while parsing introspection",
-                     qPrintable(name));
+            qDBusParserError("Invalid D-BUS annotation '%s' found while parsing introspection",
+                             qPrintable(name));
             continue;
         }
 
@@ -99,9 +106,8 @@ parseArgs(const QDomElement& elem, const QLatin1String& direction, bool acceptEm
                 argData.name = arg.attribute(QLatin1String("name")); // can be empty
             argData.type = arg.attribute(QLatin1String("type"));
             if (!QDBusUtil::isValidSingleSignature(argData.type)) {
-                qWarning("Invalid D-BUS type signature '%s' found while parsing introspection",
-                         qPrintable(argData.type));
-                continue;
+                qDBusParserError("Invalid D-BUS type signature '%s' found while parsing introspection",
+                                 qPrintable(argData.type));
             }
 
             retval << argData;
@@ -141,8 +147,8 @@ QDBusXmlParser::interfaces() const
         if (iface.isNull())
             continue;           // for whatever reason
         if (!QDBusUtil::isValidInterfaceName(ifaceName)) {
-            qWarning("Invalid D-BUS interface name '%s' found while parsing introspection",
-                     qPrintable(ifaceName));
+            qDBusParserError("Invalid D-BUS interface name '%s' found while parsing introspection",
+                             qPrintable(ifaceName));
             continue;
         }
 
@@ -166,8 +172,8 @@ QDBusXmlParser::interfaces() const
             if (method.isNull())
                 continue;
             if (!QDBusUtil::isValidMemberName(methodName)) {
-                qWarning("Invalid D-BUS member name '%s' found in interface '%s' while parsing introspection",
-                         qPrintable(methodName), qPrintable(ifaceName));
+                qDBusParserError("Invalid D-BUS member name '%s' found in interface '%s' while parsing introspection",
+                                 qPrintable(methodName), qPrintable(ifaceName));
                 continue;
             }
 
@@ -192,8 +198,8 @@ QDBusXmlParser::interfaces() const
             if (signal.isNull())
                 continue;
             if (!QDBusUtil::isValidMemberName(signalName)) {
-                qWarning("Invalid D-BUS member name '%s' found in interface '%s' while parsing introspection",
-                         qPrintable(signalName), qPrintable(ifaceName));
+                qDBusParserError("Invalid D-BUS member name '%s' found in interface '%s' while parsing introspection",
+                                 qPrintable(signalName), qPrintable(ifaceName));
                 continue;
             }
 
@@ -217,8 +223,8 @@ QDBusXmlParser::interfaces() const
             if (property.isNull())
                 continue;
             if (!QDBusUtil::isValidMemberName(propertyName)) {
-                qWarning("Invalid D-BUS member name '%s' found in interface '%s' while parsing introspection",
-                         qPrintable(propertyName), qPrintable(ifaceName));
+                qDBusParserError("Invalid D-BUS member name '%s' found in interface '%s' while parsing introspection",
+                                 qPrintable(propertyName), qPrintable(ifaceName));
                 continue;
             }
 
@@ -231,10 +237,9 @@ QDBusXmlParser::interfaces() const
 
             if (!QDBusUtil::isValidSingleSignature(propertyData.type)) {
                 // cannot be!
-                qWarning("Invalid D-BUS type signature '%s' found in property '%s.%s' while parsing introspection",
-                         qPrintable(propertyData.type), qPrintable(ifaceName),
-                         qPrintable(propertyName));
-                continue;
+                qDBusParserError("Invalid D-BUS type signature '%s' found in property '%s.%s' while parsing introspection",
+                                 qPrintable(propertyData.type), qPrintable(ifaceName),
+                                 qPrintable(propertyName));
             }
 
             QString access = property.attribute(QLatin1String("access"));
@@ -245,9 +250,9 @@ QDBusXmlParser::interfaces() const
             else if (access == QLatin1String("readwrite"))
                 propertyData.access = QDBusIntrospection::Property::ReadWrite;
             else {
-                qWarning("Invalid D-BUS property access '%s' found in property '%s.%s' while parsing introspection",
-                         qPrintable(access), qPrintable(ifaceName),
-                         qPrintable(propertyName));
+                qDBusParserError("Invalid D-BUS property access '%s' found in property '%s.%s' while parsing introspection",
+                                 qPrintable(access), qPrintable(ifaceName),
+                                 qPrintable(propertyName));
                 continue;       // invalid one!
             }
 
@@ -286,8 +291,8 @@ QDBusXmlParser::object() const
             if (obj.isNull())
                 continue;           // for whatever reason
             if (!QDBusUtil::isValidObjectPath(m_path + QLatin1Char('/') + objName)) {
-                qWarning("Invalid D-BUS object path '%s/%s' found while parsing introspection",
-                         qPrintable(m_path), qPrintable(objName));
+                qDBusParserError("Invalid D-BUS object path '%s/%s' found while parsing introspection",
+                                 qPrintable(m_path), qPrintable(objName));
                 continue;
             }
 
@@ -301,8 +306,8 @@ QDBusXmlParser::object() const
             if (iface.isNull())
                 continue;
             if (!QDBusUtil::isValidInterfaceName(ifaceName)) {
-                qWarning("Invalid D-BUS interface name '%s' found while parsing introspection",
-                         qPrintable(ifaceName));
+                qDBusParserError("Invalid D-BUS interface name '%s' found while parsing introspection",
+                                 qPrintable(ifaceName));
                 continue;
             }
 

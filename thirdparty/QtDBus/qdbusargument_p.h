@@ -7,34 +7,34 @@
 ** This file is part of the QtDBus module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
-** Commercial Usage
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
-**
 ** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this
+** file. Please review the following information to ensure the GNU Lesser
+** General Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
 ** In addition, as a special exception, Nokia gives you certain additional
-** rights.  These rights are described in the Nokia Qt LGPL Exception
+** rights. These rights are described in the Nokia Qt LGPL Exception
 ** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
 **
 ** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 3.0 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU General Public License version 3.0 requirements will be
-** met: http://www.gnu.org/copyleft/gpl.html.
+** Alternatively, this file may be used under the terms of the GNU General
+** Public License version 3.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE.GPL included in the packaging of this
+** file. Please review the following information to ensure the GNU General
+** Public License version 3.0 requirements will be met:
+** http://www.gnu.org/copyleft/gpl.html.
 **
-** If you have questions regarding the use of this file, please contact
-** Nokia at qt-info@nokia.com.
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+**
+**
+**
+**
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
@@ -54,9 +54,15 @@
 //
 
 #include <qdbusargument.h>
+#include "qdbusunixfiledescriptor.h"
 #include "qdbus_symbols_p.h"
 
 #ifndef QT_NO_DBUS
+
+#ifndef DBUS_TYPE_UNIX_FD
+# define DBUS_TYPE_UNIX_FD int('h')
+# define DBUS_TYPE_UNIX_FD_AS_STRING "h"
+#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -65,8 +71,8 @@ class QDBusDemarshaller;
 class QDBusArgumentPrivate
 {
 public:
-    inline QDBusArgumentPrivate()
-        : message(0), ref(1)
+    inline QDBusArgumentPrivate(int flags = 0)
+        : message(0), ref(1), capabilities(flags)
     { }
     ~QDBusArgumentPrivate();
 
@@ -89,6 +95,7 @@ public:
 public:
     DBusMessage *message;
     QAtomicInt ref;
+    int capabilities;
     enum Direction {
         Marshalling,
         Demarshalling
@@ -98,7 +105,7 @@ public:
 class QDBusMarshaller: public QDBusArgumentPrivate
 {
 public:
-    QDBusMarshaller() : parent(0), ba(0), closeCode(0), ok(true)
+    QDBusMarshaller(int flags) : QDBusArgumentPrivate(flags), parent(0), ba(0), closeCode(0), ok(true)
     { direction = Marshalling; }
     ~QDBusMarshaller();
 
@@ -116,6 +123,7 @@ public:
     void append(const QString &arg);
     void append(const QDBusObjectPath &arg);
     void append(const QDBusSignature &arg);
+    void append(const QDBusUnixFileDescriptor &arg);
     void append(const QStringList &arg);
     void append(const QByteArray &arg);
     bool append(const QDBusVariant &arg); // this one can fail
@@ -150,10 +158,11 @@ private:
     Q_DISABLE_COPY(QDBusMarshaller)
 };
 
-class Q_DBUS_EXPORT QDBusDemarshaller: public QDBusArgumentPrivate
+class QDBusDemarshaller: public QDBusArgumentPrivate
 {
 public:
-    inline QDBusDemarshaller() : parent(0) { direction = Demarshalling; }
+    inline QDBusDemarshaller(int flags) : QDBusArgumentPrivate(flags), parent(0)
+    { direction = Demarshalling; }
     ~QDBusDemarshaller();
 
     QString currentSignature();
@@ -170,6 +179,7 @@ public:
     QString toString();
     QDBusObjectPath toObjectPath();
     QDBusSignature toSignature();
+    QDBusUnixFileDescriptor toUnixFileDescriptor();
     QDBusVariant toVariant();
     QStringList toStringList();
     QByteArray toByteArray();

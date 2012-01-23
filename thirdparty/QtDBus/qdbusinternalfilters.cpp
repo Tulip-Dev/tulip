@@ -7,34 +7,34 @@
 ** This file is part of the QtDBus module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
-** Commercial Usage
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
-**
 ** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this
+** file. Please review the following information to ensure the GNU Lesser
+** General Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
 ** In addition, as a special exception, Nokia gives you certain additional
-** rights.  These rights are described in the Nokia Qt LGPL Exception
+** rights. These rights are described in the Nokia Qt LGPL Exception
 ** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
 **
 ** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 3.0 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU General Public License version 3.0 requirements will be
-** met: http://www.gnu.org/copyleft/gpl.html.
+** Alternatively, this file may be used under the terms of the GNU General
+** Public License version 3.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE.GPL included in the packaging of this
+** file. Please review the following information to ensure the GNU General
+** Public License version 3.0 requirements will be met:
+** http://www.gnu.org/copyleft/gpl.html.
 **
-** If you have questions regarding the use of this file, please contact
-** Nokia at qt-info@nokia.com.
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+**
+**
+**
+**
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
@@ -56,6 +56,7 @@
 #include "qdbusmetatype_p.h"
 #include "qdbusmessage_p.h"
 #include "qdbusutil_p.h"
+#include "qdbusvirtualobject.h"
 
 #ifndef QT_NO_DBUS
 
@@ -107,8 +108,7 @@ static QString generateSubObjectXml(QObject *object)
 }
 
 // declared as extern in qdbusconnection_p.h
-
-QString qDBusIntrospectObject(const QDBusConnectionPrivate::ObjectTreeNode &node)
+QString qDBusIntrospectObject(const QDBusConnectionPrivate::ObjectTreeNode &node, const QString &path)
 {
     // object may be null
 
@@ -153,6 +153,11 @@ QString qDBusIntrospectObject(const QDBusConnectionPrivate::ObjectTreeNode &node
 
                 xml_data += ifaceXml;
             }
+        }
+
+        // is it a virtual node that handles introspection itself?
+        if (node.flags & QDBusConnectionPrivate::VirtualObject) {
+            xml_data += node.treeNode->introspect(path);
         }
 
         xml_data += QLatin1String( propertiesInterfaceXml );
@@ -264,7 +269,7 @@ QDBusMessage qDBusPropertyGet(const QDBusConnectionPrivate::ObjectTreeNode &node
         return propertyNotFoundError(msg, interface_name, property_name);
     }
 
-    return msg.createReply(qVariantFromValue(QDBusVariant(value)));
+    return msg.createReply(QVariant::fromValue(QDBusVariant(value)));
 }
 
 enum PropertyWriteResult {
@@ -334,7 +339,7 @@ static int writeProperty(QObject *obj, const QByteArray &property_name, QVariant
         // we have to demarshall before writing
         void *null = 0;
         QVariant other(id, null);
-        if (!QDBusMetaType::demarshall(qVariantValue<QDBusArgument>(value), id, other.data())) {
+        if (!QDBusMetaType::demarshall(qvariant_cast<QDBusArgument>(value), id, other.data())) {
             qWarning("QDBusConnection: type `%s' (%d) is not registered with QtDBus. "
                      "Use qDBusRegisterMetaType to register it",
                      mp.typeName(), id);
@@ -495,7 +500,7 @@ QDBusMessage qDBusPropertyGetAll(const QDBusConnectionPrivate::ObjectTreeNode &n
         return interfaceNotFoundError(msg, interface_name);
     }
 
-    return msg.createReply(qVariantFromValue(result));
+    return msg.createReply(QVariant::fromValue(result));
 }
 
 QT_END_NAMESPACE

@@ -39,67 +39,59 @@
 **
 ****************************************************************************/
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the public API.  This header file may
-// change from version to version without notice, or even be
-// removed.
-//
-// We mean it.
-//
-//
-
-#ifndef QDBUSABSTRACTINTERFACEPRIVATE_H
-#define QDBUSABSTRACTINTERFACEPRIVATE_H
-
-#include <qdbusabstractinterface.h>
-#include <qdbusconnection.h>
-#include <qdbuserror.h>
-#include "qdbusconnection_p.h"
-#include "private/qobject_p.h"
-
-#define ANNOTATION_NO_WAIT      "org.freedesktop.DBus.Method.NoReply"
+#include "qdbusvirtualobject.h"
 
 #ifndef QT_NO_DBUS
 
 QT_BEGIN_NAMESPACE
 
-class QDBusAbstractInterfacePrivate : public QObjectPrivate
+QDBusVirtualObject::QDBusVirtualObject(QObject *parent) :
+    QObject(parent)
 {
-public:
-    Q_DECLARE_PUBLIC(QDBusAbstractInterface)
+}
 
-    mutable QDBusConnection connection; // mutable because we want to make calls from const functions
-    QString service;
-    QString currentOwner;
-    QString path;
-    QString interface;
-    mutable QDBusError lastError;
-    int timeout;
-
-    // this is set during creation and never changed
-    // it can't be const because QDBusInterfacePrivate has one more check
-    bool isValid;
-
-    QDBusAbstractInterfacePrivate(const QString &serv, const QString &p,
-                                  const QString &iface, const QDBusConnection& con, bool dynamic);
-    virtual ~QDBusAbstractInterfacePrivate() { }
-    bool canMakeCalls() const;
-
-    // these functions do not check if the property is valid
-    void property(const QMetaProperty &mp, QVariant &where) const;
-    bool setProperty(const QMetaProperty &mp, const QVariant &value);
-
-    // return conn's d pointer
-    inline QDBusConnectionPrivate *connectionPrivate() const
-    { return QDBusConnectionPrivate::d(connection); }
-
-    void _q_serviceOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
-};
+QDBusVirtualObject::~QDBusVirtualObject()
+{
+}
 
 QT_END_NAMESPACE
 
+
+/*!
+    \internal
+    \class QDBusVirtualObject
+    \inmodule QtDBus
+    \since 4.8
+
+    \brief The QDBusVirtualObject class is used to handle several DBus paths with one class.
+*/
+
+/*!
+    \internal
+    \fn bool QDBusVirtualObject::handleMessage(const QDBusMessage &message, const QDBusConnection &connection) = 0
+
+    This function needs to handle all messages to the path of the
+    virtual object, when the SubPath option is specified.
+    The service, path, interface and methos are all part of the message.
+    Must return true when the message is handled, otherwise false (will generate dbus error message).
+*/
+
+
+/*!
+    \internal
+    \fn QString QDBusVirtualObject::introspect(const QString &path) const
+
+    This function needs to handle the introspection of the
+    virtual object. It must return xml of the form:
+
+    \code
+<interface name="com.trolltech.QtDBus.MyObject" >
+    <property access="readwrite" type="i" name="prop1" />
+</interface>
+    \endcode
+
+    If you pass the SubPath option, this introspection has to include all child nodes.
+    Otherwise QDBus handles the introspection of the child nodes.
+*/
+
 #endif // QT_NO_DBUS
-#endif

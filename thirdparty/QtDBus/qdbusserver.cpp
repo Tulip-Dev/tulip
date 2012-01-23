@@ -7,40 +7,41 @@
 ** This file is part of the QtDBus module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
-** Commercial Usage
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
-**
 ** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this
+** file. Please review the following information to ensure the GNU Lesser
+** General Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
 ** In addition, as a special exception, Nokia gives you certain additional
-** rights.  These rights are described in the Nokia Qt LGPL Exception
+** rights. These rights are described in the Nokia Qt LGPL Exception
 ** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
 **
 ** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 3.0 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU General Public License version 3.0 requirements will be
-** met: http://www.gnu.org/copyleft/gpl.html.
+** Alternatively, this file may be used under the terms of the GNU General
+** Public License version 3.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE.GPL included in the packaging of this
+** file. Please review the following information to ensure the GNU General
+** Public License version 3.0 requirements will be met:
+** http://www.gnu.org/copyleft/gpl.html.
 **
-** If you have questions regarding the use of this file, please contact
-** Nokia at qt-info@nokia.com.
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+**
+**
+**
+**
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
 
 #include "qdbusserver.h"
 #include "qdbusconnection_p.h"
+#include "qdbusconnectionmanager_p.h"
 
 #ifndef QT_NO_DBUS
 
@@ -62,21 +63,34 @@ QT_BEGIN_NAMESPACE
 QDBusServer::QDBusServer(const QString &address, QObject *parent)
     : QObject(parent)
 {
+    if (address.isEmpty())
+        return;
+
     if (!qdbus_loadLibDBus()) {
         d = 0;
         return;
     }
     d = new QDBusConnectionPrivate(this);
 
-    if (address.isEmpty())
-        return;
+    QMutexLocker locker(&QDBusConnectionManager::instance()->mutex);
+    QDBusConnectionManager::instance()->setConnection(QLatin1String("QDBusServer-") + QString::number(reinterpret_cast<qulonglong>(d)), d);
 
     QObject::connect(d, SIGNAL(newServerConnection(QDBusConnection)),
                      this, SIGNAL(newConnection(QDBusConnection)));
 
-    // server = q_dbus_server_listen( "unix:tmpdir=/tmp", &error);
     QDBusErrorInternal error;
     d->setServer(q_dbus_server_listen(address.toUtf8().constData(), error), error);
+}
+
+/*!
+    Destructs a QDBusServer
+*/
+QDBusServer::~QDBusServer()
+{
+    if (QDBusConnectionManager::instance()) {
+        QMutexLocker locker(&QDBusConnectionManager::instance()->mutex);
+        QDBusConnectionManager::instance()->removeConnection(d->name);
+    }
 }
 
 /*!
@@ -113,11 +127,12 @@ QString QDBusServer::address() const
 
     return addr;
 }
+
 /*!
   \fn void QDBusServer::newConnection(const QDBusConnection &connection)
 
-  This signal is currently not used, but if and when it is
-  used, \a connection will be the new connection. 
+  This signal is emitted when a new client connection \a connection is
+  established to the server.
  */
 
 QT_END_NAMESPACE

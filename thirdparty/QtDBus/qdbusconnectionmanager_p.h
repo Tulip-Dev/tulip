@@ -39,87 +39,50 @@
 **
 ****************************************************************************/
 
-#ifndef QDBUSPENDINGCALL_H
-#define QDBUSPENDINGCALL_H
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the public API.  This header file may
+// change from version to version without notice, or even be
+// removed.
+//
+// We mean it.
+//
+//
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qobject.h>
-#include <QtCore/qshareddata.h>
+#ifndef QDBUSCONNECTIONMANAGER_P_H
+#define QDBUSCONNECTIONMANAGER_P_H
 
-#include <QtDBus/qdbusmacros.h>
-#include <QtDBus/qdbusmessage.h>
+#include "qdbusconnection_p.h"
 
 #ifndef QT_NO_DBUS
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
 
-QT_MODULE(DBus)
-
-class QDBusConnection;
-class QDBusError;
-class QDBusPendingCallWatcher;
-
-class QDBusPendingCallPrivate;
-class Q_DBUS_EXPORT QDBusPendingCall
+class QDBusConnectionManager
 {
 public:
-    QDBusPendingCall(const QDBusPendingCall &other);
-    ~QDBusPendingCall();
-    QDBusPendingCall &operator=(const QDBusPendingCall &other);
+    QDBusConnectionManager() {}
+    ~QDBusConnectionManager();
+    static QDBusConnectionManager* instance();
 
-#ifndef Q_QDOC
-    // pretend that they aren't here
-    bool isFinished() const;
-    void waitForFinished();
+    QDBusConnectionPrivate *connection(const QString &name) const;
+    void removeConnection(const QString &name);
+    void setConnection(const QString &name, QDBusConnectionPrivate *c);
 
-    bool isError() const;
-    bool isValid() const;
-    QDBusError error() const;
-    QDBusMessage reply() const;
-#endif
+    QDBusConnectionPrivate *sender() const;
+    void setSender(const QDBusConnectionPrivate *s);
 
-    static QDBusPendingCall fromError(const QDBusError &error);
-    static QDBusPendingCall fromCompletedCall(const QDBusMessage &message);
-
-protected:
-    QExplicitlySharedDataPointer<QDBusPendingCallPrivate> d;
-    friend class QDBusPendingCallPrivate;
-    friend class QDBusPendingCallWatcher;
-    friend class QDBusConnection;
-
-    QDBusPendingCall(QDBusPendingCallPrivate *dd);
-
+    mutable QMutex mutex;
 private:
-    QDBusPendingCall();         // not defined
-};
+    QHash<QString, QDBusConnectionPrivate *> connectionHash;
 
-class QDBusPendingCallWatcherPrivate;
-class Q_DBUS_EXPORT QDBusPendingCallWatcher: public QObject, public QDBusPendingCall
-{
-    Q_OBJECT
-public:
-    QDBusPendingCallWatcher(const QDBusPendingCall &call, QObject *parent = 0);
-    ~QDBusPendingCallWatcher();
-
-#ifdef Q_QDOC
-    // trick qdoc into thinking this method is here
-    bool isFinished() const;
-#endif
-    void waitForFinished();     // non-virtual override
-
-Q_SIGNALS:
-    void finished(QDBusPendingCallWatcher *self);
-
-private:
-    Q_DECLARE_PRIVATE(QDBusPendingCallWatcher)
-    Q_PRIVATE_SLOT(d_func(), void _q_finished())
+    mutable QMutex senderMutex;
+    QString senderName; // internal; will probably change
 };
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif // QT_NO_DBUS
 #endif

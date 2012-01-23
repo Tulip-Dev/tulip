@@ -7,34 +7,34 @@
 ** This file is part of the QtDBus module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
-** Commercial Usage
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
-**
 ** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this
+** file. Please review the following information to ensure the GNU Lesser
+** General Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
 ** In addition, as a special exception, Nokia gives you certain additional
-** rights.  These rights are described in the Nokia Qt LGPL Exception
+** rights. These rights are described in the Nokia Qt LGPL Exception
 ** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
 **
 ** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 3.0 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU General Public License version 3.0 requirements will be
-** met: http://www.gnu.org/copyleft/gpl.html.
+** Alternatively, this file may be used under the terms of the GNU General
+** Public License version 3.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE.GPL included in the packaging of this
+** file. Please review the following information to ensure the GNU General
+** Public License version 3.0 requirements will be met:
+** http://www.gnu.org/copyleft/gpl.html.
 **
-** If you have questions regarding the use of this file, please contact
-** Nokia at qt-info@nokia.com.
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+**
+**
+**
+**
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
@@ -169,6 +169,8 @@ QDBusMetaObjectGenerator::QDBusMetaObjectGenerator(const QString &interfaceName,
     }
 }
 
+Q_DBUS_EXPORT bool qt_dbus_metaobject_skip_annotations = false;
+
 QDBusMetaObjectGenerator::Type
 QDBusMetaObjectGenerator::findType(const QByteArray &signature,
                                    const QDBusIntrospection::Annotations &annotations,
@@ -178,7 +180,7 @@ QDBusMetaObjectGenerator::findType(const QByteArray &signature,
     result.id = QVariant::Invalid;
 
     int type = QDBusMetaType::signatureToType(signature);
-    if (type == QVariant::Invalid) {
+    if (type == QVariant::Invalid && !qt_dbus_metaobject_skip_annotations) {
         // it's not a type normally handled by our meta type system
         // it must contain an annotation
         QString annotationName = QString::fromLatin1("com.trolltech.QtDBus.QtTypeName");
@@ -191,16 +193,35 @@ QDBusMetaObjectGenerator::findType(const QByteArray &signature,
         QByteArray typeName = annotations.value(annotationName).toLatin1();
 
         // verify that it's a valid one
-        if (typeName.isEmpty())
-            return result;      // invalid
+        if (!typeName.isEmpty()) {
+            // type name found
+            type = QVariant::nameToType(typeName);
+            if (type == QVariant::UserType)
+                type = QMetaType::type(typeName);
+        }
 
-        type = QVariant::nameToType(typeName);
-        if (type == QVariant::UserType)
-            type = QMetaType::type(typeName);
-        if (type == QVariant::Invalid || signature != QDBusMetaType::typeToSignature(type))
-            return result;      // unknown type is invalid too
+        if (type == QVariant::Invalid || signature != QDBusMetaType::typeToSignature(type)) {
+            // type is still unknown or doesn't match back to the signature that it
+            // was expected to, so synthesize a fake type
+            type = QMetaType::VoidStar;
+            typeName = "QDBusRawType<0x" + signature.toHex() + ">*";
+        }
 
         result.name = typeName;
+    } else if (type == QVariant::Invalid) {
+        // this case is used only by the qdbus command-line tool
+        // invalid, let's create an impossible type that contains the signature
+
+        if (signature == "av") {
+            result.name = "QVariantList";
+            type = QVariant::List;
+        } else if (signature == "a{sv}") {
+            result.name = "QVariantMap";
+            type = QVariant::Map;
+        } else {
+            result.name = "QDBusRawType::" + signature;
+            type = -1;
+        }
     } else {
         result.name = QVariant::typeToName( QVariant::Type(type) );
     }

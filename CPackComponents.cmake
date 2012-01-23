@@ -1,301 +1,139 @@
-#
+# MACRO(BUNDLE_DEFINE_COMPONENT component display_name description group)
 
-SET(CPACK_COMPONENT_GROUP_THIRDPARTY_DESCRIPTION "Thirdparty libraries.")
-SET(CPACK_COMPONENT_GROUP_LIBRARIES_DESCRIPTION "Tulip framework dynamic libraries.")
-SET(CPACK_COMPONENT_GROUP_HEADERS_DESCRIPTION "Tulip framework C++ headers.")
-SET(CPACK_COMPONENT_GROUP_SOFTWARE_DESCRIPTION "Tulip softwares.")
-SET(CPACK_COMPONENT_GROUP_PLUGINS_DESCRIPTION "Tulip base plugins set.")
-SET(CPACK_COMPONENT_GROUP_EXTRAS_DESCRIPTION "Tulip extra files and documentation.")
+BUNDLE_DEFINE_COMPONENT(gzstream "gzstream" "Provides the functionality of the zlib C-library in a C++ iostream" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(ftgl "ftgl" "A font rendering library for OpenGL" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(ogdf "OGDF" "OGDF is a self-contained C++ class library for the automatic layout of diagrams" "thirdparty")
 
-IF(WIN32) # Windows-specific components
+BUNDLE_DEFINE_COMPONENT(quazip "quazip" "Qt/C++ wrapper for ZIP/UNZIP package" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(yajl "yajl" "YAJL is a small event-driven (SAX-style) JSON parser written in ANSI C, and a small validating JSON generator" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(model_tests "Qt Model tester" "Validator library for Qt model framework" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(qxt "qxt" "LibQxt is an extension library for Qt providing a suite of cross-platform utility classes to add functionality not readily available in the Qt toolkit by Trolltech, a Nokia company." "thirdparty")
+BUNDLE_DEFINE_COMPONENT(dbus "DBus" "D-Bus is a message bus system, a simple way for applications to talk to one another." "thirdparty")
+BUNDLE_DEFINE_COMPONENT(runtime "Runtime" "Runtime components for the MinGW framework" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(iconv "iconv" "The GNU iconv library" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(zlib "zlib" "A Massively Spiffy Yet Delicately Unobtrusive Compression Library" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(freetype "freetype" "A Free, High-Quality, and Portable Font Engine" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(qt "Qt" "Intuitive APIs for C++ and CSS/JavaScript-like programming with Qt Quick for rapid UI creation" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(glew "glew" "The OpenGL Extension Wrangler Library" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(jpeg "jpeg" "libjpeg is a library written entirely in C which contains a widely-used implementation of a JPEG decoder, JPEG encoder and other JPEG utilities." "thirdparty")
+BUNDLE_DEFINE_COMPONENT(png "png" "libpng is the official PNG reference library." "thirdparty")
+BUNDLE_DEFINE_COMPONENT(python "Python" "Python Programming Language" "thirdparty")
 
-# Those variables point to component dependencies specific to a Win32 environment.
-# To avoid declaring common components 2 times (since dependencies list will be different for Mac OS and Win32), we use those variables that will be void if those components do not exist
-  SET(W32_BASE_SYSTEM "base_system")
-  SET(W32_PYTHON "python")
+BUNDLE_DEFINE_COMPONENT(tulip_core_dev "tulip-core (dev)" "Headers and developer files for the tulip-core library" "Developement files")
+BUNDLE_DEFINE_COMPONENT(tulip_core "tulip-core" "tulip-core library: A C++ framework for graph manipulation" "Libraries")
+BUNDLE_DEFINE_COMPONENT(tulip_ogl_dev "tulip-ogl (dev)" "Headers and developer files for the tulip-ogl library" "Developement files")
+BUNDLE_DEFINE_COMPONENT(tulip_ogl "tulip-ogl" "tulip-ogl library: An openGL based framework to provide 3D visualization on tulip-core objects." "Libraries")
+BUNDLE_DEFINE_COMPONENT(tulip_gui_dev "tulip-gui (dev)" "Headers and developer files for the tulip-gui library" "Developement files")
+BUNDLE_DEFINE_COMPONENT(tulip_gui "tulip-gui" "tulip-gui library: A Qt based library to provide GUI oriented features using the tulip-ogl and tulip-core libraries" "Libraries")
 
-  DEFINE_COMPONENT(base_system
-    "Base system"
-    "Core runtime and libraries."
-    ""
-    ${THIRDPARTY_GROUP_NAME})
+BUNDLE_DEFINE_COMPONENT(tulip_ogdf_dev "tulip-ogdf (dev)" "Headers and developer files for the tulip-ogdf library" "Developement files")
+BUNDLE_DEFINE_COMPONENT(tulip_ogdf "tulip-ogdf" "Bridge library between tulip-core and ogdf." "Libraries")
+BUNDLE_DEFINE_COMPONENT(tulip_app "tulip-app" "Main Tulip application" "Software")
 
-  DEFINE_COMPONENT(python
-    "python"
-    "Python is a programming language that lets you work more quickly and integrate your systems more effectively."
-    ""
-    ${THIRDPARTY_GROUP_NAME})
+BUNDLE_DEFINE_COMPONENT(TULIP_TEXTURES "Textures pack" " " "Textures")
 
-ENDIF(WIN32)
+BUNDLE_DEFINE_COMPONENT(strengthclustering "Strength clustering" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(HIERARCHICALCLUSTERING "Hierarchical clustering" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(CONVOLUTIONCLUSTERING "Convolution clustering" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(EQUALVALUECLUSTERING "Equal value clustering" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(QUOTIENTCLUSTERING "Quotient clustering" " " "Plugins")
 
-IF(WIN32 OR APPLE) # Components shared between Mac OS and Win32 plateforms
+BUNDLE_DEFINE_COMPONENT(COLORMAPPING "Color mapping" " " "Plugins")
 
-  DEFINE_COMPONENT(dbus
-    "DBus"
-    "D-Bus is a message bus system, a simple way for applications to talk to one another."
-    "${W32_BASE_SYSTEM}"
-    ${THIRDPARTY_GROUP_NAME})
+BUNDLE_DEFINE_COMPONENT(PLANARGRAPH "Planar graph" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(DOTIMPORT "Dot import" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(GRID "Grid" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(GMLIMPORT "GML" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(RANDOMGRAPH "Random graph" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(RANDOMSIMPLEGRAPH "Random simple graph" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(ADJACENCYMATRIXIMPORT "Adjacency matrix" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(COMPLETEGRAPH "Complete graph" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(RANDOMTREE "Random tree" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(RANDOMTREEGENERAL "Random tree general" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(COMPLETETREE "Complete tree" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(SMALLWORLDGRAPH "Small world graph" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(FILESYSTEM "File system" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(WEBIMPORT "Web import" " " "Plugins")
 
-#-------------------------------------
-# Thirdparty
-#-------------------------------------
-  DEFINE_COMPONENT(zlib
-    "zlib" "A Massively Spiffy Yet Delicately Unobtrusive Compression Library"
-    "${W32_BASE_SYSTEM}"
-    ${THIRDPARTY_GROUP_NAME})
+BUNDLE_DEFINE_COMPONENT(MIXEDMODEL "Mixed model" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(CONNECTEDCOMPONENTPACKING "Connected component packing" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(RANDOM "Random" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(GEMLAYOUT "GEM layout" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(TREEREINGOLDANDTILFOREXTENDED "TREEREINGOLDANDTILFOREXTENDED" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(CONETREEEXTENDED "Cone tree extended" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(TREERADIAL "Tree radial" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(TREELEAF "Tree leaf" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(BUBBLETREE "Bubble tree" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(CIRCULAR "Circular" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(HIERARCHICALGRAPH "Hierarchical graph" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(TUTTE "Tutte" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(DENDROGRAM "Dendogram" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(IMPROVEDWALKER "Improved walker" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(SQUARIFIEDTREEMAP "Squarified treemap" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(TULIP_OGDF_PLUGINS "Tulip OGDF plugins" " " "Plugins")
 
-  DEFINE_COMPONENT(freetype
-    "FreeType"
-    "A Free, High-Quality, and Portable Font Engine."
-    "${W32_BASE_SYSTEM}"
-    ${THIRDPARTY_GROUP_NAME})
+BUNDLE_DEFINE_COMPONENT(ECCENTRICITY "Eccentricity" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(DEGREEMETRIC "Degree" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(CLUSTERMETRIC "Cluster metric" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(STRENGTHMETRIC "Strength" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(BICONNECTEDCOMPONENT "Biconnected component" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(CONNECTEDCOMPONENT "Connected component" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(STRONGCOMPONENT "Strong component" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(DAGLEVELMETRIC "DAG level" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(IDMETRIC "ID" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(LEAFMETRIC "Leaf" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(NODEMETRIC "Node" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(DEPTHMETRIC "Depth" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(PATHLENGTHMETRIC "Path length" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(STRAHLERMETRIC "Strahler" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(RANDOMMETRIC "Random" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(BETWEENNESSCENTRALITY "Betweenes centrality" " " "Plugins")
 
-  DEFINE_COMPONENT(glew
-    "Glew"
-    "The OpenGL Extension Wrangler Library."
-    "${W32_BASE_SYSTEM}"
-    ${THIRDPARTY_GROUP_NAME})
+BUNDLE_DEFINE_COMPONENT(SPANNINGDAGSELECTION "Spanning DAG" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(REACHABLESUBGRAPHSELECTION "Reachable subgraph" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(SPANNINGTREESELECTION "Spanning tree" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(INDUCEDSUBGRAPHSELECTION "Induced subgraph" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(LOOPSELECTION "Loop" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(MULTIPLESELECTION "Multiple selection" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(KRUSKAL "Kruskal" " " "Plugins")
 
-  DEFINE_COMPONENT(jpeg
-    "libjpeg"
-    "IJG is an informal group that writes and distributes a widely used free library for JPEG image compression."
-    "${W32_BASE_SYSTEM}"
-    ${THIRDPARTY_GROUP_NAME})
+BUNDLE_DEFINE_COMPONENT(METRICSIZEMAPPING "Metric size mapping" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(AUTOSIZE "Auto size" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(FITTOLABELS "Fit to labels" " " "Plugins")
 
-  DEFINE_COMPONENT(png
-    "libpng"
-    "libpng is the official PNG reference library."
-    "${W32_BASE_SYSTEM}"
-    ${THIRDPARTY_GROUP_NAME})
+BUNDLE_DEFINE_COMPONENT(GMLEXPORT "GML" " " "Plugins")
 
-  DEFINE_COMPONENT(qt_core
-    "QtCore"
-    "The QtCore module contains core non-GUI functionality."
-    "zlib"
-    ${THIRDPARTY_GROUP_NAME})
+BUNDLE_DEFINE_COMPONENT(CIRCLE "Circle" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(HEXAGONE "Hexagone" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(TRIANGLE "Triangle" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(PENTAGONE "Pentagone" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(SQUARE "Square" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(RING "Ring" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(BILLBOARD "Billboard" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(CUBE "Cube" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(CUBEOUTLINEDTRANSPARENT "Cube outlined transparent" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(SPHERE "Sphere" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(CONE "Cone" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(CYLINDER "Cylinder" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(HALFCYLINDER "Half cylinder" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(CHRISTMASTREE "Christmas tree" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(WINDOW "Window" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(ROUNDEDBOX "Rounded box" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(DIAMOND "Diamond" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(CROSS "Cross" " " "Plugins")
 
-  DEFINE_COMPONENT(qt_gui
-    "QtGui"
-    "The QtGui module extends QtCore with GUI functionality."
-    "qt_core"
-    ${THIRDPARTY_GROUP_NAME})
+BUNDLE_DEFINE_COMPONENT(SPREADSHEET "Spreadsheet" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(TULIP_GUI_PLUGINS "tulip-gui plugins" " " "Plugins")
 
-  DEFINE_COMPONENT(qt_network
-    "QtNetwork"
-    "The QtNetwork module provides classes to make network programming easier and portable."
-    "qt_core"
-    ${THIRDPARTY_GROUP_NAME})
+BUNDLE_DEFINE_COMPONENT(INTERACTORNAVIGATION "Navigation" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(INTERACTORGETINFORMATION "Get information" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(INTERACTORSELECTION "Plugins" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(INTERACTORSELECTIONMODIFIER "Selection modifier" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(INTERACTORRECTANGLEZOOM "Rectangle zoom" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(INTERACTORDELETEELEMENT "Delete element" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(INTERACTORADDNODE "Add node" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(INTERACTORADDEDGE "Add edge" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(INTERACTOREDITEDGEBENDS "Edit edge bends" " " "Plugins")
 
-  DEFINE_COMPONENT(qt_opengl
-    "QtOpenGL"
-    "The QtOpenGL module offers classes that make it easy to use OpenGL in Qt applications."
-    "qt_gui"
-    ${THIRDPARTY_GROUP_NAME})
+BUNDLE_DEFINE_COMPONENT(GRAPHPERSPECTIVE "Graph hierarchy analysis" " " "Plugins")
 
-  DEFINE_COMPONENT(qt_xml
-    "QtXml"
-    "The QtXml module provides C++ implementations of SAX and DOM."
-    "qt_core"
-    ${THIRDPARTY_GROUP_NAME})
-
-
-  DEFINE_COMPONENT(ogdf
-    "OGDF"
-    "OGDF is a self-contained C++ class library for the automatic layout of diagrams."
-    "${W32_BASE_SYSTEM}"
-    ${THIRDPARTY_GROUP_NAME})
-
-  DEFINE_COMPONENT(qscintilla2
-    "QScintilla"
-    "QScintilla is a port to Qt of Neil Hodgson's Scintilla C++ editor control."
-    "qt_core"
-    ${THIRDPARTY_GROUP_NAME})
-
-  DEFINE_COMPONENT(ftgl
-    "FTGL"
-    "FTGL is a free cross-platform Open Source C++ library that uses Freetype2 to simplify rendering fonts in OpenGL applications."
-    "${W32_BASE_SYSTEM}"
-    ${THIRDPARTY_GROUP_NAME})
-
-  DEFINE_COMPONENT(gzstream
-    "Gzstream"
-    "Gzstream is a small C++ library, basically just a wrapper, that provides the functionality of the zlib C-library in a C++ iostream."
-    "zlib"
-    ${THIRDPARTY_GROUP_NAME})
-
-  DEFINE_COMPONENT(quazip
-    "QuaZIP"
-    "QuaZIP is a simple C++ wrapper over Gilles Vollant's ZIP/UNZIP package that can be used to access ZIP archives."
-    "qt_core"
-    ${THIRDPARTY_GROUP_NAME})
-
-  DEFINE_COMPONENT(sip
-    "SIP"
-    "SIP is a tool for quickly writing Python modules that interface with C++ and C libraries."
-    "${W32_PYTHON}"
-    ${THIRDPARTY_GROUP_NAME})
-
-#-------------------------------------
-# Tulip libraries
-#-------------------------------------
-  DEFINE_COMPONENT(tulip_core
-    "TulipCore"
-    "TulipCore offers base features for advanced graph manipulation."
-    "zlib;qt_core"
-    ${LIBS_GROUP_NAME})
-
-  DEFINE_COMPONENT(tulip_core_dev
-    "TulipCore (headers)"
-    "Headers for the TulipCore library."
-    "tulip_core"
-    ${HEADERS_GROUP_NAME})
-
-  DEFINE_COMPONENT(tulip_core_plugins
-    "TulipCore (plugins)"
-    "Plugins additions related to the TulipCore library"
-    "tulip_core;qt_network"
-    ${PLUGINS_GROUP_NAME})
-
-
-  DEFINE_COMPONENT(tulip_ogl
-    "TulipOGL"
-    "TulipOGL provides bridges between the TulipCore library and OpenGL to allow 3D visualization of Graph objects."
-    "tulip_core;qt_xml;qt_core;glew;jpeg;png;freetype;ftgl;${W32_LIBXML2}"
-    ${LIBS_GROUP_NAME})
-
-  DEFINE_COMPONENT(tulip_ogl_dev
-    "TulipOGL (headers)"
-    "Headers for the TulipOGL library."
-    "tulip_ogl"
-    ${HEADERS_GROUP_NAME})
-
-  DEFINE_COMPONENT(tulip_ogl_plugins
-    "TulipOGL (plugins)"
-    "Plugins additions related to the TulipOGL library."
-    "tulip_ogl"
-    ${PLUGINS_GROUP_NAME})
-
-
-  DEFINE_COMPONENT(tulip_gui
-    "TulipGUI"
-    "TulipGUI provides graphical interface features (widgets, plugins) for the Tulip plateform."
-    "qt_core;qt_gui;quazip;qt_xml;qt_network;tulip_ogl;tulip_core"
-    ${LIBS_GROUP_NAME})
-
-  DEFINE_COMPONENT(tulip_gui_dev
-    "TulipGUI (header)"
-    "Headers for the TulipGUI library."
-    "tulip_gui"
-    ${HEADERS_GROUP_NAME})
-
-  DEFINE_COMPONENT(tulip_gui_plugins
-    "TulipGUI (plugins)"
-    "Plugins additions related to the TulipGUI library."
-    "tulip_gui"
-    ${PLUGINS_GROUP_NAME})
-
-  DEFINE_COMPONENT(tulip_gui_pythonview
-    "Python script view"
-    "The python script view is a plugin providing a full Pyhton editor able to modify graphs visualized inside Tulip."
-    "tulip_gui"
-    ${PLUGINS_GROUP_NAME})
-
-  DEFINE_COMPONENT(tulip_gui_spreadview
-    "Spreadsheet view"
-    "The spreadsheet view display a tabular view of a graph."
-    "tulip_gui"
-    ${PLUGINS_GROUP_NAME})
-
-
-  DEFINE_COMPONENT(tulip_ogdf
-    "TulipOGDF"
-    "A bridge between OGDF and Tulip libraries."
-    "ogdf;tulip_core"
-    ${LIBS_GROUP_NAME})
-
-  DEFINE_COMPONENT(tulip_ogdf_dev
-    "TulipOGDF (headers)"
-    "Headers for the TulipOGDF library."
-    "tulip_ogdf"
-    ${HEADERS_GROUP_NAME})
-
-  DEFINE_COMPONENT(tulip_ogdf_plugins
-    "TulipOGDF (plugins)"
-    "Plugins additions related to TulipOGDF"
-    "tulip_ogdf"
-    ${PLUGINS_GROUP_NAME})
-
-  DEFINE_COMPONENT(tulip3_compat
-    "Tulip 3 compatibility layer"
-    "Classes kept from Tulip3 for compatibility purposes."
-    "tulip_core;tulip_ogl;tulip_gui"
-    ${LIBS_GROUP_NAME})
-
-  DEFINE_COMPONENT(tulip3_compat_dev
-    "Tulip 3 compatiblity layer (headers)"
-    "Headers for the Tulip 3 compatibility layer."
-    "tulip3_compat"
-    ${HEADERS_GROUP_NAME})
-
-  DEFINE_COMPONENT(tulip_python
-    "TulipPython"
-    "The TulipPython library provides Python bidings for TulipCore, TulipGUI and TulipGUI"
-    "sip;tulip_core;tulip_ogl;tulip_gui"
-    ${LIBS_GROUP_NAME})
-
-
-  DEFINE_COMPONENT(tulip_app
-    "Tulip"
-    "A full GUI application including TulipCore, TulipOGL and TulipGUI features."
-    "tulip_core;tulip_ogl;tulip_gui;tulip_python;tulip_core_plugins;tulip_ogl_plugins;tulip_gui_plugins;tulip_gui;spreadview;tulip_gui_pythonview;${W32_DBUS}"
-    ${SOFTWARE_GROUP_NAME})
-
-ENDIF(WIN32 OR APPLE)
-
-IF(WIN32) # NSIS-specific behavior for installation types
-
-  SET(CPACK_COMPONENT_BASE_SYSTEM_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_PYTHON_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_ZLIB_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_FREETYPE_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_GLEW_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_JPEG_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_PNG_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_QT_CORE_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_QT_GUI_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_QT_NETWORK_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_QT_OPENGL_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_QT_XML_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_OGDF_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_QSCINTILLA2_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_FTGL_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_GZSTREAM_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_QUAZIP_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_SIP_INSTALL_TYPES Full Framework)
-
-  SET(CPACK_COMPONENT_TULIP_CORE_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_TULIP_CORE_DEV_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_TULIP_CORE_PLUGINS_INSTALL_TYPES Full)
-
-  SET(CPACK_COMPONENT_TULIP_OGL_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_TULIP_OGL_DEV_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_TULIP_OGL_PLUGINS_INSTALL_TYPES Full)
-
-  SET(CPACK_COMPONENT_TULIP_GUI_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_TULIP_GUI_DEV_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_TULIP_GUI_PLUGINS_INSTALL_TYPES Full)
-  SET(CPACK_COMPONENT_TULIP_GUI_PYTHONVIEW_INSTALL_TYPES Full)
-  SET(CPACK_COMPONENT_TULIP_GUI_SPREADVIEW_INSTALL_TYPES Full)
-
-  SET(CPACK_COMPONENT_TULIP_OGDF_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_TULIP_OGDF_DEV_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_TULIP_OGDF_PLUGINS_INSTALL_TYPES Full)
-
-  SET(CPACK_COMPONENT_TULIP3_COMPAT_INSTALL_TYPES Full Framework)
-  SET(CPACK_COMPONENT_TULIP3_COMPAT_DEV_INSTALL_TYPES Full Framework)
-
-  SET(CPACK_COMPONENT_TULIP_PYTHON_INSTALL_TYPES Full Framework)
-
-  SET(CPACK_COMPONENT_TULIP_APP_INSTALL_TYPES Full)
-
-ENDIF(WIN32)

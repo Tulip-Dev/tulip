@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(${QT_INCLUDE_DIRECTORY} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_
 ADD_DEFINITIONS(-DQT_BUILD_DBUS_LIB -DDBUS_API_SUBJECT_TO_CHANGE -DQT_MAKEDLL -DQT_DBUS -DQT_NO_DBUS)
 
 SET(SRCS
+qdbusmessage.cpp
 qdbusconnection.cpp
 qdbusconnectioninterface.cpp
 qdbuserror.cpp
@@ -35,7 +36,9 @@ qdbuscontext.cpp
 qdbuspendingcall.cpp
 qdbuspendingreply.cpp
 qdbus_symbols.cpp
-qdbusservicewatcher.cpp)
+qdbusservicewatcher.cpp
+qdbusvirtualobject.cpp
+qdbusunixfiledescriptor.cpp)
 
 #Those mocs are not compiled since they are included in source files.
 QT4_WRAP_CPP(MOC_SRCS_TMP
@@ -48,7 +51,8 @@ qdbusabstractadaptor.h
 qdbusconnection_p.h
 qdbusconnectioninterface.h
 qdbuspendingcall_p.h
-qdbusserver.h)
+qdbusserver.h
+qdbusvirtualobject.h)
 
 DISABLE_COMPILER_WARNINGS()
 
