@@ -37,6 +37,8 @@
 #include <tulip/GraphProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorScale.h>
+#include <tulip/GlGraphStaticData.h>
+#include <tulip/GlLabel.h>
 
 #include <vector>
 
@@ -52,7 +54,26 @@ struct TulipFileDescriptor {
   }
   QString absolutePath;
   FileType type;
+  QString fileFilterPattern;
 };
+
+
+struct NodeShape{
+    unsigned int nodeShapeId;
+    NodeShape(unsigned int nodeShapeId=0):nodeShapeId(nodeShapeId){}
+    operator unsigned int() const {
+      return nodeShapeId;
+    }
+};
+
+struct EdgeExtremityShape{
+    unsigned int edgeExtremityShapeId;
+    EdgeExtremityShape(unsigned int edgeExtremityShapeId=0):edgeExtremityShapeId(edgeExtremityShapeId){}
+    operator unsigned int() const {
+      return edgeExtremityShapeId;
+    }
+};
+
 
 //Declare tulip type compatible with QVariant
 Q_DECLARE_METATYPE(tlp::DataSet)
@@ -92,6 +113,8 @@ Q_DECLARE_METATYPE(tlp::BooleanProperty*)
 Q_DECLARE_METATYPE(tlp::BooleanVectorProperty*)
 Q_DECLARE_METATYPE(std::vector<bool>)
 
+Q_DECLARE_METATYPE(std::set<tlp::edge>)
+
 Q_DECLARE_METATYPE(tlp::PropertyInterface*)
 
 Q_DECLARE_METATYPE(tlp::ColorScale)
@@ -99,6 +122,13 @@ Q_DECLARE_METATYPE(tlp::ColorScale)
 Q_DECLARE_METATYPE(tlp::StringCollection)
 
 Q_DECLARE_METATYPE(TulipFileDescriptor)
+
+Q_DECLARE_METATYPE(NodeShape)
+Q_DECLARE_METATYPE(tlp::EdgeShape)
+Q_DECLARE_METATYPE(EdgeExtremityShape)
+
+Q_DECLARE_METATYPE(tlp::LabelPosition)
+
 
 namespace tlp {
 class TLP_QT_SCOPE TulipMetaTypes {

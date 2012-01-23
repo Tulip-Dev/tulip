@@ -2,7 +2,7 @@
 #include "ui_VectorEditionWidget.h"
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
-#include "TulipItemDelegate.h"
+#include "GraphTableItemDelegate.h"
 
 using namespace tlp;
 
@@ -19,7 +19,7 @@ VectorEditionWidget::~VectorEditionWidget() {
   delete ui;
 }
 
-ListPropertyWidgetModel::ListPropertyWidgetModel(TulipPropertyType elementsType,ListPropertyWidgetTypeMangerInterface *typeManager, QWidget* parent): QAbstractListModel( parent),elements(typeManager),elementsType(elementsType) {
+ListPropertyWidgetModel::ListPropertyWidgetModel(ListPropertyWidgetTypeMangerInterface *typeManager, QWidget* parent): QAbstractListModel( parent),elements(typeManager) {
 
 }
 
@@ -88,9 +88,9 @@ ListPropertyWidgetTypeMangerInterface* VectorEditionWidget::getInterface() {
   return ((ListPropertyWidgetModel*)ui->listView->model())->getInterface();
 }
 
-void VectorEditionWidget::setInterface(TulipPropertyType elementsType,ListPropertyWidgetTypeMangerInterface *interf) {
-  ui->listView->setModel(new ListPropertyWidgetModel(elementsType,interf,this));
-  ui->listView->setItemDelegate(new TulipItemDelegate());
+void VectorEditionWidget::setInterface(ListPropertyWidgetTypeMangerInterface *interf) {
+  ui->listView->setModel(new ListPropertyWidgetModel(interf,this));
+  ui->listView->setItemDelegate(new GraphTableItemDelegate());
 }
 
 void VectorEditionWidget::addRow() {

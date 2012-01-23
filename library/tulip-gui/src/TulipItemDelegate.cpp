@@ -70,7 +70,7 @@ tlp::TulipItemEditorCreator* TulipItemDelegate::creator(int typeId) const {
 }
 
 QWidget* TulipItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex& index) const {
-  QVariant v = index.model()->data(index);
+  QVariant v = index.model()->data(index);  
   TulipItemEditorCreator *c = creator(v.userType());
 
   if (!c)

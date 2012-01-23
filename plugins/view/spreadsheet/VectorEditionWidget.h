@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <tulip/tulipconf.h>
 #include <tulip/PropertyTypes.h>
-#include "TulipQVariantBuilder.h"
 #include <QtCore/QVariant>
 #include <QtCore/QAbstractListModel>
 
@@ -138,7 +137,7 @@ private:
 class ListPropertyWidgetModel : public QAbstractListModel {
 
 public :
-  ListPropertyWidgetModel(TulipPropertyType elementsType,ListPropertyWidgetTypeMangerInterface *typeManager, QWidget* parent = 0);
+  ListPropertyWidgetModel(ListPropertyWidgetTypeMangerInterface *typeManager, QWidget* parent = 0);
   virtual ~ListPropertyWidgetModel();
   virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
   virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -151,8 +150,7 @@ public :
     return elements;
   }
 private:
-  ListPropertyWidgetTypeMangerInterface *elements;
-  TulipPropertyType elementsType;
+  ListPropertyWidgetTypeMangerInterface *elements;  
 };
 
 
@@ -163,7 +161,7 @@ public:
   explicit VectorEditionWidget(QWidget *parent = 0);
   ~VectorEditionWidget();
   ListPropertyWidgetTypeMangerInterface *getInterface();
-  void setInterface(TulipPropertyType elementsType,ListPropertyWidgetTypeMangerInterface *interf);
+  void setInterface(ListPropertyWidgetTypeMangerInterface *interf);
 
 private slots:
   void addRow();

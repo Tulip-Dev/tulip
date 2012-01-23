@@ -5,8 +5,7 @@ SET(spreadsheet_LIB_SRCS
     GraphTableWidget.cpp
     GraphTableModel.cpp
     ElementCollection.cpp
-    TulipItemDelegate.cpp
-    TulipQVariantBuilder.cpp
+    GraphTableItemDelegate.cpp
     VectorEditionWidget.cpp        
     GlyphPreviewGenerator.cpp
     TulipTableWidgetColumnSelectionModel.cpp
@@ -15,6 +14,7 @@ SET(spreadsheet_LIB_SRCS
     SpreadViewTableWidget.cpp
     VisibleSectionsModel.cpp
     TulipFilterProxyModel.cpp    
+    PropertyToQVariantMapper.cpp
 )
 
 set(spreadsheet_UI
@@ -30,7 +30,7 @@ set(spreadsheet_MOC
     GraphTableWidget.h
     GraphTableModel.h
     ElementCollection.h
-    TulipItemDelegate.h
+    GraphTableItemDelegate.h
     VectorEditionWidget.h        
     TulipTableWidgetColumnSelectionModel.h
     TulipTableWidgetColumnSelectionWidget.h

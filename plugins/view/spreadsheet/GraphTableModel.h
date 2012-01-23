@@ -4,6 +4,13 @@
 #include <tulip/Graph.h>
 #include <deque>
 
+#include "PropertyToQVariantMapper.h"
+
+
+
+/**
+  * @brief Simple structure used to store element id and propertiy corresponding to a cell in the GraphTableModel.
+  **/
 struct GraphTableModelIndex {
   GraphTableModelIndex(unsigned int element,tlp::PropertyInterface* property);
 
@@ -25,12 +32,17 @@ private:
   tlp::PropertyInterface* _property;
 };
 /**
-  * @brief The GraphTableModel class allows to visualize and edit a Tulip Graph object with Qt's model/view framework. You can only use this model only with TulipItemDelegate class instead you cannot see double values and histogram.
+  * @brief The GraphTableModel class allows to visualize and edit a Tulip Graph object with Qt's model/view framework. This model is made to work with a GraphTableItemDelegate class as QItemDelegate. If you use another one you cannot see both values and histogram distibution in double properties cells.
   **/
 class GraphTableModel : public QAbstractTableModel, public tlp::Observable , public tlp::GraphObserver, public tlp::PropertyObserver {
   Q_OBJECT
 public:
   GraphTableModel(tlp::Graph* graph,tlp::ElementType elementType=tlp::NODE,QObject* parent = 0);
+
+  enum GraphTableModelDataRole {
+      //Return a double value between 0 and 1 where 0 correspond to elements with the lowest value and 1 the highest.
+      NormalizedValueRole = 33
+  };
 
   //Get set parameters
   tlp::Graph* graph()const {
@@ -391,6 +403,23 @@ private:
     return std::make_pair(first,last);
   }
 
+  /**
+    * @brief Create a QVariant from a tulip property value.
+    **/
+  template<typename PROPERTYCLASS,typename NODETYPE,typename EDGETYPE>
+  QVariant createQVariantFromTulipProperty(tlp::ElementType eltType,unsigned int eltId,PROPERTYCLASS* property) const {
+    QVariant v;
+
+    if(eltType == tlp::NODE) {
+      v.setValue<NODETYPE>(property->getNodeValue(tlp::node(eltId)));
+    }
+    else {
+      v.setValue<EDGETYPE>(property->getEdgeValue(tlp::edge(eltId)));
+    }
+
+    return v;
+  }
+
   tlp::Graph* _graph;
   tlp::ElementType _elementType;
   Qt::Orientation _orientation;
@@ -398,6 +427,8 @@ private:
   TLP_HASH_MAP<unsigned int,int> _idToIndex;
   std::vector<tlp::PropertyInterface*> _propertiesTable;
   TLP_HASH_MAP<tlp::PropertyInterface*,int> _propertyToIndex;
+
+  PropertyToQVariantMapper _propertyConverter;
 
   //Sorting var
   tlp::PropertyInterface* _sortingProperty;
