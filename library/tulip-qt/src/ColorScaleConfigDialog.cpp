@@ -484,6 +484,8 @@ void ColorScaleConfigDialog::setColorScale(ColorScale *colorScale) {
     colorsTable->setItem(4, 0, item5);
     nbColors->setValue(5);
     gradientCB->setChecked(true);
+
+    accept();
   }
 
   connect(nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
