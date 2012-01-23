@@ -82,12 +82,12 @@ void PlanarityTestImpl::extractBoundaryCycle(Graph *sG, node cNode,
 //=================================================================
 void PlanarityTestImpl::obstrEdgesTerminal(Graph* G, node w, node t, node u) {
   (void)u; //fixes unused parameter warning in release builds
-#ifndef DEBUG
+#ifndef NDEBUG
   node mm = lcaBetween(nodeLabelB.get(t.id), neighborWTerminal.get(t.id), p0);
-#endif
   assert((listEdgesUpwardT0(nodeLabelB.get(t.id), mm)));
   assert(listEdgesUpwardT0(neighborWTerminal.get(t.id), mm));
   assert(listEdgesUpwardT0(mm, u));
+#endif
   edge e = G->existEdge(nodeLabelB.get(t.id), nodeWithDfsPos.get(labelB.get(t.id)));
   assert(e.isValid());
   obstructionEdges.push_back(e);
