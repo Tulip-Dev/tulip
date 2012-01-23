@@ -285,12 +285,12 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
 
       if (!graph->existProperty(copyName) ||
           graph->getProperty(copyName)->getTypename() == DoubleProperty::propertyTypename) {
-        PropertyInterface*copy = graph->getProperty(copyName);
+
+        PropertyInterface*copy = graph->getProperty<DoubleProperty>(copyName);
         assert(copy != NULL);
         copy->copy(graph->getLocalProperty(destination, destType));
       }
     }
-
   }
 
   Observable::unholdObservers();
