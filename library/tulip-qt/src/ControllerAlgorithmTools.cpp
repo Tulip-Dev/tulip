@@ -369,7 +369,7 @@ bool ControllerAlgorithmTools::changeSizes(Graph *graph, QWidget *parent,
     const string &propertyName,
     View *view) {
   return changeProperty(graph, parent, name, propertyName,
-                        StringProperty::propertyTypename, view);
+                        SizeProperty::propertyTypename, view);
 }
 //**********************************************************************
 void ControllerAlgorithmTools::isAcyclic(Graph *graph,QWidget *parent) {
