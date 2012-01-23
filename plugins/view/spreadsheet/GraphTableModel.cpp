@@ -62,15 +62,15 @@ GraphTableModel::GraphTableModel(Graph* graph,ElementType displayType,QObject* p
 
 void GraphTableModel::setGraph(Graph* newGraph) {
     if(_graph != NULL) {
-        _graph->removeObserver(this);
-        _graph->removeGraphObserver(this);
+        _graph->addListener(this);
+        _graph->addObserver(this);
     }
 
     _graph = newGraph;
 
     if(_graph != NULL) {
+        _graph->addListener(this);
         _graph->addObserver(this);
-        _graph->addGraphObserver(this);
     }
 
     updateElementsTable();
@@ -526,29 +526,102 @@ bool GraphTableModel::removeRows( const QModelIndexList& toRemove) {
 }
 
 
-void GraphTableModel::addNode(Graph *, const node n) {
-    if(_elementType == NODE) {
-        _idsToAdd.insert(n.id);
+void GraphTableModel::treatEvent(const Event &evt){
+
+    const GraphEvent* graphEvent= dynamic_cast<const GraphEvent*>(&evt);
+    if(graphEvent != NULL){
+        switch(graphEvent->getType()){
+        case GraphEvent::TLP_ADD_NODE:
+            if(_elementType == NODE){
+                _idsToAdd.insert(graphEvent->getNode().id);
+            }
+            break;
+        case GraphEvent::TLP_ADD_NODES:
+        {
+            if(_elementType == NODE){
+                const vector<node>& nodes = graphEvent->getNodes();
+                for(vector<node>::const_iterator it = nodes.begin() ; it != nodes.end() ; ++it){
+                    _idsToAdd.insert((*it).id);
+                }
+            }
+        }
+            break;
+        case GraphEvent::TLP_ADD_EDGE:
+            if(_elementType == EDGE){
+                _idsToAdd.insert(graphEvent->getEdge().id);
+            }
+            break;
+        case GraphEvent::TLP_ADD_EDGES:
+        {
+            if(_elementType == EDGE){
+                const vector<edge>& edges = graphEvent->getEdges();
+                for(vector<edge>::const_iterator it = edges.begin() ; it != edges.end() ; ++it){
+                    _idsToAdd.insert((*it).id);
+                }
+            }
+        }
+        case GraphEvent::TLP_DEL_NODE:
+            if(_elementType == NODE){
+                _idsToDelete.insert(graphEvent->getNode().id);
+            }
+            break;
+        case GraphEvent::TLP_DEL_EDGE:
+            if(_elementType == EDGE){
+                _idsToDelete.insert(graphEvent->getEdge().id);
+            }
+            break;
+        case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
+            addLocalProperty(graphEvent->getGraph(),graphEvent->getPropertyName());
+            break;
+        case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY:
+            beforeDelLocalProperty(graphEvent->getGraph(),graphEvent->getPropertyName());
+            break;
+        case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
+            addInheritedProperty(graphEvent->getGraph(),graphEvent->getPropertyName());
+            break;
+        case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
+            beforeDelInheritedProperty(graphEvent->getGraph(),graphEvent->getPropertyName());
+            break;
+        default:
+            break;
+        }
+    }else{
+        const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&evt);
+        if(propertyEvent != NULL){
+            switch(propertyEvent->getType()){
+            case PropertyEvent::TLP_AFTER_SET_NODE_VALUE:
+                if(_elementType == NODE) {
+                    //If the element was not marked for deletion
+                    if(_idsToDelete.find(propertyEvent->getNode().id) == _idsToDelete.end()) {
+                        _dataUpdated.push_back(GraphTableModelIndex(propertyEvent->getNode().id,propertyEvent->getProperty()));
+                    }
+                }
+                break;
+            case PropertyEvent::TLP_AFTER_SET_EDGE_VALUE:
+                if(_elementType == EDGE) {
+                    //If the element was not marked for deletion
+                    if(_idsToDelete.find(propertyEvent->getEdge().id) == _idsToDelete.end()) {
+                        _dataUpdated.push_back(GraphTableModelIndex(propertyEvent->getEdge().id,propertyEvent->getProperty()));
+                    }
+                }
+                break;
+            case PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE:
+                if(_elementType == NODE) {
+                    _propertiesUpdated.insert(propertyEvent->getProperty());
+                }
+                break;
+            case PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE:
+                if(_elementType == EDGE) {
+                    _propertiesUpdated.insert(propertyEvent->getProperty());
+                }
+                break;
+            default:
+                break;
+            }
+        }
     }
 }
 
-void GraphTableModel::addEdge(Graph *, const edge e) {
-    if(_elementType == EDGE) {
-        _idsToAdd.insert(e.id);
-    }
-}
-
-void GraphTableModel::delNode(Graph *,const node n) {
-    if(_elementType == NODE) {
-        _idsToDelete.insert(n.id);
-    }
-}
-
-void GraphTableModel::delEdge(Graph *,const edge e) {
-    if(_elementType == EDGE) {
-        _idsToDelete.insert(e.id);
-    }
-}
 void GraphTableModel::addLocalProperty(Graph* g, const string& propertyName) {
     PropertyInterface* property = g->getProperty(propertyName);
 
@@ -563,7 +636,6 @@ void GraphTableModel::addLocalProperty(Graph* g, const string& propertyName) {
                 break;
             }
         }
-
         _propertiesToAdd.insert(property);
     }
 }
@@ -606,37 +678,11 @@ void GraphTableModel::beforeDelInheritedProperty(Graph *graph, const std::string
 
 }
 
-void GraphTableModel::afterSetNodeValue(PropertyInterface* property, const node n) {
-    if(_elementType == NODE) {
-        //If the element was not marked for deletion
-        if(_idsToDelete.find(n.id) == _idsToDelete.end()) {
-            _dataUpdated.push_back(GraphTableModelIndex(n.id,property));
-        }
-    }
+void GraphTableModel::treatEvents(const vector<Event> &){
+    update();
 }
 
-void GraphTableModel::afterSetEdgeValue(PropertyInterface* property, const edge e) {
-    if(_elementType == EDGE) {
-        //If the element was not marked for deletion
-        if(_idsToDelete.find(e.id) == _idsToDelete.end()) {
-            _dataUpdated.push_back(GraphTableModelIndex(e.id,property));
-        }
-    }
-}
-
-void GraphTableModel::afterSetAllNodeValue(PropertyInterface* property) {
-    if(_elementType == NODE) {
-        _propertiesUpdated.insert(property);
-    }
-}
-
-void GraphTableModel::afterSetAllEdgeValue(PropertyInterface* property) {
-    if(_elementType == EDGE) {
-        _propertiesUpdated.insert(property);
-    }
-}
-
-void GraphTableModel::update() {
+void GraphTableModel::update(){
     //Remove deleted properties and elements from vector.
     if(!_idsToDelete.empty()) {
         removeFromVector<unsigned int>(_idsToDelete,_idTable,_idToIndex,_orientation==Qt::Vertical);

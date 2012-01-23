@@ -34,7 +34,7 @@ private:
 /**
   * @brief The GraphTableModel class allows to visualize and edit a Tulip Graph object with Qt's model/view framework. This model is made to work with a GraphTableItemDelegate class as QItemDelegate. If you use another one you cannot see both values and histogram distibution in double properties cells.
   **/
-class GraphTableModel : public QAbstractTableModel, public tlp::Observable , public tlp::GraphObserver, public tlp::PropertyObserver {
+class GraphTableModel : public QAbstractTableModel, public tlp::Observable {
   Q_OBJECT
 public:
   GraphTableModel(tlp::Graph* graph,tlp::ElementType elementType=tlp::NODE,QObject* parent = 0);
@@ -66,9 +66,6 @@ public:
     return _orientation;
   }
   void setOrientation(Qt::Orientation orientation);
-
-
-
 
   //Data access methods
   /**
@@ -169,22 +166,16 @@ public:
   bool removeRows( const QModelIndexList& toRemove);
 
   //Observable management
-  void addNode(tlp::Graph *, const tlp::node );
-  void addEdge(tlp::Graph *, const tlp::edge );
-  void delNode(tlp::Graph *,const tlp::node );
-  void delEdge(tlp::Graph *,const tlp::edge );
+  void treatEvent(const tlp::Event &evt);
   void addLocalProperty(tlp::Graph*, const std::string&);
   void beforeDelLocalProperty(tlp::Graph *, const std::string &);
   void addInheritedProperty(tlp::Graph*, const std::string&);
   void beforeDelInheritedProperty(tlp::Graph *, const std::string &);
-  void afterSetNodeValue(tlp::PropertyInterface*, const tlp::node);
-  void afterSetEdgeValue(tlp::PropertyInterface*, const tlp::edge);
-  void afterSetAllNodeValue(tlp::PropertyInterface*);
-  void afterSetAllEdgeValue(tlp::PropertyInterface*);
 
   /**
     * @brief Apply all the modifications occured in the graph on the model.
     **/
+  void treatEvents(const  std::vector<tlp::Event> &events );
   void update();
 
 
