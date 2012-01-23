@@ -38,7 +38,6 @@ class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, public GraphObserv
 
 public:
   LayoutProperty(Graph *, std::string n="", bool updateOnEdgeReversal = true);
-  ~LayoutProperty();
 
   // override some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );

@@ -72,11 +72,6 @@ LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeRevers
   setMetaValueCalculator(&mvLayoutCalculator);
 }
 //======================================================
-LayoutProperty::~LayoutProperty() {
-  if (graph)
-    graph->removeGraphObserver(this);
-}
-//======================================================
 Coord LayoutProperty::getMax(Graph *sg) {
   if (sg==0) sg=graph;
 
