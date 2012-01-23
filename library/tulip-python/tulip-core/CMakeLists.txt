@@ -110,9 +110,9 @@ ADD_CUSTOM_TARGET(touchTulipPythonCMakeLists ALL
                   DEPENDS ${LibTulipPythonName})
 
 INSTALL(TARGETS ${LibTulipPythonName}
-        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT pythonbindings
-        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings
-        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings)
+        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
 
 ADD_CUSTOM_COMMAND(
 				   TARGET ${LibTulipPythonName}
@@ -121,8 +121,8 @@ ADD_CUSTOM_COMMAND(
                    COMMENT "Generating QScintilla API file for Tulip Python bindings"
 				   VERBATIM)
 				   
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT pythonbindings)
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings)
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)

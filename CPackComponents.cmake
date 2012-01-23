@@ -18,6 +18,8 @@ BUNDLE_DEFINE_COMPONENT(glew "glew" "The OpenGL Extension Wrangler Library" "thi
 BUNDLE_DEFINE_COMPONENT(jpeg "jpeg" "libjpeg is a library written entirely in C which contains a widely-used implementation of a JPEG decoder, JPEG encoder and other JPEG utilities." "thirdparty")
 BUNDLE_DEFINE_COMPONENT(png "png" "libpng is the official PNG reference library." "thirdparty")
 BUNDLE_DEFINE_COMPONENT(python "Python" "Python Programming Language" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(qscintilla2 "QScintilla2" "QScintilla library" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(sip "SIP" "Python/C++ bindings library" "thirdparty")
 
 BUNDLE_DEFINE_COMPONENT(tulip_core_dev "tulip-core (dev)" "Headers and developer files for the tulip-core library" "Developement files")
 BUNDLE_DEFINE_COMPONENT(tulip_core "tulip-core" "tulip-core library: A C++ framework for graph manipulation" "Libraries")
@@ -25,6 +27,7 @@ BUNDLE_DEFINE_COMPONENT(tulip_ogl_dev "tulip-ogl (dev)" "Headers and developer f
 BUNDLE_DEFINE_COMPONENT(tulip_ogl "tulip-ogl" "tulip-ogl library: An openGL based framework to provide 3D visualization on tulip-core objects." "Libraries")
 BUNDLE_DEFINE_COMPONENT(tulip_gui_dev "tulip-gui (dev)" "Headers and developer files for the tulip-gui library" "Developement files")
 BUNDLE_DEFINE_COMPONENT(tulip_gui "tulip-gui" "tulip-gui library: A Qt based library to provide GUI oriented features using the tulip-ogl and tulip-core libraries" "Libraries")
+BUNDLE_DEFINE_COMPONENT(tulip_python "Tulip python" "Tulip python bindings" "Libraries")
 
 BUNDLE_DEFINE_COMPONENT(tulip_ogdf_dev "tulip-ogdf (dev)" "Headers and developer files for the tulip-ogdf library" "Developement files")
 BUNDLE_DEFINE_COMPONENT(tulip_ogdf "tulip-ogdf" "Bridge library between tulip-core and ogdf." "Libraries")
@@ -124,6 +127,7 @@ BUNDLE_DEFINE_COMPONENT(CROSS "Cross" " " "Plugins")
 
 BUNDLE_DEFINE_COMPONENT(SPREADSHEET "Spreadsheet" " " "Plugins")
 BUNDLE_DEFINE_COMPONENT(TULIP_GUI_PLUGINS "tulip-gui plugins" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(TULIP_PLUGINS_PYTHONSCRIPTVIEW "Python script view" " " "Plugins")
 
 BUNDLE_DEFINE_COMPONENT(INTERACTORNAVIGATION "Navigation" " " "Plugins")
 BUNDLE_DEFINE_COMPONENT(INTERACTORGETINFORMATION "Get information" " " "Plugins")
