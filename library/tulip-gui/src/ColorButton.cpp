@@ -58,8 +58,7 @@ void ColorButton::setTulipColor(const tlp::Color& c) {
 }
 
 void ColorButton::chooseColor() {
-  QColor c = QColorDialog::getColor(_color,0,trUtf8("Choose a color"),QColorDialog::ShowAlphaChannel);
-
+  QColor c = QColorDialog::getColor(_color,this,trUtf8("Choose a color"),QColorDialog::ShowAlphaChannel);
   if (c.isValid())
     setColor(c);
 }
