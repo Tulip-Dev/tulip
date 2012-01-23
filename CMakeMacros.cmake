@@ -82,14 +82,13 @@ MACRO(BUNDLE_CHECK)
   FOREACH(CMP ${CPACK_COMPONENTS_ALL})
     STRING(TOUPPER ${CMP} C)
     IF(NOT CPACK_COMPONENT_${C}_DISPLAY_NAME) # Check display name
-#      MESSAGE(FATAL_ERROR "[CPack] ${C}: No display name declared. See BUNDLE_DEFINE_COMPONENT for infos")
-MESSAGE("[CPack] ${C}: No display name declared. See BUNDLE_DEFINE_COMPONENT for infos")
+      MESSAGE(FATAL_ERROR "[CPack] ${C}: No display name declared. See BUNDLE_DEFINE_COMPONENT for infos")
     ENDIF(NOT CPACK_COMPONENT_${C}_DISPLAY_NAME)
     IF(NOT CPACK_COMPONENT_${C}_DESCRIPTION) # Check description
-#      MESSAGE(FATAL_ERROR "[CPack] ${C}: No description declared. See BUNDLE_DEFINE_COMPONENT for infos")
+      MESSAGE(FATAL_ERROR "[CPack] ${C}: No description declared. See BUNDLE_DEFINE_COMPONENT for infos")
     ENDIF(NOT CPACK_COMPONENT_${C}_DESCRIPTION)
     IF(NOT CPACK_COMPONENT_${C}_GROUP) # Check group
-#      MESSAGE(FATAL_ERROR "[CPack] ${C}: No group declared. See BUNDLE_DEFINE_COMPONENT for infos")
+      MESSAGE(FATAL_ERROR "[CPack] ${C}: No group declared. See BUNDLE_DEFINE_COMPONENT for infos")
     ENDIF(NOT CPACK_COMPONENT_${C}_GROUP)
   ENDFOREACH()
 ENDMACRO(BUNDLE_CHECK)
