@@ -2,29 +2,126 @@
 ## General macros
 ## -----------------------------------------------------------------------------------------------
 
-# Define a software component. Setting variables for its dependencies, display name, description, etc
-# Those meta informations are mainly used when building software bundle using CPack
-MACRO(DEFINE_COMPONENT comp display_name desc deps group)
-  SET(CPACK_COMPONENTS_ALL
-  ${CPACK_COMPONENTS_ALL}
-  ${comp})
-  STRING(TOUPPER ${comp} CN)
-  SET(CPACK_COMPONENT_${CN}_DISPLAY_NAME ${display_name})
-  SET(CPACK_COMPONENT_${CN}_DESCRIPTION "${desc}.")
-  IF(NOT "${deps}" STREQUAL "")
-    SET(CPACK_COMPONENT_${CN}_DEPENDS ${deps})
+FUNCTION(install)
+  IF(TULIP_GENERATE_PLUGINSERVER)
+
+    cmake_parse_arguments(PLUGIN "" "DESTINATION;COMPONENT" "TARGETS" ${ARGN})
+
+    IF(PLUGIN_UNPARSED_ARGUMENTS)
+      cmake_parse_arguments(PLUGIN "" "DESTINATION;COMPONENT" "FILES" ${ARGN})
+      STRING(REPLACE ${TULIP_DIR} "" DEST ${PLUGIN_DESTINATION})
+      SET(PLUGIN_DESTINATION "${CMAKE_BINARY_DIR}/pluginserver/${PLUGIN_COMPONENT}/${DEST}")
+
+      IF(PLUGIN_UNPARSED_ARGUMENTS)
+        cmake_parse_arguments(PLUGIN "" "DESTINATION;COMPONENT" "DIRECTORY" ${ARGN})
+        STRING(REPLACE ${TULIP_DIR} "" DEST ${PLUGIN_DESTINATION})
+        SET(PLUGIN_DESTINATION "${CMAKE_BINARY_DIR}/pluginserver/${PLUGIN_COMPONENT}/${DEST}")
+        message("${PLUGIN_DESTINATION}")
+        _install(DIRECTORY ${PLUGIN_DIRECTORY} COMPONENT ${PLUGIN_COMPONENT} DESTINATION ${PLUGIN_DESTINATION})
+      ENDIF()
+      _install(FILES ${PLUGIN_FILES} COMPONENT ${PLUGIN_COMPONENT} DESTINATION ${PLUGIN_DESTINATION})
+
+    ELSE()
+      STRING(REPLACE ${TULIP_DIR} "" DEST ${PLUGIN_DESTINATION})
+      SET(PLUGIN_DESTINATION "${CMAKE_BINARY_DIR}/pluginserver/${PLUGIN_COMPONENT}/${DEST}")
+      FOREACH(TARGET ${PLUGIN_TARGETS})
+        _install(TARGETS ${PLUGIN_TARGETS} COMPONENT ${PLUGIN_COMPONENT} DESTINATION ${PLUGIN_DESTINATION})
+      ENDFOREACH()
+    ENDIF()
+
+  ELSE(TULIP_GENERATE_PLUGINSERVER)
+    cmake_parse_arguments(TGT "" "COMPONENT;TARGETS;FILES" "" ${ARGN})
+
+    IF(NOT TGT_COMPONENT) # Check COMPONENT declaration
+      MESSAGE(FATAL_ERROR "[CPack] Component not defined for ${TGT_TARGETS} ${TGT_FILES}. Component must be defined to ensure correct installer generation.")
+    ENDIF(NOT TGT_COMPONENT)
+
+    SET(CPACK_COMPONENTS_ALL ${CPACK_COMPONENTS_ALL} ${TGT_COMPONENT} CACHE INTERNAL "")
+
+    FOREACH(T ${TGT_TARGETS})
+      SET(BUNDLE_${T}_COMP ${TGT_COMPONENT} CACHE INTERNAL "")
+      SET(BUNDLE_TARGETS ${BUNDLE_TARGETS} ${T} CACHE INTERNAL "")
+    ENDFOREACH()
+
+    _install(${ARGN})
+
   ENDIF()
-  SET(CPACK_COMPONENT_${CN}_GROUP ${group})
-ENDMACRO()
+
+ENDFUNCTION(install)
+
+FUNCTION(TARGET_LINK_LIBRARIES)
+  FOREACH(A ${ARGV})
+    IF(NOT FIRST_ARG)
+      SET(LIB ${A})
+      SET(FIRST_ARG TRUE)
+    ELSE()
+      SET(DEPS ${DEPS} ${A})
+    ENDIF()
+  ENDFOREACH()
+  SET(BUNDLE_TARGET_DEPS_${LIB} ${BUNDLE_TARGET_DEPS_${LIB}} ${DEPS} CACHE INTERNAL "" FORCE)
+  _target_link_libraries(${ARGN})
+ENDFUNCTION(TARGET_LINK_LIBRARIES)
+
+MACRO(BUNDLE_INIT)
+  FOREACH(T ${BUNDLE_TARGETS})
+    SET(BUNDLE_${T}_COMP CACHE INTERNAL "" FORCE)
+    SET(BUNDLE_${T}_COMP CACHE INTERNAL "" FORCE)
+    SET(BUNDLE_TARGET_DEPS_${T} CACHE INTERNAL "" FORCE)
+  ENDFOREACH()
+  SET(BUNDLE_TARGETS CACHE INTERNAL "" FORCE)
+  FOREACH(CMP ${CPACK_COMPONENTS_ALL})
+    STRING(TOUPPER ${CMP} C)
+    SET(CPACK_COMPONENT_${C}_DISPLAY_NAME CACHE INTERNAL "" FORCE)
+    SET(CPACK_COMPONENT_${C}_DESCRIPTION CACHE INTERNAL "" FORCE)
+    SET(CPACK_COMPONENT_${C}_GROUP CACHE INTERNAL "" FORCE)
+  ENDFOREACH()
+  SET(CPACK_COMPONENTS_ALL "" CACHE INTERNAL "")
+ENDMACRO(BUNDLE_INIT)
+
+MACRO(BUNDLE_CHECK)
+  FOREACH(CMP ${CPACK_COMPONENTS_ALL})
+    STRING(TOUPPER ${CMP} C)
+    IF(NOT CPACK_COMPONENT_${C}_DISPLAY_NAME) # Check display name
+#      MESSAGE(FATAL_ERROR "[CPack] ${C}: No display name declared. See BUNDLE_DEFINE_COMPONENT for infos")
+MESSAGE("[CPack] ${C}: No display name declared. See BUNDLE_DEFINE_COMPONENT for infos")
+    ENDIF(NOT CPACK_COMPONENT_${C}_DISPLAY_NAME)
+    IF(NOT CPACK_COMPONENT_${C}_DESCRIPTION) # Check description
+#      MESSAGE(FATAL_ERROR "[CPack] ${C}: No description declared. See BUNDLE_DEFINE_COMPONENT for infos")
+    ENDIF(NOT CPACK_COMPONENT_${C}_DESCRIPTION)
+    IF(NOT CPACK_COMPONENT_${C}_GROUP) # Check group
+#      MESSAGE(FATAL_ERROR "[CPack] ${C}: No group declared. See BUNDLE_DEFINE_COMPONENT for infos")
+    ENDIF(NOT CPACK_COMPONENT_${C}_GROUP)
+  ENDFOREACH()
+ENDMACRO(BUNDLE_CHECK)
+
+MACRO(BUNDLE_DEFINE_COMPONENT component display_name description group)
+  STRING(TOUPPER ${component} C)
+  SET(CPACK_COMPONENT_${C}_DISPLAY_NAME ${display_name} CACHE INTERNAL "")
+  SET(CPACK_COMPONENT_${C}_DESCRIPTION ${description} CACHE INTERNAL "")
+  SET(CPACK_COMPONENT_${C}_GROUP ${group} CACHE INTERNAL "")
+ENDMACRO(BUNDLE_DEFINE_COMPONENT)
+
+MACRO(BUNDLE_GENERATE_DEPS)
+  FOREACH(T ${BUNDLE_TARGETS})
+    SET(CMP_SRC ${BUNDLE_${T}_COMP})
+    FOREACH(D ${BUNDLE_TARGET_DEPS_${T}})
+      SET(CMP_TGTS ${CMP_TGTS} ${BUNDLE_${D}_COMP})
+    ENDFOREACH()
+
+    STRING(TOUPPER ${CMP_SRC} C_SRC)
+    SET(CPACK_COMPONENT_${C_SRC}_DEPENDS ${CMP_TGTS} CACHE INTERNAL "")
+
+  ENDFOREACH()
+ENDMACRO(BUNDLE_GENERATE_DEPS)
 
 MACRO(DISABLE_COMPILER_WARNINGS)
-IF(MSVC)
-STRING(REGEX REPLACE "/W[0-9]" "/W0" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-STRING(REGEX REPLACE "/W[0-9]" "/W0" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-ELSE(MSVC)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w ")
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w ")
-ENDIF(MSVC)
+  IF(MSVC)
+    STRING(REGEX REPLACE "/W[0-9]" "/W0" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    STRING(REGEX REPLACE "/W[0-9]" "/W0" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+  ELSE(MSVC)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w ")
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w ")
+  ENDIF(MSVC)
 ENDMACRO()
 
 ## -----------------------------------------------------------------------------------------------
@@ -32,34 +129,23 @@ ENDMACRO()
 ## -----------------------------------------------------------------------------------------------
 IF(WIN32)
 
-# Find a library matching a pattern in common cmake library paths.
-# List of matching file will be set into the out_var variable.
-# Note: if no matching library is found, outvar will be set to ${out_var}-NOTFOUND
-MACRO(FIND_LIBRARY_GLOB out_var pattern)
-  SET(SEARCH_DIRS $ENV{CMAKE_LIBRARY_PATH} ${CMAKE_LIBRARY_PATH} ${QT_BINARY_DIR})
-  FOREACH(ITP ${SEARCH_DIRS})
-    STRING(REPLACE "\\" "/" P "${ITP}")
-    FILE(GLOB RES "${P}/${pattern}")
-    IF(RES)
-      SET(${out_var} ${RES})
-    ENDIF()
+MACRO(INSTALL_EXTERNAL_LIB pattern component)
+  FOREACH(win_path $ENV{CMAKE_LIBRARY_PATH} ${CMAKE_LIBRARY_PATH} ${QT_BINARY_DIR})
+    STRING(REPLACE "\\" "/" cmake_path "${win_path}")
+    FILE(GLOB match "${cmake_path}/${pattern}")
+    IF(match)
+      SET(results ${results} ${match})
+    ENDIF(match)
   ENDFOREACH()
-  IF(NOT ${out_var})
-    SET(${out_var} "${out_var}-NOTFOUND")
-  ENDIF()
-ENDMACRO()
 
-# Install external libraries along with a given sotfware component
-# out_var is the name of the variable containing libraries path.
-MACRO(INSTALL_EXTERNAL_LIB var_name component)
-  IF(${var_name})
-    FOREACH(ITL ${${var_name}})
-      INSTALL(FILES ${ITL} DESTINATION ${TulipBinInstallDir} COMPONENT ${component})
-    ENDFOREACH()
-  ELSE()
-    MESSAGE("${var_name} could not be located and will not be installed with package")
-  ENDIF()
-ENDMACRO()
+  IF(NOT results)
+    MESSAGE("[CPack] ${pattern} could not be located and will not be installed with package")
+  ELSE(NOT results)
+    FOREACH(F ${results})
+        INSTALL(FILES ${F} DESTINATION ${TulipBinInstallDir} COMPONENT ${component})
+    ENDFOREACH(F ${results})
+  ENDIF(NOT results)
+ENDMACRO(INSTALL_EXTERNAL_LIB)
 
 ENDIF()
 

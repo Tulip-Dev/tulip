@@ -84,5 +84,6 @@ ELSE()
   INSTALL(TARGETS yajl
        RUNTIME DESTINATION ${TulipBinInstallDir}
        LIBRARY DESTINATION ${TulipBinInstallDir}
-       ARCHIVE DESTINATION ${TulipBinInstallDir})
+       ARCHIVE DESTINATION ${TulipBinInstallDir}
+       COMPONENT yajl)
 ENDIF()

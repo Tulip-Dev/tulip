@@ -18,4 +18,4 @@ ADD_LIBRARY(ColorMapping-${TulipVersion} SHARED ${ColorMapping_SRCS} ${ColorMapp
 TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS ColorMapping-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ColorMapping-${TulipVersion})
+INSTALL(TARGETS ColorMapping-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ColorMapping)

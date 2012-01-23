@@ -4,7 +4,7 @@
 ** All rights reserved.
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **
-** This file is part of the QtDBus module of the Qt Toolkit.
+** This file is part of the FOO module of the Qt Toolkit.
 **
 ** $QT_BEGIN_LICENSE:LGPL$
 ** GNU Lesser General Public License Usage
@@ -39,17 +39,18 @@
 **
 ****************************************************************************/
 
-#ifndef QDBUSPENDINGCALL_H
-#define QDBUSPENDINGCALL_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qobject.h>
-#include <QtCore/qshareddata.h>
+#ifndef QDBUSUNIXFILEDESCRIPTOR_H
+#define QDBUSUNIXFILEDESCRIPTOR_H
 
+#include <QtCore/QSharedDataPointer>
 #include <QtDBus/qdbusmacros.h>
-#include <QtDBus/qdbusmessage.h>
 
 #ifndef QT_NO_DBUS
+
+#ifdef Q_COMPILER_RVALUE_REFS
+# include <utility>
+#endif
 
 QT_BEGIN_HEADER
 
@@ -57,69 +58,46 @@ QT_BEGIN_NAMESPACE
 
 QT_MODULE(DBus)
 
-class QDBusConnection;
-class QDBusError;
-class QDBusPendingCallWatcher;
+class QDBusUnixFileDescriptorPrivate;
+template<> QExplicitlySharedDataPointer<QDBusUnixFileDescriptorPrivate>::~QExplicitlySharedDataPointer();
 
-class QDBusPendingCallPrivate;
-class Q_DBUS_EXPORT QDBusPendingCall
+class Q_DBUS_EXPORT QDBusUnixFileDescriptor
 {
 public:
-    QDBusPendingCall(const QDBusPendingCall &other);
-    ~QDBusPendingCall();
-    QDBusPendingCall &operator=(const QDBusPendingCall &other);
+    QDBusUnixFileDescriptor();
+    explicit QDBusUnixFileDescriptor(int fileDescriptor);
+    QDBusUnixFileDescriptor(const QDBusUnixFileDescriptor &other);
+    QDBusUnixFileDescriptor &operator=(const QDBusUnixFileDescriptor &other);
+    ~QDBusUnixFileDescriptor();
 
-#ifndef Q_QDOC
-    // pretend that they aren't here
-    bool isFinished() const;
-    void waitForFinished();
-
-    bool isError() const;
     bool isValid() const;
-    QDBusError error() const;
-    QDBusMessage reply() const;
-#endif
 
-    static QDBusPendingCall fromError(const QDBusError &error);
-    static QDBusPendingCall fromCompletedCall(const QDBusMessage &message);
+    int fileDescriptor() const;
+    void setFileDescriptor(int fileDescriptor);
+
+    void giveFileDescriptor(int fileDescriptor);
+    int takeFileDescriptor();
+
+    static bool isSupported();
+
+#if defined(Q_COMPILER_RVALUE_REFS)
+    QDBusUnixFileDescriptor(QDBusUnixFileDescriptor &&other) : d(static_cast<Data &&>(other.d))
+    { }
+    inline QDBusUnixFileDescriptor &operator=(QDBusUnixFileDescriptor &&other)
+    { d.swap(other.d); return *this; }
+#endif
 
 protected:
-    QExplicitlySharedDataPointer<QDBusPendingCallPrivate> d;
-    friend class QDBusPendingCallPrivate;
-    friend class QDBusPendingCallWatcher;
-    friend class QDBusConnection;
-
-    QDBusPendingCall(QDBusPendingCallPrivate *dd);
-
-private:
-    QDBusPendingCall();         // not defined
-};
-
-class QDBusPendingCallWatcherPrivate;
-class Q_DBUS_EXPORT QDBusPendingCallWatcher: public QObject, public QDBusPendingCall
-{
-    Q_OBJECT
-public:
-    QDBusPendingCallWatcher(const QDBusPendingCall &call, QObject *parent = 0);
-    ~QDBusPendingCallWatcher();
-
-#ifdef Q_QDOC
-    // trick qdoc into thinking this method is here
-    bool isFinished() const;
-#endif
-    void waitForFinished();     // non-virtual override
-
-Q_SIGNALS:
-    void finished(QDBusPendingCallWatcher *self);
-
-private:
-    Q_DECLARE_PRIVATE(QDBusPendingCallWatcher)
-    Q_PRIVATE_SLOT(d_func(), void _q_finished())
+    typedef QExplicitlySharedDataPointer<QDBusUnixFileDescriptorPrivate>  Data;
+    Data d;
 };
 
 QT_END_NAMESPACE
 
+Q_DECLARE_METATYPE(QDBusUnixFileDescriptor)
+Q_DECLARE_METATYPE(QList<QDBusUnixFileDescriptor>)
+
 QT_END_HEADER
 
 #endif // QT_NO_DBUS
-#endif
+#endif // QDBUSUNIXFILEDESCRIPTOR_H

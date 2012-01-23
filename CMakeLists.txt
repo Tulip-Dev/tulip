@@ -81,7 +81,7 @@ ENDIF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
 ## TulipMMVersion : Ma.Mi
 ## -----------------------------------------------------------------------------------------------
 SET(TulipMajorVersion 4)
-SET(TulipMinorVersion 90)
+SET(TulipMinorVersion 91)
 SET(TulipReleaseVersion 0)
 SET(TulipVersionSeparator .)
 IF(MSVC) #specific options for Visual Studio
@@ -112,7 +112,11 @@ SET(LibTulip3CompatName "tulip3-compat-${TulipMMVersion}")
 ## Find needed packages
 ## -----------------------------------------------------------------------------------------------
 FIND_PACKAGE(Freetype REQUIRED)
+IF(WIN32)
+FIND_PACKAGE(Qt4 4.8.0 REQUIRED)
+ELSE(WIN32)
 FIND_PACKAGE(Qt4 4.7.0 REQUIRED)
+ENDIF(WIN32)
 SET(QT_USE_QTOPENGL true)
 SET(QT_USE_QTXML true)
 SET(QT_USE_QTNETWORK true)
@@ -395,6 +399,8 @@ IF(BUILD_TESTS)
   ADD_SUBDIRECTORY(unit_test)
 ENDIF()
 
+BUNDLE_INIT()
+
 ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(library)
 ADD_SUBDIRECTORY(software)
@@ -451,17 +457,11 @@ IF(EXISTS externalplugins/ExternalPlugins.cmake)
   INCLUDE(externalplugins/ExternalPlugins.cmake)
 ENDIF()
 
-SET(LIBS_GROUP_NAME "Libraries")
-SET(HEADERS_GROUP_NAME "Headers")
-SET(SOFTWARE_GROUP_NAME "Runtime")
-SET(PLUGINS_GROUP_NAME "Plugins")
-SET(EXTRAS_GROUP_NAME "Extras")
-SET(THIRDPARTY_GROUP_NAME "Third party")
-
 # Defines specific software components from tulip.
 INCLUDE(CPackComponents.cmake)
-
 INCLUDE(CPackInstaller.cmake)
+BUNDLE_CHECK()
+BUNDLE_GENERATE_DEPS()
 
 INCLUDE(CPack)
 

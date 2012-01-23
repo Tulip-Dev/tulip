@@ -32,11 +32,11 @@ IF(WIN32)
   SET(CPACK_NSIS_URL_INFO_ABOUT "http://tulip.labri.fr")
   SET(CPACK_NSIS_CONTACT "auber@labri.fr")
 
-  SET(TULIP_ICO "${PROJECT_SOURCE_DIR}/software/tulip/bitmaps/logo32x32.ico")
+  SET(TULIP_ICO "${PROJECT_SOURCE_DIR}/textures/logo32x32.ico")
   SET(CPACK_NSIS_MUI_ICON ${TULIP_ICO})
   SET(CPACK_NSIS_MUI_UNIICON ${TULIP_ICO})
   SET(CPACK_NSIS_INSTALLED_ICON_NAME ${TULIP_ICO})
-  SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\software\\\\tulip\\\\bitmaps\\\\headerlogo.bmp")
+  SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\textures\\\\headerlogo.bmp")
   SET(CPACK_NSIS_CREATE_ICONS_EXTRA "
     CreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Tulip ${TulipVersion}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\tulip.exe\\\" \\\"\\\" \\\"$INSTDIR\\\\lib\\\\tlp\\\\bitmaps\\\\logo32x32.ico\\\"
     CreateShortCut \\\"$DESKTOP\\\\Tulip ${TulipVersion}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\tulip.exe\\\" \\\"\\\" \\\"$INSTDIR\\\\lib\\\\tlp\\\\bitmaps\\\\logo32x32.ico\\\"
@@ -70,12 +70,11 @@ IF(WIN32)
   SET(CPACK_COMPONENT_GROUP_LIBRARIES_BOLD_TITLE TRUE)
   SET(CPACK_COMPONENT_GROUP_LIBRARIES_EXPANDED TRUE)
   SET(CPACK_COMPONENT_GROUP_RUNTIME_EXPANDED TRUE)
-  SET(CPACK_ALL_INSTALL_TYPES Full Framework)
 
 ELSEIF(APPLE)
     SET(CPACK_GENERATOR "DragNDrop")
     SET(CPACK_PACKAGE_FILENAME "Tulip-${TulipMajorVersion}-${TulipMinorVersion}-${TulipReleaseVersion}")
-    SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/software/tulip/bitmaps/logo32x32.ico")
+    SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/textures/logo32x32.ico")
     CONFIGURE_FILE("tulip_mac_info.plist.in" "Info.plist" @ONLY)
     INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/Info.plist" DESTINATION ${TulipAppleContentsDir})
     INSTALL(FILES tulip_mac.icns DESTINATION ${TulipAppleResourcesDir} RENAME tulip.icns)
