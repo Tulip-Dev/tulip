@@ -85,6 +85,7 @@ const int WorkspaceExposeWidget::MARGIN = 50;
 
 WorkspaceExposeWidget::WorkspaceExposeWidget(QWidget *parent): QGraphicsView(parent), _positionAnimation(NULL), _selectedItem(NULL), _placeholderItem(NULL) {
   setScene(new QGraphicsScene);
+  setSceneRect(0,0,width(),height());
   setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
@@ -176,7 +177,8 @@ void WorkspaceExposeWidget::updatePositionsAnimationFinished() {
 }
 
 void WorkspaceExposeWidget::resetSceneRect() {
-  setSceneRect(scene()->itemsBoundingRect());
+  QRectF itemsRect = scene()->itemsBoundingRect();
+  setSceneRect(0,0,std::max<qreal>(width(),itemsRect.width()),std::max<qreal>(height(),itemsRect.height()));
 }
 
 bool WorkspaceExposeWidget::eventFilter(QObject* obj, QEvent* ev) {
