@@ -33,8 +33,8 @@ QVariant ListPropertyWidgetModel::data(const QModelIndex& index, int role) const
 //      return elements->getStringValue(index.row());
 //    }
     if(role == Qt::EditRole || role == Qt::DisplayRole) {
-        QVariant v = elements->getValue(index.row());
-        std::cout<<__PRETTY_FUNCTION__<<" "<<__LINE__<<" "<<QMetaType::typeName(v.userType())<<std::endl;
+      QVariant v = elements->getValue(index.row());
+      std::cout<<__PRETTY_FUNCTION__<<" "<<__LINE__<<" "<<QMetaType::typeName(v.userType())<<std::endl;
       return elements->getValue(index.row());
     }
   }

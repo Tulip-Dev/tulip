@@ -58,20 +58,20 @@ struct TulipFileDescriptor {
 };
 
 
-struct NodeShape{
-    unsigned int nodeShapeId;
-    NodeShape(unsigned int nodeShapeId=0):nodeShapeId(nodeShapeId){}
-    operator unsigned int() const {
-      return nodeShapeId;
-    }
+struct NodeShape {
+  unsigned int nodeShapeId;
+  NodeShape(unsigned int nodeShapeId=0):nodeShapeId(nodeShapeId) {}
+  operator unsigned int() const {
+    return nodeShapeId;
+  }
 };
 
-struct EdgeExtremityShape{
-    unsigned int edgeExtremityShapeId;
-    EdgeExtremityShape(unsigned int edgeExtremityShapeId=0):edgeExtremityShapeId(edgeExtremityShapeId){}
-    operator unsigned int() const {
-      return edgeExtremityShapeId;
-    }
+struct EdgeExtremityShape {
+  unsigned int edgeExtremityShapeId;
+  EdgeExtremityShape(unsigned int edgeExtremityShapeId=0):edgeExtremityShapeId(edgeExtremityShapeId) {}
+  operator unsigned int() const {
+    return edgeExtremityShapeId;
+  }
 };
 
 
