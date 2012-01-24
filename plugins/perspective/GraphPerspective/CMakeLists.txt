@@ -10,7 +10,16 @@ src/GraphPerspective.cpp
 src/HeaderFrame.cpp
 src/ImportWizard.cpp
 src/PanelSelectionWizard.cpp
-src/ShadowFilter.cpp)
+src/ShadowFilter.cpp
+src/SpreadViewTableWidget.cpp
+src/GraphTableWidget.cpp
+src/TulipTableWidgetColumnSelectionWidget.cpp
+src/TulipFilterProxyModel.cpp
+src/TulipTableWidgetColumnSelectionModel.cpp
+src/VisibleSectionsModel.cpp
+src/DatasetTableEditor.cpp
+src/DatasetWidget.cpp
+)
 
 QT4_ADD_RESOURCES(RCC_SRCS
 resources/GraphPerspective.qrc
@@ -27,7 +36,12 @@ designer/GraphPerspectiveMainWindow.ui
 designer/HeaderFrame.ui
 designer/ImportWizard.ui
 designer/PanelSelectionWizard.ui
-designer/PanelSelectionItem.ui)
+designer/PanelSelectionItem.ui
+designer/SpreadViewTableWidget.ui
+designer/TulipTableWidgetColumnSelectionWidget.ui
+designer/DatasetTableEditor.ui
+designer/DatasetWidget.ui
+)
 
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -38,7 +52,16 @@ include/GraphPerspective.h
 include/ExpandableGroupBox.h
 include/HeaderFrame.h
 include/ImportWizard.h
-include/PanelSelectionWizard.h)
+include/PanelSelectionWizard.h
+include/SpreadViewTableWidget.h
+include/GraphTableWidget.h
+include/TulipTableWidgetColumnSelectionWidget.h
+include/TulipFilterProxyModel.h
+include/TulipTableWidgetColumnSelectionModel.h
+include/VisibleSectionsModel.h
+include/DatasetTableEditor.h
+include/DatasetWidget.h
+)
 
 ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
 

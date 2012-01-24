@@ -9,8 +9,8 @@
 #include <QtGui/QDialogButtonBox>
 #include <QtGui/QKeyEvent>
 
-#include "GraphTableModel.h"
-#include "GraphTableItemDelegate.h"
+#include <tulip/GraphTableModel.h>
+#include <tulip/GraphTableItemDelegate.h>
 #include "TulipFilterProxyModel.h"
 
 using namespace tlp;

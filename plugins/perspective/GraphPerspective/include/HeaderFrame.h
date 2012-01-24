@@ -47,6 +47,8 @@ public:
 
   QString title() const;
   QStringList menus() const;
+  QString currentMenu()const;
+  int currentMenuIndex()const;
 
   bool isExpandable() const;
   bool isExpanded() const;

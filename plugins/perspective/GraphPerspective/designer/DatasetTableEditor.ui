@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DatasetTableEditor</class>
+ <widget class="QWidget" name="DatasetTableEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="HeaderFrame" name="headerFrameWidget" native="true">
+     <property name="menus" stdset="0">
+      <stringlist>
+       <string>Nodes</string>
+       <string>Edges</string>
+      </stringlist>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="TulipTableWidgetColumnSelectionWidget" name="columnConfigurationWidget" native="true"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>HeaderFrame</class>
+   <extends>QWidget</extends>
+   <header>HeaderFrame.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TulipTableWidgetColumnSelectionWidget</class>
+   <extends>QWidget</extends>
+   <header>TulipTableWidgetColumnSelectionWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

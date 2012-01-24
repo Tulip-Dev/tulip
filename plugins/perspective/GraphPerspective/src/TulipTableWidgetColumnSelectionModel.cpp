@@ -1,6 +1,6 @@
 #include "TulipTableWidgetColumnSelectionModel.h"
 #include "GraphTableWidget.h"
-#include "GraphTableModel.h"
+#include <tulip/GraphTableModel.h>
 #include <tulip/PropertyInterface.h>
 
 using namespace tlp;

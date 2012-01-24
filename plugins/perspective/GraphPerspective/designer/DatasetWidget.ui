@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DatasetWidget</class>
+ <widget class="QWidget" name="DatasetWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QSplitter" name="splitter_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QSplitter" name="splitter">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <widget class="DatasetTableEditor" name="propertieswidget" native="true"/>
+         <widget class="GraphHierarchiesEditor" name="hierarchyWidget" native="true"/>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <widget class="SpreadViewTableWidget" name="nodesTableWidget"/>
+      <widget class="SpreadViewTableWidget" name="edgesTableWidget"/>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>GraphHierarchiesEditor</class>
+   <extends>QWidget</extends>
+   <header>GraphHierarchiesEditor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SpreadViewTableWidget</class>
+   <extends>QWidget</extends>
+   <header>SpreadViewTableWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DatasetTableEditor</class>
+   <extends>QWidget</extends>
+   <header>DatasetTableEditor.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

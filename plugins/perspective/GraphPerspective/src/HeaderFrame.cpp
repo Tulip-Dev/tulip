@@ -67,6 +67,14 @@ void HeaderFrame::setMenus(const QStringList &menus) {
   _ui->menusCombo->addItem(s);
 }
 
+QString HeaderFrame::currentMenu()const{
+    return _ui->menusCombo->currentText();
+}
+
+int HeaderFrame::currentMenuIndex()const{
+    return _ui->menusCombo->currentIndex();
+}
+
 bool HeaderFrame::isExpandable() const {
   return _ui->expandButton->isVisible();
 }

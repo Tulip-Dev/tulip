@@ -2,10 +2,10 @@
 #define TULIPTABLEWIDGETCOLUMNSELECTIONMODEL_H
 #include <QtCore/QAbstractListModel>
 class GraphTableWidget;
-class GraphTableModel;
 
 namespace tlp {
 class PropertyInterface;
+class GraphTableModel;
 }
 /**
   * @brief List model controlling the visibility of TulipTableWidget view columns.
@@ -30,7 +30,7 @@ public:
 
   bool isColumnVisible(int columnIndex)const;
 
-  GraphTableModel* graphTableModel() {
+  tlp::GraphTableModel* graphTableModel() {
     return _tableModel;
   }
 
@@ -38,7 +38,7 @@ public:
 
 private :
   GraphTableWidget* _tableView;
-  GraphTableModel* _tableModel;
+  tlp::GraphTableModel* _tableModel;
 
 private slots:
   void columnsInserted ( const QModelIndex & parent, int start, int end );

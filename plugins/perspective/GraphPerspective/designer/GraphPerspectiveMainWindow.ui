@@ -547,7 +547,13 @@ QToolButton:pressed {
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="datasetModePage"/>
+      <widget class="QWidget" name="datasetModePage">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="DatasetWidget" name="datasetWidget" native="true"/>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -558,7 +564,7 @@ QToolButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -882,6 +888,12 @@ QToolButton:pressed {
    <slots>
     <signal>panelFocused(tlp::View*)</signal>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>DatasetWidget</class>
+   <extends>QWidget</extends>
+   <header>DatasetWidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

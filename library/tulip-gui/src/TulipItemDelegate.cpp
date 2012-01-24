@@ -47,6 +47,16 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<tlp::ColorScale>(new ColorScaleEditorCreator);
   registerCreator<tlp::StringCollection>(new StringCollectionEditorCreator);
   registerCreator<TulipFileDescriptor>(new TulipFileDescriptorEditorCreator);
+  registerCreator<NodeShape>(new NodeShapeEditorCreator);
+  registerCreator<EdgeShape>(new EdgeShapeEditorCreator);
+  registerCreator<EdgeExtremityShape>(new EdgeExtremityShapeEditorCreator);
+  registerCreator<std::vector<bool> >(new GenericVectorEditorCreator<bool>);
+  registerCreator<std::vector<Color> >(new GenericVectorEditorCreator<Color>);
+  registerCreator<std::vector<Coord> >(new GenericVectorEditorCreator<Coord>);
+  registerCreator<std::vector<double> >(new GenericVectorEditorCreator<double>);
+  registerCreator<std::vector<int> >(new GenericVectorEditorCreator<int>);
+  registerCreator<std::vector<Size> >(new GenericVectorEditorCreator<Size>);
+  registerCreator<std::vector<std::string> >(new GenericVectorEditorCreator<std::string>);
 }
 
 TulipItemDelegate::~TulipItemDelegate() {

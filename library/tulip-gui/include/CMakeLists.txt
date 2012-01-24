@@ -86,6 +86,11 @@ INSTALL(FILES
   tulip/GLInteractor.h
   tulip/ScrollPopupButton.h
   tulip/WorkspaceExposeWidget.h
+  tulip/GraphTableModel.h
+  tulip/GraphTableItemDelegate.h
+  tulip/PropertyToQVariantMapper.h
+  tulip/VectorEditionWidget.h
+  tulip/GlyphRenderer.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

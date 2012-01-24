@@ -1,8 +1,8 @@
 #include "SpreadViewTableWidget.h"
 #include "ui_SpreadViewTableWidget.h"
-#include "GraphTableModel.h"
 #include "GraphTableWidget.h"
 
+#include <tulip/GraphTableModel.h>
 #include <tulip/PropertyCreationDialog.h>
 #include <tulip/CopyPropertyDialog.h>
 #include <tulip/BooleanProperty.h>
@@ -30,11 +30,6 @@ SpreadViewTableWidget::SpreadViewTableWidget(QWidget *parent) :
   connect(ui->tableView->verticalHeader(),SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showElementsContextMenu(QPoint)));
   ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(ui->tableView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showTableContextMenu(QPoint)));
-
-  //Column selection widgets
-  ui->columnEditionWidget->setVisible(false);
-  ui->columnEditionWidget->setEnabled(false);
-
 
   //Filtering
   connect(ui->showOnlySelectedElementsCheckBox,SIGNAL(stateChanged(int)),this,SLOT(filterElements()));
@@ -87,8 +82,6 @@ void SpreadViewTableWidget::setData(Graph* graph,const DataSet &data,ElementType
 
   TulipTableWidgetColumnSelectionModel* oldColumnModel = _tableColumnModel;
   _tableColumnModel = new TulipTableWidgetColumnSelectionModel(ui->tableView,this);
-  ui->columnEditionWidget->setColumnSelectionModel(_tableColumnModel);
-  ui->columnEditionWidget->setEnabled(true);
 
   if(oldColumnModel != NULL) {
     oldColumnModel->deleteLater();
@@ -101,8 +94,8 @@ void SpreadViewTableWidget::setData(Graph* graph,const DataSet &data,ElementType
 
 }
 
-TulipTableWidgetColumnSelectionWidget* SpreadViewTableWidget::columnEditionWidget() {
-  return ui->columnEditionWidget;
+TulipTableWidgetColumnSelectionModel* SpreadViewTableWidget::columnEditionModel() {
+  return _tableColumnModel;
 }
 
 GraphTableWidget* SpreadViewTableWidget::graphTableWidget() {

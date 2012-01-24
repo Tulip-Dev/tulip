@@ -2,17 +2,18 @@
 #define TULIPFILTERPROXYMODEL_H
 #include <QtGui/QSortFilterProxyModel>
 #include <tulip/Observable.h>
-class GraphTableModel;
+
 
 namespace tlp {
 class BooleanProperty;
+class GraphTableModel;
 }
 class TulipFilterProxyModel : public QSortFilterProxyModel , public tlp::Observable {
   Q_OBJECT
 public:
   TulipFilterProxyModel(QObject* parent=NULL);
 
-  void setGraphTableModel(GraphTableModel* tableModel);
+  void setGraphTableModel(tlp::GraphTableModel* tableModel);
 
   void sort(int column, Qt::SortOrder order);
 
@@ -30,7 +31,7 @@ protected:
 private:
   void setSourceModel ( QAbstractItemModel * sourceModel );
 
-  GraphTableModel* _tableModel;
+  tlp::GraphTableModel* _tableModel;
   bool _showOnlyVisibleElements;
 
   mutable tlp::BooleanProperty* _selectionProperty;
