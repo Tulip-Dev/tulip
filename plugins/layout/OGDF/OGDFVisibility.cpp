@@ -73,7 +73,7 @@ public:
 
   ~OGDFVisibility() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::VisibilityLayout *visibility = static_cast<ogdf::VisibilityLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {
@@ -84,7 +84,7 @@ public:
     }
   }
 
-  void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
+  void afterCall() {
     if (dataSet != 0) {
       bool bval = false;
 

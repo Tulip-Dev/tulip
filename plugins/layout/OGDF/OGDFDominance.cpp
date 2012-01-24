@@ -72,7 +72,7 @@ public:
   }
   ~OGDFDominance() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::DominanceLayout *dominance = static_cast<ogdf::DominanceLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {
@@ -83,7 +83,7 @@ public:
     }
   }
 
-  void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
+  void afterCall() {
     if (dataSet != 0) {
       bool bval = false;
 

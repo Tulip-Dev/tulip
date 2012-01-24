@@ -64,7 +64,7 @@ public:
 
   ~OGDFUpwardPlanarization() {}
 
-  void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
+  void afterCall() {
     if (dataSet != 0) {
       bool bval = false;
 

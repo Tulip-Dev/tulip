@@ -107,7 +107,7 @@ public:
   }
   ~OGDFStressMajorization() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::StressMajorization *stressm = static_cast<ogdf::StressMajorization*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {

@@ -120,7 +120,7 @@ public:
 
   ~OGDFTree() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::TreeLayout *tree = static_cast<ogdf::TreeLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {

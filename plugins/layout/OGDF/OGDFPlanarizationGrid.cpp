@@ -97,7 +97,7 @@ public:
 
   ~OGDFPlanarizationGrid() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::PlanarizationGridLayout *pgl = static_cast<ogdf::PlanarizationGridLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {

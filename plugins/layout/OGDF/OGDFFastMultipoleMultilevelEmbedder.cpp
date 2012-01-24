@@ -66,7 +66,7 @@ public:
 
   ~OGDFFastMultipoleMultiLevelEmbedder() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::FastMultipoleMultilevelEmbedder *fmme = static_cast<ogdf::FastMultipoleMultilevelEmbedder*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {

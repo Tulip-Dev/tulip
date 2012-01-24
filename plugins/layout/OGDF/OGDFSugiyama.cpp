@@ -143,7 +143,7 @@ public:
 
   ~OGDFSugiyama() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {
@@ -196,7 +196,7 @@ public:
     }
   }
 
-  void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
+  void afterCall() {
     if (dataSet != 0) {
       bool bval = false;
 

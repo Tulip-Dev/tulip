@@ -112,7 +112,7 @@ public:
 
   }
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::DavidsonHarelLayout *davidson = static_cast<ogdf::DavidsonHarelLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {

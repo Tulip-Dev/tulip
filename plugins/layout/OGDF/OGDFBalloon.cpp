@@ -68,7 +68,7 @@ public:
   }
   ~OGDFBalloon() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::BalloonLayout *balloon = static_cast<ogdf::BalloonLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {

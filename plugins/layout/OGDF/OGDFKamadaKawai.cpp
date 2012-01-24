@@ -101,7 +101,7 @@ public:
   }
   ~OGDFKamadaKawai() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::SpringEmbedderKK *kamada = static_cast<ogdf::SpringEmbedderKK*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {

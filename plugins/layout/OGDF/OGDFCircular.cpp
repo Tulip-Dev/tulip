@@ -86,7 +86,7 @@ public:
   }
   ~OGDFCircular() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::CircularLayout *circular = static_cast<ogdf::CircularLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {

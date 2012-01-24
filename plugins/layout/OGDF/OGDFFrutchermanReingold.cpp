@@ -114,7 +114,7 @@ public:
   OGDFFrutchermanReingold(const tlp::PropertyContext &context);
   ~OGDFFrutchermanReingold();
 
-  void beforeCall(TulipToOGDF *tlpToOGDF, ogdf::LayoutModule *ogdfLayoutAlgo);
+  void beforeCall();
 };
 /*@}*/
 
@@ -138,7 +138,7 @@ OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PropertyContext &con
 
 OGDFFrutchermanReingold::~OGDFFrutchermanReingold() {}
 
-void OGDFFrutchermanReingold::beforeCall(TulipToOGDF *tlpToOGDF, ogdf::LayoutModule *ogdfLayoutAlgo) {
+void OGDFFrutchermanReingold::beforeCall() {
   ogdf::SpringEmbedderFRExact *sefr = static_cast<ogdf::SpringEmbedderFRExact*>(ogdfLayoutAlgo);
 
   if (dataSet != 0) {

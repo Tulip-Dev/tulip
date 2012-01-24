@@ -126,7 +126,7 @@ public:
   OGDFGemFrick(const tlp::PropertyContext &context);
   ~OGDFGemFrick();
 
-  void beforeCall(TulipToOGDF *tlpToOGDF, ogdf::LayoutModule *ogdfLayoutAlgo);
+  void beforeCall();
 
 };
 /*@}*/
@@ -154,7 +154,7 @@ OGDFGemFrick::~OGDFGemFrick() {
 
 }
 
-void OGDFGemFrick::beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+void OGDFGemFrick::beforeCall() {
   ogdf::GEMLayout *gem = static_cast<ogdf::GEMLayout*>(ogdfLayoutAlgo);
 
   if (dataSet != 0) {
