@@ -39,6 +39,8 @@ class HeaderFrame: public QWidget {
   Q_PROPERTY(bool expanded READ isExpanded WRITE expand)
   bool _expanded;
 
+  Q_PROPERTY(QStringList menus READ menus WRITE setMenus)
+
 public:
   explicit HeaderFrame(QWidget *parent=0);
   virtual ~HeaderFrame();
