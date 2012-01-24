@@ -40,8 +40,8 @@ public:
   GraphTableModel(tlp::Graph* graph,tlp::ElementType elementType=tlp::NODE,QObject* parent = 0);
 
   enum GraphTableModelDataRole {
-      //Return a double value between 0 and 1 where 0 correspond to elements with the lowest value and 1 the highest.
-      NormalizedValueRole = 33
+    //Return a double value between 0 and 1 where 0 correspond to elements with the lowest value and 1 the highest.
+    NormalizedValueRole = 33
   };
 
   //Get set parameters

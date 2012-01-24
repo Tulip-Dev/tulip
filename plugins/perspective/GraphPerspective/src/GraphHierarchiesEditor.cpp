@@ -154,10 +154,13 @@ void GraphHierarchiesEditor::delAllGraph() {
 
 void GraphHierarchiesEditor::createPanel() {
   tlp::Graph* g = _contextGraph;
+
   if (g == NULL) {
     g = static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->currentGraph();
+
     if (g == NULL)
       return;
   }
+
   static_cast<GraphPerspective*>(GraphPerspective::instance())->createPanel(g);
 }

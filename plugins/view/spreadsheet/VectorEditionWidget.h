@@ -150,7 +150,7 @@ public :
     return elements;
   }
 private:
-  ListPropertyWidgetTypeMangerInterface *elements;  
+  ListPropertyWidgetTypeMangerInterface *elements;
 };
 
 

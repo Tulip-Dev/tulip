@@ -56,23 +56,23 @@ public:
 template<typename ElementType>
 class GenericVectorEditorCreator : public tlp::TulipItemEditorCreator {
 public:
-  QWidget* createWidget(QWidget* parent) const{
-      return new VectorEditionWidget(parent);
+  QWidget* createWidget(QWidget* parent) const {
+    return new VectorEditionWidget(parent);
   }
 
-  virtual void setEditorData(QWidget* editor, const QVariant& data,tlp::Graph*){
-      std::vector<ElementType> v = data.value<std::vector<ElementType> >();
-      VectorEditionWidget* vEditor = static_cast<VectorEditionWidget*>(editor);
-      vEditor->setInterface(new ListPropertyWidgetTypeManger< tlp::TypeInterface<ElementType> >(v));
+  virtual void setEditorData(QWidget* editor, const QVariant& data,tlp::Graph*) {
+    std::vector<ElementType> v = data.value<std::vector<ElementType> >();
+    VectorEditionWidget* vEditor = static_cast<VectorEditionWidget*>(editor);
+    vEditor->setInterface(new ListPropertyWidgetTypeManger< tlp::TypeInterface<ElementType> >(v));
   }
 
-  virtual QVariant editorData(QWidget* editor,tlp::Graph*){
-      VectorEditionWidget* vEditor = static_cast<VectorEditionWidget*>(editor);
-      return QVariant::fromValue<std::vector<ElementType> >(static_cast< ListPropertyWidgetTypeManger< tlp::TypeInterface<ElementType> >* >(vEditor->getInterface())->getResultValue());
+  virtual QVariant editorData(QWidget* editor,tlp::Graph*) {
+    VectorEditionWidget* vEditor = static_cast<VectorEditionWidget*>(editor);
+    return QVariant::fromValue<std::vector<ElementType> >(static_cast< ListPropertyWidgetTypeManger< tlp::TypeInterface<ElementType> >* >(vEditor->getInterface())->getResultValue());
   }
-  virtual QString displayText(const QVariant &data) const{
-      std::vector<ElementType> v = data.value<std::vector<ElementType> >();
-      return QString::fromUtf8(tlp::SerializableVectorType<ElementType,false>::toString(v).c_str());
+  virtual QString displayText(const QVariant &data) const {
+    std::vector<ElementType> v = data.value<std::vector<ElementType> >();
+    return QString::fromUtf8(tlp::SerializableVectorType<ElementType,false>::toString(v).c_str());
   }
 };
 
@@ -90,7 +90,7 @@ public:
   }
   QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem & option,
                         const QModelIndex& index) const;
-  void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;  
+  void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
 
 };
 

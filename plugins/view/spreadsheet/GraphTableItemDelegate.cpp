@@ -47,131 +47,133 @@ using namespace std;
 
 ///NodeShapeEditorCreator
 
-QWidget* NodeShapeEditorCreator::createWidget(QWidget*parent) const{
-    QComboBox* combobox = new QComboBox(parent);
-    string glyphName;
-    forEach(glyphName,GlyphLister::availablePlugins()) {
-        int glyphIndex = GlyphManager::getInst().glyphId(glyphName);
-        //Create the glyph entry
-        combobox->addItem(GlyphPreviewGenerator::getInst().getPreview(glyphIndex),tlpStringToQString(glyphName),glyphIndex);
-    }
-    return combobox;
+QWidget* NodeShapeEditorCreator::createWidget(QWidget*parent) const {
+  QComboBox* combobox = new QComboBox(parent);
+  string glyphName;
+  forEach(glyphName,GlyphLister::availablePlugins()) {
+    int glyphIndex = GlyphManager::getInst().glyphId(glyphName);
+    //Create the glyph entry
+    combobox->addItem(GlyphPreviewGenerator::getInst().getPreview(glyphIndex),tlpStringToQString(glyphName),glyphIndex);
+  }
+  return combobox;
 }
-void NodeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant&data ,Graph*){
-    QComboBox* combobox = static_cast<QComboBox*>(editor);
-    combobox->setCurrentIndex(combobox->findData(data.value<NodeShape>().nodeShapeId));
-}
-
-QVariant NodeShapeEditorCreator::editorData(QWidget*editor,Graph*){
-    QComboBox* combobox = static_cast<QComboBox*>(editor);
-    return QVariant::fromValue<NodeShape>(NodeShape(combobox->itemData(combobox->currentIndex()).toInt()));
+void NodeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant&data ,Graph*) {
+  QComboBox* combobox = static_cast<QComboBox*>(editor);
+  combobox->setCurrentIndex(combobox->findData(data.value<NodeShape>().nodeShapeId));
 }
 
-QString NodeShapeEditorCreator::displayText(const QVariant & data) const{
-    return tlpStringToQString(GlyphManager::getInst().glyphName(data.value<NodeShape>().nodeShapeId));
+QVariant NodeShapeEditorCreator::editorData(QWidget*editor,Graph*) {
+  QComboBox* combobox = static_cast<QComboBox*>(editor);
+  return QVariant::fromValue<NodeShape>(NodeShape(combobox->itemData(combobox->currentIndex()).toInt()));
 }
 
-bool NodeShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const{
+QString NodeShapeEditorCreator::displayText(const QVariant & data) const {
+  return tlpStringToQString(GlyphManager::getInst().glyphName(data.value<NodeShape>().nodeShapeId));
+}
 
-    QStyleOptionViewItemV4 opt = option;
-    opt.features |= QStyleOptionViewItemV2::HasDecoration;
-    QPixmap pixmap = GlyphPreviewGenerator::getInst().getPreview(data.value<NodeShape>().nodeShapeId);
-    opt.icon = QIcon(pixmap);
-    opt.decorationSize = pixmap.size();
+bool NodeShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const {
 
-    opt.features |= QStyleOptionViewItemV2::HasDisplay;
-    opt.text = displayText(data);
+  QStyleOptionViewItemV4 opt = option;
+  opt.features |= QStyleOptionViewItemV2::HasDecoration;
+  QPixmap pixmap = GlyphPreviewGenerator::getInst().getPreview(data.value<NodeShape>().nodeShapeId);
+  opt.icon = QIcon(pixmap);
+  opt.decorationSize = pixmap.size();
 
-    QStyle *style = QApplication::style();
-    style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, NULL);
-    return true;
+  opt.features |= QStyleOptionViewItemV2::HasDisplay;
+  opt.text = displayText(data);
+
+  QStyle *style = QApplication::style();
+  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, NULL);
+  return true;
 }
 
 ///EdgeExtremityShapeEditorCreator
-QWidget* EdgeExtremityShapeEditorCreator::createWidget(QWidget* parent) const{
-    QComboBox* combobox = new QComboBox(parent);
-    combobox->addItem(QString("NONE"),EdgeExtremityGlyphManager::NoEdgeExtremetiesId);
-    string glyphName;
-    forEach(glyphName,EdgeExtremityGlyphLister::availablePlugins()) {
-        int glyphIndex = EdgeExtremityGlyphManager::getInst().glyphId(glyphName);
-        //Create the glyph entry
-        combobox->addItem(EdgeExtremityGlyphPreviewGenerator::getInst().getPreview(glyphIndex),tlpStringToQString(glyphName),glyphIndex);
-    }
-    return combobox;
+QWidget* EdgeExtremityShapeEditorCreator::createWidget(QWidget* parent) const {
+  QComboBox* combobox = new QComboBox(parent);
+  combobox->addItem(QString("NONE"),EdgeExtremityGlyphManager::NoEdgeExtremetiesId);
+  string glyphName;
+  forEach(glyphName,EdgeExtremityGlyphLister::availablePlugins()) {
+    int glyphIndex = EdgeExtremityGlyphManager::getInst().glyphId(glyphName);
+    //Create the glyph entry
+    combobox->addItem(EdgeExtremityGlyphPreviewGenerator::getInst().getPreview(glyphIndex),tlpStringToQString(glyphName),glyphIndex);
+  }
+  return combobox;
 }
-void EdgeExtremityShapeEditorCreator::setEditorData(QWidget* editor, const QVariant& data,Graph*){
-    QComboBox* combobox = static_cast<QComboBox*>(editor);
-    combobox->setCurrentIndex(combobox->findData(data.value<EdgeExtremityShape>().edgeExtremityShapeId));
-}
-
-QVariant EdgeExtremityShapeEditorCreator::editorData(QWidget* editor,Graph*){
-    QComboBox* combobox = static_cast<QComboBox*>(editor);
-    return QVariant::fromValue<EdgeExtremityShape>(EdgeExtremityShape(combobox->itemData(combobox->currentIndex()).toInt()));
+void EdgeExtremityShapeEditorCreator::setEditorData(QWidget* editor, const QVariant& data,Graph*) {
+  QComboBox* combobox = static_cast<QComboBox*>(editor);
+  combobox->setCurrentIndex(combobox->findData(data.value<EdgeExtremityShape>().edgeExtremityShapeId));
 }
 
-QString EdgeExtremityShapeEditorCreator::displayText(const QVariant &data) const{
-    return tlpStringToQString(EdgeExtremityGlyphManager::getInst().glyphName(data.value<NodeShape>().nodeShapeId));
+QVariant EdgeExtremityShapeEditorCreator::editorData(QWidget* editor,Graph*) {
+  QComboBox* combobox = static_cast<QComboBox*>(editor);
+  return QVariant::fromValue<EdgeExtremityShape>(EdgeExtremityShape(combobox->itemData(combobox->currentIndex()).toInt()));
 }
 
-bool EdgeExtremityShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const{
-    QStyleOptionViewItemV4 opt = option;
-    opt.features |= QStyleOptionViewItemV2::HasDecoration;
-    QPixmap pixmap = GlyphPreviewGenerator::getInst().getPreview(data.value<EdgeExtremityShape>().edgeExtremityShapeId);
-    opt.icon = QIcon(pixmap);
-    opt.decorationSize = pixmap.size();
+QString EdgeExtremityShapeEditorCreator::displayText(const QVariant &data) const {
+  return tlpStringToQString(EdgeExtremityGlyphManager::getInst().glyphName(data.value<NodeShape>().nodeShapeId));
+}
 
-    opt.features |= QStyleOptionViewItemV2::HasDisplay;
-    opt.text = displayText(data);
+bool EdgeExtremityShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const {
+  QStyleOptionViewItemV4 opt = option;
+  opt.features |= QStyleOptionViewItemV2::HasDecoration;
+  QPixmap pixmap = GlyphPreviewGenerator::getInst().getPreview(data.value<EdgeExtremityShape>().edgeExtremityShapeId);
+  opt.icon = QIcon(pixmap);
+  opt.decorationSize = pixmap.size();
 
-    QStyle *style = QApplication::style();
-    style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, NULL);
-    return true;
+  opt.features |= QStyleOptionViewItemV2::HasDisplay;
+  opt.text = displayText(data);
+
+  QStyle *style = QApplication::style();
+  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, NULL);
+  return true;
 }
 
 ///EdgeShapeEditorCreator
-QWidget* EdgeShapeEditorCreator::createWidget(QWidget* parent) const{
-    QComboBox* combobox = new QComboBox(parent);
-    for (int i = 0; i < GlGraphStaticData::edgeShapesCount; i++) {
-        combobox->addItem(tlpStringToQString(GlGraphStaticData::edgeShapeName(GlGraphStaticData::edgeShapeIds[i])),QVariant(GlGraphStaticData::edgeShapeIds[i]));
-    }
-    return combobox;
+QWidget* EdgeShapeEditorCreator::createWidget(QWidget* parent) const {
+  QComboBox* combobox = new QComboBox(parent);
+
+  for (int i = 0; i < GlGraphStaticData::edgeShapesCount; i++) {
+    combobox->addItem(tlpStringToQString(GlGraphStaticData::edgeShapeName(GlGraphStaticData::edgeShapeIds[i])),QVariant(GlGraphStaticData::edgeShapeIds[i]));
+  }
+
+  return combobox;
 }
-void EdgeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant& data,Graph*){
-    QComboBox* combobox = static_cast<QComboBox*>(editor);
-    combobox->setCurrentIndex(combobox->findData(static_cast<int>(data.value<EdgeShape>())));
+void EdgeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant& data,Graph*) {
+  QComboBox* combobox = static_cast<QComboBox*>(editor);
+  combobox->setCurrentIndex(combobox->findData(static_cast<int>(data.value<EdgeShape>())));
 }
 
-QVariant EdgeShapeEditorCreator::editorData(QWidget* editor,Graph*){
-    QComboBox* combobox = static_cast<QComboBox*>(editor);
-    return QVariant::fromValue<EdgeShape>(static_cast<EdgeShape>(combobox->itemData(combobox->currentIndex()).toInt()));
+QVariant EdgeShapeEditorCreator::editorData(QWidget* editor,Graph*) {
+  QComboBox* combobox = static_cast<QComboBox*>(editor);
+  return QVariant::fromValue<EdgeShape>(static_cast<EdgeShape>(combobox->itemData(combobox->currentIndex()).toInt()));
 }
 
-QString EdgeShapeEditorCreator::displayText(const QVariant &data) const{
-    return tlpStringToQString(GlGraphStaticData::edgeShapeName(data.value<EdgeShape>()));
+QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
+  return tlpStringToQString(GlGraphStaticData::edgeShapeName(data.value<EdgeShape>()));
 }
 
 
 GraphTableItemDelegate::GraphTableItemDelegate(QObject* parent) :
-    TulipItemDelegate(parent) {
-    registerCreator<NodeShape>(new NodeShapeEditorCreator);
-    registerCreator<EdgeShape>(new EdgeShapeEditorCreator);
-    registerCreator<EdgeExtremityShape>(new EdgeExtremityShapeEditorCreator);
-    registerCreator<std::vector<bool> >(new GenericVectorEditorCreator<bool>);
-    registerCreator<std::vector<Color> >(new GenericVectorEditorCreator<Color>);
-    registerCreator<std::vector<Coord> >(new GenericVectorEditorCreator<Coord>);
-    registerCreator<std::vector<double> >(new GenericVectorEditorCreator<double>);
-    registerCreator<std::vector<int> >(new GenericVectorEditorCreator<int>);
-    registerCreator<std::vector<Size> >(new GenericVectorEditorCreator<Size>);
-    registerCreator<std::vector<std::string> >(new GenericVectorEditorCreator<std::string>);
+  TulipItemDelegate(parent) {
+  registerCreator<NodeShape>(new NodeShapeEditorCreator);
+  registerCreator<EdgeShape>(new EdgeShapeEditorCreator);
+  registerCreator<EdgeExtremityShape>(new EdgeExtremityShapeEditorCreator);
+  registerCreator<std::vector<bool> >(new GenericVectorEditorCreator<bool>);
+  registerCreator<std::vector<Color> >(new GenericVectorEditorCreator<Color>);
+  registerCreator<std::vector<Coord> >(new GenericVectorEditorCreator<Coord>);
+  registerCreator<std::vector<double> >(new GenericVectorEditorCreator<double>);
+  registerCreator<std::vector<int> >(new GenericVectorEditorCreator<int>);
+  registerCreator<std::vector<Size> >(new GenericVectorEditorCreator<Size>);
+  registerCreator<std::vector<std::string> >(new GenericVectorEditorCreator<std::string>);
 }
 
 QWidget* GraphTableItemDelegate::createEditor(QWidget* p, const QStyleOptionViewItem& option,
-                                              const QModelIndex& index) const {
-    return TulipItemDelegate::createEditor(p, option, index);
+    const QModelIndex& index) const {
+  return TulipItemDelegate::createEditor(p, option, index);
 }
 
 void GraphTableItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* model,
-                                          const QModelIndex& index) const {
-    TulipItemDelegate::setModelData(editor, model, index);
+    const QModelIndex& index) const {
+  TulipItemDelegate::setModelData(editor, model, index);
 }
 
