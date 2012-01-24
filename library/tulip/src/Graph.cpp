@@ -689,6 +689,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 
   TLP_HASH_MAP<std::string, PropertyInterface *>::const_iterator it =
     circularCalls.find(algorithm);
+
   if (it != circularCalls.end() && (*it).second == prop) {
 #ifndef NDEBUG
     std::cerr << "Circular call of " << __PRETTY_FUNCTION__ << " " << msg << std::endl;

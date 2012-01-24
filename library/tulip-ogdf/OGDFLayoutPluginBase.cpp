@@ -26,9 +26,9 @@ using namespace std;
 
 OGDFLayoutPluginBase::OGDFLayoutPluginBase(const tlp::PropertyContext &context, ogdf::LayoutModule *ogdfLayoutAlgo) :
   tlp::LayoutAlgorithm(context), tlpToOGDF(NULL), ogdfLayoutAlgo(ogdfLayoutAlgo) {
-	// convert Tulip Graph to OGDF Graph including attributes
-	if (graph)
-		tlpToOGDF = new TulipToOGDF(graph);
+  // convert Tulip Graph to OGDF Graph including attributes
+  if (graph)
+    tlpToOGDF = new TulipToOGDF(graph);
 }
 
 OGDFLayoutPluginBase::~OGDFLayoutPluginBase() {
@@ -67,7 +67,7 @@ bool OGDFLayoutPluginBase::run() {
 }
 
 void OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
-	ogdfLayoutAlgo->call(gAttributes);
+  ogdfLayoutAlgo->call(gAttributes);
 }
 
 void OGDFLayoutPluginBase::transposeLayoutVertically() {
