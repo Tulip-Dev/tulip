@@ -51,5 +51,6 @@
         <file>icons/20/edges_enabled.png</file>
         <file>icons/20/edges_label.png</file>
         <file>icons/20/edges_nolabel.png</file>
+        <file>ui/split3_screen.png</file>
     </qresource>
 </RCC>
