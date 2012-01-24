@@ -113,6 +113,7 @@ void Workspace::PanelsStorage::clear() {
 Workspace::Workspace(QWidget *parent)
   : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL) {
   _ui->setupUi(this);
+  _ui->workspaceContents->setCurrentWidget(_ui->startupPage);
   connect(_ui->startupButton,SIGNAL(clicked()),this,SIGNAL(addPanelRequest()));
   connect(_ui->exposeMode,SIGNAL(exposeFinished()),this,SLOT(hideExposeMode()));
 
@@ -121,25 +122,16 @@ Workspace::Workspace(QWidget *parent)
 #endif /* NDEBUG */
 
   // This map allows us to know how much slots we have for each mode and which widget corresponds to those slots
-  QVector<PlaceHolderWidget*> startupVector(0);
-  QVector<PlaceHolderWidget*> singleVector(1);
-  singleVector[0] = _ui->singlePage;
-  QVector<PlaceHolderWidget*> splitVector(2);
-  splitVector[0] = _ui->splitPagePanel1;
-  splitVector[1] = _ui->splitPagePanel2;
-  QVector<PlaceHolderWidget*> gridVector(4);
-  gridVector[0] = _ui->gridPagePanel1;
-  gridVector[1] = _ui->gridPagePanel2;
-  gridVector[2] = _ui->gridPagePanel3;
-  gridVector[3] = _ui->gridPagePanel4;
-  _modeToSlots[_ui->startupPage] = startupVector;
-  _modeToSlots[_ui->singlePage] = singleVector;
-  _modeToSlots[_ui->splitPage] = splitVector;
-  _modeToSlots[_ui->gridPage] = gridVector;
+  _modeToSlots[_ui->startupPage] = QVector<PlaceHolderWidget*>();
+  _modeToSlots[_ui->singlePage] = QVector<PlaceHolderWidget*>() << _ui->singlePage;
+  _modeToSlots[_ui->splitPage] = QVector<PlaceHolderWidget*>() << _ui->splitPagePanel1 << _ui->splitPagePanel2;
+  _modeToSlots[_ui->split3Page] = QVector<PlaceHolderWidget*>() << _ui->split3PagePanel1 << _ui->split3PagePanel2 << _ui->split3PagePanel3;
+  _modeToSlots[_ui->gridPage] = QVector<PlaceHolderWidget*>() << _ui->gridPagePanel1 << _ui->gridPagePanel2 << _ui->gridPagePanel3 << _ui->gridPagePanel4;
 
-  // This map allows us to know wich widget can toggle a mode
+  // This map allows us to know which widget can toggle a mode
   _modeSwitches[_ui->singlePage] = _ui->singleModeButton;
   _modeSwitches[_ui->splitPage] = _ui->splitModeButton;
+  _modeSwitches[_ui->split3Page] = _ui->split3ModeButton;
   _modeSwitches[_ui->gridPage] = _ui->gridModeButton;
   updateAvailableModes();
 }
@@ -277,6 +269,9 @@ void Workspace::switchToSingleMode() {
 }
 void Workspace::switchToSplitMode() {
   switchWorkspaceMode(_ui->splitPage);
+}
+void Workspace::switchToSplit3Mode() {
+  switchWorkspaceMode(_ui->split3Page);
 }
 void Workspace::switchToGridMode() {
   switchWorkspaceMode(_ui->gridPage);
@@ -471,7 +466,6 @@ void Workspace::showExposeMode() {
 }
 
 void Workspace::uncheckExposeButton() {
-  qWarning(__PRETTY_FUNCTION__);
   _ui->exposeButton->setChecked(false);
 }
 
