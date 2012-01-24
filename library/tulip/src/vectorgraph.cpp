@@ -37,12 +37,14 @@
 using namespace std;
 using namespace tlp;
 
+namespace tlp {
 template class TLP_SCOPE ValArray<double>;
 template class TLP_SCOPE ValArray<node>;
 template class TLP_SCOPE NodeProperty<node>;
 template class TLP_SCOPE NodeProperty<double>;
 template class TLP_SCOPE EdgeProperty<node>;
 template class TLP_SCOPE EdgeProperty<double>;
+}
 
 namespace {
 //==================================================================================
@@ -191,17 +193,11 @@ edge VectorGraph::existEdge(const node src, const node tgt, bool directed ) cons
 }
 //=======================================================
 bool VectorGraph::isElement(const node n) const {
-  if (n.id < _nData.size() && _nData[n]._nodesId != UINT_MAX)
-    return true;
-
-  return false;
+  return (n.id < _nData.size() && _nData[n]._nodesId != UINT_MAX);
 }
 //=======================================================
 bool VectorGraph::isElement(const edge e) const {
-  if (e.id < _eData.size() && _eData[e]._edgesId != UINT_MAX)
-    return true;
-
-  return false;
+  return (e.id < _eData.size() && _eData[e]._edgesId != UINT_MAX);
 }
 //=======================================================
 void VectorGraph::setEdgeOrder(const node n, const std::vector<edge> &v ) {
@@ -463,11 +459,9 @@ void VectorGraph::delEdges(const node n) {
 }
 //=======================================================
 void VectorGraph::delAllEdges() {
-  _freeEdges.insert(_freeEdges.end(), _edges.rbegin(), _edges.rend());
+  _freeEdges.resize(0);
 
-  for(size_t i=0; i<_edges.size(); ++i) {
-    _eData[_edges[i]]._edgesId = UINT_MAX;
-  }
+  _eData.resize(0);
 
   _edges.resize(0);
 
@@ -477,19 +471,15 @@ void VectorGraph::delAllEdges() {
 }
 //=======================================================
 void VectorGraph::delAllNodes() {
-  _freeEdges.insert(_freeEdges.end(),_edges.rbegin(), _edges.rend());
+  _freeEdges.resize(0);
 
-  for(size_t i=0; i<_edges.size(); ++i) {
-    _eData[_edges[i]]._edgesId = UINT_MAX;
-  }
+  _eData.resize(0);
 
   _edges.resize(0);
 
-  _freeNodes.insert(_freeNodes.end(),_nodes.rbegin(), _nodes.rend());
+  _freeNodes.resize(0);
 
-  for(size_t i=0; i<_nodes.size(); ++i) {
-    _nData[_nodes[i]]._nodesId = UINT_MAX;
-  }
+  _nData.resize(0);
 
   _nodes.resize(0);
 }
