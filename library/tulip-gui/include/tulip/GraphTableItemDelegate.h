@@ -22,25 +22,21 @@
 #include <QtGui/QStyledItemDelegate>
 #include <tulip/tulipconf.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipItemDelegate.h>
+
+
 /**
-* @brief QItemDelegate to display and edit Tulip data in the Qt model/view architecture.
+* @brief QItemDelegate to display and edit data from a GraphTableModel in the Qt model/view architecture.
 **/
-class TulipItemDelegate: public QStyledItemDelegate {
+class GraphTableItemDelegate: public tlp::TulipItemDelegate {
   Q_OBJECT
 public:
-  TulipItemDelegate(QObject* parent=NULL) :
-    QStyledItemDelegate(parent) {
-  }
-  virtual ~TulipItemDelegate() {
+  GraphTableItemDelegate(QObject* parent=NULL) ;
+  virtual ~GraphTableItemDelegate() {
   }
   QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem & option,
                         const QModelIndex& index) const;
   void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
-
-  void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-
-protected:
-  QWidget* createFileNameEditor(QWidget* parent , const TulipFileDescriptor& defaultFileName,const QString& filenameFilter=QString()) const;
 
 };
 

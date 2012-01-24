@@ -43,7 +43,7 @@ class GraphHierarchiesEditor : public QWidget {
 public:
   explicit GraphHierarchiesEditor(QWidget *parent = 0);
   virtual ~GraphHierarchiesEditor();
-  void setModel(tlp::GraphHierarchiesModel *model);
+  void setModel(tlp::GraphHierarchiesModel *model);  
   bool synchronized() const;
 
 protected slots:

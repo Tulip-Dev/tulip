@@ -1,5 +1,5 @@
 #include "TulipFilterProxyModel.h"
-#include "GraphTableModel.h"
+#include <tulip/GraphTableModel.h>
 
 #include <tulip/BooleanProperty.h>
 #include <tulip/Graph.h>

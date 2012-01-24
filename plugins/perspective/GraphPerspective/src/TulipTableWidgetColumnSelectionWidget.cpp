@@ -1,7 +1,7 @@
 #include "TulipTableWidgetColumnSelectionWidget.h"
 #include "ui_TulipTableWidgetColumnSelectionWidget.h"
 #include "TulipTableWidgetColumnSelectionModel.h"
-#include "GraphTableModel.h"
+#include <tulip/GraphTableModel.h>
 #include <QtGui/QMenu>
 #include <QtGui/QStyledItemDelegate>
 #include <tulip/PropertyCreationDialog.h>

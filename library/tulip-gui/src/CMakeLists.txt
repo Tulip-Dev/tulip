@@ -92,6 +92,11 @@ SET(SRCS
   TulipFontDialog.cpp
   ScrollPopupButton.cpp
   WorkspaceExposeWidget.cpp
+  GraphTableModel.cpp
+  GraphTableItemDelegate.cpp
+  PropertyToQVariantMapper.cpp
+  VectorEditionWidget.cpp
+  GlyphRenderer.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -113,6 +118,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/SceneConfigWidget.ui
   ../designer/QuickAccessBar.ui
   ../designer/TulipFontDialog.ui
+  ../designer/VectorEditionWidget.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -172,6 +178,9 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/TulipFontDialog.h
   ../include/tulip/ScrollPopupButton.h
   ../include/tulip/WorkspaceExposeWidget.h
+  ../include/tulip/GraphTableModel.h
+  ../include/tulip/GraphTableItemDelegate.h
+  ../include/tulip/VectorEditionWidget.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

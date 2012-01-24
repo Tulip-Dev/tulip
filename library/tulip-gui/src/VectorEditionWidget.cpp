@@ -1,8 +1,8 @@
-#include "VectorEditionWidget.h"
+#include <tulip/VectorEditionWidget.h>
+#include <tulip/GraphTableItemDelegate.h>
 #include "ui_VectorEditionWidget.h"
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
-#include "GraphTableItemDelegate.h"
 
 using namespace tlp;
 
@@ -19,7 +19,7 @@ VectorEditionWidget::~VectorEditionWidget() {
   delete ui;
 }
 
-ListPropertyWidgetModel::ListPropertyWidgetModel(ListPropertyWidgetTypeMangerInterface *typeManager, QWidget* parent): QAbstractListModel( parent),elements(typeManager) {
+ListPropertyWidgetModel::ListPropertyWidgetModel(ContainerInterface *typeManager, QWidget* parent): QAbstractListModel( parent),elements(typeManager) {
 
 }
 
@@ -29,12 +29,8 @@ ListPropertyWidgetModel::~ListPropertyWidgetModel() {
 
 QVariant ListPropertyWidgetModel::data(const QModelIndex& index, int role) const {
   if(index.isValid() && index.row() < elements->getElementNumber()) {
-//    if(role == Qt::DisplayRole) {
-//      return elements->getStringValue(index.row());
-//    }
     if(role == Qt::EditRole || role == Qt::DisplayRole) {
-      QVariant v = elements->getValue(index.row());
-      std::cout<<__PRETTY_FUNCTION__<<" "<<__LINE__<<" "<<QMetaType::typeName(v.userType())<<std::endl;
+      QVariant v = elements->getValue(index.row());      
       return elements->getValue(index.row());
     }
   }
@@ -85,11 +81,11 @@ bool ListPropertyWidgetModel::removeRows(int row, int count, const QModelIndex& 
   return false;
 }
 
-ListPropertyWidgetTypeMangerInterface* VectorEditionWidget::getInterface() {
+ContainerInterface* VectorEditionWidget::getInterface() {
   return ((ListPropertyWidgetModel*)ui->listView->model())->getInterface();
 }
 
-void VectorEditionWidget::setInterface(ListPropertyWidgetTypeMangerInterface *interf) {
+void VectorEditionWidget::setInterface(ContainerInterface *interf) {
   ui->listView->setModel(new ListPropertyWidgetModel(interf,this));
   ui->listView->setItemDelegate(new GraphTableItemDelegate());
 }
@@ -107,8 +103,7 @@ void VectorEditionWidget::removeRows() {
 }
 void VectorEditionWidget::setAll() {
   if(ui->listView->model()->rowCount() > 0) {
-    QDialog dialog(this);
-    dialog.setLayout(new QVBoxLayout(this));
+    QDialog dialog(this);    
     QWidget *editorWidget = ui->listView->itemDelegate()->createEditor(this,QStyleOptionViewItem(),ui->listView->model()->index(0,0));
     dialog.layout()->addWidget(editorWidget);
     QDialogButtonBox *buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel);

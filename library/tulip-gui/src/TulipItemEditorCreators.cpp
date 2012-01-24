@@ -28,8 +28,11 @@
 #include <tulip/ColorButton.h>
 #include <tulip/ColorScaleButton.h>
 #include <tulip/TulipFileDescriptorWidget.h>
-#include "tulip/SizeEditor.h"
-#include "tulip/CoordEditor.h"
+#include <tulip/SizeEditor.h>
+#include <tulip/CoordEditor.h>
+#include <tulip/GlyphRenderer.h>
+#include <tulip/GlGraphStaticData.h>
+#include <tulip/EdgeExtremityGlyphManager.h>
 
 using namespace tlp;
 
@@ -260,4 +263,111 @@ QVariant TulipFileDescriptorEditorCreator::editorData(QWidget* w,tlp::Graph*) {
 QString TulipFileDescriptorEditorCreator::displayText(const QVariant& v) const {
   TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
   return desc.absolutePath;
+}
+
+///NodeShapeEditorCreator
+
+QWidget* NodeShapeEditorCreator::createWidget(QWidget*parent) const {
+  QComboBox* combobox = new QComboBox(parent);
+  std::string glyphName;
+  forEach(glyphName,GlyphLister::availablePlugins()) {
+    int glyphIndex = GlyphManager::getInst().glyphId(glyphName);
+    //Create the glyph entry
+    combobox->addItem(GlyphRenderer::getInst().render(glyphIndex),tlpStringToQString(glyphName),glyphIndex);
+  }
+  return combobox;
+}
+void NodeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant&data ,Graph*) {
+  QComboBox* combobox = static_cast<QComboBox*>(editor);
+  combobox->setCurrentIndex(combobox->findData(data.value<NodeShape>().nodeShapeId));
+}
+
+QVariant NodeShapeEditorCreator::editorData(QWidget*editor,Graph*) {
+  QComboBox* combobox = static_cast<QComboBox*>(editor);
+  return QVariant::fromValue<NodeShape>(NodeShape(combobox->itemData(combobox->currentIndex()).toInt()));
+}
+
+QString NodeShapeEditorCreator::displayText(const QVariant & data) const {
+  return tlpStringToQString(GlyphManager::getInst().glyphName(data.value<NodeShape>().nodeShapeId));
+}
+
+bool NodeShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const {
+
+  QStyleOptionViewItemV4 opt = option;
+  opt.features |= QStyleOptionViewItemV2::HasDecoration;
+  QPixmap pixmap = GlyphRenderer::getInst().render(data.value<NodeShape>().nodeShapeId);
+  opt.icon = QIcon(pixmap);
+  opt.decorationSize = pixmap.size();
+
+  opt.features |= QStyleOptionViewItemV2::HasDisplay;
+  opt.text = displayText(data);
+
+  QStyle *style = QApplication::style();
+  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, NULL);
+  return true;
+}
+
+///EdgeExtremityShapeEditorCreator
+QWidget* EdgeExtremityShapeEditorCreator::createWidget(QWidget* parent) const {
+  QComboBox* combobox = new QComboBox(parent);
+  combobox->addItem(QString("NONE"),EdgeExtremityGlyphManager::NoEdgeExtremetiesId);
+  std::string glyphName;
+  forEach(glyphName,EdgeExtremityGlyphLister::availablePlugins()) {
+    int glyphIndex = EdgeExtremityGlyphManager::getInst().glyphId(glyphName);
+    //Create the glyph entry
+    combobox->addItem(EdgeExtremityGlyphRenderer::getInst().render(glyphIndex),tlpStringToQString(glyphName),glyphIndex);
+  }
+  return combobox;
+}
+void EdgeExtremityShapeEditorCreator::setEditorData(QWidget* editor, const QVariant& data,Graph*) {
+  QComboBox* combobox = static_cast<QComboBox*>(editor);
+  combobox->setCurrentIndex(combobox->findData(data.value<EdgeExtremityShape>().edgeExtremityShapeId));
+}
+
+QVariant EdgeExtremityShapeEditorCreator::editorData(QWidget* editor,Graph*) {
+  QComboBox* combobox = static_cast<QComboBox*>(editor);
+  return QVariant::fromValue<EdgeExtremityShape>(EdgeExtremityShape(combobox->itemData(combobox->currentIndex()).toInt()));
+}
+
+QString EdgeExtremityShapeEditorCreator::displayText(const QVariant &data) const {
+  return tlpStringToQString(EdgeExtremityGlyphManager::getInst().glyphName(data.value<NodeShape>().nodeShapeId));
+}
+
+bool EdgeExtremityShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const {
+  QStyleOptionViewItemV4 opt = option;
+  opt.features |= QStyleOptionViewItemV2::HasDecoration;
+  QPixmap pixmap = GlyphRenderer::getInst().render(data.value<EdgeExtremityShape>().edgeExtremityShapeId);
+  opt.icon = QIcon(pixmap);
+  opt.decorationSize = pixmap.size();
+
+  opt.features |= QStyleOptionViewItemV2::HasDisplay;
+  opt.text = displayText(data);
+
+  QStyle *style = QApplication::style();
+  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, NULL);
+  return true;
+}
+
+///EdgeShapeEditorCreator
+QWidget* EdgeShapeEditorCreator::createWidget(QWidget* parent) const {
+  QComboBox* combobox = new QComboBox(parent);
+
+  for (int i = 0; i < GlGraphStaticData::edgeShapesCount; i++) {
+    combobox->addItem(tlpStringToQString(GlGraphStaticData::edgeShapeName(GlGraphStaticData::edgeShapeIds[i])),QVariant(GlGraphStaticData::edgeShapeIds[i]));
+  }
+
+  return combobox;
+}
+void EdgeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant& data,Graph*) {
+  QComboBox* combobox = static_cast<QComboBox*>(editor);
+  combobox->setCurrentIndex(combobox->findData(static_cast<int>(data.value<EdgeShape>())));
+}
+
+QVariant EdgeShapeEditorCreator::editorData(QWidget* editor,Graph*) {
+  QComboBox* combobox = static_cast<QComboBox*>(editor);
+  return QVariant::fromValue<EdgeShape>(static_cast<EdgeShape>(combobox->itemData(combobox->currentIndex()).toInt()));
+}
+
+QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
+  return tlpStringToQString(GlGraphStaticData::edgeShapeName(data.value<EdgeShape>()));
 }

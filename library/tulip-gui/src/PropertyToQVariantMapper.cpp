@@ -1,4 +1,4 @@
-#include "PropertyToQVariantMapper.h"
+#include <tulip/PropertyToQVariantMapper.h>
 
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TlpQtTools.h>
@@ -6,26 +6,20 @@
 
 using namespace tlp;
 
-/**
-  * @brief Convert values from integer properties. Handle tulip visual properties likes viewShape(NodeShape,EdgeShape), viewLabelPosition(LabelPosition,int), viewTgtAnchorShape(int,EdgeExtremityShape), viewSrcAnchorShape(int,EdgeExtremityShape)
-  **/
-class IntegerPropertyConverter : public StandardPropertyToQVariantConverter<IntegerProperty,int,int> {
-public:
-
-  QVariant getValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property) const {
+  QVariant IntegerPropertyConverter::getValue(unsigned int id,ElementType elementType,PropertyInterface* property) const {
     IntegerProperty* p = static_cast<IntegerProperty*>(property);
 
     if (property->getName().compare("viewShape") == 0) {
-      if(elementType == tlp::NODE) {
-        return QVariant::fromValue<NodeShape>(NodeShape(p->getNodeValue(tlp::node(id))));
+      if(elementType == NODE) {
+        return QVariant::fromValue<NodeShape>(NodeShape(p->getNodeValue(node(id))));
       }
       else {
-        return QVariant::fromValue<EdgeShape>(EdgeShape(p->getEdgeValue(tlp::edge(id))));
+        return QVariant::fromValue<EdgeShape>(EdgeShape(p->getEdgeValue(edge(id))));
       }
     }
     else if(property->getName().compare("viewLabelPosition")==0) {
-      if(elementType == tlp::NODE) {
-        return QVariant::fromValue<LabelPosition>(static_cast<LabelPosition>(p->getNodeValue(tlp::node(id))));
+      if(elementType == NODE) {
+        return QVariant::fromValue<LabelPosition>(static_cast<LabelPosition>(p->getNodeValue(node(id))));
       }
       else {
         //This property is not used by edge.
@@ -33,8 +27,8 @@ public:
       }
     }
     else if(property->getName().compare("viewTgtAnchorShape")==0 || property->getName().compare("viewSrcAnchorShape")==0) {
-      if(elementType == tlp::EDGE) {
-        return QVariant::fromValue<EdgeExtremityShape>(EdgeExtremityShape(p->getEdgeValue(tlp::edge(id))));
+      if(elementType == EDGE) {
+        return QVariant::fromValue<EdgeExtremityShape>(EdgeExtremityShape(p->getEdgeValue(edge(id))));
       }
       else {
         //This property is not used by nodes.
@@ -44,31 +38,27 @@ public:
     else {
       //Default case
       if(elementType == NODE) {
-        return QVariant(p->getNodeValue(tlp::node(id)));
+        return QVariant(p->getNodeValue(node(id)));
       }
       else {
-        return QVariant(p->getEdgeValue(tlp::edge(id)));
+        return QVariant(p->getEdgeValue(edge(id)));
       }
     }
   }
-};
 
-/**
-  * @brief Convert values from integer properties. Handle tulip visual properties likes viewShape(NodeShape,EdgeShape), viewLabelPosition(LabelPosition,int), viewTgtAnchorShape(int,EdgeExtremityShape), viewSrcAnchorShape(int,EdgeExtremityShape)
-  **/
-class StringPropertyConverter : public StandardPropertyToQVariantConverter<StringProperty,std::string,std::string> {
-  QVariant getValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property) const {
+
+  QVariant StringPropertyConverter::getValue(unsigned int id,ElementType elementType,PropertyInterface* property) const {
     StringProperty* p = static_cast<StringProperty*>(property);
 
     if (property->getName().compare("viewTexture") == 0) {
       TulipFileDescriptor descriptor;
       descriptor.fileFilterPattern=QString("Images (*.bmp *.png *.jpg *.jpeg)");
 
-      if(elementType == tlp::NODE) {
-        descriptor.absolutePath=tlpStringToQString(p->getNodeValue(tlp::node(id)));
+      if(elementType == NODE) {
+        descriptor.absolutePath=tlpStringToQString(p->getNodeValue(node(id)));
       }
       else {
-        descriptor.absolutePath=tlpStringToQString(p->getEdgeValue(tlp::edge(id)));
+        descriptor.absolutePath=tlpStringToQString(p->getEdgeValue(edge(id)));
       }
 
       return QVariant::fromValue<TulipFileDescriptor>(descriptor);
@@ -77,11 +67,11 @@ class StringPropertyConverter : public StandardPropertyToQVariantConverter<Strin
       TulipFileDescriptor descriptor;
       descriptor.fileFilterPattern=QString("Font (*.ttf");
 
-      if(elementType == tlp::NODE) {
-        descriptor.absolutePath=tlpStringToQString(p->getNodeValue(tlp::node(id)));
+      if(elementType == NODE) {
+        descriptor.absolutePath=tlpStringToQString(p->getNodeValue(node(id)));
       }
       else {
-        descriptor.absolutePath=tlpStringToQString(p->getEdgeValue(tlp::edge(id)));
+        descriptor.absolutePath=tlpStringToQString(p->getEdgeValue(edge(id)));
       }
 
       return QVariant::fromValue<TulipFileDescriptor>(descriptor);
@@ -89,15 +79,15 @@ class StringPropertyConverter : public StandardPropertyToQVariantConverter<Strin
     else {
       //Default case
       if(elementType == NODE) {
-        return QVariant(tlpStringToQString(p->getNodeValue(tlp::node(id))));
+        return QVariant(tlpStringToQString(p->getNodeValue(node(id))));
       }
       else {
-        return QVariant(tlpStringToQString(p->getEdgeValue(tlp::edge(id))));
+        return QVariant(tlpStringToQString(p->getEdgeValue(edge(id))));
       }
     }
   }
 
-  bool setValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property,const QVariant& data) const {
+  bool StringPropertyConverter::setValue(unsigned int id,ElementType elementType,PropertyInterface* property,const QVariant& data) const {
     StringProperty* p = static_cast<StringProperty*>(property);
 
     if (property->getName().compare("viewTexture") == 0 || property->getName().compare("viewFont")==0) {
@@ -125,7 +115,7 @@ class StringPropertyConverter : public StandardPropertyToQVariantConverter<Strin
     }
   }
 
-  virtual bool setAllValue(tlp::ElementType elementType,tlp::PropertyInterface* property,const QVariant& data) const {
+  bool StringPropertyConverter::setAllValue(ElementType elementType,PropertyInterface* property,const QVariant& data) const {
     StringProperty* p = static_cast<StringProperty*>(property);
 
     if (property->getName().compare("viewTexture") == 0 || property->getName().compare("viewFont")==0) {
@@ -152,7 +142,6 @@ class StringPropertyConverter : public StandardPropertyToQVariantConverter<Strin
       return true;
     }
   }
-};
 
 PropertyToQVariantMapper::PropertyToQVariantMapper() {
   registerConverter<BooleanProperty>(new StandardPropertyToQVariantConverter<BooleanProperty,bool,bool>());
@@ -186,7 +175,7 @@ void PropertyToQVariantMapper::registerConverter(const QString& propertyTypeName
   _propertyTypeToConverter[propertyTypeName] = converter;
 }
 
-const PropertyToQVariantConverter* PropertyToQVariantMapper::converter(tlp::PropertyInterface* property)const {
+const PropertyToQVariantConverter* PropertyToQVariantMapper::converter(PropertyInterface* property)const {
   QString propertyTypename = QString::fromStdString(property->getTypename());
 
   if(_propertyTypeToConverter.contains(propertyTypename)) {

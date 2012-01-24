@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <tulip/Graph.h>
 #include <tulip/MutableContainer.h>
-#include <tulip/ObservableProperty.h>
 
 #include <QtCore/QModelIndex>
 #include <QtGui/QMenu>
@@ -17,7 +16,7 @@ class TulipTableWidgetColumnSelectionWidget;
 class GraphTableWidget;
 class TulipTableWidgetColumnSelectionModel;
 
-class SpreadViewTableWidget : public QWidget, public tlp::PropertyObserver, public tlp::Observable {
+class SpreadViewTableWidget : public QWidget{
   Q_OBJECT
 
 public:
@@ -27,7 +26,7 @@ public:
   void setData(tlp::Graph* graph,const tlp::DataSet& data,tlp::ElementType type);
   tlp::DataSet getData()const;
 
-  TulipTableWidgetColumnSelectionWidget* columnEditionWidget();
+  TulipTableWidgetColumnSelectionModel* columnEditionModel();
 
   GraphTableWidget* graphTableWidget();
 

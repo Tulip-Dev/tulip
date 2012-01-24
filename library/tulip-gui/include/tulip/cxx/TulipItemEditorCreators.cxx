@@ -16,10 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <QtCore/QSet>
 #include <QtGui/QLineEdit>
 #include <QtGui/QComboBox>
+
 #include <tulip/ForEach.h>
-#include <QtCore/QSet>
+#include <tulip/VectorEditionWidget.h>
+
 
 namespace tlp {
 
@@ -122,5 +125,29 @@ QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant& v) const {
 
   return prop->getName().c_str();
 }
+
+template<typename ElementType>
+QWidget* GenericVectorEditorCreator<ElementType>::createWidget(QWidget* parent) const {
+    return new VectorEditionWidget(parent);
+}
+
+template<typename ElementType>
+void GenericVectorEditorCreator<ElementType>::setEditorData(QWidget* editor, const QVariant& data,tlp::Graph*) {
+    std::vector<ElementType> v = data.value<std::vector<ElementType> >();
+    VectorEditionWidget* vEditor = static_cast<VectorEditionWidget*>(editor);
+    vEditor->setInterface(new GenericContainer< tlp::TypeInterface<ElementType> >(v));
+  }
+
+template<typename ElementType>
+QVariant GenericVectorEditorCreator<ElementType>::editorData(QWidget* editor,tlp::Graph*) {
+    VectorEditionWidget* vEditor = static_cast<VectorEditionWidget*>(editor);
+    return QVariant::fromValue<std::vector<ElementType> >(static_cast< GenericContainer< tlp::TypeInterface<ElementType> >* >(vEditor->getInterface())->getResultValue());
+  }
+
+template<typename ElementType>
+  QString GenericVectorEditorCreator<ElementType>::displayText(const QVariant &data) const {
+    std::vector<ElementType> v = data.value<std::vector<ElementType> >();
+    return QString::fromUtf8(tlp::SerializableVectorType<ElementType,false>::toString(v).c_str());
+  }
 
 }

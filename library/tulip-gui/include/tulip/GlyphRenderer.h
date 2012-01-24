@@ -7,48 +7,48 @@
 
 namespace tlp {
 class Graph;
-}
+
 
 /**
-  * @brief Handle previews for Glyphs plugins.
+  * @brief Generate Qt previews for Glyphs plug-ins.
   **/
-class GlyphPreviewGenerator {
+class TLP_QT_SCOPE GlyphRenderer {
 public:
-  static GlyphPreviewGenerator & getInst();
-  ~GlyphPreviewGenerator();
+  static GlyphRenderer & getInst();
+  ~GlyphRenderer();
   /**
     * @brief Get the preview for the glyph with the given Id.
     */
-  QPixmap getPreview(unsigned int pluginId);
+  QPixmap render(unsigned int pluginId);
 
 private:
-  GlyphPreviewGenerator();
-  static GlyphPreviewGenerator* _instance;
+  GlyphRenderer();
+  static GlyphRenderer* _instance;
   std::map<unsigned int,QPixmap> _previews;
   tlp::Graph* _graph;
   tlp::node _node;
 };
 
 /**
-  * @brief Handle previews for Edge extremities glyphs plugins.
+  * @brief Generate Qt previews for edge extremities glyphs plug-ins.
   **/
-class EdgeExtremityGlyphPreviewGenerator {
+class TLP_QT_SCOPE EdgeExtremityGlyphRenderer {
 public:
 
-  ~EdgeExtremityGlyphPreviewGenerator();
-  static EdgeExtremityGlyphPreviewGenerator & getInst();
+  ~EdgeExtremityGlyphRenderer();
+  static EdgeExtremityGlyphRenderer & getInst();
   /**
     * @brief Get the preview for the edge extremity glyph with the given Id.
     */
-  QPixmap getPreview(unsigned int pluginId);
+  QPixmap render(unsigned int pluginId);
 
 private:
-  EdgeExtremityGlyphPreviewGenerator();
-  static EdgeExtremityGlyphPreviewGenerator* _instance;
+  EdgeExtremityGlyphRenderer();
+  static EdgeExtremityGlyphRenderer* _instance;
   std::map<unsigned int,QPixmap> _previews;
   tlp::Graph* _graph;
   tlp::edge _edge;
 
 };
-
+}
 #endif // GLYPHPREVIEWGENERATOR_H

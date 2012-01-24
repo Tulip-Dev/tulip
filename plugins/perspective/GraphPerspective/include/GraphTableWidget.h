@@ -3,9 +3,11 @@
 #include <QtGui/QTableView>
 #include <tulip/Graph.h>
 
-class GraphTableModel;
 class TulipFilterProxyModel;
 
+namespace tlp{
+class GraphTableModel;
+}
 /**
   * @brief Table widget object providing convinience functions for handling graph objects.
   **/
@@ -31,7 +33,7 @@ public:
     return _graph;
   }
 
-  GraphTableModel* graphModel()const {
+  tlp::GraphTableModel* graphModel()const {
     return _tulipTableModel;
   }
 
@@ -77,7 +79,7 @@ protected:
 
   tlp::Graph* _graph;
   tlp::ElementType _type;
-  GraphTableModel* _tulipTableModel;
+  tlp::GraphTableModel* _tulipTableModel;
   TulipFilterProxyModel* _filterModel;
 
 

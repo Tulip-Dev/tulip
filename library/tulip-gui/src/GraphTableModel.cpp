@@ -1,4 +1,4 @@
-#include "GraphTableModel.h"
+#include <tulip/GraphTableModel.h>
 
 #include <tulip/Graph.h>
 #include <tulip/TlpQtTools.h>

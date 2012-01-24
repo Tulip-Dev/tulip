@@ -23,16 +23,6 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="TulipTableWidgetColumnSelectionWidget" name="columnEditionWidget" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="GraphTableWidget" name="tableView">
        <property name="editTriggers">
         <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
@@ -131,12 +121,6 @@
    <class>GraphTableWidget</class>
    <extends>QTableView</extends>
    <header>GraphTableWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>TulipTableWidgetColumnSelectionWidget</class>
-   <extends>QWidget</extends>
-   <header>TulipTableWidgetColumnSelectionWidget.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>VisibleSectionsModel</class>

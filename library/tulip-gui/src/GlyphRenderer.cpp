@@ -1,4 +1,4 @@
-#include "GlyphPreviewGenerator.h"
+#include <tulip/GlyphRenderer.h>
 #include <tulip/Graph.h>
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
@@ -6,9 +6,9 @@
 using namespace tlp;
 using namespace std;
 
-GlyphPreviewGenerator* GlyphPreviewGenerator::_instance=NULL;
+GlyphRenderer* GlyphRenderer::_instance=NULL;
 
-GlyphPreviewGenerator::GlyphPreviewGenerator():_graph(newGraph()),_node(_graph->addNode()) {
+GlyphRenderer::GlyphRenderer():_graph(newGraph()),_node(_graph->addNode()) {
   //Init graph parameters.
   GlGraphRenderingParameters parameters;
   GlGraphInputData inputData(_graph,&parameters);
@@ -19,19 +19,19 @@ GlyphPreviewGenerator::GlyphPreviewGenerator():_graph(newGraph()),_node(_graph->
 
 }
 
-GlyphPreviewGenerator::~GlyphPreviewGenerator() {
+GlyphRenderer::~GlyphRenderer() {
   delete _graph;
 }
 
-GlyphPreviewGenerator& GlyphPreviewGenerator::getInst() {
+GlyphRenderer& GlyphRenderer::getInst() {
   if(_instance==NULL) {
-    _instance = new GlyphPreviewGenerator();
+    _instance = new GlyphRenderer();
   }
 
   return *_instance;
 }
 
-QPixmap GlyphPreviewGenerator::getPreview(unsigned int pluginId) {
+QPixmap GlyphRenderer::render(unsigned int pluginId) {
   if(_previews.find(pluginId) == _previews.end()) {
     _graph->getProperty<IntegerProperty>("viewShape")->setNodeValue(_node,pluginId);
     GlOffscreenRenderer *renderer = GlOffscreenRenderer::getInstance();
@@ -46,8 +46,8 @@ QPixmap GlyphPreviewGenerator::getPreview(unsigned int pluginId) {
   return _previews[pluginId];
 }
 
-EdgeExtremityGlyphPreviewGenerator* EdgeExtremityGlyphPreviewGenerator::_instance = NULL;
-EdgeExtremityGlyphPreviewGenerator::EdgeExtremityGlyphPreviewGenerator():_graph(newGraph()) {
+EdgeExtremityGlyphRenderer* EdgeExtremityGlyphRenderer::_instance = NULL;
+EdgeExtremityGlyphRenderer::EdgeExtremityGlyphRenderer():_graph(newGraph()) {
   //No edge extremity pixmap
   _previews[EdgeExtremityGlyphManager::NoEdgeExtremetiesId] = QPixmap();
 
@@ -73,19 +73,19 @@ EdgeExtremityGlyphPreviewGenerator::EdgeExtremityGlyphPreviewGenerator():_graph(
   inputData.getElementTgtAnchorSize()->setAllEdgeValue(Size(2,2,1));
 }
 
-EdgeExtremityGlyphPreviewGenerator::~EdgeExtremityGlyphPreviewGenerator() {
+EdgeExtremityGlyphRenderer::~EdgeExtremityGlyphRenderer() {
   delete _graph;
 }
 
-EdgeExtremityGlyphPreviewGenerator & EdgeExtremityGlyphPreviewGenerator::getInst() {
+EdgeExtremityGlyphRenderer & EdgeExtremityGlyphRenderer::getInst() {
   if(_instance==NULL) {
-    _instance = new EdgeExtremityGlyphPreviewGenerator();
+    _instance = new EdgeExtremityGlyphRenderer();
   }
 
   return *_instance;
 }
 
-QPixmap EdgeExtremityGlyphPreviewGenerator::getPreview(unsigned int pluginId) {
+QPixmap EdgeExtremityGlyphRenderer::render(unsigned int pluginId) {
   if(_previews.find(pluginId) == _previews.end()) {
     _graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(_edge,pluginId);
     GlOffscreenRenderer *renderer = GlOffscreenRenderer::getInstance();
