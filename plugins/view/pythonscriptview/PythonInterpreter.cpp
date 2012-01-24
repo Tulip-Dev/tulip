@@ -288,6 +288,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 
 PythonInterpreter::~PythonInterpreter() {
   processQtEvents = false;
+
   if (interpreterInit()) {
 #ifndef WIN32
     PyEval_ReleaseLock();

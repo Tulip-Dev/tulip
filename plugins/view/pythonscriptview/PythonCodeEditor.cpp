@@ -114,6 +114,7 @@ bool AutoCompletionList::eventFilter(QObject *, QEvent *event) {
       wasActivated = false;
     }
   }
+
   codeEditor->updateAutoCompletionListPosition();
 
   return false;
@@ -963,7 +964,7 @@ void PythonCodeEditor::showAutoCompletionList() {
 void PythonCodeEditor::updateAutoCompletionListPosition() {
 
   if (!autoCompletionList->isVisible())
-	  return;
+    return;
 
   int left = static_cast<int>(blockBoundingGeometry(textCursor().block()).translated(contentOffset()).left());
   int top = static_cast<int>(blockBoundingGeometry(textCursor().block()).translated(contentOffset()).top());
