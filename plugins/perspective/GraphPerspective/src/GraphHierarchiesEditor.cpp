@@ -155,9 +155,14 @@ void GraphHierarchiesEditor::delAllGraph() {
 void GraphHierarchiesEditor::createPanel() {
   tlp::Graph* g = _contextGraph;
 
+  if (sender() == _ui->addPanelButton) {
+    QModelIndexList selectedGraphs = _ui->hierarchiesTree->selectionModel()->selectedRows();
+    if (selectedGraphs.size()>0)
+      g = _ui->hierarchiesTree->model()->data(selectedGraphs[0],tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+  }
+
   if (g == NULL) {
     g = static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->currentGraph();
-
     if (g == NULL)
       return;
   }
