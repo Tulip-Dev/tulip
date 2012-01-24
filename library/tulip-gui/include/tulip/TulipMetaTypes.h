@@ -39,6 +39,7 @@
 #include <tulip/ColorScale.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/GlLabel.h>
+#include <tulip/TulipFont.h>
 
 #include <vector>
 
@@ -128,6 +129,7 @@ Q_DECLARE_METATYPE(tlp::EdgeShape)
 Q_DECLARE_METATYPE(EdgeExtremityShape)
 
 Q_DECLARE_METATYPE(tlp::LabelPosition)
+Q_DECLARE_METATYPE(tlp::TulipFont)
 
 
 namespace tlp {

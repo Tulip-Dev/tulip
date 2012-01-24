@@ -21,6 +21,8 @@ public:
   TulipFont font() const;
   int fontSize() const;
 
+  static TulipFont getFont(QWidget* parent = NULL,const TulipFont& selectedFont=TulipFont());
+
 public slots:
   void selectFont(const TulipFont&);
 

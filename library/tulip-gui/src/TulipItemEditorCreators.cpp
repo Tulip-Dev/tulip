@@ -33,6 +33,7 @@
 #include <tulip/GlyphRenderer.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/TulipFontWidget.h>
 
 using namespace tlp;
 
@@ -370,4 +371,23 @@ QVariant EdgeShapeEditorCreator::editorData(QWidget* editor,Graph*) {
 
 QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
   return tlpStringToQString(GlGraphStaticData::edgeShapeName(data.value<EdgeShape>()));
+}
+
+QWidget* TulipFontEditorCreator::createWidget(QWidget* parent) const{
+    return new TulipFontWidget(parent);
+}
+void TulipFontEditorCreator::setEditorData(QWidget*editor, const QVariant&data,tlp::Graph*){
+    TulipFont font =data.value<TulipFont>();
+    TulipFontWidget* fontWidget = static_cast<TulipFontWidget*>(editor);
+    fontWidget->setFont(font);
+}
+
+QVariant TulipFontEditorCreator::editorData(QWidget* editor,tlp::Graph*){
+    TulipFontWidget* fontWidget = static_cast<TulipFontWidget*>(editor);
+    return QVariant::fromValue<TulipFont>(fontWidget->font());
+}
+
+QString TulipFontEditorCreator::displayText(const QVariant & data) const{
+    TulipFont font =data.value<TulipFont>();
+    return font.fontName();
 }

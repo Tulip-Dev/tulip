@@ -71,3 +71,13 @@ void TulipFontDialog::selectFont(const TulipFont& f) {
   else
     _ui->styleList->setCurrentRow(0);
 }
+
+TulipFont TulipFontDialog::getFont(QWidget* parent ,const TulipFont& selectedFont){
+    TulipFontDialog dlg;
+    dlg.selectFont(selectedFont);
+
+    if (dlg.exec() != QDialog::Accepted || !dlg.font().exists())
+        return TulipFont();
+    else
+        return dlg.font();
+}

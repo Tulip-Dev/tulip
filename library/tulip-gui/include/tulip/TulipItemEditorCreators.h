@@ -167,6 +167,14 @@ public:
 };
 
 
+class TLP_QT_SCOPE TulipFontEditorCreator: public tlp::TulipItemEditorCreator {
+public:
+  QWidget* createWidget(QWidget*) const;
+  void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  QVariant editorData(QWidget*,tlp::Graph*);
+  QString displayText(const QVariant &) const;
+};
+
 }
 
 
