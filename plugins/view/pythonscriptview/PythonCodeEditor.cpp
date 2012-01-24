@@ -375,6 +375,11 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
 
 }
 
+PythonCodeEditor::~PythonCodeEditor() {
+	delete autoCompletionDb;
+	removeEventFilter(autoCompletionList);
+}
+
 void PythonCodeEditor::indicateScriptCurrentError(int lineNumber) {
   currentErrorLines.append(lineNumber);
   emit cursorPositionChanged();
@@ -1004,13 +1009,16 @@ void PythonCodeEditor::updateAutoCompletionList() {
 
   autoCompletionList->clear();
 
+  QString textBeforeCursorTrimmed = textBeforeCursor.trimmed();
 
-  QSet<QString> stringList = autoCompletionDb->getAutoCompletionListForContext(textBeforeCursor.trimmed(), getEditedFunctionName());
-  foreach(QString s, stringList) {
-    autoCompletionList->addItem(s);
+  if (textBeforeCursorTrimmed.length() == 0 || (textBeforeCursorTrimmed.length() > 0 && !textBeforeCursor[textBeforeCursor.length()-1].isSpace())) {
+
+	  QSet<QString> stringList = autoCompletionDb->getAutoCompletionListForContext(textBeforeCursorTrimmed, getEditedFunctionName());
+	  foreach(QString s, stringList) {
+		  autoCompletionList->addItem(s);
+	  }
+	  autoCompletionList->sortItems();
   }
-  autoCompletionList->sortItems();
-
 
   if (autoCompletionList->count() == 0)
     autoCompletionList->hide();

@@ -419,7 +419,7 @@ static QSet<QString> getAlgorithmPluginsListOfType(const QString& type, const QS
   while (itP->hasNext()) {
     tlp::AlgorithmPlugin *plugin = itP->next();
 
-    if (type.toStdString() == plugin->getClassName()) {
+    if (type.toStdString() == plugin->getClassName() || type.isEmpty()) {
       QString pluginName = "\"" + QString(plugin->getName().c_str()) + "\"";
 
       if (pluginName.startsWith(prefix))
@@ -431,14 +431,14 @@ static QSet<QString> getAlgorithmPluginsListOfType(const QString& type, const QS
   return ret;
 }
 
-QSet<QString> tryAlgorithmContext(const QString &context, const QString &algoContext, const QString &algoType) {
+QSet<QString> tryAlgorithmContext(const QString &context, const QString &algoContext, const QString &algoType="") {
   QSet<QString> ret;
 
   if (context.indexOf(algoContext) != -1) {
     int pos1 = context.indexOf(algoContext);
     int pos2 = pos1 + algoContext.length();
 
-    if (context.indexOf(",", pos2) == -1 && context.mid(0, pos1) != "tlp") {
+    if (context.indexOf(",", pos2) == -1 && (algoType.isEmpty() || context.mid(0, pos1) != "tlp")) {
       QString prefix = context.mid(pos2);
       ret = getAlgorithmPluginsListOfType(algoType, prefix);
     }
@@ -450,6 +450,12 @@ QSet<QString> tryAlgorithmContext(const QString &context, const QString &algoCon
 QSet<QString> getTulipAlgorithmListIfContext(const QString &context) {
   QSet<QString> ret;
   ret = tryAlgorithmContext(context, ".applyAlgorithm(", "Algorithm");
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".getDefaultPluginParameters(");
 
   if (!ret.empty()) {
     return ret;

@@ -126,7 +126,7 @@ void PythonScriptViewWidget::resizeToolBars() {
 }
 
 int PythonScriptViewWidget::addMainScriptEditor() {
-  PythonCodeEditor *codeEditor = new PythonCodeEditor(this);
+  PythonCodeEditor *codeEditor = new PythonCodeEditor();
   codeEditor->installEventFilter(pythonScriptView);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
   connect(codeEditor, SIGNAL(textChanged()), this, SLOT(mainScriptTextChanged()));
@@ -136,7 +136,7 @@ int PythonScriptViewWidget::addMainScriptEditor() {
 }
 
 int PythonScriptViewWidget::addModuleEditor() {
-  PythonCodeEditor *codeEditor = new PythonCodeEditor(this);
+  PythonCodeEditor *codeEditor = new PythonCodeEditor();
   codeEditor->installEventFilter(pythonScriptView);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
   connect(codeEditor, SIGNAL(textChanged()), this, SLOT(moduleScriptTextChanged()));
@@ -146,7 +146,7 @@ int PythonScriptViewWidget::addModuleEditor() {
 }
 
 int PythonScriptViewWidget::addPluginEditor() {
-  PythonCodeEditor *codeEditor = new PythonCodeEditor(this);
+  PythonCodeEditor *codeEditor = new PythonCodeEditor();
   codeEditor->installEventFilter(pythonScriptView);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
   connect(codeEditor, SIGNAL(textChanged()), this, SLOT(pluginScriptTextChanged()));

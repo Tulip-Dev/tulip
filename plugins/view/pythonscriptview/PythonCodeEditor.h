@@ -113,6 +113,7 @@ class PythonCodeEditor : public QPlainTextEdit {
 public :
 
   PythonCodeEditor(QWidget *parent=0);
+  ~PythonCodeEditor();
 
   int lineNumberAreaWidth() const;
   void indicateScriptCurrentError(int lineNumber);
