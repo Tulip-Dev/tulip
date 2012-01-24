@@ -25,6 +25,7 @@
 
 #include <climits>
 #include <tulip/tulipconf.h>
+#include <tulip/tuliphash.h>
 #include <tulip/Reflect.h>
 #include <tulip/PluginContext.h>
 #include <tulip/Node.h>
@@ -846,7 +847,7 @@ protected:
 protected:
 
   unsigned int id;
-  std::set<tlp::PropertyInterface*> circularCalls;
+  TLP_HASH_MAP<std::string, tlp::PropertyInterface*> circularCalls;
 
 public:
 

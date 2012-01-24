@@ -687,7 +687,9 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   std::cerr << __PRETTY_FUNCTION__ << std::endl;
 #endif
 
-  if(circularCalls.find(prop) != circularCalls.end()) {
+  TLP_HASH_MAP<std::string, PropertyInterface *>::const_iterator it =
+    circularCalls.find(algorithm);
+  if (it != circularCalls.end() && (*it).second == prop) {
 #ifndef NDEBUG
     std::cerr << "Circular call of " << __PRETTY_FUNCTION__ << " " << msg << std::endl;
 #endif
@@ -720,7 +722,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   context.dataSet = data;
 
   tlp::Observable::holdObservers();
-  circularCalls.insert(prop);
+  circularCalls[algorithm] = prop;
   tlp::AlgorithmContext tmpContext(context);
   Algorithm *tmpAlgo =
     AlgorithmPlugin::factory->getPluginObject(algorithm, tmpContext);
@@ -739,7 +741,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     result=false;
   }
 
-  circularCalls.erase(prop);
+  circularCalls.erase(algorithm);
   tlp::Observable::unholdObservers();
 
   if (progress==0) delete tmpProgress;
