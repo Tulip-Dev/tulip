@@ -57,6 +57,7 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<std::vector<int> >(new GenericVectorEditorCreator<int>);
   registerCreator<std::vector<Size> >(new GenericVectorEditorCreator<Size>);
   registerCreator<std::vector<std::string> >(new GenericVectorEditorCreator<std::string>);
+  registerCreator<TulipFont>(new TulipFontEditorCreator);
 }
 
 TulipItemDelegate::~TulipItemDelegate() {

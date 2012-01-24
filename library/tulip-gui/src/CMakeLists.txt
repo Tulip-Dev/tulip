@@ -97,6 +97,7 @@ SET(SRCS
   PropertyToQVariantMapper.cpp
   VectorEditionWidget.cpp
   GlyphRenderer.cpp
+  TulipFontWidget.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -119,6 +120,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/QuickAccessBar.ui
   ../designer/TulipFontDialog.ui
   ../designer/VectorEditionWidget.ui
+  ../designer/TulipFontWidget.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -181,6 +183,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/GraphTableModel.h
   ../include/tulip/GraphTableItemDelegate.h
   ../include/tulip/VectorEditionWidget.h
+  ../include/tulip/TulipFontWidget.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

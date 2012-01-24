@@ -3,6 +3,7 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TlpQtTools.h>
 #include <vector>
+#include <tulip/TulipFont.h>
 
 using namespace tlp;
 
@@ -64,17 +65,14 @@ using namespace tlp;
       return QVariant::fromValue<TulipFileDescriptor>(descriptor);
     }
     else if(property->getName().compare("viewFont")==0) {
-      TulipFileDescriptor descriptor;
-      descriptor.fileFilterPattern=QString("Font (*.ttf");
-
+      std::string fontFile;
       if(elementType == NODE) {
-        descriptor.absolutePath=tlpStringToQString(p->getNodeValue(node(id)));
+        fontFile=p->getNodeValue(node(id));
       }
       else {
-        descriptor.absolutePath=tlpStringToQString(p->getEdgeValue(edge(id)));
+        fontFile=p->getEdgeValue(edge(id));
       }
-
-      return QVariant::fromValue<TulipFileDescriptor>(descriptor);
+      return QVariant::fromValue<TulipFont>(TulipFont::fromFile(tlpStringToQString(fontFile)));
     }
     else {
       //Default case
@@ -90,9 +88,17 @@ using namespace tlp;
   bool StringPropertyConverter::setValue(unsigned int id,ElementType elementType,PropertyInterface* property,const QVariant& data) const {
     StringProperty* p = static_cast<StringProperty*>(property);
 
-    if (property->getName().compare("viewTexture") == 0 || property->getName().compare("viewFont")==0) {
-      TulipFileDescriptor descriptor=data.value<TulipFileDescriptor>();
 
+    if (property->getName().compare("viewFont")==0){
+        TulipFont font = data.value<TulipFont>();
+        if(elementType == NODE){
+            p->setNodeValue(node(id),QStringToTlpString(font.fontFile()));
+        }else{
+            p->setEdgeValue(edge(id),QStringToTlpString(font.fontFile()));
+        }
+        return true;
+    }else if(property->getName().compare("viewTexture") == 0) {
+      TulipFileDescriptor descriptor=data.value<TulipFileDescriptor>();
       if(elementType == NODE) {
         p->setNodeValue(node(id),QStringToTlpString(descriptor.absolutePath));
       }
