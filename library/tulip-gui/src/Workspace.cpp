@@ -288,7 +288,8 @@ void Workspace::updatePageCountLabel() {
 
   if (currentSlotsCount() != 0) {
     index = _currentPanelIndex+1;
-    total = _panels.size() - _panels.size()%currentSlotsCount();
+    total = ceil(_panels.size() * 1./currentSlotsCount());
+
   }
 
   _ui->pagesLabel->setText(QString::number(index) + " / " + QString::number(total));
@@ -334,8 +335,6 @@ void Workspace::updatePanels() {
   if (_currentPanelIndex > _panels.size()-currentSlotsCount())
     _currentPanelIndex = _panels.size()-currentSlotsCount();
 
-  updatePageCountLabel();
-
 //   Fill up slots according to the current index until there is no panel to show
   int i = _currentPanelIndex;
   foreach (PlaceHolderWidget* slt, currentModeSlots()) {
@@ -359,6 +358,8 @@ void Workspace::updatePanels() {
 
     i++;
   }
+
+  updatePageCountLabel();
 }
 
 void Workspace::nextPage() {
