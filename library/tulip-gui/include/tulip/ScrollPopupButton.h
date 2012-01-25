@@ -3,7 +3,7 @@
 
 #include <QtGui/QPushButton>
 #include <tulip/tulipconf.h>
-class QScrollBar;
+class QSlider;
 
 class TLP_QT_SCOPE ScrollPopupButton : public QPushButton {
   Q_OBJECT
@@ -11,8 +11,7 @@ class TLP_QT_SCOPE ScrollPopupButton : public QPushButton {
   Q_PROPERTY(int minimum READ minimum WRITE setMinimum)
   Q_PROPERTY(int maximum READ maximum WRITE setMaximum)
 
-  QWidget* _popup;
-  QScrollBar* _scrollBar;
+  QSlider* _slider;
 
 public:
   explicit ScrollPopupButton(QWidget *parent = 0);
@@ -30,6 +29,9 @@ public slots:
 
 signals:
   void valueChanged(int);
+
+protected:
+  bool eventFilter(QObject *, QEvent *);
 };
 
 #endif // SCROLLPOPUPBUTTON_H

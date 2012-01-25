@@ -1,27 +1,34 @@
 #include "tulip/ScrollPopupButton.h"
 
+#include <QtGui/QKeyEvent>
+#include <QtGui/QMouseEvent>
 #include <QtGui/QVBoxLayout>
-#include <QtGui/QScrollBar>
+#include <QtGui/QSlider>
 #include <QtGui/QCursor>
+#include <QtCore/QDebug>
 
-ScrollPopupButton::ScrollPopupButton(QWidget *parent): QPushButton(parent), _popup(new QWidget(NULL)) {
-  _popup->setWindowFlags(Qt::Popup);
-  _popup->setLayout(new QVBoxLayout);
-  _scrollBar = new QScrollBar();
-  _scrollBar->setOrientation(Qt::Vertical);
-  _popup->layout()->addWidget(_scrollBar);
+ScrollPopupButton::ScrollPopupButton(QWidget *parent): QPushButton(parent) {
+  _slider = new QSlider();
+  _slider->setOrientation(Qt::Vertical);
+  _slider->setWindowFlags(Qt::Popup);
+  _slider->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Preferred);
+  _slider->adjustSize();
+  _slider->setStyleSheet("QSlider { background-color: white; border: 1px solid #C9C9C9 }");
+  _slider->setFocusPolicy(Qt::StrongFocus);
+  _slider->installEventFilter(this);
   connect(this,SIGNAL(clicked()),this,SLOT(showPopup()));
-  connect(_scrollBar,SIGNAL(valueChanged(int)),this,SIGNAL(valueChanged(int)));
+  connect(_slider,SIGNAL(valueChanged(int)),this,SIGNAL(valueChanged(int)));
 }
 
 void ScrollPopupButton::showPopup() {
   QPoint globalPos = QCursor::pos();
-  _popup->setGeometry(globalPos.x()-5,globalPos.y()-290,width(),300);
-  _popup->show();
+  _slider->setGeometry(globalPos.x()-5,globalPos.y()-290,width(),300);
+  _slider->show();
+  _slider->setFocus();
 }
 
 void ScrollPopupButton::hidePopup() {
-  _popup->hide();
+  _slider->hide();
 }
 
 void ScrollPopupButton::setPopupVisible(bool f) {
@@ -32,21 +39,29 @@ void ScrollPopupButton::setPopupVisible(bool f) {
 }
 
 void ScrollPopupButton::setValue(int v) {
-  _scrollBar->setValue(v);
+  _slider->setValue(v);
 }
 int ScrollPopupButton::value() const {
-  return _scrollBar->value();
+  return _slider->value();
 }
 int ScrollPopupButton::maximum() const {
-  return _scrollBar->maximum();
+  return _slider->maximum();
 }
 void ScrollPopupButton::setMaximum(int v) {
-  _scrollBar->setMaximum(v);
+  _slider->setMaximum(v);
 }
 int ScrollPopupButton::minimum() const {
-  return _scrollBar->minimum();
+  return _slider->minimum();
 }
 void ScrollPopupButton::setMinimum(int v) {
-  _scrollBar->setMinimum(v);
+  _slider->setMinimum(v);
 }
-
+bool ScrollPopupButton::eventFilter(QObject *, QEvent *ev) {
+  if (ev->type() == QEvent::KeyPress && static_cast<QKeyEvent*>(ev)->key() == Qt::Key_Escape) {
+    hidePopup();
+  }
+  else if (ev->type() == QEvent::MouseButtonPress && !geometry().contains(static_cast<QMouseEvent*>(ev)->pos())) {
+    hidePopup();
+  }
+  return false;
+}
