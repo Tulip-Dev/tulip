@@ -36,6 +36,7 @@
 # TULIP_MAJOR_VERSION: Major version digit.
 # TULIP_MINOR_VERSION: Minor version digit.
 # TULIP_PATCH_VERSION: Patch version digit.
+# TULIP_USE_FILE: Additional Tulip-related macro definitions
 
 # Define version separator (different for MSVC builds)
 SET(TulipVersionSeparator .)
@@ -233,7 +234,7 @@ IF(TULIP_OGDF_LIBRARY)
   SET(TULIP_LIBRARIES ${TULIP_LIBRARIES} ${TULIP_OGDF_LIBRARY})
 ENDIF(TULIP_OGDF_LIBRARY)
 
-SET(TulipUseFile "${TULIP_DIR}/share/tulip/TulipUseFile.cmake")
+SET(TULIP_USE_FILE "${TULIP_DIR}/share/tulip/TulipUseFile.cmake")
 
 MACRO(TULIP_PLUGINSERVER)
   add_custom_command(OUTPUT "pseudo-install" COMMAND ${CMAKE_COMMAND} -P cmake_install.cmake)
