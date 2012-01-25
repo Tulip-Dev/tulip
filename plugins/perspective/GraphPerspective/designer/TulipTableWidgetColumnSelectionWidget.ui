@@ -75,8 +75,8 @@ background-color: white;
      <property name="styleSheet">
       <string notr="true">#bottomFrame {
 background-color: white;
-border: 1px solid #C9C9C9;
-border-top: 0px;
+border: 0px;
+border-bottom: 1px solid #C9C9C9;
 }</string>
      </property>
      <property name="frameShape">
@@ -86,11 +86,21 @@ border-top: 0px;
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <property name="margin">
        <number>0</number>
       </property>
       <item>
-       <widget class="QLineEdit" name="customPatternLineEdit"/>
+       <widget class="QLineEdit" name="customPatternLineEdit">
+        <property name="styleSheet">
+         <string notr="true">QLineEdit {
+border: 0px;
+border-bottom: 1px solid #C9C9C9;
+}</string>
+        </property>
+       </widget>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">

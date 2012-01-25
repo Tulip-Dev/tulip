@@ -87,48 +87,14 @@ border-bottom: 1px solid black;
    </item>
    <item>
     <widget class="QFrame" name="bottomFrame">
-     <property name="styleSheet">
-      <string notr="true">* {
-color: white;
-font: bold 11px;
-}
-
-#bottomFrame {
-border-top: 1px solid rgba(117,117,117,255);
-border-bottom: 1px solid rgba(117,117,117,255);
-border-right: 1px solid rgba(117,117,117,255);
-border-left: 0px;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
-stop:0 rgb(75,75,75),
-stop:1 rgb(60, 60, 60));
-}
-
-QPushButton {
-border: 0px;
-border-image: none;
-}
-
-QPushButton:hover {
-border: 0px;
-border-image: none;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
-stop:0 rgb(85,85,85),
-stop:1 rgb(70, 70, 70));
-}
-
-QPushButton:pressed, .QPushButton:checked {
-border: 0px;
-border-image: none;
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
-stop:0 rgb(65,65,65),
-stop:1 rgb(50, 50, 50));
-}</string>
-     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
+     </property>
+     <property name="bottomFrame" stdset="0">
+      <bool>true</bool>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="margin">
