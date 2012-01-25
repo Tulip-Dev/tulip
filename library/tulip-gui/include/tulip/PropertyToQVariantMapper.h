@@ -51,6 +51,7 @@ public:
 class TLP_QT_SCOPE IntegerPropertyConverter : public StandardPropertyToQVariantConverter<tlp::IntegerProperty,int,int> {
 public:
   QVariant getValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property) const;
+  bool setValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property,const QVariant& data) const;
   QVariant getNormalizedValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property,tlp::Graph* graph=NULL)const;
 
 };
