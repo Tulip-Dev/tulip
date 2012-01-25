@@ -376,8 +376,8 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
 }
 
 PythonCodeEditor::~PythonCodeEditor() {
-	delete autoCompletionDb;
-	removeEventFilter(autoCompletionList);
+  delete autoCompletionDb;
+  removeEventFilter(autoCompletionList);
 }
 
 void PythonCodeEditor::indicateScriptCurrentError(int lineNumber) {
@@ -1013,11 +1013,11 @@ void PythonCodeEditor::updateAutoCompletionList() {
 
   if (textBeforeCursorTrimmed.length() == 0 || (textBeforeCursorTrimmed.length() > 0 && !textBeforeCursor[textBeforeCursor.length()-1].isSpace())) {
 
-	  QSet<QString> stringList = autoCompletionDb->getAutoCompletionListForContext(textBeforeCursorTrimmed, getEditedFunctionName());
-	  foreach(QString s, stringList) {
-		  autoCompletionList->addItem(s);
-	  }
-	  autoCompletionList->sortItems();
+    QSet<QString> stringList = autoCompletionDb->getAutoCompletionListForContext(textBeforeCursorTrimmed, getEditedFunctionName());
+    foreach(QString s, stringList) {
+      autoCompletionList->addItem(s);
+    }
+    autoCompletionList->sortItems();
   }
 
   if (autoCompletionList->count() == 0)
