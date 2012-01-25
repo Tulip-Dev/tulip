@@ -11,6 +11,11 @@ QVariant StandardPropertyToQVariantConverter<PropertyClass,NodeType,EdgeType>::g
 }
 
 template<typename PropertyClass, typename NodeType, typename EdgeType>
+QVariant StandardPropertyToQVariantConverter<PropertyClass,NodeType,EdgeType>::getNormalizedValue(unsigned int,tlp::ElementType,tlp::PropertyInterface*,tlp::Graph*)const{
+    return QVariant();
+}
+
+template<typename PropertyClass, typename NodeType, typename EdgeType>
 bool StandardPropertyToQVariantConverter<PropertyClass,NodeType,EdgeType>::setValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property,const QVariant& data) const {
   PropertyClass* p = static_cast<PropertyClass*>(property);
 
@@ -49,4 +54,6 @@ bool StandardPropertyToQVariantConverter<PropertyClass,NodeType,EdgeType>::setAl
 
   return true;
 }
+
 }
+

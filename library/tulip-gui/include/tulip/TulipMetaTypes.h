@@ -75,7 +75,6 @@ struct EdgeExtremityShape {
   }
 };
 
-
 //Declare tulip type compatible with QVariant
 Q_DECLARE_METATYPE(tlp::DataSet)
 

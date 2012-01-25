@@ -179,8 +179,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/TulipFont.h
   ../include/tulip/TulipFontDialog.h
   ../include/tulip/ScrollPopupButton.h
-  ../include/tulip/WorkspaceExposeWidget.h
-  ../include/tulip/GraphTableModel.h
+  ../include/tulip/WorkspaceExposeWidget.h  
   ../include/tulip/GraphTableItemDelegate.h
   ../include/tulip/VectorEditionWidget.h
   ../include/tulip/TulipFontWidget.h

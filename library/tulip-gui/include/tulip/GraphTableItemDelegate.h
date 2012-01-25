@@ -24,7 +24,6 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TulipItemDelegate.h>
 
-
 /**
 * @brief QItemDelegate to display and edit data from a GraphTableModel in the Qt model/view architecture.
 **/
@@ -37,6 +36,8 @@ public:
   QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem & option,
                         const QModelIndex& index) const;
   void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
+
+  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 };
 

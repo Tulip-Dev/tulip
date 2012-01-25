@@ -150,4 +150,5 @@ QString GenericVectorEditorCreator<ElementType>::displayText(const QVariant &dat
   return QString::fromUtf8(tlp::SerializableVectorType<ElementType,false>::toString(v).c_str());
 }
 
+
 }

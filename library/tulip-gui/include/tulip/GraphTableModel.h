@@ -10,6 +10,8 @@
 
 namespace tlp {
 
+
+
 /**
   * @brief Simple structure used to store element id and propertiy corresponding to a cell in the GraphTableModel.
   **/
@@ -36,15 +38,15 @@ private:
 /**
   * @brief The GraphTableModel class allows to visualize and edit a Tulip Graph object with Qt's model/view framework. This model is made to work with a GraphTableItemDelegate class as QItemDelegate. If you use another one you cannot see both values and histogram distibution in double properties cells.
   **/
-class TLP_QT_SCOPE GraphTableModel : public QAbstractTableModel, public tlp::Observable {
-  Q_OBJECT
+class TLP_QT_SCOPE GraphTableModel : public QAbstractTableModel, public tlp::Observable {          
 public:
-  GraphTableModel(tlp::Graph* graph,tlp::ElementType elementType=tlp::NODE,QObject* parent = 0);
 
-  enum GraphTableModelDataRole {
-    //Return a double value between 0 and 1 where 0 correspond to elements with the lowest value and 1 the highest.
-    NormalizedValueRole = 33
-  };
+    enum GraphTableModelDataRole {
+      //Return a double value between 0 and 1 where 0 correspond to elements with the lowest value and 1 the highest.
+      NormalizedValueRole = 33
+    };
+
+  GraphTableModel(tlp::Graph* graph,tlp::ElementType elementType=tlp::NODE,QObject* parent = 0);  
 
   //Get set parameters
   tlp::Graph* graph()const {
