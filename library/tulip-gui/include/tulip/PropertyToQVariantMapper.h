@@ -18,6 +18,7 @@ class TLP_QT_SCOPE PropertyToQVariantConverter {
 public:
   virtual ~PropertyToQVariantConverter() {}
   virtual QVariant getValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property) const =0;
+  virtual QVariant getNormalizedValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property,tlp::Graph* graph=NULL)const=0;
   virtual bool setValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property,const QVariant& data) const  =0;
   virtual bool setAllValue(tlp::ElementType elementType,tlp::PropertyInterface* property,const QVariant& data) const  =0;
 };
@@ -30,9 +31,17 @@ template<typename PropertyClass, typename NodeType, typename EdgeType>
 class TLP_QT_SCOPE StandardPropertyToQVariantConverter : public PropertyToQVariantConverter {
 public:
   QVariant getValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property) const;
+  QVariant getNormalizedValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property,tlp::Graph* graph=NULL)const;
   bool setValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property,const QVariant& data) const;
   bool setAllValue(tlp::ElementType elementType,tlp::PropertyInterface* property,const QVariant& data) const;
+};
 
+/**
+  * @brief Specialization for double type
+  **/
+class TLP_QT_SCOPE DoublePropertyToQVariantConverter : public StandardPropertyToQVariantConverter<tlp::DoubleProperty,double,double>{
+public:
+  QVariant getNormalizedValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property,tlp::Graph* graph=NULL)const;
 };
 
 
@@ -42,6 +51,7 @@ public:
 class TLP_QT_SCOPE IntegerPropertyConverter : public StandardPropertyToQVariantConverter<tlp::IntegerProperty,int,int> {
 public:
   QVariant getValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property) const;
+  QVariant getNormalizedValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property,tlp::Graph* graph=NULL)const;
 
 };
 

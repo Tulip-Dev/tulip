@@ -7,6 +7,32 @@
 
 using namespace tlp;
 
+  QVariant DoublePropertyToQVariantConverter::getNormalizedValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property,Graph* graph)const{
+      DoubleProperty* doubleProp = dynamic_cast<DoubleProperty*>(property);
+      double min = 0;
+      double max = 0;
+      double value = 0;
+
+      //Compute the normalization of the elements.
+      if(elementType == NODE) {
+        min = doubleProp->getNodeMin(graph);
+        max = doubleProp->getNodeMax(graph);
+        value = doubleProp->getNodeValue(node(id));
+      }
+      else {
+        min = doubleProp->getEdgeMin(graph);
+        max = doubleProp->getEdgeMax(graph);
+        value = doubleProp->getEdgeValue(edge(id));
+      }
+
+      if(min != max) {
+        return QVariant(( value - min ) / (max - min));
+      }
+      else {
+        return QVariant();
+      }
+  }
+
 QVariant IntegerPropertyConverter::getValue(unsigned int id,ElementType elementType,PropertyInterface* property) const {
   IntegerProperty* p = static_cast<IntegerProperty*>(property);
 
@@ -47,6 +73,31 @@ QVariant IntegerPropertyConverter::getValue(unsigned int id,ElementType elementT
   }
 }
 
+QVariant IntegerPropertyConverter::getNormalizedValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property,Graph* graph)const{
+    IntegerProperty* p = dynamic_cast<IntegerProperty*>(property);
+    int min = 0;
+    int max = 0;
+    int value = 0;
+
+    //Compute the normalization of the elements.
+    if(elementType == NODE) {
+      min = p->getNodeMin(graph);
+      max = p->getNodeMax(graph);
+      value = p->getNodeValue(node(id));
+    }
+    else {
+      min = p->getEdgeMin(graph);
+      max = p->getEdgeMax(graph);
+      value = p->getEdgeValue(edge(id));
+    }
+
+    if(min != max) {
+      return QVariant(static_cast<double>((value - min )) / static_cast<double>((max - min)));
+    }
+    else {
+      return QVariant();
+    }
+}
 
 QVariant StringPropertyConverter::getValue(unsigned int id,ElementType elementType,PropertyInterface* property) const {
   StringProperty* p = static_cast<StringProperty*>(property);
@@ -86,6 +137,7 @@ QVariant StringPropertyConverter::getValue(unsigned int id,ElementType elementTy
     }
   }
 }
+
 
 bool StringPropertyConverter::setValue(unsigned int id,ElementType elementType,PropertyInterface* property,const QVariant& data) const {
   StringProperty* p = static_cast<StringProperty*>(property);
@@ -157,14 +209,14 @@ bool StringPropertyConverter::setAllValue(ElementType elementType,PropertyInterf
 }
 
 PropertyToQVariantMapper::PropertyToQVariantMapper() {
-  registerConverter<BooleanProperty>(new StandardPropertyToQVariantConverter<BooleanProperty,bool,bool>());
-  registerConverter<ColorProperty>(new StandardPropertyToQVariantConverter<ColorProperty,Color,Color>());
-  registerConverter<DoubleProperty>(new StandardPropertyToQVariantConverter<DoubleProperty,double,double>());
-  registerConverter<GraphProperty>(new StandardPropertyToQVariantConverter<GraphProperty,Graph*,std::set<edge> >());
-  registerConverter<IntegerProperty>(new IntegerPropertyConverter());
-  registerConverter<LayoutProperty>(new StandardPropertyToQVariantConverter<LayoutProperty,Coord,std::vector<Coord> >());
-  registerConverter<SizeProperty>(new StandardPropertyToQVariantConverter<SizeProperty,Size,Size>());
-  registerConverter<StringProperty>(new StringPropertyConverter());
+  registerConverter<BooleanProperty>(new StandardPropertyToQVariantConverter<BooleanProperty,bool,bool>);
+  registerConverter<ColorProperty>(new StandardPropertyToQVariantConverter<ColorProperty,Color,Color>);
+  registerConverter<DoubleProperty>(new DoublePropertyToQVariantConverter);
+  registerConverter<GraphProperty>(new StandardPropertyToQVariantConverter<GraphProperty,Graph*,std::set<edge> >);
+  registerConverter<IntegerProperty>(new IntegerPropertyConverter);
+  registerConverter<LayoutProperty>(new StandardPropertyToQVariantConverter<LayoutProperty,Coord,std::vector<Coord> >);
+  registerConverter<SizeProperty>(new StandardPropertyToQVariantConverter<SizeProperty,Size,Size>);
+  registerConverter<StringProperty>(new StringPropertyConverter);
   registerConverter<BooleanVectorProperty>(new StandardPropertyToQVariantConverter<BooleanVectorProperty,std::vector<bool>,std::vector<bool> >);
   registerConverter<ColorVectorProperty>(new StandardPropertyToQVariantConverter<ColorVectorProperty,std::vector<Color>,std::vector<Color> >);
   registerConverter<CoordVectorProperty>(new StandardPropertyToQVariantConverter<CoordVectorProperty,std::vector<Coord>,std::vector<Coord> >);
