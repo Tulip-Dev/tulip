@@ -2,7 +2,6 @@
 
 #include <tulip/Graph.h>
 #include <tulip/TlpQtTools.h>
-//#include "TulipQVariantBuilder.h"
 #include <tulip/TulipMetaTypes.h>
 
 
