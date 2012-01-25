@@ -5,7 +5,7 @@
 
 class TulipFilterProxyModel;
 
-namespace tlp{
+namespace tlp {
 class GraphTableModel;
 }
 /**

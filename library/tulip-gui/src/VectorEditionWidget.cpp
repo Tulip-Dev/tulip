@@ -30,7 +30,7 @@ ListPropertyWidgetModel::~ListPropertyWidgetModel() {
 QVariant ListPropertyWidgetModel::data(const QModelIndex& index, int role) const {
   if(index.isValid() && index.row() < elements->getElementNumber()) {
     if(role == Qt::EditRole || role == Qt::DisplayRole) {
-      QVariant v = elements->getValue(index.row());      
+      QVariant v = elements->getValue(index.row());
       return elements->getValue(index.row());
     }
   }
@@ -103,7 +103,7 @@ void VectorEditionWidget::removeRows() {
 }
 void VectorEditionWidget::setAll() {
   if(ui->listView->model()->rowCount() > 0) {
-    QDialog dialog(this);    
+    QDialog dialog(this);
     QWidget *editorWidget = ui->listView->itemDelegate()->createEditor(this,QStyleOptionViewItem(),ui->listView->model()->index(0,0));
     dialog.layout()->addWidget(editorWidget);
     QDialogButtonBox *buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
