@@ -67,7 +67,7 @@ public:
    * Return if this GlVertexArrayManager is used to render entities of the scene
    */
   inline bool renderingIsBegin() {
-    return isBegin;
+    return isBegin && activated;
   }
 
   /**
