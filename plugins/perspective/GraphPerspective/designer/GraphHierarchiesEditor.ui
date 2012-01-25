@@ -39,7 +39,7 @@
       <enum>Qt::CustomContextMenu</enum>
      </property>
      <property name="styleSheet">
-      <string notr="true">QTreeView  {
+      <string notr="true">QTreeView {
 border: 0px;
 border-bottom: 1px solid black;
 }</string>

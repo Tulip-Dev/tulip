@@ -6,25 +6,40 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>896</width>
+    <height>711</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QSplitter" name="splitter_2">
+    <widget class="QSplitter" name="dataSetWidgetMainSplitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="widget" native="true">
+     <property name="handleWidth">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="docksWidget" native="true">
       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item>
-        <widget class="QSplitter" name="splitter">
+        <widget class="QSplitter" name="datasetWidgetDockSplitter">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
+         </property>
+         <property name="handleWidth">
+          <number>1</number>
          </property>
          <widget class="DatasetTableEditor" name="propertieswidget" native="true"/>
          <widget class="GraphHierarchiesEditor" name="hierarchyWidget" native="true"/>
@@ -32,7 +47,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QStackedWidget" name="stackedWidget">
+     <widget class="QStackedWidget" name="tableViewStack">
       <widget class="SpreadViewTableWidget" name="nodesTableWidget"/>
       <widget class="SpreadViewTableWidget" name="edgesTableWidget"/>
      </widget>
