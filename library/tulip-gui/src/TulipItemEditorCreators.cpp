@@ -331,13 +331,13 @@ QVariant EdgeExtremityShapeEditorCreator::editorData(QWidget* editor,Graph*) {
 }
 
 QString EdgeExtremityShapeEditorCreator::displayText(const QVariant &data) const {
-  return tlpStringToQString(EdgeExtremityGlyphManager::getInst().glyphName(data.value<NodeShape>().nodeShapeId));
+  return tlpStringToQString(EdgeExtremityGlyphManager::getInst().glyphName(data.value<EdgeExtremityShape>().edgeExtremityShapeId));
 }
 
 bool EdgeExtremityShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const {
   QStyleOptionViewItemV4 opt = option;
   opt.features |= QStyleOptionViewItemV2::HasDecoration;
-  QPixmap pixmap = GlyphRenderer::getInst().render(data.value<EdgeExtremityShape>().edgeExtremityShapeId);
+  QPixmap pixmap = EdgeExtremityGlyphRenderer::getInst().render(data.value<EdgeExtremityShape>().edgeExtremityShapeId);
   opt.icon = QIcon(pixmap);
   opt.decorationSize = pixmap.size();
 

@@ -88,36 +88,36 @@ void GraphTableItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         //If the TulipItemEditorCreator paint function don't work use default paint system
         if (!c || !c->paint(painter,option,data)){
 
-        //Get the locale
-        QLocale locale=QLocale::system();
-        if(const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(&option)){
-            locale=vopt->locale;
-        }
-        //get display value
-        QString text = displayText(data,locale);
-        const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
-        QRect boundingRect = option.rect;
-        boundingRect.adjust(textMargin, 0, -textMargin, 0);
-        //Change the color of the text if the element is selected
-        QPen pen = painter->pen();
+            //Get the locale
+            QLocale locale=QLocale::system();
+            if(const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(&option)){
+                locale=vopt->locale;
+            }
+            //get display value
+            QString text = displayText(data,locale);
+            const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
+            QRect boundingRect = option.rect;
+            boundingRect.adjust(textMargin, 0, -textMargin, 0);
+            //Change the color of the text if the element is selected
+            QPen pen = painter->pen();
 
-        if (option.state & QStyle::State_Selected)
-            pen.setColor(option.palette.color(QPalette::HighlightedText));
-        else
-            pen.setColor(option.palette.color(QPalette::Text));
+            if (option.state & QStyle::State_Selected)
+                pen.setColor(option.palette.color(QPalette::HighlightedText));
+            else
+                pen.setColor(option.palette.color(QPalette::Text));
 
-        painter->save();
-        painter->setPen(pen);
-        QTextOption textOption;
-         if(const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(&option)){
-            const bool wrapText = vopt->features & QStyleOptionViewItemV2::WrapText;
-            textOption.setWrapMode(wrapText ? QTextOption::WordWrap : QTextOption::ManualWrap);
-         }
-        textOption.setTextDirection(option.direction);
-        textOption.setAlignment(QStyle::visualAlignment(option.direction, option.displayAlignment));
-        painter->drawText(boundingRect,text,textOption);
+            painter->save();
+            painter->setPen(pen);
+            QTextOption textOption;
+            if(const QStyleOptionViewItemV4 *vopt = qstyleoption_cast<const QStyleOptionViewItemV4 *>(&option)){
+                const bool wrapText = vopt->features & QStyleOptionViewItemV2::WrapText;
+                textOption.setWrapMode(wrapText ? QTextOption::WordWrap : QTextOption::ManualWrap);
+            }
+            textOption.setTextDirection(option.direction);
+            textOption.setAlignment(QStyle::visualAlignment(option.direction, option.displayAlignment));
+            painter->drawText(boundingRect,text,textOption);
+            painter->restore();
         }
-        painter->restore();
     }else{
         TulipItemDelegate::paint(painter,option,index);
     }
