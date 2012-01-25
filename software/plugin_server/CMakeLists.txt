@@ -20,7 +20,8 @@ target_link_libraries(pushPlugins ${QT_LIBRARIES}
                       ${LibTulipGUIName}
                       ${QT_QTXML_LIBRARY})
 
-IF(TULIP_GENERATE_PLUGINSERVER)
-  INSTALL(TARGETS packagePlugins DESTINATION ${TulipBinInstallDir})
-  INSTALL(TARGETS pushPlugins DESTINATION ${TulipBinInstallDir})
+IF(TULIP_GENERATE_PLUGINSERVER_TOOLS)
+  INSTALL(TARGETS packagePlugins DESTINATION ${TulipBinInstallDir} COMPONENT plugin_server)
+  INSTALL(TARGETS pushPlugins DESTINATION ${TulipBinInstallDir} COMPONENT plugin_server)
+  BUNDLE_DEFINE_COMPONENT(plugin_server "plugin server" " " "Dev tools")
 ENDIF()
