@@ -142,6 +142,8 @@ struct OutPropertyParam {
   }
 };
 
+#define TN( T )   typeid(T).name()
+
 bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
     const string& name,
     const string& destination,
@@ -197,9 +199,20 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
     while( paramIt->hasNext() ) {
       ParameterDescription param = paramIt->next();
 
+      // forget in param
       if (param.getDirection() == IN_PARAM)
         continue;
-
+      string typeName(param.getTypeName());
+      // forget non property out param
+      if (typeName != TN(PropertyInterface*)
+	  && typeName != TN(BooleanProperty)
+	  && typeName != TN(DoubleProperty)
+	  && typeName != TN(LayoutProperty)
+	  && typeName != TN(StringProperty)
+	  && typeName != TN(IntegerProperty)
+	  && typeName != TN(SizeProperty)
+	  && typeName != TN(ColorProperty))
+	continue;
       OutPropertyParam outPropParam(param.getName());
       // get destination property
       dataSet.get(param.getName(), outPropParam.dest);
