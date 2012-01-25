@@ -10,6 +10,10 @@ DatasetWidget::DatasetWidget(QWidget *parent) :
   QWidget(parent),
   _ui(new Ui::DatasetWidget) {
   _ui->setupUi(this);
+
+  _ui->dataSetWidgetMainSplitter->setSizes(QList<int>() << 200 << 1000);
+  _ui->datasetWidgetDockSplitter->setSizes(QList<int>() << 500 << 800);
+
   connect(_ui->propertieswidget,SIGNAL(tableChanged(tlp::ElementType)),SLOT(displayedElementTypeChanged(tlp::ElementType)));
 }
 

@@ -22,34 +22,34 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QPushButton, QComboBox {
-    border-image: url(:/tulip/gui/ui/btn_26.png) 4;
-    border-width: 4;
-    padding: 0px 6px;
-    font-size: 12px;
+border-image: url(:/tulip/gui/ui/btn_26.png) 4;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
 }
 
 QPushButton::flat {
-    border-image: none;
-    border-width: 4;
-    padding: 0px 6px;
-    font-size: 12px;
-	background-color: transparent;
+border-image: none;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+background-color: transparent;
 }
 
 QPushButton, QComboBox, QLabel {
-    color: black;
+color: black;
 }
 
 QPushButton:hover, QComboBox:hover {
-    border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
 }
 
 QPushButton:disabled, QComboBox::disabled {
-	color:gray;
+color:gray;
 }
 
 QPushButton:pressed{
-    border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
+border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
 }
 
 QPushButton::menu-indicator{
@@ -62,10 +62,6 @@ QPushButton {
 outline: none;
 margin: 2
 }
-
-/*QComboBox QAbstractItemView {
-background-color:white;
-}*/
 
 QComboBox::down-arrow {
 image: url(:/tulip/gui/ui/combobox_arrow.png);
@@ -95,6 +91,42 @@ color: white;
 QSplitter::handle {
 background-color: #C0C0C0;
 border-width:0px;
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] * {
+color: white;
+font: bold 11px;
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] {
+border-top: 1px solid rgba(117,117,117,255);
+border-bottom: 1px solid rgba(117,117,117,255);
+border-right: 1px solid rgba(117,117,117,255);
+border-left: 0px;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(75,75,75),
+stop:1 rgb(60, 60, 60));
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] QPushButton {
+border: 0px;
+border-image: none;
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] QPushButton:hover {
+border: 0px;
+border-image: none;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(85,85,85),
+stop:1 rgb(70, 70, 70));
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] QPushButton:pressed, QFrame[ bottomFrame = &quot;true&quot; ] .QPushButton:checked {
+border: 0px;
+border-image: none;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(105,105,105),
+stop:1 rgb(90, 90, 90));
 }</string>
   </property>
   <property name="dockNestingEnabled">

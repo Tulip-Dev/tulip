@@ -32,7 +32,7 @@ SpreadViewTableWidget::SpreadViewTableWidget(QWidget *parent) :
   connect(ui->tableView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showTableContextMenu(QPoint)));
 
   //Filtering
-  connect(ui->showOnlySelectedElementsCheckBox,SIGNAL(stateChanged(int)),this,SLOT(filterElements()));
+  connect(ui->showOnlySelectedElementsCheckBox,SIGNAL(clicked()),this,SLOT(filterElements()));
   connect(ui->filterPatternLineEdit,SIGNAL(returnPressed()),this,SLOT(filterElements()));
   connect(ui->filterPushButton,SIGNAL(clicked()),this,SLOT(filterElements()));
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
@@ -495,13 +495,13 @@ void SpreadViewTableWidget::showOnlySelectedElements(bool) {
 void SpreadViewTableWidget::filterElements() {
   setEnabled(false);
   QApplication::processEvents();
-  ui->tableView->setRowFilter(QRegExp(ui->filterPatternLineEdit->text()),(ui->showOnlySelectedElementsCheckBox->checkState() == Qt::Checked),ui->comboBox->itemData(ui->comboBox->currentIndex()).toInt());
+  ui->tableView->setRowFilter(QRegExp(ui->filterPatternLineEdit->text()),(ui->showOnlySelectedElementsCheckBox->isChecked()),ui->comboBox->itemData(ui->comboBox->currentIndex()).toInt());
   setEnabled(true);
   QApplication::processEvents();
 }
 
 bool SpreadViewTableWidget::displayOnlySelectedElements()const {
-  return ui->showOnlySelectedElementsCheckBox->checkState()==Qt::Checked;
+  return ui->showOnlySelectedElementsCheckBox->isChecked();
 }
 
 QRegExp SpreadViewTableWidget::elementValuesFilter()const {
