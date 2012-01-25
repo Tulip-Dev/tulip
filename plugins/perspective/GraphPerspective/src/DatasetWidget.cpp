@@ -31,5 +31,5 @@ void DatasetWidget::currentGraphChanged(Graph* newGraph) {
 
 void DatasetWidget::displayedElementTypeChanged(ElementType type) {
   _ui->propertieswidget->setTulipTableWidgetColumnSelectionModel(type==NODE?_ui->nodesTableWidget->columnEditionModel():_ui->edgesTableWidget->columnEditionModel());
-  _ui->stackedWidget->setCurrentIndex(type==NODE?0:1);
+  _ui->tableViewStack->setCurrentIndex(type==NODE?0:1);
 }

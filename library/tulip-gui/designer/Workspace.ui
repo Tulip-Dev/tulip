@@ -503,6 +503,9 @@ stop:1 rgb(50, 50, 50));
          <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/split3_screen.png</normaloff>:/tulip/gui/ui/split3_screen.png</iconset>
         </property>
+        <property name="shortcut">
+         <string>Shift+3</string>
+        </property>
        </widget>
       </item>
       <item>
@@ -530,7 +533,7 @@ stop:1 rgb(50, 50, 50));
           <normaloff>:/tulip/gui/ui/grid_screen.png</normaloff>:/tulip/gui/ui/grid_screen.png</iconset>
         </property>
         <property name="shortcut">
-         <string>Shift+3</string>
+         <string>Shift+4</string>
         </property>
         <property name="checkable">
          <bool>false</bool>
