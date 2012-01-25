@@ -16,7 +16,7 @@ class TulipTableWidgetColumnSelectionWidget;
 class GraphTableWidget;
 class TulipTableWidgetColumnSelectionModel;
 
-class SpreadViewTableWidget : public QWidget{
+class SpreadViewTableWidget : public QWidget {
   Q_OBJECT
 
 public:

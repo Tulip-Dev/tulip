@@ -9,7 +9,7 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/StringProperty.h>
 
-namespace tlp{
+namespace tlp {
 
 /**
   * @brief Interface to perform data conversion between a property values and QVariant objects.

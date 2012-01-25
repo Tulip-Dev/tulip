@@ -10,26 +10,25 @@ class DatasetTableEditor;
 
 class TulipTableWidgetColumnSelectionModel;
 
-class DatasetTableEditor : public QWidget
-{
-    Q_OBJECT
-    
+class DatasetTableEditor : public QWidget {
+  Q_OBJECT
+
 public:
-    explicit DatasetTableEditor(QWidget *parent = 0);
-    ~DatasetTableEditor();
+  explicit DatasetTableEditor(QWidget *parent = 0);
+  ~DatasetTableEditor();
 
-    tlp::ElementType displayedType()const;
+  tlp::ElementType displayedType()const;
 
-    void setTulipTableWidgetColumnSelectionModel(TulipTableWidgetColumnSelectionModel* model);
+  void setTulipTableWidgetColumnSelectionModel(TulipTableWidgetColumnSelectionModel* model);
 
 signals:
-    void tableChanged(tlp::ElementType type);
-    
+  void tableChanged(tlp::ElementType type);
+
 private:
-    Ui::DatasetTableEditor *_ui;
+  Ui::DatasetTableEditor *_ui;
 
 private slots:
-    void menuChanged(const QString& menu);
+  void menuChanged(const QString& menu);
 };
 
 #endif // DATASETTABLEEDITOR_H
