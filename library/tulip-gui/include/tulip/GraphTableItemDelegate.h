@@ -27,7 +27,7 @@
 /**
 * @brief QItemDelegate to display and edit data from a GraphTableModel in the Qt model/view architecture.
 **/
-class GraphTableItemDelegate: public tlp::TulipItemDelegate {
+class TLP_QT_SCOPE GraphTableItemDelegate: public tlp::TulipItemDelegate {
   Q_OBJECT
 public:
   GraphTableItemDelegate(QObject* parent=NULL) ;
