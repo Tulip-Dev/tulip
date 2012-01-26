@@ -6,23 +6,22 @@
 namespace Ui {
 class TulipFontWidget;
 }
-namespace tlp{
-class TLP_QT_SCOPE TulipFontWidget : public QWidget
-{
-    Q_OBJECT
-    Q_PROPERTY(TulipFont font READ font WRITE setFont)
-    
+namespace tlp {
+class TLP_QT_SCOPE TulipFontWidget : public QWidget {
+  Q_OBJECT
+  Q_PROPERTY(TulipFont font READ font WRITE setFont)
+
 public:
-    explicit TulipFontWidget(QWidget *parent = 0);
-    ~TulipFontWidget();
-    void setFont(const TulipFont& font);
-    TulipFont font()const;
-    
+  explicit TulipFontWidget(QWidget *parent = 0);
+  ~TulipFontWidget();
+  void setFont(const TulipFont& font);
+  TulipFont font()const;
+
 private:
-    Ui::TulipFontWidget *ui;
+  Ui::TulipFontWidget *ui;
 
 private slots:
-    void editFont();
+  void editFont();
 };
 }
 #endif // TULIPFONTWIDGET_H

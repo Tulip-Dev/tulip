@@ -11,8 +11,8 @@ QVariant StandardPropertyToQVariantConverter<PropertyClass,NodeType,EdgeType>::g
 }
 
 template<typename PropertyClass, typename NodeType, typename EdgeType>
-QVariant StandardPropertyToQVariantConverter<PropertyClass,NodeType,EdgeType>::getNormalizedValue(unsigned int,tlp::ElementType,tlp::PropertyInterface*,tlp::Graph*)const{
-    return QVariant();
+QVariant StandardPropertyToQVariantConverter<PropertyClass,NodeType,EdgeType>::getNormalizedValue(unsigned int,tlp::ElementType,tlp::PropertyInterface*,tlp::Graph*)const {
+  return QVariant();
 }
 
 template<typename PropertyClass, typename NodeType, typename EdgeType>
