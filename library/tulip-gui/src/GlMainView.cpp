@@ -37,7 +37,7 @@ void GlMainView::draw(tlp::PluginProgress*) {
   _glMainWidget->draw();
 }
 
-void GlMainView::refresh(PluginProgress *pluginProgress) {
+void GlMainView::refresh(PluginProgress *) {
   _glMainWidget->draw(false);
 }
 
