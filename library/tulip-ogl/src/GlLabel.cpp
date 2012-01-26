@@ -255,8 +255,9 @@ void GlLabel::draw(float lod, Camera *camera) {
   float screenH;
   float multiLineH=h;
 
+  //Here the 4.5 number is the size of space between two lines
   if(textVector.size()>1)
-    multiLineH=(h-(textVector.size()-1)*10)/textVector.size();
+    multiLineH=(h-(textVector.size()-1)*4.5)/textVector.size();
 
   //Here we compute the deformation of the bounding box when we have a rotation on the camera
   float a=acos(camera->getUp()[1]/sqrt(camera->getUp()[0]*camera->getUp()[0]+camera->getUp()[1]*camera->getUp()[1]));
