@@ -18,8 +18,7 @@ SET(sip_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/../siplib/sip.h
 )
 
-INCLUDE(../../../CMakeMacros.cmake)
-
+INCLUDE(../../../TulipUseFile.cmake)
 DISABLE_COMPILER_WARNINGS()
 
 ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../siplib/sip.h

@@ -16,6 +16,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 ## Include macro definitions
 ## -----------------------------------------------------------------------------------------------
 INCLUDE(TulipUseFile.cmake)
+SET_COMPILER_OPTIONS()
 
 # Hack: on Apple, we need to set specifically the value of INSTALL_NAME_DIR for every single bloody target
 # since RPATH is not supported for the DyLib format.
