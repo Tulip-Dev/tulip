@@ -1,1 +1,0 @@
-sh tulip_run_test.sh graph_tests grid_approximation.tlp grid_approximation.tlp

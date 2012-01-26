@@ -1,1 +1,0 @@
-sh tulip_run_test.sh random_uniform_binary_tree_import 
