@@ -143,7 +143,7 @@ protected:
   void clearColorData();
   void clearData();
   void initObservers();
-  void clearObservers();
+  void clearObservers(PropertyInterface *deletedProperty=NULL);
 
   GlGraphInputData *inputData;
   Graph *graph;

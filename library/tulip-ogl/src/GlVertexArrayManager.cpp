@@ -733,7 +733,7 @@ void GlVertexArrayManager::initObservers() {
   }
 }
 
-void GlVertexArrayManager::clearObservers() {
+void GlVertexArrayManager::clearObservers(PropertyInterface *deletedProperty) {
 
   if(graphObserverActivated) {
     graph->removeListener(this);
@@ -741,9 +741,12 @@ void GlVertexArrayManager::clearObservers() {
   }
 
   if(layoutObserverActivated) {
-    inputData->getElementLayout()->removePropertyObserver(this);
-    inputData->getElementSize()->removePropertyObserver(this);
-    inputData->getElementShape()->removePropertyObserver(this);
+    if(deletedProperty!=inputData->getElementLayout())
+      inputData->getElementLayout()->removePropertyObserver(this);
+    if(deletedProperty!=inputData->getElementSize())
+      inputData->getElementSize()->removePropertyObserver(this);
+    if(deletedProperty!=inputData->getElementShape())
+      inputData->getElementShape()->removePropertyObserver(this);
     layoutObserverActivated=false;
   }
 
@@ -787,8 +790,13 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
     }
   }
   else if(evt.type() == Event::TLP_DELETE) {
+    PropertyInterface* property=NULL;
+    const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&evt);
+    if(propertyEvent)
+      property = propertyEvent->getProperty();
+
     clearData();
-    clearObservers();
+    clearObservers(property);
   }
   else {
     const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&evt);
