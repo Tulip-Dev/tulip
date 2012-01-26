@@ -39,7 +39,7 @@ public:
 /**
   * @brief Specialization for double type
   **/
-class TLP_QT_SCOPE DoublePropertyToQVariantConverter : public StandardPropertyToQVariantConverter<tlp::DoubleProperty,double,double>{
+class TLP_QT_SCOPE DoublePropertyToQVariantConverter : public StandardPropertyToQVariantConverter<tlp::DoubleProperty,double,double> {
 public:
   QVariant getNormalizedValue(unsigned int id,tlp::ElementType elementType,tlp::PropertyInterface* property,tlp::Graph* graph=NULL)const;
 };

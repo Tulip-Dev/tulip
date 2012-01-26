@@ -63,5 +63,6 @@ bool ScrollPopupButton::eventFilter(QObject *, QEvent *ev) {
   else if (ev->type() == QEvent::MouseButtonPress && !geometry().contains(static_cast<QMouseEvent*>(ev)->pos())) {
     hidePopup();
   }
+
   return false;
 }
