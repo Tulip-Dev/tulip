@@ -679,8 +679,9 @@ void PropertyWidget::showContextMenu(const QPoint & pos) {
       Observable::holdObservers();
 
       if (action == deleteAction) { // Delete
-	// allow to undo
-	graph->push();
+        // allow to undo
+        graph->push();
+
         // delete graph item
         if (displayNode)
           graph->delNode(node(itemId));
@@ -694,8 +695,8 @@ void PropertyWidget::showContextMenu(const QPoint & pos) {
       else {
         BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
 
-	// allow to undo
-	graph->push();
+        // allow to undo
+        graph->push();
 
         if (action == selectAction) { // Select
           // empty selection
