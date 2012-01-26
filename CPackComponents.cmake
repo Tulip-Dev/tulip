@@ -18,7 +18,6 @@ BUNDLE_DEFINE_COMPONENT(glew "glew" "The OpenGL Extension Wrangler Library" "thi
 BUNDLE_DEFINE_COMPONENT(jpeg "jpeg" "libjpeg is a library written entirely in C which contains a widely-used implementation of a JPEG decoder, JPEG encoder and other JPEG utilities." "thirdparty")
 BUNDLE_DEFINE_COMPONENT(png "png" "libpng is the official PNG reference library." "thirdparty")
 BUNDLE_DEFINE_COMPONENT(python "Python" "Python Programming Language" "thirdparty")
-BUNDLE_DEFINE_COMPONENT(qscintilla2 "QScintilla2" "QScintilla library" "thirdparty")
 BUNDLE_DEFINE_COMPONENT(sip "SIP" "Python/C++ bindings library" "thirdparty")
 
 BUNDLE_DEFINE_COMPONENT(tulip_core_dev "tulip-core (dev)" "Headers and developer files for the tulip-core library" "Developement files")
