@@ -340,7 +340,7 @@ QVariant GraphTableModel::headerData(int section, Qt::Orientation orientation, i
       PropertyInterface* property = _propertiesTable[section];
 
       if(_propertiesToDelete.find(property)==_propertiesToDelete.end()) {
-        return property->getGraph() != _graph?QVariant(QIcon(":/spreadsheet/inherited_properties.png")):QVariant();
+        return property->getGraph() != _graph?QVariant(QIcon(":/tulip/gui/ui/inherited_properties.png")):QVariant();
       }
     }
   }
