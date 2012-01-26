@@ -140,7 +140,6 @@ public:
   template<typename T>
   T* getProperty(PropertyName propertyName) const {
     T* property=dynamic_cast<T*>(propertiesMap.find(propertyName)->second);
-    assert(property);
     return property;
   }
 
