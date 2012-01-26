@@ -59,16 +59,26 @@ void QuickAccessBar::scaleFont(int scale) {
 
   double realScale = scale/10.;
   IntegerProperty* in = inputData()->getElementFontSize();
+  IntegerProperty* out = new IntegerProperty(_mainView->graph());
+
+  // nodes
+  out->setAllNodeValue((in->getNodeDefaultValue() / _oldFontScale) * realScale);
   node n;
   forEach(n,_mainView->graph()->getNodes()) {
     int oldSize = in->getNodeValue(n);
-    in->setNodeValue(n,(oldSize / _oldFontScale) * realScale);
+    out->setNodeValue(n,(oldSize / _oldFontScale) * realScale);
   }
+
+  // edges
+  out->setAllEdgeValue((in->getEdgeDefaultValue() / _oldFontScale) * realScale);
   edge e;
   forEach(e,_mainView->graph()->getEdges()) {
     int oldSize = in->getEdgeValue(e);
-    in->setEdgeValue(e,ceil((oldSize * 1. / _oldFontScale) * realScale));
+    out->setEdgeValue(e,ceil((oldSize * 1. / _oldFontScale) * realScale));
   }
+
+  *in = *out;
+  delete out;
 
   _oldFontScale = realScale;
   Observable::unholdObservers();
@@ -146,13 +156,23 @@ void QuickAccessBar::scaleNodes(int scale) {
 
   double realScale = scale/10.;
   SizeProperty* in = inputData()->getElementSize();
+  SizeProperty* out = new SizeProperty(_mainView->graph());
+
+  // nodes
+  out->setAllNodeValue((in->getNodeDefaultValue() / _oldFontScale) * realScale);
   node n;
-  forEach(n,_mainView->graph()->getNodes()) {
-    Size oldSize = in->getNodeValue(n);
-    in->setNodeValue(n,(oldSize / _oldFontScale) * realScale);
-  }
+  forEach(n,_mainView->graph()->getNodes())
+    out->setNodeValue(n,(in->getNodeValue(n) / _oldFontScale) * realScale);
+
+  // edges
+  out->setAllEdgeValue(in->getEdgeDefaultValue());
+  edge e;
+  forEach(e,_mainView->graph()->getEdges())
+      out->setEdgeValue(e,in->getEdgeValue(e));
 
   _oldFontScale = realScale;
+  *in = *out;
+  delete out;
   Observable::unholdObservers();
 }
 
