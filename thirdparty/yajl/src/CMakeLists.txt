@@ -34,7 +34,7 @@ SET (incDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/include/yajl)
 # set the output path for libraries
 #SET(LIBRARY_OUTPUT_PATH ${libDir})
 
-ADD_LIBRARY(yajl_s STATIC ${SRCS} ${HDRS} ${PUB_HDRS})
+#ADD_LIBRARY(yajl_s STATIC ${SRCS} ${HDRS} ${PUB_HDRS})
 
 ADD_LIBRARY(yajl SHARED ${SRCS} ${HDRS} ${PUB_HDRS})
 
@@ -73,17 +73,15 @@ ENDFOREACH (header ${PUB_HDRS})
 INCLUDE_DIRECTORIES(${incDir}/.. ${incDir})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
-IF(NOT WIN32)
+#IF(NOT WIN32)
   # at build time you may specify the cmake variable LIB_SUFFIX to handle
   # 64-bit systems which use 'lib64'
-  INSTALL(TARGETS yajl LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT yajl)
-  INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT yajl)
-  INSTALL(FILES ${PUB_HDRS} DESTINATION include/yajl COMPONENT yajl)
-  INSTALL(FILES ${incDir}/yajl_version.h DESTINATION include/yajl COMPONENT yajl)
-ELSE()
+#  INSTALL(TARGETS yajl LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT yajl)
+#  INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT yajl)
+#  INSTALL(FILES ${PUB_HDRS} DESTINATION include/yajl COMPONENT yajl)
+#  INSTALL(FILES ${incDir}/yajl_version.h DESTINATION include/yajl COMPONENT yajl)
+#ELSE()
   INSTALL(TARGETS yajl
-       RUNTIME DESTINATION ${TulipBinInstallDir}
-       LIBRARY DESTINATION ${TulipBinInstallDir}
-       ARCHIVE DESTINATION ${TulipBinInstallDir}
-       COMPONENT yajl)
-ENDIF()
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT yajl
+       LIBRARY DESTINATION ${TulipBinInstallDir} COMPONENT yajl)
+#ENDIF()
