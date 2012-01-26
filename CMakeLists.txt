@@ -362,7 +362,6 @@ ADD_SUBDIRECTORY(software)
 ADD_SUBDIRECTORY(plugins)
 ADD_SUBDIRECTORY(textures)
 ADD_SUBDIRECTORY(externalplugins)
-ADD_SUBDIRECTORY(examples)
 
 ## -----------------------------------------------------------------------------------------------
 ## Set var to create tulip-config script

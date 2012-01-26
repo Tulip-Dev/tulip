@@ -1,1 +1,0 @@
-sh tulip_run_test.sh remove_subgraph_of_metanode grid_approximation_strength_clustering.tlp

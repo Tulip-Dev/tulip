@@ -1,1 +1,0 @@
-sh tulip_run_test.sh strength_clustering grid_approximation.tlp grid_approximation.tlp

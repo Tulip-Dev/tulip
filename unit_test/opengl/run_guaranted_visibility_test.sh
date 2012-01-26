@@ -1,1 +1,0 @@
-sh tulip_run_test.sh guaranted_visibility guaranted_visibility.tlp

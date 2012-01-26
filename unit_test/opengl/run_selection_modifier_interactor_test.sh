@@ -1,1 +1,0 @@
-sh tulip_run_test.sh selection_modifier_interactor grid.tlp
