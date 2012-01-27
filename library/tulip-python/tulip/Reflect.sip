@@ -69,6 +69,8 @@ a data set is done through the [] operator as illustrated below::
 	# reading integer values
 	area = dataSet["height"] * dataSet["width"] 
 
+When reading a data set value, a reference is returned not a copy.
+
 %End
 
 	DataSet();
@@ -126,12 +128,12 @@ Returns the list of keys associated to the values stored in the data set.
 	
 	void __setitem__(const std::string &attributeName, SIP_PYOBJECT po);
 %MethodCode
+		tlp::DataType* dataType = sipCpp->getData(*a0);
 		int state=0, iserr=0;
 		if (PyBool_Check(a1)) {
 			long l = PyLong_AsLong(a1);
 			sipCpp->set<bool>(*a0, (l > 0));
 		} else if (PyInt_CheckExact(a1) || PyLong_Check(a1)) {
-			tlp::DataType* dataType = sipCpp->getData(*a0);
 			if (dataType && dataType->getTypeName() == std::string(typeid(int).name())) {
 				sipCpp->set(*a0, static_cast<int>(PyInt_AsLong(a1)));
 			} else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned int).name())) {
@@ -144,7 +146,6 @@ Returns the list of keys associated to the values stored in the data set.
 				sipCpp->set(*a0, PyInt_AsLong(a1));
 			}	
 		} else if (PyFloat_Check(a1)) {
-			tlp::DataType* dataType = sipCpp->getData(*a0);
 			if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {
 				sipCpp->set(*a0, static_cast<float>(PyFloat_AsDouble(a1)));
 			} else {
@@ -217,6 +218,7 @@ Returns the list of keys associated to the values stored in the data set.
 			msg += " can not be store in a Tulip dataset.";
 			PyErr_SetString(PyExc_Exception, msg.c_str());
 		}
+		delete dataType;
 %End
 	
 	
