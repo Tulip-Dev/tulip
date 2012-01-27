@@ -28,6 +28,7 @@
 
 #include <tulip/TulipSettings.h>
 #include <tulip/PluginManager.h>
+#include <QtCore/QDebug>
 
 #include "PerspectiveItemWidget.h"
 #include "RssParser.h"
@@ -137,4 +138,8 @@ void TulipWelcomePage::openLink(const QString &link) {
 void TulipWelcomePage::perspectiveSelected() {
   PerspectiveItemWidget *item = static_cast<PerspectiveItemWidget *>(sender());
   emit openPerspective(item->perspectiveId());
+}
+
+void TulipWelcomePage::recentFileLinkActivated(const QString& link) {
+  emit openFile(link);
 }

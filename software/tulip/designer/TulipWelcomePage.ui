@@ -261,8 +261,8 @@ p, li { white-space: pre-wrap; }
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>238</width>
-           <height>323</height>
+           <width>242</width>
+           <height>330</height>
           </rect>
          </property>
         </widget>
@@ -366,5 +366,25 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>recentDocumentsLabel</sender>
+   <signal>linkActivated(QString)</signal>
+   <receiver>TulipWelcomePageData</receiver>
+   <slot>recentFileLinkActivated(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>352</x>
+     <y>767</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>477</x>
+     <y>391</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>recentFileLinkActivated(QString)</slot>
+ </slots>
 </ui>

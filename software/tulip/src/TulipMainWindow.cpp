@@ -28,6 +28,7 @@
 
 #include <tulip/TlpTools.h>
 #include <tulip/TulipRelease.h>
+#include <tulip/TulipSettings.h>
 #include <tulip/TulipProject.h>
 #include <QtGui/QScrollArea>
 
@@ -83,6 +84,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   connect(_ui->pages,SIGNAL(currentChanged(int)),this,SLOT(pageSwitched(int)));
   connect(_ui->welcomePage,SIGNAL(openPerspective(QString)),this,SLOT(CreatePerspective(QString)));
   connect(_ui->welcomePage,SIGNAL(openProject()),this,SLOT(ShowOpenProjectWindow()));
+  connect(_ui->welcomePage,SIGNAL(openFile(QString)),this,SLOT(OpenProject(QString)));
   _systemTrayIcon->show();
 }
 
@@ -211,6 +213,7 @@ void TulipMainWindow::OpenProject(const QString &file) {
 }
 
 void TulipMainWindow::OpenProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters) {
+  TulipSettings::instance().addToRecentDocuments(file);
   TulipPerspectiveProcessHandler::instance().createPerspective(perspective,file,parameters);
 }
 
