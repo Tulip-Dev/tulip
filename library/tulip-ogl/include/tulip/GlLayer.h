@@ -145,7 +145,7 @@ public:
   /**
    * Return the map of layer's entities
    */
-  std::map<std::string, GlSimpleEntity*> *getDisplays();
+  const std::map<std::string, GlSimpleEntity*> &getGlEntities() const;
 
   /**
    * function used by visitors to visit this layer
