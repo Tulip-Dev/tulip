@@ -62,7 +62,7 @@ GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, i
 
 GlMainWidgetGraphicsItem::~GlMainWidgetGraphicsItem() {
   delete [] renderingStore;
-  glMainWidget->removeEventFilter(this);
+  delete glMainWidget;
 }
 
 QRectF GlMainWidgetGraphicsItem::boundingRect() const {

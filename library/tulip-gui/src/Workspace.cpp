@@ -231,6 +231,14 @@ void Workspace::panelDestroyed(QObject* obj) {
   if (currentModeWidget() == _ui->exposePage)
     return;
 
+  // To prevent segfaults due to Qt's event queue handling when deleting views, we reset the placeholder widget that contained this panel
+  foreach(QWidget* mode,_modeToSlots.keys()) {
+    foreach(PlaceHolderWidget* p, _modeToSlots[mode]) {
+      if (p->widget() == panel)
+        p->resetWidget();
+    }
+  }
+
   updateAvailableModes();
 
   if (!_modeSwitches[currentModeWidget()]->isEnabled()) {

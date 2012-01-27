@@ -77,19 +77,16 @@ WorkspacePanel::WorkspacePanel(tlp::View* view, const QString& viewName, QWidget
 
 WorkspacePanel::~WorkspacePanel() {
   delete _ui;
-
   if (_view != NULL) {
     disconnect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
-    delete _view->graphicsView();
+    delete _view;
   }
-
-  delete _view;
 }
 void WorkspacePanel::viewDestroyed() {
-  if (_view != NULL)
+  if (_view != NULL) {
     disconnect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
-
-  _view = NULL;
+    _view = NULL;
+  }
   deleteLater();
 }
 
