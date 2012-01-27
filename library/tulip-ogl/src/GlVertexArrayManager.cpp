@@ -714,6 +714,9 @@ void GlVertexArrayManager::clearData() {
 }
 
 void GlVertexArrayManager::initObservers() {
+  if(!graph)
+    return;
+
   if(!graphObserverActivated) {
     graph->addListener(this);
     graphObserverActivated=true;

@@ -36,6 +36,9 @@ namespace tlp {
 void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntities) {
   Graph *graph=inputData.getGraph();
 
+  if(!graph)
+    return;
+
   if(visitor->isThreadSafe()) {
 #ifdef HAVE_OMP
     #pragma omp parallel
