@@ -148,3 +148,6 @@ void View::clearRedrawTriggers() {
   foreach(Observable* t, triggers())
     removeRedrawTrigger(t);
 }
+
+void View::applySettings() {
+}

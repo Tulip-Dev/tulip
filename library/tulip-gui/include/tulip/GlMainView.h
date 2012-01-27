@@ -54,6 +54,7 @@ public slots:
   virtual void drawOverview(bool generatePixmap=true);
   virtual void centerView();
   void setOverviewVisible(bool);
+  void applySettings();
 
 protected slots:
   virtual void glMainViewDrawn(GlMainWidget*,bool graphChanged);
