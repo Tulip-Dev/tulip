@@ -21,7 +21,7 @@ protected:
  * @warning never use that class
  */
 template <typename TYPE>
-class  TLP_SCOPE ValArray : public  ValArrayInterface {
+class ValArray : public  ValArrayInterface {
   friend class VectorGraph;
 protected:
   ValArray(const unsigned int size = 0, const unsigned int capacity = 0) {
