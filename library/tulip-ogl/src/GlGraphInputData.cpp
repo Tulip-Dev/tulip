@@ -31,44 +31,46 @@ GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* para
   deleteGlVertexArrayManager(true),
   deleteMetaNodeRendererAtDestructor(true) {
 
-  propertiesMap[VIEW_COLOR]=graph->getProperty<ColorProperty>("viewColor");
-  _properties.insert(propertiesMap[VIEW_COLOR]);
-  propertiesMap[VIEW_LABELCOLOR]=graph->getProperty<ColorProperty>("viewLabelColor");
-  _properties.insert(propertiesMap[VIEW_LABELCOLOR]);
-  propertiesMap[VIEW_SIZE]=graph->getProperty<SizeProperty>("viewSize");
-  _properties.insert(propertiesMap[VIEW_SIZE]);
-  propertiesMap[VIEW_LABEL]=graph->getProperty<StringProperty>("viewLabel");
-  _properties.insert(propertiesMap[VIEW_LABEL]);
-  propertiesMap[VIEW_LABELPOSITION]=graph->getProperty<IntegerProperty>("viewLabelPosition");
-  _properties.insert(propertiesMap[VIEW_LABELPOSITION]);
-  propertiesMap[VIEW_SHAPE]=graph->getProperty<IntegerProperty>("viewShape");
-  _properties.insert(propertiesMap[VIEW_SHAPE]);
-  propertiesMap[VIEW_ROTATION]=graph->getProperty<DoubleProperty>("viewRotation");
-  _properties.insert(propertiesMap[VIEW_ROTATION]);
-  propertiesMap[VIEW_SELECTED]=graph->getProperty<BooleanProperty>("viewSelection");
-  _properties.insert(propertiesMap[VIEW_SELECTED]);
-  propertiesMap[VIEW_FONT]=graph->getProperty<StringProperty>("viewFont");
-  _properties.insert(propertiesMap[VIEW_FONT]);
-  propertiesMap[VIEW_FONTSIZE]=graph->getProperty<IntegerProperty>("viewFontSize");
-  _properties.insert(propertiesMap[VIEW_FONTSIZE]);
-  propertiesMap[VIEW_TEXTURE]=graph->getProperty<StringProperty>("viewTexture");
-  _properties.insert(propertiesMap[VIEW_TEXTURE]);
-  propertiesMap[VIEW_BORDERCOLOR]=graph->getProperty<ColorProperty>("viewBorderColor");
-  _properties.insert(propertiesMap[VIEW_BORDERCOLOR]);
-  propertiesMap[VIEW_BORDERWIDTH]=graph->getProperty<DoubleProperty>("viewBorderWidth");
-  _properties.insert(propertiesMap[VIEW_BORDERWIDTH]);
-  propertiesMap[VIEW_LAYOUT]=graph->getProperty<LayoutProperty>("viewLayout");
-  _properties.insert(propertiesMap[VIEW_LAYOUT]);
-  propertiesMap[VIEW_SRCANCHORSHAPE]=graph->getProperty<IntegerProperty>("viewSrcAnchorShape");
-  _properties.insert(propertiesMap[VIEW_SRCANCHORSHAPE]);
-  propertiesMap[VIEW_SRCANCHORSIZE]=graph->getProperty<SizeProperty>("viewSrcAnchorSize");
-  _properties.insert(propertiesMap[VIEW_SRCANCHORSIZE]);
-  propertiesMap[VIEW_TGTANCHORSHAPE]=graph->getProperty<IntegerProperty>("viewTgtAnchorShape");
-  _properties.insert(propertiesMap[VIEW_TGTANCHORSHAPE]);
-  propertiesMap[VIEW_TGTANCHORSIZE]=graph->getProperty<SizeProperty>("viewTgtAnchorSize");
-  _properties.insert(propertiesMap[VIEW_TGTANCHORSIZE]);
-  propertiesMap[VIEW_ANIMATIONFRAME]=new IntegerProperty(graph,"viewAnimationFrame");
-  _properties.insert(propertiesMap[VIEW_ANIMATIONFRAME]);
+  if(graph){
+    propertiesMap[VIEW_COLOR]=graph->getProperty<ColorProperty>("viewColor");
+    _properties.insert(propertiesMap[VIEW_COLOR]);
+    propertiesMap[VIEW_LABELCOLOR]=graph->getProperty<ColorProperty>("viewLabelColor");
+    _properties.insert(propertiesMap[VIEW_LABELCOLOR]);
+    propertiesMap[VIEW_SIZE]=graph->getProperty<SizeProperty>("viewSize");
+    _properties.insert(propertiesMap[VIEW_SIZE]);
+    propertiesMap[VIEW_LABEL]=graph->getProperty<StringProperty>("viewLabel");
+    _properties.insert(propertiesMap[VIEW_LABEL]);
+    propertiesMap[VIEW_LABELPOSITION]=graph->getProperty<IntegerProperty>("viewLabelPosition");
+    _properties.insert(propertiesMap[VIEW_LABELPOSITION]);
+    propertiesMap[VIEW_SHAPE]=graph->getProperty<IntegerProperty>("viewShape");
+    _properties.insert(propertiesMap[VIEW_SHAPE]);
+    propertiesMap[VIEW_ROTATION]=graph->getProperty<DoubleProperty>("viewRotation");
+    _properties.insert(propertiesMap[VIEW_ROTATION]);
+    propertiesMap[VIEW_SELECTED]=graph->getProperty<BooleanProperty>("viewSelection");
+    _properties.insert(propertiesMap[VIEW_SELECTED]);
+    propertiesMap[VIEW_FONT]=graph->getProperty<StringProperty>("viewFont");
+    _properties.insert(propertiesMap[VIEW_FONT]);
+    propertiesMap[VIEW_FONTSIZE]=graph->getProperty<IntegerProperty>("viewFontSize");
+    _properties.insert(propertiesMap[VIEW_FONTSIZE]);
+    propertiesMap[VIEW_TEXTURE]=graph->getProperty<StringProperty>("viewTexture");
+    _properties.insert(propertiesMap[VIEW_TEXTURE]);
+    propertiesMap[VIEW_BORDERCOLOR]=graph->getProperty<ColorProperty>("viewBorderColor");
+    _properties.insert(propertiesMap[VIEW_BORDERCOLOR]);
+    propertiesMap[VIEW_BORDERWIDTH]=graph->getProperty<DoubleProperty>("viewBorderWidth");
+    _properties.insert(propertiesMap[VIEW_BORDERWIDTH]);
+    propertiesMap[VIEW_LAYOUT]=graph->getProperty<LayoutProperty>("viewLayout");
+    _properties.insert(propertiesMap[VIEW_LAYOUT]);
+    propertiesMap[VIEW_SRCANCHORSHAPE]=graph->getProperty<IntegerProperty>("viewSrcAnchorShape");
+    _properties.insert(propertiesMap[VIEW_SRCANCHORSHAPE]);
+    propertiesMap[VIEW_SRCANCHORSIZE]=graph->getProperty<SizeProperty>("viewSrcAnchorSize");
+    _properties.insert(propertiesMap[VIEW_SRCANCHORSIZE]);
+    propertiesMap[VIEW_TGTANCHORSHAPE]=graph->getProperty<IntegerProperty>("viewTgtAnchorShape");
+    _properties.insert(propertiesMap[VIEW_TGTANCHORSHAPE]);
+    propertiesMap[VIEW_TGTANCHORSIZE]=graph->getProperty<SizeProperty>("viewTgtAnchorSize");
+    _properties.insert(propertiesMap[VIEW_TGTANCHORSIZE]);
+    propertiesMap[VIEW_ANIMATIONFRAME]=new IntegerProperty(graph,"viewAnimationFrame");
+    _properties.insert(propertiesMap[VIEW_ANIMATIONFRAME]);
+  }
 
   GlyphManager::getInst().initGlyphList(&this->graph, this, glyphs);
 

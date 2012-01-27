@@ -37,20 +37,25 @@ using namespace std;
 
 namespace tlp {
 
-GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),rootGraph(graph->getRoot()),graphRenderer(new GlGraphHighDetailsRenderer(inputData,parameters)),nodesModified(true) {
-  graph->addListener(this);
-  graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addPropertyObserver(this);
+GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),graphRenderer(new GlGraphHighDetailsRenderer(inputData,parameters)),nodesModified(true) {
+  if(!graph){
+    rootGraph=NULL;
+  }else{
+    rootGraph=graph->getRoot();
+    graph->addListener(this);
+    graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addPropertyObserver(this);
 
-  Iterator<node>* nodesIterator = graph->getNodes();
+    Iterator<node>* nodesIterator = graph->getNodes();
 
-  while (nodesIterator->hasNext()) {
-    node n=nodesIterator->next();
+    while (nodesIterator->hasNext()) {
+      node n=nodesIterator->next();
 
-    if(graph->getNodeMetaInfo(n))
-      metaNodes.insert(n);
+      if(graph->getNodeMetaInfo(n))
+        metaNodes.insert(n);
+    }
+
+    delete nodesIterator;
   }
-
-  delete nodesIterator;
 }
 
 GlGraphComposite::~GlGraphComposite() {
