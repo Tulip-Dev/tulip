@@ -162,13 +162,13 @@ void QuickAccessBar::scaleNodes(int scale) {
   out->setAllNodeValue((in->getNodeDefaultValue() / _oldFontScale) * realScale);
   node n;
   forEach(n,_mainView->graph()->getNodes())
-    out->setNodeValue(n,(in->getNodeValue(n) / _oldFontScale) * realScale);
+  out->setNodeValue(n,(in->getNodeValue(n) / _oldFontScale) * realScale);
 
   // edges
   out->setAllEdgeValue(in->getEdgeDefaultValue());
   edge e;
   forEach(e,_mainView->graph()->getEdges())
-      out->setEdgeValue(e,in->getEdgeValue(e));
+  out->setEdgeValue(e,in->getEdgeValue(e));
 
   _oldFontScale = realScale;
   *in = *out;
