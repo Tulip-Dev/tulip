@@ -88,6 +88,7 @@ WorkspacePanel::~WorkspacePanel() {
 void WorkspacePanel::viewDestroyed() {
   if (_view != NULL)
     disconnect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
+
   _view = NULL;
   deleteLater();
 }

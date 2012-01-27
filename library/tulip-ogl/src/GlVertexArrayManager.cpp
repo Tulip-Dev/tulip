@@ -743,10 +743,13 @@ void GlVertexArrayManager::clearObservers(PropertyInterface *deletedProperty) {
   if(layoutObserverActivated) {
     if(deletedProperty!=inputData->getElementLayout())
       inputData->getElementLayout()->removePropertyObserver(this);
+
     if(deletedProperty!=inputData->getElementSize())
       inputData->getElementSize()->removePropertyObserver(this);
+
     if(deletedProperty!=inputData->getElementShape())
       inputData->getElementShape()->removePropertyObserver(this);
+
     layoutObserverActivated=false;
   }
 
@@ -792,6 +795,7 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
   else if(evt.type() == Event::TLP_DELETE) {
     PropertyInterface* property=NULL;
     const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&evt);
+
     if(propertyEvent)
       property = propertyEvent->getProperty();
 
