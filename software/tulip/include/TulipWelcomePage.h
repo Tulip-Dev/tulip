@@ -45,11 +45,13 @@ public:
 signals:
   void openPerspective(QString);
   void openProject();
+  void openFile(QString);
 
 protected slots:
   void rssReply(QNetworkReply *);
   void openLink(const QString &link);
   void perspectiveSelected();
+  void recentFileLinkActivated(const QString&);
 
 private:
   Ui::TulipWelcomePageData *_ui;
