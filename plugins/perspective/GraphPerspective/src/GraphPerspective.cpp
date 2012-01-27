@@ -179,7 +179,7 @@ void GraphPerspective::save() {
 
 void GraphPerspective::saveAs(const QString& path) {
   if (path.isEmpty()) {
-    QString path = QFileDialog::getSaveFileName(_mainWindow,trUtf8("Select the file you want to save your workspace in."),QString(),"*.tlpx");
+    QString path = QFileDialog::getSaveFileName(_mainWindow,trUtf8("Save file"),QString(),"Tulip Project (*.tlpx)");
 
     if (!path.isEmpty()) {
       saveAs(path);
