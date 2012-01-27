@@ -246,6 +246,13 @@ public slots:
   void removeRedrawTrigger(tlp::Observable*);
 
   /**
+    @brief Clears the list of attached triggers
+    This method removes all triggers associated to the View.
+    @note From the moment this method is called, no update on previous triggers will be considered. Even if this is called during an Observable::holdObservers()
+    */
+  void clearRedrawTriggers();
+
+  /**
     @brief This function emit the signal drawNeeded
     */
   void emitDrawNeededSignal();
@@ -283,12 +290,7 @@ protected slots:
     */
   virtual void graphChanged(tlp::Graph*)=0;
 
-  /**
-    @brief Called when the graph associated to the View gets deleted.
-    The default implementation deletes the View.
-    If you override this method. You must make sure the graph associated to the view has been changed when this method finishes.
-    */
-  virtual void graphDeleted();
+  virtual void graphDeleted()=0;
 
 };
 
