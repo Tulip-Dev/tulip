@@ -18,6 +18,7 @@
  */
 #include "tulip/View.h"
 
+#include <QtCore/QDebug>
 #include <QtGui/QGraphicsView>
 #include <QtGui/QGraphicsItem>
 
@@ -80,16 +81,13 @@ void View::setGraph(tlp::Graph *g) {
 
 void View::treatEvent(const Event& ev) {
   if (ev.type() == Event::TLP_DELETE && ev.sender() == _graph) {
-    Graph* oldGraph = _graph;
+    Graph* old = _graph;
     graphDeleted();
 #ifndef NDEBUG
-
-    if (_graph == oldGraph) {
-      std::cerr << "The graphChanged() callback associated to this View did not change the current graph pointer. This could lead to undefined behavior. Please read View::graphDeleted() documentation for details." << std::endl;
+    if (_graph == old) {
+      qWarning() << __PRETTY_FUNCTION__ << ": Graph pointer is unchanged.";
     }
-
-#endif
-    assert(_graph != oldGraph); // Checks that the graph has been changed during the callback
+#endif // NDEBUG
   }
 }
 
@@ -98,11 +96,6 @@ QList<QWidget*> View::configurationWidgets() const {
 }
 
 void View::interactorsInstalled(const QList<tlp::Interactor *> &) {
-}
-
-void View::graphDeleted() {
-  _graph = NULL;
-  this->deleteLater();
 }
 
 void View::centerView() {
@@ -149,4 +142,9 @@ bool View::isLayoutProperty(tlp::PropertyInterface *) const {
 
 QGraphicsItem* View::centralItem() const {
   return NULL;
+}
+
+void View::clearRedrawTriggers() {
+  foreach(Observable* t, triggers())
+    removeRedrawTrigger(t);
 }

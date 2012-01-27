@@ -133,3 +133,7 @@ QPixmap GlMainView::snapshot(const QSize &outputSize) {
 
   return QPixmap::fromImage(_glMainWidget->createPicture(realSize.width(),realSize.height()));
 }
+
+void GlMainView::graphDeleted() {
+  setGraph(NULL);
+}

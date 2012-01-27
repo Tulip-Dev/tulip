@@ -59,6 +59,7 @@ protected slots:
   virtual void glMainViewDrawn(GlMainWidget*,bool graphChanged);
   virtual void sceneRectChanged(const QRectF&);
   void setQuickAccessBarVisible(bool);
+  void graphDeleted();
 
 protected:
   virtual void setupWidget();

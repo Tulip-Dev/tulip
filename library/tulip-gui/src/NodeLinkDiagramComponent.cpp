@@ -53,9 +53,10 @@ tlp::DataSet NodeLinkDiagramComponent::state() const {
 }
 
 void NodeLinkDiagramComponent::registerTriggers() {
-  foreach (tlp::Observable* obs, triggers()) {
-    removeRedrawTrigger(obs);
-  }
+  clearRedrawTriggers();
+  if (graph() == NULL)
+    return;
+
   addRedrawTrigger(getGlMainWidget()->getGraph());
   std::set<tlp::PropertyInterface*> properties = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->properties();
 
