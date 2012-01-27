@@ -48,11 +48,6 @@ QWidget* PlaceHolderWidget::widget() const {
   return _widget;
 }
 
-bool PlaceHolderWidget::eventFilter(QObject* obj, QEvent* ev) {
-  if (obj == _widget && ev->type() == QEvent::Close) {
-    _widget->setParent(NULL);
-    _widget = NULL;
-  }
-
-  return QWidget::eventFilter(obj,ev);
+void PlaceHolderWidget::resetWidget() {
+  _widget = NULL;
 }

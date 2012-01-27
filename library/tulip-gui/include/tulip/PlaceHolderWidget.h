@@ -30,9 +30,7 @@ public:
   explicit PlaceHolderWidget(QWidget *parent = 0);
   QWidget* widget() const;
   void setWidget(QWidget* widget);
-
-protected:
-  bool eventFilter(QObject* obj, QEvent *);
+  void resetWidget();
 };
 
 #endif // PLACEHOLDERWIDGET_H

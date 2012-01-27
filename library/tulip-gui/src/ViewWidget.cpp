@@ -78,6 +78,7 @@ ViewWidget::ViewWidget()
 }
 
 ViewWidget::~ViewWidget() {
+  delete _centralWidgetItem;
 }
 
 QGraphicsView* ViewWidget::graphicsView() const {
