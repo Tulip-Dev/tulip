@@ -22,7 +22,7 @@
 
 
 //====================================================
-tlp::InteractorManager* tlp::InteractorManager::inst=0;
+tlp::InteractorManager tlp::InteractorManager::inst;
 
 using namespace std;
 
@@ -32,7 +32,15 @@ InteractorManager::InteractorManager() {
   InteractorFactory::initFactory();
 }
 //====================================================
+InteractorManager::~InteractorManager() {
+  map<string,Interactor *>::iterator it = interactorsMap.begin();
+  for ( ; it != interactorsMap.end() ; ++it) {
+	  delete it->second;
+  }
+}
+//====================================================
 void InteractorManager::loadPlugins(PluginLoader *plug) {
+
   InteractorFactory::initFactory();
   string::const_iterator begin=tlp::TulipPluginsPath.begin();
   string::const_iterator end=begin;
@@ -52,15 +60,15 @@ void InteractorManager::loadPlugins(PluginLoader *plug) {
     tlp::loadInteractorPluginsFromDir(string(begin,end)+"/interactors",plug);
   }
 
-  // if interactorMap is empty, put all interactors in the Map
-  interactorsMap.clear();
   InteractorContext ic;
 
   Iterator<string> *itS = InteractorFactory::factory->availablePlugins();
 
   while (itS->hasNext()) {
     string interactorName=itS->next();
-    interactorsMap[interactorName]=InteractorFactory::factory->getPluginObject(interactorName, &ic);
+    if (interactorsMap.find(interactorName) == interactorsMap.end()) {
+    	interactorsMap[interactorName]=InteractorFactory::factory->getPluginObject(interactorName, &ic);
+    }
   }
 
   delete itS;

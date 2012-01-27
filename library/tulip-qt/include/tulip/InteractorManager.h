@@ -43,10 +43,7 @@ class TLP_QT_SCOPE InteractorManager {
 public:
 
   static InteractorManager &getInst() {
-    if(!inst)
-      inst=new InteractorManager();
-
-    return *inst;
+    return inst;
   }
 
   /**
@@ -73,9 +70,11 @@ private:
 
   InteractorManager();
 
+  ~InteractorManager();
+
   std::map<std::string,Interactor *> interactorsMap;
 
-  static InteractorManager* inst;
+  static InteractorManager inst;
 
 };
 

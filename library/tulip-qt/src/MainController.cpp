@@ -382,6 +382,7 @@ void MainController::setData(Graph *graph,DataSet dataSet) {
         p = it->next();
         Iterator< std::pair<std::string, DataType*> > *it2=(*(DataSet*)p.second->value).getValues();
         pair<string, DataType*> v=it2->next();
+        delete it2;
         int x = 0,y = 0,width = 0,height  = 0;
 
         if((*(DataSet*)p.second->value).exist("id")) {

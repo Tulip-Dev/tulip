@@ -43,10 +43,7 @@ public:
    * Singleton system
    */
   static ViewPluginsManager &getInst() {
-    if(!inst)
-      inst=new ViewPluginsManager();
-
-    return *inst;
+	  return inst;
   }
 
 
@@ -56,10 +53,6 @@ public:
    */
   void loadPlugins(PluginLoader *plug=0);
 
-  /**
-   * Get available plugins list
-   */
-  void initViewPluginsList(MutableContainer<View *> &views);
   /**
    * Create view with given name
    * \return The view
@@ -73,7 +66,7 @@ private:
    */
   ViewPluginsManager();
 
-  static ViewPluginsManager* inst;
+  static ViewPluginsManager inst;
 
 };
 

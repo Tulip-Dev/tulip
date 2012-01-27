@@ -20,7 +20,7 @@
 #include "tulip/TlpQtTools.h"
 
 //====================================================
-tlp::ViewPluginsManager* tlp::ViewPluginsManager::inst=0;
+tlp::ViewPluginsManager tlp::ViewPluginsManager::inst;
 
 using namespace std;
 
@@ -49,20 +49,6 @@ void ViewPluginsManager::loadPlugins(PluginLoader *plug) {
   if (begin!=end) {
     tlp::loadViewPluginsFromDir(string(begin,end)+"/view", plug);
   }
-}
-//====================================================
-void ViewPluginsManager::initViewPluginsList(MutableContainer<View *> &views) {
-  ViewContext ic;
-  views.setAll(0);
-
-  Iterator<string> *itS = ViewFactory::factory->availablePlugins();
-
-  while (itS->hasNext()) {
-    string viewPluginName=itS->next();
-    ViewFactory::factory->getPluginObject(viewPluginName, &ic);
-  }
-
-  delete itS;
 }
 //====================================================
 View* ViewPluginsManager::createView(const string &name) {
