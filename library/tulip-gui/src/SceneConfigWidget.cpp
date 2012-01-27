@@ -96,7 +96,7 @@ void SceneConfigWidget::applySettings() {
   // NODES
   DoubleProperty* orderingProperty = NULL;
 
-  if (_ui->labelsOrderingCombo->currentIndex() != 0)
+  if (_ui->labelsOrderingCombo->currentIndex() != 0 && _glMainWidget->getGraph())
     orderingProperty = _glMainWidget->getGraph()->getProperty<DoubleProperty>(_ui->labelsOrderingCombo->currentText().toStdString());
 
   renderingParameters->setElementOrderingProperty(orderingProperty);
