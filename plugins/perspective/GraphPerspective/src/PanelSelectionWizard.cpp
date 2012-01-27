@@ -192,9 +192,7 @@ tlp::View* PanelSelectionWizard::panel() const {
 
 void PanelSelectionWizard::done(int result) {
   if (result == QDialog::Accepted && _view != NULL) {
-    foreach(QWidget* w, _view->configurationWidgets())
-    QMetaObject::invokeMethod(w,"applySettings",Qt::DirectConnection);
-
+    _view->applySettings();
   }
   else if (result == QDialog::Accepted && _view == NULL) {
     createView();

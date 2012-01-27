@@ -410,8 +410,7 @@ void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
   _viewConfigurationExpanded = expanded;
 
   if (!expanded) {
-    foreach(QWidget*w, view()->configurationWidgets())
-    QMetaObject::invokeMethod(w,"applySettings",Qt::DirectConnection);
+    _view->applySettings();
   }
 }
 

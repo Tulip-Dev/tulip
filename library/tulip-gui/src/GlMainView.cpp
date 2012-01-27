@@ -138,3 +138,7 @@ void GlMainView::graphDeleted() {
   setGraph(NULL);
   deleteLater();
 }
+
+void GlMainView::applySettings() {
+  _sceneConfigurationWidget->applySettings();
+}

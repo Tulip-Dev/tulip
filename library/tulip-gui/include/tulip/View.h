@@ -112,6 +112,7 @@ public:
   /**
     @return a list of widgets that can be used to set up the view.
     Since several widgets can be retrived, user will be able to select them from a combo box where each widget will be identified by its windowsTitle.
+    @see View::applySettings()
     @warning This method must not instantiate configuration widgets on the fly.
     */
   virtual QList<QWidget*> configurationWidgets() const;
@@ -163,6 +164,13 @@ public:
   virtual QPixmap snapshot(const QSize& outputSize=QSize())=0;
 
 public slots:
+  /**
+    @brief This method applies settings changed in the configuration widgets
+    This method may be called from the overleying system in various situations. The View is expected to apply settings in an optimized way to prevent extra redraws.
+    By default, this method does nothing.
+    */
+  virtual void applySettings();
+
   /**
     @brief Reset the visualization to the center.
     This method is called after major changes into the data structure. At this point, the user point of view should be reset and brought back to a point where all the data can be seen.
@@ -290,8 +298,11 @@ protected slots:
     */
   virtual void graphChanged(tlp::Graph*)=0;
 
+  /**
+    @brief Called when the graph associated to the view gets deleted.
+    This method should call setGraph to input a new graph pointer (NULL or valid)
+    */
   virtual void graphDeleted()=0;
-
 };
 
 struct TLP_QT_SCOPE ViewContext {
