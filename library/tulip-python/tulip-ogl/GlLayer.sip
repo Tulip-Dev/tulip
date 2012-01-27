@@ -57,7 +57,7 @@ public:
 
 	tlp::GlSimpleEntity* findGlEntity(const std::string &key);
 
-	std::map<std::string, tlp::GlSimpleEntity*> *getDisplays();
+  const std::map<std::string, tlp::GlSimpleEntity*> &getGlEntities() const;
 
 	void acceptVisitor(tlp::GlSceneVisitor *visitor);
 

@@ -112,6 +112,9 @@ void GlScene::initGlParameters() {
 }
 
 void GlScene::draw() {
+
+  cout << "draw" << endl;
+
   initGlParameters();
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY

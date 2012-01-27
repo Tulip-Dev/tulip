@@ -86,9 +86,9 @@ public:
   /**
    * Return map of entities in composite
    */
-  inline std::map<std::string, GlSimpleEntity*> *
-  getDisplays () {
-    return &elements;
+  const std::map<std::string, GlSimpleEntity*> &
+  getGlEntities () const{
+    return elements;
   }
   /**
    * Call when a child of the composite is modified
