@@ -53,7 +53,7 @@ GraphAbstract::~GraphAbstract() {
       // indicates root destruction (see below)
       sg->id = 0;
 
-    delAllSubGraphsInternal(sg, true);
+    delete sg;
   }
 
   delete propertyContainer;
@@ -158,6 +158,7 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
 
     delete itS;
 
+    // subGraphToKeep may have change on notifyDelSubGraph
     if (toRemove != subGraphToKeep) {
       // avoid deletion of toRemove subgraphs
       ((GraphAbstract *) toRemove)->subgraphs.clear();
@@ -165,7 +166,10 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
     }
     else
       // toRemove is not deleted,
-      // it can be restored on undo or redo
+      // is is registered into a GraphUpdatesRecorder
+      // so it can be restored on undo or redo
+      // see GraphUpdatesRecorder::::addSubGraph
+      // in GraphUpdatesRecorder.cpp
       toRemove->notifyDestroy();
   }
 }
@@ -190,24 +194,17 @@ void GraphAbstract::removeSubGraph(Graph * toRemove, bool notify) {
 }
 //=========================================================================
 void GraphAbstract::delAllSubGraphsInternal(Graph * toRemove,
-    bool deleteSubGraphs) {
+					    bool deleteSubGraphs) {
+
   if (this != toRemove->getSuperGraph() || this==toRemove) // this==toRemove : root graph
     return;
 
-  notifyDelSubGraph(toRemove);
-  removeSubGraph(toRemove);
-
-  if (deleteSubGraphs)
-    delete toRemove;
-  else {
     StableIterator<Graph *> itS(toRemove->getSubGraphs());
 
     while (itS.hasNext())
       ((GraphAbstract*) toRemove)->delAllSubGraphsInternal(itS.next(),
-          deleteSubGraphs);
-
-    toRemove->notifyDestroy();
-  }
+							   deleteSubGraphs);
+    delSubGraph(toRemove);
 }
 //=========================================================================
 void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
