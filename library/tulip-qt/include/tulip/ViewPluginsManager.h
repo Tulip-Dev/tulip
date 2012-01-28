@@ -43,7 +43,7 @@ public:
    * Singleton system
    */
   static ViewPluginsManager &getInst() {
-	  return inst;
+    return inst;
   }
 
 

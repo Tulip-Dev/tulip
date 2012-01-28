@@ -34,8 +34,9 @@ InteractorManager::InteractorManager() {
 //====================================================
 InteractorManager::~InteractorManager() {
   map<string,Interactor *>::iterator it = interactorsMap.begin();
+
   for ( ; it != interactorsMap.end() ; ++it) {
-	  delete it->second;
+    delete it->second;
   }
 }
 //====================================================
@@ -66,8 +67,9 @@ void InteractorManager::loadPlugins(PluginLoader *plug) {
 
   while (itS->hasNext()) {
     string interactorName=itS->next();
+
     if (interactorsMap.find(interactorName) == interactorsMap.end()) {
-    	interactorsMap[interactorName]=InteractorFactory::factory->getPluginObject(interactorName, &ic);
+      interactorsMap[interactorName]=InteractorFactory::factory->getPluginObject(interactorName, &ic);
     }
   }
 
