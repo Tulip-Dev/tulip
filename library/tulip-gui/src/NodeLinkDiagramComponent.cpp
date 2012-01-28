@@ -54,6 +54,7 @@ tlp::DataSet NodeLinkDiagramComponent::state() const {
 
 void NodeLinkDiagramComponent::registerTriggers() {
   clearRedrawTriggers();
+
   if (graph() == NULL)
     return;
 

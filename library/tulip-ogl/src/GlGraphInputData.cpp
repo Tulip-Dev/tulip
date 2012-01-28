@@ -31,7 +31,7 @@ GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* para
   deleteGlVertexArrayManager(true),
   deleteMetaNodeRendererAtDestructor(true) {
 
-  if(graph){
+  if(graph) {
     propertiesMap[VIEW_COLOR]=graph->getProperty<ColorProperty>("viewColor");
     _properties.insert(propertiesMap[VIEW_COLOR]);
     propertiesMap[VIEW_LABELCOLOR]=graph->getProperty<ColorProperty>("viewLabelColor");
