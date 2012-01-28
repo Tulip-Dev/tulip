@@ -87,7 +87,7 @@ public:
    * Return map of entities in composite
    */
   const std::map<std::string, GlSimpleEntity*> &
-  getGlEntities () const{
+  getGlEntities () const {
     return elements;
   }
   /**

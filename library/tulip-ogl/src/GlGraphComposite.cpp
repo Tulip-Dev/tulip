@@ -38,9 +38,10 @@ using namespace std;
 namespace tlp {
 
 GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),graphRenderer(new GlGraphHighDetailsRenderer(inputData,parameters)),nodesModified(true) {
-  if(!graph){
+  if(!graph) {
     rootGraph=NULL;
-  }else{
+  }
+  else {
     rootGraph=graph->getRoot();
     graph->addListener(this);
     graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addPropertyObserver(this);

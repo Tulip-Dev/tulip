@@ -84,9 +84,11 @@ void View::treatEvent(const Event& ev) {
     Graph* old = _graph;
     graphDeleted();
 #ifndef NDEBUG
+
     if (_graph == old) {
       qWarning() << __PRETTY_FUNCTION__ << ": Graph pointer is unchanged.";
     }
+
 #endif // NDEBUG
   }
 }
@@ -146,7 +148,7 @@ QGraphicsItem* View::centralItem() const {
 
 void View::clearRedrawTriggers() {
   foreach(Observable* t, triggers())
-    removeRedrawTrigger(t);
+  removeRedrawTrigger(t);
 }
 
 void View::applySettings() {

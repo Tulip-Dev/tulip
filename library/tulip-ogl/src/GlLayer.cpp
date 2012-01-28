@@ -113,7 +113,7 @@ GlSimpleEntity* GlLayer::findGlEntity(const std::string &key) {
   return composite.findGlEntity(key);
 }
 
-const std::map<std::string, GlSimpleEntity*> &GlLayer::getGlEntities() const{
+const std::map<std::string, GlSimpleEntity*> &GlLayer::getGlEntities() const {
   return composite.getGlEntities();
 }
 
