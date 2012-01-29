@@ -221,6 +221,7 @@ protected:
   PythonCodeHighlighter *highlighter;
   ParenMatcherHighlighter *parenHighlighter;
   QFont currentFont;
+  QFontMetrics *fontMetrics;
   QVector<int> currentErrorLines;
 
   static APIDataBase *apiDb;
@@ -239,6 +240,8 @@ protected:
   QPoint toolTipPos;
   QString toolTipText;
   QString toolTipFunc;
+
+  static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
 
 };
 

@@ -2680,7 +2680,7 @@ if (sipCpp->getAttributes().exist(*a0)) {
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::DataSet).name())) {
     ok = true;
-    sipRes = sipConvertFromNewType(new tlp::DataSet(*(reinterpret_cast<tlp::DataSet *>(dataType->value))), sipType_tlp_DataSet, NULL);
+    sipRes = sipConvertFromType(reinterpret_cast<tlp::DataSet *>(dataType->value), sipType_tlp_DataSet, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::DataSet).name())) {
     ok = true;
@@ -2764,9 +2764,9 @@ if (sipCpp->getAttributes().exist(*a0)) {
     
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Size>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Size> *>(dataType->value), sipType_std_vector_0100tlp_Size, NULL);
-    
+    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Size> *>(dataType->value), sipType_std_vector_0100tlp_Size, NULL); 
   }
+  delete dataType;
 }
 
 if (!ok) {

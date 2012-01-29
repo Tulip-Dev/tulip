@@ -86,7 +86,7 @@ void AppStartUp::addErrorMsg(const std::string& errMsg) {
  *  Constructs a AppStartUp which is a child of 'parent'
  */
 AppStartUp::AppStartUp(QWidget* parent) :
-  QDialog(parent), currentFrame(0) {
+  QDialog(parent), movie(NULL), currentFrame(0) {
 
   setupUi(this);
   setModal(true);
@@ -135,6 +135,7 @@ AppStartUp::~AppStartUp() {
   settings.beginGroup("Preference");
   settings.setValue("dontCloseStartUp",showAgain->checkState()==Qt::Checked);
   settings.endGroup();
+  delete movie;
 }
 
 void AppStartUp::setProgress(int progress) {

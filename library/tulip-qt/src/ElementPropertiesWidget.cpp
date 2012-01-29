@@ -209,15 +209,19 @@ void ElementPropertiesWidget::updateTable() {
     switch(displayMode) {
     case NODE:
 
-      if (!nodeSet)
+      if (!nodeSet) {
+    	delete it;
         return;
+      }
 
       break;
 
     case EDGE:
 
-      if (!edgeSet)
+      if (!edgeSet) {
+    	delete it;
         return;
+      }
     }
 
     // first count number properties

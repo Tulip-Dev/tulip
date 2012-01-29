@@ -94,6 +94,7 @@ private :
   int fontZoom;
 
   PythonScriptView *pythonScriptView;
+  static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
 };
 
 #endif /* PYTHONSCRIPTVIEWWIDGET_H_ */

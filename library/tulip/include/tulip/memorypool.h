@@ -66,7 +66,27 @@ namespace tlp {
   * }
   * @endcode
   *
+  *
   */
+
+// This class ensures the release of allocated memory
+// when the program ends
+class MemoryBlocks {
+
+public :
+
+	~MemoryBlocks() {
+		for (size_t i = 0 ; i < MAXNBTHREADS ; ++i) {
+			if (!_freeObject[i].empty()) {
+				free(_freeObject[i][0]);
+			}
+		}
+
+	}
+
+	std::vector<void * > _freeObject[MAXNBTHREADS];
+};
+
 template <typename  TYPE >
 class MemoryPool {
 public:
@@ -85,27 +105,28 @@ public:
   }
 
   inline void operator delete( void *p ) {
-    _freeObject[THREAD_NUMBER].push_back(p);
+    memBlocks._freeObject[THREAD_NUMBER].push_back(p);
   }
 private:
-  static std::vector<void * > _freeObject[MAXNBTHREADS];
+
+  static MemoryBlocks memBlocks;
 
   static TYPE* getObject(size_t threadId) {
     TYPE *result;
 
-    if (_freeObject[threadId].empty()) {
+    if (memBlocks._freeObject[threadId].empty()) {
       TYPE * p = (TYPE *)malloc(BUFFOBJ * sizeof(TYPE));
 
       for (size_t j=0; j< BUFFOBJ - 1; ++j) {
-        _freeObject[threadId].push_back((void *)p);
+    	  memBlocks._freeObject[threadId].push_back((void *)p);
         p += 1;
       }
 
       result = p;
     }
     else {
-      result = (TYPE *)_freeObject[threadId].back();
-      _freeObject[threadId].pop_back();
+      result = (TYPE *)memBlocks._freeObject[threadId].back();
+      memBlocks._freeObject[threadId].pop_back();
     }
 
     return result;
@@ -113,7 +134,7 @@ private:
 };
 
 template <typename  TYPE >
-std::vector<void * > MemoryPool<TYPE>::_freeObject[MAXNBTHREADS];
+MemoryBlocks MemoryPool<TYPE>::memBlocks;
 
 }
 #endif // MEMORYPOOL_H

@@ -307,9 +307,10 @@ void FindReplaceDialog::hideEvent(QHideEvent *) {
 }
 
 APIDataBase*PythonCodeEditor::apiDb(NULL);
+GragKeyboardFocusEventFilter PythonCodeEditor::keyboardFocusEventFilter;
 
 PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), highlighter(NULL), tooltipActive(false) {
-  installEventFilter(new GragKeyboardFocusEventFilter());
+  installEventFilter(&keyboardFocusEventFilter);
   setAutoIndentation(true);
   setIndentationGuides(true);
   setHighlightEditedLine(true);
@@ -325,6 +326,8 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
   currentFont.setPointSize(8);
   format.setFont(currentFont);
   setCurrentCharFormat(format);
+  fontMetrics = new QFontMetrics(currentFont);
+
   lineNumberArea = new LineNumberArea(this);
 
   updateTabStopWidth();
@@ -378,6 +381,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
 PythonCodeEditor::~PythonCodeEditor() {
   delete autoCompletionDb;
   removeEventFilter(autoCompletionList);
+  delete fontMetrics;
 }
 
 void PythonCodeEditor::indicateScriptCurrentError(int lineNumber) {
@@ -391,7 +395,6 @@ void PythonCodeEditor::clearErrorIndicator() {
 }
 
 int PythonCodeEditor::lineNumberAreaWidth() const {
-  QFontMetrics fontMetrics(currentFont);
   int digits = 1;
   int max = qMax(1, blockCount());
 
@@ -400,7 +403,7 @@ int PythonCodeEditor::lineNumberAreaWidth() const {
     ++digits;
   }
 
-  int space = 3 + fontMetrics.width(QLatin1Char('9')) * digits;
+  int space = 3 + fontMetrics->width(QLatin1Char('9')) * digits;
   return space;
 }
 
@@ -435,15 +438,13 @@ void PythonCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event) {
   int top = static_cast<int>(blockBoundingGeometry(block).translated(contentOffset()).top());
   int bottom = top + static_cast<int>(blockBoundingRect(block).height());
 
-  QFontMetrics fontMetrics(currentFont);
-
   while (block.isValid() && top <= event->rect().bottom()) {
     if (block.isVisible() && bottom >= event->rect().top()) {
       QString number = QString::number(blockNumber + 1);
       painter.setPen(Qt::black);
       painter.setFont(currentFont);
       painter.drawText(0, top, lineNumberArea->width(),
-                       fontMetrics.height(), Qt::AlignRight | Qt::AlignCenter,
+                       fontMetrics->height(), Qt::AlignRight | Qt::AlignCenter,
                        number);
     }
 
@@ -459,8 +460,7 @@ static float clamp(float f, float minV, float maxV) {
 }
 
 void PythonCodeEditor::updateTabStopWidth() {
-  QFontMetrics fontMetrics(currentFont);
-  setTabStopWidth(3 * fontMetrics.width(QLatin1Char(' ')));
+  setTabStopWidth(3 * fontMetrics->width(QLatin1Char(' ')));
 }
 
 void PythonCodeEditor::zoomIn() {
@@ -495,7 +495,6 @@ void PythonCodeEditor::showEvent(QShowEvent *event) {
 void PythonCodeEditor::paintEvent(QPaintEvent *event) {
   QPlainTextEdit::paintEvent(event);
 
-  QFontMetrics fontMetrics(currentFont);
   QPainter painter(viewport());
   painter.setFont(currentFont);
 
@@ -513,7 +512,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
         left += tabStopWidth();
       }
       else {
-        left += fontMetrics.width(QLatin1Char(blockText[i].toAscii()));
+        left += fontMetrics->width(QLatin1Char(blockText[i].toAscii()));
       }
 
 
@@ -527,7 +526,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
       int w = 0;
 
       for (int j = 0 ; j < toolTipLines[i].length() ; ++j) {
-        w += fontMetrics.width(QLatin1Char(toolTipLines[i][j].toAscii()));
+        w += fontMetrics->width(QLatin1Char(toolTipLines[i][j].toAscii()));
       }
 
       width = std::max(w, width);
@@ -563,7 +562,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 
       for (int i = 0 ; i < text.length() ; ++i) {
         if (text[i] == ' ')
-          indentVal+=fontMetrics.width(QLatin1Char(' '));
+          indentVal+=fontMetrics->width(QLatin1Char(' '));
         else if (text[i] == '\t')
           indentVal+=tabStopWidth();
         else
@@ -975,7 +974,6 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
   int top = static_cast<int>(blockBoundingGeometry(textCursor().block()).translated(contentOffset()).top());
   int bottom = top + static_cast<int>(blockBoundingRect(textCursor().block()).height());
   QString textBeforeCursor = textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
-  QFontMetrics fontMetrics(currentFont);
   int pos = lineNumberAreaWidth() + left + 1;
   int stop = 0;
 
@@ -991,7 +989,7 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
       pos += tabStopWidth();
     }
     else {
-      pos += fontMetrics.width(QLatin1Char(textBeforeCursor[i].toAscii()));
+      pos += fontMetrics->width(QLatin1Char(textBeforeCursor[i].toAscii()));
     }
   }
 

@@ -39,7 +39,7 @@ LayerManagerWidget::LayerManagerWidget(QWidget* parent) : QWidget(parent) {
 
 //=============================================================================
 void LayerManagerWidget::attachMainWidget(GlMainWidget* graphWidget) {
-  treeWidget->invisibleRootItem()->takeChildren();
+  treeWidget->clear();
 
   observedMainWidget=graphWidget;
 

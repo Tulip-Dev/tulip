@@ -719,6 +719,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
         assert(it->hasNext());
         pair<string, DataType*> p;
         p = it->next();
+        delete it;
         controllerData=*((DataSet*)p.second->value);
         haveControllerData=true;
         controllerName=p.first;

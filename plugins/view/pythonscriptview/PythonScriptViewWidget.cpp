@@ -26,9 +26,11 @@
 #include <QtGui/QIcon>
 #include <QtWebKit/QWebView>
 
+GragKeyboardFocusEventFilter PythonScriptViewWidget::keyboardFocusEventFilter;
+
 PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), fontZoom(0) , pythonScriptView(view) {
   setupUi(this);
-  consoleOutputWidget->installEventFilter(new GragKeyboardFocusEventFilter());
+  consoleOutputWidget->installEventFilter(&keyboardFocusEventFilter);
   mainScriptToolBar = new QToolBar(mainScriptToolBarWidget);
   newMainScriptAction = mainScriptToolBar->addAction(QIcon(":/icons/doc_new.png"), "New main script");
   loadMainScriptAction = mainScriptToolBar->addAction(QIcon(":/icons/doc_import.png"), "Load main script from file");

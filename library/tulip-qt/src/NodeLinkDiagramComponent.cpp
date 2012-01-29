@@ -53,7 +53,7 @@ QWidget *NodeLinkDiagramComponent::construct(QWidget *parent) {
   widget->setObjectName("NLDC widget");
 
   //View Menu
-  viewMenu=new QMenu("View");
+  viewMenu=new QMenu("View", widget);
   viewMenu->addAction("&Redraw View", this, SLOT(draw()), tr("Ctrl+Shift+R"));
   viewMenu->addAction("&Center View", this, SLOT(centerView()), tr("Ctrl+Shift+C"));
   //Dialogs Menu
@@ -345,6 +345,7 @@ void NodeLinkDiagramComponent::computeContextMenuAction(QAction *action) {
   Observable::unholdObservers();
 }
 void NodeLinkDiagramComponent::checkAlgorithmResult() {
+
   if(!mainWidget->getScene()->getGlGraphComposite())
     return;
 

@@ -131,33 +131,33 @@ Iterator< pair<string, DataType*> >* DataSet::getValues() const {
 
 // management of the serialization
 // the 2 hash maps
-TLP_HASH_MAP<std::string, DataTypeSerializer*> DataSet::tnTodts;
-TLP_HASH_MAP<std::string, DataTypeSerializer*> DataSet::otnTodts;
+
+DataTypeSerializerContainer DataSet::serializerContainer;
 
 // registering of a data type serializer
 void DataSet::registerDataTypeSerializer(const std::string& typeName,
     DataTypeSerializer* dts) {
   TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it =
-    tnTodts.find(typeName);
+		  serializerContainer.tnTodts.find(typeName);
 
-  if (it != tnTodts.end())
+  if (it != serializerContainer.tnTodts.end())
     std::cerr << "Warning: a data type serializer is already registered for mangled type " << typeName << endl;
 
-  it = otnTodts.find(dts->outputTypeName);
+  it = serializerContainer.otnTodts.find(dts->outputTypeName);
 
-  if (it != otnTodts.end())
+  if (it != serializerContainer.otnTodts.end())
     std::cerr << "Warning: a data type serializer is already registered for read type " << dts->outputTypeName << endl;
 
-  tnTodts[typeName] = otnTodts[dts->outputTypeName] = dts;
+  serializerContainer.tnTodts[typeName] = serializerContainer.otnTodts[dts->outputTypeName] = dts;
 }
 
 // data write
 void DataSet::writeData(std::ostream& os, const std::string& prop,
                         const DataType* dt) const {
   TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it =
-    tnTodts.find(dt->getTypeName());
+		  serializerContainer.tnTodts.find(dt->getTypeName());
 
-  if (it == tnTodts.end()) {
+  if (it == serializerContainer.tnTodts.end()) {
     std::cerr << "Write error: No data type serializer found for mangled type " <<
               dt->getTypeName() << std::endl;
     return;
@@ -186,9 +186,9 @@ void DataSet::write(std::ostream& os, const DataSet& ds) {
 bool DataSet::readData(std::istream& is, const std::string& prop,
                        const std::string& outputTypeName) {
   TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it =
-    otnTodts.find(outputTypeName);
+		  serializerContainer.otnTodts.find(outputTypeName);
 
-  if (it == otnTodts.end()) {
+  if (it == serializerContainer.otnTodts.end()) {
     std::cerr << "Read error: No data type serializer found for read type " <<
               outputTypeName << std::endl;
     return false;
@@ -516,8 +516,8 @@ void StructDef::buildDefaultDataSet(DataSet &ioDataSet, Graph *inG) {
 }
 
 DataTypeSerializer *DataSet::typenameToSerializer(const std::string &name) {
-  if (tnTodts.count(name) == 0)
+  if (serializerContainer.tnTodts.count(name) == 0)
     return NULL;
 
-  return tnTodts[name];
+  return serializerContainer.tnTodts[name];
 }

@@ -23,7 +23,7 @@
 #include <tulip/Glyph.h>
 
 //====================================================
-tlp::GlyphManager* tlp::GlyphManager::inst=0;
+tlp::GlyphManager* tlp::GlyphManager::inst(NULL);
 
 using namespace std;
 
@@ -129,5 +129,10 @@ void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Gly
   }
 
   delete itS;
+
+  Glyph* defaultGlyph = glyphs.getDefault();
+
+  if (defaultGlyph)
+	  delete defaultGlyph;
 }
 }

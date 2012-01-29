@@ -89,7 +89,7 @@ QGLWidget* GlMainWidget::getFirstQGLWidget() {
 
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent,View *view):
-  QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), _hasHulls(false), useFramebufferObject(false), glFrameBuf(NULL) {
+  QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), manager(NULL), _hasHulls(false), useFramebufferObject(false), glFrameBuf(NULL) {
   setFocusPolicy(Qt::StrongFocus);
   setMouseTracking(true);
   grabGesture(Qt::PinchGesture);
@@ -111,6 +111,7 @@ GlMainWidget::GlMainWidget(QWidget *parent,View *view):
 GlMainWidget::~GlMainWidget() {
   delete glFrameBuf;
   delete [] renderingStore;
+  delete manager;
 }
 //==================================================
 QSize GlMainWidget::sizeHint()const {

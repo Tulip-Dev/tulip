@@ -25,6 +25,7 @@ InteractorChainOfResponsibility::InteractorChainOfResponsibility(const QString &
 }
 
 InteractorChainOfResponsibility::~InteractorChainOfResponsibility() {
+  remove();
   for(vector<InteractorComponent *>::iterator it =interactorComponents.begin(); it != interactorComponents.end(); ++it) {
     delete(*it);
   }

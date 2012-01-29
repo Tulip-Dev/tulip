@@ -114,6 +114,24 @@ struct TypedDataSerializer :public DataTypeSerializer {
   }
 };
 
+// This class is there to ensure the destruction of DataTypeSerializer objects
+// when program ends
+class DataTypeSerializerContainer {
+
+public :
+
+	~DataTypeSerializerContainer() {
+		TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it = tnTodts.begin();
+		for (; it != tnTodts.end() ; ++it) {
+			delete it->second;
+		}
+	}
+
+	 TLP_HASH_MAP<std::string, DataTypeSerializer*> tnTodts;
+	 TLP_HASH_MAP<std::string, DataTypeSerializer*> otnTodts;
+
+};
+
 /**
  * @brief A container which can store data of any type, as long as it has a well-defined copy constructor.
  **/
@@ -127,8 +145,7 @@ class TLP_SCOPE DataSet {
       type names and output type names
       tnTodsts => typename to data type serializer
       otnTodts => output type name to data type serializer */
-  static TLP_HASH_MAP<std::string, DataTypeSerializer*> tnTodts;
-  static TLP_HASH_MAP<std::string, DataTypeSerializer*> otnTodts;
+  static DataTypeSerializerContainer serializerContainer;
   static void registerDataTypeSerializer(const std::string& typeName,
                                          DataTypeSerializer* dts);
 public:
