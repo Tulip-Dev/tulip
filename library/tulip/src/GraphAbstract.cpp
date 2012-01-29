@@ -194,17 +194,18 @@ void GraphAbstract::removeSubGraph(Graph * toRemove, bool notify) {
 }
 //=========================================================================
 void GraphAbstract::delAllSubGraphsInternal(Graph * toRemove,
-					    bool deleteSubGraphs) {
+    bool deleteSubGraphs) {
 
   if (this != toRemove->getSuperGraph() || this==toRemove) // this==toRemove : root graph
     return;
 
-    StableIterator<Graph *> itS(toRemove->getSubGraphs());
+  StableIterator<Graph *> itS(toRemove->getSubGraphs());
 
-    while (itS.hasNext())
-      ((GraphAbstract*) toRemove)->delAllSubGraphsInternal(itS.next(),
-							   deleteSubGraphs);
-    delSubGraph(toRemove);
+  while (itS.hasNext())
+    ((GraphAbstract*) toRemove)->delAllSubGraphsInternal(itS.next(),
+        deleteSubGraphs);
+
+  delSubGraph(toRemove);
 }
 //=========================================================================
 void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
