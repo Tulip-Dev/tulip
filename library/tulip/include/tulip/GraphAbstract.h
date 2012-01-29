@@ -111,11 +111,10 @@ protected:
 
   // to deal with sub graph deletion
   virtual void clearSubGraphs();
-  virtual void removeSubGraph(Graph*, bool = false);
-  virtual void delAllSubGraphsInternal(Graph*, bool deleteSubGraph);
+  virtual void removeSubGraph(Graph*);
   // reinstall a previously deleted subgraph
   // only called by GraphUpdatesRecorder
-  virtual void restoreSubGraph(Graph*, bool undoOrRedo = false);
+  virtual void restoreSubGraph(Graph*);
   virtual void setSubGraphToKeep(Graph*);
 
 private:

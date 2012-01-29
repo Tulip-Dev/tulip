@@ -775,10 +775,10 @@ protected:
   }
 
   // to deal with sub graph deletion
-  virtual void removeSubGraph(Graph*, bool notify = false)=0;
+  virtual void removeSubGraph(Graph*)=0;
   virtual void clearSubGraphs()=0;
   // only called by GraphUpdatesRecorder
-  virtual void restoreSubGraph(Graph*, bool undoOrRedo = false)=0;
+  virtual void restoreSubGraph(Graph*)=0;
   virtual void setSubGraphToKeep(Graph*)=0;
 
   // for notification of GraphObserver
