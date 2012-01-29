@@ -214,6 +214,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       return;
 
 
+
     for (char *p = messages[i]; *p; ++p) {
       if (*p == '(') {
         mangled_name = p;
@@ -236,13 +237,14 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
     if (mangled_name)
       *mangled_name++ = '\0';
-
     if (runtime_offset)
       *runtime_offset++ = '\0';
-
-    *offset_end++ = '\0';
-    *runtime_addr++ = '\0';
-    *runtime_addr_end = '\0';
+    if (offset_end)
+    	*offset_end++ = '\0';
+    if (runtime_addr)
+    	*runtime_addr++ = '\0';
+    if (runtime_addr_end)
+    	*runtime_addr_end = '\0';
 
     if (mangled_name && runtime_offset &&
         mangled_name < runtime_offset) {
