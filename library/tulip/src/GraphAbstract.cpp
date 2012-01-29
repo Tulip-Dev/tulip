@@ -145,6 +145,8 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
 		// subGraphToKeep may have change on notifyDelSubGraph
 		if (toRemove != subGraphToKeep) {
 			delete toRemove;
+		} else {
+			toRemove->notifyDestroy();
 		}
 	}
 }
@@ -154,6 +156,7 @@ void GraphAbstract::removeSubGraph(Graph * toRemove) {
 	if (it != subgraphs.end()) {
 		notifyDelSubGraph(toRemove);
 		subgraphs.erase(it);
+		toRemove->notifyDestroy();
 	}
 }
 //=========================================================================
