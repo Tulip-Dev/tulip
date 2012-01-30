@@ -104,6 +104,10 @@ void GlLabel::setText(const string& text) {
   this->text=text;
 }
 //============================================================
+std::string GlLabel::getText() const {
+  return this->text;
+}
+//============================================================
 void GlLabel::setTextBeforeRendering(const std::string& text) {
   if(font->FaceSize()!=(unsigned int)fontSize) {
     font->FaceSize(fontSize);
