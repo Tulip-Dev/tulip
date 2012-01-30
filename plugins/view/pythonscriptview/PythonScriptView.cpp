@@ -1123,7 +1123,7 @@ void PythonScriptView::closeModuleTabRequested(int tab) {
   editedModules.erase(tab);
   QWidget *editorWidget = viewWidget->modulesTabWidget->widget(tab);
   delete editorWidget;
-  viewWidget->modulesTabWidget->removeTab(tab);
+
   std::map<int, std::string> editedModulesCp(editedModules);
   std::map<int, std::string>::iterator it;
 
@@ -1141,7 +1141,6 @@ void PythonScriptView::closeMainScriptTabRequested(int tab) {
   editedMainScripts.erase(tab);
   QWidget *editorWidget = viewWidget->mainScriptsTabWidget->widget(tab);
   delete editorWidget;
-  viewWidget->mainScriptsTabWidget->removeTab(tab);
 
   std::map<int, std::string> editedMainScriptsCp(editedMainScripts);
   std::map<int, std::string>::iterator it;
@@ -1163,7 +1162,6 @@ void PythonScriptView::closePluginTabRequested(int tab) {
   editedPlugins.erase(tab);
   QWidget *editorWidget = viewWidget->pluginsTabWidget->widget(tab);
   delete editorWidget;
-  viewWidget->pluginsTabWidget->removeTab(tab);
   std::map<int, std::string> editedPluginsCp(editedPlugins);
   std::map<int, std::string>::iterator it;
 
