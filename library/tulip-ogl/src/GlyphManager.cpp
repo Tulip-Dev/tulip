@@ -133,6 +133,6 @@ void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Gly
   Glyph* defaultGlyph = glyphs.getDefault();
 
   if (defaultGlyph)
-	  delete defaultGlyph;
+    delete defaultGlyph;
 }
 }

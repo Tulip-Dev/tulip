@@ -138,7 +138,7 @@ DataTypeSerializerContainer DataSet::serializerContainer;
 void DataSet::registerDataTypeSerializer(const std::string& typeName,
     DataTypeSerializer* dts) {
   TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it =
-		  serializerContainer.tnTodts.find(typeName);
+    serializerContainer.tnTodts.find(typeName);
 
   if (it != serializerContainer.tnTodts.end())
     std::cerr << "Warning: a data type serializer is already registered for mangled type " << typeName << endl;
@@ -155,7 +155,7 @@ void DataSet::registerDataTypeSerializer(const std::string& typeName,
 void DataSet::writeData(std::ostream& os, const std::string& prop,
                         const DataType* dt) const {
   TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it =
-		  serializerContainer.tnTodts.find(dt->getTypeName());
+    serializerContainer.tnTodts.find(dt->getTypeName());
 
   if (it == serializerContainer.tnTodts.end()) {
     std::cerr << "Write error: No data type serializer found for mangled type " <<
@@ -186,7 +186,7 @@ void DataSet::write(std::ostream& os, const DataSet& ds) {
 bool DataSet::readData(std::istream& is, const std::string& prop,
                        const std::string& outputTypeName) {
   TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it =
-		  serializerContainer.otnTodts.find(outputTypeName);
+    serializerContainer.otnTodts.find(outputTypeName);
 
   if (it == serializerContainer.otnTodts.end()) {
     std::cerr << "Read error: No data type serializer found for read type " <<

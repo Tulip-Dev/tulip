@@ -421,6 +421,7 @@ void MainController::setData(Graph *graph,DataSet dataSet) {
 
       }
     }
+
     delete it;
   }
   else {

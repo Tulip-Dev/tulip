@@ -54,7 +54,7 @@ namespace tlp {
 BaseGraphicsViewComponent::BaseGraphicsViewComponent(const string &realViewName):realViewName(realViewName),graphicsView(NULL),baseView(ViewPluginsManager::getInst().createView(realViewName)) {}
 
 BaseGraphicsViewComponent::~BaseGraphicsViewComponent() {
-	delete baseView;
+  delete baseView;
 }
 
 QWidget *BaseGraphicsViewComponent::construct(QWidget *parent) {

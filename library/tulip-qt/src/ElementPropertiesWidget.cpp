@@ -210,7 +210,7 @@ void ElementPropertiesWidget::updateTable() {
     case NODE:
 
       if (!nodeSet) {
-    	delete it;
+        delete it;
         return;
       }
 
@@ -219,7 +219,7 @@ void ElementPropertiesWidget::updateTable() {
     case EDGE:
 
       if (!edgeSet) {
-    	delete it;
+        delete it;
         return;
       }
     }

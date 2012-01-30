@@ -53,20 +53,22 @@ GraphUpdatesRecorder::~GraphUpdatesRecorder() {
 }
 
 static bool canDeleteSubGraph(Graph *g, Graph *sg,
-		                      TLP_HASH_MAP<Graph*, set<Graph *> >& subGraphsDeleted) {
+                              TLP_HASH_MAP<Graph*, set<Graph *> >& subGraphsDeleted) {
 
-	TLP_HASH_MAP<Graph*, set<Graph *> >::iterator itds = subGraphsDeleted.begin();
-	for ( ; itds != subGraphsDeleted.end() ; ++itds) {
-		if (itds->first != g) {
-			if (itds->second.find(sg) != itds->second.end()) {
-				if (subGraphsDeleted.find(g) != subGraphsDeleted.end() &&
-					subGraphsDeleted[g].find(itds->first) != subGraphsDeleted[g].end()) {
-					return false;
-				}
-			}
-		}
-	}
-	return true;
+  TLP_HASH_MAP<Graph*, set<Graph *> >::iterator itds = subGraphsDeleted.begin();
+
+  for ( ; itds != subGraphsDeleted.end() ; ++itds) {
+    if (itds->first != g) {
+      if (itds->second.find(sg) != itds->second.end()) {
+        if (subGraphsDeleted.find(g) != subGraphsDeleted.end() &&
+            subGraphsDeleted[g].find(itds->first) != subGraphsDeleted[g].end()) {
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
 }
 
 // delete the objects collected as to be deleted
@@ -74,7 +76,7 @@ void GraphUpdatesRecorder::deleteDeletedObjects() {
   TLP_HASH_MAP<Graph*, set<Graph *> >& subGraphsToDelete =
     updatesReverted ? addedSubGraphs : deletedSubGraphs;
   TLP_HASH_MAP<Graph*, set<Graph *> >& subGraphsDeleted =
-      updatesReverted ? deletedSubGraphs : addedSubGraphs ;
+    updatesReverted ? deletedSubGraphs : addedSubGraphs ;
   TLP_HASH_MAP<Graph*, set<PropertyRecord> >& propertiesToDelete =
     updatesReverted ? addedProperties : deletedProperties;
 
@@ -91,8 +93,9 @@ void GraphUpdatesRecorder::deleteDeletedObjects() {
       // was not a subgraph of a previously removed one.
       // In that case it will be reattached to its old parent when the graph state is popped.
       if (canDeleteSubGraph(itds->first, *its, subGraphsDeleted)) {
-    	  delete (*its);
+        delete (*its);
       }
+
       ++its;
     }
 

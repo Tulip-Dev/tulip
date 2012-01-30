@@ -120,15 +120,16 @@ class DataTypeSerializerContainer {
 
 public :
 
-	~DataTypeSerializerContainer() {
-		TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it = tnTodts.begin();
-		for (; it != tnTodts.end() ; ++it) {
-			delete it->second;
-		}
-	}
+  ~DataTypeSerializerContainer() {
+    TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it = tnTodts.begin();
 
-	 TLP_HASH_MAP<std::string, DataTypeSerializer*> tnTodts;
-	 TLP_HASH_MAP<std::string, DataTypeSerializer*> otnTodts;
+    for (; it != tnTodts.end() ; ++it) {
+      delete it->second;
+    }
+  }
+
+  TLP_HASH_MAP<std::string, DataTypeSerializer*> tnTodts;
+  TLP_HASH_MAP<std::string, DataTypeSerializer*> otnTodts;
 
 };
 
