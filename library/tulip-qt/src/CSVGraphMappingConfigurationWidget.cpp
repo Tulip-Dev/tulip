@@ -249,4 +249,8 @@ bool CSVGraphMappingConfigurationWidget::isValid()const {
 
 void CSVGraphMappingConfigurationWidget::createNewProperty() {
   PropertyCreationDialog::createNewProperty(graph,this);
+  //Update gui with new property.
+  ui->nodeMappingPropertycomboBox->setGraph(graph);
+  ui->graphIndexPropertiesComboBox->setGraph(graph);
+  ui->edgeMappingPropertycomboBox->setGraph(graph);
 }
