@@ -155,7 +155,7 @@ color: green;
        </spacer>
       </item>
       <item>
-       <widget class="QLineEdit" name="filterPatternLineEdit">
+       <widget class="ClearableLineEdit" name="filterPatternLineEdit">
         <property name="minimumSize">
          <size>
           <width>300</width>
@@ -238,6 +238,11 @@ color: green;
    <class>VisibleSectionsModel</class>
    <extends>QComboBox</extends>
    <header>VisibleSectionsModel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ClearableLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/ClearableLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources>
