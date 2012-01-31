@@ -222,14 +222,13 @@ void Workspace::delView(tlp::View* view) {
 }
 
 void Workspace::panelDestroyed(QObject* obj) {
+  qWarning() << __PRETTY_FUNCTION__;
   WorkspacePanel* panel = static_cast<WorkspacePanel*>(obj);
   int removeCount = _panels.removeAll(panel);
 
   if (removeCount==0)
     return;
 
-  if (currentModeWidget() == _ui->exposePage)
-    return;
 
   // To prevent segfaults due to Qt's event queue handling when deleting views, we reset the placeholder widget that contained this panel
   foreach(QWidget* mode,_modeToSlots.keys()) {
@@ -238,6 +237,9 @@ void Workspace::panelDestroyed(QObject* obj) {
         p->resetWidget();
     }
   }
+
+  if (currentModeWidget() == _ui->exposePage)
+    return;
 
   updateAvailableModes();
 

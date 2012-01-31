@@ -22,6 +22,8 @@ class PreviewItem: public QGraphicsObject {
   tlp::WorkspacePanel* _panel;
   bool _hovered;
   bool _closeButtonHovered;
+
+  int textHeight() const;
 public:
   explicit PreviewItem(const QPixmap& pixmap, tlp::WorkspacePanel* panel, QGraphicsItem* parent = 0);
   QRectF boundingRect() const;
