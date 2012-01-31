@@ -171,3 +171,9 @@ void GraphHierarchiesEditor::createPanel() {
 
   static_cast<GraphPerspective*>(GraphPerspective::instance())->createPanel(g);
 }
+
+void GraphHierarchiesEditor::repackHeaders() {
+  for (int i=0;i<_ui->hierarchiesTree->model()->columnCount();++i) {
+    _ui->hierarchiesTree->resizeColumnToContents(i);
+  }
+}
