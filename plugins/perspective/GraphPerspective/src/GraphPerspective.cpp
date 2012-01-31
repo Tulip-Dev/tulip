@@ -145,6 +145,7 @@ void GraphPerspective::importGraph() {
     }
 
     _graphs->addGraph(g);
+    _ui->graphHierarchiesEditor->repackHeaders();
   }
 }
 

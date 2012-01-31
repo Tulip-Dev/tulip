@@ -45,6 +45,7 @@ public:
   virtual ~GraphHierarchiesEditor();
   void setModel(tlp::GraphHierarchiesModel *model);
   bool synchronized() const;
+  void repackHeaders();
 
 protected slots:
   void activeGraphSelected(const QModelIndex&);
