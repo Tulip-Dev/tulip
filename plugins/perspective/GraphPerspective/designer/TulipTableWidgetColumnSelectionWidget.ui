@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>269</width>
+    <width>293</width>
     <height>503</height>
    </rect>
   </property>
@@ -93,7 +93,7 @@ border-bottom: 1px solid #C9C9C9;
        <number>0</number>
       </property>
       <item>
-       <widget class="QLineEdit" name="customPatternLineEdit">
+       <widget class="ClearableLineEdit" name="customPatternLineEdit">
         <property name="styleSheet">
          <string notr="true">QLineEdit {
 border: 0px;
@@ -137,6 +137,13 @@ border-bottom: 1px solid #C9C9C9;
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ClearableLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/ClearableLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
