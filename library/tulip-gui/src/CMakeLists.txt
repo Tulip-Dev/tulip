@@ -98,6 +98,7 @@ SET(SRCS
   VectorEditionWidget.cpp
   GlyphRenderer.cpp
   TulipFontWidget.cpp
+  ClearableLineEdit.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS

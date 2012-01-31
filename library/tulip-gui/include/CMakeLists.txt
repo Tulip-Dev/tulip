@@ -91,6 +91,7 @@ INSTALL(FILES
   tulip/PropertyToQVariantMapper.h
   tulip/VectorEditionWidget.h
   tulip/GlyphRenderer.h
+  tulip/ClearableLineEdit.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
