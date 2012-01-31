@@ -1113,6 +1113,11 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
       }
     }
 
+    BooleanProperty *filteringProperty = NULL;
+
+    if(glGraphComposite)
+      filteringProperty= glGraphComposite->getRenderingParameters().getDisplayFilteringProperty();
+
     // Draw complex entities
     if(glGraphComposite) {
       vector<ComplexEntityLODUnit>::iterator it;
@@ -1123,6 +1128,11 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
         for(it = (*itLayer).nodesLODVector.begin(); it!=(*itLayer).nodesLODVector.end(); ++it) {
           if((*it).lod<0)
             continue;
+
+          if(filteringProperty) {
+            if(filteringProperty->getNodeValue(node((*it).id)))
+              continue;
+          }
 
           idToEntity[id]=(*it).id;
           glLoadName(id);
@@ -1139,6 +1149,11 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
         for(it = (*itLayer).edgesLODVector.begin(); it!=(*itLayer).edgesLODVector.end(); ++it) {
           if((*it).lod<0)
             continue;
+
+          if(filteringProperty) {
+            if(filteringProperty->getEdgeValue(edge((*it).id)))
+              continue;
+          }
 
           idToEntity[id]=(*it).id;
           glLoadName(id);
