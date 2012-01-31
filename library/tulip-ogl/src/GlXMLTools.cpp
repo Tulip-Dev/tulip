@@ -208,4 +208,17 @@ void GlXMLTools::getContent(xmlNodePtr rootNode,std::string &content) {
   content=(char*)rootNode->content;
 }
 
+template<>
+void GlXMLTools::setWithXML(xmlNodePtr rootNode, const std::string &name, std::string &value) {
+  xmlNodePtr node;
+  GlXMLTools::getData(name, rootNode, node);
+  
+  if (node) {
+    std::string tmp;
+    getContent(node,tmp);
+    std::stringstream str(tmp);
+    value = str.str();
+  }
+}
+
 }
