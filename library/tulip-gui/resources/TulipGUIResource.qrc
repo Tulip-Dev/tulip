@@ -53,5 +53,6 @@
         <file>icons/20/edges_nolabel.png</file>
         <file>ui/split3_screen.png</file>
         <file>ui/inherited_properties.png</file>
+        <file>ui/clearbutton.png</file>
     </qresource>
 </RCC>

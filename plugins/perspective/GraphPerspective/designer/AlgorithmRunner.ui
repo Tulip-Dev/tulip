@@ -28,7 +28,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="searchBox">
+    <widget class="ClearableLineEdit" name="searchBox">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -151,6 +151,11 @@ QPushButton:pressed{
    <extends>QWidget</extends>
    <header>HeaderFrame.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ClearableLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/ClearableLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
