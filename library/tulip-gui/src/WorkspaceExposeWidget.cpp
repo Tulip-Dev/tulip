@@ -8,6 +8,7 @@
 #include <QtCore/QParallelAnimationGroup>
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QKeyEvent>
+#include <QtGui/QGraphicsTextItem>
 
 #include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>
@@ -29,13 +30,20 @@ PreviewItem::PreviewItem(const QPixmap& pixmap, WorkspacePanel* panel, QGraphics
   setFlag(ItemIsSelectable);
   setAcceptHoverEvents(true);
 }
+int PreviewItem::textHeight() const {
+  QGraphicsTextItem text;
+  QFont f;
+  f.setBold(true);
+  text.setFont(f);
+  text.setPlainText(_panel->windowTitle());
+  text.setTextWidth(WorkspaceExposeWidget::previewSize().width());
+  return text.boundingRect().height();
+}
 QRectF PreviewItem::boundingRect() const {
-  QRectF result = QRectF(0,0,WorkspaceExposeWidget::previewSize().width(),WorkspaceExposeWidget::previewSize().height()+30);
-
+  QRectF result = QRectF(0,0,WorkspaceExposeWidget::previewSize().width(),WorkspaceExposeWidget::previewSize().height()+textHeight());
   if (_hovered) {
     result.setTop(_closePixmapRect.top());
   }
-
   return result;
 }
 tlp::WorkspacePanel* PreviewItem::panel() const {
@@ -46,7 +54,7 @@ void PreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
   QFont f;
   f.setBold(true);
   painter->setFont(f);
-  painter->drawText(0,WorkspaceExposeWidget::previewSize().height()+5,WorkspaceExposeWidget::previewSize().width(),30,Qt::AlignHCenter | Qt::TextSingleLine | Qt::TextWordWrap,_panel->windowTitle());
+  painter->drawText(0,WorkspaceExposeWidget::previewSize().height()+5,WorkspaceExposeWidget::previewSize().width(),textHeight(),Qt::AlignHCenter | Qt::TextWordWrap,_panel->windowTitle());
 
   if (_hovered) {
     painter->setOpacity(_closeButtonHovered ? 1 : 0.5);
