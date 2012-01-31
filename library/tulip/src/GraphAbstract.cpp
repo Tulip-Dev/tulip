@@ -36,7 +36,6 @@ GraphAbstract::GraphAbstract(Graph *supergraph, unsigned int sgId)
   :supergraph(supergraph ? supergraph : this),
    root((supergraph == this) ? this : supergraph->getRoot()),
    subGraphToKeep(NULL), metaGraphProperty(NULL) {
-
   // get id
   if (supergraph != this)
     id = ((GraphImpl *) getRoot())->getSubGraphId(sgId);
@@ -78,7 +77,6 @@ void GraphAbstract::clear() {
 void GraphAbstract::restoreSubGraph(Graph* sg) {
   subgraphs.push_back(sg);
   sg->setSuperGraph(this);
-  notifyAddSubGraph(sg);
 }
 //=========================================================================
 void GraphAbstract::setSubGraphToKeep(Graph* sg) {
@@ -119,51 +117,52 @@ unsigned int GraphAbstract::numberOfDescendantGraphs() const {
 //=========================================================================
 void GraphAbstract::delSubGraph(Graph *toRemove) {
   // look for the graph we want to remove in the subgraphs
-  GRAPH_SEQ::iterator it = std::find(subgraphs.begin(), subgraphs.end(), toRemove);
+  GRAPH_SEQ::iterator it =
+    std::find(subgraphs.begin(), subgraphs.end(), toRemove);
 
   assert(it != subgraphs.end());
 
   if (it != subgraphs.end()) {
+    subGraphToKeep = NULL;
+    notifyDelSubGraph(toRemove);
 
     // remove from subgraphs
     subgraphs.erase(it);
 
-    Iterator<Graph *> *itS = new StableIterator<Graph*>(toRemove->getSubGraphs());
-
+    Iterator<Graph *> *itS = toRemove->getSubGraphs();
     // add toRemove subgraphs
     while (itS->hasNext()) {
-      Graph *sg = itS->next();
-      toRemove->removeSubGraph(sg);
-      restoreSubGraph(sg);
-    }
-
-    delete itS;
-
-    subGraphToKeep = NULL;
-    notifyDelSubGraph(toRemove);
+      restoreSubGraph(itS->next());
+    } delete itS;
 
     // subGraphToKeep may have change on notifyDelSubGraph
+    // see GraphUpdatesRecorder::delSubGraph
+    // in GraphUpdatesRecorder.cpp
     if (toRemove != subGraphToKeep) {
+      // avoid deletion of toRemove subgraphs
+      toRemove->clearSubGraphs();
       delete toRemove;
     }
-    else {
+    else
+      // toRemove is not deleted,
+      // and its subgraphs list is not erased;
+      // beacause it is registered into a GraphUpdatesRecorder
+      // in order it can be restored on undo or redo
       toRemove->notifyDestroy();
-    }
   }
 }
 //=========================================================================
 void GraphAbstract::removeSubGraph(Graph * toRemove) {
-  GRAPH_SEQ::iterator it = std::find(subgraphs.begin(), subgraphs.end(), toRemove);
-
+  GRAPH_SEQ::iterator it =
+    std::find(subgraphs.begin(), subgraphs.end(), toRemove);
   if (it != subgraphs.end()) {
-    notifyDelSubGraph(toRemove);
     subgraphs.erase(it);
-    toRemove->notifyDestroy();
   }
 }
 //=========================================================================
 void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
-  if (this != toRemove->getSuperGraph() || this==toRemove) // this==toRemove : root graph
+  if (this != toRemove->getSuperGraph() || this==toRemove)
+    // this==toRemove : root graph
     return;
 
   StableIterator<Graph *> itS(toRemove->getSubGraphs());
@@ -195,8 +194,7 @@ Iterator<Graph *> * GraphAbstract::getSubGraphs() const {
 }
 //=========================================================================
 bool GraphAbstract::isSubGraph(const Graph* sg) const {
-  GRAPH_SEQ::const_iterator it = std::find(subgraphs.begin(), subgraphs.end(), sg);
-  return (it != subgraphs.end());
+  return (std::find(subgraphs.begin(), subgraphs.end(), sg) != subgraphs.end());
 }
 //=========================================================================
 bool GraphAbstract::isDescendantGraph(const Graph* sg) const {

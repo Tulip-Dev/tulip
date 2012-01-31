@@ -151,10 +151,9 @@ protected:
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);
   virtual void removeEdge(const edge);
-  // to deal with sub graph deletion
+  // internally used to deal with sub graph deletion
   virtual void removeSubGraph(Graph*);
   virtual void clearSubGraphs();
-  // only called by GraphUpdatesRecorder
   virtual void restoreSubGraph(Graph*);
   virtual void setSubGraphToKeep(Graph*);
 };

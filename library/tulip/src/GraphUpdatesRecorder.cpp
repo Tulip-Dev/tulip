@@ -52,31 +52,10 @@ GraphUpdatesRecorder::~GraphUpdatesRecorder() {
     delete newIdsState;
 }
 
-static bool canDeleteSubGraph(Graph *g, Graph *sg,
-                              TLP_HASH_MAP<Graph*, set<Graph *> >& subGraphsDeleted) {
-
-  TLP_HASH_MAP<Graph*, set<Graph *> >::iterator itds = subGraphsDeleted.begin();
-
-  for ( ; itds != subGraphsDeleted.end() ; ++itds) {
-    if (itds->first != g) {
-      if (itds->second.find(sg) != itds->second.end()) {
-        if (subGraphsDeleted.find(g) != subGraphsDeleted.end() &&
-            subGraphsDeleted[g].find(itds->first) != subGraphsDeleted[g].end()) {
-          return false;
-        }
-      }
-    }
-  }
-
-  return true;
-}
-
 // delete the objects collected as to be deleted
 void GraphUpdatesRecorder::deleteDeletedObjects() {
   TLP_HASH_MAP<Graph*, set<Graph *> >& subGraphsToDelete =
     updatesReverted ? addedSubGraphs : deletedSubGraphs;
-  TLP_HASH_MAP<Graph*, set<Graph *> >& subGraphsDeleted =
-    updatesReverted ? deletedSubGraphs : addedSubGraphs ;
   TLP_HASH_MAP<Graph*, set<PropertyRecord> >& propertiesToDelete =
     updatesReverted ? addedProperties : deletedProperties;
 
@@ -89,13 +68,9 @@ void GraphUpdatesRecorder::deleteDeletedObjects() {
     set<Graph*>::iterator ite = (*itds).second.end();
 
     while(its != ite) {
-      // We check if the subgraph to delete (Typically a newly added one)
-      // was not a subgraph of a previously removed one.
-      // In that case it will be reattached to its old parent when the graph state is popped.
-      if (canDeleteSubGraph(itds->first, *its, subGraphsDeleted)) {
-        delete (*its);
-      }
-
+      // avoid subgraphs deletion of graph to delete
+      (*its)->clearSubGraphs();
+      delete (*its);
       ++its;
     }
 
@@ -600,8 +575,16 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     set<Graph*>::iterator itge = (*its).second.end();
 
     while(itg != itge) {
+      Graph* sg = (*itg);
       // remove from list of subgraphs + notify observers
-      g->removeSubGraph((*itg));
+      g->notifyDelSubGraph(sg);
+      g->removeSubGraph(sg);
+      sg->notifyDestroy();
+      // restore its subgraphs as subgraph of its supergraph
+      Iterator<Graph *> *itss = sg->getSubGraphs();
+      while (itss->hasNext()) {
+	g->restoreSubGraph(itss->next());
+      } delete itss;
       ++itg;
     }
 
@@ -659,7 +642,20 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     set<Graph*>::iterator itge = (*its).second.end();
 
     while(itg != itge) {
-      g->restoreSubGraph((*itg));
+      Graph* sg = *itg;
+      // restore sg as subgraph of g
+      g->restoreSubGraph(sg);
+      // notify its addition
+      g->notifyAddSubGraph(sg);
+      Iterator<Graph *> *itss = sg->getSubGraphs();
+
+      // and sg subgraphs are no longer subgraphs of g
+      while (itss->hasNext()) {
+	Graph* ssg = itss->next();
+	g->removeSubGraph(ssg);
+	ssg->setSuperGraph(sg);
+      } delete itss;
+
       ++itg;
     }
 

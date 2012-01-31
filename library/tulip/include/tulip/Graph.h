@@ -774,10 +774,9 @@ protected:
     return getRoot()->canDeleteProperty(g, prop);
   }
 
-  // to deal with sub graph deletion
+  // internally used to deal with sub graph deletion
   virtual void removeSubGraph(Graph*)=0;
   virtual void clearSubGraphs()=0;
-  // only called by GraphUpdatesRecorder
   virtual void restoreSubGraph(Graph*)=0;
   virtual void setSubGraphToKeep(Graph*)=0;
 
