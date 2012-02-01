@@ -70,16 +70,19 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
   foreach(info,localPlugins) {
     if (info->type() != "View")
       continue;
+
     PanelSelectionItem* item = new PanelSelectionItem(info);
     connect(item,SIGNAL(selected(bool)),this,SLOT(panelSelected(bool)));
     connect(item,SIGNAL(opened()),this,SLOT(panelOpened()));
     panelsLayout->addWidget(item);
+
     if (firstItem == NULL) {
       firstItem = item;
     }
   }
 
   QMouseEvent* event = new QMouseEvent(QMouseEvent::MouseButtonPress,QPoint(5,5),Qt::LeftButton,Qt::NoButton,Qt::NoModifier);
+
   if (firstItem != NULL)
     qApp->postEvent(firstItem,event);
 
@@ -130,6 +133,7 @@ void PanelSelectionWizard::done(int result) {
     foreach(int id, pageIds()) {
       if (id == startId())
         continue;
+
       QWizardPage* p = page(id);
       removePage(id);
       delete p;
@@ -141,18 +145,21 @@ void PanelSelectionWizard::done(int result) {
 
 void PanelSelectionWizard::panelSelected(bool f) {
   PanelSelectionItem* item = static_cast<PanelSelectionItem*>(sender());
+
   if (_currentItem == item)
     return;
 
   if (f) {
     if (_currentItem != NULL)
       _currentItem->setSelected(false);
+
     _currentItem = item;
     createView();
 
     foreach(int id, pageIds()) {
       if (id == startId())
         continue;
+
       QWizardPage* p = page(id);
       removePage(id);
       delete p;
@@ -171,9 +178,11 @@ void PanelSelectionWizard::panelSelected(bool f) {
 
 void PanelSelectionWizard::panelOpened() {
   PanelSelectionItem* item = static_cast<PanelSelectionItem*>(sender());
+
   if (_currentItem != item) {
     _currentItem = item;
     createView();
   }
+
   button(QWizard::FinishButton)->click();
 }

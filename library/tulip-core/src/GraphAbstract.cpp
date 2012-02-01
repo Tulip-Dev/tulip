@@ -316,21 +316,22 @@ Graph* GraphAbstract::getDescendantGraph(unsigned int sgId) const {
   return NULL;
 }
 //=========================================================================
-Graph* GraphAbstract::getDescendantGraph(const string &name) const{
-    Graph* sg = getSubGraph(name);
+Graph* GraphAbstract::getDescendantGraph(const string &name) const {
+  Graph* sg = getSubGraph(name);
 
-    if (sg)
+  if (sg)
+    return sg;
+
+  GRAPH_SEQ::const_iterator it = subgraphs.begin();
+
+  while(it != subgraphs.end()) {
+    if ((sg = (*it)->getDescendantGraph(name)))
       return sg;
 
-    GRAPH_SEQ::const_iterator it = subgraphs.begin();
+    it++;
+  }
 
-    while(it != subgraphs.end()) {
-      if ((sg = (*it)->getDescendantGraph(name)))
-        return sg;
-      it++;
-    }
-
-    return NULL;
+  return NULL;
 }
 //=========================================================================
 node GraphAbstract::getOneNode() const {
