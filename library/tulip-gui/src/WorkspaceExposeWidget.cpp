@@ -41,9 +41,11 @@ int PreviewItem::textHeight() const {
 }
 QRectF PreviewItem::boundingRect() const {
   QRectF result = QRectF(0,0,WorkspaceExposeWidget::previewSize().width(),WorkspaceExposeWidget::previewSize().height()+textHeight());
+
   if (_hovered) {
     result.setTop(_closePixmapRect.top());
   }
+
   return result;
 }
 tlp::WorkspacePanel* PreviewItem::panel() const {
