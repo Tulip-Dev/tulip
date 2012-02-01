@@ -104,13 +104,13 @@ QComboBox:drop-down {
        <widget class="QToolButton" name="currentInteractorButton">
         <property name="minimumSize">
          <size>
-          <width>150</width>
+          <width>130</width>
           <height>22</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>150</width>
+          <width>130</width>
           <height>22</height>
          </size>
         </property>
@@ -186,9 +186,15 @@ background-color: #A9A9A9;
        </widget>
       </item>
       <item>
-       <widget class="TreeViewComboBox" name="graphCombo" native="true">
-        <property name="toolTip">
-         <string>Select the graph to display</string>
+       <widget class="TreeViewComboBox" name="graphCombo">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToMinimumContentsLength</enum>
         </property>
        </widget>
       </item>
@@ -235,9 +241,8 @@ background-color: #A9A9A9;
  <customwidgets>
   <customwidget>
    <class>TreeViewComboBox</class>
-   <extends>QWidget</extends>
-   <header>tulip/TreeViewComboBox.h</header>
-   <container>1</container>
+   <extends>QComboBox</extends>
+   <header location="global">tulip/TreeViewComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
