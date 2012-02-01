@@ -115,7 +115,7 @@ Graph* GraphDecorator::getDescendantGraph(unsigned int sgId) const {
   return graph_component->getDescendantGraph(sgId);
 }
 //=========================================================================
-Graph* GraphDecorator::getDescendantGraph(const std::string &name) const{
+Graph* GraphDecorator::getDescendantGraph(const std::string &name) const {
   return graph_component->getDescendantGraph(name);
 }
 //============================================================
