@@ -1099,6 +1099,8 @@ CppUnit::Test * PushPopTest::suite() {
                          &PushPopTest::testDelSubgraph) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "addSubGraphProp operations",
                          &PushPopTest::testAddSubgraphProp) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "push, add subgraphs hierarchy, then pop operations",
+                         &PushPopTest::testPushAddSubgraphsPop) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Tests operations",
                          &PushPopTest::testTests) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Properties operations",
