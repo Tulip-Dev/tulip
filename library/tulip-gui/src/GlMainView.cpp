@@ -136,7 +136,6 @@ QPixmap GlMainView::snapshot(const QSize &outputSize) {
 
 void GlMainView::graphDeleted() {
   setGraph(NULL);
-  deleteLater();
 }
 
 void GlMainView::applySettings() {
