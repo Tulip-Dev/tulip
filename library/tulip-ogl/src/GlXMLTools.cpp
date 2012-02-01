@@ -212,7 +212,7 @@ template<>
 void GlXMLTools::setWithXML(xmlNodePtr rootNode, const std::string &name, std::string &value) {
   xmlNodePtr node;
   GlXMLTools::getData(name, rootNode, node);
-  
+
   if (node) {
     std::string tmp;
     getContent(node,tmp);

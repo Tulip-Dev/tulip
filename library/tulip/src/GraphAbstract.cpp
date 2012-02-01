@@ -130,10 +130,13 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
     subgraphs.erase(it);
 
     Iterator<Graph *> *itS = toRemove->getSubGraphs();
+
     // add toRemove subgraphs
     while (itS->hasNext()) {
       restoreSubGraph(itS->next());
-    } delete itS;
+    }
+
+    delete itS;
 
     // subGraphToKeep may have change on notifyDelSubGraph
     // see GraphUpdatesRecorder::delSubGraph
@@ -155,6 +158,7 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
 void GraphAbstract::removeSubGraph(Graph * toRemove) {
   GRAPH_SEQ::iterator it =
     std::find(subgraphs.begin(), subgraphs.end(), toRemove);
+
   if (it != subgraphs.end()) {
     subgraphs.erase(it);
   }

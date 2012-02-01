@@ -1086,7 +1086,7 @@ CppUnit::Test * PushPopTest::suite() {
   /*suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "addSubGraph operations",
     &PushPopTest::testSubgraph) );*/
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "delSubGraph operations",
-    &PushPopTest::testDelSubgraph) );
+                         &PushPopTest::testDelSubgraph) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "addSubGraphProp operations",
                          &PushPopTest::testAddSubgraphProp) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Tests operations",

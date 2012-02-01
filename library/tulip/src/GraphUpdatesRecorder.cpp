@@ -582,9 +582,12 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
       sg->notifyDestroy();
       // restore its subgraphs as subgraph of its supergraph
       Iterator<Graph *> *itss = sg->getSubGraphs();
+
       while (itss->hasNext()) {
-	g->restoreSubGraph(itss->next());
-      } delete itss;
+        g->restoreSubGraph(itss->next());
+      }
+
+      delete itss;
       ++itg;
     }
 
@@ -651,10 +654,12 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
 
       // and sg subgraphs are no longer subgraphs of g
       while (itss->hasNext()) {
-	Graph* ssg = itss->next();
-	g->removeSubGraph(ssg);
-	ssg->setSuperGraph(sg);
-      } delete itss;
+        Graph* ssg = itss->next();
+        g->removeSubGraph(ssg);
+        ssg->setSuperGraph(sg);
+      }
+
+      delete itss;
 
       ++itg;
     }
