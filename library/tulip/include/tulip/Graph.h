@@ -316,6 +316,11 @@ public:
    * or NULL if there is no descendant  with that id.
    */
   virtual Graph* getDescendantGraph(unsigned int id) const=0;
+  /**
+   * Returns a pointer on the first descendant graph with the corresponding name
+   * or NULL if there is no descendant graph with that name.
+   */
+  virtual Graph* getDescendantGraph(const std::string &name) const=0;
   //==============================================================================
   // Modification of the graph structure
   //==============================================================================
