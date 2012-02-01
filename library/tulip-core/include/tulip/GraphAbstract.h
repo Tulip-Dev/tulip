@@ -53,6 +53,7 @@ public:
   virtual Graph* getSubGraph(unsigned int id) const;
   virtual Graph* getSubGraph(const std::string &name) const;
   virtual Graph* getDescendantGraph(unsigned int id) const;
+  virtual Graph* getDescendantGraph(const std::string &name) const;
   virtual Graph *getNthSubGraph(unsigned int n) const;
   virtual unsigned int numberOfSubGraphs() const;
   virtual unsigned int numberOfDescendantGraphs() const;
