@@ -59,6 +59,11 @@ public:
   void addToRecentDocuments(const QString &);
 
   /**
+    @brief Check recently opened documents list and remove non-existing ones
+    */
+  void checkRecentDocuments();
+
+  /**
    * @brief Adds a remote location from which to list plugins.
    *
    * @param remoteLocation The URL of the plugin server.

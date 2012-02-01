@@ -19,6 +19,8 @@
 
 #include "TulipWelcomePage.h"
 
+#include <QtGui/QMessageBox>
+#include <QtCore/QFileInfo>
 #include <QtGui/QDesktopServices>
 #include <QtGui/QApplication>
 #include <QtNetwork/QNetworkAccessManager>
@@ -28,7 +30,6 @@
 
 #include <tulip/TulipSettings.h>
 #include <tulip/PluginManager.h>
-#include <QtCore/QDebug>
 
 #include "PerspectiveItemWidget.h"
 #include "RssParser.h"
@@ -52,6 +53,7 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
   manager->get(QNetworkRequest(QUrl(RSS_URL)));
 
   // Recent documents list
+  TulipSettings::instance().checkRecentDocuments();
   QList<QString> recentDocs = TulipSettings::instance().recentDocuments();
 
   if (recentDocs.size() > 0) {
@@ -141,5 +143,8 @@ void TulipWelcomePage::perspectiveSelected() {
 }
 
 void TulipWelcomePage::recentFileLinkActivated(const QString& link) {
-  emit openFile(link);
+  if (!QFileInfo(link).exists())
+    QMessageBox::critical(this,trUtf8("Error"),trUtf8("Selected recent project does not exist anymore"));
+  else
+    emit openFile(link);
 }
