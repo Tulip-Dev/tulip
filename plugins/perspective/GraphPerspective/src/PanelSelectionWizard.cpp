@@ -20,8 +20,8 @@
 #include "ui_PanelSelectionWizard.h"
 #include "ui_PanelSelectionItem.h"
 
-#include <QtCore/QDebug>
 #include <QtGui/QAbstractButton>
+#include <QtGui/QMouseEvent>
 
 #include <tulip/PluginManager.h>
 #include <tulip/View.h>
@@ -30,102 +30,65 @@
 
 using namespace tlp;
 
-/*
-  Helper class
-  */
 PanelSelectionItem::PanelSelectionItem(tlp::PluginInformations* infos, QWidget *parent): QWidget(parent), _ui(new Ui::PanelSelectionItem) {
   _ui->setupUi(this);
   _viewName = infos->name();
   _ui->icon->setPixmap(QPixmap(infos->iconPath()));
-  _ui->name->setText("<p><span style=\"font-size:large;\"><b>"
-                     +
-                     infos->name()
-                     +
-                     "</b></span></p>");
-  _ui->description->setText("<p><span style=\"color:#626262;\">"
-                            +
-                            infos->shortDescription()
-                            +
-                            "</span></p>");
+  _ui->name->setText("<p><span style=\"font-size:large;\"><b>" + infos->name() + "</b></span></p>");
+  _ui->description->setText("<p><span style=\"color:#626262;\">" + infos->shortDescription() + "</span></p>");
 }
-
 PanelSelectionItem::~PanelSelectionItem() {
   delete _ui;
 }
-
 QString PanelSelectionItem::viewName() const {
   return _viewName;
 }
-
-void PanelSelectionItem::focusInEvent(QFocusEvent *) {
-  emit selected();
-}
-
-void PanelSelectionItem::setFocus(bool f) {
+void PanelSelectionItem::setSelected(bool f) {
   QString background = (f ? "qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(233, 239, 245, 255), stop:1 rgba(222, 228, 234, 255));" : "white;");
   _ui->frame->setStyleSheet("#frame { background-color: " + background + "border: 1px solid #C9C9C9; }");
+  emit selected(f);
 }
-
-void PanelSelectionItem::mouseDoubleClickEvent(QMouseEvent *) {
-  emit doubleClicked();
+void PanelSelectionItem::mousePressEvent(QMouseEvent* ev) {
+  setSelected(true);
+}
+void PanelSelectionItem::mouseDoubleClickEvent(QMouseEvent* ev) {
+  emit opened();
 }
 
 // ************************************************
-
-PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent, bool canSelectGraph)
-  : QWizard(parent), _ui(new Ui::PanelSelectionWizard),
-    _model(model), _activeItem(NULL), _canSelectGraph(canSelectGraph), _view(NULL) {
+PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent)
+  : QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _view(NULL), _currentItem(NULL) {
   _ui->setupUi(this);
-  _ui->selectGraphFrame->setVisible(_canSelectGraph);
+  _ui->graphCombo->setModel(_model);
+  _ui->graphCombo->selectIndex(_model->indexOf(_model->currentGraph()));
 
-  if (_canSelectGraph) {
-    _ui->graphCombo->setModel(_model);
-    _ui->graphCombo->selectIndex(_model->indexOf(_model->currentGraph()));
-  }
-
+  PanelSelectionItem* firstItem = NULL;
   QVBoxLayout *panelsLayout = new QVBoxLayout;
   panelsLayout->setContentsMargins(6,6,6,6);
   QList<tlp::PluginInformations *> localPlugins = tlp::PluginManager::pluginsList(tlp::PluginManager::Local);
   tlp::PluginInformations *info;
-  int i=0;
   foreach(info,localPlugins) {
     if (info->type() != "View")
       continue;
-
     PanelSelectionItem* item = new PanelSelectionItem(info);
+    connect(item,SIGNAL(selected(bool)),this,SLOT(panelSelected(bool)));
+    connect(item,SIGNAL(opened()),this,SLOT(panelOpened()));
     panelsLayout->addWidget(item);
-    connect(item,SIGNAL(selected()),this,SLOT(panelSelected()));
-    connect(item,SIGNAL(doubleClicked()),this,SLOT(panelDoubleClicked()));
-
-    if (i++ == 0) {
-      _activeItem = item;
-      _activeItem->setFocus(true);
+    if (firstItem == NULL) {
+      firstItem = item;
     }
   }
+
+  QMouseEvent* event = new QMouseEvent(QMouseEvent::MouseButtonPress,QPoint(5,5),Qt::LeftButton,Qt::NoButton,Qt::NoModifier);
+  if (firstItem != NULL)
+    qApp->postEvent(firstItem,event);
+
   panelsLayout->addItem(new QSpacerItem(10,10,QSizePolicy::Maximum,QSizePolicy::Expanding));
   _ui->panelSelector->setLayout(panelsLayout);
-
-  button(QWizard::FinishButton)->setEnabled(true);
 }
 
 PanelSelectionWizard::~PanelSelectionWizard() {
   delete _ui;
-}
-
-void PanelSelectionWizard::panelSelected() {
-  if (_activeItem != NULL)
-    _activeItem->setFocus(false);
-
-  _activeItem = static_cast<PanelSelectionItem*>(sender());
-  _activeItem->setFocus(true);
-
-  button(QWizard::NextButton)->setEnabled(true);
-  connect(button(QWizard::NextButton),SIGNAL(clicked()),this,SLOT(nextButtonClicked()));
-}
-
-void PanelSelectionWizard::panelDoubleClicked() {
-  createView();
-  button(QWizard::NextButton)->click();
 }
 
 tlp::Graph* PanelSelectionWizard::graph() const {
@@ -133,57 +96,20 @@ tlp::Graph* PanelSelectionWizard::graph() const {
 }
 
 QString PanelSelectionWizard::panelName() const {
-  if (_activeItem)
-    return _activeItem->viewName();
-  else
-    return QString::null;
+  return _currentItem->viewName();
 }
 
 void PanelSelectionWizard::setSelectedGraph(tlp::Graph* g) {
-  if (!_canSelectGraph)
-    return;
-
   _ui->graphCombo->selectIndex(_model->indexOf(g));
 }
 
 void PanelSelectionWizard::createView() {
+  delete _view;
+
   _view = ViewLister::getPluginObject(panelName().toStdString(),NULL);
   _view->setupUi();
   _view->setGraph(graph());
   _view->setState(DataSet());
-}
-
-void PanelSelectionWizard::nextButtonClicked() {
-  createView();
-  foreach(QWidget* w, _view->configurationWidgets()) {
-    QWizardPage* page = new QWizardPage();
-    page->setLayout(new QVBoxLayout);
-    page->layout()->setMargin(0);
-    page->layout()->addWidget(w);
-    addPage(page);
-  }
-  disconnect(button(QWizard::NextButton),SIGNAL(clicked()),this,SLOT(nextButtonClicked()));
-  connect(this,SIGNAL(currentIdChanged(int)),this,SLOT(pageChanged(int)));
-  next();
-}
-
-void PanelSelectionWizard::pageChanged(int id) {
-  button(QWizard::FinishButton)->setEnabled(true);
-
-  if (id == startId()) {
-    foreach(int pageId, pageIds()) {
-      if (pageId == startId())
-        continue;
-
-      removePage(pageId);
-    }
-    button(QWizard::NextButton)->setEnabled(true);
-    delete _view;
-    _view = NULL;
-
-    connect(button(QWizard::NextButton),SIGNAL(clicked()),this,SLOT(nextButtonClicked()));
-    disconnect(this,SIGNAL(currentIdChanged(int)),this,SLOT(pageChanged(int)));
-  }
 }
 
 tlp::View* PanelSelectionWizard::panel() const {
@@ -200,7 +126,54 @@ void PanelSelectionWizard::done(int result) {
   else if (result != QDialog::Accepted) {
     delete _view;
     _view = NULL;
+
+    foreach(int id, pageIds()) {
+      if (id == startId())
+        continue;
+      QWizardPage* p = page(id);
+      removePage(id);
+      delete p;
+    }
   }
 
   QWizard::done(result);
+}
+
+void PanelSelectionWizard::panelSelected(bool f) {
+  PanelSelectionItem* item = static_cast<PanelSelectionItem*>(sender());
+  if (_currentItem == item)
+    return;
+
+  if (f) {
+    if (_currentItem != NULL)
+      _currentItem->setSelected(false);
+    _currentItem = item;
+    createView();
+
+    foreach(int id, pageIds()) {
+      if (id == startId())
+        continue;
+      QWizardPage* p = page(id);
+      removePage(id);
+      delete p;
+    }
+
+    foreach(QWidget* w, _view->configurationWidgets()) {
+      QWizardPage* p = new QWizardPage();
+      p->setLayout(new QVBoxLayout);
+      p->layout()->addWidget(w);
+      addPage(p);
+    }
+    button(QWizard::NextButton)->setEnabled(_view->configurationWidgets().size()>0);
+    validateCurrentPage();
+  }
+}
+
+void PanelSelectionWizard::panelOpened() {
+  PanelSelectionItem* item = static_cast<PanelSelectionItem*>(sender());
+  if (_currentItem != item) {
+    _currentItem = item;
+    createView();
+  }
+  button(QWizard::FinishButton)->click();
 }

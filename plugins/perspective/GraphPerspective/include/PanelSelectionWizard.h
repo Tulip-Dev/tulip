@@ -34,57 +34,46 @@ class PanelSelectionWizard;
 class PanelSelectionItem;
 }
 
-
-// Helper class
 class PanelSelectionItem: public QWidget {
   Q_OBJECT
   Ui::PanelSelectionItem* _ui;
-
   QString _viewName;
 public:
   explicit PanelSelectionItem(tlp::PluginInformations* infos, QWidget* parent = 0);
   virtual ~PanelSelectionItem();
-
   QString viewName() const;
-
 signals:
-  void selected();
-  void doubleClicked();
-
+  void selected(bool);
+  void opened();
 public slots:
-  void setFocus(bool);
-
+  void setSelected(bool);
 protected:
-  void focusInEvent(QFocusEvent *);
+  void mousePressEvent(QMouseEvent *);
   void mouseDoubleClickEvent(QMouseEvent *);
 };
 
 class PanelSelectionWizard : public QWizard {
   Q_OBJECT
 
+  QWizardPage* _placeHolder;
+  PanelSelectionItem* _currentItem;
   Ui::PanelSelectionWizard* _ui;
   tlp::GraphHierarchiesModel* _model;
-  PanelSelectionItem* _activeItem;
-  bool _canSelectGraph;
   tlp::View* _view;
+
   void createView();
-
-
 public:
-  explicit PanelSelectionWizard(tlp::GraphHierarchiesModel* model, QWidget *parent = 0, bool canSelectGraph = true);
+  explicit PanelSelectionWizard(tlp::GraphHierarchiesModel* model, QWidget *parent = 0);
   virtual ~PanelSelectionWizard();
 
   tlp::Graph* graph() const;
   QString panelName() const;
   tlp::View* panel() const;
-
   void setSelectedGraph(tlp::Graph*);
 
 protected slots:
-  void panelSelected();
-  void panelDoubleClicked();
-  void nextButtonClicked();
-  void pageChanged(int);
+  void panelSelected(bool);
+  void panelOpened();
 
 protected:
   void done(int result);
