@@ -173,7 +173,7 @@ void GraphHierarchiesEditor::createPanel() {
 }
 
 void GraphHierarchiesEditor::repackHeaders() {
-  for (int i=0;i<_ui->hierarchiesTree->model()->columnCount();++i) {
+  for (int i=0; i<_ui->hierarchiesTree->model()->columnCount(); ++i) {
     _ui->hierarchiesTree->resizeColumnToContents(i);
   }
 }
