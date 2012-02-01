@@ -40,6 +40,7 @@ public:
   void testSetEnds();
   void testCopyProperty();
   void testSubgraph();
+  void testPushAddSubgraphsPop();
   void testDelSubgraph();
   void testTests();
   void testAddDelProps();

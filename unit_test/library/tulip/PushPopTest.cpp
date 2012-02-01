@@ -764,6 +764,16 @@ void PushPopTest::testSubgraph() {
 }
 
 //==========================================================
+void PushPopTest::testPushAddSubgraphsPop() {
+  graph->push();
+  Graph *g1, *g2;
+  g1 = graph->addSubGraph();
+  g2 = g1->addSubGraph();
+  graph->pop();
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==0);
+}
+
+//==========================================================
 void PushPopTest::testDelSubgraph() {
   Graph *g1, *g2, *g3, *g4;
   g1 = graph->addSubGraph();
