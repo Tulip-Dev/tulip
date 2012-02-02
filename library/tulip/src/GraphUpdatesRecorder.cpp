@@ -580,15 +580,20 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
       g->notifyDelSubGraph(sg);
       g->removeSubGraph(sg);
       sg->notifyDestroy();
+
       if (!undo) {
-	// restore its subgraphs as subgraph of its supergraph
-	// only if we are redoing its deletion
-	Iterator<Graph *> *itss = sg->getSubGraphs();
-	while (itss->hasNext()) {
-	  Graph* ssg = itss->next();
-	  g->restoreSubGraph(ssg);
-	} delete itss;
+        // restore its subgraphs as subgraph of its supergraph
+        // only if we are redoing its deletion
+        Iterator<Graph *> *itss = sg->getSubGraphs();
+
+        while (itss->hasNext()) {
+          Graph* ssg = itss->next();
+          g->restoreSubGraph(ssg);
+        }
+
+        delete itss;
       }
+
       ++itg;
     }
 
