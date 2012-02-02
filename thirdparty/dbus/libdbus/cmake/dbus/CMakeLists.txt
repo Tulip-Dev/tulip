@@ -259,6 +259,7 @@ add_library(dbus-1 SHARED
 			${libdbus_SOURCES}
 			${libdbus_HEADERS}
 )
+SET_TARGET_PROPERTIES(dbus-1 PROPERTIES PREFIX "")
 if(WIN32)
     if(WINCE)
         target_link_libraries(dbus-1 ws2)
