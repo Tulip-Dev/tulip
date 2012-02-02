@@ -58,6 +58,7 @@ public :
    * Method to call to start the Zoom and Pan animation
    */
   void animateZoomAndPan();
+  void setDuration(const double duration);
 
 protected slots :
 

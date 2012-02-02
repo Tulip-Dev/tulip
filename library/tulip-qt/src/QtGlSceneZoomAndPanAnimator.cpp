@@ -69,6 +69,10 @@ void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
   glWidget->removeEventFilter(&medf);
 }
 
+void QtGlSceneZoomAndPanAnimator::setDuration(const double duration) {
+  animationDurationMsec = duration;
+}
+
 void QtGlSceneZoomAndPanAnimator::zoomAndPanAnimStepSlot(int animationStep) {
   zoomAndPanAnimationStep(animationStep);
   glWidget->draw();
