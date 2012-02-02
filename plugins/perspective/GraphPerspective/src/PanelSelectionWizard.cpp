@@ -75,6 +75,7 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
     connect(item,SIGNAL(focused(bool)),this,SLOT(panelFocused(bool)));
     connect(item,SIGNAL(selected()),button(QWizard::FinishButton),SLOT(click()));
     panelsLayout->addWidget(item);
+
     if (firstItem == NULL)
       firstItem = item;
   }
@@ -122,6 +123,7 @@ void PanelSelectionWizard::clearView() {
   foreach(int id, pageIds()) {
     if (id == startId())
       continue;
+
     QWizardPage* p = page(id);
     removePage(id);
     delete p;
@@ -140,12 +142,14 @@ void PanelSelectionWizard::done(int result) {
   else if (result != QDialog::Accepted) {
     clearView();
   }
+
   QWizard::done(result);
 }
 
 void PanelSelectionWizard::panelFocused(bool f) {
   if (!f)
     return;
+
   _currentItem = static_cast<PanelSelectionItem*>(sender());
   foreach(PanelSelectionItem* i, items()) {
     if (i != _currentItem)
@@ -159,11 +163,13 @@ void PanelSelectionWizard::pageChanged(int id) {
     button(QWizard::FinishButton)->setEnabled(true);
     button(QWizard::NextButton)->setEnabled(true);
   }
+
   if (page(id) == _ui->placeHolder) {
     createView();
     bool inPlaceHolder = true;
     foreach(QWidget* w, _view->configurationWidgets()) {
       QWizardPage* p;
+
       if (inPlaceHolder) {
         p = _ui->placeHolder;
         inPlaceHolder = false;
@@ -172,6 +178,7 @@ void PanelSelectionWizard::pageChanged(int id) {
         p = new QWizardPage;
         addPage(p);
       }
+
       p->setLayout(new QVBoxLayout);
       p->layout()->addWidget(w);
     }
