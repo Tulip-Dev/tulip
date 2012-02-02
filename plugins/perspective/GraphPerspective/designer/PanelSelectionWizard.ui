@@ -164,6 +164,7 @@ border: 1px solid #C9C9C9;
     </item>
    </layout>
   </widget>
+  <widget class="QWizardPage" name="placeHolder"/>
  </widget>
  <customwidgets>
   <customwidget>

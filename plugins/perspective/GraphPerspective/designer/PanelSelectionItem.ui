@@ -19,13 +19,13 @@
   <property name="focusPolicy">
    <enum>Qt::ClickFocus</enum>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <property name="styleSheet">
    <string notr="true"/>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <property name="margin">
     <number>0</number>
    </property>
@@ -52,7 +52,7 @@ background-color:white;
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <property name="spacing">
-       <number>6</number>
+       <number>0</number>
       </property>
       <property name="margin">
        <number>4</number>
@@ -126,6 +126,12 @@ background-color:white;
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections/>
+ <slots>
+  <slot>run(bool)</slot>
+  <slot>run()</slot>
+ </slots>
 </ui>

@@ -43,10 +43,10 @@ public:
   virtual ~PanelSelectionItem();
   QString viewName() const;
 signals:
-  void selected(bool);
-  void opened();
+  void focused(bool);
+  void selected();
 public slots:
-  void setSelected(bool);
+  void setFocus(bool);
 protected:
   void mousePressEvent(QMouseEvent *);
   void mouseDoubleClickEvent(QMouseEvent *);
@@ -56,12 +56,14 @@ class PanelSelectionWizard : public QWizard {
   Q_OBJECT
 
   QWizardPage* _placeHolder;
-  PanelSelectionItem* _currentItem;
   Ui::PanelSelectionWizard* _ui;
   tlp::GraphHierarchiesModel* _model;
   tlp::View* _view;
+  PanelSelectionItem* _currentItem;
 
   void createView();
+  void clearView();
+  QList<PanelSelectionItem*> items() const;
 public:
   explicit PanelSelectionWizard(tlp::GraphHierarchiesModel* model, QWidget *parent = 0);
   virtual ~PanelSelectionWizard();
@@ -72,9 +74,8 @@ public:
   void setSelectedGraph(tlp::Graph*);
 
 protected slots:
-  void panelSelected(bool);
-  void panelOpened();
-
+  void panelFocused(bool);
+  void pageChanged(int);
 protected:
   void done(int result);
 };
