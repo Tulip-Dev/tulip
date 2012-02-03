@@ -39,6 +39,7 @@ void GraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, const std
   this->graph = graph;
   this->propertiesTypes = propertiesTypes;
   this->includeViewProperties = includeViewProperties;
+
   if(graph)
     initWidget();
 }
