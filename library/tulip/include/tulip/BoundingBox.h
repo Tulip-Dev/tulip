@@ -186,8 +186,13 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   bool intersect(const tlp::BoundingBox& boundingBox)const {
     if(!boundingBox.isValid())
       return false;
-
-    return contains(boundingBox[0]) || contains(boundingBox[1]);
+    if ((*this)[1][0] < boundingBox[0][0]) return false;
+    if (boundingBox[1][0] < (*this)[0][0]) return false;
+    if ((*this)[1][1] < boundingBox[0][1]) return false;
+    if (boundingBox[1][1] < (*this)[0][1]) return false;
+    if ((*this)[1][2] < boundingBox[0][2]) return false;
+    if (boundingBox[1][2] < (*this)[0][2]) return false;
+    return true;
   }
 
   /**
