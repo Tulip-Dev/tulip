@@ -130,7 +130,7 @@ private :
                 const Coord &startPoint, const Coord &endPoint, const LineType::RealType &bends,
                 const Color &startColor, const Color &endColor, const Coord &lookDir, bool colorInterpolate, const Color &borderColor,
                 const Size &size, int shape, bool edge3D, float lod,
-		const std::string &textureName, const float outlineWidth, bool polylines3DAreBicolored);
+                const std::string &textureName, const float outlineWidth, bool polylines3DAreBicolored);
 
   /**
    * Function used to compute bounding box for edge extremity.

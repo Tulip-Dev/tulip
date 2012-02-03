@@ -54,8 +54,8 @@ GraphAbstract::~GraphAbstract() {
     // may still have a non empty list of subgraphs
     if (sg->getSuperGraph() == this) {
       if (id == 0)
-	// indicates root destruction (see below)
-	sg->id = 0;
+        // indicates root destruction (see below)
+        sg->id = 0;
 
       delete sg;
     }

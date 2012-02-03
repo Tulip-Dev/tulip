@@ -307,7 +307,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
   //draw Edge
   drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, srcCol, tgtCol,camera->getCenter()-camera->getEyes(),data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
            data->getElementShape()->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, edgeTexture, static_cast<float>(lineWidth),
-	   data->parameters->getPolylines3DAreBicolored());
+           data->parameters->getPolylines3DAreBicolored());
   GlTextureManager::getInst().setAnimationFrame(0);
 
   if (data->parameters->getFeedbackRender()) {
@@ -360,6 +360,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 
   case L3D_BIT + POLYLINESHAPE: {
     glDisable(GL_LIGHTING);
+
     if (polylines3DAreBicolored) {
       Coord mid=tmp[0]+(tmp[1]-tmp[0])/2.;
       vector<Coord> tmp1,tmp2;
@@ -370,8 +371,10 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 
       simpleQuad(tmp1, startColor, startColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
       simpleQuad(tmp2, endColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
-    } else
+    }
+    else
       simpleQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
+
     glEnable(GL_LIGHTING);
     break;
   }

@@ -323,18 +323,26 @@ public:
       PropertyInterface *prop = itP->next();
 
       Iterator<node> *itN = prop->getNonDefaultValuatedNodes(graph);
+
       while (itN->hasNext()) {
         ++nonDefaultvaluatedElementCount;
         itN->next();
-      } delete itN;
+      }
+
+      delete itN;
 
       Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(graph);
+
       while (itE->hasNext()) {
         ++nonDefaultvaluatedElementCount;
         itE->next();
-      } delete itE;
+      }
 
-    } delete itP;
+      delete itE;
+
+    }
+
+    delete itP;
 
     itP=graph->getLocalObjectProperties();
     PropertyInterface *prop;
