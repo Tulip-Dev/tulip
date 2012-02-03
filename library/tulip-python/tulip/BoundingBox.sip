@@ -122,6 +122,35 @@ Checks whether the bounding box's lowest point is less than it's highest point.
 :rtype: boolean
 %End      
       
+      bool contains(const tlp::Vec3f& coord) const;
+%Docstring
+tlp.BoundingBox.contains(point)
+
+.. versionadded:: 3.7
+
+Checks if the given point is inside the current bounding box.
+If the bounding box is invalid the result is always :const:`False`.
+
+:param point: a point in the 3D space.
+:type point: :class:`tlp.Vec3f`
+:rtype: boolean
+%End
+
+      bool intersect(const tlp::BoundingBox &boundingBox) const;
+%Docstring
+tlp.BoundingBox.intersect(boundingBox)
+
+.. versionadded:: 3.7
+
+Checks if the given bounding box intersects the current one.
+If one of the bounding boxes is invalid returns :const:`False`.
+
+:param boundingBox: the bounding box on which to check intersection
+:type boundingBox: :class:`tlp.BoundingBox`
+:rtype: boolean
+%End
+
+
       tlp::Vec3f operator[](const unsigned int i) const;
 	
       void __setitem__(int i, const tlp::Vec3f &value);
