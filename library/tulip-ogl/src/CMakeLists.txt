@@ -15,6 +15,7 @@ SET(tulip-ogl_LIB_SRCS
  GlBox.cpp
  GlCatmullRomCurve.cpp
  GlCircle.cpp
+ GlCylinder.cpp
  GlColorScale.cpp
  GlComplexPolygon.cpp
  GlComposite.cpp

@@ -306,7 +306,8 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
   GlTextureManager::getInst().setAnimationFrame(data->getElementAnimationFrame()->getEdgeValue(e));
   //draw Edge
   drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, srcCol, tgtCol,camera->getCenter()-camera->getEyes(),data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
-           data->getElementShape()->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, edgeTexture, static_cast<float>(lineWidth));
+           data->getElementShape()->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, edgeTexture, static_cast<float>(lineWidth),
+	   data->parameters->getPolylines3DAreBicolored());
   GlTextureManager::getInst().setAnimationFrame(0);
 
   if (data->parameters->getFeedbackRender()) {
@@ -321,7 +322,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Coord &startPoint,
                       const Coord &endPoint, const LineType::RealType &bends, const Color &startColor,
                       const Color &endColor, const Coord &lookDir, bool colorInterpolate, const Color &borderColor,
-                      const Size &size, int shape, bool edge3D, float lod,const string &textureName, const float outlineWidth) {
+                      const Size &size, int shape, bool edge3D, float lod,const string &textureName, const float outlineWidth, bool polylines3DAreBicolored) {
 
   glDisable(GL_CULL_FACE);
   glDepthFunc(GL_LEQUAL);
@@ -359,7 +360,18 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 
   case L3D_BIT + POLYLINESHAPE: {
     glDisable(GL_LIGHTING);
-    simpleQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
+    if (polylines3DAreBicolored) {
+      Coord mid=tmp[0]+(tmp[1]-tmp[0])/2.;
+      vector<Coord> tmp1,tmp2;
+      tmp1.push_back(tmp[0]);
+      tmp1.push_back(mid);
+      tmp2.push_back(mid);
+      tmp2.push_back(tmp[1]);
+
+      simpleQuad(tmp1, startColor, startColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
+      simpleQuad(tmp2, endColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
+    } else
+      simpleQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
     glEnable(GL_LIGHTING);
     break;
   }

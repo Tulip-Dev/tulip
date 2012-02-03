@@ -6,7 +6,8 @@ INSTALL(FILES
 	tulip/GlEntity.h 
 	tulip/GlGraphRenderingParameters.h
 	tulip/GlGraphStaticData.h 
-	tulip/GlCircle.h 
+	tulip/GlCircle.h
+	tulip/GlCylinder.h
 	tulip/GlLabel.h 
 	tulip/GlRect.h 
 	tulip/GlRectTextured.h 

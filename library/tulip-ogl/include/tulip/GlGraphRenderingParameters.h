@@ -381,6 +381,18 @@ public:
   void setLabelsAreBillboarded(bool billboarded) {
     _labelsAreBillboarded=billboarded;
   }
+  /**
+   * return if polylines are bicolored
+   */
+  bool getPolylines3DAreBicolored() {
+    return _polylines3DAreBicolored;
+  }
+  /**
+   * Set if polylines are bicolored
+   */
+  void setPolylines3DAreBicolored(bool bicolored) {
+    _polylines3DAreBicolored=bicolored;
+  }
 
   /**
    * This property is use to filter nodes/edges display, for a node/edge if this property is false : the node/edge will not be diplayed
@@ -428,6 +440,7 @@ private:
   int _labelMaxSize;
   int _labelsDensity;
   bool _labelsAreBillboarded;
+  bool _polylines3DAreBicolored;
   std::string _fontsPath;
   std::string _texturePath;
   bool _edgesMaxSizeToNodesSize;

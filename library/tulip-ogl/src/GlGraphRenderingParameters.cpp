@@ -56,6 +56,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _labelMaxSize(30),
   _labelsDensity(100),
   _labelsAreBillboarded(false),
+  _polylines3DAreBicolored(false),
   _fontsPath(tlp::TulipBitmapDir),
   _texturePath(""),
   _edgesMaxSizeToNodesSize(true),
@@ -99,6 +100,7 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("selectionColor",_selectionColor);
   data.set("labelsDensity", _labelsDensity);
   data.set("labelsAreBillboarded", _labelsAreBillboarded);
+  data.set("polylines3DAreBicolored", _polylines3DAreBicolored);
   //data.set("SupergraphId", _graph->getId());
   return data;
 }
@@ -161,6 +163,9 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
 
   if (data.get<bool>("labelsAreBillboarded", b))
     setLabelsAreBillboarded(b);
+
+  if (data.get<bool>("polylines3DAreBicolored", b))
+    setPolylines3DAreBicolored(b);
 
   unsigned int ui = 0;
 
