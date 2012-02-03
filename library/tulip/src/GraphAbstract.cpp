@@ -49,11 +49,16 @@ GraphAbstract::~GraphAbstract() {
   while(itS.hasNext()) {
     Graph* sg = itS.next();
 
-    if (id == 0)
-      // indicates root destruction (see below)
-      sg->id = 0;
+    // avoid double free
+    // in a push context, a 'deleted' graph (see delSubGraph)
+    // may still have a non empty list of subgraphs
+    if (sg->getSuperGraph() == this) {
+      if (id == 0)
+	// indicates root destruction (see below)
+	sg->id = 0;
 
-    delete sg;
+      delete sg;
+    }
   }
 
   delete propertyContainer;

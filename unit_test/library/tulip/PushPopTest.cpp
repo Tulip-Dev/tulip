@@ -769,8 +769,20 @@ void PushPopTest::testPushAddSubgraphsPop() {
   Graph *g1, *g2;
   g1 = graph->addSubGraph();
   g2 = g1->addSubGraph();
+  CPPUNIT_ASSERT(g2->getSuperGraph()==g1);
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
   graph->pop();
   CPPUNIT_ASSERT(graph->numberOfSubGraphs()==0);
+  graph->unpop();
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
+  graph->delSubGraph(g1);
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
+  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+  graph->pop();
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==0);
+  graph->unpop();
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
+  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
 }
 
 //==========================================================

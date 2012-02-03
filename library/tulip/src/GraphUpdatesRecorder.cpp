@@ -1141,6 +1141,12 @@ void GraphUpdatesRecorder::delSubGraph(Graph* g, Graph* sg) {
   if (it != addedSubGraphs.end() &&
       ((*it).second.find(sg) != (*it).second.end())) {
     (*it).second.erase(sg);
+    // but set its subgraphs as added in its supergraph
+    Iterator<Graph *> *itss = sg->getSubGraphs();
+    while (itss->hasNext()) {
+      Graph* ssg = itss->next();
+      addSubGraph(g, ssg);
+    } delete itss;
     return;
   }
 
