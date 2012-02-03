@@ -309,6 +309,21 @@ Returns the descendant graph with the corresponding id or :const:`None` if there
 %End
 
 //===========================================================================================
+
+    tlp::Graph* getDescendantGraph(const std::string &name) const;
+%Docstring
+tlp.Graph.getDescendantGraph(name)
+
+.. versionadded:: 3.7
+
+Returns the descendant with the corresponding name or :const:`None` if there is no descendant with that name.
+
+:param name: the name of the descendant to return
+:type name: string
+:rtype: :class:`tlp.Graph` or :const:`None`
+%End
+
+//===========================================================================================
 	
 	tlp::Graph *getNthSubGraph(unsigned int n) const;
 %Docstring
