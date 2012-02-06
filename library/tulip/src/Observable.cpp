@@ -214,7 +214,7 @@ Event::~Event() {
 }
 //----------------------------------
 Observable* Event::sender() const {
-  return dynamic_cast<Observable*>(OLOObject::getObject(_sender)); /** only Observable can be use to create event */
+  return static_cast<Observable*>(OLOObject::getObject(_sender));
 }
 //=================================
 // define a class for an empty Iterator of Observable *
