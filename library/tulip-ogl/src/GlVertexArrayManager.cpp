@@ -733,7 +733,7 @@ void GlVertexArrayManager::beforeSetAllNodeValue(PropertyInterface *property) {
 }
 
 void GlVertexArrayManager::beforeSetAllEdgeValue(PropertyInterface *property) {
-  if (inputData->getElementLayout()==property) {
+  if (inputData->getElementLayout()==property || inputData->getElementShape()==property) {
     edgesModified = true;
   }
 
@@ -745,7 +745,7 @@ void GlVertexArrayManager::beforeSetNodeValue(PropertyInterface *property, const
 }
 
 void GlVertexArrayManager::beforeSetEdgeValue(PropertyInterface *property, const edge) {
-  if (inputData->getElementLayout()==property) {
+    if (inputData->getElementLayout()==property || inputData->getElementShape()==property) {
     edgesModified = true;
   }
 
