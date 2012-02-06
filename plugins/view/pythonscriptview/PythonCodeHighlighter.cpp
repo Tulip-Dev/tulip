@@ -62,9 +62,11 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   if (PythonInterpreter::getInstance()->runString("import __builtin__")) {
     std::vector<std::string> builtinDictContent = PythonInterpreter::getInstance()->getObjectDictEntries("__builtin__");
     QStringList builtinPatterns;
+
     for (size_t i = 0 ; i < builtinDictContent.size() ; ++i) {
-        builtinPatterns << "\\b" + QString(builtinDictContent[i].c_str()) + "\\b";
+      builtinPatterns << "\\b" + QString(builtinDictContent[i].c_str()) + "\\b";
     }
+
     QTextCharFormat builtinFormat;
     builtinFormat.setForeground(QColor(0,87,187));
     foreach (const QString &pattern, builtinPatterns) {

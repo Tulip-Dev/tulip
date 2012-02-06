@@ -58,14 +58,14 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
     QListWidget::keyPressEvent(e);
   }
   else if (e->key() == Qt::Key_Left) {
-      if (horizontalScrollBar()) {
-          horizontalScrollBar()->setSliderPosition(horizontalScrollBar()->sliderPosition()-2);
-      }
+    if (horizontalScrollBar()) {
+      horizontalScrollBar()->setSliderPosition(horizontalScrollBar()->sliderPosition()-2);
+    }
   }
   else if (e->key() == Qt::Key_Right) {
-      if (horizontalScrollBar()) {
-          horizontalScrollBar()->setSliderPosition(horizontalScrollBar()->sliderPosition()+2);
-      }
+    if (horizontalScrollBar()) {
+      horizontalScrollBar()->setSliderPosition(horizontalScrollBar()->sliderPosition()+2);
+    }
   }
   else if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
     e->accept();
@@ -94,9 +94,11 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
 
       QString textToInsert = currentItem()->text();
       int pos = textToInsert.indexOf("\" (");
+
       if (pos != -1) {
-          textToInsert = textToInsert.mid(0, pos+1);
+        textToInsert = textToInsert.mid(0, pos+1);
       }
+
       cursor.insertText(textToInsert);
     }
   }

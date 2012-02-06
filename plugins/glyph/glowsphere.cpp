@@ -50,10 +50,10 @@ public:
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
   virtual void draw(edge e, node n, const Color& glyphColor,
-		    const Color &borderColor, float lod);
+                    const Color &borderColor, float lod);
 protected:
   inline void drawGlyph(const Color& glyphColor, const Size& glyphSize,
-			const string& texture,
+                        const string& texture,
                         const string& texturePath);
   void drawSphere();
   void drawGlowRing();
@@ -84,12 +84,12 @@ void GlowSphere::drawGlowRing() {
   gluQuadricTexture(quadratic, GL_TRUE);
   gluDisk(quadratic, 0.5f, 0.9f, 30, 30);
   gluDeleteQuadric(quadratic);
-}  
+}
 //=====================================================
 void GlowSphere::drawGlyph(const Color& glyphColor,
-			   const Size& glyphSize,
-			   const string& texture,
-			   const string& texturePath) {
+                           const Size& glyphSize,
+                           const string& texture,
+                           const string& texturePath) {
   // add sphere display list
   if (GlDisplayListManager::getInst().beginNewDisplayList("glow_sphere")) {
     drawSphere();
@@ -101,11 +101,13 @@ void GlowSphere::drawGlyph(const Color& glyphColor,
     drawGlowRing();
     GlDisplayListManager::getInst().endNewDisplayList();
   }
-  
+
   OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+
   if (texture != "") {
     GlTextureManager::getInst().activateTexture(texturePath + texture);
   }
+
   tlp::setMaterial(glyphColor);
   GlDisplayListManager::getInst().callDisplayList("glow_sphere");
   // draw a glow ring around
@@ -137,16 +139,16 @@ void GlowSphere::drawGlyph(const Color& glyphColor,
 
 void GlowSphere::draw(node n, float /* lod */) {
   drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
-	    glGraphInputData->getElementSize()->getNodeValue(n),
+            glGraphInputData->getElementSize()->getNodeValue(n),
             glGraphInputData->getElementTexture()->getNodeValue(n),
             glGraphInputData->parameters->getTexturePath());
 }
 
 void GlowSphere::draw(edge e, node n, const Color& glyphColor,
-		      const Color &/* borderColor*/, float /* lod */) {
+                      const Color &/* borderColor*/, float /* lod */) {
   glDisable(GL_LIGHTING);
   drawGlyph(glyphColor,
-	    edgeExtGlGraphInputData->getElementSize()->getNodeValue(n),
+            edgeExtGlGraphInputData->getElementSize()->getNodeValue(n),
             edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
             edgeExtGlGraphInputData->parameters->getTexturePath());
 }
