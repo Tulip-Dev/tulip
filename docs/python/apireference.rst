@@ -465,10 +465,10 @@ Graph properties classes
 	          
 .. autoclass:: tulip::tlp.LayoutProperty
 	:members: angularResolutions, averageAngularResolution, averageAngularResolution,
-			  center, computeEmbedding, computeEmbedding, crossingNumber,
-			  edgeLength, getMin, getMax, normalize, perfectAspectRatio, 
-			  rotateX, rotateY, rotateZ, rotateZ, scale, scale, translate, translate,      
-			  getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          averageEdgeLength, center, center, computeEmbedding, computeEmbedding, crossingNumber,
+		  edgeLength, getMin, getMax, normalize, perfectAspectRatio, 
+		  rotateX, rotateX, rotateY, rotateY, rotateZ, rotateZ, scale, scale, translate, translate,      
+		  getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
 	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue 
 
 .. autoclass:: tulip::tlp.SizeProperty
