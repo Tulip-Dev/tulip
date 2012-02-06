@@ -391,9 +391,28 @@ Tulip datatypes
 	:undoc-members:
 
 .. autoclass:: tulip::tlp.BoundingBox
-	:members:
-	:undoc-members:
-	
+
+        .. automethod:: tulip::tlp.BoundingBox.center
+
+        .. automethod:: tulip::tlp.BoundingBox.contains
+
+        .. automethod:: tulip::tlp.BoundingBox.depth
+
+        .. automethod:: tulip::tlp.BoundingBox.expand
+
+        .. automethod:: tulip::tlp.BoundingBox.height
+
+        .. automethod:: tulip::tlp.BoundingBox.intersect
+
+        .. automethod:: tulip::tlp.BoundingBox.intersect
+
+        .. automethod:: tulip::tlp.BoundingBox.isValid
+
+        .. automethod:: tulip::tlp.BoundingBox.translate
+
+        .. automethod:: tulip::tlp.BoundingBox.width
+
+
 .. autoclass:: tulip::tlp.Size
 	:members:
 	:undoc-members:
