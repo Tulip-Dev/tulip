@@ -572,8 +572,19 @@ void MainController::clearObservers() {
 
   Graph *curGraph = graph;
 
+  vector<View *> views;
+  ControllerViewsManager::getViews(views);
+
   while (curGraph != curGraph->getRoot()) {
-    curGraph->removeGraphObserver(this);
+    bool canRemoveObserver = true;
+    for (size_t i = 0 ; i < views.size() ; ++i) {
+        if (views[i] != getCurrentView() && curGraph->isDescendantGraph(views[i]->getGraph())) {
+            canRemoveObserver = false;
+            break;
+        }
+    }
+    if (canRemoveObserver)
+        curGraph->removeGraphObserver(this);
     curGraph = curGraph->getSuperGraph();
   }
 
@@ -1121,9 +1132,9 @@ bool MainController::changeGraph(Graph *graph) {
   if(!getCurrentView())
     return false;
 
-  clearObservers();
-
   unsigned int holdCount=Observable::observersHoldCounter();
+
+  clearObservers();
 
   ControllerViewsManager::changeGraph(graph);
 
