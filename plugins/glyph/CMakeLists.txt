@@ -110,6 +110,12 @@ ADD_LIBRARY(Cross-${TulipVersion} SHARED ${Cross_SRCS})
 TARGET_LINK_LIBRARIES(Cross-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(Cross-${TulipVersion} ${LibTulipOglName})
 
+##----------------------------------------------------------------------------------------------------------------------------
+SET(GlowSphere_SRCS glowsphere.cpp)
+ADD_LIBRARY(GlowSphere-${TulipVersion} SHARED ${GlowSphere_SRCS})
+TARGET_LINK_LIBRARIES(GlowSphere-${TulipVersion} ${LibTulipName})
+TARGET_LINK_LIBRARIES(GlowSphere-${TulipVersion} ${LibTulipOglName})
+
 INSTALL(TARGETS 
 	Circle-${TulipVersion}
 	Hexagone-${TulipVersion}
@@ -129,5 +135,10 @@ INSTALL(TARGETS
 	RoundedBox-${TulipVersion}
 	Diamond-${TulipVersion}
 	Cross-${TulipVersion}
+	GlowSphere-${TulipVersion}
   DESTINATION ${TulipPluginsInstallDir}/glyphs/
+  COMPONENT tulip_plugins)
+INSTALL(FILES
+  radialGradientTexture.png
+  DESTINATION ${TulipBitmapInstallDir}
   COMPONENT tulip_plugins)
