@@ -150,6 +150,21 @@ If one of the bounding boxes is invalid returns :const:`False`.
 :rtype: boolean
 %End
 
+      bool intersect(const tlp::Vec3f &segStart, const tlp::Vec3f &segEnd) const;
+%Docstring
+tlp.BoundingBox.intersect(segStart, segEnd)
+
+.. versionadded:: 3.7
+
+Checks if the bounding box intersects the given line segment.
+If the bounding box is invalid the result is always :const:`False`.
+
+:param segStart: the start point of the line segment on which to check intersection
+:type segStart: :class:`tlp.Vec3f`
+:param segEnd: the end point of the line segment on which to check intersection
+:type segEnd: :class:`tlp.Vec3f`
+:rtype: boolean
+%End
 
       tlp::Vec3f operator[](const unsigned int i) const;
 	
