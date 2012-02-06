@@ -47,6 +47,7 @@ public :
 private :
 
   QSet<QString> getGraphPropertiesListIfContext(const QString &context, const QString &editedFunction) const ;
+  QSet<QString> getPluginParametersListIfContext(const QString &context, const QString &editedFunction) const;
 
   QString getTypeNameForVar(const QString &varName);
   QString getTypeNameForExpr(const QString &varName);
@@ -56,6 +57,7 @@ private :
   QSet<QString> globalAutoCompletionList;
   QHash<QString, QSet<QString> > functionAutoCompletionList;
   QHash<QString, QHash<QString, QString> > varToType;
+  QHash<QString, QHash<QString, QString> > pluginParametersDataSet;
   QHash<QString, QString> iteratorType;
 
 };

@@ -17,9 +17,12 @@
  *
  */
 
+#include "PythonCodeHighlighter.h"
+#include "PythonInterpreter.h"
+
 #include <QtGui/QTextDocument>
 
-#include "PythonCodeHighlighter.h"
+
 
 PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   : QSyntaxHighlighter(parent), shellMode(false) {
@@ -48,11 +51,28 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
                   << "\\bfor\\b" << "\\bwhile\\b" << "\\bif\\b" << "\\belif\\b"
                   << "\\bimport\\b" << "\\bTrue\\b" << "\\bFalse\\b" << "\\bpass\\b"
                   << "\\belse\\b" << "\\bNone\\b" << "\\bprint\\b" << "\\bglobal\\b"
-                  << "\\breturn\\b" << "\\bbreak\\b" << "\\bcontinue\\b" << "\\bas\\b";
+                  << "\\breturn\\b" << "\\bbreak\\b" << "\\bcontinue\\b" << "\\bas\\b"
+                  << "\\blambda\\b" << "\\bdel\\b";
 
   QStringList specialCharsPatterns;
-  specialCharsPatterns << "\\+" << "-" << "=" << "\\(" << "\\)" << "\\[" << "\\]" << "," << "!"
+  specialCharsPatterns << "\\+" << "-" << "=" << "\\(" << "\\)" << "\\[" << "\\]" << "," << "!" << "\\*" << "/"
                        << "\\{" << "\\}" << ":" << "\\." << ">" << "<" << "%" << "&" << "\\^" << "\\|";
+
+
+  if (PythonInterpreter::getInstance()->runString("import __builtin__")) {
+    std::vector<std::string> builtinDictContent = PythonInterpreter::getInstance()->getObjectDictEntries("__builtin__");
+    QStringList builtinPatterns;
+    for (size_t i = 0 ; i < builtinDictContent.size() ; ++i) {
+        builtinPatterns << "\\b" + QString(builtinDictContent[i].c_str()) + "\\b";
+    }
+    QTextCharFormat builtinFormat;
+    builtinFormat.setForeground(QColor(0,87,187));
+    foreach (const QString &pattern, builtinPatterns) {
+      rule.pattern = QRegExp(pattern);
+      rule.format = builtinFormat;
+      highlightingRules.append(rule);
+    }
+  }
 
   foreach (const QString &pattern, keywordPatterns) {
     rule.pattern = QRegExp(pattern);

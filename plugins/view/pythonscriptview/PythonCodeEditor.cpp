@@ -25,6 +25,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QMainWindow>
 #include <QtGui/QToolTip>
+#include <QtGui/QScrollBar>
 
 #include <iostream>
 
@@ -52,10 +53,19 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
     close();
   }
   else if (e->key() == Qt::Key_Down || e->key() == Qt::Key_Up ||
-           e->key() == Qt::Key_Left || e->key() == Qt::Key_Right ||
            e->key() == Qt::Key_Home || e->key() == Qt::Key_End ||
            e->key() == Qt::Key_PageUp || e->key() == Qt::Key_PageDown) {
     QListWidget::keyPressEvent(e);
+  }
+  else if (e->key() == Qt::Key_Left) {
+      if (horizontalScrollBar()) {
+          horizontalScrollBar()->setSliderPosition(horizontalScrollBar()->sliderPosition()-2);
+      }
+  }
+  else if (e->key() == Qt::Key_Right) {
+      if (horizontalScrollBar()) {
+          horizontalScrollBar()->setSliderPosition(horizontalScrollBar()->sliderPosition()+2);
+      }
   }
   else if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
     e->accept();
@@ -82,7 +92,12 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
         cursor.removeSelectedText();
       }
 
-      cursor.insertText(currentItem()->text());
+      QString textToInsert = currentItem()->text();
+      int pos = textToInsert.indexOf("\" (");
+      if (pos != -1) {
+          textToInsert = textToInsert.mid(0, pos+1);
+      }
+      cursor.insertText(textToInsert);
     }
   }
   else {
