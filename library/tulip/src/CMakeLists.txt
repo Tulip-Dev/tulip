@@ -3,6 +3,7 @@ Bfs.cpp
 BiconnectedTest.cpp
 BooleanAlgorithm.cpp
 BooleanProperty.cpp
+BoundingBox.cpp
 CMakeLists.txt
 ColorAlgorithm.cpp
 Color.cpp
