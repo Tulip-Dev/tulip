@@ -233,7 +233,9 @@ MainController::~MainController() {
     delete eltProperties;
     delete tabWidgetDock;
     delete configWidgetDock;
-    delete currentGraph;
+    // currentGraph must be deleted after the views
+    // see ~ControllerViewManager
+    // delete currentGraph;
   }
 
   delete morph;
