@@ -137,6 +137,9 @@ public :
   void uncommentSelectedCode();
 
 
+  void indentSelectedCode();
+  void unindentSelectedCode();
+
   void setAutoIndentation(const bool autoIndent) {
     this->autoIndent = autoIndent;
   }
@@ -175,6 +178,14 @@ public :
 
   bool commentShortcutsActivated() const {
     return commentShortcutsActivate;
+  }
+
+  void setIndentShortcutsActivated(const bool activateIndentShortcuts) {
+      indentShortcutsActivate = activateIndentShortcuts;
+  }
+
+  bool indentShortcutsActivated() const {
+      return indentShortcutsActivate;
   }
 
   void setGraph(tlp::Graph *graph);
@@ -236,6 +247,7 @@ protected:
   bool tooltipActive;
   bool findReplaceActivate;
   bool commentShortcutsActivate;
+  bool indentShortcutsActivate;
 
   QPoint toolTipPos;
   QString toolTipText;

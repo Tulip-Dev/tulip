@@ -92,6 +92,8 @@ std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph) {
   oss << "# Some useful keyboards shortcuts : " << endl;
   oss << "#   * Ctrl + D : comment selected lines." << endl;
   oss << "#   * Ctrl + Shift + D  : uncomment selected lines." << endl;
+  oss << "#   * Ctrl + I : indent selected lines." << endl;
+  oss << "#   * Ctrl + Shift + I  : unindent selected lines." << endl;
   oss << "#   * Ctrl + Return  : run script." << endl;
   oss << "#   * Ctrl + F  : find selected text." << endl;
   oss << "#   * Ctrl + R  : replace selected text." << endl;

@@ -333,6 +333,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
   setHighlightEditedLine(true);
   setFindReplaceActivated(true);
   setCommentShortcutsActivated(true);
+  setIndentShortcutsActivated(true);
   setWordWrapMode(QTextOption::NoWrap);
   QTextCharFormat format = currentCharFormat();
 #ifdef WIN32
@@ -806,6 +807,12 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
   else if (commentShortcutsActivated() &&  e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && e->key() == Qt::Key_D) {
     uncommentSelectedCode();
   }
+  else if (indentShortcutsActivated() && e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_I) {
+    indentSelectedCode();
+  }
+  else if (indentShortcutsActivated() &&  e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && e->key() == Qt::Key_I) {
+    unindentSelectedCode();
+  }
   else if (findReplaceActivated() && e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_F) {
     QString selection = textCursor().selectedText();
 
@@ -1191,6 +1198,43 @@ void PythonCodeEditor::uncommentSelectedCode() {
 
       if (selectedText() == "#") {
         removeSelectedText();
+      }
+    }
+
+    setSelection(lineFrom, 0, lineTo, lineLength(lineTo));
+  }
+}
+
+void PythonCodeEditor::indentSelectedCode() {
+  if (hasSelectedText()) {
+    int lineFrom = 0;
+    int indexFrom = 0;
+    int lineTo = 0;
+    int indexTo = 0;
+    getSelection(lineFrom, indexFrom, lineTo, indexTo);
+
+    for (int i = lineFrom ; i <= lineTo ; ++i) {
+      insertAt("\t", i, 0);
+    }
+
+    setSelection(lineFrom, 0, lineTo, lineLength(lineTo));
+  }
+}
+void PythonCodeEditor::unindentSelectedCode() {
+  if (hasSelectedText()) {
+    int lineFrom = 0;
+    int indexFrom = 0;
+    int lineTo = 0;
+    int indexTo = 0;
+    getSelection(lineFrom, indexFrom, lineTo, indexTo);
+
+    for (int i = lineFrom ; i <= lineTo ; ++i) {
+      setSelection(i, 0, i, 1);
+
+      if (selectedText() == "\t") {
+        removeSelectedText();
+      } else {
+          break;
       }
     }
 
