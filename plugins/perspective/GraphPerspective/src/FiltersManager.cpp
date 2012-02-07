@@ -26,8 +26,9 @@ FiltersManager::FiltersManager(QWidget *parent): QWidget(parent), _ui(new Ui::Fi
   _ui->filtersListContents->setLayout(new QVBoxLayout);
   _ui->filtersListContents->layout()->setMargin(0);
   _ui->filtersListContents->layout()->setAlignment(Qt::AlignTop);
-  for (int i=0;i<30;++i)
-  _ui->filtersListContents->layout()->addWidget(new FiltersManagerItem());
+
+  for (int i=0; i<30; ++i)
+    _ui->filtersListContents->layout()->addWidget(new FiltersManagerItem());
 
 }
 
