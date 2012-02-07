@@ -56,6 +56,7 @@ private:
   QTextCharFormat quotationFormat;
   QTextCharFormat functionFormat;
   QTextCharFormat numberFormat;
+  QTextCharFormat tlpApiFormat;
 
   bool shellMode;
 

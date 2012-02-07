@@ -30,17 +30,22 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   HighlightingRule rule;
 
   commentFormat.setForeground(Qt::darkGreen);
-
   functionFormat.setFontWeight(QFont::Bold);
   functionFormat.setForeground(Qt::darkCyan);
+  tlpApiFormat.setForeground(QColor(128,128,0));
+  classFormat.setFontWeight(QFont::Bold);
+  classFormat.setForeground(Qt::blue);
+
   rule.pattern = QRegExp("def [A-Za-z0-9_]+(?=\\()");
   rule.format = functionFormat;
   highlightingRules.append(rule);
 
-  classFormat.setFontWeight(QFont::Bold);
-  classFormat.setForeground(Qt::blue);
   rule.pattern = QRegExp("class [A-Za-z]+");
   rule.format = classFormat;
+  highlightingRules.append(rule);
+
+  rule.pattern = QRegExp("tlp\\.[A-Za-z0-9_]+(?=\\()");
+  rule.format = tlpApiFormat;
   highlightingRules.append(rule);
 
   keywordFormat.setForeground(Qt::darkBlue);
