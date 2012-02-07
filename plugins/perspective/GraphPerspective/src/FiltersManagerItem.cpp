@@ -71,12 +71,14 @@ void FiltersManagerItem::setMode(Mode m) {
   _ui->dataBox->setEnabled(m != Invalid);
 
   QWidget* w = NULL;
+
   if (m == Compare)
     w = new FiltersManagerCompareItem;
   else if (m == Invert)
     w = new FiltersManagerInvertItem;
   else if (m == Algorithm)
     w = new FiltersManagerAlgorithmItem;
+
   _ui->dataBox->setWidget(w);
 }
 
