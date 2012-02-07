@@ -595,10 +595,11 @@ void PythonScriptView::executeCurrentScript() {
     viewWidget->scriptStatusLabel->setText("Executing script ...");
     viewWidget->progressBar->setRange(0,0);
 
-
     viewWidget->runScriptButton->setEnabled(false);
     viewWidget->stopScriptButton->setEnabled(true);
     viewWidget->pauseScriptButton->setEnabled(true);
+
+    QApplication::processEvents();
 
     bool scriptExecOk = pythonInterpreter->runGraphScript("__main__", "main", graph);
 
@@ -610,10 +611,6 @@ void PythonScriptView::executeCurrentScript() {
     if (scriptExecOk) {
       viewWidget->scriptStatusLabel->setText("Script execution has succeed");
       pythonInterpreter->runString("del main");
-
-      if (clusterTreeWidget)
-        clusterTreeWidget->update();
-
     }
     else {
 
@@ -625,6 +622,9 @@ void PythonScriptView::executeCurrentScript() {
 
       graph->pop();
     }
+
+    if (clusterTreeWidget)
+      clusterTreeWidget->update();
 
     viewWidget->progressBar->setRange(0,100);
     viewWidget->progressBar->reset();

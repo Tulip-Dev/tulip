@@ -21,6 +21,8 @@
 #define CONSOLEOUTPUTHANDLER_H_
 
 #include <QtGui/QPlainTextEdit>
+#include <QtGui/QApplication>
+
 
 #include <iostream>
 
@@ -53,6 +55,7 @@ public slots :
     consoleWidget->moveCursor(QTextCursor::End);
     QTextCursor cursor = consoleWidget->textCursor();
     cursor.insertText(output, formt);
+    QApplication::processEvents();
   }
 
 };
