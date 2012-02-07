@@ -72,27 +72,6 @@
   border-bottom: 0px;
 }
 
-ExpandableGroupBox {
-  background-color: &quot;#FDFDFD&quot;;
-  border: 1px solid &quot;#E9E9E9&quot;;
-  margin-top: 1.5ex;
-  font: bold;
-}
-
-ExpandableGroupBox::title {
-  subcontrol-origin: margin;
-  subcontrol-position: top left;
-  padding: 0 3px;
-}
-
-ExpandableGroupBox::indicator:unchecked {
-  image: url(:/tulip/gui/ui/right_arrow-black.png);
-}
-
-ExpandableGroupBox::indicator:checked {
-  image: url(:/tulip/gui/ui/down_arrow-black.png);
-}
-
 QToolButton, QComboBox {
     border-image: url(:/tulip/gui/ui/btn_26.png) 4;
     border-width: 4;

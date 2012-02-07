@@ -71,7 +71,7 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
 
   // Setting initial sizes for splitters
   _ui->workspaceSplitter->setSizes(QList<int>() << 200 << 1000);
-  _ui->docksSplitter->setSizes(QList<int>() << 500 << 800);
+//  _ui->docksSplitter->setSizes(QList<int>() << 500 << 800);
 
   _mainWindow->show();
   // Open project with model
@@ -85,9 +85,6 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
   }
-
-  //FIXME: alpha release code
-  _ui->filtersManager->hide();
 }
 
 void GraphPerspective::refreshDockExpandControls() {

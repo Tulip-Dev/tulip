@@ -54,5 +54,8 @@
         <file>ui/split3_screen.png</file>
         <file>ui/inherited_properties.png</file>
         <file>ui/clearbutton.png</file>
+        <file>icons/16/list-del.png</file>
+        <file>icons/16/go-down.png</file>
+        <file>icons/16/go-up.png</file>
     </qresource>
 </RCC>

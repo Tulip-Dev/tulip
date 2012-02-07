@@ -234,6 +234,7 @@ void AlgorithmRunner::staticInit() {
     FACADES_UI_NAMES[trUtf8("Labeling algorithms")] = new PropertyPluginFacade<tlp::StringAlgorithm,tlp::StringProperty>("viewLabel");
     FACADES_UI_NAMES[trUtf8("Layout algorithms")] = new PropertyPluginFacade<tlp::LayoutAlgorithm,tlp::LayoutProperty>("viewLayout");
     FACADES_UI_NAMES[trUtf8("Resizing algorithms")] = new PropertyPluginFacade<tlp::SizeAlgorithm,tlp::SizeProperty>("viewSize");
+    FACADES_UI_NAMES[trUtf8("Filtering algorithms")] = new PropertyPluginFacade<tlp::BooleanAlgorithm,tlp::BooleanProperty>("viewSelection");
     FACADES_UI_NAMES[trUtf8("General algorithms")] = new GeneralPluginFacade();
   }
 }
@@ -309,7 +310,7 @@ void AlgorithmRunner::buildListWidget() {
       }
       else {
         groupLayout->setContentsMargins(0,15,0,6);
-        ExpandableGroupBox *groupBox = new ExpandableGroupBox(group);
+        ExpandableGroupBox *groupBox = new ExpandableGroupBox(NULL,group);
         groupBox->setObjectName(group);
         groupBox->setWidget(groupWidget);
         layout->addWidget(groupBox);

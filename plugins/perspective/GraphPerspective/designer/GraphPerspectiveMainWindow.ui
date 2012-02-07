@@ -127,6 +127,34 @@ border-image: none;
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
 stop:0 rgb(105,105,105),
 stop:1 rgb(90, 90, 90));
+}
+
+ExpandableGroupBox {
+background-color: &quot;#FDFDFD&quot;;
+border: 1px solid &quot;#E9E9E9&quot;;
+font: bold;
+}
+
+ExpandableGroupBox[ expanded = &quot;true&quot; ] {
+margin-top: 1.5ex;
+}
+
+ExpandableGroupBox[ expanded = &quot;false&quot; ] {
+margin-top: 0ex;
+}
+
+ExpandableGroupBox::title {
+subcontrol-origin: margin;
+subcontrol-position: top left;
+padding: 0 3px;
+}
+
+ExpandableGroupBox::indicator:unchecked {
+image: url(:/tulip/gui/ui/right_arrow-black.png);
+}
+
+ExpandableGroupBox::indicator:checked {
+image: url(:/tulip/gui/ui/down_arrow-black.png);
 }</string>
   </property>
   <property name="dockNestingEnabled">
@@ -533,9 +561,6 @@ QToolButton:pressed {
                  <property name="handleWidth">
                   <number>1</number>
                  </property>
-                 <property name="childrenCollapsible">
-                  <bool>false</bool>
-                 </property>
                  <widget class="AlgorithmRunner" name="algorithmRunner" native="true">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -544,7 +569,7 @@ QToolButton:pressed {
                    </sizepolicy>
                   </property>
                  </widget>
-                 <widget class="GraphHierarchiesEditor" name="graphHierarchiesEditor" native="true">
+                 <widget class="FiltersManager" name="filtersManager" native="true">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                     <horstretch>0</horstretch>
@@ -552,7 +577,7 @@ QToolButton:pressed {
                    </sizepolicy>
                   </property>
                  </widget>
-                 <widget class="FiltersManager" name="filtersManager" native="true">
+                 <widget class="GraphHierarchiesEditor" name="graphHierarchiesEditor" native="true">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                     <horstretch>0</horstretch>
@@ -895,15 +920,15 @@ QToolButton:pressed {
  </widget>
  <customwidgets>
   <customwidget>
-   <class>GraphHierarchiesEditor</class>
-   <extends>QWidget</extends>
-   <header>GraphHierarchiesEditor.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>HeaderFrame</class>
    <extends>QWidget</extends>
    <header>HeaderFrame.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GraphHierarchiesEditor</class>
+   <extends>QWidget</extends>
+   <header>GraphHierarchiesEditor.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

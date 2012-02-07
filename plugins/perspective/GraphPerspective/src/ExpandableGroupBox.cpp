@@ -22,7 +22,7 @@
 
 #include <QtCore/QDebug>
 
-ExpandableGroupBox::ExpandableGroupBox(const QString &title,QWidget *parent): QGroupBox(title,parent), _expanded(true), _widget(0) {
+ExpandableGroupBox::ExpandableGroupBox(QWidget *parent, const QString &title): QGroupBox(title,parent), _expanded(true), _widget(0) {
   setCheckable(true);
   setChecked(true);
   setExpanded(_expanded);
@@ -30,6 +30,7 @@ ExpandableGroupBox::ExpandableGroupBox(const QString &title,QWidget *parent): QG
 
   QVBoxLayout *lyt = new QVBoxLayout;
   lyt->setContentsMargins(0,0,0,0);
+  lyt->setMargin(0);
   lyt->setSpacing(0);
   setLayout(lyt);
 }
@@ -39,6 +40,8 @@ ExpandableGroupBox::~ExpandableGroupBox() {
 
 void ExpandableGroupBox::setExpanded(bool e) {
   _expanded=e;
+  // As told in Qt stylesheet reference, this force recomputation of stylesheet based on dynamic properties
+  setStyleSheet(styleSheet());
 
   if (_widget)
     _widget->setVisible(e);

@@ -5,6 +5,7 @@ src/AlgorithmRunner.cpp
 src/ControlFrame.cpp
 src/ExpandableGroupBox.cpp
 src/FiltersManager.cpp
+src/FiltersManagerItem.cpp
 src/GraphHierarchiesEditor.cpp
 src/GraphPerspective.cpp
 src/HeaderFrame.cpp
@@ -31,6 +32,9 @@ designer/AlgorithmRunnerItem.ui
 designer/ControlFrame.ui
 designer/FiltersManager.ui
 designer/FiltersManagerItem.ui
+designer/FiltersManagerCompareItem.ui
+designer/FiltersManagerAlgorithmItem.ui
+designer/FiltersManagerInvertItem.ui
 designer/GraphHierarchiesEditor.ui
 designer/GraphPerspectiveMainWindow.ui
 designer/HeaderFrame.ui
@@ -47,6 +51,7 @@ designer/DatasetWidget.ui
 QT4_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
 include/FiltersManager.h
+include/FiltersManagerItem.h
 include/GraphHierarchiesEditor.h
 include/GraphPerspective.h
 include/ExpandableGroupBox.h
