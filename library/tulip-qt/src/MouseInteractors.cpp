@@ -16,9 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <iostream>
-#include <QtDebug>
-
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
@@ -27,10 +24,10 @@
 #include <QtGui/qevent.h>
 #include <QPinchGesture>
 
-#include "tulip/Graph.h"
-#include "tulip/MouseInteractors.h"
-#include "tulip/GlMainWidget.h"
-#include "tulip/AbstractView.h"
+#include <tulip/Graph.h>
+#include <tulip/MouseInteractors.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/AbstractView.h>
 #include <tulip/Observable.h>
 
 using namespace tlp;
@@ -152,7 +149,7 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
     else if (e->type() == QEvent::MouseButtonPress && qMouseEv->button()==Qt::LeftButton) {
       if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
         Observable::holdObservers();
-        Graph* graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+        Graph* graph = glMainWidget->getGraph();
         // allow to undo
         graph->push();
 
