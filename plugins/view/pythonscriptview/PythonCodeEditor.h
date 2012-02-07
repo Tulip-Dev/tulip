@@ -181,11 +181,11 @@ public :
   }
 
   void setIndentShortcutsActivated(const bool activateIndentShortcuts) {
-      indentShortcutsActivate = activateIndentShortcuts;
+    indentShortcutsActivate = activateIndentShortcuts;
   }
 
   bool indentShortcutsActivated() const {
-      return indentShortcutsActivate;
+    return indentShortcutsActivate;
   }
 
   void setGraph(tlp::Graph *graph);

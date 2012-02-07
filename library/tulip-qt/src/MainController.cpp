@@ -579,14 +579,17 @@ void MainController::clearObservers() {
 
   while (curGraph != curGraph->getRoot()) {
     bool canRemoveObserver = true;
+
     for (size_t i = 0 ; i < views.size() ; ++i) {
-        if (views[i] != getCurrentView() && curGraph->isDescendantGraph(views[i]->getGraph())) {
-            canRemoveObserver = false;
-            break;
-        }
+      if (views[i] != getCurrentView() && curGraph->isDescendantGraph(views[i]->getGraph())) {
+        canRemoveObserver = false;
+        break;
+      }
     }
+
     if (canRemoveObserver)
-        curGraph->removeGraphObserver(this);
+      curGraph->removeGraphObserver(this);
+
     curGraph = curGraph->getSuperGraph();
   }
 

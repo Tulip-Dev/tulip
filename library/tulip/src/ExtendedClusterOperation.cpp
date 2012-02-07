@@ -122,12 +122,14 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
       continue;
 
     PropertyInterface *graphProp = NULL;
+
     if (graph->existProperty(property->getName()) &&
         graph->getProperty(property->getName())->getTypename() == property->getTypename())
 
-        graphProp = graph->getProperty(property->getName());
+      graphProp = graph->getProperty(property->getName());
     else
-        graphProp = property->clonePrototype(graph, property->getName());
+      graphProp = property->clonePrototype(graph, property->getName());
+
     itN = cluster->getNodes();
 
     while(itN->hasNext()) {

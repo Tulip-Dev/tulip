@@ -38,6 +38,7 @@ ControllerViewsManager::~ControllerViewsManager() {
     delete (*it).first;
     delete (*it).second;
   }
+
   if (currentGraph)
     delete currentGraph;
 }

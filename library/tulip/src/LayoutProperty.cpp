@@ -816,15 +816,15 @@ double LayoutProperty::edgeLength(const edge e) const {
 }
 //=================================================================================
 double LayoutProperty::averageEdgeLength(const Graph *sg) const {
-    if (sg == 0) sg = graph;
-    else assert(sg==graph || graph->isDescendantGraph(sg));
+  if (sg == 0) sg = graph;
+  else assert(sg==graph || graph->isDescendantGraph(sg));
 
-    double ret = 0;
-    edge e;
-    forEach(e, sg->getEdges()) {
-        ret += edgeLength(e);
-    }
-    return (ret / sg->numberOfEdges());
+  double ret = 0;
+  edge e;
+  forEach(e, sg->getEdges()) {
+    ret += edgeLength(e);
+  }
+  return (ret / sg->numberOfEdges());
 }
 //=================================================================================
 unsigned int LayoutProperty::crossingNumber() const {

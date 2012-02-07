@@ -1233,8 +1233,9 @@ void PythonCodeEditor::unindentSelectedCode() {
 
       if (selectedText() == "\t") {
         removeSelectedText();
-      } else {
-          break;
+      }
+      else {
+        break;
       }
     }
 
