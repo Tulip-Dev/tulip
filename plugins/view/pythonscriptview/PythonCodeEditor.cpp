@@ -406,7 +406,7 @@ PythonCodeEditor::~PythonCodeEditor() {
 }
 
 QFontMetrics PythonCodeEditor::fontMetrics() const {
-    return QFontMetrics(currentFont);
+  return QFontMetrics(currentFont);
 }
 
 void PythonCodeEditor::indicateScriptCurrentError(int lineNumber) {
