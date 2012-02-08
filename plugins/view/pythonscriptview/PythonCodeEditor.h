@@ -228,11 +228,12 @@ protected:
   void hideTooltip();
   bool isTooltipActive() const;
 
+  QFontMetrics fontMetrics() const;
+
   QWidget *lineNumberArea;
   PythonCodeHighlighter *highlighter;
   ParenMatcherHighlighter *parenHighlighter;
   QFont currentFont;
-  QFontMetrics *fontMetrics;
   QVector<int> currentErrorLines;
 
   static APIDataBase *apiDb;

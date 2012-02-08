@@ -336,15 +336,19 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
   setIndentShortcutsActivated(true);
   setWordWrapMode(QTextOption::NoWrap);
   QTextCharFormat format = currentCharFormat();
-#ifdef WIN32
+#if defined(WIN32)
   currentFont.setFamily("Courier New");
+  currentFont.setPointSize(8);
+#elif defined(__APPLE__)
+  currentFont.setFamily("Menlo");
+  currentFont.setPointSize(12);
 #else
   currentFont.setFamily("Monospace");
+  currentFont.setPointSize(8);
 #endif
   currentFont.setPointSize(8);
   format.setFont(currentFont);
   setCurrentCharFormat(format);
-  fontMetrics = new QFontMetrics(currentFont);
 
   lineNumberArea = new LineNumberArea(this);
 
@@ -399,7 +403,10 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
 PythonCodeEditor::~PythonCodeEditor() {
   delete autoCompletionDb;
   removeEventFilter(autoCompletionList);
-  delete fontMetrics;
+}
+
+QFontMetrics PythonCodeEditor::fontMetrics() const {
+    return QFontMetrics(currentFont);
 }
 
 void PythonCodeEditor::indicateScriptCurrentError(int lineNumber) {
@@ -421,7 +428,7 @@ int PythonCodeEditor::lineNumberAreaWidth() const {
     ++digits;
   }
 
-  int space = 3 + fontMetrics->width(QLatin1Char('9')) * digits;
+  int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
   return space;
 }
 
@@ -462,7 +469,7 @@ void PythonCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event) {
       painter.setPen(Qt::black);
       painter.setFont(currentFont);
       painter.drawText(0, top, lineNumberArea->width(),
-                       fontMetrics->height(), Qt::AlignRight | Qt::AlignCenter,
+                       fontMetrics().height(), Qt::AlignRight | Qt::AlignCenter,
                        number);
     }
 
@@ -478,7 +485,7 @@ static float clamp(float f, float minV, float maxV) {
 }
 
 void PythonCodeEditor::updateTabStopWidth() {
-  setTabStopWidth(3 * fontMetrics->width(QLatin1Char(' ')));
+  setTabStopWidth(3 * fontMetrics().width(QLatin1Char(' ')));
 }
 
 void PythonCodeEditor::zoomIn() {
@@ -530,7 +537,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
         left += tabStopWidth();
       }
       else {
-        left += fontMetrics->width(QLatin1Char(blockText[i].toAscii()));
+        left += fontMetrics().width(QLatin1Char(blockText[i].toAscii()));
       }
 
 
@@ -544,7 +551,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
       int w = 0;
 
       for (int j = 0 ; j < toolTipLines[i].length() ; ++j) {
-        w += fontMetrics->width(QLatin1Char(toolTipLines[i][j].toAscii()));
+        w += fontMetrics().width(QLatin1Char(toolTipLines[i][j].toAscii()));
       }
 
       width = std::max(w, width);
@@ -580,7 +587,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 
       for (int i = 0 ; i < text.length() ; ++i) {
         if (text[i] == ' ')
-          indentVal+=fontMetrics->width(QLatin1Char(' '));
+          indentVal+=fontMetrics().width(QLatin1Char(' '));
         else if (text[i] == '\t')
           indentVal+=tabStopWidth();
         else
@@ -1013,7 +1020,7 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
       pos += tabStopWidth();
     }
     else {
-      pos += fontMetrics->width(QLatin1Char(textBeforeCursor[i].toAscii()));
+      pos += fontMetrics().width(QLatin1Char(textBeforeCursor[i].toAscii()));
     }
   }
 
