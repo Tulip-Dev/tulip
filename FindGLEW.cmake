@@ -8,7 +8,6 @@
 #   
 
 IF (GLEW_INCLUDE_DIR)
-
   # Already in cache, be silent
   SET(GLEW_FOUND TRUE)
   SET(GLEW_FIND_QUIETLY TRUE)
@@ -42,7 +41,7 @@ ELSE (GLEW_INCLUDE_DIR)
   GET_FILENAME_COMPONENT( GLEW_LIBRARY_DIR ${GLEW_LIBRARY} PATH )	
   IF(GLEW_INCLUDE_DIR)
     # Remove the GL or gl subdirectory, because you should say #include <GL/foo.h>, not #include <foo.h>
-    SET(GLEW_INCLUDE_DIR ${GLEW_INCLUDE_DIR}/..)
+    SET(GLEW_INCLUDE_DIR ${GLEW_INCLUDE_DIR}/.. CACHE PATH "" FORCE)
   ENDIF()
 
   IF (GLEW_INCLUDE_DIR AND GLEW_LIBRARY)
