@@ -963,11 +963,11 @@ void PythonScriptView::loadPythonPlugin() {
     }
     else if (tlpType == "Import") {
       pluginType = tlpType;
-      pluginClass = "tlp.PythonImportModule";
+      pluginClass = "tlp.ImportModule";
     }
     else {
       pluginType = "Export";
-      pluginClass = "tlp.PythonExportModule";
+      pluginClass = "tlp.ExportModule";
     }
 
     ostringstream oss;
@@ -1069,7 +1069,6 @@ bool PythonScriptView::reloadAllModules() {
   map<int, string>::const_iterator it;
 
   for (it = editedModules.begin() ; it != editedModules.end() ; ++it) {
-    PythonCodeEditor *codeEditor = static_cast<PythonCodeEditor *>(viewWidget->modulesTabWidget->widget(it->first));
     QString moduleNameExt = viewWidget->modulesTabWidget->tabText(it->first);
     QString moduleName;
 
@@ -1082,7 +1081,7 @@ bool PythonScriptView::reloadAllModules() {
     QFileInfo fileInfo((it->second).c_str());
 
     if (fileInfo.fileName() == (it->second).c_str()) {
-      ret = ret && pythonInterpreter->registerNewModuleFromString(moduleName.toStdString(),  codeEditor->toPlainText().toStdString());
+      ret = ret && pythonInterpreter->registerNewModuleFromString(moduleName.toStdString(),  viewWidget->getModuleCode(it->first));
     }
     else {
       pythonInterpreter->addModuleSearchPath(fileInfo.absolutePath().toStdString());
