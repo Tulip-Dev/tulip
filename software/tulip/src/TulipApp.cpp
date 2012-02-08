@@ -469,6 +469,7 @@ bool TulipApp::createController(const string &name,const string &graphName) {
     newWorkspace->closeAllWindows();*/
     QWidget *tab=new QWidget();
     QGridLayout *gridLayout = new QGridLayout(tab);
+    gridLayout->setContentsMargins(1,1,1,1);
     QWorkspace *newWorkspace=new QWorkspace(tab);
 
     newWorkspace->setBackground(QBrush(QPixmap(QString::fromUtf8(":/background_logo.png"))));
