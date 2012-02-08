@@ -346,7 +346,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
   currentFont.setFamily("Monospace");
   currentFont.setPointSize(8);
 #endif
-  currentFont.setPointSize(8);
+
   format.setFont(currentFont);
   setCurrentCharFormat(format);
 
