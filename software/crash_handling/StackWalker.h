@@ -40,6 +40,7 @@ public:
   virtual void printCallStack(std::ostream &os, unsigned int maxDepth = 50) = 0;
 
   void printCallStackToStdErr(unsigned int maxDepth = 50) {
+#pragma omp critical
     printCallStack(std::cerr, maxDepth);
   }
 
