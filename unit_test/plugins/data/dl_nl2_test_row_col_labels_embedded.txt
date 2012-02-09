@@ -1,0 +1,7 @@
+	dl nr=3, nc=4 format = nodelist2
+	row labels embedded
+		column labels embedded
+	data:
+		benny sex_roles, stats
+		ginny aging, intro
+		sally stats, intro, aging

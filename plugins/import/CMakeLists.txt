@@ -81,6 +81,16 @@ TARGET_LINK_LIBRARIES(WebImport-${TulipVersion} ${QT_QTGUI_LIBRARY})
 TARGET_LINK_LIBRARIES(WebImport-${TulipVersion} ${QT_QTNETWORK_LIBRARY})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+SET(ImportPajek_SRCS ImportPajek.cpp)
+ADD_LIBRARY(ImportPajek-${TulipVersion} SHARED ${ImportPajek_SRCS})
+TARGET_LINK_LIBRARIES(ImportPajek-${TulipVersion} ${LibTulipName})
+
+##----------------------------------------------------------------------------------------------------------------------------
+SET(ImportUCINET_SRCS ImportUCINET.cpp)
+ADD_LIBRARY(ImportUCINET-${TulipVersion} SHARED ${ImportUCINET_SRCS})
+TARGET_LINK_LIBRARIES(ImportUCINET-${TulipVersion} ${LibTulipName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 
 	PlanarGraph-${TulipVersion}
 	DotImport-${TulipVersion}
@@ -96,5 +106,7 @@ INSTALL(TARGETS
 	SmallWorldGraph-${TulipVersion}
 	FileSystem-${TulipVersion}
 	WebImport-${TulipVersion}
+	ImportPajek-${TulipVersion}
+	ImportUCINET-${TulipVersion}
   DESTINATION ${TulipPluginsInstallDir}/
   COMPONENT tulip_plugins)

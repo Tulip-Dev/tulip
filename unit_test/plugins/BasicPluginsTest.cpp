@@ -127,20 +127,20 @@ void BasicPluginsTest::testImportGridApproximation() {
 //==========================================================
 void BasicPluginsTest::testImportDot() {
   DataSet ds;
-  ds.set("file::filename", string("toto.dot"));
+  ds.set("file::filename", string("data/toto.dot"));
   Graph* g = importGraph("dot (graphviz)", ds, NULL, graph);
   CPPUNIT_ASSERT(g == NULL);
-  ds.set("file::filename", string("graph.dot"));
+  ds.set("file::filename", string("data/graph.dot"));
   g = importGraph("dot (graphviz)", ds, NULL, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportGml() {
   DataSet ds;
-  ds.set("file::filename", string("toto.gml"));
+  ds.set("file::filename", string("data/toto.gml"));
   Graph* g = importGraph("GML", ds, NULL, graph);
   CPPUNIT_ASSERT(g == NULL);
-  ds.set("file::filename", string("CMPb.gml"));
+  ds.set("file::filename", string("data/CMPb.gml"));
   g = importGraph("GML", ds, NULL, graph);
   CPPUNIT_ASSERT(g == graph);
 }
@@ -165,12 +165,66 @@ void BasicPluginsTest::testImportFileSystem() {
 //==========================================================
 void BasicPluginsTest::testImportAdjacencyMatrix() {
   DataSet ds;
-  ds.set("file::name", string("toto.txt"));
+  ds.set("file::name", string("data/toto.txt"));
   Graph* g = importGraph("Adjacency Matrix", ds, NULL, graph);
   CPPUNIT_ASSERT(g == NULL);
-  ds.set("file::name", string("adj_mat.txt"));
+  ds.set("file::name", string("data/adj_mat.txt"));
   g = importGraph("Adjacency Matrix", ds, NULL, graph);
   CPPUNIT_ASSERT(g == graph);
+}
+//==========================================================
+void BasicPluginsTest::testImportPajek() {
+  // test all data/*.net files
+  const char* net_files[] = {
+    "data/netscience.net",
+    "data/NDwww.net",
+    "data/NDActors.net",
+    NULL};
+  const char** files = &net_files[0];
+  while(!files[0]) {
+    DataSet ds;
+    ds.set("file::filename", string(files[0]));
+    Graph* g = importGraph("Pajek(.net)", ds, NULL, graph);
+    CPPUNIT_ASSERT(g == graph);
+    g->clear();
+    files += 1;
+  }
+}
+//==========================================================
+void BasicPluginsTest::testImportUCINET() {
+  // test all data/dl_*.txt files
+  const char* dl_files[] = {
+    "data/dl_el1_test_labels_embedded.txt",
+    "data/dl_el1_test_labels.txt",
+    "data/dl_el1_test_multiple_labels_embedded.txt"
+    "data/dl_el2_test2_labels_embedded.txt",
+    "data/dl_el2_test_labels_embedded.txt",
+    "data/dl_fm_test2.txt",
+    "data/dl_fm_test3.txt",
+    "data/dl_fm_test_labels_no_diag.txt",
+    "data/dl_fm_test_labels.txt",
+    "data/dl_fm_test_multi_matrices.txt",
+    "data/dl_fm_test_rect_labels_embedded.txt",
+    "data/dl_fm_test_rect_labels.txt",
+    "data/dl_fm_test_rect.txt",
+    "data/dl_fm_test.txt",
+    "data/dl_lh_test_labels_no_diag.txt",
+    "data/dl_lh_test_labels.txt",
+    "data/dl_nl1_test2_labels_embedded.txt",
+    "data/dl_nl1_test2_labels.txt",
+    "data/dl_nl1_test_labels_embedded.txt",
+    "data/dl_nl1_test_labels.txt",
+    "data/dl_nl2_test_row_col_labels_embedded.txt",
+    NULL};
+  const char** files = &dl_files[0];
+  while(!files[0]) {
+    DataSet ds;
+    ds.set("file::filename", string(files[0]));
+    Graph* g = importGraph("UCINET dl", ds, NULL, graph);
+    CPPUNIT_ASSERT(g == graph);
+    g->clear();
+    files += 1;
+  }
 }
 //==========================================================
 void BasicPluginsTest::testArityMetric() {
@@ -319,7 +373,7 @@ void BasicPluginsTest::testDendrogram() {
 //==========================================================
 void BasicPluginsTest::testGEMLayout() {
   DataSet ds;
-  ds.set("file::filename", string("unconnected.tlp"));
+  ds.set("file::filename", string("data/unconnected.tlp"));
   Graph* g = importGraph("tlp", ds, NULL, graph);
   CPPUNIT_ASSERT(g == graph);
   LayoutProperty prop(graph);
@@ -562,6 +616,8 @@ CppUnit::Test * BasicPluginsTest::suite() {
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import Gml", &BasicPluginsTest::testImportGml));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import FileSystem", &BasicPluginsTest::testImportFileSystem));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import AdjacencyMatrix", &BasicPluginsTest::testImportAdjacencyMatrix));
+  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import UCINET", &BasicPluginsTest::testImportUCINET));
+  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import Pajek", &BasicPluginsTest::testImportUCINET));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ArityMetric", &BasicPluginsTest::testArityMetric));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("BetweennessCentrality", &BasicPluginsTest::testBetweennessCentrality));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("BiconnectedComponent", &BasicPluginsTest::testBiconnectedComponent));

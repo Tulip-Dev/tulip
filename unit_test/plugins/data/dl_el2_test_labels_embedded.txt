@@ -1,0 +1,12 @@
+dl nr = 5 nc = 3, format = edgelist2,
+labels embedded
+data:
+clique cohesion
+clique centrality
+closeness cohesion
+closeness centrality
+rege similarity
+density cohesion
+density centrality
+concor cohesion
+concor similarity

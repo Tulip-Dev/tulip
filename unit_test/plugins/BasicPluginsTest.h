@@ -52,6 +52,8 @@ public:
   void testExportGml();
   void testImportFileSystem();
   void testImportAdjacencyMatrix();
+  void testImportPajek();
+  void testImportUCINET();
   void testArityMetric();
   void testBetweennessCentrality();
   void testBiconnectedComponent();
