@@ -39,10 +39,7 @@ public:
   virtual ~StackWalker() {}
   virtual void printCallStack(std::ostream &os, unsigned int maxDepth = 50) = 0;
 
-  void printCallStackToStdErr(unsigned int maxDepth = 50) {
-    #pragma omp critical
-    printCallStack(std::cerr, maxDepth);
-  }
+  void printCallStackToStdErr(unsigned int maxDepth = 50);
 
   virtual void printFrameInfos(std::ostream &os, unsigned int frameId, int64_t pcAddress, std::string moduleName, std::string funcName="", int64_t symbolOffset=0, std::string fileName="", unsigned int line=0) {
 
