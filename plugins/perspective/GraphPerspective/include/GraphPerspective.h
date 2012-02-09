@@ -44,6 +44,8 @@ public:
   GraphPerspective(tlp::PerspectiveContext &c);
   virtual void construct(tlp::PluginProgress *);
 
+  tlp::GraphHierarchiesModel* model() const;
+
 public slots:
   void showFullScreen(bool);
   void importGraph();

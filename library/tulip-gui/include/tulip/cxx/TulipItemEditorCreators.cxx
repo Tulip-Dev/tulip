@@ -56,6 +56,11 @@ QWidget* PropertyEditorCreator<PROPTYPE>::createWidget(QWidget* parent) const {
 
 template<typename PROPTYPE>
 void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& val,tlp::Graph* g) {
+  if (g == NULL) {
+    w->setEnabled(false);
+    return;
+  }
+
   PROPTYPE* prop = val.value<PROPTYPE*>();
 
   QSet<QString> locals,inherited;
@@ -106,6 +111,9 @@ void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& 
 
 template<typename PROPTYPE>
 QVariant PropertyEditorCreator<PROPTYPE>::editorData(QWidget* w,tlp::Graph* g) {
+  if (g == NULL)
+    return QVariant();
+
   QComboBox* combo = static_cast<QComboBox*>(w);
   std::string propName = combo->currentText().toStdString();
   PROPTYPE *prop = NULL;

@@ -20,17 +20,29 @@
 #define FILTERSMANAGER_H
 
 #include <QtGui/QWidget>
+#include "FiltersManagerItem.h"
 
 namespace Ui {
 class FiltersManagerData;
 }
 
 class FiltersManager: public QWidget {
+  Q_OBJECT
+
   Ui::FiltersManagerData *_ui;
+  QList<FiltersManagerItem*> _items;
+
 
 public:
   explicit FiltersManager(QWidget *parent=0);
   virtual ~FiltersManager();
+
+protected slots:
+  void delItem();
+  void delItem(FiltersManagerItem* item);
+  void addItem();
+  void itemModeChanged(FiltersManagerItem::Mode);
+  void currentGraphChanged(tlp::Graph*);
 };
 
 #endif // FILTERSMANAGER_H

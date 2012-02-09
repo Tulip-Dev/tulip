@@ -3,6 +3,7 @@
 
 
 #include <QtGui/QFrame>
+#include <tulip/WithParameter.h>
 
 namespace Ui {
 class FiltersManagerItem;
@@ -10,20 +11,30 @@ class FiltersManagerAlgorithmItem;
 class FiltersManagerInvertItem;
 class FiltersManagerCompareItem;
 }
-
+namespace tlp {
+class Graph;
+}
+class QTableView;
 
 /*
   Helper classes
   */
 class AbstractFiltersManagerItem: public QWidget {
   Q_OBJECT
+protected:
+  tlp::Graph* _graph;
 public:
-  explicit AbstractFiltersManagerItem(QWidget* parent = NULL): QWidget(parent) {}
+  explicit AbstractFiltersManagerItem(QWidget* parent = NULL): QWidget(parent), _graph(NULL) {}
   virtual void applyFilter()=0;
   virtual QString title() const=0;
+  void setGraph(tlp::Graph*);
+protected:
+  virtual void graphChanged();
+
 signals:
   void titleChanged();
 };
+
 class FiltersManagerAlgorithmItem: public AbstractFiltersManagerItem {
   Q_OBJECT
   Ui::FiltersManagerAlgorithmItem* _ui;
@@ -31,7 +42,12 @@ public:
   explicit FiltersManagerAlgorithmItem(QWidget* parent = NULL);
   void applyFilter();
   QString title() const;
+protected slots:
+  void algorithmSelected(int);
+protected:
+  void graphChanged();
 };
+
 class FiltersManagerCompareItem: public AbstractFiltersManagerItem {
   Q_OBJECT
   Ui::FiltersManagerCompareItem* _ui;
@@ -40,6 +56,7 @@ public:
   void applyFilter();
   QString title() const;
 };
+
 class FiltersManagerInvertItem: public AbstractFiltersManagerItem {
   Q_OBJECT
   Ui::FiltersManagerInvertItem* _ui;
@@ -55,8 +72,6 @@ class FiltersManagerItem: public QFrame {
   Ui::FiltersManagerItem *_ui;
 
   Q_ENUMS(Mode)
-  Q_PROPERTY(Mode mode READ mode)
-
 public:
   enum Mode {
     Invert,
@@ -68,9 +83,9 @@ public:
   explicit FiltersManagerItem(QWidget *parent=0);
   virtual ~FiltersManagerItem();
 
-  Mode mode() const;
-
-public slots:
+signals:
+  void removed();
+  void modeChanged(FiltersManagerItem::Mode);
 
 protected slots:
   void setCompareMode();
@@ -79,6 +94,9 @@ protected slots:
   void setMode(Mode);
 
   void addButtonClicked();
+  void dataBoxTitleChanged();
+
+  void graphChanged(tlp::Graph*);
 };
 
 #endif // FILTERSMANAGERITEM_H
