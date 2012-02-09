@@ -179,8 +179,10 @@ void BasicPluginsTest::testImportPajek() {
     "data/netscience.net",
     "data/NDwww.net",
     "data/NDActors.net",
-    NULL};
+    NULL
+  };
   const char** files = &net_files[0];
+
   while(!files[0]) {
     DataSet ds;
     ds.set("file::filename", string(files[0]));
@@ -215,8 +217,10 @@ void BasicPluginsTest::testImportUCINET() {
     "data/dl_nl1_test_labels_embedded.txt",
     "data/dl_nl1_test_labels.txt",
     "data/dl_nl2_test_row_col_labels_embedded.txt",
-    NULL};
+    NULL
+  };
   const char** files = &dl_files[0];
+
   while(!files[0]) {
     DataSet ds;
     ds.set("file::filename", string(files[0]));

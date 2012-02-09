@@ -25,7 +25,7 @@
 // it is not inlined in StackWalker.h because compilation fails
 // for GCC < 4.4
 void StackWalker::printCallStackToStdErr(unsigned int maxDepth) {
-#pragma omp critical
+  #pragma omp critical
   printCallStack(std::cerr, maxDepth);
 }
 
