@@ -18,20 +18,51 @@
  */
 #include "FiltersManager.h"
 
+#include "GraphPerspective.h"
+#include <tulip/GraphHierarchiesModel.h>
+
 #include "ui_FiltersManager.h"
-#include "FiltersManagerItem.h"
+
+using namespace tlp;
 
 FiltersManager::FiltersManager(QWidget *parent): QWidget(parent), _ui(new Ui::FiltersManagerData) {
   _ui->setupUi(this);
-  _ui->filtersListContents->setLayout(new QVBoxLayout);
-  _ui->filtersListContents->layout()->setMargin(0);
   _ui->filtersListContents->layout()->setAlignment(Qt::AlignTop);
-
-  for (int i=0; i<30; ++i)
-    _ui->filtersListContents->layout()->addWidget(new FiltersManagerItem());
-
+  addItem();
+  GraphHierarchiesModel* model = Perspective::typedInstance<GraphPerspective>()->model();
+  connect(model,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
+  currentGraphChanged(model->currentGraph());
 }
 
 FiltersManager::~FiltersManager() {
   delete _ui;
+}
+
+void FiltersManager::addItem() {
+  FiltersManagerItem* item = new FiltersManagerItem();
+  _items << item;
+  _ui->filtersListContentsLayout->insertWidget(_ui->filtersListContentsLayout->count()-1,item);
+  connect(item,SIGNAL(removed()),this,SLOT(delItem()));
+  connect(item,SIGNAL(modeChanged(FiltersManagerItem::Mode)),this,SLOT(itemModeChanged(FiltersManagerItem::Mode)));
+}
+
+void FiltersManager::delItem() {
+  delItem(static_cast<FiltersManagerItem*>(sender()));
+}
+
+void FiltersManager::delItem(FiltersManagerItem* item) {
+  _items.removeAll(item);
+  delete item;
+  if (_items.empty())
+    addItem();
+}
+
+void FiltersManager::itemModeChanged(FiltersManagerItem::Mode m) {
+  if (m != FiltersManagerItem::Invalid)
+    addItem();
+}
+
+
+void FiltersManager::currentGraphChanged(tlp::Graph* g) {
+  _ui->filtersList->setEnabled(g != NULL);
 }

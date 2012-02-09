@@ -76,10 +76,8 @@ void AlgorithmRunnerItem::setGraph(tlp::Graph* graph) {
   }
 
   int h=0;
-
   for (int i=0; i<_ui->parameters->model()->rowCount(); ++i)
     h += _ui->parameters->rowHeight(i);
-
   _ui->parameters->setMaximumHeight(h);
   _ui->parameters->setMinimumHeight(h);
 }

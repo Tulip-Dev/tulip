@@ -87,6 +87,10 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   }
 }
 
+tlp::GraphHierarchiesModel* GraphPerspective::model() const {
+  return _graphs;
+}
+
 void GraphPerspective::refreshDockExpandControls() {
   QList<HeaderFrame *> expandedHeaders, collapsedHeaders;
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {

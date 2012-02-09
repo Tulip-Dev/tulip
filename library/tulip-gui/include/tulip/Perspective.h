@@ -56,6 +56,11 @@ public:
 
   static tlp::Perspective* instance();
 
+  template<typename T>
+  static T* typedInstance() {
+    return dynamic_cast<T*>(instance());
+  }
+
   Perspective(PerspectiveContext &c);
 
   virtual ~Perspective();
