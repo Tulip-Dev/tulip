@@ -31,9 +31,11 @@ void AbstractFiltersManagerItem::graphChanged() {
 template<typename LISTER>
 void updateGraphModel(QTableView* table,const QString& algName, tlp::Graph* g) {
   int h=0;
+
   if (!algName.isNull()) {
     ParameterList params = LISTER::getPluginParameters(algName.toStdString());
     table->setModel(new ParameterListModel(params,g));
+
     for (int i=0; i<table->model()->rowCount(); ++i)
       h += table->rowHeight(i);
   }
@@ -59,8 +61,10 @@ FiltersManagerAlgorithmItem::FiltersManagerAlgorithmItem(QWidget* parent): Abstr
 void FiltersManagerAlgorithmItem::algorithmSelected(int i) {
   _ui->algorithmParams->setEnabled(i != 0);
   QString algName = QString::null;
+
   if (i != 0)
     algName = _ui->algorithmCombo->itemText(i);
+
   updateGraphModel<BooleanPluginLister>(_ui->algorithmParams,algName,_graph);
   emit titleChanged();
 }
@@ -71,6 +75,7 @@ void FiltersManagerAlgorithmItem::applyFilter() {
 QString FiltersManagerAlgorithmItem::title() const {
   if (_ui->algorithmCombo->currentIndex() == 0)
     return trUtf8("Select filtering method");
+
   return _ui->algorithmCombo->currentText();
 }
 
@@ -139,6 +144,7 @@ void FiltersManagerItem::setMode(Mode m) {
     w = new FiltersManagerAlgorithmItem;
 
   _ui->dataBox->setWidget(w);
+
   if (w != NULL) {
     connect(w,SIGNAL(titleChanged()),this,SLOT(dataBoxTitleChanged()));
     _ui->dataBox->setTitle(w->title());

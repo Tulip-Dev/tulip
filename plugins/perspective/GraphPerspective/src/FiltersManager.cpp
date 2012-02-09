@@ -53,6 +53,7 @@ void FiltersManager::delItem() {
 void FiltersManager::delItem(FiltersManagerItem* item) {
   _items.removeAll(item);
   delete item;
+
   if (_items.empty())
     addItem();
 }
