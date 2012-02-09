@@ -20,24 +20,25 @@ public :
       delaunaySubGraph->delEdge(e);
     }
 
+    const double delta = 10;
     std::vector<p2t::Point*> outline(4);
 
     std::map<p2t::Point*, tlp::node> points;
     tlp::LayoutProperty* layout = delaunaySubGraph->getProperty<tlp::LayoutProperty>("viewLayout");
 
-    outline[0] = new p2t::Point(layout->getMin().getX(), layout->getMin().getY());
-    outline[1] = new p2t::Point(layout->getMin().getX(), layout->getMax().getY());
-    outline[2] = new p2t::Point(layout->getMax().getX(), layout->getMax().getY());
-    outline[3] = new p2t::Point(layout->getMax().getX(), layout->getMin().getY());
+    outline[0] = new p2t::Point(layout->getMin().getX() - delta, layout->getMin().getY() - delta);
+    outline[1] = new p2t::Point(layout->getMin().getX() - delta, layout->getMax().getY() + delta);
+    outline[2] = new p2t::Point(layout->getMax().getX() + delta, layout->getMax().getY() + delta);
+    outline[3] = new p2t::Point(layout->getMax().getX() + delta, layout->getMin().getY() - delta);
 
     tlp::node tempNode0 = delaunaySubGraph->addNode();
     tlp::node tempNode1 = delaunaySubGraph->addNode();
     tlp::node tempNode2 = delaunaySubGraph->addNode();
     tlp::node tempNode3 = delaunaySubGraph->addNode();
-    layout->setNodeValue(tempNode0, tlp::Coord(layout->getMin()));
-    layout->setNodeValue(tempNode1, tlp::Coord(layout->getMin().getX(), layout->getMax().getY()));
-    layout->setNodeValue(tempNode2, tlp::Coord(layout->getMax()));
-    layout->setNodeValue(tempNode3, tlp::Coord(layout->getMax().getX(), layout->getMin().getY()));
+    layout->setNodeValue(tempNode0, tlp::Coord(layout->getMin().getX() - delta, layout->getMin().getY() - delta));
+    layout->setNodeValue(tempNode1, tlp::Coord(layout->getMin().getX() - delta, layout->getMax().getY() + delta));
+    layout->setNodeValue(tempNode2, tlp::Coord(layout->getMax().getX() + delta, layout->getMax().getY() + delta));
+    layout->setNodeValue(tempNode3, tlp::Coord(layout->getMax().getX() + delta, layout->getMin().getY() - delta));
     points.insert(std::pair<p2t::Point*, tlp::node>(outline[0], tempNode0));
     points.insert(std::pair<p2t::Point*, tlp::node>(outline[1], tempNode1));
     points.insert(std::pair<p2t::Point*, tlp::node>(outline[2], tempNode2));
