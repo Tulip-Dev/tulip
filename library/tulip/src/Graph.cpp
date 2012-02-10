@@ -259,19 +259,7 @@ bool Graph::applyAlgorithm(const std::string &alg, std::string &errorMsg,
 }
 //=========================================================
 bool tlp::getSource(const Graph *graph, node &n) {
-  Iterator<node> *it=graph->getNodes();
-
-  while (it->hasNext()) {
-    n=it->next();
-
-    if (graph->indeg(n)==0) {
-      delete it;
-      return true;
-    }
-  }
-
-  delete it;
-  return false;
+  return (n = graph->getSource()).isValid();
 }
 //=========================================================
 void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
@@ -434,6 +422,24 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
   }
 
   delete edgeIt;
+}
+
+tlp::node Graph::getSource() const {
+  node source(UINT_MAX);
+
+  Iterator<node> *it = getNodes();
+
+  while (it->hasNext()) {
+    source=it->next();
+
+    if (indeg(source) == 0) {
+      break;
+    }
+  }
+
+  delete it;
+
+  return source;
 }
 
 DataType* Graph::getAttribute(const std::string& name) const {

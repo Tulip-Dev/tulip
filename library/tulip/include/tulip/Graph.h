@@ -156,9 +156,10 @@ TLP_SCOPE _DEPRECATED Graph *newCloneSubGraph(Graph *root, std::string name = "u
 /**
  * @brief Finds the first node whose input degree equals 0.
  *
+ * @deprecated this function should not be used anymore, please use Graph::getSource() instead.
  * @return tlp::node The first encountered node with input degree of 0, or an invalid node if none was found.
  **/
-TLP_SCOPE bool getSource(const Graph *, node &n);
+TLP_SCOPE _DEPRECATED bool getSource(const Graph *, node &n);
 
 /**
  * Appends the selected part of the graph inG (properties, nodes and edges) into the graph outG.
@@ -449,6 +450,12 @@ public:
   //================================================================================
   //Iterators on the graph structure.
   //================================================================================
+  /**
+   * @brief Finds the first node whose input degree equals 0.
+   *
+   * @return tlp::node The first encountered node with input degree of 0, or an invalid node if none was found.
+   **/
+  virtual tlp::node getSource() const;
   /// Returns an existing node of the graph.
   virtual node getOneNode() const =0;
   /// Returns an iterator on the nodes.

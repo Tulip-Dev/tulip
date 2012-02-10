@@ -121,9 +121,9 @@ bool TreeLeaf::run() {
     return false;
   }
 
-  node root;
+  node root = tree->getSource();
 
-  if (!tlp::getSource(tree, root))
+  if (!root.isValid())
     // graph is empty
     return true;
 
