@@ -96,19 +96,31 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
 }
 
 std::string PythonScriptViewWidget::getCurrentMainScriptCode() const {
-  return static_cast<PythonCodeEditor *>(mainScriptsTabWidget->currentWidget())->toPlainText().replace("\r\n", "\n").toStdString() + "\n";
+  std::string code = static_cast<PythonCodeEditor *>(mainScriptsTabWidget->currentWidget())->toPlainText().replace("\r\n", "\n").toStdString();
+  if (code[code.size()-1] != '\n')
+      code += "\n";
+  return  code;
 }
 
 std::string PythonScriptViewWidget::getMainScriptCode(int idx) const {
-  return static_cast<PythonCodeEditor *>(mainScriptsTabWidget->widget(idx))->toPlainText().replace("\r\n", "\n").toStdString() + "\n";
+  std::string code = static_cast<PythonCodeEditor *>(mainScriptsTabWidget->widget(idx))->toPlainText().replace("\r\n", "\n").toStdString();
+  if (code[code.size()-1] != '\n')
+      code += "\n";
+  return  code;
 }
 
 std::string PythonScriptViewWidget::getModuleCode(int idx) const {
-  return static_cast<PythonCodeEditor *>(modulesTabWidget->widget(idx))->toPlainText().replace("\r\n", "\n").toStdString() + "\n";
+  std::string code = static_cast<PythonCodeEditor *>(modulesTabWidget->widget(idx))->toPlainText().replace("\r\n", "\n").toStdString();
+  if (code[code.size()-1] != '\n')
+      code += "\n";
+  return  code;
 }
 
 std::string PythonScriptViewWidget::getPluginCode(int idx) const {
-  return static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(idx))->toPlainText().replace("\r\n", "\n").toStdString() + "\n";
+  std::string code = static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(idx))->toPlainText().replace("\r\n", "\n").toStdString();
+  if (code[code.size()-1] != '\n')
+      code += "\n";
+  return  code;
 }
 
 void PythonScriptViewWidget::resizeEvent(QResizeEvent *e) {
