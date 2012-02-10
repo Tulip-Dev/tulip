@@ -113,6 +113,7 @@ private slots :
 private :
 
   bool loadScript(const QString &fileName);
+  void saveScript(int tabIdx);
   bool loadModule(const QString &fileName);
   bool loadModuleFromSrcCode(const std::string &moduleName, const std::string &moduleSrcCode);
   void saveModule();
