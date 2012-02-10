@@ -389,7 +389,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
     static GlCatmullRomCurve catmull;
     static GlOpenUniformCubicBSpline bspline;
     AbstractGlCurve *curve = NULL;
-    unsigned int nbCurvePoints = 100;
+    unsigned int nbCurvePoints = 200;
 
     if (shape == BEZIERSHAPE || shape == BEZIERSHAPE + L3D_BIT) {
       curve = &bezier;
@@ -423,7 +423,8 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
       curve->setLineCurve(true);
       curve->setCurveLineWidth(1.4f);
     }
-    else if (fisheyeActivated || lod > 100 || lod < -100) {
+
+    else if (fisheyeActivated || lod > 5 || lod < -5) {
       curve->setOutlined(outlineWidth > 0);
       curve->setCurveQuadBordersWidth(outlineWidth);
     }
