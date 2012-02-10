@@ -216,6 +216,8 @@ DataSet GlMainWidget::getData() {
 }
 //==================================================
 void GlMainWidget::setGraph(Graph *graph) {
+  assert(graph);
+
   if(!scene.getLayer("Main")) {
     setData(graph,DataSet());
     return;
