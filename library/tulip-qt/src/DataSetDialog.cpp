@@ -258,7 +258,14 @@ struct QParamDialog : public QDialog {
                || ip.typeName == TN(StringProperty)
                || ip.typeName == TN(IntegerProperty)
                || ip.typeName == TN(SizeProperty)
-               || ip.typeName == TN(ColorProperty)) {
+               || ip.typeName == TN(ColorProperty)
+               || ip.typeName == TN(BooleanVectorProperty)
+               || ip.typeName == TN(ColorVectorProperty)
+               || ip.typeName == TN(CoordVectorProperty)
+               || ip.typeName == TN(DoubleVectorProperty)
+               || ip.typeName == TN(IntegerVectorProperty)
+               || ip.typeName == TN(SizeVectorProperty)
+               || ip.typeName == TN(StringVectorProperty)) {
         QComboBox * cb = (QComboBox*) ip.wA[0];
         std::string value = cb->currentText().toUtf8().data();
 
@@ -761,7 +768,14 @@ struct QParamDialog : public QDialog {
                 || ip.typeName == TN(StringProperty)
                 || ip.typeName == TN(IntegerProperty)
                 || ip.typeName == TN(SizeProperty)
-                || ip.typeName == TN(ColorProperty))) {
+                || ip.typeName == TN(ColorProperty)
+                || ip.typeName == TN(BooleanVectorProperty)
+                || ip.typeName == TN(ColorVectorProperty)
+                || ip.typeName == TN(CoordVectorProperty)
+                || ip.typeName == TN(DoubleVectorProperty)
+                || ip.typeName == TN(IntegerVectorProperty)
+                || ip.typeName == TN(SizeVectorProperty)
+                || ip.typeName == TN(StringVectorProperty))) {
         stringA proxyA;
         PropertyInterface * curProxy = 0;
 
@@ -1047,7 +1061,14 @@ struct QParamDialog : public QDialog {
                 || ip.typeName == TN(StringProperty)
                 || ip.typeName == TN(IntegerProperty)
                 || ip.typeName == TN(SizeProperty)
-                || ip.typeName == TN(ColorProperty))) {
+                || ip.typeName == TN(ColorProperty)
+                || ip.typeName == TN(BooleanVectorProperty)
+                || ip.typeName == TN(ColorVectorProperty)
+                || ip.typeName == TN(CoordVectorProperty)
+                || ip.typeName == TN(DoubleVectorProperty)
+                || ip.typeName == TN(IntegerVectorProperty)
+                || ip.typeName == TN(SizeVectorProperty)
+                || ip.typeName == TN(StringVectorProperty))) {
         QComboBox * cb = (QComboBox*) ip.wA[0];
         std::string propName(cb->currentText().toUtf8().data());
 
