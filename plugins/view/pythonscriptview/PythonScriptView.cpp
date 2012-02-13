@@ -429,7 +429,6 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
 
           if (mainScriptsDataSet.get(oss.str(), mainScriptSrc)) {
             int mainScriptId = viewWidget->addMainScriptEditor();
-            editedMainScripts[mainScriptId] = "";
             PythonCodeEditor *codeEditor = viewWidget->getMainScriptEditor(mainScriptId);
             // TLPParser seems to replace the tab character with four white spaces when reading the content of the TLP file, don't know why
             // Anyway, replace the original tab character in order to have a correct indentation when setting the script text to the code editor
@@ -457,8 +456,9 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
       }
 
       if (!mainScriptLoaded) {
-        editedMainScripts[viewWidget->addMainScriptEditor()] = "";
-        PythonCodeEditor *codeEditor = viewWidget->getMainScriptEditor(0);
+        int editorId = viewWidget->addMainScriptEditor();
+        PythonCodeEditor *codeEditor = viewWidget->getMainScriptEditor(editorId);
+        codeEditor->setFileName("");
         QFileInfo fileInfo(filename.c_str());
 
         if (dataSet.get("script code", scriptCode)) {
@@ -517,39 +517,38 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
 void PythonScriptView::getData(Graph **graph,DataSet *dataSet) {
   *graph = this->graph;
 
-  dataSet->set("main script file", editedMainScripts[viewWidget->mainScriptsTabWidget->currentIndex()]);
+  PythonCodeEditor *codeEditor = viewWidget->getCurrentMainScriptEditor();
+  dataSet->set("main script file", codeEditor->getFileName());
   string scriptCode = viewWidget->getCurrentMainScriptCode();
   dataSet->set("script code", scriptCode);
 
-  map<int, string>::const_iterator it = editedMainScripts.begin();
   DataSet mainScriptsDataSet;
-  int i = 0;
 
-  for ( ; it != editedMainScripts.end() ; ++it) {
-    saveScript(it->first);
+  for (int i = 0 ; i < viewWidget->mainScriptsTabWidget->count() ; ++i) {
+    saveScript(i);
     ostringstream oss;
     oss << "main_script" << i;
-    mainScriptsDataSet.set(oss.str(), it->second);
+    mainScriptsDataSet.set(oss.str(), viewWidget->getMainScriptEditor(i)->getFileName().toStdString());
     oss.str("");
-    oss << "main_script_src" << i++;
-    mainScriptsDataSet.set(oss.str(), viewWidget->getMainScriptCode(it->first));
+    oss << "main_script_src" << i;
+    mainScriptsDataSet.set(oss.str(), viewWidget->getMainScriptCode(i));
   }
 
   mainScriptsDataSet.set("main_script_id", viewWidget->mainScriptsTabWidget->currentIndex());
   dataSet->set("main_scripts", mainScriptsDataSet);
 
-  it = editedModules.begin();
-  DataSet modulesDataSet;
-  i = 0;
 
-  for ( ; it != editedModules.end() ; ++it) {
-    saveModule(it->first);
+  DataSet modulesDataSet;
+
+
+  for (int i = 0 ; i < viewWidget->modulesTabWidget->count() ; ++i) {
+    saveModule(i);
     ostringstream oss;
     oss << "module" << i;
-    modulesDataSet.set(oss.str(), it->second);
+    modulesDataSet.set(oss.str(), viewWidget->getModuleEditor(i)->getFileName().toStdString());
     oss.str("");
-    oss << "module_src" << i++;
-    modulesDataSet.set(oss.str(), viewWidget->getModuleCode(it->first));
+    oss << "module_src" << i;
+    modulesDataSet.set(oss.str(), viewWidget->getModuleCode(i));
   }
 
   dataSet->set("modules", modulesDataSet);
@@ -578,15 +577,15 @@ void PythonScriptView::executeCurrentScript() {
     pythonInterpreter->clearOutputBuffers();
     clearErrorIndicators();
 
-    int curMainScriptId = viewWidget->mainScriptsTabWidget->currentIndex();
+    string scriptFileName = viewWidget->getCurrentMainScriptEditor()->getFileName().toStdString();
 
-    if (editedMainScripts[curMainScriptId] != "") {
+    if (scriptFileName != "") {
       saveScript();
     }
 
     saveAllModules();
 
-    if (!reloadAllModules() || !pythonInterpreter->runString(viewWidget->getCurrentMainScriptCode().c_str())) {
+    if (!reloadAllModules() || !pythonInterpreter->runString(viewWidget->getCurrentMainScriptCode().c_str(), scriptFileName)) {
       indicateErrors();
       return;
     }
@@ -605,7 +604,7 @@ void PythonScriptView::executeCurrentScript() {
 
     QApplication::processEvents();
 
-    bool scriptExecOk = pythonInterpreter->runGraphScript("__main__", "main", graph);
+    bool scriptExecOk = pythonInterpreter->runGraphScript("__main__", "main", graph, scriptFileName);
 
     pythonInterpreter->setProcessQtEventsDuringScriptExecution(false);
     viewWidget->stopScriptButton->setEnabled(false);
@@ -678,10 +677,11 @@ void PythonScriptView::indicateErrors() {
 
   map<int, string>::const_iterator it;
 
-  for (it = editedModules.begin() ; it != editedModules.end() ; ++it) {
-    if (errorLines.find(it->second) != errorLines.end()) {
-      const vector<int> &linesErrorNumbers = errorLines[it->second];
-      PythonCodeEditor *codeEditor = static_cast<PythonCodeEditor *>(viewWidget->modulesTabWidget->widget(it->first));
+  for (int i = 0 ; i < viewWidget->modulesTabWidget->count() ; ++i) {
+    std::string moduleFile = viewWidget->getModuleEditor(i)->getFileName().toStdString();
+    if (errorLines.find(moduleFile) != errorLines.end()) {
+      const vector<int> &linesErrorNumbers = errorLines[moduleFile];
+      PythonCodeEditor *codeEditor = viewWidget->getModuleEditor(i);
 
       for (size_t i = 0 ; i < linesErrorNumbers.size() ; ++i) {
         codeEditor->indicateScriptCurrentError(linesErrorNumbers[i]-1);
@@ -693,13 +693,13 @@ void PythonScriptView::indicateErrors() {
 void PythonScriptView::clearErrorIndicators() {
   map<int, string>::const_iterator it;
 
-  for (it = editedMainScripts.begin() ; it != editedMainScripts.end() ; ++it) {
-    PythonCodeEditor *codeEditor = static_cast<PythonCodeEditor *>(viewWidget->mainScriptsTabWidget->widget(it->first));
+  for (int i = 0 ; i < viewWidget->mainScriptsTabWidget->count() ; ++i) {
+    PythonCodeEditor *codeEditor = viewWidget->getMainScriptEditor(i);
     codeEditor->clearErrorIndicator();
   }
 
-  for (it = editedModules.begin() ; it != editedModules.end() ; ++it) {
-    PythonCodeEditor *codeEditor = static_cast<PythonCodeEditor *>(viewWidget->modulesTabWidget->widget(it->first));
+  for (int i = 0 ; i < viewWidget->modulesTabWidget->count() ; ++i) {
+    PythonCodeEditor *codeEditor = viewWidget->getModuleEditor(i);
     codeEditor->clearErrorIndicator();
   }
 }
@@ -721,7 +721,6 @@ void PythonScriptView::pauseCurrentScript() {
 
 void PythonScriptView::newScript() {
   int editorId = viewWidget->addMainScriptEditor();
-  editedMainScripts[editorId] = "";
   viewWidget->getMainScriptEditor(editorId)->setPlainText(getDefaultScriptCode(pythonInterpreter->getPythonVersion(), graph).c_str());
   viewWidget->mainScriptsTabWidget->setTabText(editorId, "[no file]");
   viewWidget->mainScriptsTabWidget->setTabToolTip(editorId, "string main script, don't forget to save the current graph or\n save script to file to not lose modifications to source code.");
@@ -745,8 +744,7 @@ bool PythonScriptView::loadScript(const QString &fileName) {
     scriptCode += file.readLine();
   }
 
-  int editorId = viewWidget->addMainScriptEditor();
-  editedMainScripts[editorId] = fileInfo.absoluteFilePath().toStdString();
+  int editorId = viewWidget->addMainScriptEditor(fileInfo.absoluteFilePath());
   viewWidget->getMainScriptEditor(editorId)->setPlainText(scriptCode);
   viewWidget->mainScriptsTabWidget->setTabText(editorId, fileInfo.fileName());
   viewWidget->mainScriptsTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
@@ -761,9 +759,9 @@ void PythonScriptView::saveScript() {
 }
 
 void PythonScriptView::saveScript(int tabIdx) {
-  if (editedMainScripts.find(tabIdx) != editedMainScripts.end()) {
+    if (tabIdx >=0 && tabIdx < viewWidget->mainScriptsTabWidget->count()) {
     QString fileName;
-    QString mainScriptFileName = editedMainScripts[tabIdx].c_str();
+    QString mainScriptFileName = viewWidget->getMainScriptEditor(tabIdx)->getFileName();
 
 
     if (mainScriptFileName == "") {
@@ -789,7 +787,7 @@ void PythonScriptView::saveScript(int tabIdx) {
       if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         return;
 
-      editedMainScripts[tabIdx] = fileInfo.absoluteFilePath().toStdString();
+      viewWidget->getMainScriptEditor(tabIdx)->setFileName(fileInfo.absoluteFilePath());
       QTextStream out(&file);
       out << viewWidget->getMainScriptCode(tabIdx).c_str();
       viewWidget->mainScriptsTabWidget->setTabText(tabIdx, fileInfo.fileName());
@@ -822,12 +820,10 @@ bool PythonScriptView::loadModule(const QString &fileName) {
 
   file.close();
 
-  int editorId = viewWidget->addModuleEditor();
+  int editorId = viewWidget->addModuleEditor(fileInfo.absoluteFilePath());
   PythonCodeEditor *codeEditor = viewWidget->getModuleEditor(editorId);
 
   pythonInterpreter->addModuleSearchPath(modulePath.toStdString());
-
-  editedModules[editorId] = fileInfo.absoluteFilePath().toStdString();
 
   codeEditor->setPlainText(scriptCode);
 
@@ -842,7 +838,7 @@ bool PythonScriptView::loadModule(const QString &fileName) {
 bool PythonScriptView::loadModuleFromSrcCode(const std::string &moduleName, const std::string &moduleSrcCode) {
   int editorId = viewWidget->addModuleEditor();
   PythonCodeEditor *codeEditor = viewWidget->getModuleEditor(editorId);
-  editedModules[editorId] = moduleName;
+  codeEditor->setFileName(moduleName.c_str());
   codeEditor->setPlainText(moduleSrcCode.c_str());
   viewWidget->modulesTabWidget->setTabText(editorId, moduleName.c_str());
   viewWidget->modulesTabWidget->setTabToolTip(editorId, "string module, don't forget to save the current graph or\n save module to file to not lose modifications to source code.");
@@ -870,12 +866,10 @@ void PythonScriptView::newFileModule() {
   QString moduleName(fileInfo.fileName());
   QString modulePath(fileInfo.absolutePath());
 
-  int editorId = viewWidget->addModuleEditor();
+  int editorId = viewWidget->addModuleEditor(fileInfo.absoluteFilePath());
   viewWidget->modulesTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
   pythonInterpreter->addModuleSearchPath(modulePath.toStdString());
   viewWidget->modulesTabWidget->setTabText(editorId, fileInfo.fileName());
-
-  editedModules[editorId] = fileInfo.absoluteFilePath().toStdString();
 
   file.close();
 }
@@ -889,9 +883,8 @@ void PythonScriptView::newStringModule() {
     if (!moduleName.endsWith(".py"))
       moduleName += ".py";
 
-    int editorId = viewWidget->addModuleEditor();
+    int editorId = viewWidget->addModuleEditor(moduleName);
     viewWidget->modulesTabWidget->setTabText(editorId, moduleName);
-    editedModules[editorId] = moduleName.toStdString();
 
     viewWidget->modulesTabWidget->setTabToolTip(editorId, "string module, don't forget to save the current graph or\n save module to file to not lose modifications to source code.");
   }
@@ -905,7 +898,7 @@ void PythonScriptView::saveModuleToFile() {
       fileName += ".py";
 
     int tabIdx = viewWidget->modulesTabWidget->currentIndex();
-    editedModules[tabIdx] = fileName.toStdString();
+    viewWidget->getModuleEditor(tabIdx)->setFileName(fileName);
     saveModule(tabIdx);
   }
 }
@@ -1006,16 +999,16 @@ void PythonScriptView::loadPythonPlugin() {
       QMessageBox::critical(viewWidget, "Error", "Unable to retrieve the plugin class name and the plugin name from the source code\n.");
     }
     else {
-      int editorId = viewWidget->addPluginEditor();
+      int editorId = viewWidget->addPluginEditor(fileInfo.absoluteFilePath());
       PythonCodeEditor *codeEditor = viewWidget->getPluginEditor(editorId);
       codeEditor->setPlainText(pluginCode);
       pythonInterpreter->addModuleSearchPath(modulePath.toStdString());
       viewWidget->pluginsTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
       viewWidget->pluginsTabWidget->setTabText(editorId, QString("[") + pluginType + QString("] ") + fileInfo.fileName());
-      editedPlugins[editorId] = fileInfo.absoluteFilePath().toStdString();
-      editedPluginsClassName[editedPlugins[editorId]] = pluginClassName.toStdString();
-      editedPluginsType[editedPlugins[editorId]] = pluginType.toStdString();
-      editedPluginsName[editedPlugins[editorId]] = pluginName.toStdString();
+      string pluginFile = fileInfo.absoluteFilePath().toStdString();
+      editedPluginsClassName[pluginFile] = pluginClassName.toStdString();
+      editedPluginsType[pluginFile] = pluginType.toStdString();
+      editedPluginsName[pluginFile] = pluginName.toStdString();
     }
   }
 }
@@ -1035,7 +1028,7 @@ void PythonScriptView::savePythonPlugin() {
     moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 3);
 
   viewWidget->pluginsTabWidget->setTabText(tabIdx, moduleName+".py");
-  QFile file(editedPlugins[tabIdx].c_str());
+  QFile file(viewWidget->getPluginEditor(tabIdx)->getFileName());
   QFileInfo fileInfo(file);
 
   if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -1047,7 +1040,7 @@ void PythonScriptView::savePythonPlugin() {
 }
 
 void PythonScriptView::saveModule(int tabIdx) {
-  if (editedModules.find(tabIdx) != editedModules.end()) {
+    if (tabIdx >= 0 && tabIdx < viewWidget->modulesTabWidget->count()) {
     QString moduleNameExt = viewWidget->modulesTabWidget->tabText(tabIdx);
     QString moduleName;
 
@@ -1058,10 +1051,10 @@ void PythonScriptView::saveModule(int tabIdx) {
 
     pythonInterpreter->deleteModule(moduleName.toStdString());
     viewWidget->modulesTabWidget->setTabText(tabIdx, moduleName+".py");
-    QFile file(editedModules[tabIdx].c_str());
+    QFile file(viewWidget->getModuleEditor(tabIdx)->getFileName());
     QFileInfo fileInfo(file);
 
-    if (fileInfo.fileName() != editedModules[tabIdx].c_str() && file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    if (fileInfo.fileName() != viewWidget->getModuleEditor(tabIdx)->getFileName() && file.open(QIODevice::WriteOnly | QIODevice::Text)) {
       QTextStream out(&file);
       out << viewWidget->getModuleCode(tabIdx).c_str();
       file.close();
@@ -1073,8 +1066,8 @@ void PythonScriptView::saveModule(int tabIdx) {
 void PythonScriptView::saveAllModules() {
   map<int, string>::const_iterator it;
 
-  for (it = editedModules.begin() ; it != editedModules.end() ; ++it) {
-    saveModule(it->first);
+  for (int i = 0 ; i < viewWidget->modulesTabWidget->count() ; ++i) {
+    saveModule(i);
 
   }
 }
@@ -1084,8 +1077,8 @@ bool PythonScriptView::reloadAllModules() {
   bool ret = true;
   map<int, string>::const_iterator it;
 
-  for (it = editedModules.begin() ; it != editedModules.end() ; ++it) {
-    QString moduleNameExt = viewWidget->modulesTabWidget->tabText(it->first);
+  for (int i = 0 ; i < viewWidget->modulesTabWidget->count() ; ++i) {
+    QString moduleNameExt = viewWidget->modulesTabWidget->tabText(i);
     QString moduleName;
 
     if (moduleNameExt[moduleNameExt.size() - 1] == '*')
@@ -1094,9 +1087,9 @@ bool PythonScriptView::reloadAllModules() {
       moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 3);
 
     pythonInterpreter->deleteModule(moduleName.toStdString());
-    QFileInfo fileInfo((it->second).c_str());
+    QFileInfo fileInfo(viewWidget->getModuleEditor(i)->getFileName());
 
-    if (fileInfo.fileName() == (it->second).c_str()) {
+    if (fileInfo.fileName() == viewWidget->getModuleEditor(i)->getFileName()) {
       ret = ret && pythonInterpreter->registerNewModuleFromString(moduleName.toStdString(),  viewWidget->getModuleCode(it->first));
     }
     else {
@@ -1137,59 +1130,22 @@ bool PythonScriptView::eventFilter(QObject *obj, QEvent *event) {
 }
 
 void PythonScriptView::closeModuleTabRequested(int tab) {
-  editedModules.erase(tab);
   QWidget *editorWidget = viewWidget->modulesTabWidget->widget(tab);
   delete editorWidget;
-
-  std::map<int, std::string> editedModulesCp(editedModules);
-  std::map<int, std::string>::iterator it;
-
-  for (it = editedModules.begin() ; it != editedModules.end() ; ++it) {
-    if (it->first > tab) {
-      editedModulesCp[it->first - 1] = editedModules[it->first];
-      editedModulesCp.erase(it->first);
-    }
-  }
-
-  editedModules = editedModulesCp;
 }
 
 void PythonScriptView::closeMainScriptTabRequested(int tab) {
-  editedMainScripts.erase(tab);
   QWidget *editorWidget = viewWidget->mainScriptsTabWidget->widget(tab);
   delete editorWidget;
-
-  std::map<int, std::string> editedMainScriptsCp(editedMainScripts);
-  std::map<int, std::string>::iterator it;
-
-  for (it = editedMainScripts.begin() ; it != editedMainScripts.end() ; ++it) {
-    if (it->first > tab) {
-      editedMainScriptsCp[it->first - 1] = editedMainScripts[it->first];
-      editedMainScriptsCp.erase(it->first);
-    }
-  }
-
-  editedMainScripts = editedMainScriptsCp;
 }
 
 void PythonScriptView::closePluginTabRequested(int tab) {
-  editedPluginsClassName.erase(editedPlugins[tab]);
-  editedPluginsType.erase(editedPlugins[tab]);
-  editedPluginsName.erase(editedPlugins[tab]);
-  editedPlugins.erase(tab);
+  std::string pluginFile = viewWidget->getPluginEditor(tab)->getFileName().toStdString();
+  editedPluginsClassName.erase(pluginFile);
+  editedPluginsType.erase(pluginFile);
+  editedPluginsName.erase(pluginFile);
   QWidget *editorWidget = viewWidget->pluginsTabWidget->widget(tab);
   delete editorWidget;
-  std::map<int, std::string> editedPluginsCp(editedPlugins);
-  std::map<int, std::string>::iterator it;
-
-  for (it = editedPlugins.begin() ; it != editedPlugins.end() ; ++it) {
-    if (it->first > tab) {
-      editedPluginsCp[it->first - 1] = editedPlugins[it->first];
-      editedPluginsCp.erase(it->first);
-    }
-  }
-
-  editedPlugins = editedPluginsCp;
 }
 
 void PythonScriptView::newPythonPlugin() {
@@ -1205,15 +1161,15 @@ void PythonScriptView::newPythonPlugin() {
     QString moduleName(fileInfo.fileName());
     QString modulePath(fileInfo.absolutePath());
 
-    int editorId = viewWidget->addPluginEditor();
+    int editorId = viewWidget->addPluginEditor(fileInfo.absoluteFilePath());
     viewWidget->pluginsTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
     pythonInterpreter->addModuleSearchPath(modulePath.toStdString());
     viewWidget->pluginsTabWidget->setTabText(editorId, QString("[") + pluginCreationDialog.getPluginType() + QString("] ") + fileInfo.fileName());
 
-    editedPlugins[editorId] = fileInfo.absoluteFilePath().toStdString();
-    editedPluginsClassName[editedPlugins[editorId]] = pluginCreationDialog.getPluginClassName().toStdString();
-    editedPluginsType[editedPlugins[editorId]] = pluginCreationDialog.getPluginType().toStdString();
-    editedPluginsName[editedPlugins[editorId]] = pluginCreationDialog.getPluginName().toStdString();
+    string pluginFile = fileInfo.absoluteFilePath().toStdString();
+    editedPluginsClassName[pluginFile] = pluginCreationDialog.getPluginClassName().toStdString();
+    editedPluginsType[pluginFile] = pluginCreationDialog.getPluginType().toStdString();
+    editedPluginsName[pluginFile] = pluginCreationDialog.getPluginName().toStdString();
     QString pluginSkeleton = getTulipPythonPluginSkeleton(pluginCreationDialog.getPluginClassName(),
                              pluginCreationDialog.getPluginType(),
                              pluginCreationDialog.getPluginName(),
@@ -1318,13 +1274,14 @@ void PythonScriptView::registerPythonPlugin() {
   PythonInterpreter::getInstance()->reloadModule(moduleName.toStdString());
   PythonInterpreter::getInstance()->runString("tulipplugins.setTestMode(False)");
   ostringstream oss;
-  string pluginType = editedPluginsType[editedPlugins[tabIdx]];
+  string pluginFile = viewWidget->getPluginEditor(tabIdx)->getFileName().toStdString();
+  string pluginType = editedPluginsType[pluginFile];
 
-  oss << "plugin = " << moduleName.toStdString() << "." << editedPluginsClassName[editedPlugins[tabIdx]] << "(tlp.AlgorithmContext())";
+  oss << "plugin = " << moduleName.toStdString() << "." << editedPluginsClassName[pluginFile] << "(tlp.AlgorithmContext())";
 
   pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
   viewWidget->consoleOutputWidget->clear();
-  removePluginAndUpdateGui(editedPluginsName[editedPlugins[tabIdx]], pluginType);
+  removePluginAndUpdateGui(editedPluginsName[pluginFile], pluginType);
 
   if (PythonInterpreter::getInstance()->runString(oss.str())) {
     QList<int> sizes;

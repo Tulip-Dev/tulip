@@ -42,9 +42,9 @@ public :
   void showEvent(QShowEvent *);
   void resizeEvent(QResizeEvent *);
 
-  int addMainScriptEditor();
-  int addModuleEditor();
-  int addPluginEditor();
+  int addMainScriptEditor(const QString &fileName="");
+  int addModuleEditor(const QString &fileName="");
+  int addPluginEditor(const QString &fileName="");
 
   PythonCodeEditor *getMainScriptEditor(int idx) const;
   PythonCodeEditor *getCurrentMainScriptEditor() const;

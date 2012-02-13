@@ -70,9 +70,9 @@ public :
 
   bool registerNewModuleFromString(const std::string &moduleName, const std::string &moduleSrcCode);
 
-  bool runString(const std::string &pyhtonCode);
+  bool runString(const std::string &pyhtonCode, const std::string &scriptFilePath="");
 
-  bool runGraphScript(const std::string &module, const std::string &function, tlp::Graph *graph);
+  bool runGraphScript(const std::string &module, const std::string &function, tlp::Graph *graph, const std::string &scriptFilePath="");
 
   bool functionExists(const std::string &moduleName, const std::string &functionName);
 

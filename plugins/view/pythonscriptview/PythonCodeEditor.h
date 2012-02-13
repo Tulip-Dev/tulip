@@ -190,6 +190,14 @@ public :
 
   void setGraph(tlp::Graph *graph);
 
+  void setFileName(const QString &fileName) {
+    pythonFileName = fileName;
+  }
+
+  QString getFileName() const {
+      return pythonFileName;
+  }
+
 protected:
 
   void resizeEvent(QResizeEvent *event);
@@ -253,6 +261,8 @@ protected:
   QPoint toolTipPos;
   QString toolTipText;
   QString toolTipFunc;
+
+  QString pythonFileName;
 
   static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
 

@@ -384,7 +384,9 @@ bool PythonInterpreter::functionExists(const string &moduleName, const string &f
   return ret;
 }
 
-bool PythonInterpreter::runString(const string &pyhtonCode) {
+bool PythonInterpreter::runString(const string &pyhtonCode, const std::string &scriptFilePath) {
+  if (consoleOuputHandler)
+    consoleOuputHandler->setMainScriptFileName(scriptFilePath.c_str());
   timer.start();
   int ret = 0;
   holdGIL();
@@ -416,8 +418,10 @@ void PythonInterpreter::addModuleSearchPath(const std::string &path, const bool 
   }
 }
 
-bool PythonInterpreter::runGraphScript(const string &module, const string &function, tlp::Graph *graph) {
+bool PythonInterpreter::runGraphScript(const string &module, const string &function, tlp::Graph *graph, const std::string &scriptFilePath) {
 
+  if (consoleOuputHandler)
+    consoleOuputHandler->setMainScriptFileName(scriptFilePath.c_str());
   timer.start();
 
   holdGIL();

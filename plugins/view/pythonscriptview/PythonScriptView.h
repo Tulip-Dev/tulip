@@ -109,7 +109,6 @@ private slots :
   void closeModuleTabRequested(int tab);
   void closePluginTabRequested(int tab);
 
-
 private :
 
   bool loadScript(const QString &fileName);
@@ -123,19 +122,13 @@ private :
   void indicateErrors();
   void clearErrorIndicators();
 
-
-
   PythonScriptViewWidget *viewWidget;
   PythonInterpreter *pythonInterpreter;
   tlp::Graph *graph;
 
-  std::map<int, std::string> editedMainScripts;
-  std::map<int, std::string> editedModules;
-  std::map<int, std::string> editedPlugins;
   std::map<std::string, std::string> editedPluginsClassName;
   std::map<std::string, std::string> editedPluginsType;
   std::map<std::string, std::string> editedPluginsName;
-
 
   tlp::SGHierarchyWidget *clusterTreeWidget;
   bool scriptStopped;

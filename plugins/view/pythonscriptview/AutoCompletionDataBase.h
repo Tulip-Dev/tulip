@@ -28,6 +28,8 @@
 
 #include "APIDataBase.h"
 
+static char sepChar[] = {' ', '\t', '=', '(', '[', '{' , ',', '*', '+', '/', '^', '-', 0};
+
 class AutoCompletionDataBase {
 
 public :

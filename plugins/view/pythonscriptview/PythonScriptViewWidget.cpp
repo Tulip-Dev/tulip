@@ -60,17 +60,9 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
   splitter->setCollapsible(0, false);
   pluginControlFrame->hide();
 
-  pluginInfoLabel->setTextFormat(Qt::RichText);
-  pluginInfoLabel->setText(QString("When the plugin development is finished, you can copy the associated Python file ")
-                           + "to <br> <b>" + pythonPluginsPath.c_str() + "</b> or <b> "
-                           + pythonPluginsPathHome.c_str() +"</b> <br> and it will be automatically loaded at Tulip startup");
-  QFont font;
-#ifdef WIN32
-  font.setPointSize(7);
-#else
-  font.setPointSize(6);
-#endif
-  pluginInfoLabel->setFont(font);
+  pluginsInfosWidget->appendHtml(QString("When the plugin development is finished, you can copy the associated Python file ")
+                           + "to <b>" + pythonPluginsPath.c_str() + "</b> or <b> "
+                           + pythonPluginsPathHome.c_str() +"</b> and it will be automatically loaded at Tulip startup");
 
   connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(resizeToolBars()));
   connect(decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
@@ -147,8 +139,9 @@ void PythonScriptViewWidget::resizeToolBars() {
   pluginsToolBar->resize(pluginsToolBarWidget->size());
 }
 
-int PythonScriptViewWidget::addMainScriptEditor() {
+int PythonScriptViewWidget::addMainScriptEditor(const QString &fileName) {
   PythonCodeEditor *codeEditor = new PythonCodeEditor();
+  codeEditor->setFileName(fileName);
   codeEditor->installEventFilter(pythonScriptView);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
   connect(codeEditor, SIGNAL(textChanged()), this, SLOT(mainScriptTextChanged()));
@@ -157,8 +150,9 @@ int PythonScriptViewWidget::addMainScriptEditor() {
   return idx;
 }
 
-int PythonScriptViewWidget::addModuleEditor() {
+int PythonScriptViewWidget::addModuleEditor(const QString &fileName) {
   PythonCodeEditor *codeEditor = new PythonCodeEditor();
+  codeEditor->setFileName(fileName);
   codeEditor->installEventFilter(pythonScriptView);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
   connect(codeEditor, SIGNAL(textChanged()), this, SLOT(moduleScriptTextChanged()));
@@ -167,8 +161,9 @@ int PythonScriptViewWidget::addModuleEditor() {
   return idx;
 }
 
-int PythonScriptViewWidget::addPluginEditor() {
+int PythonScriptViewWidget::addPluginEditor(const QString &fileName) {
   PythonCodeEditor *codeEditor = new PythonCodeEditor();
+  codeEditor->setFileName(fileName);
   codeEditor->installEventFilter(pythonScriptView);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
   connect(codeEditor, SIGNAL(textChanged()), this, SLOT(pluginScriptTextChanged()));

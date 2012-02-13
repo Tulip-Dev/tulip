@@ -427,8 +427,6 @@ QSet<QString> getGraphPropertiesList(Graph *graph, const QString &prefix, const 
   return ret;
 }
 
-char sepChar[] = {' ', '=', '(', '[', '{' , ',', '*', '+', '/', '^', 0};
-
 QSet<QString> AutoCompletionDataBase::getPluginParametersListIfContext(const QString &context, const QString &editedFunction) const {
   QSet<QString> ret;
 
