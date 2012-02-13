@@ -291,7 +291,7 @@
   <sect1 id="main-window-toolsbar"><title>Toolbar</title>
     <para>
       <graphic fileref="images/tools_bar.png"/>
-      The toolbar contains 5 tools: 
+      The toolbar contains 6 tools: 
       <itemizedlist>
       	<listitem>
       		<para><inlinegraphic fileref="images/i_open.png"/><code> Open file</code>: Open a new graph.
@@ -311,6 +311,10 @@
       	</listitem>
       	<listitem>
       		<para><inlinegraphic fileref="images/i_redo.png"/><code> Redo</code>: Redo the last undo operation.
+          </para>
+      	</listitem>
+      	<listitem>
+      		<para><inlinegraphic fileref="images/i_snapshot.png"/><code> Snapshot</code>: Record an image of the current view.
           </para>
       	</listitem>
       </itemizedlist>
@@ -401,7 +405,7 @@
 							</para>
             </listitem>
             <listitem id="rectangleSelection" xreflabel="Node Link Diagram Rectangle Selection">
-              <para><inlinegraphic fileref="images/i_selection.png"/><code>Rectangle Selection</code>: select all elements touching the selection box (the previous selection is replaced, but can be recovered with <code>Undo</code>). With <keycap>Shift</keycap>, the newly selected elements are added to the current selection; with <keycap>Ctrl</keycap> (<keycap>Alt</keycap> on Mac), the selected elements are removed from the current selection.
+              <para><inlinegraphic fileref="images/i_selection.png"/><code>Rectangle Selection</code>: select all elements intersecting the selection box (the previous selection is replaced, but can be recovered with <code>Undo</code>). With <keycap>Shift</keycap>, the newly selected elements are added to the current selection; with <keycap>Ctrl</keycap> (<keycap>Alt</keycap> on Mac), the selected elements are removed from the current selection.
               </para>
             </listitem>
             <listitem>
@@ -463,7 +467,7 @@
               </para>
             </listitem>
             <listitem>
-              <para><inlinegraphic fileref="images/i_zoom.png"/><code>Zoom Box</code>: draw a rectangle and Tulip zooms on this area.
+              <para><inlinegraphic fileref="images/i_zoom.png"/><code>Zoom on Rectangle</code>: Zooms on a specified rectangle area. <keycap>mouse left</keycap> down indicates the first corner, <keycap>mouse left</keycap> up indicates the opposite corner.
               </para>
             </listitem>
             <listitem id="zoomBox" xreflabel="Node Link Diagram Zoom Box">
@@ -565,9 +569,9 @@
           <itemizedlist>
             <listitem><para><code>Labels</code>:
                 <itemizedlist>
-                  <listitem><para><code>metric ordering</code>: if checked, labels are displayed in decreasing order of the viewMetric property.</para>
+                  <listitem><para><code>metric ordering</code>: if checked, labels are displayed in decreasing order of the selected property (default is viewMetric).</para>
                   </listitem>
-                  <listitem><para><code>Density</code>: move this slider to the right to have less labels displayed.</para>
+                  <listitem><para><code>Density</code>: move this slider to the left to have less labels displayed.</para>
                   </listitem>
 									<listitem><code>Scale labels to fit node size</code></listitem>
               </itemizedlist></para>
