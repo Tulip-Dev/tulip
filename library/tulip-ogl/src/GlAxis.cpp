@@ -71,13 +71,13 @@ void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
     float labelWidth;
 
     if (axisOrientation == HORIZONTAL_AXIS) {
-      labelWidth = spaceBetweenAxisGrads;
+      labelWidth = 0.8f * spaceBetweenAxisGrads;
 
       if (maxGraduationLabelWidth != 0 && labelWidth > maxGraduationLabelWidth) {
         labelWidth = maxGraduationLabelWidth;
       }
 
-      labelHeight = labelWidth / 3.f;
+      labelHeight = labelWidth / 2.0f;
       axisGraduation->setPosition(0, Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads - axisWidth / 2, axisBaseCoord.getY() + axisGradsWidth / 2));
       axisGraduation->setPosition(1, Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads + axisWidth / 2, axisBaseCoord.getY() + axisGradsWidth / 2));
       axisGraduation->setPosition(2, Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads + axisWidth / 2, axisBaseCoord.getY() - axisGradsWidth / 2));
