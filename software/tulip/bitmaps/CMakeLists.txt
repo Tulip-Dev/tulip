@@ -1,5 +1,4 @@
 INSTALL(FILES
-  startup.gif
   headerlogo.bmp
   logo32x32.bmp
   logo.bmp
