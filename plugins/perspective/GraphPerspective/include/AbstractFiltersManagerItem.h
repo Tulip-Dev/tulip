@@ -34,9 +34,11 @@ protected:
   template<typename LISTER>
   void updateGraphModel(QTableView* table,const QString& algName, tlp::Graph* g) {
     int h=0;
+
     if (!algName.isNull()) {
       tlp::ParameterList params = LISTER::getPluginParameters(algName.toStdString());
       table->setModel(new tlp::ParameterListModel(params,g));
+
       for (int i=0; i<table->model()->rowCount(); ++i)
         h += table->rowHeight(i);
     }

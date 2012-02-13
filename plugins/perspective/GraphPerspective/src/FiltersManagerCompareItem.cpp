@@ -19,8 +19,8 @@ void fillAlgorithms(QComboBox* combo, QString title, int id) {
   fillTitle(combo, title);
   string s;
   forEach(s,LISTER::availablePlugins()) {
-      combo->addItem(s.c_str(),id);
-      lastItem(combo)->setToolTip(s.c_str());
+    combo->addItem(s.c_str(),id);
+    lastItem(combo)->setToolTip(s.c_str());
   }
 }
 
@@ -35,10 +35,19 @@ NUM_CMP(LesserEqual,<=)
 NUM_CMP(Greater,>)
 NUM_CMP(GreaterEqual,>=)
 // String comparers
-bool FiltersManagerCompareItem::ContainsComparer::compare(const string &a, const string &b) { return QString(a.c_str()).contains(b.c_str()); }
-bool FiltersManagerCompareItem::ContainsComparer::compare(double, double) { return false; }
-bool FiltersManagerCompareItem::MatchesComparer::compare(const string &a, const string &b) { QRegExp regExp(b.c_str()); return regExp.exactMatch(a.c_str()); }
-bool FiltersManagerCompareItem::MatchesComparer::compare(double, double) { return false; }
+bool FiltersManagerCompareItem::ContainsComparer::compare(const string &a, const string &b) {
+  return QString(a.c_str()).contains(b.c_str());
+}
+bool FiltersManagerCompareItem::ContainsComparer::compare(double, double) {
+  return false;
+}
+bool FiltersManagerCompareItem::MatchesComparer::compare(const string &a, const string &b) {
+  QRegExp regExp(b.c_str());
+  return regExp.exactMatch(a.c_str());
+}
+bool FiltersManagerCompareItem::MatchesComparer::compare(double, double) {
+  return false;
+}
 
 int FiltersManagerCompareItem::DOUBLE_ALGORITHM_ID = 0;
 int FiltersManagerCompareItem::STRING_ALGORITHM_ID = 1;
@@ -48,11 +57,11 @@ QVector<int> FiltersManagerCompareItem::NUMERIC_OPERATOR_INDEXES = QVector<int>(
 QVector<int> FiltersManagerCompareItem::STRING_OPERATOR_INDEXES = QVector<int>() << 6 << 7;
 
 QVector<FiltersManagerCompareItem::Comparer*> FiltersManagerCompareItem::COMPARERS =
-    QVector<FiltersManagerCompareItem::Comparer*>()
-    << new EqualComparer() << new DifferentComparer()
-    << new LesserComparer() << new LesserEqualComparer()
-    << new GreaterComparer() << new GreaterEqualComparer()
-    << new ContainsComparer() << new MatchesComparer();
+  QVector<FiltersManagerCompareItem::Comparer*>()
+  << new EqualComparer() << new DifferentComparer()
+  << new LesserComparer() << new LesserEqualComparer()
+  << new GreaterComparer() << new GreaterEqualComparer()
+  << new ContainsComparer() << new MatchesComparer();
 
 void FiltersManagerCompareItem::fillCombo(QComboBox* combo) {
   disconnect(_ui->elem1,SIGNAL(currentIndexChanged(int)),this,SLOT(elementChanged()));
@@ -62,11 +71,14 @@ void FiltersManagerCompareItem::fillCombo(QComboBox* combo) {
   disconnect(_ui->customValueEdit,SIGNAL(textChanged(QString)),this,SIGNAL(titleChanged()));
 
   combo->clear();
+
   if (combo == _ui->elem2) {
     combo->addItem(trUtf8("Custom value"));
   }
+
   // Properties
   fillTitle(combo,trUtf8("Properties"));
+
   if (_graph != NULL) {
     string s;
     forEach(s,_graph->getProperties()) {
@@ -75,6 +87,7 @@ void FiltersManagerCompareItem::fillCombo(QComboBox* combo) {
       lastItem(combo)->setToolTip(name);
     }
   }
+
   fillAlgorithms<DoublePluginLister>(combo,trUtf8("Metrics"),DOUBLE_ALGORITHM_ID);
   fillAlgorithms<StringPluginLister>(combo, trUtf8("Labels"),STRING_ALGORITHM_ID);
 
@@ -85,7 +98,7 @@ void FiltersManagerCompareItem::fillCombo(QComboBox* combo) {
   connect(_ui->customValueEdit,SIGNAL(textChanged(QString)),this,SIGNAL(titleChanged()));
 
   foreach(QComboBox* combo, QList<QComboBox*>() << _ui->elem1 << _ui->elem2) {
-    for (int i=0;i<combo->count();++i) {
+    for (int i=0; i<combo->count(); ++i) {
       if (itemAt(combo,i)->isSelectable()) {
         combo->setCurrentIndex(i);
         break;
@@ -97,14 +110,20 @@ FiltersManagerCompareItem::ComboElementType FiltersManagerCompareItem::comboElem
   if (combo == _ui->elem2 && combo->currentIndex() == CUSTOM_VALUE_CHOICE_INDEX) {
     return E_CustomValue;
   }
+
   QStandardItem* item = itemAt(combo,combo->currentIndex());
+
   if (item == NULL)
     return E_Unknown;
+
   QVariant data = item->data(Qt::UserRole);
+
   if (data.value<PropertyInterface*>() != NULL)
     return E_Property;
+
   if (data.toInt() == STRING_ALGORITHM_ID)
     return E_StringAlgorithm;
+
   return E_DoubleAlgorithm;
 }
 PropertyInterface* FiltersManagerCompareItem::comboProperty(QComboBox* combo) const {
@@ -147,6 +166,7 @@ void FiltersManagerCompareItem::elementChanged() {
 
   foreach(QComboBox* c, QList<QComboBox*>() << _ui->elem1 << _ui->elem2) {
     comboParams[c]->setVisible(isComboAlgorithm(c));
+
     if (c == combo) {
       if (isComboAlgorithm(c))
         comboParams[c]->setModel(new ParameterListModel(comboAlgorithmParams(c),_graph));
@@ -157,9 +177,9 @@ void FiltersManagerCompareItem::elementChanged() {
 }
 void FiltersManagerCompareItem::setNumerics(bool f) {
   foreach(int i,NUMERIC_OPERATOR_INDEXES)
-    itemAt(_ui->operatorCombo,i)->setEnabled(f);
+  itemAt(_ui->operatorCombo,i)->setEnabled(f);
   foreach(int i,STRING_OPERATOR_INDEXES)
-    itemAt(_ui->operatorCombo,i)->setEnabled(!f);
+  itemAt(_ui->operatorCombo,i)->setEnabled(!f);
 }
 void FiltersManagerCompareItem::graphChanged() {
   fillCombo(_ui->elem1);
@@ -167,9 +187,9 @@ void FiltersManagerCompareItem::graphChanged() {
 }
 QString FiltersManagerCompareItem::title() const {
   return (_ui->selectModeCombo->currentIndex() == 0 ? "+  " : "-  ") +
-      _ui->elem1->currentText() + " " +
-      _ui->operatorCombo->currentText() + " " +
-      (comboElementType(_ui->elem2) == E_CustomValue ? _ui->customValueEdit->text() : _ui->elem2->currentText());
+         _ui->elem1->currentText() + " " +
+         _ui->operatorCombo->currentText() + " " +
+         (comboElementType(_ui->elem2) == E_CustomValue ? _ui->customValueEdit->text() : _ui->elem2->currentText());
 }
 
 class DoublePropertyFacade {
@@ -183,10 +203,12 @@ public:
 
   double getNodeValue(node n) {
     if (_intProp != NULL) return (double)(_intProp->getNodeValue(n));
+
     return _doubleProp->getNodeValue(n);
   }
   double getEdgeValue(edge e) {
     if (_intProp != NULL) return (double)(_intProp->getEdgeValue(e));
+
     return _doubleProp->getEdgeValue(e);
   }
 };
@@ -195,10 +217,14 @@ struct BooleanTransformer {
   virtual bool tr(bool original, bool mask)=0;
 };
 struct RemoveBooleanTransformer: public BooleanTransformer {
-  bool tr(bool original, bool mask) { return original && !mask; }
+  bool tr(bool original, bool mask) {
+    return original && !mask;
+  }
 };
 struct NoopBooleanTransformer: public BooleanTransformer {
-  bool tr(bool original, bool mask) { return original || mask; }
+  bool tr(bool original, bool mask) {
+    return original || mask;
+  }
 };
 
 void FiltersManagerCompareItem::applyFilter(BooleanProperty* out) {
@@ -212,6 +238,7 @@ void FiltersManagerCompareItem::applyFilter(BooleanProperty* out) {
   foreach(QComboBox* combo, QList<QComboBox*>() << _ui->elem1 << _ui->elem2) {
     ComboElementType elType = comboElementType(combo);
     temporaryProperties << (elType != E_Property);
+
     if (elType == E_Property)
       comparisonProperties << comboProperty(combo);
     else if (elType == E_DoubleAlgorithm) {
@@ -230,6 +257,7 @@ void FiltersManagerCompareItem::applyFilter(BooleanProperty* out) {
       QString customText = _ui->customValueEdit->text();
       bool isDouble;
       double customDouble = customText.toDouble(&isDouble);
+
       if (isDouble) {
         DoubleProperty* prop = new DoubleProperty(_graph);
         prop->setAllNodeValue(customDouble);
@@ -247,10 +275,12 @@ void FiltersManagerCompareItem::applyFilter(BooleanProperty* out) {
 
   // We will add or remove from selection using functors
   BooleanTransformer* trans;
+
   if (_ui->selectModeCombo->currentIndex() == 0)
     trans = new NoopBooleanTransformer;
   else
     trans = new RemoveBooleanTransformer;
+
   Comparer* cmp = COMPARERS[_ui->operatorCombo->currentIndex()];
 
   // Check if we are in a numeric comparison or not and apply filter
@@ -283,9 +313,10 @@ void FiltersManagerCompareItem::applyFilter(BooleanProperty* out) {
     }
   }
 
-  for(int i=0;i<temporaryProperties.size();++i) {
+  for(int i=0; i<temporaryProperties.size(); ++i) {
     if (temporaryProperties[i])
       delete comparisonProperties[i];
   }
+
   delete trans;
 }

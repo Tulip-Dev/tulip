@@ -26,8 +26,10 @@ FiltersManagerAlgorithmItem::FiltersManagerAlgorithmItem(QWidget* parent): Abstr
 void FiltersManagerAlgorithmItem::algorithmSelected(int i) {
   _ui->algorithmParams->setEnabled(i != 0);
   QString algName = QString::null;
+
   if (i != 0)
     algName = _ui->algorithmCombo->itemText(i);
+
   updateGraphModel<BooleanPluginLister>(_ui->algorithmParams,algName,_graph);
   emit titleChanged();
 }
@@ -42,21 +44,22 @@ void FiltersManagerAlgorithmItem::applyFilter(BooleanProperty* prop) {
   if (model != NULL) {
     DataSet data = model->parametersValues();
     _graph->computeProperty<BooleanProperty>(_ui->algorithmCombo->currentText().toStdString(),
-                                             prop,
-                                             msg,
-                                             0,
-                                             &data);
+        prop,
+        msg,
+        0,
+        &data);
   }
   else {
     _graph->computeProperty<BooleanProperty>(_ui->algorithmCombo->currentText().toStdString(),
-                                             prop,
-                                             msg);
+        prop,
+        msg);
   }
 }
 
 QString FiltersManagerAlgorithmItem::title() const {
   if (_ui->algorithmCombo->currentIndex() == 0)
     return trUtf8("Select filtering method");
+
   return _ui->algorithmCombo->currentText();
 }
 

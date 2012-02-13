@@ -32,11 +32,13 @@ QToolButton* insertHeaderControl(HeaderFrame* header, int pos=-1) {
   result->setMaximumSize(25,25);
   result->setMinimumSize(25,25);
   result->setIconSize(QSize(16,16));
+
   if (pos == -1)
     header->insertWidget(result);
   else {
     static_cast<QHBoxLayout*>(header->layout())->insertWidget(pos,result);
   }
+
   return result;
 }
 
@@ -99,25 +101,30 @@ void FiltersManager::applyFilter() {
   switch(_ui->header->currentMenuIndex()) {
   case None:
     break;
+
   case Current:
     *result = *(g->getProperty<BooleanProperty>("viewSelection"));
     break;
+
   case Nodes:
     result->setAllNodeValue(true);
     break;
+
   case Edges:
     result->setAllEdgeValue(true);
     break;
+
   case All:
     result->setAllNodeValue(true);
     result->setAllEdgeValue(true);
     break;
+
   default:
     break;
   }
 
   foreach(FiltersManagerItem* item, _items)
-    item->applyFilter(result);
+  item->applyFilter(result);
 
   *(g->getProperty<BooleanProperty>("viewSelection")) = *result;
   delete result;
