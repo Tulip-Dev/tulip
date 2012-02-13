@@ -20,10 +20,25 @@
 
 #include "GraphPerspective.h"
 #include <tulip/GraphHierarchiesModel.h>
+#include <QtGui/QToolButton>
+#include <tulip/BooleanProperty.h>
 
 #include "ui_FiltersManager.h"
 
 using namespace tlp;
+
+QToolButton* insertHeaderControl(HeaderFrame* header, int pos=-1) {
+  QToolButton* result = new QToolButton(header);
+  result->setMaximumSize(25,25);
+  result->setMinimumSize(25,25);
+  result->setIconSize(QSize(16,16));
+  if (pos == -1)
+    header->insertWidget(result);
+  else {
+    static_cast<QHBoxLayout*>(header->layout())->insertWidget(pos,result);
+  }
+  return result;
+}
 
 FiltersManager::FiltersManager(QWidget *parent): QWidget(parent), _ui(new Ui::FiltersManagerData) {
   _ui->setupUi(this);
@@ -32,6 +47,10 @@ FiltersManager::FiltersManager(QWidget *parent): QWidget(parent), _ui(new Ui::Fi
   GraphHierarchiesModel* model = Perspective::typedInstance<GraphPerspective>()->model();
   connect(model,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
   currentGraphChanged(model->currentGraph());
+
+  _playButton = insertHeaderControl(_ui->header);
+  _playButton->setIcon(QIcon(":/tulip/gui/icons/22/media-playback-start.png"));
+  connect(_playButton,SIGNAL(clicked()),this,SLOT(applyFilter()));
 }
 
 FiltersManager::~FiltersManager() {
@@ -66,4 +85,43 @@ void FiltersManager::itemModeChanged(FiltersManagerItem::Mode m) {
 
 void FiltersManager::currentGraphChanged(tlp::Graph* g) {
   _ui->filtersList->setEnabled(g != NULL);
+}
+
+void FiltersManager::applyFilter() {
+  Observable::holdObservers();
+  _playButton->setEnabled(false);
+
+  Graph* g = Perspective::typedInstance<GraphPerspective>()->model()->currentGraph();
+  BooleanProperty* result = new BooleanProperty(g);
+  result->setAllNodeValue(false);
+  result->setAllEdgeValue(false);
+
+  switch(_ui->header->currentMenuIndex()) {
+  case None:
+    break;
+  case Current:
+    *result = *(g->getProperty<BooleanProperty>("viewSelection"));
+    break;
+  case Nodes:
+    result->setAllNodeValue(true);
+    break;
+  case Edges:
+    result->setAllEdgeValue(true);
+    break;
+  case All:
+    result->setAllNodeValue(true);
+    result->setAllEdgeValue(true);
+    break;
+  default:
+    break;
+  }
+
+  foreach(FiltersManagerItem* item, _items)
+    item->applyFilter(result);
+
+  *(g->getProperty<BooleanProperty>("viewSelection")) = *result;
+  delete result;
+
+  Observable::unholdObservers();
+  _playButton->setEnabled(true);
 }

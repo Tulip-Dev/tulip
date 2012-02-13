@@ -6,6 +6,10 @@ src/ControlFrame.cpp
 src/ExpandableGroupBox.cpp
 src/FiltersManager.cpp
 src/FiltersManagerItem.cpp
+src/AbstractFiltersManagerItem.cpp
+src/FiltersManagerCompareItem.cpp
+src/FiltersManagerInvertItem.cpp
+src/FiltersManagerAlgorithmItem.cpp
 src/GraphHierarchiesEditor.cpp
 src/GraphPerspective.cpp
 src/HeaderFrame.cpp
@@ -52,6 +56,10 @@ QT4_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
 include/FiltersManager.h
 include/FiltersManagerItem.h
+include/AbstractFiltersManagerItem.h
+include/FiltersManagerCompareItem.h
+include/FiltersManagerInvertItem.h
+include/FiltersManagerAlgorithmItem.h
 include/GraphHierarchiesEditor.h
 include/GraphPerspective.h
 include/ExpandableGroupBox.h

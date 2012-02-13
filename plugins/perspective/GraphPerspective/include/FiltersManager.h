@@ -26,16 +26,32 @@ namespace Ui {
 class FiltersManagerData;
 }
 
+class QToolButton;
+
 class FiltersManager: public QWidget {
   Q_OBJECT
+
+  enum PreselectionModes {
+    None = 0,
+    Current = 1,
+    Nodes = 2,
+    Edges = 3,
+    All = 4
+  };
 
   Ui::FiltersManagerData *_ui;
   QList<FiltersManagerItem*> _items;
 
+  QToolButton* _playButton;
+  QToolButton* _saveButton;
+  QToolButton* _loadButton;
 
 public:
   explicit FiltersManager(QWidget *parent=0);
   virtual ~FiltersManager();
+
+public slots:
+  void applyFilter();
 
 protected slots:
   void delItem();
