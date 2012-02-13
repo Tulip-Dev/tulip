@@ -74,7 +74,7 @@ PythonShellWidget::PythonShellWidget(QWidget *parent) : PythonCodeEditor(parent)
   setCommentShortcutsActivated(false);
   setIndentShortcutsActivated(false);
   insert(QString(PythonInterpreter::getInstance()->getPythonShellBanner().c_str())+ QString("\n"));
-  insert("# The current graph is bound to the \"graph\" variate\n");
+  insert("# The current graph is bound to the \"graph\" variable\n");
   insert("# Use Ctrl + Space to show dynamic auto-completion dialog\n");
   insert(ps1);
   currentPs = ps1;
