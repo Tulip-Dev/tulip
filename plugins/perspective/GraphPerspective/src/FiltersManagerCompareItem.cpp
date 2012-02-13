@@ -192,13 +192,13 @@ public:
 };
 
 struct BooleanTransformer {
-  virtual bool tr(bool f)=0;
+  virtual bool tr(bool original, bool mask)=0;
 };
-struct ReverseBooleanTransformer: public BooleanTransformer {
-  bool tr(bool f) { return !f; }
+struct RemoveBooleanTransformer: public BooleanTransformer {
+  bool tr(bool original, bool mask) { return original && !mask; }
 };
 struct NoopBooleanTransformer: public BooleanTransformer {
-  bool tr(bool f) { return f; }
+  bool tr(bool original, bool mask) { return original || mask; }
 };
 
 void FiltersManagerCompareItem::applyFilter(BooleanProperty* out) {
@@ -250,7 +250,7 @@ void FiltersManagerCompareItem::applyFilter(BooleanProperty* out) {
   if (_ui->selectModeCombo->currentIndex() == 0)
     trans = new NoopBooleanTransformer;
   else
-    trans = new ReverseBooleanTransformer;
+    trans = new RemoveBooleanTransformer;
   Comparer* cmp = COMPARERS[_ui->operatorCombo->currentIndex()];
 
   // Check if we are in a numeric comparison or not and apply filter
@@ -260,27 +260,26 @@ void FiltersManagerCompareItem::applyFilter(BooleanProperty* out) {
     node n;
     forEach(n, _graph->getNodes()) {
       bool res = cmp->compare(facade1->getNodeValue(n),facade2->getNodeValue(n));
-      out->setNodeValue(n,trans->tr(res));
+      out->setNodeValue(n,trans->tr(out->getNodeValue(n),res));
     }
     edge e;
     forEach(e, _graph->getEdges()) {
       bool res = cmp->compare(facade1->getEdgeValue(e),facade2->getEdgeValue(e));
-      out->setEdgeValue(e,trans->tr(res));
+      out->setEdgeValue(e,trans->tr(out->getEdgeValue(e),res));
     }
   }
   else {
     PropertyInterface* pi1 = comparisonProperties[0];
     PropertyInterface* pi2 = comparisonProperties[1];
-
     node n;
     forEach(n, _graph->getNodes()) {
       bool res = cmp->compare(pi1->getNodeStringValue(n),pi2->getNodeStringValue(n));
-      out->setNodeValue(n,trans->tr(res));
+      out->setNodeValue(n,trans->tr(out->getNodeValue(n),res));
     }
     edge e;
     forEach(e, _graph->getEdges()) {
       bool res = cmp->compare(pi1->getEdgeStringValue(e),pi2->getEdgeStringValue(e));
-      out->setEdgeValue(e,trans->tr(res));
+      out->setEdgeValue(e,trans->tr(out->getEdgeValue(e),res));
     }
   }
 
@@ -288,4 +287,5 @@ void FiltersManagerCompareItem::applyFilter(BooleanProperty* out) {
     if (temporaryProperties[i])
       delete comparisonProperties[i];
   }
+  delete trans;
 }
