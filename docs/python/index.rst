@@ -24,7 +24,7 @@ Starting from Tulip 3.6, the bindings can also be used outside Tulip through the
 Contents
 =================================================
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    gettingstarted
    manual
