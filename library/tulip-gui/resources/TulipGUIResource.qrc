@@ -57,5 +57,8 @@
         <file>icons/16/list-del.png</file>
         <file>icons/16/go-down.png</file>
         <file>icons/16/go-up.png</file>
+        <file>icons/22/document-save.png</file>
+        <file>icons/22/folder.png</file>
+        <file>icons/22/media-playback-start.png</file>
     </qresource>
 </RCC>
