@@ -691,6 +691,20 @@ Returns an existing node of the graph.
 
 //===========================================================================================
 
+	tlp::node getSource() const ;
+%Docstring
+tlp.Graph.getSource()
+
+.. versionadded:: 3.7
+
+Finds the first node whose input degree equals 0.
+Returns the found node (invalid if there is no source);
+
+:rtype: :class:`tlp.node`
+%End
+
+//===========================================================================================
+
 	tlp::Iterator<tlp::node>* getNodes() const /TransferBack/;
 %Docstring
 tlp.Graph.getNodes()
@@ -3018,6 +3032,8 @@ Creates and returns a subgraph of a graph root that is equal to that graph (a cl
 bool getSource(tlp::Graph *graph, tlp::node &n /Out/);
 %Docstring
 tlp.getSource(graph)
+
+.. deprecated:: 3.7 use :meth:`tlp.Graph.getSource` instead
 
 Finds the first node whose input degree equals 0.
 Returns a tuple whose first member is a boolean indicating if such node exists and
