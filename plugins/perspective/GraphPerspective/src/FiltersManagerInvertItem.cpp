@@ -13,16 +13,17 @@ FiltersManagerInvertItem::FiltersManagerInvertItem(QWidget* parent): AbstractFil
 }
 void FiltersManagerInvertItem::applyFilter(BooleanProperty* prop) {
   int i = _ui->elementCombo->currentIndex();
+
   if (i == 0 || i == 2) {
     node n;
     forEach(n, _graph->getNodes())
-        prop->setNodeValue(n,!(prop->getNodeValue(n)));
+    prop->setNodeValue(n,!(prop->getNodeValue(n)));
   }
 
   if (i == 1 || i == 2) {
     edge e;
     forEach(e, _graph->getEdges())
-        prop->setEdgeValue(e,!(prop->getEdgeValue(e)));
+    prop->setEdgeValue(e,!(prop->getEdgeValue(e)));
   }
 }
 QString FiltersManagerInvertItem::title() const {
