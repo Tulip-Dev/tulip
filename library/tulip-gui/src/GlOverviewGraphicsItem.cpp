@@ -265,7 +265,7 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
 
   baseScene.setViewport(backupViewport);
 
-  view->emitDrawNeededSignal();
+  view->getGlMainWidget()->draw(false);
 }
 
 }
