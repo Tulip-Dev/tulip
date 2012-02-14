@@ -80,18 +80,22 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
         int start = cursor.positionInBlock();
         int end = 0;
         bool endOk = false;
+
         for (int i = start ; i > 0 ; --i) {
           int j = 0;
+
           while (sepChar[j]) {
-              if (text[i-1] == sepChar[j] || text[i-1] == '.') {
-                end = i;
-                endOk = true;
-                break;
-              }
-              ++j;
-          }
-          if (endOk)
+            if (text[i-1] == sepChar[j] || text[i-1] == '.') {
+              end = i;
+              endOk = true;
               break;
+            }
+
+            ++j;
+          }
+
+          if (endOk)
+            break;
         }
 
         cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, start - end);
@@ -222,7 +226,7 @@ bool FindReplaceDialog::doFind() {
   }
 
   if (wholeWordCB->isChecked()) {
-      findFlags |= QTextDocument::FindWholeWords;
+    findFlags |= QTextDocument::FindWholeWords;
   }
 
   QTextCursor sel;

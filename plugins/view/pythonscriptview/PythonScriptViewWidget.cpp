@@ -61,8 +61,8 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
   pluginControlFrame->hide();
 
   pluginsInfosWidget->appendHtml(QString("When the plugin development is finished, you can copy the associated Python file ")
-                           + "to <b>" + pythonPluginsPath.c_str() + "</b> or <b> "
-                           + pythonPluginsPathHome.c_str() +"</b> and it will be automatically loaded at Tulip startup");
+                                 + "to <b>" + pythonPluginsPath.c_str() + "</b> or <b> "
+                                 + pythonPluginsPathHome.c_str() +"</b> and it will be automatically loaded at Tulip startup");
 
   connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(resizeToolBars()));
   connect(decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));

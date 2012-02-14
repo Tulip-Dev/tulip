@@ -118,23 +118,27 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
   int index = commentRegexp.indexIn(text);
 
   if (index >= 0) {
-      int nbQuotes = 0;
-      for (int j = index - 1 ; j > 0 ; --j) {
-          if (text[j] == '\'') {
-              ++nbQuotes;
-          }
+    int nbQuotes = 0;
+
+    for (int j = index - 1 ; j > 0 ; --j) {
+      if (text[j] == '\'') {
+        ++nbQuotes;
       }
-      int nbDblQuotes = 0;
-      for (int j = index - 1 ; j > 0 ; --j) {
-          if (text[j] == '"') {
-              ++nbDblQuotes;
-          }
+    }
+
+    int nbDblQuotes = 0;
+
+    for (int j = index - 1 ; j > 0 ; --j) {
+      if (text[j] == '"') {
+        ++nbDblQuotes;
       }
-      if (nbQuotes%2 == 0 && nbDblQuotes%2 == 0) {
-        int length = commentRegexp.matchedLength();
-        setFormat(index, length, commentFormat);
-        comments = true;
-      }
+    }
+
+    if (nbQuotes%2 == 0 && nbDblQuotes%2 == 0) {
+      int length = commentRegexp.matchedLength();
+      setFormat(index, length, commentFormat);
+      comments = true;
+    }
   }
 
   if (comments)

@@ -679,6 +679,7 @@ void PythonScriptView::indicateErrors() {
 
   for (int i = 0 ; i < viewWidget->modulesTabWidget->count() ; ++i) {
     std::string moduleFile = viewWidget->getModuleEditor(i)->getFileName().toStdString();
+
     if (errorLines.find(moduleFile) != errorLines.end()) {
       const vector<int> &linesErrorNumbers = errorLines[moduleFile];
       PythonCodeEditor *codeEditor = viewWidget->getModuleEditor(i);
@@ -759,7 +760,7 @@ void PythonScriptView::saveScript() {
 }
 
 void PythonScriptView::saveScript(int tabIdx) {
-    if (tabIdx >=0 && tabIdx < viewWidget->mainScriptsTabWidget->count()) {
+  if (tabIdx >=0 && tabIdx < viewWidget->mainScriptsTabWidget->count()) {
     QString fileName;
     QString mainScriptFileName = viewWidget->getMainScriptEditor(tabIdx)->getFileName();
 
@@ -1040,7 +1041,7 @@ void PythonScriptView::savePythonPlugin() {
 }
 
 void PythonScriptView::saveModule(int tabIdx) {
-    if (tabIdx >= 0 && tabIdx < viewWidget->modulesTabWidget->count()) {
+  if (tabIdx >= 0 && tabIdx < viewWidget->modulesTabWidget->count()) {
     QString moduleNameExt = viewWidget->modulesTabWidget->tabText(tabIdx);
     QString moduleName;
 

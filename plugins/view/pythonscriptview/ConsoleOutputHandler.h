@@ -35,7 +35,7 @@ public:
   ConsoleOutputHandler() {}
 
   void setMainScriptFileName(const QString &fileName) {
-      mainScriptFileName = fileName;
+    mainScriptFileName = fileName;
   }
 
 public slots :
@@ -59,9 +59,11 @@ public slots :
     consoleWidget->moveCursor(QTextCursor::End);
     QTextCursor cursor = consoleWidget->textCursor();
     QString outputModfied(output);
+
     if (errorOutput && mainScriptFileName != "") {
-        outputModfied.replace("<string>", mainScriptFileName);
+      outputModfied.replace("<string>", mainScriptFileName);
     }
+
     cursor.insertText(outputModfied, formt);
     QApplication::processEvents();
   }

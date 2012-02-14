@@ -195,7 +195,7 @@ public :
   }
 
   QString getFileName() const {
-      return pythonFileName;
+    return pythonFileName;
   }
 
 protected:
