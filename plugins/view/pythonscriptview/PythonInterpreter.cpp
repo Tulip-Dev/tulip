@@ -457,9 +457,12 @@ bool PythonInterpreter::runGraphScript(const string &module, const string &funct
 
     try {
       PyObject_CallObject(pFunc, argTup);
-    }
-    catch(...) {
-      //
+    } catch (exception &e) {
+      ostringstream oss;
+      oss << "A C++ exception (" << e.what() << ") has been thrown while executing the script";
+      PyErr_SetString(PyExc_Exception, oss.str().c_str());
+    } catch(...) {
+      PyErr_SetString(PyExc_Exception, "A C++ exception has been thrown while executing the script");
     }
 
     runningScript = false;
