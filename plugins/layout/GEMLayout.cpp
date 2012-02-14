@@ -385,7 +385,7 @@ bool GEMLayout::run() {
 
   if ( dataSet!=0 ) {
     dataSet->get("3D layout", is3D);
-    _useLength = dataSet->get("edge length", metric);
+    _useLength = dataSet->get("edge length", metric) && metric!=NULL;
     dataSet->get("max iterations", max_iter);
     initLayout = !dataSet->get("initial layout", layout);
   }
