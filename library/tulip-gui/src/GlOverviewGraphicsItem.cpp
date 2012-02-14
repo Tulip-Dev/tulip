@@ -20,6 +20,7 @@
 #include "tulip/GlOffscreenRenderer.h"
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlMainView.h"
+#include "tulip/GlGraphComposite.h"
 
 #include <QtGui/QGraphicsSceneMouseEvent>
 
@@ -139,10 +140,21 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
 
   if(generatePixmap) {
+    bool edgesLabels=baseScene.getGlGraphComposite()->getRenderingParametersPointer()->isViewEdgeLabel();
+    bool nodesLabels=baseScene.getGlGraphComposite()->getRenderingParametersPointer()->isViewNodeLabel();
+    bool metaNodesLabels=baseScene.getGlGraphComposite()->getRenderingParametersPointer()->isViewMetaLabel();
+    baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(false);
+    baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(false);
+    baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewMetaLabel(false);
+
     // Draw the scene
     glFrameBuffer->bind();
     baseScene.draw();
     glFrameBuffer->release();
+
+    baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(edgesLabels);
+    baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(nodesLabels);
+    baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewMetaLabel(metaNodesLabels);
   }
 
   // invert applied camera transformations
