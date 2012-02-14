@@ -90,7 +90,7 @@
      <item>
       <widget class="QCheckBox" name="askAgain" >
        <property name="text" >
-        <string>Auto load saved controller for next time</string>
+        <string>Auto load saved controller next time</string>
        </property>
       </widget>
      </item>
