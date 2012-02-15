@@ -243,7 +243,7 @@ void GlGraphRenderingParameters::setFontsType(unsigned int i) {
 void GlGraphRenderingParameters::setFontsPath(const std::string &path) {
   _fontsPath = path;
 }
-std::string GlGraphRenderingParameters::getFontsPath() const{
+std::string GlGraphRenderingParameters::getFontsPath() const {
   return _fontsPath;
 }
 //====================================================

@@ -759,8 +759,10 @@ void GlVertexArrayManager::clearObservers(PropertyInterface *deletedProperty) {
   if(colorObserverActivated) {
     if(deletedProperty!=inputData->getElementColor())
       inputData->getElementColor()->removePropertyObserver(this);
+
     if(deletedProperty!=inputData->getElementBorderColor())
-    inputData->getElementBorderColor()->removePropertyObserver(this);
+      inputData->getElementBorderColor()->removePropertyObserver(this);
+
     colorObserverActivated=false;
   }
 }
