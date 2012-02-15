@@ -57,7 +57,8 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
                   << "\\bimport\\b" << "\\bTrue\\b" << "\\bFalse\\b" << "\\bpass\\b"
                   << "\\belse\\b" << "\\bNone\\b" << "\\bprint\\b" << "\\bglobal\\b"
                   << "\\breturn\\b" << "\\bbreak\\b" << "\\bcontinue\\b" << "\\bas\\b"
-                  << "\\blambda\\b" << "\\bdel\\b";
+                  << "\\blambda\\b" << "\\bdel\\b" << "\\btry\\b" << "\\bexcept\\b"
+                  << "\\braise\\b" << "\\bfinally\\b";
 
   QStringList specialCharsPatterns;
   specialCharsPatterns << "\\+" << "-" << "=" << "\\(" << "\\)" << "\\[" << "\\]" << "," << "!" << "\\*" << "/"
