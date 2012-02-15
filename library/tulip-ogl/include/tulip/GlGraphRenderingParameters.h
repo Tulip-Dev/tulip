@@ -115,7 +115,7 @@ public:
   /**
    * return the absolute path used for the fonts loading
    */
-  std::string getFontsPath();
+  std::string getFontsPath() const;
   /**
    * If true and if labels are activated label inside meta nodes will be displayed
    */
