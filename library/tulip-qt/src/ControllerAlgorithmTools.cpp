@@ -324,7 +324,6 @@ bool ControllerAlgorithmTools::changeString(Graph *graph, QWidget *parent,
     const string &name,
     const string &propertyName,
     View *view) {
-  StringProperty tmp(graph);
   return changeProperty(graph, parent, name, propertyName,
                         StringProperty::propertyTypename, view);
 }
