@@ -434,10 +434,12 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
             // Anyway, replace the original tab character in order to have a correct indentation when setting the script text to the code editor
             replaceAll(mainScriptSrc, "    ", "\t");
             codeEditor->setPlainText(QString::fromStdString(mainScriptSrc));
+
             if (mainScript != "")
-                viewWidget->mainScriptsTabWidget->setTabText(mainScriptId, fileInfo.fileName());
+              viewWidget->mainScriptsTabWidget->setTabText(mainScriptId, fileInfo.fileName());
             else
-                viewWidget->mainScriptsTabWidget->setTabText(mainScriptId, "[no file]");
+              viewWidget->mainScriptsTabWidget->setTabText(mainScriptId, "[no file]");
+
             viewWidget->mainScriptsTabWidget->setTabToolTip(mainScriptId, "string main script, don't forget to save the current graph or\n save script to file to not lose modifications to source code.");
           }
         }
@@ -467,10 +469,12 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
         if (dataSet.get("script code", scriptCode)) {
           replaceAll(scriptCode, "    ", "\t");
           codeEditor->setPlainText(QString::fromStdString(scriptCode));
+
           if (filename != "")
             viewWidget->mainScriptsTabWidget->setTabText(0, fileInfo.fileName());
           else
-              viewWidget->mainScriptsTabWidget->setTabText(0, "[no file]");
+            viewWidget->mainScriptsTabWidget->setTabText(0, "[no file]");
+
           viewWidget->mainScriptsTabWidget->setTabToolTip(0, "string main script, don't forget to save the current graph or\n save script to file to not lose modifications to source code.");
         }
         else {
@@ -532,8 +536,10 @@ void PythonScriptView::getData(Graph **graph,DataSet *dataSet) {
 
   for (int i = 0 ; i < viewWidget->mainScriptsTabWidget->count() ; ++i) {
     string scriptFile = viewWidget->getMainScriptEditor(i)->getFileName().toStdString();
+
     if (scriptFile != "")
-        saveScript(i);
+      saveScript(i);
+
     ostringstream oss;
     oss << "main_script" << i;
     mainScriptsDataSet.set(oss.str(), scriptFile);
@@ -551,8 +557,10 @@ void PythonScriptView::getData(Graph **graph,DataSet *dataSet) {
 
   for (int i = 0 ; i < viewWidget->modulesTabWidget->count() ; ++i) {
     string moduleFile = viewWidget->getModuleEditor(i)->getFileName().toStdString();
+
     if (moduleFile != "")
-        saveModule(i);
+      saveModule(i);
+
     ostringstream oss;
     oss << "module" << i;
     modulesDataSet.set(oss.str(), moduleFile);
