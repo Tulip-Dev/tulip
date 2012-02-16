@@ -53,15 +53,15 @@ private:
 };
 
 static const char pythonReservedCharacters[] = {'#', '%', '/', '+', '-', '&', '*', '<', '>',
-                                        '|', '~', '^', '=', '!', '\'', '\"', '{', '}',
-                                        '(', ')', '[', ']', '.', 0
-                                        };
+    '|', '~', '^', '=', '!', '\'', '\"', '{', '}',
+    '(', ')', '[', ']', '.', 0
+                                               };
 
 static const char *pythonKeywords[] = {
-    "def", "class","from", "in", "and", "or", "not", "is", "with", "assert",
-    "for", "while", "if", "elif", "import", "True", "False", "pass", "exec",
-    "else", "None", "print", "global", "return", "break", "continue", "as",
-    "lambda", "del", "try", "except", "raise", "finally", "yield", 0
+  "def", "class","from", "in", "and", "or", "not", "is", "with", "assert",
+  "for", "while", "if", "elif", "import", "True", "False", "pass", "exec",
+  "else", "None", "print", "global", "return", "break", "continue", "as",
+  "lambda", "del", "try", "except", "raise", "finally", "yield", 0
 };
 
 static std::string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";

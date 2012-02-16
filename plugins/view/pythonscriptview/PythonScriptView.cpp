@@ -77,19 +77,21 @@ std::string cleanPropertyName(const std::string &propertyName) {
   }
 
   i = 0;
+
   while (pythonKeywords[i]) {
-      if (ret == pythonKeywords[i++]) {
-          ret += "_";
-          break;
-      }
+    if (ret == pythonKeywords[i++]) {
+      ret += "_";
+      break;
+    }
   }
 
   std::vector<std::string> builtinDictContent = PythonInterpreter::getInstance()->getObjectDictEntries("__builtin__");
+
   for (i = 0 ; i < builtinDictContent.size() ; ++i) {
-      if (ret == builtinDictContent[i]) {
-          ret += "_";
-          break;
-      }
+    if (ret == builtinDictContent[i]) {
+      ret += "_";
+      break;
+    }
   }
 
   return ret;

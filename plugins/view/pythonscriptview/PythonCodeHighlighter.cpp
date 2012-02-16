@@ -52,8 +52,9 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   keywordFormat.setFontWeight(QFont::Bold);
   QStringList keywordPatterns;
   int i = 0;
+
   while (pythonKeywords[i]) {
-      keywordPatterns << "\\b" + QString(pythonKeywords[i++]) + "\\b";
+    keywordPatterns << "\\b" + QString(pythonKeywords[i++]) + "\\b";
   }
 
 
