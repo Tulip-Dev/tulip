@@ -123,12 +123,13 @@ void FiltersManager::applyFilter() {
     break;
   }
 
-  foreach(FiltersManagerItem* item, _items)
-  item->applyFilter(result);
+  foreach(FiltersManagerItem* item, _items) {
+    item->applyFilter(result);
+    *(g->getProperty<BooleanProperty>("viewSelection")) = *result;
+  }
 
-  *(g->getProperty<BooleanProperty>("viewSelection")) = *result;
   delete result;
-
   Observable::unholdObservers();
+
   _playButton->setEnabled(true);
 }
