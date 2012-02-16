@@ -143,7 +143,7 @@ void ViewWidget::setCentralWidget(QWidget* w,bool deleteOldCentralWidget) {
 
   refreshItemsParenthood();
 
-  if(deleteOldCentralWidget){
+  if(deleteOldCentralWidget) {
     delete oldCentralItem;
     delete oldCentralWidget;
   }
