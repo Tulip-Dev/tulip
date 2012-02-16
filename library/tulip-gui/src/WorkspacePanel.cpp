@@ -246,7 +246,7 @@ void WorkspacePanel::setCurrentInteractorConfigurationVisible(bool toggle) {
   _view->graphicsView()->scene()->addItem(_currentInteractorConfigurationItem);
   QPropertyAnimation* anim = new QPropertyAnimation(_currentInteractorConfigurationItem,"opacity",_currentInteractorConfigurationItem);
   anim->setStartValue(0);
-  anim->setEndValue(0.85);
+  anim->setEndValue(1);
   anim->setDuration(300);
   anim->setEasingCurve(QEasingCurve::OutQuad);
   anim->start(QAbstractAnimation::DeleteWhenStopped);
@@ -408,7 +408,7 @@ void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
   else
     _viewConfigurationWidgets->setPos(newPos);
 
-  _viewConfigurationWidgets->setOpacity((expanded ? 0.9 : 0.6));
+  _viewConfigurationWidgets->setOpacity((expanded ? 1 : 0.6));
   _viewConfigurationExpanded = expanded;
 
   if (!expanded) {

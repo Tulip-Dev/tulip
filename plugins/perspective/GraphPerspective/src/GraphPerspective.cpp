@@ -62,7 +62,6 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   connect(_ui->actionSave_Project_as,SIGNAL(triggered()),this,SLOT(saveAs()));
   connect(_ui->actionOpen_Project,SIGNAL(triggered()),this,SLOT(open()));
   connect(_ui->actionAnalyze,SIGNAL(triggered()),this,SLOT(modeSwitch()));
-  connect(_ui->actionDevelop,SIGNAL(triggered()),this,SLOT(modeSwitch()));
   connect(_ui->actionCharts,SIGNAL(triggered()),this,SLOT(modeSwitch()));
 
   // D-BUS actions
@@ -209,8 +208,6 @@ void GraphPerspective::modeSwitch() {
 
   if (sender() == _ui->actionCharts)
     mode = _ui->datasetModePage;
-  else if (sender() == _ui->actionDevelop) {
-  }
   else if (sender() == _ui->actionAnalyze)
     mode = _ui->visualizeModePage;
 
