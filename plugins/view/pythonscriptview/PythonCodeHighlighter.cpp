@@ -44,21 +44,18 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   rule.format = classFormat;
   highlightingRules.append(rule);
 
-  rule.pattern = QRegExp("tlp\\.[A-Za-z0-9_]+(?=\\()");
+  rule.pattern = QRegExp("tlp\\.[A-Za-z0-9_.]+(?=\\()");
   rule.format = tlpApiFormat;
   highlightingRules.append(rule);
 
   keywordFormat.setForeground(Qt::darkBlue);
   keywordFormat.setFontWeight(QFont::Bold);
   QStringList keywordPatterns;
-  keywordPatterns << "\\bdef\\b" << "\\bclass\\b" << "\\bfrom\\b"
-                  << "\\bin\\b" << "\\band\\b" << "\\bor\\b" << "\\bnot\\b"
-                  << "\\bfor\\b" << "\\bwhile\\b" << "\\bif\\b" << "\\belif\\b"
-                  << "\\bimport\\b" << "\\bTrue\\b" << "\\bFalse\\b" << "\\bpass\\b"
-                  << "\\belse\\b" << "\\bNone\\b" << "\\bprint\\b" << "\\bglobal\\b"
-                  << "\\breturn\\b" << "\\bbreak\\b" << "\\bcontinue\\b" << "\\bas\\b"
-                  << "\\blambda\\b" << "\\bdel\\b" << "\\btry\\b" << "\\bexcept\\b"
-                  << "\\braise\\b" << "\\bfinally\\b";
+  int i = 0;
+  while (pythonKeywords[i]) {
+      keywordPatterns << "\\b" + QString(pythonKeywords[i++]) + "\\b";
+  }
+
 
   QStringList specialCharsPatterns;
   specialCharsPatterns << "\\+" << "-" << "=" << "\\(" << "\\)" << "\\[" << "\\]" << "," << "!" << "\\*" << "/"

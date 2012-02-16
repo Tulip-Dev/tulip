@@ -70,14 +70,27 @@ const string pauseScriptFunc =
 std::string cleanPropertyName(const std::string &propertyName) {
   std::string ret(propertyName);
   std::replace(ret.begin(), ret.end(), ' ', '_');
-  int i = 0;
+  size_t i = 0;
 
   while (pythonReservedCharacters[i]) {
     ret.erase(std::remove(ret.begin(), ret.end(), pythonReservedCharacters[i++]), ret.end());
   }
 
-  if (ret == "class")
-    ret += "_";
+  i = 0;
+  while (pythonKeywords[i]) {
+      if (ret == pythonKeywords[i++]) {
+          ret += "_";
+          break;
+      }
+  }
+
+  std::vector<std::string> builtinDictContent = PythonInterpreter::getInstance()->getObjectDictEntries("__builtin__");
+  for (i = 0 ; i < builtinDictContent.size() ; ++i) {
+      if (ret == builtinDictContent[i]) {
+          ret += "_";
+          break;
+      }
+  }
 
   return ret;
 }
