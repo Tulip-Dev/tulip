@@ -96,7 +96,7 @@ protected:
     This method may be called several times. Parenthood between the widget and items added using addToScene will be automatically updated.
     @note The ViewWidget takes ownership of the central widget. The previous central widget gets deleted in the process.
     */
-  void setCentralWidget(QWidget*);
+  void setCentralWidget(QWidget*, bool deleteOldCentralWidget=true);
 
   /**
     @return The graphics item associated to the central widget
