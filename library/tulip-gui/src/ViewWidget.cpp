@@ -98,7 +98,7 @@ void ViewWidget::currentInteractorChanged(tlp::Interactor *i) {
   i->install(_centralWidget);
 }
 
-void ViewWidget::setCentralWidget(QWidget* w) {
+void ViewWidget::setCentralWidget(QWidget* w,bool deleteOldCentralWidget) {
   assert(w);
   w->setAcceptDrops(true);
   QGraphicsItem *oldCentralItem = _centralWidgetItem;
@@ -143,9 +143,10 @@ void ViewWidget::setCentralWidget(QWidget* w) {
 
   refreshItemsParenthood();
 
-  delete oldCentralItem;
-
-  delete oldCentralWidget;
+  if(deleteOldCentralWidget){
+    delete oldCentralItem;
+    delete oldCentralWidget;
+  }
 }
 
 void ViewWidget::addToScene(QGraphicsItem *item) {
