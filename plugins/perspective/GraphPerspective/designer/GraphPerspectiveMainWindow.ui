@@ -353,53 +353,6 @@ QToolButton:pressed {
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="developModeButton">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>75</width>
-           <height>75</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>75</width>
-           <height>75</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Develop</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../resources/GraphPerspective.qrc">
-           <normaloff>:/tulip/graphperspective/icons/32/python.png</normaloff>:/tulip/graphperspective/icons/32/python.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="shortcut">
-          <string>Ctrl+3</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="autoExclusive">
-          <bool>true</bool>
-         </property>
-         <property name="toolButtonStyle">
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -904,11 +857,6 @@ QToolButton:pressed {
     <string>Charts</string>
    </property>
   </action>
-  <action name="actionDevelop">
-   <property name="text">
-    <string>Develop</string>
-   </property>
-  </action>
   <action name="actionAnalyze">
    <property name="text">
     <string>Analyze</string>
@@ -1036,22 +984,6 @@ QToolButton:pressed {
     <hint type="sourcelabel">
      <x>37</x>
      <y>151</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>developModeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>actionDevelop</receiver>
-   <slot>trigger()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>37</x>
-     <y>230</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
