@@ -390,12 +390,16 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 tlp.Graph.addNode(node)
 
 Adds an existing node in the graph. This node is also added in all the graph ancestors 
-to maintain the sub-graph relation between graphs. Warning, the node must be an element of the 
-graph hierarchy, thus it must be an element of the root graph. Warning : One can't add an existing node to the root graph.
+to maintain the sub-graph relation between graphs.
 
 :param node: an existing node to add to the graph
 :type node: :class:`tlp.node`
 :throws: an exception if the node does not belong to the root graph
+
+.. warning:: The node must be an element of the graph hierarchy, thus it must be an element of the root graph.
+
+.. warning:: One can't add an existing node to the root graph.
+
 %End
 
 		
@@ -468,18 +472,36 @@ tlp.Graph.addEdge(edge)
 
 Adds an existing edge in the graph. This edge is also added in all 
 the graph's ancestors to maintain the sub-graph relation between graphs. 
-Warning, the edge must be an element of the graph hierarchy, thus it must be 
-an element of the root graph. 
-Warning : One can't add an existing edge to the root graph
 
 :param edge: an existing edge to add to the graph
 :type edge: :class:`tlp.edge`
 :throws: an exception if the edge does not belong to the root graph 
-%End	
-	
+
+.. warning:: The edge must be an element of the graph hierarchy, thus it must be an element of the root graph.
+
+.. warning:: One can't add an existing edge to the root graph.
+
+%End
+
 %MethodCode
 	if (sipCpp->getRoot()->isElement(*a0)) {
-		sipCpp->addEdge(*a0);
+            if (sipCpp->isElement(sipCpp->getRoot()->source(*a0))) {
+                if (sipCpp->isElement(sipCpp->getRoot()->target(*a0))) {
+                    sipCpp->addEdge(*a0);
+                } else {
+                    std::ostringstream oss;
+                    oss << "Error : edge " << a0->id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+                        << "because the graph does not contain its target node.";
+                    printErrorMessage(oss.str());
+                    sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(*a0));
+                }
+            } else {
+                std::ostringstream oss;
+                oss << "Error : edge " << a0->id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+                    << "because the graph does not contain its source node.";
+                printErrorMessage(oss.str());
+                sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(*a0));
+            }
 	} else {
 		sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), *a0);
 	}
@@ -662,14 +684,15 @@ tlp.Graph.reverse(edge)
 
 Reverses the direction of an edge, the source becomes the target 
 and the target becomes the source. 
-Warning : The ordering is global to the entire graph hierarchy. 
-Thus, by changing the ordering in a graph you change the ordering in the hierarchy.
 
 :param edge: the edge on which to revert the direction.
 :type edge: :class:`tlp.edge` 
 :throws: an exception if the edge does not belong to the graph
-%End	
-	
+
+.. warning:: The ordering is global to the entire graph hierarchy. Thus, by changing the ordering in a graph you change the ordering in the hierarchy.
+
+%End
+
 %MethodCode
 	if (sipCpp->isElement(*a0)) {
 		sipCpp->reverse(*a0);
@@ -1970,7 +1993,6 @@ Integer algorithm plugins are objects
 implementing the tlp::IntegerAlgorithm interface in C++ or 
 the :class:`tlp.IntegerAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
@@ -1992,6 +2014,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested integer algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End	
 
 %MethodCode
@@ -2020,7 +2045,6 @@ Double algorithm plugins are objects
 implementing the tlp::DoubleAlgorithm interface in C++ or 
 the :class:`tlp.DoubleAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
@@ -2042,6 +2066,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested double algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End
 	
 %MethodCode
@@ -2070,7 +2097,6 @@ Layout algorithm plugins are objects
 implementing the tlp::LayoutAlgorithm interface in C++ or 
 the :class:`tlp.LayoutAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
@@ -2092,6 +2118,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested layout algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End
 	
 %MethodCode
@@ -2120,7 +2149,6 @@ Boolean algorithm plugins are objects
 implementing the tlp::BooleanAlgorithm interface in C++ or 
 the :class:`tlp.BooleanAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
@@ -2142,6 +2170,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested boolean algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End
 	
 %MethodCode
@@ -2169,7 +2200,6 @@ Size algorithm plugins are objects
 implementing the tlp::SizeAlgorithm interface in C++ or 
 the :class:`tlp.SizeAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
@@ -2191,6 +2221,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested size algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End
 	
 %MethodCode
@@ -2219,7 +2252,6 @@ Color algorithm plugins are objects
 implementing the tlp::ColorAlgorithm interface in C++ or 
 the :class:`tlp.ColorAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
@@ -2241,6 +2273,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested color algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End
 
 %MethodCode
@@ -2269,7 +2304,6 @@ String algorithm plugins are objects
 implementing the tlp::StringAlgorithm interface in C++ or 
 the :class:`tlp.StringAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
@@ -2291,6 +2325,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested string algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End
 
 %MethodCode
@@ -2387,7 +2424,6 @@ tlp.Graph.createMetaNode(nodeSet[, multiEdges=True, delAllEdge=True])
 Closes a set of existing nodes into a metanode and returns it.
 Edges from nodes in the set to other nodes are replaced with
 edges from the metanode to the other nodes.
-Warning: this method will failed when called on the root graph.
 
 :param nodeSet: a set of existing nodes
 :type nodeSet: list of :class:`tlp.node`
@@ -2396,6 +2432,9 @@ Warning: this method will failed when called on the root graph.
 :param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
 :type delAllEdge: boolean
 :rtype: :class:`tlp.node`
+
+ .. warning:: This method will fail when called on the root graph.
+
 %End
 
 //===========================================================================================	
@@ -2407,7 +2446,6 @@ tlp.Graph.createMetaNode(subgraph[, multiEdges=True, delAllEdge=True])
 Closes an existing subgraph into a metanode and returns it.  Edges from nodes
 in the subgraph to nodes outside the subgraph are replaced with
 edges from the metanode to the nodes outside the subgraph.
-Warning: this method will failed when called on the root graph.
 
 :param subgraph: an existing subgraph
 :type subgraph: :class:`tlp.Graph`
@@ -2416,6 +2454,9 @@ Warning: this method will failed when called on the root graph.
 :param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
 :type delAllEdge: boolean
 :rtype: :class:`tlp.node`
+
+.. warning:: This method will fail when called on the root graph.
+
 %End
 
 //===========================================================================================
@@ -2442,12 +2483,14 @@ tlp.Graph.openMetaNode(metaNode[, updateProperties=True])
 
 Opens a metanode and replaces all edges between that
 meta node and other nodes in the graph.
-Warning: this method will failed when called on the root graph.
 
 :param metaNode: the meta-node to open
 :type metaNode: :class:`tlp.node`
 :param updateProperties: If :const:`True`, open meta node will update inner nodes layout, color, size, etc...
 :type updateProperties: boolean
+
+.. warning:: This method will fail when called on the root graph.
+
 %End
 	
 //===========================================================================================
