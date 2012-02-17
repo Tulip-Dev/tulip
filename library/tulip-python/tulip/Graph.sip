@@ -41,12 +41,14 @@ typedef tlp::Iterator<std::string> IteratorString;
 typedef tlp::Graph* GraphPointer;
 typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
 };
+typedef std::pair<tlp::node, tlp::node> std_pair_0100tlp_node_0100tlp_node;
 %End
 
 namespace tlp {
 typedef tlp::Iterator<std::string> IteratorString;
 typedef tlp::Graph* GraphPointer;
 typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
+typedef std::pair<tlp::node, tlp::node> std_pair_0100tlp_node_0100tlp_node;
 
 enum ElementType {NODE=0, EDGE};
 
@@ -234,7 +236,7 @@ tlp.Graph.getSubGraphs()
 
 Returns an iterator on all the sub-graphs of the graph.
 
-:rtype: an iterator on :class:`tlp.Graph` objects  
+:rtype: a Tulip iterator on :class:`tlp.Graph` objects
 %End
 	
 %MethodCode
@@ -385,6 +387,25 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
+        void addNodes(unsigned int nbNodes, std::vector<tlp::node>& addedNodes /Out/);
+%Docstring
+tlp.Graph.addNodes(nbNodes)
+
+.. versionadded:: 3.7
+
+Adds new nodes in the graph and returns them in a list.
+The new nodes are also added in all the graph ancestors to maintain the sub-graph relation between graphs.
+
+:param nbNodes: the number of nodes to add in the graph
+:type nbNodes: integer
+:rtype: list of :class:`tlp.node`
+
+.. warning:: the addedNodes vector is cleared before adding nodes.
+
+%End
+
+//===========================================================================================
+
 	void addNode(const tlp::node node);
 %Docstring
 tlp.Graph.addNode(node)
@@ -413,6 +434,43 @@ to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
+        void addNodes(tlp::Iterator<tlp::node>* nodes);
+%Docstring
+tlp.Graph.addNodes(itNodes)
+
+.. versionadded:: 3.7
+
+Adds existing nodes in the graph. The nodes are also added in all
+the graph ancestors to maintain the sub-graph relation between graphs.
+
+:param itNodes: an iterator on nodes to add
+:type itNodes: a Tulip iterator on :class:`tlp.node` objects
+:throws: an exception if one of the node to add is not an element of the root graph.
+
+.. warning:: The added nodes must be elements of the graph hierarchy, thus they must be elements of the root graph.
+
+.. warning:: One can't add existing nodes to the root graph.
+
+%End
+
+%MethodCode
+    tlp::StableIterator<tlp::node> sItNodes(a0);
+    tlp::node n;
+    forEach(n, &sItNodes) {
+          if (!sipCpp->getRoot()->isElement(n)) {
+              sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), n);
+              break;
+          }
+    }
+
+    if (sipIsErr == 0) {
+        sItNodes.restart();
+        sipCpp->addNodes(&sItNodes);
+    }
+%End
+
+//===========================================================================================
+
 	void delNode(const tlp::node node, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delNode(node[, deleteInAllGraphs = False])
@@ -433,6 +491,42 @@ to maintain the sub-graph relation between graphs.
 	} else {
 		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
 	}
+%End
+
+//===========================================================================================
+
+        virtual void delNodes(tlp::Iterator<tlp::node>* itN, bool deleteInAllGraphs = false)=0;
+%Docstring
+tlp.Graph.delNodes(itNodes[, deleteInAllGraphs=False])
+
+.. versionadded:: 3.7
+
+Deletes nodes in the graph. These nodes are also removed in
+the sub-graphs hierarchy of the current graph to maintain
+the sub-graph relation between graphs.
+
+:param itNodes: an iterator on the nodes to add
+:type itNodes: a Tulip iterator on :class:`tlp.node` objects
+:param deleteInAllGraphs: if :const:`True`, these nodes are  deleted in the whole hierarchy of graphs.
+:type deleteInAllGraphs: boolean
+:throws: an exception if one of the node to delete is not an element of the graph.
+
+%End
+
+ %MethodCode
+    tlp::StableIterator<tlp::node> sItNodes(a0);
+    tlp::node n;
+    forEach(n, &sItNodes) {
+        if (!sipCpp->isElement(n)) {
+            sipIsErr = throwInvalidNodeException(sipCpp, n);
+            break;
+        }
+    }
+
+    if (sipIsErr == 0) {
+        sItNodes.restart();
+        sipCpp->delNodes(&sItNodes, a1);
+    }
 %End
 
 //===========================================================================================
@@ -466,6 +560,38 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
+        void addEdges(const std::vector<std_pair_0100tlp_node_0100tlp_node>& edges, std::vector<tlp::edge>& addedEdges /Out/);
+%Docstring
+tlp.Graph.addEdges(edges)
+
+.. versionadded:: 3.7
+
+Adds new edges in the graph and returns them in a list.
+The new edges are also added in all the graph ancestors to maintain the sub-graph relation between graphs.
+
+:param edges: the list of edges to add described by a pair of nodes
+:type edges: list of tuples containing two :class:`tlp.node` objects
+:rtype: list of :class:`tlp.edge`
+:throws: an exception if of the provided nodes to link is not an element of the graph.
+%End
+
+%MethodCode
+      for (size_t i = 0 ; i < a0->size() ; ++i) {
+        if (!sipCpp->isElement((*a0)[i].first)) {
+            sipIsErr = throwInvalidNodeException(sipCpp, (*a0)[i].first);
+        }
+        if (!sipCpp->isElement((*a0)[i].second)) {
+            sipIsErr = throwInvalidNodeException(sipCpp, (*a0)[i].second);
+        }
+      }
+      if (sipIsErr == 0) {
+        sipCpp->addEdges(*a0, *a1);
+      }
+%End
+
+
+//===========================================================================================
+
 	void addEdge(const tlp::edge edge);
 %Docstring
 tlp.Graph.addEdge(edge)
@@ -475,7 +601,7 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 
 :param edge: an existing edge to add to the graph
 :type edge: :class:`tlp.edge`
-:throws: an exception if the edge does not belong to the root graph 
+:throws: an exception if the edge does not belong to the root graph of if the source and target node of the edge are not elements of the graph
 
 .. warning:: The edge must be an element of the graph hierarchy, thus it must be an element of the root graph.
 
@@ -509,6 +635,58 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
+        void addEdges(tlp::Iterator<tlp::edge>* edges);
+%Docstring
+tlp.Graph.addEdges(itEdges)
+
+.. versionadded:: 3.7
+
+Adds existing edges in the graph. The edges are also added in all
+the graph ancestors to maintain the sub-graph relation between graphs.
+
+:param itEdges: an iterator on the edges to add
+:type itEdges: a Tulip iterator on :class:`tlp.edge` objects
+:throws: an exception if one of the edge to add is not an element of the root graph or if one of the edges extremities is not an element of the graph.
+
+.. warning:: The added edges must be elements of the graph hierarchy, thus they must be elements of the root graph.
+
+.. warning : One can't add existing edges to the root graph.
+%End
+
+%MethodCode
+    tlp::StableIterator<tlp::edge> sItEdges(a0);
+    tlp::edge e;
+    forEach(e, &sItEdges) {
+        if (!sipCpp->getRoot()->isElement(e)) {
+                sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), e);
+                break;
+        } else {
+            if (!sipCpp->isElement(sipCpp->getRoot()->source(e))) {
+                std::ostringstream oss;
+                oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+                    << "because the graph does not contain its source node.";
+                printErrorMessage(oss.str());
+                sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(e));
+                break;
+            }
+            if (!sipCpp->isElement(sipCpp->getRoot()->target(e))) {
+                std::ostringstream oss;
+                oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+                    << "because the graph does not contain its target node.";
+                printErrorMessage(oss.str());
+                sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(e));
+                break;
+            }
+        }
+    }
+
+    if (sipIsErr == 0) {
+        sItEdges.restart();
+        sipCpp->delEdges(&sItEdges);
+    }
+%End
+//===========================================================================================
+
 	 void delEdge(const tlp::edge edge, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delEdge(edge[, deleteInAllGraphs = False])
@@ -529,6 +707,41 @@ of the graph to maintain the sub-graph relation between graphs. The ordering of 
 	} else {
 		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
 	}
+%End
+
+//===========================================================================================
+
+        void delEdges(tlp::Iterator<tlp::edge>* itE, bool deleteInAllGraphs = false)=0;
+%Docstring
+tlp.Graph.delEdges(itEdges[, deleteInAllGraphs=False])
+
+.. versionadded:: 3.7
+
+Deletes edges in the graph. These edges are also removed in
+the sub-graphs hierarchy of the current graph to maintain
+the sub-graph relation between graphs.
+The ordering of remaining edges is preserved.
+
+:param itEdges: an iterator on the edges to delete
+:type itEdges: a Tulip iterator on :class:`tlp.edge` objects
+:param deleteInAllGraphs: If :const:`True`, the edges are deleted in the whole hierarchy of graphs.
+:param deleteInAllGraphs: boolean
+:throws: an exception if one of the edge to delete is not an element of the graph
+%End
+
+%MethodCode
+    tlp::StableIterator<tlp::edge> sItEdges(a0);
+    tlp::edge e;
+    forEach(e, &sItEdges) {
+        if (!sipCpp->isElement(e)) {
+            sipIsErr = throwInvalidEdgeException(sipCpp, e);
+            break;
+        }
+    }
+    if (sipIsErr == 0) {
+        sItEdges.restart();
+        sipCpp->delEdges(&sItEdges, a1);
+    }
 %End
 
 //===========================================================================================
@@ -734,7 +947,7 @@ tlp.Graph.getNodes()
 
 Returns an iterator on the nodes.
 
-:rtype: an iterator on :class:`tlp.node` objects 
+:rtype: a Tulip iterator on :class:`tlp.node` objects
 %End	
 	
 %MethodCode
@@ -787,7 +1000,7 @@ Return an iterator on the predecessors of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: an iterator on :class:`tlp.node` objects
+:rtype: a Tulip iterator on :class:`tlp.node` objects
 :throws: an exception if the node does not belong to the graph
 %End	
 	
@@ -845,7 +1058,7 @@ Returns an iterator on the successors of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: an iterator on :class:`tlp.node` objects
+:rtype: a Tulip iterator on :class:`tlp.node` objects
 :throws: an exception if the node does not belong to the graph
 %End
 	
@@ -867,7 +1080,7 @@ Returns an iterator on the neighbours of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: an iterator on :class:`tlp.node` objects
+:rtype: a Tulip iterator on :class:`tlp.node` objects
 :throws: an exception if the node does not belong to the graph
 %End
 	
@@ -909,7 +1122,7 @@ tlp.Graph.getEdges()
 
 Returns an iterator on the edges.
 
-:rtype: an iterator on :class:`tlp.edge` objects 
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
 %End
 	
 %MethodCode
@@ -933,11 +1146,11 @@ Returns an existing edge of the graph.
 %Docstring
 tlp.Graph.getOutEdges(node)
 
-Returns an iterator on the outgoing edges of a node.
+Returns a Tulip iterator on the outgoing edges of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: an iterator on :class:`tlp.edge` objects
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
 :throws: an exception if the node does not belong to the graph
 %End	
 	
@@ -959,7 +1172,7 @@ Returns an iterator on the incoming and outgoing edges of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: an iterator on :class:`tlp.edge` objects
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
 :throws: an exception if the node does not belong to the graph
 %End
 	
@@ -981,7 +1194,7 @@ Returns an iterator on the incoming edges of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: an iterator on :class:`tlp.edge` objects
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
 :throws: an exception if the node does not belong to the graph
 %End
 	
@@ -1003,7 +1216,7 @@ Returns an iterator on the underlying edges of a meta edge.
 
 :param edge: an existing edge of the graph
 :type edge: :class:`tlp.edge`
-:rtype: an iterator on :class:`tlp.edge` objects
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
 :throws: an exception if the edge does not belong to the graph
 %End	
 	
@@ -1945,7 +2158,7 @@ tlp.Graph.getLocalProperties()
 
 Returns an iterator on the names of the properties local to the graph.
 
-:rtype: tlp.IteratorString
+:rtype: a Tulip iterator on string objects
 %End	
 %MethodCode
 	sipRes = new tlp::StableIterator<std::string>(sipCpp->getLocalProperties());
@@ -1959,7 +2172,7 @@ tlp.Graph.getInheritedProperties()
 
 Returns an iterator on the names of the properties inherited from the graph's ancestors.
 
-:rtype: tlp.IteratorString
+:rtype: a Tulip iterator on string objects
 %End
 	
 %MethodCode
@@ -1974,7 +2187,7 @@ tlp.Graph.getInheritedProperties()
 
 Returns an iterator on the names of all the properties attached to the graph.
 
-:rtype: tlp.IteratorString
+:rtype: a Tulip iterator on string objects
 %End
 	
 %MethodCode
@@ -2469,7 +2682,7 @@ Populates a quotient graph with one meta node for each iterated graph.
 Returns a list of created meta-nodes.
 
 :param itGraph: a graph iterator, (typically a subgraph iterator)
-:type itGraph: an iterator on :class:`tlp.Graph` objects
+:type itGraph: a Tulip iterator on :class:`tlp.Graph` objects
 :param quotientGraph: the graph that will contain the meta nodes
 :type quotientGraph: :class:`tlp.Graph`
 :rtype: list of :class:`tlp.node`
