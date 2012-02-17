@@ -91,6 +91,9 @@ void SceneConfigWidget::settingsChanged() {
 }
 
 void SceneConfigWidget::applySettings() {
+  if(!_glMainWidget->getScene()->getGlGraphComposite())
+    return;
+
   GlGraphRenderingParameters* renderingParameters = _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
 
   // NODES
