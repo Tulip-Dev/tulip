@@ -46,6 +46,7 @@ public :
   enum AxisOrientation {HORIZONTAL_AXIS, VERTICAL_AXIS};
 
   enum LabelPosition {LEFT_OR_BELOW, RIGHT_OR_ABOVE};
+  enum CaptionLabelPosition {LEFT, RIGHT, BELOW, ABOVE};
 
   /**
    * GlAxis constructor
@@ -185,7 +186,7 @@ public :
    * \param captionOffset fill this parameter if you want to fix the offset between the axis and the caption
    * \param caption if this parameter is filled, use this value as caption text, otherwise the caption text will be the axis name
    */
-  void addCaption(const LabelPosition &captionPos, const float captionHeight, const bool captionFrame = false,
+  void addCaption(const CaptionLabelPosition &captionPos, const float captionHeight, const bool captionFrame = false,
                   const float maxCaptionWidth = 0, const float captionOffset = 0, const std::string caption = "");
 
 
@@ -221,7 +222,7 @@ protected :
   GlComposite *captionComposite;
   GlComposite *gradsComposite;
   bool captionSet;
-  LabelPosition captionPosition;
+  CaptionLabelPosition captionPosition;
   float maxCaptionWidth;
   float maxGraduationLabelWidth;
 };

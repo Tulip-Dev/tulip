@@ -80,11 +80,11 @@ void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
 
       if (axisGradsPosition == LEFT_OR_BELOW) {
         graduationLabel = new GlLabel(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() - axisGradsWidth / 2 - labelHeight / 2),
-                                      Size(labelWidth, labelHeight), axisColor);
+                                      Size(labelWidth-5, labelHeight), axisColor);
       }
       else if (axisGradsPosition == RIGHT_OR_ABOVE) {
         graduationLabel = new GlLabel(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() + axisGradsWidth / 2 + labelHeight / 2),
-                                      Size(labelWidth, labelHeight), axisColor);
+                                      Size(labelWidth-5, labelHeight), axisColor);
       }
     }
     else if (axisOrientation == VERTICAL_AXIS) {
@@ -147,26 +147,32 @@ Coord GlAxis::computeCaptionCenter() {
   Coord captionCenter;
 
   if (axisOrientation == VERTICAL_AXIS) {
-    if (captionPosition == RIGHT_OR_ABOVE) {
+    if (captionPosition == RIGHT) {
+      captionCenter = Coord(axisBaseCoord.getX() + captionOffset + captionHeight / 2, axisBaseCoord.getY() + axisLength / 2);
+    } else if(captionPosition == LEFT) {
+      captionCenter = Coord(axisBaseCoord.getX() - captionOffset - captionHeight / 2, axisBaseCoord.getY() + axisLength / 2);
+    } else if(captionPosition == BELOW) {
+      captionCenter = Coord(axisBaseCoord.getX(), axisBaseCoord.getY()  - captionOffset - captionHeight / 2);
+    } else {
       captionCenter = Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength + captionOffset + captionHeight / 2);
-    }
-    else {
-      captionCenter = Coord(axisBaseCoord.getX(), axisBaseCoord.getY() - captionOffset - captionHeight / 2);
     }
   }
   else if (axisOrientation == HORIZONTAL_AXIS) {
-    if (captionPosition == RIGHT_OR_ABOVE) {
-      captionCenter = Coord(axisBaseCoord.getX() + axisLength + captionOffset + (captionWidth / 2.), axisBaseCoord.getY());
-    }
-    else {
-      captionCenter = Coord(axisBaseCoord.getX() - captionOffset - (captionWidth / 2.) , axisBaseCoord.getY());
+    if (captionPosition == RIGHT) {
+      captionCenter = Coord(axisBaseCoord.getX() + axisLength + captionOffset + captionWidth / 2, axisBaseCoord.getY());
+    } else if(captionPosition == LEFT) {
+      captionCenter = Coord(axisBaseCoord.getX() - captionOffset - captionWidth / 2, axisBaseCoord.getY());
+    } else if(captionPosition == BELOW) {
+      captionCenter = Coord(axisBaseCoord.getX() + axisLength / 2 , axisBaseCoord.getY() - captionOffset - captionHeight / 2);
+    } else {
+      captionCenter = Coord(axisBaseCoord.getX() + axisLength / 2 , axisBaseCoord.getY() + captionOffset + captionHeight / 2);
     }
   }
 
   return captionCenter;
 }
 
-void GlAxis::addCaption(const LabelPosition &captionPos, const float captionHeight, const bool frame,
+void GlAxis::addCaption(const CaptionLabelPosition &captionPos, const float captionHeight, const bool frame,
                         const float maxCapWidth, const float offset, const std::string caption) {
   if (caption != "")
     captionText = caption;
@@ -192,6 +198,10 @@ void GlAxis::addAxisCaption(const Coord &captionLabelCenter, const bool frame) {
   captionSet = true;
 
   GlLabel *captionLabel = new GlLabel(captionLabelCenter, Size(captionWidth, captionHeight), axisColor);
+
+  if (axisOrientation == VERTICAL_AXIS && (captionPosition == LEFT || captionPosition == RIGHT))
+    captionLabel->rotate(0,0,90);
+
   captionLabel->setText(captionText);
   captionComposite->addGlEntity(captionLabel, axisName + " axis caption");
 
