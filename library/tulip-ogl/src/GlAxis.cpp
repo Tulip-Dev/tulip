@@ -149,22 +149,28 @@ Coord GlAxis::computeCaptionCenter() {
   if (axisOrientation == VERTICAL_AXIS) {
     if (captionPosition == RIGHT) {
       captionCenter = Coord(axisBaseCoord.getX() + captionOffset + captionHeight / 2, axisBaseCoord.getY() + axisLength / 2);
-    } else if(captionPosition == LEFT) {
+    }
+    else if(captionPosition == LEFT) {
       captionCenter = Coord(axisBaseCoord.getX() - captionOffset - captionHeight / 2, axisBaseCoord.getY() + axisLength / 2);
-    } else if(captionPosition == BELOW) {
+    }
+    else if(captionPosition == BELOW) {
       captionCenter = Coord(axisBaseCoord.getX(), axisBaseCoord.getY()  - captionOffset - captionHeight / 2);
-    } else {
+    }
+    else {
       captionCenter = Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength + captionOffset + captionHeight / 2);
     }
   }
   else if (axisOrientation == HORIZONTAL_AXIS) {
     if (captionPosition == RIGHT) {
       captionCenter = Coord(axisBaseCoord.getX() + axisLength + captionOffset + captionWidth / 2, axisBaseCoord.getY());
-    } else if(captionPosition == LEFT) {
+    }
+    else if(captionPosition == LEFT) {
       captionCenter = Coord(axisBaseCoord.getX() - captionOffset - captionWidth / 2, axisBaseCoord.getY());
-    } else if(captionPosition == BELOW) {
+    }
+    else if(captionPosition == BELOW) {
       captionCenter = Coord(axisBaseCoord.getX() + axisLength / 2 , axisBaseCoord.getY() - captionOffset - captionHeight / 2);
-    } else {
+    }
+    else {
       captionCenter = Coord(axisBaseCoord.getX() + axisLength / 2 , axisBaseCoord.getY() + captionOffset + captionHeight / 2);
     }
   }
