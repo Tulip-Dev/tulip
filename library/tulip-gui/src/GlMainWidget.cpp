@@ -634,7 +634,9 @@ QImage GlMainWidget::createPicture(int width, int height,bool center, int zoom, 
 
   glFrameBuf->makeCurrent();
 
+  computeInteractors();
   scene.draw();
+  drawInteractors();
 
   return glFrameBuf->toImage();
 #else
@@ -647,7 +649,9 @@ QImage GlMainWidget::createPicture(int width, int height,bool center, int zoom, 
   scene.prerenderMetaNodes();
 
   unsigned char *image = (unsigned char *)malloc(width*height*3*sizeof(unsigned char));
+  computeInteractors();
   scene.draw();
+  drawInteractors();
   glFlush();
   glFinish();
   glPixelStorei(GL_PACK_ALIGNMENT,1);
