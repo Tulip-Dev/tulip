@@ -14,7 +14,7 @@ i.e. the top-right corner of the graph drawing bounding box.
 
 %MethodCode
     if (a0) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a0)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a0) || a0 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a0->getName() << " (id " << a0->getId() << ")>";
@@ -44,7 +44,7 @@ i.e. the bottom-left corner of the graph drawing bounding box.
 
 %MethodCode
     if (a0) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a0)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a0) || a0 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a0->getName() << " (id " << a0->getId() << ")>";
@@ -74,7 +74,7 @@ Translates the current layout according to a movement vector.
 
 %MethodCode
     if (a1) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a1)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a1) || a1 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a1->getName() << " (id " << a1->getId() << ")>";
@@ -122,7 +122,7 @@ Scales the layout according to a vector of scale factors (sx, sy, sz).
 
 %MethodCode
     if (a1) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a1)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a1) || a1 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a1->getName() << " (id " << a1->getId() << ")>";
@@ -171,7 +171,7 @@ Rotates the layout around the X-axis according to an angle in degrees.
 
 %MethodCode
     if (a1) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a1)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a1) || a1 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a1->getName() << " (id " << a1->getId() << ")>";
@@ -204,7 +204,7 @@ Rotates the layout around the Y-axis according to an angle in degrees.
 
 %MethodCode
     if (a1) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a1)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a1) || a1 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a1->getName() << " (id " << a1->getId() << ")>";
@@ -234,7 +234,7 @@ Rotates the layout around the Z-axis according to an angle in degrees.
 
 %MethodCode
     if (a1) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a1)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a1) || a1 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a1->getName() << " (id " << a1->getId() << ")>";
@@ -310,7 +310,7 @@ Centers the layout, meaning translating it in order that the center of its bound
 
 %MethodCode
     if (a0) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a0)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a0) || a0 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a0->getName() << " (id " << a0->getId() << ")>";
@@ -343,7 +343,7 @@ the center of its bounding box is equal to newCenter.
 
 %MethodCode
     if (a1) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a1)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a1) || a1 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a1->getName() << " (id " << a1->getId() << ")>";
@@ -371,7 +371,7 @@ Normalizes the layout, meaning dividing each nodes and edges coordinate by the m
 
 %MethodCode
     if (a0) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a0)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a0) || a0 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a0->getName() << " (id " << a0->getId() << ")>";
@@ -411,7 +411,7 @@ Thus, it measures the length of a polyline.
 %End
 
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
+        if (sipCpp->getGraph()->isElement(*a0)) {
 		sipRes = sipCpp->edgeLength(*a0);
 	} else {
 		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
@@ -436,7 +436,7 @@ Returns the average edge length of the layout, the bends are taken into account.
 
 %MethodCode
     if (a0) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a0)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a0) || a0 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a0->getName() << " (id " << a0->getId() << ")>";
@@ -467,7 +467,7 @@ It is only defined for 2D drawing, meaning the third coordinate is omitted
   
 %MethodCode
     if (a0) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a0)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a0) || a0 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a0->getName() << " (id " << a0->getId() << ")>";
@@ -501,7 +501,7 @@ It is only defined for 2D drawing, meaning the third coordinate is omitted
 
 %MethodCode
     if (a1) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a1)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a1) || a1 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a1->getName() << " (id " << a1->getId() << ")>";
@@ -545,7 +545,7 @@ It is only defined for 2D drawing, meaning the third coordinates is omitted
 
 %MethodCode
     if (a1) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a1)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a1) || a1 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a1->getName() << " (id " << a1->getId() << ")>";
@@ -587,7 +587,7 @@ Only works in 2D, the third coordinate is not taken into account.
 
 %MethodCode
     if (a0) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a0)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a0) || a0 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a0->getName() << " (id " << a0->getId() << ")>";
@@ -619,7 +619,7 @@ Only works in 2D, the third coordinate is not taken into account.
 %MethodCode
 
     if (a1) {
-        if (!sipCpp->getGraph()->isDescendantGraph(a1)) {
+        if (!sipCpp->getGraph()->isDescendantGraph(a1) || a1 != sipCpp->getGraph()) {
             sipIsErr = 1;
             std::ostringstream oss;
             oss << "Error : <graph " << a1->getName() << " (id " << a1->getId() << ")>";
