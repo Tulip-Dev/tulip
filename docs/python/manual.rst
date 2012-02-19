@@ -15,6 +15,7 @@ This manual aims to quickly introduce the following features:
 
    graphmanipulation
    graphdatastorage
+   graphvisualattributes
    graphalgorithms
 
  

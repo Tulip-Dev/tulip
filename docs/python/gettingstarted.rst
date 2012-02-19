@@ -9,7 +9,7 @@ Using the bindings from the Tulip Software GUI
 -----------------------------------------------
 
 A lightweight Python IDE can be accessed through the graphical interface of Tulip in order to run scripts on
-the graph currently visualized. In Tulip 3.6, it is integrated as a view plugin named "Python Script view"
+the graph currently visualized. Starting Tulip 3.6, it is integrated as a view plugin named "Python Script view"
 and can be accessed through the "View" menu. The interface of this component is composed of four tabs :
 
 	* the "Script editor" tab (see :ref:`Figure 1`) that allows to write scripts that can be applied to the
