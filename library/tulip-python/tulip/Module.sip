@@ -161,6 +161,7 @@ bool pluginExists(std::string pluginName) {
 %Include DrawingTools.sip
 %Include Observable.sip
 %Include GraphEvent.sip
+%Include Constants.sip
 
 
 
