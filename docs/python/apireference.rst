@@ -125,16 +125,28 @@ Modification of the graph structure
 .. automethod:: tulip::tlp.Graph.clear
 
 .. automethod:: tulip::tlp.Graph.addNode
+
+.. automethod:: tulip::tlp.Graph.addNodes
 	
 .. automethod:: tulip::tlp.Graph.addNode
 
+.. automethod:: tulip::tlp.Graph.addNodes
+
 .. automethod:: tulip::tlp.Graph.delNode
 
+.. automethod:: tulip::tlp.Graph.delNodes
+
 .. automethod:: tulip::tlp.Graph.addEdge
+
+.. automethod:: tulip::tlp.Graph.addEdges
 	
 .. automethod:: tulip::tlp.Graph.addEdge
 
+.. automethod:: tulip::tlp.Graph.addEdges
+
 .. automethod:: tulip::tlp.Graph.delEdge
+
+.. automethod:: tulip::tlp.Graph.delEdges
 
 .. automethod:: tulip::tlp.Graph.setEdgeOrder
 
