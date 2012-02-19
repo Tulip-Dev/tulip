@@ -1054,14 +1054,12 @@ void PythonCodeEditor::updateAutoCompletionList() {
 
   QString textBeforeCursorTrimmed = textBeforeCursor.trimmed();
 
-  if (textBeforeCursorTrimmed.length() == 0 || (textBeforeCursorTrimmed.length() > 0 && !textBeforeCursor[textBeforeCursor.length()-1].isSpace())) {
-
-    QSet<QString> stringList = autoCompletionDb->getAutoCompletionListForContext(textBeforeCursorTrimmed, getEditedFunctionName());
-    foreach(QString s, stringList) {
-      autoCompletionList->addItem(s);
-    }
-    autoCompletionList->sortItems();
+  QSet<QString> stringList = autoCompletionDb->getAutoCompletionListForContext(textBeforeCursorTrimmed, getEditedFunctionName());
+  foreach(QString s, stringList) {
+    autoCompletionList->addItem(s);
   }
+  autoCompletionList->sortItems();
+
 
   if (autoCompletionList->count() == 0)
     autoCompletionList->hide();

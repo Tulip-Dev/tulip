@@ -48,6 +48,7 @@ public :
 
 private :
 
+  QSet<QString> getSubGraphsListIfContext(const QString &context, const QString &editedFunction) const ;
   QSet<QString> getGraphPropertiesListIfContext(const QString &context, const QString &editedFunction) const ;
   QSet<QString> getPluginParametersListIfContext(const QString &context, const QString &editedFunction) const;
 
@@ -59,7 +60,8 @@ private :
   QSet<QString> globalAutoCompletionList;
   QHash<QString, QSet<QString> > functionAutoCompletionList;
   QHash<QString, QHash<QString, QString> > varToType;
-  QHash<QString, QHash<QString, QString> > pluginParametersDataSet;
+  QHash<QString, QHash<QString, QString> > varToPluginName;
+  QHash<QString, QHash<QString, QSet<QString> > > pluginParametersDataSet;
   QHash<QString, QString> iteratorType;
 
 };

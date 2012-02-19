@@ -44,16 +44,16 @@ APIDataBase::APIDataBase() {
 
   addApiEntry("dict.clear()");
   addApiEntry("dict.copy()");
-  addApiEntry("dict.fromkeys(seq[,value])");
-  addApiEntry("dict.get(key[,default])");
+  addApiEntry("dict.fromkeys(seq[, value])");
+  addApiEntry("dict.get(key[, default])");
   addApiEntry("dict.has_key(key)");
   addApiEntry("dict.items()");
   addApiEntry("dict.iteritems()");
   addApiEntry("dict.iterkeys()");
   addApiEntry("dict.keys()");
-  addApiEntry("dict.pop(key[,default])");
+  addApiEntry("dict.pop(key[, default])");
   addApiEntry("dict.popitem()");
-  addApiEntry("dict.setdefault(key[,default])");
+  addApiEntry("dict.setdefault(key[, default])");
   addApiEntry("dict.update([other])");
   addApiEntry("dict.values()");
   addApiEntry("dict.viewitems()");
