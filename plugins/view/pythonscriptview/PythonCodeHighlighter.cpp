@@ -70,6 +70,7 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
     for (size_t i = 0 ; i < builtinDictContent.size() ; ++i) {
       builtinPatterns << "\\b" + QString(builtinDictContent[i].c_str()) + "\\b";
     }
+    builtinPatterns << "\\bself\\b";
 
     QTextCharFormat builtinFormat;
     builtinFormat.setForeground(QColor(0,87,187));
