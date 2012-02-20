@@ -185,6 +185,7 @@ protected:
   void updateLineNumbers(bool resetValues);
 
   bool useFirstLineAsPropertyName()const;
+  void setUseFirstLineAsPropertyName(bool useFirstLineAsHeader)const;
   unsigned int rowCount()const;
   unsigned int columnCount()const;
 
@@ -228,7 +229,14 @@ protected:
   virtual PropertyConfigurationWidget *createPropertyConfigurationWidget(unsigned int propertyNumber,
       const QString& propertyName, bool propertyNameIsEditable, const std::string& propertyType, QWidget* parent);
 
+  /**
+    * @brief Compute the name of the column. Return the first token fo the column if the first lline is used as header r Column_x xhere x is the column index.
+    **/
   QString genrateColumnName(unsigned int col)const;
+  /**
+    * @brief Compute the column data type. Take in account the first row only if it is not used as column label
+    **/
+  std::string getColumnType(unsigned int col)const;
 
   std::vector<PropertyConfigurationWidget*> propertyWidgets;
 
@@ -254,14 +262,22 @@ private:
   /**
     * @brief Try to guess the property datatype in function of the type of the previous tokens and the type of the current token.
     **/
-  std::string guessPropertyDataType(const std::string data,const std::string previousType);
+  std::string guessPropertyDataType(const std::string data,const std::string previousType)const;
+
+  /**
+    * @brief Return the type of the column in function of the old and new type.
+    **/
+  std::string combinePropertyDataType(const std::string previousType,const std::string newType)const;
   /**
     * @brief Try to guess the type of the data. Can recognize int, double, boolean or string. If the type is other return string.
     * @return The property typename of the type
     **/
-  std::string guessPropertyDataType(const std::string data);
+  std::string guessDataType(const std::string data)const;
 
-  std::vector<bool> propertyWidgetInitialized;
+  //The data type of the header
+  std::vector<std::string> columnHeaderType;
+  //The data type of the rest of the column;
+  std::vector<std::string> columnType;
 
   Ui::CSVImportConifgurationWidget *ui;
   PropertyNameValidator* validator;

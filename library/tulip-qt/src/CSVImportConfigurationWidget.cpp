@@ -48,7 +48,7 @@ PropertyConfigurationWidget::PropertyConfigurationWidget(unsigned int propertyNu
     fillPropertyTypeComboBox();
     propertyTypeComboBox->setCurrentIndex(0);
 
-    if(PropertyType.empty()){
+    if(!PropertyType.empty()){
         setPropertyType(PropertyType);
     }
 
@@ -227,7 +227,8 @@ void CSVImportConfigurationWidget::begin() {
     ui->previewTableWidget->setFirstLineIndex(getFirstLineIndex());
     clearPropertiesTypeList();
     //Clear initialized columns
-    propertyWidgetInitialized.clear();
+    columnHeaderType.clear();
+    columnType.clear();
 }
 
 void CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& lineTokens) {
@@ -241,27 +242,18 @@ void CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& l
             if(propertyWidgets.size()<=column) {
                 QString columnName = genrateColumnName(column);
                 ui->previewTableWidget->setHorizontalHeaderItem(column,new QTableWidgetItem(columnName));
-                //The default type is String property
-                string propertyType=StringProperty::propertyTypename;
-                //Mark the widget as un-initialized
-                propertyWidgetInitialized.push_back(false);
-                //If the first token is not used as coolumn name
-                if(!useFirstLineAsPropertyName()){
-                    propertyType= guessPropertyDataType(lineTokens[column]);
-                    propertyWidgetInitialized[column]=true;
-                }
-                addPropertyToPropertyList(QStringToTlpString(columnName),true,propertyType);
+                //Store the first token type
+                columnHeaderType.push_back(guessDataType(lineTokens[column]));
+                //Mark the colun type as uninitialised
+                columnType.push_back("");
+                //Create the new column widget. The default type is String property
+                addPropertyToPropertyList(QStringToTlpString(columnName),true,StringProperty::propertyTypename);
             }else{
                 //If the widget is not initialized do not use the default type
-                string previousPropertyType = propertyWidgetInitialized[column]?propertyWidgets[column]->getPropertyType():"";
+                string previousPropertyType = columnType[column];
                 string propertyType = guessPropertyDataType(lineTokens[column],previousPropertyType);
-
-                //If the type of the property change update the widget.
-                if(propertyType != previousPropertyType){
-                    propertyWidgets[column]->setPropertyType(propertyType);
-                }
-                //Mark the widget initialized
-                propertyWidgetInitialized[column]=true;
+                //Store the new type
+                columnType[column]=propertyType;
             }
         }
     }
@@ -269,12 +261,24 @@ void CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& l
 
 void CSVImportConfigurationWidget::end(unsigned int rowNumber, unsigned int) {
     maxLineNumber = rowNumber;
+
+    bool firstLineIsHeader = false;
+    //Try to guess if the first line is used as header.
+    for(unsigned int i = 0 ; i< columnHeaderType.size() ; ++i){
+        //If there is at least one column with a header type different from the rest of the data treat the first line as header
+        if(columnHeaderType[i] != columnType[i]){
+            firstLineIsHeader = true;
+        }
+    }
+    setUseFirstLineAsPropertyName(firstLineIsHeader);
+
     //Force the table to correctly update.
     useFirstLineAsHeaderUpdated();
     //Avoid updating widget.
     ui->previewLineNumberSpinBox->blockSignals(true);
     ui->previewLineNumberSpinBox->setMaximum(rowNumber);
     ui->previewLineNumberSpinBox->blockSignals(false);
+
 }
 
 void CSVImportConfigurationWidget::filterPreviewLineNumber(bool checked) {
@@ -313,6 +317,10 @@ bool CSVImportConfigurationWidget::useFirstLineAsPropertyName()const {
     return ui->useFirstLineAsPropertyNamecheckBox->checkState()==Qt::Checked;
 }
 
+void CSVImportConfigurationWidget::setUseFirstLineAsPropertyName(bool useFirstLineAsHeader)const{
+    ui->useFirstLineAsPropertyNamecheckBox->setChecked(useFirstLineAsHeader);
+}
+
 unsigned int CSVImportConfigurationWidget::rowCount()const {
     return ui->previewTableWidget->rowCount();
 }
@@ -323,9 +331,12 @@ void CSVImportConfigurationWidget::updateTableHeaders() {
     QStringList itemsLabels;
 
     for(unsigned int i=0 ; i< columnCount(); ++i) {
+        //Update the column name
         QString columnName = genrateColumnName(i);
         itemsLabels<<columnName;
         propertyWidgets[i]->getNameLineEdit()->setText(columnName);
+        //Update the column type.
+        propertyWidgets[i]->setPropertyType(getColumnType(i));
     }
 
     ui->previewTableWidget->setHorizontalHeaderLabels (itemsLabels);
@@ -353,6 +364,14 @@ QString CSVImportConfigurationWidget::genrateColumnName(unsigned int col)const {
     }
     else {
         return QString("Column_")+QString::number(col);
+    }
+}
+
+string CSVImportConfigurationWidget::getColumnType(unsigned int col)const{
+    if(useFirstLineAsPropertyName()) {
+        return columnType[col];
+    }else{
+        return combinePropertyDataType(columnType[col] , columnHeaderType[col]);
     }
 }
 
@@ -512,17 +531,21 @@ QValidator::State PropertyNameValidator::validate(QString & input, int&) const {
     return count<=1?QValidator::Acceptable:QValidator::Invalid;
 }
 
-string CSVImportConfigurationWidget::guessPropertyDataType(const string data,const string previousType){
+string CSVImportConfigurationWidget::guessPropertyDataType(const string data,const string previousType) const{
     //If there is no data skip the token
     if(data.empty()){
         return previousType;
     }
-    string dataType = guessPropertyDataType(data);
+    string dataType = guessDataType(data);
+    return combinePropertyDataType(previousType,dataType);
+}
+
+string CSVImportConfigurationWidget::combinePropertyDataType(const string previousType,const string newType) const{
     if(previousType.empty()){
-        return dataType;
-    }else if(previousType == dataType){
-        return dataType;
-    }else if( (previousType == IntegerProperty::propertyTypename && dataType == DoubleProperty::propertyTypename) || (previousType == DoubleProperty::propertyTypename && dataType == IntegerProperty::propertyTypename) ){
+        return newType;
+    }else if(previousType == newType){
+        return newType;
+    }else if( (previousType == IntegerProperty::propertyTypename && newType == DoubleProperty::propertyTypename) || (previousType == DoubleProperty::propertyTypename && newType == IntegerProperty::propertyTypename) ){
         //If both types are numeric return the more generic numeric type : double
         return DoubleProperty::propertyTypename;
     }else{
@@ -530,7 +553,7 @@ string CSVImportConfigurationWidget::guessPropertyDataType(const string data,con
     }
 }
 
-string CSVImportConfigurationWidget::guessPropertyDataType(const string data){
+string CSVImportConfigurationWidget::guessDataType(const string data) const{
     bool b;
     //Qt framework is the best way to detect numerals in string.
     QString str = QString::fromUtf8(data.c_str());
