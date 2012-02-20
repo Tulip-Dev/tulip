@@ -148,6 +148,7 @@ void GlAxis::buildAxisLine() {
 Coord GlAxis::computeCaptionCenter(const bool captionFrame) {
   Coord captionCenter;
   float captionHeight;
+
   if(captionFrame)
     captionHeight=baseCaptionHeight;
   else
@@ -222,7 +223,7 @@ void GlAxis::addAxisCaption(const Coord &captionLabelCenter, const bool frame) {
     captionLabel->setSize(Size(captionWidth, baseCaptionHeight));
     BoundingBox labelBB=captionLabel->getBoundingBox();
     GlRect *captionLabelInnerFrame = new GlRect(Coord(labelBB[0][0] - 1, labelBB[0][1] + baseCaptionHeight + 1),
-                                                Coord(labelBB[0][0] + captionWidth + 1, labelBB[0][1] - 1),
+        Coord(labelBB[0][0] + captionWidth + 1, labelBB[0][1] - 1),
         axisColor, axisColor, false, true);
 
     for (unsigned int i = 0 ; i < 4 ; ++i) {
@@ -258,7 +259,7 @@ void GlAxis::computeCaptionSize(float height) {
   }
 }
 
-void GlAxis::setCaptionHeight(float height,bool frame){
+void GlAxis::setCaptionHeight(float height,bool frame) {
   computeCaptionSize(height);
   Coord captionCenter = computeCaptionCenter(frame);
   captionLabel->setSize(Size(captionWidth, captionHeight));
@@ -292,11 +293,12 @@ void GlAxis::computeBoundingBox() {
   boundingBox = glBBSV.getBoundingBox();
 }
 
-void GlAxis::setGradsLabelsHeight(float height){
+void GlAxis::setGradsLabelsHeight(float height) {
   labelHeight = height;
 
   unsigned int i=0;
-  for(vector<GlLabel*>::iterator it=gradsLabelsVector.begin();it!=gradsLabelsVector.end();++it){
+
+  for(vector<GlLabel*>::iterator it=gradsLabelsVector.begin(); it!=gradsLabelsVector.end(); ++it) {
     BoundingBox textBoundingBox=(*it)->getTextBoundingBox();
     float labelWidth = (labelHeight/(textBoundingBox[1][1]-textBoundingBox[0][1]))*(textBoundingBox[1][0]-textBoundingBox[0][0]);
     (*it)->setSize(Size(labelWidth,labelHeight));
