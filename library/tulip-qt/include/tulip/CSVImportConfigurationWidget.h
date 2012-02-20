@@ -46,9 +46,13 @@ public:
   PropertyConfigurationWidget(unsigned int propertyNumber, const QString& propertyName, bool propertyNameIsEditable,
                               const std::string& PropertyType, QWidget* parent = NULL);
   /**
-     * Return the selected property type.
+     * Return the selected property type. The property type is not the label displayed in the combobox but correspond to the Property::propertyTypename static string variable of the property class.
      */
   std::string getPropertyType() const;
+  /**
+    * @brief Change the type of the property. Use the PropertyClass::propertyTypename static var.
+    **/
+  void setPropertyType(const std::string& propertyType);
 
   QString getPropertyName() const;
   bool getPropertyUsed() const;
@@ -209,7 +213,7 @@ protected:
   /**
    * Add a property to the current property list.
    */
-  void addPropertyToPropertyList(const std::string& propertyName, bool isEditable, const std::string& propertyType =std::string("Auto detect"));
+  void addPropertyToPropertyList(const std::string& propertyName, bool isEditable, const std::string& propertyType=std::string(""));
 
   /**
    * @brief Creates a property configuration widget.
@@ -242,12 +246,23 @@ protected slots:
   void propertyNameChanged(QString propertyName);
   void propertyStateChanged(bool activated);
 
-
-
 signals:
   void fileInfoChanged();
 
 private:
+
+  /**
+    * @brief Try to guess the property datatype in function of the type of the previous tokens and the type of the current token.
+    **/
+  std::string guessPropertyDataType(const std::string data,const std::string previousType);
+  /**
+    * @brief Try to guess the type of the data. Can recognize int, double, boolean or string. If the type is other return string.
+    * @return The property typename of the type
+    **/
+  std::string guessPropertyDataType(const std::string data);
+
+  std::vector<bool> propertyWidgetInitialized;
+
   Ui::CSVImportConifgurationWidget *ui;
   PropertyNameValidator* validator;
   unsigned int maxLineNumber;

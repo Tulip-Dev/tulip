@@ -302,11 +302,6 @@ public:
 
 private:
 
-  /**
-    * @brief Try to dertemine the type of a property from the given data.
-    **/
-  std::string guessPropertyDataType(const std::string& data,const std::string& decimalSeparator);
-
   tlp::Graph* graph;
   CSVImportParameters importParameters;
   TLP_HASH_MAP<unsigned int,tlp::PropertyInterface*>propertiesBuffer;
