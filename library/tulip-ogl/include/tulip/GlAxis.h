@@ -28,6 +28,8 @@ const float MAGIG_FACTOR = (1.f / (1.3f));
 
 namespace tlp {
 
+class GlLabel;
+
 /**
  * \addtogroup GlEntities
  */
@@ -189,9 +191,20 @@ public :
   void addCaption(const CaptionLabelPosition &captionPos, const float captionHeight, const bool captionFrame = false,
                   const float maxCaptionWidth = 0, const float captionOffset = 0, const std::string caption = "");
 
-
+  /**
+   * Method to set the axis graduations labels size.
+   *   This method can be used if you want axis with same labels size
+   *
+   * \param height the height for labels
+   *
+   */
+  void setGradsLabelsHeight(float height);
 
   void translate(const Coord &c);
+
+  float getCaptionHeight() const;
+
+  void setCaptionHeight(float height, bool frame);
 
 private :
 
@@ -201,7 +214,7 @@ private :
 protected :
 
   void computeBoundingBox();
-  virtual Coord computeCaptionCenter();
+  virtual Coord computeCaptionCenter(const bool captionFrame);
   virtual void computeCaptionSize(float height);
   void addAxisCaption(const Coord &captionLabelCenter, const bool captionFrame);
 
@@ -209,18 +222,22 @@ protected :
   Coord axisBaseCoord;
   float axisLength;
   AxisOrientation axisOrientation;
+  LabelPosition axisGradsPosition;
   Color axisColor;
   float axisGradsWidth;
   float spaceBetweenAxisGrads;
   float captionWidth;
   float captionHeight;
+  float baseCaptionHeight;
   bool captionFrame;
   std::string captionText;
+  GlLabel *captionLabel;
   float labelHeight;
   float captionOffset;
   GlComposite *axisLinesComposite;
   GlComposite *captionComposite;
   GlComposite *gradsComposite;
+  std::vector<GlLabel*> gradsLabelsVector;
   bool captionSet;
   CaptionLabelPosition captionPosition;
   float maxCaptionWidth;
