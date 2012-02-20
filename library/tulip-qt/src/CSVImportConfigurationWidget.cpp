@@ -421,26 +421,18 @@ void CSVImportConfigurationWidget::updateLineNumbers(bool resetValues) {
 
 void CSVImportConfigurationWidget::clearPropertiesTypeList() {
     for (vector<PropertyConfigurationWidget*>::iterator it = propertyWidgets.begin(); it != propertyWidgets.end(); ++it) {
-        ui->propertiesListScrollAreaWidgetContents->layout()->removeWidget(*it);
+        ui->gridLayout->removeWidget(*it);
         (*it)->deleteLater();
     }
-
     propertyWidgets.clear();
-    ui->propertiesListScrollArea->setVisible(false);
 }
 
 void CSVImportConfigurationWidget::addPropertyToPropertyList(const string& propertyName, bool isEditable,
                                                              const std::string& propertyType) {
-    if (!ui->propertiesListScrollArea->isVisible())
-        ui->propertiesListScrollArea->setVisible(true);
 
     PropertyConfigurationWidget *propertyConfigurationWidget = createPropertyConfigurationWidget(propertyWidgets.size(),
-                                                                                                 QString::fromStdString(propertyName), isEditable, propertyType, ui->propertiesListScrollAreaWidgetContents);
-    ui->propertiesListScrollAreaWidgetContents->layout()->addWidget(propertyConfigurationWidget);
-    //Update propertiesListScrollArea height to ensure that properties configuration widgets are fully visible.
-    //The height is computed from the minimum property widget configuration height , the scroll bar height and a small spacing (10).
-    ui->propertiesListScrollArea->setMinimumHeight(propertyConfigurationWidget->sizeHint().height()
-                                                   + ui->propertiesListScrollArea->horizontalScrollBar()->sizeHint().height() + 10);
+                                                                                                 QString::fromStdString(propertyName), isEditable, propertyType, ui->scrollAreaWidgetContents);
+    ui->gridLayout->addWidget(propertyConfigurationWidget,0,propertyWidgets.size());
     propertyWidgets.push_back(propertyConfigurationWidget);
 }
 PropertyConfigurationWidget *CSVImportConfigurationWidget::createPropertyConfigurationWidget(
@@ -452,6 +444,7 @@ PropertyConfigurationWidget *CSVImportConfigurationWidget::createPropertyConfigu
     propertyConfigurationWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
     connect(propertyConfigurationWidget, SIGNAL(propertyNameChange(QString)), this, SLOT(propertyNameChanged(QString)));
     connect(propertyConfigurationWidget, SIGNAL(stateChange(bool)), this, SLOT(propertyStateChanged(bool )));
+    propertyConfigurationWidget->installEventFilter(this);
     return propertyConfigurationWidget;
 }
 void CSVImportConfigurationWidget::propertyNameChanged(QString newName) {
@@ -476,7 +469,12 @@ void CSVImportConfigurationWidget::propertyNameChanged(QString newName) {
 void CSVImportConfigurationWidget::propertyStateChanged(bool state) {
     PropertyConfigurationWidget *widget = qobject_cast<PropertyConfigurationWidget*>(sender());
     assert(widget != NULL);
-    ui->previewTableWidget->setColumnHidden ( widget->getPropertyNumber(), !state );
+    for(int i = 0 ; i < ui->previewTableWidget->rowCount(); ++ i){
+        QTableWidgetItem* item = ui->previewTableWidget->item(i,widget->getPropertyNumber());
+        if(item){
+            item->setFlags(state?Qt::ItemIsEnabled:Qt::NoItemFlags);
+        }
+    }
 }
 
 vector<CSVColumn> CSVImportConfigurationWidget::getPropertiesToImport()const {
@@ -579,4 +577,23 @@ string CSVImportConfigurationWidget::guessDataType(const string data) const{
         return StringProperty::propertyTypename;
     }
 
+}
+
+bool CSVImportConfigurationWidget::eventFilter(QObject *obj, QEvent *evt){
+    if(evt->type() == QEvent::Resize){
+        PropertyConfigurationWidget* columnWidget = qobject_cast<PropertyConfigurationWidget*>(obj);
+        if(columnWidget!=NULL){
+            columnSizeChanged(columnWidget->getPropertyNumber());
+        }
+    }
+    return QWidget::eventFilter(obj,evt);
+}
+
+void CSVImportConfigurationWidget::columnSizeChanged(unsigned int i){
+//    assert(_columns.size()>i);
+    PropertyConfigurationWidget* widget = propertyWidgets[i];
+    if(widget!=NULL){
+        //QRect widgetRect = ui->horizontalLayout_4->;
+        ui->previewTableWidget->setColumnWidth(i,widget->width());
+    }
 }

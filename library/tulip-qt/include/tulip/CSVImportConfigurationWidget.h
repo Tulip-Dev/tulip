@@ -174,6 +174,8 @@ public:
   **/
   CSVImportParameters getImportParameters()const;
 
+  bool eventFilter(QObject *, QEvent *);
+
 
 protected:
 
@@ -273,6 +275,8 @@ private:
     * @return The property typename of the type
     **/
   std::string guessDataType(const std::string data)const;
+
+  void columnSizeChanged(unsigned int i);
 
   //The data type of the header
   std::vector<std::string> columnHeaderType;
