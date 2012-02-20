@@ -60,8 +60,8 @@ class GlLayer;
   * We will now detail more about the behavior in overview and specific modes.
   *
   * . Overview mode: Displays a graph where each node is asociated to an item. The graph is displayed in a GlMainWidget in a layer called "overview"
-  *                  @warning The overview layer mus never be deleted
-  *                  In this mode, only the small multiples navigation interactor is enabled (@see toggleInteractors(bool)). The role methos is called to get information about items.
+  *                  @warning The overview layer must never be deleted
+  *                  In this mode, only the small multiples navigation interactor is enabled (@see toggleInteractors(bool)). The role method is called to get information about items.
   *                  The user may emit the dataChanged signal to inform the view that data needs to be refreshed on one or several items.
   *                  When the user double clicks on an item, the itemSelected method is called.
   *
@@ -152,7 +152,7 @@ public:
   }
 
   /**
-    * @brief By default, the data method organizes items position in a square shape in the overview mode. This value defines the spacing between to items in this square.
+    * @brief By default, the data method organizes items position in a square shape in the overview mode. This value defines the spacing between two items in this square.
     * @warning When overriding the data method for the Position role, this value has no effect.
     */
   double spacing() const {
@@ -229,7 +229,7 @@ public slots:
   }
 
   /**
-    * @brief By default, the data method organizes items position in a square shape in the overview mode. This value defines the spacing between to items in this square.
+    * @brief By default, the data method organizes items position in a square shape in the overview mode. This value defines the spacing between two items in this square.
     * @warning When overriding the data method for the Position role, this value has no effect.
     */
   void setSpacing(double s) {
