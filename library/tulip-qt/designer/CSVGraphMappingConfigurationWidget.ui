@@ -230,6 +230,9 @@ p, li { white-space: pre-wrap; }
            <property name="text">
             <string>Create missing entities</string>
            </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item>
@@ -288,6 +291,9 @@ p, li { white-space: pre-wrap; }
           <widget class="QCheckBox" name="createMissingNodesCheckBox">
            <property name="text">
             <string>Create missing entities</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

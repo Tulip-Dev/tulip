@@ -69,6 +69,9 @@ protected slots:
   void encodingChanged();
 
 private:
+
+  QString getSeparator(int index)const;
+
   Ui::CSVParserConfigurationWidget *ui;
 
 signals:

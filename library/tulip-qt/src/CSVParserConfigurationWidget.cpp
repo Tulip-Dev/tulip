@@ -111,19 +111,23 @@ void CSVParserConfigurationWidget::fillEncodingComboBox() {
 }
 
 
-string CSVParserConfigurationWidget::getSeparator()const {
-  QString selectedText = ui->separatorComboBox->currentText();
-
-  if(selectedText.compare("Tab")==0) {
-    return string("\t");
-  }
-  else if(selectedText.compare("Space")==0) {
-    return string(" ");
-  }
-  else {
-    return QStringToTlpString(selectedText);
-  }
+QString CSVParserConfigurationWidget::getSeparator(int index)const{
+    QString text = ui->separatorComboBox->itemText(index);
+    if(text.compare("Tab")==0) {
+      return QString("\t");
+    }
+    else if(text.compare("Space")==0) {
+      return QString(" ");
+    }
+    else {
+      return text;
+    }
 }
+
+string CSVParserConfigurationWidget::getSeparator()const {
+    return QStringToTlpString(getSeparator(ui->separatorComboBox->currentIndex()));
+  }
+
 void CSVParserConfigurationWidget::changeFileNameButtonPressed() {
   QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CSV file"), QString(), tr(
                        "CSV files (*.csv);;Text files (*.txt);;All files (*)"));
@@ -133,6 +137,33 @@ void CSVParserConfigurationWidget::changeFileNameButtonPressed() {
 void CSVParserConfigurationWidget::setFileToOpen(const QString& fileToOpen) {
   if(QFile::exists(fileToOpen)) {
     ui->fileLineEdit->setText(fileToOpen);
+    //Try to autodetect separator
+    if(QFile::exists(ui->fileLineEdit->text())){
+        QFile file(ui->fileLineEdit->text());
+        if(file.open(QIODevice::ReadOnly | QIODevice::Text)){
+            //Read the first line
+            QByteArray firstLine = file.readLine();
+            if(!firstLine.isEmpty()){
+                QString line(firstLine);
+                //Search for the best matching separator in the default list
+                QVector<int> separatorOccurence(ui->separatorComboBox->count());
+                for(int i = 0 ; i< ui->separatorComboBox->count() ; ++i){
+                    QString separator = getSeparator(i);
+                    //Count the number of occurence for this separator
+                    separatorOccurence[i] = line.count(separator);
+                }
+                int currentMaxOccurence = -1;
+                for(int i = 0 ; i< ui->separatorComboBox->count() ; ++i){
+                    if(separatorOccurence[i] > currentMaxOccurence){
+                        currentMaxOccurence = separatorOccurence[i];
+                        //Set as separator the one with the gratest occurence number.
+                        ui->separatorComboBox->setCurrentIndex(i);
+                    }
+                }
+            }
+            file.close();
+        }
+    }
     emit parserChanged();
   }
 }
