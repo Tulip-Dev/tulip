@@ -133,7 +133,7 @@ public:
    * @param error The description of the encountered error.
    * @return void
    **/
-  virtual void setError(std::string error)=0;
+  virtual void setError(const std::string& error)=0;
 
   /**
    * @brief Changes the comment about the process progression.
@@ -141,7 +141,7 @@ public:
    * @param comment A description of what the plugin is currently doing, displayed to inform the user.
    * @return void
    **/
-  virtual void setComment(std::string comment)=0;
+  virtual void setComment(const std::string& comment)=0;
 
 };
 
