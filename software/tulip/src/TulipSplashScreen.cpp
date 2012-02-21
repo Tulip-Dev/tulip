@@ -61,7 +61,7 @@ void TulipSplashScreen::aborted(const std::string &filename, const std::string &
   _message = trUtf8("Error loading ") + filename.c_str() + ": " + erreurmsg.c_str();
 }
 
-void TulipSplashScreen::finished(bool state, const std::string &msg) {
+void TulipSplashScreen::finished(bool state, const std::string&) {
   _title = trUtf8("Plugins loaded.");
 
   if (!state)
