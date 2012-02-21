@@ -111,77 +111,58 @@ static double round(double d) {
 
 //WIN32 specific defines: dllimport and dllexport stuff
 #ifdef _WIN32
-#   ifdef DLL_TULIP
-#   define TLP_SCOPE         __declspec(dllexport)
-#   else
-#   define TLP_SCOPE       __declspec(dllimport)
-#   endif
+#  ifdef DLL_TULIP
+#    define TLP_SCOPE       __declspec(dllexport)
+#  else
+#    define TLP_SCOPE       __declspec(dllimport)
+#  endif
 #endif
 #ifndef TLP_SCOPE
-#define TLP_SCOPE
+#  define TLP_SCOPE
 #endif
 
 #ifdef _WIN32
-#   ifdef DLL_TULIP_GL
-#   define TLP_GL_SCOPE         __declspec(dllexport)
-#   else
-#   define TLP_GL_SCOPE       __declspec(dllimport)
-#   endif
+#  ifdef DLL_TULIP_GL
+#    define TLP_GL_SCOPE       __declspec(dllexport)
+#  else
+#    define TLP_GL_SCOPE       __declspec(dllimport)
+#  endif
 #endif
 #ifndef TLP_GL_SCOPE
-#define TLP_GL_SCOPE
+#  define TLP_GL_SCOPE
 #endif
 
 #ifdef _WIN32
-#   ifdef DLL_TULIP_QT2
-#   define TLP_QT_SCOPE       __declspec(dllimport)
-# else
-#     ifdef DLL_TULIP_QT
-#     define TLP_QT_SCOPE         __declspec(dllexport)
-#     else
-#     define TLP_QT_SCOPE       __declspec(dllimport)
-#     endif
-# endif
+#  ifdef DLL_TULIP_QT
+#    define TLP_QT_SCOPE       __declspec(dllexport)
+#  else
+#    define TLP_QT_SCOPE       __declspec(dllimport)
+#  endif
 #endif
 #ifndef TLP_QT_SCOPE
-#define TLP_QT_SCOPE
+#  define TLP_QT_SCOPE
 #endif
 
 #ifdef _WIN32
-#   ifdef DLL_TULIP_QT2
-#   define TLP_QT_SIMPLE_SCOPE
-# else
-#     ifdef DLL_TULIP_QT
-#     define TLP_QT_SIMPLE_SCOPE  __declspec(dllexport)
-#     else
-#     define TLP_QT_SIMPLE_SCOPE
-#     endif
-# endif
-#endif
-#ifndef TLP_QT_SIMPLE_SCOPE
-#define TLP_QT_SIMPLE_SCOPE
-#endif
-
-#ifdef _WIN32
-#   ifdef DLL_TULIP_OGDF
-#   define TLP_OGDF_SCOPE         __declspec(dllexport)
-#   else
-#   define TLP_OGDF_SCOPE       __declspec(dllimport)
-#   endif
+#  ifdef DLL_TULIP_OGDF
+#    define TLP_OGDF_SCOPE         __declspec(dllexport)
+#  else
+#    define TLP_OGDF_SCOPE         __declspec(dllimport)
+#  endif
 #endif
 #ifndef TLP_OGDF_SCOPE
-#define TLP_OGDF_SCOPE
+#  define TLP_OGDF_SCOPE
 #endif
 
 #ifdef _WIN32
-#   ifdef DLL_TULIP3_COMPAT
-#   define TLP3_COMPAT_SCOPE         __declspec(dllexport)
-#   else
-#   define TLP3_COMPAT_SCOPE       __declspec(dllimport)
-#   endif
+#  ifdef DLL_TULIP3_COMPAT
+#    define TLP3_COMPAT_SCOPE       __declspec(dllexport)
+#  else
+#    define TLP3_COMPAT_SCOPE       __declspec(dllimport)
+#  endif
 #endif
 #ifndef TLP3_COMPAT_SCOPE
-#define TLP3_COMPAT_SCOPE
+#  define TLP3_COMPAT_SCOPE
 #endif
 
 #endif //TULIPCONF_H

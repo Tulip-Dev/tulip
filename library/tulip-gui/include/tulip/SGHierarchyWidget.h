@@ -34,7 +34,7 @@ class Graph;
 
 /** \addtogroup Tulip_Widgets */
 /*@{*/
-class TLP_QT_SIMPLE_SCOPE SGHierarchyWidget : public QTreeWidget {
+class TLP_QT_SCOPE SGHierarchyWidget : public QTreeWidget {
   Q_OBJECT
 
 public:
