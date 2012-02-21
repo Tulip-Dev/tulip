@@ -162,6 +162,11 @@ public :
   void drawWithStencil(float lod,Camera *camera=NULL);
 
   /**
+   * Return the height of the label after scaling in  size box
+   */
+  float getHeightAfterScale();
+
+  /**
    * Draw the Label
    */
   virtual void draw(float lod,Camera *camera=NULL);

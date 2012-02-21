@@ -227,6 +227,20 @@ void GlLabel::drawWithStencil(float lod, Camera *camera) {
   draw(lod,camera);
 }
 //============================================================
+float GlLabel::getHeightAfterScale() {
+  float w=textBoundingBox[1][0]-textBoundingBox[0][0];
+  float h=textBoundingBox[1][1]-textBoundingBox[0][1];
+  float div_w, div_h;
+
+  div_w = size[0]/w;
+  div_h = size[1]/h;
+  if(div_h * w > size[0]) {
+    if(div_w<4)
+      return size[1]*(div_w/4.);
+  }
+  return size[1];
+}
+//============================================================
 void GlLabel::draw(float lod, Camera *camera) {
 
   if(fontSize<=0)
@@ -255,7 +269,7 @@ void GlLabel::draw(float lod, Camera *camera) {
   float screenH;
   float multiLineH=h;
 
-  //Here the 4.5 number is the size of space between two lines
+  //Here the 4.5 magic number is the size of space between two lines
   if(textVector.size()>1)
     multiLineH=(h-(textVector.size()-1)*4.5)/textVector.size();
 
@@ -555,6 +569,7 @@ void GlLabel::draw(float lod, Camera *camera) {
         GlTextureManager::getInst().activateTexture(textureName);
 
       setMaterial(color);
+
 
       font->Render((*it).c_str(),-1,shift);
 
