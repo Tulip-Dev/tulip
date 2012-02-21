@@ -120,7 +120,7 @@ CSVGraphMappingConfigurationWidget::CSVGraphMappingConfigurationWidget(QWidget *
 
   connect(ui->createNewPropertyPushButton,SIGNAL(clicked(bool)),this,SLOT(createNewProperty()),Qt::QueuedConnection);
 
-  ui->graphIndexPropertiesComboBox->setDefaultText(tr("Choose the property containing existing entities ids"));
+  ui->graphIndexPropertiesComboBox->setDefaultText(tr("Select property against which newly found values are tested."));
   ui->sourceColumnComboBox->setDefaultText(tr("Choose CSV column containing source entities ids"));
   ui->targetColumnComboBox->setDefaultText(tr("Choose CSV column containing target entities ids"));
 
