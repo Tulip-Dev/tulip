@@ -41,10 +41,10 @@ public:
   virtual std::string getError() {
     return _error;
   }
-  virtual void setError(std::string error) {
+  virtual void setError(const std::string& error) {
     _error = error;
   }
-  virtual void setComment(std::string) {}
+  virtual void setComment(const std::string&) {}
 
 protected:
   virtual void progress_handler(int step, int max_step);
