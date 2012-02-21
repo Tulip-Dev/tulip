@@ -29,7 +29,7 @@
 
 namespace tlp {
 
-class TLP_QT_SIMPLE_SCOPE ElementPropertiesWidget :
+class TLP_QT_SCOPE ElementPropertiesWidget :
   public ElementPropertiesWidgetUI, private GraphObserver, private Observable {
   Q_OBJECT
   // moc as of qt 3.0.5 doesn't understand '::'... silly

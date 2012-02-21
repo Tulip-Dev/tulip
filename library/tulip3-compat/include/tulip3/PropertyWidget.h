@@ -42,7 +42,7 @@ class Graph;
 /** \addtogroup Tulip_Widgets */
 /*@{*/
 /* this table handle displaying and editing node or edge properties */
-class TLP_QT_SIMPLE_SCOPE PropertyWidget : public tlp::TulipTableWidget {
+class TLP_QT_SCOPE PropertyWidget : public tlp::TulipTableWidget {
   Q_OBJECT
 
 private:
@@ -95,7 +95,7 @@ signals:
   void showElementProperties(unsigned int eltId, bool isNode);
 };
 
-class TLP_QT_SIMPLE_SCOPE ChooseFileNameDialog : public QDialog,public Ui::ChooseFileNameDialogData {
+class TLP_QT_SCOPE ChooseFileNameDialog : public QDialog,public Ui::ChooseFileNameDialogData {
 
   Q_OBJECT
 
