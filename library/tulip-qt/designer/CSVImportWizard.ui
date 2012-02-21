@@ -10,6 +10,12 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Import CSV data</string>
   </property>
@@ -24,7 +30,7 @@
     <string>Source file settings</string>
    </property>
    <property name="subTitle">
-    <string>Specify parsing options: source file location, separator, file encoding. &lt;br&gt; &lt;em&gt;Note: several (node and/or edge) import operations using a same source file may be required to get all data to be imported and inserted into a same graph.&lt;/em&gt;</string>
+    <string>Specify parsing options: source file location, separator, file encoding.</string>
    </property>
   </widget>
   <widget class="tlp::CSVImportConfigurationQWizardPage" name="importConfigurationWizardPage">
