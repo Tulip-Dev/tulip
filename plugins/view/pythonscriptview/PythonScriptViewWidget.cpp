@@ -141,6 +141,7 @@ void PythonScriptViewWidget::resizeToolBars() {
 
 int PythonScriptViewWidget::addMainScriptEditor(const QString &fileName) {
   PythonCodeEditor *codeEditor = new PythonCodeEditor();
+  codeEditor->setGraph(pythonScriptView->getGraph());
   codeEditor->setFileName(fileName);
   codeEditor->installEventFilter(pythonScriptView);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
@@ -152,6 +153,7 @@ int PythonScriptViewWidget::addMainScriptEditor(const QString &fileName) {
 
 int PythonScriptViewWidget::addModuleEditor(const QString &fileName) {
   PythonCodeEditor *codeEditor = new PythonCodeEditor();
+  codeEditor->setGraph(pythonScriptView->getGraph());
   codeEditor->setFileName(fileName);
   codeEditor->installEventFilter(pythonScriptView);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
@@ -163,6 +165,7 @@ int PythonScriptViewWidget::addModuleEditor(const QString &fileName) {
 
 int PythonScriptViewWidget::addPluginEditor(const QString &fileName) {
   PythonCodeEditor *codeEditor = new PythonCodeEditor();
+  codeEditor->setGraph(pythonScriptView->getGraph());
   codeEditor->setFileName(fileName);
   codeEditor->installEventFilter(pythonScriptView);
   codeEditor->setFocus(Qt::ActiveWindowFocusReason);
