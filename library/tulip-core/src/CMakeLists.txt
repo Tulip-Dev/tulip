@@ -10,7 +10,6 @@ ColorScale.cpp
 ConnectedTest.cpp
 ConvexHull.cpp
 DataSet.cpp
-Delaunay.cpp
 DoubleProperty.cpp
 DrawingTools.cpp
 FaceIterator.cpp
