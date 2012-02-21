@@ -238,6 +238,7 @@ Iterator<Observable *> *Observable::getObservables() const {
 }
 //=================================
 void Observable::treatEvents(const  std::vector<Event> &events ) {
+  //this code is a compatibility layer for the old observation system.
   if (events[0].type() == Event::TLP_DELETE) {
     observableDestroyed(events[0].sender());
   }

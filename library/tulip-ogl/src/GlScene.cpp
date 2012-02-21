@@ -542,6 +542,8 @@ void GlScene::glGraphCompositeAdded(GlLayer* layer,GlGraphComposite *glGraphComp
 //========================================================================================================
 void GlScene::glGraphCompositeRemoved(GlLayer* layer,GlGraphComposite *glGraphComposite) {
   if(this->glGraphComposite==glGraphComposite) {
+    //fixes unused warning in release
+    (void)layer;
     assert(graphLayer==layer);
     graphLayer=NULL;
     this->glGraphComposite=NULL;

@@ -82,6 +82,7 @@ void PlanarityTestImpl::extractBoundaryCycle(Graph *sG, node cNode,
 void PlanarityTestImpl::obstrEdgesTerminal(Graph* G, node w, node t, node u) {
   (void)u; //fixes unused parameter warning in release builds
   node mm = lcaBetween(nodeLabelB.get(t.id), neighborWTerminal.get(t.id), p0);
+  (void)mm;
   assert((listEdgesUpwardT0(nodeLabelB.get(t.id), mm)));
   assert(listEdgesUpwardT0(neighborWTerminal.get(t.id), mm));
   assert(listEdgesUpwardT0(mm, u));
@@ -405,6 +406,7 @@ void PlanarityTestImpl::obstructionEdgesCountMin23(Graph *sG,
   else {
     obstrEdgesPNode(sG, v, n);
     node mm = lcaBetween(v, parent.get(cNode.id), p0);
+    (void)mm;
     assert(listEdgesUpwardT0(parent.get(cNode.id), mm));
   }
 }
@@ -486,6 +488,7 @@ void PlanarityTestImpl::obstructionEdgesPossibleObstrConfirmed(Graph *sG,
   assert(listEdgesUpwardT0(nodeLabelB.get(jr.id), jr));
 
   node m = lcaBetween(parent.get(cNode.id), v, p0);
+  (void)m;
 
   assert(listEdgesUpwardT0(parent.get(cNode.id), m));
   assert(listEdgesUpwardT0(nodeLabelB.get(v.id), m));

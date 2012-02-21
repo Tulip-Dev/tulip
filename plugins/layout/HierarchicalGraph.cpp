@@ -420,7 +420,7 @@ bool HierarchicalGraph::run() {
 
   //========================================================================
   //We add a node and edges to force the dag to have only one source.
-  node startNode = tlp::makeSimpleSource(mySGraph);
+  tlp::makeSimpleSource(mySGraph);
 
   //========================================================================
   list<node> properAddedNodes;
@@ -476,8 +476,8 @@ bool HierarchicalGraph::run() {
   if (edgeLength)
     delete edgeLength;
 
+  (void)resultBool;
   assert(resultBool);
-
 
   node n;
   forEach(n, graph->getNodes()) {

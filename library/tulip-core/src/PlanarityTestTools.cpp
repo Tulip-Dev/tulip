@@ -612,8 +612,7 @@ node PlanarityTestImpl::lcaBetweenTermNodes(node n1,
     lca = lastVisited.get(n2.id);
 
   //==
-  node lca2 = lcaBetween(n1,n2, parent);
-  assert(lca == lca2);
+  assert(lca == lcaBetween(n1,n2, parent));
   //==
   return lca;
 }
