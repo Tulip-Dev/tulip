@@ -54,7 +54,7 @@ namespace tlp {
 //            VIEW FUNCTIONS
 //===========================================
 SmallMultiplesView::SmallMultiplesView()
-  :AbstractView(), _glMainWidget(new GlMainWidget(0)), _zoomAnimationActivated(true), _maxLabelSize(-1), _spacing(1.7) {
+  :AbstractView(), _glMainWidget(new GlMainWidget(0)), _zoomAnimationActivated(true), _maxLabelSize(-1), _spacing(0.2) {
   Observable::holdObservers();
   _glMainWidget->setData(newGraph(), DataSet());
   GlScene *scene = _glMainWidget->getScene();
@@ -66,7 +66,7 @@ SmallMultiplesView::SmallMultiplesView()
   inputData->getElementFont()->setAllNodeValue(TulipBitmapDir + "font.ttf");
   inputData->getElementFont()->setAllEdgeValue(TulipBitmapDir + "font.ttf");
   scene->getGlGraphComposite()->getRenderingParametersPointer()->setFontsType(1);
-  scene->getGlGraphComposite()->getRenderingParametersPointer()->setLabelScaled(true);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setLabelScaled(false);
   Observable::unholdObservers();
 
   // Move the graph composite from main layer to overview layer
@@ -277,8 +277,11 @@ QVariant SmallMultiplesView::data(int id, SmallMultiplesDataRole role) {
     int row = abs(id / w);
     int col = id % w;
 
+    //get elements size
+    Size size = _glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementSize()->getNodeValue(_items[id]);
+
     // Compute spacing
-    Coord c(col * _spacing, -1. * _spacing * row, 0);
+    Coord c(col * (_spacing + size.getW()), -1. * (_spacing+size.getH()) * row, 0);
     v.setValue<Coord>(c);
     return v;
   }
