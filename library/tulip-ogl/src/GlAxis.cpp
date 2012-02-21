@@ -83,14 +83,14 @@ void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
       axisGraduation->addPoint(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() - axisGradsWidth / 2), axisColor);
 
       if (axisGradsPosition == LEFT_OR_BELOW) {
-        graduationLabel->setPosition(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() - axisGradsWidth / 2 - labelWidth / 2 - 2));
+        graduationLabel->setPosition(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads - cos(M_PI/4.)*(labelWidth/2.), axisBaseCoord.getY() - axisGradsWidth / 2 - cos(M_PI/4.)*(labelWidth/2.) - 2));
         graduationLabel->setSize(Size(labelWidth, labelHeight));
-        graduationLabel->rotate(0,0,90);
+        graduationLabel->rotate(0,0,45);
       }
       else if (axisGradsPosition == RIGHT_OR_ABOVE) {
-        graduationLabel->setPosition(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() + axisGradsWidth / 2 + labelWidth / 2 + 2));
+        graduationLabel->setPosition(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads + cos(M_PI/4.)*(labelWidth/2.), axisBaseCoord.getY() + axisGradsWidth / 2 + cos(M_PI/4.)*(labelWidth/2.) + 2));
         graduationLabel->setSize(Size(labelWidth, labelHeight));
-        graduationLabel->rotate(0,0,90);
+        graduationLabel->rotate(0,0,45);
       }
     }
     else if (axisOrientation == VERTICAL_AXIS) {
