@@ -234,10 +234,12 @@ float GlLabel::getHeightAfterScale() {
 
   div_w = size[0]/w;
   div_h = size[1]/h;
+
   if(div_h * w > size[0]) {
     if(div_w<4)
       return size[1]*(div_w/4.);
   }
+
   return size[1];
 }
 //============================================================
