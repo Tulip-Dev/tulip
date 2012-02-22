@@ -513,7 +513,7 @@ the sub-graph relation between graphs.
 
 %End
 
- %MethodCode
+%MethodCode
     tlp::StableIterator<tlp::node> sItNodes(a0);
     tlp::node n;
     forEach(n, &sItNodes) {
