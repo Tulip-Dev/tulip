@@ -1109,7 +1109,6 @@ void PythonScriptView::saveAllModules() {
 bool PythonScriptView::reloadAllModules() {
 
   bool ret = true;
-  map<int, string>::const_iterator it;
 
   for (int i = 0 ; i < viewWidget->modulesTabWidget->count() ; ++i) {
     QString moduleNameExt = viewWidget->modulesTabWidget->tabText(i);
@@ -1124,7 +1123,7 @@ bool PythonScriptView::reloadAllModules() {
     QFileInfo fileInfo(viewWidget->getModuleEditor(i)->getFileName());
 
     if (fileInfo.fileName() == viewWidget->getModuleEditor(i)->getFileName()) {
-      ret = ret && pythonInterpreter->registerNewModuleFromString(moduleName.toStdString(),  viewWidget->getModuleCode(it->first));
+      ret = ret && pythonInterpreter->registerNewModuleFromString(moduleName.toStdString(),  viewWidget->getModuleCode(i));
     }
     else {
       pythonInterpreter->addModuleSearchPath(fileInfo.absolutePath().toStdString());
