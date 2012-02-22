@@ -1014,7 +1014,7 @@ void PythonScriptView::loadPythonPlugin() {
     }
 
     ostringstream oss;
-    oss << "^.*class (.*)\\(" << pluginClass.toStdString() << "\\).*$";
+    oss << "^.*class ([a-zA-Z_][a-zA-Z0-9_]*)\\(" << pluginClass.toStdString() << "\\).*$";
     QRegExp rx(oss.str().c_str());
 
     if (rx.indexIn(pluginCode) != -1) {
