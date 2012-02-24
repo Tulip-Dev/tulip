@@ -93,7 +93,7 @@ GEMLayout::GEMLayout(const tlp::PropertyContext &context) : LayoutAlgorithm(cont
   addParameter<bool>("3D layout", paramHelp[0], "false");
   addParameter<DoubleProperty>("edge length", paramHelp[1], "", false);
   addParameter<LayoutProperty>("initial layout", paramHelp[2], "", false);
-  addParameter<unsigned int>("max iterations", paramHelp[3], 0);
+  addParameter<unsigned int>("max iterations", paramHelp[3], "0");
   addDependency<LayoutAlgorithm>("Connected Component Packing", "1.0");
 }
 //=========================================================
