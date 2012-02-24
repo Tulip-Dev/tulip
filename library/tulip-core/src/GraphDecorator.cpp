@@ -48,7 +48,7 @@ unsigned int GraphDecorator::numberOfDescendantGraphs() const {
   return graph_component->numberOfDescendantGraphs();
 }
 //============================================================
-void GraphDecorator::restoreSubGraph(Graph *, bool) {
+void GraphDecorator::restoreSubGraph(Graph *) {
   std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
@@ -58,7 +58,7 @@ void GraphDecorator::setSubGraphToKeep(Graph *) {
 }
 
 //============================================================
-void GraphDecorator::removeSubGraph(Graph*, bool) {
+void GraphDecorator::removeSubGraph(Graph*) {
   std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 

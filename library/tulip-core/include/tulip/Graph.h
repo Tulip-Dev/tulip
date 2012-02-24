@@ -62,11 +62,11 @@ enum ElementType {
 TLP_SCOPE Graph * loadGraph(const std::string &filename);
 
 /**
- * @brief Saves a graph to a file in the tlp format. Extension of the destination file can be either be .tlp (human-readable text file) or .tlp.gz (gzipped text file).
+ * @brief Saves the corresponding root graph and all its subgraphs to a file using the tlp format. Extension of the file can be either .tlp (human-readable text file) or .tlp.gz (gzipped text file).
  *
  * This function checks the file name for the '.gz' extension and uses a compressed output if found.
  *
- * This function uses the "tlp" import plugin, and will fail if it is not loaded (By default this plugin is linked into the library and should be loaded).
+ * This function uses the "tlp" export plugin, and will fail if it is not loaded (by default this plugin is linked into the library and should be loaded).
  *
  * @param  The graph to save.
  * @param filename The file to save the graph to.
@@ -116,7 +116,7 @@ TLP_SCOPE Graph* newGraph();
 /**
  * @brief Creates and returns an empty subgraph of the given graph.
  *
- * @deprecated this functions should not be used anymore, please use Graph::addSubGraph() instead.
+ * @deprecated this function should not be used anymore, please use Graph::addSubGraph() instead.
  *
  * @param graph The graph to add an empty subgraph to.
  * @param name The name of the new subgraph. Defaults to "unnamed".
@@ -127,7 +127,7 @@ TLP_SCOPE _DEPRECATED Graph* newSubGraph(Graph *graph, std::string name = "unnam
 /**
  * @brief Creates and returns a subgraph of the graph that is equal to root (a clone subgraph).
  *
- * @deprecated A new method should be added to Graph to perform this, because object-oriented programming and stuff.
+ * @deprecated this function should not be used anymore, please use Graph::addCloneSubGraph() instead.
  *
  * @param graph The Graph on which to create a clone subgraph.
  * @param name The name of the newly created subgraph. Defaults to "unnamed".
@@ -141,14 +141,14 @@ TLP_SCOPE _DEPRECATED Graph* newCloneSubGraph(Graph *graph, std::string name = "
  * The output selection is used to select the appended nodes & edges
  * \warning The input selection is extended to all selected edge ends.
  */
-TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
+TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSelection=NULL, BooleanProperty* outSelection=NULL );
 
 /**
  * Removes the selected part of the graph ioG (properties values, nodes and edges).
  * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
  * \warning The selection is extended to all selected edge ends.
  */
-TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection = 0 );
+TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection=NULL);
 
 /**
  * \defgroup graphs Graphs
@@ -784,11 +784,10 @@ protected:
     return getRoot()->canDeleteProperty(g, prop);
   }
 
-  // to deal with sub graph deletion
-  virtual void removeSubGraph(Graph*, bool notify = false)=0;
+  // internally used to deal with sub graph deletion
+  virtual void removeSubGraph(Graph*)=0;
   virtual void clearSubGraphs()=0;
-  // only called by GraphUpdatesRecorder
-  virtual void restoreSubGraph(Graph*, bool undoOrRedo = false)=0;
+  virtual void restoreSubGraph(Graph*)=0;
   virtual void setSubGraphToKeep(Graph*)=0;
 
   // for notification of GraphObserver

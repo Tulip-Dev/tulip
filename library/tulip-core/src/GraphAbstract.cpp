@@ -48,11 +48,16 @@ GraphAbstract::~GraphAbstract() {
   while(itS.hasNext()) {
     Graph* sg = itS.next();
 
-    if (id == 0)
-      // indicates root destruction (see below)
-      sg->id = 0;
+    // avoid double free
+    // in a push context, a 'deleted' graph (see delSubGraph)
+    // may still have a non empty list of subgraphs
+    if (sg->getSuperGraph() == this) {
+      if (id == 0)
+        // indicates root destruction (see below)
+        sg->id = 0;
 
-    delAllSubGraphsInternal(sg, true);
+      delete sg;
+    }
   }
 
   delete propertyContainer;
@@ -73,27 +78,9 @@ void GraphAbstract::clear() {
     delNode(itN.next());
 }
 //=========================================================================
-void GraphAbstract::restoreSubGraph(Graph* sg, bool undoOrRedo) {
-  if (undoOrRedo) {
-    notifyBeforeAddSubGraph(sg);
-  }
-
+void GraphAbstract::restoreSubGraph(Graph* sg) {
   subgraphs.push_back(sg);
   sg->setSuperGraph(this);
-
-  if (undoOrRedo) {
-    notifyAfterAddSubGraph(sg);
-    Iterator<Graph *> *itS = sg->getSubGraphs();
-
-    while (itS->hasNext()) {
-      Graph* ssg = itS->next();
-      // ssg is no longer a subgraph of this
-      removeSubGraph(ssg);
-      ssg->setSuperGraph(sg);
-    }
-
-    delete itS;
-  }
 }
 //=========================================================================
 void GraphAbstract::setSubGraphToKeep(Graph* sg) {
@@ -107,6 +94,7 @@ Graph *GraphAbstract::addSubGraph(BooleanProperty *selection, unsigned int id) {
   notifyAfterAddSubGraph(tmp);
   return tmp;
 }
+//=========================================================================
 Graph *GraphAbstract::getNthSubGraph(unsigned int n) const {
 
   if (n >= subgraphs.size())
@@ -133,26 +121,20 @@ unsigned int GraphAbstract::numberOfDescendantGraphs() const {
 //=========================================================================
 void GraphAbstract::delSubGraph(Graph *toRemove) {
   // look for the graph we want to remove in the subgraphs
-  GRAPH_SEQ::iterator it = subgraphs.begin();
-
-  while (it != subgraphs.end()) {
-    if (*it == toRemove) {
-      break;
-    }
-
-    ++it;
-  }
+  GRAPH_SEQ::iterator it =
+    std::find(subgraphs.begin(), subgraphs.end(), toRemove);
 
   assert(it != subgraphs.end());
 
   if (it != subgraphs.end()) {
     subGraphToKeep = NULL;
 
-    Iterator<Graph *> *itS = toRemove->getSubGraphs();
     // remove from subgraphs
     notifyBeforeDelSubGraph(toRemove);
     subgraphs.erase(it);
     notifyAfterDelSubGraph(toRemove);
+
+    Iterator<Graph *> *itS = toRemove->getSubGraphs();
 
     // add toRemove subgraphs
     while (itS->hasNext()) {
@@ -161,66 +143,43 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
 
     delete itS;
 
+    // subGraphToKeep may have change on notifyDelSubGraph
+    // see GraphUpdatesRecorder::delSubGraph
+    // in GraphUpdatesRecorder.cpp
     if (toRemove != subGraphToKeep) {
       // avoid deletion of toRemove subgraphs
-      ((GraphAbstract *) toRemove)->subgraphs.clear();
+      toRemove->clearSubGraphs();
       delete toRemove;
     }
     else
       // toRemove is not deleted,
-      // it can be restored on undo or redo
+      // and its subgraphs list is not erased;
+      // beacause it is registered into a GraphUpdatesRecorder
+      // in order it can be restored on undo or redo
       toRemove->notifyDestroy();
   }
 }
 //=========================================================================
-void GraphAbstract::removeSubGraph(Graph * toRemove, bool notify) {
-  for (GRAPH_SEQ::iterator it = subgraphs.begin(); it != subgraphs.end(); ++it) {
-    if (*it == toRemove) {
-      // when called from GraphUpdatesRecorder
-      // we must notify the observers
-      if (notify)
-        notifyBeforeDelSubGraph(toRemove);
+void GraphAbstract::removeSubGraph(Graph * toRemove) {
+  GRAPH_SEQ::iterator it =
+    std::find(subgraphs.begin(), subgraphs.end(), toRemove);
 
-      subgraphs.erase(it);
-
-      if (notify)
-        notifyAfterDelSubGraph(toRemove);
-
-      if (notify) {
-        toRemove->notifyDestroy();
-      }
-
-      break;
-    }
-  }
-}
-//=========================================================================
-void GraphAbstract::delAllSubGraphsInternal(Graph * toRemove,
-    bool deleteSubGraphs) {
-  if (this != toRemove->getSuperGraph() || this==toRemove) // this==toRemove : root graph
-    return;
-
-  notifyBeforeDelSubGraph(toRemove);
-  removeSubGraph(toRemove);
-  notifyAfterDelSubGraph(toRemove);
-
-  if (deleteSubGraphs)
-    delete toRemove;
-  else {
-    StableIterator<Graph *> itS(toRemove->getSubGraphs());
-
-    while (itS.hasNext())
-      ((GraphAbstract*) toRemove)->delAllSubGraphsInternal(itS.next(),
-          deleteSubGraphs);
-
-    toRemove->notifyDestroy();
+  if (it != subgraphs.end()) {
+    subgraphs.erase(it);
   }
 }
 //=========================================================================
 void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
-  // toRemove will be really deleted only if the current
-  // graph state is not redoable
-  delAllSubGraphsInternal(toRemove, !canPopThenUnpop());
+  if (this != toRemove->getSuperGraph() || this==toRemove)
+    // this==toRemove : root graph
+    return;
+
+  StableIterator<Graph *> itS(toRemove->getSubGraphs());
+
+  while (itS.hasNext())
+    ((GraphAbstract*) toRemove)->delAllSubGraphs(itS.next());
+
+  delSubGraph(toRemove);
 }
 //=========================================================================
 void GraphAbstract::clearSubGraphs() {
@@ -244,16 +203,7 @@ Iterator<Graph *> * GraphAbstract::getSubGraphs() const {
 }
 //=========================================================================
 bool GraphAbstract::isSubGraph(const Graph* sg) const {
-  GRAPH_SEQ::const_iterator it = subgraphs.begin();
-
-  while(it != subgraphs.end()) {
-    if (*it == sg)
-      return true;
-
-    ++it;
-  }
-
-  return false;
+  return (std::find(subgraphs.begin(), subgraphs.end(), sg) != subgraphs.end());
 }
 //=========================================================================
 bool GraphAbstract::isDescendantGraph(const Graph* sg) const {
