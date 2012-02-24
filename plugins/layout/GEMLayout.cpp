@@ -49,9 +49,10 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "unsigned integer" ) \
   HTML_HELP_DEF( "default", "0" ) \
   HTML_HELP_BODY() \
-  "The default value 0 means 10 * nb_nodes * nb_nodes." \
+  "This parameter allows to choose the number of iterations. The default value of 0 corresponds to (3 * nb_nodes * nb_nodes) if the graph has more than 100 nodes."\
+  " For smaller graph, the number of iterations is set to 30 000." \
   HTML_HELP_CLOSE(),
-};
+  };
 
 /*
  * GEM3D Constants
@@ -77,6 +78,7 @@ static const float AMAXTEMPDEF     = 1.5;
 static const float ASTARTTEMPDEF   = 1.0;
 static const float AFINALTEMPDEF   = 0.02f;
 static const int   AMAXITERDEF     = 3;
+static const unsigned int MIN_ITER = 30000; //minimum number of iterations (equivalent of a graph with 100 nodes)
 static const float AGRAVITYDEF     = 0.1f;
 static const float AOSCILLATIONDEF = 1.;
 static const float AROTATIONDEF    = 1.;
@@ -91,7 +93,7 @@ GEMLayout::GEMLayout(const tlp::PropertyContext &context) : LayoutAlgorithm(cont
   addParameter<bool>("3D layout", paramHelp[0], "false");
   addParameter<DoubleProperty>("edge length", paramHelp[1], "", false);
   addParameter<LayoutProperty>("initial layout", paramHelp[2], "", false);
-  addParameter<unsigned int>("max iterations", paramHelp[3], "");
+  addParameter<unsigned int>("max iterations", paramHelp[3], 0);
   addDependency<LayoutAlgorithm>("Connected Component Packing", "1.0");
 }
 //=========================================================
@@ -381,7 +383,7 @@ bool GEMLayout::run() {
   result->setAllEdgeValue(vector<Coord>(0));
 
   if (max_iter == 0)
-    max_iter = a_maxiter * _nbNodes * _nbNodes;
+    max_iter = std::max(a_maxiter * _nbNodes * _nbNodes, MIN_ITER);
 
   _particules.resize(_nbNodes);
   /* Max Edge to scale actual edges lentgh to preferres lentgh */
