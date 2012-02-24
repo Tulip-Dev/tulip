@@ -27,8 +27,9 @@ void GraphDecorator::clear() {
 
 //============================================================
 Graph *GraphDecorator::addSubGraph(BooleanProperty *selection,
-                                   unsigned int id) {
-  Graph* sg = graph_component->addSubGraph(selection, id);
+                                   unsigned int id,
+                                   std::string name) {
+  Graph* sg = graph_component->addSubGraph(selection, id, name);
   notifyAfterAddSubGraph(sg);
   return sg;
 }
@@ -482,8 +483,9 @@ bool GraphDecorator::canPopThenUnpop() {
   return graph_component->canPopThenUnpop();
 }
 //----------------------------------------------------------------
-void GraphDecorator::push(bool unpopAllowed) {
-  return graph_component->push(unpopAllowed);
+void GraphDecorator::push(bool unpopAllowed,
+                          std::vector<PropertyInterface*>* propertiesToPreserveOnPop) {
+  return graph_component->push(unpopAllowed, propertiesToPreserveOnPop);
 }
 //----------------------------------------------------------------
 void GraphDecorator::pop(bool unpopAllowed) {

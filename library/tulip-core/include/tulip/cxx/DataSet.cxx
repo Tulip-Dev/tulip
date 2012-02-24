@@ -19,28 +19,34 @@
 
 //=======================================================================
 //DataSet implementation
-template<typename T> bool tlp::DataSet::get(const std::string& key,T& value) const {
-  std::map<std::string, tlp::DataType*>::const_iterator it = data.find(key);
+template<typename T> bool tlp::DataSet::get(const std::string& str,T& value) const {
+  for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
+         data.begin(); it != data.end(); ++it) {
+    const std::pair<std::string, tlp::DataType*> &p = *it;
 
-  if(it != data.end()) {
-    //no assert can be done here on the type, as we might have stored a DoubleProperty and want only to retrieve a PropertyInterface
-    value = *((T*)it->second->value);
+    if (p.first == str) {
+      value = *((T*) p.second->value);
+      return true;
+    }
   }
 
-  return it != data.end();
+  return false;
 }
 
-template<typename T> bool tlp::DataSet::getAndFree(const std::string &key,T& value) {
-  std::map<std::string, tlp::DataType*>::iterator it = data.find(key);
+template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& value) {
+  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
+         data.begin(); it != data.end(); ++it) {
+    std::pair<std::string, tlp::DataType *> &p = *it;
 
-  if(it != data.end()) {
-    //no assert can be done here on the type, as we might have stored a DoubleProperty and want only to retrieve a PropertyInterface
-    value = *((T*)it->second->value);
-    delete it->second;
-    data.erase(it);
+    if (p.first == str) {
+      value = *((T*) p.second->value);
+      delete p.second;
+      data.erase(it);
+      return true;
+    }
   }
 
-  return it != data.end();
+  return false;
 }
 
 template<typename T> void tlp::DataSet::set(const std::string &key,

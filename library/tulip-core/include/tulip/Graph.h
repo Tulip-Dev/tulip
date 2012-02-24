@@ -68,8 +68,8 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename);
  *
  * This function uses the "tlp" export plugin, and will fail if it is not loaded (by default this plugin is linked into the library and should be loaded).
  *
- * @param  The graph to save.
- * @param filename The file to save the graph to.
+ * @param graph the graph to save.
+ * @param filename the file to save the graph to.
  * @return bool Whether the export was successfull or not.
  **/
 TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename);
@@ -219,8 +219,16 @@ public:
    * @param id The ID you wish to assign to the Graph. It is strongly advised to leave this as default and let Tulip manage subgraph IDs. Defaults to 0.
    * @return :Graph* The newly created subgraph.
    **/
-  virtual Graph *addSubGraph(BooleanProperty *selection=0, unsigned int id = 0)=0;
-
+  virtual Graph *addSubGraph(BooleanProperty *selection=NULL,
+                             unsigned int id = 0,
+                             std::string name = "unnamed")=0;
+  /**
+   * @brief Creates and returns a new named sub-graph of this graph.
+   *
+   * @param name The name of the newly created subgraph. Defaults to "unnamed".
+   * @return :Graph* The newly created subgraph.
+   **/
+  Graph *addSubGraph(std::string name);
   /**
    * @brief Creates and returns a subgraph of this graph that contains all its elements.
    *
@@ -688,8 +696,12 @@ public:
    * If the argument unpopAllowed is set to false, the next updates
    * could not be replayed after undone. If some previously undone
    * updates exist they could no longer be replayed.
+   * If the argument propertiesToPreserveOnPop is not null, all the updates
+   * occuring for the elements of this vector will be preserved during
+   * the next call of the pop method.
    */
-  virtual void push(bool unpopAllowed = true)=0;
+  virtual void push(bool unpopAllowed = true,
+                    std::vector<PropertyInterface*>* propertiesToPreserveOnPop= NULL)=0;
   /*
    * Restores a previously marked state of the current root graph
    * in the hierarchy. The restored state does not remain marked.
