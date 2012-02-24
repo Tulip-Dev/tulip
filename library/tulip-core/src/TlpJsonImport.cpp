@@ -317,12 +317,12 @@ public:
           data << value;
         }
 
-	string oldValue;
-	
+        string oldValue;
+
         if(_dataSet->get(_currentAttributeName, oldValue)) {
-	  if ((_currentAttributeName != "name") ||
-	      (oldValue != "unnamed"))
-	    std::cout << "[error] attribute '" << _currentAttributeName << "' already exists" << std::endl;
+          if ((_currentAttributeName != "name") ||
+              (oldValue != "unnamed"))
+            std::cout << "[error] attribute '" << _currentAttributeName << "' already exists" << std::endl;
         }
         else {
           bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
