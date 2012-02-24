@@ -44,11 +44,12 @@ typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
 typedef std::pair<tlp::node, tlp::node> std_pair_0100tlp_node_0100tlp_node;
 %End
 
+typedef std::pair<tlp::node, tlp::node> std_pair_0100tlp_node_0100tlp_node;
+
 namespace tlp {
 typedef tlp::Iterator<std::string> IteratorString;
 typedef tlp::Graph* GraphPointer;
 typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
-typedef std::pair<tlp::node, tlp::node> std_pair_0100tlp_node_0100tlp_node;
 
 enum ElementType {NODE=0, EDGE};
 
