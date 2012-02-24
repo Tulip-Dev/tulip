@@ -42,9 +42,9 @@ DataSet & DataSet::operator=(const DataSet &set) {
   if (this != &set) {
     data.clear();
 
-    for (std::map<std::string, tlp::DataType*>::const_iterator it =
+    for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
            set.data.begin(); it != set.data.end(); ++it) {
-      data.insert(std::pair<std::string, tlp::DataType*>((*it).first, (*it).second->clone()));
+      data.push_back(std::pair<std::string, tlp::DataType*>((*it).first, (*it).second->clone()));
     }
   }
 
@@ -52,7 +52,7 @@ DataSet & DataSet::operator=(const DataSet &set) {
 }
 
 DataSet::~DataSet() {
-  for (std::map<std::string, tlp::DataType*>::iterator it =
+  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
          data.begin(); it != data.end(); ++it) {
     if (it->second)
       delete it->second;
@@ -60,21 +60,55 @@ DataSet::~DataSet() {
 }
 
 bool DataSet::exist(const string &str) const {
-  return data.find(str) != data.end();
+  for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
+         data.begin(); it != data.end(); ++it) {
+    if ((*it).first == str)
+      return true;
+  }
+
+  return false;
 }
 
 void DataSet::remove(const string &str) {
-  data.erase(str);
+  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
+         data.begin(); it != data.end(); ++it) {
+    if ((*it).first == str) {
+      if (it->second)
+        delete it->second;
+
+      data.erase(it);
+      break;
+    }
+  }
 }
 
 DataType* DataSet::getData(const string &str) const {
-  std::map<std::string, tlp::DataType*>::const_iterator it = data.find(str);
-  return it != data.end() ? it->second->clone() : NULL;
+  for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
+         data.begin(); it != data.end(); ++it) {
+    if ((*it).first == str)
+      return it->second ? it->second->clone() : NULL;
+  }
+
+  return NULL;
 }
 
 void DataSet::setData(const std::string &str, const DataType* value) {
   DataType* val = value ? value->clone() : NULL;
-  data[str] = val;
+
+  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
+         data.begin(); it != data.end(); ++it) {
+    std::pair<std::string, tlp::DataType*> &p = *it;
+
+    if (p.first == str) {
+      if (p.second)
+        delete p.second;
+
+      p.second = val;
+      return;
+    }
+  }
+
+  data.push_back(std::pair<std::string, tlp::DataType*>(str, val));
 }
 
 unsigned int DataSet::size() const {
@@ -86,41 +120,41 @@ bool DataSet::empty() const {
 }
 
 Iterator< pair<string, DataType*> >* DataSet::getValues() const {
-  std::map<std::string, tlp::DataType*>::const_iterator begin = data.begin();
-  std::map<std::string, tlp::DataType*>::const_iterator end = data.end();
+  list< pair<string, DataType*> >::const_iterator begin = data.begin();
+  list< pair<string, DataType*> >::const_iterator end = data.end();
 
-  return new StlIterator<pair<string, DataType*>, std::map<std::string, tlp::DataType*>::const_iterator>(begin, end);
+  return new StlIterator<pair<string, DataType*>, list< pair<string, DataType*> >::const_iterator>(begin, end);
 }
 
 // management of the serialization
 // the 2 hash maps
-TLP_HASH_MAP<std::string, DataTypeSerializer*> DataSet::tnTodts;
-TLP_HASH_MAP<std::string, DataTypeSerializer*> DataSet::otnTodts;
+
+DataTypeSerializerContainer DataSet::serializerContainer;
 
 // registering of a data type serializer
 void DataSet::registerDataTypeSerializer(const std::string& typeName,
     DataTypeSerializer* dts) {
   TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it =
-    tnTodts.find(typeName);
+    serializerContainer.tnTodts.find(typeName);
 
-  if (it != tnTodts.end())
+  if (it != serializerContainer.tnTodts.end())
     std::cerr << "Warning: a data type serializer is already registered for mangled type " << typeName << endl;
 
-  it = otnTodts.find(dts->outputTypeName);
+  it = serializerContainer.otnTodts.find(dts->outputTypeName);
 
-  if (it != otnTodts.end())
+  if (it != serializerContainer.otnTodts.end())
     std::cerr << "Warning: a data type serializer is already registered for read type " << dts->outputTypeName << endl;
 
-  tnTodts[typeName] = otnTodts[dts->outputTypeName] = dts;
+  serializerContainer.tnTodts[typeName] = serializerContainer.otnTodts[dts->outputTypeName] = dts;
 }
 
 // data write
 void DataSet::writeData(std::ostream& os, const std::string& prop,
                         const DataType* dt) const {
   TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it =
-    tnTodts.find(dt->getTypeName());
+    serializerContainer.tnTodts.find(dt->getTypeName());
 
-  if (it == tnTodts.end()) {
+  if (it == serializerContainer.tnTodts.end()) {
     std::cerr << "Write error: No data type serializer found for mangled type " <<
               dt->getTypeName() << std::endl;
     return;
@@ -149,9 +183,9 @@ void DataSet::write(std::ostream& os, const DataSet& ds) {
 bool DataSet::readData(std::istream& is, const std::string& prop,
                        const std::string& outputTypeName) {
   TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it =
-    otnTodts.find(outputTypeName);
+    serializerContainer.otnTodts.find(outputTypeName);
 
-  if (it == otnTodts.end()) {
+  if (it == serializerContainer.otnTodts.end()) {
     std::cerr << "Read error: No data type serializer found for read type " <<
               outputTypeName << std::endl;
     return false;
@@ -162,9 +196,9 @@ bool DataSet::readData(std::istream& is, const std::string& prop,
 
   if (dt) {
     // replace any prexisting value associated to prop
-    for (std::map<std::string, tlp::DataType*>::iterator it =
+    for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
            data.begin(); it != data.end(); ++it) {
-      std::pair<std::string, tlp::DataType*> p = *it;
+      std::pair<std::string, tlp::DataType*> &p = *it;
 
       if (p.first == prop) {
         if (p.second)
@@ -176,7 +210,7 @@ bool DataSet::readData(std::istream& is, const std::string& prop,
     }
 
     // no prexisting value
-    data.insert(std::pair<std::string, tlp::DataType*>(prop, dt));
+    data.push_back(std::pair<std::string, tlp::DataType*>(prop, dt));
     return true;
   }
 
@@ -265,10 +299,10 @@ bool DataSet::read(std::istream& is, DataSet& ds) {
 }
 
 DataTypeSerializer *DataSet::typenameToSerializer(const std::string &name) {
-  if (tnTodts.count(name) == 0)
+  if (serializerContainer.tnTodts.count(name) == 0)
     return NULL;
 
-  return tnTodts[name];
+  return serializerContainer.tnTodts[name];
 }
 
 string DataSet::toString() const {

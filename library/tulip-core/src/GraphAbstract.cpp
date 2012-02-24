@@ -87,9 +87,11 @@ void GraphAbstract::setSubGraphToKeep(Graph* sg) {
   subGraphToKeep = sg;
 }
 //=========================================================================
-Graph *GraphAbstract::addSubGraph(BooleanProperty *selection, unsigned int id) {
+Graph *GraphAbstract::addSubGraph(BooleanProperty *selection, unsigned int id,
+                                  std::string name) {
   Graph *tmp = new GraphView(this, selection, id);
   notifyBeforeAddSubGraph(tmp);
+  tmp->setAttribute("name", name);
   subgraphs.push_back(tmp);
   notifyAfterAddSubGraph(tmp);
   return tmp;

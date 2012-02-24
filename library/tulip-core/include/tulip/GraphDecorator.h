@@ -37,7 +37,8 @@ public:
 
   virtual void clear();
   virtual Graph *addSubGraph(BooleanProperty *selection=0,
-                             unsigned int id = 0);
+                             unsigned int id = 0,
+                             std::string name = "unnamed");
   virtual void delSubGraph(Graph * s);
   virtual void delAllSubGraphs(Graph *s);
   virtual Graph* getSuperGraph()const;
@@ -125,7 +126,8 @@ public:
   virtual Iterator<PropertyInterface*>* getInheritedObjectProperties() const;
   virtual Iterator<PropertyInterface*>* getObjectProperties() const;
   // updates management
-  virtual void push(bool unpopAllowed = true);
+  virtual void push(bool unpopAllowed = true,
+                    std::vector<PropertyInterface*>* propertiesToPreserveOnPop= NULL);
   virtual void pop(bool unpopAllowed = true);
   virtual bool nextPopKeepPropertyUpdates(PropertyInterface* prop);
   virtual void unpop();

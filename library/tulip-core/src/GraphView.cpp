@@ -493,8 +493,9 @@ bool GraphView::canPopThenUnpop() {
   return getRoot()->canPopThenUnpop();
 }
 //----------------------------------------------------------------
-void GraphView::push(bool unpopAllowed) {
-  getRoot()->push(unpopAllowed);
+void GraphView::push(bool unpopAllowed,
+                     std::vector<PropertyInterface*>* propertiesToPreserveOnPop) {
+  getRoot()->push(unpopAllowed, propertiesToPreserveOnPop);
 }
 //----------------------------------------------------------------
 void GraphView::pop(bool unpopAllowed) {
