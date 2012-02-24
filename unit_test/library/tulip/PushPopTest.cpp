@@ -761,6 +761,81 @@ void PushPopTest::testSubgraph() {
   delete it;
 }
 
+//==========================================================
+void PushPopTest::testPushAddSubgraphsPop() {
+  graph->push();
+  Graph *g1, *g2;
+  g1 = graph->addSubGraph();
+  g2 = g1->addSubGraph();
+  CPPUNIT_ASSERT(g2->getSuperGraph()==g1);
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
+  graph->pop();
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==0);
+  graph->unpop();
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
+  graph->delSubGraph(g1);
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
+  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+  graph->pop();
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==0);
+  graph->unpop();
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
+  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+}
+
+//==========================================================
+void PushPopTest::testDelSubgraph() {
+  Graph *g1, *g2, *g3, *g4;
+  g1 = graph->addSubGraph();
+  g2 = graph->addSubGraph();
+  g3 = g2->addSubGraph();
+  g4 = g2->addSubGraph();
+
+  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(graph->getNthSubGraph(1) == g2);
+  CPPUNIT_ASSERT(g3->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(g2->getNthSubGraph(0) == g3);
+  CPPUNIT_ASSERT(g4->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(g2->getNthSubGraph(1) == g4);
+
+  CPPUNIT_ASSERT(graph->getRoot()==graph);
+  CPPUNIT_ASSERT(g1->getRoot()==graph);
+  CPPUNIT_ASSERT(g2->getRoot()==graph);
+  CPPUNIT_ASSERT(g3->getRoot()==graph);
+  CPPUNIT_ASSERT(g4->getRoot()==graph);
+
+  graph->push();
+
+  graph->delSubGraph(g2);
+  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g3->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(graph->getNthSubGraph(1) == g3);
+  CPPUNIT_ASSERT(g4->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(graph->getNthSubGraph(2) == g4);
+
+  graph->pop();
+
+  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(graph->getNthSubGraph(1) == g2);
+  CPPUNIT_ASSERT(g3->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(g2->getNthSubGraph(0) == g3);
+  CPPUNIT_ASSERT(g4->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(g2->getNthSubGraph(1) == g4);
+
+  graph->unpop();
+  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g3->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(graph->getNthSubGraph(1) == g3);
+  CPPUNIT_ASSERT(g4->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(graph->getNthSubGraph(2) == g4);
+}
+
 void PushPopTest::testTests() {
   node n0 = graph->addNode();
   node n1 = graph->addNode();

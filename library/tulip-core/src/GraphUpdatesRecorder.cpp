@@ -75,6 +75,8 @@ void GraphUpdatesRecorder::deleteDeletedObjects() {
     set<Graph*>::iterator ite = (*itds).second.end();
 
     while(its != ite) {
+      // avoid subgraphs deletion of graph to delete
+      (*its)->clearSubGraphs();
       delete (*its);
       ++its;
     }
@@ -580,8 +582,26 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     set<Graph*>::iterator itge = (*its).second.end();
 
     while(itg != itge) {
+      Graph* sg = (*itg);
       // remove from list of subgraphs + notify observers
-      g->removeSubGraph((*itg), true);
+      g->notifyBeforeDelSubGraph(sg);
+      g->removeSubGraph(sg);
+      g->notifyAfterDelSubGraph(sg);
+      sg->notifyDestroy();
+
+      if (!undo) {
+        // restore its subgraphs as subgraph of its supergraph
+        // only if we are redoing its deletion
+        Iterator<Graph *> *itss = sg->getSubGraphs();
+
+        while (itss->hasNext()) {
+          Graph* ssg = itss->next();
+          g->restoreSubGraph(ssg);
+        }
+
+        delete itss;
+      }
+
       ++itg;
     }
 
@@ -639,7 +659,24 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     set<Graph*>::iterator itge = (*its).second.end();
 
     while(itg != itge) {
-      g->restoreSubGraph((*itg), true);
+      Graph* sg = *itg;
+      // notify its addition
+      g->notifyBeforeAddSubGraph(sg);
+      // restore sg as subgraph of g
+      g->restoreSubGraph(sg);
+      // notify its addition
+      g->notifyAfterAddSubGraph(sg);
+      Iterator<Graph *> *itss = sg->getSubGraphs();
+
+      // and sg subgraphs are no longer subgraphs of g
+      while (itss->hasNext()) {
+        Graph* ssg = itss->next();
+        g->removeSubGraph(ssg);
+        ssg->setSuperGraph(sg);
+      }
+
+      delete itss;
+
       ++itg;
     }
 
@@ -1114,6 +1151,15 @@ void GraphUpdatesRecorder::delSubGraph(Graph* g, Graph* sg) {
   if (it != addedSubGraphs.end() &&
       ((*it).second.find(sg) != (*it).second.end())) {
     (*it).second.erase(sg);
+    // but set its subgraphs as added in its supergraph
+    Iterator<Graph *> *itss = sg->getSubGraphs();
+
+    while (itss->hasNext()) {
+      Graph* ssg = itss->next();
+      addSubGraph(g, ssg);
+    }
+
+    delete itss;
     return;
   }
 

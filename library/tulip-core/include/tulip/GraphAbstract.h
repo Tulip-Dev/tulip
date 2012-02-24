@@ -109,13 +109,10 @@ protected:
   PropertyManager *propertyContainer;
   const std::set<edge>& getReferencedEdges(const edge) const;
 
-  // to deal with sub graph deletion
+  // internally used to deal with sub graph deletion
   virtual void clearSubGraphs();
-  virtual void removeSubGraph(Graph*, bool = false);
-  virtual void delAllSubGraphsInternal(Graph*, bool deleteSubGraph);
-  // reinstall a previously deleted subgraph
-  // only called by GraphUpdatesRecorder
-  virtual void restoreSubGraph(Graph*, bool undoOrRedo = false);
+  virtual void removeSubGraph(Graph*);
+  virtual void restoreSubGraph(Graph*);
   virtual void setSubGraphToKeep(Graph*);
 
 private:
@@ -127,7 +124,7 @@ private:
   // pointer to root viewMetaGraph property
   GraphProperty* metaGraphProperty;
   // notification of addition/deletion of inherited properties
-  void notifyAddInheritedProperty(const std::string&);
+  void notifyAddInheritedProperty(const std::string& prop);
   void notifyBeforeDelInheritedProperty(const std::string& prop);
   void notifyAfterDelInheritedProperty(const std::string& prop);
 };
