@@ -72,9 +72,9 @@ public:
 	
 //===========================================================================================
 
-bool applyAlgorithm(std::string &errMsg /Out/, tlp::DataSet *dataSet, const std::string &alg);
+bool applyAlgorithm(const std::string &alg, std::string &errMsg /Out/, tlp::DataSet *dataSet = NULL);
 %Docstring
-tlp.Graph.applyAlgorithm(dataSet, algoName)
+tlp.Graph.applyAlgorithm(algoName, dataSet)
 
 Applies an algorithm plugin (must be loaded) on a graph . Algorithm plugins are objects
 implementing the tlp::Algorithm interface in C++ or the :class:`tlp.Algorithm` interface in Python.
@@ -95,12 +95,12 @@ its execution.
 %End
 
 %MethodCode
-if (pluginExists<tlp::Algorithm>(*a2)) {
-  sipRes = sipCpp->applyAlgorithm(*a0, a1, *a2);
+if (pluginExists<tlp::Algorithm>(*a0)) {
+  sipRes = sipCpp->applyAlgorithm(*a0, *a1, a2);
 } else {
   sipIsErr = 1;
   std::string msg = "No Tulip algorithm plugin named  ";
-  msg += *a2;
+  msg += *a0;
   msg += ".";
   PyErr_SetString(PyExc_Exception, msg.c_str());
 }

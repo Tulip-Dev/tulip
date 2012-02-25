@@ -122,7 +122,9 @@ void SGHierarchyWidget::buildTreeView(Graph *graph, QTreeWidgetItem *parentItem)
 //=======================================================
 void SGHierarchyWidget::setItemInfos(QTreeWidgetItem *item, Graph *graph,
                                      unsigned int nbNodes, unsigned int nbEdges) {
-  item->setText(0, QString::fromUtf8(graph->getAttribute<string>("name").c_str()));
+  string name;
+  graph->getAttribute("name", name);
+  item->setText(0, QString::fromUtf8(name.c_str()));
   char tmpstr[9];
   sprintf(tmpstr, " %.7d", nbNodes);
   item->setText(1, QString(tmpstr));
@@ -247,11 +249,13 @@ void SGHierarchyWidget::contextCloneSubgraphCluster() {
 //=======================================================
 void SGHierarchyWidget::contextRenameCluster() {
   bool ok;
+  string name;
+  _currentGraph->getAttribute("name", name);
   QString text =
     QInputDialog::getText(this, "Cluster Name",
                           "Please enter the cluster name",
                           QLineEdit::Normal,
-                          _currentGraph->getAttribute<string>("name").c_str(),
+                          name.c_str(),
                           &ok);
 
   if (ok) {

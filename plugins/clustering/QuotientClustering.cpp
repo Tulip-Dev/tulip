@@ -122,8 +122,11 @@ public:
                         Graph*) {
     if (sgLabel)
       label->setNodeValue(mN, sgLabel->getNodeValue(sg->getOneNode()));
-    else if (useSubGraphName)
-      label->setNodeValue(mN, sg->getAttribute<string>("name"));
+    else if (useSubGraphName) {
+      string name;
+      sg->getAttribute("name", name);
+      label->setNodeValue(mN, name);
+    }
   }
 };
 
@@ -178,7 +181,8 @@ bool QuotientClustering::run() {
   Graph *quotientGraph = graph->getRoot()->addSubGraph();
   stringstream sstr;
   sstr << "quotient of ";
-  string graphName = graph->getAttribute<string>("name");
+  string graphName;
+  graph->getAttribute("name", graphName);
 
   if (graphName.size() == 0)
     sstr << graph->getId();
@@ -398,7 +402,7 @@ bool QuotientClustering::run() {
       node mn = *itn;
       Graph* sg = quotientGraph->getNodeMetaInfo(mn);
       string eMsg;
-      sg->applyAlgorithm(eMsg, &dSet, "Quotient Clustering",
+      sg->applyAlgorithm("Quotient Clustering", eMsg, &dSet, 
                          pluginProgress);
 
       // if a quotient graph has been computed

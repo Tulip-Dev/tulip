@@ -126,7 +126,8 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   Graph * subgraph = 0;
   bool find = false;
   forEach(subgraph, graph->getSubGraphs()) {
-    string name = subgraph->getAttribute<string>("name");
+    string name;
+    subgraph->getAttribute("name", name);
 
     if (name == "unnamed") {
       find = true;
