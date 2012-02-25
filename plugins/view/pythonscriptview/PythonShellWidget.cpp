@@ -108,7 +108,7 @@ void PythonShellWidget::keyPressEvent(QKeyEvent * e) {
   QString lineNotTrimmed = textCursor().block().text().mid(currentPs.length());
   QString line = rtrim(textCursor().block().text()).mid(currentPs.length());
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))  
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
   int col = textCursor().positionInBlock();
 #else
   int col = textCursor().position() - textCursor().block().position();
