@@ -279,7 +279,8 @@ bool EqualValueClustering::run() {
       ConnectedTest::computeConnectedComponents(sg, components);
 
       if (components.size() > 1) {
-        string name = sg->getAttribute<string>("name");
+        string name;
+	sg->getAttribute("name", name);
         // remove the orginal subgraph
         graph->delSubGraph(sg);
 

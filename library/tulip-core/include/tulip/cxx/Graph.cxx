@@ -25,14 +25,6 @@ template <class PropertyAlgorithm> class PropertyPluginLister;
 
 //================================================================================
 template<typename ATTRIBUTETYPE>
-ATTRIBUTETYPE tlp::Graph::getAttribute(const std::string &name) const {
-  const tlp::DataSet &data=getAttributes();
-  ATTRIBUTETYPE tmp;
-  data.get(name,tmp);
-  return tmp;
-}
-//================================================================================
-template<typename ATTRIBUTETYPE>
 bool tlp::Graph::getAttribute(const std::string &name, ATTRIBUTETYPE& value) const {
   return getAttributes().get(name, value);
 }

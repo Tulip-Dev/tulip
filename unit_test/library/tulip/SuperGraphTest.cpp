@@ -751,7 +751,8 @@ void SuperGraphTest::testAttributes() {
   float f = 12.12;
   CPPUNIT_ASSERT(!graph->getAttribute("f", f));
   graph->setAttribute("name", string("The Graph"));
-  string name = graph->getAttribute<string>("name");
+  string name;
+  graph->getAttribute<string>("name", name);
   CPPUNIT_ASSERT_EQUAL(string("The Graph"), name);
   CPPUNIT_ASSERT(graph->getAttribute("name", name));
   CPPUNIT_ASSERT_EQUAL(string("The Graph"), name);

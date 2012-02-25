@@ -185,13 +185,13 @@ public:
    *
    * If an error occurs, a message describing the error should be stored in errorMessage.
    *
+   * @param algorithm The algorithm to apply.
    * @param errorMessage A string that will be modified to contain an error message should an error occur.
    * @param dataSet The parameters to the algorithm. Defaults to NULL.
-   * @param algorithm The algorithm to apply. Defaults to "any".
    * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
    * @return bool Whether the algorithm was successfully applied.
    **/
-  bool applyAlgorithm(std::string &errorMessage, DataSet *dataSet=NULL,const std::string &algorithm="any", PluginProgress *progress=NULL);
+  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage, DataSet *dataSet=NULL, PluginProgress *progress=NULL);
 
   //=========================================================================
   // Graph hierarchy access and building
@@ -550,9 +550,6 @@ public:
   /// false if not.
   template<typename ATTRIBUTETYPE>
   bool getAttribute(const std::string &name, ATTRIBUTETYPE& value) const;
-  /// Deprecated version of the previous method.
-  template<typename ATTRIBUTETYPE>
-  ATTRIBUTETYPE getAttribute(const std::string &name) const;
   /// Untyped accessor returning a copy.
   DataType* getAttribute(const std::string& name) const;
   /// Sets an attribute of the graph.
@@ -607,8 +604,9 @@ public:
    * to return some external information (not stored in result).
    */
   template<typename PropertyType>
-  bool computeProperty(const std::string &algorithm, PropertyType* result, std::string &msg,
-                       PluginProgress *progress=0, DataSet *data=0);
+  bool computeProperty(const std::string &algorithm,
+                       PropertyType* result, std::string &msg,
+                       PluginProgress *progress=NULL, DataSet *data=NULL);
   /**
    * Returns a pointer to a PropertyInterface which is in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
    * The real type of the PropertyInterface is tested with the template parameter.

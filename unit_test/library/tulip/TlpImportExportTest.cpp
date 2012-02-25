@@ -118,7 +118,7 @@ void TlpImportExportTest::testExportCluster() {
   node n1 = graph->addNode();
   node n2 = graph->addNode();
   edge e1 = graph->addEdge(n1, n2);
-  Graph* sg = newSubGraph(graph, "\"name with double quotes \"");
+  Graph* sg = graph->addSubGraph("\"name with double quotes \"");
   sg->addNode(n1);
   sg->addNode(n2);
   ostream *os = new ofstream("export_test.tlp");
@@ -174,7 +174,7 @@ void TlpImportExportTest::testExportAttributes() {
   graph->setAttribute("type = size", size);
   graph->setAttribute("type = string", str);
 
-  Graph* sg = newSubGraph(graph, "sg");
+  Graph* sg = graph->addSubGraph("sg");
   CPPUNIT_ASSERT_EQUAL(1u, sg->getId());
 
   // set sg attributes of different types

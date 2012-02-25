@@ -371,8 +371,9 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
 }
 
 //=========================================================
-bool Graph::applyAlgorithm(std::string &errorMessage, DataSet *dataSet,
-                           const std::string &algorithm, PluginProgress *progress) {
+bool Graph::applyAlgorithm(const std::string &algorithm,
+			   std::string &errorMessage,
+                           DataSet *dataSet, PluginProgress *progress) {
   if (!AlgorithmLister::pluginExists(algorithm)) {
     cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << algorithm
          << "\" doesn't exists (or is not loaded)" << endl;

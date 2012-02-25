@@ -175,13 +175,14 @@ void BasicPluginsTest::testMetricColorMapping() {
   initializeGraph("Planar Graph");
   DoubleProperty metric(graph);
   string errorMsg;
-  DataSet ds;
   bool result = graph->computeProperty("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
 
+  DataSet ds;
+  ds.set("linear/uniform\nproperty", &metric);
   ColorProperty color(graph);
-  ds.set("property", &metric);
-  result = graph->computeProperty("Color Mapping", &color, errorMsg, NULL, &ds);
+  result = graph->computeProperty("Color Mapping", &color,
+                                  errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -278,7 +279,7 @@ void BasicPluginsTest::testEqualValueClustering() {
   DoubleProperty* metric = graph->getProperty<DoubleProperty>("metric");
   ds.set("Property", metric);
 
-  result = graph->applyAlgorithm(errorMsg, &ds, algorithmName, NULL);
+  result = graph->applyAlgorithm(algorithmName, errorMsg, &ds);
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
 
   // fill graph & metric
@@ -298,7 +299,7 @@ void BasicPluginsTest::testEqualValueClustering() {
     graph->addEdge(nodes[rand()%NB_ADD], nodes[rand()%NB_ADD]);
 
   // check dcall to computeEqualValueClustering
-  result = graph->applyAlgorithm(errorMsg, &ds, algorithmName, NULL);
+  result = graph->applyAlgorithm(algorithmName, errorMsg, &ds);
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
 
   graph->clear();
@@ -307,7 +308,7 @@ void BasicPluginsTest::testEqualValueClustering() {
   initializeGraph("Planar Graph");
   result = graph->computeProperty("Degree", metric, errorMsg, progress);
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
-  result = graph->applyAlgorithm(errorMsg, &ds, algorithmName, NULL);
+  result = graph->applyAlgorithm(algorithmName, errorMsg, &ds);
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
 }
 //==========================================================
@@ -317,7 +318,7 @@ void BasicPluginsTest::testHierarchicalClustering() {
   string errorMsg;
   bool result = graph->computeProperty("Degree", metric, errorMsg);
   CPPUNIT_ASSERT(result);
-  result = graph->applyAlgorithm(errorMsg, NULL, "Hierarchical", NULL);
+  result = graph->applyAlgorithm("Hierarchical", errorMsg);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -329,10 +330,9 @@ void BasicPluginsTest::testQuotientClustering() {
   bool result = graph->computeProperty("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
   ds.set("Property", &metric);
-  result = graph->applyAlgorithm(errorMsg, &ds, "Equal Value", NULL);
+  result = graph->applyAlgorithm("Equal Value", errorMsg, &ds);
   CPPUNIT_ASSERT(result);
-  result = graph->applyAlgorithm(errorMsg, NULL,
-                                 "Quotient Clustering", NULL);
+  result = graph->applyAlgorithm("Quotient Clustering", errorMsg);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================

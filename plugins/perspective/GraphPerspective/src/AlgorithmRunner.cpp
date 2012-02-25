@@ -209,7 +209,7 @@ public:
   }
   virtual bool computeProperty(tlp::Graph* g,const QString& alg, QString& msg, tlp::PluginProgress* progress=0, tlp::DataSet *data=0,bool isLocal=false) {
     std::string errorMsg;
-    bool result = g->applyAlgorithm(errorMsg,data,alg.toStdString(),progress);
+    bool result = g->applyAlgorithm(alg.toStdString(),errorMsg,data,progress);
     msg = errorMsg.c_str();
     return result;
   }

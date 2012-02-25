@@ -239,9 +239,12 @@ void ImportExportTest::testGraphPropertiesAreEqual(Graph* first, Graph* second) 
 
 void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Graph* second) {
   stringstream nodesMessage;
-  nodesMessage << "Graphs '" << first->getAttribute<string>("name") << "' and '" << second->getAttribute<string>("name") << "' have different number of nodes";
+  string name1, name2;
+  first->getAttribute("name", name1);
+  second->getAttribute("name", name2);
+  nodesMessage << "Graphs '" << name1 << "' and '" << name2 << "' have different number of nodes";
   stringstream edgesMessage;
-  edgesMessage << "Graphs " << first->getAttribute<string>("name") << " and " << second->getAttribute<string>("name") << " have different number of edges";
+  edgesMessage << "Graphs " << name1 << " and " << name2 << " have different number of edges";
   CPPUNIT_ASSERT_EQUAL_MESSAGE(nodesMessage.str(), first->numberOfNodes(), second->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL_MESSAGE(edgesMessage.str(), first->numberOfEdges(), second->numberOfEdges());
 
