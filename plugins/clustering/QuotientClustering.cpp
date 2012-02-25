@@ -402,7 +402,7 @@ bool QuotientClustering::run() {
       node mn = *itn;
       Graph* sg = quotientGraph->getNodeMetaInfo(mn);
       string eMsg;
-      sg->applyAlgorithm("Quotient Clustering", eMsg, &dSet, 
+      sg->applyAlgorithm("Quotient Clustering", eMsg, &dSet,
                          pluginProgress);
 
       // if a quotient graph has been computed
