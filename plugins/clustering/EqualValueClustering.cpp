@@ -280,7 +280,7 @@ bool EqualValueClustering::run() {
 
       if (components.size() > 1) {
         string name;
-	sg->getAttribute("name", name);
+        sg->getAttribute("name", name);
         // remove the orginal subgraph
         graph->delSubGraph(sg);
 

@@ -319,8 +319,8 @@ QVariant GraphTableModel::headerData(int section, Qt::Orientation orientation, i
         Graph* propertyGraph = property->getGraph();
 
         if(propertyGraph != _graph) {
-	  string name;
-	  propertyGraph->getAttribute("name", name);
+          string name;
+          propertyGraph->getAttribute("name", name);
           toolTip.append("Inherited property from graph : ");
           toolTip.append(tlpStringToQString(name));
           toolTip.append(" ( ");
