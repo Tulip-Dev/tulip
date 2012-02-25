@@ -15,8 +15,9 @@
 #include <tulip/PluginLoaderTxt.h>
 #endif
 #include <tulip/PluginLibraryLoader.h>
+#include <QtGui/qapplication.h>
 
-int main(int, char**) {
+int main(int argc, char **argv) {
 #if defined(_GLIBCXX_HAVE_SETENV)
   std::string tlpdir("@prefix@");
   // check for lib64
@@ -39,6 +40,8 @@ int main(int, char**) {
   tlp::PluginLoaderTxt loader;
   pLoader = &loader;
 #endif
+  // many plugins are qt dependent so they need a QApplication
+  QApplication app(argc, argv);
   tlp::PluginLibraryLoader::loadPlugins(pLoader);   // library side plugins
 
   //CPPUNIT_NS::QtUi::TestRunner runner;
