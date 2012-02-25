@@ -77,7 +77,13 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
       QString text = cursor.block().text();
 
       if (text != "") {
-        int start = cursor.positionInBlock();
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
+	int start = cursor.positionInBlock();
+#else
+	int start = cursor.position() - cursor.block().position();
+#endif
+	
+        
         int end = 0;
         bool endOk = false;
 
@@ -309,7 +315,11 @@ void FindReplaceDialog::doReplaceAll() {
 
   if (ret) {
     int startLine = editor->textCursor().blockNumber();
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))    
     int startIndex = editor->textCursor().positionInBlock();
+#else
+    int startIndex = editor->textCursor().position() - editor->textCursor().block().position();
+#endif    
     int nbReplacements = 0;
 
     while(ret) {
@@ -317,8 +327,11 @@ void FindReplaceDialog::doReplaceAll() {
       ret = doFind();
       ++nbReplacements;
       int line = editor->textCursor().blockNumber();
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))      
       int index = editor->textCursor().positionInBlock();
-
+#else
+      int index = editor->textCursor().position() - editor->textCursor().block().position();
+#endif
       // when replacing a pattern P by a pattern following this regexp .*P.*
       // this can lead to an infinite loop, handle this case
       if (line == startLine && index >= startIndex)
