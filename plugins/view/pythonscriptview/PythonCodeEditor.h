@@ -264,6 +264,8 @@ protected:
 
   QString pythonFileName;
 
+  bool shellWidget;
+
   static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
 
 };

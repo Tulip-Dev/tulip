@@ -48,12 +48,14 @@ static PyGILState_STATE gilState;
 
 static const string printObjectDictFunction =
   "def printObjectDict(obj):\n"
-  "	if hasattr(obj, \"__dict__\"):\n"
-  "		for k in obj.__dict__.keys():\n"
-  "			print k\n"
-  "	if hasattr(obj, \"__class__\"):\n"
-  "		for k in obj.__class__.__dict__.keys():\n"
-  "			print k\n"
+  " if hasattr(obj, \"__dict__\"):\n"
+  "     for k in obj.__dict__.keys():\n"
+  "         print k\n"
+  " if hasattr(obj, \"__bases__\"):\n"
+  "     for k in obj.__bases__:\n"
+  "         printObjectDict(k)\n"
+  " if hasattr(obj, \"__class__\") and obj.__class__ != type(type):\n"
+  "     printObjectDict(obj.__class__)\n"
   ""
   ;
 
@@ -277,12 +279,11 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
       runString(printObjectDictFunction);
       runString(printObjectClassFunction);
     }
+
+    PyEval_SetTrace(tracefunc, NULL);
   }
 
-  PyEval_SetTrace(tracefunc, NULL);
-
   releaseGIL();
-
 
 }
 
@@ -358,14 +359,14 @@ bool PythonInterpreter::registerNewModuleFromString(const std::string &moduleNam
     PyErr_Print();
     PyErr_Clear();
     ret = false;
-  }
+  } else {
+    PyObject *pmod = PyImport_ExecCodeModule(const_cast<char *>(moduleName.c_str()),pycomp);
 
-  PyObject *pmod = PyImport_ExecCodeModule(const_cast<char *>(moduleName.c_str()),pycomp);
-
-  if (pmod == NULL) {
-    PyErr_Print();
-    PyErr_Clear();
-    ret = false;
+    if (pmod == NULL) {
+        PyErr_Print();
+        PyErr_Clear();
+        ret = false;
+    }
   }
 
   releaseGIL();
@@ -475,12 +476,14 @@ bool PythonInterpreter::runGraphScript(const string &module, const string &funct
 
     if (PyErr_Occurred()) {
       PyErr_Print();
+      PyErr_Clear();
       ret = false;
     }
 
   }
   else {
     PyErr_Print();
+    PyErr_Clear();
     ret =  false;
   }
 
@@ -642,6 +645,58 @@ std::vector<std::string> PythonInterpreter::getObjectDictEntries(const std::stri
   return ret;
 }
 
+vector<string> PythonInterpreter::getImportedModulesList() {
+    std::vector<std::string> ret;
+    outputActivated = false;
+    consoleOuputString = "";
+
+    if (runString("import sys\nfor mod in sorted(sys.modules.keys()): print mod")) {
+      QStringList modulesList = QString(consoleOuputString.c_str()).split("\n");
+      for (int i = 0 ; i < modulesList.count() ; ++i) {
+        if (modulesList[i] != "") {
+          if (modulesList[i].startsWith("_")) {
+            continue;
+          }
+          else {
+              ret.push_back(modulesList[i].toStdString());
+          }
+        }
+      }
+    }
+
+    outputActivated = true;
+    return ret;
+}
+
+vector<string> PythonInterpreter::getBaseTypesForType(const string &typeName) {
+    vector<string> ret;
+    outputActivated = false;
+    ostringstream oss;
+    QStringList modules = QString(typeName.c_str()).split(".");
+    string curModule = "";
+    for (int i = 0 ; i < modules.size() -1 ; ++i) {
+        curModule += modules[i].toStdString();
+        oss.str("");
+        oss << "import " << curModule;
+        runString(oss.str());
+        curModule += ".";
+    }
+
+    consoleOuputString = "";
+    oss.str("");
+    oss << "for base in " << typeName << ".__bases__ : print base";
+    if (runString(oss.str())) {
+      QStringList basesList = QString(consoleOuputString.c_str()).split("\n");
+      for (int i = 0 ; i < basesList.count() ; ++i) {
+          int pos = basesList[i].indexOf('\'');
+          int pos2 = basesList[i].lastIndexOf('\'');
+          ret.push_back(basesList[i].mid(pos+1, pos2-pos-1).toStdString());
+      }
+    }
+    outputActivated = true;
+    return ret;
+}
+
 void PythonInterpreter::holdGIL() {
   gilState = PyGILState_Ensure();
 }
@@ -675,4 +730,10 @@ void PythonInterpreter::setProcessQtEventsDuringScriptExecution(bool processEven
   processQtEvents = processEvents;
 }
 
+void PythonInterpreter::setOutputEnabled(const bool enableOutput) {
+    outputActivated = enableOutput;
+}
 
+bool PythonInterpreter::outputEnabled() const {
+    return outputActivated;
+}

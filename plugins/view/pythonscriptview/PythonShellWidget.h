@@ -56,7 +56,6 @@ public slots:
 
 protected slots:
 
-  void showAutoCompletionList();
   void updateAutoCompletionList();
 
 private :

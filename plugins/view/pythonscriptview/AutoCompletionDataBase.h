@@ -36,15 +36,25 @@ public :
 
   AutoCompletionDataBase(APIDataBase *apiDb = NULL);
 
-  void analyseCurrentScriptCode(const QString &code);
+  void setGraph(tlp::Graph * graph) {
+    this->graph = graph;
+  }
+
+  void analyseCurrentScriptCode(const QString &code, const int currentLine, const bool interactiveSession=false);
 
   QSet<QString> getAutoCompletionListForContext(const QString &context, const QString &editedFunction) const ;
 
   QString findTypeForExpr(const QString &expr, const QString &funcName) const ;
 
-  void setGraph(tlp::Graph * graph) {
-    this->graph = graph;
-  }
+  QVector<QVector<QString> > getParamTypesForMethodOrFunction(const QString &type, const QString &funcName) const;
+
+  QString getReturnTypeForMethodOrFunction(const QString &type, const QString &funcName) const;
+
+  QSet<QString> getAllDictForType(const QString &type, const QString &prefix, const bool root=true) const;
+
+  QString getTypeNameForVar(const QString &varName) const;
+
+  QString getTypeNameForExpr(const QString &varName) const;
 
 private :
 
@@ -52,17 +62,20 @@ private :
   QSet<QString> getGraphPropertiesListIfContext(const QString &context, const QString &editedFunction) const ;
   QSet<QString> getPluginParametersListIfContext(const QString &context, const QString &editedFunction) const;
 
-  QString getTypeNameForVar(const QString &varName);
-  QString getTypeNameForExpr(const QString &varName);
+  QString getClassAttributeType(const QString &className, const QString &classAttribute) const;
 
   tlp::Graph *graph;
   APIDataBase *apiDb;
   QSet<QString> globalAutoCompletionList;
   QHash<QString, QSet<QString> > functionAutoCompletionList;
   QHash<QString, QHash<QString, QString> > varToType;
+  QHash<QString, QHash<QString, QString> > classAttributeToType;
   QHash<QString, QHash<QString, QString> > varToPluginName;
   QHash<QString, QHash<QString, QSet<QString> > > pluginParametersDataSet;
   QHash<QString, QString> iteratorType;
+  //QHash<QString, QString> classType;
+  QHash<QString, QSet<QString> > classContents;
+  QHash<QString, QSet<QString> > classBases;
 
 };
 

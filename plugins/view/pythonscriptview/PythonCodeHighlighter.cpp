@@ -19,6 +19,7 @@
 
 #include "PythonCodeHighlighter.h"
 #include "PythonInterpreter.h"
+#include "APIDataBase.h"
 
 #include <QtGui/QTextDocument>
 
@@ -35,6 +36,7 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   tlpApiFormat.setForeground(QColor(128,128,0));
   classFormat.setFontWeight(QFont::Bold);
   classFormat.setForeground(Qt::blue);
+  qtApiFormat.setForeground(QColor(0, 110, 40));
 
   rule.pattern = QRegExp("def [A-Za-z0-9_]+(?=\\()");
   rule.format = functionFormat;
@@ -184,5 +186,24 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
     }
   }
 
+  QRegExp qtApiRegexp("\\bQ[A-Za-z_.]+\\b");
+  index = qtApiRegexp.indexIn(text);
+
+  while (index >= 0) {
+    int length = qtApiRegexp.matchedLength();
+    QString expr = text.mid(index, length);
+    if (APIDataBase::getInstance()->typeExists(expr) || APIDataBase::getInstance()->getFullTypeName(expr) != "") {
+        setFormat(index, length, qtApiFormat);
+    } else if (expr.indexOf(".") != -1) {
+        QString type = expr.mid(0, expr.lastIndexOf("."));
+        if (APIDataBase::getInstance()->getFullTypeName(type) != "")
+            type = APIDataBase::getInstance()->getFullTypeName(type);
+        QString entry = expr.mid(expr.lastIndexOf(".")+1);
+        if (APIDataBase::getInstance()->dictEntryExists(type, entry)) {
+            setFormat(index, length, qtApiFormat);
+        }
+    }
+    index = qtApiRegexp.indexIn(text, index + length);
+  }
 
 }

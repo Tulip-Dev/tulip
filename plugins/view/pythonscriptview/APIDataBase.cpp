@@ -18,6 +18,7 @@
  */
 
 #include <QtCore/QFile>
+#include <QtCore/QList>
 #include <QtCore/QStringList>
 #include <QtCore/QRegExp>
 #include <QtCore/QTextStream>
@@ -27,6 +28,8 @@
 using namespace std;
 
 #include "APIDataBase.h"
+
+APIDataBase APIDataBase::instance;
 
 APIDataBase::APIDataBase() {
   addApiEntry("tlp.node.id");
@@ -91,7 +94,7 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
 
   if (func) {
     withoutParams = apiEntry.mid(0, parenPos);
-    QString parameters = apiEntry.mid(parenPos+1, apiEntry.indexOf(')') - parenPos - 1);
+    QString parameters = apiEntry.mid(parenPos+1, apiEntry.lastIndexOf(')') - parenPos - 1);
 
     if (parameters != "") {
       QStringList paramsList = parameters.split(',');
@@ -142,12 +145,21 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
       }
     }
 
-    if (dictEntry != "" && !dictEntry.startsWith("__")) {
+    if (dictEntry != "" ) {
       dictContent[type].insert(dictEntry);
     }
 
     pos = newPos;
   }
+}
+
+QSet<QString> APIDataBase::getTypesList() const {
+  QSet<QString> ret;
+  QList<QString> keys = dictContent.keys();
+  foreach(QString type, keys) {
+      ret.insert(type);
+  }
+  return ret;
 }
 
 QSet<QString> APIDataBase::getDictContentForType(const QString &type, const QString &prefix) const {
@@ -219,6 +231,17 @@ QSet<QString> APIDataBase::getAllDictEntriesStartingWithPrefix(const QString &pr
 
 bool APIDataBase::typeExists(const QString &type) const {
   return dictContent.find(type) != dictContent.end();
+}
+
+QString APIDataBase::getFullTypeName(const QString &t) const {
+    QList<QString> keys = dictContent.keys();
+    foreach(QString type, keys) {
+        int pos = type.lastIndexOf(t);
+        if (pos != -1 && (pos + t.length()) == type.length() && (pos == 0 || type[pos-1] == '.')) {
+            return type;
+        }
+    }
+    return "";
 }
 
 bool APIDataBase::dictEntryExists(const QString &type, const QString &dictEntry) const {

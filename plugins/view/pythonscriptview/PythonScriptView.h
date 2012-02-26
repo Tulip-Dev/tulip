@@ -103,6 +103,7 @@ private slots :
   void newPythonPlugin();
   void loadPythonPlugin();
   void savePythonPlugin();
+
   void registerPythonPlugin();
 
   void closeMainScriptTabRequested(int tab);
@@ -116,11 +117,15 @@ private :
   bool loadModule(const QString &fileName);
   bool loadModuleFromSrcCode(const std::string &moduleName, const std::string &moduleSrcCode);
   void saveModule();
-  void saveModule(int tabIdx);
+  void saveModule(int tabIdx, const bool reload=false);
+  bool loadPythonPlugin(const QString &fileName);
+  bool loadPythonPluginFromSrcCode(const std::string &moduleName, const std::string &pluginSrcCode);
+  void savePythonPlugin(int tabIdx);
   void saveAllModules();
   bool reloadAllModules();
   void indicateErrors();
   void clearErrorIndicators();
+  bool checkAndGetPluginInfosFromSrcCode(const QString &pluginSrcCode, QString &pluginName, QString &pluginClassName, QString &pluginType, QString &pluginClass);
 
   PythonScriptViewWidget *viewWidget;
   PythonInterpreter *pythonInterpreter;

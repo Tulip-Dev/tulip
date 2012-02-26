@@ -81,6 +81,7 @@ PythonShellWidget::PythonShellWidget(QWidget *parent) : PythonCodeEditor(parent)
   currentHistoryPos = -1;
   highlighter->setShellMode(true);
   PythonInterpreter::getInstance()->runString(setCurrentGraphFunction);
+  shellWidget = true;
 }
 
 bool PythonShellWidget::isCursorOnLastLine() {
@@ -265,23 +266,13 @@ void PythonShellWidget::showEvent(QShowEvent *) {
   setFocus();
 }
 
-void PythonShellWidget::showAutoCompletionList() {
-  autoCompletionList->show();
-  updateAutoCompletionList();
-
-  if (autoCompletionList->count() == 0)
-    autoCompletionList->hide();
-}
-
 void PythonShellWidget::updateAutoCompletionList() {
 
 
   if (!autoCompletionList->isVisible())
     return;
 
-  updateAutoCompletionListPosition();
-
-  autoCompletionList->clear();
+  PythonCodeEditor::updateAutoCompletionList();
 
   QString lineNotTrimmed = textCursor().block().text().mid(currentPs.length());
   QString line = rtrim(textCursor().block().text()).mid(currentPs.length());
@@ -311,7 +302,9 @@ void PythonShellWidget::updateAutoCompletionList() {
       vector<string> dynamicAutoCompletionList = PythonInterpreter::getInstance()->getObjectDictEntries(context[0].toStdString(), context[1].toStdString());
 
       for (size_t i = 0 ; i < dynamicAutoCompletionList.size() ; ++i) {
-        autoCompletionList->addItem(QString(dynamicAutoCompletionList[i].c_str()));
+        QString entry = dynamicAutoCompletionList[i].c_str();
+        if (autoCompletionList->findItems(entry, Qt::MatchExactly).empty())
+            autoCompletionList->addItem(entry);
       }
     }
 
@@ -320,7 +313,9 @@ void PythonShellWidget::updateAutoCompletionList() {
         vector<string> dynamicAutoCompletionList = PythonInterpreter::getInstance()->getGlobalDictEntries(context[0].toStdString());
 
         for (size_t i = 0 ; i < dynamicAutoCompletionList.size() ; ++i) {
-          autoCompletionList->addItem(QString(dynamicAutoCompletionList[i].c_str()));
+            QString entry = dynamicAutoCompletionList[i].c_str();
+            if (autoCompletionList->findItems(entry, Qt::MatchExactly).empty())
+                autoCompletionList->addItem(entry);
         }
       }
     }

@@ -55,7 +55,7 @@ private:
 static const char pythonReservedCharacters[] = {'#', '%', '/', '+', '-', '&', '*', '<', '>',
     '|', '~', '^', '=', '!', '\'', '\"', '{', '}',
     '(', ')', '[', ']', '.', 0
-                                               };
+};
 
 static const char *pythonKeywords[] = {
   "def", "class","from", "in", "and", "or", "not", "is", "with", "assert",
@@ -108,6 +108,10 @@ public :
 
   void setDefaultSIGINTHandler();
 
+  std::vector<std::string> getImportedModulesList();
+
+  std::vector<std::string> getBaseTypesForType(const std::string &type);
+
   std::vector<std::string> getGlobalDictEntries(const std::string &prefixFilter = "");
 
   std::vector<std::string> getObjectDictEntries(const std::string &objectName, const std::string &prefixFilter = "");
@@ -127,6 +131,10 @@ public :
   std::string getStandardErrorOutput() const;
 
   void clearOutputBuffers();
+
+  void setOutputEnabled(const bool enableOutput);
+
+  bool outputEnabled() const;
 
 private :
 
