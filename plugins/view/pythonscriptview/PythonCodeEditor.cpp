@@ -840,19 +840,24 @@ void PythonCodeEditor::highlightErrors() {
 }
 
 void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
-    if (commentShortcutsActivated() && e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_D) {
+    Qt::KeyboardModifier modifier = Qt::ControlModifier;
+#ifdef __APPLE__
+    modifier = Qt::MetaModifier;
+#endif
+
+    if (commentShortcutsActivated() && e->modifiers() == modifier && e->key() == Qt::Key_D) {
         commentSelectedCode();
     }
-    else if (commentShortcutsActivated() &&  e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && e->key() == Qt::Key_D) {
+    else if (commentShortcutsActivated() &&  e->modifiers() == (modifier | Qt::ShiftModifier) && e->key() == Qt::Key_D) {
         uncommentSelectedCode();
     }
-    else if (indentShortcutsActivated() && e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_I) {
+    else if (indentShortcutsActivated() && e->modifiers() == modifier && e->key() == Qt::Key_I) {
         indentSelectedCode();
     }
-    else if (indentShortcutsActivated() &&  e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && e->key() == Qt::Key_I) {
+    else if (indentShortcutsActivated() &&  e->modifiers() == (modifier | Qt::ShiftModifier) && e->key() == Qt::Key_I) {
         unindentSelectedCode();
     }
-    else if (findReplaceActivated() && e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_F) {
+    else if (findReplaceActivated() && e->modifiers() == modifier && e->key() == Qt::Key_F) {
         QString selection = textCursor().selectedText();
 
         if (selection != "")
@@ -863,7 +868,7 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
         findReplaceDialog->activateWindow();
         findReplaceDialog->setFindMode(true);
     }
-    else if (findReplaceActivated() && e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_R) {
+    else if (findReplaceActivated() && e->modifiers() == modifier && e->key() == Qt::Key_R) {
         QString selection = textCursor().selectedText();
 
         if (selection != "")
@@ -874,7 +879,7 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
         findReplaceDialog->activateWindow();
         findReplaceDialog->setFindMode(false);
     }
-    else if (e->key() == Qt::Key_Space && e->modifiers() == Qt::ControlModifier) {
+    else if (e->key() == Qt::Key_Space && e->modifiers() == modifier) {
         showAutoCompletionList();
     }
     else {

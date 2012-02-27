@@ -1278,10 +1278,14 @@ bool PythonScriptView::reloadAllModules() {
 }
 
 bool PythonScriptView::eventFilter(QObject *obj, QEvent *event) {
+    Qt::KeyboardModifier modifier = Qt::ControlModifier;
+#ifdef __APPLE__
+    modifier = Qt::MetaModifier;
+#endif
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvt = static_cast<QKeyEvent *>(event);
 
-        if (keyEvt->modifiers() == Qt::ControlModifier && keyEvt->key() == Qt::Key_S) {
+        if (keyEvt->modifiers() == modifier && keyEvt->key() == Qt::Key_S) {
             if (obj == viewWidget->getCurrentMainScriptEditor()) {
                 saveScript();
                 return true;
@@ -1296,7 +1300,7 @@ bool PythonScriptView::eventFilter(QObject *obj, QEvent *event) {
             }
 
         }
-        else if (obj == viewWidget->getCurrentMainScriptEditor() && keyEvt->modifiers() == Qt::ControlModifier && keyEvt->key() == Qt::Key_Return) {
+        else if (obj == viewWidget->getCurrentMainScriptEditor() && keyEvt->modifiers() == modifier && keyEvt->key() == Qt::Key_Return) {
             executeCurrentScript();
             return true;
         }
