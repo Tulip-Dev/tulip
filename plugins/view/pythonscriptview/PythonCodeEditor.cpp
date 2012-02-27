@@ -592,10 +592,18 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
         }
 
         QPoint tPos(left+4, top - toolTipLines.size()*(bottom - top) - 1);
+#ifndef __APPLE__
         QRect tooltipRect(tPos, tPos + QPoint(width, height));
+#else
+        QRect tooltipRect(tPos, tPos + QPoint(width+fontMetrics().width(QLatin1Char(' '), height));
+#endif
         painter.drawRect(tooltipRect);
         painter.fillRect(tooltipRect, QColor(249,251,100,200));
+#ifndef __APPLE__
         painter.drawText(tooltipRect, toolTipText);
+#else
+        painter.drawText(tooltipRect, Qt::AlignLeft, toolTipText);
+#endif
     }
 
     // draw indentation guides
@@ -608,7 +616,6 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
     int top = static_cast<int>(blockBoundingGeometry(block).translated(contentOffset()).top());
 
     int bottom = top + static_cast<int>(blockBoundingRect(block).height());
-
 
     QPen pen;
     pen.setStyle(Qt::DotLine);
@@ -1228,6 +1235,8 @@ void PythonCodeEditor::insertAt(QString text, int line, int col) {
 }
 
 void PythonCodeEditor::showTooltip(int line, int col, const QString &text) {
+    if (text == "")
+        return;
     tooltipActive = true;
     toolTipPos = QPoint(line, col);
     toolTipText = text;
