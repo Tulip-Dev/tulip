@@ -303,8 +303,9 @@ void PythonShellWidget::updateAutoCompletionList() {
 
       for (size_t i = 0 ; i < dynamicAutoCompletionList.size() ; ++i) {
         QString entry = dynamicAutoCompletionList[i].c_str();
+
         if (autoCompletionList->findItems(entry, Qt::MatchExactly).empty())
-            autoCompletionList->addItem(entry);
+          autoCompletionList->addItem(entry);
       }
     }
 
@@ -313,9 +314,10 @@ void PythonShellWidget::updateAutoCompletionList() {
         vector<string> dynamicAutoCompletionList = PythonInterpreter::getInstance()->getGlobalDictEntries(context[0].toStdString());
 
         for (size_t i = 0 ; i < dynamicAutoCompletionList.size() ; ++i) {
-            QString entry = dynamicAutoCompletionList[i].c_str();
-            if (autoCompletionList->findItems(entry, Qt::MatchExactly).empty())
-                autoCompletionList->addItem(entry);
+          QString entry = dynamicAutoCompletionList[i].c_str();
+
+          if (autoCompletionList->findItems(entry, Qt::MatchExactly).empty())
+            autoCompletionList->addItem(entry);
         }
       }
     }

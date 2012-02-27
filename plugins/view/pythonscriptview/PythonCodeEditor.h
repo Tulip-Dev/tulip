@@ -199,7 +199,7 @@ public :
   }
 
   void setModuleEditor(const bool moduleEditor) {
-      this->moduleEditor = moduleEditor;
+    this->moduleEditor = moduleEditor;
   }
 
   void analyseScriptCode(const bool wholeText=false);

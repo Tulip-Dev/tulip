@@ -30,7 +30,7 @@ class APIDataBase {
 public :
 
   static APIDataBase *getInstance() {
-      return &instance;
+    return &instance;
   }
 
   void loadApiFile(const QString &apiFilePath);

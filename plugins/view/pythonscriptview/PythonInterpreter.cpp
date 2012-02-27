@@ -359,13 +359,14 @@ bool PythonInterpreter::registerNewModuleFromString(const std::string &moduleNam
     PyErr_Print();
     PyErr_Clear();
     ret = false;
-  } else {
+  }
+  else {
     PyObject *pmod = PyImport_ExecCodeModule(const_cast<char *>(moduleName.c_str()),pycomp);
 
     if (pmod == NULL) {
-        PyErr_Print();
-        PyErr_Clear();
-        ret = false;
+      PyErr_Print();
+      PyErr_Clear();
+      ret = false;
     }
   }
 
@@ -600,10 +601,11 @@ std::string PythonInterpreter::getVariableType(const std::string &varName) {
   consoleOuputString = "";
   bool ok = runString("printObjectClass("+varName+")");
   outputActivated = true;
+
   if (ok)
     return consoleOuputString.substr(0, consoleOuputString.size() - 1);
   else
-      return "";
+    return "";
 }
 
 std::vector<std::string> PythonInterpreter::getObjectDictEntries(const std::string &objectName, const std::string &prefixFilter) {
@@ -649,55 +651,60 @@ std::vector<std::string> PythonInterpreter::getObjectDictEntries(const std::stri
 }
 
 vector<string> PythonInterpreter::getImportedModulesList() {
-    std::vector<std::string> ret;
-    outputActivated = false;
-    consoleOuputString = "";
+  std::vector<std::string> ret;
+  outputActivated = false;
+  consoleOuputString = "";
 
-    if (runString("import sys\nfor mod in sorted(sys.modules.keys()): print mod")) {
-      QStringList modulesList = QString(consoleOuputString.c_str()).split("\n");
-      for (int i = 0 ; i < modulesList.count() ; ++i) {
-        if (modulesList[i] != "") {
-          if (modulesList[i].startsWith("_")) {
-            continue;
-          }
-          else {
-              ret.push_back(modulesList[i].toStdString());
-          }
+  if (runString("import sys\nfor mod in sorted(sys.modules.keys()): print mod")) {
+    QStringList modulesList = QString(consoleOuputString.c_str()).split("\n");
+
+    for (int i = 0 ; i < modulesList.count() ; ++i) {
+      if (modulesList[i] != "") {
+        if (modulesList[i].startsWith("_")) {
+          continue;
+        }
+        else {
+          ret.push_back(modulesList[i].toStdString());
         }
       }
     }
+  }
 
-    outputActivated = true;
-    return ret;
+  outputActivated = true;
+  return ret;
 }
 
 vector<string> PythonInterpreter::getBaseTypesForType(const string &typeName) {
-    vector<string> ret;
-    outputActivated = false;
-    ostringstream oss;
-    QStringList modules = QString(typeName.c_str()).split(".");
-    string curModule = "";
-    for (int i = 0 ; i < modules.size() -1 ; ++i) {
-        curModule += modules[i].toStdString();
-        oss.str("");
-        oss << "import " << curModule;
-        runString(oss.str());
-        curModule += ".";
-    }
+  vector<string> ret;
+  outputActivated = false;
+  ostringstream oss;
+  QStringList modules = QString(typeName.c_str()).split(".");
+  string curModule = "";
 
-    consoleOuputString = "";
+  for (int i = 0 ; i < modules.size() -1 ; ++i) {
+    curModule += modules[i].toStdString();
     oss.str("");
-    oss << "for base in " << typeName << ".__bases__ : print base";
-    if (runString(oss.str())) {
-      QStringList basesList = QString(consoleOuputString.c_str()).split("\n");
-      for (int i = 0 ; i < basesList.count() ; ++i) {
-          int pos = basesList[i].indexOf('\'');
-          int pos2 = basesList[i].lastIndexOf('\'');
-          ret.push_back(basesList[i].mid(pos+1, pos2-pos-1).toStdString());
-      }
+    oss << "import " << curModule;
+    runString(oss.str());
+    curModule += ".";
+  }
+
+  consoleOuputString = "";
+  oss.str("");
+  oss << "for base in " << typeName << ".__bases__ : print base";
+
+  if (runString(oss.str())) {
+    QStringList basesList = QString(consoleOuputString.c_str()).split("\n");
+
+    for (int i = 0 ; i < basesList.count() ; ++i) {
+      int pos = basesList[i].indexOf('\'');
+      int pos2 = basesList[i].lastIndexOf('\'');
+      ret.push_back(basesList[i].mid(pos+1, pos2-pos-1).toStdString());
     }
-    outputActivated = true;
-    return ret;
+  }
+
+  outputActivated = true;
+  return ret;
 }
 
 void PythonInterpreter::holdGIL() {
@@ -734,9 +741,9 @@ void PythonInterpreter::setProcessQtEventsDuringScriptExecution(bool processEven
 }
 
 void PythonInterpreter::setOutputEnabled(const bool enableOutput) {
-    outputActivated = enableOutput;
+  outputActivated = enableOutput;
 }
 
 bool PythonInterpreter::outputEnabled() const {
-    return outputActivated;
+  return outputActivated;
 }

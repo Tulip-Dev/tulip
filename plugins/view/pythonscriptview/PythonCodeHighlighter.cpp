@@ -192,17 +192,23 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
   while (index >= 0) {
     int length = qtApiRegexp.matchedLength();
     QString expr = text.mid(index, length);
+
     if (APIDataBase::getInstance()->typeExists(expr) || APIDataBase::getInstance()->getFullTypeName(expr) != "") {
-        setFormat(index, length, qtApiFormat);
-    } else if (expr.indexOf(".") != -1) {
-        QString type = expr.mid(0, expr.lastIndexOf("."));
-        if (APIDataBase::getInstance()->getFullTypeName(type) != "")
-            type = APIDataBase::getInstance()->getFullTypeName(type);
-        QString entry = expr.mid(expr.lastIndexOf(".")+1);
-        if (APIDataBase::getInstance()->dictEntryExists(type, entry)) {
-            setFormat(index, length, qtApiFormat);
-        }
+      setFormat(index, length, qtApiFormat);
     }
+    else if (expr.indexOf(".") != -1) {
+      QString type = expr.mid(0, expr.lastIndexOf("."));
+
+      if (APIDataBase::getInstance()->getFullTypeName(type) != "")
+        type = APIDataBase::getInstance()->getFullTypeName(type);
+
+      QString entry = expr.mid(expr.lastIndexOf(".")+1);
+
+      if (APIDataBase::getInstance()->dictEntryExists(type, entry)) {
+        setFormat(index, length, qtApiFormat);
+      }
+    }
+
     index = qtApiRegexp.indexIn(text, index + length);
   }
 
