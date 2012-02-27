@@ -186,6 +186,10 @@ std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph) {
         if (dynamic_cast<ColorVectorProperty *>(prop)) {
             oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getColorVectorProperty(\"" << prop->getName() << "\")" << endl;
         }
+
+        if (dynamic_cast<StringVectorProperty *>(prop)) {
+            oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getStringVectorProperty(\"" << prop->getName() << "\")" << endl;
+        }
     }
 
     oss << "\n\tfor n in graph.getNodes():" << endl;
@@ -420,6 +424,9 @@ string& replaceAll(string& context, const string& from, const string& to) {
 
 void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
 
+    this->graph = graph;
+    viewWidget->setGraph(graph);
+
     if (viewWidget->mainScriptsTabWidget->count() == 0) {
 
         string scriptCode;
@@ -565,9 +572,6 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
         pythonInterpreter->setDefaultConsoleWidget();
         viewWidget->tabWidget->setCurrentIndex(0);
     }
-
-    this->graph = graph;
-    viewWidget->setGraph(graph);
 
 }
 
@@ -739,7 +743,6 @@ void PythonScriptView::indicateErrors() {
 
     map<string, vector<int> > errorLines;
     QString consoleOutput = pythonInterpreter->getStandardErrorOutput().c_str();
-    cout << consoleOutput.toStdString() << endl;
     QStringList outputLines = consoleOutput.split("\n");
 
     for (int i = 0 ; i < outputLines.count() - 1 ; ++i) {
@@ -941,6 +944,8 @@ bool PythonScriptView::loadModule(const QString &fileName) {
 
     pythonInterpreter->reloadModule(moduleName.replace(".py", "").toStdString());
 
+    codeEditor->analyseScriptCode(true);
+
     return true;
 }
 
@@ -949,10 +954,15 @@ bool PythonScriptView::loadModuleFromSrcCode(const std::string &moduleName, cons
     PythonCodeEditor *codeEditor = viewWidget->getModuleEditor(editorId);
     codeEditor->setFileName(moduleName.c_str());
     codeEditor->setPlainText(moduleSrcCode.c_str());
+
     viewWidget->modulesTabWidget->setTabText(editorId, moduleName.c_str());
     viewWidget->modulesTabWidget->setTabToolTip(editorId, "string module, don't forget to save the current graph or\n save the module to a file to not lose modifications to source code.");
 
-    return pythonInterpreter->registerNewModuleFromString(QString(moduleName.c_str()).replace(".py", "").toStdString(),  moduleSrcCode);
+    bool ret = pythonInterpreter->registerNewModuleFromString(QString(moduleName.c_str()).replace(".py", "").toStdString(),  moduleSrcCode);
+    if (ret) {
+        codeEditor->analyseScriptCode(true);
+    }
+    return ret;
 }
 
 void PythonScriptView::newFileModule() {

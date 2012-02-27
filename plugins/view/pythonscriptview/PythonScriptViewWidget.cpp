@@ -153,6 +153,7 @@ int PythonScriptViewWidget::addMainScriptEditor(const QString &fileName) {
 
 int PythonScriptViewWidget::addModuleEditor(const QString &fileName) {
   PythonCodeEditor *codeEditor = new PythonCodeEditor();
+  codeEditor->setModuleEditor(true);
   codeEditor->setGraph(pythonScriptView->getGraph());
   codeEditor->setFileName(fileName);
   codeEditor->installEventFilter(pythonScriptView);

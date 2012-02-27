@@ -48,14 +48,14 @@ static PyGILState_STATE gilState;
 
 static const string printObjectDictFunction =
   "def printObjectDict(obj):\n"
-  " if hasattr(obj, \"__dict__\"):\n"
-  "     for k in obj.__dict__.keys():\n"
-  "         print k\n"
-  " if hasattr(obj, \"__bases__\"):\n"
-  "     for k in obj.__bases__:\n"
-  "         printObjectDict(k)\n"
-  " if hasattr(obj, \"__class__\") and obj.__class__ != type(type):\n"
-  "     printObjectDict(obj.__class__)\n"
+  "     if hasattr(obj, \"__dict__\"):\n"
+  "         for k in obj.__dict__.keys():\n"
+  "             print k\n"
+  "     if hasattr(obj, \"__bases__\"):\n"
+  "         for k in obj.__bases__:\n"
+  "             printObjectDict(k)\n"
+  "     if hasattr(obj, \"__class__\") and obj.__class__ != type(type):\n"
+  "         printObjectDict(obj.__class__)\n"
   ""
   ;
 
@@ -598,9 +598,12 @@ std::vector<std::string> PythonInterpreter::getGlobalDictEntries(const std::stri
 std::string PythonInterpreter::getVariableType(const std::string &varName) {
   outputActivated = false;
   consoleOuputString = "";
-  runString("printObjectClass("+varName+")");
+  bool ok = runString("printObjectClass("+varName+")");
   outputActivated = true;
-  return consoleOuputString.substr(0, consoleOuputString.size() - 1);
+  if (ok)
+    return consoleOuputString.substr(0, consoleOuputString.size() - 1);
+  else
+      return "";
 }
 
 std::vector<std::string> PythonInterpreter::getObjectDictEntries(const std::string &objectName, const std::string &prefixFilter) {

@@ -429,7 +429,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
     connect(this, SIGNAL(textChanged()), this, SLOT(updateAutoCompletionList()));
 
     shellWidget = false;
-
+    moduleEditor = false;
 }
 
 PythonCodeEditor::~PythonCodeEditor() {
@@ -1034,8 +1034,21 @@ void PythonCodeEditor::mouseReleaseEvent(QMouseEvent * event) {
     }
 }
 
+void PythonCodeEditor::analyseScriptCode(const bool wholeText) {
+    QString moduleName = "";
+    if (moduleEditor) {
+        QFileInfo fileInfo(getFileName());
+        moduleName = fileInfo.fileName().replace(".py", "");
+    }
+    if (!wholeText) {
+        autoCompletionDb->analyseCurrentScriptCode(toPlainText(), textCursor().blockNumber(), shellWidget, moduleName);
+    } else {
+        autoCompletionDb->analyseCurrentScriptCode(toPlainText(), document()->blockCount(), shellWidget, moduleName);
+    }
+}
+
 void PythonCodeEditor::showAutoCompletionList() {
-    autoCompletionDb->analyseCurrentScriptCode(toPlainText(), textCursor().blockNumber(), shellWidget);
+    analyseScriptCode();
     autoCompletionList->show();
     updateAutoCompletionList();
 

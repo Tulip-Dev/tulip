@@ -40,7 +40,7 @@ public :
     this->graph = graph;
   }
 
-  void analyseCurrentScriptCode(const QString &code, const int currentLine, const bool interactiveSession=false);
+  void analyseCurrentScriptCode(const QString &code, const int currentLine, const bool interactiveSession=false, const QString &moduleName="");
 
   QSet<QString> getAutoCompletionListForContext(const QString &context, const QString &editedFunction) const ;
 

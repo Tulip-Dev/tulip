@@ -198,6 +198,12 @@ public :
     return pythonFileName;
   }
 
+  void setModuleEditor(const bool moduleEditor) {
+      this->moduleEditor = moduleEditor;
+  }
+
+  void analyseScriptCode(const bool wholeText=false);
+
 protected:
 
   void resizeEvent(QResizeEvent *event);
@@ -265,6 +271,7 @@ protected:
   QString pythonFileName;
 
   bool shellWidget;
+  bool moduleEditor;
 
   static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
 

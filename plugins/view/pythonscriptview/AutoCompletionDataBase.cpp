@@ -144,23 +144,44 @@ static QString getPythonTypeNameForGraphProperty(tlp::Graph *graph, const QStrin
         if (prop->getTypename() == "bool") {
             return "tlp.BooleanProperty";
         }
+        else if (prop->getTypename() == "vector<bool>") {
+            return "tlp.BooleanVectorProperty";
+        }
         else if (prop->getTypename() == "int") {
             return "tlp.IntegerProperty";
+        }
+        else if (prop->getTypename() == "vector<int>") {
+            return "tlp.IntegerVectorProperty";
         }
         else if (prop->getTypename() == "double") {
             return "tlp.DoubleProperty";
         }
+        else if (prop->getTypename() == "vector<double>") {
+            return "tlp.DoubleVectorProperty";
+        }
         else if (prop->getTypename() == "color") {
             return "tlp.ColorProperty";
+        }
+        else if (prop->getTypename() == "vector<color>") {
+            return "tlp.ColorVectorProperty";
         }
         else if (prop->getTypename() == "layout") {
             return "tlp.LayoutProperty";
         }
+        else if (prop->getTypename() == "vector<coord>") {
+            return "tlp.CoordVectorProperty";
+        }
         else if (prop->getTypename() == "size") {
             return "tlp.SizeProperty";
         }
+        else if (prop->getTypename() == "vector<size>") {
+            return "tlp.SizeVectorProperty";
+        }
         else if (prop->getTypename() == "string") {
             return "tlp.StringProperty";
+        }
+        else if (prop->getTypename() == "vector<string>") {
+            return "tlp.StringVectorProperty";
         }
         else if (prop->getTypename() == "graph") {
             return "tlp.GraphProperty";
@@ -185,6 +206,9 @@ static QString getPythonTypeNameForPropertyType(const QString &propertyType, con
     if (propertyType == "tlp.BooleanProperty") {
         return "boolean";
     }
+    else if (propertyType == "tlp.BooleanVectorProperty") {
+        return "list-of-boolean";
+    }
     else if (propertyType == "tlp.LayoutProperty") {
         if (nodes) {
             return "tlp.Coord";
@@ -193,17 +217,32 @@ static QString getPythonTypeNameForPropertyType(const QString &propertyType, con
             return "list-of-tlp.Coord";
         }
     }
+    else if (propertyType == "tlp.CoordVectorProperty") {
+        return "list-of-tlp.Coord";
+    }
     else if (propertyType == "tlp.SizeProperty") {
         return "tlp.Size";
+    }
+    else if (propertyType == "tlp.SizeVectorProperty") {
+        return "list-of-tlp.Size";
     }
     else if (propertyType == "tlp.ColorProperty") {
         return "tlp.Color";
     }
+    else if (propertyType == "tlp.ColorVectorProperty") {
+        return "list-of-tlp.Color";
+    }
     else if (propertyType == "tlp.DoubleProperty") {
         return "float";
     }
+    else if (propertyType == "tlp.DoubleVectorProperty") {
+        return "list-of-float";
+    }
     else if (propertyType == "tlp.IntegerProperty") {
         return "integer";
+    }
+    else if (propertyType == "tlp.IntegerVectorProperty") {
+        return "list-of-integer";
     }
     else if (propertyType == "tlp.GraphProperty") {
         if (nodes) {
@@ -216,11 +255,13 @@ static QString getPythonTypeNameForPropertyType(const QString &propertyType, con
     else if (propertyType == "tlp.StringProperty") {
         return "string";
     }
-
+    else if (propertyType == "tlp.StringVectorProperty") {
+        return "list-of-string";
+    }
     return "";
 }
 
-void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const int currentLine, const bool interactiveSession) {
+void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const int currentLine, const bool interactiveSession, const QString &moduleName) {
 
     globalAutoCompletionList.clear();
     functionAutoCompletionList.clear();
@@ -240,7 +281,13 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
     classAttributeToType["tlp.Algorithm"]["self.graph"] = "tlp.Graph";
     classAttributeToType["tlp.Algorithm"]["self.dataSet"] = "tlp.DataSet";
     classAttributeToType["tlp.Algorithm"]["self.pluginProgress"] = "tlp.PluginProgress";
-
+    classAttributeToType["tlp.BooleanAlgorithm"]["self.booleanResult"] = "tlp.BooleanProperty";
+    classAttributeToType["tlp.ColorAlgorithm"]["self.colorResult"] = "tlp.ColorProperty";
+    classAttributeToType["tlp.DoubleAlgorithm"]["self.doubleResult"] = "tlp.DoubleProperty";
+    classAttributeToType["tlp.IntegerAlgorithm"]["self.integerResult"] = "tlp.IntegerProperty";
+    classAttributeToType["tlp.LayoutAlgorithm"]["self.layoutResult"] = "tlp.LayoutProperty";
+    classAttributeToType["tlp.SizeAlgorithm"]["self.sizeResult"] = "tlp.SizeProperty";
+    classAttributeToType["tlp.StringAlgorithm"]["self.stringResult"] = "tlp.StringProperty";
 
     QSet<QString> types = apiDb->getTypesList();
     foreach(QString type, types) {
@@ -390,6 +437,9 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
             if (currentFunctionName == "global") {
                 globalAutoCompletionList.insert(varName);
+                if (moduleName != "") {
+                    apiDb->addApiEntry(moduleName + "." + varName);
+                }
             }
             else {
                 functionAutoCompletionList[fullName].insert(varName);
@@ -491,6 +541,24 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
                 classContents[currentClassName].insert(currentFunctionName);
             }
 
+            if (moduleName != "") {
+                QString withParams = line.mid(4, line.lastIndexOf(')')-3);
+
+                if (currentClassName != "") {
+                    QString withParamsFull = currentClassName + "." + withParams;
+                    if (!withParams.startsWith("__")) {
+                        withParamsFull = withParamsFull.replace(QRegExp("[ \t]*self[ \t]*,[ \t]*"), "");
+                        withParamsFull = withParamsFull.replace(QRegExp("[ \t]*self[ \t]*"), "");
+                    } else if (withParams.startsWith("__init__")) {
+                        apiDb->addApiEntry(moduleName + "." + withParamsFull);
+                        withParamsFull = withParamsFull.replace(QRegExp(".__init__\\([ \t]*self[ \t]*,[ \t]*"), "(");
+                        withParamsFull = withParamsFull.replace(QRegExp(".__init__\\([ \t]*self[ \t]*"), "(");
+                    }
+                    withParams = withParamsFull;
+                }
+                apiDb->addApiEntry(moduleName + "." + withParams);
+            }
+
             if (functionAutoCompletionList.find(fullName) == functionAutoCompletionList.end()) {
                 functionAutoCompletionList[fullName] = QSet<QString>();
             }
@@ -546,6 +614,9 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
             currentClassName = className;
             globalAutoCompletionList.insert(className.trimmed());
+            if (moduleName != "") {
+                apiDb->addApiEntry(moduleName + "." + className);
+            }
         }
 
         if (graphPropRegexp.indexIn(line) != -1) {
@@ -853,12 +924,24 @@ QSet<QString> AutoCompletionDataBase::getGraphPropertiesListIfContext(const QStr
             ret = getGraphPropertiesList(graph->getRoot(), prefix, "bool");
         }
 
+        if (type == "tlp.Graph.getBooleanVectorProperty" || type == "tlp.Graph.getLocalBooleanVectorProperty") {
+            ret = getGraphPropertiesList(graph->getRoot(), prefix, "vector<bool>");
+        }
+
         if (type == "tlp.Graph.getColorProperty" || type == "tlp.Graph.getLocalColorProperty") {
             ret = getGraphPropertiesList(graph->getRoot(), prefix, "color");
         }
 
+        if (type == "tlp.Graph.getColorVectorProperty" || type == "tlp.Graph.getLocalColorVectorProperty") {
+            ret = getGraphPropertiesList(graph->getRoot(), prefix, "vector<color>");
+        }
+
         if (type == "tlp.Graph.getDoubleProperty" || type == "tlp.Graph.getLocalDoubleProperty") {
             ret = getGraphPropertiesList(graph->getRoot(), prefix, "double");
+        }
+
+        if (type == "tlp.Graph.getDoubleVectorProperty" || type == "tlp.Graph.getLocalDoubleVectorProperty") {
+            ret = getGraphPropertiesList(graph->getRoot(), prefix, "vector<double>");
         }
 
         if (type == "tlp.Graph.getGraphProperty" || type == "tlp.Graph.getLocalGraphProperty") {
@@ -869,16 +952,32 @@ QSet<QString> AutoCompletionDataBase::getGraphPropertiesListIfContext(const QStr
             ret = getGraphPropertiesList(graph->getRoot(), prefix, "int");
         }
 
+        if (type == "tlp.Graph.getIntegerVectorProperty" || type == "tlp.Graph.getLocalIntegerVectorProperty") {
+            ret = getGraphPropertiesList(graph->getRoot(), prefix, "vector<int>");
+        }
+
         if (type == "tlp.Graph.getLayoutProperty" || type == "tlp.Graph.getLocalLayoutProperty") {
             ret = getGraphPropertiesList(graph->getRoot(), prefix, "layout");
+        }
+
+        if (type == "tlp.Graph.getCoordVectorProperty" || type == "tlp.Graph.getLocalCoordVectorProperty") {
+            ret = getGraphPropertiesList(graph->getRoot(), prefix, "vector<coord>");
         }
 
         if (type == "tlp.Graph.getSizeProperty" || type == "tlp.Graph.getLocalSizeProperty") {
             ret = getGraphPropertiesList(graph->getRoot(), prefix, "size");
         }
 
+        if (type == "tlp.Graph.getSizeVectorProperty" || type == "tlp.Graph.getLocalSizeVectorProperty") {
+            ret = getGraphPropertiesList(graph->getRoot(), prefix, "vector<size>");
+        }
+
         if (type == "tlp.Graph.getStringProperty" || type == "tlp.Graph.getLocalStringProperty") {
             ret = getGraphPropertiesList(graph->getRoot(), prefix, "string");
+        }
+
+        if (type == "tlp.Graph.getStringVectorProperty" || type == "tlp.Graph.getLocalStringVectorProperty") {
+            ret = getGraphPropertiesList(graph->getRoot(), prefix, "vector<string>");
         }
     }
 
