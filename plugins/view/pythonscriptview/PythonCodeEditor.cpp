@@ -595,7 +595,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 #ifndef __APPLE__
         QRect tooltipRect(tPos, tPos + QPoint(width, height));
 #else
-        QRect tooltipRect(tPos, tPos + QPoint(width+fontMetrics().width(QLatin1Char(' '), height));
+        QRect tooltipRect(tPos, tPos + QPoint(width+2*fontMetrics().width(QLatin1Char(' ')), height));
 #endif
         painter.drawRect(tooltipRect);
         painter.fillRect(tooltipRect, QColor(249,251,100,200));
