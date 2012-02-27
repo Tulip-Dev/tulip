@@ -34,7 +34,9 @@
 using namespace std;
 
 AutoCompletionList::AutoCompletionList(PythonCodeEditor *parent) : QListWidget(parent), codeEditor(parent) {
-#if QT_VERSION >= 0x040500
+#if defined(__APPLE__)
+	setWindowFlags(Qt::Popup|Qt::FramelessWindowHint);
+#elif QT_VERSION >= 0x040500
     setWindowFlags(Qt::ToolTip);
 #else
     setWindowFlags(Qt::Tool|Qt::FramelessWindowHint);
