@@ -47,27 +47,47 @@ ParenMatcherHighlighter::ParenMatcherHighlighter(QTextDocument *parent) : QSynta
 void ParenMatcherHighlighter::highlightBlock(const QString &text) {
   ParenInfoTextBlockData *data = new ParenInfoTextBlockData;
 
+  QString modifiedText = text;
+  QRegExp dblQuotesRegexp("\".*\"");
+  QRegExp simpleQuotesRegexp("'.*'");
+
+  int pos = dblQuotesRegexp.indexIn(modifiedText);
+  while (pos != -1) {
+      for (int i = pos ; i < pos + dblQuotesRegexp.matchedLength() ; ++i) {
+          modifiedText[i] = ' ';
+      }
+      pos = dblQuotesRegexp.indexIn(modifiedText, pos + 1);
+  }
+
+  pos = simpleQuotesRegexp.indexIn(modifiedText);
+  while (pos != -1) {
+      for (int i = pos ; i < pos + simpleQuotesRegexp.matchedLength() ; ++i) {
+          modifiedText[i] = ' ';
+      }
+      pos = simpleQuotesRegexp.indexIn(modifiedText, pos + 1);
+  }
+
   for (int i = 0 ; i < leftParensToMatch.size() ; ++i) {
-    int leftPos = text.indexOf(leftParensToMatch.at(i));
+    int leftPos = modifiedText.indexOf(leftParensToMatch.at(i));
 
     while (leftPos != -1) {
       ParenInfo info;
       info.character = leftParensToMatch.at(i);
       info.position = currentBlock().position() + leftPos;
       data->insert(info);
-      leftPos = text.indexOf(leftParensToMatch.at(i), leftPos+1);
+      leftPos = modifiedText.indexOf(leftParensToMatch.at(i), leftPos+1);
     }
   }
 
   for (int i = 0 ; i < rightParensToMatch.size() ; ++i) {
-    int rightPos = text.indexOf(rightParensToMatch.at(i));
+    int rightPos = modifiedText.indexOf(rightParensToMatch.at(i));
 
     while (rightPos != -1) {
       ParenInfo info;
       info.character = rightParensToMatch.at(i);
       info.position = currentBlock().position() + rightPos;
       data->insert(info);
-      rightPos = text.indexOf(rightParensToMatch.at(i), rightPos+1);
+      rightPos = modifiedText.indexOf(rightParensToMatch.at(i), rightPos+1);
     }
   }
 
