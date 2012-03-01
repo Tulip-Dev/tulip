@@ -497,7 +497,7 @@ bool GlMainWidget::selectGlEntities(const int x, const int y,
   return selectGlEntities(x,y,2,2,pickedEntities,layer);
 }
 //==================================================
-void GlMainWidget::doSelect(const int x, const int y,
+void GlMainWidget::selectNodesEdges(const int x, const int y,
                             const int width ,const int height,
                             std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
                             GlLayer* layer) {
@@ -509,7 +509,7 @@ void GlMainWidget::doSelect(const int x, const int y,
   scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x, y, width, height, layer, selectedEdges);
 }
 //=====================================================
-bool GlMainWidget::doSelect(const int x, const int y,SelectedEntity &selectedEntity, GlLayer* layer) {
+bool GlMainWidget::selectNodesEdges(const int x, const int y,SelectedEntity &selectedEntity, GlLayer* layer) {
 #ifndef NDEBUG
   std::cerr << __PRETTY_FUNCTION__ << std::endl;
 #endif

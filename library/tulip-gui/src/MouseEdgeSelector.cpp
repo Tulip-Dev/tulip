@@ -110,7 +110,7 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
 
       if ((w==0) && (h==0)) {
         SelectedEntity selectedEntity;
-        bool result = glMainWidget->doSelect(x, y, selectedEntity);
+        bool result = glMainWidget->selectNodesEdges(x, y, selectedEntity);
 
         if (result) {
           switch(selectedEntity.getEntityType()) {
@@ -137,7 +137,7 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
           y -= h;
         }
 
-        glMainWidget->doSelect(x, y, w, h, tmpSetNode, tmpSetEdge);
+        glMainWidget->selectNodesEdges(x, y, w, h, tmpSetNode, tmpSetEdge);
         vector<SelectedEntity>::const_iterator ite;
         int compt=0;
 

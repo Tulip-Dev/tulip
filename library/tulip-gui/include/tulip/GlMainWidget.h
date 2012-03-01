@@ -131,7 +131,7 @@ public:
    *  \param sNode filled by the method with the nodes found in the region
    *  \param sEdge filled by the method with the edges found in the region
    */
-  void doSelect(const int x, const int y,
+  void selectNodesEdges(const int x, const int y,
                 const int width, const int height,
                 std::vector<SelectedEntity> &selectedNode, std::vector<SelectedEntity> &seletedEdge,
                 tlp::GlLayer* layer=NULL);
@@ -140,7 +140,7 @@ public:
    *  \param type tells what has been found: NODE, EDGE
    *  \return true if something has been found, false otherwise
    */
-  bool doSelect(const int x, const int y,
+  bool selectNodesEdges(const int x, const int y,
                 SelectedEntity &selectedEntity,
                 tlp::GlLayer* layer=NULL);
 
