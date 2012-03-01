@@ -48,27 +48,23 @@ void ParenMatcherHighlighter::highlightBlock(const QString &text) {
   ParenInfoTextBlockData *data = new ParenInfoTextBlockData;
 
   QString modifiedText = text;
-  QRegExp dblQuotesRegexp("\".*\"");
-  QRegExp simpleQuotesRegexp("'.*'");
+  QRegExp dblQuotesRegexp("\"[^\"]*\"");
+  QRegExp simpleQuotesRegexp("'[^']*'");
 
   int pos = dblQuotesRegexp.indexIn(modifiedText);
-
   while (pos != -1) {
-    for (int i = pos ; i < pos + dblQuotesRegexp.matchedLength() ; ++i) {
-      modifiedText[i] = ' ';
-    }
-
-    pos = dblQuotesRegexp.indexIn(modifiedText, pos + 1);
+      for (int i = pos ; i < pos + dblQuotesRegexp.matchedLength() ; ++i) {
+          modifiedText[i] = ' ';
+      }
+      pos = dblQuotesRegexp.indexIn(modifiedText, pos + dblQuotesRegexp.matchedLength());
   }
 
   pos = simpleQuotesRegexp.indexIn(modifiedText);
-
   while (pos != -1) {
-    for (int i = pos ; i < pos + simpleQuotesRegexp.matchedLength() ; ++i) {
-      modifiedText[i] = ' ';
-    }
-
-    pos = simpleQuotesRegexp.indexIn(modifiedText, pos + 1);
+      for (int i = pos ; i < pos + simpleQuotesRegexp.matchedLength() ; ++i) {
+          modifiedText[i] = ' ';
+      }
+      pos = simpleQuotesRegexp.indexIn(modifiedText, pos + simpleQuotesRegexp.matchedLength());
   }
 
   for (int i = 0 ; i < leftParensToMatch.size() ; ++i) {
