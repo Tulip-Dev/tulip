@@ -178,7 +178,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 
       if ((w==0) && (h==0)) {
         SelectedEntity selectedEntity;
-        bool result = glMainWidget->selectNodesEdges(x, y, selectedEntity);
+        bool result = glMainWidget->pickNodesEdges(x, y, selectedEntity);
 
         if (result) {
           switch(selectedEntity.getEntityType()) {
@@ -229,7 +229,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
           y -= h;
         }
 
-        glMainWidget->selectNodesEdges(x, y, w, h, tmpSetNode, tmpSetEdge);
+        glMainWidget->pickNodesEdges(x, y, w, h, tmpSetNode, tmpSetEdge);
 
         if (needPush)
           graph->push();

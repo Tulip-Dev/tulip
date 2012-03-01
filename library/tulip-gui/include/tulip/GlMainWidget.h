@@ -131,7 +131,7 @@ public:
    *  \param sNode filled by the method with the nodes found in the region
    *  \param sEdge filled by the method with the edges found in the region
    */
-  void selectNodesEdges(const int x, const int y,
+  void pickNodesEdges(const int x, const int y,
                 const int width, const int height,
                 std::vector<SelectedEntity> &selectedNode, std::vector<SelectedEntity> &seletedEdge,
                 tlp::GlLayer* layer=NULL);
@@ -140,7 +140,7 @@ public:
    *  \param type tells what has been found: NODE, EDGE
    *  \return true if something has been found, false otherwise
    */
-  bool selectNodesEdges(const int x, const int y,
+  bool pickNodesEdges(const int x, const int y,
                 SelectedEntity &selectedEntity,
                 tlp::GlLayer* layer=NULL);
 
@@ -183,7 +183,7 @@ public:
    * Function to do picking on entities.  It just calls
    * selectEntities on the GlScene instance.
    */
-  bool selectGlEntities(const int x, const int y,
+  bool pickGlEntities(const int x, const int y,
                         const int width, const int height,
                         std::vector<SelectedEntity>
                         &pickedEntities,
@@ -193,7 +193,7 @@ public:
    * selectEntities on the GlScene instance with a small window of
    * twelve pixels.
    */
-  bool selectGlEntities(const int x, const int y,
+  bool pickGlEntities(const int x, const int y,
                         std::vector<SelectedEntity>
                         &pickedEntities,
                         tlp::GlLayer* layer=NULL);
