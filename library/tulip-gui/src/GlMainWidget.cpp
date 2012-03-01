@@ -481,9 +481,9 @@ void GlMainWidget::makeCurrent() {
 }
 //==================================================
 bool GlMainWidget::pickGlEntities(const int x, const int y,
-                                    const int width, const int height,
-                                    std::vector<SelectedEntity> &pickedEntities,
-                                    GlLayer* layer) {
+                                  const int width, const int height,
+                                  std::vector<SelectedEntity> &pickedEntities,
+                                  GlLayer* layer) {
   makeCurrent();
   return scene.selectEntities((RenderingEntitiesFlag)(RenderingSimpleEntities | RenderingWithoutRemove),x, y,
                               width, height,
@@ -492,15 +492,15 @@ bool GlMainWidget::pickGlEntities(const int x, const int y,
 }
 //==================================================
 bool GlMainWidget::pickGlEntities(const int x, const int y,
-                                    std::vector <SelectedEntity> &pickedEntities,
-                                    GlLayer* layer) {
+                                  std::vector <SelectedEntity> &pickedEntities,
+                                  GlLayer* layer) {
   return pickGlEntities(x,y,2,2,pickedEntities,layer);
 }
 //==================================================
 void GlMainWidget::pickNodesEdges(const int x, const int y,
-                            const int width ,const int height,
-                            std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
-                            GlLayer* layer) {
+                                  const int width ,const int height,
+                                  std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
+                                  GlLayer* layer) {
 #ifndef NDEBUG
   std::cerr << __PRETTY_FUNCTION__ << " x:" << x << ", y:" <<y <<", wi:"<<width<<", height:" << height << std::endl;
 #endif

@@ -132,17 +132,17 @@ public:
    *  \param sEdge filled by the method with the edges found in the region
    */
   void pickNodesEdges(const int x, const int y,
-                const int width, const int height,
-                std::vector<SelectedEntity> &selectedNode, std::vector<SelectedEntity> &seletedEdge,
-                tlp::GlLayer* layer=NULL);
+                      const int width, const int height,
+                      std::vector<SelectedEntity> &selectedNode, std::vector<SelectedEntity> &seletedEdge,
+                      tlp::GlLayer* layer=NULL);
   /** \brief select a node or edge at a point
    *  select either a node or edge at point (x,y)
    *  \param type tells what has been found: NODE, EDGE
    *  \return true if something has been found, false otherwise
    */
   bool pickNodesEdges(const int x, const int y,
-                SelectedEntity &selectedEntity,
-                tlp::GlLayer* layer=NULL);
+                      SelectedEntity &selectedEntity,
+                      tlp::GlLayer* layer=NULL);
 
   /**
    *  Take a snapshot of the Widget
@@ -184,19 +184,19 @@ public:
    * selectEntities on the GlScene instance.
    */
   bool pickGlEntities(const int x, const int y,
-                        const int width, const int height,
-                        std::vector<SelectedEntity>
-                        &pickedEntities,
-                        tlp::GlLayer* layer=NULL);
+                      const int width, const int height,
+                      std::vector<SelectedEntity>
+                      &pickedEntities,
+                      tlp::GlLayer* layer=NULL);
   /**
    * Function to do picking on entities.  It just calls
    * selectEntities on the GlScene instance with a small window of
    * twelve pixels.
    */
   bool pickGlEntities(const int x, const int y,
-                        std::vector<SelectedEntity>
-                        &pickedEntities,
-                        tlp::GlLayer* layer=NULL);
+                      std::vector<SelectedEntity>
+                      &pickedEntities,
+                      tlp::GlLayer* layer=NULL);
 
   /**
    * Grab the image of this widget
