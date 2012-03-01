@@ -87,7 +87,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
         return false;
       }
 
-      bool entityIsSelected = glMainWidget->selectGlEntities((int)editPosition[0] - 3, (int)editPosition[1] - 3, 6, 6, select, layer);
+      bool entityIsSelected = glMainWidget->pickGlEntities((int)editPosition[0] - 3, (int)editPosition[1] - 3, 6, 6, select, layer);
 
       if(!entityIsSelected) {
         // We have click outside an entity
@@ -141,14 +141,14 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     if(selectedEntity=="targetTriangle") {
       SelectedEntity selectedEntity;
 
-      if (glMainWidget->selectNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
+      if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->getGraph()->setEnds(mEdge,glMainWidget->getGraph()->ends(mEdge).first,node(selectedEntity.getComplexEntityId()));
       }
     }
     else if(selectedEntity=="sourceCircle") {
       SelectedEntity selectedEntity;
 
-      if (glMainWidget->selectNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
+      if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->getGraph()->setEnds(mEdge,node(selectedEntity.getComplexEntityId()),glMainWidget->getGraph()->ends(mEdge).second);
       }
     }
@@ -177,7 +177,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       SelectedEntity selectedEntity;
       GlMainWidget *g = (GlMainWidget *) widget;
 
-      if (g->selectNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
+      if (g->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         g->setCursor(Qt::CrossCursor);
       }
       else {

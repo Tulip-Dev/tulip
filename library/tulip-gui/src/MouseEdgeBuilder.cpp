@@ -54,7 +54,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
     if (qMouseEv->buttons()==Qt::LeftButton) {
       if (!started) {
-        bool result=glMainWidget->selectNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity);
+        bool result=glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity);
 
         if (result && (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)) {
           started=true;
@@ -67,7 +67,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
         return false;
       }
       else {
-        bool result = glMainWidget->selectNodesEdges(qMouseEv->x(),qMouseEv->y(),selectedEntity);
+        bool result = glMainWidget->pickNodesEdges(qMouseEv->x(),qMouseEv->y(),selectedEntity);
 
         if (result && (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)) {
           Observable::holdObservers();
@@ -109,7 +109,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
     if (!started) {
       SelectedEntity selectedEntity;
-      bool hoveringOverNode = glMainWidget->selectNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED;
+      bool hoveringOverNode = glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED;
 
       if (!hoveringOverNode)
         return false;
