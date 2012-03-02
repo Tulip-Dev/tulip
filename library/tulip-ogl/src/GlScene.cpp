@@ -192,6 +192,7 @@ void GlScene::prerenderMetaNodes() {
 void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphComposite,
                                   OcclusionTest *occlusionTest,LayerLODUnit &layerLODUnit) {
   Graph *graph=glGraphComposite->getInputData()->getGraph();
+  BooleanProperty *filteredElementsProperty = glGraphComposite->getRenderingParameters().getDisplayFilteringProperty();
   BooleanProperty *selectionProperty=glGraphComposite->getInputData()->getElementSelected();
   bool viewOutScreenLabel=glGraphComposite->getRenderingParameters().isViewOutScreenLabel();
   DoubleProperty *metric = NULL;
@@ -234,7 +235,7 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
 
       n.id=(*it).id;
 
-      if(selectionProperty->getNodeValue(n)==drawSelected) {
+      if(filteredElementsProperty!= NULL && !filteredElementsProperty->getNodeValue(n) && selectionProperty->getNodeValue(n)==drawSelected) {
         if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric) {
           // Not metric ordered
           if(!graph->isMetaNode(n) && viewNodeLabel) {
@@ -290,7 +291,7 @@ void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphCom
 
       e.id=(*it).id;
 
-      if(selectionProperty->getEdgeValue(e) == drawSelected) {
+      if(filteredElementsProperty!= NULL && !filteredElementsProperty->getEdgeValue(e) && selectionProperty->getEdgeValue(e) == drawSelected) {
         if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric) {
           // Not metric ordered
           glEdge.id=e.id;
