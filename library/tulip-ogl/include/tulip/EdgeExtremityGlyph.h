@@ -50,9 +50,9 @@ public:
   }
 };
 
-class TLP_GL_SCOPE EdgeExtremityGlyph: public tlp::Plugin {
+class TLP_GL_SCOPE EdgeExtremityGlyph {
 public:
-  EdgeExtremityGlyph(tlp::PluginContext *gc);
+  EdgeExtremityGlyph(const tlp::PluginContext *context);
   virtual ~EdgeExtremityGlyph();
 
   virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) = 0;
@@ -66,7 +66,7 @@ protected:
 
 class TLP_GL_SCOPE EdgeExtremityGlyphFrom3DGlyph: public EdgeExtremityGlyph {
 public:
-  EdgeExtremityGlyphFrom3DGlyph(tlp::PluginContext *gc);
+  EdgeExtremityGlyphFrom3DGlyph(const tlp::PluginContext *context);
   virtual ~EdgeExtremityGlyphFrom3DGlyph();
 
   virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
@@ -75,7 +75,7 @@ public:
 
 class TLP_GL_SCOPE EdgeExtremityGlyphFrom2DGlyph: public EdgeExtremityGlyph {
 public:
-  EdgeExtremityGlyphFrom2DGlyph(tlp::PluginContext *gc);
+  EdgeExtremityGlyphFrom2DGlyph(const tlp::PluginContext *context);
   virtual ~EdgeExtremityGlyphFrom2DGlyph();
 
   virtual void getTransformationMatrix(const Coord &src, const Coord &dest,

@@ -56,7 +56,7 @@ public:
 //==========================================================
 class TLP_GL_SCOPE Glyph : public tlp::Plugin {
 public:
-  Glyph(tlp::PluginContext* context);
+  Glyph(const tlp::PluginContext* context);
   virtual ~Glyph();
 
   virtual std::string getGroup() const {
