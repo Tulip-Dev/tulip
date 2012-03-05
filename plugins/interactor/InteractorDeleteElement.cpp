@@ -29,7 +29,7 @@ using namespace tlp;
 class InteractorDeleteElement  : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATIONSWITHGROUP("InteractorDeleteElement", "Tulip Team", "01/04/2009", "Delete Element Interactor", "1.0", "Modification")
+  PLUGININFORMATIONS("InteractorDeleteElement", "Tulip Team", "01/04/2009", "Delete Element Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */

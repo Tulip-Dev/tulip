@@ -29,7 +29,7 @@
  */
 class DagLevelMetric:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONSWITHGROUP("Dag Level","David Auber","10/03/2000","Alpha","1.0","Tree")
+  PLUGININFORMATIONS("Dag Level","David Auber","10/03/2000","Alpha","1.0","Tree")
   DagLevelMetric(const tlp::PluginContext* context);
   ~DagLevelMetric();
   bool run();

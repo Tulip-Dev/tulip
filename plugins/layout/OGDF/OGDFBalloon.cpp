@@ -81,7 +81,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 class OGDFBalloon : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONSWITHGROUP("Balloon (OGDF)","Karsten Klein","13/11/2007","Ok","1.3","Hierarchical")
+  PLUGININFORMATIONS("Balloon (OGDF)","Karsten Klein","13/11/2007","Ok","1.3","Hierarchical")
   OGDFBalloon(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::BalloonLayout()) {
     addParameter<bool> ("Even angles", paramHelp[0], "false", false);
   }

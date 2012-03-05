@@ -42,7 +42,7 @@ class GraphPerspective : public tlp::Perspective {
   tlp::GraphHierarchiesModel *_graphs;
   bool _maximised;
 public:
-  PLUGININFORMATIONSWITHGROUP("Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "Hierarchy")
+  PLUGININFORMATIONS("Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "Hierarchy")
   GraphPerspective(const tlp::PluginContext* c);
   virtual void construct(tlp::PluginProgress *);
 

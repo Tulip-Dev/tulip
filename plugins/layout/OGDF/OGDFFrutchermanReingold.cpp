@@ -129,7 +129,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 class OGDFFrutchermanReingold: public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONSWITHGROUP("Frutcherman Reingold (OGDF)","Stephan Hachul","15/11/2007", "Alpha", "1.1","Force Directed")
+  PLUGININFORMATIONS("Frutcherman Reingold (OGDF)","Stephan Hachul","15/11/2007", "Alpha", "1.1","Force Directed")
   OGDFFrutchermanReingold(const tlp::PluginContext* context);
   ~OGDFFrutchermanReingold();
 

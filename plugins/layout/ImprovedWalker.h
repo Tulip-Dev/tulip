@@ -49,7 +49,7 @@ class ImprovedWalker : public tlp::LayoutAlgorithm {
   friend class ImprovedWalkerUnitTests;
 
 public:
-  PLUGININFORMATIONSWITHGROUP( "Improved Walker",
+  PLUGININFORMATIONS( "Improved Walker",
     "Julien Testut, Antony Durand, Pascal Ollier, "
     "Yashvin Nababsing, Sebastien Leclerc, "
     "Thibault Ruchon, Eric Dauchier",

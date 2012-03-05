@@ -61,7 +61,7 @@ void printSize(ostream &os,const Size &v) {
  */
 class GMLExport:public tlp::ExportModule {
 public:
-  PLUGININFORMATIONSWITHGROUP("GML","Auber David","31/07/2001","GML Export plugin","1.0", "Export")
+  PLUGININFORMATIONS("GML","Auber David","31/07/2001","GML Export plugin","1.0", "Export")
   GMLExport(tlp::PluginContext* context) : tlp::ExportModule(context)
   {}
 

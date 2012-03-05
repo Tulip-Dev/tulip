@@ -32,7 +32,7 @@
  */
 class LeafMetric:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONSWITHGROUP("Leaf","David Auber","20/12/1999","Alpha","1.0","Tree")
+  PLUGININFORMATIONS("Leaf","David Auber","20/12/1999","Alpha","1.0","Tree")
   LeafMetric(const tlp::PluginContext* context);
   bool check(std::string &);
   bool run();

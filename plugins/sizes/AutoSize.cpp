@@ -32,7 +32,7 @@ using namespace tlp;
  */
 class AutoSize:public SizeAlgorithm {
 public:
-  PLUGININFORMATIONSWITHGROUP("Auto Sizing","Auber","04/05/2001","","1.0", "Size")
+  PLUGININFORMATIONS("Auto Sizing","Auber","04/05/2001","","1.0", "Size")
   AutoSize(const tlp::PluginContext* context):SizeAlgorithm(context) {}
 
   bool run() {

@@ -121,7 +121,7 @@ class OGDFDavidsonHarel : public OGDFLayoutPluginBase {
   tlp::StringCollection speed;
 
 public:
-  PLUGININFORMATIONSWITHGROUP("Davidson Harel (OGDF)","Rene Weiskircher","12/11/2007","Ok","1.3","Force Directed")
+  PLUGININFORMATIONS("Davidson Harel (OGDF)","Rene Weiskircher","12/11/2007","Ok","1.3","Force Directed")
   OGDFDavidsonHarel(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::DavidsonHarelLayout()) {
     addParameter<StringCollection>(ELT_SETTINGS, paramHelp[0], ELT_SETTINGSLIST);
     addParameter<StringCollection>(ELT_SPEED, paramHelp[1], ELT_SPEEDLIST);

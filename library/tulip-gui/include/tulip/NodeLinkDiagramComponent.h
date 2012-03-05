@@ -29,7 +29,7 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
   void registerTriggers();
 
 public:
-  PLUGININFORMATIONSWITHGROUP("Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0", "relational")
+  PLUGININFORMATIONS("Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0", "relational")
   NodeLinkDiagramComponent(const tlp::PluginContext* context = NULL);
   virtual ~NodeLinkDiagramComponent();
 

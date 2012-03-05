@@ -39,7 +39,7 @@
 class Kruskal:public tlp::BooleanAlgorithm {
 
 public:
-  PLUGININFORMATIONSWITHGROUP("Kruskal","Anthony DON","14/04/03","Alpha","1.0", "Selection")
+  PLUGININFORMATIONS("Kruskal","Anthony DON","14/04/03","Alpha","1.0", "Selection")
   Kruskal(const tlp::PluginContext* context);
   ~Kruskal();
   bool run();

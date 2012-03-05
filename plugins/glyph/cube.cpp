@@ -42,7 +42,7 @@ using namespace tlp;
  */
 class Cube: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
-  PLUGININFORMATIONSWITHGROUP("3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)
+  PLUGININFORMATIONS("3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)
   Cube(const tlp::PluginContext* context = NULL);
   virtual ~Cube();
   virtual void draw(node n, float lod);

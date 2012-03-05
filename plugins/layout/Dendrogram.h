@@ -42,7 +42,7 @@ class OrientableSizeProxy;
  **/
 class Dendrogram: public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATIONSWITHGROUP("Dendrogram",
+  PLUGININFORMATIONS("Dendrogram",
   "Julien Testut, Antony Durand, Pascal Ollier, "
   "Yashvin Nababsing, Sebastien Leclerc, "
   "Thibault Ruchon, Eric Dauchier",

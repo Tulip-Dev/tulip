@@ -32,7 +32,7 @@
  */
 class DepthMetric:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONSWITHGROUP("Depth","David Auber","15/02/2001","Alpha","1.0","Tree")
+  PLUGININFORMATIONS("Depth","David Auber","15/02/2001","Alpha","1.0","Tree")
   DepthMetric(const tlp::PluginContext* context);
   bool run();
   bool check(std::string &);

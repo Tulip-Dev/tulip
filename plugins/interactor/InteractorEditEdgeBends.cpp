@@ -32,7 +32,7 @@ using namespace tlp;
 class InteractorEditEdgeBends  : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATIONSWITHGROUP("InteractorEditEdgeBends", "Tulip Team", "01/04/2009", "Edit Edge Bends Interactor", "1.0", "Modification")
+  PLUGININFORMATIONS("InteractorEditEdgeBends", "Tulip Team", "01/04/2009", "Edit Edge Bends Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */
