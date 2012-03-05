@@ -37,19 +37,6 @@ namespace tlp {
 typedef Matrix<float, 4> MatrixGL;
 class GlGraphInputData;
 
-class EdgeExtremityGlyphContext : public tlp::PluginContext {
-public:
-  GlGraphInputData *glGraphInputData;
-  ///
-  EdgeExtremityGlyphContext(Graph ** = NULL, GlGraphInputData *glGraphInputData = NULL, int =
-                              5, int = 5) :
-    glGraphInputData(glGraphInputData) {
-  }
-  ///
-  ~EdgeExtremityGlyphContext() {
-  }
-};
-
 class TLP_GL_SCOPE EdgeExtremityGlyph {
 public:
   EdgeExtremityGlyph(const tlp::PluginContext *context);

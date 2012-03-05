@@ -78,7 +78,7 @@ void EdgeExtremityGlyphManager::loadGlyphPlugins() {
 void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
     GlGraphInputData* glGraphInputData, MutableContainer<
     EdgeExtremityGlyph *>& glyphs) {
-  EdgeExtremityGlyphContext gc = EdgeExtremityGlyphContext(graph,
+  GlyphContext gc = GlyphContext(graph,
                                  glGraphInputData);
   glyphs.setAll(0);
 

@@ -61,7 +61,7 @@ QList<tlp::PluginInformations*> PluginManager::pluginsList(Location list) {
       string pluginName = *it;
       const Plugin* info = PluginLister::pluginInformations(pluginName);
       //FIXME second parameter of PluginInformations is the class name, remove it
-      PluginInformations* localinfo = new PluginInformations(info, "", PluginLister::getPluginLibrary(pluginName));
+      PluginInformations* localinfo = new PluginInformations(info, typeid(info).name(), PluginLister::getPluginLibrary(pluginName));
       result[pluginName.c_str()] = localinfo;
     }
   }
