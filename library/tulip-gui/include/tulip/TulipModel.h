@@ -21,6 +21,7 @@
 
 #include <QtCore/QAbstractItemModel>
 #include <tulip/tulipconf.h>
+#include <tulip/TulipMetaTypes.h>
 
 namespace tlp {
 
@@ -30,7 +31,8 @@ class TLP_QT_SCOPE TulipModel: public QAbstractItemModel {
 
 public:
   enum TulipRole {
-    GraphRole = Qt::UserRole+1
+    GraphRole = Qt::UserRole+1,
+    PropertyRole = Qt::UserRole+2
   };
 
   explicit TulipModel(QObject *parent=0);

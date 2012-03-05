@@ -92,6 +92,7 @@ INSTALL(FILES
   tulip/VectorEditionWidget.h
   tulip/GlyphRenderer.h
   tulip/ClearableLineEdit.h
+  tulip/GraphPropertiesModel.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
