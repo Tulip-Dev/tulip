@@ -145,7 +145,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 class OGDFSugiyama : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONSWITHGROUP("Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.4","Hierarchical")
+  PLUGININFORMATIONS("Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.4","Hierarchical")
   OGDFSugiyama(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::SugiyamaLayout()) {
     addParameter<int>("fails", paramHelp[0], "4");
     addParameter<int>("runs", paramHelp[1], "15");

@@ -31,7 +31,7 @@ using namespace tlp;
 class InteractorSelection  : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATIONSWITHGROUP("InteractorSelection", "Tulip Team", "01/04/2009", "Selection Interactor", "1.0", "Modification")
+  PLUGININFORMATIONS("InteractorSelection", "Tulip Team", "01/04/2009", "Selection Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */

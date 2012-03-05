@@ -59,7 +59,7 @@ static const char * paramHelp[] = { HTML_HELP_OPEN()
  */
 class FitToLabel: public SizeAlgorithm {
 public:
-  PLUGININFORMATIONSWITHGROUP("Fit to label","Tulip Team","25/01/2006","","1.0", "Size")
+  PLUGININFORMATIONS("Fit to label","Tulip Team","25/01/2006","","1.0", "Size")
   //==============================================Algorithm======
   FitToLabel(const PluginContext* context) :
     SizeAlgorithm(context) {

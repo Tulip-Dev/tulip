@@ -76,7 +76,7 @@ const char * paramHelp[] = {
 class OGDFUpwardPlanarization : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONSWITHGROUP("Upward Planarization (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")
+  PLUGININFORMATIONS("Upward Planarization (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")
   OGDFUpwardPlanarization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::UpwardPlanarizationLayout()) {
     addParameter<bool>("transpose", paramHelp[0], "false");
   }

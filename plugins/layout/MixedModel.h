@@ -44,7 +44,7 @@
  */
 class MixedModel : public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATIONSWITHGROUP("Mixed Model","Romain BOURQUI ","09/11/2005","Ok","1.0","Planar")
+  PLUGININFORMATIONS("Mixed Model","Romain BOURQUI ","09/11/2005","Ok","1.0","Planar")
   MixedModel(const tlp::PluginContext* context);
   ~MixedModel();
   bool run();

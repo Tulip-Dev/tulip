@@ -285,7 +285,7 @@ class OGDFFm3: public OGDFLayoutPluginBase {
   tlp::StringCollection stringCollection;
 
 public:
-  PLUGININFORMATIONSWITHGROUP("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Alpha", "1.2" ,"Force Directed")
+  PLUGININFORMATIONS("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Alpha", "1.2" ,"Force Directed")
   OGDFFm3(const tlp::PluginContext* context);
   ~OGDFFm3();
   void beforeCall(TulipToOGDF *tlpToOGDF, ogdf::LayoutModule *ogdfLayoutAlgo);

@@ -77,7 +77,7 @@ const char * paramHelp[] = {
 class OGDFFastMultipoleMultiLevelEmbedder : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONSWITHGROUP("Fast Multipole Multilevel Embedder (OGDF)","Martin Gronemann","12/11/2007","Ok","1.0","Multilevel")
+  PLUGININFORMATIONS("Fast Multipole Multilevel Embedder (OGDF)","Martin Gronemann","12/11/2007","Ok","1.0","Multilevel")
   OGDFFastMultipoleMultiLevelEmbedder(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleMultilevelEmbedder()) {
     addParameter<int>("number of threads", paramHelp[0], "2");
   }

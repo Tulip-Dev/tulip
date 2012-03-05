@@ -30,7 +30,7 @@ using namespace tlp;
 class InteractorAddNode  : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATIONSWITHGROUP("InteractorAddNode", "Tulip Team", "01/04/2009", "Add Node Interactor", "1.0", "Modification")
+  PLUGININFORMATIONS("InteractorAddNode", "Tulip Team", "01/04/2009", "Add Node Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */

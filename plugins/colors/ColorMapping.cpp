@@ -180,7 +180,7 @@ private:
 
 
 public:
-  PLUGININFORMATIONSWITHGROUP("Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","1.0", "Color")
+  PLUGININFORMATIONS("Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","1.0", "Color")
   ColorMapping(const tlp::PluginContext* context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES) {
     addParameter<DoubleProperty>("linear/uniform\nproperty",paramHelp[0],"viewMetric");
     addParameter<PropertyInterface*>("enumerated\nproperty",paramHelp[1],"viewMetric");

@@ -34,7 +34,7 @@
  */
 class InducedSubGraphSelection:public tlp::BooleanAlgorithm {
 public:
-  PLUGININFORMATIONSWITHGROUP("Induced Sub-Graph","David Auber","08/08/2001","Alpha","1.0", "Selection")
+  PLUGININFORMATIONS("Induced Sub-Graph","David Auber","08/08/2001","Alpha","1.0", "Selection")
   InducedSubGraphSelection(const tlp::PluginContext* context);
   bool run();
 };
