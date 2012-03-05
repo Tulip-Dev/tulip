@@ -72,6 +72,16 @@ ADD_LIBRARY(WebImport-${TulipVersion} SHARED ${WebImport_SRCS} ${WebImport_MOC_S
 TARGET_LINK_LIBRARIES(WebImport-${TulipVersion} ${LibTulipCoreName} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+SET(ImportPajek_SRCS ImportPajek.cpp)
+ADD_LIBRARY(ImportPajek-${TulipVersion} SHARED ${ImportPajek_SRCS})
+TARGET_LINK_LIBRARIES(ImportPajek-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
+SET(ImportUCINET_SRCS ImportUCINET.cpp)
+ADD_LIBRARY(ImportUCINET-${TulipVersion} SHARED ${ImportUCINET_SRCS})
+TARGET_LINK_LIBRARIES(ImportUCINET-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS PlanarGraph-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT PlanarGraph)
 INSTALL(TARGETS DotImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT DotImport)
 INSTALL(TARGETS Grid-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Grid)
@@ -86,3 +96,5 @@ INSTALL(TARGETS CompleteTree-${TulipVersion} DESTINATION ${TulipPluginsInstallDi
 INSTALL(TARGETS SmallWorldGraph-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT SmallWorldGraph)
 INSTALL(TARGETS FileSystem-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT FileSystem)
 INSTALL(TARGETS WebImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT WebImport)
+INSTALL(TARGETS ImportPajek-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ImportPajek)
+INSTALL(TARGETS ImportUCINET-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ImportUCINET)

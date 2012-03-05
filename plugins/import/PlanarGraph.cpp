@@ -60,10 +60,10 @@ public:
   }
   ~PlanarGraph() {}
 
-  bool import() {
+  bool importGraph() {
     unsigned int nbNodes  = 30;
 
-    if (dataSet!=0) {
+    if (dataSet!=NULL) {
       dataSet->get("nodes", nbNodes);
     }
 

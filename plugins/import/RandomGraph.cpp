@@ -79,7 +79,7 @@ public:
   ~RandomGraph() {
   }
 
-  bool import() {
+  bool importGraph() {
     srand(clock());
     unsigned int nbNodes  = 5;
     unsigned int nbEdges  = 9;

@@ -1014,7 +1014,7 @@ public:
 //    addParameter<DataSet>(DISPLAYING);
   }
   ~TLPImport() {}
-  bool import() {
+  bool importGraph() {
     std::string filename;
     std::string data;
     std::stringstream *tmpss=NULL;

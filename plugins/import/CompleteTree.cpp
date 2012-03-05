@@ -73,7 +73,7 @@ public:
   ~CompleteTree() {
   }
 
-  bool import() {
+  bool importGraph() {
     unsigned int degree  = 2;
     unsigned int depth   = 5;
     bool needLayout = false;
