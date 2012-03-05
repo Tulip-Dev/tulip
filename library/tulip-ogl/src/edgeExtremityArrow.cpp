@@ -23,7 +23,7 @@
 
 using namespace tlp;
 using namespace std;
-class GlArrow2DEdgeExtremity: public EdgeExtremityGlyphFrom2DGlyph {
+class GlArrow2DEdgeExtremity: public tlp::Plugin, public EdgeExtremityGlyphFrom2DGlyph {
 public:
   GLYPHINFORMATIONS("2D - Arrow","Jonathan Dubois","09/04/09","Edge Extremity with 2D arrow","1.0",50);
   GlArrow2DEdgeExtremity(tlp::PluginContext *gc);

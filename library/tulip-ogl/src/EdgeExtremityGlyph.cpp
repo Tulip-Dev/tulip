@@ -20,9 +20,9 @@
 #include <tulip/Vector.h>
 
 namespace tlp {
-EdgeExtremityGlyph::EdgeExtremityGlyph(tlp::PluginContext *context) : edgeExtGlGraphInputData(NULL) {
+EdgeExtremityGlyph::EdgeExtremityGlyph(const tlp::PluginContext* context) : edgeExtGlGraphInputData(NULL) {
   if(context != NULL) {
-    EdgeExtremityGlyphContext* glyphContext = dynamic_cast<EdgeExtremityGlyphContext*>(context);
+    const EdgeExtremityGlyphContext* glyphContext = dynamic_cast<const EdgeExtremityGlyphContext*>(context);
     assert(glyphContext != NULL);
     edgeExtGlGraphInputData = glyphContext->glGraphInputData;
   }
@@ -32,8 +32,8 @@ EdgeExtremityGlyph::~EdgeExtremityGlyph() {
 
 }
 
-EdgeExtremityGlyphFrom3DGlyph::EdgeExtremityGlyphFrom3DGlyph(tlp::PluginContext *gc) :
-  EdgeExtremityGlyph(gc) {
+EdgeExtremityGlyphFrom3DGlyph::EdgeExtremityGlyphFrom3DGlyph(const tlp::PluginContext* context) :
+  EdgeExtremityGlyph(context) {
 
 }
 EdgeExtremityGlyphFrom3DGlyph::~EdgeExtremityGlyphFrom3DGlyph() {
@@ -99,8 +99,8 @@ void EdgeExtremityGlyphFrom3DGlyph::getTransformationMatrix(const Coord &src, co
   scalingMatrix[3][3] = 1;
 }
 
-EdgeExtremityGlyphFrom2DGlyph::EdgeExtremityGlyphFrom2DGlyph(tlp::PluginContext *gc) :
-  EdgeExtremityGlyph(gc) {
+EdgeExtremityGlyphFrom2DGlyph::EdgeExtremityGlyphFrom2DGlyph(const tlp::PluginContext* context) :
+  EdgeExtremityGlyph(context) {
 
 }
 EdgeExtremityGlyphFrom2DGlyph::~EdgeExtremityGlyphFrom2DGlyph() {
