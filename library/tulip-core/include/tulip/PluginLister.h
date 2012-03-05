@@ -40,7 +40,7 @@ namespace tlp {
 
 class FactoryInterface;
 
-class PluginLister {
+class TLP_SCOPE PluginLister {
 private:
   struct PluginDescription {
     FactoryInterface* factory;
