@@ -47,17 +47,21 @@ namespace tlp {
 /**
  * @brief This base class describes plug-ins who only modify one property, e.g. selection.
  **/
-class TLP_SCOPE PropertyAlgorithm: public WithParameter, public WithDependency {
+class TLP_SCOPE PropertyAlgorithm: public tlp::Plugin {
 public :
   /**
    * @brief Builds a new plug-in that modifies a single property.
    *
    * @param context The context containing the graph and PropertyInterface this plug-in has access to, as well as a PluginProgress.
    **/
-  PropertyAlgorithm(const tlp::PropertyContext & context) :
-    graph(context.graph),
-    pluginProgress(context.pluginProgress),
-    dataSet(context.dataSet) {
+  PropertyAlgorithm(tlp::PluginContext* context) {
+    if(context != NULL) {
+      tlp::AlgorithmContext* algoritmContext = dynamic_cast<tlp::AlgorithmContext*>(context);
+      assert(algoritmContext != NULL);
+      graph = algoritmContext->graph;
+      pluginProgress = algoritmContext->pluginProgress;
+      dataSet = algoritmContext->dataSet;
+    }
   }
   ///
   virtual ~PropertyAlgorithm() {}
@@ -101,8 +105,11 @@ public:
   Property* result;
   virtual ~TemplateAlgorithm() {}
 protected:
-  TemplateAlgorithm (const tlp::PropertyContext  &context) : tlp::PropertyAlgorithm(context) {
-    result = (Property*)context.propertyProxy;
+  TemplateAlgorithm (tlp::PluginContext* context) : tlp::PropertyAlgorithm(context) {
+    PropertyContext* propertyContext = dynamic_cast<PropertyContext*>(context);
+    if(propertyContext) {
+      result = (Property*)propertyContext->propertyProxy;
+    }
   }
 };
 

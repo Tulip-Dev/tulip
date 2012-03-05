@@ -1,5 +1,5 @@
 INSTALL(FILES
-  tulip/AbstractPluginInfo.h
+  tulip/Plugin.h
   tulip/AbstractProperty.h
   tulip/AcyclicTest.h
   tulip/Algorithm.h

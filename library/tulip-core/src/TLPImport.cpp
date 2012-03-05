@@ -77,7 +77,6 @@
 
 #define DISPLAYING "displaying"
 #define GLYPH "glyph"
-#define PLUGIN "plugin"
 #define OLD_ATTRIBUTES "attributes"
 #define ATTRIBUTES "graph_attributes"
 #define SCENE "scene"
@@ -1009,7 +1008,9 @@ namespace tlp {
  */
 class TLPImport:public ImportModule {
 public:
-  TLPImport(AlgorithmContext context):ImportModule(context) {
+  PLUGININFORMATIONS("tlpimport","Auber","16/02/2001","Tlp Import plugin","1.0")
+  
+  TLPImport(tlp::PluginContext* context):ImportModule(context) {
     addParameter<std::string>("file::filename", paramHelp[0]);
 //    addParameter<DataSet>(DISPLAYING);
   }
@@ -1074,6 +1075,6 @@ public:
     return result;
   }
 };
-IMPORTPLUGINOFGROUP(TLPImport,"tlp","Auber","16/02/2001","Tlp Import plugin","1.0","File")
+PLUGIN(TLPImport)
 /*@}*/
 }

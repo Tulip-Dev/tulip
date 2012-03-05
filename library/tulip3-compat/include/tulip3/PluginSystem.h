@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/AbstractPluginInfo.h>
-typedef tlp::AbstractPluginInfo Plugin;
+#include <tulip/Plugin.h>
+typedef tlp::Plugin Plugin;
 
 #include <tulip/WithParameter.h>
 typedef tlp::ParameterList StructDef;

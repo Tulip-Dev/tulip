@@ -19,7 +19,7 @@
 
 #include <iostream>
 #include <tulip/PluginLoaderTxt.h>
-#include <tulip/AbstractPluginInfo.h>
+#include <tulip/Plugin.h>
 
 using namespace std;
 using namespace tlp;
@@ -31,7 +31,7 @@ void PluginLoaderTxt::loading(const string &filename) {
   cout << "loading file : " << filename << endl;
 }
 
-void PluginLoaderTxt::loaded(const AbstractPluginInfo* infos, const std::list <Dependency>& deps) {
+void PluginLoaderTxt::loaded(const Plugin* infos, const std::list <Dependency>& deps) {
   cout << "Plug-in " << infos->getName() << " loaded, Author:"<< infos->getAuthor() << " Date: " << infos->getDate() << " Release:" << infos->getRelease() << " Version: "<< infos->getTulipRelease() <<  endl;
 
   // ouput dependencies if any

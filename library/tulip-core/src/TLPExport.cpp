@@ -105,13 +105,15 @@ namespace tlp {
  */
 class TLPExport:public ExportModule {
 public:
+  PLUGININFORMATIONS("tlpexport","Auber David","31/07/2001","TLP Export plugin", "1.1")
+  
   DataSet controller;
   bool useOldFormat;
   MutableContainer<node> nodeIndex;
   MutableContainer<edge> edgeIndex;
   int progress;
 
-  TLPExport(AlgorithmContext context):ExportModule(context),
+  TLPExport(tlp::PluginContext* context): ExportModule(context),
     useOldFormat(false),progress(0) {
     addParameter<StringCollection>("format", paramHelp[3], "2.3;2.0");
     addParameter<string>("name", paramHelp[0]);
@@ -581,6 +583,6 @@ public:
     return true;
   }
 };
-EXPORTPLUGIN(TLPExport,"tlp","Auber David","31/07/2001","TLP Export plugin", "1.1")
+PLUGIN(TLPExport)
 /*@}*/
 }

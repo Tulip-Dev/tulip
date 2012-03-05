@@ -29,7 +29,7 @@
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Matrix.h>
-#include <tulip/AbstractPluginInfo.h>
+#include <tulip/Plugin.h>
 #include <tulip/PluginLister.h>
 
 namespace tlp {

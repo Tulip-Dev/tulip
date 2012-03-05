@@ -107,7 +107,7 @@ Graph * tlp::newCloneSubGraph(Graph *graph, std::string name) {
 Graph * tlp::loadGraph(const std::string &filename) {
   DataSet dataSet;
   dataSet.set("file::filename", filename);
-  Graph *sg = tlp::importGraph("tlp", dataSet);
+  Graph *sg = tlp::importGraph("tlpimport", dataSet);
   return sg;
 }
 //=========================================================
@@ -121,14 +121,14 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename) {
 
   bool result;
   DataSet data;
-  result=tlp::exportGraph(graph, *os, "tlp", data, 0);
+  result=tlp::exportGraph(graph, *os, "tlpexport", data, 0);
   delete os;
   return result;
 }
 //=========================================================
 Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress, Graph *newGraph) {
 
-  if (!ImportModuleLister::pluginExists(format)) {
+  if (!PluginLister::pluginExists(format)) {
     cerr << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format
          << "\" doesn't exists (or is not loaded)" << endl;
     return NULL;
@@ -141,9 +141,6 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
     newGraphP=true;
   }
 
-  AlgorithmContext tmp;
-  tmp.graph=newGraph;
-  tmp.dataSet = &dataSet;
   PluginProgress *tmpProgress;
   bool deletePluginProgress=false;
 
@@ -153,8 +150,8 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   }
   else tmpProgress=progress;
 
-  tmp.pluginProgress=tmpProgress;
-  ImportModule *newImportModule=ImportModuleLister::getPluginObject(format, tmp);
+  AlgorithmContext* tmp = new AlgorithmContext(newGraph, &dataSet, tmpProgress);
+  ImportModule *newImportModule = PluginLister::instance()->getPluginObject<ImportModule>(format, tmp);
   assert(newImportModule!=0);
 
   bool importSucessfull = newImportModule->importGraph();
@@ -166,7 +163,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   if (deletePluginProgress) delete tmpProgress;
 
   delete newImportModule;
-  dataSet = *tmp.dataSet;
+  dataSet = *tmp->dataSet;
 
   if (importSucessfull)
     return newGraph;
@@ -176,7 +173,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
 //=========================================================
 bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &format,
                       DataSet &dataSet, PluginProgress *progress) {
-  if (!ExportModuleLister::pluginExists(format)) {
+  if (!PluginLister::pluginExists(format)) {
     cerr << "libtulip: " << __FUNCTION__ << ": export plugin \"" << format
          << "\" doesn't exists (or is not loaded)" << endl;
     return false;
@@ -184,19 +181,15 @@ bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &
 
   bool result;
   bool deletePluginProgress=false;
-  AlgorithmContext tmp;
-  tmp.graph=sg;
-  tmp.dataSet=&dataSet;
   PluginProgress *tmpProgress=NULL;
-
   if (progress==0) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
   else tmpProgress=progress;
 
-  tmp.pluginProgress=tmpProgress;
-  ExportModule *newExportModule=ExportModuleLister::getPluginObject(format, tmp);
+  AlgorithmContext* context = new AlgorithmContext(sg, &dataSet, tmpProgress);
+  ExportModule *newExportModule=PluginLister::instance()->getPluginObject<ExportModule>(format, context);
   assert(newExportModule!=0);
   result=newExportModule->exportGraph(outputStream);
 
@@ -380,9 +373,6 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
 
   bool result;
   bool deletePluginProgress=false;
-  AlgorithmContext tmp;
-  tmp.graph = this;
-  tmp.dataSet = dataSet;
   PluginProgress *tmpProgress;
 
   if (progress == 0) {
@@ -391,8 +381,8 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   }
   else tmpProgress = progress;
 
-  tmp.pluginProgress=tmpProgress;
-  Algorithm *newAlgo=AlgorithmLister::getPluginObject(algorithm, tmp);
+  AlgorithmContext* context = new AlgorithmContext(this, dataSet, tmpProgress);
+  Algorithm *newAlgo = PluginLister::instance()->getPluginObject<Algorithm>(algorithm, context);
 
   if ((result=newAlgo->check(errorMessage)))
     newAlgo->run();

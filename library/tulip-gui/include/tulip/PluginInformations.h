@@ -24,7 +24,7 @@
 #include <QtGui/QIcon>
 
 #include <tulip/tulipconf.h>
-#include <tulip/AbstractPluginInfo.h>
+#include <tulip/Plugin.h>
 #include <tulip/WithDependency.h>
 #include <QMap>
 
@@ -32,11 +32,11 @@ class QNetworkReply;
 namespace tlp {
 
 /**
-  * @brief This implementation of AbstractPluginInfo represents a plugin located on a remote server, thus not yet installed.
+  * @brief This implementation of Plugin represents a plugin located on a remote server, thus not yet installed.
   * All the informations are 'manually' entered into this class.
   *
   **/
-class TLP_QT_SCOPE DistantPluginInfo : public tlp::AbstractPluginInfo {
+class TLP_QT_SCOPE DistantPluginInfo : public tlp::Plugin {
 public:
   DistantPluginInfo(const std::string& author, const std::string& date, const std::string& group, const std::string& name, const std::string& info, const std::string& release,
                     const std::string& tulipRelease, const std::list<tlp::Dependency> dependencies, const QString& type, const QString& location, const QString& remotepluginName)
@@ -92,7 +92,7 @@ private:
 };
 
 /**
- * @brief Simple wrapper around AbstractPluginInfo to provide informations about updates and installation/removal functions.
+ * @brief Simple wrapper around Plugin to provide informations about updates and installation/removal functions.
  **/
 class TLP_QT_SCOPE PluginInformations : public QObject {
   Q_OBJECT
@@ -100,23 +100,23 @@ public:
   /**
     * @brief This constructor is used for local plugin description, and the library is used to determine the path of the icon and long description.
     *
-    * @param info The AbstractPluginInfo representing the plugin to describe.
+    * @param info The Plugin representing the plugin to describe.
     * @param type The type of the plugin.
     * @param dependencies The dependencies of the plugin.
     * @param library The library file from which the plugin was loaded.
     **/
-  PluginInformations(const tlp::AbstractPluginInfo& info, const std::string& type, const std::string& library);
+  PluginInformations(const tlp::Plugin& info, const std::string& type, const std::string& library);
 
   /**
     * @brief This constructor is used for remote plugin description, the long description and icon's paths are directly provided.
     *
-    * @param info The AbstractPluginInfo representing the plugin to describe.
+    * @param info The Plugin representing the plugin to describe.
     * @param type The type of the plugin.
     * @param dependencies The dependencies of the plugin.
     * @param longDescriptionPath The URL where the long description resides.
     * @param iconPath The URL where the icon resides.
     **/
-  PluginInformations(const tlp::AbstractPluginInfo& info, const QString& type, const QString& basePath, const QString& remotepluginName);
+  PluginInformations(const tlp::Plugin& info, const QString& type, const QString& basePath, const QString& remotepluginName);
 
   /**
    * @brief This is used when a plugin is installed and available on a remote server.
@@ -125,7 +125,7 @@ public:
    * @param info The PluginInfo of the remote plugin.
    * @return void
    **/
-  void AddPluginInformations(const tlp::AbstractPluginInfo* info);
+  void AddPluginInformations(const tlp::Plugin* info);
 
   QString identifier() const;
   //TODO this should be a displayname, not the name used to register into the plugin system
@@ -175,7 +175,7 @@ private:
   const QString _remoteLocation;
   const QString _remoteArchive;
   const QString _version;
-  const tlp::AbstractPluginInfo* _infos;
+  const tlp::Plugin* _infos;
   const QString _library;
 public slots:
   void downloadFinished();

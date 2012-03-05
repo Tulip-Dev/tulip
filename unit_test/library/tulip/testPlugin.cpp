@@ -26,7 +26,8 @@ using namespace std;
 
 class Test : public tlp::BooleanAlgorithm {
 public:
-  Test(const tlp::PropertyContext &context) : tlp::BooleanAlgorithm(context) {
+  PLUGININFORMATIONSWITHGROUP("Test","Jezequel","03/11/2004","0","1.0", "")
+  Test(tlp::PluginContext* context) : tlp::BooleanAlgorithm(context) {
     addDependency<tlp::BooleanAlgorithm>("Test", "1.0");
     addParameter<int>("testParameter", "no help for you :)", "0", false);
   }
@@ -37,14 +38,15 @@ public:
     return graph->computeProperty(name, result, err);
   }
 };
-BOOLEANPLUGIN(Test,"Test","Jezequel","03/11/2004","0","1.0")
+PLUGIN(Test)
 
 //this plugin is registered with the same identifier as the one above, it should not show up
 class Test3 : public tlp::BooleanAlgorithm {
 public:
-  Test3(const tlp::PropertyContext &context) : tlp::BooleanAlgorithm(context) {}
+  PLUGININFORMATIONSWITHGROUP("Test","Jezequel","03/11/2004","0","1.0", "")
+  Test3(tlp::PluginContext *context) : tlp::BooleanAlgorithm(context) {}
   bool run() {
     return false;
   }
 };
-BOOLEANPLUGIN(Test3,"Test","Jezequel","03/11/2004","0","1.0")
+PLUGIN(Test3)

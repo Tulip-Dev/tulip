@@ -417,13 +417,14 @@ protected:
 
 class TlpJsonImport : public ImportModule, YajlProxy {
 public:
-  TlpJsonImport(AlgorithmContext context) :ImportModule(context) {
+  PLUGININFORMATIONS("TlpJsonImport", "Charles Huet", "18/05/2011", "Tulip JSon format", "1.0")
+  
+  TlpJsonImport(tlp::PluginContext* context) : ImportModule(context) {
     addParameter<std::string>("file::filename", "");
   }
 
   virtual bool importGraph() {
     std::string filename;
-    std::string data;
 
     if(dataSet->exist("file::filename")) {
       dataSet->get<string>("file::filename", filename);
@@ -448,4 +449,4 @@ public:
   }
 };
 
-IMPORTPLUGINOFGROUP(TlpJsonImport ,"TlpJsonImport", "Charles Huet", "18/05/2011", "Tulip JSon format", "1.0", "File")
+PLUGIN(TlpJsonImport)

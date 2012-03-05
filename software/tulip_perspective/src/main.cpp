@@ -110,7 +110,7 @@ int main(int argc,char **argv) {
   progress->setComment(QObject::trUtf8("Loading plugins").toStdString());
   tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   tlp::PluginLibraryLoader::loadPlugins();
-  tlp::PluginListerInterface::checkLoadedPluginsDependencies(0);
+  tlp::PluginLister::checkLoadedPluginsDependencies(0);
   tlp::InteractorLister::initInteractorsDependencies();
   tlp::GlyphManager::getInst().loadGlyphPlugins();
   tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();

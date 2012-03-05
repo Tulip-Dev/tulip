@@ -57,7 +57,7 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, std::string folder) 
     if (loader!=0)
       loader->start(dir.c_str());
 
-    PluginListerInterface::currentLoader = loader;
+    PluginLister::currentLoader = loader;
     getInstance()->pluginPath = dir;
     getInstance()->initPluginDir(loader);
 

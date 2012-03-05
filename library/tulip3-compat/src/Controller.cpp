@@ -72,7 +72,7 @@ void Controller::construct(tlp::PluginProgress *) {
     DataSet importData;
     importData.set("file::filename",_externalFile.toStdString());
     _lastUsedSavePath = _externalFile;
-    g = tlp::importGraph("tlp",importData,&progress);
+    g = tlp::importGraph("tlpimport",importData,&progress);
 
     if (!g) {
       g = tlp::newGraph();
@@ -196,7 +196,7 @@ void Controller::saveAs(const QString &file) {
   DataSet dataSet;
   getData(&g,&dataSet);
   tlp::SimplePluginProgressDialog *progress = new tlp::SimplePluginProgressDialog(0);
-  tlp::exportGraph(g,os,"tlp",dataSet,progress->progress());
+  tlp::exportGraph(g,os,"tlpexport",dataSet,progress->progress());
   delete progress;
   _lastUsedSavePath = file;
 }

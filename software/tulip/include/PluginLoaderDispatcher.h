@@ -32,7 +32,7 @@ public:
   virtual void numberOfFiles(int n);
 
   virtual void loading(const std::string &filename);
-  virtual void loaded(const tlp::AbstractPluginInfo* infos, const std::list <tlp::Dependency>& dependencies);
+  virtual void loaded(const tlp::Plugin* infos, const std::list <tlp::Dependency>& dependencies);
   virtual void aborted(const std::string &filename,const  std::string &errormsg);
 
   void registerLoader(tlp::PluginLoader *loader);

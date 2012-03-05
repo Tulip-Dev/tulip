@@ -24,8 +24,9 @@
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
 #include <tulip/DataSet.h>
-#include <tulip/AbstractPluginInfo.h>
+#include <tulip/Plugin.h>
 #include <tulip/PluginLister.h>
+#include <tulip/MethodFactory.h>
 
 /** \addtogroup plugins */
 
@@ -34,31 +35,33 @@ class Graph;
 class PluginProgress;
 /*@{*/
 /// Interface for exportModule plug-ins
-class ExportModule:public WithParameter, public WithDependency {
+class ExportModule: public tlp::Plugin {
 public:
   ///
-  ExportModule (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet) {}
+  ExportModule(tlp::PluginContext* context) {
+    if(context != NULL) {
+      tlp::AlgorithmContext* algoritmContext = dynamic_cast<tlp::AlgorithmContext*>(context);
+      assert(algoritmContext != NULL);
+      graph = algoritmContext->graph;
+      pluginProgress = algoritmContext->pluginProgress;
+      dataSet = algoritmContext->dataSet;
+    }
+  }
   ///
-  virtual ~ExportModule() {};
+  virtual ~ExportModule() {}
+  
   /**
    * @brief The export operations should take place here.
    * @param the output stream
    * @return bool Whether the export was successful or not.
    **/
   virtual bool exportGraph(std::ostream &os)=0;
-
   /** It is the root graph*/
   Graph *graph;
   ///
   PluginProgress *pluginProgress;
   DataSet *dataSet;
 };
-
-typedef StaticPluginLister<ExportModule,AlgorithmContext> ExportModuleLister;
-
-#ifdef WIN32
-template class TLP_SCOPE PluginLister<ExportModule,AlgorithmContext>;
-#endif
 
 /*@}*/
 }

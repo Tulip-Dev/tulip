@@ -33,7 +33,8 @@ namespace tlp {
  */
 class CubeOutLined : public Glyph {
 public:
-  CubeOutLined(GlyphContext *gc=NULL);
+  GLYPHINFORMATIONS("3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 1)
+  CubeOutLined(AlgorithmContext& context);
   virtual ~CubeOutLined();
   virtual void draw(node n,float lod);
   virtual Coord getAnchor(const Coord & vector) const;
@@ -48,11 +49,11 @@ protected:
 tlp::GlBox* tlp::CubeOutLined::box=0;
 
 namespace tlp {
-GLYPHPLUGIN(CubeOutLined, "3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 1)
+PLUGIN(CubeOutLined)
 /*@}*/
 
 //===================================================================================
-CubeOutLined::CubeOutLined(GlyphContext *gc): Glyph(gc) {
+CubeOutLined::CubeOutLined(AlgorithmContext& context): Glyph(context) {
   if(!box)
     box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
 }

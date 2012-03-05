@@ -42,7 +42,7 @@ class DataSet;
  * running the algorithm and resetting the algorithm to re-apply it.
  * The algorithm can and should report progress and which task it is performing if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, ...).
  */
-class Algorithm : public WithParameter, public WithDependency {
+class Algorithm : public tlp::Plugin {
 public :
   /**
    * @brief Constructs an algorithm and initializes members from the AlgorithmContext.
@@ -81,12 +81,6 @@ public :
    */
   DataSet *dataSet;
 };
-
-typedef StaticPluginLister<Algorithm,AlgorithmContext> AlgorithmLister;
-
-#ifdef WIN32
-template class TLP_SCOPE PluginLister<Algorithm,AlgorithmContext>;
-#endif
 
 /*@}*/
 
