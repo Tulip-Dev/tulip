@@ -32,7 +32,7 @@ void PluginLoaderTxt::loading(const string &filename) {
 }
 
 void PluginLoaderTxt::loaded(const Plugin* infos, const std::list <Dependency>& deps) {
-  cout << "Plug-in " << infos->getName() << " loaded, Author:"<< infos->getAuthor() << " Date: " << infos->getDate() << " Release:" << infos->getRelease() << " Version: "<< infos->getTulipRelease() <<  endl;
+  cout << "Plug-in " << infos->name() << " loaded, Author:"<< infos->author() << " Date: " << infos->date() << " Release:" << infos->release() << " Version: "<< infos->tulipRelease() <<  endl;
 
   // ouput dependencies if any
   if (deps.size()) {

@@ -43,22 +43,22 @@ std::string tlp::getMajor(const std::string &release) {
   return release.substr(0, pos);
 }
 
-std::string Plugin::getMajor() const {
-  return tlp::getMajor(getRelease());
+std::string Plugin::major() const {
+  return tlp::getMajor(release());
 }
 
-std::string Plugin::getMinor() const {
-  return tlp::getMinor(getRelease());
+std::string Plugin::minor() const {
+  return tlp::getMinor(release());
 }
 
-std::string Plugin::getTulipMajor() const {
-  return tlp::getMajor(getTulipRelease());
+std::string Plugin::tulipMajor() const {
+  return tlp::getMajor(tulipRelease());
 }
 
-std::string Plugin::getTulipMinor() const  {
-  return tlp::getMinor(getTulipRelease());
+std::string Plugin::tulipMinor() const  {
+  return tlp::getMinor(tulipRelease());
 }
 
-int Plugin::getId() const {
+int Plugin::id() const {
   return 0;
 }

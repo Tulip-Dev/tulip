@@ -72,7 +72,7 @@ QList<tlp::PluginInformations*> PluginManager::pluginsList(Location list) {
 
         if(current == result.end()) {
           DistantPluginInfo* pluginInfo = locationIt.value();
-          PluginInformations* pluginInformations = new PluginInformations(pluginInfo, pluginInfo->getType(), pluginInfo->getLocation(), pluginInfo->getRemotePluginName());
+          PluginInformations* pluginInformations = new PluginInformations(pluginInfo, pluginInfo->type(), pluginInfo->location(), pluginInfo->remotePluginName());
           result[locationIt.key()] = pluginInformations;
         }
         else {
@@ -117,7 +117,7 @@ LocationPlugins PluginManager::parseDescription(const QString& xmlDescription, c
 
     tlp::DistantPluginInfo* pluginInfo = new DistantPluginInfo(author, date, group, name.toStdString(), info, release, tulipRelease, dependencies, type, location, folder);
 
-    remotePlugins[pluginInfo->getName().c_str()] = pluginInfo;
+    remotePlugins[pluginInfo->name().c_str()] = pluginInfo;
   }
 
   return remotePlugins;

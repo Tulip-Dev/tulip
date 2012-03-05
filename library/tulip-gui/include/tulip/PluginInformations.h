@@ -43,37 +43,37 @@ public:
     : _author(author), _date(date), _group(group), _name(name), _info(info), _release(release), _tulipRelease(tulipRelease), _dependencies(dependencies),
       _type(type), _location(location), _remotePluginName(remotepluginName) {
   }
-  virtual std::string getAuthor() const {
+  virtual std::string author() const {
     return _author;
   }
-  virtual std::string getDate() const {
+  virtual std::string date() const {
     return _date;
   }
-  virtual std::string getGroup() const {
+  virtual std::string group() const {
     return _group;
   }
-  virtual std::string getName() const {
+  virtual std::string name() const {
     return _name;
   }
-  virtual std::string getInfo() const {
+  virtual std::string info() const {
     return _info;
   }
-  virtual std::string getRelease() const {
+  virtual std::string release() const {
     return _release;
   }
-  virtual std::string getTulipRelease() const {
+  virtual std::string tulipRelease() const {
     return _tulipRelease;
   }
-  virtual std::list<tlp::Dependency> getDependencies() const {
+  virtual std::list<tlp::Dependency> dependencies() const {
     return _dependencies;
   }
-  virtual const QString& getType() const {
+  virtual const QString& type() const {
     return _type;
   }
-  virtual const QString& getLocation() const {
+  virtual const QString& location() const {
     return _location;
   }
-  virtual const QString& getRemotePluginName() const {
+  virtual const QString& remotePluginName() const {
     return _remotePluginName;
   }
 

@@ -104,10 +104,9 @@ protected:
 
 }
 
-#define GLYPHINFORMATIONS(N,A,D,I,R,ID) \
-PLUGININFORMATIONS(N,A,D,I,R)\
-int getId() const { return ID; } \
-virtual std::string getGroup() const { return ""; }
+#define GLYPHINFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, ID) \
+PLUGININFORMATIONSWITHGROUP(NAME, AUTHOR, DATE, INFO, RELEASE, "")\
+int id() const { return ID; }
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

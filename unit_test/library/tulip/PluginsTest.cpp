@@ -144,15 +144,15 @@ void PluginsTest::pluginInformations() {
   CPPUNIT_ASSERT_EQUAL(string("i"), parameters.getTypeName(parameterName));
 
   const Plugin* factory(PluginLister::instance()->pluginInformations("Test"));
-  CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory->getAuthor());
-  CPPUNIT_ASSERT_EQUAL(string("03/11/2004"), factory->getDate());
-  CPPUNIT_ASSERT_EQUAL(string(""), factory->getGroup());
-  CPPUNIT_ASSERT_EQUAL(0, factory->getId());
-  CPPUNIT_ASSERT_EQUAL(string("1"), factory->getMajor());
-  CPPUNIT_ASSERT_EQUAL(string("0"), factory->getMinor());
-  CPPUNIT_ASSERT_EQUAL(string("Test"), factory->getName());
-  CPPUNIT_ASSERT_EQUAL(string("1.0"), factory->getRelease());
-  CPPUNIT_ASSERT_EQUAL(tlp::getMajor(TULIP_RELEASE), factory->getTulipMajor());
-  CPPUNIT_ASSERT_EQUAL(tlp::getMinor(TULIP_RELEASE), factory->getTulipMinor());
-  CPPUNIT_ASSERT_EQUAL(string(TULIP_RELEASE), factory->getTulipRelease());
+  CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory->author());
+  CPPUNIT_ASSERT_EQUAL(string("03/11/2004"), factory->date());
+  CPPUNIT_ASSERT_EQUAL(string(""), factory->group());
+  CPPUNIT_ASSERT_EQUAL(0, factory->id());
+  CPPUNIT_ASSERT_EQUAL(string("1"), factory->major());
+  CPPUNIT_ASSERT_EQUAL(string("0"), factory->minor());
+  CPPUNIT_ASSERT_EQUAL(string("Test"), factory->name());
+  CPPUNIT_ASSERT_EQUAL(string("1.0"), factory->release());
+  CPPUNIT_ASSERT_EQUAL(tlp::getMajor(TULIP_RELEASE), factory->tulipMajor());
+  CPPUNIT_ASSERT_EQUAL(tlp::getMinor(TULIP_RELEASE), factory->tulipMinor());
+  CPPUNIT_ASSERT_EQUAL(string(TULIP_RELEASE), factory->tulipRelease());
 }

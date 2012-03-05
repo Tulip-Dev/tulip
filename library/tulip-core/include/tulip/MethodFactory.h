@@ -34,22 +34,14 @@
 /** \addtogroup plugins */
 /*@{*/
 
-#define PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE)\
-std::string getName() const { return std::string(NAME); } \
-std::string getAuthor() const { return std::string(AUTHOR); }\
-std::string getDate() const { return std::string(DATE); }  \
-std::string getInfo() const { return std::string(INFO); }  \
-std::string getRelease() const { return std::string(RELEASE); }\
-std::string getTulipRelease() const { return std::string(TULIP_RELEASE); }
-
 #define PLUGININFORMATIONSWITHGROUP(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
-std::string getName() const { return std::string(NAME); } \
-std::string getAuthor() const { return std::string(AUTHOR); }\
-std::string getDate() const { return std::string(DATE); }  \
-std::string getInfo() const { return std::string(INFO); }  \
-std::string getRelease() const { return std::string(RELEASE); }\
-std::string getGroup() const { return std::string(GROUP); }\
-std::string getTulipRelease() const { return std::string(TULIP_RELEASE); }
+std::string name() const { return std::string(NAME); } \
+std::string author() const { return std::string(AUTHOR); }\
+std::string date() const { return std::string(DATE); }  \
+std::string info() const { return std::string(INFO); }  \
+std::string release() const { return std::string(RELEASE); }\
+std::string tulipRelease() const { return std::string(TULIP_RELEASE); }\
+std::string group() const { return std::string(GROUP); }
 
 #define PLUGIN(C) \
 class C##Factory : public tlp::FactoryInterface { \

@@ -60,7 +60,7 @@ void GlyphManager::loadGlyphPlugins() {
   std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<Glyph>());
   for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
     string pluginName(*it);
-    int pluginId=PluginLister::pluginInformations(pluginName)->getId();
+    int pluginId=PluginLister::pluginInformations(pluginName)->id();
     glyphIdToName[pluginId]=pluginName;
     nameToGlyphId[pluginName]=pluginId;
   }
@@ -81,7 +81,7 @@ void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputDat
   for(std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
     string glyphName(*it);
     Glyph *newGlyph = PluginLister::instance()->getPluginObject<Glyph>(glyphName, &gc);
-    glyphs.set(PluginLister::pluginInformations(glyphName)->getId(), newGlyph);
+    glyphs.set(PluginLister::pluginInformations(glyphName)->id(), newGlyph);
   }
 }
 
@@ -90,7 +90,7 @@ void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Gly
   std::list<std::string> glyphList(PluginLister::instance()->availablePlugins<Glyph>());
   for(std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
     string glyphName(*it);
-    delete glyphs.get(PluginLister::pluginInformations(glyphName)->getId());
+    delete glyphs.get(PluginLister::pluginInformations(glyphName)->id());
   }
 }
 }

@@ -38,7 +38,7 @@ ImportWizard::ImportWizard(QWidget *parent): QWizard(parent), _ui(new Ui::Import
   list<string> importModules = PluginLister::instance()->availablePlugins<ImportModule>();
   for(list<string>::const_iterator it = importModules.begin(); it != importModules.end(); ++it) {
     string algName(*it);
-    groups.insert(PluginLister::pluginInformations(algName)->getGroup().c_str());
+    groups.insert(PluginLister::pluginInformations(algName)->group().c_str());
   }
   _ui->categoryList->addItems(groups.toList());
   _ui->parametersList->setItemDelegate(new TulipItemDelegate);
@@ -72,7 +72,7 @@ void ImportWizard::groupSelected(const QString& group) {
   list<string> importModules = PluginLister::instance()->availablePlugins<ImportModule>();
   for(list<string>::const_iterator it = importModules.begin(); it != importModules.end(); ++it) {
     string algName(*it);
-    if (group == PluginLister::pluginInformations(algName)->getGroup().c_str())
+    if (group == PluginLister::pluginInformations(algName)->group().c_str())
       _ui->algorithmList->addItem(algName.c_str());
   }
 

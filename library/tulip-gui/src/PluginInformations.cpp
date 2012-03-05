@@ -35,17 +35,17 @@
 using namespace tlp;
 
 PluginInformations::PluginInformations(const tlp::Plugin* info, const std::string& type, const std::string& library)
-  :_lastVersion(info->getRelease().c_str()), _type(type.c_str()), _iconPath(":/tulip/gui/icons/logo32x32.png"), _longDescriptionPath("about:blank"), _isLocal(true),
-   _installedVersion(info->getRelease().c_str()), _updateAvailable(false), _version(info->getRelease().c_str()), _infos(info), _library(library.c_str()) {
+  :_lastVersion(info->release().c_str()), _type(type.c_str()), _iconPath(":/tulip/gui/icons/logo32x32.png"), _longDescriptionPath("about:blank"), _isLocal(true),
+   _installedVersion(info->release().c_str()), _updateAvailable(false), _version(info->release().c_str()), _infos(info), _library(library.c_str()) {
 }
 
 PluginInformations::PluginInformations(const tlp::Plugin* info, const QString& type, const QString& basePath, const QString& remotepluginName)
-  :_lastVersion(info->getRelease().c_str()), _type(type), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html"), _isLocal(false), _installedVersion(QString::null),
-   _updateAvailable(false), _remoteLocation(basePath + "/" + remotepluginName), _remoteArchive(_remoteLocation + "/" + tlp::getPluginPackageName(remotepluginName)), _version(info->getRelease().c_str()), _infos(info) {
+  :_lastVersion(info->release().c_str()), _type(type), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html"), _isLocal(false), _installedVersion(QString::null),
+   _updateAvailable(false), _remoteLocation(basePath + "/" + remotepluginName), _remoteArchive(_remoteLocation + "/" + tlp::getPluginPackageName(remotepluginName)), _version(info->release().c_str()), _infos(info) {
 }
 
 void PluginInformations::AddPluginInformations(const tlp::Plugin* info) {
-  QString newVersion = info->getRelease().c_str();
+  QString newVersion = info->release().c_str();
 
   if(_installedVersion < newVersion) {
     _updateAvailable = true;
@@ -54,23 +54,23 @@ void PluginInformations::AddPluginInformations(const tlp::Plugin* info) {
 }
 
 QString PluginInformations::identifier() const {
-  return _infos->getName().c_str();
+  return _infos->name().c_str();
 }
 
 QString PluginInformations::name() const {
-  return _infos->getName().c_str();
+  return _infos->name().c_str();
 }
 
 QString PluginInformations::author() const {
-  return _infos->getAuthor().c_str();
+  return _infos->author().c_str();
 }
 
 QString PluginInformations::group() const {
-  return _infos->getGroup().c_str();
+  return _infos->group().c_str();
 }
 
 QString PluginInformations::shortDescription() const {
-  return _infos->getInfo().c_str();
+  return _infos->info().c_str();
 }
 
 QString PluginInformations::longDescriptionPath() const {
@@ -91,9 +91,9 @@ QString PluginInformations::type() const {
 
 const QStringList PluginInformations::dependencies() const {
   QStringList result;
-  result.reserve(_infos->getDependencies().size());
+  result.reserve(_infos->dependencies().size());
 
-  for(std::list<tlp::Dependency>::const_iterator it = _infos->getDependencies().begin(); it != _infos->getDependencies().end(); ++it) {
+  for(std::list<tlp::Dependency>::const_iterator it = _infos->dependencies().begin(); it != _infos->dependencies().end(); ++it) {
     result.append(it->pluginName.c_str());
   }
 

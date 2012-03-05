@@ -60,7 +60,7 @@ private:
  **/
 class TlpJsonExport : public ExportModule {
 public:
-  PLUGININFORMATIONS("TlpJsonExport","Charles Huet","18/05/2011","Tulip JSon format","1.0")
+  PLUGININFORMATIONSWITHGROUP("TlpJsonExport","Charles Huet","18/05/2011","Tulip JSon format","1.0", "Import")
   
   /**
    * @brief Mandatory constructor to initialize the AlgorithmContext.
