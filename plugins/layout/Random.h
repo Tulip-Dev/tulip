@@ -37,7 +37,8 @@
  */
 class Random:public tlp::LayoutAlgorithm {
 public:
-  Random(const tlp::PropertyContext& context);
+  PLUGININFORMATIONSWITHGROUP("Random","David Auber","01/12/1999","Ok","1.1","Basic")
+  Random(const tlp::PluginContext* context);
   ~Random();
 
   bool run();

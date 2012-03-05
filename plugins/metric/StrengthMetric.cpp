@@ -18,12 +18,12 @@
  */
 #include "StrengthMetric.h"
 
-DOUBLEPLUGINOFGROUP(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha","1.0","Graph")
+PLUGIN(StrengthMetric)
 
 using namespace std;
 using namespace tlp;
 
-StrengthMetric::StrengthMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {}
+StrengthMetric::StrengthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
 
 StrengthMetric::~StrengthMetric() {}
 //=============================================================

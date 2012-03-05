@@ -19,12 +19,12 @@
 #include <assert.h>
 #include "LoopSelection.h"
 
-BOOLEANPLUGIN(LoopSelection,"Loop Selection","David Auber","20/01/2003","Alpha","1.0")
+PLUGIN(LoopSelection)
 
 using namespace std;
 using namespace tlp;
 
-LoopSelection::LoopSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context) {}
+LoopSelection::LoopSelection(const tlp::PluginContext* context):BooleanAlgorithm(context) {}
 //============================================
 bool LoopSelection::run() {
   result->setAllNodeValue(false);

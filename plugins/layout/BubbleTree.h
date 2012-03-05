@@ -53,7 +53,8 @@
  */
 class BubbleTree:public tlp::LayoutAlgorithm {
 public:
-  BubbleTree(const tlp::PropertyContext& context);
+  PLUGININFORMATIONSWITHGROUP("Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1.0","Tree")
+  BubbleTree(const tlp::PluginContext* context);
   ~BubbleTree();
   bool run();
 private:

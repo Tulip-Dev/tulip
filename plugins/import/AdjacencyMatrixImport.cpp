@@ -85,7 +85,8 @@ const char * paramHelp[] = {
  */
 class AdjacencyMatrixImport:public ImportModule {
 public:
-  AdjacencyMatrixImport(AlgorithmContext context):ImportModule(context) {
+  PLUGININFORMATIONSWITHGROUP("Adjacency Matrix", "Auber David", "05/09/2008","","1.2","File")
+  AdjacencyMatrixImport(tlp::PluginContext* context):ImportModule(context) {
     addParameter<string>("file::name",paramHelp[0]);
   }
   ~AdjacencyMatrixImport() {}
@@ -238,4 +239,4 @@ public:
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(AdjacencyMatrixImport, "Adjacency Matrix", "Auber David", "05/09/2008","","1.2","File")
+PLUGIN(AdjacencyMatrixImport)

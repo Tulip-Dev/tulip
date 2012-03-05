@@ -35,6 +35,7 @@ using namespace tlp;
  **/
 class TreeRadial:public LayoutAlgorithm {
 public:
+  PLUGININFORMATIONSWITHGROUP("Tree Radial","Patrick Mary","14/05/2007","Ok","1.0","Tree")
   Graph *tree;
   vector<float> nRadii;
   vector<float> lRadii;
@@ -339,7 +340,7 @@ public:
     }
   }
 
-  TreeRadial(const PropertyContext &context):LayoutAlgorithm(context), tree(NULL) {
+  TreeRadial(const PluginContext* context):LayoutAlgorithm(context), tree(NULL) {
     addNodeSizePropertyParameter(this);
     addSpacingParameters(this);
     addDependency<LayoutAlgorithm>("Tree Leaf", "1.0");
@@ -402,5 +403,4 @@ public:
   }
 };
 /*@}*/
-LAYOUTPLUGINOFGROUP(TreeRadial,"Tree Radial","Patrick Mary","14/05/2007","Ok","1.0","Tree")
-
+PLUGIN(TreeRadial)

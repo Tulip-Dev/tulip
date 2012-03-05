@@ -49,7 +49,8 @@
  */
 class ConeTreeExtended:public tlp::LayoutAlgorithm {
 public:
-  ConeTreeExtended(const tlp::PropertyContext& context);
+  PLUGININFORMATIONSWITHGROUP("Cone Tree","David Auber","01/04/2001","Stable","1.0","Tree")
+  ConeTreeExtended(const tlp::PluginContext* context);
   ~ConeTreeExtended();
   bool run();
 private:

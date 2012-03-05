@@ -22,7 +22,7 @@
 #include "ConeTreeExtended.h"
 #include "DatasetTools.h"
 
-LAYOUTPLUGINOFGROUP(ConeTreeExtended,"Cone Tree","David Auber","01/04/2001","Stable","1.0","Tree")
+PLUGIN(ConeTreeExtended)
 
 using namespace std;
 using namespace tlp;
@@ -159,7 +159,7 @@ const char * paramHelp[] = {
 }
 #define ORIENTATION "vertical;horizontal;"
 //===============================================================
-ConeTreeExtended::ConeTreeExtended(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
+ConeTreeExtended::ConeTreeExtended(const tlp::PluginContext* context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
 }

@@ -19,7 +19,7 @@
 #include <deque>
 #include "ClusterMetric.h"
 
-DOUBLEPLUGINOFGROUP(ClusterMetric,"Cluster","David Auber","26/02/2003","Beta","1.0","Graph")
+PLUGIN(ClusterMetric)
 
 using namespace std;
 using namespace tlp;
@@ -37,7 +37,7 @@ const char * paramHelp[] = {
 };
 }
 //=================================================
-ClusterMetric::ClusterMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {
+ClusterMetric::ClusterMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
   addParameter<unsigned int>("depth",paramHelp[0],"1");
 }
 //=================================================

@@ -20,10 +20,10 @@
 
 using namespace tlp;
 
-DOUBLEPLUGINOFGROUP(IdMetric,"Id","David Auber","06/04/2000","Alpha","1.0","Misc")
+PLUGIN(IdMetric)
 
 //==================================================================
-IdMetric::IdMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {
+IdMetric::IdMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
 }
 //==================================================================
 bool IdMetric::run() {

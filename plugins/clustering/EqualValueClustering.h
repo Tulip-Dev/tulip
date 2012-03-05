@@ -23,7 +23,8 @@
 
 class EqualValueClustering:public tlp::Algorithm {
 public:
-  EqualValueClustering(tlp::AlgorithmContext);
+  PLUGININFORMATIONSWITHGROUP("Equal Value","David Auber","20/05/2008","Beta","1.1", "Clustering")
+  EqualValueClustering(tlp::PluginContext* context);
   bool run();
 };
 

@@ -94,8 +94,8 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 class OGDFCircular : public OGDFLayoutPluginBase {
 
 public:
-
-  OGDFCircular(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::CircularLayout()) {
+  PLUGININFORMATIONSWITHGROUP("Circular (OGDF)","Carsten Gutwenger","13/11/2007","Ok","1.4","Basic")
+  OGDFCircular(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::CircularLayout()) {
     addParameter<double> ("minDistCircle", paramHelp[0], "20.0", false);
     addParameter<double> ("minDistLevel", paramHelp[1], "20.0", false);
     addParameter<double> ("minDistSibling", paramHelp[2], "10.0", false);
@@ -129,4 +129,4 @@ public:
 
 };
 
-LAYOUTPLUGINOFGROUP(OGDFCircular,"Circular (OGDF)","Carsten Gutwenger","13/11/2007","Ok","1.4","Basic")
+PLUGIN(OGDFCircular)

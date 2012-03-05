@@ -27,11 +27,7 @@
 using namespace std;
 using namespace tlp;
 
-LAYOUTPLUGINOFGROUP(ImprovedWalker, "Improved Walker",
-                    "Julien Testut, Antony Durand, Pascal Ollier, "
-                    "Yashvin Nababsing, Sebastien Leclerc, "
-                    "Thibault Ruchon, Eric Dauchier",
-                    "11/11/04", "ok", "1.0","Tree")
+PLUGIN(ImprovedWalker)
 
 //====================================================================
 const node  ImprovedWalker::BADNODE;
@@ -69,7 +65,7 @@ public:
   }
 };
 //====================================================================
-ImprovedWalker::ImprovedWalker(const tlp::PropertyContext& context) :
+ImprovedWalker::ImprovedWalker(const tlp::PluginContext* context) :
   LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addOrientationParameters(this);

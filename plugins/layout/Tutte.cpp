@@ -22,12 +22,12 @@
 #include <tulip/TriconnectedTest.h>
 #include "Tutte.h"
 
-LAYOUTPLUGINOFGROUP(Tutte,"3-Connected (Tutte)","David Auber","06/11/2002","Beta","1.0","Planar")
+PLUGIN(Tutte)
 
 using namespace std;
 using namespace tlp;
 //====================================================
-Tutte::Tutte(const tlp::PropertyContext &context):LayoutAlgorithm(context)
+Tutte::Tutte(const tlp::PluginContext* context):LayoutAlgorithm(context)
 {}
 //====================================================
 Tutte::~Tutte() {}

@@ -25,7 +25,7 @@
 #include "DatasetTools.h"
 
 
-LAYOUTPLUGINOFGROUP(HierarchicalGraph,"Hierarchical Graph","David Auber","23/05/2000","Alpha","1.0","Hierarchical")
+PLUGIN(HierarchicalGraph)
 
 using namespace std;
 using namespace tlp;
@@ -47,7 +47,7 @@ const char * paramHelp[] = {
 //================================================================================
 #define ORIENTATION "horizontal;vertical;"
 //================================================================================
-HierarchicalGraph::HierarchicalGraph(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
+HierarchicalGraph::HierarchicalGraph(const tlp::PluginContext* context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
   addSpacingParameters(this);

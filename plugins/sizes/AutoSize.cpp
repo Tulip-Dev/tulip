@@ -32,7 +32,8 @@ using namespace tlp;
  */
 class AutoSize:public SizeAlgorithm {
 public:
-  AutoSize(const PropertyContext &context):SizeAlgorithm(context) {}
+  PLUGININFORMATIONSWITHGROUP("Auto Sizing","Auber","04/05/2001","","1.0", "Size")
+  AutoSize(const tlp::PluginContext* context):SizeAlgorithm(context) {}
 
   bool run() {
     node n;
@@ -43,7 +44,6 @@ public:
     result->setEdgeValue(e, getEdgeValue(e));
     return true;
   }
-
 
 private:
   Size getNodeValue(const node n) {
@@ -101,4 +101,4 @@ private:
 
 };
 /*@}*/
-SIZEPLUGIN(AutoSize,"Auto Sizing","Auber","04/05/2001","","1.0")
+PLUGIN(AutoSize)

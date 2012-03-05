@@ -23,7 +23,8 @@
 
 class ConnectedComponentPacking: public tlp::LayoutAlgorithm {
 public:
-  ConnectedComponentPacking(const tlp::PropertyContext& context);
+  PLUGININFORMATIONSWITHGROUP("Connected Component Packing", "David Auber", "26/05/05", "beta", "1.0", "Misc")
+  ConnectedComponentPacking(const tlp::PluginContext* context);
   bool run();
 
 private:

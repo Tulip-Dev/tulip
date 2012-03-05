@@ -59,8 +59,9 @@ static const char * paramHelp[] = { HTML_HELP_OPEN()
  */
 class FitToLabel: public SizeAlgorithm {
 public:
+  PLUGININFORMATIONSWITHGROUP("Fit to label","Tulip Team","25/01/2006","","1.0", "Size")
   //==============================================Algorithm======
-  FitToLabel(const PropertyContext &context) :
+  FitToLabel(const PluginContext* context) :
     SizeAlgorithm(context) {
     addParameter<StringProperty> ("prop::label", paramHelp[0], "viewLabel");
     addParameter<StringProperty> ("prop::font", paramHelp[1], "viewFont");
@@ -105,4 +106,4 @@ public:
   //====================================================
 };
 /*@}*/
-SIZEPLUGIN(FitToLabel,"Fit to label","Tulip Team","25/01/2006","","1.0")
+PLUGIN(FitToLabel)

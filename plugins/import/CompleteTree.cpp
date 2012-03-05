@@ -64,7 +64,8 @@ static const char * paramHelp[] = {
  */
 class CompleteTree:public ImportModule {
 public:
-  CompleteTree(AlgorithmContext context):ImportModule(context) {
+  PLUGININFORMATIONSWITHGROUP("Complete Tree","Auber","08/09/2002","","1.1","Graphs")
+  CompleteTree(tlp::PluginContext* context):ImportModule(context) {
     addParameter<unsigned int>("depth",paramHelp[0],"5");
     addParameter<unsigned int>("degree",paramHelp[1],"2");
     addParameter<bool>("tree layout",paramHelp[2],"false");
@@ -121,4 +122,4 @@ public:
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(CompleteTree,"Complete Tree","Auber","08/09/2002","","1.1","Graphs")
+PLUGIN(CompleteTree)

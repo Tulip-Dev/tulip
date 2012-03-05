@@ -27,12 +27,12 @@ static const char * paramHelp[] = {
   HTML_HELP_CLOSE()
 };
 
-LAYOUTPLUGINOFGROUP(Random,"Random","David Auber","01/12/1999","Ok","1.1","Basic")
+PLUGIN(Random)
 
 using namespace std;
 using namespace tlp;
 
-Random::Random(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
+Random::Random(const tlp::PluginContext* context):LayoutAlgorithm(context) {
   addParameter<bool>("3D layout", paramHelp[0], "true");
 }
 

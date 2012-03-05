@@ -34,7 +34,8 @@
  */
 class MultipleEdgeSelection:public tlp::BooleanAlgorithm {
 public:
-  MultipleEdgeSelection(const tlp::PropertyContext &);
+  PLUGININFORMATIONSWITHGROUP("Multiple Edge","David Auber","20/01/2003","Alpha","1.0", "Selection")
+  MultipleEdgeSelection(const tlp::PluginContext* context);
   bool run();
 };
 /*@}*/

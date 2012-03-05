@@ -56,7 +56,8 @@ struct Strahler {
  */
 class StrahlerMetric:public tlp::DoubleAlgorithm {
 public:
-  StrahlerMetric(const tlp::PropertyContext &);
+  PLUGININFORMATIONSWITHGROUP("Strahler","David Auber","06/04/2000","Alpha","1.0","Graph")
+  StrahlerMetric(const tlp::PluginContext* context);
   bool run();
   bool check(std::string &);
 

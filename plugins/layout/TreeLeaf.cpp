@@ -21,7 +21,7 @@
 #include "DatasetTools.h"
 #include "Orientation.h"
 
-LAYOUTPLUGINOFGROUP(TreeLeaf,"Tree Leaf","David Auber","01/12/1999","ok","1.0","Tree")
+PLUGIN(TreeLeaf)
 
 using namespace std;
 using namespace tlp;
@@ -82,7 +82,7 @@ float TreeLeaf::dfsPlacement(tlp::Graph* tree, tlp::node n, float x, float y, un
   return maxX;
 }
 
-TreeLeaf::TreeLeaf(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
+TreeLeaf::TreeLeaf(const tlp::PluginContext* context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addOrientationParameters(this);
   addSpacingParameters(this);

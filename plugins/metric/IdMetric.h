@@ -29,7 +29,8 @@
  */
 class IdMetric:public tlp::DoubleAlgorithm {
 public:
-  IdMetric(const tlp::PropertyContext &);
+  PLUGININFORMATIONSWITHGROUP("Id","David Auber","06/04/2000","Alpha","1.0","Misc")
+  IdMetric(const tlp::PluginContext* context);
   bool run();
 };
 /*@}*/

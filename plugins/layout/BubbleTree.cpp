@@ -21,7 +21,7 @@
 #include "BubbleTree.h"
 #include "DatasetTools.h"
 
-LAYOUTPLUGINOFGROUP(BubbleTree,"Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1.0","Tree")
+PLUGIN(BubbleTree)
 
 using namespace std;
 using namespace tlp;
@@ -315,7 +315,7 @@ const char * paramHelp[] = {
 };
 }
 
-BubbleTree::BubbleTree(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
+BubbleTree::BubbleTree(const tlp::PluginContext* context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addParameter<bool>("complexity",paramHelp[0],"true");
   addDependency<LayoutAlgorithm>("Connected Component Packing", "1.0");

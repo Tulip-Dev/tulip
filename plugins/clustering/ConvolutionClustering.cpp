@@ -26,10 +26,10 @@
 using namespace std;
 using namespace tlp;
 
-DOUBLEPLUGINOFGROUP(ConvolutionClustering,"Convolution","David Auber","14/08/2001","Alpha","2.0","Clustering")
+PLUGIN(ConvolutionClustering)
 
 //================================================================================
-ConvolutionClustering::ConvolutionClustering(PropertyContext context):DoubleAlgorithm(context) {}
+ConvolutionClustering::ConvolutionClustering(PluginContext* context):DoubleAlgorithm(context) {}
 //================================================================================
 ConvolutionClustering::~ConvolutionClustering() {}
 //================================================================================

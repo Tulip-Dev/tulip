@@ -66,7 +66,8 @@ static const char * paramHelp[] = {
  */
 class DotImport:public ImportModule {
 public:
-  DotImport(AlgorithmContext context):ImportModule(context) {
+  PLUGININFORMATIONSWITHGROUP("dot (graphviz)","Gerald Gainant", "01/03/2004","Import plugin for dot files",".01","File")
+  DotImport(tlp::PluginContext* context):ImportModule(context) {
     addParameter<string>("file::filename",paramHelp[0]);
   }
   ~DotImport() {}
@@ -103,5 +104,4 @@ public:
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(DotImport,"dot (graphviz)","Gerald Gainant", "01/03/2004","Import plugin for dot files",".01","File")
-
+PLUGIN(DotImport)

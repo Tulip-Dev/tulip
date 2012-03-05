@@ -37,7 +37,8 @@ struct NodeInfo {
  */
 class StrongComponent:public tlp::DoubleAlgorithm {
 public:
-  StrongComponent(const tlp::PropertyContext &);
+  PLUGININFORMATIONSWITHGROUP("Strongly Connected Component","David Auber","12/06/2001","Alpha","1.0","Component")
+  StrongComponent(const tlp::PluginContext* context);
   ~StrongComponent();
   bool run();
   bool check(std::string &);

@@ -104,7 +104,8 @@ class OGDFFastMultipoleEmbedder : public OGDFLayoutPluginBase {
 
 public:
 
-  OGDFFastMultipoleEmbedder(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleEmbedder()) {
+  PLUGININFORMATIONSWITHGROUP("Fast Multipole Embedder (OGDF)","Martin Gronemann","12/11/2007","Ok","1.0","Force Directed")
+  OGDFFastMultipoleEmbedder(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleEmbedder()) {
     addParameter<int>("number of iterations", paramHelp[0], "100");
     addParameter<int>("number of coefficients", paramHelp[1], "5");
     addParameter<bool>("randomize layout", paramHelp[2], "true");
@@ -145,4 +146,4 @@ public:
 
 };
 
-LAYOUTPLUGINOFGROUP(OGDFFastMultipoleEmbedder,"Fast Multipole Embedder (OGDF)","Martin Gronemann","12/11/2007","Ok","1.0","Force Directed")
+PLUGIN(OGDFFastMultipoleEmbedder)

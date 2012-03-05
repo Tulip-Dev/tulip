@@ -28,7 +28,8 @@
  */
 class RandomMetric:public tlp::DoubleAlgorithm {
 public:
-  RandomMetric(const tlp::PropertyContext &);
+  PLUGININFORMATIONSWITHGROUP("Random","David Auber","04/10/2001","Alpha","1.0","Misc")
+  RandomMetric(const tlp::PluginContext* context);
   bool run();
 };
 /*@}*/

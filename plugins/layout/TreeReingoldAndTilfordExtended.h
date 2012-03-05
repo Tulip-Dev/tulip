@@ -50,7 +50,8 @@ struct LR {
  */
 class TreeReingoldAndTilfordExtended:public tlp::LayoutAlgorithm {
 public:
-  TreeReingoldAndTilfordExtended(const tlp::PropertyContext &);
+  PLUGININFORMATIONSWITHGROUP("Hierarchical Tree (R-T Extended)","David Auber and Romain Bourqui","24/09/2010","Beta","1.1","Tree")
+  TreeReingoldAndTilfordExtended(const tlp::PluginContext* context);
   ~TreeReingoldAndTilfordExtended();
   bool run();
 

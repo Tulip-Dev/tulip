@@ -20,7 +20,7 @@
 
 using namespace tlp;
 
-DOUBLEPLUGINOFGROUP(DegreeMetric,"Degree","David Auber","04/10/2001","Stable","1.0","Graph")
+PLUGIN(DegreeMetric)
 
 namespace {
 const char * paramHelp[] = {
@@ -58,7 +58,7 @@ const char * paramHelp[] = {
 #define IN 1
 #define OUT 2
 //==============================================================================
-DegreeMetric::DegreeMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {
+DegreeMetric::DegreeMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
   addParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
   addParameter<DoubleProperty>("metric", paramHelp[1], "", false);
   addParameter<bool>("norm", paramHelp[2], "false", false);

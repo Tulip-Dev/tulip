@@ -24,7 +24,7 @@
 
 using namespace std;
 
-OGDFLayoutPluginBase::OGDFLayoutPluginBase(const tlp::PropertyContext &context,
+OGDFLayoutPluginBase::OGDFLayoutPluginBase(const tlp::PluginContext* context,
     ogdf::LayoutModule *ogdfLayoutAlgo) :
   tlp::LayoutAlgorithm(context), tlpToOGDF(NULL), ogdfLayoutAlgo(ogdfLayoutAlgo) {
 }

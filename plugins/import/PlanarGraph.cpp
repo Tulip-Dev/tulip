@@ -55,7 +55,8 @@ struct Triangle {
  */
 class PlanarGraph:public ImportModule {
 public:
-  PlanarGraph(AlgorithmContext context):ImportModule(context) {
+  PLUGININFORMATIONSWITHGROUP("Planar Graph","Auber","25/06/2005","","1.0","Graphs")
+  PlanarGraph(tlp::PluginContext* context):ImportModule(context) {
     addParameter<unsigned int>("nodes", paramHelp[0], "30");
   }
   ~PlanarGraph() {}
@@ -117,4 +118,4 @@ public:
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(PlanarGraph,"Planar Graph","Auber","25/06/2005","","1.0","Graphs")
+PLUGIN(PlanarGraph)

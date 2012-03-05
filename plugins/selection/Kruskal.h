@@ -39,7 +39,8 @@
 class Kruskal:public tlp::BooleanAlgorithm {
 
 public:
-  Kruskal(const tlp::PropertyContext& context);
+  PLUGININFORMATIONSWITHGROUP("Kruskal","Anthony DON","14/04/03","Alpha","1.0", "Selection")
+  Kruskal(const tlp::PluginContext* context);
   ~Kruskal();
   bool run();
   bool check(std::string &);

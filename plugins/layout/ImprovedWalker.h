@@ -49,7 +49,12 @@ class ImprovedWalker : public tlp::LayoutAlgorithm {
   friend class ImprovedWalkerUnitTests;
 
 public:
-  ImprovedWalker(const tlp::PropertyContext&);
+  PLUGININFORMATIONSWITHGROUP( "Improved Walker",
+    "Julien Testut, Antony Durand, Pascal Ollier, "
+    "Yashvin Nababsing, Sebastien Leclerc, "
+    "Thibault Ruchon, Eric Dauchier",
+    "11/11/04", "ok", "1.0","Tree")
+  ImprovedWalker(const tlp::PluginContext* context);
   ~ImprovedWalker();
 
   bool run();
