@@ -175,6 +175,7 @@ int main(int argc,char **argv) {
 
   // Create perspective object
   Perspective *perspective = PluginLister::instance()->getPluginObject<Perspective>(perspectiveName.toStdString(), context);
+  Perspective::setInstance(perspective);
 
   if (!perspective)
     usage("Failed to create perspective: " + perspectiveName);

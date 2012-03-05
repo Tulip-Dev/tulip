@@ -22,6 +22,7 @@
 
 #include <tulip/ForEach.h>
 #include <tulip/VectorEditionWidget.h>
+#include <tulip/GraphPropertiesModel.h>
 
 
 namespace tlp {
@@ -60,53 +61,11 @@ void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& 
     w->setEnabled(false);
     return;
   }
-
   PROPTYPE* prop = val.value<PROPTYPE*>();
-
-  QSet<QString> locals,inherited;
-  std::string name;
-  forEach(name,g->getProperties()) {
-    PropertyInterface* pi = g->getProperty(name);
-
-    if (dynamic_cast<PROPTYPE*>(pi) == NULL)
-      continue;
-
-    if (g->existLocalProperty(name))
-      locals.insert(name.c_str());
-    else
-      inherited.insert(name.c_str());
-  }
-
-  QFont f;
-  f.setBold(true);
   QComboBox* combo = static_cast<QComboBox*>(w);
-  combo->clear();
-
-  int index=0;
-  foreach(QString s,inherited) {
-    combo->addItem(s);
-    combo->setItemData(index,f,Qt::FontRole);
-    combo->setItemData(index,QObject::trUtf8("Inherited"),Qt::ToolTipRole);
-
-    if (prop && s == prop->getName().c_str())
-      combo->setCurrentIndex(index);
-
-    index++;
-  }
-
-  foreach(QString s,locals) {
-    combo->addItem(s);
-    combo->setItemData(index,QObject::trUtf8("Local"),Qt::ToolTipRole);
-
-    if (prop && s == prop->getName().c_str())
-      combo->setCurrentIndex(index);
-
-    index++;
-  }
-
-  if (!prop) {
-    combo->setCurrentIndex(0);
-  }
+  GraphPropertiesModel<PROPTYPE>* model = new GraphPropertiesModel<PROPTYPE>(g);
+  combo->setModel(model);
+  combo->setCurrentIndex(model->rowOf(prop));
 }
 
 template<typename PROPTYPE>

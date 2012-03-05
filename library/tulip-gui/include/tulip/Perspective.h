@@ -56,6 +56,7 @@ protected:
   QVariantMap _parameters;
 public:
 
+  static void setInstance(tlp::Perspective*);
   static tlp::Perspective* instance();
 
   template<typename T>

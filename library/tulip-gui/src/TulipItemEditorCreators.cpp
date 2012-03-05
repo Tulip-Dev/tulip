@@ -36,6 +36,7 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/TulipFontWidget.h>
 #include <tulip/GlyphManager.h>
+#include <tulip/GraphPropertiesModel.h>
 
 using namespace tlp;
 
@@ -133,56 +134,23 @@ QWidget* PropertyInterfaceEditorCreator::createWidget(QWidget* parent) const {
 }
 
 void PropertyInterfaceEditorCreator::setEditorData(QWidget* w, const QVariant& val,tlp::Graph* g) {
+  if (g == NULL) {
+    w->setEnabled(false);
+    return;
+  }
+
   PropertyInterface* prop = val.value<PropertyInterface*>();
-
-  QSet<QString> locals,inherited;
-  std::string name;
-  forEach(name,g->getProperties()) {
-    if (g->existLocalProperty(name))
-      locals.insert(name.c_str());
-    else
-      inherited.insert(name.c_str());
-  }
-
-  QFont f;
-  f.setBold(true);
   QComboBox* combo = static_cast<QComboBox*>(w);
-  combo->clear();
-
-  int index=0;
-  foreach(QString s,inherited) {
-    combo->addItem(s);
-    combo->setItemData(index,f,Qt::FontRole);
-    combo->setItemData(index,QObject::trUtf8("Inherited"),Qt::ToolTipRole);
-
-    if (prop && s == prop->getName().c_str())
-      combo->setCurrentIndex(index);
-
-    index++;
-  }
-
-  foreach(QString s,locals) {
-    combo->addItem(s);
-    combo->setItemData(index,QObject::trUtf8("Local"),Qt::ToolTipRole);
-
-    if (prop && s == prop->getName().c_str())
-      combo->setCurrentIndex(index);
-
-    index++;
-  }
-
-  if (!prop)
-    combo->setCurrentIndex(0);
+  GraphPropertiesModel<PropertyInterface>* model = new GraphPropertiesModel<PropertyInterface>(g);
+  combo->setModel(model);
+  combo->setCurrentIndex(model->rowOf(prop));
 }
 
 QVariant PropertyInterfaceEditorCreator::editorData(QWidget* w,tlp::Graph* g) {
   QComboBox* combo = static_cast<QComboBox*>(w);
   std::string propName = combo->currentText().toStdString();
   PropertyInterface *prop = NULL;
-
-  if (g->existProperty(propName))
-    prop = g->getProperty(propName);
-
+  prop = g->getProperty(propName);
   return QVariant::fromValue<PropertyInterface*>(prop);
 }
 
