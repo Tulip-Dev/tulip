@@ -57,9 +57,10 @@ int GlyphManager::glyphId(string name) {
 }
 //====================================================
 void GlyphManager::loadGlyphPlugins() {
-  string pluginName;
-  forEach(pluginName, GlyphLister::availablePlugins()) {
-    int pluginId=GlyphLister::pluginInformations(pluginName).getId();
+  std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<Glyph>());
+  for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
+    string pluginName(*it);
+    int pluginId=PluginLister::pluginInformations(pluginName)->getId();
     glyphIdToName[pluginId]=pluginName;
     nameToGlyphId[pluginName]=pluginId;
   }
@@ -74,19 +75,22 @@ void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputDat
 
   // then set a new one
   GlyphContext gc = GlyphContext(graph,glGraphInputData);
-  glyphs.setAll(GlyphLister::getPluginObject("3D - Cube OutLined", &gc));
+  glyphs.setAll(PluginLister::instance()->getPluginObject<Glyph>("3D - Cube OutLined", &gc));
 
-  string glyphName;
-  forEach(glyphName, GlyphLister::availablePlugins()) {
-    Glyph *newGlyph = GlyphLister::getPluginObject(glyphName, &gc);
-    glyphs.set(GlyphLister::pluginInformations(glyphName).getId(), newGlyph);
+  std::list<std::string> glyphList(PluginLister::instance()->availablePlugins<Glyph>());
+  for(std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
+    string glyphName(*it);
+    Glyph *newGlyph = PluginLister::instance()->getPluginObject<Glyph>(glyphName, &gc);
+    glyphs.set(PluginLister::pluginInformations(glyphName)->getId(), newGlyph);
   }
 }
 
 void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Glyph *>& glyphs) {
-  string glyphName;
-  forEach(glyphName, GlyphLister::availablePlugins()) {
-    delete glyphs.get(GlyphLister::pluginInformations(glyphName).getId());
+
+  std::list<std::string> glyphList(PluginLister::instance()->availablePlugins<Glyph>());
+  for(std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
+    string glyphName(*it);
+    delete glyphs.get(PluginLister::pluginInformations(glyphName)->getId());
   }
 }
 }

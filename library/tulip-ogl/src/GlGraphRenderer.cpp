@@ -28,6 +28,8 @@
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlVertexArrayVisitor.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlEdge.h>
 
 using namespace std;
 
