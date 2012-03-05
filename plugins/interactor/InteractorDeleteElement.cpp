@@ -29,11 +29,11 @@ using namespace tlp;
 class InteractorDeleteElement  : public NodeLinkDiagramComponentInteractor {
 
 public:
-
+  PLUGININFORMATIONSWITHGROUP("InteractorDeleteElement", "Tulip Team", "01/04/2009", "Delete Element Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */
-  InteractorDeleteElement():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_del.png","Delete nodes or edges") {
+  InteractorDeleteElement(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_del.png","Delete nodes or edges") {
     setPriority(1);
     setConfigurationWidgetText("<h3>Delete interactor</h3><b>Mouse left</b> click on an element to delete it");
   }
@@ -48,4 +48,4 @@ public:
 
 };
 
-INTERACTORPLUGIN(InteractorDeleteElement, "InteractorDeleteElement", "Tulip Team", "01/04/2009", "Delete Element Interactor", "1.0")
+PLUGIN(InteractorDeleteElement)

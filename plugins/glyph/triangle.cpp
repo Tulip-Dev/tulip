@@ -36,7 +36,8 @@ using namespace tlp;
 
 class Triangle : public Glyph {
 public:
-  Triangle(GlyphContext *gc=NULL);
+  GLYPHINFORMATIONS("2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0", 11)
+  Triangle(const tlp::PluginContext *context =NULL);
   virtual ~Triangle();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n,float lod);
@@ -50,9 +51,9 @@ protected:
 GlTriangle* Triangle::triangle=0;
 
 //=====================================================
-GLYPHPLUGIN(Triangle, "2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0", 11)
+PLUGIN(Triangle)
 //===================================================================================
-Triangle::Triangle(GlyphContext *gc): Glyph(gc) {
+Triangle::Triangle(const tlp::PluginContext* context): Glyph(context) {
   if(!triangle)
     triangle = new GlTriangle(Coord(0,0,0),Size(0.5,0.5,0));
 }

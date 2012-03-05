@@ -105,9 +105,8 @@ tlp::DataSet AlgorithmRunnerItem::params() const {
 }
 
 // **********************************************
-template<typename ALG,typename PROPTYPE>
+template<typename PROPTYPE>
 class PropertyPluginFacade: public PluginFacade {
-  typedef tlp::StaticPluginLister<ALG,tlp::PropertyContext> Lister;
   std::string _defaultPropName;
   PropertyInterface* _lastComputedProperty;
 public:
@@ -146,18 +145,16 @@ public:
   }
   QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
-    std::string name;
-    tlp::Iterator<std::string> *it = Lister::availablePlugins();
-
-    while (it->hasNext()) {
-      name = it->next();
-      QString group = Lister::pluginInformations(name).getGroup().c_str();
+    
+    std::list<std::string> plugins = PluginLister::instance()->availablePlugins<PROPTYPE>();
+    for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
+      std::string name(*it);
+      QString group = PluginLister::pluginInformations(name)->getGroup().c_str();
       QStringList lst = result[group];
       lst << name.c_str();
       result[group] = lst;
     }
 
-    delete it;
     return result;
   }
   bool computeProperty(tlp::Graph* g, const QString &alg, QString &msg, tlp::PluginProgress *progress, tlp::DataSet *data, bool isLocal=false) {
@@ -185,7 +182,7 @@ public:
     return result;
   }
   tlp::ParameterList parameters(const QString &alg) {
-    return Lister::getPluginParameters(alg.toStdString());
+    return PluginLister::getPluginParameters(alg.toStdString());
   }
 };
 
@@ -194,17 +191,15 @@ class GeneralPluginFacade: public PluginFacade {
 public:
   virtual QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
-    Iterator<std::string>* it = AlgorithmLister::availablePlugins();
-
-    while (it->hasNext()) {
-      QString name = it->next().c_str();
-      QString group = AlgorithmLister::pluginInformations(name.toStdString()).getGroup().c_str();
+    std::list<std::string> algorithms = PluginLister::instance()->availablePlugins<Algorithm>();
+    for(std::list<std::string>::const_iterator it = algorithms.begin(); it != algorithms.end(); ++it) {
+      QString name = it->c_str();
+      QString group = PluginLister::pluginInformations(name.toStdString())->getGroup().c_str();
       QStringList nameList = result[group];
       nameList << name;
       result[group] = nameList;
     }
 
-    delete it;
     return result;
   }
   virtual bool computeProperty(tlp::Graph* g,const QString& alg, QString& msg, tlp::PluginProgress* progress=0, tlp::DataSet *data=0,bool isLocal=false) {
@@ -214,7 +209,7 @@ public:
     return result;
   }
   virtual tlp::ParameterList parameters(const QString& alg) {
-    return AlgorithmLister::getPluginParameters(alg.toStdString());
+    return PluginLister::getPluginParameters(alg.toStdString());
   }
   PropertyInterface* lastComputedProperty() const {
     return NULL;
@@ -227,14 +222,14 @@ QMap<QString,PluginFacade *> AlgorithmRunner::FACADES_UI_NAMES;
 
 void AlgorithmRunner::staticInit() {
   if (FACADES_UI_NAMES.empty()) {
-    FACADES_UI_NAMES[trUtf8("Coloring algorithms")] = new PropertyPluginFacade<tlp::ColorAlgorithm,tlp::ColorProperty>("viewColor");
-    FACADES_UI_NAMES[trUtf8("Filtering algorithms")] = new PropertyPluginFacade<tlp::BooleanAlgorithm,tlp::BooleanProperty>("viewSelection");
-    FACADES_UI_NAMES[trUtf8("Metric algorithms (double)")] = new PropertyPluginFacade<tlp::DoubleAlgorithm,tlp::DoubleProperty>("viewMetric");
-    FACADES_UI_NAMES[trUtf8("Metric algorithms (integer)")] = new PropertyPluginFacade<tlp::IntegerAlgorithm,tlp::IntegerProperty>("viewInteger");
-    FACADES_UI_NAMES[trUtf8("Labeling algorithms")] = new PropertyPluginFacade<tlp::StringAlgorithm,tlp::StringProperty>("viewLabel");
-    FACADES_UI_NAMES[trUtf8("Layout algorithms")] = new PropertyPluginFacade<tlp::LayoutAlgorithm,tlp::LayoutProperty>("viewLayout");
-    FACADES_UI_NAMES[trUtf8("Resizing algorithms")] = new PropertyPluginFacade<tlp::SizeAlgorithm,tlp::SizeProperty>("viewSize");
-    FACADES_UI_NAMES[trUtf8("Filtering algorithms")] = new PropertyPluginFacade<tlp::BooleanAlgorithm,tlp::BooleanProperty>("viewSelection");
+    FACADES_UI_NAMES[trUtf8("Coloring algorithms")] = new PropertyPluginFacade<tlp::ColorProperty>("viewColor");
+    FACADES_UI_NAMES[trUtf8("Filtering algorithms")] = new PropertyPluginFacade<tlp::BooleanProperty>("viewSelection");
+    FACADES_UI_NAMES[trUtf8("Metric algorithms (double)")] = new PropertyPluginFacade<tlp::DoubleProperty>("viewMetric");
+    FACADES_UI_NAMES[trUtf8("Metric algorithms (integer)")] = new PropertyPluginFacade<tlp::IntegerProperty>("viewInteger");
+    FACADES_UI_NAMES[trUtf8("Labeling algorithms")] = new PropertyPluginFacade<tlp::StringProperty>("viewLabel");
+    FACADES_UI_NAMES[trUtf8("Layout algorithms")] = new PropertyPluginFacade<tlp::LayoutProperty>("viewLayout");
+    FACADES_UI_NAMES[trUtf8("Resizing algorithms")] = new PropertyPluginFacade<tlp::SizeProperty>("viewSize");
+    FACADES_UI_NAMES[trUtf8("Filtering algorithms")] = new PropertyPluginFacade<tlp::BooleanProperty>("viewSelection");
     FACADES_UI_NAMES[trUtf8("General algorithms")] = new GeneralPluginFacade();
   }
 }

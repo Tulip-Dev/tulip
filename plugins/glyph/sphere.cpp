@@ -45,8 +45,8 @@ using namespace tlp;
  */
 class Sphere: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
-  Sphere(GlyphContext *gc = NULL);
-  Sphere(EdgeExtremityGlyphContext *gc);
+  GLYPHINFORMATIONS("3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0", 2)
+  Sphere(const tlp::PluginContext *context = NULL);
   virtual ~Sphere();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
@@ -58,15 +58,11 @@ private:
                         const string& texturePath, float lod);
 };
 
-GLYPHPLUGIN(Sphere, "3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0", 2)
-EEGLYPHPLUGIN(Sphere, "3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0", 2)
+PLUGIN(Sphere)
 
 //=========================================================================================
-Sphere::Sphere(GlyphContext *gc) :
-  Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
-}
-Sphere::Sphere(EdgeExtremityGlyphContext *gc) :
-  Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
+Sphere::Sphere(const tlp::PluginContext* context) :
+  Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
 }
 
 Sphere::~Sphere() {

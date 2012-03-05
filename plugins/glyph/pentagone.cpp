@@ -44,8 +44,8 @@ using namespace tlp;
  */
 class Pentagone: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
-  Pentagone(GlyphContext *gc = NULL);
-  Pentagone(EdgeExtremityGlyphContext *gc);
+  GLYPHINFORMATIONS("2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1.0", 12)
+  Pentagone(const tlp::PluginContext *context = NULL);
   virtual ~Pentagone();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
@@ -61,16 +61,10 @@ protected:
 GlPentagon* Pentagone::pentagon=0;
 
 //=====================================================
-GLYPHPLUGIN(Pentagone, "2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1.0", 12)
-EEGLYPHPLUGIN(Pentagone, "2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1.0", 12)
+PLUGIN(Pentagone)
 //===================================================================================
-Pentagone::Pentagone(GlyphContext *gc) :
-  Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
-  if(!pentagon)
-    pentagon=new GlPentagon(Coord(0,0,0),Size(.5,.5,0));
-}
-Pentagone::Pentagone(EdgeExtremityGlyphContext *gc) :
-  Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
+Pentagone::Pentagone(const tlp::PluginContext* context) :
+  Glyph(context), EdgeExtremityGlyphFrom2DGlyph(context) {
   if(!pentagon)
     pentagon=new GlPentagon(Coord(0,0,0),Size(.5,.5,0));
 }

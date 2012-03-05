@@ -34,7 +34,8 @@ const string gradient(TulipBitmapDir + "titlebarGradient.png");
 
 class Window : public Glyph {
 public:
-  Window(GlyphContext* context);
+  GLYPHINFORMATIONS("2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0", 17)
+  Window(const tlp::PluginContext *context);
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void getTextBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
@@ -65,9 +66,9 @@ private:
 3------------2  -0.5,-0.5        0.5, -0.5
 */
 
-GLYPHPLUGIN(Window, "2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0", 17)
+PLUGIN(Window)
 
-Window::Window(GlyphContext* context):
+Window::Window(const tlp::PluginContext* context):
   Glyph(context),
   _rectColor(205, 205, 205, 255),
   _textColor(205, 205, 205, 255),

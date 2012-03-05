@@ -32,11 +32,11 @@ using namespace tlp;
 class InteractorEditEdgeBends  : public NodeLinkDiagramComponentInteractor {
 
 public:
-
+  PLUGININFORMATIONSWITHGROUP("InteractorEditEdgeBends", "Tulip Team", "01/04/2009", "Edit Edge Bends Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */
-  InteractorEditEdgeBends():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends.png","Edit edge bends") {
+  InteractorEditEdgeBends(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends.png","Edit edge bends") {
     setPriority(1);
     setConfigurationWidgetText(QString("<h3>Edit edge bends interactor</h3>")+
                                "Modify edge bends<br/><br/>"+
@@ -64,4 +64,4 @@ public:
 
 };
 
-INTERACTORPLUGIN(InteractorEditEdgeBends, "InteractorEditEdgeBends", "Tulip Team", "01/04/2009", "Edit Edge Bends Interactor", "1.0")
+PLUGIN(InteractorEditEdgeBends)

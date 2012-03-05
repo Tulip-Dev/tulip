@@ -32,11 +32,11 @@ using namespace tlp;
 class InteractorSelectionModifier  : public NodeLinkDiagramComponentInteractor {
 
 public:
-
+  PLUGININFORMATIONSWITHGROUP("InteractorSelectionModifier", "Tulip Team", "01/04/2009", "Selection Modifier Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */
-  InteractorSelectionModifier():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_move.png","Move/Reshape selection") {
+  InteractorSelectionModifier(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_move.png","Move/Reshape selection") {
     setPriority(3);
     setConfigurationWidgetText(QString("<h3>Selection modifier interactor</h3>")+
                                "Modify selection<br/><br/>"+
@@ -67,4 +67,4 @@ public:
 
 };
 
-INTERACTORPLUGIN(InteractorSelectionModifier, "InteractorSelectionModifier", "Tulip Team", "01/04/2009", "Selection Modifier Interactor", "1.0")
+PLUGIN(InteractorSelectionModifier)

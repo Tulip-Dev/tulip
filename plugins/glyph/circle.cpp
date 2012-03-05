@@ -43,8 +43,8 @@ using namespace tlp;
  */
 class Circle: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
-  Circle(GlyphContext *gc = NULL);
-  Circle(EdgeExtremityGlyphContext *gc);
+  GLYPHINFORMATIONS("2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1", 14)
+  Circle(const tlp::PluginContext* context = NULL);
   virtual ~Circle();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
@@ -59,18 +59,12 @@ protected:
 GlCircle* Circle::circle=0;
 
 //=====================================================
-GLYPHPLUGIN(Circle, "2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1", 14)
-EEGLYPHPLUGIN(Circle,"2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1", 14)
+PLUGIN(Circle)
 //===================================================================================
-Circle::Circle(GlyphContext *gc) :
-  Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
+Circle::Circle(const tlp::PluginContext* context) :
+  Glyph(context), EdgeExtremityGlyphFrom2DGlyph(context) {
   if(!circle)
     circle=new GlCircle(Coord(0,0,0),0.5,Color(0,0,0,255),Color(0,0,0,255),true,true,0.,30);
-}
-Circle::Circle(EdgeExtremityGlyphContext  *gc) :
-  Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
-  if(!circle)
-    circle=new GlCircle(Coord(0,0,0),1.,Color(0,0,0,255),Color(0,0,0,255),true,true);
 }
 //=====================================================
 Circle::~Circle() {

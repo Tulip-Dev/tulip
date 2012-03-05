@@ -44,8 +44,8 @@ using namespace tlp;
  */
 class Hexagone: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
-  Hexagone(GlyphContext *gc = NULL);
-  Hexagone(EdgeExtremityGlyphContext *gc);
+  GLYPHINFORMATIONS("2D - Hexagone", "David Auber", "09/07/2002", "Textured Hexagone", "1.0", 13)
+  Hexagone(const tlp::PluginContext *context = NULL);
   virtual ~Hexagone();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
@@ -59,16 +59,10 @@ protected :
 GlHexagon* Hexagone::hexagon=0;
 
 //=====================================================
-GLYPHPLUGIN(Hexagone, "2D - Hexagone", "David Auber", "09/07/2002", "Textured Hexagone", "1.0", 13)
-EEGLYPHPLUGIN(Hexagone,"2D - Hexagone", "David Auber", "09/07/2002", "Textured Hexagone", "1.0", 13)
+PLUGIN(Hexagone)
 //===================================================================================
-Hexagone::Hexagone(GlyphContext *gc) :
-  Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
-  if(!hexagon)
-    hexagon=new GlHexagon(Coord(0,0,0),Size(.5,.5,0));
-}
-Hexagone::Hexagone(EdgeExtremityGlyphContext *gc) :
-  Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
+Hexagone::Hexagone(const tlp::PluginContext* context) :
+  Glyph(context), EdgeExtremityGlyphFrom2DGlyph(context) {
   if(!hexagon)
     hexagon=new GlHexagon(Coord(0,0,0),Size(.5,.5,0));
 }

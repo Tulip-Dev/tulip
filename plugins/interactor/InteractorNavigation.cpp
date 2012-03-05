@@ -30,11 +30,11 @@ using namespace tlp;
 class InteractorNavigation  : public NodeLinkDiagramComponentInteractor {
 
 public:
-
+  PLUGININFORMATIONSWITHGROUP("InteractorNavigation", "Tulip Team", "01/04/2009", "Navigation Interactor", "1.0", "Navigation")
   /**
    * Default constructor
    */
-  InteractorNavigation():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_navigation.png","Navigate in graph") {
+  InteractorNavigation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_navigation.png","Navigate in graph") {
     setPriority(5);
     setConfigurationWidgetText(QString("<h3>Navigation interactor</h3>")+
                                "3D Navigation in the graph<br><br>"+
@@ -63,4 +63,4 @@ public:
 
 };
 
-INTERACTORPLUGIN(InteractorNavigation, "InteractorNavigation", "Tulip Team", "01/04/2009", "Navigation Interactor", "1.0")
+PLUGIN(InteractorNavigation)

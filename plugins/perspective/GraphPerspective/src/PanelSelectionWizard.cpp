@@ -110,7 +110,7 @@ QList<PanelSelectionItem*> PanelSelectionWizard::items() const {
 }
 
 void PanelSelectionWizard::createView() {
-  _view = ViewLister::getPluginObject(panelName().toStdString(),NULL);
+  _view = PluginLister::instance()->getPluginObject<View>(panelName().toStdString(),NULL);
   _view->setupUi();
   _view->setGraph(graph());
   _view->setState(DataSet());

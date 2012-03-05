@@ -43,8 +43,8 @@ using namespace tlp;
 //===========================================================
 class Cone: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
-  Cone(GlyphContext *gc = NULL);
-  Cone(EdgeExtremityGlyphContext *gc);
+  GLYPHINFORMATIONS("3D - Cone", "Bertrand Mathieu", "09/07/2002", "Textured cone", "1.0", 3)
+  Cone(const tlp::PluginContext* context = NULL);
   virtual ~Cone();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
@@ -55,14 +55,10 @@ private:
   void drawCone();
 };
 //===========================================================
-GLYPHPLUGIN(Cone, "3D - Cone", "Bertrand Mathieu", "09/07/2002", "Textured cone", "1.0", 3)
-EEGLYPHPLUGIN(Cone, "3D - Cone", "Bertrand Mathieu", "09/07/2002", "Cone", "1.0", 3)
+PLUGIN(Cone)
 //===================================================================================
-Cone::Cone(GlyphContext *gc) :
-  Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
-}
-Cone::Cone(EdgeExtremityGlyphContext *gc) :
-  Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
+Cone::Cone(const tlp::PluginContext* context) :
+  Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
 }
 //===========================================================
 Cone::~Cone() {

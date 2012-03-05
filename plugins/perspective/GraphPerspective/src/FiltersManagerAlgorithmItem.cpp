@@ -15,13 +15,14 @@ FiltersManagerAlgorithmItem::FiltersManagerAlgorithmItem(QWidget* parent): Abstr
   _ui->setupUi(this);
 
   fillTitle(_ui->algorithmCombo,trUtf8("Select filter"));
-  string s;
-  forEach(s,BooleanPluginLister::availablePlugins()) {
+  list<string> booleanAlgorithms = PluginLister::instance()->availablePlugins<BooleanAlgorithm>();
+  for(list<string>::const_iterator it = booleanAlgorithms.begin(); it != booleanAlgorithms.end(); ++it) {
+    string s(*it);
     _ui->algorithmCombo->addItem(s.c_str());
   }
   connect(_ui->algorithmCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(algorithmSelected(int)));
   _ui->algorithmParams->setItemDelegate(new TulipItemDelegate);
-  updateGraphModel<BooleanPluginLister>(_ui->algorithmParams,QString::null,_graph);
+  updateGraphModel(_ui->algorithmParams,QString::null,_graph);
 }
 void FiltersManagerAlgorithmItem::algorithmSelected(int i) {
   _ui->algorithmParams->setEnabled(i != 0);
@@ -30,7 +31,7 @@ void FiltersManagerAlgorithmItem::algorithmSelected(int i) {
   if (i != 0)
     algName = _ui->algorithmCombo->itemText(i);
 
-  updateGraphModel<BooleanPluginLister>(_ui->algorithmParams,algName,_graph);
+  updateGraphModel(_ui->algorithmParams,algName,_graph);
   emit titleChanged();
 }
 
@@ -65,5 +66,5 @@ QString FiltersManagerAlgorithmItem::title() const {
 
 void FiltersManagerAlgorithmItem::graphChanged() {
   if (_ui->algorithmCombo->currentIndex() != 0)
-    updateGraphModel<BooleanPluginLister>(_ui->algorithmParams,_ui->algorithmCombo->currentText(),_graph);
+    updateGraphModel(_ui->algorithmParams,_ui->algorithmCombo->currentText(),_graph);
 }
