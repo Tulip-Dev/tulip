@@ -1008,7 +1008,7 @@ namespace tlp {
  */
 class TLPImport:public ImportModule {
 public:
-  PLUGININFORMATIONSWITHGROUP("tlpimport","Auber","16/02/2001","Tlp Import plugin","1.0", "Import")
+  PLUGININFORMATIONS("tlpimport","Auber","16/02/2001","Tlp Import plugin","1.0", "Import")
   
   TLPImport(tlp::PluginContext* context):ImportModule(context) {
     addParameter<std::string>("file::filename", paramHelp[0]);

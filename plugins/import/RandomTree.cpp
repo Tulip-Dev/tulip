@@ -63,7 +63,7 @@ const char * paramHelp[] = {
  */
 class RandomTree:public ImportModule {
 public:
-  PLUGININFORMATIONSWITHGROUP("Uniform Random Binary Tree","Auber","16/02/2001","","1.1","Graphs")
+  PLUGININFORMATIONS("Uniform Random Binary Tree","Auber","16/02/2001","","1.1","Graphs")
   RandomTree(tlp::PluginContext* context):ImportModule(context) {
     addParameter<unsigned int>("minsize",paramHelp[0],"100");
     addParameter<unsigned int>("maxsize",paramHelp[1],"1000");

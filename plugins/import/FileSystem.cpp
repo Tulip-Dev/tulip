@@ -44,7 +44,7 @@ static const char * paramHelp[] = {
  */
 class FileSystem:public tlp::ImportModule {
 public:
-  PLUGININFORMATIONSWITHGROUP( "File System Directory", "Auber", "16/12/2002", "", "2.0", "Misc")
+  PLUGININFORMATIONS( "File System Directory", "Auber", "16/12/2002", "", "2.0", "Misc")
   FileSystem(tlp::PluginContext* context):ImportModule(context), _absolutePaths(NULL), _baseNames(NULL), _createdDates(NULL),
     _fileNames(NULL), _isExecutable(NULL), _isReadable(NULL), _isSymlink(NULL), _isWritable(NULL), _lastModifiedDates(NULL),
     _lastReadDates(NULL), _owners(NULL), _permissions(NULL), _suffixes(NULL) {

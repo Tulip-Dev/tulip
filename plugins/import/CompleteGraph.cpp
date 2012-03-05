@@ -49,7 +49,7 @@ const char * paramHelp[] = {
 
 class CompleteGraph:public ImportModule {
 public:
-  PLUGININFORMATIONSWITHGROUP("Complete General Graph","Auber","16/12/2002","","1.1","Graphs")
+  PLUGININFORMATIONS("Complete General Graph","Auber","16/12/2002","","1.1","Graphs")
   CompleteGraph(tlp::PluginContext* context):ImportModule(context) {
     addParameter<unsigned int>("nodes",paramHelp[0],"5");
     addParameter<bool>("undirected",paramHelp[1],"true");

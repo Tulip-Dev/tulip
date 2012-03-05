@@ -417,7 +417,7 @@ protected:
 
 class TlpJsonImport : public ImportModule, YajlProxy {
 public:
-  PLUGININFORMATIONSWITHGROUP("TlpJsonImport", "Charles Huet", "18/05/2011", "Tulip JSon format", "1.0", "Import")
+  PLUGININFORMATIONS("TlpJsonImport", "Charles Huet", "18/05/2011", "Tulip JSon format", "1.0", "Import")
   
   TlpJsonImport(tlp::PluginContext* context) : ImportModule(context) {
     addParameter<std::string>("file::filename", "");

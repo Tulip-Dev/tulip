@@ -173,8 +173,8 @@ bool tokenize(const string& str, vector<string>& tokens,
 class ImportUCINET : public ImportModule {
 
 public :
-
-  ImportUCINET(AlgorithmContext context):ImportModule(context),
+  PLUGININFORMATIONS("UCINET dl","Patrick Mary","12/09/2011","Import UCINET","1.0","File")
+  ImportUCINET(const tlp::PluginContext* context):ImportModule(context),
     nbNodes(0), defaultMetric("weight"),
     n(0), nr(0), nc(0), nm(0), current(0),
     dl_found(false), diagonal(true),
@@ -1025,4 +1025,4 @@ public :
   }
 };
 
-IMPORTPLUGINOFGROUP(ImportUCINET, "UCINET dl","Patrick Mary","12/09/2011","Import UCINET","1.0","File")
+PLUGIN(ImportUCINET)
