@@ -70,11 +70,20 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
 
   // Setting initial sizes for splitters
   _ui->workspaceSplitter->setSizes(QList<int>() << 200 << 1000);
-//  _ui->docksSplitter->setSizes(QList<int>() << 500 << 800);
 
   _mainWindow->show();
   // Open project with model
   _graphs->readProject(_project,progress);
+  if (!_externalFile.isEmpty()) {
+    QFileInfo externalFileInfo(_externalFile);
+    if (externalFileInfo.exists()) {
+      progress->setComment((trUtf8("Loading ") + externalFileInfo.fileName()).toStdString());
+      DataSet dataSet;
+      dataSet.set("file::filename", externalFileInfo.absoluteFilePath().toStdString());
+      Graph *externalGraph = tlp::importGraph("tlp", dataSet, progress);
+      _graphs->addGraph(externalGraph);
+    }
+  }
 
   _ui->graphHierarchiesEditor->setModel(_graphs);
   _ui->algorithmRunner->setModel(_graphs);

@@ -76,13 +76,17 @@ int main(int argc,char **argv) {
   tulip_perspective.setApplicationName(QObject::trUtf8("Tulip"));
   QLocale::setDefault(QLocale(QLocale::English));
 
-  SimplePluginProgressWidget *progress = new SimplePluginProgressWidget;
-  {
-    progress->setWindowTitle(QObject::trUtf8("Tulip"));
-    progress->progress(0,100);
-    progress->show();
-    progress->setComment(QObject::trUtf8("Initializing D-Bus"));
-  }
+  TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow();
+  mainWindow->setVisible(true);
+
+  SimplePluginProgressDialog *progressDlg = new SimplePluginProgressDialog(mainWindow);
+  progressDlg->setWindowTitle(QObject::trUtf8("Tulip"));
+  progressDlg->resize(500,progressDlg->height());
+  progressDlg->show();
+
+  PluginProgress* progress = progressDlg->progress();
+  progress->progress(0,100);
+  progress->setComment(QObject::trUtf8("Initializing D-Bus").toStdString());
 
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin
@@ -103,7 +107,7 @@ int main(int argc,char **argv) {
 
   // Init Tulip and load plugins
   progress->progress(25,100);
-  progress->setComment(QObject::trUtf8("Loading plugins"));
+  progress->setComment(QObject::trUtf8("Loading plugins").toStdString());
   tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   tlp::PluginLibraryLoader::loadPlugins();
   tlp::PluginListerInterface::checkLoadedPluginsDependencies(0);
@@ -113,7 +117,7 @@ int main(int argc,char **argv) {
 
   // Check arguments
   progress->progress(60,100);
-  progress->setComment(QObject::trUtf8("Cheking arguments"));
+  progress->setComment(QObject::trUtf8("Cheking arguments").toStdString());
   QString perspectiveName,projectFilePath;
   QVariantMap extraParams;
 
@@ -167,8 +171,6 @@ int main(int argc,char **argv) {
   // Initialize main window.
   progress->progress(100,100);
   progress->setComment("Setting up GUI (this can take some time)");
-  TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow();
-  mainWindow->setVisible(false);
   context.mainWindow = mainWindow;
 
   // Create perspective object
@@ -208,7 +210,7 @@ int main(int argc,char **argv) {
 
   mainWindow->setWindowTitle(title);
 
-  delete progress;
+  delete progressDlg;
 
   int result = tulip_perspective.exec();
   delete perspective;

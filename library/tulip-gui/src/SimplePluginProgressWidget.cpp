@@ -43,7 +43,7 @@ void SimplePluginProgressWidget::preview_handler(bool p) {
     Observable::holdObservers();
 }
 
-void SimplePluginProgressWidget::setComment(std::string s) {
+void SimplePluginProgressWidget::setComment(const std::string& s) {
   setComment(QString(s.c_str()));
 }
 
