@@ -106,8 +106,8 @@ bool tokenize(const string& str, vector<string>& tokens, const string& delimiter
 class ImportPajek : public ImportModule {
 
 public :
-
-  ImportPajek(AlgorithmContext context):ImportModule(context),
+  PLUGININFORMATIONS("Pajek (.net)","Patrick Mary","09/05/2011","Import Pajek","1.0","File")
+  ImportPajek(const tlp::PluginContext* context):ImportModule(context),
     expectedLine(NET_UNKNOWN) {
     addParameter<string>("file::filename", paramHelp[0]);
   }
@@ -403,4 +403,4 @@ public :
   }
 };
 
-IMPORTPLUGINOFGROUP(ImportPajek, "Pajek (.net)","Patrick Mary","09/05/2011","Import Pajek","1.0","File")
+PLUGIN(ImportPajek)

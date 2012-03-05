@@ -34,7 +34,7 @@
 /** \addtogroup plugins */
 /*@{*/
 
-#define PLUGININFORMATIONSWITHGROUP(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
+#define PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
 std::string name() const { return std::string(NAME); } \
 std::string author() const { return std::string(AUTHOR); }\
 std::string date() const { return std::string(DATE); }  \
