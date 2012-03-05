@@ -120,18 +120,8 @@ void PluginsTest::testAncestorGraph() {
 }
 
 void PluginsTest::availablePlugins() {
-  std::set<std::string> testBooleanPlugins;
-  testBooleanPlugins.insert("Test");
-  testBooleanPlugins.insert("Test2");
-
-  std::string pluginName;
-  forEach(pluginName, PluginLister::instance()->availablePlugins()) {
-    if(testBooleanPlugins.find(pluginName) != testBooleanPlugins.end()) {
-      testBooleanPlugins.erase(pluginName);
-    }
-  }
-
-  CPPUNIT_ASSERT_MESSAGE("The test plugins were not listed by the PluginLister", testBooleanPlugins.empty());
+  CPPUNIT_ASSERT_MESSAGE("The 'Test' plugin is not listed by the PluginLister", PluginLister::pluginExists("Test"));
+  CPPUNIT_ASSERT_MESSAGE("The 'Test2' plugin is not listed by the PluginLister", PluginLister::pluginExists("Test2"));
 }
 
 void PluginsTest::pluginInformations() {
