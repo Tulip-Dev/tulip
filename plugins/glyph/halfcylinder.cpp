@@ -43,7 +43,8 @@ using namespace tlp;
 //=================================================================================================
 class HalfCylinder : public Glyph {
 public:
-  HalfCylinder(GlyphContext *gc=NULL);
+  GLYPHINFORMATIONS("3D - Half Cylinder", "Auber David", "31/07/2002", "Textured HalfCylinder", "1.0", 10)
+  HalfCylinder(const tlp::PluginContext *context = NULL);
   virtual ~HalfCylinder();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n,float lod);
@@ -52,9 +53,9 @@ public:
 private:
 };
 
-GLYPHPLUGIN(HalfCylinder, "3D - Half Cylinder", "Auber David", "31/07/2002", "Textured HalfCylinder", "1.0", 10)
+PLUGIN(HalfCylinder)
 //=================================================================================================
-HalfCylinder::HalfCylinder(GlyphContext *gc): Glyph(gc) {
+HalfCylinder::HalfCylinder(const tlp::PluginContext* context): Glyph(context) {
 }
 //=================================================================================================
 HalfCylinder::~HalfCylinder() {

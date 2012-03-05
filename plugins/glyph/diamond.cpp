@@ -44,8 +44,8 @@ using namespace tlp;
  */
 class Diamond: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
-  Diamond(GlyphContext *gc = NULL);
-  Diamond(EdgeExtremityGlyphContext *gc);
+  GLYPHINFORMATIONS("2D - Diamond", "Patrick Mary", "23/06/2011", "Textured Diamond", "1.0", 5)
+  Diamond(const tlp::PluginContext *context = NULL);
   virtual ~Diamond();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
@@ -61,18 +61,12 @@ protected :
 GlRegularPolygon* Diamond::diamond=0;
 
 //=====================================================
-GLYPHPLUGIN(Diamond, "2D - Diamond", "Patrick Mary", "23/06/2011", "Textured Diamond", "1.0", 5)
-EEGLYPHPLUGIN(Diamond,"2D - Diamond", "David Auber", "23/06/2011", "Textured Diamond", "1.0", 5)
+PLUGIN(Diamond)
 //===================================================================================
-Diamond::Diamond(GlyphContext *gc) :
-  Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
+Diamond::Diamond(const tlp::PluginContext* context) :
+  Glyph(context), EdgeExtremityGlyphFrom2DGlyph(context) {
   if(!diamond)
     diamond=new GlRegularPolygon(Coord(0,0,0),Size(.5,.5,0), 4);
-}
-Diamond::Diamond(EdgeExtremityGlyphContext *gc) :
-  Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
-  if(!diamond)
-    diamond=new GlRegularPolygon(Coord(0,0,0), Size(.5,.5,0), 4);
 }
 //=====================================================
 Diamond::~Diamond() {

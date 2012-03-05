@@ -41,7 +41,7 @@
 
 using namespace tlp;
 
-GraphPerspective::GraphPerspective(PerspectiveContext &c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)) {
+GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)) {
 #ifndef NDEBUG
   new ModelTest(_graphs,this);
 #endif /* NDEBUG */
@@ -224,4 +224,4 @@ void GraphPerspective::modeSwitch() {
     _ui->centralWidget->setCurrentWidget(mode);
 }
 
-PERSPECTIVEPLUGIN(GraphPerspective,"Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0")
+PLUGIN(GraphPerspective)

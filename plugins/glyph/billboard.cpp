@@ -44,7 +44,8 @@ using namespace tlp;
  */
 class Billboard : public Glyph {
 public:
-  Billboard(GlyphContext *gc=NULL);
+  GLYPHINFORMATIONS("2D - Billboard", "Gerald Gainant", "08/03/2004", "Textured billboard", "1.0", 7)
+  Billboard(const tlp::PluginContext* context = NULL);
   virtual ~Billboard();
   virtual void draw(node n,float lod);
   virtual Coord getAnchor(const Coord &vector) const;
@@ -56,10 +57,10 @@ protected:
 
 GlRect* Billboard::rect=0;
 
-GLYPHPLUGIN(Billboard, "2D - Billboard", "Gerald Gainant", "08/03/2004", "Textured billboard", "1.0", 7)
+PLUGIN(Billboard)
 
 //===================================================================================
-Billboard::Billboard(GlyphContext *gc): Glyph(gc) {
+Billboard::Billboard(const tlp::PluginContext* context): Glyph(context) {
   if(!rect)
     rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
 }

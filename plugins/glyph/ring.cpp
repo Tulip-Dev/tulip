@@ -48,8 +48,8 @@ using namespace tlp;
  */
 class Ring: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
-  Ring(GlyphContext *gc = NULL);
-  Ring(EdgeExtremityGlyphContext *gc);
+  GLYPHINFORMATIONS("2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", 15)
+  Ring(const tlp::PluginContext *context = NULL);
   virtual ~Ring();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual string getName() {
@@ -66,14 +66,10 @@ protected:
   void drawRingBorder();
 };
 //=====================================================
-GLYPHPLUGIN(Ring, "2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", 15)
-EEGLYPHPLUGIN(Ring, "2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", 15)
+PLUGIN(Ring)
 //===================================================================================
-Ring::Ring(GlyphContext *gc) :
-  Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
-}
-Ring::Ring(EdgeExtremityGlyphContext *gc) :
-  Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
+Ring::Ring(const tlp::PluginContext* context) :
+  Glyph(context), EdgeExtremityGlyphFrom2DGlyph(context) {
 }
 //=====================================================
 Ring::~Ring() {

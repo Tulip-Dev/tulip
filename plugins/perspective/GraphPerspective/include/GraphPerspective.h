@@ -21,6 +21,7 @@
 
 #include <QtCore/QModelIndex>
 #include <tulip/Perspective.h>
+#include <tulip/MethodFactory.h>
 
 class QAction;
 
@@ -41,7 +42,8 @@ class GraphPerspective : public tlp::Perspective {
   tlp::GraphHierarchiesModel *_graphs;
   bool _maximised;
 public:
-  GraphPerspective(tlp::PerspectiveContext &c);
+  PLUGININFORMATIONSWITHGROUP("Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "Hierarchy")
+  GraphPerspective(const tlp::PluginContext* c);
   virtual void construct(tlp::PluginProgress *);
 
   tlp::GraphHierarchiesModel* model() const;

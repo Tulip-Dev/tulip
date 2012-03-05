@@ -42,8 +42,8 @@ using namespace tlp;
  */
 class Cube: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
-  Cube(GlyphContext *gc = NULL);
-  Cube(EdgeExtremityGlyphContext *gc);
+  PLUGININFORMATIONSWITHGROUP("3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)
+  Cube(const tlp::PluginContext* context = NULL);
   virtual ~Cube();
   virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord & vector) const;
@@ -58,17 +58,10 @@ protected:
 
 GlBox* Cube::box=0;
 
-GLYPHPLUGIN(Cube, "3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)
-EEGLYPHPLUGIN(Cube,"3D - Cube","Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)
+PLUGIN(Cube)
 //===================================================================================
-Cube::Cube(GlyphContext *gc) :
-  Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
-  if(!box)
-    box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
-}
-
-Cube::Cube(EdgeExtremityGlyphContext *gc) :
-  Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
+Cube::Cube(const tlp::PluginContext* context) :
+  Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
   if(!box)
     box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
 }

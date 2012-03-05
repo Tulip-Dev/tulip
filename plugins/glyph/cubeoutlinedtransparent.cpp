@@ -39,8 +39,8 @@ using namespace tlp;
 class CubeOutLinedTransparent: public Glyph,
   public EdgeExtremityGlyphFrom3DGlyph {
 public:
-  CubeOutLinedTransparent(GlyphContext *gc = NULL);
-  CubeOutLinedTransparent(EdgeExtremityGlyphContext *gc);
+  GLYPHINFORMATIONS("3D - Cube OutLined Transparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 9)
+  CubeOutLinedTransparent(const tlp::PluginContext *context = NULL);
   virtual ~CubeOutLinedTransparent();
   virtual void draw(node n, float lod);
   virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
@@ -55,17 +55,11 @@ protected:
 
 GlBox* CubeOutLinedTransparent::box=0;
 
-GLYPHPLUGIN(CubeOutLinedTransparent, "3D - Cube OutLined Transparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 9)
-EEGLYPHPLUGIN(CubeOutLinedTransparent, "3D - Cube OutLined Transparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 9)
+PLUGIN(CubeOutLinedTransparent)
 
 //===================================================================================
-CubeOutLinedTransparent::CubeOutLinedTransparent(GlyphContext *gc) :
-  Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
-  if(!box)
-    box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
-}
-CubeOutLinedTransparent::CubeOutLinedTransparent(EdgeExtremityGlyphContext *gc) :
-  Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
+CubeOutLinedTransparent::CubeOutLinedTransparent(const tlp::PluginContext* context) :
+Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
   if(!box)
     box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
 }

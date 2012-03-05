@@ -31,11 +31,11 @@ using namespace tlp;
 class InteractorSelection  : public NodeLinkDiagramComponentInteractor {
 
 public:
-
+  PLUGININFORMATIONSWITHGROUP("InteractorSelection", "Tulip Team", "01/04/2009", "Selection Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */
-  InteractorSelection():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_selection.png","Select nodes/edges in a rectangle") {
+  InteractorSelection(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_selection.png","Select nodes/edges in a rectangle") {
     setPriority(3);
     setConfigurationWidgetText(QString("<h3>Selection interactor</h3>")+
                                "Select on rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner.<br/><br/>"+
@@ -61,4 +61,4 @@ public:
 
 };
 
-INTERACTORPLUGIN(InteractorSelection, "InteractorSelection", "Tulip Team", "01/04/2009", "Selection Interactor", "1.0")
+PLUGIN(InteractorSelection)

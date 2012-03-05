@@ -180,7 +180,8 @@ private:
 
 
 public:
-  ColorMapping(const PropertyContext &context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES) {
+  PLUGININFORMATIONSWITHGROUP("Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","1.0", "Color")
+  ColorMapping(const tlp::PluginContext* context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES) {
     addParameter<DoubleProperty>("linear/uniform\nproperty",paramHelp[0],"viewMetric");
     addParameter<PropertyInterface*>("enumerated\nproperty",paramHelp[1],"viewMetric");
     addParameter<StringCollection>(ELT_TYPE, paramHelp[2], ELT_TYPES);
@@ -346,4 +347,4 @@ public:
   }
 };
 
-COLORPLUGIN(ColorMapping,"Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","1.0")
+PLUGIN(ColorMapping)

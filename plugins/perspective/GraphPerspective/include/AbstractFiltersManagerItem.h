@@ -31,12 +31,11 @@ public:
 protected:
   virtual void graphChanged();
 
-  template<typename LISTER>
   void updateGraphModel(QTableView* table,const QString& algName, tlp::Graph* g) {
     int h=0;
 
     if (!algName.isNull()) {
-      tlp::ParameterList params = LISTER::getPluginParameters(algName.toStdString());
+      tlp::ParameterList params = tlp::PluginLister::getPluginParameters(algName.toStdString());
       table->setModel(new tlp::ParameterListModel(params,g));
 
       for (int i=0; i<table->model()->rowCount(); ++i)

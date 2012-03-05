@@ -43,8 +43,8 @@ using namespace tlp;
  */
 class ChristmasTree: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
-  ChristmasTree(GlyphContext *gc = NULL);
-  ChristmasTree(EdgeExtremityGlyphContext *gc);
+  GLYPHINFORMATIONS("3D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0" , 28)
+  ChristmasTree(const tlp::PluginContext* context = NULL);
   virtual void draw(node n, float lod);
   virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod);
 
@@ -53,15 +53,11 @@ protected:
 
 };
 
-GLYPHPLUGIN(ChristmasTree, "3D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0" , 28)
-EEGLYPHPLUGIN(ChristmasTree,"3D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0" , 28)
+PLUGIN(ChristmasTree)
 
 //===================================================================================
-ChristmasTree::ChristmasTree(GlyphContext *gc) :
-  Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
-}
-ChristmasTree::ChristmasTree(EdgeExtremityGlyphContext *gc) :
-  Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
+ChristmasTree::ChristmasTree(const tlp::PluginContext* context) :
+Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
 }
 //=======================================================
 void ChristmasTree::draw(node n, float) {

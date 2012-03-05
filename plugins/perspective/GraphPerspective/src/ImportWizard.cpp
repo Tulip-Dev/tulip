@@ -35,9 +35,10 @@ ImportWizard::ImportWizard(QWidget *parent): QWizard(parent), _ui(new Ui::Import
   _ui->setupUi(this);
 
   QSet<QString> groups;
-  string algName;
-  forEach(algName,ImportModuleLister::availablePlugins()) {
-    groups.insert(ImportModuleLister::pluginInformations(algName).getGroup().c_str());
+  list<string> importModules = PluginLister::instance()->availablePlugins<ImportModule>();
+  for(list<string>::const_iterator it = importModules.begin(); it != importModules.end(); ++it) {
+    string algName(*it);
+    groups.insert(PluginLister::pluginInformations(algName)->getGroup().c_str());
   }
   _ui->categoryList->addItems(groups.toList());
   _ui->parametersList->setItemDelegate(new TulipItemDelegate);
@@ -55,8 +56,8 @@ void ImportWizard::algorithmSelected(const QString& alg) {
   QAbstractItemModel* oldModel = _ui->parametersList->model();
   QAbstractItemModel* newModel = NULL;
 
-  if (ImportModuleLister::pluginExists(alg.toStdString())) {
-    newModel = new ParameterListModel(ImportModuleLister::getPluginParameters(alg.toStdString()));
+  if (PluginLister::pluginExists(alg.toStdString())) {
+    newModel = new ParameterListModel(PluginLister::getPluginParameters(alg.toStdString()));
   }
 
   _ui->parametersList->setModel(newModel);
@@ -68,9 +69,10 @@ void ImportWizard::algorithmSelected(const QString& alg) {
 void ImportWizard::groupSelected(const QString& group) {
   _ui->algorithmList->clear();
 
-  string algName;
-  forEach(algName,ImportModuleLister::availablePlugins()) {
-    if (group == ImportModuleLister::pluginInformations(algName).getGroup().c_str())
+  list<string> importModules = PluginLister::instance()->availablePlugins<ImportModule>();
+  for(list<string>::const_iterator it = importModules.begin(); it != importModules.end(); ++it) {
+    string algName(*it);
+    if (group == PluginLister::pluginInformations(algName)->getGroup().c_str())
       _ui->algorithmList->addItem(algName.c_str());
   }
 

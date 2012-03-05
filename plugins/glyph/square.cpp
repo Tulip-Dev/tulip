@@ -43,8 +43,8 @@ using namespace tlp;
  */
 class Square: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
-  Square(GlyphContext *gc = NULL);
-  Square(EdgeExtremityGlyphContext*gc);
+  GLYPHINFORMATIONS("2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0", 4)
+  Square(const tlp::PluginContext *context = NULL);
   virtual ~Square();
   virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord &vector) const;
@@ -61,16 +61,10 @@ protected:
 GlRect* Square::rect=0;
 
 //=====================================================
-GLYPHPLUGIN(Square, "2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0", 4)
-EEGLYPHPLUGIN(Square,"2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0", 4)
+PLUGIN(Square)
 //===================================================================================
-Square::Square(GlyphContext *gc) :
-  Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
-  if(!rect)
-    rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
-}
-Square::Square(EdgeExtremityGlyphContext *gc) :
-  Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
+Square::Square(const tlp::PluginContext* context) :
+  Glyph(context), EdgeExtremityGlyphFrom2DGlyph(context) {
   if(!rect)
     rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
 }

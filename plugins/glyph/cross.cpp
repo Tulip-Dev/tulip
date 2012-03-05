@@ -42,8 +42,8 @@ using namespace tlp;
  */
 class Cross: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
-  Cross(GlyphContext *gc = NULL);
-  Cross(EdgeExtremityGlyphContext *gc);
+  GLYPHINFORMATIONS("2D - Cross", "Patrick Mary", "23/06/2011", "Textured Cross", "1.0", 8)
+  Cross(const tlp::PluginContext* context = NULL);
   virtual ~Cross();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
@@ -60,8 +60,7 @@ protected :
 GlComplexPolygon* Cross::cross=0;
 
 //=====================================================
-GLYPHPLUGIN(Cross, "2D - Cross", "Patrick Mary", "23/06/2011", "Textured Cross", "1.0", 8)
-EEGLYPHPLUGIN(Cross,"2D - Cross", "David Auber", "23/06/2011", "Textured Cross", "1.0", 8)
+PLUGIN(Cross)
 //===================================================================================
 /*
  *
@@ -76,15 +75,11 @@ EEGLYPHPLUGIN(Cross,"2D - Cross", "David Auber", "23/06/2011", "Textured Cross",
      7---6                       (-bWidth, -0.5)  (bWidth, -0.5)
 */
 
-Cross::Cross(GlyphContext *gc) :
-  Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
+Cross::Cross(const tlp::PluginContext* context) :
+  Glyph(context), EdgeExtremityGlyphFrom2DGlyph(context) {
   initCross();
 }
 
-Cross::Cross(EdgeExtremityGlyphContext *gc) :
-  Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
-  initCross();
-}
 void Cross::initCross() {
   if(!cross) {
     float bWidth = 0.1f;

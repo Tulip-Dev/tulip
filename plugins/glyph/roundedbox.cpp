@@ -161,7 +161,8 @@ const string roundedBoxOutlineGeometryShaderSrc =
 
 class RoundedBox : public Glyph {
 public:
-  RoundedBox(GlyphContext *gc = NULL);
+  GLYPHINFORMATIONS("2D - Rounded Box", "Antoine LAMBERT", "02/11/2010", "Rounded Box", "1.0", 18)
+  RoundedBox(const tlp::PluginContext *context = NULL);
   ~RoundedBox() {}
   void draw(node n, float lod);
   Coord getAnchor(const Coord &vector) const;
@@ -177,7 +178,7 @@ private:
 
 GlPolygon* RoundedBox::roundedSquare=0;
 
-RoundedBox::RoundedBox(GlyphContext *gc) : Glyph(gc) {}
+RoundedBox::RoundedBox(const tlp::PluginContext* context) : Glyph(context) {}
 
 void RoundedBox::initRoundedSquare() {
   roundedSquare = createRoundedRect(Size(1,1,1));
@@ -378,6 +379,6 @@ Coord RoundedBox::getAnchor(const Coord &vector) const {
     return v;
 }
 
-GLYPHPLUGIN(RoundedBox, "2D - Rounded Box", "Antoine LAMBERT", "02/11/2010", "Rounded Box", "1.0", 18)
+PLUGIN(RoundedBox)
 
 /*@}*/

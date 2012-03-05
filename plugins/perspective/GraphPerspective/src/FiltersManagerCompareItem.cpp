@@ -13,12 +13,14 @@
 using namespace tlp;
 using namespace std;
 
-// Fills up a combo box with the list of currently loaded algorithms (template argument is the associated plugin lister)
-template<typename LISTER>
+// Fills up a combo box with the list of currently loaded algorithms (template argument is the type of algorithms)
+template<typename TYPE>
 void fillAlgorithms(QComboBox* combo, QString title, int id) {
   fillTitle(combo, title);
-  string s;
-  forEach(s,LISTER::availablePlugins()) {
+  
+  std::list<std::string> plugins = PluginLister::instance()->availablePlugins<TYPE>();
+  for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
+    string s(*it);
     combo->addItem(s.c_str(),id);
     lastItem(combo)->setToolTip(s.c_str());
   }
@@ -88,8 +90,8 @@ void FiltersManagerCompareItem::fillCombo(QComboBox* combo) {
     }
   }
 
-  fillAlgorithms<DoublePluginLister>(combo,trUtf8("Metrics"),DOUBLE_ALGORITHM_ID);
-  fillAlgorithms<StringPluginLister>(combo, trUtf8("Labels"),STRING_ALGORITHM_ID);
+  fillAlgorithms<DoubleAlgorithm>(combo,trUtf8("Metrics"),DOUBLE_ALGORITHM_ID);
+  fillAlgorithms<StringAlgorithm>(combo, trUtf8("Labels"),STRING_ALGORITHM_ID);
 
   connect(_ui->elem1,SIGNAL(currentIndexChanged(int)),this,SLOT(elementChanged()));
   connect(_ui->elem2,SIGNAL(currentIndexChanged(int)),this,SLOT(elementChanged()));
@@ -132,10 +134,7 @@ PropertyInterface* FiltersManagerCompareItem::comboProperty(QComboBox* combo) co
   return data.value<tlp::PropertyInterface*>();
 }
 ParameterList FiltersManagerCompareItem::comboAlgorithmParams(QComboBox* combo) const {
-  if (comboElementType(combo) == E_DoubleAlgorithm)
-    return DoublePluginLister::getPluginParameters(combo->currentText().toStdString());
-  else
-    return StringPluginLister::getPluginParameters(combo->currentText().toStdString());
+  return PluginLister::getPluginParameters(combo->currentText().toStdString());
 }
 bool FiltersManagerCompareItem::isComparisonNumeric(QComboBox* combo) const {
   ComboElementType elType = comboElementType(combo);

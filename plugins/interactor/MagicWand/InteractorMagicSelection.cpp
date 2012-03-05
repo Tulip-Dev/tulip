@@ -33,11 +33,11 @@ using namespace tlp;
  */
 class InteractorMagicSelection  : public NodeLinkDiagramComponentInteractor {
 public:
-
+  PLUGININFORMATIONSWITHGROUP("InteractorMagicSelection", "Tulip Team", "01/04/2009", "Magic Selection Interactor", "1.0", "Modification")
   /**
   * Default constructor
   */
-  InteractorMagicSelection():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_magic.png","Fuzzy selection: select neighboring nodes based on their value of a metric."), configWidget(NULL) {
+  InteractorMagicSelection(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_magic.png","Fuzzy selection: select neighboring nodes based on their value of a metric."), configWidget(NULL) {
     setPriority(3);
     setConfigurationWidgetText(QString("<h3>Magic selection interactor</h3>")+
                                "Select neighbour elements which have the same value on a metric");
@@ -56,4 +56,4 @@ private:
   MagicSelectionInteractorConfigWidget* configWidget;
 };
 
-INTERACTORPLUGIN(InteractorMagicSelection, "InteractorMagicSelection", "Tulip Team", "01/04/2009", "Magic Selection Interactor", "1.0")
+PLUGIN(InteractorMagicSelection)

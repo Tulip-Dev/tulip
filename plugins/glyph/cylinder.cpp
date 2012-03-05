@@ -40,8 +40,8 @@ using namespace tlp;
  */
 class Cylinder: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
-  Cylinder(GlyphContext *gc = NULL);
-  Cylinder(EdgeExtremityGlyphContext *gc);
+  GLYPHINFORMATIONS("3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0", 6)
+  Cylinder(const tlp::PluginContext* context = NULL);
   virtual ~Cylinder();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
@@ -51,14 +51,10 @@ public:
 private:
   inline void drawCylinder();
 };
-GLYPHPLUGIN(Cylinder, "3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0", 6)
-EEGLYPHPLUGIN(Cylinder,"3D - Cylinder","Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0", 6)
+PLUGIN(Cylinder)
 //=================================================================================================
-Cylinder::Cylinder(GlyphContext *gc) :
-  Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
-}
-Cylinder::Cylinder(EdgeExtremityGlyphContext *gc) :
-  Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
+Cylinder::Cylinder(const tlp::PluginContext* context) :
+  Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
 }
 //=================================================================================================
 Cylinder::~Cylinder() {
