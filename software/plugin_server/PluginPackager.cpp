@@ -45,15 +45,10 @@ public:
   virtual void loaded(const tlp::Plugin* info, const std::list< Dependency >& dependencies) {
     QString pluginName = QString::fromStdString(info->getName());
     QString pluginLibrary;
-    std::string pluginType;
 
-    for(std::map<std::string, PluginLister*>::const_iterator it = PluginLister::allFactories->begin(); it != PluginLister::allFactories->end(); ++it) {
-      PluginLister* currentLister = it->second;
-
-      if(currentLister->pluginExists(pluginName.toStdString())) {
-        pluginLibrary = QString::fromStdString(currentLister->getPluginLibrary(pluginName.toStdString()));
-        pluginType = currentLister->getPluginsClassName();
-      }
+    std::list<std::string> plugins = PluginLister::availablePlugins();
+    for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
+      pluginLibrary = QString::fromStdString(PluginLister::getPluginLibrary(pluginName.toStdString()));
     }
 
     //creates the xml document for this plugin
@@ -61,7 +56,8 @@ public:
     QDomElement infoElement = pluginInfoDocument.createElement("plugin");
     infoElement.setTagName("plugin");
     infoElement.setAttribute("name", pluginName);
-    infoElement.setAttribute("type", QString::fromStdString(pluginType));
+    //TODO remove this once the input/output parameters refactoring is done
+    infoElement.setAttribute("type", "");
     infoElement.setAttribute("author", QString::fromStdString(info->getAuthor()));
     infoElement.setAttribute("date", QString::fromStdString(info->getDate()));
     infoElement.setAttribute("info", QString::fromStdString(info->getInfo()));
