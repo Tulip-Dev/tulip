@@ -29,7 +29,7 @@
 
 namespace tlp {
 
-  class View;
+class View;
 /**
  * We define a specific interactor to show element graph infos in eltProperties
  */

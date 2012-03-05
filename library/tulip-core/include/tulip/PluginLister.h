@@ -84,7 +84,7 @@ public:
   PluginType* getPluginObject(const std::string& name, tlp::PluginContext* context) {
     return dynamic_cast<PluginType*>(getPluginObject(name, context));
   }
-  
+
 
   /**
    * @brief Gets the list of plug-ins that registered themselves in this factory.
@@ -96,13 +96,16 @@ public:
   template<typename PluginType>
   std::list<std::string> availablePlugins() {
     std::list<std::string> keys;
+
     for(std::map<std::string , PluginDescription>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
       PluginType* plugin = dynamic_cast<PluginType*>(it->second.factory->createPluginObject(NULL));
+
       if(plugin != NULL) {
         keys.push_back(it->first);
         delete plugin;
       }
     }
+
     return keys;
   }
 
@@ -127,7 +130,7 @@ public:
    *
    * @param name The name of the plug-in to retrieve the parameters of.
    * @return :ParameterList The parameters of the plug-in.
-   **/  
+   **/
   static const ParameterList getPluginParameters(std::string name);
 
   /**
@@ -135,7 +138,7 @@ public:
    *
    * @param name The name of the plug-in to retrieve the dependencies of.
    * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > > The list of dependencies of the plug-in.
-   **/  
+   **/
   static std::list<tlp::Dependency> getPluginDependencies(std::string name);
 
   /**

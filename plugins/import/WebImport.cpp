@@ -424,7 +424,7 @@ const char * paramHelp[] = {
 
 struct WebImport:public ImportModule {
   PLUGININFORMATIONS("Web Site","Auber","15/11/2004","Import Web site plugin","1.0","Misc")
-  
+
   std::deque<UrlElement> toVisit;
   std::set<UrlElement> visited;
   std::map<UrlElement, tlp::node> nodes;

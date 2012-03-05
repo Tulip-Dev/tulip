@@ -59,7 +59,7 @@ PLUGIN(CubeOutLinedTransparent)
 
 //===================================================================================
 CubeOutLinedTransparent::CubeOutLinedTransparent(const tlp::PluginContext* context) :
-Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
+  Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
   if(!box)
     box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
 }

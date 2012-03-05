@@ -17,8 +17,9 @@ using namespace std;
 template<typename TYPE>
 void fillAlgorithms(QComboBox* combo, QString title, int id) {
   fillTitle(combo, title);
-  
+
   std::list<std::string> plugins = PluginLister::instance()->availablePlugins<TYPE>();
+
   for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
     string s(*it);
     combo->addItem(s.c_str(),id);

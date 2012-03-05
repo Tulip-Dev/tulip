@@ -107,6 +107,7 @@ public:
 protected:
   TemplateAlgorithm (const tlp::PluginContext* context) : tlp::PropertyAlgorithm(context) {
     const PropertyContext* propertyContext = dynamic_cast<const PropertyContext*>(context);
+
     if(propertyContext) {
       result = (Property*)propertyContext->propertyProxy;
     }

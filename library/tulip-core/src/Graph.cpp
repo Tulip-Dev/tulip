@@ -182,6 +182,7 @@ bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &
   bool result;
   bool deletePluginProgress=false;
   PluginProgress *tmpProgress=NULL;
+
   if (progress==0) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;

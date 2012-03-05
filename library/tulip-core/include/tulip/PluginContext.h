@@ -70,10 +70,10 @@ public :
   PropertyInterface *propertyProxy;
 
   PropertyContext(tlp::Graph* graph = NULL, tlp::PropertyInterface* property = NULL, tlp::DataSet* dataSet = NULL, tlp::PluginProgress* progress = NULL):
-  AlgorithmContext(graph, dataSet, progress),
-  propertyProxy(property)
+    AlgorithmContext(graph, dataSet, progress),
+    propertyProxy(property)
   {}
-  
+
   ///
   ~PropertyContext() {}
 };

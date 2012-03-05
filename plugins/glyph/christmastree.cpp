@@ -57,7 +57,7 @@ PLUGIN(ChristmasTree)
 
 //===================================================================================
 ChristmasTree::ChristmasTree(const tlp::PluginContext* context) :
-Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
+  Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
 }
 //=======================================================
 void ChristmasTree::draw(node n, float) {
