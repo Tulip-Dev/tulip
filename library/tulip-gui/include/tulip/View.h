@@ -65,7 +65,7 @@ class Interactor;
   A tlp::View subclass automatically inherits from the tlp::Observable interface. The tlp::View interface also automatically listn to its active graph to trigger handling trigger when this graph gets deleted.
   When the graph associated to a View gets deleted, the View::graphDeleted() callback is triggered. @see graphDeleted() for more informations.
   */
-class TLP_QT_SCOPE View: public QObject, public tlp::WithDependency, public tlp::WithParameter, public tlp::Observable {
+class TLP_QT_SCOPE View: public QObject, public tlp::Plugin, public tlp::Observable {
   Q_OBJECT
 
   QList<tlp::Interactor*> _interactors;
@@ -305,17 +305,6 @@ protected slots:
   virtual void graphDeleted()=0;
 };
 
-struct TLP_QT_SCOPE ViewContext {
-};
-
-typedef StaticPluginLister<View, ViewContext*> ViewLister;
-
-#ifdef WIN32
-template class TLP_QT_SCOPE PluginLister<View,ViewContext*>;
-#endif
 }
-
-#define VIEWPLUGINOFGROUP(C,N,A,D,I,R,G) POINTERCONTEXTPLUGINFACTORY(View,C,N,A,D,I,R,G)
-#define VIEWPLUGIN(C,N,A,D,I,R) VIEWPLUGINOFGROUP(C,N,A,D,I,R,"")
 
 #endif /* VIEW_H_ */

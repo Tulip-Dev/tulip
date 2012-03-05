@@ -45,7 +45,7 @@ class View;
   Methods listed above are only called once. Once the interactor is initialized, it may be installed/removed several times on different QObjects. It will then repond to user inputs via the eventFilter method
   @see QObject::eventFilter()
   */
-class TLP_QT_SCOPE Interactor: public QObject, public tlp::WithParameter, public tlp::WithDependency {
+class TLP_QT_SCOPE Interactor: public QObject, public tlp::Plugin {
   Q_OBJECT
   Q_PROPERTY(unsigned int priority READ priority)
   Q_PROPERTY(QAction* action READ action)
@@ -133,85 +133,13 @@ protected:
   }
 };
 
-class TLP_QT_SCOPE InteractorContext {
-};
-
-class TLP_QT_SCOPE InteractorLister: public StaticPluginLister<Interactor, InteractorContext*> {
+class TLP_QT_SCOPE InteractorLister {
   static QMap<std::string,QList<std::string> > _compatibilityMap;
 public:
   static void initInteractorsDependencies();
   static QList<std::string> compatibleInteractors(const std::string& viewName);
 };
 
-#ifdef WIN32
-template class TLP_QT_SCOPE PluginLister<Interactor,InteractorContext*>;
-#endif
-
 }
-
-#define INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,G) POINTERCONTEXTPLUGINFACTORY(Interactor,C,N,A,D,I,R,G)
-#define INTERACTORPLUGIN(C,N,A,D,I,R) INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,"")
-
-
-// TODO : refactor Interactor/View compatibility check
-/*
-CN : New interactor class name
-CNT : New interactor name
-BCNT : Extended interactor name
-VCN : View compatibility name
-A : Author
-D : Date
-I : Infor
-R : Revision
-*/
-#define INTERACTORPLUGINVIEWEXTENSION(CN,CNT,BCNT,VCN,A,D,I,R)\
-class CN : public tlp::Interactor {\
-  mutable tlp::Interactor* _component;\
-public:\
-  CN():_component(NULL) {}\
-  bool isCompatible(const std::string& viewName) { return viewName == VCN; }\
-  QWidget* configurationWidget() const { return getComponent()->configurationWidget(); }\
-  unsigned int priority() const { return getComponent()->priority(); }\
-  QAction* action() const { return getComponent()->action(); }\
-  tlp::View* view() const { return getComponent()->view(); }\
-  QCursor cursor() const { return getComponent()->cursor(); }\
-  void construct() { getComponent()->construct(); }\
-  void setView(tlp::View* v) { getComponent()->setView(v); }\
-  void install(QObject* target) { getComponent()->install(target); }\
-  void uninstall() { getComponent()->uninstall(); }\
-  void undoIsDone() { getComponent()->undoIsDone(); }\
-  tlp::Interactor* getComponent() const {\
-    if(!_component) {\
-      _component = tlp::InteractorLister::getPluginObject(BCNT,NULL); assert(_component != NULL);\
-    }\
-    return _component;\
-  }\
-};\
-INTERACTORPLUGIN(CN, CNT, A , D , I , R)
-
-#define INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(CN,CNT,BCNT,VCN,A,D,I,R,P)     \
-class CN : public tlp::Interactor {\
-  mutable tlp::Interactor* _component;\
-public:\
-  CN():_component(NULL) {}\
-  bool isCompatible(const std::string& viewName) { return viewName == VCN; }\
-  QWidget* configurationWidget() const { return getComponent()->configurationWidget(); }\
-  unsigned int priority() const { return P; }\
-  QAction* action() const { return getComponent()->action(); }\
-  tlp::View* view() const { return getComponent()->view(); }\
-  QCursor cursor() const { return getComponent()->cursor(); }\
-  void construct() { getComponent()->construct(); }\
-  void setView(tlp::View* v) { getComponent()->setView(v); }\
-  void install(QObject* target) { getComponent()->install(target); }\
-  void uninstall() { getComponent()->uninstall(); }\
-  void undoIsDone() { getComponent()->undoIsDone(); }\
-  tlp::Interactor* getComponent() const {\
-    if(!_component) {\
-      _component = tlp::InteractorLister::getPluginObject(BCNT,NULL); assert(_component != NULL);\
-    }\
-    return _component;\
-  }\
-};\
-INTERACTORPLUGIN(CN, CNT, A , D , I , R)
 
 #endif

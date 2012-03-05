@@ -34,14 +34,14 @@
 
 using namespace tlp;
 
-PluginInformations::PluginInformations(const tlp::Plugin& info, const std::string& type, const std::string& library)
-  :_lastVersion(info.getRelease().c_str()), _type(type.c_str()), _iconPath(":/tulip/gui/icons/logo32x32.png"), _longDescriptionPath("about:blank"), _isLocal(true),
-   _installedVersion(info.getRelease().c_str()), _updateAvailable(false), _version(info.getRelease().c_str()), _infos(&info), _library(library.c_str()) {
+PluginInformations::PluginInformations(const tlp::Plugin* info, const std::string& type, const std::string& library)
+  :_lastVersion(info->getRelease().c_str()), _type(type.c_str()), _iconPath(":/tulip/gui/icons/logo32x32.png"), _longDescriptionPath("about:blank"), _isLocal(true),
+   _installedVersion(info->getRelease().c_str()), _updateAvailable(false), _version(info->getRelease().c_str()), _infos(info), _library(library.c_str()) {
 }
 
-PluginInformations::PluginInformations(const tlp::Plugin& info, const QString& type, const QString& basePath, const QString& remotepluginName)
-  :_lastVersion(info.getRelease().c_str()), _type(type), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html"), _isLocal(false), _installedVersion(QString::null),
-   _updateAvailable(false), _remoteLocation(basePath + "/" + remotepluginName), _remoteArchive(_remoteLocation + "/" + tlp::getPluginPackageName(remotepluginName)), _version(info.getRelease().c_str()), _infos(&info) {
+PluginInformations::PluginInformations(const tlp::Plugin* info, const QString& type, const QString& basePath, const QString& remotepluginName)
+  :_lastVersion(info->getRelease().c_str()), _type(type), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html"), _isLocal(false), _installedVersion(QString::null),
+   _updateAvailable(false), _remoteLocation(basePath + "/" + remotepluginName), _remoteArchive(_remoteLocation + "/" + tlp::getPluginPackageName(remotepluginName)), _version(info->getRelease().c_str()), _infos(info) {
 }
 
 void PluginInformations::AddPluginInformations(const tlp::Plugin* info) {

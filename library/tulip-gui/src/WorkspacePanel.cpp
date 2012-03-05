@@ -128,7 +128,7 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
   QList<Interactor*> compatibleInteractors;
   QList<std::string> interactorNames = InteractorLister::compatibleInteractors(viewName.toStdString());
   foreach(std::string name,interactorNames) {
-    compatibleInteractors << InteractorLister::getPluginObject(name,NULL);
+    compatibleInteractors << PluginLister::instance()->getPluginObject<Interactor>(name,NULL);
   }
   _view->setInteractors(compatibleInteractors);
   _view->graphicsView()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);

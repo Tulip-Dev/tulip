@@ -20,6 +20,7 @@
 
 #include <tulip/ForEach.h>
 #include <tulip/View.h>
+#include <tulip/Glyph.h>
 #include <QtCore/QDebug>
 
 using namespace std;
@@ -36,13 +37,15 @@ void InteractorLister::initInteractorsDependencies() {
 
   QMap<Interactor*,string> interactorToName;
 
-  string interactorName;
-  forEach(interactorName,availablePlugins()) {
-    interactorToName[getPluginObject(interactorName,NULL)] = interactorName;
+  std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<Glyph>());
+  for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
+    string interactorName(*it);
+    interactorToName[PluginLister::instance()->getPluginObject<Interactor>(interactorName,NULL)] = interactorName;
   }
 
-  string viewName;
-  forEach(viewName, ViewLister::availablePlugins()) {
+  std::list<std::string> views(PluginLister::instance()->availablePlugins<View>());
+  for(std::list<std::string>::const_iterator it = views.begin(); it != views.end(); ++it) {
+    string viewName(*it);
     QList<Interactor*> compatibleInteractors;
     foreach(Interactor* i,interactorToName.keys()) {
       if (i->isCompatible(viewName))

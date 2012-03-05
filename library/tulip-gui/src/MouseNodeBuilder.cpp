@@ -26,9 +26,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GlGraphComposite.h>
-
 
 #include <tulip/MouseNodeBuilder.h>
 
@@ -81,10 +79,6 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
         inputData->getElementSelected()->setNodeValue(newNode,true);
 
-//        GlMainView* glMainView = static_cast<GlMainView*>(view());
-//        NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view();
-//        nodeLinkView->elementSelectedSlot(newNode.id, true);
-        //glMainWidget->redraw();
         return true;
       }
     }
