@@ -19,13 +19,13 @@
 #include <stack>
 #include "PathLengthMetric.h"
 
-DOUBLEPLUGINOFGROUP(PathLengthMetric,"Path Length","David Auber","15/02/2001","Alpha","1.0","Tree")
+PLUGIN(PathLengthMetric)
 
 using namespace std;
 using namespace tlp;
 
 //=======================================
-PathLengthMetric::PathLengthMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context), leafMetric(NULL) {
+PathLengthMetric::PathLengthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), leafMetric(NULL) {
   // Leaf metric needed
   addDependency<DoubleAlgorithm>("Leaf", "1.0");
 }

@@ -20,7 +20,7 @@
 #include "TreeReingoldAndTilfordExtended.h"
 #include "DatasetTools.h"
 
-LAYOUTPLUGINOFGROUP(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber and Romain Bourqui","24/09/2010","Beta","1.1","Tree")
+PLUGIN(TreeReingoldAndTilfordExtended)
 using namespace std;
 using namespace tlp;
 
@@ -68,7 +68,7 @@ const char * paramHelp[] = {
 //=============================================================================
 #define ORIENTATION "vertical;horizontal;"
 //=============================================================================
-TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const tlp::PropertyContext &context):
+TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const tlp::PluginContext* context):
   LayoutAlgorithm(context),
   lengthMetric(0) {
   addNodeSizePropertyParameter(this);

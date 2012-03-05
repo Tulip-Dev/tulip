@@ -34,7 +34,8 @@
  */
 class StrengthMetric:public tlp::DoubleAlgorithm {
 public:
-  StrengthMetric(const tlp::PropertyContext &);
+  PLUGININFORMATIONSWITHGROUP("Strength","David Auber","26/02/2003","Alpha","1.0","Graph")
+  StrengthMetric(const tlp::PluginContext* context);
   ~StrengthMetric();
   double getNodeValue(const tlp::node n);
   double getEdgeValue(const tlp::edge n);

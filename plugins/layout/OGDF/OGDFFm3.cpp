@@ -285,17 +285,17 @@ class OGDFFm3: public OGDFLayoutPluginBase {
   tlp::StringCollection stringCollection;
 
 public:
-
-  OGDFFm3(const tlp::PropertyContext &context);
+  PLUGININFORMATIONSWITHGROUP("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Alpha", "1.2" ,"Force Directed")
+  OGDFFm3(const tlp::PluginContext* context);
   ~OGDFFm3();
   void beforeCall(TulipToOGDF *tlpToOGDF, ogdf::LayoutModule *ogdfLayoutAlgo);
 };
 
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de
  creation,informations, release, groupe*/
-LAYOUTPLUGINOFGROUP(OGDFFm3,"FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Alpha", "1.2" ,"Force Directed")
+PLUGIN(OGDFFm3)
 
-OGDFFm3::OGDFFm3(const tlp::PropertyContext &context) :
+OGDFFm3::OGDFFm3(const tlp::PluginContext* context) :
   OGDFLayoutPluginBase(context, new ogdf::FMMMLayout()) {
   addParameter<DoubleProperty> ("Edge Length Property", paramHelp[0],
                                 "viewMetric", false);

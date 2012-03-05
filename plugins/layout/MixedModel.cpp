@@ -30,7 +30,7 @@
 #include "MixedModel.h"
 #include "DatasetTools.h"
 
-LAYOUTPLUGINOFGROUP(MixedModel,"Mixed Model","Romain BOURQUI ","09/11/2005","Ok","1.0","Planar")
+PLUGIN(MixedModel)
 
 using namespace std;
 using namespace tlp;
@@ -66,7 +66,7 @@ const char * paramHelp[] = {
 }
 #define ORIENTATION "vertical;horizontal;"
 //====================================================
-MixedModel::MixedModel(const tlp::PropertyContext &context):LayoutAlgorithm(context)  {
+MixedModel::MixedModel(const tlp::PluginContext* context):LayoutAlgorithm(context)  {
   addNodeSizePropertyParameter(this);
   addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
   addParameter<float> ("y node-node spacing",paramHelp[1],"2");

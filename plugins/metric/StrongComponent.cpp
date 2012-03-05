@@ -20,7 +20,7 @@
 #include "StrongComponent.h"
 #include <tulip/DoubleProperty.h>
 
-DOUBLEPLUGINOFGROUP(StrongComponent,"Strongly Connected Component","David Auber","12/06/2001","Alpha","1.0","Component")
+PLUGIN(StrongComponent)
 
 using namespace std;
 using namespace tlp;
@@ -74,7 +74,7 @@ int StrongComponent::attachNumerotation(tlp::node n,
   return res;
 }
 
-StrongComponent::StrongComponent(const tlp::PropertyContext &context):DoubleAlgorithm(context) {}
+StrongComponent::StrongComponent(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
 
 StrongComponent::~StrongComponent() {}
 

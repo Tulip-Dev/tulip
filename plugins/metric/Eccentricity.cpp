@@ -23,7 +23,7 @@
 #include <tulip/ConnectedTest.h>
 #include "Eccentricity.h"
 
-DOUBLEPLUGINOFGROUP(EccentricityMetric,"Eccentricity","Auber/Munzner","18/06/2004","Alpha","2.0","Graph")
+PLUGIN(EccentricityMetric)
 
 using namespace std;
 using namespace tlp;
@@ -60,7 +60,7 @@ const char * paramHelp[] = {
 };
 }
 
-EccentricityMetric::EccentricityMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context), allPaths(false), norm(true), directed(false) {
+EccentricityMetric::EccentricityMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), allPaths(false), norm(true), directed(false) {
   addParameter<bool>("closeness centrality",paramHelp[0],"false");
   addParameter<bool>("norm",paramHelp[1],"true");
   addParameter<bool>("directed",paramHelp[2],"false");

@@ -42,7 +42,12 @@ class OrientableSizeProxy;
  **/
 class Dendrogram: public tlp::LayoutAlgorithm {
 public:
-  Dendrogram(const tlp::PropertyContext& context);
+  PLUGININFORMATIONSWITHGROUP("Dendrogram",
+  "Julien Testut, Antony Durand, Pascal Ollier, "
+  "Yashvin Nababsing, Sebastien Leclerc, "
+  "Thibault Ruchon, Eric Dauchier",
+  "03/12/04", "ok", "1.0","Tree")
+  Dendrogram(const tlp::PluginContext* context);
   ~Dendrogram();
 
   bool run();

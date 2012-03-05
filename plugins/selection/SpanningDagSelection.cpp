@@ -23,13 +23,13 @@
 
 #include "SpanningDagSelection.h"
 
-BOOLEANPLUGIN(SpanningDagSelection,"Spanning Dag","David Auber","01/12/1999","Alpha","1.0")
+PLUGIN(SpanningDagSelection)
 
 using namespace std;
 using namespace tlp;
 
 //=================================================================
-SpanningDagSelection::SpanningDagSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context) {}
+SpanningDagSelection::SpanningDagSelection(const tlp::PluginContext* context):BooleanAlgorithm(context) {}
 //=================================================================
 bool SpanningDagSelection::run() {
   result->setAllNodeValue(true);

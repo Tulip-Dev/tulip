@@ -22,12 +22,12 @@
 #include <tulip/MethodFactory.h>
 #include <tulip/GraphTools.h>
 
-BOOLEANPLUGIN(SpanningTreeSelection,"Spanning Forest","David Auber","01/12/1999","Alpha","1.0")
+PLUGIN(SpanningTreeSelection)
 
 using namespace std;
 using namespace tlp;
 
-SpanningTreeSelection::SpanningTreeSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context)
+SpanningTreeSelection::SpanningTreeSelection(const tlp::PluginContext* context):BooleanAlgorithm(context)
 {}
 
 SpanningTreeSelection::~SpanningTreeSelection() {}

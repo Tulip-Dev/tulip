@@ -25,9 +25,7 @@
 using namespace std;
 using namespace tlp;
 
-LAYOUTPLUGINOFGROUP(SquarifiedTreeMap,"Squarified Tree Map",
-                    "Tulip Team",
-                    "25/05/2010", "ok", "2.0", "Tree")
+PLUGIN(SquarifiedTreeMap)
 //====================================================================
 
 const double SEPARATION_Z  = 10;
@@ -66,7 +64,7 @@ const char * paramHelp[] = {
 };
 }
 //====================================================================
-SquarifiedTreeMap::SquarifiedTreeMap(const tlp::PropertyContext& context) :LayoutAlgorithm(context) {
+SquarifiedTreeMap::SquarifiedTreeMap(const tlp::PluginContext* context) :LayoutAlgorithm(context) {
   aspectRatio = DEFAULT_RATIO;
   addParameter<DoubleProperty>("metric", paramHelp[0], "", false);
   addParameter<double>("Aspect Ratio", paramHelp[1], "1.");

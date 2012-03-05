@@ -423,6 +423,8 @@ const char * paramHelp[] = {
 }
 
 struct WebImport:public ImportModule {
+  PLUGININFORMATIONSWITHGROUP("Web Site","Auber","15/11/2004","Import Web site plugin","1.0","Misc")
+  
   std::deque<UrlElement> toVisit;
   std::set<UrlElement> visited;
   std::map<UrlElement, tlp::node> nodes;
@@ -434,7 +436,7 @@ struct WebImport:public ImportModule {
   bool visitOther;
   bool extractNonHttp;
 
-  WebImport(AlgorithmContext context):ImportModule(context),labels(NULL), urls(NULL), colors(NULL), redirectionColor(NULL), maxSize(1000), nbNodes(0), visitOther(false), extractNonHttp(true) {
+  WebImport(tlp::PluginContext* context):ImportModule(context),labels(NULL), urls(NULL), colors(NULL), redirectionColor(NULL), maxSize(1000), nbNodes(0), visitOther(false), extractNonHttp(true) {
     addParameter<string>("server",paramHelp[0],"www.labri.fr");
     addParameter<string>("web page",paramHelp[1], "");
     addParameter<int>("max size",paramHelp[2], "1000");
@@ -810,4 +812,4 @@ struct WebImport:public ImportModule {
   }
 };
 
-IMPORTPLUGINOFGROUP(WebImport,"Web Site","Auber","15/11/2004","Import Web site plugin","1.0","Misc")
+PLUGIN(WebImport)

@@ -84,9 +84,9 @@ static const float AOSCILLATIONDEF = 1.;
 static const float AROTATIONDEF    = 1.;
 static const float ASHAKEDEF       = 0.3f;
 
-LAYOUTPLUGINOFGROUP(GEMLayout,"GEM (Frick)","Tulip Team","16/10/2008","Stable","1.1","Force Directed")
+PLUGIN(GEMLayout)
 
-GEMLayout::GEMLayout(const tlp::PropertyContext &context) : LayoutAlgorithm(context), i_maxtemp(IMAXTEMPDEF), a_maxtemp(AMAXTEMPDEF), i_starttemp(ISTARTTEMPDEF),
+GEMLayout::GEMLayout(const tlp::PluginContext* context) : LayoutAlgorithm(context), i_maxtemp(IMAXTEMPDEF), a_maxtemp(AMAXTEMPDEF), i_starttemp(ISTARTTEMPDEF),
   a_starttemp(ASTARTTEMPDEF), i_finaltemp(IFINALTEMPDEF), a_finaltemp(AFINALTEMPDEF), i_maxiter(IMAXITERDEF), a_maxiter(AMAXITERDEF), i_gravity(IGRAVITYDEF),
   a_gravity(AGRAVITYDEF), i_oscillation(IOSCILLATIONDEF), a_oscillation(AOSCILLATIONDEF), i_rotation(IROTATIONDEF), a_rotation(AROTATIONDEF), i_shake(ISHAKEDEF),
   a_shake(ASHAKEDEF), _dim(2), _nbNodes(0), _useLength(false), metric(NULL), max_iter(0) {

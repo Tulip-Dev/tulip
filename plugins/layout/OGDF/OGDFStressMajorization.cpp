@@ -113,8 +113,8 @@ const char * paramHelp[] = {
 class OGDFStressMajorization : public OGDFLayoutPluginBase {
 
 public:
-
-  OGDFStressMajorization(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::StressMajorization()) {
+  PLUGININFORMATIONSWITHGROUP("Stress Majorization (OGDF)","Karsten Klein","12/11/2007","Ok","1.0","Force Directed")
+  OGDFStressMajorization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::StressMajorization()) {
     addParameter<int>("iterations", paramHelp[0], "300");
     addParameter<double>("stop tolerance", paramHelp[1], "0.001");
     addParameter<bool>("used layout", paramHelp[2], "false");
@@ -162,4 +162,4 @@ public:
 
 };
 
-LAYOUTPLUGINOFGROUP(OGDFStressMajorization,"Stress Majorization (OGDF)","Karsten Klein","12/11/2007","Ok","1.0","Force Directed")
+PLUGIN(OGDFStressMajorization)

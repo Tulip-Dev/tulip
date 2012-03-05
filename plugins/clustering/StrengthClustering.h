@@ -41,7 +41,8 @@
 */
 class StrengthClustering:public tlp::DoubleAlgorithm {
 public:
-  StrengthClustering(tlp::PropertyContext);
+  PLUGININFORMATIONSWITHGROUP("Strength Clustering", "David Auber", "27/01/2003", "Alpha", "2.0","Clustering")
+  StrengthClustering(tlp::PluginContext* context);
   ~StrengthClustering();
   bool run();
   bool check(std::string &);

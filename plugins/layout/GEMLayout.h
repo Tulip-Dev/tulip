@@ -75,7 +75,8 @@
 
 class GEMLayout : public tlp::LayoutAlgorithm {
 public:
-  GEMLayout(const tlp::PropertyContext &context);
+  PLUGININFORMATIONSWITHGROUP("GEM (Frick)","Tulip Team","16/10/2008","Stable","1.1","Force Directed")
+  GEMLayout(const tlp::PluginContext* context);
   ~GEMLayout();
   bool run();
 

@@ -142,17 +142,17 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 class OGDFGemFrick : public OGDFLayoutPluginBase {
 
 public:
-
-  OGDFGemFrick(const tlp::PropertyContext &context);
+  PLUGININFORMATIONSWITHGROUP("GEM Frick (OGDF)","Christoph Buchheim", "15/11/2007","Alpha","1.1", "Force Directed")
+  OGDFGemFrick(const tlp::PluginContext* context);
   ~OGDFGemFrick();
 
   void beforeCall(TulipToOGDF *tlpToOGDF, ogdf::LayoutModule *ogdfLayoutAlgo);
 
 };
 
-LAYOUTPLUGINOFGROUP(OGDFGemFrick,"GEM Frick (OGDF)","Christoph Buchheim", "15/11/2007","Alpha","1.1", "Force Directed")
+PLUGIN(OGDFGemFrick)
 
-OGDFGemFrick::OGDFGemFrick(const tlp::PropertyContext &context) : OGDFLayoutPluginBase(context,new ogdf::GEMLayout()) {
+OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext* context) : OGDFLayoutPluginBase(context,new ogdf::GEMLayout()) {
   addParameter<int>("number of rounds", paramHelp[0], "30000");
   addParameter<double>("minimal temperature", paramHelp[1], "0.005");
   addParameter<double>("initial temperature", paramHelp[2], "12.0");

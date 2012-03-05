@@ -33,7 +33,8 @@
  */
 class DegreeMetric:public tlp::DoubleAlgorithm {
 public:
-  DegreeMetric(const tlp::PropertyContext &);
+  PLUGININFORMATIONSWITHGROUP("Degree","David Auber","04/10/2001","Stable","1.0","Graph")
+  DegreeMetric(const tlp::PluginContext* context);
   bool run();
 };
 /*@}*/

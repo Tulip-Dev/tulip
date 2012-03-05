@@ -28,7 +28,8 @@
 /*@{*/
 class HierarchicalClustering:public tlp::Algorithm {
 public:
-  HierarchicalClustering(tlp::AlgorithmContext);
+  PLUGININFORMATIONSWITHGROUP("Hierarchical","David Auber","27/01/2000","Alpha","1.0", "Clustering")
+  HierarchicalClustering(tlp::PluginContext* context);
   ~HierarchicalClustering();
   bool run();
   bool check(std::string &);

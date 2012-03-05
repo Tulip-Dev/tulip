@@ -18,7 +18,7 @@
  */
 #include "Kruskal.h"
 
-BOOLEANPLUGIN(Kruskal,"Kruskal","Anthony DON","14/04/03","Alpha","1.0")
+PLUGIN(Kruskal)
 
 using namespace std;
 using namespace tlp;
@@ -34,7 +34,7 @@ const char * paramHelp[] = {
 };
 }
 //======================================================
-Kruskal::Kruskal(const tlp::PropertyContext &context):BooleanAlgorithm(context) {
+Kruskal::Kruskal(const tlp::PluginContext* context):BooleanAlgorithm(context) {
   addParameter<DoubleProperty> ("edge weight", paramHelp[0], "viewMetric");
 }
 //======================================================

@@ -206,7 +206,8 @@ using namespace tlp;
  */
 class BiconnectedComponent:public DoubleAlgorithm {
 public:
-  BiconnectedComponent(const PropertyContext &context):DoubleAlgorithm(context) {}
+  PLUGININFORMATIONSWITHGROUP("Biconnected Component","David Auber","03/01/2005","Alpha","1.0","Component")
+  BiconnectedComponent(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
   bool run() {
     MutableContainer<int> compo;
     compo.setAll(-1);
@@ -226,4 +227,4 @@ public:
 };
 /*@}*/
 //=============================================================================================
-DOUBLEPLUGINOFGROUP(BiconnectedComponent,"Biconnected Component","David Auber","03/01/2005","Alpha","1.0","Component")
+PLUGIN(BiconnectedComponent)

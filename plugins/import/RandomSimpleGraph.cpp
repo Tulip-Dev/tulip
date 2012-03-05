@@ -94,7 +94,8 @@ const char * paramHelp[] = {
  */
 class RandomSimpleGraph:public ImportModule {
 public:
-  RandomSimpleGraph(AlgorithmContext context):ImportModule(context) {
+  PLUGININFORMATIONSWITHGROUP("Random Simple Graph","Auber","16/06/2002","","1.0","Graphs")
+  RandomSimpleGraph(tlp::PluginContext* context):ImportModule(context) {
     addParameter<unsigned int>("nodes",paramHelp[0],"5");
     addParameter<unsigned int>("edges",paramHelp[1],"9");
   }
@@ -163,4 +164,4 @@ public:
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(RandomSimpleGraph,"Random Simple Graph","Auber","16/06/2002","","1.0","Graphs")
+PLUGIN(RandomSimpleGraph)

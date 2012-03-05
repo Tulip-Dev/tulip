@@ -19,12 +19,12 @@
 #include <cassert>
 #include "DagLevelMetric.h"
 
-DOUBLEPLUGINOFGROUP(DagLevelMetric,"Dag Level","David Auber","10/03/2000","Alpha","1.0","Tree")
+PLUGIN(DagLevelMetric)
 
 using namespace std;
 using namespace tlp;
 
-DagLevelMetric::DagLevelMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {}
+DagLevelMetric::DagLevelMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
 
 DagLevelMetric::~DagLevelMetric() {}
 //======================================================

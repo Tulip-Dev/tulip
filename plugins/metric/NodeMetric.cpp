@@ -19,13 +19,13 @@
 #include <stack>
 #include "NodeMetric.h"
 
-DOUBLEPLUGINOFGROUP(NodeMetric,"Node","David Auber","20/12/1999","Alpha","1.0","Tree")
+PLUGIN(NodeMetric)
 
 using namespace std;
 using namespace tlp;
 
 //====================================================================
-NodeMetric::NodeMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context)
+NodeMetric::NodeMetric(const tlp::PluginContext* context):DoubleAlgorithm(context)
 {}
 
 // structure below is used to implement dfs loop

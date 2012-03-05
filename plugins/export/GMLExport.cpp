@@ -20,6 +20,8 @@
 #include <iostream>
 #include <iomanip>
 
+#include <tulip/MethodFactory.h>
+#include <tulip/ExportModule.h>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/AbstractProperty.h>
 
@@ -57,9 +59,10 @@ void printSize(ostream &os,const Size &v) {
  * This format is the file format used by Graphlet.
  * See www.infosun.fmi.uni-passau.de/Graphlet/GML/ for details.
  */
-class GMLExport:public ExportModule {
+class GMLExport:public tlp::ExportModule {
 public:
-  GMLExport(AlgorithmContext context):ExportModule(context)
+  PLUGININFORMATIONSWITHGROUP("GML","Auber David","31/07/2001","GML Export plugin","1.0", "Export")
+  GMLExport(tlp::PluginContext* context) : tlp::ExportModule(context)
   {}
 
   ~GMLExport() {}
@@ -163,4 +166,4 @@ public:
   }
 };
 /*@}*/
-EXPORTPLUGIN(GMLExport,"GML","Auber David","31/07/2001","GML Export plugin","1.0")
+PLUGIN(GMLExport)

@@ -32,7 +32,8 @@
  */
 class ConnectedComponent:public tlp::DoubleAlgorithm {
 public:
-  ConnectedComponent(const tlp::PropertyContext &);
+  PLUGININFORMATIONSWITHGROUP("Connected Component","David Auber","01/07/2002","Alpha","1.0","Component")
+  ConnectedComponent(const tlp::PluginContext* context);
   ~ConnectedComponent();
   bool run();
 };

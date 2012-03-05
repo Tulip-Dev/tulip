@@ -23,7 +23,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(EqualValueClustering,"Equal Value","David Auber","20/05/2008","Beta","1.1")
+PLUGIN(EqualValueClustering)
 
 namespace {
 const char * paramHelp[] = {
@@ -54,7 +54,7 @@ const char * paramHelp[] = {
 #define NODE_ELT 0
 #define EDGE_ELT 1
 //================================================================================
-EqualValueClustering::EqualValueClustering(AlgorithmContext context):Algorithm(context) {
+EqualValueClustering::EqualValueClustering(tlp::PluginContext* context):Algorithm(context) {
   addParameter<PropertyInterface*>("Property", paramHelp[0], "viewMetric");
   addParameter<StringCollection>(ELT_TYPE, paramHelp[1], ELT_TYPES);
   addParameter<bool>("Connected", paramHelp[2], "false");

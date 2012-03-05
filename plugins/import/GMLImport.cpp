@@ -545,7 +545,8 @@ const char * paramHelp[] = {
  */
 class GMLImport:public ImportModule {
 public:
-  GMLImport(AlgorithmContext context):ImportModule(context) {
+  PLUGININFORMATIONSWITHGROUP("GML","Auber","04/07/2001","GML Import plugin","1.1","File")
+  GMLImport(PluginContext* context):ImportModule(context) {
     addParameter<string>("file::filename",paramHelp[0]);
   }
   ~GMLImport() {}
@@ -576,4 +577,4 @@ public:
 };
 /*@}*/
 
-IMPORTPLUGINOFGROUP(GMLImport,"GML","Auber","04/07/2001","GML Import plugin","1.1","File")
+PLUGIN(GMLImport)

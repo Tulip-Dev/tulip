@@ -41,7 +41,8 @@
  */
 class ClusterMetric:public tlp::DoubleAlgorithm {
 public:
-  ClusterMetric(const tlp::PropertyContext &);
+  PLUGININFORMATIONSWITHGROUP("Cluster","David Auber","26/02/2003","Beta","1.0","Graph")
+  ClusterMetric(const tlp::PluginContext* context);
   bool run();
 
 private:

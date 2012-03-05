@@ -19,13 +19,13 @@
 #include <stack>
 #include "LeafMetric.h"
 
-DOUBLEPLUGINOFGROUP(LeafMetric,"Leaf","David Auber","20/12/1999","Alpha","1.0","Tree")
+PLUGIN(LeafMetric)
 
 using namespace std;
 using namespace tlp;
 
 //=======================================================================
-LeafMetric::LeafMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {}
+LeafMetric::LeafMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
 
 // structure below is used to implement dfs loop
 struct dfsLeafStruct {

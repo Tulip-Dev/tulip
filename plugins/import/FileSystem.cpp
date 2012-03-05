@@ -44,7 +44,8 @@ static const char * paramHelp[] = {
  */
 class FileSystem:public tlp::ImportModule {
 public:
-  FileSystem(tlp::AlgorithmContext context):ImportModule(context), _absolutePaths(NULL), _baseNames(NULL), _createdDates(NULL),
+  PLUGININFORMATIONSWITHGROUP( "File System Directory", "Auber", "16/12/2002", "", "2.0", "Misc")
+  FileSystem(tlp::PluginContext* context):ImportModule(context), _absolutePaths(NULL), _baseNames(NULL), _createdDates(NULL),
     _fileNames(NULL), _isExecutable(NULL), _isReadable(NULL), _isSymlink(NULL), _isWritable(NULL), _lastModifiedDates(NULL),
     _lastReadDates(NULL), _owners(NULL), _permissions(NULL), _suffixes(NULL) {
     addParameter<std::string>("dir::directory", paramHelp[0]);
@@ -158,4 +159,4 @@ private:
   tlp::StringProperty *_suffixes;
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(FileSystem, "File System Directory", "Auber", "16/12/2002", "", "2.0", "Misc")
+PLUGIN(FileSystem)

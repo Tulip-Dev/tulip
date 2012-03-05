@@ -73,7 +73,8 @@ const char
  */
 class Grid: public ImportModule {
 public:
-  Grid(AlgorithmContext context) :
+  PLUGININFORMATIONSWITHGROUP("Grid","Jonathan Dubois","02/12/2003","","2.0","Graphs")
+  Grid(tlp::PluginContext* context) :
     ImportModule(context) {
     addParameter<unsigned int> ("width", paramHelp[0], "10");
     addParameter<unsigned int> ("height", paramHelp[1], "10");
@@ -287,4 +288,4 @@ public:
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(Grid,"Grid","Jonathan Dubois","02/12/2003","","2.0","Graphs")
+PLUGIN(Grid)

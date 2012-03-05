@@ -21,7 +21,7 @@
 
 using namespace tlp;
 
-BOOLEANPLUGIN(InducedSubGraphSelection,"Induced Sub-Graph","David Auber","08/08/2001","Alpha","1.0")
+PLUGIN(InducedSubGraphSelection)
 
 //=================================================================================
 namespace {
@@ -35,7 +35,7 @@ const char * paramHelp[] = {
 };
 }
 //=================================================================================
-InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PropertyContext &context):
+InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext* context):
   BooleanAlgorithm(context) {
   addParameter<BooleanProperty>("Nodes", paramHelp[0], "viewSelection");
 }

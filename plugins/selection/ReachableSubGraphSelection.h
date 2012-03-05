@@ -36,7 +36,8 @@
  */
 class ReachableSubGraphSelection:public tlp::BooleanAlgorithm {
 public:
-  ReachableSubGraphSelection(const tlp::PropertyContext &);
+  PLUGININFORMATIONSWITHGROUP("Reachable Sub-Graph","David Auber","01/12/1999","Alpha","1.0", "Selection")
+  ReachableSubGraphSelection(const tlp::PluginContext* context);
   ~ReachableSubGraphSelection();
   bool run();
 };

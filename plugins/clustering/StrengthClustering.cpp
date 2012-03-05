@@ -22,7 +22,7 @@
 using namespace std;
 using namespace tlp;
 
-DOUBLEPLUGINOFGROUP(StrengthClustering, "Strength Clustering", "David Auber", "27/01/2003", "Alpha", "2.0","Clustering")
+PLUGIN(StrengthClustering)
 
 //================================================================================
 StrengthClustering::~StrengthClustering() {}
@@ -345,7 +345,7 @@ const char * paramHelp[] = {
 }
 
 //================================================================================
-StrengthClustering::StrengthClustering(PropertyContext context):DoubleAlgorithm(context) {
+StrengthClustering::StrengthClustering(PluginContext* context):DoubleAlgorithm(context) {
   addParameter<DoubleProperty>("metric", paramHelp[0], "", false);
 //  addParameter<bool>("layout subgraphs", paramHelp[1], "true");
 //  addParameter<bool>("layout quotient graph", paramHelp[2], "true");

@@ -21,7 +21,7 @@
 
 using namespace tlp;
 
-BOOLEANPLUGIN(ReachableSubGraphSelection,"Reachable Sub-Graph","David Auber","01/12/1999","Alpha","1.0")
+PLUGIN(ReachableSubGraphSelection)
 
 namespace {
 const char * paramHelp[] = {
@@ -57,7 +57,7 @@ const char * paramHelp[] = {
 }
 
 
-ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context) {
+ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext* context):BooleanAlgorithm(context) {
   addParameter<int> ("direction",paramHelp[0],"0");
   addParameter<BooleanProperty> ("startingnodes",paramHelp[1],"viewSelection");
   addParameter<int> ("distance",paramHelp[2],"5");

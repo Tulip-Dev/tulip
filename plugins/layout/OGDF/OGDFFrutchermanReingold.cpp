@@ -129,8 +129,8 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 class OGDFFrutchermanReingold: public OGDFLayoutPluginBase {
 
 public:
-
-  OGDFFrutchermanReingold(const tlp::PropertyContext &context);
+  PLUGININFORMATIONSWITHGROUP("Frutcherman Reingold (OGDF)","Stephan Hachul","15/11/2007", "Alpha", "1.1","Force Directed")
+  OGDFFrutchermanReingold(const tlp::PluginContext* context);
   ~OGDFFrutchermanReingold();
 
   void beforeCall(TulipToOGDF *tlpToOGDF, ogdf::LayoutModule *ogdfLayoutAlgo);
@@ -138,9 +138,9 @@ public:
 
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de
  creation,informations, realease, groupe*/
-LAYOUTPLUGINOFGROUP(OGDFFrutchermanReingold, "Frutcherman Reingold (OGDF)","Stephan Hachul","15/11/2007", "Alpha", "1.1","Force Directed")
+PLUGIN(OGDFFrutchermanReingold)
 
-OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PropertyContext &context) :
+OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PluginContext* context) :
   OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderFRExact()) {
   addParameter<int>("iterations", paramHelp[0], "1000");
   addParameter<bool>("noise", paramHelp[1], "true");

@@ -24,7 +24,8 @@
 
 class PathLengthMetric:public tlp::DoubleAlgorithm {
 public:
-  PathLengthMetric(const tlp::PropertyContext &);
+  PLUGININFORMATIONSWITHGROUP("Path Length","David Auber","15/02/2001","Alpha","1.0","Tree")
+  PathLengthMetric(const tlp::PluginContext* context);
   bool run();
   bool check(std::string &);
 private:

@@ -22,7 +22,7 @@
 #include <tulip/StringProperty.h>
 #include "StrahlerMetric.h"
 
-DOUBLEPLUGINOFGROUP(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","1.0","Graph")
+PLUGIN(StrahlerMetric)
 
 using namespace std;
 using namespace tlp;
@@ -218,7 +218,7 @@ const char * paramHelp[] = {
 #define REGISTERS 1
 #define STACKS 2
 //==============================================================================
-StrahlerMetric::StrahlerMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context), allNodes(false) {
+StrahlerMetric::StrahlerMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), allNodes(false) {
   addParameter<bool>("All nodes", paramHelp[0], "false");
   addParameter<StringCollection>(COMPUTATION_TYPE, paramHelp[1], COMPUTATION_TYPES);
 }

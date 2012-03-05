@@ -21,12 +21,12 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/SimpleTest.h>
 
-BOOLEANPLUGIN(MultipleEdgeSelection,"Multiple Edge","David Auber","20/01/2003","Alpha","1.0")
+PLUGIN(MultipleEdgeSelection)
 
 using namespace std;
 using namespace tlp;
 
-MultipleEdgeSelection::MultipleEdgeSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context) {}
+MultipleEdgeSelection::MultipleEdgeSelection(const tlp::PluginContext* context):BooleanAlgorithm(context) {}
 
 bool MultipleEdgeSelection::run() {
   vector<edge> multipleEdges;

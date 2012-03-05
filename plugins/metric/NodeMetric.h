@@ -35,7 +35,8 @@
  */
 class NodeMetric:public tlp::DoubleAlgorithm {
 public:
-  NodeMetric(const tlp::PropertyContext &);
+  PLUGININFORMATIONSWITHGROUP("Node","David Auber","20/12/1999","Alpha","1.0","Tree")
+  NodeMetric(const tlp::PluginContext* context);
   bool run();
   bool check(std::string &);
 private:

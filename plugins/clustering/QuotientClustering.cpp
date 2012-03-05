@@ -23,7 +23,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","OK","1.3")
+PLUGIN(QuotientClustering)
 
 //==============================================================================
 namespace {
@@ -93,7 +93,7 @@ const char * paramHelp[] = {
 }
 #define AGGREGATION_FUNCTIONS "none;average;sum;max;min"
 //================================================================================
-QuotientClustering::QuotientClustering(AlgorithmContext context):Algorithm(context) {
+QuotientClustering::QuotientClustering(PluginContext* context):Algorithm(context) {
   addDependency<LayoutAlgorithm>("Circular", "1.1");
   addDependency<LayoutAlgorithm>("GEM (Frick)", "1.1");
   addDependency<SizeAlgorithm>("Auto Sizing", "1.0");

@@ -19,7 +19,7 @@
 #include "Circular.h"
 #include "DatasetTools.h"
 
-LAYOUTPLUGINOFGROUP(Circular,"Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","1.1","Basic")
+PLUGIN(Circular)
 
 using namespace std;
 using namespace tlp;
@@ -35,7 +35,7 @@ const char * paramHelp[] = {
 };
 }
 
-Circular::Circular(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
+Circular::Circular(const tlp::PluginContext* context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addParameter<bool>("search cycle", paramHelp[0], "false");
 }
