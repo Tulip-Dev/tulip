@@ -99,7 +99,7 @@ public:
     return false;
   }
 
-  bool import() {
+  bool importGraph() {
     string name2;
 
     if (!dataSet->get("file::name", name2))

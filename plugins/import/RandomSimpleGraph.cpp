@@ -100,12 +100,12 @@ public:
   }
   ~RandomSimpleGraph() {}
 
-  bool import() {
+  bool importGraph() {
     srand(clock());
     unsigned int nbNodes  = 5;
     unsigned int nbEdges  = 9;
 
-    if (dataSet!=0) {
+    if (dataSet!=NULL) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("edges", nbEdges);
     }

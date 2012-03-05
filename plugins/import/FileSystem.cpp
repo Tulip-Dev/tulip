@@ -51,8 +51,8 @@ public:
   }
   ~FileSystem() {}
 
-  bool import() {
-    if (dataSet == 0)
+  bool importGraph() {
+    if (dataSet == NULL)
       return false;
 
     std::string rootPathStr;

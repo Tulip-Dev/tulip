@@ -549,7 +549,7 @@ public:
     addParameter<string>("file::filename",paramHelp[0]);
   }
   ~GMLImport() {}
-  bool import() {
+  bool importGraph() {
     string filename;
 
     if (!dataSet->get<string>("file::filename", filename))

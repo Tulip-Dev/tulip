@@ -97,9 +97,7 @@ Graph * tlp::newGraph() {
 }
 //=========================================================
 Graph * tlp::newSubGraph(Graph *graph, std::string name) {
-  Graph *newGraph = graph->addSubGraph();
-  newGraph->setAttribute("name", name);
-  return newGraph;
+  return graph->addSubGraph(NULL, 0, name);
 }
 //=========================================================
 Graph * tlp::newCloneSubGraph(Graph *graph, std::string name) {
@@ -159,7 +157,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   ImportModule *newImportModule=ImportModuleLister::getPluginObject(format, tmp);
   assert(newImportModule!=0);
 
-  bool importSucessfull = newImportModule->import();
+  bool importSucessfull = newImportModule->importGraph();
 
   //If the import failed and we created the graph then delete the graph
   if (!importSucessfull && newGraphP)
@@ -200,7 +198,7 @@ bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &
   tmp.pluginProgress=tmpProgress;
   ExportModule *newExportModule=ExportModuleLister::getPluginObject(format, tmp);
   assert(newExportModule!=0);
-  result=newExportModule->exportGraph(outputStream,sg);
+  result=newExportModule->exportGraph(outputStream);
 
   if (deletePluginProgress) delete tmpProgress;
 

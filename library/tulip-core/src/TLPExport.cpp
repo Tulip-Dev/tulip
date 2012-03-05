@@ -511,8 +511,8 @@ public:
     os << ")" << endl;
   }
 
-  bool exportGraph(ostream &os,Graph *currentGraph) {
-    graph=currentGraph->getRoot();
+  bool exportGraph(ostream &os) {
+    graph=graph->getRoot();
     string format(TLP_FILE_VERSION);
 
     // reindex nodes/edges

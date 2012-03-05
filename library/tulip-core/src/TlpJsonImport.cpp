@@ -421,7 +421,7 @@ public:
     addParameter<std::string>("file::filename", "");
   }
 
-  virtual bool import() {
+  virtual bool importGraph() {
     std::string filename;
     std::string data;
 

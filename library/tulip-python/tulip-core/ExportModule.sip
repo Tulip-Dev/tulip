@@ -31,7 +31,7 @@ public :
 	PythonExportModule(AlgorithmContext context) : 
 		ExportModule(context){}
 	
-	bool exportGraph(std::ostream &,Graph *) {
+	bool exportGraph(std::ostream &) {
 		return exportGraph();
 	}
 	

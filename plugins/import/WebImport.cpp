@@ -713,7 +713,7 @@ struct WebImport:public ImportModule {
     return true;
   }
 
-  bool import() {
+  bool importGraph() {
     string server = "www.labri.fr";
     string url;
     bool computelayout = true;

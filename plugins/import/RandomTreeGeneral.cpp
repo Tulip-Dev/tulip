@@ -101,7 +101,7 @@ public:
     return result;
   }
 
-  bool import() {
+  bool importGraph() {
     srand(clock());
 
     unsigned int sizeMin  = 10;

@@ -50,9 +50,9 @@ public:
   /**
   * @brief The import operations should take place here.
   *
-  * @return bool Whether the import was sucessful or not.
+  * @return bool Whether the import was successful or not.
   **/
-  virtual bool import()=0;
+  virtual bool importGraph()=0;
 
   /**
   * @brief The Graph in which to write the data to import.

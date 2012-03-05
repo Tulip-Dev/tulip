@@ -68,7 +68,7 @@ public:
   TlpJsonExport(AlgorithmContext context) : ExportModule(context) {
   }
 
-  virtual bool exportGraph(ostream& fileOut, Graph* graph) {
+  virtual bool exportGraph(ostream& fileOut) {
     //initialization of the maps from old ID to new ID here, before entering saveGraph (as it is recursive).
     node n;
     int i = 0;
