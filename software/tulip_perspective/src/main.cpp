@@ -139,7 +139,6 @@ int main(int argc,char **argv) {
       projectFilePath = a;
   }
 
-  PerspectiveContext context;
   TulipProject *project = NULL;
   QString error;
 
@@ -161,9 +160,10 @@ int main(int argc,char **argv) {
     project->setPerspective(perspectiveName);
   }
 
-  context.externalFile = projectFilePath;
-  context.parameters = extraParams;
-  context.project = project;
+  PerspectiveContext* context = new PerspectiveContext();
+  context->externalFile = projectFilePath;
+  context->parameters = extraParams;
+  context->project = project;
 
   if (perspectiveName.isNull())
     usage("Could not determine the perspective to launch." + error);
@@ -171,10 +171,13 @@ int main(int argc,char **argv) {
   // Initialize main window.
   progress->progress(100,100);
   progress->setComment("Setting up GUI (this can take some time)");
-  context.mainWindow = mainWindow;
+
+  TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow();
+  mainWindow->setVisible(false);
+  context->mainWindow = mainWindow;
 
   // Create perspective object
-  Perspective *perspective = StaticPluginLister<Perspective,PerspectiveContext>::getPluginObject(perspectiveName.toStdString(), context);
+  Perspective *perspective = PluginLister::instance()->getPluginObject<Perspective>(perspectiveName.toStdString(), context);
 
   if (!perspective)
     usage("Failed to create perspective: " + perspectiveName);
