@@ -149,7 +149,7 @@ public:
     std::list<std::string> plugins = PluginLister::instance()->availablePlugins<PROPTYPE>();
     for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
       std::string name(*it);
-      QString group = PluginLister::pluginInformations(name)->getGroup().c_str();
+      QString group = PluginLister::pluginInformations(name)->group().c_str();
       QStringList lst = result[group];
       lst << name.c_str();
       result[group] = lst;
@@ -194,7 +194,7 @@ public:
     std::list<std::string> algorithms = PluginLister::instance()->availablePlugins<Algorithm>();
     for(std::list<std::string>::const_iterator it = algorithms.begin(); it != algorithms.end(); ++it) {
       QString name = it->c_str();
-      QString group = PluginLister::pluginInformations(name.toStdString())->getGroup().c_str();
+      QString group = PluginLister::pluginInformations(name.toStdString())->group().c_str();
       QStringList nameList = result[group];
       nameList << name;
       result[group] = nameList;

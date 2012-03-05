@@ -90,7 +90,7 @@ const tlp::Plugin* tlp::PluginLister::pluginInformations(const std::string& name
 
 void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
   tlp::Plugin* informations = objectFactory->createPluginObject(NULL);
-  std::string pluginName = informations->getName();
+  std::string pluginName = informations->name();
   
   if (!pluginExists(pluginName)) {
     
@@ -149,7 +149,7 @@ const tlp::ParameterList tlp::PluginLister::getPluginParameters(std::string name
 std::string tlp::PluginLister::getPluginRelease(std::string name) {
   assert(plugins.find(name)!=plugins.end());
   Plugin* plugin = getPluginObject(name, NULL);
-  std::string release(plugin->getRelease());
+  std::string release(plugin->release());
   delete plugin;
   return release;
 }

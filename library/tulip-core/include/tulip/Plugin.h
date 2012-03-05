@@ -78,7 +78,7 @@ public:
    * only the latest encountered will be considered.
    * @return string the name of the plug-in.
    */
-  virtual std::string getName() const=0;
+  virtual std::string name() const=0;
 
   /**
    * @brief Returns the name of the group this plug-in belongs to.
@@ -86,14 +86,14 @@ public:
    * e.g. trees::planar trees
    * @return the group name of this plug-in.
    */
-  virtual std::string getGroup() const=0;
+  virtual std::string group() const=0;
 
   /**
    * @brief The name of the author of this plug-in.
    *
    * @return the name of the author.
    */
-  virtual std::string getAuthor() const=0;
+  virtual std::string author() const=0;
 
   /**
    * @brief The creation date of the plug-in.
@@ -101,7 +101,7 @@ public:
    *
    * @return the creation date.
    */
-  virtual std::string getDate() const=0;
+  virtual std::string date() const=0;
 
   /**
    * @brief Informations about the plug-in, from the plug-in author.
@@ -109,14 +109,14 @@ public:
    * Most plug-ins by the Tulip team use an html format to generate help from these informations.
    * @return string The informations associated with this plug-in.
    */
-  virtual std::string getInfo() const=0;
+  virtual std::string info() const=0;
 
   /**
    * @brief The release version of the plug-in, including major and minor.
    * The version should be X.Y, X being the major, and Y the minor.
    * @return string The release version.
    */
-  virtual std::string getRelease() const=0;
+  virtual std::string release() const=0;
 
   /**
    * @brief The version of Tulip this plug-in was built with.
@@ -124,7 +124,7 @@ public:
    *
    * @return The Tulip version the plug-in was built with.
    */
-  virtual std::string getTulipRelease() const=0;
+  virtual std::string tulipRelease() const=0;
 
   /**
    * @brief Only the major of the plug-in version.
@@ -132,7 +132,7 @@ public:
    *
    * @return The major part of the plug-in version.
    */
-  virtual std::string getMajor() const;
+  virtual std::string major() const;
 
   /**
    * @brief Only the minor of the plug-in version.
@@ -140,17 +140,17 @@ public:
    *
    * @return The minor part of the plug-in version.
    */
-  virtual std::string getMinor() const;
+  virtual std::string minor() const;
 
   /**
    * @return The major Tulip version the plug-in was built with.
    */
-  virtual std::string getTulipMajor() const;
+  virtual std::string tulipMajor() const;
 
   /**
    * @return Return the minor Tulip version this plug-in was built with.
    */
-  virtual std::string getTulipMinor() const;
+  virtual std::string tulipMinor() const;
 
   /**
   * @brief Returns the ID of the glyph this factory builds.
@@ -158,15 +158,15 @@ public:
   *
   * @return int the id of the glyph.
   **/
-  virtual int getId() const;
+  virtual int id() const;
 
   /**
   * @brief Returns the dependencies of this factory.
   *
   * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > > The dependencies of this plugin.
   **/
-  std::list<tlp::Dependency> getDependencies() const {
-    return dependencies;
+  std::list<tlp::Dependency> dependencies() const {
+    return WithDependency::dependencies;
   }
 };
 

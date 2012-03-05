@@ -43,7 +43,7 @@ public:
   }
 
   virtual void loaded(const tlp::Plugin* info, const std::list< Dependency >& dependencies) {
-    QString pluginName = QString::fromStdString(info->getName());
+    QString pluginName = QString::fromStdString(info->name());
     QString pluginLibrary;
 
     std::list<std::string> plugins = PluginLister::availablePlugins();
@@ -58,13 +58,13 @@ public:
     infoElement.setAttribute("name", pluginName);
     //TODO remove this once the input/output parameters refactoring is done
     infoElement.setAttribute("type", "");
-    infoElement.setAttribute("author", QString::fromStdString(info->getAuthor()));
-    infoElement.setAttribute("date", QString::fromStdString(info->getDate()));
-    infoElement.setAttribute("info", QString::fromStdString(info->getInfo()));
+    infoElement.setAttribute("author", QString::fromStdString(info->author()));
+    infoElement.setAttribute("date", QString::fromStdString(info->date()));
+    infoElement.setAttribute("info", QString::fromStdString(info->info()));
     infoElement.setAttribute("fileName", pluginLibrary);
-    infoElement.setAttribute("release", QString::fromStdString(info->getRelease()));
-    infoElement.setAttribute("group", QString::fromStdString(info->getGroup()));
-    infoElement.setAttribute("tulipRelease", QString::fromStdString(info->getTulipRelease()));
+    infoElement.setAttribute("release", QString::fromStdString(info->release()));
+    infoElement.setAttribute("group", QString::fromStdString(info->group()));
+    infoElement.setAttribute("tulipRelease", QString::fromStdString(info->tulipRelease()));
     infoElement.setAttribute("folder", _name.simplified().remove(' ').toLower());
 
     for(std::list<Dependency>::const_iterator it = dependencies.begin(); it != dependencies.end(); ++it) {
