@@ -102,7 +102,6 @@ INSTALL(FILES
   tulip/cxx/Matrix.cxx
   tulip/cxx/minmaxproperty.cxx
   tulip/cxx/MutableContainer.cxx
-  tulip/cxx/PluginLister.cxx
   tulip/cxx/Vector.cxx
 DESTINATION ${TulipIncludeInstallDir}/tulip/cxx/
 COMPONENT tulip_core_dev
