@@ -33,11 +33,11 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
     depsNeedCheck = false;
 
     // loop over plugins
-    Iterator<std::string> *itP = _instance->availablePlugins();
+    std::list<std::string> plugins = PluginLister::availablePlugins();
 
-    while(itP->hasNext()) {
-      std::string pluginName = itP->next();
-      std::list<Dependency> dependencies = _instance->getPluginDependencies(pluginName);
+    for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
+      std::string pluginName = *it;
+      std::list<Dependency> dependencies = PluginLister::getPluginDependencies(pluginName);
       std::list<Dependency>::const_iterator itD = dependencies.begin();
 
       // loop over dependencies
@@ -50,12 +50,12 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
             loader->aborted(pluginName, " '" + pluginName + "' will be removed, it depends on missing " +
                             factoryDepName + " '" + pluginDepName + "'.");
 
-            _instance->removePlugin(pluginName);
+            PluginLister::removePlugin(pluginName);
           depsNeedCheck = true;
           break;
         }
 
-        std::string release = _instance->getPluginRelease(pluginName);
+        std::string release = PluginLister::getPluginRelease(pluginName);
         std::string releaseDep = (*itD).pluginRelease;
 
         if (tlp::getMajor(release) != tlp::getMajor(releaseDep) ||
@@ -66,20 +66,22 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
                             release + " is loaded.");
           }
 
-          _instance->removePlugin(pluginName);
+          PluginLister::removePlugin(pluginName);
           depsNeedCheck = true;
           break;
         }
       }
     }
-
-    delete itP;
   }
   while (depsNeedCheck);
 }
 
-tlp::Iterator<std::string>* tlp::PluginLister::availablePlugins() {
-  return new StlMapKeyIterator<std::string, PluginDescription>(plugins.begin(), plugins.end());
+std::list<std::string> tlp::PluginLister::availablePlugins() {
+  std::list<std::string> keys;
+  for(std::map<std::string , PluginDescription>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
+    keys.push_back(it->first);
+  }
+  return keys;
 }
 
 const tlp::Plugin* tlp::PluginLister::pluginInformations(const std::string& name) {
