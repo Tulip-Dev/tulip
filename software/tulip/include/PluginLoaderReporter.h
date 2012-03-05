@@ -30,7 +30,7 @@ public:
   virtual void start(const std::string &) {}
   virtual void numberOfFiles(int) {}
   virtual void loading(const std::string &) {}
-  virtual void loaded(const tlp::AbstractPluginInfo *, const std::list <tlp::Dependency>&) {}
+  virtual void loaded(const tlp::Plugin *, const std::list <tlp::Dependency>&) {}
   virtual void aborted(const std::string &,const  std::string &);
   virtual void finished(bool ,const std::string &) {}
 

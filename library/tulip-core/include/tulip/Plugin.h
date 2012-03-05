@@ -17,17 +17,21 @@
  *
  */
 
-#ifndef TULIP_ABSTRACTPLUGININFO_H
-#define TULIP_ABSTRACTPLUGININFO_H
+#ifndef TULIP_PLUGIN_H
+#define TULIP_PLUGIN_H
 #include <assert.h>
 #include <string>
 #include <tulip/tulipconf.h>
 #include <tulip/TlpTools.h>
-// #include <tulip/PluginLister.h>
+#include "WithParameter.h"
+
 /**
  * \addtogroup plugins
  */
 namespace tlp {
+
+class PluginContext;
+
 /*@{*/
 
 /**
@@ -60,13 +64,13 @@ TLP_SCOPE std::string getMinor(const std::string &release);
  * the Tulip version the plug-in was built with (to know whether the plug-in is compatible with the currently running version of TUlip),
  * and the group this plug-in belongs to (e.g. trees).
  *
- * The function that actually creates the plugin is in the FactoryInterface class in order to keep AbstractPluginInfo clean of template parameters, making it easier to use.
+ * The function that actually creates the plugin is in the FactoryInterface class in order to keep Plugin clean of template parameters, making it easier to use.
  *
  * @see FactoryInterface for more advanced operation such as plugin creation and retrieving dependencies.
  */
-class TLP_SCOPE AbstractPluginInfo {
+class TLP_SCOPE Plugin : public tlp::WithParameter, public tlp::WithDependency {
 public:
-  virtual ~AbstractPluginInfo() {}
+  virtual ~Plugin() {}
 
   /**
    * @brief Returns the name of the plug-in, as registered in the Tulip plug-in system.
@@ -161,17 +165,16 @@ public:
   *
   * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > > The dependencies of this plugin.
   **/
-  virtual std::list<tlp::Dependency> getDependencies() const = 0;
+  std::list<tlp::Dependency> getDependencies() const {
+    return dependencies;
+  }
 };
-
-template<class ObjectType, class Context> class StaticPluginLister;
 
 /**
  * @brief This abstract class provides a more complete interface for plugin factories, including plugin creation.
  *
  **/
-template <class PluginObject, class PluginContext>
-class FactoryInterface : public AbstractPluginInfo {
+class FactoryInterface {
 public:
   /**
    * @brief Creates a new Algorithm object.
@@ -179,25 +182,10 @@ public:
    * @param context The context for the new plug-in.
    * @return PluginObject* A newly created algorithm plug-in.
    **/
-  virtual PluginObject* createPluginObject(PluginContext context) {
-    (void) context; //suppresses the unused parameter warning
-    std::cerr << "error from FactoryInterface<" << typeid(PluginObject).name() << ", " << typeid(PluginContext).name() <<">" << std::endl;
-    assert(false);
-    return NULL;
-  }
-
-  /**
-  * @brief Convenience function to retrieve the dependencies of a plugin from its factory.
-  * Forwards the call to the appropriate PluginLister.
-  *
-  * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > >
-  **/
-  virtual std::list<tlp::Dependency> getDependencies() const {
-    return tlp::StaticPluginLister<PluginObject, PluginContext>::getPluginDependencies(getName());
-  }
+  virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0;
 };
 
 /*@}*/
 }
 
-#endif //TULIP_ABSTRACTPLUGININFO_H
+#endif //TULIP_PLUGIN_H

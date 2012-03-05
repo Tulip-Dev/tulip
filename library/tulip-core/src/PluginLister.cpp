@@ -21,78 +21,142 @@
 using namespace tlp;
 using namespace std;
 
-map<string, PluginListerInterface* > *PluginListerInterface::allFactories = NULL;
-PluginLoader *PluginListerInterface::currentLoader = NULL;
+std::map<std::string, PluginLister::PluginDescription> PluginLister::plugins = std::map<std::string, PluginLister::PluginDescription>();
+PluginLoader* PluginLister::currentLoader = NULL;
+PluginLister* PluginLister::_instance = NULL;
 
-void PluginListerInterface::addFactory(PluginListerInterface *factory, const std::string &name) {
-  if (!allFactories)
-    allFactories = new std::map<std::string, PluginListerInterface*>();
-
-  //std::cerr << name.c_str() << " factory added" << std::endl;
-  (*allFactories)[name] = factory;
-}
-
-bool PluginListerInterface::pluginExists(const std::string& factoryName, const std::string& pluginName) {
-  assert(allFactories->find(factoryName) != allFactories->end());
-  return (*allFactories)[factoryName]->pluginExists(pluginName);
-}
-
-void PluginListerInterface::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
+void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
   // plugins dependencies loop
   bool depsNeedCheck;
 
   do {
-    std::map<std::string, PluginListerInterface *>::const_iterator it = PluginListerInterface::allFactories->begin();
     depsNeedCheck = false;
 
-    // loop over factories
-    for (; it != PluginListerInterface::allFactories->end(); ++  it) {
-      PluginListerInterface *tfi = (*it).second;
-      // loop over plugins
-      Iterator<std::string> *itP = tfi->availablePlugins();
+    // loop over plugins
+    Iterator<std::string> *itP = _instance->availablePlugins();
 
-      while(itP->hasNext()) {
-        std::string pluginName = itP->next();
-        std::list<Dependency> dependencies = tfi->getPluginDependencies(pluginName);
-        std::list<Dependency>::const_iterator itD = dependencies.begin();
+    while(itP->hasNext()) {
+      std::string pluginName = itP->next();
+      std::list<Dependency> dependencies = _instance->getPluginDependencies(pluginName);
+      std::list<Dependency>::const_iterator itD = dependencies.begin();
 
-        // loop over dependencies
-        for (; itD != dependencies.end(); ++itD) {
-          std::string factoryDepName = (*itD).factoryName;
-          std::string pluginDepName = (*itD).pluginName;
+      // loop over dependencies
+      for (; itD != dependencies.end(); ++itD) {
+        std::string factoryDepName = (*itD).factoryName;
+        std::string pluginDepName = (*itD).pluginName;
 
-          if (!PluginListerInterface::pluginExists(factoryDepName, pluginDepName)) {
-            if (loader)
-              loader->aborted(pluginName, tfi->getPluginsClassName() +
-                              " '" + pluginName + "' will be removed, it depends on missing " +
-                              factoryDepName + " '" + pluginDepName + "'.");
+        if (!PluginLister::pluginExists(pluginDepName)) {
+          if (loader)
+            loader->aborted(pluginName, " '" + pluginName + "' will be removed, it depends on missing " +
+                            factoryDepName + " '" + pluginDepName + "'.");
 
-            tfi->removePlugin(pluginName);
-            depsNeedCheck = true;
-            break;
+            _instance->removePlugin(pluginName);
+          depsNeedCheck = true;
+          break;
+        }
+
+        std::string release = _instance->getPluginRelease(pluginName);
+        std::string releaseDep = (*itD).pluginRelease;
+
+        if (tlp::getMajor(release) != tlp::getMajor(releaseDep) ||
+            tlp::getMinor(release) != tlp::getMinor(releaseDep)) {
+          if (loader) {
+            loader->aborted(pluginName, " '" + pluginName + "' will be removed, it depends on release " +
+                            releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
+                            release + " is loaded.");
           }
 
-          std::string release = (*PluginListerInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
-          std::string releaseDep = (*itD).pluginRelease;
-
-          if (tlp::getMajor(release) != tlp::getMajor(releaseDep) ||
-              tlp::getMinor(release) != tlp::getMinor(releaseDep)) {
-            if (loader) {
-              loader->aborted(pluginName, tfi->getPluginsClassName() +
-                              " '" + pluginName + "' will be removed, it depends on release " +
-                              releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
-                              release + " is loaded.");
-            }
-
-            tfi->removePlugin(pluginName);
-            depsNeedCheck = true;
-            break;
-          }
+          _instance->removePlugin(pluginName);
+          depsNeedCheck = true;
+          break;
         }
       }
-
-      delete itP;
     }
+
+    delete itP;
   }
   while (depsNeedCheck);
+}
+
+tlp::Iterator<std::string>* tlp::PluginLister::availablePlugins() {
+  return new StlMapKeyIterator<std::string, PluginDescription>(plugins.begin(), plugins.end());
+}
+
+const tlp::Plugin* tlp::PluginLister::pluginInformations(const std::string& name) {
+  return plugins.find(name)->second.factory->createPluginObject(NULL);
+}
+
+void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
+  tlp::Plugin* informations = objectFactory->createPluginObject(NULL);
+  std::string pluginName = informations->getName();
+  
+  if (!pluginExists(pluginName)) {
+    
+    // loop over dependencies
+    // to demangle the class names
+    std::list<tlp::Dependency> dependencies = informations->getDependencies();
+    std::list<tlp::Dependency>::iterator itD = dependencies.begin();
+    
+    for (; itD != dependencies.end(); itD++) {
+      const char *factoryDepName = (*itD).factoryName.c_str();
+      (*itD).factoryName = tlp::demangleTlpClassName(factoryDepName);
+    }
+    
+    PluginDescription description;
+    description.factory = objectFactory;
+    description.parameters = informations->getParameters();
+    description.dependencies = dependencies;
+    description.library = PluginLibraryLoader::getCurrentPluginFileName();
+    plugins[pluginName] = description;
+    
+    
+    if (currentLoader!=0) {
+      currentLoader->loaded(informations, dependencies);
+    }
+    delete informations;
+  }
+  else {
+    if (currentLoader != 0) {
+      std::string tmpStr;
+      tmpStr += "'" + pluginName + "' plugin";
+      currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
+    }
+  }
+}
+
+void tlp::PluginLister::removePlugin(const std::string &name) {
+  plugins.erase(name);
+}
+
+tlp::Plugin* tlp::PluginLister::getPluginObject(const std::string& name, PluginContext* context) {
+  typename std::map<std::string, PluginDescription>::const_iterator it = plugins.find(name);
+  
+  if (it!=plugins.end()) {
+    return (*it).second.factory->createPluginObject(context);
+  }
+  
+  return 0;
+}
+
+const tlp::ParameterList tlp::PluginLister::getPluginParameters(std::string name) {
+  assert(plugins.find(name)!=plugins.end());
+  return plugins.find(name)->second.parameters;
+}
+
+std::string tlp::PluginLister::getPluginRelease(std::string name) {
+  assert(plugins.find(name)!=plugins.end());
+  return plugins.find(name)->second.factory->createPluginObject(NULL)->getRelease();
+}
+
+std::list<tlp::Dependency> tlp::PluginLister::getPluginDependencies(std::string name) {
+  assert(plugins.find(name)!=plugins.end());
+  return plugins.find(name)->second.dependencies;
+}
+
+std::string tlp::PluginLister::getPluginLibrary(const std::string& name) {
+  return plugins.find(name)->second.library;
+}
+
+bool tlp::PluginLister::pluginExists(const std::string& pluginName) {
+  return plugins.find(pluginName) != plugins.end();
 }

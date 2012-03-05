@@ -54,19 +54,19 @@ QList<tlp::PluginInformations*> PluginManager::pluginsList(Location list) {
   QMap<QString, tlp::PluginInformations*> result;
 
   if(list.testFlag(Local)) {
-    for(std::map<std::string, PluginListerInterface*>::const_iterator it = PluginListerInterface::allFactories->begin(); it != PluginListerInterface::allFactories->end(); ++it) {
-      PluginListerInterface* currentLister = it->second;
-      Iterator<string>* plugins = currentLister->availablePlugins();
+    
+    PluginLister* currentLister = PluginLister::instance();
+    Iterator<string>* plugins = currentLister->availablePlugins();
 
-      while(plugins->hasNext()) {
-        string pluginName = plugins->next();
-        const AbstractPluginInfo& info = currentLister->pluginInformations(pluginName);
-        PluginInformations* localinfo = new PluginInformations(info, currentLister->getPluginsClassName(), currentLister->getPluginLibrary(pluginName));
-        result[pluginName.c_str()] = localinfo;
-      }
-
-      delete plugins;
+    while(plugins->hasNext()) {
+      string pluginName = plugins->next();
+      const Plugin& info = currentLister->pluginInformations(pluginName);
+      //FIXME second parameter of PluginInformations is the class name, remove it
+      PluginInformations* localinfo = new PluginInformations(info, "", currentLister->getPluginLibrary(pluginName));
+      result[pluginName.c_str()] = localinfo;
     }
+
+    delete plugins;
   }
 
   if(list.testFlag(Remote)) {

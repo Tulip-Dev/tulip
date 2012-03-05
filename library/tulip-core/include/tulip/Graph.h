@@ -31,6 +31,7 @@
 #include <tulip/Edge.h>
 #include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
+#include <tulip/PluginLister.h>
 
 namespace tlp {
 

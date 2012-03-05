@@ -68,7 +68,6 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
                                  std::string &msg,  tlp::PluginProgress *progress,
                                  tlp::DataSet *data) {
   bool result;
-  tlp::PropertyContext context;
 
   // check if this is a subgraph of prop->graph
   if (getRoot() != prop->graph) {
@@ -111,15 +110,11 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
   else
     tmpProgress=progress;
 
-  context.pluginProgress = tmpProgress;
-  context.graph = this;
-  context.dataSet = data;
+  tlp::PropertyContext* context = new tlp::PropertyContext(this, prop, data, tmpProgress);
 
   tlp::Observable::holdObservers();
   circularCalls.insert(prop);
-  tlp::PropertyContext tmpContext(context);
-  tmpContext.propertyProxy = prop;
-  typename PropertyType::PAlgorithm *tmpAlgo = tlp::PropertyPluginLister<tlp::TemplateAlgorithm<PropertyType> >::getPluginObject(algorithm, tmpContext);
+  typename PropertyType::PAlgorithm *tmpAlgo = tlp::PluginLister::instance()->getPluginObject<typename PropertyType::PAlgorithm>(algorithm, context);
 
   if (tmpAlgo != 0) {
     result = tmpAlgo->check(msg);

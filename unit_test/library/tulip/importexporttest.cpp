@@ -39,8 +39,8 @@ ImportExportTest::ImportExportTest() :importAlgorithm("TlpJsonImport"), exportAl
 void ImportExportTest::setUp() {
   CppUnit::TestFixture::setUp();
 
-  CPPUNIT_ASSERT_MESSAGE("Export plugin not loaded: " + exportAlgorithm, ExportModuleLister::pluginExists(exportAlgorithm));
-  CPPUNIT_ASSERT_MESSAGE("Import plugin not loaded: " + importAlgorithm, ImportModuleLister::pluginExists(importAlgorithm));
+  CPPUNIT_ASSERT_MESSAGE("Export plugin not loaded: " + exportAlgorithm, PluginLister::pluginExists(exportAlgorithm));
+  CPPUNIT_ASSERT_MESSAGE("Import plugin not loaded: " + importAlgorithm, PluginLister::pluginExists(importAlgorithm));
 }
 
 void ImportExportTest::testgridImportExport() {

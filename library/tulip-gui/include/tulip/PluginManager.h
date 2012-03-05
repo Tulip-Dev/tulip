@@ -43,7 +43,7 @@ static const QString PERSPECTIVE_PLUGIN_NAME = "Perspective";
 
 namespace tlp {
 
-class AbstractPluginInfo;
+class Plugin;
 
 typedef QMap<QString, tlp::DistantPluginInfo*> LocationPlugins;
 

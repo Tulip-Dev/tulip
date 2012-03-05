@@ -42,13 +42,13 @@ public:
     _name = name;
   }
 
-  virtual void loaded(const tlp::AbstractPluginInfo* info, const std::list< Dependency >& dependencies) {
+  virtual void loaded(const tlp::Plugin* info, const std::list< Dependency >& dependencies) {
     QString pluginName = QString::fromStdString(info->getName());
     QString pluginLibrary;
     std::string pluginType;
 
-    for(std::map<std::string, PluginListerInterface*>::const_iterator it = PluginListerInterface::allFactories->begin(); it != PluginListerInterface::allFactories->end(); ++it) {
-      PluginListerInterface* currentLister = it->second;
+    for(std::map<std::string, PluginLister*>::const_iterator it = PluginLister::allFactories->begin(); it != PluginLister::allFactories->end(); ++it) {
+      PluginLister* currentLister = it->second;
 
       if(currentLister->pluginExists(pluginName.toStdString())) {
         pluginLibrary = QString::fromStdString(currentLister->getPluginLibrary(pluginName.toStdString()));
@@ -133,7 +133,7 @@ int main(int argc,char **argv) {
   initTulipLib();
   PluginInformationsCollector collector;
   QDir pluginServerDir(argv[1]);
-  PluginListerInterface::currentLoader = &collector;
+  PluginLister::currentLoader = &collector;
 
   QStringList libraries;
 #if defined(_WIN32) || defined(_WIN64)

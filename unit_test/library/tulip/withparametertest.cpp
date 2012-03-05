@@ -44,7 +44,7 @@ const std::string ColorParameter = "colorParameter";
 typedef unsigned int uint;
 
 #define EXPECTED_VALUE(TYPE, VALUE) \
-TYPE TYPE##Value; \
+TYPE TYPE##Value = TYPE(); \
 set.get<TYPE>(TYPE##Parameter, TYPE##Value); \
 CPPUNIT_ASSERT_EQUAL(VALUE, TYPE##Value)
 

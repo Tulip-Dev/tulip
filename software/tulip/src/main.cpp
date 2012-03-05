@@ -164,7 +164,7 @@ int main(int argc, char **argv) {
   dispatcher->registerLoader(errorReport);
   dispatcher->registerLoader(splashScreen);
   tlp::PluginLibraryLoader::loadPlugins(dispatcher);
-  tlp::PluginListerInterface::checkLoadedPluginsDependencies(dispatcher);
+  tlp::PluginLister::checkLoadedPluginsDependencies(dispatcher);
   delete dispatcher;
   delete splashScreen;
 

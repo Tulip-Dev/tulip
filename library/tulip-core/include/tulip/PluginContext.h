@@ -33,15 +33,24 @@ class PluginProgress;
  */
 /*@{*/
 
+class PluginContext {
+public:
+  /**
+   * @brief required for dynamic casting
+   *
+   **/
+  virtual ~PluginContext() {}
+};
+
 ///Parameter for calling clustering plugins
-class AlgorithmContext {
+class AlgorithmContext : public tlp::PluginContext {
 public :
   ///
   Graph *graph;
-  PluginProgress *pluginProgress;
   DataSet *dataSet;
+  PluginProgress *pluginProgress;
   ///
-  AlgorithmContext ():graph(0),pluginProgress(0), dataSet(0) {}
+  AlgorithmContext (tlp::Graph* graph = NULL, tlp::DataSet* dataSet = NULL, tlp::PluginProgress* progress = NULL): graph(graph), dataSet(dataSet), pluginProgress(progress) {}
   ///
   ~AlgorithmContext() {}
 };
@@ -51,30 +60,20 @@ public :
  * @brief This class is used as only parameter when calling Property plug-ins.
  * It contains a Graph on whyich to run the plug-in, a PropertyInterface which will hold the result of the plug-in, and a PluginProgress to give feedback on the plug-in's progress.
  **/
-class PropertyContext {
+class PropertyContext : public tlp::AlgorithmContext {
 public :
-  ///
-  /**
-   * @brief The Graph on which the plug-in will run.
-   **/
-  Graph *graph;
 
   /**
    * @brief A property the plug-in can modify freely.
    * No other property should be modified.
    **/
   PropertyInterface *propertyProxy;
-  /**
-   * @brief A means to give feedback on the progress of the plug-in.
-   **/
-  PluginProgress *pluginProgress;
 
-  /**
-   * @brief Additional informations, such as the value of the plug-in's parameters, if any.
-   **/
-  DataSet *dataSet;
-  ///
-  PropertyContext ():graph(0),propertyProxy(0),pluginProgress(0),dataSet(0) {}
+  PropertyContext(tlp::Graph* graph = NULL, tlp::PropertyInterface* property = NULL, tlp::DataSet* dataSet = NULL, tlp::PluginProgress* progress = NULL):
+  AlgorithmContext(graph, dataSet, progress),
+  propertyProxy(property)
+  {}
+  
   ///
   ~PropertyContext() {}
 };

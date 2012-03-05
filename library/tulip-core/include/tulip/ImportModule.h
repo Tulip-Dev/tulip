@@ -22,8 +22,9 @@
 
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
-#include <tulip/AbstractPluginInfo.h>
+#include <tulip/Plugin.h>
 #include <tulip/PluginLister.h>
+#include <tulip/MethodFactory.h>
 
 /** \addtogroup plugins */
 namespace tlp {
@@ -36,17 +37,27 @@ class DataSet;
 * @brief Base class for import plug-ins.
 *
 **/
-class ImportModule :public WithParameter, public WithDependency {
+class ImportModule : public tlp::Plugin {
 public:
   /**
   * @brief Initializes the DataSet to the one passed in the context.
   *
   * @param context THe context this import plug-in runs into.
   **/
-  ImportModule (AlgorithmContext context) :
-    graph(context.graph),pluginProgress(context.pluginProgress), dataSet(context.dataSet) {}
-  virtual ~ImportModule() {}
+  ImportModule (tlp::PluginContext* context) {
+    if(context != NULL) {
+      tlp::AlgorithmContext* algoritmContext = dynamic_cast<tlp::AlgorithmContext*>(context);
+      assert(algoritmContext != NULL);
+      graph = algoritmContext->graph;
+      pluginProgress = algoritmContext->pluginProgress;
+      dataSet = algoritmContext->dataSet;
+    }
+  }
 
+  virtual std::string getGroup() const {
+    return "Import";
+  }
+  
   /**
   * @brief The import operations should take place here.
   *
@@ -69,12 +80,6 @@ public:
   **/
   DataSet *dataSet;
 };
-
-typedef StaticPluginLister<ImportModule,AlgorithmContext> ImportModuleLister;
-
-#ifdef WIN32
-template class TLP_SCOPE PluginLister<ImportModule,AlgorithmContext>;
-#endif
 
 /*@}*/
 }

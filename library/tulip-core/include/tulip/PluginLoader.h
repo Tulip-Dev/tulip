@@ -24,14 +24,14 @@
 
 namespace tlp {
 
-class AbstractPluginInfo;
+class Plugin;
 
 struct TLP_SCOPE PluginLoader {
   virtual ~PluginLoader() {}
   virtual void start(const std::string &path)=0;
   virtual void numberOfFiles(int) {}
   virtual void loading(const std::string &filename)=0;
-  virtual void loaded(const AbstractPluginInfo* infos, const std::list <Dependency>& dependencies)=0;
+  virtual void loaded(const Plugin* infos, const std::list <Dependency>& dependencies)=0;
   virtual void aborted(const std::string &filename,const  std::string &errormsg)=0;
   virtual void finished(bool state,const std::string &msg)=0;
 };

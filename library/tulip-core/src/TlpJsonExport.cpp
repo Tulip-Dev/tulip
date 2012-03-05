@@ -60,12 +60,14 @@ private:
  **/
 class TlpJsonExport : public ExportModule {
 public:
+  PLUGININFORMATIONS("TlpJsonExport","Charles Huet","18/05/2011","Tulip JSon format","1.0")
+  
   /**
    * @brief Mandatory constructor to initialize the AlgorithmContext.
    *
    * @param context The context this export algorithm will be initialized with.
    **/
-  TlpJsonExport(AlgorithmContext context) : ExportModule(context) {
+  TlpJsonExport(tlp::PluginContext* context) : ExportModule(context) {
   }
 
   virtual bool exportGraph(ostream& fileOut) {
@@ -306,4 +308,4 @@ protected:
   MutableContainer<uint> _newEdgeId;
 };
 
-EXPORTPLUGIN(TlpJsonExport,"TlpJsonExport","Charles Huet","18/05/2011","Tulip JSon format","1.0")
+PLUGIN(TlpJsonExport)

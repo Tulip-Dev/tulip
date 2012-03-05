@@ -25,7 +25,7 @@ namespace tlp {
 struct TLP_SCOPE PluginLoaderTxt:public PluginLoader {
   virtual void start(const std::string &path);
   virtual void loading(const std::string &filename);
-  virtual void loaded(const AbstractPluginInfo* infos, const std::list <Dependency>&);
+  virtual void loaded(const Plugin* infos, const std::list <Dependency>&);
   virtual void aborted(const std::string &filename,const  std::string &erreurmsg);
   virtual void finished(bool state,const std::string &msg);
 };

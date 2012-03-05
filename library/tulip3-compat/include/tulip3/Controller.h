@@ -23,11 +23,11 @@
 #include <QtGui/QDockWidget>
 #include <QtGui/QMainWindow>
 
-#include <tulip/AbstractPluginInfo.h>
+#include <tulip/Plugin.h>
 #include <tulip/PluginLister.h>
 #include <tulip/Vector.h>
 #include <tulip/Interactor.h>
-#include <tulip/AbstractPluginInfo.h>
+#include <tulip/Plugin.h>
 #include <tulip/Perspective.h>
 #include <tulip/Observable.h>
 

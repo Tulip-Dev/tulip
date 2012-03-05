@@ -21,7 +21,8 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <tulip/AbstractPluginInfo.h>
+#include <tulip/MethodFactory.h>
+#include <tulip/Plugin.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
@@ -33,7 +34,7 @@
 #include <tulip/PluginLister.h>
 
 #include <tulip/GlGraphInputData.h>
-#include <tulip/AbstractPluginInfo.h>
+#include <tulip/Plugin.h>
 
 
 namespace tlp {
@@ -53,10 +54,15 @@ public:
   }
 };
 //==========================================================
-class TLP_GL_SCOPE Glyph : public WithParameter, public WithDependency {
+class TLP_GL_SCOPE Glyph : public tlp::Plugin {
 public:
-  Glyph(GlyphContext *);
+  Glyph(AlgorithmContext&);
   virtual ~Glyph();
+
+  virtual std::string getGroup() const {
+    return "";
+  }
+  
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node) {
     boundingBox[0] = Coord(-0.5,-0.5,-0.5);
     boundingBox[1] = Coord(0.5,0.5,0.5);
@@ -103,33 +109,9 @@ template class TLP_GL_SCOPE PluginLister<Glyph,GlyphContext *>;
 #endif
 }
 
-#define GPLUGINFACTORY(T,C,N,A,D,I,R,ID,G)     \
-class C##T##Factory:public tlp::FactoryInterface<T, T##Context*>   \
-{                                                \
-public:                                          \
-  C##T##Factory(){         \
-    GlyphLister::registerPlugin(this);           \
-  }                  \
-  string getName() const { return string(N);}  \
-  string getGroup() const { return string(G);}   \
-  string getAuthor() const {return string(A);}   \
-  string getDate() const {return string(D);}   \
-  string getInfo() const {return string(I);}   \
-  string getRelease() const {return string(R);}\
-  string getTulipRelease() const {return string(TULIP_RELEASE);}\
-  int    getId() const {return ID;}    \
-  tlp::T * createPluginObject(tlp::GlyphContext *gc)   \
-  {            \
-    C *tmp = new C(gc);        \
-    return ((tlp::T *) tmp);       \
-  }            \
-};                                               \
-extern "C" {                                            \
-  C##T##Factory C##T##FactoryInitializer;               \
-}
-
-#define GLYPHPLUGINOFGROUP(C,N,A,D,I,R,ID,G) GPLUGINFACTORY(Glyph,C,N,A,D,I,R,ID,G)
-#define GLYPHPLUGIN(C,N,A,D,I,R,ID) GLYPHPLUGINOFGROUP(C,N,A,D,I,R,ID,"")
+#define GLYPHINFORMATIONS(N,A,D,I,R,ID) \
+PLUGININFORMATIONS(N,A,D,I,R)\
+int getId() const { return ID; }
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

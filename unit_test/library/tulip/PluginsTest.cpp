@@ -47,12 +47,12 @@ void PluginsTest::tearDown() {
 //==========================================================
 void PluginsTest::testloadPlugin() {
   // plugin does not exist yet
-  CPPUNIT_ASSERT(!tlp::PropertyPluginLister<tlp::TemplateAlgorithm<tlp::BooleanProperty> >::pluginExists("Test"));
+  CPPUNIT_ASSERT(!tlp::PluginLister::pluginExists("Test"));
   PluginLoaderTxt loader;
   PluginLibraryLoader::loadPluginLibrary("./testPlugin.so", &loader);
   // plugin should exist now
-  CPPUNIT_ASSERT(tlp::PropertyPluginLister<tlp::TemplateAlgorithm<tlp::BooleanProperty> >::pluginExists("Test"));
-  list<Dependency> deps = tlp::PropertyPluginLister<tlp::TemplateAlgorithm<tlp::BooleanProperty> >::getPluginDependencies("Test");
+  CPPUNIT_ASSERT(tlp::PluginLister::pluginExists("Test"));
+  list<Dependency> deps = tlp::PluginLister::instance()->getPluginDependencies("Test");
   // only one dependency (see testPlugin.cpp)
   CPPUNIT_ASSERT_EQUAL(size_t(1), deps.size());
   CPPUNIT_ASSERT_EQUAL(tlp::demangleTlpClassName(typeid(BooleanAlgorithm).name()), deps.front().factoryName);
@@ -125,7 +125,7 @@ void PluginsTest::availablePlugins() {
   testBooleanPlugins.insert("Test2");
 
   std::string pluginName;
-  forEach(pluginName, BooleanPluginLister::availablePlugins()) {
+  forEach(pluginName, PluginLister::instance()->availablePlugins()) {
     if(testBooleanPlugins.find(pluginName) != testBooleanPlugins.end()) {
       testBooleanPlugins.erase(pluginName);
     }
@@ -135,15 +135,15 @@ void PluginsTest::availablePlugins() {
 }
 
 void PluginsTest::pluginInformations() {
-  CPPUNIT_ASSERT_MESSAGE("'Test' plugin must be loaded", BooleanPluginLister::pluginExists("Test"));
+  CPPUNIT_ASSERT_MESSAGE("'Test' plugin must be loaded", PluginLister::pluginExists("Test"));
 
-  std::list<Dependency> dependencies = BooleanPluginLister::getPluginDependencies("Test");
+  std::list<Dependency> dependencies = PluginLister::instance()->getPluginDependencies("Test");
   CPPUNIT_ASSERT_EQUAL(size_t(1), dependencies.size());
   CPPUNIT_ASSERT_EQUAL(string("Test"), dependencies.begin()->pluginName);
   CPPUNIT_ASSERT_EQUAL(string("TemplateAlgorithm<tlp::BooleanProperty>"), dependencies.begin()->factoryName);
   CPPUNIT_ASSERT_EQUAL(string("1.0"), dependencies.begin()->pluginRelease);
 
-  tlp::ParameterList parameters = BooleanPluginLister::getPluginParameters("Test");
+  tlp::ParameterList parameters = PluginLister::instance()->getPluginParameters("Test");
 
   Iterator<string>* it = parameters.getParametersNames();
   CPPUNIT_ASSERT_MESSAGE("Test plugin has no parameters", it->hasNext());
@@ -153,16 +153,16 @@ void PluginsTest::pluginInformations() {
   CPPUNIT_ASSERT_EQUAL(string("0"), parameters.getDefaultValue(parameterName));
   CPPUNIT_ASSERT_EQUAL(string("i"), parameters.getTypeName(parameterName));
 
-  const AbstractPluginInfo& factory(BooleanPluginLister::pluginInformations("Test"));
-  CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory.getAuthor());
-  CPPUNIT_ASSERT_EQUAL(string("03/11/2004"), factory.getDate());
-  CPPUNIT_ASSERT_EQUAL(string(""), factory.getGroup());
-  CPPUNIT_ASSERT_EQUAL(0, factory.getId());
-  CPPUNIT_ASSERT_EQUAL(string("1"), factory.getMajor());
-  CPPUNIT_ASSERT_EQUAL(string("0"), factory.getMinor());
-  CPPUNIT_ASSERT_EQUAL(string("Test"), factory.getName());
-  CPPUNIT_ASSERT_EQUAL(string("1.0"), factory.getRelease());
-  CPPUNIT_ASSERT_EQUAL(tlp::getMajor(TULIP_RELEASE), factory.getTulipMajor());
-  CPPUNIT_ASSERT_EQUAL(tlp::getMinor(TULIP_RELEASE), factory.getTulipMinor());
-  CPPUNIT_ASSERT_EQUAL(string(TULIP_RELEASE), factory.getTulipRelease());
+  const Plugin* factory(PluginLister::instance()->pluginInformations("Test"));
+  CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory->getAuthor());
+  CPPUNIT_ASSERT_EQUAL(string("03/11/2004"), factory->getDate());
+  CPPUNIT_ASSERT_EQUAL(string(""), factory->getGroup());
+  CPPUNIT_ASSERT_EQUAL(0, factory->getId());
+  CPPUNIT_ASSERT_EQUAL(string("1"), factory->getMajor());
+  CPPUNIT_ASSERT_EQUAL(string("0"), factory->getMinor());
+  CPPUNIT_ASSERT_EQUAL(string("Test"), factory->getName());
+  CPPUNIT_ASSERT_EQUAL(string("1.0"), factory->getRelease());
+  CPPUNIT_ASSERT_EQUAL(tlp::getMajor(TULIP_RELEASE), factory->getTulipMajor());
+  CPPUNIT_ASSERT_EQUAL(tlp::getMinor(TULIP_RELEASE), factory->getTulipMinor());
+  CPPUNIT_ASSERT_EQUAL(string(TULIP_RELEASE), factory->getTulipRelease());
 }

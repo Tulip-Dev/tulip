@@ -50,7 +50,7 @@ namespace tlp {
 
 static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, ParameterList * > > paramMaps;
 
-ParameterList *ControllerAlgorithmTools::getPluginParameters(PluginListerInterface *factory, std::string name) {
+ParameterList *ControllerAlgorithmTools::getPluginParameters(PluginLister *factory, std::string name) {
   TLP_HASH_MAP<std::string, ParameterList *>::const_iterator it;
   it = paramMaps[(unsigned long) factory].find(name);
 
@@ -68,7 +68,7 @@ void ControllerAlgorithmTools::cleanPluginParameters() {
     TLP_HASH_MAP<std::string, ParameterList * >::const_iterator it2 = it->second.begin();
 
     for (; it2 != it->second.end() ; ++it2) {
-      if (!reinterpret_cast<PluginListerInterface *>(it->first)->pluginExists(it2->first)) {
+      if (!reinterpret_cast<PluginLister *>(it->first)->pluginExists(it2->first)) {
         entriesToErase.push_back(it2->first);
       }
     }

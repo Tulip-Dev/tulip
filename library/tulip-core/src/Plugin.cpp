@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/AbstractPluginInfo.h>
+#include <tulip/Plugin.h>
 
 using namespace tlp;
 using namespace std;
@@ -43,22 +43,22 @@ std::string tlp::getMajor(const std::string &release) {
   return release.substr(0, pos);
 }
 
-std::string AbstractPluginInfo::getMajor() const {
+std::string Plugin::getMajor() const {
   return tlp::getMajor(getRelease());
 }
 
-std::string AbstractPluginInfo::getMinor() const {
+std::string Plugin::getMinor() const {
   return tlp::getMinor(getRelease());
 }
 
-std::string AbstractPluginInfo::getTulipMajor() const {
+std::string Plugin::getTulipMajor() const {
   return tlp::getMajor(getTulipRelease());
 }
 
-std::string AbstractPluginInfo::getTulipMinor() const  {
+std::string Plugin::getTulipMinor() const  {
   return tlp::getMinor(getTulipRelease());
 }
 
-int AbstractPluginInfo::getId() const {
+int Plugin::getId() const {
   return 0;
 }

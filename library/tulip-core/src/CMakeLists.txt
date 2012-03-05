@@ -1,5 +1,5 @@
 SET(tulip_LIB_SRCS ${tulip_LIB_SRCS}
-AbstractPluginInfo.cpp
+Plugin.cpp
 AcyclicTest.cpp
 Bfs.cpp
 BiconnectedTest.cpp

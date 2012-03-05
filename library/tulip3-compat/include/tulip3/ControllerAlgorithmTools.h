@@ -27,7 +27,7 @@ class QWidget;
 
 namespace tlp {
 class Graph;
-class PluginListerInterface;
+class PluginLister;
 class View3;
 class DataSet;
 struct ParameterList;
@@ -43,7 +43,7 @@ public :
   /**
    * Return parameters need by a plugin
    */
-  static ParameterList *getPluginParameters(PluginListerInterface *factory, std::string name);
+  static ParameterList *getPluginParameters(PluginLister *factory, std::string name);
 
   /**
    * Remove entries from the parameters map if the plugin does not exist anymore
