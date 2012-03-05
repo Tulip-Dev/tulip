@@ -54,9 +54,9 @@ public :
    *
    * @param context The context containing the graph and PropertyInterface this plug-in has access to, as well as a PluginProgress.
    **/
-  PropertyAlgorithm(tlp::PluginContext* context) {
+  PropertyAlgorithm(const tlp::PluginContext* context) {
     if(context != NULL) {
-      tlp::AlgorithmContext* algoritmContext = dynamic_cast<tlp::AlgorithmContext*>(context);
+      const tlp::AlgorithmContext* algoritmContext = dynamic_cast<const tlp::AlgorithmContext*>(context);
       assert(algoritmContext != NULL);
       graph = algoritmContext->graph;
       pluginProgress = algoritmContext->pluginProgress;
@@ -105,8 +105,8 @@ public:
   Property* result;
   virtual ~TemplateAlgorithm() {}
 protected:
-  TemplateAlgorithm (tlp::PluginContext* context) : tlp::PropertyAlgorithm(context) {
-    PropertyContext* propertyContext = dynamic_cast<PropertyContext*>(context);
+  TemplateAlgorithm (const tlp::PluginContext* context) : tlp::PropertyAlgorithm(context) {
+    const PropertyContext* propertyContext = dynamic_cast<const PropertyContext*>(context);
     if(propertyContext) {
       result = (Property*)propertyContext->propertyProxy;
     }

@@ -118,7 +118,19 @@ public:
    *
    * @return :Iterator< std::string >* An iterator over the names of the plug-ins registered in this factory.
    **/
-  static Iterator<std::string>* availablePlugins();
+  static std::list<std::string> availablePlugins();
+
+  template<typename PluginType>
+  std::list<std::string> availablePlugins() {
+    std::list<std::string> keys;
+    for(std::map<std::string , PluginDescription>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
+      PluginType* plugin = dynamic_cast<PluginType*>(it->second.factory->createPluginObject(NULL));
+      if(plugin != NULL) {
+        keys.push_back(it->first);
+      }
+    }
+    return keys;
+  }
 
   /**
    * @brief Gets more detailed informations about one specific plug-in.

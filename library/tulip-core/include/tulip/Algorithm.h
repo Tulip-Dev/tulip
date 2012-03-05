@@ -50,7 +50,15 @@ public :
    * @param context The context this algorithm runs in, containing the graph, a DataSet for the parameters, and a PluginProgress
    * to give feedback to the user about the tasks the algorithm is performing.
    */
-  Algorithm (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet) {}
+  Algorithm (PluginContext* context) : graph(NULL),pluginProgress(NULL),dataSet(NULL) {
+    if(context != NULL) {
+      AlgorithmContext* algorithmContext = dynamic_cast<AlgorithmContext*>(context);
+      assert(algorithmContext != NULL);
+      graph = algorithmContext->graph;
+      pluginProgress = algorithmContext->pluginProgress;
+      dataSet = algorithmContext->dataSet;
+    }
+  }
   virtual ~Algorithm() {}
   /**
    * @brief Runs the algorithm on the context that was specified during construction.
