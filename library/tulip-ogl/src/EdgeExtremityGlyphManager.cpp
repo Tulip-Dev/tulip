@@ -65,17 +65,13 @@ int EdgeExtremityGlyphManager::glyphId(string name) {
 }
 //====================================================
 void EdgeExtremityGlyphManager::loadGlyphPlugins() {
-  Iterator<string> *itS = EdgeExtremityGlyphLister::availablePlugins();
-
-  while (itS->hasNext()) {
-    string pluginName = itS->next();
-    int pluginId = EdgeExtremityGlyphLister::pluginInformations(pluginName).getId();
+  std::list<std::string> plugins = PluginLister::instance()->availablePlugins<Glyph>();
+  for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
+    string pluginName = *it;
+    int pluginId = PluginLister::pluginInformations(pluginName)->getId();
     eeglyphIdToName[pluginId] = pluginName;
     nameToEeGlyphId[pluginName] = pluginId;
   }
-
-  delete itS;
-
 }
 //====================================================
 void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
@@ -85,17 +81,20 @@ void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
                                  glGraphInputData);
   glyphs.setAll(0);
 
-  string glyphName;
-  forEach(glyphName, EdgeExtremityGlyphLister::availablePlugins()) {
-    EdgeExtremityGlyph *newGlyph = EdgeExtremityGlyphLister::getPluginObject(glyphName, &gc);
-    glyphs.set(EdgeExtremityGlyphLister::pluginInformations(glyphName).getId(), newGlyph);
+  
+  std::list<std::string> plugins = PluginLister::instance()->availablePlugins<Glyph>();
+  for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
+    string glyphName = *it;
+    EdgeExtremityGlyph *newGlyph = PluginLister::instance()->getPluginObject<EdgeExtremityGlyph>(glyphName, &gc);
+    glyphs.set(PluginLister::pluginInformations(glyphName)->getId(), newGlyph);
   }
 }
 
 void EdgeExtremityGlyphManager::clearGlyphList(Graph **, GlGraphInputData*, MutableContainer<EdgeExtremityGlyph *>& glyphs) {
-  string glyphName;
-  forEach(glyphName, EdgeExtremityGlyphLister::availablePlugins()) {
-    delete glyphs.get(EdgeExtremityGlyphLister::pluginInformations(glyphName).getId());
+  std::list<std::string> plugins = PluginLister::instance()->availablePlugins<Glyph>();
+  for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
+    string glyphName = *it;
+    delete glyphs.get(PluginLister::pluginInformations(glyphName)->getId());
   }
 }
 

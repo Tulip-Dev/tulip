@@ -25,7 +25,8 @@ using namespace tlp;
 using namespace std;
 class GlArrow2DEdgeExtremity: public EdgeExtremityGlyphFrom2DGlyph {
 public:
-  GlArrow2DEdgeExtremity(EdgeExtremityGlyphContext *gc);
+  GLYPHINFORMATIONS("2D - Arrow","Jonathan Dubois","09/04/09","Edge Extremity with 2D arrow","1.0",50);
+  GlArrow2DEdgeExtremity(tlp::PluginContext *gc);
   virtual ~GlArrow2DEdgeExtremity();
 
   void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
@@ -35,11 +36,11 @@ protected :
   static GlTriangle *triangle;
 };
 
-EEGLYPHPLUGIN(GlArrow2DEdgeExtremity,"2D - Arrow","Jonathan Dubois","09/04/09","Edge Extremity with 2D arrow","1.0",50)
+PLUGIN(GlArrow2DEdgeExtremity)
 
 GlTriangle* GlArrow2DEdgeExtremity::triangle=0;
 
-GlArrow2DEdgeExtremity::GlArrow2DEdgeExtremity(EdgeExtremityGlyphContext *gc) :
+GlArrow2DEdgeExtremity::GlArrow2DEdgeExtremity(tlp::PluginContext *gc) :
   EdgeExtremityGlyphFrom2DGlyph(gc) {
   if(!triangle) {
     triangle=new GlTriangle(Coord(0,0,0),Size(0.5,0.5,0.5));

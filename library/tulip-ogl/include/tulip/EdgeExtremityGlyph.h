@@ -31,12 +31,13 @@
 #include <tulip/Matrix.h>
 #include <tulip/Plugin.h>
 #include <tulip/PluginLister.h>
+#include <tulip/Glyph.h>
 
 namespace tlp {
 typedef Matrix<float, 4> MatrixGL;
 class GlGraphInputData;
 
-class EdgeExtremityGlyphContext {
+class EdgeExtremityGlyphContext : public tlp::PluginContext {
 public:
   GlGraphInputData *glGraphInputData;
   ///
@@ -49,9 +50,9 @@ public:
   }
 };
 
-class TLP_GL_SCOPE EdgeExtremityGlyph: public WithDependency, public WithParameter {
+class TLP_GL_SCOPE EdgeExtremityGlyph: public tlp::Plugin {
 public:
-  EdgeExtremityGlyph(EdgeExtremityGlyphContext *gc);
+  EdgeExtremityGlyph(tlp::PluginContext *gc);
   virtual ~EdgeExtremityGlyph();
 
   virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) = 0;
@@ -63,15 +64,9 @@ protected:
   GlGraphInputData *edgeExtGlGraphInputData;
 };
 
-typedef tlp::StaticPluginLister<EdgeExtremityGlyph, EdgeExtremityGlyphContext*> EdgeExtremityGlyphLister;
-
-#ifdef WIN32
-template class TLP_GL_SCOPE PluginLister<EdgeExtremityGlyph,EdgeExtremityGlyphContext *>;
-#endif
-
 class TLP_GL_SCOPE EdgeExtremityGlyphFrom3DGlyph: public EdgeExtremityGlyph {
 public:
-  EdgeExtremityGlyphFrom3DGlyph(EdgeExtremityGlyphContext *gc);
+  EdgeExtremityGlyphFrom3DGlyph(tlp::PluginContext *gc);
   virtual ~EdgeExtremityGlyphFrom3DGlyph();
 
   virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
@@ -80,7 +75,7 @@ public:
 
 class TLP_GL_SCOPE EdgeExtremityGlyphFrom2DGlyph: public EdgeExtremityGlyph {
 public:
-  EdgeExtremityGlyphFrom2DGlyph(EdgeExtremityGlyphContext *gc);
+  EdgeExtremityGlyphFrom2DGlyph(tlp::PluginContext *gc);
   virtual ~EdgeExtremityGlyphFrom2DGlyph();
 
   virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
@@ -88,33 +83,5 @@ public:
 };
 
 }
-
-#define EEGPLUGINFACTORY(T,C,N,A,D,I,R,ID,G)     \
-class C##T##Factory:public tlp::FactoryInterface<T, T##Context*>   \
-{                                                \
-public:                                          \
-  C##T##Factory(){         \
-    EdgeExtremityGlyphLister::registerPlugin(this);          \
-  }                  \
-  std::string getName() const { return std::string(N);}  \
-  std::string getGroup() const { return std::string(G);}   \
-  std::string getAuthor() const {return std::string(A);}   \
-  std::string getDate() const {return std::string(D);}   \
-  std::string getInfo() const {return std::string(I);}   \
-  std::string getRelease() const {return std::string(R);}\
-  std::string getTulipRelease() const {return std::string(TULIP_RELEASE);}\
-  int    getId() const {return ID;}    \
-  tlp::T * createPluginObject(tlp::T##Context *gc)   \
-  {            \
-    C *tmp = new C(gc);        \
-    return ((tlp::T *) tmp);       \
-  }            \
-};                                               \
-extern "C" {                                            \
-  C##T##Factory C##T##FactoryInitializer;               \
-}
-
-#define EEGLYPHPLUGINOFGROUP(C,N,A,D,I,R,ID,G) EEGPLUGINFACTORY(EdgeExtremityGlyph,C,N,A,D,I,R,ID,G)
-#define EEGLYPHPLUGIN(C,N,A,D,I,R,ID) EEGLYPHPLUGINOFGROUP(C,N,A,D,I,R,ID,"")
 
 #endif /* EDGEEXTREMITYGLYPH_H_ */

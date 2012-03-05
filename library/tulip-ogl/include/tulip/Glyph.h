@@ -42,7 +42,7 @@ namespace tlp {
 class Graph;
 struct node;
 
-class GlyphContext {
+class GlyphContext : public PluginContext {
 public:
   GlGraphInputData *glGraphInputData;
   ///
@@ -56,7 +56,7 @@ public:
 //==========================================================
 class TLP_GL_SCOPE Glyph : public tlp::Plugin {
 public:
-  Glyph(AlgorithmContext&);
+  Glyph(tlp::PluginContext* context);
   virtual ~Glyph();
 
   virtual std::string getGroup() const {
@@ -102,16 +102,12 @@ protected:
   virtual Coord getAnchor(const Coord &vector) const;
 };
 
-typedef StaticPluginLister<Glyph, GlyphContext*> GlyphLister;
-
-#ifdef WIN32
-template class TLP_GL_SCOPE PluginLister<Glyph,GlyphContext *>;
-#endif
 }
 
 #define GLYPHINFORMATIONS(N,A,D,I,R,ID) \
 PLUGININFORMATIONS(N,A,D,I,R)\
-int getId() const { return ID; }
+int getId() const { return ID; } \
+virtual std::string getGroup() const { return ""; }
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 

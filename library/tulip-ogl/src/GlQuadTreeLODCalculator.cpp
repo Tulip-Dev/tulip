@@ -29,6 +29,8 @@
 #include <tulip/GlEntity.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlScene.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlEdge.h>
 #include <iostream>
 
 using namespace std;

@@ -24,12 +24,11 @@
 using namespace tlp;
 using namespace std;
 
-Glyph::Glyph(GlyphContext *gc) {
-  if (gc != 0) {
-    glGraphInputData=gc->glGraphInputData;
-  }
-  else {
-    glGraphInputData = 0;
+Glyph::Glyph(PluginContext* context) : glGraphInputData(NULL) {
+  if(context != NULL) {
+    GlyphContext* glyphContext = dynamic_cast<GlyphContext*>(context);
+    assert(glyphContext != NULL);
+    glGraphInputData = glyphContext->glGraphInputData;
   }
 }
 //=============================================
