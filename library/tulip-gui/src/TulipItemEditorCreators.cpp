@@ -33,7 +33,9 @@
 #include <tulip/GlyphRenderer.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/TulipFontWidget.h>
+#include <tulip/GlyphManager.h>
 
 using namespace tlp;
 
@@ -270,8 +272,9 @@ QString TulipFileDescriptorEditorCreator::displayText(const QVariant& v) const {
 
 QWidget* NodeShapeEditorCreator::createWidget(QWidget*parent) const {
   QComboBox* combobox = new QComboBox(parent);
-  std::string glyphName;
-  forEach(glyphName,GlyphLister::availablePlugins()) {
+  std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<Glyph>());
+  for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
+    std::string glyphName(*it);
     int glyphIndex = GlyphManager::getInst().glyphId(glyphName);
     //Create the glyph entry
     combobox->addItem(GlyphRenderer::getInst().render(glyphIndex),tlpStringToQString(glyphName),glyphIndex);
@@ -312,8 +315,9 @@ bool NodeShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem
 QWidget* EdgeExtremityShapeEditorCreator::createWidget(QWidget* parent) const {
   QComboBox* combobox = new QComboBox(parent);
   combobox->addItem(QString("NONE"),EdgeExtremityGlyphManager::NoEdgeExtremetiesId);
-  std::string glyphName;
-  forEach(glyphName,EdgeExtremityGlyphLister::availablePlugins()) {
+  std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>());
+  for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
+    std::string glyphName(*it);
     int glyphIndex = EdgeExtremityGlyphManager::getInst().glyphId(glyphName);
     //Create the glyph entry
     combobox->addItem(EdgeExtremityGlyphRenderer::getInst().render(glyphIndex),tlpStringToQString(glyphName),glyphIndex);

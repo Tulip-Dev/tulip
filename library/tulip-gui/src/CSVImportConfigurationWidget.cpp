@@ -20,6 +20,13 @@
 #include "ui_CSVImportConfigurationWidget.h"
 #include <tulip/TlpQtTools.h>
 #include <tulip/SimplePluginProgressWidget.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/BooleanProperty.h>
 #include <QtGui/QComboBox>
 #include <QtGui/QLineEdit>
 #include <QtGui/QScrollBar>

@@ -23,14 +23,13 @@
 #include <QtGui/QWidget>
 
 #include <tulip/InteractorComposite.h>
-#include "tulip/GlMainWidget.h"
-#include "tulip/NodeLinkDiagramComponent.h"
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
 
 namespace tlp {
 
+  class View;
 /**
  * We define a specific interactor to show element graph infos in eltProperties
  */

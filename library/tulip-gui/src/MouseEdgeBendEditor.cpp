@@ -19,6 +19,7 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/MouseEdgeBendEditor.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/GlyphManager.h>
 
 #include <QtGui/qevent.h>
 
@@ -574,7 +575,7 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
     }
   }
   else {
-    int complexPolygonGlyphId=GlyphManager::getInst().glyphId("2D - Complex Polygon");
+    int complexPolygonGlyphId = GlyphManager::getInst().glyphId("2D - Complex Polygon");
 
     if(_shape->getNodeValue(mNode)==complexPolygonGlyphId && complexPolygonGlyphId!=0) {
       if(_coordsVectorProperty) {

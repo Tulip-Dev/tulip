@@ -27,7 +27,7 @@
 using namespace tlp;
 using namespace std;
 
-NodeLinkDiagramComponent::NodeLinkDiagramComponent() {
+NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*) {
 }
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
@@ -70,4 +70,4 @@ bool NodeLinkDiagramComponent::isLayoutProperty(tlp::PropertyInterface* pi) cons
   return pi == getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();
 }
 
-VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0")
+PLUGIN(NodeLinkDiagramComponent)

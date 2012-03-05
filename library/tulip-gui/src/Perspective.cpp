@@ -26,12 +26,15 @@ Perspective* Perspective::instance() {
   return _instance;
 }
 
-Perspective::Perspective(PerspectiveContext &c) {
+Perspective::Perspective(const tlp::PluginContext* c) : _project(NULL), _mainWindow(NULL), _externalFile(QString()), _parameters(QVariantMap()) {
   _instance = this;
-  _mainWindow = c.mainWindow;
-  _project = c.project;
-  _externalFile = c.externalFile;
-  _parameters = c.parameters;
+  if(c != NULL) {
+    const PerspectiveContext* perspectiveContext = dynamic_cast<const PerspectiveContext*>(c);
+    _mainWindow = perspectiveContext->mainWindow;
+    _project = perspectiveContext->project;
+    _externalFile = perspectiveContext->externalFile;
+    _parameters = perspectiveContext->parameters;
+  }
 }
 
 Perspective::~Perspective() {

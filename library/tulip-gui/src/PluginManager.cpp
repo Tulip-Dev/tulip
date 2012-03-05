@@ -55,18 +55,14 @@ QList<tlp::PluginInformations*> PluginManager::pluginsList(Location list) {
 
   if(list.testFlag(Local)) {
     
-    PluginLister* currentLister = PluginLister::instance();
-    Iterator<string>* plugins = currentLister->availablePlugins();
-
-    while(plugins->hasNext()) {
-      string pluginName = plugins->next();
-      const Plugin& info = currentLister->pluginInformations(pluginName);
+    std::list<std::string> plugins = PluginLister::availablePlugins();
+    for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
+      string pluginName = *it;
+      const Plugin* info = PluginLister::pluginInformations(pluginName);
       //FIXME second parameter of PluginInformations is the class name, remove it
-      PluginInformations* localinfo = new PluginInformations(info, "", currentLister->getPluginLibrary(pluginName));
+      PluginInformations* localinfo = new PluginInformations(info, "", PluginLister::getPluginLibrary(pluginName));
       result[pluginName.c_str()] = localinfo;
     }
-
-    delete plugins;
   }
 
   if(list.testFlag(Remote)) {
@@ -76,7 +72,7 @@ QList<tlp::PluginInformations*> PluginManager::pluginsList(Location list) {
 
         if(current == result.end()) {
           DistantPluginInfo* pluginInfo = locationIt.value();
-          PluginInformations* pluginInformations = new PluginInformations(*pluginInfo, pluginInfo->getType(), pluginInfo->getLocation(), pluginInfo->getRemotePluginName());
+          PluginInformations* pluginInformations = new PluginInformations(pluginInfo, pluginInfo->getType(), pluginInfo->getLocation(), pluginInfo->getRemotePluginName());
           result[locationIt.key()] = pluginInformations;
         }
         else {
