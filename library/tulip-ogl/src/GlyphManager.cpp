@@ -58,6 +58,7 @@ int GlyphManager::glyphId(string name) {
 //====================================================
 void GlyphManager::loadGlyphPlugins() {
   std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<Glyph>());
+
   for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
     string pluginName(*it);
     int pluginId=PluginLister::pluginInformations(pluginName)->id();
@@ -78,6 +79,7 @@ void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputDat
   glyphs.setAll(PluginLister::instance()->getPluginObject<Glyph>("3D - Cube OutLined", &gc));
 
   std::list<std::string> glyphList(PluginLister::instance()->availablePlugins<Glyph>());
+
   for(std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
     string glyphName(*it);
     Glyph *newGlyph = PluginLister::instance()->getPluginObject<Glyph>(glyphName, &gc);
@@ -88,6 +90,7 @@ void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputDat
 void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Glyph *>& glyphs) {
 
   std::list<std::string> glyphList(PluginLister::instance()->availablePlugins<Glyph>());
+
   for(std::list<std::string>::const_iterator it = glyphList.begin(); it != glyphList.end(); ++it) {
     string glyphName(*it);
     delete glyphs.get(PluginLister::pluginInformations(glyphName)->id());

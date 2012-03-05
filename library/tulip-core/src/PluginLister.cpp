@@ -50,7 +50,7 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
             loader->aborted(pluginName, " '" + pluginName + "' will be removed, it depends on missing " +
                             factoryDepName + " '" + pluginDepName + "'.");
 
-            PluginLister::removePlugin(pluginName);
+          PluginLister::removePlugin(pluginName);
           depsNeedCheck = true;
           break;
         }
@@ -78,9 +78,11 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
 
 std::list<std::string> tlp::PluginLister::availablePlugins() {
   std::list<std::string> keys;
+
   for(std::map<std::string , PluginDescription>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
     keys.push_back(it->first);
   }
+
   return keys;
 }
 
@@ -91,28 +93,29 @@ const tlp::Plugin* tlp::PluginLister::pluginInformations(const std::string& name
 void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
   tlp::Plugin* informations = objectFactory->createPluginObject(NULL);
   std::string pluginName = informations->name();
-  
+
   if (!pluginExists(pluginName)) {
-    
+
     // loop over dependencies
     // to demangle the class names
     std::list<tlp::Dependency> dependencies = informations->getDependencies();
     std::list<tlp::Dependency>::iterator itD = dependencies.begin();
-    
+
     for (; itD != dependencies.end(); itD++) {
       const char *factoryDepName = (*itD).factoryName.c_str();
       (*itD).factoryName = tlp::demangleTlpClassName(factoryDepName);
     }
-    
+
     PluginDescription description;
     description.factory = objectFactory;
     description.library = PluginLibraryLoader::getCurrentPluginFileName();
     plugins[pluginName] = description;
-    
-    
+
+
     if (currentLoader!=0) {
       currentLoader->loaded(informations, dependencies);
     }
+
     delete informations;
   }
   else {
@@ -130,11 +133,11 @@ void tlp::PluginLister::removePlugin(const std::string &name) {
 
 tlp::Plugin* tlp::PluginLister::getPluginObject(const std::string& name, PluginContext* context) {
   typename std::map<std::string, PluginDescription>::const_iterator it = plugins.find(name);
-  
+
   if (it!=plugins.end()) {
     return (*it).second.factory->createPluginObject(context);
   }
-  
+
   return NULL;
 }
 

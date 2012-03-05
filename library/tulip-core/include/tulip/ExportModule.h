@@ -49,7 +49,7 @@ public:
   }
   ///
   virtual ~ExportModule() {}
-  
+
   /**
    * @brief The export operations should take place here.
    * @param the output stream

@@ -47,6 +47,7 @@ public:
     QString pluginLibrary;
 
     std::list<std::string> plugins = PluginLister::availablePlugins();
+
     for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
       pluginLibrary = QString::fromStdString(PluginLister::getPluginLibrary(pluginName.toStdString()));
     }

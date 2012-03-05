@@ -16,10 +16,12 @@ FiltersManagerAlgorithmItem::FiltersManagerAlgorithmItem(QWidget* parent): Abstr
 
   fillTitle(_ui->algorithmCombo,trUtf8("Select filter"));
   list<string> booleanAlgorithms = PluginLister::instance()->availablePlugins<BooleanAlgorithm>();
+
   for(list<string>::const_iterator it = booleanAlgorithms.begin(); it != booleanAlgorithms.end(); ++it) {
     string s(*it);
     _ui->algorithmCombo->addItem(s.c_str());
   }
+
   connect(_ui->algorithmCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(algorithmSelected(int)));
   _ui->algorithmParams->setItemDelegate(new TulipItemDelegate);
   updateGraphModel(_ui->algorithmParams,QString::null,_graph);

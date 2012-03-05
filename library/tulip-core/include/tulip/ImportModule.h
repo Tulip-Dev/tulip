@@ -57,7 +57,7 @@ public:
   virtual std::string getGroup() const {
     return "Import";
   }
-  
+
   /**
   * @brief The import operations should take place here.
   *

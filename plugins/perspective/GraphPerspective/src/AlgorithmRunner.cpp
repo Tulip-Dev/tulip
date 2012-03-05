@@ -145,8 +145,9 @@ public:
   }
   QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
-    
+
     std::list<std::string> plugins = PluginLister::instance()->availablePlugins<PROPTYPE>();
+
     for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
       std::string name(*it);
       QString group = PluginLister::pluginInformations(name)->group().c_str();
@@ -192,6 +193,7 @@ public:
   virtual QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
     std::list<std::string> algorithms = PluginLister::instance()->availablePlugins<Algorithm>();
+
     for(std::list<std::string>::const_iterator it = algorithms.begin(); it != algorithms.end(); ++it) {
       QString name = it->c_str();
       QString group = PluginLister::pluginInformations(name.toStdString())->group().c_str();

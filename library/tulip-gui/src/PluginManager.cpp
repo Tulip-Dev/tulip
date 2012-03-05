@@ -54,8 +54,9 @@ QList<tlp::PluginInformations*> PluginManager::pluginsList(Location list) {
   QMap<QString, tlp::PluginInformations*> result;
 
   if(list.testFlag(Local)) {
-    
+
     std::list<std::string> plugins = PluginLister::availablePlugins();
+
     for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
       string pluginName = *it;
       const Plugin* info = PluginLister::pluginInformations(pluginName);

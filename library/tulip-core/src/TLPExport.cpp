@@ -106,7 +106,7 @@ namespace tlp {
 class TLPExport:public ExportModule {
 public:
   PLUGININFORMATIONS("tlpexport","Auber David","31/07/2001","TLP Export plugin", "1.1", "Export")
-  
+
   DataSet controller;
   bool useOldFormat;
   MutableContainer<node> nodeIndex;

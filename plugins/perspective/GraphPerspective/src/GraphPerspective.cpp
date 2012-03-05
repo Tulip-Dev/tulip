@@ -74,8 +74,10 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _mainWindow->show();
   // Open project with model
   _graphs->readProject(_project,progress);
+
   if (!_externalFile.isEmpty()) {
     QFileInfo externalFileInfo(_externalFile);
+
     if (externalFileInfo.exists()) {
       progress->setComment((trUtf8("Loading ") + externalFileInfo.fileName()).toStdString());
       DataSet dataSet;

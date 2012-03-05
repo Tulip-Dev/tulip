@@ -62,7 +62,7 @@ public:
   virtual std::string getGroup() const {
     return "";
   }
-  
+
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node) {
     boundingBox[0] = Coord(-0.5,-0.5,-0.5);
     boundingBox[1] = Coord(0.5,0.5,0.5);
