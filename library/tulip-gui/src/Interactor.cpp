@@ -37,9 +37,9 @@ void InteractorLister::initInteractorsDependencies() {
 
   QMap<Interactor*,string> interactorToName;
 
-  std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<Glyph>());
+  std::list<std::string> interactors(PluginLister::instance()->availablePlugins<Interactor>());
 
-  for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
+  for(std::list<std::string>::const_iterator it = interactors.begin(); it != interactors.end(); ++it) {
     string interactorName(*it);
     interactorToName[PluginLister::instance()->getPluginObject<Interactor>(interactorName,NULL)] = interactorName;
   }

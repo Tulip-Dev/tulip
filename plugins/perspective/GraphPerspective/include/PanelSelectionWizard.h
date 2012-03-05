@@ -24,7 +24,7 @@
 
 namespace tlp {
 class Graph;
-class PluginInformations;
+class Plugin;
 class GraphHierarchiesModel;
 class View;
 }
@@ -39,7 +39,7 @@ class PanelSelectionItem: public QWidget {
   Ui::PanelSelectionItem* _ui;
   QString _viewName;
 public:
-  explicit PanelSelectionItem(tlp::PluginInformations* infos, QWidget* parent = 0);
+  explicit PanelSelectionItem(const tlp::Plugin* infos, QWidget* parent = 0);
   virtual ~PanelSelectionItem();
   QString viewName() const;
 signals:

@@ -30,12 +30,12 @@
 
 using namespace tlp;
 
-PanelSelectionItem::PanelSelectionItem(tlp::PluginInformations* infos, QWidget *parent): QWidget(parent), _ui(new Ui::PanelSelectionItem) {
+PanelSelectionItem::PanelSelectionItem(const Plugin *infos, QWidget *parent): QWidget(parent), _ui(new Ui::PanelSelectionItem) {
   _ui->setupUi(this);
-  _viewName = infos->name();
-  _ui->icon->setPixmap(QPixmap(infos->iconPath()));
-  _ui->name->setText("<p><span style=\"font-size:large;\"><b>" + infos->name() + "</b></span></p>");
-  _ui->description->setText("<p><span style=\"color:#626262;\">" + infos->shortDescription() + "</span></p>");
+  _viewName = infos->name().c_str();
+//  _ui->icon->setPixmap(QPixmap(infos->iconPath()));
+  _ui->name->setText("<p><span style=\"font-size:large;\"><b>" + QString(infos->name().c_str()) + "</b></span></p>");
+  _ui->description->setText("<p><span style=\"color:#626262;\">" + QString(infos->info().c_str()) + "</span></p>");
 }
 PanelSelectionItem::~PanelSelectionItem() {
   delete _ui;
@@ -65,13 +65,12 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
   PanelSelectionItem* firstItem = NULL;
   QVBoxLayout *panelsLayout = new QVBoxLayout;
   panelsLayout->setContentsMargins(6,6,6,6);
-  QList<tlp::PluginInformations *> localPlugins = tlp::PluginManager::pluginsList(tlp::PluginManager::Local);
-  tlp::PluginInformations *info;
-  foreach(info,localPlugins) {
-    if (info->type() != "View")
-      continue;
 
-    PanelSelectionItem* item = new PanelSelectionItem(info);
+  std::list<std::string> availableViews = PluginLister::instance()->availablePlugins<tlp::View>();
+  for(std::list<std::string>::iterator it = availableViews.begin(); it != availableViews.end(); ++it) {
+    const Plugin* plugin = PluginLister::pluginInformations(*it);
+    PanelSelectionItem* item = new PanelSelectionItem(plugin);
+    delete plugin;
     connect(item,SIGNAL(focused(bool)),this,SLOT(panelFocused(bool)));
     connect(item,SIGNAL(selected()),button(QWizard::FinishButton),SLOT(click()));
     panelsLayout->addWidget(item);

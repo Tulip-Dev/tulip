@@ -105,7 +105,7 @@ tlp::DataSet AlgorithmRunnerItem::params() const {
 }
 
 // **********************************************
-template<typename PROPTYPE>
+template<typename PROPTYPE, typename ALGTYPE>
 class PropertyPluginFacade: public PluginFacade {
   std::string _defaultPropName;
   PropertyInterface* _lastComputedProperty;
@@ -117,7 +117,6 @@ public:
   }
   PROPTYPE* getProperty(tlp::Graph* g, const std::string& name) {
     PROPTYPE* result = NULL;
-
     if (g->existProperty(name)) {
       PropertyInterface* interface = g->getProperty(name);
       result = dynamic_cast<PROPTYPE*>(interface);
@@ -125,29 +124,23 @@ public:
     else {
       result = g->getProperty<PROPTYPE>(name);
     }
-
     return result;
   }
   PROPTYPE* getLocalProperty(tlp::Graph* g, const std::string& name) {
     PROPTYPE* result = NULL;
-
     if (g->existProperty(name)) {
       PropertyInterface* interface = g->getProperty(name);
-
       if (dynamic_cast<PROPTYPE*>(interface) != NULL)
         result = g->getLocalProperty<PROPTYPE>(name);
     }
     else {
       result = g->getProperty<PROPTYPE>(name);
     }
-
     return result;
   }
   QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
-
-    std::list<std::string> plugins = PluginLister::instance()->availablePlugins<PROPTYPE>();
-
+    std::list<std::string> plugins = PluginLister::instance()->availablePlugins<ALGTYPE>();
     for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
       std::string name(*it);
       QString group = PluginLister::pluginInformations(name)->group().c_str();
@@ -155,7 +148,6 @@ public:
       lst << name.c_str();
       result[group] = lst;
     }
-
     return result;
   }
   bool computeProperty(tlp::Graph* g, const QString &alg, QString &msg, tlp::PluginProgress *progress, tlp::DataSet *data, bool isLocal=false) {
@@ -224,14 +216,14 @@ QMap<QString,PluginFacade *> AlgorithmRunner::FACADES_UI_NAMES;
 
 void AlgorithmRunner::staticInit() {
   if (FACADES_UI_NAMES.empty()) {
-    FACADES_UI_NAMES[trUtf8("Coloring algorithms")] = new PropertyPluginFacade<tlp::ColorProperty>("viewColor");
-    FACADES_UI_NAMES[trUtf8("Filtering algorithms")] = new PropertyPluginFacade<tlp::BooleanProperty>("viewSelection");
-    FACADES_UI_NAMES[trUtf8("Metric algorithms (double)")] = new PropertyPluginFacade<tlp::DoubleProperty>("viewMetric");
-    FACADES_UI_NAMES[trUtf8("Metric algorithms (integer)")] = new PropertyPluginFacade<tlp::IntegerProperty>("viewInteger");
-    FACADES_UI_NAMES[trUtf8("Labeling algorithms")] = new PropertyPluginFacade<tlp::StringProperty>("viewLabel");
-    FACADES_UI_NAMES[trUtf8("Layout algorithms")] = new PropertyPluginFacade<tlp::LayoutProperty>("viewLayout");
-    FACADES_UI_NAMES[trUtf8("Resizing algorithms")] = new PropertyPluginFacade<tlp::SizeProperty>("viewSize");
-    FACADES_UI_NAMES[trUtf8("Filtering algorithms")] = new PropertyPluginFacade<tlp::BooleanProperty>("viewSelection");
+    FACADES_UI_NAMES[trUtf8("Coloring algorithms")] = new PropertyPluginFacade<tlp::ColorProperty,tlp::ColorAlgorithm>("viewColor");
+    FACADES_UI_NAMES[trUtf8("Filtering algorithms")] = new PropertyPluginFacade<tlp::BooleanProperty,tlp::BooleanAlgorithm>("viewSelection");
+    FACADES_UI_NAMES[trUtf8("Metric algorithms (double)")] = new PropertyPluginFacade<tlp::DoubleProperty,tlp::DoubleAlgorithm>("viewMetric");
+    FACADES_UI_NAMES[trUtf8("Metric algorithms (integer)")] = new PropertyPluginFacade<tlp::IntegerProperty,tlp::IntegerAlgorithm>("viewInteger");
+    FACADES_UI_NAMES[trUtf8("Labeling algorithms")] = new PropertyPluginFacade<tlp::StringProperty,tlp::StringAlgorithm>("viewLabel");
+    FACADES_UI_NAMES[trUtf8("Layout algorithms")] = new PropertyPluginFacade<tlp::LayoutProperty,tlp::LayoutAlgorithm>("viewLayout");
+    FACADES_UI_NAMES[trUtf8("Resizing algorithms")] = new PropertyPluginFacade<tlp::SizeProperty,tlp::SizeAlgorithm>("viewSize");
+    FACADES_UI_NAMES[trUtf8("Filtering algorithms")] = new PropertyPluginFacade<tlp::BooleanProperty,tlp::BooleanAlgorithm>("viewSelection");
     FACADES_UI_NAMES[trUtf8("General algorithms")] = new GeneralPluginFacade();
   }
 }
