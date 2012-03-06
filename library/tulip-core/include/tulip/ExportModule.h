@@ -50,6 +50,8 @@ public:
   ///
   virtual ~ExportModule() {}
 
+  virtual std::string category() const { return "ExportModule"; }
+
   /**
    * @brief The export operations should take place here.
    * @param the output stream

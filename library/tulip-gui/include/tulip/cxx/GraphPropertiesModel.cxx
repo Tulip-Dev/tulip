@@ -4,6 +4,7 @@ namespace tlp {
 
 template<typename PROPTYPE>
 GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, QObject *parent): tlp::TulipModel(parent), _graph(graph) {
+  _graph->addListener(this);
 }
 
 template<typename PROPTYPE>

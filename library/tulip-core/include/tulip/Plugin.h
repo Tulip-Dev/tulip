@@ -73,6 +73,12 @@ public:
   virtual ~Plugin() {}
 
   /**
+    @brief A string identifier for a plugin used for categorization purposes.
+    @returns std::string the category of the plugin.
+    */
+  virtual std::string category() const=0;
+
+  /**
    * @brief Returns the name of the plug-in, as registered in the Tulip plug-in system.
    * This name must be unique, and if multiple plug-ins have the same name,
    * only the latest encountered will be considered.

@@ -35,65 +35,13 @@
 using namespace std;
 using namespace tlp;
 
-/** \addtogroup glyph */
-/*@{*/
-/// A 3D glyph.
-/**
- * This glyph draws a textured sphere using the "viewTexture" node
- * property value. If this property has no value, the sphere
- * is then colored using the "viewColor" node property value.
- */
-class Sphere: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
-public:
-  GLYPHINFORMATIONS("3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0", 2)
-  Sphere(const tlp::PluginContext *context = NULL);
-  virtual ~Sphere();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
-  virtual void draw(node n, float lod);
-  virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
-
-private:
-  void generateBuffers(int space);
-  inline void drawGlyph(const Color& glyphColor, const string& texture,
-                        const string& texturePath, float lod);
-};
-
-PLUGIN(Sphere)
-
-//=========================================================================================
-Sphere::Sphere(const tlp::PluginContext* context) :
-  Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
-}
-
-Sphere::~Sphere() {
-}
-//=====================================================
-void Sphere::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-  boundingBox[0] = Coord(-0.35f, -0.35f, -0.35f);
-  boundingBox[1] = Coord(0.35f, 0.35f, 0.35f);
-}
-
 static GLuint buffers[] = { 0, 0, 0 };
 
 static GLfloat *vertex;
 static GLfloat *texturesCoord;
 static GLushort *indices;
-//=====================================================
-void Sphere::draw(node n, float lod) {
-  drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
-            glGraphInputData->getElementTexture()->getNodeValue(n),
-            glGraphInputData->parameters->getTexturePath(), lod);
-}
 
-void Sphere::draw(edge e, node, const Color& glyphColor, const Color&, float lod) {
-  glEnable(GL_LIGHTING);
-  drawGlyph(glyphColor,
-            edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
-            edgeExtGlGraphInputData->parameters->getTexturePath(), lod);
-}
-
-//=====================================================
-void Sphere::generateBuffers(int space) {
+void generateBuffers(int space) {
   int vertexCount = (90 / space) * (360 / space) * 4;
 
   glGenBuffers(3, buffers);
@@ -177,8 +125,7 @@ void Sphere::generateBuffers(int space) {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertexCount*2*sizeof(GLushort), indices, GL_STATIC_DRAW);
 }
-/*@}*/
-void Sphere::drawGlyph(const Color& glyphColor, const string& texture,
+void drawGlyph(const Color& glyphColor, const string& texture,
                        const string& texturePath, float) {
   bool canUseVBO = OpenGlConfigManager::getInst().hasVertexBufferObject();
 
@@ -245,3 +192,59 @@ void Sphere::drawGlyph(const Color& glyphColor, const string& texture,
 
   GlTextureManager::getInst().desactivateTexture();
 }
+
+/** \addtogroup glyph */
+/*@{*/
+/// A 3D glyph.
+/**
+ * This glyph draws a textured sphere using the "viewTexture" node
+ * property value. If this property has no value, the sphere
+ * is then colored using the "viewColor" node property value.
+ */
+class Sphere: public Glyph {
+public:
+  GLYPHINFORMATIONS("3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0", 2)
+  Sphere(const tlp::PluginContext *context = NULL);
+  virtual ~Sphere();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+  virtual void draw(node n, float lod);
+};
+
+PLUGIN(Sphere)
+
+//=========================================================================================
+Sphere::Sphere(const tlp::PluginContext* context) :
+  Glyph(context) {
+}
+
+Sphere::~Sphere() {
+}
+
+void Sphere::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
+  boundingBox[0] = Coord(-0.35f, -0.35f, -0.35f);
+  boundingBox[1] = Coord(0.35f, 0.35f, 0.35f);
+}
+
+void Sphere::draw(node n, float lod) {
+  drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
+            glGraphInputData->getElementTexture()->getNodeValue(n),
+            glGraphInputData->parameters->getTexturePath(), lod);
+}
+
+class EESphere: public EdgeExtremityGlyph {
+  GLYPHINFORMATIONS("3D - Sphere extremity", "Bertrand Mathieu", "09/07/2002", "Textured sphere for edge extremities", "1.0", 2)
+public:
+  EESphere(const tlp::PluginContext *context): EdgeExtremityGlyph(context) {
+
+  }
+  virtual ~EESphere() {
+
+  }
+  virtual void draw(edge e, node, const Color& glyphColor,const Color&, float lod) {
+      glEnable(GL_LIGHTING);
+      drawGlyph(glyphColor,
+                edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
+                edgeExtGlGraphInputData->parameters->getTexturePath(), lod);
+  }
+};
+PLUGIN(EESphere)

@@ -19,7 +19,8 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/Vector.h>
 
-namespace tlp {
+using namespace tlp;
+
 EdgeExtremityGlyph::EdgeExtremityGlyph(const tlp::PluginContext* context) : edgeExtGlGraphInputData(NULL) {
   if(context != NULL) {
     const GlyphContext* glyphContext = dynamic_cast<const GlyphContext*>(context);
@@ -32,16 +33,7 @@ EdgeExtremityGlyph::~EdgeExtremityGlyph() {
 
 }
 
-EdgeExtremityGlyphFrom3DGlyph::EdgeExtremityGlyphFrom3DGlyph(const tlp::PluginContext* context) :
-  EdgeExtremityGlyph(context) {
-
-}
-EdgeExtremityGlyphFrom3DGlyph::~EdgeExtremityGlyphFrom3DGlyph() {
-
-}
-
-void EdgeExtremityGlyphFrom3DGlyph::getTransformationMatrix(const Coord &src, const Coord &dest,
-    const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix) {
+void EdgeExtremityGlyph::get3DTransformationMatrix(const Coord &src, const Coord &dest, const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix) {
   //Vecteur AB
   Vector<float, 3> vAB;
   //Vecteur V
@@ -99,16 +91,7 @@ void EdgeExtremityGlyphFrom3DGlyph::getTransformationMatrix(const Coord &src, co
   scalingMatrix[3][3] = 1;
 }
 
-EdgeExtremityGlyphFrom2DGlyph::EdgeExtremityGlyphFrom2DGlyph(const tlp::PluginContext* context) :
-  EdgeExtremityGlyph(context) {
-
-}
-EdgeExtremityGlyphFrom2DGlyph::~EdgeExtremityGlyphFrom2DGlyph() {
-
-}
-
-void EdgeExtremityGlyphFrom2DGlyph::getTransformationMatrix(const Coord &src, const Coord &dest,
-    const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix) {
+void EdgeExtremityGlyph::get2DTransformationMatrix(const Coord &src, const Coord &dest, const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix) {
   //  Vecteur AB
   Vector<float, 3> vAB;
   //Vecteur V
@@ -164,6 +147,4 @@ void EdgeExtremityGlyphFrom2DGlyph::getTransformationMatrix(const Coord &src, co
   scalingMatrix[1][1] = glyphSize[1];
   scalingMatrix[2][2] = glyphSize[2];
   scalingMatrix[3][3] = 1;
-}
-
 }

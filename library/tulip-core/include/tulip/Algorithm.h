@@ -66,6 +66,8 @@ public :
    * @return bool Whether the algorithm was successful or not.
    */
   virtual bool run() = 0;
+
+  virtual std::string category() const { return "Algorithm"; }
   /**
    * @brief Checks if the algorithm can run on the context it was given.
    *

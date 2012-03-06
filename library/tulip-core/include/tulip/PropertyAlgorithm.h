@@ -66,6 +66,8 @@ public :
   ///
   virtual ~PropertyAlgorithm() {}
 
+  virtual std::string category() const { return "PropertyAlgorithm"; }
+
   /**
    * @brief Runs the algorithm.
    * It is a good practice to report progress through the PluginProgress, Even if your algorithm is very fast.

@@ -33,56 +33,8 @@
 using namespace std;
 using namespace tlp;
 
-/** \addtogroup glyph */
-/*@{*/
-/// A 3D glyph.
-/** This glyph draws a textured cube using the "viewTexture" node
- * property value. If this property has no value, the cube is then colored
- * using the "viewColor" node property value.
- */
-class Cube: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
-public:
-  PLUGININFORMATIONS("3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)
-  Cube(const tlp::PluginContext* context = NULL);
-  virtual ~Cube();
-  virtual void draw(node n, float lod);
-  virtual Coord getAnchor(const Coord & vector) const;
-  virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod);
-  virtual void draw(const Color &fillColor,const std::string &textureName, float lod);
-
-protected:
-
-  static GlBox* box;
-
-};
-
-GlBox* Cube::box=0;
-
-PLUGIN(Cube)
-//===================================================================================
-Cube::Cube(const tlp::PluginContext* context) :
-  Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
-  if(!box)
-    box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
-}
-//=======================================================
-Cube::~Cube() {
-}
-//=======================================================
-void Cube::draw(node n, float lod) {
-  draw(glGraphInputData->getElementColor()->getNodeValue(n),
-       glGraphInputData->getElementTexture()->getNodeValue(n),
-       lod);
-}
-
-void Cube::draw(edge, node n, const Color& glyphColor,const Color&, float lod) {
-  glEnable(GL_LIGHTING);
-  draw(glyphColor,
-       edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n),
-       lod);
-}
-
-void Cube::draw(const Color &fillColor,const std::string &textureName, float lod) {
+static GlBox* box = 0;
+void drawBox(const Color &fillColor,const std::string &textureName, float lod, GlGraphInputData *glGraphInputData) {
   if (textureName.size() != 0) {
     const string& texturePath=glGraphInputData->parameters->getTexturePath();
     box->setTextureName(texturePath+textureName);
@@ -96,8 +48,35 @@ void Cube::draw(const Color &fillColor,const std::string &textureName, float lod
   box->draw(lod,NULL);
 }
 
-
-//=======================================================
+/** \addtogroup glyph */
+/*@{*/
+/// A 3D glyph.
+/** This glyph draws a textured cube using the "viewTexture" node
+ * property value. If this property has no value, the cube is then colored
+ * using the "viewColor" node property value.
+ */
+class Cube: public Glyph {
+public:
+  PLUGININFORMATIONS("3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)
+  Cube(const tlp::PluginContext* context = NULL);
+  virtual ~Cube();
+  virtual void draw(node n, float lod);
+  virtual Coord getAnchor(const Coord & vector) const;
+protected:
+};
+PLUGIN(Cube)
+Cube::Cube(const tlp::PluginContext* context) :
+  Glyph(context) {
+  if(!box)
+    box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
+}
+Cube::~Cube() {
+}
+void Cube::draw(node n, float lod) {
+  drawBox(glGraphInputData->getElementColor()->getNodeValue(n),
+       glGraphInputData->getElementTexture()->getNodeValue(n),
+       lod, glGraphInputData);
+}
 Coord Cube::getAnchor(const Coord & vector) const {
   float x, y, z, fmax;
   vector.get(x, y, z);
@@ -108,4 +87,23 @@ Coord Cube::getAnchor(const Coord & vector) const {
   else
     return vector;
 }
-/*@}*/
+
+
+class EECube: public EdgeExtremityGlyph {
+public:
+  PLUGININFORMATIONS("3D - Cube extremity", "Bertrand Mathieu", "09/07/2002", "Textured cube for edge extremities", "1.0" , 0)
+
+  EECube(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
+    if(!box)
+      box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
+  }
+
+  void draw(edge, node n, const Color& glyphColor,const Color&, float lod) {
+    glEnable(GL_LIGHTING);
+    drawBox(glyphColor,
+         edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n),
+         lod, edgeExtGlGraphInputData);
+  }
+};
+
+PLUGIN(EECube)

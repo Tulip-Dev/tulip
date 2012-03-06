@@ -32,6 +32,19 @@
 using namespace std;
 using namespace tlp;
 
+void drawCone() {
+  GLUquadricObj *quadratic;
+  quadratic = gluNewQuadric();
+  gluQuadricNormals(quadratic, GLU_SMOOTH);
+  gluQuadricTexture(quadratic, GL_TRUE);
+  glTranslatef(0.0f, 0.0f, -0.5f);
+  gluQuadricOrientation(quadratic, GLU_OUTSIDE);
+  gluCylinder(quadratic, 0.5f, 0.0f, 1.0f, 10, 10);
+  gluQuadricOrientation(quadratic, GLU_INSIDE);
+  gluDisk(quadratic, 0.0f, 0.5f, 10, 10);
+  gluDeleteQuadric(quadratic);
+}
+
 /** \addtogroup glyph */
 /*@{*/
 /// A 3D glyph.
@@ -40,8 +53,7 @@ using namespace tlp;
  * property value. If this property has no value, the cone is then colored
  * using the "viewColor" node property value.
  */
-//===========================================================
-class Cone: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
+class Cone: public Glyph {
 public:
   GLYPHINFORMATIONS("3D - Cone", "Bertrand Mathieu", "09/07/2002", "Textured cone", "1.0", 3)
   Cone(const tlp::PluginContext* context = NULL);
@@ -49,26 +61,18 @@ public:
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord &vector) const;
-  virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
-
-private:
-  void drawCone();
 };
-//===========================================================
 PLUGIN(Cone)
-//===================================================================================
+
 Cone::Cone(const tlp::PluginContext* context) :
-  Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
+  Glyph(context) {
 }
-//===========================================================
 Cone::~Cone() {
 }
-//===========================================================
 void Cone::getIncludeBoundingBox(BoundingBox& boundingBox,node) {
   boundingBox[0] = Coord(-0.25, -0.25, 0);
   boundingBox[1] = Coord(0.25, 0.25, 0.5);
 }
-//===========================================================
 void Cone::draw(node n, float) {
   if (GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {
     drawCone();
@@ -89,7 +93,6 @@ void Cone::draw(node n, float) {
 
   GlTextureManager::getInst().desactivateTexture();
 }
-//===========================================================
 Coord Cone::getAnchor(const Coord &vector) const {
   Coord anchor = vector;
 
@@ -125,40 +128,36 @@ Coord Cone::getAnchor(const Coord &vector) const {
   return anchor;
 }
 
-void Cone::draw(edge e, node, const Color& glyphColor,const Color&, float) {
-  glEnable(GL_LIGHTING);
+class EECone: public EdgeExtremityGlyph {
+public:
+  GLYPHINFORMATIONS("3D - Cone extremity", "Bertrand Mathieu", "09/07/2002", "Textured cone for edge extremities", "1.0", 3)
 
-  if (GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {
-    drawCone();
-    GlDisplayListManager::getInst().endNewDisplayList();
+  EECone(const tlp::PluginContext *context): EdgeExtremityGlyph(context) {
   }
+  virtual ~EECone() {}
 
-  setMaterial(glyphColor);
-  string texFile = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+  virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
+    glEnable(GL_LIGHTING);
 
-  if (texFile != "") {
-    string texturePath =
-      edgeExtGlGraphInputData->parameters->getTexturePath();
-    GlTextureManager::getInst().activateTexture(texturePath + texFile);
+    if (GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {
+      drawCone();
+      GlDisplayListManager::getInst().endNewDisplayList();
+    }
+
+    setMaterial(glyphColor);
+    string texFile = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+
+    if (texFile != "") {
+      string texturePath =
+        edgeExtGlGraphInputData->parameters->getTexturePath();
+      GlTextureManager::getInst().activateTexture(texturePath + texFile);
+    }
+
+    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+    GlDisplayListManager::getInst().callDisplayList("Cone_cone");
+    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
+    GlTextureManager::getInst().desactivateTexture();
   }
+};
 
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-  GlDisplayListManager::getInst().callDisplayList("Cone_cone");
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-  GlTextureManager::getInst().desactivateTexture();
-}
-
-void Cone::drawCone() {
-  GLUquadricObj *quadratic;
-  quadratic = gluNewQuadric();
-  gluQuadricNormals(quadratic, GLU_SMOOTH);
-  gluQuadricTexture(quadratic, GL_TRUE);
-  glTranslatef(0.0f, 0.0f, -0.5f);
-  gluQuadricOrientation(quadratic, GLU_OUTSIDE);
-  gluCylinder(quadratic, 0.5f, 0.0f, 1.0f, 10, 10);
-  gluQuadricOrientation(quadratic, GLU_INSIDE);
-  gluDisk(quadratic, 0.0f, 0.5f, 10, 10);
-  gluDeleteQuadric(quadratic);
-}
-//===========================================================
-/*@}*/
+PLUGIN(EECone)

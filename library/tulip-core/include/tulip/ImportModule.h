@@ -58,6 +58,8 @@ public:
     return "Import";
   }
 
+  virtual std::string category() const { return "ImportModule"; }
+
   /**
   * @brief The import operations should take place here.
   *

@@ -38,14 +38,10 @@ public:
   virtual ~CubeOutLined();
   virtual void draw(node n,float lod);
   virtual Coord getAnchor(const Coord & vector) const;
-
 protected:
-
   static GlBox* box;
-
 };
 }
-
 tlp::GlBox* tlp::CubeOutLined::box=0;
 
 namespace tlp {
