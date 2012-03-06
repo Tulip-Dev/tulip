@@ -38,9 +38,9 @@ class PluginProgress;
 class ExportModule: public tlp::Plugin {
 public:
   ///
-  ExportModule(tlp::PluginContext* context) {
+  ExportModule(const tlp::PluginContext* context) {
     if(context != NULL) {
-      tlp::AlgorithmContext* algoritmContext = dynamic_cast<tlp::AlgorithmContext*>(context);
+      const tlp::AlgorithmContext* algoritmContext = dynamic_cast<const tlp::AlgorithmContext*>(context);
       assert(algoritmContext != NULL);
       graph = algoritmContext->graph;
       pluginProgress = algoritmContext->pluginProgress;
