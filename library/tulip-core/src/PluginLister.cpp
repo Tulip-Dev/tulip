@@ -21,7 +21,6 @@
 using namespace tlp;
 using namespace std;
 
-std::map<std::string, PluginLister::PluginDescription> PluginLister::plugins = std::map<std::string, PluginLister::PluginDescription>();
 PluginLoader* PluginLister::currentLoader = NULL;
 PluginLister* PluginLister::_instance = NULL;
 
@@ -79,7 +78,7 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
 std::list<std::string> tlp::PluginLister::availablePlugins() {
   std::list<std::string> keys;
 
-  for(std::map<std::string , PluginDescription>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
+  for(std::map<std::string , PluginDescription>::const_iterator it = instance()->_plugins.begin(); it != instance()->_plugins.end(); ++it) {
     keys.push_back(it->first);
   }
 
@@ -87,7 +86,7 @@ std::list<std::string> tlp::PluginLister::availablePlugins() {
 }
 
 const tlp::Plugin* tlp::PluginLister::pluginInformations(const std::string& name) {
-  return plugins.find(name)->second.factory->createPluginObject(NULL);
+  return instance()->_plugins.find(name)->second.factory->createPluginObject(NULL);
 }
 
 void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
@@ -109,7 +108,7 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
     PluginDescription description;
     description.factory = objectFactory;
     description.library = PluginLibraryLoader::getCurrentPluginFileName();
-    plugins[pluginName] = description;
+   instance()->_plugins[pluginName] = description;
 
 
     if (currentLoader!=0) {
@@ -128,13 +127,13 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
 }
 
 void tlp::PluginLister::removePlugin(const std::string &name) {
-  plugins.erase(name);
+  instance()->_plugins.erase(name);
 }
 
 tlp::Plugin* tlp::PluginLister::getPluginObject(const std::string& name, PluginContext* context) {
-  std::map<std::string, PluginDescription>::const_iterator it = plugins.find(name);
+  std::map<std::string, PluginDescription>::const_iterator it = instance()->_plugins.find(name);
 
-  if (it!=plugins.end()) {
+  if (it != instance()->_plugins.end()) {
     return (*it).second.factory->createPluginObject(context);
   }
 
@@ -142,7 +141,7 @@ tlp::Plugin* tlp::PluginLister::getPluginObject(const std::string& name, PluginC
 }
 
 const tlp::ParameterList tlp::PluginLister::getPluginParameters(std::string name) {
-  assert(plugins.find(name)!=plugins.end());
+  assert(instance()->_plugins.find(name) != instance()->_plugins.end());
   Plugin* plugin = getPluginObject(name, NULL);
   tlp::ParameterList parameters(plugin->getParameters());
   delete plugin;
@@ -150,7 +149,7 @@ const tlp::ParameterList tlp::PluginLister::getPluginParameters(std::string name
 }
 
 std::string tlp::PluginLister::getPluginRelease(std::string name) {
-  assert(plugins.find(name)!=plugins.end());
+  assert(instance()->_plugins.find(name) != instance()->_plugins.end());
   Plugin* plugin = getPluginObject(name, NULL);
   std::string release(plugin->release());
   delete plugin;
@@ -158,7 +157,7 @@ std::string tlp::PluginLister::getPluginRelease(std::string name) {
 }
 
 std::list<tlp::Dependency> tlp::PluginLister::getPluginDependencies(std::string name) {
-  assert(plugins.find(name)!=plugins.end());
+  assert(instance()->_plugins.find(name) != instance()->_plugins.end());
   Plugin* plugin = getPluginObject(name, NULL);
   std::list<tlp::Dependency> dependencies(plugin->getDependencies());
   delete plugin;
@@ -166,9 +165,9 @@ std::list<tlp::Dependency> tlp::PluginLister::getPluginDependencies(std::string 
 }
 
 std::string tlp::PluginLister::getPluginLibrary(const std::string& name) {
-  return plugins.find(name)->second.library;
+  return instance()->_plugins.find(name)->second.library;
 }
 
 bool tlp::PluginLister::pluginExists(const std::string& pluginName) {
-  return plugins.find(pluginName) != plugins.end();
+  return instance()->_plugins.find(pluginName) != instance()->_plugins.end();
 }
