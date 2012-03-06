@@ -140,6 +140,70 @@ public:
   static QList<std::string> compatibleInteractors(const std::string& viewName);
 };
 
+#define INTERACTORPLUGINVIEWEXTENSION(CLASS_NAME,STRING_CLASS_NAME,BASE_INTERACTOR_STRING_NAME,VIEW_STRING_NAME,AUTHOR,DATE,DESCRIPTION,VERSION)\
+class CLASS_NAME : public tlp::Interactor {\
+  mutable tlp::Interactor* _component;\
+public:\
+  std::string name() const { return std::string(STRING_CLASS_NAME); } \
+  std::string author() const { return std::string(AUTHOR); }\
+  std::string date() const { return std::string(DATE); }  \
+  std::string info() const { return std::string(DESCRIPTION); }  \
+  std::string release() const { return std::string(VERSION); }\
+  std::string tulipRelease() const { return std::string(TULIP_RELEASE); }\
+  std::string group() const { return getComponent()->group(); }\
+  CLASS_NAME(const PluginContext *):_component(NULL) {}\
+  bool isCompatible(const std::string& viewName) { return viewName == VIEW_STRING_NAME; }\
+  QWidget* configurationWidget() const { return getComponent()->configurationWidget(); }\
+  unsigned int priority() const { return getComponent()->priority(); }\
+  QAction* action() const { return getComponent()->action(); }\
+  tlp::View* view() const { return getComponent()->view(); }\
+  QCursor cursor() const { return getComponent()->cursor(); }\
+  void construct() { getComponent()->construct(); }\
+  void setView(tlp::View* v) { getComponent()->setView(v); }\
+  void install(QObject* target) { getComponent()->install(target); }\
+  void uninstall() { getComponent()->uninstall(); }\
+  void undoIsDone() { getComponent()->undoIsDone(); }\
+  tlp::Interactor* getComponent() const {\
+    if(!_component) {\
+      _component = tlp::PluginLister::instance()->getPluginObject<Interactor>(BASE_INTERACTOR_STRING_NAME,NULL); assert(_component != NULL);\
+    }\
+    return _component;\
+  }\
+};\
+PLUGIN(CLASS_NAME)
+
+#define INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(CLASS_NAME,STRING_CLASS_NAME,BASE_INTERACTOR_STRING_NAME,VIEW_STRING_NAME,AUTHOR,DATE,DESCRIPTION,VERSION,PRIORITY)     \
+class CLASS_NAME : public tlp::Interactor {\
+  mutable tlp::Interactor* _component;\
+public:\
+  std::string name() const { return std::string(STRING_CLASS_NAME); } \
+  std::string author() const { return std::string(AUTHOR); }\
+  std::string date() const { return std::string(DATE); }  \
+  std::string info() const { return std::string(DESCRIPTION); }  \
+  std::string release() const { return std::string(VERSION); }\
+  std::string tulipRelease() const { return std::string(TULIP_RELEASE); }\
+  std::string group() const { return getComponent()->group(); }\
+  CLASS_NAME(const PluginContext *):_component(NULL) {}\
+  bool isCompatible(const std::string& viewName) { return viewName == VIEW_STRING_NAME; }\
+  QWidget* configurationWidget() const { return getComponent()->configurationWidget(); }\
+  unsigned int priority() const { return PRIORITY; }\
+  QAction* action() const { return getComponent()->action(); }\
+  tlp::View* view() const { return getComponent()->view(); }\
+  QCursor cursor() const { return getComponent()->cursor(); }\
+  void construct() { getComponent()->construct(); }\
+  void setView(tlp::View* v) { getComponent()->setView(v); }\
+  void install(QObject* target) { getComponent()->install(target); }\
+  void uninstall() { getComponent()->uninstall(); }\
+  void undoIsDone() { getComponent()->undoIsDone(); }\
+  tlp::Interactor* getComponent() const {\
+    if(!_component) {\
+      _component = tlp::PluginLister::instance()->getPluginObject<Interactor>(BASE_INTERACTOR_STRING_NAME,NULL); assert(_component != NULL);\
+    }\
+    return _component;\
+  }\
+};\
+PLUGIN(CLASS_NAME)
+
 }
 
 #endif
