@@ -97,7 +97,7 @@ public:
   std::list<std::string> availablePlugins() {
     std::list<std::string> keys;
 
-    for(std::map<std::string , PluginDescription>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
+    for(std::map<std::string , PluginDescription>::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it) {
       PluginType* plugin = dynamic_cast<PluginType*>(it->second.factory->createPluginObject(NULL));
 
       if(plugin != NULL) {
@@ -166,7 +166,7 @@ protected:
   /**
    * @brief Stores the the factory, dependencies, and parameters of all the plugins that register into this factory.
    **/
-  static std::map<std::string , PluginDescription> plugins;
+  std::map<std::string , PluginDescription> _plugins;
 
   /**
    * @brief Gets the release number of the given plug-in.
