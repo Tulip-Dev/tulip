@@ -74,8 +74,8 @@ Cube::~Cube() {
 }
 void Cube::draw(node n, float lod) {
   drawBox(glGraphInputData->getElementColor()->getNodeValue(n),
-       glGraphInputData->getElementTexture()->getNodeValue(n),
-       lod, glGraphInputData);
+          glGraphInputData->getElementTexture()->getNodeValue(n),
+          lod, glGraphInputData);
 }
 Coord Cube::getAnchor(const Coord & vector) const {
   float x, y, z, fmax;
@@ -101,8 +101,8 @@ public:
   void draw(edge, node n, const Color& glyphColor,const Color&, float lod) {
     glEnable(GL_LIGHTING);
     drawBox(glyphColor,
-         edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n),
-         lod, edgeExtGlGraphInputData);
+            edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n),
+            lod, edgeExtGlGraphInputData);
   }
 };
 

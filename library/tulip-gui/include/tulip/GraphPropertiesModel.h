@@ -16,7 +16,7 @@ class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
 
 public:
   explicit GraphPropertiesModel(tlp::Graph* graph, QObject *parent = 0);
-  
+
   // Methods re-implemented from QAbstractItemModel
   QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
   QModelIndex parent(const QModelIndex &child) const;
@@ -27,8 +27,10 @@ public:
   // Methods inherited from the observable system
   void treatEvent(const tlp::Event& evt) {
     const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
+
     if (graphEvent == NULL)
       return;
+
     if (graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
       PropertyInterface* pi = _graph->getProperty(graphEvent->getPropertyName());
       int row = rowOf(pi);

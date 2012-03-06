@@ -117,6 +117,7 @@ public:
   }
   PROPTYPE* getProperty(tlp::Graph* g, const std::string& name) {
     PROPTYPE* result = NULL;
+
     if (g->existProperty(name)) {
       PropertyInterface* interface = g->getProperty(name);
       result = dynamic_cast<PROPTYPE*>(interface);
@@ -124,23 +125,28 @@ public:
     else {
       result = g->getProperty<PROPTYPE>(name);
     }
+
     return result;
   }
   PROPTYPE* getLocalProperty(tlp::Graph* g, const std::string& name) {
     PROPTYPE* result = NULL;
+
     if (g->existProperty(name)) {
       PropertyInterface* interface = g->getProperty(name);
+
       if (dynamic_cast<PROPTYPE*>(interface) != NULL)
         result = g->getLocalProperty<PROPTYPE>(name);
     }
     else {
       result = g->getProperty<PROPTYPE>(name);
     }
+
     return result;
   }
   QMap<QString,QStringList> algorithms() {
     QMap<QString,QStringList> result;
     std::list<std::string> plugins = PluginLister::instance()->availablePlugins<ALGTYPE>();
+
     for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
       std::string name(*it);
       QString group = PluginLister::pluginInformations(name)->group().c_str();
@@ -148,6 +154,7 @@ public:
       lst << name.c_str();
       result[group] = lst;
     }
+
     return result;
   }
   bool computeProperty(tlp::Graph* g, const QString &alg, QString &msg, tlp::PluginProgress *progress, tlp::DataSet *data, bool isLocal=false) {

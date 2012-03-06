@@ -67,6 +67,7 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
   panelsLayout->setContentsMargins(6,6,6,6);
 
   std::list<std::string> availableViews = PluginLister::instance()->availablePlugins<tlp::View>();
+
   for(std::list<std::string>::iterator it = availableViews.begin(); it != availableViews.end(); ++it) {
     const Plugin* plugin = PluginLister::pluginInformations(*it);
     PanelSelectionItem* item = new PanelSelectionItem(plugin);
@@ -78,6 +79,7 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
     if (firstItem == NULL)
       firstItem = item;
   }
+
   firstItem->setFocus(true);
 
   panelsLayout->addItem(new QSpacerItem(10,10,QSizePolicy::Maximum,QSizePolicy::Expanding));

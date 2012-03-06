@@ -163,6 +163,7 @@ int main(int argc,char **argv) {
   PerspectiveContext* context = new PerspectiveContext();
   context->parameters = extraParams;
   context->project = project;
+
   if (project == NULL)
     context->externalFile = projectFilePath;
 

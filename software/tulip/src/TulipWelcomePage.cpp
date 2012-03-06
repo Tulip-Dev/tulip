@@ -81,8 +81,10 @@ QVBoxLayout *TulipWelcomePage::buildPerspectiveListLayout(const QObject *receive
   tlp::PluginInformations *info;
   foreach(info,localPlugins) {
     qWarning() << info->type();
+
     if (info->type() != "Perspective")
       continue;
+
     PerspectiveItemWidget *item = new PerspectiveItemWidget(info);
     perspectivesLayout->addWidget(item);
     connect(item,SIGNAL(selected()),receiver,slot);

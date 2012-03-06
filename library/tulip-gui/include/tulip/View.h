@@ -88,7 +88,9 @@ public:
     */
   virtual ~View();
 
-  virtual std::string category() const { return "View"; }
+  virtual std::string category() const {
+    return "View";
+  }
 
   /**
     @return the View's panel as a @c QGraphicsView instance.
