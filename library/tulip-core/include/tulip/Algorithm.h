@@ -50,9 +50,9 @@ public :
    * @param context The context this algorithm runs in, containing the graph, a DataSet for the parameters, and a PluginProgress
    * to give feedback to the user about the tasks the algorithm is performing.
    */
-  Algorithm (PluginContext* context) : graph(NULL),pluginProgress(NULL),dataSet(NULL) {
+  Algorithm (const PluginContext* context) : graph(NULL),pluginProgress(NULL),dataSet(NULL) {
     if(context != NULL) {
-      AlgorithmContext* algorithmContext = dynamic_cast<AlgorithmContext*>(context);
+      const AlgorithmContext* algorithmContext = dynamic_cast<const AlgorithmContext*>(context);
       assert(algorithmContext != NULL);
       graph = algorithmContext->graph;
       pluginProgress = algorithmContext->pluginProgress;
