@@ -39,7 +39,9 @@ class GlGraphInputData;
 
 class TLP_GL_SCOPE EdgeExtremityGlyph: public Plugin {
 public:
-  virtual std::string category() const { return "EdgeExtremityGlyph"; }
+  virtual std::string category() const {
+    return "EdgeExtremityGlyph";
+  }
 
   EdgeExtremityGlyph(const tlp::PluginContext *context);
   virtual ~EdgeExtremityGlyph();

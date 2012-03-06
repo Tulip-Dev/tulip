@@ -56,7 +56,9 @@ public:
 //==========================================================
 class TLP_GL_SCOPE Glyph : public tlp::Plugin {
 public:
-  std::string category() const { return "Glyph"; }
+  std::string category() const {
+    return "Glyph";
+  }
 
   Glyph(const tlp::PluginContext* context);
   virtual ~Glyph();

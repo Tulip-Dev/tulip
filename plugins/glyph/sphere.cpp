@@ -126,7 +126,7 @@ void generateBuffers(int space) {
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertexCount*2*sizeof(GLushort), indices, GL_STATIC_DRAW);
 }
 void drawGlyph(const Color& glyphColor, const string& texture,
-                       const string& texturePath, float) {
+               const string& texturePath, float) {
   bool canUseVBO = OpenGlConfigManager::getInst().hasVertexBufferObject();
 
   int space = 9;
@@ -241,10 +241,10 @@ public:
 
   }
   virtual void draw(edge e, node, const Color& glyphColor,const Color&, float lod) {
-      glEnable(GL_LIGHTING);
-      drawGlyph(glyphColor,
-                edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
-                edgeExtGlGraphInputData->parameters->getTexturePath(), lod);
+    glEnable(GL_LIGHTING);
+    drawGlyph(glyphColor,
+              edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
+              edgeExtGlGraphInputData->parameters->getTexturePath(), lod);
   }
 };
 PLUGIN(EESphere)

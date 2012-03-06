@@ -38,7 +38,9 @@ namespace tlp {
   **/
 class TLP_QT_SCOPE DistantPluginInfo : public tlp::Plugin {
 public:
-  std::string category() const { return _type.toStdString(); }
+  std::string category() const {
+    return _type.toStdString();
+  }
 
   DistantPluginInfo(const std::string& author, const std::string& date, const std::string& group, const std::string& name, const std::string& info, const std::string& release,
                     const std::string& tulipRelease, const std::list<tlp::Dependency> dependencies, const QString& type, const QString& location, const QString& remotepluginName)

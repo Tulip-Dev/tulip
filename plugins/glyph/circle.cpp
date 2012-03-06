@@ -38,6 +38,7 @@ static GlCircle *circle = NULL;
 void drawCircle(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
   if(borderWidth<1e-6f)
     borderWidth=1e-6f;
+
   circle->setFillColor(fillColor);
   circle->setOutlineColor(borderColor);
   circle->setOutlineSize(borderWidth);
@@ -76,13 +77,15 @@ void Circle::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
 void Circle::draw(node n, float lod) {
   circle->setLightingMode(true);
   string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
+
   if(textureName!="")
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
+
   drawCircle(Glyph::glGraphInputData->getElementColor()->getNodeValue(n),
-       Glyph::glGraphInputData->getElementBorderColor()->getNodeValue(n),
-       Glyph::glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-       textureName,
-       lod);
+             Glyph::glGraphInputData->getElementBorderColor()->getNodeValue(n),
+             Glyph::glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+             textureName,
+             lod);
 }
 
 class EECircle: public EdgeExtremityGlyph {
@@ -96,12 +99,14 @@ public:
   void draw(edge e, node, const Color& glyphColor,const Color &borderColor, float lod) {
     circle->setLightingMode(false);
     string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+
     if(textureName!="")
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
+
     drawCircle(glyphColor,
-         borderColor,
-         edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-         textureName,
-         lod);
+               borderColor,
+               edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+               textureName,
+               lod);
   }
 };

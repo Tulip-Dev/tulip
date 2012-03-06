@@ -108,7 +108,7 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
     PluginDescription description;
     description.factory = objectFactory;
     description.library = PluginLibraryLoader::getCurrentPluginFileName();
-   instance()->_plugins[pluginName] = description;
+    instance()->_plugins[pluginName] = description;
 
 
     if (currentLoader!=0) {

@@ -53,7 +53,9 @@ class TLP_QT_SCOPE Interactor: public QObject, public tlp::Plugin {
   Q_PROPERTY(QCursor cursor READ cursor)
 
 public:
-  virtual std::string category() const { return "Interactor"; }
+  virtual std::string category() const {
+    return "Interactor";
+  }
   /**
     @brief Checks the compatibility between the interactor and the given view (identified by its name).
     If this method returns true, it's very likely that the interactor will be installed on the associated view.

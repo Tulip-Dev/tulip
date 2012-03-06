@@ -66,7 +66,9 @@ public :
   ///
   virtual ~PropertyAlgorithm() {}
 
-  virtual std::string category() const { return "PropertyAlgorithm"; }
+  virtual std::string category() const {
+    return "PropertyAlgorithm";
+  }
 
   /**
    * @brief Runs the algorithm.

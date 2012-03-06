@@ -37,8 +37,8 @@ using namespace tlp;
 static GlRect *rect = NULL;
 
 void drawGlyph(const Color& glyphColor, const string& texture,
-                      const string& texturePath, double borderWidth,
-                      const Color& borderColor, float lod) {
+               const string& texturePath, double borderWidth,
+               const Color& borderColor, float lod) {
   rect->setFillColor(glyphColor);
   rect->setOutlineColor(borderColor);
   rect->setTextureName(texturePath+texture);
