@@ -163,6 +163,7 @@ public :
       getContent(node,tmp);
       std::stringstream str(tmp);
       str >> value;
+      std::cout << "setting value (original): " << value << std::endl;
     }
   }
 
@@ -186,6 +187,9 @@ public :
   }
 
 };
+
+template<>
+void GlXMLTools::setWithXML<std::string>(xmlNodePtr rootNode, const std::string &name, std::string &value);
 
 }
 #endif
