@@ -41,7 +41,6 @@ PlanarityTestObstr.cpp
 PlanarityTestTools.cpp
 Plane.cpp
 PluginLibraryLoader.cpp
-PluginLister.cpp
 PluginLoaderTxt.cpp
 PreferenceManager.cpp
 PropertyInterface.cpp
@@ -62,7 +61,8 @@ TreeTest.cpp
 TriconnectedTest.cpp
 vectorgraph.cpp
 WithParameter.cpp
-YajlFacade.cpp)
+YajlFacade.cpp
+PluginLister.cpp)
 
 IF(CHECK_MEMORY)
 SET(tulip_LIB_SRCS ${tulip_LIB_SRCS} MemoryChecker.cpp)
