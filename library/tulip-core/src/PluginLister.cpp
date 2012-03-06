@@ -132,7 +132,7 @@ void tlp::PluginLister::removePlugin(const std::string &name) {
 }
 
 tlp::Plugin* tlp::PluginLister::getPluginObject(const std::string& name, PluginContext* context) {
-  typename std::map<std::string, PluginDescription>::const_iterator it = plugins.find(name);
+  std::map<std::string, PluginDescription>::const_iterator it = plugins.find(name);
 
   if (it!=plugins.end()) {
     return (*it).second.factory->createPluginObject(context);
