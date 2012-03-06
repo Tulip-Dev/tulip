@@ -161,9 +161,10 @@ int main(int argc,char **argv) {
   }
 
   PerspectiveContext* context = new PerspectiveContext();
-  context->externalFile = projectFilePath;
   context->parameters = extraParams;
   context->project = project;
+  if (project == NULL)
+    context->externalFile = projectFilePath;
 
   if (perspectiveName.isNull())
     usage("Could not determine the perspective to launch." + error);
