@@ -37,36 +37,17 @@ namespace tlp {
 typedef Matrix<float, 4> MatrixGL;
 class GlGraphInputData;
 
-class TLP_GL_SCOPE EdgeExtremityGlyph {
+class TLP_GL_SCOPE EdgeExtremityGlyph: public Plugin {
 public:
+  virtual std::string category() const { return "EdgeExtremityGlyph"; }
+
   EdgeExtremityGlyph(const tlp::PluginContext *context);
   virtual ~EdgeExtremityGlyph();
-
   virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) = 0;
-
-  virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
-                                       const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix) = 0;
-
+  void get2DTransformationMatrix(const Coord &src, const Coord &dest,const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix);
+  void get3DTransformationMatrix(const Coord &src, const Coord &dest,const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix);
 protected:
   GlGraphInputData *edgeExtGlGraphInputData;
-};
-
-class TLP_GL_SCOPE EdgeExtremityGlyphFrom3DGlyph: public EdgeExtremityGlyph {
-public:
-  EdgeExtremityGlyphFrom3DGlyph(const tlp::PluginContext *context);
-  virtual ~EdgeExtremityGlyphFrom3DGlyph();
-
-  virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
-                                       const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix);
-};
-
-class TLP_GL_SCOPE EdgeExtremityGlyphFrom2DGlyph: public EdgeExtremityGlyph {
-public:
-  EdgeExtremityGlyphFrom2DGlyph(const tlp::PluginContext *context);
-  virtual ~EdgeExtremityGlyphFrom2DGlyph();
-
-  virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
-                                       const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix);
 };
 
 }

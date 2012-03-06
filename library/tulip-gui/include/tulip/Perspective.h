@@ -55,6 +55,7 @@ protected:
   QString _externalFile;
   QVariantMap _parameters;
 public:
+  virtual std::string category() const { return "Perspective"; }
 
   static void setInstance(tlp::Perspective*);
   static tlp::Perspective* instance();

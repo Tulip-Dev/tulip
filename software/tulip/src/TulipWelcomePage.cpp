@@ -60,7 +60,7 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
     QString txt;
 
     for (QList<QString>::iterator it = recentDocs.begin(); it != recentDocs.end(); ++it)
-      txt += trUtf8(("<p><span><img src=\":/tulip/app/ui/list_bullet_arrow.png\"></img>   <a href=\"" +
+      txt += trUtf8(("<p><span><img src=\":/tulip/gui/ui/list_bullet_arrow.png\"></img>   <a href=\"" +
                      *it + "\">" + *it + "</a>" +
                      "</span></p><p/>").toStdString().c_str());
 
@@ -72,15 +72,17 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
   _ui->perspectivesFrame->setLayout(perspectiveLayout);
 }
 
+#include <QtCore/QDebug>
+
 QVBoxLayout *TulipWelcomePage::buildPerspectiveListLayout(const QObject *receiver, const char *slot) {
   QVBoxLayout *perspectivesLayout = new QVBoxLayout();
   perspectivesLayout->setContentsMargins(6,6,6,6);
   QList<tlp::PluginInformations *> localPlugins = tlp::PluginManager::pluginsList(tlp::PluginManager::Local);
   tlp::PluginInformations *info;
   foreach(info,localPlugins) {
+    qWarning() << info->type();
     if (info->type() != "Perspective")
       continue;
-
     PerspectiveItemWidget *item = new PerspectiveItemWidget(info);
     perspectivesLayout->addWidget(item);
     connect(item,SIGNAL(selected()),receiver,slot);

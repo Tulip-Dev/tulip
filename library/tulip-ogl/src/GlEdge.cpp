@@ -827,7 +827,7 @@ void GlEdge::displayArrow(const GlGraphInputData *data,
   MatrixGL srcTransformationMatrix;
   MatrixGL srcScalingMatrix;
 
-  extremityGlyph->getTransformationMatrix(beginTmpAnchor, srcAnchor, size,
+  extremityGlyph->get2DTransformationMatrix(beginTmpAnchor, srcAnchor, size,
                                           srcTransformationMatrix, srcScalingMatrix);
 
 
