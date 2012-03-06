@@ -225,7 +225,7 @@ QVariant GraphHierarchiesModel::headerData(int section, Qt::Orientation orientat
 }
 
 void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
-  if (_graphs.contains(g))
+  if (_graphs.contains(g) || g == NULL)
     return;
 
   beginInsertRows(QModelIndex(),rowCount(),rowCount());
