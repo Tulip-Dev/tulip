@@ -33,9 +33,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ImportExportTest);
 
 // ImportExportTest::ImportExportTest() :importAlgorithm("tlp"), exportAlgorithm("tlp") {
 ImportExportTest::ImportExportTest() :importAlgorithm("TlpJsonImport"), exportAlgorithm("TlpJsonExport") {
-  // because we are testing the tulip core library
-  // the only needed plugins are those embedded in that library
-  //PluginLibraryLoader::loadPlugins();
 }
 
 void ImportExportTest::setUp() {
