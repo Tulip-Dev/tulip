@@ -99,6 +99,9 @@ SET(SRCS
   GlyphRenderer.cpp
   TulipFontWidget.cpp
   ClearableLineEdit.cpp
+  CaptionItem.cpp
+  CaptionGraphicsItem.cpp
+  CaptionGraphicsSubItems.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -184,6 +187,9 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/GraphTableItemDelegate.h
   ../include/tulip/VectorEditionWidget.h
   ../include/tulip/TulipFontWidget.h
+  ../include/tulip/CaptionItem.h
+  ../include/tulip/CaptionGraphicsItem.h
+  ../include/tulip/CaptionGraphicsSubItems.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
