@@ -16,10 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <QObject>
-#include <QNetworkAccessManager>
-#include <QUrl>
-#include <QMap>
+#include <QtCore/QObject>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtCore/QUrl>
+#include <QtCore/QMap>
 
 class QNetworkReply;
 class QNetworkReply;
