@@ -41,7 +41,7 @@ public:
   virtual tlp::PropertyInterface* lastComputedProperty() const=0;
   virtual QMap<QString,QStringList> algorithms()=0;
   virtual bool computeProperty(tlp::Graph *,const QString &alg, QString &msg, tlp::PluginProgress *progress=0, tlp::DataSet *data=0,bool isLocal=false)=0;
-  virtual tlp::ParameterList parameters(const QString& alg)=0;
+  virtual tlp::ParameterDescriptionList parameters(const QString& alg)=0;
 };
 // **********************************************
 class AlgorithmRunner : public QWidget {
@@ -81,9 +81,9 @@ class AlgorithmRunnerItem: public QWidget {
   QString _group;
   Q_PROPERTY(QString name READ name)
 
-  tlp::ParameterList _params;
+  tlp::ParameterDescriptionList _params;
 public:
-  explicit AlgorithmRunnerItem(const QString &group,const QString &name, const tlp::ParameterList& params, QWidget *parent=0);
+  explicit AlgorithmRunnerItem(const QString &group,const QString &name, const tlp::ParameterDescriptionList& params, QWidget *parent=0);
   virtual ~AlgorithmRunnerItem();
 
   QString group() const;

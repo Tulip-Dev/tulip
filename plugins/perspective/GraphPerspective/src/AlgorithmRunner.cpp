@@ -43,7 +43,7 @@ using namespace tlp;
 // **********************************************
 // Helper classes
 // **********************************************
-AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &name, const tlp::ParameterList& params, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItemData), _group(group), _params(params) {
+AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &name, const tlp::ParameterDescriptionList& params, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItemData), _group(group), _params(params) {
   _ui->setupUi(this);
   setEnabled(false);
   _ui->algNameLabel->setText(name);
@@ -181,7 +181,7 @@ public:
     tlp::Observable::unholdObservers();
     return result;
   }
-  tlp::ParameterList parameters(const QString &alg) {
+  tlp::ParameterDescriptionList parameters(const QString &alg) {
     return PluginLister::getPluginParameters(alg.toStdString());
   }
 };
@@ -209,7 +209,7 @@ public:
     msg = errorMsg.c_str();
     return result;
   }
-  virtual tlp::ParameterList parameters(const QString& alg) {
+  virtual tlp::ParameterDescriptionList parameters(const QString& alg) {
     return PluginLister::getPluginParameters(alg.toStdString());
   }
   PropertyInterface* lastComputedProperty() const {

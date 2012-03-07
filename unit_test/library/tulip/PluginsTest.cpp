@@ -133,15 +133,15 @@ void PluginsTest::pluginInformations() {
   CPPUNIT_ASSERT_EQUAL(string("TemplateAlgorithm<tlp::BooleanProperty>"), dependencies.begin()->factoryName);
   CPPUNIT_ASSERT_EQUAL(string("1.0"), dependencies.begin()->pluginRelease);
 
-  tlp::ParameterList parameters = PluginLister::instance()->getPluginParameters("Test");
+  tlp::ParameterDescriptionList parameters = PluginLister::instance()->getPluginParameters("Test");
 
-  Iterator<string>* it = parameters.getParametersNames();
+  Iterator<ParameterDescription>* it = parameters.getParameters();
   CPPUNIT_ASSERT_MESSAGE("Test plugin has no parameters", it->hasNext());
-  string parameterName = it->next();
-  CPPUNIT_ASSERT_EQUAL(string("testParameter"), parameterName);
-  CPPUNIT_ASSERT_MESSAGE("test parameter should not be mandatory", !parameters.isMandatory(parameterName));
-  CPPUNIT_ASSERT_EQUAL(string("0"), parameters.getDefaultValue(parameterName));
-  CPPUNIT_ASSERT_EQUAL(string("i"), parameters.getTypeName(parameterName));
+  ParameterDescription param = it->next();
+  CPPUNIT_ASSERT_EQUAL(string("testParameter"), param.getName());
+  CPPUNIT_ASSERT_MESSAGE("test parameter should not be mandatory", !param.isMandatory());
+  CPPUNIT_ASSERT_EQUAL(string("0"), param.getDefaultValue());
+  CPPUNIT_ASSERT_EQUAL(string("i"), param.getTypeName());
 
   const Plugin* factory(PluginLister::instance()->pluginInformations("Test"));
   CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory->author());

@@ -19,7 +19,6 @@
 #include <tulip/WithParameter.h>
 #include <tulip/DataSet.h>
 #include <tulip/PropertyTypes.h>
-
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
@@ -29,108 +28,47 @@
 #include <tulip/StringProperty.h>
 #include <tulip/StlIterator.h>
 #include <tulip/ColorScale.h>
-
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-
-#include <QtCore/QDebug>
+#include <tulip/ForEach.h>
 
 using namespace tlp;
 using namespace std;
 
-ParameterList::ParameterList(const ParameterList& p) {
-  parameters = p.parameters;
-}
-
-ParameterList tlp::WithParameter::getParameters() {
+const ParameterDescriptionList& tlp::WithParameter::getParameters() {
   return parameters;
 }
 
-bool ParameterList::hasField(std::string parameterName) const {
-  return parameters.find(parameterName) != parameters.end();
+Iterator<ParameterDescription>* ParameterDescriptionList::getParameters() const {
+  return new StlIterator<ParameterDescription, vector<ParameterDescription>::const_iterator>(parameters.begin(), parameters.end());
 }
 
-void ParameterList::erase(string parameterName) {
-  parameters.erase(parameterName);
-}
-
-Iterator<std::string>* ParameterList::getParametersNames() const {
-  return new StlMapKeyIterator<string, Parameter>(parameters.begin(), parameters.end());
-}
-
-string ParameterList::getHelp(string parameterName) const {
-  map<string, Parameter>::const_iterator it = parameters.find(parameterName);
-
-  if(it != parameters.end()) {
-    return parameters.find(parameterName)->second.help;
-  }
-  else {
-#ifndef NDEBUG
-    std::cout << "attemp to retrieve help of non-existing parameter: " << parameterName << std::endl;
-#endif
-    return string();
-  }
-}
-
-std::string ParameterList::getTypeName(string parameterName) const {
-  map<string, Parameter>::const_iterator it = parameters.find(parameterName);
-
-  if(it != parameters.end()) {
-    return it->second.type;
-  }
-  else {
-#ifndef NDEBUG
-    std::cout << "attemp to get value of non-existing parameter: " << parameterName << std::endl;
-#endif
-    return string();
-  }
-}
-
-string ParameterList::getDefaultValue(string parameterName) const {
-  map<string, Parameter>::const_iterator it = parameters.find(parameterName);
-
-  if(it != parameters.end()) {
-    return it->second.defaultValue;
-  }
-  else {
-#ifndef NDEBUG
-    std::cout << "attemp to get default value of non-existing parameter: " << parameterName << std::endl;
-#endif
-    return string();
-  }
-}
-
-void ParameterList::setDefaultValue(string parameterName, string value) {
-  map<string, Parameter>::iterator it = parameters.find(parameterName);
-
-  if(it != parameters.end()) {
-    it->second.defaultValue = value;
+ParameterDescription* ParameterDescriptionList::getParameter(const std::string& name) {
+  for(unsigned int i = 0; i < parameters.size(); ++i) {
+    if (name == parameters[i].getName())
+      return &parameters[i];
   }
 
 #ifndef NDEBUG
-  else {
-    std::cout << "attemp to set default value on non-existing parameter: " << parameterName << std::endl;
-  }
-
+  std::cerr << __PRETTY_FUNCTION__ << name << " does not exists" << std::endl;
 #endif
+
+  return NULL;
 }
 
-bool ParameterList::isMandatory(string parameterName) const {
-  map<string, Parameter>::const_iterator it = parameters.find(parameterName);
+const std::string& ParameterDescriptionList::getDefaultValue(const string& name)  const {
+  return ((ParameterDescriptionList *) this)->getParameter(name)->getDefaultValue();
+}
 
-  if(it != parameters.end()) {
-    return it->second.mandatory;
-  }
-  else {
-#ifndef NDEBUG
-    std::cout << "attemp to retrieve whether non-existing parameter is mandatory: " << parameterName << std::endl;
-#endif
-    return false;
-  }
+void ParameterDescriptionList::setDefaultValue(const string& name,
+    const string& val) {
+  getParameter(name)->setDefaultValue(val);
+}
+
+bool ParameterDescriptionList::isMandatory(const string& name) const {
+  return ((ParameterDescriptionList *) this)->getParameter(name)->isMandatory();
 }
 
 template<typename TYPEINTERFACE>
-void ParameterList::insertData(tlp::DataSet &dataSet,const std::string &param,const std::string &defaultValue) const {
+void ParameterDescriptionList::insertData(tlp::DataSet &dataSet,const std::string &param,const std::string &defaultValue) const {
   if (dataSet.exist(param))
     return;
 
@@ -156,22 +94,19 @@ if (type.compare(typeid(T::RealType).name()) == 0)\
 
 #define CHECK_PROPERTY(T)\
 if (type.compare(typeid(T).name()) == 0) {\
-  if (!g || defaultValue.size()==0)\
+  if (!g || defaultValue.size()==0 || !g->existProperty(defaultValue))\
     dataSet.set<T*>(name,NULL);\
-  else if (!g->existProperty(defaultValue) || dynamic_cast<T*>(g->getProperty(defaultValue)) != NULL)\
+  else\
     dataSet.set<T*>(name,g->getProperty<T>(defaultValue));\
-  else {\
-    dataSet.set<T*>(name,NULL);\
-  }\
   continue;\
 }\
  
-void ParameterList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
-  string name;
-  forEach(name,getParametersNames()) {
-    string type = getTypeName(name);
-
-    string defaultValue = getDefaultValue(name);
+void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
+  ParameterDescription param;
+  forEach(param, getParameters()) {
+    const string& name = param.getName();
+    const string& type = param.getTypeName();
+    const string& defaultValue = param.getDefaultValue();
 
     CHECK_TYPE(tlp::BooleanType);
     CHECK_TYPE(tlp::IntegerType);
@@ -185,14 +120,21 @@ void ParameterList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
 
     if (type.compare(typeid(tlp::ColorScale).name()) == 0) {
       vector<Color> colors;
-      ColorVectorType::fromString(colors,defaultValue);
-      dataSet.set<ColorScale>(name,ColorScale(colors));
+      ColorVectorType::fromString(colors, defaultValue);
+      dataSet.set<ColorScale>(name, ColorScale(colors));
     }
 
     if (type.compare(typeid(tlp::StringCollection).name()) == 0) {
       StringCollection col;
-      foreach(QString token,QString(defaultValue.c_str()).split(';'))
-      col.push_back(token.toStdString());
+      string::size_type lastPos = defaultValue.find_first_not_of(";");
+      string::size_type pos = defaultValue.find_first_of(";", lastPos);
+
+      while (string::npos != pos || string::npos != lastPos) {
+        col.push_back(defaultValue.substr(lastPos, pos - lastPos));
+        lastPos = defaultValue.find_first_not_of(";", pos);
+        pos = defaultValue.find_first_of(";", lastPos);
+      }
+
       dataSet.set<StringCollection>(name,col);
     }
 
@@ -206,9 +148,9 @@ void ParameterList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
 
     if (type.compare(typeid(PropertyInterface*).name()) == 0) {
       if (!g || defaultValue.size()==0 || !g->existProperty(defaultValue))
-        dataSet.set<PropertyInterface*>(name,NULL);
+        dataSet.set<PropertyInterface*>(name, NULL);
       else
-        dataSet.set<PropertyInterface*>(name,g->getProperty(defaultValue));
+        dataSet.set<PropertyInterface*>(name, g->getProperty(defaultValue));
 
       continue;
     }

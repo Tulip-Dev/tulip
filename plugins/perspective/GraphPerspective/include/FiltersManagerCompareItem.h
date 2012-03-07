@@ -54,7 +54,7 @@ class FiltersManagerCompareItem: public AbstractFiltersManagerItem {
   void fillCombo(QComboBox*);
   ComboElementType comboElementType(QComboBox*) const;
   tlp::PropertyInterface* comboProperty(QComboBox*) const;
-  tlp::ParameterList comboAlgorithmParams(QComboBox*) const;
+  tlp::ParameterDescriptionList comboAlgorithmParams(QComboBox*) const;
   bool isComparisonNumeric(QComboBox*) const;
   bool isComboAlgorithm(QComboBox*) const;
 

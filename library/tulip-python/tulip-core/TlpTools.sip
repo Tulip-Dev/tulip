@@ -143,7 +143,7 @@ Returns a dataset filled with default parameters (if any) for a given plugin (al
 		}
 	} 
 	if (selectedLister) {
-		tlp::ParameterList parameters = selectedLister->getPluginParameters(*a0);
+		tlp::ParameterDescriptionList parameters = selectedLister->getPluginParameters(*a0);
 		parameters.buildDefaultDataSet(result, a1);
 		sipRes = new tlp::DataSet(result);
 	} else {
