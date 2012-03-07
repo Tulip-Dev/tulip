@@ -45,8 +45,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )  \
   HTML_HELP_BODY() \
-  "If true the mesure will be normalized unweight: m(n) = deg(n) / (#V - 1) " \
-  "If true the mesure will be normalized unweight: m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)] " \
+  "If true, values m(v) for nodes v are normalized to [0, 1] using the transformation m(v) = deg(v) / (#V - 1). If computing weighted degree based on weights e_w for edges e, the transform is then m(v) = deg_w(v) / [(sum(e_w)/#E)(#V-1)] where deg_w(v) = sum_e e_w runs over all in/out edges incident to node v." \
   HTML_HELP_CLOSE(),
 
 };
