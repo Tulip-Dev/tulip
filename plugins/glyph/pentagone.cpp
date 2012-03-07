@@ -34,83 +34,8 @@
 using namespace std;
 using namespace tlp;
 
-/** \addtogroup glyph */
-/*@{*/
-/// A 2D glyph
-/**
- * This glyph draws a textured pentagone using the "viewTexture"
- * node property value. If this property has no value, the pentagone
- * is then colored using the "viewColor" node property value.
- */
-class Pentagone: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
-public:
-  GLYPHINFORMATIONS("2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1.0", 12)
-  Pentagone(const tlp::PluginContext *context = NULL);
-  virtual ~Pentagone();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
-  virtual void draw(node n, float lod);
-  virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
-  virtual void draw(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod);
-
-protected:
-
-  static GlPentagon *pentagon;
-
-};
-
-GlPentagon* Pentagone::pentagon=0;
-
-//=====================================================
-PLUGIN(Pentagone)
-//===================================================================================
-Pentagone::Pentagone(const tlp::PluginContext* context) :
-  Glyph(context), EdgeExtremityGlyphFrom2DGlyph(context) {
-  if(!pentagon)
-    pentagon=new GlPentagon(Coord(0,0,0),Size(.5,.5,0));
-}
-//=====================================================
-Pentagone::~Pentagone() {
-}
-//=====================================================
-void Pentagone::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-  boundingBox[0] = Coord(-0.3f, -0.35f, 0);
-  boundingBox[1] = Coord(0.3f, 0.35f, 0);
-}
-//=====================================================
-void Pentagone::draw(node n, float lod) {
-  pentagon->setLightingMode(true);
-  string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
-
-  if(textureName!="")
-    textureName=glGraphInputData->parameters->getTexturePath()+textureName;
-
-  draw(glGraphInputData->getElementColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-       textureName,
-       lod);
-}
-
-void Pentagone::draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
-  pentagon->setLightingMode(false);
-  string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
-
-  if(textureName!="")
-    textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
-
-  draw(glyphColor,
-       borderColor,
-       edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-       textureName,
-       lod);
-}
-
-//=====================================================
-void Pentagone::draw(const Color &fillColor,
-                     const Color &borderColor,
-                     float borderWidth,
-                     const std::string &textureName,
-                     float lod) {
+static GlPentagon *pentagon = 0;
+void drawPentagon(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
   if(borderWidth<1e-6f)
     borderWidth=1e-6f;
 
@@ -121,4 +46,69 @@ void Pentagone::draw(const Color &fillColor,
   pentagon->draw(lod,NULL);
 }
 
-/*@}*/
+/** \addtogroup glyph */
+/*@{*/
+/// A 2D glyph
+/**
+ * This glyph draws a textured pentagone using the "viewTexture"
+ * node property value. If this property has no value, the pentagone
+ * is then colored using the "viewColor" node property value.
+ */
+class Pentagone: public Glyph {
+public:
+  GLYPHINFORMATIONS("2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1.0", 12)
+  Pentagone(const tlp::PluginContext *context = NULL);
+  virtual ~Pentagone();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+  virtual void draw(node n, float lod);
+};
+PLUGIN(Pentagone)
+Pentagone::Pentagone(const tlp::PluginContext* context) :
+  Glyph(context) {
+  if(!pentagon)
+    pentagon=new GlPentagon(Coord(0,0,0),Size(.5,.5,0));
+}
+Pentagone::~Pentagone() {
+}
+void Pentagone::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
+  boundingBox[0] = Coord(-0.3f, -0.35f, 0);
+  boundingBox[1] = Coord(0.3f, 0.35f, 0);
+}
+void Pentagone::draw(node n, float lod) {
+  pentagon->setLightingMode(true);
+  string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
+
+  if(textureName!="")
+    textureName=glGraphInputData->parameters->getTexturePath()+textureName;
+
+  drawPentagon(glGraphInputData->getElementColor()->getNodeValue(n),
+       glGraphInputData->getElementBorderColor()->getNodeValue(n),
+       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+       textureName,
+       lod);
+}
+
+class EEPentagon: public EdgeExtremityGlyph {
+public:
+  GLYPHINFORMATIONS("2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1.0", 12)
+
+  EEPentagon(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
+    if(!pentagon)
+      pentagon=new GlPentagon(Coord(0,0,0),Size(.5,.5,0));
+  }
+
+  void draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
+    pentagon->setLightingMode(false);
+    string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+
+    if(textureName!="")
+      textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
+
+    drawPentagon(glyphColor,
+         borderColor,
+         edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+         textureName,
+         lod);
+  }
+};
+PLUGIN(EEPentagon)

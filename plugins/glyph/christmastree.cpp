@@ -36,55 +36,7 @@
 using namespace std;
 using namespace tlp;
 
-/** \addtogroup glyph */
-/*@{*/
-/// A 3D glyph.
-/** This glyph draws a christmas tree special for christmas release of 2008
- */
-class ChristmasTree: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
-public:
-  GLYPHINFORMATIONS("3D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0" , 28)
-  ChristmasTree(const tlp::PluginContext* context = NULL);
-  virtual void draw(node n, float lod);
-  virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod);
-
-protected:
-  void drawTree();
-
-};
-
-PLUGIN(ChristmasTree)
-
-//===================================================================================
-ChristmasTree::ChristmasTree(const tlp::PluginContext* context) :
-  Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
-}
-//=======================================================
-void ChristmasTree::draw(node n, float) {
-  drawTree();
-  glRotatef(-90., 1., 0., 0.);
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-  GlDisplayListManager::getInst().callDisplayList("ChristmasTree_tree");
-  setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
-  GlDisplayListManager::getInst().callDisplayList("ChristmasTree_sphere");
-  setMaterial(Color(255, 255, 255, 50));
-  GlDisplayListManager::getInst().callDisplayList("ChristmasTree_outsphere");
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-}
-
-void ChristmasTree::draw(edge, node, const Color& glyphColor,const Color&, float) {
-  glEnable(GL_LIGHTING);
-  drawTree();
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-  GlDisplayListManager::getInst().callDisplayList("ChristmasTree_tree");
-  setMaterial(glyphColor);
-  GlDisplayListManager::getInst().callDisplayList("ChristmasTree_sphere");
-  setMaterial(Color(255, 255, 255, 50));
-  GlDisplayListManager::getInst().callDisplayList("ChristmasTree_outsphere");
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-}
-
-void ChristmasTree::drawTree() {
+void drawTree() {
   if (GlDisplayListManager::getInst().beginNewDisplayList(
         "ChristmasTree_tree")) {
     GLUquadricObj *quadratic1;
@@ -162,5 +114,56 @@ void ChristmasTree::drawTree() {
     gluDeleteQuadric(quadratic);
   }
 }
+
+/** \addtogroup glyph */
+/*@{*/
+/// A 3D glyph.
+/** This glyph draws a christmas tree special for christmas release of 2008
+ */
+class ChristmasTree: public Glyph {
+public:
+  GLYPHINFORMATIONS("3D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0" , 28)
+  ChristmasTree(const tlp::PluginContext* context = NULL);
+  virtual void draw(node n, float lod);
+};
+PLUGIN(ChristmasTree)
+
+ChristmasTree::ChristmasTree(const tlp::PluginContext* context) :
+  Glyph(context) {
+}
+void ChristmasTree::draw(node n, float) {
+  drawTree();
+  glRotatef(-90., 1., 0., 0.);
+  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+  GlDisplayListManager::getInst().callDisplayList("ChristmasTree_tree");
+  setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
+  GlDisplayListManager::getInst().callDisplayList("ChristmasTree_sphere");
+  setMaterial(Color(255, 255, 255, 50));
+  GlDisplayListManager::getInst().callDisplayList("ChristmasTree_outsphere");
+  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
+}
+
+
+class EEChristmasTree: public EdgeExtremityGlyph {
+public:
+  GLYPHINFORMATIONS("3D - ChristmasTree extremity", "Morgan Mathiaut", "16/12/2008", "Christmas tree for edge extremities", "1.0" , 28)
+
+  EEChristmasTree(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
+  }
+
+  void draw(edge, node, const Color& glyphColor,const Color&, float) {
+    glEnable(GL_LIGHTING);
+    drawTree();
+    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+    GlDisplayListManager::getInst().callDisplayList("ChristmasTree_tree");
+    setMaterial(glyphColor);
+    GlDisplayListManager::getInst().callDisplayList("ChristmasTree_sphere");
+    setMaterial(Color(255, 255, 255, 50));
+    GlDisplayListManager::getInst().callDisplayList("ChristmasTree_outsphere");
+    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
+  }
+};
+
+
 
 /*@}*/

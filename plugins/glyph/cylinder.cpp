@@ -31,6 +31,23 @@
 using namespace std;
 using namespace tlp;
 
+void drawCylinder() {
+  GLUquadricObj *quadratic;
+  quadratic = gluNewQuadric();
+  gluQuadricNormals(quadratic, GLU_SMOOTH);
+  gluQuadricTexture(quadratic, GL_TRUE);
+  glTranslatef(0.0f, 0.0f, -0.5f);
+  gluQuadricOrientation(quadratic, GLU_INSIDE);
+  gluDisk(quadratic, 0.0f, 0.5f, 10, 10);
+  gluQuadricOrientation(quadratic, GLU_OUTSIDE);
+  gluCylinder(quadratic, 0.5f, 0.5f, 1.0f, 10, 10);
+  glTranslatef(0.0f, 0.0f, 1.0f);
+  gluDisk(quadratic, 0.0f, 0.5f, 10, 10);
+  GlDisplayListManager::getInst().endNewDisplayList();
+  gluDeleteQuadric(quadratic);
+
+}
+
 /** \addtogroup glyph */
 /// A 3D glyph.
 /**
@@ -38,33 +55,26 @@ using namespace tlp;
  * property value. If this property has no value, the cylinder is then colored
  * using the "viewColor" node property value.
  */
-class Cylinder: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
+class Cylinder: public Glyph {
 public:
   GLYPHINFORMATIONS("3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0", 6)
   Cylinder(const tlp::PluginContext* context = NULL);
   virtual ~Cylinder();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
-  virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
   virtual Coord getAnchor(const Coord &vector) const;
-
-private:
-  inline void drawCylinder();
 };
 PLUGIN(Cylinder)
-//=================================================================================================
+
 Cylinder::Cylinder(const tlp::PluginContext* context) :
-  Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
+  Glyph(context) {
 }
-//=================================================================================================
 Cylinder::~Cylinder() {
 }
-//=====================================================
 void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
   boundingBox[0] = Coord(-0.35f, -0.35f, 0);
   boundingBox[1] = Coord(0.35f, 0.35f, 1);
 }
-//=================================================================================================
 void Cylinder::draw(node n, float) {
   if (GlDisplayListManager::getInst().beginNewDisplayList("Cylinder_cylinder")) {
     drawCylinder();
@@ -84,7 +94,6 @@ void Cylinder::draw(node n, float) {
   OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
   GlTextureManager::getInst().desactivateTexture();
 }
-//=================================================================================================
 Coord Cylinder::getAnchor(const Coord &vector) const {
   Coord anchor = vector;
   float x, y, z, n;
@@ -107,44 +116,37 @@ Coord Cylinder::getAnchor(const Coord &vector) const {
 
   return Coord(x, y, z);
 }
-//=================================================================================================
 
-void Cylinder::draw(edge, node n, const Color& glyphColor, const Color&, float) {
-  glEnable(GL_LIGHTING);
+class EECylinder: public EdgeExtremityGlyph {
+public:
+  GLYPHINFORMATIONS("3D - Cylinder extremity", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder for edge extremities", "1.0", 6)
 
-  if (GlDisplayListManager::getInst().beginNewDisplayList("Cylinder_cylinder")) {
-    drawCylinder();
-    GlDisplayListManager::getInst().endNewDisplayList();
+  EECylinder(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
   }
 
-  setMaterial(glyphColor);
-  string texFile = edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n);
+  void draw(edge, node n, const Color& glyphColor, const Color&, float) {
+    glEnable(GL_LIGHTING);
 
-  if (texFile != "") {
-    string texturePath =
-      edgeExtGlGraphInputData->parameters->getTexturePath();
-    GlTextureManager::getInst().activateTexture(texturePath + texFile);
+    if (GlDisplayListManager::getInst().beginNewDisplayList("Cylinder_cylinder")) {
+      drawCylinder();
+      GlDisplayListManager::getInst().endNewDisplayList();
+    }
+
+    setMaterial(glyphColor);
+    string texFile = edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n);
+
+    if (texFile != "") {
+      string texturePath =
+        edgeExtGlGraphInputData->parameters->getTexturePath();
+      GlTextureManager::getInst().activateTexture(texturePath + texFile);
+    }
+
+    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+    GlDisplayListManager::getInst().callDisplayList("Cylinder_cylinder");
+    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
+    GlTextureManager::getInst().desactivateTexture();
   }
+};
 
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-  GlDisplayListManager::getInst().callDisplayList("Cylinder_cylinder");
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-  GlTextureManager::getInst().desactivateTexture();
-}
+PLUGIN(EECylinder)
 
-void Cylinder::drawCylinder() {
-  GLUquadricObj *quadratic;
-  quadratic = gluNewQuadric();
-  gluQuadricNormals(quadratic, GLU_SMOOTH);
-  gluQuadricTexture(quadratic, GL_TRUE);
-  glTranslatef(0.0f, 0.0f, -0.5f);
-  gluQuadricOrientation(quadratic, GLU_INSIDE);
-  gluDisk(quadratic, 0.0f, 0.5f, 10, 10);
-  gluQuadricOrientation(quadratic, GLU_OUTSIDE);
-  gluCylinder(quadratic, 0.5f, 0.5f, 1.0f, 10, 10);
-  glTranslatef(0.0f, 0.0f, 1.0f);
-  gluDisk(quadratic, 0.0f, 0.5f, 10, 10);
-  GlDisplayListManager::getInst().endNewDisplayList();
-  gluDeleteQuadric(quadratic);
-
-}
