@@ -60,9 +60,21 @@ public slots:
   void centerPanels(tlp::PropertyInterface*);
 
 protected slots:
+  void currentGraphChanged(tlp::Graph* graph);
   void refreshDockExpandControls();
   void panelFocused(tlp::View*);
   void modeSwitch();
+  void deleteSelectedElements();
+  void invertSelection();
+  void cancelSelection();
+  void selectAll();
+  void undo();
+  void redo();
+  void cut();
+  void paste();
+  void copy();
+  void group();
+  void createSubGraph();
 };
 
 #endif // GRAPHPERSPECTIVE_H
