@@ -53,10 +53,10 @@ void initCross() {
   }
 }
 void drawCross(const Color &fillColor,
-                 const Color &borderColor,
-                 float borderWidth,
-                 const std::string &textureName,
-                 float lod) {
+               const Color &borderColor,
+               float borderWidth,
+               const std::string &textureName,
+               float lod) {
   if(borderWidth<1e-6f)
     borderWidth=1e-6f;
 
@@ -116,10 +116,10 @@ void Cross::draw(node n, float lod) {
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   drawCross(glGraphInputData->getElementColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-       textureName,
-       lod);
+            glGraphInputData->getElementBorderColor()->getNodeValue(n),
+            glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+            textureName,
+            lod);
 }
 Coord Cross::getAnchor(const Coord &vector) const {
   Coord v(vector);
@@ -160,19 +160,19 @@ public:
   }
 
   void draw(edge e, node,
-                   const Color & glyphColor,
-                   const Color &borderColor,
-                   float lod) {
+            const Color & glyphColor,
+            const Color &borderColor,
+            float lod) {
     string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
     if(textureName!="")
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
     drawCross(glyphColor,
-         borderColor,
-         edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-         textureName,
-         lod);
+              borderColor,
+              edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+              textureName,
+              lod);
   }
 };
 PLUGIN(EECross)

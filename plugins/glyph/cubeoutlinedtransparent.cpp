@@ -86,9 +86,9 @@ void CubeOutLinedTransparent::draw(node n, float lod) {
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   drawBox(glGraphInputData->getElementBorderColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-       textureName,
-       lod,glGraphInputData);
+          glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+          textureName,
+          lod,glGraphInputData);
 }
 
 Coord CubeOutLinedTransparent::getAnchor(const Coord & vector) const {
@@ -113,7 +113,7 @@ public:
   }
 
   void draw(edge e, node, const Color &borderColor, const Color&,
-                                     float lod) {
+            float lod) {
     glEnable(GL_LIGHTING);
     string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
@@ -121,9 +121,9 @@ public:
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
     drawBox(borderColor,
-         edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-         textureName,
-         lod,edgeExtGlGraphInputData);
+            edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+            textureName,
+            lod,edgeExtGlGraphInputData);
     glDisable(GL_LIGHTING);
   }
 };

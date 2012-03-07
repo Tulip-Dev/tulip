@@ -232,10 +232,10 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T>
-    void addInParameter(const std::string &name,
-			const std::string &help=std::string(),
-			const std::string &defaultValue = std::string(),
-			bool isMandatory = true) {
+  void addInParameter(const std::string &name,
+                      const std::string &help=std::string(),
+                      const std::string &defaultValue = std::string(),
+                      bool isMandatory = true) {
     parameters.template add<T>(name, help, defaultValue, isMandatory, IN_PARAM);
   }
 
@@ -249,10 +249,10 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T>
-    void addOutParameter(const std::string &name,
-			 const std::string &help=std::string(),
-			 const std::string &defaultValue = std::string(),
-			 bool isMandatory = true) {
+  void addOutParameter(const std::string &name,
+                       const std::string &help=std::string(),
+                       const std::string &defaultValue = std::string(),
+                       bool isMandatory = true) {
     parameters.template add<T>(name, help, defaultValue, isMandatory, OUT_PARAM);
   }
 
@@ -266,10 +266,10 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T>
-    void addInOutParameter(const std::string &name,
-			   const std::string &help=std::string(),
-			   const std::string &defaultValue = std::string(),
-			   bool isMandatory = true) {
+  void addInOutParameter(const std::string &name,
+                         const std::string &help=std::string(),
+                         const std::string &defaultValue = std::string(),
+                         bool isMandatory = true) {
     parameters.template add<T>(name, help, defaultValue, isMandatory, INOUT_PARAM);
   }
 
@@ -283,10 +283,10 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T>
-    void addParameter(const std::string &name,
-		      const std::string &help=std::string(),
-		      const std::string &defaultValue = std::string(),
-		      bool isMandatory = true) {
+  void addParameter(const std::string &name,
+                    const std::string &help=std::string(),
+                    const std::string &defaultValue = std::string(),
+                    bool isMandatory = true) {
     addInParameter<T>(name, help, defaultValue, isMandatory);
   }
 protected:

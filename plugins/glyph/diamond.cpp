@@ -36,10 +36,10 @@ using namespace tlp;
 
 static GlRegularPolygon *diamond = 0;
 void drawDiamond(const Color &fillColor,
-                   const Color &borderColor,
-                   float borderWidth,
-                   const std::string &textureName,
-                   float lod) {
+                 const Color &borderColor,
+                 float borderWidth,
+                 const std::string &textureName,
+                 float lod) {
   if(borderWidth<1e-6f)
     borderWidth=1e-6f;
 
@@ -87,10 +87,10 @@ void Diamond::draw(node n, float lod) {
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   drawDiamond(glGraphInputData->getElementColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-       textureName,
-       lod);
+              glGraphInputData->getElementBorderColor()->getNodeValue(n),
+              glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+              textureName,
+              lod);
 }
 Coord Diamond::getAnchor(const Coord &vector) const {
   Coord v(vector);
@@ -132,10 +132,10 @@ public:
   }
 
   void draw(edge e,
-                     node,
-                     const Color & glyphColor,
-                     const Color &borderColor,
-                     float lod) {
+            node,
+            const Color & glyphColor,
+            const Color &borderColor,
+            float lod) {
     diamond->setLightingMode(false);
     string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
@@ -143,10 +143,10 @@ public:
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
     drawDiamond(glyphColor,
-         borderColor,
-         edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-         textureName,
-         lod);
+                borderColor,
+                edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+                textureName,
+                lod);
   }
 };
 

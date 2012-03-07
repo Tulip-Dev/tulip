@@ -47,11 +47,11 @@ CaptionGraphicsItem::CaptionGraphicsItem(View *view):_view(view) {
   _confPropertySelectionItem->setPos(140,10);
 }
 
-void CaptionGraphicsItem::loadConfiguration(){
+void CaptionGraphicsItem::loadConfiguration() {
   constructConfigWidget();
 }
 
-void CaptionGraphicsItem::generateCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &propertyName, double minValue, double maxValue){
+void CaptionGraphicsItem::generateCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &propertyName, double minValue, double maxValue) {
   _rondedRectItem->generateCaption(activeGradient,hideGradient,propertyName,minValue,maxValue);
 }
 
@@ -63,18 +63,24 @@ void CaptionGraphicsItem::constructConfigWidget() {
   _confPropertySelectionWidget->clear();
   QStringList properties;
   Iterator<PropertyInterface*>* itP=_view->graph()->getLocalObjectProperties();
-  while(itP->hasNext()){
+
+  while(itP->hasNext()) {
     PropertyInterface *property=itP->next();
-    if(property->getTypename()=="double"){
+
+    if(property->getTypename()=="double") {
       if(property->getName().c_str() == selectedItem)
         index=properties.size();
+
       properties << property->getName().c_str() ;
     }
   }
+
   cout << properties.size() << endl;
   _confPropertySelectionWidget->addItems(properties);
+
   if(index!=-1)
     _confPropertySelectionWidget->setCurrentIndex(index);
+
   connect(_confPropertySelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedPropertyChangedSlot(const QString &)));
 }
 
@@ -89,7 +95,7 @@ void CaptionGraphicsItem::filterChangedSlot(float begin,float end) {
   emit filterChanged(begin,end);
 }
 
-void CaptionGraphicsItem::selectedPropertyChangedSlot(const QString &propertyName){
+void CaptionGraphicsItem::selectedPropertyChangedSlot(const QString &propertyName) {
   emit selectedPropertyChanged(propertyName.toStdString());
 }
 

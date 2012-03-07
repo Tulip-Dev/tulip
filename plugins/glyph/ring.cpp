@@ -70,8 +70,8 @@ void drawRingBorder() {
   glEnd();
 }
 void drawGlyph(const Color& glyohColor, const string& texture,
-                     const string& texturePath, double borderWidth,
-                     const Color& borderColor, float lod) {
+               const string& texturePath, double borderWidth,
+               const Color& borderColor, float lod) {
 
   if (GlDisplayListManager::getInst().beginNewDisplayList("Ring_ring")) {
     drawRing();

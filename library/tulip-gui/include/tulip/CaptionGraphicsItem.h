@@ -48,7 +48,7 @@ public:
 
   void generateCaption(const QGradient &activeGradient, const QGradient &hideGradient, const std::string &propertyName, double minValue, double maxValue);
 
-  QGraphicsItem *getCaptionItem() const{
+  QGraphicsItem *getCaptionItem() const {
     return _rondedRectItem;
   }
 
