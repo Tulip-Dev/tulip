@@ -93,6 +93,9 @@ INSTALL(FILES
   tulip/GlyphRenderer.h
   tulip/ClearableLineEdit.h
   tulip/GraphPropertiesModel.h
+  tulip/CaptionItem.h
+  tulip/CaptionGraphicsItem.h
+  tulip/CaptionGraphicsSubItems.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
