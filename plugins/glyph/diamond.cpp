@@ -34,82 +34,8 @@
 using namespace std;
 using namespace tlp;
 
-/** \addtogroup glyph */
-/*@{*/
-/// A 2D glyph
-/**
- * This glyph draws a textured diamond using the "viewTexture"
- * node property value. If this property has no value, the diamond
- * is then colored using the "viewColor" node property value.
- */
-class Diamond: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
-public:
-  GLYPHINFORMATIONS("2D - Diamond", "Patrick Mary", "23/06/2011", "Textured Diamond", "1.0", 5)
-  Diamond(const tlp::PluginContext *context = NULL);
-  virtual ~Diamond();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
-  virtual void draw(node n, float lod);
-  virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
-  virtual void draw(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod);
-  virtual Coord getAnchor(const Coord &vector) const;
-
-protected :
-
-  static GlRegularPolygon *diamond;
-};
-
-GlRegularPolygon* Diamond::diamond=0;
-
-//=====================================================
-PLUGIN(Diamond)
-//===================================================================================
-Diamond::Diamond(const tlp::PluginContext* context) :
-  Glyph(context), EdgeExtremityGlyphFrom2DGlyph(context) {
-  if(!diamond)
-    diamond=new GlRegularPolygon(Coord(0,0,0),Size(.5,.5,0), 4);
-}
-//=====================================================
-Diamond::~Diamond() {
-}
-//=====================================================
-void Diamond::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-  boundingBox[0] = Coord(-0.35f, -0.35f, 0);
-  boundingBox[1] = Coord(0.35f, 0.35f, 0);
-}
-//=====================================================
-void Diamond::draw(node n, float lod) {
-  diamond->setLightingMode(true);
-  string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
-
-  if(textureName!="")
-    textureName=glGraphInputData->parameters->getTexturePath()+textureName;
-
-  draw(glGraphInputData->getElementColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-       textureName,
-       lod);
-}
-
-void Diamond::draw(edge e,
-                   node,
-                   const Color & glyphColor,
-                   const Color &borderColor,
-                   float lod) {
-  diamond->setLightingMode(false);
-  string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
-
-  if(textureName!="")
-    textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
-
-  draw(glyphColor,
-       borderColor,
-       edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-       textureName,
-       lod);
-}
-//=====================================================
-void Diamond::draw(const Color &fillColor,
+static GlRegularPolygon *diamond = 0;
+void drawDiamond(const Color &fillColor,
                    const Color &borderColor,
                    float borderWidth,
                    const std::string &textureName,
@@ -123,7 +49,49 @@ void Diamond::draw(const Color &fillColor,
   diamond->setTextureName(textureName);
   diamond->draw(lod,NULL);
 }
-//=====================================================
+
+/** \addtogroup glyph */
+/*@{*/
+/// A 2D glyph
+/**
+ * This glyph draws a textured diamond using the "viewTexture"
+ * node property value. If this property has no value, the diamond
+ * is then colored using the "viewColor" node property value.
+ */
+class Diamond: public Glyph {
+public:
+  GLYPHINFORMATIONS("2D - Diamond", "Patrick Mary", "23/06/2011", "Textured Diamond", "1.0", 5)
+  Diamond(const tlp::PluginContext *context = NULL);
+  virtual ~Diamond();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+  virtual void draw(node n, float lod);
+  virtual Coord getAnchor(const Coord &vector) const;
+};
+PLUGIN(Diamond)
+Diamond::Diamond(const tlp::PluginContext* context) :
+  Glyph(context) {
+  if(!diamond)
+    diamond=new GlRegularPolygon(Coord(0,0,0),Size(.5,.5,0), 4);
+}
+Diamond::~Diamond() {
+}
+void Diamond::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
+  boundingBox[0] = Coord(-0.35f, -0.35f, 0);
+  boundingBox[1] = Coord(0.35f, 0.35f, 0);
+}
+void Diamond::draw(node n, float lod) {
+  diamond->setLightingMode(true);
+  string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
+
+  if(textureName!="")
+    textureName=glGraphInputData->parameters->getTexturePath()+textureName;
+
+  drawDiamond(glGraphInputData->getElementColor()->getNodeValue(n),
+       glGraphInputData->getElementBorderColor()->getNodeValue(n),
+       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+       textureName,
+       lod);
+}
 Coord Diamond::getAnchor(const Coord &vector) const {
   Coord v(vector);
   float x, y, z;
@@ -153,4 +121,33 @@ Coord Diamond::getAnchor(const Coord &vector) const {
 
   return anchor;
 }
-/*@}*/
+
+class EEDiamond: public EdgeExtremityGlyph {
+public:
+  GLYPHINFORMATIONS("2D - Diamond extremity", "Patrick Mary", "23/06/2011", "Textured Diamond for edge extremities", "1.0", 5)
+
+  EEDiamond(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
+    if(!diamond)
+      diamond=new GlRegularPolygon(Coord(0,0,0),Size(.5,.5,0), 4);
+  }
+
+  void draw(edge e,
+                     node,
+                     const Color & glyphColor,
+                     const Color &borderColor,
+                     float lod) {
+    diamond->setLightingMode(false);
+    string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+
+    if(textureName!="")
+      textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
+
+    drawDiamond(glyphColor,
+         borderColor,
+         edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+         textureName,
+         lod);
+  }
+};
+
+PLUGIN(EEDiamond)

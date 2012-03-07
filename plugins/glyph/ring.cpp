@@ -37,68 +37,7 @@
 using namespace std;
 using namespace tlp;
 
-/** \addtogroup glyph */
-/*@{*/
-/// A 2D glyph
-/**
- * This glyph draws a textured disc with a circular hole using the
- * "viewTexture" node property value.
- * If this property has no value, the ring
- * is then colored using the "viewColor" node property value.
- */
-class Ring: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
-public:
-  GLYPHINFORMATIONS("2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", 15)
-  Ring(const tlp::PluginContext *context = NULL);
-  virtual ~Ring();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
-  virtual string getName() {
-    return string("Ring");
-  }
-  virtual void draw(node n, float lod);
-  virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
-
-protected:
-  inline void drawGlyph(const Color& glyohColor, const string& texture,
-                        const string& texturePath, double borderWidth,
-                        const Color& borderColor, float lod);
-  void drawRing();
-  void drawRingBorder();
-};
-//=====================================================
-PLUGIN(Ring)
-//===================================================================================
-Ring::Ring(const tlp::PluginContext* context) :
-  Glyph(context), EdgeExtremityGlyphFrom2DGlyph(context) {
-}
-//=====================================================
-Ring::~Ring() {
-}
-//=====================================================
-void Ring::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-  boundingBox[0] = Coord(-0.35f, -0.35f, 0);
-  boundingBox[1] = Coord(0.35f, 0.35f, 0);
-}
-//=====================================================
-void Ring::draw(node n, float lod) {
-  drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
-            glGraphInputData->getElementTexture()->getNodeValue(n),
-            glGraphInputData->parameters->getTexturePath(),
-            glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-            glGraphInputData->getElementBorderColor()->getNodeValue(n), lod);
-
-}
-void Ring::draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
-  glDisable(GL_LIGHTING);
-  drawGlyph(glyphColor,
-            edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
-            edgeExtGlGraphInputData->parameters->getTexturePath(),
-            edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-            borderColor, lod);
-}
-
-//=====================================================
-void Ring::drawRing() {
+void drawRing() {
   GLUquadricObj *quadratic;
   quadratic = gluNewQuadric();
   gluQuadricNormals(quadratic, GLU_SMOOTH);
@@ -109,8 +48,7 @@ void Ring::drawRing() {
   gluDisk(quadratic, 0.2f, 0.5f, 30, 1);
   gluDeleteQuadric(quadratic);
 }
-//=====================================================
-void Ring::drawRingBorder() {
+void drawRingBorder() {
   glBegin(GL_LINE_LOOP);
   double alpha = M_PI / 2.;
   double delta = 2. * M_PI / 30.0;
@@ -131,10 +69,7 @@ void Ring::drawRingBorder() {
 
   glEnd();
 }
-//=====================================================
-/*@}*/
-
-void Ring::drawGlyph(const Color& glyohColor, const string& texture,
+void drawGlyph(const Color& glyohColor, const string& texture,
                      const string& texturePath, double borderWidth,
                      const Color& borderColor, float lod) {
 
@@ -174,3 +109,62 @@ void Ring::drawGlyph(const Color& glyohColor, const string& texture,
   OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
   glEnable(GL_LIGHTING);
 }
+
+/** \addtogroup glyph */
+/*@{*/
+/// A 2D glyph
+/**
+ * This glyph draws a textured disc with a circular hole using the
+ * "viewTexture" node property value.
+ * If this property has no value, the ring
+ * is then colored using the "viewColor" node property value.
+ */
+class Ring: public Glyph {
+public:
+  GLYPHINFORMATIONS("2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", 15)
+  Ring(const tlp::PluginContext *context = NULL);
+  virtual ~Ring();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+  virtual string getName() {
+    return string("Ring");
+  }
+  virtual void draw(node n, float lod);
+};
+PLUGIN(Ring)
+Ring::Ring(const tlp::PluginContext* context) :
+  Glyph(context) {
+}
+Ring::~Ring() {
+}
+void Ring::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
+  boundingBox[0] = Coord(-0.35f, -0.35f, 0);
+  boundingBox[1] = Coord(0.35f, 0.35f, 0);
+}
+void Ring::draw(node n, float lod) {
+  drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
+            glGraphInputData->getElementTexture()->getNodeValue(n),
+            glGraphInputData->parameters->getTexturePath(),
+            glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+            glGraphInputData->getElementBorderColor()->getNodeValue(n), lod);
+
+}
+
+
+class EERing: public EdgeExtremityGlyph {
+public:
+  GLYPHINFORMATIONS("2D - Ring extremity", "David Auber", "09/07/2002", "Textured Ring for edge extremities", "1.0", 15)
+
+  EERing(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
+  }
+
+  void draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
+    glDisable(GL_LIGHTING);
+    drawGlyph(glyphColor,
+              edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
+              edgeExtGlGraphInputData->parameters->getTexturePath(),
+              edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+              borderColor, lod);
+  }
+};
+PLUGIN(EERing)
+

@@ -30,71 +30,9 @@
 using namespace std;
 using namespace tlp;
 
-/** \addtogroup glyph */
-/*@{*/
-/// A 3D glyph.
-/** This glyph draws a transparent cube using the "viewBorderColor" node
- * property value to draw its edges.
- */
-class CubeOutLinedTransparent: public Glyph,
-  public EdgeExtremityGlyphFrom3DGlyph {
-public:
-  GLYPHINFORMATIONS("3D - Cube OutLined Transparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 9)
-  CubeOutLinedTransparent(const tlp::PluginContext *context = NULL);
-  virtual ~CubeOutLinedTransparent();
-  virtual void draw(node n, float lod);
-  virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
-  virtual void draw(const Color &borderColor,float borderWidth,const std::string &textureName, float lod);
-  virtual Coord getAnchor(const Coord & vector) const;
 
-protected:
-
-  static GlBox* box;
-
-};
-
-GlBox* CubeOutLinedTransparent::box=0;
-
-PLUGIN(CubeOutLinedTransparent)
-
-//===================================================================================
-CubeOutLinedTransparent::CubeOutLinedTransparent(const tlp::PluginContext* context) :
-  Glyph(context), EdgeExtremityGlyphFrom3DGlyph(context) {
-  if(!box)
-    box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
-}
-
-CubeOutLinedTransparent::~CubeOutLinedTransparent() {
-}
-
-void CubeOutLinedTransparent::draw(node n, float lod) {
-  string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
-
-  if(textureName!="")
-    textureName=glGraphInputData->parameters->getTexturePath()+textureName;
-
-  draw(glGraphInputData->getElementBorderColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-       textureName,
-       lod);
-}
-
-void CubeOutLinedTransparent::draw(edge e, node, const Color &borderColor, const Color&,
-                                   float lod) {
-  glEnable(GL_LIGHTING);
-  string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
-
-  if(textureName!="")
-    textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
-
-  draw(borderColor,
-       edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-       textureName,
-       lod);
-  glDisable(GL_LIGHTING);
-}
-
-void CubeOutLinedTransparent::draw(const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
+static GlBox* box = 0;
+void drawBox(const Color &borderColor,float borderWidth,const std::string &textureName, float lod, GlGraphInputData* glGraphInputData) {
   if (textureName.size() != 0) {
     const string& texturePath=glGraphInputData->parameters->getTexturePath();
     box->setTextureName(texturePath+textureName);
@@ -114,6 +52,45 @@ void CubeOutLinedTransparent::draw(const Color &borderColor,float borderWidth,co
   box->draw(lod,NULL);
 }
 
+
+/** \addtogroup glyph */
+/*@{*/
+/// A 3D glyph.
+/** This glyph draws a transparent cube using the "viewBorderColor" node
+ * property value to draw its edges.
+ */
+class CubeOutLinedTransparent: public Glyph {
+public:
+  GLYPHINFORMATIONS("3D - Cube OutLined Transparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 9)
+  CubeOutLinedTransparent(const tlp::PluginContext *context = NULL);
+  virtual ~CubeOutLinedTransparent();
+  virtual void draw(node n, float lod);
+  virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
+  virtual Coord getAnchor(const Coord & vector) const;
+};
+PLUGIN(CubeOutLinedTransparent)
+
+CubeOutLinedTransparent::CubeOutLinedTransparent(const tlp::PluginContext* context) :
+  Glyph(context) {
+  if(!box)
+    box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
+}
+
+CubeOutLinedTransparent::~CubeOutLinedTransparent() {
+}
+
+void CubeOutLinedTransparent::draw(node n, float lod) {
+  string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
+
+  if(textureName!="")
+    textureName=glGraphInputData->parameters->getTexturePath()+textureName;
+
+  drawBox(glGraphInputData->getElementBorderColor()->getNodeValue(n),
+       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+       textureName,
+       lod,glGraphInputData);
+}
+
 Coord CubeOutLinedTransparent::getAnchor(const Coord & vector) const {
   float x, y, z, fmax;
   vector.get(x, y, z);
@@ -124,5 +101,33 @@ Coord CubeOutLinedTransparent::getAnchor(const Coord & vector) const {
   else
     return vector;
 }
+
+
+class EECubeOutlinedTransparent: public EdgeExtremityGlyph {
+public:
+  GLYPHINFORMATIONS("3D - Cube OutLined Transparent extremity", "David Auber", "09/07/2002", "Textured cubeOutLined for edge extremities", "1.0", 9)
+
+  EECubeOutlinedTransparent(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
+    if (!box)
+      box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
+  }
+
+  void draw(edge e, node, const Color &borderColor, const Color&,
+                                     float lod) {
+    glEnable(GL_LIGHTING);
+    string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+
+    if(textureName!="")
+      textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
+
+    drawBox(borderColor,
+         edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+         textureName,
+         lod,edgeExtGlGraphInputData);
+    glDisable(GL_LIGHTING);
+  }
+};
+PLUGIN(EECubeOutlinedTransparent)
+
 
 /*@}*/
