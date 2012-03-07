@@ -140,10 +140,10 @@ tlp::Plugin* tlp::PluginLister::getPluginObject(const std::string& name, PluginC
   return NULL;
 }
 
-const tlp::ParameterList tlp::PluginLister::getPluginParameters(std::string name) {
+const tlp::ParameterDescriptionList tlp::PluginLister::getPluginParameters(std::string name) {
   assert(instance()->_plugins.find(name) != instance()->_plugins.end());
   Plugin* plugin = getPluginObject(name, NULL);
-  tlp::ParameterList parameters(plugin->getParameters());
+  tlp::ParameterDescriptionList parameters(plugin->getParameters());
   delete plugin;
   return parameters;
 }

@@ -129,9 +129,9 @@ public:
    * @brief Gets the list of parameters for the given plug-in.
    *
    * @param name The name of the plug-in to retrieve the parameters of.
-   * @return :ParameterList The parameters of the plug-in.
+   * @return :ParameterDescriptionList The parameters of the plug-in.
    **/
-  static const ParameterList getPluginParameters(std::string name);
+  static const ParameterDescriptionList getPluginParameters(std::string name);
 
   /**
    * @brief Gets the dependencies of a plug-in.
@@ -164,7 +164,7 @@ protected:
   static PluginLister* _instance;
 
   /**
-   * @brief Stores the the factory, dependencies, and parameters of all the plugins that register into this factory.
+   * @brief Stores the factory, dependencies, and parameters of all the plugins that register into this factory.
    **/
   std::map<std::string , PluginDescription> _plugins;
 

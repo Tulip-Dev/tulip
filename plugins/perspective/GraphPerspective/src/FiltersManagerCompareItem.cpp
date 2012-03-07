@@ -134,7 +134,7 @@ PropertyInterface* FiltersManagerCompareItem::comboProperty(QComboBox* combo) co
   QVariant data = item->data(Qt::UserRole);
   return data.value<tlp::PropertyInterface*>();
 }
-ParameterList FiltersManagerCompareItem::comboAlgorithmParams(QComboBox* combo) const {
+ParameterDescriptionList FiltersManagerCompareItem::comboAlgorithmParams(QComboBox* combo) const {
   return PluginLister::getPluginParameters(combo->currentText().toStdString());
 }
 bool FiltersManagerCompareItem::isComparisonNumeric(QComboBox* combo) const {
