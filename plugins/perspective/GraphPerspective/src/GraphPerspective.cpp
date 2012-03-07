@@ -54,6 +54,8 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _mainWindow->installEventFilter(new ShadowFilter(this));
   connect(_ui->workspace,SIGNAL(addPanelRequest(tlp::Graph*)),this,SLOT(createPanel(tlp::Graph*)));
 
+  connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
+
   // Connect actions
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
   connect(_ui->actionImport,SIGNAL(triggered()),this,SLOT(importGraph()));
@@ -63,6 +65,17 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   connect(_ui->actionOpen_Project,SIGNAL(triggered()),this,SLOT(open()));
   connect(_ui->actionAnalyze,SIGNAL(triggered()),this,SLOT(modeSwitch()));
   connect(_ui->actionCharts,SIGNAL(triggered()),this,SLOT(modeSwitch()));
+  connect(_ui->actionDelete,SIGNAL(triggered()),this,SLOT(deleteSelectedElements()));
+  connect(_ui->actionInvert_selection,SIGNAL(triggered()),this,SLOT(invertSelection()));
+  connect(_ui->actionCancel_selection,SIGNAL(triggered()),this,SLOT(cancelSelection()));
+  connect(_ui->actionSelect_All,SIGNAL(triggered()),this,SLOT(selectAll()));
+  connect(_ui->actionUndo,SIGNAL(triggered()),this,SLOT(undo()));
+  connect(_ui->actionRedo,SIGNAL(triggered()),this,SLOT(redo()));
+  connect(_ui->actionCut,SIGNAL(triggered()),this,SLOT(cut()));
+  connect(_ui->actionPaste,SIGNAL(triggered()),this,SLOT(paste()));
+  connect(_ui->actionCopy,SIGNAL(triggered()),this,SLOT(copy()));
+  connect(_ui->actionGroup_elements,SIGNAL(triggered()),this,SLOT(group()));
+  connect(_ui->actionCreate_sub_graph,SIGNAL(triggered()),this,SLOT(createSubGraph()));
 
   // D-BUS actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
@@ -224,6 +237,101 @@ void GraphPerspective::modeSwitch() {
 
   if (mode != NULL)
     _ui->centralWidget->setCurrentWidget(mode);
+}
+
+void GraphPerspective::deleteSelectedElements() {
+  Observable::holdObservers();
+  tlp::Graph* graph = _graphs->currentGraph();
+  tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
+
+  tlp::Iterator<node>* itNodes = selection->getNodesEqualTo(true);
+  graph->delNodes(itNodes, false);
+  delete itNodes;
+
+  tlp::Iterator<edge>* itEdges = selection->getEdgesEqualTo(true);
+  graph->delEdges(itEdges, false);
+  delete itEdges;
+
+  Observable::unholdObservers();
+}
+
+void GraphPerspective::invertSelection() {
+  Observable::holdObservers();
+  tlp::Graph* graph = _graphs->currentGraph();
+  tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
+  selection->reverse();
+  Observable::unholdObservers();
+}
+
+void GraphPerspective::cancelSelection() {
+  Observable::holdObservers();
+  tlp::Graph* graph = _graphs->currentGraph();
+  tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
+  selection->setAllEdgeValue(false);
+  selection->setAllNodeValue(false);
+  Observable::unholdObservers();
+}
+
+void GraphPerspective::selectAll() {
+  Observable::holdObservers();
+  tlp::Graph* graph = _graphs->currentGraph();
+  tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
+  selection->setAllEdgeValue(true);
+  selection->setAllNodeValue(true);
+  Observable::unholdObservers();
+}
+
+void GraphPerspective::undo() {
+  Observable::holdObservers();
+  tlp::Graph* graph = _graphs->currentGraph();
+  graph->pop();
+  Observable::unholdObservers();
+}
+
+void GraphPerspective::redo() {
+  Observable::holdObservers();
+  tlp::Graph* graph = _graphs->currentGraph();
+  graph->unpop();
+  Observable::unholdObservers();
+}
+
+void GraphPerspective::cut() {
+  //TODO implement me
+}
+
+void GraphPerspective::paste() {
+  //TODO implement me
+}
+
+void GraphPerspective::copy() {
+  //TODO implement me
+}
+
+void GraphPerspective::group() {
+  //TODO implement me
+}
+
+void GraphPerspective::createSubGraph() {
+  Observable::holdObservers();
+  tlp::Graph* graph = _graphs->currentGraph();
+  tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
+  graph->addSubGraph(selection);
+  Observable::unholdObservers();
+}
+
+void GraphPerspective::currentGraphChanged(Graph *graph) {
+  bool enabled(graph != NULL);
+  _ui->actionUndo->setEnabled(enabled);
+  _ui->actionRedo->setEnabled(enabled);
+  _ui->actionCut->setEnabled(enabled);
+  _ui->actionCopy->setEnabled(enabled);
+  _ui->actionPaste->setEnabled(enabled);
+  _ui->actionDelete->setEnabled(enabled);
+  _ui->actionInvert_selection->setEnabled(enabled);
+  _ui->actionSelect_All->setEnabled(enabled);
+  _ui->actionCancel_selection->setEnabled(enabled);
+  _ui->actionGroup_elements->setEnabled(enabled);
+  _ui->actionCreate_sub_graph->setEnabled(enabled);
 }
 
 PLUGIN(GraphPerspective)

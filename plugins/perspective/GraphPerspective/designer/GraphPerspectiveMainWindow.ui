@@ -17,7 +17,7 @@
    <string/>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <property name="styleSheet">
@@ -708,6 +708,9 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionUndo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
      <normaloff>:/tulip/graphperspective/icons/16/edit-undo.png</normaloff>:/tulip/graphperspective/icons/16/edit-undo.png</iconset>
@@ -720,6 +723,9 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionRedo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
      <normaloff>:/tulip/graphperspective/icons/16/edit-redo.png</normaloff>:/tulip/graphperspective/icons/16/edit-redo.png</iconset>
@@ -732,6 +738,9 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionCut">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Cut</string>
    </property>
@@ -740,6 +749,9 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionCopy">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Copy</string>
    </property>
@@ -748,6 +760,9 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionPaste">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Paste</string>
    </property>
@@ -756,6 +771,9 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionDelete">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
      <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
@@ -768,6 +786,9 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionSelect_All">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Select All</string>
    </property>
@@ -776,6 +797,9 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionInvert_selection">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Invert selection</string>
    </property>
@@ -784,6 +808,9 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionCancel_selection">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Cancel selection</string>
    </property>
@@ -792,6 +819,9 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionGroup_elements">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
      <normaloff>:/tulip/graphperspective/icons/16/group.png</normaloff>:/tulip/graphperspective/icons/16/group.png</iconset>
@@ -804,6 +834,9 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionCreate_sub_graph">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
      <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
@@ -908,6 +941,7 @@ QToolButton:pressed {
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
   <include location="../resources/GraphPerspective.qrc"/>
  </resources>
  <connections>
