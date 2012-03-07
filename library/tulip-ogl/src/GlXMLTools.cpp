@@ -218,7 +218,6 @@ void GlXMLTools::setWithXML<std::string>(xmlNodePtr rootNode, const std::string 
     getContent(node,tmp);
     std::stringstream str(tmp);
     value = str.str();
-    std::cout << "setting value: " << value << std::endl;
   }
 }
 

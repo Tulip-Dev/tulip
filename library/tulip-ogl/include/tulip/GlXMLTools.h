@@ -163,7 +163,6 @@ public :
       getContent(node,tmp);
       std::stringstream str(tmp);
       str >> value;
-      std::cout << "setting value (original): " << value << std::endl;
     }
   }
 
