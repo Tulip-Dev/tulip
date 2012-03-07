@@ -64,7 +64,7 @@ public:
 };
 PLUGIN(Hexagone)
 Hexagone::Hexagone(const tlp::PluginContext* context) :
-  Glyph(context){
+  Glyph(context) {
   if(!hexagon)
     hexagon=new GlHexagon(Coord(0,0,0),Size(.5,.5,0));
 }
@@ -82,10 +82,10 @@ void Hexagone::draw(node n, float lod) {
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   drawHexagone(glGraphInputData->getElementColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-       textureName,
-       lod);
+               glGraphInputData->getElementBorderColor()->getNodeValue(n),
+               glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+               textureName,
+               lod);
 }
 
 class EEHexagone: public EdgeExtremityGlyph {
@@ -98,10 +98,10 @@ public:
   }
 
   void draw(edge e,
-                      node,
-                      const Color & glyphColor,
-                      const Color &borderColor,
-                      float lod) {
+            node,
+            const Color & glyphColor,
+            const Color &borderColor,
+            float lod) {
     hexagon->setLightingMode(false);
     string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
@@ -109,10 +109,10 @@ public:
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
     drawHexagone(glyphColor,
-         borderColor,
-         edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-         textureName,
-         lod);
+                 borderColor,
+                 edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+                 textureName,
+                 lod);
   }
 };
 

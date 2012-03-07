@@ -138,16 +138,19 @@ void CaptionGraphicsBackgroundItem::updateCaption() {
   float begin = (_circle1Item->pos().y()-_captionContentPos.y()+30)/160.;
   float end = (_circle2Item->pos().y()-_captionContentPos.y()+30)/160.;
 
-  if(begin>end){
+  if(begin>end) {
     float tmp=begin;
     begin=end;
     end=tmp;
   }
 
   QString text1=QString::number(_minValue+(1-end)*(_maxValue-_minValue));
+
   if(text1.length()>5)
     text1=text1.left(5);
+
   QString text2=QString::number(_minValue+(1-begin)*(_maxValue-_minValue));
+
   if(text2.length()>5)
     text2=text2.left(5);
 
@@ -173,12 +176,12 @@ void CaptionGraphicsBackgroundItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *ev
   _prefRect->setVisible(false);
 }
 
-void CaptionGraphicsBackgroundItem::configurationIconPressedSlot(){
+void CaptionGraphicsBackgroundItem::configurationIconPressedSlot() {
   emit configurationIconPressed();
 }
 
 SelectionArrowItem::SelectionArrowItem(float initRangePos,const QPoint &initPos):
-  QGraphicsPathItem(),yPos(initRangePos*160),initPos(initPos){
+  QGraphicsPathItem(),yPos(initRangePos*160),initPos(initPos) {
 
   setFiltersChildEvents(true);
 
@@ -197,12 +200,14 @@ SelectionArrowItem::SelectionArrowItem(float initRangePos,const QPoint &initPos)
   setFlags(QGraphicsItem::ItemIsMovable);
 }
 
-bool SelectionArrowItem::sceneEvent ( QEvent * event ){
-  if(event->type()==QEvent::GraphicsSceneMouseMove){
+bool SelectionArrowItem::sceneEvent ( QEvent * event ) {
+  if(event->type()==QEvent::GraphicsSceneMouseMove) {
     QGraphicsSceneMouseEvent *e=(QGraphicsSceneMouseEvent *)event;
     qreal diffPosY=e->pos().y()-e->lastPos().y();
+
     if(pos().y()+diffPosY>initPos.y()+130)
       diffPosY=initPos.y()+130-pos().y();
+
     if(pos().y()+diffPosY<initPos.y()-30)
       diffPosY=initPos.y()-30-pos().y();
 
@@ -218,17 +223,18 @@ bool SelectionArrowItem::sceneEvent ( QEvent * event ){
 }
 
 ColorGradientItem::ColorGradientItem(const QRectF &rect, QGraphicsRectItem *topRect,QGraphicsRectItem *bottomRect,SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle)
-  :QGraphicsRectItem(rect),_initPos(rect.x(),rect.y()),_topRect(topRect),_bottomRect(bottomRect),_topCircle(topCircle),_bottomCircle(bottomCircle){
+  :QGraphicsRectItem(rect),_initPos(rect.x(),rect.y()),_topRect(topRect),_bottomRect(bottomRect),_topCircle(topCircle),_bottomCircle(bottomCircle) {
   setFlags(QGraphicsItem::ItemIsMovable);
 }
 
-bool ColorGradientItem::sceneEvent ( QEvent * event ){
-  if(event->type()==QEvent::GraphicsSceneMouseMove){
+bool ColorGradientItem::sceneEvent ( QEvent * event ) {
+  if(event->type()==QEvent::GraphicsSceneMouseMove) {
     QGraphicsSceneMouseEvent *e=(QGraphicsSceneMouseEvent *)event;
     qreal diffPosY=e->pos().y()-e->lastPos().y();
 
     if(rect().bottom()+diffPosY>_initPos.y()+160)
       diffPosY=_initPos.y()+160-rect().bottom();
+
     if(rect().top()+diffPosY<_initPos.y())
       diffPosY=_initPos.y()-rect().top();
 

@@ -25,7 +25,7 @@ using namespace std;
 
 namespace tlp {
 
-CaptionItem::CaptionItem(View *view):view(view),_graph(NULL),_metricProperty(NULL),_colorProperty(NULL){
+CaptionItem::CaptionItem(View *view):view(view),_graph(NULL),_metricProperty(NULL),_colorProperty(NULL) {
   _captionGraphicsItem=new CaptionGraphicsItem(view);
   connect(_captionGraphicsItem,SIGNAL(filterChanged(float,float)),this,SLOT(applyNewFilter(float,float)));
   connect(_captionGraphicsItem,SIGNAL(selectedPropertyChanged(std::string)),this,SLOT(selectedPropertyChanged(std::string)));
@@ -43,24 +43,28 @@ void CaptionItem::initCaption() {
   _captionGraphicsItem->loadConfiguration();
 }
 
-void CaptionItem::generateCaption(){
+void CaptionItem::generateCaption() {
 
-  if(_graph!=view->graph()){
+  if(_graph!=view->graph()) {
     if(_graph)
       _graph->removeGraphObserver(this);
+
     _graph=view->graph();
     _graph->addGraphObserver(this);
   }
 
-  if(_metricProperty!=view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty())){
+  if(_metricProperty!=view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty())) {
     if(_metricProperty)
       _metricProperty->removePropertyObserver(this);
+
     _metricProperty=view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty());
     _metricProperty->addPropertyObserver(this);
   }
-  if(_colorProperty!=view->graph()->getProperty<ColorProperty>("viewColor")){
+
+  if(_colorProperty!=view->graph()->getProperty<ColorProperty>("viewColor")) {
     if(_colorProperty)
       _colorProperty->removePropertyObserver(this);
+
     _colorProperty=view->graph()->getProperty<ColorProperty>("viewColor");
     _colorProperty->addPropertyObserver(this);
   }
@@ -69,7 +73,7 @@ void CaptionItem::generateCaption(){
   vector<pair <double,Color> > metricToColorFiltered;
   Iterator<node> *itN=view->graph()->getNodes();
 
-  for (;itN->hasNext();) {
+  for (; itN->hasNext();) {
     node nit=itN->next();
     metricToColorMap[_metricProperty->getNodeValue(nit)]=_colorProperty->getNodeValue(nit);
   }
@@ -80,8 +84,8 @@ void CaptionItem::generateCaption(){
   double intervale=(maxProp-minProp)/50.;
   double nextValue=minProp;
 
-  for(map<double,Color>::const_iterator it=metricToColorMap.begin();it!=metricToColorMap.end();++it){
-    if((*it).first>=nextValue){
+  for(map<double,Color>::const_iterator it=metricToColorMap.begin(); it!=metricToColorMap.end(); ++it) {
+    if((*it).first>=nextValue) {
       metricToColorFiltered.push_back(*it);
       nextValue+=intervale;
     }
@@ -94,13 +98,13 @@ void CaptionItem::generateCaption(){
   _captionGraphicsItem->generateCaption(activeGradient,hideGradient,_captionGraphicsItem->usedProperty(),minProp,maxProp);
 }
 
-void CaptionItem::generateGradients(const vector<pair <double,Color> > &metricToColorFiltered, QGradient &activeGradient, QGradient &hideGradient){
+void CaptionItem::generateGradients(const vector<pair <double,Color> > &metricToColorFiltered, QGradient &activeGradient, QGradient &hideGradient) {
   double minProp=(*metricToColorFiltered.begin()).first;
   double maxProp=(*(--metricToColorFiltered.end())).first;
 
   Color color;
 
-  for(vector<pair<double,Color> >::const_iterator it=metricToColorFiltered.begin();it!=metricToColorFiltered.end();++it){
+  for(vector<pair<double,Color> >::const_iterator it=metricToColorFiltered.begin(); it!=metricToColorFiltered.end(); ++it) {
     float position=((*it).first-minProp)/(maxProp-minProp);
     color=(*it).second;
     activeGradient.setColorAt(position,QColor(color[0],color[1],color[2],255));
@@ -112,7 +116,7 @@ QGraphicsItem *CaptionItem::captionGraphicsItem() {
   return _captionGraphicsItem->getCaptionItem();
 }
 
-void CaptionItem::applyNewFilter(float begin, float end){
+void CaptionItem::applyNewFilter(float begin, float end) {
 
   DoubleProperty *metricProperty=view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty());
   ColorProperty *colorProperty=view->graph()->getProperty<ColorProperty>("viewColor");
@@ -129,18 +133,22 @@ void CaptionItem::applyNewFilter(float begin, float end){
   Observer::holdObservers();
 
   Iterator<node> *itN=view->graph()->getNodes();
-  for (;itN->hasNext();) {
+
+  for (; itN->hasNext();) {
     node nit=itN->next();
     Color tmp(colorProperty->getNodeValue(nit));
-    if(metricProperty->getNodeValue(nit)<beginMetric || metricProperty->getNodeValue(nit)>endMetric){
+
+    if(metricProperty->getNodeValue(nit)<beginMetric || metricProperty->getNodeValue(nit)>endMetric) {
       tmp[3]=25;
       colorProperty->setNodeValue(nit,tmp);
-    }else{
+    }
+    else {
       tmp[3]=255;
       colorProperty->setNodeValue(nit,tmp);
     }
 
   }
+
   delete itN;
 
   Observer::unholdObservers();
@@ -153,12 +161,13 @@ void CaptionItem::treatEvent(const Event &ev) {
   if(typeid(ev) == typeid(PropertyEvent)) {
     generateCaption();
   }
+
   if(typeid(ev) == typeid(GraphEvent)) {
     create();
   }
 }
 
-void CaptionItem::selectedPropertyChanged(string propertyName){
+void CaptionItem::selectedPropertyChanged(string propertyName) {
   generateCaption();
 }
 

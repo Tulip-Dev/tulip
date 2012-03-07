@@ -47,7 +47,7 @@ signals :
 
 protected :
 
-  void mousePressEvent( QGraphicsSceneMouseEvent *){
+  void mousePressEvent( QGraphicsSceneMouseEvent *) {
     emit configurationIconPressed();
   }
 };
