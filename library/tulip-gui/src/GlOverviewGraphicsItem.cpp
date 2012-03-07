@@ -28,15 +28,17 @@ using namespace std;
 
 namespace tlp {
 
-GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsPixmapItem(),view(view),baseScene(scene),width(128),height(128),glFrameBuffer(NULL),mouseClicked(false) {
+GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsRectItem(0,0,128,128),view(view),baseScene(scene),width(128),height(128),glFrameBuffer(NULL),mouseClicked(false) {
   //This flag is needed to don't display overview rectangle outside overview
   setFlag(QGraphicsItem::ItemClipsChildrenToShape);
-  setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
+  overview.setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
+  setBrush(QBrush(QColor(255,255,255,255)));
+  overview.setParentItem(this);
 
   //Init lines and polygons item
   for(unsigned int i=0; i<4; ++i) {
-    line[i].setParentItem(this);
-    poly[i].setParentItem(this);
+    line[i].setParentItem(&overview);
+    poly[i].setParentItem(&overview);
     poly[i].setBrush(QBrush(QColor(0,0,0,64)));
   }
 }
@@ -178,8 +180,10 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   if(generatePixmap) {
     // Load scene pixmap to the item
     QPixmap pixmap;
-    pixmap.convertFromImage(glFrameBuffer->toImage(),Qt::OrderedAlphaDither);
-    setPixmap(pixmap);
+    QImage img(glFrameBuffer->toImage());
+    img = QImage(img.bits(),img.width(),img.height(),QImage::Format_ARGB32);
+    pixmap.convertFromImage(img);
+    overview.setPixmap(pixmap);
   }
 
   // set lines and polygons coordinates

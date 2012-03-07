@@ -28,7 +28,7 @@ namespace tlp {
 
 class GlMainView;
 
-class GlOverviewGraphicsItem : public QObject, public QGraphicsPixmapItem {
+class GlOverviewGraphicsItem : public QObject, public QGraphicsRectItem {
 
   Q_OBJECT
 
@@ -55,6 +55,7 @@ private :
   unsigned int width, height;
   QGLFramebufferObject *glFrameBuffer;
 
+  QGraphicsPixmapItem overview;
   QGraphicsLineItem line[4];
   QGraphicsPolygonItem poly[4];
 
