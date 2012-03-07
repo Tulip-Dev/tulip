@@ -63,13 +63,7 @@ public:
    *
    * @return PluginLister< ObjectType, Context >* The only instance of this object that exists in the whole program.
    **/
-  static tlp::PluginLister* instance() {
-    if(_instance == NULL) {
-      _instance = new PluginLister();
-    }
-
-    return _instance;
-  }
+  static tlp::PluginLister* instance();
 
   /**
    * @brief Constructs a plug-in.

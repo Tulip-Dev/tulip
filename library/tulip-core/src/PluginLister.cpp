@@ -24,6 +24,14 @@ using namespace std;
 PluginLoader* PluginLister::currentLoader = NULL;
 PluginLister* PluginLister::_instance = NULL;
 
+tlp::PluginLister* PluginLister::instance() {
+  if(dynamic_cast<tlp::PluginLister*>(_instance) == 0) {
+    _instance = new PluginLister();
+  }
+
+  return _instance;
+}
+
 void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
   // plugins dependencies loop
   bool depsNeedCheck;
