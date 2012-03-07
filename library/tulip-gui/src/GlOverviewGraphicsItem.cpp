@@ -178,7 +178,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   if(generatePixmap) {
     // Load scene pixmap to the item
     QPixmap pixmap;
-    pixmap.convertFromImage(glFrameBuffer->toImage().convertToFormat(QImage::Format_RGB32));
+    pixmap.convertFromImage(glFrameBuffer->toImage(),Qt::OrderedAlphaDither);
     setPixmap(pixmap);
   }
 
