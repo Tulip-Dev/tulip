@@ -62,6 +62,8 @@ private slots:
 
   void filterElements();
 
+  void importCSVData();
+
   //Columns operations
   void hideColumn();
   void createNewProperties();

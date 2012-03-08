@@ -80,6 +80,11 @@ public:
     * @return The name of the selected property or an empty string if no valid property is selected.
     **/
   std::string getSelectedGraphProperty()const;
+
+  /**
+    * @brief Select the property with the given name in the list
+    **/
+  void selectProperty(const std::string& propertyName);
   /**
     * @brief Allow user to define it's default text.
     **/
