@@ -172,6 +172,7 @@ public :
    */
   virtual void setColor(const Color &color) {
     this->color=color;
+      this->outlineColor = color;
   }
 
   /**

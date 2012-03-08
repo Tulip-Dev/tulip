@@ -262,6 +262,7 @@ void GlLabel::setFontNameSizeAndColor(const std::string &name, const int &size, 
   setFontName(name);
   fontSize=size;
   this->color=color;
+  this->outlineColor = color;
 }
 //============================================================
 void GlLabel::setRenderingMode(int mode) {
