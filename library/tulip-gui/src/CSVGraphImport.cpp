@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-
 #include "tulip/CSVGraphImport.h"
 #include <tulip/Graph.h>
 #include <tulip/PropertyInterface.h>
@@ -230,7 +229,7 @@ CSVImportColumnToGraphPropertyMappingProxy::CSVImportColumnToGraphPropertyMappin
 
 }
 
-PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int column,const string& token) {
+PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int column,const string&) {
   TLP_HASH_MAP<unsigned int,PropertyInterface*>::iterator it = propertiesBuffer.find(column);
 
   //No properties
@@ -238,15 +237,11 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
     string propertyType = importParameters.getColumnDataType(column);
     string propertyName = importParameters.getColumnName(column);
 
-    //The property type is invalid or autodetect.
-    if (propertyType.compare("")==0) {
-      //Determine type
-      propertyType = guessPropertyDataType(token,string(";,."));
 
-      //If auto detection fail set to default type : string.
-      if (propertyType.empty()) {
-        propertyType = "string";
-      }
+    //If auto detection fail set to default type : string.
+    if (propertyType.empty()) {
+      std::cerr<<__PRETTY_FUNCTION__<<" No type for the column "<<propertyName<<" set to string"<<std::endl;
+      propertyType = "string";
     }
 
     PropertyInterface *interf=NULL;
@@ -290,51 +285,6 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
   }
 }
 
-string CSVImportColumnToGraphPropertyMappingProxy::guessPropertyDataType(const string& data, const string& decimalSeparator) {
-  bool stringValue = false;
-  bool intValue = false;
-  bool doubleValue = false;
-
-  for (unsigned int j = 0; j < data.length(); ++j) {
-    if (isalpha(data[j])) {
-      stringValue = true;
-    }
-    else if (isdigit(data[j]) && !stringValue) {
-      if (!doubleValue) {
-        intValue = true;
-      }
-      else {
-        doubleValue = true;
-      }
-    }
-    else if (decimalSeparator.find_first_of(data[j]) != string::npos && intValue) {
-      doubleValue = true;
-      intValue = false;
-    }
-    else if (j == 0 && data[j] == minusChar) {
-      intValue = true;
-    }
-    else {
-      stringValue = true;
-      intValue = false;
-      doubleValue = false;
-    }
-  }
-
-  if (stringValue) {
-    return "string";
-  }
-  else if (intValue) {
-    return "int";
-  }
-  else if (doubleValue) {
-    return "double";
-  }
-  else {
-    return "";
-  }
-}
-
 CSVGraphImport::CSVGraphImport(CSVToGraphDataMapping* mapping,CSVImportColumnToGraphPropertyMapping* properties,const CSVImportParameters& importParameters):mapping(mapping),propertiesManager(properties),importParameters(importParameters) {
 }
 CSVGraphImport::~CSVGraphImport() {}
@@ -361,7 +311,8 @@ void CSVGraphImport::line(unsigned int row,const std::vector<std::string>& lineT
     if(importParameters.importColumn(column)) {
       PropertyInterface *property = propertiesManager->getPropertyInterface(column,lineTokens[column]);
 
-      if( property != NULL) {
+      //If the property don't exists or if the token is empty do not import the value
+      if( property != NULL && !lineTokens[column].empty()) {
         if(element.first == NODE) {
           if(!property->setNodeStringValue(node(element.second),lineTokens[column])) {
             //We add one to the row number as in the configuration widget we start from row 1 not row 0

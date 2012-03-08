@@ -65,7 +65,7 @@ unsigned int CSVColumnComboBox::getSelectedColumnIndex()const {
   return itemData(currentIndex()).toUInt();
 }
 
-GraphPropertiesSelectionComboBox::GraphPropertiesSelectionComboBox(QWidget* parent):QComboBox(parent),currentGraph(NULL),defaultText("Choose an existing property.") {
+GraphPropertiesSelectionComboBox::GraphPropertiesSelectionComboBox(QWidget* parent):QComboBox(parent),currentGraph(NULL) {
   addItem(defaultText);
   //Avoid user to handle it when no graph is given.
   setEnabled(false);
@@ -73,7 +73,6 @@ GraphPropertiesSelectionComboBox::GraphPropertiesSelectionComboBox(QWidget* pare
 
 void GraphPropertiesSelectionComboBox::setDefaultText(const QString& newDefaultText) {
   defaultText = newDefaultText;
-  setItemText(0,newDefaultText);
 }
 
 void GraphPropertiesSelectionComboBox::setGraph(Graph* graph) {
@@ -81,13 +80,14 @@ void GraphPropertiesSelectionComboBox::setGraph(Graph* graph) {
   clear();
 
   if(graph!=NULL) {
-    QStringList labels;
-    labels<<defaultText;
+        if(!defaultText.isNull()){
+            addItem(defaultText,QVariant(QString()));
+        }
     string propertyName;
     forEach(propertyName,currentGraph->getProperties()) {
-      labels<<tlpStringToQString(propertyName);
+            QString name = tlpStringToQString(propertyName);
+            addItem(name,QVariant(name));
     }
-    addItems(labels);
     //Enable the combobox.
     setEnabled(true);
   }
@@ -97,11 +97,13 @@ void GraphPropertiesSelectionComboBox::setGraph(Graph* graph) {
 }
 
 string GraphPropertiesSelectionComboBox::getSelectedGraphProperty()const {
-  if(currentIndex()==0) {
-    return "";
+    return QStringToTlpString(itemData(currentIndex()).toString());
   }
-  else {
-    return QStringToTlpString(currentText());
+
+void GraphPropertiesSelectionComboBox::selectProperty(const string& propertyName){
+    int index = findData(QVariant(tlpStringToQString(propertyName)));
+    if(index != -1){
+        setCurrentIndex(index);
   }
 }
 
@@ -120,7 +122,7 @@ CSVGraphMappingConfigurationWidget::CSVGraphMappingConfigurationWidget(QWidget *
 
   connect(ui->createNewPropertyPushButton,SIGNAL(clicked(bool)),this,SLOT(createNewProperty()),Qt::QueuedConnection);
 
-  ui->graphIndexPropertiesComboBox->setDefaultText(tr("Choose the property containing existing entities ids"));
+    //ui->graphIndexPropertiesComboBox->setDefaultText(tr("Select property against which newly found values are tested."));
   ui->sourceColumnComboBox->setDefaultText(tr("Choose CSV column containing source entities ids"));
   ui->targetColumnComboBox->setDefaultText(tr("Choose CSV column containing target entities ids"));
 
@@ -162,6 +164,28 @@ void CSVGraphMappingConfigurationWidget::updateWidget(tlp::Graph* graph,const CS
   //Update
   ui->edgeMappingColumncomboBox->setCsvProperties(importParameters);
   ui->edgeMappingPropertycomboBox->setGraph(graph);
+
+
+    //Init default values
+    if(importParameters.columnNumber() >0) {
+        //Choose the first column as id column
+        ui->nodeMappingColumncomboBox->setCurrentIndex(1);
+        ui->edgeMappingColumncomboBox->setCurrentIndex(1);
+
+        //Selct default columns for relations import
+        if(importParameters.columnNumber() >1) {
+            //Choose the first column as source id column
+            ui->sourceColumnComboBox->setCurrentIndex(1);
+            //Choose the second column as target id column
+            ui->targetColumnComboBox->setCurrentIndex(2);
+        }
+
+    }
+
+    //Choose viewLabel as default id property
+    ui->nodeMappingPropertycomboBox->selectProperty("viewLabel");
+    ui->edgeMappingPropertycomboBox->selectProperty("viewLabel");
+    ui->graphIndexPropertiesComboBox->selectProperty("viewLabel");
 }
 
 CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() const {
@@ -248,5 +272,20 @@ bool CSVGraphMappingConfigurationWidget::isValid()const {
 }
 
 void CSVGraphMappingConfigurationWidget::createNewProperty() {
-  PropertyCreationDialog::createNewProperty(graph,this);
+    PropertyInterface* newProperty = PropertyCreationDialog::createNewProperty(graph,this);
+    if(newProperty != NULL){
+        //Update gui with new property.
+        string propertyName=newProperty->getName();
+        ui->graphIndexPropertiesComboBox->setGraph(graph);
+        ui->graphIndexPropertiesComboBox->selectProperty(propertyName);
+
+        //Keep previously selected properties
+        propertyName=ui->nodeMappingPropertycomboBox->getSelectedGraphProperty();
+        ui->nodeMappingPropertycomboBox->setGraph(graph);
+        ui->nodeMappingPropertycomboBox->selectProperty(propertyName);
+
+        propertyName=ui->edgeMappingPropertycomboBox->getSelectedGraphProperty();
+        ui->edgeMappingPropertycomboBox->setGraph(graph);
+        ui->edgeMappingPropertycomboBox->selectProperty(propertyName);
+    }
 }

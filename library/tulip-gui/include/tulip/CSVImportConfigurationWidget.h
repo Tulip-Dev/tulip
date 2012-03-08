@@ -46,9 +46,13 @@ public:
   PropertyConfigurationWidget(unsigned int propertyNumber, const QString& propertyName, bool propertyNameIsEditable,
                               const std::string& PropertyType, QWidget* parent = NULL);
   /**
-     * Return the selected property type.
+     * Return the selected property type. The property type is not the label displayed in the combobox but correspond to the Property::propertyTypename static string variable of the property class.
      */
   std::string getPropertyType() const;
+  /**
+    * @brief Change the type of the property. Use the PropertyClass::propertyTypename static var.
+    **/
+  void setPropertyType(const std::string& propertyType);
 
   QString getPropertyName() const;
   bool getPropertyUsed() const;
@@ -170,6 +174,8 @@ public:
   **/
   CSVImportParameters getImportParameters()const;
 
+  bool eventFilter(QObject *, QEvent *);
+
 
 protected:
 
@@ -181,6 +187,7 @@ protected:
   void updateLineNumbers(bool resetValues);
 
   bool useFirstLineAsPropertyName()const;
+  void setUseFirstLineAsPropertyName(bool useFirstLineAsHeader)const;
   unsigned int rowCount()const;
   unsigned int columnCount()const;
 
@@ -209,7 +216,7 @@ protected:
   /**
    * Add a property to the current property list.
    */
-  void addPropertyToPropertyList(const std::string& propertyName, bool isEditable, const std::string& propertyType =std::string("Auto detect"));
+  void addPropertyToPropertyList(const std::string& propertyName, bool isEditable, const std::string& propertyType=std::string(""));
 
   /**
    * @brief Creates a property configuration widget.
@@ -224,7 +231,14 @@ protected:
   virtual PropertyConfigurationWidget *createPropertyConfigurationWidget(unsigned int propertyNumber,
       const QString& propertyName, bool propertyNameIsEditable, const std::string& propertyType, QWidget* parent);
 
+  /**
+    * @brief Compute the name of the column. Return the first token fo the column if the first lline is used as header r Column_x xhere x is the column index.
+    **/
   QString genrateColumnName(unsigned int col)const;
+  /**
+    * @brief Compute the column data type. Take in account the first row only if it is not used as column label
+    **/
+  std::string getColumnType(unsigned int col)const;
 
   std::vector<PropertyConfigurationWidget*> propertyWidgets;
 
@@ -242,12 +256,33 @@ protected slots:
   void propertyNameChanged(QString propertyName);
   void propertyStateChanged(bool activated);
 
-
-
 signals:
   void fileInfoChanged();
 
 private:
+
+  /**
+    * @brief Try to guess the property datatype in function of the type of the previous tokens and the type of the current token.
+    **/
+  std::string guessPropertyDataType(const std::string data,const std::string previousType)const;
+
+  /**
+    * @brief Return the type of the column in function of the old and new type.
+    **/
+  std::string combinePropertyDataType(const std::string previousType,const std::string newType)const;
+  /**
+    * @brief Try to guess the type of the data. Can recognize int, double, boolean or string. If the type is other return string.
+    * @return The property typename of the type
+    **/
+  std::string guessDataType(const std::string data)const;
+
+  void columnSizeChanged(unsigned int i);
+
+  //The data type of the header
+  std::vector<std::string> columnHeaderType;
+  //The data type of the rest of the column;
+  std::vector<std::string> columnType;
+
   Ui::CSVImportConifgurationWidget *ui;
   PropertyNameValidator* validator;
   unsigned int maxLineNumber;
