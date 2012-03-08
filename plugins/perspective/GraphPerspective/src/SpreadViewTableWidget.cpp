@@ -519,22 +519,23 @@ void SpreadViewTableWidget::invalidateFilter() {
 
 }
 
-void SpreadViewTableWidget::importCSVData(){
-    std::cout<<ui->tableView->graph()->getId()<<std::endl;
-    if ( ui->tableView->graph()
-        != NULL) {
-      CSVImportWizard *wizard = new CSVImportWizard(this);
-      wizard->setGraph(ui->tableView->graph());
-      ui->tableView->graph()->push();
-      Observable::holdObservers();
-      int result = wizard->exec();
+void SpreadViewTableWidget::importCSVData() {
+  std::cout<<ui->tableView->graph()->getId()<<std::endl;
 
-      //If user cancel cancel push.
-      if(result == QDialog::Rejected) {
-        ui->tableView->graph()->pop(false);
-      }
+  if ( ui->tableView->graph()
+       != NULL) {
+    CSVImportWizard *wizard = new CSVImportWizard(this);
+    wizard->setGraph(ui->tableView->graph());
+    ui->tableView->graph()->push();
+    Observable::holdObservers();
+    int result = wizard->exec();
 
-      Observable::unholdObservers();
-      wizard->deleteLater();
+    //If user cancel cancel push.
+    if(result == QDialog::Rejected) {
+      ui->tableView->graph()->pop(false);
     }
+
+    Observable::unholdObservers();
+    wizard->deleteLater();
+  }
 }
