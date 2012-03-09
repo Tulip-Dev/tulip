@@ -65,7 +65,6 @@ public:
   CubeOutLinedTransparent(const tlp::PluginContext *context = NULL);
   virtual ~CubeOutLinedTransparent();
   virtual void draw(node n, float lod);
-  virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
   virtual Coord getAnchor(const Coord & vector) const;
 };
 PLUGIN(CubeOutLinedTransparent)

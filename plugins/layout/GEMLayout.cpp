@@ -94,7 +94,7 @@ GEMLayout::GEMLayout(const tlp::PluginContext* context) : LayoutAlgorithm(contex
   addParameter<DoubleProperty>("edge length", paramHelp[1], "0", false);
   addParameter<LayoutProperty>("initial layout", paramHelp[2], "0", false);
   addParameter<unsigned int>("max iterations", paramHelp[3], "0");
-  addDependency<LayoutAlgorithm>("Connected Component Packing", "1.0");
+  addDependency<LayoutAlgorithm>("Connected Component Packing", "1.1");
 }
 //=========================================================
 GEMLayout::~GEMLayout() {

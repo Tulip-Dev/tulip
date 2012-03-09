@@ -130,7 +130,7 @@ void BasicLayoutTest::testMixedModel() {
 }
 //==========================================================
 void BasicLayoutTest::testRandomLayout() {
-  bool result = computeProperty<LayoutProperty>("Random");
+  bool result = computeProperty<LayoutProperty>("Random layout");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================

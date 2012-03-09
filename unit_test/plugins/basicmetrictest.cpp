@@ -133,7 +133,7 @@ void BasicMetricTest::testPathLengthMetric() {
 }
 //==========================================================
 void BasicMetricTest::testRandomMetric() {
-  bool result = computeProperty<DoubleProperty>("Random");
+  bool result = computeProperty<DoubleProperty>("Random metric");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================

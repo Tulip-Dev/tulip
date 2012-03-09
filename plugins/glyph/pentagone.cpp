@@ -90,7 +90,7 @@ void Pentagone::draw(node n, float lod) {
 
 class EEPentagon: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1.0", 12)
+  GLYPHINFORMATIONS("2D - Pentagone extremity", "David Auber", "09/07/2002", "Textured Pentagone for edge extremities", "1.0", 12)
 
   EEPentagon(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
     if(!pentagon)
