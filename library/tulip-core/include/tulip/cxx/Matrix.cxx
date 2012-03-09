@@ -73,21 +73,11 @@ MATRIX&  MATRIX::operator+=(const MATRIX &mat) {
 }
 //======================================================
 template<typename Obj,unsigned int SIZE>
-MATRIX&  MATRIX::operator+(const MATRIX &mat) const {
-  return MATRIX(*this) += mat;
-}
-//======================================================
-template<typename Obj,unsigned int SIZE>
 MATRIX&  MATRIX::operator-=(const MATRIX &mat) {
   for (unsigned int i=0; i<SIZE; ++i)
     (*this)[i] -= mat[i];
 
   return (*this);
-}
-//======================================================
-template<typename Obj,unsigned int SIZE>
-MATRIX&  MATRIX::operator-(const MATRIX &mat) const {
-  return MATRIX(*this) -= mat;
 }
 //======================================================
 template<typename Obj,unsigned int SIZE>
@@ -279,6 +269,16 @@ template<typename Obj,unsigned int SIZE>
 MATRIX & MATRIX::inverse() {
   (*this) = (*this).cofactor().transpose() /= (*this).determinant();
   return (*this);
+}
+//=====================================================================================
+template<typename Obj,unsigned int SIZE>
+MATRIX tlp::operator+(const MATRIX &mat1 ,const MATRIX &mat2) {
+  return MATRIX(mat1)+=mat2;
+}
+//=====================================================================================
+template<typename Obj,unsigned int SIZE>
+MATRIX tlp::operator-(const MATRIX &mat1 ,const MATRIX &mat2) {
+  return MATRIX(mat1)-=mat2;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
