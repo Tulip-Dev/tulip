@@ -153,6 +153,7 @@ int main(int argc,char **argv) {
   }
 
   PerspectiveContext* context = new PerspectiveContext();
+
   if (project != NULL) {
     perspectiveName = project->perspective();
   }
@@ -161,6 +162,7 @@ int main(int argc,char **argv) {
     project = TulipProject::newProject();
     project->setPerspective(perspectiveName);
   }
+
   context->project = project;
   context->parameters = extraParams;
 
