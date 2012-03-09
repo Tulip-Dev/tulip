@@ -77,6 +77,7 @@ protected slots:
   void copy();
   void group();
   void createSubGraph();
+  void CSVImport();
 };
 
 #endif // GRAPHPERSPECTIVE_H

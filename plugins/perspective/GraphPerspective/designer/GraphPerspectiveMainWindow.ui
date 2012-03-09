@@ -327,7 +327,7 @@ QToolButton:pressed {
          </property>
          <property name="icon">
           <iconset resource="../resources/GraphPerspective.qrc">
-           <normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</iconset>
+           <normaloff>:/tulip/graphperspective/icons/32/table.png</normaloff>:/tulip/graphperspective/icons/32/table.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -366,9 +366,41 @@ QToolButton:pressed {
         </spacer>
        </item>
        <item>
-        <widget class="Line" name="line">
+        <widget class="Line" name="line_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="csvImportButton">
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>CSV</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../resources/GraphPerspective.qrc">
+           <normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
         </widget>
        </item>
@@ -424,38 +456,6 @@ QToolButton:pressed {
          <property name="icon">
           <iconset resource="../resources/GraphPerspective.qrc">
            <normaloff>:/tulip/graphperspective/icons/32/system-software-install.png</normaloff>:/tulip/graphperspective/icons/32/system-software-install.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="toolButtonStyle">
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="showHelpButton">
-         <property name="minimumSize">
-          <size>
-           <width>75</width>
-           <height>75</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>75</width>
-           <height>75</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Help</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../resources/GraphPerspective.qrc">
-           <normaloff>:/tulip/graphperspective/icons/32/help-about.png</normaloff>:/tulip/graphperspective/icons/32/help-about.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -614,6 +614,8 @@ QToolButton:pressed {
     <addaction name="separator"/>
     <addaction name="actionGroup_elements"/>
     <addaction name="actionCreate_sub_graph"/>
+    <addaction name="separator"/>
+    <addaction name="actionImport_CSV"/>
     <addaction name="separator"/>
     <addaction name="actionPreferences"/>
    </widget>
@@ -901,6 +903,15 @@ QToolButton:pressed {
     <string>Analyze mode</string>
    </property>
   </action>
+  <action name="actionImport_CSV">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</iconset>
+   </property>
+   <property name="text">
+    <string>Import CSV</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -949,38 +960,6 @@ QToolButton:pressed {
  </resources>
  <connections>
   <connection>
-   <sender>showHelpButton</sender>
-   <signal>clicked()</signal>
-   <receiver>actionAbout_us</receiver>
-   <slot>trigger()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>37</x>
-     <y>742</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pluginsButton</sender>
-   <signal>clicked()</signal>
-   <receiver>actionPlugins_Center</receiver>
-   <slot>trigger()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>37</x>
-     <y>663</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>importButton</sender>
    <signal>clicked()</signal>
    <receiver>actionImport</receiver>
@@ -1021,6 +1000,38 @@ QToolButton:pressed {
     <hint type="sourcelabel">
      <x>37</x>
      <y>151</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginsButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionPlugins_Center</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>663</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csvImportButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionImport_CSV</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>584</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>

@@ -84,23 +84,6 @@ border: 0px;
        <number>0</number>
       </property>
       <item>
-       <widget class="QPushButton" name="importCSVPushButton">
-        <property name="text">
-         <string>Import CSV data</string>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="showOnlySelectedElementsCheckBox">
         <property name="maximumSize">
          <size>
