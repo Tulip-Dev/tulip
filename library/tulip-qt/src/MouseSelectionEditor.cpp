@@ -368,6 +368,7 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
       glMainWidget->getScene()->insertLayerAfter(layer,"Main");
       composite = new GlComposite(false);
       layer->addGlEntity(composite,"selectionComposite");
+      connect(glMainWidget,SIGNAL(destroyed(QObject *)),this,SLOT(glMainWidgetDestroyed(QObject *)));
     }
 
     composite->addGlEntity(&centerRect, "CenterRectangle");
@@ -451,6 +452,10 @@ void MouseSelectionEditor::stopEdition() {
   }
 
   operation = NONE;
+}
+//========================================================================================
+void MouseSelectionEditor::glMainWidgetDestroyed(QObject *){
+  layer=NULL;
 }
 //========================================================================================
 void MouseSelectionEditor::initProxies(GlMainWidget *glMainWidget) {

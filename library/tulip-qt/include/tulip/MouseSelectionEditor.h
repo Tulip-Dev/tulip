@@ -38,6 +38,8 @@ namespace tlp {
 /// This interactor allows to move/rotate/stretch the current selection layout
 class TLP_QT_SCOPE MouseSelectionEditor:public InteractorComponent {
 
+  Q_OBJECT
+
 public:
 
   MouseSelectionEditor();
@@ -48,6 +50,10 @@ public:
   InteractorComponent *clone() {
     return new MouseSelectionEditor();
   }
+
+protected slots :
+
+  void glMainWidgetDestroyed(QObject *);
 
 private:
   enum EditOperation { NONE=0, ROTATE_Z, ROTATE_XY, STRETCH_X, STRETCH_Y, STRETCH_XY, TRANSLATE, ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT, ALIGN_VERTICALLY, ALIGN_HORIZONTALLY};

@@ -161,7 +161,9 @@ set(tulip-qt_MOC
     ../include/tulip/ColorButton.h
     ../include/tulip/CoordWidget.h
     ../include/tulip/SizeWidget.h
-    ../include/tulip/FileNameEditorWidget.h    
+    ../include/tulip/FileNameEditorWidget.h
+    ../include/tulip/MouseSelectionEditor.h
+    ../include/tulip/MouseEdgeBendEditor.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)

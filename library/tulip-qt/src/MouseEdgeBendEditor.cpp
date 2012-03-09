@@ -202,6 +202,7 @@ bool MouseEdgeBendEditor::compute(GlMainWidget *glMainWidget) {
         circleString = new GlComposite(false);
 
       layer->addGlEntity(circleString,"selectionComposite");
+      connect(glMainWidget,SIGNAL(destroyed(QObject *)),this,SLOT(glMainWidgetDestroyed(QObject*)));
     }
 
     this->glMainWidget=glMainWidget;
@@ -277,6 +278,10 @@ void MouseEdgeBendEditor::stopEdition() {
   selectedEntity="";
   computeSrcTgtEntities(glMainWidget);
   glMainWidget->draw(false);
+}
+//========================================================================================
+void MouseEdgeBendEditor::glMainWidgetDestroyed(QObject *){
+  layer=NULL;
 }
 //========================================================================================
 void MouseEdgeBendEditor::initProxies(GlMainWidget *glMainWidget) {

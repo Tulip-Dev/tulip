@@ -39,6 +39,8 @@ class Graph;
 /// This interactor allows to move/add/delete EdgeBends
 class TLP_QT_SCOPE MouseEdgeBendEditor:public InteractorComponent {
 
+  Q_OBJECT
+
 public:
 
   MouseEdgeBendEditor();
@@ -49,6 +51,10 @@ public:
   InteractorComponent *clone() {
     return new MouseEdgeBendEditor();
   }
+
+protected slots :
+
+  void glMainWidgetDestroyed(QObject *);
 
 protected:
   enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
