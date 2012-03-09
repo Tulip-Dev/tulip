@@ -75,21 +75,11 @@ MATRIXTLPGEO&  MATRIXTLPGEO::operator+=(const MATRIXTLPGEO &mat) {
 }
 //======================================================
 template<typename Obj,unsigned int SIZE>
-MATRIXTLPGEO&  MATRIXTLPGEO::operator+(const MATRIXTLPGEO &mat) const {
-  return MATRIXTLPGEO(*this) += mat;
-}
-//======================================================
-template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO&  MATRIXTLPGEO::operator-=(const MATRIXTLPGEO &mat) {
   for (unsigned int i=0; i<SIZE; ++i)
     (*this)[i] -= mat[i];
 
   return (*this);
-}
-//======================================================
-template<typename Obj,unsigned int SIZE>
-MATRIXTLPGEO&  MATRIXTLPGEO::operator-(const MATRIXTLPGEO &mat) const {
-  return MATRIXTLPGEO(*this) -= mat;
 }
 //======================================================
 template<typename Obj,unsigned int SIZE>
@@ -281,6 +271,16 @@ template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO & MATRIXTLPGEO::inverse() {
   (*this) = (*this).cofactor().transpose() /= (*this).determinant();
   return (*this);
+}
+//=====================================================================================
+template<typename Obj,unsigned int SIZE>
+MATRIXTLPGEO tlp::operator+(const MATRIXTLPGEO &mat1 ,const MATRIXTLPGEO &mat2) {
+  return MATRIXTLPGEO(mat1)+=mat2;
+}
+//=====================================================================================
+template<typename Obj,unsigned int SIZE>
+MATRIXTLPGEO tlp::operator-(const MATRIXTLPGEO &mat1 ,const MATRIXTLPGEO &mat2) {
+  return MATRIXTLPGEO(mat1)-=mat2;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
