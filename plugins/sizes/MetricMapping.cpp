@@ -74,13 +74,22 @@ const char * paramHelp[] = {
   "If true the algorithm will compute the size of nodes else it will compute the size of edges :" \
   "<ul><li>true : node size</li><li>false: edge size</li></ul>" \
   HTML_HELP_CLOSE(),
+
+  //proportional mapping
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "string" ) \
+  HTML_HELP_DEF( "default", "Area Proportional" ) \
+  HTML_HELP_BODY() \
+  "The mapping can either be area/volume proportional, or square/cubic;" \
+  "i.e. the areas/volumes will be proportional, or the dimensions (width, height and depth) will be." \
+  HTML_HELP_CLOSE(),
 };
 }
 
 // error msg for invalid range value
 static const char* rangeSizeErrorMsg = "max size must be greater than min size";
 static const char* rangeMetricErrorMsg = "All values are the same";
-
+static const std::string AREA_PROPORTIONAL = "Area Proportional";
 /** \addtogroup size */
 /*@{*/
 /// Metric Mapping - Compute size of elements according to a metric.
@@ -96,11 +105,12 @@ public:
     addParameter<SizeProperty>("input", paramHelp[1]);
     addParameter<bool>("width", paramHelp[2],"true");
     addParameter<bool>("height", paramHelp[2],"true");
-    addParameter<bool>("depth", paramHelp[2],"true");
+    addParameter<bool>("depth", paramHelp[2],"false");
     addParameter<double>("min size",paramHelp[3],"1");
     addParameter<double>("max size",paramHelp[4],"10");
     addParameter<bool>("type", paramHelp[5],"true");
     addParameter<bool>("node/edge", paramHelp[6],"true");
+    addParameter<StringCollection>("area proportional", paramHelp[7], "Area Proportional;Quadratic/Cubic");
   }
 
   ~MetricSizeMapping() {}
@@ -110,7 +120,15 @@ public:
 
     while(itN->hasNext()) {
       node itn=itN->next();
-      double sizos=min+(entryMetric->getNodeValue(itn)-shift)*(max-min)/range;
+
+      double sizos = 0;
+      if (proportional == AREA_PROPORTIONAL) {
+        const double power = 1.0 / (float(xaxis) + float(yaxis) + float(zaxis));
+        sizos = pow((entryMetric->getNodeValue(itn)-shift)*(max-min)/range, power);
+      }
+      else {
+        sizos = min + (entryMetric->getNodeValue(itn)-shift)*(max-min)/range;
+      }
       Size result=entrySize->getNodeValue(itn);
 
       if (xaxis) result[0]=static_cast<float>(sizos);
@@ -145,9 +163,11 @@ public:
     min=1;
     max=10;
     nodeoredge = true;
+    proportional = "Area Proportional";
     entryMetric=graph->getProperty<DoubleProperty>("viewMetric");
     entrySize=graph->getProperty<SizeProperty>("viewSize");
     mappingType = true;
+    StringCollection proportionalType;
 
     if ( dataSet!=0 ) {
       dataSet->get("property",entryMetric);
@@ -159,7 +179,10 @@ public:
       dataSet->get("max size",max);
       dataSet->get("type",mappingType);
       dataSet->get("node/edge",nodeoredge);
+      dataSet->get("area proportional",proportionalType);
+      proportional = proportionalType.getCurrentString();
     }
+    std::cout << proportional << std::endl;
 
     if (min >= max) {
       /*cerr << rangeErrorMsg << endl;
@@ -176,6 +199,15 @@ public:
     if (!range) {
       errorMsg = std::string(rangeMetricErrorMsg);
       return false;
+    }
+
+    if(!xaxis && !yaxis && !zaxis) {
+      errorMsg = "You need at least one axis to map on.";
+      return false;
+    }
+
+    if(proportional == AREA_PROPORTIONAL) {
+      max = max*max;
     }
 
     return true;
@@ -219,6 +251,7 @@ private:
   double range;
   double shift;
   bool nodeoredge;
+  std::string proportional;
 };
 /*@}*/
-SIZEPLUGIN(MetricSizeMapping,"Metric Mapping","Auber","08/08/2003","","1.0");
+SIZEPLUGIN(MetricSizeMapping,"Metric Mapping","Auber","08/08/2003","","2.0");
