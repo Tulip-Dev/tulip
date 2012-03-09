@@ -355,24 +355,6 @@ void ElementPropertiesWidget::propertyTableValueChanged(int row, int col) {
     return;
 
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  bool *elementSet;
-  QStringList *listedProperties;
-
-  switch(displayMode) {
-  case NODE:
-    elementSet = &nodeSet;
-    listedProperties = &nodeListedProperties;
-    break;
-
-  case EDGE:
-    elementSet = &edgeSet;
-    listedProperties = &edgeListedProperties;
-    break;
-
-  default:
-    elementSet = NULL;
-    listedProperties = NULL;
-  }
 
   QString property = propertyTable->item(row, 0)->text();
   QString value = ((TulipTableWidgetItem *)propertyTable->item(row, col))->textForTulip();
