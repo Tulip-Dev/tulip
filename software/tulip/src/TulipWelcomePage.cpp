@@ -80,8 +80,6 @@ QVBoxLayout *TulipWelcomePage::buildPerspectiveListLayout(const QObject *receive
   QList<tlp::PluginInformations *> localPlugins = tlp::PluginManager::pluginsList(tlp::PluginManager::Local);
   tlp::PluginInformations *info;
   foreach(info,localPlugins) {
-    qWarning() << info->type();
-
     if (info->type() != "Perspective")
       continue;
 
