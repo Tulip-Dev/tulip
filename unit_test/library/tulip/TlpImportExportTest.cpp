@@ -234,7 +234,7 @@ void TlpImportExportTest::testExportAttributes() {
   CPPUNIT_ASSERT(graph->getAttribute("type = stringvector", sv));
   CPPUNIT_ASSERT(sv[0] == "data");
   CPPUNIT_ASSERT(sv[1] == "atad");
-  
+
   sg = graph->getSubGraph(1);
   CPPUNIT_ASSERT(sg);
 

@@ -280,7 +280,7 @@ void MouseEdgeBendEditor::stopEdition() {
   glMainWidget->draw(false);
 }
 //========================================================================================
-void MouseEdgeBendEditor::glMainWidgetDestroyed(QObject *){
+void MouseEdgeBendEditor::glMainWidgetDestroyed(QObject *) {
   layer=NULL;
 }
 //========================================================================================

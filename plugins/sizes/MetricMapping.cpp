@@ -122,6 +122,7 @@ public:
       node itn=itN->next();
 
       double sizos = 0;
+
       if (proportional == AREA_PROPORTIONAL) {
         const double power = 1.0 / (float(xaxis) + float(yaxis) + float(zaxis));
         sizos = pow((entryMetric->getNodeValue(itn)-shift)*(max-min)/range, power);
@@ -129,6 +130,7 @@ public:
       else {
         sizos = min + (entryMetric->getNodeValue(itn)-shift)*(max-min)/range;
       }
+
       Size result=entrySize->getNodeValue(itn);
 
       if (xaxis) result[0]=static_cast<float>(sizos);
@@ -182,6 +184,7 @@ public:
       dataSet->get("area proportional",proportionalType);
       proportional = proportionalType.getCurrentString();
     }
+
     std::cout << proportional << std::endl;
 
     if (min >= max) {

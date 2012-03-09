@@ -454,7 +454,7 @@ void MouseSelectionEditor::stopEdition() {
   operation = NONE;
 }
 //========================================================================================
-void MouseSelectionEditor::glMainWidgetDestroyed(QObject *){
+void MouseSelectionEditor::glMainWidgetDestroyed(QObject *) {
   layer=NULL;
 }
 //========================================================================================

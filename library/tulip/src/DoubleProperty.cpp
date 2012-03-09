@@ -47,7 +47,7 @@ static void computeNodeAvgValue(AbstractDoubleProperty* metric, node mN, Graph* 
 #ifndef NDEBUG
     std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
 #endif
-      return;
+    return;
   }
 
   double value = 0;
@@ -83,7 +83,7 @@ static void computeNodeSumValue(AbstractDoubleProperty* metric, node mN, Graph* 
 #ifndef NDEBUG
     std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
 #endif
-      return;
+    return;
   }
 
   double value = 0;
@@ -112,7 +112,7 @@ static void computeNodeMaxValue(AbstractDoubleProperty* metric, node mN, Graph* 
 #ifndef NDEBUG
     std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
 #endif
-      return;
+    return;
   }
 
   double value = -DBL_MAX;
@@ -146,7 +146,7 @@ static void computeNodeMinValue(AbstractDoubleProperty* metric, node mN, Graph* 
 #ifndef NDEBUG
     std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
 #endif
-      return;
+    return;
   }
 
   double value = DBL_MAX;
@@ -223,8 +223,8 @@ static DoublePropertyPredefinedCalculator avgCalculator;
 ///Constructeur d'un DoubleProperty
 DoubleProperty::DoubleProperty (Graph *sg, std::string n):AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm>(sg, n),
   minMaxOkNode(false),minMaxOkEdge(false) {
-    assert(sg!=NULL);
-    // the property observes the graph
+  assert(sg!=NULL);
+  // the property observes the graph
   sg->addGraphObserver(this);
   // the computed meta value will be the average value
   setMetaValueCalculator(&avgCalculator);

@@ -82,6 +82,7 @@ LayoutProperty::LayoutProperty(Graph *sg, std::string n):AbstractLayoutProperty(
 //======================================================
 Coord LayoutProperty::getMax(Graph *sg) {
   if (sg==NULL) sg=graph;
+
   assert(sg==graph || graph->isDescendantGraph(sg));
 
   unsigned int sgi = sg->getId();
@@ -95,6 +96,7 @@ Coord LayoutProperty::getMax(Graph *sg) {
 //======================================================
 Coord  LayoutProperty::getMin(Graph *sg) {
   if (sg==NULL) sg=graph;
+
   assert(sg==graph || graph->isDescendantGraph(sg));
 
   unsigned int sgi = sg->getId();
