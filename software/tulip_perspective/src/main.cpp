@@ -79,12 +79,11 @@ int main(int argc,char **argv) {
   TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow();
   mainWindow->setVisible(true);
 
-  SimplePluginProgressDialog *progressDlg = new SimplePluginProgressDialog(mainWindow);
-  progressDlg->setWindowTitle(QObject::trUtf8("Tulip"));
-  progressDlg->resize(500,progressDlg->height());
-  progressDlg->show();
+  SimplePluginProgressDialog *progress = new SimplePluginProgressDialog(mainWindow);
+  progress->setWindowTitle(QObject::trUtf8("Tulip"));
+  progress->resize(500,progress->height());
+  progress->show();
 
-  PluginProgress* progress = progressDlg->progress();
   progress->progress(0,100);
   progress->setComment(QObject::trUtf8("Initializing D-Bus").toStdString());
 
@@ -212,7 +211,7 @@ int main(int argc,char **argv) {
 
   mainWindow->setWindowTitle(title);
 
-  delete progressDlg;
+  delete progress;
 
   int result = tulip_perspective.exec();
   delete perspective;

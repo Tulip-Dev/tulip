@@ -24,6 +24,8 @@
 #include <tulip/ImportModule.h>
 #include <tulip/Graph.h>
 #include <tulip/View.h>
+#include <tulip/SimplePluginProgressWidget.h>
+#include <tulip/GraphHierarchiesModel.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -31,7 +33,6 @@
 #include "PanelSelectionWizard.h"
 #include "GraphHierarchiesEditor.h"
 #include "ShadowFilter.h"
-#include <tulip/GraphHierarchiesModel.h>
 
 #ifndef NDEBUG
 #include <modeltest.h>
@@ -213,8 +214,10 @@ void GraphPerspective::saveAs(const QString& path) {
     return;
   }
 
-  _graphs->writeProject(_project,0); // FIXME add progress here
-  _project->write(path); // FIXME: add progress here
+  SimplePluginProgressDialog progress(_mainWindow);
+  progress.show();
+  _graphs->writeProject(_project,&progress);
+  _project->write(path,&progress);
 }
 
 void GraphPerspective::open(const QString &path) {

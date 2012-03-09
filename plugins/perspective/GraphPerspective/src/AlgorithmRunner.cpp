@@ -369,7 +369,9 @@ void AlgorithmRunner::runAlgorithm() {
   AlgorithmRunnerItem* item = static_cast<AlgorithmRunnerItem*>(sender());
   QString msg;
   DataSet data = item->params();
-  bool result = _pluginsListMgr->computeProperty(_model->currentGraph(),item->name(),msg,0,&data,isLocalMode());
+  PluginProgress* progress = Perspective::instance()->progress();
+  bool result = _pluginsListMgr->computeProperty(_model->currentGraph(),item->name(),msg,progress,&data,isLocalMode());
+  delete progress;
 
   if (!result) {
     QMessageBox::critical(this,trUtf8("Plugin error"),trUtf8("Error while running ") + item->name() + trUtf8(": ") + msg);

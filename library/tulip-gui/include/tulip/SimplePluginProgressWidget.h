@@ -21,6 +21,7 @@
 
 #include <QtGui/QDialog>
 #include <QtGui/QWidget>
+#include <QtCore/QTime>
 
 #include <tulip/SimplePluginProgress.h>
 
@@ -35,6 +36,9 @@ class TLP_QT_SCOPE SimplePluginProgressWidget: public QWidget, public tlp::Simpl
   Q_OBJECT
   Ui::SimplePluginProgressWidgetData *_ui;
 
+  QTime _lastUpdate;
+  void checkLastUpdate();
+
 public:
   explicit SimplePluginProgressWidget(QWidget *parent=0,Qt::WindowFlags f=0);
 
@@ -47,16 +51,21 @@ protected:
   virtual void preview_handler(bool);
 };
 
-class TLP_QT_SCOPE SimplePluginProgressDialog: public QDialog {
+class TLP_QT_SCOPE SimplePluginProgressDialog: public QDialog, public tlp::SimplePluginProgress {
 public:
   explicit SimplePluginProgressDialog(QWidget *parent=0);
   virtual ~SimplePluginProgressDialog();
-  tlp::PluginProgress *progress() const {
-    return _progress;
-  }
+
+  void setComment(const std::string&);
+  void setComment(const QString &);
+  void setComment(const char *);
+
+protected:
+  virtual void progress_handler(int step, int max_step);
+  virtual void preview_handler(bool);
 
 private:
-  tlp::PluginProgress *_progress;
+  tlp::SimplePluginProgressWidget *_progress;
 };
 
 }

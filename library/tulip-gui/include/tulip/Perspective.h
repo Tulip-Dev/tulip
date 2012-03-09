@@ -75,6 +75,8 @@ public:
 
   virtual void construct(tlp::PluginProgress *)=0;
 
+  virtual tlp::PluginProgress* progress();
+
 public slots:
 
   virtual bool terminated() {

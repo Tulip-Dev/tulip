@@ -223,7 +223,7 @@ void CSVImportConfigurationWidget::updateWidget() {
     SimplePluginProgressDialog progress(this);
     progress.setWindowTitle("Generating preview");
     progress.show();
-    parser->parse(this,progress.progress());
+    parser->parse(this,&progress);
   }
   else {
     setEnabled(true);
