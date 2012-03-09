@@ -76,17 +76,9 @@ public:
    */
   MATRIX& inverse();
   /**
-   * return the sum of two matrices
-   */
-  inline MATRIX & operator+(const MATRIX &mat) const;
-  /**
    * add another matrix to the current one and return "&(*this)"
    */
   inline MATRIX & operator+=(const MATRIX &mat);
-  /**
-   * return the difference of two matrices
-   */
-  inline MATRIX & operator-(const MATRIX &mat) const;
   /**
    * substract another matrix from the current and return "&(*this)"
    */
@@ -154,6 +146,16 @@ public:
 };
 
 
+/**
+ * Returns a new matrix equal to the sum of 2 matrices
+ */
+template<typename Obj, unsigned int SIZE>
+inline MATRIX operator+(const MATRIX &mat1, const MATRIX &mat2);
+/**
+ * Returns a new matrix equal to the difference of 2 matrices
+ */
+template<typename Obj, unsigned int SIZE>
+inline MATRIX operator-(const MATRIX &mat1, const MATRIX &mat2);
 /**
  * Returns a new matrix equal to the multiplication of the matrix by
  * obj
