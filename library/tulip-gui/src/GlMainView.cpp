@@ -33,7 +33,7 @@ GlMainView::~GlMainView() {
   delete _sceneConfigurationWidget;
 }
 
-void GlMainView::draw(tlp::PluginProgress*) {
+void GlMainView::draw(tlp::PluginProgress* progress) {
   _glMainWidget->draw();
 }
 
