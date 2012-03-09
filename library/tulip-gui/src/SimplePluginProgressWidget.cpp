@@ -19,6 +19,7 @@
 #include "tulip/SimplePluginProgressWidget.h"
 #include <QtGui/QStylePainter>
 #include <QtCore/QDebug>
+#include <QtCore/QTime>
 
 #include <tulip/Observable.h>
 #include "ui_SimplePluginProgressWidget.h"
@@ -31,9 +32,17 @@ SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent, Qt::Wind
   _ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
 }
 
+void SimplePluginProgressWidget::checkLastUpdate() {
+  if (_lastUpdate.msecsTo(QTime::currentTime()) > 1000/5) {
+    QApplication::processEvents();
+    _lastUpdate = QTime::currentTime();
+  }
+}
+
 void SimplePluginProgressWidget::progress_handler(int step, int max_step) {
   _ui->progressBar->setValue(step);
   _ui->progressBar->setMaximum(max_step);
+  checkLastUpdate();
 }
 
 void SimplePluginProgressWidget::preview_handler(bool p) {
@@ -41,6 +50,7 @@ void SimplePluginProgressWidget::preview_handler(bool p) {
     Observable::unholdObservers();
   else
     Observable::holdObservers();
+  checkLastUpdate();
 }
 
 void SimplePluginProgressWidget::setComment(const std::string& s) {
@@ -49,6 +59,7 @@ void SimplePluginProgressWidget::setComment(const std::string& s) {
 
 void SimplePluginProgressWidget::setComment(const QString &s) {
   _ui->comment->setText("<b>" + s + "</b>");
+  checkLastUpdate();
 }
 
 void SimplePluginProgressWidget::setComment(const char *s) {
@@ -62,10 +73,31 @@ SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent): QDialog
   _progress = new SimplePluginProgressWidget(this);
   mainLayout->addWidget(static_cast<SimplePluginProgressWidget *>(_progress));
   setLayout(mainLayout);
+  resize(500,height());
 }
 
 SimplePluginProgressDialog::~SimplePluginProgressDialog() {
   delete _progress;
+}
+
+void SimplePluginProgressDialog::setComment(const std::string& s) {
+  _progress->setComment(s);
+}
+
+void SimplePluginProgressDialog::setComment(const QString& s) {
+  _progress->setComment(s);
+}
+
+void SimplePluginProgressDialog::setComment(const char* s) {
+  _progress->setComment(s);
+}
+
+void SimplePluginProgressDialog::progress_handler(int step, int max_step) {
+  _progress->progress(step,max_step);
+}
+
+void SimplePluginProgressDialog::preview_handler(bool f) {
+  _progress->setPreviewMode(f);
 }
 
 }

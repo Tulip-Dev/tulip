@@ -38,6 +38,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QProgressBar" name="progressBar">
+       <property name="maximum">
+        <number>0</number>
+       </property>
        <property name="value">
         <number>0</number>
        </property>
@@ -46,9 +49,6 @@
        </property>
        <property name="textVisible">
         <bool>true</bool>
-       </property>
-       <property name="format">
-        <string>%p</string>
        </property>
       </widget>
      </item>

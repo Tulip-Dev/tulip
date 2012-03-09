@@ -348,7 +348,7 @@ bool GraphHierarchiesModel::writeProject(tlp::TulipProject *project, tlp::Plugin
     project->mkpath(folder);
     DataSet data;
     std::fstream *stream = project->stdFileStream(folder + "graph.json");
-    tlp::exportGraph(g,*stream,"TlpJsonExport",data,progress);
+    tlp::exportGraph(g,*stream,"JSON Export",data,progress);
   }
   return true;
 }

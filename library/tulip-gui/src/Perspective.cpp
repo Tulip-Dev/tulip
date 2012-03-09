@@ -18,6 +18,10 @@
  */
 #include "tulip/Perspective.h"
 
+#include <QtGui/QApplication>
+#include <QtGui/QMainWindow>
+#include <tulip/SimplePluginProgressWidget.h>
+
 namespace tlp {
 
 tlp::Perspective* Perspective::_instance = NULL;
@@ -41,11 +45,17 @@ Perspective::Perspective(const tlp::PluginContext* c) : _project(NULL), _mainWin
 
 Perspective::~Perspective() {
   delete _project;
-//  delete _mainWindow;
 }
 
 bool Perspective::isCompatible(tlp::TulipProject *) {
   return false;
+}
+
+PluginProgress* Perspective::progress() {
+  SimplePluginProgressDialog* dlg = new SimplePluginProgressDialog(_mainWindow);
+  dlg->show();
+  QApplication::processEvents();
+  return dlg;
 }
 
 }

@@ -53,7 +53,7 @@ void CSVParsingConfigurationQWizardPage::parserChanged() {
     previewTableWidget->setEnabled(true);
     SimplePluginProgressDialog progress(this);
     progress.setWindowTitle(tr("Parsing file"));
-    parser->parse(previewTableWidget,progress.progress());
+    parser->parse(previewTableWidget,&progress);
   }
   else {
     previewTableWidget->setEnabled(false);
@@ -144,7 +144,7 @@ void CSVImportWizard::accept() {
         //Build import object
         CSVGraphImport csvToGraph(rowMapping,columnMapping,importParam);
         progress.setWindowTitle("Importing data");
-        processIsValid = parser->parse(&csvToGraph,progress.progress());
+        processIsValid = parser->parse(&csvToGraph,&progress);
       }
 
       //Release objects
