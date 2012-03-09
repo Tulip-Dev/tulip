@@ -39,7 +39,12 @@ QPixmap GlyphPreviewGenerator::getPreview(unsigned int pluginId) {
     renderer->addGraphToScene(_graph);
     renderer->renderScene(true);
     QImage preview = renderer->getImage();
+     #if (QT_VERSION >= QT_VERSION_CHECK(4, 8, 0))
+     QImage img2(preview.bits(),preview.width(),preview.height(),QImage::Format_ARGB32);
+    _previews[pluginId] = QPixmap::fromImage(img2);
+    #else
     _previews[pluginId] = QPixmap::fromImage(preview);
+    #endif
   }
 
   return _previews[pluginId];
@@ -98,7 +103,12 @@ QPixmap EdgeExtremityGlyphPreviewGenerator::getPreview(unsigned int pluginId) {
     renderer->getScene()->getGlGraphComposite()->setRenderingParameters(renderingParamerters);
     renderer->renderScene(true);
     QImage preview = renderer->getImage();
+    #if (QT_VERSION >= QT_VERSION_CHECK(4, 8, 0))
+    QImage img2(preview.bits(),preview.width(),preview.height(),QImage::Format_ARGB32);
+    _previews[pluginId] = QPixmap::fromImage(img2);
+    #else
     _previews[pluginId] = QPixmap::fromImage(preview);
+    #endif
   }
 
   return _previews[pluginId];
