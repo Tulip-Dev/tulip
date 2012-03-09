@@ -319,7 +319,7 @@ unsigned int Workspace::currentSlotsCount() const {
 
 void Workspace::updateAvailableModes() {
   foreach(QWidget* page, _modeSwitches.keys()) {
-    _modeSwitches[page]->setEnabled(_panels.size() >= _modeToSlots[page].size());
+    _modeSwitches[page]->setVisible(_panels.size() >= _modeToSlots[page].size());
   }
 
   bool enableNavigation = _panels.size()>0;

@@ -22,6 +22,7 @@
 #include <QtGui/QGraphicsPixmapItem>
 #include <QtCore/QTimer>
 #include <QtCore/QObject>
+#include <QtGui/QBrush>
 
 class ProcessingAnimationItem : public QObject, public QGraphicsPixmapItem {
   Q_OBJECT
@@ -29,13 +30,18 @@ class ProcessingAnimationItem : public QObject, public QGraphicsPixmapItem {
   QVector<QPixmap> _pixmaps;
   QTimer _animationTimer;
   unsigned int _currentFrame;
+  QBrush _brush;
 
 public:
   explicit ProcessingAnimationItem(const QPixmap& pixmap, const QSize& size, QGraphicsItem* parent=0, QGraphicsScene* scene=0);
   virtual ~ProcessingAnimationItem();
 
+  QBrush brush() const { return _brush; }
+  void setBrush(const QBrush& brush) { _brush = brush; }
+
 protected slots:
   void animationTimeout();
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 #endif // PROCESSINGANIMATIONITEM_H

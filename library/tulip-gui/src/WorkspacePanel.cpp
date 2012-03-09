@@ -43,8 +43,8 @@ class ProgressItem: public QGraphicsObject {
   ProcessingAnimationItem* _animation;
 public:
   ProgressItem(QGraphicsScene* parentScene): QGraphicsObject() {
-    _animation = new ProcessingAnimationItem(QPixmap(":/tulip/gui/ui/process-working.png"),QSize(64,64));
-    _animation->setParentItem(this);
+    _animation = new ProcessingAnimationItem(QPixmap(":/tulip/gui/ui/process-working.png"),QSize(64,64),this);
+    _animation->setZValue(5);
     parentScene->addItem(_animation);
   }
 
@@ -58,7 +58,7 @@ public:
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
     painter->setPen(QColor(255,255,255));
-    painter->setBrush(QColor(0,0,0,70));
+    painter->setBrush(QColor(255,255,255,170));
     painter->drawRect(scene()->sceneRect());
     _animation->setOpacity(opacity());
     _animation->setPos(scene()->width()/2-16,scene()->height()/2-16);
