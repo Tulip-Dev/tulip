@@ -68,7 +68,7 @@ public:
     addParameter<unsigned int>("minsize",paramHelp[0],"100");
     addParameter<unsigned int>("maxsize",paramHelp[1],"1000");
     addParameter<bool>("tree layout",paramHelp[2],"false");
-    addDependency<LayoutAlgorithm>("Tree Leaf", "1.0");
+    addDependency<LayoutAlgorithm>("Tree Leaf", "1.1");
   }
   ~RandomTree() {
   }
