@@ -26,6 +26,7 @@
 #include <tulip/View.h>
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/GraphHierarchiesModel.h>
+#include <tulip/CSVImportWizard.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -77,6 +78,7 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   connect(_ui->actionCopy,SIGNAL(triggered()),this,SLOT(copy()));
   connect(_ui->actionGroup_elements,SIGNAL(triggered()),this,SLOT(group()));
   connect(_ui->actionCreate_sub_graph,SIGNAL(triggered()),this,SLOT(createSubGraph()));
+  connect(_ui->actionImport_CSV,SIGNAL(triggered()),this,SLOT(CSVImport()));
 
   // D-BUS actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
@@ -335,6 +337,19 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionCancel_selection->setEnabled(enabled);
   _ui->actionGroup_elements->setEnabled(enabled);
   _ui->actionCreate_sub_graph->setEnabled(enabled);
+}
+
+void GraphPerspective::CSVImport() {
+  if (_graphs->currentGraph() == NULL)
+    return;
+  CSVImportWizard wizard(_mainWindow);
+  wizard.setGraph(_graphs->currentGraph());
+  _graphs->currentGraph()->push();
+  Observable::holdObservers();
+  int result = wizard.exec();
+  if (result == QDialog::Rejected)
+    _graphs->currentGraph()->pop();
+  Observable::unholdObservers();
 }
 
 PLUGIN(GraphPerspective)

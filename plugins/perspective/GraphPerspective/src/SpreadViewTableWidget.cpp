@@ -40,9 +40,6 @@ SpreadViewTableWidget::SpreadViewTableWidget(QWidget *parent) :
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
   ui->filterPatternLineEdit->setPlaceholderText(QApplication::translate("SpreadViewTableWidget", "Input a filter pattern", 0, QApplication::UnicodeUTF8));
 #endif
-
-  connect(ui->importCSVPushButton,SIGNAL(clicked()),this,SLOT(importCSVData()));
-
 }
 
 SpreadViewTableWidget::~SpreadViewTableWidget() {
@@ -517,25 +514,4 @@ void SpreadViewTableWidget::filterColumnChanged(int) {
 
 void SpreadViewTableWidget::invalidateFilter() {
 
-}
-
-void SpreadViewTableWidget::importCSVData() {
-  std::cout<<ui->tableView->graph()->getId()<<std::endl;
-
-  if ( ui->tableView->graph()
-       != NULL) {
-    CSVImportWizard *wizard = new CSVImportWizard(this);
-    wizard->setGraph(ui->tableView->graph());
-    ui->tableView->graph()->push();
-    Observable::holdObservers();
-    int result = wizard->exec();
-
-    //If user cancel cancel push.
-    if(result == QDialog::Rejected) {
-      ui->tableView->graph()->pop(false);
-    }
-
-    Observable::unholdObservers();
-    wizard->deleteLater();
-  }
 }
