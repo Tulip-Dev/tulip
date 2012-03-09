@@ -107,7 +107,7 @@ Graph * tlp::newCloneSubGraph(Graph *graph, std::string name) {
 Graph * tlp::loadGraph(const std::string &filename) {
   DataSet dataSet;
   dataSet.set("file::filename", filename);
-  Graph *sg = tlp::importGraph("tlpimport", dataSet);
+  Graph *sg = tlp::importGraph("JSON Import", dataSet);
   return sg;
 }
 //=========================================================
@@ -121,7 +121,7 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename) {
 
   bool result;
   DataSet data;
-  result=tlp::exportGraph(graph, *os, "tlpexport", data, 0);
+  result=tlp::exportGraph(graph, *os, "JSON Export", data, 0);
   delete os;
   return result;
 }

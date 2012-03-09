@@ -95,7 +95,7 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
       progress->setComment((trUtf8("Loading ") + externalFileInfo.fileName()).toStdString());
       DataSet dataSet;
       dataSet.set("file::filename", externalFileInfo.absoluteFilePath().toStdString());
-      Graph *externalGraph = tlp::importGraph("tlp", dataSet, progress);
+      Graph *externalGraph = tlp::importGraph("TLP Import", dataSet, progress);
       _graphs->addGraph(externalGraph);
     }
   }

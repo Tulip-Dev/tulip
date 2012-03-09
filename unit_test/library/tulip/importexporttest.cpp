@@ -31,8 +31,8 @@ using namespace std;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ImportExportTest);
 
-// ImportExportTest::ImportExportTest() :importAlgorithm("tlp"), exportAlgorithm("tlp") {
-ImportExportTest::ImportExportTest() :importAlgorithm("TlpJsonImport"), exportAlgorithm("TlpJsonExport") {
+// ImportExportTest::ImportExportTest() :importAlgorithm("TLP Import"), exportAlgorithm("TLP Export") {
+ImportExportTest::ImportExportTest() :importAlgorithm("JSON Import"), exportAlgorithm("JSON Export") {
 }
 
 void ImportExportTest::setUp() {

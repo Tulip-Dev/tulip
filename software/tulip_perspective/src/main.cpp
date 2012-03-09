@@ -98,8 +98,8 @@ int main(int argc,char **argv) {
 
   TulipAgentCommunicator *communicator = new TulipAgentCommunicator("org.labri.Tulip","/",QDBusConnection::sessionBus(),0);
 
-//  if (!(QDBusConnection::sessionBus().interface()->isServiceRegistered("org.labri.Tulip").value()))
-//    qWarning("No org.labri.Tulip service on session bus. Falling back to headless mode.");
+  if (!(QDBusConnection::sessionBus().interface()->isServiceRegistered("org.labri.Tulip").value()))
+    qWarning("No org.labri.Tulip service on session bus. Falling back to headless mode.");
 
 #if defined(__APPLE__) // revert current directory
   QDir::setCurrent(currentPath);
@@ -153,19 +153,18 @@ int main(int argc,char **argv) {
     }
   }
 
-  if (project)
+  PerspectiveContext* context = new PerspectiveContext();
+  if (project != NULL) {
     perspectiveName = project->perspective();
+  }
   else {
+    context->externalFile = projectFilePath;
     project = TulipProject::newProject();
     project->setPerspective(perspectiveName);
   }
-
-  PerspectiveContext* context = new PerspectiveContext();
-  context->parameters = extraParams;
   context->project = project;
+  context->parameters = extraParams;
 
-  if (project == NULL)
-    context->externalFile = projectFilePath;
 
   if (perspectiveName.isNull())
     usage("Could not determine the perspective to launch." + error);
