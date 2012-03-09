@@ -53,7 +53,7 @@ enum ElementType {
 
 /**
  * @brief Loads a graph in the tlp format from a file (extension can be .tlp or .tlp.gz).
- * This function uses the "tlp" import plugin, and will fail if it is not loaded (By default this plugin is linked into the library and should be loaded).
+ * This function uses the "TLP Import" import plugin, and will fail if it is not loaded (By default this plugin is linked into the library and should be loaded).
  *
  * If the import fails (no such file, parse error, ...) NULL is returned.
  *
@@ -67,7 +67,7 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename);
  *
  * This function checks the file name for the '.gz' extension and uses a compressed output if found.
  *
- * This function uses the "tlp" export plugin, and will fail if it is not loaded (by default this plugin is linked into the library and should be loaded).
+ * This function uses the "TLP Import" export plugin, and will fail if it is not loaded (by default this plugin is linked into the library and should be loaded).
  *
  * @param graph the graph to save.
  * @param filename the file to save the graph to.

@@ -79,7 +79,7 @@ static bool outputMap(true);
 static bool outputHtmlBody(true);
 static bool saveTLP(false);
 static string saveTLPFile;
-static string importPluginName("tlp");
+static string importPluginName("TLP Import");
 static string filename(DEFAULT_FILENAME);
 static string imageFormat(tlprender::SUPPORTED_IMAGE_FORMATS[0]); //default image format
 static tlprender::ImageWriter *imageWriter(NULL);
@@ -383,11 +383,11 @@ int main (int argc, char **argv) {
     DataSet dataSet;
     ostream *os = new ofstream(saveTLPFile.c_str());
     StructDef parameter =
-      ExportModuleLister::getPluginParameters("tlp");
+      ExportModuleLister::getPluginParameters("TLP Export");
 
     dataSet.set("displaying", glOffscreen.scene.getGlGraphComposite()->getRenderingParameters().getParameters());
 
-    if (!tlp::exportGraph(glOffscreen.scene.getGlGraphComposite()->getInputData()->getGraph(), *os, "tlp", dataSet, NULL)) {
+    if (!tlp::exportGraph(glOffscreen.scene.getGlGraphComposite()->getInputData()->getGraph(), *os, "TLP Export", dataSet, NULL)) {
       cerr << programName << ": saving graph to \"" << saveTLPFile << "\" failed. Exiting" << endl;
       return EXIT_FAILURE;
     }

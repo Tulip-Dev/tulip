@@ -105,7 +105,7 @@ namespace tlp {
  */
 class TLPExport:public ExportModule {
 public:
-  PLUGININFORMATIONS("tlpexport","Auber David","31/07/2001","TLP Export plugin", "1.1", "Export")
+  PLUGININFORMATIONS("TLP Export","Auber David","31/07/2001","TLP Export plugin", "1.1", "File")
 
   DataSet controller;
   bool useOldFormat;
