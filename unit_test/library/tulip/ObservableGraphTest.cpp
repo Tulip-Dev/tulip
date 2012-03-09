@@ -585,70 +585,69 @@ void ObservableGraphTest::testSubgraph() {
 }
 //==========================================================
 void ObservableGraphTest::testDeleteSubgraph() {
-  Graph *g1, *g2, *g3, *g4;
+  Graph *g1, *g2, *g3;
 
   g1 = graph->addSubGraph();
-  g2 = graph->addSubGraph();
-  g2->addGraphObserver(gObserver);
-  g2->addObserver(observer);
-  g3 = g2->addSubGraph();
-  g4 = g2->addSubGraph();
+  g1->addGraphObserver(gObserver);
+  g1->addObserver(observer);
+  g2 = g1->addSubGraph();
+  g3 = g1->addSubGraph();
 
   gObserver->reset();
   observer->reset();
-  g2->delSubGraph(g3);
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g3);
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == g2);
+  g1->delSubGraph(g2);
+  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g2);
+  CPPUNIT_ASSERT(gObserver->getObservedGraph() == g1);
   CPPUNIT_ASSERT(observer->nbObservables() == 1);
-  CPPUNIT_ASSERT(observer->found(g2));
+  CPPUNIT_ASSERT(observer->found(g1));
 
   gObserver->reset();
   observer->reset();
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
   Observable::holdObservers();
-  g2->delSubGraph(g4);
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g4);
-  CPPUNIT_ASSERT(gObserver->getObservedGraph() == g2);
+  g1->delSubGraph(g3);
+  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g3);
+  CPPUNIT_ASSERT(gObserver->getObservedGraph() == g1);
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
   Observable::unholdObservers();
   CPPUNIT_ASSERT(observer->nbObservables() == 1);
-  CPPUNIT_ASSERT(observer->found(g2));
+  CPPUNIT_ASSERT(observer->found(g1));
 
   gObserver->reset();
   observer->reset();
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
-  graph->delAllSubGraphs(g2);
-  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g2);
+  graph->delAllSubGraphs(g1);
+  CPPUNIT_ASSERT(gObserver->getObservedSubgraph() == g1);
   vector<Graph*>& graphs = gObserver->getObservedGraphs();
   CPPUNIT_ASSERT(graphs[0] == graph);
-  CPPUNIT_ASSERT(graphs[1] == g2);
+  CPPUNIT_ASSERT(graphs[1] == g1);
   CPPUNIT_ASSERT(observer->nbObservables() == 2);
   CPPUNIT_ASSERT(observer->found(graph));
-  CPPUNIT_ASSERT(observer->found(g2));
+  CPPUNIT_ASSERT(observer->found(g1));
 
   observer->reset();
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
   Observable::holdObservers();
-  g2 = graph->addSubGraph();
+  g1 = graph->addSubGraph();
+  g1->addObserver(observer);
+  g2 = g1->addSubGraph();
+  CPPUNIT_ASSERT(observer->nbObservables() == 0);
   g2->addObserver(observer);
-  g3 = g2->addSubGraph();
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
-  g3->addObserver(observer);
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
-  g2->delSubGraph(g3);
-  CPPUNIT_ASSERT(observer->nbObservables() == 1);
-  CPPUNIT_ASSERT(observer->found(g3));
-  observer->reset();
-  CPPUNIT_ASSERT(observer->nbObservables() == 0);
-  graph->delSubGraph(g2);
+  g1->delSubGraph(g2);
   CPPUNIT_ASSERT(observer->nbObservables() == 1);
   CPPUNIT_ASSERT(observer->found(g2));
+  observer->reset();
+  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  graph->delSubGraph(g1);
+  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT(observer->found(g1));
   observer->reset();
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
   Observable::unholdObservers();
   CPPUNIT_ASSERT(observer->nbObservables() == 1);
   CPPUNIT_ASSERT(observer->found(graph));
-  CPPUNIT_ASSERT(observer->found(g2) == false);
+  CPPUNIT_ASSERT(observer->found(g1) == false);
 }
 //==========================================================
 void ObservableGraphTest::testAddDelProperties() {
