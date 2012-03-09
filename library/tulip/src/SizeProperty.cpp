@@ -33,6 +33,14 @@ class SizeMetaValueCalculator
 public:
   void computeMetaValue(AbstractSizeProperty* prop,
                         node mN, Graph* sg, Graph*) {
+    // nothing to do if the subgraph is not linked to the property graph
+    if (sg!=prop->getGraph() && !prop->getGraph()->isDescendantGraph(sg)) {
+#ifndef NDEBUG
+      std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << prop->getName().c_str() << std::endl;
+#endif
+      return;
+    }
+
     if (sg->numberOfNodes() == 0) {
       prop->setNodeValue(mN, Size(1, 1, 1));
       return;

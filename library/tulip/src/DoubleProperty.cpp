@@ -42,6 +42,14 @@ typedef void (*DoubleEdgePredefinedCalculator) (AbstractDoubleProperty* metric, 
 
 // average values
 static void computeNodeAvgValue(AbstractDoubleProperty* metric, node mN, Graph* sg) {
+  // nothing to do if the subgraph is not linked to the property graph
+  if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
+#ifndef NDEBUG
+    std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
+#endif
+      return;
+  }
+
   double value = 0;
   unsigned int nbNodes = 0;
   node n;
@@ -49,7 +57,9 @@ static void computeNodeAvgValue(AbstractDoubleProperty* metric, node mN, Graph* 
     ++nbNodes;
     value += metric->getNodeValue(n);
   }
-  metric->setNodeValue(mN, value/nbNodes);
+
+  if (nbNodes)
+    metric->setNodeValue(mN, value/nbNodes);
 }
 
 static void computeEdgeAvgValue(AbstractDoubleProperty* metric, edge mE, Iterator<edge>* itE) {
@@ -62,11 +72,20 @@ static void computeEdgeAvgValue(AbstractDoubleProperty* metric, edge mE, Iterato
     value += metric->getEdgeValue(e);
   }
 
-  metric->setEdgeValue(mE, value/nbEdges);
+  if (nbEdges)
+    metric->setEdgeValue(mE, value/nbEdges);
 }
 
 // sum values
 static void computeNodeSumValue(AbstractDoubleProperty* metric, node mN, Graph* sg) {
+  // nothing to do if the subgraph is not linked to the property graph
+  if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
+#ifndef NDEBUG
+    std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
+#endif
+      return;
+  }
+
   double value = 0;
   node n;
   forEach(n, sg->getNodes()) {
@@ -88,6 +107,14 @@ static void computeEdgeSumValue(AbstractDoubleProperty* metric, edge mE, Iterato
 
 // max values
 static void computeNodeMaxValue(AbstractDoubleProperty* metric, node mN, Graph* sg) {
+  // nothing to do if the subgraph is not linked to the property graph
+  if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
+#ifndef NDEBUG
+    std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
+#endif
+      return;
+  }
+
   double value = -DBL_MAX;
   node n;
   forEach(n, sg->getNodes()) {
@@ -114,6 +141,14 @@ static void computeEdgeMaxValue(AbstractDoubleProperty* metric, edge mE, Iterato
 
 // min values
 static void computeNodeMinValue(AbstractDoubleProperty* metric, node mN, Graph* sg) {
+  // nothing to do if the subgraph is not linked to the property graph
+  if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
+#ifndef NDEBUG
+    std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
+#endif
+      return;
+  }
+
   double value = DBL_MAX;
   node n;
   forEach(n, sg->getNodes()) {

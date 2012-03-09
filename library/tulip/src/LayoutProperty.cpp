@@ -40,6 +40,14 @@ class LayoutMetaValueCalculator
 public:
   void computeMetaValue(AbstractLayoutProperty* layout,
                         node mN, Graph* sg, Graph*) {
+    // nothing to do if the subgraph is not linked to the property graph
+    if (sg!=layout->getGraph() && !layout->getGraph()->isDescendantGraph(sg)) {
+#ifndef NDEBUG
+      std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << layout->getName().c_str() << std::endl;
+#endif
+      return;
+    }
+
     switch(sg->numberOfNodes()) {
     case 0:
       layout->setNodeValue(mN, Coord(0, 0, 0));
@@ -73,8 +81,8 @@ LayoutProperty::LayoutProperty(Graph *sg, std::string n):AbstractLayoutProperty(
 }
 //======================================================
 Coord LayoutProperty::getMax(Graph *sg) {
-  if (sg==0) sg=graph;
-  else assert(sg==graph || graph->isDescendantGraph(sg));
+  if (sg==NULL) sg=graph;
+  assert(sg==graph || graph->isDescendantGraph(sg));
 
   unsigned int sgi = sg->getId();
 
@@ -86,8 +94,8 @@ Coord LayoutProperty::getMax(Graph *sg) {
 }
 //======================================================
 Coord  LayoutProperty::getMin(Graph *sg) {
-  if (sg==0) sg=graph;
-  else assert(sg==graph || graph->isDescendantGraph(sg));
+  if (sg==NULL) sg=graph;
+  assert(sg==graph || graph->isDescendantGraph(sg));
 
   unsigned int sgi = sg->getId();
 
