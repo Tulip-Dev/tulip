@@ -18,6 +18,7 @@
  */
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
+#include <vector>
 #include "TlpImportExportTest.h"
 #include <tulip/Graph.h>
 #include <tulip/ForEach.h>
@@ -163,6 +164,9 @@ void TlpImportExportTest::testExportAttributes() {
   unsigned int ui = 10, sui = 5;
   Size size(8., 9., 10.), ssize (10., 9., 8.);
   string str("data"), sstr("atad");
+  vector<string> sv;
+  sv.push_back(str);
+  sv.push_back(sstr);
 
   // set graph attributes of different types
   graph->setAttribute("type = bool", b);
@@ -174,6 +178,7 @@ void TlpImportExportTest::testExportAttributes() {
   graph->setAttribute("type = uint", ui);
   graph->setAttribute("type = size", size);
   graph->setAttribute("type = string", str);
+  graph->setAttribute("type = stringvector", sv);
 
   Graph* sg = graph->addSubGraph("sg");
   CPPUNIT_ASSERT(sg->getId() == 1);
@@ -225,7 +230,11 @@ void TlpImportExportTest::testExportAttributes() {
   str = string("");
   CPPUNIT_ASSERT(graph->getAttribute("type = string", str));
   CPPUNIT_ASSERT(str == "data");
-
+  sv.clear();
+  CPPUNIT_ASSERT(graph->getAttribute("type = stringvector", sv));
+  CPPUNIT_ASSERT(sv[0] == "data");
+  CPPUNIT_ASSERT(sv[1] == "atad");
+  
   sg = graph->getSubGraph(1);
   CPPUNIT_ASSERT(sg);
 
