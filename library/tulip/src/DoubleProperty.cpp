@@ -223,7 +223,8 @@ static DoublePropertyPredefinedCalculator avgCalculator;
 ///Constructeur d'un DoubleProperty
 DoubleProperty::DoubleProperty (Graph *sg, std::string n):AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm>(sg, n),
   minMaxOkNode(false),minMaxOkEdge(false) {
-  // the property observes the graph
+    assert(sg!=NULL);
+    // the property observes the graph
   sg->addGraphObserver(this);
   // the computed meta value will be the average value
   setMetaValueCalculator(&avgCalculator);
