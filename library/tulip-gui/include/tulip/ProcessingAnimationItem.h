@@ -36,8 +36,12 @@ public:
   explicit ProcessingAnimationItem(const QPixmap& pixmap, const QSize& size, QGraphicsItem* parent=0, QGraphicsScene* scene=0);
   virtual ~ProcessingAnimationItem();
 
-  QBrush brush() const { return _brush; }
-  void setBrush(const QBrush& brush) { _brush = brush; }
+  QBrush brush() const {
+    return _brush;
+  }
+  void setBrush(const QBrush& brush) {
+    _brush = brush;
+  }
 
 protected slots:
   void animationTimeout();

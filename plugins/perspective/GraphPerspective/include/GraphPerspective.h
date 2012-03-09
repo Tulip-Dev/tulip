@@ -43,7 +43,9 @@ class GraphPerspective : public tlp::Perspective {
   bool _maximised;
 public:
   PLUGININFORMATIONS("Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "Hierarchy")
-  std::string icon() const { return ":/tulip/graphperspective/icons/32/desktop.png"; }
+  std::string icon() const {
+    return ":/tulip/graphperspective/icons/32/desktop.png";
+  }
 
   GraphPerspective(const tlp::PluginContext* c);
   virtual void construct(tlp::PluginProgress *);

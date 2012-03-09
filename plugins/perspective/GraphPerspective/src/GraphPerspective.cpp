@@ -342,13 +342,16 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
 void GraphPerspective::CSVImport() {
   if (_graphs->currentGraph() == NULL)
     return;
+
   CSVImportWizard wizard(_mainWindow);
   wizard.setGraph(_graphs->currentGraph());
   _graphs->currentGraph()->push();
   Observable::holdObservers();
   int result = wizard.exec();
+
   if (result == QDialog::Rejected)
     _graphs->currentGraph()->pop();
+
   Observable::unholdObservers();
 }
 

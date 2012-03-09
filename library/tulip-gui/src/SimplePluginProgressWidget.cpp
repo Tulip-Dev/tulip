@@ -50,6 +50,7 @@ void SimplePluginProgressWidget::preview_handler(bool p) {
     Observable::unholdObservers();
   else
     Observable::holdObservers();
+
   checkLastUpdate();
 }
 

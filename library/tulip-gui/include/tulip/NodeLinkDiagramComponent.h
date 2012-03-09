@@ -31,7 +31,9 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
 public:
   PLUGININFORMATIONS("Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0", "relational")
 
-  std::string icon() const { return ""; }
+  std::string icon() const {
+    return "";
+  }
 
   NodeLinkDiagramComponent(const tlp::PluginContext* context = NULL);
   virtual ~NodeLinkDiagramComponent();
