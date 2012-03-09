@@ -493,26 +493,21 @@ bool StringVectorType::read(istream& is, RealType & v) {
     return false;
 
   is.unsetf(ios_base::skipws);
-  bool endFound = false;
   bool firstVal = true;
   bool sepFound = false;
 
   for( ;; ) {
     if( !(is >> c) )
-      return endFound;
+      return false;
 
     if (isspace(c))
       continue;
-
-    if (endFound)
-      return false;
 
     if( c == ')' ) {
       if (sepFound)
         return false;
 
-      endFound = true;
-      continue;
+      return true;
     }
 
     if (c == ',') {
