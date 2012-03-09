@@ -73,6 +73,12 @@ public:
   virtual ~Plugin() {}
 
   /**
+    @brief The icon (preferably a thumbnail) of the plugin
+    @return std::string the icon path
+    */
+  virtual std::string icon() const;
+
+  /**
     @brief A string identifier for a plugin used for categorization purposes.
     @returns std::string the category of the plugin.
     */

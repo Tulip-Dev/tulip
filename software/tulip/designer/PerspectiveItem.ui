@@ -60,14 +60,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        <widget class="QLabel" name="icon">
         <property name="minimumSize">
          <size>
-          <width>64</width>
-          <height>64</height>
+          <width>48</width>
+          <height>48</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>64</width>
-          <height>64</height>
+          <width>48</width>
+          <height>48</height>
          </size>
         </property>
         <property name="text">

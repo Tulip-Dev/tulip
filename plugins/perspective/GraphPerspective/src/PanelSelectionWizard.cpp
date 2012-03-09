@@ -33,7 +33,7 @@ using namespace tlp;
 PanelSelectionItem::PanelSelectionItem(const Plugin *infos, QWidget *parent): QWidget(parent), _ui(new Ui::PanelSelectionItem) {
   _ui->setupUi(this);
   _viewName = infos->name().c_str();
-//  _ui->icon->setPixmap(QPixmap(infos->iconPath()));
+  _ui->icon->setPixmap(QPixmap(infos->icon().c_str()));
   _ui->name->setText("<p><span style=\"font-size:large;\"><b>" + QString(infos->name().c_str()) + "</b></span></p>");
   _ui->description->setText("<p><span style=\"color:#626262;\">" + QString(infos->info().c_str()) + "</span></p>");
 }

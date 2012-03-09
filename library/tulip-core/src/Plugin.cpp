@@ -62,3 +62,7 @@ std::string Plugin::tulipMinor() const  {
 int Plugin::id() const {
   return 0;
 }
+
+std::string Plugin::icon() const {
+  return ":/tulip/gui/icons/logo32x32.png";
+}

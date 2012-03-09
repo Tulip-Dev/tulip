@@ -35,7 +35,7 @@
 using namespace tlp;
 
 PluginInformations::PluginInformations(const tlp::Plugin* info, const std::string& type, const std::string& library)
-  :_lastVersion(info->release().c_str()), _type(type.c_str()), _iconPath(":/tulip/gui/icons/logo32x32.png"), _longDescriptionPath("about:blank"), _isLocal(true),
+  :_lastVersion(info->release().c_str()), _type(type.c_str()), _iconPath(info->icon().c_str()), _longDescriptionPath("about:blank"), _isLocal(true),
    _installedVersion(info->release().c_str()), _updateAvailable(false), _version(info->release().c_str()), _infos(info), _library(library.c_str()) {
 }
 
