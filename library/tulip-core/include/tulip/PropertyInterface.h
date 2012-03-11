@@ -76,6 +76,10 @@ public:
   virtual void copy(const edge src, const edge dst , PropertyInterface *prop,
                     bool ifNotDefault = false) =0;
   /**
+   * Copies the values held by the property argument on this property
+   */
+  virtual void copy(PropertyInterface* prop) = 0;
+  /**
     * Creates an object of the same real type of the current property, in the
     * the graph (first parameter) with the name (second parameter).
     * Values are not copied.
