@@ -88,36 +88,15 @@ template <class Tnode, class Tedge, class TPROPERTY>
 int tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compare(const node n1,const node n2)const {
   const typename Tnode::RealType& n1Value = getNodeValue(n1);
   const typename Tnode::RealType& n2Value = getNodeValue(n2);
-
-  if(n1Value < n2Value) {
-    return -1;
-  }
-  else if(n1Value == n2Value) {
-    return 0;
-  }
-  else {
-    return 1;
-  }
+  return (n1Value < n2Value) ? -1 : ((n1Value == n2Value) ? 0 : 1);
 }
-
+//============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
 int tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compare(const edge e1,const edge e2)const {
   const typename Tedge::RealType& e1Value = getEdgeValue(e1);
   const typename Tedge::RealType& e2Value = getEdgeValue(e2);
-
-  if(e1Value < e2Value) {
-    return -1;
-  }
-  else if(e1Value == e2Value) {
-    return 0;
-  }
-  else {
-    return 1;
-  }
+  return (e1Value < e2Value) ? -1 : ((e1Value == e2Value) ? 0 : 1);
 }
-
-
-
 //============================================================
 // define template iterator class to iterate over graph elts
 // belonging to a given graph instance

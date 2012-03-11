@@ -151,11 +151,6 @@ public:
   //=================================================================================
   virtual AbstractProperty<Tnode,Tedge,TPROPERTY>& operator =(AbstractProperty<Tnode,Tedge,TPROPERTY> &prop) {
     if (this!= &prop) {
-      //=============================================================
-      //The backup is necessary, if a proxy is a function which use the value of "*this"
-      //Future implementation should take into account : recursive or not
-      //It will enable to preserve the backup cost in a lot of case.
-      //=============================================================
       if (graph == 0) graph = prop.graph;
 
       if (graph == prop.graph) {
@@ -179,48 +174,24 @@ public:
         delete itE;
       }
       else {
-        MutableContainer<typename Tnode::RealType> backupNode;
-        MutableContainer<typename Tedge::RealType> backupEdge;
-        backupNode.setAll(prop.nodeDefaultValue);
-        backupEdge.setAll(prop.edgeDefaultValue);
-        Iterator<node> *itN=graph->getNodes();
-
-        while (itN->hasNext()) {
-          node itn=itN->next();
-
-          if (prop.graph->isElement(itn))
-            backupNode.set(itn.id,prop.getNodeValue(itn));
-        }
-
-        delete itN;
-        Iterator<edge> *itE=graph->getEdges();
-
-        while (itE->hasNext()) {
-          edge ite=itE->next();
-
-          if (prop.graph->isElement(ite))
-            backupEdge.set(ite.id,prop.getEdgeValue(ite));
-        }
-
-        delete itE;
         //==============================================================*
-        itN=graph->getNodes();
+        Iterator<node>* itN = graph->getNodes();
 
         while (itN->hasNext()) {
           node itn=itN->next();
 
           if (prop.graph->isElement(itn))
-            setNodeValue(itn,backupNode.get(itn.id));
+            setNodeValue(itn, prop.getNodeValue(itn));
         }
 
         delete itN;
-        itE=graph->getEdges();
+        Iterator<edge>*itE = graph->getEdges();
 
         while (itE->hasNext()) {
           edge ite=itE->next();
 
           if (prop.graph->isElement(ite))
-            setEdgeValue(ite,backupEdge.get(ite.id));
+            setEdgeValue(ite, prop.getEdgeValue(ite));
         }
 
         delete itE;
@@ -304,7 +275,7 @@ public:
    **/
   virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* g = NULL) const;
   /**
-   * @brief Copies the value help by a property on a node to another node on this property.
+   * @brief Copies the value held by a property on a node to another node on this property.
    *
    * @param destination The node to copy the value to.
    * @param source The node to copy the value from.
@@ -330,7 +301,7 @@ public:
     setNodeValue(destination, value);
   }
   /**
-   * @brief Copies the value help by a property on an edge to another edge on this property.
+   * @brief Copies the value held by a property on an edge to another edge on this property.
    *
    * @param destination The edge to copy the value to.
    * @param source The edge to copy the value from.
@@ -354,6 +325,17 @@ public:
       return;
 
     setEdgeValue(destination, value);
+  }
+  /**
+   * @brief Copies the values held by a property on this property
+   * @param the property to copy
+   * @return void
+   **/
+  virtual void copy(PropertyInterface* property) {
+    tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* prop =
+      dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(property);
+    assert(prop != NULL);
+    *this = *prop;
   }
   // for performance reason and use in GraphUpdatesRecorder
   virtual DataMem* getNodeDefaultDataMemValue() const {
@@ -431,7 +413,7 @@ public:
   /**
     * @brief Default implementation of PropertyInterface::compare(edge e1,edge e2)
     **/
-  int compare(const edge e1,const edge e2) const;
+  int compare(const edge e1, const edge e2) const;
 
 
   /**
@@ -461,7 +443,6 @@ protected:
   ///Enable to clone part of sub_class
   virtual void clone_handler(AbstractProperty<Tnode,Tedge,TPROPERTY> &) {}
 
-protected:
   MutableContainer<typename Tnode::RealType> nodeProperties;
   MutableContainer<typename Tedge::RealType> edgeProperties;
   typename Tnode::RealType nodeDefaultValue;
