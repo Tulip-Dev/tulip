@@ -26,7 +26,7 @@
 
 using namespace tlp;
 
-GlMainView::GlMainView(): _overviewVisible(false), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL) {
+GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL) {
 }
 
 GlMainView::~GlMainView() {

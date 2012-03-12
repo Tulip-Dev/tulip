@@ -50,7 +50,7 @@ class TLP_GL_SCOPE GlGraphHighDetailsRenderer : public GlGraphRenderer {
 
 public:
 
-  GlGraphHighDetailsRenderer(GlGraphInputData &inputData);
+  GlGraphHighDetailsRenderer(const GlGraphInputData *inputData);
 
   ~GlGraphHighDetailsRenderer();
 

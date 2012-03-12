@@ -36,7 +36,7 @@ using namespace std;
 
 namespace tlp {
 
-GlGraphLowDetailsRenderer::GlGraphLowDetailsRenderer(GlGraphInputData &inputData):GlGraphRenderer(inputData),buildVBO(true) {
+GlGraphLowDetailsRenderer::GlGraphLowDetailsRenderer(const GlGraphInputData *inputData):GlGraphRenderer(inputData),buildVBO(true) {
   fakeScene = new GlScene;
   fakeScene->addLayer(new GlLayer("fakeLayer"));
   addObservers();
@@ -48,9 +48,9 @@ GlGraphLowDetailsRenderer::~GlGraphLowDetailsRenderer() {
 }
 //====================================================
 void GlGraphLowDetailsRenderer::initEdgesArray() {
-  Graph *graph=inputData.getGraph();
-  LayoutProperty *layout=inputData.getElementLayout();
-  ColorProperty *color=inputData.getElementColor();
+  Graph *graph=inputData->getGraph();
+  LayoutProperty *layout=inputData->getElementLayout();
+  ColorProperty *color=inputData->getElementColor();
 
   size_t nbEdges = graph->numberOfEdges();
   size_t nbBends = 0;
@@ -106,10 +106,10 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
 }
 //====================================================
 void GlGraphLowDetailsRenderer::initNodesArray() {
-  Graph *graph=inputData.getGraph();
-  LayoutProperty *layout=inputData.getElementLayout();
-  ColorProperty *color=inputData.getElementColor();
-  SizeProperty *size=inputData.getElementSize();
+  Graph *graph=inputData->getGraph();
+  LayoutProperty *layout=inputData->getElementLayout();
+  ColorProperty *color=inputData->getElementColor();
+  SizeProperty *size=inputData->getElementSize();
 
   size_t nbNodes= graph->numberOfNodes();
   quad_points.resize(nbNodes * 4);
@@ -194,15 +194,15 @@ void GlGraphLowDetailsRenderer::draw(float ,Camera*) {
 }
 
 void GlGraphLowDetailsRenderer::addObservers() {
-  observedGraph = inputData.getGraph();
+  observedGraph = inputData->getGraph();
   observedGraph->addListener(this);
-  observedLayoutProperty=inputData.getElementLayout();
+  observedLayoutProperty=inputData->getElementLayout();
   observedLayoutProperty->addPropertyObserver(this);
-  observedSizeProperty=inputData.getElementSize();
+  observedSizeProperty=inputData->getElementSize();
   observedSizeProperty->addPropertyObserver(this);
-  observedSelectionProperty=inputData.getElementSelected();
+  observedSelectionProperty=inputData->getElementSelected();
   observedSelectionProperty->addPropertyObserver(this);
-  observedColorProperty=inputData.getElementColor();
+  observedColorProperty=inputData->getElementColor();
   observedColorProperty->addPropertyObserver(this);
 }
 
@@ -233,12 +233,12 @@ void GlGraphLowDetailsRenderer::treatEvent(const Event &ev) {
 
     case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
     case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
-      const PropertyInterface *property=inputData.getGraph()->getProperty(graphEvent->getPropertyName());
+      const PropertyInterface *property=inputData->getGraph()->getProperty(graphEvent->getPropertyName());
 
-      if(property == inputData.getElementLayout()
-          || property == inputData.getElementSize()
-          || property == inputData.getElementColor()
-          || property == inputData.getElementSelected()) {
+      if(property == inputData->getElementLayout()
+          || property == inputData->getElementSize()
+          || property == inputData->getElementColor()
+          || property == inputData->getElementSelected()) {
         buildVBO=true;
         updateObservers();
       }
