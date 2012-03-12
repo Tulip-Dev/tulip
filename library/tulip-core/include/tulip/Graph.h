@@ -881,7 +881,7 @@ protected:
 protected:
 
   unsigned int id;
-  std::set<tlp::PropertyInterface*> circularCalls;
+  TLP_HASH_MAP<std::string, tlp::PropertyInterface*> circularCalls;
 };
 
 /// Event class for specific events on Graph
