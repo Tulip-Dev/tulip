@@ -36,7 +36,7 @@ using namespace std;
 namespace tlp {
 
 void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntities) {
-  Graph *graph=inputData.getGraph();
+  Graph *graph=inputData->getGraph();
 
   if(!graph)
     return;
@@ -67,7 +67,7 @@ void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntiti
 }
 
 void GlGraphRenderer::visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities) {
-  if(parameters.isDisplayNodes() || parameters.isDisplayMetaNodes() || visitHiddenEntities) {
+  if(inputData->parameters->isDisplayNodes() || inputData->parameters->isDisplayMetaNodes() || visitHiddenEntities) {
     visitor->reserveMemoryForNodes(graph->numberOfNodes());
     GlNode glNode(0);
     bool isMetaNode;
@@ -76,9 +76,9 @@ void GlGraphRenderer::visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visit
 
     while (nodesIterator->hasNext()) {
       node n=nodesIterator->next();
-      isMetaNode = inputData.getGraph()->isMetaNode(n);
+      isMetaNode = inputData->getGraph()->isMetaNode(n);
 
-      if((parameters.isDisplayNodes() && !isMetaNode) || (parameters.isDisplayMetaNodes() && isMetaNode) || visitHiddenEntities) {
+      if((inputData->parameters->isDisplayNodes() && !isMetaNode) || (inputData->parameters->isDisplayMetaNodes() && isMetaNode) || visitHiddenEntities) {
         glNode.id=n.id;
         glNode.acceptVisitor(visitor);
       }
@@ -89,7 +89,7 @@ void GlGraphRenderer::visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visit
 }
 
 void GlGraphRenderer::visitEdges(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities) {
-  if(parameters.isDisplayEdges() || visitHiddenEntities) {
+  if(inputData->parameters->isDisplayEdges() || visitHiddenEntities) {
     visitor->reserveMemoryForEdges(graph->numberOfEdges());
 
     GlEdge glEdge(0);

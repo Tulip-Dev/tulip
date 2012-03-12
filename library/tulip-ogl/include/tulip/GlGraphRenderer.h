@@ -41,7 +41,7 @@ public:
    * \param inputData : GlGraphInputData used by renderer to display the graph
    * \param parameters : GlGraphRenderingParameters used by renderer to display the graph
    */
-  GlGraphRenderer(GlGraphInputData &inputData):inputData(inputData),parameters(*inputData.parameters),graphModified(true),selectionDrawActivate(false),selectionIdMap(NULL),selectionCurrentId(NULL) {
+  GlGraphRenderer(const GlGraphInputData *inputData):inputData(inputData),graphModified(true),selectionDrawActivate(false),selectionIdMap(NULL),selectionCurrentId(NULL) {
   }
 
   virtual ~GlGraphRenderer() {}
@@ -87,8 +87,7 @@ protected:
   void visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
   void visitEdges(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities=false);
 
-  const GlGraphInputData &inputData;
-  const GlGraphRenderingParameters &parameters;
+  const GlGraphInputData* inputData;
 
   bool graphModified;
 
