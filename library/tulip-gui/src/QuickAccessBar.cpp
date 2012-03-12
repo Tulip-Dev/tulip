@@ -30,6 +30,7 @@ public:
   bool eventFilter(QObject*, QEvent* ev) {
     if (ev->type() == QEvent::MouseButtonPress) {
       QMouseEvent* mouseEv = static_cast<QMouseEvent*>(ev);
+
       if (!_view->geometry().contains(mouseEv->globalPos()))
         _view->close();
       else {
@@ -37,11 +38,13 @@ public:
         _view->close();
       }
     }
+
     return false;
   }
 
   virtual void showPopup() {
     QPoint mainWindowPos = tlp::Perspective::instance()->mainWindow()->pos();
+
     if (_view == NULL) {
       _view = findChild<QListView*>();
       _view->installEventFilter(this);

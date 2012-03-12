@@ -37,8 +37,8 @@ using namespace std;
 
 namespace tlp {
 
-  GlGraphComposite::GlGraphComposite(Graph* graph, GlGraphRenderer *graphRenderer):nodesModified(true),inputData(graph,&parameters),graphRenderer(graphRenderer) {
-  if(graphRenderer==NULL){
+GlGraphComposite::GlGraphComposite(Graph* graph, GlGraphRenderer *graphRenderer):nodesModified(true),inputData(graph,&parameters),graphRenderer(graphRenderer) {
+  if(graphRenderer==NULL) {
     this->graphRenderer=new GlGraphHighDetailsRenderer(&inputData);
   }
 
