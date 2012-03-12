@@ -90,6 +90,7 @@ static std::vector<std::string> getItemGroupNames(const std::string &itemGroup) 
     groupNames.push_back(itemGroup.substr(start, end - start));
     start = itemGroup.find_first_not_of(separator, end);
   }
+
   return groupNames;
 }
 //**********************************************************************
