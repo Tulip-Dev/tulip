@@ -8,6 +8,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QApplication>
 
+#include <tulip/GraphPropertiesModel.h>
 #include <tulip/TulipFontDialog.h>
 #include <tulip/ForEach.h>
 #include <tulip/ColorProperty.h>
@@ -20,14 +21,44 @@
 #include <tulip/Perspective.h>
 
 class TopPopupComboBox: public QComboBox {
+  QListView* _view;
+
 public:
-  TopPopupComboBox(QWidget* parent = 0): QComboBox(parent) {
+  TopPopupComboBox(QWidget* parent = 0): QComboBox(parent), _view(NULL) {
+  }
+
+  bool eventFilter(QObject*, QEvent* ev) {
+    if (ev->type() == QEvent::MouseButtonPress) {
+      QMouseEvent* mouseEv = static_cast<QMouseEvent*>(ev);
+      if (!_view->geometry().contains(mouseEv->globalPos()))
+        _view->close();
+      else {
+        setCurrentIndex(_view->indexAt(mouseEv->pos()).row());
+        _view->close();
+      }
+    }
+    return false;
   }
 
   virtual void showPopup() {
-    QComboBox::showPopup();
-    QListView* view = findChild<QListView*>();
-    view->move(2,-100);
+    QPoint mainWindowPos = tlp::Perspective::instance()->mainWindow()->pos();
+    if (_view == NULL) {
+      _view = findChild<QListView*>();
+      _view->installEventFilter(this);
+      _view->viewport()->installEventFilter(this);
+      _view->setParent(NULL);
+      _view->setMouseTracking(true);
+    }
+
+    _view->setAutoScroll(false);
+    _view->setWindowFlags(Qt::Popup);
+    _view->resize(width(),200);
+    _view->move(mapToGlobal(pos()).x()+mainWindowPos.x(),QCursor::pos().y()-200-height()/2);
+    _view->show();
+  }
+
+  virtual void hidePopup() {
+    _view->close();
   }
 
 };
@@ -46,6 +77,7 @@ void QuickAccessBar::setGlMainView(GlMainView* v) {
 }
 
 void QuickAccessBar::reset() {
+  _resetting = true;
   _ui->backgroundColorButton->setTulipColor(scene()->getBackgroundColor());
   _ui->nodeColorButton->setTulipColor(inputData()->getElementColor()->getNodeDefaultValue());
   _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
@@ -55,10 +87,9 @@ void QuickAccessBar::reset() {
   _ui->showLabelsToggle->setChecked(renderingParameters()->isViewNodeLabel());
   _ui->labelPropertyCombo->clear();
   _ui->labelPropertyCombo->addItem(trUtf8("Values on labels"));
-  std::string prop;
-  forEach(prop,_mainView->graph()->getProperties())
-  _ui->labelPropertyCombo->addItem(prop.c_str());
+  _ui->labelPropertyCombo->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Select property on labels"), _mainView->graph()));
   updateFontButtonStyle();
+  _resetting = false;
 }
 
 void QuickAccessBar::takeSnapshot() {
@@ -101,10 +132,12 @@ void QuickAccessBar::setLabelProperty(const QString& prop) {
   StringProperty *out = inputData()->getElementLabel();
 
   if (_ui->labelPropertyCombo->currentIndex() == 0) {
-    out->setAllNodeValue("");
-    out->setAllEdgeValue("");
+    if (!_resetting) {
+      qWarning("reset");
+      out->setAllNodeValue("");
+      out->setAllEdgeValue("");
+    }
   }
-
   else if (_mainView->graph()->existProperty(prop.toStdString())) {
     PropertyInterface *in = _mainView->graph()->getProperty(prop.toStdString());
 

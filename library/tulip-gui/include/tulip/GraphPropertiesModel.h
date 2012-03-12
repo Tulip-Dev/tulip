@@ -13,9 +13,11 @@ namespace tlp {
 template<typename PROPTYPE>
 class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
   tlp::Graph* _graph;
+  QString _placeholder;
 
 public:
   explicit GraphPropertiesModel(tlp::Graph* graph, QObject *parent = 0);
+  explicit GraphPropertiesModel(QString placeholder, tlp::Graph* graph, QObject *parent = 0);
 
   // Methods re-implemented from QAbstractItemModel
   QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
