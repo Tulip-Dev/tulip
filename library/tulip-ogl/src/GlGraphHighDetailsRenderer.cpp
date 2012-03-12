@@ -106,7 +106,7 @@ public:
 //
 //===================================================================
 
-GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer( GlGraphInputData &inputData, GlGraphRenderingParameters &parameters):GlGraphRenderer(inputData,parameters) {
+GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer( GlGraphInputData &inputData):GlGraphRenderer(inputData) {
   lodCalculator=NULL;
   fakeScene = new GlScene;
   fakeScene->addLayer(new GlLayer("fakeLayer"));

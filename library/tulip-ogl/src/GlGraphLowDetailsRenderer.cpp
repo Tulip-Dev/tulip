@@ -36,7 +36,7 @@ using namespace std;
 
 namespace tlp {
 
-GlGraphLowDetailsRenderer::GlGraphLowDetailsRenderer(GlGraphInputData &inputData, GlGraphRenderingParameters &parameters):GlGraphRenderer(inputData,parameters),buildVBO(true) {
+GlGraphLowDetailsRenderer::GlGraphLowDetailsRenderer(GlGraphInputData &inputData):GlGraphRenderer(inputData),buildVBO(true) {
   fakeScene = new GlScene;
   fakeScene->addLayer(new GlLayer("fakeLayer"));
   addObservers();

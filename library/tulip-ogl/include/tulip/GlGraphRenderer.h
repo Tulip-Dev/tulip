@@ -41,7 +41,7 @@ public:
    * \param inputData : GlGraphInputData used by renderer to display the graph
    * \param parameters : GlGraphRenderingParameters used by renderer to display the graph
    */
-  GlGraphRenderer(GlGraphInputData &inputData,GlGraphRenderingParameters &parameters):inputData(inputData),parameters(parameters),graphModified(true),selectionDrawActivate(false),selectionIdMap(NULL),selectionCurrentId(NULL) {
+  GlGraphRenderer(GlGraphInputData &inputData):inputData(inputData),parameters(*inputData.parameters),graphModified(true),selectionDrawActivate(false),selectionIdMap(NULL),selectionCurrentId(NULL) {
   }
 
   virtual ~GlGraphRenderer() {}

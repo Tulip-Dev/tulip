@@ -50,7 +50,7 @@ class TLP_GL_SCOPE GlGraphLowDetailsRenderer : public GlGraphRenderer, public Ob
 
 public:
 
-  GlGraphLowDetailsRenderer(GlGraphInputData &inputData,GlGraphRenderingParameters &parameters);
+  GlGraphLowDetailsRenderer(GlGraphInputData &inputData);
 
   ~GlGraphLowDetailsRenderer();
 

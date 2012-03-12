@@ -39,7 +39,7 @@ namespace tlp {
 
 GlGraphComposite::GlGraphComposite(Graph* graph, GlGraphRenderer *graphRenderer):inputData(graph,&parameters),nodesModified(true) {
   if(graphRenderer==NULL){
-    this->graphRenderer=new GlGraphHighDetailsRenderer(inputData,parameters);
+    this->graphRenderer=new GlGraphHighDetailsRenderer(inputData);
   }
 
   if(!graph) {
