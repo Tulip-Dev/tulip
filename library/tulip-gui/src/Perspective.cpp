@@ -58,4 +58,8 @@ PluginProgress* Perspective::progress() {
   return dlg;
 }
 
+QMainWindow* Perspective::mainWindow() const {
+  return _mainWindow;
+}
+
 }

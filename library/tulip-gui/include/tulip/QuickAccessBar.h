@@ -37,10 +37,8 @@ public slots:
 
   void setBackgroundColor(const QColor&);
   void setColorInterpolation(bool);
-  void scaleFont(int);
   void setLabelColor(const QColor&);
   void setNodeColor(const QColor&);
-  void scaleNodes(int);
   void takeSnapshot();
   void setLabelProperty(const QString&);
   void setEdgesVisible(bool);

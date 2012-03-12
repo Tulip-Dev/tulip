@@ -49,7 +49,6 @@ public:
 
   GraphPerspective(const tlp::PluginContext* c);
   virtual void construct(tlp::PluginProgress *);
-
   tlp::GraphHierarchiesModel* model() const;
 
 public slots:

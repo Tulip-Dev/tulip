@@ -205,9 +205,9 @@ QVariant GraphHierarchiesModel::headerData(int section, Qt::Orientation orientat
       else if (section == ID_SECTION)
         return trUtf8("Id");
       else if (section == NODES_SECTION)
-        return trUtf8("N");
+        return trUtf8("Nodes");
       else if (section == EDGES_SECTION)
-        return trUtf8("E");
+        return trUtf8("Edges");
     }
 
     else if (role == Qt::TextAlignmentRole && section != NAME_SECTION)
@@ -334,7 +334,7 @@ void GraphHierarchiesModel::readProject(tlp::TulipProject *project, tlp::PluginP
     QString absolutePath = project->toAbsolutePath(file);
     DataSet data;
     data.set<std::string>("file::filename",absolutePath.toStdString());
-    Graph* g = tlp::importGraph("TlpJsonImport",data,progress);
+    Graph* g = tlp::importGraph("JSON Import",data,progress);
     addGraph(g);
   }
 }

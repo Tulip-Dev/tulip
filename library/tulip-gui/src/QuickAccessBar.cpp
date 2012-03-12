@@ -1,6 +1,12 @@
 #include "tulip/QuickAccessBar.h"
 
 #include <QtGui/QFontDatabase>
+#include <QtGui/QComboBox>
+#include <QtCore/QDebug>
+#include <QtGui/QListView>
+#include <QtGui/QMainWindow>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QApplication>
 
 #include <tulip/TulipFontDialog.h>
 #include <tulip/ForEach.h>
@@ -11,9 +17,22 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlGraphInputData.h>
-#include "ui_QuickAccessBar.h"
+#include <tulip/Perspective.h>
 
-#include <QtCore/QDebug>
+class TopPopupComboBox: public QComboBox {
+public:
+  TopPopupComboBox(QWidget* parent = 0): QComboBox(parent) {
+  }
+
+  virtual void showPopup() {
+    QComboBox::showPopup();
+    QListView* view = findChild<QListView*>();
+    view->move(2,-100);
+  }
+
+};
+
+#include "ui_QuickAccessBar.h"
 
 using namespace tlp;
 
@@ -53,35 +72,6 @@ void QuickAccessBar::setBackgroundColor(const QColor& c) {
 void QuickAccessBar::setColorInterpolation(bool f) {
   renderingParameters()->setEdgeColorInterpolate(f);
   _mainView->emitDrawNeededSignal();
-}
-void QuickAccessBar::scaleFont(int scale) {
-  Observable::holdObservers();
-
-  double realScale = scale/10.;
-  IntegerProperty* in = inputData()->getElementFontSize();
-  IntegerProperty* out = new IntegerProperty(_mainView->graph());
-
-  // nodes
-  out->setAllNodeValue((in->getNodeDefaultValue() / _oldFontScale) * realScale);
-  node n;
-  forEach(n,_mainView->graph()->getNodes()) {
-    int oldSize = in->getNodeValue(n);
-    out->setNodeValue(n,(oldSize / _oldFontScale) * realScale);
-  }
-
-  // edges
-  out->setAllEdgeValue((in->getEdgeDefaultValue() / _oldFontScale) * realScale);
-  edge e;
-  forEach(e,_mainView->graph()->getEdges()) {
-    int oldSize = in->getEdgeValue(e);
-    out->setEdgeValue(e,ceil((oldSize * 1. / _oldFontScale) * realScale));
-  }
-
-  *in = *out;
-  delete out;
-
-  _oldFontScale = realScale;
-  Observable::unholdObservers();
 }
 
 void QuickAccessBar::setLabelColor(const QColor& c) {
@@ -148,31 +138,6 @@ void QuickAccessBar::setNodeColor(const QColor& c) {
     tmp->setEdgeValue(e,colors->getEdgeValue(e));
   }
   *colors = *tmp;
-  Observable::unholdObservers();
-}
-
-void QuickAccessBar::scaleNodes(int scale) {
-  Observable::holdObservers();
-
-  double realScale = scale/10.;
-  SizeProperty* in = inputData()->getElementSize();
-  SizeProperty* out = new SizeProperty(_mainView->graph());
-
-  // nodes
-  out->setAllNodeValue((in->getNodeDefaultValue() / _oldFontScale) * realScale);
-  node n;
-  forEach(n,_mainView->graph()->getNodes())
-  out->setNodeValue(n,(in->getNodeValue(n) / _oldFontScale) * realScale);
-
-  // edges
-  out->setAllEdgeValue(in->getEdgeDefaultValue());
-  edge e;
-  forEach(e,_mainView->graph()->getEdges())
-  out->setEdgeValue(e,in->getEdgeValue(e));
-
-  _oldFontScale = realScale;
-  *in = *out;
-  delete out;
   Observable::unholdObservers();
 }
 
