@@ -9,7 +9,7 @@ using namespace tlp;
 
 SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(NULL), _resetting(false) {
   _ui->setupUi(this);
-  _ui->labelSizesSpanSlider->setHandleMovementMode(QxtSpanSlider::NoCrossing);
+  _ui->labelSizesSpanSlider->setHandleMovementMode(QxtSpanSlider::FreeMovement);
   _ui->labelsDisabledLabel->installEventFilter(this);
   _ui->labelsNoOverlapLabel->installEventFilter(this);
   _ui->labelsShowAllLabel->installEventFilter(this);

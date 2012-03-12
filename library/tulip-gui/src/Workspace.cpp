@@ -222,7 +222,6 @@ void Workspace::delView(tlp::View* view) {
 }
 
 void Workspace::panelDestroyed(QObject* obj) {
-  qWarning() << __PRETTY_FUNCTION__;
   WorkspacePanel* panel = static_cast<WorkspacePanel*>(obj);
   int removeCount = _panels.removeAll(panel);
 
@@ -243,7 +242,7 @@ void Workspace::panelDestroyed(QObject* obj) {
 
   updateAvailableModes();
 
-  if (!_modeSwitches[currentModeWidget()]->isEnabled()) {
+  if (!_modeSwitches[currentModeWidget()]->isVisible()) {
     int maxSize = 0;
     QWidget* fallbackMode = _ui->startupPage;
 

@@ -264,31 +264,6 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="ScrollPopupButton" name="nodeSizeScaleButton">
-     <property name="maximumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>Scale nodes</string>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-     <property name="minimum" stdset="0">
-      <number>1</number>
-     </property>
-     <property name="maximum" stdset="0">
-      <number>100</number>
-     </property>
-     <property name="value" stdset="0">
-      <number>10</number>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="Line" name="sep3">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -378,32 +353,7 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="ScrollPopupButton" name="fontSizeScaleButton">
-     <property name="maximumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>Scale labels</string>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-     <property name="minimum" stdset="0">
-      <number>1</number>
-     </property>
-     <property name="maximum" stdset="0">
-      <number>100</number>
-     </property>
-     <property name="value" stdset="0">
-      <number>10</number>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QComboBox" name="labelPropertyCombo">
+    <widget class="TopPopupComboBox" name="labelPropertyCombo">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -422,11 +372,6 @@ background-color: rgba(255,255,255,100);
      <item>
       <property name="text">
        <string>Value on labels</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>test</string>
       </property>
      </item>
     </widget>
@@ -456,12 +401,9 @@ background-color: rgba(255,255,255,100);
    </slots>
   </customwidget>
   <customwidget>
-   <class>ScrollPopupButton</class>
-   <extends>QPushButton</extends>
-   <header location="global">tulip/ScrollPopupButton.h</header>
-   <slots>
-    <signal>valueChanged(int)</signal>
-   </slots>
+   <class>TopPopupComboBox</class>
+   <extends>QComboBox</extends>
+   <header>tulip/QuickAccessBar.h</header>
   </customwidget>
  </customwidgets>
  <resources>
@@ -604,38 +546,6 @@ background-color: rgba(255,255,255,100);
    <hints>
     <hint type="sourcelabel">
      <x>605</x>
-     <y>16</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>549</x>
-     <y>17</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>nodeSizeScaleButton</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>QuickAccessBar</receiver>
-   <slot>scaleNodes(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>245</x>
-     <y>16</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>549</x>
-     <y>17</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>fontSizeScaleButton</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>QuickAccessBar</receiver>
-   <slot>scaleFont(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>396</x>
      <y>16</y>
     </hint>
     <hint type="destinationlabel">

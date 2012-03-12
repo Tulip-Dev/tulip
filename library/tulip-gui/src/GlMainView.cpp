@@ -108,6 +108,7 @@ void GlMainView::setQuickAccessBarVisible(bool visible) {
     _quickAccessBarItem = new QGraphicsProxyWidget();
     _quickAccessBarItem->setWidget(_quickAccessBar);
     addToScene(_quickAccessBarItem);
+    _quickAccessBarItem->setZValue(10);
   }
 }
 
