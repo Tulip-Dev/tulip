@@ -49,7 +49,7 @@ namespace tlp {
 
 static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, ParameterDescriptionList> > paramMaps;
 
-ParameterDescriptionList& ControllerAlgorithmTools::getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
+ParameterDescriptionList& ControllerAlgorithmTools::getPluginParameters(TemplateFactoryInterface *factory, const std::string &name) {
   TLP_HASH_MAP<std::string, ParameterDescriptionList>::const_iterator it;
   it = paramMaps[(unsigned long) factory].find(name);
 
