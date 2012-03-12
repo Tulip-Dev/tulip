@@ -45,17 +45,16 @@
 #include <tulip/StableIterator.h>
 #include <tulip/ForEach.h>
 #include <tulip/DrawingTools.h>
-
-#include "tulip/ControllerAlgorithmTools.h"
-#include "tulip/ControllerViewsTools.h"
-#include "tulip/TabWidget.h"
-#include "tulip/ViewPluginsManager.h"
-#include "tulip/Morphing.h"
-#include "tulip/FindSelectionWidget.h"
-#include "tulip/NodeLinkDiagramComponent.h"
-#include "tulip/GlMainWidget.h"
-#include "tulip/InteractorManager.h"
-#include "tulip/SnapshotDialog.h"
+#include <tulip/ControllerAlgorithmTools.h>
+#include <tulip/ControllerViewsTools.h>
+#include <tulip/TabWidget.h>
+#include <tulip/ViewPluginsManager.h>
+#include <tulip/Morphing.h>
+#include <tulip/FindSelectionWidget.h>
+#include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/InteractorManager.h>
+#include <tulip/SnapshotDialog.h>
 
 using namespace std;
 
@@ -76,26 +75,22 @@ static Graph* getCurrentSubGraph(Graph *graph,const string &name) {
   return (Graph *) 0;
 }
 //*********************************************************************
-static std::vector<std::string> getItemGroupNames(std::string itemGroup) {
-  std::string::size_type start = 0;
-  std::string::size_type end = 0;
-  std::vector<std::string> groupNames;
+static std::vector<std::string> getItemGroupNames(const std::string &itemGroup) {
   const char * separator = "::";
+  std::string::size_type end = 0;
+  std::string::size_type start = itemGroup.find_first_not_of(separator, end);
+  std::vector<std::string> groupNames;
 
-  while(true) {
-    start = itemGroup.find_first_not_of(separator, end);
-
-    if (start == std::string::npos) {
-      return groupNames;
-    }
-
+  while(start != std::string::npos) {
     end = itemGroup.find_first_of(separator, start);
 
     if (end == std::string::npos)
       end = itemGroup.length();
 
     groupNames.push_back(itemGroup.substr(start, end - start));
+    start = itemGroup.find_first_not_of(separator, end);
   }
+  return groupNames;
 }
 //**********************************************************************
 static void insertInMenu(QMenu &menu, string itemName, string itemGroup,
