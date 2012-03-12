@@ -99,7 +99,7 @@ void BasicLayoutTest::testDendrogram() {
 void BasicLayoutTest::testGEMLayout() {
   DataSet ds;
   ds.set("file::filename", string("unconnected.tlp"));
-  Graph* g = importGraph("tlpimport", ds, NULL, graph);
+  Graph* g = importGraph("TLP Import", ds, NULL, graph);
   CPPUNIT_ASSERT(g == graph);
   LayoutProperty prop(graph);
   string errorMsg;
