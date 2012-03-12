@@ -28,7 +28,6 @@
 
 class TlpImportExportTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE(TlpImportExportTest);
-  CPPUNIT_TEST(testLoad);
   CPPUNIT_TEST(testImport);
   CPPUNIT_TEST(testSave);
   CPPUNIT_TEST(testExport);

@@ -30,32 +30,28 @@
 #include <string>
 
 using namespace std;
-
 using namespace tlp;
+
+static Graph* tlp_loadGraph(const std::string& filename) {
+  DataSet dataSet;
+  dataSet.set("file::filename", filename);
+  Graph *sg = tlp::importGraph("TLP Import", dataSet);
+  return sg;
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION( TlpImportExportTest );
 
 //==========================================================
-void TlpImportExportTest::testLoad() {
-  Graph *graph = tlp::loadGraph("cette erreur fait partie de testLoad");
-  CPPUNIT_ASSERT(graph == NULL);
-  graph = tlp::loadGraph("TlpImportExportTest.cpp");
-  CPPUNIT_ASSERT(graph == NULL);
-  graph = tlp::loadGraph("DATA/filesystem.tlp.gz");
-  CPPUNIT_ASSERT(graph != NULL);
-  delete graph;
-}
-//==========================================================
 void TlpImportExportTest::testImport() {
   DataSet dataSet;
   dataSet.set("file::filename", std::string("cette erreur fait partie de testImport"));
-  Graph *graph = tlp::importGraph("tlpimport", dataSet, NULL);
+  Graph *graph = tlp::importGraph("TLP Import", dataSet, NULL);
   CPPUNIT_ASSERT(graph == NULL);
   dataSet.set("file::filename", std::string("TlpImportExportTest.cpp"));
-  graph = tlp::importGraph("tlpimport", dataSet, NULL);
+  graph = tlp::importGraph("TLP Import", dataSet, NULL);
   CPPUNIT_ASSERT(graph == NULL);
   dataSet.set("file::filename", std::string("DATA/filesystem.tlp.gz"));
-  graph = tlp::importGraph("tlpimport", dataSet, NULL);
+  graph = tlp::importGraph("TLP Import", dataSet, NULL);
   CPPUNIT_ASSERT(graph != NULL);
   delete graph;
 }
@@ -94,12 +90,12 @@ void TlpImportExportTest::testExport() {
   edge e1 = graph->addEdge(n1, n2);
   ostream *os = new ofstream("export_test.tlp");
   DataSet dataSet;
-  bool ok = exportGraph(graph, *os, "tlpexport", dataSet);
+  bool ok = exportGraph(graph, *os, "TLP Export", dataSet);
   delete graph;
   delete os;
   CPPUNIT_ASSERT(ok);
   graph = (Graph *) NULL;
-  graph = loadGraph("export_test.tlp");
+  graph = tlp_loadGraph("export_test.tlp");
   CPPUNIT_ASSERT(graph != NULL);
   node n;
   forEach(n, graph->getNodes()) {
@@ -124,12 +120,12 @@ void TlpImportExportTest::testExportCluster() {
   sg->addNode(n2);
   ostream *os = new ofstream("export_test.tlp");
   DataSet dataSet;
-  bool ok = exportGraph(graph, *os, "tlpexport", dataSet);
+  bool ok = exportGraph(graph, *os, "TLP Export", dataSet);
   delete graph;
   delete os;
   CPPUNIT_ASSERT(ok);
   graph = (Graph *) NULL;
-  graph = loadGraph("export_test.tlp");
+  graph = tlp_loadGraph("export_test.tlp");
   CPPUNIT_ASSERT(graph != NULL);
   node n;
   forEach(n, graph->getNodes()) {
@@ -194,12 +190,12 @@ void TlpImportExportTest::testExportAttributes() {
   sg->setAttribute("type = string", sstr);
 
   DataSet dataSet;
-  bool ok = exportGraph(graph, *os, "tlpexport", dataSet);
+  bool ok = exportGraph(graph, *os, "TLP Export", dataSet);
   delete graph;
   delete os;
   CPPUNIT_ASSERT(ok);
   graph = (Graph *) NULL;
-  graph = loadGraph("export_attributes.tlp");
+  graph = tlp_loadGraph("export_attributes.tlp");
   CPPUNIT_ASSERT(graph);
 
   b = false;
