@@ -27,6 +27,13 @@
 using namespace std;
 using namespace tlp;
 
+static Graph* tlp_loadGraph(const std::string& filename) {
+  DataSet dataSet;
+  dataSet.set("file::filename", filename);
+  Graph *sg = tlp::importGraph("TLP Import", dataSet);
+  return sg;
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION( ExtendedClusterOperationTest );
 //==========================================================
 void ExtendedClusterOperationTest::setUp() {
@@ -121,7 +128,7 @@ void ExtendedClusterOperationTest::testBugCreateOpenMetaNode() {
 //==========================================================
 void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   cerr << __PRETTY_FUNCTION__ << endl;
-  Graph * graph = tlp::loadGraph("./DATA/graphs/openmetanode1.tlp.gz");
+  Graph * graph = tlp_loadGraph("./DATA/graphs/openmetanode1.tlp.gz");
   //take the quotient graph
   Graph * subgraph = 0;
   bool find = false;

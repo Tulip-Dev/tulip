@@ -34,6 +34,13 @@
 using namespace std;
 using namespace tlp;
 
+static Graph* tlp_loadGraph(const std::string& filename) {
+  DataSet dataSet;
+  dataSet.set("file::filename", filename);
+  Graph *sg = tlp::importGraph("TLP Import", dataSet);
+  return sg;
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION( TestAlgorithmTest );
 
 //==========================================================
@@ -221,7 +228,7 @@ void TestAlgorithmTest::testBiconnected() {
   Graph *tmpGraph;
 
   for (unsigned int i = 0; i<5; ++i) {
-    tmpGraph = tlp::loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
+    tmpGraph = tlp_loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
     CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(tmpGraph));
     vector<edge> vEdges;
     BiconnectedTest::makeBiconnected(tmpGraph, vEdges);

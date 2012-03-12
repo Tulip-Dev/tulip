@@ -31,6 +31,13 @@ using namespace tlp;
 
 const std::string GRAPHPATH = "./DATA/graphs/";
 
+static Graph* tlp_loadGraph(const std::string& filename) {
+  DataSet dataSet;
+  dataSet.set("file::filename", filename);
+  Graph *sg = tlp::importGraph("TLP Import", dataSet);
+  return sg;
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION( PlanarityTestTest );
 //==========================================================
 void PlanarityTestTest::setUp() {
@@ -42,13 +49,13 @@ void PlanarityTestTest::tearDown() {
 }
 //==========================================================
 void PlanarityTestTest::planarGraphs() {
-  graph = tlp::loadGraph(GRAPHPATH + "planar/grid1010.tlp");
+  graph = tlp_loadGraph(GRAPHPATH + "planar/grid1010.tlp");
   CPPUNIT_ASSERT(PlanarityTest::isPlanar(graph));
   delete graph;
-  graph = tlp::loadGraph(GRAPHPATH + "planar/unconnected.tlp");
+  graph = tlp_loadGraph(GRAPHPATH + "planar/unconnected.tlp");
   CPPUNIT_ASSERT(PlanarityTest::isPlanar(graph));
   delete graph;
-  graph = tlp::loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
+  graph = tlp_loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
   CPPUNIT_ASSERT(PlanarityTest::isPlanar(graph));
   delete graph;
 }
@@ -58,17 +65,17 @@ void PlanarityTestTest::planarGraphs() {
  *
  */
 void PlanarityTestTest::planarEmbeddingFromLayoutGraphs() {
-  graph = tlp::loadGraph(GRAPHPATH + "planar/planar30drawnFPP.tlp.gz");
+  graph = tlp_loadGraph(GRAPHPATH + "planar/planar30drawnFPP.tlp.gz");
   LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
   layout->computeEmbedding(graph);
   CPPUNIT_ASSERT(PlanarityTest::isPlanarEmbedding(graph));
   delete graph;
-  graph = tlp::loadGraph(GRAPHPATH + "planar/planar30drawnMM.tlp.gz");
+  graph = tlp_loadGraph(GRAPHPATH + "planar/planar30drawnMM.tlp.gz");
   layout = graph->getProperty<LayoutProperty>("viewLayout");
   layout->computeEmbedding(graph);
   CPPUNIT_ASSERT(PlanarityTest::isPlanarEmbedding(graph));
   delete graph;
-  graph = tlp::loadGraph(GRAPHPATH + "notplanar/k33lostInGrip.tlp.gz");
+  graph = tlp_loadGraph(GRAPHPATH + "notplanar/k33lostInGrip.tlp.gz");
   layout = graph->getProperty<LayoutProperty>("viewLayout");
   layout->computeEmbedding(graph);
   CPPUNIT_ASSERT(!PlanarityTest::isPlanarEmbedding(graph));
@@ -76,13 +83,13 @@ void PlanarityTestTest::planarEmbeddingFromLayoutGraphs() {
 }
 //==========================================================
 void PlanarityTestTest::notPlanarGraphs() {
-  graph = tlp::loadGraph(GRAPHPATH + "notplanar/k33lostInGrip.tlp.gz");
+  graph = tlp_loadGraph(GRAPHPATH + "notplanar/k33lostInGrip.tlp.gz");
   CPPUNIT_ASSERT(!PlanarityTest::isPlanar(graph));
   delete graph;
-  graph = tlp::loadGraph(GRAPHPATH + "notplanar/k33k55.tlp.gz");
+  graph = tlp_loadGraph(GRAPHPATH + "notplanar/k33k55.tlp.gz");
   CPPUNIT_ASSERT(!PlanarityTest::isPlanar(graph));
   delete graph;
-  graph = tlp::loadGraph(GRAPHPATH + "notplanar/k5lostingrid5050.tlp.gz");
+  graph = tlp_loadGraph(GRAPHPATH + "notplanar/k5lostingrid5050.tlp.gz");
   CPPUNIT_ASSERT(!PlanarityTest::isPlanar(graph));
   delete graph;
 }
@@ -94,14 +101,14 @@ unsigned int eulerIdentity(Graph *graph) {
 //==========================================================
 void PlanarityTestTest::planarGraphsEmbedding() {
   cerr << "==================================" << endl;
-  graph = tlp::loadGraph(GRAPHPATH + "planar/grid1010.tlp");
+  graph = tlp_loadGraph(GRAPHPATH + "planar/grid1010.tlp");
   PlanarConMap *graphMap = computePlanarConMap(graph);
   //  graphMap->makePlanar();
   CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());
   delete graphMap;
   delete graph;
   cerr << "==================================" << endl;
-  graph = tlp::loadGraph(GRAPHPATH + "planar/unconnected.tlp");
+  graph = tlp_loadGraph(GRAPHPATH + "planar/unconnected.tlp");
   graph->setAttribute("name", string("unconnected"));
   // no planar connected map computed
   // beacause is not connected
@@ -110,7 +117,7 @@ void PlanarityTestTest::planarGraphsEmbedding() {
   delete graph;
   cerr << "==================================" << endl;
   cerr << "unbiconnected" << endl;
-  graph = tlp::loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
+  graph = tlp_loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
 
   graphMap = computePlanarConMap(graph);
 
@@ -124,26 +131,32 @@ void PlanarityTestTest::planarGraphsEmbedding() {
 //==========================================================
 void PlanarityTestTest::planarMetaGraphsEmbedding() {
   cerr << "===========MetaGraphsEmbedding=======================" << endl;
-  graph = tlp::loadGraph(GRAPHPATH + "planar/grid1010.tlp");
+  graph = tlp_loadGraph(GRAPHPATH + "planar/grid1010.tlp");
   Graph * g = graph->addCloneSubGraph();
   set<node> toGroup;
   Iterator<node> * itn = g->getNodes();
 
-  for(unsigned int i = 0; i < 10; ++i)
+  for(unsigned int i = 0; i < 10; ++i) {
+    assert(itn->hasNext());
     toGroup.insert(itn->next());
+  }
 
   node meta = g->createMetaNode(toGroup);
   toGroup.clear();
 
-  for(unsigned int i = 0; i < 10; ++i)
+  for(unsigned int i = 0; i < 10; ++i) {
+    assert(itn->hasNext());
     toGroup.insert(itn->next());
+  }
 
   node meta2 = g->createMetaNode(toGroup);
   toGroup.clear();
   toGroup.insert(meta2);
 
-  for(unsigned int i = 0; i < 10; ++i)
+  for(unsigned int i = 0; i < 10; ++i) {
+    assert(itn->hasNext());
     toGroup.insert(itn->next());
+  }
 
   node meta3 = g->createMetaNode(toGroup, false);
   toGroup.clear();
