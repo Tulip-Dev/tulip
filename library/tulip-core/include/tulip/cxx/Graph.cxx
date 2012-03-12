@@ -90,7 +90,10 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
   std::cerr << __PRETTY_FUNCTION__ << std::endl;
 #endif
 
-  if(circularCalls.find(prop) != circularCalls.end()) {
+  TLP_HASH_MAP<std::string, PropertyInterface *>::const_iterator it =
+    circularCalls.find(algorithm);
+
+  if (it != circularCalls.end() && (*it).second == prop) {
 #ifndef NDEBUG
     std::cerr << "Circular call of " << __PRETTY_FUNCTION__ << " " << msg << std::endl;
 #endif
@@ -105,18 +108,18 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
 
   tlp::PluginProgress *tmpProgress;
 
-  if (progress==0)
+  if (progress==NULL)
     tmpProgress=new tlp::SimplePluginProgress();
   else
     tmpProgress=progress;
 
-  tlp::PropertyContext* context = new tlp::PropertyContext(this, prop, data, tmpProgress);
+  tlp::PropertyContext context(this, prop, data, tmpProgress);
 
   tlp::Observable::holdObservers();
-  circularCalls.insert(prop);
-  typename PropertyType::PAlgorithm *tmpAlgo = tlp::PluginLister::instance()->getPluginObject<typename PropertyType::PAlgorithm>(algorithm, context);
+  circularCalls[algorithm] = prop;
+  typename PropertyType::PAlgorithm *tmpAlgo = tlp::PluginLister::instance()->getPluginObject<typename PropertyType::PAlgorithm>(algorithm, &context);
 
-  if (tmpAlgo != 0) {
+  if (tmpAlgo != NULL) {
     result = tmpAlgo->check(msg);
 
     if (result) {
@@ -130,10 +133,10 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
     result=false;
   }
 
-  circularCalls.erase(prop);
+  circularCalls.erase(algorithm);
   tlp::Observable::unholdObservers();
 
-  if (progress==0) delete tmpProgress;
+  if (progress==NULL) delete tmpProgress;
 
   return result;
 }
