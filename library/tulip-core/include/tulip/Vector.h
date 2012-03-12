@@ -121,6 +121,30 @@ inline VECTOR operator^(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
 inline VECTOR operator-(const VECTOR&);
 /**
+  * @brief typedef for 2D vector of unsigned int
+  */
+typedef Vector<unsigned int, 2> Vec2ui;
+/**
+  * @brief typedef for 3D vector of unsigned int
+  */
+typedef Vector<unsigned int, 3> Vec3ui;
+/**
+  * @brief typedef for 4D vector of unsigned int
+  */
+typedef Vector<unsigned int, 4> Vec4ui;
+/**
+  * @brief typedef for 2D vector of int
+  */
+typedef Vector<int, 2> Vec2i;
+/**
+  * @brief typedef for 3D vector of int
+  */
+typedef Vector<int, 3> Vec3i;
+/**
+  * @brief typedef for 4D vector of int
+  */
+typedef Vector<int, 4> Vec4i;
+/**
   * @brief typedef for 2D vector of double
   */
 typedef Vector<double, 2> Vec2d;
