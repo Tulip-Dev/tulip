@@ -803,8 +803,7 @@ struct WebImport:public ImportModule {
       DataSet tmp;
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
       tmp.set("initial layout", layout);
-      return graph->computeProperty("GEM (Frick)", layout,
-                                    errMsg, pluginProgress, &tmp);
+      return graph->applyPropertyAlgorithm("GEM (Frick)", layout, errMsg, pluginProgress, &tmp);
     }
 
     return true;
