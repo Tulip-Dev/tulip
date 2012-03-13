@@ -55,17 +55,16 @@ public slots:
   void showFullScreen(bool);
   void importGraph();
   void createPanel(tlp::Graph* g = NULL);
-
   void save();
   void saveAs(const QString& path=QString::null);
   void open(const QString& path=QString::null);
-
   void centerPanels(tlp::PropertyInterface*);
 
 protected slots:
   void currentGraphChanged(tlp::Graph* graph);
   void refreshDockExpandControls();
   void panelFocused(tlp::View*);
+  void focusedPanelGraphSet(tlp::Graph*);
   void modeSwitch();
   void deleteSelectedElements();
   void invertSelection();

@@ -72,7 +72,6 @@ public slots:
   void viewGraphSet(tlp::Graph*);
 
 signals:
-  void focused();
   void drawNeeded();
 
 protected slots:
