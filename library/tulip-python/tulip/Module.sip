@@ -23,7 +23,42 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%Module tulip 0
+%Module tulip
+
+// Hack to avoid overriding the tlp Python class (containing all the module classes as
+// nested classes and declared in each module : tulip, tulipogl, tulipqt) in the current
+// global namespace when importing the module the following way : from tulipogl import *
+%PreInitialisationCode
+    std::string tlpImportHook =
+     "try:\n"
+     "	_origimportfunc\n"
+     "except NameError:\n"
+     "	import __builtin__\n"
+     "	import sys\n"
+     "	_origimportfunc = __builtin__.__import__\n"
+
+     "	def tlpimporthook(name, globals={}, locals={}, fromlist=[], level=-1):\n"
+     "		fullname = name\n"
+     "		m = _origimportfunc(name, globals, locals, fromlist, level)\n"
+     "		if fullname == \"tulip\" or fullname == \"tulipogl\" or fullname == \"tulipqt\":\n"
+     "			if fromlist and len(fromlist) > 0 and fromlist[0] == \"*\":\n"
+     "				curTlpDict = None\n"
+     "				if \"tlp\" in locals:\n"
+     "					curTlpDict = locals[\"tlp\"].__dict__\n"
+     "		 		if curTlpDict:\n"
+     "					m = type(fullname, (object,), dict(m.__dict__))\n"
+     "					m.tlp = type(\"tlp\", (object,), dict(m.tlp.__dict__))\n"
+     "					for k in curTlpDict.keys():\n"
+     "						if not k.startswith(\"_\"):\n"
+     "							setattr(m.tlp, k, curTlpDict[k])\n"
+     "		return m\n"
+
+     "	__builtin__.__import__ = tlpimporthook\n"
+     ;
+
+
+    PyRun_SimpleString(tlpImportHook.c_str());
+%End
 
 %ModuleHeaderCode
 #include <tulip/Graph.h>

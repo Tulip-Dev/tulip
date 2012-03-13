@@ -23,7 +23,7 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%Module stl 0
+%Module stl
 
 %ModuleHeaderCode
 #include <string>

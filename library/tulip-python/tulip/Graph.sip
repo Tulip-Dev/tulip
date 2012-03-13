@@ -2560,7 +2560,7 @@ which can contain an error message.
 
 //===========================================================================================
 	
-	void push(bool unpopAllowed = true);
+    void push(bool unpopAllowed = true, std::vector<tlp::PropertyInterface*>* propertiesToPreserveOnPop= NULL);
 %Docstring
 tlp.Graph.push([unpopAllowed=True])
 
@@ -2802,7 +2802,7 @@ Returns the name of the graph.
 	
 //===========================================================================================
 
-	void setName(const std::string &name) const;
+    void setName(const std::string &name);
 %Docstring
 tlp.Graph.setName(name)
 

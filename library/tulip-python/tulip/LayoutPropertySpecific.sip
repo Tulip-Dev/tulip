@@ -395,7 +395,7 @@ Scales the layout in order to approach an aspect ratio (width / height) of 1.0 .
   
 //=========================================================================================== 
   
-	double edgeLength(const tlp::edge e) const;
+        double edgeLength(const tlp::edge e);
 %Docstring
 tlp.LayoutProperty.edgeLength(edge)
 
@@ -420,7 +420,7 @@ Thus, it measures the length of a polyline.
 
 //===========================================================================================
 
-  double averageEdgeLength(const tlp::Graph *subgraph=NULL) const;
+  double averageEdgeLength(const tlp::Graph *subgraph=NULL);
 %Docstring
 tlp.LayoutProperty.averageEdgeLength([subgraph=None])
 
@@ -452,7 +452,7 @@ Returns the average edge length of the layout, the bends are taken into account.
 
 //===========================================================================================
   
-        double averageAngularResolution(const tlp::Graph *subgraph=NULL) const;
+        double averageAngularResolution(const tlp::Graph *subgraph=NULL);
 %Docstring
 tlp.LayoutProperty.averageAngularResolution([subgraph = None])
 
@@ -483,7 +483,7 @@ It is only defined for 2D drawing, meaning the third coordinate is omitted
 
 //===========================================================================================  
   
-        double averageAngularResolution(const tlp::node n, const tlp::Graph *subgraph=NULL) const;
+        double averageAngularResolution(const tlp::node n, const tlp::Graph *subgraph=NULL);
 %Docstring
 tlp.LayoutProperty.averageAngularResolution(node[, subgraph = None])
 
@@ -528,7 +528,7 @@ It is only defined for 2D drawing, meaning the third coordinate is omitted
   
 //===========================================================================================  
   
-        std::vector<double> angularResolutions(const tlp::node n, const tlp::Graph *subgraph=NULL) const;
+        std::vector<double> angularResolutions(const tlp::node n, const tlp::Graph *subgraph=NULL);
 %Docstring
 tlp.LayoutProperty.angularResolutions(node[, subgraph=None])
 

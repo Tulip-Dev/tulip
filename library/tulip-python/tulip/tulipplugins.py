@@ -29,6 +29,15 @@ def reloadTulipPythonPlugins():
    for plugin in pluginModules.keys():
       reloadTulipPythonPlugin(plugin)
 
+def removePlugin(pluginName, pluginType):
+  tulipUtilsOk = True
+  try:
+    import tuliputils
+  except ImportError:
+    tulipUtilsOk = False
+  if tulipUtilsOk:
+    tuliputils.removePlugin(pluginName, pluginType)
+
 def updateTulipMenus():
   tulipUtilsOk = True
   try:
@@ -59,6 +68,8 @@ def registerAlgorithmPlugin(pluginClassName, pluginName, author, date, info, rel
 	:type release: string
 	"""
 	
+        removePlugin(pluginName, "Algorithm")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -112,7 +123,9 @@ def registerAlgorithmPluginOfGroup(pluginClassName, pluginName, author, date, in
 	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the Algorithm -> General menu from the Tulip Software GUI)
 	:type group: string
 	"""
-  
+
+        removePlugin(pluginName, "Algorithm")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -164,7 +177,9 @@ def registerLayoutPlugin(pluginClassName, pluginName, author, date, info, releas
 	:param release: the version number of the plugin in the form X.Y
 	:type release: string
 	"""
-  
+
+        removePlugin(pluginName, "Layout")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -218,7 +233,9 @@ def registerLayoutPluginOfGroup(pluginClassName, pluginName, author, date, info,
 	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the Algorithm -> Layout menu from the Tulip Software GUI)
 	:type group: string
 	"""
-	
+
+        removePlugin(pluginName, "Layout")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -271,6 +288,8 @@ def registerDoublePlugin(pluginClassName, pluginName, author, date, info, releas
 	:type release: string
 	"""
 	
+        removePlugin(pluginName, "Double")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -325,6 +344,8 @@ def registerDoublePluginOfGroup(pluginClassName, pluginName, author, date, info,
 	:type group: string
 	"""
   
+        removePlugin(pluginName, "Double")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -377,6 +398,8 @@ def registerIntegerPlugin(pluginClassName, pluginName, author, date, info, relea
 	:type release: string
 	"""
   
+        removePlugin(pluginName, "Integer")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -430,7 +453,9 @@ def registerIntegerPluginOfGroup(pluginClassName, pluginName, author, date, info
 	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the Algorithm -> Integer menu from the Tulip Software GUI)
 	:type group: string
 	"""
-  
+
+        removePlugin(pluginName, "Integer")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -482,7 +507,9 @@ def registerBooleanPlugin(pluginClassName, pluginName, author, date, info, relea
 	:param release: the version number of the plugin in the form X.Y
 	:type release: string
 	"""
-  
+
+        removePlugin(pluginName, "Boolean")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -536,7 +563,9 @@ def registerBooleanPluginOfGroup(pluginClassName, pluginName, author, date, info
 	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the Algorithm -> Selection menu from the Tulip Software GUI)
 	:type group: string
 	"""
-  
+
+        removePlugin(pluginName, "Boolean")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -588,7 +617,9 @@ def registerSizePlugin(pluginClassName, pluginName, author, date, info, release)
 	:param release: the version number of the plugin in the form X.Y
 	:type release: string
 	"""
-  
+
+        removePlugin(pluginName, "Size")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -642,7 +673,9 @@ def registerSizePluginOfGroup(pluginClassName, pluginName, author, date, info, r
 	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the Algorithm -> Size menu from the Tulip Software GUI)
 	:type group: string
 	"""
-  
+
+        removePlugin(pluginName, "Size")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -694,7 +727,9 @@ def registerColorPlugin(pluginClassName, pluginName, author, date, info, release
 	:param release: the version number of the plugin in the form X.Y
 	:type release: string
 	"""
-  
+
+        removePlugin(pluginName, "Color")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -748,7 +783,9 @@ def registerColorPluginOfGroup(pluginClassName, pluginName, author, date, info, 
 	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the Algorithm -> Color menu from the Tulip Software GUI)
 	:type group: string
 	"""
-  
+
+        removePlugin(pluginName, "Color")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -800,7 +837,9 @@ def registerImportPlugin(pluginClassName, pluginName, author, date, info, releas
 	:param release: the version number of the plugin in the form X.Y
 	:type release: string
 	"""
-  
+
+        removePlugin(pluginName, "Import")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -852,7 +891,9 @@ def registerImportPluginOfGroup(pluginClassName, pluginName, author, date, info,
 	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the File -> Import menu from the Tulip Software GUI)
 	:type group: string
 	"""
-  
+
+        removePlugin(pluginName, "Import")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -902,7 +943,9 @@ def registerExportPlugin(pluginClassName, pluginName, author, date, info, releas
 	:param release: the version number of the plugin in the form X.Y
 	:type release: string
 	"""
-  
+
+        removePlugin(pluginName, "Export")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()
@@ -954,7 +997,9 @@ def registerExportPluginOfGroup(pluginClassName, pluginName, author, date, info,
 	:param group: the name of the group in which the plugin will be inserted (a group corresponds to a sub-menu in the File -> Export menu from the Tulip Software GUI)
 	:type group: string
 	"""
-  
+
+        removePlugin(pluginName, "Export")
+        updateTulipMenus()
 	if testMode:
 	  return
         pluginModule = getCallingModuleName()

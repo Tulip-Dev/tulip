@@ -189,7 +189,7 @@ The new value for the edge is the default one.
 
 //===========================================================================================
 
-	virtual std::string getNodeStringValue( const tlp::node node ) const = 0;
+    virtual std::string getNodeStringValue( const tlp::node node )  = 0;
 %Docstring
 tlp.PropertyInterface.getNodeStringValue(node)
 
@@ -211,7 +211,7 @@ Returns a string conversion of the value registered for the given node.
 	
 //===========================================================================================	
 	
-	virtual std::string getEdgeStringValue( const tlp::edge edge ) const = 0;
+    virtual std::string getEdgeStringValue( const tlp::edge edge )  = 0;
 %Docstring
 tlp.PropertyInterface.getEdgeStringValue(edge)
 
@@ -285,7 +285,7 @@ Returns :const:`True` if the given string representation has been successfully c
 	
 //===========================================================================================	
 		
-	std::string __getitem__(const tlp::node node) const;
+    std::string __getitem__(const tlp::node node) ;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipRes = new std::string(sipCpp->getNodeStringValue(*a0));     	
@@ -297,7 +297,7 @@ Returns :const:`True` if the given string representation has been successfully c
 
 //===========================================================================================
 
-	void __setitem__(const tlp::node node, const std::string &strVal) const;
+    void __setitem__(const tlp::node node, const std::string &strVal) ;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipCpp->setNodeStringValue(*a0, *a1);     	
@@ -308,7 +308,7 @@ Returns :const:`True` if the given string representation has been successfully c
 
 //===========================================================================================	
 		
-	std::string __getitem__(const tlp::edge edge) const;
+    std::string __getitem__(const tlp::edge edge) ;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipRes = new std::string(sipCpp->getEdgeStringValue(*a0));     	
@@ -320,7 +320,7 @@ Returns :const:`True` if the given string representation has been successfully c
 
 //===========================================================================================
 
-	void __setitem__(const tlp::edge edge, const std::string &strVal) const;
+    void __setitem__(const tlp::edge edge, const std::string &strVal) ;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipCpp->setEdgeStringValue(*a0, *a1);     	
