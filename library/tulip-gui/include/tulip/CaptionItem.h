@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifndef CAPTION_H
-#define CAPTION_H
+#ifndef CAPTIONITEM_H
+#define CAPTIONITEM_H
 
 #include <QtCore/QObject>
 
@@ -32,14 +32,21 @@ class CaptionItem : public QObject, public Observer {
 
 public:
 
+  enum CaptionType {
+    ColorCaption=1,
+    SizeCaption=2
+  };
+
   CaptionItem(View *view);
   ~CaptionItem();
 
-  void create();
+  void create(CaptionType captionType);
 
   void initCaption();
 
-  void generateCaption();
+  void generateColorCaption();
+
+  void generateSizeCaption();
 
   QGraphicsItem *captionGraphicsItem();
 
@@ -49,20 +56,25 @@ public slots :
 
   void applyNewFilter(float begin,float end);
   void selectedPropertyChanged(std::string propertyName);
+  void selectedTypeChanged(std::string typeName);
 
 private :
+
+  void clearObservers();
 
   void generateGradients(const std::vector<std::pair <double,Color> > &metricToColorFiltered, QGradient &activeGradient, QGradient &hideGradient);
 
   View *view;
 
+  CaptionType _captionType;
   CaptionGraphicsItem *_captionGraphicsItem;
 
   Graph *_graph;
   DoubleProperty *_metricProperty;
   ColorProperty *_colorProperty;
+  SizeProperty *_sizeProperty;
 };
 
 }
 
-#endif // CAPTION_H
+#endif // CAPTIONITEM_H
