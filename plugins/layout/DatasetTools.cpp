@@ -32,7 +32,7 @@ const char* paramHelp[] = {
   HTML_HELP_DEF("Values", "up to down <BR> down to up <BR> right to left <BR> left to right") \
   HTML_HELP_DEF("Default", "up to down") \
   HTML_HELP_BODY() \
-  "Orientation" \
+  "Choose your <BR> wished orientation" \
   HTML_HELP_CLOSE(),
 
   //Orthogonal Edge
@@ -41,7 +41,7 @@ const char* paramHelp[] = {
   HTML_HELP_DEF("Values", "true <BR> false") \
   HTML_HELP_DEF("Default", "false") \
   HTML_HELP_BODY() \
-  "If true, uses orthogonal edges" \
+  "If true then use orthogonal edges" \
   HTML_HELP_CLOSE(),
 
   //Layer Spacing
@@ -49,14 +49,14 @@ const char* paramHelp[] = {
   HTML_HELP_DEF( "type", "float" ) \
   HTML_HELP_DEF( "default", "64." )  \
   HTML_HELP_BODY() \
-  "Minimum space between two layers in the drawing" \
+  "This parameter enables to set up the minimum space between two layers in the drawing" \
   HTML_HELP_CLOSE(),
   //Node Spacing
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "float" ) \
   HTML_HELP_DEF( "default", "18." )  \
   HTML_HELP_BODY() \
-  "Minimum space between two nodes in the same layer" \
+  "This parameter enables to set up the minimum space between two nodes in the same layer" \
   HTML_HELP_CLOSE(),
 
   // node size
@@ -65,7 +65,7 @@ const char* paramHelp[] = {
   HTML_HELP_DEF( "values", "An existing size property" ) \
   HTML_HELP_DEF( "default", "viewSize" ) \
   HTML_HELP_BODY() \
-  "Property used for the nodes' sizes." \
+  "This parameter defines the property used for node's sizes." \
   HTML_HELP_CLOSE(),
 };
 }
@@ -95,8 +95,13 @@ void getSpacingParameters(DataSet* dataSet, float& nodeSpacing, float& layerSpac
   }
 }
 //====================================================================
-void addNodeSizePropertyParameter(LayoutAlgorithm* pLayout) {
-  pLayout->addParameter<SizeProperty>("node size", paramHelp[4], "viewSize");
+void addNodeSizePropertyParameter(LayoutAlgorithm* pLayout, bool inout) {
+  if (inout)
+    pLayout->addInOutParameter<SizeProperty>("node size", paramHelp[4],
+        "viewSize");
+  else
+    pLayout->addInParameter<SizeProperty>("node size", paramHelp[4],
+                                          "viewSize");
 }
 
 bool getNodeSizePropertyParameter(DataSet* dataSet, SizeProperty* &sizes) {

@@ -235,9 +235,9 @@ void BubbleTree::calcLayout2(tlp::node n, TLP_HASH_MAP<tlp::node,tlp::Vector<dou
   rot2[2]=0.;
   zeta = rot1*zeta[0] + rot2*zeta[1];
 
-  result->setNodeValue(n, Coord(enclosingCircleCenter[0]+zeta[0],
-                                enclosingCircleCenter[1]+zeta[1],
-                                0.) );
+  result->setNodeValue(n, Coord(static_cast<float>(enclosingCircleCenter[0]+zeta[0]),
+                                      static_cast<float>(enclosingCircleCenter[1]+zeta[1]),
+                                      0.) );
 
   /*
    * Place bend on edge to prevent overlaping
@@ -255,8 +255,8 @@ void BubbleTree::calcLayout2(tlp::node n, TLP_HASH_MAP<tlp::node,tlp::Vector<dou
       Iterator<edge> *itE=tree->getInEdges(n);
       edge ite=itE->next();
       delete itE;
-      vector<Coord>tmp(1.);
-      tmp[0] = Coord(bend[0], bend[1], 0.);
+      vector<Coord>tmp(1);
+      tmp[0] = Coord(static_cast<float>(bend[0]), static_cast<float>(bend[1]), 0.);
       result->setEdgeValue(ite,tmp);
     }
   }
@@ -289,8 +289,8 @@ void BubbleTree::calcLayout(tlp::node n, TLP_HASH_MAP< tlp::node, tlp::Vector< d
 
   while (it->hasNext()) {
     node itn=it->next();
-    Coord newpos((*relativePosition)[itn][0]-(*relativePosition)[n][2],
-                 (*relativePosition)[itn][1]-(*relativePosition)[n][3], 0.);
+    Coord newpos(static_cast<float>((*relativePosition)[itn][0]-(*relativePosition)[n][2]),
+                 static_cast<float>((*relativePosition)[itn][1]-(*relativePosition)[n][3]), 0.f);
     Vector<double,3> origin,tmp;
     origin[0] = (*relativePosition)[itn][0]-(*relativePosition)[n][2];
     origin[1] = (*relativePosition)[itn][1]-(*relativePosition)[n][3];
@@ -310,7 +310,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true, false] o(nlog(n)) / o(n)" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "Complexity of the algorithm." \
+  "This parameter enables to choose the complexity of the algorithm." \
   HTML_HELP_CLOSE()
 };
 }
@@ -362,19 +362,19 @@ bool BubbleTree::run() {
   if (dataSet == 0 || !dataSet->get("complexity",nAlgo))
     nAlgo = true;
 
-  // ensure size updates will be kept after a pop
-  preservePropertyUpdates(nodeSize);
   result->setAllEdgeValue(vector<Coord>(0));
 
   if (pluginProgress)
     pluginProgress->showPreview(false);
 
   // push a temporary graph state (not redoable)
-  graph->push(false);
+  // preserving layout updates
+  std::vector<PropertyInterface*> propsToPreserve;
 
-  // but ensure result will be preserved
   if (result->getName() != "")
-    preservePropertyUpdates(result);
+    propsToPreserve.push_back(result);
+
+  graph->push(false, &propsToPreserve);
 
   tree = TreeTest::computeTree(graph, pluginProgress);
 
@@ -384,6 +384,7 @@ bool BubbleTree::run() {
   }
 
   node startNode = tree->getSource();
+  assert(startNode.isValid());
   TLP_HASH_MAP<node,Vector<double,5> > relativePosition;
   computeRelativePosition(startNode, &relativePosition);
   calcLayout(startNode, &relativePosition);

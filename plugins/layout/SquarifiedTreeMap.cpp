@@ -43,14 +43,14 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "An existing metric property" ) \
   HTML_HELP_DEF( "default", "viewMetric if it exists" ) \
   HTML_HELP_BODY() \
-  "Metric used to estimate the size of each node." \
+  "This parameter defines the metric used to estimate the size allocated to each node." \
   HTML_HELP_CLOSE(),
   // aspect ratio
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "double" ) \
   HTML_HELP_DEF( "default", "1." )   \
   HTML_HELP_BODY() \
-  "Aspect ratio (height/width) of the rectangle corresponding to the root node." \
+  "This parameter enables to set up the aspect ratio (height/width) for the rectangle corresponding to the root node." \
   HTML_HELP_CLOSE(),
   // treemap type
   HTML_HELP_OPEN() \
@@ -59,7 +59,23 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "false", "J. J. van Wijk" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "If true, use normal Treemaps (B. Shneiderman), else use Squarified Treemaps (van Wijk)" \
+  "This parameter indicates to use normal Treemaps (B. Shneiderman) or Squarified Treemaps (van Wijk)" \
+  HTML_HELP_CLOSE(),
+  // node size
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Size" ) \
+  HTML_HELP_DEF( "values", "An existing size property" ) \
+  HTML_HELP_DEF( "default", "viewSize" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the property used as node's size." \
+  HTML_HELP_CLOSE(),
+  // node shape
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Integer" ) \
+  HTML_HELP_DEF( "values", "An existing shape property" ) \
+  HTML_HELP_DEF( "default", "viewShape" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the property used as node's shape." \
   HTML_HELP_CLOSE(),
 };
 }
@@ -69,6 +85,10 @@ SquarifiedTreeMap::SquarifiedTreeMap(const tlp::PluginContext* context) :LayoutA
   addParameter<DoubleProperty>("metric", paramHelp[0], "", false);
   addParameter<double>("Aspect Ratio", paramHelp[1], "1.");
   addParameter<bool>("Treemap Type", paramHelp[2], "false");
+  addOutParameter<SizeProperty>("Node Size", paramHelp[3],
+                                "viewSize");
+  addOutParameter<IntegerProperty>("Node Shape", paramHelp[4],
+                                   "viewShape");
 }
 
 //====================================================================
@@ -108,26 +128,28 @@ bool SquarifiedTreeMap::check(std::string& errorMsg) {
 bool SquarifiedTreeMap::run() {
   double aspectRatio  = DEFAULT_RATIO;
   shneidermanTreeMap = false;
-  size  = graph->getLocalProperty<SizeProperty>("viewSize");
-
-  // ensure size updates will be kept after a pop
-  preservePropertyUpdates(size);
+  sizeResult = NULL;
+  glyphResult = NULL;
 
   if (dataSet != 0) {
     dataSet->get("Aspect Ratio", aspectRatio);
     dataSet->get("Treemap Type", shneidermanTreeMap);
+    dataSet->get("Node Size", sizeResult);
+    dataSet->get("Node Shape", glyphResult);
   }
 
-  glyph = graph->getLocalProperty<IntegerProperty>("viewShape");
-  // ensure shapes updates will be kept after a pop
-  preservePropertyUpdates(glyph);
+  if (sizeResult == NULL)
+    sizeResult = graph->getProperty<SizeProperty>("viewSize");
+
+  if (glyphResult == NULL)
+    glyphResult = graph->getLocalProperty<IntegerProperty>("viewShape");
 
   {
     //change the glyph of all internal node to be a window
     node n;
     forEach(n, graph->getNodes()) {
       if (graph->outdeg(n) != 0)
-        glyph->setNodeValue(n, TEXTUREDGLYPHID);
+        glyphResult->setNodeValue(n, TEXTUREDGLYPHID);
     }
   }
 
@@ -137,9 +159,9 @@ bool SquarifiedTreeMap::run() {
   computeNodesSize(root);
 
   Vec2d center = initialSpace.center();
-  result->setNodeValue(root, Coord(center[0], center[1], 0));
-  Size initialSpaceSize(initialSpace.width(), initialSpace.height(), 0);
-  size->setNodeValue(root, initialSpaceSize);
+  result->setNodeValue(root, Coord(static_cast<float>(center[0]), static_cast<float>(center[1]), 0));
+  Size initialSpaceSize(static_cast<float>(initialSpace.width()), static_cast<float>(initialSpace.height()), 0);
+  sizeResult->setNodeValue(root, initialSpaceSize);
   vector<node> toTreat(orderedChildren(root));
 
   if (!toTreat.empty()) {
@@ -193,8 +215,8 @@ void SquarifiedTreeMap::layoutRow(const std::vector<tlp::node> &row, const int d
     assert(layoutRec.isValid());
     sum += nodesSize.get(it->id);
     Vec2d center = layoutRec.center();
-    result->setNodeValue(*it, Coord(center[0], center[1], depth * SEPARATION_Z));
-    size->setNodeValue(*it, Size(layoutRec.width(), layoutRec.height(), 0));
+    result->setNodeValue(*it, Coord(static_cast<float>(center[0]), static_cast<float>(center[1]), static_cast<float>(depth * SEPARATION_Z)));
+    sizeResult->setNodeValue(*it, Size(static_cast<float>(layoutRec.width()), static_cast<float>(layoutRec.height(), 0)));
 
     if (graph->outdeg(*it) > 0) {
       vector<node> toTreat(orderedChildren(*it));

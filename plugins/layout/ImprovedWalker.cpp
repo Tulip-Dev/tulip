@@ -81,11 +81,13 @@ bool ImprovedWalker::run() {
     pluginProgress->showPreview(false);
 
   // push a temporary graph state (not redoable)
-  graph->push(false);
+  // preserving layout updates
+  std::vector<PropertyInterface*> propsToPreserve;
 
-  // but ensure result will be preserved
   if (result->getName() != "")
-    preservePropertyUpdates(result);
+    propsToPreserve.push_back(result);
+
+  graph->push(false, &propsToPreserve);
 
   tree = TreeTest::computeTree(graph, pluginProgress);
 
@@ -113,7 +115,7 @@ bool ImprovedWalker::run() {
   // check if the specified layer spacing is greater
   // than the max of the minimum layer spacing of the tree
   for (unsigned int i = 0; i < maxYbyLevel.size() - 1;  ++i) {
-    float minLayerSpacing = (maxYbyLevel[i] + maxYbyLevel[i + 1]) / 2.;
+    float minLayerSpacing = (maxYbyLevel[i] + maxYbyLevel[i + 1]) / 2.f;
 
     if (minLayerSpacing + nodeSpacing > spacing)
       spacing = minLayerSpacing + nodeSpacing;
@@ -198,8 +200,8 @@ void ImprovedWalker::firstWalk(tlp::node v) {
 
     if (vleftSibling  != BADNODE)
       prelimX[v]     += prelimX[vleftSibling] + nodeSpacing
-                        + oriSize->getNodeValue(v).getW()/2.
-                        + oriSize->getNodeValue(vleftSibling).getW()/2.;
+                        + oriSize->getNodeValue(v).getW()/2.f
+                        + oriSize->getNodeValue(vleftSibling).getW()/2.f;
   }
   else {
     node defaultAncestor    = leftmostChild(v);

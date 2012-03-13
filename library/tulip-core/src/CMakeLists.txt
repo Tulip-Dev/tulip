@@ -43,6 +43,7 @@ Plane.cpp
 PluginLibraryLoader.cpp
 PluginLoaderTxt.cpp
 PreferenceManager.cpp
+PropertyAlgorithm.cpp
 PropertyInterface.cpp
 PropertyManager.cpp
 PropertyTypes.cpp
