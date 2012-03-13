@@ -51,6 +51,8 @@ public:
    */
   void loadPlugins(PluginLoader *plug=0);
 
+  void addInteractor(const std::string &name);
+
   /**
    * Gets interactor with given name
    */

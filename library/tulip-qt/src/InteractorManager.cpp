@@ -75,6 +75,15 @@ void InteractorManager::loadPlugins(PluginLoader *plug) {
 
   delete itS;
 }
+
+//====================================================
+void InteractorManager::addInteractor(const std::string &interactorName) {
+    InteractorContext ic;
+    if (interactorsMap.find(interactorName) != interactorsMap.end()) {
+      delete interactorsMap[interactorName];
+    }
+    interactorsMap[interactorName]=InteractorFactory::factory->getPluginObject(interactorName, &ic);
+}
 //====================================================
 Interactor *InteractorManager::getInteractor(const string &name) {
   InteractorContext ic;
