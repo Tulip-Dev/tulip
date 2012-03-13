@@ -96,7 +96,9 @@ class MovableRectItem : public QObject, public QGraphicsRectItem {
 
 public :
 
-  MovableRectItem(const QRectF &rect,SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle);
+  MovableRectItem(const QRectF &rect,const QRectF &size,SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle);
+
+  void setInternalRect(const QRectF &rect);
 
 signals :
 
@@ -107,6 +109,7 @@ protected :
 
   bool sceneEvent ( QEvent * event );
 
+  QRectF _currentRect;
   QPoint _initPos;
   SelectionArrowItem *_topCircle;
   SelectionArrowItem *_bottomCircle;
@@ -173,8 +176,8 @@ signals :
 protected :
 
   void updateSelectionText(float begin, float end);
-  void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-  void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+  void hoverEnterEvent(QGraphicsSceneHoverEvent *);
+  void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
 
   QPoint _captionContentPos;
 

@@ -68,7 +68,7 @@ CaptionGraphicsBackgroundItem::CaptionGraphicsBackgroundItem(const QRect &rect):
   _prefIcon->setParentItem(this);
   _prefIcon->setAcceptHoverEvents(true);
   connect(_prefIcon,SIGNAL(configurationIconPressed()),this,SLOT(configurationIconPressedSlot()));
-  _prefRect=new QGraphicsRectItem(0,-20,20,20);
+  _prefRect=new QGraphicsRectItem(-10,-30,40,40);
   _prefRect->setVisible(false);
   _prefRect->setPen(QPen(QColor(0,0,0,0)));
   _prefRect->setParentItem(this);
@@ -101,7 +101,7 @@ CaptionGraphicsBackgroundItem::CaptionGraphicsBackgroundItem(const QRect &rect):
   _bottomCaptionRectItem=new QGraphicsRectItem(QRect(_captionContentPos+QPoint(0,160),QSize(30,0)));
   _bottomCaptionRectItem->setParentItem(this);
   _bottomCaptionRectItem->setAcceptHoverEvents(true);
-  _middleCaptionRectItem=new MovableRectItem(QRect(_captionContentPos,QSize(30,160)),_rangeSelector1Item,_rangeSelector2Item);
+  _middleCaptionRectItem=new MovableRectItem(QRect(_captionContentPos,QSize(30,160)),QRect(0,0,1,1),_rangeSelector1Item,_rangeSelector2Item);
   connect(_middleCaptionRectItem,SIGNAL(moved(float, float)),this,SLOT(updateCaption(float, float)));
   _middleCaptionRectItem->setParentItem(this);
   _middleCaptionRectItem->setAcceptHoverEvents(true);
@@ -211,9 +211,6 @@ void CaptionGraphicsBackgroundItem::updateSelectionText(float begin, float end) 
   if(text2.length()>5)
     text2=text2.left(5);
 
-  _rangeSelector1TextItem->setPos(QPoint(60-_rangeSelector1TextItem->boundingRect().width()/2.,17));
-  _rangeSelector2TextItem->setPos(QPoint(60-_rangeSelector2TextItem->boundingRect().width()/2.,17));
-
   if(_rangeSelector1Item->pos().y()>_rangeSelector2Item->pos().y()){
     _rangeSelector1TextItem->setPlainText(text2);
     _rangeSelector2TextItem->setPlainText(text1);
@@ -221,6 +218,10 @@ void CaptionGraphicsBackgroundItem::updateSelectionText(float begin, float end) 
     _rangeSelector1TextItem->setPlainText(text1);
     _rangeSelector2TextItem->setPlainText(text2);
   }
+
+  _rangeSelector1TextItem->setPos(QPoint(60-_rangeSelector1TextItem->boundingRect().width()/2.,17));
+  _rangeSelector2TextItem->setPos(QPoint(60-_rangeSelector2TextItem->boundingRect().width()/2.,17));
+
 }
 
 void CaptionGraphicsBackgroundItem::updateCaption() {
@@ -244,19 +245,20 @@ void CaptionGraphicsBackgroundItem::updateCaption(float begin ,float end) {
 
   _topCaptionRectItem->setRect(QRect(_captionContentPos,QSize(30,begin*160)));
   _middleCaptionRectItem->setRect(QRect(_captionContentPos+QPoint(0,begin*160),QSize(30,(end-begin)*160)));
+  _middleCaptionRectItem->setInternalRect(QRectF(0,begin,0,end-begin));
   _bottomCaptionRectItem->setRect(QRect(_captionContentPos+QPoint(0,end*160),QSize(30,160-end*160)));
 
   _sizeCaptionPathItem->setRect(QRectF(0,begin,0,end-begin));
 
-  emit filterChanged(begin,end);
+  emit filterChanged(1.-end,1.-begin);
 }
 
-void CaptionGraphicsBackgroundItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+void CaptionGraphicsBackgroundItem::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
   _prefIcon->setVisible(true);
   _prefRect->setVisible(true);
 }
 
-void CaptionGraphicsBackgroundItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+void CaptionGraphicsBackgroundItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
   _prefIcon->setVisible(false);
   _prefRect->setVisible(false);
 }
@@ -306,33 +308,37 @@ bool SelectionArrowItem::sceneEvent ( QEvent * event ) {
   return false;
 }
 
-MovableRectItem::MovableRectItem(const QRectF &rect, SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle)
-  :QGraphicsRectItem(rect),_initPos(rect.x(),rect.y()),_topCircle(topCircle),_bottomCircle(bottomCircle){
+MovableRectItem::MovableRectItem(const QRectF &rect,const QRectF &size, SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle)
+  :QGraphicsRectItem(rect),_currentRect(size),_initPos(rect.x(),rect.y()),_topCircle(topCircle),_bottomCircle(bottomCircle){
   setFlags(QGraphicsItem::ItemIsMovable);
 }
 
 bool MovableRectItem::sceneEvent ( QEvent * event ){
-  if(event->type()==QEvent::GraphicsSceneMouseMove) {
+  if(event->type()==QEvent::GraphicsSceneMouseMove){
     QGraphicsSceneMouseEvent *e=(QGraphicsSceneMouseEvent *)event;
     qreal diffPosY=e->pos().y()-e->lastPos().y();
 
-    if(rect().bottom()+diffPosY>_initPos.y()+160)
-      diffPosY=_initPos.y()+160-rect().bottom();
+    if(_currentRect.bottom()*160+diffPosY>160)
+      diffPosY=160-_currentRect.bottom()*160;
+    if(_currentRect.top()*160+diffPosY<0)
+      diffPosY=-_currentRect.top()*160;
 
-    if(rect().top()+diffPosY<_initPos.y())
-      diffPosY=_initPos.y()-rect().top();
+    _currentRect.translate(0,diffPosY/160.);
 
-    QRectF coord=rect();
-    coord.translate(0,diffPosY);
-    setRect(coord);
+    setRect(_initPos.x(),_initPos.y(),_currentRect.width()*160,_currentRect.height()*160);
 
-    emit moved((rect().top()-_initPos.y())/160.,(rect().bottom()-_initPos.y())/160.);
+    emit moved(_currentRect.top(),_currentRect.bottom());
 
     return true;
   }
 
   return false;
 }
+
+void MovableRectItem::setInternalRect(const QRectF &rect){
+  _currentRect=rect;
+}
+
 
 MovablePathItem::MovablePathItem(const QRectF &rect, QGraphicsPathItem *topPathItem, QGraphicsPathItem *bottomPathItem, SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle)
   :QGraphicsPathItem(),_currentRect(rect),_topPathItem(topPathItem),_bottomPathItem(bottomPathItem),_topCircle(topCircle),_bottomCircle(bottomCircle){
@@ -364,8 +370,8 @@ void MovablePathItem::updatePath() {
   vector<vector<QPoint> >pathsPoints;
   pathsPoints.resize(3);
 
-  double firstLimit=_minMetric+_currentRect.y()*(_maxMetric-_minMetric);
-  double secondLimit=_minMetric+(_currentRect.y()+_currentRect.height())*(_maxMetric-_minMetric);
+  double secondLimit=_minMetric+(1.-_currentRect.y())*(_maxMetric-_minMetric);
+  double firstLimit=_minMetric+(1.-(_currentRect.y()+_currentRect.height()))*(_maxMetric-_minMetric);
 
   pair<double,float> lastValue=*_metricToSizeFilteredList.begin();
   int state=0;
@@ -373,43 +379,43 @@ void MovablePathItem::updatePath() {
     if((*it).first<firstLimit){
       if(state==0){
         //init of first path
-        pathsPoints[0].push_back(QPoint(15+15.*(*it).second,0));
+        pathsPoints[0].push_back(QPoint(15+15.*(*it).second,160));
         state=1;
       }else{
-        pathsPoints[0].push_back(QPoint(15+15*(*it).second,160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[0].push_back(QPoint(15+15*(*it).second,160-160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
       }
     }else if((*it).first<=secondLimit){
       if(state==1){
         //init of second path
         float midValue=computeToto(firstLimit,lastValue.second,(*it).second,lastValue.first,(*it).first);
-        pathsPoints[0].push_back(QPoint(15+15.*midValue,160*(firstLimit-_minMetric)/(_maxMetric-_minMetric)));
-        pathsPoints[1].push_back(QPoint(15+15.*midValue,160*(firstLimit-_minMetric)/(_maxMetric-_minMetric)));
-        pathsPoints[1].push_back(QPoint(15+15.*(*it).second,160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[0].push_back(QPoint(15+15.*midValue,160-160*(firstLimit-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[1].push_back(QPoint(15+15.*midValue,160-160*(firstLimit-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[1].push_back(QPoint(15+15.*(*it).second,160-160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
         state=2;
       }else if(state<=1){
-        pathsPoints[1].push_back(QPoint(15+15.*(*it).second,160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[1].push_back(QPoint(15+15.*(*it).second,160-160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
         state=2;
       }else{
-        pathsPoints[1].push_back(QPoint(15+15*(*it).second,160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[1].push_back(QPoint(15+15*(*it).second,160-160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
       }
 
     }else{
       if(state==2){
         //init of third path
         float midValue=computeToto(secondLimit,lastValue.second,(*it).second,lastValue.first,(*it).first);
-        pathsPoints[1].push_back(QPoint(15+15.*midValue,160*(secondLimit-_minMetric)/(_maxMetric-_minMetric)));
-        pathsPoints[2].push_back(QPoint(15+15.*midValue,160*(secondLimit-_minMetric)/(_maxMetric-_minMetric)));
-        pathsPoints[2].push_back(QPoint(15+15.*(*it).second,160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[1].push_back(QPoint(15+15.*midValue,160-160*(secondLimit-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[2].push_back(QPoint(15+15.*midValue,160-160*(secondLimit-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[2].push_back(QPoint(15+15.*(*it).second,160-160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
         state=3;
       }else{
-        pathsPoints[2].push_back(QPoint(15+15*(*it).second,160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[2].push_back(QPoint(15+15*(*it).second,160-160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
       }
     }
     lastValue=(*it);
   }
 
   if(state==2){
-    pathsPoints[1].push_back(QPoint(15+15*lastValue.second,160*(lastValue.first-_minMetric)/(_maxMetric-_minMetric)));
+    pathsPoints[1].push_back(QPoint(15+15*lastValue.second,160-160*(lastValue.first-_minMetric)/(_maxMetric-_minMetric)));
   }
 
   for(unsigned int i1=0;i1<pathsPoints.size();++i1){
