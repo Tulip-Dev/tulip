@@ -1,5 +1,6 @@
 #include <ogdf/upward/DominanceLayout.h>
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
+#include <tulip/ConnectedTest.h>
 
 namespace {
 
@@ -71,6 +72,14 @@ public:
     addParameter<bool>("transpose", paramHelp[1], "false");
   }
   ~OGDFDominance() {}
+
+  bool check(string& error) {
+    if (!tlp::ConnectedTest::isConnected(graph)) {
+      error += "graph is not connected";
+      return false;
+    }
+    return true;    
+  }
 
   void beforeCall() {
     ogdf::DominanceLayout *dominance = static_cast<ogdf::DominanceLayout*>(ogdfLayoutAlgo);
