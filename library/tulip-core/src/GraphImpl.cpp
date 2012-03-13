@@ -636,39 +636,6 @@ void GraphImpl::unpop() {
   }
 }
 //----------------------------------------------------------------
-bool GraphImpl::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
-  if (!recorders.empty()) {
-    bool isAddedProp =
-      recorders.front()->isAddedOrDeletedProperty(prop->getGraph(), prop);
-
-    if (recorders.front()->dontObserveProperty(prop)) {
-      std::list<GraphUpdatesRecorder*>::iterator it = recorders.begin();
-
-      if (++it != recorders.end()) {
-        // allow the previous recorder to record
-        // the next property updates
-        if (isAddedProp)
-          // register prop as a newly added
-          (*it)->addLocalProperty(prop->getGraph(), prop->getName());
-        else
-          prop->addPropertyObserver((*it));
-      }
-
-      return true;
-    }
-
-#ifndef NDEBUG
-    else {
-      cerr << __PRETTY_FUNCTION__ << " the observation of Property " << prop->getName()  << " cannot be stopped " << endl;
-      return false;
-    }
-
-#endif
-  }
-
-  return false;
-}
-//----------------------------------------------------------------
 bool GraphImpl::canDeleteProperty(Graph* g, PropertyInterface *prop) {
   return recorders.empty() ||
          !recorders.front()->isAddedOrDeletedProperty(g, prop);

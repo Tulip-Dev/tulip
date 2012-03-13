@@ -32,10 +32,7 @@
 
 #include <tulip/PluginContext.h>
 #include <tulip/Graph.h>
-#include <tulip/DataSet.h>
-#include <tulip/WithParameter.h>
-#include <tulip/WithDependency.h>
-#include <tulip/PluginLister.h>
+#include <tulip/Algorithm.h>
 
 namespace tlp {
 
@@ -47,110 +44,82 @@ namespace tlp {
 /**
  * @brief This base class describes plug-ins who only modify one property, e.g. selection.
  **/
-class TLP_SCOPE PropertyAlgorithm: public tlp::Plugin {
+  class TLP_SCOPE PropertyAlgorithm: public tlp::Algorithm {
 public :
   /**
    * @brief Builds a new plug-in that modifies a single property.
    *
    * @param context The context containing the graph and PropertyInterface this plug-in has access to, as well as a PluginProgress.
    **/
-  PropertyAlgorithm(const tlp::PluginContext* context) {
-    if(context != NULL) {
-      const tlp::AlgorithmContext* algoritmContext = dynamic_cast<const tlp::AlgorithmContext*>(context);
-      assert(algoritmContext != NULL);
-      graph = algoritmContext->graph;
-      pluginProgress = algoritmContext->pluginProgress;
-      dataSet = algoritmContext->dataSet;
-    }
-  }
-  ///
-  virtual ~PropertyAlgorithm() {}
+  PropertyAlgorithm(const tlp::PluginContext* context):Algorithm(context) {}
 
   virtual std::string category() const {
     return "PropertyAlgorithm";
   }
-
-  /**
-   * @brief Runs the algorithm.
-   * It is a good practice to report progress through the PluginProgress, Even if your algorithm is very fast.
-   * Keep in mind that Tulip can handle very large graphs.
-   * The PluginProgress should also be used to report errors, if any.
-   *
-   * @return bool Whether the algorithm execution was successful or not.
-   **/
-  virtual bool run() {
-    return true;
-  }
-
-  /**
-   * @brief Checks whether the algorithm can be applied on this graph or not.
-   * If not, the reason why should be reported through the PluginProgress.
-   *
-   * @param errorMessage A string whose value will be modified to an error message, if the check fails.
-   * @return bool Whether the plug-in can run on this Graph.
-   **/
-  virtual bool check(std::string &errorMessage) {
-    (void)errorMessage;
-    return true;
-  }
-  ///
-  bool preservePropertyUpdates(PropertyInterface* prop) {
-    return graph->nextPopKeepPropertyUpdates(prop);
-  }
-
-  Graph *graph;
-  PluginProgress *pluginProgress;
-  DataSet *dataSet;
 };
 
 template<class Property>
 class TLP_SCOPE TemplateAlgorithm : public PropertyAlgorithm {
 public:
   Property* result;
-  virtual ~TemplateAlgorithm() {}
-protected:
-  TemplateAlgorithm (const tlp::PluginContext* context) : tlp::PropertyAlgorithm(context) {
-    const PropertyContext* propertyContext = dynamic_cast<const PropertyContext*>(context);
+  TemplateAlgorithm (const tlp::PluginContext* context) : tlp::PropertyAlgorithm(context), result(NULL) {}
+};
 
-    if(propertyContext) {
-      result = (Property*)propertyContext->propertyProxy;
-    }
-  }
+class BooleanProperty;
+/// Interface for selection plug-ins
+class TLP_SCOPE BooleanAlgorithm : public TemplateAlgorithm<BooleanProperty> {
+protected:
+  ///
+  BooleanAlgorithm (const tlp::PluginContext*);
+};
+
+class ColorProperty;
+/// Interface for color plug-ins
+class TLP_SCOPE ColorAlgorithm : public TemplateAlgorithm<ColorProperty> {
+protected:
+  ///
+  ColorAlgorithm (const tlp::PluginContext*);
+};
+
+class DoubleProperty;
+/// Interface for metric plug-ins
+class TLP_SCOPE DoubleAlgorithm : public TemplateAlgorithm<DoubleProperty> {
+protected:
+  ///
+  DoubleAlgorithm (const tlp::PluginContext*);
+};
+
+class IntegerProperty;
+/// Interface for int plug-ins
+class TLP_SCOPE IntegerAlgorithm : public TemplateAlgorithm<IntegerProperty> {
+protected:
+  ///
+  IntegerAlgorithm (const tlp::PluginContext*);
+};
+
+class LayoutProperty;
+/// Interface for layout plug-ins
+class TLP_SCOPE LayoutAlgorithm : public TemplateAlgorithm<LayoutProperty> {
+protected:
+  ///
+  LayoutAlgorithm (const tlp::PluginContext*);
 };
 
 class SizeProperty;
-class IntegerProperty;
-class LayoutProperty;
-class ColorProperty;
-class DoubleProperty;
+/// Interface for size plug-ins
+class TLP_SCOPE SizeAlgorithm : public TemplateAlgorithm<SizeProperty> {
+protected:
+  ///
+  SizeAlgorithm (const tlp::PluginContext*);
+};
+
 class StringProperty;
-class BooleanProperty;
-typedef TemplateAlgorithm<SizeProperty> SizeAlgorithm;
-typedef TemplateAlgorithm<IntegerProperty> IntegerAlgorithm;
-typedef TemplateAlgorithm<LayoutProperty> LayoutAlgorithm;
-typedef TemplateAlgorithm<ColorProperty> ColorAlgorithm;
-typedef TemplateAlgorithm<DoubleProperty> DoubleAlgorithm;
-typedef TemplateAlgorithm<StringProperty> StringAlgorithm;
-typedef TemplateAlgorithm<BooleanProperty> BooleanAlgorithm;
-
-typedef PropertyPluginLister<SizeAlgorithm> SizePluginLister;
-typedef PropertyPluginLister<IntegerAlgorithm> IntegerPluginLister;
-typedef PropertyPluginLister<LayoutAlgorithm> LayoutPluginLister;
-typedef PropertyPluginLister<ColorAlgorithm> ColorPluginLister;
-typedef PropertyPluginLister<DoubleAlgorithm> DoublePluginLister;
-typedef PropertyPluginLister<StringAlgorithm> StringPluginLister;
-typedef PropertyPluginLister<BooleanAlgorithm> BooleanPluginLister;
-
-#ifdef _MSC_VER //MSVC needs explicit instantiations of the templates
-template class TemplateAlgorithm<SizeProperty>;
-template class TemplateAlgorithm<IntegerProperty>;
-template class TemplateAlgorithm<LayoutProperty>;
-template class TemplateAlgorithm<ColorProperty>;
-template class TemplateAlgorithm<DoubleProperty>;
-template class TemplateAlgorithm<StringProperty>;
-template class TemplateAlgorithm<BooleanProperty>;
-#endif
-
+/// Interface for string plug-ins
+class TLP_SCOPE StringAlgorithm : public TemplateAlgorithm<StringProperty> {
+protected:
+  ///
+  StringAlgorithm (const tlp::PluginContext*);
+};
 /*@}*/
 
 }

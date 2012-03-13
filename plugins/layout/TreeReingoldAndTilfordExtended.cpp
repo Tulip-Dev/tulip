@@ -21,6 +21,7 @@
 #include "DatasetTools.h"
 
 PLUGIN(TreeReingoldAndTilfordExtended)
+
 using namespace std;
 using namespace tlp;
 
@@ -32,28 +33,28 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "An existing int property" ) \
   HTML_HELP_DEF( "default", "None" ) \
   HTML_HELP_BODY() \
-  "Property used to compute edge lengths." \
+  "This parameter indicates the property used to compute the length of edges." \
   HTML_HELP_CLOSE(),
   //Orientation
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF( "default", "horizontal" )   \
   HTML_HELP_BODY() \
-  "Orientation of the drawing" \
+  "This parameter enables to choose the orientation of the drawing" \
   HTML_HELP_CLOSE(),
   //Orthogonal
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "true" )          \
   HTML_HELP_BODY()              \
-  "If true, the tree is drawn orthogonally." \
+  "This parameter enables to choose if the tree is drawn orthogonally or not" \
   HTML_HELP_CLOSE(),
   //bounding circles
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )  \
   HTML_HELP_BODY() \
-  "If true, the node bounding objects are boxes, else they are bounding circles." \
+  "Indicates if the node bounding objects are boxes or bounding circles." \
 
   HTML_HELP_CLOSE(),
   //compact layout
@@ -61,7 +62,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "true" )   \
   HTML_HELP_BODY() \
-  "If true, a compact layout is computed." \
+  "Indicates if a compact layout is computed." \
   HTML_HELP_CLOSE()
 };
 }
@@ -338,8 +339,8 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::n
   Coord tmpCoord;
 
   if(!compactLayout)
-    tmpCoord.set(x+(*p)[n], -y, 0);
-  else tmpCoord.set(x+(*p)[n], - (y+maxLevelSize[level]/2.), 0);
+    tmpCoord.set(static_cast<float>(x+(*p)[n]), -static_cast<float>(y), 0);
+  else tmpCoord.set(static_cast<float>(x+(*p)[n]), - static_cast<float>(y+maxLevelSize[level]/2.f), 0);
 
   result->setNodeValue(n,tmpCoord);
 
@@ -387,8 +388,6 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (!getNodeSizePropertyParameter(dataSet, sizes))
     sizes = graph->getProperty<SizeProperty>("viewSize");
 
-  // ensure size updates will be kept after a pop
-  preservePropertyUpdates(sizes);
   getSpacingParameters(dataSet, nodeSpacing, spacing);
   orientation = "horizontal";
   lengthMetric = 0;
@@ -419,7 +418,7 @@ bool TreeReingoldAndTilfordExtended::run() {
       const Size& boundCircle = sizes->getNodeValue (n);
       double diam = 2*sqrt (boundCircle.getW()*boundCircle.getW()/4.0 +
                             boundCircle.getH()*boundCircle.getH()/4.0);
-      circleSizes->setNodeValue (n, Size (diam, diam, 1.0));
+      circleSizes->setNodeValue (n, Size (static_cast<float>(diam), static_cast<float>(diam), 1.0f));
     }//end forEach
     sizes = circleSizes;
   }//end if
@@ -431,11 +430,13 @@ bool TreeReingoldAndTilfordExtended::run() {
     pluginProgress->showPreview(false);
 
   // push a temporary graph state (not redoable)
-  graph->push(false);
+  // preserving layout updates
+  std::vector<PropertyInterface*> propsToPreserve;
 
-  // but ensure result will be preserved
   if (result->getName() != "")
-    preservePropertyUpdates(result);
+    propsToPreserve.push_back(result);
+
+  graph->push(false, &propsToPreserve);
 
   tree = TreeTest::computeTree(graph, pluginProgress);
 
@@ -445,6 +446,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   }
 
   node startNode = tree->getSource();
+  assert(startNode.isValid());
 
   map<int,double> maxSizeLevel;
   map<node, int> levels;
@@ -454,7 +456,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   // than the max of the minimum layer spacing of the tree
   if(!compactLayout) {
     for (unsigned int i = 0; i < maxSizeLevel.size() - 1;  ++i) {
-      float minLayerSpacing = (maxSizeLevel[i] + maxSizeLevel[i + 1]) / 2;
+      float minLayerSpacing = static_cast<float>((maxSizeLevel[i] + maxSizeLevel[i + 1]) / 2);
 
       if (minLayerSpacing + nodeSpacing > spacing)
         spacing = minLayerSpacing + spacing;
@@ -504,11 +506,11 @@ bool TreeReingoldAndTilfordExtended::run() {
     }
   }
 
-  if (boundingCircles)
-    delete sizes;
-
   // forget last temporary graph state
   graph->pop();
+
+  if (boundingCircles)
+    delete sizes;
 
   return true;
 }

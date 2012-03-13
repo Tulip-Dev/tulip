@@ -26,7 +26,7 @@ using namespace tlp;
 
 /** \addtogroup layout */
 /*@{*/
-/// TreeRadial.cpp - An implementation of a radial drawing of trees.
+/// An implementation of a radial drawing of trees.
 /**
  * This algorithm is inspired from
  * MoireGraphs: Radial Focus+Context Visualization and Interaction for Graphs with Visual Nodes
@@ -66,6 +66,7 @@ public:
     unsigned int depth;
     Iterator<node>* neighbours;
 
+    dfsNodeRadiiStruct() {}
     dfsNodeRadiiStruct(node n, float r, unsigned int d, Iterator<node>* it):
       current(n), radius(r), depth(d), neighbours(it) {}
   };
@@ -126,7 +127,7 @@ public:
       float lRadiusPrev = lRadius;
       lRadius += nRadii[i] + nRadii[i + 1] + lSpacing;
       // check if there is enough space for nodes of layer i + 1
-      float mRadius = (bfs[i + 1].size() * (nRadii[i + 1] + nSpacing))/(2 * M_PI);
+      float mRadius = (bfs[i + 1].size() * (nRadii[i + 1] + nSpacing))/static_cast<float>(2 * M_PI);
 
       if (mRadius > lRadius)
         lRadius = mRadius;
@@ -175,6 +176,7 @@ public:
     unsigned int depth;
     Iterator<node>* neighbours;
 
+    dfsAngularSpreadStruct() {}
     dfsAngularSpreadStruct(node n, unsigned int d, Iterator<node>* it):
       current(n), cAngle(0), depth(d), neighbours(it) {}
   };
@@ -268,6 +270,7 @@ public:
     unsigned int depth;
     Iterator<node>* neighbours;
 
+    dfsDoLayoutStruct() {}
     dfsDoLayoutStruct(node n, double bAngle, double eAngle, double spread,
                       bool flag, unsigned int d, Iterator<node>* it):
       current(n), startAngle(bAngle), endAngle(eAngle),
@@ -304,9 +307,9 @@ public:
         if (depth > 0) {
           // layout the node in the middle of the sector
           double nAngle = (startAngle + endAngle)/2.0;
-          result->setNodeValue(n, Coord(lRadii[depth] * cos(nAngle),
-                                        lRadii[depth] * sin(nAngle),
-                                        0));
+          result->setNodeValue(n, Coord(lRadii[depth] * static_cast<float>(cos(nAngle)),
+                                              lRadii[depth] * static_cast<float>(sin(nAngle)),
+                                              0));
         }
         else
           result->setNodeValue(n, Coord(0, 0, 0));
@@ -351,11 +354,13 @@ public:
       pluginProgress->showPreview(false);
 
     // push a temporary graph state (not redoable)
-    graph->push(false);
+    // preserving layout updates
+    std::vector<PropertyInterface*> propsToPreserve;
 
-    // but ensure result will be preserved
     if (result->getName() != "")
-      preservePropertyUpdates(result);
+      propsToPreserve.push_back(result);
+
+    graph->push(false, &propsToPreserve);
 
     tree = TreeTest::computeTree(graph, pluginProgress);
 
@@ -380,7 +385,7 @@ public:
       const Size& boundingBox = sizes->getNodeValue (n);
       double diam = 2*sqrt (boundingBox.getW() * boundingBox.getW()/4.0 +
                             boundingBox.getH() * boundingBox.getH()/4.0);
-      circleSizes->setNodeValue (n, Size (diam, diam, 1.0));
+      circleSizes->setNodeValue (n, Size (static_cast<float>(diam), static_cast<float>(diam), 1.0f));
     }
     sizes = circleSizes;
 

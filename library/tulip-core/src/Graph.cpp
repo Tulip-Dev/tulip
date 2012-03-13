@@ -395,6 +395,105 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   return result;
 }
 
+//=========================================================
+bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
+                                        PropertyInterface* prop,
+                                        std::string &msg,
+                                        tlp::PluginProgress *progress,
+                                        tlp::DataSet *data) {
+  bool result;
+  tlp::AlgorithmContext context;
+
+  // check if this is a subgraph of prop->graph
+  if (getRoot() != prop->getGraph()) {
+    tlp::Graph *currentGraph = this;
+
+    while(currentGraph->getSuperGraph() != currentGraph) {
+      if (currentGraph == prop->getGraph())
+        break;
+
+      currentGraph = currentGraph->getSuperGraph();
+    }
+
+    if (currentGraph != prop->getGraph()) {
+      msg = "The passed property does not belong to the graph";
+      return false;
+    }
+  }
+
+#ifndef NDEBUG
+  std::cerr << __PRETTY_FUNCTION__ << std::endl;
+#endif
+
+  TLP_HASH_MAP<std::string, PropertyInterface *>::const_iterator it =
+    circularCalls.find(algorithm);
+
+  if (it != circularCalls.end() && (*it).second == prop) {
+#ifndef NDEBUG
+    std::cerr << "Circular call of " << __PRETTY_FUNCTION__ << " " << msg << std::endl;
+#endif
+    return false;
+  }
+
+  // nothing to do if the graph is empty
+  if (numberOfNodes() == 0) {
+    msg= "The graph is empty";
+    return false;
+  }
+
+  tlp::PluginProgress *tmpProgress;
+
+  if (progress==NULL)
+    tmpProgress=new tlp::SimplePluginProgress();
+  else
+    tmpProgress=progress;
+
+  bool hasData = data != NULL;
+
+  if (!hasData)
+    data = new tlp::DataSet();
+
+  // add prop as result in dataset
+  data->set<PropertyInterface *>("result", prop);
+
+  context.pluginProgress = tmpProgress;
+  context.graph = this;
+  context.dataSet = data;
+
+  tlp::Observable::holdObservers();
+  circularCalls[algorithm] = prop;
+  tlp::AlgorithmContext tmpContext(context);
+  Algorithm *tmpAlgo =
+    tlp::PluginLister::instance()->getPluginObject<PropertyAlgorithm>(algorithm, &context);
+
+  if (tmpAlgo != NULL) {
+    result = tmpAlgo->check(msg);
+
+    if (result) {
+      tmpAlgo->run();
+    }
+
+    delete tmpAlgo;
+  }
+  else {
+    msg = "No algorithm available with this name";
+    result=false;
+  }
+
+  circularCalls.erase(algorithm);
+  tlp::Observable::unholdObservers();
+
+  if (progress==NULL) delete tmpProgress;
+
+  if (hasData)
+    // remove result from dataset
+    data->remove("result");
+  else
+    delete data;
+
+  return result;
+}
+
 tlp::node Graph::getSource() const {
   node source(UINT_MAX);
 

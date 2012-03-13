@@ -61,25 +61,28 @@ public :
   }
   virtual ~Algorithm() {}
   /**
-   * @brief Runs the algorithm on the context that was specified during construction.
+   * @brief Runs the algorithm.
+   * It is a good practice to report progress through the PluginProgress, Even if your algorithm is very fast.
+   * Keep in mind that Tulip can handle very large graphs.
+   * The PluginProgress should also be used to report errors, if any.
    *
-   * @return bool Whether the algorithm was successful or not.
-   */
+   * @return bool Whether the algorithm execution was successful or not.
+   **/
   virtual bool run() = 0;
 
   virtual std::string category() const {
     return "Algorithm";
   }
   /**
-   * @brief Checks if the algorithm can run on the context it was given.
+   * @brief Checks whether the algorithm can be applied on this graph or not.
+   * If not, the reason why should be reported through the PluginProgress.
    *
-   * @return Whether the algorithm can be applied or not.
-   */
+   * @param errorMessage A string whose value will be modified to an error message, if the check fails.
+   * @return bool Whether the plug-in can run on this Graph.
+   **/
   virtual bool check(std::string &) {
     return true;
   }
-  virtual void reset() {}
-
   /**
    * @brief The graph this algorithm will be run on. Retrieved from the context at construction.
    */

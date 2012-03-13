@@ -46,31 +46,41 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF( "default", "vertical" )   \
   HTML_HELP_BODY() \
-  "Orientation of the drawing" \
+  "This parameter enables to choose the orientation of the drawing" \
   HTML_HELP_CLOSE(),
   // y node-node spacing
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "float" ) \
   HTML_HELP_DEF( "default", "2" ) \
   HTML_HELP_BODY() \
-  "Minimum y-spacing between any two nodes." \
+  "This parameter defines the minimum y-spacing between any two nodes." \
   HTML_HELP_CLOSE(),
   // x node-node and edge-node spacing
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "float" ) \
   HTML_HELP_DEF( "default", "2" ) \
   HTML_HELP_BODY() \
-  "Minimum x-spacing between nodes or between a node and an edge." \
-  HTML_HELP_CLOSE()
+  "This parameter defines the minimum x-spacing between any two nodes or between a node and an edge." \
+  HTML_HELP_CLOSE(),
+  // node shape
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Integer" ) \
+  HTML_HELP_DEF( "values", "An existing shape property" ) \
+  HTML_HELP_DEF( "default", "viewShape" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the property used as node's shape." \
+  HTML_HELP_CLOSE(),
 };
 }
 #define ORIENTATION "vertical;horizontal;"
 //====================================================
 MixedModel::MixedModel(const tlp::PluginContext* context):LayoutAlgorithm(context)  {
-  addNodeSizePropertyParameter(this);
+  addNodeSizePropertyParameter(this, true /* inout */);
   addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
   addParameter<float> ("y node-node spacing",paramHelp[1],"2");
   addParameter<float> ("x node-node and edge-node spacing",paramHelp[2],"2");
+  addOutParameter<IntegerProperty>("node shape", paramHelp[3],
+                                   "viewShape");
   addDependency<LayoutAlgorithm>("Connected Component Packing", "1.0");
 }
 //====================================================
@@ -78,11 +88,12 @@ MixedModel::~MixedModel() {
 }
 //====================================================
 bool MixedModel::run() {
-  size = graph->getProperty<SizeProperty>("viewSize");
   string orientation = "vertical";
+  sizeResult = NULL;
+  glyphResult = NULL;
 
   if (dataSet!=0) {
-    getNodeSizePropertyParameter(dataSet, size);
+    getNodeSizePropertyParameter(dataSet, sizeResult);
     StringCollection tmp;
 
     if (dataSet->get("orientation", tmp)) {
@@ -91,26 +102,27 @@ bool MixedModel::run() {
 
     dataSet->get("y node-node spacing",spacing);
     dataSet->get("x node-node and edge-node spacing",edgeNodeSpacing);
+    dataSet->get("node shape", glyphResult);
   }
 
-  // ensure size updates will be kept after a pop
-  preservePropertyUpdates(size);
+  if (sizeResult == NULL)
+    sizeResult = graph->getProperty<SizeProperty>("viewSize");
+
+  if (glyphResult == NULL)
+    glyphResult = graph->getLocalProperty<IntegerProperty>("viewShape");
+
 
   //=========================================================
   //rotate size if necessary
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
-      const Size& tmp = size->getNodeValue(n);
-      size->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      const Size& tmp = sizeResult->getNodeValue(n);
+      sizeResult->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
   }
 
-  //===========================================================
-  IntegerProperty * intProxy = graph->getProperty<IntegerProperty>("viewShape");
-  // ensure shape updates will be kept after a pop
-  preservePropertyUpdates(intProxy);
-  intProxy->setAllEdgeValue(0);
+  glyphResult->setAllEdgeValue(0);
 
   // give some empirical feedback of what we are doing 1 %
   pluginProgress->progress(1, 1000);
@@ -131,7 +143,7 @@ bool MixedModel::run() {
   Iterator<Graph *> *it = Pere->getSubGraphs();
 
   while(it->hasNext()) {
-    ++nbConnectedComponent;
+    nbConnectedComponent++;
     currentGraph = it->next();
 
     //====================================================
@@ -147,16 +159,16 @@ bool MixedModel::run() {
     else if(currentGraph->numberOfNodes() == 2 || currentGraph->numberOfNodes() == 3) {
       Iterator<node> * itn = currentGraph->getNodes();
       node n = itn->next();
-      Coord c(currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n));
+      Coord c(sizeResult->getNodeValue(n));
       result->setNodeValue(n, Coord(0,0,0));
       node n2 = itn->next();
-      Coord c2(currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n2));
+      Coord c2(sizeResult->getNodeValue(n2));
       result->setNodeValue(n2, Coord(spacing + c.getX()/2+c2.getX()/2,0,0));
 
       if(currentGraph->numberOfNodes() == 3) {
         node n3 = itn->next();
-        Coord c3(currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n2));
-        result->setNodeValue(n3, Coord(2. * spacing + c.getX()/2 + c2.getX()+c3.getX()/2,0,0));
+        Coord c3(sizeResult->getNodeValue(n2));
+        result->setNodeValue(n3, Coord(2.f * spacing + c.getX()/2.f + c2.getX()+c3.getX()/2.f,0,0));
         edge e = currentGraph->existEdge(n,n3, false);
 
         if(e.isValid()) {
@@ -166,12 +178,12 @@ bool MixedModel::run() {
           max += (unsigned int) edgeNodeSpacing;
 
           if(currentGraph->source(e) == n) {
-            bends.push_back(Coord(0,max,0));
-            bends.push_back(Coord(2. * spacing + c.getX()/2 + c2.getX()+c3.getX()/2,max,0));
+            bends.push_back(Coord(0,static_cast<float>(max),0));
+            bends.push_back(Coord(2.f * spacing + c.getX()/2.f + c2.getX()+c3.getX()/2.f,static_cast<float>(max),0));
           }
           else {
-            bends.push_back(Coord(2. * spacing + c.getX()/2 + c2.getX()+c3.getX()/2,max,0));
-            bends.push_back(Coord(0,max,0));
+            bends.push_back(Coord(2.f * spacing + c.getX()/2.f + c2.getX()+c3.getX()/2.f,static_cast<float>(max),0));
+            bends.push_back(Coord(0,static_cast<float>(max),0));
           }
 
           result->setEdgeValue(e, bends);
@@ -347,8 +359,8 @@ bool MixedModel::run() {
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
-      const Size& tmp = size->getNodeValue(n);
-      size->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      const Size& tmp = sizeResult->getNodeValue(n);
+      sizeResult->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
       const Coord& tmpC = result->getNodeValue(n);
       result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
@@ -480,7 +492,7 @@ void MixedModel::placeNodesEdges() {
   delete ite;
 
   if(!planar) {
-    double z_size = (maxX+maxY)/3;//sqrt(maxX + maxY);
+    float z_size = (maxX+maxY)/3.f;//sqrt(maxX + maxY);
     maxX /= 8;
     maxY /= 8;
 
@@ -489,7 +501,7 @@ void MixedModel::placeNodesEdges() {
       const pair<node, node>& eEnds = carte->ends(e);
       node n = eEnds.first;
       node v = eEnds.second;
-      Coord c_n(-maxX+(NodeCoords[n].getX()+NodeCoords[v].getX())/2, -maxY+(NodeCoords[n].getY()+NodeCoords[v].getY())/2, -z_size);
+      Coord c_n(-maxX+(NodeCoords[n].getX()+NodeCoords[v].getX())/2.f, -maxY+(NodeCoords[n].getY()+NodeCoords[v].getY())/2.f, -z_size);
       vector<Coord> bends;
       bends.push_back(c_n);
       result->setEdgeValue(e, bends);
@@ -731,7 +743,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
       int out_l = 0, out_r = 0, dl = 0, dr = 0;
       // determinate the coords out-in points
 
-      float dtmp = (nbOut-1.)/2.;
+      float dtmp = (nbOut-1.f)/2.f;
       int outPlus = int(dtmp);
 
       int outMoins = (0 >= outPlus ? 0 : outPlus);
@@ -835,15 +847,15 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
         Coord c;
 
         for(int x = -out_l, y = dl; x<=-1 ; ++x,++y) {
-          c.set(x, y);
+          c.set(static_cast<float>(x), static_cast<float>(y));
           out_points[v].push_back(c);
         }
 
-        c.set(0,(out_l+dl-1 > out_r+dr-1) ? out_l+dl-1 : out_r+dr-1);
+        c.set(0,(out_l+dl-1 > out_r+dr-1) ? static_cast<float>(out_l+dl-1) : static_cast<float>(out_r+dr-1));
         out_points[v].push_back(c);
 
         for(int x = 1, y = out_r+dr-1; y>=dr ; ++x,--y) {
-          c.set(x,y);
+          c.set(static_cast<float>(x),static_cast<float>(y));
           out_points[v].push_back(c);
         }
       }
@@ -878,7 +890,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
       }
 
       int in_l = (nbIn - 3)/2;
-      float ftmp = (nbIn - 3.)/2.;
+      float ftmp = (nbIn - 3.f)/2.f;
       int in_r = in_l;
 
       if(0>in_l) in_l = 0;
@@ -892,27 +904,27 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
 
       if(nbIn > 3) {
         unsigned int j = 0;
-        Coord c(-in_l,0);
+        Coord c(-static_cast<float>(in_l),0);
         InPoints[listOfEdgesIN[j]].push_back(c);
         ++j;
 
         for(int x = -in_l, y = -1; x<=-1 ; ++x,--y) {
-          c.set(x, y);
+          c.set(static_cast<float>(x), static_cast<float>(y));
           InPoints[listOfEdgesIN[j]].push_back(c);
           ++j;
         }
 
-        c.set(0, -in_r);
+        c.set(0, -static_cast<float>(in_r));
         InPoints[listOfEdgesIN[j]].push_back(c);
         ++j;
 
         for(int x = 1, y = -in_r; x<=in_r ; ++x,++y) {
-          c.set(x, y);
+          c.set(static_cast<float>(x), static_cast<float>(y));
           InPoints[listOfEdgesIN[j]].push_back(c);
           ++j;
         }
 
-        c.set(in_r, 0);
+        c.set(static_cast<float>(in_r), 0);
         InPoints[listOfEdgesIN[j]].push_back(c);
         ++j;
 
@@ -951,7 +963,7 @@ void MixedModel::computeCoords() {
 
   while(itn->hasNext()) {
     node n = itn->next();
-    Coord c(size->getNodeValue(n));
+    Coord c(sizeResult->getNodeValue(n));
     c[0] += edgeNodeSpacing;
     nodeSize.set(n.id, c);
   }
@@ -973,8 +985,8 @@ void MixedModel::computeCoords() {
     Coord c = nodeSize.get((V[0][i]).id);
     float x;
 
-    if(i == 0) x = (out_l < (c.getX()/2.) ? (c.getX()/2.) : out_l) ;
-    else  x = out_r_moins1 + (out_l < (c.getX()/2.) ? (c.getX()/2.) : out_l)  + spacing;
+    if(i == 0) x = (out_l < static_cast<double>(c.getX()/2.f) ? (c.getX()/2.f) : static_cast<float>(out_l)) ;
+    else  x = static_cast<float>(out_r_moins1) + (out_l < static_cast<double>(c.getX()/2.f) ? (c.getX()/2.f) : static_cast<float>(out_l))  + spacing;
 
     NodeCoords[v] = Coord(x, 0, 0);  // y(vi) = 0
     out_r_moins1 = (out_r < (c.getX()/2.) ? (c.getX()/2.) : out_r);
@@ -994,12 +1006,12 @@ void MixedModel::computeCoords() {
     vector<node>::iterator ir = find(il, C.end(), cr);  // par définition, il<ir
     assert(ir != C.end());
     Coord co = nodeSize.get((*il).id);
-    float max_y = NodeCoords[(*il)].getY() + co.getY()/2. ;
+    float max_y = NodeCoords[(*il)].getY() + co.getY()/2.f ;
     float somme = 0; // relative to cl
 
     for(vector<node>::iterator i = il+1; i != ir+1; ++i) {
       Coord co2 = nodeSize.get((*i).id);
-      float y =  NodeCoords[(*i)].getY() + co2.getY()/2. ; //recherche max des y(ci) dans [cl...cr]
+      float y =  NodeCoords[(*i)].getY() + co2.getY()/2.f ; //recherche max des y(ci) dans [cl...cr]
 
       if(max_y<y) max_y = y;
 
@@ -1052,7 +1064,7 @@ void MixedModel::computeCoords() {
       int out_l = outl[V[k][0]], out_r = outr[V[k][0]];
 
       float tmp = NodeCoords[(*it)].getX()+ dxt;
-      float ftmp = (out_l<(nodeSize.get(Z0.id)).getX()/2. ? (nodeSize.get(Z0.id)).getX()/2. : out_l) + dxl;
+      float ftmp = (out_l<(nodeSize.get(Z0.id)).getX()/2.f ? (nodeSize.get(Z0.id)).getX()/2.f : out_l) + dxl;
 
       if(tmp >= ftmp) NodeCoords[Z0].setX(tmp);
       else NodeCoords[Z0].setX(ftmp);
@@ -1065,7 +1077,7 @@ void MixedModel::computeCoords() {
       else delta = 0;
 
       tmp = NodeCoords[(*ir)].getX()+ delta - NodeCoords[Z0].getX();
-      ftmp = (out_r<(nodeSize.get(Z0.id)).getX()/2. ? (nodeSize.get(Z0.id)).getX()/2. : out_r) - dxr;
+      ftmp = (out_r<(nodeSize.get(Z0.id)).getX()/2.f ? (nodeSize.get(Z0.id)).getX()/2.f : out_r) - dxr;
 
       if(tmp >= ftmp) NodeCoords[(*ir)].setX(tmp);
       else NodeCoords[(*ir)].setX(ftmp);
@@ -1091,15 +1103,15 @@ void MixedModel::computeCoords() {
         if(i == 0) x = (out_l<co2.getX()/2. ? co2.getX()/2. : out_l) + dxl;
         else x = out_r_moins1 + (out_l<co2.getX()/2. ? co2.getX()/2. : out_l)+1;
 
-        NodeCoords[V[k][i]].setX(x);
-        somme += x;
+        NodeCoords[V[k][i]].setX(static_cast<float>(x));
+        somme += static_cast<float>(x);
 
         out_r_moins1 = (int) (out_r<co2.getX()/2. ? co2.getX()/2. : out_r);
       }
 
       //assign x(cr)
       co = nodeSize.get((V[k][p-1]).id);
-      float tmp = (out_r<co.getX()/2. ? co.getX()/2. : out_r) - dxr;
+      float tmp = (out_r<co.getX()/2.f ? co.getX()/2.f : out_r) - dxr;
 
       float xtmp = NodeCoords[cr].getX();
       double x;
@@ -1107,7 +1119,7 @@ void MixedModel::computeCoords() {
       if(tmp > xtmp - somme) x = tmp;
       else x = xtmp - somme;
 
-      NodeCoords[cr].setX(x);
+      NodeCoords[cr].setX(static_cast<float>(x));
 
       float xZ0 = NodeCoords[Z0].getX();
 

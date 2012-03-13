@@ -91,8 +91,8 @@ private:
   tlp::MutableContainer<tlp::Coord> nodeSize;
   std::vector<tlp::edge> unplanar_edges;
   bool planar;
-  tlp::SizeProperty *size;
-
+  tlp::SizeProperty *sizeResult;
+  tlp::IntegerProperty *glyphResult;
 };
 /*@}*/
 #endif

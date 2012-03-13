@@ -51,7 +51,7 @@ void ConeTreeExtended::computeYCoodinates(tlp::node root) {
   yCoordinates[0] = 0;
 
   for (unsigned int i = 1; i < levelSize.size(); ++i) {
-    yCoordinates[i] = yCoordinates[i-1] + levelSize[i] / 2.0 + levelSize[i-1] / 2.0;
+    yCoordinates[i] = yCoordinates[i-1] + levelSize[i] / 2.0f + levelSize[i-1] / 2.0f;
   }
 }
 //===============================================================
@@ -106,19 +106,19 @@ double ConeTreeExtended::treePlace3D(tlp::node n,
 
   for (unsigned int i=0; i<subCircleRadius.size()-1; ++i) {
     for (unsigned int j=i+1; j<subCircleRadius.size(); ++j) {
-      newRadius = std::max(newRadius , minRadius(subCircleRadius[i],vangles[i],subCircleRadius[j],vangles[j]));
+      newRadius = std::max(newRadius , minRadius(static_cast<float>(subCircleRadius[i]),static_cast<float>(vangles[i]),static_cast<float>(subCircleRadius[j]),static_cast<float>(vangles[j])));
     }
   }
 
-  if (newRadius==0) newRadius=radius;
+  if (newRadius==0) newRadius=static_cast<float>(radius);
 
   //compute Circle Hull
   vector<tlp::Circle<float> > circles(subCircleRadius.size());
 
   for (unsigned int i=0; i<subCircleRadius.size(); ++i) {
-    circles[i][0]=newRadius*cos(vangles[i]);
-    circles[i][1]=newRadius*sin(vangles[i]);
-    circles[i].radius=subCircleRadius[i];
+    circles[i][0]=newRadius*static_cast<float>(cos(vangles[i]));
+    circles[i][1]=newRadius*static_cast<float>(sin(vangles[i]));
+    circles[i].radius=static_cast<float>(subCircleRadius[i]);
   }
 
   tlp::Circle<float> circleH=tlp::enclosingCircle(circles);
@@ -139,7 +139,7 @@ double ConeTreeExtended::treePlace3D(tlp::node n,
 void ConeTreeExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node,double> *px,
                                   TLP_HASH_MAP<tlp::node,double> *py,
                                   double x, double y, int level) {
-  result->setNodeValue(n,Coord(x+(*px)[n], - yCoordinates[level],y+(*py)[n]));
+  result->setNodeValue(n,Coord(static_cast<float>(x+(*px)[n]), - static_cast<float>(yCoordinates[level]),static_cast<float>(y+(*py)[n])));
   node itn;
   forEach(itn, tree->getOutNodes(n)) {
     calcLayout(itn, px, py, x+(*px)[n], y+(*py)[n], level + 1);
@@ -153,7 +153,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF( "default", "horizontal" )   \
   HTML_HELP_BODY() \
-  "Orientation of the drawing." \
+  "This parameter enables to choose the orientation of the drawing" \
   HTML_HELP_CLOSE()
 };
 }
@@ -200,11 +200,13 @@ bool ConeTreeExtended::run() {
     pluginProgress->showPreview(false);
 
   // push a temporary graph state (not redoable)
-  graph->push(false);
+  // preserving layout updates
+  std::vector<PropertyInterface*> propsToPreserve;
 
-  // but ensure result will be preserved
   if (result->getName() != "")
-    preservePropertyUpdates(result);
+    propsToPreserve.push_back(result);
+
+  graph->push(false, &propsToPreserve);
 
   tree = TreeTest::computeTree(graph, pluginProgress);
 
@@ -214,6 +216,7 @@ bool ConeTreeExtended::run() {
   }
 
   node root = tree->getSource();
+  assert(root.isValid());
   TLP_HASH_MAP<node,double> posX;
   TLP_HASH_MAP<node,double> posY;
   treePlace3D(root,&posX,&posY);

@@ -54,29 +54,6 @@ public :
   ///
   ~AlgorithmContext() {}
 };
-
-
-/**
- * @brief This class is used as only parameter when calling Property plug-ins.
- * It contains a Graph on whyich to run the plug-in, a PropertyInterface which will hold the result of the plug-in, and a PluginProgress to give feedback on the plug-in's progress.
- **/
-class PropertyContext : public tlp::AlgorithmContext {
-public :
-
-  /**
-   * @brief A property the plug-in can modify freely.
-   * No other property should be modified.
-   **/
-  PropertyInterface *propertyProxy;
-
-  PropertyContext(tlp::Graph* graph = NULL, tlp::PropertyInterface* property = NULL, tlp::DataSet* dataSet = NULL, tlp::PluginProgress* progress = NULL):
-    AlgorithmContext(graph, dataSet, progress),
-    propertyProxy(property)
-  {}
-
-  ///
-  ~PropertyContext() {}
-};
 /*@}*/
 
 }

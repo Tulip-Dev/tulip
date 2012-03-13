@@ -604,6 +604,14 @@ public:
    * using the DataSet. In some cases algorithms can use this DataSet in order
    * to return some external information (not stored in result).
    */
+  bool applyPropertyAlgorithm(const std::string &algorithm,
+                              PropertyInterface* result,
+                              std::string &msg,
+                              PluginProgress *progress=NULL,
+                              DataSet *data=NULL);
+  /**
+   * obsolete version of the previous one
+   */
   template<typename PropertyType>
   bool computeProperty(const std::string &algorithm,
                        PropertyType* result, std::string &msg,
@@ -708,13 +716,6 @@ public:
    * the undone updates could not be replayed.
    */
   virtual void pop(bool unpopAllowed = true)=0;
-  /*
-   * Indicates that next updates of the property given in argument
-   * will be preserved during the next call of the pop method.
-   * Returns false if updates of that property are already recorded
-   * since the last call of the push method.
-   */
-  virtual bool nextPopKeepPropertyUpdates(PropertyInterface* prop)=0;
   /*
    * Marks again the current state of the root graph hierarchy
    * and replays the last updates previously undone.

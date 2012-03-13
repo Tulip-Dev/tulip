@@ -40,7 +40,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF( "default", "horizontal" )   \
   HTML_HELP_BODY() \
-  "Orientation of the drawing" \
+  "This parameter enables to choose the orientation of the drawing" \
   HTML_HELP_CLOSE()
 };
 }
@@ -52,7 +52,7 @@ HierarchicalGraph::HierarchicalGraph(const tlp::PluginContext* context):LayoutAl
   addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
   addSpacingParameters(this);
   addDependency<DoubleAlgorithm>("Dag Level", "1.0");
-  addDependency<LayoutAlgorithm>("Hierarchical Tree (R-T Extended)", "1.0");
+  addDependency<LayoutAlgorithm>("Hierarchical Tree (R-T Extended)", "1.1");
 }
 //================================================================================
 HierarchicalGraph::~HierarchicalGraph() {}
@@ -378,10 +378,10 @@ bool HierarchicalGraph::run() {
   }
   */
   //=======================================================================
-  nodeSize = graph->getProperty<SizeProperty>("viewSize");
   orientation = "horizontal";
   spacing = 64.0;
   nodeSpacing = 18;
+  SizeProperty* nodeSize = NULL;
 
   if (dataSet!=0) {
     getNodeSizePropertyParameter(dataSet, nodeSize);
@@ -393,17 +393,21 @@ bool HierarchicalGraph::run() {
     }
   }
 
-  // ensure size updates will be kept after a pop
-  preservePropertyUpdates(nodeSize);
+  if (nodeSize == NULL)
+    nodeSize = graph->getProperty<SizeProperty>("viewSize");
 
   //=========================================================
-  //rotate size if necessary
+  // use a temporary rotated size if necessary
   if (orientation == "horizontal") {
+    SizeProperty* tmpSize = new SizeProperty(graph);
+
+    tmpSize->copy(nodeSize);
     node n;
     forEach(n, graph->getNodes()) {
-      const Size& tmp = nodeSize->getNodeValue(n);
-      nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      const Size& tmp = tmpSize->getNodeValue(n);
+      tmpSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
+    nodeSize = tmpSize;
   }
 
   // push a temporary graph state (not redoable)
@@ -456,7 +460,9 @@ bool HierarchicalGraph::run() {
   }
 
   //We draw the tree using a tree drawing algorithm
+#ifndef NDEBUG
   bool resultBool;
+#endif
   string erreurMsg;
   LayoutProperty tmpLayout(graph);
   DataSet tmp;
@@ -471,34 +477,24 @@ bool HierarchicalGraph::run() {
   StringCollection tmpS("vertical;horizontal;");
   tmpS.setCurrent("vertical");
   tmp.set("orientation", tmpS);
-  resultBool = mySGraph->computeProperty("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg, 0, &tmp);
+#ifndef NDEBUG
+  resultBool =
+#endif
+    mySGraph->computeProperty("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg, 0, &tmp);
 
   if (edgeLength)
     delete edgeLength;
 
-  (void)resultBool;
   assert(resultBool);
+
 
   node n;
   forEach(n, graph->getNodes()) {
     result->setNodeValue(n, tmpLayout.getNodeValue(n));
   }
 
-  //  computeEdgeBends(mySGraph, tmpLayout, replacedEdges, reversedEdges);
-  //  computeSelfLoops(mySGraph, tmpLayout, listSelfLoops);
   computeEdgeBends(graph, tmpLayout, replacedEdges, reversedEdges);
   computeSelfLoops(graph, tmpLayout, listSelfLoops);
-  /*
-  for (vector<edge>::const_iterator it=reversedEdges.begin(); it!=reversedEdges.end(); ++it) {
-    graph->reverse(*it);
-  }
-  mySGraph->delAllNode(startNode);
-  while(!properAddedNodes.empty()) {
-    mySGraph->delAllNode(properAddedNodes.back());
-    properAddedNodes.pop_back();
-  }
-  graph->delSubGraph(mySGraph);
-  */
 
   // forget last temporary graph state
   graph->pop();
@@ -524,8 +520,9 @@ bool HierarchicalGraph::run() {
 
   edge e;
   forEach(e, graph->getEdges()) {
-    node src = graph->source(e);
-    node tgt = graph->target(e);
+    std::pair<node, node> eEnds(graph->ends(e));
+    node src = eEnds.first;
+    node tgt = eEnds.second;
 
     if (src == tgt) {
       continue;
@@ -543,20 +540,20 @@ bool HierarchicalGraph::run() {
 
     if (old.empty()) {
       vector<Coord> pos(2);
-      srcPos[1] += rev*(levelMaxSize[nodeLevel.get(src.id)]/2.0 + spacing/4.);
-      tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.0 + spacing/4.);
+      srcPos[1] += rev*(levelMaxSize[nodeLevel.get(src.id)]/2.f + spacing/4.f);
+      tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.f + spacing/4.f);
       pos[0] = srcPos;
       pos[1] = tgtPos;
       result->setEdgeValue(e, pos);
     }
     else {
       vector<Coord> pos(4);
-      srcPos[1] += rev*(levelMaxSize[nodeLevel.get(src.id)]/2.0 + spacing/4.);
-      tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.0 + spacing/4.);
+      srcPos[1] += rev*(levelMaxSize[nodeLevel.get(src.id)]/2.f + spacing/4.f);
+      tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.f + spacing/4.f);
       Coord src2Pos = old.front();
       Coord tgt2Pos = old.back();
-      src2Pos[1] = srcPos[1] + rev*spacing/2.;
-      tgt2Pos[1] = tgtPos[1] - rev*spacing/2.;
+      src2Pos[1] = srcPos[1] + rev*spacing/2.f;
+      tgt2Pos[1] = tgtPos[1] - rev*spacing/2.f;
       /*
         Coord src2Pos = old.front();
         Coord tgt2Pos = old.back();
@@ -575,16 +572,16 @@ bool HierarchicalGraph::run() {
   forEach(n, graph->getNodes()) {
     Coord tmp = result->getNodeValue(n);
     const Size& tmpS = nodeSize->getNodeValue(n);
-    tmp[1] -= (levelMaxSize[nodeLevel.get(n.id)] - tmpS[1]) / 2.0;
+    tmp[1] -= (levelMaxSize[nodeLevel.get(n.id)] - tmpS[1]) / 2.f;
     result->setNodeValue(n, tmp);
   }
 
-  //rotate layout and size
+  //rotate layout
   if (orientation == "horizontal") {
+    // delete the temporary allocated SizeProperty (see above)
+    delete nodeSize;
     node n;
     forEach(n, graph->getNodes()) {
-      const Size&  tmp = nodeSize->getNodeValue(n);
-      nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
       const Coord& tmpC = result->getNodeValue(n);
       result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
