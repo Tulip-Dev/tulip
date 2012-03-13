@@ -68,28 +68,26 @@ void CaptionItem::clearObservers() {
     _graph=view->graph();
     _graph->addGraphObserver(this);
   }
+
+  if(_metricProperty)
+    _metricProperty->removePropertyObserver(this);
+  _metricProperty=view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty());
+  _metricProperty->addPropertyObserver(this);
+
+  if(_colorProperty)
+    _colorProperty->removePropertyObserver(this);
+  _colorProperty=view->graph()->getProperty<ColorProperty>("viewColor");
+  _colorProperty->addPropertyObserver(this);
+
+  if(_sizeProperty)
+    _sizeProperty->removePropertyObserver(this);
+  _sizeProperty=view->graph()->getProperty<SizeProperty>("viewSize");
+  _sizeProperty->addPropertyObserver(this);
 }
 
 void CaptionItem::generateColorCaption(){
 
   clearObservers();
-
-  if(_graph!=view->graph()) {
-    if(_graph)
-      _graph->removeGraphObserver(this);
-
-    _graph=view->graph();
-    _graph->addGraphObserver(this);
-  }
-
-
-  _metricProperty=view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty());
-  _metricProperty->addPropertyObserver(this);
-
-
-
-  _colorProperty=view->graph()->getProperty<ColorProperty>("viewColor");
-  _colorProperty->addPropertyObserver(this);
 
   map<double,Color> metricToColorMap;
   vector<pair <double,Color> > metricToColorFiltered;
@@ -125,18 +123,6 @@ void CaptionItem::generateColorCaption(){
 void CaptionItem::generateSizeCaption(){
 
   clearObservers();
-
-  if(_graph!=view->graph()){
-    if(_graph)
-      _graph->removeGraphObserver(this);
-    _graph=view->graph();
-    _graph->addGraphObserver(this);
-  }
-
-  _metricProperty=view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty());
-  _metricProperty->addPropertyObserver(this);
-  _sizeProperty=view->graph()->getProperty<SizeProperty>("viewSize");
-  _sizeProperty->addPropertyObserver(this);
 
   double minProp=_metricProperty->getNodeMin();
   double maxProp=_metricProperty->getNodeMax();
@@ -200,8 +186,8 @@ void CaptionItem::applyNewFilter(float begin, float end) {
   double endMetric=minProp+(end*(maxProp-minProp));
 
   metricProperty->removePropertyObserver(this);
-  if(_captionType==ColorCaption)
-    colorProperty->removePropertyObserver(this);
+  colorProperty->removePropertyObserver(this);
+  sizeProperty->removePropertyObserver(this);
 
   Observer::holdObservers();
 
@@ -231,8 +217,8 @@ void CaptionItem::applyNewFilter(float begin, float end) {
   Observer::unholdObservers();
 
   metricProperty->addPropertyObserver(this);
-  if(_captionType==ColorCaption)
-    colorProperty->addPropertyObserver(this);
+  colorProperty->addPropertyObserver(this);
+  sizeProperty->addPropertyObserver(this);
 }
 
 void CaptionItem::treatEvent(const Event &ev) {
@@ -256,10 +242,13 @@ void CaptionItem::selectedPropertyChanged(string propertyName) {
 }
 
 void CaptionItem::selectedTypeChanged(string typeName){
-  if(typeName=="Color")
+  if(typeName=="Color"){
     generateColorCaption();
-  else
+    _captionType=ColorCaption;
+  }else{
     generateSizeCaption();
+    _captionType=SizeCaption;
+  }
 }
 
 }

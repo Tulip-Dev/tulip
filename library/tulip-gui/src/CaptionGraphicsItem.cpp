@@ -34,9 +34,10 @@ CaptionGraphicsItem::CaptionGraphicsItem(View *view):_view(view) {
   connect(_rondedRectItem,SIGNAL(filterChanged(float,float)),this,SLOT(filterChangedSlot(float,float)));
   connect(_rondedRectItem,SIGNAL(configurationIconPressed()),this,SLOT(configurationIconPressed()));
 
-  _confBackgroundRectItem = new QGraphicsRectItem(130,0,170,100);
+  _confBackgroundRectItem = new QGraphicsRectItem(130,0,280,40);
   _confBackgroundRectItem->setParentItem(_rondedRectItem);
   _confBackgroundRectItem->setBrush(QBrush(QColor(255,255,255,180)));
+  _confBackgroundRectItem->setAcceptHoverEvents(true);
 
   _confBackgroundRectItem->setVisible(false);
 
@@ -44,13 +45,13 @@ CaptionGraphicsItem::CaptionGraphicsItem(View *view):_view(view) {
   _confPropertySelectionWidget->resize(QSize(150,30));
   _confPropertySelectionItem = new QGraphicsProxyWidget(_confBackgroundRectItem);
   _confPropertySelectionItem->setWidget(_confPropertySelectionWidget);
-  _confPropertySelectionItem->setPos(140,10);
+  _confPropertySelectionItem->setPos(140,5);
 
   _confTypeSelectionWidget = new QComboBox();
-  _confTypeSelectionWidget->resize(QSize(150,30));
+  _confTypeSelectionWidget->resize(QSize(100,30));
   _confTypeSelectionItem = new QGraphicsProxyWidget(_confBackgroundRectItem);
   _confTypeSelectionItem->setWidget(_confTypeSelectionWidget);
-  _confTypeSelectionItem->setPos(140,50);
+  _confTypeSelectionItem->setPos(300,5);
 }
 
 void CaptionGraphicsItem::loadConfiguration() {
