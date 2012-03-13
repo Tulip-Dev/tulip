@@ -76,15 +76,13 @@ class MemoryBlocks {
 public :
 
   ~MemoryBlocks() {
-    for (size_t i = 0 ; i < MAXNBTHREADS ; ++i) {
-      if (!_freeObject[i].empty()) {
-        free(_freeObject[i][0]);
-      }
+    for (size_t i = 0 ; i < _allocatedMemory.size() ; ++i) {
+        free(_allocatedMemory[i]);
     }
-
   }
 
   std::vector<void * > _freeObject[MAXNBTHREADS];
+  std::vector<void * > _allocatedMemory;
 };
 
 template <typename  TYPE >
@@ -116,7 +114,7 @@ private:
 
     if (memBlocks._freeObject[threadId].empty()) {
       TYPE * p = (TYPE *)malloc(BUFFOBJ * sizeof(TYPE));
-
+      memBlocks._allocatedMemory.push_back(p);
       for (size_t j=0; j< BUFFOBJ - 1; ++j) {
         memBlocks._freeObject[threadId].push_back((void *)p);
         p += 1;
