@@ -54,7 +54,7 @@ void GlMainView::drawOverview(bool generatePixmap) {
     generatePixmap=true;
   }
 
-  if(!_overviewItem->isVisible()){
+  if(!_overviewItem->isVisible()) {
     return;
   }
 
@@ -62,15 +62,17 @@ void GlMainView::drawOverview(bool generatePixmap) {
 }
 
 void GlMainView::hideShowCaption() {
-  if(_caption==NULL){
+  if(_caption==NULL) {
     _caption=new CaptionItem(this);
     _caption->create(CaptionItem::ColorCaption);
     addToScene(_caption->captionGraphicsItem());
     _caption->captionGraphicsItem()->setPos(_captionPos);
-  }else{
-    if(_caption->captionGraphicsItem()->isVisible()){
+  }
+  else {
+    if(_caption->captionGraphicsItem()->isVisible()) {
       _caption->captionGraphicsItem()->setVisible(false);
-    }else{
+    }
+    else {
       _caption->captionGraphicsItem()->setVisible(true);
     }
   }
@@ -142,6 +144,7 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
     _quickAccessBarItem->setPos(0,rect.height()-_quickAccessBarItem->size().height());
     _quickAccessBarItem->resize(rect.width(),_quickAccessBarItem->size().height());
   }
+
   if(_quickAccessBar != NULL)
     _captionPos=QPointF(0,rect.height()-230-_quickAccessBarItem->size().height());
   else

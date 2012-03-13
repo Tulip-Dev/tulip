@@ -308,8 +308,8 @@ public:
           // layout the node in the middle of the sector
           double nAngle = (startAngle + endAngle)/2.0;
           result->setNodeValue(n, Coord(lRadii[depth] * static_cast<float>(cos(nAngle)),
-                                              lRadii[depth] * static_cast<float>(sin(nAngle)),
-                                              0));
+                                        lRadii[depth] * static_cast<float>(sin(nAngle)),
+                                        0));
         }
         else
           result->setNodeValue(n, Coord(0, 0, 0));

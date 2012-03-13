@@ -198,8 +198,10 @@ void GraphPerspective::createPanel(tlp::Graph* g) {
 
 void GraphPerspective::panelFocused(tlp::View* view) {
   disconnect(this,SLOT(focusedPanelGraphSet(tlp::Graph*)));
+
   if (!_ui->graphHierarchiesEditor->synchronized())
     return;
+
   connect(view,SIGNAL(graphSet(tlp::Graph*)),this,SLOT(focusedPanelGraphSet(tlp::Graph*)));
   focusedPanelGraphSet(view->graph());
 }

@@ -58,17 +58,17 @@ void CaptionGraphicsItem::loadConfiguration() {
   constructConfigWidget();
 }
 
-void CaptionGraphicsItem::generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &propertyName, double minValue, double maxValue){
+void CaptionGraphicsItem::generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &propertyName, double minValue, double maxValue) {
   _rondedRectItem->generateColorCaption(activeGradient,hideGradient,propertyName,minValue,maxValue);
 }
 
-void CaptionGraphicsItem::generateSizeCaption(const vector< pair <double,float> > &metricToSizeFilteredList,const string &propertyName, double minValue, double maxValue){
+void CaptionGraphicsItem::generateSizeCaption(const vector< pair <double,float> > &metricToSizeFilteredList,const string &propertyName, double minValue, double maxValue) {
   _rondedRectItem->generateSizeCaption(metricToSizeFilteredList,propertyName,minValue,maxValue);
 }
 
 void CaptionGraphicsItem::constructConfigWidget() {
 
-  if(_confTypeSelectionWidget->count()==0){
+  if(_confTypeSelectionWidget->count()==0) {
     _confTypeSelectionWidget->addItems(QStringList() << "Color" << "Size");
     connect(_confTypeSelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedTypeChangedSlot(QString)));
   }
@@ -114,7 +114,7 @@ void CaptionGraphicsItem::selectedPropertyChangedSlot(const QString &propertyNam
   emit selectedPropertyChanged(propertyName.toStdString());
 }
 
-void CaptionGraphicsItem::selectedTypeChangedSlot(const QString &typeName){
+void CaptionGraphicsItem::selectedTypeChangedSlot(const QString &typeName) {
   emit selectedTypeChanged(typeName.toStdString());
 }
 

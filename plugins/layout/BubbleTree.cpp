@@ -236,8 +236,8 @@ void BubbleTree::calcLayout2(tlp::node n, TLP_HASH_MAP<tlp::node,tlp::Vector<dou
   zeta = rot1*zeta[0] + rot2*zeta[1];
 
   result->setNodeValue(n, Coord(static_cast<float>(enclosingCircleCenter[0]+zeta[0]),
-                                      static_cast<float>(enclosingCircleCenter[1]+zeta[1]),
-                                      0.) );
+                                static_cast<float>(enclosingCircleCenter[1]+zeta[1]),
+                                0.) );
 
   /*
    * Place bend on edge to prevent overlaping
