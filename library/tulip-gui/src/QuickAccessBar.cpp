@@ -95,6 +95,10 @@ void QuickAccessBar::reset() {
   _resetting = false;
 }
 
+void QuickAccessBar::hideShowCaption() {
+  _mainView->hideShowCaption();
+}
+
 void QuickAccessBar::takeSnapshot() {
 }
 

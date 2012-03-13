@@ -21,12 +21,14 @@
 #include <tulip/SceneConfigWidget.h>
 #include <tulip/GlOverviewGraphicsItem.h>
 #include <tulip/QuickAccessBar.h>
+#include <tulip/CaptionItem.h>
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtGui/QGraphicsView>
 
 using namespace tlp;
 
-GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL) {
+
+GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL),_caption(NULL) {
 }
 
 GlMainView::~GlMainView() {
@@ -52,7 +54,26 @@ void GlMainView::drawOverview(bool generatePixmap) {
     generatePixmap=true;
   }
 
+  if(!_overviewItem->isVisible()){
+    return;
+  }
+
   _overviewItem->draw(generatePixmap);
+}
+
+void GlMainView::hideShowCaption() {
+  if(_caption==NULL){
+    _caption=new CaptionItem(this);
+    _caption->create(CaptionItem::ColorCaption);
+    addToScene(_caption->captionGraphicsItem());
+    _caption->captionGraphicsItem()->setPos(_captionPos);
+  }else{
+    if(_caption->captionGraphicsItem()->isVisible()){
+      _caption->captionGraphicsItem()->setVisible(false);
+    }else{
+      _caption->captionGraphicsItem()->setVisible(true);
+    }
+  }
 }
 
 void GlMainView::setupWidget() {
@@ -121,6 +142,10 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
     _quickAccessBarItem->setPos(0,rect.height()-_quickAccessBarItem->size().height());
     _quickAccessBarItem->resize(rect.width(),_quickAccessBarItem->size().height());
   }
+  if(_quickAccessBar != NULL)
+    _captionPos=QPointF(0,rect.height()-230-_quickAccessBarItem->size().height());
+  else
+    _captionPos=QPointF(0,rect.height()-230);
 }
 
 QPixmap GlMainView::snapshot(const QSize &outputSize) {

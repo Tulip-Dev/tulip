@@ -29,6 +29,7 @@ class GlOverviewGraphicsItem;
 class SceneConfigWidget;
 class GlMainWidget;
 class QuickAccessBar;
+class CaptionItem;
 
 class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   Q_OBJECT
@@ -39,6 +40,8 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   tlp::SceneConfigWidget* _sceneConfigurationWidget;
   tlp::QuickAccessBar* _quickAccessBar;
   QGraphicsProxyWidget* _quickAccessBarItem;
+  QPointF _captionPos;
+  CaptionItem *_caption;
 
 public:
   GlMainView();
@@ -46,6 +49,7 @@ public:
   tlp::GlMainWidget* getGlMainWidget() const;
   virtual QList<QWidget*> configurationWidgets() const;
   bool overviewVisible() const;
+  void hideShowCaption();
   QPixmap snapshot(const QSize &outputSize=QSize());
 
 public slots:
