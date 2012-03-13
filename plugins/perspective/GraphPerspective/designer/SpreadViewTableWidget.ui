@@ -23,6 +23,117 @@ background-color: white;
     <number>0</number>
    </property>
    <item>
+    <widget class="QFrame" name="topFrame">
+     <property name="styleSheet">
+      <string notr="true">#topFrame {
+background-color: white;
+border: 0px;
+border-bottom: 1px solid #C9C9C9;
+}</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>2</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="showOnlySelectedElementsCheckBox">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Selected only</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+          <normaloff>:/tulip/gui/icons/i_selection.png</normaloff>:/tulip/gui/icons/i_selection.png</iconset>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="ClearableLineEdit" name="filterPatternLineEdit">
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: black;</string>
+        </property>
+        <property name="placeholderText">
+         <string>Filter values...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="VisibleSectionsModel" name="comboBox">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToContents</enum>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QFrame" name="tableFrame">
      <property name="styleSheet">
       <string notr="true">#tableFrame {
@@ -69,168 +180,22 @@ border: 0px;
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="bottomFrame">
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+    <widget class="QFrame" name="frame">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>26</height>
+      </size>
      </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>26</height>
+      </size>
      </property>
      <property name="bottomFrame" stdset="0">
       <bool>true</bool>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="margin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QPushButton" name="showOnlySelectedElementsCheckBox">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QCheckBox::text {
-color: blue;
-}
-QCheckBox::indicator {
-color: green;
-}
-QCheckBox::indicator:unchecked {
-color: green;
- }
-
- QCheckBox::indicator:unchecked:hover {
-color: green;
- }
-
- QCheckBox::indicator:unchecked:pressed {
-color: green;
- }
-
- QCheckBox::indicator:checked {
-color: green;
- }
-
- QCheckBox::indicator:checked:hover {
-color: green;
- }
-
- QCheckBox::indicator:checked:pressed {
-color: green;
- }
-
- QCheckBox::indicator:indeterminate:hover {
-color: green;
- }
-
- QCheckBox::indicator:indeterminate:pressed {
-color: green;
- }</string>
-        </property>
-        <property name="text">
-         <string>Selected only</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Line" name="line_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="ClearableLineEdit" name="filterPatternLineEdit">
-        <property name="minimumSize">
-         <size>
-          <width>300</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: black;</string>
-        </property>
-        <property name="placeholderText">
-         <string>Filter values...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>in</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="VisibleSectionsModel" name="comboBox">
-        <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToContents</enum>
-        </property>
-        <property name="frame">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="filterPushButton">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Apply filter</string>
-        </property>
-        <property name="text">
-         <string>Apply</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../resources/GraphPerspective.qrc">
-          <normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</iconset>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
     </widget>
    </item>
   </layout>
