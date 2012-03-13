@@ -580,9 +580,11 @@ void PythonScriptView::getData(Graph **graph,DataSet *dataSet) {
   *graph = this->graph;
 
   PythonCodeEditor *codeEditor = viewWidget->getCurrentMainScriptEditor();
-  dataSet->set("main script file", codeEditor->getFileName());
-  string scriptCode = viewWidget->getCurrentMainScriptCode();
-  dataSet->set("script code", scriptCode);
+  if (codeEditor) {
+    dataSet->set("main script file", codeEditor->getFileName());
+    string scriptCode = viewWidget->getCurrentMainScriptCode();
+    dataSet->set("script code", scriptCode);
+  }
 
   DataSet mainScriptsDataSet;
 
@@ -895,14 +897,12 @@ void PythonScriptView::saveScript(int tabIdx) {
       QFile file(fileName);
       QFileInfo fileInfo(file);
 
-      if (!file.exists())
-        return;
-
       file.open(QIODevice::WriteOnly | QIODevice::Text);
       viewWidget->getMainScriptEditor(tabIdx)->setFileName(fileInfo.absoluteFilePath());
       QTextStream out(&file);
       out << viewWidget->getMainScriptCode(tabIdx).c_str();
       viewWidget->mainScriptsTabWidget->setTabText(tabIdx, fileInfo.fileName());
+      viewWidget->mainScriptsTabWidget->setTabToolTip(tabIdx, fileInfo.absoluteFilePath());
       file.close();
     }
   }
@@ -1374,75 +1374,6 @@ void PythonScriptView::newPythonPlugin() {
   }
 }
 
-template <typename T>
-static bool pluginExists(std::string pluginName) {
-  std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
-
-  for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
-    if (it->first == tlp::TemplateFactoryInterface::standardizeName(typeid(T).name()) && it->second->pluginExists(pluginName)) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-template <typename T>
-static void removePlugin(std::string pluginName) {
-  std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
-
-  for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
-    if (it->first == tlp::TemplateFactoryInterface::standardizeName(typeid(T).name())) {
-      it->second->removePlugin(pluginName);
-      return;
-    }
-  }
-}
-
-static void removePluginAndUpdateGui(const string &pluginName, const string &pluginType) {
-  if (pluginType == "General") {
-    if (pluginExists<tlp::Algorithm>(pluginName)) {
-      removePlugin<tlp::Algorithm>(pluginName);
-    }
-  }
-  else if (pluginType == "Layout") {
-    if (pluginExists<tlp::LayoutAlgorithm>(pluginName)) {
-      removePlugin<tlp::LayoutAlgorithm>(pluginName);
-    }
-  }
-  else if (pluginType == "Size") {
-    if (pluginExists<tlp::SizeAlgorithm>(pluginName)) {
-      removePlugin<tlp::SizeAlgorithm>(pluginName);
-    }
-  }
-  else if (pluginType == "Color") {
-    if (pluginExists<tlp::ColorAlgorithm>(pluginName)) {
-      removePlugin<tlp::ColorAlgorithm>(pluginName);
-    }
-  }
-  else if (pluginType == "Measure") {
-    if (pluginExists<tlp::DoubleAlgorithm>(pluginName)) {
-      removePlugin<tlp::DoubleAlgorithm>(pluginName);
-    }
-  }
-  else if (pluginType == "Selection") {
-    if (pluginExists<tlp::BooleanAlgorithm>(pluginName)) {
-      removePlugin<tlp::BooleanAlgorithm>(pluginName);
-    }
-  }
-  else if (pluginType == "Import") {
-    if (pluginExists<tlp::ImportModule>(pluginName)) {
-      removePlugin<tlp::ImportModule>(pluginName);
-    }
-  }
-  else if (pluginType == "Export") {
-    if (pluginExists<tlp::ExportModule>(pluginName)) {
-      removePlugin<tlp::ExportModule>(pluginName);
-    }
-  }
-
-  PythonInterpreter::getInstance()->runString("tuliputils.updatePluginsMenus()");
-}
 
 void PythonScriptView::registerPythonPlugin() {
   int tabIdx = viewWidget->pluginsTabWidget->currentIndex();
@@ -1489,7 +1420,7 @@ void PythonScriptView::registerPythonPlugin() {
   oss << "import " << moduleName.toStdString() << endl;
   oss << "plugin = " << moduleName.toStdString() << "." << editedPluginsClassName[pluginFile] << "(tlp.AlgorithmContext())";
 
-  removePluginAndUpdateGui(editedPluginsName[pluginFile], pluginType);
+  //removePluginAndUpdateGui(editedPluginsName[pluginFile], pluginType);
 
   if (codeOk && PythonInterpreter::getInstance()->runString(oss.str())) {
     QList<int> sizes;

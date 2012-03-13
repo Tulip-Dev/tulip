@@ -393,8 +393,10 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
     apiDb = APIDataBase::getInstance();
     apiDb->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulip.api");
     apiDb->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/Python-" + QString(PythonInterpreter::getInstance()->getPythonVersion().c_str()) + ".api");
+    apiDb->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulipogl.api");
 
     if (PythonInterpreter::getInstance()->runString("import PyQt4.QtGui")) {
+      apiDb->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulipqt.api");
       apiDb->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/PyQt4.api");
     }
   }
@@ -890,7 +892,8 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
     findReplaceDialog->activateWindow();
     findReplaceDialog->setFindMode(false);
   }
-  else if (e->key() == Qt::Key_Space && e->modifiers() == modifier) {
+  else if ((e->key() == Qt::Key_Space && e->modifiers() == modifier) || e->text() == ".") {
+    QPlainTextEdit::keyPressEvent(e);
     showAutoCompletionList();
   }
   else {

@@ -83,6 +83,91 @@ tuliputils_pauseRunningScript(PyObject *, PyObject *) {
   Py_RETURN_NONE;
 }
 
+template <typename T>
+static bool pluginExists(std::string pluginName) {
+  std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
+
+  for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
+    if (it->first == tlp::TemplateFactoryInterface::standardizeName(typeid(T).name()) && it->second->pluginExists(pluginName)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+template <typename T>
+static void removePlugin(std::string pluginName) {
+  std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
+
+  for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
+    if (it->first == tlp::TemplateFactoryInterface::standardizeName(typeid(T).name())) {
+      it->second->removePlugin(pluginName);
+      return;
+    }
+  }
+}
+
+static void removePlugin(const string &pluginName, const string &pluginType) {
+  if (pluginType == "General") {
+    if (pluginExists<tlp::Algorithm>(pluginName)) {
+      removePlugin<tlp::Algorithm>(pluginName);
+    }
+  }
+  else if (pluginType == "Layout") {
+    if (pluginExists<tlp::LayoutAlgorithm>(pluginName)) {
+      removePlugin<tlp::LayoutAlgorithm>(pluginName);
+    }
+  }
+  else if (pluginType == "Size") {
+    if (pluginExists<tlp::SizeAlgorithm>(pluginName)) {
+      removePlugin<tlp::SizeAlgorithm>(pluginName);
+    }
+  }
+  else if (pluginType == "Color") {
+    if (pluginExists<tlp::ColorAlgorithm>(pluginName)) {
+      removePlugin<tlp::ColorAlgorithm>(pluginName);
+    }
+  }
+  else if (pluginType == "Measure") {
+    if (pluginExists<tlp::DoubleAlgorithm>(pluginName)) {
+      removePlugin<tlp::DoubleAlgorithm>(pluginName);
+    }
+  }
+  else if (pluginType == "Selection") {
+    if (pluginExists<tlp::BooleanAlgorithm>(pluginName)) {
+      removePlugin<tlp::BooleanAlgorithm>(pluginName);
+    }
+  }
+  else if (pluginType == "Import") {
+    if (pluginExists<tlp::ImportModule>(pluginName)) {
+      removePlugin<tlp::ImportModule>(pluginName);
+    }
+  }
+  else if (pluginType == "Export") {
+    if (pluginExists<tlp::ExportModule>(pluginName)) {
+      removePlugin<tlp::ExportModule>(pluginName);
+    }
+  }
+  else if (pluginType == "Interactor") {
+    if (pluginExists<tlp::Interactor>(pluginName)) {
+      removePlugin<tlp::Interactor>(pluginName);
+    }
+  }
+}
+
+static PyObject *
+tuliputils_removePlugin(PyObject *, PyObject *args) {
+
+  char *buf, *buf2;
+
+  if (!PyArg_ParseTuple(args, "ss", &buf, &buf2))
+    Py_RETURN_NONE;
+
+  removePlugin(buf, buf2);
+
+  Py_RETURN_NONE;
+}
 
 // Ugly code duplication from TulipApp.cpp but don't really have the choice
 //**********************************************************************
@@ -206,6 +291,7 @@ static PyMethodDef TulipUtilsMethods[] = {
   {"updateVisualization",  tuliputils_updateVisualization, METH_VARARGS, "Update views on current graph."},
   {"pauseRunningScript",  tuliputils_pauseRunningScript, METH_VARARGS, "Pause the execution of the current running script."},
   {"updatePluginsMenus",  tuliputils_updatePluginsMenus, METH_VARARGS, "Update the plugins menus entries in the Tulip GUI."},
+  {"removePlugin",  tuliputils_removePlugin, METH_VARARGS, ""},
   {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 

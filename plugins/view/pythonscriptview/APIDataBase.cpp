@@ -67,6 +67,8 @@ APIDataBase::APIDataBase() {
 
 void APIDataBase::loadApiFile(const QString &apiFilePath) {
   QFile apiFile(apiFilePath);
+  if (!apiFile.exists())
+      return;
   apiFile.open(QIODevice::ReadOnly | QIODevice::Text);
   QTextStream in(&apiFile);
 
@@ -167,7 +169,7 @@ QSet<QString> APIDataBase::getDictContentForType(const QString &type, const QStr
 
   if (dictContent.find(type) != dictContent.end()) {
     foreach(QString s, dictContent[type]) {
-      if (s.startsWith(prefix)) {
+      if (s.toLower().startsWith(prefix.toLower())) {
         ret.insert(s);
       }
     }
@@ -220,7 +222,7 @@ QSet<QString> APIDataBase::getAllDictEntriesStartingWithPrefix(const QString &pr
   while (i.hasNext()) {
     i.next();
     foreach(QString s, i.value()) {
-      if (s.startsWith(prefix)) {
+      if (s.toLower().startsWith(prefix.toLower())) {
         ret.insert(s);
       }
     }

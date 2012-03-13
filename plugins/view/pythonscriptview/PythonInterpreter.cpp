@@ -268,9 +268,12 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
       // Disable output while trying to import the module to not confuse the user
       outputActivated = false;
       runString("import site");
-      outputActivated = true;
 
       runString("from tulip import *");
+      runString("from tulipogl import *");
+      runString("from tulipqt import *");
+
+      outputActivated = true;
 
 #ifndef _MSC_VER
       loadTulipPythonPlugins();
