@@ -73,6 +73,14 @@ public:
 
   ~OGDFVisibility() {}
 
+  bool check(string& error) {
+    if (!tlp::ConnectedTest::isConnected(graph)) {
+      error += "graph is not connected";
+      return false;
+    }
+    return true;    
+  }
+
   void beforeCall() {
     ogdf::VisibilityLayout *visibility = static_cast<ogdf::VisibilityLayout*>(ogdfLayoutAlgo);
 
