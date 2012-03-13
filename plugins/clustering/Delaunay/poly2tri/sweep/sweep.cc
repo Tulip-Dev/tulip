@@ -707,13 +707,14 @@ Point& Sweep::NextFlipPoint(Point& ep, Point& eq, Triangle& ot, Point& op)
   if (o2d == CW) {
     // Right
     return *ot.PointCCW(op);
-  } else if (o2d == CCW) {
+  }
+  if (o2d == CCW) {
     // Left
     return *ot.PointCW(op);
-  } else{
-    //throw new RuntimeException("[Unsupported] Opposing point on constrained edge");
-    assert(0);
   }
+  //throw new RuntimeException("[Unsupported] Opposing point on constrained edge");
+  assert(0);
+  return op;
 }
 
 void Sweep::FlipScanEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle& flip_triangle,
