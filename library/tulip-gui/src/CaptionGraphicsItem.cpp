@@ -45,17 +45,32 @@ CaptionGraphicsItem::CaptionGraphicsItem(View *view):_view(view) {
   _confPropertySelectionItem = new QGraphicsProxyWidget(_confBackgroundRectItem);
   _confPropertySelectionItem->setWidget(_confPropertySelectionWidget);
   _confPropertySelectionItem->setPos(140,10);
+
+  _confTypeSelectionWidget = new QComboBox();
+  _confTypeSelectionWidget->resize(QSize(150,30));
+  _confTypeSelectionItem = new QGraphicsProxyWidget(_confBackgroundRectItem);
+  _confTypeSelectionItem->setWidget(_confTypeSelectionWidget);
+  _confTypeSelectionItem->setPos(140,50);
 }
 
 void CaptionGraphicsItem::loadConfiguration() {
   constructConfigWidget();
 }
 
-void CaptionGraphicsItem::generateCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &propertyName, double minValue, double maxValue) {
-  _rondedRectItem->generateCaption(activeGradient,hideGradient,propertyName,minValue,maxValue);
+void CaptionGraphicsItem::generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &propertyName, double minValue, double maxValue){
+  _rondedRectItem->generateColorCaption(activeGradient,hideGradient,propertyName,minValue,maxValue);
+}
+
+void CaptionGraphicsItem::generateSizeCaption(const vector< pair <double,float> > &metricToSizeFilteredList,const string &propertyName, double minValue, double maxValue){
+  _rondedRectItem->generateSizeCaption(metricToSizeFilteredList,propertyName,minValue,maxValue);
 }
 
 void CaptionGraphicsItem::constructConfigWidget() {
+
+  if(_confTypeSelectionWidget->count()==0){
+    _confTypeSelectionWidget->addItems(QStringList() << "Color" << "Size");
+    connect(_confTypeSelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedTypeChangedSlot(QString)));
+  }
 
   disconnect(_confPropertySelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedPropertyChangedSlot(const QString &)));
   QString selectedItem=_confPropertySelectionWidget->currentText();
@@ -75,7 +90,6 @@ void CaptionGraphicsItem::constructConfigWidget() {
     }
   }
 
-  cout << properties.size() << endl;
   _confPropertySelectionWidget->addItems(properties);
 
   if(index!=-1)
@@ -99,9 +113,12 @@ void CaptionGraphicsItem::selectedPropertyChangedSlot(const QString &propertyNam
   emit selectedPropertyChanged(propertyName.toStdString());
 }
 
+void CaptionGraphicsItem::selectedTypeChangedSlot(const QString &typeName){
+  emit selectedTypeChanged(typeName.toStdString());
+}
+
 void CaptionGraphicsItem::configurationIconPressed() {
   _confBackgroundRectItem->setVisible(!_confBackgroundRectItem->isVisible());
-  cout << "press" << endl;
 }
 
 }

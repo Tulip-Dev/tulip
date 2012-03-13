@@ -28,87 +28,105 @@ using namespace std;
 namespace tlp {
 
 CaptionGraphicsBackgroundItem::CaptionGraphicsBackgroundItem(const QRect &rect):QGraphicsRectItem(rect),_captionContentPos(10,20) {
-  _circle1Item=new SelectionArrowItem(0,_captionContentPos);
-  _circle2Item=new SelectionArrowItem(1,_captionContentPos);
 
-  _topCaptionRectItem=new QGraphicsRectItem(QRect(_captionContentPos,QSize(30,0)));
-  _bottomCaptionRectItem=new QGraphicsRectItem(QRect(_captionContentPos+QPoint(0,160),QSize(30,0)));
-  _middleCaptionRectItem=new ColorGradientItem(QRect(_captionContentPos,QSize(30,160)),_topCaptionRectItem,_bottomCaptionRectItem,_circle1Item,_circle2Item);
+  // Range selector 1
+  _rangeSelector1Item=new SelectionArrowItem(0,_captionContentPos);
+  _rangeSelector1Item->setPos(_captionContentPos+QPoint(5,-30));
+  _rangeSelector1Item->setParentItem(this);
+  _rangeSelector1Item->setAcceptHoverEvents(true);
+  connect(_rangeSelector1Item,SIGNAL(circleMoved()),this,SLOT(updateCaption()));
+  installSceneEventFilter(_rangeSelector1Item);
 
+  // Range selector 2
+  _rangeSelector2Item=new SelectionArrowItem(1,_captionContentPos);
+  _rangeSelector2Item->setPos(_captionContentPos+QPoint(5,130));
+  _rangeSelector2Item->setParentItem(this);
+  _rangeSelector2Item->setAcceptHoverEvents(true);
+  connect(_rangeSelector2Item,SIGNAL(circleMoved()),this,SLOT(updateCaption()));
+  installSceneEventFilter(_rangeSelector2Item);
+
+  // Range selector text 1
+  _rangeSelector1TextItem=new SelectionTextItem();
+  _rangeSelector1TextItem->setParentItem(_rangeSelector1Item);
+  installSceneEventFilter(_rangeSelector1TextItem);
+
+  // Range selector text 2
+  _rangeSelector2TextItem=new SelectionTextItem();
+  _rangeSelector2TextItem->setParentItem(_rangeSelector2Item);
+  installSceneEventFilter(_rangeSelector2TextItem);
+
+  // Caption Rect Border
   _captionRectBorder=new QGraphicsRectItem(QRect(_captionContentPos,QSize(30,160)));
+  _captionRectBorder->setParentItem(this);
+  _captionRectBorder->setAcceptHoverEvents(true);
 
+  // Preferences Item
   _prefIcon=new ConfigurationIconItem();
   _prefIcon->setPos(QPointF(0,-20));
   _prefIcon->setVisible(false);
   _prefIcon->setZValue(2);
+  _prefIcon->setParentItem(this);
+  _prefIcon->setAcceptHoverEvents(true);
+  connect(_prefIcon,SIGNAL(configurationIconPressed()),this,SLOT(configurationIconPressedSlot()));
   _prefRect=new QGraphicsRectItem(0,-20,20,20);
   _prefRect->setVisible(false);
   _prefRect->setPen(QPen(QColor(0,0,0,0)));
-
-  _circle1Item->setPos(_captionContentPos+QPoint(5,-30));
-  _circle2Item->setPos(_captionContentPos+QPoint(5,130));
+  _prefRect->setParentItem(this);
+  _prefRect->setAcceptHoverEvents(true);
 
   QFont font;
   font.setBold(true);
-  _propertyNameItem = new QGraphicsTextItem();
-  _propertyNameItem->setPos(0,195);
-  _propertyNameItem->setFont(font);
+
+  // MinMax Labels Item
   _minTextItem=new QGraphicsTextItem();
   _minTextItem->setFont(font);
   _maxTextItem=new QGraphicsTextItem();
   _maxTextItem->setFont(font);
-
-  _circle1ItemText=new SelectionTextItem();
-  _circle2ItemText=new SelectionTextItem();
-
-  connect(_middleCaptionRectItem,SIGNAL(moved()),this,SLOT(updateCaption()));
-  connect(_circle1Item,SIGNAL(circleMoved()),this,SLOT(updateCaption()));
-  connect(_circle2Item,SIGNAL(circleMoved()),this,SLOT(updateCaption()));
-  connect(_prefIcon,SIGNAL(configurationIconPressed()),this,SLOT(configurationIconPressedSlot()));
-
-  setAcceptHoverEvents(true);
-  _captionRectBorder->setParentItem(this);
-  _captionRectBorder->setAcceptHoverEvents(true);
-
-  _topCaptionRectItem->setParentItem(this);
-  _topCaptionRectItem->setAcceptHoverEvents(true);
-  _middleCaptionRectItem->setParentItem(this);
-  _middleCaptionRectItem->setAcceptHoverEvents(true);
-  _bottomCaptionRectItem->setParentItem(this);
-  _bottomCaptionRectItem->setAcceptHoverEvents(true);
-
-  _circle1Item->setParentItem(this);
-  _circle1Item->setAcceptHoverEvents(true);
-  _circle2Item->setParentItem(this);
-  _circle2Item->setAcceptHoverEvents(true);
-
-  _circle1ItemText->setParentItem(_circle1Item);
-  _circle1Item->setAcceptHoverEvents(true);
-  _circle2ItemText->setParentItem(_circle2Item);
-  _circle2Item->setAcceptHoverEvents(true);
-
-  _prefIcon->setParentItem(this);
-  _prefIcon->setAcceptHoverEvents(true);
-  _prefRect->setParentItem(this);
-  _prefRect->setAcceptHoverEvents(true);
-
-  _propertyNameItem->setParentItem(this);
-  _propertyNameItem->setAcceptHoverEvents(true);
   _minTextItem->setParentItem(this);
   _minTextItem->setAcceptHoverEvents(true);
   _maxTextItem->setParentItem(this);
   _maxTextItem->setAcceptHoverEvents(true);
 
+  // Property name Item
+  _propertyNameItem = new QGraphicsTextItem();
+  _propertyNameItem->setPos(0,195);
+  _propertyNameItem->setFont(font);
+  _propertyNameItem->setParentItem(this);
+  _propertyNameItem->setAcceptHoverEvents(true);
+
+  // Color caption Items
+  _topCaptionRectItem=new QGraphicsRectItem(QRect(_captionContentPos,QSize(30,0)));
+  _topCaptionRectItem->setParentItem(this);
+  _topCaptionRectItem->setAcceptHoverEvents(true);
+  _bottomCaptionRectItem=new QGraphicsRectItem(QRect(_captionContentPos+QPoint(0,160),QSize(30,0)));
+  _bottomCaptionRectItem->setParentItem(this);
+  _bottomCaptionRectItem->setAcceptHoverEvents(true);
+  _middleCaptionRectItem=new MovableRectItem(QRect(_captionContentPos,QSize(30,160)),_rangeSelector1Item,_rangeSelector2Item);
+  connect(_middleCaptionRectItem,SIGNAL(moved(float, float)),this,SLOT(updateCaption(float, float)));
+  _middleCaptionRectItem->setParentItem(this);
+  _middleCaptionRectItem->setAcceptHoverEvents(true);
   installSceneEventFilter(_middleCaptionRectItem);
-  installSceneEventFilter(_circle1Item);
-  installSceneEventFilter(_circle2Item);
-  installSceneEventFilter(_circle1ItemText);
-  installSceneEventFilter(_circle2ItemText);
+
+  // Size caption Items
+  _topSizeCaptionPathItem=new QGraphicsPathItem();
+  _topSizeCaptionPathItem->setBrush(QBrush(QColor(200,200,200,100)));
+  _topSizeCaptionPathItem->setParentItem(this);
+  _topSizeCaptionPathItem->setPos(_captionContentPos);
+  _bottomSizeCaptionPathItem=new QGraphicsPathItem();
+  _bottomSizeCaptionPathItem->setBrush(QBrush(QColor(200,200,200,100)));
+  _bottomSizeCaptionPathItem->setParentItem(this);
+  _bottomSizeCaptionPathItem->setPos(_captionContentPos);
+  _sizeCaptionPathItem=new MovablePathItem(QRect(0,0,1,1),_topSizeCaptionPathItem,_bottomSizeCaptionPathItem,_rangeSelector1Item,_rangeSelector2Item);
+  connect(_sizeCaptionPathItem,SIGNAL(moved(float, float)),this,SLOT(updateCaption(float, float)));
+  _sizeCaptionPathItem->setBrush(QBrush(QColor(200,200,200,255)));
+  _sizeCaptionPathItem->setParentItem(this);
+  _sizeCaptionPathItem->setPos(_captionContentPos);
+
 
   setAcceptHoverEvents(true);
 }
 
-void CaptionGraphicsBackgroundItem::generateCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &propertyName, double minValue, double maxValue) {
+void CaptionGraphicsBackgroundItem::generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &propertyName, double minValue, double maxValue) {
   _minValue=minValue;
   _maxValue=maxValue;
 
@@ -119,24 +137,56 @@ void CaptionGraphicsBackgroundItem::generateCaption(const QGradient &activeGradi
   _topCaptionRectItem->setBrush(QBrush(hideGradient));
   _bottomCaptionRectItem->setBrush(QBrush(hideGradient));
 
+  _sizeCaptionPathItem->setVisible(false);
+  _topSizeCaptionPathItem->setVisible(false);
+  _bottomSizeCaptionPathItem->setVisible(false);
+  _middleCaptionRectItem->setVisible(true);
+  _topCaptionRectItem->setVisible(true);
+  _bottomCaptionRectItem->setVisible(true);
+  _captionRectBorder->setVisible(true);
+
   _propertyNameItem->setPlainText(propertyName.c_str());
 
   _minTextItem->setPlainText(QString::number(_minValue));
   _maxTextItem->setPlainText(QString::number(_maxValue));
 
-  _circle1ItemText->setPlainText(QString::number(_maxValue));
-  _circle2ItemText->setPlainText(QString::number(_minValue));
+  float begin = (_rangeSelector1Item->pos().y()-_captionContentPos.y()+30)/160.;
+  float end = (_rangeSelector2Item->pos().y()-_captionContentPos.y()+30)/160.;
 
-  _circle1ItemText->setPos(QPoint(60-_circle1ItemText->boundingRect().width()/2.,17));
-  _circle2ItemText->setPos(QPoint(60-_circle2ItemText->boundingRect().width()/2.,17));
+  if(begin>end){
+    float tmp=begin;
+    begin=end;
+    end=tmp;
+  }
+
+  updateSelectionText(begin,end);
 
   _minTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,157)));
   _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,-22)));
 }
 
-void CaptionGraphicsBackgroundItem::updateCaption() {
-  float begin = (_circle1Item->pos().y()-_captionContentPos.y()+30)/160.;
-  float end = (_circle2Item->pos().y()-_captionContentPos.y()+30)/160.;
+void CaptionGraphicsBackgroundItem::generateSizeCaption(const vector<pair<double,float> > &metricToSizeFilteredList, const string &propertyName, double minValue, double maxValue) {
+  _minValue=minValue;
+  _maxValue=maxValue;
+
+  _prefIcon->setPixmap(QPixmap(":/tulip/gui/icons/16/preferences-other.png"));
+  _prefIcon->setAcceptHoverEvents(true);
+
+  _sizeCaptionPathItem->setVisible(true);
+  _topSizeCaptionPathItem->setVisible(true);
+  _bottomSizeCaptionPathItem->setVisible(true);
+  _middleCaptionRectItem->setVisible(false);
+  _topCaptionRectItem->setVisible(false);
+  _bottomCaptionRectItem->setVisible(false);
+  _captionRectBorder->setVisible(false);
+
+  _propertyNameItem->setPlainText(propertyName.c_str());
+
+  _minTextItem->setPlainText(QString::number(_minValue));
+  _maxTextItem->setPlainText(QString::number(_maxValue));
+
+  float begin = (_rangeSelector1Item->pos().y()-_captionContentPos.y()+30)/160.;
+  float end = (_rangeSelector2Item->pos().y()-_captionContentPos.y()+30)/160.;
 
   if(begin>end) {
     float tmp=begin;
@@ -144,24 +194,59 @@ void CaptionGraphicsBackgroundItem::updateCaption() {
     end=tmp;
   }
 
-  QString text1=QString::number(_minValue+(1-end)*(_maxValue-_minValue));
+  updateSelectionText(begin,end);
 
+  _minTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,157)));
+  _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,-22)));
+
+  _sizeCaptionPathItem->setDataToPath(metricToSizeFilteredList,minValue,maxValue);
+}
+
+void CaptionGraphicsBackgroundItem::updateSelectionText(float begin, float end) {
+  QString text1=QString::number(_minValue+(1-begin)*(_maxValue-_minValue));
   if(text1.length()>5)
     text1=text1.left(5);
-
-  QString text2=QString::number(_minValue+(1-begin)*(_maxValue-_minValue));
+  QString text2=QString::number(_minValue+(1-end)*(_maxValue-_minValue));
 
   if(text2.length()>5)
     text2=text2.left(5);
 
-  _circle1ItemText->setPlainText(text1);
-  _circle2ItemText->setPlainText(text2);
-  _circle1ItemText->setPos(QPoint(60-_circle1ItemText->boundingRect().width()/2.,17));
-  _circle2ItemText->setPos(QPoint(60-_circle2ItemText->boundingRect().width()/2.,17));
+  _rangeSelector1TextItem->setPos(QPoint(60-_rangeSelector1TextItem->boundingRect().width()/2.,17));
+  _rangeSelector2TextItem->setPos(QPoint(60-_rangeSelector2TextItem->boundingRect().width()/2.,17));
+
+  if(_rangeSelector1Item->pos().y()>_rangeSelector2Item->pos().y()){
+    _rangeSelector1TextItem->setPlainText(text2);
+    _rangeSelector2TextItem->setPlainText(text1);
+  }else{
+    _rangeSelector1TextItem->setPlainText(text1);
+    _rangeSelector2TextItem->setPlainText(text2);
+  }
+}
+
+void CaptionGraphicsBackgroundItem::updateCaption() {
+  float end = (_rangeSelector1Item->pos().y()-_captionContentPos.y()+30)/160.;
+  float begin = (_rangeSelector2Item->pos().y()-_captionContentPos.y()+30)/160.;
+  updateCaption(begin,end);
+}
+
+void CaptionGraphicsBackgroundItem::updateCaption(float begin ,float end) {
+
+  _rangeSelector2Item->setPos(_captionContentPos.x()+5,begin*160.+_captionContentPos.y()-30);
+  _rangeSelector1Item->setPos(_captionContentPos.x()+5,end*160.+_captionContentPos.y()-30);
+
+  if(begin>end){
+    float tmp=begin;
+    begin=end;
+    end=tmp;
+  }
+
+  updateSelectionText(begin,end);
 
   _topCaptionRectItem->setRect(QRect(_captionContentPos,QSize(30,begin*160)));
   _middleCaptionRectItem->setRect(QRect(_captionContentPos+QPoint(0,begin*160),QSize(30,(end-begin)*160)));
   _bottomCaptionRectItem->setRect(QRect(_captionContentPos+QPoint(0,end*160),QSize(30,160-end*160)));
+
+  _sizeCaptionPathItem->setRect(QRectF(0,begin,0,end-begin));
 
   emit filterChanged(begin,end);
 }
@@ -194,7 +279,6 @@ SelectionArrowItem::SelectionArrowItem(float initRangePos,const QPoint &initPos)
   circle.lineTo(25,30);
 
   setPath(circle);
-
   setBrush(QBrush(QColor(255,255,255,255)));
   //setZValue(2);
   setFlags(QGraphicsItem::ItemIsMovable);
@@ -222,12 +306,12 @@ bool SelectionArrowItem::sceneEvent ( QEvent * event ) {
   return false;
 }
 
-ColorGradientItem::ColorGradientItem(const QRectF &rect, QGraphicsRectItem *topRect,QGraphicsRectItem *bottomRect,SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle)
-  :QGraphicsRectItem(rect),_initPos(rect.x(),rect.y()),_topRect(topRect),_bottomRect(bottomRect),_topCircle(topCircle),_bottomCircle(bottomCircle) {
+MovableRectItem::MovableRectItem(const QRectF &rect, SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle)
+  :QGraphicsRectItem(rect),_initPos(rect.x(),rect.y()),_topCircle(topCircle),_bottomCircle(bottomCircle){
   setFlags(QGraphicsItem::ItemIsMovable);
 }
 
-bool ColorGradientItem::sceneEvent ( QEvent * event ) {
+bool MovableRectItem::sceneEvent ( QEvent * event ){
   if(event->type()==QEvent::GraphicsSceneMouseMove) {
     QGraphicsSceneMouseEvent *e=(QGraphicsSceneMouseEvent *)event;
     qreal diffPosY=e->pos().y()-e->lastPos().y();
@@ -242,10 +326,129 @@ bool ColorGradientItem::sceneEvent ( QEvent * event ) {
     coord.translate(0,diffPosY);
     setRect(coord);
 
-    _topCircle->setPos(_initPos.x()+5,rect().bottom()-30);
-    _bottomCircle->setPos(_initPos.x()+5,rect().top()-30);
+    emit moved((rect().top()-_initPos.y())/160.,(rect().bottom()-_initPos.y())/160.);
 
-    emit moved();
+    return true;
+  }
+
+  return false;
+}
+
+MovablePathItem::MovablePathItem(const QRectF &rect, QGraphicsPathItem *topPathItem, QGraphicsPathItem *bottomPathItem, SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle)
+  :QGraphicsPathItem(),_currentRect(rect),_topPathItem(topPathItem),_bottomPathItem(bottomPathItem),_topCircle(topCircle),_bottomCircle(bottomCircle){
+  setFlags(QGraphicsItem::ItemIsMovable);
+}
+
+void MovablePathItem::setDataToPath(const vector<pair<double,float> > &metricToSizeFilteredList, double minMetric, double maxMetric){
+  _metricToSizeFilteredList=metricToSizeFilteredList;
+  _minMetric=minMetric;
+  _maxMetric=maxMetric;
+  updatePath();
+}
+
+void MovablePathItem::setRect(const QRectF &rect){
+  _currentRect=rect;
+  updatePath();
+}
+
+float computeToto(float y,float x1, float x2, float y1, float y2){
+  return x1+((x2-x1)/(y2-y1))*(y-y1);
+}
+
+void MovablePathItem::updatePath() {
+  if(_metricToSizeFilteredList.size()==0)
+    return ;
+
+  vector<QPainterPath> paths;
+  paths.resize(3);
+  vector<vector<QPoint> >pathsPoints;
+  pathsPoints.resize(3);
+
+  double firstLimit=_minMetric+_currentRect.y()*(_maxMetric-_minMetric);
+  double secondLimit=_minMetric+(_currentRect.y()+_currentRect.height())*(_maxMetric-_minMetric);
+
+  pair<double,float> lastValue=*_metricToSizeFilteredList.begin();
+  int state=0;
+  for(vector<pair<double,float> >::iterator it=_metricToSizeFilteredList.begin();it!=_metricToSizeFilteredList.end();++it){
+    if((*it).first<firstLimit){
+      if(state==0){
+        //init of first path
+        pathsPoints[0].push_back(QPoint(15+15.*(*it).second,0));
+        state=1;
+      }else{
+        pathsPoints[0].push_back(QPoint(15+15*(*it).second,160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
+      }
+    }else if((*it).first<=secondLimit){
+      if(state==1){
+        //init of second path
+        float midValue=computeToto(firstLimit,lastValue.second,(*it).second,lastValue.first,(*it).first);
+        pathsPoints[0].push_back(QPoint(15+15.*midValue,160*(firstLimit-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[1].push_back(QPoint(15+15.*midValue,160*(firstLimit-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[1].push_back(QPoint(15+15.*(*it).second,160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
+        state=2;
+      }else if(state<=1){
+        pathsPoints[1].push_back(QPoint(15+15.*(*it).second,160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
+        state=2;
+      }else{
+        pathsPoints[1].push_back(QPoint(15+15*(*it).second,160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
+      }
+
+    }else{
+      if(state==2){
+        //init of third path
+        float midValue=computeToto(secondLimit,lastValue.second,(*it).second,lastValue.first,(*it).first);
+        pathsPoints[1].push_back(QPoint(15+15.*midValue,160*(secondLimit-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[2].push_back(QPoint(15+15.*midValue,160*(secondLimit-_minMetric)/(_maxMetric-_minMetric)));
+        pathsPoints[2].push_back(QPoint(15+15.*(*it).second,160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
+        state=3;
+      }else{
+        pathsPoints[2].push_back(QPoint(15+15*(*it).second,160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
+      }
+    }
+    lastValue=(*it);
+  }
+
+  if(state==2){
+    pathsPoints[1].push_back(QPoint(15+15*lastValue.second,160*(lastValue.first-_minMetric)/(_maxMetric-_minMetric)));
+  }
+
+  for(unsigned int i1=0;i1<pathsPoints.size();++i1){
+    for(unsigned int i2=0;i2<pathsPoints[i1].size();++i2){
+      if(i2==0){
+        paths[i1].moveTo(pathsPoints[i1][i2]);
+      }else{
+        paths[i1].lineTo(pathsPoints[i1][i2]);
+      }
+    }
+    for(int i2=(int)pathsPoints[i1].size()-1;i2>=0;--i2){
+      paths[i1].lineTo(QPoint(30-pathsPoints[i1][i2].x(),pathsPoints[i1][i2].y()));
+    }
+    if(pathsPoints[i1].size()!=0){
+      paths[i1].lineTo(QPoint(30-pathsPoints[i1][0].x(),pathsPoints[i1][0].y()));
+      paths[i1].lineTo(pathsPoints[i1][0]);
+    }
+   }
+
+
+  _topPathItem->setPath(paths[0]);
+  setPath(paths[1]);
+  _bottomPathItem->setPath(paths[2]);
+}
+
+bool MovablePathItem::sceneEvent ( QEvent * event ){
+  if(event->type()==QEvent::GraphicsSceneMouseMove){
+    QGraphicsSceneMouseEvent *e=(QGraphicsSceneMouseEvent *)event;
+    qreal diffPosY=e->pos().y()-e->lastPos().y();
+
+    if(_currentRect.bottom()*160+diffPosY>160)
+      diffPosY=160-_currentRect.bottom()*160;
+    if(_currentRect.top()*160+diffPosY<0)
+      diffPosY=-_currentRect.top()*160;
+
+    updatePath();
+    _currentRect.translate(0,diffPosY/160.);
+
+    emit moved(_currentRect.top(),_currentRect.bottom());
 
     return true;
   }

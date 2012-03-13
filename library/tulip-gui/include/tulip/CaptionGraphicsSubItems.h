@@ -90,25 +90,58 @@ protected :
 
 };
 
-class ColorGradientItem : public QObject, public QGraphicsRectItem {
+class MovableRectItem : public QObject, public QGraphicsRectItem {
 
   Q_OBJECT
 
 public :
 
-  ColorGradientItem(const QRectF &rect, QGraphicsRectItem *topRect, QGraphicsRectItem *bottomRect,SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle);
+  MovableRectItem(const QRectF &rect,SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle);
 
 signals :
 
-  void moved();
+  // begin and end in 0,1 range
+  void moved(float begin, float end);
 
 protected :
 
   bool sceneEvent ( QEvent * event );
 
   QPoint _initPos;
-  QGraphicsRectItem *_topRect;
-  QGraphicsRectItem *_bottomRect;
+  SelectionArrowItem *_topCircle;
+  SelectionArrowItem *_bottomCircle;
+};
+
+class MovablePathItem : public QObject, public QGraphicsPathItem {
+
+  Q_OBJECT
+
+public :
+
+  MovablePathItem(const QRectF &rect, QGraphicsPathItem *topPathItem, QGraphicsPathItem *bottomPathItem,SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle);
+
+  void setDataToPath(const std::vector< std::pair< double,float > > &metricToSizeFilteredList, double minMetric, double maxMetric);
+
+  void setRect(const QRectF &rect);
+
+signals :
+
+  // begin and end in 0,1 range
+  void moved(float begin, float end);
+
+protected :
+
+  void updatePath();
+
+  bool sceneEvent ( QEvent * event );
+
+  std::vector<std::pair <double, float> > _metricToSizeFilteredList;
+  double _minMetric;
+  double _maxMetric;
+
+  QRectF _currentRect;
+  QGraphicsPathItem *_topPathItem;
+  QGraphicsPathItem *_bottomPathItem;
   SelectionArrowItem *_topCircle;
   SelectionArrowItem *_bottomCircle;
 };
@@ -121,11 +154,15 @@ public :
 
   CaptionGraphicsBackgroundItem(const QRect &rect);
 
-  void generateCaption(const QGradient &activeGradient, const QGradient &hideGradient, const std::string &propertyName, double minValue, double maxValue);
+  void generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const std::string &propertyName, double minValue, double maxValue);
+
+  void generateSizeCaption(const std::vector< std::pair< double,float > > &metricToSizeFilteredList, const std::string &propertyName, double minValue, double maxValue);
 
 public slots :
 
   void updateCaption();
+  // begin and end in 0,1 range
+  void updateCaption(float begin, float end);
   void configurationIconPressedSlot();
 
 signals :
@@ -135,6 +172,7 @@ signals :
 
 protected :
 
+  void updateSelectionText(float begin, float end);
   void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
   void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
@@ -143,19 +181,29 @@ protected :
   double _minValue;
   double _maxValue;
 
+  // Global Items
   QGraphicsTextItem *_propertyNameItem;
   QGraphicsTextItem *_minTextItem;
   QGraphicsTextItem *_maxTextItem;
   QGraphicsRectItem *_captionRectBorder;
   ConfigurationIconItem *_prefIcon;
   QGraphicsRectItem *_prefRect;
+  SelectionArrowItem *_rangeSelector1Item;
+  SelectionArrowItem *_rangeSelector2Item;
+  SelectionTextItem *_rangeSelector1TextItem;
+  SelectionTextItem *_rangeSelector2TextItem;
+
+  // Color caption Items
   QGraphicsRectItem *_topCaptionRectItem;
-  ColorGradientItem *_middleCaptionRectItem;
+  MovableRectItem *_middleCaptionRectItem;
   QGraphicsRectItem *_bottomCaptionRectItem;
-  SelectionArrowItem *_circle1Item;
-  SelectionArrowItem *_circle2Item;
-  SelectionTextItem *_circle1ItemText;
-  SelectionTextItem *_circle2ItemText;
+
+  // Size caption Items
+  //MovableRectItem *_selectionSizeRectItem;
+  MovablePathItem *_sizeCaptionPathItem;
+  QGraphicsPathItem *_topSizeCaptionPathItem;
+  QGraphicsPathItem *_bottomSizeCaptionPathItem;
+
 
 };
 
