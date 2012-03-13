@@ -35,7 +35,6 @@ CaptionGraphicsBackgroundItem::CaptionGraphicsBackgroundItem(const QRect &rect):
   _rangeSelector1Item->setParentItem(this);
   _rangeSelector1Item->setAcceptHoverEvents(true);
   connect(_rangeSelector1Item,SIGNAL(circleMoved()),this,SLOT(updateCaption()));
-  installSceneEventFilter(_rangeSelector1Item);
 
   // Range selector 2
   _rangeSelector2Item=new SelectionArrowItem(1,_captionContentPos);
@@ -43,17 +42,14 @@ CaptionGraphicsBackgroundItem::CaptionGraphicsBackgroundItem(const QRect &rect):
   _rangeSelector2Item->setParentItem(this);
   _rangeSelector2Item->setAcceptHoverEvents(true);
   connect(_rangeSelector2Item,SIGNAL(circleMoved()),this,SLOT(updateCaption()));
-  installSceneEventFilter(_rangeSelector2Item);
 
   // Range selector text 1
   _rangeSelector1TextItem=new SelectionTextItem();
   _rangeSelector1TextItem->setParentItem(_rangeSelector1Item);
-  installSceneEventFilter(_rangeSelector1TextItem);
 
   // Range selector text 2
   _rangeSelector2TextItem=new SelectionTextItem();
   _rangeSelector2TextItem->setParentItem(_rangeSelector2Item);
-  installSceneEventFilter(_rangeSelector2TextItem);
 
   // Caption Rect Border
   _captionRectBorder=new QGraphicsRectItem(QRect(_captionContentPos,QSize(30,160)));
@@ -105,7 +101,6 @@ CaptionGraphicsBackgroundItem::CaptionGraphicsBackgroundItem(const QRect &rect):
   connect(_middleCaptionRectItem,SIGNAL(moved(float, float)),this,SLOT(updateCaption(float, float)));
   _middleCaptionRectItem->setParentItem(this);
   _middleCaptionRectItem->setAcceptHoverEvents(true);
-  installSceneEventFilter(_middleCaptionRectItem);
 
   // Size caption Items
   _topSizeCaptionPathItem=new QGraphicsPathItem();
