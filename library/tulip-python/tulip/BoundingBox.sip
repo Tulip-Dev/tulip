@@ -166,8 +166,8 @@ If the bounding box is invalid the result is always :const:`False`.
 :rtype: boolean
 %End
 
-      tlp::Vec3f operator[](const unsigned int i) const;
-	
+      tlp::Vec3f& operator[](const unsigned int i) const /NoCopy/;
+
       void __setitem__(int i, const tlp::Vec3f &value);
 %MethodCode
 	if (a0 < 2)
