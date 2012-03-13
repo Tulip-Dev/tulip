@@ -148,7 +148,7 @@ void CaptionGraphicsBackgroundItem::generateColorCaption(const QGradient &active
   float begin = (_rangeSelector1Item->pos().y()-_captionContentPos.y()+30)/160.;
   float end = (_rangeSelector2Item->pos().y()-_captionContentPos.y()+30)/160.;
 
-  if(begin>end){
+  if(begin>end) {
     float tmp=begin;
     begin=end;
     end=tmp;
@@ -199,17 +199,20 @@ void CaptionGraphicsBackgroundItem::generateSizeCaption(const vector<pair<double
 
 void CaptionGraphicsBackgroundItem::updateSelectionText(float begin, float end) {
   QString text1=QString::number(_minValue+(1-begin)*(_maxValue-_minValue));
+
   if(text1.length()>5)
     text1=text1.left(5);
+
   QString text2=QString::number(_minValue+(1-end)*(_maxValue-_minValue));
 
   if(text2.length()>5)
     text2=text2.left(5);
 
-  if(_rangeSelector1Item->pos().y()>_rangeSelector2Item->pos().y()){
+  if(_rangeSelector1Item->pos().y()>_rangeSelector2Item->pos().y()) {
     _rangeSelector1TextItem->setPlainText(text2);
     _rangeSelector2TextItem->setPlainText(text1);
-  }else{
+  }
+  else {
     _rangeSelector1TextItem->setPlainText(text1);
     _rangeSelector2TextItem->setPlainText(text2);
   }
@@ -230,7 +233,7 @@ void CaptionGraphicsBackgroundItem::updateCaption(float begin ,float end) {
   _rangeSelector2Item->setPos(_captionContentPos.x()+5,begin*160.+_captionContentPos.y()-30);
   _rangeSelector1Item->setPos(_captionContentPos.x()+5,end*160.+_captionContentPos.y()-30);
 
-  if(begin>end){
+  if(begin>end) {
     float tmp=begin;
     begin=end;
     end=tmp;
@@ -304,17 +307,18 @@ bool SelectionArrowItem::sceneEvent ( QEvent * event ) {
 }
 
 MovableRectItem::MovableRectItem(const QRectF &rect,const QRectF &size, SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle)
-  :QGraphicsRectItem(rect),_currentRect(size),_initPos(rect.x(),rect.y()),_topCircle(topCircle),_bottomCircle(bottomCircle){
+  :QGraphicsRectItem(rect),_currentRect(size),_initPos(rect.x(),rect.y()),_topCircle(topCircle),_bottomCircle(bottomCircle) {
   setFlags(QGraphicsItem::ItemIsMovable);
 }
 
-bool MovableRectItem::sceneEvent ( QEvent * event ){
-  if(event->type()==QEvent::GraphicsSceneMouseMove){
+bool MovableRectItem::sceneEvent ( QEvent * event ) {
+  if(event->type()==QEvent::GraphicsSceneMouseMove) {
     QGraphicsSceneMouseEvent *e=(QGraphicsSceneMouseEvent *)event;
     qreal diffPosY=e->pos().y()-e->lastPos().y();
 
     if(_currentRect.bottom()*160+diffPosY>160)
       diffPosY=160-_currentRect.bottom()*160;
+
     if(_currentRect.top()*160+diffPosY<0)
       diffPosY=-_currentRect.top()*160;
 
@@ -330,29 +334,29 @@ bool MovableRectItem::sceneEvent ( QEvent * event ){
   return false;
 }
 
-void MovableRectItem::setInternalRect(const QRectF &rect){
+void MovableRectItem::setInternalRect(const QRectF &rect) {
   _currentRect=rect;
 }
 
 
 MovablePathItem::MovablePathItem(const QRectF &rect, QGraphicsPathItem *topPathItem, QGraphicsPathItem *bottomPathItem, SelectionArrowItem *topCircle, SelectionArrowItem *bottomCircle)
-  :QGraphicsPathItem(),_currentRect(rect),_topPathItem(topPathItem),_bottomPathItem(bottomPathItem),_topCircle(topCircle),_bottomCircle(bottomCircle){
+  :QGraphicsPathItem(),_currentRect(rect),_topPathItem(topPathItem),_bottomPathItem(bottomPathItem),_topCircle(topCircle),_bottomCircle(bottomCircle) {
   setFlags(QGraphicsItem::ItemIsMovable);
 }
 
-void MovablePathItem::setDataToPath(const vector<pair<double,float> > &metricToSizeFilteredList, double minMetric, double maxMetric){
+void MovablePathItem::setDataToPath(const vector<pair<double,float> > &metricToSizeFilteredList, double minMetric, double maxMetric) {
   _metricToSizeFilteredList=metricToSizeFilteredList;
   _minMetric=minMetric;
   _maxMetric=maxMetric;
   updatePath();
 }
 
-void MovablePathItem::setRect(const QRectF &rect){
+void MovablePathItem::setRect(const QRectF &rect) {
   _currentRect=rect;
   updatePath();
 }
 
-float computeToto(float y,float x1, float x2, float y1, float y2){
+float computeToto(float y,float x1, float x2, float y1, float y2) {
   return x1+((x2-x1)/(y2-y1))*(y-y1);
 }
 
@@ -370,65 +374,76 @@ void MovablePathItem::updatePath() {
 
   pair<double,float> lastValue=*_metricToSizeFilteredList.begin();
   int state=0;
-  for(vector<pair<double,float> >::iterator it=_metricToSizeFilteredList.begin();it!=_metricToSizeFilteredList.end();++it){
-    if((*it).first<firstLimit){
-      if(state==0){
+
+  for(vector<pair<double,float> >::iterator it=_metricToSizeFilteredList.begin(); it!=_metricToSizeFilteredList.end(); ++it) {
+    if((*it).first<firstLimit) {
+      if(state==0) {
         //init of first path
         pathsPoints[0].push_back(QPoint(15+15.*(*it).second,160));
         state=1;
-      }else{
+      }
+      else {
         pathsPoints[0].push_back(QPoint(15+15*(*it).second,160-160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
       }
-    }else if((*it).first<=secondLimit){
-      if(state==1){
+    }
+    else if((*it).first<=secondLimit) {
+      if(state==1) {
         //init of second path
         float midValue=computeToto(firstLimit,lastValue.second,(*it).second,lastValue.first,(*it).first);
         pathsPoints[0].push_back(QPoint(15+15.*midValue,160-160*(firstLimit-_minMetric)/(_maxMetric-_minMetric)));
         pathsPoints[1].push_back(QPoint(15+15.*midValue,160-160*(firstLimit-_minMetric)/(_maxMetric-_minMetric)));
         pathsPoints[1].push_back(QPoint(15+15.*(*it).second,160-160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
         state=2;
-      }else if(state<=1){
+      }
+      else if(state<=1) {
         pathsPoints[1].push_back(QPoint(15+15.*(*it).second,160-160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
         state=2;
-      }else{
+      }
+      else {
         pathsPoints[1].push_back(QPoint(15+15*(*it).second,160-160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
       }
 
-    }else{
-      if(state==2){
+    }
+    else {
+      if(state==2) {
         //init of third path
         float midValue=computeToto(secondLimit,lastValue.second,(*it).second,lastValue.first,(*it).first);
         pathsPoints[1].push_back(QPoint(15+15.*midValue,160-160*(secondLimit-_minMetric)/(_maxMetric-_minMetric)));
         pathsPoints[2].push_back(QPoint(15+15.*midValue,160-160*(secondLimit-_minMetric)/(_maxMetric-_minMetric)));
         pathsPoints[2].push_back(QPoint(15+15.*(*it).second,160-160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
         state=3;
-      }else{
+      }
+      else {
         pathsPoints[2].push_back(QPoint(15+15*(*it).second,160-160*((*it).first-_minMetric)/(_maxMetric-_minMetric)));
       }
     }
+
     lastValue=(*it);
   }
 
-  if(state==2){
+  if(state==2) {
     pathsPoints[1].push_back(QPoint(15+15*lastValue.second,160-160*(lastValue.first-_minMetric)/(_maxMetric-_minMetric)));
   }
 
-  for(unsigned int i1=0;i1<pathsPoints.size();++i1){
-    for(unsigned int i2=0;i2<pathsPoints[i1].size();++i2){
-      if(i2==0){
+  for(unsigned int i1=0; i1<pathsPoints.size(); ++i1) {
+    for(unsigned int i2=0; i2<pathsPoints[i1].size(); ++i2) {
+      if(i2==0) {
         paths[i1].moveTo(pathsPoints[i1][i2]);
-      }else{
+      }
+      else {
         paths[i1].lineTo(pathsPoints[i1][i2]);
       }
     }
-    for(int i2=(int)pathsPoints[i1].size()-1;i2>=0;--i2){
+
+    for(int i2=(int)pathsPoints[i1].size()-1; i2>=0; --i2) {
       paths[i1].lineTo(QPoint(30-pathsPoints[i1][i2].x(),pathsPoints[i1][i2].y()));
     }
-    if(pathsPoints[i1].size()!=0){
+
+    if(pathsPoints[i1].size()!=0) {
       paths[i1].lineTo(QPoint(30-pathsPoints[i1][0].x(),pathsPoints[i1][0].y()));
       paths[i1].lineTo(pathsPoints[i1][0]);
     }
-   }
+  }
 
 
   _topPathItem->setPath(paths[0]);
@@ -436,13 +451,14 @@ void MovablePathItem::updatePath() {
   _bottomPathItem->setPath(paths[2]);
 }
 
-bool MovablePathItem::sceneEvent ( QEvent * event ){
-  if(event->type()==QEvent::GraphicsSceneMouseMove){
+bool MovablePathItem::sceneEvent ( QEvent * event ) {
+  if(event->type()==QEvent::GraphicsSceneMouseMove) {
     QGraphicsSceneMouseEvent *e=(QGraphicsSceneMouseEvent *)event;
     qreal diffPosY=e->pos().y()-e->lastPos().y();
 
     if(_currentRect.bottom()*160+diffPosY>160)
       diffPosY=160-_currentRect.bottom()*160;
+
     if(_currentRect.top()*160+diffPosY<0)
       diffPosY=-_currentRect.top()*160;
 

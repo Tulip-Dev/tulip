@@ -44,7 +44,7 @@ namespace tlp {
 /**
  * @brief This base class describes plug-ins who only modify one property, e.g. selection.
  **/
-  class TLP_SCOPE PropertyAlgorithm: public tlp::Algorithm {
+class TLP_SCOPE PropertyAlgorithm: public tlp::Algorithm {
 public :
   /**
    * @brief Builds a new plug-in that modifies a single property.
