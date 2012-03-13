@@ -67,8 +67,10 @@ APIDataBase::APIDataBase() {
 
 void APIDataBase::loadApiFile(const QString &apiFilePath) {
   QFile apiFile(apiFilePath);
+
   if (!apiFile.exists())
-      return;
+    return;
+
   apiFile.open(QIODevice::ReadOnly | QIODevice::Text);
   QTextStream in(&apiFile);
 

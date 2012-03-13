@@ -580,6 +580,7 @@ void PythonScriptView::getData(Graph **graph,DataSet *dataSet) {
   *graph = this->graph;
 
   PythonCodeEditor *codeEditor = viewWidget->getCurrentMainScriptEditor();
+
   if (codeEditor) {
     dataSet->set("main script file", codeEditor->getFileName());
     string scriptCode = viewWidget->getCurrentMainScriptCode();

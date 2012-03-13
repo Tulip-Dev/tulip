@@ -77,7 +77,7 @@ public :
 
   ~MemoryBlocks() {
     for (size_t i = 0 ; i < _allocatedMemory.size() ; ++i) {
-        free(_allocatedMemory[i]);
+      free(_allocatedMemory[i]);
     }
   }
 
@@ -115,6 +115,7 @@ private:
     if (memBlocks._freeObject[threadId].empty()) {
       TYPE * p = (TYPE *)malloc(BUFFOBJ * sizeof(TYPE));
       memBlocks._allocatedMemory.push_back(p);
+
       for (size_t j=0; j< BUFFOBJ - 1; ++j) {
         memBlocks._freeObject[threadId].push_back((void *)p);
         p += 1;
