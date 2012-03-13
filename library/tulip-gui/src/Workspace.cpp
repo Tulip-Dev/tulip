@@ -207,6 +207,7 @@ void Workspace::addPanel(tlp::View* view, const QString& viewName) {
 
   // Force the first panel's graph combo box update when underleying model has been updated.
   panel->viewGraphSet(view->graph());
+  emit panelFocused(view);
 }
 
 
