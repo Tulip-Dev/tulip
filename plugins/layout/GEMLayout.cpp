@@ -65,23 +65,23 @@ static const float MAXATTRACT = 8192;
 /*
  * GEM3D Default Parameter Values
  */
-static const float IMAXTEMPDEF     = 1.0;
+static const float IMAXTEMPDEF     = 1.0f;
 static const float ISTARTTEMPDEF   = 0.3f;
 static const float IFINALTEMPDEF   = 0.05f;
 static const int   IMAXITERDEF     = 10;
 static const float IGRAVITYDEF     = 0.05f;
-static const float IOSCILLATIONDEF = 0.5;
-static const float IROTATIONDEF    = 0.5;
+static const float IOSCILLATIONDEF = 0.5f;
+static const float IROTATIONDEF    = 0.5f;
 static const float ISHAKEDEF       = 0.2f;
 
-static const float AMAXTEMPDEF     = 1.5;
-static const float ASTARTTEMPDEF   = 1.0;
+static const float AMAXTEMPDEF     = 1.5f;
+static const float ASTARTTEMPDEF   = 1.0f;
 static const float AFINALTEMPDEF   = 0.02f;
 static const int   AMAXITERDEF     = 3;
-static const unsigned int MIN_ITER = 30000; //minimum number of iterations (equivalent of a graph with 100 nodes)
+static const unsigned int MIN_ITER = 30000;  //minimum number of iteration (equivalent to a graph with 100 nodes)
 static const float AGRAVITYDEF     = 0.1f;
-static const float AOSCILLATIONDEF = 1.;
-static const float AROTATIONDEF    = 1.;
+static const float AOSCILLATIONDEF = 1.f;
+static const float AROTATIONDEF    = 1.f;
 static const float ASHAKEDEF       = 0.3f;
 
 PLUGIN(GEMLayout)
@@ -114,7 +114,7 @@ void GEMLayout::vertexdata_init(const float starttemp) {
     _temperature += it->heat * it->heat;
     it->imp.fill(0);
     it->dir  = 0;
-    it->mass = 1. + it->mass / 3.;
+    it->mass = 1.f + it->mass / 3.f;
     _center += it->pos;
   }
 }
@@ -142,7 +142,7 @@ Coord GEMLayout::computeForces(unsigned int v,
 
   //Init force in a random position
   for (unsigned int cnt = 0; cnt<_dim; ++cnt) {
-    force[cnt] =  shake  - ((double(rand()) * (2. * shake)))/double(RAND_MAX);
+    force[cnt] =  shake  - static_cast<float>(((double(rand()) * (2. * shake)))/double(RAND_MAX));
   }
 
   //Add central force
@@ -178,7 +178,7 @@ Coord GEMLayout::computeForces(unsigned int v,
       float edgeLength;
 
       if (_useLength)
-        edgeLength = metric->getEdgeValue(e);
+        edgeLength = static_cast<float>(metric->getEdgeValue(e));
       else
         edgeLength = EDGELENGTH;
 
@@ -192,7 +192,6 @@ Coord GEMLayout::computeForces(unsigned int v,
 }
 //==========================================================================
 void GEMLayout::insert() {
-  vector<int>::iterator nodeSet2;
   GEMparticule *gemP, *gemQ;
   int startNode;
 
@@ -251,7 +250,7 @@ void GEMLayout::insert() {
       }
 
       if (d > 1) {
-        gemP->pos /= d;
+        gemP->pos /= static_cast<float>(d);
       }
 
       d = 0;
@@ -262,11 +261,10 @@ void GEMLayout::insert() {
     else
       startNode = i;
 
-    //    cerr << "[insert] round : " << i << " part : " << v << " pos: " <<  gemP->pos << endl;
   }
 }
 //==========================================================================
-void GEMLayout::displace(int v, Coord imp) {
+void GEMLayout::displace(unsigned int v, Coord imp) {
 
   float nV = imp.norm();
 
@@ -320,7 +318,7 @@ void GEMLayout::arrange() {
   _oscillation      = a_oscillation;
   _rotation         = a_rotation;
   _maxtemp          = a_maxtemp;
-  stop_temperature  = a_finaltemp * a_finaltemp * maxEdgeLength * _nbNodes;
+  stop_temperature  = static_cast<float>(a_finaltemp * a_finaltemp * maxEdgeLength * _nbNodes);
   Iteration         = 0;
 
   while (_temperature > stop_temperature && Iteration < max_iter) {
@@ -370,7 +368,7 @@ bool GEMLayout::run() {
 
   if ( dataSet!=0 ) {
     dataSet->get("3D layout", is3D);
-    _useLength = dataSet->get("edge length", metric);
+    _useLength = dataSet->get("edge length", metric) && metric!=NULL;
     dataSet->get("max iterations", max_iter);
     initLayout = !dataSet->get("initial layout", layout);
   }
@@ -390,7 +388,7 @@ bool GEMLayout::run() {
   node n;
   unsigned int i = 0;
   forEach(n, graph->getNodes()) {
-    _particules[i] = GEMparticule(graph->deg(n));
+    _particules[i] = GEMparticule(static_cast<float>(graph->deg(n)));
     _particules[i].n = n;
     _particules[i].id = i;
 
