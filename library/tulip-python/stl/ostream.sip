@@ -13,9 +13,17 @@ public:
 	PyObject *objStr = PyObject_Str(a1);
 	PyObject *objRepr = PyObject_Repr(a1);
 	if (objStr) {
-		sipRes = &(*a0 << PyString_AS_STRING(objStr));
+#if PY_MAJOR_VERSION >= 3
+        sipRes = &(*a0 << convertPythonUnicodeObjectToStdString(objStr));
+#else
+        sipRes = &(*a0 << PyString_AS_STRING(objStr));
+#endif
 	} else if (objRepr) {
-		sipRes = &(*a0 << PyString_AS_STRING(objRepr));
+#if PY_MAJOR_VERSION >= 3
+        sipRes = &(*a0 << convertPythonUnicodeObjectToStdString(objRepr));
+#else
+        sipRes = &(*a0 << PyString_AS_STRING(objRepr));
+#endif
 	} else {
 		sipRes = a0;
 	}

@@ -50,7 +50,11 @@ static const string printObjectDictFunction =
   "def printObjectDict(obj):\n"
   "     if hasattr(obj, \"__dict__\"):\n"
   "         for k in obj.__dict__.keys():\n"
+#if PY_MAJOR_VERSION >= 3
+  "             print(k)\n"
+#else
   "             print k\n"
+#endif
   "     if hasattr(obj, \"__bases__\"):\n"
   "         for k in obj.__bases__:\n"
   "             printObjectDict(k)\n"
@@ -70,7 +74,11 @@ static const string printObjectClassFunction =
   "			type = mod + \".\"\n"
   "		if hasattr(obj.__class__, \"__name__\"):\n"
   "			type = type + obj.__class__.__name__\n"
+#if PY_MAJOR_VERSION >= 3
+  "		print(type)\n"
+#else
   "		print type\n"
+#endif
   ""
   ;
 
@@ -105,6 +113,18 @@ const sipAPIDef *get_sip_api() {
   return (const sipAPIDef *)PyCObject_AsVoidPtr(c_api);
 #endif
 }
+
+#if PY_MAJOR_VERSION >= 3
+static std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
+    std::string ret;
+    Py_ssize_t dataSize = PyUnicode_GET_DATA_SIZE(pyUnicodeObj);
+    const char* data = PyUnicode_AS_DATA(pyUnicodeObj);
+    for (Py_ssize_t i = 0 ; i < dataSize ; ++i) {
+        ret += std::string(data+i);
+    }
+    return ret;
+}
+#endif
 
 ConsoleOutputDialog::ConsoleOutputDialog(QWidget *parent) : QDialog(parent, Qt::Dialog | Qt::WindowStaysOnTopHint) {
   setWindowTitle("Python Interpreter Output");
@@ -196,8 +216,14 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserv
 PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NULL) {
 
   int argc=1;
+#if PY_MAJOR_VERSION >= 3
+  wchar_t *argv[1];
+  argv[0] = const_cast<wchar_t *>(std::wstring(L"").c_str());
+#else
   char *argv[1];
   argv[0] = const_cast<char *>("");
+#endif
+
   Py_OptimizeFlag = 1;
   Py_NoSiteFlag = 1;
   Py_InitializeEx(0);
@@ -211,20 +237,31 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
   PyThreadState_Clear(tcur);
   PyThreadState_Delete(tcur);
 #endif
+
+#if PY_MAJOR_VERSION < 3
   PyEval_ReleaseLock();
+#endif
 
   holdGIL();
 
   PySys_SetArgv(argc, argv);
 
   runString("import sys");
+#if PY_MAJOR_VERSION >= 3
+  PyObject *pName = PyUnicode_FromString("__main__");
+#else
   PyObject *pName = PyString_FromString("__main__");
+#endif
   PyObject *pMainModule = PyImport_Import(pName);
   Py_DECREF(pName);
   PyObject *pMainDict = PyModule_GetDict(pMainModule);
   PyObject *pVersion = PyRun_String("str(sys.version_info[0])+\".\"+str(sys.version_info[1])", Py_eval_input, pMainDict, pMainDict);
-  pythonVersion = string(PyString_AsString(pVersion));
 
+#if PY_MAJOR_VERSION >= 3
+  pythonVersion = convertPythonUnicodeObjectToStdString(pVersion);
+#else
+  pythonVersion = string(PyString_AsString(pVersion));
+#endif
   // checking if a QApplication is instanced before instancing any QWidget
   // allow to avoid segfaults when trying to instantiate the plugin outside the Tulip GUI (for instance, with tulip_check_pl)
   if (QApplication::instance()) {
@@ -237,7 +274,15 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 #else
     libPythonName += string(".so.1.0");
 #endif
-    dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+    if (!dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
+        libPythonName = string("libpython") + pythonVersion + string("mu");
+#ifdef __APPLE__
+        libPythonName += string(".dylib");
+#else
+        libPythonName += string(".so.1.0");
+#endif
+        dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+    }
 #endif
 
 #if !defined(_MSC_VER)
@@ -256,10 +301,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 #endif
 
       initscriptengine();
-      _PyImport_FixupExtension(const_cast<char *>("scriptengine"), const_cast<char *>("scriptengine"));
-
       inittuliputils();
-      _PyImport_FixupExtension(const_cast<char *>("tuliputils"), const_cast<char *>("tuliputils"));
 
       runString("import sys; import scriptengine ; import tuliputils ; sys.stdout = scriptengine.ConsoleOutput(False); sys.stderr = scriptengine.ConsoleOutput(True);\n");
 
@@ -268,11 +310,10 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
       // Disable output while trying to import the module to not confuse the user
       outputActivated = false;
       runString("import site");
-
+      runString("import sip");
       runString("from tulip import *");
       runString("from tulipogl import *");
       runString("from tulipqt import *");
-
       outputActivated = true;
 
 #ifndef _MSC_VER
@@ -379,7 +420,11 @@ bool PythonInterpreter::registerNewModuleFromString(const std::string &moduleNam
 
 bool PythonInterpreter::functionExists(const string &moduleName, const string &functionName) {
   holdGIL();
+#if PY_MAJOR_VERSION >= 3
+  PyObject *pName = PyUnicode_FromString(moduleName.c_str());
+#else
   PyObject *pName = PyString_FromString(moduleName.c_str());
+#endif
   PyObject *pModule = PyImport_Import(pName);
   Py_DECREF(pName);
   PyObject *pDict = PyModule_GetDict(pModule);
@@ -437,8 +482,11 @@ bool PythonInterpreter::runGraphScript(const string &module, const string &funct
   scriptPaused = false;
 
   // Build the name object
+#if PY_MAJOR_VERSION >= 3
+  PyObject *pName = PyUnicode_FromString(module.c_str());
+#else
   PyObject *pName = PyString_FromString(module.c_str());
-
+#endif
   // Load the module object
   PyObject *pModule = PyImport_Import(pName);
   Py_DECREF(pName);
@@ -450,13 +498,13 @@ bool PythonInterpreter::runGraphScript(const string &module, const string &funct
   PyObject *pFunc = PyDict_GetItemString(pDict, function.c_str());
 
   if (PyCallable_Check(pFunc)) {
-    const sipAPIDef *sisApi = get_sip_api();
+    const sipAPIDef *sipApi = get_sip_api();
 
     // Getting proper sipWrapperType
-    const sipTypeDef* kpTypeDef     = sisApi->api_find_type("tlp::Graph");
+    const sipTypeDef* kpTypeDef     = sipApi->api_find_type("tlp::Graph");
 
     // Wrapping up C++ instance
-    PyObject* pArgs = sisApi->api_convert_from_type(graph, kpTypeDef, NULL);
+    PyObject* pArgs = sipApi->api_convert_from_type(graph, kpTypeDef, NULL);
 
     // Finally calling 'process'
     PyObject* argTup = Py_BuildValue ("(O)", pArgs);
@@ -518,6 +566,9 @@ void PythonInterpreter::deleteModule(const std::string &moduleName) {
 
 bool PythonInterpreter::reloadModule(const std::string &moduleName) {
   ostringstream oss;
+  oss << "import sys" << endl;
+  oss << "if sys.version_info[0] == 3:" << endl;
+  oss << "  from imp import reload" << endl;
   oss << "import " << moduleName << endl;
   oss << "reload(" << moduleName << ")" << endl;
   return runString(oss.str());
@@ -657,8 +708,11 @@ vector<string> PythonInterpreter::getImportedModulesList() {
   std::vector<std::string> ret;
   outputActivated = false;
   consoleOuputString = "";
-
+#if PY_MAJOR_VERSION >= 3
+  if (runString("import sys\nfor mod in sorted(sys.modules.keys()): print(mod)")) {
+#else
   if (runString("import sys\nfor mod in sorted(sys.modules.keys()): print mod")) {
+#endif
     QStringList modulesList = QString(consoleOuputString.c_str()).split("\n");
 
     for (int i = 0 ; i < modulesList.count() ; ++i) {
@@ -694,7 +748,11 @@ vector<string> PythonInterpreter::getBaseTypesForType(const string &typeName) {
 
   consoleOuputString = "";
   oss.str("");
+#if PY_MAJOR_VERSION >= 3
+  oss << "for base in " << typeName << ".__bases__ : print(base)";
+#else
   oss << "for base in " << typeName << ".__bases__ : print base";
+#endif
 
   if (runString(oss.str())) {
     QStringList basesList = QString(consoleOuputString.c_str()).split("\n");

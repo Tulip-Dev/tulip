@@ -287,7 +287,7 @@ tuliputils_updatePluginsMenus(PyObject *, PyObject *) {
   Py_RETURN_NONE;
 }
 
-static PyMethodDef TulipUtilsMethods[] = {
+static PyMethodDef tulipUtilsMethods[] = {
   {"updateVisualization",  tuliputils_updateVisualization, METH_VARARGS, "Update views on current graph."},
   {"pauseRunningScript",  tuliputils_pauseRunningScript, METH_VARARGS, "Pause the execution of the current running script."},
   {"updatePluginsMenus",  tuliputils_updatePluginsMenus, METH_VARARGS, "Update the plugins menus entries in the Tulip GUI."},
@@ -295,10 +295,29 @@ static PyMethodDef TulipUtilsMethods[] = {
   {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
+#if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef tulipUtilsModuleDef = {
+    PyModuleDef_HEAD_INIT,
+    "tuliputils",     /* m_name */
+    "",  /* m_doc */
+    -1,                  /* m_size */
+    tulipUtilsMethods,    /* m_methods */
+    NULL,                /* m_reload */
+    NULL,                /* m_traverse */
+    NULL,                /* m_clear */
+    NULL,                /* m_free */
+};
+#endif
+
 void
 inittuliputils(void) {
-  PyObject *m = Py_InitModule("tuliputils", TulipUtilsMethods);
-
+#if PY_MAJOR_VERSION >= 3
+  PyObject *m = PyModule_Create(&tulipUtilsModuleDef);
+  _PyImport_FixupBuiltin(m, const_cast<char *>("tuliputils"));
+#else
+  PyObject *m = Py_InitModule("tuliputils", tulipUtilsMethods);
+  _PyImport_FixupExtension(const_cast<char *>("tuliputils"), const_cast<char *>("tuliputils"));
+#endif
   if (m == NULL)
     return;
 }

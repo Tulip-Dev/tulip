@@ -188,7 +188,11 @@ If the bounding box is invalid the result is always :const:`False`.
 				s[i] = ']';
 			}
 		}
+#if PY_MAJOR_VERSION >= 3
+        sipRes = PyUnicode_FromString(s.c_str());
+#else
         sipRes = PyString_FromString(s.c_str());
+#endif
 %End
 
 };

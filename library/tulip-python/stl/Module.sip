@@ -34,6 +34,19 @@ static void printErrorMessage(const std::string &errMsg) {
 	pythonCode += "\\n\")";
 	PyRun_SimpleString(pythonCode.c_str());
 }
+
+#if PY_MAJOR_VERSION >= 3
+static std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
+    std::string ret;
+    Py_ssize_t dataSize = PyUnicode_GET_DATA_SIZE(pyUnicodeObj);
+    const char* data = PyUnicode_AS_DATA(pyUnicodeObj);
+    for (Py_ssize_t i = 0 ; i < dataSize ; ++i) {
+        ret += std::string(data+i);
+    }
+    return ret;
+}
+#endif
+
 %End
 
 %Include list.sip

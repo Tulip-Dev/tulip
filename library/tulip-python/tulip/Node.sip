@@ -58,7 +58,11 @@ Returns :const:`True` if the node is a valid one, meaning it is attached to a gr
 		std::ostringstream oss;
 		oss << "<node " << sipCpp->id << ">";
 		std::string s = oss.str();
+#if PY_MAJOR_VERSION >= 3
+        sipRes = PyUnicode_FromString(s.c_str());
+#else
         sipRes = PyString_FromString(s.c_str());
+#endif
 %End
  
 	long __hash__() const;

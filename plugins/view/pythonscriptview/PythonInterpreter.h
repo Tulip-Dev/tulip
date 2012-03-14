@@ -17,6 +17,10 @@
  *
  */
 
+#if defined(__GNUC__) && __GNUC__ >= 4 && ((__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >= 1) || (__GNUC_MINOR__ >= 3))
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#endif
+
 #ifndef PYTHONINTERPRETER_H_
 #define PYTHONINTERPRETER_H_
 
@@ -54,8 +58,7 @@ private:
 
 static const char pythonReservedCharacters[] = {'#', '%', '/', '+', '-', '&', '*', '<', '>',
     '|', '~', '^', '=', '!', '\'', '\"', '{', '}',
-    '(', ')', '[', ']', '.', 0
-                                               };
+    '(', ')', '[', ']', '.', 0};
 
 static const char *pythonKeywords[] = {
   "def", "class","from", "in", "and", "or", "not", "is", "with", "assert",

@@ -274,36 +274,36 @@ def process_docstring(app, what, name, obj, options, lines):
 	    
 	  
 def process_signature(app, what, name, obj, opts, sig, ann):
-	global methodSignature
-	currentSignature = ""
-	n = name.replace("tulip.", "") 
-	if what != "class" and obj.__doc__ :
-	   nbMethods = 0
-	   pos = 0
-	   signaturePos = {}
-	   while obj.__doc__.find(n, pos) != -1:
-	     pos = obj.__doc__.find(n, pos)
-	     signaturePos[nbMethods] = pos
-	     pos += len(n)
-	     nbMethods+=1  
+    global methodSignature
+    currentSignature = ""
+    n = name.replace("tulip.", "")
+    if what != "class" and obj.__doc__ :
+        nbMethods = 0
+        pos = 0
+        signaturePos = {}
+        while obj.__doc__.find(n, pos) != -1:
+            pos = obj.__doc__.find(n, pos)
+            signaturePos[nbMethods] = pos
+            pos += len(n)
+            nbMethods+=1
 	   
-	   if not n in methodSignature.keys():
-	     methodSignature[n] = [0] * nbMethods
-	     
-	     
-	   for i in range(nbMethods):
-	     if methodSignature[n][i] == 0:
-	       currentSignature = obj.__doc__[signaturePos[i]:obj.__doc__.find(")", signaturePos[i])+1]
-	       methodSignature[n][i] = 1
-	       break
-	   
-	   idx1 = currentSignature.find("(")
-	   idx2 = currentSignature.find(")")
-	   if idx1 != -1 and idx2 != -1:
-	    s = currentSignature[idx1:idx2+1]
-	    if s != "" :
-	      sig = s
-        return (sig, ann)
+        if not n in methodSignature.keys():
+            methodSignature[n] = [0] * nbMethods
+
+
+        for i in range(nbMethods):
+            if methodSignature[n][i] == 0:
+                currentSignature = obj.__doc__[signaturePos[i]:obj.__doc__.find(")", signaturePos[i])+1]
+                methodSignature[n][i] = 1
+                break
+
+        idx1 = currentSignature.find("(")
+        idx2 = currentSignature.find(")")
+        if idx1 != -1 and idx2 != -1:
+            s = currentSignature[idx1:idx2+1]
+            if s != "" :
+                sig = s
+    return (sig, ann)
 
 def setup(app):
 	

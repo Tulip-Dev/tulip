@@ -254,7 +254,11 @@ Sets the value component of the color in the HSV color space (must be in the ran
 		std::string s = oss.str();
 		s[0] = '[';
 		s[s.size() - 1] = ']';
+#if PY_MAJOR_VERSION >= 3
+        sipRes = PyUnicode_FromString(s.c_str());
+#else
         sipRes = PyString_FromString(s.c_str());
+#endif
 %End
 };
 };

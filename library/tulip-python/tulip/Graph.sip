@@ -2831,8 +2831,10 @@ Sets an attribute of the graph.
   if (PyBool_Check(a1)) {
     long l = PyLong_AsLong(a1);
     sipCpp->setAttribute<bool>(*a0, (l > 0));
+#if PY_MAJOR_VERSION < 3
   } else if (PyInt_CheckExact(a1)) {
     sipCpp->setAttribute(*a0, PyInt_AsLong(a1)); 
+#endif
   } else if (PyLong_Check(a1)) {
     sipCpp->setAttribute(*a0, PyLong_AsLong(a1));
   } else if (PyFloat_Check(a1)) {
@@ -2962,8 +2964,11 @@ if (sipCpp->getAttributes().exist(*a0)) {
     
   } else if (dataType->getTypeName() == std::string(typeid(std::string).name())) {
     ok = true;
+#if PY_MAJOR_VERSION >= 3
+    sipRes = PyUnicode_FromString((*(reinterpret_cast<std::string*>(dataType->value))).c_str());
+#else
     sipRes = PyString_FromString((*(reinterpret_cast<std::string*>(dataType->value))).c_str());
-    
+#endif
   } else if (dataType->getTypeName() == std::string(typeid(tlp::DataSet).name())) {
     ok = true;
     sipRes = sipConvertFromType(reinterpret_cast<tlp::DataSet *>(dataType->value), sipType_tlp_DataSet, NULL);
@@ -3073,7 +3078,11 @@ if (!ok) {
 	std::ostringstream oss;
 	oss << "<graph \"" << graphName << "\" (id " << sipCpp->getId() << ") >";
 	std::string s = oss.str();
-        sipRes = PyString_FromString(s.c_str());
+#if PY_MAJOR_VERSION >= 3
+    sipRes = PyUnicode_FromString(s.c_str());
+#else
+    sipRes = PyString_FromString(s.c_str());
+#endif
 %End
 
 //===========================================================================================

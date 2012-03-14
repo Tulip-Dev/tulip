@@ -85,7 +85,13 @@ std::string cleanPropertyName(const std::string &propertyName) {
     }
   }
 
-  static std::vector<std::string> builtinDictContent = PythonInterpreter::getInstance()->getObjectDictEntries("__builtin__");
+  std::string builtinModName = "__builtin__";
+  if (atof(PythonInterpreter::getInstance()->getPythonVersion().c_str()) >= 3.0) {
+      builtinModName = "builtins";
+  }
+
+  PythonInterpreter::getInstance()->runString(std::string("import ") + builtinModName);
+  static std::vector<std::string> builtinDictContent = PythonInterpreter::getInstance()->getObjectDictEntries(builtinModName);
 
   for (i = 0 ; i < builtinDictContent.size() ; ++i) {
     if (ret == builtinDictContent[i]) {
@@ -193,7 +199,10 @@ std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph) {
   }
 
   oss << "\n\tfor n in graph.getNodes():" << endl;
-  oss << "\t\tprint n" << endl;
+  if (atof(pythonVersion.c_str()) >= 3.0)
+    oss << "\t\tprint(n)" << endl;
+  else
+    oss << "\t\tprint n" << endl;
   return oss.str();
 }
 

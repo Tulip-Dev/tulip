@@ -39,11 +39,11 @@ class DoubleAlgorithm: tlp::Algorithm {
 
 public:
 
-// Setting a docstring here makes SIP failed to generate a compilable source code (bug ?)
+// Setting docstrings in that class binding makes SIP failed to generate a compilable source code (bug ?)
 
 	virtual ~DoubleAlgorithm();
 	tlp::DoubleProperty *doubleResult;
-	
+
 protected:
 
 	DoubleAlgorithm(const tlp::AlgorithmContext &context);

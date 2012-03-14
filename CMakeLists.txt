@@ -195,45 +195,51 @@ ENDIF(OPENMP_FOUND)
 ## Python (not required)
 ## -----------------------------------------------------------------------------------------------
 
-# Try to find Python in first place
+# Try to find Python (interpreter and library) in the first place
+# If Python is present, try to find if SIP and its dev tools are installed on the host system.
+# If not, compile the SIP version located in thirdparty.
 
-# If Python is present, compile SIP before launching the whole Tulip build  
-# because we need it later in the configure process 
-
-FIND_PACKAGE(PythonLibs)
 FIND_PACKAGE(PythonInterp)
 
+IF(PYTHONINTERP_FOUND)
+    EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} --version
+                    ERROR_VARIABLE PYTHON_VERSION_RAW)
+    STRING(REPLACE "\n" "" PYTHON_VERSION_RAW "${PYTHON_VERSION_RAW}")
+    STRING(REGEX MATCH "[0-9]\\.[0-9]"
+           PYTHON_VERSION "${PYTHON_VERSION_RAW}")
 
-IF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
-  SET(COMPILE_TULIP_OGL_QT_PYTHON_BINDINGS OFF CACHE BOOL "Enable the compilation of tulip-ogl and tulip-qt Python bindings")
-  SET(SIP_OK FALSE CACHE INTERNAL "")
-  FIND_PACKAGE(SIP)
-  SET(SIP_OK ${SIP_FOUND})
-  IF (SIP_OK)
-    SET(SIP_EXE "${SIP_EXECUTABLE}")
-  ELSE(SIP_OK)
-    SET(SIP_LIB sip)
-    TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.13.2/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.13.2/sipgen sip CMAKE_FLAGS -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})
-    IF(SIP_OK)
-      SET(SIP_VERSION_STR "4.13.2")
-      IF(WIN32 AND EXISTS "${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.13.2/sipgen/Debug/sip.exe")
-	SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.13.2/sipgen/Debug/sip.exe)
-      ELSE()
-	SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.13.2/sipgen/sip)
-      ENDIF()
-      SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.13.2/siplib/)
-    ENDIF(SIP_OK)
- ENDIF()
-    
-  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import sys;print str(sys.version_info[0])+\".\"+str(sys.version_info[1])"
-		  OUTPUT_VARIABLE PYTHON_VERSION)
-  STRING(REPLACE "\n" "" PYTHON_VERSION "${PYTHON_VERSION}")
+    # Find the Python library with the same version as the interpreter
+    # Starting Python 3.2, the library is suffixed by mu, also handle that case
+    SET(Python_ADDITIONAL_VERSIONS ${PYTHON_VERSION}mu ${PYTHON_VERSION})
+    FIND_PACKAGE(PythonLibs)
 
-  SET(Sphinx_DIR ${CMAKE_CURRENT_SOURCE_DIR}/docs/python)
-  MARK_AS_ADVANCED(Sphinx_DIR)
-  FIND_PACKAGE(Sphinx)
-
-ENDIF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+    IF(PYTHONLIBS_FOUND)
+        SET(COMPILE_TULIP_OGL_QT_PYTHON_BINDINGS OFF CACHE BOOL "Enable the compilation of tulip-ogl and tulip-qt Python bindings")
+        SET(SIP_OK FALSE CACHE INTERNAL "")
+        FIND_PACKAGE(SIP)
+        SET(SIP_OK ${SIP_FOUND})
+        IF (SIP_OK)
+            SET(SIP_EXE "${SIP_EXECUTABLE}")
+            SET(SYSTEM_SIP TRUE)
+        ELSE(SIP_OK)
+            SET(SIP_LIB sip)
+            SET(SYSTEM_SIP FALSE)
+            TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.13.2/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.13.2/sipgen sip CMAKE_FLAGS -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})
+            IF(SIP_OK)
+                SET(SIP_VERSION_STR "4.13.2")
+                IF(WIN32 AND EXISTS "${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.13.2/sipgen/Debug/sip.exe")
+                    SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.13.2/sipgen/Debug/sip.exe)
+                ELSE()
+                    SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.13.2/sipgen/sip)
+                ENDIF()
+                SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.13.2/siplib/)
+            ENDIF(SIP_OK)
+        ENDIF(SIP_OK)
+        SET(Sphinx_DIR ${CMAKE_CURRENT_SOURCE_DIR}/docs/python)
+        MARK_AS_ADVANCED(Sphinx_DIR)
+        FIND_PACKAGE(Sphinx)
+    ENDIF(PYTHONLIBS_FOUND)
+ENDIF(PYTHONINTERP_FOUND)
 
 ## -----------------------------------------------------------------------------------------------
 ## Include file paths

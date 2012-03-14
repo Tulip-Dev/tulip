@@ -196,13 +196,13 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-	@PROPERTY_NODE_TYPE@ __getitem__(const tlp::node node) const;
+    @PROPERTY_NODE_TYPE@ __getitem__(const tlp::node node) const;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 #ifdef PROPERTY_BASE_TYPE		
-     	sipRes = sipCpp->getNodeValue(*a0);
+        sipRes = sipCpp->getNodeValue(*a0);
 #else
-		sipRes = new @PROPERTY_NODE_TYPE@(sipCpp->getNodeValue(*a0));
+        sipRes = new @PROPERTY_NODE_TYPE@(sipCpp->getNodeValue(*a0));
 #endif     	
     } else {
     	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
@@ -262,7 +262,11 @@ Sets the value of a particular edge.
 	std::ostringstream oss;
 	oss << "<@PROPERTY_TYPE@ property " << sipCpp->getName() << ">";
 	std::string s = oss.str();
-	sipRes = PyString_FromString(s.c_str());
+#if PY_MAJOR_VERSION >= 3
+    sipRes = PyUnicode_FromString(s.c_str());
+#else
+    sipRes = PyString_FromString(s.c_str());
+#endif
 %End
 	
 //===========================================================================================	
@@ -856,7 +860,11 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 	std::ostringstream oss;
 	oss << "<@VEC_PROPERTY_TYPE@ vector property " << sipCpp->getName() << ">";
 	std::string s = oss.str();
+#if PY_MAJOR_VERSION >= 3
+    sipRes = PyUnicode_FromString(s.c_str());
+#else
 	sipRes = PyString_FromString(s.c_str());
+#endif
 %End
 
 //===========================================================================================	

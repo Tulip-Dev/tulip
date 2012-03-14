@@ -138,7 +138,11 @@ tlp.GraphProperty.setAllEdgeValue(list of tlp.edge)
 	std::ostringstream oss;
 	oss << "<graph property " << sipCpp->getName() << ">";
 	std::string s = oss.str();
+#if PY_MAJOR_VERSION >= 3
+    sipRes = PyUnicode_FromString(s.c_str());
+#else
 	sipRes = PyString_FromString(s.c_str());
+#endif
 %End
 	
 };

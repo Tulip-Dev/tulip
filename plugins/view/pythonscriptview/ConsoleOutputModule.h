@@ -47,7 +47,11 @@ typedef struct {
 
 static void
 scriptengine_ConsoleOutput_dealloc(scriptengine_ConsoleOutput* self) {
+#if PY_MAJOR_VERSION >= 3
+  Py_TYPE(self)->tp_free((PyObject*)self);
+#else
   self->ob_type->tp_free((PyObject*)self);
+#endif
 }
 
 static PyObject *
@@ -143,8 +147,12 @@ static PyMethodDef scriptengine_ConsoleOutput_methods[] = {
 };
 
 static PyTypeObject scriptengine_ConsoleOutputType = {
+#if PY_MAJOR_VERSION >= 3
+  PyVarObject_HEAD_INIT(NULL, 0)
+#else
   PyObject_HEAD_INIT(NULL)
   0,                         /*ob_size*/
+#endif
   "scriptengine.ConsoleOutput",             /*tp_name*/
   sizeof(scriptengine_ConsoleOutput),             /*tp_basicsize*/
   0,                         /*tp_itemsize*/
@@ -185,6 +193,20 @@ static PyTypeObject scriptengine_ConsoleOutputType = {
 };
 
 
+#if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef scriptEngineModuleDef = {
+    PyModuleDef_HEAD_INIT,
+    "scriptengine",     /* m_name */
+    "",  /* m_doc */
+    -1,                  /* m_size */
+    NULL,    /* m_methods */
+    NULL,                /* m_reload */
+    NULL,                /* m_traverse */
+    NULL,                /* m_clear */
+    NULL,                /* m_free */
+};
+#endif
+
 void
 initscriptengine(void) {
   PyObject* m;
@@ -193,9 +215,13 @@ initscriptengine(void) {
 
   if (PyType_Ready(&scriptengine_ConsoleOutputType) < 0)
     return;
-
+#if PY_MAJOR_VERSION >= 3
+  m = PyModule_Create(&scriptEngineModuleDef);
+  _PyImport_FixupBuiltin(m, const_cast<char *>("scriptengine"));
+#else
   m = Py_InitModule3("scriptengine", NULL,"");
-
+  _PyImport_FixupExtension(const_cast<char *>("scriptengine"), const_cast<char *>("scriptengine"));
+#endif
   Py_INCREF(&scriptengine_ConsoleOutputType);
   PyModule_AddObject(m, "ConsoleOutput", (PyObject *)&scriptengine_ConsoleOutputType);
 }
