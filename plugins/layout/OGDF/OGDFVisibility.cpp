@@ -19,15 +19,32 @@
 #include <ogdf/upward/VisibilityLayout.h>
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
+namespace {
+
+const char * paramHelp[] = {
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "the minimum grid distance."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "Sets the option for transposing layout vertically ."
+  HTML_HELP_CLOSE()
+};
+}
+
 // comments below have been extracted from OGDF/src/upward/VisibilityLayout.cpp
+/** \addtogroup layout */
 /*@{*/
-/** \file
- * \brief Implementation of visibility layout algorithm.
+/**
+ * Implementation of visibility layout algorithm.
  *
  * \author Hoi-Ming Wong and Carsten Gutwenger
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  *
  * Copyright (C). All rights reserved.
  * See README.txt in the root directory of the OGDF installation for details.
@@ -63,23 +80,6 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
-namespace {
-
-const char * paramHelp[] = {
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "int" )
-  HTML_HELP_BODY()
-  "Minimum grid distance."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "bool" )
-  HTML_HELP_BODY()
-  "If true, the layout is transposed vertically ."
-  HTML_HELP_CLOSE()
-};
-}
-
 class OGDFVisibility : public OGDFLayoutPluginBase {
 
 public:
@@ -91,7 +91,15 @@ public:
 
   ~OGDFVisibility() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  bool check(string& error) {
+    if (!tlp::ConnectedTest::isConnected(graph)) {
+      error += "graph is not connected";
+      return false;
+    }
+    return true;    
+  }
+
+  void beforeCall() {
     ogdf::VisibilityLayout *visibility = static_cast<ogdf::VisibilityLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {
@@ -102,7 +110,7 @@ public:
     }
   }
 
-  void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
+  void afterCall() {
     if (dataSet != 0) {
       bool bval = false;
 
@@ -115,5 +123,6 @@ public:
   }
 
 };
+/*@}*/
 
 PLUGIN(OGDFVisibility)

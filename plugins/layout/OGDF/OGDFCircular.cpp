@@ -20,15 +20,41 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
+namespace {
+
+const char * paramHelp[] = { HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The minimal distance between nodes on a circle."
+                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The minimal distance between father and child circle. "
+                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The minimal distance between circles on same level. "
+                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The minimal distance between connected components."
+                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The page ratio used for packing connected components."
+                             HTML_HELP_CLOSE()
+                           };
+}
+
 // comments below have been extracted from OGDF/src/misclayout/CircularLayout.cpp
 /*@{*/
-/** \file
- * \brief Implements class CircularLayout
+/// An implementation of the circular layout
+/**
  *
  * \author Carsten Gutwenger
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  *
  * Copyright (C). All rights reserved.
  * See README.txt in the root directory of the OGDF installation for details.
@@ -64,33 +90,6 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
-namespace {
-
-const char * paramHelp[] = { HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Minimal distance between nodes on a circle."
-                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Minimal distance between father and child circle. "
-                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Minimal distance between circles on same level. "
-                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Minimal distance between connected components."
-                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Page ratio used for packing connected components."
-                             HTML_HELP_CLOSE()
-                           };
-}
-
 class OGDFCircular : public OGDFLayoutPluginBase {
 
 public:
@@ -104,7 +103,7 @@ public:
   }
   ~OGDFCircular() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::CircularLayout *circular = static_cast<ogdf::CircularLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {
@@ -128,5 +127,6 @@ public:
   }
 
 };
+/*@}*/
 
 PLUGIN(OGDFCircular)

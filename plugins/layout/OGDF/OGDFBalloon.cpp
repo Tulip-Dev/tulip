@@ -20,18 +20,28 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
+namespace {
+
+const char * paramHelp[] = { HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "Subtrees may be assigned even angles or angles depending on their size."
+                             HTML_HELP_CLOSE()
+                           };
+}
+
 // comments below have been extracted from OGDF/src/misclayout/BallonLayout.cpp
-/*@{*/
-/** \file
- * \brief BalloonLayout for trees that can also be applied to
- * general graphs.
+/** \addtogroup layout */
+//*@{*/
+/// Layout for trees that can also be applied to general graphs.
+/**
  *
- * Partially based on the papers by Lin/Yen and Carriere/Kazman
+ * It is partially based on the papers by Lin/Yen and Carriere/Kazman
  *
  * \author Karsten Klein
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  *
  * Copyright (C). All rights reserved.
  * See README.txt in the root directory of the OGDF installation for details.
@@ -67,17 +77,6 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
-namespace {
-
-const char * paramHelp[] = { HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "bool" )
-                             HTML_HELP_BODY()
-                             "If true, subtrees are assigned even angles. If false, the angles depends on their size."
-                             HTML_HELP_CLOSE()
-                           };
-}
-
 class OGDFBalloon : public OGDFLayoutPluginBase {
 
 public:
@@ -87,7 +86,7 @@ public:
   }
   ~OGDFBalloon() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::BalloonLayout *balloon = static_cast<ogdf::BalloonLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {
@@ -99,5 +98,6 @@ public:
   }
 
 };
+/*@}*/
 
 PLUGIN(OGDFBalloon)

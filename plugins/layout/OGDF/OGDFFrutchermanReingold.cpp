@@ -20,16 +20,79 @@
 #include <ogdf/energybased/SpringEmbedderFRExact.h>
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
+namespace {
+
+const char * paramHelp[] = { HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "int" )
+                             HTML_HELP_BODY()
+                             "Sets the number of iterations to i."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "Sets the parameter noise. "
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "set the use of node weights given in metric.  "
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "DoubleProperty" )
+                             HTML_HELP_BODY()
+                             "metric containing nodes weights.  "
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "StringCollection")
+                             HTML_HELP_DEF("values", "Factor <BR> Logarithmic")
+                             HTML_HELP_DEF( "default", "Factor" )
+                             HTML_HELP_BODY()
+                             "Sets the parameter cooling function"
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The ideal edge length."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The minimal distance between connected components."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The page ratio used for packing connected components."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "check convergence option. "
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "convergence tolerance parameter."
+                             HTML_HELP_CLOSE()
+                           };
+}
+
+#define ELT_COOLING "Cooling function"
+#define ELT_COOLINGLIST "Factor;Logarithmic"
+#define ELT_FACTOR 0
+#define ELT_LOGARITHMIC 1
+
 // comments below have been extracted from OGDF/src/energybased/SpringEmbedderFRExact.cpp
+/** \addtogroup layout */
 /*@{*/
-/** \file
- * \brief Implementation of Spring-Embedder (Fruchterman,Reingold)
- *        algorithm with exact force computations.
+/**
+ * Implementation of Spring-Embedder (Fruchterman,Reingold)
+ * algorithm with exact force computations.
  *
  * \author Carsten Gutwenger
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  * Copyright (C) 2005-2009
  *
  * \par
@@ -63,69 +126,6 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
-namespace {
-
-const char * paramHelp[] = { HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "int" )
-                             HTML_HELP_BODY()
-                             "Number of iterations"
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "bool" )
-                             HTML_HELP_BODY()
-                             "Noise. "
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "bool" )
-                             HTML_HELP_BODY()
-                             "If true, use metric as node weights.  "
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "DoubleProperty" )
-                             HTML_HELP_BODY()
-                             "Metric containing nodes weights.  "
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "StringCollection")
-                             HTML_HELP_DEF("values", "Factor <BR> Logarithmic")
-                             HTML_HELP_DEF( "default", "Factor" )
-                             HTML_HELP_BODY()
-                             "Cooling function"
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Ideal edge length."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Minimal distance between connected components."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Page ratio used for packing connected components."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "bool" )
-                             HTML_HELP_BODY()
-                             "If true, check convergence. "
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Convergence tolerance."
-                             HTML_HELP_CLOSE()
-                           };
-}
-
-#define ELT_COOLING "Cooling function"
-#define ELT_COOLINGLIST "Factor;Logarithmic"
-#define ELT_FACTOR 0
-#define ELT_LOGARITHMIC 1
-
 class OGDFFrutchermanReingold: public OGDFLayoutPluginBase {
 
 public:
@@ -133,8 +133,9 @@ public:
   OGDFFrutchermanReingold(const tlp::PluginContext* context);
   ~OGDFFrutchermanReingold();
 
-  void beforeCall(TulipToOGDF *tlpToOGDF, ogdf::LayoutModule *ogdfLayoutAlgo);
+  void beforeCall();
 };
+/*@}*/
 
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de
  creation,informations, realease, groupe*/
@@ -156,7 +157,7 @@ OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PluginContext* conte
 
 OGDFFrutchermanReingold::~OGDFFrutchermanReingold() {}
 
-void OGDFFrutchermanReingold::beforeCall(TulipToOGDF *tlpToOGDF, ogdf::LayoutModule *ogdfLayoutAlgo) {
+void OGDFFrutchermanReingold::beforeCall() {
   ogdf::SpringEmbedderFRExact *sefr = static_cast<ogdf::SpringEmbedderFRExact*>(ogdfLayoutAlgo);
 
   if (dataSet != 0) {

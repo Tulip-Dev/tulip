@@ -17,76 +17,33 @@
  *
  */
 
-#include <ogdf/energybased/FMMMLayout.h>
+#include <tulip/ForEach.h>
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
+#include <ogdf/energybased/FMMMLayout.h>
 
 using namespace std;
-
-// comments below have been extracted from OGDF/src/energybased/FMMMLayout.cpp
-/*@{*/
-/** \file
- * \brief Implementation of Fast Multipole Multilevel Method (FM^3).
- *
- * This is an implementation of Fast Multipole Multilevel Method (FM^3).
- * \author Stefan Hachul
- *
- * \par License:
- * This is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2007
- *
- * \par
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
- *
- * \par
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * \par
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
 
 namespace {
 
 const char * paramHelp[] = {HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "DoubleProperty" )
                             HTML_HELP_BODY()
-                            "Unit edge length."
+                            "A double property containing unit edge length to use."
                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "SizeProperty" )
                             HTML_HELP_BODY()
-                            "Nodes size."
+                            "The nodes size."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "double" )
                             HTML_HELP_BODY()
-                            "Unit edge length."
+                            "The unit edge length."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "bool" )
                             HTML_HELP_BODY()
-                            "New initial placement before running the algorithm."
+                            "set new initial placement before running algorithm."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
@@ -107,94 +64,94 @@ const char * paramHelp[] = {HTML_HELP_OPEN()
                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> Midpoint : <FONT COLOR=\"black\"> Measure from center point of edge end points. <BR> <FONT COLOR=\"red\"> BoundingCircle : <FONT COLOR=\"black\"> Measure from border of circle s surrounding edge end points. ")
                             HTML_HELP_DEF( "default", "BoundingCircle" )
                             HTML_HELP_BODY()
-                            "How the length of an edge is measured."
+                            "Specifies how the length of an edge is measured."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "All <BR> Integer <BR> Exponent")
                             HTML_HELP_DEF( "default", "Integer" )
                             HTML_HELP_BODY()
-                            "Allowed positions for a node."
+                            "Specifies which positions for a node are allowed."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "None <BR> NoGrowingRow <BR> Always")
                             HTML_HELP_DEF( "default", "NoGrowingRow" )
                             HTML_HELP_BODY()
-                            "When it is allowed to tip over drawings of connected components."
+                            "Specifies in which case it is allowed to tip over drawings of connected components."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> None : <FONT COLOR=\"black\"> Do not presort. <BR> <FONT COLOR=\"red\"> DecreasingHeight :  <FONT COLOR=\"black\"> Presort by decreasing height of components. <BR> <FONT COLOR=\"red\"> DecreasingWidth : <FONT COLOR=\"black\"> Presort by decreasing width of components. ")
                             HTML_HELP_DEF( "default", "DecreasingHeight" )
                             HTML_HELP_BODY()
-                            "How connected components are sorted before the packing algorithm is applied."
+                            "Specifies how connected components are sorted before the packing algorithm is applied."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "UniformProb <BR> NonUniformProbLowerMass <BR> NonUniformProbHigherMass")
                             HTML_HELP_DEF( "default", "NonUniformProbLowerMass" )
                             HTML_HELP_BODY()
-                            "How sun nodes of galaxies are selected. "
+                            "Specifies how sun nodes of galaxies are selected. "
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "Constant <BR> LinearlyDecreasing <BR> RapidlyDecreasing")
                             HTML_HELP_DEF( "default", "LinearlyDecreasing" )
                             HTML_HELP_BODY()
-                            "How MaxIterations is changed in subsequent multilevels. "
+                            "Specifies how MaxIterations is changed in subsequent multilevels. "
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "Simple <BR> Advanced")
                             HTML_HELP_DEF( "default", "Advanced" )
                             HTML_HELP_BODY()
-                            "How the initial placement is generated."
+                            "Specifies how the initial placement is generated."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FruchtermanReingold : <FONT COLOR=\"black\"> The force-model by Fruchterman, Reingold.  <BR> <FONT COLOR=\"red\"> Eades : <FONT COLOR=\"black\"> The force-model by Eades. <BR> <FONT COLOR=\"red\"> New : <FONT COLOR=\"black\"> The new force-model. ")
                             HTML_HELP_DEF( "default", "New" )
                             HTML_HELP_BODY()
-                            "Force model. "
+                            "Specifies the force model. "
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> Exact : <FONT COLOR=\"black\"> Exact calculation. <BR> <FONT COLOR=\"red\"> GridApproximation : <FONT COLOR=\"black\"> Grid approximation. <BR> <FONT COLOR=\"red\"> NMM : <FONT COLOR=\"black\"> Calculation as for new multipole method. ")
                             HTML_HELP_DEF( "default", "NMM" )
                             HTML_HELP_BODY()
-                            "How to calculate repulsive forces."
+                            "Specifies how to calculate repulsive forces."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> UniformGrid : <FONT COLOR=\"black\"> Uniform placement on a grid.  <BR> <FONT COLOR=\"red\"> RandomTime : <FONT COLOR=\"black\"> Random placement (based on current time).  <BR> <FONT COLOR=\"red\"> RandomRandIterNr : <FONT COLOR=\"black\"> Random placement (based on randIterNr()). <BR> <FONT COLOR=\"red\"> KeepPositions : <FONT COLOR=\"black\"> No change in placement. ")
                             HTML_HELP_DEF( "default", "RandomRandIterNr" )
                             HTML_HELP_BODY()
-                            "Initial placement. "
+                            "Specifies how the initial placement is done. "
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "PathByPath <BR> SubtreeBySubtree")
                             HTML_HELP_DEF( "default", "Advanced" )
                             HTML_HELP_BODY()
-                            "How the reduced bucket quadtree is constructed."
+                            "Specifies how the reduced bucket quadtree is constructed."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "String Collection" )
                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> Iteratively : <FONT COLOR=\"black\"> 	Iteratively (in constant time). <BR> <FONT COLOR=\"red\"> Aluru : <FONT COLOR=\"black\"> According to formula by Aluru et al. (in constant time).")
                             HTML_HELP_DEF( "default", "Advanced" )
                             HTML_HELP_BODY()
-                            "How to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
+                            "Specifies how to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "int" )
                             HTML_HELP_BODY()
-                            "Number of iterations for the stop criterion."
+                            "the fixed number of iterations for the stop criterion."
                             HTML_HELP_CLOSE(),
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "double" )
                             HTML_HELP_BODY()
-                            "Threshold for the stop criterion."
+                            "the threshold for the stop criterion."
                             HTML_HELP_CLOSE()
                            };
 
@@ -230,7 +187,7 @@ const char * paramHelp[] = {HTML_HELP_OPEN()
 #define ELT_NONE 2
 
 #define ELT_PRESORT "Pre Sort"
-#define ELT_PRESORTLIST "DecreasingHeight;DecreasingWidth;None"
+#define ELT_PRESORTLIST "DecreasingHeight;DecreasingWidth;None;"
 #define ELT_DECREASINGHEIGHT 0
 #define ELT_DECREASINGWDTH 1
 
@@ -280,6 +237,48 @@ const char * paramHelp[] = {HTML_HELP_OPEN()
 #define ELT_ITERATIVELY 0
 #define ELT_ALURU 1
 
+// comments below have been extracted from OGDF/src/energybased/FMMMLayout.cpp
+/** \addtogroup layout */
+/*@{*/
+/**
+ * This is an implementation of Fast Multipole Multilevel Method (FM^3).
+ * \author Stefan Hachul
+ *
+ * \par License:
+ * This is part of the Open Graph Drawing Framework (OGDF).
+ * Copyright (C) 2005-2007
+ *
+ * \par
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * Version 2 or 3 as published by the Free Software Foundation
+ * and appearing in the files LICENSE_GPL_v2.txt and
+ * LICENSE_GPL_v3.txt included in the packaging of this file.
+ *
+ * \par
+ * In addition, as a special exception, you have permission to link
+ * this software with the libraries of the COIN-OR Osi project
+ * (http://www.coin-or.org/projects/Osi.xml), all libraries required
+ * by Osi, and all LP-solver libraries directly supported by the
+ * COIN-OR Osi project, and distribute executables, as long as
+ * you follow the requirements of the GNU General Public License
+ * in regard to all of the software in the executable aside from these
+ * third-party libraries.
+ *
+ * \par
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * \par
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ *
+ * \see  http://www.gnu.org/copyleft/gpl.html
+ ***************************************************************/
 class OGDFFm3: public OGDFLayoutPluginBase {
 
   tlp::StringCollection stringCollection;
@@ -288,8 +287,10 @@ public:
   PLUGININFORMATIONS("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Alpha", "1.2" ,"Force Directed")
   OGDFFm3(const tlp::PluginContext* context);
   ~OGDFFm3();
-  void beforeCall(TulipToOGDF *tlpToOGDF, ogdf::LayoutModule *ogdfLayoutAlgo);
+  void beforeCall();
+  void callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes);
 };
+/*@}*/
 
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de
  creation,informations, release, groupe*/
@@ -335,8 +336,7 @@ OGDFFm3::OGDFFm3(const tlp::PluginContext* context) :
 OGDFFm3::~OGDFFm3() {
 }
 
-void OGDFFm3::beforeCall(TulipToOGDF *tlpToOGDF,
-                         ogdf::LayoutModule *ogdfLayoutAlgo) {
+void OGDFFm3::beforeCall() {
   ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout*> (ogdfLayoutAlgo);
 
   if (dataSet != 0) {
@@ -345,11 +345,6 @@ void OGDFFm3::beforeCall(TulipToOGDF *tlpToOGDF,
 
     if (dataSet->get("Node Size", size))
       tlpToOGDF->copyTlpNodeSizeToOGDF(size);
-
-    DoubleProperty * length = NULL;
-
-    if (dataSet->get("Edge Length", length))
-      tlpToOGDF->copyTlpDoublePropertyToOGDFEdgeLength(length);
 
     double edgeLenth = 10;
 
@@ -536,6 +531,25 @@ void OGDFFm3::beforeCall(TulipToOGDF *tlpToOGDF,
       }
     }
   }
+}
 
+
+void OGDFFm3::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
+
+  ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout*> (ogdfLayoutAlgo);
+
+  DoubleProperty *length = NULL;
+
+  if (dataSet->get("Edge Length Property", length) && length) {
+    EdgeArray<double> edgeLength(tlpToOGDF->getOGDFGraph());
+    tlp::edge e;
+    forEach(e, graph->getEdges()) {
+      edgeLength[tlpToOGDF->getOGDFGraphEdge(e.id)] = length->getEdgeValue(e);
+    }
+    fmmm->call(gAttributes, edgeLength);
+  }
+  else {
+    OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(gAttributes);
+  }
 }
 

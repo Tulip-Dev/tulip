@@ -20,15 +20,52 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
+namespace {
+
+const char * paramHelp[] = {
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "The maximum number of iterations."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "The number of coefficients for the expansions."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "If true, layout algorithm will randomize the layout in the beginning."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "the default node size."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "the default edge length. "
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "The number of threads to use during the computation of the layout."
+  HTML_HELP_CLOSE()
+};
+}
+
 // comments below have been extracted from OGDF/src/energybased/FastMultipoleEmbedder.cpp
+/** \addtogroup layout */
 /*@{*/
-/** \file
- * \brief Implementation of class FastMultipoleEmbedder.
+/**
+ * Implementation of class FastMultipoleEmbedder.
  *
  * \author Martin Gronemann
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  * Copyright (C) 2005-2009
  *
  * \par
@@ -62,44 +99,6 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
-
-namespace {
-
-const char * paramHelp[] = {
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "int" )
-  HTML_HELP_BODY()
-  "Maximum number of iterations."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "int" )
-  HTML_HELP_BODY()
-  "Number of coefficients for the expansions."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "bool" )
-  HTML_HELP_BODY()
-  "If true, layout algorithm will randomize the layout in the beginning."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_BODY()
-  "Default node size."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_BODY()
-  "Default edge length. "
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "int" )
-  HTML_HELP_BODY()
-  "Number of threads."
-  HTML_HELP_CLOSE()
-};
-}
-
 class OGDFFastMultipoleEmbedder : public OGDFLayoutPluginBase {
 
 public:
@@ -116,7 +115,7 @@ public:
 
   ~OGDFFastMultipoleEmbedder() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::FastMultipoleEmbedder *fme = static_cast<ogdf::FastMultipoleEmbedder*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {
@@ -145,5 +144,6 @@ public:
   }
 
 };
+/*@}*/
 
 PLUGIN(OGDFFastMultipoleEmbedder)
