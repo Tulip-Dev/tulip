@@ -4,6 +4,7 @@ AcyclicTest.cpp
 Bfs.cpp
 BiconnectedTest.cpp
 BooleanProperty.cpp
+BoundingBox.cpp
 Color.cpp
 ColorProperty.cpp
 ColorScale.cpp
