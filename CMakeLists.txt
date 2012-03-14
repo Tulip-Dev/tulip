@@ -109,7 +109,7 @@ SET(UBUNTU_PPA_BUILD OFF CACHE INTERNAL "")
 ## Find need packages
 ## -----------------------------------------------------------------------------------------------
 FIND_PACKAGE(Freetype REQUIRED)
-FIND_PACKAGE(Qt4 4.5.0 REQUIRED)
+FIND_PACKAGE(Qt4 4.6.0 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 IF(DEFINED CMAKE_VERSION)
   SET(HAVE_QT4_GET_MOC_FLAGS TRUE)
