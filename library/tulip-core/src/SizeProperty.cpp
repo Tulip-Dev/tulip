@@ -29,6 +29,14 @@ class SizeMetaValueCalculator
 public:
   void computeMetaValue(AbstractSizeProperty* prop,
                         node mN, Graph* sg, Graph*) {
+    // nothing to do if the subgraph is not linked to the property graph
+    if (sg!=prop->getGraph() && !prop->getGraph()->isDescendantGraph(sg)) {
+#ifndef NDEBUG
+      std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << prop->getName().c_str() << std::endl;
+#endif
+      return;
+    }
+
     if (sg->numberOfNodes() == 0) {
       prop->setNodeValue(mN, Size(1, 1, 1));
       return;
@@ -181,7 +189,9 @@ PropertyInterface* SizeProperty::clonePrototype(Graph * g, const std::string& n)
   if( !g )
     return 0;
 
-  SizeProperty * p = g->getLocalProperty<SizeProperty>( n );
+  // allow to get an unregistered property (empty name)
+  SizeProperty * p = n.empty()
+                     ? new SizeProperty(g) : g->getLocalProperty<SizeProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
@@ -200,7 +210,9 @@ PropertyInterface* SizeVectorProperty::clonePrototype(Graph * g, const std::stri
   if( !g )
     return 0;
 
-  SizeVectorProperty * p = g->getLocalProperty<SizeVectorProperty>( n );
+  // allow to get an unregistered property (empty name)
+  SizeVectorProperty * p = n.empty()
+                           ? new SizeVectorProperty(g) : g->getLocalProperty<SizeVectorProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;

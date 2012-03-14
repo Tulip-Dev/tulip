@@ -38,6 +38,14 @@ typedef void (*DoubleEdgePredefinedCalculator) (AbstractProperty<tlp::DoubleType
 
 // average values
 static void computeNodeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, node mN, Graph* sg) {
+  // nothing to do if the subgraph is not linked to the property graph
+  if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
+#ifndef NDEBUG
+    std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
+#endif
+    return;
+  }
+
   double value = 0;
   unsigned int nbNodes = 0;
   node n;
@@ -45,7 +53,9 @@ static void computeNodeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
     ++nbNodes;
     value += metric->getNodeValue(n);
   }
-  metric->setNodeValue(mN, value/nbNodes);
+
+  if (nbNodes)
+    metric->setNodeValue(mN, value/nbNodes);
 }
 
 static void computeEdgeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, edge mE, Iterator<edge>* itE) {
@@ -58,11 +68,20 @@ static void computeEdgeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
     value += metric->getEdgeValue(e);
   }
 
-  metric->setEdgeValue(mE, value/nbEdges);
+  if (nbEdges)
+    metric->setEdgeValue(mE, value/nbEdges);
 }
 
 // sum values
 static void computeNodeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, node mN, Graph* sg) {
+  // nothing to do if the subgraph is not linked to the property graph
+  if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
+#ifndef NDEBUG
+    std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
+#endif
+    return;
+  }
+
   double value = 0;
   node n;
   forEach(n, sg->getNodes()) {
@@ -84,6 +103,14 @@ static void computeEdgeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
 
 // max values
 static void computeNodeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, node mN, Graph* sg) {
+  // nothing to do if the subgraph is not linked to the property graph
+  if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
+#ifndef NDEBUG
+    std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
+#endif
+    return;
+  }
+
   double value = -DBL_MAX;
   node n;
   forEach(n, sg->getNodes()) {
@@ -110,6 +137,14 @@ static void computeEdgeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
 
 // min values
 static void computeNodeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, node mN, Graph* sg) {
+  // nothing to do if the subgraph is not linked to the property graph
+  if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
+#ifndef NDEBUG
+    std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
+#endif
+    return;
+  }
+
   double value = DBL_MAX;
   node n;
   forEach(n, sg->getNodes()) {
@@ -315,7 +350,9 @@ PropertyInterface* DoubleProperty::clonePrototype(Graph * g, const std::string& 
   if( !g )
     return 0;
 
-  DoubleProperty * p = g->getLocalProperty<DoubleProperty>( n );
+  // allow to get an unregistered property (empty name)
+  DoubleProperty * p = n.empty()
+                       ? new DoubleProperty(g) : g->getLocalProperty<DoubleProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
@@ -325,7 +362,9 @@ PropertyInterface* DoubleVectorProperty::clonePrototype(Graph * g, const std::st
   if( !g )
     return 0;
 
-  DoubleVectorProperty * p = g->getLocalProperty<DoubleVectorProperty>( n );
+  // allow to get an unregistered property (empty name)
+  DoubleVectorProperty * p = n.empty()
+                             ? new DoubleVectorProperty(g) : g->getLocalProperty<DoubleVectorProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
