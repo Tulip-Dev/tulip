@@ -106,6 +106,7 @@ INSTALL(FILES
   tulip/cxx/PropertyAnimation.cxx
   tulip/cxx/VectorPropertyAnimation.cxx
   tulip/cxx/TulipItemEditorCreators.cxx
+  tulip/cxx/GraphPropertiesModel.cxx
 DESTINATION ${TulipIncludeInstallDir}/tulip/cxx/
 COMPONENT tulip_core_dev
 )

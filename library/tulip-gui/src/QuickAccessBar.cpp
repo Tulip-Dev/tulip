@@ -82,11 +82,14 @@ void QuickAccessBar::setGlMainView(GlMainView* v) {
 void QuickAccessBar::reset() {
   _resetting = true;
   _ui->backgroundColorButton->setTulipColor(scene()->getBackgroundColor());
+  _ui->backgroundColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->nodeColorButton->setTulipColor(inputData()->getElementColor()->getNodeDefaultValue());
+  _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
   _ui->showEdgesToggle->setChecked(renderingParameters()->isDisplayEdges());
   _ui->showEdgesToggle->setIcon((renderingParameters()->isDisplayEdges() ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
   _ui->labelColorButton->setTulipColor(inputData()->getElementLabelColor()->getNodeDefaultValue());
+  _ui->labelColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->showLabelsToggle->setChecked(renderingParameters()->isViewNodeLabel());
   _ui->labelPropertyCombo->clear();
   _ui->labelPropertyCombo->addItem(trUtf8("Values on labels"));

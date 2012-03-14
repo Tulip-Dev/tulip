@@ -32,11 +32,14 @@ class TLP_QT_SCOPE ColorButton : public QPushButton {
   Q_PROPERTY(Color tulipColor READ tulipColor WRITE setTulipColor)
 
   QColor _color;
+  QWidget* _dialogParent;
 public:
   explicit ColorButton(QWidget *parent = 0);
 
   QColor color() const;
   Color tulipColor() const;
+
+  void setDialogParent(QWidget* w);
 
 protected:
   void paintEvent(QPaintEvent *);
