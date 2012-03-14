@@ -7,16 +7,13 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Algorithm.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Array.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/BiconnectedTest.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/BooleanAlgorithm.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/BooleanPropertySpecific.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/BoundingBox.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/ColorAlgorithm.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/ColorScale.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Color.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/ConnectedTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Constants.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Coord.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/DoubleAlgorithm.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/DoublePropertySpecific.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/DrawingTools.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Edge.sip
@@ -26,10 +23,8 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/GraphProperty.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/GraphMeasure.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/ImportModule.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/IntegerAlgorithm.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/IntegerPropertySpecific.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Iterator.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/LayoutAlgorithm.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/LayoutPropertySpecific.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/MapIterator.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Matrix.sip
@@ -45,7 +40,6 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertyInterface.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Reflect.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/SimpleTest.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/SizeAlgorithm.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/SizePropertySpecific.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Size.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/StringCollection.sip
