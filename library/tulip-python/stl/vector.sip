@@ -32,7 +32,7 @@
 // we are forced to provide a specialization.
 
 template<TYPE>
-%MappedType std::vector<TYPE> {
+%MappedType std::vector<TYPE> /DocType="list-of-TYPE"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -77,6 +77,7 @@ template<TYPE>
        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
             PyObject *item = PyList_GET_ITEM(sipPy, i);
             if (!sipCanConvertToType(item, sipType_TYPE, SIP_NOT_NONE)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
                 return 0;
             }
        }
@@ -107,7 +108,7 @@ template<TYPE>
 };
 
 template<TYPE*>
-%MappedType std::vector<TYPE*> {
+%MappedType std::vector<TYPE*> /DocType="list-of-TYPE"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -151,6 +152,7 @@ template<TYPE*>
        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
             PyObject *item = PyList_GET_ITEM(sipPy, i);
             if (!sipCanConvertToType(item, sipType_TYPE, SIP_NOT_NONE)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
                 return 0;
             }
        }
@@ -184,7 +186,7 @@ template<TYPE*>
 // Specialization for std::vector<double>
 // ****************************************************
 
-%MappedType std::vector<double> {
+%MappedType std::vector<double> /DocType="list-of-float"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -217,6 +219,7 @@ template<TYPE*>
        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
             PyObject *item = PyList_GET_ITEM(sipPy, i);
             if (!PyNumber_Check(item)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to double");
                 return 0;
             }
        }
@@ -242,7 +245,7 @@ template<TYPE*>
 // Specialization for std::vector<int>
 // ****************************************************
 
-%MappedType std::vector<int> {
+%MappedType std::vector<int> /DocType="list-of-int"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -259,7 +262,7 @@ template<TYPE*>
    // wrapped object.
    for (int i = 0; i < (int)sipCpp -> size(); ++i) {
        // Add the wrapper to the list.
-       PyList_SET_ITEM(l, i, PyInt_FromLong(sipCpp -> at(i)));
+       PyList_SET_ITEM(l, i, PyLong_FromLong(sipCpp -> at(i)));
    }
 
    // Return the Python list.
@@ -274,7 +277,8 @@ template<TYPE*>
        }
        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
             PyObject *item = PyList_GET_ITEM(sipPy, i);
-            if (!PyInt_Check(item)) {
+            if (!PyLong_Check(item)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to int");
                 return 0;
             }
        }
@@ -285,7 +289,7 @@ template<TYPE*>
    std::vector<int> *v = new std::vector<int>();
    v->reserve(PyList_GET_SIZE(sipPy));
    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
-       v->push_back(PyInt_AsLong(PyList_GET_ITEM(sipPy, i)));
+       v->push_back(PyLong_AsLong(PyList_GET_ITEM(sipPy, i)));
    }
 
    *sipCppPtr = v;
@@ -298,7 +302,7 @@ template<TYPE*>
 // Specialization for std::vector<bool>
 // ****************************************************
 
-%MappedType std::vector<bool> {
+%MappedType std::vector<bool> /DocType="list-of-bool"/{
 %TypeHeaderCode
 #include <vector>
 %End
@@ -331,6 +335,7 @@ template<TYPE*>
        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
             PyObject *item = PyList_GET_ITEM(sipPy, i);
             if (!PyBool_Check(item)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to bool");
                 return 0;
             }
        }

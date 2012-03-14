@@ -75,7 +75,7 @@ class  Observable : tlp::OLOObject {
 
         virtual ~Observable();
 
-        virtual void treatEvents(const std::vector<tlp::Event> &events );
+        virtual void treatEvents(const std::vector<tlp::Event> &events);
         
         virtual void treatEvent(const tlp::Event & /NoCopy/);
 

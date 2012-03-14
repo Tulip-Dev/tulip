@@ -108,7 +108,11 @@ class Mat4f {
 			s[s.size() - 1] = ']';
 			repr += (s + "\n");
 		}
+#if PY_MAJOR_VERSION >= 3
+        sipRes = PyUnicode_FromString(repr.c_str());
+#else
         sipRes = PyString_FromString(repr.c_str());
+#endif
 %End
 
     };

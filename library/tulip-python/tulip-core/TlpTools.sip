@@ -23,9 +23,9 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-
 %ModuleHeaderCode
 #include <tulip/PluginLibraryLoader.h>
+#include <tulip/PluginLister.h>
 %End
 
 namespace tlp {
@@ -102,19 +102,17 @@ Returns :const:`True` if the plugin was correctly loaded.
 
 //=====================================================================
 
-void loadPluginsFromDir(std::string dir, tlp::PluginLoader *loader=0);
+void loadPluginsCheckDependencies(tlp::PluginLoader* loader=0);
 %Docstring
-tlp.loadPluginsFromDir(dir)
+tlp.loadPluginsCheckDependencies()
 
-Loads C++ plugins located in a specific directory.
-
-:param dir: the path to the directory containing the Tulip plugins
-:type dir: string
+Checks the dependencies of all C++ plugins loaded so far. 
+If a plugin does not have all its dependencies fulfilled,
+it is unloaded and removed from the current plugins database.
 %End
 
 %MethodCode
-  tlp::TulipPluginsPath += (tlp::PATH_DELIMITER + *a0);
-  tlp::PluginLibraryLoader::loadPlugins(a1);
+    tlp::PluginLister::checkLoadedPluginsDependencies(a0);
 %End
 
 //=====================================================================
@@ -133,31 +131,23 @@ Returns a dataset filled with default parameters (if any) for a given plugin (al
 %End
 
 %MethodCode
-	tlp::PluginListerInterface *selectedLister = NULL;
-	tlp::DataSet result;
-	std::map< std::string, tlp::PluginListerInterface* >::iterator it = tlp::PluginListerInterface::allFactories->begin();
-	for (; it != tlp::PluginListerInterface::allFactories->end() ; ++it) {
-		if (it->second->pluginExists(*a0)) {
-			selectedLister = it->second;
-			break;
-		}
-	} 
-	if (selectedLister) {
-		tlp::ParameterDescriptionList parameters = selectedLister->getPluginParameters(*a0);
-		parameters.buildDefaultDataSet(result, a1);
-		sipRes = new tlp::DataSet(result);
-	} else {
-		sipIsErr = 1;
-		std::string msg = "No plugin named  ";
-		msg += *a0;
-		msg += ".";
-		PyErr_SetString(PyExc_Exception, msg.c_str());
-	}
+    if (tlp::PluginLister::pluginExists(*a0)) {
+        tlp::DataSet result;
+        const tlp::ParameterDescriptionList &parameters = tlp::PluginLister::getPluginParameters(*a0);
+        parameters.buildDefaultDataSet(result, a1);
+        sipRes = new tlp::DataSet(result);
+    } else {
+        sipIsErr = 1;
+        std::string msg = "No plugin named  ";
+        msg += *a0;
+        msg += ".";
+        PyErr_SetString(PyExc_Exception, msg.c_str());
+    }
 %End
 
 //=====================================================================
 
-std::vector<std::string> getAlgorithmPluginsList();
+std::list<std::string> getAlgorithmPluginsList();
 %Docstring
 tlp.getAlgorithmPluginsList()
 
@@ -169,12 +159,20 @@ in C++ or the :class:`tlp.Algorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::Algorithm>());
+        std::list<std::string> algoList = tlp::PluginLister::instance()->availablePlugins<tlp::Algorithm>();
+        std::list<std::string> propAlgoList = tlp::PluginLister::instance()->availablePlugins<tlp::PropertyAlgorithm>();
+        std::list<std::string> ret;
+        for (std::list<std::string>::iterator it = algoList.begin() ; it != algoList.end() ; ++it) {
+            if (std::find(propAlgoList.begin(), propAlgoList.end(), *it) == propAlgoList.end()) {
+                ret.push_back(*it);
+            }
+        }
+        sipRes = new std::list<std::string>(ret);
 %End
 
 //=====================================================================
 
-std::vector<std::string> getImportPluginsList();
+std::list<std::string> getImportPluginsList();
 %Docstring
 tlp.getImportPluginsList()
 
@@ -186,12 +184,12 @@ in C++ or the :class:`tlp.PythonImportModule` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::ImportModule>());
+        sipRes = new std::list<std::string>(tlp::PluginLister::instance()->availablePlugins<tlp::ImportModule>());
 %End
 
 //=====================================================================
 
-std::vector<std::string> getExportPluginsList();
+std::list<std::string> getExportPluginsList();
 %Docstring
 tlp.getExportPluginsList()
 
@@ -203,12 +201,12 @@ in C++ or the :class:`tlp.PythonExportModule` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::ExportModule>());
+        sipRes = new std::list<std::string>(tlp::PluginLister::instance()->availablePlugins<tlp::ExportModule>());
 %End
 
 //=====================================================================
 
-std::vector<std::string> getBooleanAlgorithmPluginsList();
+std::list<std::string> getBooleanAlgorithmPluginsList();
 %Docstring
 tlp.getBooleanAlgorithmPluginsList()
 
@@ -220,12 +218,12 @@ the :class:`tlp.BooleanAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::BooleanAlgorithm>());
+        sipRes = new std::list<std::string>(tlp::PluginLister::instance()->availablePlugins<tlp::BooleanAlgorithm>());
 %End
 
 //=====================================================================
 
-std::vector<std::string> getIntegerAlgorithmPluginsList();
+std::list<std::string> getIntegerAlgorithmPluginsList();
 %Docstring
 tlp.getIntegerAlgorithmPluginsList()
 
@@ -237,12 +235,12 @@ the :class:`tlp.IntegerAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::IntegerAlgorithm>());
+        sipRes = new std::list<std::string>(tlp::PluginLister::instance()->availablePlugins<tlp::IntegerAlgorithm>());
 %End
 
 //=====================================================================
 
-std::vector<std::string> getDoubleAlgorithmPluginsList();
+std::list<std::string> getDoubleAlgorithmPluginsList();
 %Docstring
 tlp.getDoubleAlgorithmPluginsList()
 
@@ -254,12 +252,12 @@ the :class:`tlp.DoubleAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::DoubleAlgorithm>());
+        sipRes = new std::list<std::string>(tlp::PluginLister::instance()->availablePlugins<tlp::DoubleAlgorithm>());
 %End
 
 //=====================================================================
 
-std::vector<std::string> getColorAlgorithmPluginsList();
+std::list<std::string> getColorAlgorithmPluginsList();
 %Docstring
 tlp.getColorAlgorithmPluginsList()
 
@@ -271,12 +269,12 @@ the :class:`tlp.ColorAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::ColorAlgorithm>());
+        sipRes = new std::list<std::string>(tlp::PluginLister::instance()->availablePlugins<tlp::ColorAlgorithm>());
 %End
 
 //=====================================================================
 
-std::vector<std::string> getLayoutAlgorithmPluginsList();
+std::list<std::string> getLayoutAlgorithmPluginsList();
 %Docstring
 tlp.getLayoutAlgorithmPluginsList()
 
@@ -288,12 +286,12 @@ the :class:`tlp.LayoutAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::LayoutAlgorithm>());
+        sipRes = new std::list<std::string>(tlp::PluginLister::instance()->availablePlugins<tlp::LayoutAlgorithm>());
 %End
 
 //=====================================================================
 
-std::vector<std::string> getSizeAlgorithmPluginsList();
+std::list<std::string> getSizeAlgorithmPluginsList();
 %Docstring
 tlp.getSizeAlgorithmPluginsList()
 
@@ -305,12 +303,12 @@ the :class:`tlp.SizeAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::SizeAlgorithm>());
+        sipRes = new std::list<std::string>(tlp::PluginLister::instance()->availablePlugins<tlp::SizeAlgorithm>());
 %End
 
 //=====================================================================
 
-std::vector<std::string> getStringAlgorithmPluginsList();
+std::list<std::string> getStringAlgorithmPluginsList();
 %Docstring
 tlp.getStringAlgorithmPluginsList()
 
@@ -322,7 +320,7 @@ the :class:`tlp.StringAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getPluginsList<tlp::StringAlgorithm>());
+        sipRes = new std::list<std::string>(tlp::PluginLister::instance()->availablePlugins<tlp::StringAlgorithm>());
 %End
 
 };

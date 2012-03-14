@@ -24,39 +24,50 @@
 // +-------------------------------------------------------------------------+
 
 namespace tlp {
-class AbstractPluginInfo {
-
+class Plugin : tlp::WithParameter, tlp::WithDependency {
 %TypeHeaderCode
-#include <tulip/AbstractPluginInfo.h>
+#include <tulip/Plugin.h>
 %End
 public:
-	virtual ~AbstractPluginInfo();
+        virtual ~Plugin();
 
-	virtual  std::string getName() const = 0;
+        virtual std::string icon() const;
 
-	virtual std::string getGroup() const = 0;
+        virtual std::string category() const=0;
 
-	virtual  std::string getAuthor() const = 0;
+        virtual std::string name() const=0;
 
-	virtual  std::string getDate() const = 0;
+        virtual std::string group() const=0;
 
-	virtual  std::string getInfo() const = 0;
+        virtual std::string author() const=0;
 
-	virtual  std::string getRelease() const = 0;
+        virtual std::string date() const=0;
 
-	virtual  std::string getMajor() const = 0;
+        virtual std::string info() const=0;
 
-	virtual  std::string getMinor() const = 0;
+        virtual std::string release() const=0;
 
-	virtual  std::string getTulipRelease() const = 0;
+        virtual std::string tulipRelease() const=0;
 
-	virtual  std::string getTulipMajor() const = 0;
+        virtual std::string major() const;
 
-	virtual  std::string getTulipMinor() const = 0;
-	
-	virtual int getId() const;
-	
-	virtual std::list<tlp::Dependency> getDependencies() const = 0;
-	
+        virtual std::string minor() const;
+
+        virtual std::string tulipMajor() const;
+
+        virtual std::string tulipMinor() const;
+
+        virtual int id() const;
+
+        std::list<tlp::Dependency> dependencies() const;
 };
+
+class FactoryInterface {
+%TypeHeaderCode
+#include <tulip/Plugin.h>
+%End
+public:
+  virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0;
+};
+
 };

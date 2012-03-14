@@ -23,22 +23,15 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%ModuleHeaderCode
-#include <tulip/Algorithm.h>
 namespace tlp {
-typedef tlp::FactoryInterface<tlp::Algorithm, tlp::AlgorithmContext> AlgorithmFactory;
-};
-%End
-
-namespace tlp {
-class Algorithm : tlp::WithParameter, tlp::WithDependency {
+class Algorithm : tlp::Plugin {
 %TypeHeaderCode
 #include <tulip/Algorithm.h>
 %End
 public:
 
 %Docstring
-Bases: :class:`tlp.WithParameter`
+Bases: :class:`tlp.Plugin`
 
 This abstract class describes a general algorithm plugin.
 Basic functionality consists in checking the algorithm can run on the current Graph 
@@ -64,7 +57,7 @@ if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, .
 
 %End
 
-	Algorithm(tlp::AlgorithmContext context);
+    Algorithm(const tlp::PluginContext* context);
 
 	virtual ~Algorithm();
 
@@ -73,7 +66,8 @@ if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, .
 tlp.Algorithm.run()
 
 This method is the entry point of the algorithm when it is called.
-Derived classes must implement it. A boolean must also be returned
+Derived classes must implement it. It is a good practice to report progress through the PluginProgress.
+The PluginProgress should also be used to report errors, if any. A boolean must also be returned
 to indicate if the algorithm was successful.
 
 :rtype: boolean	
@@ -91,6 +85,8 @@ and the second one can be used to provide an error message
 :rtype: (boolean, string)
 %End
 
+    virtual std::string category() const;
+
 	tlp::Graph *graph;
  	tlp::PluginProgress *pluginProgress;
   	tlp::DataSet *dataSet;
@@ -98,28 +94,3 @@ and the second one can be used to provide an error message
 };
 };
 
-namespace tlp {
-class AlgorithmFactory : tlp::AbstractPluginInfo {
-%TypeHeaderCode
-#include <tulip/Algorithm.h>
-%End
-public:
-	
-	virtual ~AlgorithmFactory();
-	
-	virtual tlp::Algorithm * createPluginObject(tlp::AlgorithmContext) = 0 /Factory/; 
-	
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-  tlp::StaticPluginLister<tlp::Algorithm, tlp::AlgorithmContext>::registerPlugin(sipCpp);
-%End
-};
-};

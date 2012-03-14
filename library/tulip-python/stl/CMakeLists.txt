@@ -9,6 +9,7 @@ SET(STL_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/set.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/string.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/vector.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/ostream.sip
     CACHE INTERNAL ""
 )
 
@@ -22,7 +23,8 @@ ADD_CUSTOM_COMMAND(OUTPUT ${STL_PYTHON_BINDINGS_SRC}
                    COMMENT "Generating Python Bindings for stl"
                    DEPENDS ${STL_SIP_FILES})
            
-DISABLE_COMPILER_WARNINGS()
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w ")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w ")
 
 # Force to use SIP and headers located in thirdparty
 # instead of those installed in the system
@@ -50,12 +52,17 @@ ADD_CUSTOM_TARGET(touchStlPythonCMakeLists ALL
                   COMMENT "touching CMakeLists.txt for Stl Python Bindings (force configure before next build to keep source files list updated)"
                   DEPENDS ${LibStlPythonName})
 
+IF(NOT UBUNTU_PPA_BUILD)
 INSTALL(TARGETS ${LibStlPythonName}
         RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_python
         LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python
         ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
-
-
+ELSE()
+INSTALL(TARGETS ${LibStlPythonName}
+        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
+ENDIF()
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)

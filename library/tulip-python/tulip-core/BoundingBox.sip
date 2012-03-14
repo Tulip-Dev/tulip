@@ -90,7 +90,7 @@ Returns the depth of the bounding box.
 :rtype: float
 %End
 
-      void expand(const tlp::Vec3f& coord);
+      void expand(const tlp::Vec3f& point);
 %Docstring
 tlp.BoundingBox.expand(point)
 
@@ -102,7 +102,7 @@ If the vector is inside the bounding box, it remains unchanged.
 %End
 
 
-      void translate(const tlp::Vec3f& vec);
+      void translate(const tlp::Vec3f& displacement);
 %Docstring
 tlp.BoundingBox.translate(displacement)
 
@@ -122,8 +122,52 @@ Checks whether the bounding box's lowest point is less than it's highest point.
 :rtype: boolean
 %End      
       
-      tlp::Vec3f operator[](const unsigned int i) const;
-	
+      bool contains(const tlp::Vec3f& coord) const;
+%Docstring
+tlp.BoundingBox.contains(point)
+
+.. versionadded:: 3.7
+
+Checks if the given point is inside the current bounding box.
+If the bounding box is invalid the result is always :const:`False`.
+
+:param point: a point in the 3D space.
+:type point: :class:`tlp.Vec3f`
+:rtype: boolean
+%End
+
+      bool intersect(const tlp::BoundingBox &boundingBox) const;
+%Docstring
+tlp.BoundingBox.intersect(boundingBox)
+
+.. versionadded:: 3.7
+
+Checks if the given bounding box intersects the current one.
+If one of the bounding boxes is invalid returns :const:`False`.
+
+:param boundingBox: the bounding box on which to check intersection
+:type boundingBox: :class:`tlp.BoundingBox`
+:rtype: boolean
+%End
+
+      bool intersect(const tlp::Vec3f &segStart, const tlp::Vec3f &segEnd) const;
+%Docstring
+tlp.BoundingBox.intersect(segStart, segEnd)
+
+.. versionadded:: 3.7
+
+Checks if the bounding box intersects the given line segment.
+If the bounding box is invalid the result is always :const:`False`.
+
+:param segStart: the start point of the line segment on which to check intersection
+:type segStart: :class:`tlp.Vec3f`
+:param segEnd: the end point of the line segment on which to check intersection
+:type segEnd: :class:`tlp.Vec3f`
+:rtype: boolean
+%End
+
+      tlp::Vec3f& operator[](const unsigned int i) const /NoCopy/;
+
       void __setitem__(int i, const tlp::Vec3f &value);
 %MethodCode
 	if (a0 < 2)
@@ -144,7 +188,11 @@ Checks whether the bounding box's lowest point is less than it's highest point.
 				s[i] = ']';
 			}
 		}
+#if PY_MAJOR_VERSION >= 3
+        sipRes = PyUnicode_FromString(s.c_str());
+#else
         sipRes = PyString_FromString(s.c_str());
+#endif
 %End
 
 };

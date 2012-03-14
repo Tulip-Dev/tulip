@@ -24,7 +24,7 @@
 // +-------------------------------------------------------------------------+
 
 template<TYPE>
-%MappedType std::set<TYPE> {
+%MappedType std::set<TYPE> /DocType="list-of-TYPE"/{
 %TypeHeaderCode
 #include <set>
 %End
@@ -40,6 +40,7 @@ template<TYPE>
        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
             PyObject *item = PyList_GET_ITEM(sipPy, i);
             if (!sipCanConvertToType(item, sipType_TYPE, SIP_NOT_NONE)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
                 return 0;
             }
        }
@@ -103,7 +104,7 @@ template<TYPE>
 
 };
 
-%MappedType std::set<double> {
+%MappedType std::set<double> /DocType="list-of-float"/ {
 %TypeHeaderCode
 #include <set>
 %End
@@ -117,6 +118,7 @@ template<TYPE>
        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
             PyObject *item = PyList_GET_ITEM(sipPy, i);
             if (!PyNumber_Check(item)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to double");
                 return 0;
             }
        }
@@ -160,7 +162,7 @@ template<TYPE>
 };
 
 
-%MappedType std::set<int> {
+%MappedType std::set<int> /DocType="list-of-int"/ {
 %TypeHeaderCode
 #include <set>
 %End
@@ -173,7 +175,8 @@ template<TYPE>
        }
        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
             PyObject *item = PyList_GET_ITEM(sipPy, i);
-            if (!PyInt_Check(item)) {
+            if (!PyLong_Check(item)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to int");
                 return 0;
             }
        }
@@ -184,7 +187,7 @@ template<TYPE>
    std::set<int> *s = new std::set<int>();
    
    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
-       s->insert(PyInt_AsLong(PyList_GET_ITEM(sipPy, i)));
+       s->insert(PyLong_AsLong(PyList_GET_ITEM(sipPy, i)));
    }
 
    *sipCppPtr = s;
@@ -205,7 +208,7 @@ template<TYPE>
    int i = 0;
    for (std::set<int>::iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
        // Add the wrapper to the list.
-       PyList_SET_ITEM(l, i++, PyInt_FromLong(*it));
+       PyList_SET_ITEM(l, i++, PyLong_FromLong(*it));
    }
 
    // Return the Python list.
