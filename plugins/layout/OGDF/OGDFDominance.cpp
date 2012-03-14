@@ -96,7 +96,8 @@ public:
       error += "graph is not connected";
       return false;
     }
-    return true;    
+
+    return true;
   }
 
   void beforeCall() {
