@@ -8,7 +8,7 @@ Requirements :
 - autotools or cmake >= 2.6.4
 - libxml2
 - freetype2
-- Qt 4.2 or higher
+- Qt 4.5 or higher
 - OpenGl 2.0
 - glew 1.4 or higher
 - gcc, g++ >= 3.4.2
