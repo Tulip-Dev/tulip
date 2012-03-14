@@ -26,6 +26,9 @@ using namespace std;
 
 OGDFLayoutPluginBase::OGDFLayoutPluginBase(const tlp::PluginContext* context, ogdf::LayoutModule *ogdfLayoutAlgo) :
   tlp::LayoutAlgorithm(context), tlpToOGDF(NULL), ogdfLayoutAlgo(ogdfLayoutAlgo) {
+  // convert Tulip Graph to OGDF Graph including attributes
+  if (graph)
+    tlpToOGDF = new TulipToOGDF(graph);
 }
 
 OGDFLayoutPluginBase::~OGDFLayoutPluginBase() {
@@ -38,13 +41,12 @@ OGDFLayoutPluginBase::~OGDFLayoutPluginBase() {
 
 bool OGDFLayoutPluginBase::run() {
 
-  // convert Tulip Graph to OGDF Graph including attributes
-  tlpToOGDF = new TulipToOGDF(graph);
   ogdf::GraphAttributes &gAttributes = tlpToOGDF->getOGDFGraphAttr();
 
-  beforeCall(tlpToOGDF, ogdfLayoutAlgo);
+  beforeCall();
+
   // run the algorithm on the OGDF Graph with attributes
-  ogdfLayoutAlgo->call(gAttributes);
+  callOGDFLayoutAlgorithm(gAttributes);
 
   // retrieve nodes coordinates computed by the OGDF Layout Algorithm
   // and store it in the Tulip Layout Property
@@ -62,9 +64,13 @@ bool OGDFLayoutPluginBase::run() {
     result->setEdgeValue(tlpEdge, edgeCoord);
   }
 
-  afterCall(tlpToOGDF, ogdfLayoutAlgo);
+  afterCall();
 
   return true;
+}
+
+void OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
+  ogdfLayoutAlgo->call(gAttributes);
 }
 
 void OGDFLayoutPluginBase::transposeLayoutVertically() {

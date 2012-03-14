@@ -37,12 +37,13 @@ public:
   virtual bool run();
 
 protected:
-  virtual void beforeCall(TulipToOGDF *, ogdf::LayoutModule *) {}
-  virtual void afterCall(TulipToOGDF *, ogdf::LayoutModule *) {}
+
+  virtual void beforeCall() {}
+  virtual void callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes);
+  virtual void afterCall() {}
 
   void transposeLayoutVertically();
 
-private:
   TulipToOGDF *tlpToOGDF;
   ogdf::LayoutModule *ogdfLayoutAlgo;
 };

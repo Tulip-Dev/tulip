@@ -22,10 +22,53 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
+namespace {
+
+const char * paramHelp[] = {
+  HTML_HELP_OPEN()         \
+  HTML_HELP_DEF( "type", "String Collection" ) \
+  HTML_HELP_DEF("values", "Standard <BR> Repulse <BR> Planar") \
+  HTML_HELP_DEF( "default", "Standard" )   \
+  HTML_HELP_BODY() \
+  "Easy way to set fixed costs. " \
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()         \
+  HTML_HELP_DEF( "type", "String Collection" ) \
+  HTML_HELP_DEF("values", "Fast <BR> Medium <BR> HQ") \
+  HTML_HELP_DEF( "default", "Medium" )   \
+  HTML_HELP_BODY() \
+  "Easy way to set temperature and iterations. "  \
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "the preferred edge length. "
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "the preferred edge length multiplier for attraction. "
+  HTML_HELP_CLOSE()
+};
+}
+
+#define ELT_SETTINGS "Settings"
+#define ELT_SETTINGSLIST "Standard;Repulse;Planar"
+#define STANDARD_ELT 0
+#define REPULSE_ELT 1
+#define PLANAR_ELT 2
+
+#define ELT_SPEED "Speed"
+#define ELT_SPEEDLIST "Fast;Medium;HQ"
+#define FAST_ELT 0
+#define MEDIUM_ELT 1
+#define HQ_ELT 2
+
+/** \addtogroup layout */
 // comments below have been extracted from OGDF/src/energybased/DavidsonHarelLayout.cpp
 /*@{*/
-/** \file
- * \brief Implementation for DavidsonHarelLayout
+/// An implementation for DavidsonHarel layout
+/**
  *
  * This is the frontend for the DavidsonHarel optimization
  * function. It adds the energy functions to the problem and
@@ -36,7 +79,7 @@
  * \author Rene Weiskircher
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  *
  * Copyright (C). All rights reserved.
  * See README.txt in the root directory of the OGDF installation for details.
@@ -72,49 +115,6 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
-namespace {
-
-const char * paramHelp[] = {
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF("values", "Standard <BR> Repulse <BR> Planar") \
-  HTML_HELP_DEF( "default", "Standard" )   \
-  HTML_HELP_BODY() \
-  "Fixed costs " \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF("values", "Fast <BR> Medium <BR> HQ") \
-  HTML_HELP_DEF( "default", "Medium" )   \
-  HTML_HELP_BODY() \
-  "Temperature and iterations. "  \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_BODY()
-  "Preferred edge length. "
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_BODY()
-  "Preferred edge length multiplier for attraction. "
-  HTML_HELP_CLOSE()
-};
-}
-
-#define ELT_SETTINGS "Settings"
-#define ELT_SETTINGSLIST "Standard;Repulse;Planar"
-#define STANDARD_ELT 0
-#define REPULSE_ELT 1
-#define PLANAR_ELT 2
-
-#define ELT_SPEED "Speed"
-#define ELT_SPEEDLIST "Fast;Medium;HQ"
-#define FAST_ELT 0
-#define MEDIUM_ELT 1
-#define HQ_ELT 2
-
 class OGDFDavidsonHarel : public OGDFLayoutPluginBase {
 
   tlp::StringCollection settings;
@@ -130,7 +130,7 @@ public:
 
   }
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::DavidsonHarelLayout *davidson = static_cast<ogdf::DavidsonHarelLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {
@@ -175,5 +175,6 @@ public:
   ~OGDFDavidsonHarel() {}
 
 };
+/*@}*/
 
 PLUGIN(OGDFDavidsonHarel)

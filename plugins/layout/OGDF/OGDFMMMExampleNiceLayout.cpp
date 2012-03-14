@@ -21,10 +21,10 @@
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
 // comments below have been extracted from OGDF/src/energybased/multilevelmixer/MMEExampleNiceLayout.cpp
+/** \addtogroup layout */
 /*@{*/
-/** \file
- * \brief useable example of the Modular Multilevel Mixer
- *
+/// useable example of the Modular Multilevel Mixer
+/**
  * This example is tuned for nice drawings for most types of graphs.
  * EdgeCoverMerger and BarycenterPlacer are used as merging and placement
  * strategies. The FastMultipoleEmbedder is for force calculation.
@@ -32,7 +32,7 @@
  * \author Gereon Bartel
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  *
  * Copyright (C). All rights reserved.
  * See README.txt in the root directory of the OGDF installation for details.
@@ -68,7 +68,6 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
 class OGDFMMMExampleNiceLayout : public OGDFLayoutPluginBase {
 
 public:
@@ -77,5 +76,6 @@ public:
   ~OGDFMMMExampleNiceLayout() {}
 
 };
+/*@}*/
 
 PLUGIN(OGDFMMMExampleNiceLayout)

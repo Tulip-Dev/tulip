@@ -24,16 +24,89 @@
 #include <ogdf/layered/SplitHeuristic.h>
 #include <ogdf/layered/FastHierarchyLayout.h>
 
+#include "tulip2ogdf/OGDFLayoutPluginBase.h"
+
+namespace {
+
+const char * paramHelp[] = { HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "int" )
+                             HTML_HELP_BODY()
+                             "Sets the option fails to nFails."
+                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "int" )
+                             HTML_HELP_BODY()
+                             "Sets the option runs to nRuns."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "Sets the option for transposing layout vertically ."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "Sets the options arrangeCCs."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The minimal distance between connected components."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The page ratio used for packing connected components."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "Sets the option alignBaseClasses."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "Sets the option alignSiblings."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "StringCollection")
+                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> LongestPathRanking : <FONT COLOR=\"black\"> the well-known longest-path ranking algorithm. <BR> <FONT COLOR=\"red\"> OptimalRanking : <FONT COLOR=\"black\"> the LP-based algorithm for computing a node ranking with minimal edge lengths. <BR> <FONT COLOR=\"red\"> SplitHeuristic : <FONT COLOR=\"black\"> the split heuristic for 2-layer crossing minimization.")
+                             HTML_HELP_DEF( "default", "LongestPathRanking " )
+                             HTML_HELP_BODY()
+                             "Sets the option for the node ranking (layer assignment)."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "StringCollection")
+                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> BarycenterHeuristic : <FONT COLOR=\"black\"> the barycenter heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> MedianHeuristic : <FONT COLOR=\"black\"> the median heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> SplitHeuristic : <FONT COLOR=\"black\"> the split heuristic for 2-layer crossing minimization.")
+                             HTML_HELP_DEF( "default", "BarycenterHeuristic " )
+                             HTML_HELP_BODY()
+                             "Sets the module option for the two-layer crossing minimization."
+                             HTML_HELP_CLOSE()
+                           };
+}
+
+
+#define ELT_RANKING "Ranking"
+#define ELT_RANKINGLIST "LongestPathRanking;OptimalRanking"
+#define ELT_LONGESTPATHRANKING 0
+#define ELT_OPTIMALRANKING 1
+
+#define ELT_TWOLAYERCROSS "Two-layer crossing minimization"
+#define ELT_TWOLAYERCROSSLIST "BarycenterHeuristic;MedianHeuristic;SplitHeuristic"
+#define ELT_BARYCENTER 0
+#define ELT_MEDIAN 1
+#define ELT_SPLIT 2
+
 // comments below have been extracted from OGDF/src/layered/sugiyama.cpp
+/** \addtogroup layout */
 /*@{*/
-/** \file
- * \brief Implementation of Sugiyama algorithm (classes Hierarchy,
+/**
+ * Implementation of Sugiyama algorithm (classes Hierarchy,
  * Level, SugiyamaLayout)
  *
  * \author Carsten Gutwenger
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  *
  * Copyright (C). All rights reserved.
  * See README.txt in the root directory of the OGDF installation for details.
@@ -69,79 +142,6 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
-#include "tulip2ogdf/OGDFLayoutPluginBase.h"
-
-namespace {
-
-const char * paramHelp[] = { HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "int" )
-                             HTML_HELP_BODY()
-                             "Number of fails."
-                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "int" )
-                             HTML_HELP_BODY()
-                             "Number of runs."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "bool" )
-                             HTML_HELP_BODY()
-                             "If true, the layout is transposed vertically ."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "bool" )
-                             HTML_HELP_BODY()
-                             "arrangeCCs."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Minimal distance between connected components."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Page ratio used for packing connected components."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "bool" )
-                             HTML_HELP_BODY()
-                             "alignBaseClasses."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "bool" )
-                             HTML_HELP_BODY()
-                             "alignSiblings."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "StringCollection")
-                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> LongestPathRanking : <FONT COLOR=\"black\"> the well-known longest-path ranking algorithm. <BR> <FONT COLOR=\"red\"> OptimalRanking : <FONT COLOR=\"black\"> the LP-based algorithm for computing a node ranking with minimal edge lengths. <BR> <FONT COLOR=\"red\"> SplitHeuristic : <FONT COLOR=\"black\"> the split heuristic for 2-layer crossing minimization.")
-                             HTML_HELP_DEF( "default", "LongestPathRanking " )
-                             HTML_HELP_BODY()
-                             "Node ranking (layer assignment)."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "StringCollection")
-                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> BarycenterHeuristic : <FONT COLOR=\"black\"> the barycenter heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> MedianHeuristic : <FONT COLOR=\"black\"> the median heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> SplitHeuristic : <FONT COLOR=\"black\"> the split heuristic for 2-layer crossing minimization.")
-                             HTML_HELP_DEF( "default", "BarycenterHeuristic " )
-                             HTML_HELP_BODY()
-                             "Module for the two-layer crossing minimization."
-                             HTML_HELP_CLOSE()
-                           };
-}
-
-
-#define ELT_RANKING "Ranking"
-#define ELT_RANKINGLIST "LongestPathRanking;OptimalRanking"
-#define ELT_LONGESTPATHRANKING 0
-#define ELT_OPTIMALRANKING 1
-
-#define ELT_TWOLAYERCROSS "Two-layer crossing minimization"
-#define ELT_TWOLAYERCROSSLIST "BarycenterHeuristic;MedianHeuristic;SplitHeuristic"
-#define ELT_BARYCENTER 0
-#define ELT_MEDIAN 1
-#define ELT_SPLIT 2
-
 class OGDFSugiyama : public OGDFLayoutPluginBase {
 
 public:
@@ -161,7 +161,7 @@ public:
 
   ~OGDFSugiyama() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {
@@ -214,7 +214,7 @@ public:
     }
   }
 
-  void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
+  void afterCall() {
     if (dataSet != 0) {
       bool bval = false;
 
@@ -227,5 +227,6 @@ public:
   }
 
 };
+/*@}*/
 
 PLUGIN(OGDFSugiyama)

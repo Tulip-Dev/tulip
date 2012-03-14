@@ -24,16 +24,50 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
+namespace {
+
+const char * paramHelp[] = {
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "Sets the option pageRatio."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_DEF( "type", "StringCollection")
+  HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FastPlanarSubgraph : <FONT COLOR=\"black\"> Computation of a planar subgraph using PQ-trees. <BR> <FONT COLOR=\"red\"> MaximalPlanarSubgraphSimple")
+  HTML_HELP_DEF( "default", "FastPlanarSubgraph " )
+  HTML_HELP_BODY()
+  "Sets the module option for the computation of the planar subgraph."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_DEF( "type", "StringCollection")
+  HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FixedEmbeddingInserter : <FONT COLOR=\"black\"> Edge insertion module that inserts each edge optimally into a fixed embedding. <BR> <FONT COLOR=\"red\"> VariableEmbeddingInserter : <FONT COLOR=\"black\"> optimal edge insertion algorithm, which inserts a single edge with a minum number of crossings into a planar graph. <BR> <FONT COLOR=\"red\"> VariableEmbeddingInserter2 ")
+  HTML_HELP_DEF( "default", "FixedEmbeddingInserter " )
+  HTML_HELP_BODY()
+  "Sets the module option for edge insertion."
+  HTML_HELP_CLOSE()
+};
+}
+
+
+#define ELT_PLANARSUBGRAPH "Planar subgraph module"
+#define ELT_PLANARSUBGRAPHLIST "FastPlanarSubgraph;MaximalPlanarSubgraphSimple"
+#define ELT_FASTPLANAR 0
+#define ELT_MAXIMALPLANAR 1
+
+#define ELT_EDGEINSERTION "Edge insertion module"
+#define ELT_EDGEINSERTIONLIST "FixedEmbeddingInserter;VariableEmbeddingInserter"
+#define ELT_FIXEDEMBEDDING 0
+#define ELT_VARIABLEMBEDDING 1
 
 // comments below have been extracted from OGDF/src/planarity/PlanarizationGridLayout.cpp
+/** \addtogroup layout */
 /*@{*/
-/** \file
- * \brief Implements planarization with grid layout.
+/**
+ * Implements planarization with grid layout.
  *
  * \author Carsten Gutwenger
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  *
  * Copyright (C). All rights reserved.
  * See README.txt in the root directory of the OGDF installation for details.
@@ -69,41 +103,6 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
-namespace {
-
-const char * paramHelp[] = {
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_BODY()
-  "Pageratio."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_DEF( "type", "StringCollection")
-  HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FastPlanarSubgraph : <FONT COLOR=\"black\"> Computation of a planar subgraph using PQ-trees. <BR> <FONT COLOR=\"red\"> MaximalPlanarSubgraphSimple")
-  HTML_HELP_DEF( "default", "FastPlanarSubgraph " )
-  HTML_HELP_BODY()
-  "Module for computing the planar subgraph."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_DEF( "type", "StringCollection")
-  HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FixedEmbeddingInserter : <FONT COLOR=\"black\"> Edge insertion module that inserts each edge optimally into a fixed embedding. <BR> <FONT COLOR=\"red\"> VariableEmbeddingInserter : <FONT COLOR=\"black\"> optimal edge insertion algorithm, which inserts a single edge with a minum number of crossings into a planar graph. <BR> <FONT COLOR=\"red\"> VariableEmbeddingInserter2 ")
-  HTML_HELP_DEF( "default", "FixedEmbeddingInserter " )
-  HTML_HELP_BODY()
-  "Module for edge insertion."
-  HTML_HELP_CLOSE()
-};
-}
-
-
-#define ELT_PLANARSUBGRAPH "Planar subgraph module"
-#define ELT_PLANARSUBGRAPHLIST "FastPlanarSubgraph;MaximalPlanarSubgraphSimple"
-#define ELT_FASTPLANAR 0
-#define ELT_MAXIMALPLANAR 1
-
-#define ELT_EDGEINSERTION "Edge insertion module"
-#define ELT_EDGEINSERTIONLIST "FixedEmbeddingInserter;VariableEmbeddingInserter"
-#define ELT_FIXEDEMBEDDING 0
-#define ELT_VARIABLEMBEDDING 1
-
 class OGDFPlanarizationGrid : public OGDFLayoutPluginBase {
 
 public:
@@ -116,7 +115,7 @@ public:
 
   ~OGDFPlanarizationGrid() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::PlanarizationGridLayout *pgl = static_cast<ogdf::PlanarizationGridLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {
@@ -147,5 +146,6 @@ public:
   }
 
 };
+/*@}*/
 
 PLUGIN(OGDFPlanarizationGrid)

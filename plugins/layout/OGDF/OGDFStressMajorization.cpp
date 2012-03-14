@@ -21,15 +21,62 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
+namespace {
+
+const char * paramHelp[] = {
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "Sets a fixed number of iterations for stress majorization in main step."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "Sets the value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped. "
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "If set to true, the given layout is used for the initial positions."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "f set to true, number of iterations is computed depending on G."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "Sets the number of global iterations to i."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "Sets the number of local iterations to i."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "If set to true, radial constraints are added."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "If set to true, upward constraints are added. "
+  HTML_HELP_CLOSE(),
+};
+}
+
 // comments below have been extracted from OGDF/src/energybased/StressMajorizationSimple.cpp
+/** \addtogroup layout */
 /*@{*/
-/** \file
- * \brief Implementation of stress-majorization layout algorithm.
+/**
+ * Implementation of stress-majorization layout algorithm.
  *
  * \author Karsten Klein
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  * Copyright (C) 2005-2009
  *
  * \par
@@ -63,53 +110,6 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
-namespace {
-
-const char * paramHelp[] = {
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "int" )
-  HTML_HELP_BODY()
-  "Fixed number of iterations for stress majorization in main step."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_BODY()
-  "Stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped. "
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "bool" )
-  HTML_HELP_BODY()
-  "If true, the given layout is used as initial positions."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "bool" )
-  HTML_HELP_BODY()
-  "If true, the number of iterations is computed depending on G."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "int" )
-  HTML_HELP_BODY()
-  "Number of global iterations."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "int" )
-  HTML_HELP_BODY()
-  "Number of local iterations."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "bool" )
-  HTML_HELP_BODY()
-  "If true, radial constraints are added."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "bool" )
-  HTML_HELP_BODY()
-  "If true, upward constraints are added. "
-  HTML_HELP_CLOSE(),
-};
-}
-
 class OGDFStressMajorization : public OGDFLayoutPluginBase {
 
 public:
@@ -126,7 +126,7 @@ public:
   }
   ~OGDFStressMajorization() {}
 
-  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+  void beforeCall() {
     ogdf::StressMajorization *stressm = static_cast<ogdf::StressMajorization*>(ogdfLayoutAlgo);
 
     if (dataSet != 0) {
@@ -161,5 +161,6 @@ public:
   }
 
 };
+/*@}*/
 
 PLUGIN(OGDFStressMajorization)
