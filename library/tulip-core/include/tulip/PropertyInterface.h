@@ -103,7 +103,7 @@ public:
   * WARNING : If the property is inherited the graph could be different
   * that the one used to get that property.
   */
-  tlp::Graph * getGraph() {
+  tlp::Graph * getGraph() const {
     return graph;
   }
 
