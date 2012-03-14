@@ -86,8 +86,9 @@ std::string cleanPropertyName(const std::string &propertyName) {
   }
 
   std::string builtinModName = "__builtin__";
+
   if (atof(PythonInterpreter::getInstance()->getPythonVersion().c_str()) >= 3.0) {
-      builtinModName = "builtins";
+    builtinModName = "builtins";
   }
 
   PythonInterpreter::getInstance()->runString(std::string("import ") + builtinModName);
@@ -199,10 +200,12 @@ std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph) {
   }
 
   oss << "\n\tfor n in graph.getNodes():" << endl;
+
   if (atof(pythonVersion.c_str()) >= 3.0)
     oss << "\t\tprint(n)" << endl;
   else
     oss << "\t\tprint n" << endl;
+
   return oss.str();
 }
 

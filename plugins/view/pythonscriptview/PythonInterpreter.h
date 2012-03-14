@@ -58,7 +58,8 @@ private:
 
 static const char pythonReservedCharacters[] = {'#', '%', '/', '+', '-', '&', '*', '<', '>',
     '|', '~', '^', '=', '!', '\'', '\"', '{', '}',
-    '(', ')', '[', ']', '.', 0};
+    '(', ')', '[', ']', '.', 0
+                                               };
 
 static const char *pythonKeywords[] = {
   "def", "class","from", "in", "and", "or", "not", "is", "with", "assert",

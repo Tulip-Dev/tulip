@@ -66,9 +66,11 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
 
 
   std::string builtinModName = "__builtin__";
+
   if (atof(PythonInterpreter::getInstance()->getPythonVersion().c_str()) >= 3.0) {
-      builtinModName = "builtins";
+    builtinModName = "builtins";
   }
+
   if (PythonInterpreter::getInstance()->runString(std::string("import ") + builtinModName)) {
     std::vector<std::string> builtinDictContent = PythonInterpreter::getInstance()->getObjectDictEntries(builtinModName);
     QStringList builtinPatterns;

@@ -195,15 +195,15 @@ static PyTypeObject scriptengine_ConsoleOutputType = {
 
 #if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef scriptEngineModuleDef = {
-    PyModuleDef_HEAD_INIT,
-    "scriptengine",     /* m_name */
-    "",  /* m_doc */
-    -1,                  /* m_size */
-    NULL,    /* m_methods */
-    NULL,                /* m_reload */
-    NULL,                /* m_traverse */
-    NULL,                /* m_clear */
-    NULL,                /* m_free */
+  PyModuleDef_HEAD_INIT,
+  "scriptengine",     /* m_name */
+  "",  /* m_doc */
+  -1,                  /* m_size */
+  NULL,    /* m_methods */
+  NULL,                /* m_reload */
+  NULL,                /* m_traverse */
+  NULL,                /* m_clear */
+  NULL,                /* m_free */
 };
 #endif
 
@@ -215,6 +215,7 @@ initscriptengine(void) {
 
   if (PyType_Ready(&scriptengine_ConsoleOutputType) < 0)
     return;
+
 #if PY_MAJOR_VERSION >= 3
   m = PyModule_Create(&scriptEngineModuleDef);
   _PyImport_FixupBuiltin(m, const_cast<char *>("scriptengine"));

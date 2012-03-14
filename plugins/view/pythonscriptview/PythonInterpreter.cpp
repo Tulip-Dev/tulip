@@ -116,13 +116,15 @@ const sipAPIDef *get_sip_api() {
 
 #if PY_MAJOR_VERSION >= 3
 static std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
-    std::string ret;
-    Py_ssize_t dataSize = PyUnicode_GET_DATA_SIZE(pyUnicodeObj);
-    const char* data = PyUnicode_AS_DATA(pyUnicodeObj);
-    for (Py_ssize_t i = 0 ; i < dataSize ; ++i) {
-        ret += std::string(data+i);
-    }
-    return ret;
+  std::string ret;
+  Py_ssize_t dataSize = PyUnicode_GET_DATA_SIZE(pyUnicodeObj);
+  const char* data = PyUnicode_AS_DATA(pyUnicodeObj);
+
+  for (Py_ssize_t i = 0 ; i < dataSize ; ++i) {
+    ret += std::string(data+i);
+  }
+
+  return ret;
 }
 #endif
 
@@ -262,6 +264,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 #else
   pythonVersion = string(PyString_AsString(pVersion));
 #endif
+
   // checking if a QApplication is instanced before instancing any QWidget
   // allow to avoid segfaults when trying to instantiate the plugin outside the Tulip GUI (for instance, with tulip_check_pl)
   if (QApplication::instance()) {
@@ -274,15 +277,17 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 #else
     libPythonName += string(".so.1.0");
 #endif
+
     if (!dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
-        libPythonName = string("libpython") + pythonVersion + string("mu");
+      libPythonName = string("libpython") + pythonVersion + string("mu");
 #ifdef __APPLE__
-        libPythonName += string(".dylib");
+      libPythonName += string(".dylib");
 #else
-        libPythonName += string(".so.1.0");
+      libPythonName += string(".so.1.0");
 #endif
-        dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+      dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     }
+
 #endif
 
 #if !defined(_MSC_VER)
@@ -709,8 +714,10 @@ vector<string> PythonInterpreter::getImportedModulesList() {
   outputActivated = false;
   consoleOuputString = "";
 #if PY_MAJOR_VERSION >= 3
+
   if (runString("import sys\nfor mod in sorted(sys.modules.keys()): print(mod)")) {
 #else
+
   if (runString("import sys\nfor mod in sorted(sys.modules.keys()): print mod")) {
 #endif
     QStringList modulesList = QString(consoleOuputString.c_str()).split("\n");

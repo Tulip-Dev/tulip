@@ -297,15 +297,15 @@ static PyMethodDef tulipUtilsMethods[] = {
 
 #if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef tulipUtilsModuleDef = {
-    PyModuleDef_HEAD_INIT,
-    "tuliputils",     /* m_name */
-    "",  /* m_doc */
-    -1,                  /* m_size */
-    tulipUtilsMethods,    /* m_methods */
-    NULL,                /* m_reload */
-    NULL,                /* m_traverse */
-    NULL,                /* m_clear */
-    NULL,                /* m_free */
+  PyModuleDef_HEAD_INIT,
+  "tuliputils",     /* m_name */
+  "",  /* m_doc */
+  -1,                  /* m_size */
+  tulipUtilsMethods,    /* m_methods */
+  NULL,                /* m_reload */
+  NULL,                /* m_traverse */
+  NULL,                /* m_clear */
+  NULL,                /* m_free */
 };
 #endif
 
@@ -318,6 +318,7 @@ inittuliputils(void) {
   PyObject *m = Py_InitModule("tuliputils", tulipUtilsMethods);
   _PyImport_FixupExtension(const_cast<char *>("tuliputils"), const_cast<char *>("tuliputils"));
 #endif
+
   if (m == NULL)
     return;
 }
