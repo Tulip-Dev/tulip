@@ -31,7 +31,9 @@ PropertyInterface* StringProperty::clonePrototype(Graph * g, const std::string& 
   if( !g )
     return 0;
 
-  StringProperty * p = g->getLocalProperty<StringProperty>( n );
+  // allow to get an unregistered property (empty name)
+  StringProperty * p = n.empty()
+                       ? new StringProperty(g) : g->getLocalProperty<StringProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
@@ -49,7 +51,9 @@ PropertyInterface* StringVectorProperty::clonePrototype(Graph * g, const std::st
   if( !g )
     return 0;
 
-  StringVectorProperty * p = g->getLocalProperty<StringVectorProperty>( n );
+  // allow to get an unregistered property (empty name)
+  StringVectorProperty * p = n.empty()
+                             ? new StringVectorProperty(g) : g->getLocalProperty<StringVectorProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
