@@ -19,9 +19,6 @@
 #ifndef Tulip_BOUNDINGBOX_H
 #define Tulip_BOUNDINGBOX_H
 
-#include <utility>
-#include <limits>
-
 #include <tulip/Vector.h>
 #include <tulip/tulipconf.h>
 
@@ -61,15 +58,11 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
 
 
   /**
-   * @brief Creates an invalid boundig box.
-   * The minimum is (1, 1, 1) and the maximum is (-1, -1, -1).
-   *
-   **/
-  BoundingBox() {
-    (*this)[0].fill(1);
-    (*this)[1].fill(-1);
-    assert(!isValid());
-  }
+  * @brief Creates an invalid boundig box.
+  * The minimum is (1, 1, 1) and the maximum is (-1, -1, -1).
+  *
+  **/
+  BoundingBox();
 
   /**
   * @brief Creates a bounding box that must be valid.
@@ -78,137 +71,114 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   * @param min The lower left closest point of the box.
   * @param max The higher left most farther point of the box.
   **/
-  BoundingBox(const tlp::Vec3f& min, const tlp::Vec3f& max) {
-    (*this)[0] = min;
-    (*this)[1] = max;
-    assert(isValid());
-  }
+  BoundingBox(const tlp::Vec3f& min, const tlp::Vec3f& max);
 
   /**
-   * @brief Returns the geometrical center of the bounding box.
-   * An assertion is raised in debug mode if the BoundingBox is not valid.
-   *
-   * @return The center of the bounding box :Vec3f
-   **/
-  Vec3f center() const {
-    assert(isValid());
-    return ((*this)[0] + (*this)[1]) / 2.f;
-  }
+  * @brief Returns the geometrical center of the bounding box.
+  * An assertion is raised in debug mode if the BoundingBox is not valid.
+  *
+  * @return The center of the bounding box :Vec3f
+  **/
+  Vec3f center() const;
 
   /**
-   * @brief Returns the width of the bounding box
-   * An assertion is raised in debug mode if the BoundingBox is not valid.
-   *
-   **/
-  float width() const {
-    assert(isValid());
-    return ((*this)[1][0] - (*this)[0][0]);
-  }
+  * @brief Returns the width of the bounding box
+  * An assertion is raised in debug mode if the BoundingBox is not valid.
+  *
+  **/
+  float width() const;
 
   /**
-   * @brief Returns the height of the bounding box
-   * An assertion is raised in debug mode if the BoundingBox is not valid.
-   *
-   **/
-  float height() const {
-    assert(isValid());
-    return ((*this)[1][1] - (*this)[0][1]);
-  }
+  * @brief Returns the height of the bounding box
+  * An assertion is raised in debug mode if the bounding box is not valid.
+  *
+  **/
+  float height() const;
 
   /**
-   * @brief Returns the depth of the bounding box
-   * An assertion is raised in debug mode if the BoundingBox is not valid.
-   *
-   **/
-  float depth() const {
-    assert(isValid());
-    return ((*this)[1][2] - (*this)[0][2]);
-  }
+  * @brief Returns the depth of the bounding box
+  * An assertion is raised in debug mode if the bounding box is not valid.
+  *
+  **/
+  float depth() const;
 
 
   /**
-   * @brief Expands the bounding box to one containing the vector passed as parameter.
-   * If the parameter is inside the bounding box, it remains unchanged.
-   *
-   * @param coord A point in the 3D space we want the bounding box to encompass.
-   * @return void
-   **/
-  void expand(const tlp::Vec3f& coord) {
-    if(!isValid()) {
-      (*this)[0] = coord;
-      (*this)[1] = coord;
-    }
-    else {
-      (*this)[0] = tlp::minVector((*this)[0], coord);
-      (*this)[1] = tlp::maxVector((*this)[1], coord);
-    }
-  }
+  * @brief Expands the bounding box to one containing the vector passed as parameter.
+  * If the parameter is inside the bounding box, it remains unchanged.
+  *
+  * @param coord A point in the 3D space we want the bounding box to encompass.
+  * @return void
+  **/
+  void expand(const tlp::Vec3f& coord);
 
   /**
-   * @brief Translates the bounding box by the displacement given by the vector passed as parameter.
-   *
-   * @param vec The displacement vector in 3D space to translate this bounding box by.
-   * @return void
-   **/
-  void translate(const tlp::Vec3f& vec) {
-    (*this)[0] += vec;
-    (*this)[1] += vec;
-  }
+  * @brief Translates the bounding box by the displacement given by the vector passed as parameter.
+  *
+  * @param vec The displacement vector in 3D space to translate this bounding box by.
+  * @return void
+  **/
+  void translate(const tlp::Vec3f& vec);
 
   /**
-   * @brief Checks whether the bounding box's lowest point is less than it's highest point.
-   * "Less Than" means axis-by-axis comparison, i.e. x1 < x2 && y1 < y2 && z1 < z2.
-   *
-   * @return bool Whether this bounding box is valid.
-   **/
-  bool isValid() const {
-    return (*this)[0][0] <= (*this)[1][0] && (*this)[0][1] <= (*this)[1][1] && (*this)[0][2] <= (*this)[1][2];
-  }
+  * @brief Checks whether the bounding box's lowest point is less than it's highest point.
+  * "Less Than" means axis-by-axis comparison, i.e. x1 < x2 && y1 < y2 && z1 < z2.
+  *
+  * @return bool Whether this bounding box is valid.
+  **/
+  bool isValid() const;
 
   /**
-   * @brief The vector passed as parameter is modified to contain the 8 points of the bounding box.
-   * The points are, in order :
-   * 0: lower leftmost closest point (the bounding box's minimum)
-   * 1: lower rightmost closest point
-   * 2: highest rightmost closest point
-   * 3: highest leftmost closest point
-   * 4: lower rightmost farthest point
-   * 5: lower rightmost farthest point
-   * 6: highest rightmost farthest point
-   * 7: highest leftmost farthest point
-   *
-   * Crude ASCII art again, sorry for your eyes.
-   *
-   *   6_________ 7
-   *   /|       /|
-   *  / |      / |
-   *3/__|_____/2 |
-   * |  |_____|__|
-   * |  /4    |  /5
-   * | /      | /
-   * |/_______|/
-   * 0        1
-   *
-   * @param bb A vector in which to put the points of the bounding box.
-   * @return void
-   **/
-  void getCompleteBB(Vec3f bb[8]) const {
-    bb[0] = (*this)[0];
-    bb[1] = (*this)[0];
-    bb[1][0] = (*this)[1][0];
-    bb[2] = bb[1];
-    bb[2][1] = (*this)[1][1];
-    bb[3] = (*this)[0];
-    bb[3][1] = (*this)[1][1];
-    bb[4] = bb[0];
-    bb[4][2] = (*this)[1][2];
-    bb[5] = bb[1];
-    bb[5][2] = (*this)[1][2];
-    bb[6] = bb[2];
-    bb[6][2] = (*this)[1][2];
-    bb[7] = bb[3];
-    bb[7][2] = (*this)[1][2];
-  }
+  * @brief Checks if the given vector is inside the current bounding box. If the bounding box is invalid the result is always false.
+  * @param coord A point in the 3D space.
+  * @return bool Wether coord is in the bounding box.
+  **/
+  bool contains(const tlp::Vec3f& coord) const;
+
+  /**
+  * @brief Checks if the given bounding box intersect the current one. If one of the bounding box is invalid return false.
+  * @param boundingBox The bounding box to compare with.
+  * @return bool Wether the bounding boxes intersect.
+  **/
+  bool intersect(const tlp::BoundingBox& boundingBox) const;
+
+  /**
+  * @brief Checks if the bounding box intersects a given line segment. If the bounding box is invalid the result is always false.
+  * @param segStart the start point of the line segment on which to check intersection
+  * @param segEnd the end point of the line segment on which to check intersection
+  * @return bool Wether the line segment intersects the bounding box
+  **/
+  bool intersect(const Vec3f& segStart, const Vec3f& segEnd) const;
+
+
+  /**
+  * @brief The vector passed as parameter is modified to contain the 8 points of the bounding box.
+  * The points are, in order :
+  * 0: lower leftmost closest point (the bounding box's minimum)
+  * 1: lower rightmost closest point
+  * 2: highest rightmost closest point
+  * 3: highest leftmost closest point
+  * 4: lower rightmost farthest point
+  * 5: lower rightmost farthest point
+  * 6: highest rightmost farthest point
+  * 7: highest leftmost farthest point
+  *
+  * Crude ASCII art again, sorry for your eyes.
+  *
+  *   6_________ 7
+  *   /|       /|
+  *  / |      / |
+  *3/__|_____/2 |
+  * |  |_____|__|
+  * |  /4    |  /5
+  * | /      | /
+  * |/_______|/
+  * 0        1
+  *
+  * @param bb A vector in which to put the points of the bounding box.
+  * @return void
+  **/
+  void getCompleteBB(Vec3f bb[8]) const;
 };
 
 }
