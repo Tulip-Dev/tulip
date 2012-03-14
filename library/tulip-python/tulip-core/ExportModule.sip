@@ -25,44 +25,16 @@
 
 %ModuleHeaderCode
 #include <tulip/ExportModule.h>
-namespace tlp {
-class PythonExportModule : public ExportModule {
-public :
-	PythonExportModule(AlgorithmContext context) : 
-		ExportModule(context){}
-	
-	bool exportGraph(std::ostream &) {
-		return exportGraph();
-	}
-	
-	virtual bool exportGraph() = 0;
-	
-};
-typedef tlp::FactoryInterface<tlp::ExportModule, tlp::AlgorithmContext> ExportModuleFactory;
-}
 %End
 
 namespace tlp {
 
-class ExportModule: tlp::WithParameter, tlp::WithDependency /Abstract/ {
+class ExportModule: tlp::Plugin {
 %TypeHeaderCode
 #include <tulip/ExportModule.h>
 %End
 public:
   
-  ExportModule(tlp::AlgorithmContext context);
-  
-  virtual ~ExportModule();
-  
-  tlp::Graph *graph;
-  tlp::PluginProgress *pluginProgress;
-  tlp::DataSet *dataSet;
-  
-};
-
-class PythonExportModule : tlp::ExportModule {
-public :
-
 %Docstring
 Bases: :class:`tlp.WithParameter`
 
@@ -84,45 +56,41 @@ This abstract class describes an export plugin.
 
 .. rubric:: class methods
 
-%End
+%End  
+  
+  ExportModule(const tlp::PluginContext* context);
+  
+  virtual ~ExportModule();
+  
+  virtual std::string category() const;
 
-	PythonExportModule(tlp::AlgorithmContext context);
-		
-	virtual bool exportGraph() = 0;
+  virtual bool exportGraph(std::ostream &os) = 0;
 %Docstring
-tlp.PythonExportModule.exportGraph()
+tlp.ExportModule.exportGraph(os)
 
-This method is called to export the graph.
-Derived classes must implement it. A boolean must also be returned
+This method is called to export the graph to a file.
+Derived classes must implement it. 
+
+The os parameter is an output file stream (initialized by the Tulip GUI
+or by the :func:`tlp.exportGraph` function.). To write data to the file,
+you have to use the following syntax::
+
+	# write the number of nodes and edges to the file
+	os << self.graph.numberOfNodes() << "\n"
+	os << self.graph.numberOfEdges() << "\n"
+
+A boolean must also be returned
 to indicate if the export was successful.
 
+:param os: an output file stream
+:type os: std.ostream 
 :rtype: boolean
 %End 
-	
+  
+  tlp::Graph *graph;
+  tlp::PluginProgress *pluginProgress;
+  tlp::DataSet *dataSet;
+  
 };
 
-class ExportModuleFactory : tlp::AbstractPluginInfo {
-%TypeHeaderCode
-#include <tulip/ExportModule.h>
-%End
-public:
-      
-  virtual ~ExportModuleFactory();
-  
-  virtual tlp::ExportModule * createPluginObject(tlp::AlgorithmContext)=0 /Factory/ ;
-  
-  virtual  std::string getMajor();
-  
-  virtual  std::string getMinor();
-  
-  virtual  std::string getTulipMajor();
-  
-  virtual  std::string getTulipMinor();
-  
-  void registerPlugin();
-%MethodCode
-  tlp::StaticPluginLister<tlp::ExportModule, tlp::AlgorithmContext>::registerPlugin(sipCpp);
-%End
-  
-};
 };

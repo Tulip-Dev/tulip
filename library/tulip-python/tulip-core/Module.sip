@@ -23,46 +23,54 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%Module tulip 0
+%Module tulip
 
 // Hack to avoid overriding the tlp Python class (containing all the module classes as
-// nested classes and declared in each module : tulip, tulipogl, tulipqt) in the current 
-// global namespace when importing the module the following way : from tulip import *		 
+// nested classes and declared in each module : tulip, tulipogl, tulipqt) in the current
+// global namespace when importing the module the following way : from tulipogl import *
 %PreInitialisationCode
-    std::string tlpImportHook = 
-     "try:\n"
-	 "	_origimportfunc\n"	
-	 "except NameError:\n"	
-	 "	import __builtin__\n"
-	 "	import sys\n"
-	 "	_origimportfunc = __builtin__.__import__\n"
-	  
-	 "	def tlpimporthook(name, globals={}, locals={}, fromlist=[], level=-1):\n"
-     "		fullname = name\n"
-     "		m = _origimportfunc(name, globals, locals, fromlist, level)\n"
-     "		if fullname == \"tulip\" or fullname == \"tulipogl\" or fullname == \"tulipqt\":\n"
-	 "			if len(fromlist) > 0 and fromlist[0] == \"*\":\n"
-	 "				curTlpDict = None\n"			
-	 "				if \"tlp\" in locals:\n"
-     "					curTlpDict = locals[\"tlp\"].__dict__\n"
-	 "		 		if curTlpDict:\n"
-	 "					m = type(fullname, (object,), dict(m.__dict__))\n"
-	 "					m.tlp = type(\"tlp\", (object,), dict(m.tlp.__dict__))\n"
-	 "					for k in curTlpDict.keys():\n"
-	 "						if not k.startswith(\"_\"):\n"
-	 "							setattr(m.tlp, k, curTlpDict[k])\n"	 
-     "		return m\n"
-     
-     "	__builtin__.__import__ = tlpimporthook\n"
+    std::string tlpImportHook =
+    "try:\n"
+    "   _origimportfunc\n"
+    "except NameError:\n"
+    "   import sys\n"
+#if PY_MAJOR_VERSION >= 3
+    "   import builtins\n"
+    "   _origimportfunc = builtins.__import__\n"
+#else
+    "   import __builtin__\n"
+    "   _origimportfunc = __builtin__.__import__\n"
+#endif
+    "   def tlpimporthook(name, globals={}, locals={}, fromlist=[], level=-1):\n"
+    "       fullname = name\n"
+    "       m = _origimportfunc(name, globals, locals, fromlist, level)\n"
+    "       if fullname == \"tulip\" or fullname == \"tulipogl\" or fullname == \"tulipqt\":\n"
+    "           if fromlist and len(fromlist) > 0 and fromlist[0] == \"*\":\n"
+    "               curTlpDict = None\n"
+    "               if \"tlp\" in locals:\n"
+    "                   curTlpDict = locals[\"tlp\"].__dict__\n"
+    "                   if curTlpDict:\n"
+    "                       m = type(fullname, (object,), dict(m.__dict__))\n"
+    "                       m.tlp = type(\"tlp\", (object,), dict(m.tlp.__dict__))\n"
+    "                       for k in curTlpDict.keys():\n"
+    "                           if not k.startswith(\"_\"):\n"
+    "                               setattr(m.tlp, k, curTlpDict[k])\n"
+    "       return m\n"
+#if PY_MAJOR_VERSION >= 3
+    "   builtins.__import__ = tlpimporthook\n"
+#else
+    "   __builtin__.__import__ = tlpimporthook\n"
+#endif
      ;
-
 
     PyRun_SimpleString(tlpImportHook.c_str());
 %End
 
+
 %ModuleHeaderCode
 #include <tulip/Graph.h>
 #include <tulip/PluginLister.h>
+#include <tulip/PropertyAlgorithm.h>
 #include <string>
 #include <sstream>
 
@@ -88,36 +96,25 @@ static int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e) {
 static void printErrorMessage(const std::string &errMsg) {
 	std::string pythonCode = "import sys\n"
 							 "sys.stderr.write(\"";
-	pythonCode += errMsg;
+    pythonCode += errMsg;
 	pythonCode += "\\n\")";
 	PyRun_SimpleString(pythonCode.c_str());
 }
 
 template <typename T>
-std::vector<std::string> getPluginsList() {
-	std::vector<std::string> ret;
- 	std::map< std::string, tlp::PluginListerInterface* >::iterator it = tlp::PluginListerInterface::allFactories->begin();
- 	for (; it != tlp::PluginListerInterface::allFactories->end() ; ++it) {
- 		if (it->first == tlp::demangleTlpClassName(typeid(T).name())) {
- 			tlp::Iterator<std::string> *itS = it->second->availablePlugins();
- 			while (itS->hasNext()) {
- 				ret.push_back(itS->next());
- 			}
- 			delete itS;
- 		}
- 	}
-	return ret;
-}
-
-template <typename T>
 bool pluginExists(std::string pluginName) {
- 	std::map< std::string, tlp::PluginListerInterface* >::iterator it = tlp::PluginListerInterface::allFactories->begin();
- 	for (; it != tlp::PluginListerInterface::allFactories->end() ; ++it) {
- 		if (it->first == tlp::demangleTlpClassName(typeid(T).name()) && it->second->pluginExists(pluginName)) {
- 			return true;
- 		}
- 	}
-	return false;
+    std::list<std::string> pluginsList = tlp::PluginLister::instance()->availablePlugins<T>();
+    if (typeid(T).name() == typeid(tlp::Algorithm).name()) {
+        std::list<std::string> propAlgoList = tlp::PluginLister::instance()->availablePlugins<tlp::PropertyAlgorithm>();
+        std::list<std::string> tmp;
+        for (std::list<std::string>::iterator it = pluginsList.begin() ; it != pluginsList.end() ; ++it) {
+            if (std::find(propAlgoList.begin(), propAlgoList.end(), *it) == propAlgoList.end()) {
+                tmp.push_back(*it);
+            }
+        }
+        pluginsList = tmp;
+    }
+    return std::find(pluginsList.begin(), pluginsList.end(), pluginName) != pluginsList.end();
 }
 %End
 
@@ -138,15 +135,10 @@ bool pluginExists(std::string pluginName) {
 %Include Reflect.sip
 
 %Include PluginContext.sip
+%Include Plugin.sip
 
 %Include Algorithm.sip
 %Include PropertyAlgorithm.sip
-%Include LayoutAlgorithm.sip
-%Include IntegerAlgorithm.sip
-%Include DoubleAlgorithm.sip
-%Include BooleanAlgorithm.sip
-%Include SizeAlgorithm.sip
-%Include ColorAlgorithm.sip
 
 %Include ImportModule.sip
 %Include ExportModule.sip
@@ -163,13 +155,13 @@ bool pluginExists(std::string pluginName) {
 
 %Include GraphProperty.sip
 
-%Include Plugin.sip
 %Include WithParameter.sip
 %Include WithDependency.sip
 %Include PluginProgress.sip
 %Include Graph.sip
 %Include GraphMeasure.sip
 %Include PluginLoader.sip
+%Include PluginLoaderTxt.sip
 
 %Include TlpTools.sip
 %Include AcyclicTest.sip
@@ -184,6 +176,7 @@ bool pluginExists(std::string pluginName) {
 %Include DrawingTools.sip
 %Include Observable.sip
 %Include GraphEvent.sip
+%Include Constants.sip
 
 
 

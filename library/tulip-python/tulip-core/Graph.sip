@@ -35,12 +35,16 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/Algorithm.h>
+#include <fstream>
 namespace tlp {
 typedef tlp::Iterator<std::string> IteratorString;
 typedef tlp::Graph* GraphPointer;
 typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
 };
+typedef std::pair<tlp::node, tlp::node> std_pair_0100tlp_node_0100tlp_node;
 %End
+
+typedef std::pair<tlp::node, tlp::node> std_pair_0100tlp_node_0100tlp_node;
 
 namespace tlp {
 typedef tlp::Iterator<std::string> IteratorString;
@@ -70,45 +74,48 @@ public:
 
 	Graph();
 	
-//===========================================================================================
-
-bool applyAlgorithm(const std::string &alg, std::string &errMsg /Out/, tlp::DataSet *dataSet = NULL);
+//===========================================================================================	
+	
+  	bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage /Out/, tlp::DataSet *dataSet=NULL);
 %Docstring
 tlp.Graph.applyAlgorithm(algoName, dataSet)
 
-Applies an algorithm plugin (must be loaded) on a graph . Algorithm plugins are objects
-implementing the tlp::Algorithm interface in C++ or the :class:`tlp.Algorithm` interface in Python.
-Parameters can be transmit to the algorithm trough a DataSet object (refer to the plugin
-documentation to get its parameters list).
+.. versionadded:: 3.7
+	
+Applies an algorithm plugin, identified by its name.
+Algorithm plugins are objects implementing the tlp::Algorithm interface 
+in C++ or the :class:`tlp.Algorithm` interface in Python.
+Parameters can be transmit to the algorithm using a :class:`tlp.DataSet`.
+To determine a plugin's parameters, you can either:
 
-Returns a tuple whose first member is a boolean indicating if the algorithm has been successfully applied
-and second member is a string that can contain an error message if the algorithms fails during
-its execution.
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
-:param dataSet: a dataset filled with parameters to transmit to the algorithm
-:type dataSet: :class:`tlp.DataSet`
-:param algoName: the name of the algorithm plugin to call
+Returns a tuple whose first member is a boolean indicating if the 
+algorithm terminates successfully and second member is a string 
+which can contain an error message.
+
+:param algoName: The name of the algorithm to apply.
 :type algoName: string
+:param dataSet: The parameters to the algorithm. Defaults to :const:`None`.
+:type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
-:throws: an exception if the requested algorithm plugin is not registered in the plugins database.
-
-%End
+%End  	
 
 %MethodCode
-if (pluginExists<tlp::Algorithm>(*a0)) {
-  sipRes = sipCpp->applyAlgorithm(*a0, *a1, a2);
-} else {
-  sipIsErr = 1;
-  std::string msg = "No Tulip algorithm plugin named  ";
-  msg += *a0;
-  msg += ".";
-  PyErr_SetString(PyExc_Exception, msg.c_str());
-}
+    if (pluginExists<tlp::Algorithm>(*a0)) {
+        sipRes = sipCpp->applyAlgorithm(*a0, *a1, a2);
+    } else {
+        sipIsErr = 1;
+        std::string msg = "No Tulip algorithm plugin named ";
+        msg += *a0;
+        msg += ".";
+        PyErr_SetString(PyExc_Exception, msg.c_str());
+    }
 %End
 
-
 //===========================================================================================
-  
+
 	void clear();
 %Docstring
 tlp.Graph.clear()
@@ -132,22 +139,52 @@ selected in the selection. If there is no selection an empty sub-graph is return
 
 //===========================================================================================
 
+	tlp::Graph *addSubGraph(std::string name);
+%Docstring
+tlp.Graph.addSubGraph(name)
+
+.. versionadded:: 3.7
+
+Creates and returns a new named sub-graph of this graph.
+
+:param name: The name of the newly created subgraph.
+:type name: string
+:rtype: :class:`tlp.Graph`
+%End	
+
+//===========================================================================================
+
+ 	tlp::Graph* addCloneSubGraph(std::string name = "unnamed");
+%Docstring
+tlp.Graph.addCloneSubGraph(name = "unnamed")
+
+.. versionadded:: 3.7
+
+Creates and returns a subgraph of this graph that contains all its elements.
+
+:param name: The name of the newly created subgraph. Defaults to "unnamed".
+:type name: string
+:rtype: :class:`tlp.Graph`
+%End 	
+ 
+//=========================================================================================== 
+
 	tlp::Graph *inducedSubGraph(const std::set<tlp::node>& nodeSet);
 %Docstring
-tlp.Graph.inducedSubGraph(nodes)
+tlp.Graph.inducedSubGraph(nodeSet)
 
 Creates and returns a new sub-graph of the graph induced by a set of nodes. 
 The sub-graph contains all the nodes of the set and all the existing edges 
 between two nodes of the set including self-loops.
 
-:param nodes: the set of nodes from which to build the induced sub-graph
-:type nodes: list of :class:`tlp.node`
+:param nodeSet: the set of nodes from which to build the induced sub-graph
+:type nodeSet: list of :class:`tlp.node`
 :rtype: :class:`tlp.Graph` 
 %End
 
 //===========================================================================================
 
-	void delSubGraph(tlp::Graph *);
+	void delSubGraph(tlp::Graph *subgraph);
 %Docstring
 tlp.Graph.delSubGraph(subgraph)
 
@@ -159,7 +196,7 @@ Delete a sub-graph of this graph. The sub-graph's sub-graphs become sub-graphs o
 
 //===========================================================================================
 
-	void delAllSubGraphs(tlp::Graph *);
+	void delAllSubGraphs(tlp::Graph *subgraph);
 %Docstring
 tlp.Graph.delAllSubGraphs(subgraph)
 
@@ -193,7 +230,7 @@ Returns the root graph of the graph hierarchy.
 
 //===========================================================================================
 
-	void setSuperGraph(tlp::Graph *);
+	void setSuperGraph(tlp::Graph *superGraph);
 %Docstring
 tlp.Graph.setSuperGraph(superGraph)
 
@@ -212,7 +249,7 @@ tlp.Graph.getSubGraphs()
 
 Returns an iterator on all the sub-graphs of the graph.
 
-:rtype: an iterator on :class:`tlp.Graph` objects  
+:rtype: a Tulip iterator on :class:`tlp.Graph` objects
 %End
 	
 %MethodCode
@@ -221,7 +258,7 @@ Returns an iterator on all the sub-graphs of the graph.
 
 //===========================================================================================
 
-	bool isSubGraph(tlp::Graph* sg) const;
+	bool isSubGraph(tlp::Graph* graph) const;
 %Docstring
 tlp.Graph.isSubGraph(graph)
 
@@ -234,7 +271,7 @@ Returns :const:`True` if the graph argument is a direct sub-graph of the graph.
 
 //===========================================================================================
 
-	bool isDescendantGraph(tlp::Graph* sg) const;
+	bool isDescendantGraph(tlp::Graph* graph) const;
 %Docstring
 tlp.Graph.isDescendantGraph(graph)
 
@@ -260,9 +297,11 @@ Returns the sub-graph with the corresponding id or :const:`None` if there is no 
 
 //===========================================================================================
 
-	tlp::Graph* getSubGraph(const std::string &name) const;
+tlp::Graph* getSubGraph(const std::string &name) const;
 %Docstring
 tlp.Graph.getSubGraph(name)
+
+.. versionadded:: 3.7
 
 Returns the sub-graph with the corresponding name or :const:`None` if there is no sub-graph with that name.
 
@@ -286,9 +325,26 @@ Returns the descendant graph with the corresponding id or :const:`None` if there
 
 //===========================================================================================
 
+    tlp::Graph* getDescendantGraph(const std::string &name) const;
+%Docstring
+tlp.Graph.getDescendantGraph(name)
+
+.. versionadded:: 3.7
+
+Returns the descendant with the corresponding name or :const:`None` if there is no descendant with that name.
+
+:param name: the name of the descendant to return
+:type name: string
+:rtype: :class:`tlp.Graph` or :const:`None`
+%End
+
+//===========================================================================================
+	
 	tlp::Graph *getNthSubGraph(unsigned int n) const;
 %Docstring
 tlp.Graph.getNthSubGraph(n)
+
+.. versionadded:: 3.7
 
 Returns the nth subgraph or :const:`None` if there is no such sub-graph.
 Since order cannot be ensured in every implementation, this method should be equivalent to::
@@ -309,6 +365,8 @@ Since order cannot be ensured in every implementation, this method should be equ
   	unsigned  int numberOfSubGraphs() const;
 %Docstring
 tlp.Graph.numberOfSubGraphs()
+
+.. versionadded:: 3.7
 	
 Returns the number of direct sub-graphs.
 
@@ -320,6 +378,8 @@ Returns the number of direct sub-graphs.
   	unsigned int numberOfDescendantGraphs() const;
 %Docstring
 tlp.Graph.numberOfDescendantGraphs()	
+
+.. versionadded:: 3.7
 	
 Returns the number of descendant graphs.
 
@@ -340,17 +400,40 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-	void addNode(const tlp::node);
+        void addNodes(unsigned int nbNodes, std::vector<tlp::node>& addedNodes /Out/);
+%Docstring
+tlp.Graph.addNodes(nbNodes)
+
+.. versionadded:: 3.7
+
+Adds new nodes in the graph and returns them in a list.
+The new nodes are also added in all the graph ancestors to maintain the sub-graph relation between graphs.
+
+:param nbNodes: the number of nodes to add in the graph
+:type nbNodes: integer
+:rtype: list of :class:`tlp.node`
+
+.. warning:: the addedNodes vector is cleared before adding nodes.
+
+%End
+
+//===========================================================================================
+
+	void addNode(const tlp::node node);
 %Docstring
 tlp.Graph.addNode(node)
 
 Adds an existing node in the graph. This node is also added in all the graph ancestors 
-to maintain the sub-graph relation between graphs. Warning, the node must be an element of the 
-graph hierarchy, thus it must be an element of the root graph. Warning : One can't add an existing node to the root graph.
+to maintain the sub-graph relation between graphs.
 
 :param node: an existing node to add to the graph
 :type node: :class:`tlp.node`
 :throws: an exception if the node does not belong to the root graph
+
+.. warning:: The node must be an element of the graph hierarchy, thus it must be an element of the root graph.
+
+.. warning:: One can't add an existing node to the root graph.
+
 %End
 
 		
@@ -364,7 +447,44 @@ graph hierarchy, thus it must be an element of the root graph. Warning : One can
 
 //===========================================================================================
 
-	void delNode(const tlp::node, bool deleteInAllGraphs = false);
+        void addNodes(tlp::Iterator<tlp::node>* nodes);
+%Docstring
+tlp.Graph.addNodes(itNodes)
+
+.. versionadded:: 3.7
+
+Adds existing nodes in the graph. The nodes are also added in all
+the graph ancestors to maintain the sub-graph relation between graphs.
+
+:param itNodes: an iterator on nodes to add
+:type itNodes: a Tulip iterator on :class:`tlp.node` objects
+:throws: an exception if one of the node to add is not an element of the root graph.
+
+.. warning:: The added nodes must be elements of the graph hierarchy, thus they must be elements of the root graph.
+
+.. warning:: One can't add existing nodes to the root graph.
+
+%End
+
+%MethodCode
+    tlp::StableIterator<tlp::node> sItNodes(a0);
+    tlp::node n;
+    forEach(n, &sItNodes) {
+          if (!sipCpp->getRoot()->isElement(n)) {
+              sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), n);
+              break;
+          }
+    }
+
+    if (sipIsErr == 0) {
+        sItNodes.restart();
+        sipCpp->addNodes(&sItNodes);
+    }
+%End
+
+//===========================================================================================
+
+	void delNode(const tlp::node node, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delNode(node[, deleteInAllGraphs = False])
 
@@ -388,7 +508,43 @@ to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-	tlp::edge addEdge(const tlp::node, const tlp::node );
+        virtual void delNodes(tlp::Iterator<tlp::node>* itN, bool deleteInAllGraphs = false)=0;
+%Docstring
+tlp.Graph.delNodes(itNodes[, deleteInAllGraphs=False])
+
+.. versionadded:: 3.7
+
+Deletes nodes in the graph. These nodes are also removed in
+the sub-graphs hierarchy of the current graph to maintain
+the sub-graph relation between graphs.
+
+:param itNodes: an iterator on the nodes to add
+:type itNodes: a Tulip iterator on :class:`tlp.node` objects
+:param deleteInAllGraphs: if :const:`True`, these nodes are  deleted in the whole hierarchy of graphs.
+:type deleteInAllGraphs: boolean
+:throws: an exception if one of the node to delete is not an element of the graph.
+
+%End
+
+%MethodCode
+    tlp::StableIterator<tlp::node> sItNodes(a0);
+    tlp::node n;
+    forEach(n, &sItNodes) {
+        if (!sipCpp->isElement(n)) {
+            sipIsErr = throwInvalidNodeException(sipCpp, n);
+            break;
+        }
+    }
+
+    if (sipIsErr == 0) {
+        sItNodes.restart();
+        sipCpp->delNodes(&sItNodes, a1);
+    }
+%End
+
+//===========================================================================================
+
+	tlp::edge addEdge(const tlp::node src, const tlp::node tgt);
 %Docstring
 tlp.Graph.addEdge(src, tgt)
 
@@ -417,24 +573,74 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-	void addEdge(const tlp::edge);
+        void addEdges(const std::vector<std_pair_0100tlp_node_0100tlp_node>& edges, std::vector<tlp::edge>& addedEdges /Out/);
+%Docstring
+tlp.Graph.addEdges(edges)
+
+.. versionadded:: 3.7
+
+Adds new edges in the graph and returns them in a list.
+The new edges are also added in all the graph ancestors to maintain the sub-graph relation between graphs.
+
+:param edges: the list of edges to add described by a pair of nodes
+:type edges: list of tuples containing two :class:`tlp.node` objects
+:rtype: list of :class:`tlp.edge`
+:throws: an exception if of the provided nodes to link is not an element of the graph.
+%End
+
+%MethodCode
+      for (size_t i = 0 ; i < a0->size() ; ++i) {
+        if (!sipCpp->isElement((*a0)[i].first)) {
+            sipIsErr = throwInvalidNodeException(sipCpp, (*a0)[i].first);
+        }
+        if (!sipCpp->isElement((*a0)[i].second)) {
+            sipIsErr = throwInvalidNodeException(sipCpp, (*a0)[i].second);
+        }
+      }
+      if (sipIsErr == 0) {
+        sipCpp->addEdges(*a0, *a1);
+      }
+%End
+
+
+//===========================================================================================
+
+	void addEdge(const tlp::edge edge);
 %Docstring
 tlp.Graph.addEdge(edge)
 
 Adds an existing edge in the graph. This edge is also added in all 
 the graph's ancestors to maintain the sub-graph relation between graphs. 
-Warning, the edge must be an element of the graph hierarchy, thus it must be 
-an element of the root graph. 
-Warning : One can't add an existing edge to the root graph
 
 :param edge: an existing edge to add to the graph
 :type edge: :class:`tlp.edge`
-:throws: an exception if the edge does not belong to the root graph 
-%End	
-	
+:throws: an exception if the edge does not belong to the root graph of if the source and target node of the edge are not elements of the graph
+
+.. warning:: The edge must be an element of the graph hierarchy, thus it must be an element of the root graph.
+
+.. warning:: One can't add an existing edge to the root graph.
+
+%End
+
 %MethodCode
 	if (sipCpp->getRoot()->isElement(*a0)) {
-		sipCpp->addEdge(*a0);
+            if (sipCpp->isElement(sipCpp->getRoot()->source(*a0))) {
+                if (sipCpp->isElement(sipCpp->getRoot()->target(*a0))) {
+                    sipCpp->addEdge(*a0);
+                } else {
+                    std::ostringstream oss;
+                    oss << "Error : edge " << a0->id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+                        << "because the graph does not contain its target node.";
+                    printErrorMessage(oss.str());
+                    sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(*a0));
+                }
+            } else {
+                std::ostringstream oss;
+                oss << "Error : edge " << a0->id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+                    << "because the graph does not contain its source node.";
+                printErrorMessage(oss.str());
+                sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(*a0));
+            }
 	} else {
 		sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), *a0);
 	}
@@ -442,7 +648,59 @@ Warning : One can't add an existing edge to the root graph
 
 //===========================================================================================
 
-	 void delEdge(const tlp::edge, bool deleteInAllGraphs = false);
+        void addEdges(tlp::Iterator<tlp::edge>* edges);
+%Docstring
+tlp.Graph.addEdges(itEdges)
+
+.. versionadded:: 3.7
+
+Adds existing edges in the graph. The edges are also added in all
+the graph ancestors to maintain the sub-graph relation between graphs.
+
+:param itEdges: an iterator on the edges to add
+:type itEdges: a Tulip iterator on :class:`tlp.edge` objects
+:throws: an exception if one of the edge to add is not an element of the root graph or if one of the edges extremities is not an element of the graph.
+
+.. warning:: The added edges must be elements of the graph hierarchy, thus they must be elements of the root graph.
+
+.. warning : One can't add existing edges to the root graph.
+%End
+
+%MethodCode
+    tlp::StableIterator<tlp::edge> sItEdges(a0);
+    tlp::edge e;
+    forEach(e, &sItEdges) {
+        if (!sipCpp->getRoot()->isElement(e)) {
+                sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), e);
+                break;
+        } else {
+            if (!sipCpp->isElement(sipCpp->getRoot()->source(e))) {
+                std::ostringstream oss;
+                oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+                    << "because the graph does not contain its source node.";
+                printErrorMessage(oss.str());
+                sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(e));
+                break;
+            }
+            if (!sipCpp->isElement(sipCpp->getRoot()->target(e))) {
+                std::ostringstream oss;
+                oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+                    << "because the graph does not contain its target node.";
+                printErrorMessage(oss.str());
+                sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(e));
+                break;
+            }
+        }
+    }
+
+    if (sipIsErr == 0) {
+        sItEdges.restart();
+        sipCpp->delEdges(&sItEdges);
+    }
+%End
+//===========================================================================================
+
+	 void delEdge(const tlp::edge edge, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delEdge(edge[, deleteInAllGraphs = False])
 
@@ -466,7 +724,42 @@ of the graph to maintain the sub-graph relation between graphs. The ordering of 
 
 //===========================================================================================
 
-	void setEdgeOrder(const tlp::node,const std::vector<tlp::edge> &);
+        void delEdges(tlp::Iterator<tlp::edge>* itE, bool deleteInAllGraphs = false)=0;
+%Docstring
+tlp.Graph.delEdges(itEdges[, deleteInAllGraphs=False])
+
+.. versionadded:: 3.7
+
+Deletes edges in the graph. These edges are also removed in
+the sub-graphs hierarchy of the current graph to maintain
+the sub-graph relation between graphs.
+The ordering of remaining edges is preserved.
+
+:param itEdges: an iterator on the edges to delete
+:type itEdges: a Tulip iterator on :class:`tlp.edge` objects
+:param deleteInAllGraphs: If :const:`True`, the edges are deleted in the whole hierarchy of graphs.
+:param deleteInAllGraphs: boolean
+:throws: an exception if one of the edge to delete is not an element of the graph
+%End
+
+%MethodCode
+    tlp::StableIterator<tlp::edge> sItEdges(a0);
+    tlp::edge e;
+    forEach(e, &sItEdges) {
+        if (!sipCpp->isElement(e)) {
+            sipIsErr = throwInvalidEdgeException(sipCpp, e);
+            break;
+        }
+    }
+    if (sipIsErr == 0) {
+        sItEdges.restart();
+        sipCpp->delEdges(&sItEdges, a1);
+    }
+%End
+
+//===========================================================================================
+
+	void setEdgeOrder(const tlp::node node, const std::vector<tlp::edge> & edges);
 %Docstring
 tlp.Graph.setEdgeOrder(node, edges)
 
@@ -490,7 +783,7 @@ of a node will be ordered as they are in the list of edges given in parameter.
 	
 //===========================================================================================
 
-	void swapEdgeOrder(const tlp::node,const tlp::edge , const tlp::edge );
+	void swapEdgeOrder(const tlp::node node, const tlp::edge edge1, const tlp::edge edge2);
 %Docstring
 tlp.Graph.swapEdgeOrder(node, edge1, edge2)
 
@@ -523,7 +816,7 @@ Swaps two edges in the adjacency list of a node.
 
 //===========================================================================================
 
-void setSource(const tlp::edge, const tlp::node);
+void setSource(const tlp::edge edge, const tlp::node src);
 %Docstring
 tlp.Graph.setSource(edge, src)
 
@@ -550,7 +843,7 @@ Sets the source of an existing edge.
   
 //===========================================================================================  
   
-void setTarget(const tlp::edge, const tlp::node);
+void setTarget(const tlp::edge edge, const tlp::node tgt);
 %Docstring
 tlp.Graph.setTarget(edge, tgt)
 
@@ -578,7 +871,7 @@ Sets the target of an existing edge.
   
 //===========================================================================================  
   
-void setEnds(const tlp::edge, const tlp::node source, const tlp::node target);
+void setEnds(const tlp::edge edge, const tlp::node src, const tlp::node tgt);
 %Docstring
 tlp.Graph.setEnds(edge, src, tgt)
 
@@ -611,38 +904,27 @@ Sets both the source and target of an existing edge.
 
 //===========================================================================================
 
-	void reverse(const tlp::edge);
+	void reverse(const tlp::edge edge);
 %Docstring
 tlp.Graph.reverse(edge)
 
 Reverses the direction of an edge, the source becomes the target 
 and the target becomes the source. 
-Warning : The ordering is global to the entire graph hierarchy. 
-Thus, by changing the ordering in a graph you change the ordering in the hierarchy.
 
 :param edge: the edge on which to revert the direction.
 :type edge: :class:`tlp.edge` 
 :throws: an exception if the edge does not belong to the graph
-%End	
-	
+
+.. warning:: The ordering is global to the entire graph hierarchy. Thus, by changing the ordering in a graph you change the ordering in the hierarchy.
+
+%End
+
 %MethodCode
 	if (sipCpp->isElement(*a0)) {
 		sipCpp->reverse(*a0);
 	} else {
 		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
 	}
-%End
-
-//===========================================================================================
-
-tlp::node getSource();
-%Docstring
-tlp.Graph.getSource()
-
-Finds the first node whose input degree equals 0.
-Returns an invalid node if there is no node whose input degree is 0.
-
-:rtype: (boolean, :class:`tlp.node`)
 %End
 
 //===========================================================================================
@@ -658,13 +940,27 @@ Returns an existing node of the graph.
 
 //===========================================================================================
 
+	tlp::node getSource() const ;
+%Docstring
+tlp.Graph.getSource()
+
+.. versionadded:: 3.7
+
+Finds the first node whose input degree equals 0.
+Returns the found node (invalid if there is no source);
+
+:rtype: :class:`tlp.node`
+%End
+
+//===========================================================================================
+
 	tlp::Iterator<tlp::node>* getNodes() const /TransferBack/;
 %Docstring
 tlp.Graph.getNodes()
 
 Returns an iterator on the nodes.
 
-:rtype: an iterator on :class:`tlp.node` objects 
+:rtype: a Tulip iterator on :class:`tlp.node` objects
 %End	
 	
 %MethodCode
@@ -673,7 +969,7 @@ Returns an iterator on the nodes.
 
 //===========================================================================================
 
-	tlp::node getInNode(const tlp::node,unsigned int ) const;
+	tlp::node getInNode(const tlp::node node, unsigned int i) const;
 %Docstring
 tlp.Graph.getInNode(node, i)
 
@@ -709,7 +1005,7 @@ Returns the ith predecessor of a node.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::node>* getInNodes(const tlp::node) const /TransferBack/;
+	tlp::Iterator<tlp::node>* getInNodes(const tlp::node node) const /TransferBack/;
 %Docstring
 tlp.Graph.getInNodes(node)
 
@@ -717,7 +1013,7 @@ Return an iterator on the predecessors of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: an iterator on :class:`tlp.node` objects
+:rtype: a Tulip iterator on :class:`tlp.node` objects
 :throws: an exception if the node does not belong to the graph
 %End	
 	
@@ -731,7 +1027,7 @@ Return an iterator on the predecessors of a node.
 
 //===========================================================================================
 
-	tlp::node getOutNode(const tlp::node,unsigned int) const ;
+	tlp::node getOutNode(const tlp::node node, unsigned int i) const ;
 %Docstring
 tlp.Graph.getOutNode(node, i)
 
@@ -767,7 +1063,7 @@ Returns the ith successor of a node.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::node>* getOutNodes(const tlp::node) const /TransferBack/;
+	tlp::Iterator<tlp::node>* getOutNodes(const tlp::node node) const /TransferBack/;
 %Docstring
 tlp.Graph.getOutNodes(node)
 
@@ -775,7 +1071,7 @@ Returns an iterator on the successors of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: an iterator on :class:`tlp.node` objects
+:rtype: a Tulip iterator on :class:`tlp.node` objects
 :throws: an exception if the node does not belong to the graph
 %End
 	
@@ -789,7 +1085,7 @@ Returns an iterator on the successors of a node.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::node>* getInOutNodes(const tlp::node) const /TransferBack/;
+	tlp::Iterator<tlp::node>* getInOutNodes(const tlp::node node) const /TransferBack/;
 %Docstring
 tlp.Graph.getInOutNodes(node)
 
@@ -797,7 +1093,7 @@ Returns an iterator on the neighbours of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: an iterator on :class:`tlp.node` objects
+:rtype: a Tulip iterator on :class:`tlp.node` objects
 :throws: an exception if the node does not belong to the graph
 %End
 	
@@ -811,7 +1107,7 @@ Returns an iterator on the neighbours of a node.
 
 //===========================================================================================
 
-	tlp::Graph* getNodeMetaInfo(const tlp::node) const;
+	tlp::Graph* getNodeMetaInfo(const tlp::node node) const;
 %Docstring
 tlp.Graph.getNodeMetaInfo(node)
 
@@ -839,7 +1135,7 @@ tlp.Graph.getEdges()
 
 Returns an iterator on the edges.
 
-:rtype: an iterator on :class:`tlp.edge` objects 
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
 %End
 	
 %MethodCode
@@ -859,15 +1155,15 @@ Returns an existing edge of the graph.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getOutEdges(const tlp::node) const /TransferBack/;
+	tlp::Iterator<tlp::edge>* getOutEdges(const tlp::node node) const /TransferBack/;
 %Docstring
 tlp.Graph.getOutEdges(node)
 
-Returns an iterator on the outgoing edges of a node.
+Returns a Tulip iterator on the outgoing edges of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: an iterator on :class:`tlp.edge` objects
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
 :throws: an exception if the node does not belong to the graph
 %End	
 	
@@ -881,7 +1177,7 @@ Returns an iterator on the outgoing edges of a node.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getInOutEdges(const tlp::node) const /TransferBack/;
+	tlp::Iterator<tlp::edge>* getInOutEdges(const tlp::node node) const /TransferBack/;
 %Docstring
 tlp.Graph.getInOutEdges(node)
 
@@ -889,7 +1185,7 @@ Returns an iterator on the incoming and outgoing edges of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: an iterator on :class:`tlp.edge` objects
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
 :throws: an exception if the node does not belong to the graph
 %End
 	
@@ -903,7 +1199,7 @@ Returns an iterator on the incoming and outgoing edges of a node.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getInEdges(const tlp::node) const /TransferBack/;
+	tlp::Iterator<tlp::edge>* getInEdges(const tlp::node node) const /TransferBack/;
 %Docstring
 tlp.Graph.getInEdges(node)
 
@@ -911,7 +1207,7 @@ Returns an iterator on the incoming edges of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: an iterator on :class:`tlp.edge` objects
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
 :throws: an exception if the node does not belong to the graph
 %End
 	
@@ -925,7 +1221,7 @@ Returns an iterator on the incoming edges of a node.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getEdgeMetaInfo(const tlp::edge) const /TransferBack/;
+	tlp::Iterator<tlp::edge>* getEdgeMetaInfo(const tlp::edge edge) const /TransferBack/;
 %Docstring
 tlp.Graph.getEdgeMetaInfo(edge)
 
@@ -933,7 +1229,7 @@ Returns an iterator on the underlying edges of a meta edge.
 
 :param edge: an existing edge of the graph
 :type edge: :class:`tlp.edge`
-:rtype: an iterator on :class:`tlp.edge` objects
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
 :throws: an exception if the edge does not belong to the graph
 %End	
 	
@@ -958,7 +1254,7 @@ Returns the graph's id. This id is unique.
 
 //===========================================================================================
 
-	unsigned int numberOfNodes()const ;
+	unsigned int numberOfNodes() const ;
 %Docstring
 tlp.Graph.numberOfNodes()
 
@@ -969,7 +1265,7 @@ Returns the number of nodes in the graph.
 
 //===========================================================================================
 
-	unsigned int numberOfEdges()const ;
+	unsigned int numberOfEdges() const ;
 %Docstring
 tlp.Graph.numberOfEdges()
 
@@ -981,7 +1277,7 @@ Returns the number of edges in the graph.
 
 //===========================================================================================
 
-	unsigned int deg(const tlp::node)const ;
+	unsigned int deg(const tlp::node node) const ;
 %Docstring
 tlp.Graph.deg(node)
 
@@ -1003,7 +1299,7 @@ Returns the degree of a node.
 
 //===========================================================================================
 
-	unsigned int indeg(const tlp::node) const ;
+	unsigned int indeg(const tlp::node node) const ;
 %Docstring
 tlp.Graph.indeg(node)
 
@@ -1025,7 +1321,7 @@ Returns the incoming degree of a node.
 
 //===========================================================================================
 
-	unsigned int outdeg(const tlp::node)const ;
+	unsigned int outdeg(const tlp::node node) const ;
 %Docstring
 tlp.Graph.outdeg(node)
 
@@ -1047,7 +1343,7 @@ Returns the outgoing degree of a node.
 
 //===========================================================================================
 
-	tlp::node source(const tlp::edge)const ;
+	tlp::node source(const tlp::edge edge) const ;
 %Docstring
 tlp.Graph.source(edge)
 
@@ -1069,7 +1365,7 @@ Returns the source of the edge.
 
 //===========================================================================================
 
-	tlp::node target(const tlp::edge)const ;
+	tlp::node target(const tlp::edge edge) const ;
 %Docstring
 tlp.Graph.target(edge)
 
@@ -1092,7 +1388,7 @@ Returns the target of the edge.
 
 //===========================================================================================
 
-	const std::pair<tlp::node, tlp::node>& ends(const tlp::edge) const;
+	const std::pair<tlp::node, tlp::node>& ends(const tlp::edge edge) const;
 %Docstring
 tlp.Graph.ends(edge)
 
@@ -1114,7 +1410,7 @@ Returns a tuple containing the two end nodes of an edge
 
 //===========================================================================================
 
-	tlp::node opposite(const tlp::edge, const tlp::node) const ;
+	tlp::node opposite(const tlp::edge edge, const tlp::node node) const ;
 %Docstring
 tlp.Graph.opposite(edge, node)
 
@@ -1143,7 +1439,7 @@ Returns the opposite node of the edge for the given node.
 
 //===========================================================================================
 
-	bool isElement(const tlp::node) const ;
+	bool isElement(const tlp::node node) const ;
 %Docstring
 tlp.Graph.isElement(node)
 
@@ -1156,7 +1452,7 @@ Returns :const:`True` if the node is an element of the graph.
 
 //===========================================================================================
 
-	bool isElement(const tlp::edge) const ;
+	bool isElement(const tlp::edge edge) const ;
 %Docstring
 tlp.Graph.isElement(edge)
 
@@ -1169,7 +1465,7 @@ Returns :const:`True` if the edge is an element of the graph.
 
 //===========================================================================================
 
-	bool isMetaNode(const tlp::node) const ;
+	bool isMetaNode(const tlp::node node) const ;
 %Docstring
 tlp.Graph.isMetaNode(node)
 
@@ -1191,7 +1487,7 @@ Returns :const:`True` if the node is a meta-node.
 
 //===========================================================================================
 
-	bool isMetaEdge(const tlp::edge) const ;
+	bool isMetaEdge(const tlp::edge edge) const ;
 %Docstring
 tlp.Graph.isMetaEdge(edge)
 
@@ -1213,7 +1509,7 @@ Returns :const:`True` if the edge is a meta-edge.
 
 //===========================================================================================
 
-	tlp::edge existEdge(const tlp::node , const tlp::node, bool directed=true) const ;
+	tlp::edge existEdge(const tlp::node node1, const tlp::node node2, bool directed=true) const ;
 %Docstring
 tlp.Graph.existEdge(node1, node2[, directed=True])
 
@@ -1875,7 +2171,7 @@ tlp.Graph.getLocalProperties()
 
 Returns an iterator on the names of the properties local to the graph.
 
-:rtype: tlp.IteratorString
+:rtype: a Tulip iterator on string objects
 %End	
 %MethodCode
 	sipRes = new tlp::StableIterator<std::string>(sipCpp->getLocalProperties());
@@ -1889,7 +2185,7 @@ tlp.Graph.getInheritedProperties()
 
 Returns an iterator on the names of the properties inherited from the graph's ancestors.
 
-:rtype: tlp.IteratorString
+:rtype: a Tulip iterator on string objects
 %End
 	
 %MethodCode
@@ -1904,7 +2200,7 @@ tlp.Graph.getInheritedProperties()
 
 Returns an iterator on the names of all the properties attached to the graph.
 
-:rtype: tlp.IteratorString
+:rtype: a Tulip iterator on string objects
 %End
 	
 %MethodCode
@@ -1913,7 +2209,7 @@ Returns an iterator on the names of all the properties attached to the graph.
 	
 //===========================================================================================	
 	
-	bool computeIntegerProperty(const std::string &algorithm, tlp::IntegerProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
+	bool computeIntegerProperty(const std::string &algoName, tlp::IntegerProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
 %Docstring
 tlp.Graph.computeIntegerProperty(algoName, result[, dataSet = None])
 
@@ -1923,11 +2219,15 @@ Integer algorithm plugins are objects
 implementing the tlp::IntegerAlgorithm interface in C++ or 
 the :class:`tlp.IntegerAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -1940,6 +2240,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested integer algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End	
 
 %MethodCode
@@ -1949,7 +2252,7 @@ which can contain an error message.
 		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
-		std::string msg = "No Tulip integer algorithm plugin named  ";
+        std::string msg = "No Tulip integer algorithm plugin named ";
 		msg += *a0;
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());
@@ -1958,7 +2261,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-	bool computeDoubleProperty(const std::string &algorithm, tlp::DoubleProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
+	bool computeDoubleProperty(const std::string &algoName, tlp::DoubleProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
 %Docstring
 tlp.Graph.computeDoubleProperty(algoName, result[, dataSet = None])
 
@@ -1968,11 +2271,15 @@ Double algorithm plugins are objects
 implementing the tlp::DoubleAlgorithm interface in C++ or 
 the :class:`tlp.DoubleAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -1985,6 +2292,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested double algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End
 	
 %MethodCode
@@ -1994,7 +2304,7 @@ which can contain an error message.
 		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
-		std::string msg = "No Tulip double algorithm plugin named  ";
+        std::string msg = "No Tulip double algorithm plugin named ";
 		msg += *a0;
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());
@@ -2003,7 +2313,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-	bool computeLayoutProperty(const std::string &algorithm, tlp::LayoutProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
+	bool computeLayoutProperty(const std::string &algoName, tlp::LayoutProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
 %Docstring
 tlp.Graph.computeLayoutProperty(algoName, result[, dataSet = None])
 
@@ -2013,11 +2323,15 @@ Layout algorithm plugins are objects
 implementing the tlp::LayoutAlgorithm interface in C++ or 
 the :class:`tlp.LayoutAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -2030,6 +2344,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested layout algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End
 	
 %MethodCode
@@ -2039,7 +2356,7 @@ which can contain an error message.
 		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
-		std::string msg = "No Tulip layout algorithm plugin named  ";
+        std::string msg = "No Tulip layout algorithm plugin named ";
 		msg += *a0;
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());
@@ -2048,7 +2365,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-	bool computeBooleanProperty(const std::string &algorithm, tlp::BooleanProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
+	bool computeBooleanProperty(const std::string &algoName, tlp::BooleanProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
 %Docstring
 tlp.Graph.computeBooleanProperty(algoName, result[, dataSet = None])
 
@@ -2058,11 +2375,15 @@ Boolean algorithm plugins are objects
 implementing the tlp::BooleanAlgorithm interface in C++ or 
 the :class:`tlp.BooleanAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -2075,6 +2396,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested boolean algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End
 	
 %MethodCode
@@ -2084,7 +2408,7 @@ which can contain an error message.
 		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
-		std::string msg = "No Tulip boolean algorithm plugin named  ";
+        std::string msg = "No Tulip boolean algorithm plugin named ";
 		msg += *a0;
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());
@@ -2093,7 +2417,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-	bool computeSizeProperty(const std::string &algorithm, tlp::SizeProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
+	bool computeSizeProperty(const std::string &algoName, tlp::SizeProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
 %Docstring
 tlp.Graph.computeSizeProperty(algoName, result[, dataSet = None])
 Computes a size property on the current graph 
@@ -2102,11 +2426,15 @@ Size algorithm plugins are objects
 implementing the tlp::SizeAlgorithm interface in C++ or 
 the :class:`tlp.SizeAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -2119,6 +2447,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested size algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End
 	
 %MethodCode
@@ -2128,7 +2459,7 @@ which can contain an error message.
 		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
-		std::string msg = "No Tulip size algorithm plugin named  ";
+        std::string msg = "No Tulip size algorithm plugin named ";
 		msg += *a0;
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());
@@ -2137,7 +2468,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-bool computeColorProperty(const std::string &algorithm, tlp::ColorProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
+bool computeColorProperty(const std::string &algoName, tlp::ColorProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
 %Docstring
 tlp.Graph.computeColorProperty(algoName, result[, dataSet = None])
 
@@ -2147,11 +2478,15 @@ Color algorithm plugins are objects
 implementing the tlp::ColorAlgorithm interface in C++ or 
 the :class:`tlp.ColorAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -2164,6 +2499,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested color algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End
 
 %MethodCode
@@ -2173,7 +2511,7 @@ which can contain an error message.
 		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
-		std::string msg = "No Tulip color algorithm plugin named  ";
+        std::string msg = "No Tulip color algorithm plugin named ";
 		msg += *a0;
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());
@@ -2182,7 +2520,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-bool computeStringProperty(const std::string &algorithm, tlp::StringProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
+bool computeStringProperty(const std::string &algoName, tlp::StringProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
 %Docstring
 tlp.Graph.computeStringProperty(algoName, result[, dataSet = None])
 
@@ -2192,11 +2530,15 @@ String algorithm plugins are objects
 implementing the tlp::StringAlgorithm interface in C++ or 
 the :class:`tlp.StringAlgorithm` interface in Python.
 The computed values will be stored in result. 
-Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
 can use this :class:`tlp.DataSet` in order to return some external information 
 (not stored in result).
+To determine a plugin's parameters, you can either:
+    
+	* refer to its documentation
+	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
 which can contain an error message.
@@ -2209,6 +2551,9 @@ which can contain an error message.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
 :throws: an exception if the requested string algorithm plugin is not registered in the plugins database.
+
+.. warning:: Previous values stored in result will be deleted.
+
 %End
 
 %MethodCode
@@ -2218,7 +2563,7 @@ which can contain an error message.
 		*a1 = tmp;
 	} else {
 		sipIsErr = 1;
-		std::string msg = "No Tulip string algorithm plugin named  ";
+        std::string msg = "No Tulip string algorithm plugin named ";
 		msg += *a0;
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());
@@ -2227,7 +2572,7 @@ which can contain an error message.
 
 //===========================================================================================
 	
-	void push(bool unpopAllowed = true);
+    void push(bool unpopAllowed = true, std::vector<tlp::PropertyInterface*>* propertiesToPreserveOnPop= NULL);
 %Docstring
 tlp.Graph.push([unpopAllowed=True])
 
@@ -2305,7 +2650,6 @@ tlp.Graph.createMetaNode(nodeSet[, multiEdges=True, delAllEdge=True])
 Closes a set of existing nodes into a metanode and returns it.
 Edges from nodes in the set to other nodes are replaced with
 edges from the metanode to the other nodes.
-Warning: this method will failed when called on the root graph.
 
 :param nodeSet: a set of existing nodes
 :type nodeSet: list of :class:`tlp.node`
@@ -2314,18 +2658,20 @@ Warning: this method will failed when called on the root graph.
 :param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
 :type delAllEdge: boolean
 :rtype: :class:`tlp.node`
+
+ .. warning:: This method will fail when called on the root graph.
+
 %End
 
 //===========================================================================================	
 		
-	tlp::node createMetaNode(tlp::Graph* subGraph, bool multiEdges = true, bool delAllEdge = true);
+	tlp::node createMetaNode(tlp::Graph* subgraph, bool multiEdges = true, bool delAllEdge = true);
 %Docstring
 tlp.Graph.createMetaNode(subgraph[, multiEdges=True, delAllEdge=True])
 
 Closes an existing subgraph into a metanode and returns it.  Edges from nodes
 in the subgraph to nodes outside the subgraph are replaced with
 edges from the metanode to the nodes outside the subgraph.
-Warning: this method will failed when called on the root graph.
 
 :param subgraph: an existing subgraph
 :type subgraph: :class:`tlp.Graph`
@@ -2334,11 +2680,14 @@ Warning: this method will failed when called on the root graph.
 :param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
 :type delAllEdge: boolean
 :rtype: :class:`tlp.node`
+
+.. warning:: This method will fail when called on the root graph.
+
 %End
 
 //===========================================================================================
 
-	void createMetaNodes(tlp::IteratorGraph *itS, tlp::Graph *quotientGraph, std::vector<tlp::node>& metaNodes /Out/);
+	void createMetaNodes(tlp::IteratorGraph *itGraph, tlp::Graph *quotientGraph, std::vector<tlp::node>& metaNodes /Out/);
 %Docstring
 tlp.Graph.createMetaNodes(itGraph, quotientGraph)
 
@@ -2346,7 +2695,7 @@ Populates a quotient graph with one meta node for each iterated graph.
 Returns a list of created meta-nodes.
 
 :param itGraph: a graph iterator, (typically a subgraph iterator)
-:type itGraph: an iterator on :class:`tlp.Graph` objects
+:type itGraph: a Tulip iterator on :class:`tlp.Graph` objects
 :param quotientGraph: the graph that will contain the meta nodes
 :type quotientGraph: :class:`tlp.Graph`
 :rtype: list of :class:`tlp.node`
@@ -2354,18 +2703,20 @@ Returns a list of created meta-nodes.
 	
 //===========================================================================================
 
-	void openMetaNode(tlp::node n, bool updateProperties = true);
+	void openMetaNode(tlp::node metaNode, bool updateProperties = true);
 %Docstring
 tlp.Graph.openMetaNode(metaNode[, updateProperties=True])
 
 Opens a metanode and replaces all edges between that
 meta node and other nodes in the graph.
-Warning: this method will failed when called on the root graph.
 
 :param metaNode: the meta-node to open
 :type metaNode: :class:`tlp.node`
 :param updateProperties: If :const:`True`, open meta node will update inner nodes layout, color, size, etc...
 :type updateProperties: boolean
+
+.. warning:: This method will fail when called on the root graph.
+
 %End
 	
 //===========================================================================================
@@ -2463,7 +2814,7 @@ Returns the name of the graph.
 	
 //===========================================================================================
 
-	void setName(const std::string &s) const;
+    void setName(const std::string &name);
 %Docstring
 tlp.Graph.setName(name)
 
@@ -2475,14 +2826,27 @@ Sets the name of the graph.
 	
 //===========================================================================================
 
-void setAttribute(const std::string &name, SIP_PYOBJECT po);
+void setAttribute(const std::string &name, SIP_PYOBJECT val);
+%Docstring
+tlp.Graph.setAttribute(name, val)
+
+Sets an attribute of the graph.
+
+:param name: the name of the attribute to set
+:type name: string
+:param val: the value of the attribute
+:param type: object
+%End
+
 %MethodCode
   int state=0, iserr=0;
   if (PyBool_Check(a1)) {
     long l = PyLong_AsLong(a1);
     sipCpp->setAttribute<bool>(*a0, (l > 0));
+#if PY_MAJOR_VERSION < 3
   } else if (PyInt_CheckExact(a1)) {
     sipCpp->setAttribute(*a0, PyInt_AsLong(a1)); 
+#endif
   } else if (PyLong_Check(a1)) {
     sipCpp->setAttribute(*a0, PyLong_AsLong(a1));
   } else if (PyFloat_Check(a1)) {
@@ -2532,6 +2896,21 @@ void setAttribute(const std::string &name, SIP_PYOBJECT po);
   } else if (sipCanConvertToType(a1, sipType_tlp_PropertyInterface, SIP_NOT_NONE)) {    
     tlp::PropertyInterface *p = reinterpret_cast<tlp::PropertyInterface *>(sipConvertToType(a1, sipType_tlp_PropertyInterface, NULL, SIP_NOT_NONE, &state, &iserr));
     sipCpp->setAttribute(*a0, p);
+  } else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_node, SIP_NOT_NONE)) {    
+    std::vector<tlp::node> *p = reinterpret_cast<std::vector<tlp::node> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_node, NULL, SIP_NOT_NONE, &state, &iserr));
+    sipCpp->setAttribute(*a0, *p);
+  } else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_edge, SIP_NOT_NONE)) {    
+    std::vector<tlp::edge> *p = reinterpret_cast<std::vector<tlp::edge> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_edge, NULL, SIP_NOT_NONE, &state, &iserr));
+    sipCpp->setAttribute(*a0, *p);
+  } else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_Coord, SIP_NOT_NONE)) {    
+    std::vector<tlp::Coord> *p = reinterpret_cast<std::vector<tlp::Coord> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_Coord, NULL, SIP_NOT_NONE, &state, &iserr));
+    sipCpp->setAttribute(*a0, *p);
+  } else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_Color, SIP_NOT_NONE)) {    
+    std::vector<tlp::Color> *p = reinterpret_cast<std::vector<tlp::Color> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_Color, NULL, SIP_NOT_NONE, &state, &iserr));
+    sipCpp->setAttribute(*a0, *p);
+  } else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_Size, SIP_NOT_NONE)) {    
+    std::vector<tlp::Size> *p = reinterpret_cast<std::vector<tlp::Size> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_Size, NULL, SIP_NOT_NONE, &state, &iserr));
+    sipCpp->setAttribute(*a0, *p);      
   } else {
   	sipIsErr = 1;
 	std::string msg = "Object of type ";
@@ -2544,6 +2923,17 @@ void setAttribute(const std::string &name, SIP_PYOBJECT po);
 //===========================================================================================
 
 SIP_PYOBJECT getAttribute(const std::string& name);
+%Docstring
+tlp.Graph.getAttribute(name)
+
+Returns a reference on an attribute of the graph or :const:`None` if it does not exist.
+
+:param name: the name of the attribute to return.
+:type name: string
+:rtype: object
+%End
+
+
 %MethodCode
 bool ok = false;
 if (sipCpp->getAttributes().exist(*a0)) {
@@ -2586,35 +2976,38 @@ if (sipCpp->getAttributes().exist(*a0)) {
     
   } else if (dataType->getTypeName() == std::string(typeid(std::string).name())) {
     ok = true;
+#if PY_MAJOR_VERSION >= 3
+    sipRes = PyUnicode_FromString((*(reinterpret_cast<std::string*>(dataType->value))).c_str());
+#else
     sipRes = PyString_FromString((*(reinterpret_cast<std::string*>(dataType->value))).c_str());
+#endif
+  } else if (dataType->getTypeName() == std::string(typeid(tlp::DataSet).name())) {
+    ok = true;
+    sipRes = sipConvertFromType(reinterpret_cast<tlp::DataSet *>(dataType->value), sipType_tlp_DataSet, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::DataSet).name())) {
     ok = true;
-    sipRes = sipConvertFromNewType(new tlp::DataSet(*(reinterpret_cast<tlp::DataSet *>(dataType->value))), sipType_tlp_DataSet, NULL);
-    
-  } else if (dataType->getTypeName() == std::string(typeid(tlp::DataSet).name())) {
-    ok = true;
-    sipRes = sipConvertFromNewType(new tlp::DataSet(*(reinterpret_cast<tlp::DataSet *>(dataType->value))), sipType_tlp_DataSet, NULL);
+    sipRes = sipConvertFromType(reinterpret_cast<tlp::DataSet *>(dataType->value), sipType_tlp_DataSet, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::Coord).name())) {
     ok = true;
-    sipRes = sipConvertFromNewType(new tlp::Coord(*(reinterpret_cast<tlp::Coord *>(dataType->value))), sipType_tlp_Coord, NULL);
+    sipRes = sipConvertFromType(reinterpret_cast<tlp::Coord *>(dataType->value), sipType_tlp_Coord, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::Color).name())) {
     ok = true;
-    sipRes = sipConvertFromNewType(new tlp::Color(*(reinterpret_cast<tlp::Color *>(dataType->value))), sipType_tlp_Color, NULL);
+    sipRes = sipConvertFromType(reinterpret_cast<tlp::Color *>(dataType->value), sipType_tlp_Color, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::Size).name())) {
     ok = true;
-    sipRes = sipConvertFromNewType(new tlp::Size(*(reinterpret_cast<tlp::Size *>(dataType->value))), sipType_tlp_Size, NULL);
+    sipRes = sipConvertFromType(reinterpret_cast<tlp::Size *>(dataType->value), sipType_tlp_Size, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::ColorScale).name())) {
     ok = true;
-    sipRes = sipConvertFromNewType(new tlp::ColorScale(*(reinterpret_cast<tlp::ColorScale *>(dataType->value))), sipType_tlp_ColorScale, NULL);
+    sipRes = sipConvertFromType(reinterpret_cast<tlp::ColorScale *>(dataType->value), sipType_tlp_ColorScale, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::StringCollection).name())) {
     ok = true;
-    sipRes = sipConvertFromNewType(new tlp::StringCollection(*(reinterpret_cast<tlp::StringCollection *>(dataType->value))), sipType_tlp_StringCollection, NULL);
+    sipRes = sipConvertFromType(reinterpret_cast<tlp::StringCollection *>(dataType->value), sipType_tlp_StringCollection, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::PropertyInterface*).name())) {
     ok = true;
@@ -2647,15 +3040,44 @@ if (sipCpp->getAttributes().exist(*a0)) {
   } else if (dataType->getTypeName() == std::string(typeid(tlp::StringProperty*).name())) {
     ok = true;
     sipRes = sipConvertFromType(*(reinterpret_cast<tlp::StringProperty **>(dataType->value)), sipType_tlp_StringProperty, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::node>).name())) {
+    ok = true;
+    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::node> *>(dataType->value), sipType_std_vector_0100tlp_node, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::set<tlp::node>).name())) {
+    ok = true;
+    sipRes = sipConvertFromType(reinterpret_cast<std::set<tlp::node> *>(dataType->value), sipType_std_set_0100tlp_node, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::edge>).name())) {
+    ok = true;
+    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::edge> *>(dataType->value), sipType_std_vector_0100tlp_edge, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::set<tlp::edge>).name())) {
+    ok = true;
+    sipRes = sipConvertFromType(reinterpret_cast<std::set<tlp::edge> *>(dataType->value), sipType_std_set_0100tlp_edge, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Coord>).name())) {
+    ok = true;
+    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Coord> *>(dataType->value), sipType_std_vector_0100tlp_Coord, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Color>).name())) {
+    ok = true;
+    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Color> *>(dataType->value), sipType_std_vector_0100tlp_Color, NULL);
+    
+  } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Size>).name())) {
+    ok = true;
+    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Size> *>(dataType->value), sipType_std_vector_0100tlp_Size, NULL); 
   }
+  delete dataType;
 }
 
 if (!ok) {
-  std::ostringstream oss;
-  oss << "Graph attribute named \"" << *a0 << "\" does not exist.";
-  sipRes = NULL;
-  sipIsErr = 1;
-  PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
+	std::ostringstream oss;
+  	oss << "Graph attribute named \"" << *a0 << "\" does not exist.";
+  	sipRes = NULL;
+  	sipIsErr = 1;
+  	PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
 }
 %End  
 
@@ -2668,7 +3090,11 @@ if (!ok) {
 	std::ostringstream oss;
 	oss << "<graph \"" << graphName << "\" (id " << sipCpp->getId() << ") >";
 	std::string s = oss.str();
-        sipRes = PyString_FromString(s.c_str());
+#if PY_MAJOR_VERSION >= 3
+    sipRes = PyUnicode_FromString(s.c_str());
+#else
+    sipRes = PyString_FromString(s.c_str());
+#endif
 %End
 
 //===========================================================================================
@@ -2712,7 +3138,7 @@ Returns a new graph or :const:`None` if the import fails.
 
 //===========================================================================================
 
-bool saveGraph(tlp::Graph *, const std::string &filename);
+bool saveGraph(tlp::Graph *graph, const std::string &filename);
 %Docstring
 tlp.saveGraph(graph, filename)
 
@@ -2730,7 +3156,7 @@ successfully saved.
 
 //===========================================================================================
 
-tlp::Graph *importGraph(const std::string &alg, tlp::DataSet &dataSet, tlp::Graph *newGraph=0) /TransferBack/;
+tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet &dataSet, tlp::Graph *newGraph=0) /TransferBack/; 
 %Docstring
 tlp.importGraph(importPluginName, dataSet[, newGraph = None])
 
@@ -2762,9 +3188,54 @@ Returns a new graph or None if the import fails.
 
 //===========================================================================================
 
-tlp::Graph *newSubGraph(tlp::Graph *, std::string name = "unnamed");
+
+bool exportGraph(tlp::Graph *graph, const std::string &outputFilePath, const std::string &exportPluginName, tlp::DataSet &dataSet); 
+%Docstring
+tlp.exportGraph(graph, outputFilePath, exportPluginName, dataSet)
+
+Exports a graph to a file using a Tulip export plugin (must be loaded).
+
+:param graph: the graph to export
+:type graph: :class:`tlp.Graph`
+:param outputFilePath: the path of the file the export plugin will write to
+:type outputFilePath: string
+:param exportPluginName: the name of the Tulip export plugin to execute
+:type exportPluginName: string
+:param dataSet: a dataset filled with parameters to transmit to the export plugin
+:type dataSet: :class:`tlp.DataSet`
+:rtype: boolean
+:throws: an exception if the requested export plugin is not registered in the plugins database. 
+%End
+
+%MethodCode
+	if (pluginExists<tlp::ExportModule>(*a2)) {
+		std::ofstream ofs((*a1).c_str());
+		if (ofs.is_open()) {
+			sipRes = tlp::exportGraph(a0, ofs, *a2, *a3);
+		} else {
+			std::string msg = "Export error : The specified file path (";
+			msg += *a1;
+			msg += ") is not valid.";  
+			printErrorMessage(msg);
+			sipRes = false;
+		}
+		
+	} else {
+		sipIsErr = 1;
+		std::string msg = "No Tulip export plugin named  ";
+		msg += *a1;
+		msg += ".";
+		PyErr_SetString(PyExc_Exception, msg.c_str());
+	}	
+%End
+
+//===========================================================================================
+
+tlp::Graph *newSubGraph(tlp::Graph *root, std::string name = "unnamed");
 %Docstring
 tlp.newSubGraph(root[, name = "unnamed"])
+
+.. deprecated:: 3.7 use :meth:`tlp.Graph.addSubGraph` instead
 
 Creates and returns an empty subgraph of a graph.
 
@@ -2777,9 +3248,11 @@ Creates and returns an empty subgraph of a graph.
 
 //===========================================================================================
 
-tlp::Graph *newCloneSubGraph(tlp::Graph *, std::string name = "unnamed");
+tlp::Graph *newCloneSubGraph(tlp::Graph *root, std::string name = "unnamed");
 %Docstring
 tlp.newCloneSubGraph(root[, name = "unnamed"])
+
+.. deprecated:: 3.7 use :meth:`tlp.Graph.addCloneSubGraph` instead
 
 Creates and returns a subgraph of a graph root that is equal to that graph (a clone subgraph).
 
@@ -2792,7 +3265,7 @@ Creates and returns a subgraph of a graph root that is equal to that graph (a cl
 
 //===========================================================================================
 
-void copyToGraph(tlp::Graph *outG, tlp::Graph *inG, tlp::BooleanProperty* inSelection=0, tlp::BooleanProperty* outSelection=0 );
+void copyToGraph(tlp::Graph *outGraph, tlp::Graph *inGraph, tlp::BooleanProperty* inSelection=0, tlp::BooleanProperty* outSelection=0 );
 %Docstring
 tlp.copyToGraph(outGraph, inGraph[, inSelection = None, outSelection = None])
 
@@ -2815,7 +3288,7 @@ The output selection is used to select the appended nodes & edges
 
 //===========================================================================================
 
-void removeFromGraph(tlp::Graph *ioG, tlp::BooleanProperty *inSelection = 0);
+void removeFromGraph(tlp::Graph *inGraph, tlp::BooleanProperty *inSelection = 0);
 %Docstring
 tlp.removeFromGraph(inGraph[, inSelection = None])
 

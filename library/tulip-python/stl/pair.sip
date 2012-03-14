@@ -24,7 +24,7 @@
 // +-------------------------------------------------------------------------+
 
 template<T1, T2>
-%MappedType std::pair<T1, T2> {
+%MappedType std::pair<T1, T2> /DocType="(T1, T2)"/{
 %TypeHeaderCode
 #include <utility>
 %End

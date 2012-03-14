@@ -32,21 +32,31 @@
 
 %ConvertToTypeCode
 	if (sipIsErr == NULL) {
+#if PY_MAJOR_VERSION >= 3
+        return PyUnicode_Check(sipPy);
+#else
 		return PyString_Check(sipPy);
+#endif
 	}
 
 	if (sipPy == Py_None) {
 		*sipCppPtr = new std::string;
 		return 1;
 	}
-
-	*sipCppPtr = new std::string(PyString_AS_STRING(sipPy));
+#if PY_MAJOR_VERSION >= 3
+    *sipCppPtr = new std::string(convertPythonUnicodeObjectToStdString(sipPy));
+#else
+    *sipCppPtr = new std::string(PyString_AS_STRING(sipPy));
+#endif
 	return 1;
 %End
 
 %ConvertFromTypeCode
-	PyObject *obj = PyString_FromString(sipCpp->c_str());
-
+#if PY_MAJOR_VERSION >= 3
+    PyObject *obj = PyUnicode_FromString(sipCpp->c_str());
+#else
+    PyObject *obj = PyString_FromString(sipCpp->c_str());
+#endif
 	return obj;
 %End
 };

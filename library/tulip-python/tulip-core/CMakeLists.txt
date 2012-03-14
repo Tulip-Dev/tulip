@@ -14,6 +14,7 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/ColorScale.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Color.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/ConnectedTest.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/Constants.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Coord.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/DoubleAlgorithm.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/DoublePropertySpecific.sip
@@ -41,7 +42,6 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/PluginLoader.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PluginProgress.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Plugin.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/PropertyAlgorithm.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertyInterface.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Reflect.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/SimpleTest.sip
@@ -70,7 +70,8 @@ ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_PYTHON_BINDINGS_SRC}
                    COMMENT "Generating Python Bindings for libtulip"
                    DEPENDS ${TULIP_SIP_FILES} ${STL_SIP_FILES})
            
-DISABLE_COMPILER_WARNINGS()
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w")
 
 # Force to use SIP headers located in thirdparty
 # instead of those installed in the system
@@ -89,40 +90,52 @@ SET_SOURCE_FILES_PROPERTIES(siptuliptlpBooleanProperty.cpp
 							siptuliptlpIntegerVectorProperty.cpp	
                             PROPERTIES COMPILE_DEFINITIONS PROPERTY_BASE_TYPE)                            
  
-ADD_LIBRARY(${LibTulipPythonName} SHARED ${TULIP_PYTHON_BINDINGS_SRC})
+ADD_LIBRARY(${LibTulipCorePythonName} SHARED ${TULIP_PYTHON_BINDINGS_SRC})
 
-SET_TARGET_PROPERTIES(${LibTulipPythonName} 
+SET_TARGET_PROPERTIES(${LibTulipCorePythonName}
 		      PROPERTIES OUTPUT_NAME tulip PREFIX "")
 
 IF(WIN32)
-SET_TARGET_PROPERTIES(${LibTulipPythonName} 
+SET_TARGET_PROPERTIES(${LibTulipCorePythonName}
 		      PROPERTIES SUFFIX ".pyd")
 ELSE(WIN32)
-SET_TARGET_PROPERTIES(${LibTulipPythonName} 
+SET_TARGET_PROPERTIES(${LibTulipCorePythonName}
 		      PROPERTIES SUFFIX ".so")		      
 ENDIF(WIN32)
 
-TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipCoreName} ${PYTHON_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipCorePythonName} ${LibTulipCoreName})
+TARGET_LINK_LIBRARIES(${LibTulipCorePythonName} ${PYTHON_LIBRARY})
 
 ADD_CUSTOM_TARGET(touchTulipPythonCMakeLists ALL
                   COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_LIST_FILE}
                   COMMENT "touching CMakeLists.txt for Tulip Python Bindings (force configure before next build to keep source files list updated)"
-                  DEPENDS ${LibTulipPythonName})
+                  DEPENDS ${LibTulipCorePythonName})
 
-INSTALL(TARGETS ${LibTulipPythonName}
+IF(NOT UBUNTU_PPA_BUILD)
+INSTALL(TARGETS ${LibTulipCorePythonName}
         RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_python
         LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python
         ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
+ELSE()
+INSTALL(TARGETS ${LibTulipCorePythonName}
+        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
+ENDIF()
 
-ADD_CUSTOM_COMMAND(
-				   TARGET ${LibTulipPythonName}
-				   POST_BUILD
+ADD_CUSTOM_COMMAND(TARGET ${LibTulipCorePythonName}
+	           POST_BUILD
                    COMMAND ${SIP_EXE} -a ${CMAKE_CURRENT_BINARY_DIR}/tulip.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
                    COMMENT "Generating QScintilla API file for Tulip Python bindings"
-				   VERBATIM)
+		   VERBATIM)
 				   
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
+
+#IF(NOT UBUNTU_PPA_BUILD)
+#INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
+#ELSE()
+#INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
+#ENDIF()
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)

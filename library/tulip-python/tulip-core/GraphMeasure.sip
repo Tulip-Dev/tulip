@@ -6,7 +6,7 @@ namespace tlp {
 
   	enum EDGE_TYPE {DIRECTED = 0, INV_DIRECTED = 1, UNDIRECTED = 2};
 
-	double averagePathLength(const tlp::Graph* g, tlp::PluginProgress * = 0);
+	double averagePathLength(const tlp::Graph* g, tlp::PluginProgress *pluginProgress= 0);
 %Docstring
 tlp.averagePathLength(graph)
 
@@ -20,7 +20,7 @@ the shorted distance is set to 0.
 :rtype: float
 %End
 	
-  	double averageClusteringCoefficient(const tlp::Graph *, tlp::PluginProgress * = 0);
+  	double averageClusteringCoefficient(const tlp::Graph *graph, tlp::PluginProgress *pluginProgress= 0);
 %Docstring
 tlp.averageClusteringCoefficient(graph)
   	
@@ -62,7 +62,7 @@ This quantifies how close its neighbors are to being a clique.
  
  	
 
-  void dagLevel(const tlp::Graph *graph, tlp::IntegerProperty* level, tlp::PluginProgress* = 0);
+  void dagLevel(const tlp::Graph *graph, tlp::IntegerProperty* result, tlp::PluginProgress* = 0);
 %Docstring
 tlp.dagLevel(graph, result)
 
@@ -88,7 +88,7 @@ The algorithm ensures that the number of level used is minimal.
 	}
 %End  
   
-	unsigned int maxDegree(const tlp::Graph *);
+	unsigned int maxDegree(const tlp::Graph *graph);
 %Docstring
 tlp.maxDegree(graph)
 
@@ -99,7 +99,7 @@ Returns the maximum degree of the graph's nodes.
 :rtype: integer
 %End  
   
-	unsigned int minDegree(const tlp::Graph *);
+	unsigned int minDegree(const tlp::Graph *graph);
 %Docstring
 tlp.minDegree(graph)
 
@@ -110,7 +110,7 @@ Returns the minimum degree of the graph's nodes.
 :rtype: integer
 %End
   
-  	unsigned int maxDistance(const tlp::Graph *graph, const tlp::node n, tlp::IntegerProperty *distance, tlp::EDGE_TYPE direction = tlp::UNDIRECTED);
+  	unsigned int maxDistance(const tlp::Graph *graph, const tlp::node node, tlp::IntegerProperty *result, tlp::EDGE_TYPE direction = tlp::UNDIRECTED);
 %Docstring
 tlp.maxDistance(graph, node, result, direction)
   

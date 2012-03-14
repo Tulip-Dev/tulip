@@ -24,7 +24,7 @@
 // +-------------------------------------------------------------------------+
 
 template<T1, T2>
-%MappedType std::map<T1, T2> {
+%MappedType std::map<T1, T2> /DocType="dict-of-T1-T2"/ {
 %TypeHeaderCode
 #include <map>
 %End
@@ -119,7 +119,7 @@ template<T1, T2>
 };
 
 template<T1, T2>
-%MappedType std::map<T1, T2 *> {
+%MappedType std::map<T1, T2 *> /DocType="dict-of-T1-T2"/ {
 %TypeHeaderCode
 #include <map>
 %End
@@ -210,7 +210,7 @@ template<T1, T2>
 };
 
 template<T2>
-%MappedType std::map<float, T2> {
+%MappedType std::map<float, T2> /DocType="dict-of-float-T2"/{
 %TypeHeaderCode
 #include <map>
 %End

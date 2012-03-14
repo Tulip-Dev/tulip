@@ -27,6 +27,8 @@
 typedef std::set<tlp::node> std_set_0100tlp_node;
 %End
 
+typedef std::set<tlp::node> std_set_0100tlp_node;
+
 namespace tlp {
 
 class ConnectedTest {
@@ -36,7 +38,7 @@ class ConnectedTest {
 
 public:
 
-  static bool isConnected(const tlp::Graph*graph);
+  static bool isConnected(const tlp::Graph *graph);
 %Docstring
 tlp.ConnectedTest.isConnected(graph)
 
@@ -64,7 +66,8 @@ connected. Returns a list of added edges.
 
 //===========================================================================================   
 
-  static unsigned int numberOfConnectedComponents(const tlp::Graph*graph);
+
+  static unsigned int numberOfConnectedComponents(const tlp::Graph *graph);
 %Docstring
 tlp.ConnectedTest.numberOfConnectedComponents(graph)
 
@@ -77,7 +80,7 @@ Returns the number of connected components in the graph.
   
 //===========================================================================================   
   
-  static void computeConnectedComponents(tlp::Graph *graph, std::vector<std_set_0100tlp_node>& components /Out/);
+  static void computeConnectedComponents(tlp::Graph *graph, std::vector<std_set_0100tlp_node>& components /Out/) ;
 %Docstring
 tlp.ConnectedTest.computeConnectedComponents(graph)
 

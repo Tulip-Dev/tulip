@@ -25,34 +25,29 @@
 
 namespace tlp {
 
-class AlgorithmContext {
+class PluginContext{
 %TypeHeaderCode
 #include <tulip/PluginContext.h>
 %End
-public :
-	tlp::Graph *graph;
-
-	tlp::PluginProgress *pluginProgress;
-
-	tlp::DataSet *dataSet;
-
-	AlgorithmContext ();
-};
+public:
+  virtual ~PluginContext();
 };
 
-namespace tlp {
-
-class PropertyContext {
+class AlgorithmContext : tlp::PluginContext {
 %TypeHeaderCode
 #include <tulip/PluginContext.h>
 %End
 public :
 
-	tlp::Graph *graph;
-	tlp::PropertyInterface *propertyProxy;
-	tlp::PluginProgress *pluginProgress;
-	tlp::DataSet *dataSet;
+    AlgorithmContext (tlp::Graph* graph = NULL, tlp::DataSet* dataSet = NULL, tlp::PluginProgress* progress = NULL);
 
-	PropertyContext ();
+    ~AlgorithmContext ();
+
+    tlp::Graph *graph;
+
+    tlp::PluginProgress *pluginProgress;
+
+    tlp::DataSet *dataSet;
 };
+
 };

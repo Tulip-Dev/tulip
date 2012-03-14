@@ -29,12 +29,12 @@ class PluginLoader {
 #include <tulip/PluginLoader.h>
 %End
 public:
-	virtual ~PluginLoader();
-	virtual void start(const std::string &path) = 0;
-	virtual void numberOfFiles(int nbFiles);
-	virtual void loading(const std::string &filename) = 0;
-	virtual void loaded(const tlp::AbstractPluginInfo *, const std::list <tlp::Dependency>&) = 0;
-	virtual void aborted(const std::string &filename,const  std::string &erreurmsg) = 0;
-	virtual void finished(bool state,const std::string &msg) = 0;
+    virtual ~PluginLoader();
+    virtual void start(const std::string &path)=0;
+    virtual void numberOfFiles(int);
+    virtual void loading(const std::string &filename)=0;
+    virtual void loaded(const tlp::Plugin* infos, const std::list <tlp::Dependency>& dependencies)=0;
+    virtual void aborted(const std::string &filename,const  std::string &errormsg)=0;
+    virtual void finished(bool state,const std::string &msg)=0;
 };
 };

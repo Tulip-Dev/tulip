@@ -23,45 +23,23 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
+
 %ModuleHeaderCode
 #include <tulip/ImportModule.h>
-namespace tlp {
-class PythonImportModule : public ImportModule {
-public :
-	PythonImportModule(AlgorithmContext context) : 
-		ImportModule(context){}
-	
-	bool import() {
-		return importGraph();
-	}
-	
-	virtual bool importGraph() = 0;
-};
-typedef tlp::FactoryInterface<tlp::ImportModule, tlp::AlgorithmContext> ImportModuleFactory;
-};
+#include <tulip/PluginContext.h>.h>
 %End
 
-
 namespace tlp {
-class ImportModule :tlp::WithParameter, tlp::WithDependency /Abstract/ {
+
+class ImportModule : tlp::Plugin {
 %TypeHeaderCode
 #include <tulip/ImportModule.h>
 %End
-public:
 
-  ImportModule (tlp::AlgorithmContext context);
-  virtual ~ImportModule();
-    
-  tlp::Graph *graph;
-  tlp::DataSet *dataSet;
-  tlp::PluginProgress *pluginProgress;
-};
-
-class PythonImportModule : tlp::ImportModule {
 public:
 
 %Docstring
-Bases: :class:`tlp.WithParameter`
+Bases: :class:`tlp.Plugin`
 
 This abstract class describes an import plugin.
 
@@ -83,11 +61,16 @@ This abstract class describes an import plugin.
 
 %End
 
-  PythonImportModule(tlp::AlgorithmContext context);
-  
-  virtual bool importGraph() = 0;
+    ImportModule (const tlp::PluginContext* context);
+    virtual ~ImportModule();
+
+    virtual std::string getGroup() const;
+
+    virtual std::string category() const;
+
+    virtual bool importGraph() = 0;
 %Docstring
-tlp.PythonImportModule.importGraph()
+tlp.ImportModule.importGraph()
 
 This method is called to import a graph.
 Derived classes must implement it. A boolean must also be returned
@@ -95,31 +78,11 @@ to indicate if the import was successful.
 
 :rtype: boolean
 %End  
-  
-  
+    
+  tlp::Graph *graph;
+  tlp::DataSet *dataSet;
+  tlp::PluginProgress *pluginProgress;
 };
 
-class ImportModuleFactory : tlp::AbstractPluginInfo {
-%TypeHeaderCode
-#include <tulip/ImportModule.h>
-%End
-public:
-	virtual ~ImportModuleFactory();
-	
-	virtual tlp::ImportModule * createPluginObject(tlp::AlgorithmContext) = 0 /Factory/; 
-	
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::StaticPluginLister<tlp::ImportModule, tlp::AlgorithmContext>::registerPlugin(sipCpp);
-%End
-};
 };
 

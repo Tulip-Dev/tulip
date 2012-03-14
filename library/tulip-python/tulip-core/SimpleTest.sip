@@ -46,7 +46,7 @@ Returns :const:`True` if the graph is simple (i.e. it contains no self loops or 
   
 //===========================================================================================   
   
-  static void makeSimple(tlp::Graph* graph, std::vector<tlp::edge> &removed /Out/);
+  static void makeSimple(tlp::Graph* graph, std::vector<tlp::edge> &removed /Out/) ;
 %Docstring
 tlp.SimpleTest.makeSimple(graph)
 

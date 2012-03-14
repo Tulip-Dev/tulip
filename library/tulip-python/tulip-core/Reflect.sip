@@ -69,6 +69,8 @@ a data set is done through the [] operator as illustrated below::
 	# reading integer values
 	area = dataSet["height"] * dataSet["width"] 
 
+When reading a data set value, a reference is returned not a copy.
+
 %End
 
 	DataSet();
@@ -126,12 +128,13 @@ Returns the list of keys associated to the values stored in the data set.
 	
 	void __setitem__(const std::string &attributeName, SIP_PYOBJECT po);
 %MethodCode
+		tlp::DataType* dataType = sipCpp->getData(*a0);
 		int state=0, iserr=0;
 		if (PyBool_Check(a1)) {
 			long l = PyLong_AsLong(a1);
 			sipCpp->set<bool>(*a0, (l > 0));
+#if PY_MAJOR_VERSION < 3
 		} else if (PyInt_CheckExact(a1) || PyLong_Check(a1)) {
-			tlp::DataType* dataType = sipCpp->getData(*a0);
 			if (dataType && dataType->getTypeName() == std::string(typeid(int).name())) {
 				sipCpp->set(*a0, static_cast<int>(PyInt_AsLong(a1)));
 			} else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned int).name())) {
@@ -142,9 +145,22 @@ Returns the list of keys associated to the values stored in the data set.
 				sipCpp->set(*a0, static_cast<double>(PyInt_AsLong(a1)));		
 			} else {
 				sipCpp->set(*a0, PyInt_AsLong(a1));
-			}	
+            }
+#else
+        } else if (PyLong_Check(a1)) {
+            if (dataType && dataType->getTypeName() == std::string(typeid(int).name())) {
+                sipCpp->set(*a0, static_cast<int>(PyLong_AsLong(a1)));
+            } else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned int).name())) {
+                sipCpp->set(*a0, static_cast<unsigned int>(PyLong_AsLong(a1)));
+            } else if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {
+                sipCpp->set(*a0, static_cast<float>(PyLong_AsLong(a1)));
+            } else if (dataType && dataType->getTypeName() == std::string(typeid(double).name())) {
+                sipCpp->set(*a0, static_cast<double>(PyLong_AsLong(a1)));
+            } else {
+                sipCpp->set(*a0, PyLong_AsLong(a1));
+            }
+#endif
 		} else if (PyFloat_Check(a1)) {
-			tlp::DataType* dataType = sipCpp->getData(*a0);
 			if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {
 				sipCpp->set(*a0, static_cast<float>(PyFloat_AsDouble(a1)));
 			} else {
@@ -195,6 +211,21 @@ Returns the list of keys associated to the values stored in the data set.
 		} else if (sipCanConvertToType(a1, sipType_tlp_PropertyInterface, SIP_NOT_NONE)) {		
 			tlp::PropertyInterface *p = reinterpret_cast<tlp::PropertyInterface *>(sipConvertToType(a1, sipType_tlp_PropertyInterface, NULL, SIP_NOT_NONE, &state, &iserr));
 			sipCpp->set(*a0, p);
+		} else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_node, SIP_NOT_NONE)) {    
+    		std::vector<tlp::node> *p = reinterpret_cast<std::vector<tlp::node> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_node, NULL, SIP_NOT_NONE, &state, &iserr));
+    		sipCpp->set(*a0, *p);
+    	} else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_edge, SIP_NOT_NONE)) {    
+    		std::vector<tlp::edge> *p = reinterpret_cast<std::vector<tlp::edge> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_edge, NULL, SIP_NOT_NONE, &state, &iserr));
+    		sipCpp->set(*a0, *p);
+    	} else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_Coord, SIP_NOT_NONE)) {    
+    		std::vector<tlp::Coord> *p = reinterpret_cast<std::vector<tlp::Coord> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_Coord, NULL, SIP_NOT_NONE, &state, &iserr));
+    		sipCpp->set(*a0, *p);
+    	} else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_Color, SIP_NOT_NONE)) {    
+    		std::vector<tlp::Color> *p = reinterpret_cast<std::vector<tlp::Color> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_Color, NULL, SIP_NOT_NONE, &state, &iserr));
+    		sipCpp->set(*a0, *p);	
+    	} else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_Size, SIP_NOT_NONE)) {    
+    		std::vector<tlp::Size> *p = reinterpret_cast<std::vector<tlp::Size> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_Size, NULL, SIP_NOT_NONE, &state, &iserr));
+    		sipCpp->set(*a0, *p);				
 		} else {
 			sipIsErr = 1;
 			std::string msg = "Object of type ";
@@ -202,6 +233,7 @@ Returns the list of keys associated to the values stored in the data set.
 			msg += " can not be store in a Tulip dataset.";
 			PyErr_SetString(PyExc_Exception, msg.c_str());
 		}
+		delete dataType;
 %End
 	
 	
@@ -258,8 +290,11 @@ Returns the list of keys associated to the values stored in the data set.
 			
 		} else if (dataType->getTypeName() == std::string(typeid(std::string).name())) {
 			ok = true;
-			sipRes = PyString_FromString((*(reinterpret_cast<std::string*>(dataType->value))).c_str());
-			
+#if PY_MAJOR_VERSION >= 3
+            sipRes = PyUnicode_FromString((*(reinterpret_cast<std::string*>(dataType->value))).c_str());
+#else
+            sipRes = PyString_FromString((*(reinterpret_cast<std::string*>(dataType->value))).c_str());
+#endif
 		} else if (dataType->getTypeName() == std::string(typeid(tlp::DataSet).name())) {
 			ok = true;
 			sipRes = sipConvertFromType(reinterpret_cast<tlp::DataSet *>(dataType->value), sipType_tlp_DataSet, NULL);
@@ -315,7 +350,35 @@ Returns the list of keys associated to the values stored in the data set.
 			ok = true;
 			sipRes = sipConvertFromType(*(reinterpret_cast<tlp::StringProperty **>(dataType->value)), sipType_tlp_StringProperty, NULL);
 			
-		}
+		} else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::node>).name())) {
+    		ok = true;
+    		sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::node> *>(dataType->value), sipType_std_vector_0100tlp_node, NULL);
+    		
+  		} else if (dataType->getTypeName() == std::string(typeid(std::set<tlp::node>).name())) {
+    		ok = true;
+    		sipRes = sipConvertFromType(reinterpret_cast<std::set<tlp::node> *>(dataType->value), sipType_std_set_0100tlp_node, NULL);
+    		
+  		} else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::edge>).name())) {
+    		ok = true;
+    		sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::edge> *>(dataType->value), sipType_std_vector_0100tlp_edge, NULL);
+    		
+  		} else if (dataType->getTypeName() == std::string(typeid(std::set<tlp::edge>).name())) {
+    		ok = true;
+    		sipRes = sipConvertFromType(reinterpret_cast<std::set<tlp::edge> *>(dataType->value), sipType_std_set_0100tlp_edge, NULL);
+    		
+  		} else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Coord>).name())) {
+    		ok = true;
+    		sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Coord> *>(dataType->value), sipType_std_vector_0100tlp_Coord, NULL);
+    		
+  		} else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Color>).name())) {
+    		ok = true;
+    		sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Color> *>(dataType->value), sipType_std_vector_0100tlp_Color, NULL);
+    		
+  		} else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Size>).name())) {
+    		ok = true;
+    		sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Size> *>(dataType->value), sipType_std_vector_0100tlp_Size, NULL);
+    		
+  		}
 	}
 	
 	if (!ok) {
