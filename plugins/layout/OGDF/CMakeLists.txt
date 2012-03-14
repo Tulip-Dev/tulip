@@ -1,5 +1,26 @@
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipCoreInclude} ${TulipCoreBuildInclude} ${OGDFInclude} ${TulipOGDFInclude})
-FILE(GLOB PLUGINS_SRCS "*.cpp")
+
+SET(PLUGINS_SRCS
+OGDFFm3.cpp
+OGDFUpwardPlanarization.cpp
+OGDFFrutchermanReingold.cpp
+OGDFFastMultipoleMultilevelEmbedder.cpp
+OGDFFastMultipoleEmbedder.cpp
+OGDFVisibility.cpp
+OGDFKamadaKawai.cpp
+OGDFCircular.cpp
+OGDFBalloon.cpp
+OGDFDavidsonHarel.cpp
+OGDFMMMExampleNoTwistLayout.cpp
+OGDFTree.cpp
+OGDFMMMExampleFastLayout.cpp
+OGDFGemFrick.cpp
+OGDFStressMajorization.cpp
+OGDFSugiyama.cpp
+OGDFDominance.cpp
+OGDFMMMExampleNiceLayout.cpp
+OGDFPlanarizationGrid.cpp
+)
 
 IF(WIN32)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DOGDF_DLL")
@@ -8,6 +29,7 @@ ENDIF(WIN32)
 DISABLE_COMPILER_WARNINGS()
 
 FOREACH(OGDFPlugin ${PLUGINS_SRCS})
+MESSAGE(${OGDFPlugin})
   STRING(REGEX REPLACE ".cpp" "" PLUGIN_NAME ${OGDFPlugin})
   STRING(REGEX REPLACE ".*/" "" PLUGIN_NAME ${PLUGIN_NAME})
   STRING(TOLOWER ${PLUGIN_NAME} PLUGIN_NAME)
