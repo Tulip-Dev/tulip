@@ -168,29 +168,36 @@ public slots :
   void updateCaption(float begin, float end);
   void configurationIconPressedSlot();
 
+  void activateInteractions();
+  void removeInteractions();
+
 signals :
 
   void filterChanged(float begin, float end);
   void configurationIconPressed();
 
+  void interactionsActivated();
+  void interactionsRemoved();
+
 protected :
 
-  void updateSelectionText(float begin, float end);
-  void hoverEnterEvent(QGraphicsSceneHoverEvent *);
-  void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
+  void activateInteractions(bool);
 
+  bool sceneEvent ( QEvent * event );
+  void updateSelectionText(float begin, float end);
+
+  bool _interactionsActivated;
+  float _beginBackup;
+  float _endBackup;
   QPoint _captionContentPos;
 
   double _minValue;
   double _maxValue;
 
   // Global Items
-  QGraphicsTextItem *_propertyNameItem;
   QGraphicsTextItem *_minTextItem;
   QGraphicsTextItem *_maxTextItem;
   QGraphicsRectItem *_captionRectBorder;
-  ConfigurationIconItem *_prefIcon;
-  QGraphicsRectItem *_prefRect;
   SelectionArrowItem *_rangeSelector1Item;
   SelectionArrowItem *_rangeSelector2Item;
   SelectionTextItem *_rangeSelector1TextItem;

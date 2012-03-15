@@ -29,49 +29,33 @@ namespace tlp {
 
 CaptionGraphicsItem::CaptionGraphicsItem(View *view):_view(view) {
 
-  _rondedRectItem=new CaptionGraphicsBackgroundItem(QRect(QPoint(0,0),QSize(130,220)));
+  _rondedRectItem=new CaptionGraphicsBackgroundItem(QRect(QPoint(0,0),QSize(130,230)));
   _rondedRectItem->setBrush(QBrush(QColor(255,255,255,180)));
   connect(_rondedRectItem,SIGNAL(filterChanged(float,float)),this,SLOT(filterChangedSlot(float,float)));
   connect(_rondedRectItem,SIGNAL(configurationIconPressed()),this,SLOT(configurationIconPressed()));
-
-  _confBackgroundRectItem = new QGraphicsRectItem(130,0,280,40);
-  _confBackgroundRectItem->setParentItem(_rondedRectItem);
-  _confBackgroundRectItem->setBrush(QBrush(QColor(255,255,255,180)));
-  _confBackgroundRectItem->setAcceptHoverEvents(true);
-
-  _confBackgroundRectItem->setVisible(false);
+  connect(_rondedRectItem,SIGNAL(interactionsActivated()),this,SLOT(emitInteractionsActivated()));
+  connect(_rondedRectItem,SIGNAL(interactionsRemoved()),this,SLOT(emitInteractionsRemoved()));
 
   _confPropertySelectionWidget = new QComboBox();
-  _confPropertySelectionWidget->resize(QSize(150,30));
-  _confPropertySelectionItem = new QGraphicsProxyWidget(_confBackgroundRectItem);
+  _confPropertySelectionWidget->resize(QSize(120,25));
+  _confPropertySelectionItem = new QGraphicsProxyWidget(_rondedRectItem);
   _confPropertySelectionItem->setWidget(_confPropertySelectionWidget);
-  _confPropertySelectionItem->setPos(140,5);
-
-  _confTypeSelectionWidget = new QComboBox();
-  _confTypeSelectionWidget->resize(QSize(100,30));
-  _confTypeSelectionItem = new QGraphicsProxyWidget(_confBackgroundRectItem);
-  _confTypeSelectionItem->setWidget(_confTypeSelectionWidget);
-  _confTypeSelectionItem->setPos(300,5);
+  _confPropertySelectionItem->setPos(5,200);
 }
 
 void CaptionGraphicsItem::loadConfiguration() {
   constructConfigWidget();
 }
 
-void CaptionGraphicsItem::generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &propertyName, double minValue, double maxValue) {
+void CaptionGraphicsItem::generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &propertyName, double minValue, double maxValue){
   _rondedRectItem->generateColorCaption(activeGradient,hideGradient,propertyName,minValue,maxValue);
 }
 
-void CaptionGraphicsItem::generateSizeCaption(const vector< pair <double,float> > &metricToSizeFilteredList,const string &propertyName, double minValue, double maxValue) {
+void CaptionGraphicsItem::generateSizeCaption(const vector< pair <double,float> > &metricToSizeFilteredList,const string &propertyName, double minValue, double maxValue){
   _rondedRectItem->generateSizeCaption(metricToSizeFilteredList,propertyName,minValue,maxValue);
 }
 
 void CaptionGraphicsItem::constructConfigWidget() {
-
-  if(_confTypeSelectionWidget->count()==0) {
-    _confTypeSelectionWidget->addItems(QStringList() << "Color" << "Size");
-    connect(_confTypeSelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedTypeChangedSlot(QString)));
-  }
 
   disconnect(_confPropertySelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedPropertyChangedSlot(const QString &)));
   QString selectedItem=_confPropertySelectionWidget->currentText();
@@ -86,6 +70,9 @@ void CaptionGraphicsItem::constructConfigWidget() {
     if(property->getTypename()=="double") {
       if(property->getName().c_str() == selectedItem)
         index=properties.size();
+
+      if(((DoubleProperty*)property)->getNodeMin()==((DoubleProperty*)property)->getNodeMax())
+        continue;
 
       properties << property->getName().c_str() ;
     }
@@ -112,14 +99,6 @@ void CaptionGraphicsItem::filterChangedSlot(float begin,float end) {
 
 void CaptionGraphicsItem::selectedPropertyChangedSlot(const QString &propertyName) {
   emit selectedPropertyChanged(propertyName.toStdString());
-}
-
-void CaptionGraphicsItem::selectedTypeChangedSlot(const QString &typeName) {
-  emit selectedTypeChanged(typeName.toStdString());
-}
-
-void CaptionGraphicsItem::configurationIconPressed() {
-  _confBackgroundRectItem->setVisible(!_confBackgroundRectItem->isVisible());
 }
 
 }

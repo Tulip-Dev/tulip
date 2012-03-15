@@ -21,14 +21,13 @@
 #include <tulip/SceneConfigWidget.h>
 #include <tulip/GlOverviewGraphicsItem.h>
 #include <tulip/QuickAccessBar.h>
-#include <tulip/CaptionItem.h>
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtGui/QGraphicsView>
 
 using namespace tlp;
 
 
-GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL),_caption(NULL) {
+GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL),_colorCaption(NULL),_sizeCaption(NULL) {
 }
 
 GlMainView::~GlMainView() {
@@ -61,19 +60,50 @@ void GlMainView::drawOverview(bool generatePixmap) {
   _overviewItem->draw(generatePixmap);
 }
 
-void GlMainView::hideShowCaption() {
-  if(_caption==NULL) {
-    _caption=new CaptionItem(this);
-    _caption->create(CaptionItem::ColorCaption);
-    addToScene(_caption->captionGraphicsItem());
-    _caption->captionGraphicsItem()->setPos(_captionPos);
+void GlMainView::showHideCaption(CaptionItem::CaptionType captionType) {
+  if(_colorCaption==NULL){
+    _colorCaption=new CaptionItem(this);
+    _colorCaption->create(CaptionItem::ColorCaption);
+    addToScene(_colorCaption->captionGraphicsItem());
+    _colorCaption->captionGraphicsItem()->setVisible(false);
   }
-  else {
-    if(_caption->captionGraphicsItem()->isVisible()) {
-      _caption->captionGraphicsItem()->setVisible(false);
+  if(_sizeCaption==NULL){
+    _sizeCaption=new CaptionItem(this);
+    _sizeCaption->create(CaptionItem::SizeCaption);
+    addToScene(_sizeCaption->captionGraphicsItem());
+    _sizeCaption->captionGraphicsItem()->setVisible(false);
+    connect(_sizeCaption->captionGraphicsItem(),SIGNAL(interactionsActivated()),_colorCaption->captionGraphicsItem(),SLOT(removeInteractions()));
+    connect(_colorCaption->captionGraphicsItem(),SIGNAL(interactionsActivated()),_sizeCaption->captionGraphicsItem(),SLOT(removeInteractions()));
+  }
+  if(captionType==CaptionItem::ColorCaption){
+    //_colorCaption->activateInteractions(!_colorCaption->captionGraphicsItem()->isVisible());
+
+    if(_colorCaption->captionGraphicsItem()->isVisible()){
+      _colorCaption->captionGraphicsItem()->setVisible(false);
+      if(_sizeCaption->captionGraphicsItem()->isVisible())
+        _sizeCaption->captionGraphicsItem()->setPos(_captionPos);
+    }else{
+      _colorCaption->captionGraphicsItem()->setVisible(true);
+      if(_sizeCaption->captionGraphicsItem()->isVisible()){
+        _colorCaption->captionGraphicsItem()->setPos(_captionPos+QPoint(130,0));
+      }else{
+        _colorCaption->captionGraphicsItem()->setPos(_captionPos);
+      }
     }
-    else {
-      _caption->captionGraphicsItem()->setVisible(true);
+  }else{
+    //_sizeCaption->activateInteractions(!_colorCaption->captionGraphicsItem()->isVisible());
+
+    if(_sizeCaption->captionGraphicsItem()->isVisible()){
+      _sizeCaption->captionGraphicsItem()->setVisible(false);
+      if(_colorCaption->captionGraphicsItem()->isVisible())
+        _colorCaption->captionGraphicsItem()->setPos(_captionPos);
+    }else{
+      _sizeCaption->captionGraphicsItem()->setVisible(true);
+      if(_colorCaption->captionGraphicsItem()->isVisible()){
+        _sizeCaption->captionGraphicsItem()->setPos(_captionPos+QPoint(130,0));
+      }else{
+        _sizeCaption->captionGraphicsItem()->setPos(_captionPos);
+      }
     }
   }
 }

@@ -26,7 +26,7 @@ using namespace std;
 
 namespace tlp {
 
-CaptionItem::CaptionItem(View *view):view(view),_graph(NULL),_metricProperty(NULL),_colorProperty(NULL) {
+CaptionItem::CaptionItem(View *view):view(view),_graph(NULL),_metricProperty(NULL),_colorProperty(NULL),_sizeProperty(NULL) {
   _captionGraphicsItem=new CaptionGraphicsItem(view);
   connect(_captionGraphicsItem,SIGNAL(filterChanged(float,float)),this,SLOT(applyNewFilter(float,float)));
   connect(_captionGraphicsItem,SIGNAL(selectedPropertyChanged(std::string)),this,SLOT(selectedPropertyChanged(std::string)));
@@ -162,6 +162,9 @@ void CaptionItem::generateSizeCaption() {
     }
   }
 
+  if(metricToSizeFiltered.size()==1){
+    metricToSizeFiltered.push_back(metricToSizeFiltered[0]);
+  }
   _captionGraphicsItem->generateSizeCaption(metricToSizeFiltered,_captionGraphicsItem->usedProperty(),minProp,maxProp);
 }
 
@@ -179,7 +182,7 @@ void CaptionItem::generateGradients(const vector<pair <double,Color> > &metricTo
   }
 }
 
-QGraphicsItem *CaptionItem::captionGraphicsItem() {
+CaptionGraphicsBackgroundItem *CaptionItem::captionGraphicsItem() {
   return _captionGraphicsItem->getCaptionItem();
 }
 
@@ -199,6 +202,7 @@ void CaptionItem::applyNewFilter(float begin, float end) {
   metricProperty->removePropertyObserver(this);
   colorProperty->removePropertyObserver(this);
   sizeProperty->removePropertyObserver(this);
+  borderColorProperty->removePropertyObserver(this);
 
   Observer::holdObservers();
 
@@ -232,6 +236,7 @@ void CaptionItem::applyNewFilter(float begin, float end) {
   metricProperty->addPropertyObserver(this);
   colorProperty->addPropertyObserver(this);
   sizeProperty->addPropertyObserver(this);
+  borderColorProperty->addPropertyObserver(this);
 }
 
 void CaptionItem::treatEvent(const Event &ev) {

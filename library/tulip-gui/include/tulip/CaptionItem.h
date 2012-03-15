@@ -48,7 +48,7 @@ public:
 
   void generateSizeCaption();
 
-  QGraphicsItem *captionGraphicsItem();
+  CaptionGraphicsBackgroundItem *captionGraphicsItem();
 
   void treatEvent(const Event &ev);
 

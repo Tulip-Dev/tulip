@@ -20,6 +20,7 @@
 #define Tulip_GLMAINVIEW_H
 
 #include <tulip/ViewWidget.h>
+#include <tulip/CaptionItem.h>
 #include <QtCore/QRectF>
 
 class QGraphicsProxyWidget;
@@ -29,7 +30,6 @@ class GlOverviewGraphicsItem;
 class SceneConfigWidget;
 class GlMainWidget;
 class QuickAccessBar;
-class CaptionItem;
 
 class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   Q_OBJECT
@@ -41,7 +41,8 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   tlp::QuickAccessBar* _quickAccessBar;
   QGraphicsProxyWidget* _quickAccessBarItem;
   QPointF _captionPos;
-  CaptionItem *_caption;
+  CaptionItem *_colorCaption;
+  CaptionItem *_sizeCaption;
 
 public:
   GlMainView();
@@ -49,7 +50,7 @@ public:
   tlp::GlMainWidget* getGlMainWidget() const;
   virtual QList<QWidget*> configurationWidgets() const;
   bool overviewVisible() const;
-  void hideShowCaption();
+  void showHideCaption(CaptionItem::CaptionType captionType);
   QPixmap snapshot(const QSize &outputSize=QSize());
 
 public slots:
