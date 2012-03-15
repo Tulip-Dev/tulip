@@ -125,6 +125,7 @@ private:
   // pointer to root viewMetaGraph property
   GraphProperty* metaGraphProperty;
   // notification of addition/deletion of inherited properties
+  void notifyBeforeAddInheritedProperty(const std::string& prop);
   void notifyAddInheritedProperty(const std::string& prop);
   void notifyBeforeDelInheritedProperty(const std::string& prop);
   void notifyAfterDelInheritedProperty(const std::string& prop);

@@ -440,6 +440,7 @@ void GraphDecorator::delLocalProperty(const std::string&name) {
 
 //============================================================
 void GraphDecorator::addLocalProperty(const std::string &name, PropertyInterface *prop) {
+  notifyBeforeAddLocalProperty(name);
   graph_component->addLocalProperty(name, prop);
   notifyAddLocalProperty(name);
 }

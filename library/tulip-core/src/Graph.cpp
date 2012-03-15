@@ -639,6 +639,10 @@ void Graph::notifyAfterDelDescendantGraph(const Graph* sg) {
     sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH, sg));
 }
 
+void Graph::notifyBeforeAddLocalProperty(const std::string& propName) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_LOCAL_PROPERTY, propName));
+}
 void Graph::notifyAddLocalProperty(const std::string& propName) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_LOCAL_PROPERTY, propName));

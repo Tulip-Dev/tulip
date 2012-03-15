@@ -853,6 +853,7 @@ protected:
   void notifyBeforeDelDescendantGraph(const Graph*);
   void notifyAfterDelDescendantGraph(const Graph*);
 
+  void notifyBeforeAddLocalProperty(const std::string&);
   void notifyAddLocalProperty(const std::string&);
   void notifyAddLocalProperty(Graph*, const std::string& name) {
     notifyAddLocalProperty(name);
@@ -916,7 +917,9 @@ public:
     TLP_AFTER_DEL_INHERITED_PROPERTY = 22,
     TLP_BEFORE_SET_ATTRIBUTE = 23,
     TLP_AFTER_SET_ATTRIBUTE = 24,
-    TLP_REMOVE_ATTRIBUTE = 25
+    TLP_REMOVE_ATTRIBUTE = 25,
+    TLP_BEFORE_ADD_LOCAL_PROPERTY = 26,
+    TLP_BEFORE_ADD_INHERITED_PROPERTY = 27
   };
 
   // constructor for node/edge events

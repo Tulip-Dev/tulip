@@ -152,12 +152,14 @@ void PropertyManager::setInheritedProperty(const string &str,
     bool hasInheritedProperty = inheritedProperties.find(str)!=inheritedProperties.end();
 
     if( p != NULL) {
+      ((GraphAbstract *) graph)->notifyBeforeAddInheritedProperty(str);
       inheritedProperties[str] = p;
 
       if (str == metaGraphPropertyName)
         ((GraphAbstract *) graph)->metaGraphProperty = (GraphProperty *) p;
     }
     else {
+      notifyBeforeDelInheritedProperty(str);
       inheritedProperties.erase(str);
     }
 
