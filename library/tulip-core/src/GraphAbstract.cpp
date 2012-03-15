@@ -468,6 +468,7 @@ void GraphAbstract::delLocalProperty(const std::string &name) {
 //=========================================================================
 void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface *prop) {
   assert(!existLocalProperty(name));
+  notifyBeforeAddLocalProperty(name);
   propertyContainer->setLocalProperty(name, prop);
 
   if (name == metaGraphPropertyName) {
@@ -480,6 +481,10 @@ void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface 
 void GraphAbstract::notifyAddInheritedProperty(const std::string& propName) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_INHERITED_PROPERTY, propName));
+}
+void GraphAbstract::notifyBeforeAddInheritedProperty(const std::string& propName) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_INHERITED_PROPERTY, propName));
 }
 //=========================================================================
 void GraphAbstract::notifyBeforeDelInheritedProperty(const std::string& propName) {
