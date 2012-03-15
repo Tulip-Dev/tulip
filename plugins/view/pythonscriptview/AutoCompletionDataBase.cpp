@@ -347,6 +347,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
   QRegExp pluginDataSetRegexp("^[a-zA-Z_][a-zA-Z0-9_]*[ \t]*=[ \t]*tlp\\.getDefaultPluginParameters\\(.*\\).*$");
   QRegExp graphPropRegexp("\\w+\\[\".+\"\\]");
   QRegExp graphPropAccessRegexp("\\w+\\[\".+\"\\]\\[.+\\]");
+  QRegExp graphPropAccessRegexp2("\\w+\\[.+\\]");
 
   QString currentClassName = "";
   QString currentFunctionName = "global";
@@ -702,6 +703,34 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
           }
         }
       }
+    }
+
+    if (graphPropAccessRegexp2.indexIn(line) != -1) {
+      QString expr = line.mid(graphPropAccessRegexp2.indexIn(line), graphPropAccessRegexp2.matchedLength());
+      int pos = expr.indexOf("[");
+      QString varName = expr.mid(0, pos);
+      QString varName2 = expr.mid(pos+1, expr.lastIndexOf("]") - pos - 1);
+      QString type = findTypeForExpr(varName, fullName);
+
+      if (type != "") {
+          QString type2 = findTypeForExpr(varName2, fullName);
+          QString type3 = "";
+
+          if (type2 == "tlp.node") {
+            type3 = getPythonTypeNameForPropertyType(type, true);
+          }
+          else if (type2 == "tlp.edge") {
+            type3 = getPythonTypeNameForPropertyType(type, false);
+          }
+
+          if (type3 != "") {
+            if (varToType.find(fullName) == varToType.end()) {
+              varToType[fullName] = QHash<QString, QString>();
+            }
+
+            varToType[fullName][expr] = type3;
+          }
+        }
     }
 
     ++ln;
