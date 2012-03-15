@@ -112,6 +112,8 @@ void GraphObserver::treatEvent(const Event& ev) {
     case GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH:
     case GraphEvent::TLP_BEFORE_ADD_SUBGRAPH:
     case GraphEvent::TLP_BEFORE_DEL_SUBGRAPH:
+    case GraphEvent::TLP_BEFORE_ADD_LOCAL_PROPERTY:
+    case GraphEvent::TLP_BEFORE_ADD_INHERITED_PROPERTY:
       break;
 
     default:
