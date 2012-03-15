@@ -872,6 +872,33 @@ void ObservableGraphTest::testNotifyDelInheritedPropertyIsSendWhenLocalPropertyI
   CPPUNIT_ASSERT(observer.addInheritedPropertyCalledGraphs.empty());
 
   graph->getLocalProperty<BooleanProperty>("test");
+
+  observer.afterDelInheritedPropertyCalledGraphs.clear();
+  observer.beforeDelInheritedPropertyCalledGraphs.clear();
+  observer.afterDelLocalPropertyCalledGraphs.clear();
+  observer.beforeDelLocalPropertyCalledGraphs.clear();
+  observer.addLocalPropertyCalledGraphs.clear();
+  observer.addInheritedPropertyCalledGraphs.clear();
+
+  g1->getLocalProperty<BooleanProperty>("test");
+
+  CPPUNIT_ASSERT(observer.afterDelInheritedPropertyCalledGraphs.size()==2);
+  CPPUNIT_ASSERT(observer.afterDelInheritedPropertyCalledGraphs[0]==g1);
+  CPPUNIT_ASSERT(observer.afterDelInheritedPropertyCalledGraphs[1]==g2);
+
+  CPPUNIT_ASSERT(observer.beforeDelInheritedPropertyCalledGraphs.size()==2);
+  CPPUNIT_ASSERT(observer.beforeDelInheritedPropertyCalledGraphs[0]==g1);
+  CPPUNIT_ASSERT(observer.beforeDelInheritedPropertyCalledGraphs[1]==g2);
+
+  CPPUNIT_ASSERT(observer.beforeDelLocalPropertyCalledGraphs.empty());
+  CPPUNIT_ASSERT(observer.afterDelLocalPropertyCalledGraphs.empty());
+
+  CPPUNIT_ASSERT(observer.addLocalPropertyCalledGraphs.size()==1);
+  CPPUNIT_ASSERT(observer.addLocalPropertyCalledGraphs[0]==g1);
+  CPPUNIT_ASSERT(observer.addInheritedPropertyCalledGraphs.size()==1);
+  CPPUNIT_ASSERT(observer.addInheritedPropertyCalledGraphs[0]==g2);
+
+  graph->getLocalProperty<BooleanProperty>("test");
   g1->getLocalProperty<BooleanProperty>("test");
 
   observer.afterDelInheritedPropertyCalledGraphs.clear();
