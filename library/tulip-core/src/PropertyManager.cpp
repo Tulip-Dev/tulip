@@ -159,7 +159,9 @@ void PropertyManager::setInheritedProperty(const string &str,
         ((GraphAbstract *) graph)->metaGraphProperty = (GraphProperty *) p;
     }
     else {
-      notifyBeforeDelInheritedProperty(str);
+      // no need for notification
+      // already done thru notifyBeforeDelInheritedProperty(str);
+      // see setLocalProperty
       inheritedProperties.erase(str);
     }
 
@@ -233,7 +235,7 @@ void PropertyManager::delLocalProperty(const string &str) {
 
     //Remove property from map.
     localProperties.erase(it);
-    //Set the inherited property int this graph and all it's subgraphs.
+    //Set the inherited property in this graph and all it's subgraphs.
     (((GraphAbstract *) graph)->propertyContainer)->setInheritedProperty(str, newProp);
 
     //Delete property

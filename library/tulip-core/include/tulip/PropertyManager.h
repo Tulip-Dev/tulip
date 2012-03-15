@@ -47,7 +47,6 @@ public:
   bool existProperty(const std::string&) const;
   bool existLocalProperty(const std::string&) const;
   bool existInheritedProperty(const std::string&) const;
-  void setInheritedProperty(const std::string&, PropertyInterface *);
   void setLocalProperty(const std::string&, PropertyInterface *);
   PropertyInterface* getProperty(const std::string&) const;
   PropertyInterface* getLocalProperty(const std::string&) const;
@@ -61,6 +60,9 @@ public:
   Iterator<std::string>* getInheritedProperties();
   Iterator<PropertyInterface*>* getLocalObjectProperties();
   Iterator<PropertyInterface*>* getInheritedObjectProperties();
+
+ protected:
+  void setInheritedProperty(const std::string&, PropertyInterface *);
 };
 
 }
