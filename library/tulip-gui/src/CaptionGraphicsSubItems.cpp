@@ -27,20 +27,20 @@ using namespace std;
 
 namespace tlp {
 
-CaptionGraphicsBackgroundItem::CaptionGraphicsBackgroundItem(const QRect &rect):QGraphicsRectItem(rect),_captionContentPos(10,20) {
+CaptionGraphicsBackgroundItem::CaptionGraphicsBackgroundItem(const QRect &rect):QGraphicsRectItem(rect),_interactionsActivated(false),_beginBackup(0.),_endBackup(1.),_captionContentPos(50,20) {
 
   // Range selector 1
   _rangeSelector1Item=new SelectionArrowItem(0,_captionContentPos);
   _rangeSelector1Item->setPos(_captionContentPos+QPoint(5,-30));
+  _rangeSelector1Item->setVisible(false);
   _rangeSelector1Item->setParentItem(this);
-  _rangeSelector1Item->setAcceptHoverEvents(true);
   connect(_rangeSelector1Item,SIGNAL(circleMoved()),this,SLOT(updateCaption()));
 
   // Range selector 2
   _rangeSelector2Item=new SelectionArrowItem(1,_captionContentPos);
   _rangeSelector2Item->setPos(_captionContentPos+QPoint(5,130));
+  _rangeSelector2Item->setVisible(false);
   _rangeSelector2Item->setParentItem(this);
-  _rangeSelector2Item->setAcceptHoverEvents(true);
   connect(_rangeSelector2Item,SIGNAL(circleMoved()),this,SLOT(updateCaption()));
 
   // Range selector text 1
@@ -54,21 +54,6 @@ CaptionGraphicsBackgroundItem::CaptionGraphicsBackgroundItem(const QRect &rect):
   // Caption Rect Border
   _captionRectBorder=new QGraphicsRectItem(QRect(_captionContentPos,QSize(30,160)));
   _captionRectBorder->setParentItem(this);
-  _captionRectBorder->setAcceptHoverEvents(true);
-
-  // Preferences Item
-  _prefIcon=new ConfigurationIconItem();
-  _prefIcon->setPos(QPointF(0,-20));
-  _prefIcon->setVisible(false);
-  _prefIcon->setZValue(2);
-  _prefIcon->setParentItem(this);
-  _prefIcon->setAcceptHoverEvents(true);
-  connect(_prefIcon,SIGNAL(configurationIconPressed()),this,SLOT(configurationIconPressedSlot()));
-  _prefRect=new QGraphicsRectItem(-10,-30,40,40);
-  _prefRect->setVisible(false);
-  _prefRect->setPen(QPen(QColor(0,0,0,0)));
-  _prefRect->setParentItem(this);
-  _prefRect->setAcceptHoverEvents(true);
 
   QFont font;
   font.setBold(true);
@@ -79,28 +64,16 @@ CaptionGraphicsBackgroundItem::CaptionGraphicsBackgroundItem(const QRect &rect):
   _maxTextItem=new QGraphicsTextItem();
   _maxTextItem->setFont(font);
   _minTextItem->setParentItem(this);
-  _minTextItem->setAcceptHoverEvents(true);
   _maxTextItem->setParentItem(this);
-  _maxTextItem->setAcceptHoverEvents(true);
-
-  // Property name Item
-  _propertyNameItem = new QGraphicsTextItem();
-  _propertyNameItem->setPos(0,195);
-  _propertyNameItem->setFont(font);
-  _propertyNameItem->setParentItem(this);
-  _propertyNameItem->setAcceptHoverEvents(true);
 
   // Color caption Items
   _topCaptionRectItem=new QGraphicsRectItem(QRect(_captionContentPos,QSize(30,0)));
   _topCaptionRectItem->setParentItem(this);
-  _topCaptionRectItem->setAcceptHoverEvents(true);
   _bottomCaptionRectItem=new QGraphicsRectItem(QRect(_captionContentPos+QPoint(0,160),QSize(30,0)));
   _bottomCaptionRectItem->setParentItem(this);
-  _bottomCaptionRectItem->setAcceptHoverEvents(true);
   _middleCaptionRectItem=new MovableRectItem(QRect(_captionContentPos,QSize(30,160)),QRect(0,0,1,1),_rangeSelector1Item,_rangeSelector2Item);
   connect(_middleCaptionRectItem,SIGNAL(moved(float, float)),this,SLOT(updateCaption(float, float)));
   _middleCaptionRectItem->setParentItem(this);
-  _middleCaptionRectItem->setAcceptHoverEvents(true);
 
   // Size caption Items
   _topSizeCaptionPathItem=new QGraphicsPathItem();
@@ -125,9 +98,6 @@ void CaptionGraphicsBackgroundItem::generateColorCaption(const QGradient &active
   _minValue=minValue;
   _maxValue=maxValue;
 
-  _prefIcon->setPixmap(QPixmap(":/tulip/gui/icons/16/preferences-other.png"));
-  _prefIcon->setAcceptHoverEvents(true);
-
   _middleCaptionRectItem->setBrush(QBrush(activeGradient));
   _topCaptionRectItem->setBrush(QBrush(hideGradient));
   _bottomCaptionRectItem->setBrush(QBrush(hideGradient));
@@ -140,8 +110,6 @@ void CaptionGraphicsBackgroundItem::generateColorCaption(const QGradient &active
   _bottomCaptionRectItem->setVisible(true);
   _captionRectBorder->setVisible(true);
 
-  _propertyNameItem->setPlainText(propertyName.c_str());
-
   _minTextItem->setPlainText(QString::number(_minValue));
   _maxTextItem->setPlainText(QString::number(_maxValue));
 
@@ -156,16 +124,13 @@ void CaptionGraphicsBackgroundItem::generateColorCaption(const QGradient &active
 
   updateSelectionText(begin,end);
 
-  _minTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,157)));
-  _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,-22)));
+  _minTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_minTextItem->boundingRect().width()/2.,157)));
+  _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_maxTextItem->boundingRect().width()/2.,-22)));
 }
 
 void CaptionGraphicsBackgroundItem::generateSizeCaption(const vector<pair<double,float> > &metricToSizeFilteredList, const string &propertyName, double minValue, double maxValue) {
   _minValue=minValue;
   _maxValue=maxValue;
-
-  _prefIcon->setPixmap(QPixmap(":/tulip/gui/icons/16/preferences-other.png"));
-  _prefIcon->setAcceptHoverEvents(true);
 
   _sizeCaptionPathItem->setVisible(true);
   _topSizeCaptionPathItem->setVisible(true);
@@ -175,8 +140,6 @@ void CaptionGraphicsBackgroundItem::generateSizeCaption(const vector<pair<double
   _bottomCaptionRectItem->setVisible(false);
   _captionRectBorder->setVisible(false);
 
-  _propertyNameItem->setPlainText(propertyName.c_str());
-
   _minTextItem->setPlainText(QString::number(_minValue));
   _maxTextItem->setPlainText(QString::number(_maxValue));
 
@@ -191,8 +154,8 @@ void CaptionGraphicsBackgroundItem::generateSizeCaption(const vector<pair<double
 
   updateSelectionText(begin,end);
 
-  _minTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,157)));
-  _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,-22)));
+  _minTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_minTextItem->boundingRect().width()/2.,157)));
+  _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_maxTextItem->boundingRect().width()/2.,-22)));
 
   _sizeCaptionPathItem->setDataToPath(metricToSizeFilteredList,minValue,maxValue);
 }
@@ -232,6 +195,18 @@ void CaptionGraphicsBackgroundItem::updateCaption(float begin ,float end) {
 
   _rangeSelector2Item->setPos(_captionContentPos.x()+5,begin*160.+_captionContentPos.y()-30);
   _rangeSelector1Item->setPos(_captionContentPos.x()+5,end*160.+_captionContentPos.y()-30);
+  _sizeCaptionPathItem->setPos(_captionContentPos);
+  _topSizeCaptionPathItem->setPos(_captionContentPos);
+  _bottomSizeCaptionPathItem->setPos(_captionContentPos);
+
+  _captionRectBorder->setPos(_captionContentPos-QPoint(50,20));
+  if(!_interactionsActivated){
+    _minTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_minTextItem->boundingRect().width()/2.,157)));
+    _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_maxTextItem->boundingRect().width()/2.,-22)));
+  }else{
+    _minTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,157)));
+    _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,-22)));
+  }
 
   if(begin>end) {
     float tmp=begin;
@@ -251,14 +226,54 @@ void CaptionGraphicsBackgroundItem::updateCaption(float begin ,float end) {
   emit filterChanged(1.-end,1.-begin);
 }
 
-void CaptionGraphicsBackgroundItem::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
-  _prefIcon->setVisible(true);
-  _prefRect->setVisible(true);
+bool CaptionGraphicsBackgroundItem::sceneEvent ( QEvent * event ){
+  if(event->type()==QEvent::QEvent::GraphicsSceneMousePress){
+    if(((QGraphicsSceneMouseEvent*)event)->button()==Qt::LeftButton){
+      activateInteractions(!_interactionsActivated);
+      return true;
+    }
+  }
+
+  return QGraphicsRectItem::sceneEvent(event);
 }
 
-void CaptionGraphicsBackgroundItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
-  _prefIcon->setVisible(false);
-  _prefRect->setVisible(false);
+void CaptionGraphicsBackgroundItem::activateInteractions() {
+  activateInteractions(true);
+}
+
+void CaptionGraphicsBackgroundItem::removeInteractions() {
+  activateInteractions(false);
+}
+
+void CaptionGraphicsBackgroundItem::activateInteractions(bool activate){
+  if(activate)
+    emit interactionsActivated();
+  else
+    emit interactionsRemoved();
+
+  if(activate==false && activate!=_interactionsActivated){
+    _endBackup = (_rangeSelector1Item->pos().y()-_captionContentPos.y()+30)/160.;
+    _beginBackup = (_rangeSelector2Item->pos().y()-_captionContentPos.y()+30)/160.;
+  }
+
+  bool useStoredBeginEnd=false;
+  if(activate==true && activate!=_interactionsActivated){
+    useStoredBeginEnd=true;
+  }
+
+  _interactionsActivated=activate;
+  if(activate)
+    _captionContentPos=QPoint(10,20);
+  else
+    _captionContentPos=QPoint(50,20);
+
+  _rangeSelector1Item->setVisible(activate);
+  _rangeSelector2Item->setVisible(activate);
+
+  if(useStoredBeginEnd)
+    updateCaption(_beginBackup,_endBackup);
+  else
+    updateCaption(0.,1.);
 }
 
 void CaptionGraphicsBackgroundItem::configurationIconPressedSlot() {

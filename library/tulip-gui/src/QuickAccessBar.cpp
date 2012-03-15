@@ -98,8 +98,12 @@ void QuickAccessBar::reset() {
   _resetting = false;
 }
 
-void QuickAccessBar::hideShowCaption() {
-  _mainView->hideShowCaption();
+void QuickAccessBar::showHideColorCaption() {
+  _mainView->showHideCaption(CaptionItem::ColorCaption);
+}
+
+void QuickAccessBar::showHideSizeCaption() {
+  _mainView->showHideCaption(CaptionItem::SizeCaption);
 }
 
 void QuickAccessBar::takeSnapshot() {

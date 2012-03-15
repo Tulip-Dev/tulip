@@ -50,7 +50,7 @@ public:
 
   void generateSizeCaption(const std::vector< std::pair <double,float> > &metricToSizeFilteredList,const std::string &propertyName, double minValue, double maxValue);
 
-  QGraphicsItem *getCaptionItem() const {
+  CaptionGraphicsBackgroundItem *getCaptionItem() const {
     return _rondedRectItem;
   }
 
@@ -60,14 +60,22 @@ signals :
 
   void filterChanged(float begin, float end);
   void selectedPropertyChanged(std::string propertyName);
-  void selectedTypeChanged(std::string typeName);
+
+  void interactionsActivated();
+  void interactionsRemoved();
 
 protected slots :
 
   void filterChangedSlot(float begin, float end);
   void selectedPropertyChangedSlot(const QString &propertyName);
-  void selectedTypeChangedSlot(const QString &typeName);
-  void configurationIconPressed();
+
+  void emitInteractionsActivated() {
+    emit interactionsActivated();
+  }
+
+  void emitInteractionsRemoved() {
+    emit interactionsRemoved();
+  }
 
 private :
 
@@ -77,11 +85,8 @@ private :
 
   CaptionGraphicsBackgroundItem *_rondedRectItem;
 
-  QGraphicsRectItem *_confBackgroundRectItem;
   QGraphicsProxyWidget *_confPropertySelectionItem;
   QComboBox *_confPropertySelectionWidget;
-  QGraphicsProxyWidget *_confTypeSelectionItem;
-  QComboBox *_confTypeSelectionWidget;
 };
 
 }
