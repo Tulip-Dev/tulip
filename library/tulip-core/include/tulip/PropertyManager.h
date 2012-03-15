@@ -61,7 +61,7 @@ public:
   Iterator<PropertyInterface*>* getLocalObjectProperties();
   Iterator<PropertyInterface*>* getInheritedObjectProperties();
 
- protected:
+protected:
   void setInheritedProperty(const std::string&, PropertyInterface *);
 };
 

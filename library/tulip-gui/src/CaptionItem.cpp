@@ -162,9 +162,10 @@ void CaptionItem::generateSizeCaption() {
     }
   }
 
-  if(metricToSizeFiltered.size()==1){
+  if(metricToSizeFiltered.size()==1) {
     metricToSizeFiltered.push_back(metricToSizeFiltered[0]);
   }
+
   _captionGraphicsItem->generateSizeCaption(metricToSizeFiltered,_captionGraphicsItem->usedProperty(),minProp,maxProp);
 }
 

@@ -61,13 +61,14 @@ void GlMainView::drawOverview(bool generatePixmap) {
 }
 
 void GlMainView::showHideCaption(CaptionItem::CaptionType captionType) {
-  if(_colorCaption==NULL){
+  if(_colorCaption==NULL) {
     _colorCaption=new CaptionItem(this);
     _colorCaption->create(CaptionItem::ColorCaption);
     addToScene(_colorCaption->captionGraphicsItem());
     _colorCaption->captionGraphicsItem()->setVisible(false);
   }
-  if(_sizeCaption==NULL){
+
+  if(_sizeCaption==NULL) {
     _sizeCaption=new CaptionItem(this);
     _sizeCaption->create(CaptionItem::SizeCaption);
     addToScene(_sizeCaption->captionGraphicsItem());
@@ -75,33 +76,43 @@ void GlMainView::showHideCaption(CaptionItem::CaptionType captionType) {
     connect(_sizeCaption->captionGraphicsItem(),SIGNAL(interactionsActivated()),_colorCaption->captionGraphicsItem(),SLOT(removeInteractions()));
     connect(_colorCaption->captionGraphicsItem(),SIGNAL(interactionsActivated()),_sizeCaption->captionGraphicsItem(),SLOT(removeInteractions()));
   }
-  if(captionType==CaptionItem::ColorCaption){
+
+  if(captionType==CaptionItem::ColorCaption) {
     //_colorCaption->activateInteractions(!_colorCaption->captionGraphicsItem()->isVisible());
 
-    if(_colorCaption->captionGraphicsItem()->isVisible()){
+    if(_colorCaption->captionGraphicsItem()->isVisible()) {
       _colorCaption->captionGraphicsItem()->setVisible(false);
+
       if(_sizeCaption->captionGraphicsItem()->isVisible())
         _sizeCaption->captionGraphicsItem()->setPos(_captionPos);
-    }else{
+    }
+    else {
       _colorCaption->captionGraphicsItem()->setVisible(true);
-      if(_sizeCaption->captionGraphicsItem()->isVisible()){
+
+      if(_sizeCaption->captionGraphicsItem()->isVisible()) {
         _colorCaption->captionGraphicsItem()->setPos(_captionPos+QPoint(130,0));
-      }else{
+      }
+      else {
         _colorCaption->captionGraphicsItem()->setPos(_captionPos);
       }
     }
-  }else{
+  }
+  else {
     //_sizeCaption->activateInteractions(!_colorCaption->captionGraphicsItem()->isVisible());
 
-    if(_sizeCaption->captionGraphicsItem()->isVisible()){
+    if(_sizeCaption->captionGraphicsItem()->isVisible()) {
       _sizeCaption->captionGraphicsItem()->setVisible(false);
+
       if(_colorCaption->captionGraphicsItem()->isVisible())
         _colorCaption->captionGraphicsItem()->setPos(_captionPos);
-    }else{
+    }
+    else {
       _sizeCaption->captionGraphicsItem()->setVisible(true);
-      if(_colorCaption->captionGraphicsItem()->isVisible()){
+
+      if(_colorCaption->captionGraphicsItem()->isVisible()) {
         _sizeCaption->captionGraphicsItem()->setPos(_captionPos+QPoint(130,0));
-      }else{
+      }
+      else {
         _sizeCaption->captionGraphicsItem()->setPos(_captionPos);
       }
     }

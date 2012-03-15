@@ -200,10 +200,12 @@ void CaptionGraphicsBackgroundItem::updateCaption(float begin ,float end) {
   _bottomSizeCaptionPathItem->setPos(_captionContentPos);
 
   _captionRectBorder->setPos(_captionContentPos-QPoint(50,20));
-  if(!_interactionsActivated){
+
+  if(!_interactionsActivated) {
     _minTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_minTextItem->boundingRect().width()/2.,157)));
     _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_maxTextItem->boundingRect().width()/2.,-22)));
-  }else{
+  }
+  else {
     _minTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,157)));
     _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,-22)));
   }
@@ -226,9 +228,9 @@ void CaptionGraphicsBackgroundItem::updateCaption(float begin ,float end) {
   emit filterChanged(1.-end,1.-begin);
 }
 
-bool CaptionGraphicsBackgroundItem::sceneEvent ( QEvent * event ){
-  if(event->type()==QEvent::QEvent::GraphicsSceneMousePress){
-    if(((QGraphicsSceneMouseEvent*)event)->button()==Qt::LeftButton){
+bool CaptionGraphicsBackgroundItem::sceneEvent ( QEvent * event ) {
+  if(event->type()==QEvent::QEvent::GraphicsSceneMousePress) {
+    if(((QGraphicsSceneMouseEvent*)event)->button()==Qt::LeftButton) {
       activateInteractions(!_interactionsActivated);
       return true;
     }
@@ -245,23 +247,25 @@ void CaptionGraphicsBackgroundItem::removeInteractions() {
   activateInteractions(false);
 }
 
-void CaptionGraphicsBackgroundItem::activateInteractions(bool activate){
+void CaptionGraphicsBackgroundItem::activateInteractions(bool activate) {
   if(activate)
     emit interactionsActivated();
   else
     emit interactionsRemoved();
 
-  if(activate==false && activate!=_interactionsActivated){
+  if(activate==false && activate!=_interactionsActivated) {
     _endBackup = (_rangeSelector1Item->pos().y()-_captionContentPos.y()+30)/160.;
     _beginBackup = (_rangeSelector2Item->pos().y()-_captionContentPos.y()+30)/160.;
   }
 
   bool useStoredBeginEnd=false;
-  if(activate==true && activate!=_interactionsActivated){
+
+  if(activate==true && activate!=_interactionsActivated) {
     useStoredBeginEnd=true;
   }
 
   _interactionsActivated=activate;
+
   if(activate)
     _captionContentPos=QPoint(10,20);
   else
