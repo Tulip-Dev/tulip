@@ -75,6 +75,8 @@ void GlMainView::showHideCaption(CaptionItem::CaptionType captionType) {
     _sizeCaption->captionGraphicsItem()->setVisible(false);
     connect(_sizeCaption->captionGraphicsItem(),SIGNAL(interactionsActivated()),_colorCaption->captionGraphicsItem(),SLOT(removeInteractions()));
     connect(_colorCaption->captionGraphicsItem(),SIGNAL(interactionsActivated()),_sizeCaption->captionGraphicsItem(),SLOT(removeInteractions()));
+    connect(_sizeCaption,SIGNAL(filtering(bool)),_colorCaption,SLOT(removeObservation(bool)));
+    connect(_colorCaption,SIGNAL(filtering(bool)),_sizeCaption,SLOT(removeObservation(bool)));
   }
 
   if(captionType==CaptionItem::ColorCaption) {
