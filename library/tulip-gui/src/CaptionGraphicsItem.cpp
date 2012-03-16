@@ -32,9 +32,6 @@ CaptionGraphicsItem::CaptionGraphicsItem(View *view):_view(view) {
   _rondedRectItem=new CaptionGraphicsBackgroundItem(QRect(QPoint(0,0),QSize(130,230)));
   _rondedRectItem->setBrush(QBrush(QColor(255,255,255,180)));
   connect(_rondedRectItem,SIGNAL(filterChanged(float,float)),this,SLOT(filterChangedSlot(float,float)));
-  connect(_rondedRectItem,SIGNAL(configurationIconPressed()),this,SLOT(configurationIconPressed()));
-  connect(_rondedRectItem,SIGNAL(interactionsActivated()),this,SLOT(emitInteractionsActivated()));
-  connect(_rondedRectItem,SIGNAL(interactionsRemoved()),this,SLOT(emitInteractionsRemoved()));
 
   _confPropertySelectionWidget = new QComboBox();
   _confPropertySelectionWidget->resize(QSize(120,25));
