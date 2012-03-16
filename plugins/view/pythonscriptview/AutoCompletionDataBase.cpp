@@ -713,24 +713,24 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       QString type = findTypeForExpr(varName, fullName);
 
       if (type != "") {
-          QString type2 = findTypeForExpr(varName2, fullName);
-          QString type3 = "";
+        QString type2 = findTypeForExpr(varName2, fullName);
+        QString type3 = "";
 
-          if (type2 == "tlp.node") {
-            type3 = getPythonTypeNameForPropertyType(type, true);
-          }
-          else if (type2 == "tlp.edge") {
-            type3 = getPythonTypeNameForPropertyType(type, false);
-          }
-
-          if (type3 != "") {
-            if (varToType.find(fullName) == varToType.end()) {
-              varToType[fullName] = QHash<QString, QString>();
-            }
-
-            varToType[fullName][expr] = type3;
-          }
+        if (type2 == "tlp.node") {
+          type3 = getPythonTypeNameForPropertyType(type, true);
         }
+        else if (type2 == "tlp.edge") {
+          type3 = getPythonTypeNameForPropertyType(type, false);
+        }
+
+        if (type3 != "") {
+          if (varToType.find(fullName) == varToType.end()) {
+            varToType[fullName] = QHash<QString, QString>();
+          }
+
+          varToType[fullName][expr] = type3;
+        }
+      }
     }
 
     ++ln;
