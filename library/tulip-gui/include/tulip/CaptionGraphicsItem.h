@@ -61,21 +61,10 @@ signals :
   void filterChanged(float begin, float end);
   void selectedPropertyChanged(std::string propertyName);
 
-  void interactionsActivated();
-  void interactionsRemoved();
-
 protected slots :
 
   void filterChangedSlot(float begin, float end);
   void selectedPropertyChangedSlot(const QString &propertyName);
-
-  void emitInteractionsActivated() {
-    emit interactionsActivated();
-  }
-
-  void emitInteractionsRemoved() {
-    emit interactionsRemoved();
-  }
 
 private :
 

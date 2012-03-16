@@ -30,7 +30,6 @@ CaptionItem::CaptionItem(View *view):view(view),_graph(NULL),_metricProperty(NUL
   _captionGraphicsItem=new CaptionGraphicsItem(view);
   connect(_captionGraphicsItem,SIGNAL(filterChanged(float,float)),this,SLOT(applyNewFilter(float,float)));
   connect(_captionGraphicsItem,SIGNAL(selectedPropertyChanged(std::string)),this,SLOT(selectedPropertyChanged(std::string)));
-  connect(_captionGraphicsItem,SIGNAL(selectedTypeChanged(std::string)),this,SLOT(selectedTypeChanged(std::string)));
 }
 
 CaptionItem::~CaptionItem() {
