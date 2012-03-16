@@ -52,7 +52,13 @@ public:
 
   void treatEvent(const Event &ev);
 
+signals :
+
+  void filtering(bool);
+
 public slots :
+
+  void removeObservation(bool);
 
   void applyNewFilter(float begin,float end);
   void selectedPropertyChanged(std::string propertyName);

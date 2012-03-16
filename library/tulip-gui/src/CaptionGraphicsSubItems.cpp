@@ -248,6 +248,10 @@ void CaptionGraphicsBackgroundItem::removeInteractions() {
 }
 
 void CaptionGraphicsBackgroundItem::activateInteractions(bool activate) {
+
+  if(activate==_interactionsActivated)
+    return;
+
   if(activate)
     emit interactionsActivated();
   else
