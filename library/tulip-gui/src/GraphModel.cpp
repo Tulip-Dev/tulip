@@ -99,7 +99,8 @@ QVariant GraphModel::data(const QModelIndex &index, int role) const {
     return QVariant::fromValue<Graph*>(_graph);
   else if (role == IsNodeRole)
     return isNode();
-
+  else if (role == StringRole)
+    return stringValue(_elements[index.row()],(PropertyInterface*)(index.internalPointer()));
   return QVariant();
 }
 
@@ -195,6 +196,9 @@ void NodesGraphModel::setGraph(Graph* g) {
   reset();
 }
 
+QString NodesGraphModel::stringValue(unsigned int id, PropertyInterface* pi) const {
+  return pi->getNodeStringValue(node(id)).c_str();
+}
 #define GET_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) return QVariant::fromValue< TYPE >(static_cast<PROP*>(prop)->getNodeValue(n))
 QVariant NodesGraphModel::value(unsigned int id, PropertyInterface* prop) const {
   node n(id);
@@ -258,6 +262,9 @@ bool NodesGraphModel::setValue(unsigned int id, PropertyInterface* prop, QVarian
 
 // Edges model
 EdgesGraphModel::EdgesGraphModel(QObject *parent): GraphModel(parent) {
+}
+QString EdgesGraphModel::stringValue(unsigned int id, PropertyInterface* pi) const {
+  return pi->getEdgeStringValue(edge(id)).c_str();
 }
 
 void EdgesGraphModel::treatEvent(const Event& ev) {
@@ -386,4 +393,26 @@ GraphSortFilterProxyModel::GraphSortFilterProxyModel(QObject *parent): QSortFilt
 bool GraphSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const {
   GraphModel* graphModel = static_cast<GraphModel*>(sourceModel());
   return graphModel->lessThan(graphModel->elementAt(left.row()),graphModel->elementAt(right.row()),static_cast<PropertyInterface*>(left.internalPointer()));
+}
+bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const {
+  bool isNumber;
+  filterRegExp().pattern().toInt(&isNumber);
+
+  if (filterKeyColumn() != -1) {
+    sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent).data(TulipModel::StringRole).toString().contains(filterRegExp());
+  }
+  else {
+    for (int i=0;i<sourceModel()->columnCount();++i) {
+      QModelIndex index = sourceModel()->index(sourceRow, i, sourceParent);
+      if (!isNumber && (dynamic_cast<DoubleProperty*>(index.data(TulipModel::PropertyRole).value<PropertyInterface*>()) != NULL
+                        || dynamic_cast<IntegerProperty*>(index.data(TulipModel::PropertyRole).value<PropertyInterface*>()) != NULL))
+        continue;
+
+      if (index.data(TulipModel::StringRole).toString().contains(filterRegExp()))
+        return true;
+
+    }
+  }
+
+  return false;
 }
