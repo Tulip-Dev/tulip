@@ -58,8 +58,6 @@ public:
         virtual std::string tulipMinor() const;
 
         virtual int id() const;
-
-        std::list<tlp::Dependency> dependencies() const;
 };
 
 class FactoryInterface {

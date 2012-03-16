@@ -23,6 +23,7 @@
 #include <string>
 #include <typeinfo>
 #include <tulip/tulipconf.h>
+#include <tulip/TlpTools.h>
 
 namespace tlp {
 
@@ -90,7 +91,7 @@ public:
    *
    * @return list<Dependency> The list of dependencies of this plug-in.
    */
-  std::list<Dependency> getDependencies() {
+  const std::list<Dependency>& getDependencies() const {
     return dependencies;
   }
 
@@ -101,7 +102,7 @@ public:
    * @param release The required version of the plug-in.
    */
   template<typename Ty> void addDependency(const char* name, const char* release) {
-    addDependency(typeid(Ty).name(), name, release);
+    addDependency(tlp::demangleTlpClassName(typeid(Ty).name()).c_str(), name, release);
   }
 };
 /*@}*/

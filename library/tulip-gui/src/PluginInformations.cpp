@@ -91,9 +91,9 @@ QString PluginInformations::type() const {
 
 const QStringList PluginInformations::dependencies() const {
   QStringList result;
-  result.reserve(_infos->dependencies().size());
+  result.reserve(_infos->getDependencies().size());
 
-  for(std::list<tlp::Dependency>::const_iterator it = _infos->dependencies().begin(); it != _infos->dependencies().end(); ++it) {
+  for(std::list<tlp::Dependency>::const_iterator it = _infos->getDependencies().begin(); it != _infos->getDependencies().end(); ++it) {
     result.append(it->pluginName.c_str());
   }
 

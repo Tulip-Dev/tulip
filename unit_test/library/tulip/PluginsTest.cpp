@@ -55,7 +55,7 @@ void PluginsTest::testloadPlugin() {
   list<Dependency> deps = tlp::PluginLister::instance()->getPluginDependencies("Test");
   // only one dependency (see testPlugin.cpp)
   CPPUNIT_ASSERT_EQUAL(size_t(1), deps.size());
-  CPPUNIT_ASSERT_EQUAL(tlp::demangleTlpClassName(typeid(BooleanAlgorithm).name()), deps.front().factoryName);
+  CPPUNIT_ASSERT_EQUAL(string("BooleanAlgorithm"), deps.front().factoryName);
   CPPUNIT_ASSERT_EQUAL(string("Test"), deps.front().pluginName);
 }
 //==========================================================
@@ -130,7 +130,7 @@ void PluginsTest::pluginInformations() {
   std::list<Dependency> dependencies = PluginLister::instance()->getPluginDependencies("Test");
   CPPUNIT_ASSERT_EQUAL(size_t(1), dependencies.size());
   CPPUNIT_ASSERT_EQUAL(string("Test"), dependencies.begin()->pluginName);
-  CPPUNIT_ASSERT_EQUAL(string("TemplateAlgorithm<tlp::BooleanProperty>"), dependencies.begin()->factoryName);
+  CPPUNIT_ASSERT_EQUAL(string("BooleanAlgorithm"), dependencies.begin()->factoryName);
   CPPUNIT_ASSERT_EQUAL(string("1.0"), dependencies.begin()->pluginRelease);
 
   tlp::ParameterDescriptionList parameters = PluginLister::instance()->getPluginParameters("Test");
@@ -138,6 +138,8 @@ void PluginsTest::pluginInformations() {
   Iterator<ParameterDescription>* it = parameters.getParameters();
   CPPUNIT_ASSERT_MESSAGE("Test plugin has no parameters", it->hasNext());
   ParameterDescription param = it->next();
+  CPPUNIT_ASSERT_EQUAL(string("result"), param.getName());
+  param = it->next();
   CPPUNIT_ASSERT_EQUAL(string("testParameter"), param.getName());
   CPPUNIT_ASSERT_MESSAGE("test parameter should not be mandatory", !param.isMandatory());
   CPPUNIT_ASSERT_EQUAL(string("0"), param.getDefaultValue());
