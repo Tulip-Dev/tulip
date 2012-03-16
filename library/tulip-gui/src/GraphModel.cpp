@@ -21,8 +21,10 @@ void GraphModel::setGraph(Graph* g) {
     std::string s;
     forEach(s, _graph->getProperties()) _graph->getProperty(s)->removeListener(this);
   }
+
   _graph = g;
   _properties.clear();
+
   if (_graph != NULL) {
     _graph->addListener(this);
     std::string s;
@@ -41,12 +43,14 @@ Graph* GraphModel::graph() const {
 int GraphModel::rowCount(const QModelIndex &parent) const {
   if (_graph == NULL || parent.isValid())
     return 0;
+
   return _elements.size();
 }
 
 int GraphModel::columnCount(const QModelIndex &parent) const {
   if (_graph == NULL || parent.isValid())
     return 0;
+
   return _properties.size();
 }
 
@@ -68,6 +72,7 @@ QVariant GraphModel::headerData(int section, Qt::Orientation orientation, int ro
   }
   else {
     PropertyInterface* prop = _properties[section];
+
     if (role == Qt::DisplayRole)
       return QString(prop->getName().c_str());
     else if (role == Qt::DecorationRole && !_graph->existLocalProperty(prop->getName()))
@@ -80,6 +85,7 @@ QVariant GraphModel::headerData(int section, Qt::Orientation orientation, int ro
 QModelIndex GraphModel::index(int row, int column, const QModelIndex &parent) const {
   if (!hasIndex(row,column,parent))
     return QModelIndex();
+
   PropertyInterface* prop = _properties[column];
   return createIndex(row,column,prop);
 }
@@ -93,18 +99,21 @@ QVariant GraphModel::data(const QModelIndex &index, int role) const {
     return QVariant::fromValue<Graph*>(_graph);
   else if (role == IsNodeRole)
     return isNode();
+
   return QVariant();
 }
 
 bool GraphModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (role == Qt::EditRole)
     return setValue(_elements[index.row()],(PropertyInterface*)(index.internalPointer()),value);
+
   return QAbstractItemModel::setData(index,value,role);
 }
 
 void GraphModel::treatEvent(const Event& ev) {
   if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
     const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
+
     if (graphEv->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY || graphEv->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY) {
       beginInsertColumns(QModelIndex(),columnCount(),columnCount());
       PropertyInterface* prop = _graph->getProperty(graphEv->getPropertyName());
@@ -135,6 +144,7 @@ void NodesGraphModel::treatEvent(const Event& ev) {
 
   if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
     const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
+
     if (graphEv->getType() == GraphEvent::TLP_ADD_NODE) {
       beginInsertRows(QModelIndex(),_elements.size(),_elements.size());
       _elements.push_back(graphEv->getNode().id);
@@ -142,8 +152,10 @@ void NodesGraphModel::treatEvent(const Event& ev) {
     }
     else if (graphEv->getType() == GraphEvent::TLP_ADD_NODES) {
       beginInsertRows(QModelIndex(),_elements.size(),_elements.size()+graphEv->getNodes().size()-1);
-      for(std::vector<tlp::node>::const_iterator it = graphEv->getNodes().begin();it != graphEv->getNodes().end(); ++it)
+
+      for(std::vector<tlp::node>::const_iterator it = graphEv->getNodes().begin(); it != graphEv->getNodes().end(); ++it)
         _elements.push_back(it->id);
+
       endInsertRows();
     }
     else if (graphEv->getType() == GraphEvent::TLP_DEL_NODE) {
@@ -157,6 +169,7 @@ void NodesGraphModel::treatEvent(const Event& ev) {
   else if (dynamic_cast<const PropertyEvent*>(&ev) != NULL) {
     const PropertyEvent* propEv = static_cast<const PropertyEvent*>(&ev);
     int col=_properties.indexOf(propEv->getProperty());
+
     if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
       int row = _elements.indexOf(propEv->getNode().id);
       emit dataChanged(index(row,col),index(row,col));
@@ -170,25 +183,29 @@ void NodesGraphModel::treatEvent(const Event& ev) {
 void NodesGraphModel::setGraph(Graph* g) {
   GraphModel::setGraph(g);
   _elements.clear();
+
   if (graph() == NULL)
     return;
+
   _elements.resize(graph()->numberOfNodes());
   int i=0;
   node n;
   forEach(n,graph()->getNodes())
-    _elements[i++] = n.id;
+  _elements[i++] = n.id;
   reset();
 }
 
 #define GET_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) return QVariant::fromValue< TYPE >(static_cast<PROP*>(prop)->getNodeValue(n))
 QVariant NodesGraphModel::value(unsigned int id, PropertyInterface* prop) const {
   node n(id);
+
   if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
     return QVariant::fromValue<NodeShape>(static_cast<IntegerProperty*>(prop)->getNodeValue(n));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getNodeValue(n).c_str()));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<IntegerProperty*>(prop)->getNodeValue(n)));
+
   GET_NODE_VALUE(DoubleProperty,double);
   GET_NODE_VALUE(DoubleVectorProperty,std::vector<double>);
   GET_NODE_VALUE(ColorProperty,tlp::Color);
@@ -210,12 +227,14 @@ QVariant NodesGraphModel::value(unsigned int id, PropertyInterface* prop) const 
 #define SET_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setNodeValue(n,v.value< TYPE >())
 bool NodesGraphModel::setValue(unsigned int id, PropertyInterface* prop, QVariant v) const {
   node n(id);
+
   if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
     static_cast<IntegerProperty*>(prop)->setNodeValue(n,v.value<NodeShape>().nodeShapeId);
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     static_cast<StringProperty*>(prop)->setNodeValue(n,v.value<TulipFont>().fontFile().toStdString());
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     static_cast<IntegerProperty*>(prop)->setNodeValue(n,v.value<LabelPosition>());
+
   SET_NODE_VALUE(DoubleProperty,double);
   SET_NODE_VALUE(DoubleVectorProperty,std::vector<double>);
   SET_NODE_VALUE(ColorProperty,tlp::Color);
@@ -233,6 +252,7 @@ bool NodesGraphModel::setValue(unsigned int id, PropertyInterface* prop, QVarian
   SET_NODE_VALUE(BooleanVectorProperty,std::vector<bool>);
   else
     return false;
+
   return true;
 }
 
@@ -245,6 +265,7 @@ void EdgesGraphModel::treatEvent(const Event& ev) {
 
   if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
     const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
+
     if (graphEv->getType() == GraphEvent::TLP_ADD_EDGE) {
       beginInsertRows(QModelIndex(),_elements.size(),_elements.size());
       _elements.push_back(graphEv->getEdge().id);
@@ -252,8 +273,10 @@ void EdgesGraphModel::treatEvent(const Event& ev) {
     }
     else if (graphEv->getType() == GraphEvent::TLP_ADD_EDGES) {
       beginInsertRows(QModelIndex(),_elements.size(),_elements.size()+graphEv->getEdges().size()-1);
-      for(std::vector<tlp::edge>::const_iterator it = graphEv->getEdges().begin();it != graphEv->getEdges().end(); ++it)
+
+      for(std::vector<tlp::edge>::const_iterator it = graphEv->getEdges().begin(); it != graphEv->getEdges().end(); ++it)
         _elements.push_back(it->id);
+
       endInsertRows();
     }
     else if (graphEv->getType() == GraphEvent::TLP_DEL_EDGE) {
@@ -267,6 +290,7 @@ void EdgesGraphModel::treatEvent(const Event& ev) {
   else if (dynamic_cast<const PropertyEvent*>(&ev) != NULL) {
     const PropertyEvent* propEv = static_cast<const PropertyEvent*>(&ev);
     int col=_properties.indexOf(propEv->getProperty());
+
     if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_EDGE_VALUE) {
       int row = _elements.indexOf(propEv->getEdge().id);
       emit dataChanged(index(row,col),index(row,col));
@@ -280,25 +304,29 @@ void EdgesGraphModel::treatEvent(const Event& ev) {
 void EdgesGraphModel::setGraph(Graph* g) {
   GraphModel::setGraph(g);
   _elements.clear();
+
   if (graph() == NULL)
     return;
+
   _elements.resize(graph()->numberOfEdges());
   int i=0;
   edge e;
   forEach(e,graph()->getEdges())
-    _elements[i++] = e.id;
+  _elements[i++] = e.id;
   reset();
 }
 
 #define GET_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) return QVariant::fromValue< TYPE >(static_cast<PROP*>(prop)->getEdgeValue(e))
 QVariant EdgesGraphModel::value(unsigned int id, PropertyInterface* prop) const {
   edge e(id);
+
   if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
     return QVariant::fromValue<EdgeShape>((EdgeShape)(static_cast<IntegerProperty*>(prop)->getEdgeValue(e)));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getEdgeValue(e).c_str()));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<IntegerProperty*>(prop)->getEdgeValue(e)));
+
   GET_EDGE_VALUE(DoubleProperty,double);
   GET_EDGE_VALUE(DoubleVectorProperty,std::vector<double>);
   GET_EDGE_VALUE(ColorProperty,tlp::Color);
@@ -319,12 +347,14 @@ QVariant EdgesGraphModel::value(unsigned int id, PropertyInterface* prop) const 
 #define SET_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setEdgeValue(e,v.value< TYPE >())
 bool EdgesGraphModel::setValue(unsigned int id, PropertyInterface* prop, QVariant v) const {
   edge e(id);
+
   if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
     static_cast<IntegerProperty*>(prop)->setEdgeValue(e,v.value<EdgeShape>());
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     static_cast<StringProperty*>(prop)->setEdgeValue(e,v.value<TulipFont>().fontFile().toStdString());
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     static_cast<IntegerProperty*>(prop)->setEdgeValue(e,v.value<LabelPosition>());
+
   SET_EDGE_VALUE(DoubleProperty,double);
   SET_EDGE_VALUE(DoubleVectorProperty,std::vector<double>);
   SET_EDGE_VALUE(ColorProperty,tlp::Color);
@@ -341,6 +371,7 @@ bool EdgesGraphModel::setValue(unsigned int id, PropertyInterface* prop, QVarian
   SET_EDGE_VALUE(BooleanVectorProperty,std::vector<bool>);
   else
     return false;
+
   return true;
 }
 

@@ -828,7 +828,7 @@ void LayoutProperty::treatEvent(const Event& evt) {
 
   if (graphEvent) {
     switch(graphEvent->getType()) {
-    case GraphEvent::TLP_ADD_NODE: 
+    case GraphEvent::TLP_ADD_NODE:
     case GraphEvent::TLP_DEL_NODE:
     case GraphEvent::TLP_AFTER_ADD_SUBGRAPH:
     case GraphEvent::TLP_BEFORE_DEL_SUBGRAPH:
@@ -837,21 +837,24 @@ void LayoutProperty::treatEvent(const Event& evt) {
       // during bounding box computation
       LayoutMinMaxProperty::treatEvent(evt);
       break;
-   case GraphEvent::TLP_REVERSE_EDGE: {
+
+    case GraphEvent::TLP_REVERSE_EDGE: {
       std::vector<Coord> bends = getEdgeValue(graphEvent->getEdge());
 
       // reverse bends if needed
       if (bends.size() > 1) {
-	unsigned int halfSize = bends.size()/2;
+        unsigned int halfSize = bends.size()/2;
 
-	for (unsigned int i = 0, j = bends.size() - 1; i < halfSize; ++i, --j) {
-	  Coord tmp = bends[i];
-	  bends[i] = bends[j];
-	  bends[j] = tmp;
-	}
-	setEdgeValue(graphEvent->getEdge(), bends);
+        for (unsigned int i = 0, j = bends.size() - 1; i < halfSize; ++i, --j) {
+          Coord tmp = bends[i];
+          bends[i] = bends[j];
+          bends[j] = tmp;
+        }
+
+        setEdgeValue(graphEvent->getEdge(), bends);
       }
     }
+
     default:
       break;
     }

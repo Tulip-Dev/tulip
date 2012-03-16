@@ -60,7 +60,9 @@ public:
 protected:
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
-  bool isNode() const { return true; }
+  bool isNode() const {
+    return true;
+  }
 };
 
 class TLP_QT_SCOPE EdgesGraphModel: public GraphModel {
@@ -73,7 +75,9 @@ public:
 protected:
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
-  bool isNode() const { return false; }
+  bool isNode() const {
+    return false;
+  }
 };
 
 }

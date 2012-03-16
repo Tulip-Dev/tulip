@@ -30,6 +30,7 @@ GraphTableItemDelegate::GraphTableItemDelegate(QObject* parent):TulipItemDelegat
 
 void GraphTableItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
   PropertyInterface* pi = index.data(TulipModel::PropertyRole).value<PropertyInterface*>();
+
   if (index.data().type() == QVariant::Double && dynamic_cast<DoubleProperty*>(pi) != NULL) {
     DoubleProperty* prop = dynamic_cast<DoubleProperty*>(pi);
     double value = index.data().value<double>();

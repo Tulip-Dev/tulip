@@ -84,7 +84,8 @@ void CaptionItem::clearObservers() {
   if(_captionType==ColorCaption) {
     if(_colorProperty)
       _colorProperty->removePropertyObserver(this);
-  }else{
+  }
+  else {
     if(_sizeProperty)
       _sizeProperty->removePropertyObserver(this);
 
@@ -191,21 +192,26 @@ CaptionGraphicsBackgroundItem *CaptionItem::captionGraphicsItem() {
   return _captionGraphicsItem->getCaptionItem();
 }
 
-void CaptionItem::removeObservation(bool remove){
-  if(!remove){
+void CaptionItem::removeObservation(bool remove) {
+  if(!remove) {
     _graph->addGraphObserver(this);
     _metricProperty->addPropertyObserver(this);
+
     if(_captionType==ColorCaption) {
       _colorProperty->addPropertyObserver(this);
-    }else{
+    }
+    else {
       _sizeProperty->addPropertyObserver(this);
     }
-  }else{
+  }
+  else {
     _graph->removeGraphObserver(this);
     _metricProperty->removePropertyObserver(this);
+
     if(_captionType==ColorCaption) {
       _colorProperty->removePropertyObserver(this);
-    }else{
+    }
+    else {
       _sizeProperty->removePropertyObserver(this);
     }
   }
@@ -215,9 +221,11 @@ void CaptionItem::applyNewFilter(float begin, float end) {
   emit filtering(true);
   _graph->removeGraphObserver(this);
   _metricProperty->removePropertyObserver(this);
+
   if(_captionType==ColorCaption) {
     _colorProperty->removePropertyObserver(this);
-  }else{
+  }
+  else {
     _sizeProperty->removePropertyObserver(this);
   }
 
@@ -263,9 +271,11 @@ void CaptionItem::applyNewFilter(float begin, float end) {
 
   _graph->addGraphObserver(this);
   _metricProperty->addPropertyObserver(this);
+
   if(_captionType==ColorCaption) {
     _colorProperty->addPropertyObserver(this);
-  }else{
+  }
+  else {
     _sizeProperty->addPropertyObserver(this);
   }
 

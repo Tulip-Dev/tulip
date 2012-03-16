@@ -38,6 +38,7 @@ public:
     PropertyInterface* input = NULL;
     bool onNodes = true;
     bool onEdges = true;
+
     if (dataSet != NULL) {
       dataSet->get("input",input);
       dataSet->get("nodes",onNodes);
