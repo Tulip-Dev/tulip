@@ -170,6 +170,14 @@ class LayoutMetaValueCalculator : public AbstractLayoutProperty::MetaValueCalcul
 public:
   void computeMetaValue(AbstractLayoutProperty* layout,
                         node mN, Graph* sg, Graph*) {
+    // nothing to do if the subgraph is not linked to the property graph
+    if (sg!=layout->getGraph() && !layout->getGraph()->isDescendantGraph(sg)) {
+#ifndef NDEBUG
+      std::cerr << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << layout->getName().c_str() << std::endl;
+#endif
+      return;
+    }
+
     switch(sg->numberOfNodes()) {
     case 0:
       layout->setNodeValue(mN, Coord(0, 0, 0));
@@ -221,8 +229,8 @@ Coord  LayoutProperty::getMin(Graph *sg) {
 static void rotateVector(Coord &vec, double alpha, int rot) {
   Coord backupVec(vec);
   double aRot =  2.0*M_PI * alpha / 360.0;
-  float cosA = cos(aRot);
-  float sinA = sin(aRot);
+  float cosA = static_cast<float>(cos(aRot));
+  float sinA = static_cast<float>(sin(aRot));
 
   switch(rot) {
   case Z_ROT:
@@ -471,7 +479,7 @@ void LayoutProperty::normalize(Graph *sg) {
 
   delete itN;
   dtmpMax = 1.0 / sqrt(dtmpMax);
-  scale(Coord(dtmpMax,dtmpMax,dtmpMax), sg);
+  scale(Coord(static_cast<float>(dtmpMax),static_cast<float>(dtmpMax),static_cast<float>(dtmpMax)), sg);
   resetBoundingBox();
   Observable::unholdObservers();
 }
@@ -501,7 +509,7 @@ void LayoutProperty::perfectAspectRatio() {
   scaleX = delta / deltaX;
   scaleY = delta / deltaY;
   scaleZ = delta / deltaZ;
-  scale(Coord(scaleX,scaleY,scaleZ));
+  scale(Coord(static_cast<float>(scaleX),static_cast<float>(scaleY),static_cast<float>(scaleZ)));
   Observable::unholdObservers();
 }
 
@@ -806,35 +814,46 @@ PropertyInterface* LayoutProperty::clonePrototype(Graph * g, const std::string& 
   if( !g )
     return 0;
 
-  LayoutProperty * p = g->getLocalProperty<LayoutProperty>( n );
+  // allow to get an unregistered property (empty name)
+  LayoutProperty * p = n.empty()
+                       ? new LayoutProperty(g) : g->getLocalProperty<LayoutProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
 }
 //=============================================================
+//=============================================================
 void LayoutProperty::treatEvent(const Event& evt) {
-  LayoutMinMaxProperty::treatEvent(evt);
-
   const GraphEvent* graphEvent = dynamic_cast<const tlp::GraphEvent*>(&evt);
 
-  if (graphEvent && graphEvent->getType() == GraphEvent::TLP_REVERSE_EDGE) {
-    // cannot use the assert below because this property
-    // may observe subgraphs
-    // see MinMaxCalculator<>::treatEvent in MinMaxCalculator.cxx
-    //assert(graphEvent->getGraph() == graph);
-    std::vector<Coord> bends = getEdgeValue(graphEvent->getEdge());
+  if (graphEvent) {
+    switch(graphEvent->getType()) {
+    case GraphEvent::TLP_ADD_NODE: 
+    case GraphEvent::TLP_DEL_NODE:
+    case GraphEvent::TLP_AFTER_ADD_SUBGRAPH:
+    case GraphEvent::TLP_BEFORE_DEL_SUBGRAPH:
+      // ignore TLP_ADD_EDGE and TLP_DEL_EDGE
+      // because edges are not taken into account
+      // during bounding box computation
+      LayoutMinMaxProperty::treatEvent(evt);
+      break;
+   case GraphEvent::TLP_REVERSE_EDGE: {
+      std::vector<Coord> bends = getEdgeValue(graphEvent->getEdge());
 
-    // reverse bends if needed
-    if (bends.size() > 1) {
-      unsigned int halfSize = bends.size()/2;
+      // reverse bends if needed
+      if (bends.size() > 1) {
+	unsigned int halfSize = bends.size()/2;
 
-      for (unsigned int i = 0, j = bends.size() - 1; i < halfSize; ++i, j--) {
-        Coord tmp = bends[i];
-        bends[i] = bends[j];
-        bends[j] = tmp;
+	for (unsigned int i = 0, j = bends.size() - 1; i < halfSize; ++i, --j) {
+	  Coord tmp = bends[i];
+	  bends[i] = bends[j];
+	  bends[j] = tmp;
+	}
+	setEdgeValue(graphEvent->getEdge(), bends);
       }
-
-      setEdgeValue(graphEvent->getEdge(), bends);
+    }
+    default:
+      break;
     }
   }
 }
@@ -843,7 +862,9 @@ PropertyInterface* CoordVectorProperty::clonePrototype(Graph * g, const std::str
   if( !g )
     return 0;
 
-  CoordVectorProperty * p = g->getLocalProperty<CoordVectorProperty>( n );
+  // allow to get an unregistered property (empty name)
+  CoordVectorProperty * p = n.empty()
+                            ? new CoordVectorProperty(g) : g->getLocalProperty<CoordVectorProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
