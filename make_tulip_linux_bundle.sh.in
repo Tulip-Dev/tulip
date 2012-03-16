@@ -48,7 +48,7 @@ function copy_linked_lib() {
       tput sgr0
   else
       if [ ! -f $BUNDLE_LIB_DIR/$(basename $LIB_TO_COPY) ]; then
-         cp $LIB_TO_COPY $BUNDLE_LIB_DIR
+         cp $LIB_TO_COPY $BUNDLE_LIB_DIR	
 	 PYTHON_LIB=$(echo $LIB_TO_COPY | grep libpython)
 	 # for Python, we need to create a symlink as the Tulip Python Script View plugin
 	 # performs a dlopen on libpythonX.Y.so when it is loaded
@@ -58,6 +58,15 @@ function copy_linked_lib() {
 		PWD_BAK=$PWD
 		cd $BUNDLE_LIB_DIR
 		ln -s $PYTHON_LIB_NAME $PYTHON_LIB_SYMLINK_NAME 	
+		cd $PWD_BAK
+		PYTHON_PACKAGE_DIR=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\).so.*$/python\1/')
+		PYTHON_PACKAGE_INSTALLATION_DIR=$BUNDLE_DIR/$(dirname $PYTHON_LIB | sed 's/^.*\(lib64\|lib\).*$/\1/')/$PYTHON_PACKAGE_DIR/
+		cd $(dirname $PYTHON_LIB)/$PYTHON_PACKAGE_DIR
+		PYTHON_PACKAGE_LIST=`find . \( ! -name "*.pyc" \) \( ! -name "*.pyo" \) -print`
+		for file in $PYTHON_PACKAGE_LIST ;do
+		mkdir -p $PYTHON_PACKAGE_INSTALLATION_DIR/`dirname $file`
+		cp $file $PYTHON_PACKAGE_INSTALLATION_DIR/$file
+		done 		
 		cd $PWD_BAK
 	 fi	 
          echo $LIB_TO_COPY copied in $BUNDLE_LIB_DIR
@@ -111,6 +120,8 @@ echo @QT_PLUGINS_DIR@/sqldrivers copied in $BUNDLE_BIN_DIR/plugins
 # tweak OS/ABI header part of libraries (System V instead of Linux)
 for LIB in $(find $OUTPUT_DIR/Tulip-@TulipVersion@ -name '*.so*')
 do
+    #Some libs are in read only make it writable before stripping it 
+    chmod +w $LIB
     strip --strip-unneeded $LIB
 done;
 
