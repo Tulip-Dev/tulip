@@ -27,6 +27,9 @@
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/CSVImportWizard.h>
+#include <tulip/GraphModel.h>
+#include <tulip/GraphTableItemDelegate.h>
+#include <tulip/GraphPropertiesModel.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -55,8 +58,20 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui->setupUi(_mainWindow);
   _mainWindow->installEventFilter(new ShadowFilter(this));
   connect(_ui->workspace,SIGNAL(addPanelRequest(tlp::Graph*)),this,SLOT(createPanel(tlp::Graph*)));
-
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
+
+  // Dataset mode delegates and models
+  QSortFilterProxyModel* nodesModel = new GraphSortFilterProxyModel;
+  nodesModel->setSourceModel(new NodesGraphModel);
+  QSortFilterProxyModel* edgesModel = new GraphSortFilterProxyModel;
+  edgesModel->setSourceModel(new EdgesGraphModel);
+  _ui->nodesTable->setModel(nodesModel);
+  _ui->edgesTable->setModel(edgesModel);
+  _ui->nodesTable->setItemDelegate(new GraphTableItemDelegate);
+  _ui->edgesTable->setItemDelegate(new GraphTableItemDelegate);
+  _ui->datasetGraphEditor->setSynchronized(true);
+  _ui->datasetGraphEditor->setAddPanelButtonVisible(false);
+  _ui->datasetGraphEditor->setSynchronizeButtonVisible(false);
 
   // Connect actions
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
@@ -86,6 +101,8 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
 
   // Setting initial sizes for splitters
   _ui->workspaceSplitter->setSizes(QList<int>() << 200 << 1000);
+  _ui->datasetHorizontalSplitter->setSizes(QList<int>() << 200 << 1000);
+  _ui->edgesTable->setVisible(false);
 
   _mainWindow->show();
   // Open project with model
@@ -106,7 +123,8 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui->graphHierarchiesEditor->setModel(_graphs);
   _ui->algorithmRunner->setModel(_graphs);
   _ui->workspace->setModel(_graphs);
-  _ui->datasetWidget->setModel(_graphs);
+  _ui->datasetGraphEditor->setModel(_graphs);
+  _ui->datasetPropertiesEditor->setModel(_graphs);
 
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
@@ -243,10 +261,14 @@ void GraphPerspective::centerPanels(tlp::PropertyInterface* pi) {
 void GraphPerspective::modeSwitch() {
   QWidget* mode = NULL;
 
-  if (sender() == _ui->actionCharts)
+  if (sender() == _ui->actionCharts) {
+    setDatasetGraph(_graphs->currentGraph());
     mode = _ui->datasetModePage;
-  else if (sender() == _ui->actionAnalyze)
+  }
+  else if (sender() == _ui->actionAnalyze) {
+    setDatasetGraph(NULL);
     mode = _ui->visualizeModePage;
+  }
 
   if (mode != NULL)
     _ui->centralWidget->setCurrentWidget(mode);
@@ -345,6 +367,16 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionCancel_selection->setEnabled(enabled);
   _ui->actionGroup_elements->setEnabled(enabled);
   _ui->actionCreate_sub_graph->setEnabled(enabled);
+  if (_ui->centralWidget->currentWidget() == _ui->datasetModePage)
+    setDatasetGraph(graph);
+}
+
+void GraphPerspective::setDatasetGraph(Graph* graph) {
+  NodesGraphModel* nodesModel = static_cast<NodesGraphModel*>(static_cast<QSortFilterProxyModel*>(_ui->nodesTable->model())->sourceModel());
+  EdgesGraphModel* edgesModel = static_cast<EdgesGraphModel*>(static_cast<QSortFilterProxyModel*>(_ui->edgesTable->model())->sourceModel());
+  nodesModel->setGraph(graph);
+  edgesModel->setGraph(graph);
+  _ui->datasetPropertiesFilter->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Select property"),graph));
 }
 
 void GraphPerspective::CSVImport() {

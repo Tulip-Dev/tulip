@@ -61,7 +61,8 @@ public:
   }
 
   virtual void hidePopup() {
-    _view->close();
+    if (_view != NULL)
+      _view->close();
   }
 
 };

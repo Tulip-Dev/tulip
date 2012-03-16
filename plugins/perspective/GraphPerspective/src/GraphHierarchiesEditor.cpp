@@ -177,3 +177,13 @@ void GraphHierarchiesEditor::repackHeaders() {
     _ui->hierarchiesTree->resizeColumnToContents(i);
   }
 }
+
+void GraphHierarchiesEditor::setSynchronized(bool f) {
+  _linkButton->setChecked(f);
+}
+void GraphHierarchiesEditor::setSynchronizeButtonVisible(bool f) {
+  _linkButton->setVisible(f);
+}
+void GraphHierarchiesEditor::setAddPanelButtonVisible(bool f) {
+  _ui->addPanelButton->setVisible(f);
+}

@@ -32,7 +32,8 @@ class TLP_QT_SCOPE TulipModel: public QAbstractItemModel {
 public:
   enum TulipRole {
     GraphRole = Qt::UserRole+1,
-    PropertyRole = Qt::UserRole+2
+    PropertyRole = Qt::UserRole+2,
+    IsNodeRole = Qt::UserRole+3
   };
 
   explicit TulipModel(QObject *parent=0);

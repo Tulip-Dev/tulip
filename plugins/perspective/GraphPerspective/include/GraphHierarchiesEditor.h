@@ -47,6 +47,11 @@ public:
   bool synchronized() const;
   void repackHeaders();
 
+public slots:
+  void setSynchronized(bool);
+  void setSynchronizeButtonVisible(bool);
+  void setAddPanelButtonVisible(bool);
+
 protected slots:
   void activeGraphSelected(const QModelIndex&);
   void contextMenuRequested(const QPoint&);

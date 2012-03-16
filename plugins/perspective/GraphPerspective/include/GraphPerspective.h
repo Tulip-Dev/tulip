@@ -78,6 +78,7 @@ protected slots:
   void group();
   void createSubGraph();
   void CSVImport();
+  void setDatasetGraph(tlp::Graph*);
 };
 
 #endif // GRAPHPERSPECTIVE_H

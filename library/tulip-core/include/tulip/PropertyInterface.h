@@ -46,6 +46,7 @@ protected:
   Graph *graph;
 
 public:
+  PropertyInterface();
 
   virtual ~PropertyInterface();
   /**

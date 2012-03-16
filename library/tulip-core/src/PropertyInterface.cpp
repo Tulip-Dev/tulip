@@ -22,6 +22,10 @@
 
 using namespace tlp;
 
+PropertyInterface::PropertyInterface(): graph(NULL) {
+
+}
+
 PropertyInterface::~PropertyInterface() {
   // check if the current property is not registered
   // as a property of a graph

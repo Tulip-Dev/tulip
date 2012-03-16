@@ -1,21 +1,4 @@
-
-
-########### install files ###############
-
-
-
-
-#original Makefile.am contents follow:
-
-#if !MACOSX
-#DLL_FLAGS = -no-undefined
-#else
-#DLL_FLAGS = -Wl,-headerpad_max_install_names
-#endif
-#
-#plugins_LTLIBRARIES = 
-#
-#pluginsdir = $(libdir)/tlp
-#
-#AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
-#INCLUDES = @TULIP_INCLUDE@
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
+ADD_LIBRARY(ToLabels-${TulipVersion} SHARED tolabels.cpp)
+TARGET_LINK_LIBRARIES(ToLabels-${TulipVersion} ${LibTulipCoreName})
+INSTALL(TARGETS ToLabels-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ToLabels)
