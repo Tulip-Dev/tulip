@@ -22,8 +22,8 @@
 #include <assert.h>
 #include <string>
 #include <tulip/tulipconf.h>
-#include <tulip/TlpTools.h>
-#include "WithParameter.h"
+#include <tulip/WithParameter.h>
+#include <tulip/WithDependency.h>
 
 /**
  * \addtogroup plugins
@@ -171,15 +171,6 @@ public:
   * @return int the id of the glyph.
   **/
   virtual int id() const;
-
-  /**
-  * @brief Returns the dependencies of this factory.
-  *
-  * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > > The dependencies of this plugin.
-  **/
-  std::list<tlp::Dependency> dependencies() const {
-    return WithDependency::dependencies;
-  }
 };
 
 /**

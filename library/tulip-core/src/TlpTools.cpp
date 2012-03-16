@@ -27,6 +27,7 @@
 
 #include <thirdparty/gzstream/gzstream.h>
 #include <tulip/TlpTools.h>
+#include <tulip/PluginLoader.h>
 #include <tulip/PropertyTypes.h>
 
 using namespace std;

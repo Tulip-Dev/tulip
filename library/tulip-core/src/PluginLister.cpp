@@ -55,7 +55,7 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
         if (!PluginLister::pluginExists(pluginDepName)) {
           if (loader)
             loader->aborted(pluginName, " '" + pluginName + "' will be removed, it depends on missing " +
-                            factoryDepName + " '" + pluginDepName + "'.");
+                            tlp::demangleTlpClassName(factoryDepName.c_str()) + " '" + pluginDepName + "'.");
 
           PluginLister::removePlugin(pluginName);
           depsNeedCheck = true;
@@ -69,7 +69,7 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
             tlp::getMinor(release) != tlp::getMinor(releaseDep)) {
           if (loader) {
             loader->aborted(pluginName, " '" + pluginName + "' will be removed, it depends on release " +
-                            releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
+                            releaseDep + " of " + tlp::demangleTlpClassName(factoryDepName.c_str()) + " '" + pluginDepName + "' but " +
                             release + " is loaded.");
           }
 
@@ -102,17 +102,6 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
   std::string pluginName = informations->name();
 
   if (!pluginExists(pluginName)) {
-
-    // loop over dependencies
-    // to demangle the class names
-    std::list<tlp::Dependency> dependencies = informations->getDependencies();
-    std::list<tlp::Dependency>::iterator itD = dependencies.begin();
-
-    for (; itD != dependencies.end(); itD++) {
-      const char *factoryDepName = (*itD).factoryName.c_str();
-      (*itD).factoryName = tlp::demangleTlpClassName(factoryDepName);
-    }
-
     PluginDescription description;
     description.factory = objectFactory;
     description.library = PluginLibraryLoader::getCurrentPluginFileName();
@@ -120,7 +109,7 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
 
 
     if (currentLoader!=0) {
-      currentLoader->loaded(informations, dependencies);
+      currentLoader->loaded(informations, informations->getDependencies());
     }
 
     delete informations;
@@ -169,6 +158,7 @@ std::list<tlp::Dependency> tlp::PluginLister::getPluginDependencies(std::string 
   Plugin* plugin = getPluginObject(name, NULL);
   std::list<tlp::Dependency> dependencies(plugin->getDependencies());
   delete plugin;
+
   return dependencies;
 }
 
