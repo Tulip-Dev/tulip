@@ -42,6 +42,7 @@ public:
         return f;
       }
     }
+
     return QVariant();
   }
 

@@ -367,6 +367,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionCancel_selection->setEnabled(enabled);
   _ui->actionGroup_elements->setEnabled(enabled);
   _ui->actionCreate_sub_graph->setEnabled(enabled);
+
   if (_ui->centralWidget->currentWidget() == _ui->datasetModePage)
     setDatasetGraph(graph);
 }
