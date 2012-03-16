@@ -33,7 +33,8 @@ public:
   enum TulipRole {
     GraphRole = Qt::UserRole+1,
     PropertyRole = Qt::UserRole+2,
-    IsNodeRole = Qt::UserRole+3
+    IsNodeRole = Qt::UserRole+3,
+    StringRole = Qt::UserRole+4
   };
 
   explicit TulipModel(QObject *parent=0);

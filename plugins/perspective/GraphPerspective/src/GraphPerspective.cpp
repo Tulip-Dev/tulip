@@ -63,15 +63,16 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   // Dataset mode delegates and models
   QSortFilterProxyModel* nodesModel = new GraphSortFilterProxyModel;
   nodesModel->setSourceModel(new NodesGraphModel);
+  nodesModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+  nodesModel->setFilterKeyColumn(-1);
   QSortFilterProxyModel* edgesModel = new GraphSortFilterProxyModel;
   edgesModel->setSourceModel(new EdgesGraphModel);
+  edgesModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+  edgesModel->setFilterKeyColumn(-1);
   _ui->nodesTable->setModel(nodesModel);
   _ui->edgesTable->setModel(edgesModel);
   _ui->nodesTable->setItemDelegate(new GraphTableItemDelegate);
   _ui->edgesTable->setItemDelegate(new GraphTableItemDelegate);
-  _ui->datasetGraphEditor->setSynchronized(true);
-  _ui->datasetGraphEditor->setAddPanelButtonVisible(false);
-  _ui->datasetGraphEditor->setSynchronizeButtonVisible(false);
 
   // Connect actions
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
@@ -94,14 +95,14 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   connect(_ui->actionGroup_elements,SIGNAL(triggered()),this,SLOT(group()));
   connect(_ui->actionCreate_sub_graph,SIGNAL(triggered()),this,SLOT(createSubGraph()));
   connect(_ui->actionImport_CSV,SIGNAL(triggered()),this,SLOT(CSVImport()));
+  connect(_ui->datasetFilterEdit,SIGNAL(textChanged(QString)),this,SLOT(setDatasetFilter(QString)));
 
   // D-BUS actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
   connect(_ui->actionAbout_us,SIGNAL(triggered()),this,SIGNAL(showTulipAboutPage()));
 
   // Setting initial sizes for splitters
-  _ui->workspaceSplitter->setSizes(QList<int>() << 200 << 1000);
-  _ui->datasetHorizontalSplitter->setSizes(QList<int>() << 200 << 1000);
+  _ui->mainSplitter->setSizes(QList<int>() << 200 << 1000);
   _ui->edgesTable->setVisible(false);
 
   _mainWindow->show();
@@ -120,11 +121,12 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
     }
   }
 
+  _ui->filtersManager->findChild<HeaderFrame *>()->expand(false);
   _ui->graphHierarchiesEditor->setModel(_graphs);
   _ui->algorithmRunner->setModel(_graphs);
   _ui->workspace->setModel(_graphs);
-  _ui->datasetGraphEditor->setModel(_graphs);
-  _ui->datasetPropertiesEditor->setModel(_graphs);
+  _ui->propertiesEditor->setModel(_graphs
+                                  );
 
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
@@ -267,7 +269,7 @@ void GraphPerspective::modeSwitch() {
   }
   else if (sender() == _ui->actionAnalyze) {
     setDatasetGraph(NULL);
-    mode = _ui->visualizeModePage;
+    mode = _ui->workspace;
   }
 
   if (mode != NULL)
@@ -378,6 +380,11 @@ void GraphPerspective::setDatasetGraph(Graph* graph) {
   nodesModel->setGraph(graph);
   edgesModel->setGraph(graph);
   _ui->datasetPropertiesFilter->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Select property"),graph));
+}
+
+void GraphPerspective::setDatasetFilter(QString filter) {
+  static_cast<QSortFilterProxyModel*>(_ui->nodesTable->model())->setFilterFixedString(filter);
+  static_cast<QSortFilterProxyModel*>(_ui->edgesTable->model())->setFilterFixedString(filter);
 }
 
 void GraphPerspective::CSVImport() {

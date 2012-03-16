@@ -40,6 +40,7 @@ protected:
 
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const = 0;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const = 0;
+  virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const = 0;
   virtual bool isNode() const = 0;
 };
 
@@ -47,6 +48,7 @@ class GraphSortFilterProxyModel: public QSortFilterProxyModel {
 public:
   GraphSortFilterProxyModel(QObject* parent = 0);
   bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+  bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 };
 
 class TLP_QT_SCOPE NodesGraphModel: public GraphModel {
@@ -60,9 +62,8 @@ public:
 protected:
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
-  bool isNode() const {
-    return true;
-  }
+  virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
+  bool isNode() const { return true; }
 };
 
 class TLP_QT_SCOPE EdgesGraphModel: public GraphModel {
@@ -75,9 +76,8 @@ public:
 protected:
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
-  bool isNode() const {
-    return false;
-  }
+  virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
+  bool isNode() const { return false; }
 };
 
 }

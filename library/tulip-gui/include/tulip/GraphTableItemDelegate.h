@@ -31,7 +31,6 @@ class TLP_QT_SCOPE GraphTableItemDelegate: public tlp::TulipItemDelegate {
   Q_OBJECT
 public:
   GraphTableItemDelegate(QObject* parent=NULL) ;
-//  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 };
