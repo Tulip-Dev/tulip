@@ -25,6 +25,25 @@ public:
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const {
+    if (orientation == Qt::Horizontal) {
+      if (role == Qt::DisplayRole) {
+        if (section == 0)
+          return trUtf8("Name");
+        else if (section == 1)
+          return trUtf8("Type");
+        else if (section == 2)
+          return trUtf8("Scope");
+      }
+      else if (role == Qt::FontRole) {
+        QFont f;
+        f.setBold(true);
+        f.setPointSize(f.pointSize() - 1);
+        return f;
+      }
+    }
+    return QVariant();
+  }
 
   // Methods inherited from the observable system
   void treatEvent(const tlp::Event& evt) {

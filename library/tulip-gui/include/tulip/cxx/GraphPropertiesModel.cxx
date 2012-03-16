@@ -4,12 +4,14 @@ namespace tlp {
 
 template<typename PROPTYPE>
 GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(QString::null) {
-  _graph->addListener(this);
+  if (_graph != NULL)
+    _graph->addListener(this);
 }
 
 template<typename PROPTYPE>
 GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::Graph* graph, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder) {
-  _graph->addListener(this);
+  if (_graph != NULL)
+    _graph->addListener(this);
 }
 
 template<typename PROPTYPE>
@@ -52,7 +54,7 @@ QModelIndex GraphPropertiesModel<PROPTYPE>::parent(const QModelIndex &) const {
 
 template<typename PROPTYPE>
 int GraphPropertiesModel<PROPTYPE>::rowCount(const QModelIndex &parent) const {
-  if (parent.isValid())
+  if (parent.isValid() || _graph == NULL)
     return 0;
 
   int result = 0;
@@ -72,36 +74,38 @@ int GraphPropertiesModel<PROPTYPE>::rowCount(const QModelIndex &parent) const {
 
 template<typename PROPTYPE>
 int GraphPropertiesModel<PROPTYPE>::columnCount(const QModelIndex &) const {
-  return 1;
+  return 3;
 }
 
 template<typename PROPTYPE>
 QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role) const {
   PropertyInterface* pi = NULL;
 
-  if (index.internalPointer() != NULL)
-    pi = (PropertyInterface*)(index.internalPointer());
+  if (index.internalPointer() == NULL && index.row() != 0)
+    return QVariant();
 
-  if (role == Qt::DisplayRole) {
+  pi = (PropertyInterface*)(index.internalPointer());
+
+  if (role == Qt::DisplayRole || role == Qt::ToolTipRole) {
     if (!_placeholder.isNull() && index.row() == 0)
       return _placeholder;
 
-    return QString(pi->getName().c_str());
-  }
-  else if (role == Qt::ToolTipRole) {
-    if (!_placeholder.isNull() && index.row() == 0)
-      return _placeholder;
+    if (index.column() == 0)
+      return QString(pi->getName().c_str());
+    else if (index.column() == 1)
+      return pi->getTypename().c_str();
+    else if (index.column() == 2)
+      return (_graph->existLocalProperty(pi->getName()) ? trUtf8("Local") : trUtf8("Inherited"));
 
-    return (_graph->existLocalProperty(pi->getName()) ? trUtf8("Local") : trUtf8("Inherited"));
   }
+  else if (role == Qt::DecorationRole && index.column() == 0 && pi != NULL && !_graph->existLocalProperty(pi->getName()))
+    return QIcon(":/tulip/gui/ui/inherited_properties.png");
+
   else if (role == Qt::FontRole) {
     QFont f;
 
-    if (!_placeholder.isNull() && index.row() == 0) {
+    if (!_placeholder.isNull() && index.row() == 0)
       f.setItalic(true);
-    }
-    else
-      f.setBold(!_graph->existLocalProperty(pi->getName()));
 
     return f;
   }

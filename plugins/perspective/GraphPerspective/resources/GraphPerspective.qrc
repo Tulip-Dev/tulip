@@ -25,5 +25,6 @@
         <file>icons/16/view-open.png</file>
         <file>icons/48/document-import.png</file>
         <file>icons/32/table.png</file>
+        <file>icons/22/edit-find.png</file>
     </qresource>
 </RCC>
