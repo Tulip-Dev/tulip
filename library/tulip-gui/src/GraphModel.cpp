@@ -101,6 +101,7 @@ QVariant GraphModel::data(const QModelIndex &index, int role) const {
     return isNode();
   else if (role == StringRole)
     return stringValue(_elements[index.row()],(PropertyInterface*)(index.internalPointer()));
+
   return QVariant();
 }
 
@@ -402,8 +403,9 @@ bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInde
     sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent).data(TulipModel::StringRole).toString().contains(filterRegExp());
   }
   else {
-    for (int i=0;i<sourceModel()->columnCount();++i) {
+    for (int i=0; i<sourceModel()->columnCount(); ++i) {
       QModelIndex index = sourceModel()->index(sourceRow, i, sourceParent);
+
       if (!isNumber && (dynamic_cast<DoubleProperty*>(index.data(TulipModel::PropertyRole).value<PropertyInterface*>()) != NULL
                         || dynamic_cast<IntegerProperty*>(index.data(TulipModel::PropertyRole).value<PropertyInterface*>()) != NULL))
         continue;
