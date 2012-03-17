@@ -126,7 +126,7 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui->algorithmRunner->setModel(_graphs);
   _ui->workspace->setModel(_graphs);
   _ui->propertiesEditor->setModel(_graphs
-                                  );
+                                 );
 
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
