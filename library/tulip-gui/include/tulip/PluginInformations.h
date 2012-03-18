@@ -44,7 +44,7 @@ public:
 
   DistantPluginInfo(const std::string& author, const std::string& date, const std::string& group, const std::string& name, const std::string& info, const std::string& release,
                     const std::string& tulipRelease, const std::list<tlp::Dependency> dependencies, const QString& type, const QString& location, const QString& remotepluginName)
-    : _author(author), _date(date), _group(group), _name(name), _info(info), _release(release), _tulipRelease(tulipRelease), _dependencies(dependencies),
+    : _author(author), _date(date), _group(group), _name(name), _info(info), _release(release), _tulipRelease(tulipRelease), 
       _type(type), _location(location), _remotePluginName(remotepluginName) {
   }
   virtual std::string author() const {
@@ -68,9 +68,6 @@ public:
   virtual std::string tulipRelease() const {
     return _tulipRelease;
   }
-  virtual std::list<tlp::Dependency> dependencies() const {
-    return _dependencies;
-  }
   virtual const QString& type() const {
     return _type;
   }
@@ -89,7 +86,6 @@ private:
   const std::string _info;
   const std::string _release;
   const std::string _tulipRelease;
-  const std::list<tlp::Dependency> _dependencies;
   const QString _type;
   const QString _location;
   const QString _remotePluginName;

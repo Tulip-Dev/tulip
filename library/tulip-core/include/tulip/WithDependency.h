@@ -71,7 +71,7 @@ protected:
   /**
    * @brief The inner list of dependencies.
    */
-  std::list<Dependency> dependencies;
+  std::list<Dependency> _dependencies;
 
   /**
    * @brief Adds a dependency upon another plug-in.
@@ -82,7 +82,7 @@ protected:
    */
   void addDependency(const char* factory, const char *name,
                      const char *release) {
-    dependencies.push_back(Dependency(factory, name, release));
+    _dependencies.push_back(Dependency(factory, name, release));
   }
 
 public:
@@ -91,8 +91,8 @@ public:
    *
    * @return list<Dependency> The list of dependencies of this plug-in.
    */
-  const std::list<Dependency>& getDependencies() const {
-    return dependencies;
+  const std::list<Dependency>& dependencies() const {
+    return _dependencies;
   }
 
   /**
