@@ -205,7 +205,9 @@ void GraphPerspective::importGraph() {
 
     if (!wizard.algorithm().isNull()) {
       DataSet data = wizard.parameters();
-      g = tlp::importGraph(wizard.algorithm().toStdString(),data);
+      PluginProgress* prg = progress();
+      g = tlp::importGraph(wizard.algorithm().toStdString(),data,prg);
+      delete prg;
 
       if (g == NULL) {
         QMessageBox::critical(_mainWindow,trUtf8("Import error"),wizard.algorithm() + trUtf8(" failed to import data"));
