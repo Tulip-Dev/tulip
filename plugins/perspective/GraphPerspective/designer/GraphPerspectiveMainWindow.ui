@@ -519,7 +519,7 @@ QToolButton:pressed {
           </layout>
          </widget>
          <widget class="QStackedWidget" name="centralWidget">
-          <widget class="tlp::Workspace" name="workspace" native="true"/>
+          <widget class="tlp::Workspace" name="workspace"/>
           <widget class="QWidget" name="datasetModePage">
            <layout class="QVBoxLayout" name="verticalLayout">
             <property name="spacing">
@@ -782,6 +782,9 @@ border-bottom: 1px solid black;
                   <property name="frameShape">
                    <enum>QFrame::NoFrame</enum>
                   </property>
+                  <property name="editTriggers">
+                   <set>QAbstractItemView::AllEditTriggers</set>
+                  </property>
                   <property name="sortingEnabled">
                    <bool>true</bool>
                   </property>
@@ -792,6 +795,9 @@ border-bottom: 1px solid black;
                  <widget class="QTableView" name="edgesTable">
                   <property name="frameShape">
                    <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="editTriggers">
+                   <set>QAbstractItemView::AllEditTriggers</set>
                   </property>
                   <property name="sortingEnabled">
                    <bool>true</bool>
