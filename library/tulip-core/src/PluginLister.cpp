@@ -109,7 +109,7 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
 
 
     if (currentLoader!=0) {
-      currentLoader->loaded(informations, informations->getDependencies());
+      currentLoader->loaded(informations, informations->dependencies());
     }
 
     delete informations;
@@ -156,7 +156,7 @@ std::string tlp::PluginLister::getPluginRelease(std::string name) {
 std::list<tlp::Dependency> tlp::PluginLister::getPluginDependencies(std::string name) {
   assert(instance()->_plugins.find(name) != instance()->_plugins.end());
   Plugin* plugin = getPluginObject(name, NULL);
-  std::list<tlp::Dependency> dependencies(plugin->getDependencies());
+  std::list<tlp::Dependency> dependencies(plugin->dependencies());
   delete plugin;
 
   return dependencies;
