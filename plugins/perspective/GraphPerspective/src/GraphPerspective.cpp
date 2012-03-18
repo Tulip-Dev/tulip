@@ -387,6 +387,7 @@ void GraphPerspective::setDatasetGraph(Graph* graph) {
 void GraphPerspective::setDatasetFilter() {
   if (_ui->centralWidget->currentWidget() != _ui->datasetModePage)
     return;
+
   QString filter = _ui->datasetFilterEdit->text();
   static_cast<QSortFilterProxyModel*>(_ui->nodesTable->model())->setFilterFixedString(filter);
   static_cast<QSortFilterProxyModel*>(_ui->edgesTable->model())->setFilterFixedString(filter);
@@ -395,13 +396,16 @@ void GraphPerspective::setDatasetFilter() {
 void GraphPerspective::setDatasetFilterProperty() {
   if (_ui->centralWidget->currentWidget() != _ui->datasetModePage)
     return;
-    return;
+
+  return;
   GraphSortFilterProxyModel* nodesModel = static_cast<GraphSortFilterProxyModel*>(_ui->nodesTable->model());
   GraphSortFilterProxyModel* edgesModel = static_cast<GraphSortFilterProxyModel*>(_ui->edgesTable->model());
 
   QVector<PropertyInterface*> properties;
+
   if (_ui->datasetPropertiesFilter->currentIndex() != 0)
     properties.push_back(_graphs->currentGraph()->getProperty(_ui->datasetPropertiesFilter->currentText().toStdString()));
+
   nodesModel->setProperties(properties);
   edgesModel->setProperties(properties);
   setDatasetFilter();

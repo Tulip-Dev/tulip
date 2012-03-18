@@ -401,10 +401,14 @@ void GraphSortFilterProxyModel::setProperties(QVector<PropertyInterface *> prope
 bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex&) const {
   if (filterRegExp().isEmpty())
     return true;
+
   GraphModel* graphModel = static_cast<GraphModel*>(sourceModel());
+
   if (graphModel->graph() == NULL)
     return true;
+
   unsigned int id = graphModel->elementAt(sourceRow);
+
   if (_properties.isEmpty()) {
     std::string s;
     forEach(s,graphModel->graph()->getProperties()) {
@@ -418,5 +422,6 @@ bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInde
         return true;
     }
   }
+
   return false;
 }
