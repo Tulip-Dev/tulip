@@ -95,7 +95,8 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   connect(_ui->actionGroup_elements,SIGNAL(triggered()),this,SLOT(group()));
   connect(_ui->actionCreate_sub_graph,SIGNAL(triggered()),this,SLOT(createSubGraph()));
   connect(_ui->actionImport_CSV,SIGNAL(triggered()),this,SLOT(CSVImport()));
-  connect(_ui->datasetFilterEdit,SIGNAL(textChanged(QString)),this,SLOT(setDatasetFilter(QString)));
+  connect(_ui->datasetFilterEdit,SIGNAL(editingFinished()),this,SLOT(setDatasetFilter()));
+  connect(_ui->datasetPropertiesFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(setDatasetFilterProperty()));
 
   // D-BUS actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
@@ -379,12 +380,31 @@ void GraphPerspective::setDatasetGraph(Graph* graph) {
   EdgesGraphModel* edgesModel = static_cast<EdgesGraphModel*>(static_cast<QSortFilterProxyModel*>(_ui->edgesTable->model())->sourceModel());
   nodesModel->setGraph(graph);
   edgesModel->setGraph(graph);
+
   _ui->datasetPropertiesFilter->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Select property"),graph));
 }
 
-void GraphPerspective::setDatasetFilter(QString filter) {
+void GraphPerspective::setDatasetFilter() {
+  if (_ui->centralWidget->currentWidget() != _ui->datasetModePage)
+    return;
+  QString filter = _ui->datasetFilterEdit->text();
   static_cast<QSortFilterProxyModel*>(_ui->nodesTable->model())->setFilterFixedString(filter);
   static_cast<QSortFilterProxyModel*>(_ui->edgesTable->model())->setFilterFixedString(filter);
+}
+
+void GraphPerspective::setDatasetFilterProperty() {
+  if (_ui->centralWidget->currentWidget() != _ui->datasetModePage)
+    return;
+    return;
+  GraphSortFilterProxyModel* nodesModel = static_cast<GraphSortFilterProxyModel*>(_ui->nodesTable->model());
+  GraphSortFilterProxyModel* edgesModel = static_cast<GraphSortFilterProxyModel*>(_ui->edgesTable->model());
+
+  QVector<PropertyInterface*> properties;
+  if (_ui->datasetPropertiesFilter->currentIndex() != 0)
+    properties.push_back(_graphs->currentGraph()->getProperty(_ui->datasetPropertiesFilter->currentText().toStdString()));
+  nodesModel->setProperties(properties);
+  edgesModel->setProperties(properties);
+  setDatasetFilter();
 }
 
 void GraphPerspective::CSVImport() {

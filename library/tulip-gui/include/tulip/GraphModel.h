@@ -33,6 +33,7 @@ public:
 
   unsigned int elementAt(int) const;
   virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const = 0;
+  virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const = 0;
 
 protected:
   QVector<unsigned int> _elements;
@@ -40,13 +41,17 @@ protected:
 
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const = 0;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const = 0;
-  virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const = 0;
   virtual bool isNode() const = 0;
 };
 
 class GraphSortFilterProxyModel: public QSortFilterProxyModel {
+  QVector<PropertyInterface*> _properties;
+
 public:
   GraphSortFilterProxyModel(QObject* parent = 0);
+
+  void setProperties(QVector<PropertyInterface*>);
+
   bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
   bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 };
@@ -58,11 +63,11 @@ public:
 
   void treatEvent(const tlp::Event &);
   virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const;
+  virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
 
 protected:
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
-  virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
   bool isNode() const {
     return true;
   }
@@ -74,11 +79,11 @@ public:
   void setGraph(Graph *);
   void treatEvent(const tlp::Event &);
   virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const;
+  virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
 
 protected:
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
-  virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
   bool isNode() const {
     return false;
   }

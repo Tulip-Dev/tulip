@@ -388,33 +388,35 @@ bool EdgesGraphModel::lessThan(unsigned int a, unsigned int b, PropertyInterface
 }
 
 // Filter proxy
-GraphSortFilterProxyModel::GraphSortFilterProxyModel(QObject *parent): QSortFilterProxyModel(parent) {
+GraphSortFilterProxyModel::GraphSortFilterProxyModel(QObject *parent): QSortFilterProxyModel(parent), _properties(QVector<PropertyInterface*>()) {
 }
 
 bool GraphSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const {
   GraphModel* graphModel = static_cast<GraphModel*>(sourceModel());
   return graphModel->lessThan(graphModel->elementAt(left.row()),graphModel->elementAt(right.row()),static_cast<PropertyInterface*>(left.internalPointer()));
 }
-bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const {
-  bool isNumber;
-  filterRegExp().pattern().toInt(&isNumber);
-
-  if (filterKeyColumn() != -1) {
-    sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent).data(TulipModel::StringRole).toString().contains(filterRegExp());
-  }
-  else {
-    for (int i=0; i<sourceModel()->columnCount(); ++i) {
-      QModelIndex index = sourceModel()->index(sourceRow, i, sourceParent);
-
-      if (!isNumber && (dynamic_cast<DoubleProperty*>(index.data(TulipModel::PropertyRole).value<PropertyInterface*>()) != NULL
-                        || dynamic_cast<IntegerProperty*>(index.data(TulipModel::PropertyRole).value<PropertyInterface*>()) != NULL))
-        continue;
-
-      if (index.data(TulipModel::StringRole).toString().contains(filterRegExp()))
+void GraphSortFilterProxyModel::setProperties(QVector<PropertyInterface *> properties) {
+  _properties = properties;
+}
+bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex&) const {
+  if (filterRegExp().isEmpty())
+    return true;
+  GraphModel* graphModel = static_cast<GraphModel*>(sourceModel());
+  if (graphModel->graph() == NULL)
+    return true;
+  unsigned int id = graphModel->elementAt(sourceRow);
+  if (_properties.isEmpty()) {
+    std::string s;
+    forEach(s,graphModel->graph()->getProperties()) {
+      if (graphModel->stringValue(id,graphModel->graph()->getProperty(s)).contains(filterRegExp()))
         return true;
-
     }
   }
-
+  else {
+    foreach(PropertyInterface* pi, _properties) {
+      if (graphModel->stringValue(id,pi).contains(filterRegExp()))
+        return true;
+    }
+  }
   return false;
 }
