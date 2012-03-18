@@ -63,6 +63,9 @@ color: white;
 #expandButton {
 image: url(&quot;:/tulip/gui/ui/arrowup.png&quot;);
 }
+#expandButton::checked {
+image: url(&quot;:/tulip/gui/ui/arrowdown.png&quot;);
+}
 QComboBox,QLabel {
 height:20px;
 }
