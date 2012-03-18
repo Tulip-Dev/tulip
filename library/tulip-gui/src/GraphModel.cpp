@@ -23,6 +23,7 @@ void GraphModel::setGraph(Graph* g) {
   }
 
   _graph = g;
+  _elements.clear();
   _properties.clear();
 
   if (_graph != NULL) {
@@ -133,6 +134,141 @@ void GraphModel::treatEvent(const Event& ev) {
   }
 }
 
+#define STANDARD_NODE_CHECKS(MACRO) \
+  MACRO(DoubleProperty,double);\
+  MACRO(DoubleVectorProperty,std::vector<double>);\
+  MACRO(ColorProperty,tlp::Color);\
+  MACRO(ColorVectorProperty,std::vector<tlp::Color>);\
+  MACRO(SizeProperty,tlp::Size);\
+  MACRO(SizeVectorProperty,std::vector<tlp::Size>);\
+  MACRO(StringProperty,std::string);\
+  MACRO(StringVectorProperty,std::vector<std::string>);\
+  MACRO(LayoutProperty,tlp::Coord);\
+  MACRO(CoordVectorProperty,std::vector<tlp::Coord>);\
+  MACRO(GraphProperty,tlp::Graph*);\
+  MACRO(IntegerProperty,int);\
+  MACRO(IntegerVectorProperty,std::vector<int>);\
+  MACRO(BooleanProperty,bool);\
+  MACRO(BooleanVectorProperty,std::vector<bool>);
+
+#define STANDARD_EDGE_CHECKS(MACRO) \
+  MACRO(DoubleProperty,double);\
+  MACRO(DoubleVectorProperty,std::vector<double>);\
+  MACRO(ColorProperty,tlp::Color);\
+  MACRO(ColorVectorProperty,std::vector<tlp::Color>);\
+  MACRO(SizeProperty,tlp::Size);\
+  MACRO(SizeVectorProperty,std::vector<tlp::Size>);\
+  MACRO(StringProperty,std::string);\
+  MACRO(StringVectorProperty,std::vector<std::string>);\
+  MACRO(LayoutProperty,std::vector<tlp::Coord>);\
+  MACRO(CoordVectorProperty,std::vector<tlp::Coord>);\
+  MACRO(IntegerProperty,int);\
+  MACRO(IntegerVectorProperty,std::vector<int>);\
+  MACRO(BooleanProperty,bool);\
+  MACRO(BooleanVectorProperty,std::vector<bool>);
+
+#define GET_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) return QVariant::fromValue< TYPE >(static_cast<PROP*>(prop)->getNodeValue(n))
+QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface * prop) {
+  node n(id);
+  if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
+    return QVariant::fromValue<NodeShape>(static_cast<IntegerProperty*>(prop)->getNodeValue(n));
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
+    return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getNodeValue(n).c_str()));
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
+    return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<IntegerProperty*>(prop)->getNodeValue(n)));
+  STANDARD_NODE_CHECKS(GET_NODE_VALUE)
+  return QVariant();
+}
+#define GET_NODE_DEFAULT_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) return QVariant::fromValue< TYPE >(static_cast<PROP*>(prop)->getNodeDefaultValue())
+QVariant GraphModel::nodeDefaultValue(PropertyInterface * prop) {
+  if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
+    return QVariant::fromValue<EdgeShape>((EdgeShape)(static_cast<IntegerProperty*>(prop)->getNodeDefaultValue()));
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
+    return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getNodeDefaultValue().c_str()));
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
+    return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<IntegerProperty*>(prop)->getNodeDefaultValue()));
+  STANDARD_NODE_CHECKS(GET_NODE_DEFAULT_VALUE)
+  return QVariant();
+}
+#define SET_ALL_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setAllNodeValue(v.value< TYPE >())
+bool GraphModel::setAllNodeValue(PropertyInterface * prop, QVariant v) {
+  if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
+    static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<NodeShape>().nodeShapeId);
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
+    static_cast<StringProperty*>(prop)->setAllNodeValue(v.value<TulipFont>().fontFile().toStdString());
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
+    static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<LabelPosition>());
+  STANDARD_NODE_CHECKS(SET_ALL_NODE_VALUE)
+  else
+    return false;
+  return true;
+}
+#define SET_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setNodeValue(n,v.value< TYPE >())
+bool GraphModel::setNodeValue(unsigned int id, PropertyInterface * prop, QVariant v) {
+  node n(id);
+  if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
+    static_cast<IntegerProperty*>(prop)->setNodeValue(n,v.value<NodeShape>().nodeShapeId);
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
+    static_cast<StringProperty*>(prop)->setNodeValue(n,v.value<TulipFont>().fontFile().toStdString());
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
+    static_cast<IntegerProperty*>(prop)->setNodeValue(n,v.value<LabelPosition>());
+  STANDARD_NODE_CHECKS(SET_NODE_VALUE)
+  else
+    return false;
+  return true;
+}
+
+#define GET_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) return QVariant::fromValue< TYPE >(static_cast<PROP*>(prop)->getEdgeValue(e))
+QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface * prop) {
+  edge e(id);
+  if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
+    return QVariant::fromValue<EdgeShape>((EdgeShape)(static_cast<IntegerProperty*>(prop)->getEdgeValue(e)));
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
+    return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getEdgeValue(e).c_str()));
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
+    return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<IntegerProperty*>(prop)->getEdgeValue(e)));
+  STANDARD_EDGE_CHECKS(GET_EDGE_VALUE)
+  return QVariant();
+}
+#define GET_EDGE_DEFAULT_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) return QVariant::fromValue< TYPE >(static_cast<PROP*>(prop)->getEdgeDefaultValue())
+QVariant GraphModel::edgeDefaultValue(PropertyInterface * prop) {
+  if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
+    return QVariant::fromValue<EdgeShape>((EdgeShape)(static_cast<IntegerProperty*>(prop)->getEdgeDefaultValue()));
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
+    return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getEdgeDefaultValue().c_str()));
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
+    return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<IntegerProperty*>(prop)->getEdgeDefaultValue()));
+  STANDARD_EDGE_CHECKS(GET_EDGE_DEFAULT_VALUE)
+  return QVariant();
+}
+#define SET_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setEdgeValue(e,v.value< TYPE >())
+bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface* prop, QVariant v) {
+  edge e(id);
+  if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
+    static_cast<IntegerProperty*>(prop)->setEdgeValue(e,v.value<EdgeShape>());
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
+    static_cast<StringProperty*>(prop)->setEdgeValue(e,v.value<TulipFont>().fontFile().toStdString());
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
+    static_cast<IntegerProperty*>(prop)->setEdgeValue(e,v.value<LabelPosition>());
+  STANDARD_EDGE_CHECKS(SET_EDGE_VALUE)
+  else
+    return false;
+  return true;
+}
+#define SET_ALL_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setAllEdgeValue(v.value< TYPE >())
+bool GraphModel::setAllEdgeValue(PropertyInterface* prop, QVariant v) {
+  if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
+    static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeShape>());
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
+    static_cast<StringProperty*>(prop)->setAllEdgeValue(v.value<TulipFont>().fontFile().toStdString());
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
+    static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<LabelPosition>());
+  STANDARD_EDGE_CHECKS(SET_ALL_EDGE_VALUE)
+  else
+    return false;
+  return true;
+}
+
 // Nodes model
 NodesGraphModel::NodesGraphModel(QObject *parent): GraphModel(parent) {
 }
@@ -184,8 +320,6 @@ void NodesGraphModel::treatEvent(const Event& ev) {
 
 void NodesGraphModel::setGraph(Graph* g) {
   GraphModel::setGraph(g);
-  _elements.clear();
-
   if (graph() == NULL)
     return;
 
@@ -200,65 +334,13 @@ void NodesGraphModel::setGraph(Graph* g) {
 QString NodesGraphModel::stringValue(unsigned int id, PropertyInterface* pi) const {
   return pi->getNodeStringValue(node(id)).c_str();
 }
-#define GET_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) return QVariant::fromValue< TYPE >(static_cast<PROP*>(prop)->getNodeValue(n))
+
 QVariant NodesGraphModel::value(unsigned int id, PropertyInterface* prop) const {
-  node n(id);
-
-  if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
-    return QVariant::fromValue<NodeShape>(static_cast<IntegerProperty*>(prop)->getNodeValue(n));
-  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
-    return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getNodeValue(n).c_str()));
-  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
-    return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<IntegerProperty*>(prop)->getNodeValue(n)));
-
-  GET_NODE_VALUE(DoubleProperty,double);
-  GET_NODE_VALUE(DoubleVectorProperty,std::vector<double>);
-  GET_NODE_VALUE(ColorProperty,tlp::Color);
-  GET_NODE_VALUE(ColorVectorProperty,std::vector<tlp::Color>);
-  GET_NODE_VALUE(SizeProperty,tlp::Size);
-  GET_NODE_VALUE(SizeVectorProperty,std::vector<tlp::Size>);
-  GET_NODE_VALUE(StringProperty,std::string);
-  GET_NODE_VALUE(StringVectorProperty,std::vector<std::string>);
-  GET_NODE_VALUE(LayoutProperty,tlp::Coord);
-  GET_NODE_VALUE(CoordVectorProperty,std::vector<tlp::Coord>);
-  GET_NODE_VALUE(GraphProperty,tlp::Graph*);
-  GET_NODE_VALUE(IntegerProperty,int);
-  GET_NODE_VALUE(IntegerVectorProperty,std::vector<int>);
-  GET_NODE_VALUE(BooleanProperty,bool);
-  GET_NODE_VALUE(BooleanVectorProperty,std::vector<bool>);
-  return QVariant();
+  return nodeValue(id,prop);
 }
 
-#define SET_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setNodeValue(n,v.value< TYPE >())
 bool NodesGraphModel::setValue(unsigned int id, PropertyInterface* prop, QVariant v) const {
-  node n(id);
-
-  if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
-    static_cast<IntegerProperty*>(prop)->setNodeValue(n,v.value<NodeShape>().nodeShapeId);
-  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
-    static_cast<StringProperty*>(prop)->setNodeValue(n,v.value<TulipFont>().fontFile().toStdString());
-  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
-    static_cast<IntegerProperty*>(prop)->setNodeValue(n,v.value<LabelPosition>());
-
-  SET_NODE_VALUE(DoubleProperty,double);
-  SET_NODE_VALUE(DoubleVectorProperty,std::vector<double>);
-  SET_NODE_VALUE(ColorProperty,tlp::Color);
-  SET_NODE_VALUE(ColorVectorProperty,std::vector<tlp::Color>);
-  SET_NODE_VALUE(SizeProperty,tlp::Size);
-  SET_NODE_VALUE(SizeVectorProperty,std::vector<tlp::Size>);
-  SET_NODE_VALUE(StringProperty,std::string);
-  SET_NODE_VALUE(StringVectorProperty,std::vector<std::string>);
-  SET_NODE_VALUE(LayoutProperty,tlp::Coord);
-  SET_NODE_VALUE(CoordVectorProperty,std::vector<tlp::Coord>);
-  SET_NODE_VALUE(GraphProperty,tlp::Graph*);
-  SET_NODE_VALUE(IntegerProperty,int);
-  SET_NODE_VALUE(IntegerVectorProperty,std::vector<int>);
-  SET_NODE_VALUE(BooleanProperty,bool);
-  SET_NODE_VALUE(BooleanVectorProperty,std::vector<bool>);
-  else
-    return false;
-
-  return true;
+  return setNodeValue(id,prop,v);
 }
 
 // Edges model
@@ -311,7 +393,6 @@ void EdgesGraphModel::treatEvent(const Event& ev) {
 
 void EdgesGraphModel::setGraph(Graph* g) {
   GraphModel::setGraph(g);
-  _elements.clear();
 
   if (graph() == NULL)
     return;
@@ -324,63 +405,11 @@ void EdgesGraphModel::setGraph(Graph* g) {
   reset();
 }
 
-#define GET_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) return QVariant::fromValue< TYPE >(static_cast<PROP*>(prop)->getEdgeValue(e))
 QVariant EdgesGraphModel::value(unsigned int id, PropertyInterface* prop) const {
-  edge e(id);
-
-  if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
-    return QVariant::fromValue<EdgeShape>((EdgeShape)(static_cast<IntegerProperty*>(prop)->getEdgeValue(e)));
-  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
-    return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getEdgeValue(e).c_str()));
-  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
-    return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<IntegerProperty*>(prop)->getEdgeValue(e)));
-
-  GET_EDGE_VALUE(DoubleProperty,double);
-  GET_EDGE_VALUE(DoubleVectorProperty,std::vector<double>);
-  GET_EDGE_VALUE(ColorProperty,tlp::Color);
-  GET_EDGE_VALUE(ColorVectorProperty,std::vector<tlp::Color>);
-  GET_EDGE_VALUE(SizeProperty,tlp::Size);
-  GET_EDGE_VALUE(SizeVectorProperty,std::vector<tlp::Size>);
-  GET_EDGE_VALUE(StringProperty,std::string);
-  GET_EDGE_VALUE(StringVectorProperty,std::vector<std::string>);
-  GET_EDGE_VALUE(LayoutProperty,std::vector<tlp::Coord>);
-  GET_EDGE_VALUE(CoordVectorProperty,std::vector<tlp::Coord>);
-  GET_EDGE_VALUE(IntegerProperty,int);
-  GET_EDGE_VALUE(IntegerVectorProperty,std::vector<int>);
-  GET_EDGE_VALUE(BooleanProperty,bool);
-  GET_EDGE_VALUE(BooleanVectorProperty,std::vector<bool>);
-  return QVariant();
+  return edgeValue(id,prop);
 }
-
-#define SET_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setEdgeValue(e,v.value< TYPE >())
 bool EdgesGraphModel::setValue(unsigned int id, PropertyInterface* prop, QVariant v) const {
-  edge e(id);
-
-  if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
-    static_cast<IntegerProperty*>(prop)->setEdgeValue(e,v.value<EdgeShape>());
-  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
-    static_cast<StringProperty*>(prop)->setEdgeValue(e,v.value<TulipFont>().fontFile().toStdString());
-  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
-    static_cast<IntegerProperty*>(prop)->setEdgeValue(e,v.value<LabelPosition>());
-
-  SET_EDGE_VALUE(DoubleProperty,double);
-  SET_EDGE_VALUE(DoubleVectorProperty,std::vector<double>);
-  SET_EDGE_VALUE(ColorProperty,tlp::Color);
-  SET_EDGE_VALUE(ColorVectorProperty,std::vector<tlp::Color>);
-  SET_EDGE_VALUE(SizeProperty,tlp::Size);
-  SET_EDGE_VALUE(SizeVectorProperty,std::vector<tlp::Size>);
-  SET_EDGE_VALUE(StringProperty,std::string);
-  SET_EDGE_VALUE(StringVectorProperty,std::vector<std::string>);
-  SET_EDGE_VALUE(LayoutProperty,std::vector<tlp::Coord>);
-  SET_EDGE_VALUE(CoordVectorProperty,std::vector<tlp::Coord>);
-  SET_EDGE_VALUE(IntegerProperty,int);
-  SET_EDGE_VALUE(IntegerVectorProperty,std::vector<int>);
-  SET_EDGE_VALUE(BooleanProperty,bool);
-  SET_EDGE_VALUE(BooleanVectorProperty,std::vector<bool>);
-  else
-    return false;
-
-  return true;
+  return setEdgeValue(id,prop,v);
 }
 
 bool EdgesGraphModel::lessThan(unsigned int a, unsigned int b, PropertyInterface * prop) const {

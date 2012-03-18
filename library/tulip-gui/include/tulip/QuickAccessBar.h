@@ -42,7 +42,6 @@ public slots:
   void showHideColorCaption();
   void showHideSizeCaption();
   void takeSnapshot();
-  void setLabelProperty(const QString&);
   void setEdgesVisible(bool);
   void setLabelsVisible(bool);
   void selectFont();

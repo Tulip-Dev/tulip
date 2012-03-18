@@ -92,9 +92,6 @@ void QuickAccessBar::reset() {
   _ui->labelColorButton->setTulipColor(inputData()->getElementLabelColor()->getNodeDefaultValue());
   _ui->labelColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->showLabelsToggle->setChecked(renderingParameters()->isViewNodeLabel());
-  _ui->labelPropertyCombo->clear();
-  _ui->labelPropertyCombo->addItem(trUtf8("Values on labels"));
-  _ui->labelPropertyCombo->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Select property on labels"), _mainView->graph()));
   updateFontButtonStyle();
   _resetting = false;
 }
@@ -138,33 +135,6 @@ void QuickAccessBar::setLabelColor(const QColor& c) {
     tmp->setEdgeValue(e,colors->getEdgeValue(e));
   }
   *colors = *tmp;
-  Observable::unholdObservers();
-}
-
-void QuickAccessBar::setLabelProperty(const QString& prop) {
-  Observable::holdObservers();
-
-  StringProperty *out = inputData()->getElementLabel();
-
-  if (_ui->labelPropertyCombo->currentIndex() == 0) {
-    if (!_resetting) {
-      qWarning("reset");
-      out->setAllNodeValue("");
-      out->setAllEdgeValue("");
-    }
-  }
-  else if (_mainView->graph()->existProperty(prop.toStdString())) {
-    PropertyInterface *in = _mainView->graph()->getProperty(prop.toStdString());
-
-    node n;
-    forEach(n, _mainView->graph()->getNodes())
-    out->setNodeValue(n, in->getNodeStringValue(n));
-
-    edge e;
-    forEach(e, _mainView->graph()->getEdges())
-    out->setEdgeValue(e, in->getEdgeStringValue(e));
-  }
-
   Observable::unholdObservers();
 }
 
