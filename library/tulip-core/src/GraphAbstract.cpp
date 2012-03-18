@@ -460,10 +460,11 @@ PropertyInterface* GraphAbstract::getProperty(const string &str) const {
 }
 //=========================================================================
 void GraphAbstract::delLocalProperty(const std::string &name) {
-  assert(existLocalProperty(name));
-  notifyBeforeDelLocalProperty(name);
-  propertyContainer->delLocalProperty(name);
-  notifyAfterDelLocalProperty(name);
+  std::string nameCopy = name; // the name is copied to ensure that the notifyBeforeDel event will not use an invalid reference
+  assert(existLocalProperty(nameCopy));
+  notifyBeforeDelLocalProperty(nameCopy);
+  propertyContainer->delLocalProperty(nameCopy);
+  notifyAfterDelLocalProperty(nameCopy);
 }
 //=========================================================================
 void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface *prop) {

@@ -41,7 +41,14 @@ class GraphPerspective : public tlp::Perspective {
   Ui::GraphPerspectiveMainWindowData *_ui;
   tlp::GraphHierarchiesModel *_graphs;
   bool _maximised;
+
+  static QSet<QString> RESERVED_PROPERTIES;
+  static void reserveDefaultProperties();
+
 public:
+  static bool isReservedPropertyName(QString);
+  static void registerReservedProperty(QString);
+
   PLUGININFORMATIONS("Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "Hierarchy")
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/desktop.png";

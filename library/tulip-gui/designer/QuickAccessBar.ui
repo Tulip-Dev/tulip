@@ -117,7 +117,7 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="icon">
       <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/color_interpolation.png</normaloff>:/tulip/gui/icons/20/camera-photo.png</iconset>
+       <normaloff>:/tulip/gui/icons/20/color_interpolation.png</normaloff>:/tulip/gui/icons/20/color_interpolation.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -155,7 +155,7 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="icon">
       <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/color_interpolation.png</normaloff>:/tulip/gui/icons/20/camera-photo.png</iconset>
+       <normaloff>:/tulip/gui/icons/20/color_interpolation.png</normaloff>:/tulip/gui/icons/20/color_interpolation.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -429,30 +429,6 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="TopPopupComboBox" name="labelPropertyCombo">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="toolTip">
-      <string>Change property displayed on labels</string>
-     </property>
-     <property name="statusTip">
-      <string>Set a property's values as nodes' labels</string>
-     </property>
-     <property name="frame">
-      <bool>false</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>Value on labels</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item>
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -475,11 +451,6 @@ background-color: rgba(255,255,255,100);
    <slots>
     <signal>colorChanged(QColor)</signal>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>TopPopupComboBox</class>
-   <extends>QComboBox</extends>
-   <header>tulip/QuickAccessBar.h</header>
   </customwidget>
  </customwidgets>
  <resources>
@@ -599,22 +570,6 @@ background-color: rgba(255,255,255,100);
    </hints>
   </connection>
   <connection>
-   <sender>labelPropertyCombo</sender>
-   <signal>currentIndexChanged(QString)</signal>
-   <receiver>QuickAccessBar</receiver>
-   <slot>setLabelProperty(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>872</x>
-     <y>16</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>549</x>
-     <y>17</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>showEdgesToggle</sender>
    <signal>clicked(bool)</signal>
    <receiver>QuickAccessBar</receiver>
@@ -671,7 +626,6 @@ background-color: rgba(255,255,255,100);
   <slot>setColorInterpolation(bool)</slot>
   <slot>scaleFont(int)</slot>
   <slot>setLabelColor(QColor)</slot>
-  <slot>setLabelProperty(QString)</slot>
   <slot>setNodeColor(QColor)</slot>
   <slot>scaleNodes(int)</slot>
   <slot>setEdgesVisible(bool)</slot>

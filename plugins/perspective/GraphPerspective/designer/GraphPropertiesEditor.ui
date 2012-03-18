@@ -37,12 +37,44 @@
        <number>0</number>
       </property>
       <item>
+       <widget class="ClearableLineEdit" name="propertyFilter">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLineEdit {
+background-color: white;
+border: 0px;
+border-bottom: 1px solid #C9C9C9;
+}</string>
+        </property>
+        <property name="placeholderText">
+         <string>Filter property name</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QTableView" name="propertiesList">
+        <property name="contextMenuPolicy">
+         <enum>Qt::CustomContextMenu</enum>
+        </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
         <property name="alternatingRowColors">
          <bool>true</bool>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SingleSelection</enum>
         </property>
         <property name="selectionBehavior">
          <enum>QAbstractItemView::SelectRows</enum>
@@ -73,7 +105,52 @@
    <header>HeaderFrame.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>ClearableLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/ClearableLineEdit.h</header>
+  </customwidget>
  </customwidgets>
- <resources/>
- <connections/>
+ <resources>
+  <include location="../resources/GraphPerspective.qrc"/>
+  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>propertiesList</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>GraphPropertiesEditor</receiver>
+   <slot>showCustomContextMenu(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>199</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>propertyFilter</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>GraphPropertiesEditor</receiver>
+   <slot>setPropertyFilter(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>199</x>
+     <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>showCustomContextMenu(QPoint)</slot>
+  <slot>setPropertyFilter(QString)</slot>
+ </slots>
 </ui>

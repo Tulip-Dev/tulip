@@ -46,6 +46,8 @@
 
 using namespace tlp;
 
+QSet<QString> GraphPerspective::RESERVED_PROPERTIES = QSet<QString>();
+
 GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)) {
 #ifndef NDEBUG
   new ModelTest(_graphs,this);
@@ -53,7 +55,36 @@ GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c),
   Q_INIT_RESOURCE(GraphPerspective);
 }
 
+void GraphPerspective::registerReservedProperty(QString s) {
+  RESERVED_PROPERTIES.insert(s);
+}
+bool GraphPerspective::isReservedPropertyName(QString s) {
+  return RESERVED_PROPERTIES.contains(s);
+}
+void GraphPerspective::reserveDefaultProperties() {
+  registerReservedProperty("viewColor");
+  registerReservedProperty("viewLabelColor");
+  registerReservedProperty("viewSize");
+  registerReservedProperty("viewLabel");
+  registerReservedProperty("viewLabelPosition");
+  registerReservedProperty("viewShape");
+  registerReservedProperty("viewRotation");
+  registerReservedProperty("viewSelection");
+  registerReservedProperty("viewFont");
+  registerReservedProperty("viewFontSize");
+  registerReservedProperty("viewTexture");
+  registerReservedProperty("viewBorderColor");
+  registerReservedProperty("viewBorderWidth");
+  registerReservedProperty("viewLayout");
+  registerReservedProperty("viewSrcAnchorShape");
+  registerReservedProperty("viewSrcAnchorSize");
+  registerReservedProperty("viewTgtAnchorShape");
+  registerReservedProperty("viewTgtAnchorSize");
+  registerReservedProperty("viewAnimationFrame");
+}
+
 void GraphPerspective::construct(tlp::PluginProgress *progress) {
+  reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
   _mainWindow->installEventFilter(new ShadowFilter(this));
