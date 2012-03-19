@@ -501,7 +501,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dbus-env.bat.cmake ${CMAKE_BINARY_DIR
 
 INSTALL(FILES 
 		${CMAKE_BINARY_DIR}/bin/dbus-env.bat				
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/bin 
+        DESTINATION bin
         COMPONENT dbus)
 
 add_definitions(-DHAVE_CONFIG_H=1)

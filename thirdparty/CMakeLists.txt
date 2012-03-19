@@ -63,6 +63,7 @@ IF(WIN32)
   INSTALL_EXTERNAL_LIB("jpeg*.dll" jpeg)
   INSTALL_EXTERNAL_LIB("libpng*.dll" png)
   INSTALL_EXTERNAL_LIB("python2*.dll" python)
+  INSTALL_EXTERNAL_LIB("libintl*.dll" intl)
 
 ELSEIF(APPLE)
 ## -----------------------------------------------------------------------------------------------

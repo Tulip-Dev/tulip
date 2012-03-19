@@ -90,7 +90,7 @@ INSTALL(TARGETS dbus-daemon
 INSTALL(FILES 
 		${CMAKE_CURRENT_BINARY_DIR}/session.conf				
 		${CMAKE_CURRENT_BINARY_DIR}/system.conf
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/etc/dbus-1 
+        DESTINATION etc/dbus-1
         COMPONENT dbus)
 
 if (DBUS_SERVICE)
