@@ -48,8 +48,10 @@ MouseEdgeBendEditor::~MouseEdgeBendEditor() {
 void MouseEdgeBendEditor::clear() {
   if (glMainWidget != NULL) {
     glMainWidget->getScene()->removeLayer(layer,false);
+
     if(layer)
       delete layer;
+
     layer=NULL;
   }
 }
