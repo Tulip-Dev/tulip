@@ -88,14 +88,15 @@ MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL),layer(NULL),comp
 }
 //========================================================================================
 MouseSelectionEditor::~MouseSelectionEditor() {
-  if(layer) {
-    delete layer;
-  }
+
 }
 //========================================================================================
 void MouseSelectionEditor::clear() {
-  if (glMainWidget != NULL)
+  if (glMainWidget != NULL) {
     glMainWidget->getScene()->removeLayer(layer,false);
+    delete layer;
+    layer=NULL;
+  }
 }
 //========================================================================================
 void MouseSelectionEditor::getOperation(GlEntity *select) {
