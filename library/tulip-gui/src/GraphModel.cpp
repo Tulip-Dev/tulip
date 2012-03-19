@@ -422,7 +422,7 @@ bool EdgesGraphModel::lessThan(unsigned int a, unsigned int b, PropertyInterface
 }
 
 // Filter proxy
-GraphSortFilterProxyModel::GraphSortFilterProxyModel(QObject *parent): QSortFilterProxyModel(parent), _properties(QVector<PropertyInterface*>()) {
+GraphSortFilterProxyModel::GraphSortFilterProxyModel(QObject *parent): QSortFilterProxyModel(parent), _properties(QVector<PropertyInterface*>()), _selectedOnly(false) {
 }
 
 bool GraphSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const {
@@ -432,16 +432,24 @@ bool GraphSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIn
 void GraphSortFilterProxyModel::setProperties(QVector<PropertyInterface *> properties) {
   _properties = properties;
 }
+void GraphSortFilterProxyModel::setSelectedOnly(bool f) {
+  _selectedOnly = f;
+  invalidateFilter();
+}
+
 bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex&) const {
-  if (filterRegExp().isEmpty())
-    return true;
-
   GraphModel* graphModel = static_cast<GraphModel*>(sourceModel());
-
   if (graphModel->graph() == NULL)
     return true;
-
   unsigned int id = graphModel->elementAt(sourceRow);
+
+  if (_selectedOnly && graphModel->graph()->existProperty("viewSelection")) {
+    if (!(graphModel->value(id,graphModel->graph()->getProperty("viewSelection")).toBool()))
+      return false;
+  }
+
+  if (filterRegExp().isEmpty())
+    return true;
 
   if (_properties.isEmpty()) {
     std::string s;
