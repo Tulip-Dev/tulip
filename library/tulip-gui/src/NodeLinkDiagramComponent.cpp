@@ -18,11 +18,11 @@
  */
 #include "tulip/NodeLinkDiagramComponent.h"
 
+#include <QtGui/QActionGroup>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlGraphInputData.h>
-
-#include <QtCore/QDebug>
+#include <QtGui/QGraphicsView>
 
 using namespace tlp;
 using namespace std;
@@ -36,6 +36,34 @@ NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   getGlMainWidget()->setData(graph(), data);
   registerTriggers();
+
+  graphicsView()->setContextMenuPolicy(Qt::ActionsContextMenu);
+
+  QAction* overviewAction = new QAction(trUtf8("Overview"),this);
+  overviewAction->setCheckable(true);
+  overviewAction->setChecked(true);
+  connect(overviewAction,SIGNAL(triggered(bool)),this,SLOT(setOverviewVisible(bool)));
+  graphicsView()->addAction(overviewAction);
+
+  QAction* viewSeparator = new QAction(trUtf8("View"),this);
+  viewSeparator->setSeparator(true);
+  graphicsView()->addAction(viewSeparator);
+
+  QAction* redrawAction = new QAction(trUtf8("Redraw"),this);
+  redrawAction->setShortcut(trUtf8("Ctrl+Shift+R"));
+  connect(redrawAction,SIGNAL(triggered()),this,SLOT(redraw()));
+  graphicsView()->addAction(redrawAction);
+
+  QAction* centerAction = new QAction(trUtf8("Center"),this);
+  centerAction->setShortcut(trUtf8("Ctrl+Shift+C"));
+  connect(centerAction,SIGNAL(triggered()),getGlMainWidget(),SLOT(centerScene()));
+  graphicsView()->addAction(centerAction);
+
+  QActionGroup* viewGroup = new QActionGroup(this);
+  viewGroup->setExclusive(false);
+//  viewGroup->addAction(viewSeparator);
+  viewGroup->addAction(redrawAction);
+  viewGroup->addAction(centerAction);
 
   setOverviewVisible(true);
   setQuickAccessBarVisible(true);
