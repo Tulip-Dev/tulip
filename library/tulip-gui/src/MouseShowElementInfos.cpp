@@ -47,18 +47,18 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
   if(qMouseEv != NULL) {
     if (e->type() == QEvent::MouseButtonPress) {
       if (qMouseEv->button() == Qt::LeftButton) {
-        if(_informationsWidgetItem->isVisible()){
+        if(_informationsWidgetItem->isVisible()) {
           // Hide widget if we click outside it
-          if(!_informationsWidgetItem->boundingRect().contains(qMouseEv->pos())){
+          if(!_informationsWidgetItem->boundingRect().contains(qMouseEv->pos())) {
             _informationsWidgetItem->setVisible(false);
           }
         }
 
-        if(!_informationsWidgetItem->isVisible()){
+        if(!_informationsWidgetItem->isVisible()) {
           // Show widget if we click on node or edge
           if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
             if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
-               selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
+                selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
               _informationsWidgetItem->setPos(qMouseEv->pos());
               _informationsWidgetItem->setVisible(true);
               QPropertyAnimation *animation = new QPropertyAnimation(_informationsWidgetItem, "size");
@@ -69,7 +69,8 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
               animation->start();
 
               return true;
-            }else{
+            }
+            else {
               return false;
             }
           }
@@ -78,6 +79,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
       }
     }
   }
+
   return false;
 }
 

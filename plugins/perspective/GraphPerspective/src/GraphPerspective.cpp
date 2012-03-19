@@ -410,6 +410,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionCancel_selection->setEnabled(enabled);
   _ui->actionGroup_elements->setEnabled(enabled);
   _ui->actionCreate_sub_graph->setEnabled(enabled);
+
   if (_ui->centralWidget->currentWidget() == _ui->datasetModePage)
     setDatasetGraph(graph);
 }
@@ -434,6 +435,7 @@ void GraphPerspective::setDatasetFilter() {
 void GraphPerspective::setDatasetFilterProperty() {
   if (_ui->centralWidget->currentWidget() != _ui->datasetModePage || _ui->datasetPropertiesFilter->currentIndex() < 0)
     return;
+
   GraphSortFilterProxyModel* nodesModel = static_cast<GraphSortFilterProxyModel*>(_ui->nodesTable->model());
   GraphSortFilterProxyModel* edgesModel = static_cast<GraphSortFilterProxyModel*>(_ui->edgesTable->model());
 
@@ -474,10 +476,12 @@ Q_DECLARE_METATYPE(HeaderActionData)
 
 void GraphPerspective::datasetHeaderContextMenuRequested(QPoint p) {
   QTableView* tableView = NULL;
+
   if (sender() == _ui->nodesTable->horizontalHeader())
     tableView = _ui->nodesTable;
   else if (sender() == _ui->edgesTable->horizontalHeader())
     tableView = _ui->edgesTable;
+
   QHeaderView* headerView = tableView->horizontalHeader();
 
   QMenu menu;
@@ -489,13 +493,15 @@ void GraphPerspective::datasetHeaderContextMenuRequested(QPoint p) {
 
   connect(hideAllAction,SIGNAL(triggered()),this,SLOT(datasetHeaderHideAll()));
   menu.addSeparator();
-  for (int i=0;i<tableView->model()->columnCount();++i) {
+
+  for (int i=0; i<tableView->model()->columnCount(); ++i) {
     QAction* a = menu.addAction(tableView->model()->headerData(i,Qt::Horizontal).toString());
     a->setCheckable(true);
     a->setChecked(!headerView->isSectionHidden(i));
     a->setData(QVariant::fromValue<HeaderActionData>(HeaderActionData(tableView,i)));
     connect(a,SIGNAL(triggered(bool)),this,SLOT(datasetHeaderSectionToggled(bool)));
   }
+
   menu.exec(headerView->viewport()->mapToGlobal(p));
 }
 
@@ -514,7 +520,7 @@ void GraphPerspective::datasetHeaderShowAll() {
   datasetHeaderSetAllVisible(static_cast<QAction*>(sender())->data().value<HeaderActionData>()._tableView->horizontalHeader(),true);
 }
 void GraphPerspective::datasetHeaderSetAllVisible(QHeaderView* headerView, bool f) {
-  for (int i=0;i<headerView->count();++i) {
+  for (int i=0; i<headerView->count(); ++i) {
     headerView->setSectionHidden(i,!f);
   }
 }

@@ -19,7 +19,9 @@ public:
   explicit GraphPropertiesModel(tlp::Graph* graph, QObject *parent = 0);
   explicit GraphPropertiesModel(QString placeholder, tlp::Graph* graph, QObject *parent = 0);
 
-  tlp::Graph* graph() const { return _graph; }
+  tlp::Graph* graph() const {
+    return _graph;
+  }
 
   // Methods re-implemented from QAbstractItemModel
   QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;

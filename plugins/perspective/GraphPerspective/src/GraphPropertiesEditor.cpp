@@ -72,8 +72,10 @@ void GraphPropertiesEditor::setAllNodes() {
 
   QDialog* dlg = editDialog(w,this);
   dlg->setWindowTitle(_contextProperty->getName().c_str() + trUtf8(": Set all nodes values"));
+
   if (dlg->exec() == QDialog::Accepted)
     GraphModel::setAllNodeValue(_contextProperty,creator->editorData(w,_graph));
+
   delete dlg;
 }
 
@@ -85,8 +87,10 @@ void GraphPropertiesEditor::setAllEdges() {
 
   QDialog* dlg = editDialog(w,this);
   dlg->setWindowTitle(_contextProperty->getName().c_str() + trUtf8(": Set all edges values"));
+
   if (dlg->exec() == QDialog::Accepted)
     GraphModel::setAllEdgeValue(_contextProperty,creator->editorData(w,_graph));
+
   delete dlg;
 }
 

@@ -202,6 +202,7 @@ public:
     if(_parsingNodes)  {
       // allocate space needed for nodes in one call
       _graph->reserveNodes(integerVal);
+
       // then add nodes
       for(int i = 0; i < integerVal; ++i) {
         _graph->addNode();
