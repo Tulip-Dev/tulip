@@ -68,10 +68,15 @@ QVariant GraphModel::headerData(int section, Qt::Orientation orientation, int ro
     return QVariant();
 
   if (orientation == Qt::Vertical) {
+    if (section > _elements.size() || section < 0)
+      return QVariant();
+
     if (role == Qt::DisplayRole)
       return _elements[section];
   }
   else {
+    if (section > _properties.size() || section < 0)
+      return QVariant();
     PropertyInterface* prop = _properties[section];
 
     if (role == Qt::DisplayRole)

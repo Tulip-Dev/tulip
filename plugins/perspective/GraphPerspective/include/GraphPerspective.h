@@ -20,10 +20,12 @@
 #define GRAPHPERSPECTIVE_H
 
 #include <QtCore/QModelIndex>
+#include <QtCore/QPoint>
 #include <tulip/Perspective.h>
 #include <tulip/MethodFactory.h>
 
 class QAction;
+class QHeaderView;
 
 class GraphHierarchiesEditor;
 
@@ -85,9 +87,15 @@ protected slots:
   void group();
   void createSubGraph();
   void CSVImport();
+
   void setDatasetGraph(tlp::Graph*);
   void setDatasetFilter();
   void setDatasetFilterProperty();
+  void datasetHeaderContextMenuRequested(QPoint);
+  void datasetHeaderSectionToggled(bool);
+  void datasetHeaderShowAll();
+  void datasetHeaderHideAll();
+  void datasetHeaderSetAllVisible(QHeaderView*,bool);
 };
 
 #endif // GRAPHPERSPECTIVE_H
