@@ -105,23 +105,17 @@ bool MATRIXTLPGEO::operator!=(const MATRIXTLPGEO &mat) const {
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO & MATRIXTLPGEO::operator*=(const MATRIXTLPGEO &mat) {
   MATRIXTLPGEO tmpMat(*this);
-  MATRIXTLPGEO *pMat = (MATRIXTLPGEO *) &mat;
 
-  if (pMat == this)
-    pMat = new MATRIXTLPGEO(*this);
+  MATRIXTLPGEO *pMat = (MATRIXTLPGEO *) &mat;
+  if (pMat == this) pMat = &tmpMat;
 
   for (unsigned int i=0; i<SIZE; ++i)
     for (unsigned int j=0; j<SIZE; ++j) {
-      Obj tmpObj = (Obj) 0;
-
-      for (unsigned int k=0; k<SIZE; ++k)
-        tmpObj+=tmpMat[i][k]*(*pMat)[k][j];
-
+      Obj tmpObj = tmpMat[i][0] * (*pMat)[0][j];
+      for (unsigned int k=1; k<SIZE; ++k)
+        tmpObj += tmpMat[i][k] * (*pMat)[k][j];
       (*this)[i][j] = tmpObj;
     }
-
-  if (pMat != &mat)
-    delete pMat;
 
   return (*this);
 }
