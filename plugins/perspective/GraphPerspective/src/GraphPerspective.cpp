@@ -134,6 +134,7 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   connect(_ui->edgesTable->horizontalHeader(),SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(datasetHeaderContextMenuRequested(QPoint)));
   _ui->nodesTable->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
   _ui->edgesTable->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(_ui->datasetSelectedToggle,SIGNAL(clicked(bool)),this,SLOT(setDatasetSelectedOnly(bool)));
 
   // D-BUS actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
@@ -409,7 +410,6 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionCancel_selection->setEnabled(enabled);
   _ui->actionGroup_elements->setEnabled(enabled);
   _ui->actionCreate_sub_graph->setEnabled(enabled);
-
   if (_ui->centralWidget->currentWidget() == _ui->datasetModePage)
     setDatasetGraph(graph);
 }
@@ -432,9 +432,8 @@ void GraphPerspective::setDatasetFilter() {
 }
 
 void GraphPerspective::setDatasetFilterProperty() {
-  if (_ui->centralWidget->currentWidget() != _ui->datasetModePage)
+  if (_ui->centralWidget->currentWidget() != _ui->datasetModePage || _ui->datasetPropertiesFilter->currentIndex() < 0)
     return;
-
   GraphSortFilterProxyModel* nodesModel = static_cast<GraphSortFilterProxyModel*>(_ui->nodesTable->model());
   GraphSortFilterProxyModel* edgesModel = static_cast<GraphSortFilterProxyModel*>(_ui->edgesTable->model());
 
@@ -518,6 +517,12 @@ void GraphPerspective::datasetHeaderSetAllVisible(QHeaderView* headerView, bool 
   for (int i=0;i<headerView->count();++i) {
     headerView->setSectionHidden(i,!f);
   }
+}
+void GraphPerspective::setDatasetSelectedOnly(bool f) {
+  GraphSortFilterProxyModel* nodesModel = static_cast<GraphSortFilterProxyModel*>(_ui->nodesTable->model());
+  GraphSortFilterProxyModel* edgesModel = static_cast<GraphSortFilterProxyModel*>(_ui->edgesTable->model());
+  nodesModel->setSelectedOnly(f);
+  edgesModel->setSelectedOnly(f);
 }
 
 PLUGIN(GraphPerspective)

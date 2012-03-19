@@ -96,6 +96,7 @@ protected slots:
   void datasetHeaderShowAll();
   void datasetHeaderHideAll();
   void datasetHeaderSetAllVisible(QHeaderView*,bool);
+  void setDatasetSelectedOnly(bool);
 };
 
 #endif // GRAPHPERSPECTIVE_H
