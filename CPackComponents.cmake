@@ -19,6 +19,7 @@ BUNDLE_DEFINE_COMPONENT(jpeg "jpeg" "libjpeg is a library written entirely in C 
 BUNDLE_DEFINE_COMPONENT(png "png" "libpng is the official PNG reference library." "thirdparty")
 BUNDLE_DEFINE_COMPONENT(python "Python" "Python Programming Language" "thirdparty")
 BUNDLE_DEFINE_COMPONENT(sip "SIP" "Python/C++ bindings library" "thirdparty")
+BUNDLE_DEFINE_COMPONENT(intl "INTL" "Libintl is a library that provides native language support to programs. It is part of Gettext" "thirdparty")
 
 BUNDLE_DEFINE_COMPONENT(tulip_core_dev "tulip-core (dev)" "Headers and developer files for the tulip-core library" "Developement files")
 BUNDLE_DEFINE_COMPONENT(tulip_core "tulip-core" "tulip-core library: A C++ framework for graph manipulation" "Libraries")
