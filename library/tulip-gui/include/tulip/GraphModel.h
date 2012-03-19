@@ -53,7 +53,7 @@ protected:
   virtual bool isNode() const = 0;
 };
 
-class GraphSortFilterProxyModel: public QSortFilterProxyModel {
+class TLP_QT_SCOPE GraphSortFilterProxyModel: public QSortFilterProxyModel {
   QVector<PropertyInterface*> _properties;
   bool _selectedOnly;
 
