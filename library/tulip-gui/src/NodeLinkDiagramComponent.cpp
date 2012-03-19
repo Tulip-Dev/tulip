@@ -18,22 +18,43 @@
  */
 #include "tulip/NodeLinkDiagramComponent.h"
 
+#include "ui_GridOptionsWidget.h"
+
+#include <QtGui/QGraphicsView>
 #include <QtGui/QActionGroup>
+#include <QtGui/QDialog>
+
+#include <tulip/GlGrid.h>
+#include <tulip/DrawingTools.h>
+#include <tulip/TulipItemDelegate.h>
+#include <tulip/ParameterListModel.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlGraphInputData.h>
-#include <QtGui/QGraphicsView>
 
 using namespace tlp;
 using namespace std;
 
-NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*) {
+NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL) {
 }
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
 }
 
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
+  ParameterDescriptionList gridParameters;
+  gridParameters.add<StringCollection>("Grid mode","","No grid;Space divisions;Fixed size",true);
+  gridParameters.add<Size>("Grid size","","(1,1,1)",false);
+  gridParameters.add<Size>("Margins","","(0.5,0.5,0.5)",false);
+  gridParameters.add<Color>("Grid color","","(0,0,0,255)",false);
+  ParameterListModel* model = new ParameterListModel(gridParameters,NULL,this);
+
+  Ui::GridOptionsWidget* ui = new Ui::GridOptionsWidget;
+  _gridOptions = new QDialog(graphicsView());
+  ui->setupUi(_gridOptions);
+  ui->tableView->setModel(model);
+  ui->tableView->setItemDelegate(new TulipItemDelegate);
+
   getGlMainWidget()->setData(graph(), data);
   registerTriggers();
 
@@ -59,11 +80,19 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   connect(centerAction,SIGNAL(triggered()),getGlMainWidget(),SLOT(centerScene()));
   graphicsView()->addAction(centerAction);
 
-  QActionGroup* viewGroup = new QActionGroup(this);
-  viewGroup->setExclusive(false);
-//  viewGroup->addAction(viewSeparator);
-  viewGroup->addAction(redrawAction);
-  viewGroup->addAction(centerAction);
+  QAction* augmentedSeparator = new QAction(trUtf8("Augmented display"),this);
+  augmentedSeparator->setSeparator(true);
+  graphicsView()->addAction(augmentedSeparator);
+
+  QAction* zOrderAction = new QAction(trUtf8("Z Ordering"),this);
+  zOrderAction->setCheckable(true);
+  zOrderAction->setChecked(false);
+  connect(redrawAction,SIGNAL(triggered(bool)),this,SLOT(setZOrdering(bool)));
+  graphicsView()->addAction(zOrderAction);
+
+  QAction* gridAction = new QAction(trUtf8("Grid"),this);
+  connect(gridAction,SIGNAL(triggered()),this,SLOT(showGridControl()));
+  graphicsView()->addAction(gridAction);
 
   setOverviewVisible(true);
   setQuickAccessBarVisible(true);
@@ -96,6 +125,17 @@ void NodeLinkDiagramComponent::registerTriggers() {
 
 bool NodeLinkDiagramComponent::isLayoutProperty(tlp::PropertyInterface* pi) const {
   return pi == getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();
+}
+
+void NodeLinkDiagramComponent::redraw() {
+  getGlMainWidget()->redraw();
+}
+
+void NodeLinkDiagramComponent::setZOrdering(bool f) {
+  getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setElementZOrdered(f);
+}
+
+void NodeLinkDiagramComponent::showGridControl() {
 }
 
 PLUGIN(NodeLinkDiagramComponent)

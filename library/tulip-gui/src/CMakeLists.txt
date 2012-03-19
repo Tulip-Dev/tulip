@@ -126,6 +126,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/TulipFontDialog.ui
   ../designer/VectorEditionWidget.ui
   ../designer/TulipFontWidget.ui
+  ../designer/GridOptionsWidget.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS

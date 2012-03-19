@@ -22,18 +22,17 @@
 #include <tulip/GlMainView.h>
 
 namespace tlp {
-class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
+class GlGrid;
 
+class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
   Q_OBJECT
 
-  void registerTriggers();
+  tlp::GlGrid* _grid;
+  QDialog* _gridOptions;
 
+  void registerTriggers();
 public:
   PLUGININFORMATIONS("Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0", "relational")
-
-  std::string icon() const {
-    return "";
-  }
 
   NodeLinkDiagramComponent(const tlp::PluginContext* context = NULL);
   virtual ~NodeLinkDiagramComponent();
@@ -41,6 +40,11 @@ public:
   void setState(const tlp::DataSet &);
   tlp::DataSet state() const;
   bool isLayoutProperty(tlp::PropertyInterface *) const;
+
+protected slots:
+  void redraw();
+  void setZOrdering(bool);
+  void showGridControl();
 
 protected:
   void graphChanged(tlp::Graph *);

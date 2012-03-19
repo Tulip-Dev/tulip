@@ -37,6 +37,7 @@
 #include <tulip/TulipFontWidget.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/GraphPropertiesModel.h>
+#include <QtGui/QColorDialog>
 
 using namespace tlp;
 
@@ -44,7 +45,7 @@ using namespace tlp;
   ColorEditorCreator
 */
 QWidget* ColorEditorCreator::createWidget(QWidget *parent) const {
-  return new ColorButton(parent);
+  return new QColorDialog(parent);
 }
 
 bool ColorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
@@ -55,11 +56,11 @@ bool ColorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& op
 }
 
 void ColorEditorCreator::setEditorData(QWidget *editor, const QVariant &data,tlp::Graph*) {
-  static_cast<ColorButton*>(editor)->setTulipColor(data.value<tlp::Color>());
+  static_cast<QColorDialog*>(editor)->setCurrentColor(colorToQColor(data.value<tlp::Color>()));
 }
 
 QVariant ColorEditorCreator::editorData(QWidget *editor,tlp::Graph*) {
-  return QVariant::fromValue<tlp::Color>(static_cast<ColorButton*>(editor)->tulipColor());
+  return QVariant::fromValue<tlp::Color>(QColorToColor(static_cast<QColorDialog*>(editor)->currentColor()));
 }
 
 /*
