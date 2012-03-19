@@ -104,6 +104,7 @@ bool MATRIXTLPGEO::operator!=(const MATRIXTLPGEO &mat) const {
 //===================================================================
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO & MATRIXTLPGEO::operator*=(const MATRIXTLPGEO &mat) {
+  /*
   MATRIXTLPGEO tmpMat(*this);
 
   MATRIXTLPGEO *pMat = (MATRIXTLPGEO *) &mat;
@@ -116,7 +117,8 @@ MATRIXTLPGEO & MATRIXTLPGEO::operator*=(const MATRIXTLPGEO &mat) {
         tmpObj += tmpMat[i][k] * (*pMat)[k][j];
       (*this)[i][j] = tmpObj;
     }
-
+  */
+  (*this) = (*this) * mat;
   return (*this);
 }
 //=====================================================================================
@@ -279,7 +281,16 @@ MATRIXTLPGEO tlp::operator-(const MATRIXTLPGEO &mat1 ,const MATRIXTLPGEO &mat2) 
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO tlp::operator*(const MATRIXTLPGEO &mat1 ,const MATRIXTLPGEO &mat2) {
-  return MATRIXTLPGEO(mat1)*=mat2;
+  MATRIXTLPGEO result;
+  for (unsigned int i=0; i<SIZE; ++i)
+    for (unsigned int j=0; j<SIZE; ++j) {
+      Obj tmpObj = mat1[i][0] * mat2[0][j];
+      for (unsigned int k=1; k<SIZE; ++k)
+        tmpObj += mat1[i][k] * mat2[k][j];
+      result[i][j] = tmpObj;
+    }
+  return result;
+  //return MATRIXTLPGEO(mat1)*=mat2;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
