@@ -17,9 +17,9 @@ case "`uname -s`" in
     *Linux*|*GNU/kFreeBSD*)
 	export LD_LIBRARY_PATH=${THISDIR}/../lib:${THISDIR}/../lib/tulip:${THISDIR}/../lib/tulip/interactors:${THISDIR}/../lib/tulip/view:${LD_LIBRARY_PATH}
 	#If the python lib is in the lib dir set the PYTHONHOME
-	PYTHONLIB=$(ls $THISDIR/../libpython* 2> /dev/null)
-	if [ "$PYTHONLIB" != "0" ]; then
-	  export PYTHONHOME=$THISDIR/..
+        PYTHONLIB=$(ls $THISDIR/../lib/libpython* 2> /dev/null)
+        if [ $? -eq 0 ]; then
+          export PYTHONHOME=$THISDIR/../
 	fi
 	# make some additional stuff if we are in the bundle (Qt libs in ../lib)
 	QT_LIBS=$(ls ${THISDIR}/../lib/libQt*.* 2>&1 >/dev/null)
