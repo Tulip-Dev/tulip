@@ -62,7 +62,7 @@ void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
     timeLine.start();
 
     while (timeLine.state() != QTimeLine::NotRunning) {
-      QApplication::processEvents(QEventLoop::AllEvents);
+      QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
   }
 
