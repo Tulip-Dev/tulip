@@ -104,6 +104,8 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui->edgesTable->setModel(edgesModel);
   _ui->nodesTable->setItemDelegate(new GraphTableItemDelegate);
   _ui->edgesTable->setItemDelegate(new GraphTableItemDelegate);
+  _ui->nodesTable->horizontalHeader()->setMovable(true);
+  _ui->edgesTable->horizontalHeader()->setMovable(true);
 
   // Connect actions
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
