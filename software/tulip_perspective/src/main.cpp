@@ -97,9 +97,6 @@ int main(int argc,char **argv) {
 
   TulipAgentCommunicator *communicator = new TulipAgentCommunicator("org.labri.Tulip","/",QDBusConnection::sessionBus(),0);
 
-//  if (!(QDBusConnection::sessionBus().interface()->isServiceRegistered("org.labri.Tulip").value()))
-//    qWarning("No org.labri.Tulip service on session bus. Falling back to headless mode.");
-
 #if defined(__APPLE__) // revert current directory
   QDir::setCurrent(currentPath);
 #endif
