@@ -21,6 +21,9 @@
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QWidget>
+#include <QtGui/QTableView>
+#include <QtGui/QGraphicsProxyWidget>
+#include <tulip/ViewWidget.h>
 
 #include <tulip/InteractorComposite.h>
 
@@ -35,11 +38,18 @@ class View;
  */
 class TLP_QT_SCOPE MouseShowElementInfos : public InteractorComponent {
 public:
-  virtual void init();
-  virtual bool eventFilter(QObject*, QEvent*);
+  MouseShowElementInfos();
+  virtual bool eventFilter(QObject* widget, QEvent* e);
 
-  void setView(tlp::View* view);
-  tlp::View* view() const;
+  void viewChanged(View *);
+
+  void clear();
+
+protected:
+
+  ViewWidget *_view;
+  QTableView *_informationsWidget;
+  QGraphicsProxyWidget *_informationsWidgetItem;
 };
 
 }
