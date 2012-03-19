@@ -137,7 +137,11 @@ public:
       //saving nodes only requires knowing how many of them there are
       _writer.writeString(NodesNumberToken);
       _writer.writeInteger(graph->numberOfNodes());
-
+      //saving the number of edges will speed up the import phase
+      //because the space needed to store the edges will be
+      //allocated in one call
+      _writer.writeString(EdgesNumberToken);
+      _writer.writeInteger(graph->numberOfEdges());
       //saving edges requires writing source and target for every edge
       _writer.writeString(EdgesToken);
       _writer.writeArrayOpen();
@@ -153,7 +157,7 @@ public:
       _writer.writeArrayClose();
     }
     else {
-      //only saviong relevant nodes and edges
+      //only saving relevant nodes and edges
       writeInterval(NodesIDsToken, new NewValueIterator<tlp::node>(graph->getNodes(), _newNodeId));
       writeInterval(EdgesIDsToken, new NewValueIterator<tlp::edge>(graph->getEdges(), _newEdgeId));
     }

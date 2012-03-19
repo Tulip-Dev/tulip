@@ -22,6 +22,7 @@ public:
     _edgeSource(UINT_MAX),
     _parsingNodesIds(false),
     _parsingEdgesIds(false),
+    _parsingEdgesNumber(false),
     _parsingInterval(false),
     _newInterval(false),
     _intervalSource(UINT_MAX),
@@ -122,6 +123,9 @@ public:
     else if(value == NodesNumberToken) {
       _parsingNodes = true;
     }
+    else if(value == EdgesNumberToken) {
+      _parsingEdgesNumber = true;
+    }
     else if(_parsingPropertyNodeValues || _parsingPropertyEdgeValues) {
       _currentIdentifier = atoi(value.c_str());
     }
@@ -196,11 +200,22 @@ public:
     }
 
     if(_parsingNodes)  {
+      // allocate space needed for nodes in one call
+      _graph->reserveNodes(integerVal);
+      // then add nodes
       for(int i = 0; i < integerVal; ++i) {
         _graph->addNode();
       }
 
       _parsingNodes = false;
+      return; //just ignore whatever is next, we've done what we came for.
+    }
+
+    if(_parsingEdgesNumber)  {
+      // allocate space needed for edges in one call
+      _graph->reserveEdges(integerVal);
+
+      _parsingEdgesNumber = false;
       return; //just ignore whatever is next, we've done what we came for.
     }
 
@@ -348,6 +363,7 @@ private:
 
   bool _parsingNodesIds;
   bool _parsingEdgesIds;
+  bool _parsingEdgesNumber;
   bool _parsingInterval;
   bool _newInterval;
   unsigned int _intervalSource;
