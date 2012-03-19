@@ -43,13 +43,15 @@ MouseEdgeBendEditor::MouseEdgeBendEditor()
 }
 //========================================================================================
 MouseEdgeBendEditor::~MouseEdgeBendEditor() {
-  if(layer)
-    delete layer;
 }
 //========================================================================================
 void MouseEdgeBendEditor::clear() {
-  if (glMainWidget != NULL)
+  if (glMainWidget != NULL) {
     glMainWidget->getScene()->removeLayer(layer,false);
+    if(layer)
+      delete layer;
+    layer=NULL;
+  }
 }
 //========================================================================================
 bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
