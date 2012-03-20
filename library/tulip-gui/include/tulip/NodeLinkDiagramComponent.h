@@ -31,6 +31,7 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
   QDialog* _gridOptions;
 
   void registerTriggers();
+  void updateGrid();
 public:
   PLUGININFORMATIONS("Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0", "relational")
 
@@ -39,6 +40,9 @@ public:
   void setState(const tlp::DataSet &);
   tlp::DataSet state() const;
   bool isLayoutProperty(tlp::PropertyInterface *) const;
+
+public slots:
+  void draw(PluginProgress *pluginProgress);
 
 protected slots:
   void redraw();

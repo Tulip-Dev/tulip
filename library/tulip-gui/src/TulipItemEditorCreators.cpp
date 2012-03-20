@@ -90,7 +90,7 @@ bool BooleanEditorCreator::paint(QPainter *p, const QStyleOptionViewItem &option
 }
 
 void BooleanEditorCreator::setEditorData(QWidget* editor, const QVariant &data,tlp::Graph*) {
-  static_cast<QCheckBox*>(editor)->setChecked(data.toBool());
+  static_cast<QCheckBox*>(editor)->setChecked(!data.toBool());
 }
 
 QVariant BooleanEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
