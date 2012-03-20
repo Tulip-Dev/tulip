@@ -88,7 +88,19 @@ public:
 //         std::cout << "now parsing property: " << propertyName << std::endl;
     }
 
-    if(value == GraphIDToken) {
+    if(_currentProperty && value == NodesValuesToken) {
+      _parsingPropertyNodeValues = true;
+    }
+    else if(_currentProperty && value == EdgesValuesToken) {
+      _parsingPropertyEdgeValues = true;
+    }
+    else if(value == EdgeDefaultToken) {
+      _parsingPropertyDefaultEdgeValue = true;
+    }
+    else if (value == NodeDefaultToken) {
+      _parsingPropertyDefaultNodeValue = true;
+    }
+    else if(value == GraphIDToken) {
       _waitingForGraphId = true;
     }
     else if(value == NodesIDsToken) {
@@ -100,20 +112,8 @@ public:
     else if(!_currentProperty && value == EdgesToken)  {
       _parsingEdges = true;
     }
-    else if(value == "attributes") {
+    else if(value == AttributesToken) {
       _parsingAttributes = true;
-    }
-    else if(_currentProperty && value == NodesValuesToken) {
-      _parsingPropertyNodeValues = true;
-    }
-    else if(_currentProperty && value == EdgesValuesToken) {
-      _parsingPropertyEdgeValues = true;
-    }
-    else if(value == EdgeDefaultToken) {
-      _parsingPropertyDefaultEdgeValue = true;
-    }
-    else if (value == NodeDefaultToken) {
-      _parsingPropertyDefaultNodeValue = true;
     }
     else if (value == PropertiesToken) {
       _parsingProperties = true;
@@ -287,7 +287,6 @@ public:
         if(!_currentProperty) {
           cout << "[error] The property '" << _propertyName << "' of type: '" << value << "' could not be created" << endl;
         }
-
       }
 
       if(_currentProperty) {
@@ -447,6 +446,7 @@ public:
   }
 
   virtual bool importGraph() {
+    Observable::holdObservers();
     std::string filename;
     if(_progress) {
       _progress->progress(0, 0);
@@ -462,6 +462,7 @@ public:
     }
 
     pluginProgress->setError(_proxy->errorMessage());
+    Observable::unholdObservers();
     return _proxy->parsingSucceeded();
   }
 
