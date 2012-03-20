@@ -20,7 +20,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include <tulip/MethodFactory.h>
+
 #include <tulip/ExportModule.h>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/AbstractProperty.h>

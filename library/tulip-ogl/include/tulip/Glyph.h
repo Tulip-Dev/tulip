@@ -21,7 +21,7 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <tulip/MethodFactory.h>
+
 #include <tulip/Plugin.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/WithParameter.h>

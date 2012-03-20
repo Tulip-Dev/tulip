@@ -24,7 +24,7 @@
 #include <tulip/WithDependency.h>
 #include <tulip/Plugin.h>
 #include <tulip/PluginLister.h>
-#include <tulip/MethodFactory.h>
+
 
 /** \addtogroup plugins */
 namespace tlp {

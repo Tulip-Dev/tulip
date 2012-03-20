@@ -53,6 +53,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(const QString &group, const QString &na
   _ui->parameters->hide();
   _ui->settingsButton->setVisible(params.size()>0);
   _ui->parameters->setItemDelegate(new TulipItemDelegate);
+  connect(_ui->parameters, SIGNAL(destroyed()), _ui->parameters->itemDelegate(), SLOT(deleteLater()));
   setObjectName(name);
   connect(_ui->playButton,SIGNAL(clicked()),this,SIGNAL(run()));
 }

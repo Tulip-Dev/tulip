@@ -104,6 +104,9 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui->edgesTable->setModel(edgesModel);
   _ui->nodesTable->setItemDelegate(new GraphTableItemDelegate);
   _ui->edgesTable->setItemDelegate(new GraphTableItemDelegate);
+  connect(_ui->nodesTable, SIGNAL(destroyed()), _ui->nodesTable->itemDelegate(), SLOT(deleteLater()));
+  connect(_ui->edgesTable, SIGNAL(destroyed()), _ui->edgesTable->itemDelegate(), SLOT(deleteLater()));
+  
   _ui->nodesTable->horizontalHeader()->setMovable(true);
   _ui->edgesTable->horizontalHeader()->setMovable(true);
 

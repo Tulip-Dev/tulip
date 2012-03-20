@@ -96,8 +96,8 @@ public:
 
       if(plugin != NULL) {
         keys.push_back(it->first);
-        delete plugin;
       }
+      delete plugin;
     }
 
     return keys;

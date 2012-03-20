@@ -36,6 +36,10 @@ public :
   NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text):GLInteractorComposite(QIcon(iconPath),text), _label(NULL), _priority(0) {
   }
 
+  virtual ~NodeLinkDiagramComponentInteractor() {
+    _label->deleteLater();
+  }
+
   void setConfigurationWidgetText(const QString& text) {
     _label = new QLabel(text);
     _label->setWordWrap(true);

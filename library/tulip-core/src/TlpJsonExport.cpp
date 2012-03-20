@@ -3,7 +3,7 @@
 #include <tulip/Graph.h>
 #include <tulip/DataSet.h>
 #include <tulip/MutableContainer.h>
-#include <tulip/MethodFactory.h>
+
 #include <tulip/JsonTokens.h>
 
 #include <sstream>

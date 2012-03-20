@@ -22,7 +22,7 @@
 #include <QtCore/QModelIndex>
 #include <QtCore/QPoint>
 #include <tulip/Perspective.h>
-#include <tulip/MethodFactory.h>
+
 
 class QAction;
 class QHeaderView;

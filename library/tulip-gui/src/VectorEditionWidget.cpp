@@ -88,6 +88,7 @@ ContainerInterface* VectorEditionWidget::getInterface() {
 void VectorEditionWidget::setInterface(ContainerInterface *interf) {
   ui->listView->setModel(new ListPropertyWidgetModel(interf,this));
   ui->listView->setItemDelegate(new GraphTableItemDelegate());
+  connect(ui->listView, SIGNAL(destroyed()), ui->listView->itemDelegate(), SLOT(deleteLater()));
 }
 
 void VectorEditionWidget::addRow() {

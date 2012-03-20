@@ -35,7 +35,6 @@ public:
   PLUGININFORMATIONS("Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0", "relational")
 
   NodeLinkDiagramComponent(const tlp::PluginContext* context = NULL);
-  virtual ~NodeLinkDiagramComponent();
 
   void setState(const tlp::DataSet &);
   tlp::DataSet state() const;

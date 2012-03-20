@@ -24,7 +24,7 @@
 #include <QtGui/QWidget>
 #include <QtGui/QMainWindow>
 
-#include <tulip/MethodFactory.h>
+
 #include <tulip/Plugin.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/PluginLister.h>
