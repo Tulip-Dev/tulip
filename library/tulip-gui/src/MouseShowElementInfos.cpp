@@ -20,6 +20,8 @@
 
 #include <QtCore/QPropertyAnimation>
 #include <QtGui/QGraphicsView>
+#include <tulip/GraphElementModel.h>
+#include <tulip/TulipItemDelegate.h>
 
 #include <tulip/GlMainWidget.h>
 
@@ -28,6 +30,7 @@ using namespace tlp;
 
 MouseShowElementInfos::MouseShowElementInfos() {
   _informationsWidget=new QTableView();
+  _informationsWidget->setModel(NULL);
   _informationsWidgetItem=new QGraphicsProxyWidget();
   _informationsWidgetItem->setWidget(_informationsWidget);
   _informationsWidgetItem->setVisible(false);
@@ -59,13 +62,24 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
           if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
             if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
                 selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
-              _informationsWidgetItem->setPos(qMouseEv->pos());
               _informationsWidgetItem->setVisible(true);
-              QPropertyAnimation *animation = new QPropertyAnimation(_informationsWidgetItem, "size");
+              if(_informationsWidget->model()!=NULL)
+                delete _informationsWidget->model();
+              if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)
+                _informationsWidget->setModel(new GraphNodeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
+              else
+                _informationsWidget->setModel(new GraphEdgeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
+              _informationsWidget->setItemDelegate(new TulipItemDelegate);
+              QPoint position=qMouseEv->pos();
+              if(position.x()+_informationsWidgetItem->rect().width()>_view->graphicsView()->sceneRect().width())
+                position.setX(qMouseEv->pos().x()-_informationsWidgetItem->rect().width());
+              if(position.y()+_informationsWidgetItem->rect().height()>_view->graphicsView()->sceneRect().height())
+                position.setY(qMouseEv->pos().y()-_informationsWidgetItem->rect().height());
+              _informationsWidgetItem->setPos(position);
+              QPropertyAnimation *animation = new QPropertyAnimation(_informationsWidgetItem, "opacity");
               animation->setDuration(100);
-              animation->setStartValue(QSizeF(0,0));
-              animation->setEndValue(_informationsWidgetItem->preferredSize());
-
+              animation->setStartValue(0.);
+              animation->setEndValue(1.);
               animation->start();
 
               return true;
