@@ -102,25 +102,7 @@ bool MATRIX::operator!=(const MATRIX &mat) const {
 //===================================================================
 template<typename Obj,unsigned int SIZE>
 MATRIX & MATRIX::operator*=(const MATRIX &mat) {
-  MATRIX tmpMat(*this);
-  MATRIX *pMat = (MATRIX *) &mat;
-
-  if (pMat == this)
-    pMat = new MATRIX(*this);
-
-  for (unsigned int i=0; i<SIZE; ++i)
-    for (unsigned int j=0; j<SIZE; ++j) {
-      Obj tmpObj = (Obj) 0;
-
-      for (unsigned int k=0; k<SIZE; ++k)
-        tmpObj+=tmpMat[i][k]*(*pMat)[k][j];
-
-      (*this)[i][j] = tmpObj;
-    }
-
-  if (pMat != &mat)
-    delete pMat;
-
+  (*this) = (*this) * mat;
   return (*this);
 }
 //=====================================================================================
@@ -283,7 +265,15 @@ MATRIX tlp::operator-(const MATRIX &mat1 ,const MATRIX &mat2) {
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
 MATRIX tlp::operator*(const MATRIX &mat1 ,const MATRIX &mat2) {
-  return MATRIX(mat1)*=mat2;
+  MATRIX result;
+  for (unsigned int i=0; i<SIZE; ++i)
+    for (unsigned int j=0; j<SIZE; ++j) {
+      Obj tmpObj = mat1[i][0] * mat2[0][j];
+      for (unsigned int k=1; k<SIZE; ++k)
+        tmpObj += mat1[i][k] * mat2[k][j];
+      result[i][j] = tmpObj;
+    }
+  return result;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
