@@ -46,6 +46,7 @@ public:
                     const std::string& tulipRelease, const std::list<tlp::Dependency> dependencies, const QString& type, const QString& location, const QString& remotepluginName)
     : _author(author), _date(date), _group(group), _name(name), _info(info), _release(release), _tulipRelease(tulipRelease),
       _type(type), _location(location), _remotePluginName(remotepluginName) {
+        _dependencies = dependencies;
   }
   virtual std::string author() const {
     return _author;
