@@ -39,7 +39,6 @@ INSTALL(FILES
   tulip/MapIterator.h
   tulip/Matrix.h
   tulip/memorypool.h
-  tulip/MethodFactory.h
   tulip/minmaxproperty.h
   tulip/MutableContainer.h
   tulip/Node.h
