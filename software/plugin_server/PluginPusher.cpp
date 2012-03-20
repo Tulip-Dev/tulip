@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
     destinationPath = argv[4];
   }
 
-  WebDavManager manager("webdav." + serverURL, "/perso/huet", credentials);
+  WebDavManager manager("webdav." + serverURL, destinationPath, credentials);
 
   QFile description(path + "/serverDescription.xml");
 
@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
 
   QString localDescription(description.readAll());
 
-  QString location = "http://www." + serverURL + "/perso/huet/" + destinationPath;
+  QString location = "http://www." + serverURL + destinationPath;
 
   QNetworkAccessManager networkManager;
   QNetworkReply* reply = networkManager.get(QNetworkRequest(QUrl(location + "/serverDescription.xml")));
