@@ -108,8 +108,8 @@ int main(int argc,char **argv) {
   progress->setComment(QObject::trUtf8("Loading plugins").toStdString());
   tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   tlp::TulipPluginsPath = QString(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins/lib/tulip/").toStdString() +
-      tlp::PATH_DELIMITER + tlp::TulipPluginsPath +
-      tlp::PATH_DELIMITER + tlp::getPluginLocalInstallationDir().toStdString();
+                          tlp::PATH_DELIMITER + tlp::TulipPluginsPath +
+                          tlp::PATH_DELIMITER + tlp::getPluginLocalInstallationDir().toStdString();
 
   tlp::PluginLibraryLoader::loadPlugins();
   tlp::PluginLister::checkLoadedPluginsDependencies(0);

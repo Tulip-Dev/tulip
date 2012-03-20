@@ -63,18 +63,24 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
             if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
                 selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
               _informationsWidgetItem->setVisible(true);
+
               if(_informationsWidget->model()!=NULL)
                 delete _informationsWidget->model();
+
               if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)
                 _informationsWidget->setModel(new GraphNodeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
               else
                 _informationsWidget->setModel(new GraphEdgeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
+
               _informationsWidget->setItemDelegate(new TulipItemDelegate);
               QPoint position=qMouseEv->pos();
+
               if(position.x()+_informationsWidgetItem->rect().width()>_view->graphicsView()->sceneRect().width())
                 position.setX(qMouseEv->pos().x()-_informationsWidgetItem->rect().width());
+
               if(position.y()+_informationsWidgetItem->rect().height()>_view->graphicsView()->sceneRect().height())
                 position.setY(qMouseEv->pos().y()-_informationsWidgetItem->rect().height());
+
               _informationsWidgetItem->setPos(position);
               QPropertyAnimation *animation = new QPropertyAnimation(_informationsWidgetItem, "opacity");
               animation->setDuration(100);

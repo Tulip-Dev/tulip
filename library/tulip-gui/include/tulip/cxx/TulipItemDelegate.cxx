@@ -17,7 +17,7 @@
  *
  */
 namespace tlp {
-  
+
 template<typename T>
 void TulipItemDelegate::registerCreator(tlp::TulipItemEditorCreator *c) {
   int id = qMetaTypeId<T>();

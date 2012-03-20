@@ -277,11 +277,13 @@ public:
     if(_parsingProperties) {
       if(_parsingPropertyType && !_propertyName.empty()) {
         _parsingPropertyType = false;
+
         //       std::cout << "getting new property: " << propertyName << "(" << value << ")" << std::sendl;
         //       std::cout << "of type: " << value << std::endl;
         if(_progress) {
           _progress->setComment("parsing property: '" + _propertyName + "'");
         }
+
         _currentProperty = _graph->getProperty(_propertyName, value);
 
         if(!_currentProperty) {
@@ -448,6 +450,7 @@ public:
   virtual bool importGraph() {
     Observable::holdObservers();
     std::string filename;
+
     if(_progress) {
       _progress->progress(0, 0);
     }
