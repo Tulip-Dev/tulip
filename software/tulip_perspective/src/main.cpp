@@ -23,10 +23,12 @@
 #include <QtGui/QApplication>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMessageBox>
+#include <QtGui/QDesktopServices>
 
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 #include <tulip/TulipProject.h>
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/PluginLister.h>
@@ -105,6 +107,10 @@ int main(int argc,char **argv) {
   progress->progress(25,100);
   progress->setComment(QObject::trUtf8("Loading plugins").toStdString());
   tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
+  tlp::TulipPluginsPath = QString(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins/lib/tulip/").toStdString() +
+      tlp::PATH_DELIMITER + tlp::TulipPluginsPath +
+      tlp::PATH_DELIMITER + tlp::getPluginLocalInstallationDir().toStdString();
+
   tlp::PluginLibraryLoader::loadPlugins();
   tlp::PluginLister::checkLoadedPluginsDependencies(0);
   tlp::InteractorLister::initInteractorsDependencies();
