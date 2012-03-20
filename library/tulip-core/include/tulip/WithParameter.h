@@ -284,9 +284,9 @@ struct TLP_SCOPE WithParameter {
    **/
   template<typename T>
   void _DEPRECATED addParameter(const std::string &name,
-                    const std::string &help=std::string(),
-                    const std::string &defaultValue = std::string(),
-                    bool isMandatory = true) {
+                                const std::string &help=std::string(),
+                                const std::string &defaultValue = std::string(),
+                                bool isMandatory = true) {
     addInParameter<T>(name, help, defaultValue, isMandatory);
   }
 protected:

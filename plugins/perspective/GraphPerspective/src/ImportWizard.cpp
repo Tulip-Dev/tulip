@@ -45,7 +45,7 @@ ImportWizard::ImportWizard(QWidget *parent): QWizard(parent), _ui(new Ui::Import
   _ui->categoryList->addItems(groups.toList());
   _ui->parametersList->setItemDelegate(new TulipItemDelegate);
   connect(_ui->parametersList, SIGNAL(destroyed()), _ui->parametersList->itemDelegate(), SLOT(deleteLater()));
-  
+
   _ui->parametersFrame->hide();
   updateFinishButton();
 }

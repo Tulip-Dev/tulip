@@ -25,7 +25,7 @@ FiltersManagerAlgorithmItem::FiltersManagerAlgorithmItem(QWidget* parent): Abstr
   connect(_ui->algorithmCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(algorithmSelected(int)));
   _ui->algorithmParams->setItemDelegate(new TulipItemDelegate);
   connect(_ui->algorithmParams, SIGNAL(destroyed()), _ui->algorithmParams->itemDelegate(), SLOT(deleteLater()));
-  
+
   updateGraphModel(_ui->algorithmParams,QString::null,_graph);
 }
 void FiltersManagerAlgorithmItem::algorithmSelected(int i) {

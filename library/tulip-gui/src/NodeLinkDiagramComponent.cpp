@@ -46,8 +46,10 @@ void NodeLinkDiagramComponent::updateGrid() {
   StringCollection gridMode;
   gridData.get<StringCollection>("Grid mode",gridMode);
   int mode = gridMode.getCurrent();
+
   if (mode == 0)
     return;
+
   Coord margins;
   Size gridSize;
   Color gridColor;
@@ -65,7 +67,7 @@ void NodeLinkDiagramComponent::updateGrid() {
   Coord topRight = Coord(graphBB[1] + margins);
 
   if (mode == 1) {
-    for (int i=0;i<3;++i)
+    for (int i=0; i<3; ++i)
       gridSize[i] = abs(topRight[i] - bottomLeft[i]) / gridSize[i];
   }
 
@@ -188,6 +190,7 @@ void NodeLinkDiagramComponent::setZOrdering(bool f) {
 void NodeLinkDiagramComponent::showGridControl() {
   if (_gridOptions->exec() == QDialog::Rejected)
     return;
+
   updateGrid();
   emit drawNeeded();
 }

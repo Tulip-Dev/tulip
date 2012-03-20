@@ -51,7 +51,7 @@ protected :
 class TLP_QT_SCOPE GraphNodeElementModel : public GraphElementModel {
 public :
 
-  GraphNodeElementModel(Graph *graph, unsigned int id, QObject *parent=0):GraphElementModel(graph,id,parent){}
+  GraphNodeElementModel(Graph *graph, unsigned int id, QObject *parent=0):GraphElementModel(graph,id,parent) {}
 
   QString headerText(unsigned int id) const {
     return QString("node : ") + QString::number(id);
@@ -66,13 +66,13 @@ public :
 class TLP_QT_SCOPE GraphEdgeElementModel : public GraphElementModel {
 public :
 
-  GraphEdgeElementModel(Graph *graph, unsigned int id, QObject *parent=0):GraphElementModel(graph,id,parent){}
+  GraphEdgeElementModel(Graph *graph, unsigned int id, QObject *parent=0):GraphElementModel(graph,id,parent) {}
 
   QString headerText(unsigned int id) const {
     return QString("edge : ") + QString::number(id);
   }
 
-  QVariant value(unsigned int id, PropertyInterface *prop) const{
+  QVariant value(unsigned int id, PropertyInterface *prop) const {
     return GraphModel::edgeValue(id,prop);
   }
 
