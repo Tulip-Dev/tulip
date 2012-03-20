@@ -1897,18 +1897,18 @@ void MainController::redo() {
 }
 //**********************************************************************
 void MainController::snapshot() {
-    if(currentView!=NULL) {
-        QImage image=currentView->createPicture(16,16,false);
+  if(currentView!=NULL) {
+    QImage image=currentView->createPicture(16,16,false);
 
-        if(image.isNull()) {
-            QMessageBox::critical(NULL,"cannot create snapshot","Sorry but you cannot create a snapshot with this view");
-        }
-        else {
-            SnapshotDialog snapshotDialog(*currentView);
-            snapshotDialog.setModal(true);
-            snapshotDialog.exec();
-        }
+    if(image.isNull()) {
+      QMessageBox::critical(NULL,"cannot create snapshot","Sorry but you cannot create a snapshot with this view");
     }
+    else {
+      SnapshotDialog snapshotDialog(*currentView);
+      snapshotDialog.setModal(true);
+      snapshotDialog.exec();
+    }
+  }
 }
 
 void MainController::filePrint() {

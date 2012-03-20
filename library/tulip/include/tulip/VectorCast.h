@@ -103,7 +103,7 @@ public:
   }
   inline TYPE operator/(const Vector<Obj,SIZE> &v) const {
     return VECTORCAST(*this)/=v;
- }
+  }
   inline TYPE operator/(const Obj &v) const {
     return VECTORCAST(*this)/=v;
   }
