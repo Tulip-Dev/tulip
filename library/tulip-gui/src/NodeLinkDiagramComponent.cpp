@@ -73,8 +73,8 @@ void NodeLinkDiagramComponent::updateGrid() {
   displays[2] = true;
 
 
-  _grid = new GlGrid(Coord(bottomLeft[0],topRight[1],bottomLeft[2]),
-                     Coord(topRight[0],bottomLeft[1],topRight[2]),
+  _grid = new GlGrid(bottomLeft,
+                     ropRight,
                      gridSize,
                      gridColor,
                      displays);
