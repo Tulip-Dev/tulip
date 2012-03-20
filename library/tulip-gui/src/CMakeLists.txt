@@ -103,6 +103,7 @@ SET(SRCS
   CaptionGraphicsItem.cpp
   CaptionGraphicsSubItems.cpp
   GraphModel.cpp
+  GraphElementModel.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
