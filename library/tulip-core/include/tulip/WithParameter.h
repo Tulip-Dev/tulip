@@ -283,7 +283,7 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T>
-  void addParameter(const std::string &name,
+  void _DEPRECATED addParameter(const std::string &name,
                     const std::string &help=std::string(),
                     const std::string &defaultValue = std::string(),
                     bool isMandatory = true) {
