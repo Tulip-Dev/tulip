@@ -2,6 +2,10 @@
 #include <yajl_gen.h>
 #include <string>
 
+namespace tlp {
+class PluginProgress;
+}
+
 /**
  * @brief A Simple C++ wrapper around the C library 'yajl' parsing capabilities.
  *
@@ -10,7 +14,7 @@
  **/
 class YajlParseFacade {
 public:
-  YajlParseFacade() : _parsingSucceeded(true) {}
+  YajlParseFacade(tlp::PluginProgress* progress) : _progress(progress), _parsingSucceeded(true) {}
 
   /**
    * @brief Parses a JSON file.
@@ -37,6 +41,7 @@ public:
   std::string errorMessage() const;
 
 protected:
+  tlp::PluginProgress* _progress;
   bool _parsingSucceeded;
   std::string _errorMessage;
 };
