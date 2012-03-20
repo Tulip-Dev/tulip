@@ -197,7 +197,7 @@ std::string newName() {
 //**********************************************************************
 //**********************************************************************
 #ifndef WITHOUT_MAIN_CONTROLLER
-CONTROLLERPLUGIN(MainController, "Tulip Classic", "Tulip Team", "16/04/2008", "Tulip Classic", "1.0");
+CONTROLLERPLUGIN(MainController, "Tulip Classic", "Tulip Team", "16/04/2008", "Tulip Classic", "1.0")
 #endif
 
 //**********************************************************************
@@ -1433,7 +1433,6 @@ void MainController::editCreateSubgraph() {
     return;
 
   bool ok = FALSE;
-  string tmp;
   bool verifGraph = true;
   BooleanProperty *sel1 = graph->getProperty<BooleanProperty>("viewSelection");
   Observable::holdObservers();
@@ -1898,16 +1897,18 @@ void MainController::redo() {
 }
 //**********************************************************************
 void MainController::snapshot() {
-  QImage image=currentView->createPicture(16,16,false);
+    if(currentView!=NULL) {
+        QImage image=currentView->createPicture(16,16,false);
 
-  if(image.isNull()) {
-    QMessageBox::critical(NULL,"can't create snapshot","Sorry but you can't create snapshot with this view");
-  }
-  else {
-    SnapshotDialog snapshotDialog(*currentView);
-    snapshotDialog.setModal(true);
-    snapshotDialog.exec();
-  }
+        if(image.isNull()) {
+            QMessageBox::critical(NULL,"cannot create snapshot","Sorry but you cannot create a snapshot with this view");
+        }
+        else {
+            SnapshotDialog snapshotDialog(*currentView);
+            snapshotDialog.setModal(true);
+            snapshotDialog.exec();
+        }
+    }
 }
 
 void MainController::filePrint() {
