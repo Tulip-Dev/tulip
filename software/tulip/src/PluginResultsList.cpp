@@ -167,8 +167,8 @@ void PluginResultsList::initPluginsCache() {
 
   for(cache::iterator it = _pluginWidgetsCache.begin(); it != _pluginWidgetsCache.end(); ++it) {
     i = it->first;
+    delete it->second;
     delete i;
-    delete _pluginWidgetsCache[i];
   }
 
   _pluginWidgetsCache.clear();
