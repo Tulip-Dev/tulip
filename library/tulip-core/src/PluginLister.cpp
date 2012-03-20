@@ -112,7 +112,6 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
       currentLoader->loaded(informations, informations->dependencies());
     }
 
-    delete informations;
   }
   else {
     if (currentLoader != 0) {
@@ -121,6 +120,7 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
       currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
     }
   }
+  delete informations;
 }
 
 void tlp::PluginLister::removePlugin(const std::string &name) {

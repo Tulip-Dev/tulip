@@ -158,7 +158,11 @@ FiltersManagerCompareItem::FiltersManagerCompareItem(QWidget* parent): AbstractF
   _ui->alg2Params->hide();
   _ui->alg1Params->setItemDelegate(new TulipItemDelegate);
   _ui->alg2Params->setItemDelegate(new TulipItemDelegate);
+  connect(_ui->alg1Params, SIGNAL(destroyed()), _ui->alg1Params->itemDelegate(), SLOT(deleteLater()));
+  connect(_ui->alg2Params, SIGNAL(destroyed()), _ui->alg2Params->itemDelegate(), SLOT(deleteLater()));
 }
+
+
 void FiltersManagerCompareItem::elementChanged() {
   QComboBox* combo = static_cast<QComboBox*>(sender());
   setNumerics(isComparisonNumeric(_ui->elem1) && isComparisonNumeric(_ui->elem2));

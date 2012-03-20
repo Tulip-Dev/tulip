@@ -23,7 +23,7 @@
 #include <QtGui/QAction>
 
 #include <tulip/TulipRelease.h>
-#include <tulip/MethodFactory.h>
+
 #include <tulip/Plugin.h>
 #include <tulip/PluginLister.h>
 #include <tulip/Plugin.h>

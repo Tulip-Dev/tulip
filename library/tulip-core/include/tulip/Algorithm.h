@@ -23,7 +23,6 @@
 #include <string>
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
-#include <tulip/MethodFactory.h>
 
 /**
  * \addtogroup plugins

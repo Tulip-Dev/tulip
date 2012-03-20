@@ -28,7 +28,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/IntegerProperty.h>
-#include <tulip/MethodFactory.h>
+
 #include <tulip/GraphMeasure.h>
 #include <tulip/GraphTools.h>
 #include <tulip/AcyclicTest.h>

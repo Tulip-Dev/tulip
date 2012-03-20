@@ -24,7 +24,7 @@
 #include <tulip/WithParameter.h>
 #include <tulip/Observable.h>
 #include <tulip/PluginLister.h>
-#include <tulip/MethodFactory.h>
+
 
 #include <QtCore/QObject>
 #include <QtCore/QSet>

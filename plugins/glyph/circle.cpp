@@ -88,16 +88,16 @@ void Circle::draw(node n, float lod) {
              lod);
 }
 
+static GlCircle *eecircle = NULL;
 class EECircle: public EdgeExtremityGlyph {
-  static GlCircle *circle;
 public:
   GLYPHINFORMATIONS("2D - Circle extremity", "David Auber", "09/07/2002", "Textured Circle for edge extremities", "1.1", 14)
   EECircle(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
-    if(!circle)
-      circle=new GlCircle(Coord(0,0,0),0.5,Color(0,0,0,255),Color(0,0,0,255),true,true,0.,30);
+    if(!eecircle)
+      eecircle=new GlCircle(Coord(0,0,0),0.5,Color(0,0,0,255),Color(0,0,0,255),true,true,0.,30);
   }
   void draw(edge e, node, const Color& glyphColor,const Color &borderColor, float lod) {
-    circle->setLightingMode(false);
+    eecircle->setLightingMode(false);
     string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
     if(textureName!="")

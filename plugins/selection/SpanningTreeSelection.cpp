@@ -19,7 +19,7 @@
 #include <assert.h>
 #include "SpanningTreeSelection.h"
 #include <tulip/BooleanProperty.h>
-#include <tulip/MethodFactory.h>
+
 #include <tulip/GraphTools.h>
 
 PLUGIN(SpanningTreeSelection)

@@ -23,7 +23,7 @@
 
 #include <tulip/ExportModule.h>
 #include <tulip/Graph.h>
-#include <tulip/MethodFactory.h>
+
 #include <tulip/MutableContainer.h>
 #include <tulip/StringCollection.h>
 

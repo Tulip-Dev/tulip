@@ -5,7 +5,7 @@
 #include <tulip/ImportModule.h>
 #include <tulip/PropertyInterface.h>
 #include <tulip/ForEach.h>
-#include <tulip/MethodFactory.h>
+
 #include <tulip/JsonTokens.h>
 
 #include <tulip/YajlFacade.h>

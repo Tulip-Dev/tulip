@@ -23,6 +23,7 @@
 #include <QtGui/QGraphicsItem>
 
 #include <tulip/Interactor.h>
+#include <tulip/Graph.h>
 
 using namespace tlp;
 

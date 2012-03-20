@@ -26,7 +26,6 @@
 #include <tulip/DataSet.h>
 #include <tulip/Plugin.h>
 #include <tulip/PluginLister.h>
-#include <tulip/MethodFactory.h>
 
 /** \addtogroup plugins */
 

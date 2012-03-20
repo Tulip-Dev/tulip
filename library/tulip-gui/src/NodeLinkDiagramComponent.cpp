@@ -38,9 +38,6 @@ using namespace std;
 NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL) {
 }
 
-NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
-}
-
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   ParameterDescriptionList gridParameters;
   gridParameters.add<StringCollection>("Grid mode","","No grid;Space divisions;Fixed size",true);
@@ -54,6 +51,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   ui->setupUi(_gridOptions);
   ui->tableView->setModel(model);
   ui->tableView->setItemDelegate(new TulipItemDelegate);
+  connect(ui->tableView, SIGNAL(destroyed()), ui->tableView->itemDelegate(), SLOT(deleteLater()));
 
   getGlMainWidget()->setData(graph(), data);
   registerTriggers();

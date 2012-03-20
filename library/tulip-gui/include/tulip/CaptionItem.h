@@ -21,8 +21,11 @@
 
 #include <QtCore/QObject>
 
-#include "tulip/View.h"
-#include "tulip/CaptionGraphicsItem.h"
+#include <tulip/View.h>
+#include <tulip/CaptionGraphicsItem.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/SizeProperty.h>
 
 namespace tlp {
 

@@ -24,6 +24,7 @@
 #include <tulip/tulipconf.h>
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
+#include <tulip/TulipRelease.h>
 
 /**
  * \addtogroup plugins
@@ -187,6 +188,32 @@ public:
    **/
   virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0;
 };
+
+#define PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
+std::string name() const { return NAME; } \
+std::string author() const { return AUTHOR; }\
+std::string date() const { return DATE; }  \
+std::string info() const { return INFO; }  \
+std::string release() const { return RELEASE; }\
+std::string tulipRelease() const { return TULIP_RELEASE; }\
+std::string group() const { return GROUP; }
+
+#define PLUGIN(C) \
+class C##Factory : public tlp::FactoryInterface { \
+public:            \
+  C##Factory() {          \
+  tlp::PluginLister::registerPlugin(this);     \
+}             \
+~C##Factory(){}          \
+tlp::Plugin* createPluginObject(tlp::PluginContext* context) { \
+C* tmp = new C(context);       \
+return tmp;       \
+}              \
+};                                                      \
+\
+extern "C" {                                            \
+C##Factory C##FactoryInitializer;               \
+}
 
 /*@}*/
 }
