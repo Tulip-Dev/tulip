@@ -51,7 +51,7 @@ void NodeLinkDiagramComponent::updateGrid() {
   Coord margins;
   Size gridSize;
   Color gridColor;
-  bool onX,onY,onZ;
+  bool onX=true,onY=true,onZ=true;
   gridData.get<Coord>("Margins",margins);
   gridData.get<Size>("Grid size",gridSize);
   gridData.get<Color>("Grid color",gridColor);
@@ -64,17 +64,18 @@ void NodeLinkDiagramComponent::updateGrid() {
   Coord bottomLeft = Coord(graphBB[0] - margins);
   Coord topRight = Coord(graphBB[1] + margins);
 
-  if (mode == 1)
-    for (int i=0;i<3;++i) gridSize[i] = (topRight[i] - bottomLeft[i]) / gridSize[i];
+  if (mode == 1) {
+    for (int i=0;i<3;++i)
+      gridSize[i] = abs(topRight[i] - bottomLeft[i]) / gridSize[i];
+  }
 
   bool displays[3];
-  displays[0] = true;
-  displays[1] = true;
-  displays[2] = true;
-
+  displays[0] = onX;
+  displays[1] = onY;
+  displays[2] = onZ;
 
   _grid = new GlGrid(bottomLeft,
-                     ropRight,
+                     topRight,
                      gridSize,
                      gridColor,
                      displays);
@@ -82,8 +83,8 @@ void NodeLinkDiagramComponent::updateGrid() {
 }
 
 void NodeLinkDiagramComponent::draw(PluginProgress *pluginProgress) {
-  GlMainView::draw(pluginProgress);
   updateGrid();
+  GlMainView::draw(pluginProgress);
 }
 
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
@@ -188,6 +189,7 @@ void NodeLinkDiagramComponent::showGridControl() {
   if (_gridOptions->exec() == QDialog::Rejected)
     return;
   updateGrid();
+  emit drawNeeded();
 }
 
 PLUGIN(NodeLinkDiagramComponent)
