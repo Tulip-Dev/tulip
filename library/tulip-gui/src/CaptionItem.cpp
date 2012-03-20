@@ -67,14 +67,6 @@ void CaptionItem::initCaption() {
 }
 
 void CaptionItem::clearObservers() {
-  if(_graph!=view->graph()) {
-    if(_graph)
-      _graph->removeGraphObserver(this);
-
-    _graph=view->graph();
-    _graph->addGraphObserver(this);
-  }
-
   if(_metricProperty)
     _metricProperty->removePropertyObserver(this);
 
@@ -97,6 +89,14 @@ void CaptionItem::clearObservers() {
 
   if(_captionType==ColorCaption) {
     _colorProperty->addPropertyObserver(this);
+  }
+
+  if(_graph!=view->graph()) {
+    if(_graph)
+      _graph->removeGraphObserver(this);
+
+    _graph=view->graph();
+    _graph->addGraphObserver(this);
   }
 }
 
