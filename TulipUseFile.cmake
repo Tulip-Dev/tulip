@@ -18,11 +18,7 @@ MACRO(SET_COMPILER_OPTIONS)
                 OUTPUT_VARIABLE GCXX_VERSION)
 
         IF(GCXX_VERSION VERSION_GREATER 4.0)
-
-          #SET(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
-          #SET(CMAKE_MODULE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
-          #SET(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
-
+          SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--subsystem,windows")
           #GCC 4.4 use double dashes and gcc 4.6 single dashes for this option
           IF(GCXX_VERSION VERSION_LESS 4.6)
             SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shared-libgcc -Wl,--allow-multiple-definition")
