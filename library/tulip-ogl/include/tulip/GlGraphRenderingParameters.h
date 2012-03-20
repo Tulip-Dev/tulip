@@ -274,7 +274,7 @@ public:
        * using bitmap fonts.
        * \deprecated Use getLabelsDensity instead
        */
-  unsigned int getLabelsBorder() const;
+  unsigned int _DEPRECATED getLabelsBorder() const;
   /**
        * Get the size of the border that is added to any label when
        * using bitmap fonts. Setting this parameter to a high value
@@ -282,7 +282,7 @@ public:
        * Default value is set to 2 which enables readable labels.
        * \deprecated Use setLabelsDensity instead
        */
-  void setLabelsBorder(const unsigned int);
+  void _DEPRECATED setLabelsBorder(const unsigned int);
   /**
    * set if Edge max size is block to node size
    */
