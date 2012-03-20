@@ -38,12 +38,63 @@ using namespace std;
 NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL) {
 }
 
+#include <QtCore/QDebug>
+void NodeLinkDiagramComponent::updateGrid() {
+  delete _grid;
+  _grid = NULL;
+  DataSet gridData = static_cast<ParameterListModel*>(_gridOptions->findChild<QTableView*>()->model())->parametersValues();
+  StringCollection gridMode;
+  gridData.get<StringCollection>("Grid mode",gridMode);
+  int mode = gridMode.getCurrent();
+  if (mode == 0)
+    return;
+  Coord margins;
+  Size gridSize;
+  Color gridColor;
+  bool onX,onY,onZ;
+  gridData.get<Coord>("Margins",margins);
+  gridData.get<Size>("Grid size",gridSize);
+  gridData.get<Color>("Grid color",gridColor);
+  gridData.get<bool>("X grid",onX);
+  gridData.get<bool>("Y grid",onY);
+  gridData.get<bool>("Z grid",onZ);
+
+  GlGraphInputData* inputData = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
+  BoundingBox graphBB = computeBoundingBox(graph(),inputData->getElementLayout(),inputData->getElementSize(),inputData->getElementRotation());
+  Coord bottomLeft = Coord(graphBB[0] - margins);
+  Coord topRight = Coord(graphBB[1] + margins);
+
+  if (mode == 1)
+    for (int i=0;i<3;++i) gridSize[i] = (topRight[i] - bottomLeft[i]) / gridSize[i];
+
+  bool displays[3];
+  displays[0] = true;
+  displays[1] = true;
+  displays[2] = true;
+
+
+  _grid = new GlGrid(Coord(bottomLeft[0],topRight[1],bottomLeft[2]),
+                     Coord(topRight[0],bottomLeft[1],topRight[2]),
+                     gridSize,
+                     gridColor,
+                     displays);
+  getGlMainWidget()->getScene()->getLayer("Main")->addGlEntity(_grid,"Node Link Diagram Component grid");
+}
+
+void NodeLinkDiagramComponent::draw(PluginProgress *pluginProgress) {
+  GlMainView::draw(pluginProgress);
+  updateGrid();
+}
+
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   ParameterDescriptionList gridParameters;
   gridParameters.add<StringCollection>("Grid mode","","No grid;Space divisions;Fixed size",true);
   gridParameters.add<Size>("Grid size","","(1,1,1)",false);
   gridParameters.add<Size>("Margins","","(0.5,0.5,0.5)",false);
   gridParameters.add<Color>("Grid color","","(0,0,0,255)",false);
+  gridParameters.add<bool>("X grid","","true",false);
+  gridParameters.add<bool>("Y grid","","true",false);
+  gridParameters.add<bool>("Z grid","","true",false);
   ParameterListModel* model = new ParameterListModel(gridParameters,NULL,this);
 
   Ui::GridOptionsWidget* ui = new Ui::GridOptionsWidget;
@@ -134,6 +185,9 @@ void NodeLinkDiagramComponent::setZOrdering(bool f) {
 }
 
 void NodeLinkDiagramComponent::showGridControl() {
+  if (_gridOptions->exec() == QDialog::Rejected)
+    return;
+  updateGrid();
 }
 
 PLUGIN(NodeLinkDiagramComponent)
