@@ -404,8 +404,8 @@ string& replaceAll(string& context, const string& from, const string& to) {
 }
 
 void PythonScriptView::graphChanged(Graph *graph) {
-    this->graph = graph;
-    viewWidget->setGraph(graph);
+  this->graph = graph;
+  viewWidget->setGraph(graph);
 }
 
 void PythonScriptView::setState(const tlp::DataSet &dataSet) {

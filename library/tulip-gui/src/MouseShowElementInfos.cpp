@@ -60,6 +60,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
 
         if(!_informationsWidgetItem->isVisible()) {
           SelectedEntity selectedEntity;
+
           // Show widget if we click on node or edge
           if (pick(qMouseEv->x(), qMouseEv->y(),selectedEntity)) {
             if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
@@ -108,7 +109,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
   return false;
 }
 
-bool MouseShowElementInfos::pick(int x, int y, SelectedEntity &selectedEntity){
+bool MouseShowElementInfos::pick(int x, int y, SelectedEntity &selectedEntity) {
   GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
   assert(glMainView);
   return glMainView->getGlMainWidget()->pickNodesEdges(x,y,selectedEntity);

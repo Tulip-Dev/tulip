@@ -105,12 +105,14 @@ void GraphPerspective::logCleared() {
 bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
   if (obj == _ui->loggerFrame && ev->type() == QEvent::MouseButtonPress)
     showLogger();
+
   return false;
 }
 
 void GraphPerspective::showLogger() {
   if (_logger->count()==0)
     return;
+
   QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
   pos.setX(pos.x()+_ui->loggerFrame->width());
   pos.setY(std::min<int>(_mainWindow->mapToGlobal(_mainWindow->pos()).y()+mainWindow()->height()-_logger->height(),pos.y()));

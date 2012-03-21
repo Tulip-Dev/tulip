@@ -103,7 +103,7 @@ public:
     }
     else {
       qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__ << " Error index too high !"
-                << std::endl;
+                 << std::endl;
       assert(false);
     }
 

@@ -80,7 +80,7 @@ public :
   void draw(tlp::PluginProgress *) {}
 
   void graphDeleted() {
-      this->graph = NULL;
+    this->graph = NULL;
   }
 
 public slots:
