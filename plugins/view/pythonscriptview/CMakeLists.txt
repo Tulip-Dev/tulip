@@ -79,6 +79,7 @@ INSTALL(FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/api/Python-2.6.api
         ${CMAKE_CURRENT_SOURCE_DIR}/api/Python-2.7.api
         ${CMAKE_CURRENT_SOURCE_DIR}/api/Python-3.1.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/api/Python-3.2.api
         ${CMAKE_CURRENT_SOURCE_DIR}/api/PyQt4.api
         DESTINATION ${TulipShareInstallDir}/apiFiles 
         COMPONENT tulip_python)
