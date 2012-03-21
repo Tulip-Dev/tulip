@@ -38,7 +38,7 @@ border: 1px solid #C9C9C9;
 color: black;</string>
        </property>
        <property name="text">
-        <string>Errors log</string>
+        <string>Messages log</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
