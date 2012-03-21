@@ -115,9 +115,11 @@ void GlOffscreenRenderer::clearScene() {
 }
 
 void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antialiased) {
-  //Initialize the context avoid segfault when trying to render graph without any initialised gl context.
-  QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
-  firstWidget->makeCurrent();
+  //If no OpenGL context, activate the default one in order to avoid segfault when trying to render an OpenGL scene
+  if (!QGLContext::currentContext()) {
+    QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
+    firstWidget->makeCurrent();
+  }
 
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
   antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
