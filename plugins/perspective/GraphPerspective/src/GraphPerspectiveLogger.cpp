@@ -11,19 +11,24 @@ GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent): QFrame(parent),
 
 QString GraphPerspectiveLogger::iconForType(QtMsgType type) {
   QString pxUrl(":/tulip/graphperspective/icons/16/logger-");
+
   switch (type) {
   case QtDebugMsg:
     pxUrl+="info.png";
     break;
+
   case QtWarningMsg:
     pxUrl+="danger.png";
     break;
+
   case QtCriticalMsg:
     pxUrl+="error.png";
     break;
+
   default:
     break;
   }
+
   return pxUrl;
 }
 
@@ -36,8 +41,10 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
     std::cerr<<msg<<std::endl;
     abort();
   }
+
   if (type > _logSeverity)
     _logSeverity = type;
+
   _logCount++;
   _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)),msg));
 }

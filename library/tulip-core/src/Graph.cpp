@@ -130,7 +130,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
 
   if (!PluginLister::pluginExists(format)) {
     qWarning() << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format
-         << "\" doesn't exists (or is not loaded)" << endl;
+               << "\" doesn't exists (or is not loaded)" << endl;
     return NULL;
   }
 
@@ -175,7 +175,7 @@ bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &
                       DataSet &dataSet, PluginProgress *progress) {
   if (!PluginLister::pluginExists(format)) {
     qWarning() << "libtulip: " << __FUNCTION__ << ": export plugin \"" << format
-         << "\" doesn't exists (or is not loaded)" << endl;
+               << "\" doesn't exists (or is not loaded)" << endl;
     return false;
   }
 
@@ -368,7 +368,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
                            DataSet *dataSet, PluginProgress *progress) {
   if (!PluginLister::pluginExists(algorithm)) {
     qWarning() << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << algorithm
-         << "\" doesn't exists (or is not loaded)" << endl;
+               << "\" doesn't exists (or is not loaded)" << endl;
     return false;
   }
 

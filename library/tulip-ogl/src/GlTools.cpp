@@ -123,8 +123,8 @@ Coord projectPoint(const Coord &obj,
 
   if(fabs(point[3]) < 1E-6) {
     std::cerr << "Error in projectPoint with coord : "
-               << obj
-               << " and transform matrix : " << transform;
+              << obj
+              << " and transform matrix : " << transform;
   }
 
 #endif

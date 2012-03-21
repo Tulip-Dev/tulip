@@ -295,7 +295,7 @@ void Morphing::interpolate( GlMainWidget * outGlgw, float inT) {
         qWarning() << "Cannot interpolate augmented displays. " << endl;
         qWarning() << "Set " << i << " for g0 and g1 don't have same members." << endl;
         qWarning() << "Set g0 " << g0->augPoints[i].size() << " "
-             << g1->augPoints[i].size() << endl;
+                   << g1->augPoints[i].size() << endl;
         return;
       }
 

@@ -299,38 +299,38 @@ PLUGIN(OGDFFm3)
 OGDFFm3::OGDFFm3(const tlp::PluginContext* context) :
   OGDFLayoutPluginBase(context, new ogdf::FMMMLayout()) {
   addInParameter<DoubleProperty> ("Edge Length Property", paramHelp[0],
-                                "viewMetric", false);
+                                  "viewMetric", false);
   addInParameter<SizeProperty> ("Node Size", paramHelp[1], "viewSize", false);
   addInParameter<double> ("Unit edge length", paramHelp[2], "10.0", false);
   addInParameter<bool> ("New initial placement", paramHelp[3], "true");
   addInParameter<int>("Fixed iterations", paramHelp[18], "30");
   addInParameter<double>("Threshold", paramHelp[19], "0.01");
   addInParameter<StringCollection> (ELT_PAGEFORMAT, paramHelp[4],
-                                  ELT_PAGEFORMATLIST);
+                                    ELT_PAGEFORMATLIST);
   addInParameter<StringCollection> (ELT_QUALITYVSSPEED, paramHelp[5],
-                                  ELT_QUALITYVSSPEEDLIST);
+                                    ELT_QUALITYVSSPEEDLIST);
   addInParameter<StringCollection> (ELT_EDGELENGTHMEASUREMENT, paramHelp[6],
-                                  ELT_EDGELENGTHMEASUREMENTLIST);
+                                    ELT_EDGELENGTHMEASUREMENTLIST);
   addInParameter<StringCollection> (ELT_ALLOWEDPOSITIONS, paramHelp[7],
-                                  ELT_ALLOWEDPOSITIONSLIST);
+                                    ELT_ALLOWEDPOSITIONSLIST);
   addInParameter<StringCollection> (ELT_TIPOVER, paramHelp[8], ELT_TIPOVERLIST);
   addInParameter<StringCollection> (ELT_PRESORT, paramHelp[9], ELT_PRESORTLIST);
   addInParameter<StringCollection> (ELT_GALAXYCHOICE, paramHelp[10],
-                                  ELT_GALAXYCHOICELIST);
+                                    ELT_GALAXYCHOICELIST);
   addInParameter<StringCollection> (ELT_MAXITERCHANGE, paramHelp[11],
-                                  ELT_MAXITERCHANGELIST);
+                                    ELT_MAXITERCHANGELIST);
   addInParameter<StringCollection> (ELT_INITIALPLACEMENTMULT, paramHelp[12],
-                                  ELT_INITIALPLACEMENTMULTLIST);
+                                    ELT_INITIALPLACEMENTMULTLIST);
   addInParameter<StringCollection> (ELT_FORCEMODEL, paramHelp[13],
-                                  ELT_FORCEMODELLIST);
+                                    ELT_FORCEMODELLIST);
   addInParameter<StringCollection> (ELT_REPULSIVEFORCEMETHOD, paramHelp[14],
-                                  ELT_REPULSIVEFORCEMETHODLIST);
+                                    ELT_REPULSIVEFORCEMETHODLIST);
   addInParameter<StringCollection> (ELT_INITIALPLACEMENTFORCES, paramHelp[15],
-                                  ELT_INITIALPLACEMENTFORCESLIST);
+                                    ELT_INITIALPLACEMENTFORCESLIST);
   addInParameter<StringCollection> (ELT_REDUCEDTREECONSTRCUCTION, paramHelp[16],
-                                  ELT_REDUCEDTREECONSTRCUCTIONLIST);
+                                    ELT_REDUCEDTREECONSTRCUCTIONLIST);
   addInParameter<StringCollection> (ELT_SMALLESTCELLFINDING, paramHelp[17],
-                                  ELT_SMALLESTCELLFINDINGLIST);
+                                    ELT_SMALLESTCELLFINDINGLIST);
 }
 
 OGDFFm3::~OGDFFm3() {

@@ -295,7 +295,7 @@ void CaptionItem::treatEvent(const Event &ev) {
   }
 }
 
-  void CaptionItem::selectedPropertyChanged(string /*propertyName*/) {
+void CaptionItem::selectedPropertyChanged(string /*propertyName*/) {
   if(_captionType==ColorCaption)
     generateColorCaption();
   else

@@ -209,7 +209,7 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
   boxPoints.resize(steps * 4);
 
 #ifdef _OPENMP
-#pragma omp parallel for
+  #pragma omp parallel for
 #endif
 
   for (int i = 0 ; i < steps; ++i ) {
