@@ -40,11 +40,11 @@ public :
 	
 //===========================================================================================
 	
-	@PROPERTY_TYPE@Property(tlp::Graph *g, std::string n="");
+	@PROPERTY_TYPE@Property(tlp::Graph *graph, std::string name="");
 
 //===========================================================================================
 		
-	void setAllNodeValue(const @PROPERTY_NODE_TYPE@ &v);
+	void setAllNodeValue(const @PROPERTY_NODE_TYPE@ &val);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setAllNodeValue(val)
 
@@ -56,7 +56,7 @@ Sets the same value on the whole set of nodes.
 
 //===========================================================================================
 
-	void setAllEdgeValue(const @PROPERTY_EDGE_TYPE@ &v);
+	void setAllEdgeValue(const @PROPERTY_EDGE_TYPE@ &val);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setAllEdgeValue(val)
 
@@ -90,7 +90,7 @@ Returns the default value associated to the edges.
 
 //===========================================================================================
 
-	const @PROPERTY_NODE_TYPE@ getNodeValue(const tlp::node n);
+	const @PROPERTY_NODE_TYPE@ getNodeValue(const tlp::node node);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.getNodeValue(node)
 
@@ -116,7 +116,7 @@ Returns the value associated to a particular node.
 
 //===========================================================================================
 
-	const @PROPERTY_EDGE_TYPE@ getEdgeValue(const tlp::edge e);
+	const @PROPERTY_EDGE_TYPE@ getEdgeValue(const tlp::edge edge);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.getEdgeValue(edge) 
 
@@ -142,7 +142,7 @@ Returns the value associated to a particular edge.
 
 //===========================================================================================
 
-	void setNodeValue(const tlp::node n, const @PROPERTY_NODE_TYPE@ &v);
+	void setNodeValue(const tlp::node node, const @PROPERTY_NODE_TYPE@ &val);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setNodeValue(node, val)
 
@@ -169,7 +169,7 @@ Sets the value of a particular node.
 
 //===========================================================================================
 
-	void setEdgeValue(const tlp::edge e, const @PROPERTY_EDGE_TYPE@ &v);
+	void setEdgeValue(const tlp::edge edge, const @PROPERTY_EDGE_TYPE@ &val);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setEdgeValue(edge, val)
 
@@ -196,13 +196,13 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-	@PROPERTY_NODE_TYPE@ __getitem__(const tlp::node n) const;
+    @PROPERTY_NODE_TYPE@ __getitem__(const tlp::node node) const;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 #ifdef PROPERTY_BASE_TYPE		
-     	sipRes = sipCpp->getNodeValue(*a0);
+        sipRes = sipCpp->getNodeValue(*a0);
 #else
-		sipRes = new @PROPERTY_NODE_TYPE@(sipCpp->getNodeValue(*a0));
+        sipRes = new @PROPERTY_NODE_TYPE@(sipCpp->getNodeValue(*a0));
 #endif     	
     } else {
     	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
@@ -211,7 +211,7 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-	void __setitem__(const tlp::node n, const @PROPERTY_NODE_TYPE@ &v) const;
+	void __setitem__(const tlp::node node, const @PROPERTY_NODE_TYPE@ &val) const;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 #ifdef PROPERTY_BASE_TYPE		
@@ -226,7 +226,7 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-	@PROPERTY_EDGE_TYPE@ __getitem__(const tlp::edge e) const;
+	@PROPERTY_EDGE_TYPE@ __getitem__(const tlp::edge edge) const;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 #ifdef PROPERTY_BASE_TYPE		
@@ -242,7 +242,7 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-	void __setitem__(const tlp::edge e, const @PROPERTY_EDGE_TYPE@ &v) const;
+	void __setitem__(const tlp::edge edge, const @PROPERTY_EDGE_TYPE@ &val) const;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {	
 #ifdef PROPERTY_BASE_TYPE	
@@ -262,14 +262,18 @@ Sets the value of a particular edge.
 	std::ostringstream oss;
 	oss << "<@PROPERTY_TYPE@ property " << sipCpp->getName() << ">";
 	std::string s = oss.str();
-	sipRes = PyString_FromString(s.c_str());
+#if PY_MAJOR_VERSION >= 3
+    sipRes = PyUnicode_FromString(s.c_str());
+#else
+    sipRes = PyString_FromString(s.c_str());
+#endif
 %End
 	
 //===========================================================================================	
 	
-	virtual void erase(const tlp::node) ;
+	virtual void erase(const tlp::node node) ;
 	
-	virtual void erase(const tlp::edge) ;
+	virtual void erase(const tlp::edge edge) ;
 
 	virtual std::string getTypename() const ;
 
@@ -279,25 +283,26 @@ Sets the value of a particular edge.
 	
 	virtual std::string getEdgeDefaultStringValue() const ;
 	
-	virtual std::string getNodeStringValue(const tlp::node n) const ;
+	virtual std::string getNodeStringValue(const tlp::node node) const ;
 	
-	virtual std::string getEdgeStringValue(const tlp::edge e) const ;
+	virtual std::string getEdgeStringValue(const tlp::edge edge) const ;
 	
-	virtual bool setNodeStringValue(const tlp::node n, const std::string & v);
+	virtual bool setNodeStringValue(const tlp::node node, const std::string & strVal);
 	
-	virtual bool setEdgeStringValue(const tlp::edge e, const std::string & v);
+	virtual bool setEdgeStringValue(const tlp::edge edge, const std::string & strVal);
 	
-	virtual bool setAllNodeStringValue(const std::string & v);
+	virtual bool setAllNodeStringValue(const std::string & strVal);
 	
-	virtual bool setAllEdgeStringValue(const std::string & v);
+	virtual bool setAllEdgeStringValue(const std::string & strVal);
 	
-	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* = NULL) const ;
+	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = NULL) const ;
 	
-	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* = NULL) const ;
+	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const ;
 	
-  	virtual void copy(tlp::node, tlp::node, tlp::PropertyInterface*, bool) ;
+  	virtual void copy(tlp::node src, tlp::node dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
 	
-	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
+	virtual void copy(tlp::edge src, tlp::edge dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
+	
 	
 //===========================================================================================
 	
@@ -320,7 +325,7 @@ public :
 
 //===========================================================================================
 
-	@VEC_PROPERTY_TYPE@VectorProperty (tlp::Graph *, std::string n="");
+	@VEC_PROPERTY_TYPE@VectorProperty (tlp::Graph *graph, std::string name="");
   	
 //===========================================================================================	
  
@@ -346,7 +351,7 @@ Returns the default list of values associated to the edges.
 
 //===========================================================================================
 
-	const std::vector<@CPP_TYPE@> getNodeValue(const tlp::node n);
+	const std::vector<@CPP_TYPE@> getNodeValue(const tlp::node node);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeValue(node)
 
@@ -368,7 +373,7 @@ Returns the list of values associated to a particular node.
 
 //===========================================================================================
 
-	const std::vector<@CPP_TYPE@> getEdgeValue(const tlp::edge e);
+	const std::vector<@CPP_TYPE@> getEdgeValue(const tlp::edge edge);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeValue(edge)
 
@@ -390,7 +395,7 @@ Returns the list of values associated to a particular edge.
 
 //===========================================================================================
 
-	void setNodeValue(const tlp::node n, const std::vector<@CPP_TYPE@> &v);
+	void setNodeValue(const tlp::node node, const std::vector<@CPP_TYPE@> &val);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setNodeValue(node, val)
 
@@ -413,7 +418,7 @@ Sets the list of values of a particular node.
 
 //===========================================================================================
 
-	void setEdgeValue(const tlp::edge e, const std::vector<@CPP_TYPE@> &v);
+	void setEdgeValue(const tlp::edge edge, const std::vector<@CPP_TYPE@> &val);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setEdgeValue(edge, val)
 
@@ -436,7 +441,7 @@ Sets the list of values of a particular edge.
 
 //===========================================================================================
 
-	void setAllNodeValue(const std::vector<@CPP_TYPE@> &v);
+	void setAllNodeValue(const std::vector<@CPP_TYPE@> &val);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllNodeValue(val)
 
@@ -448,7 +453,7 @@ Sets the same list of values on the whole set of nodes.
 
 //===========================================================================================
 
-	void setAllEdgeValue(const std::vector<@CPP_TYPE@> &v);
+	void setAllEdgeValue(const std::vector<@CPP_TYPE@> &val);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllEdgeValue(val)
 
@@ -460,7 +465,7 @@ Sets the same list of values on the whole set of edges.
 	
 //===========================================================================================
 	
-	void setNodeEltValue(const tlp::node n, unsigned int i, const @CPP_TYPE@ &v);
+	void setNodeEltValue(const tlp::node node, unsigned int index, const @CPP_TYPE@ &val);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setNodeEltValue(node, index, val)
 
@@ -497,7 +502,7 @@ Sets the value in the list attached to a particular node at the given index.
 
 //===========================================================================================
  
- 	const @CPP_TYPE@& getNodeEltValue(const tlp::node n, unsigned int i) const;
+    const @CPP_TYPE@ getNodeEltValue(const tlp::node node, unsigned int index);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeEltValue(node, index)
 
@@ -533,7 +538,7 @@ Returns the value in the list attached to a particular node at the given index.
   
 //===========================================================================================  
   
-  	void pushBackNodeEltValue(const tlp::node n, const @CPP_TYPE@& v);
+  	void pushBackNodeEltValue(const tlp::node node, const @CPP_TYPE@& val);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.pushBackNodeEltValue(node, val)
 
@@ -560,7 +565,7 @@ Inserts a value at the end of the list attached to a particular node. The size o
  
 //=========================================================================================== 
  
-	void popBackNodeEltValue(const tlp::node n);
+	void popBackNodeEltValue(const tlp::node node);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.popBackNodeEltValue(node)
 
@@ -581,7 +586,7 @@ Removes the value at the end of the list (if not empty) attached to a particular
 	
 //===========================================================================================	
 	
-	void resizeNodeValue(const tlp::node n, unsigned int size);
+	void resizeNodeValue(const tlp::node node, unsigned int size);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.resizeNodeValue(node, size)
 
@@ -604,7 +609,7 @@ Resizes the list attached to a particular node. A default value will be assigned
 	
 //===========================================================================================
 	
-	void resizeNodeValue(const tlp::node n, unsigned int size, @CPP_TYPE@ elt);
+	void resizeNodeValue(const tlp::node node, unsigned int size, @CPP_TYPE@ elt);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.resizeNodeValue(node, size, val)
 
@@ -633,7 +638,7 @@ Resizes the list attached to a particular node. The value given in paramater wil
 
 //===========================================================================================
 	
-	void setEdgeEltValue(const tlp::edge e, unsigned int i, const @CPP_TYPE@ &v);
+	void setEdgeEltValue(const tlp::edge edge, unsigned int index, const @CPP_TYPE@ &val);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setEdgeEltValue(edge, index, val)
 
@@ -670,7 +675,7 @@ Sets the value in the list attached to a particular edge at the given index.
   
 //===========================================================================================  
   
-	const @CPP_TYPE@& getEdgeEltValue(const tlp::edge n, unsigned int i) const;
+    const @CPP_TYPE@ getEdgeEltValue(const tlp::edge edge, unsigned int index);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeEltValue(edge, index)
 
@@ -706,7 +711,7 @@ Returns the value in the list attached to a particular edge at the given index.
 
 //===========================================================================================
 
-	void pushBackEdgeEltValue(const tlp::edge e, const @CPP_TYPE@ &v);
+	void pushBackEdgeEltValue(const tlp::edge edge, const @CPP_TYPE@ &val);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.pushBackEdgeEltValue(edge, val)
 
@@ -733,7 +738,7 @@ Inserts a value at the end of the list attached to a particular edge. The size o
   
 //=========================================================================================== 
   
-	void popBackEdgeEltValue(const tlp::edge e);
+	void popBackEdgeEltValue(const tlp::edge edge);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.popBackEdgeEltValue(edge)
 
@@ -754,7 +759,7 @@ Removes the value at the end of the list (if not empty) attached to a particular
 
 //===========================================================================================
   
-  	void resizeEdgeValue(const tlp::edge e, unsigned int size);
+  	void resizeEdgeValue(const tlp::edge edge, unsigned int size);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.resizeEdgeValue(edge, size)
 
@@ -777,7 +782,7 @@ Resizes the list attached to a particular edge. A default value will be assigned
   	
 //===========================================================================================  	
   	
-	void resizeEdgeValue(const tlp::edge e, unsigned int size, @CPP_TYPE@ elt);
+	void resizeEdgeValue(const tlp::edge edge, unsigned int size, @CPP_TYPE@ val);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.resizeEdgeValue(edge, size, val)
 
@@ -806,7 +811,7 @@ Resizes the list attached to a particular edge. The value given in paramater wil
     
 //===========================================================================================    
     
-	std::vector<@CPP_TYPE@> __getitem__(const tlp::node n) const;
+	std::vector<@CPP_TYPE@> __getitem__(const tlp::node node) const;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
      	sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getNodeValue(*a0));
@@ -817,7 +822,7 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 
 //===========================================================================================
 
-	void __setitem__(const tlp::node n, const std::vector<@CPP_TYPE@> &v) const;
+	void __setitem__(const tlp::node node, const std::vector<@CPP_TYPE@> &val) const;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
      	sipCpp->setNodeValue(*a0, *a1);
@@ -828,7 +833,7 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 
 //===========================================================================================
 
-	std::vector<@CPP_TYPE@> __getitem__(const tlp::edge e) const;
+	std::vector<@CPP_TYPE@> __getitem__(const tlp::edge edge) const;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
      	sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getEdgeValue(*a0));
@@ -839,7 +844,7 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 
 //===========================================================================================
 
-	void __setitem__(const tlp::edge e, const std::vector<@CPP_TYPE@> &v) const;
+	void __setitem__(const tlp::edge edge, const std::vector<@CPP_TYPE@> &val) const;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
      	sipCpp->setEdgeValue(*a0, *a1);
@@ -855,14 +860,18 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 	std::ostringstream oss;
 	oss << "<@VEC_PROPERTY_TYPE@ vector property " << sipCpp->getName() << ">";
 	std::string s = oss.str();
+#if PY_MAJOR_VERSION >= 3
+    sipRes = PyUnicode_FromString(s.c_str());
+#else
 	sipRes = PyString_FromString(s.c_str());
+#endif
 %End
 
 //===========================================================================================	
 	
-	virtual void erase(const tlp::node) ;
+	virtual void erase(const tlp::node node) ;
 	
-	virtual void erase(const tlp::edge) ;
+	virtual void erase(const tlp::edge edge) ;
 
 	virtual std::string getTypename() const ;
 
@@ -872,25 +881,25 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 	
 	virtual std::string getEdgeDefaultStringValue() const ;
 	
-	virtual std::string getNodeStringValue(const tlp::node n) const ;
+	virtual std::string getNodeStringValue(const tlp::node node) const ;
 	
-	virtual std::string getEdgeStringValue(const tlp::edge e) const ;
+	virtual std::string getEdgeStringValue(const tlp::edge edge) const ;
 	
-	virtual bool setNodeStringValue(const tlp::node n, const std::string & v);
+	virtual bool setNodeStringValue(const tlp::node node, const std::string & val);
 	
-	virtual bool setEdgeStringValue(const tlp::edge e, const std::string & v);
+	virtual bool setEdgeStringValue(const tlp::edge edge, const std::string & val);
 	
-	virtual bool setAllNodeStringValue(const std::string & v);
+	virtual bool setAllNodeStringValue(const std::string & val);
 	
-	virtual bool setAllEdgeStringValue(const std::string & v);
+	virtual bool setAllEdgeStringValue(const std::string & val);
 	
-	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* = NULL) const ;
+	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const ;
 	
-	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* = NULL) const ;
+	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const ;
 	
-  	virtual void copy(tlp::node, tlp::node, tlp::PropertyInterface*, bool) ;
+  	virtual void copy(tlp::node src, tlp::node dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
 	
-	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
+	virtual void copy(tlp::edge src, tlp::edge dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
 	
 //===========================================================================================
 	
