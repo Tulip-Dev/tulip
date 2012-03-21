@@ -74,6 +74,7 @@ public slots:
   void centerPanels(tlp::PropertyInterface*);
 
   void log(QtMsgType,const char*);
+  void showLogger();
 
 protected slots:
   void currentGraphChanged(tlp::Graph* graph);
