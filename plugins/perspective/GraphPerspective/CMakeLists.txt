@@ -17,6 +17,7 @@ src/ImportWizard.cpp
 src/PanelSelectionWizard.cpp
 src/ShadowFilter.cpp
 src/GraphPropertiesEditor.cpp
+src/GraphPerspectiveLogger.cpp
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS
@@ -24,6 +25,7 @@ resources/GraphPerspective.qrc
 OPTIONS -name GraphPerspective)
 
 QT4_WRAP_UI(UI_SRCS
+designer/GraphPerspectiveLogger.ui
 designer/AlgorithmRunner.ui
 designer/AlgorithmRunnerItem.ui
 designer/ControlFrame.ui
@@ -57,6 +59,7 @@ include/HeaderFrame.h
 include/ImportWizard.h
 include/PanelSelectionWizard.h
 include/GraphPropertiesEditor.h
+include/GraphPerspectiveLogger.h
 )
 
 ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
