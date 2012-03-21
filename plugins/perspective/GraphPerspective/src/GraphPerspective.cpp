@@ -104,8 +104,18 @@ void GraphPerspective::logCleared() {
 
 bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
   if (obj == _ui->loggerFrame && ev->type() == QEvent::MouseButtonPress)
-    _logger->show();
+    showLogger();
   return false;
+}
+
+void GraphPerspective::showLogger() {
+  if (_logger->count()==0)
+    return;
+  QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
+  pos.setX(pos.x()+_ui->loggerFrame->width());
+  pos.setY(std::min<int>(_mainWindow->mapToGlobal(_mainWindow->pos()).y()+mainWindow()->height()-_logger->height(),pos.y()));
+  _logger->move(pos);
+  _logger->show();
 }
 
 void GraphPerspective::construct(tlp::PluginProgress *progress) {
@@ -113,7 +123,7 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
   _ui->loggerFrame->setVisible(false);
-  _logger = new GraphPerspectiveLogger();
+  _logger = new GraphPerspectiveLogger(_mainWindow);
   _ui->loggerFrame->installEventFilter(this);
   connect(_logger,SIGNAL(cleared()),this,SLOT(logCleared()));
 
@@ -142,6 +152,7 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui->edgesTable->horizontalHeader()->setMovable(true);
 
   // Connect actions
+  connect(_ui->actionMessages_log,SIGNAL(triggered()),this,SLOT(showLogger()));
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
   connect(_ui->actionImport,SIGNAL(triggered()),this,SLOT(importGraph()));
   connect(_ui->workspace,SIGNAL(panelFocused(tlp::View*)),this,SLOT(panelFocused(tlp::View*)));

@@ -937,6 +937,7 @@ border-bottom: 1px solid black;
      <string>Window</string>
     </property>
     <addaction name="actionFull_screen"/>
+    <addaction name="actionMessages_log"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -1223,6 +1224,21 @@ border-bottom: 1px solid black;
    </property>
    <property name="text">
     <string>Import CSV</string>
+   </property>
+  </action>
+  <action name="actionMessages_log">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/logger-info.png</normaloff>:/tulip/graphperspective/icons/16/logger-info.png</iconset>
+   </property>
+   <property name="text">
+    <string>Messages log</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the messages log</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+E</string>
    </property>
   </action>
  </widget>

@@ -3,8 +3,9 @@
 #include "ui_GraphPerspectiveLogger.h"
 #include <iostream>
 
-GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent): QWidget(parent), _logSeverity(QtDebugMsg), _logCount(0), _ui(new Ui::GraphPerspectiveLogger) {
+GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent): QFrame(parent), _logSeverity(QtDebugMsg), _logCount(0), _ui(new Ui::GraphPerspectiveLogger) {
   _ui->setupUi(this);
+  setWindowFlags(Qt::Popup);
   connect(_ui->clearButton,SIGNAL(clicked()),this,SLOT(clear()));
 }
 
@@ -51,4 +52,5 @@ void GraphPerspectiveLogger::clear() {
   _logCount = 0;
   _logSeverity = QtDebugMsg;
   emit cleared();
+  close();
 }

@@ -3,13 +3,13 @@
 
 #include <QtGui/QPixmap>
 #include <QtCore/QDebug>
-#include <QtGui/QDialog>
+#include <QtGui/QFrame>
 
 namespace Ui {
 class GraphPerspectiveLogger;
 }
 
-class GraphPerspectiveLogger: public QWidget {
+class GraphPerspectiveLogger: public QFrame {
   Q_OBJECT
 
   QtMsgType _logSeverity;
