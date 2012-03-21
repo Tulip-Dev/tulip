@@ -41,7 +41,7 @@ inline Iterator<node> *getIt(const Graph *sg, node n, EDGE_TYPE direction) {
     return sg->getInOutNodes(n);
 
   default:
-    cerr << __PRETTY_FUNCTION__ << "serious bug...";
+    qWarning() << __PRETTY_FUNCTION__ << "serious bug...";
     return 0;
   }
 
@@ -250,7 +250,6 @@ void tlp::reachableNodes(const Graph *graph, const node startNode,
 void tlp::clusteringCoefficient(const Graph *graph,
                                 MutableContainer<double>& clusters,
                                 unsigned int maxDepth, PluginProgress *) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   node n;
   forEach(n, graph->getNodes()) {
     set<node> reachables;

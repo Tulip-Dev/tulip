@@ -47,7 +47,7 @@ typedef bool (TextureLoader_t)(const string &, TextureInfo *,string &);
 static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMsg) {
 
 #ifndef NDEBUG
-  cerr << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
+  qWarning() << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
 #endif
 
   FILE *file;
@@ -62,13 +62,13 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
   /* make sure the file is there and open it read-only (binary) */
   if ((file = fopen(filename.c_str(), "rb")) == NULL) {
     errorMsg = "File not found : " + filename;
-    //cerr << __PRETTY_FUNCTION__ << ": File not found :" << filename << endl;
+    //qWarning() << __PRETTY_FUNCTION__ << ": File not found :" << filename << endl;
     return false;
   }
 
   if(!fread(&bfType, sizeof(short int), 1, file)) {
     errorMsg = "Error reading : " + filename;
-    //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
+    //qWarning() << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
     fclose(file);
     return false;
   }
@@ -76,7 +76,7 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
   /* check if file is a bitmap */
   if (bfType != 19778) {
     errorMsg = "Not a Bitmap-File : " + filename;
-    //cerr << __PRETTY_FUNCTION__ << ": Not a Bitmap-File: " << filename << endl;
+    //qWarning() << __PRETTY_FUNCTION__ << ": Not a Bitmap-File: " << filename << endl;
     fclose(file);
     return false;
   }
@@ -88,7 +88,7 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
   /* get the position of the actual bitmap data */
   if (!fread(&bfOffBits, sizeof(int), 1, file)) {
     errorMsg = "Error reading : " + filename;
-    //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
+    //qWarning() << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
     fclose(file);
     return false;
   }
@@ -98,14 +98,14 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
 
   if (!fread(&texture->width, sizeof(int), 1, file)) {
     errorMsg = "Error reading : " + filename;
-    //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
+    //qWarning() << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
     fclose(file);
     return false;
   }
 
   if (!fread(&texture->height, sizeof(int), 1, file)) {
     errorMsg = "Error reading : " + filename;
-    //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
+    //qWarning() << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
     fclose(file);
     return false;
   }
@@ -113,14 +113,14 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
   /* get the number of planes (must be set to 1) */
   if (!fread(&biPlanes, sizeof(short int), 1, file)) {
     errorMsg = "Error reading : " + filename;
-    //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
+    //qWarning() << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
     fclose(file);
     return false;
   }
 
   if (biPlanes != 1) {
     errorMsg = "Error: number of Planes not 1 in : " + filename;
-    //cerr << __PRETTY_FUNCTION__ << ": Error: number of Planes not 1: " << filename << endl;
+    //qWarning() << __PRETTY_FUNCTION__ << ": Error: number of Planes not 1: " << filename << endl;
     fclose(file);
     return false;
   }
@@ -128,14 +128,14 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
   /* get the number of bits per pixel */
   if (!fread(&biBitCount, sizeof(short int), 1, file)) {
     errorMsg = "Error reading file : " + filename;
-    //cerr << __PRETTY_FUNCTION__ << ": Error reading file: " << filename << endl;
+    //qWarning() << __PRETTY_FUNCTION__ << ": Error reading file: " << filename << endl;
     fclose(file);
     return false;
   }
 
   if (biBitCount != 24) {
     errorMsg = "Error : Bits per Pixel not 24 : " + filename;
-    //cerr << __PRETTY_FUNCTION__ << ": Bits per Pixel not 24: " << filename << endl;
+    //qWarning() << __PRETTY_FUNCTION__ << ": Bits per Pixel not 24: " << filename << endl;
     fclose(file);
     return false;
   }
@@ -148,7 +148,7 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
 
   if (!fread(texture->data, biSizeImage, 1, file)) {
     errorMsg = "Error loading file : " + filename;
-    //cerr << __PRETTY_FUNCTION__ << ": Error loading file: " << filename << endl;
+    //qWarning() << __PRETTY_FUNCTION__ << ": Error loading file: " << filename << endl;
     delete [] texture->data;
     texture->data=NULL;
     fclose(file);
@@ -170,13 +170,13 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
 #ifdef HAVE_LIBJPEG
 static bool loadJPEG(const string &filename, TextureInfo *texture,string &errorMsg) {
 #ifndef NDEBUG
-  cerr << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
+  qWarning() << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
 #endif
   FILE *file;
 
   if ((file = fopen(filename.c_str(), "rb")) == NULL) {
     errorMsg = "File not found : " + filename;
-    //cerr << __PRETTY_FUNCTION__ << ": File not found:" << filename << endl;
+    //qWarning() << __PRETTY_FUNCTION__ << ": File not found:" << filename << endl;
     return false;
   }
 
@@ -228,14 +228,14 @@ static bool loadJPEG(const string &filename, TextureInfo *texture,string &errorM
 #ifdef HAVE_LIBPNG
 static bool loadPNG(const string &filename, TextureInfo *texture,string &errorMsg) {
 #ifndef NDEBUG
-  cerr << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
+  qWarning() << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
 #endif
 
   FILE *file;
 
   if ((file = fopen(filename.c_str(), "rb")) == NULL) {
     errorMsg = "File not found : " + filename;
-    //cerr << __PRETTY_FUNCTION__ << ": File not found:" << filename << endl;
+    //qWarning() << __PRETTY_FUNCTION__ << ": File not found:" << filename << endl;
     return false;
   }
 
@@ -371,7 +371,7 @@ bool GlTextureManager::loadTexture(const string& filename) {
 #endif
   else {
     errorViewer->displayError("Texture manager","Warning : don't know extension "+extension+" for file : "+filename);
-    //cerr << "Warning: don't know extension \"" << extension << "\"" << endl;
+    //qWarning() << "Warning: don't know extension \"" << extension << "\"" << endl;
   }
 
   TextureInfo texti;

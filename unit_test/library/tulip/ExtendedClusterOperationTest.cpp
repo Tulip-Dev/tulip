@@ -37,7 +37,7 @@ static Graph* tlp_loadGraph(const std::string& filename) {
 CPPUNIT_TEST_SUITE_REGISTRATION( ExtendedClusterOperationTest );
 //==========================================================
 void ExtendedClusterOperationTest::setUp() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
+  //  qWarning() << __PRETTY_FUNCTION__ << endl;
   graph = tlp::newGraph();
 
   for (unsigned int i=0; i<5; ++i) {
@@ -57,7 +57,7 @@ void ExtendedClusterOperationTest::setUp() {
 }
 //==========================================================
 void ExtendedClusterOperationTest::tearDown() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
+  //  qWarning() << __PRETTY_FUNCTION__ << endl;
   delete graph;
   nodes.clear();
   edges.clear();
@@ -65,7 +65,7 @@ void ExtendedClusterOperationTest::tearDown() {
 }
 //==========================================================
 void ExtendedClusterOperationTest::testCreateMetaNode() {
-  cerr << endl << "L'erreur à suivre sur createMetaNode fait partie de testCreateMetaNode" << endl;
+  qWarning() << endl << "L'erreur à suivre sur createMetaNode fait partie de testCreateMetaNode" << endl;
   meta = graph->createMetaNode(group);
   CPPUNIT_ASSERT(!meta.isValid());
 
@@ -127,7 +127,7 @@ void ExtendedClusterOperationTest::testBugCreateOpenMetaNode() {
 }
 //==========================================================
 void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
-  cerr << __PRETTY_FUNCTION__ << endl;
+  qWarning() << __PRETTY_FUNCTION__ << endl;
   Graph * graph = tlp_loadGraph("./DATA/graphs/openmetanode1.tlp.gz");
   //take the quotient graph
   Graph * subgraph = 0;

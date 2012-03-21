@@ -207,9 +207,9 @@ struct TLPGraphBuilder:public TLPTrue {
       n = nodeIndex[nodeId];
 
     if (_graph->isElement(n) && clusterIndex[clusterId]) {
-      //cerr << "set node value ....." ;
+      //qWarning() << "set node value ....." ;
       if (propertyType==GRAPH || propertyType==METAGRAPH) { // METAGRAPH was used in Tulip 2
-        //      cerr << ".";
+        //      qWarning() << ".";
         char *endPtr=0;
         const char *startPtr=value.c_str();
         int result=strtol(startPtr,&endPtr,10);
@@ -251,7 +251,7 @@ struct TLPGraphBuilder:public TLPTrue {
       e = edgeIndex[edgeId];
 
     if (_graph->isElement(e) && clusterIndex[clusterId]) {
-      //cerr << "setEdgeValue...." << "edge:" << edgeId << " cluster " << clusterId << " " << propertyName << " " << propertyType << " value=\""<< value<<"\"  ";
+      //qWarning() << "setEdgeValue...." << "edge:" << edgeId << " cluster " << clusterId << " " << propertyName << " " << propertyType << " value=\""<< value<<"\"  ";
       bool result=false;
 
       if (propertyType==GRAPH || propertyType==METAGRAPH)  { // METAGRAPH was used in Tulip 2
@@ -341,7 +341,7 @@ struct TLPGraphBuilder:public TLPTrue {
 
   bool setAllNodeValue(int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
     if (clusterIndex[clusterId]) {
-      //cerr << "set all node value ....." ;
+      //qWarning() << "set all node value ....." ;
       if (propertyType==GRAPH || propertyType==METAGRAPH) { // METAGRAPH was used in Tulip 2
         char *endPtr=0;
         const char *startPtr=value.c_str();
@@ -417,7 +417,7 @@ struct TLPGraphBuilder:public TLPTrue {
   }
   bool setAllEdgeValue(int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
     if (clusterIndex[clusterId]) {
-      //cerr << "setAllEdgeValue.." << endl;
+      //qWarning() << "setAllEdgeValue.." << endl;
       bool result=false;
 
       if (propertyType==GRAPH|| propertyType==METAGRAPH)  { // METAGRAPH was used in Tulip 2
@@ -1032,7 +1032,7 @@ public:
         std::stringstream ess;
         ess << filename.c_str() << ": " << strerror(errno);
         pluginProgress->setError(ess.str());
-        std::cerr << pluginProgress->getError() << std::endl;
+        qWarning() << pluginProgress->getError();
         return false;
       }
 
@@ -1065,7 +1065,7 @@ public:
 
     if (!result) {
       pluginProgress->setError(filename + ": " + pluginProgress->getError());
-      std::cerr << pluginProgress->getError() << std::endl;
+      qWarning() << pluginProgress->getError();
     }
 
     if(tmpss)

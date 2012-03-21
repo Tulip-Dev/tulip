@@ -186,12 +186,12 @@ void TreeTest::makeRootedTree(Graph *graph, node root) {
   instance->resultsBuffer.erase((unsigned long)graph);
 
   if (!graph->isElement (root)) {
-    cerr << "makeRootedTree:  Passed root is not element of graph" << endl;
+    qWarning() << "makeRootedTree:  Passed root is not element of graph" << endl;
     return;
   }//end if
 
   if (!TreeTest::isFreeTree (graph)) {
-    cerr << "makeRootedTree:  Graph is not topologically a tree, so rooted "
+    qWarning() << "makeRootedTree:  Graph is not topologically a tree, so rooted "
          << "tree cannot be made." << endl;
     return;
   }//end if

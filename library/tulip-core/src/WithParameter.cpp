@@ -48,7 +48,7 @@ ParameterDescription* ParameterDescriptionList::getParameter(const std::string& 
   }
 
 #ifndef NDEBUG
-  std::cerr << __PRETTY_FUNCTION__ << name << " does not exists" << std::endl;
+  qWarning() << __PRETTY_FUNCTION__ << name << " does not exists";
 #endif
 
   return NULL;

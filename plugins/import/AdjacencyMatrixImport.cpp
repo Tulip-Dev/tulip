@@ -96,7 +96,7 @@ public:
     std::stringstream ess;
     ess <<  "Error parsing '" << s << "' at line :" << curLine;
     pluginProgress->setError(ess.str());
-    std::cerr << pluginProgress->getError() << std::endl;
+    qWarning() << pluginProgress->getError();
     return false;
   }
 

@@ -45,7 +45,7 @@ int main(int, char**) {
   CPPUNIT_NS::XmlOutputter xmlOut(&result, xmlFileOut);
   xmlOut.write();
 
-  CPPUNIT_NS::TextOutputter stdOut(&result, std::cout);
+  CPPUNIT_NS::TextOutputter stdOut(&result, qDebug());
   stdOut.write();
 
   return result.wasSuccessful() ? EXIT_SUCCESS : EXIT_FAILURE;

@@ -458,7 +458,7 @@ struct TLPParser {
 
       case COMMENTTOKEN:
 
-        if (displayComment) std::cout << "Comment line:" << tokenParser->curLine << "->" <<  currentValue.str << std::endl;
+        if (displayComment) qDebug() << "Comment line:" << tokenParser->curLine << "->" <<  currentValue.str;
 
         break;
 

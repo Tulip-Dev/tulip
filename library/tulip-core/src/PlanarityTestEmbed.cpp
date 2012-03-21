@@ -58,7 +58,7 @@ void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
   edge e;
   node r = nodeWithDfsPos.get(n), u;
   state.set(r.id, VISITED);
-  //  cout << "   " << dfsPosNum.get(r.id) << ": ";
+  //  qDebug() << "   " << dfsPosNum.get(r.id) << ": ";
   /// forall_out_edges(e, r)
   StableIterator<edge> it(sG->getOutEdges(r));
 
@@ -72,8 +72,6 @@ void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
 
       while(state.get(u.id) != VISITED) {
         // path compression;
-        //  cout << dfsPosNum.get(u.id) << "(" << dfsPosNum.get(parent.get(u.id).id) << "), ";
-        //  cerr << __PRETTY_FUNCTION__ << endl;
         if (isCNode(parent.get(u.id)))
           findActiveCNode(u, r, traversedNodes);
 
@@ -153,30 +151,30 @@ void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
 //       }
 //       el[w].push_back(e);
 //     }
-//     //    cout << "\n       * FINAL Embed List: ";
-//     //    cout << "[" << embedList[r].size() << " / "
+//     //    qDebug() << "\n       * FINAL Embed List: ";
+//     //    qDebug() << "[" << embedList[r].size() << " / "
 //     //  << sG->numberOfEdges() << "]\n";
 //     list<node>::const_iterator it= nl.begin();
 //     for(; it!=nl.end();++it) {
 //       node k = *it;
-//       cout << "         " << dfsPosNum.get(k.id) << ": ";
+//       qDebug() << "         " << dfsPosNum.get(k.id) << ": ";
 //       list<edge>::const_iterator itE = el[k].begin();
 //       for(;itE!=el[k].end();++itE) {
 //  edge e = *itE;
-//  cout << dfsPosNum.get(sG->target(e).id) << ", ";
+//  qDebug() << dfsPosNum.get(sG->target(e).id) << ", ";
 //       }
-//       cout << "\n";
+//       qDebug() << "\n";
 //     }
-//     cout << "         List of edges: ";
+//     qDebug() << "         List of edges: ";
 
 //     { // due to myforall macro;
 //       BmdListIt<edge> itBm(embedList[r]);
 //       while (itBm.hasNext()) {
 //  edge e = itBm.next();
-//  cout << "(" << dfsPosNum.get(sG->source(e).id) << "," <<
+//  qDebug() << "(" << dfsPosNum.get(sG->source(e).id) << "," <<
 //    dfsPosNum.get(sG->target(e).id) << ") ";
 //       }
-//       cout << "\n";
+//       qDebug() << "\n";
 //     }
 //   }
 
@@ -664,7 +662,6 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
     list<edge>& listBackEdges,
     vector<edge>& backEdge) {
   // constructs a DFS tree of T_v^* to sort back-edges to embed;
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   Graph *D = tlp::newGraph();
 
   list<node> listNodes, listCNodes;
@@ -762,9 +759,9 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
   for (list<edge>::iterator it = listBackEdges.begin() ; it != listBackEdges.end() ; ++it) {
     edge e = *it;
     node v = sG->source(e);
-//     cout << v.id << endl;
-//     cout << "nodeInD[v].id = " << nodeInD.get(v.id).id << endl;
-//     cout << "dfsPos.get(nodeInD[v].id) = " << dfsPos.get(nodeInD.get(v.id).id) << endl;
+//     qDebug() << v.id << endl;
+//     qDebug() << "nodeInD[v].id = " << nodeInD.get(v.id).id << endl;
+//     qDebug() << "dfsPos.get(nodeInD[v].id) = " << dfsPos.get(nodeInD.get(v.id).id) << endl;
     backEdge[dfsPos.get(nodeInD[v].id)] = e;
   }
 
@@ -798,7 +795,6 @@ bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph* sG) {
 
       if (considered.get(e.id)<2) {
         count = 0;
-        //      cerr << "Face : " << fc << " start edge:" << e.id << endl;
         edge e1 = e;
         node n, n_tmp;
 
@@ -807,7 +803,7 @@ bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph* sG) {
         else
           n = sG->source(e1);
 
-        //      cerr << "-(" << e1.id << ")->" << n.id << flush;
+        //      qWarning() << "-(" << e1.id << ")->" << n.id << flush;
         n_tmp = n;
 
         do {
@@ -819,7 +815,7 @@ bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph* sG) {
           if (sG->source(e1) == n)
             sens.set(e1.id,true);
 
-          //  cerr << "-(" << e1.id << ")->" << n.id << flush;
+          //  qWarning() << "-(" << e1.id << ")->" << n.id << flush;
           ++count;
 
           if (count > sG->numberOfEdges() +1) break;
@@ -827,7 +823,6 @@ bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph* sG) {
         while ((e1 != e)||(n != n_tmp));
 
         ++fc;
-        //  cerr << endl;
       }
     }
 
@@ -835,7 +830,6 @@ bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph* sG) {
   }
 
   if (fc != m - n + 2) {
-    //cerr << __PRETTY_FUNCTION__ << " : not ok :( nb faces :" << fc << "!=" << m - n +2 << endl;
     return false;
   }
 

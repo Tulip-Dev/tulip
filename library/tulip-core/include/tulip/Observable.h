@@ -263,26 +263,26 @@ private:
 *         for (size_t i=0; i< evs.size(); ++i)
 *             if (evs[i].type() == Event::DELETE)  {
 *             points.erase(reinterpret_cast<Point *>(evs[i].sender()));
-*             cout << "PointsViewer::Point has been deleted :" << reinterpret_cast<Point *>(evs[i].sender()) << endl << flush;
-*             cout << "PointsViewer::updating view : ";
+*             qDebug() << "PointsViewer::Point has been deleted :" << reinterpret_cast<Point *>(evs[i].sender()) << endl << flush;
+*             qDebug() << "PointsViewer::updating view : ";
 *             updateView();
 *             return;
 *         }
-*         cout << "PointsViewer::objects modified : " << evs.size() << " updating view : ";
+*         qDebug() << "PointsViewer::objects modified : " << evs.size() << " updating view : ";
 *         updateView();
 *     }
 *     void addPoint(Point& p) {
 *         points.insert(&p);
 *         p.addOnlooker(*this);
-*         cout << "PointsViewer::point added : " << &p << endl;
+*         qDebug() << "PointsViewer::point added : " << &p << endl;
 *     }
 *     void updateView() {
 *         for (set<const Point *>::const_iterator it = points.begin(); it != points.end(); ++it) {
 *             double x,y;
 *             (*it)->getXY(x, y);
-*             cout << "(" << x << "," << y << ")";
+*             qDebug() << "(" << x << "," << y << ")";
 *         }
-*         cout << endl;
+*         qDebug() << endl;
 *     }
 *
 * private:
@@ -293,7 +293,7 @@ private:
 * public:
 *     void update(const Event &ev) {
 *         if (ev.type() == Event::DELETE)  {
-*             cout << "PointListener::Point has been deleted : " << reinterpret_cast<Point *>(ev.sender()) << endl << flush;
+*             qDebug() << "PointListener::Point has been deleted : " << reinterpret_cast<Point *>(ev.sender()) << endl << flush;
 *             return;
 *         }
 *         const PointEvent *event = dynamic_cast<const PointEvent *>(&ev);
@@ -301,7 +301,7 @@ private:
 *             Point *p = reinterpret_cast<Point *>(ev.sender());
 *             double x,y;
 *             p->getXY(x, y);
-*             cout << "PointListener::Point change (" << event->prevX << "," << event->prevY << ") ==> (" << x << "," << y << ")" << endl << flush;
+*             qDebug() << "PointListener::Point change (" << event->prevX << "," << event->prevY << ") ==> (" << x << "," << y << ")" << endl << flush;
 *         }
 *     }
 * };
@@ -406,26 +406,26 @@ private:
 *         for (size_t i=0; i< evs.size(); ++i)
 *             if (evs[i].type() == Event::DELETE)  {
 *             points.erase(reinterpret_cast<Point *>(evs[i].sender()));
-*             cout << "PointsViewer::Point has been deleted :" << reinterpret_cast<Point *>(evs[i].sender()) << endl << flush;
-*             cout << "PointsViewer::updating view : ";
+*             qDebug() << "PointsViewer::Point has been deleted :" << reinterpret_cast<Point *>(evs[i].sender()) << endl << flush;
+*             qDebug() << "PointsViewer::updating view : ";
 *             updateView();
 *             return;
 *         }
-*         cout << "PointsViewer::objects modified : " << evs.size() << " updating view : ";
+*         qDebug() << "PointsViewer::objects modified : " << evs.size() << " updating view : ";
 *         updateView();
 *     }
 *     void addPoint(Point& p) {
 *         points.insert(&p);
 *         p.addOnlooker(*this);
-*         cout << "PointsViewer::point added : " << &p << endl;
+*         qDebug() << "PointsViewer::point added : " << &p << endl;
 *     }
 *     void updateView() {
 *         for (set<const Point *>::const_iterator it = points.begin(); it != points.end(); ++it) {
 *             double x,y;
 *             (*it)->getXY(x, y);
-*             cout << "(" << x << "," << y << ")";
+*             qDebug() << "(" << x << "," << y << ")";
 *         }
-*         cout << endl;
+*         qDebug() << endl;
 *     }
 *
 * private:
@@ -436,7 +436,7 @@ private:
 * public:
 *     void update(const Event &ev) {
 *         if (ev.type() == Event::DELETE)  {
-*             cout << "PointListener::Point has been deleted : " << reinterpret_cast<Point *>(ev.sender()) << endl << flush;
+*             qDebug() << "PointListener::Point has been deleted : " << reinterpret_cast<Point *>(ev.sender()) << endl << flush;
 *             return;
 *         }
 *         const PointEvent *event = dynamic_cast<const PointEvent *>(&ev);
@@ -444,7 +444,7 @@ private:
 *             Point *p = reinterpret_cast<Point *>(ev.sender());
 *             double x,y;
 *             p->getXY(x, y);
-*             cout << "PointListener::Point change (" << event->prevX << "," << event->prevY << ") ==> (" << x << "," << y << ")" << endl << flush;
+*             qDebug() << "PointListener::Point change (" << event->prevX << "," << event->prevY << ") ==> (" << x << "," << y << ")" << endl << flush;
 *         }
 *     }
 * };

@@ -100,14 +100,14 @@ unsigned int eulerIdentity(Graph *graph) {
 }
 //==========================================================
 void PlanarityTestTest::planarGraphsEmbedding() {
-  cerr << "==================================" << endl;
+  qWarning() << "==================================" << endl;
   graph = tlp_loadGraph(GRAPHPATH + "planar/grid1010.tlp");
   PlanarConMap *graphMap = computePlanarConMap(graph);
   //  graphMap->makePlanar();
   CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());
   delete graphMap;
   delete graph;
-  cerr << "==================================" << endl;
+  qWarning() << "==================================" << endl;
   graph = tlp_loadGraph(GRAPHPATH + "planar/unconnected.tlp");
   graph->setAttribute("name", string("unconnected"));
   // no planar connected map computed
@@ -115,8 +115,8 @@ void PlanarityTestTest::planarGraphsEmbedding() {
   graphMap = computePlanarConMap(graph);
   CPPUNIT_ASSERT(graphMap == NULL);
   delete graph;
-  cerr << "==================================" << endl;
-  cerr << "unbiconnected" << endl;
+  qWarning() << "==================================" << endl;
+  qWarning() << "unbiconnected" << endl;
   graph = tlp_loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
 
   graphMap = computePlanarConMap(graph);
@@ -126,11 +126,11 @@ void PlanarityTestTest::planarGraphsEmbedding() {
 
   delete graphMap;
   delete graph;
-  cerr << "==================================" << endl;
+  qWarning() << "==================================" << endl;
 }
 //==========================================================
 void PlanarityTestTest::planarMetaGraphsEmbedding() {
-  cerr << "===========MetaGraphsEmbedding=======================" << endl;
+  qWarning() << "===========MetaGraphsEmbedding=======================" << endl;
   graph = tlp_loadGraph(GRAPHPATH + "planar/grid1010.tlp");
   Graph * g = graph->addCloneSubGraph();
   set<node> toGroup;
@@ -169,12 +169,12 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
   delete graphMap;
   graph->delSubGraph(g);
   delete graph;
-  cerr << "==================================" << endl;
+  qWarning() << "==================================" << endl;
   /*
   graph = tlp::loadGraph(GRAPHPATH + "planar/unconnected.tlp");
   graph->setAttribute("name", string("unconnected"));
   graphMap = new PlanarConMap(graph);
-  cerr << "Graph name : " << graph->getAttribute<string>("name") << endl;
+  qWarning() << "Graph name : " << graph->getAttribute<string>("name") << endl;
   graphMap->makePlanar();*/
   /*
    * The number of faces must be adapted because the Planarity Test split the
@@ -183,8 +183,8 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
   /*  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces() - (ConnectedTest::numberOfConnectedComponnents(graph) - 1));
   delete graphMap;
   delete graph;
-  cerr << "==================================" << endl;
-  cerr << "unbiconnected" << endl;
+  qWarning() << "==================================" << endl;
+  qWarning() << "unbiconnected" << endl;
   graph = tlp::loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
 
   graphMap = new PlanarConMap(graph);
@@ -194,5 +194,5 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
 
   delete graphMap;
   delete graph;
-  cerr << "==================================" << endl;*/
+  qWarning() << "==================================" << endl;*/
 }

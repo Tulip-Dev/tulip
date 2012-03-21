@@ -646,25 +646,25 @@ const vector<edge>& VectorGraph::edges() const {
 }
 //=======================================================
 void VectorGraph::dump() const {
-  cout << "nodes : ";
+  qDebug() << "nodes : ";
   node n;
   forEach(n, getNodes())
-  cout << n.id << " ";
-  cout << endl;
-  cout << "edges: ";
+  qDebug() << n.id << " ";
+  qDebug() << endl;
+  qDebug() << "edges: ";
   edge e;
   forEach(e, getEdges())
-  cout << "e_" << e.id << "(" << source(e).id << "," << target(e).id << ") ";
-  cout << endl;
+  qDebug() << "e_" << e.id << "(" << source(e).id << "," << target(e).id << ") ";
+  qDebug() << endl;
 
   forEach(n, getNodes()) {
-    cout << "n_" << n << "{";
+    qDebug() << "n_" << n << "{";
     edge e;
     forEach(e, getInOutEdges(n)) {
-      cout << "e_" << e.id << " ";
+      qDebug() << "e_" << e.id << " ";
     }
-    cout << "}";
-    cout << endl;
+    qDebug() << "}";
+    qDebug() << endl;
   }
 }
 //=============================================================
@@ -731,7 +731,7 @@ void VectorGraph::integrityTest() {
 //=======================================================
 void VectorGraph::testCond(string str, bool b) {
   if (!b) {
-    cout << str << flush << endl;
+    qDebug() << str << flush << endl;
     dump();
     exit(1);
   }

@@ -181,7 +181,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     editPosition[2] = 0;
     editLayoutCenter = _layoutCenter;
 
-    //  cerr << "edit pos:" << editPosition << endl;
+    //  qWarning() << "edit pos:" << editPosition << endl;
 
     vector <SelectedEntity> select;
 
@@ -360,7 +360,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     case ALIGN_VERTICALLY:
     case ALIGN_HORIZONTALLY:
     default:
-      cerr << "[Error] : " <<__FUNCTION__ << " should not have been called" << endl;
+      qWarning() << "[Error] : " <<__FUNCTION__ << " should not have been called" << endl;
       break;
     }
   }
@@ -464,7 +464,7 @@ void MouseSelectionEditor::undoEdition() {
 }
 //========================================================================================
 void MouseSelectionEditor::stopEdition() {
-  //cerr << __PRETTY_FUNCTION__ << endl;
+  //qWarning() << __PRETTY_FUNCTION__ << endl;
   if(layer) {
     glMainWidget->getScene()->removeLayer(layer,true);
     layer=NULL;
@@ -483,7 +483,7 @@ void MouseSelectionEditor::initProxies(GlMainWidget *glMainWidget) {
 }
 //========================================================================================
 void MouseSelectionEditor::mMouseTranslate(double newX, double newY, GlMainWidget *glMainWidget) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
+  //  qWarning() << __PRETTY_FUNCTION__ << endl;
   Observable::holdObservers();
   initProxies(glMainWidget);
   Coord v0(0,0,0);
@@ -502,11 +502,11 @@ void MouseSelectionEditor::mMouseTranslate(double newX, double newY, GlMainWidge
 }
 //========================================================================================
 void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWidget* ) {
-  //  cerr << __PRETTY_FUNCTION__ << "/op=" << operation << ", mod:" << mode << endl;
+  //  qWarning() << __PRETTY_FUNCTION__ << "/op=" << operation << ", mod:" << mode << endl;
   Coord curPos(newX, newY, 0);
   Coord stretch(1,1,1);
 
-  //  cerr << "cur : << " << curPos << " center : " << editCenter << endl;
+  //  qWarning() << "cur : << " << curPos << " center : " << editCenter << endl;
   if (operation == STRETCH_X || operation == STRETCH_XY) {
     stretch[0] =  (curPos[0] - editCenter[0]) / (editPosition[0] - editCenter[0]);
   }
@@ -515,7 +515,7 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWid
     stretch[1] = (curPos[1] - editCenter[1]) / (editPosition[1] - editCenter[1]);
   }
 
-  //  cerr << "stretch : << "<< stretch << endl;
+  //  qWarning() << "stretch : << "<< stretch << endl;
 
   Observable::holdObservers();
   _graph->pop();
@@ -559,7 +559,7 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWid
 }
 //========================================================================================
 void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *glMainWidget) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
+  //  qWarning() << __PRETTY_FUNCTION__ << endl;
   if (operation == ROTATE_Z) {
     Coord curPos(newX, newY, 0);
 
@@ -903,7 +903,7 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
 
   Coord tmpCenter = glMainWidget->getScene()->getGraphCamera().worldTo2DScreen(ffdCenter);
 
-  //  cerr << tmpCenter << endl;
+  //  qWarning() << tmpCenter << endl;
 
   //tmpCenter[0] = (double)glMainWidget->width() - tmpCenter[0];
   //tmpCenter[1] = (double)glMainWidget->height() - tmpCenter[1];

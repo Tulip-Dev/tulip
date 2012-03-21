@@ -39,8 +39,8 @@ string GlyphManager::glyphName(int id) {
     return glyphIdToName[id];
   }
   else {
-    cerr << __PRETTY_FUNCTION__ << endl;
-    cerr << "Invalid glyph id" << endl;
+    qWarning() << __PRETTY_FUNCTION__ << endl;
+    qWarning() << "Invalid glyph id" << endl;
     return string("invalid");
   }
 }
@@ -50,8 +50,8 @@ int GlyphManager::glyphId(string name) {
     return nameToGlyphId[name];
   }
   else {
-    cerr << __PRETTY_FUNCTION__ << endl;
-    cerr << "Invalid glyph name" << endl;
+    qWarning() << __PRETTY_FUNCTION__ << endl;
+    qWarning() << "Invalid glyph name" << endl;
     return 0;
   }
 }

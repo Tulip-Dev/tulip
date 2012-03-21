@@ -56,7 +56,7 @@ class Graph;
  * \code
  * class PrintObs : public GraphObserver {
  *    void addNode(Graph *g, const node n) {
- *       cout << "node " << n.id << " added in " << g << endl << flush;
+ *       qDebug() << "node " << n.id << " added in " << g << endl << flush;
  *    }
  * };
  *

@@ -35,14 +35,14 @@ class TLP_GL_SCOPE OpenGlErrorViewer {
 public :
 
   /**
-   * Simple error display with cerr output
+   * Simple error display with qWarning() output
    */
   virtual void displayError(const std::string &title,const std::string &errorMsg) {
-    std::cerr << title << " : " << errorMsg << std::endl;
+    qWarning() << title << " : " << errorMsg;
   }
 
   /**
-   * Simple error display with cerr output
+   * Simple error display with qWarning() output
    */
   virtual void displayErrorWithAskAgain(const std::string &title,const std::string &errorMsg) {
     displayError(title,errorMsg);

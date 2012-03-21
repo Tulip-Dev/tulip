@@ -369,7 +369,7 @@ void WorkspacePanel::graphComboIndexChanged() {
   if (g != NULL) {
     std::string name;
     g->getAttribute<std::string>("name",name);
-    std::cerr << "selecting graph " << name << " in view" << std::endl;
+    qWarning() << "selecting graph " << name << " in view";
   }
 
 #endif /* NDEBUG */

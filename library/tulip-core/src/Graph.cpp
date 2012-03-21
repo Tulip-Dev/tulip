@@ -129,7 +129,7 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename) {
 Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress, Graph *newGraph) {
 
   if (!PluginLister::pluginExists(format)) {
-    cerr << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format
+    qWarning() << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format
          << "\" doesn't exists (or is not loaded)" << endl;
     return NULL;
   }
@@ -174,7 +174,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
 bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &format,
                       DataSet &dataSet, PluginProgress *progress) {
   if (!PluginLister::pluginExists(format)) {
-    cerr << "libtulip: " << __FUNCTION__ << ": export plugin \"" << format
+    qWarning() << "libtulip: " << __FUNCTION__ << ": export plugin \"" << format
          << "\" doesn't exists (or is not loaded)" << endl;
     return false;
   }
@@ -367,7 +367,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
                            std::string &errorMessage,
                            DataSet *dataSet, PluginProgress *progress) {
   if (!PluginLister::pluginExists(algorithm)) {
-    cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << algorithm
+    qWarning() << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << algorithm
          << "\" doesn't exists (or is not loaded)" << endl;
     return false;
   }
@@ -422,7 +422,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   }
 
 #ifndef NDEBUG
-  std::cerr << __PRETTY_FUNCTION__ << std::endl;
+  qWarning() << __PRETTY_FUNCTION__;
 #endif
 
   TLP_HASH_MAP<std::string, PropertyInterface *>::const_iterator it =
@@ -430,7 +430,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 
   if (it != circularCalls.end() && (*it).second == prop) {
 #ifndef NDEBUG
-    std::cerr << "Circular call of " << __PRETTY_FUNCTION__ << " " << msg << std::endl;
+    qWarning() << "Circular call of " << __PRETTY_FUNCTION__ << " " << msg;
 #endif
     return false;
   }
@@ -930,14 +930,14 @@ Graph * Graph::inducedSubGraph(const std::set<node> &nodes,
 //====================================================================================
 node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool delAllEdge) {
   if (getRoot() == this) {
-    cerr << __PRETTY_FUNCTION__ << endl;
-    cerr << "\t Error: Could not group a set of nodes in the root graph" << endl;
+    qWarning() << __PRETTY_FUNCTION__;
+    qWarning() << "\t Error: Could not group a set of nodes in the root graph";
     return node();
   }
 
   if (nodeSet.empty()) {
-    cerr << __PRETTY_FUNCTION__ << endl;
-    cerr << '\t' << "Warning: Creation of an empty metagraph" << endl;
+    qWarning() << __PRETTY_FUNCTION__;
+    qWarning() << '\t' << "Warning: Creation of an empty metagraph";
   }
 
   // create an induced brother sub graph
@@ -967,8 +967,8 @@ node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool
 //====================================================================================
 node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   if (getRoot() == this) {
-    cerr << __PRETTY_FUNCTION__ << endl;
-    cerr << "\t Error: Could not create a meta node in the root graph" << endl;
+    qWarning() << __PRETTY_FUNCTION__;
+    qWarning() << "\t Error: Could not create a meta node in the root graph";
     return node();
   }
 
@@ -1046,7 +1046,6 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
         edges[src].insert(tgt);
 
         if (toDelete) {
-          //  cerr << "delete edge e :" << e.id << endl;
           delEdge(e, edgeDelAll);
         }
       }
@@ -1076,7 +1075,6 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
         edges[tgt].insert(src);
 
         if (toDelete) {
-          //  cerr << "delete edge e :" << e.id << endl;
           delEdge(e, edgeDelAll);
         }
       }
@@ -1105,8 +1103,8 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 //====================================================================================
 void Graph::openMetaNode(node metaNode, bool updateProperties) {
   if (getRoot() == this) {
-    cerr << __PRETTY_FUNCTION__ << endl;
-    cerr << "\t Error: Could not ungroup a meta node in the root graph" << endl;
+    qWarning() << __PRETTY_FUNCTION__;
+    qWarning() << "\t Error: Could not ungroup a meta node in the root graph";
     return;
   }
 
@@ -1302,7 +1300,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
           graphColors->setEdgeValue (addedEdge, edgeColor);
         }
         else
-          cerr << "bug exist edge 1";
+          qWarning() << "bug exist edge 1";
       }
 
       // }

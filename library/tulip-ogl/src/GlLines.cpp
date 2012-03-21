@@ -410,7 +410,7 @@ void GlLines::glEnableLineStipple(unsigned int stippleType) {
 
     default:
       glDisable(GL_LINE_STIPPLE);
-      cerr << "unrecognizedStippleType" << endl;
+      qWarning() << "unrecognizedStippleType" << endl;
       break;
     }
   }

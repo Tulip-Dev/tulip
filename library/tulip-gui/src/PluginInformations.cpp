@@ -153,7 +153,7 @@ void PluginInformations::downloadFinished() {
     }
     else {
       //TODO proper error reporting
-      std::cout << "error while extracting plugin: " << progress->getError() << std::endl;
+      qDebug() << "error while extracting plugin: " << progress->getError();
     }
 
     //TODO load plugin ? should not be necessary as the PluginCenter does not need it. usefull for error reporting ?

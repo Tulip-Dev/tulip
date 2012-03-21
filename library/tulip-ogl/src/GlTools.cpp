@@ -79,9 +79,9 @@ void glTest(string message) {
   GLenum error = glGetError();
 
   while (error != GL_NO_ERROR) {
-    if (i==1) cerr << "[OpenGL ERROR] : " << message << endl;
+    if (i==1) qWarning() << "[OpenGL ERROR] : " << message << endl;
 
-    cerr << "[" << i << "] ========> : " << gluErrorString(error) <<  endl;
+    qWarning() << "[" << i << "] ========> : " << gluErrorString(error) <<  endl;
     assert (error == GL_NO_ERROR);
     error = glGetError();
     ++i;
@@ -122,7 +122,9 @@ Coord projectPoint(const Coord &obj,
 #ifndef NDEBUG
 
   if(fabs(point[3]) < 1E-6) {
-    std::cerr << "Error in projectPoint with coord : " << obj << " and transform matrix : " << transform << std::endl;
+    std::cerr << "Error in projectPoint with coord : "
+               << obj
+               << " and transform matrix : " << transform;
   }
 
 #endif
@@ -150,7 +152,7 @@ Coord unprojectPoint(const Coord &obj,
 #ifndef NDEBUG
 
   if(fabs(point[3]) < 1E-6) {
-    std::cerr << "Error in unprojectPoint with coord : " << obj << " and transform matrix : " << invtransform << std::endl;
+    std::cerr << "Error in unprojectPoint with coord : " << obj << " and transform matrix : " << invtransform;
   }
 
 #endif

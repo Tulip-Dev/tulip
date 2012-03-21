@@ -95,19 +95,19 @@ OLOObject::OLOObject() {
 #ifndef NDEBUG
   sent = received = 0;
 #endif
-  //cout << "[OLO node] created:" << n.id << "::" << this << endl;
+  //qDebug() << "[OLO node] created:" << n.id << "::" << this << endl;
 }
 //----------------------------------
 OLOObject::OLOObject(const OLOObject &) {
 #ifndef NDEBUG
   sent = received = 0;
 #endif
-  //cout << "[OLO node] created (copy constructor):" << n.id << "::" << this << endl;
+  //qDebug() << "[OLO node] created (copy constructor):" << n.id << "::" << this << endl;
 }
 //----------------------------------
 OLOObject& OLOObject::operator=(const OLOObject &) {
 #ifndef NDEBUG
-  cout << "[OLO Warning]: OLO object should reimplement their operator= else nothing is copied" << endl;
+  qDebug() << "[OLO Warning]: OLO object should reimplement their operator= else nothing is copied" << endl;
 #endif
   return *this;
 }
@@ -123,16 +123,16 @@ OLOObject::~OLOObject() {
     if (!oAlive[_n])
       throw OLOException("OLO object has already been deleted, possible double free!!!");
 
-    //cout << "[OLO node] destructor:" << n.id  << "::" << this << endl;
+    //qDebug() << "[OLO node] destructor:" << n.id  << "::" << this << endl;
     oAlive[_n] = false;
 
     if (notifying == 0 && unholding == 0 && holdCounter == 0) {
       oGraph.delNode(_n);
-      //cout << "[OLO node] deleted:" << n.id << "::" << this << endl;
+      //qDebug() << "[OLO node] deleted:" << n.id << "::" << this << endl;
     }
     else {
       delayedDelNode.push_back(_n);
-      //cout << "[OLO node] delayed delete:" << n.id << "::" << this << endl;
+      //qDebug() << "[OLO node] delayed delete:" << n.id << "::" << this << endl;
       oGraph.delEdges(_n);
     }
   }
@@ -255,16 +255,16 @@ void Observable::treatEvents(const  std::vector<Event> &events ) {
 }
 //=================================
 void Observable::update(std::set<Observable*>::iterator, std::set<Observable*>::iterator) {
-  std::cout << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
+  qDebug() << __PRETTY_FUNCTION__ << " : not implemented";
 }
 //=================================
 void Observable::treatEvent(const Event &) {
-  std::cout << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
+  qDebug() << __PRETTY_FUNCTION__ << " : not implemented";
 }
 
 //=================================
 void Observable::observableDestroyed(Observable *) {
-  std::cout << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
+  qDebug() << __PRETTY_FUNCTION__ << " : not implemented";
 }
 //=================================
 Observable::Observable():deleteMsgSent(false), queuedEvent(*this, Event::TLP_INVALID) {
@@ -294,10 +294,10 @@ void Observable::unholdObservers() {
   node n;
   forEach(n, OLOObject::oGraph.getNodes()) {
     if (OLOObject::oAlive[n]) {
-      //cout << "{" << n.id << "::" << OLOObject::oPointer[n] << flush;
+      //qDebug() << "{" << n.id << "::" << OLOObject::oPointer[n] << flush;
       Observable *observable = dynamic_cast<Observable *>(OLOObject::oPointer[n]);
 
-      //cout << "}" << flush;
+      //qDebug() << "}" << flush;
       if (observable) {
         if (observable->queuedEvent.type() == Event::TLP_INVALID) continue;
 
@@ -378,7 +378,7 @@ void Observable::addOnlooker(const Observable &obs, OLOEDGETYPE type) const {
 #ifndef NDEBUG
 
       if (oType[link] & type) {
-        cerr << "[OLO Warning]: observer already connected" << endl;
+        qWarning() << "[OLO Warning]: observer already connected";
       }
 
 #endif
@@ -464,7 +464,7 @@ void Observable::sendEvent(const Event &message) {
 
   for(itobs = listenerTonotify.begin(); itobs != listenerTonotify.end(); ++itobs) {
     if (itobs->second == _n && message.type() == Event::TLP_DELETE) {
-      cout << "[OLO info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
+      qDebug() << "[OLO info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
       continue;
     }
 
@@ -485,7 +485,7 @@ void Observable::sendEvent(const Event &message) {
 
   for(itobs = observerTonotify.begin(); itobs != observerTonotify.end(); ++itobs) {
     if (itobs->second == _n && message.type() == Event::TLP_DELETE) {
-      cout << "[OLO info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
+      qDebug() << "[OLO info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
       continue;
     }
 
@@ -510,7 +510,7 @@ void Observable::sendEvent(const Event &message) {
 }
 //----------------------------------------
 void Observable::updateObserverGraph() {
-  //cout << __PRETTY_FUNCTION__ << endl << flush;
+  //qDebug() << __PRETTY_FUNCTION__ << endl << flush;
   if (notifying == 0 && unholding == 0 && holdCounter == 0) {
     vector<node>::const_iterator itNodes;
 
@@ -570,7 +570,7 @@ void Observable::notifyObservers() {
 //----------------------------------------
 void Observable::notifyDestroy() {
 #ifndef NDEBUG
-  cerr << "[OLO Warning]: no event sent on notifyDestroy" << endl;
+  qWarning() << "[OLO Warning]: no event sent on notifyDestroy";
 #endif
 }
 //----------------------------------------

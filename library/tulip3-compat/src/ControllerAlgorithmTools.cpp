@@ -234,7 +234,7 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,strin
   assert(Observable::observersHoldCounter()==holdCount);
 
   if(Observable::observersHoldCounter()!=holdCount) {
-    cerr << "Algorithm hold/unhold observers error for " << name << " plugin" << endl;
+    qWarning() << "Algorithm hold/unhold observers error for " << name << " plugin" << endl;
   }
 
   delete myProgress;

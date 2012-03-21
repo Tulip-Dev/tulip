@@ -282,7 +282,7 @@ void SuperGraphTest::testDegree() {
 }
 //==========================================================
 void SuperGraphTest::testAddDel() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
+  //  qWarning() << __PRETTY_FUNCTION__ << endl;
   vector<node> nodes;
   vector<edge> edges;
   unsigned int NB_ADD = 100;
