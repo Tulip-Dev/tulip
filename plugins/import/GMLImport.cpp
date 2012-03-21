@@ -547,7 +547,7 @@ class GMLImport:public ImportModule {
 public:
   PLUGININFORMATIONS("GML","Auber","04/07/2001","GML Import plugin","1.1","File")
   GMLImport(PluginContext* context):ImportModule(context) {
-    addParameter<string>("file::filename",paramHelp[0]);
+    addInParameter<string>("file::filename",paramHelp[0]);
   }
   ~GMLImport() {}
   bool importGraph() {

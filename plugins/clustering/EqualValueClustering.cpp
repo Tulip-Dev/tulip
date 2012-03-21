@@ -55,9 +55,9 @@ const char * paramHelp[] = {
 #define EDGE_ELT 1
 //================================================================================
 EqualValueClustering::EqualValueClustering(tlp::PluginContext* context):Algorithm(context) {
-  addParameter<PropertyInterface*>("Property", paramHelp[0], "viewMetric");
-  addParameter<StringCollection>(ELT_TYPE, paramHelp[1], ELT_TYPES);
-  addParameter<bool>("Connected", paramHelp[2], "false");
+  addInParameter<PropertyInterface*>("Property", paramHelp[0], "viewMetric");
+  addInParameter<StringCollection>(ELT_TYPE, paramHelp[1], ELT_TYPES);
+  addInParameter<bool>("Connected", paramHelp[2], "false");
 }
 //===============================================================================
 bool EqualValueClustering::run() {

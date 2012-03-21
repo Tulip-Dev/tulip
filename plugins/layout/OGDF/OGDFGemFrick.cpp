@@ -153,19 +153,19 @@ public:
 PLUGIN(OGDFGemFrick)
 
 OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext* context) : OGDFLayoutPluginBase(context,new ogdf::GEMLayout()) {
-  addParameter<int>("number of rounds", paramHelp[0], "30000");
-  addParameter<double>("minimal temperature", paramHelp[1], "0.005");
-  addParameter<double>("initial temperature", paramHelp[2], "12.0");
-  addParameter<double>("gravitational constant", paramHelp[3], "0.0625");
-  addParameter<double>("desired length", paramHelp[4], "5.0");
-  addParameter<double>("maximal disturbance", paramHelp[5], "0.0");
-  addParameter<double>("rotation angle", paramHelp[6], "1.04719755");
-  addParameter<double>("oscillation angle", paramHelp[7], "1.57079633");
-  addParameter<double>("rotation sensitivity", paramHelp[8], "0.01");
-  addParameter<double>("oscillation sensitivity", paramHelp[9], "0.3");
-  addParameter<StringCollection>(ELT_ATTRACTIONFORMULA, paramHelp[10], ELT_ATTRACTIONFORMULALIST);
-  addParameter<double>("minDistCC", paramHelp[11], "20");
-  addParameter<double>("pageRatio", paramHelp[12], "1.0");
+  addInParameter<int>("number of rounds", paramHelp[0], "30000");
+  addInParameter<double>("minimal temperature", paramHelp[1], "0.005");
+  addInParameter<double>("initial temperature", paramHelp[2], "12.0");
+  addInParameter<double>("gravitational constant", paramHelp[3], "0.0625");
+  addInParameter<double>("desired length", paramHelp[4], "5.0");
+  addInParameter<double>("maximal disturbance", paramHelp[5], "0.0");
+  addInParameter<double>("rotation angle", paramHelp[6], "1.04719755");
+  addInParameter<double>("oscillation angle", paramHelp[7], "1.57079633");
+  addInParameter<double>("rotation sensitivity", paramHelp[8], "0.01");
+  addInParameter<double>("oscillation sensitivity", paramHelp[9], "0.3");
+  addInParameter<StringCollection>(ELT_ATTRACTIONFORMULA, paramHelp[10], ELT_ATTRACTIONFORMULALIST);
+  addInParameter<double>("minDistCC", paramHelp[11], "20");
+  addInParameter<double>("pageRatio", paramHelp[12], "1.0");
 
 }
 

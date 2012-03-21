@@ -115,14 +115,14 @@ class OGDFStressMajorization : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATIONS("Stress Majorization (OGDF)","Karsten Klein","12/11/2007","Ok","1.0","Force Directed")
   OGDFStressMajorization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::StressMajorization()) {
-    addParameter<int>("iterations", paramHelp[0], "300");
-    addParameter<double>("stop tolerance", paramHelp[1], "0.001");
-    addParameter<bool>("used layout", paramHelp[2], "false");
-    addParameter<bool>("compute max iterations", paramHelp[3], "true");
-    addParameter<int>("global iterations", paramHelp[4], "50");
-    addParameter<int>("local iterations", paramHelp[5], "50");
-    addParameter<bool>("radial", paramHelp[6], "false");
-    addParameter<bool>("upward", paramHelp[7], "false");
+    addInParameter<int>("iterations", paramHelp[0], "300");
+    addInParameter<double>("stop tolerance", paramHelp[1], "0.001");
+    addInParameter<bool>("used layout", paramHelp[2], "false");
+    addInParameter<bool>("compute max iterations", paramHelp[3], "true");
+    addInParameter<int>("global iterations", paramHelp[4], "50");
+    addInParameter<int>("local iterations", paramHelp[5], "50");
+    addInParameter<bool>("radial", paramHelp[6], "false");
+    addInParameter<bool>("upward", paramHelp[7], "false");
   }
   ~OGDFStressMajorization() {}
 

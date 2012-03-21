@@ -182,8 +182,8 @@ public :
     labels_known(false),
     expectedLine(DL_HEADER),
     embedding(DL_NONE), dataFormat(DL_FM) {
-    addParameter<string>("file::filename", paramHelp[0]);
-    addParameter<string>("Default metric", paramHelp[1], "weight");
+    addInParameter<string>("file::filename", paramHelp[0]);
+    addInParameter<string>("Default metric", paramHelp[1], "weight");
   }
 
   ~ImportUCINET() {}

@@ -509,7 +509,7 @@ void GraphUpdatesRecorder::restartRecording(Graph* g) {
         continue;
     }
 
-    prop->addPropertyObserver(this);
+    prop->addListener(this);
   }
 
   // add self as a GraphObserver for all previously
@@ -540,7 +540,7 @@ void GraphUpdatesRecorder::stopRecording(Graph* g) {
   g->removeListener(this);
   PropertyInterface* prop;
   forEach(prop, g->getLocalObjectProperties())
-  prop->removePropertyObserver(this);
+  prop->removeListener(this);
   Graph* sg;
   forEach(sg, g->getSubGraphs())
   stopRecording(sg);
@@ -873,7 +873,7 @@ bool GraphUpdatesRecorder::dontObserveProperty(PropertyInterface* prop) {
         (updatedPropsAddedNodes.find(prop) == updatedPropsAddedNodes.end()) &&
         (updatedPropsAddedEdges.find(prop) == updatedPropsAddedEdges.end())) {
       // prop is no longer observed
-      prop->removePropertyObserver(this);
+      prop->removeListener(this);
       // may be a newly added property
       PropertyRecord p(prop,  prop->getName());
       Graph* g = prop->getGraph();
@@ -1220,7 +1220,7 @@ void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
     deletedProperties[g].insert(p);
 
   // the property is no longer observed
-  p.prop->removePropertyObserver(this);
+  p.prop->removeListener(this);
 }
 
 void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface* p, node n) {

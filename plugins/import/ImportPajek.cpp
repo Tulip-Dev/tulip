@@ -109,7 +109,7 @@ public :
   PLUGININFORMATIONS("Pajek (.net)","Patrick Mary","09/05/2011","Import Pajek","1.0","File")
   ImportPajek(const tlp::PluginContext* context):ImportModule(context),
     expectedLine(NET_UNKNOWN) {
-    addParameter<string>("file::filename", paramHelp[0]);
+    addInParameter<string>("file::filename", paramHelp[0]);
   }
 
   ~ImportPajek() {}

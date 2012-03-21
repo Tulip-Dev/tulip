@@ -86,8 +86,8 @@ class OGDFDominance : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATIONS("Dominance (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")
   OGDFDominance(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::DominanceLayout()) {
-    addParameter<int>("minimum grid distance", paramHelp[0], "1");
-    addParameter<bool>("transpose", paramHelp[1], "false");
+    addInParameter<int>("minimum grid distance", paramHelp[0], "1");
+    addInParameter<bool>("transpose", paramHelp[1], "false");
   }
   ~OGDFDominance() {}
 

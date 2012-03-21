@@ -57,7 +57,7 @@ class PlanarGraph:public ImportModule {
 public:
   PLUGININFORMATIONS("Planar Graph","Auber","25/06/2005","","1.0","Graphs")
   PlanarGraph(tlp::PluginContext* context):ImportModule(context) {
-    addParameter<unsigned int>("nodes", paramHelp[0], "30");
+    addInParameter<unsigned int>("nodes", paramHelp[0], "30");
   }
   ~PlanarGraph() {}
 

@@ -161,7 +161,7 @@ const char * paramHelp[] = {
 //===============================================================
 ConeTreeExtended::ConeTreeExtended(const tlp::PluginContext* context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
-  addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
+  addInParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
 }
 //===============================================================
 ConeTreeExtended::~ConeTreeExtended() {}

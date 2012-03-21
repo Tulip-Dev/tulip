@@ -59,9 +59,9 @@ const char * paramHelp[] = {
 #define OUT 2
 //==============================================================================
 DegreeMetric::DegreeMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
-  addParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
-  addParameter<DoubleProperty>("metric", paramHelp[1], "", false);
-  addParameter<bool>("norm", paramHelp[2], "false", false);
+  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
+  addInParameter<DoubleProperty>("metric", paramHelp[1], "", false);
+  addInParameter<bool>("norm", paramHelp[2], "false", false);
 }
 //==================================================================
 bool DegreeMetric::run() {

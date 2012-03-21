@@ -37,7 +37,7 @@ const char * paramHelp[] = {
 //=================================================================================
 InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext* context):
   BooleanAlgorithm(context) {
-  addParameter<BooleanProperty>("Nodes", paramHelp[0], "viewSelection");
+  addInParameter<BooleanProperty>("Nodes", paramHelp[0], "viewSelection");
 }
 //=================================================================================
 bool InducedSubGraphSelection::run() {

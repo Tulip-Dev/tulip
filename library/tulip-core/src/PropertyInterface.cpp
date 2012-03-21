@@ -39,14 +39,6 @@ PropertyInterface::~PropertyInterface() {
   observableDeleted();
 }
 
-void PropertyInterface::addPropertyObserver(Observable *pObs) {
-  addListener(pObs);
-}
-
-void PropertyInterface::removePropertyObserver(Observable *pObs) {
-  removeListener(pObs);
-}
-
 void PropertyInterface::notifyBeforeSetNodeValue(const node n) {
   if (hasOnlookers())
     sendEvent(PropertyEvent(*this, PropertyEvent::TLP_BEFORE_SET_NODE_VALUE,

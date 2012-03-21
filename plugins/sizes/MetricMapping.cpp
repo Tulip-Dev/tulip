@@ -94,15 +94,15 @@ public:
   PLUGININFORMATIONS("Metric Mapping","Auber","08/08/2003","","1.0", "Size")
   MetricSizeMapping(const tlp::PluginContext* context):SizeAlgorithm(context), entryMetric(NULL), entrySize(NULL), xaxis(true), yaxis(true), zaxis(true),
     min(1), max(10), range(false), shift(DBL_MAX), nodeoredge(true) {
-    addParameter<DoubleProperty>("property", paramHelp[0]);
-    addParameter<SizeProperty>("input", paramHelp[1]);
-    addParameter<bool>("width", paramHelp[2],"true");
-    addParameter<bool>("height", paramHelp[2],"true");
-    addParameter<bool>("depth", paramHelp[2],"true");
-    addParameter<double>("min size",paramHelp[3],"1");
-    addParameter<double>("max size",paramHelp[4],"10");
-    addParameter<bool>("type", paramHelp[5],"true");
-    addParameter<bool>("node/edge", paramHelp[6],"true");
+    addInParameter<DoubleProperty>("property", paramHelp[0]);
+    addInParameter<SizeProperty>("input", paramHelp[1]);
+    addInParameter<bool>("width", paramHelp[2],"true");
+    addInParameter<bool>("height", paramHelp[2],"true");
+    addInParameter<bool>("depth", paramHelp[2],"true");
+    addInParameter<double>("min size",paramHelp[3],"1");
+    addInParameter<double>("max size",paramHelp[4],"10");
+    addInParameter<bool>("type", paramHelp[5],"true");
+    addInParameter<bool>("node/edge", paramHelp[6],"true");
   }
 
   ~MetricSizeMapping() {}

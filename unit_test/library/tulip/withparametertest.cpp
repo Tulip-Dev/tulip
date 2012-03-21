@@ -79,15 +79,15 @@ void WithParameterTest::testBuildDefaultDataSet() {
 }
 
 ParameteredClass::ParameteredClass() {
-  addParameter<int>(intParameter, "this is a test integer parameter", "42");
-  addParameter<long>(longParameter, "this is a test long parameter", "420000000");
-  addParameter<string>(stringParameter, "this is a test string parameter", "forty two");
-  addParameter<uint>(uintParameter, "this is a test unsigned integer parameter", "24");
-  addParameter<double>(doubleParameter, "this is a test double parameter", "4.2");
-  addParameter<float>(floatParameter, "this is a test float parameter", "2.4");
-  addParameter<bool>(boolParameter, "this is a test boolean parameter", "true");
-  addParameter<Coord>(CoordParameter, "this is a test Coord parameter", "(4.4, 2, 1.1)");
-  addParameter<Size>(SizeParameter, "this is a test Size parameter", "(2.2, 1.1, 4)");
-  addParameter<Color>(ColorParameter, "this is a test Color parameter", "(1, 4, 255, 9)");
+  addInParameter<int>(intParameter, "this is a test integer parameter", "42");
+  addInParameter<long>(longParameter, "this is a test long parameter", "420000000");
+  addInParameter<string>(stringParameter, "this is a test string parameter", "forty two");
+  addInParameter<uint>(uintParameter, "this is a test unsigned integer parameter", "24");
+  addInParameter<double>(doubleParameter, "this is a test double parameter", "4.2");
+  addInParameter<float>(floatParameter, "this is a test float parameter", "2.4");
+  addInParameter<bool>(boolParameter, "this is a test boolean parameter", "true");
+  addInParameter<Coord>(CoordParameter, "this is a test Coord parameter", "(4.4, 2, 1.1)");
+  addInParameter<Size>(SizeParameter, "this is a test Size parameter", "(2.2, 1.1, 4)");
+  addInParameter<Color>(ColorParameter, "this is a test Color parameter", "(1, 4, 255, 9)");
 }
 

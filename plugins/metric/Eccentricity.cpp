@@ -61,9 +61,9 @@ const char * paramHelp[] = {
 }
 
 EccentricityMetric::EccentricityMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), allPaths(false), norm(true), directed(false) {
-  addParameter<bool>("closeness centrality",paramHelp[0],"false");
-  addParameter<bool>("norm",paramHelp[1],"true");
-  addParameter<bool>("directed",paramHelp[2],"false");
+  addInParameter<bool>("closeness centrality",paramHelp[0],"false");
+  addInParameter<bool>("norm",paramHelp[1],"true");
+  addInParameter<bool>("directed",paramHelp[2],"false");
 }
 //====================================================================
 EccentricityMetric::~EccentricityMetric() {

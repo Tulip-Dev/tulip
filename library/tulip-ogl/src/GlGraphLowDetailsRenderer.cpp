@@ -197,21 +197,21 @@ void GlGraphLowDetailsRenderer::addObservers() {
   observedGraph = inputData->getGraph();
   observedGraph->addListener(this);
   observedLayoutProperty=inputData->getElementLayout();
-  observedLayoutProperty->addPropertyObserver(this);
+  observedLayoutProperty->addListener(this);
   observedSizeProperty=inputData->getElementSize();
-  observedSizeProperty->addPropertyObserver(this);
+  observedSizeProperty->addListener(this);
   observedSelectionProperty=inputData->getElementSelected();
-  observedSelectionProperty->addPropertyObserver(this);
+  observedSelectionProperty->addListener(this);
   observedColorProperty=inputData->getElementColor();
-  observedColorProperty->addPropertyObserver(this);
+  observedColorProperty->addListener(this);
 }
 
 void GlGraphLowDetailsRenderer::removeObservers() {
   observedGraph->removeListener(this);
-  observedLayoutProperty->removePropertyObserver(this);
-  observedSizeProperty->removePropertyObserver(this);
-  observedSelectionProperty->removePropertyObserver(this);
-  observedColorProperty->removePropertyObserver(this);
+  observedLayoutProperty->removeListener(this);
+  observedSizeProperty->removeListener(this);
+  observedSelectionProperty->removeListener(this);
+  observedColorProperty->removeListener(this);
 }
 
 void GlGraphLowDetailsRenderer::updateObservers() {

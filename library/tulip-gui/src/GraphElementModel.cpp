@@ -31,7 +31,7 @@ int GraphElementModel::columnCount(const QModelIndex &parent) const {
   return 1;
 }
 
-QModelIndex GraphElementModel::parent(const QModelIndex &child) const {
+QModelIndex GraphElementModel::parent(const QModelIndex &/*child*/) const {
   return QModelIndex();
 }
 

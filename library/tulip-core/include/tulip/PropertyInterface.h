@@ -251,16 +251,21 @@ public:
   /**
    * Registers a new property observer.
    */
-  void addPropertyObserver(Observable *pObs);
+  void _DEPRECATED addPropertyObserver(Observable *pObs) {
+    addListener(pObs);
+  }
+
   /**
    * Removes a registered property observer.
    */
-  void removePropertyObserver(Observable *pObs);
+  void _DEPRECATED removePropertyObserver(Observable *pObs) {
+    removeListener(pObs);
+  }
 
   /**
    * Returns the number of registered observers.
    */
-  unsigned int countPropertyObservers() const {
+  unsigned int _DEPRECATED countPropertyObservers() const {
     return countListeners();
   }
 

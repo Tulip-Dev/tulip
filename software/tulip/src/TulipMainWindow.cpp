@@ -217,7 +217,7 @@ void TulipMainWindow::OpenProjectWith(const QString &file, const QString &perspe
   TulipPerspectiveProcessHandler::instance().createPerspective(perspective,file,parameters);
 }
 
-QStringList TulipMainWindow::GetCompatiblePerspectives(const QString &file) {
+QStringList TulipMainWindow::GetCompatiblePerspectives(const QString &/*file*/) {
   return QStringList();
 }
 

@@ -58,9 +58,9 @@ const char * paramHelp[] = {
 
 
 ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext* context):BooleanAlgorithm(context) {
-  addParameter<int> ("direction",paramHelp[0],"0");
-  addParameter<BooleanProperty> ("startingnodes",paramHelp[1],"viewSelection");
-  addParameter<int> ("distance",paramHelp[2],"5");
+  addInParameter<int> ("direction",paramHelp[0],"0");
+  addInParameter<BooleanProperty> ("startingnodes",paramHelp[1],"viewSelection");
+  addInParameter<int> ("distance",paramHelp[2],"5");
 }
 
 ReachableSubGraphSelection::~ReachableSubGraphSelection() {}

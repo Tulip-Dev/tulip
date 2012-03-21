@@ -76,11 +76,11 @@ public:
   PLUGININFORMATIONS("Grid","Jonathan Dubois","02/12/2003","","2.0","Graphs")
   Grid(tlp::PluginContext* context) :
     ImportModule(context) {
-    addParameter<unsigned int> ("width", paramHelp[0], "10");
-    addParameter<unsigned int> ("height", paramHelp[1], "10");
-    addParameter<StringCollection> ("connectivity", paramHelp[2], "4;6;8");
-    addParameter<bool> ("oppositeNodesConnected", paramHelp[3], "false");
-    addParameter<double> ("spacing", paramHelp[4], "1.0");
+    addInParameter<unsigned int> ("width", paramHelp[0], "10");
+    addInParameter<unsigned int> ("height", paramHelp[1], "10");
+    addInParameter<StringCollection> ("connectivity", paramHelp[2], "4;6;8");
+    addInParameter<bool> ("oppositeNodesConnected", paramHelp[3], "false");
+    addInParameter<double> ("spacing", paramHelp[4], "1.0");
   }
   ~Grid() {
   }

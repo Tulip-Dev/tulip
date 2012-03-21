@@ -51,8 +51,8 @@ class CompleteGraph:public ImportModule {
 public:
   PLUGININFORMATIONS("Complete General Graph","Auber","16/12/2002","","1.1","Graphs")
   CompleteGraph(tlp::PluginContext* context):ImportModule(context) {
-    addParameter<unsigned int>("nodes",paramHelp[0],"5");
-    addParameter<bool>("undirected",paramHelp[1],"true");
+    addInParameter<unsigned int>("nodes",paramHelp[0],"5");
+    addInParameter<bool>("undirected",paramHelp[1],"true");
   }
   ~CompleteGraph() {
   }

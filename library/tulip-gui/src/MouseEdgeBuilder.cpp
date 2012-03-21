@@ -144,7 +144,7 @@ void MouseEdgeBuilder::initObserver(Graph *newGraph) {
   newGraph->addListener(this);
   graph=newGraph;
   layoutProperty=newGraph->getProperty<LayoutProperty>("viewLayout");
-  layoutProperty->addPropertyObserver(this);
+  layoutProperty->addListener(this);
 }
 
 void MouseEdgeBuilder::clearObserver() {
@@ -154,7 +154,7 @@ void MouseEdgeBuilder::clearObserver() {
   graph=NULL;
 
   if(layoutProperty)
-    layoutProperty->removePropertyObserver(this);
+    layoutProperty->removeListener(this);
 
   layoutProperty=NULL;
 }

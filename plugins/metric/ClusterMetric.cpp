@@ -38,7 +38,7 @@ const char * paramHelp[] = {
 }
 //=================================================
 ClusterMetric::ClusterMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
-  addParameter<unsigned int>("depth",paramHelp[0],"1");
+  addInParameter<unsigned int>("depth",paramHelp[0],"1");
 }
 //=================================================
 static double clusterGetEdgeValue(Graph *graph,

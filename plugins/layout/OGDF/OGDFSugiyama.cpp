@@ -147,16 +147,16 @@ class OGDFSugiyama : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATIONS("Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.4","Hierarchical")
   OGDFSugiyama(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::SugiyamaLayout()) {
-    addParameter<int>("fails", paramHelp[0], "4");
-    addParameter<int>("runs", paramHelp[1], "15");
-    addParameter<bool>("transpose", paramHelp[2], "false");
-    addParameter<bool>("arrangeCCs", paramHelp[3], "true");
-    addParameter<double>("minDistCC", paramHelp[4], "20");
-    addParameter<double>("pageRatio", paramHelp[5], "1.0");
-    addParameter<bool>("alignBaseClasses", paramHelp[6], "false");
-    addParameter<bool>("alignSiblings", paramHelp[7], "false");
-    addParameter<StringCollection>(ELT_RANKING, paramHelp[8], ELT_RANKINGLIST);
-    addParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[9], ELT_TWOLAYERCROSSLIST);
+    addInParameter<int>("fails", paramHelp[0], "4");
+    addInParameter<int>("runs", paramHelp[1], "15");
+    addInParameter<bool>("transpose", paramHelp[2], "false");
+    addInParameter<bool>("arrangeCCs", paramHelp[3], "true");
+    addInParameter<double>("minDistCC", paramHelp[4], "20");
+    addInParameter<double>("pageRatio", paramHelp[5], "1.0");
+    addInParameter<bool>("alignBaseClasses", paramHelp[6], "false");
+    addInParameter<bool>("alignSiblings", paramHelp[7], "false");
+    addInParameter<StringCollection>(ELT_RANKING, paramHelp[8], ELT_RANKINGLIST);
+    addInParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[9], ELT_TWOLAYERCROSSLIST);
   }
 
   ~OGDFSugiyama() {}

@@ -63,9 +63,9 @@ public:
   //==============================================Algorithm======
   FitToLabel(const PluginContext* context) :
     SizeAlgorithm(context) {
-    addParameter<StringProperty> ("prop::label", paramHelp[0], "viewLabel");
-    addParameter<StringProperty> ("prop::font", paramHelp[1], "viewFont");
-    addParameter<IntegerProperty> ("prop::fontsize", paramHelp[2], "viewFontSize");
+    addInParameter<StringProperty> ("prop::label", paramHelp[0], "viewLabel");
+    addInParameter<StringProperty> ("prop::font", paramHelp[1], "viewFont");
+    addInParameter<IntegerProperty> ("prop::fontsize", paramHelp[2], "viewFontSize");
   }
   //====================================================
   ~FitToLabel() {

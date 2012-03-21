@@ -461,13 +461,13 @@ void GlQuadTreeLODCalculator::removeObservers() {
       currentGraph->removeListener(this);
 
     if(layoutProperty)
-      layoutProperty->removePropertyObserver(this);
+      layoutProperty->removeListener(this);
 
     if(sizeProperty)
-      sizeProperty->removePropertyObserver(this);
+      sizeProperty->removeListener(this);
 
     if(selectionProperty)
-      selectionProperty->removePropertyObserver(this);
+      selectionProperty->removeListener(this);
   }
 
   if(glScene)
@@ -479,11 +479,11 @@ void GlQuadTreeLODCalculator::addObservers() {
     currentGraph=inputData->getGraph();
     currentGraph->addListener(this);
     layoutProperty=inputData->getElementLayout();
-    layoutProperty->addPropertyObserver(this);
+    layoutProperty->addListener(this);
     sizeProperty=inputData->getElementSize();
-    sizeProperty->addPropertyObserver(this);
+    sizeProperty->addListener(this);
     selectionProperty=inputData->getElementSelected();
-    selectionProperty->addPropertyObserver(this);
+    selectionProperty->addListener(this);
   }
 
   if(glScene)

@@ -82,9 +82,9 @@ const char * paramHelp[] = {
 //====================================================================
 SquarifiedTreeMap::SquarifiedTreeMap(const tlp::PluginContext* context) :LayoutAlgorithm(context) {
   aspectRatio = DEFAULT_RATIO;
-  addParameter<DoubleProperty>("metric", paramHelp[0], "", false);
-  addParameter<double>("Aspect Ratio", paramHelp[1], "1.");
-  addParameter<bool>("Treemap Type", paramHelp[2], "false");
+  addInParameter<DoubleProperty>("metric", paramHelp[0], "", false);
+  addInParameter<double>("Aspect Ratio", paramHelp[1], "1.");
+  addInParameter<bool>("Treemap Type", paramHelp[2], "false");
   addOutParameter<SizeProperty>("Node Size", paramHelp[3],
                                 "viewSize");
   addOutParameter<IntegerProperty>("Node Shape", paramHelp[4],

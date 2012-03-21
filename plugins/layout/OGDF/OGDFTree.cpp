@@ -127,13 +127,13 @@ class OGDFTree : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATIONS("Improved Walker (OGDF)","Christoph Buchheim","12/11/2007","Ok","1.5","Tree")
   OGDFTree(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::TreeLayout()) {
-    addParameter<double>("siblings distance", paramHelp[0], "20");
-    addParameter<double>("subtrees distance", paramHelp[1], "20");
-    addParameter<double>("levels distance", paramHelp[2], "50");
-    addParameter<double>("trees distance", paramHelp[3], "50");
-    addParameter<bool>("orthogonal layout", paramHelp[4], "false");
-    addParameter<StringCollection>(ELT_ORIENTATION, paramHelp[5], ELT_ORIENTATIONLIST);
-    addParameter<StringCollection>(ELT_ROOTSELECTION, paramHelp[6], ELT_ROOTSELECTIONLIST);
+    addInParameter<double>("siblings distance", paramHelp[0], "20");
+    addInParameter<double>("subtrees distance", paramHelp[1], "20");
+    addInParameter<double>("levels distance", paramHelp[2], "50");
+    addInParameter<double>("trees distance", paramHelp[3], "50");
+    addInParameter<bool>("orthogonal layout", paramHelp[4], "false");
+    addInParameter<StringCollection>(ELT_ORIENTATION, paramHelp[5], ELT_ORIENTATIONLIST);
+    addInParameter<StringCollection>(ELT_ROOTSELECTION, paramHelp[6], ELT_ROOTSELECTIONLIST);
   }
 
   ~OGDFTree() {}

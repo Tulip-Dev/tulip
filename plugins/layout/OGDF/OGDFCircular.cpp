@@ -95,11 +95,11 @@ class OGDFCircular : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATIONS("Circular (OGDF)","Carsten Gutwenger","13/11/2007","Ok","1.4","Basic")
   OGDFCircular(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::CircularLayout()) {
-    addParameter<double> ("minDistCircle", paramHelp[0], "20.0", false);
-    addParameter<double> ("minDistLevel", paramHelp[1], "20.0", false);
-    addParameter<double> ("minDistSibling", paramHelp[2], "10.0", false);
-    addParameter<double> ("minDistCC", paramHelp[3], "20.0", false);
-    addParameter<double> ("pageRatio", paramHelp[4], "1.0", false);
+    addInParameter<double> ("minDistCircle", paramHelp[0], "20.0", false);
+    addInParameter<double> ("minDistLevel", paramHelp[1], "20.0", false);
+    addInParameter<double> ("minDistSibling", paramHelp[2], "10.0", false);
+    addInParameter<double> ("minDistCC", paramHelp[3], "20.0", false);
+    addInParameter<double> ("pageRatio", paramHelp[4], "1.0", false);
   }
   ~OGDFCircular() {}
 

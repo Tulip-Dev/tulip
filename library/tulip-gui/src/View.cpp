@@ -82,7 +82,9 @@ void View::setGraph(tlp::Graph *g) {
 
 void View::treatEvent(const Event& ev) {
   if (ev.type() == Event::TLP_DELETE && ev.sender() == _graph) {
+#ifndef NDEBUG
     Graph* old = _graph;
+#endif // NDEBUG
     graphDeleted();
 #ifndef NDEBUG
 

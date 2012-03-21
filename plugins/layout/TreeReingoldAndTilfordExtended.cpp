@@ -73,12 +73,12 @@ TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const tlp::Plugin
   LayoutAlgorithm(context),
   lengthMetric(0) {
   addNodeSizePropertyParameter(this);
-  addParameter<IntegerProperty>("edge length", paramHelp[0], "", false);
-  addParameter<StringCollection>("orientation", paramHelp[1], ORIENTATION );
-  addParameter<bool>("orthogonal", paramHelp[2], "true" );
+  addInParameter<IntegerProperty>("edge length", paramHelp[0], "", false);
+  addInParameter<StringCollection>("orientation", paramHelp[1], ORIENTATION );
+  addInParameter<bool>("orthogonal", paramHelp[2], "true" );
   addSpacingParameters(this);
-  addParameter<bool>("bounding circles", paramHelp[3], "false");
-  addParameter<bool>("compact layout", paramHelp[4], "true");
+  addInParameter<bool>("bounding circles", paramHelp[3], "false");
+  addInParameter<bool>("compact layout", paramHelp[4], "true");
 }
 //=============================================================================
 TreeReingoldAndTilfordExtended::~TreeReingoldAndTilfordExtended() {

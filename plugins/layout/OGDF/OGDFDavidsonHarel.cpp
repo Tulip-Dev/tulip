@@ -123,10 +123,10 @@ class OGDFDavidsonHarel : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATIONS("Davidson Harel (OGDF)","Rene Weiskircher","12/11/2007","Ok","1.3","Force Directed")
   OGDFDavidsonHarel(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::DavidsonHarelLayout()) {
-    addParameter<StringCollection>(ELT_SETTINGS, paramHelp[0], ELT_SETTINGSLIST);
-    addParameter<StringCollection>(ELT_SPEED, paramHelp[1], ELT_SPEEDLIST);
-    addParameter<double>("preferredEdgeLength", paramHelp[2], "0");
-    addParameter<double>("preferredEdgeLengthMultiplier", paramHelp[3], "2.0");
+    addInParameter<StringCollection>(ELT_SETTINGS, paramHelp[0], ELT_SETTINGSLIST);
+    addInParameter<StringCollection>(ELT_SPEED, paramHelp[1], ELT_SPEEDLIST);
+    addInParameter<double>("preferredEdgeLength", paramHelp[2], "0");
+    addInParameter<double>("preferredEdgeLengthMultiplier", paramHelp[3], "2.0");
 
   }
 

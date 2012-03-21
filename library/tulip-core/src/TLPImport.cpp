@@ -1011,8 +1011,8 @@ public:
   PLUGININFORMATIONS("TLP Import","Auber","16/02/2001","Tlp Import plugin","1.0", "File")
 
   TLPImport(tlp::PluginContext* context):ImportModule(context) {
-    addParameter<std::string>("file::filename", paramHelp[0]);
-//    addParameter<DataSet>(DISPLAYING);
+    addInParameter<std::string>("file::filename", paramHelp[0]);
+//    addInParameter<DataSet>(DISPLAYING);
   }
   ~TLPImport() {}
   bool importGraph() {

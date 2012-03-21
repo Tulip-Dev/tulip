@@ -22,8 +22,6 @@
 
 ProcessingAnimationItem::ProcessingAnimationItem(const QPixmap &pixmap, const QSize &size, QGraphicsItem *parent, QGraphicsScene *scene)
   : QGraphicsPixmapItem(parent,scene), _currentFrame(0), _brush(Qt::transparent) {
-  int index=0;
-
   for (int y=0; y<pixmap.height(); y+=size.height()) {
     for (int x=0; x<pixmap.width(); x+=size.width()) {
       _pixmaps.push_back(pixmap.copy(x,y,size.width(),size.height()));

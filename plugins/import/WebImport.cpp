@@ -437,15 +437,15 @@ struct WebImport:public ImportModule {
   bool extractNonHttp;
 
   WebImport(tlp::PluginContext* context):ImportModule(context),labels(NULL), urls(NULL), colors(NULL), redirectionColor(NULL), maxSize(1000), nbNodes(0), visitOther(false), extractNonHttp(true) {
-    addParameter<string>("server",paramHelp[0],"www.labri.fr");
-    addParameter<string>("web page",paramHelp[1], "");
-    addParameter<int>("max size",paramHelp[2], "1000");
-    addParameter<bool>("non http links",paramHelp[3], "false");
-    addParameter<bool>("other server",paramHelp[4], "false");
-    addParameter<bool>("compute layout",paramHelp[5], "true");
-    addParameter<Color>("page color",paramHelp[6],"(240, 0, 120, 128)");
-    addParameter<Color>("link color",paramHelp[7],"(96,96,191,128)");
-    addParameter<Color>("redirection color",paramHelp[8],"(191,175,96,128)");
+    addInParameter<string>("server",paramHelp[0],"www.labri.fr");
+    addInParameter<string>("web page",paramHelp[1], "");
+    addInParameter<int>("max size",paramHelp[2], "1000");
+    addInParameter<bool>("non http links",paramHelp[3], "false");
+    addInParameter<bool>("other server",paramHelp[4], "false");
+    addInParameter<bool>("compute layout",paramHelp[5], "true");
+    addInParameter<Color>("page color",paramHelp[6],"(240, 0, 120, 128)");
+    addInParameter<Color>("link color",paramHelp[7],"(96,96,191,128)");
+    addInParameter<Color>("redirection color",paramHelp[8],"(191,175,96,128)");
     addDependency<LayoutAlgorithm>("GEM (Frick)", "1.0");
   }
 

@@ -444,7 +444,7 @@ public:
   PLUGININFORMATIONS("JSON Import", "Charles Huet", "18/05/2011", "Tulip JSON format", "1.0", "File")
 
   TlpJsonImport(tlp::PluginContext* context) : ImportModule(context) {
-    addParameter<std::string>("file::filename", "");
+    addInParameter<std::string>("file::filename", "");
   }
 
   virtual bool importGraph() {
