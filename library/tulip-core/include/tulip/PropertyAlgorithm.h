@@ -71,6 +71,9 @@ class TLP_SCOPE BooleanAlgorithm : public TemplateAlgorithm<BooleanProperty> {
 protected:
   ///
   BooleanAlgorithm (const tlp::PluginContext*);
+  virtual std::string category() const {
+    return "BooleanAlgorithm";
+  }
 };
 
 class ColorProperty;
@@ -79,6 +82,9 @@ class TLP_SCOPE ColorAlgorithm : public TemplateAlgorithm<ColorProperty> {
 protected:
   ///
   ColorAlgorithm (const tlp::PluginContext*);
+  virtual std::string category() const {
+    return "ColorAlgorithm";
+  }
 };
 
 class DoubleProperty;
@@ -87,6 +93,9 @@ class TLP_SCOPE DoubleAlgorithm : public TemplateAlgorithm<DoubleProperty> {
 protected:
   ///
   DoubleAlgorithm (const tlp::PluginContext*);
+  virtual std::string category() const {
+    return "DoubleAlgorithm";
+  }
 };
 
 class IntegerProperty;
@@ -95,6 +104,9 @@ class TLP_SCOPE IntegerAlgorithm : public TemplateAlgorithm<IntegerProperty> {
 protected:
   ///
   IntegerAlgorithm (const tlp::PluginContext*);
+  virtual std::string category() const {
+    return "IntegerAlgorithm";
+  }
 };
 
 class LayoutProperty;
@@ -103,6 +115,9 @@ class TLP_SCOPE LayoutAlgorithm : public TemplateAlgorithm<LayoutProperty> {
 protected:
   ///
   LayoutAlgorithm (const tlp::PluginContext*);
+  virtual std::string category() const {
+    return "LayoutAlgorithm";
+  }
 };
 
 class SizeProperty;
@@ -111,6 +126,9 @@ class TLP_SCOPE SizeAlgorithm : public TemplateAlgorithm<SizeProperty> {
 protected:
   ///
   SizeAlgorithm (const tlp::PluginContext*);
+  virtual std::string category() const {
+    return "SizeAlgorithm";
+  }
 };
 
 class StringProperty;
@@ -119,6 +137,9 @@ class TLP_SCOPE StringAlgorithm : public TemplateAlgorithm<StringProperty> {
 protected:
   ///
   StringAlgorithm (const tlp::PluginContext*);
+  virtual std::string category() const {
+    return "StringAlgorithm";
+  }
 };
 /*@}*/
 
