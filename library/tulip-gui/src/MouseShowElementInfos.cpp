@@ -20,9 +20,11 @@
 
 #include <QtCore/QPropertyAnimation>
 #include <QtGui/QGraphicsView>
+#include <QtGui/QHeaderView>
 #include <tulip/GraphElementModel.h>
 #include <tulip/TulipItemDelegate.h>
 
+#include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
 
 using namespace std;
@@ -35,6 +37,7 @@ MouseShowElementInfos::MouseShowElementInfos() {
   _informationsWidgetItem->setWidget(_informationsWidget);
   _informationsWidgetItem->setVisible(false);
   _informationsWidgetItem->setMinimumSize(QSizeF(0,0));
+  _informationsWidgetItem->setPreferredWidth(300);
 }
 
 void MouseShowElementInfos::clear() {
@@ -44,7 +47,7 @@ void MouseShowElementInfos::clear() {
 bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
   QMouseEvent * qMouseEv = (QMouseEvent *) e;
 
-  SelectedEntity selectedEntity;
+
   GlMainWidget *glMainWidget = (GlMainWidget *) widget;
 
   if(qMouseEv != NULL) {
@@ -52,14 +55,13 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
       if (qMouseEv->button() == Qt::LeftButton) {
         if(_informationsWidgetItem->isVisible()) {
           // Hide widget if we click outside it
-          if(!_informationsWidgetItem->boundingRect().contains(qMouseEv->pos())) {
-            _informationsWidgetItem->setVisible(false);
-          }
+          _informationsWidgetItem->setVisible(false);
         }
 
         if(!_informationsWidgetItem->isVisible()) {
+          SelectedEntity selectedEntity;
           // Show widget if we click on node or edge
-          if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
+          if (pick(qMouseEv->x(), qMouseEv->y(),selectedEntity)) {
             if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
                 selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
               _informationsWidgetItem->setVisible(true);
@@ -73,6 +75,8 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
                 _informationsWidget->setModel(new GraphEdgeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
 
               _informationsWidget->setItemDelegate(new TulipItemDelegate);
+              _informationsWidget->resizeColumnsToContents();
+              _informationsWidgetItem->adjustSize();
               QPoint position=qMouseEv->pos();
 
               if(position.x()+_informationsWidgetItem->rect().width()>_view->graphicsView()->sceneRect().width())
@@ -82,6 +86,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
                 position.setY(qMouseEv->pos().y()-_informationsWidgetItem->rect().height());
 
               _informationsWidgetItem->setPos(position);
+              _informationsWidget->setColumnWidth(0,125);
               QPropertyAnimation *animation = new QPropertyAnimation(_informationsWidgetItem, "opacity");
               animation->setDuration(100);
               animation->setStartValue(0.);
@@ -101,6 +106,12 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
   }
 
   return false;
+}
+
+bool MouseShowElementInfos::pick(int x, int y, SelectedEntity &selectedEntity){
+  GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
+  assert(glMainView);
+  return glMainView->getGlMainWidget()->pickNodesEdges(x,y,selectedEntity);
 }
 
 void MouseShowElementInfos::viewChanged(View * view) {
