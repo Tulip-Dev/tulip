@@ -24,6 +24,7 @@
 #include <QtGui/QTableView>
 #include <QtGui/QGraphicsProxyWidget>
 #include <tulip/ViewWidget.h>
+#include <tulip/GlScene.h>
 
 #include <tulip/InteractorComposite.h>
 
@@ -44,6 +45,8 @@ public:
   void viewChanged(View *);
 
   void clear();
+
+  virtual bool pick(int x, int y, SelectedEntity &selectedEntity);
 
 protected:
 
