@@ -39,7 +39,7 @@ struct Dependency {
 class WithDependency {
 public:
 	///
-	const std::list<tlp::Dependency>& getDependencies();
+    const std::list<tlp::Dependency>& dependencies();
 %Docstring
 tlp.WithDependency.getDependencies() -> list of tlp.Dependency
 %End
