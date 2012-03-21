@@ -37,7 +37,7 @@ QModelIndex GraphElementModel::parent(const QModelIndex &/*child*/) const {
 
 QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation, int role) const {
   if (orientation == Qt::Horizontal) {
-    if (role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole || role == Qt::ToolTipRole) {
       return headerText(_id);
     }
 

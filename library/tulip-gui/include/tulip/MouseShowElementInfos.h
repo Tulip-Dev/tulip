@@ -51,8 +51,10 @@ public:
 protected:
 
   ViewWidget *_view;
-  QTableView *_informationsWidget;
+  QWidget *_informationsWidget;
   QGraphicsProxyWidget *_informationsWidgetItem;
+
+  QTableView* tableView() const;
 };
 
 }
