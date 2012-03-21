@@ -229,7 +229,7 @@ public:
   }
   //=========================================================
   bool run() {
-    //    cerr << __PRETTY_FUNCTION__ << endl;
+    //    qWarning() << __PRETTY_FUNCTION__ << endl;
     eltTypes.setCurrent(LINEAR_ELT);
     targetType.setCurrent(NODES_TARGET);
     DoubleProperty* metricS = graph->getProperty<DoubleProperty>("viewMetric");
@@ -283,7 +283,7 @@ public:
   }
   //=========================================================
   bool check(string &errorMsg) {
-    //    cerr << __PRETTY_FUNCTION__ << endl;
+    //    qWarning() << __PRETTY_FUNCTION__ << endl;
     PropertyInterface *metric = graph->getProperty<DoubleProperty>("viewMetric");
 
     if (dataSet!=0) {

@@ -55,13 +55,13 @@ public:
     foreach(void* ptr,_stacks.keys()) {
       StackInfo infos = _stacks[ptr];
 
-      std::cerr << " ======================== " << std::endl;
-      std::cerr << "Possible memory leak at " << ptr << ": " << std::endl;
+      qWarning() << " ======================== ";
+      qWarning() << "Possible memory leak at " << ptr << ": ";
 
       for (size_t i=0; i<infos._size; ++i)
-        std::cerr << infos._strings[i] << std::endl;
+        qWarning() << infos._strings[i];
 
-      std::cerr << " ======================== " << std::endl << std::endl;
+      qWarning() << " ======================== ";
     }
   }
 
@@ -72,7 +72,7 @@ public:
       delete infos._strings;
     }
     _stacks.clear();
-    std::cerr << "Removed " << entries << " into the memory checker" << std::endl;
+    qWarning() << "Removed " << entries << " into the memory checker";
   }
 };
 

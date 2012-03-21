@@ -91,7 +91,6 @@ bool biconnectedTest(const Graph *graph, node v,
     if (!mark.get(w.id)) {
       if (dfsNumber.get(v.id)==1) {
         if (count != 2) {
-          //  cerr <<"Root Node :" << v.id << " is a separator" << endl;
           delete it;
           return false;
         }
@@ -107,7 +106,6 @@ bool biconnectedTest(const Graph *graph, node v,
       if (dfsNumber.get(v.id)!=1) {
         if (low.get(w.id)>=dfsNumber.get(v.id)) {
           delete it;
-          //cerr <<"Node :" << v.id << " is a separator" << endl;
           return false;
         }
         else
@@ -135,8 +133,6 @@ bool BiconnectedTest::isBiconnected(const tlp::Graph* graph) {
 }
 //=================================================================
 void BiconnectedTest::makeBiconnected(Graph *graph, vector<edge> &addedEdges) {
-  //  cerr << __PRETTY_FUNCTION__ << " : " << graph->getAttribute<string>("name") << endl;
-  //  if (BiconnectedTest::isBiconnected(graph)) return;
   if (instance == NULL) {
     instance = new BiconnectedTest();
   }
@@ -148,7 +144,6 @@ void BiconnectedTest::makeBiconnected(Graph *graph, vector<edge> &addedEdges) {
 }
 //=================================================================
 void BiconnectedTest::connect(Graph *graph, vector<edge> &addedEdges) {
-  //  cerr << __PRETTY_FUNCTION__ << " : " << graph->getAttribute<string>("name") << endl;
   ConnectedTest::makeConnected(graph, addedEdges);
   MutableContainer<int> low;
   MutableContainer<int> dfsNumber;
@@ -182,7 +177,6 @@ bool BiconnectedTest::compute(const tlp::Graph* graph) {
   delete it;
 
   if (count!=graph->numberOfNodes()+1) {
-    //  cerr << "connected test" << endl;
     result=false;
   } //connected test
 

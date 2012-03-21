@@ -65,7 +65,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
     QTextCodec * codec = QTextCodec::codecForName ( _fileEncoding.c_str());
 
     if(codec == NULL) {
-      std::cerr << __PRETTY_FUNCTION__<<":"<<__LINE__<<" Cannot found the convertion codec to convert from "<<_fileEncoding<<" string will be treated as utf8."<<std::endl;
+      qWarning() << __PRETTY_FUNCTION__<<":"<<__LINE__<<" Cannot found the convertion codec to convert from "<<_fileEncoding<<" string will be treated as utf8.";
       codec = QTextCodec::codecForName("UTF-8");
     }
 

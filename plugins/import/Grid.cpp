@@ -228,7 +228,7 @@ public:
         if (pluginProgress)
           pluginProgress->setError("Error : cannot connect opposite nodes in an hexagonal grid with odd height");
         else
-          std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " Error : cannot connect opposite nodes in an hexagonal grid with odd height"  <<std::endl;
+          qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__ << " Error : cannot connect opposite nodes in an hexagonal grid with odd height";
 
         return false;
       }

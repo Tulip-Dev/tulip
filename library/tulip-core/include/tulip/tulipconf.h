@@ -18,11 +18,17 @@
  */
 #ifndef TULIPCONF_H
 #define TULIPCONF_H
+#include <QtCore/QDebug>
 
 /**
  * @brief this file contains various helper macros and functions to have a true cross-platform compilation.
  *
  */
+
+QDebug operator<<(QDebug,const std::string&);/* {
+  dbg.nospace() << s.c_str();
+  return dbg.space();
+}*/
 
 #define STRINGIFY(PARAM) STRINGIFY_INTERNAL(PARAM)
 #define STRINGIFY_INTERNAL(PARAM) #PARAM

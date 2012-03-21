@@ -345,7 +345,7 @@ void ElementPropertiesWidget::propertyTableValueChanged(int row, int col) {
   if (col == 0)
     return;
 
-  //  cerr << __PRETTY_FUNCTION__ << endl;
+  //  qWarning() << __PRETTY_FUNCTION__ << endl;
 
   QString property = propertyTable->item(row, 0)->text();
   QString value = ((TulipTableWidgetItem *)propertyTable->item(row, col))->textForTulip();
@@ -353,7 +353,7 @@ void ElementPropertiesWidget::propertyTableValueChanged(int row, int col) {
 
   if (editedProperty==0) return;
 
-  //cerr << "Value :" << value.toUtf8().data() << endl;
+  //qWarning() << "Value :" << value.toUtf8().data() << endl;
   bool result=true;
 
   switch(displayMode) {

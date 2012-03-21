@@ -71,7 +71,7 @@ Graph* SGHierarchyWidget::getGraph() const {
 }
 //=======================================================
 void SGHierarchyWidget::setGraph(Graph *graph) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
+  //  qWarning() << __PRETTY_FUNCTION__ << endl;
   if (graph == 0) {
     _currentGraph = 0;
     clear();
@@ -88,7 +88,7 @@ void SGHierarchyWidget::setGraph(Graph *graph) {
 }
 //=======================================================
 void SGHierarchyWidget::currentGraphChanged(const Graph *graph) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
+  //  qWarning() << __PRETTY_FUNCTION__ << endl;
   QTreeWidgetItem* item = graphItems.get(graph->getId());
 
   if (item != 0) {
@@ -135,7 +135,7 @@ void SGHierarchyWidget::setItemInfos(QTreeWidgetItem *item, Graph *graph,
 }
 //=======================================================
 void SGHierarchyWidget::update() {
-  //cerr << __PRETTY_FUNCTION__ << endl;
+  //qWarning() << __PRETTY_FUNCTION__ << endl;
   clear();
   graphItems.setAll(0);
 
@@ -165,7 +165,7 @@ void SGHierarchyWidget::updateCurrentGraphInfos(Graph *graph) {
 //=======================================================
 //Cluster Tree Structure modification
 void SGHierarchyWidget::removeSubgraph(Graph *graph, bool recursive) {
-  //cerr << __PRETTY_FUNCTION__ << endl;
+  //qWarning() << __PRETTY_FUNCTION__ << endl;
   if (graph == 0) return;
 
   if (graph == graph->getRoot()) {
@@ -281,7 +281,7 @@ void SGHierarchyWidget::changeGraph(QTreeWidgetItem *item, const QPoint&, int) {
 }
 //**********************************************************************
 void SGHierarchyWidget::changeGraph(QTreeWidgetItem* current, QTreeWidgetItem*) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
+  //  qWarning() << __PRETTY_FUNCTION__ << endl;
   if (current) {
     _currentGraph = ((SGHierarchyWidgetItem*)current)->getGraph();
     emit graphChanged(_currentGraph);

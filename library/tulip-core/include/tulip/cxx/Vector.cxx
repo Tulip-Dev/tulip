@@ -108,7 +108,7 @@ VECTORTLP & VECTORTLP::operator^=(const VECTORTLP &v) {
     break;
 
   default :
-    std::cerr << "cross product not implemented for dimension :" << SIZE << std::endl;
+    qWarning() << "cross product not implemented for dimension :" << SIZE;
     break;
   }
 

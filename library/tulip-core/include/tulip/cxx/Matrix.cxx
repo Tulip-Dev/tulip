@@ -351,7 +351,7 @@ tlp::Vector<Obj, SIZE> MATRIX::powerIteration(const unsigned int nIterations) co
 template<typename Obj, unsigned int SIZE>
 bool MATRIX::simplify(tlp::Matrix<Obj, 2> &simplifiedMatrix) const {
   if (SIZE != 3) {
-    std::cerr << "Computation allowed only for 3x3 Matrices. Yours sizes : " << SIZE << "x" << SIZE << std::endl;
+    qWarning() << "Computation allowed only for 3x3 Matrices. Yours sizes : " << SIZE << "x" << SIZE;
 
     return false;
   }
@@ -409,7 +409,7 @@ bool MATRIX::simplify(tlp::Matrix<Obj, 2> &simplifiedMatrix) const {
 template<typename Obj, unsigned int SIZE>
 bool MATRIX::computeEigenVector(const float x, tlp::Vector<Obj, 3> &eigenVector) const {
   if (SIZE != 2) {
-    std::cerr << "Computation allowed only for 2x2 Matrices. Yours sizes : " << SIZE << "x" << SIZE << std::endl;
+    qWarning() << "Computation allowed only for 2x2 Matrices. Yours sizes : " << SIZE << "x" << SIZE;
 
     return false;
   }

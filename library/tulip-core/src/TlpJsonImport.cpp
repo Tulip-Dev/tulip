@@ -85,7 +85,7 @@ public:
   virtual void parseMapKey(const std::string& value) {
     if(_parsingProperties && !_parsingPropertyNodeValues && !_parsingPropertyEdgeValues && !_parsingPropertyDefaultEdgeValue && !_parsingPropertyDefaultNodeValue && _propertyName.empty()) {
       _propertyName = value;
-//         std::cout << "now parsing property: " << propertyName << std::endl;
+//         qDebug() << "now parsing property: " << propertyName << std::endl;
     }
 
     if(_currentProperty && value == NodesValuesToken) {
@@ -150,7 +150,7 @@ public:
     }
 
     if(!_parsingPropertyNodeValues && !_parsingPropertyEdgeValues && !_propertyName.empty()) {
-//       cout << "finished parsing property '" << _propertyName << "'" << endl;
+//       qDebug() << "finished parsing property '" << _propertyName << "'" << endl;
       _currentProperty = NULL;
       _propertyName = string();
     }
@@ -278,8 +278,8 @@ public:
       if(_parsingPropertyType && !_propertyName.empty()) {
         _parsingPropertyType = false;
 
-        //       std::cout << "getting new property: " << propertyName << "(" << value << ")" << std::sendl;
-        //       std::cout << "of type: " << value << std::endl;
+        //       qDebug() << "getting new property: " << propertyName << "(" << value << ")" << std::sendl;
+        //       qDebug() << "of type: " << value << std::endl;
         if(_progress) {
           _progress->setComment("parsing property: '" + _propertyName + "'");
         }
@@ -287,7 +287,7 @@ public:
         _currentProperty = _graph->getProperty(_propertyName, value);
 
         if(!_currentProperty) {
-          cout << "[error] The property '" << _propertyName << "' of type: '" << value << "' could not be created" << endl;
+          qDebug() << "[error] The property '" << _propertyName << "' of type: '" << value << "' could not be created" << endl;
         }
       }
 
@@ -295,13 +295,13 @@ public:
         if(_parsingPropertyDefaultNodeValue) {
           _currentProperty->setAllNodeStringValue(value);
           _parsingPropertyDefaultNodeValue = false;
-          //       std::cout << "of default node value: " << value << std::endl;
+          //       qDebug() << "of default node value: " << value << std::endl;
         }
 
         if(_parsingPropertyDefaultEdgeValue) {
           _currentProperty->setAllEdgeStringValue(value);
           _parsingPropertyDefaultEdgeValue = false;
-          //       std::cout << "of default edge value: " << value << std::endl;
+          //       qDebug() << "of default edge value: " << value << std::endl;
         }
 
         if(_parsingPropertyNodeValues) {
@@ -309,7 +309,7 @@ public:
           assert(_currentProperty);
           node n(_currentIdentifier);
           _currentProperty->setNodeStringValue(n, value);
-          //       cout << "setting node value: " << n.id << " " << value << "; "<< currentProperty->getNodeStringValue(n) << endl;;
+          //       qDebug() << "setting node value: " << n.id << " " << value << "; "<< currentProperty->getNodeStringValue(n) << endl;;
         }
 
         if(_parsingPropertyEdgeValues) {
@@ -320,7 +320,7 @@ public:
         }
       }
       else {
-        std::cout << "[error] The property '" << _propertyName << "'was null when trying to fill it" << std::endl;
+        qDebug() << "[error] The property '" << _propertyName << "'was null when trying to fill it";
       }
     }
 
@@ -343,14 +343,14 @@ public:
         if(_dataSet->get(_currentAttributeName, oldValue)) {
           if ((_currentAttributeName != "name") ||
               (oldValue != "unnamed"))
-            std::cout << "[error] attribute '" << _currentAttributeName << "' already exists" << std::endl;
+            qDebug() << "[error] attribute '" << _currentAttributeName << "' already exists";
         }
         else {
           bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
           _currentAttributeTypeName = string();
 
           if(!result) {
-            std::cout << "[error] while reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str() << std::endl;
+            qDebug() << "[error] while reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str();
           }
         }
       }
@@ -461,7 +461,7 @@ public:
       _proxy = new YajlParseFacade(_progress);
 //       QTime t = QTime::currentTime();
       parse(filename);
-//       cout << "msecs: " << t.msecsTo(QTime::currentTime()) << endl;
+//       qDebug() << "msecs: " << t.msecsTo(QTime::currentTime()) << endl;
     }
 
     pluginProgress->setError(_proxy->errorMessage());

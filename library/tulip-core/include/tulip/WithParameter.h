@@ -102,7 +102,7 @@ struct TLP_SCOPE ParameterDescriptionList {
     for (unsigned int i = 0; i < parameters.size(); ++i) {
       if (parameters[i].getName() == parameterName) {
 #ifndef NDEBUG
-        std::cerr << "ParameterDescriptionList::addVar " << parameterName << " already exists" << std::endl;
+        qWarning() << "ParameterDescriptionList::addVar " << parameterName << " already exists";
 #endif
         return;
       }

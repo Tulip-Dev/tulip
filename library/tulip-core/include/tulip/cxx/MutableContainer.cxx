@@ -26,7 +26,6 @@ tlp::MutableContainer<TYPE>::MutableContainer(): vData(new std::deque<typename S
 //===================================================================
 template <typename TYPE>
 tlp::MutableContainer<TYPE>::~MutableContainer() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   switch (state) {
   case VECT:
 
@@ -65,7 +64,7 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
 
   default:
     assert(false);
-    std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
     break;
   }
 
@@ -74,7 +73,6 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
 //===================================================================
 template <typename TYPE>
 void tlp::MutableContainer<TYPE>::setAll(const TYPE &value) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   switch (state) {
   case VECT:
 
@@ -113,7 +111,7 @@ void tlp::MutableContainer<TYPE>::setAll(const TYPE &value) {
 
   default:
     assert(false);
-    std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
     break;
   }
 
@@ -146,7 +144,7 @@ tlp::IteratorValue* tlp::MutableContainer<TYPE>::findAllValues(const TYPE &value
 
     default:
       assert(false);
-      std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+      qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
       return 0;
     }
   }
@@ -161,8 +159,6 @@ tlp::Iterator<unsigned int>* tlp::MutableContainer<TYPE>::findAll(const TYPE &va
 //===================================================================
 template <typename TYPE>
 void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-
   //Test if after insertion we need to resize
   if (!compressing &&
       !StoredType<TYPE>::equal(defaultValue, value)) {
@@ -201,7 +197,7 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 
     default:
       assert(false);
-      std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+      qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
       break;
     }
   }
@@ -257,7 +253,7 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 
     default:
       assert(false);
-      std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+      qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
       break;
     }
 
@@ -301,10 +297,8 @@ void tlp::MutableContainer<TYPE>::vectset(const unsigned int i,
   minIndex = std::min(minIndex, i);
 }
 //===================================================================
-//const TYPE &  MutableContainer<TYPE>::get(unsigned int i) const {
 template <typename TYPE>
 typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::get(const unsigned int i) const {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   if (maxIndex == UINT_MAX) return StoredType<TYPE>::get(defaultValue);
 
   typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
@@ -330,7 +324,7 @@ typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::
 
   default:
     assert(false);
-    std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
     return StoredType<TYPE>::get(defaultValue);
     break;
   }
@@ -355,14 +349,13 @@ bool tlp::MutableContainer<TYPE>::hasNonDefaultValue(const unsigned int i) const
 
   default:
     assert(false);
-    std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
     return false;
   }
 }
 //===================================================================
 template <typename TYPE>
 typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::get(const unsigned int i, bool& notDefault) const {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   if (maxIndex == UINT_MAX) {
     notDefault = false;
     return StoredType<TYPE>::get(defaultValue);
@@ -397,14 +390,13 @@ typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::get(c
   default:
     assert(false);
     notDefault = false;
-    std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
     return StoredType<TYPE>::get(defaultValue);
   }
 }
 //===================================================================
 template <typename TYPE>
 void tlp::MutableContainer<TYPE>::vecttohash() {
-  //  std::cerr << __FUNCTION__ << std::endl << std::flush;
   hData=new TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>(elementInserted);
 
   unsigned int newMaxIndex = 0;
@@ -429,7 +421,6 @@ void tlp::MutableContainer<TYPE>::vecttohash() {
 //===================================================================
 template <typename TYPE>
 void tlp::MutableContainer<TYPE>::hashtovect() {
-  //  std::cerr << __FUNCTION__ << std::endl << std::flush;
   vData = new std::deque<typename StoredType<TYPE>::Value>();
   minIndex = UINT_MAX;
   maxIndex = UINT_MAX;
@@ -448,7 +439,6 @@ void tlp::MutableContainer<TYPE>::hashtovect() {
 //===================================================================
 template <typename TYPE>
 void tlp::MutableContainer<TYPE>::compress(unsigned int min, unsigned int max, unsigned int nbElements) {
-  //  std::cerr << __PRETTY_FUNCTION__ << std::endl;
   if (max == UINT_MAX || (max - min) < 10) return;
 
   double limitValue = ratio*(double(max - min + 1.0));
@@ -457,20 +447,7 @@ void tlp::MutableContainer<TYPE>::compress(unsigned int min, unsigned int max, u
   case VECT:
 
     if ( double(nbElements) < limitValue) {
-      /*
-        std::cerr << "****************************************************" << std::endl;
-        std::cerr << "min : " << min << " max :" << max << " lim : ";
-        std::cerr  << limitValue << " el : " << elementInserted << std::endl;
-        std::cerr << "minId : " << minIndex << " maxId :" << maxIndex << " lim : ";
-        std::cerr  << limitValue << " el : " << elementInserted << std::endl;
-      */
       vecttohash();
-      /*
-        std::cerr << "minId : " << minIndex << " maxId :" << maxIndex << " lim : ";
-        std::cerr  << limitValue << " el : " << elementInserted << std::endl;
-        std::cerr << "****************************************************" << std::endl;
-        sleep(1);
-      */
     }
 
     break;
@@ -478,27 +455,14 @@ void tlp::MutableContainer<TYPE>::compress(unsigned int min, unsigned int max, u
   case HASH:
 
     if ( double(nbElements) > limitValue*1.5) {
-      /*
-        std::cerr << "****************************************************" << std::endl;
-        std::cerr << "min : " << min << " max :" << max << " lim : ";
-        std::cerr  << limitValue << " el : " << elementInserted << std::endl;
-        std::cerr << "minId : " << minIndex << " maxId :" << maxIndex << " lim : ";
-        std::cerr  << limitValue << " el : " << elementInserted << std::endl;
-      */
       hashtovect();
-      /*
-        std::cerr << "minId : " << minIndex << " maxId :" << maxIndex << " lim : ";
-        std::cerr  << limitValue << " el : " << elementInserted << std::endl;
-        std::cerr << "****************************************************" << std::endl;
-        sleep(1);
-      */
     }
 
     break;
 
   default:
     assert(false);
-    std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
     break;
   }
 }

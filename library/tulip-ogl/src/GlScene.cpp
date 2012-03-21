@@ -108,7 +108,7 @@ void GlScene::initGlParameters() {
   GLenum error = glGetError();
 
   if ( error != GL_NO_ERROR)
-    cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+    qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
 }
 
 void GlScene::draw() {
@@ -172,7 +172,7 @@ void GlScene::draw() {
   }
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
-  cout << "scene draw time : " << (int)((omp_get_wtime()-lastTime)*1000) << " ms" << endl;
+  qDebug() << "scene draw time : " << (int)((omp_get_wtime()-lastTime)*1000) << " ms" << endl;
   lastTime=omp_get_wtime();
 #endif
 }
@@ -182,7 +182,7 @@ void GlScene::addLayer(GlLayer *layer) {
     assert((*it).first!=layer->getName());
 
     if((*it).first==layer->getName()) {
-      cerr << "Error : You have a layer in the scene with same name : old layer will be deleted" << endl;
+      qWarning() << "Error : You have a layer in the scene with same name : old layer will be deleted" << endl;
       delete (*it).second;
       layersList.erase(it);
       break;

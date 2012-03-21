@@ -49,6 +49,9 @@ std::ostream& operator<<(std::ostream &os,const Array<Obj,SIZE> &array);
 template <typename Obj,unsigned int SIZE>
 std::istream& operator>>(std::istream &is, Array<Obj,SIZE> &);
 
+//template <typename Obj,unsigned int SIZE>
+//QDebug operator<<(QDebug dbg,const Array<Obj,SIZE>& s);
+
 /*@}*/
 }
 

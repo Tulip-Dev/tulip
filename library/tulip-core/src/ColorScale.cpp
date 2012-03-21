@@ -54,7 +54,7 @@ ColorScale& ColorScale::operator=(const ColorScale& scale) {
 
 ColorScale::~ColorScale() {
 //  observableDeleted();
-//  cout << __PRETTY_FUNCTION__ << this << endl;
+//  qDebug() << __PRETTY_FUNCTION__ << this << endl;
 }
 
 void ColorScale::setColorScale(const std::vector<Color> colors,

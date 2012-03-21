@@ -58,11 +58,10 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
 
       if (terminalNodes[comp].size() > 0) {
         // creates a new c-node to represent current component;
-        //  cerr << "  *terminal nodes for w = " << dfsPosNum.get(n1.id) << ":\n";
-        //  cerr << "    in component (" << dfsPosNum.get(comp.id) << "): ";
+        //  qWarning() << "  *terminal nodes for w = " << dfsPosNum.get(n1.id) << ":\n";
+        //  qWarning() << "    in component (" << dfsPosNum.get(comp.id) << "): ";
         //  for (list<node>::iterator it2= terminalNodes[comp].begin(); it2!=terminalNodes[comp].end(); ++it2)
-        //    cerr << dfsPosNum.get(it2->id) << ",";
-        //  cerr << endl;
+        //    qWarning() << dfsPosNum.get(it2->id) << ",";
         node newCNode = sg->addNode();
         dfsPosNum.set(newCNode.id, -(++totalCNodes)); // marks as c-node;
 
@@ -74,19 +73,17 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
 
         // else, calculates partial embedding of G;
         if (embed) {
-          //cerr << __PRETTY_FUNCTION__ << "Partial embed" << endl;
           calculatePartialEmbedding(sg, n1, newCNode, listBackEdges[comp],
                                     terminalNodes[comp]);
         }
 
         // calculates RBC, label_b, etc, for new c-node;
-        //  cout << "setInfoForNewCNode call " << endl;
+        //  qDebug() << "setInfoForNewCNode call " << endl;
         setInfoForNewCNode(sg, n1, newCNode, terminalNodes[comp]);
       }
     }
   }
 
-  //  cerr << __PRETTY_FUNCTION__ << "Embed Root" << endl;
   // embeds root with all back-edges to root;
   if (planar && embedsg)
     embedRoot(sg, nbOfNodes);
@@ -102,7 +99,7 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
       sg->delNode(n2, true);
   }
 
-  //  cout << "Le sge est " << (planar ? "planaire" : "non planaire") << endl;
+  //  qDebug() << "Le sge est " << (planar ? "planaire" : "non planaire") << endl;
   restore();
   //  displayMap(sg);
 #ifndef NDEBUG
@@ -171,15 +168,12 @@ void PlanarityTestImpl::init() {
 void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n,
     list<node> &listOfComponents,
     map<node , list<node> > &terminalNodes) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   // to remove an element from list terminal_nodes in constant time;
   //map<node, list_item> terminal_nodes_item;
   map<node, node> terminalNodesItem; //!!!! attention normalement list item pour l'efficacite
   map<node, node> componentOf;
   list<node> traversedNodes; // to restore state[u] for all traversed node u;
   list<edge> listEdges;
-  //  cerr << "Nb nodes :" << sG->numberOfNodes() << endl;
-  //  cerr << "Dfs n:" << dfsPosNum.get(n.id) << ": " ;
   componentOf[n] = NULL_NODE;
   state.set(n.id, VISITED);
   traversedNodes.push_back(n);
@@ -204,7 +198,7 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n,
       // looks for a terminal node, upward in T;
       while (state.get(target.id) != VISITED && state.get(target.id) != TERMINAL) {
 
-        //  cerr << dfsPosNum.get(target.id) << "(" << dfsPosNum.get(parent.get(target.id).id) << "), ";
+        //  qWarning() << dfsPosNum.get(target.id) << "(" << dfsPosNum.get(parent.get(target.id).id) << "), ";
         assert(target.isValid());
 
         if (isCNode(parent.get(target.id))) {
@@ -254,7 +248,6 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n,
         // did we mark as terminal a non terminal node?
         if (state.get(target.id) == TERMINAL) {
           state.set(target.id, VISITED);
-          //    cerr << "remove target :" << terminalNodesItem[target].id << endl;
           terminalNodes[c].remove(terminalNodesItem[target]);
           lastVisited.set(terminalNode.id, lastVisited.get(target.id));
 
@@ -278,7 +271,6 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n,
 }
 //=================================================================
 bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node>& terminalNodes) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   cNodeOfPossibleK33Obstruction = NULL_NODE; // reset global variable;
 
   list<node> listTerminal = terminalNodes;

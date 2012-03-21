@@ -59,7 +59,7 @@ public:
 
     while(it != end) {
       if (print)
-        cout << "inserting in observer..." << endl;
+        qDebug() << "inserting in observer..." << endl;
 
       observables.insert((*it));
       ++it;
@@ -335,7 +335,7 @@ void ObservableGraphTest::tearDown() {
 }
 //==========================================================
 void ObservableGraphTest::testAddDel() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
+  //  qWarning() << __PRETTY_FUNCTION__ << endl;
   vector<node> nodes;
   vector<edge> edges;
   unsigned int NB_NODES = 100;

@@ -482,7 +482,6 @@ void GraphStorage::setEdgeOrder(const node n, const std::vector<edge> &v ) {
  * @complexity o(1)
  */
 void GraphStorage::swapEdgeOrder(const node n, const edge e1, const edge e2) {
-  //  cerr << __PRETTY_FUNCTION__ << " not tested function" << endl;
   if (e1==e2) return;
 
   EdgeContainer& adjacency = nodes[n.id];

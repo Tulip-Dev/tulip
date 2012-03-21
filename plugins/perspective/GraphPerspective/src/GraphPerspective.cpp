@@ -55,6 +55,10 @@ GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c),
   Q_INIT_RESOURCE(GraphPerspective);
 }
 
+void prout(QtMsgType type, const char* msg) {
+  std::cout << "prout " << msg << std::endl;
+}
+
 void GraphPerspective::registerReservedProperty(QString s) {
   RESERVED_PROPERTIES.insert(s);
 }
@@ -62,6 +66,11 @@ bool GraphPerspective::isReservedPropertyName(QString s) {
   return RESERVED_PROPERTIES.contains(s);
 }
 void GraphPerspective::reserveDefaultProperties() {
+  qInstallMsgHandler(prout);
+
+  qWarning() << "meuh";
+  qWarning() << "gna";
+
   registerReservedProperty("viewColor");
   registerReservedProperty("viewLabelColor");
   registerReservedProperty("viewSize");

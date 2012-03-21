@@ -164,7 +164,7 @@ public:
     }
 
     if (min >= max) {
-      /*cerr << rangeErrorMsg << endl;
+      /*qWarning() << rangeErrorMsg << endl;
         pluginProgress->setError(rangeSizeErrorMsg); */
       errorMsg = std::string(rangeSizeErrorMsg);
       return false;

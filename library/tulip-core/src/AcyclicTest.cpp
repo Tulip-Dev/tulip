@@ -67,9 +67,8 @@ void AcyclicTest::makeAcyclic(Graph* graph,vector<edge> &reversed, vector<tlp::S
   reversed.clear();
   acyclicTest(graph, &reversed);
 
-  //  cerr << "reversed : " << reversed.size() << endl;
   if (reversed.size() > graph->numberOfEdges() / 2) {
-    cerr << "[Warning]: " << __FUNCTION__ << ", is not efficient" << endl;
+    qWarning() << "[Warning]: " << __FUNCTION__ << ", is not efficient";
   }
 
   vector<edge>::const_iterator it = reversed.begin();

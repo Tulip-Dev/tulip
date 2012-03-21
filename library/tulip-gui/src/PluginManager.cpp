@@ -165,7 +165,7 @@ void PluginManager::removePlugins() {
     }
     else {
       //TODO proper error reporting
-      std::cout << plugin.toStdString() << " could not be removed" << std::endl;
+      qDebug() << plugin.toStdString() << " could not be removed";
     }
   }
 }
@@ -180,7 +180,7 @@ void PluginManager::unpackPlugins(const QString& inputFolder) {
 
     if(!progress->getError().empty()) {
       //TODO proper error reporting
-      std::cout << progress->getError() << std::endl;
+      qDebug() << progress->getError();
     }
     else {
       QFile::remove(pluginArchive.absoluteFilePath());

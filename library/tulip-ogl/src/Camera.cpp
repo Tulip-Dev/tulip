@@ -165,7 +165,7 @@ void Camera::initLight() {
   GLuint error = glGetError();
 
   if ( error != GL_NO_ERROR)
-    cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << " begin" << endl;
+    qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << " begin" << endl;
 
   GLfloat pos[4];
 
@@ -205,7 +205,7 @@ void Camera::initLight() {
   error = glGetError();
 
   if ( error != GL_NO_ERROR)
-    cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << "end" << endl;
+    qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << "end" << endl;
 }
 //====================================================
 void Camera::initProjection(const Vector<int, 4>& viewport,bool reset) {
@@ -267,7 +267,7 @@ void Camera::initProjection(const Vector<int, 4>& viewport,bool reset) {
   GLenum error = glGetError();
 
   if ( error != GL_NO_ERROR)
-    cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+    qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
 }
 //====================================================
 void Camera::initProjection(bool reset) {
@@ -301,7 +301,7 @@ void Camera::initModelView() {
   GLenum error = glGetError();
 
   if ( error != GL_NO_ERROR)
-    cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+    qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
 }
 //====================================================
 void Camera::setSceneRadius(double sceneRadius,const BoundingBox sceneBoundingBox) {

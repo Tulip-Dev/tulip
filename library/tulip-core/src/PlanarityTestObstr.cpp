@@ -521,7 +521,7 @@ void PlanarityTestImpl::obstructionEdgesPossibleObstrConfirmed(Graph *sG,
  */
 void PlanarityTestImpl::obstructionEdgesCNodeCounter(Graph *sG, node cNode, node w,
     node jl, node jr, node t1, node t2) {
-  //  cout << __PRETTY_FUNCTION__ << endl;
+  //  qDebug() << __PRETTY_FUNCTION__ << endl;
   // seachs for a node f in RBC[cNode] between jl and jr s.t.
   // f has a descendant that is a neighbor of w in G;
   bool flag = false;
@@ -553,12 +553,12 @@ void PlanarityTestImpl::obstructionEdgesCNodeCounter(Graph *sG, node cNode, node
 
   //#ifdef _DEBUG_MODE_
   // if (f == NULL_NODE) {
-  //     cout << "-> Program terminated! (obstruction_edges_cnode_counter-01)";
-  //     cout<<"obstruction_edges_cnode_counter:\n";
-  //     cout<<"  cnode="<<dfsPosNum.get(cNode.id)<<",f="<<dfsPosNum.get(f.id);
-  //     cout<<"\n  jl="<<dfsPosNum.get(jl.id)<<",b="<<labelB.get(jl.id)<<",nl="<<dfsPosNum.get(nodeLabelB.get(jl.id).id);
-  //     cout<<"\n  jr="<<dfsPosNum.get(jr.id)<<",b="<<labelB.get(jr.id)<<",nl="<<dfsPosNum.get(nodeLabelB.get(jr.id).id);
-  //     cout<<"\n";
+  //     qDebug() << "-> Program terminated! (obstruction_edges_cnode_counter-01)";
+  //     qDebug()<<"obstruction_edges_cnode_counter:\n";
+  //     qDebug()<<"  cnode="<<dfsPosNum.get(cNode.id)<<",f="<<dfsPosNum.get(f.id);
+  //     qDebug()<<"\n  jl="<<dfsPosNum.get(jl.id)<<",b="<<labelB.get(jl.id)<<",nl="<<dfsPosNum.get(nodeLabelB.get(jl.id).id);
+  //     qDebug()<<"\n  jr="<<dfsPosNum.get(jr.id)<<",b="<<labelB.get(jr.id)<<",nl="<<dfsPosNum.get(nodeLabelB.get(jr.id).id);
+  //     qDebug()<<"\n";
   //   }
   //#endif
 

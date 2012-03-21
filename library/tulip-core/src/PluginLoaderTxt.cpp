@@ -24,42 +24,42 @@
 using namespace std;
 using namespace tlp;
 void PluginLoaderTxt::start(const string &path) {
-  cout << "Start loading plug-ins in " << path << endl;
+  qDebug() << "Start loading plug-ins in " << path << endl;
 }
 
 void PluginLoaderTxt::loading(const string &filename) {
-  cout << "loading file : " << filename << endl;
+  qDebug() << "loading file : " << filename << endl;
 }
 
 void PluginLoaderTxt::loaded(const Plugin* infos, const std::list <Dependency>& deps) {
-  cout << "Plug-in " << infos->name() << " loaded, Author:"<< infos->author() << " Date: " << infos->date() << " Release:" << infos->release() << " Version: "<< infos->tulipRelease() <<  endl;
+  qDebug() << "Plug-in " << infos->name() << " loaded, Author:"<< infos->author() << " Date: " << infos->date() << " Release:" << infos->release() << " Version: "<< infos->tulipRelease() <<  endl;
 
   // ouput dependencies if any
   if (deps.size()) {
     unsigned int i = deps.size();
-    cout << "depending on ";
+    qDebug() << "depending on ";
     list<Dependency>::const_iterator itD = deps.begin();
 
     for (i--; itD != deps.end(); ++itD, --i) {
       std::string factoryDepName = (*itD).factoryName;
       std::string pluginDepName = (*itD).pluginName;
-      cout << factoryDepName << " " << pluginDepName;
+      qDebug() << factoryDepName << " " << pluginDepName;
 
       if (i > 0)
-        cout << ", ";
+        qDebug() << ", ";
       else
-        cout << endl;
+        qDebug() << endl;
     }
   }
 }
 
 void PluginLoaderTxt::aborted(const string &filename,const  string &erreurmsg) {
-  cout << "Aborted loading of "<< filename << " Error:" << erreurmsg << endl;
+  qDebug() << "Aborted loading of "<< filename << " Error:" << erreurmsg << endl;
 }
 
 void PluginLoaderTxt::finished(bool state,const string &msg) {
   if (state)
-    cout << "Loading complete" << endl;
+    qDebug() << "Loading complete" << endl;
   else
-    cout << "Loading error " << msg << endl;
+    qDebug() << "Loading error " << msg << endl;
 }

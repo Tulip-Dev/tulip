@@ -419,20 +419,20 @@ void PlanarConMapTest::testSplitFace() {
 
   /* test 2 */
   build4();
-  //  cout << carte<< endl;
+  //  qDebug() << carte<< endl;
   f1 = carte->faces[0];
   f2 = carte->splitFace(f1,nodes[2],nodes[7]);
   e = carte->existEdge(nodes[2],nodes[7]).isValid() ? carte->existEdge(nodes[2],nodes[7]) : carte->existEdge(nodes[7],nodes[2]);
   edges.push_back(e);
-  //  cout << carte<< endl;
+  //  qDebug() << carte<< endl;
   f3 = carte->splitFace(f2,nodes[1],nodes[5]);
   e = carte->existEdge(nodes[1],nodes[5]).isValid() ? carte->existEdge(nodes[1],nodes[5]) : carte->existEdge(nodes[5],nodes[1]);
   edges.push_back(e);
-  //  cout << carte<< endl;
+  //  qDebug() << carte<< endl;
   Face f4 = carte->splitFace(f3,nodes[1],nodes[4]);
   e = carte->existEdge(nodes[1],nodes[4]).isValid() ? carte->existEdge(nodes[1],nodes[4]) : carte->existEdge(nodes[4],nodes[1]);
   edges.push_back(e);
-  //  cout << carte<< endl;
+  //  qDebug() << carte<< endl;
   vector<vector<edge> > cycles3(4);
   cycles3[0].push_back(edges[4]);
   cycles3[0].push_back(edges[9]);

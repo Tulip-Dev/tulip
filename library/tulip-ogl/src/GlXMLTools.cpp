@@ -189,7 +189,7 @@ GlSimpleEntity *GlXMLTools::createEntity(const string &name) {
     return new GlSphere();
   }
   else {
-    cout << "Unknow entity type : " << name << ". Can't create it !" << endl;
+    qDebug() << "Unknow entity type : " << name << ". Can't create it !" << endl;
   }
 
   return NULL;

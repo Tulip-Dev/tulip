@@ -35,7 +35,6 @@ bool ConnectedTest::isConnected(const tlp::Graph*const graph) {
 }
 //=================================================================
 void ConnectedTest::makeConnected(Graph *graph, vector<edge> &addedEdges) {
-  //  cerr << __PRETTY_FUNCTION__ << " : " << graph->getAttribute<string>("name") << endl;
   if (instance==0)
     instance=new ConnectedTest();
 

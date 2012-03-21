@@ -149,8 +149,8 @@ bool MixedModel::run() {
     //====================================================
     //don't compute the canonical ordering if the nmber of nodes is less than 3
 
-    /* cout << currentGraph->numberOfNodes() << " nodes and " << currentGraph->numberOfEdges() << " edges " << endl;
-    cout << "Create map" << endl; */
+    /* qDebug() << currentGraph->numberOfNodes() << " nodes and " << currentGraph->numberOfEdges() << " edges " << endl;
+    qDebug() << "Create map" << endl; */
     if(currentGraph->numberOfNodes() == 1) {
       node n = currentGraph->getOneNode();
       result->setNodeValue(n, Coord(0,0,0));
@@ -203,7 +203,7 @@ bool MixedModel::run() {
     Graph * G;
 
     if(!planar) {
-      // cout << "Graph is not planar ...";
+      // qDebug() << "Graph is not planar ...";
       BooleanProperty resultatAlgoSelection(currentGraph);
       Bfs sp(currentGraph, &resultatAlgoSelection);
       currentGraph->delSubGraph(sp.graph);
@@ -240,7 +240,7 @@ bool MixedModel::run() {
       }
 
       delete graphMap;
-      // cout << "... Planar subGraph computed" << endl;
+      // qDebug() << "... Planar subGraph computed" << endl;
     }
     else {
       G = currentGraph->addCloneSubGraph();
@@ -269,8 +269,8 @@ bool MixedModel::run() {
     // give some empirical feedback (5%)
     pluginProgress->progress(2, 100);
 
-    // cout << "Make the map planar ...";
-    // cout << "... end" << endl;
+    // qDebug() << "Make the map planar ...";
+    // qDebug() << "... end" << endl;
     // give some empirical feedback of what we are doing (10%)
     if (pluginProgress->progress(5, 100) !=TLP_CONTINUE)
       return pluginProgress->state()!= TLP_CANCEL;
@@ -292,20 +292,20 @@ bool MixedModel::run() {
     // Cout << "Partition initialization ...";
     initPartition() ;
 
-    // cout<<"... Partition initialized"<<endl;
+    // qDebug()<<"... Partition initialized"<<endl;
     if (pluginProgress->state() == TLP_CANCEL)
       return false;
 
-    // cout << "InOutPoint computation ..."  ;
+    // qDebug() << "InOutPoint computation ..."  ;
     assignInOutPoints();
-    // cout<<"... InOutPoints computed"<<endl;
+    // qDebug()<<"... InOutPoints computed"<<endl;
 
-    // cout << "Coordinate computation ..."  ;
+    // qDebug() << "Coordinate computation ..."  ;
     computeCoords();
-    // cout<<"... Coordinate computed"<<endl;
-    // cout << "Drawing edges and nodes ..." ;
+    // qDebug()<<"... Coordinate computed"<<endl;
+    // qDebug() << "Drawing edges and nodes ..." ;
     placeNodesEdges();
-    // cout << "... Edges and Nodes drawn" <<endl;
+    // qDebug() << "... Edges and Nodes drawn" <<endl;
 
     vector<edge>::const_iterator ite = dummy.begin();
 
@@ -526,24 +526,24 @@ void MixedModel::initPartition() {
 //====================================================
 void afficheCycle(tlp::PlanarConMap* m) {
   assert(m);
-  cout<<"Cycles :"<<endl;
+  qDebug()<<"Cycles :"<<endl;
   Iterator<node>* itn = m->getNodes();
 
   node n;
 
   while(itn->hasNext()) {
     n = itn->next();
-    cout<<n.id<<" ( ";
+    qDebug()<<n.id<<" ( ";
 
     edge e;
     Iterator<edge>* ite = m->getInOutEdges(n);
 
     while(ite->hasNext()) {
       e = ite->next();
-      cout<<e.id<<" ";
+      qDebug()<<e.id<<" ";
     }
 
-    cout<<" )"<<endl;
+    qDebug()<<" )"<<endl;
     delete ite;
   }
 

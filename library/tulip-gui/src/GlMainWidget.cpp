@@ -330,7 +330,7 @@ void GlMainWidget::render(RenderingOptions options) {
       //Render the graph in the back buffer.
       scene.draw();
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
-      cout << ">>> rendering time : " << (int)((omp_get_wtime()-beginTime)*1000) << " ms" << endl << endl;
+      qDebug() << ">>> rendering time : " << (int)((omp_get_wtime()-beginTime)*1000) << " ms" << endl << endl;
 #endif
     }
 
@@ -448,7 +448,7 @@ QImage GlMainWidget::grabFrameBuffer(bool withAlpha) {
 //==================================================
 void GlMainWidget::resizeGL(int w, int h) {
 #ifndef NDEBUG
-  std::cerr << __PRETTY_FUNCTION__ << "(" << w << ";" << h << ")" << std::endl;
+  qWarning() << __PRETTY_FUNCTION__ << "(" << w << ";" << h << ")";
 #endif
 
   if (w == 0 || h == 0) {
@@ -502,7 +502,7 @@ void GlMainWidget::pickNodesEdges(const int x, const int y,
                                   std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
                                   GlLayer* layer) {
 #ifndef NDEBUG
-  std::cerr << __PRETTY_FUNCTION__ << " x:" << x << ", y:" <<y <<", wi:"<<width<<", height:" << height << std::endl;
+  qWarning() << __PRETTY_FUNCTION__ << " x:" << x << ", y:" <<y <<", wi:"<<width<<", height:" << height;
 #endif
   makeCurrent();
   scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x, y, width, height, layer, selectedNodes);
@@ -511,7 +511,7 @@ void GlMainWidget::pickNodesEdges(const int x, const int y,
 //=====================================================
 bool GlMainWidget::pickNodesEdges(const int x, const int y,SelectedEntity &selectedEntity, GlLayer* layer) {
 #ifndef NDEBUG
-  std::cerr << __PRETTY_FUNCTION__ << std::endl;
+  qWarning() << __PRETTY_FUNCTION__;
 #endif
   makeCurrent();
   vector<SelectedEntity> selectedEntities;

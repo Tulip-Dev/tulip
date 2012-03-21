@@ -240,7 +240,7 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
 
     //If auto detection fail set to default type : string.
     if (propertyType.empty()) {
-      std::cerr<<__PRETTY_FUNCTION__<<" No type for the column "<<propertyName<<" set to string"<<std::endl;
+      qWarning()<<__PRETTY_FUNCTION__<<" No type for the column "<<propertyName<<" set to string";
       propertyType = "string";
     }
 
@@ -316,13 +316,13 @@ void CSVGraphImport::line(unsigned int row,const std::vector<std::string>& lineT
         if(element.first == NODE) {
           if(!property->setNodeStringValue(node(element.second),lineTokens[column])) {
             //We add one to the row number as in the configuration widget we start from row 1 not row 0
-            std::cerr<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<lineTokens[column]<<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\" at line "<<row+1<<std::endl;
+            qWarning()<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<lineTokens[column]<<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\" at line "<<row+1;
           }
         }
         else {
           if(!property->setEdgeStringValue(edge(element.second),lineTokens[column])) {
             //We add one to the row number as in the configuration widget we start from row 1 not row 0
-            std::cerr<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<lineTokens[column]<<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\" at line "<<row+1<<std::endl;
+            qWarning()<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<lineTokens[column]<<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\" at line "<<row+1;
           }
         }
       }

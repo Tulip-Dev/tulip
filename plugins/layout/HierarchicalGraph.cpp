@@ -67,12 +67,12 @@ public:
 };
 //================================================================================
 void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
-  //  cerr << __PRETTY_FUNCTION__  << endl;
+  //  qWarning() << __PRETTY_FUNCTION__  << endl;
   string erreurMsg;
   DoubleProperty dagLevel(sg);
 
   if(!sg->computeProperty("Dag Level", &dagLevel,erreurMsg)) {
-    cerr << "[ERROR] : " << erreurMsg << __PRETTY_FUNCTION__ << endl;
+    qWarning() << "[ERROR] : " << erreurMsg << __PRETTY_FUNCTION__ << endl;
     return;
   }
 
@@ -85,7 +85,7 @@ void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
     embedding->setNodeValue(n, grid[level].size());
     grid[level].push_back(n);
   }
-  //  cerr << __PRETTY_FUNCTION__  << endl;
+  //  qWarning() << __PRETTY_FUNCTION__  << endl;
 }
 //================================================================================
 unsigned int HierarchicalGraph::degree(tlp::Graph *sg, tlp::node n,bool sense) {
@@ -177,7 +177,7 @@ void HierarchicalGraph::crossReduction(tlp::Graph *sg) {
   }
   grid.push_back(vector<node>());
   grid[grid.size()-1].push_back(tmp);
-  //  cerr << __PRETTY_FUNCTION__  << endl;
+  //  qWarning() << __PRETTY_FUNCTION__  << endl;
   MutableContainer<bool> visited;
   visited.setAll(false);
   node root = sg->getSource();
@@ -221,11 +221,11 @@ void HierarchicalGraph::crossReduction(tlp::Graph *sg) {
   }
 
   sg->delNode(tmp, true);
-  //  cerr << __PRETTY_FUNCTION__  << endl;
+  //  qWarning() << __PRETTY_FUNCTION__  << endl;
 }
 //================================================================================
 void HierarchicalGraph::DagLevelSpanningTree(tlp::Graph* sg, tlp::DoubleProperty *embedding) {
-  //  cerr << __PRETTY_FUNCTION__  << endl;
+  //  qWarning() << __PRETTY_FUNCTION__  << endl;
   assert(AcyclicTest::isAcyclic(sg));
   LessThanEdge tmpL;
   tmpL.metric = embedding;
@@ -248,12 +248,12 @@ void HierarchicalGraph::DagLevelSpanningTree(tlp::Graph* sg, tlp::DoubleProperty
     }
   }
   assert(TreeTest::isTree(sg));
-  //  cerr << __PRETTY_FUNCTION__  << endl;
+  //  qWarning() << __PRETTY_FUNCTION__  << endl;
 }
 //==============================================================================================================
 void HierarchicalGraph::computeEdgeBends(const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
     const TLP_HASH_MAP<tlp::edge,tlp::edge> &replacedEdges, const std::vector<tlp::edge> &reversedEdges) {
-  //  cerr << "we compute bends on splitted edges" << endl;
+  //  qWarning() << "we compute bends on splitted edges" << endl;
   MutableContainer<bool> isReversed;
   isReversed.setAll(false);
 
@@ -304,7 +304,7 @@ void HierarchicalGraph::computeEdgeBends(const tlp::Graph *mySGraph, tlp::Layout
 }
 //=======================================================================
 void HierarchicalGraph::computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops) {
-  //cerr << "We compute self loops" << endl;
+  //qWarning() << "We compute self loops" << endl;
   while (!listSelfLoops.empty()) {
     tlp::SelfLoops tmp = listSelfLoops.back();
     listSelfLoops.pop_back();
@@ -332,7 +332,7 @@ void HierarchicalGraph::computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProper
     mySGraph->delNode(tmp.n2, true);
   }
 
-  //  cerr << "we clean every added nodes and edges" << endl;
+  //  qWarning() << "we clean every added nodes and edges" << endl;
 }
 
 

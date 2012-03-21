@@ -285,16 +285,16 @@ void Morphing::interpolate( GlMainWidget * outGlgw, float inT) {
     g0->interpolateCenters.resize (g0->augPoints.size());
 
     if (g0->augPoints.size() != g1->augPoints.size()) {
-      cerr << "Cannot interpolate augmented displays. " << endl;
-      cerr << "Not the same point sets " << endl;
+      qWarning() << "Cannot interpolate augmented displays. " << endl;
+      qWarning() << "Not the same point sets " << endl;
       return;
     }
 
     for (unsigned int i = 0; i < g0->augPoints.size(); ++i) {
       if (g0->augPoints[i].size() != g1->augPoints[i].size()) {
-        cerr << "Cannot interpolate augmented displays. " << endl;
-        cerr << "Set " << i << " for g0 and g1 don't have same members." << endl;
-        cerr << "Set g0 " << g0->augPoints[i].size() << " "
+        qWarning() << "Cannot interpolate augmented displays. " << endl;
+        qWarning() << "Set " << i << " for g0 and g1 don't have same members." << endl;
+        qWarning() << "Set g0 " << g0->augPoints[i].size() << " "
              << g1->augPoints[i].size() << endl;
         return;
       }

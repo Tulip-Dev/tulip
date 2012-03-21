@@ -40,10 +40,10 @@ using namespace std;
 using namespace tlp;
 
 void nodeAttributeError() {
-  cerr << "Error reading node attribute: The attributes of nodes must be defined after the node id (data ignored)" << endl;
+  qWarning() << "Error reading node attribute: The attributes of nodes must be defined after the node id (data ignored)" << endl;
 }
 void edgeAttributeError() {
-  cerr << "Error reading edge attribute: The attributes of edges must be defined after source and target (data ignored)" << endl;
+  qWarning() << "Error reading edge attribute: The attributes of edges must be defined after source and target (data ignored)" << endl;
 }
 
 //=================================================================================

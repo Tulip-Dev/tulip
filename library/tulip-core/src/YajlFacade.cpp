@@ -2,8 +2,7 @@
 
 #include <QFile>
 #include <malloc.h>
-
-#include <iostream>
+#include <QtCore/QDebug>
 
 static int parse_null(void *ctx) {
   YajlParseFacade* facade = (YajlParseFacade*) ctx;
@@ -218,7 +217,7 @@ std::string YajlWriteFacade::generatedString() {
   yajl_gen_status status = yajl_gen_get_buf(_generator, &buffer, &length);
 
   if(status != yajl_gen_status_ok) {
-    std::cout << "oh, shit." << std::endl;
+    qDebug() << __PRETTY_FUNCTION__ << ": parse error.";
   }
 
   std::string result((const char*)buffer);

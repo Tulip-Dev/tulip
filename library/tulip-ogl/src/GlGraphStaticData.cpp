@@ -43,8 +43,8 @@ string GlGraphStaticData::edgeShapeName(int id) {
     return string("Cubic B-Spline");
 
   default:
-    cerr << __PRETTY_FUNCTION__ << endl;
-    cerr << "Invalid edge shape id" << endl;
+    qWarning() << __PRETTY_FUNCTION__ << endl;
+    qWarning() << "Invalid edge shape id" << endl;
     return string("invalid shape id");
   }
 }
@@ -62,8 +62,8 @@ int GlGraphStaticData::edgeShapeId(string name) {
   if (name == edgeShapeName(CUBICBSPLINE))
     return CUBICBSPLINE;
 
-  cerr << __PRETTY_FUNCTION__ << endl;
-  cerr << "Invalid edge shape name" << endl;
+  qWarning() << __PRETTY_FUNCTION__ << endl;
+  qWarning() << "Invalid edge shape name" << endl;
   return -1;
 }
 
@@ -81,8 +81,8 @@ int GlGraphStaticData::labelPositionId(string name) {
       return i;
   }
 
-  cerr << __PRETTY_FUNCTION__ << endl;
-  cerr << "Invalid label position name" << endl;
+  qWarning() << __PRETTY_FUNCTION__ << endl;
+  qWarning() << "Invalid label position name" << endl;
   return -1;
 }
 

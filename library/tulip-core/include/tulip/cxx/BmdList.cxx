@@ -113,7 +113,6 @@ tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::cyclicSucc(tlp::BmdLink<TYPE> *it, tlp::
 //=================================================================
 template <typename TYPE>
 tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::push(const TYPE &data) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   count++;
 
   if (head != 0) {
@@ -130,24 +129,19 @@ tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::push(const TYPE &data) {
 //=================================================================
 template <typename TYPE>
 tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::append(const TYPE &data) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   count++;
 
-  //  std::cerr << "0 - appending : " << data << std::endl;
   if (tail != 0) {
     if (tail->pre != 0)
       tail = tail->suc = new tlp::BmdLink<TYPE>(data, tail, 0);
     else
       tail = tail->pre = new tlp::BmdLink<TYPE>(data, tail, 0);
 
-    //    std::cerr << "1 - appending : " << tail->data << std::endl;
   }
   else {
     tail = head = new tlp::BmdLink<TYPE>(data, 0, 0);
-    //    std::cerr << "2 - appending : " << tail->data << std::endl;
   }
 
-  //  std::cerr << "3 - appending : " << tail->data << std::endl;
   return tail;
 }
 //=================================================================
@@ -182,7 +176,6 @@ TYPE tlp::BmdList<TYPE>::delItem(tlp::BmdLink<TYPE> *it) {
 //=================================================================
 template <typename TYPE>
 TYPE tlp::BmdList<TYPE>::pop() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   assert(head != 0);
   tlp::BmdLink<TYPE> *x = head;
   head = nextItem(head, 0);
@@ -204,7 +197,6 @@ TYPE tlp::BmdList<TYPE>::pop() {
 //=================================================================
 template <typename TYPE>
 TYPE tlp::BmdList<TYPE>::popBack() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   assert(head != 0);
   tlp::BmdLink<TYPE> *x= tail;
   tail = predItem(tail, 0);

@@ -109,7 +109,7 @@ double StrengthClustering::computeMQValue(const vector<set<node> > & partition, 
 
 //==============================================================================
 vector< set<node> > StrengthClustering::computeNodePartition(double threshold) {
-  //cerr << __PRETTY_FUNCTION__ << endl;
+  //qWarning() << __PRETTY_FUNCTION__ << endl;
   string errMsg;
   Graph *tmpGraph = graph->addCloneSubGraph();
   StableIterator<edge> itE(graph->getEdges());
@@ -181,7 +181,7 @@ vector< set<node> > StrengthClustering::computeNodePartition(double threshold) {
 }
 //==============================================================================
 //void drawGraph(Graph *tmpg) {
-//  //  cerr << __PRETTY_FUNCTION__ << endl;
+//  //  qWarning() << __PRETTY_FUNCTION__ << endl;
 //  string errMsg;
 //  string layoutName;
 //  if (tmpg->numberOfNodes() > 300)
@@ -220,10 +220,10 @@ double StrengthClustering::findBestThreshold(int numberOfSteps, bool& stopped) {
     }
   }
 
-  // cout << __PRETTY_FUNCTION__ << endl;
-  // cout << "\t" <<" Nb try : " << numberOfSteps << endl;
-  // cout << "\t" <<" Max MQ : " << maxMQ << endl << flush;
-  // cout << "\t" <<" Best threshold : " << threshold << endl << flush;
+  // qDebug() << __PRETTY_FUNCTION__ << endl;
+  // qDebug() << "\t" <<" Nb try : " << numberOfSteps << endl;
+  // qDebug() << "\t" <<" Max MQ : " << maxMQ << endl << flush;
+  // qDebug() << "\t" <<" Best threshold : " << threshold << endl << flush;
   return threshold;
 }
 //==============================================================================
@@ -269,10 +269,10 @@ double StrengthClustering::findBestThreshold(int numberOfSteps, bool& stopped) {
 //      if (!tlp::averageCluster(sg, avCluster, pluginProgress))
 //  return false;
 //      /*
-//  cout << "Average Path Length :" << avPath << endl;
-//  cout << "Average clustering  :" <<  avCluster << endl;
-//  cout << "Number of nodes     :" <<  tmpg->numberOfNodes() << endl;
-//  cout << "Number of edges     :" <<  tmpg->numberOfEdges() << endl;
+//  qDebug() << "Average Path Length :" << avPath << endl;
+//  qDebug() << "Average clustering  :" <<  avCluster << endl;
+//  qDebug() << "Number of nodes     :" <<  tmpg->numberOfNodes() << endl;
+//  qDebug() << "Number of edges     :" <<  tmpg->numberOfEdges() << endl;
 //      */
 //      if ( avPath > 1 && avPath < 4 && avCluster > 0.25) {
 //  DataSet tmpData;

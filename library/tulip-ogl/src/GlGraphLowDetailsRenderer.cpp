@@ -63,7 +63,7 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
   points.resize(nbEdges*2 + nbBends); //todo: should be #|V| !!!
   indices.resize(nbEdges*2 + nbBends * 2);
   colors.resize(nbEdges*2 + nbBends);
-  //cout << "nb lines = " << indices.size()/2 << endl;
+  //qDebug() << "nb lines = " << indices.size()/2 << endl;
   size_t i_point  = 0;
   size_t i_indices = 0;
   size_t i_col = 0;

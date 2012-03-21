@@ -234,7 +234,7 @@ private:
       return Rectangle<float>(E, H);
 
     default:
-      std::cerr << "ERROR" << __PRETTY_FUNCTION__ << std::endl;
+      qWarning() << "ERROR" << __PRETTY_FUNCTION__ ;
       exit(1);
     }
   }

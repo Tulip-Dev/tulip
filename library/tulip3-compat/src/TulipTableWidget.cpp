@@ -102,7 +102,7 @@ public:
       data[i] = tmp;
     }
     else {
-      std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " Error index too high !"
+      qWarning() << __PRETTY_FUNCTION__ << ":" << __LINE__ << " Error index too high !"
                 << std::endl;
       assert(false);
     }
@@ -665,11 +665,11 @@ public:
   ~IntFromListTableItem() {
   }
   virtual QString valueToText(int) const {
-    cerr << __PRETTY_FUNCTION__ << endl;
+    qWarning() << __PRETTY_FUNCTION__ << endl;
     return QString("error");
   }
   virtual int textToValue(const QString &) const {
-    cerr << __PRETTY_FUNCTION__ << endl;
+    qWarning() << __PRETTY_FUNCTION__ << endl;
     return 0;
   }
 

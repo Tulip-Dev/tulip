@@ -62,7 +62,7 @@ public:
 
     if (!rootInfo.exists()) {
 #ifndef NDEBUG
-      std::cerr << "Provided directory " << rootInfo.absoluteFilePath().toStdString() << " does not exist." << std::endl;
+      qWarning() << "Provided directory " << rootInfo.absoluteFilePath().toStdString() << " does not exist.";
 #endif
       return false;
     }
