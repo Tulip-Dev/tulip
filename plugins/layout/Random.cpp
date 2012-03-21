@@ -33,7 +33,7 @@ using namespace std;
 using namespace tlp;
 
 Random::Random(const tlp::PluginContext* context):LayoutAlgorithm(context) {
-  addParameter<bool>("3D layout", paramHelp[0], "true");
+  addInParameter<bool>("3D layout", paramHelp[0], "true");
 }
 
 Random::~Random() {}

@@ -136,7 +136,7 @@ public:
   }
   virtual ~EECone() {}
 
-  virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
+  virtual void draw(edge e, node /*n*/, const Color& glyphColor,const Color &/*borderColor*/, float /*lod*/) {
     glEnable(GL_LIGHTING);
 
     if (GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {

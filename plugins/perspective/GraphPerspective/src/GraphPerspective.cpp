@@ -294,7 +294,7 @@ void GraphPerspective::saveAs(const QString& path) {
   _project->write(path,&progress);
 }
 
-void GraphPerspective::open(const QString &path) {
+void GraphPerspective::open(const QString &/*path*/) {
 }
 
 void GraphPerspective::centerPanels(tlp::PropertyInterface* pi) {

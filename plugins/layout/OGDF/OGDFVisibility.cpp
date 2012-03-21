@@ -85,8 +85,8 @@ class OGDFVisibility : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATIONS("Visibility (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")
   OGDFVisibility(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::VisibilityLayout()) {
-    addParameter<int>("minimum grid distance", paramHelp[0], "1");
-    addParameter<bool>("transpose", paramHelp[1], "false");
+    addInParameter<int>("minimum grid distance", paramHelp[0], "1");
+    addInParameter<bool>("transpose", paramHelp[1], "false");
   }
 
   ~OGDFVisibility() {}

@@ -72,18 +72,18 @@ const char* paramHelp[] = {
 
 //====================================================================
 void addOrientationParameters(LayoutAlgorithm* pLayout) {
-  pLayout->addParameter<StringCollection>(ORIENTATION_ID, paramHelp[0], ORIENTATION);
+  pLayout->addInParameter<StringCollection>(ORIENTATION_ID, paramHelp[0], ORIENTATION);
 }
 
 //====================================================================
 void addOrthogonalParameters(LayoutAlgorithm* pLayout) {
-  pLayout->addParameter<bool>(ORTHOGONAL,paramHelp[1],"false");
+  pLayout->addInParameter<bool>(ORTHOGONAL,paramHelp[1],"false");
 }
 
 //====================================================================
 void addSpacingParameters(LayoutAlgorithm* pLayout) {
-  pLayout->addParameter<float>("layer spacing", paramHelp[2], "64." );
-  pLayout->addParameter<float>("node spacing", paramHelp[3], "18." );
+  pLayout->addInParameter<float>("layer spacing", paramHelp[2], "64." );
+  pLayout->addInParameter<float>("node spacing", paramHelp[3], "18." );
 }
 void getSpacingParameters(DataSet* dataSet, float& nodeSpacing, float& layerSpacing) {
   layerSpacing = 64.;

@@ -35,7 +35,7 @@ const char * paramHelp[] = {
 }
 //======================================================
 Kruskal::Kruskal(const tlp::PluginContext* context):BooleanAlgorithm(context) {
-  addParameter<DoubleProperty> ("edge weight", paramHelp[0], "viewMetric");
+  addInParameter<DoubleProperty> ("edge weight", paramHelp[0], "viewMetric");
 }
 //======================================================
 Kruskal::~Kruskal() {

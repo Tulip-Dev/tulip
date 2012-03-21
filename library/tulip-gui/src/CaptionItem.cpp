@@ -49,17 +49,17 @@ void CaptionItem::initCaption() {
   _captionGraphicsItem->loadConfiguration();
 
   if(_metricProperty)
-    _metricProperty->removePropertyObserver(this);
+    _metricProperty->removeListener(this);
 
   _metricProperty=NULL;
 
   if(_colorProperty)
-    _colorProperty->removePropertyObserver(this);
+    _colorProperty->removeListener(this);
 
   _colorProperty=NULL;
 
   if(_sizeProperty)
-    _sizeProperty->removePropertyObserver(this);
+    _sizeProperty->removeListener(this);
 
   _sizeProperty=NULL;
 
@@ -68,35 +68,35 @@ void CaptionItem::initCaption() {
 
 void CaptionItem::clearObservers() {
   if(_metricProperty)
-    _metricProperty->removePropertyObserver(this);
+    _metricProperty->removeListener(this);
 
   _metricProperty=view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty());
-  _metricProperty->addPropertyObserver(this);
+  _metricProperty->addListener(this);
 
   if(_captionType==ColorCaption) {
     if(_colorProperty)
-      _colorProperty->removePropertyObserver(this);
+      _colorProperty->removeListener(this);
   }
   else {
     if(_sizeProperty)
-      _sizeProperty->removePropertyObserver(this);
+      _sizeProperty->removeListener(this);
 
     _sizeProperty=view->graph()->getProperty<SizeProperty>("viewSize");
-    _sizeProperty->addPropertyObserver(this);
+    _sizeProperty->addListener(this);
   }
 
   _colorProperty=view->graph()->getProperty<ColorProperty>("viewColor");
 
   if(_captionType==ColorCaption) {
-    _colorProperty->addPropertyObserver(this);
+    _colorProperty->addListener(this);
   }
 
   if(_graph!=view->graph()) {
     if(_graph)
-      _graph->removeGraphObserver(this);
+      _graph->removeListener(this);
 
     _graph=view->graph();
-    _graph->addGraphObserver(this);
+    _graph->addListener(this);
   }
 }
 
@@ -194,39 +194,39 @@ CaptionGraphicsBackgroundItem *CaptionItem::captionGraphicsItem() {
 
 void CaptionItem::removeObservation(bool remove) {
   if(!remove) {
-    _graph->addGraphObserver(this);
-    _metricProperty->addPropertyObserver(this);
+    _graph->addListener(this);
+    _metricProperty->addListener(this);
 
     if(_captionType==ColorCaption) {
-      _colorProperty->addPropertyObserver(this);
+      _colorProperty->addListener(this);
     }
     else {
-      _sizeProperty->addPropertyObserver(this);
+      _sizeProperty->addListener(this);
     }
   }
   else {
-    _graph->removeGraphObserver(this);
-    _metricProperty->removePropertyObserver(this);
+    _graph->removeListener(this);
+    _metricProperty->removeListener(this);
 
     if(_captionType==ColorCaption) {
-      _colorProperty->removePropertyObserver(this);
+      _colorProperty->removeListener(this);
     }
     else {
-      _sizeProperty->removePropertyObserver(this);
+      _sizeProperty->removeListener(this);
     }
   }
 }
 
 void CaptionItem::applyNewFilter(float begin, float end) {
   emit filtering(true);
-  _graph->removeGraphObserver(this);
-  _metricProperty->removePropertyObserver(this);
+  _graph->removeListener(this);
+  _metricProperty->removeListener(this);
 
   if(_captionType==ColorCaption) {
-    _colorProperty->removePropertyObserver(this);
+    _colorProperty->removeListener(this);
   }
   else {
-    _sizeProperty->removePropertyObserver(this);
+    _sizeProperty->removeListener(this);
   }
 
   ColorProperty *borderColorProperty=_graph->getProperty<ColorProperty>("viewBorderColor");
@@ -269,14 +269,14 @@ void CaptionItem::applyNewFilter(float begin, float end) {
 
   Observer::unholdObservers();
 
-  _graph->addGraphObserver(this);
-  _metricProperty->addPropertyObserver(this);
+  _graph->addListener(this);
+  _metricProperty->addListener(this);
 
   if(_captionType==ColorCaption) {
-    _colorProperty->addPropertyObserver(this);
+    _colorProperty->addListener(this);
   }
   else {
-    _sizeProperty->addPropertyObserver(this);
+    _sizeProperty->addListener(this);
   }
 
   emit filtering(false);
@@ -295,7 +295,7 @@ void CaptionItem::treatEvent(const Event &ev) {
   }
 }
 
-void CaptionItem::selectedPropertyChanged(string propertyName) {
+  void CaptionItem::selectedPropertyChanged(string /*propertyName*/) {
   if(_captionType==ColorCaption)
     generateColorCaption();
   else

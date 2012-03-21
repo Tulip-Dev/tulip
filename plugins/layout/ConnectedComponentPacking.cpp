@@ -62,10 +62,10 @@ const char* paramHelp[] = {
 //====================================================================
 ConnectedComponentPacking::ConnectedComponentPacking(const tlp::PluginContext* context)
   : LayoutAlgorithm(context) {
-  addParameter<LayoutProperty> ("coordinates",paramHelp[0],"viewLayout");
+  addInParameter<LayoutProperty> ("coordinates",paramHelp[0],"viewLayout");
   addNodeSizePropertyParameter(this);
-  addParameter<DoubleProperty> ("rotation",paramHelp[1],"viewRotation");
-  addParameter<StringCollection> ("complexity", paramHelp[2], COMPLEXITY );
+  addInParameter<DoubleProperty> ("rotation",paramHelp[1],"viewRotation");
+  addInParameter<StringCollection> ("complexity", paramHelp[2], COMPLEXITY );
 }
 //====================================================================
 bool ConnectedComponentPacking::run() {

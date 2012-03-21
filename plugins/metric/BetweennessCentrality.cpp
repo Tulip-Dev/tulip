@@ -79,8 +79,8 @@ class BetweennessCentrality:public DoubleAlgorithm {
 public:
   PLUGININFORMATIONS("Betweenness Centrality","David Auber","03/01/2005","Alpha","1.2","Graph")
   BetweennessCentrality(const PluginContext* context):DoubleAlgorithm(context) {
-    addParameter<bool>("directed", paramHelp[0], "false");
-    addParameter<bool>("norm", paramHelp[1], "false", false);
+    addInParameter<bool>("directed", paramHelp[0], "false");
+    addInParameter<bool>("norm", paramHelp[1], "false", false);
   }
   bool run() {
     result->setAllNodeValue(0.0);

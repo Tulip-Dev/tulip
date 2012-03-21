@@ -643,17 +643,17 @@ void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
   if(inputData->getElementLayout()==property || inputData->getElementSize()==property || inputData->getElementShape()==property) {
     setHaveToComputeLayout(true);
     clearLayoutData();
-    inputData->getElementLayout()->removePropertyObserver(this);
-    inputData->getElementSize()->removePropertyObserver(this);
-    inputData->getElementShape()->removePropertyObserver(this);
+    inputData->getElementLayout()->removeListener(this);
+    inputData->getElementSize()->removeListener(this);
+    inputData->getElementShape()->removeListener(this);
     layoutObserverActivated=false;
   }
 
   if(edgesModified || inputData->getElementColor()==property || inputData->getElementBorderColor()==property ) {
     setHaveToComputeColor(true);
     clearColorData();
-    inputData->getElementColor()->removePropertyObserver(this);
-    inputData->getElementBorderColor()->removePropertyObserver(this);
+    inputData->getElementColor()->removeListener(this);
+    inputData->getElementBorderColor()->removeListener(this);
     colorObserverActivated=false;
   }
 
@@ -723,15 +723,15 @@ void GlVertexArrayManager::initObservers() {
   }
 
   if(!layoutObserverActivated) {
-    inputData->getElementLayout()->addPropertyObserver(this);
-    inputData->getElementSize()->addPropertyObserver(this);
-    inputData->getElementShape()->addPropertyObserver(this);
+    inputData->getElementLayout()->addListener(this);
+    inputData->getElementSize()->addListener(this);
+    inputData->getElementShape()->addListener(this);
     layoutObserverActivated=true;
   }
 
   if(!colorObserverActivated) {
-    inputData->getElementColor()->addPropertyObserver(this);
-    inputData->getElementBorderColor()->addPropertyObserver(this);
+    inputData->getElementColor()->addListener(this);
+    inputData->getElementBorderColor()->addListener(this);
     colorObserverActivated=true;
   }
 }
@@ -745,23 +745,23 @@ void GlVertexArrayManager::clearObservers(PropertyInterface *deletedProperty) {
 
   if(layoutObserverActivated) {
     if(deletedProperty!=inputData->getElementLayout())
-      inputData->getElementLayout()->removePropertyObserver(this);
+      inputData->getElementLayout()->removeListener(this);
 
     if(deletedProperty!=inputData->getElementSize())
-      inputData->getElementSize()->removePropertyObserver(this);
+      inputData->getElementSize()->removeListener(this);
 
     if(deletedProperty!=inputData->getElementShape())
-      inputData->getElementShape()->removePropertyObserver(this);
+      inputData->getElementShape()->removeListener(this);
 
     layoutObserverActivated=false;
   }
 
   if(colorObserverActivated) {
     if(deletedProperty!=inputData->getElementColor())
-      inputData->getElementColor()->removePropertyObserver(this);
+      inputData->getElementColor()->removeListener(this);
 
     if(deletedProperty!=inputData->getElementBorderColor())
-      inputData->getElementBorderColor()->removePropertyObserver(this);
+      inputData->getElementBorderColor()->removeListener(this);
 
     colorObserverActivated=false;
   }

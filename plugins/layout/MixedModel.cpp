@@ -76,9 +76,9 @@ const char * paramHelp[] = {
 //====================================================
 MixedModel::MixedModel(const tlp::PluginContext* context):LayoutAlgorithm(context)  {
   addNodeSizePropertyParameter(this, true /* inout */);
-  addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
-  addParameter<float> ("y node-node spacing",paramHelp[1],"2");
-  addParameter<float> ("x node-node and edge-node spacing",paramHelp[2],"2");
+  addInParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
+  addInParameter<float> ("y node-node spacing",paramHelp[1],"2");
+  addInParameter<float> ("x node-node and edge-node spacing",paramHelp[2],"2");
   addOutParameter<IntegerProperty>("node shape", paramHelp[3],
                                    "viewShape");
   addDependency<LayoutAlgorithm>("Connected Component Packing", "1.0");

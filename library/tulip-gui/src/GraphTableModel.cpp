@@ -186,10 +186,10 @@ void GraphTableModel::updatePropertyTable() {
     PropertyInterface* property;
     forEach(property,_graph->getObjectProperties()) {
       if(useProperty(property)) {
-        property->removePropertyObserver(this);
+        property->removeListener(this);
         property->removeObserver(this);
         _propertiesTable.push_back(property);
-        property->addPropertyObserver(this);
+        property->addListener(this);
         property->addObserver(this);
       }
     }
@@ -635,7 +635,7 @@ void GraphTableModel::beforeDelLocalProperty(tlp::Graph *graph, const std::strin
     _propertiesToDelete.insert(property);
     removeFromVector<PropertyInterface*>(_propertiesToDelete,_propertiesTable,_propertyToIndex,_orientation==Qt::Horizontal);
     _propertiesToDelete.clear();
-    property->removePropertyObserver(this);
+    property->removeListener(this);
     property->removeObserver(this);
   }
 }
@@ -655,7 +655,7 @@ void GraphTableModel::beforeDelInheritedProperty(Graph *graph, const std::string
     _propertiesToDelete.insert(property);
     removeFromVector<PropertyInterface*>(_propertiesToDelete,_propertiesTable,_propertyToIndex,_orientation==Qt::Horizontal);
     _propertiesToDelete.clear();
-    property->removePropertyObserver(this);
+    property->removeListener(this);
     property->removeObserver(this);
 
   }
@@ -697,7 +697,7 @@ void GraphTableModel::update() {
     addToVector<PropertyInterface*,PropertyComparator>(_propertiesToAdd,_propertiesTable,_propertyToIndex,_orientation==Qt::Horizontal,&comparator);
 
     for(set<PropertyInterface*>::iterator it = _propertiesToAdd.begin() ; it != _propertiesToAdd.end(); ++it) {
-      (*it)->addPropertyObserver(this);
+      (*it)->addListener(this);
       (*it)->addObserver(this);
     }
 

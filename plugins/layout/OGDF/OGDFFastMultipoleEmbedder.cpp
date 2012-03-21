@@ -105,12 +105,12 @@ public:
 
   PLUGININFORMATIONS("Fast Multipole Embedder (OGDF)","Martin Gronemann","12/11/2007","Ok","1.0","Force Directed")
   OGDFFastMultipoleEmbedder(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleEmbedder()) {
-    addParameter<int>("number of iterations", paramHelp[0], "100");
-    addParameter<int>("number of coefficients", paramHelp[1], "5");
-    addParameter<bool>("randomize layout", paramHelp[2], "true");
-    addParameter<double>("default node size", paramHelp[3], "20.0");
-    addParameter<double>("default edge length", paramHelp[3], "40.0");
-    addParameter<int>("number of threads", paramHelp[4], "3");
+    addInParameter<int>("number of iterations", paramHelp[0], "100");
+    addInParameter<int>("number of coefficients", paramHelp[1], "5");
+    addInParameter<bool>("randomize layout", paramHelp[2], "true");
+    addInParameter<double>("default node size", paramHelp[3], "20.0");
+    addInParameter<double>("default edge length", paramHelp[3], "40.0");
+    addInParameter<int>("number of threads", paramHelp[4], "3");
   }
 
   ~OGDFFastMultipoleEmbedder() {}

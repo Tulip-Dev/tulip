@@ -55,7 +55,7 @@ int GraphModel::columnCount(const QModelIndex &parent) const {
   return _properties.size();
 }
 
-QModelIndex GraphModel::parent(const QModelIndex &child) const {
+QModelIndex GraphModel::parent(const QModelIndex &/*child*/) const {
   return QModelIndex();
 }
 

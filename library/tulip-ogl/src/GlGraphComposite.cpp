@@ -37,7 +37,7 @@ using namespace std;
 
 namespace tlp {
 
-GlGraphComposite::GlGraphComposite(Graph* graph, GlGraphRenderer *graphRenderer):nodesModified(true),inputData(graph,&parameters),graphRenderer(graphRenderer) {
+  GlGraphComposite::GlGraphComposite(Graph* graph, GlGraphRenderer *graphRenderer):inputData(graph,&parameters),graphRenderer(graphRenderer),nodesModified(true) {
   if(graphRenderer==NULL) {
     this->graphRenderer=new GlGraphHighDetailsRenderer(&inputData);
   }
@@ -48,7 +48,7 @@ GlGraphComposite::GlGraphComposite(Graph* graph, GlGraphRenderer *graphRenderer)
   else {
     rootGraph=graph->getRoot();
     graph->addListener(this);
-    graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addPropertyObserver(this);
+    graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph")->addListener(this);
 
     Iterator<node>* nodesIterator = graph->getNodes();
 

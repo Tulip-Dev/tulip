@@ -94,7 +94,7 @@ CaptionGraphicsBackgroundItem::CaptionGraphicsBackgroundItem(const QRect &rect):
   setAcceptHoverEvents(true);
 }
 
-void CaptionGraphicsBackgroundItem::generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &propertyName, double minValue, double maxValue) {
+void CaptionGraphicsBackgroundItem::generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &/*propertyName*/, double minValue, double maxValue) {
   _minValue=minValue;
   _maxValue=maxValue;
 
@@ -128,7 +128,7 @@ void CaptionGraphicsBackgroundItem::generateColorCaption(const QGradient &active
   _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_maxTextItem->boundingRect().width()/2.,-22)));
 }
 
-void CaptionGraphicsBackgroundItem::generateSizeCaption(const vector<pair<double,float> > &metricToSizeFilteredList, const string &propertyName, double minValue, double maxValue) {
+  void CaptionGraphicsBackgroundItem::generateSizeCaption(const vector<pair<double,float> > &metricToSizeFilteredList, const string &/*propertyName*/, double minValue, double maxValue) {
   _minValue=minValue;
   _maxValue=maxValue;
 

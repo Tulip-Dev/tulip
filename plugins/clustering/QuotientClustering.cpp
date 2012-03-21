@@ -97,14 +97,14 @@ QuotientClustering::QuotientClustering(PluginContext* context):Algorithm(context
   addDependency<LayoutAlgorithm>("Circular", "1.3");
   addDependency<LayoutAlgorithm>("GEM (Frick)", "1.3");
   addDependency<SizeAlgorithm>("Auto Sizing", "1.3");
-  addParameter<bool>("oriented", paramHelp[0], "true");
-  addParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS);
-  addParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS);
-  addParameter<StringProperty>("meta-node label", paramHelp[4], "", false);
-  addParameter<bool>("use name of subgraph", paramHelp[5], "false");
-  addParameter<bool>("recursive", paramHelp[1], "false");
-  addParameter<bool>("layout quotient graph(s)", paramHelp[7], "false");
-  addParameter<bool>("edge cardinality", paramHelp[6], "false");
+  addInParameter<bool>("oriented", paramHelp[0], "true");
+  addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS);
+  addInParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS);
+  addInParameter<StringProperty>("meta-node label", paramHelp[4], "", false);
+  addInParameter<bool>("use name of subgraph", paramHelp[5], "false");
+  addInParameter<bool>("recursive", paramHelp[1], "false");
+  addInParameter<bool>("layout quotient graph(s)", paramHelp[7], "false");
+  addInParameter<bool>("edge cardinality", paramHelp[6], "false");
 }
 //================================================================================
 QuotientClustering::~QuotientClustering() {}

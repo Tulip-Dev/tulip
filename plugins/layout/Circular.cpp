@@ -37,7 +37,7 @@ const char * paramHelp[] = {
 
 Circular::Circular(const tlp::PluginContext* context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
-  addParameter<bool>("search cycle", paramHelp[0], "false");
+  addInParameter<bool>("search cycle", paramHelp[0], "false");
 }
 
 namespace {

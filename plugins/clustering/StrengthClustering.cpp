@@ -346,9 +346,9 @@ const char * paramHelp[] = {
 
 //================================================================================
 StrengthClustering::StrengthClustering(PluginContext* context):DoubleAlgorithm(context) {
-  addParameter<DoubleProperty>("metric", paramHelp[0], "", false);
-//  addParameter<bool>("layout subgraphs", paramHelp[1], "true");
-//  addParameter<bool>("layout quotient graph", paramHelp[2], "true");
+  addInParameter<DoubleProperty>("metric", paramHelp[0], "", false);
+//  addInParameter<bool>("layout subgraphs", paramHelp[1], "true");
+//  addInParameter<bool>("layout quotient graph", paramHelp[2], "true");
 //  addDependency<Algorithm>("Quotient Clustering", "1.3");
 //  addDependency<DoubleAlgorithm>("Connected Component", "1.0");
   addDependency<DoubleAlgorithm>("Strength", "2.0");

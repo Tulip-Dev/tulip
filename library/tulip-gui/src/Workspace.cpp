@@ -81,7 +81,7 @@ QModelIndex Workspace::PanelsStorage::index(int row, int column,const QModelInde
 
   return createIndex(row,column);
 }
-QModelIndex Workspace::PanelsStorage::parent(const QModelIndex &child) const {
+QModelIndex Workspace::PanelsStorage::parent(const QModelIndex &/*child*/) const {
   return QModelIndex();
 }
 int Workspace::PanelsStorage::rowCount(const QModelIndex &parent) const {

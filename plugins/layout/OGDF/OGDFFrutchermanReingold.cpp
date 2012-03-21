@@ -143,16 +143,16 @@ PLUGIN(OGDFFrutchermanReingold)
 
 OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PluginContext* context) :
   OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderFRExact()) {
-  addParameter<int>("iterations", paramHelp[0], "1000");
-  addParameter<bool>("noise", paramHelp[1], "true");
-  addParameter<bool>("use node weights", paramHelp[2], "false");
-  addParameter<DoubleProperty>("node weights", paramHelp[3], "viewMetric");
-  addParameter<StringCollection>(ELT_COOLING, paramHelp[4], ELT_COOLINGLIST);
-  addParameter<double>("ideal edge length", paramHelp[5], "10.0");
-  addParameter<double>("minDistCC", paramHelp[6], "20.0");
-  addParameter<double>("pageRatio", paramHelp[7], "1.0");
-  addParameter<bool>("check convergence", paramHelp[8], "true");
-  addParameter<double>("convergence tolerance", paramHelp[9], "0.01");
+  addInParameter<int>("iterations", paramHelp[0], "1000");
+  addInParameter<bool>("noise", paramHelp[1], "true");
+  addInParameter<bool>("use node weights", paramHelp[2], "false");
+  addInParameter<DoubleProperty>("node weights", paramHelp[3], "viewMetric");
+  addInParameter<StringCollection>(ELT_COOLING, paramHelp[4], ELT_COOLINGLIST);
+  addInParameter<double>("ideal edge length", paramHelp[5], "10.0");
+  addInParameter<double>("minDistCC", paramHelp[6], "20.0");
+  addInParameter<double>("pageRatio", paramHelp[7], "1.0");
+  addInParameter<bool>("check convergence", paramHelp[8], "true");
+  addInParameter<double>("convergence tolerance", paramHelp[9], "0.01");
 }
 
 OGDFFrutchermanReingold::~OGDFFrutchermanReingold() {}
