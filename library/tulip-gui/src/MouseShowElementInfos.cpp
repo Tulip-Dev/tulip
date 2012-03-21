@@ -18,6 +18,8 @@
  */
 #include "tulip/MouseShowElementInfos.h"
 
+#include "ui_ElementInformationsWidget.h"
+
 #include <QtCore/QPropertyAnimation>
 #include <QtGui/QGraphicsView>
 #include <QtGui/QHeaderView>
@@ -31,26 +33,33 @@ using namespace std;
 using namespace tlp;
 
 MouseShowElementInfos::MouseShowElementInfos() {
-  _informationsWidget=new QTableView();
-  _informationsWidget->setModel(NULL);
+  Ui::ElementInformationsWidget* ui = new Ui::ElementInformationsWidget;
+  _informationsWidget=new QWidget();
+  _informationsWidget->installEventFilter(this);
+  ui->setupUi(_informationsWidget);
+  tableView()->setItemDelegate(new TulipItemDelegate);
   _informationsWidgetItem=new QGraphicsProxyWidget();
   _informationsWidgetItem->setWidget(_informationsWidget);
   _informationsWidgetItem->setVisible(false);
-  _informationsWidgetItem->setMinimumSize(QSizeF(0,0));
-  _informationsWidgetItem->setPreferredWidth(300);
 }
 
 void MouseShowElementInfos::clear() {
   _informationsWidgetItem->setVisible(false);
 }
 
+QTableView* MouseShowElementInfos::tableView() const {
+  return _informationsWidget->findChild<QTableView*>();
+}
+
 bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
-  QMouseEvent * qMouseEv = (QMouseEvent *) e;
+  if (widget == _informationsWidget && (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress))
+    return true;
 
+  QMouseEvent * qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
-  GlMainWidget *glMainWidget = (GlMainWidget *) widget;
 
   if(qMouseEv != NULL) {
+
     if (e->type() == QEvent::MouseButtonPress) {
       if (qMouseEv->button() == Qt::LeftButton) {
         if(_informationsWidgetItem->isVisible()) {
@@ -67,17 +76,17 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
                 selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
               _informationsWidgetItem->setVisible(true);
 
-              if(_informationsWidget->model()!=NULL)
-                delete _informationsWidget->model();
+              QLabel* title = _informationsWidget->findChild<QLabel*>();
+              if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
+                title->setText(trUtf8("Node"));
+                tableView()->setModel(new GraphNodeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
+              }
+              else {
+                title->setText(trUtf8("Edge"));
+                tableView()->setModel(new GraphEdgeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
+              }
+              title->setText(title->text() + " #" + QString::number(selectedEntity.getComplexEntityId()));
 
-              if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)
-                _informationsWidget->setModel(new GraphNodeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
-              else
-                _informationsWidget->setModel(new GraphEdgeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
-
-              _informationsWidget->setItemDelegate(new TulipItemDelegate);
-              _informationsWidget->resizeColumnsToContents();
-              _informationsWidgetItem->adjustSize();
               QPoint position=qMouseEv->pos();
 
               if(position.x()+_informationsWidgetItem->rect().width()>_view->graphicsView()->sceneRect().width())
@@ -87,7 +96,6 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
                 position.setY(qMouseEv->pos().y()-_informationsWidgetItem->rect().height());
 
               _informationsWidgetItem->setPos(position);
-              _informationsWidget->setColumnWidth(0,125);
               QPropertyAnimation *animation = new QPropertyAnimation(_informationsWidgetItem, "opacity");
               animation->setDuration(100);
               animation->setStartValue(0.);

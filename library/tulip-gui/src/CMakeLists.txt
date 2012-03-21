@@ -128,6 +128,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/VectorEditionWidget.ui
   ../designer/TulipFontWidget.ui
   ../designer/GridOptionsWidget.ui
+  ../designer/ElementInformationsWidget.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
