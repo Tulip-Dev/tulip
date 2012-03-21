@@ -33,6 +33,7 @@
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
+#include "GraphPerspectiveLogger.h"
 #include "ImportWizard.h"
 #include "PanelSelectionWizard.h"
 #include "GraphHierarchiesEditor.h"
@@ -48,15 +49,11 @@ using namespace tlp;
 
 QSet<QString> GraphPerspective::RESERVED_PROPERTIES = QSet<QString>();
 
-GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)) {
+GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)), _logger(NULL) {
 #ifndef NDEBUG
   new ModelTest(_graphs,this);
 #endif /* NDEBUG */
   Q_INIT_RESOURCE(GraphPerspective);
-}
-
-void prout(QtMsgType type, const char* msg) {
-  std::cout << "prout " << msg << std::endl;
 }
 
 void GraphPerspective::registerReservedProperty(QString s) {
@@ -66,11 +63,6 @@ bool GraphPerspective::isReservedPropertyName(QString s) {
   return RESERVED_PROPERTIES.contains(s);
 }
 void GraphPerspective::reserveDefaultProperties() {
-  qInstallMsgHandler(prout);
-
-  qWarning() << "meuh";
-  qWarning() << "gna";
-
   registerReservedProperty("viewColor");
   registerReservedProperty("viewLabelColor");
   registerReservedProperty("viewSize");
@@ -92,10 +84,40 @@ void GraphPerspective::reserveDefaultProperties() {
   registerReservedProperty("viewAnimationFrame");
 }
 
+void graphPerspectiveLogger(QtMsgType type, const char* msg) {
+  static_cast<GraphPerspective*>(Perspective::instance())->log(type,msg);
+}
+void GraphPerspective::log(QtMsgType type, const char* msg) {
+  _ui->loggerFrame->setVisible(true);
+  _logger->log(type,msg);
+  _ui->loggerIcon->setPixmap(_logger->icon());
+  _ui->loggerMessage->setText(QString::number(_logger->count()));
+}
+
+GraphPerspective::~GraphPerspective() {
+  qInstallMsgHandler(0);
+}
+
+void GraphPerspective::logCleared() {
+  _ui->loggerFrame->setVisible(false);
+}
+
+bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
+  if (obj == _ui->loggerFrame && ev->type() == QEvent::MouseButtonPress)
+    _logger->show();
+  return false;
+}
+
 void GraphPerspective::construct(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
+  _ui->loggerFrame->setVisible(false);
+  _logger = new GraphPerspectiveLogger();
+  _ui->loggerFrame->installEventFilter(this);
+  connect(_logger,SIGNAL(cleared()),this,SLOT(logCleared()));
+
+  qInstallMsgHandler(graphPerspectiveLogger);
   _mainWindow->installEventFilter(new ShadowFilter(this));
   connect(_ui->workspace,SIGNAL(addPanelRequest(tlp::Graph*)),this,SLOT(createPanel(tlp::Graph*)));
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));

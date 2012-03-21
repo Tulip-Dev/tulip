@@ -26,5 +26,9 @@
         <file>icons/48/document-import.png</file>
         <file>icons/32/table.png</file>
         <file>icons/22/edit-find.png</file>
+        <file>icons/16/logger-info.png</file>
+        <file>icons/16/logger-danger.png</file>
+        <file>icons/16/logger-error.png</file>
+        <file>icons/16/edit-clear.png</file>
     </qresource>
 </RCC>

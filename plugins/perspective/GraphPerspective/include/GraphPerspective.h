@@ -28,6 +28,7 @@ class QAction;
 class QHeaderView;
 
 class GraphHierarchiesEditor;
+class GraphPerspectiveLogger;
 
 namespace tlp {
 class GraphHierarchiesModel;
@@ -57,8 +58,11 @@ public:
   }
 
   GraphPerspective(const tlp::PluginContext* c);
+  virtual ~GraphPerspective();
   virtual void construct(tlp::PluginProgress *);
   tlp::GraphHierarchiesModel* model() const;
+
+  GraphPerspectiveLogger* _logger;
 
 public slots:
   void showFullScreen(bool);
@@ -68,6 +72,8 @@ public slots:
   void saveAs(const QString& path=QString::null);
   void open(const QString& path=QString::null);
   void centerPanels(tlp::PropertyInterface*);
+
+  void log(QtMsgType,const char*);
 
 protected slots:
   void currentGraphChanged(tlp::Graph* graph);
@@ -97,6 +103,11 @@ protected slots:
   void datasetHeaderHideAll();
   void datasetHeaderSetAllVisible(QHeaderView*,bool);
   void setDatasetSelectedOnly(bool);
+
+  void logCleared();
+
+protected:
+  bool eventFilter(QObject *, QEvent *);
 };
 
 #endif // GRAPHPERSPECTIVE_H
