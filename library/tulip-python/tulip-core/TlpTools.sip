@@ -125,7 +125,7 @@ Returns a dataset filled with default parameters (if any) for a given plugin (al
 
 :param pluginName: the name of the plugin on which to retrieve its default parameters
 :type pluginName: string
-:param graph: if provided, property parameters will be retrieved from the graph if they exists
+:param graph: if provided, property parameters will be retrieved from the graph if they exist
 :type graph: :class:`tlp.Graph`
 :rtype: :class:`tlp.DataSet`
 %End
@@ -178,7 +178,7 @@ tlp.getImportPluginsList()
 
 Return a list containing the names of the import plugins (written in C++ or Python) loaded so far.
 Import plugins are objects implementing the tlp::ImportModule interface 
-in C++ or the :class:`tlp.PythonImportModule` interface in Python.
+in C++ or the :class:`tlp.ImportModule` interface in Python.
 
 :rtype: list of string
 %End
@@ -195,7 +195,7 @@ tlp.getExportPluginsList()
 
 Return a list containing the names of the export plugins (written in C++ or Python) loaded so far.
 Export plugins are objects implementing the tlp::ExportModule interface 
-in C++ or the :class:`tlp.PythonExportModule` interface in Python.
+in C++ or the :class:`tlp.ExportModule` interface in Python.
 
 :rtype: list of string
 %End
