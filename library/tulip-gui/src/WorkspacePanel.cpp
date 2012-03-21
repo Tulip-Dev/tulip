@@ -210,6 +210,7 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
                                        + "}");
 
   foreach(QWidget* w, _view->configurationWidgets()) {
+    w->installEventFilter(this);
     w->resize(w->width(),w->sizeHint().height());
     viewConfigurationTabs->addTab(w,w->windowTitle());
   }
@@ -386,6 +387,8 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
       bool expand = _viewConfigurationWidgets->sceneBoundingRect().contains(mouseEv->scenePos());
       setConfigurationTabExpanded(expand);
     }
+    else if (_view->configurationWidgets().contains(dynamic_cast<QWidget*>(obj)))
+      return true;
   }
 
   return QWidget::eventFilter(obj,ev);
