@@ -35,6 +35,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/Algorithm.h>
+#include <tulip/ForEach.h>
 #include <fstream>
 namespace tlp {
 typedef tlp::Iterator<std::string> IteratorString;
@@ -42,6 +43,28 @@ typedef tlp::Graph* GraphPointer;
 typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
 };
 typedef std::pair<tlp::node, tlp::node> std_pair_0100tlp_node_0100tlp_node;
+
+extern void releaseGraphWrapper(tlp::Graph *graph);
+extern void releaseGraphHierarchyWrappers(tlp::Graph *graph);
+%End
+
+%ModuleCode
+void releaseGraphWrapper(tlp::Graph *graph) {
+    PyObject *pyGraph = sipGetPyObject(graph, sipType_tlp_Graph);
+    if (pyGraph) {
+        sipTransferTo(pyGraph, pyGraph);
+        sipSimpleWrapper *wrapper = reinterpret_cast<sipSimpleWrapper *>(pyGraph);
+        wrapper->data = NULL;
+    }
+}
+
+void releaseGraphHierarchyWrappers(tlp::Graph *graph) {
+    tlp::Graph *sg = NULL;
+    forEach(sg, graph->getSubGraphs()) {
+        releaseGraphHierarchyWrappers(sg);
+    }
+    releaseGraphWrapper(graph);
+}
 %End
 
 typedef std::pair<tlp::node, tlp::node> std_pair_0100tlp_node_0100tlp_node;
@@ -172,7 +195,7 @@ between two nodes of the set including self-loops.
 
 //===========================================================================================
 
-	void delSubGraph(tlp::Graph *subgraph);
+    void delSubGraph(tlp::Graph *subgraph);
 %Docstring
 tlp.Graph.delSubGraph(subgraph)
 
@@ -182,9 +205,21 @@ Delete a sub-graph of this graph. The sub-graph's sub-graphs become sub-graphs o
 :type subgraph: :class:`tlp.Graph`
 %End
 
+%MethodCode
+      // the sub-graph will be deleted after the call to tlp::Graph::delSubGraph(tlp::Graph *)
+      // we need to release the SIP wrapper associated to the C++ pointer otherwise the following
+      // Python code raises a segmentation fault :
+      // sg = graph.addSubGraph()
+      // graph.delSubGraph(sg)
+      // print sg # or any operation on sg
+      // An execption is now thrown claiming that the underlying C++ object has been deleted
+      releaseGraphWrapper(a0);
+      sipCpp->delSubGraph(a0);
+%End
+
 //===========================================================================================
 
-	void delAllSubGraphs(tlp::Graph *subgraph);
+    void delAllSubGraphs(tlp::Graph *subgraph);
 %Docstring
 tlp.Graph.delAllSubGraphs(subgraph)
 
@@ -192,6 +227,19 @@ Delete a sub-graph of this graph and all its sub-graphs.
 
 :param subgraph: the sub-graph to remove
 :type subgraph: :class:`tlp.Graph` 
+%End
+
+%MethodCode
+      // the sub-graphs will be deleted after the call to tlp::Graph::delAllSubGraphs(tlp::Graph *)
+      // we need to release the possible SIP wrappers associated to the C++ pointers otherwise the following
+      // Python code raises a segmentation fault :
+      // sg = graph.addSubGraph()
+      // sg2 = sg.addSubGraph()
+      // graph.delAllSubGraphs(sg2)
+      // print sg2 # or any operation on sg2
+      // An execption is now thrown claiming that the underlying C++ object has been deleted
+      releaseGraphHierarchyWrappers(a0);
+      sipCpp->delAllSubGraphs(a0);
 %End
 
 //===========================================================================================
