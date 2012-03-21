@@ -127,5 +127,6 @@ void MouseShowElementInfos::viewChanged(View * view) {
   ViewWidget *viewWidget=dynamic_cast<ViewWidget*>(view);
   assert(viewWidget);
   _view=viewWidget;
+  connect(_view,SIGNAL(graphSet(tlp::Graph*)),_informationsWidgetItem,SLOT(close()));
   _view->graphicsView()->scene()->addItem(_informationsWidgetItem);
 }
