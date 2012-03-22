@@ -54,7 +54,11 @@ void releaseGraphWrapper(tlp::Graph *graph) {
     if (pyGraph) {
         sipTransferTo(pyGraph, pyGraph);
         sipSimpleWrapper *wrapper = reinterpret_cast<sipSimpleWrapper *>(pyGraph);
+#if SIP_VERSION < 0x040b00
+	wrapper->u.cppPtr = NULL;
+#else	
         wrapper->data = NULL;
+#endif	
     }
 }
 
