@@ -1285,8 +1285,13 @@ void PythonCodeEditor::commentSelectedCode() {
     }
 
     setSelection(lineFrom, 0, lineTo, lineLength(lineTo));
+  } else {
+      QTextCursor currentCursor = textCursor();
+      insertAt("#", currentCursor.blockNumber(), 0);
+      setTextCursor(currentCursor);
   }
 }
+
 void PythonCodeEditor::uncommentSelectedCode() {
   if (hasSelectedText()) {
     int lineFrom = 0;
@@ -1314,6 +1319,24 @@ void PythonCodeEditor::uncommentSelectedCode() {
     }
 
     setSelection(lineFrom, 0, lineTo, lineLength(lineTo));
+  } else {
+      QTextCursor currentCursor = textCursor();
+      QString lineTxt = currentCursor.block().text();
+
+      for (int j = 0 ; j < lineTxt.length() ; ++j) {
+        if (lineTxt[j].isSpace()) {
+          continue;
+        }
+        else {
+          setSelection(currentCursor.blockNumber(), j, currentCursor.blockNumber(), j+1);
+          break;
+        }
+      }
+
+      if (selectedText() == "#") {
+        removeSelectedText();
+      }
+      setTextCursor(currentCursor);
   }
 }
 
