@@ -1285,10 +1285,11 @@ void PythonCodeEditor::commentSelectedCode() {
     }
 
     setSelection(lineFrom, 0, lineTo, lineLength(lineTo));
-  } else {
-      QTextCursor currentCursor = textCursor();
-      insertAt("#", currentCursor.blockNumber(), 0);
-      setTextCursor(currentCursor);
+  }
+  else {
+    QTextCursor currentCursor = textCursor();
+    insertAt("#", currentCursor.blockNumber(), 0);
+    setTextCursor(currentCursor);
   }
 }
 
@@ -1319,24 +1320,26 @@ void PythonCodeEditor::uncommentSelectedCode() {
     }
 
     setSelection(lineFrom, 0, lineTo, lineLength(lineTo));
-  } else {
-      QTextCursor currentCursor = textCursor();
-      QString lineTxt = currentCursor.block().text();
+  }
+  else {
+    QTextCursor currentCursor = textCursor();
+    QString lineTxt = currentCursor.block().text();
 
-      for (int j = 0 ; j < lineTxt.length() ; ++j) {
-        if (lineTxt[j].isSpace()) {
-          continue;
-        }
-        else {
-          setSelection(currentCursor.blockNumber(), j, currentCursor.blockNumber(), j+1);
-          break;
-        }
+    for (int j = 0 ; j < lineTxt.length() ; ++j) {
+      if (lineTxt[j].isSpace()) {
+        continue;
       }
+      else {
+        setSelection(currentCursor.blockNumber(), j, currentCursor.blockNumber(), j+1);
+        break;
+      }
+    }
 
-      if (selectedText() == "#") {
-        removeSelectedText();
-      }
-      setTextCursor(currentCursor);
+    if (selectedText() == "#") {
+      removeSelectedText();
+    }
+
+    setTextCursor(currentCursor);
   }
 }
 
@@ -1353,10 +1356,11 @@ void PythonCodeEditor::indentSelectedCode() {
     }
 
     setSelection(lineFrom, 0, lineTo, lineLength(lineTo));
-  } else {
-      QTextCursor currentCursor = textCursor();
-      insertAt("\t", currentCursor.blockNumber(), 0);
-      setTextCursor(currentCursor);
+  }
+  else {
+    QTextCursor currentCursor = textCursor();
+    insertAt("\t", currentCursor.blockNumber(), 0);
+    setTextCursor(currentCursor);
   }
 }
 void PythonCodeEditor::unindentSelectedCode() {
@@ -1379,15 +1383,17 @@ void PythonCodeEditor::unindentSelectedCode() {
     }
 
     setSelection(lineFrom, 0, lineTo, lineLength(lineTo));
-  } else {
-      QTextCursor currentCursor = textCursor();
+  }
+  else {
+    QTextCursor currentCursor = textCursor();
 
-      setSelection(currentCursor.blockNumber(), 0, currentCursor.blockNumber(), 1);
+    setSelection(currentCursor.blockNumber(), 0, currentCursor.blockNumber(), 1);
 
-      if (selectedText() == "\t") {
-        removeSelectedText();
-      }
-      setTextCursor(currentCursor);
+    if (selectedText() == "\t") {
+      removeSelectedText();
+    }
+
+    setTextCursor(currentCursor);
   }
 }
 

@@ -54,7 +54,7 @@ void CaptionGraphicsItem::generateSizeCaption(const vector< pair <double,float> 
 
 void CaptionGraphicsItem::constructConfigWidget() {
 
-  if(_view->graph()==NULL){
+  if(_view->graph()==NULL) {
     _confPropertySelectionWidget->clear();
     return;
   }
