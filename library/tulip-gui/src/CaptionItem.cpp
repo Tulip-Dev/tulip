@@ -67,11 +67,27 @@ void CaptionItem::initCaption() {
 }
 
 void CaptionItem::clearObservers() {
+
+  if(_graph!=view->graph())
+    if(_graph)
+      _graph->removeGraphObserver(this);
+  _graph=view->graph();
+
+  if(_graph==NULL){
+    _metricProperty=NULL;
+    _colorProperty=NULL;
+    _sizeProperty=NULL;
+    return;
+  }
+
   if(_metricProperty)
     _metricProperty->removeListener(this);
-
-  _metricProperty=view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty());
+  if(_captionGraphicsItem->usedProperty()!=""){
+    _metricProperty=view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty());
   _metricProperty->addListener(this);
+  }else{
+    _metricProperty=NULL;
+  }
 
   if(_captionType==ColorCaption) {
     if(_colorProperty)
@@ -91,11 +107,8 @@ void CaptionItem::clearObservers() {
     _colorProperty->addListener(this);
   }
 
-  if(_graph!=view->graph()) {
-    if(_graph)
+  if(_graph) {
       _graph->removeListener(this);
-
-    _graph=view->graph();
     _graph->addListener(this);
   }
 }
@@ -103,6 +116,17 @@ void CaptionItem::clearObservers() {
 void CaptionItem::generateColorCaption() {
 
   clearObservers();
+
+  if(_metricProperty==NULL){
+    vector<pair <double,Color> > metricToColorFiltered;
+    metricToColorFiltered.push_back(pair<double,Color>(0.,Color(255,255,255,255)));
+    metricToColorFiltered.push_back(pair<double,Color>(1.,Color(255,255,255,255)));
+    QLinearGradient activeGradient(QPointF(0,0),QPointF(0,160.));
+    QLinearGradient hideGradient(QPointF(0,0),QPointF(0,160.));
+    generateGradients(metricToColorFiltered,activeGradient,hideGradient);
+    _captionGraphicsItem->generateColorCaption(activeGradient,hideGradient,"empty",0.,1.);
+    return;
+  }
 
   map<double,Color> metricToColorMap;
   vector<pair <double,Color> > metricToColorFiltered;
@@ -138,6 +162,14 @@ void CaptionItem::generateColorCaption() {
 void CaptionItem::generateSizeCaption() {
 
   clearObservers();
+
+  if(!_metricProperty){
+    vector<pair <double,float> > metricToSizeFiltered;
+    metricToSizeFiltered.push_back(pair<double,float>(0.,1.));
+    metricToSizeFiltered.push_back(pair<double,float>(1.,1.));
+    _captionGraphicsItem->generateSizeCaption(metricToSizeFiltered,"empty",0.,1.);
+    return;
+  }
 
   double minProp=_metricProperty->getNodeMin();
   double maxProp=_metricProperty->getNodeMax();
@@ -206,7 +238,8 @@ void CaptionItem::removeObservation(bool remove) {
   }
   else {
     _graph->removeListener(this);
-    _metricProperty->removeListener(this);
+    if(_metricProperty)
+      _metricProperty->removeListener(this);
 
     if(_captionType==ColorCaption) {
       _colorProperty->removeListener(this);
@@ -218,6 +251,9 @@ void CaptionItem::removeObservation(bool remove) {
 }
 
 void CaptionItem::applyNewFilter(float begin, float end) {
+  if(_metricProperty==NULL)
+    return;
+
   emit filtering(true);
   _graph->removeListener(this);
   _metricProperty->removeListener(this);
@@ -283,12 +319,21 @@ void CaptionItem::applyNewFilter(float begin, float end) {
 }
 
 void CaptionItem::treatEvent(const Event &ev) {
+
+  if(typeid(ev) == typeid(Event)){
+    if(ev.type()==Event::TLP_DELETE){
+      create(_captionType);
+    }
+  }
+
   if(typeid(ev) == typeid(PropertyEvent)) {
     if(_captionType==ColorCaption)
       generateColorCaption();
     else
       generateSizeCaption();
   }
+
+
 
   if(typeid(ev) == typeid(GraphEvent)) {
     create(_captionType);
