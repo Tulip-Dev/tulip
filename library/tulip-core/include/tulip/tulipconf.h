@@ -25,11 +25,6 @@
  *
  */
 
-QDebug operator<<(QDebug,const std::string&);/* {
-  dbg.nospace() << s.c_str();
-  return dbg.space();
-}*/
-
 #define STRINGIFY(PARAM) STRINGIFY_INTERNAL(PARAM)
 #define STRINGIFY_INTERNAL(PARAM) #PARAM
 
@@ -170,5 +165,7 @@ static double round(double d) {
 #ifndef TLP3_COMPAT_SCOPE
 #  define TLP3_COMPAT_SCOPE
 #endif
+
+QDebug TLP_SCOPE operator<<(QDebug,const std::string&);
 
 #endif //TULIPCONF_H
