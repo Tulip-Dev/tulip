@@ -399,9 +399,16 @@ public :
 
         diagonal_found = true;
 
-        if (!skipEqualSign(str, pos) ||
-            !nextToken(str, " \r\t,", token, pos)
+        if (!nextToken(str, " \r\t,", token, pos)
             || token.empty()) {
+          error << "invalid specification for parameter DIAGONAL";
+          return false;
+        }
+
+	// specification says that DIAGONAL = PRESENT|ABSENT
+	// but = may not exist
+	if ((token == "=") && (!nextToken(str, " \r\t,", token, pos)
+			       || token.empty())) {
           error << "invalid specification for parameter DIAGONAL";
           return false;
         }

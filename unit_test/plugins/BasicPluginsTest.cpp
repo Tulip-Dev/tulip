@@ -204,6 +204,7 @@ void BasicPluginsTest::testImportUCINET() {
     "data/dl_fm_test2.txt",
     "data/dl_fm_test3.txt",
     "data/dl_fm_test_labels_no_diag.txt",
+    "data/dl_fm_test2_labels_no_diag.txt",
     "data/dl_fm_test_labels.txt",
     "data/dl_fm_test_multi_matrices.txt",
     "data/dl_fm_test_rect_labels_embedded.txt",
