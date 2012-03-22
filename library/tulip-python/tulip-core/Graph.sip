@@ -53,7 +53,7 @@ void releaseGraphWrapper(tlp::Graph *graph) {
     if (pyGraph) {
         sipTransferTo(pyGraph, pyGraph);
         sipSimpleWrapper *wrapper = reinterpret_cast<sipSimpleWrapper *>(pyGraph);
-        wrapper->data = NULL;
+        sipCommonDtor(wrapper);
     }
 }
 
