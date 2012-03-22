@@ -54,6 +54,11 @@ void CaptionGraphicsItem::generateSizeCaption(const vector< pair <double,float> 
 
 void CaptionGraphicsItem::constructConfigWidget() {
 
+  if(_view->graph()==NULL){
+    _confPropertySelectionWidget->clear();
+    return;
+  }
+
   disconnect(_confPropertySelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedPropertyChangedSlot(const QString &)));
   QString selectedItem=_confPropertySelectionWidget->currentText();
   int index=-1;
@@ -68,8 +73,8 @@ void CaptionGraphicsItem::constructConfigWidget() {
       if(property->getName().c_str() == selectedItem)
         index=properties.size();
 
-      if(((DoubleProperty*)property)->getNodeMin()==((DoubleProperty*)property)->getNodeMax())
-        continue;
+      /*if(((DoubleProperty*)property)->getNodeMin()==((DoubleProperty*)property)->getNodeMax())
+        continue;*/
 
       properties << property->getName().c_str() ;
     }
