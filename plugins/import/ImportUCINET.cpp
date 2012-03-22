@@ -405,10 +405,10 @@ public :
           return false;
         }
 
-	// specification says that DIAGONAL = PRESENT|ABSENT
-	// but = may not exist
-	if ((token == "=") && (!nextToken(str, " \r\t,", token, pos)
-			       || token.empty())) {
+        // specification says that DIAGONAL = PRESENT|ABSENT
+        // but = may not exist
+        if ((token == "=") && (!nextToken(str, " \r\t,", token, pos)
+                               || token.empty())) {
           error << "invalid specification for parameter DIAGONAL";
           return false;
         }
