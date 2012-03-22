@@ -1353,6 +1353,10 @@ void PythonCodeEditor::indentSelectedCode() {
     }
 
     setSelection(lineFrom, 0, lineTo, lineLength(lineTo));
+  } else {
+      QTextCursor currentCursor = textCursor();
+      insertAt("\t", currentCursor.blockNumber(), 0);
+      setTextCursor(currentCursor);
   }
 }
 void PythonCodeEditor::unindentSelectedCode() {
@@ -1375,6 +1379,15 @@ void PythonCodeEditor::unindentSelectedCode() {
     }
 
     setSelection(lineFrom, 0, lineTo, lineLength(lineTo));
+  } else {
+      QTextCursor currentCursor = textCursor();
+
+      setSelection(currentCursor.blockNumber(), 0, currentCursor.blockNumber(), 1);
+
+      if (selectedText() == "\t") {
+        removeSelectedText();
+      }
+      setTextCursor(currentCursor);
   }
 }
 
