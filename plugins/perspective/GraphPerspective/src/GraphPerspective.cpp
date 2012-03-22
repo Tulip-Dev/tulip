@@ -445,10 +445,13 @@ void GraphPerspective::createSubGraph() {
   forEach(e,selection->getEdgesEqualTo(true)) {
     node src = graph->source(e);
     node tgt = graph->target(e);
+
     if (!selection->getNodeValue(src))
       qDebug() << "[Create subgraph] Source n" << src.id << " of e" << e.id << " automatically added to selection.";
+
     if (!selection->getNodeValue(tgt))
       qDebug() << "[Create subgraph] Target n" << tgt.id << " of e" << e.id << " automatically added to selection.";
+
     selection->setNodeValue(src,true);
     selection->setNodeValue(tgt,true);
   }

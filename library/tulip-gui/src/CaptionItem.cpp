@@ -71,9 +71,10 @@ void CaptionItem::clearObservers() {
   if(_graph!=view->graph())
     if(_graph)
       _graph->removeGraphObserver(this);
+
   _graph=view->graph();
 
-  if(_graph==NULL){
+  if(_graph==NULL) {
     _metricProperty=NULL;
     _colorProperty=NULL;
     _sizeProperty=NULL;
@@ -82,10 +83,12 @@ void CaptionItem::clearObservers() {
 
   if(_metricProperty)
     _metricProperty->removeListener(this);
-  if(_captionGraphicsItem->usedProperty()!=""){
+
+  if(_captionGraphicsItem->usedProperty()!="") {
     _metricProperty=view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty());
-  _metricProperty->addListener(this);
-  }else{
+    _metricProperty->addListener(this);
+  }
+  else {
     _metricProperty=NULL;
   }
 
@@ -108,7 +111,7 @@ void CaptionItem::clearObservers() {
   }
 
   if(_graph) {
-      _graph->removeListener(this);
+    _graph->removeListener(this);
     _graph->addListener(this);
   }
 }
@@ -117,7 +120,7 @@ void CaptionItem::generateColorCaption() {
 
   clearObservers();
 
-  if(_metricProperty==NULL){
+  if(_metricProperty==NULL) {
     vector<pair <double,Color> > metricToColorFiltered;
     metricToColorFiltered.push_back(pair<double,Color>(0.,Color(255,255,255,255)));
     metricToColorFiltered.push_back(pair<double,Color>(1.,Color(255,255,255,255)));
@@ -163,7 +166,7 @@ void CaptionItem::generateSizeCaption() {
 
   clearObservers();
 
-  if(!_metricProperty){
+  if(!_metricProperty) {
     vector<pair <double,float> > metricToSizeFiltered;
     metricToSizeFiltered.push_back(pair<double,float>(0.,1.));
     metricToSizeFiltered.push_back(pair<double,float>(1.,1.));
@@ -238,6 +241,7 @@ void CaptionItem::removeObservation(bool remove) {
   }
   else {
     _graph->removeListener(this);
+
     if(_metricProperty)
       _metricProperty->removeListener(this);
 
@@ -320,8 +324,8 @@ void CaptionItem::applyNewFilter(float begin, float end) {
 
 void CaptionItem::treatEvent(const Event &ev) {
 
-  if(typeid(ev) == typeid(Event)){
-    if(ev.type()==Event::TLP_DELETE){
+  if(typeid(ev) == typeid(Event)) {
+    if(ev.type()==Event::TLP_DELETE) {
       create(_captionType);
     }
   }

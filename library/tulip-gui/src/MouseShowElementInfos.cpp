@@ -77,6 +77,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
               _informationsWidgetItem->setVisible(true);
 
               QLabel* title = _informationsWidget->findChild<QLabel*>();
+
               if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
                 title->setText(trUtf8("Node"));
                 tableView()->setModel(new GraphNodeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
@@ -85,6 +86,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
                 title->setText(trUtf8("Edge"));
                 tableView()->setModel(new GraphEdgeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
               }
+
               title->setText(title->text() + " #" + QString::number(selectedEntity.getComplexEntityId()));
 
               QPoint position=qMouseEv->pos();
