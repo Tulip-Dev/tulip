@@ -30,13 +30,13 @@ CPPUNIT_TEST_SUITE_REGISTRATION( MatrixTest );
 template<typename Obj, unsigned int SIZE>
 void display(const Matrix<Obj, SIZE> &mat) {
   for (unsigned int row=0; row<SIZE; ++row) {
-    qDebug() << "| ";
+    cout << "| ";
 
     for (unsigned int col=0; col<SIZE; ++col) {
-      qDebug() << setw(4) << mat[row][col] << setw(1) << " ";
+      cout << setw(4) << mat[row][col] << setw(1) << " ";
     }
 
-    qDebug() << "|" << endl;
+    cout << "|" << endl;
   }
 }
 
