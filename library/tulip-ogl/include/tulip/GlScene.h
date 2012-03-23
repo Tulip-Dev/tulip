@@ -282,6 +282,8 @@ public:
    */
   void clearLayersList() {
     layersList.clear();
+    graphLayer = NULL;
+    glGraphComposite = NULL;
   }
 
   /**
