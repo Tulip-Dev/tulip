@@ -42,8 +42,10 @@ NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _
 void NodeLinkDiagramComponent::updateGrid() {
   delete _grid;
   _grid = NULL;
+
   if(_gridOptions==NULL)
     return;
+
   DataSet gridData = static_cast<ParameterListModel*>(_gridOptions->findChild<QTableView*>()->model())->parametersValues();
   StringCollection gridMode;
   gridData.get<StringCollection>("Grid mode",gridMode);
