@@ -161,7 +161,7 @@ bool SquarifiedTreeMap::run() {
   computeNodesSize(root);
 
   Vec2d center = initialSpace.center();
-  layoutResult->setNodeValue(root, Coord(static_cast<float>(center[0]), static_cast<float>(center[1]), 0));
+  layoutResult->setNodeValue(root, Coord(static_cast<float>(center[0]), static_cast<float>(center[1])), 0);
   Size initialSpaceSize(static_cast<float>(initialSpace.width()), static_cast<float>(initialSpace.height()), 0);
   sizeResult->setNodeValue(root, initialSpaceSize);
   vector<node> toTreat(orderedChildren(root));
