@@ -35,6 +35,7 @@ BUNDLE_DEFINE_COMPONENT(tulip_app "tulip-app" "Main Tulip application" "Software
 
 BUNDLE_DEFINE_COMPONENT(TULIP_TEXTURES "Textures pack" " " "Textures")
 
+BUNDLE_DEFINE_COMPONENT(delaunay "Delaunay Triangulation" " " "Plugins")
 BUNDLE_DEFINE_COMPONENT(strengthclustering "Strength clustering" " " "Plugins")
 BUNDLE_DEFINE_COMPONENT(HIERARCHICALCLUSTERING "Hierarchical clustering" " " "Plugins")
 BUNDLE_DEFINE_COMPONENT(CONVOLUTIONCLUSTERING "Convolution clustering" " " "Plugins")

@@ -1,5 +1,7 @@
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${CMAKE_CURRENT_BINARY_DIR})
 
+ADD_SUBDIRECTORY(Delaunay)
+
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(StrengthClustering_SRCS
   StrengthClustering.h
