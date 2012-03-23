@@ -54,9 +54,9 @@ public:
        << lightMagenta << " 0x" << std::hex << std::setw(16) << pcAddress << lightRed << " in ";
 
     if (frameId%2 == 0)
-        os << lightCyan;
+      os << lightCyan;
     else
-        os << blue;
+      os << blue;
 
     if (funcName != "") {
       os << funcName;
@@ -75,10 +75,12 @@ public:
 
     if (moduleName != "") {
       os << lightRed << " from ";
+
       if (frameId%2 == 0)
-          os << lightCyan;
+        os << lightCyan;
       else
-          os << blue;
+        os << blue;
+
       os << moduleName;
     }
     else {

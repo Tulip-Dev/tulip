@@ -570,6 +570,7 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
   // hack to get a pointer on the cluster hierarchy widget
   // This way, we can update it after executing a script (there is some refresh issue otherwise)
   MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
+
   if (mainController) {
     QWidget *mainWindow = mainController->getMainWindowFacade()->getParentWidget();
     QObjectList childWidgets = mainWindow->children();
