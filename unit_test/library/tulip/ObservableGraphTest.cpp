@@ -59,7 +59,7 @@ public:
 
     while(it != end) {
       if (print)
-        qDebug() << "inserting in observer..." << endl;
+        cout << "inserting in observer..." << endl;
 
       observables.insert((*it));
       ++it;
