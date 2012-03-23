@@ -53,7 +53,10 @@ public:
     os << lightRed << std::dec << std::setfill('0') << "#" << std::setw(2) << frameId
        << lightMagenta << " 0x" << std::hex << std::setw(16) << pcAddress << lightRed << " in ";
 
-    os << lightBlue;
+    if (frameId%2 == 0)
+        os << lightCyan;
+    else
+        os << blue;
 
     if (funcName != "") {
       os << funcName;
@@ -71,7 +74,12 @@ public:
     }
 
     if (moduleName != "") {
-      os << lightRed << " from " << lightCyan << moduleName;
+      os << lightRed << " from ";
+      if (frameId%2 == 0)
+          os << lightCyan;
+      else
+          os << blue;
+      os << moduleName;
     }
     else {
       os << lightRed << " from " << lightGreen << "??";
