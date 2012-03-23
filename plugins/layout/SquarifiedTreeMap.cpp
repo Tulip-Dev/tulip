@@ -216,7 +216,7 @@ void SquarifiedTreeMap::layoutRow(const std::vector<tlp::node> &row, const int d
     sum += nodesSize.get(it->id);
     Vec2d center = layoutRec.center();
     result->setNodeValue(*it, Coord(static_cast<float>(center[0]), static_cast<float>(center[1]), static_cast<float>(depth * SEPARATION_Z)));
-    sizeResult->setNodeValue(*it, Size(static_cast<float>(layoutRec.width()), static_cast<float>(layoutRec.height(), 0)));
+    sizeResult->setNodeValue(*it, Size(static_cast<float>(layoutRec.width()), static_cast<float>(layoutRec.height()), 0));
 
     if (graph->outdeg(*it) > 0) {
       vector<node> toTreat(orderedChildren(*it));
