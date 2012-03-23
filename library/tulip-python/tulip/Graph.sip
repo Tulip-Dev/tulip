@@ -108,6 +108,8 @@ tlp.Graph.applyAlgorithm(algoName, dataSet)
 Applies an algorithm plugin, identified by its name.
 Algorithm plugins are objects implementing the tlp::Algorithm interface 
 in C++ or the :class:`tlp.Algorithm` interface in Python.
+The list of currently loaded algorithm plugins can be
+retrieved through the :func:`tlp.getAlgorithmPluginsList` function.
 Parameters can be transmit to the algorithm using a :class:`tlp.DataSet`.
 To determine a plugin's parameters, you can either:
 
@@ -123,6 +125,10 @@ which can contain an error message.
 :param dataSet: The parameters to the algorithm. Defaults to :const:`None`.
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
+:throws: an exception if the requested algorithm plugin is not registered in the plugins database.
+
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End  	
 
 //===========================================================================================
@@ -2254,6 +2260,8 @@ using an external named integer algorithm (plugin).
 Integer algorithm plugins are objects
 implementing the tlp::IntegerAlgorithm interface in C++ or 
 the :class:`tlp.IntegerAlgorithm` interface in Python.
+The list of currently loaded integer algorithm plugins can be
+retrieved through the :func:`tlp.getIntegerAlgorithmPluginsList` function.
 The computed values will be stored in result. 
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
@@ -2278,6 +2286,9 @@ which can contain an error message.
 :throws: an exception if the requested integer algorithm plugin is not registered in the plugins database.
 
 .. warning:: Previous values stored in result will be deleted.
+
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call integer algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 
 %End	
 
@@ -2306,6 +2317,8 @@ using an external named double algorithm (plugin).
 Double algorithm plugins are objects
 implementing the tlp::DoubleAlgorithm interface in C++ or 
 the :class:`tlp.DoubleAlgorithm` interface in Python.
+The list of currently loaded double algorithm plugins can be
+retrieved through the :func:`tlp.getDoubleAlgorithmPluginsList` function.
 The computed values will be stored in result. 
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
@@ -2331,6 +2344,8 @@ which can contain an error message.
 
 .. warning:: Previous values stored in result will be deleted.
 
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call double algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 	
 %MethodCode
@@ -2358,6 +2373,8 @@ using an external named layout algorithm (plugin).
 Layout algorithm plugins are objects
 implementing the tlp::LayoutAlgorithm interface in C++ or 
 the :class:`tlp.LayoutAlgorithm` interface in Python.
+The list of currently loaded layout algorithm plugins can be
+retrieved through the :func:`tlp.getLayoutAlgorithmPluginsList` function.
 The computed values will be stored in result. 
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
@@ -2383,6 +2400,8 @@ which can contain an error message.
 
 .. warning:: Previous values stored in result will be deleted.
 
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call layout algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 	
 %MethodCode
@@ -2410,6 +2429,8 @@ using an external named boolean algorithm (plugin).
 Boolean algorithm plugins are objects
 implementing the tlp::BooleanAlgorithm interface in C++ or 
 the :class:`tlp.BooleanAlgorithm` interface in Python.
+The list of currently loaded boolean algorithm plugins can be
+retrieved through the :func:`tlp.getBooleanAlgorithmPluginsList` function.
 The computed values will be stored in result. 
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
@@ -2434,6 +2455,9 @@ which can contain an error message.
 :throws: an exception if the requested boolean algorithm plugin is not registered in the plugins database.
 
 .. warning:: Previous values stored in result will be deleted.
+
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call boolean algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 
 %End
 	
@@ -2461,6 +2485,8 @@ using an external named size algorithm (plugin).
 Size algorithm plugins are objects
 implementing the tlp::SizeAlgorithm interface in C++ or 
 the :class:`tlp.SizeAlgorithm` interface in Python.
+The list of currently loaded size algorithm plugins can be
+retrieved through the :func:`tlp.getSizeAlgorithmPluginsList` function.
 The computed values will be stored in result. 
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
@@ -2486,6 +2512,8 @@ which can contain an error message.
 
 .. warning:: Previous values stored in result will be deleted.
 
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call size algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 	
 %MethodCode
@@ -2513,6 +2541,8 @@ using an external named color algorithm (plugin).
 Color algorithm plugins are objects
 implementing the tlp::ColorAlgorithm interface in C++ or 
 the :class:`tlp.ColorAlgorithm` interface in Python.
+The list of currently loaded color algorithm plugins can be
+retrieved through the :func:`tlp.getColorAlgorithmPluginsList` function.
 The computed values will be stored in result. 
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
@@ -2538,6 +2568,8 @@ which can contain an error message.
 
 .. warning:: Previous values stored in result will be deleted.
 
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call color algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 
 %MethodCode
@@ -2565,6 +2597,8 @@ using an external named string algorithm (plugin).
 String algorithm plugins are objects
 implementing the tlp::StringAlgorithm interface in C++ or 
 the :class:`tlp.StringAlgorithm` interface in Python.
+The list of currently loaded string algorithm plugins can be
+retrieved through the :func:`tlp.getStringAlgorithmPluginsList` function.
 The computed values will be stored in result. 
 Parameters can be transmit to the algorithm
 using a :class:`tlp.DataSet` . In some cases, algorithms 
@@ -2590,6 +2624,8 @@ which can contain an error message.
 
 .. warning:: Previous values stored in result will be deleted.
 
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call string algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 
 %MethodCode
@@ -3197,6 +3233,10 @@ tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet &dataS
 tlp.importGraph(importPluginName, dataSet[, newGraph = None])
 
 Imports a graph using a Tulip import plugin (must be loaded).
+Import plugins are objects implementing the tlp::ImportModule interface
+in C++ or the :class:`tlp.ImportModule` interface in Python.
+The list of currently loaded import plugins can be
+retrieved through the :func:`tlp.getImportPluginsList` function.
 Returns a new graph or None if the import fails.
 
 :param importPluginName: the name of the Tulip import plugin
@@ -3207,6 +3247,9 @@ Returns a new graph or None if the import fails.
 :type newGraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.Graph`
 :throws: an exception if the requested import plugin is not registered in the plugins database. 
+
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call import modules (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 
 %MethodCode
@@ -3230,6 +3273,10 @@ bool exportGraph(tlp::Graph *graph, const std::string &outputFilePath, const std
 tlp.exportGraph(graph, outputFilePath, exportPluginName, dataSet)
 
 Exports a graph to a file using a Tulip export plugin (must be loaded).
+Export plugins are objects implementing the tlp::ExportModule interface
+in C++ or the :class:`tlp.ExportModule` interface in Python.
+The list of currently loaded export plugins can be
+retrieved through the :func:`tlp.getExportPluginsList` function.
 
 :param graph: the graph to export
 :type graph: :class:`tlp.Graph`
@@ -3241,6 +3288,9 @@ Exports a graph to a file using a Tulip export plugin (must be loaded).
 :type dataSet: :class:`tlp.DataSet`
 :rtype: boolean
 :throws: an exception if the requested export plugin is not registered in the plugins database. 
+
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call export modules (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 
 %MethodCode
@@ -3276,6 +3326,8 @@ tlp.applyAlgorithm(graph, dataSet, algoName)
 
 Applies an algorithm plugin (must be loaded) on a graph . Algorithm plugins are objects
 implementing the tlp::Algorithm interface in C++ or the :class:`tlp.Algorithm` interface in Python. 
+The list of currently loaded algorithm plugins can be
+retrieved through the :func:`tlp.getAlgorithmPluginsList` function.
 Parameters can be transmit to the algorithm trough a DataSet object (refer to the plugin 
 documentation to get its parameters list). 
 
@@ -3292,6 +3344,8 @@ its execution.
 :rtype: (boolean, string)
 :throws: an exception if the requested algorithm plugin is not registered in the plugins database.
 
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 
 %MethodCode

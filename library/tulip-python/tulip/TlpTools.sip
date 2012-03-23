@@ -55,14 +55,23 @@ X being the major version, Y the minor version, and Z the patch version.
 
 void initTulipLib(char* appDirPath=0);
 %Docstring
-tlp.initTulipLib()
+tlp.initTulipLib([appDirPath=None])
 
 Looks for the Tulip plugins directory and fills the Tulip path variables : tlp.TulipLibDir, tlp.TulipPluginsPath, tlp.TulipBitmapDir.
 The plug-ins directory can be defined in different ways, given by order of prevalence:
 
    * the TLP_DIR environment variable, if it has a value
+
+   * from the optional appDirPath parameter that must point to the path where the tulip binary is located
+
    * a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on unix
-   
+
+:param appDirPath: if provided, the Tulip plugins directory will be defined according to the provided Tulip binary path.
+                   This parameter should only be used when using the tulip module provided in a precompiled Tulip bundle (typically on MacOS and Windows)
+                   through the classical Python interpreter. In that case, the Tulip application directory has been hardcoded in the binaries
+                   when they were compiled and so does not match your local Tulip installation. If you do not provide the correct Tulip binary
+                   path, you won't be able to load and call plugins.
+:type appDirPath: string
 %End
 
 //=====================================================================

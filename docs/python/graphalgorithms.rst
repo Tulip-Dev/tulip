@@ -1,5 +1,9 @@
 .. py:currentmodule:: tulip
 
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
+
+
 Applying an algorithm on a graph
 ================================ 
 

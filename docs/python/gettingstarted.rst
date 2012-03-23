@@ -64,6 +64,9 @@ and can be accessed through the "View" menu. The interface of this component is 
 Using the bindings from the Python Interpreter
 ----------------------------------------------
 
+Setting up the environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 The Tulip Python bindings can also be used through the classical Python Interpreter. But some setup has to be done
 before importing the :mod:`tulip` module. 
 
@@ -102,21 +105,26 @@ at the shell prompt to perform that task::
 
 	* Mac OS : Python 2.5  (as we use Mac OS Leopard to build the bundle). 
 
-.. note:: 
-  If you want to use Tulip algorithms implemented as plugins written in C++ (e.g. graph layout algorithms), 
-  you have to load them before being able to call them (see :func:`tlp.applyAlgorithm`, :meth:`tlp.Graph.computeLayoutProperty`, ...).
-  To load all the Tulip plugins written in C++, you have to execute the following sequence of command if you compiled Tulip yourself::
+.. _loading-plugins:
+
+Loading Tulip plugins
+^^^^^^^^^^^^^^^^^^^^^
+
+If you want to use Tulip algorithms implemented as plugins written in C++ (e.g. graph layout algorithms),
+you have to load them before being able to call them (see :func:`tlp.applyAlgorithm`, :meth:`tlp.Graph.computeLayoutProperty`, ...).
+To load all the Tulip plugins written in C++, you have to execute the :func:`tlp.initTulipLib` and :func:`tlp.loadPlugins` functions
+the following way if you compiled Tulip yourself::
 	
-	>>> tlp.initTulipLib()
+        >>> tlp.initTulipLib()
 	>>> tlp.loadPlugins()
 
-  If you installed Tulip from a bundle, you need to specify the path to the Tulip binary as parameter of the :func:`tlp.initTulipLib` because some paths were hardcoded during the compilation::
+If you installed Tulip from a bundle, you need to specify the path to the Tulip binary as parameter of the :func:`tlp.initTulipLib` because some paths were hardcoded during the compilation::
 
 	>>> tlp.initTulipLib("<path_to_tulip_binary>")
 	>>> tlp.loadPlugins()
 
-  The path to the Tulip binary is given below according to your system:
+The path to the Tulip binary is given below according to your system:
 
-	* Linux and Windows : <tulip_install_dir>/bin
+        * Linux and Windows : <tulip_install_dir>/bin
 
 	* Mac OS : <tulip_install_dir>/Contents/MacOS
