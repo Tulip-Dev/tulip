@@ -395,28 +395,9 @@ QWidget *PythonScriptView::construct(QWidget *parent) {
   pythonInterpreter->runString(updateVisualizationFunc);
   pythonInterpreter->runString(pauseScriptFunc);
 
-  // hack to get a pointer on the cluster hierarchy widget
-  // This way, we can update it after executing a script (there is some refresh issue otherwise)
-  MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
   clusterTreeWidget = NULL;
 
-  if (mainController) {
-    QWidget *mainWindow = mainController->getMainWindowFacade()->getParentWidget();
-    QObjectList childWidgets = mainWindow->children();
 
-    while (!childWidgets.empty()) {
-      QObject *obj = childWidgets.front();
-      clusterTreeWidget = dynamic_cast<SGHierarchyWidget *>(obj);
-
-      if (clusterTreeWidget) {
-        break;
-      }
-      else {
-        childWidgets.pop_front();
-        childWidgets += obj->children();
-      }
-    }
-  }
 
   return widget;
 }
@@ -586,6 +567,26 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
     viewWidget->tabWidget->setCurrentIndex(0);
   }
 
+  // hack to get a pointer on the cluster hierarchy widget
+  // This way, we can update it after executing a script (there is some refresh issue otherwise)
+  MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
+  if (mainController) {
+    QWidget *mainWindow = mainController->getMainWindowFacade()->getParentWidget();
+    QObjectList childWidgets = mainWindow->children();
+
+    while (!childWidgets.empty()) {
+      QObject *obj = childWidgets.front();
+      clusterTreeWidget = dynamic_cast<SGHierarchyWidget *>(obj);
+
+      if (clusterTreeWidget && graph->getRoot() == clusterTreeWidget->getGraph()->getRoot()) {
+        break;
+      }
+      else {
+        childWidgets.pop_front();
+        childWidgets += obj->children();
+      }
+    }
+  }
 }
 
 void PythonScriptView::getData(Graph **graph,DataSet *dataSet) {
