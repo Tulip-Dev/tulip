@@ -1,15 +1,15 @@
+#include <tulip/Plugin.h>
 #include <tulip/Algorithm.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/Graph.h>
-#include <tulip/MethodFactory.h>
 
 #include "cdt.h"
 
 class Delaunay : public tlp::Algorithm {
 
 public :
-
-  Delaunay(tlp::AlgorithmContext context) : Algorithm(context) {}
+  PLUGININFORMATIONS("Delaunay triangulation","","","","1.0", "Triangulation")
+  Delaunay(tlp::PluginContext* context) : Algorithm(context) {}
 
   bool run() {
     tlp::Observable::holdObservers();
@@ -97,4 +97,4 @@ public :
   }
 };
 
-ALGORITHMPLUGIN(Delaunay,"Delaunay triangulation","","","","1.0");
+PLUGIN(Delaunay)
