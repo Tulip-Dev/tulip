@@ -82,7 +82,7 @@ private:
   void vecttohash();
   void hashtovect();
   void compress(unsigned int min, unsigned int max, unsigned int nbElements);
-  void vectset(const unsigned int i, typename StoredType<TYPE>::Value value);
+  inline void vectset(const unsigned int i, typename StoredType<TYPE>::Value value);
   IteratorValue* findAllValues(const TYPE &value, bool equal = true) const;
 private:
   std::deque<typename StoredType<TYPE>::Value> *vData;
@@ -124,7 +124,7 @@ MutableContainer<TYPE>::~MutableContainer() {
     }
 
     delete vData;
-    vData=0;
+    vData = NULL;
     break;
 
   case HASH:
@@ -140,7 +140,7 @@ MutableContainer<TYPE>::~MutableContainer() {
     }
 
     delete hData;
-    hData=0;
+    hData = NULL;
     break;
 
   default:
@@ -187,7 +187,7 @@ void MutableContainer<TYPE>::setAll(const TYPE &value) {
     }
 
     delete hData;
-    hData=0;
+    hData = NULL;
     vData = new std::deque<typename StoredType<TYPE>::Value>();
     break;
 
@@ -342,6 +342,48 @@ Iterator<unsigned int>* MutableContainer<TYPE>::findAll(const TYPE &value,
 }
 //===================================================================
 template <typename TYPE>
+void MutableContainer<TYPE>::vectset(const unsigned int i,
+				     typename StoredType<TYPE>::Value value) {
+  if (minIndex == UINT_MAX) {
+    minIndex = i;
+    maxIndex = i;
+    (*vData).push_back(value);
+    ++elementInserted;
+  }
+  else {
+    // the time performance of these two attempts of nicer coding
+    // in this commented code seems worse than the loops below (about 15%)
+    // if ( i > maxIndex ) {
+    //-- 1st attempt --
+    //   vData->resize(i+1 - minIndex, defaultValue);
+    //-- 2nd attempt
+    //   vData->insert(vData->end(), i - maxIndex, defaultValue);
+    //   maxIndex = i;
+    // } else if (i < minIndex) {
+    //   vData->insert(vData->begin(), minIndex - i, defaultValue);
+    //   minIndex = i;
+    // }
+    while ( i > maxIndex ) {
+      (*vData).push_back(defaultValue);
+      ++maxIndex;
+    }
+
+    while ( i < minIndex ) {
+      (*vData).push_front(defaultValue);
+      --minIndex;
+    }
+
+    typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
+    (*vData)[i - minIndex] = value;
+
+    if (val != defaultValue)
+      StoredType<TYPE>::destroy(val);
+    else
+      ++elementInserted;
+  }
+}
+//===================================================================
+template <typename TYPE>
 void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
 
@@ -369,18 +411,19 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
         }
       }
 
-      break;
+      return;
 
-    case HASH :
+    case HASH : {
+      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
 
-      if ((it=hData->find(i)) != hData->end()) {
+      if (it!=hData->end()) {
         StoredType<TYPE>::destroy((*it).second);
         hData->erase(i);
         --elementInserted;
       }
 
       break;
-
+    }
     default:
       assert(false);
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
@@ -395,48 +438,21 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
     switch (state) {
     case VECT :
 
-      if (minIndex == UINT_MAX) {
-        minIndex = i;
-        maxIndex = i;
-        (*vData).push_back(newVal);
-        ++elementInserted;
-      }
-      else {
-        /*  if ( i > maxIndex ) {
-          (*vData).resize(i+1 - minIndex, defaultValue);
-          maxIndex = i;
-          }*/
-        while ( i > maxIndex ) {
-          (*vData).push_back(defaultValue);
-          ++maxIndex;
-        }
+      vectset(i, newVal);
 
-        while ( i < minIndex ) {
-          (*vData).push_front(defaultValue);
-          --minIndex;
-        }
+      return;
 
-        typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
-        (*vData)[i - minIndex] = newVal;
+    case HASH : {
+      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
 
-        if (val != defaultValue)
-          StoredType<TYPE>::destroy(val);
-        else
-          ++elementInserted;
-      }
-
-      break;
-
-    case HASH :
-
-      if ((it=hData->find(i)) != hData->end())
+      if (it!=hData->end())
         StoredType<TYPE>::destroy((*it).second);
       else
         ++elementInserted;
 
       (*hData)[i]= newVal;
       break;
-
+    }
     default:
       assert(false);
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
@@ -448,42 +464,6 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
   }
 }
 //===================================================================
-template <typename TYPE>
-void MutableContainer<TYPE>::vectset(const unsigned int i,
-                                     typename StoredType<TYPE>::Value value) {
-  assert(value != defaultValue);
-
-  if (minIndex == UINT_MAX) {
-    minIndex = i;
-    maxIndex = i;
-    (*vData).push_back(value);
-    ++elementInserted;
-  }
-  else {
-    while ( i > maxIndex ) {
-      (*vData).push_back(defaultValue);
-      ++maxIndex;
-    }
-
-    while ( i < minIndex ) {
-      (*vData).push_front(defaultValue);
-      --minIndex;
-    }
-
-    typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
-    (*vData)[i - minIndex] = value;
-
-    if (val != defaultValue)
-      StoredType<TYPE>::destroy(val);
-    else
-      ++elementInserted;
-  }
-
-  maxIndex = std::max(maxIndex, i);
-  minIndex = std::min(minIndex, i);
-}
-//===================================================================
-//const TYPE &  MutableContainer<TYPE>::get(unsigned int i) const {
 template <typename TYPE>
 typename StoredType<TYPE>::ReturnedConstValue MutableContainer<TYPE>::get(const unsigned int i) const {
   //  cerr << __PRETTY_FUNCTION__ << endl;
@@ -605,7 +585,7 @@ void MutableContainer<TYPE>::vecttohash() {
   maxIndex = newMaxIndex;
   minIndex = newMinIndex;
   delete vData;
-  vData = 0;
+  vData = NULL;
   state = HASH;
 }
 //===================================================================
@@ -625,7 +605,7 @@ void MutableContainer<TYPE>::hashtovect() {
   }
 
   delete hData;
-  hData = 0;
+  hData = NULL;
 }
 //===================================================================
 template <typename TYPE>
