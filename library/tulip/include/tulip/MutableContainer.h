@@ -343,7 +343,7 @@ Iterator<unsigned int>* MutableContainer<TYPE>::findAll(const TYPE &value,
 //===================================================================
 template <typename TYPE>
 void MutableContainer<TYPE>::vectset(const unsigned int i,
-				     typename StoredType<TYPE>::Value value) {
+                                     typename StoredType<TYPE>::Value value) {
   if (minIndex == UINT_MAX) {
     minIndex = i;
     maxIndex = i;
@@ -424,6 +424,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 
       break;
     }
+
     default:
       assert(false);
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
@@ -453,6 +454,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
       (*hData)[i]= newVal;
       break;
     }
+
     default:
       assert(false);
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
