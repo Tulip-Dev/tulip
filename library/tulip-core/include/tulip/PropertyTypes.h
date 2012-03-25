@@ -33,128 +33,12 @@
 #include <tulip/StringCollection.h>
 #include <tulip/Edge.h>
 #include <tulip/AbstractProperty.h>
+#include <tulip/TypeInterface.h>
+#include <tulip/SerializableType.h>
 
 namespace tlp {
 
 class Graph;
-
-template<typename T>
-class TLP_SCOPE TypeInterface {
-public:
-  typedef T RealType;
-  static RealType undefinedValue() {
-    return T();
-  }
-  static RealType defaultValue() {
-    return T();
-  }
-
-  static void write(std::ostream&, const RealType&) {}
-  static bool read(std::istream&, RealType&) {
-    return false;
-  }
-
-  static std::string toString(const RealType &) {
-    return "";
-  }
-  static bool fromString(RealType &, const std::string &) {
-    return false;
-  }
-};
-
-#define FORWARD_TOSTRING(T) static std::string toString(const T::RealType &v) { std::ostringstream oss;  write(oss, v); return oss.str(); }
-#define FORWARD_FROMSTRING(T) static bool fromString(T::RealType &v, const std::string &s) { std::istringstream iss(s); return read(iss, v); }
-#define FORWARD_STRING_METHODS(T) FORWARD_FROMSTRING(T) FORWARD_TOSTRING(T)
-
-template<typename T>
-class TLP_SCOPE SerializableType: public TypeInterface<T> {
-public:
-  static void write(std::ostream& oss, const typename TypeInterface<T>::RealType& v) {
-    oss << v;
-  }
-  static bool read(std::istream& iss, typename TypeInterface<T>::RealType& v) {
-    return (iss >> v);
-  }
-  FORWARD_STRING_METHODS(typename TypeInterface<T>)
-};
-
-template<typename VT, int openParen>
-class TLP_SCOPE SerializableVectorType: public TypeInterface<std::vector<VT> > {
-  static bool readVector(std::istream& is, std::vector<VT>& v) {
-    v.clear();
-
-    char c =' ';
-    VT val;
-    bool firstVal = true;
-    bool sepFound = false;
-
-    // go to first '('
-    while((is >> c) && isspace(c)) {}
-
-    if (c != '(')
-      return false;
-
-    for(;;) {
-      if( !(is >> c) )
-        return false;
-
-      if (isspace(c))
-        continue;
-
-      if(c == ')') {
-        if (sepFound)
-          return false;
-
-        return true;
-      }
-
-      if (c == ',') {
-        if (firstVal || sepFound)
-          return false;
-
-        sepFound = true;
-      }
-      else {
-        if (firstVal || sepFound) {
-          if (openParen && c != '(')
-            return false;
-
-          is.unget();
-
-          if( !(is >> val) )
-            return false;
-
-          v.push_back(val);
-          firstVal = false;
-          sepFound = false;
-        }
-        else
-          return false;
-      }
-    }
-  }
-  static void writeVector(std::ostream& os, const std::vector<VT>& v) {
-    os << '(';
-
-    for( unsigned int i = 0 ; i < v.size() ; i++ ) {
-      if (i)
-        os << ", ";
-
-      os << v[i];
-    }
-
-    os << ')';
-  }
-
-public:
-  static void write(std::ostream& oss, const typename TypeInterface<std::vector<VT> >::RealType& v) {
-    writeVector(oss, v);
-  }
-  static bool read(std::istream& iss, typename TypeInterface<std::vector<VT> >::RealType& v) {
-    return readVector(iss, v);
-  }
-  FORWARD_STRING_METHODS(typename TypeInterface<std::vector<VT> >)
-};
 
 class TLP_SCOPE GraphType: public TypeInterface<tlp::Graph*> {
 public:
@@ -165,7 +49,7 @@ public:
   FORWARD_STRING_METHODS(GraphType)
 };
 
-class TLP_SCOPE EdgeSetType: public TypeInterface<std::set<edge> > {
+class TLP_SCOPE EdgeSetType: public TypeInterface<std::set<tlp::edge> > {
 public:
   static void write(std::ostream &oss, const RealType &v);
   static bool read(std::istream& iss, RealType& v);
@@ -311,7 +195,7 @@ template class SerializableVectorType<tlp::Size,true>;
 template class SerializableVectorType<tlp::Color,true>;
 template class SerializableVectorType<tlp::Coord,true>;
 template class TypeInterface<tlp::Graph*>;
-template class TypeInterface<std::set<edge> >;
+template class TypeInterface<std::set<tlp::edge> >;
 template class TypeInterface<bool>;
 template class TypeInterface<std::vector<bool> >;
 template class TypeInterface<std::vector<std::string> >;

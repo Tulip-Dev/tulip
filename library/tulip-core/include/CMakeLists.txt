@@ -56,6 +56,7 @@ INSTALL(FILES
   tulip/PluginLoaderTxt.h
   tulip/PluginProgress.h
   tulip/PreferenceManager.h
+  tulip/TemplateAlgorithm.h
   tulip/PropertyAlgorithm.h
   tulip/PropertyInterface.h
   tulip/PropertyTypes.h
@@ -87,6 +88,8 @@ INSTALL(FILES
   tulip/Vector.h
   tulip/WithDependency.h
   tulip/WithParameter.h
+  tulip/TypeInterface.h
+  tulip/SerializableType.h
   ${CMAKE_CURRENT_BINARY_DIR}/tulip/TulipRelease.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_core_dev

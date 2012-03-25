@@ -69,6 +69,7 @@ class  TLP_SCOPE OLOObject {
   friend class Observable;
 
 public:
+  enum OLOEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};
   /**
     * @brief return the node representing that OLOObject in the OLOGraph
     */
@@ -112,7 +113,6 @@ protected:
     * @brief return an iterator on out objects (Listener/Observer), the iterator garantee that all objects are alive (not deleted during hold or notify)
     */
   tlp::Iterator<tlp::node> *getOutObjects() const;
-  enum OLOEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};
 private:
   static tlp::VectorGraph                oGraph;         /** the graph that store all observers and connection between them*/
   static tlp::NodeProperty<OLOObject *>  oPointer;       /** store a pointer to the object represented by a node */

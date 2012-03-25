@@ -65,7 +65,8 @@ vectorgraph.cpp
 WithParameter.cpp
 YajlFacade.cpp
 PluginLister.cpp
-tulipconf.cpp)
+tulipconf.cpp
+TulipException.cpp)
 
 IF(CHECK_MEMORY)
 SET(tulip_LIB_SRCS ${tulip_LIB_SRCS} MemoryChecker.cpp)
