@@ -58,9 +58,9 @@ private:
 /**
 * @brief This Iterator sorts the nodes in a sequence based on their values in a DoubleProperty.
 **/
-struct SortNodeIterator : public StableIterator<node> {
+struct SortNodeIterator : public StableIterator<tlp::node> {
   ///
-  SortNodeIterator(Iterator<node> *itIn, DoubleProperty* metric):StableIterator<node>(itIn) {
+  SortNodeIterator(Iterator<tlp::node> *itIn, DoubleProperty* metric):StableIterator<tlp::node>(itIn) {
     LessThan tmp(metric);
     sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
     copyIterator=sequenceCopy.begin();
@@ -72,9 +72,9 @@ struct SortNodeIterator : public StableIterator<node> {
 /**
 * @brief This Iterator sorts the edges based on the values of their target nodes in a DoubleProperty.
 **/
-struct SortTargetEdgeIterator : public StableIterator<edge> {
+struct SortTargetEdgeIterator : public StableIterator<tlp::edge> {
   ///
-  SortTargetEdgeIterator(Iterator<edge> *itIn, Graph* sg, DoubleProperty* metric):StableIterator<edge>(itIn) {
+  SortTargetEdgeIterator(Iterator<tlp::edge> *itIn, Graph* sg, DoubleProperty* metric):StableIterator<tlp::edge>(itIn) {
     LessThanEdgeTargetMetric tmp(sg,metric);
     sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
     copyIterator=sequenceCopy.begin();
