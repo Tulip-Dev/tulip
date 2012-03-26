@@ -34,8 +34,16 @@ using namespace std;
 
 TulipToOGDF::TulipToOGDF(tlp::Graph *g) : tulipGraph(g) {
 
-  long attributes = ogdf::GraphAttributes::nodeGraphics | ogdf::GraphAttributes::edgeGraphics
-                    | ogdf::GraphAttributes::edgeDoubleWeight;
+  // needed to initialize some ogdfAttributes fields
+  long attributes =
+    // x, y, width, height fields
+    ogdf::GraphAttributes::nodeGraphics |
+    // bends field
+    ogdf::GraphAttributes::edgeGraphics |
+    // doubleWeight field
+    ogdf::GraphAttributes::edgeDoubleWeight |
+    // weight field
+    ogdf::GraphAttributes::nodeWeight;
   ogdfAttributes = ogdf::GraphAttributes(ogdfGraph, attributes);
 
   tlp::SizeProperty *sizeProp = tulipGraph->getProperty<tlp::SizeProperty> ("viewSize");
@@ -44,8 +52,7 @@ TulipToOGDF::TulipToOGDF(tlp::Graph *g) : tulipGraph(g) {
   tlp::node nTlp;
   ogdf::node nOGDF;
   forEach(nTlp, tulipGraph->getNodes()) {
-    ogdfNodes.set(nTlp.id, ogdfGraph.newNode(nTlp.id));
-    nOGDF = ogdfNodes.get(nTlp.id);
+    ogdfNodes.set(nTlp.id, nOGDF = ogdfGraph.newNode(nTlp.id));
     const tlp::Coord &c = layoutProp->getNodeValue(nTlp);
     ogdfAttributes.x(nOGDF) = c.getX();
     ogdfAttributes.y(nOGDF) = c.getY();
