@@ -71,10 +71,14 @@ struct Circle : public Vector<Obj,2> {
  */
 template<typename Obj>
 bool intersection(const Circle<Obj> &c1, const Circle<Obj> &c2,  Vector<Obj,2> &p1,  Vector<Obj,2> &p2) {
-      double d2 =  (c2[0]-c1[0]) * (c2[0]-c1[0]) + (c2[1]-c1[1]) * (c2[1]-c1[1]);
+  double d2 =  (c2[0]-c1[0]) * (c2[0]-c1[0]) + (c2[1]-c1[1]) * (c2[1]-c1[1]);
+
   if (sqrt(d2) > c1.radius + c2.radius) return false;
+
   if (c1.isIncludeIn(c2)) return false;
+
   if (c2.isIncludeIn(c1)) return false;
+
   double K = (1./4.) * sqrt(((c1.radius+c2.radius)*(c1.radius+c2.radius)- d2)*(d2 - (c1.radius-c2.radius)*(c1.radius-c2.radius)));
   p1[0] = (1./2.)*(c2[0] + c1[0]) + (1./2.)*(c2[0]-c1[0])*(c1.radius*c1.radius - c2.radius*c2.radius)/d2 +  2.*(c2[1]-c1[1]) * K/d2;
   p1[1] = (1./2.)*(c2[1] + c1[1]) + (1./2.)*(c2[1]-c1[1])*(c1.radius*c1.radius - c2.radius*c2.radius)/d2 +  2.*(c2[0]-c1[0]) * K/d2;
