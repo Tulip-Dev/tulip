@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-//@TLPGEOLICENCE#
 #ifndef TLP_GEO_CIRCLE_H
 #define TLP_GEO_CIRCLE_H
 
@@ -51,12 +50,6 @@ struct Circle : public Vector<Obj,2> {
     (*this)+=v;
   }
   /**
-   * Give the instersction of "this" with c, return false if no intersection exist
-   */
-  bool intersection(const Circle<Obj> &, const Vector<Obj,2> &,  const Vector<Obj,2> &) {
-    return true;
-  }
-  /**
    * Merges this circle with another circle; merging operation
    * consists in computing the smallest enclosing circle of the
    * two circle and to store the result in "this".
@@ -72,6 +65,23 @@ struct Circle : public Vector<Obj,2> {
   bool isIncludeIn(const Circle<Obj> & circle) const;
 };
 
+/**
+ * Give the instersction of two circles, return false if no intersection exist else put the two points in p1 & p2,
+ * if there is only one solution p1 == p2;
+ */
+template<typename Obj>
+bool intersection(const Circle<Obj> &c1, const Circle<Obj> &c2,  Vector<Obj,2> &p1,  Vector<Obj,2> &p2) {
+      double d2 =  (c2[0]-c1[0]) * (c2[0]-c1[0]) + (c2[1]-c1[1]) * (c2[1]-c1[1]);
+  if (sqrt(d2) > c1.radius + c2.radius) return false;
+  if (c1.isIncludeIn(c2)) return false;
+  if (c2.isIncludeIn(c1)) return false;
+  double K = (1./4.) * sqrt(((c1.radius+c2.radius)*(c1.radius+c2.radius)- d2)*(d2 - (c1.radius-c2.radius)*(c1.radius-c2.radius)));
+  p1[0] = (1./2.)*(c2[0] + c1[0]) + (1./2.)*(c2[0]-c1[0])*(c1.radius*c1.radius - c2.radius*c2.radius)/d2 +  2.*(c2[1]-c1[1]) * K/d2;
+  p1[1] = (1./2.)*(c2[1] + c1[1]) + (1./2.)*(c2[1]-c1[1])*(c1.radius*c1.radius - c2.radius*c2.radius)/d2 +  2.*(c2[0]-c1[0]) * K/d2;
+  p2[0] = (1./2.)*(c2[0] + c1[0]) + (1./2.)*(c2[0]-c1[0])*(c1.radius*c1.radius - c2.radius*c2.radius)/d2 -  2.*(c2[1]-c1[1]) * K/d2;
+  p2[1] = (1./2.)*(c2[1] + c1[1]) + (1./2.)*(c2[1]-c1[1])*(c1.radius*c1.radius - c2.radius*c2.radius)/d2 -  2.*(c2[0]-c1[0]) * K/d2;
+  return true;
+}
 
 /**
  * Compute the optimum enclosing circle of 2 circles.
