@@ -9,7 +9,7 @@ SRCS=   tuliplibtest.cpp \
 	SuperGraphTest.cpp \
 	TlpImportExportTest.cpp \
 	PluginsTest.cpp \
-	IdManagerTest.cpp \
+	CircleTest.cpp \
 	DataSetTest.cpp \
 	ObservablePropertyTest.cpp \
 	MutableContainerTest.cpp \
@@ -24,6 +24,7 @@ SRCS=   tuliplibtest.cpp \
 	DoublePropertyTest.cpp \
 	PlanarityTestTest.cpp
 #	PlanarConMapTest.cpp
+#	IdManagerTest.cpp \
 
 TULIP_CONFIG=$(shell which tulip-config)
 

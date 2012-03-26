@@ -5,6 +5,7 @@ SET(TULIP_LIBRARY_TESTS_SRCS
   ExtendedClusterOperationTest.cpp
   VectorTest.cpp
   MatrixTest.cpp
+  CircleTest.cpp
   TestAlgorithmTest.cpp
   SelectionProxyTest.cpp
   MetaGraphProxyTest.cpp
