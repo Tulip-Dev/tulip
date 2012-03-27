@@ -51,6 +51,7 @@ GlMainWidgetItem::GlMainWidgetItem(GlMainWidget *glMainWidget, int width, int he
   setFlag(QGraphicsItem::ItemIsSelectable, true);
   setFlag(QGraphicsItem::ItemIsFocusable, true);
   setAcceptHoverEvents(true);
+  setHandlesChildEvents(false);
 
   lockedCB = new QCheckBox("locked");
   lockedCB->setChecked(true);
@@ -225,119 +226,43 @@ void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 }
 
 void GlMainWidgetItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-  float offset = 0;
-
-  if (decorate) {
-    offset = -borderWidth;
-  }
-
-  if (lockedCB->isChecked()) {
-    QPoint point(event->pos().x()+offset,event->pos().y()+offset);
-
-    if (! (point.x() < 0 || point.x() > width || point.y() < 0 || point.y() > height)) {
-      QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x()+offset,event->pos().y()+offset), Qt::NoButton, event->buttons(), event->modifiers());
-      QApplication::sendEvent(glMainWidget,eventModif);
-    }
-  }
-  else {
-    QGraphicsItem::mouseMoveEvent(event);
-  }
+  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x(),event->pos().y()), Qt::NoButton, event->buttons(), event->modifiers());
+  QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 void GlMainWidgetItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-  float offset = 0;
-
-  if (decorate) {
-    offset = -borderWidth;
-  }
-
-  if (lockedCB->isChecked()) {
-    QPoint point(event->pos().x()+offset,event->pos().y()+offset);
-
-    if (! (point.x() < 0 || point.x() > width || point.y() < 0 || point.y() > height)) {
-      QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonPress,QPoint(event->pos().x()+offset,event->pos().y()+offset), event->button(), event->buttons(), event->modifiers());
-      QApplication::sendEvent(glMainWidget,eventModif);
-    }
-  }
-  else {
-    QGraphicsItem::mousePressEvent(event);
-  }
+  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonPress,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
+  QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 void GlMainWidgetItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
-  float offset = 0;
-
-  if (decorate) {
-    offset = -borderWidth;
-  }
-
-  if (lockedCB->isChecked()) {
-    QPoint point(event->pos().x()+offset,event->pos().y()+offset);
-
-    if (! (point.x() < 0 || point.x() > width || point.y() < 0 || point.y() > height)) {
-      QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonDblClick,QPoint(event->pos().x()+offset,event->pos().y()+offset), event->button(), event->buttons(), event->modifiers());
-      QApplication::sendEvent(glMainWidget,eventModif);
-    }
-  }
+  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonDblClick,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
+  QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 void GlMainWidgetItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-  float offset = 0;
-
-  if (decorate) {
-    offset = -borderWidth;
-  }
-
-  if (lockedCB->isChecked()) {
-    QPoint point(event->pos().x()+offset,event->pos().y()+offset);
-
-    if (! (point.x() < 0 || point.x() > width || point.y() < 0 || point.y() > height)) {
-      QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonRelease,QPoint(event->pos().x()+offset,event->pos().y()+offset), event->button(), event->buttons(), event->modifiers());
-      QApplication::sendEvent(glMainWidget,eventModif);
-    }
-  }
-  else {
-    QGraphicsItem::mouseReleaseEvent(event);
-  }
+  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonRelease,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
+  QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 void GlMainWidgetItem::wheelEvent(QGraphicsSceneWheelEvent *event) {
-  float offset = 0;
-
-  if (decorate) {
-    offset = -borderWidth;
-  }
-
-  QWheelEvent *eventModif=new QWheelEvent(QPoint(event->pos().x()+offset,event->pos().y()+offset), event->delta(),event->buttons(), event->modifiers(),event->orientation());
+  QWheelEvent *eventModif=new QWheelEvent(QPoint(event->pos().x(),event->pos().y()), event->delta(),event->buttons(), event->modifiers(),event->orientation());
   QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 void GlMainWidgetItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event) {
-  float offset = 0;
-
-  if (decorate) {
-    offset = -borderWidth;
-  }
-
-  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x()+offset,event->pos().y()+offset), Qt::NoButton, Qt::NoButton, event->modifiers());
+  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x(),event->pos().y()), Qt::NoButton, Qt::NoButton, event->modifiers());
   QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 void GlMainWidgetItem::contextMenuEvent(QGraphicsSceneContextMenuEvent * event) {
-  float offset = 0;
-
-  if (decorate) {
-    offset = -borderWidth;
-  }
-
-  QContextMenuEvent *eventModif = new QContextMenuEvent(static_cast<QContextMenuEvent::Reason>(event->reason()), QPoint(event->pos().x()+offset,event->pos().y()+offset));
+  QContextMenuEvent *eventModif = new QContextMenuEvent(static_cast<QContextMenuEvent::Reason>(event->reason()), QPoint(event->pos().x(),event->pos().y()));
   QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 bool GlMainWidgetItem::eventFilter(QObject *, QEvent *evt) {
-  if (evt->type() == QEvent::CursorChange) {
+  if (evt->type() == QEvent::CursorChange)
     setCursor(glMainWidget->cursor());
-  }
 
   return false;
 }
