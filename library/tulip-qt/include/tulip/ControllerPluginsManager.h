@@ -24,7 +24,6 @@
 #include <cassert>
 
 #include <tulip/tulipconf.h>
-#include <tulip/MutableContainer.h>
 #include <tulip/PluginLoader.h>
 
 #include "tulip/Controller.h"

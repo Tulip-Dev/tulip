@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <tulip/Graph.h>
-#include <tulip/MutableContainer.h>
 #include <tulip/ObservableProperty.h>
 
 #include <QtCore/QModelIndex>

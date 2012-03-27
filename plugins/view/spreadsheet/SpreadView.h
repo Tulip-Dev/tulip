@@ -26,7 +26,6 @@
 
 #include <tulip/AbstractView.h>
 #include <tulip/ObservableProperty.h>
-#include <tulip/MutableContainer.h>
 
 #include <QtCore/QModelIndexList>
 
@@ -39,7 +38,6 @@ class SpreadViewWidget;
 class SpreadViewTableWidget;
 namespace tlp {
 class Graph;
-class BooleanProperty;
 }
 
 

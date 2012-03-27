@@ -26,7 +26,7 @@
 #include <tulip/tulipconf.h>
 #include <tulip/tuliphash.h>
 #include <tulip/StoredType.h>
-#include <tulip/Reflect.h>
+#include <tulip/DataSet.h>
 #include <tulip/Iterator.h>
 
 namespace tlp {
@@ -100,7 +100,7 @@ private:
 template<typename TYPE>
 MutableContainer<TYPE>::MutableContainer(): vData(new std::deque<typename StoredType<TYPE>::Value>()),
   hData(NULL), minIndex(UINT_MAX), maxIndex(UINT_MAX), defaultValue(StoredType<TYPE>::defaultValue()), state(VECT), elementInserted(0),
-  ratio(double(sizeof(TYPE)) / (3.0*double(sizeof(void *))+double(sizeof(TYPE)))),
+  ratio(double(sizeof(typename StoredType<TYPE>::Value)) / (3.0*double(sizeof(void *))+double(sizeof(typename StoredType<TYPE>::Value)))),
   compressing(false) {
 }
 //===================================================================
@@ -396,7 +396,6 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
   }
 
   if (StoredType<TYPE>::equal(defaultValue, value)) {
-    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
 
     switch (state) {
     case VECT :
@@ -432,7 +431,6 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
     }
   }
   else {
-    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
     typename StoredType<TYPE>::Value newVal =
       StoredType<TYPE>::clone(value);
 
@@ -471,27 +469,22 @@ typename StoredType<TYPE>::ReturnedConstValue MutableContainer<TYPE>::get(const 
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (maxIndex == UINT_MAX) return StoredType<TYPE>::get(defaultValue);
 
-  typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
-
   switch (state) {
   case VECT:
-
     if (i>maxIndex || i<minIndex)
       return StoredType<TYPE>::get(defaultValue);
     else
       return StoredType<TYPE>::get((*vData)[i - minIndex]);
 
-    break;
+  case HASH: {
+    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
 
-  case HASH:
-
-    if ((it=hData->find(i))!=hData->end())
+    if (it!=hData->end())
       return StoredType<TYPE>::get((*it).second);
     else
       return StoredType<TYPE>::get(defaultValue);
-
-    break;
-
+  }
+    
   default:
     assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
@@ -527,11 +520,8 @@ typename StoredType<TYPE>::ReturnedValue MutableContainer<TYPE>::get(const unsig
     return StoredType<TYPE>::get(defaultValue);
   }
 
-  typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
-
   switch (state) {
   case VECT:
-
     if (i>maxIndex || i<minIndex) {
       notDefault = false;
       return StoredType<TYPE>::get(defaultValue);
@@ -542,9 +532,10 @@ typename StoredType<TYPE>::ReturnedValue MutableContainer<TYPE>::get(const unsig
       return StoredType<TYPE>::get(val);
     }
 
-  case HASH:
+  case HASH: {
+    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
 
-    if ((it=hData->find(i))!=hData->end()) {
+    if (it!=hData->end()) {
       notDefault = true;
       return StoredType<TYPE>::get((*it).second);
     }
@@ -552,6 +543,7 @@ typename StoredType<TYPE>::ReturnedValue MutableContainer<TYPE>::get(const unsig
       notDefault = false;
       return StoredType<TYPE>::get(defaultValue);
     }
+  }
 
   default:
     assert(false);
