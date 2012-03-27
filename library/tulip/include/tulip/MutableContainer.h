@@ -484,7 +484,7 @@ typename StoredType<TYPE>::ReturnedConstValue MutableContainer<TYPE>::get(const 
     else
       return StoredType<TYPE>::get(defaultValue);
   }
-    
+
   default:
     assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;

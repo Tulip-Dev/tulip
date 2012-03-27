@@ -74,8 +74,11 @@ bool intersection(const Circle<Obj> &c1, const Circle<Obj> &c2,  Vector<Obj,2> &
   double d =  c1.dist(c2);
   double r1 = c1.radius;
   double r2 = c2.radius;
+
   if (c1 == c2) return false;
+
   if (d > (r1 + r2)) return false; //outside
+
   if (d < fabs(r1 - r2)) return false; //inside
 
   double a = ((r1*r1) - (r2*r2) + (d*d)) / (2.0 * d);

@@ -40,6 +40,7 @@ void CircleTest::intersect() {
   c2[0] = 10.1;
   inter = tlp::intersection(c1, c2, p1, p2);
   CPPUNIT_ASSERT_EQUAL(false, inter);
+
   for (int i=0; i<5000; ++i) {
     Vec2d c1,c2;
     double r1, r2;
@@ -52,6 +53,7 @@ void CircleTest::intersect() {
     Circle<double> cc1(c1, r1);
     Circle<double> cc2(c2, r2);
     Vec2d p1, p2;
+
     if (tlp::intersection(cc1, cc2, p1, p2)) {
       double dc1a = c1.dist(p1);
       double dc1b = c1.dist(p2);
