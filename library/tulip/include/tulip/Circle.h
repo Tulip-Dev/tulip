@@ -70,20 +70,28 @@ struct Circle : public Vector<Obj,2> {
  * if there is only one solution p1 == p2;
  */
 template<typename Obj>
-bool intersection(const Circle<Obj> &c1, const Circle<Obj> &c2,  Vector<Obj,2> &p1,  Vector<Obj,2> &p2) {
-  double d2 =  (c2[0]-c1[0]) * (c2[0]-c1[0]) + (c2[1]-c1[1]) * (c2[1]-c1[1]);
+bool intersection(const Circle<Obj> &c1, const Circle<Obj> &c2,  Vector<Obj,2> &sol1,  Vector<Obj,2> &sol2) {
+  double d =  c1.dist(c2);
+  double r1 = c1.radius;
+  double r2 = c2.radius;
+  if (c1 == c2) return false;
+  if (d > (r1 + r2)) return false; //outside
+  if (d < fabs(r1 - r2)) return false; //inside
 
-  if (sqrt(d2) > c1.radius + c2.radius) return false;
+  double a = ((r1*r1) - (r2*r2) + (d*d)) / (2.0 * d);
+  Vec2d c1c2(c2 - c1);
+  Vec2d p2(c1 + c1c2 * a/d);
 
-  if (c1.isIncludeIn(c2)) return false;
+  double h = sqrt((r1*r1) - (a*a));
+  double rx = -c1c2[1] * (h/d);
+  double ry =  c1c2[0] * (h/d);
 
-  if (c2.isIncludeIn(c1)) return false;
+  sol1[0] = p2[0] + rx;
+  sol1[1] = p2[1] + ry;
 
-  double K = (1./4.) * sqrt(((c1.radius+c2.radius)*(c1.radius+c2.radius)- d2)*(d2 - (c1.radius-c2.radius)*(c1.radius-c2.radius)));
-  p1[0] = (1./2.)*(c2[0] + c1[0]) + (1./2.)*(c2[0]-c1[0])*(c1.radius*c1.radius - c2.radius*c2.radius)/d2 +  2.*(c2[1]-c1[1]) * K/d2;
-  p1[1] = (1./2.)*(c2[1] + c1[1]) + (1./2.)*(c2[1]-c1[1])*(c1.radius*c1.radius - c2.radius*c2.radius)/d2 +  2.*(c2[0]-c1[0]) * K/d2;
-  p2[0] = (1./2.)*(c2[0] + c1[0]) + (1./2.)*(c2[0]-c1[0])*(c1.radius*c1.radius - c2.radius*c2.radius)/d2 -  2.*(c2[1]-c1[1]) * K/d2;
-  p2[1] = (1./2.)*(c2[1] + c1[1]) + (1./2.)*(c2[1]-c1[1])*(c1.radius*c1.radius - c2.radius*c2.radius)/d2 -  2.*(c2[0]-c1[0]) * K/d2;
+  sol2[0] = p2[0] - rx;
+  sol2[1] = p2[1] - ry;
+
   return true;
 }
 
