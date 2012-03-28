@@ -56,14 +56,14 @@ bool BasicPluginsTest::computeProperty(const std::string &algorithm,
                                        const std::string & graphType,
                                        PropType* prop) {
   initializeGraph(graphType);
-  bool deleteProp = prop == NULL;
+  bool deleteProp = (prop == NULL);
 
   if (prop == NULL)
     prop = new PropType(graph);
 
   string errorMsg;
   DataSet ds;
-  bool result = graph->computeProperty(algorithm, prop, errorMsg);
+  bool result = graph->applyPropertyAlgorithm(algorithm, prop, errorMsg);
 
   if (deleteProp)
     delete prop;
@@ -176,18 +176,20 @@ void BasicPluginsTest::testImportAdjacencyMatrix() {
 void BasicPluginsTest::testImportPajek() {
   // test all data/*.net files
   const char* net_files[] = {
-    "data/netscience.net",
-    "data/NDwww.net",
     "data/NDActors.net",
+    "data/NDwww.net",
+    "data/netscience.net",
     NULL
   };
   const char** files = &net_files[0];
 
-  while(!files[0]) {
+  while(files[0]) {
     DataSet ds;
     ds.set("file::filename", string(files[0]));
-    Graph* g = importGraph("Pajek(.net)", ds, NULL, graph);
+    std::cout << "importing Pajek file: " << files[0] << "...";
+    Graph* g = importGraph("Pajek (.net)", ds, NULL, graph);
     CPPUNIT_ASSERT(g == graph);
+    std::cout << " OK" << std::endl;
     g->clear();
     files += 1;
   }
@@ -198,7 +200,7 @@ void BasicPluginsTest::testImportUCINET() {
   const char* dl_files[] = {
     "data/dl_el1_test_labels_embedded.txt",
     "data/dl_el1_test_labels.txt",
-    "data/dl_el1_test_multiple_labels_embedded.txt"
+    "data/dl_el1_test_multiple_labels_embedded.txt",
     "data/dl_el2_test2_labels_embedded.txt",
     "data/dl_el2_test_labels_embedded.txt",
     "data/dl_fm_test2.txt",
@@ -222,11 +224,13 @@ void BasicPluginsTest::testImportUCINET() {
   };
   const char** files = &dl_files[0];
 
-  while(!files[0]) {
+  while(files[0]) {
     DataSet ds;
     ds.set("file::filename", string(files[0]));
+    std::cout << "importing UCINET file: " << files[0] << "...";
     Graph* g = importGraph("UCINET dl", ds, NULL, graph);
     CPPUNIT_ASSERT(g == graph);
+    std::cout << " OK" << std::endl;
     g->clear();
     files += 1;
   }
@@ -332,14 +336,14 @@ void BasicPluginsTest::testMetricColorMapping() {
   initializeGraph("Planar Graph");
   DoubleProperty metric(graph);
   string errorMsg;
-  bool result = graph->computeProperty("Degree", &metric, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
 
   DataSet ds;
   ds.set("linear/uniform\nproperty", &metric);
   ColorProperty color(graph);
-  result = graph->computeProperty("Color Mapping", &color,
-                                  errorMsg, NULL, &ds);
+  result = graph->applyPropertyAlgorithm("Color Mapping", &color,
+					 errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 
@@ -372,7 +376,7 @@ void BasicPluginsTest::testDendrogram() {
   LayoutProperty layout(graph);
   string errorMsg;
   bool result =
-    graph->computeProperty("Dendrogram", &layout, errorMsg, NULL, &ds);
+    graph->applyPropertyAlgorithm("Dendrogram", &layout, errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -383,7 +387,7 @@ void BasicPluginsTest::testGEMLayout() {
   CPPUNIT_ASSERT(g == graph);
   LayoutProperty prop(graph);
   string errorMsg;
-  bool result = graph->computeProperty("GEM (Frick)", &prop, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("GEM (Frick)", &prop, errorMsg);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -405,7 +409,7 @@ void BasicPluginsTest::testMixedModel() {
   LayoutProperty layout(graph);
   string errorMsg;
   bool result =
-    graph->computeProperty("Mixed Model", &layout, errorMsg, NULL, &ds);
+    graph->applyPropertyAlgorithm("Mixed Model", &layout, errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -419,13 +423,13 @@ void BasicPluginsTest::testSquarifiedTreeMap() {
   DoubleProperty metric(graph);
   string errorMsg;
   DataSet ds;
-  bool result = graph->computeProperty("Degree", &metric, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
 
   LayoutProperty layout(graph);
   ds.set("metric", &metric);
-  result = graph->computeProperty("Squarified Tree Map", &layout,
-                                  errorMsg, NULL, &ds);
+  result = graph->applyPropertyAlgorithm("Squarified Tree Map", &layout,
+					 errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -437,7 +441,7 @@ void BasicPluginsTest::testTreeLeaf() {
   LayoutProperty layout(graph);
   string errorMsg;
   bool result =
-    graph->computeProperty("Tree Leaf", &layout, errorMsg, NULL, &ds);
+    graph->applyPropertyAlgorithm("Tree Leaf", &layout, errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -546,13 +550,13 @@ void BasicPluginsTest::testMetricSizeMapping() {
   DoubleProperty metric(graph);
   string errorMsg;
   DataSet ds;
-  bool result = graph->computeProperty("Degree", &metric, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
 
   SizeProperty size(graph);
   ds.set("property", &metric);
-  result = graph->computeProperty("Metric Mapping", &size,
-                                  errorMsg, NULL, &ds);
+  result = graph->applyPropertyAlgorithm("Metric Mapping", &size,
+					 errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -561,7 +565,7 @@ void BasicPluginsTest::testEqualValueClustering() {
   DoubleProperty metric(graph);
   string errorMsg;
   DataSet ds;
-  bool result = graph->computeProperty("Degree", &metric, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
   ds.set("Property", &metric);
   result = graph->applyAlgorithm("Equal Value", errorMsg, &ds);
@@ -572,7 +576,7 @@ void BasicPluginsTest::testHierarchicalClustering() {
   initializeGraph("Planar Graph");
   DoubleProperty* metric = graph->getProperty<DoubleProperty>("viewMetric");
   string errorMsg;
-  bool result = graph->computeProperty("Degree", metric, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("Degree", metric, errorMsg);
   CPPUNIT_ASSERT(result);
   result = graph->applyAlgorithm("Hierarchical", errorMsg);
   CPPUNIT_ASSERT(result);
@@ -583,7 +587,7 @@ void BasicPluginsTest::testQuotientClustering() {
   DoubleProperty metric(graph);
   string errorMsg;
   DataSet ds;
-  bool result = graph->computeProperty("Degree", &metric, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
   ds.set("Property", &metric);
   result = graph->applyAlgorithm("Equal Value", errorMsg, &ds);
@@ -597,12 +601,12 @@ void BasicPluginsTest::testStrengthClustering() {
   string errorMsg;
   DoubleProperty metric(graph);
   DataSet ds;
-  bool result = graph->computeProperty("Degree", &metric, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
   ds.set("metric", &metric);
   DoubleProperty resultMetric(graph);
-  result = graph->computeProperty("Strength Clustering", &resultMetric,
-                                  errorMsg);
+  result = graph->applyPropertyAlgorithm("Strength Clustering", &resultMetric,
+					 errorMsg);
   CPPUNIT_ASSERT(result);
 }
 
@@ -622,7 +626,7 @@ CppUnit::Test * BasicPluginsTest::suite() {
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import FileSystem", &BasicPluginsTest::testImportFileSystem));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import AdjacencyMatrix", &BasicPluginsTest::testImportAdjacencyMatrix));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import UCINET", &BasicPluginsTest::testImportUCINET));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import Pajek", &BasicPluginsTest::testImportUCINET));
+  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import Pajek", &BasicPluginsTest::testImportPajek));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ArityMetric", &BasicPluginsTest::testArityMetric));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("BetweennessCentrality", &BasicPluginsTest::testBetweennessCentrality));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("BiconnectedComponent", &BasicPluginsTest::testBiconnectedComponent));
