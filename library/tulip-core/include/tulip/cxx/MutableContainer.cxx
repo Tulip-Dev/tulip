@@ -159,7 +159,7 @@ tlp::Iterator<unsigned int>* tlp::MutableContainer<TYPE>::findAll(const TYPE &va
 //===================================================================
 template <typename TYPE>
 void tlp::MutableContainer<TYPE>::vectset(const unsigned int i,
-                                          typename StoredType<TYPE>::Value value) {
+    typename StoredType<TYPE>::Value value) {
   if (minIndex == UINT_MAX) {
     minIndex = i;
     maxIndex = i;
@@ -299,7 +299,7 @@ typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::
     else
       return StoredType<TYPE>::get(defaultValue);
   }
-    
+
   default:
     assert(false);
     qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
