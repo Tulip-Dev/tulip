@@ -116,6 +116,22 @@ bool pluginExists(std::string pluginName) {
     }
     return std::find(pluginsList.begin(), pluginsList.end(), pluginName) != pluginsList.end();
 }
+
+extern void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td);
+
+%End
+
+%ModuleCode
+
+void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
+    PyObject *pyObj = sipGetPyObject(wrappedCppObject, td);
+    if (pyObj) {
+        sipTransferTo(pyObj, pyObj);
+        sipSimpleWrapper *wrapper = reinterpret_cast<sipSimpleWrapper *>(pyObj);
+        sipCommonDtor(wrapper);
+    }
+}
+
 %End
 
 %Import ../stl/Module.sip

@@ -49,12 +49,7 @@ extern void releaseGraphHierarchyWrappers(tlp::Graph *graph);
 
 %ModuleCode
 void releaseGraphWrapper(tlp::Graph *graph) {
-    PyObject *pyGraph = sipGetPyObject(graph, sipType_tlp_Graph);
-    if (pyGraph) {
-        sipTransferTo(pyGraph, pyGraph);
-        sipSimpleWrapper *wrapper = reinterpret_cast<sipSimpleWrapper *>(pyGraph);
-        sipCommonDtor(wrapper);
-    }
+    releaseSIPWrapper(graph, sipType_tlp_Graph);
 }
 
 void releaseGraphHierarchyWrappers(tlp::Graph *graph) {
@@ -2208,6 +2203,20 @@ Removes and deletes the property associated to name in the graph properties pool
 
 :param name: the name of the property to delete
 :type name: string
+%End
+
+%MethodCode
+    if (sipCpp->existLocalProperty(*a0)) {
+        tlp::PropertyInterface *prop = sipCpp->getProperty(*a0);
+        releaseSIPWrapper(prop, sipType_tlp_PropertyInterface);
+        sipCpp->delLocalProperty(*a0);
+    } else {
+        sipIsErr = 1;
+        std::string msg = "No local graph property named  ";
+        msg += *a0;
+        msg += ".";
+        PyErr_SetString(PyExc_Exception, msg.c_str());
+    }
 %End
 
 //===========================================================================================
