@@ -52,7 +52,7 @@ public:
   MutableContainer();
   ~MutableContainer();
   void setAll(const TYPE &value);
-  void set(const unsigned int i,const TYPE &value);
+  void set(const unsigned int i, const TYPE &value);
   /**
    * get the value associated to i
    */
@@ -83,7 +83,7 @@ private:
   void vecttohash();
   void hashtovect();
   void compress(unsigned int min, unsigned int max, unsigned int nbElements);
-  void vectset(const unsigned int i, typename StoredType<TYPE>::Value value);
+  inline void vectset(const unsigned int i, typename StoredType<TYPE>::Value value);
   IteratorValue* findAllValues(const TYPE &value, bool equal = true) const;
 private:
   std::deque<typename StoredType<TYPE>::Value> *vData;
