@@ -377,6 +377,7 @@ public :
     nbNodes = 0;
 
     string line;
+
     while (!in.eof() && std::getline(in, line)) {
 
       ++lineNumber;

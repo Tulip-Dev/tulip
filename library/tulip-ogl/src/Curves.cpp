@@ -283,6 +283,7 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
 
   if(angleOk && angle<M_PI/2+M_PI/4) {
     result.reserve(2);
+
     //normal form
     if ((xu^xv)[2] > 0) {
       result.push_back(pCurrent + bi_xu_xv*newSize*static_cast<float>(inversion));
@@ -300,6 +301,7 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
 
     if(angleOk && !twoPointsCurve && !(newSize>u.norm() || newSize>v.norm() || fabs(angle-M_PI)<1E-3)) {
       result.reserve(4);
+
       if ((xu^xv)[2] > 0) {
         result.push_back(pCurrent + bi_xu_xv*newSize*inversion);
         result.push_back(pCurrent - vectUnit*size*inversion);

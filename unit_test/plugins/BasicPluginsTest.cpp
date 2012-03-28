@@ -343,7 +343,7 @@ void BasicPluginsTest::testMetricColorMapping() {
   ds.set("linear/uniform\nproperty", &metric);
   ColorProperty color(graph);
   result = graph->applyPropertyAlgorithm("Color Mapping", &color,
-					 errorMsg, NULL, &ds);
+                                         errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 
@@ -429,7 +429,7 @@ void BasicPluginsTest::testSquarifiedTreeMap() {
   LayoutProperty layout(graph);
   ds.set("metric", &metric);
   result = graph->applyPropertyAlgorithm("Squarified Tree Map", &layout,
-					 errorMsg, NULL, &ds);
+                                         errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -556,7 +556,7 @@ void BasicPluginsTest::testMetricSizeMapping() {
   SizeProperty size(graph);
   ds.set("property", &metric);
   result = graph->applyPropertyAlgorithm("Metric Mapping", &size,
-					 errorMsg, NULL, &ds);
+                                         errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -606,7 +606,7 @@ void BasicPluginsTest::testStrengthClustering() {
   ds.set("metric", &metric);
   DoubleProperty resultMetric(graph);
   result = graph->applyPropertyAlgorithm("Strength Clustering", &resultMetric,
-					 errorMsg);
+                                         errorMsg);
   CPPUNIT_ASSERT(result);
 }
 
