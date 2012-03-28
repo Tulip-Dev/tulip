@@ -1225,7 +1225,15 @@ void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface* p, node n) {
     if (!restartAllowed)
       return;
 
-    updatedPropsAddedNodes[p].insert(n);
+    if (!ita->second.empty()) {
+        updatedPropsAddedNodes[p].insert(n);
+    } else {
+        // if ita->second is empty, it means that the newly added node
+        // has been deleted in the whole graph hierarchy, so we don't
+        // need to backup its property value in the next push as the node
+        // does not belong to a graph anymore
+        updatedPropsAddedNodes[p].erase(n);
+    }
   }
   else {
     TLP_HASH_MAP<PropertyInterface*,
@@ -1268,8 +1276,15 @@ void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface* p, edge e) {
   if (ita != addedEdges.end()) {
     if (!restartAllowed)
       return;
-
-    updatedPropsAddedEdges[p].insert(e);
+    if (!ita->second.graphs.empty()) {
+        updatedPropsAddedEdges[p].insert(e);
+    } else {
+        // if ita->second is empty, it means that the newly added edge
+        // has been deleted in the whole graph hierarchy, so we don't
+        // need to backup its property value in the next push as the edge
+        // does not belong to a graph anymore
+        updatedPropsAddedEdges[p].erase(e);
+    }
   }
   else {
     TLP_HASH_MAP<PropertyInterface*,
