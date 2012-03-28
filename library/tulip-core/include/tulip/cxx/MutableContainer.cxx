@@ -17,10 +17,10 @@
  *
  */
 //===================================================================
-template<typename TYPE>
+template <typename TYPE>
 tlp::MutableContainer<TYPE>::MutableContainer(): vData(new std::deque<typename StoredType<TYPE>::Value>()),
   hData(NULL), minIndex(UINT_MAX), maxIndex(UINT_MAX), defaultValue(StoredType<TYPE>::defaultValue()), state(VECT), elementInserted(0),
-  ratio(double(sizeof(TYPE)) / (3.0*double(sizeof(void *))+double(sizeof(TYPE)))),
+  ratio(double(sizeof(typename tlp::StoredType<TYPE>::Value)) / (3.0*double(sizeof(void *))+double(sizeof(typename tlp::StoredType<TYPE>::Value)))),
   compressing(false) {
 }
 //===================================================================
@@ -43,7 +43,7 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
     }
 
     delete vData;
-    vData=0;
+    vData = NULL;
     break;
 
   case HASH:
@@ -59,7 +59,7 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
     }
 
     delete hData;
-    hData=0;
+    hData = NULL;
     break;
 
   default:
@@ -158,115 +158,8 @@ tlp::Iterator<unsigned int>* tlp::MutableContainer<TYPE>::findAll(const TYPE &va
 }
 //===================================================================
 template <typename TYPE>
-void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
-  //Test if after insertion we need to resize
-  if (!compressing &&
-      !StoredType<TYPE>::equal(defaultValue, value)) {
-    compressing = true;
-    compress (std::min(i,minIndex), std::max(i,maxIndex), elementInserted);
-    compressing = false;
-  }
-
-  if (StoredType<TYPE>::equal(defaultValue, value)) {
-    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
-
-    switch (state) {
-    case VECT :
-
-      if (i<=maxIndex && i>=minIndex) {
-        typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
-
-        if (val != defaultValue) {
-          (*vData)[i - minIndex]= defaultValue;
-          StoredType<TYPE>::destroy(val);
-          --elementInserted;
-        }
-      }
-
-      break;
-
-    case HASH :
-
-      if ((it=hData->find(i)) != hData->end()) {
-        StoredType<TYPE>::destroy((*it).second);
-        hData->erase(i);
-        --elementInserted;
-      }
-
-      break;
-
-    default:
-      assert(false);
-      qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
-      break;
-    }
-  }
-  else {
-    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
-    typename StoredType<TYPE>::Value newVal =
-      StoredType<TYPE>::clone(value);
-
-    switch (state) {
-    case VECT :
-
-      if (minIndex == UINT_MAX) {
-        minIndex = i;
-        maxIndex = i;
-        (*vData).push_back(newVal);
-        ++elementInserted;
-      }
-      else {
-        /*  if ( i > maxIndex ) {
-          (*vData).resize(i+1 - minIndex, defaultValue);
-          maxIndex = i;
-          }*/
-        while ( i > maxIndex ) {
-          (*vData).push_back(defaultValue);
-          ++maxIndex;
-        }
-
-        while ( i < minIndex ) {
-          (*vData).push_front(defaultValue);
-          --minIndex;
-        }
-
-        typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
-        (*vData)[i - minIndex] = newVal;
-
-        if (val != defaultValue)
-          StoredType<TYPE>::destroy(val);
-        else
-          ++elementInserted;
-      }
-
-      break;
-
-    case HASH :
-
-      if ((it=hData->find(i)) != hData->end())
-        StoredType<TYPE>::destroy((*it).second);
-      else
-        ++elementInserted;
-
-      (*hData)[i]= newVal;
-      break;
-
-    default:
-      assert(false);
-      qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
-      break;
-    }
-
-    maxIndex = std::max(maxIndex, i);
-    minIndex = std::min(minIndex, i);
-  }
-}
-//===================================================================
-template <typename TYPE>
 void tlp::MutableContainer<TYPE>::vectset(const unsigned int i,
-    typename StoredType<TYPE>::Value value) {
-  assert(value != defaultValue);
-
+                                          typename StoredType<TYPE>::Value value) {
   if (minIndex == UINT_MAX) {
     minIndex = i;
     maxIndex = i;
@@ -274,6 +167,18 @@ void tlp::MutableContainer<TYPE>::vectset(const unsigned int i,
     ++elementInserted;
   }
   else {
+    // the time performance of these two attempts of nicer coding
+    // in this commented code seems worse than the loops below (about 15%)
+    // if ( i > maxIndex ) {
+    //-- 1st attempt --
+    //   vData->resize(i+1 - minIndex, defaultValue);
+    //-- 2nd attempt
+    //   vData->insert(vData->end(), i - maxIndex, defaultValue);
+    //   maxIndex = i;
+    // } else if (i < minIndex) {
+    //   vData->insert(vData->begin(), minIndex - i, defaultValue);
+    //   minIndex = i;
+    // }
     while ( i > maxIndex ) {
       (*vData).push_back(defaultValue);
       ++maxIndex;
@@ -292,36 +197,109 @@ void tlp::MutableContainer<TYPE>::vectset(const unsigned int i,
     else
       ++elementInserted;
   }
+}
+//===================================================================
+template <typename TYPE>
+void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
+  //Test if after insertion we need to resize
+  if (!compressing &&
+      !StoredType<TYPE>::equal(defaultValue, value)) {
+    compressing = true;
+    compress (std::min(i,minIndex), std::max(i,maxIndex), elementInserted);
+    compressing = false;
+  }
 
-  maxIndex = std::max(maxIndex, i);
-  minIndex = std::min(minIndex, i);
+  if (StoredType<TYPE>::equal(defaultValue, value)) {
+
+    switch (state) {
+    case VECT :
+
+      if (i<=maxIndex && i>=minIndex) {
+        typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
+
+        if (val != defaultValue) {
+          (*vData)[i - minIndex]= defaultValue;
+          StoredType<TYPE>::destroy(val);
+          --elementInserted;
+        }
+      }
+
+      return;
+
+    case HASH : {
+      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
+
+      if (it!=hData->end()) {
+        StoredType<TYPE>::destroy((*it).second);
+        hData->erase(i);
+        --elementInserted;
+      }
+
+      break;
+    }
+
+    default:
+      assert(false);
+      qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
+      break;
+    }
+  }
+  else {
+    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
+    typename StoredType<TYPE>::Value newVal =
+      StoredType<TYPE>::clone(value);
+
+    switch (state) {
+    case VECT :
+
+      vectset(i, newVal);
+
+      return;
+
+    case HASH : {
+      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
+
+      if (it!=hData->end())
+        StoredType<TYPE>::destroy((*it).second);
+      else
+        ++elementInserted;
+
+      (*hData)[i]= newVal;
+      break;
+    }
+
+    default:
+      assert(false);
+      qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
+      break;
+    }
+
+    maxIndex = std::max(maxIndex, i);
+    minIndex = std::min(minIndex, i);
+  }
 }
 //===================================================================
 template <typename TYPE>
 typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::get(const unsigned int i) const {
+  //  cerr << __PRETTY_FUNCTION__ << endl;
   if (maxIndex == UINT_MAX) return StoredType<TYPE>::get(defaultValue);
-
-  typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
 
   switch (state) {
   case VECT:
-
     if (i>maxIndex || i<minIndex)
       return StoredType<TYPE>::get(defaultValue);
     else
       return StoredType<TYPE>::get((*vData)[i - minIndex]);
 
-    break;
+  case HASH: {
+    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
 
-  case HASH:
-
-    if ((it=hData->find(i))!=hData->end())
+    if (it!=hData->end())
       return StoredType<TYPE>::get((*it).second);
     else
       return StoredType<TYPE>::get(defaultValue);
-
-    break;
-
+  }
+    
   default:
     assert(false);
     qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
@@ -361,11 +339,8 @@ typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::get(c
     return StoredType<TYPE>::get(defaultValue);
   }
 
-  typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
-
   switch (state) {
   case VECT:
-
     if (i>maxIndex || i<minIndex) {
       notDefault = false;
       return StoredType<TYPE>::get(defaultValue);
@@ -376,9 +351,10 @@ typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::get(c
       return StoredType<TYPE>::get(val);
     }
 
-  case HASH:
+  case HASH: {
+    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
 
-    if ((it=hData->find(i))!=hData->end()) {
+    if (it!=hData->end()) {
       notDefault = true;
       return StoredType<TYPE>::get((*it).second);
     }
@@ -386,6 +362,7 @@ typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::get(c
       notDefault = false;
       return StoredType<TYPE>::get(defaultValue);
     }
+  }
 
   default:
     assert(false);
@@ -415,7 +392,7 @@ void tlp::MutableContainer<TYPE>::vecttohash() {
   maxIndex = newMaxIndex;
   minIndex = newMinIndex;
   delete vData;
-  vData = 0;
+  vData = NULL;
   state = HASH;
 }
 //===================================================================
@@ -434,7 +411,7 @@ void tlp::MutableContainer<TYPE>::hashtovect() {
   }
 
   delete hData;
-  hData = 0;
+  hData = NULL;
 }
 //===================================================================
 template <typename TYPE>
