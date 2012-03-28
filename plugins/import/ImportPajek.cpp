@@ -41,7 +41,6 @@ const char * paramHelp[] = {
 }
 
 
-const unsigned int MAX_SIZE = 1000;
 namespace {
 bool tokenize(const string& str, vector<string>& tokens, const string& delimiters) {
   if (str.empty())
@@ -152,7 +151,8 @@ public :
     if (!tokenize(str, tokens, " \r\t"))
       return false;
 
-    if (tokens.empty()) return true;
+    if (tokens.empty())
+      return true;
 
     unsigned int nbTokens = tokens.size();
     char c = tokens[0][0];
@@ -370,7 +370,6 @@ public :
 
     stringstream errors;
     size_t lineNumber = 0;
-    char line[MAX_SIZE];
 
     if (pluginProgress)
       pluginProgress->showPreview(false);
@@ -378,10 +377,10 @@ public :
     nbNodes = 0;
 
     while (!in.eof()) {
-      in.getline(line, MAX_SIZE);
-      string lines(line);
+      string line;
+      getline(in, line);
 
-      if(!treatLine(lines)) {
+      if(!treatLine(line)) {
         errors << "An error occurs while parsing file : " << filename << endl;
         errors << "[ERROR] at line " << lineNumber << endl;
 
