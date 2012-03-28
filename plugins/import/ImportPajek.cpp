@@ -376,9 +376,10 @@ public :
 
     nbNodes = 0;
 
-    while (!in.eof()) {
-      string line;
-      getline(in, line);
+    string line;
+    while (!in.eof() && std::getline(in, line)) {
+
+      ++lineNumber;
 
       if(!treatLine(line)) {
         errors << "An error occurs while parsing file : " << filename << endl;
@@ -390,8 +391,6 @@ public :
 
         return false;
       }
-
-      ++lineNumber;
 
       if (pluginProgress && ((lineNumber % 100) == 0) &&
           (pluginProgress->progress(lineNumber, 3 * nbNodes) != TLP_CONTINUE))

@@ -975,10 +975,11 @@ public :
     unsigned int ic, ir, im;
     ic = ir = im = 0;
 
-    while (!in.eof()) {
-      std::string line;
-      getline(in, line);
+    std::string line;
+    while (!in.eof() && std::getline(in, line)) {
       bool result = false;
+
+      ++lineNumber;
 
       switch(expectedLine) {
       case DL_HEADER:
@@ -1076,8 +1077,6 @@ public :
 
         return false;
       }
-
-      ++lineNumber;
 
       if (pluginProgress && ((lineNumber % 100) == 0) &&
           (pluginProgress->progress(lineNumber, 3 * nbNodes) != TLP_CONTINUE)) {
