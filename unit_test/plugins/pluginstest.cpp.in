@@ -15,11 +15,11 @@
 #include <tulip/PluginLoaderTxt.h>
 #endif
 
-int main( int argc, char** argv ) {
+int main( int /*argc*/, char** /*argv*/ ) {
 #if defined(_GLIBCXX_HAVE_SETENV)
   std::string tlpdir("@prefix@");
   // check for lib64
-  std::string tlpdir64 = tlpdir + "/lib64/tlp";
+  std::string tlpdir64 = tlpdir + "/lib64/tulip";
   struct stat statInfo;
   if (stat(tlpdir64.c_str(), &statInfo) == 0)
     tlpdir += "/lib64";
