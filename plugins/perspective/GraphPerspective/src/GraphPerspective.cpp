@@ -193,7 +193,7 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
 
   _mainWindow->show();
   // Open project with model
-  _graphs->readProject(_project,progress);
+  QMap<QString,tlp::Graph*> rootIds = _graphs->readProject(_project,progress);
 
   if (!_externalFile.isEmpty()) {
     QFileInfo externalFileInfo(_externalFile);
@@ -211,8 +211,8 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   _ui->graphHierarchiesEditor->setModel(_graphs);
   _ui->algorithmRunner->setModel(_graphs);
   _ui->workspace->setModel(_graphs);
-  _ui->propertiesEditor->setModel(_graphs
-                                 );
+  _ui->workspace->readProject(_project,rootIds,progress);
+  _ui->propertiesEditor->setModel(_graphs);
 
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
@@ -299,7 +299,7 @@ void GraphPerspective::createPanel(tlp::Graph* g) {
   int result = wizard.exec();
 
   if (result == QDialog::Accepted && wizard.panel() != NULL) {
-    _ui->workspace->addPanel(wizard.panel(),wizard.panelName());
+    _ui->workspace->addPanel(wizard.panel());
     _ui->workspace->setActivePanel(wizard.panel());
   }
 }
@@ -334,7 +334,8 @@ void GraphPerspective::saveAs(const QString& path) {
 
   SimplePluginProgressDialog progress(_mainWindow);
   progress.show();
-  _graphs->writeProject(_project,&progress);
+  QMap<Graph*,QString> rootIds = _graphs->writeProject(_project,&progress);
+  _ui->workspace->writeProject(_project,rootIds,&progress);
   _project->write(path,&progress);
 }
 

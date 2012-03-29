@@ -67,18 +67,17 @@ public:
 
 // ========================
 
-WorkspacePanel::WorkspacePanel(tlp::View* view, const QString& viewName, QWidget *parent)
+WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
   : QWidget(parent),
     _ui(new Ui::WorkspacePanel),
     _view(NULL),
-    _viewName(viewName),
     _viewConfigurationWidgets(NULL),
     _viewConfigurationExpanded(false),
     _currentInteractorConfigurationItem(NULL),
     _progressItem(NULL) {
   _ui->setupUi(this);
   connect(_ui->closeButton,SIGNAL(clicked()),this,SLOT(close()));
-  setView(view,viewName);
+  setView(view);
   setAttribute(Qt::WA_DeleteOnClose);
 }
 
@@ -107,7 +106,7 @@ QString WorkspacePanel::viewName() const {
   return _viewName;
 }
 
-void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
+void WorkspacePanel::setView(tlp::View* view) {
   assert(view != NULL);
   _ui->currentInteractorButton->setChecked(false);
 
@@ -123,10 +122,10 @@ void WorkspacePanel::setView(tlp::View* view, const QString& viewName) {
   delete _view;
 
   _view = view;
-  _viewName = viewName;
+  _viewName = view->name().c_str();
 
   QList<Interactor*> compatibleInteractors;
-  QList<std::string> interactorNames = InteractorLister::compatibleInteractors(viewName.toStdString());
+  QList<std::string> interactorNames = InteractorLister::compatibleInteractors(_viewName.toStdString());
   foreach(std::string name,interactorNames) {
     compatibleInteractors << PluginLister::instance()->getPluginObject<Interactor>(name,NULL);
   }
@@ -354,6 +353,9 @@ void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
   if (_ui->graphCombo->model() == NULL)
     return;
 
+#ifndef NDEBUG
+  assert(dynamic_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model()));
+#endif
   tlp::GraphHierarchiesModel* model = static_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model());
   QModelIndex graphIndex = model->indexOf(g);
 

@@ -29,6 +29,7 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>
+#include <tulip/TulipProject.h>
 
 #include <QtCore/QDebug>
 
@@ -180,8 +181,8 @@ QString Workspace::panelTitle(tlp::WorkspacePanel* panel) const {
   return panel->viewName() + " <" + QString::number(digit+1) + ">";
 }
 
-void Workspace::addPanel(tlp::View* view, const QString& viewName) {
-  WorkspacePanel* panel = new WorkspacePanel(view,viewName);
+void Workspace::addPanel(tlp::View* view) {
+  WorkspacePanel* panel = new WorkspacePanel(view);
 
   if (_model != NULL)
     panel->setGraphsModel(_model);
@@ -508,4 +509,73 @@ QWidget* Workspace::suitableMode(QWidget* oldMode) {
     }
   }
   return result;
+}
+
+#include <QtXml/QDomDocument>
+/*
+  Project serialization
+  */
+void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootIds, tlp::PluginProgress* progress) {
+  project->removeAllDir("views");
+  int i=0;
+  foreach(View* v, panels()) {
+    progress->progress(i,panels().size());
+    QString path = "views/" + QString::number(i);
+    project->mkpath(path);
+    Graph* g = v->graph();
+    QIODevice* viewDescFile = project->fileStream(path + "/view.xml");
+    QDomDocument doc;
+    QDomElement root = doc.createElement("view");
+    root.setAttribute("name",v->name().c_str());
+    root.setAttribute("root",rootIds[g->getRoot()]);
+    root.setAttribute("id",QString::number(g->getId()));
+    QDomElement data = doc.createElement("data");
+    data.setNodeValue(v->state().toString().c_str());
+    root.appendChild(data);
+    doc.appendChild(root);
+    viewDescFile->write(doc.toString().toAscii());
+    viewDescFile->close();
+    delete viewDescFile;
+    i++;
+  }
+}
+
+void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootIds, PluginProgress* progress) {
+  foreach(QString entry, project->entryList("views",QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
+    QDomDocument doc;
+    QIODevice* xmlFile = project->fileStream("views/" + entry + "/view.xml");
+    doc.setContent(xmlFile);
+    xmlFile->close();
+    delete xmlFile;
+
+    QDomElement root = doc.documentElement();
+    QString viewName = root.attribute("name");
+    QString rootId = root.attribute("root");
+    QString id = root.attribute("id");
+    QString data;
+    QDomNodeList children = root.childNodes();
+    for (int i=0;i<children.size();++i) {
+      QDomNode n = children.at(i);
+      QDomElement child = n.toElement();
+      if (child.isNull())
+        continue;
+      if (child.tagName() == "data") {
+        data = child.nodeValue();
+        break;
+      }
+    }
+    View* view = PluginLister::instance()->getPluginObject<View>(viewName.toStdString(),NULL);
+    if (view == NULL)
+      continue;
+    view->setupUi();
+    Graph* rootGraph = rootIds[rootId];
+    assert(rootGraph);
+    Graph* g = rootGraph->getSubGraph(id.toInt());
+    if (g == NULL)
+      g = rootGraph;
+    view->setGraph(g);
+    // FIXME: use serialized string
+    view->setState(DataSet());
+    addPanel(view);
+  }
 }

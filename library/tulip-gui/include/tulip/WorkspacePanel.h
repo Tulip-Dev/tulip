@@ -57,7 +57,7 @@ class TLP_QT_SCOPE WorkspacePanel : public QWidget, public tlp::SimplePluginProg
   void setConfigurationTabExpanded(bool expanded, bool animate=true);
 
 public:
-  explicit WorkspacePanel(tlp::View* view, const QString& viewName, QWidget* parent=0);
+  explicit WorkspacePanel(tlp::View* view, QWidget* parent=0);
   virtual ~WorkspacePanel();
 
   tlp::View* view() const;
@@ -66,7 +66,7 @@ public:
 
 public slots:
   void toggleProgressMode(bool p);
-  void setView(tlp::View* view, const QString& viewName);
+  void setView(tlp::View* view);
   void setCurrentInteractor(tlp::Interactor*);
   void setGraphsModel(tlp::GraphHierarchiesModel*);
   void viewGraphSet(tlp::Graph*);
