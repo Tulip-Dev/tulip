@@ -43,6 +43,8 @@ class BasicPluginsTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testExportGml);
   CPPUNIT_TEST(testImportFileSystem);
   CPPUNIT_TEST(testImportAdjacencyMatrix);
+  CPPUNIT_TEST(testImportPajek);
+  CPPUNIT_TEST(testImportUCINET);
   CPPUNIT_TEST(testMetricColorMapping);
   CPPUNIT_TEST(testLoopSelection);
   CPPUNIT_TEST(testMultipleEdgeSelection);
@@ -82,6 +84,8 @@ public:
   void testExportGml();
   void testImportFileSystem();
   void testImportAdjacencyMatrix();
+  void testImportPajek();
+  void testImportUCINET();
   void testMetricColorMapping();
   void testLoopSelection();
   void testMultipleEdgeSelection();

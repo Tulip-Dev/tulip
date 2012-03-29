@@ -1,0 +1,11 @@
+	dl nr = 6, nc = 4
+	row labels embedded 
+		col labels embedded
+	data:
+	      Dian Norm Coach  Sam
+	Mon     0    1     1    0
+	Tue     1    0     1    1
+	Wed     1    1     0    0
+	Thu     0    1     0    0
+	Fri     1    0     1    1
+	Sat     1    1     0    0
