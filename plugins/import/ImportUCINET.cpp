@@ -104,11 +104,12 @@ bool nextUnsignedInt(const string& str, unsigned int& value,
 }
 
 bool nextString(const string& str, string& token,
-		string::size_type& pos) {
+                string::size_type& pos) {
   token.clear();
   // Skip separators at the beginning.
   string::size_type lastPos = str.find_first_not_of(" \r\t", pos);
   string::size_type size = str.size();
+
   if (string::npos != lastPos && str[lastPos] == '"') {
     // found and open " which marks the beginning of a string description
     // build token until the closing "
@@ -119,22 +120,24 @@ bool nextString(const string& str, string& token,
       char c = str[pos];
 
       if (bslashFound) {
-	token.push_back(c);
-	bslashFound = false;
+        token.push_back(c);
+        bslashFound = false;
       }
       else {
-	if (c == '\\')
-	  bslashFound = true;
-	else {
-	  if (c == '"')
-	    break;
+        if (c == '\\')
+          bslashFound = true;
+        else {
+          if (c == '"')
+            break;
 
-	  token.push_back(c);
-	}
+          token.push_back(c);
+        }
       }
     }
+
     return (pos++ != size);
   }
+
   return false;
 }
 
@@ -272,22 +275,24 @@ public :
       }
 
       if (nocasecmp(token, "title")) {
-	// no existing title
-	if (title_found) {
-	  error << "TITLE already specified";
-	  return false;
-	}
-	if (!skipEqualSign(str, pos) ||
-	    !nextString(str, token, pos) ||
-	    token.empty()) {
+        // no existing title
+        if (title_found) {
+          error << "TITLE already specified";
+          return false;
+        }
+
+        if (!skipEqualSign(str, pos) ||
+            !nextString(str, token, pos) ||
+            token.empty()) {
           error << "invalid specification for parameter TITLE";
           return false;
         }
-	graph->setName(token);
-	title_found = true;
-	continue;
-      }      
-	
+
+        graph->setName(token);
+        title_found = true;
+        continue;
+      }
+
       if (nocasecmp(token, "n")) {
         // we must know nothing about the size of matrices
         if (n || nr || nc) {
@@ -794,10 +799,12 @@ public :
         // check if we first have row label
         if ((embedding & DL_ROWS) && (ic == 0) && (current == 0)) {
           graph->getProperty<StringProperty>("viewLabel")->setNodeValue(src, tokens[i]);
-	  if (ir == 0 && nc == 1 && diagonal == false)
-	    ++ir;
-	  else
-	    current = 1;
+
+          if (ir == 0 && nc == 1 && diagonal == false)
+            ++ir;
+          else
+            current = 1;
+
           continue;
         }
 
@@ -812,13 +819,14 @@ public :
             src = nodes[nc + 1];
           }
           else {
-	    if (ir == 0 && nc == 1) {
-	      // nothing to read in this row
-	      ++ir, current = 0;
-	      continue;
-	    }
-	    ++ic;
-	  }
+            if (ir == 0 && nc == 1) {
+              // nothing to read in this row
+              ++ir, current = 0;
+              continue;
+            }
+
+            ++ic;
+          }
         }
 
         double value = 0;
@@ -836,7 +844,7 @@ public :
             }
           }
         }
-	// ? indicates an unspecified value
+        // ? indicates an unspecified value
         else if (tokens[i] != "?") {
           error << "invalid value";
           return false;
@@ -976,6 +984,7 @@ public :
     ic = ir = im = 0;
 
     std::string line;
+
     while (!in.eof() && std::getline(in, line)) {
       bool result = false;
 
@@ -988,7 +997,7 @@ public :
 
       case DL_ROW_LABELS:
         result = readLabels(line, errors, rowLabelToNode,
-			    nr ? nr : n, nc);
+                            nr ? nr : n, nc);
         break;
 
       case DL_COL_LABELS:
