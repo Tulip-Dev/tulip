@@ -324,8 +324,9 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 static QString GRAPHS_PATH("/graphs/");
 static QString GRAPH_FILE("graph.json");
 
-void GraphHierarchiesModel::readProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
-  foreach(QString entry, project->entryList(GRAPHS_PATH,QDir::Dirs | QDir::NoDotAndDotDot)) {
+QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
+  QMap<QString,tlp::Graph*> rootIds;
+  foreach(QString entry, project->entryList(GRAPHS_PATH,QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
     QString file = GRAPHS_PATH + entry + "/graph.json";
 
     if (!project->exists(file))
@@ -335,22 +336,27 @@ void GraphHierarchiesModel::readProject(tlp::TulipProject *project, tlp::PluginP
     DataSet data;
     data.set<std::string>("file::filename",absolutePath.toStdString());
     Graph* g = tlp::importGraph("JSON Import",data,progress);
+    rootIds[entry] = g;
     addGraph(g);
   }
+  return rootIds;
 }
 
-bool GraphHierarchiesModel::writeProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
+QMap<tlp::Graph*,QString> GraphHierarchiesModel::writeProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
+  QMap<tlp::Graph*,QString> rootIds;
+
   project->removeAllDir(GRAPHS_PATH);
   project->mkpath(GRAPHS_PATH);
   int i=0;
   foreach(tlp::Graph* g, _graphs) {
+    rootIds[g] = QString::number(i);
     QString folder = GRAPHS_PATH + "/" + QString::number(i++) + "/";
     project->mkpath(folder);
     DataSet data;
     std::fstream *stream = project->stdFileStream(folder + "graph.json");
     tlp::exportGraph(g,*stream,"JSON Export",data,progress);
   }
-  return true;
+  return rootIds;
 }
 
 QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
