@@ -38,7 +38,6 @@ using namespace std;
 NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL) {
 }
 
-#include <QtCore/QDebug>
 void NodeLinkDiagramComponent::updateGrid() {
   delete _grid;
   _grid = NULL;

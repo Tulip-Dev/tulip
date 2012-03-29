@@ -150,8 +150,7 @@ QGraphicsItem* View::centralItem() const {
 }
 
 void View::clearRedrawTriggers() {
-  foreach(Observable* t, triggers())
-  removeRedrawTrigger(t);
+  foreach(Observable* t, triggers()) removeRedrawTrigger(t);
 }
 
 void View::applySettings() {

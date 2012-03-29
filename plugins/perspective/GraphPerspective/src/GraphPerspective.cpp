@@ -433,7 +433,31 @@ void GraphPerspective::copy() {
 }
 
 void GraphPerspective::group() {
-  //TODO implement me
+  Observable::holdObservers();
+  tlp::Graph* graph = _graphs->currentGraph();
+  tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
+  std::set<node> groupedNodes;
+  node n;
+  forEach(n, selection->getNodesEqualTo(true))
+    groupedNodes.insert(n);
+  if (groupedNodes.empty()) {
+    qCritical() << trUtf8("[Group] Cannot create meta-nodes from empty selection");
+    return;
+  }
+  bool changeGraph=false;
+  if (graph == graph->getRoot()) {
+    qWarning() << trUtf8("[Group] Grouping can not be done on the root graph. A subgraph has automatically been created");
+    graph = graph->addCloneSubGraph("groups");
+    changeGraph = true;
+  }
+  graph->createMetaNode(groupedNodes);
+  if (!changeGraph)
+    return;
+  foreach(View* v, _ui->workspace->panels()) {
+    if (v->graph() == graph->getRoot())
+      v->setGraph(graph);
+  }
+  Observable::unholdObservers();
 }
 
 void GraphPerspective::createSubGraph() {
@@ -447,10 +471,10 @@ void GraphPerspective::createSubGraph() {
     node tgt = graph->target(e);
 
     if (!selection->getNodeValue(src))
-      qDebug() << "[Create subgraph] Source n" << src.id << " of e" << e.id << " automatically added to selection.";
+      qDebug() << trUtf8("[Create subgraph] Source n") << src.id << trUtf8(" of e") << e.id << trUtf8(" automatically added to selection.");
 
     if (!selection->getNodeValue(tgt))
-      qDebug() << "[Create subgraph] Target n" << tgt.id << " of e" << e.id << " automatically added to selection.";
+      qDebug() << trUtf8("[Create subgraph] Target n") << tgt.id << trUtf8(" of e") << e.id << trUtf8(" automatically added to selection.");
 
     selection->setNodeValue(src,true);
     selection->setNodeValue(tgt,true);

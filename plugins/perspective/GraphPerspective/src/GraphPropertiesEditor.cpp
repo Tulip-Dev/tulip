@@ -114,6 +114,5 @@ void GraphPropertiesEditor::toLabels() {
   data.set("input",_contextProperty);
   std::string msg;
   StringProperty* result = _graph->getProperty<StringProperty>("viewLabel");
-  result->setAllNodeValue("boo");
   _graph->computeProperty<StringProperty>("To labels",result,msg,NULL,&data);
 }
