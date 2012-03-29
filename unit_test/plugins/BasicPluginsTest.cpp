@@ -325,7 +325,7 @@ void BasicPluginsTest::testMetricSizeMapping() {
   SizeProperty size(graph);
   ds.set("property", &metric);
   result = graph->applyPropertyAlgorithm("Metric Mapping", &size,
-					 errorMsg, NULL, &ds);
+                                         errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -409,6 +409,6 @@ void BasicPluginsTest::testStrengthClustering() {
   ds.set("metric", &metric);
   DoubleProperty resultMetric(graph);
   result = graph->applyPropertyAlgorithm("Strength Clustering", &resultMetric,
-					 errorMsg);
+                                         errorMsg);
   CPPUNIT_ASSERT(result);
 }

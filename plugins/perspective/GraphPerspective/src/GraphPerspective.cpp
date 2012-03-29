@@ -439,20 +439,26 @@ void GraphPerspective::group() {
   std::set<node> groupedNodes;
   node n;
   forEach(n, selection->getNodesEqualTo(true))
-    groupedNodes.insert(n);
+  groupedNodes.insert(n);
+
   if (groupedNodes.empty()) {
     qCritical() << trUtf8("[Group] Cannot create meta-nodes from empty selection");
     return;
   }
+
   bool changeGraph=false;
+
   if (graph == graph->getRoot()) {
     qWarning() << trUtf8("[Group] Grouping can not be done on the root graph. A subgraph has automatically been created");
     graph = graph->addCloneSubGraph("groups");
     changeGraph = true;
   }
+
   graph->createMetaNode(groupedNodes);
+
   if (!changeGraph)
     return;
+
   foreach(View* v, _ui->workspace->panels()) {
     if (v->graph() == graph->getRoot())
       v->setGraph(graph);
