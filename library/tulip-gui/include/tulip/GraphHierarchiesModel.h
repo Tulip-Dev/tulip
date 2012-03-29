@@ -102,8 +102,8 @@ public slots:
   void addGraph(tlp::Graph *);
   void removeGraph(tlp::Graph *);
 
-  void readProject(tlp::TulipProject *,tlp::PluginProgress *);
-  bool writeProject(tlp::TulipProject *, tlp::PluginProgress *);
+  QMap<QString,tlp::Graph*> readProject(tlp::TulipProject *,tlp::PluginProgress *);
+  QMap<tlp::Graph*,QString> writeProject(tlp::TulipProject *, tlp::PluginProgress *);
 };
 
 }
