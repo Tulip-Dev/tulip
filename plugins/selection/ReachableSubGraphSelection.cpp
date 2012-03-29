@@ -23,135 +23,141 @@ using namespace tlp;
 BOOLEANPLUGIN(ReachableSubGraphSelection,"Reachable Sub-Graph","David Auber","01/12/1999","Alpha","1.1")
 
 namespace {
-    const char * paramHelp[] = {
-        // direction
-        HTML_HELP_OPEN() \
-        HTML_HELP_DEF( "type", "StringCollection" ) \
-        HTML_HELP_DEF( "values", "{output edges, input edges, all edges}" ) \
-        HTML_HELP_DEF( "default", "output edges" ) \
-        HTML_HELP_BODY() \
-        "This parameter defines the navigation direction. Following values are corrects :" \
-        "<ul><li>output edges: follow ouput edges (directed);</li>" \
-        "<li>input edges: follow input edges (reverse-directed);</li>" \
-        "<li>all edges: all edges (undirected).</li></ul>" \
-        HTML_HELP_CLOSE(),
+const char * paramHelp[] = {
+  // direction
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "StringCollection" ) \
+  HTML_HELP_DEF( "values", "{output edges, input edges, all edges}" ) \
+  HTML_HELP_DEF( "default", "output edges" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the navigation direction. Following values are corrects :" \
+  "<ul><li>output edges: follow ouput edges (directed);</li>" \
+  "<li>input edges: follow input edges (reverse-directed);</li>" \
+  "<li>all edges: all edges (undirected).</li></ul>" \
+  HTML_HELP_CLOSE(),
 
-        // startingNodes
-        HTML_HELP_OPEN() \
-        HTML_HELP_DEF( "type", "Selection" ) \
-        HTML_HELP_DEF( "default", "\"viewSelection\"" ) \
-        HTML_HELP_BODY() \
-        "This parameter defines the starting set of nodes used to walk in the graph." \
-        HTML_HELP_CLOSE(),
+  // startingNodes
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Selection" ) \
+  HTML_HELP_DEF( "default", "\"viewSelection\"" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the starting set of nodes used to walk in the graph." \
+  HTML_HELP_CLOSE(),
 
-        // maxdepth
-        HTML_HELP_OPEN() \
-        HTML_HELP_DEF( "type", "int" ) \
-        HTML_HELP_DEF( "values", "[0,1000000]" ) \
-        HTML_HELP_DEF( "default", "10" ) \
-        HTML_HELP_BODY() \
-        "This parameter defines the maximal distance of reachable nodes." \
-        HTML_HELP_CLOSE(),
-    };
+  // maxdepth
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "int" ) \
+  HTML_HELP_DEF( "values", "[0,1000000]" ) \
+  HTML_HELP_DEF( "default", "10" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the maximal distance of reachable nodes." \
+  HTML_HELP_CLOSE(),
+};
 
-    std::string edgesDirectionLabels[] =
-    {
-        "output edges",
-        "input edges",
-        "all edges",
-    };
+std::string edgesDirectionLabels[] = {
+  "output edges",
+  "input edges",
+  "all edges",
+};
 }
 
 
 
-ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context) {    
-    addParameter<StringCollection> ("edges direction",paramHelp[0],"output edges;input edges;all edges");
-    addParameter<BooleanProperty> ("startingnodes",paramHelp[1],"viewSelection");
-    addParameter<int> ("distance",paramHelp[2],"5");
+ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context) {
+  addParameter<StringCollection> ("edges direction",paramHelp[0],"output edges;input edges;all edges");
+  addParameter<BooleanProperty> ("startingnodes",paramHelp[1],"viewSelection");
+  addParameter<int> ("distance",paramHelp[2],"5");
 }
 
 ReachableSubGraphSelection::~ReachableSubGraphSelection() {}
 
 ///===========================================================
 bool ReachableSubGraphSelection::run() {
-    unsigned int maxDistance = 5;
-    StringCollection edgeDirectionCollecion;
-    EDGE_TYPE edgeDirection=DIRECTED;
-    BooleanProperty * startNodes=graph->getProperty<BooleanProperty>("viewSelection");
+  unsigned int maxDistance = 5;
+  StringCollection edgeDirectionCollecion;
+  EDGE_TYPE edgeDirection=DIRECTED;
+  BooleanProperty * startNodes=graph->getProperty<BooleanProperty>("viewSelection");
 
-    if ( dataSet!=NULL) {
-        dataSet->get("distance", maxDistance);
-        //Get the edge orientation
-        if(dataSet->get("edges direction",edgeDirectionCollecion)){
-            if(edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[0]){
-                edgeDirection = DIRECTED;
-            } else if(edgeDirectionCollecion.getCurrentString()== edgesDirectionLabels[1]){
-                edgeDirection = INV_DIRECTED;
-            }else if(edgeDirectionCollecion.getCurrentString()== edgesDirectionLabels[2]){
-                edgeDirection = UNDIRECTED;
-            }
-        }else{
-            //If the new parameter is not defined search for the old one.
-            int direction=0;
-            if(dataSet->get("direction",direction))
-            {
-                switch(direction){
-                case 0:
-                    edgeDirection = DIRECTED;
-                    break;
-                case 1:
-                    edgeDirection = INV_DIRECTED;
-                    break;
-                case 2:
-                    edgeDirection = UNDIRECTED;
-                }
-            }
+  if ( dataSet!=NULL) {
+    dataSet->get("distance", maxDistance);
+
+    //Get the edge orientation
+    if(dataSet->get("edges direction",edgeDirectionCollecion)) {
+      if(edgeDirectionCollecion.getCurrentString() == edgesDirectionLabels[0]) {
+        edgeDirection = DIRECTED;
+      }
+      else if(edgeDirectionCollecion.getCurrentString()== edgesDirectionLabels[1]) {
+        edgeDirection = INV_DIRECTED;
+      }
+      else if(edgeDirectionCollecion.getCurrentString()== edgesDirectionLabels[2]) {
+        edgeDirection = UNDIRECTED;
+      }
+    }
+    else {
+      //If the new parameter is not defined search for the old one.
+      int direction=0;
+
+      if(dataSet->get("direction",direction)) {
+        switch(direction) {
+        case 0:
+          edgeDirection = DIRECTED;
+          break;
+
+        case 1:
+          edgeDirection = INV_DIRECTED;
+          break;
+
+        case 2:
+          edgeDirection = UNDIRECTED;
         }
-        dataSet->get("startingnodes", startNodes);
+      }
     }
 
-    booleanResult->setAllEdgeValue(false);
-    booleanResult->setAllNodeValue(false);
+    dataSet->get("startingnodes", startNodes);
+  }
 
-    if (startNodes) {
-        Iterator<node>* itN = startNodes->getNodesEqualTo(true);
-        std::set<node> reachables;
+  booleanResult->setAllEdgeValue(false);
+  booleanResult->setAllNodeValue(false);
 
-        // iterate on startNodes add them and their reachables
-        while (itN->hasNext()) {
-            node current = itN->next();
-            reachables.insert(current);
-            reachableNodes(graph, current, reachables, maxDistance,
-                           edgeDirection);
-        }
+  if (startNodes) {
+    Iterator<node>* itN = startNodes->getNodesEqualTo(true);
+    std::set<node> reachables;
 
-        delete itN;
-
-        std::set<node>::const_iterator itr = reachables.begin();
-        std::set<node>::const_iterator ite = reachables.end();
-
-        // select nodes
-        while (itr != ite) {
-            booleanResult->setNodeValue((*itr), true);
-            ++itr;
-        }
-
-        // select corresponding edges
-        Iterator<edge> *itE = graph->getEdges();
-
-        while(itE->hasNext()) {
-            edge e = itE->next();
-            const std::pair<node, node>& ends = graph->ends(e);
-
-            if (booleanResult->getNodeValue(ends.first) &&
-                    booleanResult->getNodeValue(ends.second))
-                booleanResult->setEdgeValue(e, true);
-        }
-
-        delete itE;
+    // iterate on startNodes add them and their reachables
+    while (itN->hasNext()) {
+      node current = itN->next();
+      reachables.insert(current);
+      reachableNodes(graph, current, reachables, maxDistance,
+                     edgeDirection);
     }
 
-    return true;
+    delete itN;
+
+    std::set<node>::const_iterator itr = reachables.begin();
+    std::set<node>::const_iterator ite = reachables.end();
+
+    // select nodes
+    while (itr != ite) {
+      booleanResult->setNodeValue((*itr), true);
+      ++itr;
+    }
+
+    // select corresponding edges
+    Iterator<edge> *itE = graph->getEdges();
+
+    while(itE->hasNext()) {
+      edge e = itE->next();
+      const std::pair<node, node>& ends = graph->ends(e);
+
+      if (booleanResult->getNodeValue(ends.first) &&
+          booleanResult->getNodeValue(ends.second))
+        booleanResult->setEdgeValue(e, true);
+    }
+
+    delete itE;
+  }
+
+  return true;
 }
 
 
