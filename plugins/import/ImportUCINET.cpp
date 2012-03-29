@@ -45,8 +45,6 @@ const char * paramHelp[] = {
 };
 }
 
-
-const unsigned int MAX_SIZE = 1024;
 namespace {
 bool getUnsignedInt(unsigned int& i, const string& str) {
   const char* ptr = str.c_str();
@@ -102,6 +100,41 @@ bool nextUnsignedInt(const string& str, unsigned int& value,
   if (string::npos != pos || string::npos != lastPos)
     return getUnsignedInt(value, str.substr(lastPos, pos - lastPos));
 
+  return false;
+}
+
+bool nextString(const string& str, string& token,
+		string::size_type& pos) {
+  token.clear();
+  // Skip separators at the beginning.
+  string::size_type lastPos = str.find_first_not_of(" \r\t", pos);
+  string::size_type size = str.size();
+  if (string::npos != lastPos && str[lastPos] == '"') {
+    // found and open " which marks the beginning of a string description
+    // build token until the closing "
+    ++lastPos;
+    bool bslashFound = false;
+
+    for (pos = lastPos; pos < size; ++pos) {
+      char c = str[pos];
+
+      if (bslashFound) {
+	token.push_back(c);
+	bslashFound = false;
+      }
+      else {
+	if (c == '\\')
+	  bslashFound = true;
+	else {
+	  if (c == '"')
+	    break;
+
+	  token.push_back(c);
+	}
+      }
+    }
+    return (pos++ != size);
+  }
   return false;
 }
 
@@ -179,7 +212,7 @@ public :
     n(0), nr(0), nc(0), nm(0), current(0),
     dl_found(false), diagonal(true),
     diagonal_found(false),
-    labels_known(false),
+    labels_known(false), title_found(false),
     expectedLine(DL_HEADER),
     embedding(DL_NONE), dataFormat(DL_FM) {
     addInParameter<string>("file::filename", paramHelp[0]);
@@ -204,7 +237,7 @@ public :
   // in the matrix data
   // diagonal_found indicates that the 'diagonal' token has been found
   // labels_known indicates the labels of nodes are known before reading data
-  bool dl_found, diagonal, diagonal_found, labels_known;
+  bool dl_found, diagonal, diagonal_found, labels_known, title_found;
   enum TypeOfLine {DL_HEADER = 0, DL_ROW_LABELS, DL_COL_LABELS,
                    DL_LABELS, DL_MATRIX_LABELS, DL_DATA
                   };
@@ -238,6 +271,23 @@ public :
         return false;
       }
 
+      if (nocasecmp(token, "title")) {
+	// no existing title
+	if (title_found) {
+	  error << "TITLE already specified";
+	  return false;
+	}
+	if (!skipEqualSign(str, pos) ||
+	    !nextString(str, token, pos) ||
+	    token.empty()) {
+          error << "invalid specification for parameter TITLE";
+          return false;
+        }
+	graph->setName(token);
+	title_found = true;
+	continue;
+      }      
+	
       if (nocasecmp(token, "n")) {
         // we must know nothing about the size of matrices
         if (n || nr || nc) {
@@ -399,9 +449,16 @@ public :
 
         diagonal_found = true;
 
-        if (!skipEqualSign(str, pos) ||
-            !nextToken(str, " \r\t,", token, pos)
+        if (!nextToken(str, " \r\t,", token, pos)
             || token.empty()) {
+          error << "invalid specification for parameter DIAGONAL";
+          return false;
+        }
+
+        // specification says that DIAGONAL = PRESENT|ABSENT
+        // but = may not exist
+        if ((token == "=") && (!nextToken(str, " \r\t,", token, pos)
+                               || token.empty())) {
           error << "invalid specification for parameter DIAGONAL";
           return false;
         }
@@ -449,8 +506,8 @@ public :
 
         // or 'labels:'
         if (nocasecmp(token, "labels:")) {
-          if (nr == 0) {
-            error << "specification of ROWS LABELS applies only to 2-mode matrix";
+          if (n == 0 && nr == 0) {
+            error << "specification of ROW LABELS applies only to 2-mode matrix";
             return false;
           }
 
@@ -491,8 +548,8 @@ public :
 
         // or 'labels:'
         if (nocasecmp(token, "labels:")) {
-          if (nc == 0) {
-            error << "specification of ROWS LABELS applies only to 2-mode matrix";
+          if (n == 0 && nc == 0) {
+            error << "specification of COLUMN LABELS applies only to 2-mode matrix";
             return false;
           }
 
@@ -737,7 +794,10 @@ public :
         // check if we first have row label
         if ((embedding & DL_ROWS) && (ic == 0) && (current == 0)) {
           graph->getProperty<StringProperty>("viewLabel")->setNodeValue(src, tokens[i]);
-          current = 1;
+	  if (ir == 0 && nc == 1 && diagonal == false)
+	    ++ir;
+	  else
+	    current = 1;
           continue;
         }
 
@@ -751,8 +811,14 @@ public :
             ir = 1;
             src = nodes[nc + 1];
           }
-          else
-            ++ic;
+          else {
+	    if (ir == 0 && nc == 1) {
+	      // nothing to read in this row
+	      ++ir, current = 0;
+	      continue;
+	    }
+	    ++ic;
+	  }
         }
 
         double value = 0;
@@ -770,7 +836,8 @@ public :
             }
           }
         }
-        else {
+	// ? indicates an unspecified value
+        else if (tokens[i] != "?") {
           error << "invalid value";
           return false;
         }
@@ -897,7 +964,6 @@ public :
 
     stringstream errors;
     size_t lineNumber = 0;
-    char* buffer = new char[MAX_SIZE];
 
     if (pluginProgress)
       pluginProgress->showPreview(false);
@@ -909,10 +975,11 @@ public :
     unsigned int ic, ir, im;
     ic = ir = im = 0;
 
-    while (!in.eof()) {
-      in.getline(buffer, MAX_SIZE);
-      std::string line(buffer);
+    std::string line;
+    while (!in.eof() && std::getline(in, line)) {
       bool result = false;
+
+      ++lineNumber;
 
       switch(expectedLine) {
       case DL_HEADER:
@@ -920,11 +987,12 @@ public :
         break;
 
       case DL_ROW_LABELS:
-        result = readLabels(line, errors, rowLabelToNode, nr, nc);
+        result = readLabels(line, errors, rowLabelToNode,
+			    nr ? nr : n, nc);
         break;
 
       case DL_COL_LABELS:
-        result = readLabels(line, errors, colLabelToNode, nc, 0);
+        result = readLabels(line, errors, colLabelToNode, nc ? nc : n, 0);
         break;
 
       case DL_LABELS:
@@ -1007,20 +1075,15 @@ public :
           pluginProgress->setError(errors.str());
         }
 
-        delete [] buffer;
         return false;
       }
 
-      ++lineNumber;
-
       if (pluginProgress && ((lineNumber % 100) == 0) &&
           (pluginProgress->progress(lineNumber, 3 * nbNodes) != TLP_CONTINUE)) {
-        delete [] buffer;
         return false;
       }
     }
 
-    delete [] buffer;
     return true;
   }
 };

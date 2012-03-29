@@ -21,14 +21,13 @@
 #include <errno.h>
 #include <fstream>
 #include <sstream>
-#include <math.h>
+#include <cmath>
 #include <tulip/TulipPluginHeaders.h>
 #include <vector>
+#include <string.h>
 
 using namespace std;
 using namespace tlp;
-
-const unsigned int MAX_SIZE = 10000;
 
 enum ValType { TLP_DOUBLE = 0, TLP_STRING = 1, TLP_NOVAL = 2, TLP_NOTHING = 3, TLP_AND = 4 };
 namespace {
@@ -37,7 +36,7 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN()            \
   HTML_HELP_DEF( "type", "pathname" )       \
   HTML_HELP_BODY()                  \
-  "File to import."       \
+  "This parameter defines the file pathname to import."       \
   HTML_HELP_CLOSE(),
 };
 }
@@ -124,14 +123,16 @@ public:
     DoubleProperty *metric = graph->getProperty<DoubleProperty>("viewMetric");
     StringProperty *stringP = graph->getProperty<StringProperty>("viewLabel");
 
-    while (!in.eof()) {
-      char line[MAX_SIZE];
-      in.getline(line,MAX_SIZE);
+    std::string line;
+
+    while (!in.eof() && std::getline(in, line)) {
       stringstream lines(line);
       unsigned int curNode = 0;
       edge e;
       bool itemFound = false;
       bool andFound = false;
+
+      curLine++;
 
       while (lines.good()) {
         string valString;
@@ -231,8 +232,6 @@ public:
 
       if (andFound)
         return formatError("&", curLine);
-
-      curLine++;
     }
 
     return true;

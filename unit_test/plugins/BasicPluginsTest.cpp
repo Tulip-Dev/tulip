@@ -54,7 +54,7 @@ bool BasicPluginsTest::computeProperty(const std::string &algorithm,
                                        const std::string & graphType,
                                        PropType* prop) {
   initializeGraph(graphType);
-  bool deleteProp = prop == NULL;
+  bool deleteProp = (prop == NULL);
 
   if (prop == NULL)
     prop = new PropType(graph);
@@ -125,20 +125,20 @@ void BasicPluginsTest::testImportGridApproximation() {
 //==========================================================
 void BasicPluginsTest::testImportDot() {
   DataSet ds;
-  ds.set("file::filename", string("toto.dot"));
+  ds.set("file::filename", string("data/toto.dot"));
   Graph* g = importGraph("dot (graphviz)", ds, NULL, graph);
   CPPUNIT_ASSERT(g == NULL);
-  ds.set("file::filename", string("graph.dot"));
+  ds.set("file::filename", string("data/graph.dot"));
   g = importGraph("dot (graphviz)", ds, NULL, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
 void BasicPluginsTest::testImportGml() {
   DataSet ds;
-  ds.set("file::filename", string("toto.gml"));
+  ds.set("file::filename", string("data/toto.gml"));
   Graph* g = importGraph("GML", ds, NULL, graph);
   CPPUNIT_ASSERT(g == NULL);
-  ds.set("file::filename", string("CMPb.gml"));
+  ds.set("file::filename", string("data/CMPb.gml"));
   g = importGraph("GML", ds, NULL, graph);
   CPPUNIT_ASSERT(g == graph);
 }
@@ -163,26 +163,89 @@ void BasicPluginsTest::testImportFileSystem() {
 //==========================================================
 void BasicPluginsTest::testImportAdjacencyMatrix() {
   DataSet ds;
-  ds.set("file::name", string("toto.txt"));
+  ds.set("file::name", string("data/toto.txt"));
   Graph* g = importGraph("Adjacency Matrix", ds, NULL, graph);
   CPPUNIT_ASSERT(g == NULL);
-  ds.set("file::name", string("adj_mat.txt"));
+  ds.set("file::name", string("data/adj_mat.txt"));
   g = importGraph("Adjacency Matrix", ds, NULL, graph);
   CPPUNIT_ASSERT(g == graph);
+}
+//==========================================================
+void BasicPluginsTest::testImportPajek() {
+  // test all data/*.net files
+  const char* net_files[] = {
+    "data/NDActors.net",
+    "data/NDwww.net",
+    "data/netscience.net",
+    NULL
+  };
+  const char** files = &net_files[0];
+
+  while(files[0]) {
+    DataSet ds;
+    ds.set("file::filename", string(files[0]));
+    std::cout << "importing Pajek file: " << files[0] << "...";
+    Graph* g = importGraph("Pajek (.net)", ds, NULL, graph);
+    CPPUNIT_ASSERT(g == graph);
+    std::cout << " OK" << std::endl;
+    g->clear();
+    files += 1;
+  }
+}
+//==========================================================
+void BasicPluginsTest::testImportUCINET() {
+  // test all data/dl_*.txt files
+  const char* dl_files[] = {
+    "data/dl_el1_test_labels_embedded.txt",
+    "data/dl_el1_test_labels.txt",
+    "data/dl_el1_test_multiple_labels_embedded.txt",
+    "data/dl_el2_test2_labels_embedded.txt",
+    "data/dl_el2_test_labels_embedded.txt",
+    "data/dl_fm_test2.txt",
+    "data/dl_fm_test3.txt",
+    "data/dl_fm_test_labels_no_diag.txt",
+    "data/dl_fm_test2_labels_no_diag.txt",
+    "data/dl_fm_test_labels.txt",
+    "data/dl_fm_test_multi_matrices.txt",
+    "data/dl_fm_test_rect_labels_embedded.txt",
+    "data/dl_fm_test_rect_labels.txt",
+    "data/dl_fm_test_rect.txt",
+    "data/dl_fm_test.txt",
+    "data/dl_lh_test_labels_no_diag.txt",
+    "data/dl_lh_test_labels.txt",
+    "data/dl_nl1_test2_labels_embedded.txt",
+    "data/dl_nl1_test2_labels.txt",
+    "data/dl_nl1_test_labels_embedded.txt",
+    "data/dl_nl1_test_labels.txt",
+    "data/dl_nl2_test_row_col_labels_embedded.txt",
+    NULL
+  };
+  const char** files = &dl_files[0];
+
+  while(files[0]) {
+    DataSet ds;
+    ds.set("file::filename", string(files[0]));
+    std::cout << "importing UCINET file: " << files[0] << "...";
+    Graph* g = importGraph("UCINET dl", ds, NULL, graph);
+    CPPUNIT_ASSERT(g == graph);
+    std::cout << " OK" << std::endl;
+    g->clear();
+    files += 1;
+  }
 }
 //==========================================================
 void BasicPluginsTest::testMetricColorMapping() {
   initializeGraph("Planar Graph");
   DoubleProperty metric(graph);
   string errorMsg;
-  bool result = graph->computeProperty("Degree", &metric, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
 
   DataSet ds;
   ds.set("linear/uniform\nproperty", &metric);
   ColorProperty color(graph);
-  result = graph->computeProperty("Color Mapping", &color,
-                                  errorMsg, NULL, &ds);
+  result = graph->applyPropertyAlgorithm("Color Mapping", &color,
+                                         errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -256,13 +319,13 @@ void BasicPluginsTest::testMetricSizeMapping() {
   DoubleProperty metric(graph);
   string errorMsg;
   DataSet ds;
-  bool result = graph->computeProperty("Degree", &metric, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
 
   SizeProperty size(graph);
   ds.set("property", &metric);
-  result = graph->computeProperty("Metric Mapping", &size,
-                                  errorMsg, NULL, &ds);
+  result = graph->applyPropertyAlgorithm("Metric Mapping", &size,
+					 errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -306,7 +369,7 @@ void BasicPluginsTest::testEqualValueClustering() {
 
   PluginProgress* progress = new SimplePluginProgress();
   initializeGraph("Planar Graph");
-  result = graph->computeProperty("Degree", metric, errorMsg, progress);
+  result = graph->applyPropertyAlgorithm("Degree", metric, errorMsg, progress);
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
   result = graph->applyAlgorithm(algorithmName, errorMsg, &ds);
   CPPUNIT_ASSERT_MESSAGE(errorMsg, result);
@@ -316,7 +379,7 @@ void BasicPluginsTest::testHierarchicalClustering() {
   initializeGraph("Planar Graph");
   DoubleProperty* metric = graph->getProperty<DoubleProperty>("viewMetric");
   string errorMsg;
-  bool result = graph->computeProperty("Degree", metric, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("Degree", metric, errorMsg);
   CPPUNIT_ASSERT(result);
   result = graph->applyAlgorithm("Hierarchical", errorMsg);
   CPPUNIT_ASSERT(result);
@@ -327,7 +390,7 @@ void BasicPluginsTest::testQuotientClustering() {
   DoubleProperty metric(graph);
   string errorMsg;
   DataSet ds;
-  bool result = graph->computeProperty("Degree", &metric, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
   ds.set("Property", &metric);
   result = graph->applyAlgorithm("Equal Value", errorMsg, &ds);
@@ -341,11 +404,11 @@ void BasicPluginsTest::testStrengthClustering() {
   string errorMsg;
   DoubleProperty metric(graph);
   DataSet ds;
-  bool result = graph->computeProperty("Degree", &metric, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
   ds.set("metric", &metric);
   DoubleProperty resultMetric(graph);
-  result = graph->computeProperty("Strength Clustering", &resultMetric,
-                                  errorMsg);
+  result = graph->applyPropertyAlgorithm("Strength Clustering", &resultMetric,
+					 errorMsg);
   CPPUNIT_ASSERT(result);
 }

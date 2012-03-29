@@ -1,0 +1,10 @@
+dl nr = 6, nc = 4
+	col labels:
+	hook,canyon,silence,rosencrantz
+data:
+0 1 1 0
+1 0 1 1
+1 1 0 0
+0 1 0 0
+1 0 1 1
+1 1 0 0
