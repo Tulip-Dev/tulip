@@ -27,7 +27,7 @@
  * This selection plugin enables to find all nodes and edges at a fixed distance of a set of nodes.
  * It takes three parameters :
  * - <b>int</b> distance
- * - <b>int</b> direction : 0 means directed, 1 reverse directed, 2 undirected
+ * - <b>StringCollection</b> edge direction : output edges , input edges , all edges
  * - <b>BooleanProperty *</b> startingnodes : the selected nodes of this BooleanProperty
  * (those whose associated value is true) will be used as starting nodes.
  *
