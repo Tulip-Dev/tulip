@@ -34,10 +34,12 @@ class Workspace;
 }
 
 namespace tlp {
+class PluginProgress;
 class View;
 class WorkspacePanel;
 class Graph;
 class GraphHierarchiesModel;
+class TulipProject;
 
 class TLP_QT_SCOPE Workspace: public QWidget {
   Q_OBJECT
@@ -84,7 +86,7 @@ public:
   explicit Workspace(QWidget *parent = 0);
   virtual ~Workspace();
 
-  void addPanel(tlp::View*,const QString& viewName);
+  void addPanel(tlp::View*);
   QList<tlp::View*> panels() const;
 
 public slots:
@@ -103,6 +105,9 @@ public slots:
 
   void setActivePanel(tlp::View*);
   void setModel(tlp::GraphHierarchiesModel*);
+
+  void writeProject(tlp::TulipProject*,QMap<tlp::Graph*,QString>, tlp::PluginProgress*);
+  void readProject(tlp::TulipProject*,QMap<QString,tlp::Graph*>,tlp::PluginProgress*);
 
 signals:
   void panelFocused(tlp::View*);
