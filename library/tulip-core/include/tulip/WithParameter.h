@@ -30,7 +30,7 @@ class Graph;
 class DataSet;
 template<class itType >
 struct Iterator;
-  
+
 /** \addtogroup plugins */
 /*@{*/
 /*

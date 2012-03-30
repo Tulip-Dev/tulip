@@ -570,25 +570,33 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
     QString id = root.attribute("id");
     QString data;
     QDomNodeList children = root.childNodes();
-    for (int i=0;i<children.size();++i) {
+
+    for (int i=0; i<children.size(); ++i) {
       QDomNode n = children.at(i);
       QDomElement child = n.toElement();
+
       if (child.isNull())
         continue;
+
       if (child.tagName() == "data") {
         data = child.nodeValue();
         break;
       }
     }
+
     View* view = PluginLister::instance()->getPluginObject<View>(viewName.toStdString(),NULL);
+
     if (view == NULL)
       continue;
+
     view->setupUi();
     Graph* rootGraph = rootIds[rootId];
     assert(rootGraph);
     Graph* g = rootGraph->getSubGraph(id.toInt());
+
     if (g == NULL)
       g = rootGraph;
+
     view->setGraph(g);
     DataSet dataSet;
     std::istringstream iss(data.toStdString());
@@ -598,8 +606,10 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
   }
 
   QIODevice* workspaceXml = project->fileStream("/workspace.xml");
+
   if (workspaceXml == NULL)
     return;
+
   QDomDocument doc;
   doc.setContent(workspaceXml);
   QDomElement root = doc.documentElement();
