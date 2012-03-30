@@ -86,5 +86,5 @@ INSTALL(TARGETS
         InteractorAddNode-${TulipVersion}
         InteractorAddEdge-${TulipVersion}
         InteractorEditEdgeBends-${TulipVersion}
-        DESTINATION ${TulipPluginsInstallDir}/interactors/
+        DESTINATION ${TulipPluginsInstallDir}/interactors
         COMPONENT tulip_plugins)

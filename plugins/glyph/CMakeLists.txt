@@ -136,7 +136,7 @@ INSTALL(TARGETS
 	Diamond-${TulipVersion}
 	Cross-${TulipVersion}
 	GlowSphere-${TulipVersion}
-  DESTINATION ${TulipPluginsInstallDir}/glyphs/
+  DESTINATION ${TulipPluginsInstallDir}/glyphs
   COMPONENT tulip_plugins)
 INSTALL(FILES
   radialGradientTexture.png

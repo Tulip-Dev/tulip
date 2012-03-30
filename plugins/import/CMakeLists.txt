@@ -108,5 +108,5 @@ INSTALL(TARGETS
 	WebImport-${TulipVersion}
 	ImportPajek-${TulipVersion}
 	ImportUCINET-${TulipVersion}
-  DESTINATION ${TulipPluginsInstallDir}/
+  DESTINATION ${TulipPluginsInstallDir}
   COMPONENT tulip_plugins)

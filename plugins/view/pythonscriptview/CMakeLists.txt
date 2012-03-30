@@ -67,7 +67,7 @@ TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
 ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipQtName})
 
-INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}/view/ COMPONENT tulip_python)
+INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}/view COMPONENT tulip_python)
 
 IF(WIN32)
 	FIND_LIBRARY_GLOB(PYTHON_INSTALL_PATH "python2*.dll")

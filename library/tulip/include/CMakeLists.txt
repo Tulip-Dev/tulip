@@ -97,7 +97,7 @@ INSTALL(FILES
   tulip/vectorgraph.h
   tulip/vectorgraphproperty.h
   tulip/TulipException.h
-DESTINATION ${TulipIncludeInstallDir}/tulip/
+DESTINATION ${TulipIncludeInstallDir}/tulip
 COMPONENT libtulip_dev
 )
 
@@ -110,6 +110,6 @@ INSTALL(FILES
   	tulip/cxx/TemplateFactory.cxx
   	tulip/cxx/Reflect.cxx
   	tulip/cxx/Graph.cxx 
-DESTINATION ${TulipIncludeInstallDir}/tulip/cxx/
+DESTINATION ${TulipIncludeInstallDir}/tulip/cxx
 COMPONENT libtulip_dev
 )

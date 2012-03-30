@@ -44,5 +44,5 @@ INSTALL(TARGETS
 	LoopSelection-${TulipVersion}
 	MultipleSelection-${TulipVersion}
 	Kruskal-${TulipVersion}
-  DESTINATION ${TulipPluginsInstallDir}/
+  DESTINATION ${TulipPluginsInstallDir}
   COMPONENT tulip_plugins)

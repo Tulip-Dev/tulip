@@ -21,5 +21,5 @@ INSTALL(TARGETS
 	MetricSizeMapping-${TulipVersion}
 	AutoSize-${TulipVersion}
 	FitToLabels-${TulipVersion}
-  DESTINATION ${TulipPluginsInstallDir}/
+  DESTINATION ${TulipPluginsInstallDir}
   COMPONENT tulip_plugins)

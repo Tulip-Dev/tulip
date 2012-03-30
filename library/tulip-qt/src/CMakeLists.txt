@@ -194,7 +194,7 @@ QT4_ADD_RESOURCES(tulip-qt_RCC_SRCS ${tulip-qt_RCC})
 ADD_DEFINITIONS(-DQT_DLL)
 ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
 
-INCLUDE_DIRECTORIES(../include/ ../include/tulip ${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtBuildInclude} ${PROJECT_BINARY_DIR}/library/tulip-qt/include/tulip/)
+INCLUDE_DIRECTORIES(../include/ ../include/tulip ${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtBuildInclude} ${PROJECT_BINARY_DIR}/library/tulip-qt/include/tulip)
 ADD_LIBRARY(${LibTulipQtName} SHARED ${tulip-qt_UI_SRCS} ${tulip-qt_MOC_SRCS} ${tulip-qt_RCC_SRCS} ${tulip-qt_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipQtName} ${GLEW_LIBRARY})
 TARGET_LINK_LIBRARIES(${LibTulipQtName} ${OPENGL_glu_LIBRARY})
@@ -208,7 +208,7 @@ INSTALL(TARGETS ${LibTulipQtName}
        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_qt
        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_qt
        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_qt)
-INSTALL(FILES ${tulip-qt_UI_SRCS} DESTINATION ${TulipIncludeInstallDir}/tulip/)
+INSTALL(FILES ${tulip-qt_UI_SRCS} DESTINATION ${TulipIncludeInstallDir}/tulip)
 
 IF(WIN32)
   #Copy Qt libs
