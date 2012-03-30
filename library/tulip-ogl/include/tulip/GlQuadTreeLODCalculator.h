@@ -128,7 +128,7 @@ protected :
   BoundingBox entitiesGlobalBoundingBox;
 
   std::vector<Camera *> cameras;
-  std::map<GlLayer*,std::pair<Camera*, Camera> > layerToCamera;
+  std::map<GlLayer*, Camera> layerToCamera;
   Camera *currentCamera;
   Graph *currentGraph;
   PropertyInterface *layoutProperty;

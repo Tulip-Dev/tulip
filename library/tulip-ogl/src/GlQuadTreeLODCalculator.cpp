@@ -93,10 +93,10 @@ bool GlQuadTreeLODCalculator::needEntities() {
     return true;
 
   // Check if a camera have changed (diff between old backup camera and current camera)
-  for(map<GlLayer *,pair<Camera*, Camera> >::iterator it=layerToCamera.begin(); it!=layerToCamera.end(); ++it) {
+  for(map<GlLayer *, Camera>::iterator it=layerToCamera.begin(); it!=layerToCamera.end(); ++it) {
     if(((*it).first->getCamera()).is3D()) {
       Camera camera      = (*it).first->getCamera();
-      Camera oldCamera   = (*it).second.second;
+      Camera oldCamera   = (*it).second;
       Coord unitCamera    = camera.getEyes() - camera.getCenter();
       unitCamera          = unitCamera/unitCamera.norm();
       Coord unitOldCamera = oldCamera.getEyes()-oldCamera.getCenter();
@@ -182,7 +182,7 @@ void GlQuadTreeLODCalculator::compute(const Vector<int,4>& globalViewport,const 
       cameras.push_back(camera);
 
       if(currentLayer!=NULL) {
-        layerToCamera.insert(pair<GlLayer*,pair<Camera*,Camera> >(currentLayer,pair<Camera *,Camera>(camera,*camera)));
+        layerToCamera.insert(pair<GlLayer*, Camera>(currentLayer, *camera));
       }
 
       Matrix<float,4> transformMatrix;
