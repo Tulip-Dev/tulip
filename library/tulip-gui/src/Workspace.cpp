@@ -19,12 +19,16 @@
 #include "tulip/Workspace.h"
 
 #include <math.h>
+#include <iostream>
+#include <sstream>
+#include <string>
 
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
 #include <QtGui/QGraphicsView>
 #include <QtGui/QGraphicsEffect>
 #include <QtGui/QGraphicsSceneDragDropEvent>
+#include <QtXml/QDomDocument>
 
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/View.h>
@@ -464,7 +468,7 @@ void Workspace::showExposeMode() {
 
   _oldWorkspaceMode = currentModeWidget();
   foreach(QWidget* s, _modeSwitches.values()) {
-    s->setEnabled(false);
+    s->hide();
   }
   _ui->nextPageButton->setEnabled(false);
   _ui->previousPageButton->setEnabled(false);
@@ -511,7 +515,6 @@ QWidget* Workspace::suitableMode(QWidget* oldMode) {
   return result;
 }
 
-#include <QtXml/QDomDocument>
 /*
   Project serialization
   */
@@ -538,10 +541,23 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
     delete viewDescFile;
     i++;
   }
+  QDomDocument doc;
+  QDomElement root = doc.createElement("workspace");
+  root.setAttribute("current",_currentPanelIndex);
+  root.setAttribute("mode",currentSlotsCount());
+  doc.appendChild(root);
+  project->removeFile("/workspace.xml");
+  QIODevice* workspaceXml = project->fileStream("/workspace.xml");
+  workspaceXml->write(doc.toString().toAscii());
+  workspaceXml->close();
+  delete workspaceXml;
 }
 
 void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootIds, PluginProgress* progress) {
-  foreach(QString entry, project->entryList("views",QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
+  QStringList entries = project->entryList("views",QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
+  int step = 0,max_step = entries.size();
+  foreach(QString entry, entries) {
+    progress->progress(step++,max_step);
     QDomDocument doc;
     QIODevice* xmlFile = project->fileStream("views/" + entry + "/view.xml");
     doc.setContent(xmlFile);
@@ -574,8 +590,25 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
     if (g == NULL)
       g = rootGraph;
     view->setGraph(g);
-    // FIXME: use serialized string
-    view->setState(DataSet());
+    DataSet dataSet;
+    std::istringstream iss(data.toStdString());
+    DataSet::read(iss,dataSet);
+    view->setState(dataSet);
     addPanel(view);
+  }
+
+  QIODevice* workspaceXml = project->fileStream("/workspace.xml");
+  if (workspaceXml == NULL)
+    return;
+  QDomDocument doc;
+  doc.setContent(workspaceXml);
+  QDomElement root = doc.documentElement();
+  int current = root.attribute("current","0").toInt();
+  int mode = root.attribute("mode","-1").toInt();
+  foreach(QWidget* modeWidget, _modeToSlots.keys()) {
+    if (_modeToSlots[modeWidget].size() == mode) {
+      setActivePanel(_panels[current]->view());
+      switchWorkspaceMode(modeWidget);
+    }
   }
 }
