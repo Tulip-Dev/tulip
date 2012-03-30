@@ -1,11 +1,5 @@
 INCLUDE_DIRECTORIES(./ ${TulipCoreInclude} ${TulipCoreBuildInclude})
 
-
-##----------------------------------------------------------------------------------------------------------------------------
-SET(Includes_SRCS Includes.cpp)
-ADD_LIBRARY(Includes-${TulipVersion} SHARED ${Includes_SRCS})
-TARGET_LINK_LIBRARIES(Includes-${TulipVersion} ${LibTulipCoreName})
-
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(PlanarGraph_SRCS PlanarGraph.cpp)
 ADD_LIBRARY(PlanarGraph-${TulipVersion} SHARED ${PlanarGraph_SRCS})
@@ -104,4 +98,3 @@ INSTALL(TARGETS FileSystem-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}
 INSTALL(TARGETS WebImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT WebImport)
 INSTALL(TARGETS ImportPajek-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ImportPajek)
 INSTALL(TARGETS ImportUCINET-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ImportUCINET)
-INSTALL(TARGETS Includes-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ImportUCINET)
