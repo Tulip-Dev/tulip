@@ -24,21 +24,46 @@
 #include <set>
 
 #include <tulip/Plugin.h>
-#include <tulip/PluginLoader.h>
-#include <tulip/Iterator.h>
-#include <tulip/StlIterator.h>
 #include <tulip/TlpTools.h>
-#include <tulip/PluginContext.h>
 #include <tulip/PluginLibraryLoader.h>
-#include <tulip/PluginContext.h>
-#include <tulip/WithParameter.h>
 
 namespace tlp {
+class PluginContext;
 
 /** @addtogroup plugins
  @{ **/
 
-class FactoryInterface;
+/**
+ * @brief This abstract class provides a more complete interface for plugin factories, including plugin creation.
+ *
+ **/
+class FactoryInterface {
+public:
+  /**
+   * @brief Creates a new Algorithm object.
+   *
+   * @param context The context for the new plug-in.
+   * @return PluginObject* A newly created algorithm plug-in.
+   **/
+  virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0;
+};
+
+#define PLUGIN(C) \
+class C##Factory : public tlp::FactoryInterface { \
+public:            \
+  C##Factory() {          \
+  tlp::PluginLister::registerPlugin(this);     \
+}             \
+~C##Factory(){}          \
+tlp::Plugin* createPluginObject(tlp::PluginContext* context) { \
+C* tmp = new C(context);       \
+return tmp;       \
+}              \
+};                                                      \
+\
+extern "C" {                                            \
+C##Factory C##FactoryInitializer;               \
+}
 
 class TLP_SCOPE PluginLister {
 private:

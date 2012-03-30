@@ -25,13 +25,13 @@
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
 #include <tulip/TulipRelease.h>
+#include <tulip/PluginLister.h>
+#include <tulip/PluginContext.h>
 
 /**
  * \addtogroup plugins
  */
 namespace tlp {
-
-class PluginContext;
 
 /*@{*/
 
@@ -174,21 +174,6 @@ public:
   virtual int id() const;
 };
 
-/**
- * @brief This abstract class provides a more complete interface for plugin factories, including plugin creation.
- *
- **/
-class FactoryInterface {
-public:
-  /**
-   * @brief Creates a new Algorithm object.
-   *
-   * @param context The context for the new plug-in.
-   * @return PluginObject* A newly created algorithm plug-in.
-   **/
-  virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0;
-};
-
 #define PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
 std::string name() const { return NAME; } \
 std::string author() const { return AUTHOR; }\
@@ -197,23 +182,6 @@ std::string info() const { return INFO; }  \
 std::string release() const { return RELEASE; }\
 std::string tulipRelease() const { return TULIP_RELEASE; }\
 std::string group() const { return GROUP; }
-
-#define PLUGIN(C) \
-class C##Factory : public tlp::FactoryInterface { \
-public:            \
-  C##Factory() {          \
-  tlp::PluginLister::registerPlugin(this);     \
-}             \
-~C##Factory(){}          \
-tlp::Plugin* createPluginObject(tlp::PluginContext* context) { \
-C* tmp = new C(context);       \
-return tmp;       \
-}              \
-};                                                      \
-\
-extern "C" {                                            \
-C##Factory C##FactoryInitializer;               \
-}
 
 /*@}*/
 }

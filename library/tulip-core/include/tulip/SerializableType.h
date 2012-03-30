@@ -27,15 +27,7 @@
 #include <iostream>
 #include <sstream>
 #include <float.h>
-#include <tulip/StoredType.h>
-#include <tulip/Coord.h>
-#include <tulip/Size.h>
-#include <tulip/Color.h>
-#include <tulip/StringCollection.h>
-#include <tulip/Edge.h>
-#include <tulip/AbstractProperty.h>
-#include <tulip/TypeInterface.h>
-#include <tulip/SerializableType.h>
+
 #include <tulip/TypeInterface.h>
 
 #define FORWARD_TOSTRING(T) static std::string toString(const T::RealType &v) { std::ostringstream oss;  write(oss, v); return oss.str(); }

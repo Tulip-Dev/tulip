@@ -23,6 +23,7 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
+#include <tulip/ObservableGraph.h>
 
 using namespace std;
 using namespace tlp;

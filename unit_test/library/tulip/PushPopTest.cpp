@@ -26,6 +26,7 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/ConnectedTest.h>
+#include <tulip/ObservableProperty.h>
 
 using namespace std;
 using namespace tlp;

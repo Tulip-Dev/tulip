@@ -19,10 +19,6 @@
 #ifndef _TLPRETURNTYPE_
 #define _TLPRETURNTYPE_
 
-#include <tulip/Node.h>
-#include <tulip/Edge.h>
-#include <tulip/Color.h>
-
 #ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
 
@@ -75,7 +71,7 @@ struct StoredType {
                 \
     enum {isPointer=1};           \
                 \
-    inline static T& get(Value val) {       \
+    inline static T& get(const Value& val) {       \
       return *val;            \
     }               \
                 \
@@ -109,7 +105,7 @@ struct StoredType {
                 \
     enum {isPointer=1};           \
                 \
-    inline static T& get(Value val) {       \
+    inline static T& get(const Value& val) {       \
       return *val;            \
     }               \
                 \

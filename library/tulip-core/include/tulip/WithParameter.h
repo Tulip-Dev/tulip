@@ -23,10 +23,14 @@
 #include <typeinfo>
 
 #include <tulip/tulipconf.h>
-#include <tulip/Iterator.h>
-#include <tulip/DataSet.h>
 
 namespace tlp {
+
+class Graph;
+class DataSet;
+template<class itType >
+struct Iterator;
+  
 /** \addtogroup plugins */
 /*@{*/
 /*

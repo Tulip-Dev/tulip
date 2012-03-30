@@ -24,14 +24,15 @@
 
 #include <set>
 #include <cassert>
-#include <iostream>
 
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
-#include <tulip/Iterator.h>
 #include <tulip/vectorgraphproperty.h>
 
 namespace tlp {
+
+template<class itType >
+struct Iterator;
 //===========================================
 /**
   * @class VectorGraph

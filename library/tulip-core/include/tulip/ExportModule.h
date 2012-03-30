@@ -21,16 +21,13 @@
 #define _EXPORTMODULE_H
 
 #include <iostream>
-#include <tulip/WithParameter.h>
-#include <tulip/WithDependency.h>
-#include <tulip/DataSet.h>
 #include <tulip/Plugin.h>
-#include <tulip/PluginLister.h>
 
 /** \addtogroup plugins */
 
 namespace tlp {
 class Graph;
+class DataSet;
 class PluginProgress;
 /*@{*/
 /// Interface for exportModule plug-ins
