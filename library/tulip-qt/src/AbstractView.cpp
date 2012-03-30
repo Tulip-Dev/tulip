@@ -142,13 +142,14 @@ void AbstractView::exportImage(QAction* action) {
     return;
   }
 
-  //If no extension found automatically add the selected format extension.
-  if(!s.contains(QChar('.')) ) {
+  //If the format extension is not found automatically add it
+  if(!s.endsWith(QString('.').append(extension))) {
     s.append('.');
     s.append(extension);
   }
 
-  savePicture(s.toStdString(),centralWidget->size().width(),centralWidget->size().height(),false);
+  createPicture(s.toStdString(), centralWidget->size().width(),
+		centralWidget->size().height(),false);
 }
 
 void AbstractView::buildContextMenu(QObject *, QContextMenuEvent *, QMenu *contextMenu) {
