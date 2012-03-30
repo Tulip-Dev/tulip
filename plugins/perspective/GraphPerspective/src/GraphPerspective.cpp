@@ -512,6 +512,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
     graph->getAttribute<std::string>("name",name);
     _ui->currentGraphLabel->setText(name.c_str());
   }
+
   _ui->currentGraphFrame->setVisible(enabled);
 }
 
