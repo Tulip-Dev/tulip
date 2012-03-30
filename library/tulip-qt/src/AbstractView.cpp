@@ -142,7 +142,7 @@ void AbstractView::exportImage(QAction* action) {
     return;
   }
 
-  //If the format extension is not found automatically add it
+  // If the format extension is not found automatically add it
   if(!s.endsWith(QString('.').append(extension))) {
     s.append('.');
     s.append(extension);
