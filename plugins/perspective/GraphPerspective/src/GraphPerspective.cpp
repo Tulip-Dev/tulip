@@ -506,6 +506,13 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
 
   if (_ui->centralWidget->currentWidget() == _ui->datasetModePage)
     setDatasetGraph(graph);
+
+  if (graph != NULL) {
+    std::string name;
+    graph->getAttribute<std::string>("name",name);
+    _ui->currentGraphLabel->setText(name.c_str());
+  }
+  _ui->currentGraphFrame->setVisible(enabled);
 }
 
 void GraphPerspective::setDatasetGraph(Graph* graph) {
