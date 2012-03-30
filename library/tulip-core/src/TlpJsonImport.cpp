@@ -284,10 +284,10 @@ public:
           _progress->setComment("parsing property: '" + _propertyName + "'");
         }
 
-        _currentProperty = _graph->getProperty(_propertyName, value);
+        _currentProperty = _graph->getLocalProperty(_propertyName, value);
 
         if(!_currentProperty) {
-          qDebug() << "[error] The property '" << _propertyName << "' of type: '" << value << "' could not be created" << endl;
+          qCritical() << "The property '" << _propertyName << "' of type: '" << value << "' could not be created" << endl;
         }
       }
 
@@ -320,7 +320,7 @@ public:
         }
       }
       else {
-        qDebug() << "[error] The property '" << _propertyName << "'was null when trying to fill it";
+        qCritical() << "The property '" << _propertyName << "'was null when trying to fill it";
       }
     }
 
@@ -343,14 +343,14 @@ public:
         if(_dataSet->get(_currentAttributeName, oldValue)) {
           if ((_currentAttributeName != "name") ||
               (oldValue != "unnamed"))
-            qDebug() << "[error] attribute '" << _currentAttributeName << "' already exists";
+            qCritical() << "attribute '" << _currentAttributeName << "' already exists";
         }
         else {
           bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
           _currentAttributeTypeName = string();
 
           if(!result) {
-            qDebug() << "[error] while reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str();
+            qCritical() << "while reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str();
           }
         }
       }
