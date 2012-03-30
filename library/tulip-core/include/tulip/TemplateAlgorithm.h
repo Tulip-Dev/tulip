@@ -20,11 +20,10 @@
 #ifndef TULIP_PROPERTY_H
 #define TULIP_PROPERTY_H
 
-#include <tulip/PluginContext.h>
-#include <tulip/Graph.h>
 #include <tulip/Algorithm.h>
 
 namespace tlp {
+class PluginContext;
 
 /**
  * \addtogroup plugins

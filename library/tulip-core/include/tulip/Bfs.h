@@ -21,6 +21,7 @@
 #define Bfs_H
 
 #include <tulip/MutableContainer.h>
+#include <tulip/Node.h>
 
 namespace tlp {
 class Graph;

@@ -18,9 +18,6 @@
  */
 #ifndef PROPERTYOBSERVABLE_H
 #define PROPERTYOBSERVABLE_H
-#include <list>
-#include <map>
-#include <algorithm>
 
 #include <tulip/tulipconf.h>
 #include <tulip/Node.h>

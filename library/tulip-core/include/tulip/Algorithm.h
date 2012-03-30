@@ -21,8 +21,7 @@
 
 #include <list>
 #include <string>
-#include <tulip/WithParameter.h>
-#include <tulip/WithDependency.h>
+#include <tulip/Plugin.h>
 #include <tulip/PluginContext.h>
 
 /**

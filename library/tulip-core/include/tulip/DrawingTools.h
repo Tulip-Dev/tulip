@@ -20,11 +20,15 @@
 #define _DRAWINGTOOLS_H
 
 #include <vector>
+#include <tulip/Node.h>
+#include <tulip/Edge.h>
 #include <tulip/Coord.h>
 #include <tulip/BoundingBox.h>
-#include <tulip/Iterator.h>
 
 namespace tlp {
+
+template<class itType >
+struct Iterator;
 
 class Graph;
 class LayoutProperty;

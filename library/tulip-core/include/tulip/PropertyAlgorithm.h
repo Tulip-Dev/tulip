@@ -1,12 +1,12 @@
 #ifndef PROPERTYALGORITHM_H
 #define PROPERTYALGORITHM_H
 
-#include <tulip/PluginContext.h>
-#include <tulip/Graph.h>
 #include <tulip/Algorithm.h>
 #include <tulip/TemplateAlgorithm.h>
 
 namespace tlp {
+class PluginContext;
+
 class BooleanProperty;
 /// Interface for selection plug-ins
 class TLP_SCOPE BooleanAlgorithm : public TemplateAlgorithm<tlp::BooleanProperty> {

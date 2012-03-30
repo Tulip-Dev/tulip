@@ -26,15 +26,13 @@
 #include <climits>
 #include <tulip/tulipconf.h>
 #include <tulip/DataSet.h>
-#include <tulip/PluginContext.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
-#include <tulip/PluginLister.h>
 
 namespace tlp {
 
+class PropertyInterface;
 class BooleanProperty;
 class PluginProgress;
 template<class C>struct Iterator;

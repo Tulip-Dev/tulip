@@ -20,11 +20,7 @@
 #ifndef _IMPORTMODULE_H
 #define _IMPORTMODULE_H
 
-#include <tulip/WithParameter.h>
-#include <tulip/WithDependency.h>
 #include <tulip/Plugin.h>
-#include <tulip/PluginLister.h>
-
 
 /** \addtogroup plugins */
 namespace tlp {

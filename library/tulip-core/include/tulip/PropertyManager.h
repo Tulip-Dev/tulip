@@ -22,13 +22,14 @@
 #define TLP_PROPERTYMANAGER_H
 
 #include <map>
-#include <set>
 #include <string>
-#include <tulip/Iterator.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 
 namespace tlp {
+
+template<class itType >
+struct Iterator;
 
 class PropertyInterface;
 class Graph;

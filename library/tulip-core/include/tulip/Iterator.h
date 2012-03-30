@@ -20,8 +20,6 @@
 #define TULIP_ITERATOR_H
 
 #include <tulip/tulipconf.h>
-#include <tulip/Edge.h>
-#include <tulip/Node.h>
 
 namespace tlp {
 /**
@@ -88,6 +86,10 @@ private:
 #endif // DOXYGEN_NOTFOR_DEVEL
 /*@}*/
 #ifdef _MSC_VER
+
+#include <tulip/Edge.h>
+#include <tulip/Node.h>
+
 template struct TLP_SCOPE Iterator<edge>;
 template struct TLP_SCOPE Iterator<node>;
 #endif

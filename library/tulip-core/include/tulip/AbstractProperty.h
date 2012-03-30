@@ -29,6 +29,7 @@
 #include <tulip/Iterator.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/DataSet.h>
+#include <tulip/Graph.h>
 
 namespace tlp {
 

@@ -26,12 +26,12 @@
 #include <vector>
 #include <list>
 #include <tulip/GraphAbstract.h>
-#include <tulip/Iterator.h>
 #include <tulip/GraphStorage.h>
 #include <tulip/IdManager.h>
 
 namespace tlp {
-
+template<class itType >
+struct Iterator;
 class GraphView;
 class GraphUpdatesRecorder;
 

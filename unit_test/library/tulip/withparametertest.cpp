@@ -24,6 +24,7 @@
 #include <tulip/Coord.h>
 #include <tulip/Size.h>
 #include <tulip/Color.h>
+#include <tulip/DataSet.h>
 
 using namespace tlp;
 using namespace std;
