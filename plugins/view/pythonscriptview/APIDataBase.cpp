@@ -200,6 +200,10 @@ QVector<QVector<QString> > APIDataBase::getParamTypesForMethodOrFunction(const Q
   return ret;
 }
 
+bool APIDataBase::functionExists(const QString &funcName) const {
+    return paramTypes.find(funcName) != paramTypes.end();
+}
+
 QVector<QString> APIDataBase::findTypesContainingDictEntry(const QString &dictEntry) const {
   QVector<QString> ret;
   QHashIterator<QString, QSet<QString> > i(dictContent);

@@ -118,6 +118,28 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
       }
 
       cursor.insertText(textToInsert);
+
+      QString type = codeEditor->autoCompletionDb->getLastFoundType();
+      if (type != "") {
+        QVector<QString> types;
+        types.push_back(type);
+        vector<string> baseTypes = PythonInterpreter::getInstance()->getBaseTypesForType(type.toStdString());
+        for (size_t i = 0 ; i < baseTypes.size() ; ++i) {
+            types.push_back(baseTypes[i].c_str());
+        }
+        for (int i = 0 ; i < types.size() ; ++i) {
+          QString funcName = types[i] + "." + textToInsert;
+          if (codeEditor->apiDb->functionExists(funcName)) {
+            QVector<QVector<QString> > params = codeEditor->apiDb->getParamTypesForMethodOrFunction(funcName);
+            if (params.count() > 1 || params[0].count() > 0) {
+              qApp->sendEvent(codeEditor, new QKeyEvent(QEvent::KeyPress, Qt::Key_ParenLeft, Qt::NoModifier, "("));
+            } else {
+              cursor.insertText("()");
+            }
+            break;
+          }
+        }
+      }
     }
   }
   else {
@@ -709,12 +731,11 @@ static int matchRightParenthesis(const QTextBlock &block, const std::pair<char, 
 
 void PythonCodeEditor::matchParens() {
   blockSignals(true);
+  QTextCharFormat format = textCursor().blockCharFormat();
   parenHighlighter->rehighlightBlock(textCursor().block());
-
-  if (highlighter)
-    highlighter->rehighlightBlock(textCursor().block());
-
+  textCursor().setBlockCharFormat(format);
   blockSignals(false);
+
   ParenInfoTextBlockData *data = static_cast<ParenInfoTextBlockData *>(textCursor().block().userData());
 
   if (data) {

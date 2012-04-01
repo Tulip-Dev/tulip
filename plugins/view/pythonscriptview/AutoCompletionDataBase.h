@@ -46,7 +46,11 @@ public :
 
   void analyseCurrentScriptCode(const QString &code, const int currentLine, const bool interactiveSession=false, const QString &moduleName="");
 
-  QSet<QString> getAutoCompletionListForContext(const QString &context, const QString &editedFunction) const ;
+  QSet<QString> getAutoCompletionListForContext(const QString &context, const QString &editedFunction);
+
+  QString getLastFoundType() const {
+      return lastFoundType;
+  }
 
   QString findTypeForExpr(const QString &expr, const QString &funcName) const ;
 
@@ -77,10 +81,11 @@ private :
   QHash<QString, QHash<QString, QString> > varToPluginName;
   QHash<QString, QHash<QString, QSet<QString> > > pluginParametersDataSet;
   QHash<QString, QString> iteratorType;
-  //QHash<QString, QString> classType;
+
   QHash<QString, QSet<QString> > classContents;
   QHash<QString, QSet<QString> > classBases;
 
+  QString lastFoundType;
 };
 
 #endif /* AUTOCOMPLETIONDATABASE_H_ */
