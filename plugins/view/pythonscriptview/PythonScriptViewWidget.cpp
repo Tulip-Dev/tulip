@@ -252,7 +252,7 @@ void PythonScriptViewWidget::increaseFontSize() {
 void PythonScriptViewWidget::mainScriptTextChanged() {
 
   if (QObject::sender() != mainScriptsTabWidget->widget(mainScriptsTabWidget->currentIndex()))
-      return;
+    return;
 
   QString curTabText = mainScriptsTabWidget->tabText(mainScriptsTabWidget->currentIndex());
 

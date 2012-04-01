@@ -49,7 +49,7 @@ public :
   QSet<QString> getAutoCompletionListForContext(const QString &context, const QString &editedFunction) ;
 
   QString getLastFoundType() const {
-      return lastFoundType;
+    return lastFoundType;
   }
 
   QString findTypeForExpr(const QString &expr, const QString &funcName) const ;

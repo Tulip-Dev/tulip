@@ -201,7 +201,7 @@ QVector<QVector<QString> > APIDataBase::getParamTypesForMethodOrFunction(const Q
 }
 
 bool APIDataBase::functionExists(const QString &funcName) const {
-    return paramTypes.find(funcName) != paramTypes.end();
+  return paramTypes.find(funcName) != paramTypes.end();
 }
 
 QVector<QString> APIDataBase::findTypesContainingDictEntry(const QString &dictEntry) const {

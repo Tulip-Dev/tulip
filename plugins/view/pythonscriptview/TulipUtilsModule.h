@@ -86,42 +86,48 @@ tuliputils_pauseRunningScript(PyObject *, PyObject *) {
 
 static PyObject *
 tuliputils_runGraphScript(PyObject *, PyObject *args) {
-    char *s = NULL;
-    PyObject *o = NULL;
-    if (PyArg_ParseTuple(args, "sO", &s, &o)) {
-        QString scriptName(s);
-        scriptName.replace(".py", "");
-        if (PythonInterpreter::getInstance()->runString(std::string("import ") + scriptName.toStdString())) {
-            const sipAPIDef *sipApi = get_sip_api();
+  char *s = NULL;
+  PyObject *o = NULL;
 
-            // Getting proper sipWrapperType
-            const sipTypeDef* kpTypeDef     = sipApi->api_find_type("tlp::Graph");
+  if (PyArg_ParseTuple(args, "sO", &s, &o)) {
+    QString scriptName(s);
+    scriptName.replace(".py", "");
 
-            // Checking if the Python object wraps a tlp::Graph instance
-            if (sipApi->api_can_convert_to_type(o, kpTypeDef, SIP_NOT_NONE)) {
-                int state = 0;
-                int err = 0;
+    if (PythonInterpreter::getInstance()->runString(std::string("import ") + scriptName.toStdString())) {
+      const sipAPIDef *sipApi = get_sip_api();
 
-                // Unwrapping C++ instance
-                tlp::Graph *graph = reinterpret_cast<tlp::Graph *>(sipApi->api_convert_to_type(o, kpTypeDef, NULL, SIP_NOT_NONE, &state, &err));
+      // Getting proper sipWrapperType
+      const sipTypeDef* kpTypeDef     = sipApi->api_find_type("tlp::Graph");
 
-                if (!PythonInterpreter::getInstance()->runGraphScript(scriptName.toStdString(), "main", graph)) {
-                    PyErr_SetString(PyExc_Exception, (std::string("An exception occurred when executing the ") + std::string(s) + " script").c_str());
-                    return 0;
-                }
-            } else {
-                PyErr_SetString(PyExc_TypeError, "Second parameter of the runGraphScript function must be of type tlp.Graph");
-                return 0;
-            }
-        } else {
-            PyErr_SetString(PyExc_Exception, (std::string("The script ") + std::string(s) + " does not exist").c_str());
-            return 0;
+      // Checking if the Python object wraps a tlp::Graph instance
+      if (sipApi->api_can_convert_to_type(o, kpTypeDef, SIP_NOT_NONE)) {
+        int state = 0;
+        int err = 0;
+
+        // Unwrapping C++ instance
+        tlp::Graph *graph = reinterpret_cast<tlp::Graph *>(sipApi->api_convert_to_type(o, kpTypeDef, NULL, SIP_NOT_NONE, &state, &err));
+
+        if (!PythonInterpreter::getInstance()->runGraphScript(scriptName.toStdString(), "main", graph)) {
+          PyErr_SetString(PyExc_Exception, (std::string("An exception occurred when executing the ") + std::string(s) + " script").c_str());
+          return 0;
         }
-    } else {
-        PyErr_SetString(PyExc_TypeError, "Parameters provided to the runGraphScript function have invalid types");
+      }
+      else {
+        PyErr_SetString(PyExc_TypeError, "Second parameter of the runGraphScript function must be of type tlp.Graph");
         return 0;
+      }
     }
-    Py_RETURN_NONE;
+    else {
+      PyErr_SetString(PyExc_Exception, (std::string("The script ") + std::string(s) + " does not exist").c_str());
+      return 0;
+    }
+  }
+  else {
+    PyErr_SetString(PyExc_TypeError, "Parameters provided to the runGraphScript function have invalid types");
+    return 0;
+  }
+
+  Py_RETURN_NONE;
 }
 
 template <typename T>
