@@ -49,7 +49,6 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
   loadPluginAction = pluginsToolBar->addAction(QIcon(":/icons/doc_import.png"), "Import Tulip plugin from file");
   savePluginAction = pluginsToolBar->addAction(QIcon(":/icons/doc_export.png"), "Save Tulip plugin to file");
 
-
   modulesTabWidget->clear();
   mainScriptsTabWidget->clear();
   pluginsTabWidget->clear();
@@ -250,6 +249,10 @@ void PythonScriptViewWidget::increaseFontSize() {
 }
 
 void PythonScriptViewWidget::mainScriptTextChanged() {
+
+  if (QObject::sender() != mainScriptsTabWidget->widget(mainScriptsTabWidget->currentIndex()))
+     return;
+
   QString curTabText = mainScriptsTabWidget->tabText(mainScriptsTabWidget->currentIndex());
 
   if (curTabText == "")
@@ -262,6 +265,10 @@ void PythonScriptViewWidget::mainScriptTextChanged() {
 }
 
 void PythonScriptViewWidget::moduleScriptTextChanged() {
+
+  if (QObject::sender() != modulesTabWidget->widget(modulesTabWidget->currentIndex()))
+    return;
+
   QString curTabText = modulesTabWidget->tabText(modulesTabWidget->currentIndex());
 
   if (curTabText == "")
@@ -274,6 +281,10 @@ void PythonScriptViewWidget::moduleScriptTextChanged() {
 }
 
 void PythonScriptViewWidget::pluginScriptTextChanged() {
+
+  if (QObject::sender() != pluginsTabWidget->widget(pluginsTabWidget->currentIndex()))
+    return;
+
   QString curTabText = pluginsTabWidget->tabText(pluginsTabWidget->currentIndex());
 
   if (curTabText == "")

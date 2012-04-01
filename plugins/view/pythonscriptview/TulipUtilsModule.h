@@ -48,6 +48,47 @@ tuliputils_pauseRunningScript(PyObject *, PyObject *) {
   Py_RETURN_NONE;
 }
 
+static PyObject *
+tuliputils_runGraphScript(PyObject *, PyObject *args) {
+    char *s = NULL;
+    PyObject *o = NULL;
+    if (PyArg_ParseTuple(args, "sO", &s, &o)) {
+        QString scriptName(s);
+        scriptName.replace(".py", "");
+        if (PythonInterpreter::getInstance()->runString(std::string("import ") + scriptName.toStdString())) {
+            const sipAPIDef *sipApi = get_sip_api();
+
+            // Getting proper sipWrapperType
+            const sipTypeDef* kpTypeDef     = sipApi->api_find_type("tlp::Graph");
+
+            // Checking if the Python object wraps a tlp::Graph instance
+            if (sipApi->api_can_convert_to_type(o, kpTypeDef, SIP_NOT_NONE)) {
+                int state = 0;
+                int err = 0;
+
+                // Unwrapping C++ instance
+                tlp::Graph *graph = reinterpret_cast<tlp::Graph *>(sipApi->api_convert_to_type(o, kpTypeDef, NULL, SIP_NOT_NONE, &state, &err));
+
+                if (!PythonInterpreter::getInstance()->runGraphScript(scriptName.toStdString(), "main", graph)) {
+                    PyErr_SetString(PyExc_Exception, (std::string("An exception occurred when executing the ") + std::string(s) + " script").c_str());
+                    return 0;
+                }
+            } else {
+                PyErr_SetString(PyExc_TypeError, "Second parameter of the runGraphScript function must be of type tlp.Graph");
+                return 0;
+            }
+        } else {
+            PyErr_SetString(PyExc_Exception, (std::string("The script ") + std::string(s) + " does not exist").c_str());
+            return 0;
+        }
+    } else {
+        PyErr_SetString(PyExc_TypeError, "Parameters provided to the runGraphScript function have invalid types");
+        return 0;
+    }
+    Py_RETURN_NONE;
+}
+
+
 template <typename T>
 static bool pluginExists(const std::string &) {
 //  std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
@@ -144,6 +185,7 @@ static PyMethodDef tulipUtilsMethods[] = {
   {"pauseRunningScript",  tuliputils_pauseRunningScript, METH_VARARGS, "Pause the execution of the current running script."},
   {"updatePluginsMenus",  tuliputils_updatePluginsMenus, METH_VARARGS, "Update the plugins menus entries in the Tulip GUI."},
   {"removePlugin",  tuliputils_removePlugin, METH_VARARGS, ""},
+  {"runGraphScript",  tuliputils_runGraphScript, METH_VARARGS, "Allow to execute a script from a script."},
   {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 

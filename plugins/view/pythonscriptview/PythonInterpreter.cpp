@@ -31,8 +31,6 @@
 #include <QtGui/QPushButton>
 #include <QtCore/QTime>
 
-#include <sip.h>
-
 #include <cstdio>
 #ifndef WIN32
 #include <dlfcn.h>
@@ -81,38 +79,6 @@ static const string printObjectClassFunction =
 #endif
   ""
   ;
-
-const sipAPIDef *get_sip_api() {
-#if defined(SIP_USE_PYCAPSULE)
-  return (const sipAPIDef *)PyCapsule_Import("sip._C_API", 0);
-#else
-  PyObject *sip_module;
-  PyObject *sip_module_dict;
-  PyObject *c_api;
-
-  /* Import the SIP module. */
-  sip_module = PyImport_ImportModule("sip");
-
-  if (sip_module == NULL)
-    return NULL;
-
-  /* Get the module's dictionary. */
-  sip_module_dict = PyModule_GetDict(sip_module);
-
-  /* Get the "_C_API" attribute. */
-  c_api = PyDict_GetItemString(sip_module_dict, "_C_API");
-
-  if (c_api == NULL)
-    return NULL;
-
-  /* Sanity check that it is the right type. */
-  if (!PyCObject_Check(c_api))
-    return NULL;
-
-  /* Get the actual pointer from the object. */
-  return (const sipAPIDef *)PyCObject_AsVoidPtr(c_api);
-#endif
-}
 
 #if PY_MAJOR_VERSION >= 3
 static std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
@@ -438,7 +404,7 @@ bool PythonInterpreter::functionExists(const string &moduleName, const string &f
 }
 
 bool PythonInterpreter::runString(const string &pyhtonCode, const std::string &scriptFilePath) {
-  if (consoleOuputHandler)
+  if (consoleOuputHandler && scriptFilePath != "")
     consoleOuputHandler->setMainScriptFileName(scriptFilePath.c_str());
 
   timer.start();
@@ -474,7 +440,7 @@ void PythonInterpreter::addModuleSearchPath(const std::string &path, const bool 
 
 bool PythonInterpreter::runGraphScript(const string &module, const string &function, tlp::Graph *graph, const std::string &scriptFilePath) {
 
-  if (consoleOuputHandler)
+  if (consoleOuputHandler && scriptFilePath != "")
     consoleOuputHandler->setMainScriptFileName(scriptFilePath.c_str());
 
   timer.start();

@@ -23,6 +23,7 @@
 #include "PythonScriptViewWidget.h"
 
 #include <QtCore/QObject>
+#include <QtCore/QDateTime>
 #include <tulip/ViewWidget.h>
 
 class PythonInterpreter;
@@ -92,6 +93,7 @@ private slots :
   void newScript();
   void loadScript();
   void saveScript();
+  void saveImportAllScripts();
   void executeCurrentScript();
   void stopCurrentScript();
   void newStringModule();
@@ -111,19 +113,20 @@ private slots :
 private :
 
   bool loadScript(const QString &fileName);
-  void saveScript(int tabIdx) const;
+  void saveScript(int tabIdx) ;
   bool loadModule(const QString &fileName);
   bool loadModuleFromSrcCode(const std::string &moduleName, const std::string &moduleSrcCode);
   void saveModule();
-  void saveModule(int tabIdx, const bool reload=false) const;
+  void saveModule(int tabIdx, const bool reload=false) ;
   bool loadPythonPlugin(const QString &fileName);
   bool loadPythonPluginFromSrcCode(const std::string &moduleName, const std::string &pluginSrcCode);
-  void savePythonPlugin(int tabIdx) const;
+  void savePythonPlugin(int tabIdx) ;
   void saveAllModules();
   bool reloadAllModules() const;
   void indicateErrors() const;
   void clearErrorIndicators() const;
   bool checkAndGetPluginInfosFromSrcCode(const QString &pluginSrcCode, QString &pluginName, QString &pluginClassName, QString &pluginType, QString &pluginClass);
+  void reloadCodeInEditorIfNeeded(PythonCodeEditor *codeEditor, QTabWidget *tabWidget, int index);
 
   PythonScriptViewWidget *viewWidget;
   PythonInterpreter *pythonInterpreter;
@@ -132,9 +135,12 @@ private :
   std::map<std::string, std::string> editedPluginsClassName;
   std::map<std::string, std::string> editedPluginsType;
   std::map<std::string, std::string> editedPluginsName;
+  std::map<QString, QDateTime> lastModifiedFile;
 
   bool scriptStopped;
   bool runningScript;
+
+  bool dontTreatFocusIn;
 
 };
 
