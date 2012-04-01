@@ -49,12 +49,46 @@
 #  include <frameobject.h>
 #  include <structmember.h>
 #  include <import.h>
+#  include <sip.h>
 #  define _DEBUG
 # else
 #  include <Python.h>
 #  include <frameobject.h>
 #  include <structmember.h>
 #  include <import.h>
+#  include <sip.h>
 # endif
+
+const sipAPIDef *get_sip_api() {
+#if defined(SIP_USE_PYCAPSULE)
+  return (const sipAPIDef *)PyCapsule_Import("sip._C_API", 0);
+#else
+  PyObject *sip_module;
+  PyObject *sip_module_dict;
+  PyObject *c_api;
+
+  /* Import the SIP module. */
+  sip_module = PyImport_ImportModule("sip");
+
+  if (sip_module == NULL)
+    return NULL;
+
+  /* Get the module's dictionary. */
+  sip_module_dict = PyModule_GetDict(sip_module);
+
+  /* Get the "_C_API" attribute. */
+  c_api = PyDict_GetItemString(sip_module_dict, "_C_API");
+
+  if (c_api == NULL)
+    return NULL;
+
+  /* Sanity check that it is the right type. */
+  if (!PyCObject_Check(c_api))
+    return NULL;
+
+  /* Get the actual pointer from the object. */
+  return (const sipAPIDef *)PyCObject_AsVoidPtr(c_api);
+#endif
+}
 
 #endif /* PYTHONINCLUDES_H_ */

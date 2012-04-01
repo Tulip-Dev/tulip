@@ -1184,7 +1184,9 @@ QSet<QString> AutoCompletionDataBase::getAllDictForType(const QString &type, con
   return ret;
 }
 
-QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QString &context, const QString &editedFunction) const {
+QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QString &context, const QString &editedFunction) {
+
+  lastFoundType = "";
 
   QSet<QString> ret;
 
@@ -1280,6 +1282,7 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
     }
 
     if (type != "") {
+      lastFoundType = type;
       ret = getAllDictForType(type, prefix);
 
       if (type != "tlp" && ((varToType.find(editedFunction) != varToType.end() && varToType[editedFunction].find(expr) != varToType[editedFunction].end()) ||

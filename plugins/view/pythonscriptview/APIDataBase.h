@@ -41,6 +41,7 @@ public :
   QSet<QString> getDictContentForType(const QString &type, const QString &prefix = "") const;
   QString getReturnTypeForMethodOrFunction(const QString &funcName) const;
   QVector<QVector<QString> > getParamTypesForMethodOrFunction(const QString &funcName) const;
+  bool functionExists(const QString &funcName) const;
   QVector<QString> findTypesContainingDictEntry(const QString &dictEntry) const;
   QSet<QString> getAllDictEntriesStartingWithPrefix(const QString &prefix) const;
 
@@ -55,6 +56,7 @@ private :
   QHash<QString, QSet<QString> > dictContent;
   QHash<QString, QString> returnType;
   QHash<QString, QVector<QVector<QString> > > paramTypes;
+
 
   static APIDataBase instance;
 
