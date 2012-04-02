@@ -220,24 +220,24 @@ bool tlp::computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line
                                    const std::pair<tlp::Coord, tlp::Coord> &line2,
                                    tlp::Coord &intersectionPoint) {
 
-    Coord a = line1.second - line1.first;
-    Coord b = line2.second - line2.first;
-    Coord c = line2.first - line1.first;
-    Coord axb = a^b;
-    float axbnorm = axb.norm();
+  Coord a = line1.second - line1.first;
+  Coord b = line2.second - line2.first;
+  Coord c = line2.first - line1.first;
+  Coord axb = a^b;
+  float axbnorm = axb.norm();
 
-    // lines are parallel, no intersection
-    if (axbnorm == 0)
-        return false;
+  // lines are parallel, no intersection
+  if (axbnorm == 0)
+    return false;
 
-    // skew lines, no intersection
-    if (c.dotProduct(axb) != 0)
-        return false;
+  // skew lines, no intersection
+  if (c.dotProduct(axb) != 0)
+    return false;
 
-    // lines intersects, compute the point
-    float s = (c^b).dotProduct(axb) / (axbnorm*axbnorm);
-    intersectionPoint = line1.first + a * s;
+  // lines intersects, compute the point
+  float s = (c^b).dotProduct(axb) / (axbnorm*axbnorm);
+  intersectionPoint = line1.first + a * s;
 
-    return true;
+  return true;
 
 }
