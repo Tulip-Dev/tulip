@@ -150,7 +150,7 @@ void AbstractView::exportImage(QAction* action) {
   }
 
   createPicture(s.toStdString(), centralWidget->size().width(),
-		centralWidget->size().height(),false);
+                centralWidget->size().height(),false);
 }
 
 void AbstractView::buildContextMenu(QObject *, QContextMenuEvent *, QMenu *contextMenu) {
