@@ -533,7 +533,10 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
     root.setAttribute("root",rootIds[g->getRoot()]);
     root.setAttribute("id",QString::number(g->getId()));
     QDomElement data = doc.createElement("data");
-    data.setNodeValue(v->state().toString().c_str());
+    std::stringstream dataStr;
+    DataSet::write(dataStr,v->state());
+    QDomText dataText = doc.createTextNode(dataStr.str().c_str());
+    data.appendChild(dataText);
     root.appendChild(data);
     doc.appendChild(root);
     viewDescFile->write(doc.toString().toAscii());
@@ -579,7 +582,7 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
         continue;
 
       if (child.tagName() == "data") {
-        data = child.nodeValue();
+        data = child.text();
         break;
       }
     }
