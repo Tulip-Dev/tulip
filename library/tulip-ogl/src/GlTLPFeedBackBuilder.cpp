@@ -88,11 +88,11 @@ void GlTLPFeedBackBuilder::passThroughToken(GLfloat *data) {
       if(inGlEntity) {
         beginGlEntity(*data);
       }
-      else if(inNode) {
-        beginNode(*data);
-      }
       else if(inEdge) {
         beginEdge(*data);
+      }
+      else if(inNode) {
+        beginNode(*data);
       }
       else if(inGlGraph) {
         beginGlGraph(*data);

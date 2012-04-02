@@ -99,6 +99,9 @@ void GlSVGFeedBackBuilder::endNode() {
 }
 
 void GlSVGFeedBackBuilder::beginEdge(GLfloat data) {
+  if(inNode)
+    endNode();
+
   if(inEdge)
     endEdge();
 
