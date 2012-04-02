@@ -65,7 +65,7 @@ namespace {
 
 
 
-ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context) {
+ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext *context):BooleanAlgorithm(context) {
     addParameter<StringCollection> ("edges direction",paramHelp[0],"output edges;input edges;all edges");
     addParameter<BooleanProperty> ("startingnodes",paramHelp[1],"viewSelection");
     addParameter<int> ("distance",paramHelp[2],"5");
@@ -111,8 +111,8 @@ bool ReachableSubGraphSelection::run() {
         dataSet->get("startingnodes", startNodes);
     }
 
-    booleanResult->setAllEdgeValue(false);
-    booleanResult->setAllNodeValue(false);
+    result->setAllEdgeValue(false);
+    result->setAllNodeValue(false);
 
     if (startNodes) {
         Iterator<node>* itN = startNodes->getNodesEqualTo(true);
@@ -133,7 +133,7 @@ bool ReachableSubGraphSelection::run() {
 
         // select nodes
         while (itr != ite) {
-            booleanResult->setNodeValue((*itr), true);
+            result->setNodeValue((*itr), true);
             ++itr;
         }
 
@@ -144,9 +144,9 @@ bool ReachableSubGraphSelection::run() {
             edge e = itE->next();
             const std::pair<node, node>& ends = graph->ends(e);
 
-            if (booleanResult->getNodeValue(ends.first) &&
-                    booleanResult->getNodeValue(ends.second))
-                booleanResult->setEdgeValue(e, true);
+            if (result->getNodeValue(ends.first) &&
+                    result->getNodeValue(ends.second))
+                result->setEdgeValue(e, true);
         }
 
         delete itE;
