@@ -57,15 +57,8 @@ QWidget *AbstractView::construct(QWidget *parent) {
 
   gridLayout->addLayout(mainLayout, 0, 0, 1, 1);
 
-  // Add this to by-pass a bug in Qt 4.4.1
-  // In the QWorkspace if the widget doesn't have a QGLWidget this widget pass below others widget
-  QFrame *frame = new QFrame(widget);
-  frame->setGeometry(QRect(0, 0, 0, 0));
-  new QGridLayout(frame);
-  new QGLWidget(frame);
-
   //Build output image list
-  exportImageMenu = new QMenu("&Export in EPS or SVG ");
+  exportImageMenu = new QMenu("&Export in EPS or SVG ",widget);
 
   set<string> imgFormats;
   imgFormats.insert("EPS");
@@ -150,13 +143,14 @@ void AbstractView::exportImage(QAction* action) {
     return;
   }
 
-  //If no extension found automatically add the selected format extension.
-  if(!s.contains(QChar('.')) ) {
+  // If the format extension is not found automatically add it
+  if(!s.endsWith(QString('.').append(extension))) {
     s.append('.');
     s.append(extension);
   }
 
-  savePicture(s.toStdString(),centralWidget->size().width(),centralWidget->size().height(),false);
+  createPicture(s.toStdString(), centralWidget->size().width(),
+		centralWidget->size().height(),false);
 }
 
 void AbstractView::buildContextMenu(QObject *, QContextMenuEvent *, QMenu *contextMenu) {
