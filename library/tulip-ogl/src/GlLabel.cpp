@@ -187,7 +187,7 @@ void GlLabel::setPlainFont() {
 }
 //============================================================
 void GlLabel::setFontName(const std::string &name) {
-  if(fontName==name)
+  if(fontName==name || name=="")
     return;
 
   fontName=name;
