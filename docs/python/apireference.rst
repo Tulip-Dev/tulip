@@ -31,8 +31,8 @@ Graph management
 
 .. autofunction:: tulip::tlp.removeFromGraph
 
-Graph measures and drawing tools
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Graph measures
+^^^^^^^^^^^^^^^
 
 .. autofunction:: tulip::tlp.averagePathLength
 
@@ -50,11 +50,16 @@ Graph measures and drawing tools
 
 .. autofunction:: tulip::tlp.reachableNodes
 
+Drawing Tools
+^^^^^^^^^^^^^
+
 .. autofunction:: tulip::tlp.computeBoundingBox
 
 .. autofunction:: tulip::tlp.computeBoundingRadius
 
 .. autofunction:: tulip::tlp.computeConvexHull
+
+.. autofunction:: tulip::tlp.computeLinesIntersection
 
 Plugins Management
 ^^^^^^^^^^^^^^^^^^
