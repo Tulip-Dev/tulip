@@ -9,7 +9,7 @@ case "`uname -s`" in
     *darwin* | *Darwin* | *DARWIN*)
 	export DYLD_LIBRARY_PATH=${THISDIR}/../Frameworks:${THISDIR}/../lib/tlp:${THISDIR}/../lib/tlp/interactors:${THISDIR}/../lib/tlp/view:${DYLD_LIBRARY_PATH}	
         # check for missing link to QtCLucene lib
-	if [ ! -f $THISDIR/../Frameworks/libQtCLucene.4.dylib ]; then
+	if [ ! -L $THISDIR/../Frameworks/libQtCLucene.4.dylib ]; then
 	    QT_LUCENE=`ls $THISDIR/../Frameworks/libQtCLucene*.dylib`
 	    ln -s $QT_LUCENE $THISDIR/../Frameworks/libQtCLucene.4.dylib
 	fi
