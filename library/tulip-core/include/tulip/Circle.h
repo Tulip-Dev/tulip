@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-//@TLPGEOLICENCE#
 #ifndef TLP_GEO_CIRCLE_H
 #define TLP_GEO_CIRCLE_H
 
@@ -51,12 +50,6 @@ struct Circle : public Vector<Obj,2> {
     (*this)+=v;
   }
   /**
-   * Give the instersction of "this" with c, return false if no intersection exist
-   */
-  bool intersection(const Circle<Obj> &, const Vector<Obj,2> &,  const Vector<Obj,2> &) {
-    return true;
-  }
-  /**
    * Merges this circle with another circle; merging operation
    * consists in computing the smallest enclosing circle of the
    * two circle and to store the result in "this".
@@ -72,6 +65,38 @@ struct Circle : public Vector<Obj,2> {
   bool isIncludeIn(const Circle<Obj> & circle) const;
 };
 
+/**
+ * Give the instersction of two circles, return false if no intersection exist else put the two points in p1 & p2,
+ * if there is only one solution p1 == p2;
+ */
+template<typename Obj>
+  bool intersection(const tlp::Circle<Obj> &c1, const tlp::Circle<Obj> &c2,  tlp::Vector<Obj,2> &sol1,  tlp::Vector<Obj,2> &sol2) {
+  double d =  c1.dist(c2);
+  double r1 = c1.radius;
+  double r2 = c2.radius;
+
+  if (c1 == c2) return false;
+
+  if (d > (r1 + r2)) return false; //outside
+
+  if (d < fabs(r1 - r2)) return false; //inside
+
+  double a = ((r1*r1) - (r2*r2) + (d*d)) / (2.0 * d);
+  Vec2d c1c2(c2 - c1);
+  Vec2d p2(c1 + c1c2 * a/d);
+
+  double h = sqrt((r1*r1) - (a*a));
+  double rx = -c1c2[1] * (h/d);
+  double ry =  c1c2[0] * (h/d);
+
+  sol1[0] = p2[0] + rx;
+  sol1[1] = p2[1] + ry;
+
+  sol2[0] = p2[0] - rx;
+  sol2[1] = p2[1] - ry;
+
+  return true;
+}
 
 /**
  * Compute the optimum enclosing circle of 2 circles.
