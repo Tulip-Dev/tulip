@@ -124,6 +124,9 @@ void GlCatmullRomCurve::setCurveVertexShaderRenderingSpecificParameters() {
 
 void GlCatmullRomCurve::drawCurve(vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
 
+  GLint renderMode;
+  glGetIntegerv(GL_RENDER_MODE, &renderMode);
+
   vector<Coord> controlPointsCp;
   vector<Coord> *controlPointsP = &controlPoints;
 
@@ -137,7 +140,7 @@ void GlCatmullRomCurve::drawCurve(vector<Coord> &controlPoints, const Color &sta
     alpha = 1.0f;
   }
 
-  if (closedCurve && curveShaderProgramNormal != NULL) {
+  if (closedCurve && renderMode != GL_SELECT && curveShaderProgramNormal != NULL) {
     controlPointsCp = controlPoints;
     controlPointsCp.push_back(controlPointsCp[0]);
     controlPointsP = &controlPointsCp;
