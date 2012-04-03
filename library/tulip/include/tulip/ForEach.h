@@ -73,7 +73,7 @@ for(tlp::_TLP_IT<TYPEOF(A) > _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
  * It also avoid having to manage a tulip Iterator, whose deletion is often forgotten.
  */
 #define stableForEach(A, B)  \
-  for(tlp::_TLP_IT<TYPEOF(A) > _it_foreach(new StableIterator<TYPEOF(A) >(B));  tlp::_tlp_if_test(A, _it_foreach);)
+  for(tlp::_TLP_IT<TYPEOF(A) > _it_foreach(new tlp::StableIterator<TYPEOF(A) >(B));  tlp::_tlp_if_test(A, _it_foreach);)
 
 //@deprecated no more useful
 #define breakForEach {break;}
