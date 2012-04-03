@@ -102,7 +102,7 @@ void YajlParseFacade::parse(std::string filename) {
     parse_end_array
   };
   yajl_handle hand = yajl_alloc(&callbacks, NULL, this);
-  unsigned char* fileData = (unsigned char*)contents.data();
+  const unsigned char* fileData = (const unsigned char*)contents.constData();
 
   yajl_status stat  = yajl_parse(hand, fileData, contents.length());
 
@@ -115,6 +115,8 @@ void YajlParseFacade::parse(std::string filename) {
 
 //   yajl_gen_free(g);
   yajl_free(hand);
+
+  file.close();
 }
 
 bool YajlParseFacade::parsingSucceeded() const {

@@ -53,16 +53,16 @@ public:
 
   std::string generatedString();
 
-  virtual void writeInteger(long long int number);
-  virtual void writeDouble(double number);
-  virtual void writeNumber(const char* str, size_t len);
-  virtual void writeString(const std::string& text);
-  virtual void writeNull();
-  virtual void writeBool(bool value);
-  virtual void writeMapOpen();
-  virtual void writeMapClose();
-  virtual void writeArrayOpen();
-  virtual void writeArrayClose();
+  void writeInteger(long long int number);
+  void writeDouble(double number);
+  void writeNumber(const char* str, size_t len);
+  void writeString(const std::string& text);
+  void writeNull();
+  void writeBool(bool value);
+  void writeMapOpen();
+  void writeMapClose();
+  void writeArrayOpen();
+  void writeArrayClose();
 protected:
   yajl_gen _generator;
 };
