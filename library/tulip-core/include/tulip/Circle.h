@@ -70,7 +70,7 @@ struct Circle : public Vector<Obj,2> {
  * if there is only one solution p1 == p2;
  */
 template<typename Obj>
-  bool intersection(const tlp::Circle<Obj> &c1, const tlp::Circle<Obj> &c2,  tlp::Vector<Obj,2> &sol1,  tlp::Vector<Obj,2> &sol2) {
+bool intersection(const tlp::Circle<Obj> &c1, const tlp::Circle<Obj> &c2,  tlp::Vector<Obj,2> &sol1,  tlp::Vector<Obj,2> &sol2) {
   double d =  c1.dist(c2);
   double r1 = c1.radius;
   double r2 = c2.radius;
