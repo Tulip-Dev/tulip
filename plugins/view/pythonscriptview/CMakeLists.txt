@@ -3,8 +3,6 @@ IF(SIP_OK)
 
 SET(QT_USE_QTWEBKIT true)
 
-INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
-
 # Force to use SIP headers located in thirdparty and not those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
@@ -57,6 +55,7 @@ QT4_ADD_RESOURCES(pythonscriptview_RCC_SRCS ${pythonscriptview_RCC})
 ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${pythonscriptview_LIB_SRCS} ${pythonscriptview_MOC_SRCS} ${pythonscriptview_UI_SRCS} ${pythonscriptview_RCC_SRCS})
 
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipCoreName})
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipGUIName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_LIBRARIES})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
 IF(LINUX)
@@ -67,11 +66,6 @@ TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipCoreName})
 
 INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT tulip_python)
-
-IF(WIN32)
-	FIND_LIBRARY_GLOB(PYTHON_INSTALL_PATH "python2*.dll")
-	INSTALL_EXTERNAL_LIB(PYTHON_INSTALL_PATH tulip_python)
-ENDIF()
 
 INSTALL(FILES 
         ${CMAKE_CURRENT_SOURCE_DIR}/api/Python-2.4.api
