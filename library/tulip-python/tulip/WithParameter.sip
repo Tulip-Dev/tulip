@@ -45,9 +45,9 @@ that will be shown when the plug-in in invoked by the user.
 
 // ==================================================================================
 	
-	void addStringParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addStringParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 %Docstring
 tlp.WithParameter.addStringParameter(name[, help = None, defaultValue = None, isMandatory = True])
@@ -65,14 +65,14 @@ Adds a string parameter to the plug-in.
 %End
 			
 %MethodCode
-	sipCpp->addParameter<std::string>(a0, a1, a2, a3);
+    sipCpp->addParameter<std::string>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 // ==================================================================================
 
-	void addStringCollectionParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addStringCollectionParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 
 %Docstring
@@ -91,15 +91,15 @@ Adds a :class:`tlp.StringCollection` parameter to the plug-in.
 %End
 
 %MethodCode
-	sipCpp->addParameter<tlp::StringCollection>(a0, a1, a2, a3);
+    sipCpp->addParameter<tlp::StringCollection>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 
 // ==================================================================================
 
-	void addIntegerParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addIntegerParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 			
 %Docstring
@@ -118,14 +118,14 @@ Adds an integer parameter to the plug-in.
 %End			
 			
 %MethodCode
-	sipCpp->addParameter<int>(a0, a1, a2, a3);
+    sipCpp->addParameter<int>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 // ==================================================================================
 
-	void addFloatParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addFloatParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 
 %Docstring
@@ -144,14 +144,14 @@ Adds a floating point number parameter to the plug-in.
 %End			
 			
 %MethodCode
-	sipCpp->addParameter<double>(a0, a1, a2, a3);
+    sipCpp->addParameter<double>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 // ==================================================================================
 
-	void addBooleanParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addBooleanParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 
 %Docstring
@@ -170,14 +170,14 @@ Adds a boolean parameter to the plug-in.
 %End
 						
 %MethodCode
-	sipCpp->addParameter<bool>(a0, a1, a2, a3);
+    sipCpp->addParameter<bool>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End		
 
 // ==================================================================================
 
-	void addDoublePropertyParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addDoublePropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 
 %Docstring
@@ -196,14 +196,14 @@ Adds a :class:`tlp.DoubleProperty` parameter to the plug-in.
 %End			
 			
 %MethodCode
-	sipCpp->addParameter<tlp::DoubleProperty>(a0, a1, a2, a3);
+    sipCpp->addParameter<tlp::DoubleProperty>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 // ==================================================================================
 
-	void addIntegerPropertyParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addIntegerPropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 
 %Docstring
@@ -222,14 +222,14 @@ Adds a :class:`tlp.IntegerProperty` parameter to the plug-in.
 %End			
 			
 %MethodCode
-	sipCpp->addParameter<tlp::IntegerProperty>(a0, a1, a2, a3);
+    sipCpp->addParameter<tlp::IntegerProperty>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 // ==================================================================================
 
-	void addLayoutPropertyParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addLayoutPropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 
 %Docstring
@@ -248,14 +248,14 @@ Adds a :class:`tlp.LayoutProperty` parameter to the plug-in.
 %End			
 			
 %MethodCode
-	sipCpp->addParameter<tlp::LayoutProperty>(a0, a1, a2, a3);
+    sipCpp->addParameter<tlp::LayoutProperty>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 // ==================================================================================
 
-	void addSizePropertyParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addSizePropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 
 %Docstring
@@ -274,14 +274,14 @@ Adds a :class:`tlp.SizeProperty` parameter to the plug-in.
 %End			
 			
 %MethodCode
-	sipCpp->addParameter<tlp::SizeProperty>(a0, a1, a2, a3);
+    sipCpp->addParameter<tlp::SizeProperty>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 // ==================================================================================
 
-	void addColorPropertyParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addColorPropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 			
 %Docstring
@@ -300,14 +300,14 @@ Adds a :class:`tlp.ColorProperty` parameter to the plug-in.
 %End			
 			
 %MethodCode
-	sipCpp->addParameter<tlp::ColorProperty>(a0, a1, a2, a3);
+    sipCpp->addParameter<tlp::ColorProperty>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 // ==================================================================================
 
-	void addBooleanPropertyParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addBooleanPropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 
 %Docstring
@@ -326,14 +326,14 @@ Adds a :class:`tlp.BooleanProperty` parameter to the plug-in.
 %End			
 			
 %MethodCode
-	sipCpp->addParameter<tlp::BooleanProperty>(a0, a1, a2, a3);
+    sipCpp->addParameter<tlp::BooleanProperty>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 // ==================================================================================
 
-	void addStringPropertyParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addStringPropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 
 %Docstring
@@ -352,14 +352,14 @@ Adds a :class:`tlp.StringProperty` parameter to the plug-in.
 %End			
 			
 %MethodCode
-	sipCpp->addParameter<tlp::StringProperty>(a0, a1, a2, a3);
+    sipCpp->addParameter<tlp::StringProperty>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 // ==================================================================================
 
-	void addColorParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addColorParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 
 %Docstring
@@ -378,14 +378,14 @@ Adds a :class:`tlp.Color` parameter to the plug-in.
 %End			
 			
 %MethodCode
-	sipCpp->addParameter<tlp::Color>(a0, a1, a2, a3);
+    sipCpp->addParameter<tlp::Color>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 // ==================================================================================
 
-   void addColorScaleParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+   void addColorScaleParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 
 %Docstring
@@ -404,14 +404,14 @@ Adds a :class:`tlp.ColorScale` parameter to the plug-in.
 %End			
 			
 %MethodCode
-	sipCpp->addParameter<tlp::ColorScale>(a0, a1, a2, a3);
+    sipCpp->addParameter<tlp::ColorScale>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 // ==================================================================================
 
-	void addPropertyParameter(const char* str,
-			const char* inHelp=0,
-			const char* inDefValue = 0,
+    void addPropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
 			bool isMandatory = true);
 
 %Docstring
@@ -430,7 +430,7 @@ Adds a :class:`tlp.PropertyInterface` parameter to the plug-in.
 %End			
 			
 %MethodCode
-	sipCpp->addParameter<tlp::PropertyInterface*>(a0, a1, a2, a3);
+    sipCpp->addParameter<tlp::PropertyInterface*>((*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3);
 %End
 
 };

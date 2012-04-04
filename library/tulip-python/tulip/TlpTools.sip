@@ -53,7 +53,7 @@ X being the major version, Y the minor version, and Z the patch version.
 
 //=====================================================================
 
-void initTulipLib(char* appDirPath=0);
+    void initTulipLib(const std::string &appDirPath="");
 %Docstring
 tlp.initTulipLib([appDirPath=None])
 
@@ -72,6 +72,14 @@ The plug-ins directory can be defined in different ways, given by order of preva
                    when they were compiled and so does not match your local Tulip installation. If you do not provide the correct Tulip binary
                    path, you won't be able to load and call plugins.
 :type appDirPath: string
+%End
+
+%MethodCode
+    const char *appDirPathStr = NULL;
+    if ((*a0) != "") {
+        appDirPathStr = (*a0).c_str();
+    }
+    tlp::initTulipLib(appDirPathStr);
 %End
 
 //=====================================================================
