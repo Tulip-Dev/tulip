@@ -54,7 +54,7 @@ X being the major version, Y the minor version, and Z the patch version.
 
 //=====================================================================
 
-void initTulipLib(char* appDirPath=0);
+    void initTulipLib(const std::string &appDirPath = "");
 %Docstring
 tlp.initTulipLib()
 
@@ -64,6 +64,14 @@ The plug-ins directory can be defined in different ways, given by order of preva
    * the TLP_DIR environment variable, if it has a value
    * a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on unix
    
+%End
+
+%MethodCode
+    const char *appDirPathStr = NULL;
+    if ((*a0) != "") {
+        appDirPathStr = (*a0).c_str();
+    }
+    tlp::initTulipLib(appDirPathStr);
 %End
 
 //=====================================================================
