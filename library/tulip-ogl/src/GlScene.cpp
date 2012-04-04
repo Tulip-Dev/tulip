@@ -699,7 +699,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
 
     delete[] selectBuf;
 
-    for(vector<GlGraphComposite*>::iterator it=compositesToRender.begin();it!=compositesToRender.end();++it){
+    for(vector<GlGraphComposite*>::iterator it=compositesToRender.begin(); it!=compositesToRender.end(); ++it) {
       (*it)->selectEntities(camera,type,x,y,w,h,selectedEntities);
     }
 

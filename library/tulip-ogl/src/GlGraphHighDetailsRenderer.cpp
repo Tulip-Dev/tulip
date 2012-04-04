@@ -351,7 +351,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   selectionDrawActivate=false;
 }
 //===================================================================
-void GlGraphHighDetailsRenderer::selectEntities(Camera *camera,RenderingEntitiesFlag type, int x, int y, int w, int h, vector<SelectedEntity> &selectedEntities){
+void GlGraphHighDetailsRenderer::selectEntities(Camera *camera,RenderingEntitiesFlag type, int x, int y, int w, int h, vector<SelectedEntity> &selectedEntities) {
   map<unsigned int, SelectedEntity> idToEntity;
   unsigned int id=1;
 
