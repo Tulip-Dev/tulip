@@ -74,33 +74,6 @@
 #include <string>
 #include <sstream>
 
-static int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n) {
-	std::ostringstream oss;
-	std::string graphName;
-	graph->getAttribute("name", graphName);
-	oss << "Node with id " << n.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
-	PyErr_SetString(PyExc_Exception, oss.str().c_str());
-	return -1;
-}
-
-static int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e) {
-	std::ostringstream oss;
-	std::string graphName;
-	graph->getAttribute("name", graphName);
-	oss << "Edge with id " << e.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
-	PyErr_SetString(PyExc_Exception, oss.str().c_str());
-	return -1;
-}
-
-
-static void printErrorMessage(const std::string &errMsg) {
-	std::string pythonCode = "import sys\n"
-							 "sys.stderr.write(\"";
-    pythonCode += errMsg;
-	pythonCode += "\\n\")";
-	PyRun_SimpleString(pythonCode.c_str());
-}
-
 template <typename T>
 bool pluginExists(std::string pluginName) {
     std::list<std::string> pluginsList = tlp::PluginLister::instance()->availablePlugins<T>();
@@ -117,11 +90,44 @@ bool pluginExists(std::string pluginName) {
     return std::find(pluginsList.begin(), pluginsList.end(), pluginName) != pluginsList.end();
 }
 
+extern int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n);
+
+extern int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e);
+
+extern void printErrorMessage(const std::string &errMsg);
+
 extern void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td);
 
 %End
 
 %ModuleCode
+
+int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n) {
+    std::ostringstream oss;
+    std::string graphName;
+    graph->getAttribute("name", graphName);
+    oss << "Node with id " << n.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
+    PyErr_SetString(PyExc_Exception, oss.str().c_str());
+    return -1;
+}
+
+int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e) {
+    std::ostringstream oss;
+    std::string graphName;
+    graph->getAttribute("name", graphName);
+    oss << "Edge with id " << e.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
+    PyErr_SetString(PyExc_Exception, oss.str().c_str());
+    return -1;
+}
+
+
+void printErrorMessage(const std::string &errMsg) {
+    std::string pythonCode = "import sys\n"
+                             "sys.stderr.write(\"";
+    pythonCode += errMsg;
+    pythonCode += "\\n\")";
+    PyRun_SimpleString(pythonCode.c_str());
+}
 
 void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
     PyObject *pyObj = sipGetPyObject(wrappedCppObject, td);
