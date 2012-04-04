@@ -32,7 +32,7 @@ namespace tlp {
 
 class TLP_QT_SCOPE TulipItemEditorCreator {
 public:
-  virtual ~TulipItemEditorCreator(){}
+  virtual ~TulipItemEditorCreator() {}
   virtual QWidget* createWidget(QWidget*) const=0;
   virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const {
     return false;
