@@ -74,33 +74,6 @@
 #include <string>
 #include <sstream>
 
-static int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n) {
-	std::ostringstream oss;
-	std::string graphName;
-	graph->getAttribute("name", graphName);
-	oss << "Node with id " << n.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
-	PyErr_SetString(PyExc_Exception, oss.str().c_str());
-	return -1;
-}
-
-static int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e) {
-	std::ostringstream oss;
-	std::string graphName;
-	graph->getAttribute("name", graphName);
-	oss << "Edge with id " << e.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
-	PyErr_SetString(PyExc_Exception, oss.str().c_str());
-	return -1;
-}
-
-
-static void printErrorMessage(const std::string &errMsg) {
-	std::string pythonCode = "import sys\n"
-							 "sys.stderr.write(\"";
-	pythonCode += errMsg;
-	pythonCode += "\\n\")";
-	PyRun_SimpleString(pythonCode.c_str());
-}
-
 template <typename T>
 std::vector<std::string> getPluginsList() {
 	std::vector<std::string> ret;
@@ -117,18 +90,6 @@ std::vector<std::string> getPluginsList() {
 	return ret;
 }
 
-static std::vector<std::string> getAlgorithmPluginsListOfType(const std::string& type) {
-	std::vector<std::string> ret;
-	tlp::Iterator<tlp::AlgorithmPlugin *> *itP = tlp::AlgorithmPlugin::factory->availablePluginObjects();
-	while (itP->hasNext()) {
-	      tlp::AlgorithmPlugin *plugin = itP->next();
-	      if (type == plugin->getClassName())
-	      	 ret.push_back(plugin->getName());
-	}
-	delete itP;
-	return ret;
-}
-
 template <typename T>
 bool pluginExists(std::string pluginName) {
 	std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
@@ -140,11 +101,58 @@ bool pluginExists(std::string pluginName) {
 	return false;
 }
 
+extern int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n);
+
+extern int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e);
+
+extern void printErrorMessage(const std::string &errMsg);
+
+extern std::vector<std::string> getAlgorithmPluginsListOfType(const std::string& type);
+
 extern void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td);
 
 %End
 
 %ModuleCode
+
+int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n) {
+    std::ostringstream oss;
+    std::string graphName;
+    graph->getAttribute("name", graphName);
+    oss << "Node with id " << n.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
+    PyErr_SetString(PyExc_Exception, oss.str().c_str());
+    return -1;
+}
+
+int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e) {
+    std::ostringstream oss;
+    std::string graphName;
+    graph->getAttribute("name", graphName);
+    oss << "Edge with id " << e.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
+    PyErr_SetString(PyExc_Exception, oss.str().c_str());
+    return -1;
+}
+
+
+void printErrorMessage(const std::string &errMsg) {
+    std::string pythonCode = "import sys\n"
+                             "sys.stderr.write(\"";
+    pythonCode += errMsg;
+    pythonCode += "\\n\")";
+    PyRun_SimpleString(pythonCode.c_str());
+}
+
+std::vector<std::string> getAlgorithmPluginsListOfType(const std::string& type) {
+    std::vector<std::string> ret;
+    tlp::Iterator<tlp::AlgorithmPlugin *> *itP = tlp::AlgorithmPlugin::factory->availablePluginObjects();
+    while (itP->hasNext()) {
+          tlp::AlgorithmPlugin *plugin = itP->next();
+          if (type == plugin->getClassName())
+             ret.push_back(plugin->getName());
+    }
+    delete itP;
+    return ret;
+}
 
 void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
     PyObject *pyObj = sipGetPyObject(wrappedCppObject, td);
