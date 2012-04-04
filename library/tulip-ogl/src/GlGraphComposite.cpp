@@ -84,8 +84,8 @@ void GlGraphComposite::draw(float lod,Camera* camera) {
   graphRenderer->draw(lod,camera);
 }
 //===================================================================
-void GlGraphComposite::initSelectionRendering(RenderingEntitiesFlag type,map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId) {
-  graphRenderer->initSelectionRendering(type,idMap,currentId);
+void GlGraphComposite::selectEntities(Camera *camera,RenderingEntitiesFlag type, int x, int y, int w, int h, vector<SelectedEntity> &selectedEntities){
+  graphRenderer->selectEntities(camera,type,x,y,w,h,selectedEntities);
 }
 //===================================================================
 const GlGraphRenderingParameters& GlGraphComposite::getRenderingParameters() {

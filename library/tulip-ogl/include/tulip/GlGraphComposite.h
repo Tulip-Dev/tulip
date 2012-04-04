@@ -80,7 +80,7 @@ public:
 
   virtual void draw(float lod,Camera* camera);
 
-  void initSelectionRendering(RenderingEntitiesFlag type,std::map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId);
+  virtual void selectEntities(Camera *camera,RenderingEntitiesFlag type,int x, int y, int w, int h, std::vector<SelectedEntity>& selectedEntities);
 
   /**
    * Return set of metaNodes

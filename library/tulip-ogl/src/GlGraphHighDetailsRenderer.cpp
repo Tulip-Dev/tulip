@@ -351,6 +351,35 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   selectionDrawActivate=false;
 }
 //===================================================================
+void GlGraphHighDetailsRenderer::selectEntities(Camera *camera,RenderingEntitiesFlag type, int x, int y, int w, int h, vector<SelectedEntity> &selectedEntities){
+  map<unsigned int, SelectedEntity> idToEntity;
+  unsigned int id=1;
+
+  unsigned int size=inputData->getGraph()->numberOfNodes() + inputData->getGraph()->numberOfEdges();
+
+  //Allocate memory to store the result oh the selection
+  GLuint (*selectBuf)[4] = new GLuint[size][4];
+  glSelectBuffer(size*4 , (GLuint *)selectBuf);
+  //Activate Open Gl Selection mode
+  glRenderMode(GL_SELECT);
+  glInitNames();
+  glPushName(0);
+
+  initSelectionRendering(type,idToEntity,id);
+
+  draw(20,camera);
+
+  glFlush();
+  GLint hits = glRenderMode(GL_RENDER);
+
+  while(hits>0) {
+    selectedEntities.push_back(idToEntity[selectBuf[hits-1][3]]);
+    hits--;
+  }
+
+  delete[] selectBuf;
+}
+//===================================================================
 void GlGraphHighDetailsRenderer::initSelectionRendering(RenderingEntitiesFlag type,map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId) {
   selectionType=type;
   selectionIdMap=&idMap;

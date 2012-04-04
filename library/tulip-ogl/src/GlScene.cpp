@@ -614,22 +614,12 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
   for(vector<LayerLODUnit>::iterator itLayer=layersLODVector.begin(); itLayer!=layersLODVector.end(); ++itLayer) {
     Camera *camera=(Camera*)((*itLayer).camera);
 
+    vector<GlGraphComposite*> compositesToRender;
+
     Vector<int, 4> viewport = camera->getViewport();
 
     unsigned int size;
     size=(*itLayer).simpleEntitiesLODVector.size();
-
-    vector<SimpleEntityLODUnit>::iterator it;
-
-    for(it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
-
-      GlGraphComposite *composite=dynamic_cast<GlGraphComposite*>((*it).entity);
-
-      if(composite) {
-        size+=composite->getInputData()->getGraph()->numberOfNodes();
-        size+=composite->getInputData()->getGraph()->numberOfEdges();
-      }
-    }
 
     if(size==0)
       continue;
@@ -694,16 +684,10 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
         GlGraphComposite *composite=dynamic_cast<GlGraphComposite*>((*it).entity);
 
         if(composite) {
-          composite->initSelectionRendering(type,idToEntity,id);
-          composite->draw(20.,camera);
+          compositesToRender.push_back(composite);
         }
       }
     }
-
-    glPopMatrix();
-
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
 
     glFlush();
     GLint hits = glRenderMode(GL_RENDER);
@@ -713,10 +697,19 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
       hits--;
     }
 
+    delete[] selectBuf;
+
+    for(vector<GlGraphComposite*>::iterator it=compositesToRender.begin();it!=compositesToRender.end();++it){
+      (*it)->selectEntities(camera,type,x,y,w,h,selectedEntities);
+    }
+
+    glPopMatrix();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+
     glPopClientAttrib();
     glPopAttrib();
-
-    delete[] selectBuf;
   }
 
   selectLODCalculator->clear();
