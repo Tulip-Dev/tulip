@@ -206,7 +206,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
   PyThreadState_Delete(tcur);
 #endif
 
-#if PY_MAJOR_VERSION < 3
+#if defined(WIN32) || PY_MAJOR_VERSION < 3
   PyEval_ReleaseLock();
 #endif
 
