@@ -489,31 +489,35 @@ void MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
     switch (state) {
     case VECT: {
       while ( i > maxIndex ) {
-	(*vData).push_back(defaultValue);
-	++maxIndex;
+        (*vData).push_back(defaultValue);
+        ++maxIndex;
       }
 
       while ( i < minIndex ) {
-	(*vData).push_front(defaultValue);
-	--minIndex;
+        (*vData).push_front(defaultValue);
+        --minIndex;
       }
 
       TYPE& oldVal = (*vData)[i - minIndex];
+
       if (oldVal == defaultValue)
-	++elementInserted;
+        ++elementInserted;
+
       oldVal += val;
 
       return;
     }
+
     case HASH: {
       typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
 
       if (it!=hData->end())
-	it->second += val;
+        it->second += val;
       else {
-	++elementInserted;
-	(*hData)[i]= defaultValue + val;
+        ++elementInserted;
+        (*hData)[i]= defaultValue + val;
       }
+
       return;
     }
 
@@ -522,9 +526,10 @@ void MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     }
   }
+
   assert(false);
   std::cerr << __PRETTY_FUNCTION__ << "not implemented" << std::endl;
- }
+}
 //===================================================================
 template <typename TYPE>
 typename StoredType<TYPE>::ReturnedConstValue MutableContainer<TYPE>::get(const unsigned int i) const {
