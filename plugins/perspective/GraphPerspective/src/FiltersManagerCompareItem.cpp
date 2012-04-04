@@ -218,7 +218,7 @@ public:
 };
 
 struct BooleanTransformer {
-  virtual ~BooleanTransformer(){};
+  virtual ~BooleanTransformer(){}
   virtual bool tr(bool original, bool mask)=0;
 };
 struct RemoveBooleanTransformer: public BooleanTransformer {
