@@ -108,7 +108,6 @@ scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
   Py_RETURN_NONE;
 }
 
-/* This redirects stdout from the calling script. */
 static PyObject *
 scriptengine_ConsoleOutput_enableConsoleOutput(PyObject *self, PyObject *o) {
   int i;
@@ -118,6 +117,11 @@ scriptengine_ConsoleOutput_enableConsoleOutput(PyObject *self, PyObject *o) {
 
   ((scriptengine_ConsoleOutput *)self)->writeToConsole = i > 0;
 
+  Py_RETURN_NONE;
+}
+
+static PyObject *
+scriptengine_ConsoleOutput_flush(PyObject *, PyObject *) {
   Py_RETURN_NONE;
 }
 
@@ -142,6 +146,10 @@ static PyMethodDef scriptengine_ConsoleOutput_methods[] = {
   {
     "enableConsoleOutput", (PyCFunction) scriptengine_ConsoleOutput_enableConsoleOutput, METH_VARARGS,
     "enable / disable console output"
+  },
+  {
+    "flush", (PyCFunction) scriptengine_ConsoleOutput_flush, METH_VARARGS,
+    ""
   },
   {0, 0, 0, 0}  /* Sentinel */
 };
