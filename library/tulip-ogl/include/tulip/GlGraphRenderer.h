@@ -54,21 +54,15 @@ public:
   virtual void draw(float lod,Camera* camera) = 0;
 
   /**
-   * This function is call by GlGraphComposite to inform renderer that the next rendering will be for a selection
-   * You have the type of the selection and after you have to use and increment currentId, for example you can have this function call with 4 into currentId,
-   * if you graph contains 2 nodes you have to create 2 SelectedEntity object and add these object in the map : idMap.
-   * You will have a code like this :
-   *   idMap[currentId]=SelectedEntity(graph,node1.id,NODE_SELECTED);
-   *   currentId++;
-   *   idMap[currentId]=SelectedEntity(graph,node2.id,NODE_SELECTED);
-   *   currentId++;
-   *
-   * And when you do the rendering (in draw function) of these nodes you have to call glLoadName(...) function
-   *
-   * \param type : type of selection (RenderingSimpleEntities,RenderingNodes,RenderingEdges,RenderingAll,RenderingWithoutRemove)
-   * \param idMap : in this map you have to store SelectedEntity object
+   * This function is call by GlGraphComposite to selected entities into the graph
+   * \param type : type of selected entities
+   * \param x : x of the selected zone
+   * \param y : y of the selected zone
+   * \param w : width of the selected zone
+   * \param h : height of the selected zone
+   * \param selectedEntities : you have to put selected entities into this vector
    */
-  virtual void initSelectionRendering(RenderingEntitiesFlag type,std::map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId) = 0;
+  virtual void selectEntities(Camera *camera,RenderingEntitiesFlag type,int x, int y, int w, int h, std::vector<SelectedEntity>& selectedEntities) = 0;
 
   /**
    * You can use this funtion if you want to inject a visitor on the graph
