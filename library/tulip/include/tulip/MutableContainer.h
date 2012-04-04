@@ -51,8 +51,18 @@ class MutableContainer {
 public:
   MutableContainer();
   ~MutableContainer();
+  /**
+   * set the default value
+   */
   void setAll(const TYPE &value);
+  /**
+   * set the value associated to i
+   */
   void set(const unsigned int i, const TYPE &value);
+  /**
+   * add val to the value associated to i
+   */
+  void add(const unsigned int i, TYPE val);
   /**
    * get the value associated to i
    */
@@ -463,6 +473,58 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
     minIndex = std::min(minIndex, i);
   }
 }
+//===================================================================
+template <typename TYPE>
+void MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
+  if (StoredType<TYPE>::isPointer == false) {
+    if (maxIndex == UINT_MAX) {
+      assert(state == VECT);
+      minIndex = i;
+      maxIndex = i;
+      (*vData).push_back(defaultValue + val);
+      ++elementInserted;
+      return;
+    }
+
+    switch (state) {
+    case VECT: {
+      while ( i > maxIndex ) {
+	(*vData).push_back(defaultValue);
+	++maxIndex;
+      }
+
+      while ( i < minIndex ) {
+	(*vData).push_front(defaultValue);
+	--minIndex;
+      }
+
+      TYPE& oldVal = (*vData)[i - minIndex];
+      if (oldVal == defaultValue)
+	++elementInserted;
+      oldVal += val;
+
+      return;
+    }
+    case HASH: {
+      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
+
+      if (it!=hData->end())
+	it->second += val;
+      else {
+	++elementInserted;
+	(*hData)[i]= defaultValue + val;
+      }
+      return;
+    }
+
+    default:
+      assert(false);
+      std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    }
+  }
+  assert(false);
+  std::cerr << __PRETTY_FUNCTION__ << "not implemented" << std::endl;
+ }
 //===================================================================
 template <typename TYPE>
 typename StoredType<TYPE>::ReturnedConstValue MutableContainer<TYPE>::get(const unsigned int i) const {

@@ -104,10 +104,10 @@ unsigned int GraphView::outdeg(const node n) const {
 //----------------------------------------------------------------
 void GraphView::reverse(const edge e, const node src, const node tgt) {
   if (isElement(e)) {
-    outDegree.set(src.id, outDegree.get(src.id)-1);
-    inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
-    inDegree.set(src.id, inDegree.get(src.id)+1);
-    outDegree.set(tgt.id, outDegree.get(tgt.id)+1);
+    outDegree.add(src.id, -1);
+    inDegree.add(tgt.id, -1);
+    inDegree.add(src.id, 1);
+    outDegree.add(tgt.id, 1);
 
     notifyReverseEdge(e);
 
@@ -126,13 +126,13 @@ void GraphView::setEnds(const edge e, const node src, const node tgt,
       notifyBeforeSetEnds(e);
 
       if (src != newSrc) {
-        outDegree.set(src.id, outDegree.get(src.id)-1);
-        outDegree.set(newSrc.id, outDegree.get(newSrc.id) + 1);
+        outDegree.add(src.id, -1);
+        outDegree.add(newSrc.id, 1);
       }
 
       if (tgt != newTgt) {
-        inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
-        inDegree.set(newTgt.id, inDegree.get(newTgt.id)+1);
+        inDegree.add(tgt.id, -1);
+        inDegree.add(newTgt.id, 1);
       }
 
       // notification
@@ -227,8 +227,8 @@ edge GraphView::addEdgeInternal(edge e) {
   const std::pair<node, node>& eEnds = ends(e);
   node src = eEnds.first;
   node tgt = eEnds.second;
-  outDegree.set(src.id, outDegree.get(src.id)+1);
-  inDegree.set(tgt.id, inDegree.get(tgt.id)+1);
+  outDegree.add(src.id, 1);
+  inDegree.add(tgt.id, 1);
   notifyAddEdge(e);
   return e;
 }
@@ -251,8 +251,8 @@ void GraphView::restoreEdges(const std::vector<edge>& edges,
     std::pair<node, node> eEnds(hasEnds ? ends[i] : this->ends(e));
     node src = eEnds.first;
     node tgt = eEnds.second;
-    outDegree.set(src.id, outDegree.get(src.id)+1);
-    inDegree.set(tgt.id, inDegree.get(tgt.id)+1);
+    outDegree.add(src.id, 1);
+    inDegree.add(tgt.id, 1);
   }
 
   nEdges += edges.size();
@@ -383,8 +383,8 @@ void GraphView::delEdgeInternal(const edge e) {
   const std::pair<node, node>& eEnds = ends(e);
   node src = eEnds.first;
   node tgt = eEnds.second;
-  outDegree.set(src.id, outDegree.get(src.id)-1);
-  inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
+  outDegree.add(src.id, -1);
+  inDegree.add(tgt.id, -1);
 }
 //----------------------------------------------------------------
 void GraphView::removeEdge(const edge e) {

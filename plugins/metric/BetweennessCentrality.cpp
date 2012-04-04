@@ -134,7 +134,7 @@ public:
           }
 
           if (d.get(w.id) == d.get(v.id)+1) {
-            sigma.set(w.id, sigma.get(w.id) + sigma.get(v.id));
+	    sigma.add(w.id, sigma.get(v.id));
             P[w].push_back(v);
           }
         }
@@ -152,7 +152,7 @@ public:
 
         for (; itn!=P[w].end(); ++itn) {
           node v = *itn;
-          delta.set(v.id, delta.get(v.id) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
+          delta.add(v.id, (double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id))));
           edge e  = graph->existEdge(v,w,directed);
 
           if(e.isValid())

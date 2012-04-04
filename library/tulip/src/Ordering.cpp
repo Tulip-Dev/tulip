@@ -769,8 +769,8 @@ void Ordering::augment(Face f, node pred, node n, node pred_last, node last, int
   }
 
   if(was_last_face) {
-    outv.set(newFaces[0].id, outv.get(newFaces[0].id) + v1.size() - 2);
-    oute.set(newFaces[0].id, oute.get(newFaces[0].id) + v1.size() - 1);
+    outv.add(newFaces[0].id, v1.size() - 2);
+    oute.add(newFaces[0].id, v1.size() - 1);
   }
 
   // update markedFaces
@@ -938,15 +938,15 @@ void Ordering::selectAndUpdate(node n) {
 
     while(ite_face->hasNext()) {
       Face f_tmp = static_cast<Face>(ite_face->next());
-      outv.set(f_tmp.id, outv.get(f_tmp.id) - 1);
+      outv.add(f_tmp.id, -1);
     }
 
     delete ite_face;
-    oute.set(ext.id,oute.get(ext.id)-1);
+    oute.add(ext.id, -1);
     n2 = right.get(n2.id);
   }
 
-  oute.set(ext.id,oute.get(ext.id)-1);
+  oute.add(ext.id, -1);
 
   // split and merge old faces
   e = Gp->predCycleEdge(e_first,n1);
@@ -1055,10 +1055,10 @@ void Ordering::selectAndUpdate(node n) {
       }
 
       if(Gp->containNode(faces[i],node_f))
-        outv.set((faces[i]).id,outv.get((faces[i]).id)+1);
+        outv.add((faces[i]).id, 1);
 
       if(Gp->containNode(faces[i],node_last))
-        outv.set((faces[i]).id,outv.get((faces[i]).id)+1);
+        outv.add((faces[i]).id, 1);
     }
   }
 
@@ -1074,7 +1074,7 @@ void Ordering::selectAndUpdate(node n) {
 
   while(n2 != node_last) {
     f1 = Gp->getFaceContaining(n1,n2);
-    oute.set(f1.id,oute.get(f1.id)+1);
+    oute.add(f1.id, 1);
     addNode++;
     int cpt = 0;
     Iterator<Face > * itf = Gp->getFacesAdj(n2);
@@ -1094,7 +1094,7 @@ void Ordering::selectAndUpdate(node n) {
 
       }
 
-      outv.set(f2.id,outv.get(f2.id)+1);
+      outv.add(f2.id, 1);
     }
 
     delete itf;
@@ -1106,7 +1106,7 @@ void Ordering::selectAndUpdate(node n) {
   }
 
   f1 = Gp->getFaceContaining(n1,n2);
-  oute.set(f1.id,oute.get(f1.id)+1);
+  oute.add(f1.id, 1);
 
   if(!update_seqp.get(f1.id)) {
     seqP.set(f1.id,seqp(f1));
@@ -1114,8 +1114,8 @@ void Ordering::selectAndUpdate(node n) {
     update_seqp.set(f1.id,true);
   }
 
-  outv.set(ext.id, outv.get(ext.id)+addNode);
-  oute.set(ext.id, oute.get(ext.id)+addNode+1);
+  outv.add(ext.id, addNode);
+  oute.add(ext.id, addNode+1);
 
   if(Gp->deg(node_f) != 2 && Gp->deg(node_last) != 2)
     one_face = false;
@@ -1248,8 +1248,8 @@ void Ordering::selectAndUpdate(Face f) {
   node no_tmp2 = n3;
   edge ed_tmp = edge_pred;
   update_seqp.setAll(false);
-  outv.set(ext.id, outv.get(ext.id)-suppNodes);
-  oute.set(ext.id, oute.get(ext.id) - suppNodes - 1);
+  outv.add(ext.id, -suppNodes);
+  oute.add(ext.id, - suppNodes - 1);
 
   while(n3!=n2) {
     Iterator<Face > * itf = Gp->getFacesAdj(n3);
@@ -1262,7 +1262,7 @@ void Ordering::selectAndUpdate(Face f) {
         continue;
 
       cpt++;
-      outv.set(fa.id,outv.get(fa.id)+1);
+      outv.add(fa.id, 1);
 
       if(!update_seqp.get(fa.id)) {
         seqP.set(fa.id,seqp(fa));
@@ -1281,7 +1281,7 @@ void Ordering::selectAndUpdate(Face f) {
     }
 
     add_node++;
-    oute.set(fa.id, oute.get(fa.id) + 1);
+    oute.add(fa.id, 1);
     n4 = n3;
     n3 = right.get(n4.id);
 
@@ -1290,7 +1290,7 @@ void Ordering::selectAndUpdate(Face f) {
   }
 
   Face  fa = Gp->getFaceContaining(n4,n3);
-  oute.set(fa.id,oute.get(fa.id)+1);
+  oute.add(fa.id, 1);
 
   if(!update_seqp.get(fa.id)) {
     seqP.set(fa.id,seqp(fa));
@@ -1320,8 +1320,8 @@ void Ordering::selectAndUpdate(Face f) {
     delete itf;
   }
 
-  outv.set(ext.id,outv.get(ext.id)+add_node);
-  oute.set(ext.id,oute.get(ext.id)+add_node+1);
+  outv.add(ext.id, add_node);
+  oute.add(ext.id, add_node+1);
 
   // Update of is_selectable_visited_face and is_selectable_face
   updateSelectableFaces(v_face);
@@ -1669,7 +1669,7 @@ void Ordering::init_outv_oute() {
 
     while(it_face->hasNext()) {
       Face f = it_face->next();
-      outv.set(f.id,outv.get(f.id)+1);
+      outv.add(f.id, 1);
     }
 
     delete it_face;
@@ -1687,17 +1687,17 @@ void Ordering::init_outv_oute() {
 
     while(it_face2->hasNext()) {
       Face f = it_face2->next();
-      outv.set(f.id,outv.get(f.id)+1);
+      outv.add(f.id, 1);
     }
 
     delete it_face2;
     Face face = Gp->getFaceContaining(n,no_pred);
-    oute.set(face.id,oute.get(face.id) + 1);
+    oute.add(face.id, 1);
   }
 
   delete it_node2;
   Face face = Gp->getFaceContaining(no_first,n);
-  oute.set(face.id, oute.get(face.id)+1);
+  oute.add(face.id, 1);
   outv.set(ext.id,cpt+1);
   oute.set(ext.id,cpt+1);
 }
