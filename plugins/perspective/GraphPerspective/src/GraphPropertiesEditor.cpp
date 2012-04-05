@@ -71,12 +71,15 @@ void GraphPropertiesEditor::setAllNodes() {
   creator->setEditorData(w,defaultValue,_graph);
 
   QDialog* dlg = dynamic_cast<QDialog*>(w);
+
   if (dlg == NULL) {
     dlg = editDialog(w,this);
     dlg->setWindowTitle(_contextProperty->getName().c_str() + trUtf8(": Set all nodes values"));
   }
+
   if (dlg->exec() == QDialog::Accepted)
     GraphModel::setAllNodeValue(_contextProperty,creator->editorData(w,_graph));
+
   delete dlg;
 }
 
