@@ -104,7 +104,9 @@
 #endif
 #if defined(__INTEL_COMPILER) && !defined(QHULL_OS_WIN)
 template <typename T>
-inline void qhullUnused(T &x) { (void)x; }
+inline void qhullUnused(T &x) {
+  (void)x;
+}
 #  define QHULL_UNUSED(x) qhullUnused(x);
 #else
 #  define QHULL_UNUSED(x) (void)x;

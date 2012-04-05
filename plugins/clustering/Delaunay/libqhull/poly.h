@@ -220,10 +220,10 @@ void    qh_makenewplanes(void /* newfacet_list */);
 facetT *qh_makenew_nonsimplicial(facetT *visible, vertexT *apex, int *numnew);
 facetT *qh_makenew_simplicial(facetT *visible, vertexT *apex, int *numnew);
 void    qh_matchneighbor(facetT *newfacet, int newskip, int hashsize,
-                          int *hashcount);
+                         int *hashcount);
 void    qh_matchnewfacets(void);
 boolT   qh_matchvertices(int firstindex, setT *verticesA, int skipA,
-                          setT *verticesB, int *skipB, boolT *same);
+                         setT *verticesB, int *skipB, boolT *same);
 facetT *qh_newfacet(void);
 ridgeT *qh_newridge(void);
 int     qh_pointid(pointT *point);
@@ -251,10 +251,10 @@ void    qh_delridge(ridgeT *ridge);
 void    qh_delvertex(vertexT *vertex);
 setT   *qh_facet3vertex(facetT *facet);
 facetT *qh_findbestfacet(pointT *point, boolT bestoutside,
-           realT *bestdist, boolT *isoutside);
+                         realT *bestdist, boolT *isoutside);
 facetT *qh_findbestlower(facetT *upperfacet, pointT *point, realT *bestdistp, int *numpart);
 facetT *qh_findfacet_all(pointT *point, realT *bestdist, boolT *isoutside,
-                          int *numpart);
+                         int *numpart);
 int     qh_findgood(facetT *facetlist, int goodhorizon);
 void    qh_findgood_all(facetT *facetlist);
 void    qh_furthestnext(void /* qh facet_list */);

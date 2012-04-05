@@ -76,7 +76,7 @@ Trace short and quick memory allocations at T5
     ptr_intT is typically a signed value, but not necessarily so
     size_t is typically unsigned, but should match the parameter type
     Qhull uses int instead of size_t except for system calls such as malloc, qsort, qh_malloc, etc.
-    This matches Qt convention and is easier to work with.  
+    This matches Qt convention and is easier to work with.
 */
 #if _MSC_VER && defined(_WIN64)
 typedef long long ptr_intT;
@@ -128,7 +128,7 @@ struct qhmemT {               /* global memory management variables */
   FILE    *ferr;              /* file for reporting errors, only user is qh_fprintf() */
   int      IStracing;         /* =5 if tracing memory allocations */
   int      cntquick;          /* count of quick allocations */
-                              /* Note: removing statistics doesn't effect speed */
+  /* Note: removing statistics doesn't effect speed */
   int      cntshort;          /* count of short allocations */
   int      cntlong;           /* count of long allocations */
   int      freeshort;         /* count of short memfrees */
@@ -210,7 +210,7 @@ void qh_memfree(void *object, int insize);
 void qh_memfreeshort(int *curlong, int *totlong);
 void qh_meminit(FILE *ferr);
 void qh_meminitbuffers(int tracelevel, int alignment, int numsizes,
-                        int bufsize, int bufinit);
+                       int bufsize, int bufinit);
 void qh_memsetup(void);
 void qh_memsize(int size);
 void qh_memstatistics(FILE *fp);

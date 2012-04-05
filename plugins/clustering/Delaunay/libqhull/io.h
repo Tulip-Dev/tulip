@@ -58,9 +58,8 @@
   qh_RIDGE
     to select which ridges to print in qh_eachvoronoi
 */
-typedef enum
-{
-    qh_RIDGEall = 0, qh_RIDGEinner, qh_RIDGEouter
+typedef enum {
+  qh_RIDGEall = 0, qh_RIDGEinner, qh_RIDGEouter
 }
 qh_RIDGE;
 
@@ -85,8 +84,8 @@ int     qh_compare_facetvisit(const void *p1, const void *p2);
 int     qh_compare_vertexpoint(const void *p1, const void *p2); /* not used */
 void    qh_copyfilename(char *filename, int size, const char* source, int length);
 void    qh_countfacets(facetT *facetlist, setT *facets, boolT printall,
-              int *numfacetsp, int *numsimplicialp, int *totneighborsp,
-              int *numridgesp, int *numcoplanarsp, int *numnumtricoplanarsp);
+                       int *numfacetsp, int *numsimplicialp, int *totneighborsp,
+                       int *numridgesp, int *numcoplanarsp, int *numnumtricoplanarsp);
 pointT *qh_detvnorm(vertexT *vertex, vertexT *vertexA, setT *centers, realT *offsetp);
 setT   *qh_detvridge(vertexT *vertex);
 setT   *qh_detvridge3 (vertexT *atvertex, vertexT *vertex);
@@ -112,7 +111,7 @@ void    qh_printfacet(FILE *fp, facetT *facet);
 void    qh_printfacet2math(FILE *fp, facetT *facet, qh_PRINT format, int notfirst);
 void    qh_printfacet2geom(FILE *fp, facetT *facet, realT color[3]);
 void    qh_printfacet2geom_points(FILE *fp, pointT *point1, pointT *point2,
-                               facetT *facet, realT offset, realT color[3]);
+                                  facetT *facet, realT offset, realT color[3]);
 void    qh_printfacet3math(FILE *fp, facetT *facet, qh_PRINT format, int notfirst);
 void    qh_printfacet3geom_nonsimplicial(FILE *fp, facetT *facet, realT color[3]);
 void    qh_printfacet3geom_points(FILE *fp, setT *points, facetT *facet, realT offset, realT color[3]);
@@ -126,7 +125,7 @@ void    qh_printfacetheader(FILE *fp, facetT *facet);
 void    qh_printfacetridges(FILE *fp, facetT *facet);
 void    qh_printfacets(FILE *fp, qh_PRINT format, facetT *facetlist, setT *facets, boolT printall);
 void    qh_printhyperplaneintersection(FILE *fp, facetT *facet1, facetT *facet2,
-                   setT *vertices, realT color[3]);
+                                       setT *vertices, realT color[3]);
 void    qh_printneighborhood(FILE *fp, qh_PRINT format, facetT *facetA, facetT *facetB, boolT printall);
 void    qh_printline3geom(FILE *fp, pointT *pointA, pointT *pointB, realT color[3]);
 void    qh_printpoint(FILE *fp, const char *string, pointT *point);
@@ -141,7 +140,7 @@ void    qh_printvdiagram(FILE *fp, qh_PRINT format, facetT *facetlist, setT *fac
 int     qh_printvdiagram2 (FILE *fp, printvridgeT printvridge, setT *vertices, qh_RIDGE innerouter, boolT inorder);
 void    qh_printvertex(FILE *fp, vertexT *vertex);
 void    qh_printvertexlist(FILE *fp, const char* string, facetT *facetlist,
-                         setT *facets, boolT printall);
+                           setT *facets, boolT printall);
 void    qh_printvertices(FILE *fp, const char* string, setT *vertices);
 void    qh_printvneighbors(FILE *fp, facetT* facetlist, setT *facets, boolT printall);
 void    qh_printvoronoi(FILE *fp, qh_PRINT format, facetT *facetlist, setT *facets, boolT printall);

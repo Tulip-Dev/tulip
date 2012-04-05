@@ -605,23 +605,23 @@ stop after qh_JOGGLEmaxretry attempts
 #endif
 #endif
 #if 0  /* sample code */
-    qhT *oldqhA, *oldqhB;
+qhT *oldqhA, *oldqhB;
 
-    exitcode= qh_new_qhull(dim, numpoints, points, ismalloc,
-                      flags, outfile, errfile);
-    /* use results from first call to qh_new_qhull */
-    oldqhA= qh_save_qhull();
-    exitcode= qh_new_qhull(dimB, numpointsB, pointsB, ismalloc,
-                      flags, outfile, errfile);
-    /* use results from second call to qh_new_qhull */
-    oldqhB= qh_save_qhull();
-    qh_restore_qhull(&oldqhA);
-    /* use results from first call to qh_new_qhull */
-    qh_freeqhull(qh_ALL);  /* frees all memory used by first call */
-    qh_restore_qhull(&oldqhB);
-    /* use results from second call to qh_new_qhull */
-    qh_freeqhull(!qh_ALL); /* frees long memory used by second call */
-    qh_memfreeshort(&curlong, &totlong);  /* frees short memory and memory allocator */
+exitcode= qh_new_qhull(dim, numpoints, points, ismalloc,
+                       flags, outfile, errfile);
+/* use results from first call to qh_new_qhull */
+oldqhA= qh_save_qhull();
+exitcode= qh_new_qhull(dimB, numpointsB, pointsB, ismalloc,
+                       flags, outfile, errfile);
+/* use results from second call to qh_new_qhull */
+oldqhB= qh_save_qhull();
+qh_restore_qhull(&oldqhA);
+/* use results from first call to qh_new_qhull */
+qh_freeqhull(qh_ALL);  /* frees all memory used by first call */
+qh_restore_qhull(&oldqhB);
+/* use results from second call to qh_new_qhull */
+qh_freeqhull(!qh_ALL); /* frees long memory used by second call */
+qh_memfreeshort(&curlong, &totlong);  /* frees short memory and memory allocator */
 #endif
 
 /*-<a                             href="qh-user.htm#TOC"
