@@ -79,7 +79,7 @@ int main(int argc,char **argv) {
   QLocale::setDefault(QLocale(QLocale::English));
 
   TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow();
-  mainWindow->setVisible(true);
+  mainWindow->setVisible(false);
 
   SimplePluginProgressDialog *progress = new SimplePluginProgressDialog(mainWindow);
   progress->setWindowTitle(QObject::trUtf8("Tulip"));
@@ -202,7 +202,6 @@ int main(int argc,char **argv) {
 
   communicator->EnableCrashHandling(project->absoluteRootPath(),QApplication::applicationPid());
 
-  perspective->construct(progress);
   QString title("Tulip [" + perspectiveName + "]");
 
   if (project) {
@@ -220,7 +219,7 @@ int main(int argc,char **argv) {
 
   mainWindow->setWindowTitle(title);
 
-  delete progress;
+  perspective->start(progress);
 
   int result = tulip_perspective.exec();
   delete perspective;

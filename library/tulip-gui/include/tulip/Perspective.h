@@ -72,7 +72,7 @@ public:
   virtual ~Perspective();
 
   virtual bool isCompatible(tlp::TulipProject *);
-  virtual void construct(tlp::PluginProgress *)=0;
+  virtual void start(tlp::PluginProgress *)=0;
   virtual tlp::PluginProgress* progress();
   QMainWindow* mainWindow() const;
 

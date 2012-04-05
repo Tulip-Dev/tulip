@@ -53,7 +53,7 @@ MainWindowFacade::MainWindowFacade(QMainWindow *mainWindow,QToolBar *toolBar,QTo
 Controller::Controller(tlp::PerspectiveContext &c): Perspective(c) {
 }
 
-void Controller::construct(tlp::PluginProgress *) {
+void Controller::start(tlp::PluginProgress *) {
   _buildUi();
 
   tlp::Graph *g;

@@ -120,7 +120,7 @@ void GraphPerspective::showLogger() {
   _logger->show();
 }
 
-void GraphPerspective::construct(tlp::PluginProgress *progress) {
+void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
@@ -217,6 +217,8 @@ void GraphPerspective::construct(tlp::PluginProgress *progress) {
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
   }
+
+  delete progress;
 }
 
 tlp::GraphHierarchiesModel* GraphPerspective::model() const {
