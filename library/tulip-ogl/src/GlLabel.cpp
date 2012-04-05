@@ -112,7 +112,6 @@ void GlLabel::setTextBeforeRendering(const std::string& text) {
     if(font->FaceSize()!=(unsigned int)fontSize) {
         font->FaceSize(fontSize);
         borderFont->FaceSize(fontSize);
-        boundingBoxMap.clear();
     }
 
     // split each line
@@ -128,45 +127,38 @@ void GlLabel::setTextBeforeRendering(const std::string& text) {
     }
 
     textVector.push_back(text.substr(lastPos)+" ");
+    //Text bounding box computation
+    textBoundingBox=BoundingBox();
 
-    map<string,BoundingBox>::iterator it = boundingBoxMap.find(text);
-    if( it == boundingBoxMap.end()){
-        //Text bounding box computation
-        textBoundingBox=BoundingBox();
+    float x1,y1,z1,x2,y2,z2,w1,w2;
 
-        float x1,y1,z1,x2,y2,z2,w1,w2;
+    //Here we compute height of the text based on the char |
+    stringstream strstr;
+    strstr << "|" ;
 
-        //Here we compute height of the text based on the char |
-        stringstream strstr;
-        strstr << "|" ;
+    for(unsigned int i=0; i<textVector.size(); ++i)
+        strstr << endl << "|" ;
 
-        for(unsigned int i=0; i<textVector.size(); ++i)
-            strstr << endl << "|" ;
+    font->BBox(strstr.str().c_str(),x1,y1,z1,x2,y2,z2);
 
-        font->BBox(strstr.str().c_str(),x1,y1,z1,x2,y2,z2);
+    // After we compute width of text
+    for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
+        font->BBox((*it).c_str(),x1,w1,z1,x2,w2,z2);
 
-        // After we compute width of text
-        for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
-            font->BBox((*it).c_str(),x1,w1,z1,x2,w2,z2);
+        textWidthVector.push_back(x2-x1);
 
-            textWidthVector.push_back(x2-x1);
-
-            if(it==textVector.begin()) {
-                textBoundingBox.expand(Coord(0,y1,z1));
-                textBoundingBox.expand(Coord(x2-x1,y2,z2));
-            }
-            else {
-                font->BBox((*it).c_str(),x1,y1,z1,x2,y2,z2);
-
-                if(x2-x1>textBoundingBox[1][0])
-                    textBoundingBox[1][0]=(x2-x1);
-
-                textBoundingBox[0][1]-=fontSize+SpaceBetweenLine;
-            }
+        if(it==textVector.begin()) {
+            textBoundingBox.expand(Coord(0,y1,z1));
+            textBoundingBox.expand(Coord(x2-x1,y2,z2));
         }
-        boundingBoxMap[text]=textBoundingBox;
-    }else{
-        textBoundingBox = (*it).second;
+        else {
+            font->BBox((*it).c_str(),x1,y1,z1,x2,y2,z2);
+
+            if(x2-x1>textBoundingBox[1][0])
+                textBoundingBox[1][0]=(x2-x1);
+
+            textBoundingBox[0][1]-=fontSize+SpaceBetweenLine;
+        }
     }
 }
 //============================================================

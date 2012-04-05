@@ -460,8 +460,6 @@ private :
   std::vector<float> textWidthVector;
   BoundingBox textBoundingBox;
 
-
-  std::map<std::string, BoundingBox> boundingBoxMap;
   static std::map<std::string, FTGLPolygonFont*> fontMap;
   static std::map<std::string, FTOutlineFont*> borderFontMap;
 };
