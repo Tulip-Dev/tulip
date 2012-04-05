@@ -214,6 +214,10 @@ int main(int argc,char **argv) {
       title += projectFilePath;
   }
 
+#ifndef NDEBUG
+  title += " - [ Debug mode enabled ]";
+#endif
+
   mainWindow->setWindowTitle(title);
 
   delete progress;

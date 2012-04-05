@@ -190,7 +190,7 @@ QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface * prop) {
 #define GET_NODE_DEFAULT_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) return QVariant::fromValue< TYPE >(static_cast<PROP*>(prop)->getNodeDefaultValue())
 QVariant GraphModel::nodeDefaultValue(PropertyInterface * prop) {
   if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
-    return QVariant::fromValue<EdgeShape>((EdgeShape)(static_cast<IntegerProperty*>(prop)->getNodeDefaultValue()));
+    return QVariant::fromValue<NodeShape>((NodeShape)(static_cast<IntegerProperty*>(prop)->getNodeDefaultValue()));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getNodeDefaultValue().c_str()));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
