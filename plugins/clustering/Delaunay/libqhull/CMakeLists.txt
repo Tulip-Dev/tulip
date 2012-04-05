@@ -1,0 +1,35 @@
+set(
+    libqhull_HEADERS
+        src/libqhull/libqhull.h
+        src/libqhull/geom.h
+        src/libqhull/io.h
+        src/libqhull/mem.h
+        src/libqhull/merge.h
+        src/libqhull/poly.h
+        src/libqhull/qhull_a.h
+        src/libqhull/qset.h
+        src/libqhull/random.h
+        src/libqhull/stat.h
+        src/libqhull/user.h
+)
+set(
+    libqhull_SOURCES
+        src/libqhull/global.c
+        src/libqhull/stat.c
+        src/libqhull/geom2.c
+        src/libqhull/poly2.c
+        src/libqhull/merge.c
+        src/libqhull/libqhull.c
+        src/libqhull/geom.c
+        src/libqhull/poly.c
+        src/libqhull/qset.c
+        src/libqhull/mem.c
+        src/libqhull/random.c
+        src/libqhull/usermem.c
+        src/libqhull/userprintf.c
+        src/libqhull/io.c
+        src/libqhull/user.c
+        src/libqhull/rboxlib.c
+        src/libqhull/userprintf_rbox.c
+        ${libqhull_HEADERS}
+) 
