@@ -59,7 +59,7 @@ public:
 
   GraphPerspective(const tlp::PluginContext* c);
   virtual ~GraphPerspective();
-  virtual void construct(tlp::PluginProgress *);
+  virtual void start(tlp::PluginProgress *);
   tlp::GraphHierarchiesModel* model() const;
 
   GraphPerspectiveLogger* _logger;
