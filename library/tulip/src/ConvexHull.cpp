@@ -32,16 +32,6 @@ struct p0Vectors {
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
 
-bool operator<(const p0Vectors &p1, const p0Vectors &p2) {
-  float z = (p1.pos^p2.pos)[2];
-
-  if (z == 0)
-    // aligned points so check norm of vectors
-    return p1.pos.norm() < p2.pos.norm();
-
-  return z > 0;
-}
-
 //==============================================================
 //the following inline function of cross product ensures we
 //ignore the z-coordinate.  Only 2d-hull merging allowed.
@@ -50,6 +40,14 @@ inline double cross (Coord v1, Coord v2) {
   v2.setZ (0.0);
   return ((v1^v2)[2]);
 }//end cross
+
+bool operator<(const p0Vectors &p1, const p0Vectors &p2) {
+  double z = (double)p1.pos[0]*(double)p2.pos[1] - (double)p1.pos[1]*(double)p2.pos[0];
+  // aligned points so check norm of vectors
+  if (fabs(z) < 1E-5)
+    return p1.pos.norm() - p2.pos.norm() < 0.;
+  return z > 0.;
+}
 
 //==============================================================
 //the following inline function returns when a double is "almost zero"
@@ -106,13 +104,14 @@ inline bool hit (const Coord &v1Tail, const Coord &v1Head,
 inline unsigned int findP0(const std::vector<Coord> &points) {
   unsigned int p0Index = 0;
 
-  for (unsigned int i = 1; i < points.size(); i++) {
-    if (points[p0Index].getX() < points[i].getX()) continue;
+  for (unsigned int i = 1; i < points.size(); ++i) {
+    if (points[p0Index][0] - points[i][0] < -1E-3) continue;
 
-    if (points[p0Index].getX() > points[i].getX())
+    if (points[p0Index][0] - points[i][0] > 1E-3)
       p0Index = i;
-    else if (points[p0Index].getY() > points[i].getY())
-      p0Index = i;
+    else
+        if (points[p0Index][1] - points[i][1] > 1E-3)
+            p0Index = i;
   }//end for i
 
   return p0Index;
@@ -144,7 +143,7 @@ void tlp::convexHull (const std::vector<Coord> &points,
   //if we have less than three points, the convex hull consists of
   //all zero, one, or two points.
   if (points.size() < 3) {
-    for (unsigned int i = 0; i < points.size(); i++)
+    for (unsigned int i = 0; i < points.size(); ++i)
       convexHull.push_back (i);
 
     if (points.size() == 2) {
@@ -165,7 +164,7 @@ void tlp::convexHull (const std::vector<Coord> &points,
   //compute vectors from all the points to p0
   vector<p0Vectors> vectors;
 
-  for (unsigned int i = 0; i < points.size(); i++) {
+  for (unsigned int i = 0; i < points.size(); ++i) {
     if (p0Index == i) continue;
 
     p0Vectors curAngle;
@@ -182,14 +181,12 @@ void tlp::convexHull (const std::vector<Coord> &points,
   convexHull.push_back((*it++).index);
 
   for (; it != vectors.end(); ++it) {
-    while ((convexHull.size() > 1) &&
-           !((((*it).pos -
-               (points[convexHull[convexHull.size() - 1]] -
-                points[p0Index])) ^
-              ((points[convexHull[convexHull.size() - 2]] -
-                points[p0Index]) -
-               (points[convexHull[convexHull.size() - 1]] -
-                points[p0Index])))[2] > 0))
+      while ((convexHull.size() > 1) &&
+             !(( ((*it).pos - (points[convexHull[convexHull.size() - 1]] - points[p0Index]))
+                ^
+                ((points[convexHull[convexHull.size() - 2]] - points[p0Index]) -(points[convexHull[convexHull.size() - 1]] - points[p0Index])))[2]
+               > 1E-2)
+             )
       convexHull.pop_back();
 
     convexHull.push_back((*it).index);
