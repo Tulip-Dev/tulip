@@ -176,7 +176,10 @@ PropertyInterface* GraphProperty::clonePrototype(Graph * g, const std::string& n
   if( !g )
     return 0;
 
-  GraphProperty * p = g->getLocalProperty<GraphProperty>( n );
+  // allow to get an unregistered property (empty name)
+  GraphProperty * p = n.empty()
+                       ? new GraphProperty(g) : g->getLocalProperty<GraphProperty>( n );
+
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
