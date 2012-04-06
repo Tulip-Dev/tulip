@@ -1,6 +1,18 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-FIND_PACKAGE(PythonLibs REQUIRED)
+
 FIND_PACKAGE(PythonInterp REQUIRED)
+IF(PYTHONINTERP_FOUND)
+    EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} --version
+                    ERROR_VARIABLE PYTHON_VERSION_RAW)
+    STRING(REPLACE "\n" "" PYTHON_VERSION_RAW "${PYTHON_VERSION_RAW}")
+    STRING(REGEX MATCH "[0-9]\\.[0-9]"
+           PYTHON_VERSION "${PYTHON_VERSION_RAW}")
+
+    # Find the Python library with the same version as the interpreter
+    # Starting Python 3.2, the library is suffixed by mu, also handle that case
+    SET(Python_ADDITIONAL_VERSIONS ${PYTHON_VERSION}mu ${PYTHON_VERSION})
+    FIND_PACKAGE(PythonLibs REQUIRED)
+ENDIF(PYTHONINTERP_FOUND)
 
 IF (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)   					
 
