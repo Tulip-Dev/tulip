@@ -67,6 +67,7 @@ public :
 
   Voronoi(tlp::AlgorithmContext context) : tlp::Algorithm(context) {
     addParameter<bool>("voronoi cells", "If checked, a subgraph will be added for each computed voronoi cell.", "false");
+    addParameter<bool>("connect", "If checked, original graph nodes will be connected to the vertices of their voronoi cell.", "false");
   }
 
   bool run() {
@@ -74,9 +75,11 @@ public :
     tlp::Observable::holdObservers();
 
     bool voronoiCellSg = false;
+    bool connectNodesToVoronoiCell = false;
 
     if (dataSet) {
       dataSet->get("voronoi cells", voronoiCellSg);
+      dataSet->get("connect", connectNodesToVoronoiCell);
     }
 
     tlp::Graph *clone = graph->addCloneSubGraph("Original graph");
@@ -92,7 +95,6 @@ public :
     if (graph->applyAlgorithm("Delaunay triangulation", errMsg, &delaunayDataSet)) {
 
       // Ok, now we are ready to compute the dual voronoi diagram
-
       tlp::Graph *delaunaySubGraph = graph->getSubGraph("Delaunay");
 
       tlp::Graph* voronoiSubGraph = graph->addSubGraph("Voronoi");
@@ -160,6 +162,7 @@ public :
 
         }
         else {
+
           tlp::node n;
           std::vector<tlp::node> tetraNodes;
           tetraNodes.reserve(4);
@@ -222,43 +225,41 @@ public :
         }
       }
 
-
       // compute the voronoi cells associated to nodes
       // and add corresponding sub-graphs
       tlp::node n;
       int cellCpt = 0;
       std::ostringstream oss;
       forEach(n, clone->getNodes()) {
-        oss.str("");
-        oss << "voronoi cell " << cellCpt++;
         std::set<tlp::node> cellNodes;
         tlp::node ne;
         forEach(ne, voronoiSubGraph->getInOutNodes(n)) {
-          cellNodes.insert(ne);
+          if (voronoiCellSg) {
+            cellNodes.insert(ne);
+          }
+          cleanVoronoiSg->addNode(ne);
         }
-        tlp::Graph *cellSg = voronoiSubGraph->inducedSubGraph(cellNodes);
-        cellSg->setName(oss.str());
-        tlp::edge e;
-        stableForEach(e, voronoiSubGraph->getInOutEdges(n)) {
-          if (!clone->isElement(e)) {
-            voronoiSubGraph->delEdge(e, true);
+        if (voronoiCellSg) {
+            oss.str("");
+            oss << "voronoi cell " << cellCpt++;
+            tlp::Graph *cellSg = voronoiSubGraph->inducedSubGraph(cellNodes);
+            cellSg->setName(oss.str());
+        }
+
+        if (!connectNodesToVoronoiCell) {
+          tlp::edge e;
+          stableForEach(e, voronoiSubGraph->getInOutEdges(n)) {
+            if (!clone->isElement(e)) {
+              voronoiSubGraph->delEdge(e, true);
+            }
           }
         }
         voronoiSubGraph->delNode(n);
-        forEach(ne, cellSg->getNodes()) {
-          cleanVoronoiSg->addNode(ne);
-        }
-        forEach(e, cellSg->getEdges()) {
-          cleanVoronoiSg->addEdge(e);
-        }
       }
 
-      // remove the delaunay sub-graph and its subgraphs
-      tlp::edge e;
-      stableForEach(e, delaunaySubGraph->getEdges()) {
-        delaunaySubGraph->delEdge(e, true);
-      }
+      tlp::StableIterator<tlp::edge> delaunayEdges(delaunaySubGraph->getEdges());
       graph->delAllSubGraphs(delaunaySubGraph);
+      graph->delEdges(&delaunayEdges, true);
 
       // remove the dummy nodes added by the delaunay triangulation
       std::vector<tlp::node> dummyNodes;
@@ -277,13 +278,6 @@ public :
       }
 
       voronoiSubGraph->delSubGraph(cleanVoronoiSg);
-
-      if (!voronoiCellSg) {
-        tlp::Graph *sg = NULL;
-        stableForEach(sg, voronoiSubGraph->getSubGraphs()) {
-          voronoiSubGraph->delSubGraph(sg);
-        }
-      }
 
     }
     else {
