@@ -612,23 +612,30 @@ double LayoutProperty::averageAngularResolution(const Graph *sg) const {
   return result/(double)sg->numberOfNodes();
 }
 //=================================================================================
+
 #ifndef DOXYGEN_NOTFOR_DEVEL
 struct AngularOrder {
-  bool operator() (const Coord &c1, const Coord &c2) {
+  bool operator() (const Vec2d &c1, const Vec2d &c2) {
     //if the vectors have not the same direction on y-coordiantes
     //the result is direct.
-    if (c1[1]>=0 && c2[1]<0) return false;
+    Vec2d c1c2(c2 - c1);
+    assert(c1c2.norm() > 1E-4);
 
-    if (c2[1]>=0 && c1[1]<0) return true;
+  if (c1[1]>=0 && c2[1]<0) return false;
+        if (c2[1]>=0 && c1[1]<0) return true;
 
-    //If the vectors have the same size on the y-coordinates, we compare
-    //their x-coordinates
-    if (c2[1]>=0 && c1[1]>=0)
-      return c1[0]>c2[0];
-    else
-      return c1[0]<c2[0];
+        //If the vectors have the same size on the y-coordinates, we compare
+        //their x-coordinates
+        if (c2[1]>=0 && c1[1]>=0)
+          return c1[0]>c2[0];
+        else
+          return c1[0]<c2[0];
+
+    double alpha = c1[0]*c2[1] - c1[1]*c2[0];
+    return alpha < 0.;
+    return false;
   }
-  bool operator() (const pair<Coord, edge> &c1, const pair<Coord, edge> &c2) {
+  bool operator() (const pair<Vec2d, edge> &c1, const pair<Vec2d, edge> &c2) {
     return this->operator()(c1.first, c2.first);
   }
 };
@@ -657,7 +664,7 @@ void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
   if (sg->deg(n) < 2) return;
 
   //===========
-  typedef pair<Coord, edge> pCE;
+  typedef pair<Vec2d, edge> pCE;
 
   list< pCE > adjCoord;
   //Extract all adjacent edges, the bends are taken
@@ -668,27 +675,35 @@ void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
     edge ite=itE->next();
 
     if (getEdgeValue(ite).size()>0) {
-      if (sg->source(ite)==n)
-        adjCoord.push_back(pCE(getEdgeValue(ite).front(), ite));
-      else
-        adjCoord.push_back(pCE(getEdgeValue(ite).back(), ite) );
+      if (sg->source(ite)==n) {
+          Coord tmp = getEdgeValue(ite).front();
+          Vec2d v; v[0] = tmp[0]; v[1] = tmp[1];
+          adjCoord.push_back(pCE(v, ite));
+      } else {
+          Coord tmp = getEdgeValue(ite).back();
+          Vec2d v; v[0] = tmp[0]; v[1] = tmp[1];
+          adjCoord.push_back(pCE(v, ite) );
+      }
     }
     else {
-      adjCoord.push_back(pCE(getNodeValue(sg->opposite(ite,n)), ite) );
+        Coord tmp = getNodeValue(sg->opposite(ite,n));
+        Vec2d v; v[0] = tmp[0]; v[1] = tmp[1];
+        adjCoord.push_back(pCE(v, ite) );
     }
   }
 
   delete itE;
 
   //Compute normalized vectors associated to incident edges.
-  const Coord& center=getNodeValue(n);
+  Vec2d center;
+  center[0] = getNodeValue(n)[0]; center[1] = getNodeValue(n)[1];
   list<pCE>::iterator it;
 
   for (it=adjCoord.begin(); it!=adjCoord.end();) {
     it->first  -= center;
-    float norm = it->first.norm();
+    double norm = it->first.norm();
 
-    if (norm) {
+    if (norm > 1E-3) {
       it->first /= norm;
       ++it;
     }
@@ -716,17 +731,12 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 
-  double degree = sg->deg(n);
-
-  if (sg->deg(n)==0) return result;
-
-  if (sg->deg(n)==1) {
-    result.push_back(0.0);
-    return result;
-  }
+  if (sg->deg(n) < 2) return result;
 
   //===========
-  list<Coord> adjCoord;
+  typedef pair<Vec2d, edge> pCE;
+
+  list< pCE > adjCoord;
   //Extract all adjacent edges, the bends are taken
   //into account.
   Iterator<edge> *itE=sg->getInOutEdges(n);
@@ -735,28 +745,36 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
     edge ite=itE->next();
 
     if (getEdgeValue(ite).size()>0) {
-      if (sg->source(ite)==n)
-        adjCoord.push_back(getEdgeValue(ite).front());
-      else
-        adjCoord.push_back(getEdgeValue(ite).back());
+      if (sg->source(ite)==n) {
+          Coord tmp = getEdgeValue(ite).front();
+          Vec2d v; v[0] = tmp[1]; v[1] = tmp[2];
+          adjCoord.push_back(pCE(v, ite));
+      } else {
+          Coord tmp = getEdgeValue(ite).back();
+          Vec2d v; v[0] = tmp[1]; v[1] = tmp[2];
+          adjCoord.push_back(pCE(v, ite) );
+      }
     }
     else {
-      adjCoord.push_back(getNodeValue(sg->opposite(ite,n)));
+        Coord tmp = getNodeValue(sg->opposite(ite,n));
+        Vec2d v; v[0] = tmp[1]; v[1] = tmp[2];
+        adjCoord.push_back(pCE(v, ite) );
     }
   }
 
   delete itE;
 
   //Compute normalized vectors associated to incident edges.
-  const Coord& center=getNodeValue(n);
-  list<Coord>::iterator it;
+  Vec2d center;
+  center[0] = getNodeValue(n)[0]; center[1] = getNodeValue(n)[1];
+  list<pCE>::iterator it;
 
   for (it=adjCoord.begin(); it!=adjCoord.end();) {
-    (*it)-=center;
-    float norm = (*it).norm();
+    it->first  -= center;
+    double norm = it->first.norm();
 
     if (norm) {
-      (*it)/=norm;
+      it->first /= norm;
       ++it;
     }
     else   // remove null vector
@@ -766,16 +784,24 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
   //Sort the vector to compute angles between two edges
   //Correctly.
   adjCoord.sort(AngularOrder());
+
   //Compute the angles
-  it=adjCoord.begin();
-  Coord first=(*it);
-  Coord current=first;
+  it = adjCoord.begin();
+  Vec3d first;
+  first[0] = (*it).first[0];
+  first[1] = (*it).first[1];
+  first[2] = 0;
+  Vec3d current = first;
   ++it;
 
   int stop=2;
-
+  double degree = sg->deg(n);
   for (; stop>0;) {
-    Coord next=*it;
+    Vec3d next;
+    next[0] = (*it).first[0];
+    next[1] = (*it).first[1];
+    next[2] = 0;
+
     double cosTheta = current.dotProduct(next);//current * next;
     double sinTheta = (current^next)[2];
 
@@ -788,10 +814,10 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
     if (sinTheta-0.0001<-1) sinTheta+=0.0001;
 
     if (sinTheta>=0) {
-      result.push_back(2.0*M_PI/degree-acos(cosTheta));
+      result.push_back(2.0*M_PI/degree - acos(cosTheta));
     }
     else {
-      result.push_back(2.0*M_PI/degree-(2.0*M_PI-acos(cosTheta)));
+      result.push_back(2.0*M_PI/degree - (2.0*M_PI-acos(cosTheta)));
     }
 
     current=next;
