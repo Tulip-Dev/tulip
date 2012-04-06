@@ -282,10 +282,10 @@ public:
    * @param ifNotDefault Whether to ignore default-valuated nodes or not. Defaults to false.
    * @return void
    **/
-  virtual void copy(const node destination, const node source, PropertyInterface *property,
+  virtual bool copy(const node destination, const node source, PropertyInterface *property,
                     bool ifNotDefault = false) {
     if (property == NULL)
-      return;
+      return false;
 
     tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* tp =
       dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(property);
@@ -295,9 +295,10 @@ public:
       tp->nodeProperties.get(source.id, notDefault);
 
     if (ifNotDefault && !notDefault)
-      return;
+      return false;
 
     setNodeValue(destination, value);
+    return true;
   }
   /**
    * @brief Copies the value hold by a property on an edge to another edge on this property.
@@ -308,10 +309,10 @@ public:
    * @param ifNotDefault Whether to ignore default-valuated nodes or not. Defaults to false.
    * @return void
    **/
-  virtual void copy(const edge destination, const edge source, PropertyInterface *property,
+  virtual bool copy(const edge destination, const edge source, PropertyInterface *property,
                     bool ifNotDefault = false) {
     if (property == NULL)
-      return;
+      return false;
 
     tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* tp =
       dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(property);
@@ -321,9 +322,10 @@ public:
       tp->edgeProperties.get(source.id, notDefault);
 
     if (ifNotDefault && !notDefault)
-      return;
+      return false;
 
     setEdgeValue(destination, value);
+    return true;
   }
   /**
    * @brief Copies the values hold by a property on this property

@@ -63,8 +63,9 @@ public:
    * with the value of the node (second argument) defined in prop (third argument)
    * If the fourth argument is set to true, the value will be copied only if
    * it is not the default value.
+   * Returns true if a copy has been done
    */
-  virtual void copy(const node src, const node dst, PropertyInterface *prop,
+  virtual bool copy(const node src, const node dst, PropertyInterface *prop,
                     bool ifNotDefault = false) =0;
   /**
    * Sets the value of an edge (first argument) in the current property (this)
@@ -72,8 +73,9 @@ public:
    * defined in this property (this).
    * If the fourth argument is set to true, the value will be copied only if
    * it is not the default value.
+   * Returns true if a copy has been done
    */
-  virtual void copy(const edge src, const edge dst, PropertyInterface *prop,
+  virtual bool copy(const edge src, const edge dst, PropertyInterface *prop,
                     bool ifNotDefault = false) =0;
   /**
    * Copies the values hold by the property argument on this property
