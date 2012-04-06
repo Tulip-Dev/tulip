@@ -237,13 +237,15 @@ public :
           if (voronoiCellSg) {
             cellNodes.insert(ne);
           }
+
           cleanVoronoiSg->addNode(ne);
         }
+
         if (voronoiCellSg) {
-            oss.str("");
-            oss << "voronoi cell " << cellCpt++;
-            tlp::Graph *cellSg = voronoiSubGraph->inducedSubGraph(cellNodes);
-            cellSg->setName(oss.str());
+          oss.str("");
+          oss << "voronoi cell " << cellCpt++;
+          tlp::Graph *cellSg = voronoiSubGraph->inducedSubGraph(cellNodes);
+          cellSg->setName(oss.str());
         }
 
         if (!connectNodesToVoronoiCell) {
@@ -254,6 +256,7 @@ public :
             }
           }
         }
+
         voronoiSubGraph->delNode(n);
       }
 
