@@ -221,7 +221,7 @@ methodDocstring = {}
 methodSignature = {}
 
 def process_docstring(app, what, name, obj, options, lines):
-	if what == "class":
+        if what == "class" or not obj.__doc__:
 	  return
 	global methodSignature
 	currentSignature = ""

@@ -211,6 +211,9 @@ Creation and Modification of the sub-graphs hierarchy
 Iterators on the graph structure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+All the provided iterators are stable, meaning you can safely delete a node/edge/subgraph
+from the graph while iterating on its nodes/edges/subgraphs.
+
 .. automethod:: tulip::tlp.Graph.getOneNode
 
 .. automethod:: tulip::tlp.Graph.getNodes
@@ -410,11 +413,38 @@ Meta-nodes management
 
 .. automethod:: tulip::tlp.Graph.openMetaNode
 
+Graph observation
+^^^^^^^^^^^^^^^^^
+
+.. automethod:: tulip::tlp.Graph.addGraphObserver
+
+.. automethod:: tulip::tlp.Graph.countGraphObservers
+
+.. automethod:: tulip::tlp.Graph.removeGraphObserver
+
+Tulip observation system
+------------------------
+
+tlp.GraphObserver
+^^^^^^^^^^^^^^^^^
+
+.. autoclass:: tulip::tlp.GraphObserver
+        :members:
+        :undoc-members:
+
+tlp.PropertyObserver
+^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: tulip::tlp.PropertyObserver
+        :members:
+        :undoc-members:
+
 Tulip datatypes
 ---------------
 
 tlp.Vec3f
 ^^^^^^^^^
+
 .. autoclass:: tulip::tlp.Vec3f
 	:members:
 	:undoc-members:
