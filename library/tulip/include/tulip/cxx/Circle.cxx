@@ -58,8 +58,9 @@ tlp::Circle<Obj> & tlp::Circle<Obj>::merge(const tlp::Circle<Obj> &c) {
 
 template<typename Obj>
 bool tlp::Circle<Obj>::isIncludeIn(const tlp::Circle<Obj> &c) const {
-  Vector<Obj,2> dir=c-*this;
-  return (dir.norm()+radius)<=c.radius;
+    double d =  (*this).dist(c);
+    if (d > fabs(radius - c.radius)) return false; //outside
+    return (radius < c.radius || c == (*this));
 }
 
 template<typename Obj>
