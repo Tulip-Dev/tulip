@@ -20,6 +20,9 @@
 namespace tlp {
 
 class PropertyObserver {
+%TypeHeaderCode
+#include <tulip/ObservableProperty.h>
+%End
 
 %Docstring
 Derived implementation of that class receives a message (through a callback/handler method)

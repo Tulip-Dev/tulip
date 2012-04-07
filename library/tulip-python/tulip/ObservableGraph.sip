@@ -20,6 +20,9 @@
 namespace tlp {
 
 class GraphObserver {
+%TypeHeaderCode
+#include <tulip/ObservableGraph.h>
+%End
 
 %Docstring
 .. versionadded:: 3.7.1
