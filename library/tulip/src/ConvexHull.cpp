@@ -43,9 +43,11 @@ inline double cross (Coord v1, Coord v2) {
 
 bool operator<(const p0Vectors &p1, const p0Vectors &p2) {
   double z = (double)p1.pos[0]*(double)p2.pos[1] - (double)p1.pos[1]*(double)p2.pos[0];
+
   // aligned points so check norm of vectors
   if (fabs(z) < 1E-5)
     return p1.pos.norm() - p2.pos.norm() < 0.;
+
   return z > 0.;
 }
 
@@ -109,9 +111,8 @@ inline unsigned int findP0(const std::vector<Coord> &points) {
 
     if (points[p0Index][0] - points[i][0] > 1E-3)
       p0Index = i;
-    else
-        if (points[p0Index][1] - points[i][1] > 1E-3)
-            p0Index = i;
+    else if (points[p0Index][1] - points[i][1] > 1E-3)
+      p0Index = i;
   }//end for i
 
   return p0Index;
@@ -181,12 +182,12 @@ void tlp::convexHull (const std::vector<Coord> &points,
   convexHull.push_back((*it++).index);
 
   for (; it != vectors.end(); ++it) {
-      while ((convexHull.size() > 1) &&
-             !(( ((*it).pos - (points[convexHull[convexHull.size() - 1]] - points[p0Index]))
-                ^
-                ((points[convexHull[convexHull.size() - 2]] - points[p0Index]) -(points[convexHull[convexHull.size() - 1]] - points[p0Index])))[2]
-               > 1E-2)
-             )
+    while ((convexHull.size() > 1) &&
+           !(( ((*it).pos - (points[convexHull[convexHull.size() - 1]] - points[p0Index]))
+               ^
+               ((points[convexHull[convexHull.size() - 2]] - points[p0Index]) -(points[convexHull[convexHull.size() - 1]] - points[p0Index])))[2]
+             > 1E-2)
+          )
       convexHull.pop_back();
 
     convexHull.push_back((*it).index);

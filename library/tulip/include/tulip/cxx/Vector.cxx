@@ -192,37 +192,41 @@ VECTORTLP tlp::operator-(const VECTORTLP &u) {
 //======================================================
 template <typename TYPE,unsigned int SIZE>
 bool VECTORTLP::operator>(const VECTORTLP &vecto) const {
-    return vecto < (*this);
+  return vecto < (*this);
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE>
 bool VECTORTLP::operator<(const VECTORTLP &vecto) const {
-    if (std::numeric_limits<TYPE>::is_exact ||
-            !std::numeric_limits<TYPE>::is_specialized) {
-        for (unsigned int i=0; i<SIZE; ++i) {
-            if ((*this)[i] > vecto[i])
-                return false;
-            else
-                if ((*this)[i] < vecto[i])
-                    return true;
-        }
+  if (std::numeric_limits<TYPE>::is_exact ||
+      !std::numeric_limits<TYPE>::is_specialized) {
+    for (unsigned int i=0; i<SIZE; ++i) {
+      if ((*this)[i] > vecto[i])
         return false;
+      else if ((*this)[i] < vecto[i])
+        return true;
     }
 
-    if ((*this).dist(vecto) < sqrt(std::numeric_limits<TYPE>::epsilon())) return false;
-    for (unsigned int i=0; i<SIZE; ++i) {
-        TYPE tmp = (*this)[i] - vecto[i];
-        if (tmp > sqrt(std::numeric_limits<TYPE>::epsilon()) || tmp < -sqrt(std::numeric_limits<TYPE>::epsilon())) {
-            if ( (*this)[i] > vecto[i]) return false;
-            if ( (*this)[i] < vecto[i]) return true;
-        }
-    }
     return false;
+  }
+
+  if ((*this).dist(vecto) < sqrt(std::numeric_limits<TYPE>::epsilon())) return false;
+
+  for (unsigned int i=0; i<SIZE; ++i) {
+    TYPE tmp = (*this)[i] - vecto[i];
+
+    if (tmp > sqrt(std::numeric_limits<TYPE>::epsilon()) || tmp < -sqrt(std::numeric_limits<TYPE>::epsilon())) {
+      if ( (*this)[i] > vecto[i]) return false;
+
+      if ( (*this)[i] < vecto[i]) return true;
+    }
+  }
+
+  return false;
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE>
 bool VECTORTLP::operator!=(const VECTORTLP &vecto) const {
-    return (!((*this) == vecto));
+  return (!((*this) == vecto));
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE>
@@ -233,8 +237,9 @@ bool VECTORTLP::operator==(const VECTORTLP &vecto) const {
       if ((*this)[i] != vecto[i]) return false;
   }
   else {
-      if ((*this).dist(vecto) > sqrt(std::numeric_limits<TYPE>::epsilon())) return false;
+    if ((*this).dist(vecto) > sqrt(std::numeric_limits<TYPE>::epsilon())) return false;
   }
+
   return true;
 }
 //======================================================
