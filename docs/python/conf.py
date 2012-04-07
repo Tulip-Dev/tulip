@@ -222,57 +222,57 @@ methodSignature = {}
 
 def process_docstring(app, what, name, obj, options, lines):
         if what == "class" or not obj.__doc__:
-	  return
-	global methodSignature
-	currentSignature = ""
-	n = name.replace("tulip.", "")
-	
-	nbMethods = 0
-	pos = 0
-	signaturePos = {}
-	while obj.__doc__.find(n, pos) != -1:
-	  pos = obj.__doc__.find(n, pos)
-	  signaturePos[nbMethods] = pos
-	  pos += len(n)
-	  nbMethods+=1  
-	
+            return
+        global methodSignature
+        currentSignature = ""
+        n = name.replace("tulip.", "")
 
-	if not n in methodDocstring.keys():
-	  methodDocstring[n] = [0] * nbMethods
-	     
-	methodIdx = 0
-	
-	for i in range(nbMethods):
-	  if methodDocstring[n][i] == 0:
-	    methodIdx = i
-	    currentSignature = obj.__doc__[signaturePos[i]:obj.__doc__.find(")", signaturePos[i])+1]
-	    methodDocstring[n][i] = 1
-	    break
-		
-	signatureInLines = False
-	for l in lines:
-		if l.find(currentSignature) != -1:
-			signatureInLines = True
-			break
-			
-	if not signatureInLines:
-		lines.insert(0, currentSignature)
-	
-	while len(lines) > 0 and lines[0].find(currentSignature) == -1:
-	  del lines[0]
-	if len(lines) > 0 and lines[0].find(currentSignature) != -1:  
-	  del lines[0]
-	if len(lines) > 0 and methodIdx < nbMethods - 1:
-	  nextSignature = obj.__doc__[signaturePos[methodIdx+1]:obj.__doc__.find(")", signaturePos[methodIdx+1])+1]
-	  linesIdx = 0
-	  while lines[linesIdx].find(nextSignature) == -1:
-	    linesIdx+=1
-	  
-	  curNbLines = len(lines)
-	  for i in range(curNbLines - linesIdx):
-	    del lines[linesIdx]
-	    
-	  
+        nbMethods = 0
+        pos = 0
+        signaturePos = {}
+        while obj.__doc__.find(n, pos) != -1:
+          pos = obj.__doc__.find(n, pos)
+          signaturePos[nbMethods] = pos
+          pos += len(n)
+          nbMethods+=1
+
+
+        if not n in methodDocstring.keys():
+          methodDocstring[n] = [0] * nbMethods
+
+        methodIdx = 0
+
+        for i in range(nbMethods):
+          if methodDocstring[n][i] == 0:
+            methodIdx = i
+            currentSignature = obj.__doc__[signaturePos[i]:obj.__doc__.find(")", signaturePos[i])+1]
+            methodDocstring[n][i] = 1
+            break
+
+        signatureInLines = False
+        for l in lines:
+                if l.find(currentSignature) != -1:
+                        signatureInLines = True
+                        break
+
+        if not signatureInLines:
+                lines.insert(0, currentSignature)
+
+        while len(lines) > 0 and lines[0].find(currentSignature) == -1:
+          del lines[0]
+        if len(lines) > 0 and lines[0].find(currentSignature) != -1:
+          del lines[0]
+        if len(lines) > 0 and methodIdx < nbMethods - 1:
+          nextSignature = obj.__doc__[signaturePos[methodIdx+1]:obj.__doc__.find(")", signaturePos[methodIdx+1])+1]
+          linesIdx = 0
+          while lines[linesIdx].find(nextSignature) == -1:
+            linesIdx+=1
+
+          curNbLines = len(lines)
+          for i in range(curNbLines - linesIdx):
+            del lines[linesIdx]
+
+
 def process_signature(app, what, name, obj, opts, sig, ann):
     global methodSignature
     currentSignature = ""
@@ -286,7 +286,7 @@ def process_signature(app, what, name, obj, opts, sig, ann):
             signaturePos[nbMethods] = pos
             pos += len(n)
             nbMethods+=1
-	   
+
         if not n in methodSignature.keys():
             methodSignature[n] = [0] * nbMethods
 
@@ -306,7 +306,7 @@ def process_signature(app, what, name, obj, opts, sig, ann):
     return (sig, ann)
 
 def setup(app):
-	
+
     app.connect('autodoc-process-signature', process_signature) 
     app.connect('autodoc-process-docstring', process_docstring) 
     

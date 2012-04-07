@@ -106,14 +106,14 @@ tlp.node
 
 .. autoclass:: tulip::tlp.node
 	:members:
-	:undoc-members:
+
 
 tlp.edge
 ^^^^^^^^
 
 .. autoclass:: tulip::tlp.edge
 	:members:
-	:undoc-members:
+
 
 .. _graph-class:
 
@@ -447,7 +447,7 @@ tlp.Vec3f
 
 .. autoclass:: tulip::tlp.Vec3f
 	:members:
-	:undoc-members:
+
 
 tlp.Vec4f
 ^^^^^^^^^
@@ -464,7 +464,7 @@ tlp.Coord
 
 .. autoclass:: tulip::tlp.Coord
 	:members:
-	:undoc-members:
+
 
 tlp.BoundingBox
 ^^^^^^^^^^^^^^^
@@ -496,21 +496,21 @@ tlp.Size
 
 .. autoclass:: tulip::tlp.Size
 	:members:
-	:undoc-members:
+
 
 tlp.Color
 ^^^^^^^^^
 	
 .. autoclass:: tulip::tlp.Color
 	:members:
-	:undoc-members:
+
 
 tlp.ColorScale
 ^^^^^^^^^^^^^^
 	
 .. autoclass:: tulip::tlp.ColorScale
 	:members:
-	:undoc-members:	
+
 
 tlp.StringCollection
 ^^^^^^^^^^^^^^^^^^^^
@@ -523,14 +523,14 @@ tlp.DataSet
 
 .. autoclass:: tulip::tlp.DataSet
 	:members:
-	:undoc-members:		
+
 
 tlp.PluginProgress
 ^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.PluginProgress
 	:members:
-	:undoc-members:
+
 
 Graph properties classes
 ----------------------------
@@ -540,7 +540,7 @@ tlp.PropertyInterface
 
 .. autoclass:: tulip::tlp.PropertyInterface
 	:members:
-	:undoc-members:
+
 
 tlp.BooleanProperty
 ^^^^^^^^^^^^^^^^^^^
@@ -677,28 +677,28 @@ tlp.WithParameter
 
 .. autoclass:: tulip::tlp.WithParameter
 	:members:
-	:undoc-members:
+
 
 tlp.Algorithm
 ^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.Algorithm
 	:members:
-	:undoc-members:
+
 
 tlp.BooleanAlgorithm
 ^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.BooleanAlgorithm
 	:members:
-	:undoc-members:
+
 	
 tlp.ColorAlgorithm
 ^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.ColorAlgorithm
 	:members:
-	:undoc-members:			
+
 
 .. 
 	Don't know why but setting a docstring in DoubleAlgorithm.sip
@@ -725,35 +725,35 @@ tlp.IntegerAlgorithm
 
 .. autoclass:: tulip::tlp.IntegerAlgorithm
 	:members:
-	:undoc-members:	
+
 
 tlp.LayoutAlgorithm
 ^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.LayoutAlgorithm
 	:members:
-	:undoc-members:	
+
 
 tlp.SizeAlgorithm
 ^^^^^^^^^^^^^^^^^
 	
 .. autoclass:: tulip::tlp.SizeAlgorithm
 	:members:
-	:undoc-members:	
+
 
 tlp.ImportModule
 ^^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.ImportModule
 	:members:
-	:undoc-members:
+
 
 tlp.ExportModule
 ^^^^^^^^^^^^^^^^
 	
 .. autoclass:: tulip::tlp.ExportModule
 	:members:
-	:undoc-members:	
+
 
 Graph test classes
 -------------------
@@ -763,60 +763,60 @@ tlp.SelfLoops
 
 .. autoclass:: tulip::tlp.SelfLoops
 	:members:
-	:undoc-members:
+
 
 tlp.AcyclicTest
 ^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.AcyclicTest
 	:members:
-	:undoc-members:
+
 
 tlp.BiconnectedTest
 ^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.BiconnectedTest
 	:members:
-	:undoc-members:
+
 
 tlp.ConnectedTest
 ^^^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.ConnectedTest
 	:members:
-	:undoc-members:
+
 
 tlp.OuterPlanarTest
 ^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.OuterPlanarTest
 	:members:
-	:undoc-members:
+
 
 tlp.PlanarityTest
 ^^^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.PlanarityTest
 	:members:
-	:undoc-members:
+
 
 tlp.SimpleTest
 ^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.SimpleTest
 	:members:
-	:undoc-members:
+
 
 tlp.TreeTest
 ^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.TreeTest
 	:members:
-	:undoc-members:
+
 
 tlp.TriconnectedTest
 ^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.TriconnectedTest
 	:members:
-	:undoc-members:
+
