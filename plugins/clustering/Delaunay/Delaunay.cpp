@@ -153,12 +153,17 @@ public :
   }
 
   bool run() {
+
     tlp::Observable::holdObservers();
 
     tlp::Graph *clone = NULL;
 
+    bool voronoiMode = false;
+
     if (!graph->getAttribute("voronoi mode")) {
       clone = graph->addCloneSubGraph("Original graph");
+    } else {
+        voronoiMode = true;
     }
 
     bool triangleSg = false;
@@ -200,7 +205,7 @@ public :
       // enclose the layout in a cube whose each face is a grid.
       // It ensures that each nodes of the original graph will have an associated connected voronoi cell
       // meaning we don't have to deal with infinite voronoi edges.
-      if (graph->getAttribute("voronoi mode")) {
+      if (voronoiMode) {
 
         std::vector<tlp::node> addedNodes;
         float newWidth = bb.width() * 1.2;
@@ -269,7 +274,7 @@ public :
       // enclose the layout in its convex hull.
       // It ensures that each nodes of the original graph will have an associated connected voronoi cell
       // meaning we don't have to deal with infinite voronoi edges.
-      if (graph->getAttribute("voronoi mode")) {
+      if (voronoiMode) {
 
         std::map<tlp::node, tlp::Coord> newNodeToPos;
         std::vector<tlp::node> addedNodes;
@@ -344,10 +349,11 @@ public :
 
       int simCpt = 0;
       std::ostringstream oss;
-
+      std::vector<std::vector<tlp::node> > simplicesNodes;
       // iterate over generated simplices (triangles or tetrahedra) and add corresponding edges
       // in the delaunay sub-graph
       FORALLfacets {
+        std::vector<tlp::node> simplexNodes;
         if (!facet->upperdelaunay) {
           int pointId0=0, pointId1=0, pointId2=0, pointId3 = -1;
           int i = 0;
@@ -364,17 +370,22 @@ public :
             else {
               pointId3 = qh_pointid(vertex->point);
             }
-
             ++i;
           }
 
           tlp::node n0 = pointIdToNode[pointId0];
           tlp::node n1 = pointIdToNode[pointId1];
           tlp::node n2 = pointIdToNode[pointId2];
-          tlp::node n3;
 
-          if (pointId3 != -1)
+          simplexNodes.push_back(n0);
+          simplexNodes.push_back(n1);
+          simplexNodes.push_back(n2);
+
+          tlp::node n3;
+          if (pointId3 != -1) {
             n3 = pointIdToNode[pointId3];
+            simplexNodes.push_back(n3);
+          }
 
           tlp::Graph *triSg = NULL;
 
@@ -398,30 +409,30 @@ public :
 
           tlp::edge e1 = delaunaySubGraph->existEdge(n0, n1, false);
 
-          if(!e1.isValid())
+          if(!voronoiMode && !e1.isValid())
             e1 = delaunaySubGraph->addEdge(n0, n1);
 
-          if (triSg)
+          if (!voronoiMode && triSg)
             triSg->addEdge(e1);
 
           tlp::edge e2 = delaunaySubGraph->existEdge(n0, n2, false);
 
-          if(!e2.isValid())
+          if(!voronoiMode && !e2.isValid())
             e2 = delaunaySubGraph->addEdge(n0, n2);
 
-          if (triSg)
+          if (!voronoiMode && triSg)
             triSg->addEdge(e2);
 
           tlp::edge e3 = delaunaySubGraph->existEdge(n1, n2, false);
 
-          if(!e3.isValid())
+          if(!voronoiMode && !e3.isValid())
             e3 = delaunaySubGraph->addEdge(n1, n2);
 
-          if (triSg)
+          if (!voronoiMode && triSg)
             triSg->addEdge(e3);
 
           // 3d delaunay case
-          if (n3.isValid()) {
+          if (!voronoiMode && n3.isValid()) {
             tlp::edge e4 = delaunaySubGraph->existEdge(n3, n0, false);
 
             if (!e4.isValid())
@@ -445,13 +456,21 @@ public :
 
             if (triSg)
               triSg->addEdge(e6);
+
           }
+          simplicesNodes.push_back(simplexNodes);
         }
+      }
+
+      if (voronoiMode) {
+          graph->setAttribute("delaunay simplices nodes", simplicesNodes);
       }
     }
     else if (clone) {
       graph->delSubGraph(clone);
     }
+
+
 
     // free memory allocated by qhull
     qh_freeqhull(!qh_ALL);
