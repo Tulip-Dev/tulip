@@ -50,6 +50,24 @@ GraphUpdatesRecorder::~GraphUpdatesRecorder() {
 
   if (newIdsState)
     delete newIdsState;
+
+  // delete 'sets' of added nodes
+  IteratorValue* it =
+    graphAddedNodes.findAllValues(NULL, false);
+  
+  while(it->hasNext()) {
+    TypedValueContainer<GraphNodesRecord*> ctnr;
+    it->nextValue(ctnr);
+    delete ctnr.value;
+  } delete it;
+
+  // delete 'sets' of deleted nodes
+  it = graphDeletedNodes.findAllValues(NULL, false);
+  while(it->hasNext()) {
+    TypedValueContainer<GraphNodesRecord*> ctnr;
+    it->nextValue(ctnr);
+    delete ctnr.value;
+  } delete it;  
 }
 
 // delete the objects collected as to be deleted
@@ -94,32 +112,23 @@ void GraphUpdatesRecorder::deleteDeletedObjects() {
   }
 }
 
-// clean up all the MutableContainers
+// clean up all the clones of properties
 void GraphUpdatesRecorder::deleteValues(TLP_HASH_MAP<PropertyInterface*,
-                                        MutableContainer<DataMem*>* >& values) {
-  TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* >::iterator itnv =
+                                        RecordedValues>& values) {
+  TLP_HASH_MAP<PropertyInterface*, RecordedValues>::iterator itnv =
     values.begin();
 
   while(itnv != values.end()) {
-    deleteValues((*itnv).second);
+    // delete the clone
+    if (itnv->second.values)
+      delete itnv->second.values;
+    if (itnv->second.defaultValues)
+      delete itnv->second.defaultValues;
+    
     ++itnv;
   }
 
   values.clear();
-}
-
-// delete all the DataMem referenced by a MutableContainer
-void GraphUpdatesRecorder::deleteValues(MutableContainer<DataMem*>* values) {
-  IteratorValue* itv = values->findAllValues(NULL, false);
-
-  while(itv->hasNext()) {
-    TypedValueContainer<DataMem*> tVal;
-    itv->nextValue(tVal);
-    delete tVal.value;
-  }
-
-  delete itv;
-  delete values;
 }
 
 // delete all the DataMem referenced by a TLP_HASH_MAP
@@ -206,9 +215,8 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
     }
 
     // loop on oldNodeValues
-    TLP_HASH_MAP<PropertyInterface*,
-                 MutableContainer<DataMem*>* >::iterator itov =
-                   oldNodeValues.begin();
+    TLP_HASH_MAP<PropertyInterface*, RecordedValues>::iterator itov =
+      oldNodeValues.begin();
 
     while(itov != oldNodeValues.end()) {
       PropertyInterface* p = itov->first;
@@ -225,31 +233,24 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
 
     while(itan != updatedPropsAddedNodes.end()) {
       PropertyInterface* p = itan->first;
-      TLP_HASH_MAP<PropertyInterface*,
-                   MutableContainer<DataMem*>* >::iterator itnv =
-                     newNodeValues.find(p);
-      MutableContainer<DataMem*>*  nv;
+      TLP_HASH_MAP<PropertyInterface*, RecordedValues>::iterator itnv =
+	newNodeValues.find(p);
+      PropertyInterface*  nv;
       bool created = itnv == newNodeValues.end();
       bool hasNewValues = false;
 
-      if (created) {
-        nv = new MutableContainer<DataMem*>;
-        nv->setAll(NULL);
-      }
+      if (created)
+        nv = p->clonePrototype(p->getGraph(), "");
       else
-        nv = (*itnv).second;
+        nv = itnv->second.values;
 
       set<node>::iterator itn = (*itan).second.begin();
       set<node>::iterator itne = (*itan).second.end();
 
       while(itn != itne) {
-        DataMem* value = p->getNonDefaultDataMemValue(*itn);
-
-        // record value only if it is not the default one
-        if (value) {
-          nv->set((*itn).id, value);
-          hasNewValues = true;
-        }
+	bool notDefault = nv->copy((*itn), (*itn), p, true);
+	if (!hasNewValues)
+	  hasNewValues = notDefault;
 
         itn++;
       }
@@ -292,31 +293,24 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
 
     while(iten != updatedPropsAddedEdges.end()) {
       PropertyInterface* p = iten->first;
-      TLP_HASH_MAP<PropertyInterface*,
-                   MutableContainer<DataMem*>* >::iterator itnv =
-                     newEdgeValues.find(p);
-      MutableContainer<DataMem*>*  nv;
+      TLP_HASH_MAP<PropertyInterface*, RecordedValues>::iterator itnv =
+	newEdgeValues.find(p);
+      PropertyInterface*  nv;
       bool created = itnv == newEdgeValues.end();
       bool hasNewValues = false;
 
-      if (created) {
-        nv = new MutableContainer<DataMem*>;
-        nv->setAll(NULL);
-      }
+      if (created)
+        nv = p->clonePrototype(p->getGraph(), "");
       else
-        nv = (*itnv).second;
+        nv = itnv->second.values;
 
       set<edge>::iterator ite = (*iten).second.begin();
       set<edge>::iterator itee = (*iten).second.end();
 
       while(ite != itee) {
-        DataMem* value = p->getNonDefaultDataMemValue(*ite);
-
-        // record value only if it is not the default one
-        if (value) {
-          nv->set((*ite).id, value);
-          hasNewValues = true;
-        }
+	bool notDefault = nv->copy((*ite), (*ite), p, true);
+	if (!hasNewValues)
+	  hasNewValues = notDefault;
 
         ite++;
       }
@@ -354,8 +348,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
 
 void GraphUpdatesRecorder::recordNewNodeValues(PropertyInterface* p) {
   assert(newNodeValues.find(p) == newNodeValues.end());
-  MutableContainer<DataMem*>*  nv = new MutableContainer<DataMem*>;
-  nv->setAll(NULL);
+  PropertyInterface*  nv = p->clonePrototype(p->getGraph(), "");
   bool hasNewValues = false;
 
   // record updated nodes new values
@@ -365,47 +358,55 @@ void GraphUpdatesRecorder::recordNewNodeValues(PropertyInterface* p) {
 
     while(itn->hasNext()) {
       node n(itn->next());
-      DataMem* value = p->getNonDefaultDataMemValue(n);
-      nv->set(n.id, value);
-      hasNewValues = true;
+      bool nonDefault = nv->copy(n, n, p, true);
+      if (!hasNewValues)
+	hasNewValues = nonDefault;
     }
 
     delete itn;
   }
   else {
-    TLP_HASH_MAP<PropertyInterface*,
-                 MutableContainer<DataMem*>* >::iterator itp =
-                   oldNodeValues.find(p);
+    TLP_HASH_MAP<PropertyInterface*, RecordedValues>::iterator itp =
+      oldNodeValues.find(p);
 
     if (itp != oldNodeValues.end()) {
-      MutableContainer<DataMem*>* opv = (*itp).second;
-      IteratorValue* itov = opv->findAllValues(NULL, false);
+      PropertyInterface* opv = (*itp).second.values;
+      if (opv) {
+	Iterator<node>* itov = opv->getNonDefaultValuatedNodes();
 
-      while(itov->hasNext()) {
-        node n(itov->next());
-        DataMem* value = p->getNonDefaultDataMemValue(n);
+	while(itov->hasNext()) {
+	  node n(itov->next());
+	  bool nonDefault = nv->copy(n, n, p, true);
+	  if (!hasNewValues)
+	    hasNewValues = nonDefault;
+	}
 
-        // record value only if it is not the default one
-        if (value) {
-          nv->set(n.id, value);
-          hasNewValues = true;
-        }
+	delete itov;
       }
+      MutableContainer<bool>* dv = (*itp).second.defaultValues;
+      if (dv) {
+	Iterator<unsigned int>* itov = dv->findAll(true);
+	while(itov->hasNext()) {
+	  node n(itov->next());
+	  bool nonDefault = nv->copy(n, n, p, true);
+	  if (!hasNewValues)
+	    hasNewValues = nonDefault;
+	}
 
-      delete itov;
+	delete itov;
+      }
     }
   }
 
   if (hasNewValues)
-    newNodeValues[p] = nv;
+    newNodeValues[p] = RecordedValues(nv);
   else
     delete nv;
 }
 
 void GraphUpdatesRecorder::recordNewEdgeValues(PropertyInterface* p) {
   assert(newEdgeValues.find(p) == newEdgeValues.end());
-  MutableContainer<DataMem*>*  nv = new MutableContainer<DataMem*>;
-  nv->setAll(NULL);
+  PropertyInterface*  nv = p->clonePrototype(p->getGraph(), "");
   bool hasNewValues = false;
 
   // record updated edges new values
@@ -415,39 +416,49 @@ void GraphUpdatesRecorder::recordNewEdgeValues(PropertyInterface* p) {
 
     while(ite->hasNext()) {
       edge e(ite->next());
-      DataMem* value = p->getNonDefaultDataMemValue(e);
-      nv->set(e.id, value);
-      hasNewValues = true;
+      bool nonDefault = nv->copy(e, e, p, true);
+      if (!hasNewValues)
+	hasNewValues = nonDefault;
     }
 
     delete ite;
   }
   else {
-    TLP_HASH_MAP<PropertyInterface*,
-                 MutableContainer<DataMem*>* >::iterator itp =
-                   oldEdgeValues.find(p);
+    TLP_HASH_MAP<PropertyInterface*, RecordedValues>::iterator itp =
+      oldEdgeValues.find(p);
 
     if (itp != oldEdgeValues.end()) {
-      MutableContainer<DataMem*>* opv = (*itp).second;
-      IteratorValue* itov = opv->findAllValues(NULL, false);
+      PropertyInterface* opv = (*itp).second.values;
+      if (opv) {
+	Iterator<edge>* itov = opv->getNonDefaultValuatedEdges();
 
-      while(itov->hasNext()) {
-        edge e(itov->next());
-        DataMem* value = p->getNonDefaultDataMemValue(e);
+	while(itov->hasNext()) {
+	  edge e(itov->next());
+	  bool nonDefault = nv->copy(e, e, p, true);
+	  if (!hasNewValues)
+	    hasNewValues = nonDefault;
+	}
 
-        // record value only if it is not the default one
-        if (value) {
-          nv->set(e.id, value);
-          hasNewValues = true;
-        }
+	delete itov;
       }
+      MutableContainer<bool>* dv = (*itp).second.defaultValues;
+      if (dv) {
+	Iterator<unsigned int>* itov = dv->findAll(true);
 
-      delete itov;
+	while(itov->hasNext()) {
+	  edge e(itov->next());
+	  bool nonDefault = nv->copy(e, e, p, true);
+	  if (!hasNewValues)
+	    hasNewValues = nonDefault;
+	}
+
+	delete itov;
+      }      
     }
   }
 
   if (hasNewValues)
-    newEdgeValues[p] = nv;
+    newEdgeValues[p] = RecordedValues(nv);
   else
     delete nv;
 }
@@ -623,22 +634,20 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   }
 
   // loop on nodesToDel
-  TLP_HASH_MAP<node, set<Graph*> >& nodesToDel =
-    undo ? addedNodes : deletedNodes;
-  TLP_HASH_MAP<node, set<Graph*> >::iterator itn = nodesToDel.begin();
+  MutableContainer<GraphNodesRecord*>& nodesToDel =
+    undo ? graphAddedNodes : graphDeletedNodes;
+  IteratorValue* itgn = nodesToDel.findAllValues(NULL, false);
 
-  while(itn != nodesToDel.end()) {
-    node n = (*itn).first;
-    set<Graph*>::iterator itg = (*itn).second.begin();
-    set<Graph*>::iterator itge = (*itn).second.end();
+  while(itgn->hasNext()) {
+    TypedValueContainer<GraphNodesRecord*> gnr;
+    itgn->nextValue(gnr);
 
-    while(itg != itge) {
-      (*itg)->removeNode(n);
-      ++itg;
-    }
-
-    ++itn;
-  }
+    // loop on graph's recorded nodes
+    Iterator<unsigned int>* itn = gnr.value->nodes.findAll(true, true);
+    while(itn->hasNext()) {
+      gnr.value->graph->removeNode(node(itn->next()));
+    } delete itn;
+  } delete itgn;
 
   // loop on subGraphsToAdd
   TLP_HASH_MAP<Graph*, std::set<Graph*> >& subGraphsToAdd =
@@ -674,23 +683,21 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   }
 
   // loop on nodesToAdd
-  TLP_HASH_MAP<node, set<Graph*> >& nodesToAdd =
-    undo ? deletedNodes : addedNodes;
-  itn = nodesToAdd.begin();
+  MutableContainer<GraphNodesRecord*>&  nodesToAdd =
+    undo ? graphDeletedNodes : graphAddedNodes;
+  itgn = nodesToAdd.findAllValues(NULL, false);
 
-  while(itn != nodesToAdd.end()) {
-    node n = (*itn).first;
-    set<Graph*>::iterator itg = (*itn).second.begin();
-    set<Graph*>::iterator itge = (*itn).second.end();
+  while(itgn->hasNext()) {
+    TypedValueContainer<GraphNodesRecord*> gnr;
+    itgn->nextValue(gnr);
 
-    while(itg != itge) {
-      (*itg)->restoreNode(n);
-      ++itg;
-    }
-
-    ++itn;
-  }
-
+    // loop on graph's recorded nodes
+    Iterator<unsigned int>* itn = gnr.value->nodes.findAll(true, true);
+    while(itn->hasNext()) {
+      gnr.value->graph->restoreNode(node(itn->next()));
+    } delete itn;
+  } delete itgn;
+ 
   // now restore ids manager state
   // this is done before the loop on the edges to add
   // because of some assertion in debug mode
@@ -787,44 +794,72 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   }
 
   // loop on nodeValues
-  TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* >& nodeValues =
+  TLP_HASH_MAP<PropertyInterface*, RecordedValues>& nodeValues =
     undo ? oldNodeValues : newNodeValues;
-  TLP_HASH_MAP<PropertyInterface*,
-               MutableContainer<DataMem*>* >::iterator itnv =
-                 nodeValues.begin();
+  TLP_HASH_MAP<PropertyInterface*, RecordedValues>::iterator itnv =
+    nodeValues.begin();
 
   while(itnv != nodeValues.end()) {
     PropertyInterface* prop = itnv->first;
-    IteratorValue* itv = (*itnv).second->findAllValues(NULL, false);
+    PropertyInterface* nv = itnv->second.values;
+    if (nv) {
+      Iterator<node>* itv = nv->getNonDefaultValuatedNodes();
 
-    while(itv->hasNext()) {
-      TypedValueContainer<DataMem*> tVal;
-      node n(itv->nextValue(tVal));
-      prop->setNodeDataMemValue(n, tVal.value);
+      while(itv->hasNext()) {
+	node n(itv->next());
+	prop->copy(n, n, nv);
+      }
+
+      delete itv;
     }
+    MutableContainer<bool>* dv = itnv->second.defaultValues;
+    if (dv) {
+      Iterator<unsigned int>* itv = dv->findAll(true);
+      DataMem* defaultValue = prop->getNodeDefaultDataMemValue();
 
-    delete itv;
+      while(itv->hasNext()) {
+	node n(itv->next());
+	prop->setNodeDataMemValue(n, defaultValue);
+      }
+      delete defaultValue;
+      delete itv;
+    }
+    
     ++itnv;
   }
 
   // loop on edgeValues
-  TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* >& edgeValues =
+  TLP_HASH_MAP<PropertyInterface*, RecordedValues>& edgeValues =
     undo ? oldEdgeValues : newEdgeValues;
-  TLP_HASH_MAP<PropertyInterface*,
-               MutableContainer<DataMem*>* >::iterator itev =
-                 edgeValues.begin();
+  TLP_HASH_MAP<PropertyInterface*, RecordedValues>::iterator itev =
+    edgeValues.begin();
 
   while(itev != edgeValues.end()) {
     PropertyInterface* prop = itev->first;
-    IteratorValue* itv = (*itev).second->findAllValues(NULL, false);
+    PropertyInterface* nv = itev->second.values;
+    if (nv) {
+      Iterator<edge>* itv = nv->getNonDefaultValuatedEdges();
 
-    while(itv->hasNext()) {
-      TypedValueContainer<DataMem*> tVal;
-      edge e(itv->nextValue(tVal));
-      prop->setEdgeDataMemValue(e, tVal.value);
+      while(itv->hasNext()) {
+	edge e(itv->next());
+	prop->copy(e, e, nv);
+      }
+
+      delete itv;
     }
+    MutableContainer<bool>* dv = itev->second.defaultValues;
+    if (dv) {
+      Iterator<unsigned int>* itv = dv->findAll(true);
+      DataMem* defaultValue = prop->getEdgeDefaultDataMemValue();
 
-    delete itv;
+      while(itv->hasNext()) {
+	edge e(itv->next());
+	prop->setEdgeDataMemValue(e, defaultValue);
+      }
+      delete defaultValue;
+      delete itv;
+    }
+    
     ++itev;
   }
 
@@ -899,16 +934,14 @@ bool GraphUpdatesRecorder::isAddedOrDeletedProperty(Graph* g,
 
 
 void GraphUpdatesRecorder::addNode(Graph* g, node n) {
-  TLP_HASH_MAP<node, set<Graph*> >::iterator it =
-    addedNodes.find(n);
+  GraphNodesRecord *gnr = graphAddedNodes.get(g->getId());
 
-  if (it == addedNodes.end()) {
-    set<Graph*> graphs;
-    graphs.insert(g);
-    addedNodes[n] = graphs;
+  if (gnr == NULL) {
+    gnr = new GraphNodesRecord(g);
+    graphAddedNodes.set(g->getId(), gnr);
   }
-  else
-    (*it).second.insert(g);
+  gnr->nodes.set(n, true);
+  addedNodes.set(n, true);
 }
 
 void GraphUpdatesRecorder::addEdge(Graph* g, edge e) {
@@ -924,30 +957,25 @@ void GraphUpdatesRecorder::addEdge(Graph* g, edge e) {
 }
 
 void GraphUpdatesRecorder::delNode(Graph* g, node n) {
-  TLP_HASH_MAP<node, set<Graph*> >::iterator it = addedNodes.find(n);
+  GraphNodesRecord *gnr = graphAddedNodes.get(g->getId());
 
-  // remove n from addedNodes if it is a newly added node
-  if (it != addedNodes.end()) {
-    set<Graph*>& graphs = (*it).second;
-    graphs.erase(g);
-    // do not remove from addedNodes
+  if (gnr != NULL && gnr->nodes.get(n)) {
+    // remove n from graph's recorded nodes if it is a newly added node
+    gnr->nodes.set(n, false);
+    // but don't remove it from addedNodes
     // to ensure further erasal from property will not
     // record a value as if it was a preexisting node
-    /*if (graphs.empty())
-      addedNodes.erase(it);*/
     return;
   }
 
-  // insert n into deletedNodes
-  it = deletedNodes.find(n);
+  // insert n into graphDeletedNodes
+  gnr = graphDeletedNodes.get(g->getId());
 
-  if (it == deletedNodes.end()) {
-    set<Graph*> graphs;
-    graphs.insert(g);
-    deletedNodes[n] = graphs;
+  if (gnr == NULL) {
+    gnr = new GraphNodesRecord(g);
+    graphDeletedNodes.set(g->getId(), gnr);
   }
-  else
-    (*it).second.insert(g);
+  gnr->nodes.set(n, true);
 
   // no need of the loop below because properties are observed too
   // loop on properties to save the node's associated values
@@ -1218,38 +1246,50 @@ void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface* p, node n) {
   if (oldNodeDefaultValues.find(p) != oldNodeDefaultValues.end())
     return;
 
-  TLP_HASH_MAP<node, set<Graph*> >::iterator ita = addedNodes.find(n);
-
   // don't record old values for newly added nodes
-  if (ita != addedNodes.end()) {
+  if (addedNodes.get(n)) {
     if (!restartAllowed)
       return;
-
-    if (!ita->second.empty()) {
-      updatedPropsAddedNodes[p].insert(n);
-    }
     else {
-      // if ita->second is empty, it means that the newly added node
-      // has been deleted in the whole graph hierarchy, so we don't
-      // need to backup its property value in the next push as the node
-      // does not belong to a graph anymore
-      updatedPropsAddedNodes[p].erase(n);
+      if (p->getGraph()->isElement(n))
+	updatedPropsAddedNodes[p].insert(n);
+      else
+	// n has been deleted in the whole graph hierarchy, so we don't
+	// need to backup its property value in the next push as the node
+	// does not belong to a graph anymore
+	updatedPropsAddedNodes[p].erase(n);
     }
-  }
-  else {
-    TLP_HASH_MAP<PropertyInterface*,
-                 MutableContainer<DataMem*>* >::iterator it =
-                   oldNodeValues.find(p);
+
+  } else {
+    TLP_HASH_MAP<PropertyInterface*, RecordedValues>::iterator it =
+      oldNodeValues.find(p);
+
+    DataMem* value = p->getNonDefaultDataMemValue(n);
 
     if (it == oldNodeValues.end()) {
-      MutableContainer<DataMem*>* pv = new MutableContainer<DataMem*>;
-      pv->setAll(NULL);
-      pv->set(n.id, p->getNodeDataMemValue(n));
-      oldNodeValues[p] = pv;
-    }
-    else {
-      if ((*it).second->get(n.id) == NULL)
-        (*it).second->set(n.id, p->getNodeDataMemValue(n));
+      if (value) {
+	// it is not the default value
+	PropertyInterface* pv = p->clonePrototype(p->getGraph(), "");
+	pv->setNodeDataMemValue(n, value);
+	oldNodeValues[p] = RecordedValues(pv);
+	delete value;
+      } else {
+	MutableContainer<bool>* dv = new MutableContainer<bool>();
+	dv->set(n, true);
+	oldNodeValues[p] = RecordedValues(NULL, dv);
+      }
+    } else {
+      if (value) {
+	// it is not the default value
+	if (!it->second.values)
+	  it->second.values = p->clonePrototype(p->getGraph(), "");
+	it->second.values->setNodeDataMemValue(n, value);
+	delete value;
+      } else {
+	if (!it->second.defaultValues)
+	  it->second.defaultValues = new MutableContainer<bool>();
+	it->second.defaultValues->set(n, true);
+      }
     }
   }
 }
@@ -1259,7 +1299,7 @@ void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface* p) {
     // first save the already existing value for all non default valuated nodes
     node n;
     forEach(n, p->getNonDefaultValuatedNodes())
-    beforeSetNodeValue(p, n);
+      beforeSetNodeValue(p, n);
     // then record the old default value
     // because beforeSetNodeValue does nothing if it has already been changed
     oldNodeDefaultValues[p] = p->getNodeDefaultDataMemValue();
@@ -1290,19 +1330,35 @@ void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface* p, edge e) {
     }
   }
   else {
-    TLP_HASH_MAP<PropertyInterface*,
-                 MutableContainer<DataMem*>* >::iterator it =
-                   oldEdgeValues.find(p);
+    TLP_HASH_MAP<PropertyInterface*, RecordedValues>::iterator it =
+      oldEdgeValues.find(p);
+
+    DataMem* value = p->getNonDefaultDataMemValue(e);
 
     if (it == oldEdgeValues.end()) {
-      MutableContainer<DataMem*>* pv = new MutableContainer<DataMem*>;
-      pv->setAll(NULL);
-      pv->set(e.id, p->getEdgeDataMemValue(e));
-      oldEdgeValues[p] = pv;
-    }
-    else {
-      if ((*it).second->get(e.id) == NULL)
-        (*it).second->set(e.id, p->getEdgeDataMemValue(e));
+      if (value) {
+	// it is not the default value
+	PropertyInterface* pv = p->clonePrototype(p->getGraph(), "");
+	pv->setEdgeDataMemValue(e, value);
+	oldEdgeValues[p] = RecordedValues(pv);
+	delete value;
+      } else {
+	MutableContainer<bool>* dv = new MutableContainer<bool>();
+	dv->set(e, true);
+	oldEdgeValues[p] = RecordedValues(NULL, dv);
+      }
+    } else {
+      if (value) {
+	// it is not the default value
+	if (!it->second.values)
+	  it->second.values = p->clonePrototype(p->getGraph(), "");
+	it->second.values->setEdgeDataMemValue(e, value);
+	delete value;
+      } else {
+	if (!it->second.defaultValues)
+	  it->second.defaultValues = new MutableContainer<bool>();
+	it->second.defaultValues->set(e, true);
+      }
     }
   }
 }
