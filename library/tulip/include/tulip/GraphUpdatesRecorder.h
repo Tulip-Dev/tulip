@@ -159,8 +159,8 @@ class GraphUpdatesRecorder :public GraphObserver, public PropertyObserver {
     MutableContainer<bool>* defaultValues;
 
     RecordedValues(PropertyInterface* prop = NULL,
-		   MutableContainer<bool>* defVal = NULL):
-    values(prop), defaultValues(defVal) {}
+                   MutableContainer<bool>* defVal = NULL):
+      values(prop), defaultValues(defVal) {}
   };
 
   // the old node values for each updated property
