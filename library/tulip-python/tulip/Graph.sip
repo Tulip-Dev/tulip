@@ -2973,7 +2973,10 @@ Sets an attribute of the graph.
     sipCpp->setAttribute(*a0, *p);
   } else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_Size, SIP_NOT_NONE)) {    
     std::vector<tlp::Size> *p = reinterpret_cast<std::vector<tlp::Size> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_Size, NULL, SIP_NOT_NONE, &state, &iserr));
-    sipCpp->setAttribute(*a0, *p);      
+    sipCpp->setAttribute(*a0, *p);
+  } else if (sipCanConvertToType(a1, sipType_std_vector_0100std_string, SIP_NOT_NONE)) {
+    std::vector<std::string> *p = reinterpret_cast<std::vector<std::string> *>(sipConvertToType(a1, sipType_std_vector_0100std_string, NULL, SIP_NOT_NONE, &state, &iserr));
+    sipCpp->setAttribute(*a0, *p);
   } else {
   	sipIsErr = 1;
 	std::string msg = "Object of type ";
@@ -3130,7 +3133,10 @@ if (sipCpp->getAttributes().exist(*a0)) {
     
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Size>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Size> *>(dataType->value), sipType_std_vector_0100tlp_Size, NULL); 
+    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Size> *>(dataType->value), sipType_std_vector_0100tlp_Size, NULL);
+  } else if (dataType->getTypeName() == std::string(typeid(std::vector<std::string>).name())) {
+    ok = true;
+    sipRes = sipConvertFromType(reinterpret_cast<std::vector<std::string> *>(dataType->value), sipType_std_vector_0100std_string, NULL);
   }
   delete dataType;
 }
