@@ -64,12 +64,12 @@ static tlp::Coord computePolygonCentroid(const std::vector<tlp::Coord> &points) 
   return tlp::Coord(Cx, Cy);
 }
 
-static bool isLayoutCoPlanar(tlp::LayoutProperty *layout, Mat3f &invTransformMatrix) {
+static bool isLayoutCoPlanar(tlp::Graph* graph, tlp::LayoutProperty *layout, Mat3f &invTransformMatrix) {
   tlp::node n;
   tlp::Coord A, B, C;
   int i = 0;
   // pick three points to define a plane
-  forEach(n, layout->getGraph()->getNodes()) {
+  forEach(n, graph->getNodes()) {
     if (i == 0) {
       A = layout->getNodeValue(n);
     }
@@ -98,7 +98,7 @@ static bool isLayoutCoPlanar(tlp::LayoutProperty *layout, Mat3f &invTransformMat
   normalize(b);
 
   // compute the distance of each point to the plane
-  forEach(n, layout->getGraph()->getNodes()) {
+  forEach(n, graph->getNodes()) {
     const tlp::Coord &D = layout->getNodeValue(n);
 
     // if the point is too far from the plane, the layout is not coplanar
@@ -175,13 +175,15 @@ public :
     tlp::SizeProperty* size = graph->getProperty<tlp::SizeProperty>("viewSize");
     tlp::DoubleProperty* rotation = graph->getProperty<tlp::DoubleProperty>("viewRotation");
 
+    std::cout << graph->numberOfNodes() << std::endl;
+
     std::vector<double> points;
     tlp::node n;
     std::vector<tlp::node> pointIdToNode;
 
     // check if the layout is coplanar
     Mat3f invTransformMatrix;
-    bool coPlanarLayout = isLayoutCoPlanar(layout, invTransformMatrix);
+    bool coPlanarLayout = isLayoutCoPlanar(graph, layout, invTransformMatrix);
     int dim = 3;
 
     // if the layout is not coplanar, use a 3d delaunay triangulation
