@@ -427,6 +427,7 @@ string& replaceAll(string& context, const string& from, const string& to) {
 void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
 
   this->graph = graph;
+
   viewWidget->setGraph(graph);
 
   if (viewWidget->mainScriptsTabWidget->count() == 0) {
@@ -890,6 +891,8 @@ bool PythonScriptView::loadScript(const QString &fileName) {
     scriptCode += file.readLine();
   }
 
+  lastModifiedFile[fileName] = fileInfo.lastModified();
+
   int editorId = viewWidget->addMainScriptEditor(fileInfo.absoluteFilePath());
   viewWidget->getMainScriptEditor(editorId)->setPlainText(scriptCode);
   viewWidget->mainScriptsTabWidget->setTabText(editorId, fileInfo.fileName());
@@ -903,7 +906,7 @@ bool PythonScriptView::loadScript(const QString &fileName) {
   pythonInterpreter->reloadModule(fileInfo.fileName().replace(".py", "").toStdString());
   pythonInterpreter->setDefaultConsoleWidget();
 
-  lastModifiedFile[fileName] = fileInfo.lastModified();
+
   return true;
 }
 
@@ -997,6 +1000,8 @@ bool PythonScriptView::loadModule(const QString &fileName) {
 
   file.close();
 
+  lastModifiedFile[fileName] = fileInfo.lastModified();
+
   int editorId = viewWidget->addModuleEditor(fileInfo.absoluteFilePath());
   PythonCodeEditor *codeEditor = viewWidget->getModuleEditor(editorId);
 
@@ -1010,8 +1015,6 @@ bool PythonScriptView::loadModule(const QString &fileName) {
   pythonInterpreter->reloadModule(moduleName.replace(".py", "").toStdString());
 
   codeEditor->analyseScriptCode(true);
-
-  lastModifiedFile[fileName] = fileInfo.lastModified();
 
   return true;
 }
@@ -1051,6 +1054,8 @@ void PythonScriptView::newFileModule() {
   QFileInfo fileInfo(file);
   QString moduleName(fileInfo.fileName());
   QString modulePath(fileInfo.absolutePath());
+
+  lastModifiedFile[fileName] = fileInfo.lastModified();
 
   int editorId = viewWidget->addModuleEditor(fileInfo.absoluteFilePath());
   viewWidget->modulesTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
@@ -1203,6 +1208,7 @@ bool PythonScriptView::loadPythonPlugin(const QString &fileName) {
       return false;
     }
     else {
+      lastModifiedFile[fileName] = fileInfo.lastModified();
       int editorId = viewWidget->addPluginEditor(fileInfo.absoluteFilePath());
       PythonCodeEditor *codeEditor = viewWidget->getPluginEditor(editorId);
       codeEditor->setPlainText(pluginCode);
@@ -1214,7 +1220,6 @@ bool PythonScriptView::loadPythonPlugin(const QString &fileName) {
       editedPluginsType[pluginFile] = pluginType.toStdString();
       editedPluginsName[pluginFile] = pluginName.toStdString();
       registerPythonPlugin();
-      lastModifiedFile[fileName] = fileInfo.lastModified();
     }
   }
   else {
@@ -1361,7 +1366,7 @@ void PythonScriptView::reloadCodeInEditorIfNeeded(PythonCodeEditor *codeEditor, 
   if (fileName != "") {
     QFileInfo fileInfo(fileName);
 
-    if (fileInfo.lastModified() != lastModifiedFile[fileName]) {
+    if (fileInfo.exists() && fileInfo.lastModified() != lastModifiedFile[fileName]) {
       if (QMessageBox::question(codeEditor, "File changed on disk", QString("The file ") + fileName + " has been modified by another editor. Do you want to reload it ?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
         lastModifiedFile[fileName] = fileInfo.lastModified();
         QFile file(fileName);
