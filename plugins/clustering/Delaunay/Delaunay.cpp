@@ -332,7 +332,7 @@ public :
     // initialize qhull
     int qhullOk = qh_new_qhull(dim, graph->numberOfNodes(), &points[0], false, const_cast<char *>(qhullCommand.c_str()), NULL, stderr);
 
-    if (!qhullOk) {
+    if (qhullOk) {
 
       tlp::Graph* delaunaySubGraph = graph->addCloneSubGraph("Delaunay");
 
