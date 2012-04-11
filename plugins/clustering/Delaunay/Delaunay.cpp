@@ -162,8 +162,9 @@ public :
 
     if (!graph->getAttribute("voronoi mode")) {
       clone = graph->addCloneSubGraph("Original graph");
-    } else {
-        voronoiMode = true;
+    }
+    else {
+      voronoiMode = true;
     }
 
     bool triangleSg = false;
@@ -354,6 +355,7 @@ public :
       // in the delaunay sub-graph
       FORALLfacets {
         std::vector<tlp::node> simplexNodes;
+
         if (!facet->upperdelaunay) {
           int pointId0=0, pointId1=0, pointId2=0, pointId3 = -1;
           int i = 0;
@@ -370,6 +372,7 @@ public :
             else {
               pointId3 = qh_pointid(vertex->point);
             }
+
             ++i;
           }
 
@@ -382,6 +385,7 @@ public :
           simplexNodes.push_back(n2);
 
           tlp::node n3;
+
           if (pointId3 != -1) {
             n3 = pointIdToNode[pointId3];
             simplexNodes.push_back(n3);
@@ -458,12 +462,13 @@ public :
               triSg->addEdge(e6);
 
           }
+
           simplicesNodes.push_back(simplexNodes);
         }
       }
 
       if (voronoiMode) {
-          graph->setAttribute("delaunay simplices nodes", simplicesNodes);
+        graph->setAttribute("delaunay simplices nodes", simplicesNodes);
       }
     }
     else if (clone) {
