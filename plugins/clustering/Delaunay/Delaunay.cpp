@@ -175,8 +175,6 @@ public :
     tlp::SizeProperty* size = graph->getProperty<tlp::SizeProperty>("viewSize");
     tlp::DoubleProperty* rotation = graph->getProperty<tlp::DoubleProperty>("viewRotation");
 
-    std::cout << graph->numberOfNodes() << std::endl;
-
     std::vector<double> points;
     tlp::node n;
     std::vector<tlp::node> pointIdToNode;
