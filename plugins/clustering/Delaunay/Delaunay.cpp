@@ -330,9 +330,9 @@ public :
     std::string qhullCommand = std::string("qhull d ") + qhullOptions;
 
     // initialize qhull
-    int qhullOk = qh_new_qhull(dim, graph->numberOfNodes(), &points[0], false, const_cast<char *>(qhullCommand.c_str()), NULL, stderr);
+    int qhullKo = qh_new_qhull(dim, graph->numberOfNodes(), &points[0], false, const_cast<char *>(qhullCommand.c_str()), NULL, stderr);
 
-    if (qhullOk) {
+    if (!qhullKo) {
 
       tlp::Graph* delaunaySubGraph = graph->addCloneSubGraph("Delaunay");
 
@@ -479,7 +479,7 @@ public :
 
     tlp::Observable::unholdObservers();
 
-    return !qhullOk;
+    return !qhullKo;
   }
 };
 

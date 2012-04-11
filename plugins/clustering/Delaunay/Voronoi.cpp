@@ -309,7 +309,7 @@ public :
             // remove voronoi vertices that are not associated to a voronoi cell
             stableForEach(n, voronoiSubGraph->getNodes()) {
                 float nnorm = viewLayout->getNodeValue(n).norm();
-                if (!cleanVoronoiSg->isElement(n) || isinf(nnorm) || isnan(nnorm)) {
+                if (!cleanVoronoiSg->isElement(n) || std::isinf(nnorm) || std::isnan(nnorm)) {
                     voronoiSubGraph->delNode(n, true);
                 }
             }
