@@ -23,7 +23,7 @@
 
 class EqualValueClustering:public tlp::Algorithm {
 public:
-  EqualValueClustering(tlp::AlgorithmContext);
+  EqualValueClustering(const tlp::AlgorithmContext);
   bool run();
 };
 

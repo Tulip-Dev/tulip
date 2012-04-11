@@ -23,7 +23,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(EqualValueClustering,"Equal Value","David Auber","20/05/2008","Beta","1.1");
+ALGORITHMPLUGIN(EqualValueClustering,"Equal Value","David Auber","20/05/2008","Beta","1.1")
 
 namespace {
 const char * paramHelp[] = {
@@ -31,7 +31,7 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "PropertyInterface*" ) \
   HTML_HELP_BODY() \
-  "Specify the property that will be used to partition the graph" \
+  "Indicates the name of the property used to partition the graph" \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "String Collection" ) \
@@ -45,7 +45,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true, false]" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates whether the subgraphs have to be connected." \
+  "This parameter indicates whether the generated subgraphs have to be connected." \
   HTML_HELP_CLOSE()
 };
 }
@@ -54,14 +54,13 @@ const char * paramHelp[] = {
 #define NODE_ELT 0
 #define EDGE_ELT 1
 //================================================================================
-EqualValueClustering::EqualValueClustering(AlgorithmContext context):Algorithm(context) {
+EqualValueClustering::EqualValueClustering(const AlgorithmContext context):Algorithm(context) {
   addParameter<PropertyInterface*>("Property", paramHelp[0], "viewMetric");
   addParameter<StringCollection>(ELT_TYPE, paramHelp[1], ELT_TYPES);
   addParameter<bool>("Connected", paramHelp[2], "false");
 }
 //===============================================================================
 bool EqualValueClustering::run() {
-  string tmp1,tmp2;
   PropertyInterface *property=0;
   StringCollection eltTypes(ELT_TYPES);
   bool connected = false;
@@ -73,7 +72,7 @@ bool EqualValueClustering::run() {
     dataSet->get("Connected", connected);
   }
 
-  if (property == 0)
+  if (property == NULL)
     property = graph->getProperty("viewMetric");
 
   return computeEqualValueClustering(graph, property, eltTypes.getCurrent() == NODE_ELT,
