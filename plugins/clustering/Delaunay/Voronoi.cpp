@@ -32,12 +32,6 @@
 
 typedef tlp::Matrix<float, 3> Mat3f;
 
-template <class T>
-inline void hash_combine(std::size_t & seed, const T & v) {
-  TLP_HASH_NAMESPACE::hash<T> hasher;
-  seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-}
-
 struct Face {
     Face(tlp::node n1, tlp::node n2, tlp::node n3 = tlp::node()) {
         sortedNodes.reserve(3);
@@ -65,6 +59,13 @@ struct Face {
 };
 
 TLP_BEGIN_HASH_NAMESPACE {
+
+  template <class T>
+  inline void hash_combine(std::size_t & seed, const T & v) {
+    hash<T> hasher;
+    seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+  }
+
   template <>
   struct hash<Face> {
     inline std::size_t operator()(const Face &f) const {
