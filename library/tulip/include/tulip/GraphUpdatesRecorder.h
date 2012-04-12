@@ -85,9 +85,9 @@ struct less<tlp::PropertyRecord> {
 };
 
 template<>
-struct less<tlp::GraphEltsRecord> {
-  size_t  operator()(const tlp::GraphEltsRecord& g1, const tlp::GraphEltsRecord& g2) const {
-    return g1.graph->getId() < g2.graph->getId();
+struct less<tlp::GraphEltsRecord*> {
+  size_t  operator()(const tlp::GraphEltsRecord* g1, const tlp::GraphEltsRecord* g2) const {
+    return g1->graph->getId() < g2->graph->getId();
   }
 };
 }
