@@ -299,9 +299,9 @@ Sets the value of a particular edge.
 	
 	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const ;
 	
-  	virtual void copy(tlp::node src, tlp::node dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
+  	virtual bool copy(tlp::node src, tlp::node dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
 	
-	virtual void copy(tlp::edge src, tlp::edge dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
+	virtual bool copy(tlp::edge src, tlp::edge dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
 	
 	
 //===========================================================================================
@@ -897,9 +897,9 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 	
 	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const ;
 	
-  	virtual void copy(tlp::node src, tlp::node dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
+  	virtual bool copy(tlp::node src, tlp::node dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
 	
-	virtual void copy(tlp::edge src, tlp::edge dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
+	virtual bool copy(tlp::edge src, tlp::edge dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
 	
 //===========================================================================================
 	
