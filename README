@@ -5,7 +5,7 @@ It has been designed and implemented by David Auber.
 
 Requirements :
 
-- autotools or cmake >= 2.6.4
+- cmake >= 2.6.4
 - libxml2
 - freetype2
 - Qt 4.6 or higher
