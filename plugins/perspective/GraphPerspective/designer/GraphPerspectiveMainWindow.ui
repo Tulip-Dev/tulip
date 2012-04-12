@@ -635,9 +635,7 @@ color: white;
           </layout>
          </widget>
          <widget class="QStackedWidget" name="centralWidget">
-          <widget class="tlp::Workspace" name="workspace">
-           <zorder>modeSwitcherPanel</zorder>
-          </widget>
+          <widget class="tlp::Workspace" name="workspace"/>
           <widget class="QWidget" name="datasetModePage">
            <layout class="QVBoxLayout" name="verticalLayout">
             <property name="spacing">
@@ -967,7 +965,7 @@ border-bottom: 1px solid black;
      <x>0</x>
      <y>0</y>
      <width>1071</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1508,6 +1506,22 @@ border-bottom: 1px solid black;
     <hint type="destinationlabel">
      <x>214</x>
      <y>36</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>activated()</signal>
+   <receiver>GraphPerspectiveMainWindowData</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>535</x>
+     <y>354</y>
     </hint>
    </hints>
   </connection>
