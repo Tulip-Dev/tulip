@@ -59,15 +59,20 @@ GraphUpdatesRecorder::~GraphUpdatesRecorder() {
     TypedValueContainer<GraphEltsRecord*> ctnr;
     it->nextValue(ctnr);
     delete ctnr.value;
-  } delete it;
+  }
+
+  delete it;
 
   // delete 'sets' of deleted nodes
   it = graphDeletedNodes.findAllValues(NULL, false);
+
   while(it->hasNext()) {
     TypedValueContainer<GraphEltsRecord*> ctnr;
     it->nextValue(ctnr);
     delete ctnr.value;
-  } delete it;  
+  }
+
+  delete it;
 
   // delete 'sets' of added edges
   it = graphAddedEdges.findAllValues(NULL, false);
@@ -76,32 +81,42 @@ GraphUpdatesRecorder::~GraphUpdatesRecorder() {
     TypedValueContainer<GraphEltsRecord*> ctnr;
     it->nextValue(ctnr);
     delete ctnr.value;
-  } delete it;
+  }
+
+  delete it;
 
   // delete 'sets' of deleted edges
   it = graphDeletedEdges.findAllValues(NULL, false);
+
   while(it->hasNext()) {
     TypedValueContainer<GraphEltsRecord*> ctnr;
     it->nextValue(ctnr);
     delete ctnr.value;
-  } delete it;
+  }
+
+  delete it;
 
   // delete ends of added edges
   it = addedEdgesEnds.findAllValues(NULL, false);
-  
+
   while(it->hasNext()) {
     TypedValueContainer<std::pair<node, node>*> ctnr;
     it->nextValue(ctnr);
     delete ctnr.value;
-  } delete it;
+  }
+
+  delete it;
 
   // delete ends of deleted edges
   it = deletedEdgesEnds.findAllValues(NULL, false);
+
   while(it->hasNext()) {
     TypedValueContainer<std::pair<node, node>*> ctnr;
     it->nextValue(ctnr);
     delete ctnr.value;
-  } delete it;
+  }
+
+  delete it;
 }
 
 void GraphUpdatesRecorder::treatEvent(const Event& ev) {
@@ -243,7 +258,9 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       itae->nextValue(ends);
       recordEdgeContainer(newContainers, root, ends.value->first);
       recordEdgeContainer(newContainers, root, ends.value->second);
-    } delete itae;
+    }
+
+    delete itae;
 
     // record new properties default values & new values
     // loop on oldNodeDefaultValues
@@ -680,22 +697,30 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   std::set<GraphEltsRecord*> geSet;
 
   IteratorValue* itge = edgesToDel.findAllValues(NULL,false);
+
   while(itge->hasNext()) {
     TypedValueContainer<GraphEltsRecord*> ctnr;
     itge->nextValue(ctnr);
     geSet.insert(ctnr.value);
-  } delete itge;
+  }
+
+  delete itge;
 
   std::set<GraphEltsRecord*>::const_reverse_iterator itrse = geSet.rbegin();
+
   while(itrse != geSet.rend()) {
     GraphEltsRecord* ger = (*itrse);
     // loop on graph's recorded edges
     Iterator<unsigned int>* ite = ger->elts.findAll(true, true);
+
     while(ite->hasNext()) {
       edge e(ite->next());
+
       if (ger->graph->isElement(e))
-	ger->graph->removeEdge(e);
-    } delete ite;
+        ger->graph->removeEdge(e);
+    }
+
+    delete ite;
     ++itrse;
   }
 
@@ -710,10 +735,15 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
 
     // loop on graph's recorded nodes
     Iterator<unsigned int>* itn = gnr.value->elts.findAll(true, true);
+
     while(itn->hasNext()) {
       gnr.value->graph->removeNode(node(itn->next()));
-    } delete itn;
-  } delete itgn;
+    }
+
+    delete itn;
+  }
+
+  delete itgn;
 
   // loop on subGraphsToAdd
   TLP_HASH_MAP<Graph*, std::set<Graph*> >& subGraphsToAdd =
@@ -761,10 +791,15 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
 
     // loop on graph's recorded nodes
     Iterator<unsigned int>* itn = gnr.value->elts.findAll(true, true);
+
     while(itn->hasNext()) {
       gnr.value->graph->restoreNode(node(itn->next()));
-    } delete itn;
-  } delete itgn;
+    }
+
+    delete itn;
+  }
+
+  delete itgn;
 
   // now restore ids manager state
   // this is done before the loop on the edges to add
@@ -817,18 +852,24 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     TypedValueContainer<GraphEltsRecord*> ger;
     itge->nextValue(ger);
     geSet.insert(ger.value);
-  } delete itge;
+  }
+
+  delete itge;
 
   std::set<GraphEltsRecord*>::const_iterator itse = geSet.begin();
+
   while(itse != geSet.end()) {
     GraphEltsRecord* ger = (*itse);
     // loop on graph's recorded edges
     Iterator<unsigned int>* ite = ger->elts.findAll(true, true);
+
     while(ite->hasNext()) {
       edge e(ite->next());
       std::pair<node, node>* eEnds = edgesEnds.get(e);
       ger->graph->restoreEdge(e, eEnds->first, eEnds->second);
-    } delete ite;
+    }
+
+    delete ite;
     ++itse;
   }
 
@@ -1028,6 +1069,7 @@ void GraphUpdatesRecorder::addNode(Graph* g, node n) {
     gnr = new GraphEltsRecord(g);
     graphAddedNodes.set(g->getId(), gnr);
   }
+
   gnr->elts.set(n, true);
   addedNodes.set(n, true);
 }
@@ -1063,6 +1105,7 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
     gnr = new GraphEltsRecord(g);
     graphDeletedNodes.set(g->getId(), gnr);
   }
+
   gnr->elts.set(n, true);
 
   // no need of the loop below because properties are observed too
@@ -1110,22 +1153,23 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
 
   if (deletedEdgesEnds.get(e) == NULL) {
     const pair<node, node> &eEnds = g->ends(e);
+
     if (g == g->getSuperGraph()) {
       // remove from revertedEdges if needed
       set<edge>::iterator it = revertedEdges.find(e);
 
       if (it != revertedEdges.end()) {
         revertedEdges.erase(it);
-	deletedEdgesEnds.set(e, new std::pair<node, node>(eEnds.second, eEnds.first));
+        deletedEdgesEnds.set(e, new std::pair<node, node>(eEnds.second, eEnds.first));
       }
       else {
-	TLP_HASH_MAP<edge, pair<node, node> >::iterator ite =
-	  oldEdgesEnds.find(e);
+        TLP_HASH_MAP<edge, pair<node, node> >::iterator ite =
+          oldEdgesEnds.find(e);
 
         if (ite == oldEdgesEnds.end())
-	  deletedEdgesEnds.set(e, new std::pair<node, node>(eEnds));
+          deletedEdgesEnds.set(e, new std::pair<node, node>(eEnds));
         else {
-	  deletedEdgesEnds.set(e, new std::pair<node, node>((*ite).second));
+          deletedEdgesEnds.set(e, new std::pair<node, node>((*ite).second));
           // remove from oldEdgesEnds
           oldEdgesEnds.erase(ite);
           // remove from newEdgesEnds
@@ -1136,6 +1180,7 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
     else
       deletedEdgesEnds.set(e, new std::pair<node, node>(eEnds));
   }
+
   ger->elts.set(e, true);
 
   // no need of the loop below because properties are observed too
@@ -1392,7 +1437,7 @@ void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface* p) {
     // first save the already existing value for all non default valuated nodes
     node n;
     forEach(n, p->getNonDefaultValuatedNodes())
-      beforeSetNodeValue(p, n);
+    beforeSetNodeValue(p, n);
     // then record the old default value
     // because beforeSetNodeValue does nothing if it has already been changed
     oldNodeDefaultValues[p] = p->getNodeDefaultDataMemValue();
