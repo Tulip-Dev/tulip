@@ -30,36 +30,33 @@
 
 #include <sstream>
 
-typedef tlp::Matrix<float, 3> Mat3f;
+typedef tlp::Matrix<long double, 3> Mat3ld;
+typedef tlp::Vector<long double, 3> Vec3ld;
 
 struct Face {
-  Face(tlp::node n1, tlp::node n2, tlp::node n3 = tlp::node()) {
-    sortedNodes.reserve(3);
-    sortedNodes.push_back(n1);
-    sortedNodes.push_back(n2);
-    sortedNodes.push_back(n3);
-    std::sort(sortedNodes.begin(), sortedNodes.end());
-  }
+    Face(tlp::node n1, tlp::node n2, tlp::node n3 = tlp::node()) {
+        sortedNodes.reserve(3);
+        sortedNodes.push_back(n1);
+        sortedNodes.push_back(n2);
+        sortedNodes.push_back(n3);
+        std::sort(sortedNodes.begin(), sortedNodes.end());
+    }
 
-  bool operator==(const Face &f) const {
-    return sortedNodes[0] == f.sortedNodes[0] &&
-           sortedNodes[1] == f.sortedNodes[1] &&
-           sortedNodes[2] == f.sortedNodes[2];
-  }
+    bool operator==(const Face &f) const {
+        return sortedNodes[0] == f.sortedNodes[0] &&
+               sortedNodes[1] == f.sortedNodes[1] &&
+               sortedNodes[2] == f.sortedNodes[2];
+    }
 
-  bool operator<(const Face &f) const {
-    if (sortedNodes[0] < f.sortedNodes[0]) return true;
+    bool operator<(const Face &f) const {
+        if (sortedNodes[0] < f.sortedNodes[0]) return true;
+        if (sortedNodes[0] >= f.sortedNodes[0]) return false;
+        if (sortedNodes[1] < f.sortedNodes[1]) return true;
+        if (sortedNodes[1] >= f.sortedNodes[1]) return false;
+        return sortedNodes[2] < f.sortedNodes[2];
+    }
 
-    if (sortedNodes[0] >= f.sortedNodes[0]) return false;
-
-    if (sortedNodes[1] < f.sortedNodes[1]) return true;
-
-    if (sortedNodes[1] >= f.sortedNodes[1]) return false;
-
-    return sortedNodes[2] < f.sortedNodes[2];
-  }
-
-  std::vector<tlp::node> sortedNodes;
+    std::vector<tlp::node> sortedNodes;
 };
 
 TLP_BEGIN_HASH_NAMESPACE {
@@ -73,272 +70,282 @@ TLP_BEGIN_HASH_NAMESPACE {
   template <>
   struct hash<Face> {
     inline std::size_t operator()(const Face &f) const {
-      size_t seed = 0;
-      hash_combine(seed, f.sortedNodes[0]);
-      hash_combine(seed, f.sortedNodes[1]);
-      hash_combine(seed, f.sortedNodes[2]);
-      return seed;
+        size_t seed = 0;
+        hash_combine(seed, f.sortedNodes[0]);
+        hash_combine(seed, f.sortedNodes[1]);
+        hash_combine(seed, f.sortedNodes[2]);
+        return seed;
     }
   };
 } TLP_END_HASH_NAMESPACE
 
 static tlp::Coord computeTriangleCircumscribedCenter(const tlp::Coord &A, const tlp::Coord &B, const tlp::Coord &C) {
-  tlp::Coord a = A-C;
-  tlp::Coord b = B-C;
-  tlp::Coord axb = a^b;
-  float anorm = a.norm();
-  float bnorm = b.norm();
-  float axbnorm = axb.norm();
-  return C + (((anorm * anorm * b) - (bnorm * bnorm * a))^axb) / (2.0f * axbnorm * axbnorm);
+    Vec3ld Ad, Bd, Cd;
+    for (size_t i = 0 ; i < 3 ; ++i) {
+        Ad[i] = A[i];
+        Bd[i] = B[i];
+        Cd[i] = C[i];
+    }
+    Vec3ld a = Ad-Cd;
+    Vec3ld b = Bd-Cd;
+    Vec3ld axb = a^b;
+    long double anorm = a.norm();
+    long double bnorm = b.norm();
+    long double axbnorm = axb.norm();
+    Vec3ld c = Cd + (((anorm*anorm*b) - (bnorm*bnorm*a))^axb) / (2.0*axbnorm*axbnorm);
+    return tlp::Coord(c[0], c[1], c[2]);
 }
 
 static tlp::Coord computeTetrahedronCircumscribedCenter(const tlp::Coord &A, const tlp::Coord &B,
-    const tlp::Coord &C, const tlp::Coord &D) {
-  tlp::Coord da = D-A;
-  tlp::Coord ba = B-A;
-  tlp::Coord ca = C-A;
+                                                        const tlp::Coord &C, const tlp::Coord &D) {
 
-  float danorm = da.norm();
-  float banorm = ba.norm();
-  float canorm = ca.norm();
+    Vec3ld Ad, Bd, Cd, Dd;
+    for (size_t i = 0 ; i < 3 ; ++i) {
+        Ad[i] = A[i];
+        Bd[i] = B[i];
+        Cd[i] = C[i];
+        Dd[i] = D[i];
+    }
+    Vec3ld da = Dd-Ad;
+    Vec3ld ba = Bd-Ad;
+    Vec3ld ca = Cd-Ad;
 
-  Mat3f m;
+    long double danorm = da.norm();
+    long double banorm = ba.norm();
+    long double canorm = ca.norm();
 
-  for (int i = 0 ; i < 3 ; ++i) {
-    m[0][i] = ba[i];
-    m[1][i] = ca[i];
-    m[2][i] = da[i];
-  }
+    Mat3ld m;
 
-  return A + ((danorm*danorm*(ba^ca)) + (canorm*canorm*(da^ba)) + (banorm*banorm*(ca^da))) / (2.0f*m.determinant());
+    for (int i = 0 ; i < 3 ; ++i) {
+        m[0][i] = ba[i];
+        m[1][i] = ca[i];
+        m[2][i] = da[i];
+    }
+
+    Vec3ld c =  Ad + ((danorm*danorm*(ba^ca)) + (canorm*canorm*(da^ba)) + (banorm*banorm*(ca^da))) / (2.0*m.determinant());
+    return tlp::Coord(c[0], c[1], c[2]);
 }
 
 class Voronoi : public tlp::Algorithm {
 
 public :
 
-  Voronoi(tlp::AlgorithmContext context) : tlp::Algorithm(context) {
-    addParameter<bool>("voronoi cells", "If checked, a subgraph will be added for each computed voronoi cell.", "false");
-    addParameter<bool>("connect", "If checked, original graph nodes will be connected to the vertices of their voronoi cell.", "false");
-  }
-
-  bool run() {
-
-    tlp::Observable::holdObservers();
-
-    bool voronoiCellSg = false;
-    bool connectNodesToVoronoiCell = false;
-
-    if (dataSet) {
-      dataSet->get("voronoi cells", voronoiCellSg);
-      dataSet->get("connect", connectNodesToVoronoiCell);
+    Voronoi(tlp::AlgorithmContext context) : tlp::Algorithm(context) {
+        addParameter<bool>("voronoi cells", "If checked, a subgraph will be added for each computed voronoi cell.", "false");
+        addParameter<bool>("connect", "If checked, original graph nodes will be connected to the vertices of their voronoi cell.", "false");
     }
 
-    tlp::Graph *clone = graph->addCloneSubGraph("Original graph");
+    bool run() {
 
-    tlp::LayoutProperty *viewLayout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
+        tlp::Observable::holdObservers();
 
-    // First compute the delaunay triangulation
-    graph->setAttribute("voronoi mode", true);
-    std::string errMsg;
+        bool voronoiCellSg = false;
+        bool connectNodesToVoronoiCell = false;
 
-    if (graph->applyAlgorithm("Delaunay triangulation", errMsg)) {
-
-      // Ok, now we are ready to compute the dual voronoi diagram
-      tlp::Graph *delaunaySubGraph = graph->getSubGraph("Delaunay");
-
-      tlp::Graph* voronoiSubGraph = graph->addSubGraph("Voronoi");
-      tlp::Graph *cleanVoronoiSg = voronoiSubGraph->addSubGraph();
-
-      std::vector<std::vector<tlp::node> > simplicesNodes;
-
-      graph->getAttribute("delaunay simplices nodes", simplicesNodes);
-
-      // Iterate over each delaunay simplex
-      TLP_HASH_MAP<Face, tlp::node> faceToCircumCenter;
-      TLP_HASH_MAP<tlp::node, std::vector<tlp::node> > origNodeToCellBorder;
-      tlp::Coord A, B, C, D;
-      tlp::node n;
-
-      for (size_t i = 0 ; i < simplicesNodes.size() ; ++i) {
-        // add the voronoi vertex in the voronoi sub-graph
-        tlp::node ne = voronoiSubGraph->addNode();
-
-        for (size_t j = 0 ; j < simplicesNodes[i].size() ; ++j) {
-          n = simplicesNodes[i][j];
-
-          if (j == 0) {
-            A = viewLayout->getNodeValue(n);
-          }
-          else if (j == 1) {
-            B = viewLayout->getNodeValue(n);
-          }
-          else if (j == 2) {
-            C = viewLayout->getNodeValue(n);
-          }
-          else {
-            D = viewLayout->getNodeValue(n);
-          }
-
-          origNodeToCellBorder[simplicesNodes[i][j]].push_back(ne);
+        if (dataSet) {
+            dataSet->get("voronoi cells", voronoiCellSg);
+            dataSet->get("connect", connectNodesToVoronoiCell);
         }
 
-        // compute the circumscribed center of the simplex (triangle in 2d, tetrahedron in 3d)
-        tlp::Coord circumCenter;
+        tlp::Graph *clone = graph->addCloneSubGraph("Original graph");
 
-        if (simplicesNodes[i].size() == 3)
-          circumCenter = computeTriangleCircumscribedCenter(A, B, C);
-        else
-          circumCenter = computeTetrahedronCircumscribedCenter(A, B, C, D);
+        tlp::LayoutProperty *viewLayout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
 
-        viewLayout->setNodeValue(ne, circumCenter);
+        // First compute the delaunay triangulation
+        graph->setAttribute("voronoi mode", true);
+        std::string errMsg;
 
-        // try to connect two voronoi vertices of adjacent facets
-        if (simplicesNodes[i].size() == 3) {
+        if (graph->applyAlgorithm("Delaunay triangulation", errMsg)) {
 
-          Face face1(simplicesNodes[i][0], simplicesNodes[i][1]);
-          Face face2(simplicesNodes[i][1], simplicesNodes[i][2]);
-          Face face3(simplicesNodes[i][0], simplicesNodes[i][2]);
+            // Ok, now we are ready to compute the dual voronoi diagram
+            tlp::Graph *delaunaySubGraph = graph->getSubGraph("Delaunay");
 
-          TLP_HASH_MAP<Face, tlp::node>::const_iterator it = faceToCircumCenter.find(face1);
+            tlp::Graph* voronoiSubGraph = graph->addSubGraph("Voronoi");
+            tlp::Graph *cleanVoronoiSg = voronoiSubGraph->addSubGraph();
 
-          if (it != faceToCircumCenter.end()) {
-            voronoiSubGraph->addEdge(ne, it->second);
-          }
-          else {
-            faceToCircumCenter[face1] = ne;
-          }
+            std::vector<std::vector<tlp::node> > simplicesNodes;
 
-          it = faceToCircumCenter.find(face2);
+            graph->getAttribute("delaunay simplices nodes", simplicesNodes);
 
-          if (it != faceToCircumCenter.end()) {
-            voronoiSubGraph->addEdge(ne, it->second);
-          }
-          else {
-            faceToCircumCenter[face2] = ne;
-          }
+            // Iterate over each delaunay simplex
+            TLP_HASH_MAP<Face, tlp::node> faceToCircumCenter;
+            TLP_HASH_MAP<tlp::node, std::vector<tlp::node> > origNodeToCellBorder;
+            tlp::Coord A, B, C, D;
+            tlp::node n;
+            for (size_t i = 0 ; i < simplicesNodes.size() ; ++i) {
+                // add the voronoi vertex in the voronoi sub-graph
+                tlp::node ne = voronoiSubGraph->addNode();
+                for (size_t j = 0 ; j < simplicesNodes[i].size() ; ++j) {
+                    n = simplicesNodes[i][j];
 
-          it = faceToCircumCenter.find(face3);
+                    if (j == 0) {
+                        A = viewLayout->getNodeValue(n);
+                    }
+                    else if (j == 1) {
+                        B = viewLayout->getNodeValue(n);
+                    }
+                    else if (j == 2) {
+                        C = viewLayout->getNodeValue(n);
+                    }
+                    else {
+                        D = viewLayout->getNodeValue(n);
+                    }
+                    origNodeToCellBorder[simplicesNodes[i][j]].push_back(ne);
+                }
 
-          if (it != faceToCircumCenter.end()) {
-            voronoiSubGraph->addEdge(ne, it->second);
-          }
-          else {
-            faceToCircumCenter[face3] = ne;
-          }
+                // compute the circumscribed center of the simplex (triangle in 2d, tetrahedron in 3d)
+                tlp::Coord circumCenter;
+
+                if (simplicesNodes[i].size() == 3)
+                    circumCenter = computeTriangleCircumscribedCenter(A, B, C);
+                else
+                    circumCenter = computeTetrahedronCircumscribedCenter(A, B, C, D);
+
+                viewLayout->setNodeValue(ne, circumCenter);
+
+                // try to connect two voronoi vertices of adjacent facets
+                if (simplicesNodes[i].size() == 3) {
+
+                    Face face1(simplicesNodes[i][0], simplicesNodes[i][1]);
+                    Face face2(simplicesNodes[i][1], simplicesNodes[i][2]);
+                    Face face3(simplicesNodes[i][0], simplicesNodes[i][2]);
+
+                    TLP_HASH_MAP<Face, tlp::node>::const_iterator it = faceToCircumCenter.find(face1);
+
+                    if (it != faceToCircumCenter.end()) {
+                        voronoiSubGraph->addEdge(ne, it->second);
+                    }
+                    else {
+                        faceToCircumCenter[face1] = ne;
+                    }
+
+                    it = faceToCircumCenter.find(face2);
+
+                    if (it != faceToCircumCenter.end()) {
+                        voronoiSubGraph->addEdge(ne, it->second);
+                    }
+                    else {
+                        faceToCircumCenter[face2] = ne;
+                    }
+
+                    it = faceToCircumCenter.find(face3);
+
+                    if (it != faceToCircumCenter.end()) {
+                        voronoiSubGraph->addEdge(ne, it->second);
+                    }
+                    else {
+                        faceToCircumCenter[face3] = ne;
+                    }
+                }
+                else {
+
+                    Face face1(simplicesNodes[i][0], simplicesNodes[i][1], simplicesNodes[i][2]);
+                    Face face2(simplicesNodes[i][1], simplicesNodes[i][2], simplicesNodes[i][3]);
+                    Face face3(simplicesNodes[i][0], simplicesNodes[i][2], simplicesNodes[i][3]);
+                    Face face4(simplicesNodes[i][0], simplicesNodes[i][1], simplicesNodes[i][3]);
+
+                    TLP_HASH_MAP<Face, tlp::node>::const_iterator it = faceToCircumCenter.find(face1);
+
+                    if (it != faceToCircumCenter.end()) {
+                        voronoiSubGraph->addEdge(ne, it->second);
+                    }
+                    else {
+                        faceToCircumCenter[face1] = ne;
+                    }
+
+                    it = faceToCircumCenter.find(face2);
+
+                    if (it != faceToCircumCenter.end()) {
+                        voronoiSubGraph->addEdge(ne, it->second);
+                    }
+                    else {
+                        faceToCircumCenter[face2] = ne;
+                    }
+
+                    it = faceToCircumCenter.find(face3);
+
+                    if (it != faceToCircumCenter.end()) {
+                        voronoiSubGraph->addEdge(ne, it->second);
+                    }
+                    else {
+                        faceToCircumCenter[face3] = ne;
+                    }
+
+                    it = faceToCircumCenter.find(face4);
+
+                    if (it != faceToCircumCenter.end()) {
+                        voronoiSubGraph->addEdge(ne, it->second);
+                    }
+                    else {
+                        faceToCircumCenter[face4] = ne;
+                    }
+
+                }
+            }
+
+            // compute the voronoi cells associated to nodes
+            // and add corresponding sub-graphs
+            int cellCpt = 0;
+            std::ostringstream oss;
+            forEach(n, clone->getNodes()) {
+                std::set<tlp::node> cellNodes;
+                tlp::node ne;
+                for (size_t i = 0 ; i < origNodeToCellBorder[n].size() ; ++i) {
+                    ne = origNodeToCellBorder[n][i];
+                    if (voronoiCellSg) {
+                        cellNodes.insert(ne);
+                    }
+
+                    cleanVoronoiSg->addNode(ne);
+                    if (connectNodesToVoronoiCell) {
+                        voronoiSubGraph->addNode(n);
+                        cleanVoronoiSg->addNode(n);
+                        voronoiSubGraph->addEdge(n, ne);
+                    }
+                }
+
+                if (voronoiCellSg) {
+                    oss.str("");
+                    oss << "voronoi cell " << cellCpt++;
+                    tlp::Graph *cellSg = voronoiSubGraph->inducedSubGraph(cellNodes);
+                    cellSg->setName(oss.str());
+                }
+            }
+
+            tlp::StableIterator<tlp::edge> delaunayEdges(delaunaySubGraph->getEdges());
+            graph->delAllSubGraphs(delaunaySubGraph);
+            graph->delEdges(&delaunayEdges, true);
+
+            // remove the dummy nodes added by the delaunay triangulation
+            std::vector<tlp::node> dummyNodes;
+            graph->getAttribute("dummy nodes", dummyNodes);
+            graph->removeAttribute("dummy nodes");
+
+            for (size_t i = 0 ; i < dummyNodes.size() ; ++i) {
+                graph->delNode(dummyNodes[i], true);
+            }
+
+            // remove voronoi vertices that are not associated to a voronoi cell
+            stableForEach(n, voronoiSubGraph->getNodes()) {
+                if (!cleanVoronoiSg->isElement(n)) {
+                    voronoiSubGraph->delNode(n, true);
+                }
+            }
+
+            voronoiSubGraph->delSubGraph(cleanVoronoiSg);
+
         }
         else {
-
-          Face face1(simplicesNodes[i][0], simplicesNodes[i][1], simplicesNodes[i][2]);
-          Face face2(simplicesNodes[i][1], simplicesNodes[i][2], simplicesNodes[i][3]);
-          Face face3(simplicesNodes[i][0], simplicesNodes[i][2], simplicesNodes[i][3]);
-          Face face4(simplicesNodes[i][0], simplicesNodes[i][1], simplicesNodes[i][3]);
-
-          TLP_HASH_MAP<Face, tlp::node>::const_iterator it = faceToCircumCenter.find(face1);
-
-          if (it != faceToCircumCenter.end()) {
-            voronoiSubGraph->addEdge(ne, it->second);
-          }
-          else {
-            faceToCircumCenter[face1] = ne;
-          }
-
-          it = faceToCircumCenter.find(face2);
-
-          if (it != faceToCircumCenter.end()) {
-            voronoiSubGraph->addEdge(ne, it->second);
-          }
-          else {
-            faceToCircumCenter[face2] = ne;
-          }
-
-          it = faceToCircumCenter.find(face3);
-
-          if (it != faceToCircumCenter.end()) {
-            voronoiSubGraph->addEdge(ne, it->second);
-          }
-          else {
-            faceToCircumCenter[face3] = ne;
-          }
-
-          it = faceToCircumCenter.find(face4);
-
-          if (it != faceToCircumCenter.end()) {
-            voronoiSubGraph->addEdge(ne, it->second);
-          }
-          else {
-            faceToCircumCenter[face4] = ne;
-          }
-
-        }
-      }
-
-      // compute the voronoi cells associated to nodes
-      // and add corresponding sub-graphs
-      int cellCpt = 0;
-      std::ostringstream oss;
-      forEach(n, clone->getNodes()) {
-        std::set<tlp::node> cellNodes;
-        tlp::node ne;
-
-        for (size_t i = 0 ; i < origNodeToCellBorder[n].size() ; ++i) {
-          ne = origNodeToCellBorder[n][i];
-
-          if (voronoiCellSg) {
-            cellNodes.insert(ne);
-          }
-
-          cleanVoronoiSg->addNode(ne);
-
-          if (connectNodesToVoronoiCell) {
-            graph->addEdge(n, ne);
-          }
+            graph->delSubGraph(clone);
         }
 
-        if (voronoiCellSg) {
-          oss.str("");
-          oss << "voronoi cell " << cellCpt++;
-          tlp::Graph *cellSg = voronoiSubGraph->inducedSubGraph(cellNodes);
-          cellSg->setName(oss.str());
-        }
-      }
+        graph->removeAttribute("voronoi mode");
+        graph->removeAttribute("delaunay simplices nodes");
 
-      tlp::StableIterator<tlp::edge> delaunayEdges(delaunaySubGraph->getEdges());
-      graph->delAllSubGraphs(delaunaySubGraph);
-      graph->delEdges(&delaunayEdges, true);
+        tlp::Observable::unholdObservers();
 
-      // remove the dummy nodes added by the delaunay triangulation
-      std::vector<tlp::node> dummyNodes;
-      graph->getAttribute("dummy nodes", dummyNodes);
-      graph->removeAttribute("dummy nodes");
-
-      for (size_t i = 0 ; i < dummyNodes.size() ; ++i) {
-        graph->delNode(dummyNodes[i], true);
-      }
-
-      // remove voronoi vertices that are not associated to a voronoi cell
-      stableForEach(n, voronoiSubGraph->getNodes()) {
-        float nnorm = viewLayout->getNodeValue(n).norm();
-
-        if (!cleanVoronoiSg->isElement(n) || std::isinf(nnorm) || std::isnan(nnorm)) {
-          voronoiSubGraph->delNode(n, true);
-        }
-      }
-
-      voronoiSubGraph->delSubGraph(cleanVoronoiSg);
-
+        return true;
     }
-    else {
-      graph->delSubGraph(clone);
-    }
-
-    graph->removeAttribute("voronoi mode");
-    graph->removeAttribute("delaunay simplices nodes");
-
-    tlp::Observable::unholdObservers();
-
-    return true;
-  }
 };
 
 ALGORITHMPLUGIN(Voronoi,"Voronoi diagram","Antoine LAMBERT","","","1.0");
