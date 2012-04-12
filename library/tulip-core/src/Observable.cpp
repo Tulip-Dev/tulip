@@ -38,16 +38,16 @@ namespace {
 //======================================================================
 struct Node2Observable {
   Observable* operator()(tlp::node n) {
-    return dynamic_cast<Observable*>(object[n]);
+    return static_cast<Observable*>(object[n]);
   }
-  tlp::NodeProperty<OLOObject *> object;
+  tlp::NodeProperty<Observable *> object;
 } node2Observable;
 //======================================================================
 struct Node2Onlooker {
   Observable* operator()(tlp::node n) {
-    return dynamic_cast<Observable*>(object[n]);
+    return static_cast<Observable*>(object[n]);
   }
-  tlp::NodeProperty<OLOObject *> object;
+  tlp::NodeProperty<Observable *> object;
 } node2Onlooker;
 //======================================================================
 struct AliveFilter {
@@ -79,80 +79,34 @@ struct LinkFilter {
 namespace tlp {
 
 //=================================
-VectorGraph                 OLOObject::oGraph;
-unsigned int                OLOObject::notifying   = 0;
-unsigned int                OLOObject::unholding   = 0;
-unsigned int                OLOObject::holdCounter = 0;
-NodeProperty<OLOObject *>   OLOObject::oPointer;
-NodeProperty<bool >         OLOObject::oAlive;
-EdgeProperty<unsigned char> OLOObject::oType;
-
-vector<node>              OLOObject::delayedDelNode;
-bool                      OLOObject::_initialized = OLOObject::init();
+VectorGraph                 Observable::oGraph;
+unsigned int                Observable::notifying   = 0;
+unsigned int                Observable::unholding   = 0;
+unsigned int                Observable::holdCounter = 0;
+NodeProperty<Observable *>  Observable::oPointer;
+NodeProperty<bool >         Observable::oAlive;
+EdgeProperty<unsigned char> Observable::oType;
+std::set<std::pair<tlp::node, tlp::node> > Observable::delayedEvents = std::set<std::pair<tlp::node, tlp::node> >();
+vector<node>              Observable::delayedDelNode;
+bool                      Observable::_initialized = Observable::init();
 bool                      Observable::eventQueued = false;
-//----------------------------------
-OLOObject::OLOObject() {
-#ifndef NDEBUG
-  sent = received = 0;
-#endif
-  //qDebug() << "[OLO node] created:" << n.id << "::" << this << endl;
-}
-//----------------------------------
-OLOObject::OLOObject(const OLOObject &) {
-#ifndef NDEBUG
-  sent = received = 0;
-#endif
-  //qDebug() << "[OLO node] created (copy constructor):" << n.id << "::" << this << endl;
-}
-//----------------------------------
-OLOObject& OLOObject::operator=(const OLOObject &) {
-#ifndef NDEBUG
-  qDebug() << "[OLO Warning]: OLO object should reimplement their operator= else nothing is copied" << endl;
-#endif
-  return *this;
-}
-//----------------------------------
-OLOObject::~OLOObject() {
-  if (_n.isValid() == false)
-    return;
 
-#ifdef _OPENMP
-  #pragma omp critical(OLOGraphUpdate)
-#endif
-  {
-    if (!oAlive[_n])
-      throw OLOException("OLO object has already been deleted, possible double free!!!");
-
-    //qDebug() << "[OLO node] destructor:" << n.id  << "::" << this << endl;
-    oAlive[_n] = false;
-
-    if (notifying == 0 && unholding == 0 && holdCounter == 0) {
-      oGraph.delNode(_n);
-      //qDebug() << "[OLO node] deleted:" << n.id << "::" << this << endl;
-    }
-    else {
-      delayedDelNode.push_back(_n);
-      //qDebug() << "[OLO node] delayed delete:" << n.id << "::" << this << endl;
-      oGraph.delEdges(_n);
-    }
-  }
-}
 //----------------------------------
-Iterator<node> * OLOObject::getInObjects() const {
+Iterator<node> * Observable::getInObjects() const {
   assert(_n.isValid());
   return new FilterIterator<node, AliveFilter>(oGraph.getInNodes(_n), objectAlive);
 }
 //----------------------------------
-Iterator<node> * OLOObject::getOutObjects() const {
+Iterator<node> * Observable::getOutObjects() const {
   assert(_n.isValid());
   return new FilterIterator<node, AliveFilter>(oGraph.getOutNodes(_n), objectAlive);
 }
 //----------------------------------
-node OLOObject::getNode() const {
+node Observable::getNode() const {
   return _n;
 }
 //----------------------------------
-node OLOObject::getBoundNode() {
+node Observable::getBoundNode() {
   if (_n.isValid() == false) {
     _n = oGraph.addNode();
     oPointer[_n] = this;
@@ -162,59 +116,58 @@ node OLOObject::getBoundNode() {
   return _n;
 }
 //----------------------------------
-unsigned int OLOObject::getSent() const {
+unsigned int Observable::getSent() const {
 #ifndef NDEBUG
   return sent;
 #endif
   return 0;
 }
 //----------------------------------
-unsigned int OLOObject::getReceived() const {
+unsigned int Observable::getReceived() const {
 #ifndef NDEBUG
   return received;
 #endif
   return 0;
 }
 //----------------------------------
-bool OLOObject::isAlive(tlp::node n) {
+bool Observable::isAlive(tlp::node n) {
   return oAlive[n];
 }
-
 //----------------------------------
-OLOObject* OLOObject::getObject(node n) {
+Observable* Observable::getObject(node n) {
   if (!oAlive[n])
-    throw OLOException("That object has been deleted it is no more accessbile");
+    throw ObservableException("That object has been deleted it is no more accessbile");
 
   return oPointer[n];
 }
 //----------------------------------
-bool OLOObject::init() {
-  OLOObject::oGraph.alloc(OLOObject::oPointer);
-  OLOObject::oGraph.alloc(OLOObject::oAlive);
-  OLOObject::oGraph.alloc(OLOObject::oType);
+bool Observable::init() {
+  Observable::oGraph.alloc(Observable::oPointer);
+  Observable::oGraph.alloc(Observable::oAlive);
+  Observable::oGraph.alloc(Observable::oType);
 
-  objectAlive.alive = OLOObject::oAlive;
-  node2Observable.object = OLOObject::oPointer;
-  node2Onlooker.object = OLOObject::oPointer;
+  objectAlive.alive = Observable::oAlive;
+  node2Observable.object = Observable::oPointer;
+  node2Onlooker.object = Observable::oPointer;
   return true;
 }
 //----------------------------------
-const tlp::VectorGraph& OLOObject::getOLOGraph() {
-  return OLOObject::oGraph;
+const tlp::VectorGraph& Observable::getObservableGraph() {
+  return Observable::oGraph;
 }
 //=================================
 Event::Event(const Observable &sender, EventType type):
   _sender(sender.getNode()),
   _type(type) {
   if (_type == TLP_DELETE)
-    throw OLOException("It is forbidden to create a delete events, DeleteEvents are autmotically generated at the observable destruction");
+    throw ObservableException("It is forbidden to create a delete events, DeleteEvents are autmotically generated at the observable destruction");
 }
 //----------------------------------
 Event::~Event() {
 }
 //----------------------------------
 Observable* Event::sender() const {
-  return dynamic_cast<Observable*>(OLOObject::getObject(_sender)); /** only Observable can be use to create event */
+  return static_cast<Observable*>(Observable::getObject(_sender)); /** only Observable can be use to create event */
 }
 //=================================
 // define a class for an empty Iterator of Observable *
@@ -261,41 +214,129 @@ void Observable::update(std::set<Observable*>::iterator, std::set<Observable*>::
 void Observable::treatEvent(const Event &) {
   qDebug() << __PRETTY_FUNCTION__ << " : not implemented";
 }
-
 //=================================
 void Observable::observableDestroyed(Observable *) {
   qDebug() << __PRETTY_FUNCTION__ << " : not implemented";
 }
 //=================================
-Observable::Observable():deleteMsgSent(false), queuedEvent(*this, Event::TLP_INVALID) {
+Observable::Observable(): deleteMsgSent(false), queuedEvent(*this, Event::TLP_INVALID), _n(node()) {
+#ifndef NDEBUG
+  sent = received = 0;
+#endif
+  //qDebug() << "[Observable node] created:" << n.id << "::" << this << endl;
 }
-//----------------------------------------
+//----------------------------------
+Observable::Observable(const Observable &):deleteMsgSent(false), queuedEvent(*this, Event::TLP_INVALID), _n(node()) {
+#ifndef NDEBUG
+  sent = received = 0;
+#endif
+  //qDebug() << "[Observable node] created (copy constructor):" << n.id << "::" << this << endl;
+}
+//----------------------------------
+Observable& Observable::operator=(const Observable &) {
+#ifndef NDEBUG
+  qDebug() << "[Observable Warning]: Observable object should reimplement their operator= else nothing is copied" << endl;
+#endif
+  return *this;
+}
+//----------------------------------
 Observable::~Observable() {
-  if (!deleteMsgSent)
-    observableDeleted();
+  if (_n.isValid() == false)
+    return;
+
+#ifdef _OPENMP
+  #pragma omp critical(ObservableGraphUpdate)
+#endif
+  {
+      if (!deleteMsgSent)
+        observableDeleted();
+
+      if (!oAlive[_n])
+      throw ObservableException("Observable object has already been deleted, possible double free!!!");
+
+    //qDebug() << "[Observable node] destructor:" << n.id  << "::" << this << endl;
+    oAlive[_n] = false;
+
+    if (notifying == 0 && unholding == 0 && holdCounter == 0) {
+      oGraph.delNode(_n);
+      //qDebug() << "[Observable node] deleted:" << n.id << "::" << this << endl;
+    }
+    else {
+      delayedDelNode.push_back(_n);
+      //qDebug() << "[Observable node] delayed delete:" << n.id << "::" << this << endl;
+      oGraph.delEdges(_n);
+    }
+  }
 }
+
 //----------------------------------------
 void Observable::holdObservers() {
-  ++holdCounter;
+#ifdef _OPENMP
+  #pragma omp critical(ObservableGraphUpdate)
+#endif
+    ++holdCounter;
 }
 //----------------------------------------
 void Observable::unholdObservers() {
-  if (holdCounter == 0)
-    throw OLOException("unhold call without a previous call to hold");
+    {
+        if (holdCounter == 0)
+            throw ObservableException("unhold call without a previous call to hold");
 
-  --holdCounter;
+        --holdCounter;
+        {
+            if (holdCounter > 0 || delayedEvents.empty() ) return;
+            ++unholding;
+            ++holdCounter; /** rehold the oberver to buffer message sent during unholding */
 
-  if (holdCounter > 0 || !eventQueued ) return;
+            set< pair<node, node> > backupEvents;
+            backupEvents.swap(delayedEvents);
+            set< pair<node, node> >::const_iterator it;
+            for( it = backupEvents.begin(); it != backupEvents.end(); ++it) {
+                if (Observable::oAlive[it->first]) {
+                    Observable *sender = static_cast<Observable *>(Observable::oPointer[it->first]);
+                    sender->queuedEvent._type = Event::TLP_INVALID;
+                }
+            }
+            map<node, vector<Event> > preparedEvents;
+            for( it = backupEvents.begin(); it != backupEvents.end(); ++it) {
+                if (Observable::oAlive[it->first] && Observable::oAlive[it->second]) {
+                    Observable *sender = static_cast<Observable *>(Observable::oPointer[it->first]);
+                    preparedEvents[it->second].push_back(Event(*sender, Event::TLP_MODIFICATION));
+                }
+            }
+            {
+                map<node, vector<Event> >::const_iterator it;
+                for (it = preparedEvents.begin(); it!=preparedEvents.end(); ++it) {
+                    if (oAlive[it->first]) {
+                        Observable *obs  = static_cast<Observable *>(oPointer[it->first]);
+#ifndef NDEBUG
+                        ++(obs->received);
+#endif
+                        obs->treatEvents(it->second);
+                    }
+                }
+            }
 
+            -- unholding;
+            unholdObservers(); /** treat queued events during the unhold */
+            updateObserverGraph();
+
+            if (holdCounter > 0) {
+                throw ObservableException("Observable after unholdd call, bad nested hold/unhold function call in an Observer:: update() function");
+            }
+        }
+        return;
+    }
+  //hold Observer mechanism
   ++unholding;
   ++holdCounter; /** rehold the oberver to buffer message sent during unholding */
 
   map<node, vector<Event> > preparedEvents;
   node n;
-  forEach(n, OLOObject::oGraph.getNodes()) {
-    if (OLOObject::oAlive[n]) {
-      //qDebug() << "{" << n.id << "::" << OLOObject::oPointer[n] << flush;
-      Observable *observable = dynamic_cast<Observable *>(OLOObject::oPointer[n]);
+  forEach(n, Observable::oGraph.getNodes()) {
+    if (Observable::oAlive[n]) {
+      //qDebug() << "{" << n.id << "::" << ObservableObject::oPointer[n] << flush;
+      Observable *observable = static_cast<Observable *>(Observable::oPointer[n]);
 
       //qDebug() << "}" << flush;
       if (observable) {
@@ -323,7 +364,7 @@ void Observable::unholdObservers() {
 
   for (it = preparedEvents.begin(); it!=preparedEvents.end(); ++it) {
     if (oAlive[it->first]) {
-      Observable *obs  = dynamic_cast<Observable *>(oPointer[it->first]);
+      Observable *obs  = static_cast<Observable *>(oPointer[it->first]);
 #ifndef NDEBUG
       ++(obs->received);
 #endif
@@ -336,14 +377,14 @@ void Observable::unholdObservers() {
   updateObserverGraph();
 
   if (holdCounter > 0) {
-    throw OLOException("Observable after unholdd call, bad nested hold/unhold function call in an Observer:: update() function");
+    throw ObservableException("Observable after unholdd call, bad nested hold/unhold function call in an Observer:: update() function");
   }
 }
 //----------------------------------------
 Iterator<Observable *> *Observable::getOnlookers() const {
   if (isBound()) {
     if (!oAlive[_n]) {
-      throw OLOException("getObservers called on a deleted Observable");
+      throw ObservableException("getObservers called on a deleted Observable");
     }
 
     return new ConversionIterator<node, Observable*, Node2Onlooker>(getInObjects(), node2Onlooker);
@@ -352,13 +393,13 @@ Iterator<Observable *> *Observable::getOnlookers() const {
   return new NoObservableIterator();
 }
 //----------------------------------------
-void Observable::addOnlooker(const Observable &obs, OLOEDGETYPE type) const {
+void Observable::addOnlooker(const Observable &obs, ObservableEDGETYPE type) const {
 #ifdef _OPENMP
-  #pragma omp critical(OLOGraphUpdate)
+  #pragma omp critical(ObservableGraphUpdate)
 #endif
   {
     if (isBound() && !oAlive[_n]) {
-      throw OLOException("addObserver called on a deleted Observable");
+      throw ObservableException("addObserver called on a deleted Observable");
     }
 
     // check for an existing link
@@ -378,7 +419,7 @@ void Observable::addOnlooker(const Observable &obs, OLOEDGETYPE type) const {
 #ifndef NDEBUG
 
       if (oType[link] & type) {
-        qWarning() << "[OLO Warning]: observer already connected";
+        qWarning() << "[Observable Warning]: observer already connected";
       }
 
 #endif
@@ -386,7 +427,6 @@ void Observable::addOnlooker(const Observable &obs, OLOEDGETYPE type) const {
       oType[link] |= type;
     }
   }
-
 }
 //----------------------------------------
 void Observable::addObserver(Observable * const obs) const {
@@ -401,7 +441,7 @@ void Observable::addListener(Observable * const obs) const {
 //----------------------------------------
 void Observable::observableDeleted() {
   if (deleteMsgSent) {
-    throw OLOException("Delete message has been sent several time.");
+    throw ObservableException("Delete message has been sent several time.");
   }
 
   deleteMsgSent = true;
@@ -416,9 +456,9 @@ void Observable::observableDeleted() {
 void Observable::sendEvent(const Event &message) {
   if (!isBound())
     return;
-
+//  cerr << "send event" << message.type() << " indeg " << oGraph.indeg(_n) << " outdeg: " << oGraph.outdeg(_n) << endl;
   if (!oGraph.isElement(_n) || !oAlive[_n]) {
-    throw OLOException("Notify called on a deleted Observable");
+    throw ObservableException("Notify called on a deleted Observable");
   }
 
   const unsigned int RECCALL = 200;
@@ -426,7 +466,7 @@ void Observable::sendEvent(const Event &message) {
   if (notifying > RECCALL) {
     std::stringstream str;
     str << "Maximum number of nested calls (" << RECCALL << ") reached, contact tulip team if that limit is too restrictive";
-    throw OLOException(str.str());
+    throw ObservableException(str.str());
     //return;
   }
 
@@ -441,7 +481,7 @@ void Observable::sendEvent(const Event &message) {
     node src(oGraph.source(e));
 
     if (oAlive[src]) {
-      Observable *obs(dynamic_cast<Observable *>(oPointer[src]));
+      Observable *obs(static_cast<Observable *>(oPointer[src]));
       assert(obs != NULL);
 
       if ((message.type() != Event::TLP_INFORMATION) && (holdCounter == 0  || message.type() == Event::TLP_DELETE))
@@ -455,8 +495,19 @@ void Observable::sendEvent(const Event &message) {
   }
 
   if (message.type() == Event::TLP_MODIFICATION && holdCounter!=0) {
-    queuedEvent = message;
-    eventQueued = true;
+      if (queuedEvent.type() == Event::TLP_INVALID) {
+          queuedEvent._type = Event::TLP_MODIFICATION;
+          eventQueued = true;
+          edge e;
+          forEach(e, oGraph.getInEdges(_n)) {
+              if (oType[e] & OBSERVER) {
+                  node src(oGraph.source(e));
+                  if (oAlive[src]) {
+                      delayedEvents.insert(pair<node, node>(_n, src));
+                  }
+              }
+          }
+      }
   }
 
   //send message to listeners
@@ -464,7 +515,7 @@ void Observable::sendEvent(const Event &message) {
 
   for(itobs = listenerTonotify.begin(); itobs != listenerTonotify.end(); ++itobs) {
     if (itobs->second == _n && message.type() == Event::TLP_DELETE) {
-      qDebug() << "[OLO info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
+      qDebug() << "[Observable info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
       continue;
     }
 
@@ -476,7 +527,7 @@ void Observable::sendEvent(const Event &message) {
     }
 
     if (!oAlive[backn]) {
-      throw OLOException("An observable has been deleted during the notifification of its observer (ie. an observer has deleted its caller during an update)");
+      throw ObservableException("An observable has been deleted during the notifification of its observer (ie. an observer has deleted its caller during an update)");
     }
   }
 
@@ -485,7 +536,7 @@ void Observable::sendEvent(const Event &message) {
 
   for(itobs = observerTonotify.begin(); itobs != observerTonotify.end(); ++itobs) {
     if (itobs->second == _n && message.type() == Event::TLP_DELETE) {
-      qDebug() << "[OLO info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
+      qDebug() << "[Observable info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
       continue;
     }
 
@@ -497,7 +548,7 @@ void Observable::sendEvent(const Event &message) {
     }
 
     if (!oAlive[backn]) {
-      throw OLOException("An observable has been deleted during the notifification of its observer (ie. an observer has deleted its caller during an update)");
+      throw ObservableException("An observable has been deleted during the notifification of its observer (ie. an observer has deleted its caller during an update)");
     }
   }
 
@@ -522,17 +573,17 @@ void Observable::updateObserverGraph() {
   }
 }
 //----------------------------------------
-void Observable::removeOnlooker(const Observable &obs, OLOEDGETYPE type) const {
+void Observable::removeOnlooker(const Observable &obs, ObservableEDGETYPE type) const {
   // nothing to do if one of the observables is unbound
   if (!isBound() || !obs.isBound())
     return;
 
 #ifdef _OPENMP
-  #pragma omp critical(OLOGraphUpdate)
+  #pragma omp critical(ObservableGraphUpdate)
 #endif
   {
     if (!oAlive[_n]) {
-      throw OLOException("removeOnlooker called on a deleted Observable");
+      throw ObservableException("removeOnlooker called on a deleted Observable");
     }
 
     edge link(oGraph.existEdge(obs.getNode(), getNode()));
@@ -561,7 +612,7 @@ void Observable::notifyObservers() {
     return;
 
   if (!oAlive[_n]) {
-    throw OLOException("notifyObservers called on a deleted Observable");
+    throw ObservableException("notifyObservers called on a deleted Observable");
   }
 
   if(hasOnlookers())
@@ -570,7 +621,7 @@ void Observable::notifyObservers() {
 //----------------------------------------
 void Observable::notifyDestroy() {
 #ifndef NDEBUG
-  qWarning() << "[OLO Warning]: no event sent on notifyDestroy";
+  qWarning() << "[Observable Warning]: no event sent on notifyDestroy";
 #endif
 }
 //----------------------------------------
@@ -581,7 +632,7 @@ unsigned int Observable::countObservers() const {
   unsigned int result = 0;
   node n;
   forEach(n, (new FilterIterator<node, LinkFilter<OBSERVER> >(oGraph.getInNodes(getNode()), LinkFilter<OBSERVER>(oGraph, oType, getNode()))))
-  ++result;
+      ++result;
   return result;
 }
 //----------------------------------------
@@ -589,7 +640,7 @@ unsigned int Observable::countOnLookers() const {
   Observable *obs ;
   unsigned int result = 0;
   forEach(obs, getOnlookers())
-  ++result;
+     ++result;
   return result;
 }
 //----------------------------------------
@@ -609,20 +660,11 @@ bool Observable::hasOnlookers() const {
     return false;
 
   if (!oAlive[_n]) {
-    throw OLOException("hasOnlookers called on a deleted Observable");
+    throw ObservableException("hasOnlookers called on a deleted Observable");
   }
 
   return oGraph.indeg(_n) > 0;
 }
 //----------------------------------------
-/* void Observable::removeOnlookers() {
-        if (!oAlive[n]) {
-            throw OLOException("removeOnlookers called on a deleted Observable");
-        }
-        Observable *obs;
-        stableForEach(obs, getOnlookers())
-                removeOnlooker(*obs);
-    }
- */
-//----------------------------------------
+
 }
