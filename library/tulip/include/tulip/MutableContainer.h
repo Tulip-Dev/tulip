@@ -489,15 +489,15 @@ void MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
     switch (state) {
     case VECT: {
       if (i > maxIndex || i < minIndex) {
-	set(i, defaultValue + val);
-	return;
+        set(i, defaultValue + val);
+        return;
       }
 
       TYPE& oldVal = (*vData)[i - minIndex];
 
       if (oldVal == defaultValue) {
-	set(i, defaultValue + val);
-	return;
+        set(i, defaultValue + val);
+        return;
       }
 
       oldVal += val;
@@ -509,16 +509,19 @@ void MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
       typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
 
       if (it!=hData->end()) {
-	// check default value
-	if ((it->second + val) == defaultValue) {
-	  StoredType<TYPE>::destroy((*it).second);
-	  hData->erase(i);
-	  --elementInserted;
-	} else
-	  it->second += val;
-      } else {
+        // check default value
+        if ((it->second + val) == defaultValue) {
+          StoredType<TYPE>::destroy((*it).second);
+          hData->erase(i);
+          --elementInserted;
+        }
+        else
+          it->second += val;
+      }
+      else {
         set(i, defaultValue + val);
       }
+
       return;
     }
 
