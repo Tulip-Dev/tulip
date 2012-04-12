@@ -30,17 +30,16 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )  \
   HTML_HELP_BODY() \
-  "If true, the graph is considered directed." \
+  "indicate if the graph should be considered as directed or not" \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )  \
   HTML_HELP_BODY() \
-  "If true, the results are normalized in the following way."
-  "For nodes, undirected : m(n) = 2*c(n) / (#V - 1)(#V - 2) "  \
-  "For nodes,   directed : m(n) =   c(n) / (#V - 1)(#V - 2) " \
-  "For edges, undirected : m(e) = 2*c(n) / (#V / 2)(#V / 2) "  \
-  "For edges,   directed : m(n) =   c(n) / (#V / 2)(#V / 2) " \
+  "If true the node mesure will be normalized unweight not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2) "  \
+  "If true the node mesure will be normalized unweight directed     : m(n) = c(n) / (#V - 1)(#V - 2) " \
+  "If true the edge mesure will be normalized unweight not directed : m(e) = 2*c(n) / (#V / 2)(#V / 2) "  \
+  "If true the edge mesure will be normalized unweight directed     : m(n) = c(n) / (#V / 2)(#V / 2) " \
   HTML_HELP_CLOSE()
 };
 
@@ -134,7 +133,7 @@ public:
           }
 
           if (d.get(w.id) == d.get(v.id)+1) {
-            sigma.set(w.id, sigma.get(w.id) + sigma.get(v.id));
+            sigma.add(w.id, sigma.get(v.id));
             P[w].push_back(v);
           }
         }
@@ -152,7 +151,7 @@ public:
 
         for (; itn!=P[w].end(); ++itn) {
           node v = *itn;
-          delta.set(v.id, delta.get(v.id) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
+          delta.add(v.id, (double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id))));
           edge e  = graph->existEdge(v,w,directed);
 
           if(e.isValid())

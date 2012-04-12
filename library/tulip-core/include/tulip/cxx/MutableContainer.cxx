@@ -105,7 +105,7 @@ void tlp::MutableContainer<TYPE>::setAll(const TYPE &value) {
     }
 
     delete hData;
-    hData=0;
+    hData = NULL;
     vData = new std::deque<typename StoredType<TYPE>::Value>();
     break;
 
@@ -245,7 +245,6 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
     }
   }
   else {
-    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
     typename StoredType<TYPE>::Value newVal =
       StoredType<TYPE>::clone(value);
 
@@ -277,6 +276,63 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
     maxIndex = std::max(maxIndex, i);
     minIndex = std::min(minIndex, i);
   }
+}
+//===================================================================
+template <typename TYPE>
+void tlp::MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
+  if (tlp::StoredType<TYPE>::isPointer == false) {
+    if (maxIndex == UINT_MAX) {
+      assert(state == VECT);
+      minIndex = i;
+      maxIndex = i;
+      (*vData).push_back(defaultValue + val);
+      ++elementInserted;
+      return;
+    }
+
+    switch (state) {
+    case VECT: {
+      while ( i > maxIndex ) {
+        (*vData).push_back(defaultValue);
+        ++maxIndex;
+      }
+
+      while ( i < minIndex ) {
+        (*vData).push_front(defaultValue);
+        --minIndex;
+      }
+
+      TYPE& oldVal = (*vData)[i - minIndex];
+
+      if (oldVal == defaultValue)
+        ++elementInserted;
+
+      oldVal += val;
+
+      return;
+    }
+
+    case HASH: {
+      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
+
+      if (it!=hData->end())
+        it->second += val;
+      else {
+        ++elementInserted;
+        (*hData)[i]= defaultValue + val;
+      }
+
+      return;
+    }
+
+    default:
+      assert(false);
+      std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    }
+  }
+
+  assert(false);
+  std::cerr << __PRETTY_FUNCTION__ << "not implemented" << std::endl;
 }
 //===================================================================
 template <typename TYPE>

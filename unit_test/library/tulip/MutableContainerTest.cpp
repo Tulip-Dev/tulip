@@ -64,6 +64,8 @@ void MutableContainerTest::testCompression() {
 
   for (unsigned int i=0; i<1000; ++i) {
     mutDouble->set(10000+i*2,13.0);
+    mutDouble->add(10000+i*2, i);
+    CPPUNIT_ASSERT_EQUAL(mutDouble->get(10000+i*2), 13. + i);
     CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
     CPPUNIT_ASSERT_EQUAL(unsigned(1000) , mutDouble->elementInserted);
   }
@@ -75,10 +77,16 @@ void MutableContainerTest::testCompression() {
   mutDouble->set(10000, 345);
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::HASH, mutDouble->state);
   CPPUNIT_ASSERT_EQUAL(unsigned(2), mutDouble->elementInserted);
+  mutDouble->add(1000, 1000.5);
+  CPPUNIT_ASSERT_EQUAL(mutDouble->get(1000), 1345.5);
+  mutDouble->add(10000, -1000.2);
+  CPPUNIT_ASSERT_EQUAL(mutDouble->get(10000), 345. - 1000.2);
+  mutDouble->add(100, 1000.45);
+  CPPUNIT_ASSERT_EQUAL(mutDouble->get(100), 1010.45);
 
   for (unsigned int i=1001; i<10000; ++i) {
     mutDouble->set(i, 345);
-    CPPUNIT_ASSERT_EQUAL(unsigned(i+2-1000), mutDouble->elementInserted);
+    CPPUNIT_ASSERT_EQUAL(unsigned(i+3-1000) , mutDouble->elementInserted);
   }
 
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);

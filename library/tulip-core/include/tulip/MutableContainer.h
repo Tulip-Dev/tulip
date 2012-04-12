@@ -51,8 +51,18 @@ class MutableContainer {
 public:
   MutableContainer();
   ~MutableContainer();
+  /**
+   * set the default value
+   */
   void setAll(const TYPE &value);
+  /**
+   * set the value associated to i
+   */
   void set(const unsigned int i, const TYPE &value);
+  /**
+   * add val to the value associated to i
+   */
+  void add(const unsigned int i, TYPE val);
   /**
    * get the value associated to i
    */

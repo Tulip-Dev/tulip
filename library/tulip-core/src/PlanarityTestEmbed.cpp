@@ -807,7 +807,7 @@ bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph* sG) {
         n_tmp = n;
 
         do {
-          considered.set(e1.id,considered.get(e1.id) + 1);
+          considered.add(e1.id, 1);
           EdgeMapIterator it(sG, e1, n);
           e1 = it.next();
           n = sG->opposite(e1,n);
