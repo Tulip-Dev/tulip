@@ -49,32 +49,24 @@ class Event {
     };
     
     
-class  OLOObject {
-	
+class  Observable {
+%TypeHeaderCode
+#include <tulip/Observable.h>
+%End
 public:
 	
 	tlp::node   getNode() const;
 
-	static tlp::OLOObject* getObject(tlp::node n);
+	static tlp::Observable* getObject(tlp::node n);
 	static bool  isAlive(tlp::node n);
 
 protected:
 
-	OLOObject();
-	OLOObject(const tlp::OLOObject &);
-	virtual ~OLOObject();   
-};
-    
-class  Observable : tlp::OLOObject {
-%TypeHeaderCode
-#include <tulip/Observable.h>
-%End
-    public:
-    
-        Observable();
-
+	Observable(const tlp::Observable &);
+        Observable();	    
         virtual ~Observable();
 
+    public:
         virtual void treatEvents(const std::vector<tlp::Event> &events);
         
         virtual void treatEvent(const tlp::Event & /NoCopy/);

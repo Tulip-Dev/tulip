@@ -29,120 +29,6 @@ namespace tlp {
   * \addtogroup observable
   */
 /*@{*/
-//=======================================
-/**
-  * @class OLOException
-  * @brief OLOException is the base class of all exceptions sent by the Observable/Listener/Observer system.
-  *
-  * @see Listener
-  * @see Observer
-  * @see Observable
-  **/
-class  TLP_SCOPE OLOException : public tlp::TulipException {
-public:
-  OLOException(const std::string &desc):tlp::TulipException(desc) {
-  }
-};
-//=======================================
-/**
-  * @class OLOObject
-  * @brief OLOObject is the base class of the Observable/Listener/Observer object hierachy. It manages storage of a unique id for these objects as well
-  *        as the storage of relations between them. It also manages destruction of these objects.
-  *
-  * Each Observable/listener/Observer is stored in a VectorGraph object as a node. An edge in that graph represents
-  * a connection between an Observable and a Listener/Observer. OLOObject enables to manage the creation/destruction
-  * of node when a Observable/Listener/Observer is created/deleted. OLOObject also enables to guarantee the coherency of
-  * relations between Observable and Listener/Observer.
-  *
-  * OLOObject provides functions to access to the graph of OLOObjects as well as the state of elements in that graph. Using
-  * these functions can ease debugging of complex Observable/Listener/Observer systems.
-  *
-  * @warning Due to the possibility to delay event sending, it is possible that nodes or edges in the graph don't represent
-  * the connections and objects that the user expect. Indeed, node deletion, edge creation and edge deletion
-  * are delayed until the Obserable::notify or Obserable::unholdObserver function terminate. Only node creation is not delayed.
-  *
-  * @see Listener
-  * @see Observer
-  * @see Observable
-  **/
-class  TLP_SCOPE OLOObject {
-  friend class Observable;
-
-public:
-  enum OLOEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};
-  /**
-    * @brief return the node representing that OLOObject in the OLOGraph
-    */
-  tlp::node getNode() const;
-  /**
-   * @brief return the number of sent nofication
-   */
-  unsigned int getSent() const;
-  /**
-   * @brief return the number of received nofication
-   */
-  unsigned int getReceived() const;
-
-public:
-  /**
-    * @bried return a pointer on the object represented by that node
-    * @warning If you call that function during an update, it is possible that the pointer do not point on an existing object, use
-    *          the isAlive function before to test if your object still valid
-    */
-  static OLOObject* getObject(tlp::node n);
-  /**
-    * @brief Enables to test if the object represented by a node has been deleted. Outside a unhold/hold block or an update that function
-    *        always return true.
-    */
-  static bool  isAlive(tlp::node n);
-  /**
-    * @brief Return a reference on the Observable/Listener/Observer graph.
-    */
-  static const tlp::VectorGraph& getOLOGraph();
-
-protected:
-  OLOObject();
-  OLOObject(const OLOObject &);
-  virtual ~OLOObject();
-  OLOObject& operator=(const OLOObject &);
-  /**
-    * @brief return an iterator on in objects (Observable), the iterator guarantee that all objects are alive (not deleted during hold or notify)
-    */
-  tlp::Iterator<tlp::node> *getInObjects() const;
-  /**
-    * @brief return an iterator on out objects (Listener/Observer), the iterator garantee that all objects are alive (not deleted during hold or notify)
-    */
-  tlp::Iterator<tlp::node> *getOutObjects() const;
-private:
-  static tlp::VectorGraph                oGraph;         /** the graph that store all observers and connection between them*/
-  static tlp::NodeProperty<OLOObject *>  oPointer;       /** store a pointer to the object represented by a node */
-  static tlp::NodeProperty<bool>         oAlive;         /** enables to know if an object has been deleted or not */
-  static tlp::EdgeProperty<unsigned char> oType;         /** enables to know the type of relation between to OLO Objects*/
-  static std::vector<tlp::node>          delayedDelNode; /** store deleted nodes, to remove them at the end of the notify*/
-  static unsigned int              notifying;      /** counter of nested notify calls */
-  static unsigned int              unholding;      /** counter of nested unhold calls */
-  static unsigned int              holdCounter;    /** counter of nested holds */
-  static bool                      _initialized;   /** use to initialize oGraph when the library is loaded (nice hack) */
-private:
-  tlp::node _n; /** node that represent that object in the OLOGraph.*/
-  /**
-    * @brief return the bound node representing this OLOObject in the OLOGraph,
-    * if _n is not valid it is then bind to a new added node
-    */
-  tlp::node getBoundNode();
-  bool isBound() const {
-    return _n.isValid();
-  }
-
-#ifndef NDEBUG
-  unsigned int sent; /* counter of sent notification */
-  unsigned int received; /* counter of received notification */
-#endif
-  /**
-    * @brief Trick to init the OLOGraph properties (automatically call at the loading of the library.
-    */
-  static bool init();
-};
 
 
 class Observable;
@@ -182,332 +68,57 @@ private:
 };
 //=======================================
 /**
-  * @class Onlooker
-  * @brief Onlooker is the base class for Observer and Listener, it enbales to unify these two classes.
+  * @class ObservableException
+  * @brief ObservableException is the base class of all exceptions sent by the Observable/Listener/Observer system.
   *
   * @see Listener
   * @see Observer
   * @see Observable
-  * @see Event
   **/
-/*
-    class  TLP_SCOPE Onlooker : virtual public OLOObject {
-    public:
-        tlp::Iterator<Observable *> *getObservables() const;
-    protected:
-        virtual ~Onlooker() {
-        }
-    };
-*/
-//=======================================
-/**
-  * @class Listener
-  * @brief Listener is the base class for the implementation of an Observbale listener.
-  *
-  * All Observable Listener must inherit from that class. The update function will be call
-  * each time an Observable send notification. The event received in parameter is a reference,
-  * thus it is possible to dynamic_cast it into any kind of specialized Event.
-  *
-  * On the destruction of a Listener, there is no need (and you should not) to remove it from
-  * the Observable it is listening to. The OLOObject manage
-  * automatically disconnection and coherency.
-  *
-  * The update function is a call back function,  it is invoked by the Observable himself. Thus it is not allowed to delete the sender Observable
-  * during an update. Take care not to delete an other observable that could be implied in nested notifying calls (An exception will
-  * raised in that case). Even if it is permitted, usually
-  * it is not a good practice to delete any existing Observable during an update. The main problem is that it is difficult to know
-  * which Observable are implied in nested notify calls.
-  * Deleting any Onlooker is safe and is well managed by the mechanism.
-  *
-  * @warning Destruction of an Observable implied in nested notifying calls during an update will raise an OLOException.
-  *
-  * @see Observable
-  * @see Event
-  * @see Observer
-  * In the following example we demonstrate the use of a Listener to display all modification applied to a Point:
-  *
-  * @code
-  * class Point : public Observable {
-  * public:
-  *     ~Point() {
-  *       //observableDeleted();
-  *     }
-*     void setXY(const double x, const double y);
-*     void getXY(double &x, double &y) const {
-*         x = _x;
-*         y = _y;
-*     }
-* private:
-*     double _x, _y;
-* };
-*
-* class PointEvent : public Event {
-* public:
-*     PointEvent(const Point &p, double px, double py):
-*             Event(p, Event::MODIFICATION), prevX(px), prevY(py) {
-*     }
-*     double prevX, prevY;
-* };
-*
-* void Point::setXY(const double x, const double y) {
-*     PointEvent ev(*this, _x, _y);
-*     _x = x;
-*     _y = y;
-*     if (hasOnlookers())
-*         notify(ev);
-* }
-*
-* class PointsViewer : public Observer {
-* public:
-*     void update(const vector<Event> &evs) {
-*         for (size_t i=0; i< evs.size(); ++i)
-*             if (evs[i].type() == Event::DELETE)  {
-*             points.erase(reinterpret_cast<Point *>(evs[i].sender()));
-*             qDebug() << "PointsViewer::Point has been deleted :" << reinterpret_cast<Point *>(evs[i].sender()) << endl << flush;
-*             qDebug() << "PointsViewer::updating view : ";
-*             updateView();
-*             return;
-*         }
-*         qDebug() << "PointsViewer::objects modified : " << evs.size() << " updating view : ";
-*         updateView();
-*     }
-*     void addPoint(Point& p) {
-*         points.insert(&p);
-*         p.addOnlooker(*this);
-*         qDebug() << "PointsViewer::point added : " << &p << endl;
-*     }
-*     void updateView() {
-*         for (set<const Point *>::const_iterator it = points.begin(); it != points.end(); ++it) {
-*             double x,y;
-*             (*it)->getXY(x, y);
-*             qDebug() << "(" << x << "," << y << ")";
-*         }
-*         qDebug() << endl;
-*     }
-*
-* private:
-*     set<const Point *> points;
-* };
-*
-* class PointListener : public Listener {
-* public:
-*     void update(const Event &ev) {
-*         if (ev.type() == Event::DELETE)  {
-*             qDebug() << "PointListener::Point has been deleted : " << reinterpret_cast<Point *>(ev.sender()) << endl << flush;
-*             return;
-*         }
-*         const PointEvent *event = dynamic_cast<const PointEvent *>(&ev);
-*         if (event) {
-*             Point *p = reinterpret_cast<Point *>(ev.sender());
-*             double x,y;
-*             p->getXY(x, y);
-*             qDebug() << "PointListener::Point change (" << event->prevX << "," << event->prevY << ") ==> (" << x << "," << y << ")" << endl << flush;
-*         }
-*     }
-* };
-*
-* int main() {
-*     Point *point[8];
-*     PointsViewer pv;
-*     PointListener pl;
-*     for (int i=0; i < 8; ++i) {
-*         point[i] = new Point();
-*         point[i]->setXY(i,i);
-*         pv.addPoint(*point[i]);
-*     }
-*     point[4]->addOnlooker(pl);
-*     pv.updateView();
-*     Observable::holdObservers();//all observers are holded;
-*     for (int i=0; i < 4; ++i) {
-*         delete point[i]; //pv receive 4 DELETE events (ie 4 call to update function);
-*     }
-*     for (int j = 0; j<5; ++j) {
-*         for (int i=4; i < 8; ++i) {
-*             point[i]->setXY(i, j); //no event sent to pv
-*         }
-*     }
-*     Observable::unholdObservers(); //only one call to pointViewer::update with the 4 last event sent by the 4 observed points
-*     for (int i=4; i < 8; ++i) {
-*         delete point[i]; //pv receive 4 DELETE events (ie 10 call to update function);
-*     }
-*     return EXIT_SUCCESS;
-  * }
-  * @endcode
-  *
-  **/
-//=======================================
-#define Observer Observable
-/**
-  * @class Observer
-  * @brief Observer is the base class for the implementation of an Observbale Observer.
-  *
-  * All Observable Observer must derivate from tat class. The update function will be call
-  * each time an Observable receive a notification. The event received in parameter is an object not a reference,
-  * thus it is not possible to dynamic_cast it. Only the type of the Event can be used by an Observer.
-  * The event send to the Observer are of two types (DELETE or MODIFICATION), the DELETE event is always directly sent
-  * when the Observable is deleted. For the MODIFICATION event, the event can be delayed according to the observable
-  * hold unhold state. In case of hold/unhold of events, the Observer receive only the last event. It means that if there is
-  * 100 Event::MODFICICATION between the hold/unhold the Observer receive only one events after the unhold.
-  *
-  * On the destruction of an Observer, there is no need to remove it from the Observable it is observing. The OLOObject manage
-  * automatically disconnection and coherency.
-  *
-  * Observer are often use to enable updates of visualized elements. The hold/unhold mechanism prevents from redisplaying
-  * too many times the view, when large number of modifications are done. The hold/unhold mechanism is global thus all the
-  * observers are holded simultaneously when holdObservers function is called.
-  *
-  * The update function is a call back function,  it is invoked by the Observable himself. Thus it is lot allowed to delete the sender Observable
-  * during an update. Even if it is permitted, usually it is not a good idea to delete any existing Observable during an update. Deleting an Onlooker is safe and is well managed by the mechanism.
-  *
-  * All modification of the OLOObject (creation, destruction, connections), are allowed during an update.
-  *
-  * @warning Destruction of the Observable during an update will raise an OLOException.
-  *
-  * @see Observable
-  * @see Event
-  * @see Observer
-  *
-  * That simple example demonstrates the use of an observer to maintain a set of points that we want to display (here on stdout).
-  *
-  * @code
-  * class Point : public Observable {
-  * public:
-  *     ~Point() {
-  *       //observableDeleted();
-  *     }
-*     void setXY(const double x, const double y);
-*     void getXY(double &x, double &y) const {
-*         x = _x;
-*         y = _y;
-*     }
-* private:
-*     double _x, _y;
-* };
-*
-* class PointEvent : public Event {
-* public:
-*     PointEvent(const Point &p, double px, double py):
-*             Event(p, Event::MODIFICATION), prevX(px), prevY(py) {
-*     }
-*     double prevX, prevY;
-* };
-*
-* void Point::setXY(const double x, const double y) {
-*     PointEvent ev(*this, _x, _y);
-*     _x = x;
-*     _y = y;
-*     if (hasOnlookers())
-*         notify(ev);
-* }
-*
-* class PointsViewer : public Observer {
-* public:
-*     void update(const vector<Event> &evs) {
-*         for (size_t i=0; i< evs.size(); ++i)
-*             if (evs[i].type() == Event::DELETE)  {
-*             points.erase(reinterpret_cast<Point *>(evs[i].sender()));
-*             qDebug() << "PointsViewer::Point has been deleted :" << reinterpret_cast<Point *>(evs[i].sender()) << endl << flush;
-*             qDebug() << "PointsViewer::updating view : ";
-*             updateView();
-*             return;
-*         }
-*         qDebug() << "PointsViewer::objects modified : " << evs.size() << " updating view : ";
-*         updateView();
-*     }
-*     void addPoint(Point& p) {
-*         points.insert(&p);
-*         p.addOnlooker(*this);
-*         qDebug() << "PointsViewer::point added : " << &p << endl;
-*     }
-*     void updateView() {
-*         for (set<const Point *>::const_iterator it = points.begin(); it != points.end(); ++it) {
-*             double x,y;
-*             (*it)->getXY(x, y);
-*             qDebug() << "(" << x << "," << y << ")";
-*         }
-*         qDebug() << endl;
-*     }
-*
-* private:
-*     set<const Point *> points;
-* };
-*
-* class PointListener : public Listener {
-* public:
-*     void update(const Event &ev) {
-*         if (ev.type() == Event::DELETE)  {
-*             qDebug() << "PointListener::Point has been deleted : " << reinterpret_cast<Point *>(ev.sender()) << endl << flush;
-*             return;
-*         }
-*         const PointEvent *event = dynamic_cast<const PointEvent *>(&ev);
-*         if (event) {
-*             Point *p = reinterpret_cast<Point *>(ev.sender());
-*             double x,y;
-*             p->getXY(x, y);
-*             qDebug() << "PointListener::Point change (" << event->prevX << "," << event->prevY << ") ==> (" << x << "," << y << ")" << endl << flush;
-*         }
-*     }
-* };
-*
-* int main() {
-*     Point *point[8];
-*     PointsViewer pv;
-*     PointListener pl;
-*     for (int i=0; i < 8; ++i) {
-*         point[i] = new Point();
-*         point[i]->setXY(i,i);
-*         pv.addPoint(*point[i]);
-*     }
-*     point[4]->addOnlooker(pl);
-*     pv.updateView();
-*     Observable::holdObservers();//all observers are holded;
-*     for (int i=0; i < 4; ++i) {
-*         delete point[i]; //pv receive 4 DELETE events (ie 4 call to update function);
-*     }
-*     for (int j = 0; j<5; ++j) {
-*         for (int i=4; i < 8; ++i) {
-*             point[i]->setXY(i, j); //no event sent to pv
-*         }
-*     }
-*     Observable::unholdObservers(); //only one call to pointViewer::update with the 4 last event sent by the 4 observed points
-*     for (int i=4; i < 8; ++i) {
-*         delete point[i]; //pv receive 4 DELETE events (ie 10 call to update function);
-*     }
-*     return EXIT_SUCCESS;
-  * }
-
-  * @endcode
-  *
-  **/
-//=======================================
-/**
-  * @class Observable
-  * @brief Observable is the base class for the implementation of observable Object by Listener or Observer objects.
-  *
-  * Observable the base class of all objects that need to be Observed or listened. To notify its Onlooker an Observable
-  * have to call the notify function whenever it wants. The event will be send directly to all Listener and Observer (if not holded)
-  * The Event send by the Observable is a const reference, thus the observer is responsible of the creation and destruction of Event.
-  * Usually the Event is created on the stack in the block of code that call the notify function, thus there is no need to take care of it.
-  *
-  * Observable provides a mechanism (hold/unhold) to delay the sending of events to Observer, the mechanism is global. Calling the hold
-  * function will stop the transmission of Event::MODIFICATION to all the Observer, there is no way to delay the sending of events only
-  * for one Observable. Nested call to hold/unhold are permitted.
-  *
-  * The Event::DELETE event cannot be created by user, it is automatically send to all Observer/Listener at the destruction of an Observable.
-  * However, using the ObservableDeleted function it is possible to send the Event from the destructor of a specific Observable implementation.
-  * The update function of observer/Listener can the be called before the destruction of your internal objects. It enables the Observer/Listener, to
-  * to access to the internal data of your Observable before it disappear.
-  *
-  * @see Listener
-  * @see Observer
-  * @see Event
-  **/
-class  TLP_SCOPE Observable: public OLOObject {
+class  TLP_SCOPE ObservableException : public tlp::TulipException {
 public:
-  Observable();
-  _DEPRECATED Observable(bool) {}
+  ObservableException(const std::string &desc):tlp::TulipException(desc) {
+  }
+};
+//=======================================
+/**
+  * @class ObservableObject
+  * @brief ObservableObject is the base class of the Observable/Listener/Observer object hierachy. It manages storage of a unique id for these objects as well
+  *        as the storage of relations between them. It also manages destruction of these objects.
+  *
+  * Each Observable/listener/Observer is stored in a VectorGraph object as a node. An edge in that graph represents
+  * a connection between an Observable and a Listener/Observer. ObservableObject enables to manage the creation/destruction
+  * of node when a Observable/Listener/Observer is created/deleted. ObservableObject also enables to guarantee the coherency of
+  * relations between Observable and Listener/Observer.
+  *
+  * ObservableObject provides functions to access to the graph of ObservableObjects as well as the state of elements in that graph. Using
+  * these functions can ease debugging of complex Observable/Listener/Observer systems.
+  *
+  * @warning Due to the possibility to delay event sending, it is possible that nodes or edges in the graph don't represent
+  * the connections and objects that the user expect. Indeed, node deletion, edge creation and edge deletion
+  * are delayed until the Obserable::notify or Obserable::unholdObserver function terminate. Only node creation is not delayed.
+  *
+  * @see Listener
+  * @see Observer
+  * @see Observable
+  **/
+class  TLP_SCOPE Observable {
 
-  virtual ~Observable();
+public:
+  enum ObservableEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};
+  /**
+    * @brief return the node representing that ObservableObject in the ObservableGraph
+    */
+  tlp::node getNode() const;
+  /**
+   * @brief return the number of sent nofication
+   */
+  unsigned int getSent() const;
+  /**
+   * @brief return the number of received nofication
+   */
+  unsigned int getReceived() const;
+
   /**
    * @brief return an Iterator on all Onlookers
    * @warning adding or removing Onlooker to that Observable will devalidate the iterator
@@ -540,7 +151,11 @@ public:
    * @brief use for old observer tulip compatibility
   */
   void addListener(Observable * const obs) const;
-
+  /**
+     * @brief use for old observer tulip compatibility
+     */
+  void  removeObserver(Observable  * const obs) const;
+  void  removeListener(Observable  * const obs) const;
 
   /**
     * @brief remove an Observer/Listener of the observable
@@ -552,12 +167,7 @@ public:
     * problem in your application. Objects that are listening/observing could need to receive
     * the events to work properly.
     */
-  void removeOnlooker(const Observable &, OLOEDGETYPE type) const;
-  /**
-     * @brief use for old observer tulip compatibility
-     */
-  void  removeObserver(Observable  * const obs) const;
-  void  removeListener(Observable  * const obs) const;
+  void removeOnlooker(const Observable &, ObservableEDGETYPE type) const;
 
   /**
    * @brief use for old observer tulip compatibility
@@ -628,7 +238,7 @@ public:
     * If the stack of Observable lock is empty (ie. number of calls to unhold equal to the number of calls
     * to hold), send all queued events to observers.
     *
-    * @warning Calling that function when the hold stack is empty raises an OLOException.
+    * @warning Calling that function when the hold stack is empty raises an ObservableException.
     *
     * @see holdObservers
     * @see Observer
@@ -651,8 +261,7 @@ protected:
     * In case of nested unholding (almost never), calling that function inside hold/unhold block
     * can make the Observer receive an event that has been sent before it was Observing the object.
     */
-  void addOnlooker(const Observable &, OLOEDGETYPE type) const;
-
+  void addOnlooker(const Observable &, ObservableEDGETYPE type) const;
   /**
     * @brief Enable to send an event to all Observer/Listener
     *
@@ -691,13 +300,101 @@ protected:
 private:
   static bool eventQueued; /** Indicates if there is at least one event queued */
   /**
-    * @brief delete nodes from the OLOGraph that have been preserved to keep coherency and check bad use of the mecanism
+    * @brief delete nodes from the ObservableGraph that have been preserved to keep coherency and check bad use of the mecanism
     */
   static void updateObserverGraph();
 
   bool deleteMsgSent; /** use to enable subclasses to send the Event::DELETE in there destructor */
-  Event queuedEvent; /** store the last event to send it to Observers after an hold/unhold block temrination */
+  Event queuedEvent;  /** store the last event to send it to Observers after an hold/unhold block temrination */
+
+public:
+  /**
+    * @bried return a pointer on the object represented by that node
+    * @warning If you call that function during an update, it is possible that the pointer do not point on an existing object, use
+    *          the isAlive function before to test if your object still valid
+    */
+  static Observable* getObject(tlp::node n);
+  /**
+    * @brief Enables to test if the object represented by a node has been deleted. Outside a unhold/hold block or an update that function
+    *        always return true.
+    */
+  static bool  isAlive(tlp::node n);
+  /**
+    * @brief Return a reference on the Observable/Listener/Observer graph.
+    */
+  static const tlp::VectorGraph& getObservableGraph();
+
+protected:
+  Observable();
+  Observable(const Observable &);
+  virtual ~Observable();
+  Observable& operator=(const Observable &);
+  /**
+    * @brief return an iterator on in objects (Observable), the iterator guarantee that all objects are alive (not deleted during hold or notify)
+    */
+  tlp::Iterator<tlp::node> *getInObjects() const;
+  /**
+    * @brief return an iterator on out objects (Listener/Observer), the iterator garantee that all objects are alive (not deleted during hold or notify)
+    */
+  tlp::Iterator<tlp::node> *getOutObjects() const;
+private:
+  static tlp::VectorGraph                 oGraph;         /** the graph that store all observers and connection between them*/
+  static tlp::NodeProperty<Observable *>  oPointer;       /** store a pointer to the object represented by a node */
+  static tlp::NodeProperty<bool>          oAlive;         /** enables to know if an object has been deleted or not */
+  static tlp::EdgeProperty<unsigned char> oType;         /** enables to know the type of relation between to Observable Objects*/
+  static std::vector<tlp::node>           delayedDelNode; /** store deleted nodes, to remove them at the end of the notify*/
+  static std::set<std::pair<tlp::node, tlp::node> > delayedEvents;
+  static unsigned int              notifying;      /** counter of nested notify calls */
+  static unsigned int              unholding;      /** counter of nested unhold calls */
+  static unsigned int              holdCounter;    /** counter of nested holds */
+  static bool                      _initialized;   /** use to initialize oGraph when the library is loaded (nice hack) */
+private:
+  tlp::node _n; /** node that represent that object in the ObservableGraph.*/
+  /**
+    * @brief return the bound node representing this ObservableObject in the ObservableGraph,
+    * if _n is not valid it is then bind to a new added node
+    */
+  tlp::node getBoundNode();
+  bool isBound() const {
+    return _n.isValid();
+  }
+
+#ifndef NDEBUG
+  unsigned int sent; /* counter of sent notification */
+  unsigned int received; /* counter of received notification */
+#endif
+  /**
+    * @brief Trick to init the ObservableGraph properties (automatically call at the loading of the library.
+    */
+  static bool init();
 };
+
+
+//=======================================
+#define Observer Observable
+//=======================================
+/**
+  * @class Observable
+  * @brief Observable is the base class for the implementation of observable Object by Listener or Observer objects.
+  *
+  * Observable the base class of all objects that need to be Observed or listened. To notify its Onlooker an Observable
+  * have to call the notify function whenever it wants. The event will be send directly to all Listener and Observer (if not holded)
+  * The Event send by the Observable is a const reference, thus the observer is responsible of the creation and destruction of Event.
+  * Usually the Event is created on the stack in the block of code that call the notify function, thus there is no need to take care of it.
+  *
+  * Observable provides a mechanism (hold/unhold) to delay the sending of events to Observer, the mechanism is global. Calling the hold
+  * function will stop the transmission of Event::MODIFICATION to all the Observer, there is no way to delay the sending of events only
+  * for one Observable. Nested call to hold/unhold are permitted.
+  *
+  * The Event::DELETE event cannot be created by user, it is automatically send to all Observer/Listener at the destruction of an Observable.
+  * However, using the ObservableDeleted function it is possible to send the Event from the destructor of a specific Observable implementation.
+  * The update function of observer/Listener can the be called before the destruction of your internal objects. It enables the Observer/Listener, to
+  * to access to the internal data of your Observable before it disappear.
+  *
+  * @see Listener
+  * @see Observer
+  * @see Event
+  **/
 //=======================================
 /*@}*/
 }
