@@ -88,7 +88,7 @@ public:
    * Set the layer's camera
    * GlLayer now use a copy of the camera parameters
    */
-  void setCamera(const Camera& camera);
+  void setCamera(Camera* camera);
 
   /**
    * Set the layer's camera

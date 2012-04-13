@@ -391,7 +391,7 @@ public:
    * At default the most important layer is the layer where the graph is visualized
    * This function set the camera of this layer
    */
-  void setGraphCamera(const Camera& camera) {
+  void setGraphCamera(Camera* camera) {
     assert(graphLayer!=NULL);
     graphLayer->setCamera(camera);
   }
