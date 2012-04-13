@@ -29,7 +29,7 @@
 
 namespace tlp {
 
-class CaptionItem : public QObject, public Observer {
+class CaptionItem : public QObject, public Observable {
 
   Q_OBJECT
 
