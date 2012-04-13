@@ -682,12 +682,6 @@ public:
    */
   void _DEPRECATED addGraphObserver(Observable *) const;
   /**
-   * Returns the number of observers
-   */
-  unsigned int _DEPRECATED countGraphObservers() const {
-    return countListeners();
-  }
-  /**
    * Remove an observer
    */
   void _DEPRECATED removeGraphObserver(Observable *) const;

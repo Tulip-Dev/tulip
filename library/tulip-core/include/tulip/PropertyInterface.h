@@ -267,13 +267,6 @@ public:
   }
 
   /**
-   * Returns the number of registered observers.
-   */
-  unsigned int _DEPRECATED countPropertyObservers() const {
-    return countListeners();
-  }
-
-  /**
     * @brief Compare value of the node n1 to the value of the node n2.
     *
     * @return Return 0 if values are equal otherwise a number different from 0 is returned, with its sign indicating whether the value ot the node n1 is considered greater than the comparing value of the node n2(positive sign), or smaller (negative sign).
