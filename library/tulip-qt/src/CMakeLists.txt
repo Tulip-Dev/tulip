@@ -223,12 +223,11 @@ ELSEIF(APPLE)
   #Copy Qt libs
   set(QT_LIBS phonon QtAssistant QtCore QtDBus QtHelp QtGui QtNetwork QtOpenGL QtScript QtSql QtSvg QtWebKit QtXml QtXmlPatterns)
   FOREACH(QT_LIB ${QT_LIBS})
-    FIND_LIBRARY_GLOB_DIR(QT_LIB_FILE "${QT_LIB}.framework/${QT_LIB}" "/Library/Frameworks")
+    FIND_LIBRARY_GLOB_DIR(QT_LIB_FILE "${QT_LIB}.framework/${QT_LIB}" "${QT_LIBRARY_DIR}")
     INSTALL_EXTERNAL_LIB(QT_LIB_FILE libtulip_qt)
   ENDFOREACH()
 
-  FIND_LIBRARY_GLOB_DIR(QTLUCENE_INSTALL_PATH "libQtCLucene.4.dylib" "/usr/lib")
-  INSTALL_EXTERNAL_LIB(QTLUCENE_INSTALL_PATH libtulip_qt)  
+ INSTALL_EXTERNAL_LIB(QT_QTCLUCENE_LIBRARY_RELEASE libtulip_qt)  
 
   #Copy Qt image plugins.
   INSTALL(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" DESTINATION ${TulipAppleContentsDir} COMPONENT libtulip_qt)
