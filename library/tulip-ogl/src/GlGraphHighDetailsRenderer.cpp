@@ -134,9 +134,8 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
   // Fake scene creation
   //  This scene is needed by lod calculator to compute lod
-  Camera newCamera=*camera;
   fakeScene->setViewport(camera->getViewport()[0],camera->getViewport()[1],camera->getViewport()[2],camera->getViewport()[3]);
-  fakeScene->getLayer("fakeLayer")->setCamera(newCamera);
+  fakeScene->getLayer("fakeLayer")->setSharedCamera(camera);
 
   // LOD computation
   if(lodCalculator->needEntities()) {
@@ -351,7 +350,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   selectionDrawActivate=false;
 }
 //===================================================================
-void GlGraphHighDetailsRenderer::selectEntities(Camera *camera,RenderingEntitiesFlag type, int x, int y, int w, int h, vector<SelectedEntity> &selectedEntities) {
+void GlGraphHighDetailsRenderer::selectEntities(Camera *camera,RenderingEntitiesFlag type, int, int, int, int, vector<SelectedEntity> &selectedEntities) {
   map<unsigned int, SelectedEntity> idToEntity;
   unsigned int id=1;
 

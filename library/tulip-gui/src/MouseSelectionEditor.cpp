@@ -372,7 +372,7 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
   if (computeFFD(glMainWidget)) {
     if(!layer) {
       layer=new GlLayer("selectionEditorLayer",true);
-      layer->setCamera(Camera(glMainWidget->getScene(),false));
+      layer->setCamera(new Camera(glMainWidget->getScene(),false));
       composite = new GlComposite(false);
       layer->addGlEntity(composite,"selectionComposite");
     }

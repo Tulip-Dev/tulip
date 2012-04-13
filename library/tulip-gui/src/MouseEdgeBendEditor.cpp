@@ -203,7 +203,7 @@ bool MouseEdgeBendEditor::compute(GlMainWidget *glMainWidget) {
 
     if(!layer) {
       layer=new GlLayer("edgeBendEditorLayer",true);
-      layer->setCamera(Camera(glMainWidget->getScene(),false));
+      layer->setCamera(new Camera(glMainWidget->getScene(),false));
 
       if(!circleString)
         circleString = new GlComposite(false);

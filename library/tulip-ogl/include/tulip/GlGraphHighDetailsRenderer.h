@@ -56,7 +56,7 @@ public:
 
   virtual void draw(float lod,Camera* camera);
 
-  virtual void selectEntities(Camera *camera,RenderingEntitiesFlag type,int x, int y, int w, int h, std::vector<SelectedEntity>& selectedEntities);
+  virtual void selectEntities(Camera *camera,RenderingEntitiesFlag type,int , int , int , int , std::vector<SelectedEntity>& selectedEntities);
 
 protected:
 

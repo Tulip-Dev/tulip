@@ -41,9 +41,9 @@ GlLayer::~GlLayer() {
     delete camera;
 }
 
-void GlLayer::setCamera(const Camera& camera) {
+void GlLayer::setCamera(Camera* camera) {
   Camera *oldCamera=this->camera;
-  this->camera = new Camera(camera);
+  this->camera = camera;
 
   if (!sharedCamera)
     delete oldCamera;
