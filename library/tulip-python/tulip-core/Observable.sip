@@ -55,22 +55,11 @@ class  Observable {
 %End
 public:
 	
-	tlp::node   getNode() const;
-
 	static tlp::Observable* getObject(tlp::node n);
 	static bool  isAlive(tlp::node n);
 
-protected:
 
-	Observable(const tlp::Observable &);
-        Observable();	    
-        virtual ~Observable();
-
-    public:
-        virtual void treatEvents(const std::vector<tlp::Event> &events);
-        
-        virtual void treatEvent(const tlp::Event & /NoCopy/);
-
+public:
   		void addObserver(tlp::Observable *obs) const;
 
   		void addListener(tlp::Observable *obs) const;
@@ -79,20 +68,20 @@ protected:
         
         void  removeListener(tlp::Observable  *obs) const;
 
-		unsigned int countObservers() const ;
-
-		unsigned int countListeners() const;
-
         static void holdObservers();
 
         static void unholdObservers();
 
         static unsigned int observersHoldCounter();
 
-    protected:
+protected:
 
+	Observable(const tlp::Observable &);
+        Observable();	    
+        virtual ~Observable();
+        virtual void treatEvents(const std::vector<tlp::Event> &events);
+        virtual void treatEvent(const tlp::Event & /NoCopy/);
         void sendEvent(const tlp::Event &);
-
         void observableDeleted();
 
 };
