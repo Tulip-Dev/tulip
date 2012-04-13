@@ -17,10 +17,12 @@
  *
  */
 #include <tulip/Polynome.h>
-#include <tulip/tulipconf.h>
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#if defined(_MSC_VER)
+#include <tulip/vs_compat.h>
+#endif
 
 using namespace tlp;
 

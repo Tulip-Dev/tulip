@@ -55,38 +55,10 @@
 #    define TYPEOF BOOST_TYPEOF
 #  endif
 
-//MSVC needs explicit casting of ints ot double, float or long double. Let's just pretend he does not.
-#include <cmath>
-static double sqrt(int i) {
-  return sqrt((double)i);
-}
-static double sqrt(unsigned int i) {
-  return sqrt((double)i);
-}
-
-static double log(int i) {
-  return log((double)i);
-}
-static double log(unsigned int i) {
-  return log((double)i);
-}
-
-static double floor(int i) {
-  return floor((double)i);
-}
-static double floor(unsigned int i) {
-  return floor((double)i);
-}
-
-static double round(double d) {
-  return floor(d + 0.5);
-}
-
 #  define __PRETTY_FUNCTION__ __FUNCTION__ //MSVC has a different name for pretty_function
-#  define strcasecmp stricmp  //strcasecmp does not exists for VC, workaround
-#  define cbrt(arg) pow((double)arg, 1.0/3) //VC does not have cbrt, little workaround
-#  define isnan(x) ((x) != (x)) //you guessed it, this is a C99 feature, and VC++ does not support C99. workaroud this.
-#  define rint(arg) arg > 0 ? (int)std::floor((double)arg) : (int)std::ceil((double)arg) //Hey, nother C99 feature !
+//Need this line to keep code compatibility.
+//Remove it as soon as possible.
+#  include <tulip/vs_compat.h>
 
 //for GCC 3.X
 #elif (__GNUC__ < 3)

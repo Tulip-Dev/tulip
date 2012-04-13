@@ -18,6 +18,9 @@
  */
 #include <cmath>
 #include <limits>
+#if defined(_MSC_VER)
+#include <tulip/vs_compat.h>
+#endif
 
 #define VECTORTLP tlp::Vector<TYPE,SIZE>
 

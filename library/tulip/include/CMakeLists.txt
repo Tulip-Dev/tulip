@@ -101,6 +101,12 @@ DESTINATION ${TulipIncludeInstallDir}/tulip
 COMPONENT libtulip_dev
 )
 
+IF(MSVC)
+INSTALL(FILES tulip/vs_compat.h
+DESTINATION ${TulipIncludeInstallDir}/tulip
+COMPONENT libtulip_dev)
+ENDIF()
+
 INSTALL(FILES
     tulip/cxx/Array.cxx
   	tulip/cxx/Vector.cxx
