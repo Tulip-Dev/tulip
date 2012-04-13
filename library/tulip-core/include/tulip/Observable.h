@@ -50,21 +50,21 @@ class Observable;
   * @see Observable
   **/
 class  TLP_SCOPE Event {
-    friend class Observable;
-    friend class Graph;
-    friend class PropertyInterface;
+  friend class Observable;
+  friend class Graph;
+  friend class PropertyInterface;
 public:
-    enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID};
-    virtual ~Event();
-    Observable* sender() const;
-    Event(const Observable &sender, EventType type);
-    EventType type() const {
-        return _type;
-    }
+  enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID};
+  virtual ~Event();
+  Observable* sender() const;
+  Event(const Observable &sender, EventType type);
+  EventType type() const {
+    return _type;
+  }
 private:
-    Event() {}
-    tlp::node _sender;
-    EventType _type;
+  Event() {}
+  tlp::node _sender;
+  EventType _type;
 };
 //=======================================
 /**
@@ -77,8 +77,8 @@ private:
   **/
 class  TLP_SCOPE ObservableException : public tlp::TulipException {
 public:
-    ObservableException(const std::string &desc):tlp::TulipException(desc) {
-    }
+  ObservableException(const std::string &desc):tlp::TulipException(desc) {
+  }
 };
 /**
   * @class Observable
@@ -126,232 +126,232 @@ public:
   * @see Observable
   **/
 class  TLP_SCOPE Observable {
-    friend class Event;
+  friend class Event;
 
 public:
-    /**
-    * @brief start delay of events to all Observer
-    *
-    * After a call to holdObservers, no more events are sent to Observer(execpt DELETE events),
-    * events are still transmit to listeners. It is possible to call several time the holdObservers
-    * function, in that case the observers are holded until all holdObservers calls are closed
-    * by unholdOBservers calls.
-    *
-    * @see unholdObservers
-    * @see Observer
-    */
-    static void holdObservers();
-    /**
-    * @brief Send queued event to all Observer.
-    *
-    * If the stack of Observable lock is empty (ie. number of calls to unhold equal to the number of calls
-    * to hold), send all queued events to observers.
-    *
-    * @warning Calling that function when the hold stack is empty raises an ObservableException.
-    *
-    * @see holdObservers
-    * @see Observer
-    */
-    static void unholdObservers();
-
-    static unsigned int observersHoldCounter() {
-        return _oHoldCounter;
-    }
-
-public:
-
-    /**
-   * @brief
+  /**
+  * @brief start delay of events to all Observer
+  *
+  * After a call to holdObservers, no more events are sent to Observer(execpt DELETE events),
+  * events are still transmit to listeners. It is possible to call several time the holdObservers
+  * function, in that case the observers are holded until all holdObservers calls are closed
+  * by unholdOBservers calls.
+  *
+  * @see unholdObservers
+  * @see Observer
   */
-    void addObserver(Observable * const obs) const;
-    /**
-   * @brief
+  static void holdObservers();
+  /**
+  * @brief Send queued event to all Observer.
+  *
+  * If the stack of Observable lock is empty (ie. number of calls to unhold equal to the number of calls
+  * to hold), send all queued events to observers.
+  *
+  * @warning Calling that function when the hold stack is empty raises an ObservableException.
+  *
+  * @see holdObservers
+  * @see Observer
   */
-    void addListener(Observable * const obs) const;
-    /**
-     * @brief
-     */
-    void  removeObserver(Observable  * const obs) const;
-    void  removeListener(Observable  * const obs) const;
+  static void unholdObservers();
+
+  static unsigned int observersHoldCounter() {
+    return _oHoldCounter;
+  }
+
+public:
+
+  /**
+  * @brief
+  */
+  void addObserver(Observable * const obs) const;
+  /**
+  * @brief
+  */
+  void addListener(Observable * const obs) const;
+  /**
+   * @brief
+   */
+  void  removeObserver(Observable  * const obs) const;
+  void  removeListener(Observable  * const obs) const;
 
 
-    /**
-   * @brief return the number of sent nofication
-   */
-    unsigned int getSent() const;
-    /**
-   * @brief return the number of received nofication
-   */
-    unsigned int getReceived() const;
+  /**
+  * @brief return the number of sent nofication
+  */
+  unsigned int getSent() const;
+  /**
+  * @brief return the number of received nofication
+  */
+  unsigned int getReceived() const;
 
 
 public:
-    /**
-    * @bried return a pointer on the object represented by that node
-    * @warning If you call that function during an update, it is possible that the pointer do not point on an existing object, use
-    *          the isAlive function before to test if your object still valid
-    */
-    static Observable* getObject(tlp::node n);
-    /**
-    * @brief Enables to test if the object represented by a node has been deleted. Outside a unhold/hold block or an update that function
-    *        always return true.
-    */
-    static bool  isAlive(tlp::node n);
-    /**
-    * @brief Return a reference on the Observable/Listener/Observer graph.
-    */
-    static const tlp::VectorGraph& getObservableGraph();
+  /**
+  * @bried return a pointer on the object represented by that node
+  * @warning If you call that function during an update, it is possible that the pointer do not point on an existing object, use
+  *          the isAlive function before to test if your object still valid
+  */
+  static Observable* getObject(tlp::node n);
+  /**
+  * @brief Enables to test if the object represented by a node has been deleted. Outside a unhold/hold block or an update that function
+  *        always return true.
+  */
+  static bool  isAlive(tlp::node n);
+  /**
+  * @brief Return a reference on the Observable/Listener/Observer graph.
+  */
+  static const tlp::VectorGraph& getObservableGraph();
 
 protected:
-    Observable();
-    Observable(const Observable &);
-    virtual ~Observable();
-    Observable& operator=(const Observable &);
-    /**
-    * @brief Enable to send an event to all Observer/Listener
-    *
-    * According to the type of the event that function has got different behaviour.
-    * event::DELETE : are sent directly to all Observers/Listeners, it is not possible to delay their processing.<br>
-    * event::MODIFICATION : sent to all Observer/Listener, it is possible to delay their processing (only for Observer) <br>
-    * event::INFORMATION : sent only to Listener, it is not possible to delay their processing.<br>
-    * event::INVALID : never sent use internally.<br>
-    *
-    * @note In any cases, Event are first sent to Listener and then to Observer
-    *
-    * To prevent building of too many objects(Event) a notify code block in an Observable should look like that:
-    * @code
-    *    if (hasOnlookers()) {
-    *       notify(MyEvent(*this, param1, param2, ...));
-    *    }
-    ° @endcode
-    */
-    void sendEvent(const Event &);
-    virtual void treatEvents(const  std::vector<Event> &events );
-    virtual void treatEvent(const Event &);
+  Observable();
+  Observable(const Observable &);
+  virtual ~Observable();
+  Observable& operator=(const Observable &);
+  /**
+  * @brief Enable to send an event to all Observer/Listener
+  *
+  * According to the type of the event that function has got different behaviour.
+  * event::DELETE : are sent directly to all Observers/Listeners, it is not possible to delay their processing.<br>
+  * event::MODIFICATION : sent to all Observer/Listener, it is possible to delay their processing (only for Observer) <br>
+  * event::INFORMATION : sent only to Listener, it is not possible to delay their processing.<br>
+  * event::INVALID : never sent use internally.<br>
+  *
+  * @note In any cases, Event are first sent to Listener and then to Observer
+  *
+  * To prevent building of too many objects(Event) a notify code block in an Observable should look like that:
+  * @code
+  *    if (hasOnlookers()) {
+  *       notify(MyEvent(*this, param1, param2, ...));
+  *    }
+  ° @endcode
+  */
+  void sendEvent(const Event &);
+  virtual void treatEvents(const  std::vector<Event> &events );
+  virtual void treatEvent(const Event &);
 
-    /**
-    * @brief Enable to send Event::DELETE before the deletion of subclass internal objects.
-    *
-    * The Observable mecahnism automatically send DELETE event to Listener/Observer when an
-    * Obseravble is deleted. However when that Event is send the subclass of Observable are
-    * already deleted, thus it is no more possible to access to their members. In case you
-    * want to allow to access to your Observable member variables/functions when Listner/Observer
-    * receive a DELETE events, you should call that function in your destructor.
-    *
-    * @warning That function must be called only one time in the destructor of your object, in
-    * case of several inheritance be carefull not to call it in all the destructors implied in
-    * in the inheritance tree.
-    *
-    */
-    void observableDeleted();
-    /**
-    * @brief Enable to know if there is at least one Observer/Listener connected.
-    *
-    * it enables to prevent creation and sending of Event for nothing.
-    * Usually a notify code block in an Observable should look like that:
-    * @code
-    *    if (hasOnlookers()) {
-    *       notify(MyEvent(*this, param1, param2, ...));
-    *    }
-    ° @endcode
-    */
-    bool hasOnlookers() const;
+  /**
+  * @brief Enable to send Event::DELETE before the deletion of subclass internal objects.
+  *
+  * The Observable mecahnism automatically send DELETE event to Listener/Observer when an
+  * Obseravble is deleted. However when that Event is send the subclass of Observable are
+  * already deleted, thus it is no more possible to access to their members. In case you
+  * want to allow to access to your Observable member variables/functions when Listner/Observer
+  * receive a DELETE events, you should call that function in your destructor.
+  *
+  * @warning That function must be called only one time in the destructor of your object, in
+  * case of several inheritance be carefull not to call it in all the destructors implied in
+  * in the inheritance tree.
+  *
+  */
+  void observableDeleted();
+  /**
+  * @brief Enable to know if there is at least one Observer/Listener connected.
+  *
+  * it enables to prevent creation and sending of Event for nothing.
+  * Usually a notify code block in an Observable should look like that:
+  * @code
+  *    if (hasOnlookers()) {
+  *       notify(MyEvent(*this, param1, param2, ...));
+  *    }
+  ° @endcode
+  */
+  bool hasOnlookers() const;
 
-    /**
-   * @brief use for old observer tulip compatibility
-   */
-    tlp::Iterator<Observable *> *getObservables() const;
+  /**
+  * @brief use for old observer tulip compatibility
+  */
+  tlp::Iterator<Observable *> *getObservables() const;
 
-    /**
-   * @brief use for old observer tulip compatibility
-   */
-    void _DEPRECATED notifyObservers();
+  /**
+  * @brief use for old observer tulip compatibility
+  */
+  void _DEPRECATED notifyObservers();
 
 private:
-    enum OBSERVABLEEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};
-    bool deleteMsgSent; /** use to enable subclasses to send the Event::DELETE in there destructor */
-    bool queuedEvent;  /** store the last event to send it to Observers after an hold/unhold block temrination */
-    tlp::node _n; /** node that represent that object in the ObservableGraph.*/
+  enum OBSERVABLEEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};
+  bool deleteMsgSent; /** use to enable subclasses to send the Event::DELETE in there destructor */
+  bool queuedEvent;  /** store the last event to send it to Observers after an hold/unhold block temrination */
+  tlp::node _n; /** node that represent that object in the ObservableGraph.*/
 #ifndef NDEBUG
-    unsigned int sent; /* counter of sent notification */
-    unsigned int received; /* counter of received notification */
+  unsigned int sent; /* counter of sent notification */
+  unsigned int received; /* counter of received notification */
 #endif
 
 
-    /**
-   * @brief return an Iterator on all Onlookers
-   * @warning adding or removing Onlooker to that Observable will devalidate the iterator
-   * @see StableIterator
-   * @see forEach
-   * @see stableForEach
-   */
-    tlp::Iterator<Observable *> *getOnlookers() const;
-    /**
-    * @brief return an iterator on in objects (Observable), the iterator guarantee that all objects are alive (not deleted during hold or notify)
-    */
-    tlp::Iterator<tlp::node> *getInObjects() const;
-    /**
-    * @brief return an iterator on out objects (Listener/Observer), the iterator garantee that all objects are alive (not deleted during hold or notify)
-    */
-    tlp::Iterator<tlp::node> *getOutObjects() const;
-    /**
-    * @brief add an Observer/Listener to the observable
-    *
-    * The added Onlookers will received the next Event sent by the Observable.
-    * In case of nested unholding (almost never), calling that function inside hold/unhold block
-    * can make the Observer receive an event that has been sent before it was Observing the object.
-    */
-    void addOnlooker(const Observable &, OBSERVABLEEDGETYPE type) const;
-    /**
-    * @brief remove an Observer/Listener of the observable
-    *
-    * In case of nested unholding (almost never), Calling that function inside a hold/unhold block could
-    * make the Observer not receive an event that was sent when it was connected.
-    *
-    * @warning removing OnLooker that has been created outside of your code can create serious
-    * problem in your application. Objects that are listening/observing could need to receive
-    * the events to work properly.
-    */
-    void removeOnlooker(const Observable &, OBSERVABLEEDGETYPE type) const;
-    /**
-    * @brief return the node representing that ObservableObject in the ObservableGraph
-    */
-    tlp::node getNode() const;
+  /**
+  * @brief return an Iterator on all Onlookers
+  * @warning adding or removing Onlooker to that Observable will devalidate the iterator
+  * @see StableIterator
+  * @see forEach
+  * @see stableForEach
+  */
+  tlp::Iterator<Observable *> *getOnlookers() const;
+  /**
+  * @brief return an iterator on in objects (Observable), the iterator guarantee that all objects are alive (not deleted during hold or notify)
+  */
+  tlp::Iterator<tlp::node> *getInObjects() const;
+  /**
+  * @brief return an iterator on out objects (Listener/Observer), the iterator garantee that all objects are alive (not deleted during hold or notify)
+  */
+  tlp::Iterator<tlp::node> *getOutObjects() const;
+  /**
+  * @brief add an Observer/Listener to the observable
+  *
+  * The added Onlookers will received the next Event sent by the Observable.
+  * In case of nested unholding (almost never), calling that function inside hold/unhold block
+  * can make the Observer receive an event that has been sent before it was Observing the object.
+  */
+  void addOnlooker(const Observable &, OBSERVABLEEDGETYPE type) const;
+  /**
+  * @brief remove an Observer/Listener of the observable
+  *
+  * In case of nested unholding (almost never), Calling that function inside a hold/unhold block could
+  * make the Observer not receive an event that was sent when it was connected.
+  *
+  * @warning removing OnLooker that has been created outside of your code can create serious
+  * problem in your application. Objects that are listening/observing could need to receive
+  * the events to work properly.
+  */
+  void removeOnlooker(const Observable &, OBSERVABLEEDGETYPE type) const;
+  /**
+  * @brief return the node representing that ObservableObject in the ObservableGraph
+  */
+  tlp::node getNode() const;
 
 
 
-    //static members and methods
+  //static members and methods
 private:
-    static bool eventQueued; /** Indicates if there is at least one event queued */
-    static tlp::VectorGraph                 _oGraph;         /** the graph that store all observers and connection between them*/
-    static tlp::NodeProperty<Observable *>  _oPointer;       /** store a pointer to the object represented by a node */
-    static tlp::NodeProperty<bool>          _oAlive;         /** enables to know if an object has been deleted or not */
-    static tlp::EdgeProperty<unsigned char> _oType;         /** enables to know the type of relation between to Observable Objects*/
-    static std::vector<tlp::node>           _oDelayedDelNode; /** store deleted nodes, to remove them at the end of the notify*/
-    static std::set<std::pair<tlp::node, tlp::node> > _oDelayedEvents;
-    static unsigned int              _oNotifying;      /** counter of nested notify calls */
-    static unsigned int              _oUnholding;      /** counter of nested unhold calls */
-    static unsigned int              _oHoldCounter;    /** counter of nested holds */
-    static bool                      _oInitialized;   /** use to initialize oGraph when the library is loaded (nice hack) */
+  static bool eventQueued; /** Indicates if there is at least one event queued */
+  static tlp::VectorGraph                 _oGraph;         /** the graph that store all observers and connection between them*/
+  static tlp::NodeProperty<Observable *>  _oPointer;       /** store a pointer to the object represented by a node */
+  static tlp::NodeProperty<bool>          _oAlive;         /** enables to know if an object has been deleted or not */
+  static tlp::EdgeProperty<unsigned char> _oType;         /** enables to know the type of relation between to Observable Objects*/
+  static std::vector<tlp::node>           _oDelayedDelNode; /** store deleted nodes, to remove them at the end of the notify*/
+  static std::set<std::pair<tlp::node, tlp::node> > _oDelayedEvents;
+  static unsigned int              _oNotifying;      /** counter of nested notify calls */
+  static unsigned int              _oUnholding;      /** counter of nested unhold calls */
+  static unsigned int              _oHoldCounter;    /** counter of nested holds */
+  static bool                      _oInitialized;   /** use to initialize oGraph when the library is loaded (nice hack) */
 
-    /**
-    * @brief delete nodes from the ObservableGraph that have been preserved to keep coherency and check bad use of the mecanism
-    */
-    static void updateObserverGraph();
+  /**
+  * @brief delete nodes from the ObservableGraph that have been preserved to keep coherency and check bad use of the mecanism
+  */
+  static void updateObserverGraph();
 
-    /**
-    * @brief return the bound node representing this ObservableObject in the ObservableGraph,
-    * if _n is not valid it is then bind to a new added node
-    */
-    tlp::node getBoundNode();
-    bool isBound() const {
-        return _n.isValid();
-    }
+  /**
+  * @brief return the bound node representing this ObservableObject in the ObservableGraph,
+  * if _n is not valid it is then bind to a new added node
+  */
+  tlp::node getBoundNode();
+  bool isBound() const {
+    return _n.isValid();
+  }
 
-    /**
-    * @brief Trick to init the ObservableGraph properties (automatically call at the loading of the library.
-    */
-    static bool init();
+  /**
+  * @brief Trick to init the ObservableGraph properties (automatically call at the loading of the library.
+  */
+  static bool init();
 };
 
 /*@}*/

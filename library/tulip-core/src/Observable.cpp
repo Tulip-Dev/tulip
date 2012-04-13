@@ -191,22 +191,22 @@ Iterator<Observable *> *Observable::getObservables() const {
 }
 //=================================
 void Observable::treatEvents(const  std::vector<Event> & ) {
-    //qDebug() << __PRETTY_FUNCTION__ << " : not implemented";
-    /*
+  //qDebug() << __PRETTY_FUNCTION__ << " : not implemented";
+  /*
   //this code is a compatibility layer for the old observation system.
   if (events[0].type() == Event::TLP_DELETE) {
-    observableDestroyed(events[0].sender());
+  observableDestroyed(events[0].sender());
   }
   else {
-    std::set<Observable*> observables;
+  std::set<Observable*> observables;
 
-    for(size_t k=0; k < events.size(); ++k) {
-      observables.insert(events[k].sender());
-    }
-
-    update(observables.begin(), observables.end());
+  for(size_t k=0; k < events.size(); ++k) {
+    observables.insert(events[k].sender());
   }
-*/
+
+  update(observables.begin(), observables.end());
+  }
+  */
 }
 //=================================
 //void Observable::update(std::set<Observable*>::iterator, std::set<Observable*>::iterator) {
@@ -250,10 +250,10 @@ Observable::~Observable() {
   #pragma omp critical(ObservableGraphUpdate)
 #endif
   {
-      if (!deleteMsgSent)
-        observableDeleted();
+    if (!deleteMsgSent)
+      observableDeleted();
 
-      if (!_oAlive[_n])
+    if (!_oAlive[_n])
       throw ObservableException("Observable object has already been deleted, possible double free!!!");
 
     //qDebug() << "[Observable node] destructor:" << n.id  << "::" << this << endl;
@@ -276,58 +276,64 @@ void Observable::holdObservers() {
 #ifdef _OPENMP
   #pragma omp critical(ObservableGraphUpdate)
 #endif
-    ++_oHoldCounter;
+  ++_oHoldCounter;
 }
 //----------------------------------------
 void Observable::unholdObservers() {
+  {
+    if (_oHoldCounter == 0)
+      throw ObservableException("unhold call without a previous call to hold");
+
+    --_oHoldCounter;
     {
-        if (_oHoldCounter == 0)
-            throw ObservableException("unhold call without a previous call to hold");
+      if (_oHoldCounter > 0 || _oDelayedEvents.empty() ) return;
 
-        --_oHoldCounter;
-        {
-            if (_oHoldCounter > 0 || _oDelayedEvents.empty() ) return;
-            ++_oUnholding;
-            ++_oHoldCounter; /** rehold the oberver to buffer message sent during unholding */
+      ++_oUnholding;
+      ++_oHoldCounter; /** rehold the oberver to buffer message sent during unholding */
 
-            set< pair<node, node> > backupEvents;
-            backupEvents.swap(_oDelayedEvents);
-            set< pair<node, node> >::const_iterator it;
-            for( it = backupEvents.begin(); it != backupEvents.end(); ++it) {
-                if (Observable::_oAlive[it->first]) {
-                    Observable *sender = static_cast<Observable *>(Observable::_oPointer[it->first]);
-                    sender->queuedEvent = false;
-                }
-            }
-            map<node, vector<Event> > preparedEvents;
-            for( it = backupEvents.begin(); it != backupEvents.end(); ++it) {
-                if (Observable::_oAlive[it->first] && Observable::_oAlive[it->second]) {
-                    Observable *sender = static_cast<Observable *>(Observable::_oPointer[it->first]);
-                    preparedEvents[it->second].push_back(Event(*sender, Event::TLP_MODIFICATION));
-                }
-            }
-            {
-                map<node, vector<Event> >::const_iterator it;
-                for (it = preparedEvents.begin(); it!=preparedEvents.end(); ++it) {
-                    if (_oAlive[it->first]) {
-                        Observable *obs  = static_cast<Observable *>(_oPointer[it->first]);
-#ifndef NDEBUG
-                        ++(obs->received);
-#endif
-                        obs->treatEvents(it->second);
-                    }
-                }
-            }
+      set< pair<node, node> > backupEvents;
+      backupEvents.swap(_oDelayedEvents);
+      set< pair<node, node> >::const_iterator it;
 
-            -- _oUnholding;
-            unholdObservers(); /** treat queued events during the unhold */
-            updateObserverGraph();
-
-            if (_oHoldCounter > 0) {
-                throw ObservableException("Observable after unholdd call, bad nested hold/unhold function call in an Observer:: update() function");
-            }
+      for( it = backupEvents.begin(); it != backupEvents.end(); ++it) {
+        if (Observable::_oAlive[it->first]) {
+          Observable *sender = static_cast<Observable *>(Observable::_oPointer[it->first]);
+          sender->queuedEvent = false;
         }
+      }
+
+      map<node, vector<Event> > preparedEvents;
+
+      for( it = backupEvents.begin(); it != backupEvents.end(); ++it) {
+        if (Observable::_oAlive[it->first] && Observable::_oAlive[it->second]) {
+          Observable *sender = static_cast<Observable *>(Observable::_oPointer[it->first]);
+          preparedEvents[it->second].push_back(Event(*sender, Event::TLP_MODIFICATION));
+        }
+      }
+
+      {
+        map<node, vector<Event> >::const_iterator it;
+
+        for (it = preparedEvents.begin(); it!=preparedEvents.end(); ++it) {
+          if (_oAlive[it->first]) {
+            Observable *obs  = static_cast<Observable *>(_oPointer[it->first]);
+#ifndef NDEBUG
+            ++(obs->received);
+#endif
+            obs->treatEvents(it->second);
+          }
+        }
+      }
+
+      -- _oUnholding;
+      unholdObservers(); /** treat queued events during the unhold */
+      updateObserverGraph();
+
+      if (_oHoldCounter > 0) {
+        throw ObservableException("Observable after unholdd call, bad nested hold/unhold function call in an Observer:: update() function");
+      }
     }
+  }
 }
 //----------------------------------------
 Iterator<Observable *> *Observable::getOnlookers() const {
@@ -405,6 +411,7 @@ void Observable::observableDeleted() {
 void Observable::sendEvent(const Event &message) {
   if (!isBound())
     return;
+
   //cerr << "send event " << _oPointer[_n] << " " << message.type() << " indeg " << _oGraph.indeg(_n) << " outdeg: " << _oGraph.outdeg(_n) << endl;
   if (!_oGraph.isElement(_n) || !_oAlive[_n]) {
     throw ObservableException("Notify called on a deleted Observable");
@@ -444,19 +451,20 @@ void Observable::sendEvent(const Event &message) {
   }
 
   if (message.type() == Event::TLP_MODIFICATION && _oHoldCounter!=0) {
-      if (!queuedEvent) {
-          queuedEvent = true;
-          eventQueued = true;
-          edge e;
-          forEach(e, _oGraph.getInEdges(_n)) {
-              if (_oType[e] & OBSERVER) {
-                  node src(_oGraph.source(e));
-                  if (_oAlive[src]) {
-                      _oDelayedEvents.insert(pair<node, node>(_n, src));
-                  }
-              }
+    if (!queuedEvent) {
+      queuedEvent = true;
+      eventQueued = true;
+      edge e;
+      forEach(e, _oGraph.getInEdges(_n)) {
+        if (_oType[e] & OBSERVER) {
+          node src(_oGraph.source(e));
+
+          if (_oAlive[src]) {
+            _oDelayedEvents.insert(pair<node, node>(_n, src));
           }
+        }
       }
+    }
   }
 
   //send message to listeners
