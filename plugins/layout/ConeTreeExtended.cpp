@@ -28,8 +28,12 @@ using namespace std;
 using namespace tlp;
 
 //===============================================================
+float sqr(float x) {
+  return x*x;
+}
+//===============================================================
 float minRadius(float radius1,float alpha1,float radius2,float alpha2) {
-  return sqrt(sqrt(radius1+radius2)/(sqrt(cos(alpha1)-cos(alpha2)) + sqrt(sin(alpha1)-sin(alpha2))));
+  return sqrt(sqr(radius1+radius2)/(sqr(cos(alpha1)-cos(alpha2)) + sqr(sin(alpha1)-sin(alpha2))));
 }
 //===============================================================
 void ConeTreeExtended::computeLayerSize(tlp::node n, unsigned int level) {
