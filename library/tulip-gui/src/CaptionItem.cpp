@@ -277,7 +277,7 @@ void CaptionItem::applyNewFilter(float begin, float end) {
   double beginMetric=minProp+(begin*(maxProp-minProp));
   double endMetric=minProp+(end*(maxProp-minProp));
 
-  Observer::holdObservers();
+  Observable::holdObservers();
 
   Iterator<node> *itN=view->graph()->getNodes();
 
@@ -307,7 +307,7 @@ void CaptionItem::applyNewFilter(float begin, float end) {
 
   delete itN;
 
-  Observer::unholdObservers();
+  Observable::unholdObservers();
 
   _graph->addListener(this);
   _metricProperty->addListener(this);
