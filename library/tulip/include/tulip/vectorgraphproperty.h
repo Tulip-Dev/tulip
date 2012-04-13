@@ -218,5 +218,10 @@ private:
   NodeProperty(ValArray<TYPE> *array, VectorGraph *graph):VectorGraphProperty<TYPE>(array, graph) {}
 };
 
+#ifdef _MSC_VER
+template class TLP_SCOPE VectorGraphProperty<double>;
+template class TLP_SCOPE VectorGraphProperty<node>;
+#endif
+
 }
 #endif // VECTORGRAPHPROPERTY_H

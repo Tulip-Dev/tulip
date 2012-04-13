@@ -209,11 +209,22 @@ template class TLP_SCOPE Vector<double, 2>;
 template class TLP_SCOPE Vector<double, 3>;
 template class TLP_SCOPE Vector<double, 4>;
 template class TLP_SCOPE Vector<double, 5>;
+template class TLP_SCOPE Vector<long double, 1>;
+template class TLP_SCOPE Vector<long double, 2>;
+template class TLP_SCOPE Vector<long double, 3>;
+
 
 template struct TLP_SCOPE Array<tlp::Vector<double,1>,1>;
 template struct TLP_SCOPE Array<tlp::Vector<double,2>,2>;
 template struct TLP_SCOPE Array<tlp::Vector<double,3>,3>;
 template struct TLP_SCOPE Array<tlp::Vector<double,4>,4>;
+
+template struct TLP_SCOPE Array<tlp::Vector<long double, 4>,4>;
+template struct TLP_SCOPE Array<tlp::Vector<long double, 3>,3>;
+template struct TLP_SCOPE Array<tlp::Vector<long double, 2>,2>;
+template struct TLP_SCOPE Array<tlp::Vector<long double, 1>,1>;
+
+
 
 template struct TLP_SCOPE Array<tlp::Vector<float,1>,1>;
 template struct TLP_SCOPE Array<tlp::Vector<float,2>,2>;
