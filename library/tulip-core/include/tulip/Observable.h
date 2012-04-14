@@ -270,7 +270,7 @@ protected:
 private:
   enum OBSERVABLEEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};
   bool deleteMsgSent; /** use to enable subclasses to send the Event::DELETE in there destructor */
-  bool queuedEvent;  /** store the last event to send it to Observers after an hold/unhold block temrination */
+  mutable bool queuedEvent;  /** Use to prevent unecessary elements insertion in the set of events */
   tlp::node _n; /** node that represent that object in the ObservableGraph.*/
 #ifndef NDEBUG
   unsigned int sent; /* counter of sent notification */
@@ -322,7 +322,6 @@ private:
 
   //static members and methods
 private:
-  static bool eventQueued; /** Indicates if there is at least one event queued */
   static tlp::VectorGraph                 _oGraph;         /** the graph that store all observers and connection between them*/
   static tlp::NodeProperty<Observable *>  _oPointer;       /** store a pointer to the object represented by a node */
   static tlp::NodeProperty<bool>          _oAlive;         /** enables to know if an object has been deleted or not */
