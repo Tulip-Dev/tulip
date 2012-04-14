@@ -272,6 +272,21 @@ void PushPopTest::testSetValue() {
   prop->setEdgeValue(e0, 2.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n1) == 2.0);
   CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 2.0);
+  prop->setNodeValue(n1, 4.0);
+  prop->setEdgeValue(e0, 4.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 4.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 4.0);
+
+  graph->pop();
+   CPPUNIT_ASSERT(prop->getNodeValue(n1) == 1.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);
+ 
+  graph->unpop();
+  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 4.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n2) == 2.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 2.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 4.0);
 
   graph->push();
   prop->setAllNodeValue(3.0);
@@ -280,7 +295,7 @@ void PushPopTest::testSetValue() {
   CPPUNIT_ASSERT(prop->getNodeValue(n2) == 3.0);
   graph->pop();
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 2.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 4.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n2) == 2.0);
 
   graph->unpop();
@@ -297,8 +312,8 @@ void PushPopTest::testSetValue() {
 
   graph->pop();
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 2.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 2.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 4.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 4.0);
 
   graph->unpop();
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 3.0);
@@ -309,12 +324,11 @@ void PushPopTest::testSetValue() {
   prop->setNodeValue(n0, 2.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 2.0);
   prop->setEdgeValue(e0, 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);
 
   graph->pop();
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
-  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 2.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 2.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 4.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 4.0);
 }
 
 //==========================================================

@@ -1406,10 +1406,17 @@ void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface* p, node n) {
     else {
       if (value) {
         // it is not the default value
-        if (!it->second.values)
+        if (!it->second.values) {
           it->second.values = p->clonePrototype(p->getGraph(), "");
-
-        it->second.values->setNodeDataMemValue(n, value);
+	  it->second.values->setNodeDataMemValue(n, value);
+	} else {
+	  DataMem* old = it->second.values->getNonDefaultDataMemValue(n);
+	  // check if already registered
+	  if (old)
+	    delete old;
+	  else
+	    it->second.values->setNodeDataMemValue(n, value);
+	}
         delete value;
       }
       else {
@@ -1476,11 +1483,19 @@ void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface* p, edge e) {
     else {
       if (value) {
         // it is not the default value
-        if (!it->second.values)
+        if (!it->second.values) {
           it->second.values = p->clonePrototype(p->getGraph(), "");
-
-        it->second.values->setEdgeDataMemValue(e, value);
-        delete value;
+	  it->second.values->setEdgeDataMemValue(e, value);
+        }
+	else {
+	  DataMem* old = it->second.values->getNonDefaultDataMemValue(e);
+	  // check if already registered
+	  if (old)
+	    delete old;
+	  else
+	    it->second.values->setEdgeDataMemValue(e, value);
+	}
+	delete value;
       }
       else {
         if (!it->second.defaultValues)
