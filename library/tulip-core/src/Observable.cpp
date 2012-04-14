@@ -82,7 +82,6 @@ EdgeProperty<unsigned char> Observable::_oType;
 std::set<std::pair<tlp::node, tlp::node> > Observable::_oDelayedEvents = std::set<std::pair<tlp::node, tlp::node> >();
 vector<node>              Observable::_oDelayedDelNode;
 bool                      Observable::_oInitialized = Observable::init();
-bool                      Observable::eventQueued = false;
 
 //----------------------------------
 Iterator<node> * Observable::getInObjects() const {
@@ -184,34 +183,11 @@ Iterator<Observable *> *Observable::getObservables() const {
 //=================================
 void Observable::treatEvents(const  std::vector<Event> & ) {
     //qDebug() << __PRETTY_FUNCTION__ << " : not implemented";
-    /*
-  //this code is a compatibility layer for the old observation system.
-  if (events[0].type() == Event::TLP_DELETE) {
-    observableDestroyed(events[0].sender());
-  }
-  else {
-    std::set<Observable*> observables;
-
-    for(size_t k=0; k < events.size(); ++k) {
-      observables.insert(events[k].sender());
-    }
-
-    update(observables.begin(), observables.end());
-  }
-*/
 }
-//=================================
-//void Observable::update(std::set<Observable*>::iterator, std::set<Observable*>::iterator) {
-//  qDebug() << __PRETTY_FUNCTION__ << " : not implemented";
-//}
 //=================================
 void Observable::treatEvent(const Event &) {
-    qDebug() << __PRETTY_FUNCTION__ << " : not implemented";
+    //qDebug() << __PRETTY_FUNCTION__ << " : not implemented";
 }
-//=================================
-/*void Observable::observableDestroyed(Observable *) {
-  qDebug() << __PRETTY_FUNCTION__ << " : not implemented";
-}*/
 //=================================
 Observable::Observable(): deleteMsgSent(false), queuedEvent(false), _n(node()) {
 #ifndef NDEBUG
@@ -372,6 +348,7 @@ void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) con
 //----------------------------------------
 void Observable::addObserver(Observable * const obs) const {
     assert(obs != 0);
+    queuedEvent = false;
     addOnlooker(*obs, OBSERVER);
 }
 //----------------------------------------
@@ -449,7 +426,6 @@ void Observable::sendEvent(const Event &message) {
     }
     if (delayedEventAdded) {
         queuedEvent = true;
-        eventQueued = true;
     }
 
     //send message to listeners
