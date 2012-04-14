@@ -278,9 +278,9 @@ void PushPopTest::testSetValue() {
   CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 4.0);
 
   graph->pop();
-   CPPUNIT_ASSERT(prop->getNodeValue(n1) == 1.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 1.0);
   CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);
- 
+
   graph->unpop();
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
   CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 4.0);
