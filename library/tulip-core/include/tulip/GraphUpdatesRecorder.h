@@ -66,28 +66,13 @@ struct PropertyRecord {
   PropertyRecord(PropertyInterface* p, std::string str)
     :prop(p), name(str) {}
 };
-
-struct GraphEltsRecord {
-  Graph* graph;
-  MutableContainer<bool> elts;
-
-  GraphEltsRecord(Graph* g): graph(g) {}
-};
-
-} // end of namespace tlp
+}
 
 namespace std {
 template<>
 struct less<tlp::PropertyRecord> {
   size_t  operator()(const tlp::PropertyRecord& rp1, const tlp::PropertyRecord& rp2) const {
     return rp1.name < rp2.name;
-  }
-};
-
-template<>
-struct less<tlp::GraphEltsRecord*> {
-  size_t  operator()(const tlp::GraphEltsRecord* g1, const tlp::GraphEltsRecord* g2) const {
-    return g1->graph->getId() < g2->graph->getId();
   }
 };
 }
@@ -106,26 +91,20 @@ class GraphUpdatesRecorder :public GraphObserver, public PropertyObserver, publi
   bool restartAllowed;
   bool newValuesRecorded;
 
-  // one 'set' of added nodes per graph
-  MutableContainer<GraphEltsRecord*> graphAddedNodes;
-  // the whole 'set' of added nodes
-  MutableContainer<bool> addedNodes;
-  // one 'set' of deleted nodes per graph
-  MutableContainer<GraphEltsRecord*> graphDeletedNodes;
-  // one 'set' of added edges per graph
-  MutableContainer<GraphEltsRecord*> graphAddedEdges;
-  // ends of all added edges
-  MutableContainer<std::pair<node, node>*> addedEdgesEnds;
-  // one 'set' of deleted edges per graph
-  MutableContainer<GraphEltsRecord*> graphDeletedEdges;
-  // ends of all deleted edges
-  MutableContainer<std::pair<node, node>*> deletedEdgesEnds;
+  // one set of Graph* per added node
+  TLP_HASH_MAP<node, std::set<Graph*> > addedNodes;
+  // source + target + set of Graph* per added edge
+  TLP_HASH_MAP<edge, EdgeRecord> addedEdges;
+  // one set of Graph* par deleted node
+  TLP_HASH_MAP<node, std::set<Graph*> >  deletedNodes;
+  // source + target + set of Graph* per deleted edge
+  TLP_HASH_MAP<edge, EdgeRecord> deletedEdges;
   // one set of reverted edges
   std::set<edge> revertedEdges;
   // source + target per updated edge
-  TLP_HASH_MAP<edge, std::pair<node, node> > oldEdgesEnds;
+  TLP_HASH_MAP<edge, std::pair<node, node> > oldEdgeEnds;
   // source + target per updated edge
-  TLP_HASH_MAP<edge, std::pair<node, node> > newEdgesEnds;
+  TLP_HASH_MAP<edge, std::pair<node, node> > newEdgeEnds;
   // one set for old edge containers
   TLP_HASH_MAP<node, std::vector<edge> > oldContainers;
   // one set for new edge containers
@@ -165,31 +144,24 @@ class GraphUpdatesRecorder :public GraphObserver, public PropertyObserver, publi
   // the new default edge value for each updated property
   TLP_HASH_MAP<PropertyInterface*, DataMem*> newEdgeDefaultValues;
 
-  struct RecordedValues {
-    PropertyInterface* values;
-    MutableContainer<bool>* defaultValues;
-
-    RecordedValues(PropertyInterface* prop = NULL,
-                   MutableContainer<bool>* defVal = NULL):
-      values(prop), defaultValues(defVal) {}
-  };
-
   // the old node values for each updated property
-  TLP_HASH_MAP<PropertyInterface*, RecordedValues> oldNodeValues;
-  // the new node values for each updated property
-  TLP_HASH_MAP<PropertyInterface*, RecordedValues>  newNodeValues;
+  TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* > oldNodeValues;
+  // the new node value for each updated property
+  TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* >  newNodeValues;
 
   // the old edge values for each updated property
-  TLP_HASH_MAP<PropertyInterface*, RecordedValues> oldEdgeValues;
-  // the new edge values for each property
-  TLP_HASH_MAP<PropertyInterface*, RecordedValues> newEdgeValues;
+  TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* > oldEdgeValues;
+  // the new edge value for each property
+  TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* > newEdgeValues;
 
   // real deletion of deleted objects (properties, sub graphs)
   // during the recording of updates thes objects are removed from graph
   // structures but not really 'deleted'
   void deleteDeletedObjects();
   // deletion of recorded DataMem
-  void deleteValues(TLP_HASH_MAP<PropertyInterface*, RecordedValues>& values);
+  void deleteValues(TLP_HASH_MAP<PropertyInterface*,
+                    MutableContainer<DataMem*>* >& values);
+  void deleteValues(MutableContainer<DataMem*>* values);
   void deleteDefaultValues(TLP_HASH_MAP<PropertyInterface*, DataMem*>& values);
   // record of a node's edges container before/after modification
   void recordEdgeContainer(TLP_HASH_MAP<node, std::vector<edge> >&,
@@ -225,25 +197,25 @@ public:
   ~GraphUpdatesRecorder();
 
   // GraphObserver interface
-  // graphAddedNodes
+  // addedNodes
   void addNode(Graph* g, const node n);
 
-  // graphAddedEdges
+  // addedEdges
   void addEdge(Graph* g, const edge e);
 
-  // graphDeletedNodes
+  // deletedNodes
   void delNode(Graph* g, const node n);
 
-  // graphDeletedEdges
+  // deletedEdges
   void delEdge(Graph* g, const edge e);
 
   // revertedEdges
   void reverseEdge(Graph* g, const edge e);
 
-  // oldEdgesEnds
+  // oldEdgeEnds
   void beforeSetEnds(Graph* g, const edge e);
 
-  // newEdgesEnds
+  // newEdgeEnds
   void afterSetEnds(Graph* g, const edge e);
 
   // addedSubGraphs
