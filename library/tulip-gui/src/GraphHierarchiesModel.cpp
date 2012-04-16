@@ -224,9 +224,19 @@ QVariant GraphHierarchiesModel::headerData(int section, Qt::Orientation orientat
   return QAbstractItemModel::headerData(section,orientation,role);
 }
 
+bool GraphHierarchiesModel::needsSaving() {
+  bool saveNeeded = false;
+  foreach(GraphNeedsSavingObserver* observer, _saveNeeded) {
+    saveNeeded = saveNeeded || observer->needsSaving();
+  }
+  return saveNeeded;
+}
+
 void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   if (_graphs.contains(g) || g == NULL)
     return;
+
+  _saveNeeded[g] = new GraphNeedsSavingObserver(g);
 
   beginInsertRows(QModelIndex(),rowCount(),rowCount());
   Graph *i;
@@ -251,6 +261,8 @@ void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
     beginRemoveRows(QModelIndex(),pos,pos);
     _graphs.removeAll(g);
     endRemoveRows();
+
+    _saveNeeded.remove(g);
 
     if (_currentGraph == g) {
       if (_graphs.size() == 0)

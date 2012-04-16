@@ -20,6 +20,8 @@
 
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
+#include <QtGui/QCloseEvent>
+#include <QtGui/QMessageBox>
 
 #include <tulip/ImportModule.h>
 #include <tulip/Graph.h>
@@ -106,6 +108,20 @@ bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
   if (obj == _ui->loggerFrame && ev->type() == QEvent::MouseButtonPress)
     showLogger();
 
+  if(obj == _mainWindow && ev->type() == QEvent::Close) {
+    if(_graphs->needsSaving()) {
+      QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified, do you want to save your changes ?"),
+                                       QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
+      if(answer == QMessageBox::Yes) {
+        save();
+      }
+      else if(answer == QMessageBox::Cancel) {
+       ev->ignore();
+       return true;
+      }
+    }
+  }
+
   return false;
 }
 
@@ -127,6 +143,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->loggerFrame->setVisible(false);
   _logger = new GraphPerspectiveLogger(_mainWindow);
   _ui->loggerFrame->installEventFilter(this);
+  _mainWindow->installEventFilter(this);
   connect(_logger,SIGNAL(cleared()),this,SLOT(logCleared()));
 
   qInstallMsgHandler(graphPerspectiveLogger);
