@@ -48,23 +48,10 @@ struct Face {
            sortedNodes[2] == f.sortedNodes[2];
   }
 
-  bool operator<(const Face &f) const {
-    if (sortedNodes[0] < f.sortedNodes[0]) return true;
-
-    if (sortedNodes[0] >= f.sortedNodes[0]) return false;
-
-    if (sortedNodes[1] < f.sortedNodes[1]) return true;
-
-    if (sortedNodes[1] >= f.sortedNodes[1]) return false;
-
-    return sortedNodes[2] < f.sortedNodes[2];
-  }
-
   std::vector<tlp::node> sortedNodes;
 };
 
 TLP_BEGIN_HASH_NAMESPACE {
-
   template <class T>
   inline void hash_combine(std::size_t & seed, const T & v) {
     hash<T> hasher;
@@ -98,8 +85,12 @@ static tlp::Coord computeTriangleCircumscribedCenter(const tlp::Coord &A, const 
   long double anorm = a.norm();
   long double bnorm = b.norm();
   long double axbnorm = axb.norm();
-  Vec3ld c = Cd + (((anorm*anorm*b) - (bnorm*bnorm*a))^axb) / (2.0*axbnorm*axbnorm);
-  return tlp::Coord(c[0], c[1], c[2]);
+  if (axbnorm != 0) {
+    Vec3ld c = Cd + (((anorm*anorm*b) - (bnorm*bnorm*a))^axb) / (2.0*axbnorm*axbnorm);
+    return tlp::Coord(c[0], c[1], c[2]);
+  } else {
+      return (A+B+C)/3.0f;
+  }
 }
 
 static tlp::Coord computeTetrahedronCircumscribedCenter(const tlp::Coord &A, const tlp::Coord &B,
@@ -130,8 +121,14 @@ static tlp::Coord computeTetrahedronCircumscribedCenter(const tlp::Coord &A, con
     m[2][i] = da[i];
   }
 
-  Vec3ld c =  Ad + ((danorm*danorm*(ba^ca)) + (canorm*canorm*(da^ba)) + (banorm*banorm*(ca^da))) / (2.0*m.determinant());
-  return tlp::Coord(c[0], c[1], c[2]);
+  long double det = m.determinant();
+
+  if (det != 0) {
+    Vec3ld c =  Ad + ((danorm*danorm*(ba^ca)) + (canorm*canorm*(da^ba)) + (banorm*banorm*(ca^da))) / (2.0*det);
+    return tlp::Coord(c[0], c[1], c[2]);
+  } else {
+      return (A+B+C+D)/4.0f;
+  }
 }
 
 class Voronoi : public tlp::Algorithm {
@@ -176,15 +173,13 @@ public :
       graph->getAttribute("delaunay simplices nodes", simplicesNodes);
 
       // Iterate over each delaunay simplex
+      std::map<tlp::Coord, tlp::node> circumCenterToNode;
       TLP_HASH_MAP<Face, tlp::node> faceToCircumCenter;
-      TLP_HASH_MAP<tlp::node, std::vector<tlp::node> > origNodeToCellBorder;
+      TLP_HASH_MAP<tlp::node, std::set<tlp::node> > origNodeToCellBorder;
       tlp::Coord A, B, C, D;
       tlp::node n;
 
       for (size_t i = 0 ; i < simplicesNodes.size() ; ++i) {
-        // add the voronoi vertex in the voronoi sub-graph
-        tlp::node ne = voronoiSubGraph->addNode();
-
         for (size_t j = 0 ; j < simplicesNodes[i].size() ; ++j) {
           n = simplicesNodes[i][j];
 
@@ -201,18 +196,30 @@ public :
             D = viewLayout->getNodeValue(n);
           }
 
-          origNodeToCellBorder[simplicesNodes[i][j]].push_back(ne);
         }
 
         // compute the circumscribed center of the simplex (triangle in 2d, tetrahedron in 3d)
-        tlp::Coord circumCenter;
+        tlp::Coord circumCenterPos;
 
         if (simplicesNodes[i].size() == 3)
-          circumCenter = computeTriangleCircumscribedCenter(A, B, C);
+          circumCenterPos = computeTriangleCircumscribedCenter(A, B, C);
         else
-          circumCenter = computeTetrahedronCircumscribedCenter(A, B, C, D);
+          circumCenterPos = computeTetrahedronCircumscribedCenter(A, B, C, D);
 
-        viewLayout->setNodeValue(ne, circumCenter);
+        tlp::node ne;
+
+        if (circumCenterToNode.find(circumCenterPos) != circumCenterToNode.end()) {
+            ne = circumCenterToNode[circumCenterPos];
+        } else {
+            // add the voronoi vertex in the voronoi sub-graph
+            ne = voronoiSubGraph->addNode();
+            viewLayout->setNodeValue(ne, circumCenterPos);
+            circumCenterToNode[circumCenterPos] = ne;
+        }
+
+        for (size_t j = 0 ; j < simplicesNodes[i].size() ; ++j) {
+            origNodeToCellBorder[simplicesNodes[i][j]].insert(ne);
+        }
 
         // try to connect two voronoi vertices of adjacent facets
         if (simplicesNodes[i].size() == 3) {
@@ -302,8 +309,8 @@ public :
         std::set<tlp::node> cellNodes;
         tlp::node ne;
 
-        for (size_t i = 0 ; i < origNodeToCellBorder[n].size() ; ++i) {
-          ne = origNodeToCellBorder[n][i];
+        for (std::set<tlp::node>::iterator it = origNodeToCellBorder[n].begin() ; it != origNodeToCellBorder[n].end() ; ++it) {
+          ne = *it;
 
           if (voronoiCellSg) {
             cellNodes.insert(ne);
@@ -347,7 +354,6 @@ public :
       }
 
       voronoiSubGraph->delSubGraph(cleanVoronoiSg);
-
     }
     else {
       graph->delSubGraph(clone);
