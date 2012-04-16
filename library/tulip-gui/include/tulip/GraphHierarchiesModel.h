@@ -22,6 +22,8 @@
 #include <tulip/tulipconf.h>
 #include <tulip/TulipModel.h>
 #include <tulip/Observable.h>
+#include <tulip/GraphNeedsSavingObserver.h>
+
 #include <QtCore/QList>
 
 namespace tlp {
@@ -37,8 +39,10 @@ class TLP_QT_SCOPE GraphHierarchiesModel : public tlp::TulipModel, public tlp::O
 
   tlp::Graph *_currentGraph;
   QMap<const tlp::Graph*,QModelIndex> _indexCache;
+  QMap<const tlp::Graph*, GraphNeedsSavingObserver*> _saveNeeded;
 
 public:
+  bool needsSaving();
   static void setApplicationDefaults(tlp::Graph*);
 
   explicit GraphHierarchiesModel(QObject *parent=0);

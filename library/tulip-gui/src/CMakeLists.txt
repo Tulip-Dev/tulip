@@ -194,6 +194,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/CaptionItem.h
   ../include/tulip/CaptionGraphicsItem.h
   ../include/tulip/CaptionGraphicsSubItems.h
+  ../include/tulip/GraphNeedsSavingObserver.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
