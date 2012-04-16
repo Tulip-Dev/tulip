@@ -135,6 +135,19 @@ void GlLayer::getXML(string &outString) {
 
 }
 
+void GlLayer::getXMLOnlyForCameras(string &outString) {
+  GlXMLTools::beginDataNode(outString);
+
+  GlXMLTools::beginChildNode(outString,"camera");
+  camera->getXML(outString);
+  GlXMLTools::endChildNode(outString,"camera");
+
+  bool visible=composite.isVisible();
+  GlXMLTools::getXML(outString,"visible",visible);
+
+  GlXMLTools::endDataNode(outString);
+}
+
 void GlLayer::setWithXML(const string &inString, unsigned int &currentPosition) {
 
   GlXMLTools::enterDataNode(inString,currentPosition);
@@ -150,36 +163,14 @@ void GlLayer::setWithXML(const string &inString, unsigned int &currentPosition) 
   GlXMLTools::leaveDataNode(inString,currentPosition);
 
   childName=GlXMLTools::enterChildNode(inString,currentPosition);
-  assert(childName=="GlEntity");
+  if(childName!=""){
 
-  map<string,string> childMap=GlXMLTools::getProperties(inString,currentPosition);
-  assert(childMap["type"]=="GlComposite");
-  composite.setWithXML(inString,currentPosition);
+    map<string,string> childMap=GlXMLTools::getProperties(inString,currentPosition);
+    assert(childMap["type"]=="GlComposite");
+    composite.setWithXML(inString,currentPosition);
 
-  GlXMLTools::leaveChildNode(inString,currentPosition,"children");
-  /*xmlNodePtr dataNode= NULL;
-  xmlNodePtr childrenNode= NULL;
-  xmlNodePtr node= NULL;
-
-  GlXMLTools::getDataAndChildrenNodes(rootNode, dataNode, childrenNode);
-
-  // Parse data
-  if(dataNode) {
-    GlXMLTools::getData("camera", dataNode, node);
-
-    if(node) {
-      camera->setWithXML(node);
-    }
-
-    bool visible;
-    GlXMLTools::setWithXML(dataNode,"visible",visible);
-    composite.setVisible(visible);
+    GlXMLTools::leaveChildNode(inString,currentPosition,"children");
   }
-
-  // Parse children
-  if(childrenNode) {
-    composite.setWithXML(childrenNode);
-  }*/
 
 }
 

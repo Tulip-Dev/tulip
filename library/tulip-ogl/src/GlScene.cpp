@@ -869,6 +869,39 @@ void GlScene::getXML(string &out) {
   out.append("</scene>");
 }
 //====================================================
+void GlScene::getXMLOnlyForCameras(string &out) {
+
+  out.append("<scene>");
+
+  GlXMLTools::beginDataNode(out);
+
+  GlXMLTools::getXML(out,"viewport",viewport);
+  GlXMLTools::getXML(out,"background",backgroundColor);
+
+  GlXMLTools::endDataNode(out);
+
+  GlXMLTools::beginChildNode(out);
+
+  for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
+
+    // Don't save working layers
+    if((*it).second->isAWorkingLayer())
+      continue;
+
+    GlXMLTools::beginChildNode(out,"GlLayer");
+
+    GlXMLTools::createProperty(out, "name", (*it).first);
+
+    (*it).second->getXMLOnlyForCameras(out);
+
+    GlXMLTools::endChildNode(out,"GlLayer");
+  }
+
+  GlXMLTools::endChildNode(out);
+
+  out.append("</scene>");
+}
+//====================================================
 void GlScene::setWithXML(string &in, Graph *graph) {
 
   glGraphComposite=new GlGraphComposite(graph);
@@ -890,8 +923,11 @@ void GlScene::setWithXML(string &in, Graph *graph) {
 
     assert(properties.count("name")!=0);
 
-    GlLayer *newLayer=new GlLayer(properties["name"]);
-    addLayer(newLayer);
+    GlLayer *newLayer=getLayer(properties["name"]);
+    if(!newLayer){
+      newLayer=new GlLayer(properties["name"]);
+      addLayer(newLayer);
+    }
     newLayer->setWithXML(in,currentPosition);
 
     GlXMLTools::leaveChildNode(in,currentPosition,"GlLayer");
