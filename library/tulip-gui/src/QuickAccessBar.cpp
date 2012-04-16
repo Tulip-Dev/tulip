@@ -108,13 +108,17 @@ void QuickAccessBar::takeSnapshot() {
 }
 
 void QuickAccessBar::setBackgroundColor(const QColor& c) {
-  scene()->setBackgroundColor(QColorToColor(c));
-  _mainView->emitDrawNeededSignal();
+  if(scene()->getBackgroundColor()!=QColorToColor(c)){
+    scene()->setBackgroundColor(QColorToColor(c));
+    _mainView->emitDrawNeededSignal();
+  }
 }
 
 void QuickAccessBar::setColorInterpolation(bool f) {
-  renderingParameters()->setEdgeColorInterpolate(f);
-  _mainView->emitDrawNeededSignal();
+  if(renderingParameters()->isEdgeColorInterpolate()!=f){
+    renderingParameters()->setEdgeColorInterpolate(f);
+    _mainView->emitDrawNeededSignal();
+  }
 }
 
 void QuickAccessBar::setLabelColor(const QColor& c) {
@@ -122,19 +126,24 @@ void QuickAccessBar::setLabelColor(const QColor& c) {
   ColorProperty* tmp = new ColorProperty(_mainView->graph());
   ColorProperty* colors = inputData()->getElementLabelColor();
 
-  tmp->setAllNodeValue(QColorToColor(c));
-  tmp->setAllEdgeValue(QColorToColor(c));
+  *tmp=*colors;
 
-  node n;
-  forEach(n, colors->getNonDefaultValuatedNodes()) {
-    tmp->setNodeValue(n,colors->getNodeValue(n));
-  }
+  if(colors->getNodeDefaultValue()!=QColorToColor(c)) {
+    colors->setAllNodeValue(QColorToColor(c));
 
-  edge e;
-  forEach(e, colors->getNonDefaultValuatedEdges()) {
-    tmp->setEdgeValue(e,colors->getEdgeValue(e));
+    node n;
+    forEach(n, tmp->getNonDefaultValuatedNodes()) {
+      colors->setNodeValue(n,tmp->getNodeValue(n));
+    }
   }
-  *colors = *tmp;
+  if(colors->getEdgeDefaultValue()!=QColorToColor(c)) {
+    colors->setAllEdgeValue(QColorToColor(c));
+
+    edge e;
+    forEach(e, tmp->getNonDefaultValuatedEdges()) {
+      colors->setEdgeValue(e,tmp->getEdgeValue(e));
+    }
+  }
   Observable::unholdObservers();
 }
 
@@ -143,31 +152,33 @@ void QuickAccessBar::setNodeColor(const QColor& c) {
   ColorProperty* tmp = new ColorProperty(_mainView->graph());
   ColorProperty* colors = inputData()->getElementColor();
 
-  tmp->setAllNodeValue(QColorToColor(c));
-  tmp->setAllEdgeValue(colors->getEdgeDefaultValue());
+  *tmp = *colors;
 
-  node n;
-  forEach(n, colors->getNonDefaultValuatedNodes()) {
-    tmp->setNodeValue(n,colors->getNodeValue(n));
+  if(colors->getNodeDefaultValue()!=QColorToColor(c)){
+    colors->setAllNodeValue(QColorToColor(c));
+
+    node n;
+    forEach(n, tmp->getNonDefaultValuatedNodes()) {
+      colors->setNodeValue(n,tmp->getNodeValue(n));
+    }
   }
 
-  edge e;
-  forEach(e, colors->getNonDefaultValuatedEdges()) {
-    tmp->setEdgeValue(e,colors->getEdgeValue(e));
-  }
-  *colors = *tmp;
   Observable::unholdObservers();
 }
 
 void QuickAccessBar::setEdgesVisible(bool v) {
-  renderingParameters()->setDisplayEdges(v);
-  _ui->showEdgesToggle->setIcon((v ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
-  _mainView->emitDrawNeededSignal();
+  if(renderingParameters()->isDisplayEdges() != v){
+    renderingParameters()->setDisplayEdges(v);
+    _ui->showEdgesToggle->setIcon((v ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
+    _mainView->emitDrawNeededSignal();
+  }
 }
 
 void QuickAccessBar::setLabelsVisible(bool v) {
-  renderingParameters()->setViewNodeLabel(v);
-  _mainView->emitDrawNeededSignal();
+  if(renderingParameters()->isViewNodeLabel()!=v){
+    renderingParameters()->setViewNodeLabel(v);
+    _mainView->emitDrawNeededSignal();
+  }
 }
 
 GlGraphRenderingParameters* QuickAccessBar::renderingParameters() const {
@@ -190,8 +201,10 @@ void QuickAccessBar::selectFont() {
     return;
 
   Observable::holdObservers();
-  inputData()->getElementFont()->setAllNodeValue(dlg.font().fontFile().toStdString());
-  inputData()->getElementFont()->setAllEdgeValue(dlg.font().fontFile().toStdString());
+  if(inputData()->getElementFont()->getNodeDefaultValue()!=dlg.font().fontFile().toStdString())
+    inputData()->getElementFont()->setAllNodeValue(dlg.font().fontFile().toStdString());
+  if(inputData()->getElementFont()->getEdgeDefaultValue()!=dlg.font().fontFile().toStdString())
+    inputData()->getElementFont()->setAllEdgeValue(dlg.font().fontFile().toStdString());
   Observable::unholdObservers();
   updateFontButtonStyle();
 }
