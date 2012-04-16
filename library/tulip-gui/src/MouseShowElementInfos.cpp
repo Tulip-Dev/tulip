@@ -65,11 +65,14 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
     if(e->type() == QEvent::MouseMove) {
       if (pick(qMouseEv->x(), qMouseEv->y(),selectedEntity)) {
         glMainView->getGlMainWidget()->setCursor(Qt::WhatsThisCursor);
-      } else {
+      }
+      else {
         glMainView->getGlMainWidget()->setCursor(QCursor());
       }
+
       return false;
-    } else if (e->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
+    }
+    else if (e->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
       if(_informationsWidgetItem->isVisible()) {
         // Hide widget if we click outside it
         _informationsWidgetItem->setVisible(false);
@@ -80,7 +83,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
         // Show widget if we click on node or edge
         if (pick(qMouseEv->x(), qMouseEv->y(),selectedEntity)) {
           if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
-             selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
+              selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
             _informationsWidgetItem->setVisible(true);
 
             QLabel* title = _informationsWidget->findChild<QLabel*>();
@@ -112,7 +115,8 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
             animation->start();
 
             return true;
-          } else {
+          }
+          else {
             return false;
           }
         }

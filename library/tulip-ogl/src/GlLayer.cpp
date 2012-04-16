@@ -163,7 +163,8 @@ void GlLayer::setWithXML(const string &inString, unsigned int &currentPosition) 
   GlXMLTools::leaveDataNode(inString,currentPosition);
 
   childName=GlXMLTools::enterChildNode(inString,currentPosition);
-  if(childName!=""){
+
+  if(childName!="") {
 
     map<string,string> childMap=GlXMLTools::getProperties(inString,currentPosition);
     assert(childMap["type"]=="GlComposite");

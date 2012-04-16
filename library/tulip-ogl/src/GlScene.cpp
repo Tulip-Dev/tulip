@@ -924,10 +924,12 @@ void GlScene::setWithXML(string &in, Graph *graph) {
     assert(properties.count("name")!=0);
 
     GlLayer *newLayer=getLayer(properties["name"]);
-    if(!newLayer){
+
+    if(!newLayer) {
       newLayer=new GlLayer(properties["name"]);
       addLayer(newLayer);
     }
+
     newLayer->setWithXML(in,currentPosition);
 
     GlXMLTools::leaveChildNode(in,currentPosition,"GlLayer");
