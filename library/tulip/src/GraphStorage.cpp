@@ -589,6 +589,7 @@ void GraphStorage::delNode(node n) {
   bool haveLoops = false;
 
   const EdgeVector& edges = nodes[n.id].edges;
+
   for(EdgeVector::const_iterator i=edges.begin(); i!=edges.end();
       ++i) {
     const std::pair<node, node>& iEnds = ends(*i);
@@ -597,7 +598,8 @@ void GraphStorage::delNode(node n) {
 
     if (src!=tgt) {
       if (src!=n)
-	nodes[src.id].outDegree -= 1;
+        nodes[src.id].outDegree -= 1;
+
       removeFromEdges(*i, n);
     }
     else {

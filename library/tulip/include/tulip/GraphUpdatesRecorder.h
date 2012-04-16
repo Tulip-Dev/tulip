@@ -170,10 +170,10 @@ class GraphUpdatesRecorder :public GraphObserver, public PropertyObserver {
     MutableContainer<bool>* recordedNodes;
     MutableContainer<bool>* recordedEdges;
 
-  RecordedValues(PropertyInterface* prop = NULL,
-		 MutableContainer<bool>* rn = NULL,
-		 MutableContainer<bool>* re = NULL):
-    values(prop), recordedNodes(rn), recordedEdges(re) {}
+    RecordedValues(PropertyInterface* prop = NULL,
+                   MutableContainer<bool>* rn = NULL,
+                   MutableContainer<bool>* re = NULL):
+      values(prop), recordedNodes(rn), recordedEdges(re) {}
   };
 
   // the old nodes/edges values for each updated property
