@@ -421,11 +421,12 @@ void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
     _viewConfigurationWidgets->setPos(newPos);
 
   _viewConfigurationWidgets->setOpacity((expanded ? 1 : 0.6));
-  _viewConfigurationExpanded = expanded;
 
-  if (!expanded) {
+  if (!expanded && _viewConfigurationExpanded) {
     _view->applySettings();
   }
+
+  _viewConfigurationExpanded = expanded;
 }
 
 QPointF WorkspacePanel::configurationTabPosition(bool expanded) const {
