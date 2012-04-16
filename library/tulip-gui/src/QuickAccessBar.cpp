@@ -108,14 +108,14 @@ void QuickAccessBar::takeSnapshot() {
 }
 
 void QuickAccessBar::setBackgroundColor(const QColor& c) {
-  if(scene()->getBackgroundColor()!=QColorToColor(c)){
+  if(scene()->getBackgroundColor()!=QColorToColor(c)) {
     scene()->setBackgroundColor(QColorToColor(c));
     _mainView->emitDrawNeededSignal();
   }
 }
 
 void QuickAccessBar::setColorInterpolation(bool f) {
-  if(renderingParameters()->isEdgeColorInterpolate()!=f){
+  if(renderingParameters()->isEdgeColorInterpolate()!=f) {
     renderingParameters()->setEdgeColorInterpolate(f);
     _mainView->emitDrawNeededSignal();
   }
@@ -136,6 +136,7 @@ void QuickAccessBar::setLabelColor(const QColor& c) {
       colors->setNodeValue(n,tmp->getNodeValue(n));
     }
   }
+
   if(colors->getEdgeDefaultValue()!=QColorToColor(c)) {
     colors->setAllEdgeValue(QColorToColor(c));
 
@@ -144,6 +145,7 @@ void QuickAccessBar::setLabelColor(const QColor& c) {
       colors->setEdgeValue(e,tmp->getEdgeValue(e));
     }
   }
+
   Observable::unholdObservers();
 }
 
@@ -154,7 +156,7 @@ void QuickAccessBar::setNodeColor(const QColor& c) {
 
   *tmp = *colors;
 
-  if(colors->getNodeDefaultValue()!=QColorToColor(c)){
+  if(colors->getNodeDefaultValue()!=QColorToColor(c)) {
     colors->setAllNodeValue(QColorToColor(c));
 
     node n;
@@ -167,7 +169,7 @@ void QuickAccessBar::setNodeColor(const QColor& c) {
 }
 
 void QuickAccessBar::setEdgesVisible(bool v) {
-  if(renderingParameters()->isDisplayEdges() != v){
+  if(renderingParameters()->isDisplayEdges() != v) {
     renderingParameters()->setDisplayEdges(v);
     _ui->showEdgesToggle->setIcon((v ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
     _mainView->emitDrawNeededSignal();
@@ -175,7 +177,7 @@ void QuickAccessBar::setEdgesVisible(bool v) {
 }
 
 void QuickAccessBar::setLabelsVisible(bool v) {
-  if(renderingParameters()->isViewNodeLabel()!=v){
+  if(renderingParameters()->isViewNodeLabel()!=v) {
     renderingParameters()->setViewNodeLabel(v);
     _mainView->emitDrawNeededSignal();
   }
@@ -201,10 +203,13 @@ void QuickAccessBar::selectFont() {
     return;
 
   Observable::holdObservers();
+
   if(inputData()->getElementFont()->getNodeDefaultValue()!=dlg.font().fontFile().toStdString())
     inputData()->getElementFont()->setAllNodeValue(dlg.font().fontFile().toStdString());
+
   if(inputData()->getElementFont()->getEdgeDefaultValue()!=dlg.font().fontFile().toStdString())
     inputData()->getElementFont()->setAllEdgeValue(dlg.font().fontFile().toStdString());
+
   Observable::unholdObservers();
   updateFontButtonStyle();
 }
