@@ -366,12 +366,18 @@ public:
   //=======================================================
 private :
   // specific types
-  typedef SimpleVector<edge> EdgeContainer;
+  typedef SimpleVector<edge> EdgeVector;
+
+  struct EdgeContainer {
+    EdgeVector edges;
+    unsigned int outDegree;
+
+    EdgeContainer():outDegree(0) {}
+  };
   typedef std::vector<EdgeContainer> Nodes;
   typedef std::vector<std::pair< node , node > > Edges;
 
   // data members
-  MutableContainer<unsigned int> outDegree;
   mutable Edges edges;
   mutable Nodes nodes;
   IdManager nodeIds;
@@ -383,7 +389,7 @@ private :
   // they are just needed by the current implementation
   //=======================================================
   /**
-   * @brief remove an edge from an EdgeContainer
+   * @brief remove an edge from an EdgeVector
    * @warning That operation modify the EdgeContainer
    * and thus devalidate all iterators on it.
    */
