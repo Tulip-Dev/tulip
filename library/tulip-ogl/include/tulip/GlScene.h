@@ -316,6 +316,8 @@ public:
    */
   void getXML(std::string &out);
 
+  void getXMLOnlyForCameras(std::string &out);
+
   /**
    * Set scene's data and children with a XML
    */

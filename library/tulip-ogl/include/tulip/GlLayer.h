@@ -187,6 +187,8 @@ public:
    */
   void getXML(std::string &outString);
 
+  void getXMLOnlyForCameras(std::string &outString);
+
   /**
    * Function to set data with inString (in XML format)
    */
