@@ -330,13 +330,7 @@ public:
       }
       else {
         stringstream data;
-
-        if(_currentAttributeTypeName == "string") {
-          data << "\"" << value << "\"";
-        }
-        else {
-          data << value;
-        }
+        data << value;
 
         string oldValue;
 
@@ -464,6 +458,7 @@ public:
 //       qDebug() << "msecs: " << t.msecsTo(QTime::currentTime()) << endl;
     }
 
+    qWarning() << "name: [" << graph->getName() << "]";
     pluginProgress->setError(_proxy->errorMessage());
     Observable::unholdObservers();
     return _proxy->parsingSucceeded();
