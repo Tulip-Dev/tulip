@@ -165,24 +165,29 @@ class GraphUpdatesRecorder :public GraphObserver, public PropertyObserver {
   // the new default edge value for each updated property
   TLP_HASH_MAP<PropertyInterface*, DataMem*> newEdgeDefaultValues;
 
-  // the old node values for each updated property
-  TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* > oldNodeValues;
-  // the new node value for each updated property
-  TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* >  newNodeValues;
+  struct RecordedValues {
+    PropertyInterface* values;
+    MutableContainer<bool>* recordedNodes;
+    MutableContainer<bool>* recordedEdges;
 
-  // the old edge values for each updated property
-  TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* > oldEdgeValues;
-  // the new edge value for each property
-  TLP_HASH_MAP<PropertyInterface*, MutableContainer<DataMem*>* > newEdgeValues;
+  RecordedValues(PropertyInterface* prop = NULL,
+		 MutableContainer<bool>* rn = NULL,
+		 MutableContainer<bool>* re = NULL):
+    values(prop), recordedNodes(rn), recordedEdges(re) {}
+  };
+
+  // the old nodes/edges values for each updated property
+  TLP_HASH_MAP<PropertyInterface*, RecordedValues> oldValues;
+  // the new node value for each updated property
+  TLP_HASH_MAP<PropertyInterface*, RecordedValues>  newValues;
 
   // real deletion of deleted objects (properties, sub graphs)
   // during the recording of updates thes objects are removed from graph
   // structures but not really 'deleted'
   void deleteDeletedObjects();
   // deletion of recorded DataMem
-  void deleteValues(TLP_HASH_MAP<PropertyInterface*,
-                    MutableContainer<DataMem*>* >& values);
-  void deleteValues(MutableContainer<DataMem*>* values);
+  void deleteValues(TLP_HASH_MAP<PropertyInterface*, RecordedValues>& values);
+
   void deleteDefaultValues(TLP_HASH_MAP<PropertyInterface*, DataMem*>& values);
   // record of a node's edges container before/after modification
   void recordEdgeContainer(TLP_HASH_MAP<node, std::vector<edge> >&,
@@ -252,13 +257,13 @@ public:
   void beforeDelLocalProperty(Graph* g, const std::string& name);
 
   // PropertyObserver Interface
-  // oldNodeValues
+  // oldValues
   void beforeSetNodeValue(PropertyInterface* p, const node n);
 
   // oldNodeDefaultValues
   void beforeSetAllNodeValue(PropertyInterface* p);
 
-  // oldEdgeValues
+  // oldValues
   void beforeSetEdgeValue(PropertyInterface* p, const edge e);
 
   // oldEdgeDefaultValues
