@@ -149,10 +149,21 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(false);
     baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewMetaLabel(false);
 
+    vector<pair<string, GlLayer*> > *layersList=baseScene.getLayersList();
+    for(vector<pair<string, GlLayer*> >::iterator it=layersList->begin();it!=layersList->end();++it){
+      if((*it).second->isAWorkingLayer())
+        (*it).second->setVisible(false);
+    }
+
     // Draw the scene
     glFrameBuffer->bind();
     baseScene.draw();
     glFrameBuffer->release();
+
+    for(vector<pair<string, GlLayer*> >::iterator it=layersList->begin();it!=layersList->end();++it){
+      if((*it).second->isAWorkingLayer())
+        (*it).second->setVisible(true);
+    }
 
     baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(edgesLabels);
     baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(nodesLabels);
