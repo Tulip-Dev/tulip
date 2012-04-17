@@ -227,8 +227,8 @@ protected slots:
   void matchParens();
   virtual void highlightCurrentLine();
   void highlightErrors();
-  virtual void showAutoCompletionList();
-  virtual void updateAutoCompletionList();
+  virtual void showAutoCompletionList(bool dotContext=false);
+  virtual void updateAutoCompletionList(bool dotContext=false);
 
 protected:
 

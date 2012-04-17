@@ -46,7 +46,7 @@ public :
 
   void analyseCurrentScriptCode(const QString &code, const int currentLine, const bool interactiveSession=false, const QString &moduleName="");
 
-  QSet<QString> getAutoCompletionListForContext(const QString &context, const QString &editedFunction) ;
+  QSet<QString> getAutoCompletionListForContext(const QString &context, const QString &editedFunction, bool dotContext=false) ;
 
   QString getLastFoundType() const {
     return lastFoundType;
