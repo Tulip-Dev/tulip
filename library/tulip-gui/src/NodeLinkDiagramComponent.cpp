@@ -111,13 +111,17 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   connect(ui->tableView, SIGNAL(destroyed()), ui->tableView->itemDelegate(), SLOT(deleteLater()));
 
   bool overviewVisible=true;
-  if(data.exist("overviewVisible")){
+
+  if(data.exist("overviewVisible")) {
     data.get<bool>("overviewVisible",overviewVisible);
   }
+
   bool quickAccessBarVisible;
-  if(data.exist("quickAccessBarVisible")){
+
+  if(data.exist("quickAccessBarVisible")) {
     data.get<bool>("quickAccessBarVisible",quickAccessBarVisible);
   }
+
   getGlMainWidget()->setData(graph(), data);
   registerTriggers();
 
@@ -159,10 +163,11 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 
 
   setOverviewVisible(overviewVisible);
+
   if(overviewVisible)
     drawOverview(true);
 
-  setQuickAccessBarVisible(true); 
+  setQuickAccessBarVisible(true);
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
