@@ -396,6 +396,8 @@ class YajlProxy : public YajlParseFacade {
 public:
   YajlProxy(tlp::PluginProgress* progress = NULL) : YajlParseFacade(progress) {
   }
+  virtual ~YajlProxy() {
+  }
   virtual void parseBoolean(bool boolVal) {
     _proxy->parseBoolean(boolVal);
   }

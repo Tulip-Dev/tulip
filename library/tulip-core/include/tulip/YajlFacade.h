@@ -16,6 +16,8 @@ class YajlParseFacade {
 public:
   YajlParseFacade(tlp::PluginProgress* progress) : _progress(progress), _parsingSucceeded(true) {}
 
+  virtual ~YajlParseFacade() {
+  }
   /**
    * @brief Parses a JSON file.
    * Once this function is called, the callbacks (all the parse* functions) will get called when the corresponding event happens.
