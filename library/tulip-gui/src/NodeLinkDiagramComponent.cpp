@@ -125,7 +125,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 
   QAction* overviewAction = new QAction(trUtf8("Overview"),this);
   overviewAction->setCheckable(true);
-  overviewAction->setChecked(_overviewVisible);
+  overviewAction->setChecked(overviewVisible);
   connect(overviewAction,SIGNAL(triggered(bool)),this,SLOT(setOverviewVisible(bool)));
   graphicsView()->addAction(overviewAction);
 
