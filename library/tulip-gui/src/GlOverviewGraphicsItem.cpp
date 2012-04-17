@@ -285,9 +285,10 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
 
   for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
     Coord eyesVector=cameras[i].getEyes()-cameras[i].getCenter();
-    cameras[i].setCenter(centerPos[i]);
-    cameras[i].setEyes(cameras[i].getCenter()+eyesVector);
-    (*it).second->setSharedCamera(&cameras[i]);
+    Camera &camera=(*it).second->getCamera();
+    camera=cameras[i];
+    camera.setCenter(centerPos[i]);
+    camera.setEyes(centerPos[i]+eyesVector);
     ++i;
   }
 
