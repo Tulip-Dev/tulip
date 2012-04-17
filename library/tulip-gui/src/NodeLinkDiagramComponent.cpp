@@ -110,6 +110,14 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   ui->tableView->setItemDelegate(new TulipItemDelegate);
   connect(ui->tableView, SIGNAL(destroyed()), ui->tableView->itemDelegate(), SLOT(deleteLater()));
 
+  bool overviewVisible=true;
+  if(data.exist("overviewVisible")){
+    data.get<bool>("overviewVisible",overviewVisible);
+  }
+  bool quickAccessBarVisible;
+  if(data.exist("quickAccessBarVisible")){
+    data.get<bool>("quickAccessBarVisible",quickAccessBarVisible);
+  }
   getGlMainWidget()->setData(graph(), data);
   registerTriggers();
 
@@ -117,7 +125,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 
   QAction* overviewAction = new QAction(trUtf8("Overview"),this);
   overviewAction->setCheckable(true);
-  overviewAction->setChecked(true);
+  overviewAction->setChecked(_overviewVisible);
   connect(overviewAction,SIGNAL(triggered(bool)),this,SLOT(setOverviewVisible(bool)));
   graphicsView()->addAction(overviewAction);
 
@@ -149,9 +157,12 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   connect(gridAction,SIGNAL(triggered()),this,SLOT(showGridControl()));
   graphicsView()->addAction(gridAction);
 
-  setOverviewVisible(true);
-  setQuickAccessBarVisible(true);
-  drawOverview(true);
+
+  setOverviewVisible(overviewVisible);
+  if(overviewVisible)
+    drawOverview(true);
+
+  setQuickAccessBarVisible(true); 
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
@@ -161,7 +172,10 @@ void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
 }
 
 tlp::DataSet NodeLinkDiagramComponent::state() const {
-  return getGlMainWidget()->getData();
+  DataSet data=getGlMainWidget()->getData();
+  data.set("overviewVisible",overviewVisible());
+  data.set("quickAccessBarVisible",quickAccessBarVisible());
+  return data;
 }
 
 void NodeLinkDiagramComponent::registerTriggers() {
