@@ -37,9 +37,6 @@ tlp::BooleanAlgorithm::BooleanAlgorithm (const tlp::PluginContext* context):tlp:
                          "This parameter indicates the property to compute." \
                          HTML_HELP_CLOSE(),
                          "viewSelection");
-
-  if (dataSet != NULL)
-    dataSet->get("result", result);
 }
 
 tlp::ColorAlgorithm::ColorAlgorithm (const tlp::PluginContext* context):tlp::TemplateAlgorithm<ColorProperty>(context) {
@@ -52,9 +49,6 @@ tlp::ColorAlgorithm::ColorAlgorithm (const tlp::PluginContext* context):tlp::Tem
                        "This parameter indicates the property to compute." \
                        HTML_HELP_CLOSE(),
                        "viewColor");
-
-  if (dataSet != NULL)
-    dataSet->get("result", result);
 }
 
 tlp::DoubleAlgorithm::DoubleAlgorithm (const tlp::PluginContext* context):tlp::TemplateAlgorithm<DoubleProperty>(context) {
@@ -67,14 +61,9 @@ tlp::DoubleAlgorithm::DoubleAlgorithm (const tlp::PluginContext* context):tlp::T
                         "This parameter indicates the property to compute." \
                         HTML_HELP_CLOSE(),
                         "viewMetric");
-
-  if (dataSet != NULL)
-    dataSet->get("result", result);
 }
 
 tlp::IntegerAlgorithm::IntegerAlgorithm (const tlp::PluginContext* context):tlp::TemplateAlgorithm<IntegerProperty>(context) {
-  if (dataSet != NULL)
-    dataSet->get("result", result);
 }
 
 tlp::LayoutAlgorithm::LayoutAlgorithm (const tlp::PluginContext* context):tlp::TemplateAlgorithm<LayoutProperty>(context) {
@@ -87,9 +76,6 @@ tlp::LayoutAlgorithm::LayoutAlgorithm (const tlp::PluginContext* context):tlp::T
                         "This parameter indicates the property to compute." \
                         HTML_HELP_CLOSE(),
                         "viewLayout");
-
-  if (dataSet != NULL)
-    dataSet->get("result", result);
 }
 
 tlp::SizeAlgorithm::SizeAlgorithm (const tlp::PluginContext* context):tlp::TemplateAlgorithm<SizeProperty>(context) {
@@ -102,9 +88,6 @@ tlp::SizeAlgorithm::SizeAlgorithm (const tlp::PluginContext* context):tlp::Templ
                       "This parameter indicates the property to compute." \
                       HTML_HELP_CLOSE(),
                       "viewSize");
-
-  if (dataSet != NULL)
-    dataSet->get("result", result);
 }
 
 tlp::StringAlgorithm::StringAlgorithm (const tlp::PluginContext* context):tlp::TemplateAlgorithm<StringProperty>(context) {
@@ -117,7 +100,4 @@ tlp::StringAlgorithm::StringAlgorithm (const tlp::PluginContext* context):tlp::T
                         "This parameter indicates the property to compute." \
                         HTML_HELP_CLOSE(),
                         "viewLabel");
-
-  if (dataSet != NULL)
-    dataSet->get("result", result);
 }

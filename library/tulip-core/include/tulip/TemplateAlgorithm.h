@@ -51,7 +51,10 @@ template<class Property>
 class TLP_SCOPE TemplateAlgorithm : public PropertyAlgorithm {
 public:
   Property* result;
-  TemplateAlgorithm (const tlp::PluginContext* context) : tlp::PropertyAlgorithm(context), result(NULL) {}
+  TemplateAlgorithm (const tlp::PluginContext* context) : tlp::PropertyAlgorithm(context), result(NULL) {
+    if (dataSet != NULL)
+      dataSet->get("result", result);
+  }
 };
 /*@}*/
 
