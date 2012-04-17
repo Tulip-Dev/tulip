@@ -1280,6 +1280,10 @@ void PythonCodeEditor::insertAt(QString text, int line, int col) {
   textCursor().insertText(text);
 }
 
+void PythonCodeEditor::insertFromMimeData(const QMimeData * source) {
+    textCursor().insertText(source->text());
+}
+
 void PythonCodeEditor::showTooltip(int line, int col, const QString &text) {
   if (text == "")
     return;

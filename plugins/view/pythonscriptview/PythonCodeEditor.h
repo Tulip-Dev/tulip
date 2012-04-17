@@ -216,6 +216,7 @@ protected:
   void mousePressEvent(QMouseEvent * event);
   void mouseReleaseEvent(QMouseEvent * event);
   void lineNumberAreaPaintEvent(QPaintEvent *event);
+  void insertFromMimeData(const QMimeData * source);
 
 
 protected slots:
