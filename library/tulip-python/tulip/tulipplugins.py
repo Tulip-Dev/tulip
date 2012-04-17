@@ -75,7 +75,7 @@ def registerAlgorithmPlugin(pluginClassName, pluginName, author, date, info, rel
     :type release: string
     """
 
-    removePlugin(pluginName, "Algorithm")
+    removePlugin(pluginName, "General")
     updateTulipMenus()
     if testMode:
         return
@@ -131,7 +131,7 @@ def registerAlgorithmPluginOfGroup(pluginClassName, pluginName, author, date, in
     :type group: string
     """
 
-    removePlugin(pluginName, "Algorithm")
+    removePlugin(pluginName, "General")
     updateTulipMenus()
     if testMode:
       return
@@ -295,7 +295,7 @@ def registerDoublePlugin(pluginClassName, pluginName, author, date, info, releas
     :type release: string
     """
 
-    removePlugin(pluginName, "Double")
+    removePlugin(pluginName, "Measure")
     updateTulipMenus()
     if testMode:
       return
@@ -351,7 +351,7 @@ def registerDoublePluginOfGroup(pluginClassName, pluginName, author, date, info,
     :type group: string
     """
   
-    removePlugin(pluginName, "Double")
+    removePlugin(pluginName, "Measure")
     updateTulipMenus()
     if testMode:
       return
@@ -515,7 +515,7 @@ def registerBooleanPlugin(pluginClassName, pluginName, author, date, info, relea
     :type release: string
     """
 
-    removePlugin(pluginName, "Boolean")
+    removePlugin(pluginName, "Selection")
     updateTulipMenus()
     if testMode:
       return
@@ -571,7 +571,7 @@ def registerBooleanPluginOfGroup(pluginClassName, pluginName, author, date, info
     :type group: string
     """
 
-    removePlugin(pluginName, "Boolean")
+    removePlugin(pluginName, "Selection")
     updateTulipMenus()
     if testMode:
       return
