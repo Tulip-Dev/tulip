@@ -611,7 +611,7 @@ public:
    * obsolete version of the previous one
    */
   template<typename PropertyType>
-  bool computeProperty(const std::string &algorithm,
+  _DEPRECATED bool computeProperty(const std::string &algorithm,
                        PropertyType* result, std::string &msg,
                        PluginProgress *progress=NULL, DataSet *data=NULL);
   /**
