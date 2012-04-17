@@ -74,6 +74,14 @@ const string runGraphScriptFunc =
   "\n"
   "\n";
 
+void strReplace(std::string& str, const std::string& oldStr, const std::string& newStr) {
+  size_t pos = 0;
+  while((pos = str.find(oldStr, pos)) != std::string::npos) {
+     str.replace(pos, oldStr.length(), newStr);
+     pos += newStr.length();
+  }
+}
+
 std::string cleanPropertyName(const std::string &propertyName) {
   std::string ret(propertyName);
   std::replace(ret.begin(), ret.end(), ' ', '_');
@@ -107,6 +115,8 @@ std::string cleanPropertyName(const std::string &propertyName) {
       break;
     }
   }
+
+  strReplace(ret, "\"", "");
 
   return ret;
 }
@@ -145,67 +155,72 @@ std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph) {
   oss << "def main(graph): " << endl;
   Iterator<PropertyInterface*> *itProps = graph->getObjectProperties();
 
+
+
   while (itProps->hasNext()) {
     PropertyInterface *prop = itProps->next();
 
+    std::string cleanPropName = prop->getName();
+    strReplace(cleanPropName, "\"", "\\\"");
+
     if (dynamic_cast<DoubleProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getDoubleProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getDoubleProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<LayoutProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getLayoutProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getLayoutProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<IntegerProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getIntegerProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getIntegerProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<StringProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getStringProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getStringProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<SizeProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getSizeProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getSizeProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<BooleanProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getBooleanProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getBooleanProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<ColorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getColorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getColorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<GraphProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getGraphProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getGraphProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<DoubleVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getDoubleVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getDoubleVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<CoordVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getCoordVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getCoordVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<IntegerVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getIntegerVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getIntegerVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<SizeVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getSizeVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getSizeVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<BooleanVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getBooleanVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getBooleanVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<ColorVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getColorVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getColorVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<StringVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getStringVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getStringVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
   }
 
