@@ -183,6 +183,14 @@ public:
   * @brief return the number of received nofication
   */
   unsigned int getReceived() const;
+  /**
+  * @brief return the number of Listeners of that Object
+  */
+  unsigned int countListeners() const;
+  /**
+  * @brief return the number of Observers of that Object
+  */
+  unsigned int countObservers() const;
 
 
 public:
