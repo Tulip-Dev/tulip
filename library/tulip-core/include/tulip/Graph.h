@@ -612,8 +612,8 @@ public:
    */
   template<typename PropertyType>
   _DEPRECATED bool computeProperty(const std::string &algorithm,
-                       PropertyType* result, std::string &msg,
-                       PluginProgress *progress=NULL, DataSet *data=NULL);
+                                   PropertyType* result, std::string &msg,
+                                   PluginProgress *progress=NULL, DataSet *data=NULL);
   /**
    * Returns a pointer to a PropertyInterface which is in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
    * The real type of the PropertyInterface is tested with the template parameter.

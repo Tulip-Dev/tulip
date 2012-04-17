@@ -62,6 +62,7 @@ public:
 
   void treatEvents(const vector<Event> &events) {
     reset();
+
     for (int i=0; i<events.size(); ++i) {
       observables.insert(events[i].sender());
     }
