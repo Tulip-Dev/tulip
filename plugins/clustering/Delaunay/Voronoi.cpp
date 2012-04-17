@@ -85,11 +85,13 @@ static tlp::Coord computeTriangleCircumscribedCenter(const tlp::Coord &A, const 
   long double anorm = a.norm();
   long double bnorm = b.norm();
   long double axbnorm = axb.norm();
+
   if (axbnorm != 0) {
     Vec3ld c = Cd + (((anorm*anorm*b) - (bnorm*bnorm*a))^axb) / (2.0*axbnorm*axbnorm);
     return tlp::Coord(c[0], c[1], c[2]);
-  } else {
-      return (A+B+C)/3.0f;
+  }
+  else {
+    return (A+B+C)/3.0f;
   }
 }
 
@@ -126,8 +128,9 @@ static tlp::Coord computeTetrahedronCircumscribedCenter(const tlp::Coord &A, con
   if (det != 0) {
     Vec3ld c =  Ad + ((danorm*danorm*(ba^ca)) + (canorm*canorm*(da^ba)) + (banorm*banorm*(ca^da))) / (2.0*det);
     return tlp::Coord(c[0], c[1], c[2]);
-  } else {
-      return (A+B+C+D)/4.0f;
+  }
+  else {
+    return (A+B+C+D)/4.0f;
   }
 }
 
@@ -209,16 +212,17 @@ public :
         tlp::node ne;
 
         if (circumCenterToNode.find(circumCenterPos) != circumCenterToNode.end()) {
-            ne = circumCenterToNode[circumCenterPos];
-        } else {
-            // add the voronoi vertex in the voronoi sub-graph
-            ne = voronoiSubGraph->addNode();
-            viewLayout->setNodeValue(ne, circumCenterPos);
-            circumCenterToNode[circumCenterPos] = ne;
+          ne = circumCenterToNode[circumCenterPos];
+        }
+        else {
+          // add the voronoi vertex in the voronoi sub-graph
+          ne = voronoiSubGraph->addNode();
+          viewLayout->setNodeValue(ne, circumCenterPos);
+          circumCenterToNode[circumCenterPos] = ne;
         }
 
         for (size_t j = 0 ; j < simplicesNodes[i].size() ; ++j) {
-            origNodeToCellBorder[simplicesNodes[i][j]].insert(ne);
+          origNodeToCellBorder[simplicesNodes[i][j]].insert(ne);
         }
 
         // try to connect two voronoi vertices of adjacent facets

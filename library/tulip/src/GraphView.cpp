@@ -334,7 +334,7 @@ void GraphView::removeNode(const node n, const std::vector<edge>& edges) {
   notifyDelNode(n);
   removeEdges(edges);
   delNodeInternal(n);
-}  
+}
 //----------------------------------------------------------------
 void GraphView::delNode(const node n, bool deleteInAllGraphs) {
   if(deleteInAllGraphs) {
@@ -351,26 +351,34 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
     // use a queue for a dfs subgraphs propagation
     std::queue<Graph*> sgq;
     Iterator<Graph*>* sgs = getSubGraphs();
+
     while (sgs->hasNext()) {
       Graph* sg = sgs->next();
+
       if (sg->isElement(n))
-	sgq.push(sg);
-    } delete sgs;
+        sgq.push(sg);
+    }
+
+    delete sgs;
 
     // subgraphs loop
     while(!sgq.empty()) {
       Graph* sg = sgq.front();
-    
+
       sgs = sg->getSubGraphs();
+
       while (sgs->hasNext()) {
-	Graph* ssg = sgs->next();
-	if (ssg->isElement(n))
-	  sgq.push(ssg);
-      } delete sgs;
-      
+        Graph* ssg = sgs->next();
+
+        if (ssg->isElement(n))
+          sgq.push(ssg);
+      }
+
+      delete sgs;
+
       if (sg == sgq.front()) {
-	((GraphView *) sg)->removeNode(n, edges);
-	sgq.pop();
+        ((GraphView *) sg)->removeNode(n, edges);
+        sgq.pop();
       }
     }
 
@@ -396,17 +404,19 @@ void GraphView::removeEdge(const edge e) {
   notifyDelEdge(e);
   delEdgeInternal(e);
 }
-  //----------------------------------------------------------------
+//----------------------------------------------------------------
 void GraphView::removeEdges(const std::vector<edge>& edges) {
   std::vector<edge>::const_iterator ite = edges.begin();
 
   while (ite != edges.end()) {
     edge e = (*ite);
-    if (isElement(e)) 
+
+    if (isElement(e))
       removeEdge(e);
+
     ++ite;
   }
-}  
+}
 //----------------------------------------------------------------
 void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
   if(deleteInAllGraphs) {

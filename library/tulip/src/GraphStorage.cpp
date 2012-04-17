@@ -293,15 +293,18 @@ Iterator<edge>* GraphStorage::getInOutEdges(node n) const {
 }
 //=======================================================
 void GraphStorage::getInOutEdges(node n, std::vector<edge>& edges,
-				 bool loopsOnlyOnce) const {
+                                 bool loopsOnlyOnce) const {
   edges.reserve(nodes[n.id].edges.size());
   SimpleVector<edge>::const_iterator it = nodes[n.id].edges.begin();
   edge previous;
+
   while(it != nodes[n.id].edges.end()) {
     edge e = (*it);
+
     // loops appear twice
     if (loopsOnlyOnce == false || e != previous)
       edges.push_back(e);
+
     previous = e;
     ++it;
   }

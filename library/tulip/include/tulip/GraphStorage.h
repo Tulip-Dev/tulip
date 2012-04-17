@@ -137,9 +137,9 @@ public:
   //=======================================================
   /**
    * @brief get adjacency edges of a given node
-   */ 
+   */
   void getInOutEdges(node n, std::vector<edge>& edges,
-		     bool loopsOnlyOnce = false) const;
+                     bool loopsOnlyOnce = false) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on out edges of the node n

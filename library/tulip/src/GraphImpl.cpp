@@ -259,22 +259,30 @@ void GraphImpl::delNode(const node n, bool) {
   // use a queue for a dfs subgraphs propagation
   std::queue<Graph*> sgq;
   Iterator<Graph*>* sgs = getSubGraphs();
+
   while (sgs->hasNext()) {
     Graph* sg = sgs->next();
+
     if (sg->isElement(n))
       sgq.push(sg);
-  } delete sgs;
+  }
+
+  delete sgs;
 
   // subgraphs loop
   while(!sgq.empty()) {
     Graph* sg = sgq.front();
-    
+
     sgs = sg->getSubGraphs();
+
     while (sgs->hasNext()) {
       Graph* ssg = sgs->next();
+
       if (ssg->isElement(n))
-	sgq.push(ssg);
-    } delete sgs;
+        sgq.push(ssg);
+    }
+
+    delete sgs;
 
     if (sg == sgq.front()) {
       ((GraphView *) sg)->removeNode(n, edges);
@@ -364,7 +372,7 @@ Iterator<edge>* GraphImpl::getInOutEdges(const node n) const {
 }
 //----------------------------------------------------------------
 void GraphImpl::getInOutEdges(const node n, std::vector<edge>& edges,
-			      bool loopsOnlyOnce) const {
+                              bool loopsOnlyOnce) const {
   storage.getInOutEdges(n, edges, loopsOnlyOnce);
 }
 //----------------------------------------------------------------

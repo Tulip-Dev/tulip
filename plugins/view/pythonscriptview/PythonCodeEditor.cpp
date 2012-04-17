@@ -927,8 +927,9 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
   else if ((e->key() == Qt::Key_Space && e->modifiers() == modifier) || e->text() == ".") {
     QPlainTextEdit::keyPressEvent(e);
     QString textBeforeCursor = textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
+
     if (!textBeforeCursor.contains('#'))
-        showAutoCompletionList(e->text() == ".");
+      showAutoCompletionList(e->text() == ".");
   }
   else {
     QPlainTextEdit::keyPressEvent(e);
@@ -1281,7 +1282,7 @@ void PythonCodeEditor::insertAt(QString text, int line, int col) {
 }
 
 void PythonCodeEditor::insertFromMimeData(const QMimeData * source) {
-    textCursor().insertText(source->text());
+  textCursor().insertText(source->text());
 }
 
 void PythonCodeEditor::showTooltip(int line, int col, const QString &text) {
