@@ -60,21 +60,13 @@ public:
     return observables.find(obs) != observables.end();
   }
 
-  // Observable methods
-  void update(std::set<Observable *>::iterator begin,
-              std::set<Observable *>::iterator end) {
+  void treatEvents(const vector<Event> &events) {
     reset();
-    std::set<Observable *>::iterator it = begin;
-
-    while(it != end) {
-      observables.insert((*it));
-      ++it;
+    for (int i=0; i<events.size(); ++i) {
+      observables.insert(events[i].sender());
     }
   }
 
-  void observableDestroyed(Observable *obs) {
-    observables.insert(obs);
-  }
 };
 
 static ObserverPTest* observer;
@@ -253,7 +245,7 @@ void ObservablePropertyTest::testAddObserver() {
 
   for (unsigned int i = 0; i < 7; ++i) {
     CPPUNIT_ASSERT(props[i]->countObservers() == 1);
-    CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 1);
+    //CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 1); //same as above
   }
 }
 //==========================================================
@@ -377,7 +369,7 @@ void ObservablePropertyTest::testSynchronousDelete() {
     PropertyInterface* prop = props[i];
     delete prop;
     props[i] = NULL;
-    CPPUNIT_ASSERT(observer->nbObservables() == i + 1);
+    CPPUNIT_ASSERT(observer->nbObservables() == 1);
     CPPUNIT_ASSERT(observer->found(prop));
     CPPUNIT_ASSERT(pObserver->nbProperties() == i + 1);
     CPPUNIT_ASSERT(pObserver->found(prop));
@@ -413,7 +405,7 @@ void ObservablePropertyTest::testRemoveObserver() {
     props[i]->removeObserver(observer);
     props[i]->removePropertyObserver(pObserver);
     CPPUNIT_ASSERT(props[i]->countObservers() == 0);
-    CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 0);
+    //CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 0); same as above
   }
 
 // no more notification
@@ -442,12 +434,12 @@ void ObservablePropertyTest::testRemoveObserver() {
 
 //==========================================================
 void ObservablePropertyTest::testObserverWhenRemoveObservable() {
-  CPPUNIT_ASSERT(props[0]->countPropertyObservers() == 1);
+  CPPUNIT_ASSERT(props[0]->countObservers() == 1);
   PropertyObserverTest* pObserverTmp=new PropertyObserverTest();
   props[0]->addPropertyObserver(pObserverTmp);
-  CPPUNIT_ASSERT(props[0]->countPropertyObservers() == 2);
+  CPPUNIT_ASSERT(props[0]->countObservers() == 2);
   delete pObserverTmp;
-  CPPUNIT_ASSERT(props[0]->countPropertyObservers() == 1);
+  CPPUNIT_ASSERT(props[0]->countObservers() == 1);
 }
 
 //==========================================================
