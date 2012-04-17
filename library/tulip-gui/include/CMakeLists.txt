@@ -97,6 +97,7 @@ INSTALL(FILES
   tulip/CaptionGraphicsItem.h
   tulip/CaptionGraphicsSubItems.h
   tulip/GraphModel.h
+  tulip/GraphNeedsSavingObserver.h
   tulip/GraphElementModel.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
