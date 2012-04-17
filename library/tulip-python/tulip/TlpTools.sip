@@ -25,6 +25,7 @@
 
 %ModuleHeaderCode
 #include <tulip/TemplateFactory.h>
+#include <tulip/PluginLoaderTxt.h>
 %End
 
 namespace tlp {
@@ -84,7 +85,7 @@ The plug-ins directory can be defined in different ways, given by order of preva
 
 //=====================================================================
 
-void loadPlugins(tlp::PluginLoader *plug=0);
+    void loadPlugins(tlp::PluginLoader *plug=0);
 %Docstring
 tlp.loadPlugins()
 
@@ -92,6 +93,15 @@ Loads C++ plugins installed in the directories listed in the tlp.TulipPluginsPat
 (in the form "<path1>;<path2>" on windows and "<path1>:<path2>" on unix).
 The tlp.TulipPluginsPath can be initialized with standard Tulip directories 
 by calling the :func:`tlp.initTulipLib` function.
+%End
+
+%MethodCode
+    if (!a0) {
+        tlp::PluginLoaderTxt pluginLoaderTxt;
+        tlp::loadPlugins(&pluginLoaderTxt);
+    } else {
+        tlp::loadPlugins(a0);
+    }
 %End
 
 //=====================================================================
@@ -108,6 +118,15 @@ Returns :const:`True` if the plugin was correctly loaded.
 :rtype: boolean
 %End
 
+%MethodCode
+      if (!a1) {
+        tlp::PluginLoaderTxt pluginLoaderTxt;
+        tlp::loadPlugin(*a0, &pluginLoaderTxt);
+      } else {
+        tlp::loadPlugin(*a0, a1);
+      }
+%End
+
 //=====================================================================
 
 void loadPluginsFromDir(std::string dir, std::string type = "Algorithm", tlp::PluginLoader *loader=0);
@@ -120,6 +139,15 @@ Loads C++ plugins located in a specific directory.
 :type dir: string
 %End
 
+%MethodCode
+    if (!a2) {
+        tlp::PluginLoaderTxt pluginLoaderTxt;
+        tlp::loadPluginsFromDir(*a0, *a1, &pluginLoaderTxt);
+    } else {
+        tlp::loadPluginsFromDir(*a0, *a1, a2);
+    }
+%End
+
 //=====================================================================
 
 void loadPluginsCheckDependencies(tlp::PluginLoader* loader=0);
@@ -129,6 +157,15 @@ tlp.loadPluginsCheckDependencies()
 Checks the dependencies of all C++ plugins loaded so far. 
 If a plugin does not have all its dependencies fulfilled,
 it is unloaded and removed from the current plugins database.
+%End
+
+%MethodCode
+    if (!a0) {
+        tlp::PluginLoaderTxt pluginLoaderTxt;
+        tlp::loadPluginsCheckDependencies(&pluginLoaderTxt);
+    } else {
+        tlp::loadPluginsCheckDependencies(a0);
+    }
 %End
 
 //=====================================================================
