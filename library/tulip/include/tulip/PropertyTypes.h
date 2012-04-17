@@ -316,6 +316,7 @@ template class TypeInterface<bool>;
 template class TypeInterface<std::vector<bool> >;
 template class TypeInterface<std::vector<std::string> >;
 template class TypeInterface<tlp::Color>;
+template class TypeInterface<std::string>;
 
 template class AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>;
 template class AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>;
