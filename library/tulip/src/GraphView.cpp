@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <queue>
 
 #include <tulip/StableIterator.h>
 #include <tulip/ForEach.h>
@@ -328,6 +329,13 @@ void GraphView::removeNode(const node n) {
   delNodeInternal(n);
 }
 //----------------------------------------------------------------
+void GraphView::removeNode(const node n, const std::vector<edge>& edges) {
+  assert(isElement(n));
+  notifyDelNode(n);
+  removeEdges(edges);
+  delNodeInternal(n);
+}  
+//----------------------------------------------------------------
 void GraphView::delNode(const node n, bool deleteInAllGraphs) {
   if(deleteInAllGraphs) {
     getRoot()->delNode(n, true);
@@ -335,42 +343,38 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
   else {
     assert (isElement(n));
     notifyDelNode(n);
-    // propagate to subgraphs
-    Iterator<Graph *>*itS = getSubGraphs();
 
-    while (itS->hasNext()) {
-      Graph *subGraph = itS->next();
+    // get edges vector with loops appearing only once
+    std::vector<edge> edges;
+    ((GraphImpl *)getRoot())->getInOutEdges(n, edges, true);
 
-      if (subGraph->isElement(n))
-        subGraph->delNode(n);
-    }
+    // use a queue for a dfs subgraphs propagation
+    std::queue<Graph*> sgq;
+    Iterator<Graph*>* sgs = getSubGraphs();
+    while (sgs->hasNext()) {
+      Graph* sg = sgs->next();
+      if (sg->isElement(n))
+	sgq.push(sg);
+    } delete sgs;
 
-    delete itS;
-    // remove node's edges
-    set<edge> loops;
-    bool haveLoops = false;
-    StableIterator<edge> itE(getInOutEdges(n));
-
-    while(itE.hasNext()) {
-      edge e = itE.next();
-      node s = opposite(e, n);
-
-      if (s!=n) {
-        removeEdge(e);
-      }
-      else {
-        loops.insert(e);
-        haveLoops = true;
-      }
-    }
-
-    if (haveLoops) {
-      set<edge>::const_iterator it;
-
-      for ( it = loops.begin(); it!=loops.end(); ++it) {
-        removeEdge(*it);
+    // subgraphs loop
+    while(!sgq.empty()) {
+      Graph* sg = sgq.front();
+    
+      sgs = sg->getSubGraphs();
+      while (sgs->hasNext()) {
+	Graph* ssg = sgs->next();
+	if (ssg->isElement(n))
+	  sgq.push(ssg);
+      } delete sgs;
+      
+      if (sg == sgq.front()) {
+	((GraphView *) sg)->removeNode(n, edges);
+	sgq.pop();
       }
     }
+
+    removeEdges(edges);
 
     delNodeInternal(n);
   }
@@ -392,6 +396,17 @@ void GraphView::removeEdge(const edge e) {
   notifyDelEdge(e);
   delEdgeInternal(e);
 }
+  //----------------------------------------------------------------
+void GraphView::removeEdges(const std::vector<edge>& edges) {
+  std::vector<edge>::const_iterator ite = edges.begin();
+
+  while (ite != edges.end()) {
+    edge e = (*ite);
+    if (isElement(e)) 
+      removeEdge(e);
+    ++ite;
+  }
+}  
 //----------------------------------------------------------------
 void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
   if(deleteInAllGraphs) {

@@ -89,7 +89,7 @@ void GraphStorage::reserveAdj(size_t nb) {
 /**
  * @brief restore adjacency edges of a given node
  */
-void GraphStorage::restoreAdj(node n, std::vector<edge>& edges) {
+void GraphStorage::restoreAdj(node n, const std::vector<edge>& edges) {
   EdgeVector& nEdges = nodes[n.id].edges;
   nEdges.clear();
 
@@ -290,6 +290,21 @@ struct IONodesIterator :public Iterator<node>,
 //=======================================================
 Iterator<edge>* GraphStorage::getInOutEdges(node n) const {
   return new EdgeContainerIterator(nodes[n.id].edges);
+}
+//=======================================================
+void GraphStorage::getInOutEdges(node n, std::vector<edge>& edges,
+				 bool loopsOnlyOnce) const {
+  edges.reserve(nodes[n.id].edges.size());
+  SimpleVector<edge>::const_iterator it = nodes[n.id].edges.begin();
+  edge previous;
+  while(it != nodes[n.id].edges.end()) {
+    edge e = (*it);
+    // loops appear twice
+    if (loopsOnlyOnce == false || e != previous)
+      edges.push_back(e);
+    previous = e;
+    ++it;
+  }
 }
 //=======================================================
 Iterator<edge>* GraphStorage::getOutEdges(node n) const {

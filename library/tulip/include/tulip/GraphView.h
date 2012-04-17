@@ -106,6 +106,8 @@ protected:
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);
   virtual void removeEdge(const edge);
+  void removeNode(const node n, const std::vector<edge>& edges);
+  void removeEdges(const std::vector<edge>& edges);
 
 private:
   MutableContainer<bool> nodeAdaptativeFilter;
