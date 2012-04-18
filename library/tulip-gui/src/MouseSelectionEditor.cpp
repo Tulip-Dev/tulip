@@ -324,6 +324,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     }
 
     glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
+    glMainWidget->draw();
     return true;
   }
 
