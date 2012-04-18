@@ -73,6 +73,10 @@ public:
    */
   StringCollection(const std::vector<std::string>& vectorParam, std::string currentString);
 
+  /**
+  * Returns all the selectable string entries.
+  **/
+  std::vector<std::string> getValues()const;
 
   /**
    * Returns the current selected string value.
@@ -139,6 +143,5 @@ public:
     return _data[i];
   }
 };
-
 }
 #endif
