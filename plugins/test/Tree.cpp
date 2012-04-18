@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
@@ -26,11 +26,11 @@ public:
   PLUGININFORMATIONS("Simple Tree Test", "Tulip team", "18/04/2012", "Tests whether a graph is a simple tree or not.", "1.0", "Tree")
   DirectedTreeTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
-  
+
   virtual bool run() {
     return tlp::TreeTest::isTree(graph);
   }
-  
+
 };
 PLUGIN(DirectedTreeTest)
 
@@ -39,11 +39,11 @@ public:
   PLUGININFORMATIONS("Free Tree Test", "Tulip team", "18/04/2012", "Tests whether a graph is a free tree or not.", "1.0", "Tree")
   FreeTreeTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
-  
+
   virtual bool run() {
     return tlp::TreeTest::isFreeTree(graph);
   }
-  
+
 };
 PLUGIN(FreeTreeTest)
 
@@ -52,18 +52,19 @@ public:
   PLUGININFORMATIONS("Make Rooted Tree", "Tulip team", "18/04/2012", "Makes a graph a rooted tree.", "1.0", "Tree")
   MakeRootedTree(const tlp::PluginContext* context) : tlp::Algorithm(context) {
   }
-  
+
   virtual bool run() {
-    
+
     tlp::BooleanProperty* selection = graph->getProperty<tlp::BooleanProperty>("viewSelection");
     tlp::Iterator<tlp::node>* it = selection->getNodesEqualTo(true);
     tlp::node root = it->next();
+
     if(it->hasNext())
       return false;
-    
+
     tlp::TreeTest::makeRootedTree(graph, root);
     return true;
   }
-  
+
 };
 PLUGIN(MakeRootedTree)
