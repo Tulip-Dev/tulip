@@ -191,14 +191,16 @@ class GraphUpdatesRecorder :public GraphObserver, public PropertyObserver {
   void deleteDefaultValues(TLP_HASH_MAP<PropertyInterface*, DataMem*>& values);
   // deletion of various containers
   template<typename T>
-    void deleteContainerValues(MutableContainer<T>& ctnr) {
+  void deleteContainerValues(MutableContainer<T>& ctnr) {
     IteratorValue* it = ctnr.findAllValues(NULL, false);
 
     while(it->hasNext()) {
       TypedValueContainer<T> tvc;
       it->nextValue(tvc);
       delete tvc.value;
-    } delete it;
+    }
+
+    delete it;
   }
   // record of a node's edges container before/after modification
   void recordEdgeContainer(MutableContainer<std::vector<edge>*>&,

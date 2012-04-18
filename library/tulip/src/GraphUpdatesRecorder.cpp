@@ -139,7 +139,7 @@ void GraphUpdatesRecorder::deleteValues(TLP_HASH_MAP<PropertyInterface*,
 
 // delete all the DataMem referenced by a TLP_HASH_MAP
 void GraphUpdatesRecorder::deleteDefaultValues(TLP_HASH_MAP<PropertyInterface*,
-							    DataMem*>& values) {
+    DataMem*>& values) {
   TLP_HASH_MAP<PropertyInterface*, DataMem*>::const_iterator itv =
     values.begin();
 
@@ -168,7 +168,7 @@ void GraphUpdatesRecorder::removeFromEdgeContainer(MutableContainer<vector<edge>
 
     while(it != ctnr->end()) {
       if ((*it) == e) {
-	ctnr->erase(it);
+        ctnr->erase(it);
         break;
       }
 
@@ -262,6 +262,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
           rn->set(n, true);
           hasNewValues = true;
         }
+
         ++itn;
       }
 
@@ -336,6 +337,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
           re->set(e, true);
           hasNewValues = true;
         }
+
         ++ite;
       }
 
@@ -792,7 +794,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     TypedValueContainer<std::vector<edge>*> tvc;
     node n(itc->nextValue(tvc));
     g->storage.restoreAdj(n, *(tvc.value));
-  } delete itc;
+  }
+
+  delete itc;
 
   // loop on edgesToAdd
   MutableContainer<GraphEltsRecord*>& edgesToAdd =
@@ -889,7 +893,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
       while(itv->hasNext()) {
         node n(itv->next());
         prop->copy(n, n, nv);
-      } delete itv;
+      }
+
+      delete itv;
     }
 
     if (itrv->second.recordedEdges) {
@@ -899,8 +905,11 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
       while(itv->hasNext()) {
         edge e(itv->next());
         prop->copy(e, e, nv);
-      } delete itv;
+      }
+
+      delete itv;
     }
+
     ++itrv;
   }
 
