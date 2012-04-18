@@ -113,6 +113,12 @@ public:
     return colorMap;
   }
   /**
+    * @brief Set the map to configure position to color mapping.
+    * The values in the map must be between 0.0 and 1.0, other values will be ignored.
+    *
+    **/
+  void setColorMap(const std::map<float, Color>& colorMap);
+  /**
    * @brief Returns true if the color scale is a gradient.
    */
   bool isGradient() const {
