@@ -132,6 +132,6 @@ int StringCollection::getCurrent() {
   return current;
 }
 
-vector<string> StringCollection::getValues()const{
-    return _data;
+vector<string> StringCollection::getValues()const {
+  return _data;
 }

@@ -25,11 +25,11 @@ public:
   PLUGININFORMATIONS("Conneted Test", "Tulip team", "18/04/2012", "Tests whether a graph is connected or not.", "1.0", "Connectivity")
   ConnetedTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
-  
+
   virtual bool run() {
     return tlp::ConnectedTest::isConnected(graph);
   }
-  
+
 };
 PLUGIN(ConnetedTest)
 

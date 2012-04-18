@@ -38,11 +38,11 @@ public:
   PLUGININFORMATIONS("Planar Embedding Test", "Tulip team", "18/04/2012", "Tests whether a graph is planar embedding or not.", "1.0", "Planarity")
   PlanarEmbeddingTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
-  
+
   virtual bool run() {
     return tlp::PlanarityTest::isPlanarEmbedding(graph);
   }
-  
+
 };
 PLUGIN(PlanarEmbeddingTest)
 
@@ -51,7 +51,7 @@ public:
   PLUGININFORMATIONS("Make Planar Embedding", "Tulip team", "18/04/2012", "Makes the graph a planar embedding if it is planar.", "1.0", "Planarity")
   MakePlanarEmbedding(const tlp::PluginContext* context) : tlp::Algorithm(context) {
   }
-  
+
   virtual bool run() {
     return tlp::PlanarityTest::planarEmbedding(graph);
   }

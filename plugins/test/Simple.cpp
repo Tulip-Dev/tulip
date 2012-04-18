@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
@@ -25,11 +25,11 @@ public:
   PLUGININFORMATIONS("Simplicity Test", "Tulip team", "18/04/2012", "Tests whether a graph is simple or not.", "1.0", "Simplicity")
   SimplicityTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
-  
+
   virtual bool run() {
     return tlp::SimpleTest::isSimple(graph);
   }
-  
+
 };
 PLUGIN(SimplicityTest)
 
@@ -38,12 +38,12 @@ public:
   PLUGININFORMATIONS("Make Simple", "Tulip team", "18/04/2012", "Makes a graph simple.", "1.0", "Simplicity")
   MakeSimple(const tlp::PluginContext* context) : tlp::Algorithm(context) {
   }
-  
+
   virtual bool run() {
     std::vector<tlp::edge> edges;
     tlp::SimpleTest::makeSimple(graph, edges);
     return true;
   }
-  
+
 };
 PLUGIN(MakeSimple)
