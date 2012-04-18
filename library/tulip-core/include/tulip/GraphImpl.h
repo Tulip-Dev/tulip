@@ -70,6 +70,9 @@ public:
   Iterator<edge>* getInEdges(const node )const;
   Iterator<edge>* getOutEdges(const node )const;
   Iterator<edge>* getInOutEdges(const node )const;
+  // to ensure that loops appear only once
+  void getInOutEdges(const node, std::vector<edge>& edges,
+                     bool loopsOnlyOnce = false)const;
   //================================================================================
   unsigned int deg(const node ) const;
   unsigned int indeg(const node) const;

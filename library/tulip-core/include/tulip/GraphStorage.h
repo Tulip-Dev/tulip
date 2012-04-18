@@ -96,7 +96,7 @@ public:
   /**
    * @brief restore adjacency edges of a given node
    */
-  void restoreAdj(node n, std::vector<edge>& edges);
+  void restoreAdj(node n, const std::vector<edge>& edges);
   //=======================================================
   /**
    * @brief Return the first node of graph
@@ -130,9 +130,16 @@ public:
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on adjacent edges of the node n
+   * @warning: be careful that loops appear twice
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    */
   Iterator<edge>* getInOutEdges(node n) const;
+  //=======================================================
+  /**
+   * @brief get adjacency edges of a given node
+   */
+  void getInOutEdges(node n, std::vector<edge>& edges,
+                     bool loopsOnlyOnce = false) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on out edges of the node n
@@ -366,12 +373,18 @@ public:
   //=======================================================
 private :
   // specific types
-  typedef SimpleVector<edge> EdgeContainer;
+  typedef SimpleVector<edge> EdgeVector;
+
+  struct EdgeContainer {
+    EdgeVector edges;
+    unsigned int outDegree;
+
+    EdgeContainer():outDegree(0) {}
+  };
   typedef std::vector<EdgeContainer> Nodes;
   typedef std::vector<std::pair< node , node > > Edges;
 
   // data members
-  MutableContainer<unsigned int> outDegree;
   mutable Edges edges;
   mutable Nodes nodes;
   IdManager nodeIds;

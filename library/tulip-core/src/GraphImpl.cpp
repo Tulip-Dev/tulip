@@ -16,6 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#include <queue>
+
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
 #include <tulip/PropertyManager.h>
@@ -248,46 +251,53 @@ void GraphImpl::removeNode(const node n) {
 void GraphImpl::delNode(const node n, bool) {
   assert (isElement(n));
   notifyDelNode(n);
-  // propagate to subgraphs
-  Iterator<Graph *>*itS=getSubGraphs();
+  // get edges vector with loops appearing only once
+  std::vector<edge> edges;
+  storage.getInOutEdges(n, edges, true);
 
-  while (itS->hasNext()) {
-    Graph *subgraph = itS->next();
-    assert(subgraph != this);
+  // use a queue for a dfs subgraphs propagation
+  std::queue<Graph*> sgq;
+  Iterator<Graph*>* sgs = getSubGraphs();
 
-    if (subgraph->isElement(n))
-      subgraph->delNode(n);
+  while (sgs->hasNext()) {
+    Graph* sg = sgs->next();
+
+    if (sg->isElement(n))
+      sgq.push(sg);
   }
 
-  delete itS;
+  delete sgs;
+
+  // subgraphs loop
+  while(!sgq.empty()) {
+    Graph* sg = sgq.front();
+
+    sgs = sg->getSubGraphs();
+
+    while (sgs->hasNext()) {
+      Graph* ssg = sgs->next();
+
+      if (ssg->isElement(n))
+        sgq.push(ssg);
+    }
+
+    delete sgs;
+
+    if (sg == sgq.front()) {
+      ((GraphView *) sg)->removeNode(n, edges);
+      sgq.pop();
+    }
+  }
 
   // loop on inout edges of n
   // for notification and removal from propertyContainer
-  Iterator<edge>* edges = storage.getInOutEdges(n);
-  set<edge> loops;
+  std::vector<edge>::const_iterator ite = edges.begin();
 
-  while(edges->hasNext()) {
-    edge e = edges->next();
-    node s = opposite(e, n);
-
-    if (s != n) {
-      notifyDelEdge(e);
-      propertyContainer->erase(e);
-    }
-    else
-      loops.insert(e);
-  }
-
-  delete edges;
-
-  if (!loops.empty()) {
-    set<edge>::const_iterator it;
-
-    for (it = loops.begin(); it!=loops.end(); ++it) {
-      edge e = *it;
-      notifyDelEdge(e);
-      propertyContainer->erase(e);
-    }
+  while (ite != edges.end()) {
+    edge e = (*ite);
+    notifyDelEdge(e);
+    propertyContainer->erase(e);
+    ++ite;
   }
 
   // delete n from storage
@@ -358,6 +368,11 @@ Iterator<edge>* GraphImpl::getOutEdges(const node n) const {
 //----------------------------------------------------------------
 Iterator<edge>* GraphImpl::getInOutEdges(const node n) const {
   return new GraphImplEdgeIterator(this, storage.getInOutEdges(n));
+}
+//----------------------------------------------------------------
+void GraphImpl::getInOutEdges(const node n, std::vector<edge>& edges,
+                              bool loopsOnlyOnce) const {
+  storage.getInOutEdges(n, edges, loopsOnlyOnce);
 }
 //----------------------------------------------------------------
 unsigned int GraphImpl::deg(const node n) const {
