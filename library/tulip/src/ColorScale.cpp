@@ -153,6 +153,7 @@ Color ColorScale::getColorAtPos(const float pos) const {
 void ColorScale::setColorMap(const map<float, Color>& newColorMap){
     colorMap = newColorMap;
     colorScaleSet = false;
+    //Erase invalid values i.e < 0 and > 1
     for(map<float, Color>::iterator it = colorMap.begin() ; it != colorMap.end() ; ){
         if( (*it).first < 0.f || (*it).first > 1.f){
             //Erasing in a map does not devalidate iterator.
@@ -164,12 +165,13 @@ void ColorScale::setColorMap(const map<float, Color>& newColorMap){
     if(!colorMap.empty()){
         //Ensure color scale is valid
         if(colorMap.size()==1){
+            //If there is only one value in the map fill the interval with the whole color.
             Color c = (*colorMap.begin()).second;
             colorMap.clear();
             colorMap[0.f]=c;
             colorMap[1.f]=c;
         }else{
-            //Ensure first value is 0 and last is 1
+           //Ensure the first value is mapped to 0 and last is mapped to 1
             map<float,Color>::iterator begin = colorMap.begin();
             if((*begin).first != 0){
                 Color c = (*begin).second;
