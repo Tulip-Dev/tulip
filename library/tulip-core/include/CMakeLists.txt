@@ -29,6 +29,7 @@ INSTALL(FILES
   tulip/ForEach.h
   tulip/GraphDecorator.h
   tulip/Graph.h
+  tulip/GraphTest.h
   tulip/GraphMeasure.h
   tulip/GraphProperty.h
   tulip/GraphTools.h
