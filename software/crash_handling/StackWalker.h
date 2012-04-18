@@ -53,7 +53,7 @@ public:
     os << lightRed << std::dec << std::setfill('0') << "#" << std::setw(2) << frameId
        << lightMagenta << " 0x" << std::hex << std::setw(16) << pcAddress << lightRed << " in ";
 
-    os << lightBlue;
+    os << white;
 
     if (funcName != "") {
       os << funcName;
