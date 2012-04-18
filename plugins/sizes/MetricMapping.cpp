@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cmath>
+
 #include <tulip/TulipPlugin.h>
 
 using namespace std;
@@ -87,9 +87,9 @@ const char * paramHelp[] = {
 }
 
 // error msg for invalid range value
-static const char* rangeSizeErrorMsg = "max size must be greater than min size";
-static const char* rangeMetricErrorMsg = "All values are the same";
-static const std::string AREA_PROPORTIONAL = "Area Proportional";
+static const string rangeSizeErrorMsg = "max size must be greater than min size";
+static const string rangeMetricErrorMsg = "All values are the same";
+static const string AREA_PROPORTIONAL = "Area Proportional";
 /** \addtogroup size */
 /*@{*/
 /// Metric Mapping - Compute size of elements according to a metric.
@@ -112,8 +112,6 @@ public:
     addParameter<bool>("node/edge", paramHelp[6],"true");
     addParameter<StringCollection>("area proportional", paramHelp[7], "Area Proportional;Quadratic/Cubic");
   }
-
-  ~MetricSizeMapping() {}
 
   void computeNodeSize() {
     Iterator<node> *itN=graph->getNodes();
@@ -185,12 +183,8 @@ public:
       proportional = proportionalType.getCurrentString();
     }
 
-    std::cout << proportional << std::endl;
-
     if (min >= max) {
-      /*cerr << rangeErrorMsg << endl;
-        pluginProgress->setError(rangeSizeErrorMsg); */
-      errorMsg = std::string(rangeSizeErrorMsg);
+      errorMsg = rangeSizeErrorMsg;
       return false;
     }
 
@@ -200,7 +194,7 @@ public:
       range = entryMetric->getEdgeMax(graph) - entryMetric->getEdgeMin(graph);
 
     if (!range) {
-      errorMsg = std::string(rangeMetricErrorMsg);
+      errorMsg = rangeMetricErrorMsg;
       return false;
     }
 
@@ -257,4 +251,4 @@ private:
   std::string proportional;
 };
 /*@}*/
-SIZEPLUGIN(MetricSizeMapping,"Metric Mapping","Auber","08/08/2003","","2.0");
+SIZEPLUGIN(MetricSizeMapping,"Metric Mapping","Auber","08/08/2003","","2.0")
