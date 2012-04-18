@@ -131,3 +131,7 @@ bool StringCollection::setCurrent(std::string param) {
 int StringCollection::getCurrent() {
   return current;
 }
+
+vector<string> StringCollection::getValues()const{
+    return _data;
+}
