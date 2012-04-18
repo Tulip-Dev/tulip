@@ -313,10 +313,10 @@ void GlMainWidget::render(RenderingOptions options) {
 
     //If the rendering store is not valid need to regenerate new one force the RenderGraph flag.
     if(widthStored!=width || heightStored!=height) {
-      options |= RenderGraph;
+      options |= RenderScene;
     }
 
-    if(options.testFlag(RenderGraph)) {
+    if(options.testFlag(RenderScene)) {
       createRenderingStore(width,height);
 
       widthStored=width;
@@ -341,7 +341,7 @@ void GlMainWidget::render(RenderingOptions options) {
     glDisable(GL_LIGHTING);
 
 
-    if(options.testFlag(RenderGraph)) {
+    if(options.testFlag(RenderScene)) {
       //Copy the back buffer (containing the graph render) in the rendering store to reuse it later.
       glReadBuffer(GL_BACK);
       glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
@@ -392,7 +392,7 @@ void GlMainWidget::redraw() {
 }
 //==================================================
 void GlMainWidget::draw(bool graphChanged) {
-  render(RenderingOptions(RenderGraph|SwapBuffers));
+  render(RenderingOptions(RenderScene|SwapBuffers));
 #ifdef __APPLE__
 
   // This code is here to bug fix black screen problem on MACOSX with Qt 4.7

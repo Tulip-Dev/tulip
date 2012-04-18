@@ -75,7 +75,7 @@ public:
     * \see render
     **/
   enum RenderingOption {
-    RenderGraph=0x1, /** Force to render the graph even if there is a previous buffered render. You need to call this option if the graph is updated to regenerate the buffer. If not set try to use the last buffered graph render, if there is no valid buffer this flag is forced. **/
+    RenderScene=0x1, /** Force to render the graph even if there is a previous buffered render. You need to call this option if the graph is updated to regenerate the buffer. If not set try to use the last buffered graph render, if there is no valid buffer this flag is forced. **/
     SwapBuffers=0x2 /** Call the swapBuffer functions at the end of the rendering process. If the disabled it's up to you to call the swapBuffer function. **/
   };
   Q_DECLARE_FLAGS ( RenderingOptions, RenderingOption )
@@ -102,13 +102,6 @@ public:
    * GetGraph of GlMainWidget
    */
   Graph *getGraph();
-
-  /**
-   * Get the view who use this GlMainWidget
-   */
-  View *getView() {
-    return view;
-  }
 
   /**
    * Get the scene of this glMainWidget
@@ -238,7 +231,7 @@ public:
     * \param options Configure the rendering process, see the RenderingOption documentation for more informations on each rendering option effect.
     * \see RenderingOption
     **/
-  void render(RenderingOptions options=RenderingOptions(RenderGraph|SwapBuffers));
+  void render(RenderingOptions options=RenderingOptions(RenderScene|SwapBuffers));
 
 private:
 
