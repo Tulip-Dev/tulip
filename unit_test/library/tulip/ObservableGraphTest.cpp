@@ -411,7 +411,7 @@ void ObservableGraphTest::testClear() {
   for (unsigned int i=0; i< NB_NODES; ++i) {
     edges.push_back(graph->addEdge(nodes[i],
                                    (i == NB_NODES - 1)
-                                   ? nodes[0] : nodes[i]));
+                                   ? nodes[i] : nodes[i + 1]));
   }
 
   gObserver->reset();
@@ -430,10 +430,7 @@ void ObservableGraphTest::testClear() {
   CPPUNIT_ASSERT_EQUAL(size_t(NB_NODES), oEdges.size());
 
   for(unsigned int i = 0; i < NB_NODES; ++i) {
-    if (i == 0)
-      CPPUNIT_ASSERT_EQUAL(edges[NB_NODES - 1], oEdges[i]);
-    else
-      CPPUNIT_ASSERT_EQUAL(edges[i - 1], oEdges[i]);
+    CPPUNIT_ASSERT(oEdges[i] == edges[i]);
   }
 
   CPPUNIT_ASSERT_EQUAL(1u, observer->nbObservables());
