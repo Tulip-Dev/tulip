@@ -65,8 +65,7 @@ void makeProperDag(Graph* graph,list<node> &addedNodes,
   for (vector<edge>::const_iterator itEdge=sgEdges.begin(); itEdge!=sgEdges.end(); ++itEdge) {
     edge ite=*itEdge;
     pair<node, node> eEnds = graph->ends(ite);
-    int delta=(int)rint(dLevel.get(eEnds.second.id)
-                        - dLevel.get(eEnds.first.id));
+    int delta=dLevel.get(eEnds.second.id)- dLevel.get(eEnds.first.id);
 
     if (delta>1) {
       tmp1=graph->addNode();
