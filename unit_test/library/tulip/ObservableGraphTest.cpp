@@ -56,9 +56,10 @@ public:
   void treatEvents(const vector<Event> &events) {
     if (events[0].type() == Event::TLP_DELETE) {
       observables.insert(events[0].sender());
-    } else {
+    }
+    else {
       for (int i=0; i<events.size(); ++i) {
-	observables.insert(events[i].sender());
+        observables.insert(events[i].sender());
       }
     }
   }

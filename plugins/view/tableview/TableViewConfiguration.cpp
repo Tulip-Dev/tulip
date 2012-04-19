@@ -50,9 +50,12 @@ void TableViewConfiguration::setShowEdges(bool f) {
 void TableViewConfiguration::setFilteringProperty(QString name) {
   GraphPropertiesModel<BooleanProperty>* model = static_cast<GraphPropertiesModel<BooleanProperty>*>(_ui->filteringPropertyCombo->model());
   int r = 0;
+
   if (!name.isEmpty())
     r = model->rowOf(model->graph()->getProperty<BooleanProperty>(name.toStdString()));
+
   if (r < 0)
     r=0;
+
   _ui->filteringPropertyCombo->setCurrentIndex(r);
 }

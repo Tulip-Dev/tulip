@@ -623,6 +623,7 @@ std::string PythonInterpreter::getVariableType(const std::string &varName) {
   // avoid any function call
   if (varName.find('(') != std::string::npos)
     return "";
+
   outputActivated = false;
   consoleOuputString = "";
   bool ok = runString("printObjectClass("+varName+")");

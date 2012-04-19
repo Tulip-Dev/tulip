@@ -25,7 +25,9 @@ public:
     return _graph;
   }
 
-  QSet<int> uncheckedIndexes() const { return _unCheckedIndexes; }
+  QSet<int> uncheckedIndexes() const {
+    return _unCheckedIndexes;
+  }
 
   // Methods re-implemented from QAbstractItemModel
   QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
@@ -60,9 +62,11 @@ public:
         _unCheckedIndexes.remove(index.row());
       else
         _unCheckedIndexes.insert(index.row());
+
       emit checkStateChanged(index,(Qt::CheckState)(value.value<int>()));
       return true;
     }
+
     return false;
   }
 

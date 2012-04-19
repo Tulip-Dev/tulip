@@ -461,13 +461,16 @@ bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInde
   unsigned int id = graphModel->elementAt(sourceRow);
 
   bool selected = true;
+
   if (_filterProperty != NULL) {
     GraphModel* graphModel = static_cast<GraphModel*>(sourceModel());
+
     if (graphModel->isNode())
       selected = _filterProperty->getNodeValue(node(id));
     else
       selected = _filterProperty->getEdgeValue(edge(id));
   }
+
   if (!selected)
     return false;
 
@@ -494,9 +497,12 @@ bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInde
 void GraphSortFilterProxyModel::setFilterProperty(BooleanProperty* prop) {
   if (_filterProperty != NULL)
     _filterProperty->removeListener(this);
+
   _filterProperty = prop;
+
   if (_filterProperty != NULL)
     _filterProperty->addListener(this);
+
   invalidateFilter();
 }
 

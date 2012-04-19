@@ -622,6 +622,7 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
     if (_modeToSlots[modeWidget].size() == mode) {
       if (current > 0 && current < _panels.size())
         setActivePanel(_panels[current]->view());
+
       switchWorkspaceMode(modeWidget);
     }
   }

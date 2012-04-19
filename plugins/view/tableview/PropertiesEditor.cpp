@@ -57,18 +57,18 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
 }
 
 void PropertiesEditor::checkAll() {
-  for(int i=0;i<_sourceModel->rowCount();++i)
+  for(int i=0; i<_sourceModel->rowCount(); ++i)
     _sourceModel->setData(_sourceModel->index(i,0),Qt::Checked,Qt::CheckStateRole);
 }
 
 void PropertiesEditor::unCheckAll() {
-  for(int i=0;i<_sourceModel->rowCount();++i) {
+  for(int i=0; i<_sourceModel->rowCount(); ++i) {
     _sourceModel->setData(_sourceModel->index(i,0),Qt::Unchecked,Qt::CheckStateRole);
   }
 }
 
 void PropertiesEditor::unCheckAllExcept() {
-  for(int i=0;i<_sourceModel->rowCount();++i) {
+  for(int i=0; i<_sourceModel->rowCount(); ++i) {
     QModelIndex index = _sourceModel->index(i,0);
     Qt::CheckState state = ( _sourceModel->data(index).toString() == QString(_contextProperty->getName().c_str()) ? Qt::Checked : Qt::Unchecked);
     _sourceModel->setData(index,state,Qt::CheckStateRole);

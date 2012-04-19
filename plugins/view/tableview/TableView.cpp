@@ -91,7 +91,8 @@ void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
   QString propName = pi->getName().c_str();
   foreach(QTableView* view, QList<QTableView*>() << _ui->nodesTable << _ui->edgesTable) {
     QAbstractItemModel* model = view->model();
-    for(int i=0;i < model->columnCount(); ++i) {
+
+    for(int i=0; i < model->columnCount(); ++i) {
       if (model->headerData(i,Qt::Horizontal,Qt::DisplayRole).toString() == propName) {
         view->horizontalHeader()->setSectionHidden(i,!v);
         break;
