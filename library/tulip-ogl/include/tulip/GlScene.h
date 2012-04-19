@@ -323,8 +323,8 @@ public:
   /**
    * Return the layer list
    */
-  std::vector<std::pair<std::string, GlLayer*> >* getLayersList() {
-    return &layersList;
+  const std::vector<std::pair<std::string, GlLayer*> > &getLayersList() {
+    return layersList;
   }
 
   /**
@@ -332,6 +332,8 @@ public:
    * Layers will not be deleted in this function
    */
   void clearLayersList() {
+    for(std::vector<std::pair<std::string,GlLayer*> >::iterator it=layersList.begin();it!=layersList.end();++it)
+      delete (*it).second;
     layersList.clear();
   }
 
