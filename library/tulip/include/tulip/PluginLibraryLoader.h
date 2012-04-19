@@ -47,6 +47,8 @@ public:
 private:
   void *infos;
   static std::string currentPluginLibrary;
+  // to allow the update of the above variable
+  friend void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader);
 };
 
 }

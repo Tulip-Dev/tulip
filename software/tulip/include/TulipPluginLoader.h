@@ -60,8 +60,11 @@ struct TulipPluginLoader:public PluginLoaderWithInfo {
 
   virtual void aborted(const std::string &filename,const  std::string &errormsg) {
     progress++;
-    std::string msg("Error when loading ");
-    msg += tlp::getCurrentPluginFileName() + ":\n" + filename + '\n' + errormsg;
+    std::string msg;
+    if (!tlp::getCurrentPluginFileName().empty()) {
+      msg += "Error when loading " + tlp::getCurrentPluginFileName() + ":\n";
+    }
+    msg += filename + '\n' + errormsg;
     appStartUp->addErrorMsg(msg);
     appStartUp->setLabel("Error");
     appStartUp->setProgress(progress);

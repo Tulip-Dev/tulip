@@ -209,7 +209,8 @@ void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *lo
 void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
   // plugins dependencies loop
   bool depsNeedCheck;
-
+  // reset the name of the library currently loading
+  PluginLibraryLoader::currentPluginLibrary.clear();
   do {
     map<string, TemplateFactoryInterface *>::const_iterator it =
       TemplateFactoryInterface::allFactories->begin();
@@ -232,11 +233,13 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
           string pluginDepName = (*itD).pluginName;
 
           if (!TemplateFactoryInterface::pluginExists(factoryDepName, pluginDepName)) {
-            if (loader)
-              loader->aborted(pluginName, tfi->getPluginsClassName() +
+            if (loader) {
+	      string name("Error when checking dependencies of plugin ");
+	      name += "'" + pluginName + "':";
+              loader->aborted(name, tfi->getPluginsClassName() +
                               " '" + pluginName + "' will be removed, it depends on missing " +
                               factoryDepName + " '" + pluginDepName + "'.");
-
+	    }
             tfi->removePlugin(pluginName);
             depsNeedCheck = true;
             break;
@@ -247,11 +250,14 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
 
           if (getMajor(release) != getMajor(releaseDep) ||
               getMinor(release) != getMinor(releaseDep)) {
-            if (loader)
+            if (loader) {
+	      string name("Error when checking dependencies of plugin ");
+	      name += "'" + pluginName + "':";
               loader->aborted(pluginName, tfi->getPluginsClassName() +
                               " '" + pluginName + "' will be removed, it depends on release " +
                               releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
                               release + " is loaded.");
+	    }
 
             tfi->removePlugin(pluginName);
             depsNeedCheck = true;
