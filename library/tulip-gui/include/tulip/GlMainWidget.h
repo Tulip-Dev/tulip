@@ -110,13 +110,6 @@ public:
     return &scene;
   }
 
-  /**
-   * add a foregroundEntity to this GlMainWidget
-   */
-  void addForegroundEntity(ForegroundEntity *entity) {
-    foregroundEntity.push_back(entity);
-  }
-
   /** \brief select nodes and edges in a region of the screen
    *
    *  select all nodes and edges lying in the area of the screen of given width and height,
@@ -217,11 +210,6 @@ public:
    */
   void  drawInteractors();
 
-  /**
-   * Draw foreground entities
-   */
-  void drawForegroundEntities();
-
   void useHulls(bool hasHulls);
   bool hasHulls() const;
 
@@ -245,7 +233,6 @@ private:
   int heightStored;
   char *renderingStore;
   bool frameBufferStored;
-  std::vector<ForegroundEntity *> foregroundEntity;
   GlCompositeHierarchyManager* manager;
   bool _hasHulls;
   bool useFramebufferObject;
