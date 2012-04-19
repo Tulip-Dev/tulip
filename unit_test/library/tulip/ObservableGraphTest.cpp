@@ -53,22 +53,14 @@ public:
   }
 
   // Observable methods
-  void update(std::set<Observable *>::iterator begin,
-              std::set<Observable *>::iterator end) {
-    //reset();
-    std::set<Observable *>::iterator it = begin;
-
-    while(it != end) {
-      if (print)
-        cout << "inserting in observer..." << endl;
-
-      observables.insert((*it));
-      ++it;
+  void treatEvents(const vector<Event> &events) {
+    if (events[0].type() == Event::TLP_DELETE) {
+      observables.insert(events[0].sender());
+    } else {
+      for (int i=0; i<events.size(); ++i) {
+	observables.insert(events[i].sender());
+      }
     }
-  }
-
-  void observableDestroyed(Observable *obs) {
-    observables.insert(obs);
   }
 };
 

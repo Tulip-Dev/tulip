@@ -61,10 +61,13 @@ public:
   }
 
   void treatEvents(const vector<Event> &events) {
-    reset();
-
-    for (int i=0; i<events.size(); ++i) {
-      observables.insert(events[i].sender());
+    if (events[0].type() == Event::TLP_DELETE) {
+      observables.insert(events[0].sender());
+    } else {
+      reset();
+      for (int i=0; i<events.size(); ++i) {
+	observables.insert(events[i].sender());
+      }
     }
   }
 
@@ -370,7 +373,7 @@ void ObservablePropertyTest::testSynchronousDelete() {
     PropertyInterface* prop = props[i];
     delete prop;
     props[i] = NULL;
-    CPPUNIT_ASSERT(observer->nbObservables() == 1);
+    CPPUNIT_ASSERT(observer->nbObservables() == i + 1);
     CPPUNIT_ASSERT(observer->found(prop));
     CPPUNIT_ASSERT(pObserver->nbProperties() == i + 1);
     CPPUNIT_ASSERT(pObserver->found(prop));
@@ -435,11 +438,14 @@ void ObservablePropertyTest::testRemoveObserver() {
 
 //==========================================================
 void ObservablePropertyTest::testObserverWhenRemoveObservable() {
+  CPPUNIT_ASSERT(props[0]->countListeners() == 1);
   CPPUNIT_ASSERT(props[0]->countObservers() == 1);
   PropertyObserverTest* pObserverTmp=new PropertyObserverTest();
   props[0]->addPropertyObserver(pObserverTmp);
-  CPPUNIT_ASSERT(props[0]->countObservers() == 2);
+  CPPUNIT_ASSERT(props[0]->countListeners() == 2);
+  CPPUNIT_ASSERT(props[0]->countObservers() == 1);
   delete pObserverTmp;
+  CPPUNIT_ASSERT(props[0]->countListeners() == 1);
   CPPUNIT_ASSERT(props[0]->countObservers() == 1);
 }
 
