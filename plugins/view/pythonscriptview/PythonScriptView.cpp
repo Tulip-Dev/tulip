@@ -72,11 +72,12 @@ const string runGraphScriptFunc =
   "\n";
 
 void strReplace(std::string& str, const std::string& oldStr, const std::string& newStr) {
-    size_t pos = 0;
-    while((pos = str.find(oldStr, pos)) != std::string::npos) {
-        str.replace(pos, oldStr.length(), newStr);
-        pos += newStr.length();
-    }
+  size_t pos = 0;
+
+  while((pos = str.find(oldStr, pos)) != std::string::npos) {
+    str.replace(pos, oldStr.length(), newStr);
+    pos += newStr.length();
+  }
 }
 
 std::string cleanPropertyName(const std::string &propertyName) {
@@ -156,6 +157,7 @@ std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph) {
     PropertyInterface *prop = itProps->next();
     std::string cleanPropName = prop->getName();
     strReplace(cleanPropName, "\"", "\\\"");
+
     if (dynamic_cast<DoubleProperty *>(prop)) {
       oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getDoubleProperty(\"" << cleanPropName << "\")" << endl;
     }
@@ -1355,7 +1357,8 @@ void PythonScriptView::reloadCodeInEditorIfNeeded(PythonCodeEditor *codeEditor, 
     if (fileInfo.exists() && fileInfo.lastModified() != lastModifiedFile[fileName]) {
       if (QMessageBox::question(codeEditor, "File changed on disk", QString("The file ") + fileName + " has been modified by another editor. Do you want to reload it ?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
         lastModifiedFile[fileName] = fileInfo.lastModified();
-        QFile file(fileName); lastModifiedFile[fileName] = fileInfo.lastModified();
+        QFile file(fileName);
+        lastModifiedFile[fileName] = fileInfo.lastModified();
         file.open(QIODevice::ReadOnly | QIODevice::Text);
         QString scriptCode;
 
