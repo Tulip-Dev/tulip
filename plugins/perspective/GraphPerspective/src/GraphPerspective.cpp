@@ -49,8 +49,6 @@
 
 using namespace tlp;
 
-QSet<QString> GraphPerspective::RESERVED_PROPERTIES = QSet<QString>();
-
 GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)), _logger(NULL) {
 #ifndef NDEBUG
   new ModelTest(_graphs,this);
@@ -58,12 +56,6 @@ GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c),
   Q_INIT_RESOURCE(GraphPerspective);
 }
 
-void GraphPerspective::registerReservedProperty(QString s) {
-  RESERVED_PROPERTIES.insert(s);
-}
-bool GraphPerspective::isReservedPropertyName(QString s) {
-  return RESERVED_PROPERTIES.contains(s);
-}
 void GraphPerspective::reserveDefaultProperties() {
   registerReservedProperty("viewColor");
   registerReservedProperty("viewLabelColor");
@@ -152,25 +144,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->workspace,SIGNAL(addPanelRequest(tlp::Graph*)),this,SLOT(createPanel(tlp::Graph*)));
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
 
-  // Dataset mode delegates and models
-  QSortFilterProxyModel* nodesModel = new GraphSortFilterProxyModel;
-  nodesModel->setSourceModel(new NodesGraphModel);
-  nodesModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-  nodesModel->setFilterKeyColumn(-1);
-  QSortFilterProxyModel* edgesModel = new GraphSortFilterProxyModel;
-  edgesModel->setSourceModel(new EdgesGraphModel);
-  edgesModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-  edgesModel->setFilterKeyColumn(-1);
-  _ui->nodesTable->setModel(nodesModel);
-  _ui->edgesTable->setModel(edgesModel);
-  _ui->nodesTable->setItemDelegate(new GraphTableItemDelegate);
-  _ui->edgesTable->setItemDelegate(new GraphTableItemDelegate);
-  connect(_ui->nodesTable, SIGNAL(destroyed()), _ui->nodesTable->itemDelegate(), SLOT(deleteLater()));
-  connect(_ui->edgesTable, SIGNAL(destroyed()), _ui->edgesTable->itemDelegate(), SLOT(deleteLater()));
-
-  _ui->nodesTable->horizontalHeader()->setMovable(true);
-  _ui->edgesTable->horizontalHeader()->setMovable(true);
-
   // Connect actions
   connect(_ui->actionMessages_log,SIGNAL(triggered()),this,SLOT(showLogger()));
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
@@ -179,8 +152,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionSave_Project,SIGNAL(triggered()),this,SLOT(save()));
   connect(_ui->actionSave_Project_as,SIGNAL(triggered()),this,SLOT(saveAs()));
   connect(_ui->actionOpen_Project,SIGNAL(triggered()),this,SLOT(open()));
-  connect(_ui->actionAnalyze,SIGNAL(triggered()),this,SLOT(modeSwitch()));
-  connect(_ui->actionCharts,SIGNAL(triggered()),this,SLOT(modeSwitch()));
   connect(_ui->actionDelete,SIGNAL(triggered()),this,SLOT(deleteSelectedElements()));
   connect(_ui->actionInvert_selection,SIGNAL(triggered()),this,SLOT(invertSelection()));
   connect(_ui->actionCancel_selection,SIGNAL(triggered()),this,SLOT(cancelSelection()));
@@ -193,13 +164,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionGroup_elements,SIGNAL(triggered()),this,SLOT(group()));
   connect(_ui->actionCreate_sub_graph,SIGNAL(triggered()),this,SLOT(createSubGraph()));
   connect(_ui->actionImport_CSV,SIGNAL(triggered()),this,SLOT(CSVImport()));
-  connect(_ui->datasetFilterEdit,SIGNAL(editingFinished()),this,SLOT(setDatasetFilter()));
-  connect(_ui->datasetPropertiesFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(setDatasetFilterProperty()));
-  connect(_ui->nodesTable->horizontalHeader(),SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(datasetHeaderContextMenuRequested(QPoint)));
-  connect(_ui->edgesTable->horizontalHeader(),SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(datasetHeaderContextMenuRequested(QPoint)));
-  _ui->nodesTable->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
-  _ui->edgesTable->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(_ui->datasetSelectedToggle,SIGNAL(clicked(bool)),this,SLOT(setDatasetSelectedOnly(bool)));
 
   // D-BUS actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
@@ -207,7 +171,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   // Setting initial sizes for splitters
   _ui->mainSplitter->setSizes(QList<int>() << 200 << 1000);
-  _ui->edgesTable->setVisible(false);
 
   _mainWindow->show();
   // Open project with model
@@ -225,12 +188,10 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     }
   }
 
-  _ui->filtersManager->findChild<HeaderFrame *>()->expand(false);
   _ui->graphHierarchiesEditor->setModel(_graphs);
   _ui->algorithmRunner->setModel(_graphs);
   _ui->workspace->setModel(_graphs);
   _ui->workspace->readProject(_project,rootIds,progress);
-  _ui->propertiesEditor->setModel(_graphs);
 
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
@@ -367,22 +328,6 @@ void GraphPerspective::centerPanels(tlp::PropertyInterface* pi) {
     if (view->isLayoutProperty(pi))
       view->centerView();
   }
-}
-
-void GraphPerspective::modeSwitch() {
-  QWidget* mode = NULL;
-
-  if (sender() == _ui->actionCharts) {
-    setDatasetGraph(_graphs->currentGraph());
-    mode = _ui->datasetModePage;
-  }
-  else if (sender() == _ui->actionAnalyze) {
-    setDatasetGraph(NULL);
-    mode = _ui->workspace;
-  }
-
-  if (mode != NULL)
-    _ui->centralWidget->setCurrentWidget(mode);
 }
 
 void GraphPerspective::deleteSelectedElements() {
@@ -523,51 +468,6 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionCancel_selection->setEnabled(enabled);
   _ui->actionGroup_elements->setEnabled(enabled);
   _ui->actionCreate_sub_graph->setEnabled(enabled);
-
-  if (_ui->centralWidget->currentWidget() == _ui->datasetModePage)
-    setDatasetGraph(graph);
-
-  if (graph != NULL) {
-    std::string name;
-    graph->getAttribute<std::string>("name",name);
-    _ui->currentGraphLabel->setText(name.c_str());
-  }
-
-  _ui->currentGraphFrame->setVisible(enabled);
-}
-
-void GraphPerspective::setDatasetGraph(Graph* graph) {
-  NodesGraphModel* nodesModel = static_cast<NodesGraphModel*>(static_cast<QSortFilterProxyModel*>(_ui->nodesTable->model())->sourceModel());
-  EdgesGraphModel* edgesModel = static_cast<EdgesGraphModel*>(static_cast<QSortFilterProxyModel*>(_ui->edgesTable->model())->sourceModel());
-  nodesModel->setGraph(graph);
-  edgesModel->setGraph(graph);
-  _ui->datasetPropertiesFilter->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Select property"),graph));
-}
-
-void GraphPerspective::setDatasetFilter() {
-  if (_ui->centralWidget->currentWidget() != _ui->datasetModePage)
-    return;
-
-  QString filter = _ui->datasetFilterEdit->text();
-  static_cast<QSortFilterProxyModel*>(_ui->nodesTable->model())->setFilterFixedString(filter);
-  static_cast<QSortFilterProxyModel*>(_ui->edgesTable->model())->setFilterFixedString(filter);
-}
-
-void GraphPerspective::setDatasetFilterProperty() {
-  if (_ui->centralWidget->currentWidget() != _ui->datasetModePage || _ui->datasetPropertiesFilter->currentIndex() < 0)
-    return;
-
-  GraphSortFilterProxyModel* nodesModel = static_cast<GraphSortFilterProxyModel*>(_ui->nodesTable->model());
-  GraphSortFilterProxyModel* edgesModel = static_cast<GraphSortFilterProxyModel*>(_ui->edgesTable->model());
-
-  QVector<PropertyInterface*> properties;
-
-  if (_ui->datasetPropertiesFilter->currentIndex() != 0)
-    properties.push_back(_graphs->currentGraph()->getProperty(_ui->datasetPropertiesFilter->currentText().toStdString()));
-
-  nodesModel->setProperties(properties);
-  edgesModel->setProperties(properties);
-  setDatasetFilter();
 }
 
 void GraphPerspective::CSVImport() {
@@ -584,72 +484,6 @@ void GraphPerspective::CSVImport() {
     _graphs->currentGraph()->pop();
 
   Observable::unholdObservers();
-}
-
-struct HeaderActionData {
-  QTableView* _tableView;
-  int _sectionId;
-
-  HeaderActionData() {}
-  HeaderActionData(QTableView* view, int section): _tableView(view), _sectionId(section) {}
-};
-Q_DECLARE_METATYPE(HeaderActionData)
-
-void GraphPerspective::datasetHeaderContextMenuRequested(QPoint p) {
-  QTableView* tableView = NULL;
-
-  if (sender() == _ui->nodesTable->horizontalHeader())
-    tableView = _ui->nodesTable;
-  else if (sender() == _ui->edgesTable->horizontalHeader())
-    tableView = _ui->edgesTable;
-
-  QHeaderView* headerView = tableView->horizontalHeader();
-
-  QMenu menu;
-  QAction* showAllAction = menu.addAction(trUtf8("Show all"));
-  showAllAction->setData(QVariant::fromValue<HeaderActionData>(HeaderActionData(tableView,0)));
-  connect(showAllAction,SIGNAL(triggered()),this,SLOT(datasetHeaderShowAll()));
-  QAction* hideAllAction = menu.addAction(trUtf8("Hide all except ") + tableView->model()->headerData(headerView->logicalIndexAt(p),Qt::Horizontal).toString());
-  hideAllAction->setData(QVariant::fromValue<HeaderActionData>(HeaderActionData(tableView,headerView->logicalIndexAt(p))));
-
-  connect(hideAllAction,SIGNAL(triggered()),this,SLOT(datasetHeaderHideAll()));
-  menu.addSeparator();
-
-  for (int i=0; i<tableView->model()->columnCount(); ++i) {
-    QAction* a = menu.addAction(tableView->model()->headerData(i,Qt::Horizontal).toString());
-    a->setCheckable(true);
-    a->setChecked(!headerView->isSectionHidden(i));
-    a->setData(QVariant::fromValue<HeaderActionData>(HeaderActionData(tableView,i)));
-    connect(a,SIGNAL(triggered(bool)),this,SLOT(datasetHeaderSectionToggled(bool)));
-  }
-
-  menu.exec(headerView->viewport()->mapToGlobal(p));
-}
-
-void GraphPerspective::datasetHeaderSectionToggled(bool f) {
-  QAction* action = static_cast<QAction*>(sender());
-  HeaderActionData d = action->data().value<HeaderActionData>();
-  d._tableView->horizontalHeader()->setSectionHidden(d._sectionId,!f);
-}
-void GraphPerspective::datasetHeaderHideAll() {
-  QAction* action = static_cast<QAction*>(sender());
-  QHeaderView* headerView = action->data().value<HeaderActionData>()._tableView->horizontalHeader();
-  datasetHeaderSetAllVisible(headerView,false);
-  headerView->setSectionHidden(action->data().value<HeaderActionData>()._sectionId,false);
-}
-void GraphPerspective::datasetHeaderShowAll() {
-  datasetHeaderSetAllVisible(static_cast<QAction*>(sender())->data().value<HeaderActionData>()._tableView->horizontalHeader(),true);
-}
-void GraphPerspective::datasetHeaderSetAllVisible(QHeaderView* headerView, bool f) {
-  for (int i=0; i<headerView->count(); ++i) {
-    headerView->setSectionHidden(i,!f);
-  }
-}
-void GraphPerspective::setDatasetSelectedOnly(bool f) {
-  GraphSortFilterProxyModel* nodesModel = static_cast<GraphSortFilterProxyModel*>(_ui->nodesTable->model());
-  GraphSortFilterProxyModel* edgesModel = static_cast<GraphSortFilterProxyModel*>(_ui->edgesTable->model());
-  nodesModel->setSelectedOnly(f);
-  edgesModel->setSelectedOnly(f);
 }
 
 PLUGIN(GraphPerspective)

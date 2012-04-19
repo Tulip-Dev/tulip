@@ -14,14 +14,18 @@ template<typename PROPTYPE>
 class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
   tlp::Graph* _graph;
   QString _placeholder;
+  bool _checkable;
+  QSet<int> _unCheckedIndexes;
 
 public:
-  explicit GraphPropertiesModel(tlp::Graph* graph, QObject *parent = 0);
-  explicit GraphPropertiesModel(QString placeholder, tlp::Graph* graph, QObject *parent = 0);
+  explicit GraphPropertiesModel(tlp::Graph* graph, bool checkable=false, QObject *parent = 0);
+  explicit GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable=false, QObject *parent = 0);
 
   tlp::Graph* graph() const {
     return _graph;
   }
+
+  QSet<int> uncheckedIndexes() const { return _unCheckedIndexes; }
 
   // Methods re-implemented from QAbstractItemModel
   QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
@@ -50,6 +54,18 @@ public:
     return QVariant();
   }
 
+  bool setData(const QModelIndex &index, const QVariant &value, int role) {
+    if (_checkable && role == Qt::CheckStateRole && index.column() == 0) {
+      if (value.value<int>() == (int)Qt::Checked)
+        _unCheckedIndexes.remove(index.row());
+      else
+        _unCheckedIndexes.insert(index.row());
+      emit checkStateChanged(index,(Qt::CheckState)(value.value<int>()));
+      return true;
+    }
+    return false;
+  }
+
   // Methods inherited from the observable system
   void treatEvent(const tlp::Event& evt) {
     const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
@@ -74,6 +90,15 @@ public:
   }
 
   int rowOf(tlp::PropertyInterface*) const;
+
+  Qt::ItemFlags flags(const QModelIndex &index) const {
+    Qt::ItemFlags result = QAbstractItemModel::flags(index);
+
+    if (index.column() == 0 && _checkable)
+      result |= Qt::ItemIsUserCheckable;
+
+    return result;
+  }
 };
 
 }

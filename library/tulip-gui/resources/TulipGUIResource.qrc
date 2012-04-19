@@ -61,5 +61,6 @@
         <file>icons/22/folder.png</file>
         <file>icons/22/media-playback-start.png</file>
         <file>icons/16/preferences-other.png</file>
+        <file>txt/view_configurationtab.css</file>
     </qresource>
 </RCC>

@@ -44,6 +44,8 @@ class TulipProject;
 class TLP_QT_SCOPE Workspace: public QWidget {
   Q_OBJECT
 
+  Q_PROPERTY(bool bottomFrameVisible READ isBottomFrameVisible WRITE setBottomFrameVisible)
+
   // Helper class
   class PanelsStorage: public QAbstractItemModel {
     QList<tlp::WorkspacePanel*> _storage;
@@ -89,6 +91,8 @@ public:
   void addPanel(tlp::View*);
   QList<tlp::View*> panels() const;
 
+  bool isBottomFrameVisible() const;
+
 public slots:
   void delView(tlp::View* view);
   void switchToStartupMode();
@@ -108,6 +112,8 @@ public slots:
 
   void writeProject(tlp::TulipProject*,QMap<tlp::Graph*,QString>, tlp::PluginProgress*);
   void readProject(tlp::TulipProject*,QMap<QString,tlp::Graph*>,tlp::PluginProgress*);
+
+  void setBottomFrameVisible(bool);
 
 signals:
   void panelFocused(tlp::View*);

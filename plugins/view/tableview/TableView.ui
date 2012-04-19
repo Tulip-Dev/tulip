@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TableViewWidget</class>
+ <widget class="QWidget" name="TableViewWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QAbstractItemView {
+background-color: white;
+color: black;
+border: 0px;
+}
+QPushButton, QComboBox {
+border-image: url(:/tulip/gui/ui/btn_26.png) 4;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+}
+
+QPushButton::flat {
+border-image: none;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+background-color: transparent;
+}
+
+QPushButton, QComboBox, QLabel {
+color: black;
+}
+
+QPushButton:hover, QComboBox:hover {
+border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+}
+
+QPushButton:disabled, QComboBox::disabled {
+color:gray;
+}
+
+QPushButton:pressed{
+border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
+}
+
+QPushButton::menu-indicator{
+subcontrol-origin: margin;
+subcontrol-position: center right;
+right: 4px;
+}
+
+QPushButton {
+outline: none;
+margin: 2
+}
+
+QComboBox::down-arrow {
+image: url(:/tulip/gui/ui/combobox_arrow.png);
+}
+
+QComboBox:drop-down {
+subcontrol-origin: padding;
+subcontrol-position: top right;
+border-left-style: none; 
+border-top-right-radius: 1px;
+border-bottom-right-radius: 1px;
+}
+
+QDockWidget:title {
+border-image:none;
+background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+stop: 0 #838383,
+stop: 0.4 #707070,
+stop: 0.401 #636363,
+stop: 1 #4a4a4a);
+border: 0px solid black;
+color: white;
+text-align: center;
+color: white;
+}
+
+QSplitter::handle {
+background-color: #C0C0C0;
+border-width:0px;
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] * {
+color: black;
+font: bold 11px;
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] {
+border-top: 1px solid rgba(117,117,117,255);
+border-bottom: 1px solid rgba(117,117,117,255);
+border-right: 1px solid rgba(117,117,117,255);
+border-left: 0px;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(75,75,75),
+stop:1 rgb(60, 60, 60));
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] QPushButton {
+border: 0px;
+border-image: none;
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] QPushButton:hover {
+border: 0px;
+border-image: none;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(85,85,85),
+stop:1 rgb(70, 70, 70));
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] QPushButton:pressed, QFrame[ bottomFrame = &quot;true&quot; ] .QPushButton:checked {
+border: 0px;
+border-image: none;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(105,105,105),
+stop:1 rgb(90, 90, 90));
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="styleSheet">
+      <string notr="true">QSplitter {
+border: 0px;
+border-bottom: 1px solid black;
+}</string>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="handleWidth">
+      <number>1</number>
+     </property>
+     <widget class="QTableView" name="nodesTable">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+     </widget>
+     <widget class="QTableView" name="edgesTable">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::AllEditTriggers</set>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -45,14 +45,10 @@ class GraphPerspective : public tlp::Perspective {
   tlp::GraphHierarchiesModel *_graphs;
   bool _maximised;
 
-  static QSet<QString> RESERVED_PROPERTIES;
-  static void reserveDefaultProperties();
+  void reserveDefaultProperties();
 
 public:
-  static bool isReservedPropertyName(QString);
-  static void registerReservedProperty(QString);
-
-  PLUGININFORMATIONS("Graph hierarchy analysis", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "Hierarchy")
+  PLUGININFORMATIONS("Tulip", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "Hierarchy")
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/desktop.png";
   }
@@ -81,7 +77,6 @@ protected slots:
   void refreshDockExpandControls();
   void panelFocused(tlp::View*);
   void focusedPanelGraphSet(tlp::Graph*);
-  void modeSwitch();
   void deleteSelectedElements();
   void invertSelection();
   void cancelSelection();
@@ -94,16 +89,6 @@ protected slots:
   void group();
   void createSubGraph();
   void CSVImport();
-
-  void setDatasetGraph(tlp::Graph*);
-  void setDatasetFilter();
-  void setDatasetFilterProperty();
-  void datasetHeaderContextMenuRequested(QPoint);
-  void datasetHeaderSectionToggled(bool);
-  void datasetHeaderShowAll();
-  void datasetHeaderHideAll();
-  void datasetHeaderSetAllVisible(QHeaderView*,bool);
-  void setDatasetSelectedOnly(bool);
 
   void logCleared();
 

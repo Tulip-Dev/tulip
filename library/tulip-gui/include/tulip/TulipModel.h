@@ -38,6 +38,9 @@ public:
   };
 
   explicit TulipModel(QObject *parent=0);
+
+signals:
+  void checkStateChanged(QModelIndex,Qt::CheckState);
 };
 
 }

@@ -145,4 +145,5 @@ BUNDLE_DEFINE_COMPONENT(INTERACTOREDITEDGEBENDS "Edit edge bends" " " "Plugins")
 BUNDLE_DEFINE_COMPONENT(TOLABELS "To labels" " " "Plugins")
 
 BUNDLE_DEFINE_COMPONENT(GRAPHPERSPECTIVE "Graph hierarchy analysis" " " "Plugins")
+BUNDLE_DEFINE_COMPONENT(TABLEVIEW "Spreadsheet view" " " "Plugins")
 

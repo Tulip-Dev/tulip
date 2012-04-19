@@ -64,6 +64,12 @@ public slots:
     */
   virtual void setupUi();
 
+  /**
+    @brief Reimplemented from View::draw()
+    By default, this method does nothing. We assume the widget is automatically repainted by Qt's windowing manager
+    */
+  virtual void draw(tlp::PluginProgress*) { }
+
 protected slots:
   /**
     @see View::currentInteractorChanged()

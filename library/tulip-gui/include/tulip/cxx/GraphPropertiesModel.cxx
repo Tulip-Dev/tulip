@@ -3,13 +3,13 @@
 namespace tlp {
 
 template<typename PROPTYPE>
-GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(QString::null) {
+GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(QString::null), _checkable(checkable) {
   if (_graph != NULL)
     _graph->addListener(this);
 }
 
 template<typename PROPTYPE>
-GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::Graph* graph, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder) {
+GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder), _checkable(checkable) {
   if (_graph != NULL)
     _graph->addListener(this);
 }
@@ -111,6 +111,9 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
   }
   else if (role == PropertyRole) {
     return QVariant::fromValue<PropertyInterface*>(pi);
+  }
+  else if (_checkable && role == Qt::CheckStateRole && index.column() == 0) {
+    return (_unCheckedIndexes.contains(index.row()) ? Qt::Unchecked : Qt::Checked);
   }
 
   return QVariant();

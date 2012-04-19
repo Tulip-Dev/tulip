@@ -16,7 +16,6 @@ src/HeaderFrame.cpp
 src/ImportWizard.cpp
 src/PanelSelectionWizard.cpp
 src/ShadowFilter.cpp
-src/GraphPropertiesEditor.cpp
 src/GraphPerspectiveLogger.cpp
 )
 
@@ -40,9 +39,7 @@ designer/HeaderFrame.ui
 designer/ImportWizard.ui
 designer/PanelSelectionWizard.ui
 designer/PanelSelectionItem.ui
-designer/GraphPropertiesEditor.ui
 )
-
 
 QT4_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
@@ -58,7 +55,6 @@ include/ExpandableGroupBox.h
 include/HeaderFrame.h
 include/ImportWizard.h
 include/PanelSelectionWizard.h
-include/GraphPropertiesEditor.h
 include/GraphPerspectiveLogger.h
 )
 

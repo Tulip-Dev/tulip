@@ -44,27 +44,30 @@ public:
   virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const = 0;
   virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const = 0;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const = 0;
+  virtual bool isNode() const = 0;
 
 protected:
   QVector<unsigned int> _elements;
   QVector<tlp::PropertyInterface*> _properties;
 
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const = 0;
-  virtual bool isNode() const = 0;
 };
 
-class TLP_QT_SCOPE GraphSortFilterProxyModel: public QSortFilterProxyModel {
+class TLP_QT_SCOPE GraphSortFilterProxyModel: public QSortFilterProxyModel, public tlp::Observable {
   QVector<PropertyInterface*> _properties;
-  bool _selectedOnly;
+  tlp::BooleanProperty* _filterProperty;
 
 public:
   GraphSortFilterProxyModel(QObject* parent = 0);
 
+  void setFilterProperty(tlp::BooleanProperty*);
   void setSelectedOnly(bool);
   void setProperties(QVector<PropertyInterface*>);
 
   bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
   bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+
+  void treatEvent(const tlp::Event&);
 };
 
 class TLP_QT_SCOPE NodesGraphModel: public GraphModel {
@@ -76,12 +79,12 @@ public:
   virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const;
   virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
-
-protected:
-  virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
   bool isNode() const {
     return true;
   }
+
+protected:
+  virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
 };
 
 class TLP_QT_SCOPE EdgesGraphModel: public GraphModel {
@@ -93,11 +96,11 @@ public:
   virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
 
-protected:
-  virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
   bool isNode() const {
     return false;
   }
+protected:
+  virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
 };
 
 }

@@ -148,65 +148,10 @@ void WorkspacePanel::setView(tlp::View* view) {
   viewConfigurationTabs->setTabsClosable(true);
   connect(viewConfigurationTabs,SIGNAL(tabCloseRequested(int)),this,SLOT(hideConfigurationTab()));
   viewConfigurationTabs->setTabPosition(QTabWidget::West);
-  viewConfigurationTabs->setStyleSheet(QString() +
-
-                                       "QTabWidget {\n"
-                                       + "  background-color: transparent;\n"
-                                       + "}\n"
-
-                                       + "QTabWidget::pane {\n"
-                                       + "  background-color: white;\n"
-                                       + "  border: 1px solid #C9C9C9;\n"
-                                       + "}\n"
-
-                                       + "QTabBar::tab {\n"
-                                       + "  border-image:none;\n"
-                                       + "  border: 1px solid #C9C9C9;\n"
-                                       + "  border-right: 0px;\n"
-                                       + "  border-top-left-radius: 4px;\n"
-                                       + "  border-bottom-left-radius: 4px;\n"
-                                       + "  min-height: 10ex;\n"
-                                       + "  padding: 2px;\n"
-                                       + "  font: bold;\n"
-                                       + "}\n"
-
-                                       + "QTabBar::tab:!selected {\n"
-                                       + "  margin-left: 1px;\n"
-                                       + "}\n"
-
-                                       + "QTabBar::tab:!selected {\n"
-                                       + "  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
-                                       + "  stop: 0 #ffffff,\n"
-                                       + "  stop: 0.4 #eeeeee,\n"
-                                       + "  stop: 0.401 #e2e2e2,\n"
-                                       + "  stop: 1 #dddddd);\n"
-                                       + "  color: black;\n"
-                                       + "}\n"
-
-                                       + "QTabBar::tab:!selected:hover {\n"
-                                       + "  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
-                                       + "  stop: 0 #ffffff,\n"
-                                       + "  stop: 0.4 #fefefe,\n"
-                                       + "  stop: 0.401 #f2f2f2,\n"
-                                       + "  stop: 1 #ededed);\n"
-                                       + "}\n"
-
-                                       + "QTabBar::tab:selected {\n"
-                                       + "  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
-                                       + "  stop: 0 #838383,\n"
-                                       + "  stop: 0.4 #707070,\n"
-                                       + "  stop: 0.401 #636363,\n"
-                                       + "  stop: 1 #4a4a4a);\n"
-                                       + "  color: white;\n"
-                                       + "}\n"
-
-                                       + "QTabBar::tab:selected:hover {\n"
-                                       + "  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,\n"
-                                       + "  stop: 0 #939393,\n"
-                                       + "  stop: 0.4 #808080,\n"
-                                       + "  stop: 0.401 #737373,\n"
-                                       + "  stop: 1 #5a5a5a);\n"
-                                       + "}");
+  QFile css(":/tulip/gui/txt/view_configurationtab.css");
+  css.open(QIODevice::ReadOnly);
+  viewConfigurationTabs->setStyleSheet(css.readAll());
+  css.close();
 
   foreach(QWidget* w, _view->configurationWidgets()) {
     w->installEventFilter(this);
@@ -385,9 +330,8 @@ void WorkspacePanel::graphComboIndexChanged() {
 bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
   if (_viewConfigurationWidgets != NULL && _view != NULL) {
     if (obj == _view->graphicsView()->scene() && ev->type() == QEvent::GraphicsSceneMousePress) {
-      QGraphicsSceneMouseEvent* mouseEv = static_cast<QGraphicsSceneMouseEvent*>(ev);
-      bool expand = _viewConfigurationWidgets->sceneBoundingRect().contains(mouseEv->scenePos());
-      setConfigurationTabExpanded(expand);
+      if (_viewConfigurationWidgets->sceneBoundingRect().contains(static_cast<QGraphicsSceneMouseEvent*>(ev)->scenePos()))
+        setConfigurationTabExpanded(true);
     }
     else if (_view->configurationWidgets().contains(dynamic_cast<QWidget*>(obj)))
       return true;
