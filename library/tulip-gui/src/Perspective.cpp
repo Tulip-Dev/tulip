@@ -22,7 +22,7 @@
 #include <QtGui/QMainWindow>
 #include <tulip/SimplePluginProgressWidget.h>
 
-namespace tlp {
+using namespace tlp;
 
 tlp::Perspective* Perspective::_instance = NULL;
 
@@ -62,4 +62,9 @@ QMainWindow* Perspective::mainWindow() const {
   return _mainWindow;
 }
 
+void Perspective::registerReservedProperty(QString s) {
+  _reservedProperties.insert(s);
+}
+bool Perspective::isReservedPropertyName(QString s) {
+  return _reservedProperties.contains(s);
 }

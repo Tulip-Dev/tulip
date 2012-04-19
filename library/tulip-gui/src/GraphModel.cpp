@@ -1,5 +1,6 @@
 #include "tulip/GraphModel.h"
 
+#include <tulip/BooleanProperty.h>
 #include <tulip/Graph.h>
 #include <tulip/ForEach.h>
 #include <QtGui/QIcon>
@@ -440,7 +441,7 @@ bool EdgesGraphModel::lessThan(unsigned int a, unsigned int b, PropertyInterface
 }
 
 // Filter proxy
-GraphSortFilterProxyModel::GraphSortFilterProxyModel(QObject *parent): QSortFilterProxyModel(parent), _properties(QVector<PropertyInterface*>()), _selectedOnly(false) {
+GraphSortFilterProxyModel::GraphSortFilterProxyModel(QObject *parent): QSortFilterProxyModel(parent), _properties(QVector<PropertyInterface*>()), _filterProperty(NULL) {
 }
 
 bool GraphSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const {
@@ -449,10 +450,6 @@ bool GraphSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIn
 }
 void GraphSortFilterProxyModel::setProperties(QVector<PropertyInterface *> properties) {
   _properties = properties;
-}
-void GraphSortFilterProxyModel::setSelectedOnly(bool f) {
-  _selectedOnly = f;
-  invalidateFilter();
 }
 
 bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex&) const {
@@ -463,10 +460,16 @@ bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInde
 
   unsigned int id = graphModel->elementAt(sourceRow);
 
-  if (_selectedOnly && graphModel->graph()->existProperty("viewSelection")) {
-    if (!(graphModel->value(id,graphModel->graph()->getProperty("viewSelection")).toBool()))
-      return false;
+  bool selected = true;
+  if (_filterProperty != NULL) {
+    GraphModel* graphModel = static_cast<GraphModel*>(sourceModel());
+    if (graphModel->isNode())
+      selected = _filterProperty->getNodeValue(node(id));
+    else
+      selected = _filterProperty->getEdgeValue(edge(id));
   }
+  if (!selected)
+    return false;
 
   if (filterRegExp().isEmpty())
     return true;
@@ -486,4 +489,18 @@ bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInde
   }
 
   return false;
+}
+
+void GraphSortFilterProxyModel::setFilterProperty(BooleanProperty* prop) {
+  if (_filterProperty != NULL)
+    _filterProperty->removeListener(this);
+  _filterProperty = prop;
+  if (_filterProperty != NULL)
+    _filterProperty->addListener(this);
+  invalidateFilter();
+}
+
+void GraphSortFilterProxyModel::treatEvent(const Event& e) {
+  if (e.sender() == _filterProperty)
+    invalidateFilter();
 }

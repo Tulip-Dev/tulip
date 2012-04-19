@@ -620,8 +620,17 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
   int mode = root.attribute("mode","-1").toInt();
   foreach(QWidget* modeWidget, _modeToSlots.keys()) {
     if (_modeToSlots[modeWidget].size() == mode) {
-      setActivePanel(_panels[current]->view());
+      if (current > 0 && current < _panels.size())
+        setActivePanel(_panels[current]->view());
       switchWorkspaceMode(modeWidget);
     }
   }
+}
+
+void Workspace::setBottomFrameVisible(bool f) {
+  _ui->bottomFrame->setVisible(f);
+}
+
+bool Workspace::isBottomFrameVisible() const {
+  return _ui->bottomFrame->isVisible();
 }

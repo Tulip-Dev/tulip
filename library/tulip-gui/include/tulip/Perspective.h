@@ -48,6 +48,7 @@ class TLP_QT_SCOPE Perspective : public QObject, public tlp::Plugin {
   Q_OBJECT
 
   static tlp::Perspective* _instance;
+  QSet<QString> _reservedProperties;
 
 protected:
   TulipProject *_project;
@@ -75,6 +76,9 @@ public:
   virtual void start(tlp::PluginProgress *)=0;
   virtual tlp::PluginProgress* progress();
   QMainWindow* mainWindow() const;
+
+  bool isReservedPropertyName(QString);
+  void registerReservedProperty(QString);
 
 public slots:
 

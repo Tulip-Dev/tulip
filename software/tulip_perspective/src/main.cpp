@@ -160,7 +160,6 @@ int main(int argc,char **argv) {
   if (project == NULL) {
     context->externalFile = projectFilePath;
     project = TulipProject::newProject();
-    project->setPerspective(perspectiveName);
   }
   else if (perspectiveName.isNull()) {
     perspectiveName = project->perspective();
@@ -172,6 +171,7 @@ int main(int argc,char **argv) {
   if (perspectiveName.isNull())
     usage("Could not determine the perspective to launch." + error);
 
+  project->setPerspective(perspectiveName);
   // Initialize main window.
   progress->progress(100,100);
   progress->setComment("Setting up GUI (this can take some time)");
