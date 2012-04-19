@@ -214,13 +214,13 @@ Observable::~Observable() {
   if (_n.isValid() == false)
     return;
 
+  if (!deleteMsgSent)
+    observableDeleted();
+
 #ifdef _OPENMP
   #pragma omp critical(ObservableGraphUpdate)
 #endif
   {
-    if (!deleteMsgSent)
-      observableDeleted();
-
     if (!_oAlive[_n])
       throw ObservableException("Observable object has already been deleted, possible double free!!!");
 
