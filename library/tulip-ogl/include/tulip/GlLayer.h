@@ -63,14 +63,6 @@ public:
   ~GlLayer();
 
   /**
-   * Set the scene where the layer is
-   */
-  void setScene(GlScene *scene) {
-    this->scene=scene;
-    camera->setScene(scene);
-  }
-
-  /**
    * Return the scene where the layer is
    */
   GlScene *getScene() {
@@ -206,6 +198,16 @@ public:
    */
   void glGraphCompositeRemoved(GlGraphComposite *composite);
 
+protected :
+
+  /**
+   * Set the scene where the layer is
+   */
+  void setScene(GlScene *scene) {
+    this->scene=scene;
+    camera->setScene(scene);
+  }
+
 private:
 
   std::string name;
@@ -217,6 +219,8 @@ private:
   bool sharedCamera;
 
   bool workingLayer;
+
+  friend class GlScene;
 
 };
 
