@@ -38,7 +38,7 @@ namespace tlp {
 
 GlGraphLowDetailsRenderer::GlGraphLowDetailsRenderer(const GlGraphInputData *inputData):GlGraphRenderer(inputData),buildVBO(true) {
   fakeScene = new GlScene;
-  fakeScene->addLayer(new GlLayer("fakeLayer"));
+  fakeScene->createLayer("fakeLayer");
   addObservers();
 }
 

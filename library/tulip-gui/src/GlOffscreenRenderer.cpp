@@ -47,9 +47,9 @@ GlOffscreenRenderer::GlOffscreenRenderer()
   foregroundLayer->setVisible(true);
   backgroundLayer->set2DMode();
   foregroundLayer->set2DMode();
-  scene.addLayer(backgroundLayer);
-  scene.addLayer(mainLayer);
-  scene.addLayer(foregroundLayer);
+  scene.addExistingLayer(backgroundLayer);
+  scene.addExistingLayer(mainLayer);
+  scene.addExistingLayer(foregroundLayer);
   antialiasedFbo = false;
 }
 

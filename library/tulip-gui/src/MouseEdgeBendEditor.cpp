@@ -222,7 +222,7 @@ bool MouseEdgeBendEditor::compute(GlMainWidget *glMainWidget) {
     }
 
     if(!layerInScene)
-      glMainWidget->getScene()->insertLayerAfter(layer,"Main");
+      glMainWidget->getScene()->addExistingLayerAfter(layer,"Main");
 
     this->glMainWidget=glMainWidget;
     return true;
