@@ -355,7 +355,6 @@ void GlMainWidget::render(RenderingOptions options) {
 
     //Draw interactors and foreground entities.
     drawInteractors();
-    drawForegroundEntities();
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_STENCIL_TEST);
@@ -424,12 +423,6 @@ void GlMainWidget::drawInteractors() {
     return;
 
   interactor->draw(this);
-}
-//==================================================
-void GlMainWidget::drawForegroundEntities() {
-  for(std::vector<ForegroundEntity *>::iterator it=foregroundEntity.begin(); it!=foregroundEntity.end(); ++it) {
-    (*it)->draw(this);
-  }
 }
 //==================================================
 //QGLWidget

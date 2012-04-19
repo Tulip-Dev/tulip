@@ -154,7 +154,6 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
     glFlush();
   }
 
-  glMainWidget->drawForegroundEntities();
   glMainWidget->drawInteractors();
 
   glMatrixMode(GL_MODELVIEW);
