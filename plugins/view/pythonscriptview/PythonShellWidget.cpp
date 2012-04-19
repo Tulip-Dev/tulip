@@ -266,7 +266,7 @@ void PythonShellWidget::showEvent(QShowEvent *) {
   setFocus();
 }
 
-void PythonShellWidget::updateAutoCompletionList() {
+void PythonShellWidget::updateAutoCompletionList(bool) {
 
 
   if (!autoCompletionList->isVisible())

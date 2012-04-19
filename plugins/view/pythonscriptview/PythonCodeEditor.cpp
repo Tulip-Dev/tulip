@@ -926,7 +926,9 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
   }
   else if ((e->key() == Qt::Key_Space && e->modifiers() == modifier) || e->text() == ".") {
     QPlainTextEdit::keyPressEvent(e);
-    showAutoCompletionList();
+    QString textBeforeCursor = textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
+    if (!textBeforeCursor.contains('#'))
+        showAutoCompletionList(e->text() == ".");
   }
   else {
     QPlainTextEdit::keyPressEvent(e);
@@ -1107,10 +1109,10 @@ void PythonCodeEditor::analyseScriptCode(const bool wholeText) {
   }
 }
 
-void PythonCodeEditor::showAutoCompletionList() {
+void PythonCodeEditor::showAutoCompletionList(bool dotContext) {
   analyseScriptCode();
   autoCompletionList->show();
-  updateAutoCompletionList();
+  updateAutoCompletionList(dotContext);
 
   if (autoCompletionList->count() == 0)
     autoCompletionList->hide();
@@ -1147,7 +1149,7 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
   autoCompletionList->move(mapToGlobal(QPoint(pos, bottom)));
 }
 
-void PythonCodeEditor::updateAutoCompletionList() {
+void PythonCodeEditor::updateAutoCompletionList(bool dotContext) {
 
   if (!autoCompletionList->isVisible())
     return;
@@ -1160,7 +1162,7 @@ void PythonCodeEditor::updateAutoCompletionList() {
 
   QString textBeforeCursorTrimmed = textBeforeCursor.trimmed();
 
-  QSet<QString> stringList = autoCompletionDb->getAutoCompletionListForContext(textBeforeCursorTrimmed, getEditedFunctionName());
+  QSet<QString> stringList = autoCompletionDb->getAutoCompletionListForContext(textBeforeCursorTrimmed, getEditedFunctionName(), dotContext);
   foreach(QString s, stringList) {
     autoCompletionList->addItem(s);
   }
@@ -1427,4 +1429,8 @@ void PythonCodeEditor::unindentSelectedCode() {
 
 void PythonCodeEditor::setGraph(tlp::Graph *graph) {
   autoCompletionDb->setGraph(graph);
+}
+
+void PythonCodeEditor::insertFromMimeData(const QMimeData * source) {
+    textCursor().insertText(source->text());
 }
