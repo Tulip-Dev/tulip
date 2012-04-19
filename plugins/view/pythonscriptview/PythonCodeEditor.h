@@ -216,6 +216,7 @@ protected:
   void mousePressEvent(QMouseEvent * event);
   void mouseReleaseEvent(QMouseEvent * event);
   void lineNumberAreaPaintEvent(QPaintEvent *event);
+  void insertFromMimeData(const QMimeData * source);
 
 
 protected slots:
@@ -226,8 +227,8 @@ protected slots:
   void matchParens();
   virtual void highlightCurrentLine();
   void highlightErrors();
-  virtual void showAutoCompletionList();
-  virtual void updateAutoCompletionList();
+  virtual void showAutoCompletionList(bool dotContext=false);
+  virtual void updateAutoCompletionList(bool dotContext=false);
 
 protected:
 

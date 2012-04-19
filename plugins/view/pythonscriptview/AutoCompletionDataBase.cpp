@@ -1157,7 +1157,7 @@ QSet<QString> AutoCompletionDataBase::getAllDictForType(const QString &type, con
   return ret;
 }
 
-QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QString &context, const QString &editedFunction) {
+QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QString &context, const QString &editedFunction, bool dotContext) {
 
   lastFoundType = "";
 
@@ -1267,7 +1267,7 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
         }
       }
     }
-    else {
+    else if (!dotContext) {
       ret = apiDb->getAllDictEntriesStartingWithPrefix(prefix);
     }
   }

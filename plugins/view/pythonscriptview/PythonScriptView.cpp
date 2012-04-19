@@ -71,6 +71,14 @@ const string runGraphScriptFunc =
   "\n"
   "\n";
 
+void strReplace(std::string& str, const std::string& oldStr, const std::string& newStr) {
+    size_t pos = 0;
+    while((pos = str.find(oldStr, pos)) != std::string::npos) {
+        str.replace(pos, oldStr.length(), newStr);
+        pos += newStr.length();
+    }
+}
+
 std::string cleanPropertyName(const std::string &propertyName) {
   std::string ret(propertyName);
   std::replace(ret.begin(), ret.end(), ' ', '_');
@@ -104,6 +112,8 @@ std::string cleanPropertyName(const std::string &propertyName) {
       break;
     }
   }
+
+  strReplace(ret, "\"", "");
 
   return ret;
 }
@@ -144,65 +154,66 @@ std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph) {
 
   while (itProps->hasNext()) {
     PropertyInterface *prop = itProps->next();
-
+    std::string cleanPropName = prop->getName();
+    strReplace(cleanPropName, "\"", "\\\"");
     if (dynamic_cast<DoubleProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getDoubleProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getDoubleProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<LayoutProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getLayoutProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getLayoutProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<IntegerProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getIntegerProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getIntegerProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<StringProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getStringProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getStringProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<SizeProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getSizeProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getSizeProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<BooleanProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getBooleanProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getBooleanProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<ColorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getColorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getColorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<GraphProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getGraphProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getGraphProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<DoubleVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getDoubleVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getDoubleVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<CoordVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getCoordVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getCoordVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<IntegerVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getIntegerVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getIntegerVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<SizeVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getSizeVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getSizeVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<BooleanVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getBooleanVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getBooleanVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<ColorVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getColorVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getColorVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<StringVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getStringVectorProperty(\"" << prop->getName() << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getStringVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
   }
 
@@ -864,6 +875,8 @@ bool PythonScriptView::loadScript(const QString &fileName) {
     scriptCode += file.readLine();
   }
 
+  lastModifiedFile[fileName] = fileInfo.lastModified();
+
   int editorId = viewWidget->addMainScriptEditor(fileInfo.absoluteFilePath());
   viewWidget->getMainScriptEditor(editorId)->setPlainText(scriptCode);
   viewWidget->mainScriptsTabWidget->setTabText(editorId, fileInfo.fileName());
@@ -876,7 +889,7 @@ bool PythonScriptView::loadScript(const QString &fileName) {
   pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
   pythonInterpreter->reloadModule(fileInfo.fileName().replace(".py", "").toStdString());
   pythonInterpreter->setDefaultConsoleWidget();
-  lastModifiedFile[fileName] = fileInfo.lastModified();
+
 
   return true;
 }
@@ -971,6 +984,8 @@ bool PythonScriptView::loadModule(const QString &fileName) {
 
   file.close();
 
+  lastModifiedFile[fileName] = fileInfo.lastModified();
+
   int editorId = viewWidget->addModuleEditor(fileInfo.absoluteFilePath());
   PythonCodeEditor *codeEditor = viewWidget->getModuleEditor(editorId);
 
@@ -985,7 +1000,7 @@ bool PythonScriptView::loadModule(const QString &fileName) {
 
   codeEditor->analyseScriptCode(true);
 
-  lastModifiedFile[fileName] = fileInfo.lastModified();
+
 
   return true;
 }
@@ -1025,6 +1040,8 @@ void PythonScriptView::newFileModule() {
   QFileInfo fileInfo(file);
   QString moduleName(fileInfo.fileName());
   QString modulePath(fileInfo.absolutePath());
+
+  lastModifiedFile[fileName] = fileInfo.lastModified();
 
   int editorId = viewWidget->addModuleEditor(fileInfo.absoluteFilePath());
   viewWidget->modulesTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
@@ -1177,6 +1194,7 @@ bool PythonScriptView::loadPythonPlugin(const QString &fileName) {
       return false;
     }
     else {
+      lastModifiedFile[fileName] = fileInfo.lastModified();
       int editorId = viewWidget->addPluginEditor(fileInfo.absoluteFilePath());
       PythonCodeEditor *codeEditor = viewWidget->getPluginEditor(editorId);
       codeEditor->setPlainText(pluginCode);
@@ -1188,7 +1206,6 @@ bool PythonScriptView::loadPythonPlugin(const QString &fileName) {
       editedPluginsType[pluginFile] = pluginType.toStdString();
       editedPluginsName[pluginFile] = pluginName.toStdString();
       registerPythonPlugin();
-      lastModifiedFile[fileName] = fileInfo.lastModified();
     }
   }
   else {
@@ -1335,10 +1352,10 @@ void PythonScriptView::reloadCodeInEditorIfNeeded(PythonCodeEditor *codeEditor, 
   if (fileName != "") {
     QFileInfo fileInfo(fileName);
 
-    if (fileInfo.lastModified() != lastModifiedFile[fileName]) {
+    if (fileInfo.exists() && fileInfo.lastModified() != lastModifiedFile[fileName]) {
       if (QMessageBox::question(codeEditor, "File changed on disk", QString("The file ") + fileName + " has been modified by another editor. Do you want to reload it ?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
         lastModifiedFile[fileName] = fileInfo.lastModified();
-        QFile file(fileName);
+        QFile file(fileName); lastModifiedFile[fileName] = fileInfo.lastModified();
         file.open(QIODevice::ReadOnly | QIODevice::Text);
         QString scriptCode;
 

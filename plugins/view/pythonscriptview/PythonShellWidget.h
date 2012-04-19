@@ -56,7 +56,7 @@ public slots:
 
 protected slots:
 
-  void updateAutoCompletionList();
+  void updateAutoCompletionList(bool dotContext=false);
 
 private :
 
