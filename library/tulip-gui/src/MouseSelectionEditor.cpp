@@ -388,7 +388,7 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
     }
 
     if(!layerInScene)
-      glMainWidget->getScene()->insertLayerAfter(layer,"Main");
+      glMainWidget->getScene()->addExistingLayerAfter(layer,"Main");
 
     composite->addGlEntity(&centerRect, "CenterRectangle");
     composite->addGlEntity(&_controls[0], "left");

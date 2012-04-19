@@ -145,9 +145,9 @@ void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
     labri->setVisible(false);
     foregroundLayer->addGlEntity(labri,"labrilogo");
 
-    scene.addLayer(backgroundLayer);
-    scene.addLayer(layer);
-    scene.addLayer(foregroundLayer);
+    scene.addExistingLayer(backgroundLayer);
+    scene.addExistingLayer(layer);
+    scene.addExistingLayer(foregroundLayer);
     GlGraphComposite* graphComposite=new GlGraphComposite(graph);
     scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
     graphComposite->getRenderingParametersPointer()->setViewNodeLabel(true);

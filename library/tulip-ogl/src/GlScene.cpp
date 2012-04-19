@@ -177,16 +177,79 @@ void GlScene::draw() {
 #endif
 }
 
-void GlScene::addLayer(GlLayer *layer) {
-  for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    assert((*it).first!=layer->getName());
+/******************************************************************************
+ * GlLayer management functions
+*******************************************************************************/
 
-    if((*it).first==layer->getName()) {
-      qWarning() << "Error : You have a layer in the scene with same name : old layer will be deleted" << endl;
-      delete (*it).second;
-      layersList.erase(it);
-      break;
+GlLayer *GlScene::createLayer(const std::string &name) {
+  GlLayer *oldLayer=getLayer(name);
+  if(oldLayer!=NULL){
+    qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
+    removeLayer(oldLayer);
+  }
+
+  GlLayer *newLayer=new GlLayer(name);
+  layersList.push_back(std::pair<std::string,GlLayer*>(name,newLayer));
+  newLayer->setScene(this);
+
+  if (hasOnlookers())
+    sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,name,newLayer));
+
+  return newLayer;
+}
+
+GlLayer *GlScene::createLayerBefore(const std::string &layerName,const std::string &beforeLayerWithName) {
+  GlLayer *newLayer=NULL;
+  GlLayer *oldLayer=getLayer(layerName);
+
+  for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
+    if((*it).first==beforeLayerWithName) {
+      newLayer=new GlLayer(layerName);
+      layersList.insert(it,pair<string,GlLayer*>(layerName,newLayer));
+      newLayer->setScene(this);
+
+      if (hasOnlookers())
+        sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layerName,newLayer));
+
+      if(oldLayer!=NULL){
+        removeLayer(oldLayer);
+        qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
+      }
     }
+  }
+
+  return newLayer;
+}
+
+GlLayer *GlScene::createLayerAfter(const std::string &layerName,const std::string &afterLayerWithName){
+  GlLayer *newLayer=NULL;
+  GlLayer *oldLayer=getLayer(layerName);
+
+  for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
+    if((*it).first==afterLayerWithName) {
+      ++it;
+      newLayer=new GlLayer(layerName);
+      layersList.insert(it,pair<string,GlLayer*>(layerName,newLayer));
+      newLayer->setScene(this);
+
+      if (hasOnlookers())
+        sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layerName,newLayer));
+
+      if(oldLayer!=NULL){
+        qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
+        removeLayer(oldLayer);
+      }
+    }
+  }
+
+  return newLayer;
+}
+
+void GlScene::addExistingLayer(GlLayer *layer) {
+  GlLayer *oldLayer=getLayer(layer->getName());
+  if(oldLayer!=NULL){
+    qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
+    removeLayer(oldLayer);
   }
 
   layersList.push_back(std::pair<std::string,GlLayer*>(layer->getName(),layer));
@@ -196,25 +259,36 @@ void GlScene::addLayer(GlLayer *layer) {
     sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer));
 }
 
-bool GlScene::insertLayerBefore(GlLayer *layer,const string &name) {
+bool GlScene::addExistingLayerBefore(GlLayer *layer, const std::string &beforeLayerWithName) {
+  bool insertionOk=false;
+  GlLayer *oldLayer=getLayer(layer->getName());
+
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).first==name) {
+    if((*it).first==beforeLayerWithName) {
       layersList.insert(it,pair<string,GlLayer*>(layer->getName(),layer));
       layer->setScene(this);
 
       if (hasOnlookers())
         sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer));
 
-      return true;
+      if(oldLayer!=NULL){
+        qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
+        removeLayer(oldLayer);
+      }
+
+      insertionOk=true;
     }
   }
 
-  return false;
+  return insertionOk;
 }
 
-bool GlScene::insertLayerAfter(GlLayer *layer,const string &name) {
+bool GlScene::addExistingLayerAfter(GlLayer *layer, const std::string &afterLayerWithName) {
+  bool insertionOk=false;
+  GlLayer *oldLayer=getLayer(layer->getName());
+
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).first==name) {
+    if((*it).first==afterLayerWithName) {
       ++it;
       layersList.insert(it,pair<string,GlLayer*>(layer->getName(),layer));
       layer->setScene(this);
@@ -222,24 +296,37 @@ bool GlScene::insertLayerAfter(GlLayer *layer,const string &name) {
       if (hasOnlookers())
         sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer));
 
-      return true;
+      if(oldLayer!=NULL){
+        qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
+        removeLayer(oldLayer);
+      }
+
+      insertionOk=true;
     }
   }
 
-  return false;
+  return insertionOk;
+}
+
+GlLayer *GlScene::getLayer(const std::string& name) {
+  for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
+    if((*it).first==name) {
+      return (*it).second;
+    }
+  }
+  return NULL;
 }
 
 void GlScene::removeLayer(const std::string& name,bool deleteLayer) {
-  for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
+  for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
     if((*it).first==name) {
-      GlLayer *layer=(*it).second;
       layersList.erase(it);
 
       if (hasOnlookers())
-        sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_DELLAYER,layer->getName(),layer));
+        sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_DELLAYER,name,(*it).second));
 
       if(deleteLayer)
-        delete layer;
+        delete (*it).second;
 
       return;
     }
@@ -249,14 +336,13 @@ void GlScene::removeLayer(const std::string& name,bool deleteLayer) {
 void GlScene::removeLayer(GlLayer *layer,bool deleteLayer) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
     if((*it).second==layer) {
-      GlLayer *layer=(*it).second;
       layersList.erase(it);
 
       if (hasOnlookers())
         sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_DELLAYER,layer->getName(),layer));
 
       if(deleteLayer)
-        delete layer;
+        delete (*it).second;
 
       return;
     }
@@ -827,15 +913,6 @@ unsigned char * GlScene::getImage() {
   return image;
 }
 //====================================================
-GlLayer* GlScene::getLayer(const std::string& name) {
-  for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).first==name)
-      return (*it).second;
-  }
-
-  return NULL;
-}
-//====================================================
 void GlScene::getXML(string &out) {
 
   out.append("<scene>");
@@ -926,8 +1003,7 @@ void GlScene::setWithXML(string &in, Graph *graph) {
     GlLayer *newLayer=getLayer(properties["name"]);
 
     if(!newLayer) {
-      newLayer=new GlLayer(properties["name"]);
-      addLayer(newLayer);
+      newLayer=createLayer(properties["name"]);
     }
 
     newLayer->setWithXML(in,currentPosition);

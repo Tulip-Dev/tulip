@@ -254,37 +254,71 @@ public:
   }
 
   /**
-   * Add a layer in the scene
-   * The layer name is contain in the GlLayer object
+   * Create a layer with the given name in the scene
+   * Now the scene have the ownership of this GlLayer
+   * so you don't have to delete this GlLayer
    */
-  void addLayer(GlLayer *layer);
+  GlLayer *createLayer(const std::string &name);
 
   /**
-   * Add a layer just before layer with given name
-   * Return true if insert is ok and false if layer with given name is not find
+   * Create a layer with the given name in the scene just before layer with given name
+   * Return NULL if the layer with beforeLayerWithName is not find
+   * Now the scene have the ownership of this GlLayer
+   * so you don't have to delete this GlLayer
    */
-  bool insertLayerBefore(GlLayer *layer,const std::string &name);
+  GlLayer *createLayerBefore(const std::string &layerName,const std::string &beforeLayerWithName);
 
   /**
-   * Add a layer just after layer with given name
-   * Return true if insert is ok and false if layer with given name is not find
+   * Create a layer with the given name in the scene just after layer with given name
+   * Return NULL if the layer with beforeLayerWithName is not find
+   * Now the scene have the ownership of this GlLayer
+   * so you don't have to delete this GlLayer
    */
-  bool insertLayerAfter(GlLayer *layer,const std::string &name);
+  GlLayer *createLayerAfter(const std::string &layerName,const std::string &afterLayerWithName);
+
+  /**
+   * Add an existing layer in the scene
+   * Now the scene have the ownership of this GlLayer
+   * so you don't have to delete this GlLayer
+   */
+  void addExistingLayer(GlLayer *layer);
+
+  /**
+   * Add an existing layer in the scene just before layer with given name
+   * Return false if the layer with beforeLayerWithName is not find
+   * Now the scene have the ownership of this GlLayer
+   * so you don't have to delete this GlLayer
+   */
+  bool addExistingLayerBefore(GlLayer *layer, const std::string &beforeLayerWithName);
+
+  /**
+   * Add an existing layer in the scene just after layer with given name
+   * Return false if the layer with beforeLayerWithName is not find
+   * Now the scene have the ownership of this GlLayer
+   * so you don't have to delete this GlLayer
+   */
+  bool addExistingLayerAfter(GlLayer *layer, const std::string &afterLayerWithName);
 
   /**
    * Return the layer with name : name
    */
-  GlLayer* getLayer(const std::string& name);
+  GlLayer *getLayer(const std::string& name);
 
   /**
-   * Remove the layer with name and delete it (if bool deleteLayer == true)
+   * Remove the layer with name
+   * This GlLayer is automaticaly delete
+   * If you want to keep this GlLayer you can put false to deleteLayer parameters
+   * but after that you have the ownership of the GlLayer
    */
-  void removeLayer(const std::string& name,bool deleteLayer);
+  void removeLayer(const std::string& name,bool deleteLayer=true);
 
   /**
-   * Remove a layer and delete it (if bool deleteLayer == true)
+   * Remove the layer with name
+   * This GlLayer is automaticaly delete
+   * If you want to keep this GlLayer you can put false to deleteLayer parameters
+   * but after that you have the ownership of the GlLayer
    */
-  void removeLayer(GlLayer *layer,bool deleteLayer);
+  void removeLayer(GlLayer *layer,bool deleteLayer=true);
 
   /**
    * Return the layer list
