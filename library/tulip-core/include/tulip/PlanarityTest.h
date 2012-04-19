@@ -24,7 +24,6 @@
 #include <tulip/tulipconf.h>
 #include <tulip/tuliphash.h>
 #include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
 #include <tulip/Edge.h>
 
 namespace tlp {
