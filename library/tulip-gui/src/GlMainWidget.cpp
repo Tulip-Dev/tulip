@@ -114,12 +114,7 @@ GlMainWidget::~GlMainWidget() {
 }
 //==================================================
 void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
-  std::vector<std::pair<std::string, GlLayer*> >* layerList=scene.getLayersList();
   scene.clearLayersList();
-
-  for(std::vector<std::pair<std::string, GlLayer *> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
-    delete (*it).second;
-  }
 
   std::string sceneInput="";
 

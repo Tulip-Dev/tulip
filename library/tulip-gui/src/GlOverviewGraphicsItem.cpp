@@ -62,7 +62,7 @@ void GlOverviewGraphicsItem::setSize(unsigned int width, unsigned int height) {
 
 void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
-  if(baseScene.getLayersList()->size()==0)
+  if(baseScene.getLayersList().size()==0)
     return;
 
   // Initialize the context avoid segfault when trying to render graph without any initialised gl context.
@@ -79,9 +79,9 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   // Backup initial cameras
   vector<Camera> cameras;
-  vector<pair<string, GlLayer*> >* layerList=baseScene.getLayersList();
+  const vector<pair<string, GlLayer*> >& layerList=baseScene.getLayersList();
 
-  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
+  for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
     cameras.push_back((*it).second->getCamera());
   }
 
@@ -149,9 +149,9 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(false);
     baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewMetaLabel(false);
 
-    vector<pair<string, GlLayer*> > *layersList=baseScene.getLayersList();
+    const vector<pair<string, GlLayer*> > &layersList=baseScene.getLayersList();
 
-    for(vector<pair<string, GlLayer*> >::iterator it=layersList->begin(); it!=layersList->end(); ++it) {
+    for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
       if((*it).second->isAWorkingLayer())
         (*it).second->setVisible(false);
     }
@@ -161,7 +161,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     baseScene.draw();
     glFrameBuffer->release();
 
-    for(vector<pair<string, GlLayer*> >::iterator it=layersList->begin(); it!=layersList->end(); ++it) {
+    for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
       if((*it).second->isAWorkingLayer())
         (*it).second->setVisible(true);
     }
@@ -174,7 +174,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   // invert applied camera transformations
   unsigned int i=0;
 
-  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
+  for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
     (*it).second->getCamera()=cameras[i];
     ++i;
   }
@@ -261,9 +261,9 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
   glPushMatrix();
 
   vector<Camera> cameras;
-  vector<pair<string, GlLayer*> >* layerList=baseScene.getLayersList();
+  const vector<pair<string, GlLayer*> >& layerList=baseScene.getLayersList();
 
-  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
+  for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
     cameras.push_back((*it).second->getCamera());
   }
 
@@ -271,7 +271,7 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
 
   vector<Coord> centerPos;
 
-  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
+  for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
     centerPos.push_back((*it).second->getCamera().screenTo3DWorld(position));
   }
 
@@ -283,7 +283,7 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
 
   unsigned int i=0;
 
-  for(vector<pair<string, GlLayer*> >::iterator it=layerList->begin(); it!=layerList->end(); ++it) {
+  for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
     Coord eyesVector=cameras[i].getEyes()-cameras[i].getCenter();
     Camera &camera=(*it).second->getCamera();
     camera=cameras[i];

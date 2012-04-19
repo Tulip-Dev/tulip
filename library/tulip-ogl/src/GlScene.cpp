@@ -215,6 +215,7 @@ GlLayer *GlScene::createLayerBefore(const std::string &layerName,const std::stri
         removeLayer(oldLayer);
         qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
       }
+      break;
     }
   }
 
@@ -239,6 +240,7 @@ GlLayer *GlScene::createLayerAfter(const std::string &layerName,const std::strin
         qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
         removeLayer(oldLayer);
       }
+      break;
     }
   }
 
@@ -277,6 +279,7 @@ bool GlScene::addExistingLayerBefore(GlLayer *layer, const std::string &beforeLa
       }
 
       insertionOk=true;
+      break;
     }
   }
 
@@ -302,6 +305,7 @@ bool GlScene::addExistingLayerAfter(GlLayer *layer, const std::string &afterLaye
       }
 
       insertionOk=true;
+      break;
     }
   }
 

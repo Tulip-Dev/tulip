@@ -102,11 +102,11 @@ void GlOffscreenRenderer::addGraphCompositeToScene(GlGraphComposite *graphCompos
 
 void GlOffscreenRenderer::clearScene() {
   mainLayer->getComposite()->reset(false);
-  vector<pair<string, GlLayer *> > *layersList = scene.getLayersList();
+  const vector<pair<string, GlLayer *> > &layersList = scene.getLayersList();
 
-  for (unsigned int i = 0 ; i < layersList->size() ; ++i) {
-    if ((*layersList)[i].second != mainLayer) {
-      (*layersList)[i].second->getComposite()->reset(true);
+  for (unsigned int i = 0 ; i < layersList.size() ; ++i) {
+    if (layersList[i].second != mainLayer) {
+      layersList[i].second->getComposite()->reset(true);
     }
   }
 

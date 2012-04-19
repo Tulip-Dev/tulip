@@ -165,14 +165,14 @@ void GlQuadTreeLODCalculator::compute(const Vector<int,4>& globalViewport,const 
     entitiesQuadTree.clear();
 
     quadTreesVectorPosition=0;
-    vector<pair<std::string, GlLayer*> > *layersVector=glScene->getLayersList();
+    const vector<pair<std::string, GlLayer*> > &layersVector=glScene->getLayersList();
 
     for(vector<LayerLODUnit>::iterator it=layersLODVector.begin(); it!=layersLODVector.end(); ++it) {
       Camera *camera= ((*it).camera);
 
       GlLayer *currentLayer=NULL;
 
-      for(vector<pair<std::string, GlLayer*> >::iterator itL=layersVector->begin(); itL!=layersVector->end(); ++itL) {
+      for(vector<pair<std::string, GlLayer*> >::const_iterator itL=layersVector.begin(); itL!=layersVector.end(); ++itL) {
         if(&(*itL).second->getCamera()==camera) {
           currentLayer=(*itL).second;
           break;
