@@ -4,6 +4,7 @@
 #include <QtGui/QWidget>
 #include <tulip/tulipconf.h>
 #include <tulip/ScrollPopupButton.h>
+#include <tulip/CaptionItem.h>
 
 namespace Ui {
 class QuickAccessBar;
@@ -19,6 +20,7 @@ class QuickAccessBar : public QWidget {
   Q_OBJECT
 
   Ui::QuickAccessBar* _ui;
+  QGraphicsItem *_quickAccessBarItem;
   tlp::GlMainView* _mainView;
   bool _resetting;
   tlp::GlGraphInputData* inputData() const;
@@ -26,10 +28,13 @@ class QuickAccessBar : public QWidget {
   tlp::GlScene* scene() const;
   double _oldFontScale;
   double _oldNodeScale;
+  CaptionItem *_colorCaption;
+  CaptionItem *_sizeCaption;
   void updateFontButtonStyle();
+  void showHideCaption(CaptionItem::CaptionType captionType);
 
 public:
-  explicit QuickAccessBar(QWidget *parent = 0);
+  explicit QuickAccessBar(QGraphicsItem *quickAccessBarItem,QWidget *parent = 0);
 
 public slots:
   void setGlMainView(tlp::GlMainView*);
