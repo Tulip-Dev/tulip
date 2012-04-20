@@ -88,7 +88,7 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
   Coord first=newCamera2.worldTo2DScreen((Coord)(bb[0]));
   Coord second=newCamera2.worldTo2DScreen((Coord)(bb[1]));
 
-  Coord center=camera->worldTo2DScreen((Coord)(bb[0]+bb[1])/2);
+  Coord center=camera->worldTo2DScreen((Coord)(bb[0]+bb[1])/2.f);
   Coord size=second-first;
 
   Vector<int,4> viewport;

@@ -98,7 +98,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   // If we don't do this we will have invalid polygon when we do worldTo2DScreen transformations
   Coord eyesVector=baseCamera.getEyes()-baseCamera.getCenter();
 
-  eyesVector=eyesVector*(1./eyesVector[2]);
+  eyesVector=eyesVector*(1.f/eyesVector[2]);
 
   for(unsigned int i=0; i<4; i++)
     cameraBoundingBox[i]=cameraBoundingBox[i]-eyesVector*cameraBoundingBox[i][2];

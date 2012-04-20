@@ -97,10 +97,10 @@ Q_DECLARE_METATYPE(tlp::StringProperty*)
 Q_DECLARE_METATYPE(tlp::StringVectorProperty*)
 Q_DECLARE_METATYPE(std::vector<std::string>)
 
-Q_DECLARE_METATYPE(tlp::Coord)
+//Q_DECLARE_METATYPE(tlp::Coord)
 Q_DECLARE_METATYPE(tlp::LayoutProperty*)
 Q_DECLARE_METATYPE(tlp::CoordVectorProperty*)
-Q_DECLARE_METATYPE(std::vector<tlp::Coord>)
+//Q_DECLARE_METATYPE(std::vector<tlp::Coord>)
 
 Q_DECLARE_METATYPE(tlp::Graph*)
 Q_DECLARE_METATYPE(tlp::GraphProperty*)
