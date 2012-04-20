@@ -43,7 +43,26 @@ GlRect::GlRect(const Coord &topLeftPos, const Coord &bottomRightPos, const Color
   setFillColor(2, bottomRightCol);
   setFillColor(3, bottomRightCol);
 }
+
+GlRect::GlRect(const Coord &center, const float width, const float height,
+        const Color &fillColor, const Color &outlineColor) :
+    GlPolygon(4u, 4u, 4u, true, true) {
+
+    invertYTexture=false;
+
+    vector<Coord> coords;
+    coords.push_back(center+Coord(width/2.,height/2.,0));
+    coords.push_back(center+Coord(width/2.,-height/2.,0));
+    coords.push_back(center+Coord(-width/2.,-height/2.,0));
+    coords.push_back(center+Coord(-width/2.,height/2.0));
+    setPoints(coords);
+
+    setFillColor(fillColor);
+
+}
+
 //=====================================================
+/*
 GlRect::GlRect(const Coord &center, const Size &size, const Color &fillColor, const Color &outlineColor):
   GlPolygon(4u, 4u, 4u, true, true) {
 
@@ -60,7 +79,7 @@ GlRect::GlRect(const Coord &center, const Size &size, const Color &fillColor, co
 
   setOutlineColor(outlineColor);
 }
-
+*/
 //=====================================================
 GlRect::GlRect(bool filled, bool outlined) :
   GlPolygon(4u, 4u, 4u, filled, outlined) {

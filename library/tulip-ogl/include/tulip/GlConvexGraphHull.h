@@ -29,7 +29,6 @@ namespace tlp {
 class GlComposite;
 class GlSimpleEntity;
 class Camera;
-class Coord;
 class Graph;
 class LayoutProperty;
 class SizeProperty;

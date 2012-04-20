@@ -75,17 +75,18 @@ void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor) {
   if(boundingBox.isValid())
     visitor->visit(this);
 }
+
 void GlGraphComposite::acceptVisitorOnGraph(GlSceneVisitor *visitor) {
   graphRenderer->visitGraph(visitor);
 }
 
 //===================================================================
 void GlGraphComposite::draw(float lod,Camera* camera) {
-  graphRenderer->draw(lod,camera);
+  graphRenderer->draw(lod, camera);
 }
 //===================================================================
 void GlGraphComposite::selectEntities(Camera *camera,RenderingEntitiesFlag type, int x, int y, int w, int h, vector<SelectedEntity> &selectedEntities) {
-  graphRenderer->selectEntities(camera,type,x,y,w,h,selectedEntities);
+  graphRenderer->selectEntities(camera, type, x, y, w, h, selectedEntities);
 }
 //===================================================================
 const GlGraphRenderingParameters& GlGraphComposite::getRenderingParameters() {

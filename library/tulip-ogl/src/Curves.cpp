@@ -234,7 +234,7 @@ GLfloat* buildCurvePoints (const vector<Coord> &vertices,
 }
 
 static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const Coord &pAfter,
-                            float size, int inversion, vector<Coord> &result, bool lastPoint = false, bool twoPointsCurve=false) {
+                            float size, float inversion, vector<Coord> &result, bool lastPoint = false, bool twoPointsCurve=false) {
 
   Coord u = pBefore - pCurrent;
   Coord v = pAfter - pCurrent;
@@ -488,7 +488,7 @@ void polyQuad(const vector<Coord> &vertices,
   texCoords.resize(quadVertices.size()*2);
 
   for (size_t i = 0 ; i < quadVertices.size() / 2 ; ++i) {
-    centerLine[i]=(quadVertices[2*i]+quadVertices[2*i+1])/2;
+    centerLine[i]=(quadVertices[2*i]+quadVertices[2*i+1])/2.f;
     bottomOutlineIndices[i]=2*i;
     topOutlineIndices[i]=2*i+1;
 
@@ -503,7 +503,7 @@ void polyQuad(const vector<Coord> &vertices,
       Coord p1_1 = quadVertices[2*i];
       Coord p2_0 = quadVertices[2*(i-1)+1];
       Coord p2_1 = quadVertices[2*i+1];
-      length += ((p1_1+p2_1)/2.-(p1_0+p2_0)/2.).norm()/(p1_0-p2_0).norm();
+      length += ((p1_1+p2_1)/2.f-(p1_0+p2_0)/2.f).norm()/(p1_0-p2_0).norm();
       texCoords[i*4]=length;
       texCoords[i*4+1]=0;
       texCoords[i*4+2]=length;
@@ -681,7 +681,7 @@ void simpleQuad(const vector<Coord> &vertices,
       Coord p2_0(points[i*3 + size*3 - 3],points[i*3 + size*3-2],points[i*3 + size*3-1]);
       Coord p2_1(points[i*3 + size*3],points[i*3 + size*3+1],points[i*3 + size*3+2]);
 
-      length += ((p1_1+p2_1)/2.-(p1_0+p2_0)/2.).norm()/(p1_0-p2_0).norm();
+      length += ((p1_1+p2_1)/2.f-(p1_0+p2_0)/2.f).norm()/(p1_0-p2_0).norm();
       glMultiTexCoord2f(GL_TEXTURE0,length, 1.0f);
       glMultiTexCoord2f(GL_TEXTURE1,length, 1.0f);
       glVertex3fv(&points[i*3]);

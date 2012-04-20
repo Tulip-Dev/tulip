@@ -136,7 +136,7 @@ void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
       }
     }
 
-    camera.setCenter(camCenterStart + (camCenterEnd - camCenterStart) *f);
+    camera.setCenter(camCenterStart + (camCenterEnd - camCenterStart) * static_cast<float>(f));
     camera.setEyes(Coord(0, 0, camera.getSceneRadius()));
     camera.setEyes(camera.getEyes() + camera.getCenter());
     camera.setUp(Coord(0, 1., 0));
