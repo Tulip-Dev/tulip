@@ -132,6 +132,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
     glFrameBuf2 = NULL;
   }
 
+
   if (glFrameBuf == NULL) {
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
     QGLFramebufferObjectFormat fboFmt;
@@ -143,9 +144,11 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
     glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
   }
 
+
   if (antialiasedFbo && glFrameBuf2 == NULL) {
     glFrameBuf2 = new QGLFramebufferObject(vPWidth, vPHeight);
   }
+
 
 #else
     glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, QGLFramebufferObject::CombinedDepthStencil);
@@ -161,7 +164,10 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
 
-  Camera &camera = scene.getGraphCamera();
+
+  Camera &camera = mainLayer->getCamera();
+
+
   glFrameBuf->bind();
 
   if (centerScene) {
