@@ -89,19 +89,19 @@ public:
   /**
    * Set graph and data of GlMainWidget
    */
-  void setData(Graph *graph,DataSet dataSet);
+  //void setData(Graph *graph,DataSet dataSet);
   /**
    * Get data of GlMainWidget
    */
-  DataSet getData();
+  //DataSet getData();
   /**
    * Set the graph
    */
-  void setGraph(Graph *graph);
+  //void setGraph(Graph *graph);
   /**
    * GetGraph of GlMainWidget
    */
-  Graph *getGraph();
+  //Graph *getGraph();
 
   /**
    * Get the scene of this glMainWidget
@@ -210,9 +210,6 @@ public:
    */
   void  drawInteractors();
 
-  void useHulls(bool hasHulls);
-  bool hasHulls() const;
-
   /**
     * \brief This function performs all the rendering process of the graph.
     *   Use this function only for advanced purpose, if you want to perform simple rendering use the draw or redraw functions instead.
@@ -233,8 +230,6 @@ private:
   int heightStored;
   char *renderingStore;
   bool frameBufferStored;
-  GlCompositeHierarchyManager* manager;
-  bool _hasHulls;
   bool useFramebufferObject;
   QGLFramebufferObject *glFrameBuf;
   static bool inRendering;
@@ -267,6 +262,8 @@ public slots:
   **/
   void centerScene();
 
+  void emitGraphChanged();
+
 protected slots:
   void paintEvent( QPaintEvent* );
 
@@ -287,7 +284,7 @@ signals:
 
   void glResized(int w,int h);
 
-  void graphChanged(tlp::Graph*);
+  void graphChanged();
 
 public :
 

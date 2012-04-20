@@ -17,12 +17,12 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new 
 
 void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
   if (_glMainWidget != NULL)
-    disconnect(_glMainWidget,SIGNAL(graphChanged(tlp::Graph*)),this,SLOT(resetChanges()));
+    disconnect(_glMainWidget,SIGNAL(graphChanged()),this,SLOT(resetChanges()));
 
   _glMainWidget = glMainWidget;
 
   if (_glMainWidget != NULL)
-    connect(_glMainWidget,SIGNAL(graphChanged(tlp::Graph*)),this,SLOT(resetChanges()));
+    connect(_glMainWidget,SIGNAL(graphChanged()),this,SLOT(resetChanges()));
 
   resetChanges();
 }
@@ -33,11 +33,11 @@ void SceneConfigWidget::resetChanges() {
   _ui->labelsOrderingCombo->clear();
   _ui->scrollArea->setEnabled(_glMainWidget != NULL);
 
-  if (_glMainWidget == NULL || _glMainWidget->getGraph() == NULL) {
+  if (_glMainWidget == NULL || _glMainWidget->getScene()->getGlGraphComposite() == NULL || _glMainWidget->getScene()->getGlGraphComposite()->getGraph() == NULL) {
     return;
   }
 
-  Graph* graph = _glMainWidget->getGraph();
+  Graph* graph = _glMainWidget->getScene()->getGlGraphComposite()->getGraph();
   GlGraphRenderingParameters* renderingParameters = _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
 
   // NODES
@@ -99,8 +99,8 @@ void SceneConfigWidget::applySettings() {
   // NODES
   DoubleProperty* orderingProperty = NULL;
 
-  if (_ui->labelsOrderingCombo->currentIndex() != 0 && _glMainWidget->getGraph())
-    orderingProperty = _glMainWidget->getGraph()->getProperty<DoubleProperty>(_ui->labelsOrderingCombo->currentText().toStdString());
+  if (_ui->labelsOrderingCombo->currentIndex() != 0 && _glMainWidget->getScene()->getGlGraphComposite()->getGraph())
+    orderingProperty = _glMainWidget->getScene()->getGlGraphComposite()->getGraph()->getProperty<DoubleProperty>(_ui->labelsOrderingCombo->currentText().toStdString());
 
   renderingParameters->setElementOrderingProperty(orderingProperty);
   renderingParameters->setLabelScaled(_ui->labelsFitCheck->isChecked());

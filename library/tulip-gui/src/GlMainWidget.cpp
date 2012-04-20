@@ -90,7 +90,7 @@ QGLWidget* GlMainWidget::getFirstQGLWidget() {
 
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent,View *view):
-  QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), _hasHulls(false), useFramebufferObject(false), glFrameBuf(NULL) {
+  QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), useFramebufferObject(false), glFrameBuf(NULL) {
   setFocusPolicy(Qt::StrongFocus);
   setMouseTracking(true);
   grabGesture(Qt::PinchGesture);
@@ -111,147 +111,6 @@ GlMainWidget::GlMainWidget(QWidget *parent,View *view):
 GlMainWidget::~GlMainWidget() {
   delete glFrameBuf;
   delete [] renderingStore;
-}
-//==================================================
-void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
-  scene.clearLayersList();
-
-  std::string sceneInput="";
-
-  if(dataSet.exist("scene")) {
-    dataSet.get("scene",sceneInput);
-  }
-
-  if(sceneInput=="") {
-    //Default scene
-    GlLayer* layer=new GlLayer("Main");
-    GlLayer *backgroundLayer=new GlLayer("Background");
-    backgroundLayer->setVisible(false);
-    GlLayer *foregroundLayer=new GlLayer("Foreground");
-    foregroundLayer->setVisible(true);
-
-    backgroundLayer->set2DMode();
-    foregroundLayer->set2DMode();
-    std::string dir=TulipBitmapDir;
-    Gl2DRect *background=new Gl2DRect(0,1.,0,1.,dir + "tex_back.png",true);
-    backgroundLayer->addGlEntity(background,"background");
-
-    Gl2DRect *labri=new Gl2DRect(5.,5.,50.,50.,dir + "logolabri.jpg",true,false);
-    labri->setVisible(false);
-    foregroundLayer->addGlEntity(labri,"labrilogo");
-
-    scene.addExistingLayer(backgroundLayer);
-    scene.addExistingLayer(layer);
-    scene.addExistingLayer(foregroundLayer);
-    GlGraphComposite* graphComposite=new GlGraphComposite(graph);
-    scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
-    graphComposite->getRenderingParametersPointer()->setViewNodeLabel(true);
-    graphComposite->getRenderingParametersPointer()->setEdgeColorInterpolate(false);
-    scene.centerScene();
-  }
-  else {
-    size_t pos=sceneInput.find("TulipBitmapDir/");
-
-    while(pos!=std::string::npos) {
-      sceneInput.replace(pos,15,TulipBitmapDir);
-      pos=sceneInput.find("TulipBitmapDir/");
-    }
-
-    pos=sceneInput.find("TulipLibDir/");
-
-    while(pos!=std::string::npos) {
-      sceneInput.replace(pos,12,TulipLibDir);
-      pos=sceneInput.find("TulipLibDir/");
-    }
-
-    scene.setWithXML(sceneInput,graph);
-  }
-
-  if(dataSet.exist("Display")) {
-    DataSet renderingParameters;
-    dataSet.get("Display",renderingParameters);
-    GlGraphRenderingParameters rp=scene.getGlGraphComposite()->getRenderingParameters();
-    rp.setParameters(renderingParameters);
-    scene.getGlGraphComposite()->setRenderingParameters(rp);
-  }
-
-  if(dataSet.exist("Hulls")) {
-    useHulls(true);
-    DataSet hullsSet;
-    dataSet.get<DataSet>("Hulls", hullsSet);
-    manager->setVisible(true);
-    manager->setData(hullsSet);
-  }
-
-  scene.getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new ExtendedMetaNodeRenderer(scene.getGlGraphComposite()->getInputData()));
-  emit graphChanged(graph);
-}
-//==================================================
-DataSet GlMainWidget::getData() {
-  DataSet outDataSet;
-  outDataSet.set<DataSet>("Display",scene.getGlGraphComposite()->getRenderingParameters().getParameters());
-  std::string out;
-  scene.getXML(out);
-  size_t pos=out.find(TulipBitmapDir);
-
-  while(pos!=std::string::npos) {
-    out.replace(pos,TulipBitmapDir.size(),"TulipBitmapDir/");
-    pos=out.find(TulipBitmapDir);
-  }
-
-  outDataSet.set<std::string>("scene",out);
-
-  if(_hasHulls && manager->isVisible()) {
-    outDataSet.set<DataSet>("Hulls", manager->getData());
-  }
-
-  return outDataSet;
-}
-//==================================================
-void GlMainWidget::setGraph(Graph *graph) {
-  if(!scene.getLayer("Main")) {
-    setData(graph,DataSet());
-    return;
-  }
-
-  if(_hasHulls)
-    manager->setGraph(graph);
-
-  GlGraphComposite* oldGraphComposite=(GlGraphComposite *)(scene.getLayer("Main")->findGlEntity("graph"));
-
-  if(!oldGraphComposite) {
-    setData(graph,DataSet());
-    return;
-  }
-
-  GlGraphRenderingParameters param=oldGraphComposite->getRenderingParameters();
-  GlMetaNodeRenderer *metaNodeRenderer=oldGraphComposite->getInputData()->getMetaNodeRenderer();
-  oldGraphComposite->getInputData()->setMetaNodeRenderer(NULL,false);
-  GlGraphComposite* graphComposite=new GlGraphComposite(graph);
-  graphComposite->setRenderingParameters(param);
-
-  metaNodeRenderer->setInputData(graphComposite->getInputData());
-
-  graphComposite->getInputData()->setMetaNodeRenderer(metaNodeRenderer);
-
-  if(oldGraphComposite->getInputData()->graph==graph) {
-    oldGraphComposite->getInputData()->deleteGlVertexArrayManagerInDestructor(false);
-    delete graphComposite->getInputData()->getGlVertexArrayManager();
-    graphComposite->getInputData()->setGlVertexArrayManager(oldGraphComposite->getInputData()->getGlVertexArrayManager());
-    graphComposite->getInputData()->getGlVertexArrayManager()->setInputData(graphComposite->getInputData());
-  }
-
-  scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
-
-  delete oldGraphComposite;
-  emit graphChanged(graph);
-}
-//==================================================
-Graph *GlMainWidget::getGraph() {
-  if(scene.getGlGraphComposite()!=NULL)
-    return scene.getGlGraphComposite()->getInputData()->getGraph();
-
-  return NULL;
 }
 //==================================================
 void GlMainWidget::paintEvent( QPaintEvent*) {
@@ -664,33 +523,13 @@ QImage GlMainWidget::createPicture(int width, int height,bool center, int zoom, 
 #endif
 }
 
-void GlMainWidget::useHulls(bool hasHulls) {
-  if(hasHulls == _hasHulls)
-    return;
-
-  _hasHulls = hasHulls;
-
-  if(_hasHulls) {
-    manager = new GlCompositeHierarchyManager(scene.getGlGraphComposite()->getInputData()->getGraph(),
-        scene.getLayer("Main"),
-        "Hulls",
-        this->getScene()->getGlGraphComposite()->getInputData()->getElementLayout(),
-        this->getScene()->getGlGraphComposite()->getInputData()->getElementSize(),
-        this->getScene()->getGlGraphComposite()->getInputData()->getElementRotation());
-    // Now we remove and add GlGraphComposite to be sure of the order (first Hulls and after GraphComposite)
-    // This code doesn't affect the behavior of tulip but the tlp file is modified
-    scene.getLayer("Main")->deleteGlEntity(this->getScene()->getGlGraphComposite());
-    scene.getLayer("Main")->addGlEntity(this->getScene()->getGlGraphComposite(),"graph");
-  }
-}
-
-bool GlMainWidget::hasHulls() const {
-  return _hasHulls;
-}
-
 void GlMainWidget::centerScene() {
   scene.centerScene();
   draw(false);
+}
+
+void GlMainWidget::emitGraphChanged(){
+  emit graphChanged();
 }
 
 }

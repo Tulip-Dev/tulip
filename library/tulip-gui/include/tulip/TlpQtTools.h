@@ -30,12 +30,6 @@ class QWidget;
 
 namespace tlp {
 
-/**
- * Create a main layout in GlMainWidget and display the graph on it
- */
-
-TLP_QT_SCOPE void openGraphOnGlMainWidget(Graph *graph,DataSet *dataSet,GlMainWidget *glMainWidget);
-
 TLP_QT_SCOPE bool getColorDialog(const QColor &color,QWidget *parent,const QString &title,QColor &result);
 
 inline QColor colorToQColor(const Color& color) {

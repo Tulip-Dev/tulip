@@ -20,6 +20,7 @@
 #define _Tulip_NODELINKDIAGRAMCOMPONENT_H
 
 #include <tulip/GlMainView.h>
+#include <tulip/GlCompositeHierarchyManager.h>
 
 namespace tlp {
 class GlGrid;
@@ -29,6 +30,8 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
 
   tlp::GlGrid* _grid;
   QDialog* _gridOptions;
+  GlCompositeHierarchyManager* manager;
+  bool _hasHulls;
 
   void registerTriggers();
   void updateGrid();
@@ -51,6 +54,12 @@ protected slots:
 
 protected:
   void graphChanged(tlp::Graph *);
+
+  void createScene(Graph *graph,DataSet dataSet);
+  DataSet sceneData() const;
+  void loadGraphOnScene(Graph *graph);
+  void useHulls(bool hasHulls);
+  bool hasHulls() const;
 
 };
 }

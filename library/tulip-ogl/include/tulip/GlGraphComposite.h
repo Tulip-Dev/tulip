@@ -70,6 +70,13 @@ public:
   GlGraphInputData* getInputData();
 
   /**
+   * Return the graph used by this GlGraphComposite
+   */
+  Graph *getGraph() {
+    return inputData.getGraph();
+  }
+
+  /**
    * Function used to visit composite's children
    */
   virtual void acceptVisitor(GlSceneVisitor *visitor);

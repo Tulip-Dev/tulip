@@ -93,10 +93,6 @@ static const map<QString,string> propertyTypeLabelToPropertyTypeMap = buildPrope
 
 namespace tlp {
 
-void openGraphOnGlMainWidget(Graph *graph,DataSet *dataSet,GlMainWidget *glMainWidget) {
-  glMainWidget->setData(graph,*dataSet);
-}
-
 bool getColorDialog(const QColor &color,QWidget *parent,const QString &title,QColor &result) {
 
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
