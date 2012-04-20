@@ -28,6 +28,7 @@
 #include <sstream>
 namespace tlp {
 typedef tlp::Vector<int, 4> Vec4i;
+typedef tlp::Vec3f Coord;
 }
 %End
 
