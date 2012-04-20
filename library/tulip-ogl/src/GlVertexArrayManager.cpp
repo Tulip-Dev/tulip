@@ -180,6 +180,7 @@ void GlVertexArrayManager::beginRendering() {
 void GlVertexArrayManager::endRendering() {
   if(!isBegin)
     return;
+
   cerr << __PRETTY_FUNCTION__ << endl;
 
   isBegin=false;

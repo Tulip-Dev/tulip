@@ -528,7 +528,7 @@ void GlMainWidget::centerScene() {
   draw(false);
 }
 
-void GlMainWidget::emitGraphChanged(){
+void GlMainWidget::emitGraphChanged() {
   emit graphChanged();
 }
 
