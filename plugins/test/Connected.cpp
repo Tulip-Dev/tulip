@@ -22,7 +22,7 @@
 
 class ConnetedTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATIONS("Conneted Test", "Tulip team", "18/04/2012", "Tests whether a graph is connected or not.", "1.0", "Connectivity")
+  PLUGININFORMATIONS("Connected Test", "Tulip team", "18/04/2012", "Tests whether a graph is connected or not.", "1.0", "Connectivity")
   ConnetedTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
@@ -35,7 +35,7 @@ PLUGIN(ConnetedTest)
 
 class MakeConnected : public tlp::Algorithm {
 public:
-  PLUGININFORMATIONS("Make Conneted", "Tulip team", "18/04/2012", "Makes a graph conneted.", "1.0", "Connectivity")
+  PLUGININFORMATIONS("Make Connected", "Tulip team", "18/04/2012", "Makes a graph connected.", "1.0", "Connectivity")
   MakeConnected(const tlp::PluginContext* context) : tlp::Algorithm(context) {
   }
 
