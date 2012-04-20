@@ -27,20 +27,91 @@ using namespace tlp;
 //A private struct for vectors about a point used in convex hull computation
 #ifndef DOXYGEN_NOTFOR_DEVEL
 struct p0Vectors {
-  Coord pos;
+  Vec2d pos;
   unsigned int index;
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 bool operator<(const p0Vectors &p1, const p0Vectors &p2) {
-  float z = (p1.pos^p2.pos)[2];
-
-  if (z == 0)
+    double lengthP1 = p1.pos.norm();
+    double lengthP2 = p2.pos.norm();
+    double z = p1.pos.x()/lengthP1 - p2.pos.x()/lengthP2;
     // aligned points so check norm of vectors
-    return p1.pos.norm() < p2.pos.norm();
+    if (fabs(z) < 1E-8)
+      return lengthP1 > lengthP2;
 
-  return z > 0;
+    return z > 0;
 }
+//==============================================================
+//A function that returns a point on the convex hull
+//(the point of minimum y-coordinate).  The index returned is
+//an index of the vector points.
+inline unsigned int findP0(const std::vector<Coord> &points) {
+    unsigned int p = 0;
+    for (unsigned int i = 1; i < points.size(); ++i) {
+        if (points[i].y() < points[p].y()) {
+            p = i;
+            continue;
+        }
+        if (points[i].y() > points[p].y())
+            continue;
+        if (points[i].x() < points[p].x()) {
+            p = i;
+            continue;
+        }
+    }//end for i
+    return p;
+}//end findP0
+
+double ccw(const Coord &p1, const Coord &p2, const Coord &p3) {
+    Vec2d a(p2.x() - p1.x(), p2.y() - p1.y());
+    a.normalize();
+    Vec2d b(p3.x() - p1.x(), p3.y() - p1.y());
+    b.normalize();
+    return a.x()*b.y() - a.y()*b.x();
+}
+//==============================================================
+void tlp::convexHull (const std::vector<Coord> &points,
+                      std::vector<unsigned int> &convexHull) {
+
+  //clear the input vector
+  convexHull.clear();
+  //There is no meaning to compute the convex hull of less than three points;
+  assert(points.size() > 2);
+
+  //get the starting point of the convex hull computation
+  unsigned int p0Index = findP0(points);
+  cerr << points[p0Index] << endl;
+  //translate all points to have p0 in (0, 0);
+  vector<p0Vectors> vectors;
+  for (unsigned int i = 0; i < points.size(); ++i) {
+    if (p0Index == i) continue;
+    p0Vectors curPoint;
+    curPoint.pos.x() = points[i].x() - points[p0Index].x();
+    curPoint.pos.y() = points[i].y() - points[p0Index].y();
+    curPoint.index = i;
+    vectors.push_back(curPoint);
+  }//end for
+
+  //sort vectors counterclockwise and compute the convex hull
+  stable_sort (vectors.begin(), vectors.end());
+
+  convexHull.push_back(p0Index);
+  convexHull.push_back(vectors[0].index);
+
+  for (int i=1; i<vectors.size(); ++i) {
+      int m = convexHull.size() - 1;
+      while(m>1 && ccw(points[convexHull[m-1]], points[convexHull[m]], points[vectors[i].index]) <= 1E-5) {
+          convexHull.pop_back();
+          --m;
+      }
+      convexHull.push_back(vectors[i].index);
+  }
+
+}//end ConvexHull
+
+
+
 
 //==============================================================
 //the following inline function of cross product ensures we
@@ -98,25 +169,6 @@ inline bool hit (const Coord &v1Tail, const Coord &v1Head,
   return false;
 }
 
-//==============================================================
-
-//A function that returns a point on the convex hull
-//(the point of minimum x-coordinate).  The index returned is
-//an index of the vector points.
-inline unsigned int findP0(const vector<Coord> &points) {
-  unsigned int p0Index = 0;
-
-  for (unsigned int i = 1; i < points.size(); i++) {
-    if (points[p0Index].getX() < points[i].getX()) continue;
-
-    if (points[p0Index].getX() > points[i].getX())
-      p0Index = i;
-    else if (points[p0Index].getY() > points[i].getY())
-      p0Index = i;
-  }//end for i
-
-  return p0Index;
-}//end findP0
 
 //==============================================================
 typedef vector<unsigned int>::const_iterator constUintIt;
@@ -134,67 +186,7 @@ inline unsigned int findP0(const vector<Coord> &points,
   return findP0 (pointsSubset);
 }//end findP0
 
-//==============================================================
-void tlp::convexHull (const std::vector<Coord> &points,
-                      std::vector<unsigned int> &convexHull) {
 
-  //clear the input vector
-  convexHull.clear();
-
-  //if we have less than three points, the convex hull consists of
-  //all zero, one, or two points.
-  if (points.size() < 3) {
-    for (unsigned int i = 0; i < points.size(); i++)
-      convexHull.push_back (i);
-
-    if (points.size() == 2) {
-      if ((points[1].getX() > points[0].getX()) ||
-          (!(points[1].getX() < points[0].getX()) &&
-           (points[1].getY() > points[0].getY()))) {
-        convexHull[0] = 1;
-        convexHull[1] = 0;
-      }//end if
-    }//end if
-
-    return;
-  }//end if
-
-  //get the starting point of the convex hull computation
-  unsigned int p0Index = findP0(points);
-
-  //compute vectors from all the points to p0
-  vector<p0Vectors> vectors;
-
-  for (unsigned int i = 0; i < points.size(); i++) {
-    if (p0Index == i) continue;
-
-    p0Vectors curAngle;
-    curAngle.pos = points[i] - points[p0Index];
-    curAngle.index = i;
-    vectors.push_back (curAngle);
-  }//end for
-
-  //sort vectors counterclockwise and compute the convex hull
-  stable_sort (vectors.begin(), vectors.end());
-  vector<p0Vectors>::const_iterator it = vectors.begin();
-  convexHull.push_back(p0Index);
-  convexHull.push_back((*it++).index);
-  convexHull.push_back((*it++).index);
-
-  for (; it != vectors.end(); ++it) {
-    while ((convexHull.size() > 1) &&
-           !((((*it).pos -
-               (points[convexHull[convexHull.size() - 1]] -
-                points[p0Index])) ^
-              ((points[convexHull[convexHull.size() - 2]] -
-                points[p0Index]) -
-               (points[convexHull[convexHull.size() - 1]] -
-                points[p0Index])))[2] > 0))
-      convexHull.pop_back();
-
-    convexHull.push_back((*it).index);
-  }//end for
-}//end ConvexHull
 
 
 //==============================================================
@@ -240,7 +232,7 @@ void tlp::mergeHulls (const std::vector<Coord> &points,
     unsigned int prev2 = (caliper2 == 0) ? hull2.size() - 1 : caliper2 - 1;
     Coord copodal = points[hull2[caliper2]] - points[hull1[caliper1]];
 
-    if (!onHull1) copodal *= -1;
+    if (!onHull1) copodal *= -1.;
 
     if ((cross (copodal,
                 points[hull1[next1]] - points[hull1[caliper1]]) >= 0) &&
