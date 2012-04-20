@@ -62,7 +62,7 @@ PLUGIN(Billboard)
 //===================================================================================
 Billboard::Billboard(const tlp::PluginContext* context): Glyph(context) {
   if(!rect)
-    rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
+    rect = new GlRect(Coord(0,0,0), 1., 1., Color(0,0,0,255),Color(0,0,0,255));
 }
 //========================================================
 Billboard::~Billboard() {

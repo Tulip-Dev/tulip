@@ -72,7 +72,7 @@ PLUGIN(Square)
 Square::Square(const tlp::PluginContext* context) :
   Glyph(context) {
   if(!rect)
-    rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
+    rect = new GlRect(Coord(0,0,0), 1., 1., Color(0,0,0,255),Color(0,0,0,255));
 }
 Square::~Square() {
 }
@@ -102,7 +102,7 @@ public:
   GLYPHINFORMATIONS("2D - Square extremity", "David Auber", "09/07/2002", "Textured square for edge extremities", "1.0", 4)
   EESquare(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
     if(!rect)
-      rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
+      rect = new GlRect(Coord(0,0,0), 1., 1.,Color(0,0,0,255),Color(0,0,0,255));
   }
 
   void draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {

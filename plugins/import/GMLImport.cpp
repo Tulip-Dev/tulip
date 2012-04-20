@@ -100,7 +100,7 @@ struct GMLGraphBuilder:public GMLTrue {
 
     return false;
   }
-  bool setNodeValue(int nodeId, const string propertyName, Coord value) {
+  bool setNodeCoordValue(int nodeId, const string propertyName, Coord value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<LayoutProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
@@ -108,7 +108,7 @@ struct GMLGraphBuilder:public GMLTrue {
 
     return false;
   }
-  bool setNodeValue(int nodeId, const string propertyName, Size value) {
+  bool setNodeSizeValue(int nodeId, const string propertyName, Size value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<SizeProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
@@ -221,10 +221,10 @@ struct GMLNodeBuilder:public GMLBuilder {
     graphBuilder->setNodeValue(idSet,"viewColor",color);
   }
   void setSize(const Size &size) {
-    graphBuilder->setNodeValue(idSet,"viewSize",size);
+    graphBuilder->setNodeSizeValue(idSet,"viewSize",size);
   }
   void setCoord(const Coord &coord) {
-    graphBuilder->setNodeValue(idSet,"viewLayout",coord);
+    graphBuilder->setNodeCoordValue(idSet,"viewLayout",coord);
   }
   bool addStruct(const string& structName,GMLBuilder*&newBuilder);
   bool close() {

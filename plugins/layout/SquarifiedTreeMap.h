@@ -83,11 +83,11 @@ private:
   * surface is sum of size of elements what belongs to the rectangle
   */
   double evaluateRow(const std::vector<tlp::node> &row, tlp::node n, double width, double length, double surface);
-  void layoutRow(const std::vector<tlp::node> &row, const int depth, const tlp::Rectangle<double> &rectArea);
-  void squarify(const std::vector<tlp::node> &toTreat, const tlp::Rectangle<double> &rectArea, const int depth);
+  void layoutRow(const std::vector<tlp::node> &row, const int depth, const tlp::Rectd &rectArea);
+  void squarify(const std::vector<tlp::node> &toTreat, const tlp::Rectd &rectArea, const int depth);
   //change the rectangle to take into account space reserved for the drawing of borders and headers
   //the function currently fix adjust the size for the 2D windwows glyph.
-  tlp::Rectangle<double> adjustRectangle(const tlp::Rectangle<double> &r) const;
+  tlp::Rectd adjustRectangle(const tlp::Rectd &r) const;
   //return a vector containing children of n ordered in decreasing order of their size.
   std::vector<tlp::node> orderedChildren(const tlp::node n) const;
   /**
