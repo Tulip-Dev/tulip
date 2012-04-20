@@ -45,7 +45,7 @@ public:
     // between the min and max computed values
     prop->setNodeValue(mN,
                        (((SizeProperty *)prop)->getMax(sg) +
-                        ((SizeProperty *)prop)->getMin(sg)) / 2.0);
+                        ((SizeProperty *)prop)->getMin(sg)) / 2.0f);
   }
 };
 
