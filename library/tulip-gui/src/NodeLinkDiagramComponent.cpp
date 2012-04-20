@@ -31,11 +31,14 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/Gl2DRect.h>
+#include <tulip/ExtendedMetaNodeRenderer.h>
+#include <tulip/GlVertexArrayManager.h>
 
 using namespace tlp;
 using namespace std;
 
-NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL) {
+NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL),_hasHulls(false) {
 }
 
 void NodeLinkDiagramComponent::updateGrid() {
@@ -122,7 +125,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
     data.get<bool>("quickAccessBarVisible",quickAccessBarVisible);
   }
 
-  getGlMainWidget()->setData(graph(), data);
+  createScene(graph(), data);
   registerTriggers();
 
   graphicsView()->setContextMenuPolicy(Qt::ActionsContextMenu);
@@ -171,16 +174,154 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
-  getGlMainWidget()->setGraph(graph);
+  loadGraphOnScene(graph);
   registerTriggers();
   emit drawNeeded();
 }
 
 tlp::DataSet NodeLinkDiagramComponent::state() const {
-  DataSet data=getGlMainWidget()->getData();
+  DataSet data=sceneData();
   data.set("overviewVisible",overviewVisible());
   data.set("quickAccessBarVisible",quickAccessBarVisible());
   return data;
+}
+
+//==================================================
+void NodeLinkDiagramComponent::createScene(Graph *graph,DataSet dataSet) {
+  GlScene *scene=getGlMainWidget()->getScene();
+  scene->clearLayersList();
+
+  std::string sceneInput="";
+
+  if(dataSet.exist("scene")) {
+    dataSet.get("scene",sceneInput);
+  }
+
+  if(sceneInput=="") {
+    //Default scene
+    GlLayer* layer=new GlLayer("Main");
+    GlLayer *backgroundLayer=new GlLayer("Background");
+    backgroundLayer->setVisible(false);
+    GlLayer *foregroundLayer=new GlLayer("Foreground");
+    foregroundLayer->setVisible(true);
+
+    backgroundLayer->set2DMode();
+    foregroundLayer->set2DMode();
+    std::string dir=TulipBitmapDir;
+    Gl2DRect *background=new Gl2DRect(0,1.,0,1.,dir + "tex_back.png",true);
+    backgroundLayer->addGlEntity(background,"background");
+
+    Gl2DRect *labri=new Gl2DRect(5.,5.,50.,50.,dir + "logolabri.jpg",true,false);
+    labri->setVisible(false);
+    foregroundLayer->addGlEntity(labri,"labrilogo");
+
+    scene->addExistingLayer(backgroundLayer);
+    scene->addExistingLayer(layer);
+    scene->addExistingLayer(foregroundLayer);
+    GlGraphComposite* graphComposite=new GlGraphComposite(graph);
+    scene->getLayer("Main")->addGlEntity(graphComposite,"graph");
+    graphComposite->getRenderingParametersPointer()->setViewNodeLabel(true);
+    graphComposite->getRenderingParametersPointer()->setEdgeColorInterpolate(false);
+    scene->centerScene();
+  }
+  else {
+    size_t pos=sceneInput.find("TulipBitmapDir/");
+
+    while(pos!=std::string::npos) {
+      sceneInput.replace(pos,15,TulipBitmapDir);
+      pos=sceneInput.find("TulipBitmapDir/");
+    }
+
+    pos=sceneInput.find("TulipLibDir/");
+
+    while(pos!=std::string::npos) {
+      sceneInput.replace(pos,12,TulipLibDir);
+      pos=sceneInput.find("TulipLibDir/");
+    }
+
+    scene->setWithXML(sceneInput,graph);
+  }
+
+  if(dataSet.exist("Display")) {
+    DataSet renderingParameters;
+    dataSet.get("Display",renderingParameters);
+    GlGraphRenderingParameters rp=scene->getGlGraphComposite()->getRenderingParameters();
+    rp.setParameters(renderingParameters);
+    scene->getGlGraphComposite()->setRenderingParameters(rp);
+  }
+
+  if(dataSet.exist("Hulls")) {
+    useHulls(true);
+    DataSet hullsSet;
+    dataSet.get<DataSet>("Hulls", hullsSet);
+    manager->setVisible(true);
+    manager->setData(hullsSet);
+  }
+
+  scene->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new ExtendedMetaNodeRenderer(scene->getGlGraphComposite()->getInputData()));
+  getGlMainWidget()->emitGraphChanged();
+}
+//==================================================
+DataSet NodeLinkDiagramComponent::sceneData() const {
+  GlScene *scene=getGlMainWidget()->getScene();
+  DataSet outDataSet;
+  outDataSet.set<DataSet>("Display",scene->getGlGraphComposite()->getRenderingParameters().getParameters());
+  std::string out;
+  scene->getXML(out);
+  size_t pos=out.find(TulipBitmapDir);
+
+  while(pos!=std::string::npos) {
+    out.replace(pos,TulipBitmapDir.size(),"TulipBitmapDir/");
+    pos=out.find(TulipBitmapDir);
+  }
+
+  outDataSet.set<std::string>("scene",out);
+
+  if(_hasHulls && manager->isVisible()) {
+    outDataSet.set<DataSet>("Hulls", manager->getData());
+  }
+
+  return outDataSet;
+}
+//==================================================
+void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
+  GlScene *scene=getGlMainWidget()->getScene();
+  if(!scene->getLayer("Main")) {
+    createScene(graph,DataSet());
+    return;
+  }
+
+  if(_hasHulls)
+    manager->setGraph(graph);
+
+  GlGraphComposite* oldGraphComposite=(GlGraphComposite *)(scene->getLayer("Main")->findGlEntity("graph"));
+
+  if(!oldGraphComposite) {
+    createScene(graph,DataSet());
+    return;
+  }
+
+  GlGraphRenderingParameters param=oldGraphComposite->getRenderingParameters();
+  GlMetaNodeRenderer *metaNodeRenderer=oldGraphComposite->getInputData()->getMetaNodeRenderer();
+  oldGraphComposite->getInputData()->setMetaNodeRenderer(NULL,false);
+  GlGraphComposite* graphComposite=new GlGraphComposite(graph);
+  graphComposite->setRenderingParameters(param);
+
+  metaNodeRenderer->setInputData(graphComposite->getInputData());
+
+  graphComposite->getInputData()->setMetaNodeRenderer(metaNodeRenderer);
+
+  if(oldGraphComposite->getInputData()->graph==graph) {
+    oldGraphComposite->getInputData()->deleteGlVertexArrayManagerInDestructor(false);
+    delete graphComposite->getInputData()->getGlVertexArrayManager();
+    graphComposite->getInputData()->setGlVertexArrayManager(oldGraphComposite->getInputData()->getGlVertexArrayManager());
+    graphComposite->getInputData()->getGlVertexArrayManager()->setInputData(graphComposite->getInputData());
+  }
+
+  scene->getLayer("Main")->addGlEntity(graphComposite,"graph");
+
+  delete oldGraphComposite;
+  getGlMainWidget()->emitGraphChanged();
 }
 
 void NodeLinkDiagramComponent::registerTriggers() {
@@ -189,7 +330,7 @@ void NodeLinkDiagramComponent::registerTriggers() {
   if (graph() == NULL)
     return;
 
-  addRedrawTrigger(getGlMainWidget()->getGraph());
+  addRedrawTrigger(getGlMainWidget()->getScene()->getGlGraphComposite()->getGraph());
   std::set<tlp::PropertyInterface*> properties = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->properties();
 
   for(std::set<tlp::PropertyInterface*>::iterator it = properties.begin(); it != properties.end(); ++it) {
@@ -215,6 +356,31 @@ void NodeLinkDiagramComponent::showGridControl() {
 
   updateGrid();
   emit drawNeeded();
+}
+
+void NodeLinkDiagramComponent::useHulls(bool hasHulls) {
+  GlScene *scene=getGlMainWidget()->getScene();
+  if(hasHulls == _hasHulls)
+    return;
+
+  _hasHulls = hasHulls;
+
+  if(_hasHulls) {
+    manager = new GlCompositeHierarchyManager(scene->getGlGraphComposite()->getInputData()->getGraph(),
+        scene->getLayer("Main"),
+        "Hulls",
+        scene->getGlGraphComposite()->getInputData()->getElementLayout(),
+        scene->getGlGraphComposite()->getInputData()->getElementSize(),
+        scene->getGlGraphComposite()->getInputData()->getElementRotation());
+    // Now we remove and add GlGraphComposite to be sure of the order (first Hulls and after GraphComposite)
+    // This code doesn't affect the behavior of tulip but the tlp file is modified
+    scene->getLayer("Main")->deleteGlEntity(scene->getGlGraphComposite());
+    scene->getLayer("Main")->addGlEntity(scene->getGlGraphComposite(),"graph");
+  }
+}
+
+bool NodeLinkDiagramComponent::hasHulls() const {
+  return _hasHulls;
 }
 
 PLUGIN(NodeLinkDiagramComponent)
