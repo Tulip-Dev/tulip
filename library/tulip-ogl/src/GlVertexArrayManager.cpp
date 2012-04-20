@@ -121,7 +121,7 @@ void GlVertexArrayManager::beginRendering() {
     return;
 
   graph=inputData->getGraph();
-
+  cerr << __PRETTY_FUNCTION__ << endl;
   isBegin=true;
   linesRenderingStartIndexArray.clear();
   linesRenderingCountArray.clear();
@@ -180,6 +180,7 @@ void GlVertexArrayManager::beginRendering() {
 void GlVertexArrayManager::endRendering() {
   if(!isBegin)
     return;
+  cerr << __PRETTY_FUNCTION__ << endl;
 
   isBegin=false;
 
@@ -438,7 +439,7 @@ void GlVertexArrayManager::addEdge(GlEdge *edge) {
       vector<GLuint> quadTopOutlineIndices;
 
       for (size_t i = 0 ; i < quadVertices.size() / 2 ; ++i) {
-        centerLine.push_back((quadVertices[2*i]+quadVertices[2*i+1])/2);
+        centerLine.push_back((quadVertices[2*i]+quadVertices[2*i+1])/2.f);
         quadBottomOutlineIndices.push_back(lastQuadIndex+2*i);
         quadTopOutlineIndices.push_back(lastQuadIndex+2*i+1);
       }
@@ -496,7 +497,7 @@ void GlVertexArrayManager::addEdge(GlEdge *edge) {
       centerLine.reserve(numberQuadVertices/2);
 
       for (int i = 0 ; i < numberQuadVertices / 2 ; ++i) {
-        centerLine.push_back((quadsCoordsArray[baseQuadIndex+2*i]+quadsCoordsArray[2*i+1])/2);
+        centerLine.push_back((quadsCoordsArray[baseQuadIndex+2*i]+quadsCoordsArray[2*i+1])/2.f);
       }
 
       colors.clear();

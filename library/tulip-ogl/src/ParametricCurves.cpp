@@ -50,7 +50,7 @@ static void computeQuadraticBezierPoints(const Coord &p0, const Coord &p1, const
 
   // Compute Initial forward difference
   Coord firstFD(p0 * (h2 - 2 * h) + p1 * (-2 * h2 + 2 * h) + p2 * h2);
-  Coord secondFD(p0 * 2 * h2  - p1 * 4 * h2  + p2 * 2 * h2);
+  Coord secondFD(p0 * 2.f * h2  - p1 * 4.f * h2  + p2 * 2.f * h2);
 
   Coord c(p0);
 
@@ -271,7 +271,7 @@ static Coord computeCatmullRomPointImpl(const vector<Coord> &controlPoints, cons
   float s = 1.0 - localT;
   float s2 = s * s;
   float s3 = s2 * s;
-  return bezierControlPoints[0] * s3 + bezierControlPoints[1] * 3.0 * localT * s2 + bezierControlPoints[2] * 3.0 * t2 * s + bezierControlPoints[3] * t3;
+  return bezierControlPoints[0] * s3 + bezierControlPoints[1] * 3.0f * localT * s2 + bezierControlPoints[2] * 3.0f * t2 * s + bezierControlPoints[3] * t3;
 }
 
 Coord computeCatmullRomPoint(const vector<Coord> &controlPoints, const float t, const bool closedCurve, const float alpha) {

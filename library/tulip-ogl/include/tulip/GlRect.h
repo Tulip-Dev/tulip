@@ -45,7 +45,13 @@ public:
   /**
    * Constructor : with center coords and size, fill color and outline color
    */
-  GlRect(const Coord &center, const Size &size, const Color &fillColor, const Color &outlineColor);
+  //GlRect(const Coord &center, const Size &size, const Color &fillColor, const Color &outlineColor);
+
+  /**
+   * Constructor : with center coords and size, fill color and outline color
+   */
+  GlRect(const Coord &center, const float width, const float height, const Color &fillColor, const Color &outlineColor);
+
 
   /**
    * Constructor : with GlRect is filled/outlined

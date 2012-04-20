@@ -89,8 +89,8 @@ void GlRegularPolygon::computePolygon() {
     (*it)[1]=position[1]+(((*it)[1]-((box[1][1]+box[0][1])/2.))/((box[1][1]-box[0][1])/2.))*size[1];
   }
 
-  boundingBox.expand(position+size/2.);
-  boundingBox.expand(position-size/2.);
+  boundingBox.expand(position+size/2.f);
+  boundingBox.expand(position-size/2.f);
 
   setPoints(points);
 

@@ -448,7 +448,7 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
 
 
 
-  Coord centerTmp=(maxC + minC)/2;
+  Coord centerTmp = (maxC + minC) / 2.f;
 
   if(zoomTmp!=1) {
     double dec;
