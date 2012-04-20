@@ -27,7 +27,7 @@
 using namespace tlp;
 
 
-GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL),_colorCaption(NULL),_sizeCaption(NULL) {
+GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL) {
 }
 
 GlMainView::~GlMainView() {
@@ -58,67 +58,6 @@ void GlMainView::drawOverview(bool generatePixmap) {
   }
 
   _overviewItem->draw(generatePixmap);
-}
-
-void GlMainView::showHideCaption(CaptionItem::CaptionType captionType) {
-  if(_colorCaption==NULL) {
-    _colorCaption=new CaptionItem(this);
-    _colorCaption->create(CaptionItem::ColorCaption);
-    addToScene(_colorCaption->captionGraphicsItem());
-    _colorCaption->captionGraphicsItem()->setVisible(false);
-  }
-
-  if(_sizeCaption==NULL) {
-    _sizeCaption=new CaptionItem(this);
-    _sizeCaption->create(CaptionItem::SizeCaption);
-    addToScene(_sizeCaption->captionGraphicsItem());
-    _sizeCaption->captionGraphicsItem()->setVisible(false);
-    connect(_sizeCaption->captionGraphicsItem(),SIGNAL(interactionsActivated()),_colorCaption->captionGraphicsItem(),SLOT(removeInteractions()));
-    connect(_colorCaption->captionGraphicsItem(),SIGNAL(interactionsActivated()),_sizeCaption->captionGraphicsItem(),SLOT(removeInteractions()));
-    connect(_sizeCaption,SIGNAL(filtering(bool)),_colorCaption,SLOT(removeObservation(bool)));
-    connect(_colorCaption,SIGNAL(filtering(bool)),_sizeCaption,SLOT(removeObservation(bool)));
-  }
-
-  if(captionType==CaptionItem::ColorCaption) {
-    //_colorCaption->activateInteractions(!_colorCaption->captionGraphicsItem()->isVisible());
-
-    if(_colorCaption->captionGraphicsItem()->isVisible()) {
-      _colorCaption->captionGraphicsItem()->setVisible(false);
-
-      if(_sizeCaption->captionGraphicsItem()->isVisible())
-        _sizeCaption->captionGraphicsItem()->setPos(_captionPos);
-    }
-    else {
-      _colorCaption->captionGraphicsItem()->setVisible(true);
-
-      if(_sizeCaption->captionGraphicsItem()->isVisible()) {
-        _colorCaption->captionGraphicsItem()->setPos(_captionPos+QPoint(130,0));
-      }
-      else {
-        _colorCaption->captionGraphicsItem()->setPos(_captionPos);
-      }
-    }
-  }
-  else {
-    //_sizeCaption->activateInteractions(!_colorCaption->captionGraphicsItem()->isVisible());
-
-    if(_sizeCaption->captionGraphicsItem()->isVisible()) {
-      _sizeCaption->captionGraphicsItem()->setVisible(false);
-
-      if(_colorCaption->captionGraphicsItem()->isVisible())
-        _colorCaption->captionGraphicsItem()->setPos(_captionPos);
-    }
-    else {
-      _sizeCaption->captionGraphicsItem()->setVisible(true);
-
-      if(_colorCaption->captionGraphicsItem()->isVisible()) {
-        _sizeCaption->captionGraphicsItem()->setPos(_captionPos+QPoint(130,0));
-      }
-      else {
-        _sizeCaption->captionGraphicsItem()->setPos(_captionPos);
-      }
-    }
-  }
 }
 
 void GlMainView::setupWidget() {
@@ -169,9 +108,9 @@ void GlMainView::setQuickAccessBarVisible(bool visible) {
   }
 
   else if (!quickAccessBarVisible()) {
-    _quickAccessBar = new QuickAccessBar();
-    _quickAccessBar->setGlMainView(this);
     _quickAccessBarItem = new QGraphicsProxyWidget();
+    _quickAccessBar = new QuickAccessBar(_quickAccessBarItem);
+    _quickAccessBar->setGlMainView(this);
     _quickAccessBarItem->setWidget(_quickAccessBar);
     addToScene(_quickAccessBarItem);
     _quickAccessBarItem->setZValue(10);
@@ -187,11 +126,6 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
     _quickAccessBarItem->setPos(0,rect.height()-_quickAccessBarItem->size().height());
     _quickAccessBarItem->resize(rect.width(),_quickAccessBarItem->size().height());
   }
-
-  if(_quickAccessBar != NULL)
-    _captionPos=QPointF(0,rect.height()-230-_quickAccessBarItem->size().height());
-  else
-    _captionPos=QPointF(0,rect.height()-230);
 }
 
 QPixmap GlMainView::snapshot(const QSize &outputSize) {

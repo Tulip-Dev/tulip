@@ -7,6 +7,7 @@
 #include <QtGui/QMainWindow>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QApplication>
+#include <QtGui/QGraphicsView>
 
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/TulipFontDialog.h>
@@ -71,7 +72,7 @@ public:
 
 using namespace tlp;
 
-QuickAccessBar::QuickAccessBar(QWidget *parent): QWidget(parent), _ui(new Ui::QuickAccessBar), _mainView(NULL), _oldFontScale(1), _oldNodeScale(1) {
+QuickAccessBar::QuickAccessBar(QGraphicsItem *quickAccessBarItem, QWidget *parent): QWidget(parent), _ui(new Ui::QuickAccessBar), _quickAccessBarItem(quickAccessBarItem), _mainView(NULL), _oldFontScale(1), _oldNodeScale(1),_colorCaption(NULL),_sizeCaption(NULL) {
   _ui->setupUi(this);
 }
 
@@ -97,11 +98,11 @@ void QuickAccessBar::reset() {
 }
 
 void QuickAccessBar::showHideColorCaption() {
-  _mainView->showHideCaption(CaptionItem::ColorCaption);
+  showHideCaption(CaptionItem::ColorCaption);
 }
 
 void QuickAccessBar::showHideSizeCaption() {
-  _mainView->showHideCaption(CaptionItem::SizeCaption);
+  showHideCaption(CaptionItem::SizeCaption);
 }
 
 void QuickAccessBar::takeSnapshot() {
@@ -221,4 +222,57 @@ void QuickAccessBar::updateFontButtonStyle() {
                                  + (selectedFont.isItalic() ? "font-style: italic; " : "")
                                  + (selectedFont.isBold() ? "font-weight: bold; " : ""));
   _ui->fontButton->setText(selectedFont.fontName() + (selectedFont.isBold() ? " Bold" : "") + (selectedFont.isItalic() ? " Italic" : ""));
+}
+
+void QuickAccessBar::showHideCaption(CaptionItem::CaptionType captionType) {
+  if(_colorCaption==NULL) {
+    _colorCaption=new CaptionItem(_mainView);
+    _colorCaption->create(CaptionItem::ColorCaption);
+    _colorCaption->captionGraphicsItem()->setParentItem(_quickAccessBarItem);
+    _colorCaption->captionGraphicsItem()->setVisible(false);
+  }
+
+  if(_sizeCaption==NULL) {
+    _sizeCaption=new CaptionItem(_mainView);
+    _sizeCaption->create(CaptionItem::SizeCaption);
+    _sizeCaption->captionGraphicsItem()->setParentItem(_quickAccessBarItem);
+    _sizeCaption->captionGraphicsItem()->setVisible(false);
+    connect(_sizeCaption->captionGraphicsItem(),SIGNAL(interactionsActivated()),_colorCaption->captionGraphicsItem(),SLOT(removeInteractions()));
+    connect(_colorCaption->captionGraphicsItem(),SIGNAL(interactionsActivated()),_sizeCaption->captionGraphicsItem(),SLOT(removeInteractions()));
+    connect(_sizeCaption,SIGNAL(filtering(bool)),_colorCaption,SLOT(removeObservation(bool)));
+    connect(_colorCaption,SIGNAL(filtering(bool)),_sizeCaption,SLOT(removeObservation(bool)));
+  }
+
+  if(captionType==CaptionItem::ColorCaption) {
+    if(_colorCaption->captionGraphicsItem()->isVisible()) {
+      _colorCaption->captionGraphicsItem()->setVisible(false);
+
+      if(_sizeCaption->captionGraphicsItem()->isVisible())
+        _sizeCaption->captionGraphicsItem()->setPos(QPoint(0,-230));
+    }else {
+      _colorCaption->captionGraphicsItem()->setVisible(true);
+
+      if(_sizeCaption->captionGraphicsItem()->isVisible()) {
+        _colorCaption->captionGraphicsItem()->setPos(QPoint(120,-230));
+      }else {
+        _colorCaption->captionGraphicsItem()->setPos(QPoint(0,-230));
+      }
+    }
+  }
+  else {
+    if(_sizeCaption->captionGraphicsItem()->isVisible()) {
+      _sizeCaption->captionGraphicsItem()->setVisible(false);
+
+      if(_colorCaption->captionGraphicsItem()->isVisible())
+        _colorCaption->captionGraphicsItem()->setPos(QPoint(0,-230));
+    }else {
+      _sizeCaption->captionGraphicsItem()->setVisible(true);
+
+      if(_colorCaption->captionGraphicsItem()->isVisible()) {
+        _sizeCaption->captionGraphicsItem()->setPos(QPoint(130,-230));
+      }else {
+        _sizeCaption->captionGraphicsItem()->setPos(QPoint(0,-230));
+      }
+    }
+  }
 }

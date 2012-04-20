@@ -22,6 +22,8 @@
 #include <tulip/GlMainView.h>
 #include <tulip/GlCompositeHierarchyManager.h>
 
+class QDialog;
+
 namespace tlp {
 class GlGrid;
 
