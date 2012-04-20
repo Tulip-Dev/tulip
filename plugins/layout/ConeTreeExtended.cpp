@@ -117,7 +117,7 @@ double ConeTreeExtended::treePlace3D(tlp::node n,
   if (newRadius==0) newRadius=static_cast<float>(radius);
 
   //compute Circle Hull
-  vector<tlp::Circle<float> > circles(subCircleRadius.size());
+  vector<Circlef > circles(subCircleRadius.size());
 
   for (unsigned int i=0; i<subCircleRadius.size(); ++i) {
     circles[i][0]=newRadius*static_cast<float>(cos(vangles[i]));
@@ -125,7 +125,7 @@ double ConeTreeExtended::treePlace3D(tlp::node n,
     circles[i].radius=static_cast<float>(subCircleRadius[i]);
   }
 
-  tlp::Circle<float> circleH=tlp::enclosingCircle(circles);
+  tlp::Circlef circleH=tlp::enclosingCircle(circles);
 
   //Place relative position
   itN = tree->getOutNodes(n);

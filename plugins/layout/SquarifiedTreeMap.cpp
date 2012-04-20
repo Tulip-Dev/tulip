@@ -153,7 +153,7 @@ bool SquarifiedTreeMap::run() {
     }
   }
 
-  Rectangle<double> initialSpace(0, 0, DEFAULT_WIDTH * aspectRatio, DEFAULT_HEIGHT);
+  Rectd initialSpace(0, 0, DEFAULT_WIDTH * aspectRatio, DEFAULT_HEIGHT);
 
   node root = graph->getSource();
   computeNodesSize(root);
@@ -165,16 +165,16 @@ bool SquarifiedTreeMap::run() {
   vector<node> toTreat(orderedChildren(root));
 
   if (!toTreat.empty()) {
-    Rectangle<double> tmp = adjustRectangle(initialSpace);
+    Rectd tmp = adjustRectangle(initialSpace);
     squarify(toTreat, tmp, 1);
   }
 
   return true;
 }
 //====================================================================
-tlp::Rectangle<double> SquarifiedTreeMap::adjustRectangle(const tlp::Rectangle<double> &r) const {
+tlp::Rectd SquarifiedTreeMap::adjustRectangle(const tlp::Rectd &r) const {
   assert(r.isValid());
-  Rectangle<double> result(r);
+  Rectd result(r);
   Vec2d dist(r[1] - r[0]);
   //header size
   result[1][1] -= dist[1] * 0.1;
@@ -188,7 +188,7 @@ tlp::Rectangle<double> SquarifiedTreeMap::adjustRectangle(const tlp::Rectangle<d
   return result;
 }
 //====================================================================
-void SquarifiedTreeMap::layoutRow(const std::vector<tlp::node> &row, const int depth, const tlp::Rectangle<double> &rectArea) {
+void SquarifiedTreeMap::layoutRow(const std::vector<tlp::node> &row, const int depth, const tlp::Rectd &rectArea) {
   assert(rectArea.isValid());
   assert(!row.empty());
   vector<node>::const_iterator  it;
@@ -201,7 +201,7 @@ void SquarifiedTreeMap::layoutRow(const std::vector<tlp::node> &row, const int d
   Vec2d dist = rectArea[1] - rectArea[0];
 
   for (it = row.begin(); it!=row.end(); ++it) {
-    Rectangle<double> layoutRec(rectArea);
+    Rectd layoutRec(rectArea);
 
     if (rectArea.width() > rectArea.height()) {
       layoutRec[0][0] = rectArea[0][0] + (sum/rowArea) * dist[0];
@@ -220,7 +220,7 @@ void SquarifiedTreeMap::layoutRow(const std::vector<tlp::node> &row, const int d
 
     if (graph->outdeg(*it) > 0) {
       vector<node> toTreat(orderedChildren(*it));
-      Rectangle<double> newRec(adjustRectangle(layoutRec));
+      Rectd newRec(adjustRectangle(layoutRec));
       squarify(toTreat, newRec, depth + 1);
     }
   }
@@ -296,7 +296,7 @@ double SquarifiedTreeMap::evaluateRow(const std::vector<tlp::node> &row, tlp::no
 }
 
 //====================================================================
-void SquarifiedTreeMap::squarify(const std::vector<tlp::node> &toTreat, const tlp::Rectangle<double> &rectArea, const int depth) {
+void SquarifiedTreeMap::squarify(const std::vector<tlp::node> &toTreat, const tlp::Rectd &rectArea, const int depth) {
   assert(rectArea.isValid());
   assert(!toTreat.empty());
 
@@ -351,7 +351,7 @@ void SquarifiedTreeMap::squarify(const std::vector<tlp::node> &toTreat, const tl
   Vec2d dist = rectArea[1] - rectArea[0];
   assert(!rowNodes.empty());
 
-  Rectangle<double> rowRec(rectArea); //The rectangle for that row
+  Rectd rowRec(rectArea); //The rectangle for that row
 
   if (rectArea.width() > rectArea.height())
     rowRec[1][0] -= (unTreatedSurface/surface) * dist[0];
@@ -363,7 +363,7 @@ void SquarifiedTreeMap::squarify(const std::vector<tlp::node> &toTreat, const tl
   layoutRow(rowNodes, depth, rowRec);
 
   if (!unTreated.empty()) {
-    Rectangle<double> subRec(rectArea); //the rectangle of unTreated nodes
+    Rectd subRec(rectArea); //the rectangle of unTreated nodes
 
     if (rectArea.width() > rectArea.height())
       subRec[0][0] = rowRec[1][0];
