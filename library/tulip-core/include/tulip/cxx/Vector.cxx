@@ -31,6 +31,7 @@ template <typename TYPE,unsigned int SIZE, typename OTYPE>
 VECTORTLP & VECTORTLP::operator*=(const TYPE scalaire) {
   for (unsigned int i=0; i<SIZE; ++i)
     (*this)[i]*=scalaire;
+
   return (*this);
 }
 //======================================================
@@ -38,12 +39,14 @@ template <typename TYPE,unsigned int SIZE, typename OTYPE>
 VECTORTLP & VECTORTLP::operator*=(const VECTORTLP &vecto) {
   for (unsigned int i=0; i<SIZE; ++i)
     (*this)[i]*=vecto[i];
+
   return (*this);
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE, typename OTYPE>
 VECTORTLP & VECTORTLP::operator/=(const TYPE scalaire) {
   assert(scalaire!=static_cast<TYPE>(0));
+
   for (unsigned int i=0; i<SIZE; ++i)
     (*this)[i]/=scalaire;
 
@@ -186,32 +189,32 @@ VECTORTLP tlp::operator^(const VECTORTLP &u, const VECTORTLP &v) {
 
   switch(SIZE) {
   case 3:
-      return VECTORTLP(
-                  static_cast<TYPE>(
-                      static_cast<OTYPE>(u.y()) * static_cast<OTYPE>(v.z())
-                      -
-                      static_cast<OTYPE>(u.z()) * static_cast<OTYPE>(v.y())
-                      )
-                  ,
-                  static_cast<TYPE>(
-                      static_cast<OTYPE>(u.z()) * static_cast<OTYPE>(v.x())
-                      -
-                      static_cast<OTYPE>(u.x()) * static_cast<OTYPE>(v.z())
-                      )
-                  ,
-                  static_cast<TYPE>(
-                      static_cast<OTYPE>(u.x()) * static_cast<OTYPE>(v.y())
-                      -
-                      static_cast<OTYPE>(u.y()) * static_cast<OTYPE>(v.x())
-                      )
-                  );
+    return VECTORTLP(
+             static_cast<TYPE>(
+               static_cast<OTYPE>(u.y()) * static_cast<OTYPE>(v.z())
+               -
+               static_cast<OTYPE>(u.z()) * static_cast<OTYPE>(v.y())
+             )
+             ,
+             static_cast<TYPE>(
+               static_cast<OTYPE>(u.z()) * static_cast<OTYPE>(v.x())
+               -
+               static_cast<OTYPE>(u.x()) * static_cast<OTYPE>(v.z())
+             )
+             ,
+             static_cast<TYPE>(
+               static_cast<OTYPE>(u.x()) * static_cast<OTYPE>(v.y())
+               -
+               static_cast<OTYPE>(u.y()) * static_cast<OTYPE>(v.x())
+             )
+           );
     break;
 
   default :
-      qWarning() << "cross product not implemented for dimension :" << SIZE;
-      VECTORTLP result;
-      return result;
-      break;
+    qWarning() << "cross product not implemented for dimension :" << SIZE;
+    VECTORTLP result;
+    return result;
+    break;
   }
 }
 //======================================================
@@ -222,41 +225,48 @@ VECTORTLP tlp::operator-(const VECTORTLP &u) {
 //======================================================
 template <typename TYPE,unsigned int SIZE, typename OTYPE>
 bool VECTORTLP::operator>(const VECTORTLP &vecto) const {
-    return vecto < (*this);
+  return vecto < (*this);
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE, typename OTYPE>
 bool VECTORTLP::operator<(const VECTORTLP &v) const {
-    if (std::numeric_limits<TYPE>::is_integer) {
-        return memcmp(&((*this).array[0]), (void*)&(v.array[0]), SIZE * sizeof(TYPE)) < 0;
+  if (std::numeric_limits<TYPE>::is_integer) {
+    return memcmp(&((*this).array[0]), (void*)&(v.array[0]), SIZE * sizeof(TYPE)) < 0;
+  }
+
+  for (unsigned int i=0; i<SIZE; ++i) {
+    OTYPE tmp = static_cast<OTYPE>((*this)[i]) - static_cast<OTYPE>(v[i]);
+
+    if (tmp > sqrt(std::numeric_limits<TYPE>::epsilon()) || tmp < -sqrt(std::numeric_limits<TYPE>::epsilon())) {
+      if (tmp > 0) return false;
+
+      if (tmp < 0) return true;
     }
-    for (unsigned int i=0; i<SIZE; ++i) {
-        OTYPE tmp = static_cast<OTYPE>((*this)[i]) - static_cast<OTYPE>(v[i]);
-        if (tmp > sqrt(std::numeric_limits<TYPE>::epsilon()) || tmp < -sqrt(std::numeric_limits<TYPE>::epsilon())) {
-            if (tmp > 0) return false;
-            if (tmp < 0) return true;
-        }
-    }
-    return false;
+  }
+
+  return false;
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE, typename OTYPE>
 bool VECTORTLP::operator!=(const VECTORTLP &vecto) const {
-    return (! ( (*this) == vecto ));
+  return (! ( (*this) == vecto ));
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE, typename OTYPE>
 bool VECTORTLP::operator==(const VECTORTLP &v) const {
-    if (std::numeric_limits<TYPE>::is_integer) {
-        return memcmp((void*)&((*this).array[0]), (void*)&(v.array[0]), SIZE * sizeof(TYPE)) == 0;
+  if (std::numeric_limits<TYPE>::is_integer) {
+    return memcmp((void*)&((*this).array[0]), (void*)&(v.array[0]), SIZE * sizeof(TYPE)) == 0;
+  }
+
+  for (unsigned int i=0; i<SIZE; ++i) {
+    OTYPE tmp = static_cast<OTYPE>((*this)[i]) - static_cast<OTYPE>(v[i]);
+
+    if (tmp > sqrt(std::numeric_limits<TYPE>::epsilon()) || tmp < -sqrt(std::numeric_limits<TYPE>::epsilon())) {
+      return false;
     }
-    for (unsigned int i=0; i<SIZE; ++i) {
-        OTYPE tmp = static_cast<OTYPE>((*this)[i]) - static_cast<OTYPE>(v[i]);
-        if (tmp > sqrt(std::numeric_limits<TYPE>::epsilon()) || tmp < -sqrt(std::numeric_limits<TYPE>::epsilon())) {
-            return false;
-        }
-    }
-    return true;
+  }
+
+  return true;
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE, typename OTYPE>
@@ -283,22 +293,27 @@ TYPE  VECTORTLP::norm() const {
   switch(SIZE) {
   case 1:
     return VECTORTLP::array[0];
+
   case 2:
     return tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x())
-                                                  +
-                                                  tlpsqr<TYPE, OTYPE>(y())
-                                                  );
+                                +
+                                tlpsqr<TYPE, OTYPE>(y())
+                               );
+
   case 3:
     return tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x())
                                 +
                                 tlpsqr<TYPE, OTYPE>(y())
                                 +
                                 tlpsqr<TYPE, OTYPE>(z())
-                                );
+                               );
+
   default :
     OTYPE tmp = 0;
+
     for (unsigned int i=0; i<SIZE; ++i)
       tmp += tlpsqr<TYPE, OTYPE>((*this)[i]);
+
     return(tlpsqrt<TYPE, OTYPE>(tmp));
   }
 }
@@ -308,21 +323,26 @@ TYPE  VECTORTLP::dist(const VECTOR &c) const {
   switch(SIZE) {
   case 1:
     return static_cast<TYPE>(fabs(x()-c.x()));
+
   case 2:
     return tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x()-c.x())
                                 +
                                 tlpsqr<TYPE, OTYPE>(y()-c.y()));
+
   case 3:
-      return tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x()-c.x())
-                                  +
-                                  tlpsqr<TYPE, OTYPE>(y()-c.y())
-                                  +
-                                  tlpsqr<TYPE, OTYPE>(z()-c.z())
-                                  );
+    return tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x()-c.x())
+                                +
+                                tlpsqr<TYPE, OTYPE>(y()-c.y())
+                                +
+                                tlpsqr<TYPE, OTYPE>(z()-c.z())
+                               );
+
   default :
     OTYPE tmp = 0;
+
     for (unsigned int i=0; i<SIZE; ++i)
       tmp += tlpsqr<TYPE, OTYPE>((*this)[i]-c[i]);
+
     return(tlpsqrt<TYPE, OTYPE>(tmp));
   }
 }

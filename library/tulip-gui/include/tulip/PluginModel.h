@@ -15,7 +15,7 @@ class TLP_QT_SCOPE PluginModel : public tlp::TulipModel {
     TreeItem(QString name, TreeItem* parent = NULL): name(name), parent(parent) {}
     virtual ~TreeItem() {
       foreach(TreeItem* c, children)
-        delete c;
+      delete c;
     }
     TreeItem* addChild(QString name) {
       TreeItem* result = new TreeItem(name,this);
@@ -35,6 +35,7 @@ class TLP_QT_SCOPE PluginModel : public tlp::TulipModel {
     _root = new TreeItem("root");
     QMap<QString,QMap<QString,QSet<QString> > > pluginTree;
     std::list<std::string> plugins = PluginLister::instance()->availablePlugins<PLUGIN>();
+
     for(std::list<std::string>::iterator it = plugins.begin(); it != plugins.end(); ++it) {
       std::string name = *it;
       const Plugin* plugin = PluginLister::instance()->pluginInformations(name);
@@ -47,15 +48,17 @@ class TLP_QT_SCOPE PluginModel : public tlp::TulipModel {
       if (pluginTree[cat].keys().size() > 1) {
         foreach(QString group, pluginTree[cat].keys()) {
           TreeItem* groupItem = catItem;
+
           if (group != "")
             groupItem = catItem->addChild(group);
+
           foreach(QString alg, pluginTree[cat][group])
-            groupItem->addChild(alg);
+          groupItem->addChild(alg);
         }
       }
       else {
         foreach(QString alg, pluginTree[cat][pluginTree[cat].keys()[0]])
-          catItem->addChild(alg);
+        catItem->addChild(alg);
       }
     }
   }
@@ -64,11 +67,13 @@ class TLP_QT_SCOPE PluginModel : public tlp::TulipModel {
     QList<int> result;
     TreeItem* parent = item->parent;
     TreeItem* child = item;
+
     while (child != _root) {
       result.push_front(parent->children.indexOf(child));
       parent = parent->parent;
       child = child->parent;
     }
+
     return result;
   }
 
@@ -82,8 +87,10 @@ public:
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const {
     TreeItem* item = _root;
+
     if (parent.isValid())
       item = (TreeItem*)parent.internalPointer();
+
     return item->children.size();
   }
 
@@ -94,9 +101,12 @@ public:
   QModelIndex parent(const QModelIndex &child) const {
     if (!child.isValid())
       return QModelIndex();
+
     TreeItem* childItem = (TreeItem*)child.internalPointer();
+
     if (childItem->parent == _root)
       return QModelIndex();
+
     QList<int> indexes = indexHierarchy(childItem->parent);
     int row = indexes[indexes.size()-1];
     return createIndex(row,child.column(),childItem->parent);
@@ -110,18 +120,23 @@ public:
 
   QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const {
     TreeItem* parentItem = _root;
+
     if (parent.isValid()) {
       parentItem = (TreeItem*)parent.internalPointer();
     }
+
     if (row >= parentItem->children.size())
       return QModelIndex();
+
     return createIndex(row,column,parentItem->children[row]);
   }
 
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const {
     TreeItem* item = (TreeItem*)index.internalPointer();
+
     if (role == Qt::DisplayRole)
       return item->name;
+
     return QVariant();
   }
 };

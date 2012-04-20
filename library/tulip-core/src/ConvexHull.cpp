@@ -33,42 +33,47 @@ struct p0Vectors {
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 bool operator<(const p0Vectors &p1, const p0Vectors &p2) {
-    double lengthP1 = p1.pos.norm();
-    double lengthP2 = p2.pos.norm();
-    double z = p1.pos.x()/lengthP1 - p2.pos.x()/lengthP2;
-    // aligned points so check norm of vectors
-    if (fabs(z) < 1E-8)
-      return lengthP1 > lengthP2;
+  double lengthP1 = p1.pos.norm();
+  double lengthP2 = p2.pos.norm();
+  double z = p1.pos.x()/lengthP1 - p2.pos.x()/lengthP2;
 
-    return z > 0;
+  // aligned points so check norm of vectors
+  if (fabs(z) < 1E-8)
+    return lengthP1 > lengthP2;
+
+  return z > 0;
 }
 //==============================================================
 //A function that returns a point on the convex hull
 //(the point of minimum y-coordinate).  The index returned is
 //an index of the vector points.
 inline unsigned int findP0(const std::vector<Coord> &points) {
-    unsigned int p = 0;
-    for (unsigned int i = 1; i < points.size(); ++i) {
-        if (points[i].y() < points[p].y()) {
-            p = i;
-            continue;
-        }
-        if (points[i].y() > points[p].y())
-            continue;
-        if (points[i].x() < points[p].x()) {
-            p = i;
-            continue;
-        }
-    }//end for i
-    return p;
+  unsigned int p = 0;
+
+  for (unsigned int i = 1; i < points.size(); ++i) {
+    if (points[i].y() < points[p].y()) {
+      p = i;
+      continue;
+    }
+
+    if (points[i].y() > points[p].y())
+      continue;
+
+    if (points[i].x() < points[p].x()) {
+      p = i;
+      continue;
+    }
+  }//end for i
+
+  return p;
 }//end findP0
 
 double ccw(const Coord &p1, const Coord &p2, const Coord &p3) {
-    Vec2d a(p2.x() - p1.x(), p2.y() - p1.y());
-    a.normalize();
-    Vec2d b(p3.x() - p1.x(), p3.y() - p1.y());
-    b.normalize();
-    return a.x()*b.y() - a.y()*b.x();
+  Vec2d a(p2.x() - p1.x(), p2.y() - p1.y());
+  a.normalize();
+  Vec2d b(p3.x() - p1.x(), p3.y() - p1.y());
+  b.normalize();
+  return a.x()*b.y() - a.y()*b.x();
 }
 //==============================================================
 void tlp::convexHull (const std::vector<Coord> &points,
@@ -84,8 +89,10 @@ void tlp::convexHull (const std::vector<Coord> &points,
   cerr << points[p0Index] << endl;
   //translate all points to have p0 in (0, 0);
   vector<p0Vectors> vectors;
+
   for (unsigned int i = 0; i < points.size(); ++i) {
     if (p0Index == i) continue;
+
     p0Vectors curPoint;
     curPoint.pos.x() = points[i].x() - points[p0Index].x();
     curPoint.pos.y() = points[i].y() - points[p0Index].y();
@@ -100,12 +107,14 @@ void tlp::convexHull (const std::vector<Coord> &points,
   convexHull.push_back(vectors[0].index);
 
   for (int i=1; i<vectors.size(); ++i) {
-      int m = convexHull.size() - 1;
-      while(m>1 && ccw(points[convexHull[m-1]], points[convexHull[m]], points[vectors[i].index]) <= 1E-5) {
-          convexHull.pop_back();
-          --m;
-      }
-      convexHull.push_back(vectors[i].index);
+    int m = convexHull.size() - 1;
+
+    while(m>1 && ccw(points[convexHull[m-1]], points[convexHull[m]], points[vectors[i].index]) <= 1E-5) {
+      convexHull.pop_back();
+      --m;
+    }
+
+    convexHull.push_back(vectors[i].index);
   }
 
 }//end ConvexHull

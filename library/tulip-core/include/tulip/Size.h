@@ -22,6 +22,6 @@
 ///
 
 namespace tlp {
-    typedef Vec3f Size;
+typedef Vec3f Size;
 }
 #endif

@@ -249,12 +249,14 @@ void QuickAccessBar::showHideCaption(CaptionItem::CaptionType captionType) {
 
       if(_sizeCaption->captionGraphicsItem()->isVisible())
         _sizeCaption->captionGraphicsItem()->setPos(QPoint(0,-230));
-    }else {
+    }
+    else {
       _colorCaption->captionGraphicsItem()->setVisible(true);
 
       if(_sizeCaption->captionGraphicsItem()->isVisible()) {
         _colorCaption->captionGraphicsItem()->setPos(QPoint(120,-230));
-      }else {
+      }
+      else {
         _colorCaption->captionGraphicsItem()->setPos(QPoint(0,-230));
       }
     }
@@ -265,12 +267,14 @@ void QuickAccessBar::showHideCaption(CaptionItem::CaptionType captionType) {
 
       if(_colorCaption->captionGraphicsItem()->isVisible())
         _colorCaption->captionGraphicsItem()->setPos(QPoint(0,-230));
-    }else {
+    }
+    else {
       _sizeCaption->captionGraphicsItem()->setVisible(true);
 
       if(_colorCaption->captionGraphicsItem()->isVisible()) {
         _sizeCaption->captionGraphicsItem()->setPos(QPoint(130,-230));
-      }else {
+      }
+      else {
         _sizeCaption->captionGraphicsItem()->setPos(QPoint(0,-230));
       }
     }

@@ -36,17 +36,17 @@ namespace tlp {
 
 template<typename TYPE, typename OTYPE>
 inline OTYPE tlpsqr(const TYPE a) {
-    return static_cast<OTYPE>(a) * static_cast<OTYPE>(a);
+  return static_cast<OTYPE>(a) * static_cast<OTYPE>(a);
 }
 
 template<typename TYPE, typename OTYPE>
 inline TYPE tlpsqrt(const OTYPE a) {
-    return static_cast<TYPE>(sqrt(a));
+  return static_cast<TYPE>(sqrt(a));
 }
 
 template<>
 inline double tlpsqrt<double, long double>(long double a) {
-    return static_cast<double>(sqrtl(a));
+  return static_cast<double>(sqrtl(a));
 }
 
 /*@{*/
@@ -64,228 +64,304 @@ inline double tlpsqrt<double, long double>(long double a) {
  */
 template <typename TYPE, unsigned int SIZE, typename OTYPE = double>
 class TLP_SCOPE Vector:public Array<TYPE,SIZE> {
-    public:
-    inline VECTOR() {
-        memset( &((*this)[0]), 0, SIZE * sizeof(TYPE) );
-    }
-    inline VECTOR(const Vector<TYPE, SIZE, OTYPE> &v) {
-        set(v);
-    }
+public:
+  inline VECTOR() {
+    memset( &((*this)[0]), 0, SIZE * sizeof(TYPE) );
+  }
+  inline VECTOR(const Vector<TYPE, SIZE, OTYPE> &v) {
+    set(v);
+  }
 
-    inline VECTOR(const Vector<TYPE, SIZE + 1, OTYPE> &v) {
-        set(v);
-    }
+  inline VECTOR(const Vector<TYPE, SIZE + 1, OTYPE> &v) {
+    set(v);
+  }
 
-    explicit inline VECTOR(const TYPE x) {
-        fill(x);
-        /*
-        if (int(SIZE) - 1 > 0)
-            memset( &((*this)[1]), 0, (SIZE - 1) * sizeof(TYPE) );
-        set(x);
-        */
-    }
+  explicit inline VECTOR(const TYPE x) {
+    fill(x);
+    /*
+    if (int(SIZE) - 1 > 0)
+        memset( &((*this)[1]), 0, (SIZE - 1) * sizeof(TYPE) );
+    set(x);
+    */
+  }
 
-    explicit inline VECTOR(const TYPE x, const TYPE y) {
-        if (int(SIZE) - 2 > 0)
-            memset( &((*this)[2]), 0, (SIZE - 2) * sizeof(TYPE) );
-        set(x,y);
-    }
+  explicit inline VECTOR(const TYPE x, const TYPE y) {
+    if (int(SIZE) - 2 > 0)
+      memset( &((*this)[2]), 0, (SIZE - 2) * sizeof(TYPE) );
 
-    explicit inline VECTOR(const TYPE x, const TYPE y, const TYPE z) {
-        if (int(SIZE) - 3 > 0)
-            memset( &((*this)[3]), 0, (SIZE - 3) * sizeof(TYPE) );
-        set(x, y, z);
-    }
-    explicit inline VECTOR(const Vector<TYPE, 2, OTYPE> &v, const TYPE z) {
-        set(v, z);
-    }
-    explicit inline VECTOR(const TYPE x, const TYPE y, const TYPE z, const TYPE w) {
-        set(x, y, z, w);
-    }
-    explicit inline VECTOR(const Vector<TYPE, 2, OTYPE> &v, const TYPE z, const TYPE w) {
-        set(v, z, w);
-    }
-    explicit inline VECTOR(const Vector<TYPE, 3, OTYPE> &v, const TYPE w) {
-        set(v, w);
-    }
+    set(x,y);
+  }
 
-    inline void set(const TYPE x) {
-        (*this)[0] = x;
-    }
-    inline void set(const TYPE x, const TYPE y) {
-        assert(SIZE>1);
-        (*this)[0] = x;
-        (*this)[1] = y;
-    }
-    inline void set(const TYPE x, const TYPE y, const TYPE z) {
-        assert(SIZE>2);
-        (*this)[0] = x;
-        (*this)[1] = y;
-        (*this)[2] = z;
-    }
-    inline void set(const TYPE x, const TYPE y, const TYPE z, const TYPE w) {
-        assert(SIZE>3);
-        (*this)[0] = x;
-        (*this)[1] = y;
-        (*this)[2] = z;
-        (*this)[3] = w;
-    }
-    inline void set(const Vector<TYPE, 2, OTYPE> &v, const TYPE z) {
-        assert(SIZE>3);
-        memcpy( &((*this)[0]), (void*)&(v.array[0]), 2 * sizeof(TYPE) );
-        (*this)[2] = z;
-    }
-    inline void set(const Vector<TYPE, 3, OTYPE> &v, const TYPE w) {
-        assert(SIZE>3);
-        memcpy( &((*this)[0]), (void*)&(v.array[0]), 3 * sizeof(TYPE) );
-        (*this)[3] = w;
-    }
-    inline void set(const Vector<TYPE, SIZE, OTYPE> &v) {
-        memcpy(&((*this)[0]), (void*)&(v.array[0]), SIZE * sizeof(TYPE) );
-    }
-    inline void set(const Vector<TYPE, SIZE + 1, OTYPE> &v) {
-        memcpy(&((*this)[0]), &(v.array[0]), SIZE * sizeof(TYPE) );
-    }
-    inline void get(TYPE &x) const {
-        x = (*this)[0];
-    }
-    inline void get(TYPE &x,TYPE &y) const {
-        assert(SIZE>1);
-        x = (*this)[0]; y = (*this)[1];
-    }
-    inline void get(TYPE &x,TYPE &y,TYPE &z) const {
-        assert(SIZE>2);
-        x = (*this)[0]; y = (*this)[1]; z = (*this)[2];
-    }
-    inline void get(TYPE &x,TYPE &y,TYPE &z,TYPE &w) const {
-        assert(SIZE>3);
-        x = (*this)[0]; y = (*this)[1]; z = (*this)[2]; w = (*this)[3];
-    }
+  explicit inline VECTOR(const TYPE x, const TYPE y, const TYPE z) {
+    if (int(SIZE) - 3 > 0)
+      memset( &((*this)[3]), 0, (SIZE - 3) * sizeof(TYPE) );
 
-    //convenient accessor for coordinates
-    inline TYPE x() const {return (*this)[0];}
-    inline TYPE y() const {assert(SIZE>1); return (*this)[1];}
-    inline TYPE z() const {assert(SIZE>2); return (*this)[2];}
-    inline TYPE w() const {assert(SIZE>3); return (*this)[3];}
+    set(x, y, z);
+  }
+  explicit inline VECTOR(const Vector<TYPE, 2, OTYPE> &v, const TYPE z) {
+    set(v, z);
+  }
+  explicit inline VECTOR(const TYPE x, const TYPE y, const TYPE z, const TYPE w) {
+    set(x, y, z, w);
+  }
+  explicit inline VECTOR(const Vector<TYPE, 2, OTYPE> &v, const TYPE z, const TYPE w) {
+    set(v, z, w);
+  }
+  explicit inline VECTOR(const Vector<TYPE, 3, OTYPE> &v, const TYPE w) {
+    set(v, w);
+  }
 
-    inline TYPE& x() {return (*this)[0];}
-    inline TYPE& y() {assert(SIZE>1); return (*this)[1];}
-    inline TYPE& z() {assert(SIZE>2); return (*this)[2];}
-    inline TYPE& w() {assert(SIZE>3); return (*this)[3];}
+  inline void set(const TYPE x) {
+    (*this)[0] = x;
+  }
+  inline void set(const TYPE x, const TYPE y) {
+    assert(SIZE>1);
+    (*this)[0] = x;
+    (*this)[1] = y;
+  }
+  inline void set(const TYPE x, const TYPE y, const TYPE z) {
+    assert(SIZE>2);
+    (*this)[0] = x;
+    (*this)[1] = y;
+    (*this)[2] = z;
+  }
+  inline void set(const TYPE x, const TYPE y, const TYPE z, const TYPE w) {
+    assert(SIZE>3);
+    (*this)[0] = x;
+    (*this)[1] = y;
+    (*this)[2] = z;
+    (*this)[3] = w;
+  }
+  inline void set(const Vector<TYPE, 2, OTYPE> &v, const TYPE z) {
+    assert(SIZE>3);
+    memcpy( &((*this)[0]), (void*)&(v.array[0]), 2 * sizeof(TYPE) );
+    (*this)[2] = z;
+  }
+  inline void set(const Vector<TYPE, 3, OTYPE> &v, const TYPE w) {
+    assert(SIZE>3);
+    memcpy( &((*this)[0]), (void*)&(v.array[0]), 3 * sizeof(TYPE) );
+    (*this)[3] = w;
+  }
+  inline void set(const Vector<TYPE, SIZE, OTYPE> &v) {
+    memcpy(&((*this)[0]), (void*)&(v.array[0]), SIZE * sizeof(TYPE) );
+  }
+  inline void set(const Vector<TYPE, SIZE + 1, OTYPE> &v) {
+    memcpy(&((*this)[0]), &(v.array[0]), SIZE * sizeof(TYPE) );
+  }
+  inline void get(TYPE &x) const {
+    x = (*this)[0];
+  }
+  inline void get(TYPE &x,TYPE &y) const {
+    assert(SIZE>1);
+    x = (*this)[0];
+    y = (*this)[1];
+  }
+  inline void get(TYPE &x,TYPE &y,TYPE &z) const {
+    assert(SIZE>2);
+    x = (*this)[0];
+    y = (*this)[1];
+    z = (*this)[2];
+  }
+  inline void get(TYPE &x,TYPE &y,TYPE &z,TYPE &w) const {
+    assert(SIZE>3);
+    x = (*this)[0];
+    y = (*this)[1];
+    z = (*this)[2];
+    w = (*this)[3];
+  }
 
-    inline TYPE width()  const {return x();}
-    inline TYPE height() const {return y();}
-    inline TYPE depth()  const {return z();}
+  //convenient accessor for coordinates
+  inline TYPE x() const {
+    return (*this)[0];
+  }
+  inline TYPE y() const {
+    assert(SIZE>1);
+    return (*this)[1];
+  }
+  inline TYPE z() const {
+    assert(SIZE>2);
+    return (*this)[2];
+  }
+  inline TYPE w() const {
+    assert(SIZE>3);
+    return (*this)[3];
+  }
 
-    inline TYPE& width()  {return x();}
-    inline TYPE& height() {return y();}
-    inline TYPE& depth()  {return z();}
+  inline TYPE& x() {
+    return (*this)[0];
+  }
+  inline TYPE& y() {
+    assert(SIZE>1);
+    return (*this)[1];
+  }
+  inline TYPE& z() {
+    assert(SIZE>2);
+    return (*this)[2];
+  }
+  inline TYPE& w() {
+    assert(SIZE>3);
+    return (*this)[3];
+  }
 
-    inline TYPE r() const {return x();}
-    inline TYPE g() const {return y();}
-    inline TYPE b() const {return z();}
-    inline TYPE a() const {return w();}
+  inline TYPE width()  const {
+    return x();
+  }
+  inline TYPE height() const {
+    return y();
+  }
+  inline TYPE depth()  const {
+    return z();
+  }
 
-    inline TYPE& r() {return x();}
-    inline TYPE& g() {return y();}
-    inline TYPE& b() {return z();}
-    inline TYPE& a() {return w();}
+  inline TYPE& width()  {
+    return x();
+  }
+  inline TYPE& height() {
+    return y();
+  }
+  inline TYPE& depth()  {
+    return z();
+  }
 
-    inline TYPE s() const {return x();}
-    inline TYPE t() const {return y();}
-    inline TYPE p() const {return z();}
-    inline TYPE q() const {return w();}
+  inline TYPE r() const {
+    return x();
+  }
+  inline TYPE g() const {
+    return y();
+  }
+  inline TYPE b() const {
+    return z();
+  }
+  inline TYPE a() const {
+    return w();
+  }
 
-    inline TYPE& s() {return x();}
-    inline TYPE& t() {return y();}
-    inline TYPE& p() {return z();}
-    inline TYPE& q() {return w();}
+  inline TYPE& r() {
+    return x();
+  }
+  inline TYPE& g() {
+    return y();
+  }
+  inline TYPE& b() {
+    return z();
+  }
+  inline TYPE& a() {
+    return w();
+  }
 
-    inline void setX(TYPE xx) {
-      x() = xx;
-    }
-    inline void setY(TYPE yy) {
-      y() = yy;
-    }
-    inline void setZ(TYPE zz) {
-      z() = zz;
-    }
+  inline TYPE s() const {
+    return x();
+  }
+  inline TYPE t() const {
+    return y();
+  }
+  inline TYPE p() const {
+    return z();
+  }
+  inline TYPE q() const {
+    return w();
+  }
 
-    inline TYPE getX() const {
-      return x();
-    }
-    inline TYPE getY() const {
-      return y();
-    }
-    inline TYPE getZ() const {
-      return z();
-    }
+  inline TYPE& s() {
+    return x();
+  }
+  inline TYPE& t() {
+    return y();
+  }
+  inline TYPE& p() {
+    return z();
+  }
+  inline TYPE& q() {
+    return w();
+  }
 
-    inline void setW(const TYPE width) {
-        x() = width;
-    }
+  inline void setX(TYPE xx) {
+    x() = xx;
+  }
+  inline void setY(TYPE yy) {
+    y() = yy;
+  }
+  inline void setZ(TYPE zz) {
+    z() = zz;
+  }
 
-    inline void setH(const TYPE height) {
-        y() = height;
-    }
+  inline TYPE getX() const {
+    return x();
+  }
+  inline TYPE getY() const {
+    return y();
+  }
+  inline TYPE getZ() const {
+    return z();
+  }
 
-    inline void setD(const TYPE depth) {
-        z() = depth;
-    }
+  inline void setW(const TYPE width) {
+    x() = width;
+  }
 
-    inline TYPE getW() const {
-        return x();
-    }
-    inline TYPE getH() const {
-        return y();
-    }
-    inline TYPE getD() const {
-        return z();
-    }
+  inline void setH(const TYPE height) {
+    y() = height;
+  }
+
+  inline void setD(const TYPE depth) {
+    z() = depth;
+  }
+
+  inline TYPE getW() const {
+    return x();
+  }
+  inline TYPE getH() const {
+    return y();
+  }
+  inline TYPE getD() const {
+    return z();
+  }
 
 
 
 //    inline VECTOR & operator*=(const OTYPE );
-    inline VECTOR & operator*=(const TYPE );
-    inline VECTOR & operator*=(const VECTOR &);
+  inline VECTOR & operator*=(const TYPE );
+  inline VECTOR & operator*=(const VECTOR &);
 //    inline VECTOR & operator/=(const OTYPE );
-    inline VECTOR & operator/=(const TYPE );
-    inline VECTOR & operator/=(const VECTOR &);
+  inline VECTOR & operator/=(const TYPE );
+  inline VECTOR & operator/=(const VECTOR &);
 //    inline VECTOR & operator+=(const OTYPE );
-    inline VECTOR & operator+=(const TYPE );
-    inline VECTOR & operator+=(const VECTOR &);
+  inline VECTOR & operator+=(const TYPE );
+  inline VECTOR & operator+=(const VECTOR &);
 //    inline VECTOR & operator-=(const OTYPE );
-    inline VECTOR & operator-=(const TYPE );
-    inline VECTOR & operator-=(const VECTOR &);
-    inline VECTOR & operator^=(const VECTOR &);
+  inline VECTOR & operator-=(const TYPE );
+  inline VECTOR & operator-=(const VECTOR &);
+  inline VECTOR & operator^=(const VECTOR &);
 
-    inline bool operator>(const VECTOR &) const;
-    inline bool operator<(const VECTOR &) const;
-    inline bool operator!=(const VECTOR &) const;
-    inline bool operator==(const VECTOR &) const;
-    inline VECTOR & fill(const TYPE obj);
-    inline TYPE norm () const;
-    inline TYPE length () const {
-        return norm();
-    }
-    inline VECTOR & normalize () {
-        TYPE tmp = norm();
-        if (tmp > std::numeric_limits<TYPE>::epsilon())
-            (*this) /= norm();
-        return *this;
-    }
-    inline TYPE dist (const VECTOR &) const;
-    inline TYPE dotProduct(const VECTOR &) const;
+  inline bool operator>(const VECTOR &) const;
+  inline bool operator<(const VECTOR &) const;
+  inline bool operator!=(const VECTOR &) const;
+  inline bool operator==(const VECTOR &) const;
+  inline VECTOR & fill(const TYPE obj);
+  inline TYPE norm () const;
+  inline TYPE length () const {
+    return norm();
+  }
+  inline VECTOR & normalize () {
+    TYPE tmp = norm();
+
+    if (tmp > std::numeric_limits<TYPE>::epsilon())
+      (*this) /= norm();
+
+    return *this;
+  }
+  inline TYPE dist (const VECTOR &) const;
+  inline TYPE dotProduct(const VECTOR &) const;
 };
 
 TEMPLATEVECTOR
 inline TYPE dotProduct(const VECTOR &a, const VECTOR &b) {
-    return a.dotProduct(b);
+  return a.dotProduct(b);
 }
 
 TEMPLATEVECTOR
 inline TYPE dist(const VECTOR &a, const VECTOR &b) {
-    return a.dist(b);
+  return a.dist(b);
 }
 
 
@@ -296,10 +372,12 @@ inline TYPE dist(const VECTOR &a, const VECTOR &b) {
   */
 TEMPLATEVECTOR
 inline VECTOR minVector(const VECTOR &u, const VECTOR &v) {
-    VECTOR tmp;
-    for(unsigned int i = 0; i<SIZE; ++i)
-        tmp[i] = std::min(u[i], v[i]);
-    return tmp;
+  VECTOR tmp;
+
+  for(unsigned int i = 0; i<SIZE; ++i)
+    tmp[i] = std::min(u[i], v[i]);
+
+  return tmp;
 }
 /**
   * Return the maximum of each dimension of the two vectors
@@ -308,10 +386,12 @@ inline VECTOR minVector(const VECTOR &u, const VECTOR &v) {
   */
 TEMPLATEVECTOR
 inline VECTOR maxVector(const VECTOR &u, const VECTOR &v)  {
-    VECTOR tmp;
-    for(unsigned int i = 0; i<SIZE; ++i)
-        tmp[i] = std::max(u[i], v[i]);
-    return tmp;
+  VECTOR tmp;
+
+  for(unsigned int i = 0; i<SIZE; ++i)
+    tmp[i] = std::max(u[i], v[i]);
+
+  return tmp;
 }
 
 TEMPLATEVECTOR
@@ -461,7 +541,7 @@ template class tlp::Vector<unsigned char ,4>;
 #ifdef _MSC_VER
 //template<unsigned int SIZE>
 static double sqrt(tlp::Vector<float, 5>& v) {
-    return sqrt((double)v[0]);
+  return sqrt((double)v[0]);
 }
 #endif
 

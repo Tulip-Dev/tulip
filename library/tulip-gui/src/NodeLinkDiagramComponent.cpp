@@ -286,6 +286,7 @@ DataSet NodeLinkDiagramComponent::sceneData() const {
 //==================================================
 void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
   GlScene *scene=getGlMainWidget()->getScene();
+
   if(!scene->getLayer("Main")) {
     createScene(graph,DataSet());
     return;
@@ -360,6 +361,7 @@ void NodeLinkDiagramComponent::showGridControl() {
 
 void NodeLinkDiagramComponent::useHulls(bool hasHulls) {
   GlScene *scene=getGlMainWidget()->getScene();
+
   if(hasHulls == _hasHulls)
     return;
 
