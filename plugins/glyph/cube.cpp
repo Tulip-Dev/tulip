@@ -57,7 +57,7 @@ void drawBox(const Color &fillColor,const std::string &textureName, float lod, G
  */
 class Cube: public Glyph {
 public:
-  PLUGININFORMATIONS("3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)
+  GLYPHINFORMATIONS("3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)
   Cube(const tlp::PluginContext* context = NULL);
   virtual ~Cube();
   virtual void draw(node n, float lod);
@@ -91,7 +91,7 @@ Coord Cube::getAnchor(const Coord & vector) const {
 
 class EECube: public EdgeExtremityGlyph {
 public:
-  PLUGININFORMATIONS("3D - Cube extremity", "Bertrand Mathieu", "09/07/2002", "Textured cube for edge extremities", "1.0" , 0)
+  GLYPHINFORMATIONS("3D - Cube extremity", "Bertrand Mathieu", "09/07/2002", "Textured cube for edge extremities", "1.0" , 0)
 
   EECube(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
     if(!box)
