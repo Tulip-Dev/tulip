@@ -201,9 +201,9 @@ IF(PYTHONINTERP_FOUND)
                 SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.13.2/siplib/)
             ENDIF(SIP_OK)
         ENDIF(SIP_OK)
-        #SET(Sphinx_DIR ${CMAKE_CURRENT_SOURCE_DIR}/docs/python)
-        #MARK_AS_ADVANCED(Sphinx_DIR)
-        #FIND_PACKAGE(Sphinx)
+        SET(Sphinx_DIR ${CMAKE_CURRENT_SOURCE_DIR}/doc/python)
+        MARK_AS_ADVANCED(Sphinx_DIR)
+        FIND_PACKAGE(Sphinx)
     ENDIF(PYTHONLIBS_FOUND)
 ENDIF(PYTHONINTERP_FOUND)
 
@@ -394,6 +394,7 @@ ADD_SUBDIRECTORY(software)
 ADD_SUBDIRECTORY(plugins)
 ADD_SUBDIRECTORY(textures)
 ADD_SUBDIRECTORY(externalplugins)
+ADD_SUBDIRECTORY(doc)
 
 ## -----------------------------------------------------------------------------------------------
 ## Set var to create tulip-config script
