@@ -92,6 +92,15 @@ TLP_SCOPE   std::vector<Coord> computeConvexHull (const Graph *graph,
     const DoubleProperty *rotation,
     const BooleanProperty *selection = 0);
 
+/**
+ * Computes the intersection point (if any) of two 3d lines.
+ * Returns true if the line intersects, false otherwise (parallel or skew lines).
+ *
+ */
+TLP_SCOPE bool computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line1,
+                                        const std::pair<tlp::Coord, tlp::Coord> &line2,
+                                        tlp::Coord &intersectionPoint);
+
 }
 
 
