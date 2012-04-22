@@ -211,3 +211,33 @@ std::vector<Coord> tlp::computeConvexHull(const Graph *graph, const LayoutProper
   computeGraphPoints(graph->getNodes(), graph->getEdges(), layout, size, rotation, selection, calc);
   return calc.getResult();
 }
+
+//======================================================================================
+
+// implementation based on http://mathworld.wolfram.com/Line-LineIntersection.html
+// reference : Hill, F. S. Jr. "The Pleasures of 'Perp Dot' Products." Ch. II.5 in Graphics Gems IV (Ed. P. S. Heckbert). San Diego: Academic Press, pp. 138-148, 1994.
+bool tlp::computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line1,
+                                   const std::pair<tlp::Coord, tlp::Coord> &line2,
+                                   tlp::Coord &intersectionPoint) {
+
+  Coord a = line1.second - line1.first;
+  Coord b = line2.second - line2.first;
+  Coord c = line2.first - line1.first;
+  Coord axb = a^b;
+  float axbnorm = axb.norm();
+
+  // lines are parallel, no intersection
+  if (axbnorm == 0)
+    return false;
+
+  // skew lines, no intersection
+  if (c.dotProduct(axb) != 0)
+    return false;
+
+  // lines intersects, compute the point
+  float s = (c^b).dotProduct(axb) / (axbnorm*axbnorm);
+  intersectionPoint = line1.first + a * s;
+
+  return true;
+
+}
