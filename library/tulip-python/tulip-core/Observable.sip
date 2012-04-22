@@ -23,6 +23,12 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
+%ModuleHeaderCode
+typedef tlp::Iterator<tlp::Observable*> IteratorObservable;
+%End
+
+typedef tlp::Iterator<tlp::Observable*> IteratorObservable;
+
 namespace tlp {
 
 class Event {
@@ -44,45 +50,54 @@ class Event {
        
         Event(const tlp::Observable &sender, tlp::Event::EventType type);
         
-        EventType type() const;
-    
-    };
+        EventType type() const;    
+};
     
     
 class  Observable {
 %TypeHeaderCode
 #include <tulip/Observable.h>
 %End
-public:
-	
-	static tlp::Observable* getObject(tlp::node n);
-	static bool  isAlive(tlp::node n);
 
+    public:
 
-public:
-  		void addObserver(tlp::Observable *obs) const;
+      static void holdObservers();
 
-  		void addListener(tlp::Observable *obs) const;
+      static void unholdObservers();
 
-        void  removeObserver(tlp::Observable  *obs) const;
-        
-        void  removeListener(tlp::Observable  *obs) const;
+      static unsigned int observersHoldCounter();
 
-        static void holdObservers();
+      void addObserver(tlp::Observable *obs) const;
 
-        static void unholdObservers();
+      void addListener(tlp::Observable *obs) const;
 
-        static unsigned int observersHoldCounter();
+      void  removeObserver(tlp::Observable *obs) const;
 
-protected:
+      void  removeListener(tlp::Observable *obs) const;
 
-	Observable(const tlp::Observable &);
-        Observable();	    
-        virtual ~Observable();
-        virtual void treatEvents(const std::vector<tlp::Event> &events);
-        virtual void treatEvent(const tlp::Event & /NoCopy/);
-        void sendEvent(const tlp::Event &);
-        void observableDeleted();
+      unsigned int getSent() const;
+
+      unsigned int getReceived() const;
+
+      unsigned int countListeners() const;
+
+      unsigned int countObservers() const;
+
+    protected:
+
+      Observable();
+      Observable(const tlp::Observable &);
+      virtual ~Observable();
+
+      void sendEvent(const tlp::Event &);
+
+      virtual void treatEvents(const std::vector<tlp::Event> &events);
+
+      virtual void treatEvent(const tlp::Event & /NoCopy/);
+
+      bool hasOnlookers() const;
+
+      IteratorObservable *getObservables() const /TransferBack/;
 
 };
 

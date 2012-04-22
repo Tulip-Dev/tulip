@@ -26,6 +26,7 @@
 %ModuleHeaderCode
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
+#include <tulip/PluginLoaderTxt.h>
 %End
 
 namespace tlp {
@@ -87,7 +88,12 @@ by calling the :func:`tlp.initTulipLib` function.
 %End
 
 %MethodCode
-    tlp::PluginLibraryLoader::loadPlugins(a0);
+    if (a0) {
+        tlp::PluginLibraryLoader::loadPlugins(a0);
+    } else {
+        tlp::PluginLoaderTxt pluginLoader;
+        tlp::PluginLibraryLoader::loadPlugins(&pluginLoader);
+    }
 %End
 
 //=====================================================================
@@ -105,7 +111,12 @@ Returns :const:`True` if the plugin was correctly loaded.
 %End
 
 %MethodCode
-    tlp::PluginLibraryLoader::loadPluginLibrary(*a0, a1);
+    if (a1) {
+        tlp::PluginLibraryLoader::loadPluginLibrary(*a0, a1);
+    } else {
+        tlp::PluginLoaderTxt pluginLoader;
+        tlp::PluginLibraryLoader::loadPluginLibrary(*a0, &pluginLoader);
+    }
 %End
 
 //=====================================================================
@@ -120,7 +131,12 @@ it is unloaded and removed from the current plugins database.
 %End
 
 %MethodCode
-    tlp::PluginLister::checkLoadedPluginsDependencies(a0);
+    if (a0) {
+        tlp::PluginLister::checkLoadedPluginsDependencies(a0);
+    } else {
+        tlp::PluginLoaderTxt pluginLoader;
+        tlp::PluginLister::checkLoadedPluginsDependencies(&pluginLoader);
+    }
 %End
 
 //=====================================================================

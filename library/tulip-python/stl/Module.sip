@@ -27,16 +27,25 @@
 
 %ModuleHeaderCode
 #include <string>
-static void printErrorMessage(const std::string &errMsg) {
-	std::string pythonCode = "import sys\n"
-							 "sys.stderr.write(\"";
-	pythonCode += errMsg;
-	pythonCode += "\\n\")";
-	PyRun_SimpleString(pythonCode.c_str());
+extern void printErrorMessage(const std::string &errMsg);
+
+#if PY_MAJOR_VERSION >= 3
+extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
+#endif
+%End
+
+%ModuleCode
+#include <string>
+void printErrorMessage(const std::string &errMsg) {
+    std::string pythonCode = "import sys\n"
+                             "sys.stderr.write(\"";
+    pythonCode += errMsg;
+    pythonCode += "\\n\")";
+    PyRun_SimpleString(pythonCode.c_str());
 }
 
 #if PY_MAJOR_VERSION >= 3
-static std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
+std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
     std::string ret;
     Py_ssize_t dataSize = PyUnicode_GET_DATA_SIZE(pyUnicodeObj);
     const char* data = PyUnicode_AS_DATA(pyUnicodeObj);
@@ -46,8 +55,8 @@ static std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj)
     return ret;
 }
 #endif
-
 %End
+
 
 %Include list.sip
 %Include pair.sip

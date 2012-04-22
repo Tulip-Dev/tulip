@@ -29,6 +29,44 @@ class PropertyInterface /Abstract/ {
 %TypeHeaderCode
 #include <tulip/PropertyInterface.h>
 %End
+
+%ConvertToSubClassCode
+    if (dynamic_cast<tlp::BooleanProperty *>(sipCpp)) {
+        sipType = sipType_tlp_BooleanProperty;
+    } else if (dynamic_cast<tlp::ColorProperty *>(sipCpp)) {
+        sipType = sipType_tlp_ColorProperty;
+    } else if (dynamic_cast<tlp::DoubleProperty *>(sipCpp)) {
+        sipType = sipType_tlp_DoubleProperty;
+    } else if (dynamic_cast<tlp::GraphProperty *>(sipCpp)) {
+        sipType = sipType_tlp_GraphProperty;
+    } else if (dynamic_cast<tlp::IntegerProperty *>(sipCpp)) {
+        sipType = sipType_tlp_IntegerProperty;
+    } else if (dynamic_cast<tlp::LayoutProperty *>(sipCpp)) {
+        sipType = sipType_tlp_LayoutProperty;
+    } else if (dynamic_cast<tlp::SizeProperty *>(sipCpp)) {
+        sipType = sipType_tlp_SizeProperty;
+    } else if (dynamic_cast<tlp::StringProperty *>(sipCpp)) {
+        sipType = sipType_tlp_StringProperty;
+
+    } else if (dynamic_cast<tlp::BooleanVectorProperty *>(sipCpp)) {
+        sipType = sipType_tlp_BooleanVectorProperty;
+    } else if (dynamic_cast<tlp::ColorVectorProperty *>(sipCpp)) {
+        sipType = sipType_tlp_ColorVectorProperty;
+    } else if (dynamic_cast<tlp::DoubleVectorProperty *>(sipCpp)) {
+        sipType = sipType_tlp_DoubleVectorProperty;
+    } else if (dynamic_cast<tlp::IntegerVectorProperty *>(sipCpp)) {
+        sipType = sipType_tlp_IntegerVectorProperty;
+    } else if (dynamic_cast<tlp::CoordVectorProperty *>(sipCpp)) {
+        sipType = sipType_tlp_CoordVectorProperty;
+    } else if (dynamic_cast<tlp::SizeVectorProperty *>(sipCpp)) {
+        sipType = sipType_tlp_SizeVectorProperty;
+    } else if (dynamic_cast<tlp::StringVectorProperty *>(sipCpp)) {
+        sipType = sipType_tlp_StringVectorProperty;
+    } else {
+        sipType = NULL;
+    }
+%End
+
 public:
  
  	tlp::Graph * getGraph();
@@ -36,10 +74,11 @@ public:
 tlp.PropertyInterface.getGraph()
 
 Returns the graph on which the property has been defined.
-WARNING : If the property is inherited the graph could be different
-that the one used to get that property.
 
 :rtype: :class:`tlp.Graph`
+
+.. warning:: If the property is inherited the graph could be different
+             that the one used to get that property.
 %End  
 
 //===========================================================================================
@@ -284,7 +323,44 @@ Returns :const:`True` if the given string representation has been successfully c
 %End
 	
 //===========================================================================================	
-		
+
+    void addPropertyObserver(tlp::PropertyObserverPython *pObs);
+%Docstring
+tlp.PropertyInterface.addPropertyObserver(propertyObserver)
+
+.. versionadded:: 3.7.1
+
+Registers a new property observer object
+that will receive notifications when the property is modified.
+
+:param propertyObserver: the new property observer to register
+:type propertyObserver: :class:`tlp.PropertyObserver`
+%End
+
+%MethodCode
+    sipCpp->addListener(a0);
+%End
+
+//===========================================================================================
+
+    void removePropertyObserver(tlp::PropertyObserverPython *pObs);
+%Docstring
+tlp.PropertyInterface.removePropertyObserver(propertyObserver)
+
+.. versionadded:: 3.7.1
+
+Removes a registered property observer object.
+
+:param propertyObserver: the property observer to remove
+:type propertyObserver: :class:`tlp.PropertyObserver`
+%End
+
+%MethodCode
+    sipCpp->removeListener(a0);
+%End
+
+//===========================================================================================
+
     std::string __getitem__(const tlp::node node) ;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
@@ -293,7 +369,6 @@ Returns :const:`True` if the given string representation has been successfully c
     	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
     }
 %End
-
 
 //===========================================================================================
 
