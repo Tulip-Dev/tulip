@@ -28,6 +28,7 @@ BUNDLE_DEFINE_COMPONENT(tulip_ogl "tulip-ogl" "tulip-ogl library: An openGL base
 BUNDLE_DEFINE_COMPONENT(tulip_gui_dev "tulip-gui (dev)" "Headers and developer files for the tulip-gui library" "Developement files")
 BUNDLE_DEFINE_COMPONENT(tulip_gui "tulip-gui" "tulip-gui library: A Qt based library to provide GUI oriented features using the tulip-ogl and tulip-core libraries" "Libraries")
 BUNDLE_DEFINE_COMPONENT(tulip_python "Tulip python" "Tulip python bindings" "Libraries")
+BUNDLE_DEFINE_COMPONENT(tulip_python_doc "Tulip python doc" "Tulip Python API documentation" "Documentation")
 
 BUNDLE_DEFINE_COMPONENT(tulip_ogdf_dev "tulip-ogdf (dev)" "Headers and developer files for the tulip-ogdf library" "Developement files")
 BUNDLE_DEFINE_COMPONENT(tulip_ogdf "tulip-ogdf" "Bridge library between tulip-core and ogdf." "Libraries")
