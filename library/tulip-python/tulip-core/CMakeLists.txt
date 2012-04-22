@@ -31,6 +31,8 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Node.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Observable.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/ObservableGraph.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/ObservableProperty.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/OuterPlanarTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PlanarityTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PluginContext.sip
@@ -74,6 +76,7 @@ INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${TulipCoreInclude} ${TulipCoreBuildInclude})
 
 SET_SOURCE_FILES_PROPERTIES(siptuliptlpIteratorGraph.cpp
+                            siptulipIteratorObservable.cpp
                             PROPERTIES COMPILE_DEFINITIONS ITERATOR_NO_COPY)
                             
 SET_SOURCE_FILES_PROPERTIES(siptuliptlpBooleanProperty.cpp 

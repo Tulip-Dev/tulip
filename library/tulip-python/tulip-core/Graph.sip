@@ -2627,7 +2627,43 @@ which can contain an error message.
 %End
 
 //===========================================================================================
-	
+
+    void addGraphObserver(tlp::GraphObserverPython *) const;
+%Docstring
+tlp.Graph.addGraphObserver(graphObserver)
+
+.. versionadded:: 3.7.1
+
+Registers a new graph observer object
+that will receive notifications when the graph is modified.
+
+:param graphObserver: the new graph observer to register
+:type graphObserver: :class:`tlp.GraphObserver`
+%End
+
+%MethodCode
+    sipCpp->addListener(a0);
+%End
+
+//===========================================================================================
+
+    void removeGraphObserver(tlp::GraphObserverPython *) const;
+%Docstring
+tlp.Graph.removeGraphObserver(graphObserver)
+
+.. versionadded:: 3.7.1
+
+Removes a registered graph observer object.
+
+:param graphObserver: the graph observer to remove
+:type graphObserver: :class:`tlp.GraphObserver`
+%End
+
+%MethodCode
+    sipCpp->removeListener(a0);
+%End
+
+ //===========================================================================================
     void push(bool unpopAllowed = true, std::vector<tlp::PropertyInterface*>* propertiesToPreserveOnPop= NULL);
 %Docstring
 tlp.Graph.push([unpopAllowed=True])
@@ -2777,83 +2813,15 @@ meta node and other nodes in the graph.
 	
 //===========================================================================================
 	
-	SIP_PYOBJECT __getitem__(const std::string &attributeName) const;
+    tlp::PropertyInterface* __getitem__(const std::string &attributeName) const;
 %MethodCode
-        tlp::Iterator<std::string> *graphProperties = sipCpp->getProperties();
-        bool found = false;
-        while (graphProperties->hasNext()) {
-        	std::string p = graphProperties->next();
-        	if (p == *a0) {
-        		tlp::PropertyInterface *prop = sipCpp->getProperty(p);
-        		if (dynamic_cast<tlp::BooleanProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::BooleanProperty *>(prop), sipType_tlp_BooleanProperty, NULL);
-        			found = true;
-        			break;
-        		} else if (dynamic_cast<tlp::BooleanVectorProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::BooleanVectorProperty *>(prop), sipType_tlp_BooleanVectorProperty, NULL);
-        			found = true;
-        			break;
-        		} else if (dynamic_cast<tlp::ColorProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::ColorProperty *>(prop), sipType_tlp_ColorProperty, NULL);
-        			found = true;
-        			break;
-        		} else if (dynamic_cast<tlp::ColorVectorProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::ColorVectorProperty *>(prop), sipType_tlp_ColorVectorProperty, NULL);
-        			found = true;
-        			break;
-        		} else if (dynamic_cast<tlp::DoubleProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::DoubleProperty *>(prop), sipType_tlp_DoubleProperty, NULL);
-        			found = true;
-        			break;
-        		} else if (dynamic_cast<tlp::DoubleVectorProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::DoubleVectorProperty *>(prop), sipType_tlp_DoubleVectorProperty, NULL);
-        			found = true;
-        			break;
-        		} else if (dynamic_cast<tlp::IntegerProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::IntegerProperty *>(prop), sipType_tlp_IntegerProperty, NULL);
-        			found = true;
-        			break;
-        		} else if (dynamic_cast<tlp::IntegerVectorProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::IntegerVectorProperty *>(prop), sipType_tlp_IntegerVectorProperty, NULL);
-        			found = true;
-        			break;
-        		} else if (dynamic_cast<tlp::SizeProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::SizeProperty *>(prop), sipType_tlp_SizeProperty, NULL);
-        			found = true;
-        			break;
-        		} else if (dynamic_cast<tlp::SizeVectorProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::SizeVectorProperty *>(prop), sipType_tlp_SizeVectorProperty, NULL);
-        			found = true;
-        			break;
-        		} else if (dynamic_cast<tlp::StringProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::StringProperty *>(prop), sipType_tlp_StringProperty, NULL);
-        			found = true;
-        			break;
-        		} else if (dynamic_cast<tlp::StringVectorProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::StringVectorProperty *>(prop), sipType_tlp_StringVectorProperty, NULL);
-        			found = true;
-        			break;
-        		} if (dynamic_cast<tlp::LayoutProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::LayoutProperty *>(prop), sipType_tlp_LayoutProperty, NULL);
-        			found = true;
-        			break;
-        		} else if (dynamic_cast<tlp::CoordVectorProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::CoordVectorProperty *>(prop), sipType_tlp_CoordVectorProperty, NULL);
-        			found = true;
-        			break;
-        		} else if (dynamic_cast<tlp::GraphProperty *>(prop)) {
-        			sipRes = sipConvertFromType(dynamic_cast<tlp::GraphProperty *>(prop), sipType_tlp_GraphProperty, NULL);
-        			found = true;
-        			break;
-        		} 
-        	}
-        }
-        delete graphProperties;
-        if (!found) {
+        if (!sipCpp->existProperty(*a0)) {
         	std::ostringstream oss;
         	oss << "graph property named \"" << *a0 << "\" does not exist.";
 			sipIsErr = -1;    
         	PyErr_SetString(PyExc_Exception, oss.str().c_str());
+        } else {
+            sipRes = sipCpp->getProperty(*a0);
         }
 %End
 
@@ -2966,7 +2934,10 @@ Sets an attribute of the graph.
     sipCpp->setAttribute(*a0, *p);
   } else if (sipCanConvertToType(a1, sipType_std_vector_0100tlp_Size, SIP_NOT_NONE)) {    
     std::vector<tlp::Size> *p = reinterpret_cast<std::vector<tlp::Size> *>(sipConvertToType(a1, sipType_std_vector_0100tlp_Size, NULL, SIP_NOT_NONE, &state, &iserr));
-    sipCpp->setAttribute(*a0, *p);      
+    sipCpp->setAttribute(*a0, *p);
+  } else if (sipCanConvertToType(a1, sipType_std_vector_0100std_string, SIP_NOT_NONE)) {
+    std::vector<std::string> *p = reinterpret_cast<std::vector<std::string> *>(sipConvertToType(a1, sipType_std_vector_0100std_string, NULL, SIP_NOT_NONE, &state, &iserr));
+    sipCpp->setAttribute(*a0, *p);
   } else {
   	sipIsErr = 1;
 	std::string msg = "Object of type ";
@@ -3124,6 +3095,9 @@ if (sipCpp->getAttributes().exist(*a0)) {
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Size>).name())) {
     ok = true;
     sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Size> *>(dataType->value), sipType_std_vector_0100tlp_Size, NULL); 
+  } else if (dataType->getTypeName() == std::string(typeid(std::vector<std::string>).name())) {
+    ok = true;
+    sipRes = sipConvertFromType(reinterpret_cast<std::vector<std::string> *>(dataType->value), sipType_std_vector_0100std_string, NULL);
   }
   delete dataType;
 }
