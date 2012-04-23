@@ -329,14 +329,13 @@ GlLayer *GlScene::getLayer(const std::string& name) {
 void GlScene::removeLayer(const std::string& name,bool deleteLayer) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
     if((*it).first==name) {
-      layersList.erase(it);
-
       if (hasOnlookers())
         sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_DELLAYER,name,(*it).second));
 
       if(deleteLayer)
         delete (*it).second;
 
+      layersList.erase(it);
       return;
     }
   }
@@ -345,14 +344,13 @@ void GlScene::removeLayer(const std::string& name,bool deleteLayer) {
 void GlScene::removeLayer(GlLayer *layer,bool deleteLayer) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
     if((*it).second==layer) {
-      layersList.erase(it);
-
       if (hasOnlookers())
         sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_DELLAYER,layer->getName(),layer));
 
       if(deleteLayer)
         delete (*it).second;
 
+      layersList.erase(it);
       return;
     }
   }
