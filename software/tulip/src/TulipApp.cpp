@@ -534,7 +534,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
 
   controller.set<DataSet>(controllerToControllerName[controllerToSave],controllerData);
   dataSet.set<DataSet>("controller",controller);
-
+  dataSet.set("file", filename);
   string graphName;
 
   if (graph->getRoot()->getAttribute("name", graphName) && graphName.find("unnamed") != 0)
@@ -571,6 +571,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
     if (name == QString::null) return false;
 
     filename = name.toUtf8().data();
+    dataSet.set("file", filename);
   }
 
   bool result;

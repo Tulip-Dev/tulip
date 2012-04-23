@@ -117,6 +117,7 @@ bool tlp::saveGraph(Graph *sg, const std::string &filename) {
 
   bool result;
   DataSet data;
+  data.set("file", filename);
   result=tlp::exportGraph(sg, *os, "tlp", data, 0);
   delete os;
   return result;
@@ -165,6 +166,11 @@ Graph * tlp::importGraph(const std::string &alg, DataSet &dataSet, PluginProgres
 
   if (!(result=newImportModule->importGraph())) {
     if (newGraphP) delete newGraph;
+  } else {
+      std::string filename;
+      if (dataSet.get("file::filename", filename)) {
+          newGraph->setAttribute("file", filename);
+      }
   }
 
   if (deletePluginProgress) delete tmpProgress;
@@ -210,6 +216,10 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const std::string &alg,
   tmp.pluginProgress=tmpProgress;
   ExportModule *newExportModule=ExportModuleFactory::factory->getPluginObject(alg, tmp);
   assert(newExportModule!=0);
+  std::string filename;
+  if (dataSet.get("file", filename)) {
+      sg->setAttribute("file", filename);
+  }
   result=newExportModule->exportGraph(os);
 
   if (deletePluginProgress) delete tmpProgress;
