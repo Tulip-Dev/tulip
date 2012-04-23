@@ -101,7 +101,7 @@ namespace tlp {
 
 namespace tlp {
 
-    class NodeShape {
+    class NodeShape /NoDefaultCtors/ {
 
     public:
 
@@ -129,7 +129,7 @@ namespace tlp {
         };
     };
 
-    class EdgeShape {
+    class EdgeShape /NoDefaultCtors/ {
 
     public:
 
@@ -141,7 +141,7 @@ namespace tlp {
         };
     };
 
-    class EdgeExtrimityShape {
+    class EdgeExtrimityShape /NoDefaultCtors/ {
 
     public:
 
@@ -165,7 +165,7 @@ namespace tlp {
         };
     };
 
-    class LabelPosition {
+    class LabelPosition /NoDefaultCtors/ {
 
     public:
 

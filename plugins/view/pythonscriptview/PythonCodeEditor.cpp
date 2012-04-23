@@ -137,7 +137,8 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
             QVector<QVector<QString> > params = codeEditor->apiDb->getParamTypesForMethodOrFunction(funcName);
 
             if (params.count() > 1 || params[0].count() > 0) {
-              qApp->sendEvent(codeEditor, new QKeyEvent(QEvent::KeyPress, Qt::Key_ParenLeft, Qt::NoModifier, "("));
+                if (text.indexOf("class ") == -1)
+                    qApp->sendEvent(codeEditor, new QKeyEvent(QEvent::KeyPress, Qt::Key_ParenLeft, Qt::NoModifier, "("));
             }
             else {
               cursor.insertText("()");

@@ -352,9 +352,10 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
   QString currentClassName = "";
   QString currentFunctionName = "global";
 
-  int ln = 0;
+  int ln = -1;
 
   while (!in.atEnd()) {
+    ++ln;
     QString origLine = in.readLine();
     QString line = origLine.trimmed();
 
@@ -368,7 +369,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       }
     }
 
-    if (origLine == "" || origLine.startsWith("#"))
+    if (line == "" || line.startsWith("#"))
       continue;
 
     if (!(origLine.startsWith("\t") || origLine.startsWith(" "))) {
@@ -463,6 +464,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       else {
         functionAutoCompletionList[fullName].insert(varName);
       }
+      continue;
     }
 
 
@@ -500,6 +502,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
           }
         }
       }
+      continue;
     }
 
     if (ln < currentLine && forRegexp.indexIn(line) != -1) {
@@ -537,6 +540,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
         varToType[fullName][varName] = type;
       }
+      continue;
     }
 
     if (funcRegexp.indexIn(line) != -1) {
@@ -599,16 +603,19 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
           functionAutoCompletionList[fullName].insert(param.trimmed());
         }
       }
+      continue;
     }
 
     if (globalVarRegexp.indexIn(line) != -1) {
       QString varName = line.mid(7).trimmed();
       globalAutoCompletionList.insert(varName);
+      continue;
     }
 
     if (importRegexp.indexIn(line) != -1) {
       QString varName = line.mid(7).trimmed();
       globalAutoCompletionList.insert(varName);
+      continue;
     }
 
     if (classRegexp.indexIn(line) != -1) {
@@ -651,6 +658,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       if (moduleName != "") {
         apiDb->addApiEntry(moduleName + "." + className);
       }
+      continue;
     }
 
     if (graphPropRegexp.indexIn(line) != -1) {
@@ -732,8 +740,6 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
         }
       }
     }
-
-    ++ln;
   }
 }
 
