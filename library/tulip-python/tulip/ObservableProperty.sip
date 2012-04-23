@@ -25,6 +25,8 @@ class PropertyObserver {
 %End
 
 %Docstring
+.. versionadded:: 3.7.1
+
 Derived implementation of that class receives a message (through a callback/handler method)
 after each modification of an object deriving from :class:`tlp.PropertyInterface`.
 

@@ -40,27 +40,33 @@ If the color scale isn't a gradient returned colors are the predefined colors st
 
 The sample code below illustrates how to create and manipulate a color scale::
 
-	# Creating a color scale.
-	colorScale = tlp.ColorScale()
- 	
-	# Color scale initialization : from blue to red with gradient.
-	colorScale.setColorAtPos(0.0, tlp.Color(0,0,255))
-	colorScale.setColorAtPos(1.0, tlp.Color(255,0,0)) 	
+    # Creating an empty color scale (default constructor creates a heatmap from blue to red).
+    colorScale = tlp.ColorScale([])
+
+    # Color scale initialization : from blue to red with gradient.
+    colorScale.setColorAtPos(0.0, tlp.Color(0,0,255))
+    colorScale.setColorAtPos(1.0, tlp.Color(255,0,0))
  
-	# Get the color for the position 0.5, i.e. Color(127,0,127).
-	color = colorScale.getColorAtPos(0.5);
-	 	
-	# Reinitialize the color scale : from blue to red without gradient.
-	newColors = []
-	newColors.append(tlp.Color(0,0,255))
-	newColors.append(tlp.Color(255,0,0))
-	colorScale.setColorScale(newColors,False)
-	 	
-	# Get the color for the position 0.3, i.e. Color(0,0,255).
-	color = colorScale.getColorAtPos(0.3)
-	 	
-	# Get the color for the position 0.7, i.e. Color(255,0,0).
-	color = colorScale.getColorAtPos(0.7)
+    # The following syntax could also be used
+    # colors = [tlp.Color(0,0,255), tlp.Color(255,0,0)]
+    # colorScale.setColorScale(colors)
+    #    or
+    # colorScale = tlp.ColorScale(colors)
+
+    # Get the color for the position 0.5, i.e. Color(127,0,127).
+    color = colorScale.getColorAtPos(0.5);
+
+    # Reinitialize the color scale : from blue to red without gradient.
+    newColors = []
+    newColors.append(tlp.Color(0,0,255))
+    newColors.append(tlp.Color(255,0,0))
+    colorScale.setColorScale(newColors,False)
+
+    # Get the color for the position 0.3, i.e. Color(0,0,255).
+    color = colorScale.getColorAtPos(0.3)
+
+    # Get the color for the position 0.7, i.e. Color(255,0,0).
+    color = colorScale.getColorAtPos(0.7)
 %End
 
   ColorScale(const bool gradient = true);
