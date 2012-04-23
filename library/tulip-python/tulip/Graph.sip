@@ -126,6 +126,18 @@ which can contain an error message.
              able to call algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End  	
 
+%MethodCode
+    if (pluginExists(*a0, "Algorithm")) {
+        sipRes = sipCpp->applyAlgorithm(*a0, *a1, a2);
+    } else {
+        sipIsErr = 1;
+        std::string msg = "No Tulip general algorithm plugin named  ";
+        msg += *a0;
+        msg += ".";
+        PyErr_SetString(PyExc_Exception, msg.c_str());
+    }
+%End
+
 //===========================================================================================
 
 	void clear();
@@ -2310,7 +2322,7 @@ which can contain an error message.
 %End	
 
 %MethodCode
-	if (pluginExists<tlp::IntegerAlgorithm>(*a0)) {
+    if (pluginExists(*a0, "Integer")) {
 		tlp::IntegerProperty tmp(sipCpp);
 		sipRes = sipCpp->computeProperty<tlp::IntegerProperty>(*a0, &tmp, *a2, NULL, a3);
 		*a1 = tmp;
@@ -2366,7 +2378,7 @@ which can contain an error message.
 %End
 	
 %MethodCode
-	if (pluginExists<tlp::DoubleAlgorithm>(*a0)) {
+    if (pluginExists(*a0, "Double")) {
 		tlp::DoubleProperty tmp(sipCpp);
 		sipRes = sipCpp->computeProperty<tlp::DoubleProperty>(*a0, &tmp, *a2, NULL, a3);
 		*a1 = tmp;
@@ -2422,7 +2434,7 @@ which can contain an error message.
 %End
 	
 %MethodCode
-	if (pluginExists<tlp::LayoutAlgorithm>(*a0)) {
+    if (pluginExists(*a0, "Layout")) {
 		tlp::LayoutProperty tmp(sipCpp);
 		sipRes = sipCpp->computeProperty<tlp::LayoutProperty>(*a0, &tmp, *a2, NULL, a3);
 		*a1 = tmp;
@@ -2479,7 +2491,7 @@ which can contain an error message.
 %End
 	
 %MethodCode
-	if (pluginExists<tlp::BooleanAlgorithm>(*a0)) {
+    if (pluginExists(*a0, "Boolean")) {
 		tlp::BooleanProperty tmp(sipCpp);
 		sipRes = sipCpp->computeProperty<tlp::BooleanProperty>(*a0, &tmp, *a2, NULL, a3);
 		*a1 = tmp;
@@ -2534,7 +2546,7 @@ which can contain an error message.
 %End
 	
 %MethodCode
-	if (pluginExists<tlp::SizeAlgorithm>(*a0)) {
+    if (pluginExists(*a0, "Size")) {
 		tlp::SizeProperty tmp(sipCpp);
 		sipRes = sipCpp->computeProperty<tlp::SizeProperty>(*a0, &tmp, *a2, NULL, a3);
 		*a1 = tmp;
@@ -2590,7 +2602,7 @@ which can contain an error message.
 %End
 
 %MethodCode
-	if (pluginExists<tlp::ColorAlgorithm>(*a0)) {
+    if (pluginExists(*a0, "Color")) {
 		tlp::ColorProperty tmp(sipCpp);
 		sipRes = sipCpp->computeProperty<tlp::ColorProperty>(*a0, &tmp, *a2, NULL, a3);
 		*a1 = tmp;
@@ -2646,7 +2658,7 @@ which can contain an error message.
 %End
 
 %MethodCode
-	if (pluginExists<tlp::StringAlgorithm>(*a0)) {
+    if (pluginExists(*a0, "String")) {
 		tlp::StringProperty tmp(sipCpp);
 		sipRes = sipCpp->computeProperty<tlp::StringProperty>(*a0, &tmp, *a2, NULL, a3);
 		*a1 = tmp;
@@ -3250,7 +3262,7 @@ Returns a new graph or None if the import fails.
 %End
 
 %MethodCode
-	if (pluginExists<tlp::ImportModule>(*a0)) {
+    if (pluginExists(*a0, "Import")) {
 		sipRes = tlp::importGraph(*a0, *a1, 0, a2);
 	} else {
 		sipIsErr = 1;
@@ -3291,7 +3303,7 @@ retrieved through the :func:`tlp.getExportPluginsList` function.
 %End
 
 %MethodCode
-	if (pluginExists<tlp::ExportModule>(*a2)) {
+    if (pluginExists(*a2, "Export")) {
 		std::ofstream ofs((*a1).c_str());
 		if (ofs.is_open()) {
 			sipRes = tlp::exportGraph(a0, ofs, *a2, *a3);
@@ -3346,11 +3358,11 @@ its execution.
 %End
 
 %MethodCode
-	if (pluginExists<tlp::Algorithm>(*a3)) {
+    if (pluginExists(*a3, "Algorithm")) {
 		sipRes = tlp::applyAlgorithm(a0, *a1, a2, *a3);
 	} else {
 		sipIsErr = 1;
-		std::string msg = "No Tulip algorithm plugin named  ";
+        std::string msg = "No Tulip general algorithm plugin named  ";
 		msg += *a3;
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());

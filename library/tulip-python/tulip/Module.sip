@@ -76,30 +76,21 @@
 
 template <typename T>
 std::vector<std::string> getPluginsList() {
-	std::vector<std::string> ret;
-	std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
-	for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
-		if (it->first == tlp::demangleTlpClassName(typeid(T).name())) {
-			tlp::Iterator<std::string> *itS = it->second->availablePlugins();
-			while (itS->hasNext()) {
-				ret.push_back(itS->next());
-			}
-			delete itS;
-		}
-	}
-	return ret;
+    std::vector<std::string> ret;
+    std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
+    for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
+        if (it->first == tlp::demangleTlpClassName(typeid(T).name())) {
+            tlp::Iterator<std::string> *itS = it->second->availablePlugins();
+            while (itS->hasNext()) {
+                ret.push_back(itS->next());
+            }
+            delete itS;
+        }
+    }
+    return ret;
 }
 
-template <typename T>
-bool pluginExists(std::string pluginName) {
-	std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
-	for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
-		if (it->first == tlp::TemplateFactoryInterface::standardizeName(typeid(T).name()) && it->second->pluginExists(pluginName)) {
-			return true;
-		}
-	}
-	return false;
-}
+extern bool pluginExists(std::string pluginName, std::string type);
 
 extern int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n);
 
@@ -154,6 +145,22 @@ std::vector<std::string> getAlgorithmPluginsListOfType(const std::string& type) 
     return ret;
 }
 
+bool pluginExists(std::string pluginName, std::string type) {
+    if (type == "Import" || type == "Export") {
+        std::string importFactoType = tlp::TemplateFactoryInterface::standardizeName(typeid(tlp::ImportModule).name());
+        std::string exportFactoType = tlp::TemplateFactoryInterface::standardizeName(typeid(tlp::ExportModule).name());
+        std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
+        for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
+            if ((it->first == importFactoType && type == "Import") || (it->first == exportFactoType && type == "Export"))
+                return it->second->pluginExists(pluginName);
+        }
+        return false;
+    } else {
+        std::vector<std::string> algoList = getAlgorithmPluginsListOfType(type);
+        return std::find(algoList.begin(), algoList.end(), pluginName) != algoList.end();
+    }
+}
+
 void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
     PyObject *pyObj = sipGetPyObject(wrappedCppObject, td);
     if (pyObj) {
@@ -170,7 +177,7 @@ void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
 %Include Iterator.sip
 %Include MapIterator.sip
 %Include Node.sip
-%Include Edge.sip	
+%Include Edge.sip
 %Include Vector.sip
 %Include Color.sip
 %Include Coord.sip
