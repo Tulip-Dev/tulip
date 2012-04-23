@@ -65,6 +65,7 @@ namespace tlp {
     public:
 
         enum EdgeExtremityShapes {
+            None=-1,
             Arrow=50,
             ChristmasTree=28,
             Circle=14,
@@ -145,6 +146,7 @@ namespace tlp {
     public:
 
         enum EdgeExtremityShapes {
+            None=-1,
             Arrow=50,
             ChristmasTree=28,
             Circle=14,
