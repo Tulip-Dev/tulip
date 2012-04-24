@@ -182,7 +182,7 @@ void ImportExportTest::testGraphsAreEqual(Graph* first, Graph* second) {
     Graph* secondSub = secondSubGraphs->next();
 
     testGraphsTopologiesAreEqual(firstSub, secondSub);
-    testGraphAttributesAreEqual(first, second);
+    testGraphAttributesAreEqual(firstSub, secondSub);
   }
 }
 
@@ -190,13 +190,23 @@ void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph
   std::pair<std::string, tlp::DataType*> attribute;
   forEach(attribute, first->getAttributes().getValues()) {
     stringstream attributeNameMessage;
-    attributeNameMessage << "property \"" << attribute.first << "\" does not exists on imported graph";
+    attributeNameMessage << "attribute \"" << attribute.first << "\" does not exists on imported graph";
     CPPUNIT_ASSERT_MESSAGE(attributeNameMessage.str(), second->attributeExist(attribute.first));
+    
     stringstream attributeTypeMessage;
-    attributeTypeMessage << "property \"" << attribute.first << "\" has different type on imported graph";
+    attributeTypeMessage << "attribute \"" << attribute.first << "\" has different type on imported graph";
     CPPUNIT_ASSERT_EQUAL_MESSAGE(attributeTypeMessage.str(), attribute.second->getTypeName(), second->getAttribute(attribute.first)->getTypeName());
 
-    //TODO test attribute value
+    stringstream attributeValueMessage;
+    attributeValueMessage << "attribute \"" << attribute.first << "\" has different value on imported graph";
+    tlp::DataTypeSerializer* serializer = DataSet::typenameToSerializer(attribute.second->getTypeName());
+    stringstream firstValue;
+    stringstream secondValue;
+    serializer->writeData(firstValue, attribute.second);
+    serializer->writeData(secondValue, second->getAttribute(attribute.first));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(attributeValueMessage.str(), firstValue.str(), secondValue.str());
+
+    cout <<  firstValue.str() << " == " << secondValue.str() << endl;
   }
 }
 
