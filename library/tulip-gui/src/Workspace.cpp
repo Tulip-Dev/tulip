@@ -348,6 +348,21 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
       emit panelFocused(panel->view());
     }
   }
+  else if(ev->type() == QEvent::DragEnter || ev->type() == QEvent::DragMove) {
+    const QMimeData* mimedata = static_cast<QDragMoveEvent*>(ev)->mimeData();
+    return handleDragEnterEvent(ev, mimedata);
+  }
+  else if(ev->type() == QEvent::Drop) {
+    const QMimeData* mimedata = static_cast<QDropEvent*>(ev)->mimeData();
+
+    QWidget* w = dynamic_cast<QWidget*>(obj);
+    WorkspacePanel* p = NULL;
+    while(p == NULL && w != NULL) {
+      p = dynamic_cast<WorkspacePanel*>(w);
+      w = w->parentWidget();
+    }
+    return handleDropEvent(mimedata, p);
+  }
   else if (ev->type() == QEvent::GraphicsSceneDragEnter || ev->type() == QEvent::GraphicsSceneDragMove) {
     const QMimeData* mimedata = static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData();
     return handleDragEnterEvent(ev, mimedata);
@@ -394,7 +409,6 @@ bool Workspace::handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel
   }
 
   else if (panelMime) {
-    qWarning() << "swapping " << _panels.indexOf(panel) << " and " << _panels.indexOf(panelMime->panel()) << "; " << panel;
     if(panel) {
       _panels.swap(_panels.indexOf(panel), _panels.indexOf(panelMime->panel()));
       updatePanels();
