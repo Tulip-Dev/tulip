@@ -1003,7 +1003,7 @@ QString PythonScriptView::findFile(const QString &filePath) {
     QString filename = fileInfo.fileName();
     if (fileInfo.exists()) {
         return filePath;
-    } else if (graph) {
+    } else if (filename != "" && graph) {
         std::string tlpFile;
         if (graph->getRoot()->getAttribute("file", tlpFile)) {
             QFileInfo fileInfoTlp(tlpFile.c_str());
