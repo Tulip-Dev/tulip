@@ -99,6 +99,7 @@ INSTALL(FILES
   tulip/GraphModel.h
   tulip/GraphNeedsSavingObserver.h
   tulip/GraphElementModel.h
+  tulip/DragHandle.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

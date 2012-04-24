@@ -33,6 +33,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/TulipSettings.h>
+#include <tulip/TulipMimes.h>
 
 using namespace std;
 using namespace tlp;
@@ -439,11 +440,12 @@ QMimeData* GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const
       graphs.insert(g);
   }
 
-  QList<QVariant> colorData;
-  foreach(Graph* g,graphs)
-  colorData.push_back(QVariant::fromValue<Graph*>(g));
+  GraphMimeType* result = new GraphMimeType();
 
-  QMimeData* result = new QMimeData();
-  result->setColorData(colorData);
+  //every current implementation uses a single graph, so we do not have a graphmim with multiple graphs.
+  foreach(Graph* g,graphs) {
+    result->setGraph(g);
+  }
+
   return result;
 }

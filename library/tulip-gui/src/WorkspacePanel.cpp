@@ -76,6 +76,7 @@ WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
     _currentInteractorConfigurationItem(NULL),
     _progressItem(NULL) {
   _ui->setupUi(this);
+  _ui->dragHandle->setPanel(this);
   connect(_ui->closeButton,SIGNAL(clicked()),this,SLOT(close()));
   setView(view);
   setAttribute(Qt::WA_DeleteOnClose);
