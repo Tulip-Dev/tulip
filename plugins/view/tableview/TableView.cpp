@@ -22,7 +22,9 @@ tlp::DataSet TableView::state() const {
   DataSet data;
   data.set("show_nodes",_tableViewConfiguration->isShowNodes());
   data.set("show_edges",_tableViewConfiguration->isShowEdges());
-  data.set("filtering_property",_tableViewConfiguration->filteringProperty()->getName());
+  PropertyInterface* pi = _tableViewConfiguration->filteringProperty();
+  if (pi != NULL)
+    data.set("filtering_property",pi->getName());
   return data;
 }
 
