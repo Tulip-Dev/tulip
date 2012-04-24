@@ -44,6 +44,8 @@ public:
   CaptionGraphicsItem(View *view);
   ~CaptionGraphicsItem();
 
+  void setType(unsigned int type);
+
   void loadConfiguration();
 
   void generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const std::string &propertyName, double minValue, double maxValue);
@@ -75,6 +77,7 @@ private :
   CaptionGraphicsBackgroundItem *_rondedRectItem;
 
   QGraphicsProxyWidget *_confPropertySelectionItem;
+  QGraphicsSimpleTextItem *_nodesEdgesTextItem;
   QComboBox *_confPropertySelectionWidget;
 };
 

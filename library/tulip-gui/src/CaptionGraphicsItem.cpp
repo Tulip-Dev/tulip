@@ -22,6 +22,7 @@
 
 #include <tulip/DoubleProperty.h>
 #include <tulip/ColorProperty.h>
+#include "tulip/CaptionItem.h"
 
 using namespace std;
 
@@ -29,7 +30,7 @@ namespace tlp {
 
 CaptionGraphicsItem::CaptionGraphicsItem(View *view):_view(view) {
 
-  _rondedRectItem=new CaptionGraphicsBackgroundItem(QRect(QPoint(0,0),QSize(130,230)));
+  _rondedRectItem=new CaptionGraphicsBackgroundItem(QRect(QPoint(0,0),QSize(130,260)));
   _rondedRectItem->setBrush(QBrush(QColor(255,255,255,180)));
   connect(_rondedRectItem,SIGNAL(filterChanged(float,float)),this,SLOT(filterChangedSlot(float,float)));
 
@@ -37,11 +38,21 @@ CaptionGraphicsItem::CaptionGraphicsItem(View *view):_view(view) {
   _confPropertySelectionWidget->resize(QSize(120,25));
   _confPropertySelectionItem = new QGraphicsProxyWidget(_rondedRectItem);
   _confPropertySelectionItem->setWidget(_confPropertySelectionWidget);
-  _confPropertySelectionItem->setPos(5,200);
+  _confPropertySelectionItem->setPos(5,230);
+
+  _nodesEdgesTextItem = new QGraphicsSimpleTextItem(_rondedRectItem);
 }
 
 void CaptionGraphicsItem::loadConfiguration() {
   constructConfigWidget();
+}
+
+void CaptionGraphicsItem::setType(unsigned int type){
+  if(type==1 || type==2)
+    _nodesEdgesTextItem->setText("on nodes");
+  else
+    _nodesEdgesTextItem->setText("on edges");
+  _nodesEdgesTextItem->setPos(35,210);
 }
 
 void CaptionGraphicsItem::generateColorCaption(const QGradient &activeGradient, const QGradient &hideGradient, const string &propertyName, double minValue, double maxValue) {

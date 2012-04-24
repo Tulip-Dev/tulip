@@ -37,6 +37,7 @@ CaptionItem::~CaptionItem() {
 
 void CaptionItem::create(CaptionType captionType) {
   _captionType=captionType;
+  _captionGraphicsItem->setType(captionType);
   initCaption();
 
   if(captionType==NodesColorCaption || captionType==EdgesColorCaption)
