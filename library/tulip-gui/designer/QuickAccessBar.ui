@@ -93,7 +93,7 @@ background-color: rgba(255,255,255,100);
     <number>0</number>
    </property>
    <item>
-    <widget class="QPushButton" name="colorCaptionButton">
+    <widget class="QPushButton" name="nodesColorCaptionButton">
      <property name="minimumSize">
       <size>
        <width>32</width>
@@ -107,10 +107,10 @@ background-color: rgba(255,255,255,100);
       </size>
      </property>
      <property name="toolTip">
-      <string>Show/Hide caption</string>
+      <string>Show/Hide nodes color caption</string>
      </property>
      <property name="statusTip">
-      <string>Show/Hide caption</string>
+      <string>Show/Hide nodes color caption</string>
      </property>
      <property name="text">
       <string/>
@@ -131,7 +131,7 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="sizeCaptionButton">
+    <widget class="QPushButton" name="nodesSizeCaptionButton">
      <property name="minimumSize">
       <size>
        <width>32</width>
@@ -145,10 +145,86 @@ background-color: rgba(255,255,255,100);
       </size>
      </property>
      <property name="toolTip">
-      <string>Show/Hide caption</string>
+      <string>Show/Hide nodes size caption</string>
      </property>
      <property name="statusTip">
-      <string>Show/Hide caption</string>
+      <string>Show/Hide nodes size caption</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/color_interpolation.png</normaloff>:/tulip/gui/icons/20/color_interpolation.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="edgesColorCaptionButton">
+     <property name="minimumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Show/Hide edges color caption</string>
+     </property>
+     <property name="statusTip">
+      <string>Show/Hide edges color caption</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/color_interpolation.png</normaloff>:/tulip/gui/icons/20/color_interpolation.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="edgesSizeCaptionButton">
+     <property name="minimumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Show/Hide edges size caption</string>
+     </property>
+     <property name="statusTip">
+      <string>Show/Hide edges size caption</string>
      </property>
      <property name="text">
       <string/>
@@ -522,10 +598,10 @@ background-color: rgba(255,255,255,100);
    </hints>
   </connection>
   <connection>
-   <sender>colorCaptionButton</sender>
+   <sender>nodesColorCaptionButton</sender>
    <signal>clicked()</signal>
    <receiver>QuickAccessBar</receiver>
-   <slot>showHideColorCaption()</slot>
+   <slot>showHideNodesColorCaption()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>15</x>
@@ -538,10 +614,42 @@ background-color: rgba(255,255,255,100);
    </hints>
   </connection>
   <connection>
-   <sender>sizeCaptionButton</sender>
+   <sender>nodesSizeCaptionButton</sender>
    <signal>clicked()</signal>
    <receiver>QuickAccessBar</receiver>
-   <slot>showHideSizeCaption()</slot>
+   <slot>showHideNodesSizeCaption()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>edgesColorCaptionButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>showHideEdgesColorCaption()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>edgesSizeCaptionButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>showHideEdgesSizeCaption()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>15</x>
@@ -619,8 +727,10 @@ background-color: rgba(255,255,255,100);
   </connection>
  </connections>
  <slots>
-  <slot>showHideColorCaption()</slot>
-  <slot>showHideSizeCaption()</slot>
+  <slot>showHideNodesColorCaption()</slot>
+  <slot>showHideNodesSizeCaption()</slot>
+  <slot>showHideEdgesColorCaption()</slot>
+  <slot>showHideEdgesSizeCaption()</slot>
   <slot>takeSnapshot()</slot>
   <slot>setBackgroundColor(QColor)</slot>
   <slot>setColorInterpolation(bool)</slot>
