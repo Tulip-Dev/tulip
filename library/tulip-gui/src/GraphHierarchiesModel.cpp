@@ -351,12 +351,6 @@ QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *
     Graph* g = tlp::importGraph("JSON Import",data,progress);
     rootIds[entry] = g;
 
-#ifndef NDEBUG
-    std::string name;
-    g->getAttribute<std::string>("name",name);
-    qDebug() << absolutePath << " is " << name.c_str();
-#endif
-
     addGraph(g);
   }
   return rootIds;
