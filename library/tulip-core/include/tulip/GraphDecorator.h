@@ -37,8 +37,7 @@ public:
 
   virtual void clear();
   virtual Graph *addSubGraph(BooleanProperty *selection=0,
-                             unsigned int id = 0,
-                             std::string name = "unnamed");
+                             unsigned int id = 0);
   virtual void delSubGraph(Graph * s);
   virtual void delAllSubGraphs(Graph *s);
   virtual Graph* getSuperGraph()const;

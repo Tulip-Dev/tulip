@@ -97,7 +97,9 @@ Graph * tlp::newGraph() {
 }
 //=========================================================
 Graph * tlp::newSubGraph(Graph *graph, std::string name) {
-  return graph->addSubGraph(NULL, 0, name);
+  Graph* g = graph->addSubGraph(NULL, 0);
+  g->setName(name);
+  return g;
 }
 //=========================================================
 Graph * tlp::newCloneSubGraph(Graph *graph, std::string name) {
@@ -891,14 +893,18 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
 }
 //=========================================================
 Graph* Graph::addSubGraph(std::string name) {
-  return addSubGraph(NULL, 0, name);
+  Graph* g = addSubGraph(NULL, 0);
+  g->setName(name);
+  return g;
 }
 //=========================================================
 Graph* Graph::addCloneSubGraph(std::string name) {
   BooleanProperty selection(this);
   selection.setAllNodeValue(true);
   selection.setAllEdgeValue(true);
-  return addSubGraph(&selection, 0, name);
+  Graph* sub = addSubGraph(&selection, 0);
+  sub->setName(name);
+  return sub;
 }
 //=========================================================
 Graph * Graph::inducedSubGraph(const std::set<node> &nodes,

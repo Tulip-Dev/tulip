@@ -27,9 +27,8 @@ void GraphDecorator::clear() {
 
 //============================================================
 Graph *GraphDecorator::addSubGraph(BooleanProperty *selection,
-                                   unsigned int id,
-                                   std::string name) {
-  Graph* sg = graph_component->addSubGraph(selection, id, name);
+                                   unsigned int id) {
+  Graph* sg = graph_component->addSubGraph(selection, id);
   notifyAfterAddSubGraph(sg);
   return sg;
 }

@@ -325,6 +325,8 @@ public:
     }
 
     if(_parsingAttributes) {
+      std::cout << "reading " << value << "(" << _currentAttributeTypeName << ")" << std::endl;
+      
       if(_currentAttributeTypeName.empty()) {
         _currentAttributeTypeName = value;
       }
@@ -335,16 +337,14 @@ public:
         string oldValue;
 
         if(_dataSet->get(_currentAttributeName, oldValue)) {
-          if ((_currentAttributeName != "name") ||
-              (oldValue != "unnamed"))
-            qCritical() << "attribute '" << _currentAttributeName << "' already exists";
+          qCritical() << "attribute '" << _currentAttributeName << "' already exists";
         }
         else {
           bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
           _currentAttributeTypeName = string();
 
           if(!result) {
-            qCritical() << "while reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str();
+            qCritical() << "error reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str();
           }
         }
       }

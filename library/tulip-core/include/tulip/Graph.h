@@ -219,8 +219,7 @@ public:
    * @return :Graph* The newly created subgraph.
    **/
   virtual Graph *addSubGraph(BooleanProperty *selection=NULL,
-                             unsigned int id = 0,
-                             std::string name = "unnamed")=0;
+                             unsigned int id = 0)=0;
   /**
    * @brief Creates and returns a new named sub-graph of this graph.
    *
