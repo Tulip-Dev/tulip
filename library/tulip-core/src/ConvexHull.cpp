@@ -106,7 +106,7 @@ void tlp::convexHull (const std::vector<Coord> &points,
   convexHull.push_back(p0Index);
   convexHull.push_back(vectors[0].index);
 
-  for (int i=1; i<vectors.size(); ++i) {
+  for (unsigned int i=1; i<vectors.size(); ++i) {
     int m = convexHull.size() - 1;
 
     while(m>1 && ccw(points[convexHull[m-1]], points[convexHull[m]], points[vectors[i].index]) <= 1E-5) {
