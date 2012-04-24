@@ -20,87 +20,50 @@
 #define ALGORITHMRUNNER_H
 
 #include <QtGui/QWidget>
-#include <QtCore/QMap>
 
-#include <tulip/WithParameter.h>
-#include <tulip/GraphHierarchiesModel.h>
-
+class QToolButton;
+namespace Ui {
+class AlgorithmRunner;
+class AlgorithmRunnerItem;
+}
 namespace tlp {
 class Graph;
-class PluginProgress;
-class DataSet;
-class PropertyInterface;
 }
-namespace Ui {
-class AlgorithmRunnerData;
-class AlgorithmRunnerItemData;
-}
-class QAbstractButton;
-class PluginFacade: public QObject {
-public:
-  virtual tlp::PropertyInterface* lastComputedProperty() const=0;
-  virtual QMap<QString,QStringList> algorithms()=0;
-  virtual bool computeProperty(tlp::Graph *,const QString &alg, QString &msg, tlp::PluginProgress *progress=0, tlp::DataSet *data=0,bool isLocal=false)=0;
-  virtual tlp::ParameterDescriptionList parameters(const QString& alg)=0;
-};
-// **********************************************
-class AlgorithmRunner : public QWidget {
+
+class AlgorithmRunner: public QWidget {
   Q_OBJECT
 
-  static QMap<QString, PluginFacade *> FACADES_UI_NAMES;
-  static void staticInit();
+  Ui::AlgorithmRunner* _ui;
 
-  Ui::AlgorithmRunnerData *_ui;
-  QAbstractButton* _localModeButton;
-  PluginFacade *_pluginsListMgr;
-  QMap<QString,QStringList> _currentAlgorithmsList;
-
-  tlp::GraphHierarchiesModel* _model;
 public:
-  explicit AlgorithmRunner(QWidget *parent = 0);
-  void setModel(tlp::GraphHierarchiesModel* model);
-
-  bool isLocalMode() const;
+  explicit AlgorithmRunner(QWidget* parent = 0);
+  virtual ~AlgorithmRunner();
 
 public slots:
-  void buildListWidget();
-
-protected slots:
-  void algorithmTypeChanged(const QString &);
-  void setFilter(const QString &);
-  void currentGraphChanged(tlp::Graph* g);
-  void itemSettingsToggled(bool);
-  void runAlgorithm();
-};
-// **********************************************
-class AlgorithmRunnerItem: public QWidget {
-  Q_OBJECT
-  Ui::AlgorithmRunnerItemData *_ui;
-
-  Q_PROPERTY(QString group READ group)
-  QString _group;
-  Q_PROPERTY(QString name READ name)
-
-  tlp::ParameterDescriptionList _params;
-public:
-  explicit AlgorithmRunnerItem(const QString &group,const QString &name, const tlp::ParameterDescriptionList& params, QWidget *parent=0);
-  virtual ~AlgorithmRunnerItem();
-
-  QString group() const;
-  QString name() const;
-  tlp::DataSet params() const;
   void setGraph(tlp::Graph*);
 
-public slots:
-  void toggleParameters(bool);
-
 protected slots:
-  void settingsButtonToggled(bool);
+  void setFilter(QString);
+};
 
-signals:
-  void settingsToggled(bool);
-  void run();
+class AlgorithmRunnerItem: public QWidget {
+  Q_OBJECT
+  Ui::AlgorithmRunnerItem* _ui;
+  QString _pluginName;
+  tlp::Graph* _graph;
+  bool _localMode;
 
+public:
+  explicit AlgorithmRunnerItem(QString pluginName, QWidget* parent = 0);
+  virtual ~AlgorithmRunnerItem();
+
+  QString name() const;
+
+public slots:
+  void setGraph(tlp::Graph*);
+  void setLocalMode(bool);
+
+  void run(tlp::Graph* g = NULL);
 };
 
 #endif // ALGORITHMRUNNER_H

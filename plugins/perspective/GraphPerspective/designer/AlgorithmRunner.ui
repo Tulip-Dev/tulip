@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AlgorithmRunnerData</class>
- <widget class="QWidget" name="AlgorithmRunnerData">
+ <class>AlgorithmRunner</class>
+ <widget class="QWidget" name="AlgorithmRunner">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -9,6 +9,47 @@
     <width>386</width>
     <height>712</height>
    </rect>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#AlgorithmRunner, #contents {
+background-color: white;
+}
+
+ExpandableGroupBox[ expanded = &quot;true&quot; ] {
+margin-top: 1.5ex;
+}
+ExpandableGroupBox[ expanded = &quot;false&quot; ] {
+margin-top: 0ex;
+margin-left: 0ex;
+}
+ExpandableGroupBox::title {
+subcontrol-origin: margin;
+subcontrol-position: top left;
+padding: 0 3px;
+}
+ExpandableGroupBox::indicator:unchecked {
+image: url(:/tulip/gui/ui/right_arrow-black.png);
+}
+ExpandableGroupBox::indicator:checked {
+image: url(:/tulip/gui/ui/down_arrow-black.png);
+}
+ExpandableGroupBox{
+background-color: &quot;#FDFDFD&quot;;
+border: 1px solid &quot;#E9E9E9&quot;;
+}
+ExpandableGroupBox[ root = &quot;true&quot; ] {
+font: bold;
+}
+ExpandableGroupBox[ root = &quot;false&quot; ] {
+border: 0px;
+}
+ExpandableGroupBox[root = &quot;true&quot; ][expanded = &quot;true&quot; ] {
+margin-left: 1ex;
+}
+ExpandableGroupBox[root = &quot;false&quot; ][expanded = &quot;true&quot; ] {
+margin-left: 4ex;
+}
+</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -24,6 +65,9 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="title" stdset="0">
+      <string>Algorithms</string>
      </property>
     </widget>
    </item>
@@ -110,7 +154,7 @@ QPushButton:pressed{
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
-     <widget class="QWidget" name="algorithmListContents">
+     <widget class="QWidget" name="contents">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -119,6 +163,30 @@ QPushButton:pressed{
         <height>680</height>
        </rect>
       </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <layout class="QVBoxLayout" name="contentsLayout">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="leftMargin">
+          <number>3</number>
+         </property>
+         <property name="topMargin">
+          <number>6</number>
+         </property>
+         <property name="rightMargin">
+          <number>3</number>
+         </property>
+         <property name="bottomMargin">
+          <number>6</number>
+         </property>
+        </layout>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
@@ -138,5 +206,25 @@ QPushButton:pressed{
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>searchBox</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>AlgorithmRunner</receiver>
+   <slot>setFilter(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>192</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>192</x>
+     <y>355</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>setFilter(QString)</slot>
+ </slots>
 </ui>

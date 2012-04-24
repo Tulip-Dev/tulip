@@ -21,6 +21,7 @@
 #include <tulip/SceneConfigWidget.h>
 #include <tulip/GlOverviewGraphicsItem.h>
 #include <tulip/QuickAccessBar.h>
+#include <tulip/GlGraphComposite.h>
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtGui/QGraphicsView>
 
@@ -146,4 +147,9 @@ void GlMainView::graphDeleted() {
 
 void GlMainView::applySettings() {
   _sceneConfigurationWidget->applySettings();
+}
+
+bool GlMainView::isLayoutProperty(tlp::PropertyInterface* pi) const {
+  qWarning() << "prout";
+  return pi == getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();
 }

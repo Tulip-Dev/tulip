@@ -143,6 +143,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _mainWindow->installEventFilter(new ShadowFilter(this));
   connect(_ui->workspace,SIGNAL(addPanelRequest(tlp::Graph*)),this,SLOT(createPanel(tlp::Graph*)));
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
+  connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),_ui->algorithmRunner,SLOT(setGraph(tlp::Graph*)));
 
   // Connect actions
   connect(_ui->actionMessages_log,SIGNAL(triggered()),this,SLOT(showLogger()));
@@ -189,7 +190,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   }
 
   _ui->graphHierarchiesEditor->setModel(_graphs);
-  _ui->algorithmRunner->setModel(_graphs);
   _ui->workspace->setModel(_graphs);
   _ui->workspace->readProject(_project,rootIds,progress);
 
@@ -321,13 +321,6 @@ void GraphPerspective::saveAs(const QString& path) {
 }
 
 void GraphPerspective::open(const QString &/*path*/) {
-}
-
-void GraphPerspective::centerPanels(tlp::PropertyInterface* pi) {
-  foreach(tlp::View* view, _ui->workspace->panels()) {
-    if (view->isLayoutProperty(pi))
-      view->centerView();
-  }
 }
 
 void GraphPerspective::deleteSelectedElements() {

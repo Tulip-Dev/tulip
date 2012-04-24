@@ -44,7 +44,6 @@ public:
 
   void setState(const tlp::DataSet &);
   tlp::DataSet state() const;
-  bool isLayoutProperty(tlp::PropertyInterface *) const;
 
 public slots:
   void draw(PluginProgress *pluginProgress);

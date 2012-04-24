@@ -67,7 +67,6 @@ public slots:
   void save();
   void saveAs(const QString& path=QString::null);
   void open(const QString& path=QString::null);
-  void centerPanels(tlp::PropertyInterface*);
 
   void log(QtMsgType,const char*);
   void showLogger();

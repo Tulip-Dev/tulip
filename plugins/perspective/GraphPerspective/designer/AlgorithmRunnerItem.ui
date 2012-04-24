@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AlgorithmRunnerItemData</class>
- <widget class="QWidget" name="AlgorithmRunnerItemData">
+ <class>AlgorithmRunnerItem</class>
+ <widget class="QWidget" name="AlgorithmRunnerItem">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -109,7 +109,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLabel" name="algNameLabel">
+       <widget class="QLabel" name="algorithmName">
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
@@ -129,6 +129,12 @@
    </item>
    <item>
     <widget class="QTableView" name="parameters">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -183,11 +189,27 @@
   <connection>
    <sender>settingsButton</sender>
    <signal>toggled(bool)</signal>
-   <receiver>AlgorithmRunnerItemData</receiver>
-   <slot>settingsButtonToggled(bool)</slot>
+   <receiver>parameters</receiver>
+   <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>41</x>
+     <y>13</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>369</x>
+     <y>140</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>playButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>AlgorithmRunnerItem</receiver>
+   <slot>run()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>13</x>
      <y>13</y>
     </hint>
     <hint type="destinationlabel">
@@ -198,7 +220,6 @@
   </connection>
  </connections>
  <slots>
-  <signal>run()</signal>
-  <slot>settingsButtonToggled(bool)</slot>
+  <slot>run()</slot>
  </slots>
 </ui>

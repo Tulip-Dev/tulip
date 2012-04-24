@@ -339,10 +339,6 @@ void NodeLinkDiagramComponent::registerTriggers() {
   }
 }
 
-bool NodeLinkDiagramComponent::isLayoutProperty(tlp::PropertyInterface* pi) const {
-  return pi == getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();
-}
-
 void NodeLinkDiagramComponent::redraw() {
   getGlMainWidget()->redraw();
 }
