@@ -51,6 +51,7 @@ using namespace tlp;
   */
 Workspace::Workspace(QWidget *parent)
   : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL) {
+  installEventFilter(this);
   _ui->setupUi(this);
   _ui->workspaceContents->setCurrentWidget(_ui->startupPage);
   connect(_ui->startupButton,SIGNAL(clicked()),this,SIGNAL(addPanelRequest()));
@@ -121,7 +122,7 @@ void Workspace::addPanel(tlp::View* view) {
   if (_model != NULL)
     panel->setGraphsModel(_model);
 
-  panel->installEventFilter(this);
+//  panel->installEventFilter(this);
   panel->setWindowTitle(panelTitle(panel));
   connect(panel,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
   connect(panel,SIGNAL(destroyed(QObject*)),this,SLOT(panelDestroyed(QObject*)));
@@ -350,16 +351,14 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
   }
   else if (ev->type() == QEvent::GraphicsSceneDragEnter || ev->type() == QEvent::GraphicsSceneDragMove) {
     const QMimeData* mimedata = static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData();
-    handleDragEnterEvent(ev, mimedata);
-    return true;
+    return handleDragEnterEvent(ev, mimedata);
   }
   else if (ev->type() == QEvent::GraphicsSceneDrop) {
     const QMimeData* mimedata = static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData();
-    //TODO find the panel on which we drop
-    handleDropEvent(mimedata, NULL);
+    return handleDropEvent(mimedata, NULL);
   }
 
-  return QWidget::eventFilter(obj,ev);
+  return false;
 }
 
 void Workspace::dragEnterEvent(QDragEnterEvent* event) {
@@ -370,29 +369,31 @@ void Workspace::dropEvent(QDropEvent* event) {
   handleDropEvent(event->mimeData());
 }
 
-void Workspace::handleDragEnterEvent(QEvent* e, const QMimeData* mimedata) {
-  if(dynamic_cast<const GraphMimeType*>(mimedata)) {
+bool Workspace::handleDragEnterEvent(QEvent* e, const QMimeData* mimedata) {
+  if(dynamic_cast<const GraphMimeType*>(mimedata) != NULL || dynamic_cast<const PanelMimeType*>(mimedata) != NULL || dynamic_cast<const AlgorithmMimeType*>(mimedata) !=  NULL) {
     e->accept();
+    return true;
   }
-  else if(dynamic_cast<const PanelMimeType*>(mimedata)) {
-    e->accept();
-  }
-  else if(dynamic_cast<const AlgorithmMimeType*>(mimedata)) {
-    e->accept();
-  }
+  return false;
 }
 
-void Workspace::handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel) {
+bool Workspace::handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel) {
   const GraphMimeType* graphMime = dynamic_cast<const GraphMimeType*>(mimedata);
-  if(graphMime && graphMime->graph()) {
+  const PanelMimeType* panelMime = dynamic_cast<const PanelMimeType*>(mimedata);
+  const AlgorithmMimeType* algorithmMime = dynamic_cast<const AlgorithmMimeType*>(mimedata);
+
+  if (graphMime != NULL && graphMime->graph()) {
     emit(addPanelRequest(graphMime->graph()));
   }
-  const PanelMimeType* panelMime = dynamic_cast<const PanelMimeType*>(mimedata);
-  if(panelMime) {
+
+  else if (panelMime) {
     _panels.swap(_panels.indexOf(panel), _panels.indexOf(panelMime->panel()));
   }
   
-  const AlgorithmMimeType* algorithmMime = dynamic_cast<const AlgorithmMimeType*>(mimedata);
+  else if (algorithmMime) {
+  }
+
+  return graphMime != NULL || panelMime != NULL || algorithmMime != NULL;
 }
 
 void Workspace::expose(bool f) {
