@@ -94,8 +94,8 @@ public:
   PLUGININFORMATIONS("Metric Mapping","Auber","08/08/2003","","1.0", "Size")
   MetricSizeMapping(const tlp::PluginContext* context):SizeAlgorithm(context), entryMetric(NULL), entrySize(NULL), xaxis(true), yaxis(true), zaxis(true),
     min(1), max(10), range(false), shift(DBL_MAX), nodeoredge(true) {
-    addInParameter<DoubleProperty>("property", paramHelp[0]);
-    addInParameter<SizeProperty>("input", paramHelp[1]);
+    addInParameter<DoubleProperty>("property", paramHelp[0], "viewMetric");
+    addInParameter<SizeProperty>("input", paramHelp[1], "viewSize");
     addInParameter<bool>("width", paramHelp[2],"true");
     addInParameter<bool>("height", paramHelp[2],"true");
     addInParameter<bool>("depth", paramHelp[2],"true");
