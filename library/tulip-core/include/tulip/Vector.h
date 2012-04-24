@@ -343,12 +343,21 @@ public:
     return norm();
   }
   inline VECTOR & normalize () {
-    TYPE tmp = norm();
+      OTYPE tmp = 0;
+      for (unsigned int i=0; i<SIZE; ++i)
+        tmp += tlpsqr<TYPE, OTYPE>((*this)[i]);
+      if (tmp < sqrt(std::numeric_limits<TYPE>::epsilon())) {
+          return *this;
+      }
 
-    if (tmp > std::numeric_limits<TYPE>::epsilon())
-      (*this) /= norm();
+      for (unsigned int i=0; i<SIZE; ++i) {
+          if ((*this)[i] < 0.)
+              (*this)[i] = -tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>((*this)[i]) / tmp);
+          else
+              (*this)[i] = tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>((*this)[i]) / tmp);
+      }
 
-    return *this;
+      return *this;
   }
   inline TYPE dist (const VECTOR &) const;
   inline TYPE dotProduct(const VECTOR &) const;

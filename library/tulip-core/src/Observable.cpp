@@ -386,6 +386,7 @@ void Observable::sendEvent(const Event &message) {
     throw ObservableException("Notify called on a deleted Observable");
   }
 
+
   const unsigned int RECCALL = 200;
 
   if (_oNotifying > RECCALL) {
