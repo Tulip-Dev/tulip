@@ -460,7 +460,6 @@ public:
 //       qDebug() << "msecs: " << t.msecsTo(QTime::currentTime()) << endl;
     }
 
-    qWarning() << "name: [" << graph->getName() << "]";
     pluginProgress->setError(_proxy->errorMessage());
     Observable::unholdObservers();
     return _proxy->parsingSucceeded();
