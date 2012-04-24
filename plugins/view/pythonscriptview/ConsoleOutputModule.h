@@ -37,6 +37,7 @@ static ConsoleOutputHandler *consoleOuputHandler = NULL;
 static ConsoleOutputEmitter *consoleOuputEmitter = NULL;
 static std::string consoleOuputString = "";
 static std::string consoleErrorOuputString = "";
+static QString mainScriptFileName = "";
 static bool outputActivated = true;
 
 typedef struct {
@@ -85,22 +86,27 @@ scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
   if(!PyArg_ParseTuple(o, "s", &buf))
     return NULL;
 
+  QString output(buf);
+
   if (reinterpret_cast<scriptengine_ConsoleOutput *>(self)->stderrflag) {
-    consoleErrorOuputString += buf;
+    if (mainScriptFileName != "") {
+        output.replace("<string>", mainScriptFileName);
+    }
+    consoleErrorOuputString += output.toStdString();
   }
   else {
-    consoleOuputString += buf;
+    consoleOuputString += output.toStdString();
   }
 
   if (outputActivated) {
 
     if (reinterpret_cast<scriptengine_ConsoleOutput *>(self)->stderrflag) {
-      cerr << buf << endl;
+      cerr << output.toStdString() << endl;
     }
 
     if (consoleOuputEmitter) {
       if (buf != NULL && reinterpret_cast<scriptengine_ConsoleOutput *>(self)->writeToConsole) {
-        consoleOuputEmitter->sendOutputToConsole(buf, reinterpret_cast<scriptengine_ConsoleOutput *>(self)->stderrflag);
+        consoleOuputEmitter->sendOutputToConsole(output, reinterpret_cast<scriptengine_ConsoleOutput *>(self)->stderrflag);
       }
     }
   }
@@ -132,7 +138,7 @@ scriptengine_ConsoleOutput_flush(PyObject *, PyObject *) {
 #endif
 
 static PyMemberDef scriptengine_ConsoleOutput_members[] = {
-  {const_cast<char*>("stderrflag"), T_BOOL, offsetof(scriptengine_ConsoleOutput, stderrflag), 0, const_cast<char *>("flag for stderrflag")},
+  {const_cast<char*>("stderrflag"), T_BOOL, offsetof(scriptengine_ConsoleOutput, stderrflag), 0, const_cast<char *>("flag for stderr")},
   {const_cast<char*>("writeToConsole"), T_BOOL, offsetof(scriptengine_ConsoleOutput, writeToConsole), 0, const_cast<char *>("flag for enabling/disabling console output")},
   {NULL}  /* Sentinel */
 };

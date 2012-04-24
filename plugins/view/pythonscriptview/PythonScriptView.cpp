@@ -156,8 +156,6 @@ std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph) {
   oss << "def main(graph): " << endl;
   Iterator<PropertyInterface*> *itProps = graph->getObjectProperties();
 
-
-
   while (itProps->hasNext()) {
     PropertyInterface *prop = itProps->next();
 
@@ -706,6 +704,9 @@ void PythonScriptView::executeCurrentScript() {
     clearErrorIndicators();
 
     string scriptFileName = viewWidget->getCurrentMainScriptEditor()->getFileName().toStdString();
+    if (scriptFileName == "") {
+        scriptFileName = "<unnamed script>";
+    }
 
     saveImportAllScripts();
 
@@ -797,10 +798,10 @@ void PythonScriptView::indicateErrors() {
 
   }
 
-  if (errorLines.find("<string>") != errorLines.end()) {
-    for (size_t i = 0 ; i < errorLines["<string>"].size() ; ++i) {
-      if (errorLines["<string>"][i] > 1) {
-        viewWidget->getCurrentMainScriptEditor()->indicateScriptCurrentError(errorLines["<string>"][i]-1);
+  if (errorLines.find("<unnamed script>") != errorLines.end()) {
+    for (size_t i = 0 ; i < errorLines["<unnamed script>"].size() ; ++i) {
+      if (errorLines["<unnamed script>"][i] > 1) {
+        viewWidget->getCurrentMainScriptEditor()->indicateScriptCurrentError(errorLines["<unnamed script>"][i]-1);
       }
     }
   }
@@ -894,7 +895,7 @@ void PythonScriptView::loadScript() {
 }
 
 bool PythonScriptView::loadScript(const QString &fileName) {
-  QFile file(fileName);
+  QFile file(findFile(fileName));
   QFileInfo fileInfo(file);
 
   if (!file.exists())
@@ -907,7 +908,7 @@ bool PythonScriptView::loadScript(const QString &fileName) {
     scriptCode += file.readLine();
   }
 
-  lastModifiedFile[fileName] = fileInfo.lastModified();
+  lastModifiedFile[fileInfo.absoluteFilePath()] = fileInfo.lastModified();
 
   int editorId = viewWidget->addMainScriptEditor(fileInfo.absoluteFilePath());
   viewWidget->getMainScriptEditor(editorId)->setPlainText(scriptCode);
@@ -996,9 +997,48 @@ void PythonScriptView::loadModule() {
   loadModule(fileName);
 }
 
+QString PythonScriptView::findFile(const QString &filePath) {
+    QFileInfo fileInfo(filePath);
+    QString filepath = fileInfo.absolutePath();
+    QString filename = fileInfo.fileName();
+    if (fileInfo.exists()) {
+        return filePath;
+    } else if (graph) {
+        std::string tlpFile;
+        if (graph->getRoot()->getAttribute("file", tlpFile)) {
+            QFileInfo fileInfoTlp(tlpFile.c_str());
+            QString newfilepath = fileInfoTlp.absolutePath() + "/" + filename;
+            fileInfo = QFileInfo(newfilepath);
+            if (fileInfo.exists()) {
+                return newfilepath;
+            } else {
+                QStringList pathSaved = filepath.split("/");
+                QStringList pathTlp = fileInfoTlp.absolutePath().split("/");
+                for (int i = pathSaved.size()-1; i > 0 ; --i) {
+                    int idx = pathTlp.lastIndexOf(pathSaved[i]);
+                    if (idx != -1) {
+                        QString testPath = "";
+                        for (int j = 0 ; j < idx ; ++j) {
+                            testPath += (pathTlp[j] + "/");
+                        }
+                        for (int j = i ; j < pathSaved.size() ; ++j) {
+                            testPath += (pathSaved[j] + "/");
+                        }
+                        testPath += filename;
+                        fileInfo = QFileInfo(testPath);
+                        if (fileInfo.exists()) {
+                            return testPath;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return "";
+}
 
 bool PythonScriptView::loadModule(const QString &fileName) {
-  QFile file(fileName);
+  QFile file(findFile(fileName));
 
   if (!file.exists())
     return false;
@@ -1016,7 +1056,7 @@ bool PythonScriptView::loadModule(const QString &fileName) {
 
   file.close();
 
-  lastModifiedFile[fileName] = fileInfo.lastModified();
+  lastModifiedFile[fileInfo.absoluteFilePath()] = fileInfo.lastModified();
 
   int editorId = viewWidget->addModuleEditor(fileInfo.absoluteFilePath());
   PythonCodeEditor *codeEditor = viewWidget->getModuleEditor(editorId);
@@ -1195,7 +1235,7 @@ void PythonScriptView::loadPythonPlugin() {
 
 bool PythonScriptView::loadPythonPlugin(const QString &fileName) {
 
-  QFile file(fileName);
+  QFile file(findFile(fileName));
 
   if (!file.exists())
     return false;
@@ -1224,7 +1264,7 @@ bool PythonScriptView::loadPythonPlugin(const QString &fileName) {
       return false;
     }
     else {
-      lastModifiedFile[fileName] = fileInfo.lastModified();
+      lastModifiedFile[fileInfo.absolutePath()] = fileInfo.lastModified();
       int editorId = viewWidget->addPluginEditor(fileInfo.absoluteFilePath());
       PythonCodeEditor *codeEditor = viewWidget->getPluginEditor(editorId);
       codeEditor->setPlainText(pluginCode);

@@ -34,10 +34,6 @@ public:
 
   ConsoleOutputHandler() {}
 
-  void setMainScriptFileName(const QString &fileName) {
-    mainScriptFileName = fileName;
-  }
-
 public slots :
 
   void writeToConsole(QPlainTextEdit *consoleWidget, const QString &output, bool errorOutput) {
@@ -58,19 +54,9 @@ public slots :
     formt.setForeground(brush);
     consoleWidget->moveCursor(QTextCursor::End);
     QTextCursor cursor = consoleWidget->textCursor();
-    QString outputModfied(output);
-
-    if (errorOutput && mainScriptFileName != "") {
-      outputModfied.replace("<string>", mainScriptFileName);
-    }
-
-    cursor.insertText(outputModfied, formt);
+    cursor.insertText(output, formt);
     QApplication::processEvents();
   }
-
-private :
-
-  QString mainScriptFileName;
 
 };
 

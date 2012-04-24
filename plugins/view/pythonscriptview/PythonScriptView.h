@@ -129,6 +129,7 @@ private :
   void clearErrorIndicators();
   bool checkAndGetPluginInfosFromSrcCode(const QString &pluginSrcCode, QString &pluginName, QString &pluginClassName, QString &pluginType, QString &pluginClass);
   void reloadCodeInEditorIfNeeded(PythonCodeEditor *codeEditor, QTabWidget *tabWidget, int index);
+  QString findFile(const QString &filePath);
 
   PythonScriptViewWidget *viewWidget;
   PythonInterpreter *pythonInterpreter;
