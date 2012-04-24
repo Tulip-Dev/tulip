@@ -162,7 +162,7 @@ void QuickAccessBar::showHideCaption(CaptionItem::CaptionType captionType) {
 
   for(size_t i=0;i<4;i++){
     if(_captions[i]->captionGraphicsItem()->isVisible()){
-      _captions[i]->captionGraphicsItem()->setPos(QPoint(numberVisible*130,-230));
+      _captions[i]->captionGraphicsItem()->setPos(QPoint(numberVisible*130,-260));
       numberVisible++;
     }
   }
