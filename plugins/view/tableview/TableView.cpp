@@ -33,7 +33,8 @@ void TableView::setState(const tlp::DataSet& data) {
   std::string filterPropertyName = "";
   data.get<bool>("show_nodes",showNodes);
   data.get<bool>("show_edges",showEdges);
-  data.get<std::string>("filtering_property",filterPropertyName);
+  if (data.exist("filtering_property"))
+    data.get<std::string>("filtering_property",filterPropertyName);
   _tableViewConfiguration->setShowEdges(showEdges);
   _tableViewConfiguration->setShowNodes(showNodes);
   _tableViewConfiguration->setFilteringProperty(filterPropertyName.c_str());
