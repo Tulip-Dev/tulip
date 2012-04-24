@@ -82,6 +82,8 @@ private :
   DoubleProperty *_metricProperty;
   ColorProperty *_colorProperty;
   SizeProperty *_sizeProperty;
+  ColorProperty *_backupColorProperty;
+  ColorProperty *_backupBorderColorProperty;
 };
 
 }
