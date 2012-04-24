@@ -26,7 +26,7 @@ using namespace std;
 
 namespace tlp {
 
-CaptionItem::CaptionItem(View *view):view(view),_graph(NULL),_metricProperty(NULL),_colorProperty(NULL),_sizeProperty(NULL) {
+CaptionItem::CaptionItem(View *view):view(view),_graph(NULL),_metricProperty(NULL),_colorProperty(NULL),_sizeProperty(NULL),_backupColorProperty(NULL),_backupBorderColorProperty(NULL) {
   _captionGraphicsItem=new CaptionGraphicsItem(view);
   connect(_captionGraphicsItem,SIGNAL(filterChanged(float,float)),this,SLOT(applyNewFilter(float,float)));
   connect(_captionGraphicsItem,SIGNAL(selectedPropertyChanged(std::string)),this,SLOT(selectedPropertyChanged(std::string)));
@@ -43,6 +43,14 @@ void CaptionItem::create(CaptionType captionType) {
     generateColorCaption();
   else
     generateSizeCaption();
+
+  if(_backupColorProperty){
+    delete _backupColorProperty;
+    delete _backupBorderColorProperty;
+  }
+  _backupColorProperty=new ColorProperty(_graph);
+  *_backupColorProperty=*_colorProperty;
+  _backupBorderColorProperty=NULL;
 }
 
 void CaptionItem::initCaption() {
@@ -269,15 +277,24 @@ void CaptionItem::applyNewFilter(float begin, float end) {
     _sizeProperty->removeListener(this);
   }
 
+  Observable::holdObservers();
+
   ColorProperty *borderColorProperty=_graph->getProperty<ColorProperty>("viewBorderColor");
+
+  if(!_backupBorderColorProperty){
+    _backupBorderColorProperty=new ColorProperty(_graph);
+    *_backupBorderColorProperty=*borderColorProperty;
+  }else{
+    *borderColorProperty=*_backupBorderColorProperty;
+  }
+
+  *_colorProperty=*_backupColorProperty;
 
   double minProp=_metricProperty->getNodeMin();
   double maxProp=_metricProperty->getNodeMax();
 
   double beginMetric=minProp+(begin*(maxProp-minProp));
   double endMetric=minProp+(end*(maxProp-minProp));
-
-  Observable::holdObservers();
 
   Iterator<node> *itN=view->graph()->getNodes();
 
@@ -335,6 +352,11 @@ void CaptionItem::treatEvent(const Event &ev) {
       generateColorCaption();
     else
       generateSizeCaption();
+
+    if(_backupColorProperty)
+      delete _backupColorProperty;
+    _backupColorProperty=new ColorProperty(_graph);
+    *_backupColorProperty=*_colorProperty;
   }
 
 
