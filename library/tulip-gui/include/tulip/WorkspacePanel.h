@@ -25,6 +25,7 @@
 #include <tulip/DataSet.h>
 #include <tulip/SimplePluginProgress.h>
 
+class QDragEnterEvent;
 class QGraphicsObject;
 class QPropertyAnimation;
 class QGraphicsProxyWidget;

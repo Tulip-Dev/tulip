@@ -230,6 +230,13 @@ background-color: #A9A9A9;
        </widget>
       </item>
       <item>
+       <widget class="tlp::DragHandle" name="dragHandle">
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QToolButton" name="closeButton">
         <property name="toolTip">
          <string>Close</string>
@@ -256,6 +263,11 @@ background-color: #A9A9A9;
    <class>TreeViewComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">tulip/TreeViewComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>tlp::DragHandle</class>
+   <extends>QLabel</extends>
+   <header location="global">tulip/DragHandle.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

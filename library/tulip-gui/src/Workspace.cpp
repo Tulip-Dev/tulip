@@ -34,6 +34,7 @@
 #include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>
 #include <tulip/TulipProject.h>
+#include <tulip/TulipMimes.h>
 
 #include <QtCore/QDebug>
 
@@ -48,83 +49,12 @@ using namespace tlp;
 /*
   Helper storage class to ensure synchronization between panels list and model passed down to opened panels
   */
-Workspace::PanelsStorage::PanelsStorage(QObject* parent): QAbstractItemModel(parent) {
-}
-Workspace::PanelsStorage::PanelsStorage(const PanelsStorage& cpy): QAbstractItemModel(cpy.QObject::parent()) {
-  _storage = cpy._storage;
-}
-void Workspace::PanelsStorage::push_back(tlp::WorkspacePanel* panel) {
-  _storage.push_back(panel);
-}
-int Workspace::PanelsStorage::removeAll(tlp::WorkspacePanel* panel) {
-  return _storage.removeAll(panel);
-}
-tlp::WorkspacePanel* Workspace::PanelsStorage::operator[](int i) const {
-  return _storage[i];
-}
-tlp::WorkspacePanel* Workspace::PanelsStorage::operator[](int i) {
-  return _storage[i];
-}
-int Workspace::PanelsStorage::size() const {
-  return _storage.size();
-}
-Workspace::PanelsStorage::iterator Workspace::PanelsStorage::begin() {
-  return _storage.begin();
-}
-Workspace::PanelsStorage::iterator Workspace::PanelsStorage::end() {
-  return _storage.end();
-}
-Workspace::PanelsStorage::const_iterator Workspace::PanelsStorage::begin() const {
-  return _storage.begin();
-}
-Workspace::PanelsStorage::const_iterator Workspace::PanelsStorage::end() const {
-  return _storage.end();
-}
-QModelIndex Workspace::PanelsStorage::index(int row, int column,const QModelIndex &parent) const {
-  if (!hasIndex(row,column,parent))
-    return QModelIndex();
-
-  return createIndex(row,column);
-}
-QModelIndex Workspace::PanelsStorage::parent(const QModelIndex &/*child*/) const {
-  return QModelIndex();
-}
-int Workspace::PanelsStorage::rowCount(const QModelIndex &parent) const {
-  if (parent != QModelIndex())
-    return 0;
-
-  return _storage.size();
-}
-int Workspace::PanelsStorage::columnCount(const QModelIndex&) const {
-  return 1;
-}
-QVariant Workspace::PanelsStorage::data(const QModelIndex &index, int role) const {
-  if (!hasIndex(index.row(),index.column(),index.parent()))
-    return QVariant();
-
-  WorkspacePanel* panel = _storage[index.row()];
-
-  if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
-    return panel->windowTitle();
-
-  return QVariant();
-}
-void Workspace::PanelsStorage::clear() {
-  _storage.clear();
-}
-
-// ***********************************************
-
 Workspace::Workspace(QWidget *parent)
   : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL) {
   _ui->setupUi(this);
   _ui->workspaceContents->setCurrentWidget(_ui->startupPage);
   connect(_ui->startupButton,SIGNAL(clicked()),this,SIGNAL(addPanelRequest()));
   connect(_ui->exposeMode,SIGNAL(exposeFinished()),this,SLOT(hideExposeMode()));
-
-#ifndef NDEBUG
-  new ModelTest(&_panels,this);
-#endif /* NDEBUG */
 
   // This map allows us to know how much slots we have for each mode and which widget corresponds to those slots
   _modeToSlots[_ui->startupPage] = QVector<PlaceHolderWidget*>();
@@ -419,40 +349,50 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
     }
   }
   else if (ev->type() == QEvent::GraphicsSceneDragEnter || ev->type() == QEvent::GraphicsSceneDragMove) {
-    if (static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData()->hasColor())
-      ev->accept();
-
+    const QMimeData* mimedata = static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData();
+    handleDragEnterEvent(ev, mimedata);
     return true;
   }
   else if (ev->type() == QEvent::GraphicsSceneDrop) {
-    addPanelFromDropAction(static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData());
+    const QMimeData* mimedata = static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData();
+    //TODO find the panel on which we drop
+    handleDropEvent(mimedata, NULL);
   }
 
   return QWidget::eventFilter(obj,ev);
 }
 
-bool Workspace::event(QEvent* e) {
-  if (e->type() == QEvent::DragEnter) {
-    if (static_cast<QDragEnterEvent*>(e)->mimeData()->hasColor())
-      e->accept();
-  }
-  else if (e->type()==QEvent::Drop) {
-    addPanelFromDropAction(static_cast<QDropEvent*>(e)->mimeData());
-  }
-
-  return QWidget::event(e);
+void Workspace::dragEnterEvent(QDragEnterEvent* event) {
+  handleDragEnterEvent(event, event->mimeData());
 }
 
-void Workspace::addPanelFromDropAction(const QMimeData* mimeData) {
-  QList<QVariant> colorData = mimeData->colorData().toList();
-  foreach(QVariant v, colorData) {
-    Graph* g = v.value<Graph*>();
+void Workspace::dropEvent(QDropEvent* event) {
+  handleDropEvent(event->mimeData());
+}
 
-    if (g == NULL)
-      continue;
-
-    emit addPanelRequest(g);
+void Workspace::handleDragEnterEvent(QEvent* e, const QMimeData* mimedata) {
+  if(dynamic_cast<const GraphMimeType*>(mimedata)) {
+    e->accept();
   }
+  else if(dynamic_cast<const PanelMimeType*>(mimedata)) {
+    e->accept();
+  }
+  else if(dynamic_cast<const AlgorithmMimeType*>(mimedata)) {
+    e->accept();
+  }
+}
+
+void Workspace::handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel) {
+  const GraphMimeType* graphMime = dynamic_cast<const GraphMimeType*>(mimedata);
+  if(graphMime && graphMime->graph()) {
+    emit(addPanelRequest(graphMime->graph()));
+  }
+  const PanelMimeType* panelMime = dynamic_cast<const PanelMimeType*>(mimedata);
+  if(panelMime) {
+    _panels.swap(_panels.indexOf(panel), _panels.indexOf(panelMime->panel()));
+  }
+  
+  const AlgorithmMimeType* algorithmMime = dynamic_cast<const AlgorithmMimeType*>(mimedata);
 }
 
 void Workspace::expose(bool f) {

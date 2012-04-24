@@ -46,35 +46,8 @@ class TLP_QT_SCOPE Workspace: public QWidget {
 
   Q_PROPERTY(bool bottomFrameVisible READ isBottomFrameVisible WRITE setBottomFrameVisible)
 
-  // Helper class
-  class PanelsStorage: public QAbstractItemModel {
-    QList<tlp::WorkspacePanel*> _storage;
-  public:
-    PanelsStorage(const PanelsStorage&);
-    PanelsStorage(QObject* parent = 0);
-    void push_back(tlp::WorkspacePanel*);
-    int removeAll(tlp::WorkspacePanel *);
-    void clear();
-    // Allows the model to behave like a list and to be iterable
-    typedef QList<tlp::WorkspacePanel *>::iterator iterator;
-    typedef QList<tlp::WorkspacePanel *>::const_iterator const_iterator;
-    tlp::WorkspacePanel *operator[](int i) const;
-    tlp::WorkspacePanel *operator[](int i);
-    int size() const;
-    iterator begin();
-    iterator end();
-    const_iterator begin() const;
-    const_iterator end() const;
-    // inherited from QAbstractItemModel
-    QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &child) const;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-  };
-
   Ui::Workspace* _ui;
-  PanelsStorage _panels;
+  QList<WorkspacePanel*> _panels;
   int _currentPanelIndex;
   QWidget* _oldWorkspaceMode;
 
@@ -120,7 +93,6 @@ signals:
   void addPanelRequest(tlp::Graph* g = NULL);
 
 protected slots:
-  void addPanelFromDropAction(const QMimeData* data);
   void viewNeedsDraw();
   void switchWorkspaceMode(QWidget* page);
   void panelDestroyed(QObject*);
@@ -131,8 +103,13 @@ protected slots:
   QWidget* suitableMode(QWidget* oldMode);
 
 protected:
+  virtual void dragEnterEvent(QDragEnterEvent* event);
+  virtual void dropEvent(QDropEvent* event);
+
+  void handleDragEnterEvent(QEvent* e, const QMimeData* mimedata);
+  void handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel = NULL);
+
   bool eventFilter(QObject *, QEvent *);
-  bool event(QEvent *);
 
   QWidget* currentModeWidget() const;
   QVector<PlaceHolderWidget*> currentModeSlots() const;
