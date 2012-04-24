@@ -72,6 +72,10 @@ typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType, algorithmTyp
 
 template<typename nodeType, typename edgeType, typename algorithmType>
 typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType, algorithmType>::getEdgeMax(tlp::Graph* graph) {
+  if(!graph) {
+    graph = this->graph;
+  }
+
   unsigned int graphID = graph->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = edgeValueUptodate.find(graphID);
 
