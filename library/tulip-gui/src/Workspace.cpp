@@ -51,7 +51,6 @@ using namespace tlp;
   */
 Workspace::Workspace(QWidget *parent)
   : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL) {
-  installEventFilter(this);
   _ui->setupUi(this);
   _ui->workspaceContents->setCurrentWidget(_ui->startupPage);
   connect(_ui->startupButton,SIGNAL(clicked()),this,SIGNAL(addPanelRequest()));
@@ -122,7 +121,7 @@ void Workspace::addPanel(tlp::View* view) {
   if (_model != NULL)
     panel->setGraphsModel(_model);
 
-//  panel->installEventFilter(this);
+  panel->installEventFilter(this);
   panel->setWindowTitle(panelTitle(panel));
   connect(panel,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
   connect(panel,SIGNAL(destroyed(QObject*)),this,SLOT(panelDestroyed(QObject*)));
