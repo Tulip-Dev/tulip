@@ -25,6 +25,7 @@
 
 #include <tulip/ImportModule.h>
 #include <tulip/Graph.h>
+#include <tulip/ExportModule.h>
 #include <tulip/View.h>
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/GraphHierarchiesModel.h>
@@ -34,6 +35,9 @@
 #include <tulip/GraphPropertiesModel.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
+
+#include <fstream>
+#include <iostream>
 
 #include "GraphPerspectiveLogger.h"
 #include "ImportWizard.h"
@@ -149,6 +153,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionMessages_log,SIGNAL(triggered()),this,SLOT(showLogger()));
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
   connect(_ui->actionImport,SIGNAL(triggered()),this,SLOT(importGraph()));
+  connect(_ui->actionExport,SIGNAL(triggered()),this,SLOT(exportGraph()));
   connect(_ui->workspace,SIGNAL(panelFocused(tlp::View*)),this,SLOT(panelFocused(tlp::View*)));
   connect(_ui->actionSave_Project,SIGNAL(triggered()),this,SLOT(save()));
   connect(_ui->actionSave_Project_as,SIGNAL(triggered()),this,SLOT(saveAs()));
@@ -232,6 +237,30 @@ void GraphPerspective::showFullScreen(bool f) {
   }
 }
 
+void GraphPerspective::exportGraph() {
+  QString filters;
+  QMap<std::string, std::string> modules;
+  std::list<std::string> exports = PluginLister::instance()->availablePlugins<ExportModule>();
+  for(std::list<std::string>::const_iterator it = exports.begin(); it != exports.end(); ++it) {
+    ExportModule* m = PluginLister::instance()->getPluginObject<ExportModule>(*it, NULL);
+    QString currentFilter = it->c_str() + QString("(*.") + m->fileExtension().c_str() + QString(")");
+    filters += currentFilter;
+    if(it != exports.end()) {
+      filters += ";;";
+    }
+    modules[currentFilter.toStdString()] = *it;
+    delete m;
+  }
+
+  QString selectedFilter;
+  QString fileName = QFileDialog::getSaveFileName(_mainWindow, tr("Export Graph"), QString(), filters, &selectedFilter);
+  if(!fileName.isEmpty()) {
+    std::ofstream out(fileName.toStdString().c_str());
+    DataSet params;
+    tlp::exportGraph(_graphs->currentGraph(), out, modules[selectedFilter.toStdString()], params);
+  }
+}
+  
 void GraphPerspective::importGraph() {
   ImportWizard wizard(_mainWindow);
 

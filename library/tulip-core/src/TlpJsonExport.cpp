@@ -61,7 +61,11 @@ private:
 class TlpJsonExport : public ExportModule {
 public:
   PLUGININFORMATIONS("JSON Export","Charles Huet","18/05/2011","Tulip JSON format","1.0","File")
-
+  
+  std::string fileExtension() const {
+    return "json";
+  }
+  
   /**
    * @brief Mandatory constructor to initialize the AlgorithmContext.
    *

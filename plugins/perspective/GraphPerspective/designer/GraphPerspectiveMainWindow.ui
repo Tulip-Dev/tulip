@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1071</width>
-    <height>709</height>
+    <height>710</height>
    </rect>
   </property>
   <property name="contextMenuPolicy">
@@ -323,6 +323,34 @@ color: white;
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="exportButton">
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Export</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QToolButton" name="importButton">
          <property name="minimumSize">
           <size>
@@ -454,7 +482,7 @@ color: white;
      <x>0</x>
      <y>0</y>
      <width>1071</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -789,6 +817,14 @@ color: white;
     <string>Ctrl+Alt+E</string>
    </property>
   </action>
+  <action name="actionExport">
+   <property name="text">
+    <string>export</string>
+   </property>
+   <property name="toolTip">
+    <string>Export</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -885,6 +921,22 @@ color: white;
     <hint type="destinationlabel">
      <x>535</x>
      <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exportButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionExport</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>513</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>
