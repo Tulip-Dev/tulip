@@ -1014,15 +1014,13 @@ QString PythonScriptView::findFile(const QString &filePath) {
             } else {
                 QStringList pathSaved = filepath.split("/");
                 QStringList pathTlp = fileInfoTlp.absolutePath().split("/");
-                for (int i = pathSaved.size()-1; i > 0 ; --i) {
-                    int idx = pathTlp.lastIndexOf(pathSaved[i]);
-                    if (idx != -1) {
-                        QString testPath = "";
-                        for (int j = 0 ; j < idx ; ++j) {
-                            testPath += (pathTlp[j] + "/");
-                        }
-                        for (int j = i ; j < pathSaved.size() ; ++j) {
-                            testPath += (pathSaved[j] + "/");
+                QString basePath = "";
+                for (int i = 0 ; i < pathTlp.size() ; ++i) {
+                    basePath += (pathTlp[i] + "/");
+                    for (int j = 0 ; j < pathSaved.size()-1 ; ++j) {
+                        QString testPath = basePath;
+                        for (int k = j ; k < pathSaved.size() ; ++k) {
+                            testPath += (pathSaved[k] + "/");
                         }
                         testPath += filename;
                         fileInfo = QFileInfo(testPath);
