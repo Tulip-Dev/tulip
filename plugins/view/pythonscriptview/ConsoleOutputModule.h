@@ -90,8 +90,9 @@ scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
 
   if (reinterpret_cast<scriptengine_ConsoleOutput *>(self)->stderrflag) {
     if (mainScriptFileName != "") {
-        output.replace("<string>", mainScriptFileName);
+      output.replace("<string>", mainScriptFileName);
     }
+
     consoleErrorOuputString += output.toStdString();
   }
   else {

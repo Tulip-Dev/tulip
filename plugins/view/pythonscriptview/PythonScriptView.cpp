@@ -704,8 +704,9 @@ void PythonScriptView::executeCurrentScript() {
     clearErrorIndicators();
 
     string scriptFileName = viewWidget->getCurrentMainScriptEditor()->getFileName().toStdString();
+
     if (scriptFileName == "") {
-        scriptFileName = "<unnamed script>";
+      scriptFileName = "<unnamed script>";
     }
 
     saveImportAllScripts();
@@ -998,41 +999,52 @@ void PythonScriptView::loadModule() {
 }
 
 QString PythonScriptView::findFile(const QString &filePath) {
-    QFileInfo fileInfo(filePath);
-    QString filepath = fileInfo.absolutePath();
-    QString filename = fileInfo.fileName();
-    if (fileInfo.exists()) {
-        return filePath;
-    } else if (filename != "" && graph) {
-        std::string tlpFile;
-        if (graph->getRoot()->getAttribute("file", tlpFile)) {
-            QFileInfo fileInfoTlp(tlpFile.c_str());
-            QString newfilepath = fileInfoTlp.absolutePath() + "/" + filename;
-            fileInfo = QFileInfo(newfilepath);
-            if (fileInfo.exists()) {
-                return newfilepath;
-            } else {
-                QStringList pathSaved = filepath.split("/");
-                QStringList pathTlp = fileInfoTlp.absolutePath().split("/");
-                QString basePath = "";
-                for (int i = 0 ; i < pathTlp.size() ; ++i) {
-                    basePath += (pathTlp[i] + "/");
-                    for (int j = 0 ; j < pathSaved.size()-1 ; ++j) {
-                        QString testPath = basePath;
-                        for (int k = j ; k < pathSaved.size() ; ++k) {
-                            testPath += (pathSaved[k] + "/");
-                        }
-                        testPath += filename;
-                        fileInfo = QFileInfo(testPath);
-                        if (fileInfo.exists()) {
-                            return testPath;
-                        }
-                    }
-                }
+  QFileInfo fileInfo(filePath);
+  QString filepath = fileInfo.absolutePath();
+  QString filename = fileInfo.fileName();
+
+  if (fileInfo.exists()) {
+    return filePath;
+  }
+  else if (filename != "" && graph) {
+    std::string tlpFile;
+
+    if (graph->getRoot()->getAttribute("file", tlpFile)) {
+      QFileInfo fileInfoTlp(tlpFile.c_str());
+      QString newfilepath = fileInfoTlp.absolutePath() + "/" + filename;
+      fileInfo = QFileInfo(newfilepath);
+
+      if (fileInfo.exists()) {
+        return newfilepath;
+      }
+      else {
+        QStringList pathSaved = filepath.split("/");
+        QStringList pathTlp = fileInfoTlp.absolutePath().split("/");
+        QString basePath = "";
+
+        for (int i = 0 ; i < pathTlp.size() ; ++i) {
+          basePath += (pathTlp[i] + "/");
+
+          for (int j = 0 ; j < pathSaved.size()-1 ; ++j) {
+            QString testPath = basePath;
+
+            for (int k = j ; k < pathSaved.size() ; ++k) {
+              testPath += (pathSaved[k] + "/");
             }
+
+            testPath += filename;
+            fileInfo = QFileInfo(testPath);
+
+            if (fileInfo.exists()) {
+              return testPath;
+            }
+          }
         }
+      }
     }
-    return "";
+  }
+
+  return "";
 }
 
 bool PythonScriptView::loadModule(const QString &fileName) {

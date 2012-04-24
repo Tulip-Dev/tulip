@@ -55,7 +55,7 @@ GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData)
    vectorIndexSizeInit(false),
    edgesModified(false) {
   colorInterpolate=inputData->parameters->isEdgeColorInterpolate();
-  sizeInterpolate=inputData->parameters->isEdgeSizeInterpolate();  
+  sizeInterpolate=inputData->parameters->isEdgeSizeInterpolate();
 }
 
 GlVertexArrayManager::~GlVertexArrayManager() {
@@ -73,8 +73,9 @@ void GlVertexArrayManager::setInputData(GlGraphInputData *inputData) {
 bool GlVertexArrayManager::haveToCompute() {
 
   bool recompute = false;
+
   if(toComputeAll || toComputeLayout || toComputeColor) {
-      recompute = true;
+    recompute = true;
   }
 
   if(inputData->parameters->isEdgeColorInterpolate()!=colorInterpolate) {

@@ -421,8 +421,10 @@ bool PythonInterpreter::runString(const string &pyhtonCode, const std::string &s
   }
 
   releaseGIL();
+
   if (scriptFilePath != "")
     mainScriptFileName = "";
+
   return  ret != -1;
 }
 
@@ -522,6 +524,7 @@ bool PythonInterpreter::runGraphScript(const string &module, const string &funct
   }
 
   releaseGIL();
+
   if (scriptFilePath != "")
     mainScriptFileName = "";
 
