@@ -65,9 +65,6 @@ void WithParameterTest::testBuildDefaultDataSet() {
   CPPUNIT_ASSERT(set.exist(SizeParameter));
   CPPUNIT_ASSERT(set.exist(ColorParameter));
 
-  CPPUNIT_ASSERT(!set.exist(CoordParameter));
-//   EXPECTED_VALUE(Coord, Coord(4, 2, 1));
-
   EXPECTED_VALUE(int, 42);
   EXPECTED_VALUE(long, 420000000l);
   EXPECTED_VALUE(string, string("forty two"));
@@ -75,6 +72,7 @@ void WithParameterTest::testBuildDefaultDataSet() {
   EXPECTED_VALUE(double, 4.2);
   EXPECTED_VALUE(float, 2.4f);
   EXPECTED_VALUE(bool, true);
+  EXPECTED_VALUE(Coord, Coord(4.4, 2, 1.1));
   EXPECTED_VALUE(Size, Size(2.2, 1.1, 4));
   EXPECTED_VALUE(Color, Color(1, 4, 255, 9));
 }
