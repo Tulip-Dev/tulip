@@ -28,8 +28,8 @@ class QuickAccessBar : public QWidget {
   tlp::GlScene* scene() const;
   double _oldFontScale;
   double _oldNodeScale;
-  CaptionItem *_colorCaption;
-  CaptionItem *_sizeCaption;
+  bool _captionsInitialized;
+  CaptionItem *_captions[4];
   void updateFontButtonStyle();
   void showHideCaption(CaptionItem::CaptionType captionType);
 
@@ -44,8 +44,10 @@ public slots:
   void setColorInterpolation(bool);
   void setLabelColor(const QColor&);
   void setNodeColor(const QColor&);
-  void showHideColorCaption();
-  void showHideSizeCaption();
+  void showHideNodesColorCaption();
+  void showHideNodesSizeCaption();
+  void showHideEdgesColorCaption();
+  void showHideEdgesSizeCaption();
   void takeSnapshot();
   void setEdgesVisible(bool);
   void setLabelsVisible(bool);

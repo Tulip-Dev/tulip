@@ -36,8 +36,10 @@ class CaptionItem : public QObject, public Observable {
 public:
 
   enum CaptionType {
-    ColorCaption=1,
-    SizeCaption=2
+    NodesColorCaption=1,
+    NodesSizeCaption=2,
+    EdgesColorCaption=3,
+    EdgesSizeCaption=4
   };
 
   CaptionItem(View *view);
@@ -47,9 +49,9 @@ public:
 
   void initCaption();
 
-  void generateColorCaption();
+  void generateColorCaption(CaptionType captionType);
 
-  void generateSizeCaption();
+  void generateSizeCaption(CaptionType captionType);
 
   CaptionGraphicsBackgroundItem *captionGraphicsItem();
 
@@ -65,7 +67,6 @@ public slots :
 
   void applyNewFilter(float begin,float end);
   void selectedPropertyChanged(std::string propertyName);
-  void selectedTypeChanged(std::string typeName);
 
 private :
 

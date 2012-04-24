@@ -39,10 +39,10 @@ void CaptionItem::create(CaptionType captionType) {
   _captionType=captionType;
   initCaption();
 
-  if(captionType==ColorCaption)
-    generateColorCaption();
+  if(captionType==NodesColorCaption || captionType==EdgesColorCaption)
+    generateColorCaption(captionType);
   else
-    generateSizeCaption();
+    generateSizeCaption(captionType);
 
   if(_backupColorProperty){
     delete _backupColorProperty;
@@ -100,7 +100,7 @@ void CaptionItem::clearObservers() {
     _metricProperty=NULL;
   }
 
-  if(_captionType==ColorCaption) {
+  if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption) {
     if(_colorProperty)
       _colorProperty->removeListener(this);
   }
@@ -114,7 +114,7 @@ void CaptionItem::clearObservers() {
 
   _colorProperty=view->graph()->getProperty<ColorProperty>("viewColor");
 
-  if(_captionType==ColorCaption) {
+  if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption) {
     _colorProperty->addListener(this);
   }
 
@@ -124,53 +124,62 @@ void CaptionItem::clearObservers() {
   }
 }
 
-void CaptionItem::generateColorCaption() {
+void CaptionItem::generateColorCaption(CaptionType captionType) {
 
   clearObservers();
 
-  if(_metricProperty==NULL) {
-    vector<pair <double,Color> > metricToColorFiltered;
-    metricToColorFiltered.push_back(pair<double,Color>(0.,Color(255,255,255,255)));
-    metricToColorFiltered.push_back(pair<double,Color>(1.,Color(255,255,255,255)));
-    QLinearGradient activeGradient(QPointF(0,0),QPointF(0,160.));
-    QLinearGradient hideGradient(QPointF(0,0),QPointF(0,160.));
-    generateGradients(metricToColorFiltered,activeGradient,hideGradient);
-    _captionGraphicsItem->generateColorCaption(activeGradient,hideGradient,"empty",0.,1.);
-    return;
-  }
-
-  map<double,Color> metricToColorMap;
   vector<pair <double,Color> > metricToColorFiltered;
-  Iterator<node> *itN=view->graph()->getNodes();
-
-  for (; itN->hasNext();) {
-    node nit=itN->next();
-    metricToColorMap[_metricProperty->getNodeValue(nit)]=_colorProperty->getNodeValue(nit);
-  }
-
-  delete itN;
-
-  double minProp=_metricProperty->getNodeMin();
-  double maxProp=_metricProperty->getNodeMax();
-
-  double intervale=(maxProp-minProp)/50.;
-  double nextValue=minProp;
-
-  for(map<double,Color>::const_iterator it=metricToColorMap.begin(); it!=metricToColorMap.end(); ++it) {
-    if((*it).first>=nextValue) {
-      metricToColorFiltered.push_back(*it);
-      nextValue+=intervale;
-    }
-  }
-
+  double minProp=0;
+  double maxProp=1;
   QLinearGradient activeGradient(QPointF(0,0),QPointF(0,160.));
   QLinearGradient hideGradient(QPointF(0,0),QPointF(0,160.));
 
+  string propertyName="empty";
+
+  if(_metricProperty==NULL) {
+    metricToColorFiltered.push_back(pair<double,Color>(0.,Color(255,255,255,255)));
+    metricToColorFiltered.push_back(pair<double,Color>(1.,Color(255,255,255,255)));
+  }else{
+
+    map<double,Color> metricToColorMap;
+
+    if(captionType==NodesColorCaption){
+      minProp=_metricProperty->getNodeMin();
+      maxProp=_metricProperty->getNodeMax();
+      Iterator<node> *itN=view->graph()->getNodes();
+      for (; itN->hasNext();) {
+        node nit=itN->next();
+        metricToColorMap[_metricProperty->getNodeValue(nit)]=_colorProperty->getNodeValue(nit);
+      }
+      delete itN;
+    }else{
+      minProp=_metricProperty->getEdgeMin();
+      maxProp=_metricProperty->getEdgeMax();
+      Iterator<edge> *itE=view->graph()->getEdges();
+      for (; itE->hasNext();) {
+        edge eit=itE->next();
+        metricToColorMap[_metricProperty->getEdgeValue(eit)]=_colorProperty->getEdgeValue(eit);
+      }
+      delete itE;
+    }
+
+    double intervale=(maxProp-minProp)/50.;
+    double nextValue=minProp;
+
+    for(map<double,Color>::const_iterator it=metricToColorMap.begin(); it!=metricToColorMap.end(); ++it) {
+      if((*it).first>=nextValue) {
+        metricToColorFiltered.push_back(*it);
+        nextValue+=intervale;
+      }
+    }
+    propertyName=_captionGraphicsItem->usedProperty();
+  }
+
   generateGradients(metricToColorFiltered,activeGradient,hideGradient);
-  _captionGraphicsItem->generateColorCaption(activeGradient,hideGradient,_captionGraphicsItem->usedProperty(),minProp,maxProp);
+  _captionGraphicsItem->generateColorCaption(activeGradient,hideGradient,propertyName,minProp,maxProp);
 }
 
-void CaptionItem::generateSizeCaption() {
+void CaptionItem::generateSizeCaption(CaptionType captionType) {
 
   clearObservers();
 
@@ -188,17 +197,28 @@ void CaptionItem::generateSizeCaption() {
 
   map<double,float> metricToSizeMap;
   vector<pair <double,float> > metricToSizeFiltered;
-  Iterator<node> *itN=view->graph()->getNodes();
 
-  for (; itN->hasNext();) {
-    node nit=itN->next();
-    metricToSizeMap[_metricProperty->getNodeValue(nit)]=_sizeProperty->getNodeValue(nit)[0];
+  if(captionType==NodesSizeCaption){
+    Iterator<node> *itN=view->graph()->getNodes();
+    for (; itN->hasNext();) {
+      node nit=itN->next();
+      metricToSizeMap[_metricProperty->getNodeValue(nit)]=_sizeProperty->getNodeValue(nit)[0];
 
-    if(maxSize<_sizeProperty->getNodeValue(nit)[0])
-      maxSize=_sizeProperty->getNodeValue(nit)[0];
+      if(maxSize<_sizeProperty->getNodeValue(nit)[0])
+        maxSize=_sizeProperty->getNodeValue(nit)[0];
+    }
+    delete itN;
+  }else{
+    Iterator<edge> *itE=view->graph()->getEdges();
+    for (; itE->hasNext();) {
+      edge eit=itE->next();
+      metricToSizeMap[_metricProperty->getEdgeValue(eit)]=_sizeProperty->getEdgeValue(eit)[0];
+
+      if(maxSize<_sizeProperty->getEdgeValue(eit)[0])
+        maxSize=_sizeProperty->getEdgeValue(eit)[0];
+    }
+    delete itE;
   }
-
-  delete itN;
 
   double intervale=(maxProp-minProp)/50.;
   double nextValue=minProp;
@@ -240,7 +260,7 @@ void CaptionItem::removeObservation(bool remove) {
     _graph->addListener(this);
     _metricProperty->addListener(this);
 
-    if(_captionType==ColorCaption) {
+    if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption) {
       _colorProperty->addListener(this);
     }
     else {
@@ -253,7 +273,7 @@ void CaptionItem::removeObservation(bool remove) {
     if(_metricProperty)
       _metricProperty->removeListener(this);
 
-    if(_captionType==ColorCaption) {
+    if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption) {
       _colorProperty->removeListener(this);
     }
     else {
@@ -270,7 +290,7 @@ void CaptionItem::applyNewFilter(float begin, float end) {
   _graph->removeListener(this);
   _metricProperty->removeListener(this);
 
-  if(_captionType==ColorCaption) {
+  if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption) {
     _colorProperty->removeListener(this);
   }
   else {
@@ -290,46 +310,76 @@ void CaptionItem::applyNewFilter(float begin, float end) {
 
   *_colorProperty=*_backupColorProperty;
 
-  double minProp=_metricProperty->getNodeMin();
-  double maxProp=_metricProperty->getNodeMax();
 
-  double beginMetric=minProp+(begin*(maxProp-minProp));
-  double endMetric=minProp+(end*(maxProp-minProp));
 
-  Iterator<node> *itN=view->graph()->getNodes();
 
   Color tmp;
   Color borderTmp;
 
-  for (; itN->hasNext();) {
-    node nit=itN->next();
+  if(_captionType==NodesColorCaption || _captionType==NodesSizeCaption){
+    double minProp=_metricProperty->getNodeMin();
+    double maxProp=_metricProperty->getNodeMax();
 
-    tmp=Color(_colorProperty->getNodeValue(nit));
-    borderTmp=Color(borderColorProperty->getNodeValue(nit));
+    double beginMetric=minProp+(begin*(maxProp-minProp));
+    double endMetric=minProp+(end*(maxProp-minProp));
 
-    if(_metricProperty->getNodeValue(nit)<beginMetric || _metricProperty->getNodeValue(nit)>endMetric) {
-      tmp[3]=25;
-      borderTmp[3]=25;
-      _colorProperty->setNodeValue(nit,tmp);
-      borderColorProperty->setNodeValue(nit,borderTmp);
+    Iterator<node> *itN=view->graph()->getNodes();
+    for (; itN->hasNext();) {
+      node nit=itN->next();
+
+      tmp=Color(_backupColorProperty->getNodeValue(nit));
+      borderTmp=Color(_backupBorderColorProperty->getNodeValue(nit));
+
+      if(_metricProperty->getNodeValue(nit)<beginMetric || _metricProperty->getNodeValue(nit)>endMetric) {
+        tmp[3]=25;
+        borderTmp[3]=25;
+        _colorProperty->setNodeValue(nit,tmp);
+        borderColorProperty->setNodeValue(nit,borderTmp);
+      }
+      else {
+        tmp[3]=255;
+        borderTmp[3]=255;
+        _colorProperty->setNodeValue(nit,tmp);
+        borderColorProperty->setNodeValue(nit,borderTmp);
+      }
     }
-    else {
-      tmp[3]=255;
-      borderTmp[3]=255;
-      _colorProperty->setNodeValue(nit,tmp);
-      borderColorProperty->setNodeValue(nit,borderTmp);
-    }
+    delete itN;
+  }else{
+    double minProp=_metricProperty->getEdgeMin();
+    double maxProp=_metricProperty->getEdgeMax();
 
+    double beginMetric=minProp+(begin*(maxProp-minProp));
+    double endMetric=minProp+(end*(maxProp-minProp));
+
+    Iterator<edge> *itE=view->graph()->getEdges();
+    for (; itE->hasNext();) {
+      edge eit=itE->next();
+
+      tmp=Color(_backupColorProperty->getEdgeValue(eit));
+      borderTmp=Color(_backupBorderColorProperty->getEdgeValue(eit));
+
+      if(_metricProperty->getEdgeValue(eit)<beginMetric || _metricProperty->getEdgeValue(eit)>endMetric) {
+        tmp[3]=25;
+        borderTmp[3]=25;
+        _colorProperty->setEdgeValue(eit,tmp);
+        borderColorProperty->setEdgeValue(eit,borderTmp);
+      }
+      else {
+        tmp[3]=255;
+        borderTmp[3]=255;
+        _colorProperty->setEdgeValue(eit,tmp);
+        borderColorProperty->setEdgeValue(eit,borderTmp);
+      }
+    }
+    delete itE;
   }
-
-  delete itN;
 
   Observable::unholdObservers();
 
   _graph->addListener(this);
   _metricProperty->addListener(this);
 
-  if(_captionType==ColorCaption) {
+  if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption) {
     _colorProperty->addListener(this);
   }
   else {
@@ -348,10 +398,10 @@ void CaptionItem::treatEvent(const Event &ev) {
   }
 
   if(typeid(ev) == typeid(PropertyEvent)) {
-    if(_captionType==ColorCaption)
-      generateColorCaption();
+    if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption)
+      generateColorCaption(_captionType);
     else
-      generateSizeCaption();
+      generateSizeCaption(_captionType);
 
     if(_backupColorProperty)
       delete _backupColorProperty;
@@ -367,21 +417,15 @@ void CaptionItem::treatEvent(const Event &ev) {
 }
 
 void CaptionItem::selectedPropertyChanged(string /*propertyName*/) {
-  if(_captionType==ColorCaption)
-    generateColorCaption();
+  if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption)
+    generateColorCaption(_captionType);
   else
-    generateSizeCaption();
-}
+    generateSizeCaption(_captionType);
 
-void CaptionItem::selectedTypeChanged(string typeName) {
-  if(typeName=="Color") {
-    generateColorCaption();
-    _captionType=ColorCaption;
-  }
-  else {
-    generateSizeCaption();
-    _captionType=SizeCaption;
-  }
+  if(_backupColorProperty)
+    delete _backupColorProperty;
+  _backupColorProperty=new ColorProperty(_graph);
+  *_backupColorProperty=*_colorProperty;
 }
 
 }

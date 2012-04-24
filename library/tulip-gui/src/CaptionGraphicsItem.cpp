@@ -73,9 +73,6 @@ void CaptionGraphicsItem::constructConfigWidget() {
       if(property->getName().c_str() == selectedItem)
         index=properties.size();
 
-      /*if(((DoubleProperty*)property)->getNodeMin()==((DoubleProperty*)property)->getNodeMax())
-        continue;*/
-
       properties << property->getName().c_str() ;
     }
   }
