@@ -187,7 +187,7 @@ void PluginResultsList::initPluginsCache() {
 
 tlp::PluginInformations* PluginResultsList::featuredPlugin() {
   srand(time(NULL));
-  int i=0,rnd=rand()%_pluginWidgetsCache.size();
+  unsigned int i=0,rnd=rand()%_pluginWidgetsCache.size();
   bool returnNext=false;
 
   for(cache::iterator it = _pluginWidgetsCache.begin(); it != _pluginWidgetsCache.end(); ++it) {
