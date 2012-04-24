@@ -106,8 +106,8 @@ protected:
   virtual void dragEnterEvent(QDragEnterEvent* event);
   virtual void dropEvent(QDropEvent* event);
 
-  void handleDragEnterEvent(QEvent* e, const QMimeData* mimedata);
-  void handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel = NULL);
+  bool handleDragEnterEvent(QEvent* e, const QMimeData* mimedata);
+  bool handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel = NULL);
 
   bool eventFilter(QObject *, QEvent *);
 
