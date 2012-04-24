@@ -134,6 +134,9 @@ void View::treatEvents(const std::vector<Event> &events) {
   for(unsigned int i=0; i<events.size(); ++i) {
     Event e = events[i];
 
+    if (isLayoutProperty(dynamic_cast<PropertyInterface*>(e.sender())))
+      centerView();
+
     if (_triggers.contains(e.sender())) {
       emit drawNeeded();
       break;
