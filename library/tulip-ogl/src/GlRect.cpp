@@ -58,7 +58,7 @@ GlRect::GlRect(const Coord &center, const float width, const float height,
   setPoints(coords);
 
   setFillColor(fillColor);
-
+  setOutlineColor(outlineColor);
 }
 
 //=====================================================
