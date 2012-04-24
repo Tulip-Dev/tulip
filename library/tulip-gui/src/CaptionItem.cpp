@@ -45,10 +45,11 @@ void CaptionItem::create(CaptionType captionType) {
   else
     generateSizeCaption(captionType);
 
-  if(_backupColorProperty){
+  if(_backupColorProperty) {
     delete _backupColorProperty;
     delete _backupBorderColorProperty;
   }
+
   _backupColorProperty=new ColorProperty(_graph);
   *_backupColorProperty=*_colorProperty;
   _backupBorderColorProperty=NULL;
@@ -140,27 +141,33 @@ void CaptionItem::generateColorCaption(CaptionType captionType) {
   if(_metricProperty==NULL) {
     metricToColorFiltered.push_back(pair<double,Color>(0.,Color(255,255,255,255)));
     metricToColorFiltered.push_back(pair<double,Color>(1.,Color(255,255,255,255)));
-  }else{
+  }
+  else {
 
     map<double,Color> metricToColorMap;
 
-    if(captionType==NodesColorCaption){
+    if(captionType==NodesColorCaption) {
       minProp=_metricProperty->getNodeMin();
       maxProp=_metricProperty->getNodeMax();
       Iterator<node> *itN=view->graph()->getNodes();
+
       for (; itN->hasNext();) {
         node nit=itN->next();
         metricToColorMap[_metricProperty->getNodeValue(nit)]=_colorProperty->getNodeValue(nit);
       }
+
       delete itN;
-    }else{
+    }
+    else {
       minProp=_metricProperty->getEdgeMin();
       maxProp=_metricProperty->getEdgeMax();
       Iterator<edge> *itE=view->graph()->getEdges();
+
       for (; itE->hasNext();) {
         edge eit=itE->next();
         metricToColorMap[_metricProperty->getEdgeValue(eit)]=_colorProperty->getEdgeValue(eit);
       }
+
       delete itE;
     }
 
@@ -173,6 +180,7 @@ void CaptionItem::generateColorCaption(CaptionType captionType) {
         nextValue+=intervale;
       }
     }
+
     propertyName=_captionGraphicsItem->usedProperty();
   }
 
@@ -199,8 +207,9 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
   map<double,float> metricToSizeMap;
   vector<pair <double,float> > metricToSizeFiltered;
 
-  if(captionType==NodesSizeCaption){
+  if(captionType==NodesSizeCaption) {
     Iterator<node> *itN=view->graph()->getNodes();
+
     for (; itN->hasNext();) {
       node nit=itN->next();
       metricToSizeMap[_metricProperty->getNodeValue(nit)]=_sizeProperty->getNodeValue(nit)[0];
@@ -208,9 +217,12 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
       if(maxSize<_sizeProperty->getNodeValue(nit)[0])
         maxSize=_sizeProperty->getNodeValue(nit)[0];
     }
+
     delete itN;
-  }else{
+  }
+  else {
     Iterator<edge> *itE=view->graph()->getEdges();
+
     for (; itE->hasNext();) {
       edge eit=itE->next();
       metricToSizeMap[_metricProperty->getEdgeValue(eit)]=_sizeProperty->getEdgeValue(eit)[0];
@@ -218,6 +230,7 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
       if(maxSize<_sizeProperty->getEdgeValue(eit)[0])
         maxSize=_sizeProperty->getEdgeValue(eit)[0];
     }
+
     delete itE;
   }
 
@@ -302,10 +315,11 @@ void CaptionItem::applyNewFilter(float begin, float end) {
 
   ColorProperty *borderColorProperty=_graph->getProperty<ColorProperty>("viewBorderColor");
 
-  if(!_backupBorderColorProperty){
+  if(!_backupBorderColorProperty) {
     _backupBorderColorProperty=new ColorProperty(_graph);
     *_backupBorderColorProperty=*borderColorProperty;
-  }else{
+  }
+  else {
     *borderColorProperty=*_backupBorderColorProperty;
   }
 
@@ -317,7 +331,7 @@ void CaptionItem::applyNewFilter(float begin, float end) {
   Color tmp;
   Color borderTmp;
 
-  if(_captionType==NodesColorCaption || _captionType==NodesSizeCaption){
+  if(_captionType==NodesColorCaption || _captionType==NodesSizeCaption) {
     double minProp=_metricProperty->getNodeMin();
     double maxProp=_metricProperty->getNodeMax();
 
@@ -325,6 +339,7 @@ void CaptionItem::applyNewFilter(float begin, float end) {
     double endMetric=minProp+(end*(maxProp-minProp));
 
     Iterator<node> *itN=view->graph()->getNodes();
+
     for (; itN->hasNext();) {
       node nit=itN->next();
 
@@ -344,8 +359,10 @@ void CaptionItem::applyNewFilter(float begin, float end) {
         borderColorProperty->setNodeValue(nit,borderTmp);
       }
     }
+
     delete itN;
-  }else{
+  }
+  else {
     double minProp=_metricProperty->getEdgeMin();
     double maxProp=_metricProperty->getEdgeMax();
 
@@ -353,6 +370,7 @@ void CaptionItem::applyNewFilter(float begin, float end) {
     double endMetric=minProp+(end*(maxProp-minProp));
 
     Iterator<edge> *itE=view->graph()->getEdges();
+
     for (; itE->hasNext();) {
       edge eit=itE->next();
 
@@ -372,6 +390,7 @@ void CaptionItem::applyNewFilter(float begin, float end) {
         borderColorProperty->setEdgeValue(eit,borderTmp);
       }
     }
+
     delete itE;
   }
 
@@ -406,6 +425,7 @@ void CaptionItem::treatEvent(const Event &ev) {
 
     if(_backupColorProperty)
       delete _backupColorProperty;
+
     _backupColorProperty=new ColorProperty(_graph);
     *_backupColorProperty=*_colorProperty;
   }
@@ -425,6 +445,7 @@ void CaptionItem::selectedPropertyChanged(string /*propertyName*/) {
 
   if(_backupColorProperty)
     delete _backupColorProperty;
+
   _backupColorProperty=new ColorProperty(_graph);
   *_backupColorProperty=*_colorProperty;
 }

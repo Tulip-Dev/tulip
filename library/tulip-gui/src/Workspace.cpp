@@ -357,10 +357,12 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
 
     QWidget* w = dynamic_cast<QWidget*>(obj);
     WorkspacePanel* p = NULL;
+
     while(p == NULL && w != NULL) {
       p = dynamic_cast<WorkspacePanel*>(w);
       w = w->parentWidget();
     }
+
     return handleDropEvent(mimedata, p);
   }
   else if (ev->type() == QEvent::GraphicsSceneDragEnter || ev->type() == QEvent::GraphicsSceneDragMove) {
@@ -396,6 +398,7 @@ bool Workspace::handleDragEnterEvent(QEvent* e, const QMimeData* mimedata) {
     e->accept();
     return true;
   }
+
   return false;
 }
 
@@ -414,7 +417,7 @@ bool Workspace::handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel
       updatePanels();
     }
   }
-  
+
   else if (algorithmMime) {
   }
 

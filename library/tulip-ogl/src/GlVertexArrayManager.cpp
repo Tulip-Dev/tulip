@@ -71,26 +71,27 @@ void GlVertexArrayManager::setInputData(GlGraphInputData *inputData) {
 }
 
 bool GlVertexArrayManager::haveToCompute() {
-    bool recompute = false;
-    if(toComputeAll || toComputeLayout || toComputeColor) {
-        recompute = true;
-    }
+  bool recompute = false;
 
-    if(inputData->parameters->isEdgeColorInterpolate()!=colorInterpolate) {
-      colorInterpolate=inputData->parameters->isEdgeColorInterpolate();
-      clearColorData();
-      toComputeColor = true;
-      recompute = true;
-    }
+  if(toComputeAll || toComputeLayout || toComputeColor) {
+    recompute = true;
+  }
 
-    if(inputData->parameters->isEdgeSizeInterpolate()!=sizeInterpolate) {
-      sizeInterpolate=inputData->parameters->isEdgeSizeInterpolate();
-      clearLayoutData();
-      toComputeLayout = true;
-      recompute = true;
-    }
+  if(inputData->parameters->isEdgeColorInterpolate()!=colorInterpolate) {
+    colorInterpolate=inputData->parameters->isEdgeColorInterpolate();
+    clearColorData();
+    toComputeColor = true;
+    recompute = true;
+  }
 
-    return recompute;
+  if(inputData->parameters->isEdgeSizeInterpolate()!=sizeInterpolate) {
+    sizeInterpolate=inputData->parameters->isEdgeSizeInterpolate();
+    clearLayoutData();
+    toComputeLayout = true;
+    recompute = true;
+  }
+
+  return recompute;
 }
 
 void GlVertexArrayManager::setHaveToComputeAll(bool compute) {

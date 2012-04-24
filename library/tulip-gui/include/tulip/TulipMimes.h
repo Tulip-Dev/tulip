@@ -34,11 +34,11 @@ public:
   void setGraph(tlp::Graph* graph) {
     _graph = graph;
   }
-  
+
   tlp::Graph* graph() const {
     return _graph;
   }
-  
+
 private:
   tlp::Graph* _graph;
 };
@@ -49,7 +49,7 @@ public:
   void setAlgorithm(tlp::Algorithm* algorithm) {
     _algorithm = algorithm;
   }
-  
+
   tlp::Algorithm* algorithm() const {
     return _algorithm;
   }
@@ -57,11 +57,11 @@ public:
   void setDataSet(tlp::DataSet* dataset) {
     _dataset = dataset;
   }
-  
+
   tlp::DataSet* dataset() const {
     return _dataset;
   }
-  
+
 private:
   tlp::Algorithm* _algorithm;
   tlp::DataSet* _dataset;
@@ -74,11 +74,11 @@ public:
   void setPanel(tlp::WorkspacePanel* panel) {
     _panel = panel;
   }
-  
+
   tlp::WorkspacePanel* panel() const {
     return _panel;
   }
-  
+
 private:
   tlp::WorkspacePanel* _panel;
 };

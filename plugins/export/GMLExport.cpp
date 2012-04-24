@@ -65,7 +65,7 @@ public:
   std::string fileExtension() const {
     return "gml";
   }
-  
+
   GMLExport(tlp::PluginContext* context) : tlp::ExportModule(context)
   {}
 

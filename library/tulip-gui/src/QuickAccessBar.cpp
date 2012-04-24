@@ -138,7 +138,7 @@ void QuickAccessBar::showHideCaption(CaptionItem::CaptionType captionType) {
     _captions[3]->captionGraphicsItem()->setParentItem(_quickAccessBarItem);
     _captions[3]->captionGraphicsItem()->setVisible(false);
 
-    for(size_t i=0;i<4;i++){
+    for(size_t i=0; i<4; i++) {
       connect(_captions[i]->captionGraphicsItem(),SIGNAL(interactionsActivated()),_captions[(i+1)%4],SLOT(removeInteractions()));
       connect(_captions[i]->captionGraphicsItem(),SIGNAL(interactionsActivated()),_captions[(i+2)%4],SLOT(removeInteractions()));
       connect(_captions[i]->captionGraphicsItem(),SIGNAL(interactionsActivated()),_captions[(i+3)%4],SLOT(removeInteractions()));
@@ -149,6 +149,7 @@ void QuickAccessBar::showHideCaption(CaptionItem::CaptionType captionType) {
   }
 
   size_t captionIndice=0;
+
   if(captionType==CaptionItem::NodesSizeCaption)
     captionIndice=1;
   else if(captionType==CaptionItem::EdgesColorCaption)
@@ -160,8 +161,8 @@ void QuickAccessBar::showHideCaption(CaptionItem::CaptionType captionType) {
 
   unsigned int numberVisible=0;
 
-  for(size_t i=0;i<4;i++){
-    if(_captions[i]->captionGraphicsItem()->isVisible()){
+  for(size_t i=0; i<4; i++) {
+    if(_captions[i]->captionGraphicsItem()->isVisible()) {
       _captions[i]->captionGraphicsItem()->setPos(QPoint(numberVisible*130,-260));
       numberVisible++;
     }

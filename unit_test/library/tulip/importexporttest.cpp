@@ -192,7 +192,7 @@ void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph
     stringstream attributeNameMessage;
     attributeNameMessage << "attribute \"" << attribute.first << "\" does not exists on imported graph";
     CPPUNIT_ASSERT_MESSAGE(attributeNameMessage.str(), second->attributeExist(attribute.first));
-    
+
     stringstream attributeTypeMessage;
     attributeTypeMessage << "attribute \"" << attribute.first << "\" has different type on imported graph";
     CPPUNIT_ASSERT_EQUAL_MESSAGE(attributeTypeMessage.str(), attribute.second->getTypeName(), second->getAttribute(attribute.first)->getTypeName());

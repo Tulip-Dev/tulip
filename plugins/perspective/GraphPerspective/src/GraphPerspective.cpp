@@ -241,26 +241,30 @@ void GraphPerspective::exportGraph() {
   QString filters;
   QMap<std::string, std::string> modules;
   std::list<std::string> exports = PluginLister::instance()->availablePlugins<ExportModule>();
+
   for(std::list<std::string>::const_iterator it = exports.begin(); it != exports.end(); ++it) {
     ExportModule* m = PluginLister::instance()->getPluginObject<ExportModule>(*it, NULL);
     QString currentFilter = it->c_str() + QString("(*.") + m->fileExtension().c_str() + QString(")");
     filters += currentFilter;
+
     if(it != exports.end()) {
       filters += ";;";
     }
+
     modules[currentFilter.toStdString()] = *it;
     delete m;
   }
 
   QString selectedFilter;
   QString fileName = QFileDialog::getSaveFileName(_mainWindow, tr("Export Graph"), QString(), filters, &selectedFilter);
+
   if(!fileName.isEmpty()) {
     std::ofstream out(fileName.toStdString().c_str());
     DataSet params;
     tlp::exportGraph(_graphs->currentGraph(), out, modules[selectedFilter.toStdString()], params);
   }
 }
-  
+
 void GraphPerspective::importGraph() {
   ImportWizard wizard(_mainWindow);
 
