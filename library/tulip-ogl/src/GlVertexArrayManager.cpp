@@ -121,7 +121,6 @@ void GlVertexArrayManager::beginRendering() {
     return;
 
   graph=inputData->getGraph();
-  cerr << __PRETTY_FUNCTION__ << endl;
   isBegin=true;
   linesRenderingStartIndexArray.clear();
   linesRenderingCountArray.clear();
@@ -180,8 +179,6 @@ void GlVertexArrayManager::beginRendering() {
 void GlVertexArrayManager::endRendering() {
   if(!isBegin)
     return;
-
-  cerr << __PRETTY_FUNCTION__ << endl;
 
   isBegin=false;
 
