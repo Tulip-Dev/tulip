@@ -32,9 +32,10 @@
 using namespace tlp;
 
 void buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model, const QModelIndex& parent, QToolButton* localModeButton, bool root = false) {
-  for (int i=0;i<model->rowCount(parent); ++i) {
+  for (int i=0; i<model->rowCount(parent); ++i) {
     QModelIndex index = model->index(i,0,parent);
     QString name = model->data(index).toString();
+
     if (model->rowCount(index) > 0) {
       ExpandableGroupBox* groupBox = new ExpandableGroupBox(NULL,name);
       groupBox->setProperty("root",root);
@@ -76,7 +77,7 @@ AlgorithmRunner::~AlgorithmRunner() {
 
 void AlgorithmRunner::setGraph(Graph* g) {
   foreach(AlgorithmRunnerItem* item, findChildren<AlgorithmRunnerItem*>())
-    item->setGraph(g);
+  item->setGraph(g);
 }
 
 // A not recursive implementation of QObject::findChildren
@@ -85,6 +86,7 @@ QList<T> childrenObj(QObject* obj) {
   QList<T> result;
   foreach(QObject* o, obj->children()) {
     T var = dynamic_cast<T>(o);
+
     if (var != NULL)
       result+=var;
   }
@@ -93,6 +95,7 @@ QList<T> childrenObj(QObject* obj) {
 bool filterGroup(ExpandableGroupBox* group, QString filter) {
   QList<ExpandableGroupBox*> subGroups = childrenObj<ExpandableGroupBox*>(group->widget());
   QList<AlgorithmRunnerItem*> subItems = childrenObj<AlgorithmRunnerItem*>(group->widget());
+
   if (group->title().contains(filter,Qt::CaseInsensitive)) {
     group->show();
     foreach(ExpandableGroupBox* g, subGroups) {
@@ -100,9 +103,10 @@ bool filterGroup(ExpandableGroupBox* group, QString filter) {
       subItems+=childrenObj<AlgorithmRunnerItem*>(g->widget());
     }
     foreach(AlgorithmRunnerItem* i, subItems)
-      i->show();
+    i->show();
     return true;
   }
+
   bool groupVisible = false;
   foreach(ExpandableGroupBox* g, subGroups) {
     groupVisible |= filterGroup(g,filter);
@@ -153,6 +157,7 @@ void asLocal(QVariant var, DataSet& data, Graph* g) {
 void copyToLocal(DataSet& data, Graph* g) {
   if (!data.exist("result"))
     return;
+
   DataType* d = data.getData("result");
   QVariant var = TulipMetaTypes::dataTypeToQvariant(d,"");
   asLocal<DoubleProperty>(var,data,g);
@@ -166,20 +171,26 @@ void copyToLocal(DataSet& data, Graph* g) {
 void AlgorithmRunnerItem::run(Graph *g) {
   if (g == NULL)
     g=_graph;
+
   if (g == NULL) {
     qCritical() << name() << trUtf8(": No graph selected");
     return;
   }
+
   Observable::holdObservers();
   DataSet dataSet = static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues();
+
   if (_localMode)
     copyToLocal(dataSet, g);
+
   std::string errorMessage;
   PluginProgress* progress = Perspective::instance()->progress();
   bool result = g->applyAlgorithm(_pluginName.toStdString(),errorMessage,&dataSet,progress);
   delete progress;
+
   if (!result)
     qCritical() << name() << ": " << errorMessage.c_str();
+
   Observable::unholdObservers();
 }
 

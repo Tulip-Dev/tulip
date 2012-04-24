@@ -233,13 +233,17 @@ bool VECTORTLP::operator<(const VECTORTLP &v) const {
   if (std::numeric_limits<TYPE>::is_integer) {
     return memcmp(&((*this).array[0]), (void*)&(v.array[0]), SIZE * sizeof(TYPE)) < 0;
   }
+
   for (unsigned int i=0; i<SIZE; ++i) {
     OTYPE tmp = static_cast<OTYPE>((*this)[i]) - static_cast<OTYPE>(v[i]);
+
     if (tmp > sqrt(std::numeric_limits<TYPE>::epsilon()) || tmp < -sqrt(std::numeric_limits<TYPE>::epsilon())) {
       if (tmp > 0) return false;
+
       if (tmp < 0) return true;
     }
   }
+
   return false;
 }
 //======================================================
@@ -269,8 +273,10 @@ template <typename TYPE,unsigned int SIZE, typename OTYPE>
 TYPE VECTORTLP::dotProduct(const VECTORTLP &v) const {
   assert (SIZE>0);
   OTYPE tmpO = static_cast<OTYPE>(VECTORTLP::array[0]) * static_cast<OTYPE>(v[0]);
+
   for (unsigned int i=1; i<SIZE; ++i)
     tmpO += static_cast<OTYPE>((*this)[i]) * static_cast<OTYPE>(v[i]);
+
   return static_cast<TYPE>(tmpO);
 }
 //======================================================
@@ -304,8 +310,10 @@ TYPE  VECTORTLP::norm() const {
 
   default :
     OTYPE tmp = tlpsqr<TYPE, OTYPE>((*this)[0]);
+
     for (unsigned int i=1; i<SIZE; ++i)
       tmp += tlpsqr<TYPE, OTYPE>((*this)[i]);
+
     return(tlpsqrt<TYPE, OTYPE>(tmp));
   }
 }
@@ -331,8 +339,10 @@ TYPE  VECTORTLP::dist(const VECTOR &c) const {
 
   default :
     OTYPE tmp = tlpsqr<TYPE, OTYPE>((*this)[0] - c[0]);
+
     for (unsigned int i=1; i<SIZE; ++i)
       tmp += tlpsqr<TYPE, OTYPE>((*this)[i]-c[i]);
+
     return(tlpsqrt<TYPE, OTYPE>(tmp));
   }
 }

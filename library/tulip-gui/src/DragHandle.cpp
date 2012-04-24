@@ -13,21 +13,21 @@ using namespace tlp;
 DragHandle::DragHandle(QWidget* parent, Qt::WindowFlags f) : QLabel(parent, f), _panel(NULL), _pressed(false) {
 }
 
-void DragHandle::mousePressEvent(QMouseEvent* ev){
+void DragHandle::mousePressEvent(QMouseEvent* ev) {
   _pressed = true;
   _clickPosition = ev->pos();
 }
 
-void DragHandle::mouseReleaseEvent(QMouseEvent*){
-    _pressed = false;
+void DragHandle::mouseReleaseEvent(QMouseEvent*) {
+  _pressed = false;
 }
 
-void DragHandle::mouseMoveEvent(QMouseEvent* ev){
+void DragHandle::mouseMoveEvent(QMouseEvent* ev) {
   assert(_panel != NULL);
-  
+
   if(!_panel || !_pressed || (ev->pos() - _clickPosition).manhattanLength() < QApplication::startDragDistance())
     return;
-  
+
   QDrag* drag = new QDrag(this);
   PanelMimeType* mimedata = new PanelMimeType();
   mimedata->setPanel(_panel);

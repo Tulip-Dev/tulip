@@ -47,11 +47,12 @@ void CaptionGraphicsItem::loadConfiguration() {
   constructConfigWidget();
 }
 
-void CaptionGraphicsItem::setType(unsigned int type){
+void CaptionGraphicsItem::setType(unsigned int type) {
   if(type==1 || type==2)
     _nodesEdgesTextItem->setText("on nodes");
   else
     _nodesEdgesTextItem->setText("on edges");
+
   _nodesEdgesTextItem->setPos(35,210);
 }
 

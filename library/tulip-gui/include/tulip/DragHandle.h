@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
@@ -22,10 +22,10 @@
 
 #include <QtGui/QLabel>
 
-namespace tlp{
+namespace tlp {
 
 class WorkspacePanel;
-  
+
 class DragHandle : public QLabel {
 public:
   explicit DragHandle(QWidget* parent = 0, Qt::WindowFlags f = 0);
