@@ -205,8 +205,6 @@ void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph
     serializer->writeData(firstValue, attribute.second);
     serializer->writeData(secondValue, second->getAttribute(attribute.first));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(attributeValueMessage.str(), firstValue.str(), secondValue.str());
-
-    cout <<  firstValue.str() << " == " << secondValue.str() << endl;
   }
 }
 
