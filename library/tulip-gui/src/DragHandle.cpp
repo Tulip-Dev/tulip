@@ -10,7 +10,7 @@
 
 using namespace tlp;
 
-DragHandle::DragHandle(QWidget* parent, Qt::WindowFlags f) : _panel(NULL), _pressed(false) {
+DragHandle::DragHandle(QWidget* parent, Qt::WindowFlags f) : QLabel(parent, f), _panel(NULL), _pressed(false) {
 }
 
 void DragHandle::mousePressEvent(QMouseEvent* ev){
@@ -18,7 +18,7 @@ void DragHandle::mousePressEvent(QMouseEvent* ev){
   _clickPosition = ev->pos();
 }
 
-void DragHandle::mouseReleaseEvent(QMouseEvent* ev){
+void DragHandle::mouseReleaseEvent(QMouseEvent*){
     _pressed = false;
 }
 

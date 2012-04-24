@@ -355,7 +355,15 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
   }
   else if (ev->type() == QEvent::GraphicsSceneDrop) {
     const QMimeData* mimedata = static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData();
-    return handleDropEvent(mimedata, NULL);
+
+    WorkspacePanel* p = NULL;
+    foreach(WorkspacePanel* panel, _panels) {
+      if(panel->view()->graphicsView()->scene() == obj) {
+        p = panel;
+        break;
+      }
+    }
+    return handleDropEvent(mimedata, p);
   }
 
   return false;
@@ -387,7 +395,11 @@ bool Workspace::handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel
   }
 
   else if (panelMime) {
-    _panels.swap(_panels.indexOf(panel), _panels.indexOf(panelMime->panel()));
+    qWarning() << "swapping " << _panels.indexOf(panel) << " and " << _panels.indexOf(panelMime->panel()) << "; " << panel;
+    if(panel) {
+      _panels.swap(_panels.indexOf(panel), _panels.indexOf(panelMime->panel()));
+      updatePanels();
+    }
   }
   
   else if (algorithmMime) {
