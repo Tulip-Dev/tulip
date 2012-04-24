@@ -294,9 +294,6 @@ QImage GlMainWidget::grabFrameBuffer(bool withAlpha) {
 //QGLWidget slots
 //==================================================
 void GlMainWidget::resizeGL(int w, int h) {
-#ifndef NDEBUG
-  qWarning() << __PRETTY_FUNCTION__ << "(" << w << ";" << h << ")";
-#endif
 
   if (w == 0 || h == 0) {
     return ;
@@ -348,18 +345,12 @@ void GlMainWidget::pickNodesEdges(const int x, const int y,
                                   const int width ,const int height,
                                   std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
                                   GlLayer* layer) {
-#ifndef NDEBUG
-  qWarning() << __PRETTY_FUNCTION__ << " x:" << x << ", y:" <<y <<", wi:"<<width<<", height:" << height;
-#endif
   makeCurrent();
   scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x, y, width, height, layer, selectedNodes);
   scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x, y, width, height, layer, selectedEdges);
 }
 //=====================================================
 bool GlMainWidget::pickNodesEdges(const int x, const int y,SelectedEntity &selectedEntity, GlLayer* layer) {
-#ifndef NDEBUG
-  qWarning() << __PRETTY_FUNCTION__;
-#endif
   makeCurrent();
   vector<SelectedEntity> selectedEntities;
 
