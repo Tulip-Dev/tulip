@@ -61,6 +61,8 @@ This abstract class describes an export plugin.
   ExportModule(const tlp::PluginContext* context);
   
   virtual ~ExportModule();
+
+  virtual std::string fileExtension() const = 0;
   
   virtual std::string category() const;
 

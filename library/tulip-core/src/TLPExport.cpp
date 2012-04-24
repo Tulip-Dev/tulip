@@ -107,6 +107,10 @@ class TLPExport:public ExportModule {
 public:
   PLUGININFORMATIONS("TLP Export","Auber David","31/07/2001","TLP Export plugin", "1.1", "File")
 
+  std::string fileExtension() const {
+    return "tlp";
+  }
+
   DataSet controller;
   bool useOldFormat;
   MutableContainer<node> nodeIndex;

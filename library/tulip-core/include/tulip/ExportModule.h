@@ -51,6 +51,14 @@ public:
   }
 
   /**
+   * @brief Gets the extension of the file format this export plugin saves to.
+   * e.g. a GraphML export would return 'xml'.
+   *
+   * @return :string the extension that this export module saves to.
+   **/
+  virtual std::string fileExtension() const = 0;
+
+  /**
    * @brief The export operations should take place here.
    * @param the output stream
    * @return bool Whether the export was successful or not.
