@@ -236,6 +236,37 @@ void GraphPerspective::showFullScreen(bool f) {
   }
 }
 
+void GraphPerspective::importFileGraph() {
+  QString filters;
+  QMap<std::string, std::string> modules;
+  std::list<std::string> exports = PluginLister::instance()->availablePlugins<ImportModule>();
+  QString filterAny("Any supported format (");
+  for(std::list<std::string>::const_iterator it = exports.begin(); it != exports.end(); ++it) {
+    ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
+    if(m->fileExtension().empty())
+      continue;
+    QString currentFilter = it->c_str() + QString("(*.") + m->fileExtension().c_str() + QString(")");
+    filterAny += QString("*.") + m->fileExtension().c_str() + " ";
+    filters += currentFilter;
+    if(it != exports.end()) {
+      filters += ";;";
+    }
+    modules[m->fileExtension()] = *it;
+    delete m;
+  }
+  filterAny += ");;";
+
+  filters.insert(0, filterAny);
+  QString fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Export Graph"), QString(), filters);
+  if(!fileName.isEmpty()) {
+    QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
+    DataSet params;
+    params.set<std::string>("file::filename", fileName.toStdString());
+    Graph* g = tlp::importGraph(modules[extension.toStdString()], params);
+    _graphs->addGraph(g);
+  }
+}
+
 void GraphPerspective::exportGraph() {
   QString filters;
   QMap<std::string, std::string> modules;
@@ -249,18 +280,16 @@ void GraphPerspective::exportGraph() {
     if(it != exports.end()) {
       filters += ";;";
     }
-
-    modules[currentFilter.toStdString()] = *it;
+    modules[m->fileExtension()] = *it;
     delete m;
   }
 
-  QString selectedFilter;
-  QString fileName = QFileDialog::getSaveFileName(_mainWindow, tr("Export Graph"), QString(), filters, &selectedFilter);
-
+  QString fileName = QFileDialog::getSaveFileName(_mainWindow, tr("Export Graph"), QString(), filters);
   if(!fileName.isEmpty()) {
     std::ofstream out(fileName.toStdString().c_str());
+    QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
     DataSet params;
-    tlp::exportGraph(_graphs->currentGraph(), out, modules[selectedFilter.toStdString()], params);
+    tlp::exportGraph(_graphs->currentGraph(), out, modules[extension.toStdString()], params);
   }
 }
 
