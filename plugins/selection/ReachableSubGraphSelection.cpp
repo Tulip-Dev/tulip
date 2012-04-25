@@ -65,9 +65,9 @@ std::string edgesDirectionLabels[] = {
 
 
 ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext *context):BooleanAlgorithm(context) {
-  addParameter<StringCollection> ("edges direction",paramHelp[0],"output edges;input edges;all edges");
-  addParameter<BooleanProperty> ("startingnodes",paramHelp[1],"viewSelection");
-  addParameter<int> ("distance",paramHelp[2],"5");
+  addInParameter<StringCollection> ("edges direction",paramHelp[0],"output edges;input edges;all edges");
+  addInParameter<BooleanProperty> ("startingnodes",paramHelp[1],"viewSelection");
+  addInParameter<int> ("distance",paramHelp[2],"5");
 }
 
 ReachableSubGraphSelection::~ReachableSubGraphSelection() {}
