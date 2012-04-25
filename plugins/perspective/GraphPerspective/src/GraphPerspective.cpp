@@ -86,7 +86,6 @@ void graphPerspectiveLogger(QtMsgType type, const char* msg) {
   static_cast<GraphPerspective*>(Perspective::instance())->log(type,msg);
 }
 void GraphPerspective::log(QtMsgType type, const char* msg) {
-  _ui->loggerFrame->setVisible(true);
   _logger->log(type,msg);
   _ui->loggerIcon->setPixmap(_logger->icon());
   _ui->loggerMessage->setText(QString::number(_logger->count()));
@@ -97,7 +96,8 @@ GraphPerspective::~GraphPerspective() {
 }
 
 void GraphPerspective::logCleared() {
-  _ui->loggerFrame->setVisible(false);
+  _ui->loggerMessage->setText("");
+  _ui->loggerIcon->setPixmap(QPixmap());
 }
 
 bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
@@ -137,7 +137,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
-  _ui->loggerFrame->setVisible(false);
+//  _ui->loggerFrame->setVisible(false);
   _logger = new GraphPerspectiveLogger(_mainWindow);
   _ui->loggerFrame->installEventFilter(this);
   _mainWindow->installEventFilter(this);
