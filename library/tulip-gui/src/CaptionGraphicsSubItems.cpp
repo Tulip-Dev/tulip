@@ -61,10 +61,25 @@ CaptionGraphicsBackgroundItem::CaptionGraphicsBackgroundItem(const QRect &rect):
   // MinMax Labels Item
   _minTextItem=new QGraphicsTextItem();
   _minTextItem->setFont(font);
+  _minTextItem->setParentItem(this);
   _maxTextItem=new QGraphicsTextItem();
   _maxTextItem->setFont(font);
-  _minTextItem->setParentItem(this);
   _maxTextItem->setParentItem(this);
+  _min2TextItem=new QGraphicsTextItem();
+  _min2TextItem->setFont(font);
+  _min2TextItem->setParentItem(this);
+  _max2TextItem=new QGraphicsTextItem();
+  _max2TextItem->setFont(font);
+  _max2TextItem->setParentItem(this);
+  _min2LineItem=new QGraphicsLineItem(this);
+  _max2LineItem=new QGraphicsLineItem(this);
+  _min2TextItem->setPos(_captionContentPos+QPoint(35,95));
+  _max2TextItem->setPos(_captionContentPos+QPoint(35,40));
+  _min2LineItem->setLine(QLineF(_captionContentPos+QPoint(-5,107),_captionContentPos+QPoint(35,107)));
+  _min2LineItem->setZValue(2);
+  _max2LineItem->setLine(QLineF(_captionContentPos+QPoint(-5,53),_captionContentPos+QPoint(35,53)));
+  _max2LineItem->setZValue(2);
+
 
   // Color caption Items
   _topCaptionRectItem=new QGraphicsRectItem(QRect(_captionContentPos,QSize(30,0)));
@@ -112,6 +127,9 @@ void CaptionGraphicsBackgroundItem::generateColorCaption(const QGradient &active
 
   _minTextItem->setPlainText(QString::number(_minValue));
   _maxTextItem->setPlainText(QString::number(_maxValue));
+  _min2TextItem->setPlainText(QString::number(_minValue+(_maxValue-_minValue)/3.).left(5));
+  _max2TextItem->setPlainText(QString::number(_maxValue-(_maxValue-_minValue)/3.).left(5));
+
 
   float begin = (_rangeSelector1Item->pos().y()-_captionContentPos.y()+30)/160.;
   float end = (_rangeSelector2Item->pos().y()-_captionContentPos.y()+30)/160.;
@@ -124,8 +142,8 @@ void CaptionGraphicsBackgroundItem::generateColorCaption(const QGradient &active
 
   updateSelectionText(begin,end);
 
-  _minTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_minTextItem->boundingRect().width()/2.,157)));
-  _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_maxTextItem->boundingRect().width()/2.,-22)));
+  _minTextItem->setPos(_captionContentPos+QPoint(17-_minTextItem->boundingRect().width()/2.,157));
+  _maxTextItem->setPos(_captionContentPos+QPoint(17-_maxTextItem->boundingRect().width()/2.,-22));
 }
 
 void CaptionGraphicsBackgroundItem::generateSizeCaption(const vector<pair<double,float> > &metricToSizeFilteredList, const string &/*propertyName*/, double minValue, double maxValue) {
@@ -142,6 +160,8 @@ void CaptionGraphicsBackgroundItem::generateSizeCaption(const vector<pair<double
 
   _minTextItem->setPlainText(QString::number(_minValue));
   _maxTextItem->setPlainText(QString::number(_maxValue));
+  _min2TextItem->setPlainText(QString::number(_minValue+(_maxValue-_minValue)/3.).left(5));
+  _max2TextItem->setPlainText(QString::number(_maxValue-(_maxValue-_minValue)/3.).left(5));
 
   float begin = (_rangeSelector1Item->pos().y()-_captionContentPos.y()+30)/160.;
   float end = (_rangeSelector2Item->pos().y()-_captionContentPos.y()+30)/160.;
@@ -154,8 +174,8 @@ void CaptionGraphicsBackgroundItem::generateSizeCaption(const vector<pair<double
 
   updateSelectionText(begin,end);
 
-  _minTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_minTextItem->boundingRect().width()/2.,157)));
-  _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_maxTextItem->boundingRect().width()/2.,-22)));
+  _minTextItem->setPos(_captionContentPos+QPoint(17-_minTextItem->boundingRect().width()/2.,157));
+  _maxTextItem->setPos(_captionContentPos+QPoint(17-_maxTextItem->boundingRect().width()/2.,-22));
 
   _sizeCaptionPathItem->setDataToPath(metricToSizeFilteredList,minValue,maxValue);
 }
@@ -204,10 +224,18 @@ void CaptionGraphicsBackgroundItem::updateCaption(float begin ,float end) {
   if(!_interactionsActivated) {
     _minTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_minTextItem->boundingRect().width()/2.,157)));
     _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(17-_maxTextItem->boundingRect().width()/2.,-22)));
+    _min2TextItem->setVisible(true);
+    _max2TextItem->setVisible(true);
+    _min2LineItem->setVisible(true);
+    _max2LineItem->setVisible(true);
   }
   else {
     _minTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,157)));
     _maxTextItem->setPos(QPointF(_captionContentPos+QPoint(-5,-22)));
+    _min2TextItem->setVisible(false);
+    _max2TextItem->setVisible(false);
+    _min2LineItem->setVisible(false);
+    _max2LineItem->setVisible(false);
   }
 
   if(begin>end) {
