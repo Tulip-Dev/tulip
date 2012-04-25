@@ -241,23 +241,30 @@ void GraphPerspective::importFileGraph() {
   QMap<std::string, std::string> modules;
   std::list<std::string> exports = PluginLister::instance()->availablePlugins<ImportModule>();
   QString filterAny("Any supported format (");
+
   for(std::list<std::string>::const_iterator it = exports.begin(); it != exports.end(); ++it) {
     ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
+
     if(m->fileExtension().empty())
       continue;
+
     QString currentFilter = it->c_str() + QString("(*.") + m->fileExtension().c_str() + QString(")");
     filterAny += QString("*.") + m->fileExtension().c_str() + " ";
     filters += currentFilter;
+
     if(it != exports.end()) {
       filters += ";;";
     }
+
     modules[m->fileExtension()] = *it;
     delete m;
   }
+
   filterAny += ");;";
 
   filters.insert(0, filterAny);
   QString fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Export Graph"), QString(), filters);
+
   if(!fileName.isEmpty()) {
     QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
     DataSet params;
@@ -280,11 +287,13 @@ void GraphPerspective::exportGraph() {
     if(it != exports.end()) {
       filters += ";;";
     }
+
     modules[m->fileExtension()] = *it;
     delete m;
   }
 
   QString fileName = QFileDialog::getSaveFileName(_mainWindow, tr("Export Graph"), QString(), filters);
+
   if(!fileName.isEmpty()) {
     std::ofstream out(fileName.toStdString().c_str());
     QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));

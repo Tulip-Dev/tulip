@@ -99,6 +99,7 @@ void SnapshotDialog::accept() {
   QPixmap pixmap=view->snapshot(QSize(widthSpinBox->value(),heightSpinBox->value()));
 
   QImage image(pixmap.toImage());
+
   if(!image.save(fileName->text(),0,qualitySpinBox->value())) {
     QMessageBox::critical(this,"Snapshot cannot be saved","Snapshot cannot be saved in file : "+fileName->text());
   }
