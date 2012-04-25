@@ -10,7 +10,7 @@
 namespace tlp {
 
 template<typename PLUGIN>
-class TLP_QT_SCOPE PluginModel : public tlp::TulipModel {
+class PluginModel : public tlp::TulipModel {
   struct TreeItem {
     TreeItem(QString name, TreeItem* parent = NULL): name(name), parent(parent) {}
     virtual ~TreeItem() {
