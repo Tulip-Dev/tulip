@@ -20,6 +20,7 @@
 #include <tulip/GlMainView.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/Perspective.h>
+#include <tulip/SnapshotDialog.h>
 
 class TopPopupComboBox: public QComboBox {
   QListView* _view;
@@ -170,6 +171,8 @@ void QuickAccessBar::showHideCaption(CaptionItem::CaptionType captionType) {
 }
 
 void QuickAccessBar::takeSnapshot() {
+    SnapshotDialog dialog(*_mainView);
+    dialog.exec();
 }
 
 void QuickAccessBar::setBackgroundColor(const QColor& c) {

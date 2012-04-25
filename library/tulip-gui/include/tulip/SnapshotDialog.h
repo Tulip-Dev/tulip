@@ -28,19 +28,19 @@
 
 #include "ui_SnapshotDialog.h"
 
-#include "tulip/View3.h"
+#include "tulip/GlMainView.h"
 
 namespace tlp {
 
 class LockLabel;
 
-class TLP3_COMPAT_SCOPE SnapshotDialog : public QDialog,public Ui::SnapshotDialogData {
+class TLP_QT_SCOPE SnapshotDialog : public QDialog,public Ui::SnapshotDialogData {
 
   Q_OBJECT
 
 public :
 
-  SnapshotDialog(View3 &v,QWidget *parent=NULL);
+  SnapshotDialog(GlMainView &v,QWidget *parent=NULL);
   ~SnapshotDialog();
 
 public slots :
@@ -61,7 +61,7 @@ protected :
 
   void sizeSpinBoxValueChanged();
 
-  View3 *view;
+  GlMainView *view;
 
   QGraphicsScene *scene;
   QGraphicsPixmapItem *pixmapItem;

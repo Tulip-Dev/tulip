@@ -17,11 +17,13 @@
  *
  */
 
-#include "tulip3/SnapshotDialog.h"
+#include "tulip/SnapshotDialog.h"
 
 #include <QtGui/QMessageBox>
 #include <QtGui/QImageWriter>
 #include <QtGui/QFileDialog>
+
+#include "tulip/GlMainWidget.h"
 
 using namespace std;
 
@@ -60,14 +62,14 @@ protected :
 
 };
 
-SnapshotDialog::SnapshotDialog(View3 &v,QWidget *parent):QDialog(parent),view(&v),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
+SnapshotDialog::SnapshotDialog(GlMainView &v,QWidget *parent):QDialog(parent),view(&v),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
   setupUi(this);
   scene=new QGraphicsScene();
   scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
   graphicsView->setScene(scene);
 
-  widthSpinBox->setValue(view->getWidget()->width());
-  heightSpinBox->setValue(view->getWidget()->height());
+  widthSpinBox->setValue(view->getGlMainWidget()->rect().width());
+  heightSpinBox->setValue(view->getGlMainWidget()->rect().height());
 
   pixmapItem=scene->addPixmap(QPixmap(10,10));
 
@@ -80,6 +82,10 @@ SnapshotDialog::SnapshotDialog(View3 &v,QWidget *parent):QDialog(parent),view(&v
 
   lockLabel=new LockLabel();
   lockLayout->addWidget(lockLabel);
+
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
+  fileName->setPlaceholderText(QApplication::translate("SnapshotDialogData", "Enter the filename or use the browse button", 0, QApplication::UnicodeUTF8));
+#endif
 }
 
 SnapshotDialog::~SnapshotDialog() {
@@ -90,10 +96,11 @@ void SnapshotDialog::resizeEvent(QResizeEvent *) {
 }
 
 void SnapshotDialog::accept() {
-  QImage image=view->createPicture(widthSpinBox->value(),heightSpinBox->value(),false);
+  QPixmap pixmap=view->snapshot(QSize(widthSpinBox->value(),heightSpinBox->value()));
 
+  QImage image(pixmap.toImage());
   if(!image.save(fileName->text(),0,qualitySpinBox->value())) {
-    QMessageBox::critical(this,"Snapshot can't be saved","Snapshot can't be saved in file : "+fileName->text());
+    QMessageBox::critical(this,"Snapshot cannot be saved","Snapshot cannot be saved in file : "+fileName->text());
   }
   else {
     QDialog::accept();
@@ -156,14 +163,14 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
   float viewRatio=((float)graphicsView->width())/((float)graphicsView->height());
   float imageRatio=((float)widthSpinBox->value())/((float)heightSpinBox->value());
 
+  QPixmap pixmap;
   QImage image;
 
   if(viewRatio>imageRatio) {
-    image=view->createPicture((graphicsView->height()-2)*imageRatio,graphicsView->height()-2,false);
-
+    pixmap=view->snapshot(QSize((graphicsView->height()-2)*imageRatio,graphicsView->height()-7));
   }
   else {
-    image=view->createPicture(graphicsView->width()-2,(graphicsView->width()-2)/imageRatio,false);
+    pixmap=view->snapshot(QSize(graphicsView->width()-2,(graphicsView->width()-2)/imageRatio));
   }
 
   ratio=((float)widthSpinBox->value())/((float)heightSpinBox->value());
@@ -173,7 +180,11 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
   scene=new QGraphicsScene();
   scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
   graphicsView->setScene(scene);
-  pixmapItem=scene->addPixmap(QPixmap::fromImage(image));
+  QPixmap pixmap2;
+  QImage img(pixmap.toImage());
+  img = QImage(img.bits(),img.width(),img.height(),QImage::Format_ARGB32);
+  pixmap2.convertFromImage(img);
+  pixmapItem=scene->addPixmap(pixmap2);
   pixmapItem->setPos(graphicsView->sceneRect().center()-pixmapItem->boundingRect().center());
 }
 

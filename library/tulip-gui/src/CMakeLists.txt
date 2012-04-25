@@ -105,6 +105,7 @@ SET(SRCS
   CaptionGraphicsSubItems.cpp
   GraphModel.cpp
   GraphElementModel.cpp
+  SnapshotDialog.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -130,6 +131,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/TulipFontWidget.ui
   ../designer/GridOptionsWidget.ui
   ../designer/ElementInformationsWidget.ui
+  ../designer/SnapshotDialog.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -197,6 +199,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/CaptionGraphicsSubItems.h
   ../include/tulip/GraphNeedsSavingObserver.h
   ../include/tulip/DragHandle.h
+  ../include/tulip/SnapshotDialog.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

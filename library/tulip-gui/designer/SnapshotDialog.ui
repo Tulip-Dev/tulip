@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>346</width>
+    <width>502</width>
     <height>421</height>
    </rect>
   </property>
@@ -154,7 +154,7 @@
                         <item>
                          <widget class="QLabel" name="label">
                           <property name="text">
-                           <string>Width :</string>
+                           <string>Width:</string>
                           </property>
                          </widget>
                         </item>
@@ -175,7 +175,7 @@
                         <item>
                          <widget class="QLabel" name="label_2">
                           <property name="text">
-                           <string>Height :</string>
+                           <string>Height:</string>
                           </property>
                          </widget>
                         </item>
@@ -237,7 +237,7 @@
                     <item>
                      <widget class="QLabel" name="label_4">
                       <property name="text">
-                       <string>Picture quality :</string>
+                       <string>Picture quality:</string>
                       </property>
                       <property name="textFormat">
                        <enum>Qt::AutoText</enum>
@@ -293,11 +293,7 @@ p, li { white-space: pre-wrap; }
               <number>2</number>
              </property>
              <item>
-              <widget class="QLineEdit" name="fileName">
-               <property name="placeholderText">
-                <string>Enter the filename or use the browse button</string>
-               </property>
-              </widget>
+              <widget class="QLineEdit" name="fileName"/>
              </item>
              <item>
               <widget class="QPushButton" name="browseButton">
