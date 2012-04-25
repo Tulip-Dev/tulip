@@ -848,6 +848,7 @@ void PythonCodeEditor::matchParens() {
 void PythonCodeEditor::resetExtraSelections() {
   if (selectedText() != "")
     return;
+
   QList<QTextEdit::ExtraSelection> selections;
   setExtraSelections(selections);
 }
@@ -871,19 +872,21 @@ void PythonCodeEditor::highlightCurrentLine() {
 void PythonCodeEditor::highlightSelection() {
   QString text = selectedText();
   QList<QTextEdit::ExtraSelection> selections = extraSelections();
+
   if (text != "") {
     QTextDocument::FindFlags findFlags;
     findFlags |= QTextDocument::FindCaseSensitively;
     findFlags |= QTextDocument::FindWholeWords;
     QTextCursor cursor = document()->find(text, QTextCursor(document()->begin()), findFlags);
+
     while (!cursor.isNull()) {
-        QTextEdit::ExtraSelection selection;
-        QColor lineColor = QColor(Qt::yellow);
-        selection.format = cursor.block().charFormat();
-        selection.format.setBackground(lineColor);
-        selection.cursor = cursor;
-        selections.append(selection);
-        cursor = document()->find(text, cursor, findFlags);
+      QTextEdit::ExtraSelection selection;
+      QColor lineColor = QColor(Qt::yellow);
+      selection.format = cursor.block().charFormat();
+      selection.format.setBackground(lineColor);
+      selection.cursor = cursor;
+      selections.append(selection);
+      cursor = document()->find(text, cursor, findFlags);
     }
   }
 

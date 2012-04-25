@@ -921,10 +921,12 @@ bool PythonScriptView::loadScript(const QString &fileName, bool clear) {
   QString modulePath = fileInfo.absolutePath();
   pythonInterpreter->addModuleSearchPath(modulePath.toStdString());
   pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
+
   if (clear) {
     viewWidget->consoleOutputWidget->clear();
     pythonInterpreter->clearOutputBuffers();
   }
+
   clearErrorIndicators();
   pythonInterpreter->reloadModule(fileInfo.fileName().replace(".py", "").toStdString());
   indicateErrors();
@@ -975,10 +977,12 @@ void PythonScriptView::saveScript(int tabIdx, bool clear) {
       pythonInterpreter->addModuleSearchPath(modulePath.toStdString());
 
       pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
+
       if (clear) {
         viewWidget->consoleOutputWidget->clear();
         pythonInterpreter->clearOutputBuffers();
       }
+
       clearErrorIndicators();
       pythonInterpreter->reloadModule(fileInfo.fileName().replace(".py", "").toStdString());
       indicateErrors();
@@ -1096,10 +1100,12 @@ bool PythonScriptView::loadModule(const QString &fileName, bool clear) {
   codeEditor->analyseScriptCode(true);
 
   pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
+
   if (clear) {
     viewWidget->consoleOutputWidget->clear();
     pythonInterpreter->clearOutputBuffers();
   }
+
   clearErrorIndicators();
   reloadAllModules();
   saveImportAllScripts();
@@ -1462,7 +1468,9 @@ void PythonScriptView::reloadCodeInEditorIfNeeded(PythonCodeEditor *codeEditor, 
       while (!file.atEnd()) {
         scriptCode += file.readLine();
       }
+
       lastModifiedFile[fileName] = fileInfo.lastModified();
+
       if (scriptCode != codeEditor->getCleanCode() && QMessageBox::question(codeEditor, "File changed on disk", QString("The file ") + fileName + " has been modified by another editor. Do you want to reload it ?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
         codeEditor->setPlainText(scriptCode);
         tabWidget->setTabText(index, fileInfo.fileName());
@@ -1606,10 +1614,12 @@ void PythonScriptView::registerPythonPlugin(bool clear) {
   moduleName = moduleName.replace(".py", "");
 
   pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
+
   if (clear) {
     pythonInterpreter->clearOutputBuffers();
     viewWidget->consoleOutputWidget->clear();
   }
+
   clearErrorIndicators();
 
   pythonInterpreter->deleteModule(moduleName.toStdString());

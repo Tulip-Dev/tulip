@@ -340,48 +340,52 @@ void PythonScriptViewWidget::setGraph(tlp::Graph *graph) {
 }
 
 static void scrollToLine(PythonCodeEditor *codeEditor, int line) {
-    QTextBlock block = codeEditor->document()->findBlockByLineNumber(line);
-    codeEditor->setTextCursor(QTextCursor(block));
-    codeEditor->centerCursor();
+  QTextBlock block = codeEditor->document()->findBlockByLineNumber(line);
+  codeEditor->setTextCursor(QTextCursor(block));
+  codeEditor->centerCursor();
 }
 
 void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {
-    QStringList strList = link.toString().split(":");
-    QString file = strList.at(0);
-    int line = strList.at(1).toInt()-1;
-    if (file == "<unnamed script>") {
-        tabWidget->setCurrentIndex(0);
-        scrollToLine(getCurrentMainScriptEditor(), line);
-        return;
-    }
+  QStringList strList = link.toString().split(":");
+  QString file = strList.at(0);
+  int line = strList.at(1).toInt()-1;
 
-    for (int i = 0 ; i < mainScriptsTabWidget->count() ; ++i) {
-      PythonCodeEditor *codeEditor = getMainScriptEditor(i);
-      if (file == codeEditor->getFileName()) {
-          tabWidget->setCurrentIndex(0);
-          mainScriptsTabWidget->setCurrentIndex(i);
-          scrollToLine(codeEditor, line);
-          return;
-      }
-    }
+  if (file == "<unnamed script>") {
+    tabWidget->setCurrentIndex(0);
+    scrollToLine(getCurrentMainScriptEditor(), line);
+    return;
+  }
 
-    for (int i = 0 ; i < modulesTabWidget->count() ; ++i) {
-      PythonCodeEditor *codeEditor = getModuleEditor(i);
-      if (file == codeEditor->getFileName()) {
-          tabWidget->setCurrentIndex(1);
-          modulesTabWidget->setCurrentIndex(i);
-          scrollToLine(codeEditor, line);
-          return;
-      }
-    }
+  for (int i = 0 ; i < mainScriptsTabWidget->count() ; ++i) {
+    PythonCodeEditor *codeEditor = getMainScriptEditor(i);
 
-    for (int i = 0 ; i < pluginsTabWidget->count() ; ++i) {
-      PythonCodeEditor *codeEditor = getPluginEditor(i);
-      if (file == codeEditor->getFileName()) {
-          tabWidget->setCurrentIndex(3);
-          pluginsTabWidget->setCurrentIndex(i);
-          scrollToLine(codeEditor, line);
-          return;
-      }
+    if (file == codeEditor->getFileName()) {
+      tabWidget->setCurrentIndex(0);
+      mainScriptsTabWidget->setCurrentIndex(i);
+      scrollToLine(codeEditor, line);
+      return;
     }
+  }
+
+  for (int i = 0 ; i < modulesTabWidget->count() ; ++i) {
+    PythonCodeEditor *codeEditor = getModuleEditor(i);
+
+    if (file == codeEditor->getFileName()) {
+      tabWidget->setCurrentIndex(1);
+      modulesTabWidget->setCurrentIndex(i);
+      scrollToLine(codeEditor, line);
+      return;
+    }
+  }
+
+  for (int i = 0 ; i < pluginsTabWidget->count() ; ++i) {
+    PythonCodeEditor *codeEditor = getPluginEditor(i);
+
+    if (file == codeEditor->getFileName()) {
+      tabWidget->setCurrentIndex(3);
+      pluginsTabWidget->setCurrentIndex(i);
+      scrollToLine(codeEditor, line);
+      return;
+    }
+  }
 }
