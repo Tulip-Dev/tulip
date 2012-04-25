@@ -197,6 +197,10 @@ protected :
   // Global Items
   QGraphicsTextItem *_minTextItem;
   QGraphicsTextItem *_maxTextItem;
+  QGraphicsTextItem *_min2TextItem;
+  QGraphicsTextItem *_max2TextItem;
+  QGraphicsLineItem *_min2LineItem;
+  QGraphicsLineItem *_max2LineItem;
   QGraphicsRectItem *_captionRectBorder;
   SelectionArrowItem *_rangeSelector1Item;
   SelectionArrowItem *_rangeSelector2Item;
