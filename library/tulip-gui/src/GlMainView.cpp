@@ -150,6 +150,5 @@ void GlMainView::applySettings() {
 }
 
 bool GlMainView::isLayoutProperty(tlp::PropertyInterface* pi) const {
-  qWarning() << "prout";
   return pi == getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();
 }

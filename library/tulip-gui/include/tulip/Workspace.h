@@ -101,6 +101,7 @@ protected slots:
   void updatePanels();
   void uncheckExposeButton();
   QWidget* suitableMode(QWidget* oldMode);
+  WorkspacePanel* panelForScene(QObject* obj);
 
 protected:
   virtual void dragEnterEvent(QDragEnterEvent* event);

@@ -27,6 +27,7 @@ namespace tlp {
 class WorkspacePanel;
 
 class DragHandle : public QLabel {
+  Q_OBJECT
 public:
   explicit DragHandle(QWidget* parent = 0, Qt::WindowFlags f = 0);
   virtual void mousePressEvent(QMouseEvent* ev);
@@ -34,6 +35,7 @@ public:
   virtual void mouseMoveEvent(QMouseEvent* ev);
 
   void setPanel(tlp::WorkspacePanel* panel);
+
 private:
   tlp::WorkspacePanel* _panel;
   bool _pressed;
