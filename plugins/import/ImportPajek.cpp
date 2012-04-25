@@ -40,7 +40,6 @@ const char * paramHelp[] = {
 };
 }
 
-
 namespace {
 bool tokenize(const string& str, vector<string>& tokens, const string& delimiters) {
   if (str.empty())
@@ -100,12 +99,14 @@ bool tokenize(const string& str, vector<string>& tokens, const string& delimiter
 }
 }
 
-
-
 class ImportPajek : public ImportModule {
 
 public :
   PLUGININFORMATIONS("Pajek (.net)","Patrick Mary","09/05/2011","Import Pajek","1.0","File")
+  virtual std::string fileExtension() const {
+    return "net";
+  }
+  
   ImportPajek(const tlp::PluginContext* context):ImportModule(context),
     expectedLine(NET_UNKNOWN) {
     addInParameter<string>("file::filename", paramHelp[0]);

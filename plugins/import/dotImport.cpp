@@ -67,6 +67,9 @@ static const char * paramHelp[] = {
 class DotImport:public ImportModule {
 public:
   PLUGININFORMATIONS("dot (graphviz)","Gerald Gainant", "01/03/2004","Import plugin for dot files",".01","File")
+  virtual std::string fileExtension() const {
+    return "dot";
+  }
   DotImport(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<string>("file::filename",paramHelp[0]);
   }

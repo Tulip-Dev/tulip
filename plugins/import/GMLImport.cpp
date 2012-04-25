@@ -546,6 +546,9 @@ const char * paramHelp[] = {
 class GMLImport:public ImportModule {
 public:
   PLUGININFORMATIONS("GML","Auber","04/07/2001","GML Import plugin","1.1","File")
+  virtual std::string fileExtension() const {
+    return "gml";
+  }
   GMLImport(PluginContext* context):ImportModule(context) {
     addInParameter<string>("file::filename",paramHelp[0]);
   }
