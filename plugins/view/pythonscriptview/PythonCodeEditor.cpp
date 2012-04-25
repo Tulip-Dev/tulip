@@ -467,6 +467,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightErrors()));
   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(matchParens()));
   connect(this, SIGNAL(textChanged()), this, SLOT(updateAutoCompletionList()));
+  connect(this, SIGNAL(selectionChanged()), this, SLOT(highlightSelection()));
 
   shellWidget = false;
   moduleEditor = false;
@@ -475,6 +476,15 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
 PythonCodeEditor::~PythonCodeEditor() {
   delete autoCompletionDb;
   removeEventFilter(autoCompletionList);
+}
+
+QString PythonCodeEditor::getCleanCode() const {
+  QString code = toPlainText().replace("\r\n", "\n");
+
+  if (code[code.size()-1] != '\n')
+    code += "\n";
+
+  return  code;
 }
 
 QFontMetrics PythonCodeEditor::fontMetrics() const {
@@ -836,6 +846,8 @@ void PythonCodeEditor::matchParens() {
 }
 
 void PythonCodeEditor::resetExtraSelections() {
+  if (selectedText() != "")
+    return;
   QList<QTextEdit::ExtraSelection> selections;
   setExtraSelections(selections);
 }
@@ -851,6 +863,28 @@ void PythonCodeEditor::highlightCurrentLine() {
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
     selection.cursor = textCursor();
     selections.append(selection);
+  }
+
+  setExtraSelections(selections);
+}
+
+void PythonCodeEditor::highlightSelection() {
+  QString text = selectedText();
+  QList<QTextEdit::ExtraSelection> selections = extraSelections();
+  if (text != "") {
+    QTextDocument::FindFlags findFlags;
+    findFlags |= QTextDocument::FindCaseSensitively;
+    findFlags |= QTextDocument::FindWholeWords;
+    QTextCursor cursor = document()->find(text, QTextCursor(document()->begin()), findFlags);
+    while (!cursor.isNull()) {
+        QTextEdit::ExtraSelection selection;
+        QColor lineColor = QColor(Qt::yellow);
+        selection.format = cursor.block().charFormat();
+        selection.format.setBackground(lineColor);
+        selection.cursor = cursor;
+        selections.append(selection);
+        cursor = document()->find(text, cursor, findFlags);
+    }
   }
 
   setExtraSelections(selections);

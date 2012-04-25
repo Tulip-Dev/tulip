@@ -71,6 +71,8 @@ public slots :
 
   void currentTabChanged(int index);
 
+  void scrollToEditorLine(const QUrl & link);
+
 public :
 
   QAction *newMainScriptAction;

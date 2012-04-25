@@ -124,7 +124,7 @@ public :
 
   void setDefaultConsoleWidget();
 
-  void setConsoleWidget(QPlainTextEdit *consoleWidget);
+  void setConsoleWidget(QAbstractScrollArea *consoleWidget);
 
   void initConsoleOutput();
 

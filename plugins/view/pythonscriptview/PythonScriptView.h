@@ -114,7 +114,7 @@ private slots :
 private :
 
   bool loadScript(const QString &fileName);
-  void saveScript(int tabIdx);
+  void saveScript(int tabIdx, bool clear=true);
   void saveImportAllScripts();
   bool loadModule(const QString &fileName);
   bool loadModuleFromSrcCode(const std::string &moduleName, const std::string &moduleSrcCode);

@@ -561,12 +561,12 @@ bool PythonInterpreter::reloadModule(const std::string &moduleName) {
   return runString(oss.str());
 }
 
-void PythonInterpreter::setConsoleWidget(QPlainTextEdit *console) {
+void PythonInterpreter::setConsoleWidget(QAbstractScrollArea *console) {
   if (consoleOuputHandler) {
     consoleOuputEmitter->setOutputActivated(true);
     consoleOuputEmitter->setConsoleWidget(console);
-    QObject::disconnect(consoleOuputEmitter, SIGNAL(consoleOutput(QPlainTextEdit*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QPlainTextEdit*, const QString &, bool)));
-    QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QPlainTextEdit*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QPlainTextEdit*, const QString &, bool)));
+    QObject::disconnect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea*, const QString &, bool)));
+    QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea*, const QString &, bool)));
   }
 }
 
@@ -574,8 +574,8 @@ void PythonInterpreter::setDefaultConsoleWidget() {
   if (consoleDialog) {
     consoleOuputEmitter->setOutputActivated(true);
     consoleOuputEmitter->setConsoleWidget(consoleDialog->consoleWidget);
-    QObject::disconnect(consoleOuputEmitter, SIGNAL(consoleOutput(QPlainTextEdit*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QPlainTextEdit*, const QString &, bool)));
-    QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QPlainTextEdit*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QPlainTextEdit*, const QString &, bool)), Qt::QueuedConnection);
+    QObject::disconnect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea*, const QString &, bool)));
+    QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea*, const QString &, bool)), Qt::QueuedConnection);
   }
 }
 

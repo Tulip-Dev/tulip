@@ -21,6 +21,7 @@
 #define CONSOLEOUTPUTHANDLER_H_
 
 #include <QtGui/QPlainTextEdit>
+#include <QtGui/QTextBrowser>
 #include <QtGui/QApplication>
 
 
@@ -36,10 +37,13 @@ public:
 
 public slots :
 
-  void writeToConsole(QPlainTextEdit *consoleWidget, const QString &output, bool errorOutput) {
+  void writeToConsole(QAbstractScrollArea *consoleWidget, const QString &output, bool errorOutput) {
 
     if (!consoleWidget)
       return;
+
+    QTextBrowser *textBrowser = dynamic_cast<QTextBrowser*>(consoleWidget);
+    QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit*>(consoleWidget);
 
     QBrush brush(Qt::SolidPattern);
 
@@ -50,11 +54,31 @@ public slots :
       brush.setColor(Qt::black);
     }
 
-    QTextCharFormat formt = consoleWidget->textCursor().charFormat();
-    formt.setForeground(brush);
-    consoleWidget->moveCursor(QTextCursor::End);
-    QTextCursor cursor = consoleWidget->textCursor();
+    QTextCursor cursor;
+    QTextCharFormat formt;
+    if (textEdit) {
+        formt = textEdit->textCursor().charFormat();
+        formt.setForeground(brush);
+        textEdit->moveCursor(QTextCursor::End);
+        cursor = textEdit->textCursor();
+    } else {
+        formt = textBrowser->textCursor().charFormat();
+        formt.setForeground(brush);
+        textBrowser->moveCursor(QTextCursor::End);
+        cursor = textBrowser->textCursor();
+        QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
+        if (output.indexOf(rx) != -1 && rx.cap(1) != "<string>") {
+            formt.setAnchor(true);
+            formt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
+            formt.setAnchorHref(rx.cap(1) + ":" + rx.cap(2));
+        } else {
+            formt.setAnchor(false);
+            formt.setUnderlineStyle(QTextCharFormat::NoUnderline);
+            formt.setAnchorHref("");
+        }
+    }
     cursor.insertText(output, formt);
+
     QApplication::processEvents();
   }
 
@@ -74,7 +98,7 @@ public:
     }
   }
 
-  void setConsoleWidget(QPlainTextEdit *consoleWidget) {
+  void setConsoleWidget(QAbstractScrollArea *consoleWidget) {
     this->consoleWidget = consoleWidget;
   }
 
@@ -84,11 +108,11 @@ public:
 
 signals:
 
-  void consoleOutput(QPlainTextEdit *consoleWidget, const QString &output, bool errorOutput);
+  void consoleOutput(QAbstractScrollArea *consoleWidget, const QString &output, bool errorOutput);
 
 private :
 
-  QPlainTextEdit *consoleWidget;
+  QAbstractScrollArea *consoleWidget;
   bool outputActivated;
 };
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>544</width>
-    <height>632</height>
+    <width>542</width>
+    <height>630</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -240,15 +240,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="consoleOutputWidget">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
+        <widget class="QTextBrowser" name="consoleOutputWidget">
+         <property name="openLinks">
+          <bool>false</bool>
          </property>
         </widget>
        </item>

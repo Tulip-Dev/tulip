@@ -70,6 +70,7 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
   connect(decreaseFontSizeButton2, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
   connect(increaseFontSizeButton2, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
   connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
+  connect(consoleOutputWidget, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(scrollToEditorLine(const QUrl &)));
 
   QString docRootPath = QString(tlp::TulipShareDir.c_str()) + "../doc/tulip-python/html/index.html";
 
@@ -97,30 +98,15 @@ std::string PythonScriptViewWidget::getCurrentMainScriptCode() const {
 }
 
 std::string PythonScriptViewWidget::getMainScriptCode(int idx) const {
-  std::string code = static_cast<PythonCodeEditor *>(mainScriptsTabWidget->widget(idx))->toPlainText().replace("\r\n", "\n").toStdString();
-
-  if (code[code.size()-1] != '\n')
-    code += "\n";
-
-  return  code;
+  return static_cast<PythonCodeEditor *>(mainScriptsTabWidget->widget(idx))->getCleanCode().toStdString();
 }
 
 std::string PythonScriptViewWidget::getModuleCode(int idx) const {
-  std::string code = static_cast<PythonCodeEditor *>(modulesTabWidget->widget(idx))->toPlainText().replace("\r\n", "\n").toStdString();
-
-  if (code[code.size()-1] != '\n')
-    code += "\n";
-
-  return  code;
+  return static_cast<PythonCodeEditor *>(modulesTabWidget->widget(idx))->getCleanCode().toStdString();
 }
 
 std::string PythonScriptViewWidget::getPluginCode(int idx) const {
-  std::string code = static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(idx))->toPlainText().replace("\r\n", "\n").toStdString();
-
-  if (code[code.size()-1] != '\n')
-    code += "\n";
-
-  return  code;
+  return static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(idx))->getCleanCode().toStdString();
 }
 
 void PythonScriptViewWidget::resizeEvent(QResizeEvent *e) {
@@ -351,4 +337,50 @@ void PythonScriptViewWidget::setGraph(tlp::Graph *graph) {
   }
 
   pythonShellWidget->setGraph(graph);
+}
+
+static void scrollToLine(PythonCodeEditor *codeEditor, int line) {
+    QTextBlock block = codeEditor->document()->findBlockByLineNumber(line);
+    codeEditor->setTextCursor(QTextCursor(block));
+}
+
+void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {
+    QStringList strList = link.toString().split(":");
+    QString file = strList.at(0);
+    int line = strList.at(1).toInt()-1;
+    if (file == "<unnamed script>") {
+        tabWidget->setCurrentIndex(0);
+        scrollToLine(getCurrentMainScriptEditor(), line);
+        return;
+    }
+
+    for (int i = 0 ; i < mainScriptsTabWidget->count() ; ++i) {
+      PythonCodeEditor *codeEditor = getMainScriptEditor(i);
+      if (file == codeEditor->getFileName()) {
+          tabWidget->setCurrentIndex(0);
+          mainScriptsTabWidget->setCurrentIndex(i);
+          scrollToLine(codeEditor, line);
+          return;
+      }
+    }
+
+    for (int i = 0 ; i < modulesTabWidget->count() ; ++i) {
+      PythonCodeEditor *codeEditor = getModuleEditor(i);
+      if (file == codeEditor->getFileName()) {
+          tabWidget->setCurrentIndex(1);
+          modulesTabWidget->setCurrentIndex(i);
+          scrollToLine(codeEditor, line);
+          return;
+      }
+    }
+
+    for (int i = 0 ; i < pluginsTabWidget->count() ; ++i) {
+      PythonCodeEditor *codeEditor = getPluginEditor(i);
+      if (file == codeEditor->getFileName()) {
+          tabWidget->setCurrentIndex(3);
+          pluginsTabWidget->setCurrentIndex(i);
+          scrollToLine(codeEditor, line);
+          return;
+      }
+    }
 }

@@ -921,9 +921,12 @@ bool PythonScriptView::loadScript(const QString &fileName) {
   QString modulePath = fileInfo.absolutePath();
   pythonInterpreter->addModuleSearchPath(modulePath.toStdString());
   pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
+  viewWidget->consoleOutputWidget->clear();
+  pythonInterpreter->clearOutputBuffers();
+  clearErrorIndicators();
   pythonInterpreter->reloadModule(fileInfo.fileName().replace(".py", "").toStdString());
+  indicateErrors();
   pythonInterpreter->setDefaultConsoleWidget();
-
 
   return true;
 }
@@ -932,7 +935,7 @@ void PythonScriptView::saveScript() {
   saveScript(viewWidget->mainScriptsTabWidget->currentIndex());
 }
 
-void PythonScriptView::saveScript(int tabIdx) {
+void PythonScriptView::saveScript(int tabIdx, bool clear) {
   if (tabIdx >=0 && tabIdx < viewWidget->mainScriptsTabWidget->count()) {
     QString fileName;
     QString mainScriptFileName = viewWidget->getMainScriptEditor(tabIdx)->getFileName();
@@ -968,7 +971,17 @@ void PythonScriptView::saveScript(int tabIdx) {
 
       QString modulePath = fileInfo.absolutePath();
       pythonInterpreter->addModuleSearchPath(modulePath.toStdString());
+
+      pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
+      if (clear) {
+        viewWidget->consoleOutputWidget->clear();
+        pythonInterpreter->clearOutputBuffers();
+      }
+      clearErrorIndicators();
       pythonInterpreter->reloadModule(fileInfo.fileName().replace(".py", "").toStdString());
+      indicateErrors();
+      pythonInterpreter->setDefaultConsoleWidget();
+
       lastModifiedFile[fileName] = fileInfo.lastModified();
     }
   }
@@ -979,7 +992,7 @@ void PythonScriptView::saveImportAllScripts() {
     PythonCodeEditor *codeEditor = viewWidget->getMainScriptEditor(i);
 
     if (codeEditor->getFileName() != "") {
-      saveScript(i);
+      saveScript(i, false);
     }
     else {
       QString tabText = viewWidget->mainScriptsTabWidget->tabText(i);
@@ -1078,9 +1091,16 @@ bool PythonScriptView::loadModule(const QString &fileName) {
   viewWidget->modulesTabWidget->setTabText(editorId, fileInfo.fileName());
   viewWidget->modulesTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
 
-  pythonInterpreter->reloadModule(moduleName.replace(".py", "").toStdString());
-
   codeEditor->analyseScriptCode(true);
+
+  pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
+  viewWidget->consoleOutputWidget->clear();
+  pythonInterpreter->clearOutputBuffers();
+  clearErrorIndicators();
+  reloadAllModules();
+  saveImportAllScripts();
+  indicateErrors();
+  pythonInterpreter->setDefaultConsoleWidget();
 
   return true;
 }
@@ -1379,7 +1399,10 @@ void PythonScriptView::saveModule(int tabIdx, const bool reload) {
     pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
     viewWidget->consoleOutputWidget->clear();
     pythonInterpreter->clearOutputBuffers();
+    clearErrorIndicators();
     reloadAllModules();
+    saveImportAllScripts();
+    indicateErrors();
     pythonInterpreter->setDefaultConsoleWidget();
   }
 }
@@ -1394,8 +1417,6 @@ void PythonScriptView::saveAllModules() {
 }
 
 bool PythonScriptView::reloadAllModules() {
-
-  clearErrorIndicators();
 
   bool ret = true;
 
@@ -1420,9 +1441,6 @@ bool PythonScriptView::reloadAllModules() {
     }
   }
 
-  if (!ret)
-    indicateErrors();
-
   return ret;
 }
 
@@ -1433,16 +1451,15 @@ void PythonScriptView::reloadCodeInEditorIfNeeded(PythonCodeEditor *codeEditor, 
     QFileInfo fileInfo(fileName);
 
     if (fileInfo.exists() && fileInfo.lastModified() != lastModifiedFile[fileName]) {
-      if (QMessageBox::question(codeEditor, "File changed on disk", QString("The file ") + fileName + " has been modified by another editor. Do you want to reload it ?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
-        lastModifiedFile[fileName] = fileInfo.lastModified();
-        QFile file(fileName);
-        file.open(QIODevice::ReadOnly | QIODevice::Text);
-        QString scriptCode;
+      QFile file(fileName);
+      file.open(QIODevice::ReadOnly | QIODevice::Text);
+      QString scriptCode;
 
-        while (!file.atEnd()) {
-          scriptCode += file.readLine();
-        }
-
+      while (!file.atEnd()) {
+        scriptCode += file.readLine();
+      }
+      lastModifiedFile[fileName] = fileInfo.lastModified();
+      if (scriptCode != codeEditor->getCleanCode() && QMessageBox::question(codeEditor, "File changed on disk", QString("The file ") + fileName + " has been modified by another editor. Do you want to reload it ?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
         codeEditor->setPlainText(scriptCode);
         tabWidget->setTabText(index, fileInfo.fileName());
       }
