@@ -342,6 +342,7 @@ void PythonScriptViewWidget::setGraph(tlp::Graph *graph) {
 static void scrollToLine(PythonCodeEditor *codeEditor, int line) {
     QTextBlock block = codeEditor->document()->findBlockByLineNumber(line);
     codeEditor->setTextCursor(QTextCursor(block));
+    codeEditor->centerCursor();
 }
 
 void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {

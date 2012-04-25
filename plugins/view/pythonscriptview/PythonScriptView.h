@@ -105,7 +105,7 @@ private slots :
   void loadPythonPlugin();
   void savePythonPlugin();
 
-  void registerPythonPlugin();
+  void registerPythonPlugin(bool clear=true);
 
   void closeMainScriptTabRequested(int tab);
   void closeModuleTabRequested(int tab);
@@ -113,15 +113,15 @@ private slots :
 
 private :
 
-  bool loadScript(const QString &fileName);
+  bool loadScript(const QString &fileName, bool clear=true);
   void saveScript(int tabIdx, bool clear=true);
   void saveImportAllScripts();
-  bool loadModule(const QString &fileName);
+  bool loadModule(const QString &fileName, bool clear = true);
   bool loadModuleFromSrcCode(const std::string &moduleName, const std::string &moduleSrcCode);
   void saveModule();
   void saveModule(int tabIdx, const bool reload=false);
-  bool loadPythonPlugin(const QString &fileName);
-  bool loadPythonPluginFromSrcCode(const std::string &moduleName, const std::string &pluginSrcCode);
+  bool loadPythonPlugin(const QString &fileName, bool clear = true);
+  bool loadPythonPluginFromSrcCode(const std::string &moduleName, const std::string &pluginSrcCode, bool clear=true);
   void savePythonPlugin(int tabIdx);
   void saveAllModules();
   bool reloadAllModules();

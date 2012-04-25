@@ -22,6 +22,7 @@
 
 #include <QtGui/QPlainTextEdit>
 #include <QtGui/QTextBrowser>
+#include <QtGui/QTextBlock>
 #include <QtGui/QApplication>
 
 
@@ -64,20 +65,29 @@ public slots :
     } else {
         formt = textBrowser->textCursor().charFormat();
         formt.setForeground(brush);
+        formt.setAnchor(false);
+        formt.setUnderlineStyle(QTextCharFormat::NoUnderline);
+        formt.setAnchorHref("");
         textBrowser->moveCursor(QTextCursor::End);
         cursor = textBrowser->textCursor();
-        QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
-        if (output.indexOf(rx) != -1 && rx.cap(1) != "<string>") {
-            formt.setAnchor(true);
-            formt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
-            formt.setAnchorHref(rx.cap(1) + ":" + rx.cap(2));
-        } else {
-            formt.setAnchor(false);
-            formt.setUnderlineStyle(QTextCharFormat::NoUnderline);
-            formt.setAnchorHref("");
-        }
     }
     cursor.insertText(output, formt);
+
+    if (textBrowser) {
+        QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
+        cursor = textBrowser->document()->find(rx, QTextCursor(textBrowser->document()->begin()));
+        while (!cursor.isNull()) {
+            rx.indexIn(cursor.selectedText());
+            if (rx.cap(1) != "<string>") {
+                formt = cursor.charFormat();
+                formt.setAnchor(true);
+                formt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
+                formt.setAnchorHref(rx.cap(1) + ":" + rx.cap(2));
+                cursor.setCharFormat(formt);
+            }
+            cursor = textBrowser->document()->find(rx, cursor);
+        }
+    }
 
     QApplication::processEvents();
   }

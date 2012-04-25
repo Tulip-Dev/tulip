@@ -409,7 +409,7 @@ QWidget *PythonScriptView::construct(QWidget *parent) {
   connect(viewWidget->newPluginAction, SIGNAL(triggered()), this, SLOT(newPythonPlugin()));
   connect(viewWidget->loadPluginAction, SIGNAL(triggered()), this, SLOT(loadPythonPlugin()));
   connect(viewWidget->savePluginAction, SIGNAL(triggered()), this, SLOT(savePythonPlugin()));
-  connect(viewWidget->registerPluginButton, SIGNAL(clicked()), this, SLOT(registerPythonPlugin()));
+  connect(viewWidget->registerPluginButton, SIGNAL(clicked()), this, SLOT(registerPythonPlugin(bool)));
   connect(viewWidget->mainScriptsTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeMainScriptTabRequested(int)));
   connect(viewWidget->modulesTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeModuleTabRequested(int)));
   connect(viewWidget->pluginsTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closePluginTabRequested(int)));
@@ -458,7 +458,7 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
       oss << "module" << i;
 
       while (modulesDataSet.get(oss.str(), module)) {
-        bool moduleLoaded = loadModule(module.c_str());
+        bool moduleLoaded = loadModule(module.c_str(), false);
 
         if (!moduleLoaded) {
           string moduleSrc;
@@ -489,7 +489,7 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
       oss << "main_script" << i;
 
       while (mainScriptsDataSet.get(oss.str(), mainScript)) {
-        mainScriptLoaded = loadScript(mainScript.c_str());
+        mainScriptLoaded = loadScript(mainScript.c_str(), false);
 
         if (!mainScriptLoaded) {
           string mainScriptSrc;
@@ -527,7 +527,7 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
     else {
 
       if (dataSet.get("main script file", filename)) {
-        mainScriptLoaded = loadScript(filename.c_str());
+        mainScriptLoaded = loadScript(filename.c_str(), false);
       }
 
       if (!mainScriptLoaded) {
@@ -567,7 +567,7 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
       oss << "plugin" << i;
 
       while (pluginsDataSet.get(oss.str(), plugin)) {
-        bool pluginLoaded = loadPythonPlugin(plugin.c_str());
+        bool pluginLoaded = loadPythonPlugin(plugin.c_str(), false);
 
         if (!pluginLoaded) {
           string pluginSrc;
@@ -577,7 +577,7 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
           if (pluginsDataSet.get(oss.str(), pluginSrc)) {
             replaceAll(pluginSrc, "    ", "\t");
             QFileInfo fileInfo(plugin.c_str());
-            loadPythonPluginFromSrcCode(fileInfo.fileName().toStdString(), pluginSrc);
+            loadPythonPluginFromSrcCode(fileInfo.fileName().toStdString(), pluginSrc, false);
           }
         }
 
@@ -895,7 +895,7 @@ void PythonScriptView::loadScript() {
   loadScript(fileName);
 }
 
-bool PythonScriptView::loadScript(const QString &fileName) {
+bool PythonScriptView::loadScript(const QString &fileName, bool clear) {
   QFile file(findFile(fileName));
   QFileInfo fileInfo(file);
 
@@ -921,8 +921,10 @@ bool PythonScriptView::loadScript(const QString &fileName) {
   QString modulePath = fileInfo.absolutePath();
   pythonInterpreter->addModuleSearchPath(modulePath.toStdString());
   pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
-  viewWidget->consoleOutputWidget->clear();
-  pythonInterpreter->clearOutputBuffers();
+  if (clear) {
+    viewWidget->consoleOutputWidget->clear();
+    pythonInterpreter->clearOutputBuffers();
+  }
   clearErrorIndicators();
   pythonInterpreter->reloadModule(fileInfo.fileName().replace(".py", "").toStdString());
   indicateErrors();
@@ -1060,7 +1062,7 @@ QString PythonScriptView::findFile(const QString &filePath) {
   return "";
 }
 
-bool PythonScriptView::loadModule(const QString &fileName) {
+bool PythonScriptView::loadModule(const QString &fileName, bool clear) {
   QFile file(findFile(fileName));
 
   if (!file.exists())
@@ -1094,8 +1096,10 @@ bool PythonScriptView::loadModule(const QString &fileName) {
   codeEditor->analyseScriptCode(true);
 
   pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
-  viewWidget->consoleOutputWidget->clear();
-  pythonInterpreter->clearOutputBuffers();
+  if (clear) {
+    viewWidget->consoleOutputWidget->clear();
+    pythonInterpreter->clearOutputBuffers();
+  }
   clearErrorIndicators();
   reloadAllModules();
   saveImportAllScripts();
@@ -1263,7 +1267,7 @@ void PythonScriptView::loadPythonPlugin() {
   loadPythonPlugin(fileName);
 }
 
-bool PythonScriptView::loadPythonPlugin(const QString &fileName) {
+bool PythonScriptView::loadPythonPlugin(const QString &fileName, bool clear) {
 
   QFile file(findFile(fileName));
 
@@ -1305,7 +1309,7 @@ bool PythonScriptView::loadPythonPlugin(const QString &fileName) {
       editedPluginsClassName[pluginFile] = pluginClassName.toStdString();
       editedPluginsType[pluginFile] = pluginType.toStdString();
       editedPluginsName[pluginFile] = pluginName.toStdString();
-      registerPythonPlugin();
+      registerPythonPlugin(clear);
     }
   }
   else {
@@ -1316,7 +1320,7 @@ bool PythonScriptView::loadPythonPlugin(const QString &fileName) {
   return true;
 }
 
-bool PythonScriptView::loadPythonPluginFromSrcCode(const std::string &moduleName, const std::string &pluginSrcCode) {
+bool PythonScriptView::loadPythonPluginFromSrcCode(const std::string &moduleName, const std::string &pluginSrcCode, bool clear) {
   QString pluginType = "";
   QString pluginClass = "";
   QString pluginClassName = "";
@@ -1333,7 +1337,7 @@ bool PythonScriptView::loadPythonPluginFromSrcCode(const std::string &moduleName
       editedPluginsClassName[pluginFile] = pluginClassName.toStdString();
       editedPluginsType[pluginFile] = pluginType.toStdString();
       editedPluginsName[pluginFile] = pluginName.toStdString();
-      registerPythonPlugin();
+      registerPythonPlugin(clear);
       return true;
     }
   }
@@ -1582,7 +1586,7 @@ void PythonScriptView::newPythonPlugin() {
 }
 
 
-void PythonScriptView::registerPythonPlugin() {
+void PythonScriptView::registerPythonPlugin(bool clear) {
   int tabIdx = viewWidget->pluginsTabWidget->currentIndex();
 
   if (tabIdx == -1)
@@ -1602,7 +1606,10 @@ void PythonScriptView::registerPythonPlugin() {
   moduleName = moduleName.replace(".py", "");
 
   pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
-  viewWidget->consoleOutputWidget->clear();
+  if (clear) {
+    pythonInterpreter->clearOutputBuffers();
+    viewWidget->consoleOutputWidget->clear();
+  }
   clearErrorIndicators();
 
   pythonInterpreter->deleteModule(moduleName.toStdString());
