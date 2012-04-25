@@ -210,6 +210,9 @@ class ImportUCINET : public ImportModule {
 
 public :
   PLUGININFORMATIONS("UCINET dl","Patrick Mary","12/09/2011","Import UCINET","1.0","File")
+  virtual std::string fileExtension() const {
+    return "dl";
+  }
   ImportUCINET(const tlp::PluginContext* context):ImportModule(context),
     nbNodes(0), defaultMetric("weight"),
     n(0), nr(0), nc(0), nm(0), current(0),

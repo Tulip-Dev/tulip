@@ -439,6 +439,10 @@ class TlpJsonImport : public ImportModule, YajlProxy {
 public:
   PLUGININFORMATIONS("JSON Import", "Charles Huet", "18/05/2011", "Tulip JSON format", "1.0", "File")
 
+  virtual std::string fileExtension() const {
+    return "json";
+  }
+  
   TlpJsonImport(tlp::PluginContext* context) : ImportModule(context) {
     addInParameter<std::string>("file::filename", "");
   }

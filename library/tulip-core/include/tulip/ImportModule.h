@@ -50,6 +50,10 @@ public:
     }
   }
 
+  virtual std::string fileExtension() const {
+    return std::string();
+  }
+
   virtual std::string getGroup() const {
     return "Import";
   }
