@@ -325,7 +325,6 @@ public:
     }
 
     if(_parsingAttributes) {
-      std::cout << "reading " << value << "(" << _currentAttributeTypeName << ")" << std::endl;
 
       if(_currentAttributeTypeName.empty()) {
         _currentAttributeTypeName = value;
