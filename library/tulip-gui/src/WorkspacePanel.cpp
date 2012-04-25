@@ -394,6 +394,7 @@ void WorkspacePanel::setOverlayMode(bool m) {
     _view->graphicsView()->scene()->addItem(_overlayRect);
     _overlayRect->setZValue(30);
   }
+
   if (!m && _overlayRect != NULL) {
     delete _overlayRect;
     _overlayRect = NULL;

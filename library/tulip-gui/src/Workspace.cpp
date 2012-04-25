@@ -379,9 +379,11 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
   else if (ev->type() == QEvent::GraphicsSceneDragEnter || ev->type() == QEvent::GraphicsSceneDragMove) {
     QGraphicsSceneDragDropEvent* dragDropEv = static_cast<QGraphicsSceneDragDropEvent*>(ev);
     const QMimeData* mimedata = dragDropEv->mimeData();
+
     if (panelForScene(obj) != dragDropEv->source() && dynamic_cast<const PanelMimeType*>(mimedata) != NULL) {
       panelForScene(obj)->setOverlayMode(true);
     }
+
     return handleDragEnterEvent(ev, mimedata);
   }
   else if (ev->type() == QEvent::GraphicsSceneDrop) {

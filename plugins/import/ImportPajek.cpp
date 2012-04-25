@@ -106,7 +106,7 @@ public :
   virtual std::string fileExtension() const {
     return "net";
   }
-  
+
   ImportPajek(const tlp::PluginContext* context):ImportModule(context),
     expectedLine(NET_UNKNOWN) {
     addInParameter<string>("file::filename", paramHelp[0]);

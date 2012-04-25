@@ -441,7 +441,7 @@ public:
   virtual std::string fileExtension() const {
     return "json";
   }
-  
+
   TlpJsonImport(tlp::PluginContext* context) : ImportModule(context) {
     addInParameter<std::string>("file::filename", "");
   }
