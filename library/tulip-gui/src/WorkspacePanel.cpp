@@ -24,6 +24,7 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QApplication>
 #include <QtGui/QGraphicsProxyWidget>
+#include <QtGui/QGraphicsRectItem>
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QTabWidget>
 
@@ -68,13 +69,14 @@ public:
 // ========================
 
 WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
-  : QWidget(parent),
+  : QFrame(parent),
     _ui(new Ui::WorkspacePanel),
     _view(NULL),
     _viewConfigurationWidgets(NULL),
     _viewConfigurationExpanded(false),
     _currentInteractorConfigurationItem(NULL),
-    _progressItem(NULL) {
+    _progressItem(NULL),
+    _overlayRect(NULL) {
   _ui->setupUi(this);
   _ui->dragHandle->setPanel(this);
   connect(_ui->closeButton,SIGNAL(clicked()),this,SLOT(close()));
@@ -381,5 +383,19 @@ QPointF WorkspacePanel::configurationTabPosition(bool expanded) const {
     QTabWidget* tabWidget = static_cast<QTabWidget*>(_viewConfigurationWidgets->widget());
     int tabWidth = _viewConfigurationWidgets->size().width() - tabWidget->widget(0)->width();
     return QPointF(width() - tabWidth,10);
+  }
+}
+
+void WorkspacePanel::setOverlayMode(bool m) {
+  if (m && _overlayRect == NULL) {
+    _overlayRect = new QGraphicsRectItem(_view->graphicsView()->sceneRect());
+    _overlayRect->setBrush(QColor::fromHsv(0,0,0,50));
+    _overlayRect->setPen(QColor(67, 86, 108));
+    _view->graphicsView()->scene()->addItem(_overlayRect);
+    _overlayRect->setZValue(30);
+  }
+  if (!m && _overlayRect != NULL) {
+    delete _overlayRect;
+    _overlayRect = NULL;
   }
 }

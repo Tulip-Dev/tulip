@@ -323,6 +323,17 @@ void Workspace::setActivePanel(tlp::View* view) {
   updatePanels();
 }
 
+WorkspacePanel* Workspace::panelForScene(QObject *obj) {
+  WorkspacePanel* p = NULL;
+  foreach(WorkspacePanel* panel, _panels) {
+    if(panel->view()->graphicsView()->scene() == obj) {
+      p = panel;
+      break;
+    }
+  }
+  return p;
+}
+
 bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
   if (ev->type() == QEvent::ChildAdded || ev->type() == 70) {
     QObject* childObj = static_cast<QChildEvent*>(ev)->child();
@@ -366,20 +377,20 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
     return handleDropEvent(mimedata, p);
   }
   else if (ev->type() == QEvent::GraphicsSceneDragEnter || ev->type() == QEvent::GraphicsSceneDragMove) {
-    const QMimeData* mimedata = static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData();
+    QGraphicsSceneDragDropEvent* dragDropEv = static_cast<QGraphicsSceneDragDropEvent*>(ev);
+    const QMimeData* mimedata = dragDropEv->mimeData();
+    if (panelForScene(obj) != dragDropEv->source() && dynamic_cast<const PanelMimeType*>(mimedata) != NULL) {
+      panelForScene(obj)->setOverlayMode(true);
+    }
     return handleDragEnterEvent(ev, mimedata);
   }
   else if (ev->type() == QEvent::GraphicsSceneDrop) {
     const QMimeData* mimedata = static_cast<QGraphicsSceneDragDropEvent*>(ev)->mimeData();
-
-    WorkspacePanel* p = NULL;
-    foreach(WorkspacePanel* panel, _panels) {
-      if(panel->view()->graphicsView()->scene() == obj) {
-        p = panel;
-        break;
-      }
-    }
-    return handleDropEvent(mimedata, p);
+    panelForScene(obj)->setOverlayMode(false);
+    return handleDropEvent(mimedata, panelForScene(obj));
+  }
+  else if (ev->type() == QEvent::GraphicsSceneDragLeave) {
+    panelForScene(obj)->setOverlayMode(false);
   }
 
   return false;

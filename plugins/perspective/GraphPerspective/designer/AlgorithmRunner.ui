@@ -47,7 +47,7 @@ ExpandableGroupBox[root = &quot;true&quot; ][expanded = &quot;true&quot; ] {
 margin-left: 1ex;
 }
 ExpandableGroupBox[root = &quot;false&quot; ][expanded = &quot;true&quot; ] {
-margin-left: 4ex;
+margin-left: 1ex;
 }
 </string>
   </property>

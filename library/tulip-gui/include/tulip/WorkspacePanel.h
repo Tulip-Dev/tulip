@@ -20,7 +20,7 @@
 #define WORKSPACEPANEL_H
 
 #include <QtCore/QAbstractItemModel>
-#include <QtGui/QWidget>
+#include <QtGui/QFrame>
 #include <tulip/tulipconf.h>
 #include <tulip/DataSet.h>
 #include <tulip/SimplePluginProgress.h>
@@ -29,6 +29,7 @@ class QDragEnterEvent;
 class QGraphicsObject;
 class QPropertyAnimation;
 class QGraphicsProxyWidget;
+class QGraphicsRectItem;
 
 namespace Ui {
 class WorkspacePanel;
@@ -40,7 +41,7 @@ class View;
 class Interactor;
 class GraphHierarchiesModel;
 
-class TLP_QT_SCOPE WorkspacePanel : public QWidget, public tlp::SimplePluginProgress {
+class TLP_QT_SCOPE WorkspacePanel : public QFrame, public tlp::SimplePluginProgress {
   Q_OBJECT
   Q_PROPERTY(bool progressMode READ isProgressMode WRITE toggleProgressMode)
 
@@ -48,6 +49,7 @@ class TLP_QT_SCOPE WorkspacePanel : public QWidget, public tlp::SimplePluginProg
   tlp::View* _view;
   QString _viewName;
   QMap<QAction*, QWidget*> _actionTriggers;
+  QGraphicsRectItem* _overlayRect;
 
   QGraphicsProxyWidget* _viewConfigurationWidgets;
   bool _viewConfigurationExpanded;
@@ -71,6 +73,7 @@ public slots:
   void setCurrentInteractor(tlp::Interactor*);
   void setGraphsModel(tlp::GraphHierarchiesModel*);
   void viewGraphSet(tlp::Graph*);
+  void setOverlayMode(bool);
 
 signals:
   void drawNeeded();
