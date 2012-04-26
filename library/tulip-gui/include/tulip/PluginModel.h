@@ -24,18 +24,18 @@ public:
   virtual int columnCount ( const QModelIndex& parent = QModelIndex() ) const {
     return 1;
   }
-  
+
   int rowCount(const QModelIndex &parent = QModelIndex()) const {
     if(parent.isValid())
       return 0;
-    
+
     return PluginLister::instance()->availablePlugins<PLUGIN>().size();
   }
-  
+
   QModelIndex parent(const QModelIndex &child) const {
     return QModelIndex();
   }
-  
+
   QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const {
     if(parent.isValid())
       return QModelIndex();
@@ -46,6 +46,7 @@ public:
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const {
     if(index.row() < _list.size()) {
       std::string name(_list[index.row()]);
+
       if(role == Qt::DisplayRole) {
         return name.c_str();
       }
@@ -56,11 +57,11 @@ public:
         return pix;
       }
     }
-    
+
     return QVariant();
   }
 };
-  
+
 template<typename PLUGIN>
 class PluginModel : public tlp::TulipModel {
   struct TreeItem {
@@ -197,11 +198,13 @@ public:
     return QVariant();
   }
 
-  virtual Qt::ItemFlags flags ( const QModelIndex& index ) const{
+  virtual Qt::ItemFlags flags ( const QModelIndex& index ) const {
     Qt::ItemFlags result(QAbstractItemModel::flags(index));
+
     if(!index.parent().parent().isValid()) {
       result = Qt::ItemIsEnabled;
     }
+
     return result;
   }
 };

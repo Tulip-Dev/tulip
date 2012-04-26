@@ -33,8 +33,10 @@ GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _overvie
 
 GlMainView::~GlMainView() {
   delete _sceneConfigurationWidget;
+
   if(_overviewItem)
     delete _overviewItem;
+
   if(_overviewContextMenu)
     delete _overviewContextMenu;
 }
@@ -60,7 +62,7 @@ void GlMainView::drawOverview(bool generatePixmap) {
 
   }
 
-  if(_overviewContextMenu == NULL){
+  if(_overviewContextMenu == NULL) {
     graphicsView()->setContextMenuPolicy(Qt::ActionsContextMenu);
     QAction* viewSeparator = new QAction(trUtf8(""),this);
     viewSeparator->setSeparator(true);
@@ -112,6 +114,7 @@ void GlMainView::setOverviewVisible(bool display) {
   }
 
   _overviewVisible = display;
+
   if(_overviewVisible)
     drawOverview(true);
 }

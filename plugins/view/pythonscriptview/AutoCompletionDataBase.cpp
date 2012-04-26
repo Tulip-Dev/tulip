@@ -437,6 +437,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       else {
         functionAutoCompletionList[fullName].insert(varName);
       }
+
       continue;
     }
 
@@ -475,6 +476,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
           }
         }
       }
+
       continue;
     }
 
@@ -513,6 +515,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
         varToType[fullName][varName] = type;
       }
+
       continue;
     }
 
@@ -576,6 +579,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
           functionAutoCompletionList[fullName].insert(param.trimmed());
         }
       }
+
       continue;
     }
 
@@ -631,6 +635,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       if (moduleName != "") {
         apiDb->addApiEntry(moduleName + "." + className);
       }
+
       continue;
     }
 

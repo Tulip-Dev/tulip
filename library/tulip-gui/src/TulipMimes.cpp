@@ -19,6 +19,7 @@ void asLocal(QVariant var, DataSet& data, Graph* g) {
 void copyToLocal(DataSet& data, Graph* g) {
   if (!data.exist("result"))
     return;
+
   DataType* d = data.getData("result");
   QVariant var = TulipMetaTypes::dataTypeToQvariant(d,"");
   asLocal<DoubleProperty>(var,data,g);
@@ -38,6 +39,7 @@ void AlgorithmMimeType::run(Graph* g) const {
     qCritical() << _algorithm << trUtf8(": No graph selected");
     return;
   }
+
   Observable::holdObservers();
   DataSet dataSet = _params;
   std::pair<std::string,tlp::DataType*> entry;
@@ -58,7 +60,9 @@ void AlgorithmMimeType::run(Graph* g) const {
   PluginProgress* progress = Perspective::instance()->progress();
   bool result = g->applyAlgorithm(_algorithm.toStdString(),errorMessage,&dataSet,progress);
   delete progress;
+
   if (!result)
     qCritical() << _algorithm << ": " << errorMessage.c_str();
+
   Observable::unholdObservers();
 }

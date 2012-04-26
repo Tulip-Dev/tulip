@@ -12,8 +12,10 @@ SceneLayersModel::SceneLayersModel(GlScene* scene, QObject *parent): QAbstractIt
 QModelIndex SceneLayersModel::index(int row, int column,const QModelIndex &parent) const {
   if (!parent.isValid()) { // Top level: layers
     std::vector<std::pair<std::string, GlLayer*> > layers = _scene->getLayersList();
+
     if (row > layers.size())
       return QModelIndex();
+
     return createIndex(row,column,layers[row].second);
   }
 

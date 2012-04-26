@@ -848,7 +848,8 @@ void PythonCodeEditor::matchParens() {
 
 void PythonCodeEditor::resetExtraSelections() {
   if (selectedText() != "")
-      return;
+    return;
+
   QList<QTextEdit::ExtraSelection> selections;
   setExtraSelections(selections);
 }

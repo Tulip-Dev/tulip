@@ -177,6 +177,7 @@ void FiltersManagerCompareItem::elementChanged() {
       else {
         if (comboParams[c]->model() != NULL)
           comboParams[c]->model()->deleteLater();
+
         comboParams[c]->setModel(NULL);
       }
     }

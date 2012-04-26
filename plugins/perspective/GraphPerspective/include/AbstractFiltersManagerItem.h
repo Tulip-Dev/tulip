@@ -44,6 +44,7 @@ protected:
     else {
       if (table->model() != NULL)
         table->model()->deleteLater();
+
       table->setModel(NULL);
     }
 
