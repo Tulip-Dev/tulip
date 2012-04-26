@@ -6,6 +6,7 @@
 #include <tulip/Graph.h>
 #include <tulip/PropertyInterface.h>
 #include <QtGui/QFont>
+#include <QtGui/QIcon>
 #include <QtCore/QSet>
 
 namespace tlp {
