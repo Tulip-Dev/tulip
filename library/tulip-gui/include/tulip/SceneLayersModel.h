@@ -16,7 +16,7 @@ class TLP_QT_SCOPE SceneLayersModel : public QAbstractItemModel, tlp::Observable
 
 public:
   explicit SceneLayersModel(tlp::GlScene* scene, QObject *parent = 0);
-  
+
   QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
   QModelIndex parent(const QModelIndex &child) const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;

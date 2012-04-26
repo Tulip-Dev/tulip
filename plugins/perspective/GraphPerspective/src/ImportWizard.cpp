@@ -41,7 +41,7 @@ ImportWizard::ImportWizard(QWidget *parent): QWizard(parent), _ui(new Ui::Import
   _ui->importModules->setRootIndex(model->index(0, 0));
   _ui->importModules->expandAll();
   connect(_ui->importModules, SIGNAL(activated(QModelIndex)), this, SLOT(algorithmSelected(QModelIndex)));
-  
+
   _ui->parametersList->setItemDelegate(new TulipItemDelegate);
   connect(_ui->parametersList, SIGNAL(destroyed()), _ui->parametersList->itemDelegate(), SLOT(deleteLater()));
 
@@ -71,18 +71,18 @@ void ImportWizard::algorithmSelected(const QModelIndex& index) {
 }
 
 QString ImportWizard::algorithm() const {
-    if (_ui->importModules->selectionModel()->hasSelection())
-      return _ui->importModules->selectionModel()->selectedIndexes()[0].data().toString();
-  
+  if (_ui->importModules->selectionModel()->hasSelection())
+    return _ui->importModules->selectionModel()->selectedIndexes()[0].data().toString();
+
   return QString::null;
 }
 
 tlp::DataSet ImportWizard::parameters() const {
   ParameterListModel* model = dynamic_cast<ParameterListModel*>(_ui->parametersList->model());
-  
+
   if (model == NULL)
     return DataSet();
-  
+
   return model->parametersValues();
 }
 

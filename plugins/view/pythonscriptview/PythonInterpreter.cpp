@@ -405,7 +405,7 @@ bool PythonInterpreter::functionExists(const string &moduleName, const string &f
 
 bool PythonInterpreter::runString(const string &pyhtonCode, const std::string &scriptFilePath) {
   if (scriptFilePath != "")
-      mainScriptFileName = scriptFilePath.c_str();
+    mainScriptFileName = scriptFilePath.c_str();
 
 
   timer.start();
@@ -421,7 +421,7 @@ bool PythonInterpreter::runString(const string &pyhtonCode, const std::string &s
   releaseGIL();
 
   if (scriptFilePath != "")
-     mainScriptFileName = "";
+    mainScriptFileName = "";
 
   return  ret != -1;
 }
@@ -446,7 +446,7 @@ void PythonInterpreter::addModuleSearchPath(const std::string &path, const bool 
 bool PythonInterpreter::runGraphScript(const string &module, const string &function, tlp::Graph *graph, const std::string &scriptFilePath) {
 
   if (scriptFilePath != "")
-      mainScriptFileName = scriptFilePath.c_str();
+    mainScriptFileName = scriptFilePath.c_str();
 
 
   timer.start();
@@ -527,7 +527,7 @@ bool PythonInterpreter::runGraphScript(const string &module, const string &funct
   releaseGIL();
 
   if (scriptFilePath != "")
-      mainScriptFileName = "";
+    mainScriptFileName = "";
 
   return ret;
 }
