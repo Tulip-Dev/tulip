@@ -115,6 +115,8 @@ public :
   PythonCodeEditor(QWidget *parent=0);
   ~PythonCodeEditor();
 
+  QString getCleanCode() const;
+
   int lineNumberAreaWidth() const;
   void indicateScriptCurrentError(int lineNumber);
   void clearErrorIndicator();
@@ -229,6 +231,7 @@ protected slots:
   void highlightErrors();
   virtual void showAutoCompletionList(bool dotContext=false);
   virtual void updateAutoCompletionList(bool dotContext=false);
+  void highlightSelection();
 
 protected:
 

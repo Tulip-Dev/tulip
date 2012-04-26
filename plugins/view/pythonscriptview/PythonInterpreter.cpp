@@ -404,8 +404,9 @@ bool PythonInterpreter::functionExists(const string &moduleName, const string &f
 }
 
 bool PythonInterpreter::runString(const string &pyhtonCode, const std::string &scriptFilePath) {
-  if (consoleOuputHandler && scriptFilePath != "")
-    consoleOuputHandler->setMainScriptFileName(scriptFilePath.c_str());
+  if (scriptFilePath != "")
+      mainScriptFileName = scriptFilePath.c_str();
+
 
   timer.start();
   int ret = 0;
@@ -418,6 +419,10 @@ bool PythonInterpreter::runString(const string &pyhtonCode, const std::string &s
   }
 
   releaseGIL();
+
+  if (scriptFilePath != "")
+     mainScriptFileName = "";
+
   return  ret != -1;
 }
 
@@ -440,8 +445,9 @@ void PythonInterpreter::addModuleSearchPath(const std::string &path, const bool 
 
 bool PythonInterpreter::runGraphScript(const string &module, const string &function, tlp::Graph *graph, const std::string &scriptFilePath) {
 
-  if (consoleOuputHandler && scriptFilePath != "")
-    consoleOuputHandler->setMainScriptFileName(scriptFilePath.c_str());
+  if (scriptFilePath != "")
+      mainScriptFileName = scriptFilePath.c_str();
+
 
   timer.start();
 
@@ -459,6 +465,15 @@ bool PythonInterpreter::runGraphScript(const string &module, const string &funct
   // Load the module object
   PyObject *pModule = PyImport_Import(pName);
   Py_DECREF(pName);
+
+  // If the module is not __main__, reload it (needed to avoid errors when calling the runGraphScript
+  // function from Python)
+  if (module != "__main__") {
+    PyObject *pModuleReloaded = PyImport_ReloadModule(pModule);
+    Py_DECREF(pModule);
+    pModule = pModuleReloaded;
+  }
+
 
   // pDict is a borrowed reference
   PyObject *pDict = PyModule_GetDict(pModule);
@@ -494,6 +509,7 @@ bool PythonInterpreter::runGraphScript(const string &module, const string &funct
     runningScript = false;
     Py_DECREF(argTup);
     Py_DECREF(pArgs);
+    Py_DECREF(pModule);
 
     if (PyErr_Occurred()) {
       PyErr_Print();
@@ -509,6 +525,9 @@ bool PythonInterpreter::runGraphScript(const string &module, const string &funct
   }
 
   releaseGIL();
+
+  if (scriptFilePath != "")
+      mainScriptFileName = "";
 
   return ret;
 }
@@ -543,12 +562,12 @@ bool PythonInterpreter::reloadModule(const std::string &moduleName) {
   return runString(oss.str());
 }
 
-void PythonInterpreter::setConsoleWidget(QPlainTextEdit *console) {
+void PythonInterpreter::setConsoleWidget(QAbstractScrollArea *console) {
   if (consoleOuputHandler) {
     consoleOuputEmitter->setOutputActivated(true);
     consoleOuputEmitter->setConsoleWidget(console);
-    QObject::disconnect(consoleOuputEmitter, SIGNAL(consoleOutput(QPlainTextEdit*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QPlainTextEdit*, const QString &, bool)));
-    QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QPlainTextEdit*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QPlainTextEdit*, const QString &, bool)));
+    QObject::disconnect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea*, const QString &, bool)));
+    QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea*, const QString &, bool)));
   }
 }
 
@@ -556,8 +575,8 @@ void PythonInterpreter::setDefaultConsoleWidget() {
   if (consoleDialog) {
     consoleOuputEmitter->setOutputActivated(true);
     consoleOuputEmitter->setConsoleWidget(consoleDialog->consoleWidget);
-    QObject::disconnect(consoleOuputEmitter, SIGNAL(consoleOutput(QPlainTextEdit*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QPlainTextEdit*, const QString &, bool)));
-    QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QPlainTextEdit*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QPlainTextEdit*, const QString &, bool)), Qt::QueuedConnection);
+    QObject::disconnect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea*, const QString &, bool)));
+    QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea*, const QString &, bool)), Qt::QueuedConnection);
   }
 }
 
