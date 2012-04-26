@@ -38,7 +38,10 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
   void registerTriggers();
   void updateGrid();
 public:
-  PLUGININFORMATIONS("Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0", "relational")
+  PLUGININFORMATIONS("Node Link Diagram view", "Tulip Team", "16/04/2008",
+                     "The Node Link Diagram view is the standard representation of relational data, where entities are represented as nodes, and their relation as edges."
+                     "This view allows you to change the glyph used to represent nodes (e.g. square, round, donut), as well as the shape of the arrows indicating the direction of the relationship.",
+                     "1.0", "relational")
 
   NodeLinkDiagramComponent(const tlp::PluginContext* context = NULL);
 
