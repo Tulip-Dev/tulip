@@ -27,6 +27,7 @@
 #include <tulip/ForEach.h>
 
 #include <tulip/GraphHierarchiesModel.h>
+#include <tulip/PluginModel.h>
 
 using namespace tlp;
 using namespace std;
@@ -34,15 +35,13 @@ using namespace std;
 ImportWizard::ImportWizard(QWidget *parent): QWizard(parent), _ui(new Ui::ImportWizard) {
   _ui->setupUi(this);
 
-  QSet<QString> groups;
-  list<string> importModules = PluginLister::instance()->availablePlugins<ImportModule>();
+  PluginModel<tlp::ImportModule>* model = new PluginModel<tlp::ImportModule>();
 
-  for(list<string>::const_iterator it = importModules.begin(); it != importModules.end(); ++it) {
-    string algName(*it);
-    groups.insert(PluginLister::pluginInformations(algName)->group().c_str());
-  }
-
-  _ui->categoryList->addItems(groups.toList());
+  _ui->importModules->setModel(model);
+  _ui->importModules->setRootIndex(model->index(0, 0));
+  _ui->importModules->expandAll();
+  connect(_ui->importModules, SIGNAL(activated(QModelIndex)), this, SLOT(algorithmSelected(QModelIndex)));
+  
   _ui->parametersList->setItemDelegate(new TulipItemDelegate);
   connect(_ui->parametersList, SIGNAL(destroyed()), _ui->parametersList->itemDelegate(), SLOT(deleteLater()));
 
@@ -55,7 +54,8 @@ ImportWizard::~ImportWizard() {
   delete _ui;
 }
 
-void ImportWizard::algorithmSelected(const QString& alg) {
+void ImportWizard::algorithmSelected(const QModelIndex& index) {
+  QString alg(index.data().toString());
   _ui->parametersFrame->setVisible(!alg.isEmpty());
   QAbstractItemModel* oldModel = _ui->parametersList->model();
   QAbstractItemModel* newModel = NULL;
@@ -70,45 +70,22 @@ void ImportWizard::algorithmSelected(const QString& alg) {
   updateFinishButton();
 }
 
-void ImportWizard::groupSelected(const QString& group) {
-  _ui->algorithmList->clear();
-
-  list<string> importModules = PluginLister::instance()->availablePlugins<ImportModule>();
-
-  for(list<string>::const_iterator it = importModules.begin(); it != importModules.end(); ++it) {
-    string algName(*it);
-
-    if (group == PluginLister::pluginInformations(algName)->group().c_str())
-      _ui->algorithmList->addItem(algName.c_str());
-  }
-
-  _ui->algorithmFrame->setEnabled(_ui->algorithmList->count() > 0);
-  updateFinishButton();
-}
-
 QString ImportWizard::algorithm() const {
-  if (_ui->algorithmList->currentItem() != NULL)
-    return _ui->algorithmList->currentItem()->text();
-
-  return QString::null;
-}
-
-QString ImportWizard::group() const {
-  if (_ui->categoryList->currentItem() != NULL)
-    return _ui->categoryList->currentItem()->text();
-
+    if (_ui->importModules->selectionModel()->hasSelection())
+      return _ui->importModules->selectionModel()->selectedIndexes()[0].data().toString();
+  
   return QString::null;
 }
 
 tlp::DataSet ImportWizard::parameters() const {
   ParameterListModel* model = dynamic_cast<ParameterListModel*>(_ui->parametersList->model());
-
+  
   if (model == NULL)
     return DataSet();
-
+  
   return model->parametersValues();
 }
 
 void ImportWizard::updateFinishButton() {
-  button(QWizard::FinishButton)->setEnabled(!algorithm().isNull() || (!_ui->algorithmFrame->isEnabled() && !group().isNull()));
+  button(QWizard::FinishButton)->setEnabled(_ui->importModules->selectionModel()->hasSelection());
 }

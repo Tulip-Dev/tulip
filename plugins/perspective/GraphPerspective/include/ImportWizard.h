@@ -20,6 +20,7 @@
 #define IMPORTWIZARD_H
 
 #include <QtGui/QWizard>
+#include <QtCore/QModelIndex>
 #include <tulip/WithParameter.h>
 
 namespace Ui {
@@ -39,12 +40,10 @@ public:
   virtual ~ImportWizard();
 
   QString algorithm() const;
-  QString group() const;
   tlp::DataSet parameters() const;
 
 protected slots:
-  void groupSelected(const QString&);
-  void algorithmSelected(const QString&);
+  void algorithmSelected (const QModelIndex& index);
   void updateFinishButton();
 };
 
