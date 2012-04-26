@@ -100,6 +100,14 @@ public:
   static tlp::Plugin* getPluginObject(const std::string& name, tlp::PluginContext* context);
 
   template<typename PluginType>
+  bool pluginExists(const std::string &pluginName) {
+    const Plugin* p = pluginInformations(pluginName);
+    bool result = dynamic_cast<const PluginType*>(p) != NULL;
+    delete p;
+    return result;
+  }
+
+  template<typename PluginType>
   PluginType* getPluginObject(const std::string& name, tlp::PluginContext* context) {
     return dynamic_cast<PluginType*>(getPluginObject(name, context));
   }

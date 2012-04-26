@@ -52,12 +52,18 @@ class AlgorithmRunnerItem: public QWidget {
   QString _pluginName;
   tlp::Graph* _graph;
   bool _localMode;
+  QPointF _dragStartPosition;
 
 public:
   explicit AlgorithmRunnerItem(QString pluginName, QWidget* parent = 0);
   virtual ~AlgorithmRunnerItem();
 
   QString name() const;
+  QString python() const;
+
+protected:
+  virtual void mousePressEvent(QMouseEvent* ev);
+  virtual void mouseMoveEvent(QMouseEvent* ev);
 
 public slots:
   void setGraph(tlp::Graph*);

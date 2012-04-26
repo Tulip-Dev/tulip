@@ -19,8 +19,10 @@
 #include "AlgorithmRunner.h"
 
 #include <QtGui/QToolButton>
+#include <QtGui/QMouseEvent>
 
 #include <tulip/PluginModel.h>
+#include <tulip/TulipMimes.h>
 #include <tulip/ParameterListModel.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/Perspective.h>
@@ -55,7 +57,6 @@ void buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model, const QModelInd
   }
 }
 
-#include <QtGui/QToolButton>
 AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::AlgorithmRunner) {
   _ui->setupUi(this);
   QToolButton* localModeButton = new QToolButton(_ui->header);
@@ -196,4 +197,21 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
 void AlgorithmRunnerItem::setLocalMode(bool m) {
   _localMode = m;
+}
+
+void AlgorithmRunnerItem::mousePressEvent(QMouseEvent *ev) {
+  if (ev->button() == Qt::LeftButton)
+    _dragStartPosition = ev->pos();
+}
+
+void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
+  if (!(ev->buttons() & Qt::LeftButton) ||
+      (ev->pos() - _dragStartPosition).manhattanLength() < QApplication::startDragDistance())
+    return;
+
+  QDrag *drag = new QDrag(this);
+  drag->setPixmap(QPixmap::grabWidget(this));
+  AlgorithmMimeType* mimeData = new AlgorithmMimeType(name(),static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues());
+  drag->setMimeData(mimeData);
+  Qt::DropAction dropAction = drag->exec(Qt::CopyAction | Qt::MoveAction);
 }

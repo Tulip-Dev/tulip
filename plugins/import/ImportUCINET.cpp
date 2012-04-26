@@ -221,7 +221,7 @@ public :
     labels_known(false), title_found(false),
     expectedLine(DL_HEADER),
     embedding(DL_NONE), dataFormat(DL_FM) {
-    addInParameter<string>("file::filename", paramHelp[0]);
+    addInParameter<string>("file::filename", paramHelp[0],"");
     addInParameter<string>("Default metric", paramHelp[1], "weight");
   }
 
