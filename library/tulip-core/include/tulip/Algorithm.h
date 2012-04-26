@@ -59,6 +59,10 @@ public :
     }
   }
   virtual ~Algorithm() {}
+
+  std::string icon() const {
+    return ":/tulip/gui/icons/32/plugin_algorithm.png";
+  }
   /**
    * @brief Runs the algorithm.
    * It is a good practice to report progress through the PluginProgress, Even if your algorithm is very fast.

@@ -91,6 +91,9 @@ public:
   virtual std::string category() const {
     return "View";
   }
+  std::string icon() const {
+    return ":/tulip/gui/icons/32/plugin_view.png";
+  }
 
   /**
     @return the View's panel as a @c QGraphicsView instance.

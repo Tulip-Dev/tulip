@@ -49,6 +49,9 @@ public:
   virtual std::string category() const {
     return "ExportModule";
   }
+  std::string icon() const {
+    return ":/tulip/gui/icons/32/plugin_import_export.png";
+  }
 
   /**
    * @brief Gets the extension of the file format this export plugin saves to.

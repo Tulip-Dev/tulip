@@ -20,6 +20,7 @@
 
 #include <QtGui/QToolButton>
 #include <QtGui/QMouseEvent>
+#include <QtGui/QFontMetrics>
 
 #include <tulip/PluginModel.h>
 #include <tulip/TulipMimes.h>
@@ -210,7 +211,24 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
     return;
 
   QDrag *drag = new QDrag(this);
-  drag->setPixmap(QPixmap::grabWidget(this));
+  const Plugin* p = PluginLister::pluginInformations(_pluginName.toStdString().c_str());
+  QPixmap icon(QPixmap(p->icon().c_str()).scaled(64,64));
+  delete p;
+  QFont f;
+  f.setBold(true);
+  QFontMetrics metrics(f);
+  int textHeight = metrics.boundingRect(0,0,icon.width(),INT_MAX,Qt::AlignTop | Qt::AlignHCenter | Qt::TextWordWrap,_pluginName).height();
+  QPixmap pix(icon.width()+textHeight,icon.height()+textHeight);
+  pix.fill(Qt::white);
+  QPainter painter(&pix);
+  painter.drawPixmap(pix.width()/2 - icon.width()/2,0,icon.width(),icon.height(),icon);
+  painter.setFont(f);
+  painter.drawText(0,icon.height(),pix.width(),pix.height()-icon.height(),Qt::AlignCenter | Qt::AlignHCenter | Qt::TextWordWrap,_pluginName);
+  painter.setBrush(Qt::transparent);
+  painter.setPen(QColor(169, 169, 169));
+  painter.drawRect(0,0,pix.width()-1,pix.height()-1);
+  drag->setPixmap(pix);
+
   AlgorithmMimeType* mimeData = new AlgorithmMimeType(name(),static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues());
   drag->setMimeData(mimeData);
   Qt::DropAction dropAction = drag->exec(Qt::CopyAction | Qt::MoveAction);

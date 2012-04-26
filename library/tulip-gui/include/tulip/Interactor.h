@@ -56,6 +56,9 @@ public:
   virtual std::string category() const {
     return "Interactor";
   }
+  std::string icon() const {
+    return ":/tulip/gui/icons/32/plugin_interactor.png";
+  }
   /**
     @brief Checks the compatibility between the interactor and the given view (identified by its name).
     If this method returns true, it's very likely that the interactor will be installed on the associated view.

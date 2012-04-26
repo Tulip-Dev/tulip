@@ -59,6 +59,9 @@ public:
   virtual std::string category() const {
     return "Perspective";
   }
+  std::string icon() const {
+    return ":/tulip/gui/icons/32/plugin_controller.png";
+  }
 
   static void setInstance(tlp::Perspective*);
   static tlp::Perspective* instance();
