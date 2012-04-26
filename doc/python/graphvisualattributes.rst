@@ -151,6 +151,7 @@ Below is the exhaustive list of the constants for edges shapes:
 The shape of the edge extremities can also be modified through the **"viewSrcAnchorShape"** and **"viewTgtAnchorShape"** graph properties.
 Constants are also available for code readability, here is the exhaustive list :
 
+    * :const:`tlp.EdgeExtremityShape.None`
     * :const:`tlp.EdgeExtremityShape.Arrow`
     * :const:`tlp.EdgeExtremityShape.ChristmasTree`
     * :const:`tlp.EdgeExtremityShape.Circle`

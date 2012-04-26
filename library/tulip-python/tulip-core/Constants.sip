@@ -65,6 +65,7 @@ namespace tlp {
     public:
 
         enum EdgeExtremityShapes {
+            None=-1,
             Arrow=50,
             ChristmasTree=28,
             Circle=14,
@@ -100,7 +101,7 @@ namespace tlp {
 
 namespace tlp {
 
-    class NodeShape {
+    class NodeShape /NoDefaultCtors/ {
 
     public:
 
@@ -128,7 +129,7 @@ namespace tlp {
         };
     };
 
-    class EdgeShape {
+    class EdgeShape /NoDefaultCtors/ {
 
     public:
 
@@ -140,11 +141,12 @@ namespace tlp {
         };
     };
 
-    class EdgeExtrimityShape {
+    class EdgeExtrimityShape /NoDefaultCtors/ {
 
     public:
 
         enum EdgeExtremityShapes {
+            None=-1,
             Arrow=50,
             ChristmasTree=28,
             Circle=14,
@@ -163,7 +165,7 @@ namespace tlp {
         };
     };
 
-    class LabelPosition {
+    class LabelPosition /NoDefaultCtors/ {
 
     public:
 
