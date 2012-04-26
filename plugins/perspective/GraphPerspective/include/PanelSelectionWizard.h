@@ -31,26 +31,7 @@ class View;
 
 namespace Ui {
 class PanelSelectionWizard;
-class PanelSelectionItem;
 }
-
-class PanelSelectionItem: public QWidget {
-  Q_OBJECT
-  Ui::PanelSelectionItem* _ui;
-  QString _viewName;
-public:
-  explicit PanelSelectionItem(const tlp::Plugin* infos, QWidget* parent = 0);
-  virtual ~PanelSelectionItem();
-  QString viewName() const;
-signals:
-  void focused(bool);
-  void selected();
-public slots:
-  void setFocus(bool);
-protected:
-  void mousePressEvent(QMouseEvent *);
-  void mouseDoubleClickEvent(QMouseEvent *);
-};
 
 class PanelSelectionWizard : public QWizard {
   Q_OBJECT
@@ -59,11 +40,10 @@ class PanelSelectionWizard : public QWizard {
   Ui::PanelSelectionWizard* _ui;
   tlp::GraphHierarchiesModel* _model;
   tlp::View* _view;
-  PanelSelectionItem* _currentItem;
+  QString _currentItem;
 
   void createView();
   void clearView();
-  QList<PanelSelectionItem*> items() const;
 public:
   explicit PanelSelectionWizard(tlp::GraphHierarchiesModel* model, QWidget *parent = 0);
   virtual ~PanelSelectionWizard();
@@ -74,8 +54,8 @@ public:
   void setSelectedGraph(tlp::Graph*);
 
 protected slots:
-  void panelFocused(bool);
   void pageChanged(int);
+  void panelSelected (const QModelIndex& index);
 protected:
   void done(int result);
 };
