@@ -781,7 +781,7 @@ void PythonScriptView::executeCurrentScript() {
 }
 
 void PythonScriptView::indicateErrors() {
-  QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*in \(.*\)$");
+  QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*in (.*)$");
 
   map<string, vector<int> > errorLines;
   QString consoleOutput = pythonInterpreter->getStandardErrorOutput().c_str();

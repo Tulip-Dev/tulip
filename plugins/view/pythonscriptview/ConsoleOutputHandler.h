@@ -74,7 +74,7 @@ public slots :
     cursor.insertText(output, formt);
 
     if (textBrowser) {
-        QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*in \(.*\)$");
+        QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*in (.*)$");
         cursor = textBrowser->document()->find(rx, QTextCursor(textBrowser->document()->begin()));
         while (!cursor.isNull()) {
             rx.indexIn(cursor.selectedText());
