@@ -61,6 +61,9 @@ public:
   virtual std::string category() const {
     return "ImportModule";
   }
+  std::string icon() const {
+    return ":/tulip/gui/icons/32/plugin_import_export.png";
+  }
 
   /**
   * @brief The import operations should take place here.

@@ -42,6 +42,9 @@ public:
   virtual std::string category() const {
     return "EdgeExtremityGlyph";
   }
+  std::string icon() const {
+    return ":/tulip/gui/icons/32/plugin_glyph.png";
+  }
 
   EdgeExtremityGlyph(const tlp::PluginContext *context);
   virtual ~EdgeExtremityGlyph();

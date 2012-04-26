@@ -59,6 +59,9 @@ public:
   std::string category() const {
     return "Glyph";
   }
+  std::string icon() const {
+    return ":/tulip/gui/icons/32/plugin_glyph.png";
+  }
 
   Glyph(const tlp::PluginContext* context);
   virtual ~Glyph();
