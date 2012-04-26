@@ -4,3 +4,5 @@ welcomelogo.bmp
 DESTINATION ${TulipBitmapInstallDir}
 COMPONENT tulip_app
 )
+
+ADD_SUBDIRECTORY(colorscales)

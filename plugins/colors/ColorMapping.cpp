@@ -186,7 +186,7 @@ public:
     addInParameter<PropertyInterface*>("enumerated\nproperty",paramHelp[1],"viewMetric");
     addInParameter<StringCollection>(ELT_TYPE, paramHelp[2], ELT_TYPES);
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[3], TARGET_TYPES);
-    addInParameter<ColorScale>("colorScale",paramHelp[4],"((229, 40, 0, 200), (255, 170, 0, 200), (255, 255, 127, 200), (156, 161, 255, 200), (75, 75, 255, 200))");
+    addInParameter<ColorScale>("colorScale",paramHelp[4],"((75, 75, 255, 200), (156, 161, 255, 200), (255, 255, 127, 200), (255, 170, 0, 200), (229, 40, 0, 200))");
   }
 
   //=========================================================
