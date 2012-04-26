@@ -796,6 +796,7 @@ void PythonScriptView::indicateErrors() {
         int line = rx.cap(2).toInt();
         errorLines[file].push_back(line);
       }
+
       pos += rx.matchedLength();
     }
 
