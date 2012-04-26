@@ -28,7 +28,7 @@
 using namespace tlp;
 
 
-GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL) {
+GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL),_overviewContextMenu(NULL) {
 }
 
 GlMainView::~GlMainView() {
@@ -52,6 +52,20 @@ void GlMainView::drawOverview(bool generatePixmap) {
     addToScene(_overviewItem);
     _overviewItem->setPos(QPointF(0,0));
     generatePixmap=true;
+
+
+  }
+
+  if(_overviewContextMenu == NULL){
+    graphicsView()->setContextMenuPolicy(Qt::ActionsContextMenu);
+    QAction* viewSeparator = new QAction(trUtf8(""),this);
+    viewSeparator->setSeparator(true);
+    graphicsView()->addAction(viewSeparator);
+    _overviewContextMenu = new QAction(trUtf8("Overview visible"),this);
+    _overviewContextMenu->setCheckable(true);
+    _overviewContextMenu->setChecked(true);
+    connect(_overviewContextMenu,SIGNAL(triggered(bool)),this,SLOT(setOverviewVisible(bool)));
+    graphicsView()->addAction(_overviewContextMenu);
   }
 
   if(!_overviewItem->isVisible()) {
@@ -94,6 +108,8 @@ void GlMainView::setOverviewVisible(bool display) {
   }
 
   _overviewVisible = display;
+  if(_overviewVisible)
+    drawOverview(true);
 }
 
 bool GlMainView::overviewVisible() const {

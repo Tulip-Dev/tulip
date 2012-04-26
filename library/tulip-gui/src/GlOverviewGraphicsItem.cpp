@@ -21,6 +21,7 @@
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlMainView.h"
 #include "tulip/GlGraphComposite.h"
+#include <QtGui/QMenu>
 
 #include <QtGui/QGraphicsSceneMouseEvent>
 
