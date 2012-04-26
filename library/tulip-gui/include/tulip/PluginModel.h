@@ -6,9 +6,61 @@
 #include <QtCore/QMap>
 #include <QtCore/QSet>
 #include <QtCore/QString>
+#include <QtGui/QPixmap>
+#include <QtGui/QFont>
 
 namespace tlp {
 
+template<typename PLUGIN>
+class PluginListModel : public tlp::TulipModel {
+private:
+  QList<std::string> _list;
+public:
+  explicit PluginListModel(QObject *parent = 0): TulipModel(parent), _list(QList<std::string>::fromStdList(PluginLister::instance()->availablePlugins<PLUGIN>())) {
+  }
+  virtual ~PluginListModel() {
+  }
+
+  virtual int columnCount ( const QModelIndex& parent = QModelIndex() ) const {
+    return 1;
+  }
+  
+  int rowCount(const QModelIndex &parent = QModelIndex()) const {
+    if(parent.isValid())
+      return 0;
+    
+    return PluginLister::instance()->availablePlugins<PLUGIN>().size();
+  }
+  
+  QModelIndex parent(const QModelIndex &child) const {
+    return QModelIndex();
+  }
+  
+  QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const {
+    if(parent.isValid())
+      return QModelIndex();
+
+    return createIndex(row, column);
+  }
+
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const {
+    if(index.row() < _list.size()) {
+      std::string name(_list[index.row()]);
+      if(role == Qt::DisplayRole) {
+        return name.c_str();
+      }
+      else if (role == Qt::DecorationRole) {
+        const Plugin* p = PluginLister::pluginInformations(name);
+        QPixmap pix(p->icon().c_str());
+        delete p;
+        return pix;
+      }
+    }
+    
+    return QVariant();
+  }
+};
+  
 template<typename PLUGIN>
 class PluginModel : public tlp::TulipModel {
   struct TreeItem {
@@ -136,8 +188,21 @@ public:
 
     if (role == Qt::DisplayRole)
       return item->name;
+    else if (role == Qt::FontRole && !index.parent().parent().isValid()) {
+      QFont f;
+      f.setBold(true);
+      return f;
+    }
 
     return QVariant();
+  }
+
+  virtual Qt::ItemFlags flags ( const QModelIndex& index ) const{
+    Qt::ItemFlags result(QAbstractItemModel::flags(index));
+    if(!index.parent().parent().isValid()) {
+      result = Qt::ItemIsEnabled;
+    }
+    return result;
   }
 };
 }
