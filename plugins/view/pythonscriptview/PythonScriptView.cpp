@@ -781,7 +781,7 @@ void PythonScriptView::executeCurrentScript() {
 }
 
 void PythonScriptView::indicateErrors() {
-  QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
+  QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*in \(.*\)$");
 
   map<string, vector<int> > errorLines;
   QString consoleOutput = pythonInterpreter->getStandardErrorOutput().c_str();
@@ -791,9 +791,11 @@ void PythonScriptView::indicateErrors() {
     int pos = 0;
 
     while ((pos = rx.indexIn(outputLines[i], pos)) != -1) {
-      string file = rx.cap(1).toStdString();
-      int line = rx.cap(2).toInt();
-      errorLines[file].push_back(line);
+      if (rx.cap(3) != "tlpimporthook") {
+        string file = rx.cap(1).toStdString();
+        int line = rx.cap(2).toInt();
+        errorLines[file].push_back(line);
+      }
       pos += rx.matchedLength();
     }
 
