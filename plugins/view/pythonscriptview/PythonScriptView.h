@@ -104,7 +104,7 @@ private slots :
   void loadPythonPlugin();
   void savePythonPlugin();
 
-  void registerPythonPlugin();
+  void registerPythonPlugin(bool clear=true);
 
   void closeMainScriptTabRequested(int tab);
   void closeModuleTabRequested(int tab);
@@ -112,14 +112,14 @@ private slots :
 
 private :
 
-  bool loadScript(const QString &fileName);
-  void saveScript(int tabIdx) ;
-  bool loadModule(const QString &fileName);
+  bool loadScript(const QString &fileName, bool clear=true);
+  void saveScript(int tabIdx, bool clear=true);
+  bool loadModule(const QString &fileName, bool clear=true);
   bool loadModuleFromSrcCode(const std::string &moduleName, const std::string &moduleSrcCode);
   void saveModule();
   void saveModule(int tabIdx, const bool reload=false) ;
-  bool loadPythonPlugin(const QString &fileName);
-  bool loadPythonPluginFromSrcCode(const std::string &moduleName, const std::string &pluginSrcCode);
+  bool loadPythonPlugin(const QString &fileName, bool clear=true);
+  bool loadPythonPluginFromSrcCode(const std::string &moduleName, const std::string &pluginSrcCode, bool clear=true);
   void savePythonPlugin(int tabIdx) ;
   void saveAllModules();
   bool reloadAllModules() const;
@@ -127,6 +127,7 @@ private :
   void clearErrorIndicators() const;
   bool checkAndGetPluginInfosFromSrcCode(const QString &pluginSrcCode, QString &pluginName, QString &pluginClassName, QString &pluginType, QString &pluginClass);
   void reloadCodeInEditorIfNeeded(PythonCodeEditor *codeEditor, QTabWidget *tabWidget, int index);
+  QString findFile(const QString &filePath);
 
   PythonScriptViewWidget *viewWidget;
   PythonInterpreter *pythonInterpreter;

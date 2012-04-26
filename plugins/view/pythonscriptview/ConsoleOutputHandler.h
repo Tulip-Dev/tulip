@@ -21,6 +21,8 @@
 #define CONSOLEOUTPUTHANDLER_H_
 
 #include <QtGui/QPlainTextEdit>
+#include <QtGui/QTextBrowser>
+#include <QtGui/QTextBlock>
 #include <QtGui/QApplication>
 
 
@@ -34,16 +36,15 @@ public:
 
   ConsoleOutputHandler() {}
 
-  void setMainScriptFileName(const QString &fileName) {
-    mainScriptFileName = fileName;
-  }
-
 public slots :
 
-  void writeToConsole(QPlainTextEdit *consoleWidget, const QString &output, bool errorOutput) {
+  void writeToConsole(QAbstractScrollArea *consoleWidget, const QString &output, bool errorOutput) {
 
     if (!consoleWidget)
       return;
+
+    QTextBrowser *textBrowser = dynamic_cast<QTextBrowser*>(consoleWidget);
+    QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit*>(consoleWidget);
 
     QBrush brush(Qt::SolidPattern);
 
@@ -54,23 +55,42 @@ public slots :
       brush.setColor(Qt::black);
     }
 
-    QTextCharFormat formt = consoleWidget->textCursor().charFormat();
-    formt.setForeground(brush);
-    consoleWidget->moveCursor(QTextCursor::End);
-    QTextCursor cursor = consoleWidget->textCursor();
-    QString outputModfied(output);
+    QTextCursor cursor;
+    QTextCharFormat formt;
+    if (textEdit) {
+        formt = textEdit->textCursor().charFormat();
+        formt.setForeground(brush);
+        textEdit->moveCursor(QTextCursor::End);
+        cursor = textEdit->textCursor();
+    } else {
+        formt = textBrowser->textCursor().charFormat();
+        formt.setForeground(brush);
+        formt.setAnchor(false);
+        formt.setUnderlineStyle(QTextCharFormat::NoUnderline);
+        formt.setAnchorHref("");
+        textBrowser->moveCursor(QTextCursor::End);
+        cursor = textBrowser->textCursor();
+    }
+    cursor.insertText(output, formt);
 
-    if (errorOutput && mainScriptFileName != "") {
-      outputModfied.replace("<string>", mainScriptFileName);
+    if (textBrowser) {
+        QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*in (.*)$");
+        cursor = textBrowser->document()->find(rx, QTextCursor(textBrowser->document()->begin()));
+        while (!cursor.isNull()) {
+            rx.indexIn(cursor.selectedText());
+            if (rx.cap(1) != "<string>" && rx.cap(3) != "tlpimporthook") {
+                formt = cursor.charFormat();
+                formt.setAnchor(true);
+                formt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
+                formt.setAnchorHref(rx.cap(1) + ":" + rx.cap(2));
+                cursor.setCharFormat(formt);
+            }
+            cursor = textBrowser->document()->find(rx, cursor);
+        }
     }
 
-    cursor.insertText(outputModfied, formt);
     QApplication::processEvents();
   }
-
-private :
-
-  QString mainScriptFileName;
 
 };
 
@@ -88,7 +108,7 @@ public:
     }
   }
 
-  void setConsoleWidget(QPlainTextEdit *consoleWidget) {
+  void setConsoleWidget(QAbstractScrollArea *consoleWidget) {
     this->consoleWidget = consoleWidget;
   }
 
@@ -98,11 +118,11 @@ public:
 
 signals:
 
-  void consoleOutput(QPlainTextEdit *consoleWidget, const QString &output, bool errorOutput);
+  void consoleOutput(QAbstractScrollArea *consoleWidget, const QString &output, bool errorOutput);
 
 private :
 
-  QPlainTextEdit *consoleWidget;
+  QAbstractScrollArea *consoleWidget;
   bool outputActivated;
 };
 
