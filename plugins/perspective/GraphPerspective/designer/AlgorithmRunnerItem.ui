@@ -10,6 +10,12 @@
     <height>468</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="styleSheet">
    <string notr="true">#algFrame {
   border-top: 0px solid red;
@@ -27,6 +33,12 @@
    </property>
    <item>
     <widget class="QFrame" name="algFrame">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="spacing">
        <number>0</number>
@@ -138,9 +150,6 @@
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
-     </property>
      <property name="editTriggers">
       <set>QAbstractItemView::AllEditTriggers</set>
      </property>
@@ -166,19 +175,6 @@
       <number>27</number>
      </attribute>
     </widget>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>1</width>
-       <height>1</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

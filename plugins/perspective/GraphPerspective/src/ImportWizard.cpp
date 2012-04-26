@@ -35,7 +35,7 @@ using namespace std;
 ImportWizard::ImportWizard(QWidget *parent): QWizard(parent), _ui(new Ui::ImportWizard) {
   _ui->setupUi(this);
 
-  PluginModel<tlp::ImportModule>* model = new PluginModel<tlp::ImportModule>();
+  PluginModel<tlp::ImportModule>* model = new PluginModel<tlp::ImportModule>(_ui->importModules);
 
   _ui->importModules->setModel(model);
   _ui->importModules->setRootIndex(model->index(0, 0));

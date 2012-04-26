@@ -26,7 +26,7 @@ PropertiesEditor::~PropertiesEditor() {
 
 void PropertiesEditor::setGraph(tlp::Graph *g) {
   _graph=g;
-  QSortFilterProxyModel* model = new QSortFilterProxyModel();
+  QSortFilterProxyModel* model = new QSortFilterProxyModel(_ui->tableView);
   _sourceModel = new GraphPropertiesModel<PropertyInterface>(g,true);
   model->setSourceModel(_sourceModel);
   model->setFilterCaseSensitivity(Qt::CaseInsensitive);

@@ -36,12 +36,14 @@ protected:
 
     if (!algName.isNull()) {
       tlp::ParameterDescriptionList params = tlp::PluginLister::getPluginParameters(algName.toStdString());
-      table->setModel(new tlp::ParameterListModel(params,g));
+      table->setModel(new tlp::ParameterListModel(params,g,table));
 
       for (int i=0; i<table->model()->rowCount(); ++i)
         h += table->rowHeight(i);
     }
     else {
+      if (table->model() != NULL)
+        table->model()->deleteLater();
       table->setModel(NULL);
     }
 
