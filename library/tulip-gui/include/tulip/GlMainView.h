@@ -20,7 +20,8 @@
 #define Tulip_GLMAINVIEW_H
 
 #include <tulip/ViewWidget.h>
-#include <QtCore/QRectF>
+#include <QtGui/QAction>
+#include <QtGui/QMenu>
 
 class QGraphicsProxyWidget;
 
@@ -39,6 +40,7 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   tlp::SceneConfigWidget* _sceneConfigurationWidget;
   tlp::QuickAccessBar* _quickAccessBar;
   QGraphicsProxyWidget* _quickAccessBarItem;
+  QAction *_overviewContextMenu;
 
 public:
   GlMainView();

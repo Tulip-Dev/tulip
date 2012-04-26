@@ -50,6 +50,7 @@ private :
   void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
   void setScenePosition(QPointF pos);
 
+
   GlMainView *view;
   GlScene &baseScene;
   unsigned int width, height;

@@ -130,12 +130,6 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 
   graphicsView()->setContextMenuPolicy(Qt::ActionsContextMenu);
 
-  QAction* overviewAction = new QAction(trUtf8("Overview"),this);
-  overviewAction->setCheckable(true);
-  overviewAction->setChecked(overviewVisible);
-  connect(overviewAction,SIGNAL(triggered(bool)),this,SLOT(setOverviewVisible(bool)));
-  graphicsView()->addAction(overviewAction);
-
   QAction* viewSeparator = new QAction(trUtf8("View"),this);
   viewSeparator->setSeparator(true);
   graphicsView()->addAction(viewSeparator);
