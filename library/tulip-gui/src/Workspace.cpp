@@ -432,6 +432,7 @@ bool Workspace::handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel
   }
 
   else if (algorithmMime) {
+    algorithmMime->run(panel->view()->graph());
   }
 
   return graphMime != NULL || panelMime != NULL || algorithmMime != NULL;
