@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>879</width>
-    <height>482</height>
+    <height>557</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -164,10 +164,10 @@ border: 0px;
             <enum>QFrame::Plain</enum>
            </property>
            <property name="flow">
-            <enum>QListView::LeftToRight</enum>
+            <enum>QListView::TopToBottom</enum>
            </property>
            <property name="isWrapping" stdset="0">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="resizeMode">
             <enum>QListView::Adjust</enum>
@@ -179,7 +179,7 @@ border: 0px;
             <number>2</number>
            </property>
            <property name="viewMode">
-            <enum>QListView::IconMode</enum>
+            <enum>QListView::ListMode</enum>
            </property>
            <property name="uniformItemSizes">
             <bool>true</bool>
