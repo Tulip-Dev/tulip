@@ -38,7 +38,6 @@ designer/GraphPerspectiveMainWindow.ui
 designer/HeaderFrame.ui
 designer/ImportWizard.ui
 designer/PanelSelectionWizard.ui
-designer/PanelSelectionItem.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
