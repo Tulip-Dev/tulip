@@ -141,7 +141,7 @@ AlgorithmRunnerItem::~AlgorithmRunnerItem() {
 
 void AlgorithmRunnerItem::setGraph(Graph* g) {
   _graph = g;
-  _ui->parameters->setModel(new ParameterListModel(PluginLister::getPluginParameters(_pluginName.toStdString()),g));
+  _ui->parameters->setModel(new ParameterListModel(PluginLister::getPluginParameters(_pluginName.toStdString()),g,_ui->parameters));
 }
 
 QString AlgorithmRunnerItem::name() const {

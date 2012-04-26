@@ -11,7 +11,7 @@
 using namespace tlp;
 
 TableView::TableView(tlp::PluginContext *): ViewWidget(), _ui(new Ui::TableViewWidget), _tableViewConfiguration(NULL), _propertiesEditor(NULL),
-  _nodesModel(new NodesGraphModel), _edgesModel(new EdgesGraphModel) {
+  _nodesModel(new NodesGraphModel(this)), _edgesModel(new EdgesGraphModel(this)) {
 }
 
 TableView::~TableView() {
@@ -54,11 +54,11 @@ void TableView::setupWidget() {
   _propertiesEditor = new PropertiesEditor;
   connect(_tableViewConfiguration,SIGNAL(settingsChanged()),this,SLOT(readSettings()));
 
-  QSortFilterProxyModel* nodesModel = new GraphSortFilterProxyModel;
+  QSortFilterProxyModel* nodesModel = new GraphSortFilterProxyModel(_ui->nodesTable);
   nodesModel->setSourceModel(_nodesModel);
   nodesModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
   nodesModel->setFilterKeyColumn(-1);
-  QSortFilterProxyModel* edgesModel = new GraphSortFilterProxyModel;
+  QSortFilterProxyModel* edgesModel = new GraphSortFilterProxyModel(_ui->edgesTable);
   edgesModel->setSourceModel(_edgesModel);
   edgesModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
   edgesModel->setFilterKeyColumn(-1);

@@ -64,7 +64,7 @@ void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& 
 
   PROPTYPE* prop = val.value<PROPTYPE*>();
   QComboBox* combo = static_cast<QComboBox*>(w);
-  GraphPropertiesModel<PROPTYPE>* model = new GraphPropertiesModel<PROPTYPE>(g);
+  GraphPropertiesModel<PROPTYPE>* model = new GraphPropertiesModel<PROPTYPE>(g,false,combo);
   combo->setModel(model);
   combo->setCurrentIndex(model->rowOf(prop));
 }

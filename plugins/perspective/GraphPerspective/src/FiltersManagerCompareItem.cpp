@@ -173,9 +173,12 @@ void FiltersManagerCompareItem::elementChanged() {
 
     if (c == combo) {
       if (isComboAlgorithm(c))
-        comboParams[c]->setModel(new ParameterListModel(comboAlgorithmParams(c),_graph));
-      else
+        comboParams[c]->setModel(new ParameterListModel(comboAlgorithmParams(c),_graph,comboParams[c]));
+      else {
+        if (comboParams[c]->model() != NULL)
+          comboParams[c]->model()->deleteLater();
         comboParams[c]->setModel(NULL);
+      }
     }
   }
 }
