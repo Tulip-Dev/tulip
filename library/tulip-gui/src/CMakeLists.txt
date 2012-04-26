@@ -106,6 +106,7 @@ SET(SRCS
   GraphModel.cpp
   GraphElementModel.cpp
   SnapshotDialog.cpp
+  TulipMimes.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
