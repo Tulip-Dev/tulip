@@ -443,7 +443,7 @@ public:
   }
 
   TlpJsonImport(tlp::PluginContext* context) : ImportModule(context) {
-    addInParameter<std::string>("file::filename", "");
+    addInParameter<std::string>("file::filename", "","");
   }
 
   virtual bool importGraph() {

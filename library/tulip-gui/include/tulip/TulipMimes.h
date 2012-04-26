@@ -21,6 +21,7 @@
 #define _TLP_MIMES_H
 
 #include <QtCore/QMimeData>
+#include <tulip/DataSet.h>
 
 namespace tlp {
 class Graph;
@@ -44,27 +45,11 @@ private:
 };
 
 class AlgorithmMimeType : public QMimeData {
+  tlp::DataSet _params;
+  QString _algorithm;
 public:
-
-  void setAlgorithm(tlp::Algorithm* algorithm) {
-    _algorithm = algorithm;
-  }
-
-  tlp::Algorithm* algorithm() const {
-    return _algorithm;
-  }
-
-  void setDataSet(tlp::DataSet* dataset) {
-    _dataset = dataset;
-  }
-
-  tlp::DataSet* dataset() const {
-    return _dataset;
-  }
-
-private:
-  tlp::Algorithm* _algorithm;
-  tlp::DataSet* _dataset;
+  AlgorithmMimeType(QString algorithmName, const tlp::DataSet& data);
+  void run(tlp::Graph*) const;
 };
 
 

@@ -550,7 +550,7 @@ public:
     return "gml";
   }
   GMLImport(PluginContext* context):ImportModule(context) {
-    addInParameter<string>("file::filename",paramHelp[0]);
+    addInParameter<string>("file::filename",paramHelp[0],"");
   }
   ~GMLImport() {}
   bool importGraph() {

@@ -71,7 +71,7 @@ public:
     return "dot";
   }
   DotImport(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<string>("file::filename",paramHelp[0]);
+    addInParameter<string>("file::filename",paramHelp[0],"");
   }
   ~DotImport() {}
 

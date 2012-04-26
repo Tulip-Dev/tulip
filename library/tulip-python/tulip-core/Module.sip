@@ -76,18 +76,7 @@
 
 template <typename T>
 bool pluginExists(std::string pluginName) {
-    std::list<std::string> pluginsList = tlp::PluginLister::instance()->availablePlugins<T>();
-    if (typeid(T).name() == typeid(tlp::Algorithm).name()) {
-        std::list<std::string> propAlgoList = tlp::PluginLister::instance()->availablePlugins<tlp::PropertyAlgorithm>();
-        std::list<std::string> tmp;
-        for (std::list<std::string>::iterator it = pluginsList.begin() ; it != pluginsList.end() ; ++it) {
-            if (std::find(propAlgoList.begin(), propAlgoList.end(), *it) == propAlgoList.end()) {
-                tmp.push_back(*it);
-            }
-        }
-        pluginsList = tmp;
-    }
-    return std::find(pluginsList.begin(), pluginsList.end(), pluginName) != pluginsList.end();
+      return tlp::PluginLister::instance()->pluginExists<T>(pluginName);
 }
 
 extern int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n);

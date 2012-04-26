@@ -1014,7 +1014,7 @@ public:
   }
 
   TLPImport(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<std::string>("file::filename", paramHelp[0]);
+    addInParameter<std::string>("file::filename", paramHelp[0],"");
 //    addInParameter<DataSet>(DISPLAYING);
   }
   ~TLPImport() {}

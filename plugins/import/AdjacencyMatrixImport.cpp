@@ -86,7 +86,7 @@ class AdjacencyMatrixImport:public ImportModule {
 public:
   PLUGININFORMATIONS("Adjacency Matrix", "Auber David", "05/09/2008","","1.2","File")
   AdjacencyMatrixImport(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<string>("file::name",paramHelp[0]);
+    addInParameter<string>("file::name",paramHelp[0],"");
   }
   ~AdjacencyMatrixImport() {}
   vector<node> nodes;

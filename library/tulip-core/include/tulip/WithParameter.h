@@ -237,8 +237,8 @@ struct TLP_SCOPE WithParameter {
    **/
   template<typename T>
   void addInParameter(const std::string &name,
-                      const std::string &help=std::string(),
-                      const std::string &defaultValue = std::string(),
+                      const std::string &help,
+                      const std::string &defaultValue,
                       bool isMandatory = true) {
     parameters.template add<T>(name, help, defaultValue, isMandatory, IN_PARAM);
   }
