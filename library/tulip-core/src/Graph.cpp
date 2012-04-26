@@ -123,6 +123,7 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename) {
 
   bool result;
   DataSet data;
+  data.set("file", filename);
   result=tlp::exportGraph(graph, *os, "JSON Export", data, 0);
   delete os;
   return result;
@@ -159,8 +160,14 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   bool importSucessfull = newImportModule->importGraph();
 
   //If the import failed and we created the graph then delete the graph
-  if (!importSucessfull && newGraphP)
+  if (!importSucessfull && newGraphP) {
     delete newGraph;
+  } else {
+    std::string filename;
+    if (dataSet.get("file::filename", filename)) {
+      newGraph->setAttribute("file", filename);
+    }
+  }
 
   if (deletePluginProgress) delete tmpProgress;
 
@@ -194,6 +201,10 @@ bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &
   AlgorithmContext* context = new AlgorithmContext(sg, &dataSet, tmpProgress);
   ExportModule *newExportModule=PluginLister::instance()->getPluginObject<ExportModule>(format, context);
   assert(newExportModule!=0);
+  std::string filename;
+  if (dataSet.get("file", filename)) {
+    sg->setAttribute("file", filename);
+  }
   result=newExportModule->exportGraph(outputStream);
 
   if (deletePluginProgress) delete tmpProgress;

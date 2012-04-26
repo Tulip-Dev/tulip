@@ -298,6 +298,7 @@ void GraphPerspective::exportGraph() {
     std::ofstream out(fileName.toStdString().c_str());
     QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
     DataSet params;
+    params.set("file", fileName.toStdString());
     tlp::exportGraph(_graphs->currentGraph(), out, modules[extension.toStdString()], params);
   }
 }
