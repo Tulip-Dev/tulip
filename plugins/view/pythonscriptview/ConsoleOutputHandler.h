@@ -57,38 +57,44 @@ public slots :
 
     QTextCursor cursor;
     QTextCharFormat formt;
+
     if (textEdit) {
-        formt = textEdit->textCursor().charFormat();
-        formt.setForeground(brush);
-        textEdit->moveCursor(QTextCursor::End);
-        cursor = textEdit->textCursor();
-    } else {
-        formt = textBrowser->textCursor().charFormat();
-        formt.setForeground(brush);
-        formt.setAnchor(false);
-        formt.setUnderlineStyle(QTextCharFormat::NoUnderline);
-        formt.setAnchorHref("");
-        textBrowser->moveCursor(QTextCursor::End);
-        cursor = textBrowser->textCursor();
+      formt = textEdit->textCursor().charFormat();
+      formt.setForeground(brush);
+      textEdit->moveCursor(QTextCursor::End);
+      cursor = textEdit->textCursor();
     }
+    else {
+      formt = textBrowser->textCursor().charFormat();
+      formt.setForeground(brush);
+      formt.setAnchor(false);
+      formt.setUnderlineStyle(QTextCharFormat::NoUnderline);
+      formt.setAnchorHref("");
+      textBrowser->moveCursor(QTextCursor::End);
+      cursor = textBrowser->textCursor();
+    }
+
     cursor.insertText(output, formt);
 
     if (textBrowser) {
-        QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
-        QRegExp rx2("^.*File.*\"(.*)\".*line.*(\\d+).*in (.*)$");
-        cursor = textBrowser->document()->find(rx, QTextCursor(textBrowser->document()->begin()));
-        while (!cursor.isNull()) {
-            rx.indexIn(cursor.selectedText());
-            rx2.indexIn(cursor.selectedText());
-            if (rx.cap(1) != "<string>" && rx2.cap(3) != "tlpimporthook") {
-                formt = cursor.charFormat();
-                formt.setAnchor(true);
-                formt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
-                formt.setAnchorHref(rx.cap(1) + ":" + rx.cap(2));
-                cursor.setCharFormat(formt);
-            }
-            cursor = textBrowser->document()->find(rx, cursor);
+      QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
+      QRegExp rx2("^.*File.*\"(.*)\".*line.*(\\d+).*in (.*)$");
+      cursor = textBrowser->document()->find(rx, QTextCursor(textBrowser->document()->begin()));
+
+      while (!cursor.isNull()) {
+        rx.indexIn(cursor.selectedText());
+        rx2.indexIn(cursor.selectedText());
+
+        if (rx.cap(1) != "<string>" && rx2.cap(3) != "tlpimporthook") {
+          formt = cursor.charFormat();
+          formt.setAnchor(true);
+          formt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
+          formt.setAnchorHref(rx.cap(1) + ":" + rx.cap(2));
+          cursor.setCharFormat(formt);
         }
+
+        cursor = textBrowser->document()->find(rx, cursor);
+      }
     }
 
     QApplication::processEvents();
