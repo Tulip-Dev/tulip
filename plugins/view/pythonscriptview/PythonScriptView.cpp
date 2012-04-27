@@ -793,6 +793,7 @@ void PythonScriptView::indicateErrors() {
 
     while ((pos = rx.indexIn(outputLines[i], pos)) != -1) {
       rx2.indexIn(outputLines[i], pos);
+
       if (rx2.cap(3) != "tlpimporthook") {
         string file = rx.cap(1).toStdString();
         int line = rx.cap(2).toInt();
