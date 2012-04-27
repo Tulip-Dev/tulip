@@ -79,7 +79,7 @@ public slots :
         cursor = textBrowser->document()->find(rx, QTextCursor(textBrowser->document()->begin()));
         while (!cursor.isNull()) {
             rx.indexIn(cursor.selectedText());
-            rx2.indexIn(cursor.selectedText())
+            rx2.indexIn(cursor.selectedText());
             if (rx.cap(1) != "<string>" && rx2.cap(3) != "tlpimporthook") {
                 formt = cursor.charFormat();
                 formt.setAnchor(true);
