@@ -356,6 +356,7 @@ void MainController::setData(Graph *graph,DataSet dataSet) {
   Graph *lastViewedGraph=newGraph;
   Observable::unholdObservers();
   setCurrentGraph(newGraph);
+  clusterTreeWidget->setGraph(newGraph);
   // install predefined meta value calculators
   newGraph->getProperty<ColorProperty>("viewColor")->
   setMetaValueCalculator(&vColorCalc);
