@@ -507,7 +507,8 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
             if (mainScript != "") {
               QFileInfo fileInfo(mainScript.c_str());
               viewWidget->mainScriptsTabWidget->setTabText(mainScriptId, fileInfo.fileName());
-            } else
+            }
+            else
               viewWidget->mainScriptsTabWidget->setTabText(mainScriptId, "[no file]");
 
             viewWidget->mainScriptsTabWidget->setTabToolTip(mainScriptId, "string main script, don't forget to save the current graph or\n save the script to a file to not lose modifications to source code.");
@@ -1025,8 +1026,9 @@ void PythonScriptView::loadModule() {
 
 QString PythonScriptView::findFile(const QString &filePath) {
   if (filePath.isEmpty()) {
-      return "";
+    return "";
   }
+
   QFileInfo fileInfo(filePath);
   QString filepath = fileInfo.absolutePath();
   QString filename = fileInfo.fileName();
