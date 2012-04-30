@@ -20,6 +20,8 @@
 #include <iomanip>
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
+#include <tulip/Coord.h>
+#include <tulip/Size.h>
 #include "DataSetTest.h"
 
 using namespace std;
@@ -39,6 +41,21 @@ void DataSetTest::testSetGetBool() {
 
   dSet.set("bool", v1);
   CPPUNIT_ASSERT_EQUAL(true, dSet.get("bool", v2));
+
+  CPPUNIT_ASSERT_EQUAL(v1, v2);
+}
+
+//==========================================================
+void DataSetTest::testSetGetCoord() {
+  DataSet dSet;
+  CPPUNIT_ASSERT_EQUAL(false, dSet.exist("coord"));
+
+  Coord v1(4.4, 2, 1.1), v2;
+  CPPUNIT_ASSERT_EQUAL(false, dSet.get("coord", v1));
+  CPPUNIT_ASSERT(v1 != v2);
+
+  dSet.set("coord", v1);
+  CPPUNIT_ASSERT_EQUAL(true, dSet.get("coord", v2));
 
   CPPUNIT_ASSERT_EQUAL(v1, v2);
 }
@@ -69,6 +86,21 @@ void DataSetTest::testSetGetInt() {
 
   dSet.set("int", v1);
   CPPUNIT_ASSERT_EQUAL(true, dSet.get("int", v2));
+
+  CPPUNIT_ASSERT_EQUAL(v1, v2);
+}
+
+//==========================================================
+void DataSetTest::testSetGetSize() {
+  DataSet dSet;
+  CPPUNIT_ASSERT_EQUAL(false, dSet.exist("size"));
+
+  Size v1(4.4, 2, 1.1), v2;
+  CPPUNIT_ASSERT_EQUAL(false, dSet.get("size", v1));
+  CPPUNIT_ASSERT(v1 != v2);
+
+  dSet.set("size", v1);
+  CPPUNIT_ASSERT_EQUAL(true, dSet.get("size", v2));
 
   CPPUNIT_ASSERT_EQUAL(v1, v2);
 }
@@ -147,12 +179,16 @@ CppUnit::Test * DataSetTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : DataSet" );
   suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetBool",
                          &DataSetTest::testSetGetBool ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetCoord",
+                         &DataSetTest::testSetGetCoord ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetDouble",
                          &DataSetTest::testSetGetDouble ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetInt",
                          &DataSetTest::testSetGetInt ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetString",
+  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetSize",
                          &DataSetTest::testSetGetString ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetString",
+                         &DataSetTest::testSetGetSize ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetStruct",
                          &DataSetTest::testSetGetStruct ) );
   return suiteOfTests;
