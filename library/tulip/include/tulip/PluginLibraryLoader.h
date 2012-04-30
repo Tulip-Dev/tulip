@@ -23,6 +23,7 @@
 
 #include <tulip/PluginLoader.h>
 #include <tulip/tulipconf.h>
+#include <tulip/TlpTools.h>
 
 namespace tlp {
 
