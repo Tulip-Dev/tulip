@@ -219,7 +219,7 @@ Observable::Observable(): _n(node()), deleteMsgSent(false), queuedEvent(*this, E
   //cout << "[Observable node] created:" << n.id << "::" << this << endl;
 }
 //----------------------------------
-  Observable::Observable(const Observable &): _n(node()), deleteMsgSent(false), queuedEvent(*this, Event::TLP_INVALID) {
+Observable::Observable(const Observable &): _n(node()), deleteMsgSent(false), queuedEvent(*this, Event::TLP_INVALID) {
 #ifndef NDEBUG
   sent = received = 0;
 #endif
@@ -240,11 +240,11 @@ Observable::~Observable() {
   if (!deleteMsgSent)
     observableDeleted();
 
- #ifdef _OPENMP
+#ifdef _OPENMP
   #pragma omp critical(ObservableGraphUpdate)
 #endif
   {
-   if (!_oAlive[_n])
+    if (!_oAlive[_n])
       throw ObservableException("Observable object has already been deleted, possible double free!!!");
 
     //cout << "[Observable node] destructor:" << n.id  << "::" << this << endl;
@@ -289,7 +289,7 @@ void Observable::unholdObservers() {
       for( it = backupEvents.begin(); it != backupEvents.end(); ++it) {
         if (Observable::_oAlive[it->first]) {
           Observable *sender = static_cast<Observable *>(Observable::_oPointer[it->first]);
-	  QUEUED_EVENT(sender) = false;
+          QUEUED_EVENT(sender) = false;
         }
       }
 
