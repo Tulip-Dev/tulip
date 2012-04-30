@@ -117,6 +117,8 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
     CHECK_TYPE(tlp::StringType);
     CHECK_TYPE(tlp::ColorType);
     CHECK_TYPE(tlp::SizeType);
+    CHECK_TYPE(tlp::PointType);
+    CHECK_TYPE(tlp::LineType);
 
     if (type.compare(typeid(tlp::ColorScale).name()) == 0) {
       vector<Color> colors;

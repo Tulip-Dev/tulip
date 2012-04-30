@@ -25,7 +25,8 @@ SET(TULIP_LIBRARY_TESTS_SRCS
   StringVectorPropertyTest.cpp
   GraphToolsTest.cpp
   DoublePropertyTest.cpp
-  PlanarityTestTest.cpp)
+  PlanarityTestTest.cpp
+  WithParameterTest.cpp)
 
 ADD_EXECUTABLE(tulip_tests ${TULIP_LIBRARY_TESTS_SRCS})
 TARGET_LINK_LIBRARIES(tulip_tests ${LibTulipName} cppunit)
