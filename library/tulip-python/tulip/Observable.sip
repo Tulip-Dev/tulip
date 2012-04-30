@@ -49,36 +49,17 @@ class Event {
     };
     
     
-class  OLOObject {
-	
-public:
-	
-	tlp::node   getNode() const;
-
-	static tlp::OLOObject* getObject(tlp::node n);
-	static bool  isAlive(tlp::node n);
-
-protected:
-
-	OLOObject();
-	OLOObject(const tlp::OLOObject &);
-	virtual ~OLOObject();   
-};
-    
-class  Observable : tlp::OLOObject {
+class  Observable {
 %TypeHeaderCode
 #include <tulip/Observable.h>
 %End
-    public:
-    
-        Observable();
+public:
+	
+	static tlp::Observable* getObject(tlp::node n);
+	static bool  isAlive(tlp::node n);
 
-        virtual ~Observable();
 
-        virtual void treatEvents(const std::vector<tlp::Event> &events);
-        
-        virtual void treatEvent(const tlp::Event & /NoCopy/);
-
+public:
   		void addObserver(tlp::Observable *obs) const;
 
   		void addListener(tlp::Observable *obs) const;
@@ -87,20 +68,20 @@ class  Observable : tlp::OLOObject {
         
         void  removeListener(tlp::Observable  *obs) const;
 
-		unsigned int countObservers() const ;
-
-		unsigned int countListeners() const;
-
         static void holdObservers();
 
         static void unholdObservers();
 
         static unsigned int observersHoldCounter();
 
-    protected:
+protected:
 
+	Observable(const tlp::Observable &);
+        Observable();	    
+        virtual ~Observable();
+        virtual void treatEvents(const std::vector<tlp::Event> &events);
+        virtual void treatEvent(const tlp::Event & /NoCopy/);
         void sendEvent(const tlp::Event &);
-
         void observableDeleted();
 
 };

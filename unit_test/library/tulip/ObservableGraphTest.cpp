@@ -33,7 +33,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ObservableGraphTest );
 // these classes will capture
 // everything that will happen to our properties
 // synchronously or asynchronously
-class ObserverGTest :public Observer {
+class ObserverGTest :public Observable {
 public:
   std::set<Observable*> observables;
   bool print;
