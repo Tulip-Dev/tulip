@@ -33,8 +33,10 @@ public:
   void setUp() {}
   void tearDown() {}
   void testSetGetBool();
+  void testSetGetCoord();
   void testSetGetDouble();
   void testSetGetInt();
+  void testSetGetSize();
   void testSetGetString();
   void testSetGetStruct();
   static CppUnit::Test *suite();
