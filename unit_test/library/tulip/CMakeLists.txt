@@ -3,30 +3,30 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
 SET(TULIP_LIBRARY_TESTS_SRCS
   tuliplibtest.cpp
   importexporttest.cpp
-#   ExtendedClusterOperationTest.cpp
-#   VectorTest.cpp
-#   MatrixTest.cpp
-#   TestAlgorithmTest.cpp
-#   BooleanPropertyTest.cpp
-#   GraphPropertyTest.cpp
-#   SuperGraphTest.cpp
-#   TlpImportExportTest.cpp
-#   PluginsTest.cpp
-#   IdManagerTest.cpp
-#   DataSetTest.cpp
-#   ObservablePropertyTest.cpp
-#   MutableContainerTest.cpp
-#   ObservableGraphTest.cpp
-#   PushPopTest.cpp
-#   IntegerPropertyMinMaxSubgraphTest.cpp
-#   IntegerPropertyMinMaxUpdateTest.cpp
-#   TestPropertiesMinMaxAfterAddNode.cpp
-#   IsMetaEdgeTest.cpp
-#   stringpropertytest.cpp
-#   DoublePropertyTest.cpp
-#   PlanarityTestTest.cpp
-#   withparametertest.cpp
-#   FaceIteratorTest.cpp
+  ExtendedClusterOperationTest.cpp
+  VectorTest.cpp
+  MatrixTest.cpp
+  TestAlgorithmTest.cpp
+  BooleanPropertyTest.cpp
+  GraphPropertyTest.cpp
+  SuperGraphTest.cpp
+  TlpImportExportTest.cpp
+  PluginsTest.cpp
+  IdManagerTest.cpp
+  DataSetTest.cpp
+  ObservablePropertyTest.cpp
+  MutableContainerTest.cpp
+  ObservableGraphTest.cpp
+  PushPopTest.cpp
+  IntegerPropertyMinMaxSubgraphTest.cpp
+  IntegerPropertyMinMaxUpdateTest.cpp
+  TestPropertiesMinMaxAfterAddNode.cpp
+  IsMetaEdgeTest.cpp
+  stringpropertytest.cpp
+  DoublePropertyTest.cpp
+  PlanarityTestTest.cpp
+  withparametertest.cpp
+  FaceIteratorTest.cpp
   )
 
 ADD_EXECUTABLE(tulip_tests ${TULIP_LIBRARY_TESTS_SRCS})
