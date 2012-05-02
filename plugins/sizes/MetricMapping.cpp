@@ -185,42 +185,55 @@ public:
 
       // compute size of nodes
       Iterator<node> *itN=graph->getNodes();
+
       while(itN->hasNext()) {
-	node itn=itN->next();
-	double sizos = 0;
+        node itn=itN->next();
+        double sizos = 0;
 
-	if (proportional == AREA_PROPORTIONAL) {
-	  const double power = 1.0 / (float(xaxis) + float(yaxis) + float(zaxis));
-	  sizos = pow((entryMetric->getNodeValue(itn)-shift)*(max-min)/range, power);
-	}
-	else {
-	  sizos = min + (entryMetric->getNodeValue(itn)-shift)*(max-min)/range;
-	}
+        if (proportional == AREA_PROPORTIONAL) {
+          const double power = 1.0 / (float(xaxis) + float(yaxis) + float(zaxis));
+          sizos = pow((entryMetric->getNodeValue(itn)-shift)*(max-min)/range, power);
+        }
+        else {
+          sizos = min + (entryMetric->getNodeValue(itn)-shift)*(max-min)/range;
+        }
 
-	Size result=entrySize->getNodeValue(itn);
-	if (xaxis) result[0]=static_cast<float>(sizos);
-	if (yaxis) result[1]=static_cast<float>(sizos);
-	if (zaxis) result[2]=static_cast<float>(sizos);
+        Size result=entrySize->getNodeValue(itn);
 
-	sizeResult->setNodeValue(itn, result);
-	if ((iter % 100 == 0) &&
-	    (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
-	  delete itN;
-	  if (!mappingType) delete tmp;
-	  return false;
-	}
-	++iter;
-      } delete itN;
+        if (xaxis) result[0]=static_cast<float>(sizos);
+
+        if (yaxis) result[1]=static_cast<float>(sizos);
+
+        if (zaxis) result[2]=static_cast<float>(sizos);
+
+        sizeResult->setNodeValue(itn, result);
+
+        if ((iter % 100 == 0) &&
+            (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
+          delete itN;
+
+          if (!mappingType) delete tmp;
+
+          return false;
+        }
+
+        ++iter;
+      }
+
+      delete itN;
 
       edge e;
       forEach(e, graph->getEdges()) {
-	sizeResult->setEdgeValue(e, entrySize->getEdgeValue(e));
-	if ((iter % 100 == 0) &&
-	    (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
-	  if (!mappingType) delete tmp;
-	  return false;
-	}
-	++iter;
+        sizeResult->setEdgeValue(e, entrySize->getEdgeValue(e));
+
+        if ((iter % 100 == 0) &&
+            (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
+          if (!mappingType) delete tmp;
+
+          return false;
+        }
+
+        ++iter;
       }
     }
     else {
@@ -229,31 +242,40 @@ public:
       Iterator<edge> *itE=graph->getEdges();
 
       while(itE->hasNext()) {
-	edge ite=itE->next();
-	double sizos =
-	  min+(entryMetric->getEdgeValue(ite)-shift)*(max-min)/range;
-	Size result  = entrySize->getEdgeValue(ite);
-	result[0] = static_cast<float>(sizos);
-	result[1] = static_cast<float>(sizos);
-	sizeResult->setEdgeValue(ite, result);
-	if ((iter % 100 == 0) &&
-	    (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
-	  delete itE;
-	  if (!mappingType) delete tmp;
-	  return pluginProgress->state()!=TLP_CANCEL;
-	}
-	++iter;
-      } delete itE;
+        edge ite=itE->next();
+        double sizos =
+          min+(entryMetric->getEdgeValue(ite)-shift)*(max-min)/range;
+        Size result  = entrySize->getEdgeValue(ite);
+        result[0] = static_cast<float>(sizos);
+        result[1] = static_cast<float>(sizos);
+        sizeResult->setEdgeValue(ite, result);
+
+        if ((iter % 100 == 0) &&
+            (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
+          delete itE;
+
+          if (!mappingType) delete tmp;
+
+          return pluginProgress->state()!=TLP_CANCEL;
+        }
+
+        ++iter;
+      }
+
+      delete itE;
 
       node n;
       forEach(n, graph->getNodes()) {
-	sizeResult->setNodeValue(n, entrySize->getNodeValue(n));
-	if ((iter % 100 == 0) &&
-	    (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
-	  if (!mappingType) delete tmp;
-	  return pluginProgress->state()!=TLP_CANCEL;
-	}
-	++iter;
+        sizeResult->setNodeValue(n, entrySize->getNodeValue(n));
+
+        if ((iter % 100 == 0) &&
+            (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
+          if (!mappingType) delete tmp;
+
+          return pluginProgress->state()!=TLP_CANCEL;
+        }
+
+        ++iter;
       }
     }
 

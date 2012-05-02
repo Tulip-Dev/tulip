@@ -230,60 +230,67 @@ public:
 
       // loop on nodes
       if(targetType.getCurrent()==NODES_TARGET && graph->numberOfNodes()!=0) {
-	unsigned int maxIter = graph->numberOfNodes();
-	unsigned int iter = 0;
-	double minN,maxN;
-	minN=entryMetric->getNodeMin(graph);
-	maxN=entryMetric->getNodeMax(graph);
-	Iterator<node> *itN=graph->getNodes();
+        unsigned int maxIter = graph->numberOfNodes();
+        unsigned int iter = 0;
+        double minN,maxN;
+        minN=entryMetric->getNodeMin(graph);
+        maxN=entryMetric->getNodeMax(graph);
+        Iterator<node> *itN=graph->getNodes();
 
-	while(itN->hasNext()) {
-	  node itn=itN->next();
-	  double dd=entryMetric->getNodeValue(itn)-minN;
-	  colorResult->setNodeValue(itn, getColor(dd,maxN-minN));
-	  if ((iter % 100 == 0) &&
-	      (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
-	    if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
-	    delete itN;
-	    return pluginProgress->state()!=TLP_CANCEL;
-	  }
-	  ++iter;
-	}
+        while(itN->hasNext()) {
+          node itn=itN->next();
+          double dd=entryMetric->getNodeValue(itn)-minN;
+          colorResult->setNodeValue(itn, getColor(dd,maxN-minN));
 
-	delete itN;
+          if ((iter % 100 == 0) &&
+              (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
+            if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
+
+            delete itN;
+            return pluginProgress->state()!=TLP_CANCEL;
+          }
+
+          ++iter;
+        }
+
+        delete itN;
       }
 
       // loop on edges
       if(targetType.getCurrent()==EDGES_TARGET && graph->numberOfEdges()!=0) {
-	unsigned int maxIter = graph->numberOfEdges();
-	unsigned int iter = 0;
-	double minE,maxE;
-	minE = entryMetric->getEdgeMin(graph);
-	maxE = entryMetric->getEdgeMax(graph);
-	Iterator<edge> *itE=graph->getEdges();
+        unsigned int maxIter = graph->numberOfEdges();
+        unsigned int iter = 0;
+        double minE,maxE;
+        minE = entryMetric->getEdgeMin(graph);
+        maxE = entryMetric->getEdgeMax(graph);
+        Iterator<edge> *itE=graph->getEdges();
 
-	while(itE->hasNext()) {
-	  edge ite=itE->next();
-	  double dd=entryMetric->getEdgeValue(ite)-minE;
-	  colorResult->setEdgeValue(ite, getColor(dd,maxE-minE));
-	  if ((iter % 100 == 0) &&
-	      (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
-	    if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
-	    delete itE;
-	    return pluginProgress->state()!=TLP_CANCEL;
-	  }
-	  ++iter;
-	}
+        while(itE->hasNext()) {
+          edge ite=itE->next();
+          double dd=entryMetric->getEdgeValue(ite)-minE;
+          colorResult->setEdgeValue(ite, getColor(dd,maxE-minE));
 
-	delete itE;
+          if ((iter % 100 == 0) &&
+              (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
+            if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
+
+            delete itE;
+            return pluginProgress->state()!=TLP_CANCEL;
+          }
+
+          ++iter;
+        }
+
+        delete itE;
       }
-    
-    if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
+
+      if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
     }
     else {
       unsigned int maxIter = (targetType.getCurrent()==NODES_TARGET) ?
-	graph->numberOfNodes() : graph->numberOfEdges();
+                             graph->numberOfNodes() : graph->numberOfEdges();
       unsigned int iter = 0;
+
       for(vector<pair<string,Color> >::iterator it =
             enumeratedMappingResultVector.begin();
           it!=enumeratedMappingResultVector.end(); ++it) {
@@ -294,11 +301,13 @@ public:
             colorResult->setNodeValue(node(*itE),(*it).second);
           else
             colorResult->setEdgeValue(edge(*itE),(*it).second);
-	  if ((iter % 100 == 0) &&
-	      (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
-	    return pluginProgress->state()!=TLP_CANCEL;
-	  }
-	  ++iter;
+
+          if ((iter % 100 == 0) &&
+              (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
+            return pluginProgress->state()!=TLP_CANCEL;
+          }
+
+          ++iter;
         }
       }
     }
