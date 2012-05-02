@@ -11,8 +11,8 @@ if [ -f tlp_diff_arg2.tlp ]; then
 fi
 
 # remove tlp, date, comments
-sed '/(tlp /,/Tulip.")/d' $1 > tlp_diff_arg1.tlp
-sed '/(tlp /,/Tulip.")/d' $2 > tlp_diff_arg2.tlp
+sed -e '/(tlp /,/Tulip.")/d' -e '/(string "file" "/,0d' $1 > tlp_diff_arg1.tlp
+sed -e '/(tlp /,/Tulip.")/d' -e '/(string "file" "/,0d' $2 > tlp_diff_arg2.tlp
 
 # and controller description if needed
 if [ "$TLP_DIFF_CONTROLLER" = "NO" ]; then
@@ -27,6 +27,6 @@ diff tlp_diff_arg1.tlp tlp_diff_arg2.tlp
 ok=$?
 
 # remove created files
-rm tlp_diff_arg1.tlp tlp_diff_arg2.tlp
+rm tlp_diff_arg*.tlp
 
 exit $ok
