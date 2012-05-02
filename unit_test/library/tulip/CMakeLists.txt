@@ -1,36 +1,21 @@
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
 
-SET(TULIP_LIBRARY_TESTS_SRCS
-  tuliplibtest.cpp
-  importexporttest.cpp
-  ExtendedClusterOperationTest.cpp
-  VectorTest.cpp
-  MatrixTest.cpp
-  TestAlgorithmTest.cpp
-  BooleanPropertyTest.cpp
-  GraphPropertyTest.cpp
-  SuperGraphTest.cpp
-  TlpImportExportTest.cpp
-  PluginsTest.cpp
-  IdManagerTest.cpp
-  DataSetTest.cpp
-  ObservablePropertyTest.cpp
-  MutableContainerTest.cpp
-  ObservableGraphTest.cpp
-  PushPopTest.cpp
-  IntegerPropertyMinMaxSubgraphTest.cpp
-  IntegerPropertyMinMaxUpdateTest.cpp
-  TestPropertiesMinMaxAfterAddNode.cpp
-  IsMetaEdgeTest.cpp
-  stringpropertytest.cpp
-  DoublePropertyTest.cpp
-  PlanarityTestTest.cpp
-  withparametertest.cpp
-  FaceIteratorTest.cpp
-  )
+MACRO(UNIT_TEST file)
 
-ADD_EXECUTABLE(tulip_tests ${TULIP_LIBRARY_TESTS_SRCS})
-TARGET_LINK_LIBRARIES(tulip_tests ${LibTulipCoreName} cppunit)
+  SET(TEST_NAME "pwet.cpp")
+  STRING(REPLACE ".cpp" "" TEST_NAME ${file})
+  ADD_EXECUTABLE(${TEST_NAME} ${file} tuliplibtest.cpp )
+  TARGET_LINK_LIBRARIES(${TEST_NAME} ${LibTulipCoreName} cppunit)
+  ADD_TEST(${TEST_NAME} ${TEST_NAME})
+
+ENDMACRO(UNIT_TEST)
+
+# SET(TULIP_LIBRARY_TESTS_SRCS
+#   tuliplibtest.cpp 
+#   )
+
+# ADD_EXECUTABLE(tulip_tests ${TULIP_LIBRARY_TESTS_SRCS})
+# TARGET_LINK_LIBRARIES(tulip_tests ${LibTulipCoreName} cppunit)
 
 ADD_LIBRARY(testPlugin SHARED testPlugin.cpp)
 SET_TARGET_PROPERTIES(testPlugin 
@@ -48,6 +33,31 @@ ADD_CUSTOM_TARGET(copyTestData ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CU
 ADD_CUSTOM_TARGET(copyTestData2 ALL ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/TlpImportExportTest.cpp ${CMAKE_CURRENT_BINARY_DIR}/TlpImportExportTest.cpp )
 
 ENABLE_TESTING()
-ADD_TEST(TulipLibraryTestSuite tulip_tests)
-SET_TESTS_PROPERTIES(TulipLibraryTestSuite PROPERTIES DEPENDS copyTestData)
+
+UNIT_TEST(importexporttest.cpp)
+UNIT_TEST(ExtendedClusterOperationTest.cpp)
+UNIT_TEST(VectorTest.cpp)
+UNIT_TEST(MatrixTest.cpp)
+UNIT_TEST(TestAlgorithmTest.cpp)
+UNIT_TEST(BooleanPropertyTest.cpp)
+UNIT_TEST(GraphPropertyTest.cpp)
+UNIT_TEST(SuperGraphTest.cpp)
+UNIT_TEST(TlpImportExportTest.cpp)
+UNIT_TEST(IdManagerTest.cpp)
+UNIT_TEST(DataSetTest.cpp)
+UNIT_TEST(ObservablePropertyTest.cpp)
+UNIT_TEST(MutableContainerTest.cpp)
+UNIT_TEST(ObservableGraphTest.cpp)
+UNIT_TEST(PushPopTest.cpp)
+UNIT_TEST(IntegerPropertyMinMaxSubgraphTest.cpp)
+UNIT_TEST(IntegerPropertyMinMaxUpdateTest.cpp)
+UNIT_TEST(TestPropertiesMinMaxAfterAddNode.cpp)
+UNIT_TEST(IsMetaEdgeTest.cpp)
+UNIT_TEST(stringpropertytest.cpp)
+UNIT_TEST(DoublePropertyTest.cpp)
+UNIT_TEST(PlanarityTestTest.cpp)
+UNIT_TEST(withparametertest.cpp)
+# UNIT_TEST(FaceIteratorTest.cpp)
+UNIT_TEST(PluginsTest.cpp)
+SET_TESTS_PROPERTIES(PluginsTest PROPERTIES DEPENDS copyTestData)
 # ADD_DEPENDENCIES(TulipLibraryTestSuite copyTestData)
