@@ -33,6 +33,7 @@ class PlanarityTestTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(planarGraphsEmbedding);
   CPPUNIT_TEST(planarMetaGraphsEmbedding);
   CPPUNIT_TEST(planarEmbeddingFromLayoutGraphs);
+  CPPUNIT_TEST(emptyGraph);
   CPPUNIT_TEST_SUITE_END();
 public:
   void setUp();
@@ -42,6 +43,7 @@ public:
   void planarGraphsEmbedding();
   void planarMetaGraphsEmbedding();
   void planarEmbeddingFromLayoutGraphs();
+  void emptyGraph();
 private:
   tlp::Graph *graph;
 };
