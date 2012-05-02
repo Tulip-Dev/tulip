@@ -381,6 +381,9 @@ private:
   */
   static bool init();
 };
+
+typedef _DEPRECATED Observable Observer; 	 
+
 /*@}*/
 }
 
