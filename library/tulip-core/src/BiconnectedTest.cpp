@@ -159,6 +159,9 @@ void BiconnectedTest::connect(Graph *graph, vector<edge> &addedEdges) {
 }
 //=================================================================
 bool BiconnectedTest::compute(const tlp::Graph* graph) {
+  if(graph->numberOfNodes() == 0) {
+    return true;
+  }
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     return resultsBuffer[(unsigned long)graph];
 

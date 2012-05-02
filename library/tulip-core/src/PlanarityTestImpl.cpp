@@ -40,6 +40,10 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
   else
     embed = false;
 
+  if(sg->numberOfNodes() ==0) {
+    return true;
+  }
+
   init();
   int nbOfNodes = sg->numberOfNodes();
   preProcessing(sg);
