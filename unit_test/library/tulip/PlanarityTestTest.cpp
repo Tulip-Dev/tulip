@@ -196,3 +196,9 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
   delete graph;
   qWarning() << "==================================" << endl;*/
 }
+
+void PlanarityTestTest::emptyGraph() {
+ graph = tlp::newGraph();
+ CPPUNIT_ASSERT(PlanarityTest::isPlanar(graph));
+ delete graph;
+}
