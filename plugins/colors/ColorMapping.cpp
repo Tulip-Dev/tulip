@@ -217,6 +217,8 @@ public:
     if (metric == NULL)
       metric = graph->getProperty<DoubleProperty>("viewMetric");
 
+    pluginProgress->showPreview(false);
+
     if (eltTypes.getCurrent()!=ENUMERATED_ELT) {
       if (eltTypes.getCurrent()==LINEAR_ELT) {
         entryMetric = metricS;
