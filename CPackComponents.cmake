@@ -148,3 +148,6 @@ BUNDLE_DEFINE_COMPONENT(TOLABELS "To labels" " " "Plugins")
 BUNDLE_DEFINE_COMPONENT(GRAPHPERSPECTIVE "Graph hierarchy analysis" " " "Plugins")
 BUNDLE_DEFINE_COMPONENT(TABLEVIEW "Spreadsheet view" " " "Plugins")
 
+IF(APPLE)
+BUNDLE_DEFINE_COMPONENT(MAC_BUNDLE "Mac Bundle" " " "System files")
+ENDIF(APPLE)

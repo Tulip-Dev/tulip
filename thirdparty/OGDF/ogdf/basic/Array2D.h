@@ -316,7 +316,7 @@ float Array2D<E>::det()
 	  }
 	}
       }
-      determinant += pow(-1,(a+column)) * (*this)(a,column) * remMatrix.det();
+      determinant += pow((float)-1,(a+column)) * (*this)(a,column) * remMatrix.det();
     }
   }  
   return determinant;

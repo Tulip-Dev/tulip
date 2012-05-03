@@ -22,6 +22,7 @@
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
+#include <QtDBus/QDBusAbstractAdaptor>
 class QByteArray;
 template<class T> class QList;
 template<class Key, class Value> class QMap;

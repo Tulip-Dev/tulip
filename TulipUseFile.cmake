@@ -47,6 +47,7 @@ ENDMACRO(SET_COMPILER_OPTIONS)
 ## -----------------------------------------------------------------------------------------------
 ## General macros
 ## -----------------------------------------------------------------------------------------------
+IF(NOT APPLE)
 FUNCTION(install)
   IF(TULIP_GENERATE_PLUGINSERVER)
 
@@ -106,6 +107,8 @@ FUNCTION(TARGET_LINK_LIBRARIES)
   SET(BUNDLE_TARGET_DEPS_${LIB} ${BUNDLE_TARGET_DEPS_${LIB}} ${DEPS} CACHE INTERNAL "" FORCE)
   _target_link_libraries(${ARGN})
 ENDFUNCTION(TARGET_LINK_LIBRARIES)
+
+ENDIF(NOT APPLE)
 
 MACRO(BUNDLE_INIT)
   FOREACH(T ${BUNDLE_TARGETS})

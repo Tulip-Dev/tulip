@@ -34,7 +34,7 @@ SET_COMPILER_OPTIONS()
 IF(APPLE)
   FUNCTION(ADD_LIBRARY name)
     _ADD_LIBRARY(${name} ${ARGN})
-    SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_NAME_DIR "@loader_path/../Frameworks")
+    SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_NAME_DIR "@loader_path/../lib")
   ENDFUNCTION()
 ENDIF(APPLE)
 
@@ -91,7 +91,7 @@ SET(QT_USE_QTXML true)
 SET(QT_USE_QTNETWORK true)
 SET(QT_USE_QTWEBKIT true)
 SET(QT_USE_QTTEST true)
-IF (NOT WIN32)
+IF(NOT WIN32)
 SET(QT_USE_QTDBUS true)
 ELSE()
 SET(QT_QTDBUS_LIBRARY QtDBus4)
@@ -230,23 +230,12 @@ SET(Tulip3CompatBuildInclude ${PROJECT_BINARY_DIR}/library/tulip3-compat/include
 ## -----------------------------------------------------------------------------------------------
 ## Install paths
 ## -----------------------------------------------------------------------------------------------
-IF(APPLE)
-SET(TulipAppleContentsDir Tulip-${TulipVersion}.app/Contents/)
-SET(TulipBinInstallDir ${TulipAppleContentsDir}MacOS/)
-SET(TulipLibInstallDir ${TulipAppleContentsDir}Frameworks/)
-SET(TulipIncludeInstallDir ${TulipAppleContentsDir}include/)
-SET(TulipShareInstallDir ${TulipAppleContentsDir}share/tulip)
-SET(TulipPluginsInstallDir ${TulipAppleContentsDir}lib/tulip/)
-SET(TulipBitmapInstallDir ${TulipShareInstallDir}/bitmaps/)
-SET(TulipAppleResourcesDir ${TulipAppleContentsDir}Resources/)
-ELSE()
 SET(TulipLibInstallDir lib/)
 SET(TulipPluginsInstallDir ${TulipLibInstallDir}/tulip/)
 SET(TulipBinInstallDir bin/)
 SET(TulipIncludeInstallDir include/)
 SET(TulipShareInstallDir share/tulip)
 SET(TulipBitmapInstallDir ${TulipShareInstallDir}/bitmaps/)
-ENDIF()
 
 ## -----------------------------------------------------------------------------------------------
 ## Disable deprecated compilation output

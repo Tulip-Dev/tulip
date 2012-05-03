@@ -1,7 +1,7 @@
 #include <tulip/YajlFacade.h>
 
-#include <QFile>
-#include <malloc.h>
+#include <QtCore/QFile>
+#include <stdlib.h>
 #include <QtCore/QDebug>
 
 static int parse_null(void *ctx) {
