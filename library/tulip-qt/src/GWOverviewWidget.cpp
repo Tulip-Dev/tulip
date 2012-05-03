@@ -156,7 +156,7 @@ void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {
 
   if (isVisible() || drawIfNotVisible) {
 
-#ifdef __APPLE__
+#if defined(__APPLE__) && defined(QT_MAC_USE_COCOA)
 
     // This code is here to bug fix not visible overview problem on MACOSX with Qt 4.7
     // We have to test with next version of Qt to check if the problem exist
@@ -167,7 +167,7 @@ void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {
     }
 
 #if (QT_VERSION > QT_VERSION_CHECK(4, 7, 1))
-#warning Qt fix must be tested with this version of Qt, see GWOverviewWidget l.150
+#warning An APPLE Qt specific fix must be tested with this version of Qt, see GWOverviewWidget::draw
 #endif
 #endif
 
