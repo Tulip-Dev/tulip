@@ -127,6 +127,7 @@ pid_t appleInit() {
 
   if (dbusPidRegexp.exactMatch(dbus_daemon.readLine()))
     dbusPid = dbusPidRegexp.cap(1).toLong();
+
   checkTulipRunning();
   QDir::setCurrent(currentPath);
   return dbusPid;
