@@ -29,7 +29,7 @@
 
 #include <tulip/TlpTools.h>
 
-int main(int, char**) {
+int main(int argc, char** argv) {
   tlp::initTulipLib();
 
   //CPPUNIT_NS::QtUi::TestRunner runner;
@@ -41,7 +41,14 @@ int main(int, char**) {
   runner.addTest(CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
   runner.run(controller);
 
-  std::ofstream xmlFileOut("cpptestresults.xml");
+  std::stringstream s;
+  s << "cpptestresults";
+  if(argc > 1) {
+    s << "-" << argv[1];
+  }
+  s << ".xml";
+
+  std::ofstream xmlFileOut(s.str().c_str());
   CPPUNIT_NS::XmlOutputter xmlOut(&result, xmlFileOut);
   xmlOut.write();
 

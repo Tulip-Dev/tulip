@@ -2,11 +2,10 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
 
 MACRO(UNIT_TEST file)
 
-  SET(TEST_NAME "pwet.cpp")
   STRING(REPLACE ".cpp" "" TEST_NAME ${file})
   ADD_EXECUTABLE(${TEST_NAME} ${file} tuliplibtest.cpp )
   TARGET_LINK_LIBRARIES(${TEST_NAME} ${LibTulipCoreName} cppunit)
-  ADD_TEST(${TEST_NAME} ${TEST_NAME})
+  ADD_TEST(NAME ${TEST_NAME} COMMAND ${TEST_NAME} ${TEST_NAME})
 
 ENDMACRO(UNIT_TEST)
 
