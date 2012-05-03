@@ -113,6 +113,12 @@ public:
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition) =0;
 
+  GlComposite* getParent() const {
+    if (parents.size()==0)
+      return NULL;
+    return parents[0];
+  }
+
 protected:
 
   bool visible;

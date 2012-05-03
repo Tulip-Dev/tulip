@@ -28,6 +28,7 @@ class QGraphicsProxyWidget;
 namespace tlp {
 class GlOverviewGraphicsItem;
 class SceneConfigWidget;
+class SceneLayersConfigWidget;
 class GlMainWidget;
 class QuickAccessBar;
 
@@ -38,6 +39,7 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   tlp::GlMainWidget* _glMainWidget;
   tlp::GlOverviewGraphicsItem* _overviewItem;
   tlp::SceneConfigWidget* _sceneConfigurationWidget;
+  tlp::SceneLayersConfigWidget* _sceneLayersConfigurationWidget;
   tlp::QuickAccessBar* _quickAccessBar;
   QGraphicsProxyWidget* _quickAccessBarItem;
   QAction *_overviewContextMenu;
