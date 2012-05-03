@@ -116,6 +116,7 @@ public:
   GlComposite* getParent() const {
     if (parents.size()==0)
       return NULL;
+
     return parents[0];
   }
 

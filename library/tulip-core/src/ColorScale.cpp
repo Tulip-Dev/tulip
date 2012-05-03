@@ -190,6 +190,7 @@ void ColorScale::setColorMap(const map<float, Color>& newColorMap) {
         colorMap[1.f]=c;
       }
     }
+
     colorScaleSet = true;
   }
   else {

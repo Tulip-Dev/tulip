@@ -43,9 +43,11 @@ int main(int argc, char** argv) {
 
   std::stringstream s;
   s << "cpptestresults";
+
   if(argc > 1) {
     s << "-" << argv[1];
   }
+
   s << ".xml";
 
   std::ofstream xmlFileOut(s.str().c_str());
