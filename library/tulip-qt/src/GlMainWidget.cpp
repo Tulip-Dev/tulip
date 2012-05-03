@@ -96,7 +96,7 @@ GlMainWidget::GlMainWidget(QWidget *parent,View *view):
   grabGesture(Qt::PanGesture);
   grabGesture(Qt::SwipeGesture);
   renderingStore=NULL;
-#if defined(__APPLE__) && defined(QT_MAC_USE_COCOA) 
+#if defined(__APPLE__) && defined(QT_MAC_USE_COCOA)
   // This code is here to bug fix black screen problem on MACOSX with Qt 4.7
   // When we do the first redraw we don't use frame backup but we draw the view
   // We have to test with next version of Qt to check if the problem exist

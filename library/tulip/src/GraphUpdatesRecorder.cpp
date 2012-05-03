@@ -1084,9 +1084,9 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
       }
       else {
         // iterator below cannot be const
-	// because stdext::hash_map::erase (used on MACOSX)
-	// does not support a const iterator as argument
-	TLP_HASH_MAP<edge, pair<node, node> >::iterator ite =
+        // because stdext::hash_map::erase (used on MACOSX)
+        // does not support a const iterator as argument
+        TLP_HASH_MAP<edge, pair<node, node> >::iterator ite =
           oldEdgesEnds.find(e);
 
         if (ite == oldEdgesEnds.end())
