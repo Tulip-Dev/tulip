@@ -27,14 +27,16 @@ const char * paramHelp[] = {
   // property
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "DoubleProperty" ) \
+  HTML_HELP_DEF( "default", "\"viewMetric\"" ) \
   HTML_HELP_BODY() \
-  "This metric is used to affect scalar values to graph items." \
+  "Metric to map to size." \
   HTML_HELP_CLOSE(),
   // input
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "SizeProperty" ) \
+  HTML_HELP_DEF( "default", "\"viewSize\"" ) \
   HTML_HELP_BODY() \
-  "This size property is used to affect values to unselected dimensions (width, height, depth)." \
+  "If not all dimensions (width, height, depth) are checked below, the dimensions not computed are copied from this property." \
   HTML_HELP_CLOSE(),
   // width, height, depth
   HTML_HELP_OPEN() \
@@ -42,7 +44,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "true/false" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "Indicates if this parameter will be computed(box is checked) or kept(box is unchecked) from the value of input size property" \
+  "Each checked dimension is adjusted to represent property, each unchecked dimension is copied from input." \
   HTML_HELP_CLOSE(),
   // min
   HTML_HELP_OPEN() \
@@ -62,8 +64,9 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "true / false" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "This value defines the type of mapping. Following values are valid :" \
-  "<ul><li>true : linear mapping</li><li>false: uniform quantification</li></ul>" \
+  "Type of mapping." \
+  "<ul><li>true: linear mapping (min value of property is mapped to min size, max to max size, and a linear interpolation is used inbetween.)</li>" \
+  "<li>false: uniform quantification (the values of property are sorted, and the same size increment is used between consecutive values).</li></ul>"                          \
   HTML_HELP_CLOSE(),
   // Mapping type
   HTML_HELP_OPEN() \
@@ -101,8 +104,8 @@ static const string AREA_PROPORTIONAL = "Area Proportional";
 class MetricSizeMapping:public SizeAlgorithm {
 public:
   MetricSizeMapping(const PropertyContext &context):SizeAlgorithm(context) {
-    addParameter<DoubleProperty>("property", paramHelp[0]);
-    addParameter<SizeProperty>("input", paramHelp[1]);
+    addParameter<DoubleProperty>("property", paramHelp[0], "viewMetric");
+    addParameter<SizeProperty>("input", paramHelp[1], "viewSize");
     addParameter<bool>("width", paramHelp[2],"true");
     addParameter<bool>("height", paramHelp[2],"true");
     addParameter<bool>("depth", paramHelp[2],"false");
@@ -119,8 +122,8 @@ public:
     max=10;
     nodeoredge = true;
     proportional = "Area Proportional";
-    entryMetric=graph->getProperty<DoubleProperty>("viewMetric");
-    entrySize=graph->getProperty<SizeProperty>("viewSize");
+    entryMetric = NULL;
+    entrySize = NULL;
     mappingType = true;
     StringCollection proportionalType;
 
@@ -137,6 +140,12 @@ public:
       dataSet->get("area proportional",proportionalType);
       proportional = proportionalType.getCurrentString();
     }
+
+    if (!entryMetric)
+      entryMetric=graph->getProperty<DoubleProperty>("viewMetric");
+
+    if (!entrySize)
+      entrySize=graph->getProperty<SizeProperty>("viewSize");
 
     if (min >= max) {
       errorMsg = rangeSizeErrorMsg;
