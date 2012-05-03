@@ -90,8 +90,19 @@ void updatePlateform(char* tulipPath) {
   }
 }
 
+void checkTulipRunning() {
+  // There can be only one tulip_agent running at a time on the same system.
+  // To ensure that no agent is already running, we check the existence of an org.labri.Tulip service on the session bus.
+  if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.labri.Tulip").value()) {
+    qWarning("Tulip agent is already running. Note that you can only have one at a time on your system. Please check your system tray to display the tulip agent window.");
+    QMessageBox::critical(0,QObject::trUtf8("Error when starting Tulip"),
+                          QObject::trUtf8("Tulip agent is already running. Note that you can only have one at a time on your system. Please check your system tray to display the tulip agent window."));
+    exit(1);
+  }
+}
+
 #if defined(__APPLE__)
-void appleInit() {
+pid_t appleInit() {
   // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
 
@@ -116,19 +127,12 @@ void appleInit() {
 
   if (dbusPidRegexp.exactMatch(dbus_daemon.readLine()))
     dbusPid = dbusPidRegexp.cap(1).toLong();
+  checkTulipRunning();
+  QDir::setCurrent(currentPath);
+  return dbusPid;
 }
 #endif
 
-void checkTulipRunning() {
-  // There can be only one tulip_agent running at a time on the same system.
-  // To ensure that no agent is already running, we check the existence of an org.labri.Tulip service on the session bus.
-  if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.labri.Tulip").value()) {
-    qWarning("Tulip agent is already running. Note that you can only have one at a time on your system. Please check your system tray to display the tulip agent window.");
-    QMessageBox::critical(0,QObject::trUtf8("Error when starting Tulip"),
-                          QObject::trUtf8("Tulip agent is already running. Note that you can only have one at a time on your system. Please check your system tray to display the tulip agent window."));
-    exit(1);
-  }
-}
 
 int main(int argc, char **argv) {
   start_crash_handler();
@@ -143,13 +147,9 @@ int main(int argc, char **argv) {
   updatePlateform(argv[0]);
 
 #if defined(__APPLE__)
-  appleInit()
-#endif
-
+  pid_t dbusPid = appleInit();
+#else
   checkTulipRunning();
-
-#if defined(__APPLE__) // revert current directory
-  QDir::setCurrent(currentPath);
 #endif
 
   tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
