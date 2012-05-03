@@ -108,6 +108,7 @@ SET(SRCS
   SnapshotDialog.cpp
   TulipMimes.cpp
   SceneLayersModel.cpp
+  SceneLayersConfigWidget.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -134,6 +135,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/GridOptionsWidget.ui
   ../designer/ElementInformationsWidget.ui
   ../designer/SnapshotDialog.ui
+  ../designer/SceneLayersConfigWidget.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -202,6 +204,8 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/GraphNeedsSavingObserver.h
   ../include/tulip/DragHandle.h
   ../include/tulip/SnapshotDialog.h
+  ../include/tulip/SceneLayersModel.h
+  ../include/tulip/SceneLayersConfigWidget.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)

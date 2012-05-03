@@ -5,6 +5,7 @@ INSTALL(FILES
   edgeSpring.png
   titlebarGradient.png
   logo32x32.ico
+  logolabri.jpg
 DESTINATION ${TulipBitmapInstallDir}
 COMPONENT tulip_textures
 )

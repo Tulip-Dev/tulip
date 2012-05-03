@@ -19,6 +19,7 @@
 #include "tulip/GlMainView.h"
 #include <tulip/GlMainWidget.h>
 #include <tulip/SceneConfigWidget.h>
+#include <tulip/SceneLayersConfigWidget.h>
 #include <tulip/GlOverviewGraphicsItem.h>
 #include <tulip/QuickAccessBar.h>
 #include <tulip/GlGraphComposite.h>
@@ -28,11 +29,12 @@
 using namespace tlp;
 
 
-GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL),_overviewContextMenu(NULL) {
+GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _sceneLayersConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL),_overviewContextMenu(NULL) {
 }
 
 GlMainView::~GlMainView() {
   delete _sceneConfigurationWidget;
+  delete _sceneLayersConfigurationWidget;
 
   if(_overviewItem)
     delete _overviewItem;
@@ -87,6 +89,9 @@ void GlMainView::setupWidget() {
   delete _sceneConfigurationWidget;
   _sceneConfigurationWidget = new SceneConfigWidget();
   _sceneConfigurationWidget->setGlMainWidget(_glMainWidget);
+  _sceneLayersConfigurationWidget = new SceneLayersConfigWidget();
+  _sceneLayersConfigurationWidget->setView(this);
+  connect(_sceneLayersConfigurationWidget,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
   connect(_glMainWidget,SIGNAL(viewDrawn(GlMainWidget*,bool)),this,SLOT(glMainViewDrawn(GlMainWidget*,bool)));
   connect(graphicsView()->scene(),SIGNAL(sceneRectChanged(QRectF)),this,SLOT(sceneRectChanged(QRectF)));
 }
@@ -104,7 +109,7 @@ void GlMainView::glMainViewDrawn(GlMainWidget *, bool graphChanged) {
 }
 
 QList<QWidget*> GlMainView::configurationWidgets() const {
-  return QList<QWidget*>() << _sceneConfigurationWidget;
+  return QList<QWidget*>() << _sceneConfigurationWidget << _sceneLayersConfigurationWidget;
 }
 
 void GlMainView::setOverviewVisible(bool display) {

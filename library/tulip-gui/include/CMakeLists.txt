@@ -101,6 +101,7 @@ INSTALL(FILES
   tulip/GraphElementModel.h
   tulip/DragHandle.h
   tulip/SnapshotDialog.h
+  tulip/SceneLayersConfigWidget.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
