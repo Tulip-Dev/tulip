@@ -3,13 +3,13 @@
 namespace tlp {
 
 template<typename PROPTYPE>
-GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(QString::null), _checkable(checkable) {
+GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool checkable, bool hasNullProperty, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(QString::null), _checkable(checkable), _hasNullProperty(hasNullProperty) {
   if (_graph != NULL)
     _graph->addListener(this);
 }
 
 template<typename PROPTYPE>
-GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder), _checkable(checkable) {
+GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable, bool hasNullProperty, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder), _checkable(checkable), _hasNullProperty(hasNullProperty) {
   if (_graph != NULL)
     _graph->addListener(this);
 }
@@ -28,6 +28,12 @@ QModelIndex GraphPropertiesModel<PROPTYPE>::index(int row, int column,const QMod
       return createIndex(row,column);
   }
 
+  if (_hasNullProperty) {
+    if (row == 0)
+      return createIndex(row, column);
+    else i = 1;
+  }
+
   std::string propName;
 
   forEach(propName,_graph->getInheritedProperties()) {
@@ -44,6 +50,7 @@ QModelIndex GraphPropertiesModel<PROPTYPE>::index(int row, int column,const QMod
     if (i++ == row)
       return createIndex(row,column,_graph->getProperty(propName));
   }
+
   return QModelIndex();
 }
 
@@ -69,6 +76,8 @@ int GraphPropertiesModel<PROPTYPE>::rowCount(const QModelIndex &parent) const {
 
     result++;
   }
+  if (_hasNullProperty)
+    ++result;
   return result;
 }
 
@@ -89,6 +98,9 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
   if (role == Qt::DisplayRole || role == Qt::ToolTipRole) {
     if (!_placeholder.isNull() && index.row() == 0)
       return _placeholder;
+
+    if (pi == NULL)
+      return QString();
 
     if (index.column() == 0)
       return QString(pi->getName().c_str());
@@ -121,7 +133,8 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
 
 template<typename PROPTYPE>
 int GraphPropertiesModel<PROPTYPE>::rowOf(PropertyInterface* pi) const {
-  for (int i=0; i<rowCount(); ++i) {
+  int nbRows = rowCount();
+  for (int i=0; i<nbRows; ++i) {
     QVariant v = data(index(i,0),PropertyRole);
 
     if (v.value<PropertyInterface*>() == pi)
