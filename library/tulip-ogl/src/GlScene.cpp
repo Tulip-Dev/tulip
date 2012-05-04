@@ -48,7 +48,8 @@ namespace tlp {
 
 //====================================================
 
-GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewOrtho(true),glGraphComposite(NULL),graphLayer(NULL), clearBufferAtDraw(true) {
+GlScene::GlScene(GlLODCalculator *calculator)
+  :viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewOrtho(true),glGraphComposite(NULL),graphLayer(NULL), clearBufferAtDraw(true),needCenterScene(false) {
 
   if(calculator!=NULL)
     lodCalculator=calculator;
@@ -112,6 +113,11 @@ void GlScene::initGlParameters() {
 }
 
 void GlScene::draw() {
+
+  if(needCenterScene){
+    ajustSceneToSize(viewport[2], viewport[3]);
+    needCenterScene=false;
+  }
 
   initGlParameters();
 
@@ -367,7 +373,7 @@ void GlScene::notifyModifyEntity(GlSimpleEntity *entity) {
 }
 
 void GlScene::centerScene() {
-  ajustSceneToSize(viewport[2], viewport[3]);
+  needCenterScene=true;
 }
 
 void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor,BoundingBox *sceneBoundingBox,float *zoomFactor) {
