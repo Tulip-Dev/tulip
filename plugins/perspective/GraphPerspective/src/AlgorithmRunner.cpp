@@ -60,6 +60,7 @@ void buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model, const QModelInd
 
 AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::AlgorithmRunner) {
   _ui->setupUi(this);
+  setEnabled(false);
   QToolButton* localModeButton = new QToolButton(_ui->header);
   localModeButton->setMaximumSize(25,25);
   localModeButton->setMinimumSize(25,25);
@@ -78,6 +79,7 @@ AlgorithmRunner::~AlgorithmRunner() {
 }
 
 void AlgorithmRunner::setGraph(Graph* g) {
+  setEnabled(g != NULL);
   foreach(AlgorithmRunnerItem* item, findChildren<AlgorithmRunnerItem*>())
   item->setGraph(g);
 }
