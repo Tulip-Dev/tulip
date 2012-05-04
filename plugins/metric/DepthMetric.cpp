@@ -73,8 +73,8 @@ double DepthMetric::getNodeValue(tlp::node current) {
 
       // compute max
       if (value > 0.0)
-	// since depth value of neighbour is already computed
-	// update maxDepth if needed
+        // since depth value of neighbour is already computed
+        // update maxDepth if needed
         maxDepth = std::max(maxDepth, value + edgeValue);
       else {
         // we need to compute depth value for neighbour
@@ -83,10 +83,10 @@ double DepthMetric::getNodeValue(tlp::node current) {
         if (outEdges->hasNext()) {
           // store maxDepth for current
           dfsLevels.top().maxDepth = maxDepth;
-	  // store edgeValue for current
-	  // it will be needed as soon as the value
-	  // for neighbour will be computed
-	  dfsLevels.top().edgeValue = edgeValue;
+          // store edgeValue for current
+          // it will be needed as soon as the value
+          // for neighbour will be computed
+          dfsLevels.top().edgeValue = edgeValue;
           // push neighbour dfsParams on stack
           current = dfsParams.current = neighbour;
           dfsParams.outEdges = outEdges;
@@ -96,12 +96,12 @@ double DepthMetric::getNodeValue(tlp::node current) {
           break;
         }
         else { // no out edges for neighbour
-	  // so its depth value will remain to 0.0
+          // so its depth value will remain to 0.0
           delete outEdges;
           // go on with the current
-	  outEdges = dfsParams.outEdges;
-	  // update current maxDepth if needed
-	  maxDepth = std::max(maxDepth, edgeValue);
+          outEdges = dfsParams.outEdges;
+          // update current maxDepth if needed
+          maxDepth = std::max(maxDepth, edgeValue);
         }
       }
     }
@@ -125,7 +125,7 @@ double DepthMetric::getNodeValue(tlp::node current) {
     outEdges = dfsParams.outEdges;
     // update current maxDepth
     dfsParams.maxDepth = std::max(dfsParams.maxDepth,
-				  maxDepth + dfsParams.edgeValue);
+                                  maxDepth + dfsParams.edgeValue);
     maxDepth = dfsParams.maxDepth;
   }
 

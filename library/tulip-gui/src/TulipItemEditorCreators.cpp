@@ -150,6 +150,7 @@ void PropertyInterfaceEditorCreator::setEditorData(QWidget* w, const QVariant& v
   // takes place), we record its position as an unsigned int
   // 16 bits for x and 16 bits for y
   unsigned int ipos = (pos.x() << 16) + pos.y();
+
   if (prop == NULL)
     // indicates that a null property
     // has to be managed in that cell

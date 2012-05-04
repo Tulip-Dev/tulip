@@ -105,9 +105,10 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
     else
       return QObject::trUtf8("Value");
   }
-  
+
   if (orientation == Qt::Vertical) {
     ParamInfos infos = _params[section];
+
     if (role == Qt::DisplayRole)
       return infos.name;
     else if (role == Qt::BackgroundRole) {
@@ -117,7 +118,7 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
         return QColor(222, 255, 222);
     }
   }
-  
+
 
   return QAbstractItemModel::headerData(section,orientation,role);
 }

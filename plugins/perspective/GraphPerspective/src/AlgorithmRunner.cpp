@@ -149,8 +149,10 @@ void AlgorithmRunnerItem::setGraph(Graph* g) {
   _ui->parameters->setModel(model);
   _ui->settingsButton->setEnabled(model->rowCount() > 0);
   int h = 10;
-  for (int i=0;i<model->rowCount();++i)
+
+  for (int i=0; i<model->rowCount(); ++i)
     h += _ui->parameters->rowHeight(i);
+
   _ui->parameters->setMinimumSize(_ui->parameters->minimumSize().width(),h);
   _ui->parameters->setMaximumSize(_ui->parameters->maximumSize().width(),h);
   adjustSize();

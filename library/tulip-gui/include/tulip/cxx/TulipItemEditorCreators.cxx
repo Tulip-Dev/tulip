@@ -72,11 +72,12 @@ void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& 
   // takes place), we record its position as an unsigned int
   // 16 bits for x and 16 bits for y
   unsigned int ipos = (pos.x() << 16) + pos.y();
+
   if (prop == NULL)
     // indicates that a null property
     // has to be managed in that cell
     hasNullProperty.insert(ipos);
-    
+
   QComboBox* combo = static_cast<QComboBox*>(w);
   GraphPropertiesModel<PROPTYPE>* model = new GraphPropertiesModel<PROPTYPE>(g,false,hasNullProperty.contains(ipos),combo);
   combo->setModel(model);
