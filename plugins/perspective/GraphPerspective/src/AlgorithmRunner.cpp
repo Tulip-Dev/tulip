@@ -72,6 +72,7 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   _ui->header->insertWidget(localModeButton);
   PluginModel<tlp::Algorithm> model;
   buildTreeUi(_ui->contents, &model, QModelIndex(), localModeButton, true);
+  _ui->contents->layout()->addItem(new QSpacerItem(0,0,QSizePolicy::Minimum,QSizePolicy::Expanding));
 }
 
 AlgorithmRunner::~AlgorithmRunner() {
@@ -135,6 +136,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
   _ui->algorithmName->setText(pluginName);
   _ui->parameters->setVisible(false);
   _ui->parameters->setItemDelegate(new TulipItemDelegate);
+  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
 }
 
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {
@@ -143,7 +145,14 @@ AlgorithmRunnerItem::~AlgorithmRunnerItem() {
 
 void AlgorithmRunnerItem::setGraph(Graph* g) {
   _graph = g;
-  _ui->parameters->setModel(new ParameterListModel(PluginLister::getPluginParameters(_pluginName.toStdString()),g,_ui->parameters));
+  ParameterListModel* model = new ParameterListModel(PluginLister::getPluginParameters(_pluginName.toStdString()),g,_ui->parameters);
+  _ui->parameters->setModel(model);
+  int h = 10;
+  for (int i=0;i<model->rowCount();++i)
+    h += _ui->parameters->rowHeight(i);
+  _ui->parameters->setMinimumSize(_ui->parameters->minimumSize().width(),h);
+  _ui->parameters->setMaximumSize(_ui->parameters->maximumSize().width(),h);
+  adjustSize();
 }
 
 QString AlgorithmRunnerItem::name() const {
