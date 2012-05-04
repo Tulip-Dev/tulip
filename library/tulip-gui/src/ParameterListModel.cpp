@@ -62,7 +62,7 @@ int ParameterListModel::rowCount(const QModelIndex&) const {
 }
 
 int ParameterListModel::columnCount(const QModelIndex&) const {
-  return 2;
+  return 1;
 }
 
 QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
@@ -87,9 +87,6 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
       return QColor(222, 255, 222);
   }
   else if (role == Qt::DisplayRole) {
-    if (index.column() == 0)
-      return infos.name;
-
     tlp::DataType *dataType = _data.getData(infos.name.toStdString());
 
     assert(dataType);
@@ -106,12 +103,25 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
 }
 
 QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation, int role) const {
-  if (orientation == Qt::Horizontal) {
+
+  if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
     if (section == 0)
       return QObject::trUtf8("Name");
     else
       return QObject::trUtf8("Value");
   }
+  
+  if (orientation == Qt::Vertical) {
+    if(role == Qt::DisplayRole) 
+      return _params[section].name;
+    if(role == Qt::FontRole) {
+      QFont f;
+      f.setBold(true);
+      f.setPointSize(f.pointSize() - 1);
+      return f;
+    }
+  }
+  
 
   return QAbstractItemModel::headerData(section,orientation,role);
 }
@@ -119,7 +129,7 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
 Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
   Qt::ItemFlags result = QAbstractItemModel::flags(index);
 
-  if (index.column() == 1)
+  if (index.column() == 0)
     result |= Qt::ItemIsEditable;
 
   return result;
