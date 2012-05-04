@@ -462,7 +462,6 @@ private:
   GlLayer *graphLayer;
 
   bool clearBufferAtDraw;
-  bool needCenterScene;
 
 };
 
