@@ -147,6 +147,7 @@ void AlgorithmRunnerItem::setGraph(Graph* g) {
   _graph = g;
   ParameterListModel* model = new ParameterListModel(PluginLister::getPluginParameters(_pluginName.toStdString()),g,_ui->parameters);
   _ui->parameters->setModel(model);
+  _ui->settingsButton->setEnabled(model->rowCount() > 0);
   int h = 10;
   for (int i=0;i<model->rowCount();++i)
     h += _ui->parameters->rowHeight(i);
