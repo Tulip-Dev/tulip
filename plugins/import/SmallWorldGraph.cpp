@@ -109,23 +109,17 @@ public:
 
     pluginProgress->showPreview(false);
 
+    graph->addNodes(nbNodes, sg);
     for (unsigned int i=0; i<nbNodes; ++i) {
-      sg[i]=graph->addNode();
-      newLayout->setNodeValue(sg[i],Coord(rand()%WIDTH, rand()%HEIGHT, 0));
+      newLayout->setNodeValue(sg[i],Coord(static_cast<float>(rand()%WIDTH), static_cast<float>(rand()%HEIGHT), 0));
     }
 
-    unsigned int count = 0;
-    unsigned int iterations = nbNodes*(nbNodes-1)/2;
     double minSize = DBL_MAX;
 
     for (unsigned int i=0; i<nbNodes-1; ++i) {
       bool longEdge =false;
 
-      if (pluginProgress->progress(count,iterations)!=TLP_CONTINUE) break;
-
       for (unsigned int j=i+1; j<nbNodes; ++j) {
-        ++count;
-
         if (i!=j) {
           double distance = newLayout->getNodeValue(sg[i]).dist(newLayout->getNodeValue(sg[j]));
           minSize = std::min(distance, minSize);
@@ -143,6 +137,7 @@ public:
           }
         }
       }
+      if (pluginProgress->progress(i, nbNodes - 1)!=TLP_CONTINUE) break;
     }
 
     return  pluginProgress->state()!=TLP_CANCEL;
