@@ -44,6 +44,7 @@ ImportWizard::ImportWizard(QWidget *parent): QWizard(parent), _ui(new Ui::Import
 
   _ui->parametersList->setItemDelegate(new TulipItemDelegate);
   connect(_ui->parametersList, SIGNAL(destroyed()), _ui->parametersList->itemDelegate(), SLOT(deleteLater()));
+  _ui->parametersList->verticalHeader()->setResizeMode(QHeaderView::Fixed);
 
   _ui->parametersFrame->hide();
   updateFinishButton();
