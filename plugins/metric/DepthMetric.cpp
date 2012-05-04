@@ -24,84 +24,96 @@ PLUGIN(DepthMetric)
 using namespace std;
 using namespace tlp;
 
-DepthMetric::DepthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
+static const char * paramHelp[] = {
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "DoubleProperty" ) \
+  HTML_HELP_DEF( "default", "None" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the metric used for edges weight." \
+  HTML_HELP_CLOSE(),
+};
+
+DepthMetric::DepthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), edgeWeight(NULL) {
+  addInParameter<DoubleProperty> ("edge weight", paramHelp[0], "", false);
+}
 
 // structure below is used to implement dfs loop
 struct dfsDepthStruct {
   node current;
-  Iterator<node>* outNodes;
+  Iterator<edge>* outEdges;
   double maxDepth;
+  double edgeValue;
 
-  dfsDepthStruct(node n, Iterator<node>* nodes):
-    current(n), outNodes(nodes), maxDepth(0.0) {}
+  dfsDepthStruct() {}
+  dfsDepthStruct(node n, Iterator<edge>* edges):
+    current(n), outEdges(edges), maxDepth(0.0), edgeValue(0.0) {}
 };
-//=================================================
-// original recursive algorithm
-/*double DepthMetric::getNodeValue(const tlp::node n) {
-  if (graph->outdeg(n)==0) return 0.0;
-  if (result->getNodeValue(n) > 0.1)
-    return result->getNodeValue(n);
-  double max = 0;
-  node _n2;
-  forEach(_n2, graph->getOutNodes(n))
-    max = std::max(max, getNodeValue(_n2));
-  result->setNodeValue(n, max + 1);
-  return max + 1;
-  }*/
 //=================================================
 double DepthMetric::getNodeValue(tlp::node current) {
   if (graph->outdeg(current) == 0) return 0.0;
 
   double value = result->getNodeValue(current);
 
-  if (value > 0.1)
+  if (value > 0.0)
     return value;
 
   // dfs loop
   stack<dfsDepthStruct> dfsLevels;
-  Iterator<node>* outNodes = graph->getOutNodes(current);
-  dfsDepthStruct dfsParams(current, outNodes);
-  double maxDepth = 0;
+  Iterator<edge>* outEdges = graph->getOutEdges(current);
+  dfsDepthStruct dfsParams(current, outEdges);
+  double maxDepth = 0.0;
   dfsLevels.push(dfsParams);
 
   while(!dfsLevels.empty()) {
-    while (outNodes->hasNext()) {
-      node neighbour = outNodes->next();
+    while(outEdges->hasNext()) {
+      edge e = outEdges->next();
+      double edgeValue = edgeWeight ? edgeWeight->getEdgeValue(e) : 1.0;
+      node neighbour = graph->target(e);
       value = result->getNodeValue(neighbour);
 
       // compute max
-      if (value > 0.1)
-        maxDepth = std::max(maxDepth, value);
+      if (value > 0.0)
+	// since depth value of neighbour is already computed
+	// update maxDepth if needed
+        maxDepth = std::max(maxDepth, value + edgeValue);
       else {
-        outNodes = graph->getOutNodes(neighbour);
+        // we need to compute depth value for neighbour
+        outEdges = graph->getOutEdges(neighbour);
 
-        if (outNodes->hasNext()) {
+        if (outEdges->hasNext()) {
           // store maxDepth for current
           dfsLevels.top().maxDepth = maxDepth;
-          // push new dfsParams on stack
+	  // store edgeValue for current
+	  // it will be needed as soon as the value
+	  // for neighbour will be computed
+	  dfsLevels.top().edgeValue = edgeValue;
+          // push neighbour dfsParams on stack
           current = dfsParams.current = neighbour;
-          dfsParams.outNodes = outNodes;
-          maxDepth = dfsParams.maxDepth = 0.0;
+          dfsParams.outEdges = outEdges;
+          maxDepth = dfsParams.maxDepth = dfsParams.edgeValue = 0.0;
           dfsLevels.push(dfsParams);
           // and go deeper
           break;
         }
-        else {
-          delete outNodes;
-          outNodes = dfsParams.outNodes;
+        else { // no out edges for neighbour
+	  // so its depth value will remain to 0.0
+          delete outEdges;
+          // go on with the current
+	  outEdges = dfsParams.outEdges;
+	  // update current maxDepth if needed
+	  maxDepth = std::max(maxDepth, edgeValue);
         }
       }
     }
 
-    if (outNodes->hasNext())
+    if (outEdges->hasNext())
       // new dfsParams has been pushed on stack
       continue;
 
     // save current maxDepth
-    ++maxDepth;
     result->setNodeValue(current, maxDepth);
     // unstack current dfsParams
-    delete dfsLevels.top().outNodes;
+    delete dfsLevels.top().outEdges;
     dfsLevels.pop();
 
     if (dfsLevels.empty())
@@ -110,9 +122,10 @@ double DepthMetric::getNodeValue(tlp::node current) {
     // get dfsParams on top of dfsLevels
     dfsParams = dfsLevels.top();
     current = dfsParams.current;
-    outNodes = dfsParams.outNodes;
-    // update new current maxDepth if any
-    dfsParams.maxDepth = std::max(dfsParams.maxDepth, maxDepth);
+    outEdges = dfsParams.outEdges;
+    // update current maxDepth
+    dfsParams.maxDepth = std::max(dfsParams.maxDepth,
+				  maxDepth + dfsParams.edgeValue);
     maxDepth = dfsParams.maxDepth;
   }
 
@@ -120,11 +133,16 @@ double DepthMetric::getNodeValue(tlp::node current) {
 }
 //====================================================================
 bool DepthMetric::run() {
+  if ( dataSet!=NULL) {
+    dataSet->get("edge weight", edgeWeight);
+  }
+
   result->setAllEdgeValue(0);
   result->setAllNodeValue(0);
   node _n;
-  forEach(_n, graph->getNodes())
-  result->setNodeValue(_n, getNodeValue(_n));
+  forEach(_n, graph->getNodes()) {
+    result->setNodeValue(_n, getNodeValue(_n));
+  }
   return true;
 }
 //=================================================
