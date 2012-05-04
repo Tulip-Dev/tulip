@@ -75,11 +75,6 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
     return infos.name;
   else if (role == Qt::WhatsThisRole)
     return infos.desc;
-  else if (role == Qt::FontRole && index.column() == 0) {
-    QFont f;
-    f.setBold(true);
-    return f;
-  }
   else if (role == Qt::BackgroundRole) {
     if (infos.mandatory)
       return QColor(255, 255, 222);
@@ -111,15 +106,8 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
       return QObject::trUtf8("Value");
   }
   
-  if (orientation == Qt::Vertical) {
-    if(role == Qt::DisplayRole) 
-      return _params[section].name;
-    if(role == Qt::FontRole) {
-      QFont f;
-      f.setBold(true);
-      f.setPointSize(f.pointSize() - 1);
-      return f;
-    }
+  if (orientation == Qt::Vertical && role == Qt::DisplayRole) {
+    return _params[section].name;
   }
   
 

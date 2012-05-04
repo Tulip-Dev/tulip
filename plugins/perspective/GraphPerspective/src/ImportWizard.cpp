@@ -40,7 +40,7 @@ ImportWizard::ImportWizard(QWidget *parent): QWizard(parent), _ui(new Ui::Import
   _ui->importModules->setModel(model);
   _ui->importModules->setRootIndex(model->index(0, 0));
   _ui->importModules->expandAll();
-  connect(_ui->importModules, SIGNAL(activated(QModelIndex)), this, SLOT(algorithmSelected(QModelIndex)));
+  connect(_ui->importModules->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(algorithmSelected(QModelIndex)));
 
   _ui->parametersList->setItemDelegate(new TulipItemDelegate);
   connect(_ui->parametersList, SIGNAL(destroyed()), _ui->parametersList->itemDelegate(), SLOT(deleteLater()));
@@ -87,5 +87,5 @@ tlp::DataSet ImportWizard::parameters() const {
 }
 
 void ImportWizard::updateFinishButton() {
-  button(QWizard::FinishButton)->setEnabled(_ui->importModules->selectionModel()->hasSelection());
+  button(QWizard::FinishButton)->setEnabled(_ui->parametersList->model() != NULL);
 }
