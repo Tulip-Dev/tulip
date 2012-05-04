@@ -104,7 +104,6 @@ void PanelSelectionWizard::pageChanged(int id) {
   if (id == startId()) {
     clearView();
     button(QWizard::FinishButton)->setEnabled(true);
-    button(QWizard::NextButton)->setEnabled(!_currentItem.isNull());
   }
 
   if (page(id) == _ui->placeHolder) {
@@ -126,4 +125,6 @@ void PanelSelectionWizard::pageChanged(int id) {
       p->layout()->addWidget(w);
     }
   }
+
+  button(QWizard::NextButton)->setEnabled(nextId()!=-1);
 }
