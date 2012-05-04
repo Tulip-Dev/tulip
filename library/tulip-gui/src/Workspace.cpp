@@ -416,6 +416,8 @@ bool Workspace::handleDragEnterEvent(QEvent* e, const QMimeData* mimedata) {
 }
 
 bool Workspace::handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel) {
+  if (panel == NULL)
+    return false;
   const GraphMimeType* graphMime = dynamic_cast<const GraphMimeType*>(mimedata);
   const PanelMimeType* panelMime = dynamic_cast<const PanelMimeType*>(mimedata);
   const AlgorithmMimeType* algorithmMime = dynamic_cast<const AlgorithmMimeType*>(mimedata);
