@@ -400,7 +400,11 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
   currentFont.setFamily("Courier New");
   currentFont.setPointSize(8);
 #elif defined(__APPLE__)
+#ifdef QT_MAC_USE_COCOA
   currentFont.setFamily("Menlo");
+#else
+  currentFont.setFamily("Andale Mono");
+#endif
   currentFont.setPointSize(12);
 #else
   currentFont.setFamily("Monospace");
