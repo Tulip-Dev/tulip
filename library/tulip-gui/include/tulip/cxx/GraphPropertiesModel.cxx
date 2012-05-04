@@ -76,8 +76,10 @@ int GraphPropertiesModel<PROPTYPE>::rowCount(const QModelIndex &parent) const {
 
     result++;
   }
+
   if (_hasNullProperty)
     ++result;
+
   return result;
 }
 
@@ -134,6 +136,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
 template<typename PROPTYPE>
 int GraphPropertiesModel<PROPTYPE>::rowOf(PropertyInterface* pi) const {
   int nbRows = rowCount();
+
   for (int i=0; i<nbRows; ++i) {
     QVariant v = data(index(i,0),PropertyRole);
 

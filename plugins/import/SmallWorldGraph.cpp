@@ -110,6 +110,7 @@ public:
     pluginProgress->showPreview(false);
 
     graph->addNodes(nbNodes, sg);
+
     for (unsigned int i=0; i<nbNodes; ++i) {
       newLayout->setNodeValue(sg[i],Coord(static_cast<float>(rand()%WIDTH), static_cast<float>(rand()%HEIGHT), 0));
     }
@@ -137,6 +138,7 @@ public:
           }
         }
       }
+
       if (pluginProgress->progress(i, nbNodes - 1)!=TLP_CONTINUE) break;
     }
 
