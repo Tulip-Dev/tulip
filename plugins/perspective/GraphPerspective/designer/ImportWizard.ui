@@ -199,6 +199,24 @@ border: 0px;
              </item>
              <item>
               <widget class="QTableView" name="parametersList">
+               <property name="styleSheet">
+                <string notr="true">QHeaderView::section {
+background-color: white;
+color: black;
+padding-left: 4px;
+padding-right: 4px;
+margin-bottom: -1px;
+border: 1px solid #C9C9C9;
+border-bottom: 0px;
+font: bold;
+}
+QHeaderView {
+background-color: white;
+}
+QTableView {
+background-color: white;
+}</string>
+               </property>
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
                </property>
