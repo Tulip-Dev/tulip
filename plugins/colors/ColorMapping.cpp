@@ -121,13 +121,15 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "DoubleProperty" ) \
   HTML_HELP_BODY() \
-  "The metric mapped to a color." \
+  "This metric is used to affect scalar values to graph items." \
+  "The meaning of theses values depends of the choosen color model." \
   HTML_HELP_CLOSE(),
   // property
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "PropertyInterface*" ) \
   HTML_HELP_BODY() \
-  "The metric mapped to a color." \
+  "This metric is used to affect scalar values to graph items." \
+  "The meaning of theses values depends of the choosen color model." \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "String Collection" ) \
@@ -198,43 +200,13 @@ public:
     return colorScale.getColorAtPos(value/range);
   }
   //=========================================================
-  void computeEdgeColor() {
-    double minE,maxE;
-    minE = entryMetric->getEdgeMin(graph);
-    maxE = entryMetric->getEdgeMax(graph);
-    Iterator<edge> *itE=graph->getEdges();
-
-    while(itE->hasNext()) {
-      edge ite=itE->next();
-      double dd=entryMetric->getEdgeValue(ite)-minE;
-      result->setEdgeValue(ite, getColor(dd,maxE-minE));
-    }
-
-    delete itE;
-  }
-  //=========================================================
-  void computeNodeColor() {
-    double minN,maxN;
-    minN=entryMetric->getNodeMin(graph);
-    maxN=entryMetric->getNodeMax(graph);
-    Iterator<node> *itN=graph->getNodes();
-
-    while(itN->hasNext()) {
-      node itn=itN->next();
-      double dd=entryMetric->getNodeValue(itn)-minN;
-      result->setNodeValue(itn, getColor(dd,maxN-minN));
-    }
-
-    delete itN;
-  }
-  //=========================================================
   bool run() {
     //    qWarning() << __PRETTY_FUNCTION__ << endl;
     eltTypes.setCurrent(LINEAR_ELT);
     targetType.setCurrent(NODES_TARGET);
-    DoubleProperty* metricS = graph->getProperty<DoubleProperty>("viewMetric");
+    DoubleProperty* metricS = NULL;
 
-    PropertyInterface *metric = graph->getProperty("viewMetric");
+    PropertyInterface *metric = NULL;
 
     if ( dataSet!=0 ) {
       dataSet->get("linear/uniform\nproperty", metricS);
@@ -244,7 +216,15 @@ public:
       dataSet->get("colorScale", colorScale);
     }
 
-    if (eltTypes.getCurrent()==LINEAR_ELT || eltTypes.getCurrent()==UNIFORM_ELT) {
+    if (metricS == NULL)
+      metricS = graph->getProperty<DoubleProperty>("viewMetric");
+
+    if (metric == NULL)
+      metric = graph->getProperty<DoubleProperty>("viewMetric");
+
+    pluginProgress->showPreview(false);
+
+    if (eltTypes.getCurrent()!=ENUMERATED_ELT) {
       if (eltTypes.getCurrent()==LINEAR_ELT) {
         entryMetric = metricS;
       }
@@ -255,14 +235,62 @@ public:
         entryMetric = tmp;
       }
 
-      if(targetType.getCurrent()==NODES_TARGET && graph->numberOfNodes()!=0)
-        computeNodeColor();
+      // loop on nodes
+      if(targetType.getCurrent()==NODES_TARGET && graph->numberOfNodes()!=0) {
+	unsigned int maxIter = graph->numberOfNodes();
+	unsigned int iter = 0;
+	double minN,maxN;
+	minN=entryMetric->getNodeMin(graph);
+	maxN=entryMetric->getNodeMax(graph);
+	Iterator<node> *itN=graph->getNodes();
 
-      if(targetType.getCurrent()==EDGES_TARGET && graph->numberOfEdges()!=0)
-        computeEdgeColor();
+	while(itN->hasNext()) {
+	  node itn=itN->next();
+	  double dd=entryMetric->getNodeValue(itn)-minN;
+	  result->setNodeValue(itn, getColor(dd,maxN-minN));
+	  if ((iter % 100 == 0) &&
+	      (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
+	    if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
+	    delete itN;
+	    return pluginProgress->state()!=TLP_CANCEL;
+	  }
+	  ++iter;
+	}
 
+	delete itN;
+      }
+
+      // loop on edges
+      if(targetType.getCurrent()==EDGES_TARGET && graph->numberOfEdges()!=0) {
+	unsigned int maxIter = graph->numberOfEdges();
+	unsigned int iter = 0;
+	double minE,maxE;
+	minE = entryMetric->getEdgeMin(graph);
+	maxE = entryMetric->getEdgeMax(graph);
+	Iterator<edge> *itE=graph->getEdges();
+
+	while(itE->hasNext()) {
+	  edge ite=itE->next();
+	  double dd=entryMetric->getEdgeValue(ite)-minE;
+	  result->setEdgeValue(ite, getColor(dd,maxE-minE));
+	  if ((iter % 100 == 0) &&
+	      (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
+	    if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
+	    delete itE;
+	    return pluginProgress->state()!=TLP_CANCEL;
+	  }
+	  ++iter;
+	}
+
+	delete itE;
+      }
+    
+    if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
     }
     else {
+      unsigned int maxIter = (targetType.getCurrent()==NODES_TARGET) ?
+	graph->numberOfNodes() : graph->numberOfEdges();
+      unsigned int iter = 0;
       for(vector<pair<string,Color> >::iterator it =
             enumeratedMappingResultVector.begin();
           it!=enumeratedMappingResultVector.end(); ++it) {
@@ -273,18 +301,21 @@ public:
             result->setNodeValue(node(*itE),(*it).second);
           else
             result->setEdgeValue(edge(*itE),(*it).second);
+	  if ((iter % 100 == 0) &&
+	      (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
+	    return pluginProgress->state()!=TLP_CANCEL;
+	  }
+	  ++iter;
         }
       }
     }
-
-    if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
 
     return true;
   }
   //=========================================================
   bool check(string &errorMsg) {
-    //    qWarning() << __PRETTY_FUNCTION__ << endl;
-    PropertyInterface *metric = graph->getProperty<DoubleProperty>("viewMetric");
+    //    cerr << __PRETTY_FUNCTION__ << endl;
+    PropertyInterface *metric = NULL;
 
     if (dataSet!=0) {
       dataSet->get("enumerated\nproperty", metric);
@@ -292,6 +323,9 @@ public:
       dataSet->get(TARGET_TYPE, targetType);
       dataSet->get("colorScale", colorScale);
     }
+
+    if (metric == NULL)
+      metric = graph->getProperty<DoubleProperty>("viewMetric");
 
     if (eltTypes.getCurrent() == ENUMERATED_ELT) {
       if(targetType.getCurrent()==NODES_TARGET) {
