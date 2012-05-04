@@ -161,9 +161,6 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 
   setOverviewVisible(overviewVisible);
 
-  if(overviewVisible)
-    drawOverview(true);
-
   setQuickAccessBarVisible(true);
 }
 
