@@ -30,14 +30,15 @@
  *  \note This algorithm works on general graphs.
  *
  */
-class DepthMetric:public tlp::DoubleAlgorithm {
+class DepthMetric :public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Depth","David Auber","15/02/2001","Alpha","1.0","Tree")
+  PLUGININFORMATIONS("Depth","David Auber","15/02/2001","Alpha","1.1","Tree")
   DepthMetric(const tlp::PluginContext* context);
   bool run();
   bool check(std::string &);
 private:
   double getNodeValue(const tlp::node n);
+  tlp::DoubleProperty* edgeWeight;
 };
 /*@}*/
 #endif
