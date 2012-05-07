@@ -22,7 +22,7 @@
 #include <sstream>
 #include <string>
 #include <list>
-#include <string.h>
+#include <cstring>
 
 namespace tlp {
 

@@ -18,10 +18,10 @@
  */
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <errno.h>
+#include <cerrno>
 #include <sstream>
 #include <tulip/TulipPlugin.h>
-#include <string.h>
+#include <cstring>
 
 #ifdef _WIN32
 #include <windows.h>

@@ -19,14 +19,14 @@
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/tulipconf.h>
-#include <string.h>
+#include <cstring>
 #include <set>
 
 #ifdef _WIN32
 #include <windows.h>
 #include <stdio.h>
 #else
-#include <stdlib.h>
+#include <cstdlib>
 #include <dlfcn.h>
 #include <dirent.h>
 #endif

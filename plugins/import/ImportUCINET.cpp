@@ -4,7 +4,7 @@
 #include <cctype>
 #include <cstdlib>
 #include <algorithm>
-#include <string.h>
+#include <cstring>
 #include <tulip/TulipPlugin.h>
 
 /*@{*/

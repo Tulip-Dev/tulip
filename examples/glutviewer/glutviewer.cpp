@@ -18,7 +18,7 @@
  */
 #include <iostream>
 
-#include <stdio.h>
+#include <cstdio>
 #include <GL/glew.h>
 #include <fstream>
 #include <iostream>

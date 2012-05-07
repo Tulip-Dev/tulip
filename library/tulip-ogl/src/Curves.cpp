@@ -17,7 +17,7 @@
  *
  */
 #include <vector>
-#include <string.h>
+#include <cstring>
 #include <GL/glew.h>
 #include <tulip/Vector.h>
 #include <tulip/TlpTools.h>

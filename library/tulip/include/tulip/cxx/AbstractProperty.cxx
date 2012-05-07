@@ -17,7 +17,7 @@
  *
  */
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 
 template <class Tnode, class Tedge, class TPROPERTY>
 tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::AbstractProperty(tlp::Graph *sg, std::string n) {

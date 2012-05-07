@@ -19,7 +19,7 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include <string.h>
+#include <cstring>
 
 /*
   Il faut ajouter la gestion correcte des erreurs et cest nikel.

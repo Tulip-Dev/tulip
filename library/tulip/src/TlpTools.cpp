@@ -17,7 +17,7 @@
  *
  */
 
-#include <string.h>
+#include <cstring>
 #include <locale.h>
 
 #ifndef _WIN32

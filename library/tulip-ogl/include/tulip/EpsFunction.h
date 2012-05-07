@@ -20,7 +20,7 @@
 #define EPSFUNCTION
 #ifndef DOXYGEN_NOTFOR_DEVEL
 //====================================================
-#include <stdio.h>
+#include <cstdio>
 #include <tulip/Color.h>
 #include <tulip/OpenGlConfigManager.h>
 

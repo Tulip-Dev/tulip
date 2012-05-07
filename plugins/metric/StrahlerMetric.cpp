@@ -18,7 +18,7 @@
  */
 
 #include <cmath>
-#include <stdio.h>
+#include <cstdio>
 #include <tulip/StringProperty.h>
 #include "StrahlerMetric.h"
 

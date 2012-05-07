@@ -34,7 +34,7 @@
 
 #include <tulip/TlpTools.h>
 
-#include <string.h>
+#include <cstring>
 
 #ifdef __APPLE_CC__
 #if __APPLE_CC__ < 5400

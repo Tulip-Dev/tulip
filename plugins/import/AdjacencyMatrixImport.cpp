@@ -18,13 +18,13 @@
  */
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <errno.h>
+#include <cerrno>
 #include <fstream>
 #include <sstream>
 #include <cmath>
 #include <tulip/TulipPlugin.h>
 #include <vector>
-#include <string.h>
+#include <cstring>
 
 using namespace std;
 using namespace tlp;

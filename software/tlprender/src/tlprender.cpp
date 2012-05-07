@@ -39,7 +39,7 @@
 #include <GL/glu.h>
 #endif
 
-#include <string.h>
+#include <cstring>
 #include <GL/osmesa.h>
 
 #include <tulip/TlpTools.h>

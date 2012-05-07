@@ -19,7 +19,7 @@
 
 #include <GL/glew.h>
 
-#include <string.h>
+#include <cstring>
 
 #include <tulip/GlBezierCurve.h>
 #include <tulip/GlCatmullRomCurve.h>

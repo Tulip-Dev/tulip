@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <stdlib.h>
+#include <cstdlib>
 
 template<typename Obj>
 tlp::Circle<Obj> & tlp::Circle<Obj>::merge(const tlp::Circle<Obj> &c) {

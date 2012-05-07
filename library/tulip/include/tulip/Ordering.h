@@ -24,7 +24,7 @@
 #include <tulip/Node.h>
 #include <vector>
 #include <map>
-#include <stdio.h>
+#include <cstdio>
 #include <tulip/MutableContainer.h>
 
 #ifndef DOXYGEN_NOTFOR_USER

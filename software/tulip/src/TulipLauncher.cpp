@@ -18,7 +18,7 @@
  */
 #include <iostream>
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <QtGui/QApplication>
 #include <QtCore/QDir>

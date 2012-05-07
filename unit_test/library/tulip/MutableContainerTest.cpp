@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <stdlib.h>
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
 #include "MutableContainerTest.h"

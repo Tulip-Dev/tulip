@@ -17,7 +17,7 @@
  *
  */
 //#include <cppunit/ui/qt/TestRunner.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <fstream>
 
 #include <cppunit/ui/text/TestRunner.h>
