@@ -100,7 +100,7 @@ QuotientClustering::QuotientClustering(PluginContext* context):Algorithm(context
   addInParameter<bool>("oriented", paramHelp[0], "true");
   addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS);
   addInParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS);
-  addInParameter<StringProperty>("meta-node label", paramHelp[4], "viewLabel", false);
+  addInParameter<StringProperty>("meta-node label", paramHelp[4], "", false);
   addInParameter<bool>("use name of subgraph", paramHelp[5], "false");
   addInParameter<bool>("recursive", paramHelp[1], "false");
   addInParameter<bool>("layout quotient graph(s)", paramHelp[7], "false");

@@ -91,8 +91,8 @@ GEMLayout::GEMLayout(const tlp::PluginContext* context) : LayoutAlgorithm(contex
   a_gravity(AGRAVITYDEF), i_oscillation(IOSCILLATIONDEF), a_oscillation(AOSCILLATIONDEF), i_rotation(IROTATIONDEF), a_rotation(AROTATIONDEF), i_shake(ISHAKEDEF),
   a_shake(ASHAKEDEF), _dim(2), _nbNodes(0), _useLength(false), metric(NULL), max_iter(0) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
-  addInParameter<DoubleProperty>("edge length", paramHelp[1], "viewMetric", false);
-  addInParameter<LayoutProperty>("initial layout", paramHelp[2], "viewLayout", false);
+  addInParameter<DoubleProperty>("edge length", paramHelp[1], "", false);
+  addInParameter<LayoutProperty>("initial layout", paramHelp[2], "", false);
   addInParameter<unsigned int>("max iterations", paramHelp[3], "0");
   addDependency<LayoutAlgorithm>("Connected Component Packing", "1.1");
 }
