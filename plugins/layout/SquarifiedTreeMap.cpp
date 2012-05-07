@@ -379,14 +379,9 @@ void SquarifiedTreeMap::squarify(const std::vector<tlp::node> &toTreat, const tl
 void SquarifiedTreeMap::computeNodesSize(const tlp::node n) {
 
   if (graph->outdeg(n) == 0) { //the node is a leaf of the tree
-    double leafValue = 1.;
+    double leafValue = metric ? metric->getNodeValue(n) : 1.;
 
-    if (metric != 0) { //if there is a user defined metric on leaves use it.
-      if (metric->getNodeValue(n) > 0)
-        leafValue = metric->getNodeValue(n);
-    }
-
-    nodesSize.set(n.id , leafValue);
+    nodesSize.set(n.id , (leafValue > 0) ? leafValue : 1.);
     return;
   }
 
