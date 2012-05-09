@@ -68,5 +68,6 @@
         <file>icons/32/plugin_import_export.png</file>
         <file>icons/32/plugin_interactor.png</file>
         <file>icons/32/plugin_view.png</file>
+        <file>ui/split3_2_screen.png</file>
     </qresource>
 </RCC>

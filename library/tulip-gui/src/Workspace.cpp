@@ -61,12 +61,14 @@ Workspace::Workspace(QWidget *parent)
   _modeToSlots[_ui->singlePage] = QVector<PlaceHolderWidget*>() << _ui->singlePage;
   _modeToSlots[_ui->splitPage] = QVector<PlaceHolderWidget*>() << _ui->splitPagePanel1 << _ui->splitPagePanel2;
   _modeToSlots[_ui->split3Page] = QVector<PlaceHolderWidget*>() << _ui->split3PagePanel1 << _ui->split3PagePanel2 << _ui->split3PagePanel3;
+  _modeToSlots[_ui->split32Page] = QVector<PlaceHolderWidget*>() << _ui->split32Panel1 << _ui->split32Panel2 << _ui->split32Panel3;
   _modeToSlots[_ui->gridPage] = QVector<PlaceHolderWidget*>() << _ui->gridPagePanel1 << _ui->gridPagePanel2 << _ui->gridPagePanel3 << _ui->gridPagePanel4;
 
   // This map allows us to know which widget can toggle a mode
   _modeSwitches[_ui->singlePage] = _ui->singleModeButton;
   _modeSwitches[_ui->splitPage] = _ui->splitModeButton;
   _modeSwitches[_ui->split3Page] = _ui->split3ModeButton;
+  _modeSwitches[_ui->split32Page] = _ui->split32ModeButton;
   _modeSwitches[_ui->gridPage] = _ui->gridModeButton;
   updateAvailableModes();
 }
@@ -217,6 +219,9 @@ void Workspace::switchToSplitMode() {
 }
 void Workspace::switchToSplit3Mode() {
   switchWorkspaceMode(_ui->split3Page);
+}
+void Workspace::switchToSplit32Mode() {
+  switchWorkspaceMode(_ui->split32Page);
 }
 void Workspace::switchToGridMode() {
   switchWorkspaceMode(_ui->gridPage);
