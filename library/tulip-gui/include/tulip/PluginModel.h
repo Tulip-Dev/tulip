@@ -165,12 +165,6 @@ public:
     return createIndex(row,child.column(),childItem->parent);
   }
 
-//  Qt::ItemFlags flags(const QModelIndex &index) const {
-//  }
-
-//  QVariant headerData(int section, Qt::Orientation orientation, int role) const {
-//  }
-
   QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const {
     TreeItem* parentItem = _root;
 
@@ -201,8 +195,10 @@ public:
   virtual Qt::ItemFlags flags ( const QModelIndex& index ) const {
     Qt::ItemFlags result(QAbstractItemModel::flags(index));
 
-    if(!index.parent().parent().isValid()) {
-      result = Qt::ItemIsEnabled;
+    if(index.isValid()) {
+      TreeItem* item = (TreeItem*)index.internalPointer();
+      if (!PluginLister::instance()->pluginExists<PLUGIN>(item->name.toStdString()))
+        result = Qt::ItemIsEnabled;
     }
 
     return result;
