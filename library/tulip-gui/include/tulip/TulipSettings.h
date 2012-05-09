@@ -44,6 +44,7 @@ public:
   static const QString DefaultColorConfigEntry;
   static const QString DefaultSizeConfigEntry;
   static const QString DefaultShapeConfigEntry;
+  static const QString DefaultSelectionColorEntry;
 
   static TulipSettings &instance();
 
@@ -97,6 +98,9 @@ public:
   void setDefaultSize(tlp::ElementType elem, const tlp::Size& size);
   int defaultShape(tlp::ElementType elem);
   void setDefaultShape(tlp::ElementType elem, int shape);
+
+  tlp::Color defaultSelectionColor();
+  void setDefaultSelectionColor(const tlp::Color& color);
 
 private:
   TulipSettings();

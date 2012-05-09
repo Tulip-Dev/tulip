@@ -1,14 +1,23 @@
 #include "tulip/SceneConfigWidget.h"
 
 #include <QtCore/QDebug>
+#include <QtGui/QMainWindow>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/Perspective.h>
+#include <tulip/TulipSettings.h>
 #include "ui_SceneConfigWidget.h"
 
 using namespace tlp;
 
 SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(NULL), _resetting(false) {
   _ui->setupUi(this);
+
+  if (Perspective::instance()->mainWindow() != NULL) {
+    _ui->selectionColorButton->setDialogParent(Perspective::instance()->mainWindow());
+    _ui->backgroundColorButton->setDialogParent(Perspective::instance()->mainWindow());
+  }
+
   _ui->labelSizesSpanSlider->setHandleMovementMode(QxtSpanSlider::FreeMovement);
   _ui->labelsDisabledLabel->installEventFilter(this);
   _ui->labelsNoOverlapLabel->installEventFilter(this);
@@ -33,9 +42,8 @@ void SceneConfigWidget::resetChanges() {
   _ui->labelsOrderingCombo->clear();
   _ui->scrollArea->setEnabled(_glMainWidget != NULL);
 
-  if (_glMainWidget == NULL || _glMainWidget->getScene()->getGlGraphComposite() == NULL || _glMainWidget->getScene()->getGlGraphComposite()->getGraph() == NULL) {
+  if (_glMainWidget == NULL || _glMainWidget->getScene()->getGlGraphComposite() == NULL || _glMainWidget->getScene()->getGlGraphComposite()->getGraph() == NULL)
     return;
-  }
 
   Graph* graph = _glMainWidget->getScene()->getGlGraphComposite()->getGraph();
   GlGraphRenderingParameters* renderingParameters = _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
@@ -67,6 +75,10 @@ void SceneConfigWidget::resetChanges() {
   _ui->edgesColorInterpolationCheck->setChecked(renderingParameters->isEdgeColorInterpolate());
   _ui->edgesSizeInterpolationCheck->setChecked(renderingParameters->isEdgeSizeInterpolate());
 
+  // SCENE
+  _ui->backgroundColorButton->setTulipColor(_glMainWidget->getScene()->getBackgroundColor());
+  _ui->selectionColorButton->setTulipColor(renderingParameters->getSelectionColor());
+
   QApplication::processEvents();
   _resetting = false;
 }
@@ -91,14 +103,13 @@ void SceneConfigWidget::settingsChanged() {
 }
 
 void SceneConfigWidget::applySettings() {
-  if(!_glMainWidget->getScene()->getGlGraphComposite())
+  if(_resetting || !_glMainWidget->getScene()->getGlGraphComposite())
     return;
 
   GlGraphRenderingParameters* renderingParameters = _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
 
   // NODES
   DoubleProperty* orderingProperty = NULL;
-
   if (_ui->labelsOrderingCombo->currentIndex() != 0 && _glMainWidget->getScene()->getGlGraphComposite()->getGraph())
     orderingProperty = _glMainWidget->getScene()->getGlGraphComposite()->getGraph()->getProperty<DoubleProperty>(_ui->labelsOrderingCombo->currentText().toStdString());
 
@@ -113,6 +124,10 @@ void SceneConfigWidget::applySettings() {
   renderingParameters->setViewArrow(_ui->edgesArrowCheck->isChecked());
   renderingParameters->setEdgeColorInterpolate(_ui->edgesColorInterpolationCheck->isChecked());
   renderingParameters->setEdgeSizeInterpolate(_ui->edgesSizeInterpolationCheck->isChecked());
+
+  // SCENE
+  renderingParameters->setSelectionColor(_ui->selectionColorButton->tulipColor());
+  _glMainWidget->getScene()->setBackgroundColor(_ui->backgroundColorButton->tulipColor());
 
   _glMainWidget->draw();
   _ui->applyButton->setEnabled(false);

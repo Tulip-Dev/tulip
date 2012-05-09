@@ -6,15 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>420</width>
-    <height>540</height>
+    <width>414</width>
+    <height>683</height>
    </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Scene</string>
@@ -87,12 +81,6 @@ background-color: #F4F4F4;
    </property>
    <item>
     <widget class="QScrollArea" name="scrollArea">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -100,28 +88,16 @@ background-color: #F4F4F4;
       <enum>Qt::ScrollBarAlwaysOff</enum>
      </property>
      <property name="widgetResizable">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <widget class="QWidget" name="scrollAreaWidgetContents">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>400</width>
-        <height>511</height>
+        <width>394</width>
+        <height>663</height>
        </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>400</width>
-        <height>0</height>
-       </size>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="leftMargin">
@@ -513,6 +489,77 @@ font-size: 10px;
          </layout>
         </widget>
        </item>
+       <item>
+        <widget class="QFrame" name="sceneFrame">
+         <property name="section" stdset="0">
+          <bool>true</bool>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font-weight: bold;</string>
+            </property>
+            <property name="text">
+             <string>Scene</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <item>
+               <widget class="QLabel" name="selectionColorLabel">
+                <property name="text">
+                 <string>Selection color</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="tlp::ColorButton" name="selectionColorButton">
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <item>
+               <widget class="QLabel" name="backgroundColorLabel">
+                <property name="text">
+                 <string>Background color</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="tlp::ColorButton" name="backgroundColorButton">
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -527,6 +574,14 @@ font-size: 10px;
    <slots>
     <signal>lowerValueChanged(int)</signal>
     <signal>upperValueChanged(int)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>tlp::ColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">tulip/ColorButton.h</header>
+   <slots>
+    <signal>colorChanged(QColor)</signal>
    </slots>
   </customwidget>
  </customwidgets>
@@ -723,6 +778,38 @@ font-size: 10px;
     <hint type="destinationlabel">
      <x>209</x>
      <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>backgroundColorButton</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>SceneConfigWidget</receiver>
+   <slot>applySettings()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>309</x>
+     <y>653</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>341</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>selectionColorButton</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>SceneConfigWidget</receiver>
+   <slot>applySettings()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>309</x>
+     <y>621</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>341</y>
     </hint>
    </hints>
   </connection>
