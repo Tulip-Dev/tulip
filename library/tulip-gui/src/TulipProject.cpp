@@ -28,7 +28,7 @@
 #include <QtCore/QTextStream>
 #include <QtXml/QDomDocument>
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <tulip/QuaZIPFacade.h>
 
 #define DATA_DIR_NAME "data"

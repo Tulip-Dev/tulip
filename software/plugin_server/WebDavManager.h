@@ -29,8 +29,6 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 
-#include <assert.h>
-
 class QDomDocument;
 /**
  * @brief This class uploads files to a server using the WEBDAV protocol.

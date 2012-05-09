@@ -20,7 +20,7 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/tulipconf.h>
 #include <tulip/PluginLister.h>
-#include <string.h>
+#include <cstring>
 #include <sstream>
 #include <set>
 #include <vector>
@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <windows.h>
 #else
-#include <stdlib.h>
+#include <cstdlib>
 #include <dlfcn.h>
 #endif
 

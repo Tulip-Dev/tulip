@@ -19,7 +19,6 @@
 #include "tulip/MemoryChecker.h"
 
 #include <QtCore/QMap>
-#include <assert.h>
 
 static int miss_count = 0;
 static int hit_count = 0;

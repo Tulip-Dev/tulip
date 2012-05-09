@@ -19,7 +19,7 @@
 #ifndef TULIP_COORD_H
 #define TULIP_COORD_H
 
-#include <string.h>
+#include <cstring>
 #include <tulip/tulipconf.h>
 #include <tulip/Vector.h>
 

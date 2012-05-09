@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <iostream>
 #include <sstream>
 

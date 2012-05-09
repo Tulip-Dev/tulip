@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <cassert>
 #include "WebDavManager.h"
 #include <QDomDocument>
 
