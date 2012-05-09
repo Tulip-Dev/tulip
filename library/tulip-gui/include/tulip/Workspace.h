@@ -72,6 +72,7 @@ public slots:
   void switchToSingleMode();
   void switchToSplitMode();
   void switchToSplit3Mode();
+  void switchToSplit32Mode();
   void switchToGridMode();
 
   void nextPage();
