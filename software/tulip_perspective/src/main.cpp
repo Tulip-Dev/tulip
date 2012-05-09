@@ -216,9 +216,8 @@ int main(int argc,char **argv) {
   title += " - [ Debug mode enabled ]";
 #endif
 
-  mainWindow->setWindowTitle(title);
-
   perspective->start(progress);
+  mainWindow->setWindowTitle(title);
 
   int result = tulip_perspective.exec();
   delete perspective;
