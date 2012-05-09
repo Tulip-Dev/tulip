@@ -23,7 +23,7 @@
 #include <QtGui/QComboBox>
 #include <QtGui/QLineEdit>
 #include <QtGui/QScrollBar>
-#include <limits.h>
+#include <climits>
 
 using namespace tlp;
 using namespace std;

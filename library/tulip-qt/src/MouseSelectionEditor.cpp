@@ -18,7 +18,7 @@
  */
 
 #include <cmath>
-#include <limits.h>
+#include <climits>
 
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>

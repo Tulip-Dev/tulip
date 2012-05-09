@@ -1,7 +1,6 @@
 #include "tulip/MemoryChecker.h"
 
 #include <QtCore/QMap>
-#include <assert.h>
 #include <iostream>
 
 static int miss_count = 0;

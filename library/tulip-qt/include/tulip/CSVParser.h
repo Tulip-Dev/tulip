@@ -22,7 +22,7 @@
 #include <tulip/tulipconf.h>
 #include <string>
 #include <vector>
-#include <limits.h>
+#include <climits>
 
 #include <QtCore/QTextCodec>
 #include <QtCore/QString>

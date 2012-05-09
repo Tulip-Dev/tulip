@@ -18,7 +18,7 @@
  */
 #include <deque>
 #include <list>
-#include <limits.h>
+#include <climits>
 #ifdef _OPENMP
 #include <omp.h>
 #endif

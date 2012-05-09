@@ -19,7 +19,7 @@
 
 #include <tulip/Ordering.h>
 #include <tulip/BiconnectedTest.h>
-#include <assert.h>
+#include <cassert>
 #include <cstdlib>
 
 using namespace std;

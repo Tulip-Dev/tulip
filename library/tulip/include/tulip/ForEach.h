@@ -19,7 +19,7 @@
 #ifndef Tulip_FOREACH_H
 #define Tulip_FOREACH_H
 
-#include <assert.h>
+#include <cassert>
 #include <tulip/Iterator.h>
 #include <tulip/StableIterator.h>
 #include <tulip/tulipconf.h>

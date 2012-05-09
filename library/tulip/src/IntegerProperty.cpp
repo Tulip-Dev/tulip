@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <limits.h>
+#include <climits>
 #include <tulip/IntegerProperty.h>
 #include <tulip/IntegerAlgorithm.h>
 

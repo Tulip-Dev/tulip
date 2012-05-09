@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <assert.h>
 #include "MultipleEdgeSelection.h"
 #include <tulip/BooleanProperty.h>
 #include <tulip/SimpleTest.h>
