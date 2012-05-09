@@ -296,7 +296,9 @@ private:
   bool useFramebufferObject;
   QGLFramebufferObject *glFrameBuf;
   static bool inRendering;
+#if defined(__APPLE__) && defined(QT_MAC_USE_COCOA)
   int renderingNumber;
+#endif
 
 public slots:
   /**
