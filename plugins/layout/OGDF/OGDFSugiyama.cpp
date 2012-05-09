@@ -1,21 +1,3 @@
-/**
- *
- * This file is part of Tulip (www.tulip-software.org)
- *
- * Authors: David Auber and the Tulip development Team
- * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
- *
- * Tulip is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * Tulip is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
 #include <ogdf/layered/SugiyamaLayout.h>
 #include <ogdf/layered/LongestPathRanking.h>
 #include <ogdf/layered/OptimalRanking.h>
@@ -36,6 +18,21 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "int" )
                              HTML_HELP_BODY()
                              "Sets the option runs to nRuns."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The minimal distance between two nodes on the same layer."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "double" )
+                             HTML_HELP_BODY()
+                             "The minimal distance between two layers."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "bool" )
+                             HTML_HELP_BODY()
+                             "If false, adjust the distance of each layer to the longest edge."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
@@ -69,7 +66,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "StringCollection")
-                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> LongestPathRanking : <FONT COLOR=\"black\"> the well-known longest-path ranking algorithm. <BR> <FONT COLOR=\"red\"> OptimalRanking : <FONT COLOR=\"black\"> the LP-based algorithm for computing a node ranking with minimal edge lengths. <BR> <FONT COLOR=\"red\"> SplitHeuristic : <FONT COLOR=\"black\"> the split heuristic for 2-layer crossing minimization.")
+                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> LongestPathRanking : <FONT COLOR=\"black\"> the well-known longest-path ranking algorithm. <BR> <FONT COLOR=\"red\"> OptimalRanking : <FONT COLOR=\"black\"> the LP-based algorithm for computing a node ranking with minimal edge lengths.")
                              HTML_HELP_DEF( "default", "LongestPathRanking " )
                              HTML_HELP_BODY()
                              "Sets the option for the node ranking (layer assignment)."
@@ -145,24 +142,30 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 class OGDFSugiyama : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONS("Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.4","Hierarchical")
-  OGDFSugiyama(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::SugiyamaLayout()) {
-    addInParameter<int>("fails", paramHelp[0], "4");
-    addInParameter<int>("runs", paramHelp[1], "15");
-    addInParameter<bool>("transpose", paramHelp[2], "false");
-    addInParameter<bool>("arrangeCCs", paramHelp[3], "true");
-    addInParameter<double>("minDistCC", paramHelp[4], "20");
-    addInParameter<double>("pageRatio", paramHelp[5], "1.0");
-    addInParameter<bool>("alignBaseClasses", paramHelp[6], "false");
-    addInParameter<bool>("alignSiblings", paramHelp[7], "false");
-    addInParameter<StringCollection>(ELT_RANKING, paramHelp[8], ELT_RANKINGLIST);
-    addInParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[9], ELT_TWOLAYERCROSSLIST);
+
+  OGDFSugiyama(const tlp::PluginContext *context) :OGDFLayoutPluginBase(context, new ogdf::SugiyamaLayout()) {
+    addParameter<int>("fails", paramHelp[0], "4");
+    addParameter<int>("runs", paramHelp[1], "15");
+    addParameter<double>("node distance", paramHelp[2], "3");
+    addParameter<double>("layer distance", paramHelp[3], "3");
+    addParameter<bool>("fixed layer distance", paramHelp[4], "true");
+    addParameter<bool>("transpose", paramHelp[5], "false");
+    addParameter<bool>("arrangeCCs", paramHelp[6], "true");
+    addParameter<double>("minDistCC", paramHelp[7], "20");
+    addParameter<double>("pageRatio", paramHelp[8], "1.0");
+    addParameter<bool>("alignBaseClasses", paramHelp[9], "false");
+    addParameter<bool>("alignSiblings", paramHelp[10], "false");
+    addParameter<StringCollection>(ELT_RANKING, paramHelp[11], ELT_RANKINGLIST);
+    addParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[12], ELT_TWOLAYERCROSSLIST);
   }
 
   ~OGDFSugiyama() {}
 
+  PLUGININFORMATIONS("Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.4","Hierarchical")
+
   void beforeCall() {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
+    ogdf::FastHierarchyLayout *fhl = new FastHierarchyLayout();
 
     if (dataSet != 0) {
       int ival = 0;
@@ -175,6 +178,15 @@ public:
 
       if (dataSet->get("runs", ival))
         sugiyama->runs(ival);
+
+      if (dataSet->get("node distance", dval))
+        fhl->nodeDistance(dval);
+
+      if (dataSet->get("layer distance", dval))
+        fhl->layerDistance(dval);
+
+      if (dataSet->get("fixed layer distance", bval))
+        fhl->fixedLayerDistance(bval);
 
       if (dataSet->get("arrangeCCS", bval))
         sugiyama->arrangeCCs(bval);
@@ -212,6 +224,9 @@ public:
         }
       }
     }
+
+    sugiyama->setLayout(fhl);
+
   }
 
   void afterCall() {
