@@ -19,7 +19,6 @@
 
 #ifndef TULIP_PLUGIN_H
 #define TULIP_PLUGIN_H
-#include <assert.h>
 #include <string>
 #include <tulip/tulipconf.h>
 #include <tulip/WithParameter.h>

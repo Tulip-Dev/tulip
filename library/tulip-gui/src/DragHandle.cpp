@@ -3,7 +3,7 @@
 #include <tulip/WorkspacePanel.h>
 #include <tulip/View.h>
 
-#include <assert.h>
+#include <cassert>
 
 #include <QtCore/QMimeData>
 #include <QtGui/QDrag>

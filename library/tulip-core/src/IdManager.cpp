@@ -17,8 +17,8 @@
  *
  */
 #include <tulip/IdManager.h>
-#include <limits.h>
-#include <assert.h>
+#include <climits>
+#include <cassert>
 using namespace std;
 
 namespace tlp {

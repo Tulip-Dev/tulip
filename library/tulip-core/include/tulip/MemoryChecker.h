@@ -22,7 +22,7 @@
 #define MEMORYCHECKER_ON
 
 #include <execinfo.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 
 void memchecker_insert_stack(void* ptr,char** strings, size_t size);

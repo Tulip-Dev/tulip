@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "WebDavManager.h"
 #include <QDir>

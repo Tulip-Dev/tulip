@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cassert>
-
 #include <tulip/BooleanProperty.h>
 #include <tulip/AcyclicTest.h>
 

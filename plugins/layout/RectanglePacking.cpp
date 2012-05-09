@@ -19,7 +19,7 @@
 #include "RectanglePacking.h"
 #include <cstring>
 #include <float.h> //FLT_MAX
-#include <limits.h> //INT_MAX
+#include <climits> //INT_MAX
 
 using namespace std;
 using namespace tlp;
