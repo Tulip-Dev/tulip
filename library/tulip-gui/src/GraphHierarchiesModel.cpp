@@ -44,7 +44,8 @@ using namespace tlp;
 #define EDGES_SECTION 3
 
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
-  const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize";
+  const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
+      borderWidth = "viewBorderWidth", borderColor = "viewBorderColor";
 
   if (!g->existProperty(shapes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipSettings::instance().defaultShape(tlp::NODE));
@@ -75,6 +76,17 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
     g->getProperty<IntegerProperty>(fontSizes)->setAllNodeValue(18);
     g->getProperty<IntegerProperty>(fontSizes)->setAllEdgeValue(18);
   }
+
+  if (!g->existProperty(borderWidth)) {
+    g->getProperty<DoubleProperty>(borderWidth)->setAllNodeValue(0);
+    g->getProperty<DoubleProperty>(borderWidth)->setAllEdgeValue(1);
+  }
+
+  if (!g->existProperty(borderColor)) {
+    g->getProperty<ColorProperty>(borderColor)->setAllNodeValue(TulipSettings::instance().defaultColor(tlp::NODE));
+    g->getProperty<ColorProperty>(borderColor)->setAllEdgeValue(TulipSettings::instance().defaultColor(tlp::EDGE));
+  }
+
 }
 
 GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): TulipModel(parent), _currentGraph(NULL) {

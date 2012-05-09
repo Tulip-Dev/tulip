@@ -70,9 +70,7 @@ public:
   /**
    * Get color for selection
    */
-  const Color& getSelectionColor() {
-    return selectionColor;
-  }
+  const Color& getSelectionColor();
 
   /**
    * Set if tulip auto load controller

@@ -34,6 +34,7 @@ const QString TulipSettings::PluginsToRemoveConfigEntry = "app/pluginsToRemove";
 const QString TulipSettings::DefaultColorConfigEntry = "graph/defaults/color/";
 const QString TulipSettings::DefaultSizeConfigEntry = "graph/defaults/size/";
 const QString TulipSettings::DefaultShapeConfigEntry = "graph/defaults/shape/";
+const QString TulipSettings::DefaultSelectionColorEntry = "graph/defaults/selectioncolor/";
 
 TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }
@@ -156,4 +157,16 @@ int TulipSettings::defaultShape(tlp::ElementType elem) {
 
 void TulipSettings::setDefaultShape(tlp::ElementType elem, int shape) {
   setValue(elementKey(DefaultShapeConfigEntry,elem),shape);
+}
+
+tlp::Color TulipSettings::defaultSelectionColor() {
+  QString val = value(DefaultSelectionColorEntry,"(23, 81, 228)").toString();
+  Color result;
+  ColorType::fromString(result,val.toStdString());
+  return result;
+}
+
+void TulipSettings::setDefaultSelectionColor(const tlp::Color& color) {
+  QString value = tlp::ColorType::toString(color).c_str();
+  setValue(DefaultSelectionColorEntry,value);
 }

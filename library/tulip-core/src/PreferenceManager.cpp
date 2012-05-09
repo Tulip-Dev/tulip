@@ -18,9 +18,19 @@
  */
 #include <tulip/PreferenceManager.h>
 
+#include <QtCore/QSettings>
+#include <tulip/PropertyTypes.h>
+
 tlp::PreferenceManager* tlp::PreferenceManager::inst=0;
 
 using namespace std;
+using namespace tlp;
 
-namespace tlp {
+// FIXME: pretty dirty since this is duplicated in TulipSettings and should belong to it
+const Color& PreferenceManager::getSelectionColor() {
+  QSettings settings("TulipSoftware","Tulip");
+  QString val = settings.value("graph/defaults/selectioncolor/","(23, 81, 228)").toString();
+  Color result;
+  ColorType::fromString(result,val.toStdString());
+  return result;
 }
