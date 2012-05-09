@@ -102,8 +102,10 @@ public:
   template<typename PluginType>
   bool pluginExists(const std::string &pluginName) {
     const Plugin* p = getPluginObject(pluginName,NULL);
+
     if (p == NULL)
       return false;
+
     bool result = dynamic_cast<const PluginType*>(p) != NULL;
     delete p;
     return result;

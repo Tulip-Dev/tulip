@@ -110,6 +110,7 @@ void SceneConfigWidget::applySettings() {
 
   // NODES
   DoubleProperty* orderingProperty = NULL;
+
   if (_ui->labelsOrderingCombo->currentIndex() != 0 && _glMainWidget->getScene()->getGlGraphComposite()->getGraph())
     orderingProperty = _glMainWidget->getScene()->getGlGraphComposite()->getGraph()->getProperty<DoubleProperty>(_ui->labelsOrderingCombo->currentText().toStdString());
 
