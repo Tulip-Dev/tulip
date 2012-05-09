@@ -82,6 +82,10 @@ ADD_LIBRARY(ImportUCINET-${TulipVersion} SHARED ${ImportUCINET_SRCS})
 TARGET_LINK_LIBRARIES(ImportUCINET-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(EmptyGraph-${TulipVersion} SHARED EmptyGraph.cpp)
+TARGET_LINK_LIBRARIES(EmptyGraph-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS PlanarGraph-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT PlanarGraph)
 INSTALL(TARGETS DotImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT DotImport)
 INSTALL(TARGETS Grid-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Grid)
@@ -98,3 +102,4 @@ INSTALL(TARGETS FileSystem-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}
 INSTALL(TARGETS WebImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT WebImport)
 INSTALL(TARGETS ImportPajek-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ImportPajek)
 INSTALL(TARGETS ImportUCINET-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ImportUCINET)
+INSTALL(TARGETS EmptyGraph-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT EmptyGraph)
