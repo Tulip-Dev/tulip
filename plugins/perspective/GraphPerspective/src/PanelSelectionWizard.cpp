@@ -39,6 +39,7 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
 
   _ui->panelList->setModel(new PluginListModel<tlp::View>(_ui->panelList));
   connect(_ui->panelList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(panelSelected(QModelIndex)));
+  connect(_ui->panelList,SIGNAL(doubleClicked(QModelIndex)),button(QWizard::FinishButton),SLOT(click()));
   _ui->panelList->setCurrentIndex(_ui->panelList->model()->index(0,0));
 }
 
