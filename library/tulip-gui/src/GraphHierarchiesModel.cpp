@@ -45,7 +45,7 @@ using namespace tlp;
 
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
-      borderWidth = "viewBorderWidth", borderColor = "viewBorderColor";
+                    borderWidth = "viewBorderWidth", borderColor = "viewBorderColor";
 
   if (!g->existProperty(shapes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipSettings::instance().defaultShape(tlp::NODE));

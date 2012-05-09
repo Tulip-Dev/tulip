@@ -197,6 +197,7 @@ public:
 
     if(index.isValid()) {
       TreeItem* item = (TreeItem*)index.internalPointer();
+
       if (!PluginLister::instance()->pluginExists<PLUGIN>(item->name.toStdString()))
         result = Qt::ItemIsEnabled;
     }
