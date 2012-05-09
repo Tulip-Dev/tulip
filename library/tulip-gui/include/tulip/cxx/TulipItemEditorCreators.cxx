@@ -130,7 +130,7 @@ QVariant GenericVectorEditorCreator<ElementType>::editorData(QWidget* editor,tlp
 template<typename ElementType>
 QString GenericVectorEditorCreator<ElementType>::displayText(const QVariant &data) const {
   std::vector<ElementType> v = data.value<std::vector<ElementType> >();
-  return QString::fromUtf8(tlp::SerializableVectorType<ElementType,false>::toString(v).c_str());
+  return QString::number(v.size()) + QObject::trUtf8(" elements");
 }
 
 
