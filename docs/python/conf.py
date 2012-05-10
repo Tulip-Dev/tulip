@@ -267,6 +267,8 @@ def process_docstring(app, what, name, obj, options, lines):
           linesIdx = 0
           while lines[linesIdx].find(nextSignature) == -1:
             linesIdx+=1
+            if linesIdx >= len(lines):
+                break
 
           curNbLines = len(lines)
           for i in range(curNbLines - linesIdx):
