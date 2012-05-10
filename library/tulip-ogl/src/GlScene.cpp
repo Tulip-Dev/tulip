@@ -989,7 +989,8 @@ void GlScene::getXMLOnlyForCameras(string &out) {
 //====================================================
 void GlScene::setWithXML(string &in, Graph *graph) {
 
-  glGraphComposite=new GlGraphComposite(graph);
+  if(graph)
+    glGraphComposite=new GlGraphComposite(graph);
 
   assert(in.substr(0,7)=="<scene>");
   unsigned int currentPosition=7;
@@ -1021,7 +1022,8 @@ void GlScene::setWithXML(string &in, Graph *graph) {
     childName=GlXMLTools::enterChildNode(in,currentPosition);
   }
 
-  getLayer("Main")->addGlEntity(glGraphComposite,"graph");
+  if(graph)
+    getLayer("Main")->addGlEntity(glGraphComposite,"graph");
 }
 
 void GlScene::setViewportZoom(int zoom,int xDec, int yDec) {
