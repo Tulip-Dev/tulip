@@ -30,7 +30,6 @@ using namespace tlp;
 const Color& PreferenceManager::getSelectionColor() {
   QSettings settings("TulipSoftware","Tulip");
   QString val = settings.value("graph/defaults/selectioncolor/","(23, 81, 228)").toString();
-  Color result;
-  ColorType::fromString(result,val.toStdString());
-  return result;
+  ColorType::fromString(selectionColor,val.toStdString());
+  return selectionColor;
 }
