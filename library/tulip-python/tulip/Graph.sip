@@ -3237,7 +3237,7 @@ successfully saved.
 
 //===========================================================================================
 
-tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet &dataSet, tlp::Graph *newGraph=0) /TransferBack/; 
+tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet &dataSet) /TransferBack/;
 %Docstring
 tlp.importGraph(importPluginName, dataSet[, newGraph = None])
 
@@ -3263,7 +3263,7 @@ Returns a new graph or None if the import fails.
 
 %MethodCode
     if (pluginExists(*a0, "Import")) {
-		sipRes = tlp::importGraph(*a0, *a1, 0, a2);
+        sipRes = tlp::importGraph(*a0, *a1, 0);
 	} else {
 		sipIsErr = 1;
 		std::string msg = "No Tulip import plugin named  ";
@@ -3273,6 +3273,41 @@ Returns a new graph or None if the import fails.
 	}	
 %End
 
+tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet &dataSet, tlp::Graph *newGraph);
+%Docstring
+tlp.importGraph(importPluginName, dataSet[, newGraph = None])
+
+Imports a graph using a Tulip import plugin (must be loaded).
+Import plugins are objects implementing the tlp::ImportModule interface
+in C++ or the :class:`tlp.ImportModule` interface in Python.
+The list of currently loaded import plugins can be
+retrieved through the :func:`tlp.getImportPluginsList` function.
+Returns a new graph or None if the import fails.
+
+:param importPluginName: the name of the Tulip import plugin
+:type importPluginName: string
+:param dataSet: a dataset filled with parameters to transmit to the import plugin
+:type dataSet: :class:`tlp.DataSet`
+:param newGraph: if provided, add imported graph elements in that graph
+:type newGraph: :class:`tlp.Graph`
+:rtype: :class:`tlp.Graph`
+:throws: an exception if the requested import plugin is not registered in the plugins database.
+
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call import modules (see :ref:`Loading Tulip plugins <loading-plugins>`)).
+%End
+
+%MethodCode
+    if (pluginExists(*a0, "Import")) {
+        sipRes = tlp::importGraph(*a0, *a1, 0, a2);
+    } else {
+        sipIsErr = 1;
+        std::string msg = "No Tulip import plugin named  ";
+        msg += *a0;
+        msg += ".";
+        PyErr_SetString(PyExc_Exception, msg.c_str());
+    }
+%End
 
 //===========================================================================================
 
