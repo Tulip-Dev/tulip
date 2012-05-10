@@ -51,7 +51,7 @@ bool getUnsignedInt(unsigned int& i, const string& str) {
   char* endPtr;
   long int value = strtol(ptr, &endPtr, 10);
   i = (unsigned int) value;
-  return (value > 0) && (*endPtr == 0);
+  return (value >= 0) && (*endPtr == 0);
 }
 
 bool getDouble(double& d, const string& str) {

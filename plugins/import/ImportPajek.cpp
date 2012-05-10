@@ -128,7 +128,7 @@ public :
     char* endPtr;
     long int value = strtol(ptr, &endPtr, 10);
     i = (unsigned int) value;
-    return (value > 0) && (*endPtr == 0);
+    return (value >= 0) && (*endPtr == 0);
   }
 
   bool getFloat(float& f, const string& str) {
