@@ -74,7 +74,7 @@ public :
   virtual bool run() = 0;
 
   virtual std::string category() const {
-    return "Algorithm";
+    return QObject::trUtf8("Algorithm").toStdString();
   }
   /**
    * @brief Checks whether the algorithm can be applied on this graph or not.

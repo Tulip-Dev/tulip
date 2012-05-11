@@ -57,7 +57,7 @@ protected:
   QVariantMap _parameters;
 public:
   virtual std::string category() const {
-    return "Perspective";
+    return QObject::trUtf8("Perspective").toStdString();
   }
   std::string icon() const {
     return ":/tulip/gui/icons/32/plugin_controller.png";

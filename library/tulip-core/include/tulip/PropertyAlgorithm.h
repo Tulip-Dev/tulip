@@ -14,7 +14,7 @@ protected:
   ///
   BooleanAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return "BooleanAlgorithm";
+    return QObject::trUtf8("Filtering").toStdString();
   }
 };
 
@@ -25,7 +25,7 @@ protected:
   ///
   ColorAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return "ColorAlgorithm";
+    return QObject::trUtf8("Coloring").toStdString();
   }
 };
 
@@ -36,7 +36,7 @@ protected:
   ///
   DoubleAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return "DoubleAlgorithm";
+    return QObject::trUtf8("Metric").toStdString();
   }
 };
 
@@ -47,7 +47,7 @@ protected:
   ///
   IntegerAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return "IntegerAlgorithm";
+    return QObject::trUtf8("Metric").toStdString();
   }
 };
 
@@ -58,7 +58,7 @@ protected:
   ///
   LayoutAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return "LayoutAlgorithm";
+    return QObject::trUtf8("Layout").toStdString();
   }
 };
 
@@ -69,7 +69,7 @@ protected:
   ///
   SizeAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return "SizeAlgorithm";
+    return QObject::trUtf8("Resizing").toStdString();
   }
 };
 
@@ -80,7 +80,7 @@ protected:
   ///
   StringAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return "StringAlgorithm";
+    return QObject::trUtf8("Labeling").toStdString();
   }
 };
 }

@@ -40,7 +40,7 @@ class GlGraphInputData;
 class TLP_GL_SCOPE EdgeExtremityGlyph: public Plugin {
 public:
   virtual std::string category() const {
-    return "EdgeExtremityGlyph";
+    return QObject::trUtf8("Edge extremities").toStdString();
   }
   std::string icon() const {
     return ":/tulip/gui/icons/32/plugin_glyph.png";

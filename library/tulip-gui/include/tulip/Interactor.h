@@ -54,7 +54,7 @@ class TLP_QT_SCOPE Interactor: public QObject, public tlp::Plugin {
 
 public:
   virtual std::string category() const {
-    return "Interactor";
+    return QObject::trUtf8("Interactor").toStdString();
   }
   std::string icon() const {
     return ":/tulip/gui/icons/32/plugin_interactor.png";
