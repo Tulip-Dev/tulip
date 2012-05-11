@@ -34,6 +34,7 @@
 #include <tulip/Gl2DRect.h>
 #include <tulip/ExtendedMetaNodeRenderer.h>
 #include <tulip/GlVertexArrayManager.h>
+#include <tulip/GlOverviewGraphicsItem.h>
 
 using namespace tlp;
 using namespace std;
@@ -160,6 +161,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 
 
   setOverviewVisible(overviewVisible);
+  _overviewItem->setLayerVisible("Foreground",false);
 
   setQuickAccessBarVisible(true);
 }

@@ -37,7 +37,6 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
 
   bool _overviewVisible;
   tlp::GlMainWidget* _glMainWidget;
-  tlp::GlOverviewGraphicsItem* _overviewItem;
   tlp::SceneConfigWidget* _sceneConfigurationWidget;
   tlp::SceneLayersConfigWidget* _sceneLayersConfigurationWidget;
   tlp::QuickAccessBar* _quickAccessBar;
@@ -70,6 +69,8 @@ protected slots:
 protected:
   virtual void setupWidget();
   bool quickAccessBarVisible() const;
+
+  tlp::GlOverviewGraphicsItem* _overviewItem;
 };
 }
 

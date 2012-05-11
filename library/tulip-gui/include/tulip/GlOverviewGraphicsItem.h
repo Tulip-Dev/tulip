@@ -39,6 +39,8 @@ public:
 
   void setSize(unsigned int width, unsigned int height);
 
+  void setLayerVisible(const std::string &name,bool visible);
+
 public slots :
 
   void draw(bool generatePixmap);
@@ -61,6 +63,8 @@ private :
   QGraphicsPolygonItem poly[4];
 
   bool mouseClicked;
+
+  std::set<std::string> _hiddenLayers;
 
 };
 

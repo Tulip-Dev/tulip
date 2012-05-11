@@ -29,7 +29,7 @@
 using namespace tlp;
 
 
-GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _overviewItem(NULL), _sceneConfigurationWidget(NULL), _sceneLayersConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL),_overviewContextMenu(NULL) {
+GlMainView::GlMainView(): _overviewVisible(false), _glMainWidget(NULL), _sceneConfigurationWidget(NULL), _sceneLayersConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL),_overviewContextMenu(NULL), _overviewItem(NULL) {
 }
 
 GlMainView::~GlMainView() {

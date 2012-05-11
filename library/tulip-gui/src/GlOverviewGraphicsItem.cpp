@@ -61,6 +61,14 @@ void GlOverviewGraphicsItem::setSize(unsigned int width, unsigned int height) {
   draw(true);
 }
 
+void GlOverviewGraphicsItem::setLayerVisible(const string &name, bool visible){
+  if(visible==false){
+    _hiddenLayers.insert(name);
+  }else{
+    _hiddenLayers.erase(name);
+  }
+}
+
 void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   if(baseScene.getLayersList().size()==0)
@@ -150,10 +158,15 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(false);
     baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewMetaLabel(false);
 
+    vector<bool> layersVisibility;
+
     const vector<pair<string, GlLayer*> > &layersList=baseScene.getLayersList();
 
     for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
+      layersVisibility.push_back((*it).second->isVisible());
       if((*it).second->isAWorkingLayer())
+        (*it).second->setVisible(false);
+      if(_hiddenLayers.count((*it).first)!=0)
         (*it).second->setVisible(false);
     }
 
@@ -162,9 +175,11 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     baseScene.draw();
     glFrameBuffer->release();
 
+    vector<bool>::iterator itTmp=layersVisibility.begin();
     for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-      if((*it).second->isAWorkingLayer())
+      if((*itTmp)==true)
         (*it).second->setVisible(true);
+      ++itTmp;
     }
 
     baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(edgesLabels);
