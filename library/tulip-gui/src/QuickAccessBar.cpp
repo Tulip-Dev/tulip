@@ -78,6 +78,15 @@ QuickAccessBar::QuickAccessBar(QGraphicsItem *quickAccessBarItem, QWidget *paren
   _ui->setupUi(this);
 }
 
+QuickAccessBar::~QuickAccessBar(){
+  if(_captionsInitialized) {
+    delete _captions[0];
+    delete _captions[1];
+    delete _captions[2];
+    delete _captions[3];
+  }
+}
+
 void QuickAccessBar::setGlMainView(GlMainView* v) {
   _mainView = v;
   reset();
@@ -140,9 +149,9 @@ void QuickAccessBar::showHideCaption(CaptionItem::CaptionType captionType) {
     _captions[3]->captionGraphicsItem()->setVisible(false);
 
     for(size_t i=0; i<4; i++) {
-      connect(_captions[i]->captionGraphicsItem(),SIGNAL(interactionsActivated()),_captions[(i+1)%4],SLOT(removeInteractions()));
-      connect(_captions[i]->captionGraphicsItem(),SIGNAL(interactionsActivated()),_captions[(i+2)%4],SLOT(removeInteractions()));
-      connect(_captions[i]->captionGraphicsItem(),SIGNAL(interactionsActivated()),_captions[(i+3)%4],SLOT(removeInteractions()));
+      connect(_captions[i]->captionGraphicsItem(),SIGNAL(interactionsActivated()),_captions[(i+1)%4]->captionGraphicsItem(),SLOT(removeInteractions()));
+      connect(_captions[i]->captionGraphicsItem(),SIGNAL(interactionsActivated()),_captions[(i+2)%4]->captionGraphicsItem(),SLOT(removeInteractions()));
+      connect(_captions[i]->captionGraphicsItem(),SIGNAL(interactionsActivated()),_captions[(i+3)%4]->captionGraphicsItem(),SLOT(removeInteractions()));
       connect(_captions[i],SIGNAL(filtering(bool)),_captions[(i+1)%4],SLOT(removeObservation(bool)));
       connect(_captions[i],SIGNAL(filtering(bool)),_captions[(i+2)%4],SLOT(removeObservation(bool)));
       connect(_captions[i],SIGNAL(filtering(bool)),_captions[(i+3)%4],SLOT(removeObservation(bool)));
