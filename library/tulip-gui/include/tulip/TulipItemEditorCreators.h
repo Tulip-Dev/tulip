@@ -41,7 +41,7 @@ public:
     return "";
   }
 
-  virtual void setEditorData(QWidget*,const QVariant&,tlp::Graph* g=NULL)=0;
+  virtual void setEditorData(QWidget*,const QVariant&,bool isMandatory,tlp::Graph* g=NULL)=0;
   virtual QVariant editorData(QWidget*,tlp::Graph* g=NULL)=0;
 };
 
@@ -57,7 +57,7 @@ class TLP_QT_SCOPE ColorEditorCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget*) const;
   bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
-  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
 };
 
@@ -65,7 +65,7 @@ template<typename T>
 class TLP_QT_SCOPE LineEditEditorCreator: public StringDisplayEditorCreator<T> {
 public:
   QWidget* createWidget(QWidget*) const;
-  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
 };
 
@@ -73,21 +73,21 @@ class TLP_QT_SCOPE BooleanEditorCreator: public TulipItemEditorCreator {
 public:
   virtual QWidget* createWidget(QWidget*) const;
   virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant &) const;
-  virtual void setEditorData(QWidget*,const QVariant&,tlp::Graph*);
+  virtual void setEditorData(QWidget*,const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
 };
 
 class TLP_QT_SCOPE CoordEditorCreator: public StringDisplayEditorCreator<tlp::PointType> {
 public:
   QWidget* createWidget(QWidget*) const;
-  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
 };
 
 class TLP_QT_SCOPE SizeEditorCreator: public StringDisplayEditorCreator<tlp::SizeType> {
 public:
   QWidget* createWidget(QWidget*) const;
-  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
 };
 
@@ -97,7 +97,7 @@ class TLP_QT_SCOPE PropertyEditorCreator: public tlp::TulipItemEditorCreator {
   QSet<unsigned int> hasNullProperty;
 public:
   QWidget* createWidget(QWidget*) const;
-  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual QString displayText(const QVariant &) const;
 };
@@ -107,7 +107,7 @@ class TLP_QT_SCOPE PropertyInterfaceEditorCreator: public tlp::TulipItemEditorCr
   QSet<unsigned int> hasNullProperty;
 public:
   QWidget* createWidget(QWidget*) const;
-  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual QString displayText(const QVariant &) const;
 };
@@ -116,14 +116,14 @@ class TLP_QT_SCOPE ColorScaleEditorCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget*) const;
   bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
-  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
 };
 
 class TLP_QT_SCOPE StringCollectionEditorCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget*) const;
-  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual QString displayText(const QVariant &) const;
 };
@@ -131,7 +131,7 @@ public:
 class TLP_QT_SCOPE TulipFileDescriptorEditorCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget*) const;
-  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual QString displayText(const QVariant &) const;
 };
@@ -139,7 +139,7 @@ public:
 class TLP_QT_SCOPE NodeShapeEditorCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget*) const;
-  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual QString displayText(const QVariant &) const;
   virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
@@ -148,7 +148,7 @@ public:
 class TLP_QT_SCOPE EdgeExtremityShapeEditorCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget*) const;
-  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual QString displayText(const QVariant &) const;
   virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
@@ -157,7 +157,7 @@ public:
 class TLP_QT_SCOPE EdgeShapeEditorCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget*) const;
-  virtual void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual QString displayText(const QVariant &) const;
 };
@@ -166,7 +166,7 @@ template<typename ElementType>
 class TLP_QT_SCOPE GenericVectorEditorCreator : public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget* parent) const;
-  virtual void setEditorData(QWidget* editor, const QVariant& data,tlp::Graph*);
+  virtual void setEditorData(QWidget* editor, const QVariant& data,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget* editor,tlp::Graph*);
   virtual QString displayText(const QVariant &data) const;
 };
@@ -175,7 +175,7 @@ public:
 class TLP_QT_SCOPE TulipFontEditorCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget*) const;
-  void setEditorData(QWidget*, const QVariant&,tlp::Graph*);
+  void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   QVariant editorData(QWidget*,tlp::Graph*);
   QString displayText(const QVariant &) const;
 };

@@ -33,7 +33,7 @@ QWidget* LineEditEditorCreator<T>::createWidget(QWidget *parent) const {
 }
 
 template<typename T>
-void LineEditEditorCreator<T>::setEditorData(QWidget* editor, const QVariant &data,tlp::Graph*) {
+void LineEditEditorCreator<T>::setEditorData(QWidget* editor, const QVariant &data,bool,tlp::Graph*) {
   typename T::RealType val = data.value<typename T::RealType>();
   static_cast<QLineEdit*>(editor)->setText(T::toString(val).c_str());
 }
@@ -56,31 +56,19 @@ QWidget* PropertyEditorCreator<PROPTYPE>::createWidget(QWidget* parent) const {
 }
 
 template<typename PROPTYPE>
-void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& val,tlp::Graph* g) {
+void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& val,bool isMandatory,tlp::Graph* g) {
   if (g == NULL) {
     w->setEnabled(false);
     return;
   }
 
   PROPTYPE* prop = val.value<PROPTYPE*>();
-//  QPoint pos = w->pos();
-//  // because this PropertyEditor and the QWidget w
-//  // may be used to managed the value of several cells,
-//  // we use a QSet to register the cells for which we need
-//  // to manage a null property.
-//  // To uniquely identify theses cells (in which the editor w
-//  // takes place), we record its position as an unsigned int
-//  // 16 bits for x and 16 bits for y
-//  unsigned int ipos = (pos.x() << 16) + pos.y();
-
-//  if (prop == NULL)
-//    // indicates that a null property
-//    // has to be managed in that cell
-//    hasNullProperty.insert(ipos);
-
-
   QComboBox* combo = static_cast<QComboBox*>(w);
-  GraphPropertiesModel<PROPTYPE>* model = new GraphPropertiesModel<PROPTYPE>(g,false,combo);
+  GraphPropertiesModel<PROPTYPE>* model = NULL;
+  if (isMandatory)
+    model = new GraphPropertiesModel<PROPTYPE>(g,false,combo);
+  else
+    model = new GraphPropertiesModel<PROPTYPE>(QObject::trUtf8("Select a property"),g,false,combo);
   combo->setModel(model);
   combo->setCurrentIndex(model->rowOf(prop));
 }
@@ -89,15 +77,9 @@ template<typename PROPTYPE>
 QVariant PropertyEditorCreator<PROPTYPE>::editorData(QWidget* w,tlp::Graph* g) {
   if (g == NULL)
     return QVariant();
-
   QComboBox* combo = static_cast<QComboBox*>(w);
-  std::string propName = combo->currentText().toStdString();
-  PROPTYPE *prop = NULL;
-
-  if (g->existProperty(propName))
-    prop = g->getProperty<PROPTYPE>(propName);
-
-  return QVariant::fromValue<PROPTYPE*>(prop);
+  GraphPropertiesModel<PROPTYPE>* model = static_cast<GraphPropertiesModel<PROPTYPE> *>(combo->model());
+  return model->data(model->index(combo->currentIndex(),0),TulipModel::PropertyRole);
 }
 
 template<typename PROPTYPE>
@@ -116,7 +98,7 @@ QWidget* GenericVectorEditorCreator<ElementType>::createWidget(QWidget* parent) 
 }
 
 template<typename ElementType>
-void GenericVectorEditorCreator<ElementType>::setEditorData(QWidget* editor, const QVariant& data,tlp::Graph*) {
+void GenericVectorEditorCreator<ElementType>::setEditorData(QWidget* editor, const QVariant& data,bool,tlp::Graph*) {
   std::vector<ElementType> v = data.value<std::vector<ElementType> >();
   VectorEditionWidget* vEditor = static_cast<VectorEditionWidget*>(editor);
   vEditor->setInterface(new GenericContainer< tlp::TypeInterface<ElementType> >(v));
