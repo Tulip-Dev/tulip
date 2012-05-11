@@ -78,7 +78,7 @@ QuickAccessBar::QuickAccessBar(QGraphicsItem *quickAccessBarItem, QWidget *paren
   _ui->setupUi(this);
 }
 
-QuickAccessBar::~QuickAccessBar(){
+QuickAccessBar::~QuickAccessBar() {
   if(_captionsInitialized) {
     delete _captions[0];
     delete _captions[1];

@@ -245,7 +245,7 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
     }
   }
 
-  if(metricToSizeFiltered.size()==0){
+  if(metricToSizeFiltered.size()==0) {
     metricToSizeFiltered.push_back(pair<double,float>(minProp,0));
     metricToSizeFiltered.push_back(pair<double,float>(maxProp,0));
   }
