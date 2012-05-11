@@ -35,6 +35,7 @@ class QuickAccessBar : public QWidget {
 
 public:
   explicit QuickAccessBar(QGraphicsItem *quickAccessBarItem,QWidget *parent = 0);
+  virtual ~QuickAccessBar();
 
 public slots:
   void setGlMainView(tlp::GlMainView*);

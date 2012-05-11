@@ -33,6 +33,7 @@ CaptionItem::CaptionItem(View *view):view(view),_graph(NULL),_metricProperty(NUL
 }
 
 CaptionItem::~CaptionItem() {
+  clearObservers();
 }
 
 void CaptionItem::create(CaptionType captionType) {
