@@ -26,10 +26,9 @@ public:
   TriconnectedTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
-  virtual bool run() {
+  virtual bool test() {
     return tlp::TriconnectedTest::isTriconnected(graph);
   }
-
 };
 PLUGIN(TriconnectedTest)
 

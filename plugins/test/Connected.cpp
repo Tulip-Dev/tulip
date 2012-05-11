@@ -26,7 +26,7 @@ public:
   ConnetedTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
-  virtual bool run() {
+  virtual bool test() {
     return tlp::ConnectedTest::isConnected(graph);
   }
 

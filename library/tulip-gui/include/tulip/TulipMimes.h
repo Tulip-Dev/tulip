@@ -56,7 +56,7 @@ public:
   void run(tlp::Graph*) const;
 
 signals:
-  void mimeRun(tlp::Graph*) const;
+  void mimeRun(tlp::Graph*,tlp::DataSet) const;
 };
 
 class TLP_QT_SCOPE PanelMimeType : public QMimeData {

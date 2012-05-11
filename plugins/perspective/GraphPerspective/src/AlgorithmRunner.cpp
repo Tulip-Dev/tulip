@@ -27,6 +27,7 @@
 #include <tulip/ParameterListModel.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/Perspective.h>
+#include <tulip/GraphTest.h>
 #include "ExpandableGroupBox.h"
 #include "GraphPerspective.h"
 
@@ -208,7 +209,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
   if (!result)
     qCritical() << name() << ": " << errorMessage.c_str();
 
-  checkCenter(g);
+  afterRun(g,dataSet);
 
   Observable::unholdObservers();
 }
@@ -247,12 +248,20 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   drag->setPixmap(pix);
 
   AlgorithmMimeType* mimeData = new AlgorithmMimeType(name(),static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues());
-  connect(mimeData,SIGNAL(mimeRun(tlp::Graph*)),this,SLOT(checkCenter(tlp::Graph*)));
+  connect(mimeData,SIGNAL(mimeRun(tlp::Graph*,tlp::DataSet)),this,SLOT(afterRun(tlp::Graph*,tlp::DataSet)));
   drag->setMimeData(mimeData);
   Qt::DropAction dropAction = drag->exec(Qt::CopyAction | Qt::MoveAction);
 }
 
-void AlgorithmRunnerItem::checkCenter(Graph* g) {
+void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
   if (PluginLister::instance()->pluginExists<LayoutAlgorithm>(name().toStdString()))
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
+  else if (PluginLister::instance()->pluginExists<GraphTest>(name().toStdString())) {
+    bool result = true;
+    dataSet.get<bool>("result",result);
+    std::string gname;
+    g->getAttribute<std::string>("name",gname);
+    qDebug() << gname.c_str() << " - " << name() << (result ? trUtf8(": sucess") : trUtf8(": failure"));
+    // TODO : add a dialog here
+  }
 }
