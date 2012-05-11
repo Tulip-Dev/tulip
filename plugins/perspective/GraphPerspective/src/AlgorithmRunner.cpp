@@ -28,6 +28,7 @@
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/Perspective.h>
 #include "ExpandableGroupBox.h"
+#include "GraphPerspective.h"
 
 #include "ui_AlgorithmRunner.h"
 #include "ui_AlgorithmRunnerItem.h"
@@ -207,6 +208,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
   if (!result)
     qCritical() << name() << ": " << errorMessage.c_str();
 
+  checkCenter(g);
+
   Observable::unholdObservers();
 }
 
@@ -244,6 +247,12 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   drag->setPixmap(pix);
 
   AlgorithmMimeType* mimeData = new AlgorithmMimeType(name(),static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues());
+  connect(mimeData,SIGNAL(mimeRun(tlp::Graph*)),this,SLOT(checkCenter(tlp::Graph*)));
   drag->setMimeData(mimeData);
   Qt::DropAction dropAction = drag->exec(Qt::CopyAction | Qt::MoveAction);
+}
+
+void AlgorithmRunnerItem::checkCenter(Graph* g) {
+  if (PluginLister::instance()->pluginExists<LayoutAlgorithm>(name().toStdString()))
+    Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
 }

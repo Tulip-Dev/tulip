@@ -26,6 +26,7 @@
 #include <QtGui/QTextDocument>
 #include <QtGui/QToolButton>
 
+#include <tulip/Perspective.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/TulipMetaTypes.h>
 
@@ -73,6 +74,7 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
   if (_contextIndex.isValid()) {
     _contextGraph = (tlp::Graph*)_contextIndex.internalPointer();
     QMenu menu;
+    menu.addAction(_ui->actionExport);
     menu.addAction(_ui->actionCreate_panel);
     menu.addSeparator();
     menu.addAction(_ui->actionAdd_sub_graph);
@@ -140,7 +142,11 @@ void GraphHierarchiesEditor::createPanel() {
       return;
   }
 
-  static_cast<GraphPerspective*>(GraphPerspective::instance())->createPanel(g);
+  tlp::Perspective::typedInstance<GraphPerspective>()->createPanel(g);
+}
+
+void GraphHierarchiesEditor::exportGraph() {
+  tlp::Perspective::typedInstance<GraphPerspective>()->exportGraph(_contextGraph);
 }
 
 void GraphHierarchiesEditor::repackHeaders() {

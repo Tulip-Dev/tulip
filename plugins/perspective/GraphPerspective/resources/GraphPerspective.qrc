@@ -31,5 +31,6 @@
         <file>icons/16/logger-error.png</file>
         <file>icons/16/edit-clear.png</file>
         <file>icons/32/database.png</file>
+        <file>icons/16/document-export.png</file>
     </qresource>
 </RCC>

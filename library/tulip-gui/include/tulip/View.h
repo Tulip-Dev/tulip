@@ -149,14 +149,6 @@ public:
   void treatEvents(const std::vector<Event> &events);
 
   /**
-    @brief checks uif the given property's values affect the way elements in the view are layouted.
-    This method will be used by the overleying system to check if the view should be re-centered after computing an algorithm.
-    @return true if the view checks values from that property to setup its element's layout
-    @note By default, this method returns false.
-    */
-  virtual bool isLayoutProperty(tlp::PropertyInterface*) const;
-
-  /**
     @brief defines which item is considered as the central item in the view.
     The central item is considered to be a background item that will be set as parent of every graphics item added by the workspace into the view.
     By default, this method returns NULL, which means that no central item is defined.

@@ -323,34 +323,6 @@ color: white;
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="exportButton">
-         <property name="minimumSize">
-          <size>
-           <width>75</width>
-           <height>75</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>75</width>
-           <height>75</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Export</string>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="toolButtonStyle">
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QToolButton" name="importButton">
          <property name="minimumSize">
           <size>
@@ -482,7 +454,7 @@ color: white;
      <x>0</x>
      <y>0</y>
      <width>1071</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -495,6 +467,7 @@ color: white;
     <addaction name="actionSave_Project_as"/>
     <addaction name="separator"/>
     <addaction name="actionImport"/>
+    <addaction name="actionExport"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -552,25 +525,16 @@ color: white;
     <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="actionOpen_Project">
-   <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
-     <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Open Project</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+O</string>
-   </property>
-  </action>
   <action name="actionSave_Project">
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
      <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
    </property>
    <property name="text">
-    <string>Save Project</string>
+    <string>&amp;Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save project</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
@@ -582,7 +546,10 @@ color: white;
      <normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</iconset>
    </property>
    <property name="text">
-    <string>Save Project as</string>
+    <string>Save as</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Project as a new file name</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
@@ -597,7 +564,7 @@ color: white;
     <string>I&amp;mport</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+M</string>
+    <string>Ctrl+Shift+O</string>
    </property>
   </action>
   <action name="actionExit">
@@ -814,15 +781,37 @@ color: white;
     <string>Show the messages log</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+E</string>
+    <string>Ctrl+Alt+L</string>
    </property>
   </action>
   <action name="actionExport">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/document-export.png</normaloff>:/tulip/graphperspective/icons/16/document-export.png</iconset>
+   </property>
    <property name="text">
-    <string>export</string>
+    <string>Export</string>
    </property>
    <property name="toolTip">
-    <string>Export</string>
+    <string>Export current graph</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionOpen_Project">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open</string>
+   </property>
+   <property name="toolTip">
+    <string>Open a graph file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
  </widget>
@@ -921,22 +910,6 @@ color: white;
     <hint type="destinationlabel">
      <x>535</x>
      <y>354</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>exportButton</sender>
-   <signal>clicked()</signal>
-   <receiver>actionExport</receiver>
-   <slot>trigger()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>37</x>
-     <y>513</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
     </hint>
    </hints>
   </connection>

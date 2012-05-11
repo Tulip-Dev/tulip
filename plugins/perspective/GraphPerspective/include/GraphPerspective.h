@@ -64,7 +64,7 @@ public slots:
   void showFullScreen(bool);
   void importGraph();
   void importFileGraph();
-  void exportGraph();
+  void exportGraph(tlp::Graph*g = NULL);
   void createPanel(tlp::Graph* g = NULL);
   void save();
   void saveAs(const QString& path=QString::null);
@@ -72,6 +72,9 @@ public slots:
 
   void log(QtMsgType,const char*);
   void showLogger();
+
+  void centerPanelsForGraph(tlp::Graph*);
+  void closePanelsForGraph(tlp::Graph*);
 
 protected slots:
   void currentGraphChanged(tlp::Graph* graph);

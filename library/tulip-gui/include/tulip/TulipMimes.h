@@ -47,11 +47,16 @@ private:
 };
 
 class TLP_QT_SCOPE AlgorithmMimeType : public QMimeData {
-  tlp::DataSet _params;
+  Q_OBJECT
+
   QString _algorithm;
+  tlp::DataSet _params;
 public:
   AlgorithmMimeType(QString algorithmName, const tlp::DataSet& data);
   void run(tlp::Graph*) const;
+
+signals:
+  void mimeRun(tlp::Graph*) const;
 };
 
 class TLP_QT_SCOPE PanelMimeType : public QMimeData {

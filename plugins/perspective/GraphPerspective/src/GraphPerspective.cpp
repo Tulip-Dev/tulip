@@ -274,7 +274,12 @@ void GraphPerspective::importFileGraph() {
   }
 }
 
-void GraphPerspective::exportGraph() {
+void GraphPerspective::exportGraph(Graph* g) {
+  if (g == NULL)
+    g = _graphs->currentGraph();
+  if (g == NULL)
+    return;
+
   QString filters;
   QMap<std::string, std::string> modules;
   std::list<std::string> exports = PluginLister::instance()->availablePlugins<ExportModule>();
@@ -548,6 +553,21 @@ void GraphPerspective::CSVImport() {
     _graphs->currentGraph()->pop();
 
   Observable::unholdObservers();
+}
+
+void GraphPerspective::centerPanelsForGraph(tlp::Graph* g) {
+  foreach(View* v, _ui->workspace->panels()) {
+    if (v->graph() == g)
+      v->centerView();
+  }
+}
+
+void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
+  foreach(View* v, _ui->workspace->panels()) {
+    if (v->graph() == g)
+      v->deleteLater();
+  }
+  QApplication::processEvents();
 }
 
 PLUGIN(GraphPerspective)

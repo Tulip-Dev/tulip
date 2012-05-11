@@ -198,6 +198,18 @@ border-bottom: 1px solid black;
     <string>Open a new visualization panel</string>
    </property>
   </action>
+  <action name="actionExport">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/document-export.png</normaloff>:/tulip/graphperspective/icons/16/document-export.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export</string>
+   </property>
+   <property name="toolTip">
+    <string>Export the graph</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -340,6 +352,22 @@ border-bottom: 1px solid black;
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionExport</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>exportGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>activeGraphSelected(QModelIndex)</slot>
@@ -349,5 +377,6 @@ border-bottom: 1px solid black;
   <slot>cloneSubGraph()</slot>
   <slot>delAllGraph()</slot>
   <slot>createPanel()</slot>
+  <slot>exportGraph()</slot>
  </slots>
 </ui>

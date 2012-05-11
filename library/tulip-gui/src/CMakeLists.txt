@@ -206,6 +206,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/SnapshotDialog.h
   ../include/tulip/SceneLayersModel.h
   ../include/tulip/SceneLayersConfigWidget.h
+  ../include/tulip/TulipMimes.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
