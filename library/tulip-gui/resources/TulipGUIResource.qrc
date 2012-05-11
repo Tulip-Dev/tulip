@@ -69,5 +69,9 @@
         <file>icons/32/plugin_interactor.png</file>
         <file>icons/32/plugin_view.png</file>
         <file>ui/split3_2_screen.png</file>
+        <file>icons/20/edge_color_interpolation.png</file>
+        <file>icons/20/edge_size_interpolation.png</file>
+        <file>icons/20/node_color_interpolation.png</file>
+        <file>icons/20/node_size_interpolation.png</file>
     </qresource>
 </RCC>

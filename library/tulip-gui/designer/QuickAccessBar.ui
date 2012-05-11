@@ -117,7 +117,7 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="icon">
       <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/color_interpolation.png</normaloff>:/tulip/gui/icons/20/color_interpolation.png</iconset>
+       <normaloff>:/tulip/gui/icons/20/node_color_interpolation.png</normaloff>:/tulip/gui/icons/20/node_color_interpolation.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -155,7 +155,7 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="icon">
       <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/color_interpolation.png</normaloff>:/tulip/gui/icons/20/color_interpolation.png</iconset>
+       <normaloff>:/tulip/gui/icons/20/node_size_interpolation.png</normaloff>:/tulip/gui/icons/20/node_size_interpolation.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -193,7 +193,7 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="icon">
       <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/color_interpolation.png</normaloff>:/tulip/gui/icons/20/color_interpolation.png</iconset>
+       <normaloff>:/tulip/gui/icons/20/edge_color_interpolation.png</normaloff>:/tulip/gui/icons/20/edge_color_interpolation.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -231,7 +231,7 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="icon">
       <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/color_interpolation.png</normaloff>:/tulip/gui/icons/20/color_interpolation.png</iconset>
+       <normaloff>:/tulip/gui/icons/20/edge_size_interpolation.png</normaloff>:/tulip/gui/icons/20/edge_size_interpolation.png</iconset>
      </property>
      <property name="iconSize">
       <size>
