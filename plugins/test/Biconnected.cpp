@@ -26,7 +26,7 @@ public:
   BiconnectedTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
-  virtual bool run() {
+  virtual bool test() {
     return tlp::BiconnectedTest::isBiconnected(graph);
   }
 

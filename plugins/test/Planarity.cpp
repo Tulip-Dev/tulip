@@ -26,7 +26,7 @@ public:
   PlanarityTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
-  virtual bool run() {
+  virtual bool test() {
     return tlp::PlanarityTest::isPlanar(graph);
   }
 
@@ -39,7 +39,7 @@ public:
   PlanarEmbeddingTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
-  virtual bool run() {
+  virtual bool test() {
     return tlp::PlanarityTest::isPlanarEmbedding(graph);
   }
 

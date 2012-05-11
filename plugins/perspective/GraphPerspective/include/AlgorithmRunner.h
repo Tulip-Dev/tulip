@@ -20,6 +20,7 @@
 #define ALGORITHMRUNNER_H
 
 #include <QtGui/QWidget>
+#include <tulip/DataSet.h>
 
 class QToolButton;
 namespace Ui {
@@ -72,7 +73,7 @@ public slots:
   void run(tlp::Graph* g = NULL);
 
 protected slots:
-  void checkCenter(tlp::Graph*);
+  void afterRun(tlp::Graph*,tlp::DataSet);
 };
 
 #endif // ALGORITHMRUNNER_H

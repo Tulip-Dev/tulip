@@ -26,7 +26,7 @@ public:
   SimplicityTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
-  virtual bool run() {
+  virtual bool test() {
     return tlp::SimpleTest::isSimple(graph);
   }
 

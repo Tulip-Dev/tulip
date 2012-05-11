@@ -33,6 +33,14 @@ public:
                           "Whether the graph passed the test or not." \
                           HTML_HELP_CLOSE());
   }
+
+  virtual bool run() {
+    bool result = test();
+    dataSet->set<bool>("result",result);
+    return true;
+  }
+
+  virtual bool test()=0;
 };
 
 }

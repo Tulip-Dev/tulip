@@ -27,7 +27,7 @@ public:
   DirectedTreeTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
-  virtual bool run() {
+  virtual bool test() {
     return tlp::TreeTest::isTree(graph);
   }
 
@@ -40,7 +40,7 @@ public:
   FreeTreeTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
-  virtual bool run() {
+  virtual bool test() {
     return tlp::TreeTest::isFreeTree(graph);
   }
 
