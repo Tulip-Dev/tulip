@@ -64,5 +64,7 @@ void AlgorithmMimeType::run(Graph* g) const {
   if (!result)
     qCritical() << _algorithm << ": " << errorMessage.c_str();
 
+  emit mimeRun(g);
+
   Observable::unholdObservers();
 }

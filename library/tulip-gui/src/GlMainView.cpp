@@ -176,7 +176,3 @@ void GlMainView::graphDeleted() {
 void GlMainView::applySettings() {
   _sceneConfigurationWidget->applySettings();
 }
-
-bool GlMainView::isLayoutProperty(tlp::PropertyInterface* pi) const {
-  return pi == getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();
-}

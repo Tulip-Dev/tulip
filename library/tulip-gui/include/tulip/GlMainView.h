@@ -50,7 +50,6 @@ public:
   virtual QList<QWidget*> configurationWidgets() const;
   bool overviewVisible() const;
   QPixmap snapshot(const QSize &outputSize=QSize());
-  bool isLayoutProperty(PropertyInterface *) const;
 
 public slots:
   virtual void draw(tlp::PluginProgress* pluginProgress);

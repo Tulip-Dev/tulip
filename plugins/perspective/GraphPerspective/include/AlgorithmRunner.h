@@ -70,6 +70,9 @@ public slots:
   void setLocalMode(bool);
 
   void run(tlp::Graph* g = NULL);
+
+protected slots:
+  void checkCenter(tlp::Graph*);
 };
 
 #endif // ALGORITHMRUNNER_H
