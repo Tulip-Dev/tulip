@@ -3,13 +3,13 @@
 namespace tlp {
 
 template<typename PROPTYPE>
-GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool checkable, bool hasNullProperty, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(QString::null), _checkable(checkable), _hasNullProperty(hasNullProperty) {
+GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(QString::null), _checkable(checkable) {
   if (_graph != NULL)
     _graph->addListener(this);
 }
 
 template<typename PROPTYPE>
-GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable, bool hasNullProperty, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder), _checkable(checkable), _hasNullProperty(hasNullProperty) {
+GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder), _checkable(checkable) {
   if (_graph != NULL)
     _graph->addListener(this);
 }
@@ -26,12 +26,6 @@ QModelIndex GraphPropertiesModel<PROPTYPE>::index(int row, int column,const QMod
 
     if (row == 0)
       return createIndex(row,column);
-  }
-
-  if (_hasNullProperty) {
-    if (row == 0)
-      return createIndex(row, column);
-    else i = 1;
   }
 
   std::string propName;
@@ -76,9 +70,6 @@ int GraphPropertiesModel<PROPTYPE>::rowCount(const QModelIndex &parent) const {
 
     result++;
   }
-
-  if (_hasNullProperty)
-    ++result;
 
   return result;
 }

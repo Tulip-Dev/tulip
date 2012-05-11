@@ -63,23 +63,24 @@ void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& 
   }
 
   PROPTYPE* prop = val.value<PROPTYPE*>();
-  QPoint pos = w->pos();
-  // because this PropertyEditor and the QWidget w
-  // may be used to managed the value of several cells,
-  // we use a QSet to register the cells for which we need
-  // to manage a null property.
-  // To uniquely identify theses cells (in which the editor w
-  // takes place), we record its position as an unsigned int
-  // 16 bits for x and 16 bits for y
-  unsigned int ipos = (pos.x() << 16) + pos.y();
+//  QPoint pos = w->pos();
+//  // because this PropertyEditor and the QWidget w
+//  // may be used to managed the value of several cells,
+//  // we use a QSet to register the cells for which we need
+//  // to manage a null property.
+//  // To uniquely identify theses cells (in which the editor w
+//  // takes place), we record its position as an unsigned int
+//  // 16 bits for x and 16 bits for y
+//  unsigned int ipos = (pos.x() << 16) + pos.y();
 
-  if (prop == NULL)
-    // indicates that a null property
-    // has to be managed in that cell
-    hasNullProperty.insert(ipos);
+//  if (prop == NULL)
+//    // indicates that a null property
+//    // has to be managed in that cell
+//    hasNullProperty.insert(ipos);
+
 
   QComboBox* combo = static_cast<QComboBox*>(w);
-  GraphPropertiesModel<PROPTYPE>* model = new GraphPropertiesModel<PROPTYPE>(g,false,hasNullProperty.contains(ipos),combo);
+  GraphPropertiesModel<PROPTYPE>* model = new GraphPropertiesModel<PROPTYPE>(g,false,combo);
   combo->setModel(model);
   combo->setCurrentIndex(model->rowOf(prop));
 }
