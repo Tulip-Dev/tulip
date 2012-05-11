@@ -65,10 +65,12 @@ void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& 
   PROPTYPE* prop = val.value<PROPTYPE*>();
   QComboBox* combo = static_cast<QComboBox*>(w);
   GraphPropertiesModel<PROPTYPE>* model = NULL;
+
   if (isMandatory)
     model = new GraphPropertiesModel<PROPTYPE>(g,false,combo);
   else
     model = new GraphPropertiesModel<PROPTYPE>(QObject::trUtf8("Select a property"),g,false,combo);
+
   combo->setModel(model);
   combo->setCurrentIndex(model->rowOf(prop));
 }
@@ -77,6 +79,7 @@ template<typename PROPTYPE>
 QVariant PropertyEditorCreator<PROPTYPE>::editorData(QWidget* w,tlp::Graph* g) {
   if (g == NULL)
     return QVariant();
+
   QComboBox* combo = static_cast<QComboBox*>(w);
   GraphPropertiesModel<PROPTYPE>* model = static_cast<GraphPropertiesModel<PROPTYPE> *>(combo->model());
   return model->data(model->index(combo->currentIndex(),0),TulipModel::PropertyRole);

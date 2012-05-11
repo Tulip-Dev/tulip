@@ -61,10 +61,11 @@ void GlOverviewGraphicsItem::setSize(unsigned int width, unsigned int height) {
   draw(true);
 }
 
-void GlOverviewGraphicsItem::setLayerVisible(const string &name, bool visible){
-  if(visible==false){
+void GlOverviewGraphicsItem::setLayerVisible(const string &name, bool visible) {
+  if(visible==false) {
     _hiddenLayers.insert(name);
-  }else{
+  }
+  else {
     _hiddenLayers.erase(name);
   }
 }
@@ -164,8 +165,10 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
     for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
       layersVisibility.push_back((*it).second->isVisible());
+
       if((*it).second->isAWorkingLayer())
         (*it).second->setVisible(false);
+
       if(_hiddenLayers.count((*it).first)!=0)
         (*it).second->setVisible(false);
     }
@@ -176,9 +179,11 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     glFrameBuffer->release();
 
     vector<bool>::iterator itTmp=layersVisibility.begin();
+
     for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
       if((*itTmp)==true)
         (*it).second->setVisible(true);
+
       ++itTmp;
     }
 

@@ -277,6 +277,7 @@ void GraphPerspective::importFileGraph() {
 void GraphPerspective::exportGraph(Graph* g) {
   if (g == NULL)
     g = _graphs->currentGraph();
+
   if (g == NULL)
     return;
 

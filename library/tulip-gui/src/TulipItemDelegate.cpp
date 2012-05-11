@@ -133,8 +133,10 @@ void TulipItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index)
   tlp::Graph* g = index.data(TulipModel::GraphRole).value<tlp::Graph*>();
   bool isMandatory = true;
   QVariant mandatoryVar = index.data(TulipModel::MandatoryRole);
+
   if (mandatoryVar.isValid())
     isMandatory = mandatoryVar.value<bool>();
+
   TulipItemEditorCreator *c = creator(data.userType());
 
   if (!c)

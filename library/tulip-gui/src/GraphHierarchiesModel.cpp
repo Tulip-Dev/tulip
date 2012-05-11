@@ -318,8 +318,10 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         Graph* parentGraph = ge->getSubGraph()->getSuperGraph();
         parentGraph->getAttribute<string>("name",pName);
         QModelIndex parentIndex = _indexCache[parentGraph];
+
         if (parentIndex == QModelIndex())
           parentIndex = forceGraphIndex(parentGraph);
+
         assert(parentIndex != QModelIndex());
         beginInsertRows(parentIndex,parentGraph->numberOfSubGraphs(),parentGraph->numberOfSubGraphs());
       }
@@ -351,20 +353,24 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 QModelIndex GraphHierarchiesModel::forceGraphIndex(Graph* g) {
   QVector<Graph*> hierarchy;
   Graph* child = g;
+
   do {
     hierarchy.push_front(g);
     child = child->getSuperGraph();
-  } while (child != child->getRoot());
+  }
+  while (child != child->getRoot());
 
   QModelIndex result;
 
   foreach(Graph* child, hierarchy) {
     Graph* parent = child->getSuperGraph();
     unsigned int n = 0;
-    for (n=0;n<parent->numberOfSubGraphs();++n) {
+
+    for (n=0; n<parent->numberOfSubGraphs(); ++n) {
       if (parent->getNthSubGraph(n) == child)
         break;
     }
+
     result = createIndex(n,0,child);
     _indexCache[child] = result;
   }
