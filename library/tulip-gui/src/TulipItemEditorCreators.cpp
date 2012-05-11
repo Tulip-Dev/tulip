@@ -55,7 +55,7 @@ bool ColorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& op
   return true;
 }
 
-void ColorEditorCreator::setEditorData(QWidget *editor, const QVariant &data,tlp::Graph*) {
+void ColorEditorCreator::setEditorData(QWidget *editor, const QVariant &data, bool, tlp::Graph*) {
   static_cast<QColorDialog*>(editor)->setCurrentColor(colorToQColor(data.value<tlp::Color>()));
 }
 
@@ -89,7 +89,7 @@ bool BooleanEditorCreator::paint(QPainter *p, const QStyleOptionViewItem &option
   return true;
 }
 
-void BooleanEditorCreator::setEditorData(QWidget* editor, const QVariant &data,tlp::Graph*) {
+void BooleanEditorCreator::setEditorData(QWidget* editor, const QVariant &data, bool, tlp::Graph*) {
   static_cast<QCheckBox*>(editor)->setChecked(!data.toBool());
 }
 
@@ -104,7 +104,7 @@ QWidget* CoordEditorCreator::createWidget(QWidget* parent) const {
   return new CoordEditor(parent);
 }
 
-void CoordEditorCreator::setEditorData(QWidget* w, const QVariant& v,tlp::Graph*) {
+void CoordEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
   static_cast<CoordEditor*>(w)->setCoord(v.value<tlp::Coord>());
 }
 
@@ -119,7 +119,7 @@ QWidget* SizeEditorCreator::createWidget(QWidget* parent) const {
   return new SizeEditor(parent);
 }
 
-void SizeEditorCreator::setEditorData(QWidget* w, const QVariant& v,tlp::Graph*) {
+void SizeEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
   static_cast<SizeEditor*>(w)->setSize(v.value<tlp::Size>());
 }
 
@@ -134,26 +134,27 @@ QWidget* PropertyInterfaceEditorCreator::createWidget(QWidget* parent) const {
   return new QComboBox(parent);
 }
 
-void PropertyInterfaceEditorCreator::setEditorData(QWidget* w, const QVariant& val,tlp::Graph* g) {
+void PropertyInterfaceEditorCreator::setEditorData(QWidget* w, const QVariant& val, bool isMandatory, tlp::Graph* g) {
   if (g == NULL) {
     w->setEnabled(false);
     return;
   }
 
   PropertyInterface* prop = val.value<PropertyInterface*>();
-
   QComboBox* combo = static_cast<QComboBox*>(w);
-  GraphPropertiesModel<PropertyInterface>* model = new GraphPropertiesModel<PropertyInterface>(g,false,combo);
+  GraphPropertiesModel<PropertyInterface>* model = NULL;
+  if (isMandatory)
+    model = new GraphPropertiesModel<PropertyInterface>(g,false,combo);
+  else
+    model = new GraphPropertiesModel<PropertyInterface>(QObject::trUtf8("Select a property"),g,false,combo);
   combo->setModel(model);
   combo->setCurrentIndex(model->rowOf(prop));
 }
 
 QVariant PropertyInterfaceEditorCreator::editorData(QWidget* w,tlp::Graph* g) {
   QComboBox* combo = static_cast<QComboBox*>(w);
-  std::string propName = combo->currentText().toStdString();
-  PropertyInterface *prop = NULL;
-  prop = g->getProperty(propName);
-  return QVariant::fromValue<PropertyInterface*>(prop);
+  GraphPropertiesModel<PropertyInterface>* model = static_cast<GraphPropertiesModel<PropertyInterface> *>(combo->model());
+  return model->data(model->index(combo->currentIndex(),0),TulipModel::PropertyRole);
 }
 
 QString PropertyInterfaceEditorCreator::displayText(const QVariant& v) const {
@@ -177,7 +178,7 @@ bool ColorScaleEditorCreator::paint(QPainter* painter, const QStyleOptionViewIte
   return true;
 }
 
-void ColorScaleEditorCreator::setEditorData(QWidget* w, const QVariant& var,tlp::Graph*) {
+void ColorScaleEditorCreator::setEditorData(QWidget* w, const QVariant& var,bool,tlp::Graph*) {
   static_cast<ColorScaleButton*>(w)->setColorScale(var.value<ColorScale>());
 }
 
@@ -192,7 +193,7 @@ QWidget* StringCollectionEditorCreator::createWidget(QWidget* parent) const {
   return new QComboBox(parent);
 }
 
-void StringCollectionEditorCreator::setEditorData(QWidget* widget, const QVariant& var, tlp::Graph*) {
+void StringCollectionEditorCreator::setEditorData(QWidget* widget, const QVariant& var, bool,tlp::Graph*) {
   StringCollection col = var.value<StringCollection>();
   QComboBox* combo = static_cast<QComboBox*>(widget);
 
@@ -225,7 +226,7 @@ QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget* parent) const {
   return new TulipFileDescriptorWidget(parent);
 }
 
-void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant& v,tlp::Graph*) {
+void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
   static_cast<TulipFileDescriptorWidget*>(w)->setData(v.value<TulipFileDescriptor>());
 }
 
@@ -253,7 +254,7 @@ QWidget* NodeShapeEditorCreator::createWidget(QWidget*parent) const {
 
   return combobox;
 }
-void NodeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant&data ,Graph*) {
+void NodeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant&data , bool, Graph*) {
   QComboBox* combobox = static_cast<QComboBox*>(editor);
   combobox->setCurrentIndex(combobox->findData(data.value<NodeShape>().nodeShapeId));
 }
@@ -298,7 +299,7 @@ QWidget* EdgeExtremityShapeEditorCreator::createWidget(QWidget* parent) const {
 
   return combobox;
 }
-void EdgeExtremityShapeEditorCreator::setEditorData(QWidget* editor, const QVariant& data,Graph*) {
+void EdgeExtremityShapeEditorCreator::setEditorData(QWidget* editor, const QVariant& data,bool,Graph*) {
   QComboBox* combobox = static_cast<QComboBox*>(editor);
   combobox->setCurrentIndex(combobox->findData(data.value<EdgeExtremityShape>().edgeExtremityShapeId));
 }
@@ -337,7 +338,7 @@ QWidget* EdgeShapeEditorCreator::createWidget(QWidget* parent) const {
 
   return combobox;
 }
-void EdgeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant& data,Graph*) {
+void EdgeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant& data, bool, Graph*) {
   QComboBox* combobox = static_cast<QComboBox*>(editor);
   combobox->setCurrentIndex(combobox->findData(static_cast<int>(data.value<EdgeShape>())));
 }
@@ -354,7 +355,7 @@ QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
 QWidget* TulipFontEditorCreator::createWidget(QWidget* parent) const {
   return new TulipFontWidget(parent);
 }
-void TulipFontEditorCreator::setEditorData(QWidget*editor, const QVariant&data,tlp::Graph*) {
+void TulipFontEditorCreator::setEditorData(QWidget*editor, const QVariant&data,bool,tlp::Graph*) {
   TulipFont font =data.value<TulipFont>();
   TulipFontWidget* fontWidget = static_cast<TulipFontWidget*>(editor);
   fontWidget->setFont(font);

@@ -131,12 +131,16 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 void TulipItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
   QVariant data = index.data();
   tlp::Graph* g = index.data(TulipModel::GraphRole).value<tlp::Graph*>();
+  bool isMandatory = true;
+  QVariant mandatoryVar = index.data(TulipModel::MandatoryRole);
+  if (mandatoryVar.isValid())
+    isMandatory = mandatoryVar.value<bool>();
   TulipItemEditorCreator *c = creator(data.userType());
 
   if (!c)
     return;
 
-  c->setEditorData(editor,data,g);
+  c->setEditorData(editor,data,isMandatory,g);
 }
 
 void TulipItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {

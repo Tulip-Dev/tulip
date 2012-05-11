@@ -34,7 +34,8 @@ public:
     GraphRole = Qt::UserRole+1,
     PropertyRole = Qt::UserRole+2,
     IsNodeRole = Qt::UserRole+3,
-    StringRole = Qt::UserRole+4
+    StringRole = Qt::UserRole+4,
+    MandatoryRole = Qt::UserRole+5
   };
 
   explicit TulipModel(QObject *parent=0);
