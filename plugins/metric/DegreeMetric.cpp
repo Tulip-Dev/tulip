@@ -60,7 +60,7 @@ const char * paramHelp[] = {
 //==============================================================================
 DegreeMetric::DegreeMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
   addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
-  addInParameter<DoubleProperty>("metric", paramHelp[1], "viewMetric", false);
+  addInParameter<DoubleProperty>("metric", paramHelp[1], "", false);
   addInParameter<bool>("norm", paramHelp[2], "false", false);
 }
 //==================================================================
