@@ -57,7 +57,7 @@ public:
 class TLP_GL_SCOPE Glyph : public tlp::Plugin {
 public:
   std::string category() const {
-    return "Glyph";
+    return QObject::trUtf8("Node shape").toStdString();
   }
   std::string icon() const {
     return ":/tulip/gui/icons/32/plugin_glyph.png";

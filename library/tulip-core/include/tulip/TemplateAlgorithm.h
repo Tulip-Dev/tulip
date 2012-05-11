@@ -43,7 +43,7 @@ public :
   PropertyAlgorithm(const tlp::PluginContext* context):Algorithm(context) {}
 
   virtual std::string category() const {
-    return "PropertyAlgorithm";
+    return QObject::trUtf8("Property").toStdString();
   }
 };
 

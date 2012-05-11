@@ -47,7 +47,7 @@ public:
   virtual ~ExportModule() {}
 
   virtual std::string category() const {
-    return "ExportModule";
+    return QObject::trUtf8("Export").toStdString();
   }
   std::string icon() const {
     return ":/tulip/gui/icons/32/plugin_import_export.png";

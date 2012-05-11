@@ -41,6 +41,8 @@ class TLP_QT_SCOPE GraphHierarchiesModel : public tlp::TulipModel, public tlp::O
   QMap<const tlp::Graph*,QModelIndex> _indexCache;
   QMap<const tlp::Graph*, GraphNeedsSavingObserver*> _saveNeeded;
 
+  QModelIndex forceGraphIndex(tlp::Graph*);
+
 public:
   bool needsSaving();
   static void setApplicationDefaults(tlp::Graph*);

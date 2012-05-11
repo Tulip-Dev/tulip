@@ -89,7 +89,7 @@ public:
   virtual ~View();
 
   virtual std::string category() const {
-    return "View";
+    return QObject::trUtf8("Panel").toStdString();
   }
   std::string icon() const {
     return ":/tulip/gui/icons/32/plugin_view.png";
