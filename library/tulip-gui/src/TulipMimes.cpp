@@ -32,6 +32,7 @@ void copyToLocal(DataSet& data, Graph* g) {
 }
 #define CHECK_PROP(T)     if (v->getTypeName().compare(typeid(T*).name()) == 0) {\
 T* prop = *((T**)v->value); \
+if (prop != 0)\
 dataSet.set(k,g->getProperty<T>(prop->getName()));\
 }
 void AlgorithmMimeType::run(Graph* g) const {
@@ -46,6 +47,7 @@ void AlgorithmMimeType::run(Graph* g) const {
   forEach(entry, dataSet.getValues()) {
     std::string k = entry.first;
     DataType* v = dataSet.getData(k);
+
     CHECK_PROP(DoubleProperty)
     CHECK_PROP(IntegerProperty)
     CHECK_PROP(LayoutProperty)
