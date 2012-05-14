@@ -382,16 +382,6 @@ public:
   BoundingBox getBoundingBox();
 
   /**
-   * Set a zoom level and a xDec/yDec, this parameters change viewport of the scene
-   */
-  void setViewportZoom(int zoom=1,int xDec=0, int yDec=0);
-
-  /**
-   * Get a zoom level and a xDec/yDec, this parameters change viewport of the scene
-   */
-  void getViewportZoom(int &zoom, int &xDec, int &yDec);
-
-  /**
    * This function is automaticaly call when a GlGraphComposite is added in a layer in the scene
    * You don't have to call this function
    */
@@ -452,9 +442,6 @@ private:
   std::vector<std::pair<std::string,GlLayer *> > layersList;
   GlLODCalculator *lodCalculator;
   Vector<int, 4> viewport;
-  int viewportZoom;
-  int xDecViewport;
-  int yDecViewport;
   Color backgroundColor;
   bool viewOrtho;
 
