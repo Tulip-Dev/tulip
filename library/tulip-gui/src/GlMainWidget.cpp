@@ -361,11 +361,6 @@ bool GlMainWidget::pickNodesEdges(const int x, const int y,SelectedEntity &selec
   return false;
 }
 //=====================================================
-unsigned char * GlMainWidget::getImage() {
-  makeCurrent();
-  return scene.getImage();
-}
-//=====================================================
 bool GlMainWidget::outputEPS(int size, int, const char *filename) {
   makeCurrent();
   scene.outputEPS(size, filename);
