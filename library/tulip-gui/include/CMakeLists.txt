@@ -11,7 +11,6 @@ INSTALL(FILES
   tulip/CSVParser.h
   tulip/DoubleStringsListSelectionWidget.h
   tulip/DownloadManager.h
-  tulip/ForegroundEntity.h
   tulip/GlCompositeHierarchyManager.h
   tulip/GlMainView.h
   tulip/GlMainWidget.h
