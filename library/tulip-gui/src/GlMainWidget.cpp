@@ -178,14 +178,8 @@ void GlMainWidget::render(RenderingOptions options) {
 
       computeInteractors();
 
-#ifdef ENABLE_RENDERING_TIME_DISPLAY
-      double beginTime=omp_get_wtime();
-#endif
       //Render the graph in the back buffer.
       scene.draw();
-#ifdef ENABLE_RENDERING_TIME_DISPLAY
-      qDebug() << ">>> rendering time : " << (int)((omp_get_wtime()-beginTime)*1000) << " ms" << endl << endl;
-#endif
     }
 
     glDisable(GL_TEXTURE_2D);
@@ -453,20 +447,18 @@ QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName
 }
 
 //=====================================================
-void GlMainWidget::createPicture(const std::string &pictureName, int width, int height,bool center, int zoom, int xDec, int yDec) {
-  createPicture(width,height,center,zoom,xDec,yDec).save(pictureName.c_str());
+void GlMainWidget::createPicture(const std::string &pictureName, int width, int height, bool center) {
+  createPicture(width,height,center).save(pictureName.c_str());
 }
 
 //=====================================================
-QImage GlMainWidget::createPicture(int width, int height,bool center, int zoom, int xDec, int yDec) {
+QImage GlMainWidget::createPicture(int width, int height,bool center) {
 #ifndef WITHOUT_QT_PICTURE_OUTPUT
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
   scene.setViewport(0,0,width,height);
 
   if(center)
     scene.ajustSceneToSize(width,height);
-
-  scene.setViewportZoom(zoom,xDec,yDec);
 
   QGLPixelBuffer *glFrameBuf=QGlPixelBufferManager::getInst().getPixelBuffer(width,height);
 

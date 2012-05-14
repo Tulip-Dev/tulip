@@ -22,6 +22,8 @@
 #include <cstdlib>
 #include <climits>
 #include <stdio.h>
+#include <sys/time.h>
+#include <unistd.h>
 
 
 #include <tulip/OpenGlConfigManager.h>
@@ -49,7 +51,7 @@ namespace tlp {
 //====================================================
 
 GlScene::GlScene(GlLODCalculator *calculator)
-  :viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewOrtho(true),glGraphComposite(NULL),graphLayer(NULL), clearBufferAtDraw(true) {
+  :backgroundColor(255, 255, 255, 255),viewOrtho(true),glGraphComposite(NULL),graphLayer(NULL), clearBufferAtDraw(true) {
 
   if(calculator!=NULL)
     lodCalculator=calculator;
@@ -117,7 +119,8 @@ void GlScene::draw() {
   initGlParameters();
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
-  double lastTime=omp_get_wtime();
+  timeval lastTime;
+  gettimeofday(&lastTime, 0);
 #endif
 
   /**********************************************************************
@@ -173,8 +176,9 @@ void GlScene::draw() {
   }
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
-  qDebug() << "scene draw time : " << (int)((omp_get_wtime()-lastTime)*1000) << " ms" << endl;
-  lastTime=omp_get_wtime();
+  timeval currentTime;
+  gettimeofday(&currentTime, 0);
+  qDebug() << "scene draw time : " << (int)((currentTime.tv_usec-lastTime.tv_usec)) << " ms" << endl;
 #endif
 }
 
@@ -417,76 +421,15 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
   Coord maxC(boundingBox[1]);
   Coord minC(boundingBox[0]);
 
-  int zoomTmp=1;
-
-  for(int i=0; i<viewportZoom-1; ++i) {
-    zoomTmp=zoomTmp*2;
-  }
-
-
   double dx = maxC[0] - minC[0];
   double dy = maxC[1] - minC[1];
   double dz = maxC[2] - minC[2];
 
-  double dxZoomed=(maxC[0] - minC[0])/zoomTmp;
-  double dyZoomed=(maxC[1] - minC[1])/zoomTmp;
-
-  int newXDecViewport;
-
-  if(xDecViewport<zoomTmp/2)
-    newXDecViewport=xDecViewport-zoomTmp/2;
-  else
-    newXDecViewport=xDecViewport-zoomTmp/2+1;
-
-  int newYDecViewport;
-
-  if(yDecViewport<zoomTmp/2)
-    newYDecViewport=yDecViewport-zoomTmp/2;
-  else
-    newYDecViewport=yDecViewport-zoomTmp/2+1;
-
-
-
-  Coord centerTmp = (maxC + minC) / 2.f;
-
-  if(zoomTmp!=1) {
-    double dec;
-
-    if(dxZoomed>=dyZoomed)
-      dec=dxZoomed;
-    else
-      dec=dyZoomed;
-
-    if(newXDecViewport<0) {
-      if(newXDecViewport==-1)
-        centerTmp[0]-=static_cast<float>(dec/2);
-      else
-        centerTmp[0]-=static_cast<float>(dec/2-dec*(newXDecViewport+1));
-    }
-    else {
-      if(newXDecViewport==1)
-        centerTmp[0]+=static_cast<float>(dec/2);
-      else
-        centerTmp[0]+=static_cast<float>(dec/2+dec*(newXDecViewport-1));
-    }
-
-    if(newYDecViewport<0) {
-      if(newYDecViewport==-1)
-        centerTmp[1]-=static_cast<float>(dec/2);
-      else
-        centerTmp[1]-=static_cast<float>(dec/2-dec*(newYDecViewport+1));
-    }
-    else {
-      if(newYDecViewport==1)
-        centerTmp[1]+=static_cast<float>(dec/2);
-      else
-        centerTmp[1]+=static_cast<float>(dec/2+dec*(newYDecViewport-1));
-    }
-  }
-
+  double dxZoomed=(maxC[0] - minC[0]);
+  double dyZoomed=(maxC[1] - minC[1]);
 
   if(center) {
-    *center=centerTmp;
+    *center=(maxC + minC) / 2.f;
   }
 
   if ((dx==0) && (dy==0) && (dz==0))
@@ -539,6 +482,7 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
 
   if(eye) {
     *eye=Coord(0, 0, sceneRadiusTmp);
+    Coord centerTmp=(maxC + minC) / 2.f;
     *eye=*eye + centerTmp;
   }
 
@@ -547,7 +491,7 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
   }
 
   if(zoomFactor) {
-    *zoomFactor=static_cast<float>(zoomTmp);
+    *zoomFactor=1.;
   }
 
 }
@@ -1024,18 +968,6 @@ void GlScene::setWithXML(string &in, Graph *graph) {
 
   if(graph)
     getLayer("Main")->addGlEntity(glGraphComposite,"graph");
-}
-
-void GlScene::setViewportZoom(int zoom,int xDec, int yDec) {
-  viewportZoom=zoom;
-  xDecViewport=xDec;
-  yDecViewport=yDec;
-}
-
-void GlScene::getViewportZoom(int &zoom,int &xDec, int &yDec) {
-  zoom=viewportZoom;
-  xDec=xDecViewport;
-  yDec=yDecViewport;
 }
 
 BoundingBox GlScene::getBoundingBox() {
