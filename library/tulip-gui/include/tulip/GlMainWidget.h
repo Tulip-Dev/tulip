@@ -87,23 +87,6 @@ public:
   ~GlMainWidget();
 
   /**
-   * Set graph and data of GlMainWidget
-   */
-  //void setData(Graph *graph,DataSet dataSet);
-  /**
-   * Get data of GlMainWidget
-   */
-  //DataSet getData();
-  /**
-   * Set the graph
-   */
-  //void setGraph(Graph *graph);
-  /**
-   * GetGraph of GlMainWidget
-   */
-  //Graph *getGraph();
-
-  /**
    * Get the scene of this glMainWidget
    */
   tlp::GlScene* getScene() {
