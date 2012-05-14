@@ -395,15 +395,6 @@ void GlMainWidget::getTextureRealSize(int width, int height, int &textureRealWid
 
 }
 //=====================================================
-void GlMainWidget::getTextureShift(int width, int height, float &xTextureShift, float &yTextureShift) {
-  int textureRealWidth;
-  int textureRealHeight;
-
-  getTextureRealSize(width,height,textureRealWidth,textureRealHeight);
-
-  scene.computeAjustSceneToSize(textureRealWidth, textureRealHeight,NULL,NULL,NULL, &xTextureShift, &yTextureShift);
-}
-//=====================================================
 QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName, int width, int height) {
 
   makeCurrent();

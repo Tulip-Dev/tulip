@@ -114,11 +114,6 @@ public:
   static void getTextureRealSize(int width, int height, int &textureRealWidth, int &textureRealHeight);
 
   /**
-   *
-   */
-  void getTextureShift(int width, int height,float &xTextureShift, float &yTextureShift);
-
-  /**
    * Take a snapshot of the Widget and put it in an OpenGl texture
    */
   QGLFramebufferObject *createTexture(const std::string &textureName,int width, int height);
