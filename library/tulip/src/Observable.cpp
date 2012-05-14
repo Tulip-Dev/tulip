@@ -34,9 +34,6 @@
 using namespace std;
 using namespace tlp;
 
-// quite ugly but it ensures binary compatibility with 3.7
-#define QUEUED_EVENT(obj) *((bool *) &((obj)->queuedEvent))
-
 namespace {
 //======================================================================
 struct Node2Observable {
@@ -212,14 +209,14 @@ void Observable::treatEvent(const Event &) {
   std::cout << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
 }
 //=================================
-Observable::Observable(): _n(node()), deleteMsgSent(false), queuedEvent(*this, Event::TLP_INVALID) {
+Observable::Observable(): deleteMsgSent(false), queuedEvent(false), _n(node()) {
 #ifndef NDEBUG
   sent = received = 0;
 #endif
   //cout << "[Observable node] created:" << n.id << "::" << this << endl;
 }
 //----------------------------------
-Observable::Observable(const Observable &): _n(node()), deleteMsgSent(false), queuedEvent(*this, Event::TLP_INVALID) {
+Observable::Observable(const Observable &):deleteMsgSent(false), queuedEvent(false), _n(node()) {
 #ifndef NDEBUG
   sent = received = 0;
 #endif
@@ -289,7 +286,7 @@ void Observable::unholdObservers() {
       for( it = backupEvents.begin(); it != backupEvents.end(); ++it) {
         if (Observable::_oAlive[it->first]) {
           Observable *sender = static_cast<Observable *>(Observable::_oPointer[it->first]);
-          QUEUED_EVENT(sender) = false;
+          sender->queuedEvent = false;
         }
       }
 
@@ -377,7 +374,7 @@ void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) con
 //----------------------------------------
 void Observable::addObserver(Observable * const obs) const {
   assert(obs != NULL);
-  QUEUED_EVENT(this) = false;
+  queuedEvent = false;
   addOnlooker(*obs, OBSERVER);
 }
 //----------------------------------------
@@ -401,7 +398,6 @@ void Observable::observableDeleted() {
 }
 //----------------------------------------
 void Observable::sendEvent(const Event &message) {
-  // nothing to do if not bound
   if (!isBound())
     return;
 
@@ -409,6 +405,7 @@ void Observable::sendEvent(const Event &message) {
   if (!_oGraph.isElement(_n) || !_oAlive[_n]) {
     throw ObservableException("Notify called on a deleted Observable");
   }
+
 
   const unsigned int RECCALL = 200;
 
@@ -438,7 +435,7 @@ void Observable::sendEvent(const Event &message) {
       if ((_oType[e] & OBSERVER) && (message.type() != Event::TLP_INFORMATION)) {
         if (_oHoldCounter == 0  || message.type() == Event::TLP_DELETE)
           observerTonotify.push_back(pair<Observable*, node>(obs, src));
-        else if (!QUEUED_EVENT(this)) {
+        else if (!queuedEvent) {
           delayedEventAdded = true;
 #ifdef _OPENMP
           #pragma omp critical(ObservableGraphUpdate)
@@ -456,7 +453,7 @@ void Observable::sendEvent(const Event &message) {
   }
 
   if (delayedEventAdded) {
-    QUEUED_EVENT(this) = true;
+    queuedEvent = true;
   }
 
   //send message to listeners

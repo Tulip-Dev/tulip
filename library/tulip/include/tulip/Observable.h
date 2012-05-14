@@ -294,18 +294,14 @@ protected:
 
 private:
   enum OBSERVABLEEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};
+  bool deleteMsgSent; /** use to enable subclasses to send the Event::DELETE in there destructor */
+  mutable bool queuedEvent;  /** Use to prevent unecessary elements insertion in the set of events */
   tlp::node _n; /** node that represent that object in the ObservableGraph.*/
 #ifndef NDEBUG
   unsigned int sent; /* counter of sent notification */
   unsigned int received; /* counter of received notification */
 #endif
-  bool deleteMsgSent; /** use to enable subclasses to send the Event::DELETE in there destructor */
-  mutable Event queuedEvent; /** store the last event to send it to Observers after an hold/unhold block termination */
-  // we keep the old definition below
-  // for binary compatibility purpose with Tulip 3.7
-  // but queueEvent will be managed using the macro QUEUED_EVENT
-  // defined in Observable.cpp as if it was declared as below
-  //mutable bool queuedEvent;  /** Use to prevent unecessary elements insertion in the set of events */
+
 
   /**
   * @brief return an Iterator on all Onlookers

@@ -70,7 +70,7 @@ ENDIF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
 ## TulipMMVersion : Ma.Mi
 ## -----------------------------------------------------------------------------------------------
 SET(TulipMajorVersion 3)
-SET(TulipMinorVersion 7)
+SET(TulipMinorVersion 8)
 SET(TulipReleaseVersion 0)
 SET(TulipVersionSeparator .)
 IF(MSVC) #specific options for Visual Studio
