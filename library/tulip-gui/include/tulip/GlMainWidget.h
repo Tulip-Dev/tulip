@@ -130,12 +130,6 @@ public:
                       SelectedEntity &selectedEntity,
                       tlp::GlLayer* layer=NULL);
 
-  /**
-   *  Take a snapshot of the Widget
-   *  \return an array of dimension width*height*3 char (8bits per color RGB).
-   *   The pointer has to be freed after (with free, not delete)
-   **/
-  unsigned char* getImage();
   // EPS output of a GlGraph
   bool outputEPS(int size, int doSort, const char *filename);
   // SVG output of a GlGraph
