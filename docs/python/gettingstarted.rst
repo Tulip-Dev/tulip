@@ -74,11 +74,11 @@ First, the path to the :mod:`tulip` module must be provided to Python.
 In the following, <tulip_install_dir> represents the root directory of a Tulip installation.
 The Tulip Python module is installed in the following directory according to your system :
 
-	* Linux : <tulip_install_dir>/lib
+        * Linux : <tulip_install_dir>/lib/python
 
-	* Windows : <tulip_install_dir>/bin
+        * Windows : <tulip_install_dir>/bin/python
 
-	* Mac OS : <tulip_install_dir>/Contents/Frameworks (if you install Tulip from a bundle, <tulip_install_dir> should be /Applications/Tulip-3.X.Y.app/)  	
+        * Mac OS : <tulip_install_dir>/Contents/Frameworks/python (if you install Tulip from a bundle, <tulip_install_dir> should be /Applications/Tulip-3.X.Y.app/)
 
 This path has to be added to the list of Python module search path. To do so, you can add it in the **PYTHONPATH**
 environment variable or add it to the :data:`sys.path` list.	
