@@ -55,7 +55,13 @@ Drawing Tools
 
 .. autofunction:: tulip::tlp.computeBoundingBox
 
+.. autofunction:: tulip::tlp.computeBoundingBox
+
 .. autofunction:: tulip::tlp.computeBoundingRadius
+
+.. autofunction:: tulip::tlp.computeBoundingRadius
+
+.. autofunction:: tulip::tlp.computeConvexHull
 
 .. autofunction:: tulip::tlp.computeConvexHull
 
