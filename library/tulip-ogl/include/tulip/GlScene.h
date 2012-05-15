@@ -255,6 +255,7 @@ public:
 
   /**
    * Create a layer with the given name in the scene
+   * This layer is added to the layers list
    * Now the scene have the ownership of this GlLayer
    * so you don't have to delete this GlLayer
    */
@@ -262,6 +263,7 @@ public:
 
   /**
    * Create a layer with the given name in the scene just before layer with given name
+   * This layer is added to the layers list
    * Return NULL if the layer with beforeLayerWithName is not find
    * Now the scene have the ownership of this GlLayer
    * so you don't have to delete this GlLayer
@@ -270,6 +272,7 @@ public:
 
   /**
    * Create a layer with the given name in the scene just after layer with given name
+   * This layer is added to the layers list
    * Return NULL if the layer with beforeLayerWithName is not find
    * Now the scene have the ownership of this GlLayer
    * so you don't have to delete this GlLayer
@@ -301,6 +304,7 @@ public:
 
   /**
    * Return the layer with name : name
+   * Return NULL if the layer doesn't exist in the scene
    */
   GlLayer *getLayer(const std::string& name);
 
