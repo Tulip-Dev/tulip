@@ -123,13 +123,11 @@ protected :
   }
   void delEdge(Graph *,const edge ) {
     setHaveToCompute();
-  }
-  void addLocalProperty(Graph*, const std::string &name);
-  void delLocalProperty(Graph*, const std::string &name);
-  void addInheritedProperty(Graph *, const std::string &name);
-  void afterDelInheritedProperty(Graph *, const std::string &name);
+  }  
+
   void destroy(Graph *);
-  void destroy(const Camera *);
+  void destroy(const Camera *);    
+  void destroy(PropertyInterface*);
 
   void removeObservers();
   void addObservers();
@@ -160,6 +158,8 @@ protected :
 
   int quadTreesVectorPosition;
   int simpleEntitiesVectorPosition;
+
+
 };
 
 }
