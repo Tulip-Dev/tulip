@@ -56,13 +56,13 @@ bool Kruskal::check(std::string &erreurMsg) {
 /// Compute the Minimum Spanning Tree
 bool Kruskal::run() {
   /* Initialisation */
-  DoubleProperty *edgeWeight = 0;
+  DoubleProperty *edgeWeight = NULL;
 
-  if ( dataSet!=0) {
+  if ( dataSet!=NULL) {
     dataSet->get("edge weight", edgeWeight);
   }
 
-  if (edgeWeight == 0)
+  if (edgeWeight == NULL)
     edgeWeight = graph->getProperty<DoubleProperty>("viewMetric");
 
   selectMinimumSpanningTree(graph, booleanResult, edgeWeight, pluginProgress);

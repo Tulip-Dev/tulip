@@ -50,7 +50,7 @@ public:
    * Load all view's plugins available
    * \param plug : Use this plugin loader
    */
-  void loadPlugins(PluginLoader *plug=0);
+  void loadPlugins(PluginLoader *plug=NULL);
 
   /**
    * Create view with given name

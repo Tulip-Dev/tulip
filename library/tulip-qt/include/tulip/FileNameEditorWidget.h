@@ -20,7 +20,7 @@ class TLP_QT_SCOPE FileNameEditorWidget : public QWidget {
   Q_PROPERTY(QString filter READ filter WRITE setFilter)
 
 public:
-  explicit FileNameEditorWidget(QWidget *parent = 0);
+  explicit FileNameEditorWidget(QWidget *parent = NULL);
   ~FileNameEditorWidget();
 
   QString fileName() const;

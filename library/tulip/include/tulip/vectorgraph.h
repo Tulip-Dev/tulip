@@ -657,18 +657,18 @@ private:
 #if !defined(_MSC_VER) || defined(DLL_TULIP) //MSVC does not like definitions of DLLImport functions. If using MSVC, defining these only if compiling the Tulip DLL.
 template <typename TYPE>
 bool NodeProperty<TYPE>::isValid() const {
-  if (this->_graph == 0) return false;
+  if (this->_graph == NULL) return false;
 
-  if (this->_array == 0) return false;
+  if (this->_array == NULL) return false;
 
   return this->_graph->isNodeAttr(this->_array);
 }
 
 template <typename TYPE>
 bool EdgeProperty<TYPE>::isValid() const {
-  if (this->_graph == 0) return false;
+  if (this->_graph == NULL) return false;
 
-  if (this->_array == 0) return false;
+  if (this->_array == NULL) return false;
 
   return this->_graph->isEdgeAttr(this->_array);
 }

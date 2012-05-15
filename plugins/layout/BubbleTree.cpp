@@ -359,7 +359,7 @@ bool BubbleTree::run() {
     }
   }
 
-  if (dataSet == 0 || !dataSet->get("complexity",nAlgo))
+  if (dataSet == NULL || !dataSet->get("complexity",nAlgo))
     nAlgo = true;
 
   layoutResult->setAllEdgeValue(vector<Coord>(0));

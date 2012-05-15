@@ -58,7 +58,7 @@ protected :
   static GlRegularPolygon *diamond;
 };
 
-GlRegularPolygon* Diamond::diamond=0;
+GlRegularPolygon* Diamond::diamond=NULL;
 
 //=====================================================
 GLYPHPLUGIN(Diamond, "2D - Diamond", "Patrick Mary", "23/06/2011", "Textured Diamond", "1.0", 5)

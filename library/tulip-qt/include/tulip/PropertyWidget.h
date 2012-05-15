@@ -49,7 +49,7 @@ private:
   tlp::Graph *graph;
 
 public:
-  PropertyWidget(QWidget *, const char * = 0);
+  PropertyWidget(QWidget *, const char * = NULL);
   ~PropertyWidget();
   tlp::Graph *getGraph() const;
 

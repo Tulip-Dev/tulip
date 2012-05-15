@@ -39,7 +39,7 @@ class PluginsManager : public QDialog {
   Q_OBJECT
 
 public:
-  PluginsManager(MultiServerManager *msm,QWidget *parent=0);
+  PluginsManager(MultiServerManager *msm,QWidget *parent=NULL);
   virtual ~PluginsManager();
 
 protected:

@@ -6,9 +6,9 @@
 
 class OrientedPushButton : public QPushButton {
 public:
-  OrientedPushButton(QWidget* parent = 0);
-  OrientedPushButton(const QString& text, QWidget* parent = 0);
-  OrientedPushButton(const QIcon& icon, const QString& text, QWidget* parent = 0);
+  OrientedPushButton(QWidget* parent = NULL);
+  OrientedPushButton(const QString& text, QWidget* parent = NULL);
+  OrientedPushButton(const QIcon& icon, const QString& text, QWidget* parent = NULL);
   ~OrientedPushButton();
 
   Qt::Orientation orientation() const;

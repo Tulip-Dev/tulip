@@ -73,7 +73,7 @@ Morphing::Morphing() {
   g0 = g1 = 0;
   e0 = e1 = 0;
   t = 0.0f;
-  glWidget = 0;
+  glWidget = NULL;
 }
 //===========================================================
 bool Morphing::init( GlMainWidget * outGlgw,

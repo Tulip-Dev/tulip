@@ -39,11 +39,11 @@ CPPUNIT_TEST_SUITE_REGISTRATION( TlpImportExportTest );
 //==========================================================
 void TlpImportExportTest::testLoad() {
   Graph *graph = tlp::loadGraph("cette erreur fait partie de testLoad");
-  CPPUNIT_ASSERT(graph == 0);
+  CPPUNIT_ASSERT(graph == NULL);
   graph = tlp::loadGraph("TlpImportExportTest.cpp");
-  CPPUNIT_ASSERT(graph == 0);
+  CPPUNIT_ASSERT(graph == NULL);
   graph = tlp::loadGraph("DATA/filesystem.tlp.gz");
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   delete graph;
 }
 //==========================================================
@@ -51,19 +51,19 @@ void TlpImportExportTest::testImport() {
   DataSet dataSet;
   dataSet.set("file::filename", std::string("cette erreur fait partie de testImport"));
   Graph *graph = tlp::importGraph("tlp", dataSet, NULL);
-  CPPUNIT_ASSERT(graph == 0);
+  CPPUNIT_ASSERT(graph == NULL);
   dataSet.set("file::filename", std::string("TlpImportExportTest.cpp"));
   graph = tlp::importGraph("tlp", dataSet, NULL);
-  CPPUNIT_ASSERT(graph == 0);
+  CPPUNIT_ASSERT(graph == NULL);
   dataSet.set("file::filename", std::string("DATA/filesystem.tlp.gz"));
   graph = tlp::importGraph("tlp", dataSet, NULL);
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   delete graph;
 }
 //==========================================================
 void TlpImportExportTest::testSave() {
   Graph *graph = newGraph();
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   node n1 = graph->addNode();
   node n2 = graph->addNode();
   edge e1 = graph->addEdge(n1, n2);
@@ -72,7 +72,7 @@ void TlpImportExportTest::testSave() {
   CPPUNIT_ASSERT(ok == true);
   graph = (Graph *) NULL;
   graph = loadGraph("save_test.tlp");
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   node n;
   forEach(n, graph->getNodes()) {
     CPPUNIT_ASSERT((n == n1) || (n == n2));
@@ -86,7 +86,7 @@ void TlpImportExportTest::testSave() {
 //==========================================================
 void TlpImportExportTest::testExport() {
   Graph *graph = newGraph();
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   node n1 = graph->addNode();
   // for sf bug  #2999413
   graph->delNode(n1);
@@ -101,7 +101,7 @@ void TlpImportExportTest::testExport() {
   CPPUNIT_ASSERT(ok == true);
   graph = (Graph *) NULL;
   graph = loadGraph("export_test.tlp");
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   node n;
   forEach(n, graph->getNodes()) {
     // - 1 is because of delNode
@@ -116,7 +116,7 @@ void TlpImportExportTest::testExport() {
 //==========================================================
 void TlpImportExportTest::testExportCluster() {
   Graph *graph = newGraph();
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   node n1 = graph->addNode();
   node n2 = graph->addNode();
   edge e1 = graph->addEdge(n1, n2);
@@ -131,7 +131,7 @@ void TlpImportExportTest::testExportCluster() {
   CPPUNIT_ASSERT(ok == true);
   graph = (Graph *) NULL;
   graph = loadGraph("export_test.tlp");
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   node n;
   forEach(n, graph->getNodes()) {
     CPPUNIT_ASSERT((n == n1) || (n == n2));

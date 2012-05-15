@@ -176,7 +176,7 @@ bool QuotientClustering::run() {
 
   delete itS;
 
-  IntegerProperty *opProp = 0, *cardProp = 0;
+  IntegerProperty *opProp = NULL, *cardProp = NULL;
   Graph *quotientGraph = graph->getRoot()->addSubGraph();
   stringstream sstr;
   sstr << "quotient of ";

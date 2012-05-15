@@ -542,7 +542,7 @@ int main (int argc, char **argv) {
 
   graph = tlp::loadGraph(argv[1]);
 
-  if (graph == 0) {
+  if (graph == NULL) {
     cout << "can't load the graph" << argv[1] << endl;
   }
 

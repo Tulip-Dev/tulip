@@ -30,7 +30,7 @@ private:
 class GraphTableModel : public QAbstractTableModel, public tlp::Observable , public tlp::GraphObserver, public tlp::PropertyObserver {
   Q_OBJECT
 public:
-  GraphTableModel(tlp::Graph* graph,tlp::ElementType elementType=tlp::NODE,QObject* parent = 0);
+  GraphTableModel(tlp::Graph* graph,tlp::ElementType elementType=tlp::NODE,QObject* parent = NULL);
 
   //Get set parameters
   tlp::Graph* graph()const {

@@ -42,7 +42,7 @@ TLP_SCOPE   BoundingBox computeBoundingBox(const Graph *graph,
     const LayoutProperty *layout,
     const SizeProperty *size,
     const DoubleProperty *rotation,
-    const BooleanProperty *selection = 0);
+    const BooleanProperty *selection = NULL);
 
 
 /**
@@ -56,7 +56,7 @@ TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
     const LayoutProperty *layout,
     const SizeProperty *size,
     const DoubleProperty *rotation,
-    const BooleanProperty *selection = 0);
+    const BooleanProperty *selection = NULL);
 /**
   *
   * Computes a bounding sphere (or a bounding circle if the graph has a 2D layout) of a graph according to nodes positions, edges bends,
@@ -73,7 +73,7 @@ TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (const Graph *graph,
     const LayoutProperty *layout,
     const SizeProperty *size,
     const DoubleProperty *rotation,
-    const BooleanProperty *selection = 0);
+    const BooleanProperty *selection = NULL);
 /**
   *
   * Computes a convex hull of a graph according to nodes positions, edges bends,
@@ -86,7 +86,7 @@ TLP_SCOPE   std::vector<Coord> computeConvexHull (const Graph *graph,
     const LayoutProperty *layout,
     const SizeProperty *size,
     const DoubleProperty *rotation,
-    const BooleanProperty *selection = 0);
+    const BooleanProperty *selection = NULL);
 
 /**
  * Computes the intersection point (if any) of two 3d lines.

@@ -223,7 +223,7 @@ void importGraph(const string &filename, const string &importPluginName, GlScene
   Graph *newGraph = tlp::newGraph();
   tlp::importGraph(importPluginName, dataSet, NULL,newGraph);
 
-  if (newGraph!=0) {
+  if (newGraph!=NULL) {
     string sceneData;
     dataSet.get<std::string>("scene", sceneData);
 

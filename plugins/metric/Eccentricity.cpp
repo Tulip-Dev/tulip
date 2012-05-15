@@ -115,7 +115,7 @@ bool EccentricityMetric::run() {
   norm     = true;
   directed = false;
 
-  if (dataSet!=0) {
+  if (dataSet!=NULL) {
     dataSet->get("closeness centrality", allPaths);
     dataSet->get("norm", norm);
     dataSet->get("directed", directed);

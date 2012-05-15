@@ -25,10 +25,10 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-BiconnectedTest * BiconnectedTest::instance=0;
+BiconnectedTest * BiconnectedTest::instance=NULL;
 //=================================================================
 bool BiconnectedTest::isBiconnected(Graph *graph) {
-  if (instance==0)
+  if (instance==NULL)
     instance=new BiconnectedTest();
 
   return instance->compute(graph);
@@ -37,7 +37,7 @@ bool BiconnectedTest::isBiconnected(Graph *graph) {
 void BiconnectedTest::makeBiconnected(Graph *graph, vector<edge> &addedEdges) {
   //  cerr << __PRETTY_FUNCTION__ << " : " << graph->getAttribute<string>("name") << endl;
   //  if (BiconnectedTest::isBiconnected(graph)) return;
-  if (instance==0) instance=new BiconnectedTest();
+  if (instance==NULL) instance=new BiconnectedTest();
 
   graph->removeGraphObserver(instance);
   instance->resultsBuffer.erase((unsigned long)graph);

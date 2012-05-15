@@ -99,7 +99,7 @@ public:
   void beforeCall() {
     ogdf::FastMultipoleEmbedder *fme = static_cast<ogdf::FastMultipoleEmbedder*>(ogdfLayoutAlgo);
 
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       double dval = 0;
       int ival = 0;
       bool bval = 0;

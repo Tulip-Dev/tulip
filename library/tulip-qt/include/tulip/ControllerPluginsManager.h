@@ -45,7 +45,7 @@ public:
     return *inst;
   }
 
-  void loadPlugins(PluginLoader *plug=0);
+  void loadPlugins(PluginLoader *plug=NULL);
 
   /**
    * return if the Controller with given name exist

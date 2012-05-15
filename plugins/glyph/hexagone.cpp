@@ -56,7 +56,7 @@ protected :
   static GlHexagon *hexagon;
 };
 
-GlHexagon* Hexagone::hexagon=0;
+GlHexagon* Hexagone::hexagon=NULL;
 
 //=====================================================
 GLYPHPLUGIN(Hexagone, "2D - Hexagone", "David Auber", "09/07/2002", "Textured Hexagone", "1.0", 13)

@@ -66,7 +66,7 @@ PropertyWidget::PropertyWidget(QWidget *parent, const char *name) :
   TulipTableWidget(parent, name), graph(0), vScrollPos(0),displayNode(true),inUpdate(false) {
   resetBackColor1();
   resetBackColor2();
-  editedProperty=0;
+  editedProperty=NULL;
   setRowCount(0);
   setColumnCount(2);
   setHorizontalHeaderItem(0, new QTableWidgetItem("Id"));
@@ -87,7 +87,7 @@ Graph *PropertyWidget::getGraph() const {
   return graph;
 }
 void PropertyWidget::setGraph(Graph *s) {
-  editedProperty=0;
+  editedProperty=NULL;
   clearContents();
   setRowCount(0);
   setColumnCount(2);
@@ -102,7 +102,7 @@ void PropertyWidget::changeProperty(Graph *sg,const std::string &name) {
   graph=sg;
 
   if (!graph->existProperty(name)) {
-    editedProperty=0;
+    editedProperty=NULL;
   }
   else {
     editedProperty=graph->getProperty(name);

@@ -34,7 +34,7 @@ extern "C" {
 };
 
 //====================================================
-tlp::GlTextureManager* tlp::GlTextureManager::inst=0;
+tlp::GlTextureManager* tlp::GlTextureManager::inst=NULL;
 
 using namespace std;
 

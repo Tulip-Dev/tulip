@@ -492,8 +492,8 @@ void PlanarityTestImpl::setInfoForNewCNode(Graph *sG,
 
   BmdLink<node> *first = RBC[newCNode].firstItem();
   BmdLink<node> *last  = RBC[newCNode].lastItem();
-  assert(first!=0);
-  assert(last!=0);
+  assert(first!=NULL);
+  assert(last!=NULL);
   activeCNode[first] = newCNode;
   activeCNode[last]  = newCNode;
 }

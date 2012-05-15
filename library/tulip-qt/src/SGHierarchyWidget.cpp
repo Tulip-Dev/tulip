@@ -77,13 +77,13 @@ Graph* SGHierarchyWidget::getGraph() const {
 //=======================================================
 void SGHierarchyWidget::setGraph(Graph *graph) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (graph == 0) {
-    _currentGraph = 0;
+  if (graph == NULL) {
+    _currentGraph = NULL;
     clear();
     return;
   }
 
-  if (_currentGraph==0 || (graphItems.get(graph->getId())==0)) {
+  if (_currentGraph==NULL || (graphItems.get(graph->getId())==NULL)) {
     _currentGraph = graph;
     update();
   }
@@ -96,7 +96,7 @@ void SGHierarchyWidget::currentGraphChanged(const Graph *graph) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   QTreeWidgetItem* item = graphItems.get(graph->getId());
 
-  if (item != 0) {
+  if (item != NULL) {
     disconnect(this, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
                this, SLOT(changeGraph(QTreeWidgetItem*, QTreeWidgetItem*)));
     setCurrentItem(item);
@@ -142,7 +142,7 @@ void SGHierarchyWidget::update() {
   clear();
   graphItems.setAll(0);
 
-  if (_currentGraph != 0) {
+  if (_currentGraph != NULL) {
     buildTreeView(_currentGraph->getRoot());
     currentGraphChanged(_currentGraph);
   }
@@ -153,11 +153,11 @@ void SGHierarchyWidget::update() {
 }
 //=======================================================
 void SGHierarchyWidget::updateCurrentGraphInfos(Graph *graph) {
-  if (graph == 0 || _currentGraph==0) return;
+  if (graph == NULL || _currentGraph==NULL) return;
 
   QTreeWidgetItem* item = graphItems.get(graph->getId());
 
-  if (item != 0)
+  if (item != NULL)
     setItemInfos(item, graph, graph->numberOfNodes(), graph->numberOfEdges());
 
   Iterator<Graph *> *subGraphsIt=graph->getSubGraphs();
@@ -173,7 +173,7 @@ void SGHierarchyWidget::updateCurrentGraphInfos(Graph *graph) {
 //Cluster Tree Structure modification
 void SGHierarchyWidget::removeSubgraph(Graph *graph, bool recursive) {
   //cerr << __PRETTY_FUNCTION__ << endl;
-  if (graph == 0) return;
+  if (graph == NULL) return;
 
   if (graph == graph->getRoot()) {
     QMessageBox::critical( 0, "Tulip Hierarchy Editor Remove Failed", QString("You cannot remove the root graph"));

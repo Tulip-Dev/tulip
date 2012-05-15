@@ -68,9 +68,9 @@ TLP_QT_SCOPE bool openDataSetDialog (DataSet& outSet,
 
 TLP_QT_SCOPE void openGraphOnGlMainWidget(Graph *graph,DataSet *dataSet,GlMainWidget *glMainWidget);
 
-TLP_QT_SCOPE void loadInteractorPluginsFromDir(std::string dir,PluginLoader *loader=0);
-TLP_QT_SCOPE void loadViewPluginsFromDir(std::string dir,PluginLoader *loader=0);
-TLP_QT_SCOPE void loadControllerPluginsFromDir(std::string dir,PluginLoader *loader=0);
+TLP_QT_SCOPE void loadInteractorPluginsFromDir(std::string dir,PluginLoader *loader=NULL);
+TLP_QT_SCOPE void loadViewPluginsFromDir(std::string dir,PluginLoader *loader=NULL);
+TLP_QT_SCOPE void loadControllerPluginsFromDir(std::string dir,PluginLoader *loader=NULL);
 
 TLP_QT_SCOPE bool canUseQGLPixelBuffer();
 

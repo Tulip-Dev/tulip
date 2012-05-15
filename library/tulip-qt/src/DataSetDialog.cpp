@@ -98,7 +98,7 @@ protected :
 
 int getAllProperties( stringA &outA,
                       Graph *inG,
-                      PropertyInterface *inCurrent = 0  ) {
+                      PropertyInterface *inCurrent = NULL  ) {
   assert( inG );
   outA.clear();
   Iterator< std::string > * propIt = inG->getProperties();
@@ -121,7 +121,7 @@ int getAllProperties( stringA &outA,
 int getPropertyOf(stringA &outA,
                   Graph *inG,
                   std::string inTypeName,
-                  PropertyInterface *inCurrent = 0) {
+                  PropertyInterface *inCurrent = NULL) {
   assert( inG );
   outA.clear();
   Iterator< std::string > * propIt = inG->getProperties();
@@ -170,9 +170,9 @@ struct QParamDialog : public QDialog {
 
   QParamDialog(const ParameterDescriptionList& sDef,
                ParameterDescriptionList& iDef,
-               QWidget * parent = 0)
+               QWidget * parent = NULL)
     : QDialog( parent), sysDef(sDef), inDef(iDef) {
-    helpBrowser = 0;
+    helpBrowser = NULL;
     curHelpParam = -1;
 
     mainLayout = new QVBoxLayout;
@@ -777,11 +777,11 @@ struct QParamDialog : public QDialog {
                 || ip.typeName == TN(SizeVectorProperty)
                 || ip.typeName == TN(StringVectorProperty))) {
         stringA proxyA;
-        PropertyInterface * curProxy = 0;
+        PropertyInterface * curProxy = NULL;
 
         if( !inSet || !inSet->get
             (ip.name,curProxy) )
-          curProxy = 0;
+          curProxy = NULL;
 
         int curIdx;
 

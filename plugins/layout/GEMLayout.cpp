@@ -409,7 +409,7 @@ bool GEMLayout::run() {
     _particules[i].n = n;
     _particules[i].id = i;
 
-    if (!initLayout && layout != 0)
+    if (!initLayout && layout != NULL)
       _particules[i].pos = layout->getNodeValue(n);
     else
       _particules[i].pos.fill(0);
@@ -418,7 +418,7 @@ bool GEMLayout::run() {
     ++i;
   }
 
-  if (initLayout && layout != 0) {
+  if (initLayout && layout != NULL) {
     if (i_finaltemp < i_starttemp) this->insert();
   }
 

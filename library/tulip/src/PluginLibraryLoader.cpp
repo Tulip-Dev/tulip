@@ -115,7 +115,7 @@ PluginLibraryLoader::PluginLibraryLoader(const std::string& _pluginPath, PluginL
     SetCurrentDirectory (pluginPath.c_str());
     _infos->hFind = FindFirstFile ("*.dll", &_infos->FindData);
 
-    if (loader != 0) {
+    if (loader != NULL) {
       // count files loop
       unsigned long nbFiles = 0;
 

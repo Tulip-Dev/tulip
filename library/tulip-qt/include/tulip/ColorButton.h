@@ -36,7 +36,7 @@ public:
   /**
     * Use ColorButton instead.
     */
-  _DEPRECATED ColorButton(const QRgb &c, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
+  _DEPRECATED ColorButton(const QRgb &c, QWidget *parent = NULL, const char *name = NULL, Qt::WFlags f = 0);
   ~ColorButton();
   QColor color() const;
 

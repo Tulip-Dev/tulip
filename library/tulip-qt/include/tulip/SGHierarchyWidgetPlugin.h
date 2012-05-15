@@ -28,7 +28,7 @@ class SGHierarchyWidgetPlugin : public QObject, public QDesignerCustomWidgetInte
   Q_OBJECT
   Q_INTERFACES(QDesignerCustomWidgetInterface)
 public:
-  SGHierarchyWidgetPlugin(QObject *parent = 0);
+  SGHierarchyWidgetPlugin(QObject *parent = NULL);
   ~SGHierarchyWidgetPlugin();
 
   bool isContainer() const;

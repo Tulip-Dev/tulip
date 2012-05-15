@@ -57,7 +57,7 @@ protected :
   void initCross();
 };
 
-GlComplexPolygon* Cross::cross=0;
+GlComplexPolygon* Cross::cross=NULL;
 
 //=====================================================
 GLYPHPLUGIN(Cross, "2D - Cross", "Patrick Mary", "23/06/2011", "Textured Cross", "1.0", 8)

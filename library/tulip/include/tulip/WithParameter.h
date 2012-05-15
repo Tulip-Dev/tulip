@@ -157,7 +157,7 @@ struct TLP_SCOPE ParameterDescriptionList {
    * @param inG A graph on which to create properties if any parameter is of a property type. Defaults to 0.
    * @return void
    **/
-  void buildDefaultDataSet(DataSet& ioDataSet, Graph* inG = 0 ) const;
+  void buildDefaultDataSet(DataSet& ioDataSet, Graph* inG = NULL ) const;
 
   unsigned int size() const {
     return parameters.size();
@@ -232,8 +232,8 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T> void addInParameter(const char* str,
-      const char* inHelp=0,
-      const char* inDefValue = 0,
+      const char* inHelp=NULL,
+      const char* inDefValue = NULL,
       bool isMandatory = true) {
     parameters.template add<T>(str,inHelp,inDefValue,isMandatory, IN_PARAM);
   }
@@ -248,8 +248,8 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T> void addOutParameter(const char* str,
-      const char* inHelp=0,
-      const char* inDefValue = 0,
+      const char* inHelp=NULL,
+      const char* inDefValue = NULL,
       bool isMandatory = true) {
     parameters.template add<T>(str,inHelp,inDefValue,isMandatory, OUT_PARAM);
   }
@@ -264,8 +264,8 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T> void addInOutParameter(const char* str,
-      const char* inHelp=0,
-      const char* inDefValue = 0,
+      const char* inHelp=NULL,
+      const char* inDefValue = NULL,
       bool isMandatory = true) {
     parameters.template add<T>(str,inHelp,inDefValue,isMandatory, INOUT_PARAM);
   }

@@ -47,7 +47,7 @@ class AutoCompletionList : public QListWidget {
 
 public :
 
-  AutoCompletionList(PythonCodeEditor *parent=0);
+  AutoCompletionList(PythonCodeEditor *parent=NULL);
 
 protected :
 
@@ -112,7 +112,7 @@ class PythonCodeEditor : public QPlainTextEdit {
 
 public :
 
-  PythonCodeEditor(QWidget *parent=0);
+  PythonCodeEditor(QWidget *parent=NULL);
   ~PythonCodeEditor();
 
   QString getCleanCode() const;

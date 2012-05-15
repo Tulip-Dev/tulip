@@ -27,7 +27,7 @@ class ElementPropertiesWidgetPlugin : public QObject, public QDesignerCustomWidg
   Q_OBJECT
   Q_INTERFACES(QDesignerCustomWidgetInterface)
 public:
-  ElementPropertiesWidgetPlugin(QObject *parent = 0);
+  ElementPropertiesWidgetPlugin(QObject *parent = NULL);
 
   bool isContainer() const;
   bool isInitialized() const;

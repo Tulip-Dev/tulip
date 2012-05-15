@@ -225,8 +225,8 @@ public:
 struct TLP_SCOPE StructDef {
   ///Add the variable of type T and name str in the structure.
   template<typename T> void add(const char* str,
-                                const char* inHelp = 0,
-                                const char* inDefValue = 0,
+                                const char* inHelp = NULL,
+                                const char* inDefValue = NULL,
                                 bool mandatory = true);
 
   ///Returns if a name field exists
@@ -247,7 +247,7 @@ struct TLP_SCOPE StructDef {
 
   ///Build a default dataSet according to fields
   ///The optional Graph is needed to create properties (PropertyInterface*)
-  void    buildDefaultDataSet( DataSet & ioDataSet, Graph * inG = 0 );
+  void    buildDefaultDataSet( DataSet & ioDataSet, Graph * inG = NULL);
 private:
   std::list< std::pair<std::string, std::string> > data;
   std::map<std::string,std::string> help;

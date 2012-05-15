@@ -80,7 +80,7 @@ class CSVImportWizard : public QWizard {
   Q_OBJECT
 
 public:
-  explicit CSVImportWizard(QWidget *parent = 0);
+  explicit CSVImportWizard(QWidget *parent = NULL);
   ~CSVImportWizard();
 
   CSVParsingConfigurationQWizardPage* getParsingConfigurationPage()const;

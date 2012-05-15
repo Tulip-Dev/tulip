@@ -25,13 +25,13 @@
 using namespace std;
 using namespace tlp;
 
-AcyclicTest * AcyclicTest::instance=0;
+AcyclicTest * AcyclicTest::instance=NULL;
 //**********************************************************************
 AcyclicTest::AcyclicTest() {
 }
 //**********************************************************************
 bool AcyclicTest::isAcyclic(const Graph *graph) {
-  if (instance==0)
+  if (instance==NULL)
     instance = new AcyclicTest();
 
   if (instance->resultsBuffer.find((unsigned long)graph) == instance->resultsBuffer.end()) {

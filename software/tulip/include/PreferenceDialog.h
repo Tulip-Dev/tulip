@@ -25,7 +25,7 @@ class PreferenceDialog : public QDialog, public Ui::PreferenceDialogData {
   Q_OBJECT
 
 public:
-  PreferenceDialog( QWidget* parent = 0);
+  PreferenceDialog( QWidget* parent = NULL);
   ~PreferenceDialog();
 
   static void loadPreference();

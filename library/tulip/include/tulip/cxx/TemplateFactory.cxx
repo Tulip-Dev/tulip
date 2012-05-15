@@ -71,7 +71,7 @@ void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::registerPlugin(Obje
       );
   }
   else {
-    if (currentLoader != 0) {
+    if (currentLoader != NULL) {
       std::string tmpStr;
       tmpStr += "'" + pluginName + "' " + getPluginsClassName() + " plugin";
       currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");

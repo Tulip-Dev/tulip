@@ -40,14 +40,14 @@ class TLP_QT_SCOPE PluginProgressWidget : public QWidget, public tlp::SimplePlug
   Q_OBJECT
 
 public:
-  PluginProgressWidget(QWidget *parent = 0);
+  PluginProgressWidget(QWidget *parent = NULL);
   /**
     * @brief Create a PluginProgressWidget.
     * @param view The view to update if the preview mode is enabled. Can be NULL if you don't want to update a view.
     * @param updateInterval The minimum time interval (in msec) between two update the progress bar. Avoid to perform too many call to progressBar redraw function that can slow down the process.
     * @parma parent The parent widget.
     **/
-  PluginProgressWidget(View *view,int updateInterval=200,QWidget *parent = 0);
+  PluginProgressWidget(View *view,int updateInterval=200,QWidget *parent = NULL);
 
   ~PluginProgressWidget();
   /**

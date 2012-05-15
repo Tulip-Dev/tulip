@@ -493,7 +493,7 @@ void NodeLinkDiagramComponent::draw() {
 
   GlMainView::draw();
 
-  if (gridOptionsWidget !=0)
+  if (gridOptionsWidget !=NULL)
     gridOptionsWidget->validateGrid();
 
   layerManagerWidget->attachMainWidget(mainWidget);

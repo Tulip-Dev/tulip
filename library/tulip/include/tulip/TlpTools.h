@@ -50,7 +50,7 @@ extern TLP_SCOPE void initTulipLib(const char* appDirPath = 0);
  *
  * @param plug A PluginLoader to output what is going on. Defaults to 0.
  **/
-TLP_SCOPE void loadPlugins(PluginLoader *plug=0);
+TLP_SCOPE void loadPlugins(PluginLoader *plug=NULL);
 
 /**
  * Loads a plugin from a specific shared library.
@@ -59,7 +59,7 @@ TLP_SCOPE void loadPlugins(PluginLoader *plug=0);
  * @param plug A PluginLoader to output what is going on. Defaults to 0.
  * @return bool true if the plugin was correctly loaded
  */
-TLP_SCOPE bool loadPlugin(const std::string &filename, PluginLoader *plug=0);
+TLP_SCOPE bool loadPlugin(const std::string &filename, PluginLoader *plug=NULL);
 
 /**
   * Loads plugins located in a specific directory
@@ -68,7 +68,7 @@ TLP_SCOPE bool loadPlugin(const std::string &filename, PluginLoader *plug=0);
   * @param type a string used by the plugin loader (if any) to output the type of plugin being loaded
   * @param loader A PluginLoader to output what is going on. Defaults to 0.
   */
-TLP_SCOPE void loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader=0);
+TLP_SCOPE void loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader=NULL);
 
 /**
   *
@@ -77,7 +77,7 @@ TLP_SCOPE void loadPluginsFromDir(std::string dir, std::string type, PluginLoade
   *
   * @param loader A PluginLoader to output what is going on. Defaults to 0.
   **/
-TLP_SCOPE void loadPluginsCheckDependencies(PluginLoader* loader=0);
+TLP_SCOPE void loadPluginsCheckDependencies(PluginLoader* loader=NULL);
 
 /**
  * @brief Demangles the name of a C++ class defined in the tlp namespace.

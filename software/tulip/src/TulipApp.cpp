@@ -633,7 +633,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
   bool cancel=false, noPlugin = true;
 
   if (s == QString::null) {
-    if (plugin==0) {
+    if (plugin==NULL) {
       plugin = &tmpStr;
       s = QFileDialog::getOpenFileName(this, tr("Choose a file to open" ),
                                        QString(),
@@ -1332,7 +1332,7 @@ void TulipApp::tabChanged(int index) {
 }
 //==============================================================
 void TulipApp::helpAbout() {
-  if (aboutWidget==0)
+  if (aboutWidget==NULL)
     aboutWidget = new InfoDialog(this);
 
   aboutWidget->show();

@@ -68,7 +68,7 @@ GridOptionsWidget::~GridOptionsWidget() {
 void GridOptionsWidget::setCurrentMainWidget(GlMainWidget *graphWidget) {
   this->glMainWidget = graphWidget;
 
-  if (glMainWidget != NULL && glMainWidget != 0)
+  if (glMainWidget != NULL && glMainWidget != NULL)
     grid = (GlGrid*)glMainWidget->getScene()->getLayer("Main")->findGlEntity("Layout Grid");
 }
 //==============================================
@@ -77,7 +77,7 @@ void GridOptionsWidget::setCurrentRenderingParametersDialog(RenderingParametersD
 }
 //==============================================
 void GridOptionsWidget::validateGrid() {
-  if (glMainWidget != 0) {
+  if (glMainWidget != NULL) {
     if (ActivatedCB->isChecked()) {
       if (grid != NULL) {
         glMainWidget->getScene()->getLayer("Main")->deleteGlEntity(grid);

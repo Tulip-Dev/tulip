@@ -175,7 +175,7 @@ private:
   static GlPolygon *roundedSquare;
 };
 
-GlPolygon* RoundedBox::roundedSquare=0;
+GlPolygon* RoundedBox::roundedSquare=NULL;
 
 RoundedBox::RoundedBox(GlyphContext *gc) : Glyph(gc) {}
 

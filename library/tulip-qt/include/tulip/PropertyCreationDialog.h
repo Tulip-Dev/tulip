@@ -31,11 +31,11 @@ public:
   /**
     * @brief Constructs a property creation dialog with the given parent.
     **/
-  explicit PropertyCreationDialog(QWidget *parent = 0);
+  explicit PropertyCreationDialog(QWidget *parent = NULL);
   /**
     * @brief Constructs a property creation dialog with the given parent graph and parent widget.
     **/
-  explicit PropertyCreationDialog(tlp::Graph* graph,QWidget *parent = 0);
+  explicit PropertyCreationDialog(tlp::Graph* graph,QWidget *parent = NULL);
   ~PropertyCreationDialog();
 
 

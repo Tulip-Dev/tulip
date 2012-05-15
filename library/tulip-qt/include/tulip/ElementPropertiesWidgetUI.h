@@ -40,7 +40,7 @@ class ElementPropertiesWidgetUI : public QWidget {
   Q_OBJECT
 
 public:
-  ElementPropertiesWidgetUI( QWidget* parent = 0);
+  ElementPropertiesWidgetUI( QWidget* parent = NULL);
   ~ElementPropertiesWidgetUI();
 
   QLabel* label;

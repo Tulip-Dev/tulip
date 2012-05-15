@@ -25,7 +25,7 @@ class PropertyWidgetPlugin : public QObject, public QDesignerCustomWidgetInterfa
   Q_OBJECT
   Q_INTERFACES(QDesignerCustomWidgetInterface)
 public:
-  PropertyWidgetPlugin(QObject *parent = 0);
+  PropertyWidgetPlugin(QObject *parent = NULL);
 
   bool isContainer() const;
   bool isInitialized() const;

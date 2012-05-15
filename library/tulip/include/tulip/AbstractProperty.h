@@ -150,7 +150,7 @@ public:
   //=================================================================================
   virtual AbstractProperty<Tnode,Tedge,TPROPERTY>& operator =(AbstractProperty<Tnode,Tedge,TPROPERTY> &prop) {
     if (this!= &prop) {
-      if (graph == 0) graph = prop.graph;
+      if (graph == NULL) graph = prop.graph;
 
       if (graph == prop.graph) {
         setAllNodeValue(prop.getNodeDefaultValue());

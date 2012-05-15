@@ -64,7 +64,7 @@ public:
     * that create cycle.
     *
     */
-  static bool acyclicTest(const Graph *, std::vector<edge> *obstructionEdges = 0);
+  static bool acyclicTest(const Graph *, std::vector<edge> *obstructionEdges = NULL);
 
 private:
 

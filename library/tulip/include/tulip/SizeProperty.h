@@ -39,9 +39,9 @@ class TLP_SCOPE SizeProperty:public AbstractSizeProperty {
 public :
   SizeProperty (Graph *, std::string n="");
 
-  Size getMax(Graph *sg=0);
-  Size getMin(Graph *sg=0);
-  void scale( const tlp::Vector<float,3>&, Graph *sg=0 );
+  Size getMax(Graph *sg=NULL);
+  Size getMin(Graph *sg=NULL);
+  void scale( const tlp::Vector<float,3>&, Graph *sg=NULL);
   void scale( const tlp::Vector<float,3>&, Iterator<node> *, Iterator<edge> *);
 
   // redefinition of some PropertyInterface methods

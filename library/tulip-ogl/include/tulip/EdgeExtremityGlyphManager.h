@@ -64,7 +64,7 @@ public:
   /**
    * Load glyphs plugins with given PluginLoader
    */
-  void loadPlugins(PluginLoader *plug = 0);
+  void loadPlugins(PluginLoader *plug = NULL);
 
   /**
    * Create the glyph list and store it in glyphs parameter

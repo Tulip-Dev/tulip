@@ -323,7 +323,7 @@ void DoubleProperty::edgesUniformQuantification(unsigned int k) {
 //====================================================================
 ///Renvoie le minimum de la metrique associe aux noeuds du DoubleProperty
 double DoubleProperty::getNodeMin(Graph *sg) {
-  if (sg==0) sg=graph;
+  if (sg==NULL) sg=graph;
 
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.find(sgi);
@@ -336,7 +336,7 @@ double DoubleProperty::getNodeMin(Graph *sg) {
 //====================================================================
 ///Renvoie le maximum de la metrique associe aux noeuds du DoubleProperty
 double DoubleProperty::getNodeMax(Graph *sg) {
-  if (sg==0) sg=graph;
+  if (sg==NULL) sg=graph;
 
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.find(sgi);
@@ -349,7 +349,7 @@ double DoubleProperty::getNodeMax(Graph *sg) {
 //====================================================================
 ///Renvoie le Minimum de la metrique associe aux aretes du DoubleProperty
 double DoubleProperty::getEdgeMin(Graph *sg) {
-  if (sg==0) sg=graph;
+  if (sg==NULL) sg=graph;
 
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.find(sgi);
@@ -362,7 +362,7 @@ double DoubleProperty::getEdgeMin(Graph *sg) {
 //====================================================================
 ///Renvoie le Maximum de la metrique associe aux aretes du DoubleProperty
 double DoubleProperty::getEdgeMax(Graph *sg) {
-  if (sg==0) sg=graph;
+  if (sg==NULL) sg=graph;
 
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.find(sgi);
@@ -376,7 +376,7 @@ double DoubleProperty::getEdgeMax(Graph *sg) {
 void DoubleProperty::computeMinMaxNode(Graph *sg) {
   double maxN2 = -DBL_MAX, minN2 = DBL_MAX;
 
-  if (sg==0) sg=graph;
+  if (sg==NULL) sg=graph;
 
   Iterator<node> *itN=sg->getNodes();
 
@@ -401,7 +401,7 @@ void DoubleProperty::computeMinMaxNode(Graph *sg) {
 void DoubleProperty::computeMinMaxEdge(Graph *sg) {
   double maxE2 = -DBL_MAX, minE2 = DBL_MAX;
 
-  if (sg==0) sg=graph;
+  if (sg==NULL) sg=graph;
 
   Iterator<edge> *itE=sg->getEdges();
 

@@ -53,7 +53,7 @@ static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, Gr
 
     Graph *meta = metaInfo->getNodeValue(n);
 
-    if ( meta != 0)
+    if ( meta != NULL)
       buildMapping(meta->getNodes(), mapping, metaInfo, mapping.get(n.id));
   }
 
@@ -62,7 +62,7 @@ static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, Gr
 //====================================================================================
 void updatePropertiesUngroup(Graph *graph, node metanode,
                              GraphProperty *clusterInfo) {
-  if (clusterInfo->getNodeValue(metanode)==0) return; //The metanode is not a metanode.
+  if (clusterInfo->getNodeValue(metanode)==NULL) return; //The metanode is not a metanode.
 
   LayoutProperty *graphLayout = graph->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty *graphSize = graph->getProperty<SizeProperty>(sizeProperty);
@@ -267,8 +267,8 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
       node src = eEnds.first;
       node tgt = eEnds.second;
       bool toDelete =
-        ((metaInfo->getNodeValue(src)!=0) ||
-         (metaInfo->getNodeValue(tgt)!=0)) &&
+        ((metaInfo->getNodeValue(src)!=NULL) ||
+         (metaInfo->getNodeValue(tgt)!=NULL)) &&
         isElement (src) && isElement (tgt) &&
         existEdge (src, tgt).isValid();
 
@@ -365,7 +365,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     ((GraphAbstract *) getRoot())->getMetaGraphProperty();
   Graph *metaGraph = metaInfo->getNodeValue(metaNode);
 
-  if (metaGraph == 0) return;
+  if (metaGraph == NULL) return;
 
   Observable::holdObservers();
   MutableContainer<node> mappingM;
@@ -410,7 +410,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       mappingM.set(mn.id, mn);
       Graph *mnGraph = metaInfo->getNodeValue(mn);
 
-      if (mnGraph != 0) {
+      if (mnGraph != NULL) {
         Iterator<node> *it = mnGraph->getNodes();
 
         while(it->hasNext()) {
@@ -538,8 +538,8 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
         else continue;
       }
 
-      if (metaInfo->getNodeValue(src) == 0 &&
-          metaInfo->getNodeValue(tgt) == 0) {
+      if (metaInfo->getNodeValue(src) == NULL &&
+          metaInfo->getNodeValue(tgt) == NULL) {
         addEdge(e);
         continue;
       }

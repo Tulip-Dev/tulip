@@ -40,14 +40,14 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
   inDegree.setAll(0);
   outDegree.setAll(0);
 
-  if (filter == 0) return;
+  if (filter == NULL) return;
 
-  Iterator<unsigned int> *it=0;
+  Iterator<unsigned int> *it=NULL;
   it = filter->nodeProperties.findAll(true);
 
   Iterator<node> *iteN;
 
-  if (it==0)
+  if (it==NULL)
     iteN =getSuperGraph()->getNodes();
   else
     iteN = new UINTIterator<node>(it);
@@ -64,7 +64,7 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 
   Iterator<edge> *iteE;
 
-  if (it==0)
+  if (it==NULL)
     iteE = getSuperGraph()->getEdges();
   else
     iteE = new UINTIterator<edge>(it);
@@ -449,10 +449,10 @@ void GraphView::swapEdgeOrder(const node n,const edge e1 , const edge e2) {
 }
 //----------------------------------------------------------------
 Iterator<node>* GraphView::getNodes() const {
-  Iterator<unsigned int> *it=0;
+  Iterator<unsigned int> *it=NULL;
   it = nodeAdaptativeFilter.findAll(true);
 
-  if (it==0)
+  if (it==NULL)
     return new SGraphNodeIterator(this, nodeAdaptativeFilter);
   else
     return (new UINTIterator<node>(it));
@@ -471,10 +471,10 @@ Iterator<node>* GraphView::getInOutNodes(const node n)const {
 }
 //----------------------------------------------------------------
 Iterator<edge>* GraphView::getEdges()const {
-  Iterator<unsigned int> *it=0;
+  Iterator<unsigned int> *it=NULL;
   it = edgeAdaptativeFilter.findAll(true);
 
-  if (it==0)
+  if (it==NULL)
     return new SGraphEdgeIterator(this, edgeAdaptativeFilter);
   else
     return (new UINTIterator<edge>(it));

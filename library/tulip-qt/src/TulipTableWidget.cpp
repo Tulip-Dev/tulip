@@ -545,7 +545,7 @@ void LabelTableItem::setContentFromEditor(QWidget *editor) {
 class IntFromListEditor: public QComboBox {
   QStringList* values;
 public:
-  IntFromListEditor(QStringList *list, QWidget *widget = 0);
+  IntFromListEditor(QStringList *list, QWidget *widget = NULL);
   ~IntFromListEditor() {
   }
 private:

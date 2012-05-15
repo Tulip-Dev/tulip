@@ -40,7 +40,7 @@ public:
   }
   bool loadNextPluginLibrary(PluginLoader *loader);
   static bool loadPluginLibrary(const std::string & filename,
-                                PluginLoader *loader = 0);
+                                PluginLoader *loader = NULL);
   static const std::string& getCurrentPluginFileName() {
     return currentPluginLibrary;
   }

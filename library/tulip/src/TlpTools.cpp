@@ -178,10 +178,10 @@ ostream *tlp::getOgzstream(const char *name, int open_mode) {
   return new ogzstream(name, open_mode);
 }
 //=========================================================
-map<string, TemplateFactoryInterface* > *TemplateFactoryInterface::allFactories = 0;
-TemplateFactory<AlgorithmPlugin,Algorithm,AlgorithmContext > *AlgorithmPlugin::factory = 0;
-TemplateFactory<ImportModuleFactory,ImportModule,AlgorithmContext > *ImportModuleFactory::factory = 0;
-TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext > *ExportModuleFactory::factory = 0;
+map<string, TemplateFactoryInterface* > *TemplateFactoryInterface::allFactories = NULL;
+TemplateFactory<AlgorithmPlugin,Algorithm,AlgorithmContext > *AlgorithmPlugin::factory = NULL;
+TemplateFactory<ImportModuleFactory,ImportModule,AlgorithmContext > *ImportModuleFactory::factory = NULL;
+TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext > *ExportModuleFactory::factory = NULL;
 //==========================================================
 PluginLoader *TemplateFactoryInterface::currentLoader = NULL;
 //==========================================================

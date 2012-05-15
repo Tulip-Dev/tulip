@@ -21,7 +21,7 @@
 using namespace std;
 
 //====================================================
-tlp::Controller* tlp::Controller::currentController=0;
+tlp::Controller* tlp::Controller::currentController=NULL;
 
 namespace tlp {
 

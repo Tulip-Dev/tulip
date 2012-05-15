@@ -57,7 +57,7 @@ PropertyDialog::PropertyDialog(QWidget* parent) :
   QWidget(parent) {
   setupUi(this);
   _filterSelection = false;
-  graph = 0;
+  graph = NULL;
   connect(removeButton, SIGNAL(clicked()), SLOT(removeProperty()));
   connect(newButton, SIGNAL(clicked()), SLOT(newProperty()));
   connect(cloneButton, SIGNAL(clicked()), SLOT(cloneProperty()));
@@ -135,7 +135,7 @@ void PropertyDialog::setAllValue() {
 //=================================================
 void PropertyDialog::setGraph(Graph *graph) {
   this->graph = graph;
-  editedProperty = 0;
+  editedProperty = NULL;
 
   //Build the property list
   tableNodes->selectNodeOrEdge(true);
@@ -165,7 +165,7 @@ void PropertyDialog::newProperty() {
 }
 //=================================================
 void PropertyDialog::toStringProperty() {
-  if (editedProperty == 0)
+  if (editedProperty == NULL)
     return;
 
   string name = editedPropertyName;
@@ -218,7 +218,7 @@ void PropertyDialog::toStringProperty() {
 }
 //=================================================
 void PropertyDialog::removeProperty() {
-  if (editedProperty == 0)
+  if (editedProperty == NULL)
     return;
 
   if (graph->existLocalProperty(editedPropertyName)) {
@@ -227,7 +227,7 @@ void PropertyDialog::removeProperty() {
     graph->delLocalProperty(editedPropertyName);
     //setGlMainWidget(glWidget);
     setGraph(graph);
-    editedProperty = 0;
+    editedProperty = NULL;
     emit removePropertySignal(graph, editedPropertyName);
   }
   else

@@ -41,7 +41,7 @@ class TLP_QT_SCOPE PropertyDialog: public QWidget, public Ui::PropertyDialogData
   ;
 
 public:
-  PropertyDialog(QWidget *parent = 0);
+  PropertyDialog(QWidget *parent = NULL);
   ~PropertyDialog();
   void setGraph(Graph *);
 

@@ -127,7 +127,7 @@ public:
     mappingType = true;
     StringCollection proportionalType;
 
-    if ( dataSet!=0 ) {
+    if ( dataSet!=NULL) {
       dataSet->get("property",entryMetric);
       dataSet->get("input",entrySize);
       dataSet->get("width",xaxis);
@@ -175,7 +175,7 @@ public:
   }
 
   bool run() {
-    DoubleProperty *tmp = 0;
+    DoubleProperty *tmp = NULL;
 
     if (!mappingType) {
       tmp = new DoubleProperty(graph);

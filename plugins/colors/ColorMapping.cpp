@@ -203,7 +203,7 @@ public:
 
     PropertyInterface *metric = NULL;
 
-    if ( dataSet!=0 ) {
+    if (dataSet!=NULL) {
       dataSet->get("linear/uniform\nproperty", metricS);
       dataSet->get("enumerated\nproperty", metric);
       dataSet->get(ELT_TYPE, eltTypes);
@@ -321,7 +321,7 @@ public:
     //    cerr << __PRETTY_FUNCTION__ << endl;
     PropertyInterface *metric = NULL;
 
-    if (dataSet!=0) {
+    if (dataSet!=NULL) {
       dataSet->get("enumerated\nproperty", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);

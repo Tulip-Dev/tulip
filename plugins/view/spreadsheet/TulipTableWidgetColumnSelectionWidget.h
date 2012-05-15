@@ -16,7 +16,7 @@ class TulipTableWidgetColumnSelectionWidget : public QWidget {
   Q_OBJECT
 
 public:
-  explicit TulipTableWidgetColumnSelectionWidget(QWidget *parent = 0);
+  explicit TulipTableWidgetColumnSelectionWidget(QWidget *parent = NULL);
   ~TulipTableWidgetColumnSelectionWidget();
   /**
   * @brief Set the column selection model. Do not delete models it's up to the creator of the model to destruct it.

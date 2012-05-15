@@ -202,7 +202,7 @@ public:
    * Set data of controller
    * graph and dataSet may be empty
    */
-  virtual void setData(Graph *graph=0,DataSet dataSet=DataSet()) =0;
+  virtual void setData(Graph *graph=NULL,DataSet dataSet=DataSet()) =0;
   /**
    * Get the graph and the dataSet of this controller
    * \return the graph and the dataSet who will be store in tlp file

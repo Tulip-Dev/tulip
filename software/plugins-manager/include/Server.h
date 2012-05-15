@@ -52,7 +52,7 @@ class Server : public QObject {
 
 public:
 
-  Server(const std::string& serverAddress, QObject* parent = 0);
+  Server(const std::string& serverAddress, QObject* parent = NULL);
   virtual ~Server();
 
   virtual void send(Request* request);

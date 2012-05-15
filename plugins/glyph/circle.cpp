@@ -56,7 +56,7 @@ protected:
   static GlCircle *circle;
 };
 
-GlCircle* Circle::circle=0;
+GlCircle* Circle::circle=NULL;
 
 //=====================================================
 GLYPHPLUGIN(Circle, "2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1", 14)

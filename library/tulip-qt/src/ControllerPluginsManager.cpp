@@ -20,7 +20,7 @@
 #include "tulip/TlpQtTools.h"
 
 //====================================================
-tlp::ControllerPluginsManager* tlp::ControllerPluginsManager::inst=0;
+tlp::ControllerPluginsManager* tlp::ControllerPluginsManager::inst=NULL;
 
 using namespace std;
 

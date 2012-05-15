@@ -921,7 +921,7 @@ bool PlanarityTestImpl::testObstructionFromTerminalNode(Graph *sG,
 //=================================================================
 BmdLink<node>*  PlanarityTestImpl::searchRBC(int dir, BmdLink<node>* it, node n,
     list<node>& traversedNodesInRBC) {
-  if (it != 0 && (it->prev() == 0 || it->succ() == 0)) // 1st or last item in RBC;
+  if (it != NULL && (it->prev() == NULL || it->succ() == NULL)) // 1st or last item in RBC;
     return it;
 
   BmdLink<node>* prev = it;
@@ -939,7 +939,7 @@ BmdLink<node>*  PlanarityTestImpl::searchRBC(int dir, BmdLink<node>* it, node n,
   node u = it->getData();
   int b = labelB.get(u.id);
 
-  while (it != 0 && (b <= dfsPosNum.get(n.id) || dir != 1) && state.get(u.id) == NOT_VISITED) {
+  while (it != NULL && (b <= dfsPosNum.get(n.id) || dir != 1) && state.get(u.id) == NOT_VISITED) {
     aux1 = it->prev();
 
     if (aux1 == prev)
@@ -951,18 +951,18 @@ BmdLink<node>*  PlanarityTestImpl::searchRBC(int dir, BmdLink<node>* it, node n,
     state.set(u.id, VISITED_IN_RBC);
     traversedNodesInRBC.push_back(u);
 
-    if (it != 0) {
+    if (it != NULL) {
       u = it->getData();
       b = labelB.get(u.id);
     }
   }
 
-  if (it == 0)
+  if (it == NULL)
     return prev;
-  else if (state.get(u.id) != NOT_VISITED || (it->prev() == 0 || it->succ() == 0))
+  else if (state.get(u.id) != NOT_VISITED || (it->prev() == NULL || it->succ() == NULL))
     return it;
   else
-    return 0;
+    return NULL;
 }
 //=================================================================
 /*
@@ -988,20 +988,20 @@ node PlanarityTestImpl::findActiveCNode(node u, node w, list<node>& nl) {
   }
 
   BmdLink<node>*  it1 = ptrItem.get(u.id);//ptrItem[u];
-  assert(it1 != 0);
+  assert(it1 != NULL);
 
   state.set(u.id, VISITED_IN_RBC);
   traversedNodesInRBC.push_back(u);
   BmdLink<node>*  it = searchRBC(1, it1, w, traversedNodesInRBC);
 
-  if (it == 0)  it = searchRBC(0, it1, w, traversedNodesInRBC);
+  if (it == NULL)  it = searchRBC(0, it1, w, traversedNodesInRBC);
 
-  assert(it != 0);
+  assert(it != NULL);
 
   node v = it->getData();
   node cNode;
 
-  if (it->prev() != 0 && it->succ() != 0)
+  if (it->prev() != NULL && it->succ() != NULL)
     cNode = parent.get(v.id); // path compressed;
   else
     cNode = activeCNode[it];

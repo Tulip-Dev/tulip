@@ -1,6 +1,6 @@
 #include "tulip/TulipSettings.h"
 
-TulipSettings *TulipSettings::_instance = 0;
+TulipSettings *TulipSettings::_instance = NULL;
 
 TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }

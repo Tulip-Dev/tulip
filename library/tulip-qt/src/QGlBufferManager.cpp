@@ -26,7 +26,7 @@
 #include <iostream>
 
 //====================================================
-tlp::QGlBufferManager* tlp::QGlBufferManager::inst=0;
+tlp::QGlBufferManager* tlp::QGlBufferManager::inst=NULL;
 
 using namespace std;
 

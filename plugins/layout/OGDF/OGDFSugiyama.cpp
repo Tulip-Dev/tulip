@@ -165,7 +165,7 @@ public:
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
     ogdf::FastHierarchyLayout *fhl = new FastHierarchyLayout();
 
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       int ival = 0;
       double dval = 0;
       bool bval = false;
@@ -228,7 +228,7 @@ public:
   }
 
   void afterCall() {
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       bool bval = false;
 
       if (dataSet->get("transpose", bval)) {

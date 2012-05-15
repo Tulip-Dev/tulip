@@ -89,7 +89,7 @@ public:
   void beforeCall() {
     ogdf::CircularLayout *circular = static_cast<ogdf::CircularLayout*>(ogdfLayoutAlgo);
 
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       double val = 0;
 
       if (dataSet->get("minDistCircle", val))

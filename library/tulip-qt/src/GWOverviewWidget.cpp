@@ -92,7 +92,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   if ( obj->inherits("tlp::GlMainWidget") &&
        ((e->type() == QEvent::MouseButtonPress) ||
         (e->type() == QEvent::MouseMove))) {
-    if (_observedView == 0) return false;
+    if (_observedView == NULL) return false;
 
     QMouseEvent *me = (QMouseEvent *) e;
 
@@ -171,7 +171,7 @@ void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {
 #endif
 #endif
 
-    if (_observedView != 0) {
+    if (_observedView != NULL) {
       // If we have an observed view
       if(_initialCamera && !graphChanged) {
         // Check if the camera changed. If no, only redraw overview
@@ -230,13 +230,13 @@ void GWOverviewWidget::setObservedView(GlMainWidget *glWidget,GlSimpleEntity *ob
   cerr << __PRETTY_FUNCTION__ << glWidget << endl << flush;
 #endif
 
-  if (_observedView != 0) {
+  if (_observedView != NULL) {
     // Signal deconnection
     disconnect(_observedView, SIGNAL(graphRedrawn(GlMainWidget *,bool)),
                this, SLOT(draw(GlMainWidget *,bool)));
     disconnect(_observedView, SIGNAL(destroyed(QObject *)),
                this, SLOT(observedViewDestroyed(QObject *)));
-    _observedView = 0;
+    _observedView = NULL;
   }
 
   // ToolTip activation if we have an observed view
@@ -248,7 +248,7 @@ void GWOverviewWidget::setObservedView(GlMainWidget *glWidget,GlSimpleEntity *ob
   _observedView = glWidget;
   _glDraw->setObservedView(_observedView);
 
-  if (_observedView != 0) {
+  if (_observedView != NULL) {
     // If we have an observed view : initialise the "Main" layer
     _view->getScene()->getLayer("Main")->deleteGlEntity("overviewEntity");
     _view->getScene()->getLayer("Main")->addGlEntity(observedEntity,"overviewEntity");
@@ -274,7 +274,7 @@ void GWOverviewWidget::setObservedView(GlMainWidget *glWidget,GlSimpleEntity *ob
 void GWOverviewWidget::observedViewDestroyed(QObject *glWidget) {
   assert(_observedView == glWidget);
   (void) glWidget;
-  _observedView = 0;
+  _observedView = NULL;
   _glDraw->setObservedView(0);
   _view->getScene()->getLayer("Main")->deleteGlEntity("overviewEntity");
   _view->getScene()->addGlGraphCompositeInfo(0,0);
@@ -282,7 +282,7 @@ void GWOverviewWidget::observedViewDestroyed(QObject *glWidget) {
 }
 //=============================================================================
 void GWOverviewWidget::updateView() {
-  if (_observedView!=0) {
+  if (_observedView!=NULL) {
     draw(_observedView);
   }
 }
@@ -293,7 +293,7 @@ void GWOverviewWidget::show() {
 //=============================================================================
 void RectPosition::draw(GlMainWidget*) {
   //assert (_view == target);
-  if(_observedView == 0) {
+  if(_observedView == NULL) {
     return ;
   }
 

@@ -37,7 +37,7 @@ public :
   /**
    * Default Constructor (usefull for qt designer)
    */
-  GraphPropertiesSelectionWidget(QWidget *parent = 0, const StringsListSelectionWidget::ListType &listType = StringsListSelectionWidget::SIMPLE_LIST,
+  GraphPropertiesSelectionWidget(QWidget *parent = NULL, const StringsListSelectionWidget::ListType &listType = StringsListSelectionWidget::SIMPLE_LIST,
                                  const unsigned int maxNbSelectedProperties = 0);
 
   /**

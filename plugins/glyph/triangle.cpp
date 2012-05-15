@@ -47,7 +47,7 @@ protected:
 
 };
 
-GlTriangle* Triangle::triangle=0;
+GlTriangle* Triangle::triangle=NULL;
 
 //=====================================================
 GLYPHPLUGIN(Triangle, "2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0", 11);

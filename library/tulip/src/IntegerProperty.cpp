@@ -36,7 +36,7 @@ IntegerProperty::IntegerProperty (Graph *sg, std::string n):AbstractProperty<Int
 //====================================================================
 ///Renvoie le minimum de la m�trique associ� aux noeuds du IntegerProperty
 int IntegerProperty::getNodeMin(Graph *sg) {
-  if (sg==0) sg=graph;
+  if (sg==NULL) sg=graph;
 
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.find(sgi);
@@ -49,7 +49,7 @@ int IntegerProperty::getNodeMin(Graph *sg) {
 //====================================================================
 ///Renvoie le maximum de la m�trique associ� aux noeuds du IntegerProperty
 int IntegerProperty::getNodeMax(Graph *sg) {
-  if (sg==0) sg=graph;
+  if (sg==NULL) sg=graph;
 
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.find(sgi);
@@ -62,7 +62,7 @@ int IntegerProperty::getNodeMax(Graph *sg) {
 //====================================================================
 ///Renvoie le Minimum de la m�trique associ� aux ar�tes du IntegerProperty
 int IntegerProperty::getEdgeMin(Graph *sg) {
-  if (sg==0) sg=graph;
+  if (sg==NULL) sg=graph;
 
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.find(sgi);
@@ -75,7 +75,7 @@ int IntegerProperty::getEdgeMin(Graph *sg) {
 //====================================================================
 ///Renvoie le Maximum de la m�trique associ� aux ar�tes du IntegerProperty
 int IntegerProperty::getEdgeMax(Graph *sg) {
-  if (sg==0) sg=graph;
+  if (sg==NULL) sg=graph;
 
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.find(sgi);
@@ -90,7 +90,7 @@ int IntegerProperty::getEdgeMax(Graph *sg) {
 void IntegerProperty::computeMinMaxNode(Graph *sg) {
   int maxN2 = INT_MIN, minN2 = INT_MAX;
 
-  if (sg==0) sg=graph;
+  if (sg==NULL) sg=graph;
 
   Iterator<node> *itN=sg->getNodes();
 
@@ -115,7 +115,7 @@ void IntegerProperty::computeMinMaxNode(Graph *sg) {
 void IntegerProperty::computeMinMaxEdge(Graph *sg) {
   int maxE2 = INT_MIN, minE2 = INT_MAX;
 
-  if (sg==0) sg=graph;
+  if (sg==NULL) sg=graph;
 
   Iterator<edge> *itE=sg->getEdges();
 

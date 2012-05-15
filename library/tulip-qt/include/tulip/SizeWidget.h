@@ -15,7 +15,7 @@ namespace tlp {
 class TLP_QT_SCOPE SizeWidget : public QWidget {
   Q_OBJECT
 public:
-  explicit SizeWidget(QWidget *parent = 0);
+  explicit SizeWidget(QWidget *parent = NULL);
   ~SizeWidget();
   tlp::Size size()const;
 public slots:

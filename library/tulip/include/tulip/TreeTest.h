@@ -70,7 +70,7 @@ public:
    *   computes a tree for each of its connected components,
    *   adds a simple source and returns the clone.
    */
-  static Graph *computeTree(Graph* graph, PluginProgress *pluginProgress = 0);
+  static Graph *computeTree(Graph* graph, PluginProgress *pluginProgress = NULL);
 
   /**
    * Clean the graph from a tree previously computed

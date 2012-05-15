@@ -142,7 +142,7 @@ Graph * tlp::importGraph(const std::string &alg, DataSet &dataSet, PluginProgres
 
   bool newGraphP=false;
 
-  if (newGraph==0) {
+  if (newGraph==NULL) {
     newGraph=new GraphImpl();
     newGraphP=true;
   }
@@ -153,7 +153,7 @@ Graph * tlp::importGraph(const std::string &alg, DataSet &dataSet, PluginProgres
   PluginProgress *tmpProgress;
   bool deletePluginProgress=false;
 
-  if (plugProgress==0) {
+  if (plugProgress==NULL) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
@@ -161,7 +161,7 @@ Graph * tlp::importGraph(const std::string &alg, DataSet &dataSet, PluginProgres
 
   tmp.pluginProgress=tmpProgress;
   ImportModule *newImportModule=ImportModuleFactory::factory->getPluginObject(alg, tmp);
-  assert(newImportModule!=0);
+  assert(newImportModule!=NULL);
   bool result;
 
   if (!(result=newImportModule->importGraph())) {
@@ -209,7 +209,7 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const std::string &alg,
   tmp.dataSet=&dataSet;
   PluginProgress *tmpProgress=NULL;
 
-  if (plugProgress==0) {
+  if (plugProgress==NULL) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
@@ -217,7 +217,7 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const std::string &alg,
 
   tmp.pluginProgress=tmpProgress;
   ExportModule *newExportModule=ExportModuleFactory::factory->getPluginObject(alg, tmp);
-  assert(newExportModule!=0);
+  assert(newExportModule!=NULL);
   std::string filename;
 
   if (dataSet.get("file", filename)) {
@@ -388,7 +388,7 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
     while (propIt->hasNext()) {
       PropertyInterface *src = propIt->next();
 
-      if (dynamic_cast<GraphProperty *>(src) == 0) {
+      if (dynamic_cast<GraphProperty *>(src) == NULL) {
         const std::string& pName = src->getName();
         PropertyInterface *dst =
           outG->existProperty(pName) ? outG->getProperty(pName)
@@ -423,7 +423,7 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
     while (propIt->hasNext()) {
       PropertyInterface *src = propIt->next();
 
-      if (dynamic_cast<GraphProperty *>(src) == 0) {
+      if (dynamic_cast<GraphProperty *>(src) == NULL) {
         const std::string& pName = src->getName();
         PropertyInterface *dst =
           outG->existProperty(pName) ? outG->getProperty(pName)
@@ -725,7 +725,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 
   tlp::PluginProgress *tmpProgress;
 
-  if (progress==0)
+  if (progress==NULL)
     tmpProgress=new tlp::SimplePluginProgress();
   else
     tmpProgress=progress;
@@ -748,7 +748,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   Algorithm *tmpAlgo =
     AlgorithmPlugin::factory->getPluginObject(algorithm, tmpContext);
 
-  if (tmpAlgo != 0) {
+  if (tmpAlgo != NULL) {
     result = tmpAlgo->check(msg);
 
     if (result) {
@@ -765,7 +765,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   circularCalls.erase(algorithm);
   tlp::Observable::unholdObservers();
 
-  if (progress==0) delete tmpProgress;
+  if (progress==NULL) delete tmpProgress;
 
   if (hasData)
     // remove result from dataset

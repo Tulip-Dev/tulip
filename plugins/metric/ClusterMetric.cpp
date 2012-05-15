@@ -58,7 +58,7 @@ bool ClusterMetric::run() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   unsigned int maxDepth = 1;
 
-  if (dataSet!=0) dataSet->get("depth", maxDepth);
+  if (dataSet!=NULL) dataSet->get("depth", maxDepth);
 
   MutableContainer<double> clusters;
   clusteringCoefficient(graph, clusters, maxDepth, pluginProgress);

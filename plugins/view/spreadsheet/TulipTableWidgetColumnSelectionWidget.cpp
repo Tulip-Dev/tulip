@@ -15,7 +15,7 @@
   **/
 class TulipTableWidgetColumnSelectionWidgetItemDelegate : public QStyledItemDelegate {
 public :
-  TulipTableWidgetColumnSelectionWidgetItemDelegate(QObject * parent = 0) : QStyledItemDelegate(parent) {
+  TulipTableWidgetColumnSelectionWidgetItemDelegate(QObject * parent) : QStyledItemDelegate(parent) {
   }
 
   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {

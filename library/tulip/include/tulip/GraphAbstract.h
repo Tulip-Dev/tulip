@@ -41,7 +41,7 @@ protected:
 public:
   virtual ~GraphAbstract();
   virtual void clear();
-  virtual Graph *addSubGraph(BooleanProperty *selection=0,
+  virtual Graph *addSubGraph(BooleanProperty *selection=NULL,
                              unsigned int id = 0,
                              std::string name = "unnamed");
   virtual void delSubGraph(Graph *);

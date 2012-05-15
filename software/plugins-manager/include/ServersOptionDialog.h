@@ -51,7 +51,7 @@ protected :
   virtual void closeEvent(QCloseEvent* event);
 
 public :
-  ServersOptionDialog(MultiServerManager* msm,QWidget *parent=0);
+  ServersOptionDialog(MultiServerManager* msm,QWidget *parent = NULL);
   virtual ~ServersOptionDialog();
 
 public slots :

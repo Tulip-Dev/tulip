@@ -383,7 +383,7 @@ bool HierarchicalGraph::run() {
   nodeSpacing = 18;
   SizeProperty* nodeSize = NULL;
 
-  if (dataSet!=0) {
+  if (dataSet!=NULL) {
     getNodeSizePropertyParameter(dataSet, nodeSize);
     getSpacingParameters(dataSet, nodeSpacing, spacing);
     StringCollection tmp;
@@ -470,7 +470,7 @@ bool HierarchicalGraph::run() {
   tmp.set("layer spacing", spacing);
   tmp.set("node spacing", nodeSpacing);
 
-  if (edgeLength!=0)
+  if (edgeLength!=NULL)
     tmp.set("edge length", edgeLength);
 
   tmp.set("orthogonal", true);

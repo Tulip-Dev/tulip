@@ -58,7 +58,7 @@ protected:
 
 };
 
-GlPentagon* Pentagone::pentagon=0;
+GlPentagon* Pentagone::pentagon=NULL;
 
 //=====================================================
 GLYPHPLUGIN(Pentagone, "2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1.0", 12)

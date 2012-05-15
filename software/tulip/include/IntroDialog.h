@@ -24,7 +24,7 @@ class IntroDialog : public InfoDialogForm {
   Q_OBJECT
 
 public:
-  IntroDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+  IntroDialog( QWidget* parent = NULL, const char* name = NULL, bool modal = FALSE, WFlags fl = 0 );
   ~IntroDialog();
 
 };

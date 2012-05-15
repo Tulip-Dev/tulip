@@ -109,7 +109,7 @@ public:
     unsigned int arityMax = 5;
     bool needLayout = false;
 
-    if (dataSet!=0) {
+    if (dataSet!=NULL) {
       dataSet->get("minsize", sizeMin);
       dataSet->get("maxsize", sizeMax);
       dataSet->get("maxdegree", arityMax);

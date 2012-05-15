@@ -155,7 +155,7 @@ void ElementPropertiesWidget::setCurrentEdge(Graph *sg,const edge &e) {
 }
 //==========================================
 void ElementPropertiesWidget::setGraph(Graph *s, bool destroy) {
-  if (graph!=0 && !destroy)
+  if (graph!=NULL && !destroy)
     graph->removeGraphObserver(this);
 
   graph = s;
@@ -168,7 +168,7 @@ void ElementPropertiesWidget::setGraph(Graph *s, bool destroy) {
     }*/
   propertyTable->setRowCount(0);
 
-  if (graph!=0)
+  if (graph!=NULL)
     graph->addGraphObserver(this);
 }
 //==========================================
@@ -360,7 +360,7 @@ void ElementPropertiesWidget::propertyTableValueChanged(int row, int col) {
   QString value = ((TulipTableWidgetItem *)propertyTable->item(row, col))->textForTulip();
   PropertyInterface *editedProperty = graph->getProperty(property.toUtf8().data());
 
-  if (editedProperty==0) return;
+  if (editedProperty==NULL) return;
 
   //cerr << "Value :" << value.toUtf8().data() << endl;
   bool result=true;
@@ -412,14 +412,14 @@ void ElementPropertiesWidget::edgePropertyChanged(Graph *s, edge const &e, QStri
 }
 //==========================================
 void ElementPropertiesWidget::delNode(Graph *sg, node n) {
-  if (sg!=graph && graph!=0 )
+  if (sg!=graph && graph!=NULL )
     graph->removeGraphObserver(this);
 
   if (displayMode==NODE && currentNode==n)
     setGraph(sg);
 }
 void ElementPropertiesWidget::delEdge(Graph *sg, edge e) {
-  if (sg!=graph && graph!=0)
+  if (sg!=graph && graph!=NULL)
     graph->removeGraphObserver(this);
 
   if (displayMode==EDGE && currentEdge==e)

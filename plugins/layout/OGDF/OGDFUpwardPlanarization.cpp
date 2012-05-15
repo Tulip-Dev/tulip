@@ -74,7 +74,7 @@ public:
   }
 
   void afterCall() {
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       bool bval = false;
 
       if (dataSet->get("transpose", bval)) {

@@ -58,7 +58,7 @@ public :
     emit pluginUninstalled(this,localPluginInfo);
   }
 
-  UpdatePlugin(QObject *parent=0);
+  UpdatePlugin(QObject *parent=NULL);
 
   int pluginsCheckAndUpdate(MultiServerManager *msm,std::set<DistPluginInfo,PluginCmp> &pluginsToInstall, std::set<LocalPluginInfo,PluginCmp> &pluginsToRemove,QWidget *parent);
   static void windowToDisplayError(std::string pluginName,QWidget *parent);

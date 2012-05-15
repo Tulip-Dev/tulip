@@ -138,7 +138,7 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
     const Coord& curCoord = layout->getNodeValue(itn);
     Size curSize(size->getNodeValue(itn) / 2.0f);
 
-    if (selection == 0 || selection->getNodeValue(itn)) {
+    if (selection == NULL || selection->getNodeValue(itn)) {
       double nodeRad = sqrt(curSize.getW() * curSize.getW() + curSize.getH() * curSize.getH());
       Coord  radDir = curCoord - centre;
       double curRad = nodeRad + radDir.norm();

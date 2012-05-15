@@ -45,7 +45,7 @@ class TLP_QT_SIMPLE_SCOPE GWOverviewWidget :
   Q_OBJECT
 
 public:
-  GWOverviewWidget(QWidget* parent = 0,bool drawIfNotVisible = false);
+  GWOverviewWidget(QWidget* parent = NULL,bool drawIfNotVisible = false);
   ~GWOverviewWidget();
   bool eventFilter(QObject *, QEvent *);
   GlMainWidget *getObservedView();

@@ -389,13 +389,13 @@ bool TreeReingoldAndTilfordExtended::run() {
 
   getSpacingParameters(dataSet, nodeSpacing, spacing);
   orientation = "horizontal";
-  lengthMetric = 0;
+  lengthMetric = NULL;
   ortho = true;
   useLength = false;
   compactLayout = true;
   bool boundingCircles = false;
 
-  if (dataSet!=0) {
+  if (dataSet!=NULL) {
     useLength = dataSet->get("edge length", lengthMetric);
     dataSet->get("orthogonal", ortho);
     dataSet->get("bounding circles", boundingCircles);

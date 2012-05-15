@@ -69,7 +69,7 @@ void CopyPropertyDialog::init(Graph* graph,PropertyInterface* source) {
     Graph *parent = _graph->getSuperGraph();
 
     if (parent == graph) {
-      parent = 0;
+      parent = NULL;
     }
 
     forEach(property,_graph->getLocalObjectProperties()) {

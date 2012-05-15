@@ -41,7 +41,7 @@ Random::~Random() {}
 bool Random::run() {
   bool is3D = true ;
 
-  if ( dataSet!=0 ) {
+  if ( dataSet!=NULL ) {
     dataSet->get("3D layout", is3D);
   }
 

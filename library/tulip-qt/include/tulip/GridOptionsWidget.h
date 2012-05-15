@@ -53,7 +53,7 @@ public:
   /**
    * Constructor.
    */
-  GridOptionsWidget(QWidget *parent = 0);
+  GridOptionsWidget(QWidget *parent = NULL);
 
   /**
    * Destructor.

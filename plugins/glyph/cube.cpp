@@ -56,7 +56,7 @@ protected:
 
 };
 
-GlBox* Cube::box=0;
+GlBox* Cube::box=NULL;
 
 GLYPHPLUGIN(Cube, "3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)
 EEGLYPHPLUGIN(Cube,"3D - Cube","Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)

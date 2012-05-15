@@ -1249,7 +1249,7 @@ void MainController::updateCurrentGraphInfos() {
   if(!getCurrentGraph())
     return;
 
-  static QLabel *currentGraphInfosLabel = 0;
+  static QLabel *currentGraphInfosLabel = NULL;
 
   if (!currentGraphInfosLabel) {
     currentGraphInfosLabel = new QLabel(mainWindowFacade.getStatusBar());
@@ -1647,7 +1647,7 @@ void MainController::applyMorphing(GraphState *graphState) {
 
   if( !morphable ) {
     delete g1;
-    g1 = 0;
+    g1 = NULL;
   }
   else {
     morph->start(mainView->getGlMainWidget());

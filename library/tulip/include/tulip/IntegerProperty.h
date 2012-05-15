@@ -39,10 +39,10 @@ class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public GraphObse
 
 public :
   IntegerProperty(Graph *, std::string n = "");
-  IntegerType::RealType  getNodeMin(Graph *sg=0);
-  IntegerType::RealType  getNodeMax(Graph *sg=0);
-  IntegerType::RealType  getEdgeMin(Graph *sg=0);
-  IntegerType::RealType  getEdgeMax(Graph *sg=0);
+  IntegerType::RealType  getNodeMin(Graph *sg=NULL);
+  IntegerType::RealType  getNodeMax(Graph *sg=NULL);
+  IntegerType::RealType  getEdgeMin(Graph *sg=NULL);
+  IntegerType::RealType  getEdgeMax(Graph *sg=NULL);
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
@@ -82,8 +82,8 @@ private:
   TLP_HASH_MAP<unsigned int, int> maxN,minN,maxE,minE;
   TLP_HASH_MAP<unsigned int, bool> minMaxOkNode;
   TLP_HASH_MAP<unsigned int, bool> minMaxOkEdge;
-  void computeMinMaxNode(Graph *sg=0);
-  void computeMinMaxEdge(Graph *sg=0);
+  void computeMinMaxNode(Graph *sg=NULL);
+  void computeMinMaxEdge(Graph *sg=NULL);
 };
 
 class TLP_SCOPE IntegerVectorProperty:public AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType> {

@@ -33,7 +33,7 @@ class TLP_QT_SCOPE DoubleStringsListSelectionWidget : public QWidget, public Str
 
 public :
 
-  DoubleStringsListSelectionWidget(QWidget *parent = 0, const unsigned int maxSelectedStringsListSize = 0);
+  DoubleStringsListSelectionWidget(QWidget *parent = NULL, const unsigned int maxSelectedStringsListSize = NULL);
 
   void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList);
 

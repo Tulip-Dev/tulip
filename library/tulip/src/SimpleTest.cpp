@@ -25,13 +25,13 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-SimpleTest * SimpleTest::instance=0;
+SimpleTest * SimpleTest::instance=NULL;
 //=================================================================
 SimpleTest::SimpleTest () {
 }
 //=================================================================
 bool SimpleTest::isSimple(Graph *graph) {
-  if(instance == 0 )
+  if(instance == NULL )
     instance = new SimpleTest();
 
   if (instance->resultsBuffer.find((unsigned long)graph) == instance->resultsBuffer.end()) {
@@ -57,7 +57,7 @@ void SimpleTest::makeSimple(Graph* graph,vector<edge> &removed) {
 //=================================================================
 bool SimpleTest::simpleTest(Graph *graph, vector<edge> *multipleEdges, vector<edge> *loops) {
   bool result = true;
-  bool computeAll = (loops != 0) || (multipleEdges != 0);
+  bool computeAll = (loops != NULL) || (multipleEdges != NULL);
   Iterator<node> *itNode = graph->getNodes();
   MutableContainer<bool> inserted;
   MutableContainer<bool> visited;
@@ -88,7 +88,7 @@ bool SimpleTest::simpleTest(Graph *graph, vector<edge> *multipleEdges, vector<ed
           break;
         }
 
-        if (loops!=0) {
+        if (loops!=NULL) {
           if (!inserted.get(e.id)) {
             loops->push_back(e);
             inserted.set(e.id, true);
@@ -102,7 +102,7 @@ bool SimpleTest::simpleTest(Graph *graph, vector<edge> *multipleEdges, vector<ed
           break;
         }
 
-        if (multipleEdges != 0)  {
+        if (multipleEdges != NULL)  {
           if (!inserted.get(e.id)) {
             multipleEdges->push_back(e);
             inserted.set(e.id, true);

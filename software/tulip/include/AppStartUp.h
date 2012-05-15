@@ -37,7 +37,7 @@ class AppStartUp : public QDialog, public Ui::AppStartUpData {
   unsigned int currentTipNumber;
 
 public:
-  AppStartUp( QWidget* parent = 0);
+  AppStartUp( QWidget* parent = NULL);
   ~AppStartUp();
   void addErrorMsg(const std::string &errMsg);
 

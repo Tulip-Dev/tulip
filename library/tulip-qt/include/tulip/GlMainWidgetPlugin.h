@@ -27,7 +27,7 @@ class GlMainWidgetPlugin : public QObject, public QDesignerCustomWidgetInterface
   Q_OBJECT
   Q_INTERFACES(QDesignerCustomWidgetInterface)
 public:
-  GlMainWidgetPlugin(QObject *parent = 0);
+  GlMainWidgetPlugin(QObject *parent = NULL);
 
   bool isContainer() const;
   bool isInitialized() const;

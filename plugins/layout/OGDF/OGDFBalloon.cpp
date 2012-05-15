@@ -71,7 +71,7 @@ public:
   void beforeCall() {
     ogdf::BalloonLayout *balloon = static_cast<ogdf::BalloonLayout*>(ogdfLayoutAlgo);
 
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       bool val = false;
 
       if (dataSet->get("Even angles", val))

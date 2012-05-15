@@ -36,10 +36,10 @@ class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, public GraphObserv
 
 public :
   DoubleProperty (Graph *, std::string n="");
-  DoubleType::RealType  getNodeMin(Graph *sg=0);
-  DoubleType::RealType  getNodeMax(Graph *sg=0);
-  DoubleType::RealType  getEdgeMin(Graph *sg=0);
-  DoubleType::RealType  getEdgeMax(Graph *sg=0);
+  DoubleType::RealType  getNodeMin(Graph *sg=NULL);
+  DoubleType::RealType  getNodeMax(Graph *sg=NULL);
+  DoubleType::RealType  getEdgeMin(Graph *sg=NULL);
+  DoubleType::RealType  getEdgeMax(Graph *sg=NULL);
   void uniformQuantification(unsigned int);
   void nodesUniformQuantification(unsigned int);
   void edgesUniformQuantification(unsigned int);
@@ -80,8 +80,8 @@ private:
   TLP_HASH_MAP<unsigned int, double> maxN,minN,maxE,minE;
   TLP_HASH_MAP<unsigned int, bool> minMaxOkNode;
   TLP_HASH_MAP<unsigned int, bool> minMaxOkEdge;
-  void computeMinMaxNode(Graph *sg=0);
-  void computeMinMaxEdge(Graph *sg=0);
+  void computeMinMaxNode(Graph *sg=NULL);
+  void computeMinMaxEdge(Graph *sg=NULL);
 };
 
 class TLP_SCOPE DoubleVectorProperty:public AbstractVectorProperty<tlp::DoubleVectorType, tlp::DoubleType> {

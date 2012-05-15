@@ -61,7 +61,7 @@ protected :
 
   bool activate;
 
-  void init(QWidget * parent = 0);
+  void init(QWidget * parent = NULL);
 
   // Check if the plugin is installed
   //bool isInstalled(const std::string &typeName,const std::string &pluginName);
@@ -82,7 +82,7 @@ protected :
   void setItemCheckability(const PluginInfo *pluginInfo,bool created,QTreeWidgetItem *twi);
 
 public :
-  PluginsViewWidget(MultiServerManager* msm, QWidget * parent=0 );
+  PluginsViewWidget(MultiServerManager* msm, QWidget * parent=NULL );
   virtual ~PluginsViewWidget();
 
   void changeList();

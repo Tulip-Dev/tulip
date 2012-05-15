@@ -32,7 +32,7 @@ class PythonCodeHighlighter : public QSyntaxHighlighter {
 
 public:
 
-  PythonCodeHighlighter(QTextDocument *parent = 0);
+  PythonCodeHighlighter(QTextDocument *parent = NULL);
 
   void setShellMode(const bool shellMode) {
     this->shellMode = shellMode;
