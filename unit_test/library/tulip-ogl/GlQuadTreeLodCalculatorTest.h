@@ -10,6 +10,7 @@
 namespace tlp{
 class GlQuadTreeLODCalculator;
 class GlScene;
+class Graph;
 }
 /**
  * @brief Unitary test for the GlQuadTreeLodCalculator object
@@ -18,6 +19,7 @@ class GlQuadTreeLodCalculatorTest : public CppUnit::TestFixture
 {
     tlp::GlScene* scene;
     tlp::GlQuadTreeLODCalculator* quadTreeLodCalculator;
+    tlp::Graph* graph;
 public:
     GlQuadTreeLodCalculatorTest();
     void setUp();

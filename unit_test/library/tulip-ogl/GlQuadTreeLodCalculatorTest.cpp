@@ -19,7 +19,7 @@ void GlQuadTreeLodCalculatorTest::setUp(){
     //Add data
     tlp::GlLayer* layer=new tlp::GlLayer("Main");
     scene->addLayer(layer);
-    tlp::Graph* graph = tlp::newGraph();
+    graph = tlp::newGraph();
     //Add nodes.
     std::vector<tlp::node> addedNodes;
     graph->addNodes(50,addedNodes);
@@ -33,6 +33,7 @@ void GlQuadTreeLodCalculatorTest::tearDown(){
     //The destruction of the scene destruct the lod calculator.
     quadTreeLodCalculator = NULL;
     scene=NULL;
+    delete graph;
 }
 
 void GlQuadTreeLodCalculatorTest::testInputDataModifications(){
