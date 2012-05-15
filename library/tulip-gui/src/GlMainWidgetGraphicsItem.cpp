@@ -33,15 +33,6 @@
 using namespace std;
 using namespace tlp;
 
-static void setRasterPosition(unsigned int x, unsigned int y) {
-  float val[4];
-  unsigned char tmp[10];
-  glGetFloatv(GL_CURRENT_RASTER_POSITION, (float*)&val);
-  glBitmap(0,0,0,0,-val[0] + x, -val[1] + y, tmp);
-  glGetFloatv(GL_CURRENT_RASTER_POSITION, (float*)&val);
-  tlp::glTest(__PRETTY_FUNCTION__);
-}
-
 GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, int width, int height):
   QGraphicsObject(),
   glMainWidget(glMainWidget), redrawNeeded(true), renderingStore(NULL) {
