@@ -25,7 +25,7 @@ class GraphObserver {
 %End
 
 %Docstring
-.. versionadded:: 3.7.1
+.. versionadded:: 3.8
 
 Derived implementation of that class receives a message (through a callback/handler method)
 after each modification of a :class:`tlp.Graph` object.

@@ -2677,7 +2677,7 @@ which can contain an error message.
 %Docstring
 tlp.Graph.addGraphObserver(graphObserver)
 
-.. versionadded:: 3.7.1
+.. versionadded:: 3.8
 
 Registers a new graph observer object
 that will receive notifications when the graph is modified.
@@ -2692,7 +2692,7 @@ that will receive notifications when the graph is modified.
 %Docstring
 tlp.Graph.countGraphObservers()
 
-.. versionadded:: 3.7.1
+.. versionadded:: 3.8
 
 Returns the number of registered graph observers.
 
@@ -2705,7 +2705,7 @@ Returns the number of registered graph observers.
 %Docstring
 tlp.Graph.removeGraphObserver(graphObserver)
 
-.. versionadded:: 3.7.1
+.. versionadded:: 3.8
 
 Removes a registered graph observer object.
 

@@ -8,7 +8,7 @@ tlp::BoundingBox computeBoundingBox(tlp::Graph *graph, tlp::BooleanProperty *sel
 %Docstring
 tlp.computeBoundingBox(graph[, selection = None])
 
-.. versionadded:: 3.7.1
+.. versionadded:: 3.8
 
 Computes the bounding box of a graph according to nodes positions and edges bends defined in the default layout property "viewLayout",
 nodes z-rotations defined in the default double property "viewRotation" and sizes of elements defined in the default size property "viewSize".
@@ -84,7 +84,7 @@ std::pair<tlp::Coord, tlp::Coord> computeBoundingRadius(tlp::Graph *graph, tlp::
 %Docstring
 tlp.computeBoundingRadius(graph[, selection = None])
 
-.. versionadded:: 3.7.1
+.. versionadded:: 3.8
 
 Computes a bounding sphere (or a bounding circle if the graph has a 2D layout) of a graph according to nodes positions and edges bends
 defined in the default layout property "viewLayout", nodes z-rotations defined in the default double property "viewRotation"
@@ -173,7 +173,7 @@ std::vector<tlp::Coord> computeConvexHull(tlp::Graph *graph, tlp::BooleanPropert
 %Docstring
 tlp.computeConvexHull(graph[, selection = None])
 
-.. versionadded:: 3.7.1
+.. versionadded:: 3.8
 
 Computes a convex hull of a graph according to nodes positions and edges bends
 defined in the default layout property "viewLayout", nodes z-rotations defined in the default double property "viewRotation"
@@ -255,7 +255,7 @@ bool computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line1,
 %Docstring
 tlp.computeLinesIntersection(line1, line2)
 
-.. versionadded:: 3.7.1
+.. versionadded:: 3.8
 
 Computes the intersection point (if any) of two 3d lines.
 Returns a tuple whose first member is a boolean indicating
