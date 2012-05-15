@@ -178,7 +178,7 @@ public:
     * \param options Configure the rendering process, see the RenderingOption documentation for more informations on each rendering option effect.
     * \see RenderingOption
     **/
-  void render(RenderingOptions options=RenderingOptions(RenderScene|SwapBuffers));
+  void render(RenderingOptions options=RenderingOptions(RenderScene|SwapBuffers), bool checkVisibility=true);
 
 private:
 
