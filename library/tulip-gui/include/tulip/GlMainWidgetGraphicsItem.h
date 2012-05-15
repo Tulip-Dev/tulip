@@ -56,6 +56,10 @@ public:
 
   bool eventFilter(QObject *, QEvent *evt);
 
+signals:
+
+  void widgetPainted(bool redraw);
+
 protected :
   void wheelEvent(QGraphicsSceneWheelEvent *event);
   void mouseMoveEvent(QGraphicsSceneMouseEvent *event);

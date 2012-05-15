@@ -25,6 +25,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtGui/QGraphicsView>
+#include "tulip/GlMainWidgetGraphicsItem.h"
 
 using namespace tlp;
 
@@ -86,13 +87,14 @@ void GlMainView::drawOverview(bool generatePixmap) {
 void GlMainView::setupWidget() {
   _glMainWidget = new GlMainWidget(NULL,this);
   setCentralWidget(_glMainWidget);
+  GlMainWidgetGraphicsItem *glMainWidgetGraphicsItem=dynamic_cast<GlMainWidgetGraphicsItem*>(centralItem());
   delete _sceneConfigurationWidget;
   _sceneConfigurationWidget = new SceneConfigWidget();
   _sceneConfigurationWidget->setGlMainWidget(_glMainWidget);
   _sceneLayersConfigurationWidget = new SceneLayersConfigWidget();
   _sceneLayersConfigurationWidget->setView(this);
   connect(_sceneLayersConfigurationWidget,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
-  connect(_glMainWidget,SIGNAL(viewDrawn(GlMainWidget*,bool)),this,SLOT(glMainViewDrawn(GlMainWidget*,bool)));
+  connect(glMainWidgetGraphicsItem,SIGNAL(widgetPainted(bool)),this,SLOT(glMainViewDrawn(bool)));
   connect(graphicsView()->scene(),SIGNAL(sceneRectChanged(QRectF)),this,SLOT(sceneRectChanged(QRectF)));
 }
 
@@ -104,7 +106,7 @@ void GlMainView::centerView() {
   getGlMainWidget()->getScene()->centerScene();
 }
 
-void GlMainView::glMainViewDrawn(GlMainWidget *, bool graphChanged) {
+void GlMainView::glMainViewDrawn(bool graphChanged) {
   drawOverview(graphChanged);
 }
 
