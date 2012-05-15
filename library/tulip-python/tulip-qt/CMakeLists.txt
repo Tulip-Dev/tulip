@@ -75,9 +75,9 @@ ADD_CUSTOM_TARGET(touchTulipQtPythonCMakeLists ALL
   DEPENDS ${LibTulipQtPythonName})
 
 INSTALL(TARGETS ${LibTulipQtPythonName}
-  RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_python
-  LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python
-  ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
+  RUNTIME DESTINATION ${TulipBinInstallDir}/python COMPONENT tulip_python
+  LIBRARY DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python
+  ARCHIVE DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python)
 
 
 ADD_CUSTOM_COMMAND(
@@ -90,7 +90,7 @@ ADD_CUSTOM_COMMAND(
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulipqt.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
 
 IF(NOT UBUNTU_PPA_BUILD)
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipqtplugins.py DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipqtplugins.py DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python)
 ELSE()
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipqtplugins.py DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
 ENDIF()

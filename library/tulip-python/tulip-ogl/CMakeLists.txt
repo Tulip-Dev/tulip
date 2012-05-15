@@ -62,9 +62,9 @@ ADD_CUSTOM_TARGET(touchTulipOglPythonCMakeLists ALL
   DEPENDS ${LibTulipOglPythonName})
 
 INSTALL(TARGETS ${LibTulipOglPythonName}
-  RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_python
-  LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python
-  ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
+  RUNTIME DESTINATION ${TulipBinInstallDir}/python COMPONENT tulip_python
+  LIBRARY DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python
+  ARCHIVE DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python)
 
 ADD_CUSTOM_COMMAND(
   TARGET ${LibTulipOglPythonName}
