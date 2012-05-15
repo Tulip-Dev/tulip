@@ -201,21 +201,12 @@ int main(int argc,char **argv) {
     if (!generatePluginInfoFile(pluginInfo, dstDir))
       return EXIT_FAILURE;
 
-  if (suffix == "so")
-    UpdatePlugin::copyFile(srcDir,
-                           QString(pluginInfo.fileName.c_str())+".so",
-                           dstSubDir,
-                           QString(pluginInfo.fileName.c_str())+".so");
-  else if (suffix == "dylib")
-    UpdatePlugin::copyFile(srcDir,
-                           QString(pluginInfo.fileName.c_str())+".dylib",
-                           dstSubDir,
-                           QString(pluginInfo.fileName.c_str())+".dylib");
-  else if (suffix == "dll")
-    UpdatePlugin::copyFile(srcDir,
-                           QString(pluginInfo.fileName.c_str())+".dll",
-                           dstSubDir,
-                           QString(pluginInfo.fileName.c_str())+".dll");
+  UpdatePlugin::copyFile(srcDir,
+			 QString(pluginInfo.fileName.c_str())
+			 + '.' + suffix,
+			 dstSubDir,
+			 QString(pluginInfo.fileName.c_str())
+			 + '.' + suffix);
 
   // Documentation
   if(generateDoc) {
