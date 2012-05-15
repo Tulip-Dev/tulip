@@ -108,59 +108,13 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
 
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
-
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
-
-  rect = rect.translated(pos());
-
-  float vpX = rect.x();
-  float vpY = scene()->height() - (rect.y() + rect.height());
-  float vpW = rect.width();
-  float vpH = rect.height();
-
-  glMainWidget->getScene()->setViewport(vpX,vpY,vpW,vpH);
-  glMainWidget->getScene()->setClearBufferAtDraw(true);
-  glMainWidget->getScene()->initGlParameters();
-
   if(redrawNeeded) {
-    glMainWidget->computeInteractors();
-    glMainWidget->getScene()->draw();
-
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_STENCIL_TEST);
-    glDisable(GL_BLEND);
-    glDisable(GL_LIGHTING);
-
-    glReadBuffer(GL_BACK);
-    glReadPixels(vpX,vpY,vpW,vpH,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
-    glFlush();
-
+    glMainWidget->render(GlMainWidget::RenderingOptions(GlMainWidget::RenderScene),false);
     redrawNeeded=false;
+  }else{
+    glMainWidget->render(GlMainWidget::RenderingOptions(),false);
   }
-  else {
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_STENCIL_TEST);
-    glDisable(GL_BLEND);
-    glDisable(GL_LIGHTING);
-
-    glDrawBuffer(GL_BACK);
-    setRasterPosition(vpX,vpY);
-    glDrawPixels(vpW,vpH,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
-    glFlush();
-  }
-
-  glMainWidget->drawInteractors();
-
-  glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();
-
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
+  glFlush();
 
   glPopAttrib();
 

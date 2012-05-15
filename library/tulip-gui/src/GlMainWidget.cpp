@@ -154,8 +154,9 @@ void GlMainWidget::createRenderingStore(int width, int height) {
   }
 }
 //==================================================
-void GlMainWidget::render(RenderingOptions options) {
-  if (isVisible() && !inRendering) {
+void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
+  if ((isVisible() || !checkVisibility) && !inRendering) {
+
     assert(contentsRect().width()!=0 && contentsRect().height()!=0);
     //Begin rendering process
     inRendering=true;
