@@ -84,9 +84,10 @@ void GlMainWidgetGraphicsItem::glMainWidgetRedraw(GlMainWidget *) {
 
 void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-  if(redrawNeeded){
+  if(redrawNeeded) {
     emit widgetPainted(true);
-  }else{
+  }
+  else {
     emit widgetPainted(false);
   }
 
@@ -107,11 +108,13 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
   glPushAttrib(GL_ALL_ATTRIB_BITS);
 
   if(redrawNeeded) {
-    glMainWidget->render(GlMainWidget::RenderingOptions(GlMainWidget::RenderScene),false); 
+    glMainWidget->render(GlMainWidget::RenderingOptions(GlMainWidget::RenderScene),false);
     redrawNeeded=false;
-  }else{
+  }
+  else {
     glMainWidget->render(GlMainWidget::RenderingOptions(),false);
   }
+
   glFlush();
 
   glPopAttrib();
