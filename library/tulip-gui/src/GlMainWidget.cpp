@@ -88,6 +88,11 @@ QGLWidget* GlMainWidget::getFirstQGLWidget() {
   return GlMainWidget::firstQGLWidget;
 }
 
+void GlMainWidget::clearFirstQGLWidget() {
+  if(GlMainWidget::firstQGLWidget)
+    delete GlMainWidget::firstQGLWidget;
+}
+
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent,View *view):
   QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), useFramebufferObject(false), glFrameBuf(NULL) {

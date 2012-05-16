@@ -256,6 +256,8 @@ public :
    */
   static QGLWidget* getFirstQGLWidget();
 
+  static void clearFirstQGLWidget();
+
 private :
   static QGLWidget *firstQGLWidget;
 

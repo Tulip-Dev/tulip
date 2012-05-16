@@ -223,8 +223,9 @@ int main(int argc,char **argv) {
   int result = tulip_perspective.exec();
   delete perspective;
 
-  // We need to clear allocated Qt buffers to remove a segfault when we close tulip
+  // We need to clear allocated Qt buffers and QGlWidget to remove a segfault when we close tulip
   QGlBufferManager::clearBuffers();
+  GlMainWidget::clearFirstQGLWidget();
 
 
 #ifdef MEMORYCHECKER_ON
