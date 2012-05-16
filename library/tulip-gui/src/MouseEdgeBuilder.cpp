@@ -95,6 +95,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     if (qMouseEv->buttons()==Qt::MidButton) {
       bends.clear();
       started=false;
+      source=node();
       clearObserver();
       glMainWidget->draw();
       return true;
