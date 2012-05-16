@@ -36,10 +36,6 @@ class TLP_QT_SCOPE QGlBufferManager {
 public:
 
   /**
-   * Create the QGlBuffer manager singleton
-   */
-  static void createInst();
-  /**
    * Return the QGlBuffer manager singleton, il singleton doesn't exist this function create it
    */
   static QGlBufferManager &getInst() {
