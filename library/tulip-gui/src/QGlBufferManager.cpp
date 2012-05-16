@@ -18,9 +18,6 @@
  */
 #include "tulip/QGlBufferManager.h"
 
-#include <QtOpenGL/QGLPixelBuffer>
-#include <QtOpenGL/QGLFramebufferObject>
-
 #include "tulip/GlMainWidget.h"
 
 #include <iostream>

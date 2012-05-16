@@ -36,6 +36,7 @@
 #include <tulip/Interactor.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/QGlBufferManager.h>
 
 #include "TulipPerspectiveMainWindow.h"
 
@@ -221,6 +222,11 @@ int main(int argc,char **argv) {
 
   int result = tulip_perspective.exec();
   delete perspective;
+
+  // We need to clear allocated Qt buffers to remove a segfault when we close tulip
+  QGlBufferManager::clearBuffers();
+
+
 #ifdef MEMORYCHECKER_ON
   memory_checker_print_report();
 #endif // MEMORYCHECKER_ON
