@@ -42,6 +42,12 @@ namespace tlp {
 GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData)
   :inputData(inputData),
    graph(inputData->getGraph()),
+   layoutProperty(inputData->getElementLayout()),
+   sizeProperty(inputData->getElementSize()),
+   shapeProperty(inputData->getElementShape()),
+   rotationProperty(inputData->getElementRotation()),
+   colorProperty(inputData->getElementColor()),
+   borderColorProperty(inputData->getElementBorderColor()),
    graphObserverActivated(false),
    layoutObserverActivated(false),
    colorObserverActivated(false),
@@ -66,6 +72,13 @@ GlVertexArrayManager::~GlVertexArrayManager() {
 void GlVertexArrayManager::setInputData(GlGraphInputData *inputData) {
   clearObservers();
   this->inputData=inputData;
+  //Update properties with new ones
+  layoutProperty = inputData->getElementLayout();
+  sizeProperty = inputData->getElementSize();
+  shapeProperty = inputData->getElementShape();
+  rotationProperty = inputData->getElementRotation();
+  colorProperty = inputData->getElementColor();
+  borderColorProperty = inputData->getElementBorderColor();
   graph=inputData->getGraph();
   initObservers();
 }
@@ -80,16 +93,80 @@ bool GlVertexArrayManager::haveToCompute() {
 
   if(inputData->parameters->isEdgeColorInterpolate()!=colorInterpolate) {
     colorInterpolate=inputData->parameters->isEdgeColorInterpolate();
-    clearColorData();
-    toComputeColor = true;
+    clearColorData();    
     recompute = true;
   }
 
   if(inputData->parameters->isEdgeSizeInterpolate()!=sizeInterpolate) {
     sizeInterpolate=inputData->parameters->isEdgeSizeInterpolate();
-    clearLayoutData();
-    toComputeLayout = true;
+    clearLayoutData();    
     recompute = true;
+  }
+
+  //The layout property in the input data has changed need to recompute layout.
+  if(layoutProperty != inputData->getElementLayout()){
+      if(layoutProperty)
+          layoutProperty->removePropertyObserver(this);
+
+      layoutProperty = inputData->getElementLayout();
+      layoutProperty->addPropertyObserver(this);
+      clearLayoutData();
+      recompute = true;
+  }
+
+  //Size property changed
+  if(sizeProperty != inputData->getElementSize()){
+      if(sizeProperty)
+          sizeProperty->removePropertyObserver(this);
+
+      sizeProperty = inputData->getElementSize();
+      sizeProperty->addPropertyObserver(this);
+      clearLayoutData();
+      recompute = true;
+  }
+
+  //Shape property changed
+  if(shapeProperty != inputData->getElementShape()){
+      if(shapeProperty)
+          shapeProperty->removePropertyObserver(this);
+
+      shapeProperty = inputData->getElementShape();
+      shapeProperty->addPropertyObserver(this);
+      clearLayoutData();
+      recompute = true;
+  }
+
+  //Rotation property changed
+  if(rotationProperty != inputData->getElementRotation()){
+      if(rotationProperty)
+          rotationProperty->removePropertyObserver(this);
+
+      rotationProperty = inputData->getElementRotation();
+      rotationProperty->addPropertyObserver(this);
+      clearLayoutData();
+      recompute = true;
+  }
+
+  //Color property changed
+  if(colorProperty != inputData->getElementColor()){
+      if(colorProperty)
+          colorProperty->removePropertyObserver(this);
+
+      colorProperty = inputData->getElementColor();
+      colorProperty->addPropertyObserver(this);
+      clearColorData();
+      recompute = true;
+  }
+
+  //Color property changed
+  if(borderColorProperty != inputData->getElementBorderColor()){
+      if(borderColorProperty)
+          borderColorProperty->removePropertyObserver(this);
+
+      borderColorProperty = inputData->getElementBorderColor();
+      borderColorProperty->addPropertyObserver(this);
+      clearColorData();
+      recompute = true;
   }
 
   return recompute;
@@ -407,13 +484,13 @@ void GlVertexArrayManager::addEdge(GlEdge *edge) {
   node src = graph->source(tlp::edge(edge->id));
   node tgt = graph->target(tlp::edge(edge->id));
 
-  const Size &srcSize = inputData->getElementSize()->getNodeValue(src);
-  const Size &tgtSize = inputData->getElementSize()->getNodeValue(tgt);
+  const Size &srcSize = sizeProperty->getNodeValue(src);
+  const Size &tgtSize = sizeProperty->getNodeValue(tgt);
 
-  const Color &edgeColor = inputData->getElementColor()->getEdgeValue(tlp::edge(edge->id));
-  const Color &srcColor = inputData->getElementColor()->getNodeValue(src);
-  const Color &tgtColor = inputData->getElementColor()->getNodeValue(tgt);
-  const Color &borderColor = inputData->getElementBorderColor()->getEdgeValue(tlp::edge(edge->id));
+  const Color &edgeColor = colorProperty->getEdgeValue(tlp::edge(edge->id));
+  const Color &srcColor = colorProperty->getNodeValue(src);
+  const Color &tgtColor = colorProperty->getNodeValue(tgt);
+  const Color &borderColor = borderColorProperty->getEdgeValue(tlp::edge(edge->id));
 
   if(toComputeAll || toComputeLayout) {
 
@@ -708,22 +785,22 @@ void GlVertexArrayManager::afterSetEnds(Graph *, const edge) {
 }
 
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
-  if(inputData->getElementLayout()==property || inputData->getElementSize()==property ||
-      inputData->getElementShape()==property || inputData->getElementRotation()==property) {
+  if(layoutProperty==property || sizeProperty==property ||
+      shapeProperty==property || rotationProperty==property) {
     setHaveToComputeLayout(true);
     clearLayoutData();
-    inputData->getElementLayout()->removePropertyObserver(this);
-    inputData->getElementSize()->removePropertyObserver(this);
-    inputData->getElementShape()->removePropertyObserver(this);
-    inputData->getElementRotation()->removePropertyObserver(this);
+    layoutProperty->removePropertyObserver(this);
+    sizeProperty->removePropertyObserver(this);
+    shapeProperty->removePropertyObserver(this);
+    rotationProperty->removePropertyObserver(this);
     layoutObserverActivated=false;
   }
 
-  if(edgesModified || inputData->getElementColor()==property || inputData->getElementBorderColor()==property ) {
+  if(edgesModified || colorProperty==property || borderColorProperty==property ) {
     setHaveToComputeColor(true);
     clearColorData();
-    inputData->getElementColor()->removePropertyObserver(this);
-    inputData->getElementBorderColor()->removePropertyObserver(this);
+    colorProperty->removePropertyObserver(this);
+    borderColorProperty->removePropertyObserver(this);
     colorObserverActivated=false;
   }
 
@@ -735,7 +812,7 @@ void GlVertexArrayManager::beforeSetAllNodeValue(PropertyInterface *property) {
 }
 
 void GlVertexArrayManager::beforeSetAllEdgeValue(PropertyInterface *property) {
-  if (inputData->getElementLayout()==property || inputData->getElementShape()==property) {
+  if (layoutProperty==property || shapeProperty==property) {
     edgesModified = true;
   }
 
@@ -747,7 +824,7 @@ void GlVertexArrayManager::beforeSetNodeValue(PropertyInterface *property, const
 }
 
 void GlVertexArrayManager::beforeSetEdgeValue(PropertyInterface *property, const edge) {
-  if (inputData->getElementLayout()==property || inputData->getElementShape()==property) {
+  if (layoutProperty==property || shapeProperty==property) {
     edgesModified = true;
   }
 
@@ -759,24 +836,39 @@ void GlVertexArrayManager::destroy(Graph *) {
   clearObservers();
 }
 
-void GlVertexArrayManager::destroy(PropertyInterface*) {
-  clearData();
-  clearObservers();
+void GlVertexArrayManager::destroy(PropertyInterface* property) {
+    //Layout property changed
+    if(layoutProperty == property){
+       layoutProperty = NULL;
+        clearLayoutData();
+    }
+    //Size property changed
+    if(sizeProperty == property){
+        sizeProperty = NULL;
+        clearLayoutData();
+    }
+    //Shape property changed
+    if(shapeProperty == property){
+        shapeProperty = NULL;
+        clearLayoutData();
+    }
+    //Rotation property changed
+    if(rotationProperty == property){
+        rotationProperty = NULL;
+        clearLayoutData();
+    }
+    //Color property changed
+    if(colorProperty == property){
+        colorProperty = NULL;
+        clearColorData();
+    }
+    //Color property changed
+    if(borderColorProperty == property){
+        borderColorProperty = NULL;
+        clearColorData();
+    }
 }
 
-void GlVertexArrayManager::addLocalProperty(Graph *, const std::string &name) {
-  if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName() || name==inputData->getElementShapePropName()) {
-    clearData();
-    clearObservers();
-  }
-}
-
-void GlVertexArrayManager::delLocalProperty(Graph *, const std::string &name) {
-  if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName() || name==inputData->getElementShapePropName()) {
-    clearData();
-    clearObservers();
-  }
-}
 
 void GlVertexArrayManager::clearLayoutData() {
   toComputeLayout=true;
@@ -836,16 +928,16 @@ void GlVertexArrayManager::initObservers() {
   }
 
   if(!layoutObserverActivated) {
-    inputData->getElementLayout()->addPropertyObserver(this);
-    inputData->getElementSize()->addPropertyObserver(this);
-    inputData->getElementShape()->addPropertyObserver(this);
-    inputData->getElementRotation()->addPropertyObserver(this);
+    layoutProperty->addPropertyObserver(this);
+    sizeProperty->addPropertyObserver(this);
+    shapeProperty->addPropertyObserver(this);
+    rotationProperty->addPropertyObserver(this);
     layoutObserverActivated=true;
   }
 
   if(!colorObserverActivated) {
-    inputData->getElementColor()->addPropertyObserver(this);
-    inputData->getElementBorderColor()->addPropertyObserver(this);
+    colorProperty->addPropertyObserver(this);
+    borderColorProperty->addPropertyObserver(this);
     colorObserverActivated=true;
   }
 }
@@ -858,16 +950,22 @@ void GlVertexArrayManager::clearObservers() {
   }
 
   if(layoutObserverActivated) {
-    inputData->getElementLayout()->removePropertyObserver(this);
-    inputData->getElementSize()->removePropertyObserver(this);
-    inputData->getElementShape()->removePropertyObserver(this);
-    inputData->getElementRotation()->removePropertyObserver(this);
+      if(layoutProperty != NULL)
+    layoutProperty->removePropertyObserver(this);
+      if(sizeProperty != NULL)
+    sizeProperty->removePropertyObserver(this);
+      if(shapeProperty != NULL)
+    shapeProperty->removePropertyObserver(this);
+      if(rotationProperty != NULL)
+    rotationProperty->removePropertyObserver(this);
     layoutObserverActivated=false;
   }
 
   if(colorObserverActivated) {
-    inputData->getElementColor()->removePropertyObserver(this);
-    inputData->getElementBorderColor()->removePropertyObserver(this);
+      if(colorProperty != NULL)
+    colorProperty->removePropertyObserver(this);
+      if(borderColorProperty != NULL)
+    borderColorProperty->removePropertyObserver(this);
     colorObserverActivated=false;
   }
 }

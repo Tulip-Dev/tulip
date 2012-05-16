@@ -31,7 +31,11 @@
 #include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/ObservableProperty.h>
-
+#include <tulip/LayoutProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/ColorProperty.h>
 #include <vector>
 
 namespace tlp {
@@ -138,7 +142,7 @@ public:
 
 protected:
 
-  void propertyValueChanged(PropertyInterface *property);
+  void propertyValueChanged(PropertyInterface *property); 
 
   void addEdge(Graph *,const edge);
   void addNode(Graph *,const node);
@@ -146,9 +150,7 @@ protected:
   void beforeSetAllNodeValue(PropertyInterface*);
   void beforeSetAllEdgeValue(PropertyInterface*);
   void beforeSetNodeValue(PropertyInterface*, const node);
-  void beforeSetEdgeValue(PropertyInterface*, const edge);
-  void addLocalProperty(Graph*, const std::string&);
-  void delLocalProperty(Graph*, const std::string&);
+  void beforeSetEdgeValue(PropertyInterface*, const edge);  
 
   void destroy(Graph *);
   void destroy(PropertyInterface*);
@@ -161,6 +163,13 @@ protected:
 
   GlGraphInputData *inputData;
   Graph *graph;
+  //Store properties used to compute the arrays
+  LayoutProperty* layoutProperty;
+  SizeProperty* sizeProperty;
+  IntegerProperty* shapeProperty;
+  DoubleProperty* rotationProperty;
+  ColorProperty* colorProperty;
+  ColorProperty* borderColorProperty;
   bool graphObserverActivated;
   bool layoutObserverActivated;
   bool colorObserverActivated;
