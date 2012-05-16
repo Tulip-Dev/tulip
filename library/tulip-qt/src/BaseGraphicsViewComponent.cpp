@@ -16,32 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/BaseGraphicsViewComponent.h"
-
-//#include <QtGui/QMenuBar>
-//#include <QtGui/QImageWriter>
-//#include <QtGui/QStatusBar>
-//#include <QtGui/QInputDialog>
-//#include <QtGui/QMouseEvent>
-//#include <QtGui/QToolTip>
-
-//#include <tulip/ExtendedClusterOperation.h>
-//#include <tulip/ColorProperty.h>
-//#include <tulip/BooleanProperty.h>
-//#include <tulip/StableIterator.h>
-//#include <tulip/StringProperty.h>
-
-//#include <tulip/GlMetaNodeTrueRenderer.h>
+#include <tulip/BaseGraphicsViewComponent.h>
 
 #include <tulip/GWOverviewWidget.h>
-//#include "tulip/RenderingParametersDialog.h"
-//#include "tulip/LayerManagerWidget.h"
-//#include "tulip/GridOptionsWidget.h"
-//#include "tulip/InteractorManager.h"
-//#include "tulip/TlpQtTools.h"
 #include <tulip/GlMainWidgetGraphicsView.h>
-//#include "tulip/Interactor.h"
-//#include "tulip/NodeLinkDiagramComponent.h"
 #include <tulip/ViewPluginsManager.h>
 #include <tulip/GlMainView.h>
 #include <tulip/TabWidgetHidableMenuGraphicsProxy.h>

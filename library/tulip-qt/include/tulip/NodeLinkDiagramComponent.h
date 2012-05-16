@@ -63,7 +63,6 @@ protected :
   QAction *actionsGridOptions;
   QAction *actionZOrderingOptions;
   QAction *actionAntialiasingOptions;
-  QAction *augmentedDisplayDialogAction;
   QAction* addRemoveAction;
   QAction* selectAction;
   QAction* deleteAction;
@@ -85,7 +84,6 @@ protected :
   void checkAlgorithmResult();
 
 protected slots:
-//  void showDialog(QAction*);
   void gridOptions();
 
 public slots:

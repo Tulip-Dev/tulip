@@ -20,7 +20,7 @@
 #ifndef _Tulip_BASEGRAPHICSVIEWCOMPONENT_H
 #define _Tulip_BASEGRAPHICSVIEWCOMPONENT_H
 
-#include "tulip/AbstractView.h"
+#include <tulip/AbstractView.h>
 
 class QFrame;
 
