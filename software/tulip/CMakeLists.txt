@@ -8,7 +8,6 @@ SET(SRCS
   src/PluginsCenter.cpp
   src/PluginInformationsListItem.cpp
   src/RssParser.cpp
-  src/TulipAgentServiceAdaptor.cpp
   src/TulipMainWindow.cpp
   src/TulipSplashScreen.cpp
   src/TulipWelcomePage.cpp
@@ -36,7 +35,6 @@ QT4_WRAP_CPP(MOC_SRCS
   include/PerspectiveItemWidget.h
   include/PluginErrorReport.h
   include/PluginsCenter.h
-  include/TulipAgentServiceAdaptor.h
   include/TulipMainWindow.h
   include/TulipWelcomePage.h
   include/PluginInformationsListItem.h
@@ -52,22 +50,16 @@ QT4_ADD_RESOURCES(RCC_SRCS resources/TulipAgent.qrc)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../crash_handling)
 
 INCLUDE_DIRECTORIES(include ${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR})
-IF(WIN32)
-INCLUDE_DIRECTORIES(BEFORE ${QT_QTDBUS_INCLUDE_DIR})
-ADD_DEFINITIONS(-DQT_DBUS -DQT_NO_DBUS)
-ENDIF()
 
 ADD_EXECUTABLE(tulip ${SRCS} ${UI_HEADERS} ${MOC_SRCS} ${RCC_SRCS})
 
-IF(LINUX)
-  SET_TARGET_PROPERTIES(tulip PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
-ELSEIF(APPLE)
+IF(LINUX OR APPLE)
   SET_TARGET_PROPERTIES(tulip PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
 ELSE()
   SET_TARGET_PROPERTIES(tulip PROPERTIES INSTALL_RPATH "$ORIGIN")
 ENDIF()
 
-TARGET_LINK_LIBRARIES(tulip ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES} ${QT_QTDBUS_LIBRARY} crash_handling)
+TARGET_LINK_LIBRARIES(tulip ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES} crash_handling)
 
 INSTALL(TARGETS tulip
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_app

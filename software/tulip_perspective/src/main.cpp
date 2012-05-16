@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "TulipAgentCommunicator.h"
-
 #include <QtCore/QString>
 #include <QtCore/QDir>
 #include <QtGui/QApplication>
@@ -91,14 +89,9 @@ int main(int argc,char **argv) {
   progress->setComment(QObject::trUtf8("Initializing D-Bus").toStdString());
 
 #if defined(__APPLE__)
-  // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
-  // Switch the current directory to ensure that libdbus is loaded
-  QString currentPath = QDir::currentPath();
-  QDir::setCurrent(QApplication::applicationDirPath() + "/../Frameworks");
+  QDir::setCurrent(QApplication::applicationDirPath());
 #endif
-
-  TulipAgentCommunicator *communicator = new TulipAgentCommunicator("org.labri.Tulip","/",QDBusConnection::sessionBus(),0);
 
 #if defined(__APPLE__) // revert current directory
   QDir::setCurrent(currentPath);
@@ -186,21 +179,6 @@ int main(int argc,char **argv) {
     usage("Failed to create perspective: " + perspectiveName);
 
   mainWindow->setPerspective(perspective);
-
-  // Connect perspective and communicator
-  QObject::connect(perspective,SIGNAL(showTulipWelcomeScreen()),communicator,SLOT(ShowWelcomeScreen()));
-  QObject::connect(perspective,SIGNAL(showTulipPluginsCenter()),communicator,SLOT(ShowPluginsCenter()));
-  QObject::connect(perspective,SIGNAL(showTulipAboutPage()),communicator,SLOT(ShowAboutPage()));
-  QObject::connect(perspective,SIGNAL(showOpenProjectWindow()),communicator,SLOT(ShowOpenProjectWindow()));
-  QObject::connect(perspective,SIGNAL(openProject(QString)),communicator,SLOT(OpenProject(QString)));
-  QObject::connect(perspective,SIGNAL(openProjectWith(QString,QString,const QVariantMap&)),communicator,SLOT(OpenProjectWith(QString,QString,const QVariantMap&)));
-  QObject::connect(perspective,SIGNAL(createPerspective(QString,const QVariantMap&)),communicator,SLOT(CreatePerspective(QString,const QVariantMap&)));
-  QObject::connect(perspective,SIGNAL(addPluginRepository(QString)),communicator,SLOT(AddPluginRepository(QString)));
-  QObject::connect(perspective,SIGNAL(removePluginRepository(QString)),communicator,SLOT(RemovePluginRepository(QString)));
-  QObject::connect(perspective,SIGNAL(showTrayMessage(QString,QString,uint,uint)),communicator,SLOT(ShowTrayMessage(QString,QString,uint,uint)));
-  QObject::connect(communicator,SIGNAL(Terminate()),mainWindow,SLOT(close()));
-
-  communicator->EnableCrashHandling(project->absoluteRootPath(),QApplication::applicationPid());
 
   QString title("Tulip [" + perspectiveName + "]");
 

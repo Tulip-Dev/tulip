@@ -18,15 +18,14 @@
  */
 
 #include <QtCore/QLocale>
+#include <QtCore/QProcess>
 #include <QtGui/QApplication>
-#include <QtDBus/QDBusConnection>
 
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/TlpTools.h>
 #include <QtGui/QMessageBox>
 
-#include "TulipAgentServiceAdaptor.h"
 #include "TulipMainWindow.h"
 #include "PluginLoaderReporter.h"
 #include "PluginLoaderDispatcher.h"
@@ -106,7 +105,6 @@ int main(int argc, char **argv) {
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../");
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../lib/");
 #endif
-  checkTulipRunning();
 
   tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   //TODO find a cleaner way to achieve this (QDesktopServices is part of QtGui, so it does not belong in TlpTools)
@@ -131,17 +129,6 @@ int main(int argc, char **argv) {
   TulipMainWindow *mainWindow = TulipMainWindow::instance();
   mainWindow->pluginsCenter()->reportPluginErrors(errorReport->errors());
   delete errorReport;
-
-  // Register D-Bus service
-  new TulipAgentServiceAdaptor(mainWindow);
-  bool dbusRegisterServiceOk = QDBusConnection::sessionBus().registerService("org.labri.Tulip");
-  bool dbusRegisterObjectOk = QDBusConnection::sessionBus().registerObject("/",mainWindow);
-
-  if (!dbusRegisterServiceOk)
-    qWarning() << "D-Bus registration of service org.labri.Tulip failed.";
-
-  if (!dbusRegisterObjectOk)
-    qWarning() << "D-Bus registration of object / over service org.labri.Tulip failed.";
 
   mainWindow->show();
   int result = tulip_agent.exec();
