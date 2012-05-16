@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $
  ***************************************************************/
 
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  *
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -52,7 +42,7 @@
 #include <ogdf/energybased/multilevelmixer/MMMExampleNiceLayout.h>
 #include <ogdf/basic/PreprocessorLayout.h>
 #include <ogdf/packing/ComponentSplitterLayout.h>
-#include <ogdf/energybased/multilevelmixer/ModularMultilevelMixerLayout.h>
+#include <ogdf/energybased/multilevelmixer/ModularMultilevelMixer.h>
 #include <ogdf/energybased/multilevelmixer/ScalingLayout.h>
 #include <ogdf/energybased/FastMultipoleEmbedder.h>
 
@@ -77,50 +67,43 @@ void MMMExampleNiceLayout::call(GraphAttributes &GA)
 void MMMExampleNiceLayout::call(MultilevelGraph &MLG)
 {
 	// Fast Multipole Embedder
-	ogdf::FastMultipoleEmbedder * FME = new ogdf::FastMultipoleEmbedder();
+	FastMultipoleEmbedder * FME = new FastMultipoleEmbedder();
 	FME->setNumIterations(1000);
 	FME->setRandomize(false);
 
 	// Fast Edges Only Embedder
-	ogdf::FastMultipoleEmbedder * FEOE = new ogdf::FastMultipoleEmbedder();
+	FastMultipoleEmbedder * FEOE = new FastMultipoleEmbedder();
 	FEOE->setNumIterations(0);
 	FEOE->setRandomize(false);
 
 	// Edge Cover Merger
-	ogdf::EdgeCoverMerger * ECM = new ogdf::EdgeCoverMerger();
+	EdgeCoverMerger * ECM = new EdgeCoverMerger();
 	ECM->setFactor(2.0);
 	ECM->setEdgeLengthAdjustment(0); // BEFORE (but arg is int!): ECM->setEdgeLengthAdjustment(0.1);
 
 	// Barycenter Placer with weighted Positions
-	ogdf::BarycenterPlacer * BP = new ogdf::BarycenterPlacer();
-	BP->weightedPositionPritority(true);
+	BarycenterPlacer * BP = new BarycenterPlacer();
+	BP->weightedPositionPriority(true);
 
 	// No Scaling
-	ogdf::ScalingLayout * SL = new ogdf::ScalingLayout();
+	ScalingLayout * SL = new ScalingLayout();
 	SL->setExtraScalingSteps(0);
 	SL->setScaling(1.0, 1.0);
-	SL->setScalingType(ogdf::ScalingLayout::st_relativeToDrawing);
+	SL->setScalingType(ScalingLayout::st_relativeToDrawing);
 	SL->setSecondaryLayout(FME);
 	SL->setLayoutRepeats(1);
 
-	ogdf::ModularMultilevelMixer MMM;
-	MMM.setLayoutRepeats(1);
-//	MMM.setAllEdgeLenghts(5.0);
-//	MMM.setAllNodeSizes(1.0);
-	MMM.setLevelLayoutModule(SL);
-	MMM.setInitialPlacer(BP);
-	MMM.setMultilevelBuilder(ECM);
+	ModularMultilevelMixer *MMM = new ModularMultilevelMixer;
+	MMM->setLayoutRepeats(1);
+//	MMM->setAllEdgeLenghts(5.0);
+//	MMM->setAllNodeSizes(1.0);
+	MMM->setLevelLayoutModule(SL);
+	MMM->setInitialPlacer(BP);
+	MMM->setMultilevelBuilder(ECM);
 
-	// set Postprocessing Options
-	MMM.setPostLayoutModule(FEOE);
-	MMM.setPostTimeFactor(0);
-	MMM.setPostIterations(50);
-	MMM.setPostProcessingAfterEveryStep(true);
-
-	ogdf::TileToRowsCCPacker TTRCCP;
-	ogdf::ComponentSplitterLayout CS(TTRCCP);
-	CS.setLayoutModule(MMM);
-	ogdf::PreprocessorLayout PPL;
+	ComponentSplitterLayout *CS = new ComponentSplitterLayout;
+	CS->setLayoutModule(MMM);
+	PreprocessorLayout PPL;
 	PPL.setLayoutModule(CS);
 	PPL.setRandomizePositions(true);
 

@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -67,25 +57,21 @@ ELabelPosSimple::~ELabelPosSimple()
 {
 }
 
-// liefert das Segment der Kantenlinie, auf dem point liegt
-static DLine segment(DPolyline &bends, DPoint &point)
+// returns the segment of the polyline containing the point
+// that is fraction*bends.length() away from the start
+static DLine segment(DPolyline &bends, double fraction)
 {
-    ListConstIterator<DPoint> iter;
-    DPoint from, to;
+	double targetpos = bends.length()*fraction;
+    double pos = 0.0;
 
-    from = *(iter = bends.begin());
-    for (++iter; iter.valid(); ++iter) {
-        to = *iter;
-        DLine line(from, to);
-        if (line.contains(point))
-            break;
-        from = to;
-    }
+    ListConstIterator<DPoint> iter, next;
+	for (iter = next = bends.begin(), next++; next.valid(); iter++, next++) {
+		pos += (*iter).distance(*next);
+		if (pos >= targetpos)
+			return DLine(*iter, *next);
+	}
 
-    if (from == to)
-        OGDF_THROW_PARAM(AlgorithmFailureException, afcLabel);
-
-    return DLine(from, to);
+	return DLine(*--iter, bends.back());
 }
 
 // liefert den Punkt neben dem Segment (links oder rechts, siehe 'left'), der orthogonal von
@@ -138,15 +124,19 @@ void ELabelPosSimple::call(GraphAttributes &ug, ELabelInterface<double> &eli)
         if (frac < 0.0) frac = 0.0;
         if (frac > 0.4) frac = 0.4;
 
+        double midFrac   = 0.5;
+        double startFrac = frac;
+        double endFrac   = 1.0 -frac;
+
         // hole Positionen auf der Kante
-        DPoint midPoint   = bends.position(0.5);
-        DPoint startPoint = bends.position(frac);
-        DPoint endPoint   = bends.position(1.0 - frac);
+        DPoint midPoint   = bends.position(midFrac);
+        DPoint startPoint = bends.position(startFrac);
+        DPoint endPoint   = bends.position(endFrac);
 
         // hole die beteiligten Segmente
-        DLine startLine = segment(bends, startPoint);
-        DLine endLine   = segment(bends, endPoint);
-        DLine midLine   = segment(bends, midPoint);
+        DLine midLine   = segment(bends, midFrac);
+        DLine startLine = segment(bends, startFrac);
+        DLine endLine   = segment(bends, endFrac);
 
         // berechne die Labelpositionen
         if (el.usedLabel(elEnd1)) {

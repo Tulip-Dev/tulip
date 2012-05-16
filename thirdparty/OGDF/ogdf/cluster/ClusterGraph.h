@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -21,19 +21,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -92,7 +82,7 @@ class OGDF_EXPORT ClusterElement : private GraphElement {
 										  // list of the underlying graph
 
 	#ifdef OGDF_DEBUG
-	// we store the graph containing this node for debugging purposes
+	// we store the graph containing this cluster for debugging purposes
 	const ClusterGraph *m_pClusterGraph;
 	#endif
 
@@ -127,7 +117,7 @@ public:
 		m_pClusterGraph(pClusterGraph) {};
 	#else
 	ClusterElement(int id):
-		m_id(id), m_depth(0),m_parent(0),m_pPrev(0),m_pNext(0),m_it(0) {}
+		m_id(id), m_depth(0),m_parent(0),m_pPrev(0),m_pNext(0),m_it(0) {};
 	#endif
 
 
@@ -352,6 +342,7 @@ public:
 	void clearClusterTree(cluster C);
 
 	//! Returns a reference to the underlying graph.
+	//TODO should be named getConstGraph
 	const Graph & getGraph() const {return *m_pGraph;}
 
 	//! Inserts a new cluster; makes it a child of the cluster \a parent.
@@ -379,7 +370,7 @@ public:
 	void delCluster(cluster c);
 
 	//! Returns the root cluster.
-	cluster rootCluster() const {return m_rootCluster;}
+	cluster rootCluster() const {return m_rootCluster;};
 
 	//! Returns the cluster to which a node belongs.
 	inline cluster clusterOf(node v) const{ 
@@ -536,7 +527,7 @@ public:
 
 	//! Returns the list of all clusters in \a clusters.
 	template<class CLUSTERLIST>
-	void allNodes(CLUSTERLIST &clusters) const {
+	void allClusters(CLUSTERLIST &clusters) const {
 		clusters.clear();
 		for (cluster c = m_clusters.begin(); c; c = c->succ())
 			clusters.pushBack(c);
@@ -626,6 +617,17 @@ public:
 	//! Writes the cluster graph in GML format to output stream \a os.
 	void writeGML(ostream &os);
 
+
+	//**************************
+	//file input
+	//! reading graph, attributes, cluster structure from file
+	bool readClusterGML(const char* fileName, Graph& G);
+	//! reading graph, attributes, cluster structure from stream
+	bool readClusterGML(istream& is, Graph& G);
+
+	// read Cluster Graph from OGML file
+	//bool readClusterGraphOGML(const char* fileName, ClusterGraph& CG, Graph& G);
+
 	//! Checks the consistency of the data structure.
 	// (for debugging purposes only)
 	bool consistencyCheck();
@@ -635,7 +637,7 @@ public:
 	bool representsCombEmbedding();
 
 	//! Sets the availability status of the adjacency entries. 
-	void adjAvailable(bool val){ m_adjAvailable = val;}
+	void adjAvailable(bool val){ m_adjAvailable = val;};
 
 protected:
 	//! Creates new cluster containing nodes in parameter list
@@ -653,7 +655,7 @@ protected:
 	mutable ClusterArray<cluster>* m_vAncestor;//!< Used to save last search run number for commoncluster.
 	mutable ClusterArray<cluster>* m_wAncestor;//!< Used to save last search run number for commoncluster.
 
-	//! Copies lowest common ancestor info to copy pf clustered graph. 
+	//! Copies lowest common ancestor info to copy of clustered graph.
 	void copyLCA(const ClusterGraph &C, ClusterArray<cluster>* clusterCopy=0);
 	//int m_treeDepth; //should be implemented and updated in operations?
 
@@ -702,20 +704,20 @@ protected:
 	virtual void nodeAdded(node v)   
 	{
 		assignNode(v, rootCluster());
-	}
+	};
 	//! Implementation of inherited method: Updates data if edge deleted.
-	virtual void edgeDeleted(edge /* e */) {}
+	virtual void edgeDeleted(edge /* e */) {};
 	//! Implementation of inherited method: Updates data if edge added.
-	virtual void edgeAdded(edge /* e */)   {}
+	virtual void edgeAdded(edge /* e */)   {};
 	//! Currently does nothing.
-	virtual void reInit()            {}
+	virtual void reInit()            {};
 	//! Clears cluster data without deleting root when underlying graphs' clear method is called.
 	virtual void cleared()			 
 	{
 		//we don't want a complete clear, as the graph still exists
 		//and can be updated from input stream
 		semiClear();
-	}//Graph cleared
+	};//Graph cleared
 
 private:
 	//! Assigns node \a v to cluster \a c (\a v not yet assigned!).

@@ -1,16 +1,16 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2307 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 11:47:29 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
  * \brief Implementation of heuristics for two-layer crossing
  * minimization (BarycenterHeuristic, MedianHeuristic)
  * 
- * \author Carsten Gutwenger
+ * \author Carsten Gutwenger, Till Schäfer
  * 
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
@@ -21,19 +21,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -53,6 +43,9 @@
 
 #include <ogdf/layered/BarycenterHeuristic.h>
 #include <ogdf/layered/MedianHeuristic.h>
+#include <ogdf/layered/GreedyInsertHeuristic.h>
+#include <ogdf/layered/GreedySwitchHeuristic.h>
+#include <ogdf/layered/SiftingHeuristic.h>
 
 
 namespace ogdf {
@@ -110,5 +103,162 @@ void MedianHeuristic::call (Level &L)
 	L.sort(m_weight,0,2*H.adjLevel(L.index()).high());
 }
 
+
+//---------------------------------------------------------
+// GreedySwitchHeuristic
+// implements the greedy switch heuristic for 2-layer 
+// crossing minimization
+//---------------------------------------------------------
+
+void GreedySwitchHeuristic::init (const Hierarchy& H)
+{
+	m_crossingMatrix = new CrossingsMatrix(H);
+}
+
+void GreedySwitchHeuristic::cleanup()
+{
+	delete m_crossingMatrix;
+}
+
+void GreedySwitchHeuristic::call (Level &L)
+{
+	m_crossingMatrix->init(L);
+	int index;
+	bool nolocalmin;
+
+	do {
+		nolocalmin = false;
+
+		for (index = 0; index < L.size() - 1; index++)
+			if ((*m_crossingMatrix)(index,index+1) > (*m_crossingMatrix)(index+1,index)) {
+
+				nolocalmin = true;
+
+				L.swap(index,index+1);
+				m_crossingMatrix->swap(index,index+1);
+			}
+	} while (nolocalmin);
+}
+
+
+//---------------------------------------------------------
+// GreedyInsertHeuristic
+// implements the greedy insert heuristic for 2-layer 
+// crossing minimization
+//---------------------------------------------------------
+
+void GreedyInsertHeuristic::init (const Hierarchy& H)
+{
+	m_weight.init(H);
+	m_crossingMatrix = new CrossingsMatrix(H);
+}
+
+void GreedyInsertHeuristic::cleanup()
+{
+	m_weight.init();
+	delete m_crossingMatrix;
+}
+
+void GreedyInsertHeuristic::call(Level &L)
+{
+	m_crossingMatrix->init(L);
+	int index, i;
+
+	// initialisation & priorisation 
+	for (i = 0; i < L.size(); i++) {
+		double prio = 0;
+		for (index = 0; index < L.size(); index++)
+			prio += (*m_crossingMatrix)(i,index);
+
+		// stable quicksort: no need for unique prio 
+		m_weight[L[i]] = prio;
+	}
+
+	L.sort(m_weight);
+}
+
+
+//---------------------------------------------------------
+// SiftingHeuristic
+// implements the sifting heuristic for 2-layer 
+// crossing minimization
+//---------------------------------------------------------
+
+void SiftingHeuristic::init (const Hierarchy& H)
+{
+	m_crossingMatrix = new CrossingsMatrix(H);
+}
+
+void SiftingHeuristic::cleanup()
+{
+	delete m_crossingMatrix;
+}
+
+void SiftingHeuristic::call(Level &L)
+{
+	List<node> vertices;
+	int i;
+
+	const int n = L.size();
+
+	m_crossingMatrix->init(L); // initialize crossing matrix
+
+	if (m_strategy == left_to_right || m_strategy == random) {
+		for (i = 0; i < n; i++) {
+			vertices.pushBack(L[i]);
+		}
+		
+		if (m_strategy == random) {
+			vertices.permute();
+		}
+
+	} else { // m_strategy == desc_degree
+		int max_deg = 0;
+		
+		for (i = 0; i < n; i++) {
+			int deg = L.adjNodes(L[i]).size();
+			if (deg > max_deg) max_deg = deg;
+		}
+
+		Array<List<node>, int> bucket(0, max_deg);
+		for (i = 0; i < n; i++) {
+			bucket[L.adjNodes(L[i]).size()].pushBack(L[i]);
+		}
+
+		for (i = max_deg; i >= 0; i--) {
+			while(!bucket[i].empty()) {
+				vertices.pushBack(bucket[i].popFrontRet());
+			}
+		}
+	}
+
+	for(i = 0; i< vertices.size(); i++) {
+		int dev = 0;
+
+		// sifting left
+		for(; i > 0; --i) {
+			dev = dev - (*m_crossingMatrix)(i-1,i) + (*m_crossingMatrix)(i,i-1);
+			L.swap(i-1,i);
+			m_crossingMatrix->swap(i-1,i);
+		}
+
+		// sifting right and searching optimal position
+		int opt = dev, opt_pos = 0;
+		for (; i < n-1; ++i) {
+			dev = dev - (*m_crossingMatrix)(i,i+1) + (*m_crossingMatrix)(i+1,i);
+			L.swap(i,i+1);
+			m_crossingMatrix->swap(i,i+1);
+			if (dev <= opt) {
+				opt = dev; opt_pos = i+1;
+			}
+		}
+
+		// set optimal position
+		for (; i > opt_pos; --i) {
+			L.swap(i-1,i);
+			m_crossingMatrix->swap(i-1,i);
+		}
+	}
+}
 
 } // namespace ogdf

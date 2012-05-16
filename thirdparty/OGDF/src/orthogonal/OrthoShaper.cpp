@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -21,19 +21,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -70,7 +60,6 @@ namespace ogdf {
 void OrthoShaper::call(PlanRepUML &PG,
 	CombinatorialEmbedding &E,
 	OrthoRep &OR,
-	int startBoundBendsPerEdge,
 	bool fourPlanar) throw(AlgorithmFailureException)
 {
     
@@ -1605,8 +1594,8 @@ forall_nodes(tv, Network)
 
 
 	int currentUpperBound;
-	if (startBoundBendsPerEdge > 0)	
-		currentUpperBound = startBoundBendsPerEdge;
+	if (m_startBoundBendsPerEdge > 0)
+		currentUpperBound = m_startBoundBendsPerEdge;
 	else
 		currentUpperBound = 4*PG.numberOfEdges();
 
@@ -1658,14 +1647,14 @@ forall_nodes(tv, Network)
 //}
 //#endif
 
-		OGDF_ASSERT(startBoundBendsPerEdge >= 1 || isFlow);
+		OGDF_ASSERT(m_startBoundBendsPerEdge >= 1 || isFlow);
 
 		currentUpperBound++;
 
 	}// while (!isflow)
 
 
-    if (startBoundBendsPerEdge && !isFlow) 
+    if (m_startBoundBendsPerEdge && !isFlow)
 		OGDF_THROW_PARAM(AlgorithmFailureException, afcNoFlow);
 
 

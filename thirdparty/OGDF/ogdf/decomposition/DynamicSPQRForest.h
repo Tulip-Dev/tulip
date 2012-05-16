@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -192,7 +182,7 @@ protected:
  * findSPQRTree() and - under certain circumstances - by
  * updateInsertedEdge().
  * \param vB is a vertex of the BC-tree representing a B-component.
- * \pre \a vB has to be the proper representant of its B-component,
+ * \pre \a vB has to be the proper representative of its B-component,
  * i.e. it has to be the root vertex of its respective
  * UNION/FIND-tree.
  * \pre The B-component represented by \a vB must contain at least
@@ -205,17 +195,17 @@ protected:
  * \param vB is a vertex of the BC-tree representing a B-component.
  * \param sT is a vertex of the SPQR-tree belonging to \a vB.
  * \param tT is a vertex of the SPQR-tree belonging to \a vB.
- * \pre \a vB has to be the proper representant of its B-component,
+ * \pre \a vB has to be the proper representative of its B-component,
  * i.e. it has to be the root vertex of its respective
  * UNION/FIND-tree.
- * \pre \a sT and \a tT have to be proper representants of their
+ * \pre \a sT and \a tT have to be proper representatives of their
  * triconnected components, i.e. they have to be the root vertices of
  * their respective UNION/FIND-trees.
- * \return the proper representant of the united SPQR-tree-vertex.
+ * \return the proper representative of the united SPQR-tree-vertex.
  */
 	node uniteSPQR (node vB, node sT, node tT);
 /**
- * \brief finds the proper representant of an SPQR-tree-vertex (FIND
+ * \brief finds the proper representative of an SPQR-tree-vertex (FIND
  * part of UNION/FIND).
  * \param vT is any vertex of \e m_T.
  * \return the owner of \a vT properly representing a triconnected
@@ -228,10 +218,10 @@ protected:
  * \param sT is a vertex of an SPQR-tree.
  * \param tT is a vertex of an SPQR-tree.
  * \pre \a sT and \a tT must belong to the same SPQR-tree.
- * \pre \a sT and \a tT have to be proper representants of their
+ * \pre \a sT and \a tT have to be proper representatives of their
  * triconnected components, i.e. they have to be the root vertices of
  * their respective UNION/FIND-trees.
- * \return the proper representant of the nearest common ancestor of
+ * \return the proper representative of the nearest common ancestor of
  * \a sT and \a tT.
  */
 	node findNCASPQR (node sT, node tT) const;
@@ -256,7 +246,7 @@ protected:
  * \param vB is a BC-tree-vertex representing a B-component. The
  * SPQR-tree, which is to be updated is identified by it.
  * \param eG is a new edge in the original graph.
- * \pre \a vB has to be the proper representant of its B-component,
+ * \pre \a vB has to be the proper representative of its B-component,
  * i.e. it has to be the root vertex of its respective
  * UNION/FIND-tree.
  * \pre Both the source and the target vertices of \a eG must belong
@@ -293,7 +283,7 @@ public:
 	DynamicSPQRForest (Graph& G) : DynamicBCTree(G) { init(); }
 
 /** @} @{
- * \brief finds the proper representant of the SPQR-tree-vertex which
+ * \brief finds the proper representative of the SPQR-tree-vertex which
  * a given real or virtual edge is belonging to.
  * 
  * This member function has to be used carefully (see <b>Precondition</b>)!
@@ -304,7 +294,7 @@ public:
  * member function, because that member function needs an SPQR-tree-vertex as
  * parameter, which might have been found (and eventually created) by the
  * findPathSPQR() member function.
- * \return the proper representant of the SPQR-tree-vertex which \a eH
+ * \return the proper representative of the SPQR-tree-vertex which \a eH
  * is belonging to.
  */
 	node spqrproper (edge eH) const { return m_hEdge_tNode[eH] = findSPQR(m_hEdge_tNode[eH]); }
@@ -321,7 +311,7 @@ public:
  * \brief returns the type of the triconnected component represented by
  * a given SPQR-tree-vertex.
  * \param vT is a vertex of an SPQR-tree.
- * \pre \a vT has to be the proper representant of its triconnected
+ * \pre \a vT has to be the proper representative of its triconnected
  * component, i.e. it has to be the root vertex of its respective
  * UNION/FIND-tree. This condition is particularly fulfilled if \a vT
  * is a member of a list gained by the findPathSPQR() member function.
@@ -332,7 +322,7 @@ public:
  * \brief returns a linear list of the edges in \e m_H belonging to
  * the triconnected component represented by a given SPQR-tree-vertex.
  * \param vT is a vertex of an SPQR-tree.
- * \pre \a vT has to be the proper representant of its triconnected
+ * \pre \a vT has to be the proper representative of its triconnected
  * component, i.e. it has to be the root vertex of its respective
  * UNION/FIND-tree. This condition is particularly fulfilled if \a vT
  * is a member of a list gained by the findPathSPQR() member function.
@@ -360,7 +350,7 @@ public:
  * \param wT is a vertex of an SPQR-tree.
  * \pre \a vT and \a wT must belong to the same SPQR-tree and must be
  * adjacent.
- * \pre \a vT and \a wT have to be proper representants of their
+ * \pre \a vT and \a wT have to be proper representatives of their
  * triconnected components, i.e. they have to be the root vertices of
  * their respective UNION/FIND-trees. This condition is particularly
  * fulfilled if \a vT and \a wT are members of a list gained by the

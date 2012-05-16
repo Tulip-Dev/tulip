@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -57,6 +47,7 @@
 #include <ogdf/basic/Queue.h>
 #include <ogdf/basic/tuples.h>
 #include <ogdf/basic/GraphCopyAttributes.h>
+#include <ogdf/basic/Math.h>
 #include <ogdf/packing/TileToRowsCCPacker.h>
 
 
@@ -66,10 +57,10 @@ namespace ogdf {
 double angleNormalize(double alpha)
 {
 	while(alpha < 0)
-		alpha += 2*pi;
+		alpha += 2*Math::pi;
 
-	while(alpha >= 2*pi)
-		alpha -= 2*pi;
+	while(alpha >= 2*Math::pi)
+		alpha -= 2*Math::pi;
 
 	return alpha;
 }
@@ -79,12 +70,12 @@ bool angleSmaller(double alpha, double beta)
 	double alphaNorm = angleNormalize(alpha);
 	double betaNorm  = angleNormalize(beta);
 
-	double start = betaNorm-pi;
+	double start = betaNorm-Math::pi;
 
 	if(start >= 0) {
 		return start < alphaNorm && alphaNorm < betaNorm;
 	} else {
-		return alphaNorm < betaNorm || alphaNorm >= start+2*pi;
+		return alphaNorm < betaNorm || alphaNorm >= start+2*Math::pi;
 	}
 }
 
@@ -94,9 +85,9 @@ double angleDistance(double alpha, double beta)
 	double betaNorm  = angleNormalize(beta);
 
 	double dist = alphaNorm - betaNorm;
-	if (dist < 0) dist += 2*pi;
+	if (dist < 0) dist += 2*Math::pi;
 
-	return (dist <= pi) ? dist : 2*pi-dist;
+	return (dist <= Math::pi) ? dist : 2*Math::pi-dist;
 }
 
 
@@ -107,9 +98,9 @@ void angleRangeAdapt(double sectorStart, double sectorEnd, double &start, double
 	double start2 = angleNormalize(start);
 	double end2   = angleNormalize(start+length);
 
-	if(end1   < start1) end1   += 2*pi;
-	if(start2 < start1) start2 += 2*pi;
-	if(end2   < start1) end2   += 2*pi;
+	if(end1   < start1) end1   += 2*Math::pi;
+	if(start2 < start1) start2 += 2*Math::pi;
+	if(end2   < start1) end2   += 2*Math::pi;
 
 	if(start2 > end1) start = start1;
 	if(end2   > end1) start = angleNormalize(sectorEnd - length);
@@ -292,11 +283,11 @@ void ClusterStructure::sortChildren(
 			m_childCluster[i].pushBack((*itWeights).x1());
 
 			if(m_nodesIn[i].size() == 1)
-				dirFromParent[(*itWeights).x1()] = ogdf::pi;
+				dirFromParent[(*itWeights).x1()] = Math::pi;
 			else {
 				double x = (*itWeights).x2() - parentWeight[i];
 				if(x < 0) x += n;
-				dirFromParent[(*itWeights).x1()] = x/n*2*ogdf::pi;
+				dirFromParent[(*itWeights).x1()] = x/n*2*Math::pi;
 			}
 		}
 
@@ -710,7 +701,7 @@ struct SuperCluster
 typedef SuperCluster *PtrSuperCluster;
 ostream &operator<<(ostream &os, const PtrSuperCluster &sc)
 {
-	const double fac = 180 / ogdf::pi;
+	const double fac = 180 / Math::pi;
 
 	os << "{" << fac*sc->m_direction << "," << fac*sc->m_length << "," << sc->m_scaleFactor << ":" << sc->m_cluster << "}";
 	return os;
@@ -731,7 +722,7 @@ struct SCRegion
 
 void outputRegions(List<SCRegion> &regions)
 {
-	const double fac = 180 / ogdf::pi;
+	const double fac = 180 / Math::pi;
 
 	cout << "regions:\n";
 	ListIterator<SCRegion> it;
@@ -758,7 +749,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 	Array<double> outerRadius(nCluster);
 
 #ifdef OUTPUT
-	const double fac = 360/(2*ogdf::pi);
+	const double fac = 360/(2*Math::pi);
 #endif
 
 	int i;
@@ -784,7 +775,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 			outerRadius[i] = 0.5*m_minDistCircle + sumDiameters / 2;
 
 		} else {
-			radius     [i] = (n*m_minDistCircle + sumDiameters) / (2*ogdf::pi);
+			radius     [i] = (n*m_minDistCircle + sumDiameters) / (2*Math::pi);
 			outerRadius[i] = radius[i] + maxR;
 		}
 
@@ -856,7 +847,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 
 	// estimation for distance of child cluster
 	double rFromMainSite = max(m_minDistLevel+outerRadius[mainSite],
-		sumChildrenLength / (2 * pi));
+		sumChildrenLength / (2 * Math::pi));
 	// estiamtion for maximal allowed angle (which is 2*maxHalfAngle)
 	double maxHalfAngle = acos(outerRadius[mainSite] / rFromMainSite);
 
@@ -871,7 +862,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 	for(it = mainSiteWeights.begin(); it.valid(); )
 	{
 		double currentWeight    = (*it).x2();
-		double currentDirection = currentWeight*2*pi/C.m_nodesIn[mainSite].size();
+		double currentDirection = currentWeight*2*Math::pi/C.m_nodesIn[mainSite].size();
 		double sumLength = 0;
 		SList<int> currentClusters;
 
@@ -913,10 +904,10 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 
 			if(!itR2.valid()) {
 				itR2 = regions.begin();
-				double alpha = angleNormalize((*itR1).m_start + 2*pi);
+				double alpha = angleNormalize((*itR1).m_start + 2*Math::pi);
 				double beta = angleNormalize((*itR2).m_start);
 				double dist = beta - alpha;
-				if (dist < 0) dist += 2*pi;
+				if (dist < 0) dist += 2*Math::pi;
 				double dx = (*itR1).m_length - dist;
 				doMerge = dx > DBL_EPSILON;
 				//doMerge = dist < (*itR1).m_length;
@@ -925,7 +916,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 				double alpha = angleNormalize((*itR1).m_start);
 				double beta = angleNormalize((*itR2).m_start);
 				double dist = beta - alpha;
-				if (dist < 0) dist += 2*pi;
+				if (dist < 0) dist += 2*Math::pi;
 				double dx = (*itR1).m_length - dist;
 				doMerge = dx > DBL_EPSILON;
 				//doMerge = dist < (*itR1).m_length;
@@ -947,10 +938,10 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 
 				if(!itR3.valid()) {
 					itR3 = regions.begin();
-					double beta = angleNormalize((*itR3).m_start + 2*pi);
+					double beta = angleNormalize((*itR3).m_start + 2*Math::pi);
 					double alpha = angleNormalize((*itR2).m_start);
 					double dist = beta - alpha;
-					if (dist < 0) dist += 2*pi;
+					if (dist < 0) dist += 2*Math::pi;
 					double dx = (*itR2).m_length - dist;
 					doMerge = dx > DBL_EPSILON;
 					//doMerge = dist < (*itR2).m_length;
@@ -959,7 +950,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 					double beta = angleNormalize((*itR3).m_start);
 					double alpha = angleNormalize((*itR2).m_start);
 					double dist = beta - alpha;
-					if (dist < 0) dist += 2*pi;
+					if (dist < 0) dist += 2*Math::pi;
 					double dx = (*itR2).m_length - dist;
 					doMerge = dx > DBL_EPSILON;
 					//doMerge = dist < (*itR2).m_length;
@@ -975,14 +966,14 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 			double sectorStart = 0, sectorEnd, sectorLength = 0;
 			bool singleRegion = false;
 			if(regions.size() == 1) {
-				sectorLength = 2*pi;
+				sectorLength = 2*Math::pi;
 				singleRegion = true;
 			} else {
 				sectorEnd   = angleNormalize((*regions.cyclicSucc(itR1)).m_start);
 				ListIterator<SCRegion> itPred = regions.cyclicPred(itR1);
 				sectorStart = angleNormalize((*itPred).m_start + (*itPred).m_length);
 				sectorLength = sectorEnd - sectorStart;
-				if(sectorLength < 0) sectorLength += 2*pi;
+				if(sectorLength < 0) sectorLength += 2*Math::pi;
 			}
 
 			changed = true;
@@ -996,7 +987,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 
 				SListConstIterator<SuperCluster*> itSucc = superClustersR1.cyclicSucc(it);
 				double gap = (*itSucc)->m_direction - (*it)->m_direction;
-				if (gap < 0) gap += 2*pi;
+				if (gap < 0) gap += 2*Math::pi;
 				if(gap > maxGap) {
 					maxGap = gap; itStartRegion = itSucc;
 				}
@@ -1018,21 +1009,21 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 
 				double currentPos = (*it)->m_direction;
 				if (currentPos < (*itR1).m_start)
-					currentPos += 2*pi;
+					currentPos += 2*Math::pi;
 				sumWAngles += (*it)->m_length * currentPos;
 
 				it = superClustersR1.cyclicSucc(it);
 			} while(it != itStartRegion);
 
 			double deflection = sumDef / (*itR1).m_superClusters.size();
-			while(deflection < -pi) deflection += 2*pi;
-			while(deflection >  pi) deflection -= 2*pi;
+			while(deflection < -Math::pi) deflection += 2*Math::pi;
+			while(deflection >  Math::pi) deflection -= 2*Math::pi;
 
 			(*itR1).m_start += deflection;
 
 			double center = sumWAngles / sumLength;
-			while(center < 0   ) center += 2*pi;
-			while(center > 2*pi) center -= 2*pi;
+			while(center < 0   ) center += 2*Math::pi;
+			while(center > 2*Math::pi) center -= 2*Math::pi;
 
 			double tmpScaleFactor = scaleFactor;
 			double left = center - tmpScaleFactor*sumLength/2;
@@ -1059,7 +1050,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 				}
 
 				double currentLength = right-left;
-				if(currentLength < 0) currentLength += 2*pi;
+				if(currentLength < 0) currentLength += 2*Math::pi;
 				if(currentLength > 2*maxHalfAngle)
 					scaleFactor = min(scaleFactor, 2*maxHalfAngle/currentLength);
 
@@ -1122,8 +1113,8 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 						SListConstIterator<SuperCluster*> it;
 						for(it = (*itA).m_superClusters.begin(); it.valid(); ++it) {
 							double currentDef = (*it)->m_direction - (posStart + (*it)->m_scaleFactor * (*it)->m_length/2);
-							if(currentDef > pi) currentDef -= 2*pi;
-							if(currentDef < -pi) currentDef += 2*pi;
+							if(currentDef > Math::pi) currentDef -= 2*Math::pi;
+							if(currentDef < -Math::pi) currentDef += 2*Math::pi;
 							sumDef    += currentDef; //(*it)->m_direction - (posStart + (*it)->m_length/2);
 							posStart  += (*it)->m_length * (*it)->m_scaleFactor;
 						}
@@ -1170,7 +1161,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 
 			if(!itR2.valid()) {
 				itR2 = regions.begin();
-				doMerge = (*itR2).m_start + 2*ogdf::pi < (*itR1).m_start + (*itR1).m_length;
+				doMerge = (*itR2).m_start + 2*Math::pi < (*itR1).m_start + (*itR1).m_length;
 			} else
 				doMerge = (*itR2).m_start < (*itR1).m_start + (*itR1).m_length;
 		
@@ -1197,7 +1188,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 				changed = true;
 
 				// compute scaling
-				double scaleFactor = (sumPrefAngles <= 2*pi) ? 1 : 2*pi/sumPrefAngles;
+				double scaleFactor = (sumPrefAngles <= 2*Math::pi) ? 1 : 2*Math::pi/sumPrefAngles;
 				double left = (*itR1).m_start;
 				double center = left + sumPrefAngles/2;
 				for(it = (*itR1).m_clusters.begin(); it.valid(); ++it)
@@ -1221,8 +1212,8 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 				(*itR1).m_length = scaleFactor * sumPrefAngles;
 				(*itR1).m_start  = center - (*itR1).m_length / 2;
 				(*itR1).m_scaleFactor = scaleFactor;
-				if((*itR1).m_start > 2*ogdf::pi)
-					(*itR1).m_start -= 2*ogdf::pi;
+				if((*itR1).m_start > 2*Math::pi)
+					(*itR1).m_start -= 2*Math::pi;
 
 #ifdef OUTPUT
 				outputRegions(regions);
@@ -1239,7 +1230,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 */
 	ListIterator<SCRegion> itR;
 	//double minDist   = outerRadius[mainSite] + m_minDistLevel;
-	//double sectorEnd = posStart+2*pi;
+	//double sectorEnd = posStart+2*Math::pi;
 	for(itR = regions.begin(); itR.valid(); ++itR)
 	{
 		double posStart  = (*itR).m_start;
@@ -1298,7 +1289,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 	// end of pendulum method -------------------------------------------
 
 
-	/*double completeAngle = 2 * ogdf::pi;
+	/*double completeAngle = 2 * Math::pi;
 	double angle = 0;
 	//double minDist = outerRadius[mainSite] + m_minDistLevel;//
 	//ListConstIterator<Tuple2<int,double> > it;//
@@ -1310,8 +1301,8 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 
 		double delta = completeAngle * preferedAngle[child] / sumPrefAngles;
 
-		//double gammaC = angle+delta/2 - weight*2*ogdf::pi/C.m_nodesIn[mainSite].size();
-		double gammaC = circleAngle[child] - weight*2*ogdf::pi/C.m_nodesIn[mainSite].size();
+		//double gammaC = angle+delta/2 - weight*2*Math::pi/C.m_nodesIn[mainSite].size();
+		double gammaC = circleAngle[child] - weight*2*Math::pi/C.m_nodesIn[mainSite].size();
 
 		sum += gammaC;
 
@@ -1323,7 +1314,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 	}
 
 	double gammaMainSite = (mainSiteWeights.size() == 0) ? 0 : sum / mainSiteWeights.size();
-	if(gammaMainSite < 0) gammaMainSite += 2*ogdf::pi;*/
+	if(gammaMainSite < 0) gammaMainSite += 2*Math::pi;*/
 	double gammaMainSite = 0;
 
 	while(!circleQueue.empty())
@@ -1339,8 +1330,8 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 #endif
 
 		double delta = qcp.m_sectorEnd - qcp.m_sectorStart;
-		if (delta >= ogdf::pi)
-		//if (delta <= ogdf::pi)
+		if (delta >= Math::pi)
+		//if (delta <= Math::pi)
 		{
 			circleDistance[cluster] = qcp.m_minDist + outerRadius[cluster];
 
@@ -1374,23 +1365,23 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 			double gamma = dirFromParent[*itC];
 
 #ifdef OUTPUT
-			cout << "    gamma of " << *itC << " = " << gamma/(2*ogdf::pi)*360 << endl;
+			cout << "    gamma of " << *itC << " = " << gamma/(2*Math::pi)*360 << endl;
 #endif
-			if(gamma <= ogdf::pi/2)
+			if(gamma <= Math::pi/2)
 				preferedDirection[*itC] = qcp.m_sectorStart;
-			else if(gamma >= 3*ogdf::pi/2)
+			else if(gamma >= 3*Math::pi/2)
 				preferedDirection[*itC] = qcp.m_sectorEnd;
-			//else if(gamma == ogdf::pi) // Achtung! nicht Gleichheit ohne Toleranz testen!
-			else if(DIsEqual(gamma,ogdf::pi))
+			//else if(gamma == Math::pi) // Achtung! nicht Gleichheit ohne Toleranz testen!
+			else if(DIsEqual(gamma,Math::pi))
 				preferedDirection[*itC] = circleAngle[cluster];
 			else {
-				double gamma2 = (gamma < ogdf::pi) ? ogdf::pi - gamma : gamma - ogdf::pi;
+				double gamma2 = (gamma < Math::pi) ? Math::pi - gamma : gamma - Math::pi;
 				double K = 1 + 1 /(tan(gamma2)*tan(gamma2));
 				double C = r/(a*tan(gamma2))/K;
 				double C2 = sqrt((1-(r/a)*(r/a))/K + C*C);
 
 				double beta = asin(C2-C);
-				if (gamma < ogdf::pi)
+				if (gamma < Math::pi)
 					preferedDirection[*itC] = circleAngle[cluster]-beta;
 				else
 					preferedDirection[*itC] = circleAngle[cluster]+beta;
@@ -1523,33 +1514,33 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 
 		} else {
 			double alpha = circleAngle[i];
-			if(alpha <= ogdf::pi/2) {
+			if(alpha <= Math::pi/2) {
 				// upper left
-				double beta = ogdf::pi/2 - alpha;
+				double beta = Math::pi/2 - alpha;
 				mX = -circleDistance[i] * cos(beta);
 				mY =  circleDistance[i] * sin(beta);
-				gamma = 1.5*ogdf::pi - beta;
+				gamma = 1.5*Math::pi - beta;
 
-			} else if(alpha <= ogdf::pi) {
+			} else if(alpha <= Math::pi) {
 				// lower left
-				double beta = alpha - ogdf::pi/2;
+				double beta = alpha - Math::pi/2;
 				mX = -circleDistance[i] * cos(beta);
 				mY = -circleDistance[i] * sin(beta);
-				gamma = 1.5*ogdf::pi + beta;
+				gamma = 1.5*Math::pi + beta;
 
-			} else if(alpha <= 1.5*ogdf::pi) {
+			} else if(alpha <= 1.5*Math::pi) {
 				// lower right
-				double beta = 1.5*ogdf::pi - alpha;
+				double beta = 1.5*Math::pi - alpha;
 				mX =  circleDistance[i] * cos(beta);
 				mY = -circleDistance[i] * sin(beta);
-				gamma = ogdf::pi/2 - beta;
+				gamma = Math::pi/2 - beta;
 
 			} else {
 				// upper right
-				double beta = alpha - 1.5*ogdf::pi;
+				double beta = alpha - 1.5*Math::pi;
 				mX =  circleDistance[i] * cos(beta);
 				mY =  circleDistance[i] * sin(beta);
-				gamma = ogdf::pi/2 + beta;
+				gamma = Math::pi/2 + beta;
 			}
 		}
 
@@ -1563,31 +1554,31 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 			double phi = pos - parentWeight[i];
 			if(phi < 0) phi += n;
 
-			phi = phi * 2*ogdf::pi/n + gamma;
-			if(phi >= 2*ogdf::pi) phi -= 2*ogdf::pi;
+			phi = phi * 2*Math::pi/n + gamma;
+			if(phi >= 2*Math::pi) phi -= 2*Math::pi;
 
 			double x, y;
-			if(phi <= ogdf::pi/2) {
+			if(phi <= Math::pi/2) {
 				// upper left
-				double beta = ogdf::pi/2 - phi;
+				double beta = Math::pi/2 - phi;
 				x = -radius[i] * cos(beta);
 				y =  radius[i] * sin(beta);
 
-			} else if(phi <= ogdf::pi) {
+			} else if(phi <= Math::pi) {
 				// lower left
-				double beta = phi - ogdf::pi/2;
+				double beta = phi - Math::pi/2;
 				x = -radius[i] * cos(beta);
 				y = -radius[i] * sin(beta);
 
-			} else if(phi <= 1.5*ogdf::pi) {
+			} else if(phi <= 1.5*Math::pi) {
 				// lower right
-				double beta = 1.5*ogdf::pi - phi;
+				double beta = 1.5*Math::pi - phi;
 				x =  radius[i] * cos(beta);
 				y = -radius[i] * sin(beta);
 
 			} else {
 				// upper right
-				double beta = phi - 1.5*ogdf::pi;
+				double beta = phi - 1.5*Math::pi;
 				x =  radius[i] * cos(beta);
 				y =  radius[i] * sin(beta);
 			}
@@ -1636,7 +1627,7 @@ void CircularLayout::computePreferedAngles(
 #ifdef OUTPUT
 	cout << "\nprefered angles:" << endl;
 	for(int i = 0; i < nCluster; ++i)
-		cout << i << ": " << 360*preferedAngle[i]/(2*ogdf::pi) << endl;
+		cout << i << ": " << 360*preferedAngle[i]/(2*Math::pi) << endl;
 #endif
 }
 

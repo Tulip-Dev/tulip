@@ -220,7 +220,7 @@ private:
 
 	void deallocate()
 	{
-		delete m_array;
+		delete[] m_array;
 	};
 
 	//! the graph

@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -23,19 +23,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -64,6 +54,7 @@
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/basic/Queue.h>
 #include <ogdf/basic/Stack.h>
+#include <ogdf/basic/Math.h>
 
 #include <math.h>
 
@@ -341,7 +332,7 @@ void BalloonLayout::computeRadii(const GraphAttributes &AG)
 					{
 						m_radius[v] = max((m_maxChildRadius[v]/max(m_childCount[v], 1) + 
 									m_estimateFactor*2.0*(m_childCount[v]*m_maxChildRadius[v]))/
-									(2*ogdf::pi), 2.0*m_size[v]);
+									(2*Math::pi), 2.0*m_size[v]);
 						#ifdef OGDF_DEBUG
 						cout <<"Even angles \n";
 						#endif
@@ -356,7 +347,7 @@ void BalloonLayout::computeRadii(const GraphAttributes &AG)
 							
 							cout << "Radien mit einem Kind: "<< v->degree() <<" : "<<m_radius[v] << " "<< (m_maxChildRadius[v]/max(m_childCount[v], 4) + 
 									m_estimateFactor*2.0*m_estimate[v])/
-									(2.0*ogdf::pi)<<" "<< 1.1*m_maxChildRadius[v]<<"\n";
+									(2.0*Math::pi)<<" "<< 1.1*m_maxChildRadius[v]<<"\n";
 							
 							#endif
 						}
@@ -365,16 +356,16 @@ void BalloonLayout::computeRadii(const GraphAttributes &AG)
 						//better version:
 						m_radius[v] = max(max((m_maxChildRadius[v]/max(m_childCount[v], 4) + 
 									m_estimateFactor*2.0*m_estimate[v])/
-									(2.0*ogdf::pi), 2*m_size[v]), 1.1*m_maxChildRadius[v]);
+									(2.0*Math::pi), 2*m_size[v]), 1.1*m_maxChildRadius[v]);
 							#ifdef OGDF_DEBUG
 							cout << "Radien: "<< v->degree() <<" : "<<m_radius[v] << " "<< (m_maxChildRadius[v]/max(m_childCount[v], 4) + 
 									m_estimateFactor*2.0*m_estimate[v])/
-									(2.0*ogdf::pi)<<" "<< 1.1*m_maxChildRadius[v]<<"\n";
+									(2.0*Math::pi)<<" "<< 1.1*m_maxChildRadius[v]<<"\n";
 							#endif
 						//else
 						//m_radius[v] = max((m_maxChildRadius[v]/max(m_childCount[v], 2) + 
 						//			m_estimateFactor*2.0*m_estimate[v])/
-						//			(2.0*ogdf::pi), 2*m_size[v]);
+						//			(2.0*Math::pi), 2*m_size[v]);
 						}
 					}//if even angles  
 					
@@ -547,11 +538,11 @@ void BalloonLayout::computeAngles(const Graph &G)
 		{
 			double anglesum = 0.0; 
 			double pestimate = m_estimate[p]; //the circumference estimate of the parent
-			double fullAngle = 2.0*ogdf::pi;  //angle that has to be shared by children
+			double fullAngle = 2.0*Math::pi;  //angle that has to be shared by children
 			ListConstIterator<node> it = m_childList[p].begin();
 			if (m_childCount[p] == 1)
 			{
-				m_angle[(*it)] = ogdf::pi;//not used currently, fixed to parent angle
+				m_angle[(*it)] = Math::pi;//not used currently, fixed to parent angle
 				queue.pushBack((*it));
 				#ifdef OGDF_DEBUG
 				checker++;
@@ -580,7 +571,7 @@ void BalloonLayout::computeAngles(const Graph &G)
 							checkMulti = true;
 							#endif	
 							pestimate = pestimate - m_oRadius[(*it2)];
-							fullAngle = ogdf::pi;
+							fullAngle = Math::pi;
 							#ifndef OGDF_DEBUG
 							break;
 							#endif
@@ -599,7 +590,7 @@ void BalloonLayout::computeAngles(const Graph &G)
 					
 					if (m_evenAngles)
 					{
-						m_angle[v] = ogdf::pi*2.0/m_childCount[p];
+						m_angle[v] = Math::pi*2.0/m_childCount[p];
 						queue.pushBack(v);
 					}
 					else
@@ -615,13 +606,13 @@ void BalloonLayout::computeAngles(const Graph &G)
 						double ratio = m_oRadius[v]/m_estimate[p];
 						//restrict vertices to at most half of the space, otherwise.
 						//there will be an overlap
-						if (ratio > 0.501) anglesum = ogdf::pi;
+						if (ratio > 0.501) anglesum = Math::pi;
 						else anglesum = fullAngle*m_oRadius[v]/pestimate;
 						//cout<<"\nAnteil : "<<m_oRadius[v]/m_estimate[p]<<" bei Kindern: "<<m_childCount[p]<<"\n";
 												
 						m_angle[v] = anglesum;
 						#ifdef OGDF_DEBUG
-						if (anglesum >ogdf::pi) cout << "Angle large than pi!!"<<anglesum<<"children"<< m_childCount[p]<<" full: "<<fullAngle<<"\n";
+						if (anglesum >Math::pi) cout << "Angle large than pi!!"<<anglesum<<"children"<< m_childCount[p]<<" full: "<<fullAngle<<"\n";
 						#endif
 						//cout <<"Set angle at "<<v->index()<<" "<<m_angle[v]<<"\n";
 					}//else
@@ -669,8 +660,8 @@ void BalloonLayout::computeCoordinates(GraphAttributes &AG)
 		{
 			//we start at the parent's angle and skip half of the angle
 			//of the last element
-			double anglesum = fmod(m_angle[p]-ogdf::pi+
-				m_angle[*m_childList[p].begin()]/2.0, 2.0*ogdf::pi);//0.0;
+			double anglesum = fmod(m_angle[p]-Math::pi+
+				m_angle[*m_childList[p].begin()]/2.0, 2.0*Math::pi);//0.0;
 			//double sumchecker = 0.0;// debug value
 			//cout<<"Angle start offset: "<<anglesum<<"\n";
 			ListConstIterator<node> it = m_childList[p].begin();
@@ -717,7 +708,7 @@ void BalloonLayout::computeCoordinates(GraphAttributes &AG)
 				m_angle[w] = anglesum;
 				
 				//z's value is the required angle, not the direction
-				anglesum = fmod((anglesum + (s+m_angle[z])/2.0), 2.0*ogdf::pi);
+				anglesum = fmod((anglesum + (s+m_angle[z])/2.0), 2.0*Math::pi);
 				//cout <<"Finished...\n";
 				
 			}//while children

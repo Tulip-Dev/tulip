@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -21,19 +21,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -118,18 +108,45 @@ public:
 	//! Initializes the memory manager.
 	static OGDF_EXPORT void init();
 
-	static OGDF_EXPORT void initThread();
+	static OGDF_EXPORT void initThread() {
+#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
+		pthread_setspecific(s_tpKey,calloc(eTableSize,sizeof(MemElemPtr)));
+#endif
+	}
 
 	//! Frees all memory blocks allocated by the memory manager.
 	static OGDF_EXPORT void cleanup();
 
-	static OGDF_EXPORT bool checkSize(size_t nBytes);
+	static OGDF_EXPORT bool checkSize(size_t nBytes) {
+		return nBytes < eTableSize;
+	}
 
 	//! Allocates memory of size \a nBytes.
-	static OGDF_EXPORT void *allocate(size_t nBytes);
+	static OGDF_EXPORT void *allocate(size_t nBytes) {
+#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
+		MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
+#else
+		MemElemPtr *pFreeBytes = s_tp+nBytes;
+#endif
+		if (OGDF_LIKELY(*pFreeBytes != 0)) {
+			MemElemPtr p = *pFreeBytes;
+			*pFreeBytes = p->m_next;
+			return p;
+		} else {
+			return fillPool(*pFreeBytes,__uint16(nBytes));
+		}
+	}
 
 	//! Deallocates memory at address \a p which is of size \a nBytes.
-	static OGDF_EXPORT void deallocate(size_t nBytes, void *p);
+	static OGDF_EXPORT void deallocate(size_t nBytes, void *p) {
+#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
+		MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
+#else
+		MemElemPtr *pFreeBytes = s_tp+nBytes;
+#endif
+		MemElemPtr(p)->m_next = *pFreeBytes;
+		*pFreeBytes = MemElemPtr(p);
+	}
 
 	//! Deallocate a complete list starting at \a pHead and ending at \a pTail.
 	/**
@@ -138,7 +155,15 @@ public:
 	 * each element separately, since the whole chain can be concatenated with the
 	 * free list, requiring only constant effort.
 	 */
-	static OGDF_EXPORT void deallocateList(size_t nBytes, void *pHead, void *pTail);
+	static OGDF_EXPORT void deallocateList(size_t nBytes, void *pHead, void *pTail) {
+#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
+		MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
+#else
+		MemElemPtr *pFreeBytes = s_tp+nBytes;
+#endif
+		MemElemPtr(pTail)->m_next = *pFreeBytes;
+		*pFreeBytes = MemElemPtr(pHead);
+	}
 
 	static OGDF_EXPORT void flushPool();
 	static OGDF_EXPORT void flushPool(__uint16 nBytes);

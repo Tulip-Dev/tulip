@@ -1,9 +1,9 @@
 /*
- * $Revision: 2044 $
+ * $Revision: 2305 $
  * 
  * last checkin:
- *   $Author: tschaefer $ 
- *   $Date: 2010-10-06 14:54:26 +0200 (Wed, 06 Oct 2010) $ 
+ *   $Author: gutwenger $ 
+ *   $Date: 2012-05-08 11:32:25 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -23,19 +23,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -70,7 +60,7 @@ GraphAttributes::GraphAttributes() : m_pGraph(0), m_directed(true) { }
 
 
 GraphAttributes::GraphAttributes(const Graph &G, long initAttr) :
-	m_pGraph(&G), m_directed(true), m_attributes(0)
+	m_pGraph(&G), m_attributes(0), m_directed(true)
 {
 	initAttributes(m_attributes = initAttr);
 }
@@ -89,10 +79,10 @@ void GraphAttributes::initAttributes(long attr)
 	OGDF_ASSERT( (m_attributes & edgeGraphics) != 0 || (attr & edgeColor) == 0);
 
 	if (attr & nodeGraphics) {
-		m_x     .init(*m_pGraph,0);
-		m_y     .init(*m_pGraph,0);
-		m_width .init(*m_pGraph,0);
-		m_height.init(*m_pGraph,0);
+		m_x     .init(*m_pGraph,0.0);
+		m_y     .init(*m_pGraph,0.0);
+		m_width .init(*m_pGraph,0.0);
+		m_height.init(*m_pGraph,0.0);
 		m_nodeShape.init(*m_pGraph,rectangle);
 	}
 
@@ -493,12 +483,38 @@ void GraphAttributes::writeGML(ostream &os) const
 			os << "type \"line\"\n";
 
 			if (attributes() & GraphAttributes::edgeType) {
-				if (type(e) == Graph::generalization)
-					os << "arrow \"last\"\n";
-				else
-					os << "arrow \"none\"\n";
+				if (attributes() & GraphAttributes::edgeArrow) {
+					switch(arrowEdge(e)) {
+						case GraphAttributes::none:
+							os << "arrow \"none\"\n";
+							break;
 
-				//os << "generalization " << type(e) << "\n";
+						case GraphAttributes::last:
+							os << "arrow \"last\"\n";
+							break;
+
+						case GraphAttributes::first:
+							os << "arrow \"first\"\n";
+							break;
+
+						case GraphAttributes::both:
+							os << "arrow \"both\"\n";
+							break;
+
+						case GraphAttributes::undefined:
+							// do nothing
+							break;
+
+						default:
+							// do nothing
+							break;
+					}
+				} else {
+					if (type(e) == Graph::generalization)
+						os << "arrow \"last\"\n";
+					else
+						os << "arrow \"none\"\n";
+				}
 
 			} else {
 				os << "arrow \"last\"\n";
@@ -1037,6 +1053,170 @@ String GraphAttributes::formatLabel(const String& labelText) {
         }
     }
     return formattedString;
+}
+
+void GraphAttributes::writeSVG(const String &fileName, int fontSize, const String &fontColor) const
+	{
+		ofstream os(fileName.cstr());
+		writeSVG(os, fontSize, fontColor);
+	}
+
+void GraphAttributes::writeSVG(ostream &os, int fontSize, const String &fontColor) const
+{
+	os.setf(ios::showpoint);
+	os.precision(10);
+
+	os << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	os << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ev=\"http://www.w3.org/2001/xml-events\" version=\"1.1\" baseProfile=\"full\" ";
+
+	// determine bounding box of svg
+	OGDF_ASSERT((*m_pGraph).numberOfNodes() > 0);
+	double maxX = x((*m_pGraph).firstNode());
+	double maxY = y((*m_pGraph).firstNode());
+	double minX = x((*m_pGraph).firstNode());
+	double minY = y((*m_pGraph).firstNode());
+	double nodeStrokeWidth;
+
+	node v;
+	forall_nodes(v, *m_pGraph) {
+		if (m_attributes & nodeStyle) {
+			nodeStrokeWidth = lineWidthNode(v);
+		} else {
+			nodeStrokeWidth = 1.0;
+		}
+		maxX = max(maxX, x(v) + m_width[v]/2 + nodeStrokeWidth);
+		maxY = max(maxY, y(v) + m_height[v]/2 + nodeStrokeWidth);
+		minX = min(minX, x(v) - m_width[v]/2 - nodeStrokeWidth);
+		minY = min(minY, y(v) - m_height[v]/2 - nodeStrokeWidth);
+	}
+
+	edge e;
+	ListConstIterator<DPoint> it;
+	double edgeStrokeWidth;
+	forall_edges(e, *m_pGraph) {
+		if (m_attributes & edgeGraphics) {
+			if (attributes() & GraphAttributes::edgeStyle) {
+				edgeStrokeWidth = edgeWidth(e);
+			} else {
+				edgeStrokeWidth = 1.0;
+			}
+			const DPolyline &dpl = m_bends[e];
+			if (!dpl.empty()) {
+				for(it = dpl.begin(); it.valid(); ++it) {
+					maxX = max(maxX, (*it).m_x + edgeStrokeWidth);
+					maxY = max(maxY, (*it).m_y + edgeStrokeWidth);
+					minX = min(minX, (*it).m_x - edgeStrokeWidth);
+					minY = min(minY, (*it).m_y - edgeStrokeWidth);
+				}
+			}
+		}
+	}
+
+	os << "width=\"" << (maxX - minX) << "px\" ";
+	os << "height=\"" << (maxY - minY) << "px\" ";
+	os << "viewBox=\"" << 0 << " " << 0 << " " << (maxX - minX) << " " << (maxY - minY) << "\">\n";
+
+	forall_edges(e, *m_pGraph) {
+
+		const DPolyline &dpl = m_bends[e];
+		if (m_attributes & edgeGraphics) {
+			if (!dpl.empty()) { //polyline
+				os << "<polyline fill=\"none\" ";
+
+				if ((m_attributes & edgeColor) && (m_edgeColor[e].length() != 0)) {
+					os << "stroke=\"" << m_edgeColor[e] << "\" ";
+				}
+
+				if (attributes() & GraphAttributes::edgeStyle) {
+					os << "stroke-width=\"" << edgeWidth(e) << "px\" ";
+				} else {
+					os << "stroke=\"#000000\" ";
+				}
+
+				os << "points=\"";
+				node v = e->source();
+				if(dpl.front().m_x < m_x[v] - m_width[v]/2 ||
+						dpl.front().m_x > m_x[v] + m_width[v]/2 ||
+						dpl.front().m_y < m_y[v] - m_height[v]/2 ||
+						dpl.front().m_y > m_y[v] + m_height[v]/2)
+				{
+					os << (m_x[e->source()] - minX) << "," << (m_y[e->source()] - minY) << " ";
+				}
+
+				for(it = dpl.begin(); it.valid(); ++it)
+				os << ((*it).m_x - minX) << "," << ((*it).m_y - minY) << " ";
+
+				v = e->target();
+				if(dpl.back().m_x < m_x[v] - m_width[v]/2 ||
+						dpl.back().m_x > m_x[v] + m_width[v]/2 ||
+						dpl.back().m_y < m_y[v] - m_height[v]/2 ||
+						dpl.back().m_y > m_y[v] + m_height[v]/2)
+				{
+					os << (m_x[e->target()] - minX) << "," << (m_y[e->target()] - minY) << " ";
+				}
+
+				os << "\"/>\n";
+			} else { // single line
+				os << "<line ";
+				os << "x1=\"" << x(e->source()) - minX << "\" ";
+				os << "y1=\"" << y(e->source()) - minY << "\" ";
+				os << "x2=\"" << x(e->target()) - minX << "\" ";
+				os << "y2=\"" << y(e->target()) - minY<< "\" ";
+
+				if ((m_attributes & edgeColor) && (m_edgeColor[e].length() != 0)) {
+					os << "stroke=\"" << m_edgeColor[e] << "\" ";
+				} else {
+					os << "stroke=\"#000000\" ";
+				}
+
+				if (attributes() & GraphAttributes::edgeStyle) {
+					os << "stroke-width=\"" << edgeWidth(e) << "px\" ";
+				}
+
+				os << "/>\n";
+			}
+		}
+	}
+
+	forall_nodes(v,*m_pGraph) {
+		if (m_attributes & nodeGraphics) {
+			switch (m_nodeShape[v])
+			{
+				case rectangle:
+				os << "<rect ";
+				os << "x=\"" << m_x[v] - minX - m_width[v]/2 << "\" ";
+				os << "y=\"" << m_y[v] - minY - m_height[v]/2 << "\" ";
+				os << "width=\"" << m_width[v] << "\" ";
+				os << "height=\"" << m_height[v] << "\" ";
+				break;
+				case oval:
+				os << "<ellipse ";
+				os << "cx=\"" << m_x[v] - minX << "\" ";
+				os << "cy=\"" << m_y[v] - minY << "\" ";
+				os << "rx=\"" << m_width[v]/2 << "\" ";
+				os << "ry=\"" << m_height[v]/2 << "\" ";
+				break;
+			}
+
+			if (m_attributes & nodeColor) {
+				os << "fill=\"" << m_nodeColor[v] << "\" ";
+				os << "stroke=\"" << m_nodeLine[v] << "\" ";
+			}
+
+			if (m_attributes & nodeStyle)
+			{
+				os << "stroke-width=\"" << lineWidthNode(v) << "px\" ";
+			}
+
+			os << "/>\n";
+
+			if(m_attributes & nodeLabel){
+				os << "<text x=\"" << m_x[v] - minX - m_width[v]/2 << "\" y=\"" << m_y[v] - minY << "\" textLength=\"" << m_width[v] << "\" font-size=\"" << fontSize << "\" fill=\"" << fontColor << "\" lengthAdjust=\"spacingAndGlyphs\">" << m_nodeLabel[v] << "</text>\n";
+			}
+		}
+	}
+
+	os << "</svg>\n";
 }
 
 } // end namespace ogdf

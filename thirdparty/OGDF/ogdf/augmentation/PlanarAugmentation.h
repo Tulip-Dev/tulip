@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -112,63 +102,63 @@ public:
 		m_parent = parent;
 		m_head = cutvertex;
 		m_stopCause = sc;
-	}
+	};
 
 	bool isBLabel() {
 		return (m_parent != 0);
-	}
+	};
 
 	bool isCLabel() {
 		return (m_parent == 0);
-	}
+	};
 
 	//! return pendant with number nr, starts counting at 0
 	node getPendant(int nr) {
 		return (nr < m_pendants.size()) ? (*(m_pendants.get(nr))) : 0;
-	}
+	};
 
 	node getFirstPendant() {
 		return (m_pendants.size() > 0) ? m_pendants.front() : 0;
-	}
+	};
 
 	node getLastPendant() {
 		return (m_pendants.size() > 0) ? m_pendants.back() : 0;
-	}
+	};
 	
     //! return number of pendants
 	int size() {
 		return m_pendants.size();
-	}
+	};
 	
 	void removePendant(node pendant);
 
 	void removePendant(ListIterator<node> it){
 		m_pendants.del(it);
-	}
+	};
 
 	void removeFirstPendant() {
 		if (m_pendants.size() > 0){
 			m_pendants.popFront();
 		}
-	}
+	};
 	
 	void addPendant(node pendant) {
 		m_pendants.pushBack(pendant);
-	}
+	};
 
 	void deleteAllPendants() {
 		m_pendants.clear();
-	}
+	};
 
 	//! return the parent node. If the label is a c-label it returns m_head
 	node parent() {
 		return (m_parent != 0) ? m_parent : m_head;
-	}
+	};
 
 	//! returns the head node
 	node head() {
 		return m_head;
-	}
+	};
 	
 	void setParent(node newParent){
 		m_parent = newParent;
@@ -273,7 +263,7 @@ private:
 	 * 		  that doesn't belong to the same parent-node.
 	 * 
 	 * This is necessary because the bc-tree uses an union-find-data-structure to store 
-	 * dependancies between bc-nodes. The adjacencies in the bc-tree won't be updated.
+	 * dependencies between bc-nodes. The adjacencies in the bc-tree won't be updated.
 	 */
 	NodeArray< SList<adjEntry> > m_adjNonChildren; 	
 

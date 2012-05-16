@@ -1,9 +1,9 @@
 /*
- * $Revision: 2014 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-08-27 15:49:59 +0200 (Fri, 27 Aug 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
 
 /** \file
@@ -18,19 +18,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -56,7 +46,7 @@
 namespace ogdf {
 
 
-OrderComparer::OrderComparer(const ogdf::UpwardPlanRep &_UPR, Hierarchy &_H) : UPR(_UPR), H(_H) {
+OrderComparer::OrderComparer(const UpwardPlanRep &_UPR, Hierarchy &_H) : UPR(_UPR), H(_H) {
 	dfsNum.init(UPR, -1);
 	crossed.init(UPR, false);	
 
@@ -282,7 +272,7 @@ bool OrderComparer::left(List<edge> &chain1, List<edge> &chain2, int level) cons
 
 
 
-bool OrderComparer::less(ogdf::node vH1, ogdf::node vH2) const {
+bool OrderComparer::less(node vH1, node vH2) const {
 
 	if (vH1 == vH2)
 		return false;
@@ -459,7 +449,7 @@ void LayerBasedUPRLayout::doCall(const UpwardPlanRep &UPR, GraphAttributes &AG) 
 }
 
 
-void LayerBasedUPRLayout::computeRanking(const ogdf::UpwardPlanRep &UPR, ogdf::NodeArray<int> &rank) 
+void LayerBasedUPRLayout::computeRanking(const UpwardPlanRep &UPR, NodeArray<int> &rank) 
 {
 	OGDF_ASSERT(UPR.augmented());
 	
@@ -658,7 +648,7 @@ void LayerBasedUPRLayout::postProcessing_sourceReorder(Hierarchy &H, List<node> 
 
 
 
-void LayerBasedUPRLayout::postProcessing_markUp(ogdf::Hierarchy &H, node s, NodeArray<bool> &markedNodes) {
+void LayerBasedUPRLayout::postProcessing_markUp(Hierarchy &H, node s, NodeArray<bool> &markedNodes) {
 	const GraphCopy &GC = H;
 	NodeArray<bool> inQueue(GC, false);
 	Queue<node> nodesToDo;
@@ -682,7 +672,7 @@ void LayerBasedUPRLayout::postProcessing_markUp(ogdf::Hierarchy &H, node s, Node
 
 
 
-void LayerBasedUPRLayout::postProcessing_reduceLED(ogdf::Hierarchy &H, node s) {
+void LayerBasedUPRLayout::postProcessing_reduceLED(Hierarchy &H, node s) {
 
 	const GraphCopy &GC = H;
 	NodeArray<bool> markedNodes(GC, false);
@@ -784,7 +774,7 @@ void LayerBasedUPRLayout::postProcessing_reduceLED(ogdf::Hierarchy &H, node s) {
 }
 
 
-void LayerBasedUPRLayout::post_processing_reduce(ogdf::Hierarchy &H, int &i, node s, int minIdx, int maxIdx, NodeArray<bool> &markedNodes) {
+void LayerBasedUPRLayout::post_processing_reduce(Hierarchy &H, int &i, node s, int minIdx, int maxIdx, NodeArray<bool> &markedNodes) {
 	const Level &lvl = H[i];
 
 	if (maxIdx-minIdx+1 == lvl.size()) {
@@ -1134,6 +1124,8 @@ void LayerBasedUPRLayout::callSimple(GraphAttributes &GA, adjEntry adj)
 			stRank[eSt->source()] = ++r;
 			st2GC[eSt->source()] = (*it)->source();
 
+			node v = eSt->source();
+			node vGC = (*it)->source();
 			OGDF_ASSERT(stRank[eSt->source()] == H.rank((*it)->source()));
 		}
 	}

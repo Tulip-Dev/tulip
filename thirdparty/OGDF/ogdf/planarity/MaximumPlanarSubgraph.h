@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -86,24 +76,24 @@ protected:
 #else // Use_ABACUS
 
 public:
-    //construction
+    // Construction
     MaximumPlanarSubgraph() {}
-    //destruction
+    // Destruction
     virtual ~MaximumPlanarSubgraph() {}
     
 protected:
-    //implements the Planar Subgraph interface
-    //for the given graph, a clustered graph with only
-    //a single root cluster is generated
-    // computes set of edges delEdges, which have to be deleted
-    // in order to get a planar subgraph; edges in preferedEdges
-    // should be contained in planar subgraph
-    // Status: pCost and preferedEdges are ignored so far
+    // Implements the Planar Subgraph interface.
+    // For the given graph \a G, a clustered graph with only
+    // a single root cluster is generated.
+    // Computes set of edges delEdges, which have to be deleted
+    // in order to get a planar subgraph; edges in preferredEdges
+    // should be contained in planar subgraph.
+    // Status: pCost and preferredEdges are ignored in current implementation.
     virtual ReturnType doCall(const Graph &G,
-            const List<edge> &preferedEdges,
+            const List<edge> &preferredEdges,
             List<edge> &delEdges,
             const EdgeArray<int>  *pCost,
-            bool preferedImplyPlanar);
+            bool preferredImplyPlanar);
 };
 
 #endif // USE_ABACUS

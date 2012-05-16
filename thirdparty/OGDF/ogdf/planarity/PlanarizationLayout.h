@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -82,7 +72,7 @@ namespace ogdf {
  *   - Calling the algorithm for a usual graph (call with GraphAttributes).
  *   - Calling the algorithm for a mixed-upward graph (e.g., a UML class
  *     diagram; call with UMLGraph); a simplified version is provided by
- *     simpleCall().
+ *     simpleCall.
  *   - Calling the algorithm for simultaneous drawing.
  * 
  * If the planarization layout algorithm shall be used for simultaneous drawing,
@@ -163,12 +153,12 @@ public:
 	 */
 
 	/**
-	 * \brief Calls planarization layout for graph attributes \a GA and computes a layout.
+	 * \brief Calls planarization layout for GraphAttributes \a GA and computes a layout.
 	 * \pre The graph has no self-loops.
 	 * @param GA is the input graph and will also be assigned the layout information.
 	 */
 	void call(GraphAttributes &GA) {
-		doSimpleCall(&GA, 0);
+		doSimpleCall(&GA);
 	}
 
 	/**
@@ -180,7 +170,35 @@ public:
 
 	//! Simple call function that does not care about cliques etc.
 	void simpleCall(UMLGraph &umlGraph) {
-		doSimpleCall(&umlGraph, &umlGraph);
+		//this simple call method does not care about any special treatments
+		//of subgraphs, layout informations etc., therefore we save the
+		//option status and set them back later on
+		//cliques are only handled for UMLGraphs, so it is save to 
+		//only set this value here and not in the GraphAtrtibutes interface method.
+		bool l_saveCliqueHandling = m_processCliques;
+		m_processCliques = false;
+
+		//---------------------------------------------------
+		// preprocessing: insert a merger for generalizations
+		
+		preProcess(umlGraph);
+		umlGraph.insertGenMergers();
+		
+		doSimpleCall(&umlGraph);
+
+		umlGraph.undoGenMergers();
+
+		umlGraph.removeUnnecessaryBendsHV();
+
+		postProcess(umlGraph);
+
+		m_processCliques = l_saveCliqueHandling;
+	}
+
+	void simpleCall(GraphAttributes & GA)
+	{
+		doSimpleCall(&GA);
+		GA.removeUnnecessaryBendsHV();
 	}
 
 	//! Call for simultaneous drawing with graph \a umlGraph.
@@ -257,7 +275,7 @@ public:
 		m_cliqueSize = max(i, 3);
 	}
 
-	//set the option field for the orthogonal layouter
+	//set the option field for the planar layouter
 	void setLayouterOptions(int ops)
 	{m_planarLayouter.get().setOptions(ops);}
 
@@ -350,7 +368,7 @@ public:
 	//! @}
 
 protected:
-	void doSimpleCall(GraphAttributes *pGA, UMLGraph *pUmlGraph);
+	void doSimpleCall(GraphAttributes *pGA);
 
 	//sorts the additional nodes for piecewise insertion
 	void sortIncrementalNodes(List<node> &addNodes, const NodeArray<bool> &fixedNodes);

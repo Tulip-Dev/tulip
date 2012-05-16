@@ -1,15 +1,15 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
  * \brief Declaration of simple graph loaders.
  * 
- * \author Markus Chimani, Carsten Gutwenger
+ * \author Markus Chimani, Carsten Gutwenger, Karsten Klein
  * 
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -56,6 +46,8 @@
 #define OGDF_SIMPLE_GRAPH_LOAD_H
 
 #include <ogdf/basic/Graph.h>
+#include <ogdf/basic/GridLayout.h>
+
 
 namespace ogdf { 
 
@@ -78,18 +70,38 @@ OGDF_EXPORT bool loadRomeGraphStream(Graph &G, std::istream& fileStream);
  */
 OGDF_EXPORT bool loadRomeGraph(Graph &G, const char *fileName);
 
-//! Loads a graph in a simple format
+/** \brief Reads the chaco (graph partitioning) file format (usually a .graph file)
+* from a stream.
+*
+* The first line contains two integers separated by spacing: #nodes #edges
+* A third entry indicates node and edge weights (not supported here yet).
+* Each of the following #nodes lines from 1 to #nodes contains the space
+* separated index list of the adjacent nodes for the node associated with
+* that line (where node indices are from 1 to n).
+* Macro SIMPLE_LOAD_BUFFER_SIZE defines the length of the line read buffer
+* and should be adjusted according to the maximum read size.
+*/
+OGDF_EXPORT bool loadChacoStream(Graph &G, std::istream& fileStream);
 
+//! Reads the chaco (graph partitioning) file format (usually a .graph file).
+/**
+* Uses loadChacoStream internally.
+*/
+OGDF_EXPORT bool loadChacoGraph(Graph &G, const char *fileName);
+
+//! Loads a graph in a simple format
 /**
  * Simple format has a leading line stating the name of the graph
- * and a following line stating the size of the graph
+ * and a following line stating the size of the graph.
+ *
  * *BEGIN unknown_name.numN.numE
  * *GRAPH numN numE UNDIRECTED UNWEIGHTED
  * */
 OGDF_EXPORT bool loadSimpleGraphStream(Graph &G, std::istream& fileStream);
-//! Loads a graph in the simple format from the specified file. This
-// format is used e.g. for the graphs from Petra Mutzels Ph.D. Thesis.
+
+//! Loads a graph in the simple format from the specified file. 
 /**
+ * This format is used e.g. for the graphs from Petra Mutzel's Ph.D. Thesis.
  * Uses loadSimpleGraphStream internally; see there for details.
  */
 OGDF_EXPORT bool loadSimpleGraph(Graph &G, const char *fileName);
@@ -161,6 +173,31 @@ OGDF_EXPORT bool loadPlaHypergraphStream(Graph &G, List<node>& hypernodes, List<
  */
 OGDF_EXPORT bool loadPlaHypergraph(Graph &G, List<node>& hypernodes, List<edge>* shell, const char *fileName);
 
+
+//! Loads graph \a G with subgraph defined by \a delEdges from file \a fileName.
+OGDF_EXPORT bool loadEdgeListSubgraph(Graph &G, List<edge> &delEdges, const char *fileName);
+
+//! Loads graph \a G with subgraph defined by \a delEdges from stream \a is.
+OGDF_EXPORT bool loadEdgeListSubgraph(Graph &G, List<edge> &delEdges, istream &is);
+
+//! Writes graph \a G with subgraph defined by \a delEdges to file \a fileName.
+OGDF_EXPORT bool saveEdgeListSubgraph(const Graph &G, const List<edge> &delEdges, const char *fileName);
+
+//! Writes graph \a G with subgraph defined by \a delEdges to stream \a os.
+OGDF_EXPORT bool saveEdgeListSubgraph(const Graph &G, const List<edge> &delEdges, ostream &os);
+
+
+//! Loads a graph \a G with layout \a gl stored in GD-Challenge-format from file \a fileName.
+OGDF_EXPORT bool loadChallengeGraph(Graph &G, GridLayout &gl, const char *fileName);
+
+//! Loads a graph \a G with layout \a gl stored in GD-Challenge-format from stream \a is.
+OGDF_EXPORT bool loadChallengeGraph(Graph &G, GridLayout &gl, istream &is);
+
+//! Writes graph \a G with layout \a gl in GD-Challenge-format to file \a fileName.
+OGDF_EXPORT bool saveChallengeGraph(const Graph &G, const GridLayout &gl, const char *fileName);
+
+//! Writes graph \a G with layout \a gl in GD-Challenge-format to stream \a os.
+OGDF_EXPORT bool saveChallengeGraph(const Graph &G, const GridLayout &gl, ostream &os);
 
 
 }

@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2306 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $
+ *   $Date: 2012-05-08 11:32:55 +0200 (Tue, 08 May 2012) $
  ***************************************************************/
 
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  *
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -69,8 +59,8 @@ void MedianPlacer::placeOneNode(MultilevelGraph &MLG)
 {
 	node merged = MLG.undoLastMerge();
 	int i = 0;
-	std::vector<float> xVector;
-	std::vector<float> yVector;
+	std::vector<double> xVector;
+	std::vector<double> yVector;
 	adjEntry adj;
 	forall_adj(adj, merged) {
 		i++;
@@ -79,8 +69,8 @@ void MedianPlacer::placeOneNode(MultilevelGraph &MLG)
 	}
 	std::nth_element(xVector.begin(), xVector.begin()+(i/2), xVector.end());
 	std::nth_element(yVector.begin(), yVector.begin()+(i/2), yVector.end());
-	float x = xVector[i/2];
-	float y = yVector[i/2];
+	double x = xVector[i/2];
+	double y = yVector[i/2];
 	if (i % 2 == 0) {
 		std::nth_element(xVector.begin(), xVector.begin()+(i/2)-1, xVector.end());
 		std::nth_element(yVector.begin(), yVector.begin()+(i/2)-1, yVector.end());

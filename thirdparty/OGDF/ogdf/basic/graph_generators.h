@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -87,6 +77,14 @@ OGDF_EXPORT bool randomSimpleGraph(Graph &G, int n, int m);
  */
 OGDF_EXPORT void randomBiconnectedGraph(Graph &G, int n, int m);
 
+//! Creates a connected (simple) planar (embedded) graph.
+/**
+ * @param G is assigned the generated graph.
+ * @param n is the number of nodes of the generated graph.
+ * @param m is the number of edges of the generated graph.
+ */
+OGDF_EXPORT void planarConnectedGraph(Graph &G, int n, int m);
+
 //! Creates a planar biconnected (embedded) graph.
 /**
  * @param G is assigned the generated graph.
@@ -101,7 +99,6 @@ OGDF_EXPORT void planarBiconnectedGraph(Graph &G, int n, int m, bool multiEdges 
 /*   @param n is the max. number of nodes in each biconencted component
  *   @param m is the max. number of edges in each biconnected component
  *   @param b is the number of biconnected components
- * 
  */
 OGDF_EXPORT void planarCNBGraph(Graph &G, int n, int m,	int b);
 
@@ -175,6 +172,13 @@ OGDF_EXPORT void planarTriconnectedGraph(Graph &G, int n, int m);
  */
 OGDF_EXPORT void planarTriconnectedGraph(Graph &G, int n, double p1, double p2);
 
+//! Creates a random tree (simpler version.
+/**
+ * @param G is assigned the tree.
+ * @param n is the number of nodes of the tree.
+ */
+OGDF_EXPORT void randomTree(Graph& G, int n);
+
 //! Creates a random tree.
 /**
  * @param G is assigned the tree.
@@ -183,6 +187,18 @@ OGDF_EXPORT void planarTriconnectedGraph(Graph &G, int n, double p1, double p2);
  * @param maxWidth is the maximal allowed width of a level; 0 means no restriction.
  */
 OGDF_EXPORT void randomTree(Graph &G, int n, int maxDeg, int maxWidth);
+
+//! Creates a regular tree.
+/**
+ * @param G is assigned the tree.
+ * @param n is the number of nodes of the tree.
+ * @param children is the number of children per node. root has index 0, the next level has
+ * indizes 1...children, the children of node 1 have indizes children+1...2*children, etc.
+ * if number of nodes does not allow a regular node, the "last" node will have fewer children.
+ */
+void regularTree(Graph& G, int n, int children);
+
+
 
 //! Creates a random hierarchical graph.
 /**
@@ -224,6 +240,23 @@ OGDF_EXPORT void randomClusterPlanarGraph(ClusterGraph &C,Graph &G,int cNum);
  */
 OGDF_EXPORT void randomClusterGraph(ClusterGraph &C,Graph &G,int cNum);
 
+
+//! Assigns a specified cluster-structure to a given graph \a G, and assigns vertices to clusters.
+/**
+ * This function is called with a graph \a G and the root of a second graph, resembling a tree,
+ * that gives the cluster structure. Then, the vertices of G are randomly assigned to the clusters,
+ * where we can guarantee that any leaf-cluster has (on average) \a moreInLeaves -times more vertices
+ * than a non-leaf cluster. (E.g. if \a moreInLeaves = 5, any leaf will contain roughly 5 times more vertices than
+ * an inner cluster)
+ * @param C is a cluster graph for \a G, to be assigned the solution.
+ * @param G is the input graph.
+ * @param root is a node in some other graph (say \a T). \a T is a tree that we will consider rooted at \a root. \a T is the
+ * pattern for the cluster hierarchy.
+ * \pre \a G contains at least twice as many nodes as \a T has leaves.
+ */
+OGDF_EXPORT void randomClusterGraph(ClusterGraph& C, const Graph& G, const node root, int moreInLeaves);
+
+
 //! Creates the complete graph \f$K_n\f$.
 /**
  * @param G is assigned the generated graph.
@@ -260,6 +293,23 @@ OGDF_EXPORT void cubeGraph(Graph &G, int n);
  */
 OGDF_EXPORT void suspension(Graph &G, int s);
 
+//! Creates a (toroidal) grid graph on \it n x \it m nodes.
+/**
+ * @param G is assigned the generated graph.
+ * @param n is the number of nodes on first axis.
+ * @param m is the number of nodes on second axis.
+ * @param loopN if the grid is cyclic on first axis
+ * @param loopN if the grid is cyclic on second axis
+ */
+OGDF_EXPORT void gridGraph(Graph &G, int n, int m, bool loopN, bool loopM);
+
+//! Creates a generalized Petersen graph.
+/**
+ * @param G is assigned the generated graph.
+ * @param n is the number of nodes on outer cycle.
+ * @param m is the number of jumps.
+ */
+OGDF_EXPORT void petersenGraph(Graph &G, int n, int m);
 
 //! Creates a random (simple) directed graph.
 /** 

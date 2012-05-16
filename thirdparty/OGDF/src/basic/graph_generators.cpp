@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -481,6 +471,86 @@ void planarTriconnectedGraph(Graph &G, int n, int m)
 	}
 }
 
+void planarConnectedGraph(Graph &G, int n, int m)
+{
+	if (n < 1) n = 1;
+	if (m < n-1) m = n-1;
+	if (m > 3*n-6) m = 3*n-6;
+
+	G.clear();
+	Array<node> nodes(n);
+
+	// we start with a triangle
+	nodes[0] = G.newNode();
+
+	//build tree
+	int i;
+	for(i=1; i<n; ++i) {
+		node on = nodes[randomNumber(0,i-1)];
+		node nn = nodes[i] = G.newNode();
+		G.firstNode()->degree();
+		if(on->degree() > 1) {
+			adjEntry adj = on->firstAdj();
+			for(int fwd = randomNumber(0,on->degree()-1); fwd>0; --fwd)
+				adj = adj->succ();
+			G.newEdge(nn, adj);
+		} else {
+			G.newEdge(nn, on);
+		}
+	}
+
+	List<face> bigFaces; // not a triangle
+
+	CombinatorialEmbedding E(G);
+	bigFaces.pushBack(E.firstFace());
+	for(i = m-n+1; i-->0;) {
+		ListIterator<face> fi = bigFaces.chooseIterator();
+		face f = *fi;
+		bigFaces.del(fi);
+
+		int fd = f->size();
+
+		List<adjEntry> fnodes;
+		adjEntry adj;
+		forall_face_adj(adj, f) {
+			fnodes.pushBack(adj);
+		}
+		fnodes.permute();
+		adjEntry adj1,adj2;
+		bool okay = false;
+		do {
+			adj1 = fnodes.popFrontRet();
+			node n1 = adj1->theNode();
+			forall_listiterators(adjEntry, it, fnodes) {
+				adj2 = *it;
+				node n2 = adj2->theNode();
+
+				if(n1==n2 || adj1->faceCyclePred() == adj2 || adj2->faceCyclePred() == adj1) {
+					continue;
+				}
+				edge e;
+				okay = true;
+				forall_adj_edges(e,n1) {
+					if(e->opposite(n1) == n2) {
+						okay = false;
+						break;
+					};
+				}
+				if(okay) break;
+			}
+		} while(!okay);
+
+		edge ne = E.splitFace(adj1,adj2);
+
+		face f1 = E.rightFace(ne->adjSource());
+		face f2 = E.rightFace(ne->adjTarget());
+
+		if (f1->size() > 3) bigFaces.pushBack(f1);
+		if (f2->size() > 3) bigFaces.pushBack(f2);
+	}
+}
+
+
 void planarBiconnectedGraph(Graph &G, int n, int m, bool multiEdges)
 {
 	if (n < 3) n = 3;
@@ -908,6 +978,80 @@ void bfs(node v,SList<node> &newCluster,NodeArray<bool> &visited,ClusterGraph &C
 		bfs(bfsL.popFrontRet(),newCluster,visited,C);
 }
 
+
+void randomTree(Graph& G, int n) {
+	G.clear();
+	G.newNode();
+	for(int i=1; i<n; i++) {
+		node on = G.chooseNode();
+		G.newEdge(on, G.newNode());
+	}
+}
+
+void regularTree(Graph& G, int n, int children) {
+	G.clear();
+	node* id2node = new node[n];
+	id2node[0] = G.newNode();
+	for(int i=1; i<n; i++) {
+		G.newEdge(id2node[(i-1)/children], id2node[i] = G.newNode());
+	}
+	delete[] id2node;
+}
+
+void createClustersHelper(ClusterGraph& C, const node curr, const node pred, const cluster predC, List<cluster>& internal, List<cluster>& leaves) {
+	cluster currC = predC ? C.createEmptyCluster(predC) : C.rootCluster();
+	if(curr->degree()==1 && pred!=0) {
+		leaves.pushBack(currC);
+	} else {
+		edge e;
+		forall_adj_edges(e,curr) {
+			node next = e->opposite(curr);
+			if(next == pred) continue;
+			createClustersHelper(C,  next,curr,currC,  internal,leaves);
+		}
+		internal.pushBack(currC);
+	}
+}
+
+void randomClusterGraph(ClusterGraph& C, const Graph& G, const node root, int moreInLeaves) {
+	C.init(G);
+
+	// Build cluster structure (and store which clusters are internal and which are leaves)
+	List<cluster> internal;
+	List<cluster> leaves;
+	createClustersHelper(C,  root,0,0,  internal,leaves);
+
+	// Assign nodes to clusters
+	List<node> nodes;
+	G.allNodes<List<node> >(nodes);
+
+	// Step 1: Ensure two node per leaf-cluster
+	nodes.permute();
+	forall_listiterators(cluster, it, leaves) {
+		C.reassignNode(nodes.popFrontRet(),*it);
+		C.reassignNode(nodes.popFrontRet(),*it);
+	}
+
+	// Step 2: Distribute the other nodes
+	int n = G.numberOfNodes();
+	int numI = internal.size();
+	int numL = leaves.size();
+	double chanceForInternal = ( numI*n/double(numL*moreInLeaves+numI) ) / double(n-2*numL);
+	// a leaf-cluster should have (on average) moreInLeaves-times as many vertices as in internal-cluster.
+	// #verticesInInternalCluster = n / (numL*moreInLeaves + numI)
+	// #nodesToDistribute = n - 2*numL
+	// => chance that a node goes into an internal cluster = numI * #verticesInInternalCluster / (n-2*numL)
+	while(!nodes.empty()) {
+		cluster cl;
+		if(randomDouble(0,1) < chanceForInternal) {
+			cl = * internal.get(randomNumber(0,internal.size()-1));
+		} else {
+			cl = * leaves.get(randomNumber(0,leaves.size()-1));
+		}
+		C.reassignNode(nodes.popFrontRet(),cl);
+	}
+}
+
 void completeGraph(Graph &G, int n)
 {
 	G.clear();
@@ -989,6 +1133,53 @@ void cubeGraph(Graph &G, int n)
 	}	
 }
 
+void gridGraph(Graph &G, int n, int m, bool loopN, bool loopM) {
+	G.clear();
+	Array<node> front(0,n-1,0);
+	Array<node> fringe(0,n-1,0);
+	node first = 0;
+	node last = 0;
+	node cur;
+	for(int j=m; j-->0;) {
+		for(int i=n; i-->0;) {
+			cur = G.newNode();
+			if(!last) first=cur;
+			else G.newEdge(last,cur);
+			if(fringe[i]) G.newEdge(fringe[i],cur);
+			else front[i] = cur;
+			fringe[i] = cur;
+			last = cur;
+		}
+		if(loopN)
+			G.newEdge(last, first);
+		last = 0;
+	}
+	if(loopM) {
+		for(int i=n; i-->0;) {
+			G.newEdge(fringe[i],front[i]);
+		}
+	}
+}
+
+void petersenGraph(Graph &G, int n, int m) {
+	G.clear();
+	Array<node> inner(0, n-1, 0);
+	node first = 0;
+	node last = 0;
+	for(int i=n; i-->0;) {
+		node outn = G.newNode();
+		node inn = G.newNode();
+		G.newEdge(outn,inn);
+		inner[i]=inn;
+		if(!last) first=outn;
+		else G.newEdge(last,outn);
+		last = outn;
+	}
+	G.newEdge(last, first);
+	for(int i=n; i-->0;) {
+		G.newEdge(inner[i],inner[(i+m)%n]);
+	}
+}
 
 void randomDiGraph(Graph &G, int n, double p) {
 	
