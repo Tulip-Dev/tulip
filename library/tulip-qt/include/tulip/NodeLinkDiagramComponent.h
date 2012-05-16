@@ -85,7 +85,7 @@ protected :
   void checkAlgorithmResult();
 
 protected slots:
-  void showDialog(QAction*);
+//  void showDialog(QAction*);
   void gridOptions();
 
 public slots:

@@ -31,14 +31,11 @@
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/RenderingParametersDialog.h"
 #include "tulip/LayerManagerWidget.h"
-#include "tulip/AugmentedDisplayDialog.h"
 #include "tulip/GridOptionsWidget.h"
-
-//#include "tulip/BaseGraphicsViewComponentMacro.h"
 
 namespace tlp {
 
-VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0");
+VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0")
 //GRAPHICSVIEWEXTENSION(NodeLinkDiagramComponentGraphicsView, "Node Link Diagram graphics view","Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram GV", "1.0");
 
 //==================================================
@@ -60,7 +57,6 @@ QWidget *NodeLinkDiagramComponent::construct(QWidget *parent) {
   renderingParametersDialog=new RenderingParametersDialog();
   connect(renderingParametersDialog,SIGNAL(viewNeedDraw()),this, SLOT(drawAfterRenderingParametersChange()));
   layerManagerWidget=new LayerManagerWidget();
-  augmentedDisplayDialogAction = dialogMenu->addAction("Augmented Display");
   //Options Menu
   optionsMenu=new QMenu("Options");
   actionTooltips=optionsMenu->addAction("Tooltips");
@@ -521,35 +517,35 @@ void NodeLinkDiagramComponent::centerView() {
   draw();
 }
 //==================================================
-void NodeLinkDiagramComponent::showDialog(QAction* action) {
-  GlMainView::showDialog(action);
+//void NodeLinkDiagramComponent::showDialog(QAction* action) {
+//  GlMainView::showDialog(action);
 
-  std::string name(action->text().toStdString());
+//  std::string name(action->text().toStdString());
 
-  if(name =="Augmented Display") {
-    Graph *graph=mainWidget->getGraph();
-    AugmentedDisplayDialog dialog(widget,graph,"NodeLinkDiagramComponent");
+//  if(name =="Augmented Display") {
+//      Graph *graph=mainWidget->getGraph();
+//      AugmentedDisplayDialog dialog(widget,graph,"NodeLinkDiagramComponent");
 
-    if(dialog.exec()==QDialog::Accepted) {
-      std::vector<std::string> toRemove;
-      dialog.getRemovedList(toRemove);
-      DataSet nldcDataSet;
-      graph->getAttribute("NodeLinkDiagramComponent",nldcDataSet);
+//      if(dialog.exec()==QDialog::Accepted) {
+//        std::vector<std::string> toRemove;
+//        dialog.getRemovedList(toRemove);
+//        DataSet nldcDataSet;
+//        graph->getAttribute("NodeLinkDiagramComponent",nldcDataSet);
 
-      for(std::vector<std::string>::iterator it=toRemove.begin(); it!=toRemove.end(); ++it) {
-        DataSet data=algorithmInfoDataSet[*it];
-        std::string layerName;
-        data.get("layer",layerName);
-        mainWidget->getScene()->getLayer(layerName)->deleteGlEntity(*it);
-        algorithmInfoDataSet.erase(*it);
-        nldcDataSet.remove(*it);
-      }
+//        for(std::vector<std::string>::iterator it=toRemove.begin(); it!=toRemove.end(); ++it) {
+//          DataSet data=algorithmInfoDataSet[*it];
+//          std::string layerName;
+//          data.get("layer",layerName);
+//          mainWidget->getScene()->getLayer(layerName)->deleteGlEntity(*it);
+//          algorithmInfoDataSet.erase(*it);
+//          nldcDataSet.remove(*it);
+//        }
 
-      graph->setAttribute("NodeLinkDiagramComponent",nldcDataSet);
-      mainWidget->draw();
-    }
-  }
-}
+//        graph->setAttribute("NodeLinkDiagramComponent",nldcDataSet);
+//        mainWidget->draw();
+//      }
+//    }
+//}
 //==================================================
 void NodeLinkDiagramComponent::gridOptions() {
   if (gridOptionsWidget == 0)
