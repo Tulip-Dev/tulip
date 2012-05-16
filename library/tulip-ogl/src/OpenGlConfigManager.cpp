@@ -47,7 +47,11 @@ OpenGlConfigManager::OpenGlConfigManager():
 
 void OpenGlConfigManager::initGlew() {
   if (!glewIsInit) {
-    glewIsInit = (glewInit() == GLEW_OK);
+    #ifdef __APPLE__
+      glewIsInit = true; // glewInit() causes an invalid memory access on Mac plateform and OpenGL works fine without calling it
+    #else
+      glewIsInit = (glewInit() == GLEW_OK);
+    #endif
   }
 }
 

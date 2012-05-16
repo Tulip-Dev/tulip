@@ -90,51 +90,6 @@ void updatePlateform(char* tulipPath) {
   }
 }
 
-void checkTulipRunning() {
-  // There can be only one tulip_agent running at a time on the same system.
-  // To ensure that no agent is already running, we check the existence of an org.labri.Tulip service on the session bus.
-  if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.labri.Tulip").value()) {
-    qWarning("Tulip agent is already running. Note that you can only have one at a time on your system. Please check your system tray to display the tulip agent window.");
-    QMessageBox::critical(0,QObject::trUtf8("Error when starting Tulip"),
-                          QObject::trUtf8("Tulip agent is already running. Note that you can only have one at a time on your system. Please check your system tray to display the tulip agent window."));
-    exit(1);
-  }
-}
-
-#if defined(__APPLE__)
-pid_t appleInit() {
-  // allows to load qt imageformats plugin
-  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
-
-  // Switch the current directory to ensure that libdbus is loaded
-  QString currentPath = QDir::currentPath();
-  QDir::setCurrent(QApplication::applicationDirPath() + "/../Frameworks");
-
-  // Manually run the dbus daemon and retrieve infos
-  QProcess dbus_daemon;
-  dbus_daemon.setProcessChannelMode(QProcess::MergedChannels);
-  dbus_daemon.start(QApplication::applicationDirPath() + "/dbus-launch");
-  // Retrieve session bus address and update environment variables
-  dbus_daemon.waitForReadyRead(-1);
-  QRegExp sessionBusAddressRegexp("^DBUS_SESSION_BUS_ADDRESS\\=(unix\\:[^\\n\\r]*).*");
-
-  if (sessionBusAddressRegexp.exactMatch(dbus_daemon.readLine()))
-    setenv("DBUS_SESSION_BUS_ADDRESS",sessionBusAddressRegexp.cap(1).toStdString().c_str(),1);
-
-  // Retrieve dbus_daemon PID to be able to kill it when application ends.
-  QRegExp dbusPidRegexp("DBUS_SESSION_BUS_PID\\=([0-9]*).*");
-  pid_t dbusPid = 0;
-
-  if (dbusPidRegexp.exactMatch(dbus_daemon.readLine()))
-    dbusPid = dbusPidRegexp.cap(1).toLong();
-
-  checkTulipRunning();
-  QDir::setCurrent(currentPath);
-  return dbusPid;
-}
-#endif
-
-
 int main(int argc, char **argv) {
   start_crash_handler();
   QApplication tulip_agent(argc, argv);
@@ -142,16 +97,16 @@ int main(int argc, char **argv) {
   QLocale::setDefault(QLocale(QLocale::English));
 
   // revert previous remote locations
-  foreach(const QString& remoteLocation, TulipSettings::instance().remoteLocations())
-  tlp::PluginManager::addRemoteLocation(remoteLocation);
-
+  foreach(const QString& remoteLocation, TulipSettings::instance().remoteLocations()) {
+    tlp::PluginManager::addRemoteLocation(remoteLocation);
+  }
   updatePlateform(argv[0]);
 
 #if defined(__APPLE__)
-  pid_t dbusPid = appleInit();
-#else
-  checkTulipRunning();
+  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../");
+  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../lib/");
 #endif
+  checkTulipRunning();
 
   tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   //TODO find a cleaner way to achieve this (QDesktopServices is part of QtGui, so it does not belong in TlpTools)
@@ -190,12 +145,6 @@ int main(int argc, char **argv) {
 
   mainWindow->show();
   int result = tulip_agent.exec();
-
-#if defined(__APPLE__)
-  // manually killing D-Bus process
-  qWarning() << "Terminating D-Bus at PID: " << dbusPid;
-  kill(dbusPid,SIGKILL);
-#endif
 
 #ifdef MEMORYCHECKER_ON
   memory_checker_print_report();
