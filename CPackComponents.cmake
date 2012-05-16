@@ -8,7 +8,6 @@ BUNDLE_DEFINE_COMPONENT(quazip "quazip" "Qt/C++ wrapper for ZIP/UNZIP package" "
 BUNDLE_DEFINE_COMPONENT(yajl "yajl" "YAJL is a small event-driven (SAX-style) JSON parser written in ANSI C, and a small validating JSON generator" "thirdparty")
 BUNDLE_DEFINE_COMPONENT(model_tests "Qt Model tester" "Validator library for Qt model framework" "thirdparty")
 BUNDLE_DEFINE_COMPONENT(qxt "qxt" "LibQxt is an extension library for Qt providing a suite of cross-platform utility classes to add functionality not readily available in the Qt toolkit by Trolltech, a Nokia company." "thirdparty")
-BUNDLE_DEFINE_COMPONENT(dbus "DBus" "D-Bus is a message bus system, a simple way for applications to talk to one another." "thirdparty")
 BUNDLE_DEFINE_COMPONENT(runtime "Runtime" "Runtime components for the MinGW framework" "thirdparty")
 BUNDLE_DEFINE_COMPONENT(iconv "iconv" "The GNU iconv library" "thirdparty")
 BUNDLE_DEFINE_COMPONENT(zlib "zlib" "A Massively Spiffy Yet Delicately Unobtrusive Compression Library" "thirdparty")

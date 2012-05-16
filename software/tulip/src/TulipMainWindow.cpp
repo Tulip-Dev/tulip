@@ -82,9 +82,9 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   connect(_systemTrayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(systemTrayRequest(QSystemTrayIcon::ActivationReason)));
   connect(_systemTrayIcon,SIGNAL(messageClicked()),this,SLOT(systemTrayMessageClicked()));
   connect(_ui->pages,SIGNAL(currentChanged(int)),this,SLOT(pageSwitched(int)));
-  connect(_ui->welcomePage,SIGNAL(openPerspective(QString)),this,SLOT(CreatePerspective(QString)));
-  connect(_ui->welcomePage,SIGNAL(openProject()),this,SLOT(ShowOpenProjectWindow()));
-  connect(_ui->welcomePage,SIGNAL(openFile(QString)),this,SLOT(OpenProject(QString)));
+  connect(_ui->welcomePage,SIGNAL(openPerspective(QString)),this,SLOT(createPerspective(QString)));
+  connect(_ui->welcomePage,SIGNAL(openProject()),this,SLOT(showOpenProjectWindow()));
+  connect(_ui->welcomePage,SIGNAL(openFile(QString)),this,SLOT(openProject(QString)));
   _systemTrayIcon->show();
 }
 
@@ -136,52 +136,10 @@ PluginsCenter *TulipMainWindow::pluginsCenter() const {
   return _ui->pluginsPage;
 }
 
-
-// Methods and properties coming from the D-Bus implementation
-qlonglong TulipMainWindow::pid() const {
-  return QApplication::applicationPid();
+void TulipMainWindow::createPerspective(const QString &name) {
+  createPerspective(name,QVariantMap());
 }
-
-void TulipMainWindow::ShowAboutPage() {
-  if (!isVisible())
-    setVisible(true);
-
-  raise();
-  _ui->pages->setCurrentWidget(_ui->aboutPage);
-}
-
-void TulipMainWindow::ShowPluginsCenter() {
-  if (!isVisible())
-    setVisible(true);
-
-  raise();
-  _ui->pages->setCurrentWidget(_ui->pluginsPage);
-}
-
-void TulipMainWindow::ShowWelcomeScreen() {
-  if (!isVisible())
-    setVisible(true);
-
-  raise();
-  _ui->pages->setCurrentWidget(_ui->welcomePage);
-}
-
-void TulipMainWindow::AddPluginRepository(const QString &url) {
-  _ui->pluginsPage->addRemoteLocation(url);
-}
-
-void TulipMainWindow::RemovePluginRepository(const QString &url) {
-  _ui->pluginsPage->removeRemoteLocation(url);
-}
-
-void TulipMainWindow::CreatePerspective(const QString &name,const QVariantMap &parameters) {
-  TulipPerspectiveProcessHandler::instance().createPerspective(name,"",parameters);
-}
-void TulipMainWindow::CreatePerspective(const QString &name) {
-  CreatePerspective(name,QVariantMap());
-}
-
-void TulipMainWindow::ShowOpenProjectWindow() {
+void TulipMainWindow::showOpenProjectWindow() {
   setVisible(true);
   QString filePath =
     QFileDialog::getOpenFileName(this,
@@ -192,10 +150,9 @@ void TulipMainWindow::ShowOpenProjectWindow() {
   if (filePath.isEmpty())
     return;
 
-  OpenProject(filePath);
+  openProject(filePath);
 }
-
-void TulipMainWindow::OpenProject(const QString &file) {
+void TulipMainWindow::openProject(const QString &file) {
   tlp::TulipProject *project = tlp::TulipProject::openProject(file);
 
   if (!project->isValid()) {
@@ -204,28 +161,69 @@ void TulipMainWindow::OpenProject(const QString &file) {
     dlg.exec();
 
     if (!dlg.selectedPerspectiveName.isNull())
-      OpenProjectWith(file,dlg.selectedPerspectiveName,QVariantMap());
+      openProjectWith(file,dlg.selectedPerspectiveName,QVariantMap());
   }
   else
-    OpenProjectWith(file, project->perspective(),QVariantMap());
+    openProjectWith(file, project->perspective(),QVariantMap());
 
   delete project;
 }
 
-void TulipMainWindow::OpenProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters) {
+void TulipMainWindow::createPerspective(const QString &name,const QVariantMap &parameters) {
+  TulipPerspectiveProcessHandler::instance().createPerspective(name,"",parameters);
+}
+void TulipMainWindow::openProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters) {
   TulipSettings::instance().addToRecentDocuments(file);
   TulipPerspectiveProcessHandler::instance().createPerspective(perspective,file,parameters);
 }
 
-QStringList TulipMainWindow::GetCompatiblePerspectives(const QString &/*file*/) {
-  return QStringList();
-}
+// Methods and properties coming from the D-Bus implementation
+//qlonglong TulipMainWindow::pid() const {
+//  return QApplication::applicationPid();
+//}
 
-void TulipMainWindow::EnableCrashHandling(const QString &folder, qlonglong pid) {
-  TulipPerspectiveProcessHandler::instance().enableCrashHandling(pid,folder);
-}
+//void TulipMainWindow::ShowAboutPage() {
+//  if (!isVisible())
+//    setVisible(true);
 
-void TulipMainWindow::ShowTrayMessage(const QString &title, const QString &message, uint icon, uint duration) {
+//  raise();
+//  _ui->pages->setCurrentWidget(_ui->aboutPage);
+//}
+
+//void TulipMainWindow::ShowPluginsCenter() {
+//  if (!isVisible())
+//    setVisible(true);
+
+//  raise();
+//  _ui->pages->setCurrentWidget(_ui->pluginsPage);
+//}
+
+//void TulipMainWindow::ShowWelcomeScreen() {
+//  if (!isVisible())
+//    setVisible(true);
+
+//  raise();
+//  _ui->pages->setCurrentWidget(_ui->welcomePage);
+//}
+
+//void TulipMainWindow::AddPluginRepository(const QString &url) {
+//  _ui->pluginsPage->addRemoteLocation(url);
+//}
+
+//void TulipMainWindow::RemovePluginRepository(const QString &url) {
+//  _ui->pluginsPage->removeRemoteLocation(url);
+//}
+
+
+//QStringList TulipMainWindow::GetCompatiblePerspectives(const QString &/*file*/) {
+//  return QStringList();
+//}
+
+//void TulipMainWindow::EnableCrashHandling(const QString &folder, qlonglong pid) {
+//  TulipPerspectiveProcessHandler::instance().enableCrashHandling(pid,folder);
+//}
+
+void TulipMainWindow::showTrayMessage(const QString &title, const QString &message, uint icon, uint duration) {
   if (!_systemTrayIcon)
     return;
 
@@ -234,5 +232,5 @@ void TulipMainWindow::ShowTrayMessage(const QString &title, const QString &messa
 
 void TulipMainWindow::pluginErrorMessage(const QString &message) {
   _currentTrayMessage = PluginErrorMessage;
-  ShowTrayMessage(trUtf8("Error while loading plugins"),message + "\n\n" + trUtf8("Click on this message to see detailed informations"),(uint)QSystemTrayIcon::Critical,10000);
+  showTrayMessage(trUtf8("Error while loading plugins"),message + "\n\n" + trUtf8("Click on this message to see detailed informations"),(uint)QSystemTrayIcon::Critical,10000);
 }

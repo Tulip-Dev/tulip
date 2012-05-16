@@ -58,6 +58,15 @@ public:
 public slots:
   void closeApp();
   void pluginErrorMessage(const QString &message);
+  void showTrayMessage(const QString &title, const QString &message, uint icon, uint duration);
+
+  void createPerspective(const QString &name);
+  void createPerspective(const QString &name, const QVariantMap &parameters);
+
+  void openProject(const QString &file);
+  void openProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters);
+
+  void showOpenProjectWindow();
 
 protected:
   void closeEvent(QCloseEvent *);
@@ -80,27 +89,21 @@ private:
 
   QVector<QObject *> _pageChoosers;
 
-// Methods and properties coming from the D-Bus service implementation
-public: // PROPERTIES
-  Q_PROPERTY(qlonglong pid READ pid)
-  qlonglong pid() const;
+//// Methods and properties coming from the D-Bus service implementation
+//public: // PROPERTIES
+//  Q_PROPERTY(qlonglong pid READ pid)
+//  qlonglong pid() const;
 
-public Q_SLOTS: // METHODS
-  void AddPluginRepository(const QString &url);
-  void CreatePerspective(const QString &name);
-  void CreatePerspective(const QString &name, const QVariantMap &parameters);
-  void EnableCrashHandling(const QString &folder, qlonglong pid);
-  QStringList GetCompatiblePerspectives(const QString &file);
-  void OpenProject(const QString &file);
-  void OpenProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters);
-  void RemovePluginRepository(const QString &url);
-  void ShowAboutPage();
-  void ShowOpenProjectWindow();
-  void ShowPluginsCenter();
-  void ShowTrayMessage(const QString &title, const QString &message, uint icon, uint duration);
-  void ShowWelcomeScreen();
-Q_SIGNALS: // SIGNALS
-  void Terminate();
+//public Q_SLOTS: // METHODS
+//  void AddPluginRepository(const QString &url);
+//  void EnableCrashHandling(const QString &folder, qlonglong pid);
+//  QStringList GetCompatiblePerspectives(const QString &file);
+//  void RemovePluginRepository(const QString &url);
+//  void ShowAboutPage();
+//  void ShowPluginsCenter();
+//  void ShowWelcomeScreen();
+//Q_SIGNALS: // SIGNALS
+//  void Terminate();
 };
 
 class PerspectiveSelectionDialog: public QDialog {

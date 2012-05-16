@@ -90,23 +90,18 @@ public slots:
   }
 
 signals:
-
   void showTulipWelcomeScreen();
-
   void showTulipPluginsCenter();
-
   void showTulipAboutPage();
 
   void createPerspective(QString name, const QVariantMap &parameters = QVariantMap());
 
   void openProject(QString);
-
   void openProjectWith(QString,QString,const QVariantMap &parameters = QVariantMap());
 
   void showOpenProjectWindow();
 
   void addPluginRepository(QString);
-
   void removePluginRepository(QString);
 
   void showTrayMessage(QString title,QString message,uint icon=0,uint duration=10000);
