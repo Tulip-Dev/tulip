@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -602,6 +592,58 @@ bool isTriconnectedPrimitive(const Graph &G, node &s1, node &s2)
 
 
 //--------------------------------------------------------------------------
+// triangulate()
+//--------------------------------------------------------------------------
+void triangulate(Graph &G)
+{
+	OGDF_ASSERT(isSimple(G))
+	
+    CombinatorialEmbedding E(G);
+	
+	OGDF_ASSERT(E.consistencyCheck())
+	
+    node v;
+    edge e;
+    adjEntry adj, succ, succ2, succ3;
+    NodeArray<int> marked(E.getGraph(), 0);
+
+    forall_nodes(v,E.getGraph()) {
+        marked.init(E.getGraph(), 0);
+
+        forall_adj(adj,v) {
+            marked[adj->twinNode()] = 1;
+        }
+
+        // forall faces adj to v
+        forall_adj(adj,v) {
+            succ = adj->faceCycleSucc();
+            succ2 = succ->faceCycleSucc();
+
+            if (succ->twinNode() != v && adj->twinNode() != v) {
+                while (succ2->twinNode() != v) {
+                    if (marked[succ2->theNode()] == 1) {
+                        // edge e=(x2,x4)
+                        succ3 = succ2->faceCycleSucc();
+                        E.splitFace(succ, succ3);
+                    }
+                    else {
+                        // edge e=(v=x1,x3)
+                        e = E.splitFace(adj, succ2);
+                        marked[succ2->theNode()] = 1;
+
+                        // old adj is in wrong face
+                        adj = e->adjSource();
+                    }
+                    succ = adj->faceCycleSucc();
+                    succ2 = succ->faceCycleSucc();
+                }
+            }
+        }
+    }
+}
+
+
+//--------------------------------------------------------------------------
 // isAcyclic(), isAcyclicUndirected(), makeAcyclic(), makeAcyclicByReverse()
 // testing acyclicity, establishing acyclicity
 //--------------------------------------------------------------------------
@@ -809,6 +851,71 @@ void topologicalNumbering(const Graph &G, NodeArray<int> &num)
 			}
 		}
 	}
+}
+
+//---------------------------------------------------------
+// strongComponents()
+// computes number of strong components
+//---------------------------------------------------------
+int strongComponents(const Graph& G, NodeArray<int>& component)
+{
+	if (G.numberOfNodes() == 0)
+		return 0;
+	if (G.numberOfNodes() == 1){
+		component[G.firstNode()] = 0;
+		return 1;
+	}
+	NodeArray<int> pre(G, -1);
+	NodeArray<int> low(G, G.numberOfNodes());
+	BoundedStack<node> S(G.numberOfNodes());
+	int cnt = 0;
+	int scnt = 0;
+	node v;
+	bool first = true;
+	forall_nodes(v, G){
+		if (pre[v] == -1){
+			dfsStrongComponents(G, v, S, pre, low, cnt, scnt, component);
+		}
+	}
+	return scnt;
+}
+
+void dfsStrongComponents(const Graph& G,
+						node w,
+						BoundedStack<node>& S,
+						NodeArray<int>& pre,
+						NodeArray<int>& low,
+						int& cnt,
+						int& scnt,
+						NodeArray<int>& component)
+{
+	S.push(w);
+	int min = cnt;
+	low[w] = cnt;
+	pre[w] = cnt;
+	cnt++;
+	node t;
+	edge e;
+	forall_adj_edges(e, w){
+		if (e->source() == w){
+			t = e->target();
+			if(pre[t] == -1){
+				dfsStrongComponents(G, t, S, pre, low, cnt, scnt, component);
+			}
+			if (low[t] < low[w])
+				min = low[t];
+		}
+	}
+	if (min < low[w]){
+		low[w] = min;
+		return;
+	}
+	do{
+		t = S.pop();
+		component[t] = scnt;
+		low[t] = G.numberOfNodes();
+	}while (t != w);
+	scnt++;
 }
 
 

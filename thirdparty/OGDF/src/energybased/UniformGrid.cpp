@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -481,7 +471,7 @@ bool UniformGrid::crossingTest(const edge e1, const edge e2, const node moved,
 
 #ifdef OGDF_DEBUG
 
-void UniformGrid::markCells(SList<IPoint> &result, ogdf::Array2D<bool> &cells) const {
+void UniformGrid::markCells(SList<IPoint> &result, Array2D<bool> &cells) const {
 		while(!result.empty()) {
 			IPoint p = result.popFrontRet();
 			if(cells.low1() <= p.m_x && cells.high1() >= p.m_x
@@ -574,7 +564,7 @@ void UniformGrid::checkBresenham(IPoint p1, IPoint p2) const {
 	int right = max(max(p1.m_x,p2.m_x),left+1);
 	int bottom = min(p1.m_y,p2.m_y)-1;
 	int top = max(max(p1.m_y,p2.m_y),bottom+1);
-	ogdf::Array2D<bool> cells(left,right,bottom,top,false);
+	Array2D<bool> cells(left,right,bottom,top,false);
 	SList<IPoint> result;
 	ModifiedBresenham(p1,p2,result);
 	cout << "\nList computed by Bresenham:\n" << result;

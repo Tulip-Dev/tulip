@@ -1,9 +1,9 @@
 /*
- * $Revision: 2047 $
+ * $Revision: 2299 $
  * 
  * last checkin:
- *   $Author: klein $ 
- *   $Date: 2010-10-13 17:12:21 +0200 (Wed, 13 Oct 2010) $ 
+ *   $Author: gutwenger $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -22,19 +22,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -590,6 +580,23 @@ public:
 		permute(size());
 	}
 
+	//! Scans the list for the specified element and returns its position in the list, or -1 if not found.
+	int search (const E& e) const {
+		int x = 0;
+		for(SListConstIterator<E> i = begin(); i.valid(); ++i, ++x)
+			if(*i == e) return x;
+		return -1;
+	}
+
+	//! Scans the list for the specified element (using the user-defined comparer) and returns its position in the list, or -1 if not found.
+	template<class COMPARER>
+	int search (const E& e, const COMPARER &comp) const {
+		int x = 0;
+		for(SListConstIterator<E> i = begin(); i.valid(); ++i, ++x)
+			if(comp.equal(*i,e)) return x;
+		return -1;
+	}
+
 protected:
 	void copy(const SListPure<E> &L) {
 		for(SListElement<E> *pX = L.m_head; pX != 0; pX = pX->m_next)
@@ -869,6 +876,17 @@ public:
 	//! Randomly permutes the elements in the list.
 	void permute() {
 		SListPure<E>::permute(m_count);
+	}
+
+	//! Scans the list for the specified element and returns its position in the list, or -1 if not found.
+	int search (const E& e) const {
+		return SListPure<E>::search(e);
+	}
+
+	//! Scans the list for the specified element (using the user-defined comparer) and returns its position in the list, or -1 if not found.
+	template<class COMPARER>
+	int search (const E& e, const COMPARER &comp) const {
+		return SListPure<E>::search(e, comp);
 	}
 
 	OGDF_NEW_DELETE

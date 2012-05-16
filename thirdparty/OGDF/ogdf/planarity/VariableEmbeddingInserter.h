@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
 
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -86,10 +76,23 @@ class OGDF_EXPORT BiconnectedComponent;
 class OGDF_EXPORT VariableEmbeddingInserter : public EdgeInsertionModule
 {
 public:
-	//! Creates an instance of optimal edge inserter.
+	//! Creates an instance of variable embedding edge inserter.
 	VariableEmbeddingInserter();
 
 	~VariableEmbeddingInserter() { }
+
+	/**
+	 * \brief Calls only the postprocessing; assumes that all edges in \a origEdges are already inserted into \a PG.
+	 *
+	 * @param PG is the input planarized representation and will also receive the result.
+	 * @param origEdges is the list of original edges (edges in the original graph
+	 *        of \a PG) that have to be inserted.
+	 * \return the status of the result.
+	 */
+	ReturnType callPostprocessing(PlanRep &PG, const List<edge> &origEdges) {
+		return doCallPostprocessing(PG, origEdges, false, 0, 0, 0);
+	}
+
 
 	/**
 	 *  @name Optional parameters
@@ -146,6 +149,17 @@ private:
 				// is 0 no edges are explicitly forbidden to cross
 		const EdgeArray<unsigned int> *edgeSubGraph); // pointer to array of SubGraphInformation
 	// used in Simultaneous Drawing
+
+	ReturnType doCallPostprocessing(
+		PlanRep &PG,                  // planarized representation
+		const List<edge> &origEdges,     // original edge to be inserted
+		bool forbidCrossingGens,         // frobid crossings between gen's
+		const EdgeArray<int> *costOrig,  // pointer to array of cost of
+	                          // original edges; if pointer is0 all costs are 1
+		const EdgeArray<bool> *forbiddenEdgeOrig, // pointer to array deciding
+				// which original edges are forbidden to cross; if pointer is
+				// is 0 no edges are explicitly forbidden to cross
+		const EdgeArray<unsigned int> *edgeSubGraph); // pointer to array of SubGraphInformation
 
 	edge crossedEdge(adjEntry adj) const;
 	int costCrossed(edge eOrig) const;

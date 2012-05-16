@@ -1,9 +1,9 @@
 /*
- * $Revision: 2014 $
+ * $Revision: 2323 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-08-27 15:49:59 +0200 (Fri, 27 Aug 2010) $ 
+ *   $Date: 2012-05-10 08:35:16 +0200 (Thu, 10 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -18,19 +18,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -59,7 +49,7 @@ const double SpringEmbedderKK::minVal = DBL_MIN;
 const double SpringEmbedderKK::desMinLength = 0.0001;
 
 void SpringEmbedderKK::initialize(GraphAttributes& GA,
-								  NodeArray<dpair>&, 
+								  NodeArray<dpair>& partialDer, 
 								  const EdgeArray<double>& eLength,
 								  NodeArray< NodeArray<double> >& oLength,
 								  NodeArray< NodeArray<double> >& sstrength,
@@ -87,15 +77,15 @@ void SpringEmbedderKK::initialize(GraphAttributes& GA,
 	{	
 		//we use simply BFS n times
 		//TODO experimentally compare speed, also with bintree dijkstra
-#ifdef OGDF_DEBUG
-		double timeUsed;
-		usedTime(timeUsed);
-#endif		
+//#ifdef OGDF_DEBUG
+//		double timeUsed;
+//		usedTime(timeUsed);
+//#endif		
 		maxDist = allpairsspBFS(G, oLength);
-#ifdef OGDF_DEBUG
-		timeUsed = usedTime(timeUsed);
-		cout << "\n******APSP BFS runtime: \n";
-#endif
+//#ifdef OGDF_DEBUG
+//		timeUsed = usedTime(timeUsed);
+//		cout << "\n******APSP BFS runtime: \n";
+//#endif
 	}
 	else
 	{
@@ -148,9 +138,9 @@ void SpringEmbedderKK::initialize(GraphAttributes& GA,
 		
 		
 		L = Lzero / maxDist;
-#ifdef OGDF_DEBUG
-		cout << "Desirable edge length computed: "<<L<<"\n";
-#endif
+//#ifdef OGDF_DEBUG
+//		cout << "Desirable edge length computed: "<<L<<"\n";
+//#endif
 	}//set L != 0
 	//--------------------------------------------------
 	// Having L we can compute the original lengths l_ij
@@ -182,7 +172,7 @@ void SpringEmbedderKK::mainStep(GraphAttributes& GA,
 								NodeArray<dpair>& partialDer, 
 								NodeArray< NodeArray<double> >& oLength,
 								NodeArray< NodeArray<double> >& sstrength,
-								const double)
+								const double maxDist)
 {
 	const Graph &G = GA.constGraph();
 	node v;
@@ -316,7 +306,7 @@ void SpringEmbedderKK::mainStep(GraphAttributes& GA,
           }
         }//while	
 #ifdef OGDF_DEBUG
-        cout << "NodeCount: "<<nodeCount<<"\n";
+//        cout << "NodeCount: "<<nodeCount<<"\n";
 //        forall_nodes(v, G)
 //        {
 //        	cout<<"Counts "<<v->index()<<": "<<nodeCounts[v]<<"\n";
@@ -385,7 +375,7 @@ void SpringEmbedderKK::adaptLengths(const Graph& G,
 	}
 }//adaptLengths
 
-void SpringEmbedderKK::shufflePositions(GraphAttributes&)
+void SpringEmbedderKK::shufflePositions(GraphAttributes& GA)
 {
 //first check if degenerated or
 //just position all on a circle or random layout?
@@ -483,20 +473,20 @@ const double threshold)
 	    }
 	}
 	//debug output
-#ifdef OGDF_DEBUG
-	forall_nodes(v, G)
-	{
-		if (distance[v][v] < 0.0) cerr << "\n###Error in shortest path computation###\n\n";
-	}
-	cout << "Maxdist: "<<maxDist<<"\n";
-	forall_nodes(u, G)
-	{
-	forall_nodes(w, G)
-	{
-//		cout << "Distance " << u->index() << " -> "<<w->index()<<" "<<distance[u][w]<<"\n"; 
-	}
-	}
-#endif
+//#ifdef OGDF_DEBUG
+//	forall_nodes(v, G)
+//	{
+//		if (distance[v][v] < 0.0) cerr << "\n###Error in shortest path computation###\n\n";
+//	}
+//	cout << "Maxdist: "<<maxDist<<"\n";
+//	forall_nodes(u, G)
+//	{
+//	forall_nodes(w, G)
+//	{
+////		cout << "Distance " << u->index() << " -> "<<w->index()<<" "<<distance[u][w]<<"\n"; 
+//	}
+//	}
+//#endif
 	return maxDist;
 }//allpairssp
 
@@ -551,17 +541,17 @@ double SpringEmbedderKK::allpairsspBFS(const Graph& G, NodeArray< NodeArray<doub
 	}
 	
 //debug output
-#ifdef OGDF_DEBUG
-	node u, w;
-	cout << "Maxdist: "<<maxDist<<"\n";
-	forall_nodes(u, G)
-	{
-	forall_nodes(w, G)
-	{
-//		cout << "Distance " << u->index() << " -> "<<w->index()<<" "<<distance[u][w]<<"\n"; 
-	}
-	}
-#endif
+//#ifdef OGDF_DEBUG
+//	node u, w;
+//	cout << "Maxdist: "<<maxDist<<"\n";
+//	forall_nodes(u, G)
+//	{
+//	forall_nodes(w, G)
+//	{
+////		cout << "Distance " << u->index() << " -> "<<w->index()<<" "<<distance[u][w]<<"\n"; 
+//	}
+//	}
+//#endif
 	return maxDist;
 }//allpairsspBFS
 void SpringEmbedderKK::scale(GraphAttributes& GA) 
@@ -632,9 +622,9 @@ void SpringEmbedderKK::scale(GraphAttributes& GA)
 				GA.y(v) = GA.y(v)*maxFac;
 			}
 		}
-#ifdef OGDF_DEBUG
-		cout << "Scaled by factor "<<maxFac<<"\n";
-#endif 
+//#ifdef OGDF_DEBUG
+//		cout << "Scaled by factor "<<maxFac<<"\n";
+//#endif 
 	}
 }//Scale
 

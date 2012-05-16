@@ -1,9 +1,9 @@
 /*
- * $Revision: 2047 $
+ * $Revision: 2306 $
  *
  * last checkin:
- *   $Author: klein $
- *   $Date: 2010-10-13 17:12:21 +0200 (Wed, 13 Oct 2010) $
+ *   $Author: gutwenger $
+ *   $Date: 2012-05-08 11:32:55 +0200 (Tue, 08 May 2012) $
  ***************************************************************/
 
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  *
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -49,6 +39,7 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
+#include <ogdf/basic/Math.h>
 #include <ogdf/energybased/multilevelmixer/CirclePlacer.h>
 #include <ogdf/energybased/multilevelmixer/BarycenterPlacer.h>
 #include <vector>
@@ -81,8 +72,9 @@ void CirclePlacer::setNodeSelection(NodeSelection nodeSel)
 
 void CirclePlacer::placeOneLevel(MultilevelGraph &MLG)
 {
+	int level = MLG.getLevel();
 	DPoint center(0.0, 0.0);
-	float radius = 0.0;
+	double radius = 0.0;
 
 	std::map<node, bool> oldNodes;
 	Graph &G = MLG.getGraph();
@@ -95,7 +87,7 @@ void CirclePlacer::placeOneLevel(MultilevelGraph &MLG)
 		}
 		center = DPoint(center.m_x / n, center.m_y / n);
 		forall_nodes(v, G) {
-			float r = sqrt( MLG.x(v) * MLG.x(v) + MLG.y(v) * MLG.y(v) );
+			double r = sqrt( MLG.x(v) * MLG.x(v) + MLG.y(v) * MLG.y(v) );
 			if (r > radius) radius = r;
 		}
 		radius += m_circleSize;
@@ -115,7 +107,7 @@ void CirclePlacer::placeOneLevel(MultilevelGraph &MLG)
 			|| (m_nodeSelection == nsNew && oldNodes[v])
 			|| (m_nodeSelection == nsOld && !oldNodes[v]))
 		{
-			float angle = (float)(atan2( MLG.x(v) - center.m_x, -MLG.y(v) + center.m_y) - 0.5 * pi);
+			float angle = (float)(atan2( MLG.x(v) - center.m_x, -MLG.y(v) + center.m_y) - 0.5 * Math::pi);
 			MLG.x(v, cos(angle) * radius + ((m_randomOffset)?(float)randomDouble(-1.0, 1.0):0.f));
 			MLG.y(v, sin(angle) * radius + ((m_randomOffset)?(float)randomDouble(-1.0, 1.0):0.f));
 		}

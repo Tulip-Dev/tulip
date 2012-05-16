@@ -1,9 +1,9 @@
 /*
- * $Revision: 2047 $
+ * $Revision: 2302 $
  * 
  * last checkin:
- *   $Author: klein $ 
- *   $Date: 2010-10-13 17:12:21 +0200 (Wed, 13 Oct 2010) $ 
+ *   $Author: gutwenger $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -21,19 +21,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -64,6 +54,7 @@
 #include <ogdf/packing/TileToRowsCCPacker.h>
 #include <ogdf/basic/simple_graph_alg.h>
 
+#include <algorithm>
 
 
 namespace ogdf {
@@ -193,9 +184,6 @@ void Level::swap(int i, int j)
 
 
 
-
-
-
 class WeightBucket : public BucketFunc<node> {
 	const NodeArray<int> *m_pWeight;
 
@@ -253,9 +241,18 @@ void Level::sort(NodeArray<double> &weight)
 	getIsolatedNodes(isolated);
 
 	WeightComparer<> cmp(&weight);
-	m_nodes.quicksort(cmp);
+	//m_nodes.quicksort(cmp);
+	std::stable_sort(&m_nodes[0], &m_nodes[0]+m_nodes.size(), cmp);
 
 	if (!isolated.empty()) setIsolatedNodes(isolated);
+	recalcPos();
+}
+
+
+void Level::sortByWeightOnly(NodeArray<double> &weight)
+{
+	WeightComparer<> cmp(&weight);
+	std::stable_sort(&m_nodes[0], &m_nodes[0]+m_nodes.size(), cmp);
 	recalcPos();
 }
 
@@ -265,7 +262,7 @@ void Level::sort(NodeArray<int> &weight, int minBucket, int maxBucket)
 	SListPure<Tuple2<node,int> > isolated;
 	getIsolatedNodes(isolated);
 
-WeightBucket bucketFunc(&weight);
+	WeightBucket bucketFunc(&weight);
 	bucketSort(m_nodes,minBucket,maxBucket,bucketFunc);
 
 	if (!isolated.empty()) setIsolatedNodes(isolated);
@@ -785,6 +782,7 @@ SugiyamaLayout::SugiyamaLayout()
 	m_fails = 4;
 	m_runs = 15;
 	m_transpose = true;
+	m_permuteFirst = false;
 
 	m_arrangeCCs = true;
 	m_minDistCC = 20;
@@ -793,8 +791,10 @@ SugiyamaLayout::SugiyamaLayout()
 	m_alignBaseClasses = false;
 	m_alignSiblings = false;
 	m_subgraphs = 0;
+
 	m_maxLevelSize = -1;
 	m_numLevels = -1;
+	m_timeReduceCrossings = 0.0;
 }
 
 
@@ -861,6 +861,8 @@ void SugiyamaLayout::doCall(GraphAttributes &AG, bool umlCall, NodeArray<int> &r
 		Array<DPoint> boundingBox(m_numCC);
 		Array<DPoint> offset1(m_numCC);
 		NodeArray<bool> mark(GC);
+
+		m_numLevels = m_maxLevelSize = 0;
 
 		int totalCrossings = 0;
 		for(int i = 0; i < m_numCC; ++i)
@@ -953,6 +955,12 @@ void SugiyamaLayout::doCall(GraphAttributes &AG, bool umlCall, NodeArray<int> &r
 
 			boundingBox[i] = DPoint(maxX - minX, maxY - minY);
 			offset1    [i] = DPoint(minX,minY);
+
+			m_numLevels = max(m_numLevels, H.size());
+			for(int i = 0; i <= H.high(); i++) {
+				Level &l = H[i];
+				m_maxLevelSize = max(m_maxLevelSize, l.size());
+			}
 		}
 
 		m_nCrossings = totalCrossings;
@@ -997,14 +1005,6 @@ void SugiyamaLayout::doCall(GraphAttributes &AG, bool umlCall, NodeArray<int> &r
 			}
 		}		
 		
-		m_numLevels = H.size();
-		m_maxLevelSize = 0;
-		for(int i = 0; i <= H.high(); i++) {
-			Level &l = H[i];
-			if (l.size() > m_maxLevelSize)
-				m_maxLevelSize = l.size();			
-		}
-
 	} else {
 		int minRank = INT_MAX;
 		node v;
@@ -1136,16 +1136,13 @@ int SugiyamaLayout::traverseTopDown(Hierarchy& H)
 	H.direction(Hierarchy::downward);
 
 	for (int i = 1; i <= H.high(); ++i) {
-	  if(!useSubgraphs())
-	    {
-	      TwoLayerCrossMin &minimizer = m_crossMin.get();
-	      minimizer(H[i]);
-	    }
-	  else
-	    {
-	      TwoLayerCrossMinSimDraw &minimizer = m_crossMinSimDraw.get();
-	      minimizer.call(H[i],m_subgraphs);
-	    }
+		if(!useSubgraphs()) {
+			TwoLayerCrossMin &minimizer = m_crossMin.get();
+			minimizer(H[i]);
+	    } else {
+			TwoLayerCrossMinSimDraw &minimizer = m_crossMinSimDraw.get();
+			minimizer.call(H[i],m_subgraphs);
+		}
 	}
 
 	if (m_transpose)
@@ -1191,8 +1188,14 @@ int SugiyamaLayout::traverseBottomUp(Hierarchy& H)
 
 void SugiyamaLayout::reduceCrossings(Hierarchy &H)
 {
+	__int64 t;
+	System::usedRealTime(t);
+
 	TwoLayerCrossMin &minimizer = m_crossMin.get();
 	TwoLayerCrossMinSimDraw &sdminimizer = m_crossMinSimDraw.get();
+
+	if(m_permuteFirst)
+		H.permute();
 
 	int nCrossingsOld, nCrossingsNew;
 	NodeArray<int> bestPos;
@@ -1203,8 +1206,11 @@ void SugiyamaLayout::reduceCrossings(Hierarchy &H)
 		m_nCrossings = nCrossingsOld = H.calculateCrossingsSimDraw(m_subgraphs);
 	H.storePos(bestPos);
 
-	
-	if (m_nCrossings == 0) return;
+	if (m_nCrossings == 0) {
+		t = System::usedRealTime(t);
+		m_timeReduceCrossings = double(t) / 1000;
+		return;
+	}
 
 	if(!useSubgraphs())
 		minimizer.init(H);
@@ -1221,6 +1227,7 @@ void SugiyamaLayout::reduceCrossings(Hierarchy &H)
 
 		do {
 			nCrossingsNew = traverseTopDown(H);
+			//cout << nCrossingsNew << endl;
 
 			if (nCrossingsNew < nCrossingsOld) {
 				if (nCrossingsNew < m_nCrossings) {
@@ -1235,6 +1242,7 @@ void SugiyamaLayout::reduceCrossings(Hierarchy &H)
 				--nFails;
 
 			nCrossingsNew = traverseBottomUp(H);
+			//cout << nCrossingsNew << endl;
 
 			if (nCrossingsNew < nCrossingsOld) {
 				if (nCrossingsNew < m_nCrossings) {
@@ -1269,10 +1277,13 @@ void SugiyamaLayout::reduceCrossings(Hierarchy &H)
 	H.restorePos(bestPos);
 
 	if(!useSubgraphs())
-	  minimizer.cleanup();
+		minimizer.cleanup();
 	else
-	  sdminimizer.cleanup();
+		sdminimizer.cleanup();
 	m_levelChanged.init();
+
+	t = System::usedRealTime(t);
+	m_timeReduceCrossings = double(t) / 1000;
 }
 
 

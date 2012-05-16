@@ -1,9 +1,9 @@
 /*
- * $Revision: 2045 $
+ * $Revision: 2299 $
  *
  * last checkin:
- *   $Author: tschaefer $
- *   $Date: 2010-10-06 23:47:55 +0200 (Wed, 06 Oct 2010) $
+ *   $Author: gutwenger $
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
  ***************************************************************/
 
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  *
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -56,9 +46,11 @@
 #ifndef OGDF_SCALING_LAYOUT_H
 #define OGDF_SCALING_LAYOUT_H
 
-#include <ogdf/module/LayoutModule.h>
-#include <ogdf/energybased/multilevelmixer/ModularMultilevelMixerLayout.h>
+#include <ogdf/basic/ModuleOption.h>
+#include <ogdf/module/MultilevelLayoutModule.h>
+#include <ogdf/energybased/multilevelmixer/ModularMultilevelMixer.h>
 #include <ogdf/internal/energybased/MultilevelGraph.h>
+
 
 namespace ogdf {
 
@@ -67,7 +59,7 @@ namespace ogdf {
  *
  * For use with ModularMultilevelMixer.
  */
-class OGDF_EXPORT ScalingLayout : public ogdf::LayoutModule
+class OGDF_EXPORT ScalingLayout : public MultilevelLayoutModule
 {
 public:
 	/*!
@@ -79,7 +71,7 @@ public:
 		/*! 
 		 * Scales by a factor relative to the avg edge weights
 		 * to be used in combination with the fixed edge length
-		 * setting in ModularMultilevelMixerLayout.
+		 * setting in ModularMultilevelMixer.
 		 */
 		st_relativeToAvgLength, 
 		//! Scales by a factor relative to the desired Edgelength m_desEdgeLength.
@@ -110,7 +102,7 @@ public:
 	 * @param min sets the minimum
 	 * @param max sets the maximum
 	 */
-	void setScaling(float min, float max);
+	void setScaling(double min, double max);
 	
 	/*!
 	 * \brief Sets how often the scaling should be repeated.
@@ -127,7 +119,7 @@ public:
 	void setSecondaryLayout(LayoutModule* layout);
 	
 	/*!
-	 * \brief Is used top compute the scaling realtively to the level size change when ScalingType st_absolute is used.
+	 * \brief Is used to compute the scaling relatively to the level size change when ScalingType st_absolute is used.
 	 *
 	 * @param mmm is the ModularMultilevelMixer
 	 */
@@ -153,10 +145,10 @@ public:
 private:
 
 	// Usually a simple force-directed / energy-based Layout should be chosen.
-	LayoutModule * m_secondaryLayoutModule;
+	ModuleOption<LayoutModule> m_secondaryLayoutModule;
 
-	float m_minScaling;
-	float m_maxScaling; 
+	double m_minScaling;
+	double m_maxScaling; 
 	ModularMultilevelMixer* m_mmm;//!< Used to derive level size ratio if st_absolute 
 	double m_desEdgeLength;
 

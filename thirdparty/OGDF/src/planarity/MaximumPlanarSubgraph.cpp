@@ -1,9 +1,9 @@
  /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -62,7 +52,7 @@
             const List<edge> &preferedEdges,
             List<edge> &delEdges,
             const EdgeArray<int>  *pCost,
-            bool preferedImplyPlanar)
+            bool preferredImplyPlanar)
 {
 
 	if (G.numberOfEdges() < 9)
@@ -87,7 +77,7 @@
 
 	EdgeArray<int> componentID(G);
 
-	// Determine Biconnected Components
+	// Determine biconnected components
 	int bcCount = biconnectedComponents(G,componentID);
 
 	// Determine edges per biconnected component
@@ -158,8 +148,9 @@
 			}
 
 			// Construct a translation table for the edges.
-			// Necessary, since edges are deleted in a new graph.
-			// that represents the biconnectedcomponent of the original graph.
+			// Necessary, since edges are deleted in a new graph
+			// that represents the current biconnected component
+			// of the original graph.
 			EdgeArray<edge> backTableEdges(C,0);
 			for (it = blockEdges[i].begin(); it.valid(); ++it)
 				backTableEdges[tableEdges[*it]] = *it; 
@@ -169,11 +160,11 @@
 
 			ClusterGraph CG(C);
 			mr = mc.call(CG, delEdgesOfBC, addEdges);
-			//abort if not optimal solution found, i.e., feasible is also not allowed
+			// Abort if no optimal solution found, i.e., feasible is also not allowed
 			if (mr != retOptimal)
 				return mr;
 		
-			// get the original edges that are deleted and 
+			// Get the original edges that are deleted and
 			// put them on the list delEdges.
 			while (!delEdgesOfBC.empty())
 				delEdges.pushBack(backTableEdges[delEdgesOfBC.popFrontRet()]);

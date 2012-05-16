@@ -1,13 +1,13 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $
  ***************************************************************/
 
 /** \file
- * \brief MLG is the main Datastructure for ModularMultilevelMixerLayout
+ * \brief MLG is the main data structure for ModularMultilevelMixer
  *
  * \author Gereon Bartel
  *
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  *
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -53,19 +43,8 @@
 #include <ogdf/basic/simple_graph_alg.h>
 #include <algorithm>
 
+
 namespace ogdf {
-
-NodeMerge::NodeMerge(int level)
-:m_level(level)
-{
-
-}
-
-
-NodeMerge::~NodeMerge()
-{
-
-}
 
 
 MultilevelGraph::~MultilevelGraph()
@@ -80,22 +59,29 @@ MultilevelGraph::~MultilevelGraph()
 	if (m_createdGraph)	{
 		delete m_G;
 	}
+	delete m_GA;
 }
 
+//initialize internal structures such as the GraphAttributes that store the layout
+void MultilevelGraph::initInternal()
+{
+	OGDF_ASSERT(m_G != 0);
+	m_GA = new GraphAttributes(*m_G);
+}
 
 MultilevelGraph::MultilevelGraph()
-:m_createdGraph(false)
+:m_createdGraph(true)
 {
 	m_G = new Graph();
 	if(m_G == 0) {
 		OGDF_THROW(InsufficientMemoryException);
-	} else {
-		m_createdGraph = true;
-	}
+	} 
+
+	//replaces layout info stuff below
+	initInternal();
+
 	m_nodeAssociations.init(*m_G, 0);
 	m_edgeAssociations.init(*m_G, 0);
-	m_x.init(*m_G, 0);
-	m_y.init(*m_G, 0);
 	m_radius.init(*m_G, 1.0);
 	m_weight.init(*m_G, 1.0);
 
@@ -104,18 +90,18 @@ MultilevelGraph::MultilevelGraph()
 
 
 MultilevelGraph::MultilevelGraph(GraphAttributes &GA)
-:m_createdGraph(false)
+:m_createdGraph(true)
 {
 	m_G = new Graph();
 	if(m_G == 0) {
 		OGDF_THROW(InsufficientMemoryException);
-	} else {
-		m_createdGraph = true;
-	}
+	} 
+	
+	//replaces layout info stuff below
+	initInternal();
+
 	m_nodeAssociations.init(*m_G);
 	m_edgeAssociations.init(*m_G);
-	m_x.init(*m_G);
-	m_y.init(*m_G);
 	m_radius.init(*m_G);
 	m_weight.init(*m_G);
 	copyFromGraph(GA.constGraph(), m_nodeAssociations, m_edgeAssociations);
@@ -127,13 +113,15 @@ MultilevelGraph::MultilevelGraph(GraphAttributes &GA)
 
 
 MultilevelGraph::MultilevelGraph(Graph &G)
-:m_createdGraph(false)
+:m_createdGraph(false), m_G(0)
 {
 	m_G = &G;
+
+	//replaces layout info stuff below
+	initInternal();
+
 	m_nodeAssociations.init(*m_G, 0);
 	m_edgeAssociations.init(*m_G, 0);
-	m_x.init(*m_G, 0);
-	m_y.init(*m_G, 0);
 	m_radius.init(*m_G, 1.0);
 	m_weight.init(*m_G, 1.0);
 
@@ -142,15 +130,16 @@ MultilevelGraph::MultilevelGraph(Graph &G)
 
 
 MultilevelGraph::MultilevelGraph(GraphAttributes &GA, Graph &G)
-:m_createdGraph(false)
+:m_createdGraph(false), m_G(0)
 {
 	m_G = &G;
 	m_nodeAssociations.init(*m_G, 0);
 	m_edgeAssociations.init(*m_G, 0);
-	m_x.init(*m_G);
-	m_y.init(*m_G);
 	m_radius.init(*m_G);
 	m_weight.init(*m_G);
+
+	initInternal();
+
 	prepareGraphAttributes(GA);
 	importAttributes(GA);
 
@@ -159,48 +148,44 @@ MultilevelGraph::MultilevelGraph(GraphAttributes &GA, Graph &G)
 
 
 MultilevelGraph::MultilevelGraph(istream &is)
-:m_createdGraph(false)
+:m_createdGraph(true)
 {
 	m_G = new Graph();
 	if(m_G == 0) {
 		OGDF_THROW(InsufficientMemoryException);
-	} else {
-		m_createdGraph = true;
-	}
+	} 
 	m_nodeAssociations.init(*m_G);
 	m_edgeAssociations.init(*m_G);
-	m_x.init(*m_G);
-	m_y.init(*m_G);
 	m_radius.init(*m_G);
 	m_weight.init(*m_G);
-	GraphAttributes tempGA(*m_G);
-	tempGA.readGML(*m_G, is);
-	prepareGraphAttributes(tempGA);
-	importAttributesSimple(tempGA);
+
+	initInternal();
+	//GraphAttributes tempGA(*m_G);
+	m_GA->readGML(*m_G, is);
+	prepareGraphAttributes(*m_GA);
+	importAttributesSimple(*m_GA);
 
 	initReverseIndizes();
 }
 
 
 MultilevelGraph::MultilevelGraph(const String &filename)
-:m_createdGraph(false)
+:m_createdGraph(true)
 {
 	m_G = new Graph();
 	if(m_G == 0) {
 		OGDF_THROW(InsufficientMemoryException);
-	} else {
-		m_createdGraph = true;
-	}
+	} 
 	m_nodeAssociations.init(*m_G);
 	m_edgeAssociations.init(*m_G);
-	m_x.init(*m_G);
-	m_y.init(*m_G);
 	m_radius.init(*m_G);
 	m_weight.init(*m_G);
-	GraphAttributes tempGA(*m_G);
-	tempGA.readGML(*m_G, filename);
-	prepareGraphAttributes(tempGA);
-	importAttributesSimple(tempGA);
+
+	initInternal();
+	//GraphAttributes tempGA(*m_G);
+	m_GA->readGML(*m_G, filename);
+	prepareGraphAttributes(*m_GA);
+	importAttributesSimple(*m_GA);
 
 	initReverseIndizes();
 }
@@ -253,28 +238,22 @@ int MultilevelGraph::getLevel()
 }
 
 
-Graph & MultilevelGraph::getGraph()
-{
-	return *m_G;
-}
-
-
-// assumes, that the Graphs of MultilevelGraph an GA are the same, not copies!
+// assumes, that the Graphs of MultilevelGraph and GA are the same, not copies!
 void MultilevelGraph::exportAttributesSimple(GraphAttributes &GA) const
 {
 	OGDF_ASSERT(&(GA.constGraph()) == m_G);
 
 	prepareGraphAttributes(GA);
-	//const Graph &cG = GA.constGraph();
 
 	node v;
 	forall_nodes(v, *m_G) {
-		GA.x(v) =  m_x[v];
-		GA.y(v) =  m_y[v];
-		float w = (float)GA.width(v);
-		float h = (float)GA.height(v);
+		GA.x(v) =  m_GA->x(v);
+		GA.y(v) =  m_GA->y(v);
+		//TODO: Check what this w,h computation does
+		double w = GA.width(v);
+		double h = GA.height(v);
 		if(w > 0 || h > 0) {
-			float factor =  m_radius[v] / sqrt(w*w + h*h) * 2.0f;
+			double factor =  m_radius[v] / sqrt(w*w + h*h) * 2.0f;
 			w *= factor;
 			h *= factor;
 		} else {
@@ -308,12 +287,12 @@ void MultilevelGraph::exportAttributes(GraphAttributes &GA) const
 	}
 
 	forall_nodes(v, *m_G) {
-		GA.x(tempNodeAssociations[m_nodeAssociations[v]]) =  m_x[v];
-		GA.y(tempNodeAssociations[m_nodeAssociations[v]]) =  m_y[v];
-		float w = (float)GA.width(tempNodeAssociations[m_nodeAssociations[v]]);
-		float h = (float)GA.height(tempNodeAssociations[m_nodeAssociations[v]]);
+		GA.x(tempNodeAssociations[m_nodeAssociations[v]]) =  m_GA->x(v);
+		GA.y(tempNodeAssociations[m_nodeAssociations[v]]) =  m_GA->y(v);
+		double w = GA.width(tempNodeAssociations[m_nodeAssociations[v]]);
+		double h = GA.height(tempNodeAssociations[m_nodeAssociations[v]]);
 		if(w > 0 || h > 0) {
-			float factor =  m_radius[v] / sqrt(w*w + h*h) * 2.0f;
+			double factor =  m_radius[v] / sqrt(w*w + h*h) * 2.0f;
 			w *= factor;
 			h *= factor;
 		} else {
@@ -341,23 +320,28 @@ void MultilevelGraph::importAttributesSimple(const GraphAttributes &GA)
 {
 	OGDF_ASSERT(&(GA.constGraph()) == m_G);
 
-	//const Graph &cG = GA.constGraph();
+	m_avgRadius = 0.0;
+
 	node v;
 	forall_nodes(v, *m_G) {
-		m_x[v] = (float)GA.x(v);
-		m_y[v] = (float)GA.y(v);
-		float w = (float)GA.width(v);
-		float h = (float)GA.height(v);
+		double w = GA.width(v);
+		double h = GA.height(v);
 		if(w > 0 || h > 0) {
 			m_radius[v] = sqrt(w*w + h*h) / 2.0f;
 		} else {
 			m_radius[v] = 1.0f;
 		}
+		m_avgRadius += m_radius[v];
+		m_GA->x(v) = GA.x(v);
+		m_GA->y(v) = GA.y(v);
+		m_GA->width(v) = GA.width(v);
+		m_GA->height(v) = GA.height(v);
 	}
+	m_avgRadius /= m_G->numberOfNodes();
 
 	edge e;
 	forall_edges(e, *m_G) {
-		m_weight[e] = (float)GA.doubleWeight(e);
+		m_weight[e] = GA.doubleWeight(e);
 	}
 }
 
@@ -366,6 +350,8 @@ void MultilevelGraph::importAttributes(const GraphAttributes &GA)
 {
 	OGDF_ASSERT(GA.constGraph().numberOfNodes() == m_G->numberOfNodes());
 	OGDF_ASSERT(GA.constGraph().numberOfEdges() == m_G->numberOfEdges());
+
+	m_avgRadius = 0.0;
 
 	std::vector<node> tempNodeAssociations;
 	node v;
@@ -376,16 +362,24 @@ void MultilevelGraph::importAttributes(const GraphAttributes &GA)
 	}
 
 	forall_nodes(v, *m_G) {
-		m_x[v] = (float)GA.x(tempNodeAssociations[m_nodeAssociations[v]]);
-		m_y[v] = (float)GA.y(tempNodeAssociations[m_nodeAssociations[v]]);
-		float w = (float)GA.width(tempNodeAssociations[m_nodeAssociations[v]]);
-		float h = (float)GA.height(tempNodeAssociations[m_nodeAssociations[v]]);
+		
+		double w = GA.width(tempNodeAssociations[m_nodeAssociations[v]]);
+		double h = GA.height(tempNodeAssociations[m_nodeAssociations[v]]);
 		if(w > 0 || h > 0) {
 			m_radius[v] = sqrt(w*w + h*h) / 2.0f;
 		} else {
 			m_radius[v] = 1.0f;
 		}
+
+		m_avgRadius += m_radius[v];
+
+		m_GA->x(v) = GA.x(tempNodeAssociations[m_nodeAssociations[v]]);
+		m_GA->y(v) = GA.y(tempNodeAssociations[m_nodeAssociations[v]]);
+		m_GA->width(v) = GA.width(tempNodeAssociations[m_nodeAssociations[v]]);
+		m_GA->height(v) = GA.height(tempNodeAssociations[m_nodeAssociations[v]]);
 	}
+
+	m_avgRadius /= m_G->numberOfNodes();
 
 	std::vector<edge> tempEdgeAssociations;
 	edge e;
@@ -395,7 +389,7 @@ void MultilevelGraph::importAttributes(const GraphAttributes &GA)
 	}
 
 	forall_edges(e, *m_G) {
-		m_weight[e] = (float)GA.doubleWeight(tempEdgeAssociations[m_edgeAssociations[e]]);
+		m_weight[e] = GA.doubleWeight(tempEdgeAssociations[m_edgeAssociations[e]]);
 	}
 }
 
@@ -432,6 +426,7 @@ void MultilevelGraph::reInsertAll(std::vector<MultilevelGraph *> components)
 // keeps Node and Edge Associations
 // deletes Nodes and Eges from Graph
 // deletes Attributes
+// deprecated, use componentsplitterlayout instead
 std::vector<MultilevelGraph *> MultilevelGraph::splitIntoComponents()
 {
 	std::vector<MultilevelGraph *> components;
@@ -458,8 +453,6 @@ std::vector<MultilevelGraph *> MultilevelGraph::splitIntoComponents()
 	OGDF_ASSERT(m_G->numberOfNodes() == 0);
 	OGDF_ASSERT(m_G->numberOfEdges() == 0);
 
-	m_x.init(*m_G);
-	m_y.init(*m_G);
 	m_radius.init(*m_G);
 	m_weight.init(*m_G);
 
@@ -481,8 +474,8 @@ void MultilevelGraph::copyNodeTo(node v, MultilevelGraph &MLG, std::map<node, no
 		MLG.m_nodeAssociations[v_new] = v->index();
 	}
 	MLG.m_radius[v_new] = m_radius[v];
-	MLG.m_x[v_new] = m_x[v];
-	MLG.m_y[v_new] = m_y[v];
+	MLG.x(v_new, x(v));
+	MLG.y(v_new, y(v));
 }
 
 
@@ -565,7 +558,7 @@ bool MultilevelGraph::postMerge(NodeMerge * NM, node merged)
 }
 
 
-bool MultilevelGraph::changeNode(NodeMerge * NM, node theNode, float newRadius, node merged)
+bool MultilevelGraph::changeNode(NodeMerge * NM, node theNode, double newRadius, node merged)
 {
 	int index = theNode->index();
 	//we assume that changeNode is called exactly onces when a node is merged
@@ -584,7 +577,7 @@ bool MultilevelGraph::changeNode(NodeMerge * NM, node theNode, float newRadius, 
 }
 
 
-bool MultilevelGraph::changeEdge(NodeMerge * NM, edge theEdge, float newWeight, node newSource, node newTarget)
+bool MultilevelGraph::changeEdge(NodeMerge * NM, edge theEdge, double newWeight, node newSource, node newTarget)
 {
 	int index = theEdge->index();
 	std::vector<int>::iterator pos = find(NM->m_changedEdges.begin(), NM->m_changedEdges.end(), index);
@@ -630,7 +623,7 @@ std::vector<edge> MultilevelGraph::moveEdgesToParent(NodeMerge * NM, node theNod
 		adjEdges.push_back(e);
 	}
 
-	float nodeToParentLen = 0.0;
+	double nodeToParentLen = 0.0;
 	for (std::vector<edge>::iterator i = adjEdges.begin(); i != adjEdges.end(); i++)
 	{
 		e = *i;
@@ -663,7 +656,7 @@ std::vector<edge> MultilevelGraph::moveEdgesToParent(NodeMerge * NM, node theNod
 			if (adj->twinNode() != parent && (adj->twinNode() == newSource || adj->twinNode() == newTarget)) {
 				exists = true;
 				twinEdge = adj->theEdge();
-				float extraLength = 0.0;
+				double extraLength = 0.0;
 				if(adjustEdgeLengths != 0) {
 					extraLength = m_weight[twinEdge->index()] + adjustEdgeLengths * nodeToParentLen;
 				}
@@ -760,54 +753,6 @@ node MultilevelGraph::getNode(unsigned int index)
 }
 
 
-float MultilevelGraph::radius(node v)
-{
-	return m_radius[v];
-}
-
-
-void MultilevelGraph::radius(node v, float r)
-{
-	m_radius[v] = r;
-}
-
-
-float MultilevelGraph::x(node v)
-{
-	return m_x[v];
-}
-
-
-float MultilevelGraph::y(node v)
-{
-	return m_y[v];
-}
-
-
-void MultilevelGraph::x(node v, float x)
-{
-	m_x[v] = x;
-}
-
-
-void MultilevelGraph::y(node v, float y)
-{
-	m_y[v] = y;
-}
-
-
-void MultilevelGraph::weight(edge e, float weight)
-{
-	m_weight[e] = weight;
-}
-
-
-float MultilevelGraph::weight(edge e)
-{
-	return m_weight[e];
-}
-
-
 void MultilevelGraph::initReverseIndizes()
 {
 	if (m_G->numberOfNodes() > 0) {
@@ -821,6 +766,7 @@ void MultilevelGraph::initReverseIndizes()
 	}
 }
 
+
 void MultilevelGraph::updateMergeWeights()
 {
 	node v;
@@ -829,6 +775,7 @@ void MultilevelGraph::updateMergeWeights()
 	}
 	
 }
+
 
 void MultilevelGraph::updateReverseIndizes()
 {
@@ -868,8 +815,8 @@ void MultilevelGraph::moveToZero()
 {
 	// move Graph to zero
 	node v;
-	float avg_x = 0.0;
-	float avg_y = 0.0;
+	double avg_x = 0.0;
+	double avg_y = 0.0;
 	forall_nodes(v, getGraph()) {
 		avg_x += x(v);
 		avg_y += y(v);
@@ -882,28 +829,5 @@ void MultilevelGraph::moveToZero()
 	}
 }
 
-
-NodeArray<float> & MultilevelGraph::getXArray()
-{
-	return m_x;
-}
-
-
-NodeArray<float> & MultilevelGraph::getYArray()
-{
-	return m_y;
-}
-
-
-NodeArray<float> & MultilevelGraph::getRArray()
-{
-	return m_radius;
-}
-
-
-EdgeArray<float> & MultilevelGraph::getWArray()
-{
-	return m_weight;
-}
 
 } // namespace ogdf

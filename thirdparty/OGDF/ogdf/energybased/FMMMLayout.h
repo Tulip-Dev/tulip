@@ -1,9 +1,9 @@
 /*
- * $Revision: 2056 $
+ * $Revision: 2299 $
  * 
  * last checkin:
- *   $Author: klein $ 
- *   $Date: 2010-10-16 16:27:46 +0200 (Sat, 16 Oct 2010) $ 
+ *   $Author: gutwenger $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -75,7 +65,7 @@ namespace ogdf {
  * The class FMMMLayout implements a force-directed graph drawing
  * method suited also for very large graphs. It is based on a
  * combination of an efficient multilevel scheme and a strategy for
- * approximating the repusive forces in the system by rapidly
+ * approximating the repulsive forces in the system by rapidly
  * evaluating potential fields.
  *
  * The implementation is based on the following publication:
@@ -96,10 +86,10 @@ namespace ogdf {
  *     <th><i>Option</i><th><i>Type</i><th><i>Default</i><th><i>Description</i>
  *   </tr><tr>
  *     <td><i>useHighLevelOptions</i><td>bool<td>false
- *     <td>Wether high-level options are used or not.
+ *     <td>Whether high-level options are used or not.
  *   </tr><tr>
  *     <td><i>pageFormat</i><td> #PageFormatType <td> #pfSquare
- *     <td>The desired apsect ratio of the layout.
+ *     <td>The desired aspect ratio of the layout.
  *   </tr><tr>
  *     <td><i>unitEdgeLength</i><td>double<td>100.0
  *     <td>The unit edge length.

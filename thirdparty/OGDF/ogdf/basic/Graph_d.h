@@ -1,9 +1,9 @@
 /*
- * $Revision: 2047 $
+ * $Revision: 2299 $
  * 
  * last checkin:
- *   $Author: klein $ 
- *   $Date: 2010-10-13 17:12:21 +0200 (Wed, 13 Oct 2010) $ 
+ *   $Author: gutwenger $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -23,19 +23,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -196,8 +186,8 @@ public:
 			pY->m_prev = pX;
 
 		} else {
-			swap(pX->m_next,pY->m_next);
-			swap(pX->m_prev,pY->m_prev);
+			::swap(pX->m_next,pY->m_next);
+			::swap(pX->m_prev,pY->m_prev);
 		}
 
 		if(pX->m_prev)
@@ -511,17 +501,17 @@ public:
 }; // class NodeElement
 
 
-inline adjEntry OGDF_EXPORT AdjElement::cyclicSucc() const
+inline adjEntry AdjElement::cyclicSucc() const
 {
 	return (m_next) ? (adjEntry)m_next : m_node->firstAdj();
 }
 
-inline adjEntry OGDF_EXPORT AdjElement::cyclicPred() const
+inline adjEntry AdjElement::cyclicPred() const
 {
 	return (m_prev) ? (adjEntry)m_prev : m_node->lastAdj();
 }
 
-inline bool OGDF_EXPORT test_forall_adj_edges(adjEntry &adj, edge &e)
+inline bool test_forall_adj_edges(adjEntry &adj, edge &e)
 {
 	if (adj) { e = adj->theEdge(); return true; }
 	else return false;

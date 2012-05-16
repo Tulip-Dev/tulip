@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -58,6 +48,8 @@
 
 #include <ogdf/planarity/PlanRepInc.h>
 #include <ogdf/basic/TopologyModule.h>
+#include <ogdf/basic/Math.h>
+
 
 namespace ogdf {
 
@@ -741,20 +733,20 @@ double angle(DPoint p, DPoint q, DPoint r)
   
     double cosphi = (dx1*dx2+dy1*dy2) / sqrt(norm);
     
-	if (cosphi >= 1.0 ) return 0; if (cosphi <= -1.0 ) return ogdf::pi;
+	if (cosphi >= 1.0 ) return 0; if (cosphi <= -1.0 ) return Math::pi;
   
     double phi = acos(cosphi);
     
     if (dx1*dy2 < dy1*dx2) phi = -phi;
     
-	if (phi < 0) phi += 2*ogdf::pi;
+	if (phi < 0) phi += 2*Math::pi;
     
     return phi; 
 }//angle
 
 double fAngle(DPoint p, DPoint q, DPoint r) 
 {
-	return angle(p, q, r)*360.0/(2*ogdf::pi);
+	return angle(p, q, r)*360.0/(2*Math::pi);
 }
 
 
@@ -990,7 +982,7 @@ void PlanRepInc::writeGML(ostream &os, const Layout &drawing,
 					double testAngleS = refAngleS-angleS;
 
 					//---
-					double dTS = testAngleS*2*ogdf::pi/360.0;					
+					double dTS = testAngleS*2*Math::pi/360.0;					
 					//--
 					sx = xs + rad*cos(dTS);//testAngleS);
 					sy = ys + rad*sin(dTS);//testAngleS);
@@ -1012,7 +1004,7 @@ void PlanRepInc::writeGML(ostream &os, const Layout &drawing,
 					double testAngleT = refAngleT-angleT;
 
 					//--
-					double dTT = testAngleT*2*ogdf::pi/360.0;
+					double dTT = testAngleT*2*Math::pi/360.0;
 					//--
 					
 					tx = xt + rad*cos(dTT);//testAngleT);

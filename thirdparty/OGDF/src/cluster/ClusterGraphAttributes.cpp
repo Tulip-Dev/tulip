@@ -1,9 +1,9 @@
 /*
- * $Revision: 2064 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-10-17 18:23:53 +0200 (Sun, 17 Oct 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -218,7 +208,7 @@ void ClusterGraphAttributes::writeCluster(ostream &os,
 								String indent)
 {
 	String newindent = indent;
-	newindent+="  ";
+	newindent ="  ";
 	os << indent << "cluster [\n";
 	os << indent << "id " << (cId[c] = nextId++) << "\n";
 	ListConstIterator<cluster> it;
@@ -240,7 +230,7 @@ void ClusterGraphAttributes::writeGraphWinCluster(
 	)
 {
 	String newindent = indent;
-	newindent+="  ";
+	newindent="  ";
 
 	if (c == m_pClusterGraph->rootCluster())
 		os << indent << "rootcluster [\n";
@@ -314,8 +304,8 @@ void ClusterGraphAttributes::writeOGML(const char *fileName)//, GraphConstraints
 void ClusterGraphAttributes::writeOGML(ostream & os) {//, GraphConstraints & GC) {
 	
 	// Graph Component Identification
-	NodeArray<int> nodeIds(*m_pGraph);			// generated Node IDs
-	EdgeArray<int> edgeIds(*m_pGraph);			// generated Edge IDs
+	//NodeArray<int> nodeIds(*m_pGraph);			// generated Node IDs
+	//EdgeArray<int> edgeIds(*m_pGraph);			// generated Edge IDs
 	ClusterArray<int> clusterIds(*m_pGraph);	// generated Cluster IDs
 	int nodeId(0);								// new ID of current node
 	//int edgeId(0);								// new ID of current edge
@@ -357,7 +347,7 @@ void ClusterGraphAttributes::writeOGML(ostream & os) {//, GraphConstraints & GC)
 	os << indent << "<structure>" << NEWLINE;
 	
 	// recursive handling of clusters
-	writeClusterOGML(os, osS, nodeIds, nodeId, labelId, m_pClusterGraph->rootCluster(), ++indentDepth, indentDepthS);
+	writeClusterOGML(os, osS, /*nodeIds,*/ nodeId, labelId, m_pClusterGraph->rootCluster(), ++indentDepth, indentDepthS);
 	
 	cout << "Nodes written...\n" << flush;
 	
@@ -549,7 +539,7 @@ void ClusterGraphAttributes::writeOGML(ostream & os) {//, GraphConstraints & GC)
 void ClusterGraphAttributes::writeClusterOGML(
 	ostream & os, 
 	std::ostringstream & osS, 
-	NodeArray<int> & nodeIds, 
+	//NodeArray<int> & nodeIds, 
 	int & nextNodeId, 
 	int & nextLabelId, 
 	cluster clust,
@@ -667,7 +657,7 @@ void ClusterGraphAttributes::writeClusterOGML(
 	// this is done for ALL clusters
 	ListConstIterator<cluster> it;
 	for (it = clust->cBegin(); it.valid(); ++it) {
-		writeClusterOGML(os, osS, nodeIds, nextNodeId, nextLabelId, *it, indentDepth, indentDepthS);
+		writeClusterOGML(os, osS, /*nodeIds,*/ nextNodeId, nextLabelId, *it, indentDepth, indentDepthS);
 	}
 
 	// we handle all cluster except the root cluster

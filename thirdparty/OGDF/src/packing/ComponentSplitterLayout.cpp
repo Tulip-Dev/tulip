@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $
  ***************************************************************/
 
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  *
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -49,70 +39,118 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
-//#define USE_OGL_DRAWER
-
-#ifdef USE_OGL_DRAWER
-#include <../ModularMultilevelMixer/ModularMultilevelMixer/mmm/DrawOGLGraph.h>
-#endif
 
 #include <ogdf/packing/ComponentSplitterLayout.h>
+#include <ogdf/packing/TileToRowsCCPacker.h>
 #include <ogdf/basic/geometry.h>
+#include <ogdf/basic/Math.h>
 #include <ogdf/graphalg/ConvexHull.h>
+//used for splitting
+#include <ogdf/basic/simple_graph_alg.h>
+#include <ogdf/basic/GraphCopy.h>
+
 
 namespace ogdf {
 
-ComponentSplitterLayout::ComponentSplitterLayout(CCLayoutPackModule &packer)
-:m_packer(packer)
+ComponentSplitterLayout::ComponentSplitterLayout()
 {
-	m_secondaryLayout = 0;
-	m_number_of_components = 0;
+	m_packer.set(new TileToRowsCCPacker);
 	m_targetRatio = 1.f;
 	m_border = 30;
 }
 
 
-ComponentSplitterLayout::~ComponentSplitterLayout()
-{
-}
-
-
 void ComponentSplitterLayout::call(GraphAttributes &GA)
 {
-	MultilevelGraph MLG(GA);
-	call(MLG);
-	MLG.exportAttributes(GA);
-}
-
-
-void ComponentSplitterLayout::call(MultilevelGraph &MLG)
-{
-	splitIntoComponents(MLG);
-
-	if (m_secondaryLayout != 0)
+	// Only do preparations and call if layout is valid
+	if (m_secondaryLayout.valid())
 	{
-		// Calculating Graph Drawing for every Component
-		for (std::vector<MultilevelGraph *>::iterator i = m_components.begin();
-			i != m_components.end(); i++)
-		{
-//			(*i)->writeGML("last_component.gml");
-			m_secondaryLayout->call((**i));
-#ifdef USE_OGL_DRAWER
-//			DrawOGLGraph::setGraph(*i);
-//			DrawOGLGraph::drawUntilEsc();
-#endif
+		//first we split the graph into its components
+		const Graph& G = GA.constGraph();
 
+		NodeArray<int> componentNumber(G);
+		m_numberOfComponents = connectedComponents(G, componentNumber);
+		if (m_numberOfComponents == 0) {
+			return;
 		}
-	}
 
-	reassembleDrawings(MLG);
+		//std::vector< std::vector<node> > componentArray;
+		//componentArray.resize(numComponents);
+	    //Array<GraphAttributes *> components(numComponents);
+		//
+		
+		// intialize the array of lists of nodes contained in a CC 
+		nodesInCC.init(m_numberOfComponents);
+
+		 node v;
+		 forall_nodes(v,G)
+			nodesInCC[componentNumber[v]].pushBack(v);
+
+		 // Create copies of the connected components and corresponding
+		 // GraphAttributes
+		 GraphCopy GC;
+		 GC.createEmpty(G);
+	 
+	     EdgeArray<edge> auxCopy(G);
+	 
+		 for (int i = 0; i < m_numberOfComponents; i++)
+		 {
+			 GC.initByNodes(nodesInCC[i],auxCopy);
+			 GraphAttributes cGA(GC);
+			 //copy information into copy GA
+			 forall_nodes(v, GC)
+			 {
+				cGA.width(v) = GA.width(GC.original(v));
+				cGA.height(v) = GA.height(GC.original(v));
+				cGA.x(v) = GA.x(GC.original(v));
+				cGA.y(v) = GA.y(GC.original(v));
+			 }
+			 m_secondaryLayout.get().call(cGA);
+			 
+			 //copy layout information back into GA
+			 forall_nodes(v, GC)
+			 {
+				 node w = GC.original(v);
+				 if (w != 0)
+				  GA.x(w) = cGA.x(v);
+				  GA.y(w) = cGA.y(v);
+			 }
+		 }
+		 
+		 
+	// rotate component drawings and call the packer
+	reassembleDrawings(GA);
+	// free
+	nodesInCC.init();
+
+	}//if valid
+
 }
 
 
-void ComponentSplitterLayout::splitIntoComponents(MultilevelGraph &MLG)
+//-----------------
+// geometry helpers
+
+/* copied from multilevelgraph
+//moves point set average to origin
+void moveToZero()
 {
-	m_components = MLG.splitIntoComponents();
+	// move Graph to zero
+	node v;
+	double avg_x = 0.0;
+	double avg_y = 0.0;
+	forall_nodes(v, getGraph()) {
+		avg_x += x(v);
+		avg_y += y(v);
+	}
+	avg_x /= getGraph().numberOfNodes();
+	avg_y /= getGraph().numberOfNodes();
+	forall_nodes(v, getGraph()) {
+		x(v, x(v) - avg_x);
+		y(v, y(v) - avg_y);
+	}
 }
-
+*/
 
 double atan2ex(double y, double x)
 {
@@ -121,9 +159,9 @@ double atan2ex(double y, double x)
 	if (x == 0)
 	{
 		if (y >= 0) {
-			angle = 0.5 * pi;
+			angle = 0.5 * Math::pi;
 		} else {
-			angle = 1.5 * pi;
+			angle = 1.5 * Math::pi;
 		}
 	}
 
@@ -133,37 +171,67 @@ double atan2ex(double y, double x)
 		{
 			angle = 0.0;
 		} else {
-			angle = pi;
+			angle = Math::pi;
 		}
 	}
 
 	return angle;
 }
 
-
-void ComponentSplitterLayout::reassembleDrawings(MultilevelGraph &MLG)
+//TODO: Regard some kind of aspect ration (input) 
+//(then also the rotation of a single component makes sense)
+void ComponentSplitterLayout::reassembleDrawings(GraphAttributes& GA)
 {
 	Array<IPoint> box;
 	Array<IPoint> offset;
 	Array<DPoint> oldOffset;
-	Array<float> rotation;
+	Array<double> rotation;
 	ConvexHull CH;
 
-	// rotate components and create bounding rects
-	for (std::vector<MultilevelGraph *>::iterator i = m_components.begin();
-		i != m_components.end(); i++)
+	// rotate components and create bounding rectangles
+
+	//iterate through all components and compute convex hull
+	for (int j = 0; j < m_numberOfComponents; j++)
 	{
+		//todo: should not use std::vector, but in order not
+		//to have to change all interfaces, we do it anyway
+		std::vector<DPoint> points;
 
-		(*i)->moveToZero();
+		//collect node positions and at the same time center average 
+		// at origin
+		//node v;
+		ListConstIterator<node> it = nodesInCC[j].begin();
+		double avg_x = 0.0;
+		double avg_y = 0.0;
+		while (it.valid())
+		{
+			DPoint dp(GA.x(*it), GA.y(*it));
+			avg_x += dp.m_x;
+			avg_y += dp.m_y;
+			points.push_back(dp);
+			it++;
+		}
+		avg_x /= nodesInCC[j].size();
+		avg_y /= nodesInCC[j].size();
+
+		//adapt positions to origin
+		it = nodesInCC[j].begin();
+		int count = 0;
+		//assume same order of vertices and positions
+		while (it.valid())
+		{
+			//TODO: I am not sure if we need to update both
+			GA.x(*it) = GA.x(*it) - avg_x;
+			GA.y(*it) = GA.y(*it) - avg_y;
+			points.at(count).m_x -= avg_x;
+			points.at(count).m_y -= avg_y;
+
+			it++;
+			count++;
+		}
+
 		// calculate convex hull
-		DPolygon hull = CH.call(**i);
-
-#ifdef USE_OGL_DRAWER
-//		DrawOGLGraph::setGraph(*i);
-//		DrawOGLGraph::setPoly(&hull);
-//		DrawOGLGraph::drawUntilEsc();
-//		DrawOGLGraph::setPoly(0);
-#endif
+		DPolygon hull = CH.call(points);
 
 		double best_area = DBL_MAX;
 		DPoint best_normal;
@@ -217,9 +285,9 @@ void ComponentSplitterLayout::reassembleDrawings(MultilevelGraph &MLG)
 			best_normal = DPoint(1.0, 1.0);
 		}
 
-		float angle = (float)(-atan2(best_normal.m_y, best_normal.m_x) + 1.5 * pi);
+		double angle = -atan2(best_normal.m_y, best_normal.m_x) + 1.5 * Math::pi;
 		if (best_width < best_height) {
-			angle += 0.5f * (float)pi;
+			angle += 0.5f * Math::pi;
 			double temp = best_height;
 			best_height = best_width;
 			best_width = temp;
@@ -247,63 +315,70 @@ void ComponentSplitterLayout::reassembleDrawings(MultilevelGraph &MLG)
 				bottom = tempP.m_y;
 			}
 		}
-		oldOffset.grow(1, DPoint(left + 0.5 * (double)m_border, -1.0 * best_height + 1.0 * bottom + 0.0 * top + 0.5 * (double)m_border));
+		oldOffset.grow(1, DPoint(left + 0.5 * static_cast<double>(m_border), -1.0 * best_height + 1.0 * bottom + 0.0 * top + 0.5 * (double)m_border));
 
 		// save rect
 		int w = static_cast<int>(best_width);
 		int h = static_cast<int>(best_height);
 		box.grow(1, IPoint(w + m_border, h + m_border));
-	}
+	}// components
 
 	offset.init(box.size());
 
 	// call packer
-	m_packer.call(box, offset, m_targetRatio);
+	m_packer.get().call(box, offset, m_targetRatio);
 
 	int index = 0;
 	// Apply offset and rebuild Graph
-	for (std::vector<MultilevelGraph *>::iterator i = m_components.begin();
-		i != m_components.end(); i++, index++)
+	for (int j = 0; j < m_numberOfComponents; j++)
 	{
-		MultilevelGraph *temp = *i;
+	//for (std::vector<MultilevelGraph *>::iterator i = m_components.begin();
+	//	i != m_components.end(); i++, index++)
+	//{
+	//	MultilevelGraph *temp = *i;
 
-		if (temp != 0)
-		{
-			float angle = rotation[index];
+	//	if (temp != 0)
+	//	{
+			double angle = rotation[index];
 			// apply rotation and offset to all nodes
 			node v;
-			forall_nodes(v, temp->getGraph()) {
-				float x = temp->x(v);
-				float y = temp->y(v);
-				float ang = atan2(y, x);
-				float len = sqrt(x*x + y*y);
+			
+			ListConstIterator<node> it = nodesInCC[j].begin();
+			while (it.valid())
+			{
+				v = *it;
+				double x = GA.x(v);
+				double y = GA.y(v);
+				double ang = atan2(y, x);
+				double len = sqrt(x*x + y*y);
 				ang += angle;
 				x = cos(ang) * len;
 				y = sin(ang) * len;
 
-				x += static_cast<float>(offset[index].m_x);
-				y += static_cast<float>(offset[index].m_y);
+				x += static_cast<double>(offset[index].m_x);
+				y += static_cast<double>(offset[index].m_y);
 
-				x -= (float)oldOffset[index].m_x;
-				y -= (float)oldOffset[index].m_y;
+				x -= oldOffset[index].m_x;
+				y -= oldOffset[index].m_y;
 
-				temp->x(v, x);
-				temp->y(v, y);
-			}
+				GA.x(v) = x;
+				GA.y(v) = y;
+				
+				it++;
 
-			MLG.reInsertGraph(*temp);
-			delete temp;
-			*i = 0;
-		}
-	}
+			}// while nodes in component
 
-	MLG.moveToZero();
+//			MLG.reInsertGraph(*temp);
+		//}
+			index++;
+	} // for components
+
+	//now we center the whole graph again
+	//TODO: why?
+	//const Graph& G = GA.constGraph();
+	//forall_nodes(v, G)
+	//MLG.moveToZero();
 }
 
-
-void ComponentSplitterLayout::setLayoutModule(LayoutModule &layout)
-{
-	m_secondaryLayout = &layout;
-}
 
 } // namespace ogdf

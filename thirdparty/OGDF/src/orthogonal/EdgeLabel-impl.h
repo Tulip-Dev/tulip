@@ -1,10 +1,10 @@
 /*
  * $Archive: /ogdl/ogdf/EdgeLabel.cpp $
- * $Revision: 2010 $
+ * $Revision: 2209 $
  * 
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2010-08-27 12:25:58 +0200 (Fri, 27 Aug 2010) $ 
+ *   $Author: klein $ 
+ *   $Date: 2011-07-29 10:58:35 +0200 (Fri, 29 Jul 2011) $ 
  ***************************************************************/
  
 /** \file
@@ -195,7 +195,7 @@ namespace ogdf {
           }//if 
           else //delete all intersecting candidates
           {
-            ListIterator< GPoint<coordType> > l_it = m_candPosList[i][e].begin();
+            ListIterator< GenericPoint<coordType> > l_it = m_candPosList[i][e].begin();
             int k = 0;
 
             while (l_it.valid())
@@ -204,7 +204,7 @@ namespace ogdf {
 
               if (intersections > 0) 
               {
-                ListIterator< GPoint<coordType> > l_dummy = l_it;
+                ListIterator< GenericPoint<coordType> > l_dummy = l_it;
                 l_it++;
                 m_candPosList[i][e].del(l_dummy);
                 //l_it++;
@@ -371,8 +371,8 @@ void ELabelPos<coordType>::computeCandidates()
 #ifdef foutput
 //fout<<"     labelIndex: "<<labelIndex<<" Typ: "<<(eLabelTyp)labelIndex<<"\n";                
 #endif
-                GPoint<coordType> candidate;
-                GPoint<coordType> symmCandidate; //end label on the opposite edge side
+                GenericPoint<coordType> candidate;
+                GenericPoint<coordType> symmCandidate; //end label on the opposite edge side
                 //now assign positions according to segment direction 
                 //endlabels are shifted depending on direction and type/distance
                 //in inner switch statement
@@ -506,7 +506,7 @@ void ELabelPos<coordType>::computeCandidates()
                         }//switch
                         break;
                       }//odSouth
-                  default: THROW_PARAM(AlgorithmFailureException, afcLabel); 
+                  default: OGDF_THROW_PARAM(AlgorithmFailureException, afcLabel); 
                 }//switch
 
                 currentPos++;
@@ -618,9 +618,9 @@ void ELabelPos<coordType>::computeCandidates()
 
           //insert nodes for the candidate positions for all pairs
           //and connect them to the pairs representant
-          List< GPoint<coordType> >& l_posList = posList(e,i); //all candidates for label Nr. i
+          List< GenericPoint<coordType> >& l_posList = posList(e,i); //all candidates for label Nr. i
 
-          ListIterator< GPoint<coordType> > it = l_posList.begin();
+          ListIterator< GenericPoint<coordType> > it = l_posList.begin();
           //int candIndex = 0;
           while (it.valid())
           {
@@ -654,7 +654,7 @@ void ELabelPos<coordType>::computeCandidates()
       //initialize label structure 
 
       //assure spare candidate
-      EdgeArray< GPoint<coordType> > l_saveCandidate[labelNum];
+      EdgeArray< GenericPoint<coordType> > l_saveCandidate[labelNum];
       for (int k = 0; k < labelNum; k++) l_saveCandidate[k].init(m_prup->original());
       saveRecovery(l_saveCandidate);
       
@@ -687,14 +687,14 @@ void ELabelPos<coordType>::computeCandidates()
 //man braucht ja echte Labelposition und die Groesse, wichtig
 //auch, da man die Richtung des Labels wissen muss
           //insert labels into structure
-          List< GPoint<coordType> >& l_posList = posList(e,i); //all candidates for label Nr. i
+          List< GenericPoint<coordType> >& l_posList = posList(e,i); //all candidates for label Nr. i
           //will be replaced by
 		  List<PosInfo>& l_candList = candList(e, i);
 
           //check intersection with original graph nodes:
           
           //simple version one after another
-          ListIterator< GPoint<coordType> > it = l_posList.begin();
+          ListIterator< GenericPoint<coordType> > it = l_posList.begin();
           while (it.valid())
           {
 
@@ -721,7 +721,7 @@ void ELabelPos<coordType>::computeCandidates()
             }//forall_nodes
             if (intersect)
             {
-              ListIterator< GPoint<coordType> > itX = it;
+              ListIterator< GenericPoint<coordType> > itX = it;
               it++;
               l_posList.del(itX);
               
@@ -751,7 +751,7 @@ void ELabelPos<coordType>::computeCandidates()
     }//testfeatureintersect
 
     template <class coordType>
-    void ELabelPos<coordType>::saveRecovery(EdgeArray< GPoint<coordType> > (&saveCandidate)[labelNum])
+    void ELabelPos<coordType>::saveRecovery(EdgeArray< GenericPoint<coordType> > (&saveCandidate)[labelNum])
     {
 		//a labeltype - dependant extra candidate for label positioning should
 		//be defined here to help in case of empty cand.list after featureintersect
@@ -780,7 +780,7 @@ void ELabelPos<coordType>::computeCandidates()
 		    int i;
 			for (i = 0; i < labelNum; i++)
 			{
-				List< GPoint<coordType> >& l_posList = posList(e,i); //all candidates for label Nr. i
+				List< GenericPoint<coordType> >& l_posList = posList(e,i); //all candidates for label Nr. i
 				//hier: sichere, das Eintrag vorhanden
 				saveCandidate[i][e] = (*l_posList.get(int(floor((double)(l_posList.size())/2))));
 			}//for labeltypes
@@ -826,11 +826,11 @@ void ELabelPos<coordType>::computeCandidates()
         for (i = 0; i < labelNum; i++)
         {
           //insert labels into structure
-          List< GPoint<coordType> >& l_posList = posList(e,i); //all candidates for label Nr. i
+          List< GenericPoint<coordType> >& l_posList = posList(e,i); //all candidates for label Nr. i
           
           //simple version one after another
           int index = 0;
-          ListIterator< GPoint<coordType> > it = l_posList.begin();
+          ListIterator< GenericPoint<coordType> > it = l_posList.begin();
           while (it.valid())
           {
 
@@ -1020,7 +1020,7 @@ void ELabelPos<coordType>::computeCandidates()
         edge et = m_prup->copy(e); //chain(e).front
 
         //fill the m_poly polyline for original e
-        m_poly[e].pushBack( GPoint<coordType>(m_gl->x(et->source()), m_gl->y(et->source())));
+        m_poly[e].pushBack( GenericPoint<coordType>(m_gl->x(et->source()), m_gl->y(et->source())));
 
         //count all inner nodes as crossings or bends
         ListConstIterator<edge> l_it;
@@ -1032,8 +1032,8 @@ void ELabelPos<coordType>::computeCandidates()
           SegmentInfo si;
 
           ec = *l_it;
-          GPoint<coordType> ip1(m_gl->x(ec->source()), m_gl->y(ec->source()));
-          GPoint<coordType> ip2(m_gl->x(ec->target()), m_gl->y(ec->target()));
+          GenericPoint<coordType> ip1(m_gl->x(ec->source()), m_gl->y(ec->source()));
+          GenericPoint<coordType> ip2(m_gl->x(ec->target()), m_gl->y(ec->target()));
           m_poly[e].pushBack(ip2);
           int len = max(abs(m_gl->x(ec->target()) - m_gl->x(ec->source()) ),
                         abs(m_gl->y(ec->target())- m_gl->y(ec->source()) ) );
@@ -1772,8 +1772,8 @@ template <class coordType>
 
 				coordType stepping = (currentPos - segStartLabel)*standardDist;
 
-                GPoint<coordType> candidate;
-                GPoint<coordType> symmCandidate; //end label on the opposite edge side
+                GenericPoint<coordType> candidate;
+                GenericPoint<coordType> symmCandidate; //end label on the opposite edge side
                 //now assign positions according to segment direction 
                 //endlabels are shifted depending on direction and type/distance
                 //in inner switch statement
@@ -1903,7 +1903,7 @@ template <class coordType>
                         }//switch
                         break;
                       }//odSouth
-                  default: THROW_PARAM(AlgorithmFailureException, afcLabel); 
+                  default: OGDF_THROW_PARAM(AlgorithmFailureException, afcLabel); 
                 }//switch
 
                 currentPos++;
@@ -1999,7 +1999,7 @@ template <class coordType>
 
 		l_it = theBends.begin();
 		dp1 = *l_it;
-        GPoint<coordType> ip2(dp1.m_x, dp1.m_y);
+        GenericPoint<coordType> ip2(dp1.m_x, dp1.m_y);
         m_poly[e].pushBack(ip2);
 #ifdef foutput
 //outf<<"Startpunkt: "<<ip2.m_x<<"/"<<ip2.m_y<<"\n";
@@ -2017,7 +2017,7 @@ template <class coordType>
 #endif
           dp2 = *l_it;
           
-          GPoint<coordType> ip2(dp2.m_x, dp2.m_y);
+          GenericPoint<coordType> ip2(dp2.m_x, dp2.m_y);
 
 		  //derive the segment direction
 		  OrthoDir od;
@@ -2030,7 +2030,7 @@ template <class coordType>
           else
           {
 			if (!DIsEqual(dp1.m_x, dp2.m_x, 1e-9)) 
-				THROW_PARAM(PreconditionViolatedException, pvcOrthogonal);
+				OGDF_THROW_PARAM(PreconditionViolatedException, pvcOrthogonal);
               //check m_x == m_x
             if (DIsLess(dp1.m_y, dp2.m_y, 1e-9)) od = odNorth;
             else od = odSouth;
@@ -2117,7 +2117,7 @@ template <class coordType>
       //initialize label structure 
 
       //assure spare candidate
-      EdgeArray< GPoint<coordType> > l_saveCandidate[labelNum];
+      EdgeArray< GenericPoint<coordType> > l_saveCandidate[labelNum];
 	  //TODO: nur falls usedLabel
       for (int k = 0; k < labelNum; k++) l_saveCandidate[k].init(m_ug->constGraph());
       saveUMLRecovery(l_saveCandidate);
@@ -2151,7 +2151,7 @@ template <class coordType>
             //save intersection status if the number is to be counted
             bool hasIntersection = false;
 
-			GPoint<coordType>& coord =(*itPos).m_coord;
+			GenericPoint<coordType>& coord =(*itPos).m_coord;
 
             //label size and position
 
@@ -2520,7 +2520,7 @@ template <class coordType>
 
 
 template <class coordType>
-    void ELabelPos<coordType>::saveUMLRecovery(EdgeArray< GPoint<coordType> > 
+    void ELabelPos<coordType>::saveUMLRecovery(EdgeArray< GenericPoint<coordType> > 
 	                           (&saveCandidate)[labelNum])
     {
 
@@ -2720,7 +2720,7 @@ template <class coordType>
 
       ofstream os(filename);
 
-	  const Graph& G = *m_ug;
+	  const Graph& G = m_ug->constGraph();
 
 	  NodeArray<int> id(G);
 	  int nextId = 0;
@@ -2762,7 +2762,8 @@ template <class coordType>
 			os << "fill \"#FFFF00\"\n";
 
 		else
-			os << "fill \"#000000\"\n";
+			os << "fill \"#FFFF00\"\n";
+			//os << "fill \"#000000\"\n";
 
 		os << "]\n"; // graphics
 		os << "]\n"; // node
@@ -2873,14 +2874,23 @@ template <class coordType>
 		    os << "width 0.01\n";
 		
 			//os << "type \"oval\"\n";
+			//Change background color of labels here
             switch (i)
             {
-              case 0: os << "fill \"#2F2F0F\"\n"; break;
+				case 0: os << "line \"#00FF00\"\n"; break;
+				case 1: os << "line \"#00FF00\"\n"; break;
+				case 2: os << "line \"#FF0000\"\n"; break;
+				case 3: os << "line \"#0000FF\"\n"; break;
+				case 4: os << "line \"#0000FF\"\n"; break;
+				default: os << "line \"#FF00FF\"\n";
+             /* case 0: os << "fill \"#2F2F0F\"\n"; break;
               case 1: os << "fill \"#4F4F0F\"\n"; break;
               case 2: os << "fill \"#6F6F0F\"\n"; break;
               case 3: os << "fill \"#0F7F7F\"\n"; break;
-              case 4: os << "fill \"#0F9F9F\"\n"; break;
+              case 4: os << "fill \"#0F9F9F\"\n"; break;*/
             }//switch
+
+			os << "fill \"#FFFFFF\"\n";
 
       		os << "]\n"; // graphics
          	os << "]\n"; // node

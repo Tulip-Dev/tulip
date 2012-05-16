@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -106,9 +96,24 @@ public:
 		m_percentMostCrossed = percent;
 	}
 
-	//! Returns the current setting of option percentMostCrossed.
+	//! Returns the current setting of option <i>percentMostCrossed</i>.
 	double percentMostCrossed() const {
 		return m_percentMostCrossed;
+	}
+
+	//! Sets the option <i>keepEmbedding</i> to \a keep.
+	/**
+	 * This option determines if the planar embedding of the planarized representation \a PG passed to the call-method
+	 * is preserved, or if always a new embedding is computed. If <i>keepEmbedding</i> is set to true,
+	 * \a PG must always be planarly embedded.
+	 */
+	void keepEmbedding(bool keep) {
+		m_keepEmbedding = keep;
+	}
+
+	//! Returns the current setting of option <i>keepEmbedding</i>.
+	bool keepEmbeding() const {
+		return m_keepEmbedding;
 	}
 	
 	/** @}
@@ -214,6 +219,7 @@ private:
 
 	RemoveReinsertType m_rrOption; //!< The remove-reinsert method.
 	double m_percentMostCrossed;   //!< The portion of most crossed edges considered.
+	bool m_keepEmbedding;
 
 	int m_runsPostprocessing; //!< Runs of remove-reinsert method.
 };

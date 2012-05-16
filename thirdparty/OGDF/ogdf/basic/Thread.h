@@ -1,9 +1,9 @@
 /*
- * $Revision: 2029 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-02 11:17:59 +0200 (Thu, 02 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -178,7 +168,7 @@ public:
 	//	return SetThreadAffinityMask(m_handle, (DWORD_PTR)mask);
 	//}
 
-	void start(State = tsRunning) {
+	void start(State state = tsRunning) {
 		OGDF_ASSERT(m_pt == 0);
 		pthread_create(&m_pt, NULL, threadProc, this);
 	}
@@ -226,6 +216,7 @@ private:
 		Thread *pThread = static_cast<Thread*>(pParam);
 		OGDF_ALLOCATOR::initThread();
 		pThread->doWork();
+		pthread_exit(NULL);
 		OGDF_ALLOCATOR::flushPool();
 		pThread->m_pt = 0;
 		return 0;

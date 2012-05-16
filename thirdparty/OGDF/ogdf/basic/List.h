@@ -1,9 +1,9 @@
 /*
- * $Revision: 2071 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-10-19 16:18:38 +0200 (Tue, 19 Oct 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
 
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -467,6 +457,26 @@ public:
 		for(ListElement<E> *pX = m_head; pX != 0; pX = pX->m_next, ++p)
 			if (pX == it) break;
 		return p;
+	}
+
+	// returns random valid iterator. Note that this takes linear time (doubled).
+	ListConstIterator<E> chooseIterator() const {
+		return get(randomNumber(0,size()-1));
+	}
+
+	// returns random valid iterator. Note that this takes linear time (doubled).
+	ListIterator<E> chooseIterator() {
+		return get(randomNumber(0,size()-1));
+	}
+
+	// returns random element. Note that this takes linear time.
+	const E chooseElement() const {
+		return *chooseIterator();
+	}
+
+	// returns random element. Note that this takes linear time.
+	E chooseElement() {
+		return *chooseIterator();
 	}
 
 	//! Assignment operator.
@@ -1206,6 +1216,26 @@ public:
 		return ListPure<E>::pos(it);
 	}
 
+	// returns random valid iterator. Note that this takes linear time.
+	ListConstIterator<E> chooseIterator() const {
+		return get(randomNumber(0,m_count-1));
+	}
+
+	// returns random valid iterator. Note that this takes linear time.
+	ListIterator<E> chooseIterator() {
+		return get(randomNumber(0,m_count-1));
+	}
+
+	// returns random element. Note that this takes linear time.
+	const E chooseElement() const {
+		return *chooseIterator();
+	}
+
+	// returns random element. Note that this takes linear time.
+	E chooseElement() {
+		return *chooseIterator();
+	}
+
 	// assignment
 	List<E> &operator=(const List<E> &L) {
 		ListPure<E>::operator=(L);
@@ -1442,9 +1472,12 @@ public:
 		ListPure<E>::permute(m_count);
 	}
 
+	//! Scans the list for the specified element and returns its position in the list, or -1 if not found.
 	int search (const E& e) const {
 		return ListPure<E>::search(e);
 	}
+
+	//! Scans the list for the specified element (using the user-defined comparer) and returns its position in the list, or -1 if not found.
 	template<class COMPARER>
 	int search (const E& e, const COMPARER &comp) const {
 		return ListPure<E>::search(e, comp);

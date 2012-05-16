@@ -1,13 +1,13 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
  ***************************************************************/
 
 /** \file
- * \brief Splits and packs the components of a Graph
+ * \brief Splits and packs the components of a Graph.
  *
  * \author Gereon Bartel
  *
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  *
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -56,40 +46,49 @@
 #ifndef OGDF_COMPONENT_SPLITTER_LAYOUT_H
 #define OGDF_COMPONENT_SPLITTER_LAYOUT_H
 
+#include <ogdf/basic/ModuleOption.h>
 #include <ogdf/internal/energybased/MultilevelGraph.h>
 #include <ogdf/module/CCLayoutPackModule.h>
-#include <ogdf/packing/TileToRowsCCPacker.h>
 #include <ogdf/module/LayoutModule.h>
-#include <ogdf/basic/Graph.h>
 #include <ogdf/basic/geometry.h>
 #include <ogdf/basic/GraphAttributes.h>
 #include <vector>
 
+
 namespace ogdf {
 
-class OGDF_EXPORT ComponentSplitterLayout : public ogdf::LayoutModule
+class OGDF_EXPORT ComponentSplitterLayout : public LayoutModule
 {
 private:
-	LayoutModule * m_secondaryLayout;
-	std::vector<MultilevelGraph *> m_components;
-	CCLayoutPackModule &m_packer;
-	int m_number_of_components;
+	ModuleOption<LayoutModule> m_secondaryLayout;
+	ModuleOption<CCLayoutPackModule> m_packer;
+
+	// keeps a list of nodes for each connected component,
+	// up to date only in call method
+	Array<List<node> > nodesInCC;
+	int m_numberOfComponents;
 	double m_targetRatio;
 	int m_minDistCC;
 	int m_rotatingSteps;
 	int m_border;
-
-	void splitIntoComponents(MultilevelGraph &MLG);
-	void reassembleDrawings(MultilevelGraph &MLG);
+	
+	//! Combines drawings of connected components to
+	//! a single drawing by rotating components and packing
+	//! the result (optimizes area of axis-parallel rectangle).
+	void reassembleDrawings(GraphAttributes &GA);
 
 public:
-	ComponentSplitterLayout(CCLayoutPackModule &packer);
-	~ComponentSplitterLayout();
+	ComponentSplitterLayout();
 
-	void call(ogdf::GraphAttributes &GA);
-	void call(MultilevelGraph &MLG);
-	void setLayoutModule(LayoutModule &layout);
+	void call(GraphAttributes &GA);
 
+	void setLayoutModule(LayoutModule *layout) {
+		m_secondaryLayout.set(layout);
+	}
+
+	void setPacker(CCLayoutPackModule *packer) {
+		m_packer.set(packer);
+	}
 };
 
 } // namespace ogdf

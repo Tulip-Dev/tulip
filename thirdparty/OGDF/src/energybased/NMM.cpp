@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -2144,11 +2134,11 @@ void NMM :: calculate_local_expansions_and_WSPRLS(NodeArray<NodeAttributes>&A,
 
   //Step 1: calculate Lists I (min. ill sep. set), L (interaction List of well sep.
   //nodes , they are used to form the Local Expansions from the multipole expansions),
-  //L2 (non bordering leaves that have a larger or equal Sm-cell and  are ill seperated;
+  //L2 (non bordering leaves that have a larger or equal Sm-cell and  are ill separated;
   //empty if the actual node is a leaf)
   //calculate List D1(bordering leaves that have a larger or equal Sm-cell and are
-  //ill seperated) and D2 (non bordering leaves that have a larger or equal Sm-cell and
-  //are ill seperated;empty if the actual node is an interior node)  
+  //ill separated) and D2 (non bordering leaves that have a larger or equal Sm-cell and
+  //are ill separated;empty if the actual node is an interior node)
 
   //special case: act_node is the root of T
   if (act_node_ptr->is_root())
@@ -2180,7 +2170,7 @@ void NMM :: calculate_local_expansions_and_WSPRLS(NodeArray<NodeAttributes>&A,
   while (!E.empty())
    {//while
      selected_node_ptr = E.popFrontRet();
-     if (well_seperated(act_node_ptr,selected_node_ptr)) 
+     if (well_separated(act_node_ptr,selected_node_ptr))
         L.pushBack(selected_node_ptr);
      else if (act_node_ptr->get_Sm_level() < selected_node_ptr->get_Sm_level())
         I.pushBack(selected_node_ptr);
@@ -2233,7 +2223,7 @@ void NMM :: calculate_local_expansions_and_WSPRLS(NodeArray<NodeAttributes>&A,
         calculate_local_expansions_and_WSPRLS(A,act_node_ptr->get_child_rb_ptr());
    }
 
-  //Step 5: WSPRLS(Well Seperateness Preserving Refinement of leaf surroundings)
+  //Step 5: WSPRLS(Well Separateness Preserving Refinement of leaf surroundings)
   //if act_node is a leaf than calculate the list D1,D2 and M from I and D1
   else // *act_node_ptr is a leaf
    {//else
@@ -2275,7 +2265,7 @@ void NMM :: calculate_local_expansions_and_WSPRLS(NodeArray<NodeAttributes>&A,
 }
 
 
-bool NMM :: well_seperated(QuadTreeNodeNM* node_1_ptr,QuadTreeNodeNM* node_2_ptr)
+bool NMM :: well_separated(QuadTreeNodeNM* node_1_ptr,QuadTreeNodeNM* node_2_ptr)
 {
   numexcept N;
   double boxlength_1 = node_1_ptr->get_Sm_boxlength();
@@ -2643,17 +2633,17 @@ void NMM :: calculate_neighbourcell_forces(NodeArray<NodeAttributes>&
 	       pos_u = A[u].get_position();
 	       pos_v = A[v].get_position();
 	       if (pos_u == pos_v)
-		 {//if2  (Exzeption handling if two nodes have the same position)        
-		   pos_u = N.choose_distinct_random_point_in_radius_epsilon(pos_u);
-		 }//if2
+	       {//if2  (Exception handling if two nodes have the same position)
+	    	   pos_u = N.choose_distinct_random_point_in_radius_epsilon(pos_u);
+		   }//if2
 	       vector_v_minus_u = pos_v - pos_u;
 	       norm_v_minus_u = M.norm(vector_v_minus_u);
 	       if(!N.f_rep_near_machine_precision(norm_v_minus_u,f_rep_u_on_v))
-		 {
-		   scalar = f_rep_scalar(norm_v_minus_u)/norm_v_minus_u ;
-		   f_rep_u_on_v.m_x = scalar * vector_v_minus_u.m_x;
-		   f_rep_u_on_v.m_y = scalar * vector_v_minus_u.m_y;
-		 }
+	       {
+	    	   scalar = f_rep_scalar(norm_v_minus_u)/norm_v_minus_u ;
+	    	   f_rep_u_on_v.m_x = scalar * vector_v_minus_u.m_x;
+	    	   f_rep_u_on_v.m_y = scalar * vector_v_minus_u.m_y;
+	       }
 	       F_direct[v] = F_direct[v] + f_rep_u_on_v;
 	       F_direct[u] = F_direct[u] - f_rep_u_on_v;
 	     }
@@ -2686,7 +2676,7 @@ void NMM :: calculate_neighbourcell_forces(NodeArray<NodeAttributes>&
 		     pos_u = A[*u_ptr].get_position();
 		     pos_v = A[*v_ptr].get_position();
 		     if (pos_u == pos_v)
-		       {//if2  (Exzeption handling if two nodes have the same position)
+		       {//if2  (Exception handling if two nodes have the same position)
 			 pos_u = N.choose_distinct_random_point_in_radius_epsilon(pos_u);
 		       }//if2
 		     vector_v_minus_u = pos_v - pos_u;
@@ -2718,7 +2708,7 @@ void NMM :: calculate_neighbourcell_forces(NodeArray<NodeAttributes>&
                  pos_u = A[*u_ptr].get_position();
 		 pos_v = A[*v_ptr].get_position();
 		 if (pos_u == pos_v)
-		   {//if2  (Exzeption handling if two nodes have the same position)   
+		   {//if2  (Exception handling if two nodes have the same position)
 		     pos_u = N.choose_distinct_random_point_in_radius_epsilon(pos_u);
 		   }//if2
 		 vector_v_minus_u = pos_v - pos_u;
@@ -2792,7 +2782,7 @@ void NMM :: init_binko(int t)
     BK[i]=  new double[i+1];
    }//for  
 
-     //Pascalsches Dreieck
+     //Pascal's triangle
 
  for (i = 0; i <= t;i++)
    BK[i][0] = BK[i][i] = 1;

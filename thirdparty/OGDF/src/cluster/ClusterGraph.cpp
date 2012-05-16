@@ -1,9 +1,9 @@
 /*
- * $Revision: 2047 $
+ * $Revision: 2302 $
  * 
  * last checkin:
- *   $Author: klein $ 
- *   $Date: 2010-10-13 17:12:21 +0200 (Wed, 13 Oct 2010) $ 
+ *   $Author: gutwenger $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -13,7 +13,7 @@
  * and a rooted tree T in which the leaves of T correspond 
  * to the vertices of G=(V,E).
  * 
- * \author Sebastian Leipert
+ * \author Sebastian Leipert, Karsten Klein
  * 
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
@@ -24,19 +24,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -63,8 +53,9 @@
 #include <string.h>
 
 #include <ogdf/basic/String.h>
-#include <ogdf/fileformats/GmlParser.h>
 #include <ogdf/basic/AdjEntryArray.h>
+
+#include <ogdf/fileformats/GmlParser.h>
 
 
 namespace ogdf {
@@ -753,7 +744,7 @@ cluster ClusterGraph::commonClusterAncestorsPath(node v,
 }//commonclusterlastAncestors
 
 void ClusterGraph::copyLCA(const ClusterGraph &C, 
-						   ClusterArray<cluster>*)
+						   ClusterArray<cluster>* clusterCopy)
 {
 	if (m_lcaSearch) 
 	{
@@ -1723,6 +1714,57 @@ void ClusterGraph::writeGraphWinCluster(ostream &os,
 		os << scip << "vertex \"v" << nId[*itn] << "\"\n";
 	os << scip << "]\n"; // cluster
 }
+
+
+//++++++++++++++++++++++++++++++++++++++++++++
+//reading graph,  cluster structure
+bool ClusterGraph::readClusterGML(const char* fileName,
+								Graph& G)
+{
+	ifstream is(fileName);
+	if (!is)
+		return false; // couldn't open file
+
+	return readClusterGML(is, G);
+}
+
+bool ClusterGraph::readClusterGML(istream& is,
+								Graph& G)
+{
+	bool result;
+	GmlParser gml(is);
+	if (gml.error())
+		return false;
+
+	result = gml.read(G);
+
+	if (!result) return false;
+
+	return gml.readCluster(G, *this);
+}
+
+
+// read Cluster Graph from OGML file
+//bool ClusterGraph::readClusterGraphOGML(const char* fileName,
+//												 ClusterGraph& CG,
+//												 Graph& G)
+//{
+//	ifstream is(fileName);
+//	// not able to open file
+//	if (!is) return false;
+//
+//	OgmlParser *op = new OgmlParser();
+//	// build graph
+//	// method read contains the validation
+//	if (!op->read(fileName, G, CG, *this)){
+//		delete(op);
+//		cerr << "ERROR occured while reading. Aborting." << endl << flush;
+//		return false;
+//	}
+//
+//	delete(op);
+//	return true;
+//};
 
 
 } // end namespace ogdf

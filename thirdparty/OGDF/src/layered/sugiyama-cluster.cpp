@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -21,19 +21,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -1183,20 +1173,15 @@ bool ExtendedNestingGraph::tryEdge(node u, node v, Graph &G, NodeArray<int> &lev
 
 	else if(level[u] >= level[v]) {
 		SListPure<node> successors;
-		if(reachable(v, u, successors) == false) {
-			int d = level[u] - level[v] + 1;
-			OGDF_ASSERT(d > 0);
-
-			SListConstIterator<node> it;
-			for(it = successors.begin(); it.valid(); ++it)
-				level[*it] += d;
-		} else {
+		if(reachable(v, u, successors))
 			return false;
+		else {
+			level[v] = level[u] + 1;
+			moveDown(v, successors, level);
 		}
 	}
 
 	G.newEdge(u,v);
-	//OGDF_ASSERT(isAcyclic(G));
 
 	return true;
 }
@@ -1270,6 +1255,7 @@ RCCrossings ExtendedNestingGraph::reduceCrossings(LHTreeNode *cNode, bool dirTop
 	Graph G; // crossing reduction graph
 	NodeArray<int>  level(G,-1);
 	m_aeVisited.init(G,false);
+	m_auxDeg.init(G,0);
 
 	// create nodes
 	NodeArray<LHTreeNode*> fromG(G);
@@ -1621,6 +1607,60 @@ bool ExtendedNestingGraph::reachable(node v, node u, SListPure<node> &successors
 }
 
 
+void ExtendedNestingGraph::moveDown(node v, const SListPure<node> &successors, NodeArray<int> &level)
+{
+	SListConstIterator<node> it;
+	for(it = successors.begin(); it.valid(); ++it) {
+		m_aeVisited[*it] = true;
+		m_auxDeg[*it] = 0;
+	}
+
+	for(it = successors.begin(); it.valid(); ++it) {
+		edge e;
+		forall_adj_edges(e,*it) {
+			node s = e->source();
+			if(s != *it && m_aeVisited[s])
+				++m_auxDeg[*it];
+		}
+	}
+
+	SListPure<node> Q;
+	edge e;
+	forall_adj_edges(e,v) {
+		node t = e->target();
+		if(t != v) {
+			if( --m_auxDeg[t] == 0 )
+				Q.pushBack(t);
+		}
+	}
+
+	while(!Q.empty())
+	{
+		node w = Q.popFrontRet();
+
+		int maxLevel = 0;
+		edge e;
+		forall_adj_edges(e, w) {
+			node s = e->source();
+			node t = e->target();
+
+			if(s != w)
+				maxLevel = max(maxLevel, level[s]);
+			if(t != w) {
+				if(--m_auxDeg[t] == 0)
+					Q.pushBack(t);
+			}
+		}
+
+		level[w] = maxLevel+1;
+	}
+
+	for(it = successors.begin(); it.valid(); ++it) {
+		m_aeVisited[*it] = false;
+	}
+}
+
+
 edge ExtendedNestingGraph::addEdge(node u, node v, bool addAlways)
 {
 	if(m_aeLevel[u] < m_aeLevel[v])
@@ -1843,8 +1883,10 @@ void SugiyamaLayout::reduceCrossings(ExtendedNestingGraph &H)
 	for(int i = 1; ; ++i)
 	{
 		int nFails = m_fails+1;
+		int counter = 0;
 
 		do {
+			counter++;
 			// top-down traversal
 			nCrossingsNew = traverseTopDown(H);
 

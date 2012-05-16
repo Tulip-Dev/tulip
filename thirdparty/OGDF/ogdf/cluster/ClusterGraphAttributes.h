@@ -1,9 +1,9 @@
 /*
- * $Revision: 2056 $
+ * $Revision: 2299 $
  * 
  * last checkin:
- *   $Author: klein $ 
- *   $Date: 2010-10-16 16:27:46 +0200 (Sat, 16 Oct 2010) $ 
+ *   $Author: gutwenger $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -23,19 +23,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -293,11 +283,14 @@ namespace ogdf {
 
 			//! Writes attributed clustergraph in GML format to file fileName.
 			void writeGML(const char *fileName);
+
 			//! Writes attributed clustergraph in GML format to output stream \a os.
 			void writeGML(ostream& os);
+
 			//we don't have GraphConstraints yet
 			//! Writes attributed clustergraph in OGML format to file fileName
 			void writeOGML(const char * fileName);//, GraphConstraints & GC);
+
 			//! Writes attributed clustergraph in OGML format to output stream \a os.
 			void writeOGML(ostream & os);//, GraphConstraints & GC);
 			
@@ -305,24 +298,12 @@ namespace ogdf {
 			bool readClusterGML(const char* fileName, 
 								ClusterGraph& CG, 
 								Graph& G);
+
 			//! Reads attributed clustergraph in GML format from input stream \a is.
 			bool readClusterGML(istream& is, 
 								ClusterGraph& CG, 
 								Graph& G);
 
-			//will be private
-			//! Reads Cluster Graph with Attributes, base graph \a G, from \a fileName
-			//! with a given gmlparser \a gml (has objecttree).
-			//! Input stream given by parser.
-			bool readClusterGraphGML(const char* fileName, 
-									 ClusterGraph& CG, 
-									 Graph& G,
-									 GmlParser& gml);
-			//! Reads clustered graph from input stream of GmlParser.
-			bool readClusterGraphGML( 
-				 ClusterGraph& CG, 
-				 Graph& G,
-				 GmlParser& gml);
 			//! Reads clustered graph from OGML-file.
 			bool readClusterGraphOGML(const char* fileName, 
 												 ClusterGraph& CG, 
@@ -334,6 +315,20 @@ namespace ogdf {
 		private:
 			//! Information on the cluster positions, index is cluster ID.
 			HashArray<int, ClusterInfo> m_clusterInfo;
+
+			//! Reads Cluster Graph with Attributes, base graph \a G, from \a fileName
+			//! with a given gmlparser \a gml (has objecttree).
+			//! Input stream given by parser.
+			bool readClusterGraphGML(const char* fileName, 
+									 ClusterGraph& CG, 
+									 Graph& G,
+									 GmlParser& gml);
+
+			//! Reads clustered graph from input stream of GmlParser.
+			bool readClusterGraphGML( 
+				 ClusterGraph& CG, 
+				 Graph& G,
+				 GmlParser& gml);
 
 			//! Recursively writes the cluster structure in GML format into output stream \a os.
 			void writeCluster(ostream &os,
@@ -352,7 +347,7 @@ namespace ogdf {
 			//! Recursively writes the cluster structure in OGML.
 			void writeClusterOGML(ostream &os, 
 								std::ostringstream & osS, // string stream for styles block
-								NodeArray<int> & nodeIds, 
+								//NodeArray<int> & nodeIds, 
 								int & nextNodeId, 
 								int & nextLabelId, 
 								cluster cluster,

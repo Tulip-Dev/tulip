@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -152,7 +142,7 @@ private:
  * A planar grid layout algorithm is a grid layout algorithm
  * that produces a crossing-free grid layout of a planar
  * graph. It provides an additional call method for producing
- * a planar layout with a pedefined planar embedding.
+ * a planar layout with a predefined planar embedding.
  */
 class OGDF_EXPORT PlanarGridLayoutModule : public GridLayoutModule
 {
@@ -234,7 +224,7 @@ protected:
  * A GridLayoutPlanRepModule is a special class of a grid layout module
  * that produces a planar layout of a planar graph, and that has a
  * special call method (taking a PlanRep as input) for using the
- * layout module witihn the planarization approach.
+ * layout module within the planarization approach.
  *
  * \see PlanarizationGridLayout
  */

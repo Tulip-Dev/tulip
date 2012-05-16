@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -58,6 +48,8 @@
 
 
 #include <ogdf/cluster/ClusterGraph.h>
+#include <ogdf/basic/BinaryHeap2.h>
+#include <limits>
 
 namespace ogdf {
 
@@ -226,7 +218,88 @@ OGDF_EXPORT bool testSTnumber(const Graph &G, NodeArray<int> &st_no,int max);
  *  is set to true, otherwise to false.
  *  Returns the sum of the edge weights in the computed tree.
  * */ 
-double computeMinST(const Graph &G, EdgeArray<double> &weight, EdgeArray<bool> &isInTree);
+template<typename T>
+T computeMinST(const Graph &G, const EdgeArray<T> &weight, EdgeArray<bool> &isInTree){
+	NodeArray<edge> pred(G, 0);
+	return computeMinST(G.firstNode(), G, weight, pred, isInTree);
+}
+
+template<typename T>
+T computeMinST(const Graph &G, const EdgeArray<T> &weight, NodeArray<edge> &pred, EdgeArray<bool> &isInTree){
+	return computeMinST(G.firstNode(), G, weight, pred, isInTree);
+}
+
+template<typename T>
+T computeMinST(node s, const Graph &G, const EdgeArray<T> &weight, NodeArray<edge> &pred, EdgeArray<bool> &isInTree)
+{
+	//our priority queue storing the front vertices
+	BinaryHeap2<T, node> pq;
+
+	//initialize tree flag for edges
+	edge e;
+	forall_edges(e, G)
+	{
+		isInTree[e] = false;
+	}
+
+	//array to save the position information from pq
+	int* pqpos = new int[G.numberOfNodes()];
+
+	int i = 0;
+	NodeArray<int> vIndex(G);
+	//array that tells us if node is already processed
+	NodeArray<bool> processed(G);
+	//predecessor of node v is given by an edge (w,v)
+
+	//insert nodes into pr
+	node v = G.firstNode();
+	T prio = std::numeric_limits<T>::max();;
+	while (v != 0)
+	{
+		vIndex[v] = i;
+		pq.insert(v, prio, &(pqpos[i++]));
+		processed[v] = false;
+		pred[v] = 0;
+		v = v->succ();
+	}//while all nodes
+	// decrease start node
+	pq.decreaseKey(pqpos[vIndex[s]], 0.0);
+
+	//extract the nodes again along a minimum ST
+	while (!pq.empty())
+	{
+		v = pq.extractMin();
+		processed[v] = true;
+		forall_adj_edges(e, v)
+		{
+			node w = e->opposite(v);
+
+			int posofw = pqpos[vIndex[w]];
+			if ((!processed[w]) && (weight[e] < pq.getPriority(posofw)))
+			{
+				pq.decreaseKey(posofw, weight[e]);
+				pred[w] = e;
+			}//if improvement
+		}
+	}//while pq
+
+	//only for connected graphs
+	int rootcount = 0;
+	T treeWeight = 0.0;
+	forall_nodes(v, G)
+	{
+		if (pred[v] == 0) rootcount++;
+		else
+		{
+			isInTree[pred[v]] = true;
+			treeWeight += weight[pred[v]];
+		}
+	}
+	OGDF_ASSERT(rootcount == 1);
+
+	delete[] pqpos;
+	return treeWeight;
+}//computeMinST
 
 } // end namespace ogdf
 

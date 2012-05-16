@@ -1,13 +1,13 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
  ***************************************************************/
 
 /** \file
- * \brief MLG is the main Datastructure for ModularMultilevelMixerLayout
+ * \brief MLG is the main data structure for ModularMultilevelMixer
  *
  * \author Gereon Bartel
  *
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  *
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -64,39 +54,40 @@
 namespace ogdf {
 
 //Stores info on merging for a refinement level
-struct NodeMerge {
+struct NodeMerge
+{
 	// Node/Edge IDs instead of pointers as the nodes themselves may be nonexistent.
 	std::vector<int> m_deletedEdges;
 	std::vector<int> m_changedEdges;
-	std::map<int, float> m_doubleWeight; // for changed and deleted edges
+	std::map<int, double> m_doubleWeight; // for changed and deleted edges
 	std::map<int, int> m_source;
 	std::map<int, int> m_target;
 
 	int m_mergedNode;
-	std::vector< std::pair<int, float> > m_position; // optional information <target, distance>. mergedNode will be placed at average of relative distances to target.
+	std::vector< std::pair<int, double> > m_position; // optional information <target, distance>. mergedNode will be placed at average of relative distances to target.
 
 	std::vector<int> m_changedNodes; // there may be placement strategies that use more than one reference-node.
-	std::map<int, float> m_radius; // for changed nodes and the merged node
+	std::map<int, double> m_radius; // for changed nodes and the merged node
 	
 	int m_level;
 
 
-	NodeMerge(int level);
-	~NodeMerge();
+	NodeMerge(int level) : m_level(level) { }
+	~NodeMerge() { }
 };
 
 
-class OGDF_EXPORT MultilevelGraph
+class MultilevelGraph
 {
 private:
-	bool m_createdGraph;
+	bool m_createdGraph; //used in destructor, TODO: check if it is needed
 	Graph * m_G;
+	GraphAttributes * m_GA; //<! Keeps layout info in replacement of information below (todo: remove them)
 	std::vector<NodeMerge *> m_changes;
-	NodeArray<float> m_x;
-	NodeArray<float> m_y;
-	NodeArray<float> m_radius;
+	NodeArray<double> m_radius;
+	double m_avgRadius; //stores average node radius for scaling and random layout purposes
 
-	EdgeArray<float> m_weight;
+	EdgeArray<double> m_weight;
 
 	// Associations to index only as the node/edge may be nonexistent
 	NodeArray<int> m_nodeAssociations;
@@ -111,6 +102,7 @@ private:
 	void prepareGraphAttributes(GraphAttributes &GA) const;
 
 	void initReverseIndizes();
+	void initInternal();
 
 public:
 	~MultilevelGraph();
@@ -124,29 +116,33 @@ public:
 	MultilevelGraph(istream &is);
 	MultilevelGraph(const String &filename);
 
-	NodeArray<float> & getXArray();
-	NodeArray<float> & getYArray();
-	NodeArray<float> & getRArray();
-	EdgeArray<float> & getWArray();
+	NodeArray<double> &getRArray() { return m_radius; }
+	EdgeArray<double> &getWArray() { return m_weight; }
 
 	edge getEdge(unsigned int index);
 	node getNode(unsigned int index);
-	float radius(node v);
-	void radius(node v, float r);
-	float x(node v);
-	float y(node v);
-	void x(node v, float x);
-	void y(node v, float y);
 
-	void weight(edge e, float weight);
-	float weight(edge e);
+	double radius(node v) { return m_radius[v]; }
+	void radius(node v, double r) { m_radius[v] = r; }
+	double averageRadius() const { return m_avgRadius;}
+
+	double x(node v) { return m_GA->x(v); }
+	double y(node v) { return m_GA->y(v); }
+	void x(node v, double x) { m_GA->x(v) = x;}
+	void y(node v, double y) { m_GA->y(v) = y;}
+
+	void weight(edge e, double weight) { m_weight[e] = weight; }
+	double weight(edge e) { return m_weight[e]; }
+
 	//returns the merge weight, i.e. the number of nodes represented by v on the current level
 	int mergeWeight(node v) {return m_reverseNodeMergeWeight[v->index()];}
 
 	void moveToZero();
 
 	int getLevel();
-	Graph & getGraph();
+	Graph & getGraph() { return *m_G; }
+	//! Returns attributes of current level graph as GraphAttributes
+	GraphAttributes & getGraphAttributes() const {return *m_GA;}; 
 	void exportAttributes(GraphAttributes &GA) const;
 	void exportAttributesSimple(GraphAttributes &GA) const;
 	void importAttributes(const GraphAttributes &GA);
@@ -163,8 +159,8 @@ public:
 
 	bool postMerge(NodeMerge * NM, node merged);
 	//\a merged is the node now represented by \a theNode
-	bool changeNode(NodeMerge * NM, node theNode, float newRadius, node merged);
-	bool changeEdge(NodeMerge * NM, edge theEdge, float newWeight, node newSource, node newTarget);
+	bool changeNode(NodeMerge * NM, node theNode, double newRadius, node merged);
+	bool changeEdge(NodeMerge * NM, edge theEdge, double newWeight, node newSource, node newTarget);
 	bool deleteEdge(NodeMerge * NM, edge theEdge);
 	std::vector<edge> moveEdgesToParent(NodeMerge * NM, node theNode, node parent, bool deleteDoubleEndges, int adjustEdgeLengths);
 	NodeMerge * getLastMerge();
