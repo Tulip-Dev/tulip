@@ -23,8 +23,8 @@
 
 #include <tulip/tulipconf.h>
 
-class QGLPixelBuffer;
-class QGLFramebufferObject;
+#include <QtOpenGL/QGLPixelBuffer>
+#include <QtOpenGL/QGLFramebufferObject>
 
 namespace tlp {
 
@@ -43,6 +43,20 @@ public:
       inst=new QGlBufferManager();
 
     return *inst;
+  }
+
+  static void clearBuffers() {
+    if(!inst)
+      return;
+
+    for(std::map<std::pair<int,int>,QGLPixelBuffer*>::iterator it=inst->widthHeightToBuffer.begin();it!=inst->widthHeightToBuffer.end();++it)
+      delete (*it).second;
+    for(std::map<std::pair<int,int>,QGLFramebufferObject*>::iterator it=inst->widthHeightToFramebuffer.begin();it!=inst->widthHeightToFramebuffer.end();++it)
+      delete (*it).second;
+    inst->widthHeightToBuffer.clear();
+    inst->bufferToWidthHeight.clear();
+    inst->widthHeightToFramebuffer.clear();
+    inst->framebufferToWidthHeight.clear();
   }
 
   /**
