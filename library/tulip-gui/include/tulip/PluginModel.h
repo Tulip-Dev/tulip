@@ -16,7 +16,7 @@ class PluginListModel : public tlp::TulipModel {
 private:
   QList<std::string> _list;
 public:
-  explicit PluginListModel(QObject *parent = 0): TulipModel(parent), _list(QList<std::string>::fromStdList(PluginLister::instance()->availablePlugins<PLUGIN>())) {
+  explicit PluginListModel(QObject *parent = NULL): TulipModel(parent), _list(QList<std::string>::fromStdList(PluginLister::instance()->availablePlugins<PLUGIN>())) {
   }
   virtual ~PluginListModel() {
   }
@@ -131,7 +131,7 @@ class PluginModel : public tlp::TulipModel {
   }
 
 public:
-  explicit PluginModel(QObject *parent = 0): TulipModel(parent), _root(NULL) {
+  explicit PluginModel(QObject *parent = NULL): TulipModel(parent), _root(NULL) {
     buildTree();
   }
   virtual ~PluginModel() {

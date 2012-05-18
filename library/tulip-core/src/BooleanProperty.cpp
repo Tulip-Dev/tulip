@@ -29,28 +29,28 @@ const string BooleanVectorProperty::propertyTypename = "vector<bool>";
 
 //=================================================================================
 Iterator<node>* BooleanProperty::getNodesEqualTo(const bool val, Graph *sg) {
-  if (sg == 0) sg = graph;
+  if (sg == NULL) sg = graph;
 
-  Iterator<unsigned int> *it = 0;
+  Iterator<unsigned int> *it = NULL;
 
   if (sg == graph)
     it = nodeProperties.findAll(val);
 
-  if (it == 0)
+  if (it == NULL)
     return new SGraphNodeIterator(sg, nodeProperties, val);
 
   return (new UINTIterator<node>(it));
 }
 //=================================================================================
 Iterator<edge>* BooleanProperty::getEdgesEqualTo(const bool val, Graph *sg) {
-  if (sg == 0) sg = graph;
+  if (sg == NULL) sg = graph;
 
   Iterator<unsigned int> *it=0;
 
   if (sg == graph)
     it = edgeProperties.findAll(val);
 
-  if (it == 0)
+  if (it == NULL)
     return new SGraphEdgeIterator(sg, edgeProperties, val);
 
   return (new UINTIterator<edge>(it));

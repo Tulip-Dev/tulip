@@ -26,7 +26,7 @@ class TopPopupComboBox: public QComboBox {
   QListView* _view;
 
 public:
-  TopPopupComboBox(QWidget* parent = 0): QComboBox(parent), _view(NULL) {
+  TopPopupComboBox(QWidget* parent = NULL): QComboBox(parent), _view(NULL) {
   }
 
   bool eventFilter(QObject*, QEvent* ev) {

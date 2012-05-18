@@ -43,12 +43,12 @@ InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext* con
 bool InducedSubGraphSelection::run() {
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);
-  BooleanProperty *entrySelection = 0;
+  BooleanProperty *entrySelection = NULL;
 
-  if (dataSet!=0)
+  if (dataSet!=NULL)
     dataSet->get("Nodes", entrySelection);
 
-  if (entrySelection == 0)
+  if (entrySelection == NULL)
     entrySelection = graph->getProperty<BooleanProperty>("viewSelection");
 
   Iterator<node> *itN = graph->getNodes();

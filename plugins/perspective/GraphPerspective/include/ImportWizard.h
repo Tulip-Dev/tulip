@@ -36,7 +36,7 @@ class ImportWizard: public QWizard {
 
   Ui::ImportWizard* _ui;
 public:
-  explicit ImportWizard(QWidget *parent = 0);
+  explicit ImportWizard(QWidget *parent = NULL);
   virtual ~ImportWizard();
 
   QString algorithm() const;

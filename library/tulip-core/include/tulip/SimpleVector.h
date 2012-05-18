@@ -40,7 +40,7 @@ public:
   typedef const T *const_iterator;
 
   SimpleVector() {
-    beginP=middleP=endP=0;
+    beginP=middleP=endP=NULL;
   }
   SimpleVector(const SimpleVector &v):
     beginP(v.beginP),middleP(v.middleP),endP(v.endP) { }
@@ -117,7 +117,7 @@ public:
   }
   void clear() {
     deallocateAll();
-    beginP=middleP=endP=0;
+    beginP=middleP=endP=NULL;
   }
   void deallocateAll() {
     free(beginP);

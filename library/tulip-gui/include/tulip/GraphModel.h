@@ -22,7 +22,7 @@ public:
   static bool setEdgeValue(unsigned int,tlp::PropertyInterface*, QVariant);
   static bool setAllEdgeValue(tlp::PropertyInterface*, QVariant);
 
-  explicit GraphModel(QObject *parent = 0);
+  explicit GraphModel(QObject *parent = NULL);
 
   virtual void setGraph(tlp::Graph*);
   tlp::Graph* graph() const;
@@ -58,7 +58,7 @@ class TLP_QT_SCOPE GraphSortFilterProxyModel: public QSortFilterProxyModel, publ
   tlp::BooleanProperty* _filterProperty;
 
 public:
-  GraphSortFilterProxyModel(QObject* parent = 0);
+  GraphSortFilterProxyModel(QObject* parent = NULL);
 
   void setFilterProperty(tlp::BooleanProperty*);
   void setSelectedOnly(bool);
@@ -72,7 +72,7 @@ public:
 
 class TLP_QT_SCOPE NodesGraphModel: public GraphModel {
 public:
-  NodesGraphModel(QObject* parent = 0);
+  NodesGraphModel(QObject* parent = NULL);
   void setGraph(Graph *);
 
   void treatEvent(const tlp::Event &);
@@ -89,7 +89,7 @@ protected:
 
 class TLP_QT_SCOPE EdgesGraphModel: public GraphModel {
 public:
-  EdgesGraphModel(QObject* parent = 0);
+  EdgesGraphModel(QObject* parent = NULL);
   void setGraph(Graph *);
   void treatEvent(const tlp::Event &);
   virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const;

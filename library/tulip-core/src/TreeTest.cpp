@@ -27,13 +27,13 @@
 
 using namespace std;
 using namespace tlp;
-TreeTest * TreeTest::instance=0;
+TreeTest * TreeTest::instance=NULL;
 
 TreeTest::TreeTest() {
 }
 
 bool TreeTest::isTree(const tlp::Graph* graph) {
-  if (instance==0)
+  if (instance==NULL)
     instance=new TreeTest();
 
   return instance->compute(graph);
@@ -43,7 +43,7 @@ bool TreeTest::isTree(const tlp::Graph* graph) {
 //Determines if a graph is a topological tree.  This means that
 //if the graph was undirected, there would be no cycle
 bool TreeTest::isFreeTree(const tlp::Graph* graph) {
-  if (instance==0) instance = new TreeTest();
+  if (instance==NULL) instance = new TreeTest();
 
   node firstNode = graph->getOneNode();
   return (firstNode.isValid() &&
@@ -180,7 +180,7 @@ static void makeRootedTree (Graph *graph, node curRoot,
 //Turns a topological tree graph into a directed tree starting at
 //the node root.
 void TreeTest::makeRootedTree(Graph *graph, node root) {
-  if (instance==0) instance=new TreeTest();
+  if (instance==NULL) instance=new TreeTest();
 
   graph->removeListener(instance);
   instance->resultsBuffer.erase((unsigned long)graph);

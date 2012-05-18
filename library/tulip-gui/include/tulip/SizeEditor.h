@@ -36,7 +36,7 @@ class TLP_QT_SCOPE SizeEditor: public QWidget {
   Ui::SizeEditorData* _ui;
 
 public:
-  explicit SizeEditor(QWidget *parent=0);
+  explicit SizeEditor(QWidget *parent=NULL);
   virtual ~SizeEditor();
   tlp::Size size() const;
 

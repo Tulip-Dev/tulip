@@ -50,7 +50,7 @@ public:
    * \param listType this parameter defines the widget's look (see class description)
    * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, no size restriction)
    */
-  StringsListSelectionWidget(QWidget *parent = 0, const ListType listType =
+  StringsListSelectionWidget(QWidget *parent = NULL, const ListType listType =
                                DOUBLE_LIST, const unsigned int maxSelectedStringsListSize = 0);
 
   /**
@@ -62,7 +62,7 @@ public:
    */
   StringsListSelectionWidget(
     const std::vector<std::string> &unselectedStringsList,
-    QWidget *parent = 0, const ListType listType = DOUBLE_LIST,
+    QWidget *parent = NULL, const ListType listType = DOUBLE_LIST,
     const unsigned int maxSelectedStringsListSize = 0);
 
   /**

@@ -210,7 +210,7 @@ struct TLPGraphBuilder:public TLPTrue {
       //qWarning() << "set node value ....." ;
       if (propertyType==GRAPH || propertyType==METAGRAPH) { // METAGRAPH was used in Tulip 2
         //      qWarning() << ".";
-        char *endPtr=0;
+        char *endPtr=NULL;
         const char *startPtr=value.c_str();
         int result=strtol(startPtr,&endPtr,10);
 
@@ -343,7 +343,7 @@ struct TLPGraphBuilder:public TLPTrue {
     if (clusterIndex[clusterId]) {
       //qWarning() << "set all node value ....." ;
       if (propertyType==GRAPH || propertyType==METAGRAPH) { // METAGRAPH was used in Tulip 2
-        char *endPtr=0;
+        char *endPtr=NULL;
         const char *startPtr=value.c_str();
         int result=strtol(startPtr,&endPtr,10);
 

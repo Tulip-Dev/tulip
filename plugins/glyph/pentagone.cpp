@@ -34,7 +34,7 @@
 using namespace std;
 using namespace tlp;
 
-static GlPentagon *pentagon = 0;
+static GlPentagon *pentagon = NULL;
 void drawPentagon(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
   if(borderWidth<1e-6f)
     borderWidth=1e-6f;

@@ -31,7 +31,7 @@ class PluginInformationsListItem;
 class PluginResultsList : public QScrollArea {
   Q_OBJECT
 public:
-  explicit PluginResultsList(QWidget *parent=0);
+  explicit PluginResultsList(QWidget *parent=NULL);
   tlp::PluginInformations* featuredPlugin();
 
 public slots:

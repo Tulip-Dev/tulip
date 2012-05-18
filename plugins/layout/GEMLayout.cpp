@@ -366,7 +366,7 @@ bool GEMLayout::run() {
   _useLength = false;
   max_iter = 0;
 
-  if ( dataSet!=0 ) {
+  if ( dataSet!=NULL ) {
     dataSet->get("3D layout", is3D);
     _useLength = dataSet->get("edge length", metric) && metric!=NULL;
     dataSet->get("max iterations", max_iter);
@@ -392,7 +392,7 @@ bool GEMLayout::run() {
     _particules[i].n = n;
     _particules[i].id = i;
 
-    if (!initLayout && layout != 0)
+    if (!initLayout && layout != NULL)
       _particules[i].pos = layout->getNodeValue(n);
     else
       _particules[i].pos.fill(0);
@@ -401,7 +401,7 @@ bool GEMLayout::run() {
     ++i;
   }
 
-  if (initLayout && layout != 0) {
+  if (initLayout && layout != NULL) {
     if (i_finaltemp < i_starttemp) this->insert();
   }
 

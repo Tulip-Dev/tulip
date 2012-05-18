@@ -30,9 +30,9 @@ using namespace std;
 MouseEdgeBendEditor::MouseEdgeBendEditor()
   :glMainWidget(NULL),layer(NULL),targetTriangle(Coord(0,0,0),Size(1,1,1)),circleString(NULL) {
   operation = NONE_OP;
-  _copyLayout = 0;
-  _copySizes = 0;
-  _copyRotation = 0;
+  _copyLayout = NULL;
+  _copySizes = NULL;
+  _copyRotation = NULL;
 
   basicCircle.resizePoints(30); //circle
   basicCircle.setFillMode(true);
@@ -239,9 +239,9 @@ bool MouseEdgeBendEditor::draw(GlMainWidget*) {
 }
 //========================================================================================
 void MouseEdgeBendEditor::restoreInfo() {
-  assert(_copyLayout != 0);
-  assert(_copySizes != 0);
-  assert(_copyRotation != 0);
+  assert(_copyLayout != NULL);
+  assert(_copySizes != NULL);
+  assert(_copyRotation != NULL);
   edge e;
   forEach(e, _selection->getEdgesEqualTo(true, _graph)) {
     _rotation->setEdgeValue(e, _copyRotation->getEdgeValue(e));
@@ -251,9 +251,9 @@ void MouseEdgeBendEditor::restoreInfo() {
 }
 //========================================================================================
 void MouseEdgeBendEditor::saveInfo() {
-  assert(_copyLayout == 0);
-  assert(_copySizes == 0);
-  assert(_copyRotation == 0);
+  assert(_copyLayout == NULL);
+  assert(_copySizes == NULL);
+  assert(_copyRotation == NULL);
   _copyRotation = new DoubleProperty(_graph);
   _copyLayout   = new LayoutProperty(_graph);
   _copySizes    = new SizeProperty(_graph);
@@ -277,11 +277,11 @@ void MouseEdgeBendEditor::undoEdition() {
   restoreInfo();
   operation = NONE_OP;
   delete _copyLayout;
-  _copyLayout = 0;
+  _copyLayout = NULL;
   delete _copySizes;
-  _copySizes = 0;
+  _copySizes = NULL;
   delete _copyRotation;
-  _copyRotation = 0;
+  _copyRotation = NULL;
 }
 //========================================================================================
 void MouseEdgeBendEditor::stopEdition() {
@@ -289,11 +289,11 @@ void MouseEdgeBendEditor::stopEdition() {
 
   operation = NONE_OP;
   delete _copyLayout;
-  _copyLayout = 0;
+  _copyLayout = NULL;
   delete _copySizes;
-  _copySizes = 0;
+  _copySizes = NULL;
   delete _copyRotation;
-  _copyRotation = 0;
+  _copyRotation = NULL;
   selectedEntity="";
   computeSrcTgtEntities(glMainWidget);
   glMainWidget->draw(false);

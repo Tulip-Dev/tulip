@@ -152,7 +152,7 @@ private:
 class TLP_QT_SCOPE ListPropertyWidgetModel : public QAbstractListModel {
 
 public :
-  ListPropertyWidgetModel(ContainerInterface *typeManager, QWidget* parent = 0);
+  ListPropertyWidgetModel(ContainerInterface *typeManager, QWidget* parent = NULL);
   virtual ~ListPropertyWidgetModel();
   virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
   virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -175,7 +175,7 @@ class TLP_QT_SCOPE VectorEditionWidget : public QWidget {
   Q_OBJECT
 
 public:
-  explicit VectorEditionWidget(QWidget *parent = 0);
+  explicit VectorEditionWidget(QWidget *parent = NULL);
   ~VectorEditionWidget();
   ContainerInterface *getInterface();
   void setInterface(ContainerInterface *interf);

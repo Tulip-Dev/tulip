@@ -34,7 +34,7 @@
 using namespace std;
 using namespace tlp;
 
-static GlRegularPolygon *diamond = 0;
+static GlRegularPolygon *diamond = NULL;
 void drawDiamond(const Color &fillColor,
                  const Color &borderColor,
                  float borderWidth,

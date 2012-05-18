@@ -79,7 +79,7 @@ void ExtendedClusterOperationTest::testCreateMetaNode() {
   CPPUNIT_ASSERT_EQUAL(6u, graph->numberOfNodes());
 
   Graph *cluster = quotient->getNodeMetaInfo(meta);
-  CPPUNIT_ASSERT(cluster!=0);
+  CPPUNIT_ASSERT(cluster!=NULL);
   CPPUNIT_ASSERT(cluster->isElement(nodes[0]));
   CPPUNIT_ASSERT(cluster->isElement(nodes[1]));
   CPPUNIT_ASSERT_EQUAL(1u, cluster->numberOfEdges());
@@ -141,7 +141,7 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
       break;
     }
   }
-  CPPUNIT_ASSERT(find && subgraph != 0);
+  CPPUNIT_ASSERT(find && subgraph != NULL);
   CPPUNIT_ASSERT_EQUAL(2u, subgraph->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL(1u, subgraph->numberOfEdges());
   //open all meta nodes

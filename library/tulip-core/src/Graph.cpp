@@ -139,7 +139,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
 
   bool newGraphP=false;
 
-  if (newGraph==0) {
+  if (newGraph==NULL) {
     newGraph=new GraphImpl();
     newGraphP=true;
   }
@@ -147,7 +147,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   PluginProgress *tmpProgress;
   bool deletePluginProgress=false;
 
-  if (progress==0) {
+  if (progress==NULL) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
@@ -155,7 +155,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
 
   AlgorithmContext* tmp = new AlgorithmContext(newGraph, &dataSet, tmpProgress);
   ImportModule *newImportModule = PluginLister::instance()->getPluginObject<ImportModule>(format, tmp);
-  assert(newImportModule!=0);
+  assert(newImportModule!=NULL);
 
   bool importSucessfull = newImportModule->importGraph();
 
@@ -194,7 +194,7 @@ bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &
   bool deletePluginProgress=false;
   PluginProgress *tmpProgress=NULL;
 
-  if (progress==0) {
+  if (progress==NULL) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
@@ -202,7 +202,7 @@ bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &
 
   AlgorithmContext* context = new AlgorithmContext(sg, &dataSet, tmpProgress);
   ExportModule *newExportModule=PluginLister::instance()->getPluginObject<ExportModule>(format, context);
-  assert(newExportModule!=0);
+  assert(newExportModule!=NULL);
   std::string filename;
 
   if (dataSet.get("file", filename)) {
@@ -329,7 +329,7 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
     while (propIt->hasNext()) {
       PropertyInterface *src = propIt->next();
 
-      if (dynamic_cast<GraphProperty *>(src) == 0) {
+      if (dynamic_cast<GraphProperty *>(src) == NULL) {
         const std::string& pName = src->getName();
         PropertyInterface *dst =
           outG->existProperty(pName) ? outG->getProperty(pName)
@@ -364,7 +364,7 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
     while (propIt->hasNext()) {
       PropertyInterface *src = propIt->next();
 
-      if (dynamic_cast<GraphProperty *>(src) == 0) {
+      if (dynamic_cast<GraphProperty *>(src) == NULL) {
         const std::string& pName = src->getName();
         PropertyInterface *dst =
           outG->existProperty(pName) ? outG->getProperty(pName)
@@ -393,7 +393,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   bool deletePluginProgress=false;
   PluginProgress *tmpProgress;
 
-  if (progress == 0) {
+  if (progress == NULL) {
     tmpProgress = new SimplePluginProgress();
     deletePluginProgress = true;
   }
@@ -819,7 +819,7 @@ static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, Gr
 
     Graph *meta = metaInfo->getNodeValue(n);
 
-    if ( meta != 0)
+    if ( meta != NULL)
       buildMapping(meta->getNodes(), mapping, metaInfo, mapping.get(n.id));
   }
 
@@ -828,7 +828,7 @@ static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, Gr
 //====================================================================================
 void updatePropertiesUngroup(Graph *graph, node metanode,
                              GraphProperty *clusterInfo) {
-  if (clusterInfo->getNodeValue(metanode)==0) return; //The metanode is not a metanode.
+  if (clusterInfo->getNodeValue(metanode)==NULL) return; //The metanode is not a metanode.
 
   LayoutProperty *graphLayout = graph->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty *graphSize = graph->getProperty<SizeProperty>(sizeProperty);
@@ -1040,8 +1040,8 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
       node src = eEnds.first;
       node tgt = eEnds.second;
       bool toDelete =
-        ((metaInfo->getNodeValue(src)!=0) ||
-         (metaInfo->getNodeValue(tgt)!=0)) &&
+        ((metaInfo->getNodeValue(src)!=NULL) ||
+         (metaInfo->getNodeValue(tgt)!=NULL)) &&
         isElement (src) && isElement (tgt) &&
         existEdge (src, tgt).isValid();
 
@@ -1136,7 +1136,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     ((GraphAbstract *) getRoot())->getMetaGraphProperty();
   Graph *metaGraph = metaInfo->getNodeValue(metaNode);
 
-  if (metaGraph == 0) return;
+  if (metaGraph == NULL) return;
 
   Observable::holdObservers();
   MutableContainer<node> mappingM;
@@ -1181,7 +1181,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       mappingM.set(mn.id, mn);
       Graph *mnGraph = metaInfo->getNodeValue(mn);
 
-      if (mnGraph != 0) {
+      if (mnGraph != NULL) {
         Iterator<node> *it = mnGraph->getNodes();
 
         while(it->hasNext()) {
@@ -1309,8 +1309,8 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
         else continue;
       }
 
-      if (metaInfo->getNodeValue(src) == 0 &&
-          metaInfo->getNodeValue(tgt) == 0) {
+      if (metaInfo->getNodeValue(src) == NULL &&
+          metaInfo->getNodeValue(tgt) == NULL) {
         addEdge(e);
         continue;
       }

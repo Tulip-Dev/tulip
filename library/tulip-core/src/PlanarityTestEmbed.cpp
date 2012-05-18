@@ -517,7 +517,7 @@ void PlanarityTestImpl::addOldCNodeToEmbedding(bool embBackEdgesOutW,
 
   list<node> listNodesL, listNodesR;
   // goes to the left;
-  BmdLink<node> *aux = 0;
+  BmdLink<node> *aux = NULL;
   BmdLink<node> *s = it;
 
   while (labelB.get(jl.id) <= dfsPosNum.get(w.id)) {

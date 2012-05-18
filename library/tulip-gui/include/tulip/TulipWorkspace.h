@@ -28,7 +28,7 @@ class TLP_QT_SCOPE TulipWorkspace: public QWidget {
   Q_OBJECT
 
 public:
-  explicit TulipWorkspace(QWidget* parent=0);
+  explicit TulipWorkspace(QWidget* parent=NULL);
   virtual ~TulipWorkspace();
 };
 

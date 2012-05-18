@@ -57,7 +57,7 @@ void ExpandableGroupBox::setWidget(QWidget *w) {
 
 QWidget *ExpandableGroupBox::takeWidget() {
   QWidget *result = _widget;
-  _widget = 0;
+  _widget = NULL;
 
   if (result)
     layout()->removeWidget(result);

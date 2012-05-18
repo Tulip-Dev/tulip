@@ -104,7 +104,7 @@ bool SquarifiedTreeMap::check(std::string& errorMsg) {
 
   metric = NULL;
 
-  if (dataSet != 0)
+  if (dataSet != NULL)
     dataSet->get("metric", metric);
 
   if (!metric && graph->existProperty("viewMetric")) {
@@ -131,7 +131,7 @@ bool SquarifiedTreeMap::run() {
   sizeResult = NULL;
   glyphResult = NULL;
 
-  if (dataSet != 0) {
+  if (dataSet != NULL) {
     dataSet->get("Aspect Ratio", aspectRatio);
     dataSet->get("Treemap Type", shneidermanTreeMap);
     dataSet->get("Node Size", sizeResult);

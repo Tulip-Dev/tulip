@@ -19,8 +19,8 @@ class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
   QSet<int> _unCheckedIndexes;
 
 public:
-  explicit GraphPropertiesModel(tlp::Graph* graph, bool checkable=false, QObject *parent = 0);
-  explicit GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable=false, QObject *parent = 0);
+  explicit GraphPropertiesModel(tlp::Graph* graph, bool checkable=false, QObject *parent = NULL);
+  explicit GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable=false, QObject *parent = NULL);
 
   tlp::Graph* graph() const {
     return _graph;

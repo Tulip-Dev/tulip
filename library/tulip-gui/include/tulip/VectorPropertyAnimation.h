@@ -26,7 +26,7 @@ namespace tlp {
 template<typename PropType, typename RealType, typename VectorType, unsigned int SIZE>
 class VectorPropertyAnimation: public CachedPropertyAnimation<PropType, RealType, RealType> {
 public:
-  VectorPropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out, tlp::BooleanProperty *selection = 0, int frameCount = 1,
+  VectorPropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out, tlp::BooleanProperty *selection = NULL, int frameCount = 1,
                           bool computeNodes = true, bool computeEdges = true);
 
   virtual ~VectorPropertyAnimation() {}

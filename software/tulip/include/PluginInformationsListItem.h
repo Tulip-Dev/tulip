@@ -33,7 +33,7 @@ class PluginInformationsListItem: public QWidget {
   Q_OBJECT
 
 public:
-  explicit PluginInformationsListItem(tlp::PluginInformations *, QWidget *parent = 0);
+  explicit PluginInformationsListItem(tlp::PluginInformations *, QWidget *parent = NULL);
   tlp::PluginInformations *pluginInformations() const {
     return _pluginInformations;
   }

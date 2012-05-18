@@ -79,7 +79,7 @@ public:
     unsigned int depth   = 5;
     bool needLayout = false;
 
-    if (dataSet!=0) {
+    if (dataSet!=NULL) {
       dataSet->get("depth", depth);
       dataSet->get("degree", degree);
       dataSet->get("tree layout", needLayout);

@@ -39,7 +39,7 @@ extern TLP_SCOPE std::string TulipShareDir;
  * 2. the appDirPath parameter, if it is not NULL
  * 3. a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on unices.
  */
-extern TLP_SCOPE void initTulipLib(const char* appDirPath = 0);
+extern TLP_SCOPE void initTulipLib(const char* appDirPath = NULL);
 
 /**
  * @brief Demangles the name of a C++ class defined in the tlp namespace.

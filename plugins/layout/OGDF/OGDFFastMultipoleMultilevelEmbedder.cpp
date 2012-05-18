@@ -87,7 +87,7 @@ public:
   void beforeCall() {
     ogdf::FastMultipoleMultilevelEmbedder *fmme = static_cast<ogdf::FastMultipoleMultilevelEmbedder*>(ogdfLayoutAlgo);
 
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       int ival = 0;
 
       if (dataSet->get("number of threads", ival))

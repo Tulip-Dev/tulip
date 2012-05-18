@@ -32,7 +32,7 @@
 using namespace std;
 using namespace tlp;
 
-static GlComplexPolygon *cross = 0;
+static GlComplexPolygon *cross = NULL;
 void initCross() {
   if(!cross) {
     float bWidth = 0.1f;

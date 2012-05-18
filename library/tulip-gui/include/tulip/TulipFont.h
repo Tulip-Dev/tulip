@@ -33,8 +33,8 @@ public:
   static QStringList installedFontNames();
   static TulipFont fromFile(const QString&);
 
-  explicit TulipFont(QObject *parent = 0);
-  explicit TulipFont(const QString fontName, QObject *parent = 0);
+  explicit TulipFont(QObject *parent = NULL);
+  explicit TulipFont(const QString fontName, QObject *parent = NULL);
   TulipFont(const TulipFont&);
 
   TulipFont& operator =(const TulipFont&);

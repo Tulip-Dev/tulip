@@ -55,7 +55,7 @@ public:
    */
   ~QuadTreeNode() {
     for(int i=0; i<4; ++i)
-      if (children[i] != 0) delete children[i];
+      if (children[i] != NULL) delete children[i];
   }
   /**
    * Insert an element in the quadtree
@@ -103,7 +103,7 @@ public:
       }
 
       for (unsigned int i=0; i<4; ++i) {
-        if (children[i]!=0)
+        if (children[i]!=NULL)
           children[i]->getElements(box, result);
       }
     }
@@ -118,7 +118,7 @@ public:
     }
 
     for (unsigned int i=0; i<4; ++i) {
-      if (children[i]!=0)
+      if (children[i]!=NULL)
         children[i]->getElements(result);
     }
   }
@@ -147,7 +147,7 @@ public:
         }
 
         for (unsigned int i=0; i<4; ++i) {
-          if (children[i]!=0)
+          if (children[i]!=NULL)
             children[i]->getElementsWithRatio(box, result, ratio);
         }
       }
@@ -162,8 +162,8 @@ public:
 
         if(!find) {
           for (unsigned int i=0; i<4; ++i) {
-            if (children[i]!=0 && children[i]->_box.intersect(box)) {
-              //if children[i]!=0 we are sure to find an elements in that branch of the tree
+            if (children[i]!=NULL && children[i]->_box.intersect(box)) {
+              //if children[i]!=NULL we are sure to find an elements in that branch of the tree
               //thus we do not have to explore the other branches.
               children[i]->getElementsWithRatio(box, result, ratio);
               break;

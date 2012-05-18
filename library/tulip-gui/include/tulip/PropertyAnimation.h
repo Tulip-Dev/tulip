@@ -29,7 +29,7 @@ template<typename PropType, typename NodeType, typename EdgeType>
 class TLP_QT_SCOPE PropertyAnimation: public Animation {
 public:
   PropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out,
-                    tlp::BooleanProperty *selection = 0, int frameCount = 1, bool computeNodes = true, bool computeEdges = true, QObject* parent=0);
+                    tlp::BooleanProperty *selection = 0, int frameCount = 1, bool computeNodes = true, bool computeEdges = true, QObject* parent=NULL);
 
   virtual ~PropertyAnimation();
   virtual void frameChanged(int f);

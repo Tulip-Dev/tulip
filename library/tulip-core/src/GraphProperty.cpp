@@ -41,13 +41,13 @@ GraphProperty::~GraphProperty() {
     while(it->hasNext()) {
       node n = it->next();
 
-      if (getNodeValue(n) != 0)
+      if (getNodeValue(n) != NULL)
         getNodeValue(n)->removeListener(this);
     }
 
     delete it;
 
-    if (getNodeDefaultValue() != 0) {
+    if (getNodeDefaultValue() != NULL) {
       getNodeDefaultValue()->removeListener(this);
     }
   }
@@ -66,7 +66,7 @@ void GraphProperty::setAllNodeValue(const GraphType::RealType& g) {
   set<node> emptySet;
   referencedGraph.setAll(emptySet);
 
-  if (getNodeDefaultValue() != 0) {
+  if (getNodeDefaultValue() != NULL) {
     getNodeDefaultValue()->removeListener(this);
   }
 

@@ -292,7 +292,7 @@ void LayoutProperty::rotateZ(const double& alpha,  Iterator<node> *itN, Iterator
 }
 //=================================================================================
 void LayoutProperty::rotateX(const double &alpha, Graph *sg) {
-  if (sg==0) sg = graph;
+  if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 
@@ -306,7 +306,7 @@ void LayoutProperty::rotateX(const double &alpha, Graph *sg) {
 }
 //=================================================================================
 void LayoutProperty::rotateY(const double &alpha, Graph *sg) {
-  if (sg==0) sg = graph;
+  if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 
@@ -320,7 +320,7 @@ void LayoutProperty::rotateY(const double &alpha, Graph *sg) {
 }
 //=================================================================================
 void LayoutProperty::rotateZ(const double& alpha, Graph *sg) {
-  if (sg==0) sg = graph;
+  if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 
@@ -364,7 +364,7 @@ void LayoutProperty::scale(const tlp::Vec3f& v, Iterator<node> *itN, Iterator<ed
 }
 //=================================================================================
 void LayoutProperty::scale(const tlp::Vec3f& v, Graph *sg) {
-  if (sg==0) sg = graph;
+  if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 
@@ -380,7 +380,7 @@ void LayoutProperty::scale(const tlp::Vec3f& v, Graph *sg) {
 void LayoutProperty::translate(const tlp::Vec3f& v, Iterator<node> *itN, Iterator<edge> *itE) {
   Observable::holdObservers();
 
-  if (itN != 0)
+  if (itN != NULL)
     while (itN->hasNext()) {
       node itn = itN->next();
       Coord tmpCoord(getNodeValue(itn));
@@ -388,7 +388,7 @@ void LayoutProperty::translate(const tlp::Vec3f& v, Iterator<node> *itN, Iterato
       setNodeValue(itn,tmpCoord);
     }
 
-  if (itE != 0)
+  if (itE != NULL)
     while (itE->hasNext()) {
       edge ite=itE->next();
 
@@ -406,7 +406,7 @@ void LayoutProperty::translate(const tlp::Vec3f& v, Iterator<node> *itN, Iterato
       }
     }
 
-  if (itE != 0 || itN != 0) {
+  if (itE != NULL || itN != NULL) {
     resetBoundingBox();
   }
 
@@ -414,7 +414,7 @@ void LayoutProperty::translate(const tlp::Vec3f& v, Iterator<node> *itN, Iterato
 }
 //=================================================================================
 void LayoutProperty::translate(const tlp::Vec3f& v, Graph *sg) {
-  if (sg==0) sg = graph;
+  if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 
@@ -429,7 +429,7 @@ void LayoutProperty::translate(const tlp::Vec3f& v, Graph *sg) {
 //=================================================================================
 void LayoutProperty::center(Graph *sg) {
 
-  if (sg==0) sg = graph;
+  if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 
@@ -444,7 +444,7 @@ void LayoutProperty::center(Graph *sg) {
 }
 //=================================================================================
 void LayoutProperty::center(const Vec3f &newCenter, Graph *sg) {
-  if (sg==0) sg = graph;
+  if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 
@@ -459,7 +459,7 @@ void LayoutProperty::center(const Vec3f &newCenter, Graph *sg) {
 //=================================================================================
 void LayoutProperty::normalize(Graph *sg) {
 
-  if (sg==0) sg = graph;
+  if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 
@@ -549,7 +549,7 @@ void LayoutProperty::setAllEdgeValue(const std::vector<Coord> &v) {
 }
 //=================================================================================
 double LayoutProperty::averageAngularResolution(const Graph *sg) const {
-  if (sg==0) sg=graph;
+  if (sg==NULL) sg=graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 
@@ -591,7 +591,7 @@ struct AngularOrder {
  * TODO check code duplication with angularresolution function
  */
 void LayoutProperty::computeEmbedding(Graph *sg) {
-  if (sg == 0) sg = graph;
+  if (sg == NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 
@@ -602,7 +602,7 @@ void LayoutProperty::computeEmbedding(Graph *sg) {
 }
 
 void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
-  if (sg == 0) sg = graph;
+  if (sg == NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 
@@ -664,7 +664,7 @@ void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
 vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg) const {
   vector<double> result;
 
-  if (sg == 0) sg = graph;
+  if (sg == NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 
@@ -791,7 +791,7 @@ double LayoutProperty::edgeLength(const edge e) const {
 }
 //=================================================================================
 double LayoutProperty::averageEdgeLength(const Graph *sg) const {
-  if (sg == 0) sg = graph;
+  if (sg == NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
 

@@ -71,7 +71,7 @@ public:
    * @param loader A loader to report what is going on (only its loaded or aborted functions will be called) Defaults to 0.
    * @return bool Whether the plugin was sucessfully loaded.
    **/
-  static bool loadPluginLibrary(const std::string & filename, PluginLoader *loader = 0);
+  static bool loadPluginLibrary(const std::string & filename, PluginLoader *loader = NULL);
 
   /**
    * @brief Gets the name of the plug-in library being loaded.

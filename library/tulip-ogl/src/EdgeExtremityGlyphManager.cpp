@@ -21,7 +21,7 @@
 #include <tulip/tuliphash.h>
 #include <tulip/ForEach.h>
 
-tlp::EdgeExtremityGlyphManager* tlp::EdgeExtremityGlyphManager::eeinst = 0;
+tlp::EdgeExtremityGlyphManager* tlp::EdgeExtremityGlyphManager::eeinst = NULL;
 
 using namespace std;
 

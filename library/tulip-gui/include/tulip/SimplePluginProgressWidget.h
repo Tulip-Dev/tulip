@@ -40,7 +40,7 @@ class TLP_QT_SCOPE SimplePluginProgressWidget: public QWidget, public tlp::Simpl
   void checkLastUpdate();
 
 public:
-  explicit SimplePluginProgressWidget(QWidget *parent=0,Qt::WindowFlags f=0);
+  explicit SimplePluginProgressWidget(QWidget *parent=NULL,Qt::WindowFlags f=0);
 
   void setComment(const std::string&);
   void setComment(const QString &);
@@ -53,7 +53,7 @@ protected:
 
 class TLP_QT_SCOPE SimplePluginProgressDialog: public QDialog, public tlp::SimplePluginProgress {
 public:
-  explicit SimplePluginProgressDialog(QWidget *parent=0);
+  explicit SimplePluginProgressDialog(QWidget *parent=NULL);
   virtual ~SimplePluginProgressDialog();
 
   void setComment(const std::string&);

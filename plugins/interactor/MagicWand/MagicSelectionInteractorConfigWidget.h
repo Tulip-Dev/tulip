@@ -38,7 +38,7 @@ enum Selectionbehavior {
 class MagicSelectionInteractorConfigWidget : public QWidget, public Ui_MagicSelectionInteractorConfigWidget, public tlp::Observable {
   Q_OBJECT
 public:
-  MagicSelectionInteractorConfigWidget(QWidget* parent = 0);
+  MagicSelectionInteractorConfigWidget(QWidget* parent = NULL);
 
   void setGraph(tlp::Graph* graph);
 

@@ -67,10 +67,10 @@ DegreeMetric::DegreeMetric(const tlp::PluginContext* context):DoubleAlgorithm(co
 bool DegreeMetric::run() {
   StringCollection degreeTypes(DEGREE_TYPES);
   degreeTypes.setCurrent(0);
-  DoubleProperty* weights = 0;
+  DoubleProperty* weights = NULL;
   bool norm = false;
 
-  if (dataSet!=0) {
+  if (dataSet!=NULL) {
     dataSet->get(DEGREE_TYPE, degreeTypes);
     dataSet->get("metric", weights);
     dataSet->get("norm", norm);

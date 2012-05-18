@@ -42,7 +42,7 @@ protected:
   static GlBox* box;
 };
 }
-tlp::GlBox* tlp::CubeOutLined::box=0;
+tlp::GlBox* tlp::CubeOutLined::box=NULL;
 
 namespace tlp {
 PLUGIN(CubeOutLined)

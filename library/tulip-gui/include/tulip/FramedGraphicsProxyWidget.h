@@ -5,7 +5,7 @@
 
 class FramedGraphicsProxyWidget: public QGraphicsProxyWidget {
 public:
-  FramedGraphicsProxyWidget(QGraphicsItem *parent=0, Qt::WindowFlags wFlags=0);
+  FramedGraphicsProxyWidget(QGraphicsItem *parent=NULL, Qt::WindowFlags wFlags=0);
   virtual ~FramedGraphicsProxyWidget();
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

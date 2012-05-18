@@ -24,10 +24,10 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-OuterPlanarTest * OuterPlanarTest::instance=0;
+OuterPlanarTest * OuterPlanarTest::instance=NULL;
 //=================================================================
 bool OuterPlanarTest::isOuterPlanar(tlp::Graph* graph) {
-  if(instance==0)
+  if(instance==NULL)
     instance = new OuterPlanarTest();
 
   Observable::holdObservers();

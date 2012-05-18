@@ -60,7 +60,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       }
       else {
         if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
-          graph = 0;
+          graph = NULL;
           started = false;
           return false;
         }
@@ -82,7 +82,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
          qMouseEv->modifiers() & kModifier))) {
 
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
-      graph=0;
+      graph=NULL;
       started=false;
     }
 
@@ -114,7 +114,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
   if  (e->type() == QEvent::MouseButtonRelease) {
 
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
-      graph=0;
+      graph=NULL;
       started=false;
       return false;
     }
@@ -265,7 +265,7 @@ bool MouseSelector::draw(GlMainWidget *glMainWidget) {
   if (!started) return false;
 
   if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
-    graph = 0;
+    graph = NULL;
     started = false;
   }
 

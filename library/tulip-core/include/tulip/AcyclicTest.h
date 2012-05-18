@@ -84,7 +84,7 @@ public:
    * @param obstructionEdges If not null, will be filled with edges that cause the graph to be cyclic. Defaults to 0.
    * @return bool
    **/
-  static bool acyclicTest(const Graph * graph, std::vector<edge> *obstructionEdges = 0);
+  static bool acyclicTest(const Graph * graph, std::vector<edge> *obstructionEdges = NULL);
 
 private:
   AcyclicTest();

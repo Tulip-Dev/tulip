@@ -58,7 +58,7 @@ class TLP_QT_SCOPE Workspace: public QWidget {
   QString panelTitle(tlp::WorkspacePanel*) const;
 
 public:
-  explicit Workspace(QWidget *parent = 0);
+  explicit Workspace(QWidget *parent = NULL);
   virtual ~Workspace();
 
   void addPanel(tlp::View*);

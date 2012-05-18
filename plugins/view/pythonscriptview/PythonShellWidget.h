@@ -36,7 +36,7 @@ class PythonShellWidget : public PythonCodeEditor {
 
 public :
 
-  PythonShellWidget(QWidget *parent = 0);
+  PythonShellWidget(QWidget *parent = NULL);
 
   void keyPressEvent(QKeyEvent * e);
 

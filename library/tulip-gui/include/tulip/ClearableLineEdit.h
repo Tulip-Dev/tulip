@@ -11,7 +11,7 @@ class TLP_QT_SCOPE ClearableLineEdit : public QLineEdit {
   static void initPixmap();
   QRect pixmapRect();
 public:
-  explicit ClearableLineEdit(QWidget *parent = 0);
+  explicit ClearableLineEdit(QWidget *parent = NULL);
 
 protected:
   void paintEvent(QPaintEvent *);
