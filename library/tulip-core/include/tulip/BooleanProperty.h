@@ -53,13 +53,13 @@ public :
    * whose associated value is equal to val.
    * If g is NULL, the graph given when creating the property is considered.
    */
-  Iterator<node> *getNodesEqualTo(const bool val, Graph *g = 0);
+  Iterator<node> *getNodesEqualTo(const bool val, Graph *g = NULL);
   /*
    * Returns an iterator through all edges belonging to g
    * whose associated value is equal to val.
    * If g is NULL, the graph given when creating the property is considered.
    */
-  Iterator<edge> *getEdgesEqualTo(const bool val, Graph *g = 0);
+  Iterator<edge> *getEdgesEqualTo(const bool val, Graph *g = NULL);
 };
 
 class TLP_SCOPE BooleanVectorProperty:public AbstractVectorProperty<tlp::BooleanVectorType, tlp::BooleanType> {

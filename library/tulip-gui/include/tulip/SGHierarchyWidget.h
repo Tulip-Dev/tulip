@@ -38,7 +38,7 @@ class TLP_QT_SCOPE SGHierarchyWidget : public QTreeWidget {
   Q_OBJECT
 
 public:
-  SGHierarchyWidget(QWidget* parent = 0, Graph *rootGraph = 0);
+  SGHierarchyWidget(QWidget* parent = NULL, Graph *rootGraph = NULL);
   Graph *getGraph() const;
 
 public slots:

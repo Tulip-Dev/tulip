@@ -190,7 +190,7 @@ public:
     StringCollection connectivity;
     double spacing = 1.0;
 
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       dataSet->get("width", width);
       dataSet->get("height", height);
       dataSet->get("oppositeNodesConnected", isTore);

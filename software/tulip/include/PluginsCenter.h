@@ -42,7 +42,7 @@ class PluginInformations;
 class PluginsCenter: public QWidget {
   Q_OBJECT
 public:
-  explicit PluginsCenter(QWidget *parent=0);
+  explicit PluginsCenter(QWidget *parent=NULL);
 
 public slots:
   void showHomePage();

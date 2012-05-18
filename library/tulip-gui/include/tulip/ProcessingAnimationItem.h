@@ -33,7 +33,7 @@ class ProcessingAnimationItem : public QObject, public QGraphicsPixmapItem {
   QBrush _brush;
 
 public:
-  explicit ProcessingAnimationItem(const QPixmap& pixmap, const QSize& size, QGraphicsItem* parent=0, QGraphicsScene* scene=0);
+  explicit ProcessingAnimationItem(const QPixmap& pixmap, const QSize& size, QGraphicsItem* parent=NULL, QGraphicsScene* scene=NULL);
   virtual ~ProcessingAnimationItem();
 
   QBrush brush() const {

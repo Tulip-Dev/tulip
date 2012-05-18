@@ -103,7 +103,7 @@ public:
   void beforeCall() {
     ogdf::DominanceLayout *dominance = static_cast<ogdf::DominanceLayout*>(ogdfLayoutAlgo);
 
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       int ival = 0;
 
       if (dataSet->get("minimum grid distance", ival))
@@ -112,7 +112,7 @@ public:
   }
 
   void afterCall() {
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       bool bval = false;
 
       if (dataSet->get("transpose", bval)) {

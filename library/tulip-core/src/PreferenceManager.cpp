@@ -21,7 +21,7 @@
 #include <QtCore/QSettings>
 #include <tulip/PropertyTypes.h>
 
-tlp::PreferenceManager* tlp::PreferenceManager::inst=0;
+tlp::PreferenceManager* tlp::PreferenceManager::inst=NULL;
 
 using namespace std;
 using namespace tlp;

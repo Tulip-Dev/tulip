@@ -353,13 +353,13 @@ void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) con
 }
 //----------------------------------------
 void Observable::addObserver(Observable * const obs) const {
-  assert(obs != 0);
+  assert(obs != NULL);
   queuedEvent = false;
   addOnlooker(*obs, OBSERVER);
 }
 //----------------------------------------
 void Observable::addListener(Observable * const obs) const {
-  assert(obs != 0);
+  assert(obs != NULL);
   addOnlooker(*obs, LISTENER);
 }
 //----------------------------------------

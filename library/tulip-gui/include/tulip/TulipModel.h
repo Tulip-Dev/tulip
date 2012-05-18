@@ -38,7 +38,7 @@ public:
     MandatoryRole = Qt::UserRole+5
   };
 
-  explicit TulipModel(QObject *parent=0);
+  explicit TulipModel(QObject *parent=NULL);
 
 signals:
   void checkStateChanged(QModelIndex,Qt::CheckState);

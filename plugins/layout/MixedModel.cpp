@@ -92,7 +92,7 @@ bool MixedModel::run() {
   sizeResult = NULL;
   glyphResult = NULL;
 
-  if (dataSet!=0) {
+  if (dataSet!=NULL) {
     getNodeSizePropertyParameter(dataSet, sizeResult);
     StringCollection tmp;
 

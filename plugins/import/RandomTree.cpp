@@ -98,7 +98,7 @@ public:
     unsigned int maxSize  = 1000;
     bool needLayout = false;
 
-    if (dataSet!=0) {
+    if (dataSet!=NULL) {
       dataSet->get("minsize", minSize);
       dataSet->get("maxsize", maxSize);
       dataSet->get("tree layout", needLayout);

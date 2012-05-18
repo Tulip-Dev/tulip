@@ -156,7 +156,7 @@ private:
 class TLP_QT_SCOPE CSVImportConfigurationWidget : public QWidget, public CSVContentHandler {
   Q_OBJECT
 public:
-  CSVImportConfigurationWidget(QWidget *parent = 0);
+  CSVImportConfigurationWidget(QWidget *parent = NULL);
   ~CSVImportConfigurationWidget();
   void begin();
   void line(unsigned int row,const std::vector<std::string>& lineTokens);

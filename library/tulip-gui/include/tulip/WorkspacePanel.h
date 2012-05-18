@@ -60,7 +60,7 @@ class TLP_QT_SCOPE WorkspacePanel : public QFrame, public tlp::SimplePluginProgr
   void setConfigurationTabExpanded(bool expanded, bool animate=true);
 
 public:
-  explicit WorkspacePanel(tlp::View* view, QWidget* parent=0);
+  explicit WorkspacePanel(tlp::View* view, QWidget* parent=NULL);
   virtual ~WorkspacePanel();
 
   tlp::View* view() const;

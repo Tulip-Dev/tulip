@@ -23,13 +23,13 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-TriconnectedTest * TriconnectedTest::instance=0;
+TriconnectedTest * TriconnectedTest::instance=NULL;
 //=================================================================
 TriconnectedTest::TriconnectedTest() {
 }
 //=================================================================
 bool TriconnectedTest::isTriconnected(Graph* graph) {
-  if (instance==0)
+  if (instance==NULL)
     instance=new TriconnectedTest();
 
   return instance->compute(graph);

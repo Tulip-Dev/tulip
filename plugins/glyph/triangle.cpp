@@ -48,7 +48,7 @@ protected:
 
 };
 
-GlTriangle* Triangle::triangle=0;
+GlTriangle* Triangle::triangle=NULL;
 
 //=====================================================
 PLUGIN(Triangle)

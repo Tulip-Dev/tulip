@@ -34,7 +34,7 @@ namespace tlp {
 class CSVParserConfigurationWidgetEditableComboBox : public QComboBox {
   Q_OBJECT
 public :
-  CSVParserConfigurationWidgetEditableComboBox(QWidget * parent = 0 );
+  CSVParserConfigurationWidgetEditableComboBox(QWidget * parent = NULL);
 protected:
   //Qt workaround avoiding QDialog to close automatically when pressing return or enter.
   void keyPressEvent(QKeyEvent *e);
@@ -43,7 +43,7 @@ protected:
 class TLP_QT_SCOPE CSVParserConfigurationWidget : public QWidget {
   Q_OBJECT
 public:
-  CSVParserConfigurationWidget(QWidget *parent = 0);
+  CSVParserConfigurationWidget(QWidget *parent = NULL);
   ~CSVParserConfigurationWidget();
   /**
     * @brief Generate a csv parser in function of the parameters in the widget. User define the range of line to import.

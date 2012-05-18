@@ -156,7 +156,7 @@ bool QuotientClustering::run() {
   StringCollection edgeFunctions(AGGREGATION_FUNCTIONS);
   edgeFunctions.setCurrent(0);
 
-  if (dataSet!=0) {
+  if (dataSet!=NULL) {
     dataSet->get("oriented", oriented);
     dataSet->get("node function", nodeFunctions);
     dataSet->get("edge function", edgeFunctions);
@@ -177,7 +177,7 @@ bool QuotientClustering::run() {
 
   delete itS;
 
-  IntegerProperty *opProp = 0, *cardProp = 0;
+  IntegerProperty *opProp = NULL, *cardProp = NULL;
   Graph *quotientGraph = graph->getRoot()->addSubGraph();
   stringstream sstr;
   sstr << "quotient of ";
@@ -363,7 +363,7 @@ bool QuotientClustering::run() {
   if (opProp)
     delete opProp;
 
-  if (dataSet!=0) {
+  if (dataSet!=NULL) {
     dataSet->set("quotientGraph", quotientGraph);
   }
 

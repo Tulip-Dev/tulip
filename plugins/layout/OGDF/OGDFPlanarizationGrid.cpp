@@ -118,7 +118,7 @@ public:
   void beforeCall() {
     ogdf::PlanarizationGridLayout *pgl = static_cast<ogdf::PlanarizationGridLayout*>(ogdfLayoutAlgo);
 
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       double dval = 0;
       StringCollection sc;
 

@@ -26,7 +26,7 @@
 #include <cstdlib>
 
 //====================================================
-tlp::OpenGlConfigManager* tlp::OpenGlConfigManager::inst=0;
+tlp::OpenGlConfigManager* tlp::OpenGlConfigManager::inst=NULL;
 
 using namespace std;
 

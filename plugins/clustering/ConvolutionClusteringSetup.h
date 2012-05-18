@@ -26,7 +26,7 @@ class ConvolutionClusteringSetup
   Q_OBJECT
 
 public:
-  ConvolutionClusteringSetup(ConvolutionClustering *convolPlugin,QWidget* parent = 0);
+  ConvolutionClusteringSetup(ConvolutionClustering *convolPlugin,QWidget* parent = NULL);
   ~ConvolutionClusteringSetup();
 
   ConvolutionClustering *getPlugin() {

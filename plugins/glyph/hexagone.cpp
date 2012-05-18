@@ -34,7 +34,7 @@
 using namespace std;
 using namespace tlp;
 
-static GlHexagon *hexagon = 0;
+static GlHexagon *hexagon = NULL;
 void drawHexagone(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
   if(borderWidth<1e-6f)
     borderWidth=1e-6f;

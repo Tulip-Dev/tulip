@@ -37,7 +37,7 @@ class AlgorithmRunner: public QWidget {
   Ui::AlgorithmRunner* _ui;
 
 public:
-  explicit AlgorithmRunner(QWidget* parent = 0);
+  explicit AlgorithmRunner(QWidget* parent = NULL);
   virtual ~AlgorithmRunner();
 
 public slots:
@@ -56,7 +56,7 @@ class AlgorithmRunnerItem: public QWidget {
   QPointF _dragStartPosition;
 
 public:
-  explicit AlgorithmRunnerItem(QString pluginName, QWidget* parent = 0);
+  explicit AlgorithmRunnerItem(QString pluginName, QWidget* parent = NULL);
   virtual ~AlgorithmRunnerItem();
 
   QString name() const;

@@ -727,7 +727,7 @@ struct WebImport:public ImportModule {
     visitOther = false;
     extractNonHttp = true;
 
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       dataSet->get("server", server);
       dataSet->get("web page", url);
       dataSet->get("max size", maxSize);

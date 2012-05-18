@@ -228,7 +228,7 @@ bool StrahlerMetric::run() {
   StringCollection computationTypes(COMPUTATION_TYPES);
   computationTypes.setCurrent(0);
 
-  if (dataSet!=0) {
+  if (dataSet!=NULL) {
     dataSet->get("All nodes", allNodes);
     dataSet->get(COMPUTATION_TYPE, computationTypes);
   }

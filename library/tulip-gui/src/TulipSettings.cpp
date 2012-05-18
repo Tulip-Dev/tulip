@@ -26,7 +26,7 @@
 
 using namespace tlp;
 
-TulipSettings *TulipSettings::_instance = 0;
+TulipSettings *TulipSettings::_instance = NULL;
 
 const QString TulipSettings::RemoteLocationsConfigEntry = "app/remote_locations";
 const QString TulipSettings::RecentDocumentsConfigEntry = "app/recent_documents";

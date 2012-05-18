@@ -19,7 +19,7 @@ class TLP_QT_SCOPE SceneLayersModel : public QAbstractItemModel, tlp::Observable
   QModelIndex graphCompositeIndex() const;
 
 public:
-  explicit SceneLayersModel(tlp::GlScene* scene, QObject *parent = 0);
+  explicit SceneLayersModel(tlp::GlScene* scene, QObject *parent = NULL);
 
   QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
   QModelIndex parent(const QModelIndex &child) const;

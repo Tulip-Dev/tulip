@@ -37,7 +37,7 @@ public :
   /**
    * Default Constructor (usefull for qt designer)
    */
-  GraphPropertiesSelectionWidget(QWidget *parent = 0, const StringsListSelectionWidget::ListType &listType = StringsListSelectionWidget::SIMPLE_LIST,
+  GraphPropertiesSelectionWidget(QWidget *parent = NULL, const StringsListSelectionWidget::ListType &listType = StringsListSelectionWidget::SIMPLE_LIST,
                                  const unsigned int maxNbSelectedProperties = 0);
 
   /**
@@ -47,7 +47,7 @@ public :
    *  \param propertiesType To select properties with particular datatypes, fill a vector of string with the wanted datatypes name and passed it as parameter of this constructor. The datatypes name must be the same as those returned by the getTypename method of the PropertyInterface class (e.g. "int", "double", "string"). If the vector is empty, there is no restriction on property datatypes.
    *  \param includeViewProperties If true, the view properties (e.g. "viewLabel", "viewMetric") will be selectable
    */
-  GraphPropertiesSelectionWidget(Graph *graph, QWidget *parent = 0, const StringsListSelectionWidget::ListType &listType = StringsListSelectionWidget::SIMPLE_LIST,
+  GraphPropertiesSelectionWidget(Graph *graph, QWidget *parent = NULL, const StringsListSelectionWidget::ListType &listType = StringsListSelectionWidget::SIMPLE_LIST,
                                  const unsigned int maxNbSelectedProperties = 0, const std::vector<std::string> &propertiesTypes = std::vector<std::string>(),
                                  const bool includeViewProperties = false);
 

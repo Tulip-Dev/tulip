@@ -383,7 +383,7 @@ bool HierarchicalGraph::run() {
   nodeSpacing = 18;
   SizeProperty* nodeSize = NULL;
 
-  if (dataSet!=0) {
+  if (dataSet!=NULL) {
     getNodeSizePropertyParameter(dataSet, nodeSize);
     getSpacingParameters(dataSet, nodeSpacing, spacing);
     StringCollection tmp;
@@ -429,7 +429,7 @@ bool HierarchicalGraph::run() {
   //========================================================================
   list<node> properAddedNodes;
   TLP_HASH_MAP<edge,edge> replacedEdges;
-  IntegerProperty *edgeLength = 0;
+  IntegerProperty *edgeLength = NULL;
 
   if (!TreeTest::isTree(mySGraph)) {
     //We transform the dag in a proper dag
@@ -470,7 +470,7 @@ bool HierarchicalGraph::run() {
   tmp.set("layer spacing", spacing);
   tmp.set("node spacing", nodeSpacing);
 
-  if (edgeLength!=0)
+  if (edgeLength!=NULL)
     tmp.set("edge length", edgeLength);
 
   tmp.set("orthogonal", true);

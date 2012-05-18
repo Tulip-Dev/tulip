@@ -33,7 +33,7 @@
 using namespace std;
 using namespace tlp;
 
-static GlBox* box = 0;
+static GlBox* box = NULL;
 void drawBox(const Color &fillColor,const std::string &textureName, float lod, GlGraphInputData *glGraphInputData) {
   if (textureName.size() != 0) {
     const string& texturePath=glGraphInputData->parameters->getTexturePath();

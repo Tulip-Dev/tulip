@@ -17,7 +17,7 @@ class TLP_QT_SCOPE TulipFontDialog : public QDialog {
   Ui::TulipFontDialog* _ui;
 
 public:
-  explicit TulipFontDialog(QWidget *parent = 0);
+  explicit TulipFontDialog(QWidget *parent = NULL);
   TulipFont font() const;
   int fontSize() const;
 

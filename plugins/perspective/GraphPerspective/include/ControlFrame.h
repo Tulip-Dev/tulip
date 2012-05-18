@@ -28,7 +28,7 @@ class ControlFrame;
 class ControlFrame: public QFrame {
   Ui::ControlFrame* _ui;
 public:
-  explicit ControlFrame(QWidget* parent = 0);
+  explicit ControlFrame(QWidget* parent = NULL);
   virtual ~ControlFrame();
 };
 

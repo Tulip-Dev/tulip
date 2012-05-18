@@ -32,7 +32,7 @@ public:
     Invalid
   };
 
-  explicit FiltersManagerItem(QWidget *parent=0);
+  explicit FiltersManagerItem(QWidget *parent=NULL);
   virtual ~FiltersManagerItem();
 
 signals:

@@ -160,7 +160,7 @@ OGDFFrutchermanReingold::~OGDFFrutchermanReingold() {}
 void OGDFFrutchermanReingold::beforeCall() {
   ogdf::SpringEmbedderFRExact *sefr = static_cast<ogdf::SpringEmbedderFRExact*>(ogdfLayoutAlgo);
 
-  if (dataSet != 0) {
+  if (dataSet != NULL) {
     int ival = 0;
     double dval = 0;
     bool bval = false;

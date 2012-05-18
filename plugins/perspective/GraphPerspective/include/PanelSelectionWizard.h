@@ -45,7 +45,7 @@ class PanelSelectionWizard : public QWizard {
   void createView();
   void clearView();
 public:
-  explicit PanelSelectionWizard(tlp::GraphHierarchiesModel* model, QWidget *parent = 0);
+  explicit PanelSelectionWizard(tlp::GraphHierarchiesModel* model, QWidget *parent = NULL);
   virtual ~PanelSelectionWizard();
 
   tlp::Graph* graph() const;

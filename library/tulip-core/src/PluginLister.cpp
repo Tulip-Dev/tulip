@@ -109,13 +109,13 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
     instance()->_plugins[pluginName] = description;
 
 
-    if (currentLoader!=0) {
+    if (currentLoader!=NULL) {
       currentLoader->loaded(informations, informations->dependencies());
     }
 
   }
   else {
-    if (currentLoader != 0) {
+    if (currentLoader != NULL) {
       std::string tmpStr;
       tmpStr += "'" + pluginName + "' plugin";
       currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");

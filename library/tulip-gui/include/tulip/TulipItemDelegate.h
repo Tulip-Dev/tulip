@@ -28,7 +28,7 @@ class TLP_QT_SCOPE TulipItemDelegate : public QStyledItemDelegate {
   QMap<int,TulipItemEditorCreator*> _creators;
 
 public:
-  explicit TulipItemDelegate(QObject* parent=0);
+  explicit TulipItemDelegate(QObject* parent=NULL);
   virtual ~TulipItemDelegate();
 
   template<typename T>

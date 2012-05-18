@@ -25,7 +25,7 @@ class PreviewItem: public QGraphicsObject {
 
   int textHeight() const;
 public:
-  explicit PreviewItem(const QPixmap& pixmap, tlp::WorkspacePanel* panel, QGraphicsItem* parent = 0);
+  explicit PreviewItem(const QPixmap& pixmap, tlp::WorkspacePanel* panel, QGraphicsItem* parent = NULL);
   QRectF boundingRect() const;
   void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
   tlp::WorkspacePanel* panel() const;
@@ -58,7 +58,7 @@ class TLP_QT_SCOPE WorkspaceExposeWidget : public QGraphicsView {
 public:
   static QSize previewSize();
 
-  explicit WorkspaceExposeWidget(QWidget *parent = 0);
+  explicit WorkspaceExposeWidget(QWidget *parent = NULL);
   int currentPanelIndex() const;
   QVector<WorkspacePanel*> panels() const;
 

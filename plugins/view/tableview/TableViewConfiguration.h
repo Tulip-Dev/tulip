@@ -17,7 +17,7 @@ class TableViewConfiguration : public QWidget {
 
   Ui::TableViewConfiguration* _ui;
 public:
-  explicit TableViewConfiguration(QWidget *parent = 0);
+  explicit TableViewConfiguration(QWidget *parent = NULL);
   virtual ~TableViewConfiguration();
 
   void setGraph(tlp::Graph* g);

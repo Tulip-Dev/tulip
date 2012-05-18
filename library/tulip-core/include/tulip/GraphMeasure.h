@@ -47,7 +47,7 @@ inline bool averagePathLength(Graph *g, double& result, PluginProgress *pp = NUL
  * (see clusteringCoefficient function) of all the nodes.
  * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details.
  */
-TLP_SCOPE double averageClusteringCoefficient(const Graph *, PluginProgress * = 0);
+TLP_SCOPE double averageClusteringCoefficient(const Graph *, PluginProgress * = NULL);
 // obsolete version for compatibility purpose
 inline bool averageCluster(Graph* g, double& result, PluginProgress* pp = NULL) {
   result = averageClusteringCoefficient(g, pp);

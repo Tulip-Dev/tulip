@@ -26,7 +26,7 @@ namespace tlp {
 
 class TLP_QT_SCOPE TulipParallelAnimationGroup : public QParallelAnimationGroup {
 public:
-  explicit TulipParallelAnimationGroup(QObject *parent = 0);
+  explicit TulipParallelAnimationGroup(QObject *parent = NULL);
 protected:
   void updateCurrentTime(int currentTime);
 };

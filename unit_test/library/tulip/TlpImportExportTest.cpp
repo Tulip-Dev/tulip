@@ -67,7 +67,7 @@ void TlpImportExportTest::testSave() {
   CPPUNIT_ASSERT(ok);
   graph = (Graph *) NULL;
   graph = loadGraph("save_test.tlp");
-  CPPUNIT_ASSERT(graph != 0);
+  CPPUNIT_ASSERT(graph != NULL);
   node n;
   forEach(n, graph->getNodes()) {
     CPPUNIT_ASSERT((n == n1) || (n == n2));

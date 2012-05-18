@@ -105,7 +105,7 @@ private:
 class TLP_QT_SCOPE CSVGraphMappingConfigurationWidget : public QWidget {
   Q_OBJECT
 public:
-  CSVGraphMappingConfigurationWidget(QWidget *parent = 0);
+  CSVGraphMappingConfigurationWidget(QWidget *parent = NULL);
   ~CSVGraphMappingConfigurationWidget();
 
   /**

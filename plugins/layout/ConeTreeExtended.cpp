@@ -174,7 +174,7 @@ bool ConeTreeExtended::run() {
   nodeSize = NULL;
   string orientation = "vertical";
 
-  if (dataSet!=0) {
+  if (dataSet!=NULL) {
     getNodeSizePropertyParameter(dataSet, nodeSize);
     StringCollection tmp;
 

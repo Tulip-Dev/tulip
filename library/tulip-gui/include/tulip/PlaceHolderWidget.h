@@ -27,7 +27,7 @@ class PlaceHolderWidget: public QWidget {
   QWidget* _widget;
 
 public:
-  explicit PlaceHolderWidget(QWidget *parent = 0);
+  explicit PlaceHolderWidget(QWidget *parent = NULL);
   QWidget* widget() const;
   void setWidget(QWidget* widget);
   void resetWidget();

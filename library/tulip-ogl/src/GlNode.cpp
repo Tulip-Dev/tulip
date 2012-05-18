@@ -40,8 +40,8 @@
 #include <tulip/GlLabel.h>
 
 //====================================================
-tlp::GlLabel* tlp::GlNode::label=0;
-tlp::GlBox* tlp::GlNode::selectionBox=0;
+tlp::GlLabel* tlp::GlNode::label=NULL;
+tlp::GlBox* tlp::GlNode::selectionBox=NULL;
 
 using namespace std;
 

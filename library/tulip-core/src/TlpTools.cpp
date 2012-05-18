@@ -110,7 +110,7 @@ void tlp::initTulipLib(const char* appDirPath) {
 
   getEnvTlp=getenv(TULIP_PLUGINS_PATH_VARIABLE);
 
-  if (getEnvTlp!=0) {
+  if (getEnvTlp!=NULL) {
     TulipPluginsPath=string(getEnvTlp);
 #ifdef _WIN32
     // ensure it is a unix-style path

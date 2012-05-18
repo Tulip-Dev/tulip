@@ -71,10 +71,10 @@ static bool AssociateEdges( GraphState  * g0, LayoutProperty * e0,
 }
 //===========================================================
 Morphing::Morphing() {
-  g0 = g1 = 0;
-  e0 = e1 = 0;
+  g0 = g1 = NULL;
+  e0 = e1 = NULL;
   t = 0.0f;
-  glWidget = 0;
+  glWidget = NULL;
 }
 //===========================================================
 bool Morphing::init( GlMainWidget * outGlgw,
@@ -120,7 +120,7 @@ bool Morphing::init( GlMainWidget * outGlgw,
     if( haveSameValues ) {
       delete e0;
       delete e1;
-      e0 = e1 = 0;
+      e0 = e1 = NULL;
     }
   }
 
@@ -150,8 +150,8 @@ void Morphing::stop( ) {
 
   if( e1 )  delete e1;
 
-  g0 = g1 = 0;
-  e0 = e1 = 0;
+  g0 = g1 = NULL;
+  e0 = e1 = NULL;
 }
 //===========================================================
 void Morphing::interpolate( GlMainWidget * outGlgw, float inT) {

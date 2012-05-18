@@ -26,7 +26,7 @@ class PropertiesEditor : public QWidget {
   tlp::GraphPropertiesModel<tlp::PropertyInterface>* _sourceModel;
 
 public:
-  explicit PropertiesEditor(QWidget *parent = 0);
+  explicit PropertiesEditor(QWidget *parent = NULL);
   virtual ~PropertiesEditor();
 
   void setGraph(tlp::Graph* g);

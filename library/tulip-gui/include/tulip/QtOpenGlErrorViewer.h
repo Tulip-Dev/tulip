@@ -37,7 +37,7 @@ public :
   /**
    * Basic constructor
    */
-  QtOpenGlErrorViewer(QWidget *parent=0):parent(parent) {}
+  QtOpenGlErrorViewer(QWidget *parent=NULL):parent(parent) {}
 
   /**
    * Display an error in a QDialog with title : title, and text : errorMsg
@@ -63,7 +63,7 @@ protected :
 class TLP_QT_SCOPE QtOpenGlErrorViewerWithAskAgainDialog : public QDialog {
   friend class QtOpenGlErrorViewer;
 public :
-  QtOpenGlErrorViewerWithAskAgainDialog(QWidget *parent=0);
+  QtOpenGlErrorViewerWithAskAgainDialog(QWidget *parent=NULL);
 
 private:
   Ui::QtOpenGlErrorViewerWithAskAgainDialogData *_ui;

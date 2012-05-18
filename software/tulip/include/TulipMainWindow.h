@@ -41,7 +41,7 @@ class TulipMainWindow: public QMainWindow {
   Q_OBJECT
 
   static TulipMainWindow* _instance;
-  TulipMainWindow(QWidget *parent=0);
+  TulipMainWindow(QWidget *parent=NULL);
 
 public:
   static TulipMainWindow* instance() {
@@ -109,7 +109,7 @@ private:
 class PerspectiveSelectionDialog: public QDialog {
   Q_OBJECT
 public:
-  PerspectiveSelectionDialog(QWidget *parent=0);
+  PerspectiveSelectionDialog(QWidget *parent=NULL);
   QString selectedPerspectiveName;
 
 protected slots:

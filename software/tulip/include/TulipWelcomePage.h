@@ -37,7 +37,7 @@ class QNetworkReply;
 class TulipWelcomePage: public QWidget {
   Q_OBJECT
 public:
-  explicit TulipWelcomePage(QWidget *parent=0);
+  explicit TulipWelcomePage(QWidget *parent=NULL);
   virtual ~TulipWelcomePage();
 
   static QVBoxLayout *buildPerspectiveListLayout(const QObject *receiver, const char *slot);

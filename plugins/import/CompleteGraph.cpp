@@ -61,7 +61,7 @@ public:
     unsigned int nbNodes  = 5;
     bool undirected = false;
 
-    if (dataSet!=0) {
+    if (dataSet!=NULL) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("undirected", undirected);
     }

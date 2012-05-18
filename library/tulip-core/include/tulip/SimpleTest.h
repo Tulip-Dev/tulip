@@ -70,7 +70,7 @@ public:
    * @param loops The self loops that need to be removed to make the graph simple. Defaults to 0.
    * @return bool True if the graph is simple, false otherwise.
    **/
-  static bool simpleTest(const Graph *graph, std::vector<edge> *multipleEdges=0, std::vector<edge> *loops=0);
+  static bool simpleTest(const Graph *graph, std::vector<edge> *multipleEdges=NULL, std::vector<edge> *loops=NULL);
 
 private:
   SimpleTest();

@@ -28,7 +28,7 @@ class TLP_QT_SCOPE TulipFileDescriptorWidget: public QWidget {
   TulipFileDescriptor _data;
   QWidget* _display;
 public:
-  explicit TulipFileDescriptorWidget(QWidget* parent = 0);
+  explicit TulipFileDescriptorWidget(QWidget* parent = NULL);
 
   void setData(TulipFileDescriptor);
   TulipFileDescriptor data() const;

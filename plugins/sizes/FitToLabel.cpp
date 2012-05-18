@@ -78,7 +78,7 @@ public:
     StringProperty *fonts(graph->getProperty<StringProperty> ("viewFont"));
     IntegerProperty *fontSizes(graph->getProperty<IntegerProperty> ("viewFontSize"));
 
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       dataSet->get("prop::label", labels);
       dataSet->get("prop::font", fonts);
       dataSet->get("prop::fontsize", fontSizes);

@@ -46,7 +46,7 @@ public:
     NormalizedValueRole = 33
   };
 
-  GraphTableModel(tlp::Graph* graph,tlp::ElementType elementType=tlp::NODE,QObject* parent = 0);
+  GraphTableModel(tlp::Graph* graph,tlp::ElementType elementType=tlp::NODE,QObject* parent = NULL);
 
   //Get set parameters
   tlp::Graph* graph()const {

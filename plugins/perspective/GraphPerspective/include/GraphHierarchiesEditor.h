@@ -41,7 +41,7 @@ class GraphHierarchiesEditor : public QWidget {
   QAbstractButton* _linkButton;
 
 public:
-  explicit GraphHierarchiesEditor(QWidget *parent = 0);
+  explicit GraphHierarchiesEditor(QWidget *parent = NULL);
   virtual ~GraphHierarchiesEditor();
   void setModel(tlp::GraphHierarchiesModel *model);
   bool synchronized() const;

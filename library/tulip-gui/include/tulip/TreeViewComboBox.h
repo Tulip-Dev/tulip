@@ -11,7 +11,7 @@ class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
   QTreeView* _treeView;
 
 public:
-  explicit TreeViewComboBox(QWidget *parent = 0);
+  explicit TreeViewComboBox(QWidget *parent = NULL);
   virtual void showPopup();
 
   QModelIndex selectedIndex() const;

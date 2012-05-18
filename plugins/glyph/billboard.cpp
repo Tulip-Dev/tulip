@@ -55,7 +55,7 @@ protected:
   static GlRect *rect;
 };
 
-GlRect* Billboard::rect=0;
+GlRect* Billboard::rect=NULL;
 
 PLUGIN(Billboard)
 

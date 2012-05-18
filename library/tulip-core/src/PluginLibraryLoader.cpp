@@ -54,7 +54,7 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, std::string folder) 
   for(std::vector<std::string>::const_iterator it = paths.begin(); it != paths.end(); ++it) {
     std::string dir = (*it) + "/" + folder;
 
-    if (loader!=0)
+    if (loader!=NULL)
       loader->start(dir.c_str());
 
     PluginLister::currentLoader = loader;
@@ -71,7 +71,7 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginL
   QLibrary lib(filename.c_str());
   bool loaded = lib.load();
 
-  if (loader != 0 && !loaded) {
+  if (loader != NULL && !loaded) {
     loader->aborted(filename, lib.errorString().toStdString());
   }
 
@@ -92,7 +92,7 @@ void PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
   QStringList plugins = pluginDir.entryList(filters, QDir::Files);
   int nbUnloadedPluginLibraries = plugins.size();
 
-  if (loader!=0)
+  if (loader!=NULL)
     loader->numberOfFiles(nbUnloadedPluginLibraries);
 
   if (nbUnloadedPluginLibraries < 0) {
@@ -105,7 +105,7 @@ void PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
     currentPluginLibrary = pluginPath +"/"+ lib;
 
     if(library.contains(TULIP_RELEASE)) {
-      if (loader!=0) {
+      if (loader!=NULL) {
         loader->loading(lib);
       }
 

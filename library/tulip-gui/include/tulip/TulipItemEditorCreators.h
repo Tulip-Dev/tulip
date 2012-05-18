@@ -93,8 +93,6 @@ public:
 
 template<typename PROP>
 class TLP_QT_SCOPE PropertyEditorCreator: public tlp::TulipItemEditorCreator {
-  // indicates if the editor have to manage a null property
-  QSet<unsigned int> hasNullProperty;
 public:
   QWidget* createWidget(QWidget*) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
@@ -103,8 +101,6 @@ public:
 };
 
 class TLP_QT_SCOPE PropertyInterfaceEditorCreator: public tlp::TulipItemEditorCreator {
-  // indicates if the editor have to manage a null property
-  QSet<unsigned int> hasNullProperty;
 public:
   QWidget* createWidget(QWidget*) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
