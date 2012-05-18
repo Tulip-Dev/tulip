@@ -73,22 +73,22 @@ tuliputils_runGraphScript(PyObject *, PyObject *args) {
 
         if (!PythonInterpreter::getInstance()->runGraphScript(scriptName.toStdString(), "main", graph)) {
           PyErr_SetString(PyExc_Exception, (std::string("An exception occurred when executing the ") + std::string(s) + " script").c_str());
-          return 0;
+          return NULL;
         }
       }
       else {
         PyErr_SetString(PyExc_TypeError, "Second parameter of the runGraphScript function must be of type tlp.Graph");
-        return 0;
+        return NULL;
       }
     }
     else {
       PyErr_SetString(PyExc_Exception, (std::string("The script ") + std::string(s) + " does not exist").c_str());
-      return 0;
+      return NULL;
     }
   }
   else {
     PyErr_SetString(PyExc_TypeError, "Parameters provided to the runGraphScript function have invalid types");
-    return 0;
+    return NULL;
   }
 
   Py_RETURN_NONE;
