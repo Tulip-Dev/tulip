@@ -145,7 +145,7 @@ tlp::IteratorValue* tlp::MutableContainer<TYPE>::findAllValues(const TYPE &value
     default:
       assert(false);
       qWarning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
-      return 0;
+      return NULL;
     }
   }
 }
