@@ -23,7 +23,6 @@
 
 
 #include <tulip/Plugin.h>
-#include <tulip/TulipRelease.h>
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
 #include <tulip/Size.h>
