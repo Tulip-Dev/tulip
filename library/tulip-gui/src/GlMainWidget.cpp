@@ -445,6 +445,20 @@ void GlMainWidget::createPicture(const std::string &pictureName, int width, int 
 
 //=====================================================
 QImage GlMainWidget::createPicture(int width, int height,bool center) {
+
+  int oldWidth=scene.getViewport()[2];
+  int oldHeight=scene.getViewport()[3];
+  vector<Camera> oldCameras;
+  const vector<pair<string, GlLayer*> > &layersList=scene.getLayersList();
+  if(center){
+    for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin();it!=layersList.end();++it){
+      if(!(*it).second->useSharedCamera())
+        oldCameras.push_back((*it).second->getCamera());
+    }
+  }
+
+  QImage resultImage;
+
 #ifndef WITHOUT_QT_PICTURE_OUTPUT
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
   scene.setViewport(0,0,width,height);
@@ -460,7 +474,9 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
   scene.draw();
   drawInteractors();
 
-  return glFrameBuf->toImage();
+
+
+  resultImage=glFrameBuf->toImage();
 #else
   makeCurrent();
   scene.setViewport(0,0,width,height);
@@ -494,8 +510,26 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
 
   painter.end();
   free(image);
-  return pm.toImage();
+  resultImage= pm.toImage();
 #endif
+
+  scene.setViewport(0,0,oldWidth,oldHeight);
+  if(center){
+    int i=0;
+    for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin();it!=layersList.end();++it){
+      if(!(*it).second->useSharedCamera()){
+        Camera &camera=(*it).second->getCamera();
+        camera.setCenter(oldCameras[i].getCenter());
+        camera.setEyes(oldCameras[i].getEyes());
+        camera.setSceneRadius(oldCameras[i].getSceneRadius());
+        camera.setUp(oldCameras[i].getUp());
+        camera.setZoomFactor(oldCameras[i].getZoomFactor());
+      }
+      i++;
+    }
+  }
+
+  return resultImage;
 }
 
 void GlMainWidget::centerScene() {
