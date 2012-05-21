@@ -80,7 +80,6 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
           bends.clear();
           Observable::unholdObservers();
 
-          inputData->getElementSelected()->setEdgeValue(newEdge,true);
         }
         else {
           Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);

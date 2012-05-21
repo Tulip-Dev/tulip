@@ -77,8 +77,6 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
         mLayout->setNodeValue(newNode, point);
         Observable::unholdObservers();
 
-        inputData->getElementSelected()->setNodeValue(newNode,true);
-
         return true;
       }
     }
