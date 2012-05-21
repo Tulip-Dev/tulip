@@ -19,8 +19,6 @@
 #ifndef _PERSPECTIVE_H
 #define _PERSPECTIVE_H
 
-#include <tulip/WithParameter.h>
-#include <tulip/WithDependency.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TulipProject.h>
 #include <tulip/PluginContext.h>
