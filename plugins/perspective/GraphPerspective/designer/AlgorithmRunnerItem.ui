@@ -136,6 +136,49 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="favoriteCheck">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>28</width>
+          <height>28</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>28</width>
+          <height>28</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QCheckBox {
+spacing: 0px;
+}
+QCheckBox::indicator {
+width: 28px;
+height: 28px;
+}
+QCheckBox::indicator:unchecked {
+image: url(:/tulip/graphperspective/icons/16/favorite-empty.png);
+}
+QCheckBox::indicator:unchecked:hover {
+image: url(:/tulip/graphperspective/icons/16/favorite-empty-hover.png);
+}
+QCheckBox::indicator:checked {
+image: url(:/tulip/graphperspective/icons/16/favorite.png);
+}
+QCheckBox::indicator:checked:hover {
+image: url(:/tulip/graphperspective/icons/16/favorite-hover.png);
+}</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -192,6 +235,12 @@ background-color: white;
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
      </property>
     </spacer>
    </item>
