@@ -79,10 +79,12 @@ int main(int argc,char **argv) {
   PluginLoaderWithInfo plug;
   initTulipLib(NULL);
   loadPlugin(pluginPath.toStdString(), &plug);
-  //GlyphManager::getInst().loadPlugins(&plug); //Glyph plugins
-  InteractorManager::getInst().loadPlugins(&plug);
-  ViewPluginsManager::getInst().loadPlugins(&plug);
-  ControllerPluginsManager::getInst().loadPlugins(&plug);
+  if (generateDoc) {
+    //GlyphManager::getInst().loadPlugins(&plug); //Glyph plugins
+    InteractorManager::getInst().loadPlugins(&plug);
+    ViewPluginsManager::getInst().loadPlugins(&plug);
+    ControllerPluginsManager::getInst().loadPlugins(&plug);
+  }
 
   if (!plug.errorMsgs.empty()) {
     cout << "Error when loading plugins:"<< endl;
@@ -181,10 +183,12 @@ int main(int argc,char **argv) {
     pluginInfo = plug.pluginsList[0];
   }
 
-  pluginInfo.displayType= PluginInfo::getPluginDisplayType(pluginInfo.name);
+  if (generateDoc) {
+    pluginInfo.displayType= PluginInfo::getPluginDisplayType(pluginInfo.name);
 
-  if(pluginInfo.displayType == "Glyph")
-    pluginInfo.type = "Glyph";
+    if(pluginInfo.displayType == "Glyph")
+      pluginInfo.type = "Glyph";
+  }
 
   QString path= pluginInfo.fileName.c_str()+QString(".")+(QString(pluginInfo.version.c_str()).split(" "))[1];
 
