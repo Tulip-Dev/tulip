@@ -11,10 +11,9 @@
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">#AlgorithmRunner, #contents {
+   <string notr="true">#AlgorithmRunner, #contents, #favoritesContents {
 background-color: white;
 }
-
 ExpandableGroupBox[ expanded = &quot;true&quot; ] {
 margin-top: 1.5ex;
 }
@@ -48,6 +47,36 @@ margin-left: 1ex;
 }
 ExpandableGroupBox[root = &quot;false&quot; ][expanded = &quot;true&quot; ] {
 margin-left: 1ex;
+}
+QToolButton, QComboBox {
+border-image: url(:/tulip/gui/ui/btn_26.png) 4;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+}
+QPushButton {
+border-image: none;
+background-color: white;
+border: 1px solid &quot;#E9E9E9&quot;;
+color: black;
+outline: none;
+margin: 2
+}
+
+QPushButton:hover {
+border-image: none;
+background-color: white;
+border: 1px solid &quot;#C9C9C9&quot;;
+}
+
+QPushButton:disabled {
+color:gray;
+}
+
+QPushButton:pressed{
+  border-image: none;
+  background-color: &quot;#E9E9E9&quot;;
+  border: 1px solid &quot;#C9C9C9&quot;;
 }
 </string>
   </property>
@@ -100,93 +129,101 @@ margin-left: 1ex;
     </widget>
    </item>
    <item>
-    <widget class="QScrollArea" name="algorithmList">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="styleSheet">
-      <string notr="true">#algorithmListContents {
-  background-color: white;
-  border-top: 0px;
-  border-left: 1px solid &quot;#C9C9C9&quot;;
-  border-right: 0px;
-  border-bottom: 0px;
-}
-
-QToolButton, QComboBox {
-    border-image: url(:/tulip/gui/ui/btn_26.png) 4;
-    border-width: 4;
-    padding: 0px 6px;
-    font-size: 12px;
-}
-
-QPushButton {
-  border-image: none;
-  background-color: white;
-  border: 1px solid &quot;#E9E9E9&quot;;
-  color: black;
-  outline: none;
-  margin: 2
-}
-
-QPushButton:hover {
-  border-image: none;
-  background-color: white;
-  border: 1px solid &quot;#C9C9C9&quot;;
-}
-
-QPushButton:disabled {
-	color:gray;
-}
-
-QPushButton:pressed{
-  border-image: none;
-  background-color: &quot;#E9E9E9&quot;;
-  border: 1px solid &quot;#C9C9C9&quot;;
-}</string>
+     <property name="handleWidth">
+      <number>1</number>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="contents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>386</width>
-        <height>680</height>
-       </rect>
+     <widget class="QScrollArea" name="algorithmList">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <property name="margin">
-        <number>0</number>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="contents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>386</width>
+         <height>340</height>
+        </rect>
        </property>
-       <item>
-        <layout class="QVBoxLayout" name="contentsLayout">
-         <property name="spacing">
-          <number>10</number>
-         </property>
-         <property name="leftMargin">
-          <number>3</number>
-         </property>
-         <property name="topMargin">
-          <number>6</number>
-         </property>
-         <property name="rightMargin">
-          <number>3</number>
-         </property>
-         <property name="bottomMargin">
-          <number>6</number>
-         </property>
-        </layout>
-       </item>
-      </layout>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="contentsLayout">
+          <property name="spacing">
+           <number>10</number>
+          </property>
+          <property name="leftMargin">
+           <number>3</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>3</number>
+          </property>
+          <property name="bottomMargin">
+           <number>6</number>
+          </property>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QScrollArea" name="favoritesList">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>75</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="favoritesContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>386</width>
+         <height>339</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="acceptDrops">
+        <bool>true</bool>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="favoritesContentsLayout"/>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </widget>
    </item>
@@ -205,7 +242,10 @@ QPushButton:pressed{
    <header location="global">tulip/ClearableLineEdit.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources/GraphPerspective.qrc"/>
+  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>searchBox</sender>

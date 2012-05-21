@@ -32,5 +32,11 @@
         <file>icons/16/edit-clear.png</file>
         <file>icons/32/database.png</file>
         <file>icons/16/document-export.png</file>
+        <file>icons/16/favorite-empty-hover.png</file>
+        <file>icons/16/favorite-empty.png</file>
+        <file>icons/16/favorite-hover.png</file>
+        <file>icons/16/favorite.png</file>
+        <file>icons/32/favorite-empty.png</file>
+        <file>icons/32/favorite.png</file>
     </qresource>
 </RCC>

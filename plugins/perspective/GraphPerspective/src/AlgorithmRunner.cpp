@@ -20,6 +20,9 @@
 
 #include <QtGui/QToolButton>
 #include <QtGui/QMouseEvent>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QDragMoveEvent>
+#include <QtGui/QDragLeaveEvent>
 #include <QtGui/QFontMetrics>
 
 #include <tulip/PluginModel.h>
@@ -60,8 +63,9 @@ void buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model, const QModelInd
   }
 }
 
-AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::AlgorithmRunner) {
+AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::AlgorithmRunner), _droppingFavorite(false) {
   _ui->setupUi(this);
+  _ui->favoritesContents->installEventFilter(this);
   setEnabled(false);
   QToolButton* localModeButton = new QToolButton(_ui->header);
   localModeButton->setMaximumSize(25,25);
@@ -131,6 +135,49 @@ void AlgorithmRunner::setFilter(QString filter) {
   foreach(ExpandableGroupBox* group, childrenObj<ExpandableGroupBox*>(_ui->contents)) {
     filterGroup(group,filter);
   }
+}
+
+bool AlgorithmRunner::eventFilter(QObject* obj, QEvent* ev) {
+  if (obj == _ui->favoritesContents) {
+    if (ev->type() == QEvent::Paint) {
+      QPainter painter(_ui->favoritesContents);
+      QPixmap px((_droppingFavorite ? ":/tulip/graphperspective/icons/32/favorite.png" : ":/tulip/graphperspective/icons/32/favorite-empty.png"));
+      painter.drawPixmap(_ui->favoritesContents->width()/2 - 16, 5, px);
+      QFont f;
+      f.setBold(true);
+      painter.setFont(f);
+      painter.setBrush(QColor(107,107,107));
+      painter.setPen(QColor(107,107,107));
+      painter.drawText(0,40,_ui->favoritesContents->width(),65535,Qt::AlignHCenter | Qt::AlignTop | Qt::TextWordWrap,trUtf8("Put your favorite algorithms here"));
+    }
+    else if (ev->type() == QEvent::DragEnter || ev->type() == QEvent::DragMove) {
+      QDropEvent* dropEv = static_cast<QDropEvent*>(ev);
+      if (dynamic_cast<const AlgorithmMimeType*>(dropEv->mimeData()) != NULL) {
+        _droppingFavorite = true;
+        ev->accept();
+        _ui->favoritesContents->repaint();
+      }
+      return true;
+    }
+    else if (ev->type() == QEvent::DragLeave) {
+      _droppingFavorite = false;
+      _ui->favoritesContents->repaint();
+    }
+    else if (ev->type() == QEvent::Drop) {
+      _droppingFavorite = false;
+      QDropEvent* dropEv = static_cast<QDropEvent*>(ev);
+      const AlgorithmMimeType* mime = dynamic_cast<const AlgorithmMimeType*>(dropEv->mimeData());
+      if (mime != NULL) {
+        // TODO: call addFavorite
+      }
+      _ui->favoritesContents->repaint();
+    }
+  }
+  return false;
+}
+
+void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
+
 }
 
 AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _localMode(true) {

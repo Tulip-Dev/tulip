@@ -35,6 +35,7 @@ class AlgorithmRunner: public QWidget {
   Q_OBJECT
 
   Ui::AlgorithmRunner* _ui;
+  bool _droppingFavorite;
 
 public:
   explicit AlgorithmRunner(QWidget* parent = NULL);
@@ -45,6 +46,10 @@ public slots:
 
 protected slots:
   void setFilter(QString);
+  void addFavorite(const QString& algName, const tlp::DataSet& data);
+
+protected:
+  bool eventFilter(QObject *, QEvent *);
 };
 
 class AlgorithmRunnerItem: public QWidget {
