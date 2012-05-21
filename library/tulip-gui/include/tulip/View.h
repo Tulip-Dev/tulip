@@ -20,11 +20,8 @@
 #define VIEW_H
 
 #include <tulip/tulipconf.h>
-#include <tulip/WithDependency.h>
-#include <tulip/WithParameter.h>
 #include <tulip/Observable.h>
 #include <tulip/PluginLister.h>
-
 
 #include <QtCore/QObject>
 #include <QtCore/QSet>

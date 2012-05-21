@@ -20,8 +20,6 @@
 #ifndef EDGEEXTREMITYGLYPH_H_
 #define EDGEEXTREMITYGLYPH_H_
 
-#include <tulip/WithDependency.h>
-#include <tulip/WithParameter.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/Color.h>
