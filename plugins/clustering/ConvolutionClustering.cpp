@@ -297,10 +297,6 @@ bool ConvolutionClustering::check(string &erreurMsg) {
   erreurMsg="";
   return true;
 }
-//================================================================================
-void ConvolutionClustering::reset() {
-}
-//================================================================================
 
 
 

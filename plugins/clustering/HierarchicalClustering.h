@@ -32,7 +32,6 @@ public:
   ~HierarchicalClustering();
   bool run();
   bool check(std::string &);
-  void reset();
 private :
   bool split (tlp::DoubleProperty*, std::list<tlp::node> &);
 };

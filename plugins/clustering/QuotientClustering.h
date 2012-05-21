@@ -28,8 +28,6 @@ public:
   QuotientClustering(const tlp::AlgorithmContext &);
   ~QuotientClustering();
   bool run();
-  bool check(std::string &);
-  void reset();
 };
 /*@}*/
 #endif

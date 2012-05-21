@@ -41,7 +41,6 @@ public:
   ~Random();
 
   bool run();
-  bool check(std::string& erreurMsg);
 };
 
 #endif

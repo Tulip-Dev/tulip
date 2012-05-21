@@ -61,8 +61,3 @@ bool Random::run() {
   delete itN;
   return true;
 }
-
-bool Random::check(std::string &erreurMsg) {
-  erreurMsg="";
-  return (true);
-}

@@ -40,8 +40,6 @@ public:
   StrongComponent(const tlp::PropertyContext &);
   ~StrongComponent();
   bool run();
-  bool check(std::string &);
-  void reset();
 
 private:
   int  attachNumerotation(tlp::node, TLP_HASH_MAP<tlp::node,bool> &,

@@ -72,10 +72,6 @@ EccentricityMetric::EccentricityMetric(const tlp::PropertyContext &context):Doub
 EccentricityMetric::~EccentricityMetric() {
 }
 //====================================================================
-bool EccentricityMetric::check(string &/*err*/) {
-  return true;
-}
-//====================================================================
 double EccentricityMetric::compute(node n) {
 
   MutableContainer<unsigned int> distance;

@@ -116,11 +116,3 @@ bool StrongComponent::run() {
 
   return true;
 }
-
-bool StrongComponent::check(std::string &erreurMsg) {
-  erreurMsg="";
-  return true;
-}
-
-void StrongComponent::reset() {
-}
