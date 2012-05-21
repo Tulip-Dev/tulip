@@ -59,7 +59,7 @@ IF(WIN32)
 
         IF(MSVC_REDIST)
             #If the redistribuable package is found integrate it to installer.
-                INSTALL(PROGRAMS ${MSVC_REDIST} COMPONENT libtulip DESTINATION ${TulipBinInstallDir})
+                INSTALL(PROGRAMS ${MSVC_REDIST} COMPONENT tulip_core DESTINATION ${TulipBinInstallDir})
                 SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "ExecWait '\\\"$INSTDIR\\\\bin\\\\vcredist_x86.exe\\\" /passive'")
                 message(STATUS "MSVC_REDIST: ${MSVC_REDIST}")
         ELSE()
