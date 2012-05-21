@@ -18,9 +18,15 @@
  */
 #ifndef TULIP_GGRAPHITERATOR_H
 #define TULIP_GGRAPHITERATOR_H
+#include <set>
 #include <tulip/Iterator.h>
 #include <tulip/memorypool.h>
-#include <set>
+
+// TulipRelease.h is included
+// to prevent any misuse of NDEBUG
+// while the classes below will be different
+// in debug and release modes
+#include <tulip/TulipRelease.h>
 
 #include <tulip/MutableContainer.h>
 #include <tulip/ObservableGraph.h>

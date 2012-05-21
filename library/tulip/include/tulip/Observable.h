@@ -19,10 +19,17 @@
 #ifndef OBSERVABLE_H
 #define OBSERVABLE_H
 
+#include <set>
+
+// TulipRelease.h is included
+// to prevent any misuse of NDEBUG
+// while the classes below will be different
+// in debug and release modes
+#include <tulip/TulipRelease.h>
+
 #include <tulip/TulipException.h>
 #include <tulip/ForEach.h>
 #include <tulip/vectorgraph.h>
-#include <set>
 
 namespace tlp {
 /**
