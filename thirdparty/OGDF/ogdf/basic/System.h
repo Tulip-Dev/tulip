@@ -56,7 +56,6 @@
 #include <malloc.h>
 #endif
 
-
 // detect processor architecture we're compiling for
 //
 // OGDF_ARCH_X86       Intel / AMD x86 32-bit processors
@@ -166,18 +165,18 @@ public:
 
 	static void *alignedMemoryAlloc16(size_t size) {
 		size_t alignment = 16;
-#ifdef OGDF_SYSTEM_WINDOWS
-		return _aligned_malloc(size,alignment);
-#elif defined(OGDF_SYSTEM_OSX)
+#if defined(OGDF_SYSTEM_OSX) || defined(__MINGW32__)
 		// malloc returns 16 byte aligned memory on OS X.
 		return malloc(size);
+#elif defined(OGDF_SYSTEM_WINDOWS)
+        return _aligned_malloc(size,alignment);
 #else
 		return memalign(alignment,size);
 #endif
 	}
 
 	static void alignedMemoryFree(void *p) {
-#ifdef OGDF_SYSTEM_WINDOWS
+#if defined(OGDF_SYSTEM_WINDOWS) && !defined(__MINGW32__)
 		_aligned_free(p);
 #else
 		free(p);
