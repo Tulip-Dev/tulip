@@ -571,14 +571,7 @@ delete itNodes; //!!!Warning : do not forget to delete iterators (memory leak)]]
     			<listitem><para>
     				An Iterator for the same type as the variable, for example : Variable of type node, Graph::getNodes().
     			</para></listitem>
-    		</itemizedlist>
-    		<warning><itemizedlist>
-    			<listitem><para>
-    				Must use breakForEach to break iteration
-    			</para></listitem>
-    			<listitem><para> Must use returnForEach to return during iteration
-    			</para></listitem>
-    		</itemizedlist></warning>
+    		</itemizedlist>    		
     		<para>This macro function is defined in the header file : tulip/ForEach.h</para>
     		<para>Following is a small example of its use.
     		<programlisting>
