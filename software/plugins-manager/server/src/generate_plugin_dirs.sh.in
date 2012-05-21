@@ -24,7 +24,7 @@ else
   mkdir /tmp/plugins_doc
 fi
 
-for LIB in $(find $BUILD_TOP_DIR -name 'lib*-@TulipVersion@.so')
+for LIB in $(find $BUILD_TOP_DIR -name 'lib*-@TulipVersion@.@shared_lib_suffix@')
 do
 GEN_DOC=no
 FILE_XML=none
@@ -64,10 +64,10 @@ if [ "$GENERATEDOC" == "yes" ]; then
 fi
 echo ""
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" >> /tmp/generation.log
-echo ./pluginInstaller $LIB $FILE_XML $SRV_DIR $GEN_DOC $ARCH >> /tmp/generation.log
-./pluginInstaller $LIB $FILE_XML $SRV_DIR $GEN_DOC $ARCH >> /tmp/generation.log
+echo ./pluginFilesGenerator $LIB $FILE_XML $SRV_DIR $GEN_DOC $ARCH >> /tmp/generation.log
+./pluginFilesGenerator $LIB $FILE_XML $SRV_DIR $GEN_DOC $ARCH >> /tmp/generation.log
 if [ $? -ne 0 ]; then
-  echo pluginInstaller error !!!
+  echo pluginsFileGenerator error !!!
   exit
 fi
 echo "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" >> /tmp/generation.log

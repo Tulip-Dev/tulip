@@ -63,9 +63,12 @@ ENDIF(QT_VERSION_MINOR LESS 7)
                       
 ADD_DEPENDENCIES(serverGenerator ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
 
-ADD_EXECUTABLE(pluginInstaller ${pluginInstaller_SRCS})
+# because windows do a special hack when launching an executable
+# whose name contains "setup" or "install"
+# we rename pluginInstaller into pluginFilesGenerator
+ADD_EXECUTABLE(pluginFilesGenerator ${pluginInstaller_SRCS})
 IF(QT_VERSION_MINOR LESS 7)
-TARGET_LINK_LIBRARIES(pluginInstaller
+TARGET_LINK_LIBRARIES(pluginFilesGenerator
                       ${LibTulipName}
                       ${LibTulipOglName}
                       ${LibTulipQtName}
@@ -82,7 +85,7 @@ TARGET_LINK_LIBRARIES(pluginInstaller
                       ${LIBXML2_LIBRARIES}
                       ${JPEG_LIBRARY} )
 ELSE(QT_VERSION_MINOR LESS 7)
-TARGET_LINK_LIBRARIES(pluginInstaller
+TARGET_LINK_LIBRARIES(pluginFilesGenerator
                       ${LibTulipName}
                       ${LibTulipOglName}
                       ${LibTulipQtName}
@@ -98,7 +101,7 @@ TARGET_LINK_LIBRARIES(pluginInstaller
                       ${JPEG_LIBRARY} )
 ENDIF(QT_VERSION_MINOR LESS 7)                      	
                       
-ADD_DEPENDENCIES(pluginInstaller ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
+ADD_DEPENDENCIES(pluginFilesGenerator ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
 
 IF(QT_VERSION_MINOR GREATER 6)
 QT4_WRAP_CPP(pluginPusher_MOC_SRCS PushToPluginServer.h)
