@@ -3,19 +3,18 @@ if [ $# -lt 3 ]; then
     echo "--- $(basename $0) allows to copy all plugin libraries, found in"
     echo "    a hierachy of build plugins, in an already existing list of"
     echo "    plugins server directories"
-    echo "usage: $(basename $0) plugins_build_top_dir plugins_server_top_dir plugin_suffix (dll|dylib|so) [arch (i386|i64) = i386]"
+    echo "usage: $(basename $0) plugins_build_top_dir plugins_server_top_dir [arch (i386|i64) = i386]"
   exit
 fi
 
 BUILD_TOP_DIR=$1
 SRV_DIR=$2
-SUFFIX=$3
 ARCH=i386
-if [ $# -eq 4 ]; then
-    ARCH=$4
+if [ $# -eq 3 ]; then
+    ARCH=$3
 fi
 
-for PLUGIN_LIB in $(find $BUILD_TOP_DIR -name 'lib*-'@TulipVersion@.$SUFFIX)
+for PLUGIN_LIB in $(find $BUILD_TOP_DIR -name 'lib*-@TulipVersion@.@shared_lib_suffix@')
 do
   PLUGIN_LIB_NAME=$(basename $PLUGIN_LIB)
   PLUGIN_DIR_NAME=${PLUGIN_LIB_NAME%.$SUFFIX}

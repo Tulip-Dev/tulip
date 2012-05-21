@@ -10,7 +10,7 @@ includedir=@includedir@
 libdir=@libdir@
 sharedir=${prefix}/share
 libversion=@libversion@
-libextension=so
+libextension=@shared_lib_suffix@
 plugincxxflags="-fPIC -DPIC"
 pluginldflags=-shared
 pluginpath=${prefix}/lib/tulip
@@ -21,7 +21,6 @@ LINUX=$(sh -c 'uname -s | grep -q Linux; echo $?')
 
 # check for MacOS or Windows installation
 if [ $MACOSX -eq 0 ] ; then
-  libextension=dylib
   pluginldflags="-bundle -Wl,-bind_at_load -flat_namespace"
   if [ -e $(dirname $thisdir)/Frameworks/QtCore ] ; then
 # MacOS bundle
@@ -32,7 +31,6 @@ if [ $MACOSX -eq 0 ] ; then
 fi
 if [ $WINNT -eq 0 ] ; then
   libversion=@WIN_VERSION@
-  libextension=dll
   plugincxxflags=-DPIC
   if [ -f "$thisdir/../Uninstall.exe" ] ; then
 #   Windows installation
