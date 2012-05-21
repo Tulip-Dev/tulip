@@ -356,6 +356,13 @@ SET(BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
 ## -----------------------------------------------------------------------------------------------
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in
 ## -----------------------------------------------------------------------------------------------
+STRING(COMPARE EQUAL ${CMAKE_BUILD_TYPE} "Release" result1)
+STRING(COMPARE EQUAL ${CMAKE_BUILD_TYPE} "RelWithDebInfo" result2)
+IF(${result1} OR ${result2})
+  SET(TulipBuildIsRelease 1)
+ELSE()
+  SET(TulipBuildIsRelease 0)
+ENDIF()
 CONFIGURE_FILE("library/tulip-core/include/tulip/TulipRelease.h.in" "library/tulip-core/include/tulip/TulipRelease.h")
 
 ## -----------------------------------------------------------------------------------------------
