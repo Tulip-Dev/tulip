@@ -78,30 +78,29 @@ double OGDF_clk_tck = sysconf(_SC_CLK_TCK); //is long. but definig it here avoid
 
 
 #ifdef OGDF_DLL
+extern "C" {
+    BOOL APIENTRY DllMain(HANDLE hModule,
+        DWORD  ul_reason_for_call, LPVOID lpReserved)
+    {
+        switch (ul_reason_for_call)
+        {
+            case DLL_PROCESS_ATTACH:
+                ogdf::PoolMemoryAllocator::init();
+                ogdf::System::init();
+                break;
 
-BOOL APIENTRY DllMain(HANDLE hModule, 
-	DWORD  ul_reason_for_call, LPVOID lpReserved)
-{
-    switch (ul_reason_for_call)
-	{
-		case DLL_PROCESS_ATTACH:
-			ogdf::PoolMemoryAllocator::init();
-			ogdf::System::init();
-			break;
+            case DLL_THREAD_ATTACH:
+            case DLL_THREAD_DETACH:
+                break;
 
-		case DLL_THREAD_ATTACH:
-		case DLL_THREAD_DETACH:
-			break;
-
-		case DLL_PROCESS_DETACH:
-			ogdf::PoolMemoryAllocator::cleanup();
-			break;
+            case DLL_PROCESS_DETACH:
+                ogdf::PoolMemoryAllocator::cleanup();
+                break;
+        }
+        return TRUE;
     }
-    return TRUE;
 }
-
 #else
-
 namespace ogdf {
 
 //static int variables are automatically initialized with 0
