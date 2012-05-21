@@ -22,7 +22,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","OK","1.3");
+ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","OK","1.3")
 
 //==============================================================================
 namespace {
@@ -92,7 +92,7 @@ const char * paramHelp[] = {
 }
 #define AGGREGATION_FUNCTIONS "none;average;sum;max;min"
 //================================================================================
-QuotientClustering::QuotientClustering(AlgorithmContext context):Algorithm(context) {
+QuotientClustering::QuotientClustering(const AlgorithmContext &context):Algorithm(context) {
   addDependency<LayoutAlgorithm>("Circular", "1.1");
   addDependency<LayoutAlgorithm>("GEM (Frick)", "1.2");
   addDependency<SizeAlgorithm>("Auto Sizing", "1.0");
@@ -378,10 +378,10 @@ bool QuotientClustering::run() {
       layoutName = "GEM (Frick)";
 
     string sizesName="Auto Sizing";
-    quotientGraph->computeProperty(layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg);
+    quotientGraph->applyPropertyAlgorithm(layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg);
 
     if (mNodes.size() < 300)
-      quotientGraph->computeProperty(sizesName, quotientGraph->getLocalProperty<SizeProperty>("viewSize"),errMsg);
+      quotientGraph->applyPropertyAlgorithm(sizesName, quotientGraph->getLocalProperty<SizeProperty>("viewSize"),errMsg);
   }
 
   // recursive call if needed

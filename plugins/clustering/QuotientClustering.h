@@ -25,7 +25,7 @@
 /*@{*/
 class QuotientClustering:public tlp::Algorithm {
 public:
-  QuotientClustering(tlp::AlgorithmContext);
+  QuotientClustering(const tlp::AlgorithmContext &);
   ~QuotientClustering();
   bool run();
   bool check(std::string &);
