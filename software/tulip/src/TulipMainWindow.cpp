@@ -27,7 +27,6 @@
 #include <QtCore/QDir>
 
 #include <tulip/TlpTools.h>
-#include <tulip/TulipRelease.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipProject.h>
 #include <QtGui/QScrollArea>

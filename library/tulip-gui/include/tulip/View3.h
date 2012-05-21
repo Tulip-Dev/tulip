@@ -26,7 +26,6 @@
 
 
 #include <tulip/Plugin.h>
-#include <tulip/TulipRelease.h>
 #include <tulip/PluginLister.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/Vector.h>

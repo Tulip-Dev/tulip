@@ -21,7 +21,6 @@
 #include <tulip/WithDependency.h>
 #include <tulip/Plugin.h>
 #include <tulip/PluginLister.h>
-#include <tulip/TulipRelease.h>
 
 #include <QtCore/QFileInfo>
 #include <tulip/TlpQtTools.h>

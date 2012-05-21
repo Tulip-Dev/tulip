@@ -24,7 +24,6 @@
 
 #include <tulip/SystemDefinition.h>
 #include <tulip/PluginLister.h>
-#include <tulip/TulipRelease.h>
 #include <tulip/PluginInformations.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/QuaZIPFacade.h>
