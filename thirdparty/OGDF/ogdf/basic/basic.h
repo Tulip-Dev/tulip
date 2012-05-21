@@ -208,10 +208,13 @@ typedef unsigned __int64 __uint64;
 
 #else
 
+#if !defined(__MINGW32__)
 typedef signed char        __int8;
 typedef short              __int16;
 typedef int                __int32;
 typedef long long          __int64;
+#endif
+
 typedef unsigned char      __uint8;
 typedef unsigned short     __uint16;
 typedef unsigned int       __uint32;
