@@ -59,11 +59,14 @@
 #include <Psapi.h>
 #endif
 
+#if defined(__MINGW32__)
+#include <malloc.h>
+#endif
+
 #ifdef _MSC_VER
 #include <intrin.h>
 
 #elif defined(OGDF_SYSTEM_UNIX) || defined(__MINGW32__)
-#include <malloc.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/time.h>

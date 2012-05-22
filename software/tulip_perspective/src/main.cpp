@@ -93,10 +93,6 @@ int main(int argc,char **argv) {
   QDir::setCurrent(QApplication::applicationDirPath());
 #endif
 
-#if defined(__APPLE__) // revert current directory
-  QDir::setCurrent(currentPath);
-#endif
-
   // Init Tulip and load plugins
   progress->progress(25,100);
   progress->setComment(QObject::trUtf8("Loading plugins").toStdString());
