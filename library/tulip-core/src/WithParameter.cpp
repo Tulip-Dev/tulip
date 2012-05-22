@@ -33,7 +33,7 @@
 using namespace tlp;
 using namespace std;
 
-const ParameterDescriptionList& tlp::WithParameter::getParameters() {
+const ParameterDescriptionList& tlp::WithParameter::getParameters() const {
   return parameters;
 }
 
