@@ -101,17 +101,10 @@ ENDMACRO(CHECK_VERSION)
 # First step: set up the TULIP_DIR variable
 IF(TULIP_DIR) # TULIP_DIR is already set
   IF(NOT TULIP_INCLUDE_DIR)
-    IF(APPLE)
-      FIND_PATH(TULIP_INCLUDE_DIR tulip/TulipRelease.h
-                PATHS ${TULIP_DIR}/Contents/include
-                NO_DEFAULT_PATH)
-    ELSE(APPLE)
-      FIND_PATH(TULIP_INCLUDE_DIR tulip/TulipRelease.h
-                PATHS ${TULIP_DIR}/include
-                NO_DEFAULT_PATH)
-    ENDIF(APPLE)
+    FIND_PATH(TULIP_INCLUDE_DIR tulip/TulipRelease.h
+              PATHS ${TULIP_DIR}/include
+              NO_DEFAULT_PATH)
   ENDIF(NOT TULIP_INCLUDE_DIR)
-
   RETRIEVE_VERSION()
   CHECK_VERSION()
 ELSE(TULIP_DIR)
@@ -121,8 +114,6 @@ ELSE(TULIP_DIR)
   ENDIF(NOT TULIP_INCLUDE_DIR)
   IF(NOT TULIP_INCLUDE_DIR)
     MESSAGE(FATAL_ERROR "Auto-detecting your Tulip headers installation directory failed. Please try to provide the TULIP_DIR CMake variable poiting to your Tulip installation root directory")
-  ELSEIF(APPLE)
-    SET(TULIP_DIR ${TULIP_INCLUDE_DIR}/../../)
   ELSE()
     SET(TULIP_DIR ${TULIP_INCLUDE_DIR}/../)
   ENDIF(NOT TULIP_INCLUDE_DIR)
@@ -135,8 +126,6 @@ MARK_AS_ADVANCED(TULIP_DIR)
 MARK_AS_ADVANCED(TULIP_INCLUDE_DIR)
 IF(WIN32)
   SET(TULIP_LIBRARIES_DIR ${TULIP_DIR}/bin)
-ELSEIF(APPLE)
-  SET(TULIP_LIBRARIES_DIR ${TULIP_DIR}/Frameworks)
 ELSE()
   SET(TULIP_LIBRARIES_DIR ${TULIP_DIR}/lib)
 ENDIF()
@@ -147,8 +136,6 @@ SET(TULIP_FOUND true)
 
 IF(WIN32)
   SET(TULIP_LIBRARIES_DIR ${TULIP_DIR}/bin)
-ELSEIF(APPLE)
-  SET(TULIP_LIBRARIES_DIR ${TULIP_DIR}/Frameworks)
 ELSE()
   SET(TULIP_LIBRARIES_DIR ${TULIP_DIR}/lib)
 ENDIF()
