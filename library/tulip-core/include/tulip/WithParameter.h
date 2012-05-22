@@ -224,7 +224,7 @@ struct TLP_SCOPE WithParameter {
    *
    * @return :ParameterDescriptionList the parameters of the plug-in.
    **/
-  const tlp::ParameterDescriptionList& getParameters();
+  const tlp::ParameterDescriptionList& getParameters() const;
 
   /**
    * @brief Adds an IN parameter to the plug-in.
