@@ -37,6 +37,8 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
 
 void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   _contextProperty = _ui->tableView->indexAt(p).data(TulipModel::PropertyRole).value<PropertyInterface*>();
+  if (_contextProperty == NULL)
+    return;
   QMenu menu;
   connect(menu.addAction(trUtf8("Check all")),SIGNAL(triggered()),this,SLOT(checkAll()));
   connect(menu.addAction(trUtf8("Uncheck all")),SIGNAL(triggered()),this,SLOT(unCheckAll()));
