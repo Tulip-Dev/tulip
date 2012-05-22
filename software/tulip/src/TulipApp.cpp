@@ -1364,7 +1364,7 @@ void TulipApp::preference() {
 //==============================================================
 void TulipApp::helpDocumentation() {
   QStringList args;
-  args << "-collectionFile" << tlp::TulipDocProfile.c_str();
+  args << "-collectionFile" << QString::fromStdString(TulipShareDir)+QString("Porgy.qhc");
   assistantProcess->start(assistantProcessApp, args);
 
   if (!assistantProcess->waitForStarted()) {
