@@ -246,11 +246,7 @@ void GlVertexArrayManager::endRendering() {
       glLineWidth(it->first);
       glMultiDrawElements(GL_LINE_STRIP, &quadsOutlineSelectedRenderingCountArray[it->first][0], GL_UNSIGNED_INT, reinterpret_cast<const GLvoid **>(&quadsOutlineSelectedRenderingIndexArray[it->first][0]), quadsOutlineSelectedRenderingCountArray[it->first].size());
     }
-
-    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
   }
-
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
 //============ Graph elements rendering ============================
 
