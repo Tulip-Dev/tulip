@@ -151,13 +151,11 @@ bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value
 }
 
 DataSet ParameterListModel::parametersValues() const {
-  std::pair<std::string,tlp::DataType*> entry;
-  forEach(entry, _data.getValues()) {
-    std::string k = entry.first;
-    DataType* v = _data.getData(k);
-  }
-
   return _data;
+}
+
+void ParameterListModel::setParametersValues(const DataSet &data) {
+  _data = data;
 }
 
 }

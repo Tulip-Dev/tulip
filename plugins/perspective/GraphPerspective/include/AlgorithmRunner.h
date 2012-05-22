@@ -30,12 +30,16 @@ class AlgorithmRunnerItem;
 namespace tlp {
 class Graph;
 }
+class AlgorithmRunnerItem;
 
 class AlgorithmRunner: public QWidget {
   Q_OBJECT
 
   Ui::AlgorithmRunner* _ui;
   bool _droppingFavorite;
+  tlp::Graph* _graph;
+
+  QList<AlgorithmRunnerItem*> _favorites;
 
 public:
   explicit AlgorithmRunner(QWidget* parent = NULL);
@@ -47,38 +51,11 @@ public slots:
 protected slots:
   void setFilter(QString);
   void addFavorite(const QString& algName, const tlp::DataSet& data);
+  void removeFavorite(const QString& algName);
+  void favorized(bool);
 
 protected:
   bool eventFilter(QObject *, QEvent *);
-};
-
-class AlgorithmRunnerItem: public QWidget {
-  Q_OBJECT
-  Ui::AlgorithmRunnerItem* _ui;
-  QString _pluginName;
-  tlp::Graph* _graph;
-  bool _localMode;
-  QPointF _dragStartPosition;
-
-public:
-  explicit AlgorithmRunnerItem(QString pluginName, QWidget* parent = NULL);
-  virtual ~AlgorithmRunnerItem();
-
-  QString name() const;
-  QString python() const;
-
-protected:
-  virtual void mousePressEvent(QMouseEvent* ev);
-  virtual void mouseMoveEvent(QMouseEvent* ev);
-
-public slots:
-  void setGraph(tlp::Graph*);
-  void setLocalMode(bool);
-
-  void run(tlp::Graph* g = NULL);
-
-protected slots:
-  void afterRun(tlp::Graph*,tlp::DataSet);
 };
 
 #endif // ALGORITHMRUNNER_H

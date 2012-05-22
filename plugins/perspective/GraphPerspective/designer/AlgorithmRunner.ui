@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">#AlgorithmRunner, #contents, #favoritesContents {
+   <string notr="true">#AlgorithmRunner, #contents {
 background-color: white;
 }
 ExpandableGroupBox[ expanded = &quot;true&quot; ] {
@@ -32,9 +32,12 @@ image: url(:/tulip/gui/ui/right_arrow-black.png);
 ExpandableGroupBox::indicator:checked {
 image: url(:/tulip/gui/ui/down_arrow-black.png);
 }
-ExpandableGroupBox{
+ExpandableGroupBox {
 background-color: &quot;#FDFDFD&quot;;
 border: 1px solid &quot;#E9E9E9&quot;;
+}
+#favoritesBox {
+border-bottom: 1px solid #C9C9C9;
 }
 ExpandableGroupBox[ root = &quot;true&quot; ] {
 font: bold;
@@ -62,21 +65,18 @@ color: black;
 outline: none;
 margin: 2
 }
-
 QPushButton:hover {
 border-image: none;
 background-color: white;
 border: 1px solid &quot;#C9C9C9&quot;;
 }
-
 QPushButton:disabled {
 color:gray;
 }
-
 QPushButton:pressed{
-  border-image: none;
-  background-color: &quot;#E9E9E9&quot;;
-  border: 1px solid &quot;#C9C9C9&quot;;
+border-image: none;
+background-color: &quot;#E9E9E9&quot;;
+border: 1px solid &quot;#C9C9C9&quot;;
 }
 </string>
   </property>
@@ -155,7 +155,7 @@ QPushButton:pressed{
          <x>0</x>
          <y>0</y>
          <width>386</width>
-         <height>340</height>
+         <height>680</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -179,48 +179,20 @@ QPushButton:pressed{
           <property name="bottomMargin">
            <number>6</number>
           </property>
+          <item>
+           <widget class="ExpandableGroupBox" name="favoritesBox">
+            <property name="title">
+             <string>Favorites</string>
+            </property>
+            <property name="expanded" stdset="0">
+             <bool>true</bool>
+            </property>
+            <property name="root" stdset="0">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
          </layout>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QScrollArea" name="favoritesList">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>75</height>
-       </size>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="favoritesContents">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>386</width>
-         <height>339</height>
-        </rect>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>75</height>
-        </size>
-       </property>
-       <property name="acceptDrops">
-        <bool>true</bool>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <item>
-         <layout class="QVBoxLayout" name="favoritesContentsLayout"/>
         </item>
        </layout>
       </widget>
@@ -240,6 +212,12 @@ QPushButton:pressed{
    <class>ClearableLineEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">tulip/ClearableLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ExpandableGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>ExpandableGroupBox.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

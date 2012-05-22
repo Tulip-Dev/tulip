@@ -2,6 +2,7 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclu
 
 SET(LIB_SRCS
 src/AlgorithmRunner.cpp
+src/AlgorithmRunnerItem.cpp
 src/ControlFrame.cpp
 src/ExpandableGroupBox.cpp
 src/FiltersManager.cpp
@@ -42,6 +43,7 @@ designer/PanelSelectionWizard.ui
 
 QT4_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
+include/AlgorithmRunnerItem.h
 include/FiltersManager.h
 include/FiltersManagerItem.h
 include/AbstractFiltersManagerItem.h
