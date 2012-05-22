@@ -538,8 +538,8 @@ void GlAbstractPolygon::clearGenerated() {
   texArray=NULL;
   normalArray.clear();
 
-  if(OpenGlConfigManager::getInst().hasVertexBufferObject()) {
-    if(generated)
+  if(generated)
+    if(OpenGlConfigManager::getInst().hasVertexBufferObject()) {
       glDeleteBuffers(6,buffers);
   }
 
