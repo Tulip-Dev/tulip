@@ -87,7 +87,7 @@ struct StableIterator : public Iterator<itType> {
   //=============================
   bool hasNext() {
     return (copyIterator != sequenceCopy.end());
-  };
+  }
   //=============================
 
   /**

@@ -39,7 +39,7 @@ public:
   ///
   ExportModule (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet) {}
   ///
-  virtual ~ExportModule() {};
+  virtual ~ExportModule() {}
   /**
    * @brief The export operations should take place here.
    * @param the output stream
