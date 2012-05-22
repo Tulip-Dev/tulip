@@ -26,7 +26,7 @@ class VectorGraph;
  * @brief Internal class to access to a stl::vector in VectorGraph
  * @warning never use that class
  */
-class  TLP_SCOPE ValArrayInterface {
+class ValArrayInterface {
   friend class VectorGraph;
 protected:
   virtual void addElement(const unsigned int id) = 0;
@@ -39,7 +39,7 @@ protected:
  * @warning never use that class
  */
 template <typename TYPE>
-class  TLP_SCOPE ValArray : public  ValArrayInterface {
+class  ValArray : public  ValArrayInterface {
   friend class VectorGraph;
 protected:
   ValArray(const unsigned int size = 0, const unsigned int capacity = 0) {
@@ -68,7 +68,7 @@ public:
   * @see VectorGraph
   */
 template <typename TYPE>
-class TLP_SCOPE VectorGraphProperty {
+class VectorGraphProperty {
   friend class VectorGraph;
 public:
   /**
@@ -173,7 +173,7 @@ protected:
  * @see VectorGraph
  */
 template <typename TYPE>
-class  TLP_SCOPE EdgeProperty : public VectorGraphProperty<TYPE> {
+class EdgeProperty : public VectorGraphProperty<TYPE> {
   friend class VectorGraph;
 public:
   EdgeProperty():VectorGraphProperty<TYPE>() {}
@@ -221,7 +221,7 @@ private:
   * @see VectorGraph free(NodeProperty)
   */
 template <typename TYPE>
-class  TLP_SCOPE NodeProperty : public VectorGraphProperty<TYPE> {
+class NodeProperty : public VectorGraphProperty<TYPE> {
   friend class VectorGraph;
 public:
   NodeProperty():VectorGraphProperty<TYPE>() {}
