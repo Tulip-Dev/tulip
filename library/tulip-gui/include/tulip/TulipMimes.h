@@ -55,6 +55,9 @@ public:
   AlgorithmMimeType(QString algorithmName, const tlp::DataSet& data);
   void run(tlp::Graph*) const;
 
+  QString algorithm() const { return _algorithm; }
+  tlp::DataSet params() const { return _params; }
+
 signals:
   void mimeRun(tlp::Graph*,tlp::DataSet) const;
 };

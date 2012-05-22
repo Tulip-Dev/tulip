@@ -284,6 +284,7 @@ background-color: white;
   </connection>
  </connections>
  <slots>
+  <signal>favorized(bool)</signal>
   <slot>run()</slot>
  </slots>
 </ui>

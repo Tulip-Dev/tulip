@@ -42,7 +42,6 @@ void ExpandableGroupBox::setExpanded(bool e) {
   _expanded=e;
   // As told in Qt stylesheet reference, this force recomputation of stylesheet based on dynamic properties
   setStyleSheet(styleSheet());
-
   if (_widget)
     _widget->setVisible(e);
 }
