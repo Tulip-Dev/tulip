@@ -39,8 +39,6 @@ INSTALL(FILES
   tulip/SGHierarchyWidget.h
   tulip/SimplePluginProgressWidget.h
   tulip/SimpleStringsListSelectionWidget.h
-  tulip/SmallMultiplesNavigatorComponent.h
-  tulip/SmallMultiplesView.h
   tulip/StringsListSelectionWidget.h
   tulip/StringsListSelectionWidgetInterface.h
   tulip/TabWidgetHidableMenuGraphicsProxy.h

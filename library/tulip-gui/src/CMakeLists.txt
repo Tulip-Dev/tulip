@@ -46,8 +46,6 @@ SET(SRCS
   SGHierarchyWidget.cpp
   SimplePluginProgressWidget.cpp
   SimpleStringsListSelectionWidget.cpp
-  SmallMultiplesNavigatorComponent.cpp
-  SmallMultiplesView.cpp
   StringsListSelectionWidget.cpp
   TabWidgetHidableMenuGraphicsProxy.cpp
   ThreadedComputeProperty.cpp
@@ -161,7 +159,6 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/SGHierarchyWidget.h
   ../include/tulip/SimplePluginProgressWidget.h
   ../include/tulip/SimpleStringsListSelectionWidget.h
-  ../include/tulip/SmallMultiplesView.h
   ../include/tulip/TabWidgetHidableMenuGraphicsProxy.h
   ../include/tulip/ThreadedComputeProperty.h
   ../include/tulip/TulipProject.h
