@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -22,19 +22,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -88,18 +78,10 @@ public:
 	// representation using Tamassias bend minimization algorithm
     // with a flow network where every flow unit defines 90 degree angle
 	// in traditional mode.
-	// A maximum number of bends per edge can be specified in 
-	// startBoundBendsPerEdge. If the algorithm is not successful in 
-	// producing a bend minimal representation subject to 
-	// startBoundBendsPerEdge, it successively enhances the bound by 
-	// one trying to compute an orthogonal representation.
-	//
-	// Using startBoundBendsPerEdge may not produce a bend minimal
-	// representation in general.
+
 	void call(PlanRepUML &PG,
 		CombinatorialEmbedding &E,
 		OrthoRep &OR,
-		int startBoundBendsPerEdge = 0,
 		bool fourPlanar = true) throw(AlgorithmFailureException);
 
 	//sets the default settings used in the standard constructor
@@ -112,6 +94,7 @@ public:
         m_traditional     = true;//true;  //prefer 3/1 flow at degree 2 (false: 2/2)
 		m_deg4free        = false; //allow free angle assignment at degree four
 		m_align           = false; //align nodes on same hierarchy level
+		m_startBoundBendsPerEdge = 0; //don't use bound on bend number per edge
 	}
 
 	// returns option distributeEdges
@@ -138,7 +121,10 @@ public:
 	void align(bool al) {m_align = al;}
 	bool align() {return m_align;}
 
-
+	//! Set bound for number of bends per edge (none if set to 0). If shape
+	//! flow computation is unsuccessful, the bound is increased iteratively.
+	void setBendBound(int i){ OGDF_ASSERT(i >= 0); m_startBoundBendsPerEdge = i;}
+	int getBendBound(){return m_startBoundBendsPerEdge;}
 
 private:
 	bool m_distributeEdges; // distribute edges among all sides if degree > 4
@@ -154,6 +140,16 @@ private:
     // not traditional interprets angle flow zero as 180 degree, "flow
 	// through the node"
 	bool m_align;           //try to achieve an alignment in hierarchy levels
+	// A maximum number of bends per edge can be specified in
+	// m_startBoundBendsPerEdge. If the algorithm is not successful in
+	// producing a bend minimal representation subject to
+	// startBoundBendsPerEdge, it successively enhances the bound by
+	// one trying to compute an orthogonal representation.
+	//
+	// Using m_startBoundBendsPerEdge may not produce a bend minimal
+	// representation in general.
+	int m_startBoundBendsPerEdge; //!< bound on the number of bends per edge for flow
+								  //!< if == 0, no bound is used
 
 	//set angle boundary
 	//warning: sets upper AND lower bounds, therefore may interfere with existing bounds

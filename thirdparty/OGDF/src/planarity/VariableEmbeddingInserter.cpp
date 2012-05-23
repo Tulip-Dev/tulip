@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -141,7 +131,7 @@ Module::ReturnType VariableEmbeddingInserter::doCall(
 
 		PG.insertEdgePath(eOrig,eip);
 		
-		if(removeReinsert() == rrIncremental) {
+		if(removeReinsert() == rrIncremental || removeReinsert() == rrIncInserted) {
 			currentOrigEdges.pushBack(eOrig);
 
 			bool improved;
@@ -181,7 +171,7 @@ Module::ReturnType VariableEmbeddingInserter::doCall(
 	}
 
 
-	if(removeReinsert() != rrIncremental) {
+	if(removeReinsert() != rrIncremental && removeReinsert() != rrIncInserted) {
 		// postprocessing (remove-reinsert heuristc)
 		const Graph &G = PG.original();
 		SListPure<edge> rrEdges;
@@ -212,6 +202,7 @@ Module::ReturnType VariableEmbeddingInserter::doCall(
 
 		case rrNone:
 		case rrIncremental:
+		case rrIncInserted:
 			break;
 		}
 	
@@ -271,6 +262,141 @@ Module::ReturnType VariableEmbeddingInserter::doCall(
 			}
 		} while (improved);
 	}
+
+	PlanarModule pm;
+#ifdef OGDF_DEBUG
+	bool isPlanar =
+#endif
+		pm.planarEmbed(PG);
+
+	OGDF_ASSERT(isPlanar);
+
+	PG.removePseudoCrossings();
+	OGDF_ASSERT(PG.representsCombEmbedding());
+	OGDF_ASSERT(forbidCrossingGens == false || checkCrossingGens((const PlanRepUML&)PG) == true);
+
+	return retValue;
+}
+
+
+Module::ReturnType VariableEmbeddingInserter::doCallPostprocessing(
+	PlanRep &PG,
+	const List<edge> &origEdges,
+	bool forbidCrossingGens,
+	const EdgeArray<int> *costOrig,
+	const EdgeArray<bool> *forbiddenEdgeOrig,
+	const EdgeArray<unsigned int> *edgeSubgraph)
+{
+	double T;
+	usedTime(T);
+	ReturnType retValue = retFeasible;
+	m_runsPostprocessing = 0;
+
+	if (origEdges.size() == 0)
+		return retOptimal;  // nothing to do
+
+	if(removeReinsert() == rrIncremental || removeReinsert() == rrIncInserted)
+		return retFeasible;
+
+	OGDF_ASSERT(forbidCrossingGens == false || forbiddenEdgeOrig == 0);
+
+	m_pPG                = &PG;
+	m_forbidCrossingGens = forbidCrossingGens;
+	m_costOrig           = costOrig;
+	m_forbiddenEdgeOrig  = forbiddenEdgeOrig;
+	m_edgeSubgraph       = edgeSubgraph;
+
+	SListPure<edge> currentOrigEdges;
+
+	// postprocessing (remove-reinsert heuristc)
+	const Graph &G = PG.original();
+	SListPure<edge> rrEdges;
+	
+	switch(removeReinsert())
+	{
+	case rrAll:
+	case rrMostCrossed: {
+			const List<node> &origInCC = PG.nodesInCC();
+			ListConstIterator<node> itV;
+	
+			for(itV = origInCC.begin(); itV.valid(); ++itV) {
+				node vG = *itV;
+				adjEntry adj;
+				forall_adj(adj,vG) {
+					if ((adj->index() & 1) == 0) continue;
+					edge eG = adj->theEdge();
+					rrEdges.pushBack(eG);
+				}
+			}
+		}
+		break;
+	
+	case rrInserted:
+		for(ListConstIterator<edge> it = origEdges.begin(); it.valid(); ++it)
+			rrEdges.pushBack(*it);
+		break;
+
+	case rrNone:
+	case rrIncremental:
+	case rrIncInserted:
+		break;
+	}
+	
+	
+	
+	// marks the end of the interval of rrEdges over which we iterate
+	// initially set to invalid iterator which means all edges
+	SListConstIterator<edge> itStop;
+	
+	bool improved;
+	do {
+		// abort postprocessing if time limit reached
+		if (m_timeLimit >= 0 && m_timeLimit <= usedTime(T)) {
+			retValue = retTimeoutFeasible;
+			break;
+		}
+				
+		++m_runsPostprocessing;
+		improved = false;
+	
+		if(removeReinsert() == rrMostCrossed)
+		{
+			VEICrossingsBucket bucket(&PG);
+			rrEdges.bucketSort(bucket);
+	
+			const int num = int(0.01 * percentMostCrossed() * G.numberOfEdges());
+			itStop = rrEdges.get(num);
+		}
+	
+		SListConstIterator<edge> it;
+		for(it = rrEdges.begin(); it != itStop; ++it)
+		{
+			edge eOrig = *it;
+	
+			int pathLength;
+			if(costOrig != 0)
+				pathLength = costCrossed(eOrig);
+			else
+				pathLength = PG.chain(eOrig).size() - 1;
+			if (pathLength == 0) continue; // cannot improve
+	
+			PG.removeEdgePath(eOrig);
+	
+			m_typeOfCurrentEdge = m_forbidCrossingGens ? ((PlanRepUML&)PG).typeOrig(eOrig) : Graph::association;
+	
+			SList<adjEntry> eip;
+			m_st = eOrig;
+			insert(PG.copy(eOrig->source()),PG.copy(eOrig->target()),eip);
+			PG.insertEdgePath(eOrig,eip);
+	
+			// we cannot find a shortest path that is longer than before!
+			int newPathLength = (costOrig != 0) ? costCrossed(eOrig) : (PG.chain(eOrig).size() - 1);
+			OGDF_ASSERT(newPathLength <= pathLength);
+				
+			if(newPathLength < pathLength)
+				improved = true;
+		}
+	} while (improved);
 
 	PlanarModule pm;
 #ifdef OGDF_DEBUG

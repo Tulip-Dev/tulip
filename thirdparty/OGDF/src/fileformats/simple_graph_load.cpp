@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2302 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -11,7 +11,7 @@
  * 
  * See header-file simple_graph_load.h for more information.
  * 
- * \author Markus Chimani, Carsten Gutwenger
+ * \author Markus Chimani, Carsten Gutwenger, Karsten Klein
  * 
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
@@ -22,19 +22,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -56,6 +46,7 @@
 #include <ogdf/basic/HashArray.h>
 #include <ogdf/basic/String.h>
 #include <string.h>
+#include <sstream>
 
 #define SIMPLE_LOAD_BUFFER_SIZE 2048
 
@@ -113,11 +104,21 @@ bool loadRomeGraphStream(Graph &G, std::istream& fileStream) {
 	return true;
 }
 
+
+bool loadChacoGraph(Graph &G, const char *fileName) {
+	std::ifstream is(fileName);
+	if(!is.good()) return false;
+	return loadChacoStream(G, is);
+}
+
+
 bool loadSimpleGraph(Graph &G, const char *fileName) {
 	std::ifstream is(fileName);
 	if(!is.good()) return false;
 	return loadSimpleGraphStream(G, is);
 }
+
+
 bool loadSimpleGraphStream(Graph &G, std::istream& fileStream) {
 	G.clear();
 
@@ -184,6 +185,80 @@ bool loadSimpleGraphStream(Graph &G, std::istream& fileStream) {
 	}
 	return true;
 }
+
+//Reads the chaco (graph partitioning) file format (usually a .graph file).
+bool loadChacoStream(Graph &G, std::istream& fileStream)
+{
+	G.clear();
+	char buffer[SIMPLE_LOAD_BUFFER_SIZE];
+	int numN = 0, numE = 0, runEdges = 0, lineNum = 0;
+	char* pch = NULL;
+
+	//try to read the first line to get the graph size
+	if (!fileStream.eof())
+	{
+		//contains the size numbers
+		fileStream.getline(buffer, SIMPLE_LOAD_BUFFER_SIZE-1);
+		//char* context = NULL;
+		//now read the number of nodes
+		pch = strtok(buffer, " ");//strtok_s(buffer, " ", &context);
+		if (pch == NULL) return false;
+		numN = atoi(pch);
+	    //now read the number of edges
+	    pch = strtok(NULL, " ");//strtok_s(NULL, " ", &context);
+	    if (pch == NULL) return false;
+	    numE = atoi(pch);
+	    // extension: check here for weights
+	}
+	else return false;
+
+	if (numN == 0) return true;
+
+	Array<node> indexToNode(1,numN,0);
+	for (int i = 1; i <= numN; i++)
+	{
+		//we assign new indexes here if they are not consecutive
+		//starting from 1 in the file! Thus, if the file is not in the correct
+		//format, node indices do not correspond to indices from the file.
+		indexToNode[i] = G.newNode();
+	}
+
+	while(!fileStream.eof())
+	{
+		fileStream.getline(buffer, SIMPLE_LOAD_BUFFER_SIZE-1);
+		if (strlen(buffer) == 0) continue;
+		lineNum++;
+		if (lineNum > numN)
+		{
+			cerr<< "File read error: More lines than expected number of nodes "<< lineNum <<":"<<numN<<"\n";
+			return false;
+		}
+		//char* context = NULL;
+		pch = strtok(buffer, " ");//strtok_s(buffer, " ", &context);
+
+		while (pch != NULL)
+		{
+			int wind = atoi(pch);
+			if (wind < 1 || wind > numN)
+			{
+				cerr<<"File read error: Illegal node index encountered\n";
+				return false;
+			}
+
+			//create edges
+			if (wind >= lineNum)
+			{
+				G.newEdge( indexToNode[lineNum], indexToNode[wind] );
+				runEdges++;
+			}
+
+			pch = strtok(NULL, " ");//strtok_s(NULL, " ", &context);
+		}//while node entries
+	}//while file
+	//cout <<"Read #nodes: "<<numN<<", #edges "<<runEdges<<"\n";
+	return true;
+}//loadChacoStream
+
 #define YG_NEXTBYTE(x) x = fgetc(lineStream);	if(x == EOF || x == '\n') { Logger::slout() << "loadYGraph: line too short!"; return false; } x &= 0x3F;
 
 bool loadYGraph(Graph &G, FILE *lineStream) {
@@ -216,17 +291,20 @@ bool loadYGraph(Graph &G, FILE *lineStream) {
 	return true;
 }
 
+
 bool loadBenchHypergraph(Graph &G, List<node>& hypernodes, List<edge>* shell, const char *fileName) {
 	std::ifstream is(fileName);
 	if(!is.good()) return false;
 	return loadBenchHypergraphStream(G, hypernodes, shell, is);
 }
 
+
 bool loadPlaHypergraph(Graph &G, List<node>& hypernodes, List<edge>* shell, const char *fileName) {
 	std::ifstream is(fileName);
 	if(!is.good()) return false;
 	return loadPlaHypergraphStream(G, hypernodes, shell, is);
 }
+
 
 int extractIdentifierLength(char* from, int line) {
 	int p = 1;
@@ -241,6 +319,7 @@ int extractIdentifierLength(char* from, int line) {
 	return p;
 }
 
+
 int newStartPos(char* from, int line) {
 	int p = 0;
 	while(from[p]=='\t' || from[p]==' ' || from[p]==',') { 
@@ -254,6 +333,7 @@ int newStartPos(char* from, int line) {
 	
 	return p;
 }
+
 
 int findOpen(char* from, int line) {
 	int p = 0;
@@ -278,6 +358,7 @@ String inName(const String& s) {
 	delete[] t;
 	return u;
 }
+
 
 bool loadBenchHypergraphStream(Graph &G, List<node>& hypernodes, List<edge>* shell, std::istream& fileStream) {
 	G.clear();
@@ -416,5 +497,212 @@ bool loadPlaHypergraphStream(Graph &G, List<node>& hypernodes, List<edge>* shell
 	
 	return true;
 }
+
+
+
+bool loadEdgeListSubgraph(Graph &G, List<edge> &delEdges, const char *fileName)
+{
+	ifstream is(fileName);
+	if(!is.good()) return false;
+	return loadEdgeListSubgraph(G, delEdges, is);
+}
+
+
+bool loadEdgeListSubgraph(Graph &G, List<edge> &delEdges, istream &is)
+{
+	G.clear();
+	delEdges.clear();
+
+	char buffer[SIMPLE_LOAD_BUFFER_SIZE];
+
+	if(is.eof()) return false;
+	is.getline(buffer, SIMPLE_LOAD_BUFFER_SIZE-1);
+
+	int n = 0, m = 0, m_del = 0;
+	sscanf(buffer, "%d%d%d", &n, &m, &m_del);
+
+	if(n < 0 || m < 0 || m_del < 0)
+		return false;
+
+	Array<node> indexToNode(n);
+	for(int i = 0; i < n; ++i)
+		indexToNode[i] = G.newNode();
+
+	int m_all = m + m_del;
+	for(int i = 0; i < m_all; ++i) {
+		if(is.eof()) return false;
+
+		is.getline(buffer, SIMPLE_LOAD_BUFFER_SIZE-1);
+		int src, tgt;
+		sscanf(buffer, "%d%d", &src, &tgt);
+		if(src < 0 || src >= n || tgt < 0 || tgt >= n)
+			return false;
+
+		edge e = G.newEdge(indexToNode[src], indexToNode[tgt]);
+
+		if(i >= m)
+			delEdges.pushBack(e);
+	}
+
+	return true;
+}
+
+
+bool saveEdgeListSubgraph(const Graph &G, const List<edge> &delEdges, const char *fileName)
+{
+	ofstream os(fileName);
+	return saveEdgeListSubgraph(G,delEdges,os);
+}
+
+
+bool saveEdgeListSubgraph(const Graph &G, const List<edge> &delEdges, ostream &os)
+{
+	if(!os.good()) return false;
+
+	const int m_del = delEdges.size();
+	const int n = G.numberOfNodes();
+	const int m = G.numberOfEdges() - m_del;
+
+	os << n << " " << m << " " << m_del << "\n";
+
+	EdgeArray<bool> markSub(G,true);
+	for(ListConstIterator<edge> it = delEdges.begin(); it.valid(); ++it)
+		markSub[*it] = false;
+	
+	NodeArray<int> index(G);
+	int i = 0;
+	node v;
+	forall_nodes(v,G)
+		index[v] = i++;
+
+	edge e;
+	forall_edges(e,G)
+		if(markSub[e])
+			os << index[e->source()] << " " << index[e->target()] << "\n";
+
+	for(ListConstIterator<edge> it = delEdges.begin(); it.valid(); ++it)
+		os << index[(*it)->source()] << " " << index[(*it)->target()] << "\n";
+	
+
+	return true;
+}
+
+
+bool loadChallengeGraph(Graph &G, GridLayout &gl, const char *fileName)
+{
+	ifstream is(fileName);
+	if(!is.good()) return false;
+	return loadChallengeGraph(G, gl, is);
+}
+
+
+#define CHALLENGE_LOAD_BUFFER_SIZE 4096
+
+bool loadChallengeGraph(Graph &G, GridLayout &gl, istream &is)
+{
+	G.clear();
+	char buffer[CHALLENGE_LOAD_BUFFER_SIZE];
+
+	int n = -1;
+	do {
+		if(is.eof()) return false;
+		is.getline(buffer,CHALLENGE_LOAD_BUFFER_SIZE);
+		if(buffer[0] != '#') {
+			sscanf(buffer, "%d", &n);
+			if(n < 0) return false;
+		}
+	} while(n < 0);
+
+	Array<node> indexToNode(n);
+	for(int i = 0; i < n; ) {
+		if(is.eof()) return false;
+		is.getline(buffer,CHALLENGE_LOAD_BUFFER_SIZE);
+
+		if(buffer[0] != '#') {
+			node v = G.newNode();
+			sscanf(buffer, "%d%d", &gl.x(v), &gl.y(v));
+			indexToNode[i++] = v;
+		}
+	}
+
+	while(!is.eof()) {
+		is.getline(buffer,CHALLENGE_LOAD_BUFFER_SIZE);
+
+		if(buffer[0] != '#' && buffer[0] != 0) {
+			std::stringstream ss(buffer);
+			int srcIndex, tgtIndex;
+
+			if(ss.eof()) return false;
+			ss >> srcIndex;
+			if(srcIndex < 0 || srcIndex >= n) return false;
+
+			if(ss.eof()) return false;
+			ss >> tgtIndex;
+			if(tgtIndex < 0 || tgtIndex >= n) return false;
+
+			node src = indexToNode[srcIndex];
+			node tgt = indexToNode[tgtIndex];
+			edge e = G.newEdge(src,tgt);
+
+			std::string symbol;
+			if(ss.eof()) return false;
+			ss >> symbol;
+			if(symbol != "[") return false;
+
+			IPolyline &ipl = gl.bends(e);;
+			for(;;) {
+				if(ss.eof()) return false;
+				ss >> symbol;
+				if(symbol == "]") break;
+
+				IPoint ip;
+				ip.m_x = atoi(symbol.c_str());
+				if(ss.eof()) return false;
+				ss >> ip.m_y;
+				ipl.pushBack(ip);
+			}
+		}
+	}
+
+	return true;
+}
+
+
+bool saveChallengeGraph(const Graph &G, const GridLayout &gl, const char *fileName)
+{
+	ofstream os(fileName);
+	return saveChallengeGraph(G, gl, os);
+}
+
+
+bool saveChallengeGraph(const Graph &G, const GridLayout &gl, ostream &os)
+{
+	if(!os.good()) return false;
+
+	os << "# Number of Nodes\n";
+	os << G.numberOfNodes() << "\n";
+
+	os << "# Nodes\n";
+	NodeArray<int> index(G);
+	int i = 0;
+	node v;
+	forall_nodes(v,G) {
+		os << gl.x(v) << " " << gl.y(v) << "\n";
+		index[v] = i++;
+	}
+
+	os << "# Edges\n";
+	edge e;
+	forall_edges(e,G) {
+		os << index[e->source()] << " " << index[e->target()] << " [";
+		const IPolyline &ipl = gl.bends(e);
+		for(ListConstIterator<IPoint> it = ipl.begin(); it.valid(); ++it)
+			os << " " << (*it).m_x << " " << (*it).m_y;
+		os << " ]\n";
+	}
+
+	return true;
+}
+
 
 }

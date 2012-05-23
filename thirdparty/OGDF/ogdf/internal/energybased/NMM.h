@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -114,7 +104,7 @@ class OGDF_EXPORT NMM
        int* power_of_2;//holds the powers of 2 (for speed reasons to calculate the
                        //maximal boxindex (index is from 0 to max_power_of_2_index)
        int max_power_of_2_index;//holds max. index for power_of_2 (= 30) 
-       double ** BK; //holds the binominal coefficients
+       double ** BK; //holds the binomial coefficients
        List<DPoint> rep_forces;   //stores the rep. forces of the last iteration 
                                   //(needed for error calculation)
 
@@ -134,7 +124,7 @@ class OGDF_EXPORT NMM
       //Returns the maximal index of a box in level i.
       int maxboxindex (int level);
 
-      //Use NMM for force calculation (useded for large Graphs (|V| > MIN_NODE_NUMBER)).
+      //Use NMM for force calculation (used for large Graphs (|V| > MIN_NODE_NUMBER)).
       void  calculate_repulsive_forces_by_NMM(const Graph &G, NodeArray 
 				  <NodeAttributes>& A ,NodeArray<DPoint>& F_rep);
 					
@@ -166,13 +156,13 @@ class OGDF_EXPORT NMM
 			       List<ParticleInfo>& L_x,List<ParticleInfo>& L_y);
 
       //T is extended by a subtree T1 rooted at the T.get_act_node().  
-      //The boxlength and down_left_corner of the actaul node is reduced if it is
-      //not the minimal subquad that containes all the particles in the represented area.
+      //The boxlength and down_left_corner of the actual node is reduced if it is
+      //not the minimal subquad that contains all the particles in the represented area.
       void  decompose_subtreenode(QuadTreeNM& T,List<ParticleInfo>& act_x_List_copy,
 			      List<ParticleInfo>& act_y_List_copy,List<QuadTreeNodeNM*>& 
 			      new_leaf_List);
 
-      //The extreme coordinates of the particles conatined in *act_ptr are calculated. 
+      //The extreme coordinates of the particles contained in *act_ptr are calculated.
       void calculate_boundaries_of_act_node(QuadTreeNodeNM* act_ptr,double& x_min,
 					   double& x_max,double& y_min,double& y_max);
 
@@ -292,7 +282,7 @@ class OGDF_EXPORT NMM
       void  build_up_red_quad_tree_subtree_by_subtree(const Graph& G, NodeArray
 						      <NodeAttributes>& A,QuadTreeNM& T);
      
-      //The root node ot T is constructed and contained_nodes is set to the list of
+      //The root node of T is constructed and contained_nodes is set to the list of
       //all nodes of G.
       void build_up_root_vertex(const Graph&G,QuadTreeNM& T);
       
@@ -306,7 +296,7 @@ class OGDF_EXPORT NMM
 			     new_subtree_root_List);
       
       //A complete subtree of T and of depth subtree_depth, rooted at *T.get_act_ptr() is
-      //constructed. Furthermore leaf_ptr[i][j] points to a leaf node of the suptree
+      //constructed. Furthermore leaf_ptr[i][j] points to a leaf node of the subtree
       //that represents the quadratic subregion of *T.get_act_ptr() at subtree_depth
       //and position [i][j] i,j in 0,...,maxindex;act_depth(x_index,y_index) are
       //helping variables for recursive calls.
@@ -346,12 +336,12 @@ class OGDF_EXPORT NMM
       bool check_and_delete_degenerated_node(QuadTreeNM& T);
       
       //The subtree rooted at new_leaf_ptr is deleted, *new_leaf_ptr is a leaf 
-      //of T and new_leaf_ptr->get_contained_nodes() containes all the particles
+      //of T and new_leaf_ptr->get_contained_nodes() contains all the particles
       //contained in the leaves of the deleted subtree; Precondition: T.get_act_ptr() is
       //new_leaf_ptr.
       void delete_sparse_subtree(QuadTreeNM& T,QuadTreeNodeNM* new_leaf_ptr);
       
-      //new_leaf_ptr->get_contained_nodes() containes all the particles contained in 
+      //new_leaf_ptr->get_contained_nodes() contains all the particles contained in
       //the leaves of its subtree afterwards; Precondition: T.get_act_ptr() is
       //new_leaf_ptr
       void collect_contained_nodes(QuadTreeNM& T,QuadTreeNodeNM* new_leaf_ptr);
@@ -371,7 +361,7 @@ class OGDF_EXPORT NMM
       void find_small_cell_iteratively(QuadTreeNodeNM* act_ptr,double x_min,double x_max,
 				       double y_min,double y_max);
       
-      //Finds the small cell of the actual Node of T by Alurus Formula, and updates 
+      //Finds the small cell of the actual Node of T by Aluru's Formula, and updates
       //Sm_downleftcorner, Sm_boxlength, and level of *act_ptr. 
       void find_small_cell_by_formula(QuadTreeNodeNM* act_ptr,double x_min,double x_max,
 				      double y_min,double y_max);
@@ -384,7 +374,7 @@ class OGDF_EXPORT NMM
       void form_multipole_expansions(NodeArray<NodeAttributes>& A,QuadTreeNM& T,List
 				     <QuadTreeNodeNM*>& quad_tree_leaves);
       
-      //The multiplole expansion List ME for the tree rooted at T.get_act_ptr() is 
+      //The multipole expansion List ME for the tree rooted at T.get_act_ptr() is
       //recursively calculated. 
       void form_multipole_expansion_of_subtree(NodeArray<NodeAttributes>& A,QuadTreeNM& 
 					       T, List<QuadTreeNodeNM*>& 
@@ -410,9 +400,9 @@ class OGDF_EXPORT NMM
       void calculate_local_expansions_and_WSPRLS(NodeArray<NodeAttributes>&A,
 						 QuadTreeNodeNM* act_node_ptr);
       
-      //If the small cell of ptr_1 and ptr_2 are well seperated true is returned (else 
+      //If the small cell of ptr_1 and ptr_2 are well separated true is returned (else
       //false).
-      bool well_seperated(QuadTreeNodeNM* ptr_1,QuadTreeNodeNM* ptr_2);
+      bool well_separated(QuadTreeNodeNM* ptr_1,QuadTreeNodeNM* ptr_2);
       
       //If ptr_1 and ptr_2 are nonequal and bordering true is returned; else false.
       bool bordering(QuadTreeNodeNM* ptr_1,QuadTreeNodeNM* ptr_2);
@@ -474,7 +464,7 @@ class OGDF_EXPORT NMM
       
       //(0) means that the smallest quadratic cell that surrounds a node of the 
       //quadtree is calculated iteratively in constant time (1) means that it is 
-      //calculated by the formula of Aluru et al. in constsnt time
+      //calculated by the formula of Aluru et al. in constant time
       int find_sm_cell() const {return _find_small_cell;}
       void find_sm_cell(int a) { _find_small_cell = 
 				   (((0<=a)&&(a<=1)) ? a : 0);}    

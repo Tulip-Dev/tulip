@@ -2,14 +2,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <title>$title</title>
+
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
 <link href="$relpath$govisual.css" rel="stylesheet" type="text/css"/>
-<link href="$relpath$tabs.css" rel="stylesheet" type="text/css"/>
-<link href="$relpath$search/search.css" rel="stylesheet" type="text/css"/>
-<script type="text/javaScript" src="$relpath$search/search.js"></script>
-<link href="$relpath$doxygen.css" rel="stylesheet" type="text/css"/>
+
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+</script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    if ($('.searchresults').length > 0) { searchBox.DOMSearchField().focus(); }
+  });
+</script>
+<link rel="search" href="search-opensearch.php?v=opensearch.xml" type="application/opensearchdescription+xml" title="ogdf"/>
+
+
 </head>
-<body onload='searchBox.OnSelectItem(0);'>
+<body>
+<div id="top"><!-- do not remove this div! -->
+
   <div class="header" align="center">
     <table border="0" cellspacing="0" cellpadding="0">
       <tr>
@@ -19,7 +39,7 @@
               <td width="264"><a href="http://www.ogdf.net" title="Go to www.ogdf.net" target="blank"><img  style="border-width: 0px" src="http://www.ogdf.net/lib/images/logoA.png"/></a></td>
               <td align="left"><h1>Open<br>Graph Drawing<br>Framework</h1></td>
 		  <td align="left" valign="bottom" >
-		    <span style="font-size:110%; color:rgb(56,95,118)">&nbsp;v.2010.10</span><br>&nbsp;
+		    <span style="font-size:110%; color:rgb(56,95,118)">&nbsp;v.2012.05</span><br>&nbsp;
 		  </td>
             </tr>
           </table>
@@ -30,25 +50,30 @@
           <div class="menubox">
             <table border="0" cellpadding="0" cellspacing="0" class="menutable">
               <tr>
-                <td><a class="menu" href="main.html" title="Start page with overview">Overview</a></td>
+                <td><a class="menu" href="index.html" title="Start page with overview">Overview</a></td>
                 <td><a class="menu" href="hierarchy.html" title="Inheritance hierarchies">Class&nbsp;Hierarchy</a></td>
                 <td><a class="menu" href="classes.html" title="Alphabetical list of classes">Class&nbsp;Index</a></td>
                 <td><a class="menu" href="annotated.html" title="Classes with brief descriptions">Class&nbsp;List</a></td>
                 <td><a class="menu" href="functions.html" title="Complete list of member functions, enumerations, and variables">Members</a></td>
                 <td><a class="menu" href="namespaces.html" title="Namespaces with brief descriptions">Namespaces</a></td>
                 <td><a class="menu" href="files.html" title="Complete list of files with brief descriptions">Source&nbsp;Files</a></td>
+				
+				<td><div id="MSearchBox" class="MSearchBoxInactive">
+                  <div class="left">
+                    <form id="FSearchBox" action="search.php" method="get">
+                      <img id="MSearchSelect" src="search/mag.png" alt=""/>
+                      <input type="text" id="MSearchField" name="query" value="Search" size="20" accesskey="S" 
+                        onfocus="searchBox.OnSearchFieldFocus(true)" 
+                        onblur="searchBox.OnSearchFieldFocus(false)"/>
+                    </form>
+                  </div><div class="right"></div>
+                 </div></td>
+		
               </tr>
-<!--
-              <tr>
-		    <td colspan="7">
-                  <form style="margin: 0px; padding: 0px" action="search.php" method="get"><a class="menu" style="text-decoration: none;
- color: rgb(56,95,118); background-color:#ffffff" title="Search for keywords in the entire documentation">Search&nbsp;for:&nbsp;<input type="text" name="query" value="" size="40" accesskey="s"/></a></form>
-		    </td>
-		  </tr>
--->
 		</table>
 	    </div><br>
       </td>
-    </tr>
-  </table>
+      </tr>
+    </table>
+  </div>
 </div>

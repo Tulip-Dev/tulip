@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2299 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $ 
+ *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -60,6 +50,7 @@
 
 #include <ogdf/basic/EdgeArray.h>
 #include <ogdf/basic/SList.h>
+#include <ogdf/basic/BoundedStack.h>
 
 namespace ogdf {
 
@@ -154,7 +145,7 @@ OGDF_EXPORT int numParallelEdgesUndirected(const Graph &G);
 
 //! Removes all but one of each bundle of undirected multi-edges.
 /**
- * Undirected means that edges (v,w) and (w,v) are considered as mutli-edges.
+ * Undirected means that edges (v,w) and (w,v) are considered as multi-edges.
  * @param G is the input graph.
  * @param parallelEdges is assigned the list of remaining edges that were
  * part of a bundle of multi-edges in the input graph.
@@ -428,6 +419,14 @@ inline bool isTriconnectedPrimitive(const Graph &G) {
 	return isTriconnectedPrimitive(G,s1,s2);
 }
 
+/**
+ * Triangulates a planar Graph.
+ * i.e. creates a maximum planar Graph by adding new edges.
+ * 
+ * @param G is the graph that should be triangulated. 
+ *          The Graph has to be embedded.
+ */
+void triangulate(Graph &G);
 
 //---------------------------------------------------------
 // Methods for directed graphs
@@ -525,6 +524,34 @@ inline bool isStGraph(const Graph &G) {
  * @param num is assigned the topological numbering.
  */
 OGDF_EXPORT void topologicalNumbering(const Graph &G, NodeArray<int> &num);
+
+//! Returns the number of strongly connected components of \a G.
+/**
+ * @param G is the input graph.
+ * @param component is assigned a mapping from nodes to component numbers.
+ */
+OGDF_EXPORT int strongComponents(const Graph& G, NodeArray<int>& component);
+
+//! Computes the strongly connected components with the algorithm of Tarjan.
+/**
+ * @param G is the input graph.
+ * @param w is the current node.
+ * @param S is the stack containing all vertices of the current 
+ * component during the algorithm
+ * @param pre is the preorder number.
+ * @param low is the lowest reachable preorder number (lowpoint).
+ * @param cnt is the counter for the dfs-number.
+ * @param scnt is the counter for the components.
+ * @param component is assigned a mapping from nodes to component numbers.
+ */
+void dfsStrongComponents(const Graph& G,
+						node w,
+						BoundedStack<node>& S,
+						NodeArray<int>& pre,
+						NodeArray<int>& low,
+						int& cnt,
+						int& scnt,
+						NodeArray<int>& component);
 
 //---------------------------------------------------------
 // Methods for trees and forests

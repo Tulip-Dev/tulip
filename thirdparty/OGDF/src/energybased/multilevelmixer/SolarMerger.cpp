@@ -1,9 +1,9 @@
 /*
- * $Revision: 2027 $
+ * $Revision: 2306 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2010-09-01 11:55:17 +0200 (Wed, 01 Sep 2010) $
+ *   $Date: 2012-05-08 11:32:55 +0200 (Tue, 08 May 2012) $
  ***************************************************************/
 
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  *
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -238,7 +228,7 @@ node SolarMerger::sunOf(node object)
 }
 
 
-void SolarMerger::addPath(node sourceSun, node targetSun, float distance)
+void SolarMerger::addPath(node sourceSun, node targetSun, double distance)
 {
 	node source = sourceSun;
 	node target = targetSun;
@@ -250,7 +240,7 @@ void SolarMerger::addPath(node sourceSun, node targetSun, float distance)
 	OGDF_ASSERT(data.targetSun == target->index() || data.number == 0);
 
 	int num = data.number;
-	float len = data.length;
+	double len = data.length;
 
 	len = len * num + distance;
 	num++;
@@ -263,9 +253,9 @@ void SolarMerger::addPath(node sourceSun, node targetSun, float distance)
 }
 
 
-float SolarMerger::distanceToSun(node object, MultilevelGraph &MLG)
+double SolarMerger::distanceToSun(node object, MultilevelGraph &MLG)
 {
-	float dist = 0.0f;
+	double dist = 0.0;
 
 	if (object == 0 || m_celestial[object] <= 1) {
 		return dist;
@@ -297,23 +287,22 @@ void SolarMerger::findInterSystemPaths(Graph &G, MultilevelGraph &MLG)
 		node source = e->source();
 		node target = e->target();
 		if (sunOf(source) != sunOf(target)) {
-			float len;
 			// construct intersystempath
-			len = distanceToSun(source, MLG) + distanceToSun(target, MLG) + MLG.weight(e);
+			double len = distanceToSun(source, MLG) + distanceToSun(target, MLG) + MLG.weight(e);
 			OGDF_ASSERT(len > 0);
 			addPath(sunOf(source), sunOf(target), len);
 			
 			// save positions of nodes on the path.
 			node src = source;
 			do {
-				float dist = distanceToSun(src, MLG);
+				double dist = distanceToSun(src, MLG);
 				m_pathDistances[src].push_back(PathData(sunOf(target)->index(), dist / len, 1));
 				src = m_orbitalCenter[src];
 			} while(src != 0);
 			
 			node tgt = target;
 			do {
-				float dist = distanceToSun(tgt, MLG);
+				double dist = distanceToSun(tgt, MLG);
 				m_pathDistances[tgt].push_back(PathData(sunOf(source)->index(), dist / len, 1));
 				tgt = m_orbitalCenter[tgt];
 			} while(tgt != 0);
@@ -378,6 +367,8 @@ bool SolarMerger::buildOneLevel(MultilevelGraph &MLG)
 
 bool SolarMerger::collapsSolarSystem(MultilevelGraph &MLG, node sun, int level)
 {
+	Graph &G = MLG.getGraph();
+
 	bool retVal = false;
 
 	std::vector<node> systemNodes;
@@ -429,7 +420,7 @@ bool SolarMerger::collapsSolarSystem(MultilevelGraph &MLG, node sun, int level)
 		NodeMerge * NM = new NodeMerge(level);
 		std::vector<PathData> positions = m_pathDistances[mergeNode];
 		for (std::vector<PathData>::iterator j = positions.begin(); j != positions.end(); j++) {
-			NM->m_position.push_back(std::pair<int, float>((*j).targetSun, (*j).length));
+			NM->m_position.push_back(std::pair<int,double>((*j).targetSun, (*j).length));
 		}
 		
 		bool ret;

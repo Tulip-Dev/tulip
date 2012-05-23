@@ -1,9 +1,9 @@
 /*
- * $Revision: 2047 $
+ * $Revision: 2302 $
  * 
  * last checkin:
- *   $Author: klein $ 
- *   $Date: 2010-10-13 17:12:21 +0200 (Wed, 13 Oct 2010) $ 
+ *   $Author: gutwenger $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
 
 /** \file
@@ -18,19 +18,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -59,7 +49,7 @@
 namespace ogdf {
 
 
-UpwardPlanRep::UpwardPlanRep(const ogdf::CombinatorialEmbedding &Gamma):
+UpwardPlanRep::UpwardPlanRep(const CombinatorialEmbedding &Gamma):
 			GraphCopy(Gamma.getGraph()), 													
 			isAugmented(false),
 			t_hat(0),
@@ -88,7 +78,7 @@ UpwardPlanRep::UpwardPlanRep(const ogdf::CombinatorialEmbedding &Gamma):
 }
 
 
-UpwardPlanRep::UpwardPlanRep(const ogdf::GraphCopy &GC, ogdf::adjEntry adj_ext):
+UpwardPlanRep::UpwardPlanRep(const GraphCopy &GC, ogdf::adjEntry adj_ext):
 			GraphCopy(GC), 													
 			isAugmented(false),
 			t_hat(0),
@@ -119,14 +109,14 @@ UpwardPlanRep::UpwardPlanRep(const ogdf::GraphCopy &GC, ogdf::adjEntry adj_ext):
 
 
 //copy constructor
-UpwardPlanRep::UpwardPlanRep(const ogdf::UpwardPlanRep &UPR): GraphCopy(),
+UpwardPlanRep::UpwardPlanRep(const UpwardPlanRep &UPR): GraphCopy(),
 		isAugmented(UPR.isAugmented), crossings(UPR.crossings)					
 {		
 	copyMe(UPR);
 }
 
 
-void UpwardPlanRep::copyMe(const ogdf::UpwardPlanRep &UPR) 
+void UpwardPlanRep::copyMe(const UpwardPlanRep &UPR) 
 {
 	NodeArray<node> vCopy;
 	EdgeArray<edge> eCopy;
@@ -193,7 +183,7 @@ void UpwardPlanRep::copyMe(const ogdf::UpwardPlanRep &UPR)
 
 
 
-UpwardPlanRep & UpwardPlanRep::operator =(const ogdf::UpwardPlanRep &cp) 
+UpwardPlanRep & UpwardPlanRep::operator =(const UpwardPlanRep &cp) 
 {		
 	clear();
 	createEmpty(cp.original());
@@ -321,7 +311,7 @@ void UpwardPlanRep::removeSinkArcs(SList<adjEntry> &crossedEdges) {
 }
 
 
-void UpwardPlanRep::insertEdgePathEmbedded(ogdf::edge eOrig, ogdf::SList<adjEntry> crossedEdges, EdgeArray<int> &costOrig) 
+void UpwardPlanRep::insertEdgePathEmbedded(edge eOrig, SList<adjEntry> crossedEdges, EdgeArray<int> &costOrig) 
 {	
 	
 	removeSinkArcs(crossedEdges);
@@ -433,7 +423,7 @@ void UpwardPlanRep::insertEdgePathEmbedded(ogdf::edge eOrig, ogdf::SList<adjEntr
 
 
 
-void UpwardPlanRep::constructSinkArcs(ogdf::face f, node t) {		
+void UpwardPlanRep::constructSinkArcs(face f, node t) {		
 	List<adjEntry> srcList;
 	adjEntry adjTgt;
 

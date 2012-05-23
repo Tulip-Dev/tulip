@@ -4,17 +4,16 @@
 //! the useless do nothing function
 struct do_nothing 
 { 
-	template<typename A> inline void operator()(A) { };
-	template<typename A, typename B> inline void operator()(A, B) { };
+	template<typename A> inline void operator()(A a) { }; 
+	template<typename A, typename B> inline void operator()(A a, B b) { }; 
 };
 
 //! condition functor for returning a constant boolean value
 template<bool result>
 struct const_condition
 {
-	template<typename A> inline bool operator()(A) { return result; };
-//         TODO this was commented because clang sees this as erroneous
-	template<typename A, typename B> inline void operator()(A, B) { /*return result; */};
+	template<typename A> inline bool operator()(A a) { return result; }; 
+	template<typename A, typename B> inline void operator()(A a, B b) { return result; }; 
 };
 
 //! the corresponding typedefs

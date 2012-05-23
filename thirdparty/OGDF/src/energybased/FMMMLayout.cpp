@@ -1,9 +1,9 @@
 /*
- * $Revision: 2056 $
+ * $Revision: 2302 $
  * 
  * last checkin:
- *   $Author: klein $ 
- *   $Date: 2010-10-16 16:27:46 +0200 (Sat, 16 Oct 2010) $ 
+ *   $Author: gutwenger $ 
+ *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -20,19 +20,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -229,7 +219,7 @@ void FMMMLayout :: call_FORCE_CALCULATION_step(Graph& G,NodeArray<NodeAttributes
 		NodeArray<DPoint> F_attr(G); //stores attr. forces 
 		NodeArray<DPoint> F (G); //stores resulting forces 
 		NodeArray<DPoint> last_node_movement(G);//stores the force vectors F of the last
-												//iterations (needed to avoid oszilations) 
+												//iterations (needed to avoid oscillations)
 
 		set_average_ideal_edgelength(G,E);//needed for easy scaling of the forces
 		make_initialisations_for_rep_calc_classes(G);

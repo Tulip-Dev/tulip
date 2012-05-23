@@ -25,7 +25,7 @@ If you have questions, please write to license@ogdf.net .
 
 All files in the OGDF distribution are copyrighted:
 
-Copyright (C) 2005-2010
+Copyright (C) 2005-2012
 
 
 ****************** INSTALLATION *****************

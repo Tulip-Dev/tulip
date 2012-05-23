@@ -276,6 +276,7 @@ struct l2p_functor
 
 	inline void operator()(LinearQuadtree::NodeID nodeIndex, LinearQuadtree::PointID pointIndex)
 	{
+		const LinearQuadtree::LQPoint& p = tree.point(pointIndex);
 		expansions.L2P(nodeIndex, pointIndex, fx[pointIndex], fy[pointIndex]);
 	};
 
@@ -891,8 +892,7 @@ public:
 
 	inline void operator()(void) const
 	{
-//              TODO this was commented because clang sees this as erroneous
-// 		return pGraph->numNodes();
+		return pGraph->numNodes();
 	};
 
 	inline void operator()(__uint32 i)

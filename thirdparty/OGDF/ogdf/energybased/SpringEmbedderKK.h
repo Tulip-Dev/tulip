@@ -1,9 +1,9 @@
 /*
- * $Revision: 2008 $
+ * $Revision: 2323 $
  * 
  * last checkin:
  *   $Author: gutwenger $ 
- *   $Date: 2010-08-27 10:02:46 +0200 (Fri, 27 Aug 2010) $ 
+ *   $Date: 2012-05-10 08:35:16 +0200 (Thu, 10 May 2012) $ 
  ***************************************************************/
  
 /** \file
@@ -19,19 +19,9 @@
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
  * 
  * \par
  * This program is distributed in the hope that it will be useful,
@@ -202,9 +192,9 @@ protected:
           
         double diff = m_prevEnergy - maxdelta; //energy difference
         if (diff < 0.0) diff = -diff;
-#ifdef OGDF_DEBUG
-        cout << "Finished(): maxdelta: "<< maxdelta<<" diff/prev: "<<diff / m_prevEnergy<<"\n";
-#endif
+//#ifdef OGDF_DEBUG
+//        cout << "Finished(): maxdelta: "<< maxdelta<<" diff/prev: "<<diff / m_prevEnergy<<"\n";
+//#endif
 		//check if we want to stop
         bool done = (maxdelta < m_tolerance);// || (diff / m_prevEnergy) < m_tolerance);
         
@@ -221,9 +211,9 @@ protected:
           m_prevLEnergy = deltav;
           return deltav == 0.0;//<m_ltolerance; //locally stable
         }
-#ifdef OGDF_DEBUG
-        cout << "Local delta: "<<deltav<<"\n";
-#endif
+//#ifdef OGDF_DEBUG
+//        cout << "Local delta: "<<deltav<<"\n";
+//#endif
         double diff = m_prevLEnergy - deltav;
         //check if we want to stop
         bool done = (deltav == 0.0 || (diff / m_prevLEnergy) < m_ltolerance);

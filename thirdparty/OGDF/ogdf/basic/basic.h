@@ -1,51 +1,41 @@
 /*
- * $Revision: 2047 $
- *
+ * $Revision: 2320 $
+ * 
  * last checkin:
- *   $Author: klein $
- *   $Date: 2010-10-13 17:12:21 +0200 (Wed, 13 Oct 2010) $
+ *   $Author: gutwenger $ 
+ *   $Date: 2012-05-09 14:37:44 +0200 (Wed, 09 May 2012) $ 
  ***************************************************************/
-
+ 
 /** \file
  * \brief Basic declarations, included by all source files.
- *
+ * 
  * \author Carsten Gutwenger
- *
+ * 
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
  * Copyright (C). All rights reserved.
  * See README.txt in the root directory of the OGDF installation for details.
- *
+ * 
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
- *
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
+ * 
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * \par
- * You should have received a copy of the GNU General Public
+ * You should have received a copy of the GNU General Public 
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- *
+ * 
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -60,15 +50,26 @@
 
 /**
  * \mainpage The Open Graph Drawing Framework
- *
+ * 
  * \section sec_intro Introduction
  * The Open Graph Drawing Framework (OGDF) is a C++ library containing
  * implementations of various graph drawing algorithms. The library is self
  * contained; optionally, additional packages like LP-solvers are required
  * for some implementations.
+ *
+ * Here, you find the library's code documentation. For more general information
+ * on OGDF see http://www.ogdf.net. There, you can also find further explanations,
+ * how-tos, and example code.
+ *
+ * The OGDF project is a cooperation between
+ * - [Chair of Algorithm Engineering](http://ls11-www.cs.uni-dortmund.de/), Faculty of Computer Science, TU Dortmund, Germany
+ * - [Juniorprofessorship of Algorithm Engineering](http://www.ae.uni-jena.de/), Faculty of Mathematics and Computer Science, Friedrich-Schiller-University Jena, Germany
+ * - [Chair of Prof. J&uuml;nger](http://www.informatik.uni-koeln.de/ls_juenger/), Department of Computer Science, University of Cologne, Germany
+ * - [University of Sydney](http://sydney.edu.au/engineering/it/), Australia
+ * - [oreas GmbH](http://www.oreas.com/), Cologne, Germany
  */
-
-
+ 
+ 
 //---------------------------------------------------------
 // assertions
 //---------------------------------------------------------
@@ -77,7 +78,7 @@
 #include <assert.h>
 #define OGDF_ASSERT(expr) assert(expr);
 #define OGDF_ASSERT_IF(minLevel,expr) \
-        if (int(ogdf::debugLevel) >= int(minLevel)) assert(expr); else ;
+	if (int(ogdf::debugLevel) >= int(minLevel)) assert(expr); else ;
 #define OGDF_SET_DEBUG_LEVEL(level) ogdf::debugLevel = level;
 
 #else
@@ -206,17 +207,18 @@ typedef unsigned __int32 __uint32;
 typedef unsigned __int64 __uint64;
 
 #else
-#ifndef WIN32
+
+#if !defined(__MINGW32__)
 typedef signed char        __int8;
 typedef short              __int16;
 typedef int                __int32;
 typedef long long          __int64;
 #endif
+
 typedef unsigned char      __uint8;
 typedef unsigned short     __uint16;
 typedef unsigned int       __uint32;
 typedef unsigned long long __uint64;
-
 #endif
 
 
@@ -305,8 +307,6 @@ static Initialization s_ogdfInitializer;
 //---------------------------------------------------------
 // global basic functions
 //---------------------------------------------------------
-	const double pi    = 3.1415926535897932384626433832795028841971;
-	const double euler = 2.7182818284590452353602874713526624977572;
 
 	// forward declarations
 	template<class E> class List;
@@ -402,8 +402,8 @@ static Initialization s_ogdfInitializer;
 	//! Returns true iff \a fileName is a directory.
 	OGDF_EXPORT bool isDirectory(const char *fileName);
 
-	//! Changes current directory to \a dirName.
-	OGDF_EXPORT void changeDir(const char *dirName);
+	//! Changes current directory to \a dirName; returns true if successful.
+	OGDF_EXPORT bool changeDir(const char *dirName);
 	
 	//! Returns in \a files the list of files in directory \a dirName.
 	/** The optional argument \a pattern can be used to filter files.
@@ -557,7 +557,8 @@ inline int strncpy(char *strDest, size_t sizeOfDest, const char *strSource, size
 
 inline char *strtok(char *strToken, const char *strDelimit)
 {
-	char *context;
+	//provide a persistent context pointer for strtok_s
+	static char *context;
 	return strtok_s(strToken, strDelimit, &context);
 }
 
