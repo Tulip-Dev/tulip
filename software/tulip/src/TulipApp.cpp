@@ -562,7 +562,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
       name =
         QFileDialog::getSaveFileName(this, tr("Choose a file to save" ),
                                      QString(),
-                                     tr("Tulip graph (*.tlp);;gzipped Tulip graph(*.tlp.gz)"));
+                                     tr("Tulip graph (*.tlp);;Gzipped Tulip graph(*.tlp.gz)"));
     else
       name =
         QFileDialog::getSaveFileName(this,
