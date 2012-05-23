@@ -20,7 +20,6 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QCoreApplication>
-#include <QtNetwork/QHttp>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
