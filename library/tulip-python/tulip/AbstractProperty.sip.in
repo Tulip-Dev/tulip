@@ -272,38 +272,113 @@ Sets the value of a particular edge.
 //===========================================================================================	
 	
 	virtual void erase(const tlp::node node) ;
-	
+
+//===========================================================================================
+
 	virtual void erase(const tlp::edge edge) ;
+
+//===========================================================================================
 
 	virtual std::string getTypename() const ;
 
+//===========================================================================================
+
 	const std::string& getName() const;
 
+//===========================================================================================
+
 	virtual std::string getNodeDefaultStringValue() const ;
-	
+
+//===========================================================================================
+
 	virtual std::string getEdgeDefaultStringValue() const ;
 	
+//===========================================================================================
+
 	virtual std::string getNodeStringValue(const tlp::node node) const ;
-	
+
+//===========================================================================================
+
 	virtual std::string getEdgeStringValue(const tlp::edge edge) const ;
-	
+
+//===========================================================================================
+
 	virtual bool setNodeStringValue(const tlp::node node, const std::string & strVal);
 	
+//===========================================================================================
+
 	virtual bool setEdgeStringValue(const tlp::edge edge, const std::string & strVal);
-	
+
+//===========================================================================================
+
 	virtual bool setAllNodeStringValue(const std::string & strVal);
-	
+
+//===========================================================================================
+
 	virtual bool setAllEdgeStringValue(const std::string & strVal);
 	
+//===========================================================================================
+
 	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = NULL) const ;
 	
+//===========================================================================================
+
 	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const ;
 	
-  	virtual bool copy(tlp::node src, tlp::node dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
-	
-	virtual bool copy(tlp::edge src, tlp::edge dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
-	
-	
+//===========================================================================================
+
+    virtual bool copy(tlp::node dst, tlp::node src, tlp::@PROPERTY_TYPE@Property* prop, bool ifNotDefault=false);
+%Docstring
+tlp.@PROPERTY_TYPE@Property.copy(nodeDst, nodeSrc, prop[, ifNotDefault=False])
+
+.. versionadded:: 3.8
+
+Copies the value hold by a property on a node to another node on this property.
+
+:param nodeDst: the node to copy the value to.
+:type nodeDst: :class:`tlp.node`
+:param nodeSrc: the node to copy the value from.
+:type nodeSrc: :class:`tlp.node`
+:param prop: the property holding the value to copy.
+:type prop: :class:`tlp.@PROPERTY_TYPE@Property`
+:param ifNotDefault: whether to ignore default-valuated nodes or not. Defaults to :const:`False`.
+:type ifNotDefault: boolean
+%End
+
+
+//===========================================================================================
+
+    virtual bool copy(tlp::edge src, tlp::edge dst, tlp::@PROPERTY_TYPE@Property* prop, bool ifNotDefault=false);
+%Docstring
+tlp.@PROPERTY_TYPE@Property.copy(edgeDst, edgeSrc, prop[, ifNotDefault=False])
+
+.. versionadded:: 3.8
+
+Copies the value hold by a property on an edge to another edge on this property.
+
+:param edgeDst: the node to copy the value to.
+:type edgeDst: :class:`tlp.edge`
+:param edgeSrc: the node to copy the value from.
+:type edgeSrc: :class:`tlp.edge`
+:param prop: the property holding the value to copy.
+:type prop: :class:`tlp.@PROPERTY_TYPE@Property`
+:param ifNotDefault: whether to ignore default-valuated nodes or not. Defaults to :const:`False`.
+:type ifNotDefault: boolean
+%End
+
+//===========================================================================================
+
+    virtual void copy(tlp::@PROPERTY_TYPE@Property* prop);
+%Docstring
+tlp.@PROPERTY_TYPE@Property.copy(prop)
+
+.. versionadded:: 3.8
+
+Copies the values hold by a property on this property.
+
+:param prop: the property to copy
+:type prop: :class:`tlp.@PROPERTY_TYPE@Property`
+%End
 //===========================================================================================
 	
 @PROPERTY_SPECIFIC_METHODS@
@@ -871,36 +946,112 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 	
 	virtual void erase(const tlp::node node) ;
 	
+//===========================================================================================
+
 	virtual void erase(const tlp::edge edge) ;
+
+//===========================================================================================
 
 	virtual std::string getTypename() const ;
 
+//===========================================================================================
+
 	const std::string& getName() const;
+
+//===========================================================================================
 
 	virtual std::string getNodeDefaultStringValue() const ;
 	
+//===========================================================================================
+
 	virtual std::string getEdgeDefaultStringValue() const ;
 	
+//===========================================================================================
+
 	virtual std::string getNodeStringValue(const tlp::node node) const ;
-	
+
+//===========================================================================================
+
 	virtual std::string getEdgeStringValue(const tlp::edge edge) const ;
-	
+
+//===========================================================================================
+
 	virtual bool setNodeStringValue(const tlp::node node, const std::string & val);
-	
+
+//===========================================================================================
+
 	virtual bool setEdgeStringValue(const tlp::edge edge, const std::string & val);
-	
+
+//===========================================================================================
+
 	virtual bool setAllNodeStringValue(const std::string & val);
-	
+
+//===========================================================================================
+
 	virtual bool setAllEdgeStringValue(const std::string & val);
-	
+
+//===========================================================================================
+
 	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const ;
-	
+
+//===========================================================================================
+
 	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const ;
 	
-  	virtual bool copy(tlp::node src, tlp::node dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
-	
-	virtual bool copy(tlp::edge src, tlp::edge dst, tlp::PropertyInterface* prop, bool ifNotDefault=false) ;
-	
+//===========================================================================================
+
+    virtual bool copy(tlp::node src, tlp::node dst, tlp::@VEC_PROPERTY_TYPE@VectorProperty* prop, bool ifNotDefault=false);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.copy(nodeDst, nodeSrc, prop[, ifNotDefault=False])
+
+.. versionadded:: 3.8
+
+Copies the value hold by a property on a node to another node on this property.
+
+:param nodeDst: the node to copy the value to.
+:type nodeDst: :class:`tlp.node`
+:param nodeSrc: the node to copy the value from.
+:type nodeSrc: :class:`tlp.node`
+:param prop: the property holding the value to copy.
+:type prop: :class:`tlp.@VEC_PROPERTY_TYPE@VectorProperty`
+:param ifNotDefault: whether to ignore default-valuated nodes or not. Defaults to :const:`False`.
+:type ifNotDefault: boolean
+%End
+
+//===========================================================================================
+
+    virtual bool copy(tlp::edge src, tlp::edge dst, tlp::@VEC_PROPERTY_TYPE@VectorProperty* prop, bool ifNotDefault=false);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.copy(edgeDst, edgeSrc, prop[, ifNotDefault=False])
+
+.. versionadded:: 3.8
+
+Copies the value hold by a property on an edge to another edge on this property.
+
+:param edgeDst: the node to copy the value to.
+:type edgeDst: :class:`tlp.edge`
+:param edgeSrc: the node to copy the value from.
+:type edgeSrc: :class:`tlp.edge`
+:param prop: the property holding the value to copy.
+:type prop: :class:`tlp.@VEC_PROPERTY_TYPE@VectorProperty`
+:param ifNotDefault: whether to ignore default-valuated nodes or not. Defaults to :const:`False`.
+:type ifNotDefault: boolean
+%End
+
+//===========================================================================================
+
+    virtual void copy(tlp::@VEC_PROPERTY_TYPE@VectorProperty* prop);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.copy(prop)
+
+.. versionadded:: 3.8
+
+Copies the values hold by a property on this property.
+
+:param prop: the property to copy
+:type prop: :class:`tlp.@VEC_PROPERTY_TYPE@VectorProperty`
+%End
+
 //===========================================================================================
 	
 };
