@@ -123,10 +123,10 @@ protected :
   }
   void delEdge(Graph *,const edge ) {
     setHaveToCompute();
-  }  
+  }
 
   void destroy(Graph *);
-  void destroy(const Camera *);    
+  void destroy(const Camera *);
   void destroy(PropertyInterface*);
 
   void removeObservers();

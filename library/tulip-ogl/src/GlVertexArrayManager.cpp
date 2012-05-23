@@ -93,80 +93,80 @@ bool GlVertexArrayManager::haveToCompute() {
 
   if(inputData->parameters->isEdgeColorInterpolate()!=colorInterpolate) {
     colorInterpolate=inputData->parameters->isEdgeColorInterpolate();
-    clearColorData();    
+    clearColorData();
     recompute = true;
   }
 
   if(inputData->parameters->isEdgeSizeInterpolate()!=sizeInterpolate) {
     sizeInterpolate=inputData->parameters->isEdgeSizeInterpolate();
-    clearLayoutData();    
+    clearLayoutData();
     recompute = true;
   }
 
   //The layout property in the input data has changed need to recompute layout.
-  if(layoutProperty != inputData->getElementLayout()){
-      if(layoutProperty)
-          layoutProperty->removePropertyObserver(this);
+  if(layoutProperty != inputData->getElementLayout()) {
+    if(layoutProperty)
+      layoutProperty->removePropertyObserver(this);
 
-      layoutProperty = inputData->getElementLayout();
-      layoutProperty->addPropertyObserver(this);
-      clearLayoutData();
-      recompute = true;
+    layoutProperty = inputData->getElementLayout();
+    layoutProperty->addPropertyObserver(this);
+    clearLayoutData();
+    recompute = true;
   }
 
   //Size property changed
-  if(sizeProperty != inputData->getElementSize()){
-      if(sizeProperty)
-          sizeProperty->removePropertyObserver(this);
+  if(sizeProperty != inputData->getElementSize()) {
+    if(sizeProperty)
+      sizeProperty->removePropertyObserver(this);
 
-      sizeProperty = inputData->getElementSize();
-      sizeProperty->addPropertyObserver(this);
-      clearLayoutData();
-      recompute = true;
+    sizeProperty = inputData->getElementSize();
+    sizeProperty->addPropertyObserver(this);
+    clearLayoutData();
+    recompute = true;
   }
 
   //Shape property changed
-  if(shapeProperty != inputData->getElementShape()){
-      if(shapeProperty)
-          shapeProperty->removePropertyObserver(this);
+  if(shapeProperty != inputData->getElementShape()) {
+    if(shapeProperty)
+      shapeProperty->removePropertyObserver(this);
 
-      shapeProperty = inputData->getElementShape();
-      shapeProperty->addPropertyObserver(this);
-      clearLayoutData();
-      recompute = true;
+    shapeProperty = inputData->getElementShape();
+    shapeProperty->addPropertyObserver(this);
+    clearLayoutData();
+    recompute = true;
   }
 
   //Rotation property changed
-  if(rotationProperty != inputData->getElementRotation()){
-      if(rotationProperty)
-          rotationProperty->removePropertyObserver(this);
+  if(rotationProperty != inputData->getElementRotation()) {
+    if(rotationProperty)
+      rotationProperty->removePropertyObserver(this);
 
-      rotationProperty = inputData->getElementRotation();
-      rotationProperty->addPropertyObserver(this);
-      clearLayoutData();
-      recompute = true;
+    rotationProperty = inputData->getElementRotation();
+    rotationProperty->addPropertyObserver(this);
+    clearLayoutData();
+    recompute = true;
   }
 
   //Color property changed
-  if(colorProperty != inputData->getElementColor()){
-      if(colorProperty)
-          colorProperty->removePropertyObserver(this);
+  if(colorProperty != inputData->getElementColor()) {
+    if(colorProperty)
+      colorProperty->removePropertyObserver(this);
 
-      colorProperty = inputData->getElementColor();
-      colorProperty->addPropertyObserver(this);
-      clearColorData();
-      recompute = true;
+    colorProperty = inputData->getElementColor();
+    colorProperty->addPropertyObserver(this);
+    clearColorData();
+    recompute = true;
   }
 
   //Color property changed
-  if(borderColorProperty != inputData->getElementBorderColor()){
-      if(borderColorProperty)
-          borderColorProperty->removePropertyObserver(this);
+  if(borderColorProperty != inputData->getElementBorderColor()) {
+    if(borderColorProperty)
+      borderColorProperty->removePropertyObserver(this);
 
-      borderColorProperty = inputData->getElementBorderColor();
-      borderColorProperty->addPropertyObserver(this);
-      clearColorData();
-      recompute = true;
+    borderColorProperty = inputData->getElementBorderColor();
+    borderColorProperty->addPropertyObserver(this);
+    clearColorData();
+    recompute = true;
   }
 
   return recompute;
@@ -837,36 +837,41 @@ void GlVertexArrayManager::destroy(Graph *) {
 }
 
 void GlVertexArrayManager::destroy(PropertyInterface* property) {
-    //Layout property changed
-    if(layoutProperty == property){
-       layoutProperty = NULL;
-        clearLayoutData();
-    }
-    //Size property changed
-    if(sizeProperty == property){
-        sizeProperty = NULL;
-        clearLayoutData();
-    }
-    //Shape property changed
-    if(shapeProperty == property){
-        shapeProperty = NULL;
-        clearLayoutData();
-    }
-    //Rotation property changed
-    if(rotationProperty == property){
-        rotationProperty = NULL;
-        clearLayoutData();
-    }
-    //Color property changed
-    if(colorProperty == property){
-        colorProperty = NULL;
-        clearColorData();
-    }
-    //Color property changed
-    if(borderColorProperty == property){
-        borderColorProperty = NULL;
-        clearColorData();
-    }
+  //Layout property changed
+  if(layoutProperty == property) {
+    layoutProperty = NULL;
+    clearLayoutData();
+  }
+
+  //Size property changed
+  if(sizeProperty == property) {
+    sizeProperty = NULL;
+    clearLayoutData();
+  }
+
+  //Shape property changed
+  if(shapeProperty == property) {
+    shapeProperty = NULL;
+    clearLayoutData();
+  }
+
+  //Rotation property changed
+  if(rotationProperty == property) {
+    rotationProperty = NULL;
+    clearLayoutData();
+  }
+
+  //Color property changed
+  if(colorProperty == property) {
+    colorProperty = NULL;
+    clearColorData();
+  }
+
+  //Color property changed
+  if(borderColorProperty == property) {
+    borderColorProperty = NULL;
+    clearColorData();
+  }
 }
 
 
@@ -950,22 +955,28 @@ void GlVertexArrayManager::clearObservers() {
   }
 
   if(layoutObserverActivated) {
-      if(layoutProperty != NULL)
-    layoutProperty->removePropertyObserver(this);
-      if(sizeProperty != NULL)
-    sizeProperty->removePropertyObserver(this);
-      if(shapeProperty != NULL)
-    shapeProperty->removePropertyObserver(this);
-      if(rotationProperty != NULL)
-    rotationProperty->removePropertyObserver(this);
+    if(layoutProperty != NULL)
+      layoutProperty->removePropertyObserver(this);
+
+    if(sizeProperty != NULL)
+      sizeProperty->removePropertyObserver(this);
+
+    if(shapeProperty != NULL)
+      shapeProperty->removePropertyObserver(this);
+
+    if(rotationProperty != NULL)
+      rotationProperty->removePropertyObserver(this);
+
     layoutObserverActivated=false;
   }
 
   if(colorObserverActivated) {
-      if(colorProperty != NULL)
-    colorProperty->removePropertyObserver(this);
-      if(borderColorProperty != NULL)
-    borderColorProperty->removePropertyObserver(this);
+    if(colorProperty != NULL)
+      colorProperty->removePropertyObserver(this);
+
+    if(borderColorProperty != NULL)
+      borderColorProperty->removePropertyObserver(this);
+
     colorObserverActivated=false;
   }
 }

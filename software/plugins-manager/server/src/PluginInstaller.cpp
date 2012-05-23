@@ -79,6 +79,7 @@ int main(int argc,char **argv) {
   PluginLoaderWithInfo plug;
   initTulipLib(NULL);
   loadPlugin(pluginPath.toStdString(), &plug);
+
   if (generateDoc) {
     //GlyphManager::getInst().loadPlugins(&plug); //Glyph plugins
     InteractorManager::getInst().loadPlugins(&plug);
@@ -206,11 +207,11 @@ int main(int argc,char **argv) {
       return EXIT_FAILURE;
 
   UpdatePlugin::copyFile(srcDir,
-			 QString(pluginInfo.fileName.c_str())
-			 + '.' + suffix,
-			 dstSubDir,
-			 QString(pluginInfo.fileName.c_str())
-			 + '.' + suffix);
+                         QString(pluginInfo.fileName.c_str())
+                         + '.' + suffix,
+                         dstSubDir,
+                         QString(pluginInfo.fileName.c_str())
+                         + '.' + suffix);
 
   // Documentation
   if(generateDoc) {

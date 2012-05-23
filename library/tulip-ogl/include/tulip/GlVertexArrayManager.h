@@ -142,7 +142,7 @@ public:
 
 protected:
 
-  void propertyValueChanged(PropertyInterface *property); 
+  void propertyValueChanged(PropertyInterface *property);
 
   void addEdge(Graph *,const edge);
   void addNode(Graph *,const node);
@@ -150,7 +150,7 @@ protected:
   void beforeSetAllNodeValue(PropertyInterface*);
   void beforeSetAllEdgeValue(PropertyInterface*);
   void beforeSetNodeValue(PropertyInterface*, const node);
-  void beforeSetEdgeValue(PropertyInterface*, const edge);  
+  void beforeSetEdgeValue(PropertyInterface*, const edge);
 
   void destroy(Graph *);
   void destroy(PropertyInterface*);

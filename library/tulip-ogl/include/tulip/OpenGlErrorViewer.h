@@ -34,7 +34,7 @@ class TLP_GL_SCOPE OpenGlErrorViewer {
 
 public :
 
-    virtual ~OpenGlErrorViewer(){}
+  virtual ~OpenGlErrorViewer() {}
 
   /**
    * Simple error display with cerr output
