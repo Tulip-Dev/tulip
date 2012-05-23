@@ -35,6 +35,7 @@ const QString TulipSettings::DefaultColorConfigEntry = "graph/defaults/color/";
 const QString TulipSettings::DefaultSizeConfigEntry = "graph/defaults/size/";
 const QString TulipSettings::DefaultShapeConfigEntry = "graph/defaults/shape/";
 const QString TulipSettings::DefaultSelectionColorEntry = "graph/defaults/selectioncolor/";
+const QString TulipSettings::FavoriteAlgorithmsEntry = "app/algorithms/favorites";
 
 TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }
@@ -169,4 +170,26 @@ tlp::Color TulipSettings::defaultSelectionColor() {
 void TulipSettings::setDefaultSelectionColor(const tlp::Color& color) {
   QString value = tlp::ColorType::toString(color).c_str();
   setValue(DefaultSelectionColorEntry,value);
+}
+
+QStringList TulipSettings::favoriteAlgorithms() const {
+  return value(FavoriteAlgorithmsEntry,QStringList()).toStringList();
+}
+
+void TulipSettings::addFavoriteAlgorithm(const QString& name) {
+  QStringList lst = favoriteAlgorithms();
+  if (!lst.contains(name))
+    lst+=name;
+  setFavoriteAlgorithms(lst);
+}
+
+void TulipSettings::removeFavoriteAlgorithm(const QString& name) {
+  QStringList lst = favoriteAlgorithms();
+  if (lst.contains(name))
+    lst.removeAll(name);
+  setFavoriteAlgorithms(lst);
+}
+
+void TulipSettings::setFavoriteAlgorithms(const QStringList& lst) {
+  setValue(FavoriteAlgorithmsEntry,lst);
 }

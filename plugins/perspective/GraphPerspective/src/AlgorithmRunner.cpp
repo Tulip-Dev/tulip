@@ -18,16 +18,33 @@
  */
 #include "AlgorithmRunner.h"
 
-#include "ui_AlgorithmRunner.h"
 #include "AlgorithmRunnerItem.h"
-
-#include <tulip/TulipMimes.h>
+#include "ExpandableGroupBox.h"
 
 #include <QtGui/QDropEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QToolButton>
 
+#include <tulip/TulipMimes.h>
 #include <tulip/PluginModel.h>
+#include <tulip/TulipSettings.h>
+
+struct FavoriteBox: public ExpandableGroupBox {
+  bool _droppingFavorite;
+
+  explicit FavoriteBox(QWidget *parent = NULL, const QString &title=QString()): ExpandableGroupBox(parent,title), _droppingFavorite(false) {
+  }
+
+protected:
+  void paintEvent(QPaintEvent *event) {
+    ExpandableGroupBox::paintEvent(event);
+    QPainter painter(this);
+    QPixmap px((_droppingFavorite ? ":/tulip/graphperspective/icons/16/favorite.png" : ":/tulip/graphperspective/icons/16/favorite-empty.png"));
+    painter.drawPixmap(25,2,px);
+  }
+};
+
+#include "ui_AlgorithmRunner.h"
 
 using namespace tlp;
 
@@ -55,13 +72,13 @@ void buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model, const QModelInd
   }
 }
 
-AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::AlgorithmRunner), _droppingFavorite(false), _graph(NULL) {
+AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::AlgorithmRunner), _graph(NULL) {
   _ui->setupUi(this);
   _ui->favoritesBox->setWidget(new QWidget());
   _ui->favoritesBox->widget()->setAcceptDrops(true);
   _ui->favoritesBox->widget()->setMinimumHeight(75);
   _ui->favoritesBox->widget()->setLayout(new QVBoxLayout);
-  _ui->favoritesBox->widget()->layout()->setContentsMargins(0,25,0,15);
+  _ui->favoritesBox->widget()->layout()->setContentsMargins(0,15,0,15);
   _ui->favoritesBox->widget()->layout()->setSpacing(0);
   _ui->favoritesBox->widget()->installEventFilter(this);
 
@@ -79,8 +96,12 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   PluginModel<tlp::Algorithm> model;
   buildTreeUi(_ui->contents, &model, QModelIndex(), localModeButton, true);
   _ui->contents->layout()->addItem(new QSpacerItem(0,0,QSizePolicy::Minimum,QSizePolicy::Expanding));
-  foreach(AlgorithmRunnerItem* i, findChildren<AlgorithmRunnerItem*>())
-  connect(i,SIGNAL(favorized(bool)),this,SLOT(favorized(bool)));
+  foreach(AlgorithmRunnerItem* i, findChildren<AlgorithmRunnerItem*>()) {
+    connect(i,SIGNAL(favorized(bool)),this,SLOT(favorized(bool)));
+  }
+  foreach(QString a, TulipSettings::instance().favoriteAlgorithms()) {
+    addFavorite(a);
+  }
 }
 
 AlgorithmRunner::~AlgorithmRunner() {
@@ -91,7 +112,12 @@ void AlgorithmRunner::setGraph(Graph* g) {
   setEnabled(g != NULL);
   _graph = g;
   foreach(AlgorithmRunnerItem* item, findChildren<AlgorithmRunnerItem*>())
-  item->setGraph(g);
+    item->setGraph(g);
+}
+
+void AlgorithmRunner::findPlugins() {
+  _ui->searchBox->selectAll();
+  _ui->searchBox->setFocus(Qt::ShortcutFocusReason);
 }
 
 void AlgorithmRunner::favorized(bool f) {
@@ -153,12 +179,11 @@ void AlgorithmRunner::setFilter(QString filter) {
 bool AlgorithmRunner::eventFilter(QObject* obj, QEvent* ev) {
   bool draggableObject = obj == _ui->favoritesBox->widget() || _favorites.contains(dynamic_cast<AlgorithmRunnerItem*>(obj));
 
-  if (ev->type() == QEvent::Paint && obj == _ui->favoritesBox->widget()) {
-    QPainter painter(_ui->favoritesBox->widget());
-    QPixmap px((_droppingFavorite ? ":/tulip/graphperspective/icons/32/favorite.png" : ":/tulip/graphperspective/icons/32/favorite-empty.png"));
-    painter.drawPixmap(_ui->favoritesBox->widget()->width()/2 - px.width()/2, 8, px);
-
-    if (_favorites.isEmpty()) {
+  if (ev->type() == QEvent::Paint) {
+    if (obj == _ui->favoritesBox->widget() && _favorites.empty()) {
+      QPainter painter(_ui->favoritesBox->widget());
+      QPixmap px((_ui->favoritesBox->_droppingFavorite ? ":/tulip/graphperspective/icons/32/favorite.png" : ":/tulip/graphperspective/icons/32/favorite-empty.png"));
+      painter.drawPixmap(_ui->favoritesBox->widget()->width()/2 - px.width()/2, 8, px);
       QFont f;
       f.setBold(true);
       painter.setFont(f);
@@ -171,16 +196,16 @@ bool AlgorithmRunner::eventFilter(QObject* obj, QEvent* ev) {
     QDropEvent* dropEv = static_cast<QDropEvent*>(ev);
 
     if (dynamic_cast<const AlgorithmMimeType*>(dropEv->mimeData()) != NULL) {
-      _droppingFavorite = true;
+      _ui->favoritesBox->_droppingFavorite = true;
       ev->accept();
-      _ui->favoritesBox->widget()->repaint();
+      _ui->favoritesBox->repaint();
     }
 
     return true;
   }
   else if (ev->type() == QEvent::DragLeave && draggableObject) {
-    _droppingFavorite = false;
-    _ui->favoritesBox->widget()->repaint();
+    _ui->favoritesBox->_droppingFavorite = false;
+    _ui->favoritesBox->repaint();
   }
   else if (ev->type() == QEvent::Drop && draggableObject) {
     QDropEvent* dropEv = static_cast<QDropEvent*>(ev);
@@ -189,8 +214,8 @@ bool AlgorithmRunner::eventFilter(QObject* obj, QEvent* ev) {
     if (mime != NULL)
       addFavorite(mime->algorithm(),mime->params());
 
-    _droppingFavorite = false;
-    _ui->favoritesBox->widget()->repaint();
+    _ui->favoritesBox->_droppingFavorite = false;
+    _ui->favoritesBox->repaint();
   }
 
   return false;
@@ -209,20 +234,29 @@ void AlgorithmRunner::removeFavorite(const QString &algName) {
       break;
     }
   }
+  TulipSettings::instance().removeFavoriteAlgorithm(algName);
+  if (_favorites.isEmpty())
+    _ui->favoritesBox->widget()->setMinimumHeight(75);
 }
 
 void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
-  foreach(AlgorithmRunnerItem* i, _favorites)
-
-  if (i->name() == algName)
+  if (!PluginLister::pluginExists(algName.toStdString()))
     return;
+  TulipSettings::instance().addFavoriteAlgorithm(algName);
+
+  foreach(AlgorithmRunnerItem* i, _favorites) {
+    if (i->name() == algName)
+      return;
+  }
 
   _ui->favoritesBox->widget()->setMinimumHeight(0);
   AlgorithmRunnerItem* item = new AlgorithmRunnerItem(algName);
   item->setGraph(_graph);
-  item->setData(data);
+  if (!data.empty()) {
+    item->setData(data);
+  }
   item->setFavorite(true);
-  _ui->favoritesBox->layout()->addWidget(item);
+  _ui->favoritesBox->widget()->layout()->addWidget(item);
   _favorites+=item;
   item->installEventFilter(this);
   item->setAcceptDrops(true);

@@ -45,6 +45,7 @@ public:
   static const QString DefaultSizeConfigEntry;
   static const QString DefaultShapeConfigEntry;
   static const QString DefaultSelectionColorEntry;
+  static const QString FavoriteAlgorithmsEntry;
 
   static TulipSettings &instance();
 
@@ -86,7 +87,6 @@ public:
    * @return const QStringList
    **/
   const QStringList remoteLocations() const;
-
   const QStringList pluginsToRemove() const;
 
   void markPluginForRemoval(const QString& pluginLibrary);
@@ -94,18 +94,25 @@ public:
 
   tlp::Color defaultColor(tlp::ElementType elem);
   void setDefaultColor(tlp::ElementType elem, const tlp::Color& color);
+
   tlp::Size defaultSize(tlp::ElementType elem);
   void setDefaultSize(tlp::ElementType elem, const tlp::Size& size);
+
   int defaultShape(tlp::ElementType elem);
   void setDefaultShape(tlp::ElementType elem, int shape);
 
   tlp::Color defaultSelectionColor();
   void setDefaultSelectionColor(const tlp::Color& color);
 
+  QStringList favoriteAlgorithms() const;
+  void addFavoriteAlgorithm(const QString&name);
+  void removeFavoriteAlgorithm(const QString&name);
+
 private:
   TulipSettings();
-
   static TulipSettings *_instance;
+
+  void setFavoriteAlgorithms(const QStringList& lst);
 };
 
 #endif // TULIPSETTINGS_H
