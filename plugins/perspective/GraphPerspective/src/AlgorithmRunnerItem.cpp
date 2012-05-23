@@ -157,5 +157,6 @@ void AlgorithmRunnerItem::setFavorite(bool f) {
 tlp::DataSet AlgorithmRunnerItem::data() const {
   if (_ui->parameters->model() == NULL)
     return DataSet();
+
   return static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues();
 }

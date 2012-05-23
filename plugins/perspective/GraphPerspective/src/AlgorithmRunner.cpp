@@ -112,7 +112,7 @@ void AlgorithmRunner::setGraph(Graph* g) {
   setEnabled(g != NULL);
   _graph = g;
   foreach(AlgorithmRunnerItem* item, findChildren<AlgorithmRunnerItem*>())
-    item->setGraph(g);
+  item->setGraph(g);
 }
 
 void AlgorithmRunner::findPlugins() {
@@ -235,6 +235,7 @@ void AlgorithmRunner::removeFavorite(const QString &algName) {
     }
   }
   TulipSettings::instance().removeFavoriteAlgorithm(algName);
+
   if (_favorites.isEmpty())
     _ui->favoritesBox->widget()->setMinimumHeight(75);
 }
@@ -242,6 +243,7 @@ void AlgorithmRunner::removeFavorite(const QString &algName) {
 void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
   if (!PluginLister::pluginExists(algName.toStdString()))
     return;
+
   TulipSettings::instance().addFavoriteAlgorithm(algName);
 
   foreach(AlgorithmRunnerItem* i, _favorites) {
@@ -252,9 +254,11 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
   _ui->favoritesBox->widget()->setMinimumHeight(0);
   AlgorithmRunnerItem* item = new AlgorithmRunnerItem(algName);
   item->setGraph(_graph);
+
   if (!data.empty()) {
     item->setData(data);
   }
+
   item->setFavorite(true);
   _ui->favoritesBox->widget()->layout()->addWidget(item);
   _favorites+=item;

@@ -178,15 +178,19 @@ QStringList TulipSettings::favoriteAlgorithms() const {
 
 void TulipSettings::addFavoriteAlgorithm(const QString& name) {
   QStringList lst = favoriteAlgorithms();
+
   if (!lst.contains(name))
     lst+=name;
+
   setFavoriteAlgorithms(lst);
 }
 
 void TulipSettings::removeFavoriteAlgorithm(const QString& name) {
   QStringList lst = favoriteAlgorithms();
+
   if (lst.contains(name))
     lst.removeAll(name);
+
   setFavoriteAlgorithms(lst);
 }
 
