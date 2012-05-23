@@ -20,9 +20,9 @@
 #ifndef TULIPAPP_H
 #define TULIPAPP_H
 
-#include <QtGui/qmessagebox.h>
-#include <QtGui/qmainwindow.h>
+#include <QtGui/QMainWindow>
 #include <QtCore/QSettings>
+#include <QtGui/QMessageBox>
 
 #include "TulipPluginLoader.h"
 #include "TulipData.h"
@@ -50,7 +50,7 @@ struct FileInfo {
 
 ///Widget for manipulation and visualization of a graph
 class TulipApp : public QMainWindow, public Ui::TulipData {
-  Q_OBJECT;
+  Q_OBJECT
 
 public slots:
   void clearMemoryChecker();

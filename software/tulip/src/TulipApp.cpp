@@ -25,14 +25,12 @@
 #include <windows.h>
 #endif
 
-#include <QtGui/qfiledialog.h>
-#include <QtCore/qlibraryinfo.h>
-#include <QtGui/qevent.h>
-#include <QtGui/qdesktopwidget.h>
-#include <QtGui/qstatusbar.h>
-#include <QtGui/qprinter.h>
-#include <QtGui/qprintdialog.h>
+#include <QtGui/QFileDialog>
+#include <QtGui/QDesktopWidget>
+#include <QtGui/QStatusBar>
 #include <QtCore/QProcess>
+#include <QtCore/QLibraryInfo>
+#include <QtGui/QCloseEvent>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/ControllerPluginsManager.h>
@@ -414,8 +412,8 @@ void TulipApp::closeTab(int index) {
     tabWidget->setCurrentIndex(index);
 
   Graph *graph=tabIndexToController[index]->getGraph()->getRoot();
-  string name;
-  graph->getAttribute<string>("name", name);
+  string name=graph->getName();
+
   QMessageBox::StandardButton answer =askSaveGraph(name ,index);
 
   if(answer != QMessageBox::Cancel) {
@@ -501,6 +499,7 @@ bool TulipApp::createController(const string &name,const string &graphName) {
   Controller::currentActiveController(tabIndexToController[tabWidget->currentIndex()]);
   return true;
 }
+
 //**********************************************************************
 bool TulipApp::doFileSave(int index) {
   Controller *controller=tabIndexToController[index];
@@ -513,6 +512,7 @@ bool TulipApp::doFileSave(int index) {
   FileInfo &vFile = openFiles[controller];
   return doFileSave(controller,"tlp", vFile.name, vFile.author, vFile.comments);
 }
+
 //**********************************************************************
 void TulipApp::fileSave() {
   doFileSave(tabWidget->currentIndex());
@@ -562,7 +562,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
       name =
         QFileDialog::getSaveFileName(this, tr("Choose a file to save" ),
                                      QString(),
-                                     tr("Tulip graph (*.tlp *.tlp.gz)"));
+                                     tr("Tulip graph (*.tlp);;gzipped Tulip graph(*.tlp.gz)"));
     else
       name =
         QFileDialog::getSaveFileName(this,
