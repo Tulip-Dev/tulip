@@ -84,6 +84,7 @@ INSTALL(FILES
   tulip/CoordWidget.h
   tulip/SizeWidget.h
   tulip/FileNameEditorWidget.h        
+  tulip/TlpNetworkAccess.h        
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_qt_dev
 )

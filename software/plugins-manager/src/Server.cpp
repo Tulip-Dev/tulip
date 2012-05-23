@@ -57,7 +57,10 @@ void Server::getAddress(string &address) {
 
 void Server::requestDone() {
   timer.stop();
-  Request* lastRequest = requests.front();
+  std::list<Request *>::const_iterator itr = requests.begin();
+  if (itr == requests.end())
+    return;
+  Request* lastRequest = *itr;
 
   if(lastRequest->post) {
     string response;

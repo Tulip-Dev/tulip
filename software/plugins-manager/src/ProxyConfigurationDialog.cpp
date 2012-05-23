@@ -23,6 +23,8 @@
 #include <QtCore/QSettings>
 #include <QtGui/QIntValidator>
 
+#include <tulip/TlpNetworkAccess.h>
+
 using namespace std;
 
 namespace tlp {
@@ -32,39 +34,31 @@ ProxyConfigurationDialog::ProxyConfigurationDialog(QWidget* parent) : QDialog(pa
   connect(enableProxy,SIGNAL(stateChanged(int)),this,SLOT(proxyStateChange(int)));
   connect(useUsernamePassword,SIGNAL(stateChanged(int)),this,SLOT(useUsernamePasswordStateChange(int)));
 
-  QSettings settings("TulipSoftware","Tulip");
-  settings.beginGroup("PluginsManager");
-  bool proxyEnable=settings.value("proxyEnable",false).toBool();
-  bool proxyUsernamePasswordEnable=settings.value("proxyUsernamePasswordEnable",false).toBool();
-  QString proxyAddress=settings.value("proxyAddress","").toString();
-  quint16 proxyPort=settings.value("proxyPort",0).toUInt();
-  QString proxyUsername=settings.value("proxyUsername","").toString();
-  QString proxyPassword=settings.value("proxyPassword","").toString();
-  settings.endGroup();
+  NetworkProxyConfiguration npc = getNetworkProxyConfiguration();
 
-  if(proxyEnable)
+  if(npc.proxyEnabled)
     enableProxy->setCheckState(Qt::Checked);
 
-  if(proxyUsernamePasswordEnable)
+  if(npc.authenticationEnabled)
     useUsernamePassword->setCheckState(Qt::Checked);
 
-  hostEdit->setText(proxyAddress);
-  portEdit->setText(QString::number(proxyPort));
+  hostEdit->setText(npc.address);
+  portEdit->setText(QString::number(npc.port));
   portEdit->setValidator(new QIntValidator(0,65535,portEdit));
-  usernameEdit->setText(proxyUsername);
-  passwordEdit->setText(proxyPassword);
+  usernameEdit->setText(npc.login);
+  passwordEdit->setText(npc.passwd);
 }
 
 void ProxyConfigurationDialog::saveProxy() {
-  QSettings settings("TulipSoftware","Tulip");
-  settings.beginGroup("PluginsManager");
-  settings.setValue("proxyEnable",enableProxy->isChecked());
-  settings.setValue("proxyAddress",hostEdit->text());
-  settings.setValue("proxyPort",portEdit->text().toUInt());
-  settings.setValue("proxyUsernamePasswordEnable",useUsernamePassword->isChecked());
-  settings.setValue("proxyUsername",usernameEdit->text());
-  settings.setValue("proxyPassword",passwordEdit->text());
-  settings.endGroup();
+  NetworkProxyConfiguration npc;
+  npc.proxyEnabled = enableProxy->isChecked();
+  npc.address = hostEdit->text();
+  npc.port = portEdit->text().toUInt();
+  npc.authenticationEnabled = useUsernamePassword->isChecked();
+  npc.login = usernameEdit->text();
+  npc.passwd = passwordEdit->text();
+
+  setNetworkProxyConfiguration(npc);
 }
 
 void ProxyConfigurationDialog::proxyStateChange(int state) {

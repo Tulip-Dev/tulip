@@ -16,43 +16,44 @@
  * See the GNU General Public License for more details.
  *
  */
-
-#ifndef _Tulip_HTTPREQUEST_H
-#define _Tulip_HTTPREQUEST_H
-
-#include <tulip/tulipconf.h>
+#ifndef _TLPNETWORKACCESS_H
+#define _TLPNETWORKACCESS_H
 
 #include <QtNetwork/QNetworkAccessManager>
-#include <QtCore/QFile>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 
-class HttpRequest : public QObject {
-  Q_OBJECT
-  std::string result;
-  QFile *outFile;
-  std::string server;
-  QObject *mainWindow;
+ struct NetworkProxyConfiguration {
+   bool proxyEnabled;
+   QString address;
+   quint16 port;
+   bool authenticationEnabled;
+   QString login;
+   QString passwd;
+ };
 
-public:
+ /**
+  * @brief return the current network proxy configuration
+  *
+  **/
+ TLP_QT_SCOPE NetworkProxyConfiguration getNetworkProxyConfiguration();
 
-  HttpRequest(const std::string &serverName,QObject *parent=NULL);
+ /**
+  * @brief allow to set the current network proxy configuration
+  *
+  **/
+ TLP_QT_SCOPE void setNetworkProxyConfiguration(const NetworkProxyConfiguration&);
 
-  void request(const std::string &msg);
-  void get(const std::string &getFileName, const std::string &outFileName);
-
-  void getResponse(std::string &response);
-
-  void getServerName(std::string &serverName);
-
-signals:
-  void done();
-
-private slots:
-  void finished();
-
-};
+/**
+ * @brief return a proxy configured QNetworkAccessManager
+ * Only one QNetworkAccessManager is needed by application
+ *
+ **/
+ TLP_QT_SCOPE QNetworkAccessManager* getNetworkAccessManager();
 
 }
 
 #endif
+
+

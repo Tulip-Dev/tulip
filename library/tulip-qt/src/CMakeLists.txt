@@ -86,6 +86,7 @@ ColorButton.cpp
 CoordWidget.cpp
 SizeWidget.cpp
 FileNameEditorWidget.cpp
+TlpNetworkAccess.cpp
 )
 
 set(tulip-qt_UI
