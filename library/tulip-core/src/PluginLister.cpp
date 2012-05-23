@@ -63,7 +63,7 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
           break;
         }
 
-        std::string release = PluginLister::getPluginRelease(pluginName);
+        std::string release = PluginLister::getPluginRelease(pluginDepName);
         std::string releaseDep = (*itD).pluginRelease;
 
         if (tlp::getMajor(release) != tlp::getMajor(releaseDep) ||
