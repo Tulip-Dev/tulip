@@ -33,7 +33,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true, false]" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates whether the graph has to be considered as oriented or not." \
+  "This parameter indicates whether the graph has to be considered as oriented or not. If not, only one meta-edge will be created between two meta-nodes to represent the existing edges between the nodes they represent." \
   HTML_HELP_CLOSE(),
   // recursive
   HTML_HELP_OPEN() \
@@ -48,14 +48,14 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF( "default", "none" )   \
   HTML_HELP_BODY() \
-  "This parameter indicates the function used to compute a measure value for a meta-node using the values of its underlying nodes. If 'none' is choosen no value will be computed" \
+  "This parameter indicates the function used to compute the value of any already defined metrics for the created meta-nodes using the values of the nodes they represent. If 'none' is choosen no value will be computed." \
   HTML_HELP_CLOSE(),
   // edge aggregation function
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF( "default", "none" )   \
   HTML_HELP_BODY() \
-  "This parameter indicates the function used to compute a measure value for a meta-edge using the values of its underlying edges. If 'none' is choosen no value will be computed." \
+  "This parameter indicates the function used to compute the value of any already defined metrics for the created meta-edges using the values of the edges they represent. If 'none' is choosen no value will be computed." \
   HTML_HELP_CLOSE(),
   // meta-node label
   HTML_HELP_OPEN()              \
@@ -78,7 +78,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true, false]" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "This parameter indicates whether the cardinality of the underlying edges of the meta-edges has to be computed or not. If yes, the property edgeCardinality will be created for the quotient graph." \
+  "This parameter indicates whether meta-edges are assigned a value equal to the number of underlying edges they represent. If yes, the property edgeCardinality will be created for the quotient graph." \
   HTML_HELP_CLOSE(),
   // layout quotient graph
   HTML_HELP_OPEN() \
