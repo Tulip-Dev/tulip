@@ -541,7 +541,7 @@ void GlAbstractPolygon::clearGenerated() {
   if(generated)
     if(OpenGlConfigManager::getInst().hasVertexBufferObject()) {
       glDeleteBuffers(6,buffers);
-  }
+    }
 
   generated=false;
 }

@@ -80,7 +80,7 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   buildTreeUi(_ui->contents, &model, QModelIndex(), localModeButton, true);
   _ui->contents->layout()->addItem(new QSpacerItem(0,0,QSizePolicy::Minimum,QSizePolicy::Expanding));
   foreach(AlgorithmRunnerItem* i, findChildren<AlgorithmRunnerItem*>())
-    connect(i,SIGNAL(favorized(bool)),this,SLOT(favorized(bool)));
+  connect(i,SIGNAL(favorized(bool)),this,SLOT(favorized(bool)));
 }
 
 AlgorithmRunner::~AlgorithmRunner() {
@@ -96,6 +96,7 @@ void AlgorithmRunner::setGraph(Graph* g) {
 
 void AlgorithmRunner::favorized(bool f) {
   AlgorithmRunnerItem* item = static_cast<AlgorithmRunnerItem*>(sender());
+
   if (f)
     addFavorite(item->name(),item->data());
   else
@@ -108,6 +109,7 @@ QList<T> childrenObj(QObject* obj) {
   QList<T> result;
   foreach(QObject* o, obj->children()) {
     T var = dynamic_cast<T>(o);
+
     if (var != NULL)
       result+=var;
   }
@@ -155,6 +157,7 @@ bool AlgorithmRunner::eventFilter(QObject* obj, QEvent* ev) {
     QPainter painter(_ui->favoritesBox->widget());
     QPixmap px((_droppingFavorite ? ":/tulip/graphperspective/icons/32/favorite.png" : ":/tulip/graphperspective/icons/32/favorite-empty.png"));
     painter.drawPixmap(_ui->favoritesBox->widget()->width()/2 - px.width()/2, 8, px);
+
     if (_favorites.isEmpty()) {
       QFont f;
       f.setBold(true);
@@ -164,13 +167,15 @@ bool AlgorithmRunner::eventFilter(QObject* obj, QEvent* ev) {
       painter.drawText(0,45,_ui->favoritesBox->widget()->width(),65535,Qt::AlignHCenter | Qt::AlignTop | Qt::TextWordWrap,trUtf8("Put your favorite algorithms here"));
     }
   }
-  else if ((ev->type() == QEvent::DragEnter || ev->type() == QEvent::DragMove) && draggableObject){
+  else if ((ev->type() == QEvent::DragEnter || ev->type() == QEvent::DragMove) && draggableObject) {
     QDropEvent* dropEv = static_cast<QDropEvent*>(ev);
+
     if (dynamic_cast<const AlgorithmMimeType*>(dropEv->mimeData()) != NULL) {
       _droppingFavorite = true;
       ev->accept();
       _ui->favoritesBox->widget()->repaint();
-     }
+    }
+
     return true;
   }
   else if (ev->type() == QEvent::DragLeave && draggableObject) {
@@ -180,12 +185,14 @@ bool AlgorithmRunner::eventFilter(QObject* obj, QEvent* ev) {
   else if (ev->type() == QEvent::Drop && draggableObject) {
     QDropEvent* dropEv = static_cast<QDropEvent*>(ev);
     const AlgorithmMimeType* mime = dynamic_cast<const AlgorithmMimeType*>(dropEv->mimeData());
+
     if (mime != NULL)
       addFavorite(mime->algorithm(),mime->params());
 
     _droppingFavorite = false;
     _ui->favoritesBox->widget()->repaint();
   }
+
   return false;
 }
 
@@ -195,8 +202,10 @@ void AlgorithmRunner::removeFavorite(const QString &algName) {
       _favorites.removeAll(i);
       i->deleteLater();
       foreach(AlgorithmRunnerItem* item, findChildren<AlgorithmRunnerItem*>())
-        if (item != i && item->name() == algName)
-          item->setFavorite(false);
+
+      if (item != i && item->name() == algName)
+        item->setFavorite(false);
+
       break;
     }
   }
@@ -204,8 +213,9 @@ void AlgorithmRunner::removeFavorite(const QString &algName) {
 
 void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
   foreach(AlgorithmRunnerItem* i, _favorites)
-    if (i->name() == algName)
-      return;
+
+  if (i->name() == algName)
+    return;
 
   _ui->favoritesBox->widget()->setMinimumHeight(0);
   AlgorithmRunnerItem* item = new AlgorithmRunnerItem(algName);
