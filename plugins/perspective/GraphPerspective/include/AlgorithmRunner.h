@@ -36,7 +36,6 @@ class AlgorithmRunner: public QWidget {
   Q_OBJECT
 
   Ui::AlgorithmRunner* _ui;
-  bool _droppingFavorite;
   tlp::Graph* _graph;
 
   QList<AlgorithmRunnerItem*> _favorites;
@@ -47,10 +46,11 @@ public:
 
 public slots:
   void setGraph(tlp::Graph*);
+  void findPlugins();
 
 protected slots:
   void setFilter(QString);
-  void addFavorite(const QString& algName, const tlp::DataSet& data);
+  void addFavorite(const QString& algName, const tlp::DataSet& data=tlp::DataSet());
   void removeFavorite(const QString& algName);
   void favorized(bool);
 

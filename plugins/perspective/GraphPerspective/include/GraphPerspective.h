@@ -93,8 +93,8 @@ protected slots:
   void group();
   void createSubGraph();
   void CSVImport();
-
   void logCleared();
+  void findPlugins();
 
 protected:
   bool eventFilter(QObject *, QEvent *);

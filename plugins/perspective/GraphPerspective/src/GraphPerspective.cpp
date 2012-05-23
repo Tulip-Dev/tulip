@@ -100,6 +100,10 @@ void GraphPerspective::logCleared() {
   _ui->loggerIcon->setPixmap(QPixmap());
 }
 
+void GraphPerspective::findPlugins() {
+  _ui->algorithmRunner->findPlugins();
+}
+
 bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
   if (obj == _ui->loggerFrame && ev->type() == QEvent::MouseButtonPress)
     showLogger();
@@ -169,6 +173,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionGroup_elements,SIGNAL(triggered()),this,SLOT(group()));
   connect(_ui->actionCreate_sub_graph,SIGNAL(triggered()),this,SLOT(createSubGraph()));
   connect(_ui->actionImport_CSV,SIGNAL(triggered()),this,SLOT(CSVImport()));
+  connect(_ui->actionFind_plugins,SIGNAL(triggered()),this,SLOT(findPlugins()));
 
   // D-BUS actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));

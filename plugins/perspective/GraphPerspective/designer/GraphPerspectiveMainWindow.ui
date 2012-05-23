@@ -500,6 +500,7 @@ color: white;
     </property>
     <addaction name="actionFull_screen"/>
     <addaction name="actionMessages_log"/>
+    <addaction name="actionFind_plugins"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -812,6 +813,17 @@ color: white;
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionFind_plugins">
+   <property name="text">
+    <string>Find plugins</string>
+   </property>
+   <property name="toolTip">
+    <string>Search in installed plugins</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+H</string>
    </property>
   </action>
  </widget>

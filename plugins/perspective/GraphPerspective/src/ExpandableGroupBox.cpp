@@ -43,8 +43,10 @@ void ExpandableGroupBox::setExpanded(bool e) {
   // As told in Qt stylesheet reference, this force recomputation of stylesheet based on dynamic properties
   setStyleSheet(styleSheet());
 
-  if (_widget)
+  if (_widget) {
+    qWarning("prout");
     _widget->setVisible(e);
+  }
 }
 
 void ExpandableGroupBox::setWidget(QWidget *w) {
