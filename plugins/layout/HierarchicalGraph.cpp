@@ -71,7 +71,7 @@ void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
   string erreurMsg;
   DoubleProperty dagLevel(sg);
 
-  if(!sg->computeProperty("Dag Level", &dagLevel,erreurMsg)) {
+  if(!sg->applyPropertyAlgorithm("Dag Level", &dagLevel,erreurMsg)) {
     cerr << "[ERROR] : " << erreurMsg << __PRETTY_FUNCTION__ << endl;
     return;
   }
@@ -480,7 +480,7 @@ bool HierarchicalGraph::run() {
 #ifndef NDEBUG
   resultBool =
 #endif
-    mySGraph->computeProperty("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg, 0, &tmp);
+    mySGraph->applyPropertyAlgorithm("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg, 0, &tmp);
 
   if (edgeLength)
     delete edgeLength;

@@ -335,14 +335,14 @@ bool BubbleTree::run() {
 
     for (unsigned int i = 0; i < components.size(); ++i) {
       Graph * tmp = graph->inducedSubGraph(components[i]);
-      tmp->computeProperty("Bubble Tree", layoutResult, err, pluginProgress, dataSet);
+      tmp->applyPropertyAlgorithm("Bubble Tree", layoutResult, err, pluginProgress, dataSet);
     }
 
     // call connected componnent packing
     LayoutProperty tmpLayout(graph);
     DataSet tmpdataSet;
     tmpdataSet.set("coordinates", layoutResult);
-    graph->computeProperty("Connected Component Packing", &tmpLayout, err, pluginProgress, &tmpdataSet);
+    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, pluginProgress, &tmpdataSet);
     // forget last temporary graph state
     graph->pop();
     *layoutResult = tmpLayout;
