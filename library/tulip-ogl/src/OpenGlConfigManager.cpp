@@ -47,7 +47,7 @@ OpenGlConfigManager::OpenGlConfigManager():
 
 void OpenGlConfigManager::initGlew() {
   if (!glewIsInit) {
-      glewExperimental=true;
+    glewExperimental=true;
     glewIsInit = (glewInit() == GLEW_OK);
   }
 }
