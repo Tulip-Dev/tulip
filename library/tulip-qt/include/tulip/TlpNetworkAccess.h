@@ -24,33 +24,33 @@
 
 namespace tlp {
 
- struct NetworkProxyConfiguration {
-   bool proxyEnabled;
-   QString address;
-   quint16 port;
-   bool authenticationEnabled;
-   QString login;
-   QString passwd;
- };
+struct NetworkProxyConfiguration {
+  bool proxyEnabled;
+  QString address;
+  quint16 port;
+  bool authenticationEnabled;
+  QString login;
+  QString passwd;
+};
 
- /**
-  * @brief return the current network proxy configuration
-  *
-  **/
- TLP_QT_SCOPE NetworkProxyConfiguration getNetworkProxyConfiguration();
+/**
+ * @brief return the current network proxy configuration
+ *
+ **/
+TLP_QT_SCOPE NetworkProxyConfiguration getNetworkProxyConfiguration();
 
- /**
-  * @brief allow to set the current network proxy configuration
-  *
-  **/
- TLP_QT_SCOPE void setNetworkProxyConfiguration(const NetworkProxyConfiguration&);
+/**
+ * @brief allow to set the current network proxy configuration
+ *
+ **/
+TLP_QT_SCOPE void setNetworkProxyConfiguration(const NetworkProxyConfiguration&);
 
 /**
  * @brief return a proxy configured QNetworkAccessManager
  * Only one QNetworkAccessManager is needed by application
  *
  **/
- TLP_QT_SCOPE QNetworkAccessManager* getNetworkAccessManager();
+TLP_QT_SCOPE QNetworkAccessManager* getNetworkAccessManager();
 
 }
 

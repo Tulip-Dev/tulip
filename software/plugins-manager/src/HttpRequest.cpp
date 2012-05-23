@@ -38,7 +38,7 @@ HttpRequest::HttpRequest(const string &serverName,QObject *parent) : QObject(par
 void HttpRequest::request(const string &msg) {
   QNetworkRequest request(QUrl(server.c_str()));
   request.setHeader(QNetworkRequest::ContentTypeHeader,
-		    "text/xml; charset=ISO-8859-1");
+                    "text/xml; charset=ISO-8859-1");
   request.setRawHeader("User-Agent", "Tulip Agent");
   QByteArray bamsg(msg.c_str());
   request.setHeader(QNetworkRequest::ContentLengthHeader, bamsg.length());
@@ -49,7 +49,7 @@ void HttpRequest::request(const string &msg) {
 void HttpRequest::get(const string &getFileName, const string &outFileName) {
   QNetworkRequest request(QUrl(QString(server.c_str())+getFileName.c_str()));
   request.setHeader(QNetworkRequest::ContentTypeHeader,
-		    "text/xml; charset=ISO-8859-1");
+                    "text/xml; charset=ISO-8859-1");
   request.setRawHeader("User-Agent", "Tulip Agent");
   outFile=new QFile(outFileName.c_str());
   outFile->open(QIODevice::ReadWrite);
@@ -59,18 +59,20 @@ void HttpRequest::get(const string &getFileName, const string &outFileName) {
 
 void HttpRequest::finished() {
   QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+
   if (reply) {
     if (reply->error() == QNetworkReply::NoError) {
       if (outFile) {
-	outFile->write(reply->readAll());
-	outFile->close();
-	delete outFile;
-	outFile=NULL;
+        outFile->write(reply->readAll());
+        outFile->close();
+        delete outFile;
+        outFile=NULL;
       }
       else {
-	result = (string)reply->readAll();
+        result = (string)reply->readAll();
       }
     }
+
     reply->close();
     reply->deleteLater();
   }
