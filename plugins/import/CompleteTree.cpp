@@ -69,7 +69,7 @@ public:
     addInParameter<unsigned int>("depth",paramHelp[0],"5");
     addInParameter<unsigned int>("degree",paramHelp[1],"2");
     addInParameter<bool>("tree layout",paramHelp[2],"false");
-    addDependency<LayoutAlgorithm>("Tree Leaf", "1.1");
+    addDependency<LayoutAlgorithm>("Tree Leaf", "1.0");
   }
   ~CompleteTree() {
   }
