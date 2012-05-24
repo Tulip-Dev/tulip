@@ -68,7 +68,7 @@ public slots:
   void createPanel(tlp::Graph* g = NULL);
   void save();
   void saveAs(const QString& path=QString::null);
-  void open(const QString& path=QString::null);
+  void open();
 
   void log(QtMsgType,const char*);
   void showLogger();
@@ -95,6 +95,7 @@ protected slots:
   void CSVImport();
   void logCleared();
   void findPlugins();
+  void addNewGraph();
 
 protected:
   bool eventFilter(QObject *, QEvent *);

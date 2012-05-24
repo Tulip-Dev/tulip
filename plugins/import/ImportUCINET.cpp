@@ -209,7 +209,7 @@ bool tokenize(const string& str, vector<string>& tokens,
 class ImportUCINET : public ImportModule {
 
 public :
-  PLUGININFORMATIONS("UCINET dl","Patrick Mary","12/09/2011","Import UCINET","1.0","File")
+  PLUGININFORMATIONS("UCINET","Patrick Mary","12/09/2011","Import UCINET","1.0","File")
   virtual std::string fileExtension() const {
     return "dl";
   }

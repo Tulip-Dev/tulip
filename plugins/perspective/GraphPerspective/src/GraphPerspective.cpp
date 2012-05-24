@@ -174,6 +174,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionCreate_sub_graph,SIGNAL(triggered()),this,SLOT(createSubGraph()));
   connect(_ui->actionImport_CSV,SIGNAL(triggered()),this,SLOT(CSVImport()));
   connect(_ui->actionFind_plugins,SIGNAL(triggered()),this,SLOT(findPlugins()));
+  connect(_ui->actionNew, SIGNAL(triggered()), this, SLOT(addNewGraph()));
 
   // D-BUS actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
@@ -241,44 +242,6 @@ void GraphPerspective::showFullScreen(bool f) {
   }
 }
 
-void GraphPerspective::importFileGraph() {
-  QString filters;
-  QMap<std::string, std::string> modules;
-  std::list<std::string> exports = PluginLister::instance()->availablePlugins<ImportModule>();
-  QString filterAny("Any supported format (");
-
-  for(std::list<std::string>::const_iterator it = exports.begin(); it != exports.end(); ++it) {
-    ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
-
-    if(m->fileExtension().empty())
-      continue;
-
-    QString currentFilter = it->c_str() + QString("(*.") + m->fileExtension().c_str() + QString(")");
-    filterAny += QString("*.") + m->fileExtension().c_str() + " ";
-    filters += currentFilter;
-
-    if(it != exports.end()) {
-      filters += ";;";
-    }
-
-    modules[m->fileExtension()] = *it;
-    delete m;
-  }
-
-  filterAny += ");;";
-
-  filters.insert(0, filterAny);
-  QString fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Export Graph"), QString(), filters);
-
-  if(!fileName.isEmpty()) {
-    QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
-    DataSet params;
-    params.set<std::string>("file::filename", fileName.toStdString());
-    Graph* g = tlp::importGraph(modules[extension.toStdString()], params);
-    _graphs->addGraph(g);
-  }
-}
-
 void GraphPerspective::exportGraph(Graph* g) {
   if (g == NULL)
     g = _graphs->currentGraph();
@@ -339,7 +302,7 @@ void GraphPerspective::importGraph() {
       }
     }
     else {
-      g = newGraph();
+      g = tlp::newGraph();
     }
 
     _graphs->addGraph(g);
@@ -402,7 +365,42 @@ void GraphPerspective::saveAs(const QString& path) {
   _project->write(path,&progress);
 }
 
-void GraphPerspective::open(const QString &/*path*/) {
+void GraphPerspective::open() {
+  QString filters;
+  QMap<std::string, std::string> modules;
+  std::list<std::string> exports = PluginLister::instance()->availablePlugins<ImportModule>();
+  QString filterAny("Any supported format (");
+  
+  for(std::list<std::string>::const_iterator it = exports.begin(); it != exports.end(); ++it) {
+    ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
+    
+    if(m->fileExtension().empty())
+      continue;
+    
+    QString currentFilter = it->c_str() + QString("(.") + m->fileExtension().c_str() + QString(")") + QString("(*.") + m->fileExtension().c_str() + QString(")");
+    filterAny += QString("*.") + m->fileExtension().c_str() + " ";
+    filters += currentFilter;
+    
+    if(it != exports.end()) {
+      filters += ";;";
+    }
+    
+    modules[m->fileExtension()] = *it;
+    delete m;
+  }
+  
+  filterAny += ");;";
+  
+  filters.insert(0, filterAny);
+  QString fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Export Graph"), QString(), filters);
+  
+  if(!fileName.isEmpty()) {
+    QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
+    DataSet params;
+    params.set<std::string>("file::filename", fileName.toStdString());
+    Graph* g = tlp::importGraph(modules[extension.toStdString()], params);
+    _graphs->addGraph(g);
+  }
 }
 
 void GraphPerspective::deleteSelectedElements() {
@@ -574,6 +572,11 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
       v->deleteLater();
   }
   QApplication::processEvents();
+}
+
+void GraphPerspective::addNewGraph() {
+  _graphs->addGraph(tlp::newGraph());
+  _ui->graphHierarchiesEditor->repackHeaders();
 }
 
 PLUGIN(GraphPerspective)
