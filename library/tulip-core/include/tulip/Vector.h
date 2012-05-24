@@ -532,11 +532,19 @@ template class Vector<double, 2>;
 template class Vector<double, 3>;
 template class Vector<double, 4>;
 template class Vector<double, 5>;
+template class Vector<long double, 1>;
+template class Vector<long double, 2>;
+template class Vector<long double, 3>;
 
 template struct Array<tlp::Vector<double,1>,1>;
 template struct Array<tlp::Vector<double,2>,2>;
 template struct Array<tlp::Vector<double,3>,3>;
 template struct Array<tlp::Vector<double,4>,4>;
+
+template struct Array<tlp::Vector<long double, 4>,4>;
+template struct Array<tlp::Vector<long double, 3>,3>;
+template struct Array<tlp::Vector<long double, 2>,2>;
+template struct Array<tlp::Vector<long double, 1>,1>;
 
 template struct Array<tlp::Vector<float,1>,1>;
 template struct Array<tlp::Vector<float,2>,2>;
