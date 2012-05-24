@@ -48,5 +48,155 @@ tlp.WithDependency.getDependencies() -> list of tlp.Dependency
 	 *  If non null the second argument needs to be a null terminated array of character strings.
 	 */
 	// template<typename Ty> void addDependency(const char* name, const char* release);
+    // ==================================================================================
+
+        void addBooleanAlgorithmDependency(const std::string & algorithm,
+                const std::string & release );
+    %Docstring
+    tlp.WithParameter.addBooleanAlgorithmDependency(algorithm, release )
+
+    Add a dependency on a boolean algorithm.
+
+    :param name: the name of the algorithm
+    :type name: string
+    :param release: the version of the algortihm
+    :type release: string
+    %End
+
+    %MethodCode
+        sipCpp->addDependency<tlp::BooleanAlgorithm>((*a0).c_str(), (*a1).c_str());
+    %End
+
+
+    // ==================================================================================
+
+        void addColorAlgorithmDependency(const std::string & algorithm,
+                const std::string & release );
+    %Docstring
+    tlp.WithParameter.addColorAlgorithmDependency(algorithm, release )
+
+    Add a dependency on a color algorithm.
+
+    :param name: the name of the algorithm
+    :type name: string
+    :param release: the version of the algortihm
+    :type release: string
+    %End
+
+    %MethodCode
+        sipCpp->addDependency<tlp::ColorAlgorithm>((*a0).c_str(), (*a1).c_str());
+    %End
+
+    // ==================================================================================
+
+        void addDoubleAlgorithmDependency(const std::string & algorithm,
+                const std::string & release );
+    %Docstring
+    tlp.WithParameter.addDoubleAlgorithmDependency(algorithm, release )
+
+    Add a dependency on a double algorithm.
+
+    :param name: the name of the algorithm
+    :type name: string
+    :param release: the version of the algortihm
+    :type release: string
+    %End
+
+    %MethodCode
+        sipCpp->addDependency<tlp::DoubleAlgorithm>((*a0).c_str(), (*a1).c_str());
+    %End
+
+    // ==================================================================================
+
+        void addIntegerAlgorithmDependency(const std::string & algorithm,
+                const std::string & release );
+    %Docstring
+    tlp.WithParameter.addIntegerAlgorithmDependency(algorithm, release )
+
+    Add a dependency on an integer algorithm.
+
+    :param name: the name of the algorithm
+    :type name: string
+    :param release: the version of the algortihm
+    :type release: string
+    %End
+
+    %MethodCode
+        sipCpp->addDependency<tlp::IntegerAlgorithm>((*a0).c_str(), (*a1).c_str());
+    %End
+    // ==================================================================================
+
+        void addLayoutAlgorithmDependency(const std::string & algorithm,
+                const std::string & release );
+    %Docstring
+    tlp.WithParameter.addLayoutAlgorithmDependency(algorithm, release )
+
+    Add a dependency on a layout algorithm.
+
+    :param name: the name of the layout algorithm
+    :type name: string
+    :param release: the version of the algortihm
+    :type release: string
+    %End
+
+    %MethodCode
+        sipCpp->addDependency<tlp::LayoutAlgorithm>((*a0).c_str(), (*a1).c_str());
+    %End
+    // ==================================================================================
+
+        void addSizeAlgorithmDependency(const std::string & algorithm,
+                const std::string & release );
+    %Docstring
+    tlp.WithParameter.addSizeAlgorithmDependency(algorithm, release )
+
+    Add a dependency on a size algorithm.
+
+    :param name: the name of the layout algorithm
+    :type name: string
+    :param release: the version of the algortihm
+    :type release: string
+    %End
+
+    %MethodCode
+        sipCpp->addDependency<tlp::SizeAlgorithm>((*a0).c_str(), (*a1).c_str());
+    %End
+
+    // ==================================================================================
+
+        void addStringAlgorithmDependency(const std::string & algorithm,
+                const std::string & release );
+    %Docstring
+    tlp.WithParameter.addStringAlgorithmDependency(algorithm, release )
+
+    Add a dependency on a string algorithm.
+
+    :param name: the name of the layout algorithm
+    :type name: string
+    :param release: the version of the algortihm
+    :type release: string
+    %End
+
+    %MethodCode
+        sipCpp->addDependency<tlp::StringAlgorithm>((*a0).c_str(), (*a1).c_str());
+    %End
+
+    // ==================================================================================
+
+        void addAlgorithmDependency(const std::string & algorithm,
+                const std::string & release );
+    %Docstring
+    tlp.WithParameter.addAlgorithmDependency(algorithm, release )
+
+    Add a dependency on an algorithm.
+
+    :param name: the name of the layout algorithm
+    :type name: string
+    :param release: the version of the algortihm
+    :type release: string
+    %End
+
+    %MethodCode
+        sipCpp->addDependency<tlp::Algorithm>((*a0).c_str(), (*a1).c_str());
+    %End
 };
 };
