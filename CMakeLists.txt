@@ -418,12 +418,6 @@ CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 ## -----------------------------------------------------------------------------------------------
 INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config DESTINATION ${TulipBinInstallDir} COMPONENT tulip_core_dev)
 INSTALL(FILES FindTULIP.cmake FindGLEW.cmake TulipUseFile.cmake DESTINATION ${TulipShareInstallDir} COMPONENT tulip_core_dev)
-## -----------------------------------------------------------------------------------------------
-## Script for linux Tulip bundle building
-IF(LINUX)
-  CONFIGURE_FILE("make_tulip_linux_bundle.sh.in" "make_tulip_linux_bundle.sh" @ONLY)
-  CONFIGURE_FILE("strip_debug_linux.sh.in" "strip_debug_linux.sh" @ONLY)
-ENDIF(LINUX)
 
 ## -----------------------------------------------------------------------------------------------
 ## CPack packaging directives
