@@ -87,7 +87,7 @@ QVariant GraphModel::headerData(int section, Qt::Orientation orientation, int ro
       return QIcon(":/tulip/gui/ui/inherited_properties.png");
   }
 
-  return QVariant();
+  return TulipModel::headerData(section,orientation,role);
 }
 
 QModelIndex GraphModel::index(int row, int column, const QModelIndex &parent) const {

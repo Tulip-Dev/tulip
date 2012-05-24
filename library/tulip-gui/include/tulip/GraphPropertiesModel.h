@@ -16,7 +16,7 @@ class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
   tlp::Graph* _graph;
   QString _placeholder;
   bool _checkable;
-  QSet<int> _unCheckedIndexes;
+  QSet<int> _checkedIndexes;
 
 public:
   explicit GraphPropertiesModel(tlp::Graph* graph, bool checkable=false, QObject *parent = NULL);
@@ -26,8 +26,8 @@ public:
     return _graph;
   }
 
-  QSet<int> uncheckedIndexes() const {
-    return _unCheckedIndexes;
+  QSet<int> checkedIndexes() const {
+    return _checkedIndexes;
   }
 
   // Methods re-implemented from QAbstractItemModel
@@ -46,23 +46,17 @@ public:
         else if (section == 2)
           return trUtf8("Scope");
       }
-      else if (role == Qt::FontRole) {
-        QFont f;
-        f.setBold(true);
-        f.setPointSize(f.pointSize() - 1);
-        return f;
-      }
     }
 
-    return QVariant();
+    return TulipModel::headerData(section,orientation,role);
   }
 
   bool setData(const QModelIndex &index, const QVariant &value, int role) {
     if (_checkable && role == Qt::CheckStateRole && index.column() == 0) {
       if (value.value<int>() == (int)Qt::Checked)
-        _unCheckedIndexes.remove(index.row());
+        _checkedIndexes.insert(index.row());
       else
-        _unCheckedIndexes.insert(index.row());
+        _checkedIndexes.remove(index.row());
 
       emit checkStateChanged(index,(Qt::CheckState)(value.value<int>()));
       return true;

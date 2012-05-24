@@ -37,19 +37,10 @@ QModelIndex GraphElementModel::parent(const QModelIndex &/*child*/) const {
 
 QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation, int role) const {
   if (orientation == Qt::Horizontal) {
-    if (role == Qt::DisplayRole || role == Qt::ToolTipRole) {
+    if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
       return headerText(_id);
-    }
-
     else if (role == Qt::TextAlignmentRole)
       return Qt::AlignCenter;
-
-    else if (role == Qt::FontRole) {
-      QFont f;
-      f.setBold(true);
-      f.setPointSize(f.pointSize() - 1);
-      return f;
-    }
   }
   else if(role==Qt::DisplayRole) {
     string propertyName;
@@ -62,7 +53,7 @@ QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation,
     }
   }
 
-  return QAbstractItemModel::headerData(section,orientation,role);
+  return TulipModel::headerData(section,orientation,role);
 }
 
 QModelIndex GraphElementModel::index(int row, int column,const QModelIndex &parent) const {

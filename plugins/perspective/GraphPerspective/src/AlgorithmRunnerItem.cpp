@@ -37,7 +37,6 @@ void AlgorithmRunnerItem::setGraph(Graph* g) {
 
   _ui->parameters->setMinimumSize(_ui->parameters->minimumSize().width(),h);
   _ui->parameters->setMaximumSize(_ui->parameters->maximumSize().width(),h);
-  adjustSize();
 }
 
 void AlgorithmRunnerItem::setData(const DataSet &data) {

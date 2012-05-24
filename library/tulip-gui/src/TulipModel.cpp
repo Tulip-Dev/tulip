@@ -18,7 +18,19 @@
  */
 #include "tulip/TulipModel.h"
 
+#include <QtGui/QFont>
+
 using namespace tlp;
 
 TulipModel::TulipModel(QObject *parent): QAbstractItemModel(parent) {
+}
+
+QVariant TulipModel::headerData(int, Qt::Orientation orientation, int role) const {
+  if (orientation == Qt::Horizontal && role == Qt::FontRole) {
+    QFont f;
+    f.setBold(true);
+    f.setPointSize(f.pointSize() - 1);
+    return f;
+  }
+  return QVariant();
 }

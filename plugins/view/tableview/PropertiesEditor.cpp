@@ -33,6 +33,8 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
   connect(_ui->lineEdit,SIGNAL(textChanged(QString)),model,SLOT(setFilterFixedString(QString)));
   _ui->tableView->setModel(model);
   connect(_sourceModel,SIGNAL(checkStateChanged(QModelIndex,Qt::CheckState)),this,SLOT(checkStateChanged(QModelIndex,Qt::CheckState)));
+  _ui->tableView->resizeColumnsToContents();
+  _ui->tableView->sortByColumn(0,Qt::AscendingOrder);
 }
 
 void PropertiesEditor::showCustomContextMenu(const QPoint& p) {

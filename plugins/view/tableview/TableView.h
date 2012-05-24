@@ -2,6 +2,7 @@
 #define TABLEVIEW_H
 
 #include <tulip/ViewWidget.h>
+#include <QtCore/QModelIndex>
 
 namespace Ui {
 class TableViewWidget;
@@ -20,7 +21,6 @@ class TableView : public tlp::ViewWidget {
 
   Ui::TableViewWidget* _ui;
   TableViewConfiguration* _tableViewConfiguration;
-  PropertiesEditor* _propertiesEditor;
 
   tlp::NodesGraphModel* _nodesModel;
   tlp::EdgesGraphModel* _edgesModel;
@@ -45,6 +45,8 @@ protected:
   void graphChanged(tlp::Graph *);
   void graphDeleted();
 
+protected slots:
+  void columnsInserted(const QModelIndex&,int,int);
 };
 
 #endif // TABLEVIEW_H

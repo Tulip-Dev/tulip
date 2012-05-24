@@ -20,7 +20,7 @@ const QVector<quint32> GRAPH_COMPOSITE_IDS = QVector<quint32>() << NODES_ID << E
 const int NO_STENCIL = 0xFFFF;
 const int FULL_STENCIL = 0x0002;
 
-SceneLayersModel::SceneLayersModel(GlScene* scene, QObject *parent): QAbstractItemModel(parent), _scene(scene) {
+SceneLayersModel::SceneLayersModel(GlScene* scene, QObject *parent): TulipModel(parent), _scene(scene) {
 }
 
 QModelIndex SceneLayersModel::index(int row, int column,const QModelIndex &parent) const {
@@ -327,16 +327,9 @@ QVariant SceneLayersModel::headerData(int section, Qt::Orientation orientation, 
 
     else if (role == Qt::TextAlignmentRole)
       return Qt::AlignCenter;
-
-    else if (role == Qt::FontRole) {
-      QFont f;
-      f.setBold(true);
-      f.setPointSize(f.pointSize() - 1);
-      return f;
-    }
   }
 
-  return QVariant();
+  return TulipModel::headerData(section,orientation,role);
 }
 
 Qt::ItemFlags SceneLayersModel::flags(const QModelIndex &index) const {

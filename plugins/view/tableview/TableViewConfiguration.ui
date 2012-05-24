@@ -198,6 +198,9 @@ color: #595959;</string>
             <property name="text">
              <string>Tables</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
            </widget>
           </item>
           <item>
@@ -206,10 +209,7 @@ color: #595959;</string>
              <number>10</number>
             </property>
             <item>
-             <widget class="QCheckBox" name="nodesCheck">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
+             <widget class="QRadioButton" name="nodesCheck">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -225,7 +225,7 @@ color: #595959;</string>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="edgesCheck">
+             <widget class="QRadioButton" name="edgesCheck">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -268,6 +268,9 @@ color: #595959;</string>
             <property name="text">
              <string>Filtering</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
            </widget>
           </item>
           <item>
@@ -305,38 +308,5 @@ color: #595959;</string>
  <resources>
   <include location="../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>nodesCheck</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>edgesCheck</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>241</x>
-     <y>105</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>241</x>
-     <y>136</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>edgesCheck</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>nodesCheck</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>241</x>
-     <y>136</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>241</x>
-     <y>105</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
