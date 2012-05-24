@@ -40,6 +40,8 @@ public:
 
   explicit TulipModel(QObject *parent=NULL);
 
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
 signals:
   void checkStateChanged(QModelIndex,Qt::CheckState);
 };

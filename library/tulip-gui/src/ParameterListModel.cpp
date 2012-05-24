@@ -123,7 +123,7 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
   }
 
 
-  return QAbstractItemModel::headerData(section,orientation,role);
+  return TulipModel::headerData(section,orientation,role);
 }
 
 Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {

@@ -225,16 +225,9 @@ QVariant GraphHierarchiesModel::headerData(int section, Qt::Orientation orientat
 
     else if (role == Qt::TextAlignmentRole && section != NAME_SECTION)
       return Qt::AlignCenter;
-
-    else if (role == Qt::FontRole) {
-      QFont f;
-      f.setBold(true);
-      f.setPointSize(f.pointSize() - 1);
-      return f;
-    }
   }
 
-  return QAbstractItemModel::headerData(section,orientation,role);
+  return TulipModel::headerData(section,orientation,role);
 }
 
 bool GraphHierarchiesModel::needsSaving() {

@@ -1,9 +1,9 @@
 #ifndef SCENELAYERSMODEL_H
 #define SCENELAYERSMODEL_H
 
-#include <QtCore/QAbstractItemModel>
 #include <tulip/tulipconf.h>
 #include <tulip/Observable.h>
+#include <tulip/TulipModel.h>
 
 /**
   @brief Oh, you know, just a model for a GlScene entities
@@ -11,7 +11,7 @@
 namespace tlp {
 class GlScene;
 
-class TLP_QT_SCOPE SceneLayersModel : public QAbstractItemModel, tlp::Observable {
+class TLP_QT_SCOPE SceneLayersModel : public TulipModel, tlp::Observable {
   Q_OBJECT
 
   tlp::GlScene* _scene;

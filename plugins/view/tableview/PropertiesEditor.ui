@@ -73,16 +73,28 @@ QFrame[ subsection = &quot;true&quot; ] {
 border-top: 1px solid #D9D9D9;
 padding-top: 5px;
 background-color: #F4F4F4;
+}
+#frame_2 {
+border-right: 0px;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="margin">
-    <number>10</number>
+    <number>0</number>
    </property>
    <item>
     <widget class="QFrame" name="frame">
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -98,7 +110,7 @@ background-color: #F4F4F4;
 color: #595959;</string>
         </property>
         <property name="text">
-         <string>&lt;font size=&quot;5&quot;&gt;Properties editor&lt;/font&gt;</string>
+         <string>&lt;font size=&quot;5&quot;&gt;Properties&lt;/font&gt;</string>
         </property>
        </widget>
       </item>
@@ -118,43 +130,6 @@ color: #595959;</string>
        <number>0</number>
       </property>
       <item>
-       <widget class="QTableView" name="tableView">
-        <property name="contextMenuPolicy">
-         <enum>Qt::CustomContextMenu</enum>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
-        </property>
-        <property name="alternatingRowColors">
-         <bool>true</bool>
-        </property>
-        <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectRows</enum>
-        </property>
-        <property name="showGrid">
-         <bool>false</bool>
-        </property>
-        <property name="sortingEnabled">
-         <bool>true</bool>
-        </property>
-        <property name="cornerButtonEnabled">
-         <bool>false</bool>
-        </property>
-        <attribute name="horizontalHeaderMinimumSectionSize">
-         <number>50</number>
-        </attribute>
-        <attribute name="horizontalHeaderStretchLastSection">
-         <bool>true</bool>
-        </attribute>
-        <attribute name="verticalHeaderVisible">
-         <bool>false</bool>
-        </attribute>
-       </widget>
-      </item>
-      <item>
        <widget class="ClearableLineEdit" name="lineEdit">
         <property name="minimumSize">
          <size>
@@ -172,11 +147,45 @@ color: #595959;</string>
          <string notr="true">background-color: white;
 border: 0px;
 color: black;
-border-top: 1px solid #C9C9C9;</string>
+border-bottom: 1px solid #C9C9C9;</string>
         </property>
         <property name="placeholderText">
          <string>Filter properties names</string>
         </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTableView" name="tableView">
+        <property name="contextMenuPolicy">
+         <enum>Qt::CustomContextMenu</enum>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <property name="sortingEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="cornerButtonEnabled">
+         <bool>false</bool>
+        </property>
+        <attribute name="horizontalHeaderMinimumSectionSize">
+         <number>50</number>
+        </attribute>
+        <attribute name="horizontalHeaderStretchLastSection">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
        </widget>
       </item>
      </layout>

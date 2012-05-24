@@ -10,8 +10,10 @@
 
 using namespace tlp;
 
-TableView::TableView(tlp::PluginContext *): ViewWidget(), _ui(new Ui::TableViewWidget), _tableViewConfiguration(NULL), _propertiesEditor(NULL),
+TableView::TableView(tlp::PluginContext *): ViewWidget(), _ui(new Ui::TableViewWidget), _tableViewConfiguration(NULL),
   _nodesModel(new NodesGraphModel(this)), _edgesModel(new EdgesGraphModel(this)) {
+  connect(_nodesModel,SIGNAL(columnsInserted(QModelIndex,int,int)),this,SLOT(columnsInserted(QModelIndex,int,int)));
+  connect(_edgesModel,SIGNAL(columnsInserted(QModelIndex,int,int)),this,SLOT(columnsInserted(QModelIndex,int,int)));
 }
 
 TableView::~TableView() {
@@ -48,43 +50,75 @@ void TableView::setState(const tlp::DataSet& data) {
 void TableView::setupWidget() {
   QWidget* centralWidget = new QWidget();
   _ui->setupUi(centralWidget);
+
   setCentralWidget(centralWidget);
+  connect(_ui->propertiesEditor,SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface*,bool)),this,SLOT(setPropertyVisible(tlp::PropertyInterface*,bool)));
 
   _tableViewConfiguration = new TableViewConfiguration;
-  _propertiesEditor = new PropertiesEditor;
   connect(_tableViewConfiguration,SIGNAL(settingsChanged()),this,SLOT(readSettings()));
 
   QSortFilterProxyModel* nodesModel = new GraphSortFilterProxyModel(_ui->nodesTable);
   nodesModel->setSourceModel(_nodesModel);
   nodesModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
   nodesModel->setFilterKeyColumn(-1);
+
   QSortFilterProxyModel* edgesModel = new GraphSortFilterProxyModel(_ui->edgesTable);
   edgesModel->setSourceModel(_edgesModel);
   edgesModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
   edgesModel->setFilterKeyColumn(-1);
+
   _ui->nodesTable->setModel(nodesModel);
   _ui->edgesTable->setModel(edgesModel);
   _ui->nodesTable->setItemDelegate(new GraphTableItemDelegate);
   _ui->edgesTable->setItemDelegate(new GraphTableItemDelegate);
+  _ui->nodesTable->horizontalHeader()->setMovable(true);
+  _ui->edgesTable->horizontalHeader()->setMovable(true);
+
   connect(_ui->nodesTable, SIGNAL(destroyed()), _ui->nodesTable->itemDelegate(), SLOT(deleteLater()));
   connect(_ui->edgesTable, SIGNAL(destroyed()), _ui->edgesTable->itemDelegate(), SLOT(deleteLater()));
 
-  connect(_propertiesEditor,SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface*,bool)),this,SLOT(setPropertyVisible(tlp::PropertyInterface*,bool)));
+  _ui->splitter_2->setSizes(QList<int>() << centralWidget->width()/4 << centralWidget->width()*3/4);
 }
 
 void TableView::graphChanged(tlp::Graph* g) {
   _nodesModel->setGraph(g);
   _edgesModel->setGraph(g);
+  _ui->nodesTable->resizeColumnsToContents();
+  _ui->edgesTable->resizeColumnsToContents();
   _tableViewConfiguration->setGraph(g);
-  _propertiesEditor->setGraph(g);
+  _ui->propertiesEditor->setGraph(g);
+
+  // Hide all data in the table view
+  foreach(QTableView* view, QList<QTableView*>() << _ui->nodesTable << _ui->edgesTable) {
+    QAbstractItemModel* model = view->model();
+    for(int i=0; i < model->columnCount(); ++i) {
+      view->horizontalHeader()->setSectionHidden(i,true);
+    }
+  }
 }
 
 void TableView::graphDeleted() {
   graphChanged(NULL);
 }
 
+void TableView::columnsInserted(const QModelIndex&, int start, int end) {
+  qWarning() << "Column inserted from " << start << " to " << end;
+  QAbstractItemModel* model = static_cast<QAbstractItemModel*>(sender());
+  QTableView* view = NULL;
+  if (model == _nodesModel)
+    view = _ui->nodesTable;
+  else if (model == _edgesModel)
+    view = _ui->edgesTable;
+  if (view == NULL)
+    return;
+  for (int c = start; c <= end; c++) {
+    qWarning() << "Hiding column " << c;
+    view->setColumnHidden(c,true);
+  }
+}
+
 QList<QWidget*> TableView::configurationWidgets() const {
-  return QList<QWidget*>() << _tableViewConfiguration << _propertiesEditor;
+  return QList<QWidget*>() << _tableViewConfiguration;
 }
 
 void TableView::readSettings() {

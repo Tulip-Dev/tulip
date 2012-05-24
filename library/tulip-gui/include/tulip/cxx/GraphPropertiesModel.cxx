@@ -118,7 +118,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
     return QVariant::fromValue<PropertyInterface*>(pi);
   }
   else if (_checkable && role == Qt::CheckStateRole && index.column() == 0) {
-    return (_unCheckedIndexes.contains(index.row()) ? Qt::Unchecked : Qt::Checked);
+    return (_checkedIndexes.contains(index.row()) ? Qt::Checked : Qt::Unchecked);
   }
 
   return QVariant();
