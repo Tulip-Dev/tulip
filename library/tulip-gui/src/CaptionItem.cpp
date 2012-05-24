@@ -81,7 +81,7 @@ void CaptionItem::clearObservers() {
 
   if(_graph!=view->graph())
     if(_graph)
-      _graph->removeGraphObserver(this);
+      _graph->removeListener(this);
 
   _graph=view->graph();
 
