@@ -85,6 +85,8 @@ QVariant GraphModel::headerData(int section, Qt::Orientation orientation, int ro
       return QString(prop->getName().c_str());
     else if (role == Qt::DecorationRole && !_graph->existLocalProperty(prop->getName()))
       return QIcon(":/tulip/gui/ui/inherited_properties.png");
+    else if (role == TulipModel::PropertyRole)
+      return QVariant::fromValue<PropertyInterface*>(prop);
   }
 
   return TulipModel::headerData(section,orientation,role);

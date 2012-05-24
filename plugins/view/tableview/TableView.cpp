@@ -95,6 +95,7 @@ void TableView::graphChanged(tlp::Graph* g) {
       view->horizontalHeader()->setSectionHidden(i,true);
     }
   }
+  _ui->frame->hide();
 }
 
 void TableView::graphDeleted() {
@@ -102,18 +103,10 @@ void TableView::graphDeleted() {
 }
 
 void TableView::columnsInserted(const QModelIndex&, int start, int end) {
-  qWarning() << "Column inserted from " << start << " to " << end;
   QAbstractItemModel* model = static_cast<QAbstractItemModel*>(sender());
-  QTableView* view = NULL;
-  if (model == _nodesModel)
-    view = _ui->nodesTable;
-  else if (model == _edgesModel)
-    view = _ui->edgesTable;
-  if (view == NULL)
-    return;
   for (int c = start; c <= end; c++) {
-    qWarning() << "Hiding column " << c;
-    view->setColumnHidden(c,true);
+    PropertyInterface* pi = model->headerData(c,Qt::Horizontal,TulipModel::PropertyRole).value<PropertyInterface*>();
+    setPropertyVisible(pi,false);
   }
 }
 
@@ -140,6 +133,17 @@ void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
       }
     }
   }
+
+  QTableView* view = _ui->nodesTable->isVisible() ? _ui->nodesTable : _ui->edgesTable;
+  QAbstractItemModel* model = view->model();
+  bool visible = false;
+  for(int i=0; i < model->columnCount(); ++i) {
+    if (!view->isColumnHidden(i)) {
+      visible = true;
+      break;
+    }
+  }
+  _ui->frame->setVisible(visible);
 }
 
 PLUGIN(TableView)
