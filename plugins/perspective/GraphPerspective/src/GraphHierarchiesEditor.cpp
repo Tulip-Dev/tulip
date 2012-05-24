@@ -77,6 +77,7 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
     menu.addAction(_ui->actionExport);
     menu.addAction(_ui->actionCreate_panel);
     menu.addSeparator();
+    menu.addAction(_ui->actionRename);
     menu.addAction(_ui->actionAdd_sub_graph);
     menu.addAction(_ui->actionClone_subgraph);
     menu.addSeparator();
@@ -149,6 +150,10 @@ void GraphHierarchiesEditor::createPanel() {
 
 void GraphHierarchiesEditor::exportGraph() {
   tlp::Perspective::typedInstance<GraphPerspective>()->exportGraph(_contextGraph);
+}
+
+void GraphHierarchiesEditor::renameGraph() {
+  _ui->hierarchiesTree->edit(_contextIndex);
 }
 
 void GraphHierarchiesEditor::repackHeaders() {
