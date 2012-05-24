@@ -333,7 +333,7 @@ bool MixedModel::run() {
     LayoutProperty layout(graph);
     DataSet tmp;
     tmp.set("coordinates", result);
-    graph->computeProperty(string("Connected Component Packing"),&layout,err,NULL,&tmp);
+    graph->applyPropertyAlgorithm(string("Connected Component Packing"),&layout,err,NULL,&tmp);
     Iterator<node> *itN = graph->getNodes();
 
     while(itN->hasNext()) {
@@ -485,7 +485,7 @@ void MixedModel::placeNodesEdges() {
         result->setEdgeValue(e, bends);
     }
 
-    // rs == rt, même partition donc pas de points intermédiaire à calculer
+    // rs == rt, même partition donc pas de points intermédiaire �  calculer
     // en cas de post-processing, il faudra pe y changer
   }
 
@@ -944,7 +944,7 @@ void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc do
 
     }
 
-    // mise à jour du contour
+    // mise �  jour du contour
     if(k == 0) C = V[0];
     else {
       C.erase(il+1, ir);
@@ -999,7 +999,7 @@ void MixedModel::computeCoords() {
   for(unsigned int k = 1; k< size_V; ++k) { // parcours de chaque partition
 
     unsigned int p  = V[k].size();  // taille de la partition Vk
-    node cl = leftV(k), cr = rightV(k); // recherche du left et right de Vk, qui là est cherché à l'aide de EdgesIN
+    node cl = leftV(k), cr = rightV(k); // recherche du left et right de Vk, qui l�  est cherché �  l'aide de EdgesIN
 
     vector<node>::iterator il = find(C.begin(), C.end(), cl);
     assert(il != C.end());

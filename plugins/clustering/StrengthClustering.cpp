@@ -150,7 +150,7 @@ vector< set<node> > StrengthClustering::computeNodePartition(double threshold) {
 
   //Extract connected component
   DoubleProperty *connected= new DoubleProperty(tmpGraph);
-  tmpGraph->computeProperty("Connected Component", connected, errMsg);
+  tmpGraph->applyPropertyAlgorithm("Connected Component", connected, errMsg);
 
   //Compute the node partition
   int index=0;
@@ -362,7 +362,7 @@ bool StrengthClustering::run() {
   string errMsg;
   values = new DoubleProperty(graph);
 
-  if (!graph->computeProperty("Strength", values, errMsg, pluginProgress))
+  if (!graph->applyPropertyAlgorithm("Strength", values, errMsg, pluginProgress))
     return false;
 
   DoubleProperty *metric = NULL;
