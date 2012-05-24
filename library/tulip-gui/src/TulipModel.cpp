@@ -32,5 +32,6 @@ QVariant TulipModel::headerData(int, Qt::Orientation orientation, int role) cons
     f.setPointSize(f.pointSize() - 1);
     return f;
   }
+
   return QVariant();
 }

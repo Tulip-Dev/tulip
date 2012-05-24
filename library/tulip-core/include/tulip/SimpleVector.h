@@ -39,7 +39,7 @@ public:
   typedef T *iterator;
   typedef const T *const_iterator;
 
- SimpleVector():beginP(NULL),middleP(NULL),endP(NULL) {  }
+  SimpleVector():beginP(NULL),middleP(NULL),endP(NULL) {  }
   SimpleVector(const SimpleVector &v):
     beginP(v.beginP),middleP(v.middleP),endP(v.endP) { }
   explicit SimpleVector(size_t s):beginP(NULL),middleP(NULL),endP(NULL) {
