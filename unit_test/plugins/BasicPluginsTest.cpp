@@ -126,10 +126,10 @@ void BasicPluginsTest::testImportGridApproximation() {
 void BasicPluginsTest::testImportDot() {
   DataSet ds;
   ds.set("file::filename", string("data/toto.dot"));
-  Graph* g = importGraph("dot (graphviz)", ds, NULL, graph);
+  Graph* g = importGraph("graphviz", ds, NULL, graph);
   CPPUNIT_ASSERT(g == NULL);
   ds.set("file::filename", string("data/graph.dot"));
-  g = importGraph("dot (graphviz)", ds, NULL, graph);
+  g = importGraph("graphviz", ds, NULL, graph);
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
@@ -185,7 +185,7 @@ void BasicPluginsTest::testImportPajek() {
     DataSet ds;
     ds.set("file::filename", string(files[0]));
     std::cout << "importing Pajek file: " << files[0] << "...";
-    Graph* g = importGraph("Pajek (.net)", ds, NULL, graph);
+    Graph* g = importGraph("Pajek", ds, NULL, graph);
     CPPUNIT_ASSERT(g == graph);
     std::cout << " OK" << std::endl;
     g->clear();
@@ -226,7 +226,7 @@ void BasicPluginsTest::testImportUCINET() {
     DataSet ds;
     ds.set("file::filename", string(files[0]));
     std::cout << "importing UCINET file: " << files[0] << "...";
-    Graph* g = importGraph("UCINET dl", ds, NULL, graph);
+    Graph* g = importGraph("UCINET", ds, NULL, graph);
     CPPUNIT_ASSERT(g == graph);
     std::cout << " OK" << std::endl;
     g->clear();

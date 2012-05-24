@@ -66,7 +66,7 @@ static const char * paramHelp[] = {
  */
 class DotImport:public ImportModule {
 public:
-  PLUGININFORMATIONS("dot (graphviz)","Gerald Gainant", "01/03/2004","Import plugin for dot files",".01","File")
+  PLUGININFORMATIONS("graphviz","Gerald Gainant", "01/03/2004","Import plugin for dot files",".01","File")
   virtual std::string fileExtension() const {
     return "dot";
   }
