@@ -91,6 +91,7 @@ void TableView::graphChanged(tlp::Graph* g) {
   // Hide all data in the table view
   foreach(QTableView* view, QList<QTableView*>() << _ui->nodesTable << _ui->edgesTable) {
     QAbstractItemModel* model = view->model();
+
     for(int i=0; i < model->columnCount(); ++i) {
       view->horizontalHeader()->setSectionHidden(i,true);
     }
@@ -104,6 +105,7 @@ void TableView::graphDeleted() {
 
 void TableView::columnsInserted(const QModelIndex&, int start, int end) {
   QAbstractItemModel* model = static_cast<QAbstractItemModel*>(sender());
+
   for (int c = start; c <= end; c++) {
     PropertyInterface* pi = model->headerData(c,Qt::Horizontal,TulipModel::PropertyRole).value<PropertyInterface*>();
     setPropertyVisible(pi,false);
@@ -137,12 +139,14 @@ void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
   QTableView* view = _ui->nodesTable->isVisible() ? _ui->nodesTable : _ui->edgesTable;
   QAbstractItemModel* model = view->model();
   bool visible = false;
+
   for(int i=0; i < model->columnCount(); ++i) {
     if (!view->isColumnHidden(i)) {
       visible = true;
       break;
     }
   }
+
   _ui->frame->setVisible(visible);
 }
 

@@ -74,8 +74,10 @@ void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
 
     BoundingBox textBoundingBox=graduationLabel->getTextBoundingBox();
     labelHeight = spaceBetweenAxisGrads/2.;
+
     if(labelHeight>50)
       labelHeight=50;
+
     labelWidth = (labelHeight/(textBoundingBox[1][1]-textBoundingBox[0][1]))*(textBoundingBox[1][0]-textBoundingBox[0][0]);
 
     if (axisOrientation == HORIZONTAL_AXIS) {
