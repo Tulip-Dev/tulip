@@ -87,9 +87,6 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
   if(redrawNeeded) {
     emit widgetPainted(true);
   }
-  else {
-    emit widgetPainted(false);
-  }
 
   QRectF rect = boundingRect();
 
