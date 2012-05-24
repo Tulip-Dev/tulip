@@ -62,6 +62,7 @@ protected slots:
   void delAllGraph();
   void createPanel();
   void exportGraph();
+  void renameGraph();
 };
 
 #endif // GRAPHHIERARCHIESEDITOR_H

@@ -210,6 +210,11 @@ border-bottom: 1px solid black;
     <string>Export the graph</string>
    </property>
   </action>
+  <action name="actionRename">
+   <property name="text">
+    <string>Rename</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -368,6 +373,22 @@ border-bottom: 1px solid black;
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionRename</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>renameGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>activeGraphSelected(QModelIndex)</slot>
@@ -378,5 +399,6 @@ border-bottom: 1px solid black;
   <slot>delAllGraph()</slot>
   <slot>createPanel()</slot>
   <slot>exportGraph()</slot>
+  <slot>renameGraph()</slot>
  </slots>
 </ui>
