@@ -599,6 +599,8 @@
                   <listitem><para><code>Selection color</code>: how to show that a node is selected.
 											Click "Save at default" to apply this selection color to new views.</para>
                   </listitem>
+                  <listitem><para><code>Center view when changing graph</code>: If checked, when selecting a graph in the hierarchy widget, it will be displayed as fully centered in the current Node Link Diagram view. If not, it will be displayed using the current point of view.</para>
+                  </listitem>
               </itemizedlist></para>
             </listitem>
           </itemizedlist>
