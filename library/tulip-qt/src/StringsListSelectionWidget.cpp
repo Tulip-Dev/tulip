@@ -17,9 +17,9 @@
  *
  */
 
-#include "tulip/SimpleStringsListSelectionWidget.h"
-#include "tulip/DoubleStringsListSelectionWidget.h"
-#include "tulip/StringsListSelectionWidget.h"
+#include <tulip/SimpleStringsListSelectionWidget.h>
+#include <tulip/DoubleStringsListSelectionWidget.h>
+#include <tulip/StringsListSelectionWidget.h>
 
 using namespace std;
 
@@ -33,13 +33,10 @@ StringsListSelectionWidget::StringsListSelectionWidget(QWidget *parent,
     maxSelectedStringsListSize);
 }
 
-StringsListSelectionWidget::StringsListSelectionWidget(
-  const vector<string> &unselectedStringsList, QWidget *parent,
-  const ListType listType, const unsigned int maxSelectedStringsListSize) :
+StringsListSelectionWidget::StringsListSelectionWidget(const vector<string> &unselectedStringsList, QWidget *parent, const ListType listType, const unsigned int maxSelectedStringsListSize) :
   QWidget(parent), listType(listType), stringsListSelectionWidget(NULL) {
   setListType(listType);
-  stringsListSelectionWidget->setMaxSelectedStringsListSize(
-    maxSelectedStringsListSize);
+  stringsListSelectionWidget->setMaxSelectedStringsListSize(maxSelectedStringsListSize);
   stringsListSelectionWidget->setUnselectedStringsList(unselectedStringsList);
 }
 

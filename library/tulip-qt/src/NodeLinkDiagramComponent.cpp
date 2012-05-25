@@ -38,7 +38,7 @@ namespace tlp {
 VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0")
 
 //==================================================
-NodeLinkDiagramComponent::NodeLinkDiagramComponent():GlMainView(),qtMetaNode(true),initViewOnSetGraph(true),currentMetaNodeRenderer(NULL) {
+NodeLinkDiagramComponent::NodeLinkDiagramComponent():GlMainView(),qtMetaNode(true),initViewOnSetGraph(true),gridOptionsWidget(NULL),currentMetaNodeRenderer(NULL){
 }
 //==================================================
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
@@ -63,7 +63,6 @@ QWidget *NodeLinkDiagramComponent::construct(QWidget *parent) {
   actionTooltips->setChecked(false);
   actionsGridOptions=optionsMenu->addAction("Grid");
   connect(actionsGridOptions, SIGNAL(triggered()), SLOT(gridOptions()));
-  gridOptionsWidget=NULL;
   actionZOrderingOptions=optionsMenu->addAction("Z Ordering");
   actionZOrderingOptions->setCheckable(true);
   actionZOrderingOptions->setChecked(true);
@@ -558,7 +557,7 @@ void NodeLinkDiagramComponent::centerView() {
 //}
 //==================================================
 void NodeLinkDiagramComponent::gridOptions() {
-  if (gridOptionsWidget == 0)
+  if (gridOptionsWidget == NULL)
     gridOptionsWidget = new GridOptionsWidget(getWidget());
 
   gridOptionsWidget->setCurrentMainWidget(mainWidget);
