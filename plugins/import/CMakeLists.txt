@@ -91,9 +91,9 @@ ADD_LIBRARY(ImportUCINET-${TulipVersion} SHARED ${ImportUCINET_SRCS})
 TARGET_LINK_LIBRARIES(ImportUCINET-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(GEFXImport_SRCS GEFXImport.cpp)
-ADD_LIBRARY(GEFXImport-${TulipVersion} SHARED ${GEFXImport_SRCS})
-TARGET_LINK_LIBRARIES(GEFXImport-${TulipVersion} ${LibTulipName})
+SET(GEXFImport_SRCS GEXFImport.cpp)
+ADD_LIBRARY(GEXFImport-${TulipVersion} SHARED ${GEXFImport_SRCS})
+TARGET_LINK_LIBRARIES(GEXFImport-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 
@@ -113,6 +113,6 @@ INSTALL(TARGETS
 	WebImport-${TulipVersion}
 	ImportPajek-${TulipVersion}
 	ImportUCINET-${TulipVersion}
-	GEFXImport-${TulipVersion}
+	GEXFImport-${TulipVersion}
   DESTINATION ${TulipPluginsInstallDir}
   COMPONENT tulip_plugins)
