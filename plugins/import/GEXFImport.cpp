@@ -86,8 +86,8 @@ public :
 	GEXFImport(AlgorithmContext context):ImportModule(context) {
 		// add a file parameter for the pugin
 		// when the plugin will be called, a file chooser will be automatically created by Tulip
-		addParameter<string>("file::filename","");
-		addParameter<bool>("Curved edges","", "false");
+		addInParameter<string>("file::filename","");
+		addInParameter<bool>("Curved edges","", "false");
 	}
 
 	~GEXFImport() {}
