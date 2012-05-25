@@ -24,7 +24,6 @@
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
 #include <tulip/TulipRelease.h>
-#include <tulip/PluginLister.h>
 #include <tulip/PluginContext.h>
 
 /**
@@ -181,6 +180,27 @@ std::string info() const { return INFO; }  \
 std::string release() const { return RELEASE; }\
 std::string tulipRelease() const { return TULIP_RELEASE; }\
 std::string group() const { return GROUP; }
+}
+
+//This include is here because the PluginLister needs to know the Plugin type, and the PLUGIN macro needs to know the PluginLister.
+#include <tulip/PluginLister.h>
+namespace tlp {
+#define PLUGIN(C) \
+class C##Factory : public tlp::FactoryInterface { \
+public:            \
+  C##Factory() {          \
+  tlp::PluginLister::registerPlugin(this);     \
+}             \
+~C##Factory(){}          \
+tlp::Plugin* createPluginObject(tlp::PluginContext* context) { \
+C* tmp = new C(context);       \
+return tmp;       \
+}              \
+};                                                      \
+\
+extern "C" {                                            \
+C##Factory C##FactoryInitializer;               \
+}
 
 /*@}*/
 }
