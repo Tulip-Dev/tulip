@@ -35,8 +35,8 @@ class QuickAccessBar;
 class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   Q_OBJECT
 
-  bool _overviewVisible;
   tlp::GlMainWidget* _glMainWidget;
+  bool _overviewVisible;
   tlp::SceneConfigWidget* _sceneConfigurationWidget;
   tlp::SceneLayersConfigWidget* _sceneLayersConfigurationWidget;
   tlp::QuickAccessBar* _quickAccessBar;
@@ -66,8 +66,12 @@ protected slots:
   void graphDeleted();
 
 protected:
+
   virtual void setupWidget();
+
   bool quickAccessBarVisible() const;
+
+  void assignNewGlMainWidget(GlMainWidget *glMainWidget,bool deleteOldGlMainWidget=true);
 
   tlp::GlOverviewGraphicsItem* _overviewItem;
 };
