@@ -125,10 +125,13 @@ void GlComposite::deleteGlEntity(const string &key,bool informTheEntity) {
   if(informTheEntity) {
     GlSimpleEntity *entity=elements[key];
 
-    if(informTheEntity)
+    if(informTheEntity) {
+      entity->removeParent(this);
+
       for(vector<GlLayer*>::iterator it=layerParents.begin(); it!=layerParents.end(); ++it) {
         entity->removeLayerParent(*it);
       }
+    }
   }
 
   _sortedElements.remove(elements[key]);
