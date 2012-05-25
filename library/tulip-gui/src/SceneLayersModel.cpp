@@ -13,10 +13,12 @@ const quint32 SELECTED_EDGES_ID = 4;
 const quint32 META_NODES_ID = 5;
 const quint32 SELECTED_META_NODES_ID = 6;
 const quint32 META_NODES_LABELS_ID = 7;
+const quint32 NODES_LABELS_ID = 8;
+const quint32 EDGES_LABELS_ID = 8;
 const QVector<quint32> GRAPH_COMPOSITE_IDS = QVector<quint32>() << NODES_ID << EDGES_ID
     << SELECTED_NODES_ID << SELECTED_EDGES_ID
     << META_NODES_ID << SELECTED_META_NODES_ID
-    << META_NODES_LABELS_ID;
+    << META_NODES_LABELS_ID << NODES_LABELS_ID << EDGES_LABELS_ID;
 const int NO_STENCIL = 0xFFFF;
 const int FULL_STENCIL = 0x0002;
 
@@ -192,6 +194,16 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
       stencil = parameters->getMetaNodesLabelStencil();
       visible = parameters->isDisplayMetaNodes();
     }
+    else if (id == NODES_LABELS_ID) {
+      display = trUtf8("Nodes labels");
+      stencil = parameters->getNodesLabelStencil();
+      visible = parameters->isViewNodeLabel();
+    }
+    else if (id == EDGES_LABELS_ID) {
+      display = trUtf8("Edges labels");
+      stencil = parameters->getEdgesLabelStencil();
+      visible = parameters->isViewEdgeLabel();
+    }
 
     if (role == Qt::DisplayRole && index.column() == 0)
       return display;
@@ -265,6 +277,10 @@ bool SceneLayersModel::setData(const QModelIndex &index, const QVariant &value, 
         p->setDisplayEdges(visible);
       else if (id == META_NODES_ID)
         p->setDisplayMetaNodes(visible);
+      else if (id == NODES_LABELS_ID)
+        p->setViewNodeLabel(visible);
+      else if (id == EDGES_LABELS_ID)
+        p->setViewEdgeLabel(visible);
     }
     else if (index.column() == 2) {
       int stencil = (value.value<int>() == (int)(Qt::Checked) ? FULL_STENCIL : NO_STENCIL);
@@ -283,6 +299,10 @@ bool SceneLayersModel::setData(const QModelIndex &index, const QVariant &value, 
         p->setSelectedMetaNodesStencil(stencil);
       else if (id == META_NODES_LABELS_ID)
         p->setMetaNodesLabelStencil(stencil);
+      else if (id == NODES_LABELS_ID)
+        p->setNodesLabelStencil(stencil);
+      else if (id == EDGES_LABELS_ID)
+        p->setEdgesLabelStencil(stencil);
     }
 
     emit drawNeeded(_scene);
