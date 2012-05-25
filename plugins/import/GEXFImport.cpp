@@ -84,7 +84,7 @@ class GEXFImport : public ImportModule { // import plugins must inherit class tl
 public :
 
     PLUGININFORMATIONS("GEXF Import","Antoine LAMBERT","05/05/2010","GEXF Import Plugin","1.0","File")
-    GEXFImport(const PluginContext* context):ImportModule(context) {
+    GEXFImport(const PluginContext*  context):ImportModule(context) {
 		// add a file parameter for the pugin
 		// when the plugin will be called, a file chooser will be automatically created by Tulip
 		addParameter<string>("file::filename","");
@@ -93,7 +93,7 @@ public :
 
     ~GEXFImport() {}
 
-    std::string fileExtension() {
+    std::string fileExtension() const {
         return "gexf";
     }
 
