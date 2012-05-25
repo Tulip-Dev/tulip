@@ -93,7 +93,7 @@ TARGET_LINK_LIBRARIES(ImportUCINET-${TulipVersion} ${LibTulipName})
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(GEXFImport_SRCS GEXFImport.cpp)
 ADD_LIBRARY(GEXFImport-${TulipVersion} SHARED ${GEXFImport_SRCS})
-TARGET_LINK_LIBRARIES(GEXFImport-${TulipVersion} ${LibTulipName})
+TARGET_LINK_LIBRARIES(GEXFImport-${TulipVersion} ${LibTulipName} ${QT_QTCORE_LIBRARY})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 
