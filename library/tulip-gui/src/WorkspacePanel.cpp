@@ -72,10 +72,10 @@ WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
   : QFrame(parent),
     _ui(new Ui::WorkspacePanel),
     _view(NULL),
+    _overlayRect(NULL),
     _viewConfigurationWidgets(NULL),
     _viewConfigurationExpanded(false),
     _currentInteractorConfigurationItem(NULL),
-    _overlayRect(NULL),
     _progressItem(NULL){
   _ui->setupUi(this);
   _ui->dragHandle->setPanel(this);
