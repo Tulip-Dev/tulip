@@ -48,23 +48,6 @@ public:
   virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0;
 };
 
-#define PLUGIN(C) \
-class C##Factory : public tlp::FactoryInterface { \
-public:            \
-  C##Factory() {          \
-  tlp::PluginLister::registerPlugin(this);     \
-}             \
-~C##Factory(){}          \
-tlp::Plugin* createPluginObject(tlp::PluginContext* context) { \
-C* tmp = new C(context);       \
-return tmp;       \
-}              \
-};                                                      \
-\
-extern "C" {                                            \
-C##Factory C##FactoryInitializer;               \
-}
-
 class TLP_SCOPE PluginLister {
 private:
   struct PluginDescription {
