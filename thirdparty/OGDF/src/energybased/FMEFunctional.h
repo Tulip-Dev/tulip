@@ -13,7 +13,6 @@ template<bool result>
 struct const_condition
 {
 	template<typename A> inline bool operator()(A a) { return result; }; 
-	template<typename A, typename B> inline void operator()(A a, B b) { return result; }; 
 };
 
 //! the corresponding typedefs
@@ -29,7 +28,6 @@ struct not_condition_functor
 	not_condition_functor(const Func& cond) : cond_func(cond) {};
 
 	template<typename A> inline bool operator()(A a) { return !cond_func(a); }; 
-	template<typename A, typename B> inline void operator()(A a, B b) { return !cond_func(a, b); }; 
 };
 
 //! creator of the negator
