@@ -496,7 +496,7 @@ to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-        void addNodes(tlp::Iterator<tlp::node>* nodes);
+        void addNodes(tlp::Iterator<tlp::node>* nodes /Transfer/);
 %Docstring
 tlp.Graph.addNodes(itNodes)
 
@@ -518,7 +518,8 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 %MethodCode
     tlp::StableIterator<tlp::node> sItNodes(a0);
     tlp::node n;
-    forEach(n, &sItNodes) {
+    while (sItNodes.hasNext()) {
+          n = sItNodes.next();
           if (!sipCpp->getRoot()->isElement(n)) {
               sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), n);
               break;
@@ -557,7 +558,7 @@ to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-        virtual void delNodes(tlp::Iterator<tlp::node>* itN, bool deleteInAllGraphs = false)=0;
+        virtual void delNodes(tlp::Iterator<tlp::node>* itN /Transfer/, bool deleteInAllGraphs = false)=0;
 %Docstring
 tlp.Graph.delNodes(itNodes[, deleteInAllGraphs=False])
 
@@ -578,7 +579,8 @@ the sub-graph relation between graphs.
 %MethodCode
     tlp::StableIterator<tlp::node> sItNodes(a0);
     tlp::node n;
-    forEach(n, &sItNodes) {
+    while (sItNodes.hasNext()) {
+        n = sItNodes.next();
         if (!sipCpp->isElement(n)) {
             sipIsErr = throwInvalidNodeException(sipCpp, n);
             break;
@@ -697,7 +699,7 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-        void addEdges(tlp::Iterator<tlp::edge>* edges);
+        void addEdges(tlp::Iterator<tlp::edge>* edges /Transfer/);
 %Docstring
 tlp.Graph.addEdges(itEdges)
 
@@ -718,7 +720,8 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 %MethodCode
     tlp::StableIterator<tlp::edge> sItEdges(a0);
     tlp::edge e;
-    forEach(e, &sItEdges) {
+    while (sItEdges.hasNext()) {
+        e = sItEdges.next();
         if (!sipCpp->getRoot()->isElement(e)) {
                 sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), e);
                 break;
@@ -773,7 +776,7 @@ of the graph to maintain the sub-graph relation between graphs. The ordering of 
 
 //===========================================================================================
 
-        void delEdges(tlp::Iterator<tlp::edge>* itE, bool deleteInAllGraphs = false)=0;
+        void delEdges(tlp::Iterator<tlp::edge>* itE /Transfer/, bool deleteInAllGraphs = false)=0;
 %Docstring
 tlp.Graph.delEdges(itEdges[, deleteInAllGraphs=False])
 
@@ -794,7 +797,8 @@ The ordering of remaining edges is preserved.
 %MethodCode
     tlp::StableIterator<tlp::edge> sItEdges(a0);
     tlp::edge e;
-    forEach(e, &sItEdges) {
+    while (sItEdges.hasNext()) {
+        e = sItEdges.next();
         if (!sipCpp->isElement(e)) {
             sipIsErr = throwInvalidEdgeException(sipCpp, e);
             break;
