@@ -63,7 +63,6 @@ public:
 public slots:
   void showFullScreen(bool);
   void importGraph();
-  void importFileGraph();
   void exportGraph(tlp::Graph*g = NULL);
   void createPanel(tlp::Graph* g = NULL);
   void save();
