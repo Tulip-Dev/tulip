@@ -86,6 +86,10 @@ ADD_LIBRARY(EmptyGraph-${TulipVersion} SHARED EmptyGraph.cpp)
 TARGET_LINK_LIBRARIES(EmptyGraph-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(GEXFImport-${TulipVersion} SHARED GEXFImport.cpp)
+TARGET_LINK_LIBRARIES(GEXFImport-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS PlanarGraph-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT PlanarGraph)
 INSTALL(TARGETS DotImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT DotImport)
 INSTALL(TARGETS Grid-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Grid)
@@ -103,3 +107,4 @@ INSTALL(TARGETS WebImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} 
 INSTALL(TARGETS ImportPajek-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ImportPajek)
 INSTALL(TARGETS ImportUCINET-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ImportUCINET)
 INSTALL(TARGETS EmptyGraph-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT EmptyGraph)
+INSTALL(TARGETS GEXFImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT GEXFImport)
