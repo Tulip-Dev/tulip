@@ -315,6 +315,8 @@ public :
 
 };
 
+typedef CoordVectorProperty LayoutVectorProperty;
+
 /*@}*/
 
 }

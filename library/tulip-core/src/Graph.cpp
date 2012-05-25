@@ -22,6 +22,7 @@
 
 #include <thirdparty/gzstream/gzstream.h>
 
+#include <tulip/ForEach.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
 #include <tulip/BooleanProperty.h>
@@ -380,6 +381,19 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
 }
 
 //=========================================================
+#define CHECK_PROPERTY(T) \
+  if (dataSet->getData(n)->getTypeName().compare(typeid(T*).name()) == 0) {\
+    T* prop=NULL;\
+    dataSet->getAndFree<T*>(n,prop);\
+    T* clone = new T(this,prop->getName());\
+    clone->copy(prop);\
+    clonedProperties[clone] = prop;\
+    dataSet->set<T*>(n,clone);\
+  }
+#define CHECK_PI(P)\
+  CHECK_PROPERTY(P##Property)\
+  CHECK_PROPERTY(P##VectorProperty)
+
 bool Graph::applyAlgorithm(const std::string &algorithm,
                            std::string &errorMessage,
                            DataSet *dataSet, PluginProgress *progress) {
@@ -399,15 +413,43 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   }
   else tmpProgress = progress;
 
+  // Parse every output parameters. If we have a PropertyInterface, we will use a temporary clone in order to avoid getting duplicate pointers between in and out parameters
+  QList<std::string> outParams;
+  ParameterDescriptionList paramList = PluginLister::getPluginParameters(algorithm);
+  ParameterDescription desc;
+  forEach(desc, paramList.getParameters()) {
+    if (desc.getDirection() != OUT_PARAM)
+      continue;
+    outParams+=desc.getName();
+  }
+  QMap<PropertyInterface*,PropertyInterface*> clonedProperties;
+  foreach(std::string n, outParams) {
+    if (!dataSet->exist(n))
+      continue;
+    CHECK_PI(Boolean)
+    CHECK_PI(Double)
+    CHECK_PI(Layout)
+    CHECK_PI(String)
+    CHECK_PI(Integer)
+    CHECK_PI(Size)
+    CHECK_PI(Color)
+  }
+
   AlgorithmContext* context = new AlgorithmContext(this, dataSet, tmpProgress);
   Algorithm *newAlgo = PluginLister::instance()->getPluginObject<Algorithm>(algorithm, context);
-
   if ((result=newAlgo->check(errorMessage)))
     newAlgo->run();
-
   delete newAlgo;
 
   if (deletePluginProgress) delete tmpProgress;
+
+  // restore temporary properties and free memory
+  foreach(PropertyInterface* clone, clonedProperties.keys()) {
+    PropertyInterface* prop = clonedProperties[clone];
+    if (result)
+      prop->copy(clone);
+    delete clone;
+  }
 
   return result;
 }
