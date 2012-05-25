@@ -84,9 +84,9 @@ void GlMainView::drawOverview(bool generatePixmap) {
   _overviewItem->draw(generatePixmap);
 }
 
-void GlMainView::setupWidget() {
-  _glMainWidget = new GlMainWidget(NULL,this);
-  setCentralWidget(_glMainWidget);
+void GlMainView::assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOldGlMainWidget) {
+  _glMainWidget=glMainWidget;
+  setCentralWidget(_glMainWidget,deleteOldGlMainWidget);
   GlMainWidgetGraphicsItem *glMainWidgetGraphicsItem=dynamic_cast<GlMainWidgetGraphicsItem*>(centralItem());
   delete _sceneConfigurationWidget;
   _sceneConfigurationWidget = new SceneConfigWidget();
@@ -96,6 +96,10 @@ void GlMainView::setupWidget() {
   connect(_sceneLayersConfigurationWidget,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
   connect(glMainWidgetGraphicsItem,SIGNAL(widgetPainted(bool)),this,SLOT(glMainViewDrawn(bool)));
   connect(graphicsView()->scene(),SIGNAL(sceneRectChanged(QRectF)),this,SLOT(sceneRectChanged(QRectF)));
+}
+
+void GlMainView::setupWidget() {
+  assignNewGlMainWidget(new GlMainWidget(NULL,this),true);
 }
 
 GlMainWidget* GlMainView::getGlMainWidget() const {
