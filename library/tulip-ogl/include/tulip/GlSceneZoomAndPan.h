@@ -33,6 +33,8 @@ class TLP_GL_SCOPE AdditionalGlSceneAnimation {
 
 public :
 
+    virtual ~AdditionalGlSceneAnimation(){}
+
   /**
    * Method to set the total number of animation steps. No need to call it because the GlSceneZoomAndPan class do that task.
    *
