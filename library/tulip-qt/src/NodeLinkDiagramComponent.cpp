@@ -38,7 +38,7 @@ namespace tlp {
 VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0")
 
 //==================================================
-NodeLinkDiagramComponent::NodeLinkDiagramComponent():GlMainView(),qtMetaNode(true),initViewOnSetGraph(true),gridOptionsWidget(NULL),currentMetaNodeRenderer(NULL){
+NodeLinkDiagramComponent::NodeLinkDiagramComponent():GlMainView(),qtMetaNode(true),initViewOnSetGraph(true),gridOptionsWidget(NULL),currentMetaNodeRenderer(NULL) {
 }
 //==================================================
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
@@ -167,16 +167,16 @@ void NodeLinkDiagramComponent::setGraph(Graph *graph,bool initView) {
 bool NodeLinkDiagramComponent::getInitViewOnSetGraph() {
   return initViewOnSetGraph;
 }
-  
+
 void NodeLinkDiagramComponent::setInitViewOnSetGraph(bool flag) {
   initViewOnSetGraph = flag;
 }
-  
+
 //==================================================
 void NodeLinkDiagramComponent::setGraph(Graph *graph) {
   if((mainWidget->getGraph() && !initViewOnSetGraph) ||
-     (mainWidget->getScene()->getGlGraphComposite() &&
-      mainWidget->getGraph()==graph))
+      (mainWidget->getScene()->getGlGraphComposite() &&
+       mainWidget->getGraph()==graph))
     setGraph(graph,false);
   else
     setGraph(graph,true);

@@ -83,10 +83,11 @@ void RenderingParametersDialog::setGlMainWidget(GlMainWidget *glWidget) {
   // when changing graph
   NodeLinkDiagramComponent* ndlc =
     dynamic_cast<NodeLinkDiagramComponent*>(glWidget->getView());
+
   if (ndlc)
     initview->setChecked(ndlc->getInitViewOnSetGraph());
   else
-    initview->setVisible(false);    
+    initview->setVisible(false);
 }
 
 void RenderingParametersDialog::updateView() {
