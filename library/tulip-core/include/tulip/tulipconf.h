@@ -155,17 +155,6 @@ static double round(double d) {
 #  define TLP_OGDF_SCOPE
 #endif
 
-#ifdef _WIN32
-#  ifdef DLL_TULIP3_COMPAT
-#    define TLP3_COMPAT_SCOPE       __declspec(dllexport)
-#  else
-#    define TLP3_COMPAT_SCOPE       __declspec(dllimport)
-#  endif
-#endif
-#ifndef TLP3_COMPAT_SCOPE
-#  define TLP3_COMPAT_SCOPE
-#endif
-
 QDebug TLP_SCOPE operator<<(QDebug,const std::string&);
 
 #endif //TULIPCONF_H
