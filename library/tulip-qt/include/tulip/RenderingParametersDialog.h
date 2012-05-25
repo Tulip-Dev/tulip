@@ -55,6 +55,7 @@ public slots:
   void setButtonColor(QColor tmp,QPushButton *button);
   void labelSizeChanged(int);
   void updateOrderingProperty(QString propertyName);
+  void setInitViewOnSetGraph();
 
 signals :
 

@@ -27,6 +27,7 @@
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlMainView.h"
+#include "tulip/NodeLinkDiagramComponent.h"
 
 using namespace std;
 
@@ -77,6 +78,15 @@ void RenderingParametersDialog::setGlMainWidget(GlMainWidget *glWidget) {
   maxSizeSpinBox->setMinimum(minSizeSpinBox->value());
 
   holdUpdateView=false;
+
+  // allow to enable/disable automatic centering
+  // when changing graph
+  NodeLinkDiagramComponent* ndlc =
+    dynamic_cast<NodeLinkDiagramComponent*>(glWidget->getView());
+  if (ndlc)
+    initview->setChecked(ndlc->getInitViewOnSetGraph());
+  else
+    initview->setVisible(false);    
 }
 
 void RenderingParametersDialog::updateView() {
@@ -252,6 +262,13 @@ void RenderingParametersDialog::updateOrderingProperty(QString propertyName) {
     param.setElementOrderingProperty(glWidget->getGraph()->getProperty<DoubleProperty>(propertyName.toStdString()));
     glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
   }
+}
+
+void RenderingParametersDialog::setInitViewOnSetGraph() {
+  NodeLinkDiagramComponent* ndlc =
+    dynamic_cast<NodeLinkDiagramComponent*>(glWidget->getView());
+  assert(ndlc);
+  ndlc->setInitViewOnSetGraph(initview->isChecked());
 }
 
 }

@@ -514,6 +514,19 @@
         </item>
        </layout>
       </item>
+      <item>
+	<widget class="QCheckBox" name="initview">
+          <property name="focusPolicy">
+	    <enum>Qt::StrongFocus</enum>
+          </property>
+          <property name="text">
+	    <string>Center view when changing graph</string>
+          </property>
+          <property name="checked">
+	    <bool>true</bool>
+          </property>
+	</widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -773,6 +786,22 @@
      <y>242</y>
     </hint>
    </hints>
+  </connection>
+  <connection>
+    <sender>initview</sender>
+    <signal>stateChanged(int)</signal>
+    <receiver>RenderingParametersDialogData</receiver>
+    <slot>setInitViewOnSetGraph()</slot>
+    <hints>
+      <hint type="sourcelabel">
+	<x>90</x>
+	<y>213</y>
+      </hint>
+      <hint type="destinationlabel">
+	<x>162</x>
+	<y>179</y>
+      </hint>
+    </hints>
   </connection>
  </connections>
 </ui>

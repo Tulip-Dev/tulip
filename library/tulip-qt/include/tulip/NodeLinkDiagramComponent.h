@@ -55,6 +55,9 @@ public:
     emit requestChangeGraph(this,graph);
   }
 
+  void setInitViewOnSetGraph(bool);
+  bool getInitViewOnSetGraph();
+
 protected :
 
   QMenu *viewMenu;
@@ -71,6 +74,7 @@ protected :
   QAction* propAction;
   bool isNode;
   bool qtMetaNode;
+  bool initViewOnSetGraph;
   int itemId;
 
   GridOptionsWidget *gridOptionsWidget;
