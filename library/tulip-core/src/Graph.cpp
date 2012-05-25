@@ -420,12 +420,14 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   forEach(desc, paramList.getParameters()) {
     if (desc.getDirection() != OUT_PARAM)
       continue;
+
     outParams+=desc.getName();
   }
   QMap<PropertyInterface*,PropertyInterface*> clonedProperties;
   foreach(std::string n, outParams) {
     if (!dataSet->exist(n))
       continue;
+
     CHECK_PI(Boolean)
     CHECK_PI(Double)
     CHECK_PI(Layout)
@@ -437,8 +439,10 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
 
   AlgorithmContext* context = new AlgorithmContext(this, dataSet, tmpProgress);
   Algorithm *newAlgo = PluginLister::instance()->getPluginObject<Algorithm>(algorithm, context);
+
   if ((result=newAlgo->check(errorMessage)))
     newAlgo->run();
+
   delete newAlgo;
 
   if (deletePluginProgress) delete tmpProgress;
@@ -446,8 +450,10 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   // restore temporary properties and free memory
   foreach(PropertyInterface* clone, clonedProperties.keys()) {
     PropertyInterface* prop = clonedProperties[clone];
+
     if (result)
       prop->copy(clone);
+
     delete clone;
   }
 
