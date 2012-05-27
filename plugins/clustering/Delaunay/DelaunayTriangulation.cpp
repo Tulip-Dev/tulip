@@ -43,6 +43,7 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs) {
         graph->addCloneSubGraph("Original graph");
 
         tlp::Graph *delaunaySg = graph->addCloneSubGraph("Delaunay");
+        delaunaySg->delEdges(graph->getEdges());
         for (size_t i = 0 ; i < edges.size() ; ++i) {
             delaunaySg->addEdge(nodes[edges[i].first], nodes[edges[i].second]);
         }
