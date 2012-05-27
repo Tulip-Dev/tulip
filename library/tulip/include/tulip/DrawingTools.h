@@ -38,12 +38,13 @@ class BooleanProperty;
   * nodes z-rotations and sizes of elements.
   *
   */
-TLP_SCOPE   BoundingBox computeBoundingBox(const Graph *graph,
-    const LayoutProperty *layout,
-    const SizeProperty *size,
-    const DoubleProperty *rotation,
-    const BooleanProperty *selection = NULL);
+TLP_SCOPE BoundingBox computeBoundingBox(const Graph *graph,
+                                         const LayoutProperty *layout,
+                                         const SizeProperty *size,
+                                         const DoubleProperty *rotation,
+                                         const BooleanProperty *selection = NULL);
 
+//======================================================================================================
 
 /**
  * Compute the bounding box of graph elements according to node positions, edges bends,
@@ -52,11 +53,14 @@ TLP_SCOPE   BoundingBox computeBoundingBox(const Graph *graph,
  * Iterator itN and itE will be deleted after the computations (i.e. no need to delete them yourself).
  */
 TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
-    Iterator<edge> *itE,
-    const LayoutProperty *layout,
-    const SizeProperty *size,
-    const DoubleProperty *rotation,
-    const BooleanProperty *selection = NULL);
+                                         Iterator<edge> *itE,
+                                         const LayoutProperty *layout,
+                                         const SizeProperty *size,
+                                         const DoubleProperty *rotation,
+                                         const BooleanProperty *selection = NULL);
+
+//======================================================================================================
+
 /**
   *
   * Computes a bounding sphere (or a bounding circle if the graph has a 2D layout) of a graph according to nodes positions, edges bends,
@@ -69,11 +73,14 @@ TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
   *
   */
 
-TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (const Graph *graph,
-    const LayoutProperty *layout,
-    const SizeProperty *size,
-    const DoubleProperty *rotation,
-    const BooleanProperty *selection = NULL);
+TLP_SCOPE std::pair<Coord, Coord> computeBoundingRadius(const Graph *graph,
+                                                        const LayoutProperty *layout,
+                                                        const SizeProperty *size,
+                                                        const DoubleProperty *rotation,
+                                                        const BooleanProperty *selection = NULL);
+
+//======================================================================================================
+
 /**
   *
   * Computes a convex hull of a graph according to nodes positions, edges bends,
@@ -82,11 +89,25 @@ TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (const Graph *graph,
   * Returns a vector of tlp::Coord containing the vertices of the graph convex hull correctly ordered.
   *
   */
-TLP_SCOPE   std::vector<Coord> computeConvexHull (const Graph *graph,
-    const LayoutProperty *layout,
-    const SizeProperty *size,
-    const DoubleProperty *rotation,
-    const BooleanProperty *selection = NULL);
+TLP_SCOPE std::vector<Coord> computeConvexHull(const Graph *graph,
+                                               const LayoutProperty *layout,
+                                               const SizeProperty *size,
+                                               const DoubleProperty *rotation,
+                                               const BooleanProperty *selection = NULL);
+
+//======================================================================================================
+
+/**
+  *
+  * Computes a convex hull of a set of points,
+  * Only works with 2D layouts.
+  *
+  * Returns a vector of tlp::Coord containing the vertices of the points convex hull correctly ordered.
+  *
+  */
+TLP_SCOPE std::vector<Coord> computeConvexHull(const std::vector<tlp::Coord> &points);
+
+//======================================================================================================
 
 /**
  * Computes the intersection point (if any) of two 3d lines.
@@ -96,6 +117,15 @@ TLP_SCOPE   std::vector<Coord> computeConvexHull (const Graph *graph,
 TLP_SCOPE bool computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line1,
                                         const std::pair<tlp::Coord, tlp::Coord> &line2,
                                         tlp::Coord &intersectionPoint);
+
+//======================================================================================================
+
+/**
+ * Computes the centroid of a polygon.
+ * Polygon vertices must be provided correctly ordered in the points vector.
+ *
+ */
+TLP_SCOPE tlp::Coord computePolygonCentroid(const std::vector<tlp::Coord> &points);
 
 }
 

@@ -214,6 +214,16 @@ std::vector<Coord> tlp::computeConvexHull(const Graph *graph, const LayoutProper
 
 //======================================================================================
 
+std::vector<Coord> tlp::computeConvexHull(const std::vector<tlp::Coord> &points) {
+    ConvexHullCalculator calc;
+    for (size_t i = 0 ; i < points.size() ; ++i) {
+        calc.addPoint(points[i]);
+    }
+    return calc.getResult();
+}
+
+//======================================================================================
+
 // implementation based on http://mathworld.wolfram.com/Line-LineIntersection.html
 // reference : Hill, F. S. Jr. "The Pleasures of 'Perp Dot' Products." Ch. II.5 in Graphics Gems IV (Ed. P. S. Heckbert). San Diego: Academic Press, pp. 138-148, 1994.
 bool tlp::computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line1,
@@ -240,4 +250,25 @@ bool tlp::computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line
 
   return true;
 
+}
+
+//======================================================================================================
+
+Coord tlp::computePolygonCentroid(const vector<Coord> &points) {
+  vector<Coord> pointsCp(points);
+  pointsCp.push_back(points[0]);
+  float A = 0;
+  float Cx = 0;
+  float Cy = 0;
+
+  for (size_t i = 0 ; i < pointsCp.size() - 1 ; ++i) {
+    A += (pointsCp[i][0] * pointsCp[i+1][1] - pointsCp[i+1][0] * pointsCp[i][1]);
+    Cx += (pointsCp[i][0] + pointsCp[i+1][0])*(pointsCp[i][0]*pointsCp[i+1][1] - pointsCp[i+1][0]*pointsCp[i][1]);
+    Cy += (pointsCp[i][1] + pointsCp[i+1][1])*(pointsCp[i][0]*pointsCp[i+1][1] - pointsCp[i+1][0]*pointsCp[i][1]);
+  }
+
+  A *= 0.5f;
+  Cx *= 1.0f / (6*A);
+  Cy *= 1.0f / (6*A);
+  return Coord(Cx, Cy);
 }

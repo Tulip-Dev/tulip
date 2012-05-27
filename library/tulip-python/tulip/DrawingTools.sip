@@ -169,6 +169,22 @@ To get the bounding radius, you have to compute the distance between the two mem
 
 // ================================================================================================
 
+std::vector<tlp::Coord> computeConvexHull(const std::vector<tlp::Coord> &points);
+%Docstring
+tlp.computeConvexHull(points)
+
+.. versionadded:: 3.8
+
+Computes a convex hull of a set of points. Only works with 2D layouts.
+Returns a list of :class:`tlp.Coord` containing the vertices of the points convex hull correctly ordered.
+
+:param points: the points on which to compute a conbex hull
+:type points: :list of class:`tlp.Coord`
+:rtype: list of :class:`tlp.Coord`
+%End
+
+// ================================================================================================
+
 std::vector<tlp::Coord> computeConvexHull(tlp::Graph *graph, tlp::BooleanProperty *selection = 0);
 %Docstring
 tlp.computeConvexHull(graph[, selection = None])
@@ -267,6 +283,21 @@ and second member is the intersection point (if any).
 :param line2: the coordinates of the two points defining the second line
 :type line2: (:class:`tlp.Coord` , :class:`tlp.Coord`)
 :rtype: (boolean, :class:`tlp.Coord`)
-
 %End
+
+// ================================================================================================
+
+tlp::Coord computePolygonCentroid(const std::vector<tlp::Coord> &points);
+%Docstring
+tlp.computePolygonCentroid(points)
+
+.. versionadded:: 3.8
+
+Computes the centroid of a polygon.
+
+:param points: the vertices of the polygon correctly ordered
+:type points: list of :class:`tlp.Coord`
+:rtype: :class:`tlp.Coord`
+%End
+
 };
