@@ -299,6 +299,64 @@ template<TYPE*>
 };
 
 // ****************************************************
+// Specialization for std::vector<unsigned int>
+// ****************************************************
+
+%MappedType std::vector<unsigned int> /DocType="list-of-int"/ {
+%TypeHeaderCode
+#include <vector>
+%End
+
+%ConvertFromTypeCode
+   PyObject *l;
+
+   // Create the Python list of the correct length.
+   if ((l = PyList_New(sipCpp -> size())) == NULL) {
+       return NULL;
+   }
+
+   // Go through each element in the C++ instance and convert it to a
+   // wrapped object.
+   for (int i = 0; i < (int)sipCpp -> size(); ++i) {
+    // Add the wrapper to the list.
+       PyList_SET_ITEM(l, i, PyLong_FromUnsignedLong(sipCpp -> at(i)));
+   }
+
+   // Return the Python list.
+   return l;
+%End
+
+%ConvertToTypeCode
+   // Check if type is compatible
+   if (sipIsErr == NULL) {
+       if (!PyList_Check(sipPy)) {
+          return 0;
+       }
+       for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+            PyObject *item = PyList_GET_ITEM(sipPy, i);
+            if (!PyLong_Check(item)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to int");
+                return 0;
+            }
+       }
+       return 1;
+   }
+
+   // Convert Python list of integers to a std::vector<int>
+   std::vector<unsigned int> *v = new std::vector<unsigned int>();
+   v->reserve(PyList_GET_SIZE(sipPy));
+   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+       v->push_back(PyLong_AsUnsignedLong(PyList_GET_ITEM(sipPy, i)));
+   }
+
+   *sipCppPtr = v;
+   return sipGetState(sipTransferObj);
+%End
+
+};
+
+
+// ****************************************************
 // Specialization for std::vector<bool>
 // ****************************************************
 

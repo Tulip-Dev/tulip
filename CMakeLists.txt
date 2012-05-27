@@ -254,6 +254,7 @@ IF(UBUNTU_PPA_BUILD)
 ELSE()
   SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl)
 ENDIF()
+SET(QHULLInclude ${PROJECT_SOURCE_DIR}/thirdparty/libqhull)
 
 SET(TulipInclude ${PROJECT_SOURCE_DIR}/library/tulip/include)
 SET(TulipBuildInclude ${PROJECT_BINARY_DIR}/library/tulip/include)
