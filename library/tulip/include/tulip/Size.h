@@ -84,4 +84,14 @@ void Size::setD(const float depth) {
 #ifdef _MSC_VER
 template class TLP_SCOPE tlp::VectorCast<float,3, tlp::Size>;
 #endif
+
+TLP_BEGIN_HASH_NAMESPACE {
+  template <>
+  struct hash<tlp::Size> {
+    inline std::size_t operator()(const tlp::Size &s) const {
+        return hash_vector(s);
+    }
+  };
+} TLP_END_HASH_NAMESPACE
+
 #endif

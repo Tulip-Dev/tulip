@@ -20,6 +20,7 @@
 #define TULIP_COORD_H
 
 #include <tulip/tulipconf.h>
+#include <tulip/tuliphash.h>
 #include <tulip/VectorCast.h>
 
 namespace tlp {
@@ -112,5 +113,14 @@ template class TLP_SCOPE VectorCast<float, 3, Coord>;
 template struct TLP_SCOPE Array<tlp::Coord,4>;
 #endif
 }
+
+TLP_BEGIN_HASH_NAMESPACE {
+  template <>
+  struct hash<tlp::Coord> {
+    inline std::size_t operator()(const tlp::Coord &c) const {
+        return hash_vector(c);
+    }
+  };
+} TLP_END_HASH_NAMESPACE
 
 #endif

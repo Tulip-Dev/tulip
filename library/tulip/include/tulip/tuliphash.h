@@ -81,4 +81,21 @@ struct hash<double> {
 #  define TLP_END_HASH_NAMESPACE }
 #endif
 
+// The hash_combine function from the boost library
+// Call it repeatedly to incrementally create a hash value from several variables.
+
+// Explanation of the formula from StackOverflow (http://stackoverflow.com/questions/4948780/magic-numbers-in-boosthash-combine) :
+// The magic number 0x9e3779b9 = 2^32 / ((1 + sqrt(5)) / 2) is the reciprocal of the golden ratio.
+// It is supposed to be 32 random bits, where each is equally likely to be 0 or 1, and with no simple correlation between the bits.
+// So including this number "randomly" changes each bit of the seed; as you say, this means that consecutive values will be far apart.
+// Including the shifted versions of the old seed makes sure that, even if hash_value() has a fairly small range of values,
+// differences will soon be spread across all the bits.
+TLP_BEGIN_HASH_NAMESPACE {
+  template <class T>
+  inline void hash_combine(std::size_t & seed, const T & v) {
+    hash<T> hasher;
+    seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+  }
+} TLP_END_HASH_NAMESPACE
+
 #endif
