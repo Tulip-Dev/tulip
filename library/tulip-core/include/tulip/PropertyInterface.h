@@ -68,7 +68,7 @@ public:
    * it is not the default value.
    * Returns true if a copy has been done
    */
-  virtual bool copy(const node src, const node dst, PropertyInterface *prop,
+  virtual bool copy(const node dst, const node src, PropertyInterface *prop,
                     bool ifNotDefault = false) =0;
   /**
    * Sets the value of an edge (first argument) in the current property (this)
@@ -78,7 +78,7 @@ public:
    * it is not the default value.
    * Returns true if a copy has been done
    */
-  virtual bool copy(const edge src, const edge dst, PropertyInterface *prop,
+  virtual bool copy(const edge dst, const edge src, PropertyInterface *prop,
                     bool ifNotDefault = false) =0;
   /**
    * Copies the values held by the property argument on this property
