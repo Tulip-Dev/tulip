@@ -328,7 +328,7 @@ Returns :const:`True` if the given string representation has been successfully c
 %Docstring
 tlp.PropertyInterface.addPropertyObserver(propertyObserver)
 
-.. versionadded:: 3.7.1
+.. versionadded:: 3.8
 
 Registers a new property observer object
 that will receive notifications when the property is modified.
@@ -347,7 +347,7 @@ that will receive notifications when the property is modified.
 %Docstring
 tlp.PropertyInterface.removePropertyObserver(propertyObserver)
 
-.. versionadded:: 3.7.1
+.. versionadded:: 3.8
 
 Removes a registered property observer object.
 
