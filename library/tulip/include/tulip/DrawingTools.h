@@ -39,10 +39,10 @@ class BooleanProperty;
   *
   */
 TLP_SCOPE BoundingBox computeBoundingBox(const Graph *graph,
-                                         const LayoutProperty *layout,
-                                         const SizeProperty *size,
-                                         const DoubleProperty *rotation,
-                                         const BooleanProperty *selection = NULL);
+    const LayoutProperty *layout,
+    const SizeProperty *size,
+    const DoubleProperty *rotation,
+    const BooleanProperty *selection = NULL);
 
 //======================================================================================================
 
@@ -53,11 +53,11 @@ TLP_SCOPE BoundingBox computeBoundingBox(const Graph *graph,
  * Iterator itN and itE will be deleted after the computations (i.e. no need to delete them yourself).
  */
 TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
-                                         Iterator<edge> *itE,
-                                         const LayoutProperty *layout,
-                                         const SizeProperty *size,
-                                         const DoubleProperty *rotation,
-                                         const BooleanProperty *selection = NULL);
+    Iterator<edge> *itE,
+    const LayoutProperty *layout,
+    const SizeProperty *size,
+    const DoubleProperty *rotation,
+    const BooleanProperty *selection = NULL);
 
 //======================================================================================================
 
@@ -74,10 +74,10 @@ TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
   */
 
 TLP_SCOPE std::pair<Coord, Coord> computeBoundingRadius(const Graph *graph,
-                                                        const LayoutProperty *layout,
-                                                        const SizeProperty *size,
-                                                        const DoubleProperty *rotation,
-                                                        const BooleanProperty *selection = NULL);
+    const LayoutProperty *layout,
+    const SizeProperty *size,
+    const DoubleProperty *rotation,
+    const BooleanProperty *selection = NULL);
 
 //======================================================================================================
 
@@ -90,10 +90,10 @@ TLP_SCOPE std::pair<Coord, Coord> computeBoundingRadius(const Graph *graph,
   *
   */
 TLP_SCOPE std::vector<Coord> computeConvexHull(const Graph *graph,
-                                               const LayoutProperty *layout,
-                                               const SizeProperty *size,
-                                               const DoubleProperty *rotation,
-                                               const BooleanProperty *selection = NULL);
+    const LayoutProperty *layout,
+    const SizeProperty *size,
+    const DoubleProperty *rotation,
+    const BooleanProperty *selection = NULL);
 
 //======================================================================================================
 

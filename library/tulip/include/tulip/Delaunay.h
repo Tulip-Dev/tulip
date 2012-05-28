@@ -107,9 +107,11 @@ public:
   // Returns the edges of the voronoi cell for the ith site
   std::vector<Edge> voronoiEdgesForSite(const unsigned int siteIdx) {
     std::vector<Edge> ret;
+
     for (size_t i = 0 ; i < siteToCellEdges[siteIdx].size() ; ++i) {
-        ret.push_back(edges[siteToCellEdges[siteIdx][i]]);
+      ret.push_back(edges[siteToCellEdges[siteIdx][i]]);
     }
+
     return ret;
   }
 

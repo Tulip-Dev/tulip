@@ -25,48 +25,58 @@
 using namespace std;
 
 static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs) {
-    vector<tlp::node> nodes;
-    nodes.reserve(graph->numberOfNodes());
-    vector<tlp::Coord> points;
-    points.reserve(graph->numberOfNodes());
-    tlp::node n;
-    tlp::LayoutProperty *layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
-    forEach(n, graph->getNodes()) {
-        nodes.push_back(n);
-        points.push_back(layout->getNodeValue(n));
-    }
-    vector<pair<unsigned int, unsigned int> > edges;
-    vector<vector<unsigned int> > simplices;
-    bool ret = tlp::delaunayTriangulation(points, edges, simplices);
-    if (ret) {
+  vector<tlp::node> nodes;
+  nodes.reserve(graph->numberOfNodes());
+  vector<tlp::Coord> points;
+  points.reserve(graph->numberOfNodes());
+  tlp::node n;
+  tlp::LayoutProperty *layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
+  forEach(n, graph->getNodes()) {
+    nodes.push_back(n);
+    points.push_back(layout->getNodeValue(n));
+  }
+  vector<pair<unsigned int, unsigned int> > edges;
+  vector<vector<unsigned int> > simplices;
+  bool ret = tlp::delaunayTriangulation(points, edges, simplices);
 
-        graph->addCloneSubGraph("Original graph");
+  if (ret) {
 
-        tlp::Graph *delaunaySg = graph->addCloneSubGraph("Delaunay");
-        delaunaySg->delEdges(graph->getEdges());
-        for (size_t i = 0 ; i < edges.size() ; ++i) {
-            delaunaySg->addEdge(nodes[edges[i].first], nodes[edges[i].second]);
-        }
-        if (simplicesSubGraphs) {
-            ostringstream oss;
-            unsigned int simCpt = 0;
-            for (size_t i = 0 ; i < simplices.size() ; ++i) {
-                set<tlp::node> nodesSet;
-                for (size_t j = 0 ; j < simplices[i].size() ; ++j) {
-                    nodesSet.insert(nodes[simplices[i][j]]);
-                }
-                oss.str("");
-                if (simplices[i].size() == 3) {
-                    oss << "triangle " << simCpt++;
-                } else {
-                    oss << "tetrahedron " << simCpt++;
-                }
-                tlp::Graph *simplexSg = delaunaySg->inducedSubGraph(nodesSet);
-                simplexSg->setName(oss.str());
-            }
-        }
+    graph->addCloneSubGraph("Original graph");
+
+    tlp::Graph *delaunaySg = graph->addCloneSubGraph("Delaunay");
+    delaunaySg->delEdges(graph->getEdges());
+
+    for (size_t i = 0 ; i < edges.size() ; ++i) {
+      delaunaySg->addEdge(nodes[edges[i].first], nodes[edges[i].second]);
     }
-    return ret;
+
+    if (simplicesSubGraphs) {
+      ostringstream oss;
+      unsigned int simCpt = 0;
+
+      for (size_t i = 0 ; i < simplices.size() ; ++i) {
+        set<tlp::node> nodesSet;
+
+        for (size_t j = 0 ; j < simplices[i].size() ; ++j) {
+          nodesSet.insert(nodes[simplices[i][j]]);
+        }
+
+        oss.str("");
+
+        if (simplices[i].size() == 3) {
+          oss << "triangle " << simCpt++;
+        }
+        else {
+          oss << "tetrahedron " << simCpt++;
+        }
+
+        tlp::Graph *simplexSg = delaunaySg->inducedSubGraph(nodesSet);
+        simplexSg->setName(oss.str());
+      }
+    }
+  }
+
+  return ret;
 }
 
 class DelaunayTriangulation : public tlp::Algorithm {

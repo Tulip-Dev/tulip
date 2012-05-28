@@ -89,7 +89,7 @@ TLP_BEGIN_HASH_NAMESPACE {
   template <>
   struct hash<tlp::Size> {
     inline std::size_t operator()(const tlp::Size &s) const {
-        return hash_vector(s);
+      return hash_vector(s);
     }
   };
 } TLP_END_HASH_NAMESPACE

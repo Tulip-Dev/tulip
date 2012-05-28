@@ -143,7 +143,7 @@ TLP_BEGIN_HASH_NAMESPACE {
   template <>
   struct hash<tlp::Color> {
     inline std::size_t operator()(const tlp::Color &c) const {
-        return hash_vector(c);
+      return hash_vector(c);
     }
   };
 } TLP_END_HASH_NAMESPACE
