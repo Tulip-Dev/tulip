@@ -14,7 +14,7 @@ SET(siplib_SRCS
     siplib.c
     threads.c
     voidptr.c
-	sip.h
+    sip.h
 )
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w ")
@@ -44,8 +44,8 @@ ENDIF(WIN32)
 TARGET_LINK_LIBRARIES(${SIP_LIB} ${PYTHON_LIBRARY})
 
 INSTALL(TARGETS ${SIP_LIB}
-	RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT ${SIP_LIB}
-	LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT ${SIP_LIB}
-	ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT ${SIP_LIB})
+        RUNTIME DESTINATION ${TulipBinInstallDir}/python COMPONENT ${SIP_LIB}
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python COMPONENT ${SIP_LIB}
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python COMPONENT ${SIP_LIB})
 	
 ENDIF (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)   					

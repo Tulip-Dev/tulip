@@ -3,6 +3,37 @@
 %End
 
 namespace tlp { 
+
+tlp::BoundingBox computeBoundingBox(tlp::Graph *graph, tlp::BooleanProperty *selection = 0);
+%Docstring
+tlp.computeBoundingBox(graph[, selection = None])
+
+.. versionadded:: 3.8
+
+Computes the bounding box of a graph according to nodes positions and edges bends defined in the default layout property "viewLayout",
+nodes z-rotations defined in the default double property "viewRotation" and sizes of elements defined in the default size property "viewSize".
+
+:param graph: the graph on which to compute its bounding box
+:type graph: :class:`tlp.Graph`
+:param selection: a boolean property to restrain the computation of the bounding box to selected elements (if provided)
+:type selection: :class:`tlp.BooleanProperty`
+:rtype: :class:`tlp.BoundingBox`
+:throws: an exception if the provided boolean property is not attached to the graph
+%End
+
+%MethodCode
+    if (a1 && !(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
+        sipIsErr = 1;
+        PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding box.");
+    } else {
+        sipRes = new tlp::BoundingBox(tlp::computeBoundingBox(a0, a0->getProperty<tlp::LayoutProperty>("viewLayout"),
+                                                              a0->getProperty<tlp::SizeProperty>("viewSize"),
+                                                              a0->getProperty<tlp::DoubleProperty>("viewRotation"),
+                                                              a1));
+    }
+%End
+
+// ================================================================================================
  
 tlp::BoundingBox computeBoundingBox(tlp::Graph *graph,
                                     tlp::LayoutProperty *layout,
@@ -46,9 +77,47 @@ nodes z-rotations and sizes of elements.
 		sipRes = new tlp::BoundingBox(tlp::computeBoundingBox(a0, a1, a2, a3, a4));
 	}
 %End
-                             
+
 // ================================================================================================                             
-                                     
+
+std::pair<tlp::Coord, tlp::Coord> computeBoundingRadius(tlp::Graph *graph, tlp::BooleanProperty *selection = 0);
+%Docstring
+tlp.computeBoundingRadius(graph[, selection = None])
+
+.. versionadded:: 3.8
+
+Computes a bounding sphere (or a bounding circle if the graph has a 2D layout) of a graph according to nodes positions and edges bends
+defined in the default layout property "viewLayout", nodes z-rotations defined in the default double property "viewRotation"
+and sizes of elements defined in the default size property "viewSize".
+
+Returns a tuple of :class:`tlp.Coord` whose first member is the center of the bounding sphere (circle for 2D layout)
+and second member is the farthest point from the center (computed from graph elements positions).
+To get the bounding radius, you have to compute the distance between the two members of the tuple
+(use the :meth:`tlp.Vec3f.dist` method).
+
+:param graph: the graph on which to compute its bounding sphere
+:type graph: :class:`tlp.Graph`
+:param selection: a boolean property to restrain the computation of the bounding sphere to selected elements (if provided)
+:type selection: :class:`tlp.BooleanProperty`
+:rtype: (:class:`tlp.Coord`, :class:`tlp.Coord`)
+:throws: an exception if the provided boolean property is not attached to the graph
+
+%End
+
+%MethodCode
+    if (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
+        sipIsErr = 1;
+        PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding sphere.");
+    } else {
+        sipRes = new std::pair<tlp::Coord, tlp::Coord>(tlp::computeBoundingRadius(a0, a0->getProperty<tlp::LayoutProperty>("viewLayout"),
+                                                                                  a0->getProperty<tlp::SizeProperty>("viewSize"),
+                                                                                  a0->getProperty<tlp::DoubleProperty>("viewRotation"),
+                                                                                  a1));
+    }
+%End
+
+// ================================================================================================                             
+
 std::pair<tlp::Coord, tlp::Coord> computeBoundingRadius(tlp::Graph *graph,
                                                         tlp::LayoutProperty *layout,
                                                         tlp::SizeProperty *size,
@@ -96,6 +165,39 @@ To get the bounding radius, you have to compute the distance between the two mem
 	} else {
 		sipRes = new std::pair<tlp::Coord, tlp::Coord>(tlp::computeBoundingRadius(a0, a1, a2, a3, a4));
 	}
+%End
+
+// ================================================================================================
+
+std::vector<tlp::Coord> computeConvexHull(tlp::Graph *graph, tlp::BooleanProperty *selection = 0);
+%Docstring
+tlp.computeConvexHull(graph[, selection = None])
+
+.. versionadded:: 3.8
+
+Computes a convex hull of a graph according to nodes positions and edges bends
+defined in the default layout property "viewLayout", nodes z-rotations defined in the default double property "viewRotation"
+and sizes of elements defined in the default size property "viewSize". Only works with 2D layouts.
+Returns a list of :class:`tlp.Coord` containing the vertices of the graph convex hull correctly ordered.
+
+:param graph: the graph on which to compute its convex hull
+:type graph: :class:`tlp.Graph`
+:param selection: a boolean property to restrain the computation of the convex hull to selected elements (if provided)
+:type selection: :class:`tlp.BooleanProperty`
+:rtype: list of :class:`tlp.Coord`
+:throws: an exception if the provided boolean property is not attached to the graph
+%End
+
+%MethodCode
+    if (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
+        sipIsErr = 1;
+        PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its convex hull.");
+    } else {
+        sipRes = new std::vector<tlp::Coord>(tlp::computeConvexHull(a0, a0->getProperty<tlp::LayoutProperty>("viewLayout"),
+                                                                    a0->getProperty<tlp::SizeProperty>("viewSize"),
+                                                                    a0->getProperty<tlp::DoubleProperty>("viewRotation"),
+                                                                    a1));
+    }
 %End
 
 // ================================================================================================
@@ -153,7 +255,7 @@ bool computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line1,
 %Docstring
 tlp.computeLinesIntersection(line1, line2)
 
-.. versionadded:: 3.7.1
+.. versionadded:: 3.8
 
 Computes the intersection point (if any) of two 3d lines.
 Returns a tuple whose first member is a boolean indicating
