@@ -48,6 +48,7 @@ TLP_SCOPE   BoundingBox computeBoundingBox(const Graph *graph,
     const DoubleProperty *rotation,
     const BooleanProperty *selection = NULL);
 
+//======================================================================================================
 
 /**
  * Compute the bounding box of graph elements according to node positions, edges bends,
@@ -61,6 +62,9 @@ TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
     const SizeProperty *size,
     const DoubleProperty *rotation,
     const BooleanProperty *selection = NULL);
+
+//======================================================================================================
+
 /**
   *
   * Computes a bounding sphere (or a bounding circle if the graph has a 2D layout) of a graph according to nodes positions, edges bends,
@@ -78,6 +82,9 @@ TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (const Graph *graph,
     const SizeProperty *size,
     const DoubleProperty *rotation,
     const BooleanProperty *selection = NULL);
+
+//======================================================================================================
+
 /**
   *
   * Computes a convex hull of a graph according to nodes positions, edges bends,
@@ -92,6 +99,21 @@ TLP_SCOPE   std::vector<Coord> computeConvexHull (const Graph *graph,
     const DoubleProperty *rotation,
     const BooleanProperty *selection = NULL);
 
+//======================================================================================================
+
+/**
+  *
+  * Computes a convex hull of a set of points,
+  * Only works with 2D layouts.
+  *
+  * Returns a vector of tlp::Coord containing the vertices of the points convex hull correctly ordered.
+  *
+  */
+TLP_SCOPE std::vector<Coord> computeConvexHull(const std::vector<tlp::Coord> &points);
+
+//======================================================================================================
+
+
 /**
  * Computes the intersection point (if any) of two 3d lines.
  * Returns true if the line intersects, false otherwise (parallel or skew lines).
@@ -100,6 +122,16 @@ TLP_SCOPE   std::vector<Coord> computeConvexHull (const Graph *graph,
 TLP_SCOPE bool computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line1,
                                         const std::pair<tlp::Coord, tlp::Coord> &line2,
                                         tlp::Coord &intersectionPoint);
+
+//======================================================================================================
+
+/**
+ * Computes the centroid of a polygon.
+ * Polygon vertices must be provided correctly ordered in the points vector.
+ *
+ */
+TLP_SCOPE tlp::Coord computePolygonCentroid(const std::vector<tlp::Coord> &points);
+
 
 }
 

@@ -190,6 +190,7 @@ void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
 %Include Observable.sip
 %Include GraphEvent.sip
 %Include Constants.sip
+%Include Delaunay.sip
 
 
 
