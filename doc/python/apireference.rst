@@ -46,8 +46,8 @@ Graph measures
 
 .. autofunction:: tulip::tlp.reachableNodes
 
-Drawing Tools
-^^^^^^^^^^^^^
+Geometry
+^^^^^^^^
 
 .. autofunction:: tulip::tlp.computeBoundingBox
 
@@ -56,12 +56,23 @@ Drawing Tools
 .. autofunction:: tulip::tlp.computeBoundingRadius
 
 .. autofunction:: tulip::tlp.computeBoundingRadius
+
+.. autofunction:: tulip::tlp.computeConvexHull
 
 .. autofunction:: tulip::tlp.computeConvexHull
 
 .. autofunction:: tulip::tlp.computeConvexHull
 
 .. autofunction:: tulip::tlp.computeLinesIntersection
+
+.. autofunction:: tulip::tlp.computePolygonCentroid
+
+.. autofunction:: tulip::tlp.delaunayTriangulation
+
+.. autoclass:: tulip::tlp.VoronoiDiagram
+    :members:
+
+.. autofunction:: tulip::tlp.voronoiDiagram
 
 Plugins Management
 ^^^^^^^^^^^^^^^^^^
