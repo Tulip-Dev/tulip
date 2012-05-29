@@ -232,7 +232,7 @@ public:
           sugiyama->setRanking(new ogdf::OptimalRanking());
         }
         else
-            sugiyama->setRanking(new ogdf::CoffmanGrahamRanking());
+          sugiyama->setRanking(new ogdf::CoffmanGrahamRanking());
       }
 
       if (dataSet->get(ELT_TWOLAYERCROSS, sc)) {
@@ -242,29 +242,29 @@ public:
         else if (sc.getCurrent() == ELT_MEDIAN) {
           sugiyama->setCrossMin(new ogdf::MedianHeuristic());
         }
-        else if(sc.getCurrent()==ELT_SPLIT){
+        else if(sc.getCurrent()==ELT_SPLIT) {
           sugiyama->setCrossMin(new ogdf::SplitHeuristic());
         }
-        else if(sc.getCurrent()==ELT_SIFTING){
-            sugiyama->setCrossMin(new ogdf::SiftingHeuristic());
+        else if(sc.getCurrent()==ELT_SIFTING) {
+          sugiyama->setCrossMin(new ogdf::SiftingHeuristic());
         }
-        else if(sc.getCurrent()==ELT_GREEDYINSERT){
-            sugiyama->setCrossMin(new ogdf::GreedyInsertHeuristic());
+        else if(sc.getCurrent()==ELT_GREEDYINSERT) {
+          sugiyama->setCrossMin(new ogdf::GreedyInsertHeuristic());
         }
         else
-            sugiyama->setCrossMin(new ogdf::GreedySwitchHeuristic());
+          sugiyama->setCrossMin(new ogdf::GreedySwitchHeuristic());
       }
 
       if(dataSet->get(ELT_HIERARCHYLAYOUT, sc)) {
-          if(sc.getCurrent()==ELT_FASTHIERARCHY) {
-              sugiyama->setLayout(new ogdf::FastHierarchyLayout());
-          }
-          else if(sc.getCurrent()==ELT_FASTSIMPLEHIERARCHY) {
-              sugiyama->setLayout(new ogdf::FastSimpleHierarchyLayout());
-          }
-          else {
-              sugiyama->setLayout(new ogdf::OptimalHierarchyLayout());
-          }
+        if(sc.getCurrent()==ELT_FASTHIERARCHY) {
+          sugiyama->setLayout(new ogdf::FastHierarchyLayout());
+        }
+        else if(sc.getCurrent()==ELT_FASTSIMPLEHIERARCHY) {
+          sugiyama->setLayout(new ogdf::FastSimpleHierarchyLayout());
+        }
+        else {
+          sugiyama->setLayout(new ogdf::OptimalHierarchyLayout());
+        }
       }
     }
 
