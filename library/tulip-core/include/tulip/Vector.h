@@ -568,94 +568,96 @@ static double sqrt(tlp::Vector<float, 5>& v) {
 TLP_BEGIN_HASH_NAMESPACE {
   TEMPLATEVECTOR
   size_t hash_vector(const tlp::VECTOR &v) {
-      size_t seed = 0;
-      for (unsigned int i = 0 ; i < SIZE ; ++i) {
-          hash_combine(seed, v[i]);
-      }
-      return seed;
+    size_t seed = 0;
+
+    for (unsigned int i = 0 ; i < SIZE ; ++i) {
+      hash_combine(seed, v[i]);
+    }
+
+    return seed;
   }
 
   template <>
   struct hash<tlp::Vec2ui> {
     inline std::size_t operator()(const tlp::Vec2ui &v) const {
-        return hash_vector(v);
+      return hash_vector(v);
     }
   };
 
   template <>
   struct hash<tlp::Vec3ui> {
     inline std::size_t operator()(const tlp::Vec3ui &v) const {
-        return hash_vector(v);
+      return hash_vector(v);
     }
   };
 
   template <>
   struct hash<tlp::Vec4ui> {
     inline std::size_t operator()(const tlp::Vec4ui &v) const {
-        return hash_vector(v);
+      return hash_vector(v);
     }
   };
 
   template <>
   struct hash<tlp::Vec2i> {
     inline std::size_t operator()(const tlp::Vec2i &v) const {
-        return hash_vector(v);
+      return hash_vector(v);
     }
   };
 
   template <>
   struct hash<tlp::Vec3i> {
     inline std::size_t operator()(const tlp::Vec3i &v) const {
-        return hash_vector(v);
+      return hash_vector(v);
     }
   };
 
   template <>
   struct hash<tlp::Vec4i> {
     inline std::size_t operator()(const tlp::Vec4i &v) const {
-        return hash_vector(v);
+      return hash_vector(v);
     }
   };
 
   template <>
   struct hash<tlp::Vec2d> {
     inline std::size_t operator()(const tlp::Vec2d &v) const {
-        return hash_vector(v);
+      return hash_vector(v);
     }
   };
 
   template <>
   struct hash<tlp::Vec3d> {
     inline std::size_t operator()(const tlp::Vec3f &v) const {
-        return hash_vector(v);
+      return hash_vector(v);
     }
   };
 
   template <>
   struct hash<tlp::Vec4d> {
     inline std::size_t operator()(const tlp::Vec4d &v) const {
-        return hash_vector(v);
+      return hash_vector(v);
     }
   };
 
   template <>
   struct hash<tlp::Vec2f> {
     inline std::size_t operator()(const tlp::Vec2f &v) const {
-        return hash_vector(v);
+      return hash_vector(v);
     }
   };
 
   template <>
   struct hash<tlp::Vec3f> {
     inline std::size_t operator()(const tlp::Vec3f &v) const {
-        return hash_vector(v);
+      return hash_vector(v);
     }
   };
 
   template <>
   struct hash<tlp::Vec4f> {
     inline std::size_t operator()(const tlp::Vec4f &v) const {
-        return hash_vector(v);
+      return hash_vector(v);
     }
   };
 
