@@ -421,6 +421,7 @@ ENDIF(MACPPC)
 ## -----------------------------------------------------------------------------------------------
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in
 ## -----------------------------------------------------------------------------------------------
+IF( NOT MSVC)
 SET(TulipBuildIsRelease 0)
 STRING(COMPARE EQUAL "${CMAKE_BUILD_TYPE}" "Release" rel_build)
 IF(${rel_build})
@@ -430,6 +431,7 @@ ELSE()
   IF(${rel_build})
     SET(TulipBuildIsRelease 1)
   ENDIF()
+ENDIF()
 ENDIF()
 
 CONFIGURE_FILE("library/tulip/include/tulip/TulipRelease.h.in" "library/tulip/include/tulip/TulipRelease.h")
