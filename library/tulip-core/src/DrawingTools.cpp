@@ -215,11 +215,13 @@ std::vector<Coord> tlp::computeConvexHull(const Graph *graph, const LayoutProper
 //======================================================================================
 
 std::vector<Coord> tlp::computeConvexHull(const std::vector<tlp::Coord> &points) {
-    ConvexHullCalculator calc;
-    for (size_t i = 0 ; i < points.size() ; ++i) {
-        calc.addPoint(points[i]);
-    }
-    return calc.getResult();
+  ConvexHullCalculator calc;
+
+  for (size_t i = 0 ; i < points.size() ; ++i) {
+    calc.addPoint(points[i]);
+  }
+
+  return calc.getResult();
 }
 
 //======================================================================================
