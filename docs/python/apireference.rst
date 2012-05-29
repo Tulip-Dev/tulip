@@ -678,6 +678,7 @@ tlp.SizeVectorProperty
 	          pushBackEdgeEltValue, popBackEdgeEltValue, resizeEdgeValue, resizeEdgeValue
 
 tlp.StringVectorProperty
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.StringVectorProperty
         :members: copy, copy, copy, getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue,
