@@ -116,4 +116,4 @@ public :
   }
 };
 
-ALGORITHMPLUGIN(VoronoiDiagram,"Voronoi diagram","Antoine LAMBERT","","","1.0");
+ALGORITHMPLUGINOFGROUP(VoronoiDiagram,"Voronoi diagram","Antoine LAMBERT","","","1.0", "Triangulation");

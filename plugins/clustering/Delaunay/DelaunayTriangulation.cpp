@@ -104,4 +104,4 @@ public :
 
 };
 
-ALGORITHMPLUGIN(DelaunayTriangulation,"Delaunay triangulation","Antoine LAMBERT","","","1.0");
+ALGORITHMPLUGINOFGROUP(DelaunayTriangulation,"Delaunay triangulation","Antoine LAMBERT","","","1.0", "Triangulation");
