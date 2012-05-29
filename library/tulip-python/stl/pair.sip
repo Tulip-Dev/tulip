@@ -381,3 +381,81 @@ template<T1, T2*>
 	return pyTuple;
 %End
 };
+
+%MappedType std::pair<unsigned int, unsigned int> /DocType="(int, int)"/{
+%TypeHeaderCode
+#include <utility>
+%End
+
+%ConvertToTypeCode
+    PyObject *itm1 = NULL;
+    PyObject *itm2 = NULL;
+
+    if (sipIsErr == NULL) {
+        if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
+            return 0;
+
+        itm1 = PyTuple_GetItem(sipPy, 0);
+        itm2 = PyTuple_GetItem(sipPy, 1);
+
+        bool ok = PyLong_Check(itm1);
+        ok = ok && PyLong_Check(itm2);
+
+        if (!ok) {
+            return 0;
+        }
+
+        return 1;
+    }
+
+    itm1 = PyTuple_GetItem(sipPy, 0);
+    itm2 = PyTuple_GetItem(sipPy, 1);
+
+    int t1State = 0;
+    int t2State = 0;
+
+    unsigned int ui1 = PyLong_AsUnsignedLong(itm1);
+    unsigned int ui2 = PyLong_AsUnsignedLong(itm2);
+
+    std::pair<unsigned int, unsigned int> *p = new std::pair<unsigned int, unsigned int>(ui1, ui2);
+
+    *sipCppPtr = p;
+    return sipGetState(sipTransferObj);
+%End
+
+%ConvertFromTypeCode
+    PyObject *pyTuple = PyTuple_New(2);
+
+    if (pyTuple == NULL) {
+        return 0;
+    }
+
+    PyObject *pyFirst = NULL;
+    PyObject *pySecond = NULL;
+
+    pyFirst = PyLong_FromUnsignedLong(sipCpp->first);
+    pySecond = PyLong_FromUnsignedLong(sipCpp->second);
+
+    if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
+        if (pyFirst)
+            Py_XDECREF(pyFirst);
+
+        if (pySecond)
+            Py_XDECREF(pySecond);
+
+        Py_XDECREF(pyTuple);
+
+        return 0;
+    }
+
+    if (PyTuple_SetItem(pyTuple, 1, pySecond)) {
+        Py_XDECREF(pySecond);
+        Py_XDECREF(pyTuple);
+
+        return 0;
+    }
+
+    return pyTuple;
+%End
+};
+

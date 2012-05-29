@@ -19,6 +19,7 @@ INSTALL(FILES
   tulip/ConvexHull.h
   tulip/Coord.h
   tulip/DataSet.h
+  tulip/Delaunay.h
   tulip/DoubleProperty.h
   tulip/DrawingTools.h
   tulip/Edge.h
