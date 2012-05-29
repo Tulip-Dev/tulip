@@ -138,5 +138,15 @@ void tlp::Color::setB(unsigned char blue) {
 void tlp::Color::setA(unsigned char alpha) {
   array[3]=alpha;
 }
+
+TLP_BEGIN_HASH_NAMESPACE {
+  template <>
+  struct hash<tlp::Color> {
+    inline std::size_t operator()(const tlp::Color &c) const {
+        return hash_vector(c);
+    }
+  };
+} TLP_END_HASH_NAMESPACE
+
 #endif
 
