@@ -470,14 +470,20 @@ void GlQuadTreeLODCalculator::removeObservers() {
     if(currentGraph)
       currentGraph->removeGraphObserver(this);
 
-    if(layoutProperty)
+    if(layoutProperty) {
       layoutProperty->removePropertyObserver(this);
+      layoutProperty = NULL;
+    }
 
-    if(sizeProperty)
+    if(sizeProperty) {
       sizeProperty->removePropertyObserver(this);
+      sizeProperty = NULL;
+    }
 
-    if(selectionProperty)
+    if(selectionProperty) {
       selectionProperty->removePropertyObserver(this);
+      selectionProperty = NULL;
+    }
   }
 
   if(glScene)
