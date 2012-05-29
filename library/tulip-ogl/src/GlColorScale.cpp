@@ -37,8 +37,6 @@ GlColorScale::~GlColorScale() {
   if (colorScalePolyQuad != NULL) {
     delete colorScalePolyQuad;
   }
-
-  colorScale->removeListener(this);
 }
 
 void GlColorScale::setColorScale(ColorScale * scale) {
