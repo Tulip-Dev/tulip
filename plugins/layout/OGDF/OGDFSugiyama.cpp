@@ -73,7 +73,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "StringCollection")
-                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> LongestPathRanking: <FONT COLOR=\"black\"> the well-known longest-path ranking algorithm. <BR> <FONT COLOR=\"red\"> OptimalRanking: <FONT COLOR=\"black\"> the LP-based algorithm for computing a node ranking with minimal edge lengths.")
+                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> CoffmanGrahamRanking: <FONT COLOR=\"black\"> The coffman graham ranking algorithm. <BR> <FONT COLOR=\"red\"> LongestPathRanking: <FONT COLOR=\"black\"> the well-known longest-path ranking algorithm. <BR> <FONT COLOR=\"red\"> OptimalRanking: <FONT COLOR=\"black\"> the LP-based algorithm for computing a node ranking with minimal edge lengths.")
                              HTML_HELP_DEF( "default", "LongestPathRanking " )
                              HTML_HELP_BODY()
                              "Sets the option for the node ranking (layer assignment)."
