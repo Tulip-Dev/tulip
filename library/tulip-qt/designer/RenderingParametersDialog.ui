@@ -270,6 +270,16 @@
           </layout>
          </widget>
         </item>
+        <item>
+         <widget class="QCheckBox" name="billboarded">
+          <property name="toolTip">
+           <string>billboarded labels</string>
+          </property>
+          <property name="text">
+           <string>Always face to point of view</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
@@ -784,6 +794,22 @@
     <hint type="destinationlabel">
      <x>177</x>
      <y>242</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>billboarded</sender>
+   <signal>clicked()</signal>
+   <receiver>RenderingParametersDialogData</receiver>
+   <slot>updateView()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>95</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>177</x>
+     <y>219</y>
     </hint>
    </hints>
   </connection>

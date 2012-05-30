@@ -62,6 +62,7 @@ void RenderingParametersDialog::setGlMainWidget(GlMainWidget *glWidget) {
   Color selectionC = param.getSelectionColor();
   setButtonColor(QColor(selectionC[0],selectionC[1],selectionC[2]),selection);
   scaled->setChecked(param.isLabelScaled());
+  billboarded->setChecked(param.getLabelsAreBillboarded());
 
   if(param.getLabelsDensity()>0)
     density->setValue(param.getLabelsDensity()+5);
@@ -106,6 +107,7 @@ void RenderingParametersDialog::updateView() {
   glWidget->getScene()->setViewOrtho(orthogonal->isChecked());
   param.setEdge3D(edge3D->isChecked());
   param.setLabelScaled(scaled->isChecked());
+  param.setLabelsAreBillboarded(billboarded->isChecked());
   QColor backgroundC = background->palette().color(QPalette::Button);
   glWidget->getScene()->setBackgroundColor(Color(backgroundC.red(),backgroundC.green(),backgroundC.blue()));
   QColor selectionC = selection->palette().color(QPalette::Button);
