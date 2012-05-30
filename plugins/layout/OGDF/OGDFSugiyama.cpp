@@ -39,7 +39,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "If false, adjust the distance of each layer to the longest edge."
+                             "If false, adjust the distance of each layer to the longest edge (only for FastHierarchyLayout)."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
@@ -87,7 +87,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "StringCollection")
-                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FastHierarchyLayout: <FONT COLOR=\"black\"> Coordinate assignment phase for the Sugiyama algorithm by Buchheim et al.. <BR> <FONT COLOR=\"red\"> FastSimpleHierarchyLayout: <FONT COLOR=\"black\"> Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Koepf. <BR> <FONT COLOR=\"red\"> OptimalHierarchyLayout: <FONT COLOR=\"black\"> The LP-based hierarchy layout algorithm.")
+                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FastHierarchyLayout: <FONT COLOR=\"black\"> Coordinate assignment phase for the Sugiyama algorithm by Buchheim et al.. <BR> <FONT COLOR=\"red\"> FastSimpleHierarchyLayout: <FONT COLOR=\"black\"> Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Koepf.")
                              HTML_HELP_DEF( "default", "FastHierarchyLayout" )
                              HTML_HELP_BODY()
                              "The hierarchy layout module that computes the final layout."
@@ -112,10 +112,9 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 #define ELT_GREEDYSWITCH 5
 
 #define ELT_HIERARCHYLAYOUT "Layout"
-#define ELT_HIERARCHYLAYOUTLIST "FastHierarchyLayout;FastSimpleHierarchyLayout;OptimalHierarchyLayout"
+#define ELT_HIERARCHYLAYOUTLIST "FastHierarchyLayout;FastSimpleHierarchyLayout"
 #define ELT_FASTHIERARCHY 0
 #define ELT_FASTSIMPLEHIERARCHY 1
-#define ELT_OPTIMALHIERARCHY 2
 
 // comments below have been extracted from OGDF/src/layered/sugiyama.cpp
 /** \addtogroup layout */
@@ -186,7 +185,6 @@ public:
 
   void beforeCall() {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
-    ogdf::FastHierarchyLayout *fhl = new FastHierarchyLayout();
 
     if (dataSet != NULL) {
       int ival = 0;
@@ -199,15 +197,6 @@ public:
 
       if (dataSet->get("runs", ival))
         sugiyama->runs(ival);
-
-      if (dataSet->get("node distance", dval))
-        fhl->nodeDistance(dval);
-
-      if (dataSet->get("layer distance", dval))
-        fhl->layerDistance(dval);
-
-      if (dataSet->get("fixed layer distance", bval))
-        fhl->fixedLayerDistance(bval);
 
       if (dataSet->get("arrangeCCS", bval))
         sugiyama->arrangeCCs(bval);
@@ -256,20 +245,25 @@ public:
       }
 
       if(dataSet->get(ELT_HIERARCHYLAYOUT, sc)) {
+        double nodeDistance = 3;
+        double layerDistance = 3;
+        bool fixedLayerDistance = true;
+        dataSet->get("node distance", nodeDistance);
+        dataSet->get("layer distance", layerDistance);
+        dataSet->get("fixed layer distance", fixedLayerDistance);
+
         if(sc.getCurrent()==ELT_FASTHIERARCHY) {
-          sugiyama->setLayout(new ogdf::FastHierarchyLayout());
-        }
-        else if(sc.getCurrent()==ELT_FASTSIMPLEHIERARCHY) {
-          sugiyama->setLayout(new ogdf::FastSimpleHierarchyLayout());
+          ogdf::FastHierarchyLayout *fhl = new FastHierarchyLayout();
+          fhl->nodeDistance(nodeDistance);
+          fhl->layerDistance(layerDistance);
+          fhl->fixedLayerDistance(fixedLayerDistance);
+          sugiyama->setLayout(fhl);
         }
         else {
-          sugiyama->setLayout(new ogdf::OptimalHierarchyLayout());
+            sugiyama->setLayout(new ogdf::FastSimpleHierarchyLayout(static_cast<int>(nodeDistance), static_cast<int>(layerDistance)));
         }
       }
     }
-
-    sugiyama->setLayout(fhl);
-
   }
 
   void afterCall() {
