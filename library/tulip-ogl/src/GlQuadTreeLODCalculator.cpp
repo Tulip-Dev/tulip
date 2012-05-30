@@ -520,8 +520,8 @@ void GlQuadTreeLODCalculator::addObservers() {
 
 void GlQuadTreeLODCalculator::update(PropertyInterface *property) {
   if(property==inputData->getElementLayout() ||
-     property==inputData->getElementSize() ||
-     property==inputData->getElementSelected()) {
+      property==inputData->getElementSize() ||
+      property==inputData->getElementSelected()) {
     setHaveToCompute();
   }
 }

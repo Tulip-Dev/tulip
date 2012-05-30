@@ -260,7 +260,7 @@ public:
           sugiyama->setLayout(fhl);
         }
         else {
-            sugiyama->setLayout(new ogdf::FastSimpleHierarchyLayout(static_cast<int>(nodeDistance), static_cast<int>(layerDistance)));
+          sugiyama->setLayout(new ogdf::FastSimpleHierarchyLayout(static_cast<int>(nodeDistance), static_cast<int>(layerDistance)));
         }
       }
     }

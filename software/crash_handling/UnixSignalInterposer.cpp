@@ -150,9 +150,9 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact) __TH
 
 extern "C"
 void __cxa_throw(void *thrown_exception, void *pvtinfo, void (*dest)(void *)) {
-    std::cerr << "An exception has been thrown. Below is the stack trace." << std::endl;
-    StackWalkerGCC sw;
-    sw.printCallStackToStdErr();
-    real_cxa_throw(thrown_exception, pvtinfo, dest);
+  std::cerr << "An exception has been thrown. Below is the stack trace." << std::endl;
+  StackWalkerGCC sw;
+  sw.printCallStackToStdErr();
+  real_cxa_throw(thrown_exception, pvtinfo, dest);
 }
 
