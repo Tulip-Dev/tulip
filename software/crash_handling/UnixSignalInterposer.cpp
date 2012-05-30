@@ -36,16 +36,19 @@
 #include <dlfcn.h>
 
 #include "UnixSignalInterposer.h"
+#include "StackWalker.h"
 
 using namespace std;
 
 // some typedef on function pointers
 typedef SignalHandlerFunc* SignalFunc(int, SignalHandlerFunc*);
 typedef int SigactionFunc(int, const struct sigaction *, struct sigaction *);
+typedef void CxaThrowFunc(void *, void *, void (*) (void *));
 
 static SigactionFunc *real_sigaction = NULL;
 static SignalFunc *real_signal = NULL;
 static SignalFunc *real_sigset = NULL;
+static CxaThrowFunc *real_cxa_throw = NULL;
 
 static set<int> handledSignals;
 
@@ -69,6 +72,7 @@ static void initSignalInterposer(void) {
   real_sigaction = nasty_cast<SigactionFunc *>(dlsym(RTLD_NEXT, "sigaction"));
   real_signal = nasty_cast<SignalFunc *>(dlsym(RTLD_NEXT, "signal"));
   real_sigset = nasty_cast<SignalFunc *>(dlsym(RTLD_NEXT, "sigset"));
+  real_cxa_throw = nasty_cast<CxaThrowFunc *>(dlsym(RTLD_NEXT, "__cxa_throw"));
 }
 
 void installSignalHandler(int sig, SignalHandlerFunc *handler) {
@@ -143,3 +147,12 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact) __TH
   }
 
 }
+
+extern "C"
+void __cxa_throw(void *thrown_exception, void *pvtinfo, void (*dest)(void *)) {
+    std::cerr << "An exception has been thrown. Below is the stack trace." << std::endl;
+    StackWalkerGCC sw;
+    sw.printCallStackToStdErr();
+    real_cxa_throw(thrown_exception, pvtinfo, dest);
+}
+
