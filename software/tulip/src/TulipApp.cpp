@@ -314,7 +314,7 @@ void TulipApp::startTulip() {
         continue;
       }
 
-      QFileInfo info(argv[i]);
+      QFileInfo info(QString::fromUtf8(argv[i]));
       QString s = info.absoluteFilePath();
       fileOpen(0, s);
     }
