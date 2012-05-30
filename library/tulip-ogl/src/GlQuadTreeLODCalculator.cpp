@@ -519,15 +519,11 @@ void GlQuadTreeLODCalculator::addObservers() {
 }
 
 void GlQuadTreeLODCalculator::update(PropertyInterface *property) {
-  bool needCompute=false;
-
-  if(property==inputData->getElementLayout() || property==inputData->getElementSize() || property==inputData->getElementSelected()) {
-    needCompute=true;
-
-  }
-
-  if(needCompute)
+  if(property==inputData->getElementLayout() ||
+     property==inputData->getElementSize() ||
+     property==inputData->getElementSelected()) {
     setHaveToCompute();
+  }
 }
 
 void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
