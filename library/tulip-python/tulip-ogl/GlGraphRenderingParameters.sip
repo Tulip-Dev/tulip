@@ -9,440 +9,826 @@ class GlGraphRenderingParameters {
 #include <tulip/GlGraphRenderingParameters.h>
 %End
 
+%Docstring
+.. versionadded:: 3.8
+
+That class holds all the rendering parameters for a Tulip OpenGL graph drawing.
+%End
+
 public:
 
   GlGraphRenderingParameters();
 
-  tlp::DataSet getParameters() const;
+// =============================================================================================
 
-  void setParameters(const tlp::DataSet &);
-
-  /**
-   * @brief Gets the LOD below which the point mode is activated.
-   *
-   * @return float
-   **/
   float getPointModeLOD() const;
+%Docstring
+tlp.GlGraphRenderingParameters.getPointModeLOD()
 
-  /**
-   * @brief Sets the LOD below which the point mode is activated.
-   * If the lod is strictly less than the value, the point mode will be activated.
-   *
-   * @param pointModeLOD The LOD at which to enable point mode.
-   * @return void
-   **/
+Returns the Level Of Detail threshold below which point rendering for nodes and edges
+(typically when far from the camera) is activated.
+
+:rtype: float
+%End
+
+// =============================================================================================
+
   void setPointModeLOD(const float pointModeLOD);
+%Docstring
+tlp.GlGraphRenderingParameters.setPointModeLOD(lod)
 
-  /**
-   * activate or deactivate anlialiasing
-   */
+Sets the Level Of Detail threshold below which point rendering for nodes and edges
+(typically when far from the camera) is activated.
+
+:param lod: the Level Of Detail threshold value
+:type lod: float
+%End
+
+// =============================================================================================
+
   void setAntialiasing(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setAntiAliasing(antialiasing)
 
-  /** return true if antialiasing is activated else false.
-   */
-  bool isAntialiased()const;
+Activates/desactivates antialiasing.
 
-  /**
-   * activate or deactivate displaying of arrows along the graph's edges.
-   */
+:param antialiasing: the antialiasing state
+:type antialiasing: boolean
+%End
+
+// =============================================================================================
+
+  bool isAntialiased() const;
+%Docstring
+tlp.GlGraphRenderingParameters.isAntialiased()
+
+Returns if antialiasing rendering is activated.
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
   void setViewArrow(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setViewArrow(arrow)
 
-  /** return true if arrows drawing is activated else false.
-   * \sa setViewArrow
-   */
+Activates / desactivates the displaying of arrows along the graph edges.
+
+:param arrow: the state of the arrows rendering
+:type arrow: boolean
+%End
+
+
+// =============================================================================================
+
   bool isViewArrow()const;
+%Docstring
+tlp.GlGraphRenderingParameters.isViewArrow()
 
-  /**
-   * activate or deactivate displaying of labels on nodes.
-   */
+Returns the state of the displaying of arrows along the graph edges.
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
   void setViewNodeLabel(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setViewNodeLabel(nodeLabel)
 
-  /**
-   * return true if drawing of nodes' labels is activated.
-   */
+Activates / desactivates the displaying of nodes labels.
+
+:param nodeLabel: the state of the nodes labels rendering
+:type nodeLabel: boolean
+%End
+
+
+// =============================================================================================
+
   bool isViewNodeLabel() const;
+%Docstring
+tlp.GlGraphRenderingParameters.isViewNodeLabel()
 
-  /**
-   * activate or deactivate displaying of labels on nodes.
-   */
+Returns the state of the displaying of nodes labels.
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
   void setViewEdgeLabel(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setViewEdgeLabel(edgeLabel)
 
-  /**
-   * return true if drawing of nodes' labels is activated.
-   */
+Activates / desactivates the displaying of edges labels.
+
+:param edgeLabel: the state of the edges labels rendering
+:type edgeLabel: boolean
+%End
+
+// =============================================================================================
+
   bool isViewEdgeLabel() const;
+%Docstring
+tlp.GlGraphRenderingParameters.isViewEdgeLabel()
 
-  /**
-   * activate or deactivate displaying of labels outside the screen.
-   */
+Returns the state of the displaying of edges labels.
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
   void setViewOutScreenLabel(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setViewOutScreenLabel(outScreenLabel)
 
-  /**
-   * return true if drawing of outscreen labels is activated.
-   */
+Activates / desactivates the displaying of labels for elements outside the screen.
+
+:param outScreenLabel: the state of the labels rendering for elements outside the screen.
+:type outScreenLabel: boolean
+%End
+
+// =============================================================================================
+
   bool isViewOutScreenLabel() const;
+%Docstring
+tlp.GlGraphRenderingParameters.isViewOutScreenLabel()
 
-  /**
-   *activate or deactivate interpolation of nodes colors along edge
-   */
+Returns the state of the displaying of labels for elements outside the screen.
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
   void setEdgeColorInterpolate(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setEdgeColorInterpolate(interpolate)
 
-  /**
-   * return true if color interpolation is activated
-   */
+Activates / desactivates the interpolation of nodes colors along edges.
+
+:param interpolate: the state of the edge color interpolation
+:type interpolate: boolean
+%End
+
+// =============================================================================================
+
   bool isEdgeColorInterpolate() const;
+%Docstring
+tlp.GlGraphRenderingParameters.isEdgeColorInterpolate()
 
-  /**
-   * activate or deactivate interpolation of nodes colors along edge
-   */
+Returns the state of the edge color interpolation.
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
   void setEdgeSizeInterpolate(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setEdgeSizeInterpolate(interpolate)
 
-  /**
-   * return true if color interpolation is activated
-   */
+Activates / desactivates the interpolation of nodes sizes along edges.
+
+:param interpolate: the state of the edge size interpolation
+:type interpolate: boolean
+%End
+
+// =============================================================================================
+
   bool isEdgeSizeInterpolate() const;
+%Docstring
+tlp.GlGraphRenderingParameters.isEdgeSizeInterpolate()
 
-  /**
-   * return the type of fonts used in the renderer(0=3D,1=bitmap,2=texture)
-   */
-  unsigned int getFontsType() const;
+Returns the state of the edge size interpolation.
 
-  /**
-   * set fonts type used in the renderer (0=3D,1=bitmap,2=texture)
-   */
-  void setFontsType(unsigned int type);
+:rtype: boolean
+%End
 
-  /**
-   * set the path for the texture loading
-   */
+// =============================================================================================
+
   void setTexturePath(const std::string& path);
+%Docstring
+tlp.GlGraphRenderingParameters.setTexturePath(path)
 
-  /**
-   * return the absolute path used for texture loading
-   */
+Sets the absolute path for textures loading.
+
+:param path: the absolute path of a directory for textures loading.
+:type path: string
+%End
+
+// =============================================================================================
+
   std::string getTexturePath() const;
+%Docstring
+tlp.GlGraphRenderingParameters.getTexturePath()
 
-  /**
-   * set the absolute path used for the fonts loading
-   */
+Returns the absolute path used for texture loading.
+
+:rtype: string
+%End
+
+// =============================================================================================
+
   void setFontsPath(const std::string& path);
+%Docstring
+tlp.GlGraphRenderingParameters.setFontsPath(path)
 
-  /**
-   * return the absolute path used for the fonts loading
-   */
+Sets the absolute path for fonts loading (.ttf files).
+
+:param path: the absolute path of a directory for fonts loading.
+:type path: string
+%End
+
+// =============================================================================================
+
   std::string getFontsPath();
+%Docstring
+tlp.GlGraphRenderingParameters.getFontsPath()
 
-  /**
-   * If true and if labels are activated label inside meta nodes will be displayed
-   */
+Returns the absolute path used for fonts loading (.ttf files).
+
+:rtype: string
+%End
+
+// =============================================================================================
+
   void setViewMetaLabel(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setViewMetaLabel(metaLabel)
 
-  /**
-   * return the true if viewMetaLabels is enable else false
-   */
+Activates / desactivates the displaying of labels inside meta-nodes.
+
+:param metaLabel: the state of the displaying of labels inside meta-nodes.
+:type edgeLabel: boolean
+%End
+
+// =============================================================================================
+
   bool isViewMetaLabel() const;
+%Docstring
+tlp.GlGraphRenderingParameters.isViewMetaLabel()
 
-  /**
-   * If true edges are displayed.
-   */
+Returns the state of the displaying of labels inside meta-nodes.
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
   void setDisplayEdges(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setDisplayEdges(displayEdges)
 
-  /**
-   * return true if edges are displayed.
-   */
+Activates / desactivates the displaying of edges.
+
+:param displayEdges: the state of the displaying of edges.
+:type displayEdges: boolean
+%End
+
+// =============================================================================================
+
   bool isDisplayEdges() const;
+%Docstring
+tlp.GlGraphRenderingParameters.isDisplayEdges()
 
-  /**
-   * If true nodes are displayed.
-   */
+Returns the state of the displaying of edges.
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
   void setDisplayNodes(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setDisplayNodes(displayNodes)
 
-  /**
-   * return true if nodes are displayed.
-   */
+Activates / desactivates the displaying of nodes.
+
+:param displayNodes: the state of the displaying of nodes.
+:type displayNodes: boolean
+%End
+
+// =============================================================================================
+
   bool isDisplayNodes() const;
+%Docstring
+tlp.GlGraphRenderingParameters.isDisplayNodes()
 
-  /**
-   * If true meta-nodes are displayed.
-   */
+Returns the state of the displaying of nodes.
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
   void setDisplayMetaNodes(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setDisplayMetaNodes(displayMetaNodes)
 
-  /**
-   * return true if meta-nodes are displayed.
-   */
+Activates / desactivates the displaying of nodes.
+
+:param displayMetaNodes: the state of the displaying of meta-nodes.
+:type displayMetaNodes: boolean
+%End
+
+// =============================================================================================
+
   bool isDisplayMetaNodes() const;
+%Docstring
+tlp.GlGraphRenderingParameters.isDisplayMetaNodes()
 
-  /**
-   * set stencil number for selected nodes
-   */
+Returns the state of the displaying of meta-nodes.
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
   void setSelectedNodesStencil(const int stencil);
+%Docstring
+tlp.GlGraphRenderingParameters.setSelectedNodesStencil(stencil)
 
-  /**
-   * get stencil number for selected nodes
-   */
+Sets the stencil value for selected nodes. The lower the value is, the more the objects will be drawn
+on top of other ones. The default value is 2.
+
+:param stencil: a value in the range [0, 255]
+:type stencil: integer
+%End
+
+// =============================================================================================
+
   int getSelectedNodesStencil();
+%Docstring
+tlp.GlGraphRenderingParameters.getSelectedNodesStencil()
 
-  /**
-   * set stencil number for selected meta-nodes
-   */
+Returns the stencil value for selected nodes.
+
+:rtype: integer 
+%End
+
+// =============================================================================================
+
   void setSelectedMetaNodesStencil(const int stencil);
+%Docstring
+tlp.GlGraphRenderingParameters.setSelectedMetaNodesStencil(stencil)
 
-  /**
-   * get stencil number for selected meta-nodes
-   */
+Sets the stencil value for selected meta-nodes. The lower the value is, the more the objects will be drawn
+on top of other ones. The default value is 2.
+
+:param stencil: a value in the range [0, 255]
+:type stencil: integer
+%End
+
+
+// =============================================================================================
+
   int getSelectedMetaNodesStencil();
+%Docstring
+tlp.GlGraphRenderingParameters.getSelectedMetaNodesStencil()
 
-  /**
-   * set stencil number for selected edges
-   */
+Returns the stencil value for selected meta-nodes.
+
+:rtype: integer 
+%End
+
+// =============================================================================================
+
   void setSelectedEdgesStencil(const int stencil);
+%Docstring
+tlp.GlGraphRenderingParameters.setSelectedEdgesStencil(stencil)
 
-  /**
-   * get stencil number for selected edges
-   */
+Sets the stencil value for selected edges. The lower the value is, the more the objects will be drawn
+on top of other ones. The default value is 2.
+
+:param stencil: a value in the range [0, 255]
+:type stencil: integer
+%End
+
+// =============================================================================================
+
   int getSelectedEdgesStencil();
+%Docstring
+tlp.GlGraphRenderingParameters.getSelectedEdgesStencil()
 
-  /**
-   * set stencil number for nodes
-   */
+Returns the stencil value for selected edges.
+
+:rtype: integer 
+%End
+
+// =============================================================================================
+
   void setNodesStencil(const int stencil);
+%Docstring
+tlp.GlGraphRenderingParameters.setNodesStencil(stencil)
 
-  /**
-   * get stencil number for nodes
-   */
+Sets the stencil value for nodes. The lower the value is, the more the objects will be drawn
+on top of other ones. The default value is 255.
+
+:param stencil: a value in the range [0, 255]
+:type stencil: integer
+%End
+
+// =============================================================================================
+
   int getNodesStencil();
+%Docstring
+tlp.GlGraphRenderingParameters.getNodesStencil()
 
-  /**
-   * set stencil number for meta-nodes
-   */
+Returns the stencil value for nodes.
+
+:rtype: integer 
+%End
+
+// =============================================================================================
+
   void setMetaNodesStencil(const int stencil);
+%Docstring
+tlp.GlGraphRenderingParameters.setMetaNodesStencil(stencil)
 
-  /**
-   * get stencil number for meta-nodes
-   */
+Sets the stencil value for meta-nodes. The lower the value is, the more the objects will be drawn
+on top of other ones. The default value is 255.
+
+:param stencil: a value in the range [0, 255]
+:type stencil: integer
+%End
+
+// =============================================================================================
+
   int getMetaNodesStencil();
+%Docstring
+tlp.GlGraphRenderingParameters.getMetaNodesStencil()
 
-  /**
-   * set stencil number for edges
-   */
+Returns the stencil value for meta-nodes.
+
+:rtype: integer 
+%End
+
+// =============================================================================================
+
   void setEdgesStencil(const int stencil);
+%Docstring
+tlp.GlGraphRenderingParameters.setEdgesStencil(stencil)
 
-  /**
-   * get stencil number for edges
-   */
+Sets the stencil value for edges. The lower the value is, the more the objects will be drawn
+on top of other ones. The default value is 255.
+
+:param stencil: a value in the range [0, 255]
+:type stencil: integer
+%End
+
+// =============================================================================================
+
   int getEdgesStencil();
+%Docstring
+tlp.GlGraphRenderingParameters.getEdgesStencil()
 
-  /**
-   * set stencil number for nodes label
-   */
+Returns the stencil value for edges.
+
+:rtype: integer 
+%End
+
+// =============================================================================================
+
   void setNodesLabelStencil(const int stencil);
+%Docstring
+tlp.GlGraphRenderingParameters.setNodesLabelStencil(stencil)
 
-  /**
-   * get stencil number for nodes label
-   */
+Sets the stencil value for nodes labels. The lower the value is, the more the objects will be drawn
+on top of other ones. The default value is 255.
+
+:param stencil: a value in the range [0, 255]
+:type stencil: integer
+%End
+
+// =============================================================================================
+
   int getNodesLabelStencil();
+%Docstring
+tlp.GlGraphRenderingParameters.getNodesLabelStencil()
 
-  /**
-   * set stencil number for meta-nodes label
-   */
+Returns the stencil value for nodes labels.
+
+:rtype: integer 
+%End
+
+// =============================================================================================
+
   void setMetaNodesLabelStencil(const int stencil);
+%Docstring
+tlp.GlGraphRenderingParameters.setMetaNodesLabelsStencil(stencil)
 
-  /**
-   * get stencil number for meta-nodes label
-   */
+Sets the stencil value for meta-nodes labels. The lower the value is, the more the objects will be drawn
+on top of other ones. The default value is 255.
+
+:param stencil: a value in the range [0, 255]
+:type stencil: integer
+%End
+
+// =============================================================================================
+
   int getMetaNodesLabelStencil();
+%Docstring
+tlp.GlGraphRenderingParameters.getMetaNodesLabelStencil()
 
-  /**
-   * set stencil number for edges label
-   */
+Returns the stencil value for meta-nodes labels.
+
+:rtype: integer 
+%End
+
+// =============================================================================================
+
   void setEdgesLabelStencil(const int stencil);
+%Docstring
+tlp.GlGraphRenderingParameters.setEdgesLabelStencil(stencil)
 
-  /**
-   * get stencil number for edges label
-   */
+Sets the stencil value for edges labels. The lower the value is, the more the objects will be drawn
+on top of other ones. The default value is 255.
+
+:param stencil: a value in the range [0, 255]
+:type stencil: integer
+%End
+
+
+// =============================================================================================
+
   int getEdgesLabelStencil();
+%Docstring
+tlp.GlGraphRenderingParameters.getEdgesLabelStencil()
 
-  /**
-   * If true node and edges are ordered according to the viewMetric property
-   */
+Returns the stencil value for edges labels.
+
+:rtype: integer 
+%End
+
+// =============================================================================================
+
   void setElementOrdered(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setElementOrdered(elementOrdered)
 
-  /**
-   * return true if element ordering is activated
-   */
+Activates / desactivates the ordered rendering of graph elements according
+to the values in the "viewMetric" double property.
+
+:param elementsOrdered: the state of the ordered rendering
+:type elementOrdered: boolean
+%End
+
+// =============================================================================================
+
   bool isElementOrdered() const;
+%Docstring
+tlp.GlGraphRenderingParameters.isElementOrdered()
 
-  /**
-   * @brief Defines which property is used for the element ordering.
-   *
-   * @param property The property to use to order the elements.
-   * @return void
-   **/
-  void setElementOrderingProperty(tlp::DoubleProperty* property);
+Returns the state of the ordered rendering of graph elements.
 
-  /**
-   * @brief Gets the property used for element ordering. Setting it to NULL will use viewMetric if the ordering is enabled.
-   *
-   * @return :DoubleProperty* The Property curretly used.
-   **/
+:rtype: boolean
+%End
+
+// =============================================================================================
+
+  void setElementOrderingProperty(tlp::DoubleProperty* property /AllowNone/);
+%Docstring
+tlp.GlGraphRenderingParameters.setElementOrderingProperty(property)
+
+Defines which property should be used for the ordered rendering of graph elements.
+Setting it to :const:`None` will use the "viewMetric" property if the ordering is enabled.
+
+:param property: the property to use to order the rendering of graph elements
+:type property: :class:`tulip.tlp.DoubleProperty`
+%End
+
+// =============================================================================================
+
   tlp::DoubleProperty* getElementOrderingProperty() const;
+%Docstring
+tlp.GlGraphRenderingParameters.getElementOrderingProperty()
 
-  /**
-   * If true node and edges are ordered according to the distance with camera
-   */
+Returns the double property used for the ordered rendering of graph elements.
+
+:rtype: :class:`tulip.tlp.DoubleProperty`
+%End
+
+// =============================================================================================
+
   void setElementZOrdered(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setElementZOrdered(zOrdering)
 
-  /**
-   * return true if element Z ordering is activated
-   */
+Activates / desactivates the ordered rendering of elements according to their
+distance to the camera.
+
+:param zOrdering: the state of the z-ordered rendering
+:type zOrdering: boolean
+%End
+
+// =============================================================================================
+
   bool isElementZOrdered() const;
+%Docstring
+tlp.GlGraphRenderingParameters.isElementZOrdered()
 
-  /**
-   * if true use 3D displaying of edges instead of 2D lines on ALL edges
-   */
+Returns the state of the z-ordered rendering.
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
   void setEdge3D(const bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setEdge3D(edge3d)
 
-  /**
-   * return true if 3D drawing of edges is activated
-   */
+Activates / desactivates the 3d displaying of edges instead of 2d lines.
+
+:param edge3d: the state of the 3d edge rendering
+:type edge3d: boolean
+%End
+
+// =============================================================================================
+
   bool isEdge3D() const;
+%Docstring
+tlp.GlGraphRenderingParameters.isEdge3D()
 
-  /**
-   * Get the size of the border that is added to any label when
-   * using bitmap fonts.
-   * \deprecated Use getLabelsDensity instead
-   */
-  unsigned int getLabelsBorder() const;
+Returns the state of the 3d edge rendering.
 
-  /**
-   * Get the size of the border that is added to any label when
-   * using bitmap fonts. Setting this parameter to a high value
-   * enables de reduce the label density in the final drawing.
-   * Default value is set to 2 which enables readable labels.
-   * \deprecated Use setLabelsDensity instead
-   */
-  void setLabelsBorder(const unsigned int);
+:rtype: boolean
+%End
 
-  /**
-   * set if Edge max size is block to node size
-   */
-  void setEdgesMaxSizeToNodesSize(const bool b);
+// =============================================================================================
 
-  /**
-   * return if Edge max size is block to node size
-   */
-  bool getEdgesMaxSizeToNodesSize() const;
-
-  /**
-   * if true draw graph with feedback information (very low)
-   */
-  void setFeedbackRender(bool feedback);
-
-  /**
-   * return true if the graph is draw with feedback information
-   */
-  bool getFeedbackRender();
-
-  /**
-   * Change the selection color
-   */
   void setSelectionColor(const tlp::Color &color);
+%Docstring
+tlp.GlGraphRenderingParameters.setSelectionColor(color)
 
-  /**
-   * return the selection color
-   */
+Sets the color of selected elements.
+
+:param color: the selection color
+:type color: :class:`tulip.tlp.Color`
+%End
+
+// =============================================================================================
+
   tlp::Color getSelectionColor();
+%Docstring
+tlp.GlGraphRenderingParameters.getSelectionColor()
 
-  /**
-   * return if labels are scaled to node size
-   */
+Returns the color of selection.
+
+:rtype: :class:`tulip.tlp.Color`
+%End
+
+// =============================================================================================
+
   bool isLabelScaled();
+%Docstring
+tlp.GlGraphRenderingParameters.isLabelScaled()
 
-  /**
-   * Set if labels are scaled to node size
-   */
+Returns the state of the scaling of labels to nodes sizes.
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
   void setLabelScaled(bool state);
+%Docstring
+tlp.GlGraphRenderingParameters.setLabelScaled(labelScaled)
 
-  /**
-   * return if labels can be overlaped
-   * \deprecated Use getLabelsDensity instead
-   */
-  bool isLabelOverlaped();
+Activates / desactivates the scaling of labels to nodes sizes.
 
-  /**
-   * Set if labels can be overlaped
-   * \deprecated Use setLabelsDensity instead
-   */
-  void setLabelOverlaped(bool state);
+:param labelScaled: the state of the scaling of labels to nodes sizes.
+:type labelScaled: boolean
+%End
 
-  /**
-   * Return labels density
-   * This density must be in interval -100 100
-   * -100 : No labels
-   * 0    : No overlap
-   * 100  : All labels
-   */
+// =============================================================================================
+
   int getLabelsDensity();
+%Docstring
+tlp.GlGraphRenderingParameters.getLabelsDensity()
 
-  /**
-   * Set labels density
-   * This density must be in interval -100 100
-   * -100 : No labels
-   * 0    : No overlap
-   * 100  : All labels
-   */
+Returns the labels density value.
+
+:rtype: integer
+%End
+
+// =============================================================================================
+
   void setLabelsDensity(int density);
+%Docstring
+tlp.GlGraphRenderingParameters.setLabelsDensity(density)
 
-  /**
-   * return min size of label : this min size is only used if labels aren't be scaled
-   */
-  int getMinSizeOfLabel();
+Sets the labels density value. It must be in the range [-100, 100].
+The labels are displayed according to that value :
 
-  /**
-   * Set min size of label : this min size is only used if labels aren't be scaled
-   */
+  * -100 : no labels are displayed
+  * 0 : only non overlapping labels are displayed
+  * 100 : all labels are displayed
+
+:param density: a value in the range [-100, 100]
+:type density: integer
+%End
+
+// =============================================================================================
+
+    int getMinSizeOfLabel();
+%Docstring
+tlp.GlGraphRenderingParameters.getMinSizeOfLabel()
+
+Returns the minimum size of labels. That value is only used if the labels
+are not scaled to nodes sizes.
+
+:rtype: integer
+%End
+
+// =============================================================================================
+
   void setMinSizeOfLabel(int size);
+%Docstring
+tlp.GlGraphRenderingParameters.setMinSizeOfLabel(size)
 
-  /**
-   * return max size of label : this max size is only used if labels aren't be scaled
-   */
+Sets the minimum size of labels. That value is only used if the labels
+are not scaled to nodes sizes.
+
+;param size: the minimum size of labels
+:type: integer
+%End
+
+// =============================================================================================
+
   int getMaxSizeOfLabel();
+%Docstring
+tlp.GlGraphRenderingParameters.getMaxSizeOfLabel()
 
-  /**
-   * Set max size of label : this max size is only used if labels aren't be scaled
-   */
+Returns the maximum size of labels. That value is only used if the labels
+are not scaled to nodes sizes.
+
+:rtype: integer
+%End
+
+// =============================================================================================
+
   void setMaxSizeOfLabel(int size);
+%Docstring
+tlp.GlGraphRenderingParameters.setMaxSizeOfLabel(size)
 
-  /**
-   * return if labels are billboarded
-   */
+Sets the maximum size of labels. That value is only used if the labels
+are not scaled to nodes sizes.
+
+;param size: the maximum size of labels
+:type: integer
+%End
+
+// =============================================================================================
+
   bool getLabelsAreBillboarded();
+%Docstring
+tlp.GlGraphRenderingParameters.getLabelsAreBillboarded()
 
-  /**
-   * Set if labels are billboarded
-   */
+Returns the state of the labels billboarding (always facing the camera).
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
   void setLabelsAreBillboarded(bool billboarded);
+%Docstring
+tlp.GlGraphRenderingParameters.setLabelsAreBillboarded(billboardLabels)
 
-  /**
-   * return if polylines are bicolored
-   */
-  bool getPolylines3DAreBicolored();
+Activates / desactivates labels billboarding (always facing the camera).
 
-  /**
-   * Set if polylines are bicolored
-   */
-  void setPolylines3DAreBicolored(bool bicolored);
+:param billboardLabels: the state of labels billboarding
+:type billboardLabels: boolean
+%End
 
-  /**
-   * This property is use to filter nodes/edges display, for a node/edge if this property is false : the node/edge will not be diplayed
-   * Warning : this property will not be saved in DataSet
-   */
-  void setDisplayFilteringProperty(tlp::BooleanProperty *filteringProperty);
+// =============================================================================================
 
-  /**
-   * Get the boolean property use to filtering displaying of nodes/edges
-   */
+  void setDisplayFilteringProperty(tlp::BooleanProperty *filteringProperty /AllowNone/);
+%Docstring
+tlp.GlGraphRenderingParameters.setDisplayFilteringProperty(property)
+
+Sets the boolean property used to filter the rendering of graph elements. If sets to :const:`None`,
+the filtering is desactivated. If the value for a node / edge in that property is :const:`False`,
+it will not be displayed.
+
+:param property: the boolean property used to filter the rendering of graph elements
+:type property: :class:`tulip.tlp.BooleanProperty`
+%End
+
+// =============================================================================================
+
   tlp::BooleanProperty * getDisplayFilteringProperty() const;
+%Docstring
+tlp.GlGraphRenderingParameters.getDisplayFilteringProperty()
+
+Returns the boolean property used to filter the rendering of graph elements.
+
+:rtype: :class:`tulip.tlp.BooleanProperty`
+%End
 
 };
 };

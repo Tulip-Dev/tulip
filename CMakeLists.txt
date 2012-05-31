@@ -214,7 +214,7 @@ IF(PYTHONINTERP_FOUND)
     FIND_PACKAGE(PythonLibs)
 
     IF(PYTHONLIBS_FOUND)
-        SET(COMPILE_TULIP_OGL_QT_PYTHON_BINDINGS OFF CACHE BOOL "Enable the compilation of tulip-ogl and tulip-qt Python bindings")
+        SET(COMPILE_TULIP_QT_PYTHON_BINDINGS OFF CACHE BOOL "Enable the compilation of tulip-qt Python bindings (requires PyQt4, experimental and not documented)")
         SET(SIP_OK FALSE CACHE INTERNAL "")
         FIND_PACKAGE(SIP)
         SET(SIP_OK ${SIP_FOUND})

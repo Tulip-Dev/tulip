@@ -44,7 +44,7 @@
     "   def tlpimporthook(name, globals={}, locals={}, fromlist=[], level=-1):\n"
     "       fullname = name\n"
     "       m = _origimportfunc(name, globals, locals, fromlist, level)\n"
-    "       if fullname == \"tulip\" or fullname == \"tulipogl\" or fullname == \"tulipqt\":\n"
+    "       if fullname.startswith(\"tulip\"):\n"
     "           if fromlist and len(fromlist) > 0 and fromlist[0] == \"*\":\n"
     "               curTlpDict = None\n"
     "               if \"tlp\" in locals:\n"
@@ -68,12 +68,16 @@
 
 %ModuleHeaderCode
 #include <string>
-static void printErrorMessage(const std::string &errMsg) {
-	std::string pythonCode = "import sys\n"
-							 "sys.stderr.write(\"";
-	pythonCode += errMsg;
-	pythonCode += "\\n\")";
-	PyRun_SimpleString(pythonCode.c_str());
+extern void printErrorMessage(const std::string &errMsg);
+%End
+
+%ModuleCode
+void printErrorMessage(const std::string &errMsg) {
+    std::string pythonCode = "import sys\n"
+                             "sys.stderr.write(\"";
+    pythonCode += errMsg;
+    pythonCode += "\\n\")";
+    PyRun_SimpleString(pythonCode.c_str());
 }
 %End
 

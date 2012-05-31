@@ -271,7 +271,6 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 #else
       addModuleSearchPath(tlp::TulipLibDir + "/python", true);
 #endif
-
       initscriptengine();
       inittuliputils();
 
@@ -285,6 +284,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
       runString("import sip");
       runString("from tulip import *");
       runString("from tulipogl import *");
+      runString("from tulipgui import *");
       runString("from tulipqt import *");
       outputActivated = true;
 

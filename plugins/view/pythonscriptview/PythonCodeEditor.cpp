@@ -428,6 +428,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), hi
     apiDb->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulip.api");
     apiDb->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/Python-" + QString(PythonInterpreter::getInstance()->getPythonVersion().c_str()) + ".api");
     apiDb->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulipogl.api");
+    apiDb->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulipgui.api");
 
     PythonInterpreter::getInstance()->setOutputEnabled(false);
 

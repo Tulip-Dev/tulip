@@ -31,6 +31,8 @@ Contents
    pythonplugins 
    apireference
    tulippluginsreference       
+   tulipoglreference
+   tulipguireference
 
 Indices and tables
 ==================

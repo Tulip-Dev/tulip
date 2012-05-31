@@ -225,7 +225,10 @@ def process_docstring(app, what, name, obj, options, lines):
             return
         global methodSignature
         currentSignature = ""
-        n = name.replace("tulip.", "")
+        n = name.replace("tulipgui.", "")
+        n = n.replace("tulipogl.", "")
+        n = n.replace("tulipqt.", "")
+        n = n.replace("tulip.", "")
 
         nbMethods = 0
         pos = 0
@@ -278,7 +281,10 @@ def process_docstring(app, what, name, obj, options, lines):
 def process_signature(app, what, name, obj, opts, sig, ann):
     global methodSignature
     currentSignature = ""
-    n = name.replace("tulip.", "")
+    n = name.replace("tulipgui.", "")
+    n = n.replace("tulipogl.", "")
+    n = n.replace("tulipqt.", "")
+    n = n.replace("tulip.", "")
     if what != "class" and obj.__doc__ :
         nbMethods = 0
         pos = 0

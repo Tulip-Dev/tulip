@@ -28,7 +28,7 @@ public:
    */
   tlp::GlGraphRenderingParameters* getRenderingParameters();
 %MethodCode
-    sipRes = sipCpp->getRenderingParametersPointer();
+    sipRes = new tlp::GlGraphRenderingParameters(sipCpp->getRenderingParameters());
 %End
 
   /**

@@ -17,17 +17,11 @@
  *
  */
 
-// +-------------------------------------------------------------------------+
-// | Tulip Python Bindings                                                   |
-// | inspired for bindings by the Booggie project development team           |
-// | (http://booggie.org/)                                                   |
-// +-------------------------------------------------------------------------+
-
-%Module tulipogl
+%Module tulipgui
 
 // Hack to avoid overriding the tlp Python class (containing all the module classes as
 // nested classes and declared in each module : tulip, tulipogl, tulipqt) in the current 
-// global namespace when importing the module the following way : from tulipogl import *		 
+// global namespace when importing the module the following way : from tulipqt import *		 
 %PreInitialisationCode
     std::string tlpImportHook =
     "try:\n"
@@ -66,38 +60,35 @@
     PyRun_SimpleString(tlpImportHook.c_str());
 %End
 
-
 %ModuleHeaderCode
 #include <string>
-static void printErrorMessage(const std::string &errMsg) {
-	std::string pythonCode = "import sys\n"
-							 "sys.stderr.write(\"";
-	pythonCode += errMsg;
-	pythonCode += "\\n\")";
-	PyRun_SimpleString(pythonCode.c_str());
+extern void printErrorMessage(const std::string &errMsg);
+extern void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td);
+%End
+
+%ModuleCode
+void printErrorMessage(const std::string &errMsg) {
+    std::string pythonCode = "import sys\n"
+                             "sys.stderr.write(\"";
+    pythonCode += errMsg;
+    pythonCode += "\\n\")";
+    PyRun_SimpleString(pythonCode.c_str());
+}
+
+void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
+    PyObject *pyObj = sipGetPyObject(wrappedCppObject, td);
+    if (pyObj) {
+        sipTransferTo(pyObj, pyObj);
+        sipSimpleWrapper *wrapper = reinterpret_cast<sipSimpleWrapper *>(pyObj);
+        sipCommonDtor(wrapper);
+    }
 }
 %End
 
 namespace tlp;
 
-%Include GlSimpleEntity.sip
-%Include GlSceneVisitor.sip
-%Include GlComposite.sip
-%Include GlGraphComposite.sip
-%Include GlScene.sip
-%Include Camera.sip
-%Include GlLayer.sip
-%Include GlGraphRenderingParameters.sip
-%Include GlGraphInputData.sip
-%Include Glyph.sip
-%Include GlTools.sip
-%Include GlSceneObserver.sip
-%Include GlAbstractPolygon.sip
-%Include GlPolygon.sip
-%Include GlRegularPolygon.sip
-%Include GlComplexPolygon.sip
-%Include GlCircle.sip
-%Include GlRect.sip
-%Include ParametricCurves.sip
+%Include View.sip
+%Include NodeLinkDiagramComponent.sip
+%Include TulipGui.sip
 
-%Import ../tulip/Module.sip
+%Import tulip-ogl/Module.sip
