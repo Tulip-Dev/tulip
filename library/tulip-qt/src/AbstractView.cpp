@@ -148,7 +148,7 @@ void AbstractView::exportImage(QAction* action) {
     s.append(extension);
   }
 
-  createPicture(s.toStdString(), centralWidget->size().width(),
+  createPicture(s.toUtf8().data(), centralWidget->size().width(),
                 centralWidget->size().height(),false);
 }
 
