@@ -201,7 +201,7 @@ public:
 
         if (proportional == AREA_PROPORTIONAL) {
           const double power = 1.0 / (float(xaxis) + float(yaxis) + float(zaxis));
-          sizos = pow((entryMetric->getNodeValue(itn)-shift)*(max-min)/range, power);
+          sizos = min + pow((entryMetric->getNodeValue(itn)-shift)*(max-min)/range, power);
         }
         else {
           sizos = min + (entryMetric->getNodeValue(itn)-shift)*(max-min)/range;
