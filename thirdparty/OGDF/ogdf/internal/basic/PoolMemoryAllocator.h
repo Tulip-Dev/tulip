@@ -76,7 +76,11 @@ namespace ogdf {
  * macro \c #OGDF_MALLOC_NEW_DELETE in a class declaration.
  */
 
+#ifdef __MINGW32__
 class OGDF_EXPORT PoolMemoryAllocator
+#else
+class PoolMemoryAllocator
+#endif
 {
 	struct MemElem {
 		MemElem *m_next;
