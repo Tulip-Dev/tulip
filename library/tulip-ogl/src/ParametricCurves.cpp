@@ -16,6 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #include <tulip/ParametricCurves.h>
 #include <cstring>
 
@@ -138,7 +142,9 @@ void buildPascalTriangle(unsigned int n, vector<vector<double> > &pascalTriangle
 static vector<vector<double> > pascalTriangle;
 
 Coord computeBezierPoint(const vector<Coord> &controlPoints, const float t) {
+#ifdef _OPENMP
   #pragma omp critical
+#endif
   buildPascalTriangle(controlPoints.size(), pascalTriangle);
 
   unsigned int nbControlPoints = controlPoints.size();
@@ -177,7 +183,9 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
   default:
     curvePoints.resize(nbCurvePoints);
     float h = 1.0f / static_cast<float>(nbCurvePoints - 1);
+#ifdef _OPENMP
     #pragma omp parallel for
+#endif
 
     for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
       float curStep = i * h;
@@ -299,7 +307,9 @@ void computeCatmullRomPoints(const vector<Coord> &controlPoints, vector<Coord> &
 
   computeCatmullRomGlobalParameter(controlPointsCp, globalParameter, alpha);
   curvePoints.resize(nbCurvePoints);
+#ifdef _OPENMP
   #pragma omp parallel for
+#endif
 
   for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
     curvePoints[i] = computeCatmullRomPointImpl(controlPointsCp, i / static_cast<float>(nbCurvePoints - 1), globalParameter, closedCurve, alpha);
@@ -362,7 +372,9 @@ Coord computeOpenUniformBsplinePoint(const vector<Coord> &controlPoints, const f
 
 void computeOpenUniformBsplinePoints(const vector<Coord> &controlPoints, vector<Coord> &curvePoints, const unsigned int curveDegree, const unsigned int nbCurvePoints) {
   curvePoints.resize(nbCurvePoints);
+#ifdef _OPENMP
   #pragma omp parallel for
+#endif
 
   for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
     curvePoints[i] = computeOpenUniformBsplinePoint(controlPoints, i / static_cast<float>(nbCurvePoints - 1), curveDegree);
