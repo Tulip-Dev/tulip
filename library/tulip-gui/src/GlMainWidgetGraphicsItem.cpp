@@ -35,7 +35,7 @@ using namespace tlp;
 
 GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, int width, int height):
   QGraphicsObject(),
-  glMainWidget(glMainWidget), redrawNeeded(true), renderingStore(NULL) {
+  glMainWidget(glMainWidget), redrawNeeded(true), _graphChanged(true), renderingStore(NULL) {
 
 //  setFlag(QGraphicsItem::ItemIsMovable, true);
   setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -67,13 +67,15 @@ void GlMainWidgetGraphicsItem::resize(int width, int height) {
   glMainWidget->resize(width,height);
   glMainWidget->resizeGL(width,height);
   redrawNeeded = true;
+  _graphChanged=true;
   delete [] renderingStore;
   renderingStore = new unsigned char[width*height*4];
   prepareGeometryChange();
 }
 
-void GlMainWidgetGraphicsItem::glMainWidgetDraw(GlMainWidget *,bool) {
+void GlMainWidgetGraphicsItem::glMainWidgetDraw(GlMainWidget *,bool graphChanged) {
   redrawNeeded=true;
+  _graphChanged=graphChanged;
   update();
 }
 
@@ -85,7 +87,7 @@ void GlMainWidgetGraphicsItem::glMainWidgetRedraw(GlMainWidget *) {
 void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
   if(redrawNeeded) {
-    emit widgetPainted(true);
+    emit widgetPainted(_graphChanged);
   }
 
   QRectF rect = boundingRect();
