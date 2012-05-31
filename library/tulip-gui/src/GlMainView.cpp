@@ -53,16 +53,12 @@ void GlMainView::refresh(PluginProgress *) {
 }
 
 void GlMainView::drawOverview(bool generatePixmap) {
-  if(!_overviewVisible)
-    return;
 
   if(_overviewItem == NULL) {
     _overviewItem=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
     addToScene(_overviewItem);
     _overviewItem->setPos(QPointF(0,0));
     generatePixmap=true;
-
-
   }
 
   if(_overviewContextMenu == NULL) {
@@ -72,12 +68,13 @@ void GlMainView::drawOverview(bool generatePixmap) {
     graphicsView()->addAction(viewSeparator);
     _overviewContextMenu = new QAction(trUtf8("Overview visible"),this);
     _overviewContextMenu->setCheckable(true);
-    _overviewContextMenu->setChecked(true);
+    _overviewContextMenu->setChecked(_overviewVisible);
     connect(_overviewContextMenu,SIGNAL(triggered(bool)),this,SLOT(setOverviewVisible(bool)));
     graphicsView()->addAction(_overviewContextMenu);
   }
 
-  if(!_overviewItem->isVisible()) {
+  if(!_overviewVisible){
+    _overviewItem->setVisible(false);
     return;
   }
 
@@ -119,15 +116,9 @@ QList<QWidget*> GlMainView::configurationWidgets() const {
 }
 
 void GlMainView::setOverviewVisible(bool display) {
-  if (!display) {
-    delete _overviewItem;
-    _overviewItem = NULL;
-  }
-
   _overviewVisible = display;
-
-  if(_overviewVisible)
-    drawOverview(true);
+  drawOverview(true);
+  _overviewItem->setVisible(display);
 }
 
 bool GlMainView::overviewVisible() const {
