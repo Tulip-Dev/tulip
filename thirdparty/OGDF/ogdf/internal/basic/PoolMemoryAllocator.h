@@ -110,23 +110,44 @@ public:
 	~PoolMemoryAllocator() { }
 
 	//! Initializes the memory manager.
+#ifdef __MINGW32__
     static void init();
+#else
+	static OGDF_EXPORT void init();
+#endif	
 
+#ifdef __MINGW32__
     static void initThread() {
+#else
+	static OGDF_EXPORT void initThread() {
+#endif
+
 #if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
 		pthread_setspecific(s_tpKey,calloc(eTableSize,sizeof(MemElemPtr)));
 #endif
 	}
 
 	//! Frees all memory blocks allocated by the memory manager.
+#ifdef __MINGW32__	
     static void cleanup();
+#else
+	static OGDF_EXPORT void cleanup();
+#endif
 
+#ifdef __MINGW32__		
     static bool checkSize(size_t nBytes) {
+#else
+	static OGDF_EXPORT bool checkSize(size_t nBytes) {
+#endif
 		return nBytes < eTableSize;
 	}
 
 	//! Allocates memory of size \a nBytes.
+#ifdef __MINGW32__		
     static void *allocate(size_t nBytes) {
+#else
+	static OGDF_EXPORT void *allocate(size_t nBytes) {
+#endif
 #if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
 		MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
 #else
@@ -142,7 +163,12 @@ public:
 	}
 
 	//! Deallocates memory at address \a p which is of size \a nBytes.
+#ifdef __MINGW32__		
     static void deallocate(size_t nBytes, void *p) {
+#else
+	static OGDF_EXPORT void deallocate(size_t nBytes, void *p) {
+#endif
+
 #if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
 		MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
 #else
@@ -159,7 +185,11 @@ public:
 	 * each element separately, since the whole chain can be concatenated with the
 	 * free list, requiring only constant effort.
 	 */
+#ifdef __MINGW32__			 
     static void deallocateList(size_t nBytes, void *pHead, void *pTail) {
+#else
+	static OGDF_EXPORT void deallocateList(size_t nBytes, void *pHead, void *pTail) {
+#endif
 #if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
 		MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
 #else
@@ -169,17 +199,38 @@ public:
 		*pFreeBytes = MemElemPtr(pHead);
 	}
 
+#ifdef __MINGW32__			 	
     static void flushPool();
+#else
+    static OGDF_EXPORT void flushPool();
+#endif
+	
+#ifdef __MINGW32__			 	
     static void flushPool(__uint16 nBytes);
+#else
+	static OGDF_EXPORT void flushPool(__uint16 nBytes);
+#endif
 
-	//! Returns the total amount of memory (in bytes) allocated from the system.
+	//! Returns the total amount of memory (in bytes) allocated from the system
+#ifdef __MINGW32__			 	.
     static size_t memoryAllocatedInBlocks();
+#else
+	static OGDF_EXPORT size_t memoryAllocatedInBlocks();
+#endif
 
 	//! Returns the total amount of memory (in bytes) available in the global free lists.
+#ifdef __MINGW32__			 	
     static size_t memoryInGlobalFreeList();
+#else
+	static OGDF_EXPORT size_t memoryInGlobalFreeList();
+#endif
 
 	//! Returns the total amount of memory (in bytes) available in the thread's free lists.
+#ifdef __MINGW32__			 	
     static size_t memoryInThreadFreeList();
+#else
+	static OGDF_EXPORT size_t memoryInThreadFreeList();
+#endif
 
 private:
 	static int slicesPerBlock(__uint16 nBytes) {
