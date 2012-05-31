@@ -80,7 +80,6 @@ public:
    */
   void buildMenu();
 
-protected :
   /**
    * Set the default initialization of the graph
    */
@@ -105,6 +104,9 @@ protected :
    * Draw/Init all views
    */
   virtual void drawViews(bool init=false);
+
+protected :
+
   /**
    * This function is call when an observable is destroyed
    */
