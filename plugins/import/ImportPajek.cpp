@@ -8,9 +8,9 @@
 /*@{*/
 /** \file
  *  \brief - Import Pajek format graph file.
- *  This plugin imports a graph from a file (.net) in Pajek input format,</br>
+ *  This plugin imports a graph from a file (.net) in Pajek input format,<br/>
  *  as it is described in the Pajek manual (http://pajek.imfm.si/lib/exe/fetch.php?media=dl:pajekman203.pdf) from the Pajek wiki page http://pajek.imfm.si/doku.php?id=download.
- *  Warning: the description of the edges with *Matrix (adjacency lists)</br>
+ *  Warning: the description of the edges with *Matrix (adjacency lists)<br/>
  *  is not yet supported.
  *  <b>HISTORY</b>
  *

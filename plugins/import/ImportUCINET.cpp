@@ -10,7 +10,7 @@
 /*@{*/
 /** \file
  *  \brief - Import UCINET DL format graph file.
- *  This plugin imports a graph from a file in UCINET DL input format,</br>
+ *  This plugin imports a graph from a file in UCINET DL input format,<br/>
  *  as it is described in the UCINET reference manual (http://www.analytictech.com/ucinet/documentation/reference.rtf).
  *  <b>HISTORY</b>
  *

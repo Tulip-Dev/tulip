@@ -565,7 +565,7 @@
       <sect3 id="renderingparams"><title>Rendering Parameters</title>
         <para>
           <graphic fileref="images/renderingparams.png"/>
-					Actions in this dialog are aplied only on the current view window.
+	  Actions in this dialog only apply to the current view window.
           <itemizedlist>
             <listitem><para><code>Labels</code>:
                 <itemizedlist>
@@ -573,7 +573,10 @@
                   </listitem>
                   <listitem><para><code>Density</code>: move this slider to the left to have less labels displayed.</para>
                   </listitem>
-									<listitem><code>Scale labels to fit node size</code></listitem>
+		  <listitem><code>Scale labels to fit nodes sizes</code>: if checked, the sizes of the labels are scaled according to the size of their corresponding node.
+		  </listitem>
+		  <listitem><code>Always face to point of view</code>: if checked, to be fully readable, labels are always displayed in the screen plane (billboarding technique).
+		  </listitem>
               </itemizedlist></para>
             </listitem>
             <listitem><para><code>Edges</code>:

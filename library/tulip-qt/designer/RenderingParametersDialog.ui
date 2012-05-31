@@ -273,7 +273,7 @@
         <item>
          <widget class="QCheckBox" name="billboarded">
           <property name="toolTip">
-           <string>billboarded labels</string>
+           <string>For a better readability, the labels are always displayed in the screen plane.</string>
           </property>
           <property name="text">
            <string>Always face to point of view</string>
