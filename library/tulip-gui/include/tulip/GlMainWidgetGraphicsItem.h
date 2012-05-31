@@ -76,6 +76,7 @@ protected slots:
 private :
   tlp::GlMainWidget *glMainWidget;
   bool redrawNeeded;
+  bool _graphChanged;
   int width, height;
   unsigned char *renderingStore;
 };
