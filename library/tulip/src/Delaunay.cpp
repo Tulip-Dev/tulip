@@ -28,11 +28,11 @@
 #include <iostream>
 
 extern "C" {
-#include <libqhull.h>
-#include <qset.h>
-#include <geom.h>
-#include <poly.h>
-#include <io.h>
+#include <libqhull/libqhull.h>
+#include <libqhull/qset.h>
+#include <libqhull/geom.h>
+#include <libqhull/poly.h>
+#include <libqhull/io.h>
 }
 
 using namespace std;
