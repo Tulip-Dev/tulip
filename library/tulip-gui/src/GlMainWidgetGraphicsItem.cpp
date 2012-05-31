@@ -35,7 +35,7 @@ using namespace tlp;
 
 GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, int width, int height):
   QGraphicsObject(),
-  glMainWidget(glMainWidget), redrawNeeded(true), _graphChanged(true), renderingStore(NULL) {
+  glMainWidget(glMainWidget), _redrawNeeded(true), _graphChanged(true), renderingStore(NULL) {
 
 //  setFlag(QGraphicsItem::ItemIsMovable, true);
   setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -66,7 +66,7 @@ void GlMainWidgetGraphicsItem::resize(int width, int height) {
   this->height = height;
   glMainWidget->resize(width,height);
   glMainWidget->resizeGL(width,height);
-  redrawNeeded = true;
+  _redrawNeeded = true;
   _graphChanged=true;
   delete [] renderingStore;
   renderingStore = new unsigned char[width*height*4];
@@ -74,7 +74,7 @@ void GlMainWidgetGraphicsItem::resize(int width, int height) {
 }
 
 void GlMainWidgetGraphicsItem::glMainWidgetDraw(GlMainWidget *,bool graphChanged) {
-  redrawNeeded=true;
+  _redrawNeeded=true;
   _graphChanged=graphChanged;
   update();
 }
@@ -86,14 +86,14 @@ void GlMainWidgetGraphicsItem::glMainWidgetRedraw(GlMainWidget *) {
 
 void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-  if(redrawNeeded) {
+  if(_redrawNeeded) {
     emit widgetPainted(_graphChanged);
   }
 
   QRectF rect = boundingRect();
 
   if (pos().x() < 0 || pos().x()+rect.width() > scene()->width() || pos().y() < 0 || pos().y()+rect.height() > scene()->height())
-    redrawNeeded = true;
+    _redrawNeeded = true;
 
   Color backgroundColor = glMainWidget->getScene()->getBackgroundColor();
   painter->setBrush(QColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]));
@@ -106,9 +106,9 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
 
-  if(redrawNeeded) {
+  if(_redrawNeeded) {
     glMainWidget->render(GlMainWidget::RenderingOptions(GlMainWidget::RenderScene),false);
-    redrawNeeded=false;
+    _redrawNeeded=false;
   }
   else {
     glMainWidget->render(GlMainWidget::RenderingOptions(),false);

@@ -47,7 +47,7 @@ public:
   void resize(int width, int height);
 
   void setRedrawNeeded(bool redrawNeeded) {
-    this->redrawNeeded=redrawNeeded;
+    this->_redrawNeeded=redrawNeeded;
   }
 
   tlp::GlMainWidget *getGlMainWidget() {
@@ -75,7 +75,7 @@ protected slots:
 
 private :
   tlp::GlMainWidget *glMainWidget;
-  bool redrawNeeded;
+  bool _redrawNeeded;
   bool _graphChanged;
   int width, height;
   unsigned char *renderingStore;
