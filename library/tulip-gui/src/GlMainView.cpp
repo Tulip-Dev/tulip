@@ -73,7 +73,7 @@ void GlMainView::drawOverview(bool generatePixmap) {
     graphicsView()->addAction(_overviewContextMenu);
   }
 
-  if(!_overviewVisible){
+  if(!_overviewVisible) {
     _overviewItem->setVisible(false);
     return;
   }
