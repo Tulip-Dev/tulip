@@ -71,7 +71,7 @@ void SpreadViewTableWidget::setData(Graph* graph,const DataSet &data,ElementType
   pair<string, DataType*> columnDataSet;
   forEach(columnDataSet,data.getValues()) {
     bool conversionWork = false;
-    QString value = QString::fromStdString(columnDataSet.first);
+    QString value = QString::fromUtf8(columnDataSet.first.c_str());
     int column = value.toInt(&conversionWork);
 
     if(conversionWork) {

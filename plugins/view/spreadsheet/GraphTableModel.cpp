@@ -275,7 +275,7 @@ QVariant GraphTableModel::headerData(int section, Qt::Orientation orientation, i
       PropertyInterface* property = _propertiesTable[section];
 
       if(_propertiesToDelete.find(property)==_propertiesToDelete.end()) {
-        QString name = QString::fromStdString(property->getName());
+        QString name = QString::fromUtf8(property->getName().c_str());
         name.append("\n");
         name.append("( ");
         name.append(propertyInterfaceToPropertyTypeLabel(_propertiesTable[section]));

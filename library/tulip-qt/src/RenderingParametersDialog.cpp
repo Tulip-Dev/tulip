@@ -262,7 +262,7 @@ void RenderingParametersDialog::recreateOrderingPropertyCombobox(GlGraphRenderin
 void RenderingParametersDialog::updateOrderingProperty(QString propertyName) {
   if(!propertyName.isEmpty()) {
     GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
-    param.setElementOrderingProperty(glWidget->getGraph()->getProperty<DoubleProperty>(propertyName.toStdString()));
+    param.setElementOrderingProperty(glWidget->getGraph()->getProperty<DoubleProperty>(QStringToTlpString(propertyName)));
     glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
   }
 }

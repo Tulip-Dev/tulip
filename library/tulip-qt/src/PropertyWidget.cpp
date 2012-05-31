@@ -414,7 +414,7 @@ void PropertyWidget::setAllNodeValue() {
     ChooseFileNameDialog dialog(QString("Font (*.ttf)"),this);
 
     if(dialog.exec()==QDialog::Accepted) {
-      tmpStr=dialog.getText().toStdString();
+      tmpStr=dialog.getText().toUtf8().data();
       ok=true;
     }
   }
@@ -422,7 +422,7 @@ void PropertyWidget::setAllNodeValue() {
     ChooseFileNameDialog dialog(QString("Images (*.png *.jpeg *.jpg *.bmp)"),TulipBitmapDir.c_str(),this);
 
     if(dialog.exec()==QDialog::Accepted) {
-      tmpStr=dialog.getText().toStdString();
+      tmpStr=dialog.getText().toUtf8().data();
       GlTextureManager::getInst().clearErrorVector();
       ok=true;
     }
@@ -585,7 +585,7 @@ void  PropertyWidget::setAllEdgeValue() {
     ChooseFileNameDialog dialog(QString("Images (*.png *.jpeg *.jpg *.bmp)"),TulipBitmapDir.c_str(),this);
 
     if(dialog.exec()==QDialog::Accepted) {
-      tmpStr=dialog.getText().toStdString();
+      tmpStr=dialog.getText().toUtf8().data();
       GlTextureManager::getInst().clearErrorVector();
       ok=true;
     }

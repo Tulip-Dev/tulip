@@ -405,7 +405,7 @@ bool TulipQVariantBuilder::setData(const QVariant& value, ElementType elementTyp
 
     if(elementType == NODE) {
       const string& oldValue = property->getNodeStringValue(node(elementId));
-      string newValue = value.toString().toStdString();
+      string newValue = QStringToTlpString(value.toString());
 
       if(oldValue.compare(newValue)!=0) {
         return property->setNodeStringValue(node(elementId),newValue);
@@ -413,7 +413,7 @@ bool TulipQVariantBuilder::setData(const QVariant& value, ElementType elementTyp
     }
     else {
       const string& oldValue = property->getEdgeStringValue(edge(elementId));
-      string newValue = value.toString().toStdString();
+      string newValue = QStringToTlpString(value.toString());
 
       if(oldValue.compare(newValue)!=0) {
         return property->setEdgeStringValue(edge(elementId),newValue);
@@ -512,7 +512,7 @@ bool TulipQVariantBuilder::setAllElementData(const QVariant& value,tlp::ElementT
 
     if(elementType == NODE) {
       const string& oldValue = property->getNodeDefaultStringValue();
-      string newValue = value.toString().toStdString();
+      string newValue = QStringToTlpString(value.toString());
 
       if(oldValue.compare(newValue)!=0) {
         return property->setAllNodeStringValue(newValue);
@@ -520,7 +520,7 @@ bool TulipQVariantBuilder::setAllElementData(const QVariant& value,tlp::ElementT
     }
     else {
       const string& oldValue = property->getEdgeDefaultStringValue();
-      string newValue = value.toString().toStdString();
+      string newValue = QStringToTlpString(value.toString());
 
       if(oldValue.compare(newValue)!=0) {
         return property->setAllEdgeStringValue(newValue);

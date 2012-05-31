@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <tulip/tulipconf.h>
 #include <tulip/PropertyTypes.h>
+#include <tulip/TlpQtTools.h>
 #include "TulipQVariantBuilder.h"
 #include <QtCore/QVariant>
 #include <QtCore/QAbstractListModel>
@@ -111,7 +112,7 @@ public:
     assert(i < elements.size());
 
     if(data.isValid()) {
-      elements[i]=data.toString().toStdString();
+      elements[i]=tlp::QStringToTlpString(data.toString());
       return true;
     }
     else {
