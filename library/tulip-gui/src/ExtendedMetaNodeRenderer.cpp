@@ -62,7 +62,7 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
   }
   else {
     view=new NodeLinkDiagramComponent;
-    view->setOverviewVisible(false);
+    //view->setOverviewVisible(false);
     view->setupUi();
     view->setGraph(metaGraph);
     view->setState(DataSet());
