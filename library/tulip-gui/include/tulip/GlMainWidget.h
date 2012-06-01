@@ -100,6 +100,25 @@ public:
                       tlp::GlLayer* layer=NULL);
 
   /**
+   * @deprecated this function should not be used anymore, please use pickNodesEdges instead.
+   **/
+  _DEPRECATED void doSelect(const int x, const int y,
+                      const int width, const int height,
+                      std::vector<SelectedEntity> &selectedNode, std::vector<SelectedEntity> &seletedEdge,
+                      tlp::GlLayer* layer=NULL){
+    pickNodesEdges(x,y,width,height,selectedNode,seletedEdge,layer);
+  }
+
+  /**
+   * @deprecated this function should not be used anymore, please use pickNodesEdges instead.
+   **/
+  _DEPRECATED bool doSelect(const int x, const int y,
+                      SelectedEntity &selectedEntity,
+                      tlp::GlLayer* layer=NULL){
+    return pickNodesEdges(x,y,selectedEntity,layer);
+  }
+
+  /**
    * \brief EPS output of a GlGraph
    */
   bool outputEPS(int size, int doSort, const char *filename);
@@ -145,6 +164,27 @@ public:
                       std::vector<SelectedEntity>
                       &pickedEntities,
                       tlp::GlLayer* layer=NULL);
+
+  /**
+   * @deprecated this function should not be used anymore, please use pickGlEntities instead.
+   */
+  _DEPRECATED bool selectGlEntities(const int x, const int y,
+                      const int width, const int height,
+                      std::vector<SelectedEntity>
+                      &pickedEntities,
+                      tlp::GlLayer* layer=NULL){
+    return pickGlEntities(x,y,width,height,pickedEntities,layer);
+  }
+
+  /**
+   * @deprecated this function should not be used anymore, please use pickGlEntities instead.
+   */
+  _DEPRECATED bool selectGlEntities(const int x, const int y,
+                      std::vector<SelectedEntity>
+                      &pickedEntities,
+                      tlp::GlLayer* layer=NULL){
+    return pickGlEntities(x,y,pickedEntities,layer);
+  }
 
   /**
    * Grab the image of this widget
