@@ -53,6 +53,7 @@ void MouseEdgeBendEditor::clear() {
       delete layer;
 
     layer=NULL;
+    circleString=NULL;
   }
 }
 //========================================================================================
