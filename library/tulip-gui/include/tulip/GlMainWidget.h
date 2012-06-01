@@ -103,9 +103,9 @@ public:
    * @deprecated this function should not be used anymore, please use pickNodesEdges instead.
    **/
   _DEPRECATED void doSelect(const int x, const int y,
-                      const int width, const int height,
-                      std::vector<SelectedEntity> &selectedNode, std::vector<SelectedEntity> &seletedEdge,
-                      tlp::GlLayer* layer=NULL){
+                            const int width, const int height,
+                            std::vector<SelectedEntity> &selectedNode, std::vector<SelectedEntity> &seletedEdge,
+                            tlp::GlLayer* layer=NULL) {
     pickNodesEdges(x,y,width,height,selectedNode,seletedEdge,layer);
   }
 
@@ -113,8 +113,8 @@ public:
    * @deprecated this function should not be used anymore, please use pickNodesEdges instead.
    **/
   _DEPRECATED bool doSelect(const int x, const int y,
-                      SelectedEntity &selectedEntity,
-                      tlp::GlLayer* layer=NULL){
+                            SelectedEntity &selectedEntity,
+                            tlp::GlLayer* layer=NULL) {
     return pickNodesEdges(x,y,selectedEntity,layer);
   }
 
@@ -169,10 +169,10 @@ public:
    * @deprecated this function should not be used anymore, please use pickGlEntities instead.
    */
   _DEPRECATED bool selectGlEntities(const int x, const int y,
-                      const int width, const int height,
-                      std::vector<SelectedEntity>
-                      &pickedEntities,
-                      tlp::GlLayer* layer=NULL){
+                                    const int width, const int height,
+                                    std::vector<SelectedEntity>
+                                    &pickedEntities,
+                                    tlp::GlLayer* layer=NULL) {
     return pickGlEntities(x,y,width,height,pickedEntities,layer);
   }
 
@@ -180,9 +180,9 @@ public:
    * @deprecated this function should not be used anymore, please use pickGlEntities instead.
    */
   _DEPRECATED bool selectGlEntities(const int x, const int y,
-                      std::vector<SelectedEntity>
-                      &pickedEntities,
-                      tlp::GlLayer* layer=NULL){
+                                    std::vector<SelectedEntity>
+                                    &pickedEntities,
+                                    tlp::GlLayer* layer=NULL) {
     return pickGlEntities(x,y,pickedEntities,layer);
   }
 
