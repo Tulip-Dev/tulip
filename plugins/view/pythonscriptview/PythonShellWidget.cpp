@@ -248,7 +248,7 @@ void PythonShellWidget::executeCurrentLines() {
   tlp::Observable::holdObservers();
   PythonInterpreter::getInstance()->setConsoleWidget(this);
   PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(true);
-  PythonInterpreter::getInstance()->runString(currentCodeLines.toStdString());
+  PythonInterpreter::getInstance()->runString(currentCodeLines.toUtf8().data());
   currentCodeLines = "";
   PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(false);
   PythonInterpreter::getInstance()->setDefaultConsoleWidget();

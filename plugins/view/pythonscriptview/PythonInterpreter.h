@@ -69,7 +69,7 @@ static const char *pythonKeywords[] = {
 };
 
 static std::string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";
-static std::string pythonPluginsPathHome = (QDir::homePath()+"/.Tulip-"+TULIP_MM_RELEASE+"/plugins/python").toStdString();
+static std::string pythonPluginsPathHome = (QDir::homePath()+"/.Tulip-"+TULIP_MM_RELEASE+"/plugins/python").toUtf8().data();
 
 class PythonInterpreter {
 

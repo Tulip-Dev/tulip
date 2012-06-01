@@ -93,16 +93,16 @@ scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
       output.replace("<string>", mainScriptFileName);
     }
 
-    consoleErrorOuputString += output.toStdString();
+    consoleErrorOuputString += output.toUtf8().data();
   }
   else {
-    consoleOuputString += output.toStdString();
+    consoleOuputString += output.toUtf8().data();
   }
 
   if (outputActivated) {
 
     if (reinterpret_cast<scriptengine_ConsoleOutput *>(self)->stderrflag) {
-      cerr << output.toStdString() << endl;
+      cerr << output.toUtf8().data() << endl;
     }
 
     if (consoleOuputEmitter) {

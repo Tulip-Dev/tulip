@@ -138,8 +138,8 @@ static QSet<QString> getStringCollectionEntriesForPlugin(const QString &pluginNa
 
 
 static QString getPythonTypeNameForGraphProperty(tlp::Graph *graph, const QString &propName) {
-  if (graph->existLocalProperty(propName.toStdString())) {
-    PropertyInterface *prop = graph->getProperty(propName.toStdString());
+  if (graph->existLocalProperty(propName.toUtf8().data())) {
+    PropertyInterface *prop = graph->getProperty(propName.toUtf8().data());
 
     if (prop->getTypename() == "bool") {
       return "tlp.BooleanProperty";

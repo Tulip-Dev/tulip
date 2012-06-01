@@ -351,7 +351,7 @@ void PythonInterpreter::loadTulipPythonPlugins(const std::string &pluginsPath) {
     QFileInfo fileInfo = fileList.at(i);
     QString moduleName = fileInfo.fileName();
     moduleName.replace(".py", "");
-    runString("import " + moduleName.toStdString());
+    runString(std::string("import ") + moduleName.toUtf8().data());
   }
 
   // some external modules (like numpy) overrides the SIGINT handler at import

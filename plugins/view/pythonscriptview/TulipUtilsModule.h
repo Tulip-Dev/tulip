@@ -95,7 +95,7 @@ tuliputils_runGraphScript(PyObject *, PyObject *args) {
     QString scriptName(s);
     scriptName.replace(".py", "");
 
-    if (PythonInterpreter::getInstance()->runString(std::string("import ") + scriptName.toStdString())) {
+    if (PythonInterpreter::getInstance()->runString(std::string("import ") + scriptName.toUtf8().data())) {
       const sipAPIDef *sipApi = get_sip_api();
 
       // Getting proper sipWrapperType
@@ -109,7 +109,7 @@ tuliputils_runGraphScript(PyObject *, PyObject *args) {
         // Unwrapping C++ instance
         tlp::Graph *graph = reinterpret_cast<tlp::Graph *>(sipApi->api_convert_to_type(o, kpTypeDef, NULL, SIP_NOT_NONE, &state, &err));
 
-        if (!PythonInterpreter::getInstance()->runGraphScript(scriptName.toStdString(), "main", graph)) {
+        if (!PythonInterpreter::getInstance()->runGraphScript(scriptName.toUtf8().data(), "main", graph)) {
           PyErr_SetString(PyExc_Exception, (std::string("An exception occurred when executing the ") + std::string(s) + " script").c_str());
           return 0;
         }
