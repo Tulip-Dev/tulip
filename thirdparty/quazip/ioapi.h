@@ -4,6 +4,8 @@
    Version 1.01e, February 12th, 2005
 
    Copyright (C) 1998-2005 Gilles Vollant
+
+   Modified by Sergey A. Tachenov to integrate with Qt.
 */
 
 #ifndef _ZLIBIOAPI_H
@@ -35,11 +37,15 @@
 extern "C" {
 #endif
 
-typedef voidpf (ZCALLBACK *open_file_func) OF((voidpf opaque, const char* filename, int mode));
+#ifndef OF
+# define OF(x) x
+#endif
+
+typedef voidpf (ZCALLBACK *open_file_func) OF((voidpf opaque, voidpf file, int mode));
 typedef uLong  (ZCALLBACK *read_file_func) OF((voidpf opaque, voidpf stream, void* buf, uLong size));
 typedef uLong  (ZCALLBACK *write_file_func) OF((voidpf opaque, voidpf stream, const void* buf, uLong size));
-typedef long   (ZCALLBACK *tell_file_func) OF((voidpf opaque, voidpf stream));
-typedef long   (ZCALLBACK *seek_file_func) OF((voidpf opaque, voidpf stream, uLong offset, int origin));
+typedef uLong   (ZCALLBACK *tell_file_func) OF((voidpf opaque, voidpf stream));
+typedef int   (ZCALLBACK *seek_file_func) OF((voidpf opaque, voidpf stream, uLong offset, int origin));
 typedef int    (ZCALLBACK *close_file_func) OF((voidpf opaque, voidpf stream));
 typedef int    (ZCALLBACK *testerror_file_func) OF((voidpf opaque, voidpf stream));
 
@@ -57,7 +63,7 @@ typedef struct zlib_filefunc_def_s
 
 
 
-void fill_fopen_filefunc OF((zlib_filefunc_def* pzlib_filefunc_def));
+void fill_qiodevice_filefunc OF((zlib_filefunc_def* pzlib_filefunc_def));
 
 #define ZREAD(filefunc,filestream,buf,size) ((*((filefunc).zread_file))((filefunc).opaque,filestream,buf,size))
 #define ZWRITE(filefunc,filestream,buf,size) ((*((filefunc).zwrite_file))((filefunc).opaque,filestream,buf,size))

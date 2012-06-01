@@ -33,6 +33,8 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 
+   Modified by Sergey A. Tachenov to integrate with Qt.
+
 
 */
 
@@ -74,6 +76,8 @@ typedef voidp zipFile;
 #define ZIP_BADZIPFILE                  (-103)
 #define ZIP_INTERNALERROR               (-104)
 
+#define ZIP_WRITE_DATA_DESCRIPTOR 0x8u
+
 #ifndef DEF_MEM_LEVEL
 #  if MAX_MEM_LEVEL >= 8
 #    define DEF_MEM_LEVEL 8
@@ -111,11 +115,11 @@ typedef const char* zipcharpc;
 #define APPEND_STATUS_CREATEAFTER   (1)
 #define APPEND_STATUS_ADDINZIP      (2)
 
-extern zipFile ZEXPORT zipOpen OF((const char *pathname, int append));
+extern zipFile ZEXPORT zipOpen OF((voidpf file, int append));
 /*
   Create a zipfile.
-     pathname contain on Windows XP a filename like "c:\\zlib\\zlib113.zip" or on
-       an Unix computer "zlib/zlib113.zip".
+     file is whatever the IO API accepts. For Qt IO API it's a pointer to
+       QIODevice. For fopen() IO API it's a file name (const char*).
      if the file pathname exist and append==APPEND_STATUS_CREATEAFTER, the zip
        will be created at the end of the file.
          (useful if the file contain a self extractor code)
@@ -131,7 +135,7 @@ extern zipFile ZEXPORT zipOpen OF((const char *pathname, int append));
    Of couse, you can use RAW reading and writing to copy the file you did not want delte
 */
 
-extern zipFile ZEXPORT zipOpen2 OF((const char *pathname,
+extern zipFile ZEXPORT zipOpen2 OF((voidpf file,
                                    int append,
                                    zipcharpc* globalcomment,
                                    zlib_filefunc_def* pzlib_filefunc_def));
@@ -227,6 +231,12 @@ extern int ZEXPORT zipClose OF((zipFile file,
 /*
   Close the zipfile
 */
+
+/*
+   Added by Sergey A. Tachenov to tweak zipping behaviour.
+   */
+extern int ZEXPORT zipSetFlags(zipFile file, unsigned flags);
+extern int ZEXPORT zipClearFlags(zipFile file, unsigned flags);
 
 #ifdef __cplusplus
 }
