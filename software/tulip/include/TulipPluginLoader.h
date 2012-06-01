@@ -68,6 +68,7 @@ struct TulipPluginLoader:public PluginLoaderWithInfo {
 
     if (!filename.empty())
       msg += filename + '\n';
+
     msg += errormsg;
     appStartUp->addErrorMsg(msg);
     appStartUp->setLabel("Error");

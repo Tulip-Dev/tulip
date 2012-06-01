@@ -469,7 +469,7 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
             replaceAll(moduleSrc, "    ", "\t");
             QFileInfo fileInfo(module.c_str());
             loadModuleFromSrcCode(fileInfo.fileName().toUtf8().data(),
-				  moduleSrc);
+                                  moduleSrc);
           }
         }
 
@@ -580,7 +580,7 @@ void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
             replaceAll(pluginSrc, "    ", "\t");
             QFileInfo fileInfo(QString::fromUtf8(plugin.c_str()));
             loadPythonPluginFromSrcCode(fileInfo.fileName().toUtf8().data(),
-					pluginSrc, false);
+                                        pluginSrc, false);
           }
         }
 

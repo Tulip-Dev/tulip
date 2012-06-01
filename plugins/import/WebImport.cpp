@@ -48,7 +48,7 @@ public:
 private:
   void fill(std::string &result);
   bool siteconnect(const std::string &server, const std::string &url,
-		   bool headonly);
+                   bool headonly);
 
 private:
   HttpContext *context;
@@ -102,26 +102,31 @@ void HttpContext::request(const std::string& url, bool head) {
     reply->deleteLater();
     reply = NULL;
   }
+
   processed = isHtml = redirected = false;
   QNetworkRequest request(QUrl(url.c_str()));
+
   //request.setRawHeader("User-Agent", "Tulip Agent");
   if (head) {
     reply =
       getNetworkAccessManager()->head(request);
     connect(reply, SIGNAL(finished()), this, SLOT(headerReceived()));
-  } else {
+  }
+  else {
     reply =
       getNetworkAccessManager()->get(request);
     connect(reply, SIGNAL(finished()), this, SLOT(finished()));
   }
-}    
+}
 
 void HttpContext::finished() {
   // check to see if it is the request we made
   if (reply != qobject_cast<QNetworkReply*>(sender()))
     return;
+
   // OK
   processed = true;
+
   // set status of the request
   if ((status = (reply->error() == QNetworkReply::NoError)))
     data = reply->readAll().data();
@@ -133,29 +138,34 @@ void HttpContext::headerReceived() {
     return;
 
   processed = true;
+
   if ((status = isHtml = (reply->error() == QNetworkReply::NoError))) {
     QVariant value = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+
     if (value.canConvert<int>()) {
       code = value.toInt();
- 
+
       if (code > 399) /* error codes */
-	isHtml = false;
+        isHtml = false;
       else if ((code > 299) &&
-	       (code < 305 || code == 307)) {
-	/* redirection codes */
-	redirected = true;
-	QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
-	if (!redirectionTarget.isNull())
-	  data = redirectionTarget.toUrl().toString().toStdString();
-	else
-	  data = "";
+               (code < 305 || code == 307)) {
+        /* redirection codes */
+        redirected = true;
+        QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+
+        if (!redirectionTarget.isNull())
+          data = redirectionTarget.toUrl().toString().toStdString();
+        else
+          data = "";
       }
+
       return;
     }
+
     /* normal codes */
     value = reply->header(QNetworkRequest::ContentTypeHeader);
     status = isHtml = (value.canConvert<QString>() &&
-		       value.toString().contains(QString("text/html")));
+                       value.toString().contains(QString("text/html")));
     reply->close();
   }
 }
@@ -163,6 +173,7 @@ void HttpContext::headerReceived() {
 void HttpContext::timeout() {
   if (!processed)
     cerr << "time-out occurs" << endl;
+
   // if timeout occurs
   // just indicates the we failed during processing
   processed = true;
@@ -235,7 +246,7 @@ bool UrlElement::isHtmlPage() {
 }
 
 bool UrlElement::siteconnect(const std::string &server, const std::string &path,
-			     bool headonly) {
+                             bool headonly) {
   // check that we actually got data..
   if (server.empty()) return false;
 
@@ -252,7 +263,7 @@ bool UrlElement::siteconnect(const std::string &server, const std::string &path,
 
   string url("http://");
   url += server.c_str() + thePath;
-  
+
   // start the request
   context->request(url, headonly);
 
@@ -384,7 +395,7 @@ UrlElement UrlElement::parseUrl (const std::string &href) {
     if (theUrl != "/") {
       newUrl.setUrl(theUrl);
       newUrl.server = this->server;
-     }
+    }
   }
 
   return newUrl;
