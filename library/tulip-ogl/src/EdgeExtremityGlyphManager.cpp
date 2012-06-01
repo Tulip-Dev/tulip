@@ -83,7 +83,7 @@ void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
   glyphs.setAll(0);
 
 
-  std::list<std::string> plugins = PluginLister::instance()->availablePlugins<Glyph>();
+  std::list<std::string> plugins = PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>();
 
   for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
     string glyphName = *it;
