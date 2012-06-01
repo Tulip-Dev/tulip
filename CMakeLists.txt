@@ -211,7 +211,7 @@ SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
 SET(qscintilla2Include ${PROJECT_SOURCE_DIR}/thirdparty/QScintilla-gpl-2.5.1/Qt4/)
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF)
 SET(OGDFLibrary OGDF)
-SET(QHULLInclude ${PROJECT_SOURCE_DIR}/thirdparty/libqhull)
+SET(QHULLInclude ${PROJECT_SOURCE_DIR}/thirdparty)
 
 SET(TulipCoreInclude ${PROJECT_SOURCE_DIR}/library/tulip-core/include/)
 SET(TulipCoreBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-core/include/)
