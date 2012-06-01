@@ -110,12 +110,17 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
 
   float baseNorm=(scene->getGraphLayer()->getCamera().getEyes()-scene->getGraphLayer()->getCamera().getCenter()).norm();
   Camera newCamera=scene->getGraphLayer()->getCamera();
+  Camera *oldCamera=new Camera(scene,true);
+  *oldCamera=newCamera;
+  newCamera.setScene(scene);
   newCamera.setUp(camera->getUp());
   newCamera.setEyes(newCamera.getCenter()+(eyeDirection*baseNorm));
   newCamera.setZoomFactor(newCamera.getZoomFactor()*0.5);
   scene->getGraphLayer()->setSharedCamera(&newCamera);
 
   scene->draw();
+
+  scene->getGraphLayer()->setCamera(oldCamera);
 
   camera->getScene()->setClearBufferAtDraw(false);
   camera->getScene()->initGlParameters();
