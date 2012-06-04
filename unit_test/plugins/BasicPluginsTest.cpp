@@ -236,6 +236,29 @@ void BasicPluginsTest::testImportUCINET() {
   }
 }
 //==========================================================
+void BasicPluginsTest::testImportGEXF() {
+  // test all data/*.net files
+  const char* gexf_files[] = {
+    "data/basic.gexf",
+    "data/data.gexf",
+    "data/hierarchy1.gexf",
+    "data/viz.gexf",
+    NULL
+  };
+  const char** files = &gexf_files[0];
+
+  while(files[0]) {
+    DataSet ds;
+    ds.set("file::filename", string(files[0]));
+    std::cout << "importing GEXF file: " << files[0] << "...";
+    Graph* g = importGraph("GEXF", ds, NULL, graph);
+    CPPUNIT_ASSERT(g == graph);
+    std::cout << " OK" << std::endl;
+    g->clear();
+    files += 1;
+  }
+}
+//==========================================================
 void BasicPluginsTest::testArityMetric() {
   bool result = computeProperty<DoubleProperty>("Degree");
   CPPUNIT_ASSERT(result);
@@ -626,6 +649,7 @@ CppUnit::Test * BasicPluginsTest::suite() {
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import FileSystem", &BasicPluginsTest::testImportFileSystem));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import AdjacencyMatrix", &BasicPluginsTest::testImportAdjacencyMatrix));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import UCINET", &BasicPluginsTest::testImportUCINET));
+  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import GEXF", &BasicPluginsTest::testImportGEXF));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Import Pajek", &BasicPluginsTest::testImportPajek));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ArityMetric", &BasicPluginsTest::testArityMetric));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("BetweennessCentrality", &BasicPluginsTest::testBetweennessCentrality));

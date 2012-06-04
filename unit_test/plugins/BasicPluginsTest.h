@@ -54,6 +54,7 @@ public:
   void testImportAdjacencyMatrix();
   void testImportPajek();
   void testImportUCINET();
+  void testImportGEXF();
   void testArityMetric();
   void testBetweennessCentrality();
   void testBiconnectedComponent();
