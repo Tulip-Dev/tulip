@@ -103,7 +103,6 @@ public:
    * @deprecated this function should not be used anymore, please use pickNodesEdges instead.
    **/
   _DEPRECATED void doSelect(const int x, const int y,
-<<<<<<< .mine
                             const int width, const int height,
                             std::vector<tlp::node> &sNode, std::vector<tlp::edge> &sEdge,
                             tlp::GlLayer* layer=NULL){
@@ -116,19 +115,12 @@ public:
     for(std::vector<SelectedEntity>::iterator it=edges.begin();it!=edges.end();++it){
       sEdge.push_back(edge((*it).getComplexEntityId()));
     }
-=======
-                            const int width, const int height,
-                            std::vector<SelectedEntity> &selectedNode, std::vector<SelectedEntity> &seletedEdge,
-                            tlp::GlLayer* layer=NULL) {
-    pickNodesEdges(x,y,width,height,selectedNode,seletedEdge,layer);
->>>>>>> .r7729
   }
 
   /**
    * @deprecated this function should not be used anymore, please use pickNodesEdges instead.
    **/
   _DEPRECATED bool doSelect(const int x, const int y,
-<<<<<<< .mine
                             tlp::ElementType &type,
                             tlp::node &n,tlp::edge &e,
                             tlp::GlLayer* layer=NULL){
@@ -146,11 +138,6 @@ public:
     }
 
     return true;
-=======
-                            SelectedEntity &selectedEntity,
-                            tlp::GlLayer* layer=NULL) {
-    return pickNodesEdges(x,y,selectedEntity,layer);
->>>>>>> .r7729
   }
 
   /**
