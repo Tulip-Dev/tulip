@@ -499,7 +499,7 @@ bool tlp::voronoiDiagram(vector<Coord> &sites, VoronoiDiagram &voronoiDiagram) {
   if (ret) {
     // Iterate over each delaunay simplex
     TLP_HASH_MAP<Face, unsigned int> faceToCircumCenter;
-    TLP_HASH_MAP<Coord, unsigned int> circumCenterToIdx;
+    map<Coord, unsigned int> circumCenterToIdx;
     tlp::Coord A, B, C, D;
 
     for (size_t i = 0 ; i < simplices.size() ; ++i) {
