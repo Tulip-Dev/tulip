@@ -103,19 +103,54 @@ public:
    * @deprecated this function should not be used anymore, please use pickNodesEdges instead.
    **/
   _DEPRECATED void doSelect(const int x, const int y,
+<<<<<<< .mine
+                            const int width, const int height,
+                            std::vector<tlp::node> &sNode, std::vector<tlp::edge> &sEdge,
+                            tlp::GlLayer* layer=NULL){
+    std::vector<SelectedEntity> nodes;
+    std::vector<SelectedEntity> edges;
+    pickNodesEdges(x,y,width,height,nodes,edges,layer);
+    for(std::vector<SelectedEntity>::iterator it=nodes.begin();it!=nodes.end();++it){
+      sNode.push_back(node((*it).getComplexEntityId()));
+    }
+    for(std::vector<SelectedEntity>::iterator it=edges.begin();it!=edges.end();++it){
+      sEdge.push_back(edge((*it).getComplexEntityId()));
+    }
+=======
                             const int width, const int height,
                             std::vector<SelectedEntity> &selectedNode, std::vector<SelectedEntity> &seletedEdge,
                             tlp::GlLayer* layer=NULL) {
     pickNodesEdges(x,y,width,height,selectedNode,seletedEdge,layer);
+>>>>>>> .r7729
   }
 
   /**
    * @deprecated this function should not be used anymore, please use pickNodesEdges instead.
    **/
   _DEPRECATED bool doSelect(const int x, const int y,
+<<<<<<< .mine
+                            tlp::ElementType &type,
+                            tlp::node &n,tlp::edge &e,
+                            tlp::GlLayer* layer=NULL){
+    SelectedEntity entity;
+    bool foundEntity=pickNodesEdges(x,y,entity,layer);
+    if(!foundEntity)
+      return false;
+
+    if(entity.getEntityType()==SelectedEntity::NODE_SELECTED){
+      n=node(entity.getComplexEntityId());
+      type=NODE;
+    }else{
+      e=edge(entity.getComplexEntityId());
+      type=EDGE;
+    }
+
+    return true;
+=======
                             SelectedEntity &selectedEntity,
                             tlp::GlLayer* layer=NULL) {
     return pickNodesEdges(x,y,selectedEntity,layer);
+>>>>>>> .r7729
   }
 
   /**
@@ -170,20 +205,36 @@ public:
    */
   _DEPRECATED bool selectGlEntities(const int x, const int y,
                                     const int width, const int height,
-                                    std::vector<SelectedEntity>
-                                    &pickedEntities,
-                                    tlp::GlLayer* layer=NULL) {
-    return pickGlEntities(x,y,width,height,pickedEntities,layer);
+                                    std::vector<GlSimpleEntity*> &pickedEntities,
+                                    tlp::GlLayer* layer=NULL){
+    std::vector<SelectedEntity> entities;
+    pickGlEntities(x,y,width,height,entities,layer);
+    bool foundEntity=false;
+    for(std::vector<SelectedEntity>::iterator it=entities.begin();it!=entities.end();++it){
+      if((*it).getEntityType()==SelectedEntity::SIMPLE_ENTITY_SELECTED){
+        pickedEntities.push_back((*it).getSimpleEntity());
+        foundEntity=true;
+      }
+    }
+    return foundEntity;
   }
 
   /**
    * @deprecated this function should not be used anymore, please use pickGlEntities instead.
    */
   _DEPRECATED bool selectGlEntities(const int x, const int y,
-                                    std::vector<SelectedEntity>
-                                    &pickedEntities,
-                                    tlp::GlLayer* layer=NULL) {
-    return pickGlEntities(x,y,pickedEntities,layer);
+                                    std::vector<GlSimpleEntity*> &pickedEntities,
+                                    tlp::GlLayer* layer=NULL){
+    std::vector<SelectedEntity> entities;
+    pickGlEntities(x,y,entities,layer);
+    bool foundEntity=false;
+    for(std::vector<SelectedEntity>::iterator it=entities.begin();it!=entities.end();++it){
+      if((*it).getEntityType()==SelectedEntity::SIMPLE_ENTITY_SELECTED){
+        pickedEntities.push_back((*it).getSimpleEntity());
+        foundEntity=true;
+      }
+    }
+    return foundEntity;
   }
 
   /**
