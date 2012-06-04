@@ -80,7 +80,7 @@ QVariant GraphElementModel::data(const QModelIndex &index, int role) const {
 }
 
 bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
-  if(role==Qt::EditRole){
+  if(role==Qt::EditRole) {
     string propertyName;
     PropertyInterface* prop;
     int result=0;
@@ -98,7 +98,7 @@ bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &va
 }
 
 bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
-  if(role==Qt::EditRole){
+  if(role==Qt::EditRole) {
     string propertyName;
     PropertyInterface* prop;
     int result=0;
