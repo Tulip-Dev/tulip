@@ -89,7 +89,7 @@ color: black;
          <enum>QFrame::NoFrame</enum>
         </property>
         <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
+         <set>QAbstractItemView::AllEditTriggers</set>
         </property>
         <property name="alternatingRowColors">
          <bool>true</bool>

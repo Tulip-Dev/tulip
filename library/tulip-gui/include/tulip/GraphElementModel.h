@@ -41,6 +41,10 @@ public:
   virtual QString headerText(unsigned int id) const = 0;
   virtual QVariant value(unsigned int id,PropertyInterface *prop) const = 0;
 
+  Qt::ItemFlags flags(const QModelIndex &index) const {
+    return TulipModel::flags(index) | Qt::ItemIsEditable;
+  }
+
 protected :
 
   Graph *_graph;
@@ -61,6 +65,8 @@ public :
     return GraphModel::nodeValue(id,prop);
   }
 
+  bool setData(const QModelIndex &index, const QVariant &value, int role);
+
 };
 
 class TLP_QT_SCOPE GraphEdgeElementModel : public GraphElementModel {
@@ -75,6 +81,8 @@ public :
   QVariant value(unsigned int id, PropertyInterface *prop) const {
     return GraphModel::edgeValue(id,prop);
   }
+
+  bool setData(const QModelIndex &index, const QVariant &value, int role);
 
 };
 

@@ -79,3 +79,39 @@ QVariant GraphElementModel::data(const QModelIndex &index, int role) const {
   return QVariant();
 }
 
+bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+  if(role==Qt::EditRole){
+    string propertyName;
+    PropertyInterface* prop;
+    int result=0;
+    forEach(propertyName,_graph->getProperties()) {
+      if(result==index.row())
+        prop=_graph->getProperty(propertyName);
+
+      ++result;
+    }
+
+    return GraphModel::setNodeValue(_id,prop,value);
+  }
+
+  return false;
+}
+
+bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+  if(role==Qt::EditRole){
+    string propertyName;
+    PropertyInterface* prop;
+    int result=0;
+    forEach(propertyName,_graph->getProperties()) {
+      if(result==index.row())
+        prop=_graph->getProperty(propertyName);
+
+      ++result;
+    }
+
+    return GraphModel::setEdgeValue(_id,prop,value);
+  }
+
+  return false;
+}
+
