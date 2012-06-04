@@ -61,7 +61,7 @@ QModelIndex GraphElementModel::index(int row, int column,const QModelIndex &pare
     return QModelIndex();
 
   string propertyName;
-  PropertyInterface* prop;
+  PropertyInterface* prop=NULL;
   int result=0;
   forEach(propertyName,_graph->getProperties()) {
     if(result==row)
@@ -82,7 +82,7 @@ QVariant GraphElementModel::data(const QModelIndex &index, int role) const {
 bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if(role==Qt::EditRole) {
     string propertyName;
-    PropertyInterface* prop;
+    PropertyInterface* prop=NULL;
     int result=0;
     forEach(propertyName,_graph->getProperties()) {
       if(result==index.row())
@@ -100,7 +100,7 @@ bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &va
 bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if(role==Qt::EditRole) {
     string propertyName;
-    PropertyInterface* prop;
+    PropertyInterface* prop=NULL;
     int result=0;
     forEach(propertyName,_graph->getProperties()) {
       if(result==index.row())
