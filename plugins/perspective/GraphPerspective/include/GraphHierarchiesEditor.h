@@ -53,7 +53,6 @@ public slots:
   void setAddPanelButtonVisible(bool);
 
 protected slots:
-  void activeGraphSelected(const QModelIndex&);
   void contextMenuRequested(const QPoint&);
 
   void addSubGraph();
