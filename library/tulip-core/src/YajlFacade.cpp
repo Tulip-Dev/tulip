@@ -166,7 +166,8 @@ void YajlParseFacade::parseString(const std::string&) {
 YajlWriteFacade::YajlWriteFacade() {
   _generator = yajl_gen_alloc(NULL);
   yajl_gen_config(_generator, yajl_gen_validate_utf8, 1);
-//   yajl_gen_config(_generator, yajl_gen_beautify, 1);
+  yajl_gen_config(_generator, yajl_gen_beautify, 1);
+  yajl_gen_config(_generator, yajl_gen_indent_string, " ");
 }
 
 YajlWriteFacade::~YajlWriteFacade() {
