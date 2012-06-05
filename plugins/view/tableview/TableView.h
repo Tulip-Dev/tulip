@@ -40,6 +40,7 @@ public:
 public slots:
   void readSettings();
   void setPropertyVisible(tlp::PropertyInterface*,bool);
+  void filterChanged();
 
 protected:
   void graphChanged(tlp::Graph *);
