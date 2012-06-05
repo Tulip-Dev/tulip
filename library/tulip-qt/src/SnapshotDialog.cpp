@@ -63,16 +63,11 @@ protected :
 
 };
 
-SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),view(&v),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
+SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),view(&v),scene(NULL),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
   setupUi(this);
-  scene=new QGraphicsScene();
-  scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
-  graphicsView->setScene(scene);
 
   widthSpinBox->setValue(view->getWidget()->width());
   heightSpinBox->setValue(view->getWidget()->height());
-
-  pixmapItem=scene->addPixmap(QPixmap(10,10));
 
   sizeSpinBoxValueChanged();
 
@@ -151,15 +146,12 @@ void SnapshotDialog::browseClicked() {
     formatedFormatList+=QString(*it).toLower()+" (*."+QString(*it).toLower()+");;";
   }
 
-  QString newFileName=QFileDialog::getSaveFileName(this,tr("Save Image As"), QDir::homePath(), tr(QString(formatedFormatList).toStdString().c_str()));
+  QString newFileName=QFileDialog::getSaveFileName(this,tr("Save image as..."), QDir::homePath(), tr(QString(formatedFormatList).toStdString().c_str()));
   fileName->setText(newFileName);
 }
 
 void SnapshotDialog::fileNameTextChanged(QString text) {
-  if(text!="")
-    okButton->setEnabled(true);
-  else
-    okButton->setEnabled(false);
+    okButton->setEnabled(text.isEmpty()?false:true);
 }
 
 void SnapshotDialog::sizeSpinBoxValueChanged() {
@@ -179,15 +171,16 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
 
   ratio=((float)widthSpinBox->value())/((float)heightSpinBox->value());
 
-  delete pixmapItem;
-  delete scene;
+  if(scene!=NULL) {
+      delete pixmapItem;
+      delete scene;
+  }
   scene=new QGraphicsScene();
-  scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
-  graphicsView->setScene(scene);
+ scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
   pixmapItem=scene->addPixmap(QPixmap::fromImage(image));
   pixmapItem->setPos(graphicsView->sceneRect().center()-pixmapItem->boundingRect().center());
+  graphicsView->setScene(scene);
+
 }
-
-
 
 }

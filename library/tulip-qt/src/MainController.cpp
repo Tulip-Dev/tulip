@@ -1905,8 +1905,8 @@ void MainController::snapshot() {
       QMessageBox::critical(NULL,"cannot create snapshot","Sorry but you cannot create a snapshot with this view");
     }
     else {
-      SnapshotDialog snapshotDialog(*currentView);
-      snapshotDialog.setModal(true);
+      SnapshotDialog snapshotDialog(*currentView, mainWindowFacade.getParentWidget());
+   //   snapshotDialog.setModal(true);
       snapshotDialog.exec();
     }
   }
