@@ -429,7 +429,10 @@ bool Workspace::handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel
     return false;
 
   if (graphMime != NULL && graphMime->graph()) {
-    emit(addPanelRequest(graphMime->graph()));
+    if (panel != NULL)
+      panel->view()->setGraph(graphMime->graph());
+    else
+      emit(addPanelRequest(graphMime->graph()));
   }
 
   else if (panelMime) {
