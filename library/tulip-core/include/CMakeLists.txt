@@ -93,6 +93,7 @@ INSTALL(FILES
   tulip/TypeInterface.h
   tulip/SerializableType.h
   tulip/YajlFacade.h
+  tulip/JsonTokens.h
   ${CMAKE_CURRENT_BINARY_DIR}/tulip/TulipRelease.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_core_dev
