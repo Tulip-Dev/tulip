@@ -63,11 +63,6 @@ GraphHierarchiesEditor::~GraphHierarchiesEditor() {
   delete _ui;
 }
 
-void GraphHierarchiesEditor::activeGraphSelected(const QModelIndex& index) {
-  tlp::Graph* graph = (tlp::Graph*)(_ui->hierarchiesTree->model()->index(index.row(),0,index.parent()).internalPointer());
-  static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(graph);
-}
-
 void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
   _contextIndex = _ui->hierarchiesTree->indexAt(p);
 
@@ -142,7 +137,6 @@ void GraphHierarchiesEditor::createPanel() {
 
   if (g == NULL) {
     g = static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->currentGraph();
-
     if (g == NULL)
       return;
   }

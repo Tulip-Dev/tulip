@@ -231,22 +231,6 @@ border-bottom: 1px solid black;
  <connections>
   <connection>
    <sender>hierarchiesTree</sender>
-   <signal>doubleClicked(QModelIndex)</signal>
-   <receiver>GraphHierarchiesEditorData</receiver>
-   <slot>activeGraphSelected(QModelIndex)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>117</x>
-     <y>213</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>117</x>
-     <y>208</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hierarchiesTree</sender>
    <signal>customContextMenuRequested(QPoint)</signal>
    <receiver>GraphHierarchiesEditorData</receiver>
    <slot>contextMenuRequested(QPoint)</slot>
