@@ -130,8 +130,17 @@ public :
     // Parse each line of the file
     while (!xmlReader.atEnd()) {
       if (xmlReader.readNextStartElement()) {
+	// only static graph are supported
+	if (xmlReader.name() == "graph") {
+	  string mode =
+	    xmlReader.attributes().value("mode").toString().toStdString();
+	  if (mode == "dynamic") {
+	    pluginProgress->setError("dynamic graph is not yet supported");
+	    return false;
+	  }
+	}
 	// create Tulip Properties from Gephi attributes
-	if (xmlReader.name() == "attributes") {
+	else if (xmlReader.name() == "attributes") {
 	  createPropertiesFromAttributes(xmlReader);
 	}
 	// parse graph node data
@@ -235,6 +244,32 @@ public :
     }
   }
 
+  Graph* addInParent(node n, const string& pid) {
+    // get the parent node
+    // to find the corresponding sub graph
+    // in which the current node must be added
+    node pn;
+    if (nodesMap.find(pid) == nodesMap.end()) {
+      // create a fake meta node
+      pn = graph->addNode();
+      nodesMap[pid] = pn;
+    } else
+      pn = nodesMap[pid];
+    Graph* sg = (Graph*) nodeToSubgraph.get(pn.id);
+    if (sg == NULL) {
+      // add a subgraph for the fake meta node
+      sg = graph->addSubGraph();
+      // record pn as its fake meta node
+      sg->setAttribute<node>("meta-node", pn);
+      // and vice-versa
+      nodeToSubgraph.set(pn.id, (size_t) sg);
+    }
+    // add n in the subgraph found
+    sg->addNode(n);
+
+    return sg;
+  }
+
   // Parse node data
   void parseNode(QXmlStreamReader &xmlReader, Graph* g) {
     node n;
@@ -258,27 +293,10 @@ public :
     if (xmlReader.attributes().hasAttribute("pid")) {
       string pid =
 	xmlReader.attributes().value("pid").toString().toStdString();
-      // get the parent node
-      // to find the corresponding sub graph
-      // in which the current node must be added
-      node pn;
-      if (nodesMap.find(pid) == nodesMap.end()) {
-	// create a fake meta node
-	pn = graph->addNode();
-	nodesMap[pid] = pn;
-      } else
-	pn = nodesMap[pid];
-      Graph* sg = (Graph*) nodeToSubgraph.get(pn.id);
-      if (sg == NULL) {
-	// add a subgraph for the fake meta node
-	sg = graph->addSubGraph();
-	// record pn as its fake meta node
-	sg->setAttribute<node>("meta-node", pn);
-	// and vice-versa
-	nodeToSubgraph.set(pn.id, (size_t) sg);
-      }
-      // add n in the subgraph found
-      sg->addNode(n);
+      if (g == graph)
+	g = addInParent(n, pid);
+      else
+	cerr << "multiple parents are not supported: " << pid.c_str() << " will be not added as parent of " << nodeId.c_str() << endl;
     }
 
     xmlReader.readNext();
@@ -341,6 +359,20 @@ public :
       else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "edges") {
 	// create its edges
 	createEdges(xmlReader);
+      }
+      else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "parents") {
+	while (!(xmlReader.isEndElement() && xmlReader.name() == "parents")) {
+	  xmlReader.readNext();
+	  // must be a parent
+	  if (xmlReader.isStartElement() && xmlReader.name() == "parent") {
+	    string pid =
+	      xmlReader.attributes().value("for").toString().toStdString();
+	    if (g == graph) {
+	      g = addInParent(n, pid);
+	    } else
+	      cerr << "multiple parents are not supported: " << pid.c_str() << " will be not added as parent of " << nodeId.c_str() << endl;
+	  }
+	}
       }
 
       xmlReader.readNext();

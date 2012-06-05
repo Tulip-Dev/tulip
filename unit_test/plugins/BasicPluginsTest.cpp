@@ -245,7 +245,9 @@ void BasicPluginsTest::testImportGEXF() {
     "data/hierarchy2.gexf",
     "data/hierarchy3.gexf",
     "data/hierarchy4.gexf",
+    "data/phylogeny.gexf",
     "data/viz.gexf",
+    "data/WebAtlas_EuroSiS.gexf",
     NULL
   };
   const char** files = &gexf_files[0];
