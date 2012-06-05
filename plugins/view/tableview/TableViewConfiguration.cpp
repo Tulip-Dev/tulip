@@ -18,11 +18,9 @@ TableViewConfiguration::~TableViewConfiguration() {
 }
 
 void TableViewConfiguration::setGraph(tlp::Graph *g) {
-  // Force creation of the viewSelection property
-  BooleanProperty* viewSelection = g->getProperty<BooleanProperty>("viewSelection");
   GraphPropertiesModel<BooleanProperty>* model = new GraphPropertiesModel<BooleanProperty>(trUtf8("No filtering"),g,_ui->filteringPropertyCombo);
   _ui->filteringPropertyCombo->setModel(model);
-  _ui->filteringPropertyCombo->setCurrentIndex(model->rowOf(viewSelection));
+  _ui->filteringPropertyCombo->setCurrentIndex(0);
 }
 
 bool TableViewConfiguration::isShowEdges() const {

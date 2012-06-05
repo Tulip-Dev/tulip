@@ -17,6 +17,9 @@ class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
   QString _placeholder;
   bool _checkable;
   QSet<int> _checkedIndexes;
+  QVector<PropertyInterface*> _properties;
+
+  void rebuildCache();
 
 public:
   explicit GraphPropertiesModel(tlp::Graph* graph, bool checkable=false, QObject *parent = NULL);
@@ -36,52 +39,26 @@ public:
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role) const {
-    if (orientation == Qt::Horizontal) {
-      if (role == Qt::DisplayRole) {
-        if (section == 0)
-          return trUtf8("Name");
-        else if (section == 1)
-          return trUtf8("Type");
-        else if (section == 2)
-          return trUtf8("Scope");
-      }
-    }
-
-    return TulipModel::headerData(section,orientation,role);
-  }
-
-  bool setData(const QModelIndex &index, const QVariant &value, int role) {
-    if (_checkable && role == Qt::CheckStateRole && index.column() == 0) {
-      if (value.value<int>() == (int)Qt::Checked)
-        _checkedIndexes.insert(index.row());
-      else
-        _checkedIndexes.remove(index.row());
-
-      emit checkStateChanged(index,(Qt::CheckState)(value.value<int>()));
-      return true;
-    }
-
-    return false;
-  }
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+  bool setData(const QModelIndex &index, const QVariant &value, int role);
 
   // Methods inherited from the observable system
   void treatEvent(const tlp::Event& evt) {
     const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
-
     if (graphEvent == NULL)
       return;
-
     if (graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
       PropertyInterface* pi = _graph->getProperty(graphEvent->getPropertyName());
       int row = rowOf(pi);
       beginRemoveRows(QModelIndex(),row,row);
+      _properties.remove(row);
     }
     else if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
       endRemoveRows();
     }
     else if (graphEvent->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY) {
       PropertyInterface* pi = _graph->getProperty(graphEvent->getPropertyName());
+      rebuildCache();
       int row = rowOf(pi);
       beginInsertRows(QModelIndex(),row,row);
       endInsertRows();

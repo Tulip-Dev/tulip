@@ -131,6 +131,12 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
        </spacer>
       </item>
       <item>
@@ -248,6 +254,22 @@ background-color: white;
  </resources>
  <connections>
   <connection>
+   <sender>playButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>AlgorithmRunnerItem</receiver>
+   <slot>run()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>13</x>
+     <y>13</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>369</x>
+     <y>233</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>settingsButton</sender>
    <signal>toggled(bool)</signal>
    <receiver>parameters</receiver>
@@ -264,18 +286,18 @@ background-color: white;
    </hints>
   </connection>
   <connection>
-   <sender>playButton</sender>
-   <signal>clicked(bool)</signal>
+   <sender>settingsButton</sender>
+   <signal>toggled(bool)</signal>
    <receiver>AlgorithmRunnerItem</receiver>
-   <slot>run()</slot>
+   <slot>initModel()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>13</x>
+     <x>41</x>
      <y>13</y>
     </hint>
     <hint type="destinationlabel">
      <x>369</x>
-     <y>233</y>
+     <y>243</y>
     </hint>
    </hints>
   </connection>
@@ -283,5 +305,6 @@ background-color: white;
  <slots>
   <signal>favorized(bool)</signal>
   <slot>run()</slot>
+  <slot>initModel()</slot>
  </slots>
 </ui>
