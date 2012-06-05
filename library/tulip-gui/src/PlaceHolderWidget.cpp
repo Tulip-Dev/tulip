@@ -31,6 +31,7 @@ PlaceHolderWidget::PlaceHolderWidget(QWidget *parent): QWidget(parent), _widget(
 
 void PlaceHolderWidget::setWidget(QWidget *widget) {
   if (_widget != NULL) {
+    _widget->hide();
     layout()->removeWidget(_widget);
     _widget->setParent(NULL);
     _widget = NULL;
@@ -39,6 +40,7 @@ void PlaceHolderWidget::setWidget(QWidget *widget) {
   _widget = widget;
 
   if (_widget != NULL) {
+    _widget->show();
     _widget->installEventFilter(this);
     layout()->addWidget(_widget);
   }
