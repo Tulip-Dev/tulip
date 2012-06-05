@@ -242,6 +242,9 @@ void BasicPluginsTest::testImportGEXF() {
     "data/basic.gexf",
     "data/data.gexf",
     "data/hierarchy1.gexf",
+    "data/hierarchy2.gexf",
+    "data/hierarchy3.gexf",
+    "data/hierarchy4.gexf",
     "data/viz.gexf",
     NULL
   };
