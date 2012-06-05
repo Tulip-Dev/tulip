@@ -19,20 +19,17 @@
 #ifndef _Tulip_SNAPSHOTDIALOG_H
 #define _Tulip_SNAPSHOTDIALOG_H
 
+#include <QtGui/QDialog>
+
+#include <tulip/SnapshotDialogData.h>
 #include <tulip/tulipconf.h>
 
-#include <QtGui/QDialog>
-#include <QtGui/QGraphicsPixmapItem>
-#include <QtGui/QGraphicsScene>
-#include <QtGui/QApplication>
-
-#include "tulip/SnapshotDialogData.h"
-
-#include "tulip/View.h"
-
+class QGraphicsScene;
+class QGraphicsPixmapItem;
 namespace tlp {
 
 class LockLabel;
+class View;
 
 class TLP_QT_SCOPE SnapshotDialog : public QDialog,public Ui::SnapshotDialogData {
 
@@ -41,7 +38,6 @@ class TLP_QT_SCOPE SnapshotDialog : public QDialog,public Ui::SnapshotDialogData
 public :
 
   SnapshotDialog(View &v,QWidget *parent=NULL);
-  ~SnapshotDialog();
 
 public slots :
 
@@ -54,6 +50,7 @@ protected slots :
 
   void fileNameTextChanged(QString);
   void browseClicked();
+  void copyClicked();
 
 protected :
 

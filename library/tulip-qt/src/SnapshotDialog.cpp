@@ -17,11 +17,14 @@
  *
  */
 
-#include "tulip/SnapshotDialog.h"
+#include <tulip/SnapshotDialog.h>
+#include <tulip/View.h>
 
 #include <QtGui/QMessageBox>
 #include <QtGui/QImageWriter>
 #include <QtGui/QFileDialog>
+#include <QClipboard>
+#include <QtGui/QGraphicsPixmapItem>
 
 using namespace std;
 
@@ -77,6 +80,7 @@ SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),view(&v)
   connect(heightSpinBox,SIGNAL(valueChanged(int)),this,SLOT(heightSpinBoxValueChanged(int)));
   connect(fileName,SIGNAL(textChanged(QString)),this,SLOT(fileNameTextChanged(QString)));
   connect(browseButton,SIGNAL(clicked()),this,SLOT(browseClicked()));
+  connect(clipboardbutton,SIGNAL(clicked()), this, SLOT(copyClicked()));
 
   lockLabel=new LockLabel();
   lockLayout->addWidget(lockLabel);
@@ -84,9 +88,6 @@ SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),view(&v)
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
   fileName->setPlaceholderText(QApplication::translate("SnapshotDialogData", "Enter the filename or use the browse button", 0, QApplication::UnicodeUTF8));
 #endif
-}
-
-SnapshotDialog::~SnapshotDialog() {
 }
 
 void SnapshotDialog::resizeEvent(QResizeEvent *) {
@@ -97,11 +98,17 @@ void SnapshotDialog::accept() {
   QImage image=view->createPicture(widthSpinBox->value(),heightSpinBox->value(),false);
 
   if(!image.save(fileName->text(),0,qualitySpinBox->value())) {
-    QMessageBox::critical(this,"Snapshot cannot be saved","Snapshot cannot be saved in file : "+fileName->text());
+    QMessageBox::critical(this,"Snapshot cannot be saved","Snapshot cannot be saved in file: "+fileName->text());
   }
   else {
     QDialog::accept();
   }
+}
+
+void SnapshotDialog::copyClicked() {
+    QImage image=view->createPicture(widthSpinBox->value(),heightSpinBox->value(),false);
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setImage(image);
 }
 
 void SnapshotDialog::widthSpinBoxValueChanged(int value) {
