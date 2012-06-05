@@ -1,10 +1,10 @@
-#include <yajl_parse.h>
-#include <yajl_gen.h>
 #include <string>
 
 namespace tlp {
 class PluginProgress;
 }
+
+class yajl_gen_t;
 
 /**
  * @brief A Simple C++ wrapper around the C library 'yajl' parsing capabilities.
@@ -66,5 +66,5 @@ public:
   void writeArrayOpen();
   void writeArrayClose();
 protected:
-  yajl_gen _generator;
+  yajl_gen_t* _generator;
 };

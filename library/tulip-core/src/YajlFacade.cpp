@@ -1,5 +1,7 @@
 #include <tulip/YajlFacade.h>
 
+#include <yajl_parse.h>
+#include <yajl_gen.h>
 #include <QtCore/QFile>
 #include <stdlib.h>
 #include <QtCore/QDebug>
