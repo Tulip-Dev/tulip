@@ -176,7 +176,7 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
       delete scene;
   }
   scene=new QGraphicsScene();
- scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
+  scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
   pixmapItem=scene->addPixmap(QPixmap::fromImage(image));
   pixmapItem->setPos(graphicsView->sceneRect().center()-pixmapItem->boundingRect().center());
   graphicsView->setScene(scene);
