@@ -77,6 +77,8 @@ void TableView::setupWidget() {
   connect(_ui->nodesTable, SIGNAL(destroyed()), _ui->nodesTable->itemDelegate(), SLOT(deleteLater()));
   connect(_ui->edgesTable, SIGNAL(destroyed()), _ui->edgesTable->itemDelegate(), SLOT(deleteLater()));
 
+  connect(_ui->filterEdit,SIGNAL(returnPressed()),this,SLOT(filterChanged()));
+
   _ui->splitter_2->setSizes(QList<int>() << centralWidget->width()/4 << centralWidget->width()*3/4);
 }
 
@@ -135,7 +137,6 @@ void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
       }
     }
   }
-
   QTableView* view = _ui->nodesTable->isVisible() ? _ui->nodesTable : _ui->edgesTable;
   QAbstractItemModel* model = view->model();
   bool visible = false;
@@ -146,8 +147,24 @@ void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
       break;
     }
   }
-
   _ui->frame->setVisible(visible);
+}
+
+void TableView::filterChanged() {
+  QString filter = _ui->filterEdit->text();
+  GraphSortFilterProxyModel* nodesModel = static_cast<GraphSortFilterProxyModel*>(_ui->nodesTable->model());
+  GraphSortFilterProxyModel* edgesModel = static_cast<GraphSortFilterProxyModel*>(_ui->edgesTable->model());
+
+  QVector<PropertyInterface*> props;
+  for (int i=0; i < nodesModel->columnCount(); ++i) {
+    if (!_ui->nodesTable->horizontalHeader()->isSectionHidden(i))
+      props += nodesModel->headerData(i,Qt::Horizontal,TulipModel::PropertyRole).value<PropertyInterface*>();
+  }
+  nodesModel->setProperties(props);
+  edgesModel->setProperties(props);
+
+  nodesModel->setFilterFixedString(filter);
+  edgesModel->setFilterFixedString(filter);
 }
 
 PLUGIN(TableView)

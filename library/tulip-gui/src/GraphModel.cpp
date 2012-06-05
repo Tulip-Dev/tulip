@@ -479,18 +479,9 @@ bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInde
   if (filterRegExp().isEmpty())
     return true;
 
-  if (_properties.isEmpty()) {
-    std::string s;
-    forEach(s,graphModel->graph()->getProperties()) {
-      if (graphModel->stringValue(id,graphModel->graph()->getProperty(s)).contains(filterRegExp()))
-        return true;
-    }
-  }
-  else {
-    foreach(PropertyInterface* pi, _properties) {
-      if (graphModel->stringValue(id,pi).contains(filterRegExp()))
-        return true;
-    }
+  foreach(PropertyInterface* pi, _properties) {
+    if (graphModel->stringValue(id,pi).contains(filterRegExp()))
+      return true;
   }
 
   return false;
