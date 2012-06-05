@@ -119,5 +119,4 @@ QString GenericVectorEditorCreator<ElementType>::displayText(const QVariant &dat
   return QString::number(v.size()) + QObject::trUtf8(" elements");
 }
 
-
 }

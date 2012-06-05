@@ -36,6 +36,7 @@ void AlgorithmRunnerItem::setGraph(Graph* g) {
 }
 
 void AlgorithmRunnerItem::setData(const DataSet &data) {
+  initModel();
   ParameterListModel* model = static_cast<ParameterListModel*>(_ui->parameters->model());
   model->setParametersValues(data);
 }
@@ -128,6 +129,7 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   painter.drawRect(0,0,pix.width()-1,pix.height()-1);
   drag->setPixmap(pix);
 
+  initModel();
   AlgorithmMimeType* mimeData = new AlgorithmMimeType(name(),static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues());
   connect(mimeData,SIGNAL(mimeRun(tlp::Graph*,tlp::DataSet)),this,SLOT(afterRun(tlp::Graph*,tlp::DataSet)));
   drag->setMimeData(mimeData);

@@ -184,6 +184,11 @@ border: 1px solid &quot;#C9C9C9&quot;;
           </property>
           <item>
            <widget class="FavoriteBox" name="favoritesBox">
+            <property name="styleSheet">
+             <string notr="true">#favoritesBox {
+border: 0px;
+}</string>
+            </property>
             <property name="title">
              <string>Favorites</string>
             </property>

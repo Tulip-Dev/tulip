@@ -38,6 +38,7 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/GraphPropertiesModel.h>
 #include <QtGui/QColorDialog>
+#include <tulip/GlLabel.h>
 
 using namespace tlp;
 
@@ -153,7 +154,7 @@ void PropertyInterfaceEditorCreator::setEditorData(QWidget* w, const QVariant& v
   combo->setCurrentIndex(model->rowOf(prop));
 }
 
-QVariant PropertyInterfaceEditorCreator::editorData(QWidget* w,tlp::Graph* g) {
+QVariant PropertyInterfaceEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   QComboBox* combo = static_cast<QComboBox*>(w);
   GraphPropertiesModel<PropertyInterface>* model = static_cast<GraphPropertiesModel<PropertyInterface> *>(combo->model());
   return model->data(model->index(combo->currentIndex(),0),TulipModel::PropertyRole);
@@ -354,6 +355,7 @@ QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
   return tlpStringToQString(GlGraphStaticData::edgeShapeName(data.value<EdgeShape>()));
 }
 
+//TulipFontEditorCreator
 QWidget* TulipFontEditorCreator::createWidget(QWidget* parent) const {
   return new TulipFontWidget(parent);
 }
@@ -371,4 +373,29 @@ QVariant TulipFontEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
 QString TulipFontEditorCreator::displayText(const QVariant & data) const {
   TulipFont font =data.value<TulipFont>();
   return font.fontName();
+}
+
+//TulipLabelPositionEditorCreator
+QVector<QString> TulipLabelPositionEditorCreator::POSITION_LABEL = QVector<QString>()
+  << QObject::trUtf8("Center")
+  << QObject::trUtf8("Top")
+  << QObject::trUtf8("Bottom")
+  << QObject::trUtf8("Left")
+  << QObject::trUtf8("Right");
+
+QWidget* TulipLabelPositionEditorCreator::createWidget(QWidget* parent) const {
+  QComboBox* result = new QComboBox(parent);
+  foreach(QString s, POSITION_LABEL)
+    result->addItem(s);
+  return result;
+}
+void TulipLabelPositionEditorCreator::setEditorData(QWidget* w, const QVariant& var,bool,tlp::Graph*) {
+  QComboBox* comboBox = static_cast<QComboBox*>(w);
+  comboBox->setCurrentIndex((int)(var.value<LabelPosition>()));
+}
+QVariant TulipLabelPositionEditorCreator::editorData(QWidget* w,tlp::Graph*) {
+  return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<QComboBox*>(w)->currentIndex()));
+}
+QString TulipLabelPositionEditorCreator::displayText(const QVariant& v) const {
+  return POSITION_LABEL[(int)(v.value<LabelPosition>())];
 }
