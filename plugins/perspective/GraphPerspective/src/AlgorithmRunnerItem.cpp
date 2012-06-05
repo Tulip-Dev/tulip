@@ -27,8 +27,10 @@ AlgorithmRunnerItem::~AlgorithmRunnerItem() {
 
 void AlgorithmRunnerItem::setGraph(Graph* g) {
   _graph = g;
+
   if (_ui->parameters->model() != NULL)
     _ui->parameters->setModel(NULL);
+
   if (_ui->parameters->isVisible())
     initModel();
 }
@@ -152,6 +154,7 @@ void AlgorithmRunnerItem::setFavorite(bool f) {
 tlp::DataSet AlgorithmRunnerItem::data() const {
   if (_ui->parameters->model() == NULL)
     return DataSet();
+
   return static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues();
 }
 
@@ -164,8 +167,10 @@ void AlgorithmRunnerItem::initModel() {
   _ui->parameters->setModel(model);
   _ui->settingsButton->setEnabled(model->rowCount() > 0);
   int h = 10;
+
   for (int i=0; i<model->rowCount(); ++i)
     h += _ui->parameters->rowHeight(i);
+
   _ui->parameters->setMinimumSize(_ui->parameters->minimumSize().width(),h);
   _ui->parameters->setMaximumSize(_ui->parameters->maximumSize().width(),h);
 }

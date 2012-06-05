@@ -137,6 +137,7 @@ void GraphHierarchiesEditor::createPanel() {
 
   if (g == NULL) {
     g = static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->currentGraph();
+
     if (g == NULL)
       return;
   }

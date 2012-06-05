@@ -8,14 +8,18 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
   std::string propName;
   forEach(propName,_graph->getInheritedProperties()) {
     PropertyInterface* pi = _graph->getProperty(propName);
+
     if (dynamic_cast<PROPTYPE*>(pi) == NULL)
       continue;
+
     _properties+=pi;
   }
   forEach(propName,_graph->getLocalProperties()) {
     PropertyInterface* pi = _graph->getProperty(propName);
+
     if (dynamic_cast<PROPTYPE*>(pi) == NULL)
       continue;
+
     _properties+=pi;
   }
 }
@@ -44,8 +48,10 @@ QModelIndex GraphPropertiesModel<PROPTYPE>::index(int row, int column,const QMod
   if (!_placeholder.isNull()) {
     if (row == 0)
       return createIndex(row,column);
+
     row--;
   }
+
   return createIndex(row,column,_properties[row]);
 }
 
@@ -60,8 +66,10 @@ int GraphPropertiesModel<PROPTYPE>::rowCount(const QModelIndex &parent) const {
     return 0;
 
   int result = _properties.size();
+
   if (!_placeholder.isNull())
     result++;
+
   return result;
 }
 
@@ -80,8 +88,10 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
   if (role == Qt::DisplayRole || role == Qt::ToolTipRole) {
     if (!_placeholder.isNull() && index.row() == 0)
       return _placeholder;
+
     if (pi == NULL)
       return QString();
+
     if (index.column() == 0)
       return QString(pi->getName().c_str());
     else if (index.column() == 1)
@@ -95,8 +105,10 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
 
   else if (role == Qt::FontRole) {
     QFont f;
+
     if (!_placeholder.isNull() && index.row() == 0)
       f.setItalic(true);
+
     return f;
   }
   else if (role == PropertyRole) {
@@ -126,6 +138,7 @@ QVariant tlp::GraphPropertiesModel<PROPTYPE>::headerData(int section, Qt::Orient
         return trUtf8("Scope");
     }
   }
+
   return TulipModel::headerData(section,orientation,role);
 }
 
