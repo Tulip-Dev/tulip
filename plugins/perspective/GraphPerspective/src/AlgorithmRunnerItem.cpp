@@ -27,16 +27,10 @@ AlgorithmRunnerItem::~AlgorithmRunnerItem() {
 
 void AlgorithmRunnerItem::setGraph(Graph* g) {
   _graph = g;
-  ParameterListModel* model = new ParameterListModel(PluginLister::getPluginParameters(_pluginName.toStdString()),g,_ui->parameters);
-  _ui->parameters->setModel(model);
-  _ui->settingsButton->setEnabled(model->rowCount() > 0);
-  int h = 10;
-
-  for (int i=0; i<model->rowCount(); ++i)
-    h += _ui->parameters->rowHeight(i);
-
-  _ui->parameters->setMinimumSize(_ui->parameters->minimumSize().width(),h);
-  _ui->parameters->setMaximumSize(_ui->parameters->maximumSize().width(),h);
+  if (_ui->parameters->model() != NULL)
+    _ui->parameters->setModel(NULL);
+  if (_ui->parameters->isVisible())
+    initModel();
 }
 
 void AlgorithmRunnerItem::setData(const DataSet &data) {
@@ -70,6 +64,8 @@ void copyToLocal(DataSet& data, Graph* g) {
   asLocal<StringProperty>(var,data,g);
 }
 void AlgorithmRunnerItem::run(Graph *g) {
+  initModel();
+
   if (g == NULL)
     g=_graph;
 
@@ -156,6 +152,20 @@ void AlgorithmRunnerItem::setFavorite(bool f) {
 tlp::DataSet AlgorithmRunnerItem::data() const {
   if (_ui->parameters->model() == NULL)
     return DataSet();
-
   return static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues();
+}
+
+
+void AlgorithmRunnerItem::initModel() {
+  if (_ui->parameters->model() != NULL)
+    return;
+
+  ParameterListModel* model = new ParameterListModel(PluginLister::getPluginParameters(_pluginName.toStdString()),_graph,_ui->parameters);
+  _ui->parameters->setModel(model);
+  _ui->settingsButton->setEnabled(model->rowCount() > 0);
+  int h = 10;
+  for (int i=0; i<model->rowCount(); ++i)
+    h += _ui->parameters->rowHeight(i);
+  _ui->parameters->setMinimumSize(_ui->parameters->minimumSize().width(),h);
+  _ui->parameters->setMaximumSize(_ui->parameters->maximumSize().width(),h);
 }

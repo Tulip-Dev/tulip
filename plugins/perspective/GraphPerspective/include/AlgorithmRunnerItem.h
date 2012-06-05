@@ -20,6 +20,7 @@ class AlgorithmRunnerItem: public QWidget {
   bool _localMode;
   QPointF _dragStartPosition;
 
+
 public:
   explicit AlgorithmRunnerItem(QString pluginName, QWidget* parent = NULL);
   virtual ~AlgorithmRunnerItem();
@@ -46,5 +47,6 @@ signals:
 
 protected slots:
   void afterRun(tlp::Graph*,tlp::DataSet);
+  void initModel();
 };
 #endif // ALGORITHMRUNNERITEM_H

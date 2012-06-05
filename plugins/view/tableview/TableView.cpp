@@ -85,20 +85,19 @@ void TableView::setupWidget() {
 void TableView::graphChanged(tlp::Graph* g) {
   _nodesModel->setGraph(g);
   _edgesModel->setGraph(g);
-  _ui->nodesTable->resizeColumnsToContents();
-  _ui->edgesTable->resizeColumnsToContents();
   _tableViewConfiguration->setGraph(g);
   _ui->propertiesEditor->setGraph(g);
 
+  _ui->frame->hide();
   // Hide all data in the table view
   foreach(QTableView* view, QList<QTableView*>() << _ui->nodesTable << _ui->edgesTable) {
     QAbstractItemModel* model = view->model();
 
     for(int i=0; i < model->columnCount(); ++i) {
       view->horizontalHeader()->setSectionHidden(i,true);
+      view->horizontalHeader()->resizeSection(i,view->horizontalHeader()->defaultSectionSize());
     }
   }
-  _ui->frame->hide();
 }
 
 void TableView::graphDeleted() {
@@ -137,10 +136,11 @@ void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
       }
     }
   }
+
+  // Hide table if no more column is displayed
   QTableView* view = _ui->nodesTable->isVisible() ? _ui->nodesTable : _ui->edgesTable;
   QAbstractItemModel* model = view->model();
   bool visible = false;
-
   for(int i=0; i < model->columnCount(); ++i) {
     if (!view->isColumnHidden(i)) {
       visible = true;

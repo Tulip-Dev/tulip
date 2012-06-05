@@ -73,12 +73,7 @@ void TulipItemDelegate::unregisterCreator(tlp::TulipItemEditorCreator* c) {
 }
 
 tlp::TulipItemEditorCreator* TulipItemDelegate::creator(int typeId) const {
-  tlp::TulipItemEditorCreator *result = NULL;
-
-  if (_creators.contains(typeId))
-    result = _creators[typeId];
-
-  return result;
+  return _creators[typeId];
 }
 
 QWidget* TulipItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex& index) const {

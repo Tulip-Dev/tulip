@@ -112,7 +112,7 @@ void AlgorithmRunner::setGraph(Graph* g) {
   setEnabled(g != NULL);
   _graph = g;
   foreach(AlgorithmRunnerItem* item, findChildren<AlgorithmRunnerItem*>())
-  item->setGraph(g);
+    item->setGraph(g);
 }
 
 void AlgorithmRunner::findPlugins() {
