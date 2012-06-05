@@ -14,7 +14,7 @@ const quint32 META_NODES_ID = 5;
 const quint32 SELECTED_META_NODES_ID = 6;
 const quint32 META_NODES_LABELS_ID = 7;
 const quint32 NODES_LABELS_ID = 8;
-const quint32 EDGES_LABELS_ID = 8;
+const quint32 EDGES_LABELS_ID = 9;
 const QVector<quint32> GRAPH_COMPOSITE_IDS = QVector<quint32>() << NODES_ID << EDGES_ID
     << SELECTED_NODES_ID << SELECTED_EDGES_ID
     << META_NODES_ID << SELECTED_META_NODES_ID
