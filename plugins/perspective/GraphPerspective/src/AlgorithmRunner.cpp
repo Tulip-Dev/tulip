@@ -40,7 +40,7 @@ protected:
     ExpandableGroupBox::paintEvent(event);
     QPainter painter(this);
     QPixmap px((_droppingFavorite ? ":/tulip/graphperspective/icons/16/favorite.png" : ":/tulip/graphperspective/icons/16/favorite-empty.png"));
-    painter.drawPixmap(25,2,px);
+    painter.drawPixmap(25,0,px);
   }
 };
 
@@ -79,7 +79,7 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   _ui->favoritesBox->widget()->setMinimumHeight(75);
   _ui->favoritesBox->widget()->setLayout(new QVBoxLayout);
   _ui->favoritesBox->widget()->layout()->setContentsMargins(0,15,0,15);
-  _ui->favoritesBox->widget()->layout()->setSpacing(0);
+  _ui->favoritesBox->widget()->layout()->setSpacing(5);
   _ui->favoritesBox->widget()->installEventFilter(this);
 
   setEnabled(false);

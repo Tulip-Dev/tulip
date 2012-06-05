@@ -18,7 +18,10 @@
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QListView, QListWidget {
+   <string notr="true">QWizard {
+background-color: white;
+}
+QListView, QListWidget {
 background-color: white;
 border: 0px;
 }
@@ -44,9 +47,6 @@ border: 0px;
   </property>
   <property name="modal">
    <bool>true</bool>
-  </property>
-  <property name="wizardStyle">
-   <enum>QWizard::AeroStyle</enum>
   </property>
   <property name="options">
    <set>QWizard::ExtendedWatermarkPixmap|QWizard::HaveFinishButtonOnEarlyPages|QWizard::NoBackButtonOnStartPage</set>

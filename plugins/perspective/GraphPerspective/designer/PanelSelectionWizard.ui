@@ -18,7 +18,10 @@
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QComboBox QTreeView {
+   <string notr="true">QWizard, #choosePanelPage {
+background-color: white;
+}
+QComboBox QTreeView {
 background-color:white;
 color: black;
 border: 1px solid #C9C9C9;
@@ -41,9 +44,6 @@ border: 0px;
   </property>
   <property name="modal">
    <bool>true</bool>
-  </property>
-  <property name="wizardStyle">
-   <enum>QWizard::AeroStyle</enum>
   </property>
   <property name="options">
    <set>QWizard::ExtendedWatermarkPixmap|QWizard::HaveFinishButtonOnEarlyPages|QWizard::HaveNextButtonOnLastPage|QWizard::NoBackButtonOnStartPage</set>
@@ -157,6 +157,11 @@ border: 0px;
          </item>
          <item>
           <widget class="QListView" name="panelList">
+           <property name="styleSheet">
+            <string notr="true">#panelList {
+background-color: white
+}</string>
+           </property>
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
            </property>
