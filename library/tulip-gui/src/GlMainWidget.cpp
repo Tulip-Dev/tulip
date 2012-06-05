@@ -176,13 +176,13 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
       options |= RenderScene;
     }
 
+    computeInteractors();
+
     if(options.testFlag(RenderScene)) {
       createRenderingStore(width,height);
 
       widthStored=width;
       heightStored=height;
-
-      computeInteractors();
 
       //Render the graph in the back buffer.
       scene.draw();
