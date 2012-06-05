@@ -141,12 +141,14 @@ void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
   QTableView* view = _ui->nodesTable->isVisible() ? _ui->nodesTable : _ui->edgesTable;
   QAbstractItemModel* model = view->model();
   bool visible = false;
+
   for(int i=0; i < model->columnCount(); ++i) {
     if (!view->isColumnHidden(i)) {
       visible = true;
       break;
     }
   }
+
   _ui->frame->setVisible(visible);
 }
 
@@ -156,10 +158,12 @@ void TableView::filterChanged() {
   GraphSortFilterProxyModel* edgesModel = static_cast<GraphSortFilterProxyModel*>(_ui->edgesTable->model());
 
   QVector<PropertyInterface*> props;
+
   for (int i=0; i < nodesModel->columnCount(); ++i) {
     if (!_ui->nodesTable->horizontalHeader()->isSectionHidden(i))
       props += nodesModel->headerData(i,Qt::Horizontal,TulipModel::PropertyRole).value<PropertyInterface*>();
   }
+
   nodesModel->setProperties(props);
   edgesModel->setProperties(props);
 
