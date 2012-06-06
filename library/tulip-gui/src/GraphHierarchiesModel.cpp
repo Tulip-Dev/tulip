@@ -407,6 +407,8 @@ QMap<tlp::Graph*,QString> GraphHierarchiesModel::writeProject(tlp::TulipProject 
     std::fstream *stream = project->stdFileStream(folder + "graph.json");
     tlp::exportGraph(g,*stream,"JSON Export",data,progress);
   }
+  foreach(GraphNeedsSavingObserver* observer, _saveNeeded)
+    observer->saved();
   return rootIds;
 }
 
