@@ -64,6 +64,13 @@
      ;
 
     PyRun_SimpleString(tlpImportHook.c_str());
+
+    // Try to load plugins when importing the module from the Python shell
+    if (tlp::TulipPluginsPath.empty()) {
+        tlp::initTulipLib();
+        tlp::loadPlugins();
+    }
+
 %End
 
 
