@@ -109,16 +109,17 @@ void installSignalHandler(int sig, SigactionHandlerFunc *handler) {
 // if the signal is not treated by our custom handler, call the real signal function
 SignalHandlerFunc *signal (int sig, SignalHandlerFunc *handler) __THROW {
 
-    if (handledSignals.find(sig) != handledSignals.end()) {
-      return SIG_DFL;
+  if (handledSignals.find(sig) != handledSignals.end()) {
+    return SIG_DFL;
+  }
+  else {
+    //Init function if needed
+    if(real_signal == NULL) {
+      initSignalInterposer();
     }
-    else {
-        //Init function if needed
-       if(real_signal == NULL){
-          initSignalInterposer();
-       }
-      return real_signal(sig, handler);
-    }
+
+    return real_signal(sig, handler);
+  }
 }
 
 // redefinition of the sigset function
@@ -127,16 +128,17 @@ SignalHandlerFunc *signal (int sig, SignalHandlerFunc *handler) __THROW {
 // if the signal is not treated by our custom handler, call the real sigset function
 SignalHandlerFunc *sigset(int sig, SignalHandlerFunc *handler) __THROW {
 
-    if(handledSignals.find(sig) != handledSignals.end()) {
-      return SIG_DFL;
+  if(handledSignals.find(sig) != handledSignals.end()) {
+    return SIG_DFL;
+  }
+  else {
+    //Init function if needed
+    if(real_sigset == NULL) {
+      initSignalInterposer();
     }
-    else {
-        //Init function if needed
-       if(real_sigset == NULL){
-          initSignalInterposer();
-       }
-      return real_sigset(sig, handler);
-    }
+
+    return real_sigset(sig, handler);
+  }
 
 }
 
@@ -146,16 +148,17 @@ SignalHandlerFunc *sigset(int sig, SignalHandlerFunc *handler) __THROW {
 // if the signal is not treated by our custom handler, call the real sigaction function
 int sigaction(int sig, const struct sigaction *act, struct sigaction *oact) __THROW {
 
-    if (handledSignals.find(sig) != handledSignals.end() ) {
-      return 0;
+  if (handledSignals.find(sig) != handledSignals.end() ) {
+    return 0;
+  }
+  else {
+    //Init function if needed
+    if(real_sigaction == NULL) {
+      initSignalInterposer();
     }
-    else {
-        //Init function if needed
-       if(real_sigaction == NULL){
-          initSignalInterposer();
-       }
-      return real_sigaction(sig, act, oact);
-    }
+
+    return real_sigaction(sig, act, oact);
+  }
 
 }
 

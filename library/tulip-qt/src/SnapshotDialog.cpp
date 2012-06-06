@@ -101,9 +101,9 @@ void SnapshotDialog::accept() {
 }
 
 void SnapshotDialog::copyClicked() {
-    QImage image=view->createPicture(widthSpinBox->value(),heightSpinBox->value(),false);
-    QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setImage(image);
+  QImage image=view->createPicture(widthSpinBox->value(),heightSpinBox->value(),false);
+  QClipboard *clipboard = QApplication::clipboard();
+  clipboard->setImage(image);
 }
 
 void SnapshotDialog::widthSpinBoxValueChanged(int value) {
@@ -151,7 +151,7 @@ void SnapshotDialog::browseClicked() {
 }
 
 void SnapshotDialog::fileNameTextChanged(QString text) {
-    okButton->setEnabled(text.isEmpty()?false:true);
+  okButton->setEnabled(text.isEmpty()?false:true);
 }
 
 void SnapshotDialog::sizeSpinBoxValueChanged() {
@@ -172,9 +172,10 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
   ratio=((float)widthSpinBox->value())/((float)heightSpinBox->value());
 
   if(scene!=NULL) {
-      delete pixmapItem;
-      delete scene;
+    delete pixmapItem;
+    delete scene;
   }
+
   scene=new QGraphicsScene();
   scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
 

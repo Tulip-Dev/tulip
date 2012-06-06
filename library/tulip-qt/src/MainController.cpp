@@ -1904,7 +1904,7 @@ void MainController::snapshot() {
     }
     else {
       SnapshotDialog snapshotDialog(*currentView, mainWindowFacade.getParentWidget());
-   //   snapshotDialog.setModal(true);
+      //   snapshotDialog.setModal(true);
       snapshotDialog.exec();
     }
   }

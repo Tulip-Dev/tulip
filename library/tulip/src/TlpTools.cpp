@@ -81,7 +81,7 @@ const char tlp::PATH_DELIMITER = ':';
 // define an unmangled symbol for the trick
 // to retrieve the Tulip lib dir dynamically
 extern "C" {
-    int unmangledSymbol;
+  int unmangledSymbol;
 }
 #endif
 
@@ -98,15 +98,18 @@ static std::string getTulipLibDir() {
   libTulipName = "tulip-" + getMajor(TULIP_RELEASE) + "_" + getMinor(TULIP_RELEASE) + ".dll";
 #endif
   HMODULE hmod = GetModuleHandle(libTulipName.c_str());
+
   if (hmod != NULL) {
-	TCHAR szPath[512 + 1];
-	DWORD dwLen = GetModuleFileName(hmod, szPath, 512);
-	if (dwLen > 0) {
-		std::string tmp = szPath;
-		std::replace(tmp.begin(), tmp.end(), '\\', '/');
-		tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
-	}
+    TCHAR szPath[512 + 1];
+    DWORD dwLen = GetModuleFileName(hmod, szPath, 512);
+
+    if (dwLen > 0) {
+      std::string tmp = szPath;
+      std::replace(tmp.begin(), tmp.end(), '\\', '/');
+      tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
+    }
   }
+
 #else
 #ifdef __APPLE__
   libTulipName = "libtulip-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".dylib";
@@ -121,13 +124,15 @@ static std::string getTulipLibDir() {
 
   if (ptr != NULL) {
     symbol = dlsym(ptr, "unmangledSymbol");
+
     if (symbol != NULL) {
-        if (dladdr(symbol, &info)) {
-            std::string tmp = info.dli_fname;
-            tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
-        }
+      if (dladdr(symbol, &info)) {
+        std::string tmp = info.dli_fname;
+        tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
+      }
     }
   }
+
 #endif
   return tulipLibDir;
 }
@@ -166,11 +171,12 @@ void tlp::initTulipLib(const char* appDirPath) {
     }
     else {
       // if no appDirPath is provided, retrieve dynamically the Tulip lib dir
-	  TulipLibDir = getTulipLibDir();
+      TulipLibDir = getTulipLibDir();
+
       // if no results (should not happen with a clean Tulip install), fall back in the default value provided during compilation
-	  if (TulipLibDir.empty())
-		TulipLibDir = string(_TULIP_LIB_DIR);
-	}
+      if (TulipLibDir.empty())
+        TulipLibDir = string(_TULIP_LIB_DIR);
+    }
   }
   else
     TulipLibDir=string(getEnvTlp);
@@ -422,11 +428,15 @@ std::string tlp::getMinor(const std::string& v) {
   sep = '_';
 #endif
   size_t pos = v.find(sep);
+
   if (pos == string::npos)
     return string("0");
+
   unsigned int rpos = v.rfind(sep);
+
   if (pos == rpos)
     return v.substr(pos+1);
+
   return v.substr(pos + 1, rpos - pos - 1);
 }
 //=========================================================
