@@ -33,6 +33,7 @@
 #include <tulip/GlScene.h>
 
 #include <QtGui/QGraphicsView>
+#include <QtGui/QGraphicsProxyWidget>
 #include <QtGui/QGraphicsScene>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QDialog>
@@ -84,6 +85,8 @@ public:
     return glSceneItem;
   }
 
+  void setCentralWidget(QWidget *widget);
+
 protected:
 
   void resizeEvent(QResizeEvent *event);
@@ -92,6 +95,7 @@ protected:
   GlMainWidget *glMainWidget;
   QGLWidget *viewportWidet;
   bool drawNeeded;
+  QGraphicsProxyWidget *centralWidgetItem;
 };
 
 }

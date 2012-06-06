@@ -54,7 +54,7 @@ const int nbAnimStep = 100;
 void TabWidgetHidableMenuGraphicsProxy::hideTabWidget() {
   hidden = true;
   double dx = sceneBoundingRect().width() - transform().m11() * offsetWhenHiding;
-  setPos(-dx, 0);
+  setPos(-dx, scenePos().y());
 }
 
 void TabWidgetHidableMenuGraphicsProxy::mouseDoubleClickEvent(

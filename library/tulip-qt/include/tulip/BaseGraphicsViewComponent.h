@@ -21,15 +21,17 @@
 #define _Tulip_BASEGRAPHICSVIEWCOMPONENT_H
 
 #include <tulip/AbstractView.h>
+#include <tulip/TabWidgetHidableMenuGraphicsProxy.h>
 
 class QFrame;
+class QGraphicsView;
 
 namespace tlp {
 
 class GlMainWidgetGraphicsView;
 class GlMainWidgetItem;
 class GWOverviewWidget;
-class TabWidgetHidableMenuGraphicsProxy;
+
 
 class TLP_QT_SCOPE BaseGraphicsViewComponent : public AbstractView {
 
@@ -75,7 +77,15 @@ public :
     return baseView->savePicture(pictureName, width, height, center, zoom, xOffset, yOffset);
   }
 
+  virtual tlp::View *getRealView() const {
+      return baseView;
+  }
+
   virtual std::string getRealViewName() const;
+
+  TabWidgetHidableMenuGraphicsProxy *getOptionsTabWiget() const {
+      return tabWidgetProxy;
+  }
 
 public slots:
 
@@ -102,7 +112,7 @@ protected :
   GlMainWidgetItem *overviewItem;
   QFrame *overviewFrame;
   std::string realViewName;
-  GlMainWidgetGraphicsView *graphicsView;
+  QGraphicsView *graphicsView;
   View *baseView;
 
 };

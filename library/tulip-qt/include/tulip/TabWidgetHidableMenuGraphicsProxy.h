@@ -50,6 +50,10 @@ public :
 
   void hideTabWidget();
 
+  QTabWidget *getTabWidget() const {
+      return tabWidget;
+  }
+
 protected :
 
   void wheelEvent(QGraphicsSceneWheelEvent * event);

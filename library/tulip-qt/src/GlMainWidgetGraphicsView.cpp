@@ -40,65 +40,76 @@ namespace tlp {
 
 //==================================================
 static QGLFormat GlInit() {
-  QGLFormat tmpFormat;
-  tmpFormat.setDirectRendering(true);
-  tmpFormat.setDoubleBuffer(true);
-  tmpFormat.setAccum(false);
-  tmpFormat.setStencil(true);
-  tmpFormat.setOverlay(false);
-  tmpFormat.setDepth(true);
-  tmpFormat.setRgba(true);
-  tmpFormat.setAlpha(true);
-  tmpFormat.setOverlay(false);
-  tmpFormat.setStereo(false);
-  tmpFormat.setSampleBuffers(true);
-  return tmpFormat;
+    QGLFormat tmpFormat;
+    tmpFormat.setDirectRendering(true);
+    tmpFormat.setDoubleBuffer(true);
+    tmpFormat.setAccum(false);
+    tmpFormat.setStencil(true);
+    tmpFormat.setOverlay(false);
+    tmpFormat.setDepth(true);
+    tmpFormat.setRgba(true);
+    tmpFormat.setAlpha(true);
+    tmpFormat.setOverlay(false);
+    tmpFormat.setStereo(false);
+    tmpFormat.setSampleBuffers(true);
+    return tmpFormat;
 }
 
-GlMainWidgetGraphicsView::GlMainWidgetGraphicsView(QWidget *parent,GlMainWidget *glMainWidget) : QGraphicsView(new QGraphicsScene(), parent),
-  glMainWidget(glMainWidget), drawNeeded(true) {
-  setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
-  viewportWidet = new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget());
-  setViewport(viewportWidet);
-  setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-  setFrameStyle(QFrame::NoFrame);
-  scene()->setBackgroundBrush(Qt::white);
-  glSceneItem=new GlMainWidgetItem(glMainWidget,width(),height());
-  scene()->addItem(glSceneItem);
-  glSceneItem->setPos(0,0);
-  glSceneItem->setZValue(0);
+GlMainWidgetGraphicsView::GlMainWidgetGraphicsView(QWidget *parent,GlMainWidget *glMainWidget) : QGraphicsView(new QGraphicsScene(), parent), glSceneItem(NULL),
+    glMainWidget(glMainWidget), drawNeeded(true), centralWidgetItem(NULL) {
+    setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    setFrameStyle(QFrame::NoFrame);
+    if (glMainWidget) {
+        setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
+        viewportWidet = new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget());
+        setViewport(viewportWidet);
+        scene()->setBackgroundBrush(Qt::white);
+        glSceneItem=new GlMainWidgetItem(glMainWidget,width(),height());
+        scene()->addItem(glSceneItem);
+        glSceneItem->setPos(0,0);
+        glSceneItem->setZValue(0);
+    } else {
+        setRenderHints(QPainter::TextAntialiasing);
+        setViewport(NULL);
+    }
 }
 
-GlMainWidgetGraphicsView::~GlMainWidgetGraphicsView() {
-  delete viewportWidet;
+GlMainWidgetGraphicsView::~GlMainWidgetGraphicsView() {}
+
+void GlMainWidgetGraphicsView::setCentralWidget(QWidget *widget) {
+    centralWidgetItem = scene()->addWidget(widget);
+    centralWidgetItem->resize(width(),height());
 }
 
 void GlMainWidgetGraphicsView::draw(bool) {
-  glSceneItem->setRedrawNeeded(true);
-  scene()->update();
+    if (glSceneItem)
+        glSceneItem->setRedrawNeeded(true);
+    scene()->update();
 }
 
 void GlMainWidgetGraphicsView::redraw() {
-  scene()->update();
+    scene()->update();
 }
 
-
 void GlMainWidgetGraphicsView::resizeEvent(QResizeEvent *event) {
-  QGraphicsView::resizeEvent(event);
+    QGraphicsView::resizeEvent(event);
 
-  if (scene()) {
-    scene()->setSceneRect(QRect(QPoint(0, 0), size()));
-  }
+    if (scene()) {
+        scene()->setSceneRect(QRect(QPoint(0, 0), size()));
+    }
 
-  glSceneItem->resize(width(),height());
+    if (glSceneItem)
+        glSceneItem->resize(width(),height());
+    if (centralWidgetItem)
+        centralWidgetItem->resize(width(),height());
 
-  if (scene()) {
-    scene()->update();
-  }
+    if (scene()) {
+        scene()->update();
+    }
 
-  // Hack : send a mouse event to force redraw of the scene (otherwise artifacts was displayed when maximizing or minimizing the graphics view)
-  QMouseEvent *eventModif = new QMouseEvent(QEvent::MouseMove,QPoint(size().width()/2, size().height()/2), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-  QApplication::sendEvent(this, eventModif);
+    // Hack : send a mouse event to force redraw of the scene (otherwise artifacts was displayed when maximizing or minimizing the graphics view)
+    QMouseEvent *eventModif = new QMouseEvent(QEvent::MouseMove,QPoint(size().width()/2, size().height()/2), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+    QApplication::sendEvent(this, eventModif);
 }
 
 }
