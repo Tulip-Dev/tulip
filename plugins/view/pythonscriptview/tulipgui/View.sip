@@ -21,6 +21,7 @@
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GlMainView.h>
 #include <tulip/View.h>
+#include <tulip/MainController.h>
 %End
 
 namespace tlp {
@@ -64,20 +65,20 @@ Sets the graph and parameters for the view.
 %End
 
 %MethodCode
-    if (!sipCpp->getGraph()->getRoot()->isDescendantGraph(a0) && a0 != sipCpp->getGraph()->getRoot()) {
-        sipIsErr = 1;
-        std::ostringstream oss;
-        oss << "Error : the graph you are trying to set on a view does not belong to the same sub-graphs hierarchy as the one currently loaded." << std::endl;
-        oss << "<graph " << a0->getName() << " (id " << a0->getId() << ")>";
-        oss << "is not a descendant of <graph " << sipCpp->getGraph()->getName() << " (id " << sipCpp->getGraph()->getId() << ")>";
-        PyErr_SetString(PyExc_Exception, oss.str().c_str());
-    } else {
-        tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
-        if (mainController) {
+    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
+    if (mainController) {
+        if (!sipCpp->getGraph()->getRoot()->isDescendantGraph(a0) && a0 != sipCpp->getGraph()->getRoot()) {
+            sipIsErr = 1;
+            std::ostringstream oss;
+            oss << "Error : the graph you are trying to set on a view does not belong to the same sub-graphs hierarchy as the one currently loaded." << std::endl;
+            oss << "<graph " << a0->getName() << " (id " << a0->getId() << ")>";
+            oss << "is not a descendant of <graph " << sipCpp->getGraph()->getName() << " (id " << sipCpp->getGraph()->getId() << ")>";
+            PyErr_SetString(PyExc_Exception, oss.str().c_str());
+         } else {
             mainController->setDataOfView(sipCpp, a0, *a1);
-        } else {
-            sipCpp->setData(a0, *a1);
-        }
+         }
+    } else {
+        sipCpp->setData(a0, *a1);
     }
 %End
 
@@ -94,20 +95,20 @@ Sets the graph for the view. The current parameters will be kept.
 %End
 
 %MethodCode
-    if (!sipCpp->getGraph()->getRoot()->isDescendantGraph(a0) && a0 != sipCpp->getGraph()->getRoot()) {
-        sipIsErr = 1;
-        std::ostringstream oss;
-        oss << "Error : the graph you are trying to set on a view does not belong to the same sub-graphs hierarchy as the one currently loaded." << std::endl;
-        oss << "<graph " << a0->getName() << " (id " << a0->getId() << ")>";
-        oss << "is not a descendant of <graph " << sipCpp->getGraph()->getName() << " (id " << sipCpp->getGraph()->getId() << ")>";
-        PyErr_SetString(PyExc_Exception, oss.str().c_str());
-    } else {
-        tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
-        if (mainController) {
-            mainController->setGraphOfView(sipCpp, a0);
+    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
+    if (mainController) {
+        if (!sipCpp->getGraph()->getRoot()->isDescendantGraph(a0) && a0 != sipCpp->getGraph()->getRoot()) {
+            sipIsErr = 1;
+            std::ostringstream oss;
+            oss << "Error : the graph you are trying to set on a view does not belong to the same sub-graphs hierarchy as the one currently loaded." << std::endl;
+            oss << "<graph " << a0->getName() << " (id " << a0->getId() << ")>";
+            oss << "is not a descendant of <graph " << sipCpp->getGraph()->getName() << " (id " << sipCpp->getGraph()->getId() << ")>";
+            PyErr_SetString(PyExc_Exception, oss.str().c_str());
         } else {
-            sipCpp->setGraph(a0);
+            mainController->setGraphOfView(sipCpp, a0);
         }
+    } else {
+        sipCpp->setGraph(a0);
     }
 %End
 
@@ -169,6 +170,14 @@ tlp.View.draw()
 Draws/Updates the view.
 %End
 
+%MethodCode
+    sipCpp->draw();
+    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
+    if (!mainController) {
+        QApplication::processEvents();
+    }
+%End
+
 // =========================================================================================================================
 
     std::string getName();
@@ -181,12 +190,7 @@ Returns the name of the view.
 %End
 
 %MethodCode
-    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
-    std::string name;
-    if (mainController) {
-        name = mainController->getNameOfView(sipCpp);
-    }
-    sipRes = new std::string(name);
+    sipRes = new std::string(tvm.getNameOfView(sipCpp));
 %End
 
 };

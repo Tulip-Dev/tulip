@@ -65,7 +65,7 @@ public:
 %Docstring
 tlp.NodeLinkDiagramComponent.centerView()
 
-Centers the view according to the current view window size.
+Centers the view according to the current view window size and draws it.
 %End
 
 // =======================================================================================
@@ -105,6 +105,10 @@ Sets the rendering parameters for the node link diagram view.
 %MethodCode
     sipCpp->getGlMainWidget()->getScene()->getGlGraphComposite()->setRenderingParameters(*a0);
     updateNodeLinkConfWidgets(sipCpp);
+    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
+    if (!mainController) {
+        sipCpp->draw();
+    }
 %End
 
 // =======================================================================================
@@ -137,6 +141,18 @@ Returns the state of the automatic centering when setting a new graph on the vie
 
 %MethodCode
     sipRes = sipCpp->getInitViewOnSetGraph();
+%End
+
+// =======================================================================================
+
+    void hideOverview(bool hideOverview);
+%Docstring
+tlp.NodeLinkDiagramComponent.hideOverview(hideOverview)
+
+Hides / displays the overview in the top left corner of the view.
+
+:param hideOverview: whether to hide the overview
+:type hideOverview: boolean
 %End
 
 };

@@ -1,25 +1,26 @@
 %ModuleHeaderCode
-#include <tulip/MainController.h>
-#include <tulip/TemplateFactory.h>
-#include <QtGui/QWorkspace>
-
-extern std::vector<std::string> getTulipViews();
+#include <TulipViewsUtils.h>
+extern TulipViewsManager tvm;
 %End
 
 %ModuleCode
-std::vector<std::string> getTulipViews() {
-    std::vector<std::string> ret;
-    tlp::TemplateFactory<tlp::ViewFactory, tlp::View, tlp::ViewContext>::ObjectCreator::const_iterator it;
-    for (it=tlp::ViewFactory::factory->objMap.begin(); it != tlp::ViewFactory::factory->objMap.end(); ++it) {
-        if (it->first != "Python Script view") {
-            ret.push_back(it->first);
-        }
-    }
-    return ret;
-}
+TulipViewsManager tvm;
 %End
 
 namespace tlp {
+
+void loadGUIPlugins();
+%Docstring
+tlp.loadGUIPlugins()
+
+Loads Tulip plugins related to the :mod:`tulipgui` module (views, interactors, glyphs).
+%End
+
+%MethodCode
+ tlp::InteractorManager::getInst().loadPlugins();
+ tlp::ViewPluginsManager::getInst().loadPlugins();
+ tlp::GlyphManager::getInst().loadPlugins();
+%End
 
 std::vector<std::string> getAvailableViews() const;
 %Docstring
@@ -33,7 +34,7 @@ Returns a list of the views names currently available in Tulip.
 %End
 
 %MethodCode
-    sipRes = new std::vector<std::string>(getTulipViews());
+    sipRes = new std::vector<std::string>(tvm.getTulipViews());
 %End
 
 // =========================================================================================
@@ -44,58 +45,47 @@ tlp.getOpenedViews()
 
 .. versionadded:: 3.8
 
-Returns a list of the views (except the Python ones) currently opened in Tulip.
+Returns a list of the views currently opened.
 
 :rtype: list of :class:`tlp.View`
 %End
 
 %MethodCode
-    std::vector<tlp::View *> views;
-    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
-    if (mainController) {
-        std::vector<tlp::View *> viewsTmp;
-        mainController->getViews(viewsTmp);
-        for (size_t i = 0 ; i < viewsTmp.size() ; ++i) {
-            if (mainController->getNameOfView(viewsTmp[i]) != "Python Script view") {
-                views.push_back(viewsTmp[i]);
-            }
-        }
-    }
-    sipRes = new std::vector<tlp::View *>(views);
+    sipRes = new std::vector<tlp::View *>(tvm.getOpenedViews());
 %End
 
 // =========================================================================================
 
-    tlp::View *addView(const std::string &viewName, tlp::Graph *graph, tlp::DataSet dataSet);
+            tlp::View *addView(const std::string &viewName, tlp::Graph *graph, tlp::DataSet dataSet = tlp::DataSet());
 %Docstring
-tlp.addView(viewName, graph, dataSet)
+tlp.addView(viewName, graph[, dataSet])
 
 .. versionadded:: 3.8
 
-Creates and add a new view in the Tulip workspace. Returns an instance on the newly created view.
+Creates and adds a new Tulip view. If called through a Python Script editor in the main Tulip GUI, the
+view will be added in the Tulip workspace. If called through the classical Python shell,
+a dialog containing the view will be created and displayed.
+Returns an instance of the newly created view.
 
 :param viewName: the name of the view to create (use :func:`tlp.getAvailableViews` to know which ones are installed)
 :type viewName: string
 :param graph: the graph to set on the new view
 :type graph: :class:`tulip.tlp.Graph`
-:param dataSet: the parameters of the view
+:param dataSet: the optional parameters of the view
 :type dataSet: :class:`tulip.tlp.Dataset`
 :rtype: :class:`tlp.View`
 %End
 
 %MethodCode
     sipRes = NULL;
-    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
-    if (mainController) {
-        std::vector<std::string> tlpViews = getTulipViews();
-        if (std::find(tlpViews.begin(), tlpViews.end(), *a0) != tlpViews.end()) {
-            sipRes = mainController->createView(*a0, a1, *a2);
-        } else {
-            sipIsErr = 1;
-            std::ostringstream oss;
-            oss << "Error : No Tulip view named \"" << *a0 << "\".";
-            PyErr_SetString(PyExc_Exception, oss.str().c_str());
-        }
+    std::vector<std::string> tlpViews = tvm.getTulipViews();
+    if (std::find(tlpViews.begin(), tlpViews.end(), *a0) != tlpViews.end()) {
+        sipRes = tvm.addView(*a0, a1, *a2);
+    } else {
+        sipIsErr = 1;
+        std::ostringstream oss;
+        oss << "Error : No Tulip view named \"" << *a0 << "\".";
+        PyErr_SetString(PyExc_Exception, oss.str().c_str());
     }
 %End
 
@@ -107,18 +97,14 @@ tlp.closeView(view)
 
 .. versionadded:: 3.8
 
-Closes a view in the Tulip workspace.
+Closes an opened view.
 
 :param view: the view to close
 :type view: :class:`tlp.View`
 %End
 
 %MethodCode
-    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
-    if (mainController) {
-        releaseSIPWrapper(a0, sipType_tlp_View);
-        mainController->closeView(a0);
-    }
+    tvm.closeView(a0);
 %End
 
 // =========================================================================================
@@ -129,14 +115,12 @@ tlp.tileViews()
 
 .. versionadded:: 3.8
 
-Tiles the opened views in the current workspace.
+Tiles the opened views in the current workspace (this function has no effect when called
+from the classical Python shell).
 %End
 
 %MethodCode
-    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
-    if (mainController) {
-        mainController->getMainWindowFacade()->getWorkspace()->tile();
-    }
+    tvm.tileViews();
 %End
 
 // =========================================================================================
@@ -147,7 +131,7 @@ tlp.getViewsOfGraph(graph)
 
 .. versionadded:: 3.8
 
-Returns a list of views (except the Python ones) associated to a particular graph.
+Returns a list of views associated to a particular graph.
 
 :param graph: the graph on which to find views
 :type graph: :class:`tulip.tlp.Graph`
@@ -155,17 +139,7 @@ Returns a list of views (except the Python ones) associated to a particular grap
 %End
 
 %MethodCode
-    std::vector<tlp::View*> ret;
-    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
-    if (mainController) {
-        std::vector<tlp::View*> tmp = mainController->getViewsOfGraph(a0);
-        for (size_t i = 0 ; i < tmp.size() ; ++i) {
-            if (mainController->getNameOfView(tmp[i]) != "Python Script view") {
-                ret.push_back(tmp[i]);
-            }
-        }
-    }
-    sipRes = new std::vector<tlp::View*>(ret);
+    sipRes = new std::vector<tlp::View*>(tvm.getViewsOfGraph(a0));
 %End
 
 // =========================================================================================
@@ -176,21 +150,11 @@ tlp.closeAllViews()
 
 .. versionadded:: 3.8
 
-Closes all the views (except the Python ones) in the Tulip workspace.
+Closes all opened views.
 %End
 
 %MethodCode
-    std::vector<tlp::View*> views;
-    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
-    if (mainController) {
-        mainController->getViews(views);
-        for (size_t i = 0 ; i < views.size() ; ++i) {
-            if (mainController->getNameOfView(views[i]) != "Python Script view") {
-                releaseSIPWrapper(views[i], sipType_tlp_View);
-                mainController->closeView(views[i]);
-            }
-        }
-    }
+    tvm.closeAllViews();
 %End
 
 // =========================================================================================
@@ -201,25 +165,46 @@ tlp.closeViewsRelatedToGraph(graph)
 
 .. versionadded:: 3.8
 
-Closes all the views (except the Python ones) associated to a particular graph.
+Closes all the views associated to a particular graph.
 
 :param graph: the graph on which to close views
 :type graph: :class:`tulip.tlp.Graph`
 %End
 
 %MethodCode
-    std::vector<tlp::View*> views;
+    tvm.closeViewsRelatedToGraph(a0);
+%End
+
+// =========================================================================================
+
+    void runQtMainLoop();
+%Docstring
+tlp.runQtMainLoop()
+
+.. versionadded:: 3.8
+
+That function allows to run the main Qt event loop.
+It should only be used when executing a script through the classical Python interpreter
+(it has no effect when calling it from a Python script editor in the main Tulip GUI).
+There is no need to call it when working in an interactive Python shell, as Qt events
+are processed when the shell is waiting for input.
+It will return only when there is no more Qt widgets displayed.
+So it should be the last instruction of a script and it enables to keep the created Tulip
+views displayed and functionnal (otherwise, the interpreter is closed and so are the views).
+%End
+
+%MethodCode
     tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
-    if (mainController) {
-        views = mainController->getViewsOfGraph(a0);
-        for (size_t i = 0 ; i < views.size() ; ++i) {
-            if (mainController->getNameOfView(views[i]) != "Python Script view") {
-                if (views[i]->getGraph() == a0) {
-                    releaseSIPWrapper(views[i], sipType_tlp_View);
-                    mainController->closeView(views[i]);
-                }
+    if (!mainController) {
+        bool processQtEvents = false;
+        foreach (QWidget *widget, QApplication::topLevelWidgets()) {
+            if (widget->isVisible()) {
+                processQtEvents = true;
+                break;
             }
         }
+        if (processQtEvents)
+            QApplication::exec();
     }
 %End
 

@@ -162,6 +162,8 @@ private :
 
   std::string pythonVersion;
 
+  bool wasInit;
+
 
 };
 

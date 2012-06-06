@@ -1,12 +1,11 @@
 IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
-
-ADD_SUBDIRECTORY(tulipgui)
-
 SET(QT_USE_QTWEBKIT true)
 
 INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
+
+ADD_SUBDIRECTORY(tulipgui)
 
 # Force to use SIP headers located in thirdparty and not those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
@@ -67,7 +66,6 @@ IF(LINUX)
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY_RELEASE})
 ENDIF(LINUX)
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} tulipgui)
 
 ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipQtName})
 
