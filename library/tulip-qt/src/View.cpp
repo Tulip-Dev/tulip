@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <iostream>
 #include "tulip/View.h"
 
 using namespace std;
@@ -24,13 +25,16 @@ namespace tlp {
 
 TemplateFactory<ViewFactory,View, ViewContext *> *ViewFactory::factory;
 
-void View::createPicture(const std::string &,int, int) {}
+void View::createPicture(const std::string &pictureName, int width, int height) {
+  createPicture(pictureName, width, height, true);
+}
 
 bool View::createPicture(const std::string& pictureName, int width, int height, bool center, int zoom, int xOffset, int yOffset) {
   return savePicture(pictureName,width,height,center,zoom,xOffset,yOffset);
 }
 
 bool View::savePicture(const std::string& , int , int , bool , int , int , int ) {
+  cout << __PRETTY_FUNCTION__ << " : not implemented" << endl;
   return false;
 }
 
