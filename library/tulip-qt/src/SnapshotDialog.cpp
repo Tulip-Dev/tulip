@@ -178,6 +178,8 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
   scene=new QGraphicsScene();
   scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
 
+//The alpha channel may not be correctly handled in the preview (graphic driver issue?).
+//Thanks to Qt4.7, we can easily overcome this issue.
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
   QPixmap pixmap;
   QImage img = QImage(image.bits(),image.width(),image.height(),QImage::Format_ARGB32);
