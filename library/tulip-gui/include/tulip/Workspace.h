@@ -61,7 +61,7 @@ public:
   explicit Workspace(QWidget *parent = NULL);
   virtual ~Workspace();
 
-  void addPanel(tlp::View*);
+  int addPanel(tlp::View*);
   QList<tlp::View*> panels() const;
 
   bool isBottomFrameVisible() const;

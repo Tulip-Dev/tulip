@@ -306,6 +306,19 @@ void GraphPerspective::importGraph() {
     }
 
     _graphs->addGraph(g);
+
+    View* firstPanel = NULL;
+    foreach(QString panelName, QStringList() << "Spreadsheet" << "Node Link Diagram view") {
+      View* view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(),NULL);
+      if (firstPanel == NULL)
+        firstPanel = view;
+      view->setupUi();
+      view->setGraph(g);
+      view->setState(DataSet());
+      _ui->workspace->addPanel(view);
+    }
+    _ui->workspace->setActivePanel(firstPanel);
+    _ui->workspace->switchToSplitMode();
     _ui->graphHierarchiesEditor->repackHeaders();
   }
 }

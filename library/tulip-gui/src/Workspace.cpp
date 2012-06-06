@@ -117,7 +117,7 @@ QString Workspace::panelTitle(tlp::WorkspacePanel* panel) const {
   return panel->viewName() + " <" + QString::number(digit+1) + ">";
 }
 
-void Workspace::addPanel(tlp::View* view) {
+int Workspace::addPanel(tlp::View* view) {
   WorkspacePanel* panel = new WorkspacePanel(view);
 
   if (_model != NULL)
@@ -145,6 +145,7 @@ void Workspace::addPanel(tlp::View* view) {
   // Force the first panel's graph combo box update when underleying model has been updated.
   panel->viewGraphSet(view->graph());
   emit panelFocused(view);
+  return _panels.size()-1;
 }
 
 
