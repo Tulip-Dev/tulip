@@ -135,7 +135,7 @@ SignalHandlerFunc *sigset(int sig, SignalHandlerFunc *handler) __THROW {
 // if the signal is not treated by our custom handler, call the real sigaction function
 int sigaction(int sig, const struct sigaction *act, struct sigaction *oact) __THROW {
 
-  if (std::find(handledSignals.begin(), handledSignals.end(), sig) != handledSignals.end()) {
+  if (handledSignals.find(sig) != handledSignals.end() ) {
     return 0;
   }
   else {
