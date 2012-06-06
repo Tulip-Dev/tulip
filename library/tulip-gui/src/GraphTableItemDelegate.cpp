@@ -42,8 +42,8 @@ void GraphTableItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     }
 
     if (max != min) {
-      painter->setBrush(QColor(230,230,230));
-      painter->setPen(QColor(230,230,230));
+      painter->setBrush(QColor(200,200,200));
+      painter->setPen(QColor(200,200,200));
       painter->drawRect(option.rect.x(),option.rect.y()+1,((value - min) / (max - min)) * option.rect.width(), option.rect.height()-2);
     }
   }
