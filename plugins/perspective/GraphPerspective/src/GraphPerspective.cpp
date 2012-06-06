@@ -392,7 +392,7 @@ void GraphPerspective::open() {
   filterAny += ");;";
 
   filters.insert(0, filterAny);
-  QString fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Export Graph"), QString(), filters);
+  QString fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open Graph"), QString(), filters);
 
   if(!fileName.isEmpty()) {
     QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
