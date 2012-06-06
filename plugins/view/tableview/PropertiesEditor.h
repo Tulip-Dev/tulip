@@ -42,6 +42,9 @@ protected slots:
   void copyProperty();
   void delProperty();
   void toLabels();
+  void toNodesLabels();
+  void toEdgesLabels();
+  void toLabels(bool nodes, bool edges);
   void checkAll();
   void unCheckAll();
   void unCheckAllExcept();

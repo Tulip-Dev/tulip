@@ -52,6 +52,8 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   connect(menu.addAction(trUtf8("Set all edges")),SIGNAL(triggered()),this,SLOT(setAllEdges()));
   menu.addSeparator();
   connect(menu.addAction(trUtf8("To labels")),SIGNAL(triggered()),this,SLOT(toLabels()));
+  connect(menu.addAction(trUtf8("To labels (nodes only)")),SIGNAL(triggered()),this,SLOT(toNodesLabels()));
+  connect(menu.addAction(trUtf8("To labels (edges only)")),SIGNAL(triggered()),this,SLOT(toEdgesLabels()));
   menu.addSeparator();
   connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
   QAction* delAction = menu.addAction(trUtf8("Delete"));
@@ -136,9 +138,21 @@ void PropertiesEditor::delProperty() {
 }
 
 void PropertiesEditor::toLabels() {
+  toLabels(true,true);
+}
+
+void PropertiesEditor::toNodesLabels() {
+  toLabels(true,false);
+}
+
+void PropertiesEditor::toEdgesLabels() {
+  toLabels(false,true);
+}
+
+void PropertiesEditor::toLabels(bool nodes, bool edges) {
   DataSet data;
-  data.set("nodes",true);
-  data.set("edges",true);
+  data.set("nodes",nodes);
+  data.set("edges",edges);
   data.set("input",_contextProperty);
   std::string msg;
   StringProperty* result = _graph->getProperty<StringProperty>("viewLabel");
