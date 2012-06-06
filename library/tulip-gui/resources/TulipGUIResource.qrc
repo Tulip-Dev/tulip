@@ -73,5 +73,7 @@
         <file>icons/20/edge_size_interpolation.png</file>
         <file>icons/20/node_color_interpolation.png</file>
         <file>icons/20/node_size_interpolation.png</file>
+        <file>icons/eye.png</file>
+        <file>icons/eye_disabled.png</file>
     </qresource>
 </RCC>

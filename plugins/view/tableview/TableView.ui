@@ -122,6 +122,12 @@ border-image: none;
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
 stop:0 rgb(105,105,105),
 stop:1 rgb(90, 90, 90));
+}
+QTableView::indicator:checked {
+image: url(:/tulip/gui/icons/eye.png);
+}
+QTableView::indicator:unchecked {
+image: url(:/tulip/gui/icons/eye_disabled.png);
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
