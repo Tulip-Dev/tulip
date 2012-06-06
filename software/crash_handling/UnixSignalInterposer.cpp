@@ -109,6 +109,10 @@ SignalHandlerFunc *signal (int sig, SignalHandlerFunc *handler) __THROW {
     return SIG_DFL;
   }
   else {
+      //Init function if needed
+     if(real_signal == NULL){
+        initSignalInterposer();
+     }
     return real_signal(sig, handler);
   }
 
@@ -124,6 +128,10 @@ SignalHandlerFunc *sigset(int sig, SignalHandlerFunc *handler) __THROW {
     return SIG_DFL;
   }
   else {
+      //Init function if needed
+     if(real_sigset == NULL){
+        initSignalInterposer();
+     }
     return real_sigset(sig, handler);
   }
 
@@ -139,6 +147,10 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact) __TH
     return 0;
   }
   else {
+      //Init function if needed
+     if(real_sigaction == NULL){
+        initSignalInterposer();
+     }
     return real_sigaction(sig, act, oact);
   }
 
