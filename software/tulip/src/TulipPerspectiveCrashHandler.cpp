@@ -53,22 +53,30 @@ void TulipPerspectiveCrashHandler::toggleDetailedView() {
 
 void TulipPerspectiveCrashHandler::sendReport() {
   _poster = new FormPost;
-  _poster->addField("platform",_ui->plateformValue->text());
-  _poster->addField("compiler",_ui->compilerValue->text());
-  _poster->addField("arch",_ui->archValue->text());
-  _poster->addField("perspective_name",_ui->perspectiveNameValue->text());
-  _poster->addField("tulip_version",_ui->versionValue->text());
-  _poster->addField("stack",_ui->dumpEdit->toPlainText());
+  _poster->addField("summary","[ Tulip " + _ui->versionValue->text() + " ] " + _ui->perspectiveNameValue->text() + " " + _ui->perspectiveArgumentsValue->text());
+  _poster->addField("description",_ui->dumpEdit->toPlainText());
+  _poster->addField("platform",_ui->compilerValue->text());
+  _poster->addField("os",_ui->plateformValue->text());
+  _poster->addField("os_build",_ui->archValue->text());
 
-  connect(_poster->postData("http://tulip.labri.fr/crash_report/send_report.php"),SIGNAL(finished()),this,SLOT(reportPosted()));
+  //FIXME: temorary url until script is merged on Drupal
+  connect(_poster->postData("http://auliyaa.dyndns.org/test.php"),SIGNAL(finished()),this,SLOT(reportPosted()));
 
   _ui->sendReportButton->setText(trUtf8("Sending report"));
   _ui->sendReportButton->setEnabled(false);
 }
 
 void TulipPerspectiveCrashHandler::reportPosted() {
-  _ui->sendReportButton->setText(trUtf8("Report sent"));
-  _ui->errorReportTitle->setText(trUtf8("<b>Report has been sent. Thank you for supporting Tulip !</b>"));
+  QNetworkReply* reply = static_cast<QNetworkReply*>(sender());
+  if (reply->error() == QNetworkReply::NoError) {
+    _ui->sendReportButton->setText(trUtf8("Report sent"));
+    _ui->errorReportTitle->setText(trUtf8("<b>Report has been sent. Thank you for supporting Tulip !</b>"));
+  }
+  else {
+    _ui->sendReportButton->setText(trUtf8("Error while sending report"));
+    _ui->errorReportTitle->setText("<i>" + reply->errorString() + "</i>");
+    _ui->sendReportButton->setEnabled(true);
+  }
   sender()->deleteLater();
   _poster->deleteLater();
 }
