@@ -17,6 +17,10 @@
  *
  */
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #include "StackWalker.h"
 
 
@@ -25,7 +29,9 @@
 // it is not inlined in StackWalker.h because compilation fails
 // for GCC < 4.4
 void StackWalker::printCallStackToStdErr(unsigned int maxDepth) {
+#ifdef _OPENMP
   #pragma omp critical
+#endif
   printCallStack(std::cerr, maxDepth);
 }
 
