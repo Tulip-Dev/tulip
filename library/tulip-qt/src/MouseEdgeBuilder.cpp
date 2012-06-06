@@ -39,11 +39,6 @@ using namespace tlp;
 
 MouseEdgeBuilder::MouseEdgeBuilder():started(false),graph(NULL),layoutProperty(NULL),source(node()) {}
 
-MouseEdgeBuilder::~MouseEdgeBuilder() {
-  if(graph)
-    graph->removeGraphObserver(this);
-}
-
 bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
   GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);

@@ -45,7 +45,6 @@ protected:
 
 public:
   MouseEdgeBuilder();
-  ~MouseEdgeBuilder();
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
   void initObserver(Graph *);

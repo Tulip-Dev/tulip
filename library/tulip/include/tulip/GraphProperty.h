@@ -37,7 +37,6 @@ class TLP_SCOPE GraphProperty:public AbstractGraphProperty,
 
 public :
   GraphProperty (Graph *, std::string n="");
-  virtual ~GraphProperty();
   void destroy(Graph *);
 
   // redefinition of some PropertyInterface methods

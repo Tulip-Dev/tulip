@@ -36,25 +36,6 @@ GraphProperty::GraphProperty (Graph *sg, std::string n) :
   setAllNodeValue(0);
 }
 //==============================
-GraphProperty::~GraphProperty() {
-  if (graph) {
-    Iterator<node> *it = graph->getNodes();
-
-    while(it->hasNext()) {
-      node n = it->next();
-
-      if (getNodeValue(n) != NULL)
-        getNodeValue(n)->removeGraphObserver(this);
-    }
-
-    delete it;
-
-    if (getNodeDefaultValue() != NULL) {
-      getNodeDefaultValue()->removeGraphObserver(this);
-    }
-  }
-}
-//==============================
 void GraphProperty::setAllNodeValue(const GraphType::RealType& g) {
   //remove all observed graphs if any
   Iterator<node> *it = getNonDefaultValuatedNodes();

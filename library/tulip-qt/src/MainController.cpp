@@ -215,8 +215,6 @@ MainController::~MainController() {
   Graph *currentGraph=getGraph();
 
   if (currentGraph) {
-    currentGraph->removeObserver(this);
-    currentGraph->removeGraphObserver(this);
     delete editMenu;
     delete algorithmMenu;
     delete viewMenu;
