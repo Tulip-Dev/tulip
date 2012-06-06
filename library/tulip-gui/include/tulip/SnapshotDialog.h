@@ -21,18 +21,12 @@
 
 #include <tulip/tulipconf.h>
 
-#include <QtGui/QDialog>
-#include <QtGui/QGraphicsPixmapItem>
-#include <QtGui/QGraphicsScene>
-#include <QtGui/QApplication>
-
 #include "ui_SnapshotDialog.h"
-
-#include "tulip/GlMainView.h"
 
 namespace tlp {
 
 class LockLabel;
+class GlMainView;
 
 class TLP_QT_SCOPE SnapshotDialog : public QDialog,public Ui::SnapshotDialogData {
 
@@ -52,8 +46,9 @@ protected slots :
   void widthSpinBoxValueChanged(int value);
   void heightSpinBoxValueChanged(int value);
 
-  void fileNameTextChanged(QString);
+  void fileNameTextChanged(const QString &);
   void browseClicked();
+  void copyClicked();
 
 protected :
 
