@@ -289,6 +289,8 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
         list<Dependency> dependencies = tfi->getPluginDependencies(pluginName);
         list<Dependency>::const_iterator itD = dependencies.begin();
 
+        bool foundError = false;
+
         // loop over dependencies
         for (; itD != dependencies.end(); ++itD) {
           string factoryDepName = (*itD).factoryName;
@@ -298,13 +300,17 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
             if (loader) {
               string name("Error when checking dependencies of plugin ");
               name += "'" + pluginName + "':";
+
+              if (foundError)
+                name.clear();
+
               loader->aborted(name, tfi->getPluginsClassName() +
                               " '" + pluginName + "' will be removed, it depends on missing " +
                               factoryDepName + " '" + pluginDepName + "'.");
             }
 
             tfi->removePlugin(pluginName);
-            depsNeedCheck = true;
+            foundError = depsNeedCheck = true;
             break;
           }
 
@@ -316,6 +322,10 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
             if (loader) {
               string name("Error when checking dependencies of plugin ");
               name += "'" + pluginName + "':";
+
+              if (foundError)
+                name.clear();
+
               loader->aborted(pluginName, tfi->getPluginsClassName() +
                               " '" + pluginName + "' will be removed, it depends on release " +
                               releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
@@ -324,7 +334,7 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
 
             tfi->removePlugin(pluginName);
             depsNeedCheck = true;
-            break;
+            continue;
           }
         }
       }
