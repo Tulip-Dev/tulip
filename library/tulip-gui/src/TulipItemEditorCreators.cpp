@@ -377,16 +377,16 @@ QString TulipFontEditorCreator::displayText(const QVariant & data) const {
 
 //TulipLabelPositionEditorCreator
 QVector<QString> TulipLabelPositionEditorCreator::POSITION_LABEL = QVector<QString>()
-  << QObject::trUtf8("Center")
-  << QObject::trUtf8("Top")
-  << QObject::trUtf8("Bottom")
-  << QObject::trUtf8("Left")
-  << QObject::trUtf8("Right");
+    << QObject::trUtf8("Center")
+    << QObject::trUtf8("Top")
+    << QObject::trUtf8("Bottom")
+    << QObject::trUtf8("Left")
+    << QObject::trUtf8("Right");
 
 QWidget* TulipLabelPositionEditorCreator::createWidget(QWidget* parent) const {
   QComboBox* result = new QComboBox(parent);
   foreach(QString s, POSITION_LABEL)
-    result->addItem(s);
+  result->addItem(s);
   return result;
 }
 void TulipLabelPositionEditorCreator::setEditorData(QWidget* w, const QVariant& var,bool,tlp::Graph*) {

@@ -310,8 +310,10 @@ void GraphPerspective::importGraph() {
     View* firstPanel = NULL;
     foreach(QString panelName, QStringList() << "Spreadsheet" << "Node Link Diagram view") {
       View* view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(),NULL);
+
       if (firstPanel == NULL)
         firstPanel = view;
+
       view->setupUi();
       view->setGraph(g);
       view->setState(DataSet());
