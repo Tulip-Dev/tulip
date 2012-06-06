@@ -332,6 +332,13 @@ p, li { white-space: pre-wrap; }
         </spacer>
        </item>
        <item>
+        <widget class="QPushButton" name="copybutton">
+         <property name="text">
+          <string>Copy to clipboard</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="cancelButton">
          <property name="text">
           <string>Cancel</string>
