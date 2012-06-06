@@ -26,13 +26,17 @@
 #include <unistd.h>
 #endif
 
-#if _MSC_VER
+#include <thirdparty/gzstream/gzstream.h>
+
+#ifdef _WIN32
 #include <windows.h>
-#include <Dbghelp.h>
+#ifdef _MSC_VER
+#include <dbghelp.h>
+#endif
 #else
 #include <dirent.h>
+#include <dlfcn.h>
 #endif
-#include <thirdparty/gzstream/gzstream.h>
 
 #include <tulip/TlpTools.h>
 #include <tulip/PropertyTypes.h>
@@ -74,7 +78,60 @@ string tlp::TulipShareDir;
 const char tlp::PATH_DELIMITER = ';';
 #else
 const char tlp::PATH_DELIMITER = ':';
+// define an unmangled symbol for the trick
+// to retrieve the Tulip lib dir dynamically
+extern "C" {
+    int unmangledSymbol;
+}
 #endif
+
+// A function that retrieves the Tulip libraries directory based on
+// the path of the loaded shared library libtulip-X.Y.[dll, so, dylib]
+static std::string getTulipLibDir() {
+  std::string tulipLibDir;
+  std::string libTulipName;
+
+#ifdef _WIN32
+#ifdef __MINGW32__
+  libTulipName = "libtulip-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".dll";
+#else
+  libTulipName = "tulip-" + getMajor(TULIP_RELEASE) + "_" + getMinor(TULIP_RELEASE) + ".dll";
+#endif
+  HMODULE hmod = GetModuleHandle(libTulipName.c_str());
+  if (hmod != NULL) {
+	TCHAR szPath[512 + 1];
+	DWORD dwLen = GetModuleFileName(hmod, szPath, 512);
+	if (dwLen > 0) {
+		std::string tmp = szPath;
+		std::replace(tmp.begin(), tmp.end(), '\\', '/');
+		tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
+	}
+  }
+#else
+#ifdef __APPLE__
+  libTulipName = "libtulip-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".dylib";
+#else
+  libTulipName = "libtulip-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".so";
+#endif
+  void *ptr;
+  void *symbol;
+  Dl_info info;
+
+  ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
+
+  if (ptr != NULL) {
+    symbol = dlsym(ptr, "unmangledSymbol");
+    if (symbol != NULL) {
+        if (dladdr(symbol, &info)) {
+            std::string tmp = info.dli_fname;
+            tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
+        }
+    }
+  }
+#endif
+  return tulipLibDir;
+}
+
 //=========================================================
 void tlp::initTulipLib(const char* appDirPath) {
   // first we must ensure that the parsing of float or double
@@ -83,7 +140,6 @@ void tlp::initTulipLib(const char* appDirPath) {
 
   char *getEnvTlp;
   string::size_type pos;
-
   getEnvTlp=getenv("TLP_DIR");
 
   if (getEnvTlp==0) {
@@ -108,8 +164,13 @@ void tlp::initTulipLib(const char* appDirPath) {
 
 #endif
     }
-    else
-      TulipLibDir=string(_TULIP_LIB_DIR);
+    else {
+      // if no appDirPath is provided, retrieve dynamically the Tulip lib dir
+	  TulipLibDir = getTulipLibDir();
+      // if no results (should not happen with a clean Tulip install), fall back in the default value provided during compilation
+	  if (TulipLibDir.empty())
+		TulipLibDir = string(_TULIP_LIB_DIR);
+	}
   }
   else
     TulipLibDir=string(getEnvTlp);
@@ -228,8 +289,6 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
         list<Dependency> dependencies = tfi->getPluginDependencies(pluginName);
         list<Dependency>::const_iterator itD = dependencies.begin();
 
-        bool foundError = false;
-
         // loop over dependencies
         for (; itD != dependencies.end(); ++itD) {
           string factoryDepName = (*itD).factoryName;
@@ -239,18 +298,14 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
             if (loader) {
               string name("Error when checking dependencies of plugin ");
               name += "'" + pluginName + "':";
-
-              if (foundError)
-                name.clear();
-
               loader->aborted(name, tfi->getPluginsClassName() +
                               " '" + pluginName + "' will be removed, it depends on missing " +
                               factoryDepName + " '" + pluginDepName + "'.");
             }
 
             tfi->removePlugin(pluginName);
-            foundError = depsNeedCheck = true;
-            continue;
+            depsNeedCheck = true;
+            break;
           }
 
           string release = (*TemplateFactoryInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
@@ -261,11 +316,7 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
             if (loader) {
               string name("Error when checking dependencies of plugin ");
               name += "'" + pluginName + "':";
-
-              if (foundError)
-                name.clear();
-
-              loader->aborted(name, tfi->getPluginsClassName() +
+              loader->aborted(pluginName, tfi->getPluginsClassName() +
                               " '" + pluginName + "' will be removed, it depends on release " +
                               releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
                               release + " is loaded.");
@@ -273,7 +324,7 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
 
             tfi->removePlugin(pluginName);
             depsNeedCheck = true;
-            continue;
+            break;
           }
         }
       }
@@ -346,22 +397,26 @@ std::string tlp::demangleTlpClassName(const char* className) {
 
 //=========================================================
 std::string tlp::getMajor(const std::string& v) {
-  unsigned int pos = v.find('.');
+  char sep = '.';
+#ifdef _MSC_VER
+  sep = '_';
+#endif
+  unsigned int pos = v.find(sep);
   return v.substr(0, pos);
 }
 
 //=========================================================
 std::string tlp::getMinor(const std::string& v) {
-  size_t pos = v.find('.');
-
+  char sep = '.';
+#ifdef _MSC_VER
+  sep = '_';
+#endif
+  size_t pos = v.find(sep);
   if (pos == string::npos)
     return string("0");
-
-  unsigned int rpos = v.rfind('.');
-
+  unsigned int rpos = v.rfind(sep);
   if (pos == rpos)
     return v.substr(pos+1);
-
   return v.substr(pos + 1, rpos - pos - 1);
 }
 //=========================================================
