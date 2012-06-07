@@ -462,10 +462,22 @@ border: 0px;
                 <number>0</number>
                </property>
                <item>
-                <widget class="tlp::Workspace" name="workspace" native="true">
-                 <property name="bottomFrameVisible" stdset="0">
-                  <bool>false</bool>
+                <widget class="QSplitter" name="splitter">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
                  </property>
+                 <property name="handleWidth">
+                  <number>1</number>
+                 </property>
+                 <widget class="tlp::Workspace" name="workspace" native="true">
+                  <property name="bottomFrameVisible" stdset="0">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                 <widget class="QStackedWidget" name="outputFrame">
+                  <widget class="QWidget" name="pythonPanel" native="true"/>
+                  <widget class="QWidget" name="searchPanel"/>
+                 </widget>
                 </widget>
                </item>
               </layout>
@@ -575,13 +587,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  <property name="title" stdset="0">
                   <string>Python</string>
                  </property>
-                 <attribute name="buttonGroup">
-                  <string notr="true">outputPanelsGroup</string>
-                 </attribute>
                 </widget>
                </item>
                <item>
-                <widget class="OutputPanelButton" name="toolButton">
+                <widget class="OutputPanelButton" name="searchButton">
                  <property name="minimumSize">
                   <size>
                    <width>120</width>
@@ -600,9 +609,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  <property name="number" stdset="0">
                   <string>3</string>
                  </property>
-                 <attribute name="buttonGroup">
-                  <string notr="true">outputPanelsGroup</string>
-                 </attribute>
                 </widget>
                </item>
                <item>
@@ -1428,7 +1434,8 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </hints>
   </connection>
  </connections>
- <buttongroups>
-  <buttongroup name="outputPanelsGroup"/>
- </buttongroups>
+ <slots>
+  <slot>setPythonOutput(bool)</slot>
+  <slot>setSearchOutput(bool)</slot>
+ </slots>
 </ui>
