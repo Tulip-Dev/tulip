@@ -15,11 +15,8 @@ INSTALL(FILES
   tulip/GlMainView.h
   tulip/GlMainWidget.h
   tulip/GlOffscreenRenderer.h
-  tulip/GraphicsWidgetBase.h
   tulip/GraphPropertiesSelectionWidget.h
-  tulip/GraphPropertiesTableWidget.h
   tulip/ItemsListWidget.h
-  tulip/Morphing.h
   tulip/MouseBoxZoomer.h
   tulip/MouseEdgeBendEditor.h
   tulip/MouseEdgeBuilder.h
@@ -36,12 +33,10 @@ INSTALL(FILES
   tulip/QGlPixelBufferManager.h
   tulip/QtGlSceneZoomAndPanAnimator.h
   tulip/QtOpenGlErrorViewer.h
-  tulip/SGHierarchyWidget.h
   tulip/SimplePluginProgressWidget.h
   tulip/SimpleStringsListSelectionWidget.h
   tulip/StringsListSelectionWidget.h
   tulip/StringsListSelectionWidgetInterface.h
-  tulip/TabWidgetHidableMenuGraphicsProxy.h
   tulip/TlpQtTools.h
   tulip/TulipProject.h
   tulip/TulipSettings.h
@@ -64,8 +59,6 @@ INSTALL(FILES
   tulip/View.h
   tulip/ViewWidget.h
   tulip/GlMainWidgetGraphicsItem.h
-  tulip/View3.h
-  tulip/AbstractView.h
   tulip/Interactor.h
   tulip/InteractorComposite.h
   tulip/ProcessingAnimationItem.h
@@ -75,7 +68,6 @@ INSTALL(FILES
   tulip/TulipFileDescriptorWidget.h
   tulip/TreeViewComboBox.h
   tulip/GraphHierarchiesModel.h
-  tulip/FramedGraphicsProxyWidget.h
   tulip/GlOverviewGraphicsItem.h
   tulip/QuickAccessBar.h
   tulip/TulipFont.h
@@ -83,9 +75,7 @@ INSTALL(FILES
   tulip/GLInteractor.h
   tulip/ScrollPopupButton.h
   tulip/WorkspaceExposeWidget.h
-  tulip/GraphTableModel.h
   tulip/GraphTableItemDelegate.h
-  tulip/PropertyToQVariantMapper.h
   tulip/VectorEditionWidget.h
   tulip/GlyphRenderer.h
   tulip/ClearableLineEdit.h
