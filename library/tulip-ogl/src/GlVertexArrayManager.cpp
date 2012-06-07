@@ -817,7 +817,7 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
     case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
     case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
 
-      if (inputData->getElementLayout()==property) {
+      if (inputData->getElementLayout()==property || inputData->getElementShape()==property) {
         edgesModified = true;
       }
 

@@ -53,6 +53,29 @@ public :
     this->outlineColor = outlineColor;
   }
 
+  /**
+   * If set to true, the curve quad outlines will have the same colors
+   * than the curve quad
+   */
+  virtual void setOutlineColorInterpolation(const bool outlineColorInterpolation) {
+    this->outlineColorInterpolation = outlineColorInterpolation;
+  }
+
+  /**
+   * If set to true, the curve is drawn as a line and not as a thick quad
+   */
+  void setLineCurve(const bool lineCurve) {
+    this->lineCurve = lineCurve;
+  }
+
+  void setCurveLineWidth(const float curveLineWidth) {
+    this->curveLineWidth = curveLineWidth;
+  }
+
+  void setCurveQuadBordersWidth(const float curveQuadBorderWidth) {
+    this->curveQuadBordersWidth = curveQuadBorderWidth;
+  }
+
   virtual void setBillboardCurve(const bool billboardCurve) {
     this->billboardCurve = billboardCurve;
   }
@@ -61,9 +84,9 @@ public :
     this->lookDir = lookDir;
   }
 
-  void getXML(std::string &outString);
+  void getXML(std::string &);
 
-  void setWithXML(const std::string &inString,unsigned int &currentPosition);
+  void setWithXML(const std::string &,unsigned int &);
 
   virtual void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=100);
 
@@ -112,7 +135,10 @@ protected:
   float texCoordFactor;
   bool billboardCurve;
   Coord lookDir;
-
+  bool lineCurve;
+  float curveLineWidth;
+  float curveQuadBordersWidth;
+  bool outlineColorInterpolation;
 };
 
 }

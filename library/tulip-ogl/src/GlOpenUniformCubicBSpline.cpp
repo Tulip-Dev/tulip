@@ -97,6 +97,10 @@ void GlOpenUniformCubicBSpline::drawCurve(std::vector<Coord> &controlPoints, con
     static GlBezierCurve curve;
     curve.setOutlined(outlined);
     curve.setOutlineColor(outlineColor);
+    curve.setLineCurve(lineCurve);
+    curve.setCurveLineWidth(curveLineWidth);
+    curve.setCurveQuadBordersWidth(curveQuadBordersWidth);
+    curve.setOutlineColorInterpolation(outlineColorInterpolation);
     curve.setTexture(texture);
     curve.setBillboardCurve(billboardCurve);
     curve.setLookDir(lookDir);

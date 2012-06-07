@@ -159,6 +159,10 @@ void GlCatmullRomCurve::drawCurve(vector<Coord> &controlPoints, const Color &sta
 
   if (controlPoints.size() == 2) {
     curve.setOutlined(outlined);
+    curve.setLineCurve(lineCurve);
+    curve.setCurveLineWidth(curveLineWidth);
+    curve.setCurveQuadBordersWidth(curveQuadBordersWidth);
+    curve.setOutlineColorInterpolation(outlineColorInterpolation);
     curve.setOutlineColor(outlineColor);
     curve.setTexture(texture);
     curve.setBillboardCurve(billboardCurve);

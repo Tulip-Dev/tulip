@@ -24,6 +24,7 @@
 #include <tulip/Curves.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlShaderProgram.h>
 
 using namespace std;
 using namespace tlp;
@@ -478,6 +479,26 @@ void polyQuad(const vector<Coord> &vertices,
   vector<float> texCoords;
 
   buildCurvePoints(vertices, sizes, startN, endN, quadVertices);
+
+  if (GlShaderProgram::getCurrentActiveShader() && GlShaderProgram::getCurrentActiveShader()->getName() == "fisheye") {
+    const float nbSubDiv = 20.f;
+    vector<Coord> newVertices;
+    vector<float> newSizes;
+    newVertices.push_back(quadVertices[0]);
+    newVertices.push_back(quadVertices[1]);
+    newSizes.push_back(sizes[0]);
+
+    for (size_t i = 0 ; i < quadVertices.size()/2 - 1 ; ++i) {
+      for (float j = 1 ; j < nbSubDiv ; ++j) {
+        newVertices.push_back(quadVertices[2*i] + (j/(nbSubDiv-1)) * (quadVertices[2*(i+1)] - quadVertices[2*i]));
+        newVertices.push_back(quadVertices[2*i+1] + (j/(nbSubDiv-1)) * (quadVertices[2*(i+1)+1] - quadVertices[2*i+1]));
+        newSizes.push_back(sizes[i] + (j/(nbSubDiv-1)) * (sizes[i+1] - sizes[i]));
+      }
+    }
+
+    quadVertices = newVertices;
+    sizes = newSizes;
+  }
 
   float length = 0;
   vector<Coord> centerLine;
