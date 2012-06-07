@@ -38,5 +38,10 @@
         <file>icons/16/favorite.png</file>
         <file>icons/32/favorite-empty.png</file>
         <file>icons/32/favorite.png</file>
+        <file>ui/panel_button.png</file>
+        <file>ui/panel_button_checked.png</file>
+        <file>ui/panel_button_checked_hover.png</file>
+        <file>ui/panel_button_hover.png</file>
+        <file>ui/panel_button_pressed.png</file>
     </qresource>
 </RCC>

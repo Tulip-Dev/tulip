@@ -33,6 +33,7 @@ namespace Ui {
 class Workspace;
 }
 
+class QLabel;
 namespace tlp {
 class PluginProgress;
 class View;
@@ -57,6 +58,8 @@ class TLP_QT_SCOPE Workspace: public QWidget {
 
   QString panelTitle(tlp::WorkspacePanel*) const;
 
+  QLabel* _pageCountLabel;
+
 public:
   explicit Workspace(QWidget *parent = NULL);
   virtual ~Workspace();
@@ -70,10 +73,15 @@ public slots:
   void delView(tlp::View* view);
   void switchToStartupMode();
   void switchToSingleMode();
+  void setSingleModeSwitch(QWidget*);
   void switchToSplitMode();
+  void setSplitModeSwitch(QWidget*);
   void switchToSplit3Mode();
+  void setSplit3ModeSwitch(QWidget*);
   void switchToSplit32Mode();
+  void setSplit32ModeSwitch(QWidget*);
   void switchToGridMode();
+  void setGridModeSwitch(QWidget*);
 
   void nextPage();
   void previousPage();
@@ -88,6 +96,7 @@ public slots:
   void readProject(tlp::TulipProject*,QMap<QString,tlp::Graph*>,tlp::PluginProgress*);
 
   void setBottomFrameVisible(bool);
+  void setPageCountLabel(QLabel* l);
 
 signals:
   void panelFocused(tlp::View*);
