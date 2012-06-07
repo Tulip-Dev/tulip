@@ -389,6 +389,11 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
     clone->copy(prop);\
     clonedProperties[clone] = prop;\
     dataSet->set<T*>(n,clone);\
+    QString copyName = dataSetName + "(" + prop->getName().c_str() + ")";\
+    if (existProperty(copyName.toStdString()) && getProperty(copyName.toStdString())->getTypename().compare(prop->getTypename()) != 0)\
+      qWarning() << algorithm.c_str() << ": Type mismatch for output property " << copyName;\
+    else\
+      namedProperties[prop] = getProperty<T>(copyName.toStdString());\
   }
 #define CHECK_PI(P)\
   CHECK_PROPERTY(P##Property)\
@@ -420,10 +425,11 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   forEach(desc, paramList.getParameters()) {
     if (desc.getDirection() != OUT_PARAM)
       continue;
-
     outParams+=desc.getName();
   }
+  QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSet->toString().c_str();
   QMap<PropertyInterface*,PropertyInterface*> clonedProperties;
+  QMap<PropertyInterface*,PropertyInterface*> namedProperties;
   foreach(std::string n, outParams) {
     if (!dataSet->exist(n))
       continue;
@@ -451,8 +457,12 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   foreach(PropertyInterface* clone, clonedProperties.keys()) {
     PropertyInterface* prop = clonedProperties[clone];
 
-    if (result)
+    if (result) {
       prop->copy(clone);
+      PropertyInterface* namedCopy = namedProperties[prop];
+      if (namedCopy != NULL)
+        namedCopy->copy(prop);
+    }
 
     delete clone;
   }
