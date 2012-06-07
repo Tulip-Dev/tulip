@@ -26,6 +26,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QDir>
 #include <QtCore/QTextStream>
+#include <QtGui/QApplication>
 
 #include <tulip/TlpTools.h>
 #include <tulip/GlyphManager.h>
@@ -66,6 +67,7 @@ int main(int argc,char **argv) {
   if(argc>=6)
     subDir=QString(argv[5]);
 
+  QApplication app(argc, argv);
   QFileInfo fileInfo(pluginPath);
   QDir srcDir = fileInfo.dir();
   QString suffix = fileInfo.suffix();
