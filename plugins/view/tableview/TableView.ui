@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">QAbstractItemView {
+   <string notr="true">#TableViewWidget{
+background-color:white;
+}
+QAbstractItemView {
 background-color: white;
 color: black;
 border: 0px;
