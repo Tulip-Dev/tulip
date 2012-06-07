@@ -50,8 +50,9 @@ using namespace tlp;
   Helper storage class to ensure synchronization between panels list and model passed down to opened panels
   */
 Workspace::Workspace(QWidget *parent)
-  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL) {
+  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL), _pageCountLabel(NULL) {
   _ui->setupUi(this);
+  _pageCountLabel = _ui->pagesLabel;
   _ui->workspaceContents->setCurrentWidget(_ui->startupPage);
   connect(_ui->startupButton,SIGNAL(clicked()),this,SIGNAL(addPanelRequest()));
   connect(_ui->exposeMode,SIGNAL(exposeFinished()),this,SLOT(hideExposeMode()));
@@ -215,17 +216,37 @@ void Workspace::switchToStartupMode() {
 void Workspace::switchToSingleMode() {
   switchWorkspaceMode(_ui->singlePage);
 }
+
+void Workspace::setSingleModeSwitch(QWidget* w) {
+  _modeSwitches[_ui->singlePage] = w;
+}
 void Workspace::switchToSplitMode() {
   switchWorkspaceMode(_ui->splitPage);
+}
+
+void Workspace::setSplitModeSwitch(QWidget *w) {
+  _modeSwitches[_ui->splitPage] = w;
 }
 void Workspace::switchToSplit3Mode() {
   switchWorkspaceMode(_ui->split3Page);
 }
+
+void Workspace::setSplit3ModeSwitch(QWidget *w) {
+  _modeSwitches[_ui->split3Page] = w;
+}
 void Workspace::switchToSplit32Mode() {
   switchWorkspaceMode(_ui->split32Page);
 }
+
+void Workspace::setSplit32ModeSwitch(QWidget *w) {
+  _modeSwitches[_ui->split32Page] = w;
+}
 void Workspace::switchToGridMode() {
   switchWorkspaceMode(_ui->gridPage);
+}
+
+void Workspace::setGridModeSwitch(QWidget*w) {
+  _modeSwitches[_ui->gridPage] = w;
 }
 
 void Workspace::switchWorkspaceMode(QWidget *page) {
@@ -243,7 +264,7 @@ void Workspace::updatePageCountLabel() {
 
   }
 
-  _ui->pagesLabel->setText(QString::number(index) + " / " + QString::number(total));
+  _pageCountLabel->setText(QString::number(index) + " / " + QString::number(total));
 }
 
 QWidget* Workspace::currentModeWidget() const {
@@ -625,6 +646,10 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
 
 void Workspace::setBottomFrameVisible(bool f) {
   _ui->bottomFrame->setVisible(f);
+}
+
+void Workspace::setPageCountLabel(QLabel *l) {
+  _pageCountLabel = l;
 }
 
 bool Workspace::isBottomFrameVisible() const {

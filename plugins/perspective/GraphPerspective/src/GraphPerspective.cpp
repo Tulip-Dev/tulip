@@ -141,6 +141,12 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
+  _ui->workspace->setSingleModeSwitch(_ui->singleModeButton);
+  _ui->workspace->setSplitModeSwitch(_ui->splitModeButton);
+  _ui->workspace->setSplit3ModeSwitch(_ui->split3ModeButton);
+  _ui->workspace->setSplit32ModeSwitch(_ui->split32ModeButton);
+  _ui->workspace->setGridModeSwitch(_ui->gridModeButton);
+  _ui->workspace->setPageCountLabel(_ui->pageCountLabel);
   _logger = new GraphPerspectiveLogger(_mainWindow);
   _ui->loggerFrame->installEventFilter(this);
   _mainWindow->installEventFilter(this);

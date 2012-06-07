@@ -18,6 +18,7 @@ src/ImportWizard.cpp
 src/PanelSelectionWizard.cpp
 src/ShadowFilter.cpp
 src/GraphPerspectiveLogger.cpp
+src/OutputPanelButton.cpp
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS
@@ -57,6 +58,7 @@ include/HeaderFrame.h
 include/ImportWizard.h
 include/PanelSelectionWizard.h
 include/GraphPerspectiveLogger.h
+include/OutputPanelButton.h
 )
 
 ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})

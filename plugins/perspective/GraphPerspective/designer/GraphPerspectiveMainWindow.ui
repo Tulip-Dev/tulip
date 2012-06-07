@@ -27,6 +27,9 @@ border-width: 4;
 padding: 0px 6px;
 font-size: 12px;
 }
+#mainWidget{
+background-color:white;
+}
 
 QPushButton::flat {
 border-image: none;
@@ -435,10 +438,364 @@ color: white;
           </layout>
          </widget>
          <widget class="QStackedWidget" name="centralWidget">
-          <widget class="tlp::Workspace" name="workspace">
-           <property name="bottomFrameVisible" stdset="0">
-            <bool>true</bool>
-           </property>
+          <widget class="QWidget" name="centralFrame">
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QFrame" name="workspaceFrame">
+              <property name="styleSheet">
+               <string notr="true">#workspaceFrame {
+border: 0px;
+  background-color: white;
+}</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_3">
+               <property name="margin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="tlp::Workspace" name="workspace" native="true">
+                 <property name="bottomFrameVisible" stdset="0">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFrame" name="bottomFrame">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">OutputPanelButton{
+border-image: url(:/tulip/graphperspective/ui/panel_button.png) 2 2 2 19;
+border-width: 2px 2px 2px 19px;
+padding-left: -17;
+padding-right: 4
+}
+OutputPanelButton:checked{
+border-image: url(:/tulip/graphperspective/ui/panel_button_checked.png) 2 2 2 19
+}
+OutputPanelButton::menu-indicator{
+width:0; height:0
+}
+OutputPanelButton:checked:hover{
+border-image: url(:/tulip/graphperspective/ui/panel_button_checked_hover.png) 2 2 2 19
+}
+OutputPanelButton:pressed:hover{
+border-image: url(:/tulip/graphperspective/ui/panel_button_pressed.png) 2 2 2 19
+}
+OutputPanelButton:hover{
+border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
+}</string>
+              </property>
+              <property name="bottomFrame" stdset="0">
+               <bool>true</bool>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <property name="leftMargin">
+                <number>5</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="OutputPanelButton" name="exposeModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>120</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to expose mode</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
+                 </property>
+                 <property name="number" stdset="0">
+                  <number>1</number>
+                 </property>
+                 <property name="title" stdset="0">
+                  <string>Expose</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="OutputPanelButton" name="pythonButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>120</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
+                 </property>
+                 <property name="number" stdset="0">
+                  <number>2</number>
+                 </property>
+                 <property name="title" stdset="0">
+                  <string>Python</string>
+                 </property>
+                 <attribute name="buttonGroup">
+                  <string notr="true">outputPanelsGroup</string>
+                 </attribute>
+                </widget>
+               </item>
+               <item>
+                <widget class="OutputPanelButton" name="toolButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>120</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
+                 </property>
+                 <property name="title" stdset="0">
+                  <string>Search</string>
+                 </property>
+                 <property name="number" stdset="0">
+                  <string>3</string>
+                 </property>
+                 <attribute name="buttonGroup">
+                  <string notr="true">outputPanelsGroup</string>
+                 </attribute>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="previousPageButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Previous panel</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                   <normaloff>:/tulip/gui/ui/previous.png</normaloff>:/tulip/gui/ui/previous.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="pageCountLabel"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="nextPageButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Next panel</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                   <normaloff>:/tulip/gui/ui/next.png</normaloff>:/tulip/gui/ui/next.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="singleModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to full screen mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                   <normaloff>:/tulip/gui/ui/full_screen.png</normaloff>:/tulip/gui/ui/full_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="splitModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 2-panels mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                   <normaloff>:/tulip/gui/ui/split_screen.png</normaloff>:/tulip/gui/ui/split_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="split3ModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 3-panels mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                   <normaloff>:/tulip/gui/ui/split3_screen.png</normaloff>:/tulip/gui/ui/split3_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="split32ModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 3-panels mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                   <normaloff>:/tulip/gui/ui/split3_2_screen.png</normaloff>:/tulip/gui/ui/split3_2_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="gridModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 4-panels mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                   <normaloff>:/tulip/gui/ui/grid_screen.png</normaloff>:/tulip/gui/ui/grid_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </widget>
         </widget>
@@ -454,7 +811,7 @@ color: white;
      <x>0</x>
      <y>0</y>
      <width>1071</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -853,7 +1210,21 @@ color: white;
    <container>1</container>
    <slots>
     <signal>panelFocused(tlp::View*)</signal>
+    <slot>switchToStartupMode()</slot>
+    <slot>switchToSingleMode()</slot>
+    <slot>switchToSplitMode()</slot>
+    <slot>switchToSplit3Mode()</slot>
+    <slot>switchToSplit32Mode()</slot>
+    <slot>switchToGridMode()</slot>
+    <slot>nextPage()</slot>
+    <slot>previousPage()</slot>
+    <slot>expose(bool)</slot>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>OutputPanelButton</class>
+   <extends>QToolButton</extends>
+   <header>OutputPanelButton.h</header>
   </customwidget>
  </customwidgets>
  <resources>
@@ -925,5 +1296,136 @@ color: white;
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>nextPageButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>nextPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>937</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>previousPageButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>previousPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>913</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>singleModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToSingleMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>961</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>split32ModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToSplit32Mode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1033</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>split3ModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToSplit3Mode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1009</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>splitModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToSplitMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>985</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>gridModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToGridMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1057</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exposeModeButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>workspace</receiver>
+   <slot>expose(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>553</x>
+     <y>696</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>779</x>
+     <y>353</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <buttongroups>
+  <buttongroup name="outputPanelsGroup"/>
+ </buttongroups>
 </ui>
