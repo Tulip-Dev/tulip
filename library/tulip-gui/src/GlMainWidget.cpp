@@ -533,7 +533,9 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
     }
   }
 
-  return resultImage;
+  //The QGlPixelBuffer returns the wrong image format QImage::Format_ARGB32_Premultiplied. We need to create an image from original data with the right format QImage::Format_ARGB32.
+  //We need to clone the data as when the image var will be destroy at the end of the function it's data will be destroyed too and the newly created image object will have invalid data pointer.
+  return QImage(resultImage.bits(),resultImage.width(),resultImage.height(),QImage::Format_ARGB32).copy();
 }
 
 void GlMainWidget::centerScene() {
