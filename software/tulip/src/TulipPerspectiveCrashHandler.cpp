@@ -59,8 +59,7 @@ void TulipPerspectiveCrashHandler::sendReport() {
   _poster->addField("os",_ui->plateformValue->text());
   _poster->addField("os_build",_ui->archValue->text());
 
-  //FIXME: temorary url until script is merged on Drupal
-  connect(_poster->postData("http://auliyaa.dyndns.org/test.php"),SIGNAL(finished()),this,SLOT(reportPosted()));
+  connect(_poster->postData("http://tulip.labri.fr/crash_report/mantis.php"),SIGNAL(finished()),this,SLOT(reportPosted()));
 
   _ui->sendReportButton->setText(trUtf8("Sending report"));
   _ui->sendReportButton->setEnabled(false);
