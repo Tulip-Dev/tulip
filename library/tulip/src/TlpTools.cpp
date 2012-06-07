@@ -85,55 +85,55 @@ const char tlp::PATH_DELIMITER = ':';
 
 extern "C" {
 
-std::string getTulipLibDir() {
-  std::string tulipLibDir;
-  std::string libTulipName;
+  std::string getTulipLibDir() {
+    std::string tulipLibDir;
+    std::string libTulipName;
 
 #ifdef _WIN32
 #ifdef __MINGW32__
-  libTulipName = "libtulip-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".dll";
+    libTulipName = "libtulip-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".dll";
 #else
-  libTulipName = "tulip-" + getMajor(TULIP_RELEASE) + "_" + getMinor(TULIP_RELEASE) + ".dll";
+    libTulipName = "tulip-" + getMajor(TULIP_RELEASE) + "_" + getMinor(TULIP_RELEASE) + ".dll";
 #endif
-  HMODULE hmod = GetModuleHandle(libTulipName.c_str());
+    HMODULE hmod = GetModuleHandle(libTulipName.c_str());
 
-  if (hmod != NULL) {
-    TCHAR szPath[512 + 1];
-    DWORD dwLen = GetModuleFileName(hmod, szPath, 512);
+    if (hmod != NULL) {
+      TCHAR szPath[512 + 1];
+      DWORD dwLen = GetModuleFileName(hmod, szPath, 512);
 
-    if (dwLen > 0) {
-      std::string tmp = szPath;
-      std::replace(tmp.begin(), tmp.end(), '\\', '/');
-      tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
-    }
-  }
-
-#else
-#ifdef __APPLE__
-  libTulipName = "libtulip-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".dylib";
-#else
-  libTulipName = "libtulip-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".so";
-#endif
-  void *ptr;
-  void *symbol;
-  Dl_info info;
-
-  ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
-
-  if (ptr != NULL) {
-    symbol = dlsym(ptr, "getTulipLibDir");
-
-    if (symbol != NULL) {
-      if (dladdr(symbol, &info)) {
-        std::string tmp = info.dli_fname;
+      if (dwLen > 0) {
+        std::string tmp = szPath;
+        std::replace(tmp.begin(), tmp.end(), '\\', '/');
         tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
       }
     }
-  }
+
+#else
+#ifdef __APPLE__
+    libTulipName = "libtulip-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".dylib";
+#else
+    libTulipName = "libtulip-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".so";
+#endif
+    void *ptr;
+    void *symbol;
+    Dl_info info;
+
+    ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
+
+    if (ptr != NULL) {
+      symbol = dlsym(ptr, "getTulipLibDir");
+
+      if (symbol != NULL) {
+        if (dladdr(symbol, &info)) {
+          std::string tmp = info.dli_fname;
+          tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
+        }
+      }
+    }
 
 #endif
-  return tulipLibDir;
-}
+    return tulipLibDir;
+  }
 
 }
 

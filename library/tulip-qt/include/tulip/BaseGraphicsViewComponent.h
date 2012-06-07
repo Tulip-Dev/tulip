@@ -78,13 +78,13 @@ public :
   }
 
   virtual tlp::View *getRealView() const {
-      return baseView;
+    return baseView;
   }
 
   virtual std::string getRealViewName() const;
 
   TabWidgetHidableMenuGraphicsProxy *getOptionsTabWiget() const {
-      return tabWidgetProxy;
+    return tabWidgetProxy;
   }
 
 public slots:

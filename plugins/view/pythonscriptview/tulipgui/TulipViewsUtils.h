@@ -41,7 +41,7 @@ public :
   void setData(tlp::Graph *graph, const tlp::DataSet &data);
 
   tlp::View *getView() {
-      return viewProxy->getRealView();
+    return viewProxy->getRealView();
   }
 
 public slots:
@@ -64,39 +64,39 @@ private :
 
 class TulipViewsManager : public QObject {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public :
 
-    std::vector<std::string> getTulipViews();
+  std::vector<std::string> getTulipViews();
 
-    std::vector<tlp::View *> getOpenedViews();
+  std::vector<tlp::View *> getOpenedViews();
 
-    std::string getNameOfView(tlp::View *view);
+  std::string getNameOfView(tlp::View *view);
 
-    tlp::View *addView(const std::string &viewName, tlp::Graph *graph, tlp::DataSet dataSet = tlp::DataSet());
+  tlp::View *addView(const std::string &viewName, tlp::Graph *graph, tlp::DataSet dataSet = tlp::DataSet());
 
-    void closeView(tlp::View *view);
+  void closeView(tlp::View *view);
 
-    void tileViews();
+  void tileViews();
 
-    std::vector<tlp::View*> getViewsOfGraph(tlp::Graph *graph);
+  std::vector<tlp::View*> getViewsOfGraph(tlp::Graph *graph);
 
-    void closeAllViews();
+  void closeAllViews();
 
-    void closeViewsRelatedToGraph(tlp::Graph* graph);
+  void closeViewsRelatedToGraph(tlp::Graph* graph);
 
 
 
 public slots:
 
-    void viewDestroyed(QObject *view);
+  void viewDestroyed(QObject *view);
 
 private:
 
-    std::vector<tlp::View *> openedViews;
-    std::map<tlp::View *, ViewMainWindow *> viewToWindow;
-    std::map<tlp::View *, std::string> viewToName;
+  std::vector<tlp::View *> openedViews;
+  std::map<tlp::View *, ViewMainWindow *> viewToWindow;
+  std::map<tlp::View *, std::string> viewToName;
 
 };
 

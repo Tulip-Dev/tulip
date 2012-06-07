@@ -51,7 +51,7 @@ public :
   void hideTabWidget();
 
   QTabWidget *getTabWidget() const {
-      return tabWidget;
+    return tabWidget;
   }
 
 protected :

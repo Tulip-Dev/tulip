@@ -185,8 +185,9 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserv
 PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NULL) {
 
   wasInit = Py_IsInitialized();
+
   if (wasInit)
-      return;
+    return;
 
   int argc=1;
 #if PY_MAJOR_VERSION >= 3
@@ -311,7 +312,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 
 PythonInterpreter::~PythonInterpreter() {
   if (wasInit)
-      return;
+    return;
 
   processQtEvents = false;
 
