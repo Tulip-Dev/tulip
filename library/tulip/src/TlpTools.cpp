@@ -78,16 +78,14 @@ string tlp::TulipShareDir;
 const char tlp::PATH_DELIMITER = ';';
 #else
 const char tlp::PATH_DELIMITER = ':';
-// define an unmangled symbol for the trick
-// to retrieve the Tulip lib dir dynamically
-extern "C" {
-  int unmangledSymbol;
-}
 #endif
 
 // A function that retrieves the Tulip libraries directory based on
 // the path of the loaded shared library libtulip-X.Y.[dll, so, dylib]
-static std::string getTulipLibDir() {
+
+extern "C" {
+
+std::string getTulipLibDir() {
   std::string tulipLibDir;
   std::string libTulipName;
 
@@ -123,7 +121,7 @@ static std::string getTulipLibDir() {
   ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
 
   if (ptr != NULL) {
-    symbol = dlsym(ptr, "unmangledSymbol");
+    symbol = dlsym(ptr, "getTulipLibDir");
 
     if (symbol != NULL) {
       if (dladdr(symbol, &info)) {
@@ -135,6 +133,8 @@ static std::string getTulipLibDir() {
 
 #endif
   return tulipLibDir;
+}
+
 }
 
 //=========================================================
