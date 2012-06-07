@@ -19,6 +19,8 @@
 
 #include <GL/glew.h>
 
+#include <cstring>
+
 #include <tulip/GlBezierCurve.h>
 #include <tulip/GlCatmullRomCurve.h>
 #include <tulip/ParametricCurves.h>
@@ -115,7 +117,7 @@ Coord GlBezierCurve::computeCurvePointOnCPU(const std::vector<Coord> &controlPoi
 
 void GlBezierCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
 
-  static bool floatTextureOk = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_texture_float");
+  static bool floatTextureOk = glewIsSupported("GL_ARB_texture_float") == GL_TRUE;
 
   if (pascalTriangleTextureId == 0 && floatTextureOk) {
     buildPascalTriangleTexture();
@@ -128,7 +130,7 @@ void GlBezierCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &st
   }
 
   if (controlPoints.size() <= CONTROL_POINTS_LIMIT) {
-    AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize, controlPoints.size() > 2 ? nbCurvePoints : 2);
+    AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
   }
   else {
 
