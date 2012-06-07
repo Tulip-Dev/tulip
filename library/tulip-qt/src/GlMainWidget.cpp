@@ -731,7 +731,11 @@ QImage GlMainWidget::createPicture(int width, int height,bool center, int zoom, 
 
   scene.setViewportZoom(1,0,0);
 
-  return glFrameBuf->toImage();
+  QImage image = glFrameBuf->toImage();
+  //Fix the alpha channel bug.
+  //The QGlPixelBuffer returns the wrong image format QImage::Format_ARGB32_Premultiplied. We need to create an image from original data with the right format QImage::Format_ARGB32.
+  //We need to clone the data as when the image var will be destroy at the end of the function it's data will be destroyed too and the newly created image object will have invalid data pointer.
+  return QImage(image.bits(),image.width(),image.height(),QImage::Format_ARGB32).copy();
 #else
   makeCurrent();
   scene.setViewport(0,0,width,height);

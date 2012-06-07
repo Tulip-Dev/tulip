@@ -90,8 +90,7 @@ void SnapshotDialog::resizeEvent(QResizeEvent *) {
 }
 
 void SnapshotDialog::accept() {
-  QImage image=view->createPicture(widthSpinBox->value(),heightSpinBox->value(),false);
-
+  QImage image=view->createPicture(widthSpinBox->value(),heightSpinBox->value(),false);  
   if(!image.save(fileName->text(),0,qualitySpinBox->value())) {
     QMessageBox::critical(this,"Snapshot cannot be saved","Snapshot cannot be saved in file: "+fileName->text());
   }
@@ -183,8 +182,7 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
 //Thanks to Qt4.7, we can easily overcome this issue.
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
   QPixmap pixmap;
-  QImage img = QImage(image.bits(),image.width(),image.height(),QImage::Format_ARGB32);
-  pixmap.convertFromImage(img);
+  pixmap.convertFromImage(image);
   pixmapItem=scene->addPixmap(pixmap);
 #else
   pixmapItem=scene->addPixmap(QPixmap::fromImage(image));
