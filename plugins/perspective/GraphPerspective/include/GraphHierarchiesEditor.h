@@ -54,6 +54,7 @@ public slots:
 
 protected slots:
   void contextMenuRequested(const QPoint&);
+  void doubleClicked(const QModelIndex&);
 
   void addSubGraph();
   void cloneSubGraph();

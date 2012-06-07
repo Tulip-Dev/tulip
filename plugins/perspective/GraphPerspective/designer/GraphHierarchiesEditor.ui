@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>235</width>
+    <width>597</width>
     <height>417</height>
    </rect>
   </property>
@@ -385,6 +385,22 @@ border-bottom: 1px solid black;
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>hierarchiesTree</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>doubleClicked(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>117</x>
+     <y>199</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>activeGraphSelected(QModelIndex)</slot>
@@ -396,5 +412,6 @@ border-bottom: 1px solid black;
   <slot>createPanel()</slot>
   <slot>exportGraph()</slot>
   <slot>renameGraph()</slot>
+  <slot>doubleClicked(QModelIndex)</slot>
  </slots>
 </ui>
