@@ -425,6 +425,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   forEach(desc, paramList.getParameters()) {
     if (desc.getDirection() != OUT_PARAM)
       continue;
+
     outParams+=desc.getName();
   }
   QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSet->toString().c_str();
@@ -460,6 +461,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
     if (result) {
       prop->copy(clone);
       PropertyInterface* namedCopy = namedProperties[prop];
+
       if (namedCopy != NULL)
         namedCopy->copy(prop);
     }
