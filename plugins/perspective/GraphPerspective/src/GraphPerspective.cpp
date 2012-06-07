@@ -147,6 +147,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->workspace->setSplit32ModeSwitch(_ui->split32ModeButton);
   _ui->workspace->setGridModeSwitch(_ui->gridModeButton);
   _ui->workspace->setPageCountLabel(_ui->pageCountLabel);
+  _ui->outputFrame->hide();
   _logger = new GraphPerspectiveLogger(_mainWindow);
   _ui->loggerFrame->installEventFilter(this);
   _mainWindow->installEventFilter(this);
@@ -181,6 +182,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionImport_CSV,SIGNAL(triggered()),this,SLOT(CSVImport()));
   connect(_ui->actionFind_plugins,SIGNAL(triggered()),this,SLOT(findPlugins()));
   connect(_ui->actionNew, SIGNAL(triggered()), this, SLOT(addNewGraph()));
+  connect(_ui->pythonButton,SIGNAL(clicked(bool)),this,SLOT(setPythonOutput(bool)));
+  connect(_ui->searchButton,SIGNAL(clicked(bool)),this,SLOT(setSearchOutput(bool)));
 
   // D-BUS actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
@@ -593,6 +596,18 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
       v->deleteLater();
   }
   QApplication::processEvents();
+}
+
+void GraphPerspective::setPythonOutput(bool) {
+  _ui->outputFrame->setCurrentWidget(_ui->pythonPanel);
+  _ui->searchButton->setChecked(false);
+  _ui->outputFrame->setVisible(_ui->pythonButton->isChecked() || _ui->searchButton->isChecked());
+}
+
+void GraphPerspective::setSearchOutput(bool) {
+  _ui->outputFrame->setCurrentWidget(_ui->searchPanel);
+  _ui->pythonButton->setChecked(false);
+  _ui->outputFrame->setVisible(_ui->pythonButton->isChecked() || _ui->searchButton->isChecked());
 }
 
 void GraphPerspective::addNewGraph() {
