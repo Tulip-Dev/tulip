@@ -46,7 +46,9 @@ using namespace tlp;
   ColorEditorCreator
 */
 QWidget* ColorEditorCreator::createWidget(QWidget *parent) const {
-  return new QColorDialog(parent);
+    QColorDialog *colorDialog = new QColorDialog(parent);
+    colorDialog->setOptions(colorDialog->options() | QColorDialog::ShowAlphaChannel);
+    return colorDialog;
 }
 
 bool ColorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
