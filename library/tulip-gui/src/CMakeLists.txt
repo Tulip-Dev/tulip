@@ -19,12 +19,8 @@ SET(SRCS
   GlMainView.cpp
   GlMainWidget.cpp
   GlOffscreenRenderer.cpp
-  GraphicsWidgetBase.cpp
   GraphPropertiesSelectionWidget.cpp
-  GraphPropertiesTableWidget.cpp
-  GraphState.cpp
   ItemsListWidget.cpp
-  Morphing.cpp
   MouseBoxZoomer.cpp
   MouseEdgeBendEditor.cpp
   MouseEdgeBuilder.cpp
@@ -43,12 +39,9 @@ SET(SRCS
   QtGlSceneZoomAndPanAnimator.cpp
   QtOpenGlErrorViewer.cpp
   QuaZIPFacade.cpp
-  SGHierarchyWidget.cpp
   SimplePluginProgressWidget.cpp
   SimpleStringsListSelectionWidget.cpp
   StringsListSelectionWidget.cpp
-  TabWidgetHidableMenuGraphicsProxy.cpp
-  ThreadedComputeProperty.cpp
   TlpQtTools.cpp
   TulipProject.cpp
   TulipSettings.cpp
@@ -68,8 +61,6 @@ SET(SRCS
   View.cpp
   GlMainWidgetGraphicsItem.cpp
   ViewWidget.cpp
-  View3.cpp
-  AbstractView.cpp
   InteractorComposite.cpp
   GLInteractor.cpp
   TulipWorkspace.cpp
@@ -80,9 +71,7 @@ SET(SRCS
   PlaceHolderWidget.cpp
   ExtendedMetaNodeRenderer.cpp
   TulipFileDescriptorWidget.cpp
-  TreeViewComboBox.cpp
   GraphHierarchiesModel.cpp
-  FramedGraphicsProxyWidget.cpp
   CoordEditor.cpp
   GlOverviewGraphicsItem.cpp
   SceneConfigWidget.cpp
@@ -91,9 +80,7 @@ SET(SRCS
   TulipFontDialog.cpp
   ScrollPopupButton.cpp
   WorkspaceExposeWidget.cpp
-  GraphTableModel.cpp
   GraphTableItemDelegate.cpp
-  PropertyToQVariantMapper.cpp
   VectorEditionWidget.cpp
   GlyphRenderer.cpp
   TulipFontWidget.cpp
@@ -107,6 +94,7 @@ SET(SRCS
   TulipMimes.cpp
   SceneLayersModel.cpp
   SceneLayersConfigWidget.cpp
+  TreeViewComboBox.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -147,20 +135,15 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/DownloadManager.h
   ../include/tulip/GlMainView.h
   ../include/tulip/GlMainWidget.h
-  ../include/tulip/GraphPropertiesTableWidget.h
   ../include/tulip/ItemsListWidget.h
-  ../include/tulip/Morphing.h
   ../include/tulip/NodeLinkDiagramComponent.h
   ../include/tulip/Perspective.h
   ../include/tulip/PluginInformations.h
   ../include/tulip/PluginManager.h
   ../include/tulip/PropertyCreationDialog.h
   ../include/tulip/QtGlSceneZoomAndPanAnimator.h
-  ../include/tulip/SGHierarchyWidget.h
   ../include/tulip/SimplePluginProgressWidget.h
   ../include/tulip/SimpleStringsListSelectionWidget.h
-  ../include/tulip/TabWidgetHidableMenuGraphicsProxy.h
-  ../include/tulip/ThreadedComputeProperty.h
   ../include/tulip/TulipProject.h
   ../include/tulip/Animation.h
   ../include/tulip/ColorButton.h
@@ -171,8 +154,6 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/View.h
   ../include/tulip/ViewWidget.h
   ../include/tulip/GlMainWidgetGraphicsItem.h
-  ../include/tulip/View3.h
-  ../include/tulip/AbstractView.h
   ../include/tulip/Interactor.h
   ../include/tulip/InteractorComposite.h
   ../include/tulip/GLInteractor.h
@@ -182,7 +163,6 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/Workspace.h
   ../include/tulip/TulipFileDescriptorWidget.h
   ../include/tulip/PlaceHolderWidget.h
-  ../include/tulip/TreeViewComboBox.h
   ../include/tulip/GraphHierarchiesModel.h
   ../include/tulip/CoordEditor.h
   ../include/tulip/GlOverviewGraphicsItem.h
@@ -204,6 +184,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/SceneLayersModel.h
   ../include/tulip/SceneLayersConfigWidget.h
   ../include/tulip/TulipMimes.h
+  ../include/tulip/TreeViewComboBox.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
