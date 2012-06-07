@@ -90,6 +90,7 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
 void GraphHierarchiesEditor::doubleClicked(const QModelIndex& index) {
   if (!index.isValid() || index.internalPointer() == NULL)
     return;
+
   _contextGraph = (tlp::Graph*)index.internalPointer();
   createPanel();
   _contextGraph = NULL;

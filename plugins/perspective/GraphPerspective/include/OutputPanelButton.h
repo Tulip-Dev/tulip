@@ -14,11 +14,15 @@ class OutputPanelButton : public QToolButton {
 
 public:
   explicit OutputPanelButton(QWidget *parent = 0);
-  int number() const { return _number; }
-  QString title() const { return _title; }
+  int number() const {
+    return _number;
+  }
+  QString title() const {
+    return _title;
+  }
 
   QSize sizeHint() const;
-  
+
 protected:
   void paintEvent(QPaintEvent *);
 
@@ -29,7 +33,7 @@ public slots:
   void setTitle(QString title) {
     _title = title;
   }
-  
+
 };
 
 #endif // OUTPUTPANELBUTTON_H

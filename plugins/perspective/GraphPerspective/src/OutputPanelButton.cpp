@@ -27,8 +27,10 @@ void OutputPanelButton::paintEvent(QPaintEvent* event) {
   p.setFont(font());
   p.setPen(Qt::white);
   p.drawText((20 - numberWidth) / 2, baseLine, QString::number(_number));
+
   if (!isChecked())
-      p.setPen(Qt::black);
+    p.setPen(Qt::black);
+
   int leftPart = 22;
   p.drawText(leftPart, baseLine, width()-leftPart, height()-baseLine*2, Qt::AlignCenter | Qt::AlignVCenter, fm.elidedText(_title, Qt::ElideMiddle, width() - leftPart - 1));
 }
