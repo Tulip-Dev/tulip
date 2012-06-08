@@ -33,7 +33,7 @@ public:
   virtual ~SearchWidget();
 
 signals:
-  
+
 public slots:
   void setModel(tlp::GraphHierarchiesModel* model);
   void currentGraphChanged(tlp::Graph* g);
