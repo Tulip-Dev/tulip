@@ -457,7 +457,7 @@ void GlLabel::draw(float lod, Camera *camera) {
     glRotatef(zRot,0.,0.,1.);
 
 
-  if(!billboarded){
+  if(!billboarded) {
     //Alignement translation
     switch(alignment) {
     case ON_CENTER:
@@ -483,7 +483,8 @@ void GlLabel::draw(float lod, Camera *camera) {
     default:
       break;
     }
-  }else{
+  }
+  else {
 
     Matrix<float, 4> modelviewMatrix, projectionMatrix, transformMatrix;
 

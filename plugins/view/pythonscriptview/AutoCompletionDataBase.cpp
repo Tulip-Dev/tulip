@@ -1084,19 +1084,23 @@ static QSet<QString> getAlgorithmPluginsListOfType(const QString& type, const QS
   }
 
   if (type == "Import" || type == "Export" || type == "") {
-      std::string importFactoType = tlp::TemplateFactoryInterface::standardizeName(typeid(tlp::ImportModule).name());
-      std::string exportFactoType = tlp::TemplateFactoryInterface::standardizeName(typeid(tlp::ExportModule).name());
-      std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
-      for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
-          if ((it->first == importFactoType && (type == "Import" || type == "")) || (it->first == exportFactoType && (type == "Export" || type == ""))) {
-              tlp::Iterator<std::string> *itS = it->second->availablePlugins();
-              while (itS->hasNext()) {
-                  QString pluginName = "\"" + QString(itS->next().c_str()) + "\"";
-                  if (pluginName.startsWith(prefix))
-                    ret.insert(pluginName);
-              }
-              delete itS;
+    std::string importFactoType = tlp::TemplateFactoryInterface::standardizeName(typeid(tlp::ImportModule).name());
+    std::string exportFactoType = tlp::TemplateFactoryInterface::standardizeName(typeid(tlp::ExportModule).name());
+    std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
+
+    for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
+      if ((it->first == importFactoType && (type == "Import" || type == "")) || (it->first == exportFactoType && (type == "Export" || type == ""))) {
+        tlp::Iterator<std::string> *itS = it->second->availablePlugins();
+
+        while (itS->hasNext()) {
+          QString pluginName = "\"" + QString(itS->next().c_str()) + "\"";
+
+          if (pluginName.startsWith(prefix))
+            ret.insert(pluginName);
         }
+
+        delete itS;
+      }
     }
   }
 
