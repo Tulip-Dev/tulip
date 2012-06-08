@@ -4,6 +4,8 @@
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/BooleanProperty.h>
+#include <tulip/GraphTableItemDelegate.h>
+#include <tulip/GraphModel.h>
 #include <QtGui/QStandardItemModel>
 
 using namespace tlp;
@@ -104,6 +106,8 @@ SearchWidget::SearchWidget(QWidget *parent): QWidget(parent), _ui(new Ui::Search
   _ui->setupUi(this);
   _ui->resultsFrame->hide();
   _ui->customValueEdit->hide();
+  _ui->nodesResultsTable->setItemDelegate(new GraphTableItemDelegate(_ui->nodesResultsTable));
+  _ui->edgesResultsTable->setItemDelegate(new GraphTableItemDelegate(_ui->edgesResultsTable));
 }
 
 SearchWidget::~SearchWidget() {
@@ -125,7 +129,8 @@ void SearchWidget::setGraph(Graph *g) {
   _ui->resultsStorageCombo->clear();
   _ui->searchTermACombo->clear();
   _ui->searchTermBCombo->clear();
-  _ui->resultsTable->setModel(NULL);
+  _ui->nodesResultsTable->setModel(NULL);
+  _ui->edgesResultsTable->setModel(NULL);
   _ui->resultsFrame->hide();
   _ui->resultsCountLabel->setText("");
   setEnabled(g != NULL);
@@ -217,6 +222,40 @@ void SearchWidget::search() {
   delete result;
   if (deleteTermB)
     delete b;
+
+  unsigned int resultsCount = 0;
+  forEach(n, g->getNodes()) {
+    if (output->getNodeValue(n))
+      resultsCount++;
+  }
+  forEach(e, g->getEdges()) {
+    if (output->getEdgeValue(e))
+      resultsCount++;
+  }
+
+  _ui->resultsCountLabel->setText(QString::number(resultsCount) + trUtf8(" results found"));
+  _ui->nodesResultsTable->setModel(NULL);
+  _ui->edgesResultsTable->setModel(NULL);
+  _ui->nodesResultsTable->setVisible(onNodes);
+  _ui->edgesResultsTable->setVisible(onEdges);
+  if (onNodes) {
+    GraphSortFilterProxyModel* proxyModel = new GraphSortFilterProxyModel(_ui->nodesResultsTable);
+    proxyModel->setFilterProperty(output);
+    NodesGraphModel* sourceModel = new NodesGraphModel(proxyModel);
+    proxyModel->setSourceModel(sourceModel);
+    sourceModel->setGraph(g);
+    _ui->nodesResultsTable->setModel(proxyModel);
+  }
+  if (onEdges) {
+    GraphSortFilterProxyModel* proxyModel = new GraphSortFilterProxyModel(_ui->edgesResultsTable);
+    proxyModel->setFilterProperty(output);
+    EdgesGraphModel* sourceModel = new EdgesGraphModel(proxyModel);
+    proxyModel->setSourceModel(sourceModel);
+    sourceModel->setGraph(g);
+    _ui->edgesResultsTable->setModel(proxyModel);
+  }
+  _ui->resultsFrame->show();
+
   Observable::unholdObservers();
 }
 
