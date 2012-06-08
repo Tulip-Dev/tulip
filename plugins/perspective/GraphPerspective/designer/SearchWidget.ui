@@ -75,6 +75,9 @@ background-color: #A9A9A9;
           </property>
           <item>
            <layout class="QFormLayout" name="formLayout">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::ExpandingFieldsGrow</enum>
+            </property>
             <property name="labelAlignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
@@ -84,6 +87,16 @@ background-color: #A9A9A9;
             <property name="verticalSpacing">
              <number>10</number>
             </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="graphLabel">
+              <property name="text">
+               <string>Graph:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="TreeViewComboBox" name="graphCombo"/>
+            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="scopeLabel">
               <property name="sizePolicy">
@@ -119,7 +132,7 @@ background-color: #A9A9A9;
               </item>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item row="3" column="0">
              <widget class="QLabel" name="resultsStorageLabel">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -132,14 +145,14 @@ background-color: #A9A9A9;
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item row="3" column="1">
              <widget class="QComboBox" name="resultsStorageCombo">
               <property name="sizeAdjustPolicy">
                <enum>QComboBox::AdjustToContents</enum>
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
+            <item row="4" column="0">
              <widget class="QLabel" name="searchTermsLabel">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -152,7 +165,7 @@ background-color: #A9A9A9;
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="4" column="1">
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
                <widget class="QComboBox" name="searchTermACombo"/>
@@ -225,15 +238,34 @@ color: black;
               </item>
              </layout>
             </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="graphLabel">
+            <item row="2" column="0">
+             <widget class="QLabel" name="label">
               <property name="text">
-               <string>Graph:</string>
+               <string>Selection mode:</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="TreeViewComboBox" name="graphCombo"/>
+            <item row="2" column="1">
+             <widget class="QComboBox" name="selectionModeCombo">
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::AdjustToContents</enum>
+              </property>
+              <item>
+               <property name="text">
+                <string>Replace current selection</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Add to current selection</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Remove from current selection</string>
+               </property>
+              </item>
+             </widget>
             </item>
            </layout>
           </item>
@@ -354,8 +386,75 @@ border: 1px solid #C9C9C9;
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>searchTermACombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SearchWidget</receiver>
+   <slot>termAChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>181</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>494</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>searchTermBCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SearchWidget</receiver>
+   <slot>termBChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>374</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>494</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>customValueEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>SearchWidget</receiver>
+   <slot>termBChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>699</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>494</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>searchButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchWidget</receiver>
+   <slot>search()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>58</x>
+     <y>192</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>494</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>graphIndexChanged(int)</slot>
+  <slot>termAChanged()</slot>
+  <slot>termBChanged()</slot>
+  <slot>search()</slot>
  </slots>
 </ui>
