@@ -33,11 +33,8 @@ background-color: #A9A9A9;
     <widget class="QStackedWidget" name="workspaceContents">
      <property name="styleSheet">
       <string notr="true">#workspaceContents {
-  border-bottom: 1px solid black;
-  border-right: 0px;
-  border-left: 0px;
-  border-top: 0px;
-  background-color: white;
+border: 0px;
+background-color: white;
 }
 
 PlaceHolderWidget {
@@ -45,7 +42,7 @@ background-color: white;
 }</string>
      </property>
      <property name="currentIndex">
-      <number>6</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="startupPage">
       <layout class="QHBoxLayout" name="horizontalLayout_2">

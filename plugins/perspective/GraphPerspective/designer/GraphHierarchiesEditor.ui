@@ -35,12 +35,6 @@
    </item>
    <item>
     <widget class="QFrame" name="treeFrame">
-     <property name="styleSheet">
-      <string notr="true">#treeFrame {
-border: 0px;
-border-bottom: 1px solid black;
-}</string>
-     </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <property name="spacing">
        <number>0</number>
