@@ -29,10 +29,10 @@ INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${TulipQtBuildInclude} ${LI
 ADD_EXECUTABLE(serverGenerator ${serverGenerator_SRCS})
 IF(QT_VERSION_MINOR LESS 7)
 TARGET_LINK_LIBRARIES(serverGenerator
+                      ${LibTulipPluginsManagerName}
                       ${LibTulipName}
                       ${LibTulipOglName}
                       ${LibTulipQtName}
-                      ${LibTulipPluginsManagerName}
                       ${FREETYPE_LIBRARY}
                       ${GZStreamLibrary}
                       ${QT_LIBRARIES}
@@ -46,10 +46,10 @@ TARGET_LINK_LIBRARIES(serverGenerator
                       ${JPEG_LIBRARY} )
 ELSE(QT_VERSION_MINOR LESS 7)                     
 TARGET_LINK_LIBRARIES(serverGenerator
+                      ${LibTulipPluginsManagerName}
                       ${LibTulipName}
                       ${LibTulipOglName}
                       ${LibTulipQtName}
-                      ${LibTulipPluginsManagerName}
                       ${FREETYPE_LIBRARY}
                       ${GZStreamLibrary}
                       ${QT_LIBRARIES}
@@ -69,10 +69,10 @@ ADD_DEPENDENCIES(serverGenerator ${LibTulipName} ${LibTulipOglName} ${LibTulipQt
 ADD_EXECUTABLE(pluginFilesGenerator ${pluginInstaller_SRCS})
 IF(QT_VERSION_MINOR LESS 7)
 TARGET_LINK_LIBRARIES(pluginFilesGenerator
+                      ${LibTulipPluginsManagerName}
                       ${LibTulipName}
                       ${LibTulipOglName}
                       ${LibTulipQtName}
-                      ${LibTulipPluginsManagerName}
                       ${FREETYPE_LIBRARY}
                       ${GZStreamLibrary}
                       ${QT_LIBRARIES}
@@ -86,10 +86,10 @@ TARGET_LINK_LIBRARIES(pluginFilesGenerator
                       ${JPEG_LIBRARY} )
 ELSE(QT_VERSION_MINOR LESS 7)
 TARGET_LINK_LIBRARIES(pluginFilesGenerator
+                      ${LibTulipPluginsManagerName}
                       ${LibTulipName}
                       ${LibTulipOglName}
                       ${LibTulipQtName}
-                      ${LibTulipPluginsManagerName}
                       ${FREETYPE_LIBRARY}
                       ${GZStreamLibrary}
                       ${QT_LIBRARIES}
@@ -107,10 +107,10 @@ IF(QT_VERSION_MINOR GREATER 6)
 QT4_WRAP_CPP(pluginPusher_MOC_SRCS PushToPluginServer.h)
 ADD_EXECUTABLE(pluginPusher ${pluginPusher_SRCS} ${pluginPusher_MOC_SRCS})
 target_link_libraries(pluginPusher
+                      ${LibTulipPluginsManagerName} 
                       ${LibTulipName}
                       ${LibTulipOglName}
                       ${LibTulipQtName}
-                      ${LibTulipPluginsManagerName} 
 		      ${QT_LIBRARIES}
                       ${QT_QTXML_LIBRARY}
                       ${LIBXML2_LIBRARIES})
