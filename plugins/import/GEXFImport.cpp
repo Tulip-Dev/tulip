@@ -1,17 +1,21 @@
-/*
-
-    Copyright (C) 2010 Antoine Lambert
-
-    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
-    published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
-    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-    You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
  */
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -28,58 +32,27 @@
 using namespace tlp;
 using namespace std;
 
-/*
-   Tulip GEXF format import plugin
-   This plugin allow to import graph saved in GEXF format (proper to Gephi software).
-   GEXF is a xml graph format, a sample file describing a graph with two nodes and one edge is given below :
+/*@{*/
+/** \file
+ *  \brief - Import GEXF format graph file.
+ * This plugin imports a graph from a file in GEXF format,<br/>
+ * as it is described in the XML Schema 1.2draft (http://gexf.net/format/schema.html). Dynamic mode is not yet supported.
+ *  <b>HISTORY</b>
+ *
+ *  - 04/06/2012 Version 1.0: Initial release
+ *
+ *  \author Antoine Lambert & Patrick Mary of Tulip Team http://tulip-software.org/
+ *
+ *  <b>LICENCE</b>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ */
 
-<?xml version="1.0" encoding="UTF-8"?>
-<gexf xmlns="http://www.gexf.net/1.1draft" version="1.1" xmlns:viz="http://www.gexf.net/1.1draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.1draft http://www.gexf.net/1.1draft/gexf.xsd">
-  <meta lastmodifieddate="2010-10-22">
-    <creator>Gephi 0.7</creator>
-    <description></description>
-  </meta>
-  <graph defaultedgetype="undirected" timeformat="double" mode="dynamic">
-  <attributes class="node" mode="static">
-      <attribute id="string_attribute" title="string_attribute" type="string"></attribute>
-      <attribute id="float_attribute" title="float_attribute" type="float"></attribute>
-  </attributes>
-  <attributes class="edge" mode="static">
-      <attribute id="weight" title="weight" type="float"></attribute>
-  </attributes>
-    <nodes>
-      <node id="1" label="node 1">
-        <attvalues>
-          <attvalue for="string_attribute" value="foo"></attvalue>
-          <attvalue for="float_attribute" value="0.0"></attvalue>
-  </attvalues>
-        <viz:size value="10.0"></viz:size>
-        <viz:position x="-173.14468" y="170.76477"></viz:position>
-        <viz:color r="93" g="172" b="194"></viz:color>
-      </node>
-      <node id="2" label="node2">
-        <attvalues>
-          <attvalue for="string_attribute" value="bar"></attvalue>
-          <attvalue for="float_attribute" value="1.0"></attvalue>
-  </attvalues>
-        <viz:size value="10.0"></viz:size>
-        <viz:position x="-7.442688" y="61.904907"></viz:position>
-        <viz:color r="93" g="172" b="194"></viz:color>
-      </node>
-    </nodes>
-    <edges>
-      <edge source="1" target="2">
-        <attvalues>
-          <attvalue for="weight" value="1.0"></attvalue>
-        </attvalues>
-      </edge>
-    </edges>
-  </graph>
-</gexf>
-
-*/
-
-class GEXFImport : public ImportModule { // import plugins must inherit class tlp::ImportModule
+class GEXFImport : public ImportModule {
 
 public :
 
