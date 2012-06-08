@@ -28,6 +28,8 @@
 #include <tulip/Algorithm.h>
 #include <tulip/ForEach.h>
 #include <tulip/StringCollection.h>
+#include <tulip/ImportModule.h>
+#include <tulip/ExportModule.h>
 
 #include "AutoCompletionDataBase.h"
 #include "PythonInterpreter.h"
@@ -1081,6 +1083,23 @@ static QSet<QString> getAlgorithmPluginsListOfType(const QString& type, const QS
     }
   }
 
+  if (type == "Import" || type == "Export" || type == "") {
+      std::string importFactoType = tlp::TemplateFactoryInterface::standardizeName(typeid(tlp::ImportModule).name());
+      std::string exportFactoType = tlp::TemplateFactoryInterface::standardizeName(typeid(tlp::ExportModule).name());
+      std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
+      for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
+          if ((it->first == importFactoType && (type == "Import" || type == "")) || (it->first == exportFactoType && (type == "Export" || type == ""))) {
+              tlp::Iterator<std::string> *itS = it->second->availablePlugins();
+              while (itS->hasNext()) {
+                  QString pluginName = "\"" + QString(itS->next().c_str()) + "\"";
+                  if (pluginName.startsWith(prefix))
+                    ret.insert(pluginName);
+              }
+              delete itS;
+        }
+    }
+  }
+
   delete itP;
   return ret;
 }
@@ -1092,7 +1111,7 @@ static QSet<QString> tryAlgorithmContext(const QString &context, const QString &
     int pos1 = context.indexOf(algoContext);
     int pos2 = pos1 + algoContext.length();
 
-    if (context.indexOf(",", pos2) == -1 && (algoType.isEmpty() || context.mid(0, pos1) != "tlp")) {
+    if (context.indexOf(",", pos2) == -1) {
       QString prefix = context.mid(pos2);
       ret = getAlgorithmPluginsListOfType(algoType, prefix);
     }
@@ -1104,6 +1123,12 @@ static QSet<QString> tryAlgorithmContext(const QString &context, const QString &
 static QSet<QString> getTulipAlgorithmListIfContext(const QString &context) {
   QSet<QString> ret;
   ret = tryAlgorithmContext(context, ".applyAlgorithm(", "Algorithm");
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".importGraph(", "Import");
 
   if (!ret.empty()) {
     return ret;
@@ -1121,7 +1146,19 @@ static QSet<QString> getTulipAlgorithmListIfContext(const QString &context) {
     return ret;
   }
 
+  ret = tryAlgorithmContext(context, ".applyBooleanAlgorithm(", "Boolean");
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
   ret = tryAlgorithmContext(context, ".computeColorProperty(", "Color");
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".applyColorAlgorithm(", "Color");
 
   if (!ret.empty()) {
     return ret;
@@ -1133,7 +1170,19 @@ static QSet<QString> getTulipAlgorithmListIfContext(const QString &context) {
     return ret;
   }
 
+  ret = tryAlgorithmContext(context, ".applyDoubleAlgorithm(", "Double");
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
   ret = tryAlgorithmContext(context, ".computeIntegerProperty(", "Integer");
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".applyIntegerAlgorithm(", "Integer");
 
   if (!ret.empty()) {
     return ret;
@@ -1145,13 +1194,29 @@ static QSet<QString> getTulipAlgorithmListIfContext(const QString &context) {
     return ret;
   }
 
+  ret = tryAlgorithmContext(context, ".applyLayoutAlgorithm(", "Layout");
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
   ret = tryAlgorithmContext(context, ".computeSizeProperty(", "Size");
 
   if (!ret.empty()) {
     return ret;
   }
 
+  ret = tryAlgorithmContext(context, ".applySizeAlgorithm(", "Size");
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
   ret = tryAlgorithmContext(context, ".computeStringProperty(", "String");
+
+  return ret;
+
+  ret = tryAlgorithmContext(context, ".applyStringAlgorithm(", "String");
 
   return ret;
 }
