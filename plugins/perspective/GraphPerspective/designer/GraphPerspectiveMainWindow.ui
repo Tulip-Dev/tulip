@@ -89,7 +89,7 @@ font: bold 11px;
 }
 
 QFrame[ bottomFrame = &quot;true&quot; ] {
-border-top: 1px solid rgba(117,117,117,255);
+border-top: 1px solid black;
 border-bottom: 1px solid rgba(117,117,117,255);
 border-right: 1px solid rgba(117,117,117,255);
 border-left: 0px;
@@ -475,7 +475,7 @@ border: 0px;
                   </property>
                  </widget>
                  <widget class="QStackedWidget" name="outputFrame">
-                  <widget class="QWidget" name="pythonPanel" native="true"/>
+                  <widget class="QWidget" name="pythonPanel"/>
                   <widget class="QWidget" name="searchPanel"/>
                  </widget>
                 </widget>
@@ -820,7 +820,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <x>0</x>
      <y>0</y>
      <width>1071</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
