@@ -422,34 +422,90 @@ void GlLabel::draw(float lod, Camera *camera) {
   if(zRot!=0.)
     glRotatef(zRot,0.,0.,1.);
 
-  //Alignement translation
-  switch(alignment) {
-  case ON_CENTER:
-    glTranslatef(translationAfterRotation[0],translationAfterRotation[1],translationAfterRotation[2]);
-    break;
+  if(!billboarded){
+    //Alignement translation
+    switch(alignment) {
+    case ON_CENTER:
+      glTranslatef(translationAfterRotation[0],translationAfterRotation[1],translationAfterRotation[2]);
+      break;
 
-  case ON_LEFT:
-    glTranslatef(-sizeForOutAlign[0]/2,0,0);
-    break;
+    case ON_LEFT:
+      glTranslatef(-sizeForOutAlign[0]/2,0,0);
+      break;
 
-  case ON_RIGHT:
-    glTranslatef(sizeForOutAlign[0]/2,0,0);
-    break;
+    case ON_RIGHT:
+      glTranslatef(sizeForOutAlign[0]/2,0,0);
+      break;
 
-  case ON_TOP:
-    glTranslatef(0,sizeForOutAlign[1]/2,0);
-    break;
+    case ON_TOP:
+      glTranslatef(0,sizeForOutAlign[1]/2,0);
+      break;
 
-  case ON_BOTTOM:
-    glTranslatef(0,-sizeForOutAlign[1]/2,0);
-    break;
+    case ON_BOTTOM:
+      glTranslatef(0,-sizeForOutAlign[1]/2,0);
+      break;
 
-  default:
-    break;
-  }
+    default:
+      break;
+    }
+  }else{
 
-  //Billboard computation
-  if(billboarded) {
+    Matrix<float, 4> modelviewMatrix, projectionMatrix, transformMatrix;
+
+    glGetFloatv (GL_MODELVIEW_MATRIX, (GLfloat*)&modelviewMatrix);
+    glGetFloatv (GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glMultMatrixf((GLfloat*)&projectionMatrix);
+    glMultMatrixf((GLfloat*)&modelviewMatrix);
+    glGetFloatv(GL_MODELVIEW_MATRIX, (GLfloat*)&transformMatrix);
+    glPopMatrix();
+
+    MatrixGL invTransformMatrix(transformMatrix);
+    invTransformMatrix.inverse();
+
+    Coord baseCenter=projectPoint(centerPosition,transformMatrix,camera->getViewport());
+    baseCenter=unprojectPoint(baseCenter,invTransformMatrix,camera->getViewport());
+
+    BoundingBox billboardedBB;
+    billboardedBB.expand(projectPoint(centerPosition+Coord(sizeForOutAlign[0]/2.,sizeForOutAlign[1]/2.,sizeForOutAlign[2]/2.),transformMatrix,camera->getViewport()));
+    billboardedBB.expand(projectPoint(centerPosition+Coord(-sizeForOutAlign[0]/2.,sizeForOutAlign[1]/2.,sizeForOutAlign[2]/2.),transformMatrix,camera->getViewport()));
+    billboardedBB.expand(projectPoint(centerPosition+Coord(sizeForOutAlign[0]/2.,-sizeForOutAlign[1]/2.,sizeForOutAlign[2]/2.),transformMatrix,camera->getViewport()));
+    billboardedBB.expand(projectPoint(centerPosition+Coord(-sizeForOutAlign[0]/2.,-sizeForOutAlign[1]/2.,sizeForOutAlign[2]/2.),transformMatrix,camera->getViewport()));
+    billboardedBB.expand(projectPoint(centerPosition+Coord(sizeForOutAlign[0]/2.,sizeForOutAlign[1]/2.,-sizeForOutAlign[2]/2.),transformMatrix,camera->getViewport()));
+    billboardedBB.expand(projectPoint(centerPosition+Coord(-sizeForOutAlign[0]/2.,sizeForOutAlign[1]/2.,-sizeForOutAlign[2]/2.),transformMatrix,camera->getViewport()));
+    billboardedBB.expand(projectPoint(centerPosition+Coord(sizeForOutAlign[0]/2.,-sizeForOutAlign[1]/2.,-sizeForOutAlign[2]/2.),transformMatrix,camera->getViewport()));
+    billboardedBB.expand(projectPoint(centerPosition+Coord(-sizeForOutAlign[0]/2.,-sizeForOutAlign[1]/2.,-sizeForOutAlign[2]/2.),transformMatrix,camera->getViewport()));
+
+    Coord billboardedTranlation(0,0,0);
+
+    switch(alignment) {
+
+    case ON_LEFT:
+      billboardedTranlation=unprojectPoint(((Coord)billboardedBB.center())+Coord(-billboardedBB.width()/2.,0,0),invTransformMatrix,camera->getViewport())-baseCenter;
+      break;
+
+    case ON_RIGHT:
+      billboardedTranlation=unprojectPoint(((Coord)billboardedBB.center())+Coord(billboardedBB.width()/2.,0,0),invTransformMatrix,camera->getViewport())-baseCenter;
+      break;
+
+    case ON_TOP:
+      billboardedTranlation=unprojectPoint(((Coord)billboardedBB.center())+Coord(0,billboardedBB.height()/2.,0),invTransformMatrix,camera->getViewport())-baseCenter;
+      break;
+
+    case ON_BOTTOM:
+      billboardedTranlation=unprojectPoint(((Coord)billboardedBB.center())+Coord(0,-billboardedBB.height()/2.,0),invTransformMatrix,camera->getViewport())-baseCenter;
+      break;
+
+    default:
+      break;
+    }
+
+    glTranslatef(billboardedTranlation[0],billboardedTranlation[1],billboardedTranlation[2]);
+
+    //Billboard computation
     float mdlM[16];
     glGetFloatv( GL_MODELVIEW_MATRIX, mdlM );
     glMatrixMode( GL_MODELVIEW );
