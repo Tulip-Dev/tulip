@@ -45,14 +45,14 @@ QModelIndex GraphPropertiesModel<PROPTYPE>::index(int row, int column,const QMod
   if (!hasIndex(row,column,parent))
     return QModelIndex();
 
+  int vectorIndex = row;
   if (!_placeholder.isNull()) {
     if (row == 0)
       return createIndex(row,column);
-
-    row--;
+    vectorIndex--;
   }
 
-  return createIndex(row,column,_properties[row]);
+  return createIndex(row,column,_properties[vectorIndex]);
 }
 
 template<typename PROPTYPE>
