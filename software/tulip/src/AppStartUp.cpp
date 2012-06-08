@@ -43,8 +43,10 @@ static const char* tips[] = {
   "If you find a bug in Tulip, please make a bug report on our sourceforge project page at: http://sourceforge.net/tracker/?group_id=61223",
   "Pajek file import is now available in Tulip using<br/>Menu : <b>File -> Import -> File -> Pajek (.net)</b>",
   "UCINET dl file import is now available in Tulip using<br/>Menu : <b>File -> Import -> File -> UCINET dl</b>",
+  "GEXF file import is now available in Tulip using<br/>Menu : <b>File -> Import -> File -> GEXF</b>",
   "A Python interpreter enables to dynamically load, save, write, run and test your code. It is available using<br/>Menu : <b>View -> Python Script view</b>",
-  "OGDF layout algorithms are available in this version.",
+  "OGDF layout algorithms are available using<br/>Menu : <b>Algorithms -> Layout -> ...</b>",
+  "Take a snapshot of the visualization of your data using<br/>Toolbar : <b>snapshot button</b>",
   /* last one needs to be NULL */
   NULL
 };
