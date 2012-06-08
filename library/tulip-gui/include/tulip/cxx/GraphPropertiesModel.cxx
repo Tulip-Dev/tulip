@@ -46,9 +46,11 @@ QModelIndex GraphPropertiesModel<PROPTYPE>::index(int row, int column,const QMod
     return QModelIndex();
 
   int vectorIndex = row;
+
   if (!_placeholder.isNull()) {
     if (row == 0)
       return createIndex(row,column);
+
     vectorIndex--;
   }
 

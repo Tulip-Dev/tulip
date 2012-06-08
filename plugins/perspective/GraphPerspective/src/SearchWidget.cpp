@@ -26,24 +26,31 @@ public:
 
   tlp::BooleanProperty* run(tlp::Graph* g, bool onNodes, bool onEdges) {
     tlp::BooleanProperty* prop = new BooleanProperty(g);
+
     if (onNodes) {
       node n;
       forEach(n,g->getNodes())
-          prop->setNodeValue(n,compare(n));
+      prop->setNodeValue(n,compare(n));
     }
+
     if (onEdges) {
       edge e;
       forEach(e,g->getEdges())
-          prop->setEdgeValue(e,compare(e));
+      prop->setEdgeValue(e,compare(e));
     }
+
     return prop;
   }
 };
 class StringSearchOperator: public SearchOperator {
 public:
   virtual bool compareStrings(const QString& a, const QString& b)=0;
-  bool compare(tlp::node n) { return compareStrings(_a->getNodeStringValue(n).c_str(),_b->getNodeStringValue(n).c_str()); }
-  bool compare(tlp::edge e) { return compareStrings(_a->getEdgeStringValue(e).c_str(),_b->getEdgeStringValue(e).c_str()); }
+  bool compare(tlp::node n) {
+    return compareStrings(_a->getNodeStringValue(n).c_str(),_b->getNodeStringValue(n).c_str());
+  }
+  bool compare(tlp::edge e) {
+    return compareStrings(_a->getEdgeStringValue(e).c_str(),_b->getEdgeStringValue(e).c_str());
+  }
 };
 class NumericSearchOperator: public SearchOperator {
   tlp::DoubleProperty* _numericA;
@@ -55,8 +62,12 @@ public:
     _numericB = static_cast<DoubleProperty*>(_b);
   }
   virtual bool compareDoubles(double a, double b)=0;
-  bool compare(tlp::node n) { return compareDoubles(_numericA->getNodeValue(n),_numericB->getNodeValue(n)); }
-  bool compare(tlp::edge e) { return compareDoubles(_numericA->getEdgeValue(e),_numericB->getEdgeValue(e)); }
+  bool compare(tlp::node n) {
+    return compareDoubles(_numericA->getNodeValue(n),_numericB->getNodeValue(n));
+  }
+  bool compare(tlp::edge e) {
+    return compareDoubles(_numericA->getEdgeValue(e),_numericB->getEdgeValue(e));
+  }
 };
 
 #define STRING_CMP(NAME,CMP) class NAME : public StringSearchOperator { \
@@ -134,6 +145,7 @@ void SearchWidget::setGraph(Graph *g) {
   _ui->resultsFrame->hide();
   _ui->resultsCountLabel->setText("");
   setEnabled(g != NULL);
+
   if (g != NULL) {
     // Force creation of viewSelection to ensure we have at least one boolean property exisint in the graph
     g->getProperty<BooleanProperty>("viewSelection");
@@ -158,8 +170,10 @@ void SearchWidget::search() {
   tlp::PropertyInterface* a = term(_ui->searchTermACombo);
   tlp::PropertyInterface* b = NULL;
   bool deleteTermB = false;
+
   if (_ui->customValueEdit->isVisible()) {
     deleteTermB = true;
+
     if (isNumericComparison()) {
       DoubleProperty* doubleProp = new DoubleProperty(g);
       doubleProp->setAllNodeValue(_ui->customValueEdit->text().toInt());
@@ -188,6 +202,7 @@ void SearchWidget::search() {
 
   node n;
   edge e;
+
   if (_ui->selectionModeCombo->currentIndex() == 0) // replace current selection
     *output = *result;
   else if (_ui->selectionModeCombo->currentIndex() == 1) { // add to current selection
@@ -197,6 +212,7 @@ void SearchWidget::search() {
           output->setNodeValue(n,true);
       }
     }
+
     if (onEdges) {
       forEach(e,g->getEdges()) {
         if (result->getEdgeValue(e))
@@ -211,6 +227,7 @@ void SearchWidget::search() {
           output->setNodeValue(n,false);
       }
     }
+
     if (onEdges) {
       forEach(e,g->getEdges()) {
         if (result->getEdgeValue(e))
@@ -220,6 +237,7 @@ void SearchWidget::search() {
   }
 
   delete result;
+
   if (deleteTermB)
     delete b;
 
@@ -238,6 +256,7 @@ void SearchWidget::search() {
   _ui->edgesResultsTable->setModel(NULL);
   _ui->nodesResultsTable->setVisible(onNodes);
   _ui->edgesResultsTable->setVisible(onEdges);
+
   if (onNodes) {
     GraphSortFilterProxyModel* proxyModel = new GraphSortFilterProxyModel(_ui->nodesResultsTable);
     proxyModel->setFilterProperty(output);
@@ -246,6 +265,7 @@ void SearchWidget::search() {
     sourceModel->setGraph(g);
     _ui->nodesResultsTable->setModel(proxyModel);
   }
+
   if (onEdges) {
     GraphSortFilterProxyModel* proxyModel = new GraphSortFilterProxyModel(_ui->edgesResultsTable);
     proxyModel->setFilterProperty(output);
@@ -254,6 +274,7 @@ void SearchWidget::search() {
     sourceModel->setGraph(g);
     _ui->edgesResultsTable->setModel(proxyModel);
   }
+
   _ui->resultsFrame->show();
 
   Observable::unholdObservers();
@@ -292,8 +313,9 @@ void SearchWidget::updateOperators(PropertyInterface *a, const QString &b) {
 }
 
 void SearchWidget::setNumericOperatorsEnabled(bool e) {
-  for(int i=2;i<=5;++i) {
+  for(int i=2; i<=5; ++i) {
     static_cast<QStandardItemModel*>(_ui->operatorCombo->model())->item(i)->setEnabled(e);
+
     if (_ui->operatorCombo->currentIndex() == i && !e)
       _ui->operatorCombo->setCurrentIndex(0);
   }
@@ -306,10 +328,12 @@ PropertyInterface *SearchWidget::term(QComboBox *combo) {
 
 SearchOperator *SearchWidget::searchOperator() {
   SearchOperator* op = NULL;
+
   if (isNumericComparison())
     op = NUMERIC_OPERATORS[_ui->operatorCombo->currentIndex()];
   else
     op = STRING_OPERATORS[_ui->operatorCombo->currentIndex()];
+
   return op;
 }
 
