@@ -89,10 +89,7 @@ void PanelSelectionWizard::clearView() {
 }
 
 void PanelSelectionWizard::done(int result) {
-  if (result == QDialog::Accepted && _view != NULL) {
-    _view->applySettings();
-  }
-  else if (result == QDialog::Accepted && _view == NULL) {
+  if (result == QDialog::Accepted && _view == NULL) {
     createView();
   }
   else if (result == QDialog::Rejected) {

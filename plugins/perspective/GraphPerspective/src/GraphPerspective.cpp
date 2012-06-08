@@ -211,6 +211,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->graphHierarchiesEditor->setModel(_graphs);
   _ui->workspace->setModel(_graphs);
   _ui->workspace->readProject(_project,rootIds,progress);
+  _ui->searchPanel->setModel(_graphs);
 
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
@@ -351,6 +352,7 @@ void GraphPerspective::createPanel(tlp::Graph* g) {
   if (result == QDialog::Accepted && wizard.panel() != NULL) {
     _ui->workspace->addPanel(wizard.panel());
     _ui->workspace->setActivePanel(wizard.panel());
+    wizard.panel()->applySettings();
   }
 }
 
