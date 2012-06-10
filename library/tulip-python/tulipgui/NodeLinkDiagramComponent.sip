@@ -108,6 +108,7 @@ Sets the rendering parameters for the node link diagram view.
     tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
     if (!mainController) {
         sipCpp->draw();
+        QApplication::processEvents();
     }
 %End
 

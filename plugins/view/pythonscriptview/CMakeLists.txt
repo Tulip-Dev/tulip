@@ -5,8 +5,6 @@ SET(QT_USE_QTWEBKIT true)
 
 INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
 
-ADD_SUBDIRECTORY(tulipgui)
-
 # Force to use SIP headers located in thirdparty and not those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})

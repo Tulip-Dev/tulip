@@ -193,5 +193,83 @@ Returns the name of the view.
     sipRes = new std::string(tvm.getNameOfView(sipCpp));
 %End
 
+// =========================================================================================================================
+
+    void setVisible(const bool visible);
+%Docstring
+tlp.View.setVisible(visible)
+
+Hides / Shows the view window. That method has effects only when working trough the
+classical Python interpreter. It can be usefull for scripts that only needs.
+to save visualizations snaphots to disk. View windows can be hidden and the script will
+terminate directly instead of waiting for the views windows to be closed by the user.
+However, the view window needs to be displayed at least once in order to correctly
+initialize the OpenGL context.
+
+:param visible: the state of the view window visibility
+:type visible: boolean
+
+%End
+
+%MethodCode
+    tvm.setViewVisible(sipCpp, a0);
+%End
+
+// =========================================================================================================================
+
+    void resize(int width, int height);
+%Docstring
+tlp.View.resize(width, height)
+
+Resizes the view windows. That method has effects only when working trough the
+classical Python interpreter.
+
+:param width: the new width of the view window
+:type width: integer
+:param height: the new height of the view window
+:type height: integer
+%End
+
+%MethodCode
+    tvm.resizeView(sipCpp, a0, a1);
+%End
+
+// =========================================================================================================================
+
+    void setPos(int x, int y);
+%Docstring
+tlp.View.setPos(x, y)
+
+Set the position on screen of the view windows. That method has effects only when working trough the
+classical Python interpreter.
+
+:param x: the new x position of the view window
+:type x: integer
+:param y: the new y position of the view window
+:type y: integer
+%End
+
+%MethodCode
+    tvm.setViewPos(sipCpp, a0, a1);
+%End
+
+// =========================================================================================================================
+
+    void setOptionsWidgetsVisible(const bool visible);
+%Docstring
+tlp.View.setOptionsWidgetsVisible(visible)
+
+Shows / hides the options widgets located on the left side of the view.
+That method has effects only when working trough the
+classical Python interpreter.
+
+:param visible: the state of the options widgets visibility
+:type visible: boolean
+%End
+
+%MethodCode
+    tvm.setViewOptionsWidgetsVisible(sipCpp, a0);
+%End
+
 };
 };

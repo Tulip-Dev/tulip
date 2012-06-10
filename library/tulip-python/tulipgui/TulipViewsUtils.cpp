@@ -202,7 +202,9 @@ tlp::View *TulipViewsManager::addView(const std::string &viewName, tlp::Graph *g
     vmw->setData(graph, dataSet);
     QApplication::processEvents();
     newView = vmw->getView();
+    newView->init();
     newView->draw();
+    QApplication::processEvents();
   }
 
   connect(newView, SIGNAL(destroyed(QObject *)), this, SLOT(viewDestroyed(QObject*)));
@@ -312,4 +314,42 @@ void TulipViewsManager::viewDestroyed(QObject *obj) {
   }
 }
 
+void TulipViewsManager::setViewVisible(tlp::View *view, const bool visible) {
+    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
+    if (!mainController) {
+        viewToWindow[view]->setVisible(visible);
+        QApplication::processEvents();
+    }
+}
 
+bool TulipViewsManager::areViewsVisible()  {
+    bool ret = false;
+    for (size_t i = 0 ; i < openedViews.size() ; ++i) {
+        ret = ret || viewToWindow[openedViews[i]]->isVisible();
+    }
+    return ret;
+}
+
+void TulipViewsManager::resizeView(tlp::View *view, int width, int height) {
+    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
+    if (!mainController) {
+        viewToWindow[view]->resize(width, height);
+        QApplication::processEvents();
+    }
+}
+
+void TulipViewsManager::setViewPos(tlp::View *view, int x, int y) {
+    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
+    if (!mainController) {
+        viewToWindow[view]->move(x, y);
+        QApplication::processEvents();
+    }
+}
+
+void TulipViewsManager::setViewOptionsWidgetsVisible(View *view, const bool visible){
+    tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
+    if (!mainController) {
+        viewToWindow[view]->getViewProxy()->setOptionsTabWidgetVisible(visible);
+        QApplication::processEvents();
+    }
+}

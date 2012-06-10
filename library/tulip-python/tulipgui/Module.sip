@@ -84,7 +84,7 @@
         // If so, register an exit callback that will run the Qt event loop if some widgets are
         // still in a visible state
         PyObject *ps1 = PySys_GetObject("ps1");
-        if (!ps1) {
+        if (!ps1 && !Py_InteractiveFlag) {
             std::string installExitFunc =
                 "def tulipguiExitFunc():\n"
                 "   import tulipgui\n"
@@ -115,6 +115,7 @@ extern void removeQtInputHook();
 %End
 
 %ModuleCode
+
 void printErrorMessage(const std::string &errMsg) {
     std::string pythonCode = "import sys\n"
                              "sys.stderr.write(\"";

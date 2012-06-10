@@ -91,6 +91,28 @@ Returns an instance of the newly created view.
 
 // =========================================================================================
 
+tlp::NodeLinkDiagramComponent *addNodeLinkDiagramView(tlp::Graph *graph);
+%Docstring
+tlp.addNodeLinkDiagramView(graph)
+
+.. versionadded:: 3.8
+
+Convenient function for creating the principal view offered by Tulip : a node link diagram.
+Its call is equivalent to::
+
+    nodeLinkView = tlp.addView("Node Link Diagram view", graph)
+
+:param graph: the graph to visualize
+:type graph: :class:`tulip.tlp.Graph`
+:rtype: :class:`tlp.NodeLinkDiagramComponent`
+%End
+
+%MethodCode
+    sipRes = static_cast<tlp::NodeLinkDiagramComponent *>(tvm.addView("Node Link Diagram view", a0));
+%End
+
+// =========================================================================================
+
     void closeView(tlp::View *view);
 %Docstring
 tlp.closeView(view)
@@ -196,14 +218,7 @@ views displayed and functionnal (otherwise, the interpreter is closed and so are
 %MethodCode
     tlp::MainController *mainController = dynamic_cast<tlp::MainController *>(tlp::Controller::getCurrentController());
     if (!mainController) {
-        bool processQtEvents = false;
-        foreach (QWidget *widget, QApplication::topLevelWidgets()) {
-            if (widget->isVisible()) {
-                processQtEvents = true;
-                break;
-            }
-        }
-        if (processQtEvents)
+        if (tvm.areViewsVisible())
             QApplication::exec();
     }
 %End

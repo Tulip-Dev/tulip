@@ -40,7 +40,11 @@ public :
 
   void setData(tlp::Graph *graph, const tlp::DataSet &data);
 
-  tlp::View *getView() {
+  tlp::BaseGraphicsViewComponent *getViewProxy() const {
+      return viewProxy;
+  }
+
+  tlp::View *getView() const {
     return viewProxy->getRealView();
   }
 
@@ -86,7 +90,15 @@ public :
 
   void closeViewsRelatedToGraph(tlp::Graph* graph);
 
+  void setViewVisible(tlp::View *view, const bool visible);
 
+  bool areViewsVisible();
+
+  void resizeView(tlp::View *view, int width, int height);
+
+  void setViewPos(tlp::View *view, int x, int y);
+
+  void setViewOptionsWidgetsVisible(tlp::View *view, const bool visible);
 
 public slots:
 
