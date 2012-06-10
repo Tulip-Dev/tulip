@@ -12,7 +12,7 @@ A lightweight Python IDE can be accessed through the graphical interface of Tuli
 the graph currently visualized. Starting Tulip 3.6, it is integrated as a view plugin named "Python Script view"
 and can be accessed through the "View" menu. The interface of this component is composed of four tabs :
 
-	* the "Script editor" tab (see :ref:`Figure 1`) that allows to write scripts that can be applied to the
+        * the "Script editor" tab (see :ref:`Figure 1<fig1>`) that allows to write scripts that can be applied to the
 	  graph currently loaded in Tulip. To do so, the "main(graph)" has to be defined
           and is used as the script entry point. The graph currently loaded is wrapped 
           as a :class:`tlp.Graph` object and provided as parameter of the "main" function.
@@ -20,31 +20,35 @@ and can be accessed through the "View" menu. The interface of this component is 
           in the lower part of the interface. Once started, the script execution can be
           stopped at any time.
 
+.. _fig1:
 .. figure:: pythonScriptViewGUI1.png
    :align: center
 
    Figure 1: Screenshot of the "Script editor" tab from the Tulip Python Script view.
 
-	* the "Modules editor" tab (see :ref:`Figure 2`) that enables to write and edit 
+        * the "Modules editor" tab (see :ref:`Figure 2<fig2>`) that enables to write and edit
 	  Python modules that can be immediately imported in the main script.
 
+.. _fig2:
 .. figure:: pythonScriptViewGUI2.png
    :align: center
 
    Figure 2: Screenshot of the "Modules editor" tab from the Tulip Python Script view.
 
-	* the "Interactive session" tab (see :ref:`Figure 3`) that provides an interactive
+        * the "Interactive session" tab (see :ref:`Figure 3<fig3>`) that provides an interactive
           Python shell. The graph currently loaded in Tulip is wrapped to a :class:`tlp.Graph`
           object and bound to the "graph" variable.
 
+.. _fig3:
 .. figure:: pythonScriptViewGUI3.png
    :align: center
 
    Figure 3: Screenshot of the "Interactive session" tab from the Tulip Python Script view.
 
-       * The "Tulip plugin editor" tab (see :ref:`Figure 4`) that allows to develop Tulip plugins in Python and registers them immediately in the interface to test them.
+       * The "Tulip plugin editor" tab (see :ref:`Figure 4<fig4>`) that allows to develop Tulip plugins in Python and registers them immediately in the interface to test them.
          Different kinds of plugins can be develop : General Algorithms, Property Algorithms, Import plugins and Export plugins. 
 
+.. _fig4:
 .. figure:: pythonScriptViewGUI4.png
    :align: center
 
@@ -56,8 +60,7 @@ and can be accessed through the "View" menu. The interface of this component is 
 
       * Mac OS : Nothing to do, you should be able to import all the modules installed on the system.
 
-      * Linux : Unfortunately, our linux bundle does not allow to import the majority of Python external modules as the Python library included in the bundle lacks some important built-in modules
-	(like math, cPickle, ...). The only solution you have is to compile Tulip yourself (don't forget to install the Python development package on your system to be able to build the bindings).
+      * Linux : Nothing to do, since Tulip 3.8 the standard Python library is now included in the binary bundle.
 
 .. _usingBindingsInShell:
 
@@ -68,11 +71,11 @@ Setting up the environment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Tulip Python bindings can also be used through the classical Python Interpreter. But some setup has to be done
-before importing the :mod:`tulip` module. 
+before importing the Tulip modules.
 
-First, the path to the :mod:`tulip` module must be provided to Python.
+First, the path to the modules must be provided to Python.
 In the following, <tulip_install_dir> represents the root directory of a Tulip installation.
-The Tulip Python module is installed in the following directory according to your system :
+The Tulip Python modules are installed in the following directory according to your system :
 
         * Linux : <tulip_install_dir>/lib/python
 
@@ -92,10 +95,12 @@ also installed in the directory provided above. You have to add this path to :
 
 	* the **PATH** environment variable on Windows.
 
-You should now be able to import the :mod:`tulip` module through the Python shell. Issue the following command
+You should now be able to import the modules through the Python shell. Issue the following command
 at the shell prompt to perform that task::
 
 	>>> from tulip import *
+        >>> from tulipogl import *
+        >>> from tulipgui import *
 
 .. note:: 
   If you have installed Tulip from a bundle, the Tulip bindings were built against a specific version of Python 
@@ -112,6 +117,11 @@ Loading Tulip plugins
 
 If you want to use Tulip algorithms implemented as plugins written in C++ (e.g. graph layout algorithms),
 you have to load them before being able to call them (see :func:`tlp.applyAlgorithm`, :meth:`tlp.Graph.computeLayoutProperty`, ...).
+
+**Since Tulip 3.8, all plugins shoud be automatically loaded when you import the tulip module.**
+
+If you use a Tulip version anterior to the 3.8 release, you have to proceed as described below to load the plugins.
+
 To load all the Tulip plugins written in C++, you have to execute the :func:`tlp.initTulipLib` and :func:`tlp.loadPlugins` functions
 the following way if you compiled Tulip yourself::
 	

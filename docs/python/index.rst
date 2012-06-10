@@ -29,7 +29,7 @@ Contents
    gettingstarted
    manual
    pythonplugins 
-   apireference
+   tulipreference
    tulippluginsreference       
    tulipoglreference
    tulipguireference

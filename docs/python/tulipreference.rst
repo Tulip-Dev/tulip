@@ -3,6 +3,8 @@
 :mod:`tulip` module API    
 ==========================
 
+.. automodule:: tulip
+
 Utility functions
 -------------------
 

@@ -3,6 +3,8 @@
 :mod:`tulipogl` module API
 ==========================
 
+.. automodule:: tulipogl
+
 tlp.GlGraphRenderingParameters
 -------------------------------
 

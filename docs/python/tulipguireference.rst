@@ -3,15 +3,18 @@
 :mod:`tulipgui` module API
 ==========================
 
-That module should only be used when working with the Python Script editor
-integrated in the Tulip software.
+.. automodule:: tulipgui
 
 Utility functions
 -----------------
 
+.. autofunction:: tulipgui::tlp.loadGUIPlugins
+
 .. autofunction:: tulipgui::tlp.getAvailableViews
 
 .. autofunction:: tulipgui::tlp.addView
+
+.. autofunction:: tulipgui::tlp.addNodeLinkDiagramView
 
 .. autofunction:: tulipgui::tlp.getOpenedViews
 
@@ -24,6 +27,7 @@ Utility functions
 .. autofunction:: tulipgui::tlp.closeAllViews
 
 .. autofunction:: tulipgui::tlp.closeViewsRelatedToGraph
+
 
 tlp.View
 ---------
