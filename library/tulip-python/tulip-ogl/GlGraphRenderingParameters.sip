@@ -753,7 +753,7 @@ tlp.GlGraphRenderingParameters.setMinSizeOfLabel(size)
 Sets the minimum size of labels. That value is only used if the labels
 are not scaled to nodes sizes.
 
-;param size: the minimum size of labels
+:param size: the minimum size of labels
 :type: integer
 %End
 
@@ -778,7 +778,7 @@ tlp.GlGraphRenderingParameters.setMaxSizeOfLabel(size)
 Sets the maximum size of labels. That value is only used if the labels
 are not scaled to nodes sizes.
 
-;param size: the maximum size of labels
+:param size: the maximum size of labels
 :type: integer
 %End
 
