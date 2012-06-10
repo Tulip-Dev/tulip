@@ -25,11 +25,13 @@
 #include <tulip/TabWidgetHidableMenuGraphicsProxy.h>
 #include <tulip/GlMainWidgetItem.h>
 
+#include <QtGui/QMenu>
+
 using namespace std;
 
 namespace tlp {
 
-BaseGraphicsViewComponent::BaseGraphicsViewComponent(const string &realViewName):realViewName(realViewName),graphicsView(NULL),baseView(ViewPluginsManager::getInst().createView(realViewName)) {}
+BaseGraphicsViewComponent::BaseGraphicsViewComponent(const string &realViewName):realViewName(realViewName),graphicsView(NULL),baseView(ViewPluginsManager::getInst().createView(realViewName)), showHideOptionWidgets(NULL) {}
 
 BaseGraphicsViewComponent::~BaseGraphicsViewComponent() {
   delete baseView;
@@ -66,6 +68,10 @@ QWidget *BaseGraphicsViewComponent::construct(QWidget *parent) {
       overviewWidget = glView->getOverviewWidget();
       overviewAction = glView->getOverviewAction();
       glWidget = glView->getGlMainWidget();
+      showHideOptionWidgets = glView->getDialogMenu()->addAction("Options widgets");
+      showHideOptionWidgets->setCheckable(true);
+      showHideOptionWidgets->setChecked(true);
+      connect(showHideOptionWidgets, SIGNAL(toggled(bool)), this, SLOT(setOptionsTabWidgetVisible(bool)));
     }
 
     GlMainWidgetGraphicsView *glGraphicsView = new GlMainWidgetGraphicsView(NULL,glWidget);
@@ -173,6 +179,17 @@ void BaseGraphicsViewComponent::hideOverview(bool hide) {
 
 void BaseGraphicsViewComponent::setVisibleOverview(bool visible) {
   hideOverview(!visible);
+}
+
+void BaseGraphicsViewComponent::setOptionsTabWidgetVisible(const bool visible) {
+    if (showHideOptionWidgets) {
+        disconnect(showHideOptionWidgets, SIGNAL(toggled(bool)), this, SLOT(setOptionsTabWidgetVisible(bool)));
+    }
+    tabWidgetProxy->setVisible(visible);
+    if (showHideOptionWidgets) {
+        showHideOptionWidgets->setChecked(visible);
+        connect(showHideOptionWidgets, SIGNAL(toggled(bool)), this, SLOT(setOptionsTabWidgetVisible(bool)));
+    }
 }
 
 }

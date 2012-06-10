@@ -131,6 +131,10 @@ public:
     return overviewAction;
   }
 
+  QMenu *getDialogMenu() const {
+      return dialogMenu;
+  }
+
 protected :
 
   GlMainWidget *mainWidget;
@@ -157,6 +161,7 @@ public slots:
    * Hide the overview
    */
   virtual void hideOverview(bool);
+
 
   virtual void displayOverview(bool display) {
     hideOverview(!display);

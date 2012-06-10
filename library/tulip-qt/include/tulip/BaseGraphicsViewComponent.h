@@ -101,6 +101,8 @@ public slots:
 
   virtual void elementSelectedSlot(unsigned int,bool);
 
+  void setOptionsTabWidgetVisible(const bool visible);
+
 protected slots :
 
   void hideOverview(bool);
@@ -114,6 +116,7 @@ protected :
   std::string realViewName;
   QGraphicsView *graphicsView;
   View *baseView;
+  QAction *showHideOptionWidgets;
 
 };
 
