@@ -130,6 +130,7 @@ static void normalize(Vec3f &v) {
 static bool isLayoutCoPlanar(const vector<Coord> &points, Mat3f &invTransformMatrix) {
   Coord A, B, C;
   bool BSet = false;
+
   // pick three points to define a plane
   for (size_t i = 0 ; i < points.size() ; ++i) {
     if (i == 0) {
