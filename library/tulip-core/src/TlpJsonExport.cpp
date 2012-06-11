@@ -146,7 +146,7 @@ public:
       uint i = 0;
       forEach(e, graph->getEdges()) {
         _newEdgeId.set(e.id, i++);
-        
+
         uint source = _newNodeId.get(graph->source(e).id);
         uint target = _newNodeId.get(graph->target(e).id);
 
