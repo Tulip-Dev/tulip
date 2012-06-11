@@ -17,6 +17,8 @@ INSTALL(FILES
   tulip/GlOffscreenRenderer.h
   tulip/GraphPropertiesSelectionWidget.h
   tulip/ItemsListWidget.h
+  tulip/TulipMimes.h
+  tulip/PluginModel.h
   tulip/MouseBoxZoomer.h
   tulip/MouseEdgeBendEditor.h
   tulip/MouseEdgeBuilder.h
