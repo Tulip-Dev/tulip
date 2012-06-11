@@ -56,7 +56,7 @@ public:
   ~CompleteGraph() {
   }
 
-  bool import(const string &) {
+  bool importGraph() {
     unsigned int nbNodes  = 5;
     bool undirected = false;
 

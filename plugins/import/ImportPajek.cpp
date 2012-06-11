@@ -346,7 +346,7 @@ public :
     return true;
   }
 
-  bool import(const string &) {
+  bool importGraph() {
     string filename;
     string coord;
     dataSet->get<string>("file::filename", filename);

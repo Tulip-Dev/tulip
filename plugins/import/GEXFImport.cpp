@@ -65,8 +65,8 @@ public :
 
   ~GEXFImport() {}
 
-  // import plugins must implement bool import(const string &)
-  bool import(const string&) {
+  // import plugins must implement bool importGraph()
+  bool importGraph() {
     string filename;
     bool curvedEdges = false;
     // get the filename choosed by the user
