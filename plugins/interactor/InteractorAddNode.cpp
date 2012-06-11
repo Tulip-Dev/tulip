@@ -48,7 +48,7 @@ public:
     push_back(new MouseNodeBuilder);
   }
 
-  QCursor cursor() {
+  QCursor cursor() const {
     return QCursor(Qt::PointingHandCursor);
   }
 

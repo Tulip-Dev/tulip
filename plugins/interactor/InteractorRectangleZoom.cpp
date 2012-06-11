@@ -50,7 +50,7 @@ public:
     push_back(new MouseBoxZoomer);
   }
 
-  QCursor cursor() {
+  QCursor cursor() const {
     return QCursor(Qt::CrossCursor);
   }
 
