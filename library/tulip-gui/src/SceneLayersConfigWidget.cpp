@@ -7,7 +7,7 @@
 
 using namespace tlp;
 
-SceneLayersConfigWidget::SceneLayersConfigWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SceneLayersConfigWidget), _view(NULL) {
+SceneLayersConfigWidget::SceneLayersConfigWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SceneLayersConfigWidget), _glMainWidget(NULL) {
   _ui->setupUi(this);
 }
 
@@ -15,9 +15,9 @@ SceneLayersConfigWidget::~SceneLayersConfigWidget() {
   delete _ui;
 }
 
-void SceneLayersConfigWidget::setView(GlMainView *view) {
-  _view = view;
-  SceneLayersModel* model = new SceneLayersModel(_view->getGlMainWidget()->getScene(),_ui->treeView);
+void SceneLayersConfigWidget::setGlMainWidget(GlMainWidget *glMainWidget) {
+  _glMainWidget = glMainWidget;
+  SceneLayersModel* model = new SceneLayersModel(_glMainWidget->getScene(),_ui->treeView);
   _ui->treeView->setModel(model);
   connect(model,SIGNAL(drawNeeded(tlp::GlScene*)),this,SIGNAL(drawNeeded()));
 }
