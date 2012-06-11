@@ -182,14 +182,16 @@ void BaseGraphicsViewComponent::setVisibleOverview(bool visible) {
 }
 
 void BaseGraphicsViewComponent::setOptionsTabWidgetVisible(const bool visible) {
-    if (showHideOptionWidgets) {
-        disconnect(showHideOptionWidgets, SIGNAL(toggled(bool)), this, SLOT(setOptionsTabWidgetVisible(bool)));
-    }
-    tabWidgetProxy->setVisible(visible);
-    if (showHideOptionWidgets) {
-        showHideOptionWidgets->setChecked(visible);
-        connect(showHideOptionWidgets, SIGNAL(toggled(bool)), this, SLOT(setOptionsTabWidgetVisible(bool)));
-    }
+  if (showHideOptionWidgets) {
+    disconnect(showHideOptionWidgets, SIGNAL(toggled(bool)), this, SLOT(setOptionsTabWidgetVisible(bool)));
+  }
+
+  tabWidgetProxy->setVisible(visible);
+
+  if (showHideOptionWidgets) {
+    showHideOptionWidgets->setChecked(visible);
+    connect(showHideOptionWidgets, SIGNAL(toggled(bool)), this, SLOT(setOptionsTabWidgetVisible(bool)));
+  }
 }
 
 }

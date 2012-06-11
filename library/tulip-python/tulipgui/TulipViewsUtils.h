@@ -41,7 +41,7 @@ public :
   void setData(tlp::Graph *graph, const tlp::DataSet &data);
 
   tlp::BaseGraphicsViewComponent *getViewProxy() const {
-      return viewProxy;
+    return viewProxy;
   }
 
   tlp::View *getView() const {

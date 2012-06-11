@@ -132,7 +132,7 @@ public:
   }
 
   QMenu *getDialogMenu() const {
-      return dialogMenu;
+    return dialogMenu;
   }
 
 protected :
