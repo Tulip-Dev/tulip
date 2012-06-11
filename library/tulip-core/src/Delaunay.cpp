@@ -129,14 +129,15 @@ static void normalize(Vec3f &v) {
 
 static bool isLayoutCoPlanar(const vector<Coord> &points, Mat3f &invTransformMatrix) {
   Coord A, B, C;
-
+  bool BSet = false;
   // pick three points to define a plane
   for (size_t i = 0 ; i < points.size() ; ++i) {
     if (i == 0) {
       A = points[i];
     }
-    else if (i == 1) {
+    else if (!BSet && points[i] != A) {
       B = points[i];
+      BSet = true;
     }
     else {
       // pick a third point non aligned with the two others
