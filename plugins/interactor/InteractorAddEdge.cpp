@@ -51,7 +51,7 @@ public:
     push_back(new MouseEdgeBuilder);
   }
 
-  QCursor cursor() {
+  QCursor cursor() const {
     return QCursor(Qt::PointingHandCursor);
   }
 
