@@ -10,18 +10,18 @@ class SceneLayersConfigWidget;
 
 namespace tlp {
 
-class GlMainView;
+class GlMainWidget;
 
 class TLP_QT_SCOPE SceneLayersConfigWidget : public QWidget {
   Q_OBJECT
 
   Ui::SceneLayersConfigWidget* _ui;
-  tlp::GlMainView* _view;
+  tlp::GlMainWidget* _glMainWidget;
 public:
   explicit SceneLayersConfigWidget(QWidget *parent = NULL);
   virtual ~SceneLayersConfigWidget();
 
-  void setView(tlp::GlMainView* view);
+  void setGlMainWidget(tlp::GlMainWidget* glMainWidget);
 
 signals:
   void drawNeeded();
