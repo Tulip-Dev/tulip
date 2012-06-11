@@ -82,12 +82,6 @@ public:
       _newNodeId.set(n.id, i++);
     }
 
-    edge e;
-    i = 0;
-    forEach(e, graph->getEdges()) {
-      _newEdgeId.set(e.id, i++);
-    }
-
     _writer.writeMapOpen(); //top-level map
 
     _writer.writeString("version");
@@ -149,7 +143,10 @@ public:
       //saving edges requires writing source and target for every edge
       _writer.writeString(EdgesToken);
       _writer.writeArrayOpen();
+      uint i = 0;
       forEach(e, graph->getEdges()) {
+        _newEdgeId.set(e.id, i++);
+        
         uint source = _newNodeId.get(graph->source(e).id);
         uint target = _newNodeId.get(graph->target(e).id);
 
@@ -267,7 +264,7 @@ public:
       //we don't need/want to do all this on the first time we loop
       if(previousId != UINT_MAX) {
 
-        //if the ID are continuous, define an interval, otherwise witre the IDs (either intervals or single)
+        //if the ID are continuous, define an interval, otherwise write the IDs (either intervals or single)
         if(currentId == previousId + 1) {
           //if we have no interval being defined, set the lower bound to the previous edge ID
           //if an interval is being defined, set its end to the current edge ID
