@@ -83,6 +83,7 @@ static QGLFormat GlInit() {
 QGLWidget* GlMainWidget::getFirstQGLWidget() {
   if(!GlMainWidget::firstQGLWidget) {
     GlMainWidget::firstQGLWidget=new QGLWidget(GlInit());
+    assert(GlMainWidget::firstQGLWidget->isValid());
   }
 
   return GlMainWidget::firstQGLWidget;
@@ -96,6 +97,7 @@ void GlMainWidget::clearFirstQGLWidget() {
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent,View *view):
   QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), useFramebufferObject(false), glFrameBuf(NULL) {
+  assert(this->isValid());
   setFocusPolicy(Qt::StrongFocus);
   setMouseTracking(true);
   grabGesture(Qt::PinchGesture);
