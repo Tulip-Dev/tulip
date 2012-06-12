@@ -434,13 +434,13 @@ void GraphPerspective::deleteSelectedElements() {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
 
-  tlp::Iterator<node>* itNodes = selection->getNodesEqualTo(true);
-  graph->delNodes(itNodes, false);
-  delete itNodes;
-
   tlp::Iterator<edge>* itEdges = selection->getEdgesEqualTo(true);
   graph->delEdges(itEdges, false);
   delete itEdges;
+
+  tlp::Iterator<node>* itNodes = selection->getNodesEqualTo(true);
+  graph->delNodes(itNodes, false);
+  delete itNodes;
 
   Observable::unholdObservers();
 }
