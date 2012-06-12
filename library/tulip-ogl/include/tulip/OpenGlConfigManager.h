@@ -78,12 +78,12 @@ public:
    */
   double getOpenGLVersion();
 
-  /*
+  /**
    * Return the vendor name of the OpenGL driver installed on the host system.
    */
   std::string getOpenGLVendor();
 
-  /*
+  /**
    * Checks if an OpenGL extension is supported by the driver installed on the host system.
    * \param extensionName the name of the OpenGL extension to check in the form "GL_.*" (for instance "GL_ARB_vertex_buffer_object")
    */
@@ -101,24 +101,24 @@ public:
     antialiased = antialiasing;
   }
 
-  /*
+  /**
    * Activates the anti-aliasing of lines and points primitives.
    * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
    */
   void activateLineAndPointAntiAliasing();
 
-  /*
+  /**
    * Desactivates the anti-aliasing of lines and points primitives.
    * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
    */
   void desactivateLineAndPointAntiAliasing();
 
-  /*
+  /**
    * Activates the anti-aliasing of polygons primitives.
    * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
    */
   void activatePolygonAntiAliasing();
-  /*
+  /**
    * Desactivates the anti-aliasing of polygons primitives.
    * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
    */
