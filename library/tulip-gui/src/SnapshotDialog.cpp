@@ -75,14 +75,10 @@ SnapshotDialog::SnapshotDialog(GlMainView &v,QWidget *parent):QDialog(parent),vi
 
   connect(widthSpinBox,SIGNAL(valueChanged(int)),this,SLOT(widthSpinBoxValueChanged(int)));
   connect(heightSpinBox,SIGNAL(valueChanged(int)),this,SLOT(heightSpinBoxValueChanged(int)));
-  connect(fileName,SIGNAL(textChanged(QString)),this,SLOT(fileNameTextChanged(const QString &)));
-  connect(browseButton,SIGNAL(clicked()),this,SLOT(browseClicked()));
   connect(copybutton, SIGNAL(clicked()), this, SLOT(copyClicked()));
 
   lockLabel=new LockLabel();
   lockLayout->addWidget(lockLabel);
-
-  fileName->setPlaceholderText(QApplication::translate("SnapshotDialogData", "Enter the filename or use the browse button", 0, QApplication::UnicodeUTF8));
 }
 
 SnapshotDialog::~SnapshotDialog() {
@@ -93,12 +89,18 @@ void SnapshotDialog::resizeEvent(QResizeEvent *) {
 }
 
 void SnapshotDialog::accept() {
+  QString fileName=browseClicked();
+  if(fileName=="")
+    return;
+
+  this->setEnabled(false);
+
   QPixmap pixmap=view->snapshot(QSize(widthSpinBox->value(),heightSpinBox->value()));
 
   QImage image(pixmap.toImage());
 
-  if(!image.save(fileName->text(),0,qualitySpinBox->value())) {
-    QMessageBox::critical(this,"Snapshot cannot be saved","Snapshot cannot be saved in file : "+fileName->text());
+  if(!image.save(fileName,0,qualitySpinBox->value())) {
+    QMessageBox::critical(this,"Snapshot cannot be saved","Snapshot cannot be saved in file : "+fileName);
   }
   else {
     QDialog::accept();
@@ -137,16 +139,19 @@ void SnapshotDialog::heightSpinBoxValueChanged(int value) {
   inSizeSpinBoxValueChanged=false;
 }
 
-void SnapshotDialog::browseClicked() {
+QString SnapshotDialog::browseClicked() {
   QList<QByteArray> formatList=QImageWriter::supportedImageFormats();
   QString formatedFormatList;
 
   for(QList<QByteArray>::iterator it=formatList.begin(); it!=formatList.end(); ++it) {
-    formatedFormatList+=QString(*it).toLower()+" (*."+QString(*it).toLower()+");;";
+    if(QString(*it).toLower()=="jpeg")
+      formatedFormatList=QString(*it).toLower()+" (*."+QString(*it).toLower()+");;"+formatedFormatList;
+    else
+      formatedFormatList+=QString(*it).toLower()+" (*."+QString(*it).toLower()+");;";
   }
 
   QString newFileName=QFileDialog::getSaveFileName(this,tr("Save image as..."), QDir::homePath(), tr(QString(formatedFormatList).toStdString().c_str()));
-  fileName->setText(newFileName);
+  return newFileName;
 }
 
 void SnapshotDialog::fileNameTextChanged(const QString &text) {
