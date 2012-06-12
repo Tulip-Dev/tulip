@@ -163,7 +163,7 @@ QPixmap GlMainView::snapshot(const QSize &outputSize) {
   if (!realSize.isValid())
     realSize = _glMainWidget->size();
 
-  return QPixmap::fromImage(_glMainWidget->createPicture(realSize.width(),realSize.height()));
+  return QPixmap::fromImage(_glMainWidget->createPicture(realSize.width(),realSize.height(),false));
 }
 
 void GlMainView::graphDeleted() {

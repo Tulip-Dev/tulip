@@ -47,7 +47,7 @@ protected slots :
   void heightSpinBoxValueChanged(int value);
 
   void fileNameTextChanged(const QString &);
-  void browseClicked();
+  QString browseClicked();
   void copyClicked();
 
 protected :
