@@ -86,6 +86,8 @@ TLP_QT_SCOPE QString getPluginStagingDirectory();
 
 TLP_QT_SCOPE QString getPluginLocalInstallationDir();
 
+TLP_QT_SCOPE QGLFramebufferObject *createQGLFramebufferObject(int width, int height, QGLFramebufferObject::Attachment attachment);
+
 }
 
 #endif

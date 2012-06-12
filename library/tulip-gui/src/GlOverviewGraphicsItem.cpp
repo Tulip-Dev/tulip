@@ -21,7 +21,9 @@
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlMainView.h"
 #include "tulip/GlGraphComposite.h"
+#include "tulip/TlpQtTools.h"
 #include <QtGui/QMenu>
+#include <QtGui/QMessageBox>
 
 #include <QtGui/QGraphicsSceneMouseEvent>
 
@@ -30,18 +32,6 @@ using namespace std;
 namespace tlp {
 
 GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsRectItem(0,0,128,128),view(view),baseScene(scene),width(128),height(128),glFrameBuffer(NULL),mouseClicked(false) {
-  //This flag is needed to don't display overview rectangle outside overview
-  setFlag(QGraphicsItem::ItemClipsChildrenToShape);
-  overview.setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
-  setBrush(QBrush(QColor(255,255,255,255)));
-  overview.setParentItem(this);
-
-  //Init lines and polygons item
-  for(unsigned int i=0; i<4; ++i) {
-    line[i].setParentItem(&overview);
-    poly[i].setParentItem(&overview);
-    poly[i].setBrush(QBrush(QColor(0,0,0,64)));
-  }
 }
 
 GlOverviewGraphicsItem::~GlOverviewGraphicsItem() {
@@ -79,9 +69,23 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
   firstWidget->makeCurrent();
 
-  if(!glFrameBuffer) {
+  if(glFrameBuffer==NULL) {
     // Allocate frame buffer object
-    glFrameBuffer=new QGLFramebufferObject(width, height, QGLFramebufferObject::CombinedDepthStencil);
+    glFrameBuffer=createQGLFramebufferObject(width, height, QGLFramebufferObject::CombinedDepthStencil);
+
+    //This flag is needed to don't display overview rectangle outside overview
+    setFlag(QGraphicsItem::ItemClipsChildrenToShape);
+    overview.setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
+    setBrush(QBrush(QColor(255,255,255,255)));
+    overview.setParentItem(this);
+
+    //Init lines and polygons item
+    for(unsigned int i=0; i<4; ++i) {
+      line[i].setParentItem(&overview);
+      poly[i].setParentItem(&overview);
+      poly[i].setBrush(QBrush(QColor(0,0,0,64)));
+    }
+
   }
 
   // Backup initial viewport
@@ -269,6 +273,7 @@ void GlOverviewGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
+
   Coord position(width-pos.x(),pos.y(),0);
 
   Vector<int,4> backupViewport=baseScene.getViewport();
