@@ -89,8 +89,11 @@ void GlQuadTreeLODCalculator::setInputData(const GlGraphInputData *newInputData)
 
 bool GlQuadTreeLODCalculator::needEntities() {
   // Check if quadtree need entities
-  if(haveToCompute)
+  if(haveToCompute){
+    if(inputData)
+      oldParameters=*inputData->parameters;
     return true;
+  }
 
   // Check if a camera have changed (diff between old backup camera and current camera)
   for(map<GlLayer *, Camera>::iterator it=layerToCamera.begin(); it!=layerToCamera.end(); ++it) {
@@ -104,8 +107,22 @@ bool GlQuadTreeLODCalculator::needEntities() {
 
       if(unitCamera != unitOldCamera) {
         haveToCompute = true;
+        if(inputData)
+          oldParameters=*inputData->parameters;
         return true;
       }
+    }
+  }
+
+  if(inputData){
+    // Check visibility flags
+    GlGraphRenderingParameters *newParameters=inputData->parameters;
+    if(oldParameters.isDisplayEdges()!=newParameters->isDisplayEdges() ||
+       oldParameters.isDisplayMetaNodes()!=newParameters->isDisplayMetaNodes() ||
+       oldParameters.isDisplayNodes()!=newParameters->isDisplayNodes()){
+      oldParameters=*inputData->parameters;
+      haveToCompute = true;
+      return true;
     }
   }
 
