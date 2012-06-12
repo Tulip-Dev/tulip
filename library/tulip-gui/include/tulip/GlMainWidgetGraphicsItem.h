@@ -61,6 +61,8 @@ signals:
   void widgetPainted(bool redraw);
 
 protected :
+  void keyPressEvent(QKeyEvent *event);
+  void keyReleaseEvent(QKeyEvent *event);
   void wheelEvent(QGraphicsSceneWheelEvent *event);
   void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
   void mousePressEvent(QGraphicsSceneMouseEvent *event);
