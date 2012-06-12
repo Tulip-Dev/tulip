@@ -134,6 +134,7 @@ protected :
   PropertyInterface *layoutProperty;
   PropertyInterface *sizeProperty;
   PropertyInterface *selectionProperty;
+  GlGraphRenderingParameters oldParameters;
 
   int quadTreesVectorPosition;
   int simpleEntitiesVectorPosition;
