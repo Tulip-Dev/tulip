@@ -156,6 +156,16 @@ void GlMainWidgetGraphicsItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *
   QApplication::sendEvent(glMainWidget,eventModif);
 }
 
+void GlMainWidgetGraphicsItem::keyReleaseEvent(QKeyEvent *event) {
+  QKeyEvent *eventModif = new QKeyEvent(event->type(), event->key(), event->modifiers(), event->text(), event->isAutoRepeat(), event->count());
+  QApplication::sendEvent(glMainWidget,eventModif);
+}
+
+void GlMainWidgetGraphicsItem::keyPressEvent(QKeyEvent *event) {
+  QKeyEvent *eventModif = new QKeyEvent(event->type(), event->key(), event->modifiers(), event->text(), event->isAutoRepeat(), event->count());
+  QApplication::sendEvent(glMainWidget,eventModif);
+}
+
 bool GlMainWidgetGraphicsItem::eventFilter(QObject *, QEvent *evt) {
   if (evt->type() == QEvent::CursorChange)
     setCursor(glMainWidget->cursor());
