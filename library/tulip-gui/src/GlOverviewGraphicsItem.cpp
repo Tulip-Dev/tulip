@@ -31,12 +31,12 @@ using namespace std;
 
 namespace tlp {
 
+map<pair<int,int>,QGLFramebufferObject*> GlOverviewGraphicsItem::framebufferObjects=map<pair<int,int>,QGLFramebufferObject*>();
+
 GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsRectItem(0,0,128,128),view(view),baseScene(scene),width(128),height(128),glFrameBuffer(NULL),mouseClicked(false) {
 }
 
 GlOverviewGraphicsItem::~GlOverviewGraphicsItem() {
-  if(glFrameBuffer)
-    delete glFrameBuffer;
 }
 
 void GlOverviewGraphicsItem::setSize(unsigned int width, unsigned int height) {
@@ -71,7 +71,12 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   if(glFrameBuffer==NULL) {
     // Allocate frame buffer object
-    glFrameBuffer=createQGLFramebufferObject(width, height, QGLFramebufferObject::CombinedDepthStencil);
+    if(framebufferObjects.count(pair<int,int>(width,height))!=0){
+      glFrameBuffer=framebufferObjects[pair<int,int>(width,height)];
+    }else{
+      glFrameBuffer=createQGLFramebufferObject(width, height, QGLFramebufferObject::CombinedDepthStencil);
+      framebufferObjects[pair<int,int>(width,height)]=glFrameBuffer;
+    }
 
     //This flag is needed to don't display overview rectangle outside overview
     setFlag(QGraphicsItem::ItemClipsChildrenToShape);
