@@ -144,12 +144,14 @@ QString getPluginLocalInstallationDir() {
   return QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins";
 }
 
-QGLFramebufferObject *createQGLFramebufferObject(int width, int height, QGLFramebufferObject::Attachment attachment){
+QGLFramebufferObject *createQGLFramebufferObject(int width, int height, QGLFramebufferObject::Attachment attachment) {
   QGLFramebufferObject *fbo=new QGLFramebufferObject(width,height,attachment);
-  if(!fbo->isValid()){
+
+  if(!fbo->isValid()) {
     QMessageBox::critical(NULL,"OpenGL Error","Tulip don't have enough video card memory to run. Tulip will be closed");
     exit(1);
   }
+
   return fbo;
 }
 

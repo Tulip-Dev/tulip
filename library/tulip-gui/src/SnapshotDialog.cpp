@@ -90,6 +90,7 @@ void SnapshotDialog::resizeEvent(QResizeEvent *) {
 
 void SnapshotDialog::accept() {
   QString fileName=browseClicked();
+
   if(fileName=="")
     return;
 

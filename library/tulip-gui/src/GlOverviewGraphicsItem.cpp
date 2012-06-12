@@ -71,9 +71,10 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   if(glFrameBuffer==NULL) {
     // Allocate frame buffer object
-    if(framebufferObjects.count(pair<int,int>(width,height))!=0){
+    if(framebufferObjects.count(pair<int,int>(width,height))!=0) {
       glFrameBuffer=framebufferObjects[pair<int,int>(width,height)];
-    }else{
+    }
+    else {
       glFrameBuffer=createQGLFramebufferObject(width, height, QGLFramebufferObject::CombinedDepthStencil);
       framebufferObjects[pair<int,int>(width,height)]=glFrameBuffer;
     }
