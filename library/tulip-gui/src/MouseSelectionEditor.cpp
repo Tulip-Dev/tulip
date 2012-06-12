@@ -550,6 +550,9 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWid
   if (mode == COORD_AND_SIZE || mode == SIZE) {
     Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
     Iterator<edge> *itE = _selection->getEdgesEqualTo(true, _graph);
+    stretch[0]=abs(stretch[0]);
+    stretch[1]=abs(stretch[1]);
+    stretch[2]=abs(stretch[1]);
     _sizes->scale(stretch, itN, itE);
     delete itN;
     delete itE;
