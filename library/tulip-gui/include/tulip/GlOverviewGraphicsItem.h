@@ -66,6 +66,8 @@ private :
 
   std::set<std::string> _hiddenLayers;
 
+  static std::map<std::pair<int,int>,QGLFramebufferObject*> framebufferObjects;
+
 };
 
 }
