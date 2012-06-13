@@ -668,8 +668,6 @@ void tlp::initTypeSerializers() {
 
   DataSet::registerDataTypeSerializer<PointType::RealType>(KnownTypeSerializer<PointType>("coord"));
 
-  DataSet::registerDataTypeSerializer<SizeType::RealType>(KnownTypeSerializer<SizeType>("size"));
-
   DataSet::registerDataTypeSerializer<StringType::RealType>(KnownTypeSerializer<StringType>("string"));
 
   DataSet::registerDataTypeSerializer<DoubleVectorType::RealType>(KnownTypeSerializer<DoubleVectorType>("doublevector"));
@@ -681,8 +679,6 @@ void tlp::initTypeSerializers() {
   DataSet::registerDataTypeSerializer<ColorVectorType::RealType>(KnownTypeSerializer<ColorVectorType>("colorvector"));
 
   DataSet::registerDataTypeSerializer<LineType::RealType>(KnownTypeSerializer<LineType>("coordvector"));
-
-  DataSet::registerDataTypeSerializer<SizeVectorType::RealType>(KnownTypeSerializer<SizeVectorType>("sizevector"));
 
   DataSet::registerDataTypeSerializer<StringVectorType::RealType>(KnownTypeSerializer<StringVectorType>("stringvector"));
 
