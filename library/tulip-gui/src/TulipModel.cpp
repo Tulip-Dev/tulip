@@ -25,6 +25,9 @@ using namespace tlp;
 TulipModel::TulipModel(QObject *parent): QAbstractItemModel(parent) {
 }
 
+TulipModel::~TulipModel() {
+}
+
 QVariant TulipModel::headerData(int, Qt::Orientation orientation, int role) const {
   if (orientation == Qt::Horizontal && role == Qt::FontRole) {
     QFont f;

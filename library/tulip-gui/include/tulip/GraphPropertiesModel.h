@@ -17,16 +17,33 @@ class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
   QString _placeholder;
   bool _checkable;
   QSet<int> _checkedIndexes;
-  QVector<PropertyInterface*> _properties;
+  QVector<PROPTYPE*> _properties;
+  bool _removingRows;
 
   void rebuildCache();
 
 public:
   explicit GraphPropertiesModel(tlp::Graph* graph, bool checkable=false, QObject *parent = NULL);
   explicit GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable=false, QObject *parent = NULL);
+  virtual ~GraphPropertiesModel() {
+#ifndef NDEBUG
+    qDebug() << "Deleting GraphPropertiesModel<" << typeid(PROPTYPE).name() << "*>";
+#endif
+  }
 
   tlp::Graph* graph() const {
     return _graph;
+  }
+
+  void setGraph(tlp::Graph* graph) {
+    beginResetModel();
+    if (_graph != NULL)
+      _graph->removeListener(this);
+    _graph = graph;
+    if (_graph != NULL)
+      _graph->addListener(this);
+    rebuildCache();
+    endResetModel();
   }
 
   QSet<int> checkedIndexes() const {
@@ -44,30 +61,46 @@ public:
 
   // Methods inherited from the observable system
   void treatEvent(const tlp::Event& evt) {
+    if (evt.type() == Event::TLP_DELETE) {
+      beginResetModel();
+      _graph = NULL;
+      _properties.clear();
+      endResetModel();
+      return;
+    }
+
     const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
 
     if (graphEvent == NULL)
       return;
 
     if (graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
-      PropertyInterface* pi = _graph->getProperty(graphEvent->getPropertyName());
-      int row = rowOf(pi);
-      beginRemoveRows(QModelIndex(),row,row);
-      _properties.remove(row);
+      PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(graphEvent->getPropertyName()));
+      if (prop != NULL) {
+        int row = rowOf(prop);
+        beginRemoveRows(QModelIndex(),row,row);
+        _properties.remove(row);
+        _removingRows = true;
+      }
     }
     else if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
-      endRemoveRows();
+      if (_removingRows) {
+        endRemoveRows();
+        _removingRows = false;
+      }
     }
     else if (graphEvent->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY) {
-      PropertyInterface* pi = _graph->getProperty(graphEvent->getPropertyName());
-      rebuildCache();
-      int row = rowOf(pi);
-      beginInsertRows(QModelIndex(),row,row);
-      endInsertRows();
+      PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(graphEvent->getPropertyName()));
+      if (prop != NULL) {
+        rebuildCache();
+        int row = rowOf(prop);
+        beginInsertRows(QModelIndex(),row,row);
+        endInsertRows();
+      }
     }
   }
 
-  int rowOf(tlp::PropertyInterface*) const;
+  int rowOf(PROPTYPE*) const;
 
   Qt::ItemFlags flags(const QModelIndex &index) const {
     Qt::ItemFlags result = QAbstractItemModel::flags(index);

@@ -101,7 +101,7 @@ void TableView::graphChanged(tlp::Graph* g) {
 }
 
 void TableView::graphDeleted() {
-  graphChanged(NULL);
+  setGraph(NULL);
 }
 
 void TableView::columnsInserted(const QModelIndex&, int start, int end) {

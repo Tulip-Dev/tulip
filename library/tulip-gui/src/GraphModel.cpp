@@ -93,11 +93,8 @@ QVariant GraphModel::headerData(int section, Qt::Orientation orientation, int ro
 }
 
 QModelIndex GraphModel::index(int row, int column, const QModelIndex &parent) const {
-  if (parent.isValid())
+  if (parent.isValid() || _graph == NULL)
     return QModelIndex();
-
-//  if (row < 0 || row >= rowCount() || column < 0 || column > columnCount() || parent.isValid())
-//    return QModelIndex();
   PropertyInterface* prop = _properties[column];
   return createIndex(row,column,prop);
 }

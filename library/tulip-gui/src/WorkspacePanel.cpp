@@ -317,13 +317,11 @@ void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
 void WorkspacePanel::graphComboIndexChanged() {
   tlp::Graph* g = _ui->graphCombo->model()->data(_ui->graphCombo->selectedIndex(),TulipModel::GraphRole).value<tlp::Graph*>();
 #ifndef NDEBUG
-
   if (g != NULL) {
     std::string name;
     g->getAttribute<std::string>("name",name);
-    qWarning() << "selecting graph " << name << " in view";
+    qDebug() << "selecting graph " << name << " in view";
   }
-
 #endif /* NDEBUG */
 
   if (g != NULL && _view != NULL && g != _view->graph()) {

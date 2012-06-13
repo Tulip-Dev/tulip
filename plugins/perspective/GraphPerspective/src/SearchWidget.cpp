@@ -119,6 +119,10 @@ SearchWidget::SearchWidget(QWidget *parent): QWidget(parent), _ui(new Ui::Search
   _ui->customValueEdit->hide();
   _ui->nodesResultsTable->setItemDelegate(new GraphTableItemDelegate(_ui->nodesResultsTable));
   _ui->edgesResultsTable->setItemDelegate(new GraphTableItemDelegate(_ui->edgesResultsTable));
+
+  _ui->resultsStorageCombo->setModel(new GraphPropertiesModel<BooleanProperty>(NULL,false,_ui->resultsStorageCombo));
+  _ui->searchTermACombo->setModel(new GraphPropertiesModel<PropertyInterface>(NULL,false,_ui->searchTermACombo));
+  _ui->searchTermBCombo->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Custom value"),NULL,false,_ui->searchTermBCombo));
 }
 
 SearchWidget::~SearchWidget() {
@@ -137,28 +141,21 @@ void SearchWidget::currentGraphChanged(tlp::Graph *g) {
 }
 
 void SearchWidget::setGraph(Graph *g) {
-  _ui->resultsStorageCombo->clear();
-  _ui->searchTermACombo->clear();
-  _ui->searchTermBCombo->clear();
   _ui->nodesResultsTable->setModel(NULL);
   _ui->edgesResultsTable->setModel(NULL);
+
   _ui->resultsFrame->hide();
   _ui->resultsCountLabel->setText("");
   setEnabled(g != NULL);
 
   if (g != NULL) {
-    // Force creation of viewSelection to ensure we have at least one boolean property exisint in the graph
+    // Force creation of viewSelection to ensure we have at least one boolean property exising in the graph
     g->getProperty<BooleanProperty>("viewSelection");
-    // Storage model
-    GraphPropertiesModel<BooleanProperty>* storageModel = new GraphPropertiesModel<BooleanProperty>(g,false,_ui->resultsStorageCombo);
-    _ui->resultsStorageCombo->setModel(storageModel);
-    // Term A
-    GraphPropertiesModel<PropertyInterface>* termAModel = new GraphPropertiesModel<PropertyInterface>(g,false,_ui->searchTermACombo);
-    _ui->searchTermACombo->setModel(termAModel);
-    // Term B
-    GraphPropertiesModel<PropertyInterface>* termBModel = new GraphPropertiesModel<PropertyInterface>(trUtf8("Custom value"), g,false,_ui->searchTermBCombo);
-    _ui->searchTermBCombo->setModel(termBModel);
   }
+
+  static_cast<GraphPropertiesModel<BooleanProperty>*>(_ui->resultsStorageCombo->model())->setGraph(g);
+  static_cast<GraphPropertiesModel<PropertyInterface>*>(_ui->searchTermACombo->model())->setGraph(g);
+  static_cast<GraphPropertiesModel<PropertyInterface>*>(_ui->searchTermBCombo->model())->setGraph(g);
 }
 
 void SearchWidget::search() {
