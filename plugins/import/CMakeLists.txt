@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(./ ${TulipCoreInclude} ${TulipCoreBuildInclude})
+INCLUDE_DIRECTORIES(./ ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipGUIInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(PlanarGraph_SRCS PlanarGraph.cpp)

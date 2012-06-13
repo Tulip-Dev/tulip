@@ -16,10 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <iostream>
 #include <QtGui/qapplication.h>
 #include <QtCore/qtimer.h>
-#include <iostream>
 #include <tulip/TulipPluginHeaders.h>
+#include <tulip/DownloadManager.h>
 #include "WebImport.h"
 
 using namespace std;
@@ -29,7 +30,6 @@ class UrlElement {
 public:
   bool is_http;
   std::string data;
-  unsigned int serverport;
   std::string server;
   std::string url;
   std::string clean_url;
@@ -48,7 +48,7 @@ public:
 private:
   void fill(std::string &result);
   bool siteconnect(const std::string &server, const std::string &url,
-                   const int serverport, bool headonly);
+                   bool headonly);
 
 private:
   HttpContext *context;
@@ -63,7 +63,7 @@ public:
   }
 
   UrlElement getRedirection() {
-    return parseUrl(context->newLocation);
+    return parseUrl(context->data);
   }
   int getCode() {
     return context->code;
@@ -83,58 +83,108 @@ struct less<UrlElement> {
 };
 }
 
-HttpContext::HttpContext() {
-  // connect the requestFinished signal to our finished slot
-  connect(this, SIGNAL(requestFinished(int, bool)), this, SLOT(finished(int, bool)));
-  connect(this, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
-          this, SLOT(headerReceived(const QHttpResponseHeader &)));
+HttpContext::HttpContext():
+  status(false), code(-1), reply(NULL),
+  processed(false), redirected(false), isHtml(false) {
 }
 
-void HttpContext::finished(int id, bool error) {
-  // check to see if it is the request we made
-  if(id !=rqid) return;
+HttpContext::~HttpContext() {
+  if (reply)  {
+    reply->close();
+    reply->deleteLater();
+    reply = NULL;
+  }
+}
 
-  // set status of the request
-  status = !error;
+void HttpContext::request(const std::string& url, bool head) {
+  if (reply)  {
+    reply->close();
+    reply->deleteLater();
+    reply = NULL;
+  }
+
+  processed = isHtml = redirected = false;
+  QNetworkRequest request(QUrl(url.c_str()));
+
+  if (head) {
+    reply = DownloadManager::getInstance()->head(request);
+    connect(reply, SIGNAL(finished()), this, SLOT(headerReceived()));
+  }
+  else {
+    reply = DownloadManager::getInstance()->get(request);
+    connect(reply, SIGNAL(finished()), this, SLOT(finished()));
+  }
+}
+
+void HttpContext::finished() {
+  // check to see if it is the request we made
+  if (reply != qobject_cast<QNetworkReply*>(sender()))
+    return;
+
   // OK
   processed = true;
+
+  // set status of the request
+  if ((status = (reply->error() == QNetworkReply::NoError)))
+    data = reply->readAll().data();
 }
 
-void HttpContext::headerReceived(const QHttpResponseHeader & resp) {
-  if ((isHtml = resp.isValid())) {
-    code = resp.statusCode();
+void HttpContext::headerReceived() {
+  // check to see if it is the request we made
+  if (reply != qobject_cast<QNetworkReply*>(sender()))
+    return;
 
-    if (code > 399) /* error codes */
-      isHtml = false;
-    else if ((code > 299) &&
-             (code < 305 || code == 307)) {
-      /* redirection codes */
-      redirected = true;
-      newLocation = resp.value(QString("Location")).toAscii().data();
+  processed = true;
+
+  if ((status = isHtml = (reply->error() == QNetworkReply::NoError))) {
+    QVariant value = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+
+    if (value.canConvert<int>()) {
+      code = value.toInt();
+
+      if (code > 399) /* error codes */
+        isHtml = false;
+      else if ((code > 299) &&
+               (code < 305 || code == 307)) {
+        /* redirection codes */
+        redirected = true;
+        QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+
+        if (!redirectionTarget.isNull())
+          data = redirectionTarget.toUrl().toString().toStdString();
+        else
+          data = "";
+      }
+
+      return;
     }
-    else   /* normal codes */
-      isHtml = resp.hasContentType() &&
-               resp.contentType().contains(QString("text/html"));
+
+    /* normal codes */
+    value = reply->header(QNetworkRequest::ContentTypeHeader);
+    status = isHtml = (value.canConvert<QString>() &&
+                       value.toString().contains(QString("text/html")));
+    reply->close();
   }
 }
 
 void HttpContext::timeout() {
-  qWarning() << "time-out occurs" << endl;
+  if (!processed)
+    qWarning() << "time-out occurs" << endl;
+
   // if timeout occurs
   // just indicates the we failed during processing
   processed = true;
-  status = false;
 }
 
 void HttpContext::setTimer(QTimer *timer) {
   connect(timer, SIGNAL(timeout()), SLOT(timeout()));
 }
 
-UrlElement::UrlElement():is_http(true),data(""),serverport(80),context(0)  {
+UrlElement::UrlElement():is_http(true),data(""),context(0)  {
 }
 UrlElement::UrlElement(const UrlElement &c):
   is_http(c.is_http),
-  data(""),serverport(c.serverport),server(c.server),url(c.url),clean_url(c.clean_url),context(0) {
+  data(""),server(c.server),url(c.url),clean_url(c.clean_url),context(NULL) {
 }
 
 void UrlElement::setUrl(const std::string& theUrl) {
@@ -148,15 +198,13 @@ void UrlElement::setUrl(const std::string& theUrl) {
 }
 
 void UrlElement::fill(std::string &result) {
-  if (context->bytesAvailable() > 0)
-    result += context->readAll().data();
+  result += context->data;
 }
 
 void UrlElement::clear() {
   if (context) {
-    context->clearPendingRequests();
     delete context;
-    context = 0;
+    context = NULL;
   }
 
   data = "";
@@ -164,7 +212,7 @@ void UrlElement::clear() {
 
 
 bool UrlElement::load() {
-  if (!siteconnect(server,url,serverport,false))
+  if (!siteconnect(server,url,false))
     return false;
 
   fill(data);
@@ -173,7 +221,7 @@ bool UrlElement::load() {
 
 static const char* not_html_extensions[] = {
   ".bmp", ".css", ".doc", ".ico", ".exe", ".gif", ".gz", ".js", ".jpeg", ".jpg",
-  ".pdf", ",.png", ".ps", ".tar", ".tgz", ".wav", ".zip", ".z",
+  ".pdf", ".png", ".ps", ".rss", ".tar", ".tgz", ".wav", ".zip", ".z",
   0 /* must be the last */
 };
 
@@ -188,42 +236,40 @@ bool UrlElement::isHtmlPage() {
     if (lowercase.rfind(not_html_extensions[i], len) != string::npos)
       return false;
 
-  if(!siteconnect(server,url,serverport,true))
+  if(!siteconnect(server,url,true))
     return false;
 
   return context->isHtml;
 }
 
-bool UrlElement::siteconnect(const std::string &server, const std::string &url,const int serverport, bool headonly) {
+bool UrlElement::siteconnect(const std::string &server, const std::string &path,
+                             bool headonly) {
   // check that we actually got data..
   if (server.empty()) return false;
 
   if (!context)
     context = new HttpContext();
 
-  context->setHost(QString(server.c_str()), serverport);
-  string theUrl("/");
+  string thePath("/");
 
-  // prefix the url with / if it doesn't start with it..
-  if (url.empty() || url.c_str()[0] != '/')
-    theUrl += url;
+  // prefix the path with / if it doesn't start with it..
+  if (path.c_str()[0] != '/')
+    thePath += url;
   else
-    theUrl = url;
+    thePath = url;
 
-  context->processed = context->isHtml = context->redirected = false;
+  string url("http://");
+  url += server.c_str() + thePath;
 
-  // start the request and store the request ID
-  if (headonly)
-    context->rqid = context->head(QString(theUrl.c_str()));
-  else
-    context->rqid = context->get(QString(theUrl.c_str()));
+  // start the request
+  context->request(url, headonly);
 
   // block until the request is finished
   // or there is timeout
   QTimer timer;
   timer.setSingleShot(true);
   context->setTimer(&timer);
-  timer.start(2000);
+  timer.start(20000);
 
   while(!context->processed) {
     QCoreApplication::processEvents();
@@ -346,7 +392,6 @@ UrlElement UrlElement::parseUrl (const std::string &href) {
     if (theUrl != "/") {
       newUrl.setUrl(theUrl);
       newUrl.server = this->server;
-      newUrl.serverport = this->serverport;
     }
   }
 
@@ -361,63 +406,63 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "string" ) \
   HTML_HELP_DEF( "default", "www.labri.fr" ) \
   HTML_HELP_BODY() \
-  "Web site to crawl. http protocol is always assumed: no need for http:// at the beginning nor / at the end." \
+  "This parameter defines the web server that you want to inspect. No need for http:// at the beginning; http protocol is always assumed. No need for / at the end." \
   HTML_HELP_CLOSE(),
   // initial page
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "string" ) \
   HTML_HELP_DEF( "default", "" ) \
   HTML_HELP_BODY() \
-  "First web page to visit. No need for / at the beginning."\
+  "This parameter defines the first web page to visit. No need for / at the beginning."\
   HTML_HELP_CLOSE(),
   // max number of links
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "unsigned int" ) \
   HTML_HELP_DEF( "default", "1000" ) \
   HTML_HELP_BODY() \
-  "Maximum number of nodes (different pages) in the final graph." \
+  "This parameter defines the maximum number of nodes (different pages) allowed in the extracted graph." \
   HTML_HELP_CLOSE(),
   // non http links
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "boolean" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "If true, non http links (https, ftp, mailto...) are extracted." \
+  "This parameter indicates if non http links (https, ftp, mailto...) have to be extracted." \
   HTML_HELP_CLOSE(),
   // other server
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "boolean" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "If true, links or redirection to other server pages are followed." \
+  "This parameter indicates if links or redirection to other server pages have to be followed." \
   HTML_HELP_CLOSE(),
   // compute layout
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "boolean" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "If true, a layout of the extracted graph is computed." \
+  "This parameter indicates if a layout of the extracted graph has to be computed." \
   HTML_HELP_CLOSE(),
   // page color
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "color" ) \
   HTML_HELP_DEF( "default", "red" ) \
   HTML_HELP_BODY() \
-  "Color used to display nodes." \
+  "This parameter indicated the color used to display nodes." \
   HTML_HELP_CLOSE(),
   // link color
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "color" ) \
   HTML_HELP_DEF( "default", "blue" ) \
   HTML_HELP_BODY() \
-  "Color used to display links." \
+  "This parameter indicated the color used to display links." \
   HTML_HELP_CLOSE(),
   // link color
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "color" ) \
   HTML_HELP_DEF( "default", "yellow" ) \
   HTML_HELP_BODY() \
-  "Color used to display redirections." \
+  "This parameter indicated the color used to display redirections." \
   HTML_HELP_CLOSE()
 };
 }
@@ -446,7 +491,7 @@ struct WebImport:public ImportModule {
     addInParameter<Color>("page color",paramHelp[6],"(240, 0, 120, 128)");
     addInParameter<Color>("link color",paramHelp[7],"(96,96,191,128)");
     addInParameter<Color>("redirection color",paramHelp[8],"(191,175,96,128)");
-    addDependency<LayoutAlgorithm>("GEM (Frick)", "1.1");
+    addDependency<LayoutAlgorithm>("FM^3 (OGDF)", "1.2");
   }
 
   string urlDecode(const string& url) {
@@ -645,7 +690,6 @@ struct WebImport:public ImportModule {
     UrlElement tmpUrl;
     tmpUrl.server = servername;
     tmpUrl.setUrl("/");
-    tmpUrl.serverport = 80;
     tmpUrl.data = "";
 
     if (visited.find(tmpUrl)!=visited.end())
@@ -715,6 +759,7 @@ struct WebImport:public ImportModule {
     return true;
   }
 
+
   bool importGraph() {
     string server = "www.labri.fr";
     string url;
@@ -761,7 +806,6 @@ struct WebImport:public ImportModule {
       url = url.substr(1);
 
     mySite.setUrl(string("/") + url);
-    mySite.serverport = 80;
     mySite.data = "";
 
     labels = graph->getProperty<StringProperty>("viewLabel");
@@ -798,18 +842,17 @@ struct WebImport:public ImportModule {
       return false;
 
     if (computelayout) {
-      pluginProgress->setComment("Layouting extracted graph using GEM...");
+      pluginProgress->setComment("Layouting extracted graph using FM³...");
       string errMsg;
-      // apply GEM
+      // apply FM³
       DataSet tmp;
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
-      tmp.set("initial layout", layout);
-      return graph->computeProperty("GEM (Frick)", layout,
-                                    errMsg, pluginProgress, &tmp);
+      return graph->applyPropertyAlgorithm("FM^3 (OGDF)", layout, errMsg, pluginProgress, &tmp);
     }
 
     return true;
   }
 };
+
 
 PLUGIN(WebImport)
