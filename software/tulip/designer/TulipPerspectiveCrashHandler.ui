@@ -234,6 +234,11 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+font: bold;
+}</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -250,7 +255,7 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
          </sizepolicy>
         </property>
         <property name="text">
-         <string>&lt;b&gt;System specifications&lt;/b&gt;</string>
+         <string>System</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -288,28 +293,28 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
          <item row="0" column="0">
           <widget class="QLabel" name="plateformTitle">
            <property name="text">
-            <string>&lt;b&gt;Plateform:&lt;/b&gt;</string>
+            <string>Plateform:</string>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="archTitle">
            <property name="text">
-            <string>&lt;b&gt;Architecture:&lt;/b&gt;</string>
+            <string>Architecture:</string>
            </property>
           </widget>
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="compilerTitle">
            <property name="text">
-            <string>&lt;b&gt;Compiler:&lt;/b&gt;</string>
+            <string>Compiler:</string>
            </property>
           </widget>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="versionTitle">
            <property name="text">
-            <string>&lt;b&gt;Tulip version:&lt;/b&gt;</string>
+            <string>Tulip version:</string>
            </property>
           </widget>
          </item>
@@ -347,7 +352,7 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>&lt;b&gt;Perspective infos&lt;/b&gt;</string>
+         <string>Perspective</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -388,7 +393,7 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
          <item row="0" column="0">
           <widget class="QLabel" name="perspectiveNameTitle">
            <property name="text">
-            <string>&lt;b&gt;Name:&lt;/b&gt;</string>
+            <string>Name:</string>
            </property>
           </widget>
          </item>
@@ -402,7 +407,7 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
          <item row="1" column="0">
           <widget class="QLabel" name="perspectiveArgumentsTitle">
            <property name="text">
-            <string>&lt;b&gt;Arguments:&lt;/b&gt;</string>
+            <string>Arguments:</string>
            </property>
           </widget>
          </item>
@@ -417,13 +422,35 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Steps to reproduce</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPlainTextEdit" name="commentsEdit">
+        <property name="styleSheet">
+         <string notr="true">QPlainTextEdit { 
+  background-color: white; 
+border: 1px solid #C9C9C9;
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="plainText">
+         <string>Please tell us what you were doing when Tulip crashed</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="dumpTitle">
         <property name="text">
-         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stack dump&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>Stack</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
