@@ -25,6 +25,7 @@
 
 #include <tulip/GlMetaNodeRenderer.h>
 #include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/ObservableGraph.h>
 
 namespace tlp {
 
@@ -44,7 +45,7 @@ class GlVertexArrayManager;
 /**
  * Class use to store inputData of the graph
  */
-class TLP_GL_SCOPE GlGraphInputData {
+class TLP_GL_SCOPE GlGraphInputData : public Observable{
 
 public:
 
@@ -86,6 +87,8 @@ public:
   Graph* getGraph() const {
     return graph;
   }
+
+  void treatEvent(const Event &ev);
 
   /**
    * Set metaNode renderer
@@ -151,6 +154,12 @@ public:
     _properties.erase(propertiesMap[propertyName]);
     propertiesMap[propertyName]=property;
     _properties.insert(property);
+    for(std::map<std::string,PropertyName>::iterator it=propertiesNameMap.begin();it!=propertiesNameMap.end();++it){
+      if((*it).second==propertyName){
+        propertiesNameMap.erase(it);
+        break;
+      }
+    }
   }
 
   /**
@@ -402,6 +411,7 @@ protected:
   bool deleteGlVertexArrayManager;
 
   std::map<PropertyName,PropertyInterface*> propertiesMap;
+  std::map<std::string,PropertyName> propertiesNameMap;
 
   bool deleteMetaNodeRendererAtDestructor;
   GlMetaNodeRenderer *metaNodeRenderer;
