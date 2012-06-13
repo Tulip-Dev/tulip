@@ -476,7 +476,7 @@ border: 0px;
                  </widget>
                  <widget class="QStackedWidget" name="outputFrame">
                   <widget class="QWidget" name="pythonPanel"/>
-                  <widget class="SearchWidget" name="searchPanel"/>
+                  <widget class="QWidget" name="searchPanel"/>
                  </widget>
                 </widget>
                </item>
@@ -1234,12 +1234,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <class>OutputPanelButton</class>
    <extends>QToolButton</extends>
    <header>OutputPanelButton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>SearchWidget</class>
-   <extends>QWidget</extends>
-   <header>SearchWidget.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
