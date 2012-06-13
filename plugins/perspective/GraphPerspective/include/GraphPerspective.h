@@ -73,7 +73,7 @@ public slots:
   void showLogger();
 
   void centerPanelsForGraph(tlp::Graph*);
-  void closePanelsForGraph(tlp::Graph*);
+  void closePanelsForGraph(tlp::Graph* g = NULL);
   void setPythonOutput(bool);
   void setSearchOutput(bool);
 

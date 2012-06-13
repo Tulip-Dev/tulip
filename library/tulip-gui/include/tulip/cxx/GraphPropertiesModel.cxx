@@ -5,27 +5,25 @@ namespace tlp {
 template<typename PROPTYPE>
 void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
   _properties.clear();
+  if (_graph == NULL)
+    return;
   std::string propName;
   forEach(propName,_graph->getInheritedProperties()) {
-    PropertyInterface* pi = _graph->getProperty(propName);
-
-    if (dynamic_cast<PROPTYPE*>(pi) == NULL)
-      continue;
-
-    _properties+=pi;
+    PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(propName));
+    if (prop != NULL) {
+      _properties+=prop;
+    }
   }
   forEach(propName,_graph->getLocalProperties()) {
-    PropertyInterface* pi = _graph->getProperty(propName);
-
-    if (dynamic_cast<PROPTYPE*>(pi) == NULL)
-      continue;
-
-    _properties+=pi;
+    PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(propName));
+    if (prop != NULL) {
+      _properties+=prop;
+    }
   }
 }
 
 template<typename PROPTYPE>
-GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(QString::null), _checkable(checkable) {
+GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(QString::null), _checkable(checkable), _removingRows(false) {
   if (_graph != NULL) {
     _graph->addListener(this);
     rebuildCache();
@@ -33,7 +31,7 @@ GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool che
 }
 
 template<typename PROPTYPE>
-GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder), _checkable(checkable) {
+GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder), _checkable(checkable), _removingRows(false) {
   if (_graph != NULL) {
     _graph->addListener(this);
     rebuildCache();
@@ -42,7 +40,7 @@ GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::G
 
 template<typename PROPTYPE>
 QModelIndex GraphPropertiesModel<PROPTYPE>::index(int row, int column,const QModelIndex &parent) const {
-  if (!hasIndex(row,column,parent))
+  if (_graph == NULL || !hasIndex(row,column,parent))
     return QModelIndex();
 
   int vectorIndex = row;
@@ -82,7 +80,7 @@ int GraphPropertiesModel<PROPTYPE>::columnCount(const QModelIndex &) const {
 
 template<typename PROPTYPE>
 QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role) const {
-  if (index.internalPointer() == NULL && index.row() != 0)
+  if (_graph == NULL || (index.internalPointer() == NULL && index.row() != 0))
     return QVariant();
 
   PropertyInterface* pi = (PropertyInterface*)(index.internalPointer());
@@ -124,7 +122,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
 }
 
 template<typename PROPTYPE>
-int GraphPropertiesModel<PROPTYPE>::rowOf(PropertyInterface* pi) const {
+int GraphPropertiesModel<PROPTYPE>::rowOf(PROPTYPE* pi) const {
   return _properties.indexOf(pi);
 }
 
@@ -146,6 +144,9 @@ QVariant tlp::GraphPropertiesModel<PROPTYPE>::headerData(int section, Qt::Orient
 
 template<typename PROPTYPE>
 bool tlp::GraphPropertiesModel<PROPTYPE>::setData(const QModelIndex &index, const QVariant &value, int role) {
+  if (_graph == NULL)
+    return false;
+
   if (_checkable && role == Qt::CheckStateRole && index.column() == 0) {
     if (value.value<int>() == (int)Qt::Checked)
       _checkedIndexes.insert(index.row());

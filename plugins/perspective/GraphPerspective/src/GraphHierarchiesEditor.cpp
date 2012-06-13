@@ -118,6 +118,7 @@ void GraphHierarchiesEditor::delGraph() {
   if (_contextGraph == NULL)
     return;
 
+  GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
   if (_contextGraph->getRoot() == _contextGraph)
     delete _contextGraph;
   else
@@ -128,10 +129,12 @@ void GraphHierarchiesEditor::delAllGraph() {
   if (_contextGraph == NULL)
     return;
 
+  GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
   if (_contextGraph->getRoot() == _contextGraph)
     delete _contextGraph;
   else
     _contextGraph->getSuperGraph()->delAllSubGraphs(_contextGraph);
+
 }
 
 void GraphHierarchiesEditor::createPanel() {

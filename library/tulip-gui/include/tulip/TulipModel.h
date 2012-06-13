@@ -39,6 +39,7 @@ public:
   };
 
   explicit TulipModel(QObject *parent=NULL);
+  virtual ~TulipModel();
 
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 

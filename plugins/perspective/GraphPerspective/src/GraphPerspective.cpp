@@ -593,11 +593,14 @@ void GraphPerspective::centerPanelsForGraph(tlp::Graph* g) {
 }
 
 void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
+  QVector<View*> viewsToDelete;
   foreach(View* v, _ui->workspace->panels()) {
     if (v->graph() == g)
-      v->deleteLater();
+      viewsToDelete+=v;
   }
-  QApplication::processEvents();
+  foreach(View* v, viewsToDelete) {
+    _ui->workspace->delView(v);
+  }
 }
 
 void GraphPerspective::setPythonOutput(bool) {
