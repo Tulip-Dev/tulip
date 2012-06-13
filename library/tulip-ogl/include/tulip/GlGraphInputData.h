@@ -45,7 +45,7 @@ class GlVertexArrayManager;
 /**
  * Class use to store inputData of the graph
  */
-class TLP_GL_SCOPE GlGraphInputData : public Observable{
+class TLP_GL_SCOPE GlGraphInputData : public Observable {
 
 public:
 
@@ -154,8 +154,9 @@ public:
     _properties.erase(propertiesMap[propertyName]);
     propertiesMap[propertyName]=property;
     _properties.insert(property);
-    for(std::map<std::string,PropertyName>::iterator it=propertiesNameMap.begin();it!=propertiesNameMap.end();++it){
-      if((*it).second==propertyName){
+
+    for(std::map<std::string,PropertyName>::iterator it=propertiesNameMap.begin(); it!=propertiesNameMap.end(); ++it) {
+      if((*it).second==propertyName) {
         propertiesNameMap.erase(it);
         break;
       }

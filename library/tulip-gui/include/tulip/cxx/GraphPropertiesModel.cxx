@@ -5,17 +5,21 @@ namespace tlp {
 template<typename PROPTYPE>
 void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
   _properties.clear();
+
   if (_graph == NULL)
     return;
+
   std::string propName;
   forEach(propName,_graph->getInheritedProperties()) {
     PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(propName));
+
     if (prop != NULL) {
       _properties+=prop;
     }
   }
   forEach(propName,_graph->getLocalProperties()) {
     PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(propName));
+
     if (prop != NULL) {
       _properties+=prop;
     }
