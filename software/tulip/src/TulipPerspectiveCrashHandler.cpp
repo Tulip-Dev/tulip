@@ -24,6 +24,8 @@
 #include <QtCore/QFile>
 #include "FormPost.h"
 
+static const QString SEPARATOR = "=======================\n";
+
 TulipPerspectiveCrashHandler::TulipPerspectiveCrashHandler(QWidget *parent)
   : QDialog(parent), _ui(new Ui::TulipPerspectiveCrashHandlerData), _isDetailedView(false) {
   _ui->setupUi(this);
@@ -53,15 +55,32 @@ void TulipPerspectiveCrashHandler::toggleDetailedView() {
 
 void TulipPerspectiveCrashHandler::sendReport() {
   _poster = new FormPost;
-  _poster->addField("summary","[ Tulip " + _ui->versionValue->text() + " ] " + _ui->perspectiveNameValue->text() + " " + _ui->perspectiveArgumentsValue->text());
-  _poster->addField("description",_ui->dumpEdit->toPlainText());
+
+  _poster->addField("summary","[ Tulip " + _ui->versionValue->text() + " ] Crash report from perspective: " + _ui->perspectiveNameValue->text() + " " + _ui->perspectiveArgumentsValue->text());
+
+  QString description = + "System:\n\n";
+  description += "Plateform: " + _ui->plateformValue->text() + "\n";
+  description += "Architecture: " + _ui->archValue->text() + "\n";
+  description += "Compiler: " + _ui->compilerValue->text() + "\n";
+  description += "Tulip version: " + _ui->versionValue->text() + "\n";
+  description += SEPARATOR;
+  description += "Perspective:\n";
+  description += "Name: " + _ui->perspectiveNameValue->text() + "\n";
+  description += "Arguments: " + _ui->perspectiveArgumentsValue->text() + "\n";
+  description += SEPARATOR;
+  description += "Stack trace:\n";
+  description += _ui->dumpEdit->toPlainText();
+
+  _poster->addField("description",description);
   _poster->addField("platform",_ui->compilerValue->text());
   _poster->addField("os",_ui->plateformValue->text());
   _poster->addField("os_build",_ui->archValue->text());
+  _poster->addField("steps_to_reproduce",_ui->commentsEdit->toPlainText());
 
   connect(_poster->postData("http://tulip.labri.fr/crash_report/mantis.php"),SIGNAL(finished()),this,SLOT(reportPosted()));
 
-  _ui->sendReportButton->setText(trUtf8("Sending report"));
+  _ui->sendReportButton->setText(trUtf8("Sending report..."));
+  _ui->detailsFrame->setEnabled(false);
   _ui->sendReportButton->setEnabled(false);
 }
 
