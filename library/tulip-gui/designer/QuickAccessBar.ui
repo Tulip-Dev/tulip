@@ -389,7 +389,7 @@ background-color: rgba(255,255,255,100);
       </size>
      </property>
      <property name="toolTip">
-      <string>Edges</string>
+      <string>Show/Hide edges</string>
      </property>
      <property name="statusTip">
       <string>Toggle edges display</string>
@@ -456,7 +456,7 @@ background-color: rgba(255,255,255,100);
       </size>
      </property>
      <property name="toolTip">
-      <string>Labels</string>
+      <string>Show/Hide labels</string>
      </property>
      <property name="statusTip">
       <string>Toggle labels display</string>
