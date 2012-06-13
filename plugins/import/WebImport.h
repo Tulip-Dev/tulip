@@ -17,26 +17,28 @@
  *
  */
 #include <string>
-#include <QtNetwork/qhttp.h>
+#include <QtNetwork/QNetworkReply>
 #include <QtCore/qeventloop.h>
 #include <QtCore/qtimer.h>
 
-class HttpContext :public QHttp {
+class HttpContext :public QObject {
   Q_OBJECT
 public:
   bool status;
   int code;
-  int rqid;
+  QNetworkReply* reply;
   bool processed;
   bool redirected;
   bool isHtml;
-  std::string newLocation;
+  std::string data;
 
   HttpContext();
+  ~HttpContext();
   void setTimer(QTimer *timer);
+  void request(const std::string& url, bool header = false);
 
 public slots:
-  void finished(int id, bool error);
-  void headerReceived(const QHttpResponseHeader &);
+  void finished();
+  void headerReceived();
   void timeout();
 };
