@@ -125,8 +125,8 @@ void GlGraphInputData::treatEvent(const Event &ev) {
     if (graphEv->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY ||
         graphEv->getType() == GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY ||
         graphEv->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY ||
-        graphEv->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY){
-      if(propertiesNameMap.count(graphEv->getPropertyName())!=0){
+        graphEv->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
+      if(propertiesNameMap.count(graphEv->getPropertyName())!=0) {
         PropertyInterface *oldProperty=propertiesMap[propertiesNameMap[graphEv->getPropertyName()]];
         _properties.erase(oldProperty);
         propertiesMap[propertiesNameMap[graphEv->getPropertyName()]]=graph->getProperty(graphEv->getPropertyName());

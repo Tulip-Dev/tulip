@@ -37,11 +37,15 @@ public:
 
   void setGraph(tlp::Graph* graph) {
     beginResetModel();
+
     if (_graph != NULL)
       _graph->removeListener(this);
+
     _graph = graph;
+
     if (_graph != NULL)
       _graph->addListener(this);
+
     rebuildCache();
     endResetModel();
   }
@@ -76,6 +80,7 @@ public:
 
     if (graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
       PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(graphEvent->getPropertyName()));
+
       if (prop != NULL) {
         int row = rowOf(prop);
         beginRemoveRows(QModelIndex(),row,row);
@@ -91,6 +96,7 @@ public:
     }
     else if (graphEvent->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY) {
       PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(graphEvent->getPropertyName()));
+
       if (prop != NULL) {
         rebuildCache();
         int row = rowOf(prop);
