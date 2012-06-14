@@ -20,11 +20,12 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtCore/QUrl>
 #include <QtCore/QMap>
+#include <tulip/tulipconf.h>
 
 class QNetworkReply;
 class QNetworkReply;
 
-class DownloadManager: public QNetworkAccessManager {
+class TLP_SCOPE DownloadManager: public QNetworkAccessManager {
   Q_OBJECT
   QList<QNetworkReply *> currentDownloads;
   QMap<QUrl, QString> downloadDestinations;
