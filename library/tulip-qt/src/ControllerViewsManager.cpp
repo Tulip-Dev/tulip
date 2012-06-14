@@ -40,7 +40,8 @@ ControllerViewsManager::~ControllerViewsManager() {
   }
 
   if (currentGraph)
-    delete currentGraph;
+      //Need to destroy the root graph
+    delete currentGraph->getRoot();
 }
 //**********************************************************************
 void ControllerViewsManager::attachMainWindow(MainWindowFacade facade) {
