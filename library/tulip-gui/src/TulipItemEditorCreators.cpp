@@ -39,6 +39,8 @@
 #include <tulip/GraphPropertiesModel.h>
 #include <QtGui/QColorDialog>
 #include <tulip/GlLabel.h>
+#include <tulip/Perspective.h>
+#include <QtGui/QMainWindow>
 
 using namespace tlp;
 
@@ -46,8 +48,9 @@ using namespace tlp;
   ColorEditorCreator
 */
 QWidget* ColorEditorCreator::createWidget(QWidget *parent) const {
-  QColorDialog *colorDialog = new QColorDialog(parent);
+  QColorDialog *colorDialog = new QColorDialog(NULL);
   colorDialog->setOptions(colorDialog->options() | QColorDialog::ShowAlphaChannel);
+  colorDialog->setModal(true);
   return colorDialog;
 }
 
