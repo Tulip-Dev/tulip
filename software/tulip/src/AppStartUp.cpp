@@ -105,11 +105,11 @@ AppStartUp::AppStartUp(QWidget* parent) :
   string tmp = "Tulip ";
   tmp+=TULIP_RELEASE;
   setWindowTitle(tmp.c_str());
-  movie = new QMovie(string(":/startUpPicture.png").c_str());
+  movie = new QMovie(string(":/startUpPicture.png").c_str(),QByteArray(),PixmapLabel1);
   movie->setCacheMode(QMovie::CacheAll);
   PixmapLabel1->setMovie(movie);
   movie->start();
-  movie->stop();
+  movie->stop();  
 
   // compute tipsNumber
   while(tips[tipsNumber]) ++tipsNumber;
