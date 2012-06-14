@@ -32,6 +32,7 @@ class QGraphicsItem;
 class QWidget;
 class QPixmap;
 class QMenu;
+class QPoint;
 
 namespace tlp {
 class Interactor;
