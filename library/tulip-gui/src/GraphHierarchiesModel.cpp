@@ -94,6 +94,8 @@ GraphHierarchiesModel::~GraphHierarchiesModel() {
 
 // Cache related methods
 QModelIndex GraphHierarchiesModel::indexOf(const tlp::Graph* g) {
+  if (g == NULL)
+    return QModelIndex();
   QModelIndex result = _indexCache[g];
   if (!result.isValid())
     result = forceGraphIndex(const_cast<Graph*>(g));
