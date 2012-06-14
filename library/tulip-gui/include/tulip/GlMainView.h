@@ -36,12 +36,11 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   Q_OBJECT
 
   tlp::GlMainWidget* _glMainWidget;
-  bool _overviewVisible;
+  tlp::GlOverviewGraphicsItem* _overviewItem;
   tlp::SceneConfigWidget* _sceneConfigurationWidget;
   tlp::SceneLayersConfigWidget* _sceneLayersConfigurationWidget;
   tlp::QuickAccessBar* _quickAccessBar;
   QGraphicsProxyWidget* _quickAccessBarItem;
-  QAction *_overviewContextMenu;
 
 public:
   GlMainView();
@@ -64,16 +63,14 @@ protected slots:
   virtual void sceneRectChanged(const QRectF&);
   void setQuickAccessBarVisible(bool);
   void graphDeleted();
+  void fillContextMenu(QMenu *menu);
 
 protected:
-
   virtual void setupWidget();
-
   bool quickAccessBarVisible() const;
-
   void assignNewGlMainWidget(GlMainWidget *glMainWidget,bool deleteOldGlMainWidget=true);
 
-  tlp::GlOverviewGraphicsItem* _overviewItem;
+  tlp::GlOverviewGraphicsItem* overviewItem() const;
 };
 }
 

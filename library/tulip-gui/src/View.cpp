@@ -21,6 +21,7 @@
 #include <QtCore/QDebug>
 #include <QtGui/QGraphicsView>
 #include <QtGui/QGraphicsItem>
+#include <QtGui/QMenu>
 
 #include <tulip/Interactor.h>
 #include <tulip/Graph.h>
@@ -56,11 +57,18 @@ void View::setCurrentInteractor(tlp::Interactor *i) {
   _currentInteractor = i;
   currentInteractorChanged(i);
 
-  //We need a refresh here to clear last interactor displayed and init the next one
+  //We need a refresh here to clear last interactor displayed arnd init the next one
   refresh(NULL);
 }
 void View::currentInteractorChanged(tlp::Interactor *i) {
   i->install(graphicsView());
+}
+
+void View::showContextMenu(const QPoint &point) {
+  QMenu menu;
+  fillContextMenu(&menu);
+  menu.move(point);
+  menu.exec();
 }
 
 Graph* View::graph() const {
