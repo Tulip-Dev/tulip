@@ -49,10 +49,12 @@ ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &para
     else
       outParams.push_back(ParamInfos(param.isMandatory(),param.getName().c_str(),param.getHelp().c_str(),param.getTypeName()));
   }
+
   // then add out parameters
   for(unsigned int i = 0; i < outParams.size(); ++i) {
     _params.push_back(outParams[i]);
   }
+
   // no sort, keep the predefined ordering
   params.buildDefaultDataSet(_data,graph);
 }

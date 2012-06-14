@@ -46,34 +46,42 @@ using namespace tlp;
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
                     borderWidth = "viewBorderWidth", borderColor = "viewBorderColor";
+
   if (!g->existProperty(shapes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipSettings::instance().defaultShape(tlp::NODE));
     g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(TulipSettings::instance().defaultShape(tlp::EDGE));
   }
+
   if (!g->existProperty(colors)) {
     g->getProperty<ColorProperty>(colors)->setAllNodeValue(TulipSettings::instance().defaultColor(tlp::NODE));
     g->getProperty<ColorProperty>(colors)->setAllEdgeValue(TulipSettings::instance().defaultColor(tlp::EDGE));
   }
+
   if (!g->existProperty(sizes)) {
     g->getProperty<SizeProperty>(sizes)->setAllNodeValue(TulipSettings::instance().defaultSize(tlp::NODE));
     g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(TulipSettings::instance().defaultSize(tlp::EDGE));
   }
+
   if (!g->existProperty(metrics)) {
     g->getProperty<DoubleProperty>(metrics)->setAllNodeValue(0);
     g->getProperty<DoubleProperty>(metrics)->setAllEdgeValue(0);
   }
+
   if (!g->existProperty(fonts)) {
     g->getProperty<StringProperty>(fonts)->setAllNodeValue(tlp::TulipBitmapDir + "font.ttf");
     g->getProperty<StringProperty>(fonts)->setAllEdgeValue(tlp::TulipBitmapDir + "font.ttf");
   }
+
   if (!g->existProperty(fontSizes)) {
     g->getProperty<IntegerProperty>(fontSizes)->setAllNodeValue(18);
     g->getProperty<IntegerProperty>(fontSizes)->setAllEdgeValue(18);
   }
+
   if (!g->existProperty(borderWidth)) {
     g->getProperty<DoubleProperty>(borderWidth)->setAllNodeValue(0);
     g->getProperty<DoubleProperty>(borderWidth)->setAllEdgeValue(1);
   }
+
   if (!g->existProperty(borderColor)) {
     g->getProperty<ColorProperty>(borderColor)->setAllNodeValue(TulipSettings::instance().defaultColor(tlp::NODE));
     g->getProperty<ColorProperty>(borderColor)->setAllEdgeValue(TulipSettings::instance().defaultColor(tlp::EDGE));
@@ -86,6 +94,7 @@ GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): TulipModel(parent
 GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy): TulipModel(copy.QObject::parent()), tlp::Observable() {
   for (int i=0; i < copy.size(); ++i)
     addGraph(copy[i]);
+
   _currentGraph = NULL;
 }
 
@@ -96,14 +105,18 @@ GraphHierarchiesModel::~GraphHierarchiesModel() {
 QModelIndex GraphHierarchiesModel::indexOf(const tlp::Graph* g) {
   if (g == NULL)
     return QModelIndex();
+
   QModelIndex result = _indexCache[g];
+
   if (!result.isValid())
     result = forceGraphIndex(const_cast<Graph*>(g));
+
   return result;
 }
 QModelIndex GraphHierarchiesModel::forceGraphIndex(Graph* g) {
   QVector<Graph*> hierarchy;
   Graph* child = g;
+
   do {
     hierarchy.push_front(g);
     child = child->getSuperGraph();
@@ -183,13 +196,16 @@ QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex 
     return QModelIndex();
 
   Graph *g = NULL;
+
   if (parent.isValid())
     g = ((Graph *)(parent.internalPointer()))->getNthSubGraph(row);
   else
     g = _graphs[row];
+
   if (g == NULL) {
     return QModelIndex();
   }
+
   return createIndex(row,column,g);
 }
 

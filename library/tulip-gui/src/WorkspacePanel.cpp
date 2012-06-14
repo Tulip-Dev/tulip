@@ -308,10 +308,13 @@ void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
 
   tlp::GraphHierarchiesModel* model = static_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model());
   QModelIndex graphIndex = model->indexOf(g);
+
   if (!graphIndex.isValid())
     graphIndex = model->forceGraphIndex(g);
+
   if (graphIndex == _ui->graphCombo->selectedIndex())
     return;
+
   _ui->graphCombo->selectIndex(graphIndex);
 }
 
@@ -341,6 +344,7 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
     else if (_view->configurationWidgets().contains(dynamic_cast<QWidget*>(obj)))
       return true;
   }
+
   if (ev->type() == QEvent::GraphicsSceneContextMenu) {
     _view->showContextMenu(QCursor::pos());
   }
