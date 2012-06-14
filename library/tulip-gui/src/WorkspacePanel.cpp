@@ -27,6 +27,7 @@
 #include <QtGui/QGraphicsRectItem>
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QTabWidget>
+#include <QtGui/QGraphicsSceneContextMenuEvent>
 
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ProcessingAnimationItem.h>
@@ -339,6 +340,9 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
     }
     else if (_view->configurationWidgets().contains(dynamic_cast<QWidget*>(obj)))
       return true;
+  }
+  if (ev->type() == QEvent::GraphicsSceneContextMenu) {
+    _view->showContextMenu(QCursor::pos());
   }
 
   return QWidget::eventFilter(obj,ev);

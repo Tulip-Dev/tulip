@@ -31,6 +31,7 @@ class QGraphicsView;
 class QGraphicsItem;
 class QWidget;
 class QPixmap;
+class QMenu;
 
 namespace tlp {
 class Interactor;
@@ -160,6 +161,12 @@ public:
   virtual QPixmap snapshot(const QSize& outputSize=QSize())=0;
 
 public slots:
+  /**
+  * @brief This method is called whenever the context menu is required on the view.
+  * @param point The screen coordinates where the context menu should be displayed.
+  */
+  void showContextMenu(const QPoint& point);
+
   /**
     @brief This method applies settings changed in the configuration widgets
     This method may be called from the overleying system in various situations. The View is expected to apply settings in an optimized way to prevent extra redraws.
@@ -299,6 +306,13 @@ protected slots:
     This method should call setGraph to input a new graph pointer (NULL or valid)
     */
   virtual void graphDeleted()=0;
+
+  /**
+   * @brief fills the context menu with entries related to the view.
+   * This method is called whenever the context menu is displayed on the panel.
+   * @param QMenu The popup menu that will be displayed. This menu should be populated with context action related to the panel.
+   */
+  virtual void fillContextMenu(QMenu*) {}
 };
 
 }

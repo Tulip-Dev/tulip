@@ -128,27 +128,10 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 
   createScene(graph(), data);
   registerTriggers();
-
-  graphicsView()->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(graphicsView(),SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showContextMenu(QPoint)));
-
   setOverviewVisible(overviewVisible);
-  _overviewItem->setLayerVisible("Foreground",false);
+  overviewItem()->setLayerVisible("Foreground",false);
 
   setQuickAccessBarVisible(true);
-}
-
-void NodeLinkDiagramComponent::showContextMenu(const QPoint &){
-  QMenu menu;
-  menu.addAction(trUtf8("View"))->setSeparator(true);
-  menu.addAction(trUtf8("Force redraw"),this,SLOT(redraw()));
-  menu.addAction(trUtf8("Center view"),this,SLOT(centerScene()));
-  menu.addAction(trUtf8("Augmented display"))->setSeparator(true);
-  QAction* zOrdering = menu.addAction(trUtf8("Z Ordering"));
-  zOrdering->setCheckable(true);
-  connect(zOrdering,SIGNAL(triggered(bool)),this,SLOT(setZOrdering(bool)));
-  menu.addAction(trUtf8("Grid"),this,SLOT(showGridControl()));
-  menu.exec();
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
@@ -320,6 +303,7 @@ void NodeLinkDiagramComponent::redraw() {
 
 void NodeLinkDiagramComponent::setZOrdering(bool f) {
   getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setElementZOrdered(f);
+  centerView();
 }
 
 void NodeLinkDiagramComponent::showGridControl() {
@@ -328,6 +312,19 @@ void NodeLinkDiagramComponent::showGridControl() {
 
   updateGrid();
   emit drawNeeded();
+}
+
+void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu) {
+  GlMainView::fillContextMenu(menu);
+  menu->addAction(trUtf8("View"))->setSeparator(true);
+  menu->addAction(trUtf8("Force redraw"),this,SLOT(redraw()));
+  menu->addAction(trUtf8("Center view"),this,SLOT(centerView()));
+  menu->addAction(trUtf8("Augmented display"))->setSeparator(true);
+  QAction* zOrdering = menu->addAction(trUtf8("Z Ordering"));
+  zOrdering->setCheckable(true);
+  zOrdering->setChecked(getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isElementZOrdered());
+  connect(zOrdering,SIGNAL(triggered(bool)),this,SLOT(setZOrdering(bool)));
+  menu->addAction(trUtf8("Grid"),this,SLOT(showGridControl()));
 }
 
 void NodeLinkDiagramComponent::useHulls(bool hasHulls) {

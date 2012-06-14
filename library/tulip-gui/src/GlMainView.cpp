@@ -30,18 +30,13 @@
 using namespace tlp;
 
 
-GlMainView::GlMainView(): _glMainWidget(NULL), _overviewVisible(false), _sceneConfigurationWidget(NULL), _sceneLayersConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL),_overviewContextMenu(NULL), _overviewItem(NULL) {
+GlMainView::GlMainView(): _glMainWidget(NULL), _sceneConfigurationWidget(NULL), _sceneLayersConfigurationWidget(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL), _overviewItem(NULL) {
 }
 
 GlMainView::~GlMainView() {
   delete _sceneConfigurationWidget;
   delete _sceneLayersConfigurationWidget;
-
-  if(_overviewItem)
-    delete _overviewItem;
-
-  if(_overviewContextMenu)
-    delete _overviewContextMenu;
+  delete _overviewItem;
 }
 
 void GlMainView::draw(tlp::PluginProgress*) {
@@ -53,31 +48,12 @@ void GlMainView::refresh(PluginProgress *) {
 }
 
 void GlMainView::drawOverview(bool generatePixmap) {
-
   if(_overviewItem == NULL) {
     _overviewItem=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
     addToScene(_overviewItem);
     _overviewItem->setPos(QPointF(0,0));
     generatePixmap=true;
   }
-
-  if(_overviewContextMenu == NULL) {
-    graphicsView()->setContextMenuPolicy(Qt::ActionsContextMenu);
-    QAction* viewSeparator = new QAction(trUtf8(""),this);
-    viewSeparator->setSeparator(true);
-    graphicsView()->addAction(viewSeparator);
-    _overviewContextMenu = new QAction(trUtf8("Overview visible"),this);
-    _overviewContextMenu->setCheckable(true);
-    _overviewContextMenu->setChecked(_overviewVisible);
-    connect(_overviewContextMenu,SIGNAL(triggered(bool)),this,SLOT(setOverviewVisible(bool)));
-    graphicsView()->addAction(_overviewContextMenu);
-  }
-
-  if(!_overviewVisible) {
-    _overviewItem->setVisible(false);
-    return;
-  }
-
   _overviewItem->draw(generatePixmap);
 }
 
@@ -95,6 +71,10 @@ void GlMainView::assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOl
   connect(graphicsView()->scene(),SIGNAL(sceneRectChanged(QRectF)),this,SLOT(sceneRectChanged(QRectF)));
 }
 
+GlOverviewGraphicsItem *GlMainView::overviewItem() const {
+  return _overviewItem;
+}
+
 void GlMainView::setupWidget() {
   assignNewGlMainWidget(new GlMainWidget(NULL,this),true);
 }
@@ -105,6 +85,7 @@ GlMainWidget* GlMainView::getGlMainWidget() const {
 
 void GlMainView::centerView() {
   getGlMainWidget()->getScene()->centerScene();
+  emit drawNeeded();
 }
 
 void GlMainView::glMainViewDrawn(bool graphChanged) {
@@ -116,13 +97,12 @@ QList<QWidget*> GlMainView::configurationWidgets() const {
 }
 
 void GlMainView::setOverviewVisible(bool display) {
-  _overviewVisible = display;
   drawOverview(true);
   _overviewItem->setVisible(display);
 }
 
 bool GlMainView::overviewVisible() const {
-  return _overviewVisible;
+  return _overviewItem != NULL && _overviewItem->isVisible();
 }
 
 void GlMainView::setQuickAccessBarVisible(bool visible) {
@@ -168,6 +148,13 @@ QPixmap GlMainView::snapshot(const QSize &outputSize) {
 
 void GlMainView::graphDeleted() {
   setGraph(NULL);
+}
+
+void GlMainView::fillContextMenu(QMenu *menu) {
+  QAction* a = menu->addAction(trUtf8("Show overview"));
+  a->setCheckable(true);
+  a->setChecked(overviewVisible());
+  connect(a,SIGNAL(triggered(bool)),this,SLOT(setOverviewVisible(bool)));
 }
 
 void GlMainView::applySettings() {
