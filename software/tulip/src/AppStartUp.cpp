@@ -109,7 +109,7 @@ AppStartUp::AppStartUp(QWidget* parent) :
   movie->setCacheMode(QMovie::CacheAll);
   PixmapLabel1->setMovie(movie);
   movie->start();
-  movie->stop();  
+  movie->stop();
 
   // compute tipsNumber
   while(tips[tipsNumber]) ++tipsNumber;

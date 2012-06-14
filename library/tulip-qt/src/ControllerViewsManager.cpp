@@ -40,7 +40,7 @@ ControllerViewsManager::~ControllerViewsManager() {
   }
 
   if (currentGraph)
-      //Need to destroy the root graph
+    //Need to destroy the root graph
     delete currentGraph->getRoot();
 }
 //**********************************************************************
