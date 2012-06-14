@@ -165,7 +165,6 @@ void WorkspacePanel::setView(tlp::View* view) {
   _viewConfigurationWidgets = new QGraphicsProxyWidget(_view->centralItem());
   _viewConfigurationWidgets->setWidget(viewConfigurationTabs);
   _viewConfigurationWidgets->setZValue(DBL_MAX);
-
   _view->graphicsView()->scene()->installEventFilter(this);
 }
 
@@ -299,18 +298,19 @@ void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel* model) {
 }
 
 void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
-  if (_ui->graphCombo->model() == NULL)
-    return;
-
 #ifndef NDEBUG
   assert(dynamic_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model()));
-#endif
+  std::string name;
+  g->getAttribute<std::string>("name",name);
+  qDebug() << "Setting graph " << name.c_str() << " for panel " << windowTitle();
+#endif // NDEBUG
+
   tlp::GraphHierarchiesModel* model = static_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model());
   QModelIndex graphIndex = model->indexOf(g);
-
+  if (!graphIndex.isValid())
+    graphIndex = model->forceGraphIndex(g);
   if (graphIndex == _ui->graphCombo->selectedIndex())
     return;
-
   _ui->graphCombo->selectIndex(graphIndex);
 }
 

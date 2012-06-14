@@ -46,47 +46,38 @@ using namespace tlp;
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
                     borderWidth = "viewBorderWidth", borderColor = "viewBorderColor";
-
   if (!g->existProperty(shapes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipSettings::instance().defaultShape(tlp::NODE));
     g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(TulipSettings::instance().defaultShape(tlp::EDGE));
   }
-
   if (!g->existProperty(colors)) {
     g->getProperty<ColorProperty>(colors)->setAllNodeValue(TulipSettings::instance().defaultColor(tlp::NODE));
     g->getProperty<ColorProperty>(colors)->setAllEdgeValue(TulipSettings::instance().defaultColor(tlp::EDGE));
   }
-
   if (!g->existProperty(sizes)) {
     g->getProperty<SizeProperty>(sizes)->setAllNodeValue(TulipSettings::instance().defaultSize(tlp::NODE));
     g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(TulipSettings::instance().defaultSize(tlp::EDGE));
   }
-
   if (!g->existProperty(metrics)) {
     g->getProperty<DoubleProperty>(metrics)->setAllNodeValue(0);
     g->getProperty<DoubleProperty>(metrics)->setAllEdgeValue(0);
   }
-
   if (!g->existProperty(fonts)) {
     g->getProperty<StringProperty>(fonts)->setAllNodeValue(tlp::TulipBitmapDir + "font.ttf");
     g->getProperty<StringProperty>(fonts)->setAllEdgeValue(tlp::TulipBitmapDir + "font.ttf");
   }
-
   if (!g->existProperty(fontSizes)) {
     g->getProperty<IntegerProperty>(fontSizes)->setAllNodeValue(18);
     g->getProperty<IntegerProperty>(fontSizes)->setAllEdgeValue(18);
   }
-
   if (!g->existProperty(borderWidth)) {
     g->getProperty<DoubleProperty>(borderWidth)->setAllNodeValue(0);
     g->getProperty<DoubleProperty>(borderWidth)->setAllEdgeValue(1);
   }
-
   if (!g->existProperty(borderColor)) {
     g->getProperty<ColorProperty>(borderColor)->setAllNodeValue(TulipSettings::instance().defaultColor(tlp::NODE));
     g->getProperty<ColorProperty>(borderColor)->setAllEdgeValue(TulipSettings::instance().defaultColor(tlp::EDGE));
   }
-
 }
 
 GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): TulipModel(parent), _currentGraph(NULL) {
@@ -95,28 +86,108 @@ GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): TulipModel(parent
 GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy): TulipModel(copy.QObject::parent()), tlp::Observable() {
   for (int i=0; i < copy.size(); ++i)
     addGraph(copy[i]);
-
   _currentGraph = NULL;
 }
 
 GraphHierarchiesModel::~GraphHierarchiesModel() {
 }
 
+// Cache related methods
+QModelIndex GraphHierarchiesModel::indexOf(const tlp::Graph* g) {
+  QModelIndex result = _indexCache[g];
+  if (!result.isValid())
+    result = forceGraphIndex(const_cast<Graph*>(g));
+  return result;
+}
+QModelIndex GraphHierarchiesModel::forceGraphIndex(Graph* g) {
+  QVector<Graph*> hierarchy;
+  Graph* child = g;
+  do {
+    hierarchy.push_front(g);
+    child = child->getSuperGraph();
+  }
+  while (child != child->getRoot());
+
+  QModelIndex result;
+
+  foreach(Graph* child, hierarchy) {
+    Graph* parent = child->getSuperGraph();
+    unsigned int n = 0;
+
+    for (n=0; n<parent->numberOfSubGraphs(); ++n) {
+      if (parent->getNthSubGraph(n) == child)
+        break;
+    }
+
+    result = createIndex(n,0,child);
+    _indexCache[child] = result;
+  }
+
+  return result;
+}
+
+// Serialization
+static QString GRAPHS_PATH("/graphs/");
+static QString GRAPH_FILE("graph.json");
+
+bool GraphHierarchiesModel::needsSaving() {
+  bool saveNeeded = false;
+  foreach(GraphNeedsSavingObserver* observer, _saveNeeded) {
+    saveNeeded = saveNeeded || observer->needsSaving();
+  }
+  return saveNeeded;
+}
+
+QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
+  QMap<QString,tlp::Graph*> rootIds;
+  foreach(QString entry, project->entryList(GRAPHS_PATH,QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
+    QString file = GRAPHS_PATH + entry + "/graph.json";
+
+    if (!project->exists(file))
+      continue;
+
+    QString absolutePath = project->toAbsolutePath(file);
+    DataSet data;
+    data.set<std::string>("file::filename",absolutePath.toStdString());
+    Graph* g = tlp::importGraph("JSON Import",data,progress);
+    rootIds[entry] = g;
+
+    addGraph(g);
+  }
+  return rootIds;
+}
+QMap<tlp::Graph*,QString> GraphHierarchiesModel::writeProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
+  QMap<tlp::Graph*,QString> rootIds;
+
+  project->removeAllDir(GRAPHS_PATH);
+  project->mkpath(GRAPHS_PATH);
+  int i=0;
+  foreach(tlp::Graph* g, _graphs) {
+    rootIds[g] = QString::number(i);
+    QString folder = GRAPHS_PATH + "/" + QString::number(i++) + "/";
+    project->mkpath(folder);
+    DataSet data;
+    std::fstream *stream = project->stdFileStream(folder + "graph.json");
+    tlp::exportGraph(g,*stream,"JSON Export",data,progress);
+  }
+  foreach(GraphNeedsSavingObserver* observer, _saveNeeded)
+  observer->saved();
+  return rootIds;
+}
+
+// Model related
 QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex &parent) const {
   if (!hasIndex(row,column,parent))
     return QModelIndex();
 
   Graph *g = NULL;
-
   if (parent.isValid())
     g = ((Graph *)(parent.internalPointer()))->getNthSubGraph(row);
   else
     g = _graphs[row];
-
   if (g == NULL) {
     return QModelIndex();
   }
-
   return createIndex(row,column,g);
 }
 
@@ -230,12 +301,81 @@ QVariant GraphHierarchiesModel::headerData(int section, Qt::Orientation orientat
   return TulipModel::headerData(section,orientation,role);
 }
 
-bool GraphHierarchiesModel::needsSaving() {
-  bool saveNeeded = false;
-  foreach(GraphNeedsSavingObserver* observer, _saveNeeded) {
-    saveNeeded = saveNeeded || observer->needsSaving();
+Qt::ItemFlags GraphHierarchiesModel::flags(const QModelIndex &index) const {
+  Qt::ItemFlags result = QAbstractItemModel::flags(index);
+
+  if (index.column() == 0)
+    result |= Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
+
+  return result;
+}
+
+QMimeData* GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const {
+  QSet<Graph*> graphs;
+
+  foreach(QModelIndex index, indexes) {
+    Graph *g = data(index,GraphRole).value<Graph*>();
+
+    if (g != NULL)
+      graphs.insert(g);
   }
-  return saveNeeded;
+
+  GraphMimeType* result = new GraphMimeType();
+
+  //every current implementation uses a single graph, so we do not have a graphmim with multiple graphs.
+  foreach(Graph* g,graphs) {
+    result->setGraph(g);
+  }
+
+  return result;
+}
+
+// Graphs collection
+
+QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
+  std::string name;
+  graph->getAttribute<std::string>("name",name);
+
+  if (name == "") {
+    name = (trUtf8("graph_") + QString::number(graph->getId())).toStdString();
+    graph->setAttribute<std::string>("name",name);
+  }
+
+  return name.c_str();
+}
+
+void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
+  bool inHierarchy = false;
+  foreach(Graph *i,_graphs) {
+    if (i->isDescendantGraph(g) || g == i) {
+      inHierarchy = true;
+      break;
+    }
+  }
+
+  if (!inHierarchy)
+    return;
+
+  Graph* oldGraph = _currentGraph;
+  _currentGraph = g;
+
+  if (oldGraph != NULL) {
+    QModelIndex oldRow1 = indexOf(_currentGraph);
+    QModelIndex oldRow2 = createIndex(oldRow1.row(),columnCount()-1);
+    emit dataChanged(oldRow1,oldRow2);
+  }
+
+  if (_currentGraph != NULL) {
+    QModelIndex newRow1 = indexOf(_currentGraph);
+    QModelIndex newRow2 = createIndex(newRow1.row(),columnCount()-1);
+    emit dataChanged(newRow1,newRow2);
+  }
+
+  emit currentGraphChanged(g);
+}
+
+Graph *GraphHierarchiesModel::currentGraph() const {
+  return _currentGraph;
 }
 
 void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
@@ -279,6 +419,8 @@ void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
   }
 }
 
+// Observation
+
 void GraphHierarchiesModel::treatEvent(const Event &e) {
   Graph *g = dynamic_cast<tlp::Graph *>(e.sender());
   assert(g);
@@ -310,9 +452,9 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         string pName;
         Graph* parentGraph = ge->getSubGraph()->getSuperGraph();
         parentGraph->getAttribute<string>("name",pName);
-        QModelIndex parentIndex = _indexCache[parentGraph];
+        QModelIndex parentIndex = indexOf(parentGraph);
 
-        if (parentIndex == QModelIndex())
+        if (!parentIndex.isValid())
           parentIndex = forceGraphIndex(parentGraph);
 
         assert(parentIndex != QModelIndex());
@@ -324,161 +466,18 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
       else if (ge->getType() == GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH) {
         const Graph* sg = ge->getSubGraph();
 
-        if (_indexCache.contains(sg)) {
-          QModelIndex index = _indexCache[sg];
-          QModelIndex parentIndex = index.parent();
-          int row = index.row();
-          beginRemoveRows(parentIndex,row,row);
-        }
+        QModelIndex index = indexOf(sg);
+        assert(index.isValid());
+        QModelIndex parentIndex = index.parent();
+        int row = index.row();
+        beginRemoveRows(parentIndex,row,row);
       }
       else if (ge->getType() == GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH) {
         const Graph* sg = ge->getSubGraph();
-
-        if (_indexCache.contains(sg)) {
-          _indexCache.remove(sg);
-          endRemoveRows();
-        }
+        assert(_indexCache.contains(sg));
+        _indexCache.remove(sg);
+        endRemoveRows();
       }
     }
   }
-}
-
-QModelIndex GraphHierarchiesModel::forceGraphIndex(Graph* g) {
-  QVector<Graph*> hierarchy;
-  Graph* child = g;
-
-  do {
-    hierarchy.push_front(g);
-    child = child->getSuperGraph();
-  }
-  while (child != child->getRoot());
-
-  QModelIndex result;
-
-  foreach(Graph* child, hierarchy) {
-    Graph* parent = child->getSuperGraph();
-    unsigned int n = 0;
-
-    for (n=0; n<parent->numberOfSubGraphs(); ++n) {
-      if (parent->getNthSubGraph(n) == child)
-        break;
-    }
-
-    result = createIndex(n,0,child);
-    _indexCache[child] = result;
-  }
-
-  return result;
-}
-
-static QString GRAPHS_PATH("/graphs/");
-static QString GRAPH_FILE("graph.json");
-
-QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
-  QMap<QString,tlp::Graph*> rootIds;
-  foreach(QString entry, project->entryList(GRAPHS_PATH,QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
-    QString file = GRAPHS_PATH + entry + "/graph.json";
-
-    if (!project->exists(file))
-      continue;
-
-    QString absolutePath = project->toAbsolutePath(file);
-    DataSet data;
-    data.set<std::string>("file::filename",absolutePath.toStdString());
-    Graph* g = tlp::importGraph("JSON Import",data,progress);
-    rootIds[entry] = g;
-
-    addGraph(g);
-  }
-  return rootIds;
-}
-
-QMap<tlp::Graph*,QString> GraphHierarchiesModel::writeProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
-  QMap<tlp::Graph*,QString> rootIds;
-
-  project->removeAllDir(GRAPHS_PATH);
-  project->mkpath(GRAPHS_PATH);
-  int i=0;
-  foreach(tlp::Graph* g, _graphs) {
-    rootIds[g] = QString::number(i);
-    QString folder = GRAPHS_PATH + "/" + QString::number(i++) + "/";
-    project->mkpath(folder);
-    DataSet data;
-    std::fstream *stream = project->stdFileStream(folder + "graph.json");
-    tlp::exportGraph(g,*stream,"JSON Export",data,progress);
-  }
-  foreach(GraphNeedsSavingObserver* observer, _saveNeeded)
-  observer->saved();
-  return rootIds;
-}
-
-QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
-  std::string name;
-  graph->getAttribute<std::string>("name",name);
-
-  if (name == "") {
-    name = (trUtf8("graph_") + QString::number(graph->getId())).toStdString();
-    graph->setAttribute<std::string>("name",name);
-  }
-
-  return name.c_str();
-}
-
-void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
-  bool inHierarchy = false;
-  foreach(Graph *i,_graphs) {
-    if (i->isDescendantGraph(g) || g == i) {
-      inHierarchy = true;
-      break;
-    }
-  }
-
-  if (!inHierarchy)
-    return;
-
-  QModelIndex oldRow1 = _indexCache[_currentGraph];
-  QModelIndex oldRow2 = createIndex(oldRow1.row(),columnCount()-1);
-  _currentGraph = g;
-  QModelIndex newRow1 = _indexCache[_currentGraph];
-  QModelIndex newRow2 = createIndex(newRow1.row(),columnCount()-1);
-  emit currentGraphChanged(g);
-  emit dataChanged(oldRow1,oldRow2);
-  emit dataChanged(newRow1,newRow2);
-}
-
-Graph *GraphHierarchiesModel::currentGraph() const {
-  return _currentGraph;
-}
-
-Qt::ItemFlags GraphHierarchiesModel::flags(const QModelIndex &index) const {
-  Qt::ItemFlags result = QAbstractItemModel::flags(index);
-
-  if (index.column() == 0)
-    result |= Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
-
-  return result;
-}
-
-QModelIndex GraphHierarchiesModel::indexOf(tlp::Graph* g) const {
-  return _indexCache[g];
-}
-
-QMimeData* GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const {
-  QSet<Graph*> graphs;
-
-  foreach(QModelIndex index, indexes) {
-    Graph *g = data(index,GraphRole).value<Graph*>();
-
-    if (g != NULL)
-      graphs.insert(g);
-  }
-
-  GraphMimeType* result = new GraphMimeType();
-
-  //every current implementation uses a single graph, so we do not have a graphmim with multiple graphs.
-  foreach(Graph* g,graphs) {
-    result->setGraph(g);
-  }
-
-  return result;
 }

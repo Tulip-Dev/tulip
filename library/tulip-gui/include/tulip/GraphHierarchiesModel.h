@@ -41,7 +41,6 @@ class TLP_QT_SCOPE GraphHierarchiesModel : public tlp::TulipModel, public tlp::O
   QMap<const tlp::Graph*,QModelIndex> _indexCache;
   QMap<const tlp::Graph*, GraphNeedsSavingObserver*> _saveNeeded;
 
-  QModelIndex forceGraphIndex(tlp::Graph*);
 
 public:
   bool needsSaving();
@@ -92,7 +91,8 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
   QMimeData* mimeData(const QModelIndexList &indexes) const;
 
-  QModelIndex indexOf(tlp::Graph*) const;
+  QModelIndex indexOf(const Graph *);
+  QModelIndex forceGraphIndex(Graph *);
 
   // Methods inherited from the observable system
   void treatEvent(const tlp::Event &);
