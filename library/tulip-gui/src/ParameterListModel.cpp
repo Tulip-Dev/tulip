@@ -41,12 +41,20 @@ bool ParameterListModel::ParamInfosSorter::operator()(ParameterListModel::ParamI
 ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params, tlp::Graph *graph, QObject *parent)
   : TulipModel(parent), _graph(graph) {
   ParameterDescription param;
+  std::vector<ParamInfos> outParams;
+  // first add in parameters
   forEach(param,params.getParameters()) {
-    _params.push_back(ParamInfos(param.isMandatory(),param.getName().c_str(),param.getHelp().c_str(),param.getTypeName()));
+    if (param.getDirection() != OUT_PARAM)
+      _params.push_back(ParamInfos(param.isMandatory(),param.getName().c_str(),param.getHelp().c_str(),param.getTypeName()));
+    else
+      outParams.push_back(ParamInfos(param.isMandatory(),param.getName().c_str(),param.getHelp().c_str(),param.getTypeName()));
   }
-  std::sort(_params.begin(),_params.end(),ParamInfosSorter());
+  // then add out parameters
+  for(unsigned int i = 0; i < outParams.size(); ++i) {
+    _params.push_back(outParams[i]);
+  }
+  // no sort, keep the predefined ordering
   params.buildDefaultDataSet(_data,graph);
-
 }
 
 QModelIndex ParameterListModel::index(int row, int column,const QModelIndex&) const {
@@ -72,7 +80,7 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
   ParamInfos infos = _params[index.row()];
 
   if (role == Qt::ToolTipRole)
-    return infos.name;
+    infos.getNameForDisplay();
   else if (role == Qt::WhatsThisRole)
     return infos.desc;
   else if (role == Qt::BackgroundRole) {
@@ -113,7 +121,7 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
     ParamInfos infos = _params[section];
 
     if (role == Qt::DisplayRole)
-      return infos.name;
+      return infos.getNameForDisplay();
     else if (role == Qt::BackgroundRole) {
       if (infos.mandatory)
         return QColor(255, 255, 222);
