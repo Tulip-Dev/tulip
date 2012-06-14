@@ -52,6 +52,15 @@ inline QString tlpStringToQString(const std::string& toConvert) {
 }
 
 /**
+ * @brief Case insensitive comparison of two QStrings
+ **/
+inline bool QStringCaseCmp(const QString& s1, const QString& s2) {
+  return QString::localeAwareCompare(s1, s2) < 0;
+}
+
+
+
+/**
     * @brief Convert the property type string to a label to display in the GUI.
     * The property type label is the string to display in the GUI instead of the basic property type string.
     * By example for a property of type "double" the label displayed in the GUI will be "Metric".

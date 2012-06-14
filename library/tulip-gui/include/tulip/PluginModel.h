@@ -3,6 +3,7 @@
 
 #include <tulip/TulipModel.h>
 #include <tulip/PluginLister.h>
+#include <tulip/TlpQtTools.h>
 #include <QtCore/QMap>
 #include <QtCore/QSet>
 #include <QtCore/QString>
@@ -86,13 +87,13 @@ class PluginModel : public tlp::TulipModel {
   void buildTree() {
     delete _root;
     _root = new TreeItem("root");
-    QMap<QString,QMap<QString,QSet<QString> > > pluginTree;
+    QMap<QString,QMap<QString,QStringList > > pluginTree;
     std::list<std::string> plugins = PluginLister::instance()->availablePlugins<PLUGIN>();
 
     for(std::list<std::string>::iterator it = plugins.begin(); it != plugins.end(); ++it) {
       std::string name = *it;
       const Plugin* plugin = PluginLister::instance()->pluginInformations(name);
-      pluginTree[plugin->category().c_str()][plugin->group().c_str()]+=name.c_str();
+      pluginTree[plugin->category().c_str()][plugin->group().c_str()].append(name.c_str());
     }
 
     foreach(QString cat, pluginTree.keys()) {
@@ -105,7 +106,11 @@ class PluginModel : public tlp::TulipModel {
           if (group != "")
             groupItem = catItem->addChild(group);
 
-          foreach(QString alg, pluginTree[cat][group])
+	  // sort in case insensitive alphabetic order
+	  std::sort(pluginTree[cat][group].begin(),
+		    pluginTree[cat][group].end(), QStringCaseCmp);
+	  
+	  foreach(QString alg, pluginTree[cat][group])
           groupItem->addChild(alg);
         }
       }
