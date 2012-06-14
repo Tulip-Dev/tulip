@@ -37,10 +37,11 @@ class TLP_QT_SCOPE ParameterListModel : public TulipModel {
     QString getNameForDisplay() {
       // if a a subtype prefix exists, don't show it
       int pos = name.indexOf("::");
+
       if (pos != -1)
-	return name.mid(pos + 2);
+        return name.mid(pos + 2);
       else
-	return name;
+        return name;
     }
   };
 

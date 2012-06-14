@@ -106,11 +106,11 @@ class PluginModel : public tlp::TulipModel {
           if (group != "")
             groupItem = catItem->addChild(group);
 
-	  // sort in case insensitive alphabetic order
-	  std::sort(pluginTree[cat][group].begin(),
-		    pluginTree[cat][group].end(), QStringCaseCmp);
-	  
-	  foreach(QString alg, pluginTree[cat][group])
+          // sort in case insensitive alphabetic order
+          std::sort(pluginTree[cat][group].begin(),
+                    pluginTree[cat][group].end(), QStringCaseCmp);
+
+          foreach(QString alg, pluginTree[cat][group])
           groupItem->addChild(alg);
         }
       }
