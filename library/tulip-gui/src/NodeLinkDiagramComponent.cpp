@@ -129,41 +129,26 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   createScene(graph(), data);
   registerTriggers();
 
-  graphicsView()->setContextMenuPolicy(Qt::ActionsContextMenu);
-
-  QAction* viewSeparator = new QAction(trUtf8("View"),this);
-  viewSeparator->setSeparator(true);
-  graphicsView()->addAction(viewSeparator);
-
-  QAction* redrawAction = new QAction(trUtf8("Redraw"),this);
-  redrawAction->setShortcut(trUtf8("Ctrl+Shift+R"));
-  connect(redrawAction,SIGNAL(triggered()),this,SLOT(redraw()));
-  graphicsView()->addAction(redrawAction);
-
-  QAction* centerAction = new QAction(trUtf8("Center"),this);
-  centerAction->setShortcut(trUtf8("Ctrl+Shift+C"));
-  connect(centerAction,SIGNAL(triggered()),getGlMainWidget(),SLOT(centerScene()));
-  graphicsView()->addAction(centerAction);
-
-  QAction* augmentedSeparator = new QAction(trUtf8("Augmented display"),this);
-  augmentedSeparator->setSeparator(true);
-  graphicsView()->addAction(augmentedSeparator);
-
-  QAction* zOrderAction = new QAction(trUtf8("Z Ordering"),this);
-  zOrderAction->setCheckable(true);
-  zOrderAction->setChecked(false);
-  connect(redrawAction,SIGNAL(triggered(bool)),this,SLOT(setZOrdering(bool)));
-  graphicsView()->addAction(zOrderAction);
-
-  QAction* gridAction = new QAction(trUtf8("Grid"),this);
-  connect(gridAction,SIGNAL(triggered()),this,SLOT(showGridControl()));
-  graphicsView()->addAction(gridAction);
-
+  graphicsView()->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(graphicsView(),SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showContextMenu(QPoint)));
 
   setOverviewVisible(overviewVisible);
   _overviewItem->setLayerVisible("Foreground",false);
 
   setQuickAccessBarVisible(true);
+}
+
+void NodeLinkDiagramComponent::showContextMenu(const QPoint &){
+  QMenu menu;
+  menu.addAction(trUtf8("View"))->setSeparator(true);
+  menu.addAction(trUtf8("Force redraw"),this,SLOT(redraw()));
+  menu.addAction(trUtf8("Center view"),this,SLOT(centerScene()));
+  menu.addAction(trUtf8("Augmented display"))->setSeparator(true);
+  QAction* zOrdering = menu.addAction(trUtf8("Z Ordering"));
+  zOrdering->setCheckable(true);
+  connect(zOrdering,SIGNAL(triggered(bool)),this,SLOT(setZOrdering(bool)));
+  menu.addAction(trUtf8("Grid"),this,SLOT(showGridControl()));
+  menu.exec();
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
