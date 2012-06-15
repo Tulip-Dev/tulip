@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>530</width>
-    <height>674</height>
+    <height>712</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -227,6 +227,48 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
     </widget>
    </item>
    <item>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <property name="margin">
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="styleSheet">
+        <string notr="true">font:bold;</string>
+       </property>
+       <property name="text">
+        <string>Steps to reproduce (*)</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPlainTextEdit" name="commentsEdit">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>75</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPlainTextEdit { 
+background-color: white; 
+border: 1px solid #C9C9C9;
+}</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="plainText">
+        <string>Please tell us what you were doing when Tulip crashed</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QFrame" name="detailsFrame">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -419,32 +461,6 @@ font: bold;
           </widget>
          </item>
         </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Steps to reproduce</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPlainTextEdit" name="commentsEdit">
-        <property name="styleSheet">
-         <string notr="true">QPlainTextEdit { 
-  background-color: white; 
-border: 1px solid #C9C9C9;
-}</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="plainText">
-         <string>Please tell us what you were doing when Tulip crashed</string>
-        </property>
        </widget>
       </item>
       <item>

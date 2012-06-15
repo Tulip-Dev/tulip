@@ -218,6 +218,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   }
 
   delete progress;
+  progress = NULL;progress->progress(0,50);
 }
 
 tlp::GraphHierarchiesModel* GraphPerspective::model() const {

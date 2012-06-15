@@ -82,6 +82,7 @@ void TulipPerspectiveCrashHandler::sendReport() {
   _ui->sendReportButton->setText(trUtf8("Sending report..."));
   _ui->detailsFrame->setEnabled(false);
   _ui->sendReportButton->setEnabled(false);
+  _ui->commentsEdit->setEnabled(false);
 }
 
 void TulipPerspectiveCrashHandler::reportPosted() {
