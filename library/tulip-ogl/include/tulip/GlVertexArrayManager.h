@@ -103,6 +103,10 @@ public:
    */
   void endRendering();
 
+  void addLocalProperty(Graph *, const std::string &);
+
+  void addInheritedProperty(Graph *, const std::string &);
+
   /**
    * This function is call by GlVertexArraySceneVisitor to inform GlVertexArrayManager that we need to render an edge
    */
