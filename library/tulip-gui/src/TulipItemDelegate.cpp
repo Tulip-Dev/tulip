@@ -22,10 +22,11 @@
 #include <tulip/TulipModel.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TulipItemEditorCreators.h>
+#include <QtCore/QEvent>
 
 using namespace tlp;
 
-TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(parent) {
+TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(parent), _currentMonitoredChild(NULL), _currentMonitoredCombo(NULL) {
   registerCreator<bool>(new BooleanEditorCreator);
   registerCreator<int>(new LineEditEditorCreator<tlp::IntegerType>);
   registerCreator<unsigned int>(new LineEditEditorCreator<tlp::UnsignedIntegerType>);
@@ -159,4 +160,34 @@ void TulipItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
     return;
 
   model->setData(index,c->editorData(editor,g));
+}
+
+bool TulipItemDelegate::eventFilter(QObject *object, QEvent *event) {
+  if (event->type() == QEvent::FocusOut && dynamic_cast<QComboBox*>(object) != NULL) {
+    return true;
+  }
+  else if (event->type() == QEvent::ChildAdded) {
+    QChildEvent* childEv = static_cast<QChildEvent*>(event);
+    if (dynamic_cast<QComboBox*>(object) != NULL) {
+      _currentMonitoredChild = childEv->child();
+      _currentMonitoredCombo = static_cast<QComboBox*>(object);
+      _currentMonitoredChild->installEventFilter(this);
+      _currentMonitoredCombo->removeEventFilter(this);
+      connect(_currentMonitoredCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(comboDataChanged()));
+    }
+  }
+  else if (object == _currentMonitoredChild && event->type() == QEvent::Hide) {
+    _currentMonitoredChild->removeEventFilter(this);
+    _currentMonitoredChild = NULL;
+    emit commitData(_currentMonitoredCombo);
+    _currentMonitoredCombo->deleteLater();
+    _currentMonitoredCombo = NULL;
+    return true;
+  }
+
+  return QStyledItemDelegate::eventFilter(object,event);
+}
+
+void TulipItemDelegate::comboDataChanged() {
+  emit commitData(static_cast<QWidget*>(sender()));
 }
