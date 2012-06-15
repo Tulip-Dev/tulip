@@ -59,6 +59,8 @@ static bool runQHull(int dim, vector<double> &points, vector<pair<unsigned int, 
 
   if (!qhullKo) {
 
+    set<pair<unsigned int, unsigned int> > placedEdges;
+
     // call qhull delaunay triangulation
     qh_triangulate();
 
@@ -89,9 +91,22 @@ static bool runQHull(int dim, vector<double> &points, vector<pair<unsigned int, 
         }
 
         vector<unsigned int> simplex;
-        edges.push_back(make_pair(pointId0, pointId1));
-        edges.push_back(make_pair(pointId1, pointId2));
-        edges.push_back(make_pair(pointId2, pointId0));
+        pair<unsigned int, unsigned int> edge1 = make_pair(min(pointId0, pointId1), max(pointId0, pointId1));
+        pair<unsigned int, unsigned int> edge2 = make_pair(min(pointId1, pointId2), max(pointId1, pointId2));
+        pair<unsigned int, unsigned int> edge3 = make_pair(min(pointId2, pointId0), max(pointId2, pointId0));
+
+        if (placedEdges.find(edge1) == placedEdges.end()) {
+            edges.push_back(edge1);
+            placedEdges.insert(edge1);
+        }
+        if (placedEdges.find(edge2) == placedEdges.end()) {
+            edges.push_back(edge2);
+            placedEdges.insert(edge2);
+        }
+        if (placedEdges.find(edge3) == placedEdges.end()) {
+            edges.push_back(edge3);
+            placedEdges.insert(edge3);
+        }
 
         simplex.reserve(3);
         simplex.push_back(pointId0);
@@ -100,9 +115,21 @@ static bool runQHull(int dim, vector<double> &points, vector<pair<unsigned int, 
 
         if (pointId3 != -1) {
           simplex.push_back(pointId3);
-          edges.push_back(make_pair(pointId0, pointId3));
-          edges.push_back(make_pair(pointId1, pointId3));
-          edges.push_back(make_pair(pointId2, pointId3));
+          pair<unsigned int, unsigned int> edge4 = make_pair(min(pointId0, pointId3), max(pointId0, pointId3));
+          pair<unsigned int, unsigned int> edge5 = make_pair(min(pointId1, pointId3), max(pointId1, pointId3));
+          pair<unsigned int, unsigned int> edge6 = make_pair(min(pointId2, pointId3), max(pointId2, pointId3));
+          if (placedEdges.find(edge4) == placedEdges.end()) {
+            edges.push_back(edge4);
+            placedEdges.insert(edge4);
+          }
+          if (placedEdges.find(edge5) == placedEdges.end()) {
+            edges.push_back(edge5);
+            placedEdges.insert(edge5);
+          }
+          if (placedEdges.find(edge6) == placedEdges.end()) {
+            edges.push_back(edge6);
+            placedEdges.insert(edge6);
+          }
         }
 
         simplices.push_back(simplex);
