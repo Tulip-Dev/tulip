@@ -168,12 +168,15 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
   if (push)
     graph->push();
 
-  // ensure destination exists
-  graph->getLocalProperty(destination, destType);
-
   ParameterDescriptionList& params =
     ControllerAlgorithmTools::getPluginParameters(factory, name);
   params.buildDefaultDataSet(dataSet, graph);
+
+  PropertyInterface* dest = NULL;
+
+  // ensure destination exists
+  if (!graph->existProperty(destination))
+    dest = graph->getLocalProperty(destination, destType);
 
   // plugin parameters dialog
   if (query) {
@@ -188,8 +191,9 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
 
   if (resultBool) {
     // check if the destination property is a layout
-    bool updateLayout =  (nldc != NULL) &&
-                         (destType == LayoutProperty::propertyTypename);
+    bool updateLayout =
+      destination == "viewLayout" && (nldc != NULL) &&
+      (destType == LayoutProperty::propertyTypename);
     PropertyInterface* tmpLayout = NULL;
     // keep track of out properties
     // to ensure only that ones are updated
@@ -223,13 +227,19 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
       outPropParam.tmp = outPropParam.dest->clonePrototype(graph, "");
 
       if (param.getDirection() == OUT_PARAM) {
-        // get tmpLayout if needed
-        if (updateLayout &&
-            outPropParam.dest->getTypename() == LayoutProperty::propertyTypename)
-          tmpLayout = outPropParam.tmp;
-
         outPropParam.tmp->setAllNodeDataMemValue(outPropParam.dest->getNodeDefaultDataMemValue());
         outPropParam.tmp->setAllEdgeDataMemValue(outPropParam.dest->getEdgeDefaultDataMemValue());
+
+        if (param.getName() == "result" &&
+	    outPropParam.dest->getName() == destination) {
+	  // get tmpLayout if needed
+	  if (updateLayout &&
+	      outPropParam.dest->getTypename() == LayoutProperty::propertyTypename)
+	    tmpLayout = outPropParam.tmp;
+
+	  // result has to be a local property
+	  outPropParam.dest = graph->getLocalProperty(destination, destType);
+	}
       }
       else
         // inout property
@@ -307,7 +317,10 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
         copy->copy(graph->getLocalProperty(destination, destType));
       }
     }
-  }
+  } else if (dest)
+    // local destination property has not been used
+    // remove it
+    graph->delLocalProperty(dest->getName());
 
   Observable::unholdObservers();
   assert(Observable::observersHoldCounter()==holdCount);
