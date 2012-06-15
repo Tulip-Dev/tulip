@@ -106,15 +106,12 @@ void HttpContext::request(const std::string& url, bool head) {
   processed = isHtml = redirected = false;
   QNetworkRequest request(QUrl(url.c_str()));
 
-  //request.setRawHeader("User-Agent", "Tulip Agent");
   if (head) {
-    reply =
-      getNetworkAccessManager()->head(request);
+    reply = getNetworkAccessManager()->head(request);
     connect(reply, SIGNAL(finished()), this, SLOT(headerReceived()));
   }
   else {
-    reply =
-      getNetworkAccessManager()->get(request);
+    reply = getNetworkAccessManager()->get(request);
     connect(reply, SIGNAL(finished()), this, SLOT(finished()));
   }
 }
@@ -183,11 +180,11 @@ void HttpContext::setTimer(QTimer *timer) {
   connect(timer, SIGNAL(timeout()), SLOT(timeout()));
 }
 
-UrlElement::UrlElement():is_http(true),data(""),context(0)  {
+UrlElement::UrlElement():is_http(true),data(""),context(NULL)  {
 }
 UrlElement::UrlElement(const UrlElement &c):
   is_http(c.is_http),
-  data(""),server(c.server),url(c.url),clean_url(c.clean_url),context(0) {
+  data(""),server(c.server),url(c.url),clean_url(c.clean_url),context(NULL) {
 }
 
 void UrlElement::setUrl(const std::string& theUrl) {
@@ -492,7 +489,7 @@ struct WebImport:public ImportModule {
     addParameter<Color>("page color",paramHelp[6],"(240, 0, 120, 128)");
     addParameter<Color>("link color",paramHelp[7],"(96,96,191,128)");
     addParameter<Color>("redirection color",paramHelp[8],"(191,175,96,128)");
-    addDependency<LayoutAlgorithm>("GEM (Frick)", "1.2");
+    addDependency<LayoutAlgorithm>("FM^3 (OGDF)", "1.2");
   }
 
   string urlDecode(const string& url) {
@@ -773,7 +770,7 @@ struct WebImport:public ImportModule {
     visitOther = false;
     extractNonHttp = true;
 
-    if (dataSet != 0) {
+    if (dataSet != NULL) {
       dataSet->get("server", server);
       dataSet->get("web page", url);
       dataSet->get("max size", maxSize);
@@ -843,7 +840,7 @@ struct WebImport:public ImportModule {
       return false;
 
     if (computelayout) {
-      pluginProgress->setComment("Layouting extracted graph using GEM...");
+      pluginProgress->setComment("Layouting extracted graph using FM³...");
       string errMsg;
       // apply FM³
       DataSet tmp;

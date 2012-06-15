@@ -124,18 +124,17 @@ int getPropertyOf(stringA &outA,
                   PropertyInterface *inCurrent = NULL) {
   assert( inG );
   outA.clear();
-  Iterator< std::string > * propIt = inG->getProperties();
+  Iterator<PropertyInterface*> * propIt = inG->getObjectProperties();
   int curIdx = -1;
 
   while( propIt->hasNext() ) {
-    std::string s = propIt->next();
-    PropertyInterface * proxy = inG->getProperty( s );
+    PropertyInterface * prop = propIt->next();
 
-    if( typeid((*proxy)).name() == inTypeName ) {
-      if( inCurrent && proxy == inCurrent )
+    if( typeid((*prop)).name() == inTypeName ) {
+      if( inCurrent && prop == inCurrent )
         curIdx = outA.size();
 
-      outA.push_back( s );
+      outA.push_back(prop->getName());
     }
   }
 

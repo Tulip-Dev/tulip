@@ -876,7 +876,6 @@ struct TLPNodePropertyBuilder:public TLPFalse {
 struct TLPEdgePropertyBuilder:public TLPFalse {
   TLPPropertyBuilder *propertyBuilder;
   int edgeId;
-  std::string nodeValue;
   TLPEdgePropertyBuilder(TLPPropertyBuilder *propertyBuilder):propertyBuilder(propertyBuilder) {}
   virtual ~TLPEdgePropertyBuilder() {}
   bool addInt(const int id) {
