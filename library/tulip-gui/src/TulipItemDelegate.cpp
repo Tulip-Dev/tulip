@@ -75,7 +75,6 @@ void TulipItemDelegate::unregisterCreator(tlp::TulipItemEditorCreator* c) {
 }
 
 tlp::TulipItemEditorCreator* TulipItemDelegate::creator(int typeId) const {
-  assert(_creators[typeId] != NULL);
   return _creators[typeId];
 }
 
@@ -118,9 +117,17 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
   painter->drawRect(option.rect);
 
   QVariant v = index.data();
+  if (!v.isValid()) {
+#ifndef NDEBUG
+    qWarning() << "Value for row(" << index.model()->headerData(index.row(),Qt::Vertical).toString() << ") - column(" << index.model()->headerData(index.column(),Qt::Horizontal).toString() << ") is invalid";
+#endif
+    return;
+  }
   TulipItemEditorCreator *c = creator(v.userType());
 
-  if (c && c->paint(painter,option,v))
+  if (c == NULL)
+    return;
+  if (c != NULL && c->paint(painter,option,v))
     return;
 
   QStyledItemDelegate::paint(painter,option,index);

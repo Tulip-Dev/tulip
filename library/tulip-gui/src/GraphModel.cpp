@@ -164,6 +164,7 @@ void GraphModel::treatEvent(const Event& ev) {
   MACRO(DoubleProperty,double);\
   MACRO(DoubleVectorProperty,std::vector<double>);\
   MACRO(ColorProperty,tlp::Color);\
+  MACRO(GraphProperty,std::set<tlp::edge>);\
   MACRO(ColorVectorProperty,std::vector<tlp::Color>);\
   MACRO(SizeProperty,tlp::Size);\
   MACRO(SizeVectorProperty,std::vector<tlp::Size>);\
@@ -175,6 +176,7 @@ void GraphModel::treatEvent(const Event& ev) {
   MACRO(IntegerVectorProperty,std::vector<int>);\
   MACRO(BooleanProperty,bool);\
   MACRO(BooleanVectorProperty,std::vector<bool>);
+
 
 #define GET_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) return QVariant::fromValue< TYPE >(static_cast<PROP*>(prop)->getNodeValue(n))
 QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface * prop) {
