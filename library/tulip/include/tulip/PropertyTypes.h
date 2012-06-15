@@ -172,10 +172,15 @@ public:
   FORWARD_STRING_METHODS(EdgeSetType)
 };
 
-class TLP_SCOPE DoubleType: public SerializableType<double> {
+class TLP_SCOPE DoubleType: public TypeInterface<double> {
 public:
   static double undefinedValue();
   static double defaultValue();
+  static void write(std::ostream &oss, const RealType &v) {
+    oss << v;
+  }
+  static bool read(std::istream& iss, RealType& v);
+  FORWARD_STRING_METHODS(DoubleType)
 };
 
 class TLP_SCOPE FloatType: public SerializableType<float> {

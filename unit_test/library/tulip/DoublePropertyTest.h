@@ -36,6 +36,7 @@ public:
   void testDoublePropertyMaxUpdateFromString();
   void testDoublePropertySubGraphMin();
   void testDoublePropertySubGraphMax();
+  void testDoublePropertyInfValue();
 
   static CppUnit::Test *suite();
 
