@@ -428,6 +428,10 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
 
     outParams+=desc.getName();
   }
+
+  // Pushing before creating output properties
+  push();
+
   QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSet->toString().c_str();
   QMap<PropertyInterface*,PropertyInterface*> clonedProperties;
   QMap<PropertyInterface*,PropertyInterface*> namedProperties;
