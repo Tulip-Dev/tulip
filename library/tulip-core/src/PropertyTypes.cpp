@@ -102,6 +102,36 @@ double DoubleType::defaultValue() {
   return 0;
 }
 
+// add support for inf and -inf
+bool DoubleType::read(std::istream& iss, double& v) {
+  char c;
+  char sign = 0;
+  // go to first non space char
+  while((iss >> c) && isspace(c)) {}
+
+  if (c == '-' || c == '+') {
+    sign = c;
+    if (!(iss >> c))
+      return false;
+  }
+  if (c == 'i') {
+    // should be inf
+    if (!(iss >> c) || (c != 'n') ||
+	!(iss >> c) || (c != 'f'))
+      return false;
+    if (sign == '-')
+      v = -std::numeric_limits<double>::infinity();
+    else
+      v = std::numeric_limits<double>::infinity();
+    return true;
+  } else {
+    iss.unget();
+    if (sign)
+      iss.unget();
+  }
+  return iss >> v;
+}
+
 // FloatType
 float FloatType::undefinedValue() {
   return -FLT_MAX;
