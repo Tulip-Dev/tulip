@@ -20,6 +20,7 @@
 
 #include <QtCore/QDebug>
 #include <QtGui/QCheckBox>
+#include <QtGui/QLabel>
 #include <QtGui/QStylePainter>
 #include <QtGui/QApplication>
 #include <QtGui/QLinearGradient>
@@ -403,4 +404,31 @@ QVariant TulipLabelPositionEditorCreator::editorData(QWidget* w,tlp::Graph*) {
 }
 QString TulipLabelPositionEditorCreator::displayText(const QVariant& v) const {
   return POSITION_LABEL[(int)(v.value<LabelPosition>())];
+}
+
+//GraphEditorCreator
+QWidget* GraphEditorCreator::createWidget(QWidget *parent) const {
+  return new QLabel(parent);
+}
+
+void GraphEditorCreator::setEditorData(QWidget* w, const QVariant& var, bool, tlp::Graph*) {
+  Graph* g = var.value<Graph*>();
+  if (g != NULL) {
+    std::string name;
+    g->getAttribute<std::string>("name",name);
+    static_cast<QLabel*>(w)->setText(name.c_str());
+  }
+}
+
+QVariant GraphEditorCreator::editorData(QWidget*,tlp::Graph*) {
+  return QVariant();
+}
+
+QString GraphEditorCreator::displayText(const QVariant& var) const {
+  Graph* g = var.value<Graph*>();
+  if (g == NULL)
+    return QString::null;
+  std::string name;
+  g->getAttribute<std::string>("name",name);
+  return name.c_str();
 }
