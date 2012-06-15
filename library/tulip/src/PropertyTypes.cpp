@@ -106,29 +106,37 @@ double DoubleType::defaultValue() {
 bool DoubleType::read(std::istream& iss, double& v) {
   char c;
   char sign = 0;
+
   // go to first non space char
   while((iss >> c) && isspace(c)) {}
 
   if (c == '-' || c == '+') {
     sign = c;
+
     if (!(iss >> c))
       return false;
   }
+
   if (c == 'i') {
     // should be inf
     if (!(iss >> c) || (c != 'n') ||
-	!(iss >> c) || (c != 'f'))
+        !(iss >> c) || (c != 'f'))
       return false;
+
     if (sign == '-')
       v = -std::numeric_limits<double>::infinity();
     else
       v = std::numeric_limits<double>::infinity();
+
     return true;
-  } else {
+  }
+  else {
     iss.unget();
+
     if (sign)
       iss.unget();
   }
+
   return iss >> v;
 }
 

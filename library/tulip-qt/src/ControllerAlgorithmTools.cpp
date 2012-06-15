@@ -231,15 +231,15 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
         outPropParam.tmp->setAllEdgeDataMemValue(outPropParam.dest->getEdgeDefaultDataMemValue());
 
         if (param.getName() == "result" &&
-	    outPropParam.dest->getName() == destination) {
-	  // get tmpLayout if needed
-	  if (updateLayout &&
-	      outPropParam.dest->getTypename() == LayoutProperty::propertyTypename)
-	    tmpLayout = outPropParam.tmp;
+            outPropParam.dest->getName() == destination) {
+          // get tmpLayout if needed
+          if (updateLayout &&
+              outPropParam.dest->getTypename() == LayoutProperty::propertyTypename)
+            tmpLayout = outPropParam.tmp;
 
-	  // result has to be a local property
-	  outPropParam.dest = graph->getLocalProperty(destination, destType);
-	}
+          // result has to be a local property
+          outPropParam.dest = graph->getLocalProperty(destination, destType);
+        }
       }
       else
         // inout property
@@ -317,7 +317,8 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
         copy->copy(graph->getLocalProperty(destination, destType));
       }
     }
-  } else if (dest)
+  }
+  else if (dest)
     // local destination property has not been used
     // remove it
     graph->delLocalProperty(dest->getName());

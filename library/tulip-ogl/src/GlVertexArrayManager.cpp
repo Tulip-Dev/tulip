@@ -807,12 +807,12 @@ void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
   edgesModified = false;
 }
 
-void GlVertexArrayManager::addLocalProperty(Graph *, const string &){
+void GlVertexArrayManager::addLocalProperty(Graph *, const string &) {
   clearData();
   clearObservers();
 }
 
-void GlVertexArrayManager::addInheritedProperty(Graph *, const string &){
+void GlVertexArrayManager::addInheritedProperty(Graph *, const string &) {
   clearData();
   clearObservers();
 }

@@ -145,7 +145,7 @@ void DoublePropertyTest::testDoublePropertyInfValue() {
 
   CPPUNIT_ASSERT(infValue == std::numeric_limits<double>::infinity());
   CPPUNIT_ASSERT(-infValue == -std::numeric_limits<double>::infinity());
- 
+
   node n = graph->addNode();
 
   DoubleProperty* prop =
@@ -160,13 +160,13 @@ void DoublePropertyTest::testDoublePropertyInfValue() {
 
   prop->setNodeValue(n, -infValue);
   CPPUNIT_ASSERT(prop->getNodeValue(n) == -infValue);
-  
+
   prop->setNodeValue(n, 1.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n) == 1.0);
 
   prop->setNodeStringValue(n , "inf");
   CPPUNIT_ASSERT(prop->getNodeValue(n) == infValue);
-  
+
   prop->setNodeStringValue(n , "-inf");
   CPPUNIT_ASSERT(prop->getNodeValue(n) == -infValue);
 }
@@ -180,7 +180,8 @@ CppUnit::Test * DoublePropertyTest::suite() {
   suiteOfTests->addTest(new CppUnit::TestCaller<DoublePropertyTest>(" Max update from string", &DoublePropertyTest::testDoublePropertyMaxUpdateFromString));
   suiteOfTests->addTest(new CppUnit::TestCaller<DoublePropertyTest>(" Min update on subgraph", &DoublePropertyTest::testDoublePropertySubGraphMin));
   suiteOfTests->addTest(new CppUnit::TestCaller<DoublePropertyTest>(" Max update on subgraph", &DoublePropertyTest::testDoublePropertySubGraphMax))
-;  suiteOfTests->addTest(new CppUnit::TestCaller<DoublePropertyTest>(" inf values", &DoublePropertyTest::testDoublePropertyInfValue));
+  ;
+  suiteOfTests->addTest(new CppUnit::TestCaller<DoublePropertyTest>(" inf values", &DoublePropertyTest::testDoublePropertyInfValue));
 
   return suiteOfTests;
 }
