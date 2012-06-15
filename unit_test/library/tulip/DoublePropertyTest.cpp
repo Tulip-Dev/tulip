@@ -137,6 +137,37 @@ void DoublePropertyTest::testDoublePropertySubGraphMax() {
   CPPUNIT_ASSERT_EQUAL(doubleProperty->getNodeMax(), originalMax);
   CPPUNIT_ASSERT_EQUAL(6.0, doubleProperty->getNodeMax(subGraph));
   graph->delNode(n4);
-  CPPUNIT_ASSERT_EQUAL(6.0, doubleProperty->getNodeMax(subGraph));
-  CPPUNIT_ASSERT_EQUAL(9.0, doubleProperty->getNodeMax());
+  CPPUNIT_ASSERT(doubleProperty->getNodeMax(subGraph) == 6);
+  CPPUNIT_ASSERT(doubleProperty->getNodeMax() == 9);
+}
+
+void DoublePropertyTest::testDoublePropertyInfValue() {
+  double infValue = 1.0/0.0;
+
+  CPPUNIT_ASSERT(infValue == std::numeric_limits<double>::infinity());
+  CPPUNIT_ASSERT(-infValue == -std::numeric_limits<double>::infinity());
+ 
+  node n = graph->addNode();
+
+  DoubleProperty* prop =
+    graph->getLocalProperty<DoubleProperty>(doublePropertyName);
+  CPPUNIT_ASSERT(prop->getNodeValue(n) == 0.0);
+
+  prop->setNodeValue(n, infValue);
+  CPPUNIT_ASSERT(prop->getNodeValue(n) == infValue);
+
+  prop->setNodeValue(n, 1.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n) == 1.0);
+
+  prop->setNodeValue(n, -infValue);
+  CPPUNIT_ASSERT(prop->getNodeValue(n) == -infValue);
+  
+  prop->setNodeValue(n, 1.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n) == 1.0);
+
+  prop->setNodeStringValue(n , "inf");
+  CPPUNIT_ASSERT(prop->getNodeValue(n) == infValue);
+  
+  prop->setNodeStringValue(n , "-inf");
+  CPPUNIT_ASSERT(prop->getNodeValue(n) == -infValue);
 }
