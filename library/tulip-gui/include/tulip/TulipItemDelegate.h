@@ -25,7 +25,12 @@
 namespace tlp {
 
 class TLP_QT_SCOPE TulipItemDelegate : public QStyledItemDelegate {
+  Q_OBJECT
+
   QMap<int,TulipItemEditorCreator*> _creators;
+
+  QObject* _currentMonitoredChild;
+  QComboBox* _currentMonitoredCombo;
 
 public:
   explicit TulipItemDelegate(QObject* parent=NULL);
@@ -49,6 +54,11 @@ public:
   QString displayText(const QVariant &value, const QLocale &locale) const;
   void setEditorData(QWidget *editor, const QModelIndex &index) const;
   void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+
+  bool eventFilter(QObject *object, QEvent *event);
+
+protected slots:
+  void comboDataChanged();
 };
 
 }
