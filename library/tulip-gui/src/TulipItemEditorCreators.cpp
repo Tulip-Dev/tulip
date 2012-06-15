@@ -413,6 +413,7 @@ QWidget* GraphEditorCreator::createWidget(QWidget *parent) const {
 
 void GraphEditorCreator::setEditorData(QWidget* w, const QVariant& var, bool, tlp::Graph*) {
   Graph* g = var.value<Graph*>();
+
   if (g != NULL) {
     std::string name;
     g->getAttribute<std::string>("name",name);
@@ -426,8 +427,10 @@ QVariant GraphEditorCreator::editorData(QWidget*,tlp::Graph*) {
 
 QString GraphEditorCreator::displayText(const QVariant& var) const {
   Graph* g = var.value<Graph*>();
+
   if (g == NULL)
     return QString::null;
+
   std::string name;
   g->getAttribute<std::string>("name",name);
   return name.c_str();

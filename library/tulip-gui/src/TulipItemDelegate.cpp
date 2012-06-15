@@ -118,16 +118,19 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
   painter->drawRect(option.rect);
 
   QVariant v = index.data();
+
   if (!v.isValid()) {
 #ifndef NDEBUG
     qWarning() << "Value for row(" << index.model()->headerData(index.row(),Qt::Vertical).toString() << ") - column(" << index.model()->headerData(index.column(),Qt::Horizontal).toString() << ") is invalid";
 #endif
     return;
   }
+
   TulipItemEditorCreator *c = creator(v.userType());
 
   if (c == NULL)
     return;
+
   if (c != NULL && c->paint(painter,option,v))
     return;
 
@@ -168,6 +171,7 @@ bool TulipItemDelegate::eventFilter(QObject *object, QEvent *event) {
   }
   else if (event->type() == QEvent::ChildAdded) {
     QChildEvent* childEv = static_cast<QChildEvent*>(event);
+
     if (dynamic_cast<QComboBox*>(object) != NULL) {
       _currentMonitoredChild = childEv->child();
       _currentMonitoredCombo = static_cast<QComboBox*>(object);

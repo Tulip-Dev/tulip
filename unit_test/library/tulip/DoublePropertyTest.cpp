@@ -146,7 +146,7 @@ void DoublePropertyTest::testDoublePropertyInfValue() {
 
   CPPUNIT_ASSERT(infValue == std::numeric_limits<double>::infinity());
   CPPUNIT_ASSERT(-infValue == -std::numeric_limits<double>::infinity());
- 
+
   node n = graph->addNode();
 
   DoubleProperty* prop =
@@ -161,13 +161,13 @@ void DoublePropertyTest::testDoublePropertyInfValue() {
 
   prop->setNodeValue(n, -infValue);
   CPPUNIT_ASSERT(prop->getNodeValue(n) == -infValue);
-  
+
   prop->setNodeValue(n, 1.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n) == 1.0);
 
   prop->setNodeStringValue(n , "inf");
   CPPUNIT_ASSERT(prop->getNodeValue(n) == infValue);
-  
+
   prop->setNodeStringValue(n , "-inf");
   CPPUNIT_ASSERT(prop->getNodeValue(n) == -infValue);
 }
