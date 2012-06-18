@@ -197,12 +197,12 @@ PropertyInterface* PropertyManager::getProperty(const string &str) const {
 //==============================================================
 PropertyInterface* PropertyManager::getLocalProperty(const string &str) const {
   assert(existLocalProperty(str));
-  return (localProperties.at(str));
+  return ((PropertyManager *)this)->localProperties[str];
 }
 //==============================================================
 PropertyInterface* PropertyManager::getInheritedProperty(const string &str) const {
   assert(existInheritedProperty(str));
-  return (inheritedProperties.at(str));
+  return ((PropertyManager *)this)->inheritedProperties[str];
 }
 //==============================================================
 void PropertyManager::delLocalProperty(const string &str) {
