@@ -61,7 +61,6 @@ protected slots:
   void deleteItem();
   void goInsideItem();
   void ungroupItem();
-  void showProperties();
   void setZOrdering(bool);
   void showGridControl();
   void fillContextMenu(QMenu *menu,const QPointF &point);
