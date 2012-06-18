@@ -69,7 +69,7 @@ TARGET_LINK_LIBRARIES(FileSystem-${TulipVersion} ${LibTulipCoreName})
 SET(WebImport_SRCS WebImport.cpp)
 QT4_WRAP_CPP(WebImport_MOC_SRCS WebImport.h)
 ADD_LIBRARY(WebImport-${TulipVersion} SHARED ${WebImport_SRCS} ${WebImport_MOC_SRCS})
-TARGET_LINK_LIBRARIES(WebImport-${TulipVersion} ${LibTulipCoreName} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY})
+TARGET_LINK_LIBRARIES(WebImport-${TulipVersion} ${LibTulipCoreName} ${LibTulipGUIName} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(ImportPajek_SRCS ImportPajek.cpp)
