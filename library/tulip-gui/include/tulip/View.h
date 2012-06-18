@@ -166,7 +166,7 @@ public slots:
   * @brief This method is called whenever the context menu is required on the view.
   * @param point The screen coordinates where the context menu should be displayed.
   */
-  void showContextMenu(const QPoint& point);
+  void showContextMenu(const QPoint& point, const QPointF &scenePoint);
 
   /**
     @brief This method applies settings changed in the configuration widgets
@@ -313,7 +313,7 @@ protected slots:
    * This method is called whenever the context menu is displayed on the panel.
    * @param QMenu The popup menu that will be displayed. This menu should be populated with context action related to the panel.
    */
-  virtual void fillContextMenu(QMenu*) {}
+  virtual void fillContextMenu(QMenu*,const QPointF &) {}
 };
 
 }

@@ -63,7 +63,7 @@ protected slots:
   virtual void sceneRectChanged(const QRectF&);
   void setQuickAccessBarVisible(bool);
   void graphDeleted();
-  void fillContextMenu(QMenu *menu);
+  void fillContextMenu(QMenu *menu,const QPointF &);
 
 protected:
   virtual void setupWidget();
