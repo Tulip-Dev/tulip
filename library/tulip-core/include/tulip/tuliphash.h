@@ -70,6 +70,12 @@ struct hash<double> {
     return (size_t) s;
   }
 };
+template<>
+struct hash<float> {
+  size_t operator()(const float s) const {
+    return hash<unsigned int>()(*((unsigned int *) &s));
+  }
+};
 }
 //MSVC < 2010 use tr1 from boost, and GCC 4.X provides tr1 too.
 #else
