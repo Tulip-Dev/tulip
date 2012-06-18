@@ -64,9 +64,9 @@ void View::currentInteractorChanged(tlp::Interactor *i) {
   i->install(graphicsView());
 }
 
-void View::showContextMenu(const QPoint &point) {
+void View::showContextMenu(const QPoint &point,const QPointF &scenePoint) {
   QMenu menu;
-  fillContextMenu(&menu);
+  fillContextMenu(&menu,scenePoint);
   menu.move(point);
   menu.exec();
 }

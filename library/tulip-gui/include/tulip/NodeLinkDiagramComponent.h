@@ -55,7 +55,7 @@ protected slots:
   void redraw();
   void setZOrdering(bool);
   void showGridControl();
-  void fillContextMenu(QMenu *menu);
+  void fillContextMenu(QMenu *menu,const QPointF &point);
 
 protected:
   void graphChanged(tlp::Graph *);

@@ -314,8 +314,8 @@ void NodeLinkDiagramComponent::showGridControl() {
   emit drawNeeded();
 }
 
-void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu) {
-  GlMainView::fillContextMenu(menu);
+void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point) {
+  GlMainView::fillContextMenu(menu,point);
   menu->addAction(trUtf8("View"))->setSeparator(true);
   menu->addAction(trUtf8("Force redraw"),this,SLOT(redraw()));
   menu->addAction(trUtf8("Center view"),this,SLOT(centerView()));

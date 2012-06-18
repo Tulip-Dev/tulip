@@ -151,7 +151,7 @@ void GlMainView::graphDeleted() {
   setGraph(NULL);
 }
 
-void GlMainView::fillContextMenu(QMenu *menu) {
+void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   QAction* a = menu->addAction(trUtf8("Show overview"));
   a->setCheckable(true);
   a->setChecked(overviewVisible());

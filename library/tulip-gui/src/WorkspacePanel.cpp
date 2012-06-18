@@ -346,7 +346,7 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
   }
 
   if (ev->type() == QEvent::GraphicsSceneContextMenu) {
-    _view->showContextMenu(QCursor::pos());
+    _view->showContextMenu(QCursor::pos(),static_cast<QGraphicsSceneContextMenuEvent*>(ev)->scenePos());
   }
 
   return QWidget::eventFilter(obj,ev);
