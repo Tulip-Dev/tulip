@@ -609,7 +609,7 @@ void GraphPerspective::centerPanelsForGraph(tlp::Graph* g) {
 void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
   QVector<View*> viewsToDelete;
   foreach(View* v, _ui->workspace->panels()) {
-    if (v->graph() == g)
+    if (v->graph() == g || g->isDescendantGraph(v->graph()))
       viewsToDelete+=v;
   }
   foreach(View* v, viewsToDelete) {

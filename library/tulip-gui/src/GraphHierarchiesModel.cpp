@@ -114,6 +114,8 @@ QModelIndex GraphHierarchiesModel::indexOf(const tlp::Graph* g) {
   return result;
 }
 QModelIndex GraphHierarchiesModel::forceGraphIndex(Graph* g) {
+  if (g == NULL)
+    return QModelIndex();
   QVector<Graph*> hierarchy;
   Graph* child = g;
 

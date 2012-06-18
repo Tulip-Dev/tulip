@@ -146,11 +146,7 @@ background-color: #A9A9A9;
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QComboBox" name="resultsStorageCombo">
-              <property name="sizeAdjustPolicy">
-               <enum>QComboBox::AdjustToContents</enum>
-              </property>
-             </widget>
+             <widget class="QComboBox" name="resultsStorageCombo"/>
             </item>
             <item row="4" column="0">
              <widget class="QLabel" name="searchTermsLabel">
@@ -291,6 +287,9 @@ font: bold;
                <iconset resource="../resources/GraphPerspective.qrc">
                 <normaloff>:/tulip/graphperspective/icons/22/edit-find.png</normaloff>:/tulip/graphperspective/icons/22/edit-find.png</iconset>
               </property>
+              <property name="shortcut">
+               <string>Return</string>
+              </property>
              </widget>
             </item>
             <item>
@@ -320,6 +319,12 @@ font: bold;
        </item>
        <item>
         <widget class="QFrame" name="resultsFrame">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>90</height>
+          </size>
+         </property>
          <property name="styleSheet">
           <string notr="true">QTableView {
 border: 1px solid #C9C9C9;

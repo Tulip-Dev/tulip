@@ -141,11 +141,6 @@ void SearchWidget::currentGraphChanged(tlp::Graph *g) {
 }
 
 void SearchWidget::setGraph(Graph *g) {
-  _ui->nodesResultsTable->setModel(NULL);
-  _ui->edgesResultsTable->setModel(NULL);
-
-  _ui->resultsFrame->hide();
-  _ui->resultsCountLabel->setText("");
   setEnabled(g != NULL);
 
   if (g != NULL) {
@@ -153,11 +148,20 @@ void SearchWidget::setGraph(Graph *g) {
     g->getProperty<BooleanProperty>("viewSelection");
   }
 
+  else {
+    _ui->nodesResultsTable->setModel(NULL);
+    _ui->edgesResultsTable->setModel(NULL);
+
+    _ui->resultsFrame->hide();
+    _ui->resultsCountLabel->setText("");
+  }
+
   static_cast<GraphPropertiesModel<BooleanProperty>*>(_ui->resultsStorageCombo->model())->setGraph(g);
-
+  _ui->resultsStorageCombo->setCurrentIndex(0);
   static_cast<GraphPropertiesModel<PropertyInterface>*>(_ui->searchTermACombo->model())->setGraph(g);
-
+  _ui->searchTermACombo->setCurrentIndex(0);
   static_cast<GraphPropertiesModel<PropertyInterface>*>(_ui->searchTermBCombo->model())->setGraph(g);
+  _ui->searchTermBCombo->setCurrentIndex(0);
 }
 
 void SearchWidget::search() {
