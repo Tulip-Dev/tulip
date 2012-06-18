@@ -363,8 +363,6 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
         menu->addAction(tr("Ungroup"),this,SLOT(ungroupItem()));
       }
     }
-
-    menu->addAction(tr("Properties"),this,SLOT(showProperties()));
   }
 
   menu->addSeparator();
@@ -413,10 +411,6 @@ void NodeLinkDiagramComponent::goInsideItem() {
 void NodeLinkDiagramComponent::ungroupItem() {
   graph()->push();
   graph()->openMetaNode(node(itemId));
-}
-
-void NodeLinkDiagramComponent::showProperties() {
-  //TODO : implement it
 }
 
 void NodeLinkDiagramComponent::useHulls(bool hasHulls) {
