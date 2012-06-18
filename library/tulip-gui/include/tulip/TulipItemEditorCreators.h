@@ -196,8 +196,10 @@ public:
 }
 
 
+#if defined(__clang__)
 template class tlp::StringDisplayEditorCreator<tlp::PointType>;
 template class tlp::StringDisplayEditorCreator<tlp::SizeType>;
+#endif
 
 
 #include "cxx/TulipItemEditorCreators.cxx"
