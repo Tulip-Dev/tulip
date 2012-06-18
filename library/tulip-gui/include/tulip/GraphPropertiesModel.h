@@ -16,7 +16,7 @@ class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
   tlp::Graph* _graph;
   QString _placeholder;
   bool _checkable;
-  QSet<int> _checkedIndexes;
+  QSet<PROPTYPE*> _checkedProperties;
   QVector<PROPTYPE*> _properties;
   bool _removingRows;
 
@@ -50,8 +50,8 @@ public:
     endResetModel();
   }
 
-  QSet<int> checkedIndexes() const {
-    return _checkedIndexes;
+  QSet<PROPTYPE*> checkedProperties() const {
+    return _checkedProperties;
   }
 
   // Methods re-implemented from QAbstractItemModel
