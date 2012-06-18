@@ -789,24 +789,32 @@ void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
       shapeProperty==property || rotationProperty==property) {
     setHaveToComputeLayout(true);
     clearLayoutData();
+
     if(layoutProperty!=NULL)
-        layoutProperty->removePropertyObserver(this);
+      layoutProperty->removePropertyObserver(this);
+
     if(sizeProperty!=NULL)
-        sizeProperty->removePropertyObserver(this);
+      sizeProperty->removePropertyObserver(this);
+
     if(shapeProperty!=NULL)
-        shapeProperty->removePropertyObserver(this);
+      shapeProperty->removePropertyObserver(this);
+
     if(rotationProperty!=NULL)
-        rotationProperty->removePropertyObserver(this);
+      rotationProperty->removePropertyObserver(this);
+
     layoutObserverActivated=false;
   }
 
   if(edgesModified || colorProperty==property || borderColorProperty==property ) {
     setHaveToComputeColor(true);
     clearColorData();
+
     if(colorProperty!=NULL)
-        colorProperty->removePropertyObserver(this);
+      colorProperty->removePropertyObserver(this);
+
     if(borderColorProperty!=NULL)
-        borderColorProperty->removePropertyObserver(this);
+      borderColorProperty->removePropertyObserver(this);
+
     colorObserverActivated=false;
   }
 
