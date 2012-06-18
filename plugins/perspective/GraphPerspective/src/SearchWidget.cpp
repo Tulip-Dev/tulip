@@ -157,10 +157,15 @@ void SearchWidget::setGraph(Graph *g) {
   }
 
   static_cast<GraphPropertiesModel<BooleanProperty>*>(_ui->resultsStorageCombo->model())->setGraph(g);
+
   _ui->resultsStorageCombo->setCurrentIndex(0);
+
   static_cast<GraphPropertiesModel<PropertyInterface>*>(_ui->searchTermACombo->model())->setGraph(g);
+
   _ui->searchTermACombo->setCurrentIndex(0);
+
   static_cast<GraphPropertiesModel<PropertyInterface>*>(_ui->searchTermBCombo->model())->setGraph(g);
+
   _ui->searchTermBCombo->setCurrentIndex(0);
 }
 
