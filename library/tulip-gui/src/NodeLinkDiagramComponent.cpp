@@ -333,7 +333,8 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     std::stringstream sstr;
     sstr << (isNode ? "Node " : "Edge ") << itemId;
     menu->addAction(tr(sstr.str().c_str()))->setEnabled(false);
-  }else{
+  }
+  else {
     menu->addAction(tr("nothing under cursor"))->setEnabled(false);
   }
 
@@ -397,6 +398,7 @@ void NodeLinkDiagramComponent::selectItem() {
 
 void NodeLinkDiagramComponent::deleteItem() {
   graph()->push();
+
   if (isNode)
     graph()->delNode(node(itemId));
   else
