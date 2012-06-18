@@ -72,6 +72,9 @@
         <property name="text">
          <string/>
         </property>
+	<property name="toolTip">
+	  <string>Apply algorithm</string>
+	</property>
         <property name="icon">
          <iconset resource="../resources/GraphPerspective.qrc">
           <normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</iconset>
@@ -95,6 +98,9 @@
         <property name="text">
          <string/>
         </property>
+	<property name="toolTip">
+	  <string>Show/Hide parameters</string>
+	</property>
         <property name="icon">
          <iconset resource="../resources/GraphPerspective.qrc">
           <normaloff>:/tulip/graphperspective/icons/16/preferences-other.png</normaloff>:/tulip/graphperspective/icons/16/preferences-other.png</iconset>

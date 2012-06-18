@@ -107,8 +107,10 @@ void AlgorithmRunnerItem::mousePressEvent(QMouseEvent *ev) {
 
 void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   if (!(ev->buttons() & Qt::LeftButton) ||
-      (ev->pos() - _dragStartPosition).manhattanLength() < QApplication::startDragDistance())
+      (ev->pos() - _dragStartPosition).manhattanLength() < QApplication::startDragDistance()) {
+    QWidget::mouseMoveEvent(ev);
     return;
+  }
 
   QDrag *drag = new QDrag(this);
   const Plugin* p = PluginLister::pluginInformations(_pluginName.toStdString().c_str());
