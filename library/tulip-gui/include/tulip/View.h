@@ -26,6 +26,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QSet>
 #include <QtCore/QSize>
+#include <QtCore/QPointF>
 
 class QGraphicsView;
 class QGraphicsItem;
