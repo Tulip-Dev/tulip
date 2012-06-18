@@ -35,6 +35,7 @@
 #include <tulip/ExtendedMetaNodeRenderer.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlOverviewGraphicsItem.h>
+#include <tulip/Interactor.h>
 
 using namespace tlp;
 using namespace std;
@@ -315,7 +316,27 @@ void NodeLinkDiagramComponent::showGridControl() {
 }
 
 void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point) {
-  GlMainView::fillContextMenu(menu,point);
+
+  //Check if a node/edge is under the mouse pointer
+  node tmpNode;
+  edge tmpEdge;
+  bool result;
+  SelectedEntity entity;
+  // look if the mouse pointer is over a node or edge
+  QRect rect=getGlMainWidget()->frameGeometry();
+  result = getGlMainWidget()->pickNodesEdges(point.x()-rect.x(), point.y()-rect.y(), entity);
+
+  if (result) {
+    // Display a context menu
+    isNode = entity.getEntityType() == SelectedEntity::NODE_SELECTED;
+    itemId = entity.getComplexEntityId();
+    std::stringstream sstr;
+    sstr << (isNode ? "Node " : "Edge ") << itemId;
+    menu->addAction(tr(sstr.str().c_str()))->setEnabled(false);
+  }else{
+    menu->addAction(tr("nothing under cursor"))->setEnabled(false);
+  }
+
   menu->addAction(trUtf8("View"))->setSeparator(true);
   menu->addAction(trUtf8("Force redraw"),this,SLOT(redraw()));
   menu->addAction(trUtf8("Center view"),this,SLOT(centerView()));
@@ -325,6 +346,77 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
   zOrdering->setChecked(getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isElementZOrdered());
   connect(zOrdering,SIGNAL(triggered(bool)),this,SLOT(setZOrdering(bool)));
   menu->addAction(trUtf8("Grid"),this,SLOT(showGridControl()));
+
+  if (result) {
+    menu->addAction(trUtf8(isNode ? "Node " : "Edge "))->setSeparator(true);
+
+    menu->addAction(tr("Add to/Remove from selection"),this,SLOT(addRemoveItemToSelection()));
+    menu->addAction(tr("Select"),this,SLOT(selectItem()));
+    menu->addAction(tr("Delete"),this,SLOT(deleteItem()));
+
+
+    if (isNode) {
+      Graph *metaGraph=graph()->getNodeMetaInfo(node(entity.getComplexEntityId()));
+
+      if (metaGraph) {
+        menu->addAction(tr("Go inside"),this,SLOT(goInsideItem()));
+        menu->addAction(tr("Ungroup"),this,SLOT(ungroupItem()));
+      }
+    }
+
+    menu->addAction(tr("Properties"),this,SLOT(showProperties()));
+  }
+
+  menu->addSeparator();
+  GlMainView::fillContextMenu(menu,point);
+}
+
+void NodeLinkDiagramComponent::addRemoveItemToSelection() {
+  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+  graph()->push();
+
+  // selection add/remove graph item
+  if (isNode)
+    elementSelected->setNodeValue(node(itemId), !elementSelected->getNodeValue(node(itemId)));
+  else
+    elementSelected->setEdgeValue(edge(itemId), !elementSelected->getEdgeValue(edge(itemId)));
+}
+
+void NodeLinkDiagramComponent::selectItem() {
+  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+  graph()->push();
+
+  // empty selection
+  elementSelected->setAllNodeValue(false);
+  elementSelected->setAllEdgeValue(false);
+
+  // selection add/remove graph item
+  if (isNode)
+    elementSelected->setNodeValue(node(itemId), true);
+  else
+    elementSelected->setEdgeValue(edge(itemId), true);
+}
+
+void NodeLinkDiagramComponent::deleteItem() {
+  graph()->push();
+  if (isNode)
+    graph()->delNode(node(itemId));
+  else
+    graph()->delEdge(edge(itemId));
+}
+
+void NodeLinkDiagramComponent::goInsideItem() {
+  Graph *metaGraph=graph()->getNodeMetaInfo(node(itemId));
+  this->loadGraphOnScene(metaGraph);
+}
+
+void NodeLinkDiagramComponent::ungroupItem() {
+  graph()->push();
+  graph()->openMetaNode(node(itemId));
+}
+
+void NodeLinkDiagramComponent::showProperties() {
+  //TODO : implement it
 }
 
 void NodeLinkDiagramComponent::useHulls(bool hasHulls) {

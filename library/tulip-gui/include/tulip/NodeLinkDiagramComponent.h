@@ -35,6 +35,9 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
   GlCompositeHierarchyManager* manager;
   bool _hasHulls;
 
+  bool isNode;
+  unsigned int itemId;
+
   void registerTriggers();
   void updateGrid();
 public:
@@ -53,6 +56,12 @@ public slots:
 
 protected slots:
   void redraw();
+  void addRemoveItemToSelection();
+  void selectItem();
+  void deleteItem();
+  void goInsideItem();
+  void ungroupItem();
+  void showProperties();
   void setZOrdering(bool);
   void showGridControl();
   void fillContextMenu(QMenu *menu,const QPointF &point);
