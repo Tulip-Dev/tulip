@@ -168,15 +168,15 @@ bool ControllerAlgorithmTools::changeProperty(Graph *graph, QWidget *parent,
   if (push)
     graph->push();
 
-  ParameterDescriptionList& params =
-    ControllerAlgorithmTools::getPluginParameters(factory, name);
-  params.buildDefaultDataSet(dataSet, graph);
-
   PropertyInterface* dest = NULL;
 
   // ensure destination exists
   if (!graph->existProperty(destination))
     dest = graph->getLocalProperty(destination, destType);
+
+  ParameterDescriptionList& params =
+    ControllerAlgorithmTools::getPluginParameters(factory, name);
+  params.buildDefaultDataSet(dataSet, graph);
 
   // plugin parameters dialog
   if (query) {
