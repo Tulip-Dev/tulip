@@ -439,7 +439,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
     QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSet->toString().c_str();
     foreach(std::string n, outParams) {
       if (!dataSet->exist(n))
-	continue;
+        continue;
 
       CHECK_PI(Boolean)
       CHECK_PI(Double)
