@@ -134,7 +134,11 @@ ADD_CUSTOM_COMMAND(TARGET ${LibTulipPythonName}
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
 
 IF(NOT UBUNTU_PPA_BUILD)
+IF(WIN32)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipBinInstallDir}/python COMPONENT tulip_python)
+ELSE(WIN32)
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python)
+ENDIF()
 ELSE()
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
 ENDIF()
