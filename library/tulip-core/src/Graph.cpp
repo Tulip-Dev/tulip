@@ -432,20 +432,23 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   // Pushing before creating output properties
   push();
 
-  QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSet->toString().c_str();
   QMap<PropertyInterface*,PropertyInterface*> clonedProperties;
   QMap<PropertyInterface*,PropertyInterface*> namedProperties;
-  foreach(std::string n, outParams) {
-    if (!dataSet->exist(n))
-      continue;
 
-    CHECK_PI(Boolean)
-    CHECK_PI(Double)
-    CHECK_PI(Layout)
-    CHECK_PI(String)
-    CHECK_PI(Integer)
-    CHECK_PI(Size)
-    CHECK_PI(Color)
+  if (dataSet) {
+    QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSet->toString().c_str();
+    foreach(std::string n, outParams) {
+      if (!dataSet->exist(n))
+	continue;
+
+      CHECK_PI(Boolean)
+      CHECK_PI(Double)
+      CHECK_PI(Layout)
+      CHECK_PI(String)
+      CHECK_PI(Integer)
+      CHECK_PI(Size)
+      CHECK_PI(Color)
+    }
   }
 
   AlgorithmContext* context = new AlgorithmContext(this, dataSet, tmpProgress);
