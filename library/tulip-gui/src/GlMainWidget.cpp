@@ -189,6 +189,8 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
 
       //Render the graph in the back buffer.
       scene.draw();
+    }else{
+      scene.initGlParameters();
     }
 
     glDisable(GL_TEXTURE_2D);
