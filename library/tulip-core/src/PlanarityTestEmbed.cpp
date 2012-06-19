@@ -818,7 +818,7 @@ bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph* sG) {
           //  qWarning() << "-(" << e1.id << ")->" << n.id << flush;
           ++count;
 
-          if (count > sG->numberOfEdges() +1) break;
+          if (count > 2 * sG->numberOfEdges() +1) break; //needed for trees or non biconnected graphs
         }
         while ((e1 != e)||(n != n_tmp));
 
