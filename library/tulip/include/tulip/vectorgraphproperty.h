@@ -42,6 +42,18 @@ protected:
 public:
   std::vector<TYPE> _data; /**< TODO */
 };
+
+/**
+* The vector graph property doesn't need to be exported. To keep the binary compatibility on platform different from Visual Studio we need to export them. Remove the VECTOR_PROPERTY_SCOPE definition at the next release that break binary compatibility.
+* @TODO Remove the VECTOR_PROPERTY_SCOPE definition at the next release that break binary compatibility.
+*/
+#ifdef _MSC_VER
+#define VECTOR_PROPERTY_SCOPE 
+#else
+#define VECTOR_PROPERTY_SCOPE TLP_SCOPE 
+#endif
+
+
 /**
  * @class VectorGraphProperty
  * @brief That class enables to factorize code for NodeProperty and EdgeProperty in VectorGraph, it could not be used directly.
@@ -50,7 +62,7 @@ public:
  * @see VectorGraph
  */
 template <typename TYPE>
-class TLP_SCOPE VectorGraphProperty {
+class VECTOR_PROPERTY_SCOPE VectorGraphProperty {
   friend class VectorGraph;
 public:
 
@@ -157,13 +169,19 @@ protected:
  * @see VectorGraph
  */
 template <typename TYPE>
-class  TLP_SCOPE EdgeProperty : public VectorGraphProperty<TYPE> {
+class VECTOR_PROPERTY_SCOPE EdgeProperty : public VectorGraphProperty<TYPE> {
   friend class VectorGraph;
 public:
   EdgeProperty():VectorGraphProperty<TYPE>() {}
   EdgeProperty(const EdgeProperty &obj): VectorGraphProperty<TYPE>(obj) {}
 #ifndef NDEBUG
-  bool isValid() const;
+  bool isValid() const{
+  if (this->_graph == NULL) return false;
+
+  if (this->_array == NULL) return false;
+
+  return this->_graph->isEdgeAttr(this->_array);
+  }
 #endif
 
 private:
@@ -205,23 +223,20 @@ private:
  * @see VectorGraph free(NodeProperty)
  */
 template <typename TYPE>
-class  TLP_SCOPE NodeProperty : public VectorGraphProperty<TYPE> {
+class VECTOR_PROPERTY_SCOPE NodeProperty : public VectorGraphProperty<TYPE> {
   friend class VectorGraph;
 public:
   NodeProperty():VectorGraphProperty<TYPE>() {}
   NodeProperty(const NodeProperty &obj): VectorGraphProperty<TYPE>(obj) {}
 #ifndef NDEBUG
-  bool isValid() const;
+  bool isValid() const{
+  }
 #endif
 
 private:
   NodeProperty(ValArray<TYPE> *array, VectorGraph *graph):VectorGraphProperty<TYPE>(array, graph) {}
 };
 
-#ifdef _MSC_VER
-template class TLP_SCOPE VectorGraphProperty<double>;
-template class TLP_SCOPE VectorGraphProperty<node>;
-#endif
 
 }
 #endif // VECTORGRAPHPROPERTY_H
