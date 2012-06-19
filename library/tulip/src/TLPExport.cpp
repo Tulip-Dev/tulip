@@ -132,6 +132,7 @@ public:
   }
   //=====================================================
   void saveGraphElements(ostream &os, Graph *graph) {
+    pluginProgress->showPreview(false);
     pluginProgress->setComment("Saving Graph Elements");
     pluginProgress->progress(progress, graph->numberOfEdges() + graph->numberOfNodes());
 
