@@ -1,20 +1,11 @@
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
 
 MACRO(UNIT_TEST file)
-
   STRING(REPLACE ".cpp" "" TEST_NAME ${file})
   ADD_EXECUTABLE(${TEST_NAME} ${file} tuliplibtest.cpp )
   TARGET_LINK_LIBRARIES(${TEST_NAME} ${LibTulipCoreName} cppunit)
   ADD_TEST(NAME ${TEST_NAME} COMMAND ${TEST_NAME} ${TEST_NAME})
-
 ENDMACRO(UNIT_TEST)
-
-# SET(TULIP_LIBRARY_TESTS_SRCS
-#   tuliplibtest.cpp 
-#   )
-
-# ADD_EXECUTABLE(tulip_tests ${TULIP_LIBRARY_TESTS_SRCS})
-# TARGET_LINK_LIBRARIES(tulip_tests ${LibTulipCoreName} cppunit)
 
 ADD_LIBRARY(testPlugin SHARED testPlugin.cpp)
 SET_TARGET_PROPERTIES(testPlugin 
@@ -29,7 +20,7 @@ SET_TARGET_PROPERTIES(testPlugin2
 TARGET_LINK_LIBRARIES(testPlugin2 ${LibTulipCoreName})
 
 ADD_CUSTOM_TARGET(copyTestData ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/DATA ${CMAKE_CURRENT_BINARY_DIR}/DATA )
-ADD_CUSTOM_TARGET(copyTestData2 ALL ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/TlpImportExportTest.cpp ${CMAKE_CURRENT_BINARY_DIR}/TlpImportExportTest.cpp )
+ADD_CUSTOM_TARGET(copyScript ALL ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/tulip_tests.sh ${CMAKE_CURRENT_BINARY_DIR}/tulip_tests.sh)
 
 ENABLE_TESTING()
 
