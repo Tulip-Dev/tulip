@@ -48,9 +48,9 @@ public:
 * @TODO Remove the VECTOR_PROPERTY_SCOPE definition at the next release that break binary compatibility.
 */
 #ifdef _MSC_VER
-#define VECTOR_PROPERTY_SCOPE 
+#define VECTOR_PROPERTY_SCOPE
 #else
-#define VECTOR_PROPERTY_SCOPE TLP_SCOPE 
+#define VECTOR_PROPERTY_SCOPE TLP_SCOPE
 #endif
 
 
@@ -175,12 +175,12 @@ public:
   EdgeProperty():VectorGraphProperty<TYPE>() {}
   EdgeProperty(const EdgeProperty &obj): VectorGraphProperty<TYPE>(obj) {}
 #ifndef NDEBUG
-  bool isValid() const{
-  if (this->_graph == NULL) return false;
+  bool isValid() const {
+    if (this->_graph == NULL) return false;
 
-  if (this->_array == NULL) return false;
+    if (this->_array == NULL) return false;
 
-  return this->_graph->isEdgeAttr(this->_array);
+    return this->_graph->isEdgeAttr(this->_array);
   }
 #endif
 
@@ -229,7 +229,7 @@ public:
   NodeProperty():VectorGraphProperty<TYPE>() {}
   NodeProperty(const NodeProperty &obj): VectorGraphProperty<TYPE>(obj) {}
 #ifndef NDEBUG
-  bool isValid() const{
+  bool isValid() const {
   }
 #endif
 
