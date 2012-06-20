@@ -1,121 +1,48 @@
 #include <tulip/VectorEditionWidget.h>
-#include <tulip/GraphTableItemDelegate.h>
+
+#include <tulip/TulipItemDelegate.h>
+
 #include "ui_VectorEditionWidget.h"
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
 
 using namespace tlp;
 
-VectorEditionWidget::VectorEditionWidget(QWidget *parent) :
-  QWidget(parent),
-  ui(new Ui::VectorEditionWidget) {
-  ui->setupUi(this);
-  connect(ui->addPushButton,SIGNAL(clicked(bool)),this,SLOT(addRow()));
-  connect(ui->delPushButton,SIGNAL(clicked(bool)),this,SLOT(removeRows()));
-  connect(ui->setAllPushButton,SIGNAL(clicked(bool)),this,SLOT(setAll()));
+VectorEditionWidget::VectorEditionWidget(QWidget *parent): QWidget(parent), _ui(new Ui::VectorEditionWidget), _userType(0) {
+  _ui->setupUi(this);
+  _ui->list->setItemDelegate(new TulipItemDelegate(_ui->list));
 }
 
-VectorEditionWidget::~VectorEditionWidget() {
-  delete ui;
-}
+void VectorEditionWidget::setVector(const QVector<QVariant> &d, int userType) {
+  _userType = userType;
+  _ui->list->clear();
 
-ListPropertyWidgetModel::ListPropertyWidgetModel(ContainerInterface *typeManager, QWidget* parent): QAbstractListModel( parent),elements(typeManager) {
-
-}
-
-ListPropertyWidgetModel::~ListPropertyWidgetModel() {
-  delete elements;
-}
-
-QVariant ListPropertyWidgetModel::data(const QModelIndex& index, int role) const {
-  if(index.isValid() && index.row() < elements->getElementNumber()) {
-    if(role == Qt::EditRole || role == Qt::DisplayRole) {
-      QVariant v = elements->getValue(index.row());
-      return elements->getValue(index.row());
-    }
+  foreach(QVariant v, d) {
+    QListWidgetItem* i = new QListWidgetItem();
+    i->setData(Qt::DisplayRole,v);
+    i->setFlags(i->flags() | Qt::ItemIsEditable);
+    _ui->list->addItem(i);
   }
-
-  return QVariant();
+  _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
 }
 
-int ListPropertyWidgetModel::rowCount(const QModelIndex&) const {
-  return elements->getElementNumber();
-}
-
-Qt::ItemFlags ListPropertyWidgetModel::flags(const QModelIndex& index) const {
-  return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
-}
-
-bool ListPropertyWidgetModel::setData(const QModelIndex& index, const QVariant& value, int) {
-  if(index.isValid() && index.row() < elements->getElementNumber()) {
-    if(elements->setValue(index.row(),value)) {
-      emit dataChanged(index,index);
-      return true;
-    }
+QVector<QVariant> VectorEditionWidget::vector() const {
+  QVector<QVariant> result;
+  QAbstractItemModel* model = _ui->list->model();
+  for (int i=0;i<model->rowCount();++i) {
+    result.push_back(model->data(model->index(i,0)));
   }
-  else {
-    return false;
-  }
-
-  return false;
-}
-bool ListPropertyWidgetModel::insertRows(int, int, const QModelIndex& parent) {
-  beginInsertRows(parent,elements->getElementNumber(),elements->getElementNumber());
-  elements->insertRow();
-  endInsertRows();
-  return true;
+  return result;
 }
 
-bool ListPropertyWidgetModel::removeRows(int row, int count, const QModelIndex& parent) {
-  if(row < elements->getElementNumber() && row + count <= elements->getElementNumber()) {
-    beginRemoveRows(parent,row,row+count-1);
-
-    for(int i = 0 ; i < count ; ++i) {
-      elements->deleteRow(row+i);
-    }
-
-    endRemoveRows();
-    return true;
-  }
-
-  return false;
+void VectorEditionWidget::add() {
+  QListWidgetItem* i = new QListWidgetItem();
+  i->setData(Qt::DisplayRole,QVariant(_userType,NULL));
+  i->setFlags(i->flags() | Qt::ItemIsEditable);
+  _ui->list->addItem(i);
+  _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
 }
 
-ContainerInterface* VectorEditionWidget::getInterface() {
-  return ((ListPropertyWidgetModel*)ui->listView->model())->getInterface();
-}
-
-void VectorEditionWidget::setInterface(ContainerInterface *interf) {
-  ui->listView->setModel(new ListPropertyWidgetModel(interf,this));
-  ui->listView->setItemDelegate(new GraphTableItemDelegate());
-  connect(ui->listView, SIGNAL(destroyed()), ui->listView->itemDelegate(), SLOT(deleteLater()));
-}
-
-void VectorEditionWidget::addRow() {
-  ui->listView->model()->insertRow(ui->listView->model()->rowCount());
-  ui->listView->selectionModel()->select(ui->listView->model()->index(ui->listView->model()->rowCount()-1,0),QItemSelectionModel::ClearAndSelect);
-}
-void VectorEditionWidget::removeRows() {
-  QModelIndexList selection = ui->listView->selectionModel()->selectedRows();
-
-  if(!selection.empty()) {
-    ui->listView->model()->removeRows(selection.first().row(),selection.count());
-  }
-}
-void VectorEditionWidget::setAll() {
-  if(ui->listView->model()->rowCount() > 0) {
-    QDialog dialog(this);
-    QWidget *editorWidget = ui->listView->itemDelegate()->createEditor(this,QStyleOptionViewItem(),ui->listView->model()->index(0,0));
-    dialog.layout()->addWidget(editorWidget);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    dialog.layout()->addWidget(buttonBox);
-    connect(buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
-
-    if(dialog.exec()== QDialog::Accepted) {
-      for(int i = 0 ; i < ui->listView->model()->rowCount() ; ++i) {
-        ui->listView->itemDelegate()->setModelData(editorWidget,ui->listView->model(),ui->listView->model()->index(i,0));
-      }
-    }
-  }
+void VectorEditionWidget::remove() {
+  foreach(QListWidgetItem* i, _ui->list->selectedItems())
+    delete i;
+  _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
 }
