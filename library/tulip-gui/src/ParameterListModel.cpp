@@ -82,7 +82,7 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
   ParamInfos infos = _params[index.row()];
 
   if (role == Qt::ToolTipRole)
-    infos.getNameForDisplay();
+    return infos.desc;
   else if (role == Qt::WhatsThisRole)
     return infos.desc;
   else if (role == Qt::BackgroundRole) {
@@ -129,9 +129,9 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
         return QColor(255, 255, 222);
       else
         return QColor(222, 255, 222);
-    }
+    } else if (role == Qt::ToolTipRole)
+      return infos.desc;
   }
-
 
   return TulipModel::headerData(section,orientation,role);
 }
