@@ -7,14 +7,17 @@
     <x>0</x>
     <y>0</y>
     <width>989</width>
-    <height>544</height>
+    <height>231</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="styleSheet">
-   <string notr="true">QLabel {
-font: bold;
-}
-#SearchWidget {
+   <string notr="true">#SearchWidget {
 background-color: #A9A9A9;
 }</string>
   </property>
@@ -25,6 +28,16 @@ background-color: #A9A9A9;
    <property name="margin">
     <number>0</number>
    </property>
+   <item>
+    <widget class="HeaderFrame" name="headerFrame">
+     <property name="expandable" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="title" stdset="0">
+      <string>Search</string>
+     </property>
+    </widget>
+   </item>
    <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="frameShape">
@@ -38,9 +51,14 @@ background-color: #A9A9A9;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>989</width>
-        <height>544</height>
+        <width>974</width>
+        <height>239</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel {
+font: bold;
+}</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="spacing">
@@ -318,62 +336,19 @@ font: bold;
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="resultsFrame">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>90</height>
-          </size>
+        <widget class="QLabel" name="resultsCountLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
          <property name="styleSheet">
-          <string notr="true">QTableView {
-border: 1px solid #C9C9C9;
-}</string>
+          <string notr="true">font: normal;</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <property name="spacing">
-           <number>10</number>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="resultsCountLabel">
-            <property name="styleSheet">
-             <string notr="true">font: normal;</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QTableView" name="nodesResultsTable">
-              <property name="frameShape">
-               <enum>QFrame::NoFrame</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTableView" name="edgesResultsTable">
-              <property name="styleSheet">
-               <string notr="true">QTableView {
-border-left: 0px;
-}</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::NoFrame</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
+         <property name="alignment">
+          <set>Qt::AlignLeading</set>
+         </property>
         </widget>
        </item>
       </layout>
@@ -387,6 +362,12 @@ border-left: 0px;
    <class>TreeViewComboBox</class>
    <extends>QComboBox</extends>
    <header>tulip/TreeViewComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>HeaderFrame</class>
+   <extends>QFrame</extends>
+   <header>HeaderFrame.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
