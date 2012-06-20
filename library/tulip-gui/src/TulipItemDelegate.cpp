@@ -51,13 +51,13 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<NodeShape>(new NodeShapeEditorCreator);
   registerCreator<EdgeShape>(new EdgeShapeEditorCreator);
   registerCreator<EdgeExtremityShape>(new EdgeExtremityShapeEditorCreator);
-  registerCreator<std::vector<bool> >(new GenericVectorEditorCreator<bool>);
-  registerCreator<std::vector<Color> >(new GenericVectorEditorCreator<Color>);
-  registerCreator<std::vector<Coord> >(new GenericVectorEditorCreator<Coord>);
-  registerCreator<std::vector<double> >(new GenericVectorEditorCreator<double>);
-  registerCreator<std::vector<int> >(new GenericVectorEditorCreator<int>);
-  registerCreator<std::vector<Size> >(new GenericVectorEditorCreator<Size>);
-  registerCreator<std::vector<std::string> >(new GenericVectorEditorCreator<std::string>);
+  registerCreator<std::vector<bool> >(new VectorEditorCreator<bool>);
+  registerCreator<std::vector<Color> >(new VectorEditorCreator<Color>);
+  registerCreator<std::vector<Coord> >(new VectorEditorCreator<Coord>);
+  registerCreator<std::vector<double> >(new VectorEditorCreator<double>);
+  registerCreator<std::vector<int> >(new VectorEditorCreator<int>);
+  registerCreator<std::vector<Size> >(new VectorEditorCreator<Size>);
+  registerCreator<std::vector<std::string> >(new VectorEditorCreator<std::string>);
   registerCreator<TulipFont>(new TulipFontEditorCreator);
   registerCreator<LabelPosition>(new TulipLabelPositionEditorCreator);
   registerCreator<Graph*>(new GraphEditorCreator);
@@ -86,7 +86,8 @@ QWidget* TulipItemDelegate::createEditor(QWidget* parent, const QStyleOptionView
   if (!c)
     return NULL;
 
-  return c->createWidget(parent);
+  QWidget* w = c->createWidget(parent);
+  return w;
 }
 
 QString TulipItemDelegate::displayText(const QVariant &value, const QLocale &locale) const {

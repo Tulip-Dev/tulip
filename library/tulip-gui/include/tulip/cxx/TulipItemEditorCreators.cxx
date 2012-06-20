@@ -96,25 +96,36 @@ QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant& v) const {
 }
 
 template<typename ElementType>
-QWidget* GenericVectorEditorCreator<ElementType>::createWidget(QWidget* parent) const {
-  return new VectorEditionWidget(parent);
+QWidget* VectorEditorCreator<ElementType>::createWidget(QWidget*) const {
+  VectorEditionWidget* w = new VectorEditionWidget(NULL);
+  w->setWindowFlags(Qt::Dialog);
+  w->setWindowModality(Qt::ApplicationModal);
+  return w;
+
 }
 
 template<typename ElementType>
-void GenericVectorEditorCreator<ElementType>::setEditorData(QWidget* editor, const QVariant& data,bool,tlp::Graph*) {
-  std::vector<ElementType> v = data.value<std::vector<ElementType> >();
-  VectorEditionWidget* vEditor = static_cast<VectorEditionWidget*>(editor);
-  vEditor->setInterface(new GenericContainer< tlp::TypeInterface<ElementType> >(v));
+void VectorEditorCreator<ElementType>::setEditorData(QWidget* editor, const QVariant& v,bool,tlp::Graph*) {
+  QVector<QVariant> editorData;
+  std::vector<ElementType> vect = v.value<std::vector<ElementType> >();
+  for (size_t i=0; i < vect.size(); ++i)  {
+    editorData.push_back(QVariant::fromValue<ElementType>(vect[i]));
+  }
+  static_cast<VectorEditionWidget*>(editor)->setVector(editorData,qMetaTypeId<ElementType>());
+  static_cast<VectorEditionWidget*>(editor)->move(QCursor::pos());
 }
 
 template<typename ElementType>
-QVariant GenericVectorEditorCreator<ElementType>::editorData(QWidget* editor,tlp::Graph*) {
-  VectorEditionWidget* vEditor = static_cast<VectorEditionWidget*>(editor);
-  return QVariant::fromValue<std::vector<ElementType> >(static_cast< GenericContainer< tlp::TypeInterface<ElementType> >* >(vEditor->getInterface())->getResultValue());
+QVariant VectorEditorCreator<ElementType>::editorData(QWidget* editor,tlp::Graph*) {
+  std::vector<ElementType> result;
+  QVector<QVariant> editorData = static_cast<VectorEditionWidget*>(editor)->vector();
+  foreach(QVariant v, editorData)
+    result.push_back(v.value<ElementType>());
+  return QVariant::fromValue<std::vector<ElementType> >(result);
 }
 
 template<typename ElementType>
-QString GenericVectorEditorCreator<ElementType>::displayText(const QVariant &data) const {
+QString VectorEditorCreator<ElementType>::displayText(const QVariant &data) const {
   std::vector<ElementType> v = data.value<std::vector<ElementType> >();
   return QString::number(v.size()) + QObject::trUtf8(" elements");
 }

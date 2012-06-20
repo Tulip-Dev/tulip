@@ -43,6 +43,7 @@ public:
 
   virtual void setEditorData(QWidget*,const QVariant&,bool isMandatory,tlp::Graph* g=NULL)=0;
   virtual QVariant editorData(QWidget*,tlp::Graph* g=NULL)=0;
+
 };
 
 template<typename T>
@@ -159,7 +160,7 @@ public:
 };
 
 template<typename ElementType>
-class TLP_QT_SCOPE GenericVectorEditorCreator : public tlp::TulipItemEditorCreator {
+class TLP_QT_SCOPE VectorEditorCreator : public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget* parent) const;
   virtual void setEditorData(QWidget* editor, const QVariant& data,bool,tlp::Graph*);
