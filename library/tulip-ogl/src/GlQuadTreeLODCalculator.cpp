@@ -88,6 +88,18 @@ void GlQuadTreeLODCalculator::setInputData(const GlGraphInputData *newInputData)
 }
 
 bool GlQuadTreeLODCalculator::needEntities() {
+  if(inputData != NULL) {
+    //Checks if the properties in the GlGraphInputData have changed
+    if(layoutProperty != inputData->getElementLayout() || sizeProperty != inputData->getElementSize() || selectionProperty != inputData->getElementSelected()) {
+      //Remove observers on old properties
+      removeObservers();
+      //Reinit properties and listen them
+      addObservers();
+      //Need to recompute
+      haveToCompute = true;
+    }
+  }
+
   // Check if quadtree need entities
   if(haveToCompute) {
     if(inputData)
@@ -481,14 +493,20 @@ void GlQuadTreeLODCalculator::removeObservers() {
     if(currentGraph)
       currentGraph->removeListener(this);
 
-    if(layoutProperty)
+    if(layoutProperty) {
       layoutProperty->removeListener(this);
+      layoutProperty = NULL;
+    }
 
-    if(sizeProperty)
+    if(sizeProperty) {
       sizeProperty->removeListener(this);
+      sizeProperty = NULL;
+    }
 
-    if(selectionProperty)
+    if(selectionProperty) {
       selectionProperty->removeListener(this);
+      selectionProperty = NULL;
+    }
   }
 
   if(glScene)
@@ -499,12 +517,24 @@ void GlQuadTreeLODCalculator::addObservers() {
   if(inputData) {
     currentGraph=inputData->getGraph();
     currentGraph->addListener(this);
-    layoutProperty=inputData->getElementLayout();
-    layoutProperty->addListener(this);
-    sizeProperty=inputData->getElementSize();
-    sizeProperty->addListener(this);
+
+    layoutProperty = inputData->getElementLayout();
+
+    if(layoutProperty != NULL) {
+      layoutProperty->addListener(this);
+    }
+
+    sizeProperty = inputData->getElementSize();
+
+    if(sizeProperty != NULL) {
+      sizeProperty->addListener(this);
+    }
+
     selectionProperty=inputData->getElementSelected();
-    selectionProperty->addListener(this);
+
+    if(selectionProperty != NULL) {
+      selectionProperty->addListener(this);
+    }
   }
 
   if(glScene)
@@ -512,7 +542,9 @@ void GlQuadTreeLODCalculator::addObservers() {
 }
 
 void GlQuadTreeLODCalculator::update(PropertyInterface *property) {
-  if(property==inputData->getElementLayout() || property==inputData->getElementSize())
+  if(property==inputData->getElementLayout() ||
+     property==inputData->getElementSize() ||
+     property==inputData->getElementSelected())
     setHaveToCompute();
 }
 
@@ -581,6 +613,19 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
     if (dynamic_cast<tlp::Graph*>(ev.sender())) {
       clear();
       setInputData(NULL);
+    }
+
+    PropertyInterface* property;
+    if ((property = dynamic_cast<PropertyInterface*>(ev.sender()))) {
+      if(property == layoutProperty) {
+	layoutProperty=NULL;
+      }
+      else if(property == sizeProperty) {
+	sizeProperty = NULL;
+      }
+      else if(property == selectionProperty) {
+	selectionProperty = NULL;
+      }
     }
   }
 }
