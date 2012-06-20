@@ -49,6 +49,8 @@ void ColorButton::paintEvent(QPaintEvent *event) {
   float tickW = width() / 4.;
   float tickH = height() / 4;
   p.setPen(Qt::black);
+  QColor c(_color);
+  _color.setAlpha(255);
   p.setBrush(_color);
   p.drawRect(tickW, tickH, tickW * 2, tickH * 2);
 }
