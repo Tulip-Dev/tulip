@@ -129,7 +129,8 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
         return QColor(255, 255, 222);
       else
         return QColor(222, 255, 222);
-    } else if (role == Qt::ToolTipRole)
+    }
+    else if (role == Qt::ToolTipRole)
       return infos.desc;
   }
 

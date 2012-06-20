@@ -543,8 +543,8 @@ void GlQuadTreeLODCalculator::addObservers() {
 
 void GlQuadTreeLODCalculator::update(PropertyInterface *property) {
   if(property==inputData->getElementLayout() ||
-     property==inputData->getElementSize() ||
-     property==inputData->getElementSelected())
+      property==inputData->getElementSize() ||
+      property==inputData->getElementSelected())
     setHaveToCompute();
 }
 
@@ -616,15 +616,16 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
     }
 
     PropertyInterface* property;
+
     if ((property = dynamic_cast<PropertyInterface*>(ev.sender()))) {
       if(property == layoutProperty) {
-	layoutProperty=NULL;
+        layoutProperty=NULL;
       }
       else if(property == sizeProperty) {
-	sizeProperty = NULL;
+        sizeProperty = NULL;
       }
       else if(property == selectionProperty) {
-	selectionProperty = NULL;
+        selectionProperty = NULL;
       }
     }
   }
