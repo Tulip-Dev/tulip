@@ -230,11 +230,11 @@ public:
   NodeProperty(const NodeProperty &obj): VectorGraphProperty<TYPE>(obj) {}
 #ifndef NDEBUG
   bool isValid() const {
-      if (this->_graph == NULL) return false;
+    if (this->_graph == NULL) return false;
 
-      if (this->_array == NULL) return false;
+    if (this->_array == NULL) return false;
 
-      return this->_graph->isNodeAttr(this->_array);
+    return this->_graph->isNodeAttr(this->_array);
   }
 #endif
 
