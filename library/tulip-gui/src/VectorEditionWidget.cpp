@@ -27,9 +27,11 @@ void VectorEditionWidget::setVector(const QVector<QVariant> &d, int userType) {
 QVector<QVariant> VectorEditionWidget::vector() const {
   QVector<QVariant> result;
   QAbstractItemModel* model = _ui->list->model();
-  for (int i=0;i<model->rowCount();++i) {
+
+  for (int i=0; i<model->rowCount(); ++i) {
     result.push_back(model->data(model->index(i,0)));
   }
+
   return result;
 }
 
@@ -43,6 +45,6 @@ void VectorEditionWidget::add() {
 
 void VectorEditionWidget::remove() {
   foreach(QListWidgetItem* i, _ui->list->selectedItems())
-    delete i;
+  delete i;
   _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
 }

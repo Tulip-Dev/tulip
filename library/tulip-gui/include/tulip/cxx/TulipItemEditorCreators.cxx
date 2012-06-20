@@ -108,10 +108,13 @@ template<typename ElementType>
 void VectorEditorCreator<ElementType>::setEditorData(QWidget* editor, const QVariant& v,bool,tlp::Graph*) {
   QVector<QVariant> editorData;
   std::vector<ElementType> vect = v.value<std::vector<ElementType> >();
+
   for (size_t i=0; i < vect.size(); ++i)  {
     editorData.push_back(QVariant::fromValue<ElementType>(vect[i]));
   }
+
   static_cast<VectorEditionWidget*>(editor)->setVector(editorData,qMetaTypeId<ElementType>());
+
   static_cast<VectorEditionWidget*>(editor)->move(QCursor::pos());
 }
 
@@ -120,7 +123,7 @@ QVariant VectorEditorCreator<ElementType>::editorData(QWidget* editor,tlp::Graph
   std::vector<ElementType> result;
   QVector<QVariant> editorData = static_cast<VectorEditionWidget*>(editor)->vector();
   foreach(QVariant v, editorData)
-    result.push_back(v.value<ElementType>());
+  result.push_back(v.value<ElementType>());
   return QVariant::fromValue<std::vector<ElementType> >(result);
 }
 
