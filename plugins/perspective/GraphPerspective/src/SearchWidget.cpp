@@ -115,10 +115,7 @@ QVector<SearchOperator*> SearchWidget::STRING_OPERATORS = QVector<SearchOperator
 
 SearchWidget::SearchWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SearchWidget) {
   _ui->setupUi(this);
-  _ui->resultsFrame->hide();
   _ui->customValueEdit->hide();
-  _ui->nodesResultsTable->setItemDelegate(new GraphTableItemDelegate(_ui->nodesResultsTable));
-  _ui->edgesResultsTable->setItemDelegate(new GraphTableItemDelegate(_ui->edgesResultsTable));
 
   _ui->resultsStorageCombo->setModel(new GraphPropertiesModel<BooleanProperty>(NULL,false,_ui->resultsStorageCombo));
   _ui->searchTermACombo->setModel(new GraphPropertiesModel<PropertyInterface>(NULL,false,_ui->searchTermACombo));
@@ -149,23 +146,14 @@ void SearchWidget::setGraph(Graph *g) {
   }
 
   else {
-    _ui->nodesResultsTable->setModel(NULL);
-    _ui->edgesResultsTable->setModel(NULL);
-
-    _ui->resultsFrame->hide();
     _ui->resultsCountLabel->setText("");
   }
 
   static_cast<GraphPropertiesModel<BooleanProperty>*>(_ui->resultsStorageCombo->model())->setGraph(g);
-
   _ui->resultsStorageCombo->setCurrentIndex(0);
-
   static_cast<GraphPropertiesModel<PropertyInterface>*>(_ui->searchTermACombo->model())->setGraph(g);
-
   _ui->searchTermACombo->setCurrentIndex(0);
-
   static_cast<GraphPropertiesModel<PropertyInterface>*>(_ui->searchTermBCombo->model())->setGraph(g);
-
   _ui->searchTermBCombo->setCurrentIndex(0);
 }
 
@@ -260,30 +248,6 @@ void SearchWidget::search() {
   }
 
   _ui->resultsCountLabel->setText(QString::number(resultsCount) + trUtf8(" results found"));
-  _ui->nodesResultsTable->setModel(NULL);
-  _ui->edgesResultsTable->setModel(NULL);
-  _ui->nodesResultsTable->setVisible(onNodes);
-  _ui->edgesResultsTable->setVisible(onEdges);
-
-  if (onNodes) {
-    GraphSortFilterProxyModel* proxyModel = new GraphSortFilterProxyModel(_ui->nodesResultsTable);
-    proxyModel->setFilterProperty(output);
-    NodesGraphModel* sourceModel = new NodesGraphModel(proxyModel);
-    proxyModel->setSourceModel(sourceModel);
-    sourceModel->setGraph(g);
-    _ui->nodesResultsTable->setModel(proxyModel);
-  }
-
-  if (onEdges) {
-    GraphSortFilterProxyModel* proxyModel = new GraphSortFilterProxyModel(_ui->edgesResultsTable);
-    proxyModel->setFilterProperty(output);
-    EdgesGraphModel* sourceModel = new EdgesGraphModel(proxyModel);
-    proxyModel->setSourceModel(sourceModel);
-    sourceModel->setGraph(g);
-    _ui->edgesResultsTable->setModel(proxyModel);
-  }
-
-  _ui->resultsFrame->show();
 
   Observable::unholdObservers();
 }
