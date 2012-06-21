@@ -37,7 +37,7 @@ QVector<QVariant> VectorEditionWidget::vector() const {
 
 void VectorEditionWidget::add() {
   QListWidgetItem* i = new QListWidgetItem();
-  i->setData(Qt::DisplayRole,QVariant(_userType,NULL));
+  i->setData(Qt::DisplayRole,QVariant(_userType,(const void*)NULL));
   i->setFlags(i->flags() | Qt::ItemIsEditable);
   _ui->list->addItem(i);
   _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
