@@ -155,6 +155,7 @@ void WorkspacePanel::setView(tlp::View* view) {
   QFile css(":/tulip/gui/txt/view_configurationtab.css");
   css.open(QIODevice::ReadOnly);
   viewConfigurationTabs->setStyleSheet(css.readAll());
+  viewConfigurationTabs->findChild<QTabBar*>()->installEventFilter(this);
   css.close();
 
   foreach(QWidget* w, _view->configurationWidgets()) {
@@ -166,7 +167,25 @@ void WorkspacePanel::setView(tlp::View* view) {
   _viewConfigurationWidgets = new QGraphicsProxyWidget(_view->centralItem());
   _viewConfigurationWidgets->setWidget(viewConfigurationTabs);
   _viewConfigurationWidgets->setZValue(DBL_MAX);
-  _view->graphicsView()->scene()->installEventFilter(this);
+//  _view->graphicsView()->scene()->installEventFilter(this);
+}
+
+bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
+  if (_viewConfigurationWidgets != NULL && _view != NULL) {
+    if (ev->type() == QEvent::GraphicsSceneContextMenu) {
+      _view->showContextMenu(QCursor::pos(),static_cast<QGraphicsSceneContextMenuEvent*>(ev)->scenePos());
+    }
+
+    else if (_view->configurationWidgets().contains(dynamic_cast<QWidget*>(obj)))
+      return true;
+
+    else if (ev->type() == QEvent::MouseButtonPress && !_viewConfigurationExpanded && dynamic_cast<QTabBar*>(obj) != NULL) {
+      setConfigurationTabExpanded(true);
+    }
+  }
+
+
+  return QWidget::eventFilter(obj,ev);
 }
 
 void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
@@ -333,23 +352,6 @@ void WorkspacePanel::graphComboIndexChanged() {
   if (g != NULL && _view != NULL && g != _view->graph()) {
     _view->setGraph(g);
   }
-}
-
-bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
-  if (_viewConfigurationWidgets != NULL && _view != NULL) {
-    if (obj == _view->graphicsView()->scene() && ev->type() == QEvent::GraphicsSceneMousePress) {
-      if (_viewConfigurationWidgets->sceneBoundingRect().contains(static_cast<QGraphicsSceneMouseEvent*>(ev)->scenePos()))
-        setConfigurationTabExpanded(true);
-    }
-    else if (_view->configurationWidgets().contains(dynamic_cast<QWidget*>(obj)))
-      return true;
-  }
-
-  if (ev->type() == QEvent::GraphicsSceneContextMenu) {
-    _view->showContextMenu(QCursor::pos(),static_cast<QGraphicsSceneContextMenuEvent*>(ev)->scenePos());
-  }
-
-  return QWidget::eventFilter(obj,ev);
 }
 
 void WorkspacePanel::resizeEvent(QResizeEvent* ev) {
