@@ -504,14 +504,14 @@ struct QParamDialog : public QDialog {
 
       // forget non property output parameter
       if (param.getDirection() == OUT_PARAM
-          && typeName == TN(PropertyInterface*)
-          && typeName == TN(BooleanProperty)
-          && typeName == TN(DoubleProperty)
-          && typeName == TN(LayoutProperty)
-          && typeName == TN(StringProperty)
-          && typeName == TN(IntegerProperty)
-          && typeName == TN(SizeProperty)
-          && typeName == TN(ColorProperty))
+          && typeName != TN(PropertyInterface*)
+          && typeName != TN(BooleanProperty)
+          && typeName != TN(DoubleProperty)
+          && typeName != TN(LayoutProperty)
+          && typeName != TN(StringProperty)
+          && typeName != TN(IntegerProperty)
+          && typeName != TN(SizeProperty)
+          && typeName != TN(ColorProperty))
         continue;
 
       IParam ip;
