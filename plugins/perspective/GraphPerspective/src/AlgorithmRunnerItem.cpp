@@ -19,6 +19,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
   _ui->parameters->setVisible(false);
   _ui->parameters->setItemDelegate(new TulipItemDelegate);
   setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
+  _ui->settingsButton->setEnabled(tlp::PluginLister::getPluginParameters(pluginName.toStdString()).size()>0);
 }
 
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {
