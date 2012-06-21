@@ -167,7 +167,6 @@ void WorkspacePanel::setView(tlp::View* view) {
   _viewConfigurationWidgets = new QGraphicsProxyWidget(_view->centralItem());
   _viewConfigurationWidgets->setWidget(viewConfigurationTabs);
   _viewConfigurationWidgets->setZValue(DBL_MAX);
-//  _view->graphicsView()->scene()->installEventFilter(this);
 }
 
 bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
