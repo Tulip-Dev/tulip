@@ -479,8 +479,8 @@ void GlEdge::drawLabel(OcclusionTest* test, const GlGraphInputData* data, float 
   else
     label->setStencil(data->parameters->getEdgesLabelStencil());
 
-  label->setText(tmp);
   label->setFontNameSizeAndColor(data->getElementFont()->getEdgeValue(e),fontSize,fontColor);
+  label->setText(tmp);
   label->setOutlineColor(Color(0,0,0,fontColor[3]));
 
   const std::pair<node, node>& eEnds = data->graph->ends(e);
