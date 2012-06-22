@@ -184,12 +184,6 @@ ENDIF(TULIP_OGDF_LIBRARY)
 
 SET(TULIP_USE_FILE "${TULIP_DIR}/share/tulip/TulipUseFile.cmake")
 
-MACRO(TULIP_PLUGINSERVER)
-  add_custom_command(OUTPUT "pseudo-install" COMMAND ${CMAKE_COMMAND} -P cmake_install.cmake)
-  add_custom_command(OUTPUT "plugin packages" COMMAND packagePlugins ${CMAKE_BINARY_DIR}/pluginserver archive DEPENDS "pseudo-install")
-  add_custom_target(pluginserver DEPENDS "plugin packages")
-ENDMACRO()
-
 MACRO(GENERATE_DOCUMENTATION PLUGIN_COMPONENT)
   SET(TEMPLATE_DIR /home/packadal/src/tulip/doc/pluginDocTemplate)
   add_custom_target("copy sources-${PLUGIN_COMPONENT}" ALL COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/html doc)
