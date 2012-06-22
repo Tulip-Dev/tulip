@@ -28,9 +28,13 @@
 #define STRINGIFY(PARAM) STRINGIFY_INTERNAL(PARAM)
 #define STRINGIFY_INTERNAL(PARAM) #PARAM
 
-//MSVC is the only compiler we use that does not have typeof
+//MSVC and GCC in c++11 mode use decltype instead of typeof
 #if !defined(_MSC_VER)
-#  define TYPEOF typeof
+#  if defined(__GXX_EXPERIMENTAL_CXX0X__)
+#    define TYPEOF decltype
+#  else
+#    define TYPEOF typeof
+#  endif
 #endif
 
 #if defined(_MSC_VER)
