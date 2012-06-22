@@ -66,8 +66,10 @@ int main(int argc,char **argv) {
   }
 
   QString destinationDir = QDir::currentPath();
+
   if(argc >= 3)
     destinationDir = argv[2];
+
   QFileInfo destInfo(destinationDir);
   QDir::home().mkpath(destInfo.absoluteFilePath());
 
@@ -90,9 +92,11 @@ int main(int argc,char **argv) {
     collector._currentDirectory = component.fileName();
     QDir pluginDir(component.absoluteFilePath());
     QDir::home().mkpath(outputDir.absoluteFilePath(component.fileName()));
+
     if (!QuaZIPFacade::zipDir(pluginDir.absolutePath(),outputDir.absoluteFilePath(component.fileName() + QDir::separator() + "data-" + OS_PLATFORM + OS_ARCHITECTURE + ".zip"))) {
       qFatal("Failed to zip archive");
     }
+
     pluginDir.cd("lib");
     pluginDir.cd("tulip");
     foreach(QFileInfo pluginFile, pluginDir.entryInfoList(QDir::Files | QDir::NoSymLinks)) {
@@ -132,11 +136,13 @@ int main(int argc,char **argv) {
       rootPluginNode.setAttribute("tulip",info->tulipRelease().c_str());
       QDomElement depsNode = pluginDocument.createElement("dependencies");
       std::list<Dependency> deps = PluginLister::getPluginDependencies(info->name());
+
       for(std::list<Dependency>::iterator it = deps.begin(); it != deps.end(); ++it) {
         QDomElement dep = pluginDocument.createElement("dependency");
         dep.setAttribute("name",it->pluginName.c_str());
         depsNode.appendChild(dep);
       }
+
       rootPluginNode.appendChild(depsNode);
       pluginDocument.appendChild(rootPluginNode);
 
