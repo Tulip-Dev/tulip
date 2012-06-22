@@ -47,10 +47,8 @@ ENDMACRO(SET_COMPILER_OPTIONS)
 ## -----------------------------------------------------------------------------------------------
 ## General macros
 ## -----------------------------------------------------------------------------------------------
-IF(NOT APPLE)
 FUNCTION(install)
   IF(TULIP_GENERATE_PLUGINSERVER)
-
     cmake_parse_arguments(PLUGIN "" "DESTINATION;COMPONENT" "TARGETS" ${ARGN})
 
     IF(PLUGIN_UNPARSED_ARGUMENTS)
@@ -62,7 +60,6 @@ FUNCTION(install)
         cmake_parse_arguments(PLUGIN "" "DESTINATION;COMPONENT" "DIRECTORY" ${ARGN})
         STRING(REPLACE ${TULIP_DIR} "" DEST ${PLUGIN_DESTINATION})
         SET(PLUGIN_DESTINATION "${CMAKE_BINARY_DIR}/pluginserver/${PLUGIN_COMPONENT}/${DEST}")
-        message("${PLUGIN_DESTINATION}")
         _install(DIRECTORY ${PLUGIN_DIRECTORY} COMPONENT ${PLUGIN_COMPONENT} DESTINATION ${PLUGIN_DESTINATION})
       ENDIF()
       _install(FILES ${PLUGIN_FILES} COMPONENT ${PLUGIN_COMPONENT} DESTINATION ${PLUGIN_DESTINATION})
@@ -75,25 +72,21 @@ FUNCTION(install)
       ENDFOREACH()
     ENDIF()
 
-  ELSE(TULIP_GENERATE_PLUGINSERVER)
+  ELSE(TULIP_GENERATE_PLUGINSERVER) # Check CPack component and forward to install
     cmake_parse_arguments(TGT "" "COMPONENT;TARGETS;FILES" "" ${ARGN})
-
     IF(NOT TGT_COMPONENT) # Check COMPONENT declaration
       MESSAGE(FATAL_ERROR "[CPack] Component not defined for ${TGT_TARGETS} ${TGT_FILES}. Component must be defined to ensure correct installer generation.")
     ENDIF(NOT TGT_COMPONENT)
-
     SET(CPACK_COMPONENTS_ALL ${CPACK_COMPONENTS_ALL} ${TGT_COMPONENT} CACHE INTERNAL "")
-
     FOREACH(T ${TGT_TARGETS})
       SET(BUNDLE_${T}_COMP ${TGT_COMPONENT} CACHE INTERNAL "")
       SET(BUNDLE_TARGETS ${BUNDLE_TARGETS} ${T} CACHE INTERNAL "")
     ENDFOREACH()
-
     _install(${ARGN})
-
   ENDIF()
-
 ENDFUNCTION(install)
+
+IF(NOT APPLE)
 
 FUNCTION(TARGET_LINK_LIBRARIES)
   FOREACH(A ${ARGV})

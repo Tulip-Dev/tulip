@@ -21,6 +21,9 @@
 #include <QtCore/QFile>
 #include <QtCore/QDir>
 #include <QtXml/QDomDocument>
+#include <QtCore/QLibrary>
+#include <QtCore/QDebug>
+#include <QtGui/QApplication>
 
 #include <tulip/SystemDefinition.h>
 #include <tulip/PluginLister.h>
@@ -28,54 +31,20 @@
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/QuaZIPFacade.h>
 
+#include <tulip/Interactor.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/EdgeExtremityGlyphManager.h>
+
 #include <fcntl.h>
 #include <tulip/TlpQtTools.h>
 
 using namespace std;
 using namespace tlp;
 
-class PluginInformationsCollector : public PluginLoader {
-public:
+struct PluginInformationsCollector : public PluginLoader {
 
-  void setCurrentPluginName(const QString& name) {
-    _name = name;
-  }
-
-  virtual void loaded(const tlp::Plugin* info, const std::list< Dependency >& dependencies) {
-    QString pluginName = QString::fromStdString(info->name());
-    QString pluginLibrary;
-
-    std::list<std::string> plugins = PluginLister::availablePlugins();
-
-    for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
-      pluginLibrary = QString::fromStdString(PluginLister::getPluginLibrary(pluginName.toStdString()));
-    }
-
-    //creates the xml document for this plugin
-    QDomDocument pluginInfoDocument;
-    QDomElement infoElement = pluginInfoDocument.createElement("plugin");
-    infoElement.setTagName("plugin");
-    infoElement.setAttribute("name", pluginName);
-    //TODO remove this once the input/output parameters refactoring is done
-    infoElement.setAttribute("type", "");
-    infoElement.setAttribute("author", QString::fromStdString(info->author()));
-    infoElement.setAttribute("date", QString::fromStdString(info->date()));
-    infoElement.setAttribute("info", QString::fromStdString(info->info()));
-    infoElement.setAttribute("fileName", pluginLibrary);
-    infoElement.setAttribute("release", QString::fromStdString(info->release()));
-    infoElement.setAttribute("group", QString::fromStdString(info->group()));
-    infoElement.setAttribute("tulipRelease", QString::fromStdString(info->tulipRelease()));
-    infoElement.setAttribute("folder", _name.simplified().remove(' ').toLower());
-
-    for(std::list<Dependency>::const_iterator it = dependencies.begin(); it != dependencies.end(); ++it) {
-      QDomElement dependencyElement = pluginInfoDocument.createElement("dependency");
-      dependencyElement.setAttribute("name", QString::fromStdString(it->pluginName));
-      dependencyElement.setAttribute("type", QString::fromStdString(it->factoryName));
-      dependencyElement.setAttribute("version", QString::fromStdString(it->pluginRelease));
-      infoElement.appendChild(dependencyElement);
-    }
-
-    _xmlElements.push_back(infoElement);
+  virtual void loaded(const tlp::Plugin* info, const std::list< Dependency >&) {
+    _directoryPlugins[_currentDirectory].push_back(info->name().c_str());
   }
 
   virtual void aborted(const std::string& plugin, const std::string& message) {
@@ -85,105 +54,106 @@ public:
   virtual void finished(bool, const std::string&) {}
   virtual void start(const std::string&) {}
 
-  const QList<QDomElement>& xmlElements() {
-    return _xmlElements;
-  }
-
-private:
-  QList<QDomElement> _xmlElements;
-  QString _name;
+  QString _currentDirectory;
+  QMap<QString,QStringList> _directoryPlugins;
 };
 
 int main(int argc,char **argv) {
-  //the plugin path is the root of the plugin folder. In the following example, it is the edgeseparation folder.
-//   pluginserver/
-//   ├── edgeseparation
-//   │   ├── lib
-//   │   │   └── tulip
-//   │   │       └── libedgeseparation-4.0.0.so
-//   │   └── share
-//   │       └── doc
-//   │           └── edgeseparation
-//   │               └── index.html
-//
+  QApplication app(argc,argv);
+
   if(argc < 2) {
-    std::cout << "packagePlugin pluginPath [destinationDir]" << std::endl;
-    cout << "destinationDir defaults to the current dir" << endl;
-    exit(0);
+    qFatal("packagePlugin pluginPath [destinationDir]");
   }
 
-  QString destinationDir;
-
-  if(argc < 3) {
-    destinationDir = QDir::currentPath();
-  }
-  else {
+  QString destinationDir = QDir::currentPath();
+  if(argc >= 3)
     destinationDir = argv[2];
-    QDir destination(QDir::current());
+  QFileInfo destInfo(destinationDir);
+  QDir::home().mkpath(destInfo.absoluteFilePath());
 
-    if(!destination.exists(destinationDir)) {
-      destination.mkdir(destinationDir);
-    }
-  }
+  // First we initialize Tulip with basic plugins to ensure dependencies consistency
+  tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
+  tlp::TulipPluginsPath = tlp::TulipPluginsPath;
+  tlp::PluginLibraryLoader::loadPlugins();
+  tlp::PluginLister::checkLoadedPluginsDependencies(0);
+  tlp::InteractorLister::initInteractorsDependencies();
+  tlp::GlyphManager::getInst().loadGlyphPlugins();
+  tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
 
-  initTulipLib();
+  QDir outputDir(destinationDir);
+
+  // Next: we load additional plugins from external project and ZIP data into output directory
   PluginInformationsCollector collector;
   QDir pluginServerDir(argv[1]);
   PluginLister::currentLoader = &collector;
-
-  QStringList libraries;
-#if defined(_WIN32) || defined(_WIN64)
-  libraries.push_back("*.dll");
-#elif defined(__APPLE__)
-  libraries.push_back("*.dylib");
-#else
-  libraries.push_back("*.so");
-#endif
-
-  foreach(const QString component, pluginServerDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-    QString plugindir = pluginServerDir.canonicalPath() + "/" + component;
-
-    QDir pluginDirectory(plugindir);
-    pluginDirectory.cd("lib");
-    pluginDirectory.cd("tulip");
-
-    QString pluginSimplifiedName = component.simplified().remove(' ').toLower();
-
-    foreach(const QString& pluginFile, pluginDirectory.entryList(libraries, QDir::Files | QDir::NoSymLinks)) {
-      QString pluginFileName = pluginDirectory.canonicalPath() + "/" + pluginFile;
-      collector.setCurrentPluginName(pluginSimplifiedName);
-      PluginLibraryLoader::loadPluginLibrary(pluginFileName.toStdString(), &collector);
+  foreach(const QFileInfo component, pluginServerDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+    collector._currentDirectory = component.fileName();
+    QDir pluginDir(component.absoluteFilePath());
+    QDir::home().mkpath(outputDir.absoluteFilePath(component.fileName()));
+    if (!QuaZIPFacade::zipDir(pluginDir.absolutePath(),outputDir.absoluteFilePath(component.fileName() + QDir::separator() + "data-" + OS_PLATFORM + OS_ARCHITECTURE + ".zip"))) {
+      qFatal("Failed to zip archive");
     }
-
-    QString archiveName = tlp::getPluginPackageName(pluginSimplifiedName);
-
-    QDir pluginDir(destinationDir + "/");
-    pluginDir.mkdir(pluginSimplifiedName);
-    bool compressed = QuaZIPFacade::zipDir(plugindir, destinationDir + "/" + pluginSimplifiedName + "/" + archiveName);
-
-    if(!compressed) {
-      cout << "failed to compress folder " << plugindir.toStdString() << " as archive: " << destinationDir.toStdString() << "/" << pluginSimplifiedName.toStdString() << "/" + archiveName.toStdString() << endl;
+    pluginDir.cd("lib");
+    pluginDir.cd("tulip");
+    foreach(QFileInfo pluginFile, pluginDir.entryInfoList(QDir::Files | QDir::NoSymLinks)) {
+      if (QLibrary::isLibrary(pluginFile.absoluteFilePath())) {
+        PluginLibraryLoader::loadPluginLibrary(pluginFile.absoluteFilePath().toStdString(),&collector);
+      }
     }
-    else {
-      std::cout << "created archive: " << destinationDir.toStdString() << "/" + pluginSimplifiedName.toStdString( )+ "/" << archiveName.toStdString() << std::endl;
-    }
-
   }
 
-  QDomDocument serverDescription;
-  QDomElement description = serverDescription.createElement("server");
-  serverDescription.appendChild(description);
-  description.setAttribute("serverName", destinationDir);
-  description.setAttribute("lastUpdate", QDateTime::currentDateTime().toString(Qt::ISODate));
+  QDomDocument serverDocument;
+  QDomElement rootNode = serverDocument.createElement("server");
+  serverDocument.appendChild(rootNode);
+  rootNode.setAttribute("serverName", destinationDir);
+  rootNode.setAttribute("lastUpdate", QDateTime::currentDateTime().toString(Qt::ISODate));
+  rootNode.setAttribute("release",TULIP_RELEASE);
+  QDomElement pluginsNode = serverDocument.createElement("plugins");
+  rootNode.appendChild(pluginsNode);
 
-  foreach(const QDomElement& element, collector.xmlElements()) {
-    description.appendChild(element);
+  foreach(QString component, collector._directoryPlugins.keys()) {
+    foreach(QString plugin, collector._directoryPlugins[component]) {
+      // Server description
+      QDomElement componentDesc = serverDocument.createElement("plugin");
+      componentDesc.setAttribute("name",plugin);
+      componentDesc.setAttribute("path",component);
+      pluginsNode.appendChild(componentDesc);
+
+      // Plugin informations
+      const Plugin* info = PluginLister::pluginInformations(plugin.toStdString());
+      QDomDocument pluginDocument;
+      QDomElement rootPluginNode = pluginDocument.createElement("plugin");
+      rootPluginNode.setAttribute("name",info->name().c_str());
+      rootPluginNode.setAttribute("category",info->category().c_str());
+      rootPluginNode.setAttribute("author",info->author().c_str());
+      rootPluginNode.setAttribute("date",info->date().c_str());
+      rootPluginNode.setAttribute("desc",info->info().c_str());
+      rootPluginNode.setAttribute("release",info->release().c_str());
+      rootPluginNode.setAttribute("tulip",info->tulipRelease().c_str());
+      QDomElement depsNode = pluginDocument.createElement("dependencies");
+      std::list<Dependency> deps = PluginLister::getPluginDependencies(info->name());
+      for(std::list<Dependency>::iterator it = deps.begin(); it != deps.end(); ++it) {
+        QDomElement dep = pluginDocument.createElement("dependency");
+        dep.setAttribute("name",it->pluginName.c_str());
+        depsNode.appendChild(dep);
+      }
+      rootPluginNode.appendChild(depsNode);
+      pluginDocument.appendChild(rootPluginNode);
+
+      delete info;
+      QFile outputPluginXML(outputDir.absoluteFilePath(component + QDir::separator() + plugin + ".xml"));
+      outputPluginXML.open(QIODevice::ReadWrite | QIODevice::Truncate);
+      outputPluginXML.write(pluginDocument.toByteArray());
+      outputPluginXML.close();
+    }
   }
 
-  QFile outputXML(destinationDir + "/serverDescription.xml");
+  QFile outputXML(outputDir.absoluteFilePath("server.xml"));
   outputXML.open(QIODevice::ReadWrite | QIODevice::Truncate);
-  outputXML.write(serverDescription.toByteArray());
+  outputXML.write(serverDocument.toByteArray());
   outputXML.close();
+
+  qDebug() << "Output stored in" << outputDir.absolutePath();
 
   return 0;
 }
