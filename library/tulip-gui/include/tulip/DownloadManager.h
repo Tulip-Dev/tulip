@@ -25,7 +25,7 @@
 class QNetworkReply;
 class QNetworkReply;
 
-class TLP_SCOPE DownloadManager: public QNetworkAccessManager {
+class TLP_QT_SCOPE DownloadManager: public QNetworkAccessManager {
   Q_OBJECT
   QList<QNetworkReply *> currentDownloads;
   QMap<QUrl, QString> downloadDestinations;
