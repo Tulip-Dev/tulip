@@ -34,7 +34,7 @@ class GlMainWidget;
 }
 
 namespace tlp {
-class GlMainWidgetGraphicsItem : public QGraphicsObject {
+class TLP_QT_SCOPE GlMainWidgetGraphicsItem : public QGraphicsObject {
   Q_OBJECT
 public:
   GlMainWidgetGraphicsItem(tlp::GlMainWidget *glMainWidget, int width, int height);
