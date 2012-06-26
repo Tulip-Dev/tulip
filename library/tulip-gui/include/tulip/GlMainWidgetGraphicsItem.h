@@ -28,6 +28,7 @@
  */
 
 #include <QtGui/QGraphicsObject>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 class GlMainWidget;
