@@ -47,7 +47,7 @@ bool BasicLayoutTest::computeProperty(const std::string &algorithm,
 
   string errorMsg;
   DataSet ds;
-  bool result = graph->computeProperty(algorithm, prop, errorMsg);
+  bool result = graph->applyPropertyAlgorithm(algorithm, prop, errorMsg);
 
   if (deleteProp)
     delete prop;
@@ -92,7 +92,7 @@ void BasicLayoutTest::testDendrogram() {
   LayoutProperty layout(graph);
   string errorMsg;
   bool result =
-    graph->computeProperty("Dendrogram", &layout, errorMsg, NULL, &ds);
+  graph->applyPropertyAlgorithm("Dendrogram", &layout, errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -103,7 +103,7 @@ void BasicLayoutTest::testGEMLayout() {
   CPPUNIT_ASSERT_EQUAL(g, graph);
   LayoutProperty prop(graph);
   string errorMsg;
-  bool result = graph->computeProperty("GEM (Frick)", &prop, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("GEM (Frick)", &prop, errorMsg);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -125,7 +125,7 @@ void BasicLayoutTest::testMixedModel() {
   LayoutProperty layout(graph);
   string errorMsg;
   bool result =
-    graph->computeProperty("Mixed Model", &layout, errorMsg, NULL, &ds);
+  graph->applyPropertyAlgorithm("Mixed Model", &layout, errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -139,12 +139,12 @@ void BasicLayoutTest::testSquarifiedTreeMap() {
   DoubleProperty metric(graph);
   string errorMsg;
   DataSet ds;
-  bool result = graph->computeProperty("Degree", &metric, errorMsg);
+  bool result = graph->applyPropertyAlgorithm("Degree", &metric, errorMsg);
   CPPUNIT_ASSERT(result);
 
   LayoutProperty layout(graph);
   ds.set("metric", &metric);
-  result = graph->computeProperty("Squarified Tree Map", &layout,
+  result = graph->applyPropertyAlgorithm("Squarified Tree Map", &layout,
                                   errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
@@ -156,8 +156,7 @@ void BasicLayoutTest::testTreeLeaf() {
   ds.set("node size", &size);
   LayoutProperty layout(graph);
   string errorMsg;
-  bool result =
-    graph->computeProperty("Tree Leaf", &layout, errorMsg, NULL, &ds);
+  bool result = graph->applyPropertyAlgorithm("Tree Leaf", &layout, errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
