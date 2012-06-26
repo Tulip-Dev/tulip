@@ -211,7 +211,6 @@ MainController::MainController():
 }
 //**********************************************************************
 MainController::~MainController() {
-  clearObservers();
   Graph *currentGraph=getGraph();
 
   if (currentGraph) {
