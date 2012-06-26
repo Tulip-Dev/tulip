@@ -190,7 +190,7 @@ void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph
   std::pair<std::string, tlp::DataType*> attribute;
   forEach(attribute, first->getAttributes().getValues()) {
     stringstream attributeNameMessage;
-    attributeNameMessage << "attribute \"" << attribute.first << "\" does not exists on imported graph";
+    attributeNameMessage << "attribute \"" << attribute.first << "\" does not exists on imported graph. Should be: " << *(std::string*)attribute.second->value;
     CPPUNIT_ASSERT_MESSAGE(attributeNameMessage.str(), second->attributeExist(attribute.first));
 
     stringstream attributeTypeMessage;
