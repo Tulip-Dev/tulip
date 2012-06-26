@@ -92,7 +92,7 @@ void BasicLayoutTest::testDendrogram() {
   LayoutProperty layout(graph);
   string errorMsg;
   bool result =
-  graph->applyPropertyAlgorithm("Dendrogram", &layout, errorMsg, NULL, &ds);
+    graph->applyPropertyAlgorithm("Dendrogram", &layout, errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -125,7 +125,7 @@ void BasicLayoutTest::testMixedModel() {
   LayoutProperty layout(graph);
   string errorMsg;
   bool result =
-  graph->applyPropertyAlgorithm("Mixed Model", &layout, errorMsg, NULL, &ds);
+    graph->applyPropertyAlgorithm("Mixed Model", &layout, errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -145,7 +145,7 @@ void BasicLayoutTest::testSquarifiedTreeMap() {
   LayoutProperty layout(graph);
   ds.set("metric", &metric);
   result = graph->applyPropertyAlgorithm("Squarified Tree Map", &layout,
-                                  errorMsg, NULL, &ds);
+                                         errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
