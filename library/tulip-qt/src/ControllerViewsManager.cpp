@@ -37,6 +37,7 @@ ControllerViewsManager::~ControllerViewsManager() {
   for(map<QWidget *,View*>::iterator it=viewWidget.begin(); it!=viewWidget.end(); ++it) {
     delete (*it).first;
     delete (*it).second;
+    (*it).second=NULL;
   }
 
   if (currentGraph)
