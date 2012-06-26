@@ -32,7 +32,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(BasicLayoutTest);
 void BasicLayoutTest::initializeGraph(const string& type) {
   DataSet ds;
   Graph* g = importGraph(type, ds, NULL, graph);
-  CPPUNIT_ASSERT(g == graph);
+  CPPUNIT_ASSERT_EQUAL(g, graph);
 }
 //==========================================================
 template<typename PropType>
@@ -98,9 +98,9 @@ void BasicLayoutTest::testDendrogram() {
 //==========================================================
 void BasicLayoutTest::testGEMLayout() {
   DataSet ds;
-  ds.set("file::filename", string("unconnected.tlp"));
+  ds.set("file::filename", string("data/unconnected.tlp"));
   Graph* g = importGraph("TLP Import", ds, NULL, graph);
-  CPPUNIT_ASSERT(g == graph);
+  CPPUNIT_ASSERT_EQUAL(g, graph);
   LayoutProperty prop(graph);
   string errorMsg;
   bool result = graph->computeProperty("GEM (Frick)", &prop, errorMsg);
