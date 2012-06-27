@@ -75,6 +75,10 @@ Workspace::Workspace(QWidget *parent)
 }
 
 Workspace::~Workspace() {
+  foreach(WorkspacePanel* p, _panels) {
+      delete p;
+    }
+
   delete _ui;
 }
 
