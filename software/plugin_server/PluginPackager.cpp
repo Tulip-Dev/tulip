@@ -129,11 +129,13 @@ int main(int argc,char **argv) {
       pluginNode.setAttribute("tulip",info->tulipRelease().c_str());
       QDomElement depsNode = serverDocument.createElement("dependencies");
       std::list<Dependency> deps = PluginLister::getPluginDependencies(info->name());
+
       for(std::list<Dependency>::iterator it = deps.begin(); it != deps.end(); ++it) {
         QDomElement dep = serverDocument.createElement("dependency");
         dep.setAttribute("name",it->pluginName.c_str());
         depsNode.appendChild(dep);
       }
+
       pluginNode.appendChild(depsNode);
       pluginsListNode.appendChild(pluginNode);
     }
@@ -146,7 +148,7 @@ int main(int argc,char **argv) {
   outputXML.close();
 
   foreach(QFileInfo phpFile, QDir(":/tulip/pluginpackager/php/").entryInfoList(QDir::Files)) {
-      QFile::copy(phpFile.absoluteFilePath(),QDir(destinationDir).filePath(phpFile.fileName()));
+    QFile::copy(phpFile.absoluteFilePath(),QDir(destinationDir).filePath(phpFile.fileName()));
   }
 
   qDebug() << "Output stored in" << outputDir.absolutePath();
