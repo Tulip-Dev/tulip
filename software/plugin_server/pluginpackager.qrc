@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/tulip/pluginpackager">
+        <file>php/fetch.php</file>
+        <file>php/list.php</file>
+        <file>php/pluginserver.php</file>
+    </qresource>
+</RCC>

@@ -112,52 +112,42 @@ int main(int argc,char **argv) {
   rootNode.setAttribute("serverName", destinationDir);
   rootNode.setAttribute("lastUpdate", QDateTime::currentDateTime().toString(Qt::ISODate));
   rootNode.setAttribute("release",TULIP_RELEASE);
-  QDomElement pluginsNode = serverDocument.createElement("plugins");
-  rootNode.appendChild(pluginsNode);
+  QDomElement pluginsListNode = serverDocument.createElement("plugins");
 
   foreach(QString component, collector._directoryPlugins.keys()) {
     foreach(QString plugin, collector._directoryPlugins[component]) {
       // Server description
-      QDomElement componentDesc = serverDocument.createElement("plugin");
-      componentDesc.setAttribute("name",plugin);
-      componentDesc.setAttribute("path",component);
-      pluginsNode.appendChild(componentDesc);
-
-      // Plugin informations
+      QDomElement pluginNode = serverDocument.createElement("plugin");
+      pluginNode.setAttribute("name",plugin);
+      pluginNode.setAttribute("path",component);
       const Plugin* info = PluginLister::pluginInformations(plugin.toStdString());
-      QDomDocument pluginDocument;
-      QDomElement rootPluginNode = pluginDocument.createElement("plugin");
-      rootPluginNode.setAttribute("name",info->name().c_str());
-      rootPluginNode.setAttribute("category",info->category().c_str());
-      rootPluginNode.setAttribute("author",info->author().c_str());
-      rootPluginNode.setAttribute("date",info->date().c_str());
-      rootPluginNode.setAttribute("desc",info->info().c_str());
-      rootPluginNode.setAttribute("release",info->release().c_str());
-      rootPluginNode.setAttribute("tulip",info->tulipRelease().c_str());
-      QDomElement depsNode = pluginDocument.createElement("dependencies");
+      pluginNode.setAttribute("category",info->category().c_str());
+      pluginNode.setAttribute("author",info->author().c_str());
+      pluginNode.setAttribute("date",info->date().c_str());
+      pluginNode.setAttribute("desc",info->info().c_str());
+      pluginNode.setAttribute("release",info->release().c_str());
+      pluginNode.setAttribute("tulip",info->tulipRelease().c_str());
+      QDomElement depsNode = serverDocument.createElement("dependencies");
       std::list<Dependency> deps = PluginLister::getPluginDependencies(info->name());
-
       for(std::list<Dependency>::iterator it = deps.begin(); it != deps.end(); ++it) {
-        QDomElement dep = pluginDocument.createElement("dependency");
+        QDomElement dep = serverDocument.createElement("dependency");
         dep.setAttribute("name",it->pluginName.c_str());
         depsNode.appendChild(dep);
       }
-
-      rootPluginNode.appendChild(depsNode);
-      pluginDocument.appendChild(rootPluginNode);
-
-      delete info;
-      QFile outputPluginXML(outputDir.absoluteFilePath(component + QDir::separator() + plugin + ".xml"));
-      outputPluginXML.open(QIODevice::ReadWrite | QIODevice::Truncate);
-      outputPluginXML.write(pluginDocument.toByteArray());
-      outputPluginXML.close();
+      pluginNode.appendChild(depsNode);
+      pluginsListNode.appendChild(pluginNode);
     }
   }
+  rootNode.appendChild(pluginsListNode);
 
   QFile outputXML(outputDir.absoluteFilePath("server.xml"));
   outputXML.open(QIODevice::ReadWrite | QIODevice::Truncate);
   outputXML.write(serverDocument.toByteArray());
   outputXML.close();
+
+  foreach(QFileInfo phpFile, QDir(":/tulip/pluginpackager/php/").entryInfoList(QDir::Files)) {
+      QFile::copy(phpFile.absoluteFilePath(),QDir(destinationDir).filePath(phpFile.fileName()));
+  }
 
   qDebug() << "Output stored in" << outputDir.absolutePath();
 
