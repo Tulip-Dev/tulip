@@ -76,6 +76,7 @@ Workspace::Workspace(QWidget *parent)
 
 Workspace::~Workspace() {
   foreach(WorkspacePanel* p, _panels) {
+    disconnect(p,SIGNAL(destroyed(QObject*)),this,SLOT(panelDestroyed(QObject*)));
     delete p;
   }
 
