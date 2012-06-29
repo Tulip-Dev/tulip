@@ -15,21 +15,21 @@ using namespace tlp;
 
 QDebug operator<<(QDebug dbg, const PluginManager::PluginVersionInformations &c) {
   dbg.nospace() << "(author " << c.author << ") "
-                   << "(version " << c.version << ") "
-                      << "(icon " << c.icon << ") "
-                         << "(description " << c.description << ") "
-                            << "(date " << c.date << ") "
-                               << "(librarylocation " << c.libraryLocation << ") "
-                                  << "(dependencies " << c.dependencies << ") ";
+                << "(version " << c.version << ") "
+                << "(icon " << c.icon << ") "
+                << "(description " << c.description << ") "
+                << "(date " << c.date << ") "
+                << "(librarylocation " << c.libraryLocation << ") "
+                << "(dependencies " << c.dependencies << ") ";
 
   return dbg.space();
 }
 
 QDebug operator<<(QDebug dbg, const PluginManager::PluginInformations &c) {
   dbg.nospace() << "(name " << c.name << ") "
-                   << "(category " << c.category << ") "
-                      << "(installed " << c.installedVersion << ") "
-                         << "(available " << c.availableVersions << ") ";
+                << "(category " << c.category << ") "
+                << "(installed " << c.installedVersion << ") "
+                << "(available " << c.availableVersions << ") ";
 
   return dbg.space();
 }
@@ -50,9 +50,11 @@ public:
     QNetworkAccessManager mgr;
     QNetworkRequest request(QUrl(_location + "/list.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" + TULIP_MM_RELEASE + "&name=" + nameFilter + "&category=" + categoryFilter));
     QNetworkReply* reply = mgr.get(request);
+
     while (!reply->isFinished()) {
       QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
+
     parse(reply);
     return _result;
   }
@@ -104,13 +106,16 @@ PluginManager::PluginInformationsList PluginManager::listPlugins(PluginLocations
 
   if (locations.testFlag(Local)) {
     std::list<std::string> localResults = PluginLister::instance()->availablePlugins();
+
     for (std::list<std::string>::iterator it = localResults.begin(); it != localResults.end(); ++it) {
       const Plugin* info = PluginLister::instance()->pluginInformations(*it);
+
       if (QString(info->category().c_str()).contains(categoryFilter) && QString(info->name().c_str()).contains(nameFilter)) {
         nameToInfos[info->name().c_str()].fillLocalInfos(info);
       }
     }
   }
+
   if (locations.testFlag(Remote)) {
     foreach(QString loc, remoteLocations()) {
       PluginServerClient client(loc);
@@ -167,9 +172,11 @@ void PluginManager::PluginInformations::fillLocalInfos(const Plugin* info) {
   installedVersion.author = info->author().c_str();
   installedVersion.libraryLocation = PluginLister::getPluginLibrary(info->name()).c_str();
   std::list<tlp::Dependency> dependencies = PluginLister::instance()->getPluginDependencies(info->name());
+
   for (std::list<tlp::Dependency>::iterator it = dependencies.begin(); it != dependencies.end(); ++it) {
     installedVersion.dependencies.push_back(it->pluginName.c_str());
   }
+
   installedVersion.isValid = true;
 }
 

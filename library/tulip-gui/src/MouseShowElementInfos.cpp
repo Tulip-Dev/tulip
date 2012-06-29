@@ -55,7 +55,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
   if (widget == _informationsWidget && (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress))
     return true;
 
-  if(_informationsWidget->isVisible() && e->type()==QEvent::Wheel){
+  if(_informationsWidget->isVisible() && e->type()==QEvent::Wheel) {
     _informationsWidgetItem->setVisible(false);
     return false;
   }

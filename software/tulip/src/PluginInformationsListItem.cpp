@@ -31,6 +31,7 @@ PluginInformationsListItem::PluginInformationsListItem(PluginManager::PluginInfo
   _ui->installationControls->hide();
 
   PluginManager::PluginVersionInformations versionInfos = infos.installedVersion;
+
   if (!versionInfos.isValid) {
     versionInfos = infos.availableVersions.first();
     _ui->statusIcon->hide();
@@ -39,7 +40,8 @@ PluginInformationsListItem::PluginInformationsListItem(PluginManager::PluginInfo
   else {
     bool updateAvailable = false;
     foreach(PluginManager::PluginVersionInformations availableInfos,infos.availableVersions)
-      updateAvailable = updateAvailable || (availableInfos.version != versionInfos.version);
+    updateAvailable = updateAvailable || (availableInfos.version != versionInfos.version);
+
     if (updateAvailable) {
       _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-upgrade.png"));
       _ui->installFrame->show();
@@ -48,6 +50,7 @@ PluginInformationsListItem::PluginInformationsListItem(PluginManager::PluginInfo
     else
       _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-installed-updated.png"));
   }
+
   _ui->icon->setPixmap(QPixmap(versionInfos.icon));
   _ui->name->setText(infos.name + " " + versionInfos.version);
   _ui->desc->setText(versionInfos.description + "\n\n" + trUtf8("Author: ") + versionInfos.author);

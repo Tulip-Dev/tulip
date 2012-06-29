@@ -73,9 +73,11 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
 
 
   std::list<std::string> perspectives = PluginLister::instance()->availablePlugins<tlp::Perspective>();
+
   for (std::list<std::string>::iterator it = perspectives.begin(); it != perspectives.end(); ++it) {
     _ui->perspectivesFrame->layout()->addWidget(new PerspectiveItemWidget(it->c_str()));
   }
+
   _ui->perspectivesFrame->layout()->addItem(new QSpacerItem(0,0,QSizePolicy::Maximum,QSizePolicy::Expanding));
 }
 
