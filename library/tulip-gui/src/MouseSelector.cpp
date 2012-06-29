@@ -35,9 +35,10 @@ using namespace tlp;
 
 //==================================================================
 MouseSelector::MouseSelector(Qt::MouseButton button,
-                             Qt::KeyboardModifier modifier):
+                             Qt::KeyboardModifier modifier,
+                             SelectionMode mode):
   mButton(button), kModifier(modifier), x(0),y(0),w(0),h(0),
-  started(false),graph(0) {
+  started(false),graph(0),_mode(mode) {
 }
 //==================================================================
 bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
@@ -183,29 +184,33 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         if (result) {
           switch(selectedEntity.getEntityType()) {
           case SelectedEntity::NODE_SELECTED:
-            result = selection->getNodeValue(node(selectedEntity.getComplexEntityId()));
+            if(_mode == EdgesAndNodes || _mode == NodesOnly) {
+              result = selection->getNodeValue(node(selectedEntity.getComplexEntityId()));
 
-            if (revertSelection || boolVal != result) {
-              if (needPush) {
-                graph->push();
-                needPush = false;
+              if (revertSelection || boolVal != result) {
+                if (needPush) {
+                  graph->push();
+                  needPush = false;
+                }
+
+                selection->setNodeValue(node(selectedEntity.getComplexEntityId()), !result);
               }
-
-              selection->setNodeValue(node(selectedEntity.getComplexEntityId()), !result);
             }
 
             break;
 
           case SelectedEntity::EDGE_SELECTED:
-            result = selection->getEdgeValue(edge(selectedEntity.getComplexEntityId()));
+            if(_mode == EdgesAndNodes || _mode == EdgesOnly) {
+              result = selection->getEdgeValue(edge(selectedEntity.getComplexEntityId()));
 
-            if (revertSelection || boolVal != result) {
-              if (needPush) {
-                graph->push();
-                needPush = false;
+              if (revertSelection || boolVal != result) {
+                if (needPush) {
+                  graph->push();
+                  needPush = false;
+                }
+
+                selection->setEdgeValue(edge(selectedEntity.getComplexEntityId()), !result);
               }
-
-              selection->setEdgeValue(edge(selectedEntity.getComplexEntityId()), !result);
             }
 
             break;
@@ -236,18 +241,22 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 
         vector<SelectedEntity>::const_iterator it;
 
-        for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
-          selection->setNodeValue(node((*it).getComplexEntityId()),
-                                  revertSelection ?
-                                  !selection->getNodeValue(node((*it).getComplexEntityId()))
-                                  : boolVal);
+        if(_mode == EdgesAndNodes || _mode == NodesOnly) {
+          for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
+            selection->setNodeValue(node((*it).getComplexEntityId()),
+                                    revertSelection ?
+                                    !selection->getNodeValue(node((*it).getComplexEntityId()))
+                                    : boolVal);
+          }
         }
 
-        for (it=tmpSetEdge.begin(); it!=tmpSetEdge.end(); ++it) {
-          selection->setEdgeValue(edge((*it).getComplexEntityId()),
-                                  revertSelection ?
-                                  !selection->getEdgeValue(edge((*it).getComplexEntityId()))
-                                  : boolVal);
+        if(_mode == EdgesAndNodes || _mode == EdgesOnly) {
+          for (it=tmpSetEdge.begin(); it!=tmpSetEdge.end(); ++it) {
+            selection->setEdgeValue(edge((*it).getComplexEntityId()),
+                                    revertSelection ?
+                                    !selection->getEdgeValue(edge((*it).getComplexEntityId()))
+                                    : boolVal);
+          }
         }
       }
 
