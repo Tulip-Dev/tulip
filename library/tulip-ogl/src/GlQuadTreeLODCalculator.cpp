@@ -571,6 +571,7 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
 
       if(property==inputData->getElementLayout() || property==inputData->getElementSize()) {
         setHaveToCompute();
+        removeObservers();
         addObservers();
       }
 
