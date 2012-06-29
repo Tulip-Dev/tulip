@@ -18,38 +18,41 @@
  */
 #include "PerspectiveItemWidget.h"
 
-#include <QtGui/QMouseEvent>
-#include <tulip/PluginInformations.h>
 #include "ui_PerspectiveItem.h"
 
-PerspectiveItemWidget::PerspectiveItemWidget(tlp::PluginInformations *infos,QWidget *parent)
-  : QWidget(parent), _perspectiveId(infos->identifier()), _ui(new Ui::PerspectiveItemData) {
+#include <QtGui/QMouseEvent>
 
+#include <tulip/PluginLister.h>
+#include "TulipMainWindow.h"
+
+using namespace tlp;
+
+PerspectiveItemWidget::PerspectiveItemWidget(const QString& perspectiveName,QWidget *parent)
+  : QWidget(parent), _perspectiveName(perspectiveName), _ui(new Ui::PerspectiveItemData) {
   _ui->setupUi(this);
-  _ui->icon->setPixmap(infos->iconPath());
-  _ui->name->setText("<p><span style=\"font-size:large;\"><b>"
-                     +
-                     infos->name()
-                     +
-                     "</b></span></p>");
-  _ui->description->setText("<p><span style=\"color:#626262;\">"
-                            +
-                            infos->shortDescription()
-                            +
-                            "</span></p>");
-  connect(_ui->runButton,SIGNAL(clicked()),this,SIGNAL(selected()));
+  _ui->name->setText(_perspectiveName);
+  const tlp::Plugin* info = PluginLister::instance()->pluginInformations(_perspectiveName.toStdString());
+  _ui->description->setText(info->info().c_str());
+  _ui->icon->setPixmap(QPixmap(info->icon().c_str()));
+  delete info;
+}
+
+void PerspectiveItemWidget::run() {
+  TulipMainWindow::instance()->createPerspective(_perspectiveName);
+  emit selected();
+}
+
+void PerspectiveItemWidget::mouseDoubleClickEvent(QMouseEvent *) {
+  run();
 }
 
 void PerspectiveItemWidget::focusInEvent(QFocusEvent *) {
-  _ui->frame->setStyleSheet("QFrame#frame { background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(243, 249, 255, 255), stop:1 rgba(232, 238, 244, 255));  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
+  _ui->frame->setProperty("highlighted",true);
+  _ui->frame->setStyleSheet(_ui->frame->styleSheet());
 }
 
 void PerspectiveItemWidget::focusOutEvent(QFocusEvent *) {
-  _ui->frame->setStyleSheet("QFrame#frame { background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(245, 245, 245, 255), stop:1 rgba(225,225,225, 255));  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
-}
-
-void PerspectiveItemWidget::mouseDoubleClickEvent(QMouseEvent *e) {
-  e->accept();
-  emit selected();
+  _ui->frame->setProperty("highlighted",false);
+  _ui->frame->setStyleSheet(_ui->frame->styleSheet());
 }
 

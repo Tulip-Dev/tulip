@@ -27,9 +27,9 @@
 
 #include <tulip/SystemDefinition.h>
 #include <tulip/PluginLister.h>
-#include <tulip/PluginInformations.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/QuaZIPFacade.h>
+#include <QtCore/QDateTime>
 
 #include <tulip/Interactor.h>
 #include <tulip/GlyphManager.h>

@@ -40,8 +40,6 @@ public:
   explicit TulipWelcomePage(QWidget *parent=NULL);
   virtual ~TulipWelcomePage();
 
-  static QVBoxLayout *buildPerspectiveListLayout(const QObject *receiver, const char *slot);
-
 signals:
   void openPerspective(QString);
   void openProject();
@@ -50,7 +48,6 @@ signals:
 protected slots:
   void rssReply(QNetworkReply *);
   void openLink(const QString &link);
-  void perspectiveSelected();
   void recentFileLinkActivated(const QString&);
 
 private:

@@ -18,246 +18,174 @@
  */
 
 #include "PluginsCenter.h"
+
 #include "PluginErrorReport.h"
-#include "TulipMainWindow.h"
+#include "PluginInformationsListItem.h"
+
+#include <tulip/Algorithm.h>
+#include <tulip/TemplateAlgorithm.h>
+#include <tulip/PropertyAlgorithm.h>
+#include <tulip/View.h>
+#include <tulip/Perspective.h>
+#include <tulip/Interactor.h>
+#include <tulip/Glyph.h>
+#include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/ImportModule.h>
+#include <tulip/ExportModule.h>
+#include <tulip/PluginManager.h>
 
 #include "ui_PluginsCenter.h"
-
-#include <tulip/PluginManager.h>
 #include <QtCore/QDebug>
-#include <tulip/TulipSettings.h>
-#include "DetailedPluginInformationsWidget.h"
 
-PluginsCenter::PluginsCenter(QWidget *parent) :
-  QWidget(parent), _ui(new Ui::PluginsCenterData()) {
+static const int ALL_ROW          = 0;
+static const int ALGORITHMS_ROW   = 1;
+static const int IMPORTEXPORT_ROW = 2;
+static const int GLYPHS_ROW       = 3;
+static const int VIEWS_ROW        = 4;
+static const int INTERACTORS_ROW  = 5;
+static const int PERSPECTIVES_ROW = 6;
+static const int ERRORS_ROW       = 8;
+
+using namespace tlp;
+
+PluginsCenter::PluginsCenter(QWidget *parent): QWidget(parent), _ui(new Ui::PluginsCenterData()), _currentItem(NULL) {
   _ui->setupUi(this);
-  _ui->pluginsListTopFrame->hide();
-  connect(_ui->repoButton,SIGNAL(clicked()),this,SLOT(showReposPage()));
-  connect(_ui->homeButton,SIGNAL(clicked()),this,SLOT(showHomePage()));
-  connect(_ui->pluginsSideList,SIGNAL(itemSelectionChanged()),this,SLOT(listItemSelected()));
-  connect(_ui->browseAlgorithmsButton,SIGNAL(clicked()),this,SLOT(browseAlgorithms()));
-  connect(_ui->browseImportExportButton,SIGNAL(clicked()),this,SLOT(browseImportExport()));
-  connect(_ui->browseGlyphsButton,SIGNAL(clicked()),this,SLOT(browseGlyphs()));
-  connect(_ui->browseViewsButton,SIGNAL(clicked()),this,SLOT(browseViews()));
-  connect(_ui->browseInteractorsButton,SIGNAL(clicked()),this,SLOT(browseInteractors()));
-  connect(_ui->browsePerspectivesButton,SIGNAL(clicked()),this,SLOT(browsePerspectives()));
-  connect(_ui->searchEdit,SIGNAL(textChanged(QString)),this,SLOT(setPluginNameFilter(QString)));
-  connect(_ui->pluginsSearchList,SIGNAL(fetch(tlp::PluginInformations*)),this,SLOT(fetch(tlp::PluginInformations*)));
-  connect(_ui->pluginsSearchList,SIGNAL(remove(tlp::PluginInformations*)),this,SLOT(remove(tlp::PluginInformations*)));
-  connect(_ui->addRemoteLocation, SIGNAL(clicked()), this, SLOT(addRemoteLocation()));
-  connect(_ui->remoteLocationText, SIGNAL(editingFinished()), this, SLOT(addRemoteLocation()));
-  connect(_ui->removeRemoteLocation, SIGNAL(clicked()), this, SLOT(removeRemoteLocation()));
-  connect(tlp::PluginManager::getInstance(),SIGNAL(remoteLocationAdded(QString)),this,SLOT(remoteLocationAdded(QString)));
-  connect(tlp::PluginManager::getInstance(),SIGNAL(errorAddRemoteLocation(QNetworkReply::NetworkError,QString)),this,SLOT(remoteLocationError(QNetworkReply::NetworkError,QString)));
-  connect(_ui->reloadListButton,SIGNAL(clicked()),_ui->pluginsSearchList,SLOT(initPluginsCache()));
-  connect(_ui->reloadListButton,SIGNAL(clicked()),_ui->pluginsListTopFrame,SLOT(hide()));
+}
 
-  foreach(const QString& remoteLocation, TulipSettings::instance().remoteLocations()) {
-    _ui->remoteLocationsList->addItem(remoteLocation);
+void PluginsCenter::reportPluginErrors(const QMap<QString, QString>& errors) {
+  if (!errors.empty())
+    _ui->pluginsSideList->item(ERRORS_ROW)->setFlags(Qt::ItemIsEnabled | _ui->pluginsSideList->item(ERRORS_ROW)->flags());
+  foreach(QString k, errors.keys()) {
+    _ui->errorsLogAreaLayout->addWidget(new PluginErrorReport(k,errors[k]));
   }
-
-  tlp::PluginInformations* infos = _ui->pluginsSearchList->featuredPlugin();
-  DetailedPluginInformationsWidget *featuredWidget = new DetailedPluginInformationsWidget(infos);
-  featuredWidget->hideNavigationBar();
-  _ui->featuredFrame->setWidget(featuredWidget);
-  featuredWidget->setObjectName("featuredWidget");
-  featuredWidget->setStyleSheet("#headerFrame {\nbackground-color: #ECECEC;\nborder-left: 1px solid \"#C9C9C9\";\nborder-right: 1px solid \"#C9C9C9\";\nborder-bottom: 1px solid \"#C9C9C9\";\n}");
-  connect(featuredWidget,SIGNAL(fetch(tlp::PluginInformations*)),this,SLOT(fetch(tlp::PluginInformations*)));
+  _ui->errorsLogAreaLayout->addItem(new QSpacerItem(0,0,QSizePolicy::Maximum,QSizePolicy::Expanding));
 }
 
 void PluginsCenter::showErrorsPage() {
-  showPage(_ui->errorsPage);
+  _ui->pluginsContent->setCurrentWidget(_ui->errorsPage);
 }
 
-void PluginsCenter::showHomePage() {
-  showPage(_ui->homePage);
+void PluginsCenter::showWelcomePage() {
+  _ui->pluginsContent->setCurrentWidget(_ui->homePage);
 }
 
-void PluginsCenter::showSearchPage() {
-  showPage(_ui->pluginsListPage);
+void PluginsCenter::showRepositoriesPage() {
+  _ui->pluginsContent->setCurrentWidget(_ui->reposPage);
 }
 
-void PluginsCenter::showReposPage() {
-  showPage(_ui->reposPage);
+void PluginsCenter::searchAll() {
+  setCategoryFilter("");
 }
 
-void PluginsCenter::showPage(QWidget *page) {
-  QStackedWidget *stackedParent = static_cast<QStackedWidget *>(parent());
-
-  if (!stackedParent)
-    return;
-
-  stackedParent->setCurrentWidget(this);
-  _ui->pluginsContent->setCurrentWidget(page);
+void PluginsCenter::searchAlgorithms() {
+  setCategoryFilters(QStringList()
+                    << tlp::ALGORITHM_CATEGORY.c_str()
+                    << tlp::BOOLEAN_ALGORITHM_CATEGORY.c_str()
+                    << tlp::COLOR_ALGORITHM_CATEGORY.c_str()
+                    << tlp::DOUBLE_ALGORITHM_CATEGORY.c_str()
+                    << tlp::INTEGER_ALGORITHM_CATEGORY.c_str()
+                    << tlp::LAYOUT_ALGORITHM_CATEGORY.c_str()
+                    << tlp::STRING_ALGORITHM_CATEGORY.c_str()
+                    << tlp::PROPERTY_ALGORITHM_CATEGORY.c_str());
 }
 
-void PluginsCenter::listItemSelected() {
-  int row = _ui->pluginsSideList->currentRow();
+void PluginsCenter::searchImportExport() {
+  setCategoryFilters(QStringList()
+                     << tlp::IMPORT_CATEGORY.c_str()
+                     << tlp::EXPORT_CATEGORY.c_str());
+}
 
-  switch (row) {
-  case 0:
-    browseAll();
+void PluginsCenter::searchGlyphs() {
+  setCategoryFilters(QStringList()
+                     << tlp::GLYPH_CATEGORY.c_str()
+                     << tlp::EEGLYPH_CATEGORY.c_str());
+}
+
+void PluginsCenter::searchViews() {
+  setCategoryFilter(tlp::VIEW_CATEGORY.c_str());
+}
+
+void PluginsCenter::searchInteractors() {
+  setCategoryFilter(tlp::INTERACTOR_CATEGORY.c_str());
+}
+
+void PluginsCenter::searchPerspectives() {
+  setCategoryFilter(tlp::PERSPECTIVE_CATEGORY.c_str());
+}
+
+void PluginsCenter::setCategoryFilter(const QString& filter) {
+  setCategoryFilters(QStringList() << filter);
+}
+
+void PluginsCenter::setCategoryFilters(const QStringList& filters) {
+  _categoryFilters = filters;
+  refreshFilter();
+}
+
+void PluginsCenter::setNameFilter(const QString& filter) {
+  _nameFilter = filter;
+  refreshFilter();
+}
+
+void PluginsCenter::refreshFilter() {
+  _currentItem = NULL;
+
+  if (_categoryFilters.isEmpty())
+    _categoryFilters.push_back("");
+
+  QVBoxLayout* lyt = new QVBoxLayout();
+
+  foreach(QString cf,_categoryFilters) {
+    foreach(PluginManager::PluginInformations info,PluginManager::listPlugins(PluginManager::Remote | PluginManager::Local,_nameFilter,cf)) {
+      PluginInformationsListItem* item = new PluginInformationsListItem(info);
+      connect(item,SIGNAL(focused()),this,SLOT(itemFocused()));
+      lyt->addWidget(item);
+    }
+  }
+  lyt->addItem(new QSpacerItem(0,0,QSizePolicy::Maximum,QSizePolicy::Expanding));
+
+  QString oldObjName = _ui->pluginsSearchListContent->objectName();
+  _ui->pluginsSearchList->setWidget(NULL);
+  _ui->pluginsSearchListContent = new QWidget();
+  _ui->pluginsSearchListContent->setObjectName(oldObjName);
+  _ui->pluginsSearchListContent->setLayout(lyt);
+  _ui->pluginsSearchList->setWidget(_ui->pluginsSearchListContent);
+  _ui->pluginsContent->setCurrentWidget(_ui->pluginsListPage);
+}
+
+void PluginsCenter::sideListRowChanged(int i) {
+  switch(i) {
+  case ALL_ROW:
+    searchAll();
     break;
-
-  case 1:
-    browseAlgorithms();
+  case ALGORITHMS_ROW:
+    searchAlgorithms();
     break;
-
-  case 2:
-    browseImportExport();
+  case IMPORTEXPORT_ROW:
+    searchImportExport();
     break;
-
-  case 3:
-    browseGlyphs();
+  case GLYPHS_ROW:
+    searchGlyphs();
     break;
-
-  case 4:
-    browseViews();
+  case VIEWS_ROW:
+    searchViews();
     break;
-
-  case 5:
-    browseInteractors();
+  case INTERACTORS_ROW:
+    searchInteractors();
     break;
-
-  case 6:
-    browsePerspectives();
+  case PERSPECTIVES_ROW:
+    searchPerspectives();
     break;
-
-  case 7: // separator
-    break;
-
-  case 8:
+  case ERRORS_ROW:
     showErrorsPage();
     break;
   }
 }
 
-void PluginsCenter::reportPluginErrors(const QMap<QString,QString> &errors) {
-  QString message;
-
-  foreach(QString k,errors.keys()) {
-    QString filename(k),errormsg(errors[k]);
-    _ui->errorsLogAreaLayout->addWidget(new PluginErrorReport(filename,errormsg));
-    QListWidgetItem *errorsItem = _ui->pluginsSideList->item(8);
-    errorsItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-    QFont f = errorsItem->font();
-    f.setBold(true);
-    errorsItem->setFont(f);
-    message += filename + ": " + errormsg;
+void PluginsCenter::itemFocused() {
+  if (_currentItem != NULL) {
+    _currentItem->focusOut();
   }
-
-  _ui->errorsLogAreaLayout->addItem(new QSpacerItem(0,0,QSizePolicy::Maximum,QSizePolicy::Expanding));
-
-  if (!errors.empty())
-    TulipMainWindow::instance()->pluginErrorMessage(message);
-}
-
-void PluginsCenter::browseAll() {
-  _ui->pluginsSearchList->setTypeFilter(QStringList());
-  showSearchPage();
-}
-
-void PluginsCenter::browseAlgorithms() {
-  _ui->pluginsSearchList->setTypeFilter(QStringList() << ALGORITHM_PLUGIN_NAME << PROPERTY_ALGORITHM_PLUGIN_NAME << TEMPLATE_ALGORITHM_PLUGIN_NAME);
-  showSearchPage();
-}
-
-void PluginsCenter::browseImportExport() {
-  _ui->pluginsSearchList->setTypeFilter(QStringList() << IMPORT_PLUGIN_NAME << EXPORT_PLUGIN_NAME);
-  showSearchPage();
-}
-
-void PluginsCenter::browseGlyphs() {
-  _ui->pluginsSearchList->setTypeFilter(QStringList() << EE_GLYPH_PLUGIN_NAME << GLYPH_PLUGIN_NAME);
-  showSearchPage();
-}
-
-void PluginsCenter::browseViews() {
-  _ui->pluginsSearchList->setTypeFilter(VIEW_PLUGIN_NAME);
-  showSearchPage();
-}
-
-void PluginsCenter::browseInteractors() {
-  _ui->pluginsSearchList->setTypeFilter(INTERACTOR_PLUGIN_NAME);
-  showSearchPage();
-}
-
-void PluginsCenter::browsePerspectives() {
-  _ui->pluginsSearchList->setTypeFilter(PERSPECTIVE_PLUGIN_NAME);
-  showSearchPage();
-}
-
-void PluginsCenter::setPluginNameFilter(const QString &f) {
-  _ui->pluginsSearchList->setNameFilter(f);
-  showSearchPage();
-}
-
-void PluginsCenter::fetch(tlp::PluginInformations *infos) {
-  infos->fetch();
-}
-
-void PluginsCenter::remove(tlp::PluginInformations *infos) {
-  infos->remove();
-}
-
-void PluginsCenter::addRemoteLocation(const QString &url) {
-  QString remoteLocation = url;
-
-  if (url.isNull())
-    remoteLocation = _ui->remoteLocationText->text();
-
-  tlp::PluginManager::addRemoteLocation(remoteLocation);
-
-  _ui->remoteLocationText->setEnabled(false);
-  _ui->addRemoteLocation->setEnabled(false);
-  _ui->removeRemoteLocation->setEnabled(false);
-  _ui->repoLocationsErrorLabel->hide();
-}
-
-void PluginsCenter::removeRemoteLocation(const QString& url) {
-  foreach(QListWidgetItem* item, _ui->remoteLocationsList->findItems("",Qt::MatchContains)) {
-    if (item->text() != url)
-      continue;
-
-    TulipSettings::instance().removeRemoteLocation(item->text());
-    tlp::PluginManager::removeRemoteLocation(item->text());
-    _ui->pluginsSearchList->initPluginsCache();
-    _ui->pluginsSearchList->refreshResults();
-    delete item;
-  }
-}
-
-void PluginsCenter::removeRemoteLocation() {
-  foreach(QListWidgetItem* item, _ui->remoteLocationsList->selectedItems()) {
-    TulipSettings::instance().removeRemoteLocation(item->text());
-    tlp::PluginManager::removeRemoteLocation(item->text());
-    _ui->pluginsSearchList->initPluginsCache();
-    _ui->pluginsSearchList->refreshResults();
-    delete item;
-  }
-}
-
-void PluginsCenter::remoteLocationAdded(const QString &remoteLocation) {
-  if (_ui->pluginsListPage->isVisible())
-    _ui->pluginsListTopFrame->show();
-  else
-    _ui->pluginsSearchList->initPluginsCache();
-
-  TulipSettings::instance().addRemoteLocation(remoteLocation);
-  _ui->remoteLocationsList->addItem(remoteLocation);
-  _ui->remoteLocationText->clear();
-  _ui->pluginsSearchList->initPluginsCache();
-  _ui->pluginsSearchList->refreshResults();
-
-  _ui->remoteLocationText->setEnabled(true);
-  _ui->addRemoteLocation->setEnabled(true);
-  _ui->removeRemoteLocation->setEnabled(true);
-}
-
-void PluginsCenter::remoteLocationError(QNetworkReply::NetworkError error, const QString& errorMsg) {
-  _ui->repoLocationsErrorLabel->show();
-  _ui->repoLocationsErrorLabel->setText("<span style=\"color:#dc4d4f;\">" + trUtf8("Error #") + QString::number((int)error) + ": " + errorMsg + "</span></p>");
-  _ui->remoteLocationText->setEnabled(true);
-  _ui->addRemoteLocation->setEnabled(true);
-  _ui->removeRemoteLocation->setEnabled(true);
+  _currentItem = static_cast<PluginInformationsListItem*>(sender());
+  _currentItem->focusIn();
 }

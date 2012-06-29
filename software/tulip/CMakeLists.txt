@@ -11,8 +11,6 @@ SET(SRCS
   src/TulipMainWindow.cpp
   src/TulipSplashScreen.cpp
   src/TulipWelcomePage.cpp
-  src/PluginResultsList.cpp
-  src/DetailedPluginInformationsWidget.cpp
   src/TulipPerspectiveProcessHandler.cpp
   src/TulipPerspectiveCrashHandler.cpp
   src/FormPost.cpp
@@ -26,9 +24,7 @@ QT4_WRAP_UI(UI_HEADERS
   designer/TulipMainWindow.ui
   designer/TulipWelcomePage.ui
   designer/PluginInformationsListItem.ui
-  designer/DetailedPluginInformationsWidget.ui
   designer/TulipPerspectiveCrashHandler.ui
-  designer/PerspectiveSelectionDialog.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -38,8 +34,6 @@ QT4_WRAP_CPP(MOC_SRCS
   include/TulipMainWindow.h
   include/TulipWelcomePage.h
   include/PluginInformationsListItem.h
-  include/PluginResultsList.h
-  include/DetailedPluginInformationsWidget.h
   include/TulipPerspectiveProcessHandler.h
   include/TulipPerspectiveCrashHandler.h
   include/FormPost.h

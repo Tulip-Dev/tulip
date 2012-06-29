@@ -28,54 +28,45 @@ namespace Ui {
 class PluginsCenterData;
 }
 
-namespace tlp {
-class PluginInformations;
-}
+class PluginInformationsListItem;
 
-/**
-  @brief The widget managing plugins installation.
-  This widget is meant to list plugins available from several plugins repositories. Order them by categories and provide with a way to easily download and install them.
-  The plugin center also displays detailed information about each plugin.
-
-  @see PluginInformations
-  */
 class PluginsCenter: public QWidget {
   Q_OBJECT
+
+  Ui::PluginsCenterData* _ui;
+
+  QStringList _categoryFilters;
+  QString _nameFilter;
+
+  PluginInformationsListItem* _currentItem;
+
 public:
   explicit PluginsCenter(QWidget *parent=NULL);
 
 public slots:
-  void showHomePage();
-  void showSearchPage();
+  void reportPluginErrors(const QMap<QString,QString>&errors);
+
   void showErrorsPage();
-  void showReposPage();
-  void reportPluginErrors(const QMap<QString,QString> &);
-  void fetch(tlp::PluginInformations *);
-  void remove(tlp::PluginInformations *);
-  void addRemoteLocation(const QString &url=QString::null);
-  void removeRemoteLocation();
-  void removeRemoteLocation(const QString &url);
+  void showWelcomePage();
+  void showRepositoriesPage();
 
+  void searchAll();
+  void searchAlgorithms();
+  void searchImportExport();
+  void searchGlyphs();
+  void searchViews();
+  void searchInteractors();
+  void searchPerspectives();
+
+  void setNameFilter(const QString&filter);
+  void setCategoryFilter(const QString&filter);
+  void setCategoryFilters(const QStringList&filters);
+
+  void refreshFilter();
 protected slots:
-  void showPage(QWidget *page);
-  void listItemSelected();
-
-  void browseAll();
-  void browseAlgorithms();
-  void browseImportExport();
-  void browseGlyphs();
-  void browseViews();
-  void browseInteractors();
-  void browsePerspectives();
-
-  void setPluginNameFilter(const QString &);
-  void remoteLocationAdded(const QString &);
-  void remoteLocationError(QNetworkReply::NetworkError,const QString &);
-
-private:
-  QVector<const char *> _typeSlots;
-  Ui::PluginsCenterData *_ui;
-  QStringList indexType(int) const;
+  void sideListRowChanged(int i);
+  void itemFocused();
 };
 
 #endif // PLUGINSCENTER_
+

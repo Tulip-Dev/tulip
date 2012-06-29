@@ -20,46 +20,29 @@
 #define PLUGININFORMATIONSLISTITEM_H
 
 #include <QtGui/QWidget>
+#include <tulip/PluginManager.h>
 
 class QNetworkReply;
 namespace Ui {
 class PluginInformationsListItemData;
 }
-namespace tlp {
-class PluginInformations;
-}
 
 class PluginInformationsListItem: public QWidget {
   Q_OBJECT
-
+  Ui::PluginInformationsListItemData *_ui;
 public:
-  explicit PluginInformationsListItem(tlp::PluginInformations *, QWidget *parent = NULL);
-  tlp::PluginInformations *pluginInformations() const {
-    return _pluginInformations;
-  }
+  explicit PluginInformationsListItem(tlp::PluginManager::PluginInformations, QWidget *parent = NULL);
+  virtual ~PluginInformationsListItem();
+
+public slots:
+  void focusOut();
+  void focusIn();
+
+signals:
+  void focused();
 
 protected:
   void focusInEvent(QFocusEvent *);
-
-signals:
-  void gotFocus();
-  void showDetailedInformations();
-  void fetch();
-  void remove();
-
-public slots:
-  void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
-  void downloadFinished();
-  void expand();
-  void collapse();
-  void markedForRemoval();
-  void DownloadStarted(QNetworkReply*);
-
-private:
-  Ui::PluginInformationsListItemData *_ui;
-  tlp::PluginInformations *_pluginInformations;
-
-  QString backgroundCode();
 };
 
 #endif // PLUGININFORMATIONSLISTITEM_H

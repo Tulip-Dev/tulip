@@ -26,29 +26,19 @@
 #include <QtCore/QProcess>
 #include <QtCore/QDir>
 
+#include <tulip/PluginLister.h>
+#include <tulip/Perspective.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipProject.h>
 #include <QtGui/QScrollArea>
 
-#include "ui_PerspectiveSelectionDialog.h"
 #include "ui_TulipMainWindow.h"
 #include "TulipPerspectiveProcessHandler.h"
 #include "TulipWelcomePage.h"
 #include "PerspectiveItemWidget.h"
 
-// Helper classes
-PerspectiveSelectionDialog::PerspectiveSelectionDialog(QWidget *parent): QDialog(parent) {
-  Ui::PerspectiveSelectionDialogData *ui = new Ui::PerspectiveSelectionDialogData;
-  ui->setupUi(this);
-  ui->perspectiveDialogScrollContents->setLayout(TulipWelcomePage::buildPerspectiveListLayout(this,SLOT(perspectiveSelected())));
-}
-
-void PerspectiveSelectionDialog::perspectiveSelected() {
-  PerspectiveItemWidget *item = static_cast<PerspectiveItemWidget *>(sender());
-  selectedPerspectiveName = item->perspectiveId();
-  close();
-}
+using namespace tlp;
 
 TulipMainWindow* TulipMainWindow::_instance = NULL;
 
@@ -154,16 +144,9 @@ void TulipMainWindow::showOpenProjectWindow() {
 void TulipMainWindow::openProject(const QString &file) {
   tlp::TulipProject *project = tlp::TulipProject::openProject(file);
 
-  if (!project->isValid()) {
-    setVisible(true);
-    PerspectiveSelectionDialog dlg(this);
-    dlg.exec();
-
-    if (!dlg.selectedPerspectiveName.isNull())
-      openProjectWith(file,dlg.selectedPerspectiveName,QVariantMap());
-  }
-  else
+  if (project->isValid()) {
     openProjectWith(file, project->perspective(),QVariantMap());
+  }
 
   delete project;
 }
@@ -175,52 +158,6 @@ void TulipMainWindow::openProjectWith(const QString &file, const QString &perspe
   TulipSettings::instance().addToRecentDocuments(file);
   TulipPerspectiveProcessHandler::instance().createPerspective(perspective,file,parameters);
 }
-
-// Methods and properties coming from the D-Bus implementation
-//qlonglong TulipMainWindow::pid() const {
-//  return QApplication::applicationPid();
-//}
-
-//void TulipMainWindow::ShowAboutPage() {
-//  if (!isVisible())
-//    setVisible(true);
-
-//  raise();
-//  _ui->pages->setCurrentWidget(_ui->aboutPage);
-//}
-
-//void TulipMainWindow::ShowPluginsCenter() {
-//  if (!isVisible())
-//    setVisible(true);
-
-//  raise();
-//  _ui->pages->setCurrentWidget(_ui->pluginsPage);
-//}
-
-//void TulipMainWindow::ShowWelcomeScreen() {
-//  if (!isVisible())
-//    setVisible(true);
-
-//  raise();
-//  _ui->pages->setCurrentWidget(_ui->welcomePage);
-//}
-
-//void TulipMainWindow::AddPluginRepository(const QString &url) {
-//  _ui->pluginsPage->addRemoteLocation(url);
-//}
-
-//void TulipMainWindow::RemovePluginRepository(const QString &url) {
-//  _ui->pluginsPage->removeRemoteLocation(url);
-//}
-
-
-//QStringList TulipMainWindow::GetCompatiblePerspectives(const QString &/*file*/) {
-//  return QStringList();
-//}
-
-//void TulipMainWindow::EnableCrashHandling(const QString &folder, qlonglong pid) {
-//  TulipPerspectiveProcessHandler::instance().enableCrashHandling(pid,folder);
-//}
 
 void TulipMainWindow::showTrayMessage(const QString &title, const QString &message, uint icon, uint duration) {
   if (!_systemTrayIcon)

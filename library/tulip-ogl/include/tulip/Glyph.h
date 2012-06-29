@@ -36,6 +36,8 @@
 
 namespace tlp {
 
+static const std::string GLYPH_CATEGORY = QObject::trUtf8("Node shape").toStdString();
+
 class Graph;
 struct node;
 
@@ -54,7 +56,7 @@ public:
 class TLP_GL_SCOPE Glyph : public tlp::Plugin {
 public:
   std::string category() const {
-    return QObject::trUtf8("Node shape").toStdString();
+    return GLYPH_CATEGORY;
   }
   std::string icon() const {
     return ":/tulip/gui/icons/32/plugin_glyph.png";

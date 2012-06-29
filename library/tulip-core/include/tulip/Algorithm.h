@@ -29,6 +29,8 @@
  */
 namespace tlp {
 
+static const std::string ALGORITHM_CATEGORY = QObject::trUtf8("Algorithm").toStdString();
+
 class PluginProgress;
 class Graph;
 class DataSet;
@@ -74,7 +76,7 @@ public :
   virtual bool run() = 0;
 
   virtual std::string category() const {
-    return QObject::trUtf8("Algorithm").toStdString();
+    return ALGORITHM_CATEGORY;
   }
   /**
    * @brief Checks whether the algorithm can be applied on this graph or not.
