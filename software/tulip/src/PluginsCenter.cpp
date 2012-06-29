@@ -55,6 +55,7 @@ PluginsCenter::PluginsCenter(QWidget *parent): QWidget(parent), _ui(new Ui::Plug
 void PluginsCenter::reportPluginErrors(const QMap<QString, QString>& errors) {
   if (!errors.empty())
     _ui->pluginsSideList->item(ERRORS_ROW)->setFlags(Qt::ItemIsEnabled | _ui->pluginsSideList->item(ERRORS_ROW)->flags());
+
   foreach(QString k, errors.keys()) {
     _ui->errorsLogAreaLayout->addWidget(new PluginErrorReport(k,errors[k]));
   }
@@ -79,14 +80,14 @@ void PluginsCenter::searchAll() {
 
 void PluginsCenter::searchAlgorithms() {
   setCategoryFilters(QStringList()
-                    << tlp::ALGORITHM_CATEGORY.c_str()
-                    << tlp::BOOLEAN_ALGORITHM_CATEGORY.c_str()
-                    << tlp::COLOR_ALGORITHM_CATEGORY.c_str()
-                    << tlp::DOUBLE_ALGORITHM_CATEGORY.c_str()
-                    << tlp::INTEGER_ALGORITHM_CATEGORY.c_str()
-                    << tlp::LAYOUT_ALGORITHM_CATEGORY.c_str()
-                    << tlp::STRING_ALGORITHM_CATEGORY.c_str()
-                    << tlp::PROPERTY_ALGORITHM_CATEGORY.c_str());
+                     << tlp::ALGORITHM_CATEGORY.c_str()
+                     << tlp::BOOLEAN_ALGORITHM_CATEGORY.c_str()
+                     << tlp::COLOR_ALGORITHM_CATEGORY.c_str()
+                     << tlp::DOUBLE_ALGORITHM_CATEGORY.c_str()
+                     << tlp::INTEGER_ALGORITHM_CATEGORY.c_str()
+                     << tlp::LAYOUT_ALGORITHM_CATEGORY.c_str()
+                     << tlp::STRING_ALGORITHM_CATEGORY.c_str()
+                     << tlp::PROPERTY_ALGORITHM_CATEGORY.c_str());
 }
 
 void PluginsCenter::searchImportExport() {
@@ -158,24 +159,31 @@ void PluginsCenter::sideListRowChanged(int i) {
   case ALL_ROW:
     searchAll();
     break;
+
   case ALGORITHMS_ROW:
     searchAlgorithms();
     break;
+
   case IMPORTEXPORT_ROW:
     searchImportExport();
     break;
+
   case GLYPHS_ROW:
     searchGlyphs();
     break;
+
   case VIEWS_ROW:
     searchViews();
     break;
+
   case INTERACTORS_ROW:
     searchInteractors();
     break;
+
   case PERSPECTIVES_ROW:
     searchPerspectives();
     break;
+
   case ERRORS_ROW:
     showErrorsPage();
     break;
@@ -186,6 +194,7 @@ void PluginsCenter::itemFocused() {
   if (_currentItem != NULL) {
     _currentItem->focusOut();
   }
+
   _currentItem = static_cast<PluginInformationsListItem*>(sender());
   _currentItem->focusIn();
 }
