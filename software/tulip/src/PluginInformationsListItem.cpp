@@ -62,21 +62,18 @@ PluginInformationsListItem::~PluginInformationsListItem() {
 }
 
 void PluginInformationsListItem::focusOut() {
-  qDebug() << __PRETTY_FUNCTION__;
   _ui->installationControls->hide();
   _ui->contentsFrame->setProperty("highlighted",false);
   _ui->contentsFrame->setStyleSheet(_ui->contentsFrame->styleSheet());
 }
 
 void PluginInformationsListItem::focusIn() {
-  qDebug() << __PRETTY_FUNCTION__;
   _ui->installationControls->show();
   _ui->contentsFrame->setProperty("highlighted",true);
   _ui->contentsFrame->setStyleSheet(_ui->contentsFrame->styleSheet());
 }
 
 void PluginInformationsListItem::focusInEvent(QFocusEvent *) {
-  qDebug() << __PRETTY_FUNCTION__;
   emit focused();
 }
 
