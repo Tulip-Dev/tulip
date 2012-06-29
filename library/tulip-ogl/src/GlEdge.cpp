@@ -563,7 +563,7 @@ void GlEdge::drawLabel(OcclusionTest* test, const GlGraphInputData* data, float 
   label->rotate(0,0,angle);
   label->setAlignment(ON_TOP);
   label->setScaleToSize(false);
-  label->setLabelsDensity(data->parameters->getLabelsBorder());
+  label->setLabelsDensity(data->parameters->getLabelsDensity());
 
   if(!(data->parameters->getLabelsDensity()==100)) //labels overlap
     label->setOcclusionTester(test);
