@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>819</width>
-    <height>57</height>
+    <height>59</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,9 +18,6 @@
   </property>
   <property name="focusPolicy">
    <enum>Qt::WheelFocus</enum>
-  </property>
-  <property name="windowTitle">
-   <string>Form</string>
   </property>
   <property name="styleSheet">
    <string notr="true">#PluginErrorReportData { background-color: white; }</string>

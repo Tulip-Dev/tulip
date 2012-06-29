@@ -52,41 +52,42 @@
 #endif
 
 void updatePlateform(char* tulipPath) {
-  tlp::PluginManager::removePlugins();
-  tlp::PluginManager::unpackPlugins(tlp::getPluginStagingDirectory());
 
-  //update the updater
-  const QString updaterLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/updater";
+//  tlp::PluginManager::removePlugins();
+//  tlp::PluginManager::unpackPlugins(tlp::getPluginStagingDirectory());
 
-  //run the updater
-  QDir upgradeDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/update");
+//  //update the updater
+//  const QString updaterLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/updater";
 
-  if(!upgradeDir.entryList(QDir::NoDotAndDotDot).empty()) {
-    //we unpack the archives in-place, the contents will be copied later by a script
-    tlp::PluginProgress* progress = new tlp::SimplePluginProgress();
-    QStringList filters;
-    filters << "*.zip";
-    foreach(const QFileInfo& pluginArchive, upgradeDir.entryInfoList(filters)) {
-      QuaZIPFacade::unzip(tlp::getPluginLocalInstallationDir(), pluginArchive.absoluteFilePath(), progress);
+//  //run the updater
+//  QDir upgradeDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/update");
 
-      if(!progress->getError().empty()) {
-        //TODO proper error reporting
-        std::cout << progress->getError() << std::endl;
-      }
-      else {
-        QFile::remove(pluginArchive.absoluteFilePath());
-      }
-    }
+//  if(!upgradeDir.entryList(QDir::NoDotAndDotDot).empty()) {
+//    //we unpack the archives in-place, the contents will be copied later by a script
+//    tlp::PluginProgress* progress = new tlp::SimplePluginProgress();
+//    QStringList filters;
+//    filters << "*.zip";
+//    foreach(const QFileInfo& pluginArchive, upgradeDir.entryInfoList(filters)) {
+//      QuaZIPFacade::unzip(tlp::getPluginLocalInstallationDir(), pluginArchive.absoluteFilePath(), progress);
 
-    //launch the updater and quit, the updater will re-launch Tulip
-    QFileInfo tulipExecutable(tulipPath);
-#ifdef WIN32
-    int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.bat");
-#else
-    int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.sh");
-#endif
-    exit(result);
-  }
+//      if(!progress->getError().empty()) {
+//        //TODO proper error reporting
+//        std::cout << progress->getError() << std::endl;
+//      }
+//      else {
+//        QFile::remove(pluginArchive.absoluteFilePath());
+//      }
+//    }
+
+//    //launch the updater and quit, the updater will re-launch Tulip
+//    QFileInfo tulipExecutable(tulipPath);
+//#ifdef WIN32
+//    int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.bat");
+//#else
+//    int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.sh");
+//#endif
+//    exit(result);
+//  }
 }
 
 int main(int argc, char **argv) {
@@ -95,10 +96,12 @@ int main(int argc, char **argv) {
   tulip_agent.setApplicationName(QObject::trUtf8("Tulip"));
   QLocale::setDefault(QLocale(QLocale::English));
 
-  // revert previous remote locations
-  foreach(const QString& remoteLocation, TulipSettings::instance().remoteLocations()) {
-    tlp::PluginManager::addRemoteLocation(remoteLocation);
-  }
+  // Setting default plugin servers
+  TulipSettings::instance().addRemoteLocation(QString("http://tulip.labri.fr/pluginserver/") + TULIP_MM_RELEASE);
+
+  // FIXME: remove me
+//  TulipSettings::instance().addRemoteLocation("http://192.168.1.12/testserver");
+
   updatePlateform(argv[0]);
 
 #if defined(__APPLE__)
@@ -124,13 +127,13 @@ int main(int argc, char **argv) {
   delete dispatcher;
   delete splashScreen;
 
-
   // Main window
   TulipMainWindow *mainWindow = TulipMainWindow::instance();
   mainWindow->pluginsCenter()->reportPluginErrors(errorReport->errors());
   delete errorReport;
 
   mainWindow->show();
+
   int result = tulip_agent.exec();
 
 #ifdef MEMORYCHECKER_ON

@@ -8,79 +8,93 @@ namespace tlp {
 class PluginContext;
 
 class BooleanProperty;
+static const std::string BOOLEAN_ALGORITHM_CATEGORY = QObject::trUtf8("Filtering").toStdString();
+
 /// Interface for selection plug-ins
 class TLP_SCOPE BooleanAlgorithm : public TemplateAlgorithm<tlp::BooleanProperty> {
 protected:
   ///
   BooleanAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return QObject::trUtf8("Filtering").toStdString();
+    return BOOLEAN_ALGORITHM_CATEGORY;
   }
 };
 
 class ColorProperty;
+static const std::string COLOR_ALGORITHM_CATEGORY = QObject::trUtf8("Coloring").toStdString();
+
 /// Interface for color plug-ins
 class TLP_SCOPE ColorAlgorithm : public TemplateAlgorithm<tlp::ColorProperty> {
 protected:
   ///
   ColorAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return QObject::trUtf8("Coloring").toStdString();
+    return COLOR_ALGORITHM_CATEGORY;
   }
 };
 
 class DoubleProperty;
+static const std::string DOUBLE_ALGORITHM_CATEGORY = QObject::trUtf8("Metric").toStdString();
+
 /// Interface for metric plug-ins
 class TLP_SCOPE DoubleAlgorithm : public TemplateAlgorithm<tlp::DoubleProperty> {
 protected:
   ///
   DoubleAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return QObject::trUtf8("Metric").toStdString();
+    return DOUBLE_ALGORITHM_CATEGORY;
   }
 };
 
 class IntegerProperty;
+static const std::string INTEGER_ALGORITHM_CATEGORY = QObject::trUtf8("Metric").toStdString();
+
 /// Interface for int plug-ins
 class TLP_SCOPE IntegerAlgorithm : public TemplateAlgorithm<tlp::IntegerProperty> {
 protected:
   ///
   IntegerAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return QObject::trUtf8("Metric").toStdString();
+    return INTEGER_ALGORITHM_CATEGORY;
   }
 };
 
 class LayoutProperty;
+static const std::string LAYOUT_ALGORITHM_CATEGORY = QObject::trUtf8("Layout").toStdString();
+
 /// Interface for layout plug-ins
 class TLP_SCOPE LayoutAlgorithm : public TemplateAlgorithm<tlp::LayoutProperty> {
 protected:
   ///
   LayoutAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return QObject::trUtf8("Layout").toStdString();
+    return LAYOUT_ALGORITHM_CATEGORY;
   }
 };
 
 class SizeProperty;
+static const std::string SIZE_ALGORITHM_CATEGORY = QObject::trUtf8("Resizing").toStdString();
+
 /// Interface for size plug-ins
 class TLP_SCOPE SizeAlgorithm : public TemplateAlgorithm<tlp::SizeProperty> {
 protected:
   ///
   SizeAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return QObject::trUtf8("Resizing").toStdString();
+    return SIZE_ALGORITHM_CATEGORY;
   }
 };
 
 class StringProperty;
+static const std::string STRING_ALGORITHM_CATEGORY = QObject::trUtf8("Labeling").toStdString();
+
 /// Interface for string plug-ins
 class TLP_SCOPE StringAlgorithm : public TemplateAlgorithm<tlp::StringProperty> {
 protected:
   ///
   StringAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
-    return QObject::trUtf8("Labeling").toStdString();
+    return STRING_ALGORITHM_CATEGORY;
   }
 };
 }

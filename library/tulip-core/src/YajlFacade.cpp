@@ -86,9 +86,13 @@ static int parse_end_array(void *ctx) {
 }
 
 void YajlParseFacade::parse(std::string filename) {
-  QFile file(filename.c_str());
-  file.open(QIODevice::ReadOnly);
-  QByteArray contents = file.readAll();
+  QFile f(filename.c_str());
+  parse(&f);
+}
+
+void YajlParseFacade::parse(QIODevice *stream) {
+  stream->open(QIODevice::ReadOnly);
+  QByteArray contents = stream->readAll();
 
   const yajl_callbacks callbacks = {
     parse_null,
@@ -115,10 +119,10 @@ void YajlParseFacade::parse(std::string filename) {
     yajl_free_error(hand, str);
   }
 
-//   yajl_gen_free(g);
+  //   yajl_gen_free(g);
   yajl_free(hand);
 
-  file.close();
+  stream->close();
 }
 
 bool YajlParseFacade::parsingSucceeded() const {

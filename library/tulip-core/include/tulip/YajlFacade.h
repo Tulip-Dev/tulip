@@ -6,6 +6,8 @@ class PluginProgress;
 
 class yajl_gen_t;
 
+class QIODevice;
+
 /**
  * @brief A Simple C++ wrapper around the C library 'yajl' parsing capabilities.
  *
@@ -14,7 +16,7 @@ class yajl_gen_t;
  **/
 class YajlParseFacade {
 public:
-  YajlParseFacade(tlp::PluginProgress* progress) : _progress(progress), _parsingSucceeded(true) {}
+  YajlParseFacade(tlp::PluginProgress* progress=NULL) : _progress(progress), _parsingSucceeded(true) {}
 
   virtual ~YajlParseFacade() {
   }
@@ -26,6 +28,7 @@ public:
    * @return void
    **/
   void parse(std::string filename);
+  void parse(QIODevice* stream);
 
   virtual void parseNull();
   virtual void parseBoolean(bool boolVal);

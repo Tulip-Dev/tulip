@@ -36,6 +36,8 @@ class QMenu;
 class QPoint;
 
 namespace tlp {
+static const std::string VIEW_CATEGORY = QObject::trUtf8("Panel").toStdString();
+
 class Interactor;
 
 /**
@@ -89,7 +91,7 @@ public:
   virtual ~View();
 
   virtual std::string category() const {
-    return QObject::trUtf8("Panel").toStdString();
+    return VIEW_CATEGORY;
   }
   std::string icon() const {
     return ":/tulip/gui/icons/32/plugin_view.png";

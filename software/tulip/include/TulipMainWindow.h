@@ -88,22 +88,6 @@ private:
   SystemTrayMessage _currentTrayMessage;
 
   QVector<QObject *> _pageChoosers;
-
-//// Methods and properties coming from the D-Bus service implementation
-//public: // PROPERTIES
-//  Q_PROPERTY(qlonglong pid READ pid)
-//  qlonglong pid() const;
-
-//public Q_SLOTS: // METHODS
-//  void AddPluginRepository(const QString &url);
-//  void EnableCrashHandling(const QString &folder, qlonglong pid);
-//  QStringList GetCompatiblePerspectives(const QString &file);
-//  void RemovePluginRepository(const QString &url);
-//  void ShowAboutPage();
-//  void ShowPluginsCenter();
-//  void ShowWelcomeScreen();
-//Q_SIGNALS: // SIGNALS
-//  void Terminate();
 };
 
 class PerspectiveSelectionDialog: public QDialog {
@@ -112,8 +96,6 @@ public:
   PerspectiveSelectionDialog(QWidget *parent=NULL);
   QString selectedPerspectiveName;
 
-protected slots:
-  void perspectiveSelected();
 };
 
 #endif // TULIPMAINWINDOW_H

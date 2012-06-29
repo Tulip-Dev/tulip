@@ -30,6 +30,8 @@
 
 #include <tulip/TulipSettings.h>
 #include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
+#include <tulip/Perspective.h>
 
 #include "PerspectiveItemWidget.h"
 #include "RssParser.h"
@@ -37,6 +39,8 @@
 
 static const QString RSS_URL = "http://tulip.labri.fr/TulipDrupal/?q=newsFeed.xml";
 static const int RSS_LIMIT = 3;
+
+using namespace tlp;
 
 TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui::TulipWelcomePageData) {
   _ui->setupUi(this);
@@ -67,28 +71,12 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
     _ui->recentDocumentsLabel->setText(txt);
   }
 
-  // Perspectives list
-  QVBoxLayout *perspectiveLayout = buildPerspectiveListLayout(this, SLOT(perspectiveSelected()));
-  _ui->perspectivesFrame->setLayout(perspectiveLayout);
-}
 
-#include <QtCore/QDebug>
-
-QVBoxLayout *TulipWelcomePage::buildPerspectiveListLayout(const QObject *receiver, const char *slot) {
-  QVBoxLayout *perspectivesLayout = new QVBoxLayout();
-  perspectivesLayout->setContentsMargins(6,6,6,6);
-  QList<tlp::PluginInformations *> localPlugins = tlp::PluginManager::pluginsList(tlp::PluginManager::Local);
-  tlp::PluginInformations *info;
-  foreach(info,localPlugins) {
-    if (info->type() != "Perspective")
-      continue;
-
-    PerspectiveItemWidget *item = new PerspectiveItemWidget(info);
-    perspectivesLayout->addWidget(item);
-    connect(item,SIGNAL(selected()),receiver,slot);
+  std::list<std::string> perspectives = PluginLister::instance()->availablePlugins<tlp::Perspective>();
+  for (std::list<std::string>::iterator it = perspectives.begin(); it != perspectives.end(); ++it) {
+    _ui->perspectivesFrame->layout()->addWidget(new PerspectiveItemWidget(it->c_str()));
   }
-  perspectivesLayout->addItem(new QSpacerItem(10,10,QSizePolicy::Maximum,QSizePolicy::Expanding));
-  return perspectivesLayout;
+  _ui->perspectivesFrame->layout()->addItem(new QSpacerItem(0,0,QSizePolicy::Maximum,QSizePolicy::Expanding));
 }
 
 TulipWelcomePage::~TulipWelcomePage() {
@@ -137,11 +125,6 @@ void TulipWelcomePage::rssReply(QNetworkReply *reply) {
 
 void TulipWelcomePage::openLink(const QString &link) {
   QDesktopServices::openUrl(link);
-}
-
-void TulipWelcomePage::perspectiveSelected() {
-  PerspectiveItemWidget *item = static_cast<PerspectiveItemWidget *>(sender());
-  emit openPerspective(item->perspectiveId());
 }
 
 void TulipWelcomePage::recentFileLinkActivated(const QString& link) {

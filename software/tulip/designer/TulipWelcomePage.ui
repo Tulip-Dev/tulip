@@ -112,9 +112,10 @@ QToolButton:pressed {
           <x>0</x>
           <y>0</y>
           <width>688</width>
-          <height>609</height>
+          <height>601</height>
          </rect>
         </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3"/>
        </widget>
       </widget>
      </item>
@@ -261,8 +262,8 @@ p, li { white-space: pre-wrap; }
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>242</width>
-           <height>330</height>
+           <width>238</width>
+           <height>320</height>
           </rect>
          </property>
         </widget>

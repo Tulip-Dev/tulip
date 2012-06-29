@@ -23,8 +23,9 @@ $arch=$_GET['arch'];
 $os=$_GET['os'];
 $category=$_GET['category'];
 $name=$_GET['name'];
+$tulip=$_GET['tulip'];
 
-$results = find_plugin($name,$os,$arch,$category);
+$results = find_plugin($name,$os,$arch,$category,$tulip);
 echo "[\n";
 foreach($results as $r) {
   echo "\t{\n";

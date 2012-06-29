@@ -23,9 +23,13 @@
 #include <iostream>
 #include <tulip/Plugin.h>
 
+
 /** \addtogroup plugins */
 
 namespace tlp {
+
+static const std::string EXPORT_CATEGORY = QObject::trUtf8("Export").toStdString();
+
 class Graph;
 class DataSet;
 class PluginProgress;
@@ -47,7 +51,7 @@ public:
   virtual ~ExportModule() {}
 
   virtual std::string category() const {
-    return QObject::trUtf8("Export").toStdString();
+    return EXPORT_CATEGORY;
   }
   std::string icon() const {
     return ":/tulip/gui/icons/32/plugin_import_export.png";

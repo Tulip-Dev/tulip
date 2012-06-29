@@ -178,7 +178,7 @@ std::string author() const { return AUTHOR; }\
 std::string date() const { return DATE; }  \
 std::string info() const { return INFO; }  \
 std::string release() const { return RELEASE; }\
-std::string tulipRelease() const { return TULIP_RELEASE; }\
+std::string tulipRelease() const { return TULIP_MM_RELEASE; }\
 std::string group() const { return GROUP; }
 }
 

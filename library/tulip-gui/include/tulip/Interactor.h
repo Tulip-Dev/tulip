@@ -30,6 +30,8 @@
 
 namespace tlp {
 
+static const std::string INTERACTOR_CATEGORY = QObject::trUtf8("Interactor").toStdString();
+
 class View;
 
 /**
@@ -54,7 +56,7 @@ class TLP_QT_SCOPE Interactor: public QObject, public tlp::Plugin {
 
 public:
   virtual std::string category() const {
-    return QObject::trUtf8("Interactor").toStdString();
+    return INTERACTOR_CATEGORY;
   }
   std::string icon() const {
     return ":/tulip/gui/icons/32/plugin_interactor.png";

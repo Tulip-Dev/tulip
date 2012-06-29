@@ -18,115 +18,65 @@
  */
 #include "PluginInformationsListItem.h"
 #include <QtGui/QPainter>
-#include <tulip/PluginInformations.h>
 #include "ui_PluginInformationsListItem.h"
 #include <QtNetwork/QNetworkReply>
 
 using namespace tlp;
 
-PluginInformationsListItem::PluginInformationsListItem(tlp::PluginInformations *infos, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationsListItemData), _pluginInformations(infos) {
+PluginInformationsListItem::PluginInformationsListItem(PluginManager::PluginInformations infos, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationsListItemData) {
   _ui->setupUi(this);
-  _ui->mainFrame->setStyleSheet("#mainFrame { background-color:" + backgroundCode() + ";  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
+  _ui->progressFrame->hide();
+  _ui->installFrame->hide();
+  _ui->rebootFrame->hide();
+  _ui->installationControls->hide();
 
-  if(infos->isInstalled()) {
-    _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-installed-updated.png"));
-
-    if(infos->updateAvailable()) {
-      _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-upgrade.png"));
-    }
+  PluginManager::PluginVersionInformations versionInfos = infos.installedVersion;
+  if (!versionInfos.isValid) {
+    versionInfos = infos.availableVersions.first();
+    _ui->statusIcon->hide();
+    _ui->installFrame->show();
   }
+  else {
+    bool updateAvailable = false;
+    foreach(PluginManager::PluginVersionInformations availableInfos,infos.availableVersions)
+      updateAvailable = updateAvailable || (availableInfos.version != versionInfos.version);
+    if (updateAvailable) {
+      _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-upgrade.png"));
+      _ui->installFrame->show();
+    }
 
-  _ui->errorFrame->hide();
-  _ui->downloadProgress->hide();
-  _ui->icon->setPixmap(QPixmap(infos->iconPath()));
-  _ui->name->setText("<p><span style=\"font-size:large;\"><b>" + infos->name() + "</b></span>");
-  _ui->shortDescription->setText("<p><span style=\"font-size:small; color:#626262;\">" + infos->shortDescription() + "</span>");
+    else
+      _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-installed-updated.png"));
+  }
+  _ui->icon->setPixmap(QPixmap(versionInfos.icon));
+  _ui->name->setText(infos.name + " " + versionInfos.version);
+  _ui->desc->setText(versionInfos.description + "\n\n" + trUtf8("Author: ") + versionInfos.author);
 
-  if (!hasFocus())
-    _ui->bottomFrame->hide();
+  foreach(PluginManager::PluginVersionInformations vi, infos.availableVersions) {
+    _ui->versionsCombo->addItem(vi.version);
+  }
+}
 
-  connect(_ui->infosButton,SIGNAL(clicked()),this,SIGNAL(showDetailedInformations()));
-  connect(_ui->installButton,SIGNAL(clicked()),this,SIGNAL(fetch()));
-  connect(_ui->removeButton,SIGNAL(clicked()),this,SIGNAL(remove()));
-  connect(_ui->removeButton,SIGNAL(clicked()),this, SLOT(markedForRemoval()));
-  connect(infos, SIGNAL(DownloadStarted(QNetworkReply*)), this, SLOT(DownloadStarted(QNetworkReply*)));
+PluginInformationsListItem::~PluginInformationsListItem() {
+  delete _ui;
+}
+
+void PluginInformationsListItem::focusOut() {
+  qDebug() << __PRETTY_FUNCTION__;
+  _ui->installationControls->hide();
+  _ui->contentsFrame->setProperty("highlighted",false);
+  _ui->contentsFrame->setStyleSheet(_ui->contentsFrame->styleSheet());
+}
+
+void PluginInformationsListItem::focusIn() {
+  qDebug() << __PRETTY_FUNCTION__;
+  _ui->installationControls->show();
+  _ui->contentsFrame->setProperty("highlighted",true);
+  _ui->contentsFrame->setStyleSheet(_ui->contentsFrame->styleSheet());
 }
 
 void PluginInformationsListItem::focusInEvent(QFocusEvent *) {
-  emit gotFocus();
+  qDebug() << __PRETTY_FUNCTION__;
+  emit focused();
 }
 
-void PluginInformationsListItem::expand() {
-  _ui->mainFrame->setStyleSheet("#mainFrame { background-color:" + backgroundCode() + ";  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
-
-  _ui->bottomFrame->show();
-
-  if(!_ui->errorLabel->text().isEmpty()) {
-    _ui->errorFrame->show();
-  }
-
-  _ui->installButton->setVisible(!_pluginInformations->isInstalled() || _pluginInformations->updateAvailable());
-  _ui->removeButton->setVisible(_pluginInformations->isInstalled());
-
-  _ui->infosButton->setIcon(QIcon(":/tulip/app/icons/16/help-contents.png"));
-
-  if (_pluginInformations->isInstalled() && _pluginInformations->updateAvailable()) {
-    _ui->installButton->setIcon(QIcon(":/tulip/app/icons/16/package-upgrade.png"));
-    _ui->installButton->setText(trUtf8("Upgrade to ") + _pluginInformations->latestVersion());
-  }
-  else
-    _ui->installButton->setIcon(QIcon(":/tulip/app/icons/16/list-add.png"));
-
-  _ui->removeButton->setIcon(QIcon(":/tulip/app/icons/16/package-purge.png"));
-}
-
-void PluginInformationsListItem::collapse() {
-  _ui->mainFrame->setStyleSheet("#mainFrame { background-color:" + backgroundCode() + ";  border-left: 1px solid \"#C9C9C9\";  border-right: 1px solid \"#C9C9C9\";  border-top: 1px solid \"#C9C9C9\";  border-bottom: 1px solid \"#C9C9C9\";}");
-
-  _ui->bottomFrame->hide();
-  _ui->errorFrame->hide();
-}
-
-void PluginInformationsListItem::markedForRemoval() {
-  _ui->removeButton->setEnabled(false);
-  _ui->removeButton->setText("Plugin has been marked for removal");
-}
-
-void PluginInformationsListItem::DownloadStarted(QNetworkReply* reply) {
-  _ui->downloadProgress->show();
-  connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
-  connect(reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
-}
-
-void PluginInformationsListItem::downloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
-  _ui->downloadProgress->setMaximum(bytesTotal);
-  _ui->downloadProgress->setValue(bytesReceived);
-}
-
-void PluginInformationsListItem::downloadFinished() {
-  QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-
-  if(reply) {
-    _ui->downloadProgress->hide();
-
-    if(reply->error() == QNetworkReply::NoError) {
-      _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-installed-updated.png"));
-      _ui->installButton->hide();
-      _ui->removeButton->show();
-    }
-    else {
-      _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-purge.png"));
-      _ui->errorFrame->show();
-      _ui->errorLabel->setText(qPrintable(reply->errorString()));
-    }
-  }
-}
-
-QString PluginInformationsListItem::backgroundCode() {
-  if (hasFocus())
-    return "rgb(232, 238, 244)";
-  else if (_pluginInformations->isInstalled() && !_pluginInformations->updateAvailable())
-    return "#E9E9E9";
-
-  return "white";
-}

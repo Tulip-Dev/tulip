@@ -24,6 +24,7 @@
 
 namespace tlp {
 class PluginContext;
+static const std::string PROPERTY_ALGORITHM_CATEGORY = QObject::trUtf8("Property").toStdString();
 
 /**
  * \addtogroup plugins
@@ -43,7 +44,7 @@ public :
   PropertyAlgorithm(const tlp::PluginContext* context):Algorithm(context) {}
 
   virtual std::string category() const {
-    return QObject::trUtf8("Property").toStdString();
+    return PROPERTY_ALGORITHM_CATEGORY;
   }
 };
 

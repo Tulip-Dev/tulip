@@ -32,13 +32,13 @@ class PerspectiveItemData;
 class PerspectiveItemWidget : public QWidget {
   Q_OBJECT
 
-  QString _perspectiveId;
+  QString _perspectiveName;
   Ui::PerspectiveItemData *_ui;
 public:
-  explicit PerspectiveItemWidget(tlp::PluginInformations *infos,QWidget *parent = 0);
-  QString perspectiveId() const {
-    return _perspectiveId;
-  }
+  explicit PerspectiveItemWidget(const QString& perspectiveName,QWidget *parent = 0);
+
+public slots:
+  void run();
 
 signals:
   void selected();

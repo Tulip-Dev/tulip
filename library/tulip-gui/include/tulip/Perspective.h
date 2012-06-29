@@ -32,6 +32,8 @@ namespace tlp {
 
 class PluginProgress;
 
+static const std::string PERSPECTIVE_CATEGORY = QObject::trUtf8("Perspective").toStdString();
+
 class TLP_QT_SCOPE PerspectiveContext : public tlp::PluginContext {
 public:
   PerspectiveContext(): mainWindow(0), project(0) {}
@@ -53,8 +55,9 @@ protected:
   QString _externalFile;
   QVariantMap _parameters;
 public:
+
   virtual std::string category() const {
-    return QObject::trUtf8("Perspective").toStdString();
+    return PERSPECTIVE_CATEGORY;
   }
   std::string icon() const {
     return ":/tulip/gui/icons/32/plugin_controller.png";
