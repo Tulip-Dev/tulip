@@ -1,2 +1,5 @@
 add_subdirectory(library)
-add_subdirectory(plugins)
+
+IF(TULIP_PLUGIN_TESTS)
+  add_subdirectory(plugins)
+ENDIF()
