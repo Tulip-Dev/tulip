@@ -99,9 +99,6 @@ int main(int argc, char **argv) {
   // Setting default plugin servers
   TulipSettings::instance().addRemoteLocation(QString("http://tulip.labri.fr/pluginserver/") + TULIP_MM_RELEASE);
 
-  // FIXME: remove me
-//  TulipSettings::instance().addRemoteLocation("http://192.168.1.12/testserver");
-
   updatePlateform(argv[0]);
 
 #if defined(__APPLE__)
