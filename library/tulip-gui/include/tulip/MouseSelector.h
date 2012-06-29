@@ -30,6 +30,22 @@ class Graph;
 /** \addtogroup Mouse_interactor */
 /*@{*/
 class TLP_QT_SCOPE MouseSelector:public GLInteractorComponent {
+public:
+  enum SelectionMode {
+    EdgesAndNodes = 0,
+    EdgesOnly,
+    NodesOnly
+  };
+
+  MouseSelector(Qt::MouseButton button = Qt::LeftButton,
+                Qt::KeyboardModifier modifier = Qt::NoModifier,
+                SelectionMode mode = EdgesAndNodes);
+  ~MouseSelector() {}
+  bool draw(GlMainWidget *);
+  bool eventFilter(QObject *, QEvent *);
+  InteractorComponent *clone() {
+    return new MouseSelector(mButton, kModifier);
+  }
 protected:
   Qt::MouseButton mButton;
   Qt::KeyboardModifier kModifier;
@@ -38,15 +54,7 @@ protected:
   int w,h;
   bool started;
   Graph *graph;
-public:
-  MouseSelector(Qt::MouseButton button = Qt::LeftButton,
-                Qt::KeyboardModifier modifier = Qt::NoModifier);
-  ~MouseSelector() {}
-  bool draw(GlMainWidget *);
-  bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() {
-    return new MouseSelector(mButton, kModifier);
-  }
+  SelectionMode _mode;
 };
 /*@}*/
 
