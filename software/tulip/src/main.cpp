@@ -19,28 +19,26 @@
 
 #include <QtCore/QLocale>
 #include <QtCore/QProcess>
+#include <QtCore/QDir>
+
 #include <QtGui/QApplication>
+#include <QtGui/QMessageBox>
 
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/TlpTools.h>
-#include <QtGui/QMessageBox>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipSettings.h>
+#include <tulip/PluginManager.h>
+#include <tulip/QuaZIPFacade.h>
+
+#include <CrashHandling.h>
 
 #include "TulipMainWindow.h"
 #include "PluginLoaderReporter.h"
 #include "PluginLoaderDispatcher.h"
 #include "TulipSplashScreen.h"
 #include "PluginsCenter.h"
-
-#include <tulip/TlpQtTools.h>
-
-#include <QtGui/QDesktopServices>
-#include <QtCore/QDir>
-#include <tulip/TulipSettings.h>
-#include <tulip/PluginManager.h>
-#include <tulip/QuaZIPFacade.h>
-
-#include <CrashHandling.h>
 
 #if defined(__APPLE__)
 #include <sys/types.h>
@@ -108,9 +106,11 @@ int main(int argc, char **argv) {
 
   tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   //TODO find a cleaner way to achieve this (QDesktopServices is part of QtGui, so it does not belong in TlpTools)
-  tlp::TulipPluginsPath = QString(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins/lib/tulip/").toStdString() +
-                          tlp::PATH_DELIMITER + tlp::TulipPluginsPath +
-                          tlp::PATH_DELIMITER + tlp::getPluginLocalInstallationDir().toStdString();
+  tlp::TulipPluginsPath = tlp::localPluginsPath().toStdString() +
+                          tlp::PATH_DELIMITER +
+                          tlp::TulipPluginsPath +
+                          tlp::PATH_DELIMITER +
+                          tlp::getPluginLocalInstallationDir().toStdString();
 
 
   // Load plugins
