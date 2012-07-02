@@ -58,7 +58,7 @@ public:
     QString name;
     QString category;
     PluginVersionInformations installedVersion;
-    PluginVersionInformationsList availableVersions;
+    PluginVersionInformations availableVersion;
 
     PluginInformations();
     PluginInformations(const PluginInformations& copy);

@@ -29,7 +29,7 @@ QDebug operator<<(QDebug dbg, const PluginManager::PluginInformations &c) {
   dbg.nospace() << "(name " << c.name << ") "
                 << "(category " << c.category << ") "
                 << "(installed " << c.installedVersion << ") "
-                << "(available " << c.availableVersions << ") ";
+                << "(available " << c.availableVersion << ") ";
 
   return dbg.space();
 }
@@ -84,7 +84,7 @@ public:
     versionInfos.date = _currentMap["date"];
     versionInfos.isValid = true;
     // TODO fill icon
-    infos.availableVersions += versionInfos;
+    infos.availableVersion = versionInfos;
     _result.push_back(infos);
   }
 };
@@ -123,7 +123,7 @@ PluginManager::PluginInformationsList PluginManager::listPlugins(PluginLocations
         PluginInformations storedInfos = nameToInfos[infos.name];
         storedInfos.name = infos.name;
         storedInfos.category = infos.category;
-        storedInfos.availableVersions += infos.availableVersions;
+        storedInfos.availableVersion = infos.availableVersion;
         nameToInfos[infos.name] = storedInfos;
       }
     }
@@ -159,7 +159,7 @@ PluginManager::PluginInformations::PluginInformations(const PluginManager::Plugi
   name = copy.name;
   category = copy.category;
   installedVersion = copy.installedVersion;
-  availableVersions = copy.availableVersions;
+  availableVersion = copy.availableVersion;
 }
 
 void PluginManager::PluginInformations::fillLocalInfos(const Plugin* info) {

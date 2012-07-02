@@ -33,16 +33,12 @@ PluginInformationsListItem::PluginInformationsListItem(PluginManager::PluginInfo
   PluginManager::PluginVersionInformations versionInfos = infos.installedVersion;
 
   if (!versionInfos.isValid) {
-    versionInfos = infos.availableVersions.first();
+    versionInfos = infos.availableVersion;
     _ui->statusIcon->hide();
     _ui->installFrame->show();
   }
   else {
-    bool updateAvailable = false;
-    foreach(PluginManager::PluginVersionInformations availableInfos,infos.availableVersions)
-    updateAvailable = updateAvailable || (availableInfos.version != versionInfos.version);
-
-    if (updateAvailable) {
+    if (infos.availableVersion.isValid && infos.availableVersion.version != versionInfos.version) {
       _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-upgrade.png"));
       _ui->installFrame->show();
     }
@@ -54,10 +50,6 @@ PluginInformationsListItem::PluginInformationsListItem(PluginManager::PluginInfo
   _ui->icon->setPixmap(QPixmap(versionInfos.icon));
   _ui->name->setText(infos.name + " " + versionInfos.version);
   _ui->desc->setText(versionInfos.description + "\n\n" + trUtf8("Author: ") + versionInfos.author);
-
-  foreach(PluginManager::PluginVersionInformations vi, infos.availableVersions) {
-    _ui->versionsCombo->addItem(vi.version);
-  }
 }
 
 PluginInformationsListItem::~PluginInformationsListItem() {
