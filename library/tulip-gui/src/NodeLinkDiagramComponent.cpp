@@ -132,7 +132,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   setOverviewVisible(overviewVisible);
   overviewItem()->setLayerVisible("Foreground",false);
 
-  setQuickAccessBarVisible(true);
+  setQuickAccessBarVisible(quickAccessBarVisible);
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
