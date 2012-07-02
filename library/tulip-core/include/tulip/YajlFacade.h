@@ -1,5 +1,7 @@
 #include <string>
 
+#include <tulip/tulipconf.h>
+
 namespace tlp {
 class PluginProgress;
 }
@@ -14,7 +16,7 @@ class QIODevice;
  * It uses callbacks to signal what is being parsed (map start and end, strings, ...), and this class is intended to be subclassed,
  * with the subclass overriding the callbacks to process the events.
  **/
-class YajlParseFacade {
+class TLP_SCOPE YajlParseFacade {
 public:
   YajlParseFacade(tlp::PluginProgress* progress=NULL) : _progress(progress), _parsingSucceeded(true) {}
 
