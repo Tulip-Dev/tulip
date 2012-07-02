@@ -156,7 +156,7 @@ QGLFramebufferObject *createQGLFramebufferObject(int width, int height, QGLFrame
 }
 
 QString localPluginsPath() {
-  return QString(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins/lib/tulip/").toStdString();
+  return QString(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins/lib/tulip/");
 }
 
 }
