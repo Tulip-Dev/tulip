@@ -225,17 +225,21 @@ void PluginsCenter::stableChecked(bool f) {
 void PluginsCenter::repoAdded() {
   QString location = _ui->remoteLocationText->text();
   TulipSettings::instance().addRemoteLocation(location);
+
   if (_ui->remoteLocationsList->findItems(location,Qt::MatchExactly).size() == 0)
     _ui->remoteLocationsList->addItem(location);
 }
 
 void PluginsCenter::repoRemoved() {
   QList<QListWidgetItem*> selected = _ui->remoteLocationsList->selectedItems();
+
   if (selected.size()==0)
     return;
+
   QString location = selected.first()->text();
   TulipSettings::instance().removeRemoteLocation(location);
   QList<QListWidgetItem*> lst = _ui->remoteLocationsList->findItems(location,Qt::MatchExactly);
+
   if (lst.size() > 0) {
     foreach(QListWidgetItem* i, lst) {
       delete i;
