@@ -53,15 +53,20 @@ public:
 
     QNetworkReply* reply = NULL;
     QUrl url(_location + "/fetch.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" + TULIP_MM_RELEASE + "&name=" + name);
+
     do {
       QNetworkRequest request(url);
       reply = mgr.get(request);
       QObject::connect(reply,SIGNAL(downloadProgress(qint64,qint64)),recv,progressSlot);
+
       while (!reply->isFinished()) {
         QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
       }
+
       url = QUrl(reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl());
-    } while (reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isValid());
+    }
+    while (reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isValid());
+
     reply->open(QIODevice::ReadOnly);
     QString tmpOutPath = QDir::temp().absoluteFilePath("tulip_plugin_" + name + ".zip");
     QFile tmpOut(tmpOutPath);
@@ -173,8 +178,10 @@ void PluginManager::markForRemoval(const QString &plugin) {
 
 void PluginManager::markForInstallation(const QString& plugin, QObject* recv, const char *progressSlot) {
   PluginInformationsList lst = listPlugins(Remote,plugin);
+
   if (lst.size() == 0 || !lst.first().availableVersion.isValid)
     return;
+
   PluginVersionInformations version = lst.first().availableVersion;
   PluginServerClient clt(version.libraryLocation);
   clt.fetch(plugin, recv, progressSlot);
