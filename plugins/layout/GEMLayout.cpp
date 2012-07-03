@@ -189,6 +189,9 @@ Coord GEMLayout::computeForces(unsigned int v,
   edge e;
   forEach(e,  graph->getInOutEdges(vNode)) {
     node uNode = graph->opposite(e, vNode);
+    if (uNode == vNode)
+      // nothing to do if it is a self loop
+      continue;
     GEMparticule *gemQ = _nodeToParticules.get(uNode.id);
 
     if (!testPlaced || gemQ->in > 0) { //test whether the node is already placed
@@ -244,9 +247,13 @@ void GEMLayout::insert() {
 
     //
     _particules[v].in = 1;
+    node vNode = _particules[v].n;
     node uNode;
     //remove one to non-visited nodes
-    forEach(uNode, graph->getInOutNodes(_particules[v].n)) {
+    forEach(uNode, graph->getInOutNodes(vNode)) {
+      if (uNode == vNode)
+	// nothing to do if it is a self loop
+	continue;
       if (_nodeToParticules.get(uNode.id)->in <= 0)
         --(_nodeToParticules.get(uNode.id)->in);
     }
@@ -257,8 +264,11 @@ void GEMLayout::insert() {
     if (startNode >= 0) {
       int d = 0;
       node uNode;
-      forEach(uNode, graph->getInOutNodes(_particules[v].n)) {
-        gemQ = _nodeToParticules.get(uNode.id);
+      forEach(uNode, graph->getInOutNodes(vNode)) {
+	if (uNode == vNode)
+	  // nothing to do if it a self loop
+	  continue;
+	gemQ = _nodeToParticules.get(uNode.id);
 
         if (gemQ->in > 0) {
           gemP->pos += gemQ->pos;
