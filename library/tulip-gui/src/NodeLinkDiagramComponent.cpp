@@ -121,7 +121,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
     data.get<bool>("overviewVisible",overviewVisible);
   }
 
-  bool quickAccessBarVisible;
+  bool quickAccessBarVisible = true;
 
   if(data.exist("quickAccessBarVisible")) {
     data.get<bool>("quickAccessBarVisible",quickAccessBarVisible);
