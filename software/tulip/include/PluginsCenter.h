@@ -20,6 +20,7 @@
 #ifndef PLUGINSCENTER_
 #define PLUGINSCENTER_
 
+#include <tulip/TulipRelease.h>
 #include <QtGui/QWidget>
 #include <QtCore/QMap>
 #include <QtNetwork/QNetworkReply>
@@ -29,6 +30,9 @@ class PluginsCenterData;
 }
 
 class PluginInformationsListItem;
+
+static const QString STABLE_LOCATION = QString("http://tulip.labri.fr/pluginserver/stable/") + TULIP_MM_RELEASE;
+static const QString TESTING_LOCATION = QString("http://tulip.labri.fr/pluginserver/testing/") + TULIP_MM_RELEASE;
 
 class PluginsCenter: public QWidget {
   Q_OBJECT
@@ -66,6 +70,12 @@ public slots:
 protected slots:
   void sideListRowChanged(int i);
   void itemFocused();
+
+  void testingChecked(bool);
+  void stableChecked(bool);
+  void repoAdded();
+  void repoRemoved();
+
 };
 
 #endif // PLUGINSCENTER_

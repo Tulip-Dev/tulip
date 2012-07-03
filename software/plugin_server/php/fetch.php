@@ -18,5 +18,6 @@ require_once('pluginserver.php');
 $arch=$_GET['arch'];
 $os=$_GET['os'];
 $name=$_GET['name'];
+$tulip=$_GET['tulip'];
 
-fetch_plugin($name,$os,$arch);
+fetch_plugin($name,$os,$arch,$tulip);

@@ -10,8 +10,8 @@ function is_available($path,$os,$arch) {
   return file_exists($path.'/data-'.$os.$arch.'.zip');
 }
 
-function data_url($name,$os,$arch) {
-  $plugindesc = find_plugin($name,$os,$arch)[0];
+function data_url($name,$os,$arch,$tulip) {
+  $plugindesc = find_plugin($name,$os,$arch,"",$tulip)[0];
   return 'http://'.$_SERVER['SERVER_ADDR'].dirname($_SERVER['REQUEST_URI']).'/'.$plugindesc['path'].'/data-'.$os.$arch.'.zip';
 }
 
@@ -34,8 +34,8 @@ function find_plugin($name,$os,$arch,$category,$tulip) {
 }
 
 
-function fetch_plugin($name,$os,$arch) {
-  header('Location: '.data_url($name,$os,$arch));
+function fetch_plugin($name,$os,$arch,$tulip) {
+  header('Location: '.data_url($name,$os,$arch,$tulip));
 }
 
 ?>

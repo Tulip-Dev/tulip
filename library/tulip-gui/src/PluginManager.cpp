@@ -5,7 +5,10 @@
 #include <tulip/SystemDefinition.h>
 
 #include <tulip/YajlFacade.h>
+#include <tulip/QuaZIPFacade.h>
+#include <tulip/TlpQtTools.h>
 
+#include <QtCore/QDir>
 #include <QtGui/QApplication>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
@@ -43,6 +46,31 @@ class PluginServerClient: public YajlParseFacade {
 
 public:
   PluginServerClient(const QString& location): _location(location) {
+  }
+
+  void fetch(const QString& name, QObject* recv, const char* progressSlot) {
+    QNetworkAccessManager mgr;
+
+    QNetworkReply* reply = NULL;
+    QUrl url(_location + "/fetch.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" + TULIP_MM_RELEASE + "&name=" + name);
+    do {
+      QNetworkRequest request(url);
+      reply = mgr.get(request);
+      QObject::connect(reply,SIGNAL(downloadProgress(qint64,qint64)),recv,progressSlot);
+      while (!reply->isFinished()) {
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+      }
+      url = QUrl(reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl());
+    } while (reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isValid());
+    reply->open(QIODevice::ReadOnly);
+    QString tmpOutPath = QDir::temp().absoluteFilePath("tulip_plugin_" + name + ".zip");
+    QFile tmpOut(tmpOutPath);
+    tmpOut.open(QIODevice::WriteOnly);
+    tmpOut.write(reply->readAll());
+    tmpOut.close();
+    reply->close();
+    QuaZIPFacade::unzip(tlp::localPluginsPath(),tmpOutPath);
+    tmpOut.remove();
   }
 
   PluginManager::PluginInformationsList list(const QString& nameFilter, const QString& categoryFilter) {
@@ -101,6 +129,8 @@ QStringList PluginManager::remoteLocations() {
   return TulipSettings::instance().remoteLocations();
 }
 
+QStringList PluginManager::_markedForInstallation = QStringList();
+
 PluginManager::PluginInformationsList PluginManager::listPlugins(PluginLocations locations, const QString &nameFilter, const QString &categoryFilter) {
   QMap<QString,PluginInformations> nameToInfos;
 
@@ -141,11 +171,18 @@ void PluginManager::markForRemoval(const QString &plugin) {
   TulipSettings::instance().markPluginForRemoval(plugin);
 }
 
-void PluginManager::markForInstallation(const QString& plugin, const QString &version) {
+void PluginManager::markForInstallation(const QString& plugin, QObject* recv, const char *progressSlot) {
+  PluginInformationsList lst = listPlugins(Remote,plugin);
+  if (lst.size() == 0 || !lst.first().availableVersion.isValid)
+    return;
+  PluginVersionInformations version = lst.first().availableVersion;
+  PluginServerClient clt(version.libraryLocation);
+  clt.fetch(plugin, recv, progressSlot);
+  _markedForInstallation.push_back(plugin);
 }
 
-PluginManager::PluginVersionInformationsList PluginManager::markedForInstallation() {
-  return PluginVersionInformationsList();
+QStringList PluginManager::markedForInstallation() {
+  return _markedForInstallation;
 }
 
 QStringList PluginManager::markedForRemoval() {
