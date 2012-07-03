@@ -49,55 +49,19 @@
 #undef interface
 #endif
 
-void updatePlateform(char* tulipPath) {
-
-//  tlp::PluginManager::removePlugins();
-//  tlp::PluginManager::unpackPlugins(tlp::getPluginStagingDirectory());
-
-//  //update the updater
-//  const QString updaterLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/updater";
-
-//  //run the updater
-//  QDir upgradeDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/update");
-
-//  if(!upgradeDir.entryList(QDir::NoDotAndDotDot).empty()) {
-//    //we unpack the archives in-place, the contents will be copied later by a script
-//    tlp::PluginProgress* progress = new tlp::SimplePluginProgress();
-//    QStringList filters;
-//    filters << "*.zip";
-//    foreach(const QFileInfo& pluginArchive, upgradeDir.entryInfoList(filters)) {
-//      QuaZIPFacade::unzip(tlp::getPluginLocalInstallationDir(), pluginArchive.absoluteFilePath(), progress);
-
-//      if(!progress->getError().empty()) {
-//        //TODO proper error reporting
-//        std::cout << progress->getError() << std::endl;
-//      }
-//      else {
-//        QFile::remove(pluginArchive.absoluteFilePath());
-//      }
-//    }
-
-//    //launch the updater and quit, the updater will re-launch Tulip
-//    QFileInfo tulipExecutable(tulipPath);
-//#ifdef WIN32
-//    int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.bat");
-//#else
-//    int result = QProcess::execute(tulipExecutable.canonicalPath() + "/updater.sh");
-//#endif
-//    exit(result);
-//  }
-}
-
 int main(int argc, char **argv) {
   start_crash_handler();
   QApplication tulip_agent(argc, argv);
-  tulip_agent.setApplicationName(QObject::trUtf8("Tulip"));
+  tulip_agent.setApplicationName("tulip");
+
+  if (TulipSettings::instance().value("firstRun",true).toBool()) {
+    TulipSettings::instance().setValue("firstRun",false);
+    TulipSettings::instance().addRemoteLocation(STABLE_LOCATION);
+    TulipSettings::instance().addRemoteLocation(TESTING_LOCATION);
+  }
+
+  QDir::home().mkpath(tlp::localPluginsPath());
   QLocale::setDefault(QLocale(QLocale::English));
-
-  // Setting default plugin servers
-  TulipSettings::instance().addRemoteLocation(QString("http://tulip.labri.fr/pluginserver/") + TULIP_MM_RELEASE);
-
-  updatePlateform(argv[0]);
 
 #if defined(__APPLE__)
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../");
@@ -106,12 +70,11 @@ int main(int argc, char **argv) {
 
   tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   //TODO find a cleaner way to achieve this (QDesktopServices is part of QtGui, so it does not belong in TlpTools)
-  tlp::TulipPluginsPath = tlp::localPluginsPath().toStdString() +
+  tlp::TulipPluginsPath = (tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toStdString() +
                           tlp::PATH_DELIMITER +
                           tlp::TulipPluginsPath +
                           tlp::PATH_DELIMITER +
                           tlp::getPluginLocalInstallationDir().toStdString();
-
 
   // Load plugins
   PluginLoaderDispatcher *dispatcher = new PluginLoaderDispatcher();

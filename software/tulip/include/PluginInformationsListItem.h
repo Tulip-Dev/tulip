@@ -30,6 +30,9 @@ class PluginInformationsListItemData;
 class PluginInformationsListItem: public QWidget {
   Q_OBJECT
   Ui::PluginInformationsListItemData *_ui;
+
+  tlp::PluginManager::PluginInformations _infos;
+
 public:
   explicit PluginInformationsListItem(tlp::PluginManager::PluginInformations, QWidget *parent = NULL);
   virtual ~PluginInformationsListItem();
@@ -37,9 +40,13 @@ public:
 public slots:
   void focusOut();
   void focusIn();
+  void install();
 
 signals:
   void focused();
+
+protected slots:
+  void downloadProgress(qint64,qint64);
 
 protected:
   void focusInEvent(QFocusEvent *);

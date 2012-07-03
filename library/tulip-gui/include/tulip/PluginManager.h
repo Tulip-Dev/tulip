@@ -30,6 +30,8 @@ namespace tlp {
 class Plugin;
 
 class TLP_QT_SCOPE PluginManager {
+  static QStringList _markedForInstallation;
+
 public:
   enum PluginLocation {
     Remote = 0b01,
@@ -74,9 +76,9 @@ public:
   static PluginInformationsList listPlugins(PluginLocations locations,const QString& nameFilter = QString(),const QString& categoryFilter = QString());
 
   static void markForRemoval(const QString& plugin);
-  static void markForInstallation(const QString& plugin,const QString& version);
+  static void markForInstallation(const QString& plugin, QObject *recv, const char* progressSlot);
 
-  static PluginVersionInformationsList markedForInstallation();
+  static QStringList markedForInstallation();
   static QStringList markedForRemoval();
 };
 

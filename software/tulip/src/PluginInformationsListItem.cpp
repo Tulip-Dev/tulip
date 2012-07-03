@@ -23,7 +23,7 @@
 
 using namespace tlp;
 
-PluginInformationsListItem::PluginInformationsListItem(PluginManager::PluginInformations infos, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationsListItemData) {
+PluginInformationsListItem::PluginInformationsListItem(PluginManager::PluginInformations infos, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationsListItemData), _infos(infos) {
   _ui->setupUi(this);
   _ui->progressFrame->hide();
   _ui->installFrame->hide();
@@ -50,6 +50,7 @@ PluginInformationsListItem::PluginInformationsListItem(PluginManager::PluginInfo
   _ui->icon->setPixmap(QPixmap(versionInfos.icon));
   _ui->name->setText(infos.name + " " + versionInfos.version);
   _ui->desc->setText(versionInfos.description + "\n\n" + trUtf8("Author: ") + versionInfos.author);
+  _ui->installButton->setText(trUtf8("Install ") + infos.availableVersion.version);
 }
 
 PluginInformationsListItem::~PluginInformationsListItem() {
@@ -68,7 +69,18 @@ void PluginInformationsListItem::focusIn() {
   _ui->contentsFrame->setStyleSheet(_ui->contentsFrame->styleSheet());
 }
 
+void PluginInformationsListItem::install() {
+  _ui->installFrame->hide();
+  _ui->progressFrame->show();
+  PluginManager::markForInstallation(_infos.name,this,SLOT(downloadProgress(qint64,qint64)));
+  _ui->rebootFrame->show();
+}
+
 void PluginInformationsListItem::focusInEvent(QFocusEvent *) {
   emit focused();
 }
 
+void PluginInformationsListItem::downloadProgress(qint64 received, qint64 total) {
+  _ui->progressBar->setMaximum(total);
+  _ui->progressBar->setValue(received);
+}

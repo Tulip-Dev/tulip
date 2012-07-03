@@ -189,42 +189,6 @@ border-top: 0px;
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="label_3">
-           <property name="pixmap">
-            <pixmap resource="../resources/TulipAgent.qrc">:/tulip/app/icons/16/emblem-downloads.png</pixmap>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Available versions:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="versionsCombo">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="sizeAdjustPolicy">
-            <enum>QComboBox::AdjustToContents</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPushButton" name="installButton">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -238,8 +202,9 @@ border-top: 0px;
              <height>0</height>
             </size>
            </property>
-           <property name="text">
-            <string>Install</string>
+           <property name="icon">
+            <iconset resource="../resources/TulipAgent.qrc">
+             <normaloff>:/tulip/app/icons/16/emblem-downloads.png</normaloff>:/tulip/app/icons/16/emblem-downloads.png</iconset>
            </property>
           </widget>
          </item>
@@ -291,12 +256,9 @@ background-color: white;
 QProgressBar::chunk {
 background-color: #416894;
 }
-QProgressBar[value=&quot;100&quot;]::chunk {
+/*QProgressBar[value=&quot;100&quot;]::chunk {
 background-color: #bed452;
-}</string>
-           </property>
-           <property name="value">
-            <number>100</number>
+}*/</string>
            </property>
            <property name="textVisible">
             <bool>false</bool>
@@ -319,29 +281,6 @@ background-color: #bed452;
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="restartButton">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>120</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Restart now</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../resources/TulipAgent.qrc">
-             <normaloff>:/tulip/app/icons/16/view-refresh.png</normaloff>:/tulip/app/icons/16/view-refresh.png</iconset>
            </property>
           </widget>
          </item>
@@ -370,5 +309,25 @@ background-color: #bed452;
   <include location="../resources/TulipAgent.qrc"/>
   <include location="../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>installButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PluginInformationsListItemData</receiver>
+   <slot>install()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>64</x>
+     <y>234</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>418</x>
+     <y>147</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>install()</slot>
+ </slots>
 </ui>

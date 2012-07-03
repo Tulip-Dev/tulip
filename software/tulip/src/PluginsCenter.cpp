@@ -33,9 +33,9 @@
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
 #include <tulip/PluginManager.h>
+#include <tulip/TulipSettings.h>
 
 #include "ui_PluginsCenter.h"
-#include <QtCore/QDebug>
 
 static const int ALL_ROW          = 0;
 static const int ALGORITHMS_ROW   = 1;
@@ -50,6 +50,15 @@ using namespace tlp;
 
 PluginsCenter::PluginsCenter(QWidget *parent): QWidget(parent), _ui(new Ui::PluginsCenterData()), _currentItem(NULL) {
   _ui->setupUi(this);
+
+  QStringList remoteLocs = TulipSettings::instance().remoteLocations();
+  _ui->stableCheck->setChecked(remoteLocs.contains(STABLE_LOCATION));
+  _ui->testingCheck->setChecked(remoteLocs.contains(TESTING_LOCATION));
+
+  foreach(QString s,remoteLocs) {
+    if (s != STABLE_LOCATION && s != TESTING_LOCATION)
+      _ui->remoteLocationsList->addItem(s);
+  }
 }
 
 void PluginsCenter::reportPluginErrors(const QMap<QString, QString>& errors) {
@@ -197,4 +206,39 @@ void PluginsCenter::itemFocused() {
 
   _currentItem = static_cast<PluginInformationsListItem*>(sender());
   _currentItem->focusIn();
+}
+
+void PluginsCenter::testingChecked(bool f) {
+  if (f)
+    TulipSettings::instance().addRemoteLocation(TESTING_LOCATION);
+  else
+    TulipSettings::instance().removeRemoteLocation(TESTING_LOCATION);
+}
+
+void PluginsCenter::stableChecked(bool f) {
+  if (f)
+    TulipSettings::instance().addRemoteLocation(STABLE_LOCATION);
+  else
+    TulipSettings::instance().removeRemoteLocation(STABLE_LOCATION);
+}
+
+void PluginsCenter::repoAdded() {
+  QString location = _ui->remoteLocationText->text();
+  TulipSettings::instance().addRemoteLocation(location);
+  if (_ui->remoteLocationsList->findItems(location,Qt::MatchExactly).size() == 0)
+    _ui->remoteLocationsList->addItem(location);
+}
+
+void PluginsCenter::repoRemoved() {
+  QList<QListWidgetItem*> selected = _ui->remoteLocationsList->selectedItems();
+  if (selected.size()==0)
+    return;
+  QString location = selected.first()->text();
+  TulipSettings::instance().removeRemoteLocation(location);
+  QList<QListWidgetItem*> lst = _ui->remoteLocationsList->findItems(location,Qt::MatchExactly);
+  if (lst.size() > 0) {
+    foreach(QListWidgetItem* i, lst) {
+      delete i;
+    }
+  }
 }
