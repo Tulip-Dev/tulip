@@ -183,11 +183,3 @@ IF(TULIP_OGDF_LIBRARY)
 ENDIF(TULIP_OGDF_LIBRARY)
 
 SET(TULIP_USE_FILE "${TULIP_DIR}/share/tulip/TulipUseFile.cmake")
-
-MACRO(GENERATE_DOCUMENTATION PLUGIN_COMPONENT)
-  SET(TEMPLATE_DIR /home/packadal/src/tulip/doc/pluginDocTemplate)
-  add_custom_target("copy sources-${PLUGIN_COMPONENT}" ALL COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/html doc)
-  add_custom_target("HTML documentation-${PLUGIN_COMPONENT}" ALL COMMAND sphinx-build -b html -n -c ${TEMPLATE_DIR} -q ${CMAKE_CURRENT_BINARY_DIR}/doc ${CMAKE_CURRENT_BINARY_DIR}/html)
-  add_dependencies("HTML documentation-${PLUGIN_COMPONENT}" "copy sources-${PLUGIN_COMPONENT}")
-  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${TULIP_PLUGINS_DIR}/../../share/doc/${PLUGIN_COMPONENT} COMPONENT ${PLUGIN_COMPONENT})
-ENDMACRO(GENERATE_DOCUMENTATION)
