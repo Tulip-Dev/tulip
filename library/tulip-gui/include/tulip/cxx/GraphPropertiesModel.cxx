@@ -12,8 +12,10 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
   std::string propName;
   forEach(propName,_graph->getInheritedProperties()) {
 #ifndef NDEBUG
-      if (propName == "viewMetaGraph")
-	continue;
+
+    if (propName == "viewMetaGraph")
+      continue;
+
 #endif
     PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(propName));
 
@@ -23,8 +25,10 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
   }
   forEach(propName,_graph->getLocalProperties()) {
 #ifndef NDEBUG
-      if (propName == "viewMetaGraph")
-	continue;
+
+    if (propName == "viewMetaGraph")
+      continue;
+
 #endif
     PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(propName));
 

@@ -86,8 +86,10 @@ void FiltersManagerCompareItem::fillCombo(QComboBox* combo) {
     string s;
     forEach(s,_graph->getProperties()) {
 #ifndef NDEBUG
+
       if (s == "viewMetaGraph")
-	continue;
+        continue;
+
 #endif
       QString name = QString(s.c_str()) + " (" + _graph->getProperty(s)->getTypename().c_str() + ")";
       combo->addItem(name,QVariant::fromValue<tlp::PropertyInterface*>(_graph->getProperty(s)));

@@ -20,8 +20,10 @@ int GraphElementModel::rowCount(const QModelIndex &parent) const {
   int result=0;
   forEach(prop,_graph->getObjectProperties()) {
 #ifndef NDEBUG
-      if (prop->getName() == "viewMetaGraph")
-	continue;
+
+    if (prop->getName() == "viewMetaGraph")
+      continue;
+
 #endif
     ++result;
   }
@@ -51,9 +53,12 @@ QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation,
     int result=0;
     forEach(propertyName,_graph->getProperties()) {
 #ifndef NDEBUG
+
       if (propertyName == "viewMetaGraph")
-	continue;
+        continue;
+
 #endif
+
       if(section==result)
         return propertyName.c_str();
 
@@ -72,11 +77,15 @@ QModelIndex GraphElementModel::index(int row, int column,const QModelIndex &pare
   int result=0;
   forEach(prop, _graph->getObjectProperties()) {
 #ifndef NDEBUG
-      if (prop->getName() == "viewMetaGraph")
-	continue;
+
+    if (prop->getName() == "viewMetaGraph")
+      continue;
+
 #endif
+
     if(result==row)
       break;
+
     ++result;
   }
   return createIndex(row,column,prop);
@@ -95,11 +104,15 @@ bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &va
     int result=0;
     forEach(prop,_graph->getObjectProperties()) {
 #ifndef NDEBUG
+
       if (prop->getName() == "viewMetaGraph")
-	continue;
+        continue;
+
 #endif
+
       if(result==index.row())
-	break;
+        break;
+
       ++result;
     }
 
@@ -115,11 +128,15 @@ bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &va
     int result=0;
     forEach(prop,_graph->getObjectProperties()) {
 #ifndef NDEBUG
+
       if (prop->getName() == "viewMetaGraph")
-	continue;
+        continue;
+
 #endif
+
       if(result==index.row())
         break;
+
       ++result;
     }
 
