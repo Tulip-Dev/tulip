@@ -16,9 +16,13 @@ int GraphElementModel::rowCount(const QModelIndex &parent) const {
   if (_graph == NULL || parent.isValid())
     return 0;
 
-  string propertyName;
+  PropertyInterface* prop;
   int result=0;
-  forEach(propertyName,_graph->getProperties()) {
+  forEach(prop,_graph->getObjectProperties()) {
+#ifndef NDEBUG
+      if (prop->getName() == "viewMetaGraph")
+	continue;
+#endif
     ++result;
   }
   return result;
@@ -46,6 +50,10 @@ QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation,
     string propertyName;
     int result=0;
     forEach(propertyName,_graph->getProperties()) {
+#ifndef NDEBUG
+      if (propertyName == "viewMetaGraph")
+	continue;
+#endif
       if(section==result)
         return propertyName.c_str();
 
@@ -60,13 +68,15 @@ QModelIndex GraphElementModel::index(int row, int column,const QModelIndex &pare
   if (!hasIndex(row,column,parent))
     return QModelIndex();
 
-  string propertyName;
   PropertyInterface* prop=NULL;
   int result=0;
-  forEach(propertyName,_graph->getProperties()) {
+  forEach(prop, _graph->getObjectProperties()) {
+#ifndef NDEBUG
+      if (prop->getName() == "viewMetaGraph")
+	continue;
+#endif
     if(result==row)
-      prop=_graph->getProperty(propertyName);
-
+      break;
     ++result;
   }
   return createIndex(row,column,prop);
@@ -81,13 +91,15 @@ QVariant GraphElementModel::data(const QModelIndex &index, int role) const {
 
 bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if(role==Qt::EditRole) {
-    string propertyName;
     PropertyInterface* prop=NULL;
     int result=0;
-    forEach(propertyName,_graph->getProperties()) {
+    forEach(prop,_graph->getObjectProperties()) {
+#ifndef NDEBUG
+      if (prop->getName() == "viewMetaGraph")
+	continue;
+#endif
       if(result==index.row())
-        prop=_graph->getProperty(propertyName);
-
+	break;
       ++result;
     }
 
@@ -99,13 +111,15 @@ bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &va
 
 bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if(role==Qt::EditRole) {
-    string propertyName;
     PropertyInterface* prop=NULL;
     int result=0;
-    forEach(propertyName,_graph->getProperties()) {
+    forEach(prop,_graph->getObjectProperties()) {
+#ifndef NDEBUG
+      if (prop->getName() == "viewMetaGraph")
+	continue;
+#endif
       if(result==index.row())
-        prop=_graph->getProperty(propertyName);
-
+        break;
       ++result;
     }
 
