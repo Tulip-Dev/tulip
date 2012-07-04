@@ -437,7 +437,7 @@ void GraphPerspective::open() {
   if(!fileName.isEmpty()) {
     QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
     DataSet params;
-    params.set<std::string>("file::filename", fileName.toStdString());
+    params.set<std::string>("file::filename", std::string(fileName.toUtf8().data()));
     Graph* g = tlp::importGraph(modules[extension.toStdString()], params);
     _graphs->addGraph(g);
   }
