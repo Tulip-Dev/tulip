@@ -166,7 +166,7 @@ QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *
 
     QString absolutePath = project->toAbsolutePath(file);
     DataSet data;
-    data.set<std::string>("file::filename",absolutePath.toStdString());
+    data.set<std::string>("file::filename",std::string(absolutePath.toUtf8().data()));
     Graph* g = tlp::importGraph("JSON Import",data,progress);
     rootIds[entry] = g;
 
