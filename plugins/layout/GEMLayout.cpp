@@ -36,13 +36,13 @@ static const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "DoubleProperty" ) \
   HTML_HELP_BODY() \
-  "Length of the edges." \
+  "This metric is used to compute the length of edges." \
   HTML_HELP_CLOSE(),
   // initial layout
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "LayoutProperty" ) \
   HTML_HELP_BODY() \
-  "Initial position of the graph elements. Optional." \
+  "The layout property used to compute the initial position of the graph elements. If none is given the initial position will be computed by the algorithm." \
   HTML_HELP_CLOSE(),
   // max iterations
   HTML_HELP_OPEN() \
@@ -172,6 +172,9 @@ Coord GEMLayout::computeForces(unsigned int v,
   edge e;
   forEach(e,  graph->getInOutEdges(vNode)) {
     node uNode = graph->opposite(e, vNode);
+    if (uNode == vNode)
+      // nothing to do if it is a self loop
+      continue;
     GEMparticule *gemQ = _nodeToParticules.get(uNode.id);
 
     if (!testPlaced || gemQ->in > 0) { //test whether the node is already placed
@@ -227,9 +230,13 @@ void GEMLayout::insert() {
 
     //
     _particules[v].in = 1;
+    node vNode = _particules[v].n;
     node uNode;
     //remove one to non-visited nodes
-    forEach(uNode, graph->getInOutNodes(_particules[v].n)) {
+    forEach(uNode, graph->getInOutNodes(vNode)) {
+      if (uNode == vNode)
+	// nothing to do if it is a self loop
+	continue;
       if (_nodeToParticules.get(uNode.id)->in <= 0)
         --(_nodeToParticules.get(uNode.id)->in);
     }
@@ -240,7 +247,10 @@ void GEMLayout::insert() {
     if (startNode >= 0) {
       int d = 0;
       node uNode;
-      forEach(uNode, graph->getInOutNodes(_particules[v].n)) {
+      forEach(uNode, graph->getInOutNodes(vNode)) {
+	if (uNode == vNode)
+	  // nothing to do if it a self loop
+	  continue;
         gemQ = _nodeToParticules.get(uNode.id);
 
         if (gemQ->in > 0) {
@@ -342,14 +352,14 @@ bool GEMLayout::run() {
 
     for (size_t i = 0; i < components.size(); ++i) {
       Graph * tmp = graph->inducedSubGraph(components[i]);
-      tmp->computeProperty("GEM (Frick)", result, err, pluginProgress, dataSet);
+      tmp->applyPropertyAlgorithm("GEM (Frick)", result, err, pluginProgress, dataSet);
     }
 
     // call connected component packing
     LayoutProperty tmpLayout(graph);
     DataSet ds;
     ds.set("coordinates", result);
-    graph->computeProperty("Connected Component Packing", &tmpLayout, err, pluginProgress, &ds);
+    graph->applyPropertyAlgorithm("Connected Component Packing", &tmpLayout, err, pluginProgress, &ds);
     // forget last temporary graph state
     graph->pop();
     *result = tmpLayout;
