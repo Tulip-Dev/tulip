@@ -202,7 +202,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     if (externalFileInfo.exists()) {
       progress->setComment((trUtf8("Loading ") + externalFileInfo.fileName()).toStdString());
       DataSet dataSet;
-      dataSet.set("file::filename", externalFileInfo.absoluteFilePath().toStdString());
+      dataSet.set("file::filename", std::string(externalFileInfo.absoluteFilePath().toUtf8().data()));
       Graph *externalGraph = tlp::importGraph("TLP Import", dataSet, progress);
       _graphs->addGraph(externalGraph);
     }
@@ -307,7 +307,7 @@ void GraphPerspective::importGraph() {
       std::string name;
 
       if (!g->getAttribute<std::string>("name",name)) {
-        name = (wizard.algorithm() + " - " + wizard.parameters().toString().c_str()).toStdString();
+        name = wizard.algorithm().toStdString() + " - " + wizard.parameters().toString();
         // remove parameters subtype prefix if any
         std::string::size_type pos = name.find("::");
 

@@ -189,7 +189,7 @@ bool TulipProject::copy(const QString &source, const QString &destination) {
 std::fstream *TulipProject::stdFileStream(const QString &path) {
   QString filePath(toAbsolutePath(path));
   std::fstream *result = new std::fstream();
-  result->open(filePath.toStdString().c_str(), std::fstream::in | std::fstream::out | std::fstream::app);
+  result->open(filePath.toUtf8().data(), std::fstream::in | std::fstream::out | std::fstream::app);
 
   if (!result->is_open()) {
     delete result;
