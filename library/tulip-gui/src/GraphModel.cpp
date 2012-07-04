@@ -19,8 +19,8 @@ unsigned int GraphModel::elementAt(int row) const {
 void GraphModel::setGraph(Graph* g) {
   if (_graph != NULL) {
     _graph->removeListener(this);
-    std::string s;
-    forEach(s, _graph->getProperties()) _graph->getProperty(s)->removeListener(this);
+    PropertyInterface* pi;
+    forEach(pi, _graph->getObjectProperties()) pi->removeListener(this);
   }
 
   _graph = g;
@@ -29,9 +29,8 @@ void GraphModel::setGraph(Graph* g) {
 
   if (_graph != NULL) {
     _graph->addListener(this);
-    std::string s;
-    forEach(s, _graph->getProperties()) {
-      PropertyInterface* pi = _graph->getProperty(s);
+    PropertyInterface* pi;
+    forEach(pi, _graph->getObjectProperties()) {
       _properties.push_back(pi);
       pi->addListener(this);
     }
