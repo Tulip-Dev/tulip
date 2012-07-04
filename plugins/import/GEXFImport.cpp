@@ -36,7 +36,7 @@ using namespace std;
 /** \file
  *  \brief - Import GEXF format graph file.
  * This plugin imports a graph from a file in GEXF format,<br/>
- * as it is described in the XML Schema 1.2draft (http://gexf.net/format/schema.html). Dynamic mode is not yet supported.
+ * as it is described in the XML Schema 1.2 draft (http://gexf.net/format/schema.html). Dynamic mode is not yet supported.
  *  <b>HISTORY</b>
  *
  *  - 04/06/2012 Version 1.0: Initial release
@@ -56,14 +56,12 @@ class GEXFImport : public ImportModule {
 
 public :
 
-  GEXFImport(AlgorithmContext context):ImportModule(context) {
+  GEXFImport(const AlgorithmContext &context):ImportModule(context) {
     // add a file parameter for the pugin
     // when the plugin will be called, a file chooser will be automatically created by Tulip
     addInParameter<string>("file::filename","");
     addInParameter<bool>("Curved edges","", "false");
   }
-
-  ~GEXFImport() {}
 
   // import plugins must implement bool importGraph()
   bool importGraph() {
