@@ -23,5 +23,4 @@ target_link_libraries(packagePlugins ${QT_LIBRARIES}
 IF(TULIP_GENERATE_PLUGINSERVER_TOOLS)
   INSTALL(TARGETS packagePlugins DESTINATION ${TulipBinInstallDir} COMPONENT plugin_server)
   INSTALL(TARGETS pushPlugins DESTINATION ${TulipBinInstallDir} COMPONENT plugin_server)
-  BUNDLE_DEFINE_COMPONENT(plugin_server "plugin server" " " "Dev tools")
 ENDIF()
