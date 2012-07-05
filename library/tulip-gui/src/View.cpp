@@ -67,8 +67,10 @@ void View::currentInteractorChanged(tlp::Interactor *i) {
 void View::showContextMenu(const QPoint &point,const QPointF &scenePoint) {
   QMenu menu;
   fillContextMenu(&menu,scenePoint);
-  menu.move(point);
-  menu.exec();
+  if (menu.actions().size()>0) {
+    menu.move(point);
+    menu.exec();
+  }
 }
 
 Graph* View::graph() const {
