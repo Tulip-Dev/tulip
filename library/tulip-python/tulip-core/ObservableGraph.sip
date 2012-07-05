@@ -201,7 +201,7 @@ standard output each time a node is added to a graph::
 
     def main(graph):
         graph.addGraphObserver(printObs)
-        graph.addNode() // output : "<node ?> added in <graph ?>"
+        graph.addNode() # output : "<node ?> added in <graph ?>"
 
 
 %End
