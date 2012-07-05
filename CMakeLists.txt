@@ -88,14 +88,26 @@ add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_D
 INCLUDE(TulipUseFile.cmake)
 
 ## ========================================================
-## Apple: Must specify install name dir for libraries (an equivalent to RPATH on Linux & Windows)
+## Point RPATH to lib folder
 ## ========================================================
-IF(APPLE)
-  FUNCTION(ADD_LIBRARY name)
-    _ADD_LIBRARY(${name} ${ARGN})
+FUNCTION(ADD_LIBRARY name)
+  _ADD_LIBRARY(${name} ${ARGN})
+  IF(APPLE)
     SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_NAME_DIR "@executable_path/../lib")
-  ENDFUNCTION()
-ENDIF(APPLE)
+  ENDIF(APPLE)
+  SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_RPATH "$ORIGIN")
+ENDFUNCTION()
+FUNCTION(ADD_EXECUTABLE name)
+  _ADD_EXECUTABLE(${name} ${ARGN})
+  IF(APPLE)
+    SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_NAME_DIR "@executable_path/../lib")
+  ENDIF(APPLE)
+  IF(LINUX OR APPLE)
+    SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
+  ELSE(LINUX OR APPLE)
+    SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_RPATH "$ORIGIN")
+  ENDIF(LINUX OR APPLE)
+ENDFUNCTION()
 
 ## ========================================================
 ## Compiler-specific options
@@ -135,8 +147,7 @@ ENDIF()
 ## ========================================================
 ## Required packages
 ## ========================================================
-# Freetype
-FIND_PACKAGE(Freetype REQUIRED)
+
 # Qt
 FIND_PACKAGE(Qt4 4.8.0 REQUIRED)
 SET(QT_USE_QTOPENGL true)
@@ -146,6 +157,9 @@ SET(QT_USE_QTWEBKIT true)
 SET(QT_USE_QTTEST true)
 SET(QT_USE_QTDBUS false)
 INCLUDE(${QT_USE_FILE})
+
+# Freetype
+FIND_PACKAGE(Freetype REQUIRED)
 
 # Yajl
 SET(YAJL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src/api ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src/yajl ${CMAKE_CURRENT_BUILD_DIR}/thirdparty/yajl/yajl-2.0.1/include)
@@ -249,6 +263,7 @@ IF(PYTHONINTERP_FOUND)
     FIND_PACKAGE(Sphinx)
   ENDIF(PYTHONLIBS_FOUND)
 ENDIF(PYTHONINTERP_FOUND)
+
 
 ## ========================================================
 ## Include paths
