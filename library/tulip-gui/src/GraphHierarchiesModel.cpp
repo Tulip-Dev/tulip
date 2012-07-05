@@ -427,6 +427,7 @@ void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
     int pos = _graphs.indexOf(g);
     beginRemoveRows(QModelIndex(),pos,pos);
     _graphs.removeAll(g);
+    _saveNeeded.remove(g);
     endRemoveRows();
 
     _saveNeeded.remove(g);
@@ -450,6 +451,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
     int pos = _graphs.indexOf(g);
     beginRemoveRows(QModelIndex(),pos,pos);
     _graphs.removeAll(g);
+    _saveNeeded.remove(g);
 
     if (_currentGraph == g) {
       if (_graphs.size() == 0)
