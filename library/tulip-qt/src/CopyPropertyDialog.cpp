@@ -47,6 +47,12 @@
 using namespace std;
 using namespace tlp;
 
+#define COPY_PROPERTY(TYPE,GRAPH,SOURCE,NAME,SCOPE) if (typeid((*SOURCE)) == typeid(TYPE)) { \
+TYPE* newProperty = SCOPE==INHERITED?GRAPH->getSuperGraph()->getProperty<TYPE>(NAME):GRAPH->getLocalProperty<TYPE>(NAME); \
+*newProperty = *(static_cast<TYPE*>(SOURCE)); \
+property = newProperty; \
+}
+
 //=============================================================================
 CopyPropertyDialog::CopyPropertyDialog(QWidget* parent)
   : QDialog(parent),ui(new Ui::CopyPropertyDialogData()),_graph(NULL),_source(NULL) {
@@ -156,96 +162,24 @@ PropertyInterface* CopyPropertyDialog::copyProperty(QString& errorMsg) {
   }
 
   if(valid) {
-    string tulipPropertyName = QStringToTlpString(propertyName);
-    CopyPropertyDialog::PropertyScope destinationScope = destinationPropertyScope();
-    Graph *parentGraph = _graph->getSuperGraph();
-    _graph->push();
+      string tulipPropertyName = QStringToTlpString(propertyName);
+      CopyPropertyDialog::PropertyScope destinationScope = destinationPropertyScope();
+      _graph->push();
 
-    if (typeid((*_source)) == typeid(DoubleProperty)) {
-      DoubleProperty* doubleProperty = destinationScope==NEW?_graph->getLocalProperty<DoubleProperty>(tulipPropertyName):parentGraph->getProperty<DoubleProperty>(tulipPropertyName);
-      *doubleProperty = *((DoubleProperty*) _source);
-      property = doubleProperty;
-    }
-
-    if (typeid((*_source)) == typeid(LayoutProperty)) {
-      LayoutProperty* layoutProperty = destinationScope==NEW?_graph->getLocalProperty<LayoutProperty>(tulipPropertyName):parentGraph->getProperty<LayoutProperty>(tulipPropertyName);
-      *layoutProperty = *((LayoutProperty*) _source);
-      property = layoutProperty;
-    }
-
-    if (typeid((*_source)) == typeid(StringProperty)) {
-      StringProperty* stringProperty = destinationScope==NEW?_graph->getLocalProperty<StringProperty>(tulipPropertyName):parentGraph->getProperty<StringProperty>(tulipPropertyName);
-      *stringProperty = *((StringProperty*) _source);
-      property = stringProperty;
-    }
-
-    if (typeid((*_source)) == typeid(BooleanProperty)) {
-      BooleanProperty* booleanProperty = destinationScope==NEW?_graph->getLocalProperty<BooleanProperty>(tulipPropertyName):parentGraph->getProperty<BooleanProperty>(tulipPropertyName);
-      * booleanProperty= *((BooleanProperty*) _source);
-      property= booleanProperty;
-    }
-
-    if (typeid((*_source)) == typeid(IntegerProperty)) {
-      IntegerProperty* integerProperty = destinationScope==NEW?_graph->getLocalProperty<IntegerProperty>(tulipPropertyName):parentGraph->getProperty<IntegerProperty>(tulipPropertyName);
-      *integerProperty = *((IntegerProperty*) _source);
-      property = integerProperty;
-    }
-
-    if (typeid((*_source)) == typeid(ColorProperty)) {
-      ColorProperty* colorProperty = destinationScope==NEW?_graph->getLocalProperty<ColorProperty>(tulipPropertyName):parentGraph->getProperty<ColorProperty>(tulipPropertyName);
-      *colorProperty = *((ColorProperty*) _source);
-      property = colorProperty;
-    }
-
-    if (typeid((*_source)) == typeid(SizeProperty)) {
-      SizeProperty* sizeProperty = destinationScope==NEW?_graph->getLocalProperty<SizeProperty>(tulipPropertyName):parentGraph->getProperty<SizeProperty>(tulipPropertyName);
-      *sizeProperty = *((SizeProperty*) _source);
-      property = sizeProperty;
-    }
-
-    if (typeid((*_source)) == typeid(DoubleVectorProperty)) {
-      DoubleVectorProperty* doubleVectorProperty = destinationScope==NEW?_graph->getLocalProperty<DoubleVectorProperty>(tulipPropertyName):parentGraph->getProperty<DoubleVectorProperty>(tulipPropertyName);
-      *doubleVectorProperty= *((DoubleVectorProperty*) _source);
-      property = doubleVectorProperty;
-    }
-
-    if (typeid((*_source)) == typeid(CoordVectorProperty)) {
-      CoordVectorProperty* coordVectorProperty = destinationScope==NEW?_graph->getLocalProperty<CoordVectorProperty>(tulipPropertyName):parentGraph->getProperty<CoordVectorProperty>(tulipPropertyName);
-      *coordVectorProperty = *((CoordVectorProperty*) _source);
-      property = coordVectorProperty;
-    }
-
-    if (typeid((*_source)) == typeid(StringVectorProperty)) {
-      StringVectorProperty* stringVectorProperty = destinationScope==NEW?_graph->getLocalProperty<StringVectorProperty>(tulipPropertyName):parentGraph->getProperty<StringVectorProperty>(tulipPropertyName);
-      *stringVectorProperty = *((StringVectorProperty*) _source);
-      property = stringVectorProperty;
-    }
-
-    if (typeid((*_source)) == typeid(BooleanVectorProperty)) {
-      BooleanVectorProperty* booleanVectorProperty = destinationScope==NEW?_graph->getLocalProperty<BooleanVectorProperty>(tulipPropertyName):parentGraph->getProperty<BooleanVectorProperty>(tulipPropertyName);
-      *booleanVectorProperty = *((BooleanVectorProperty*) _source);
-      property = booleanVectorProperty;
-    }
-
-    if (typeid((*_source)) == typeid(IntegerVectorProperty)) {
-      IntegerVectorProperty* integerVectorProperty = destinationScope==NEW?_graph->getLocalProperty<IntegerVectorProperty>(tulipPropertyName):parentGraph->getProperty<IntegerVectorProperty>(tulipPropertyName);
-      *integerVectorProperty   = *((IntegerVectorProperty*) _source);
-      property = integerVectorProperty;
-    }
-
-    if (typeid((*_source))
-        == typeid(ColorVectorProperty)) {
-      ColorVectorProperty* colorVectorProperty = destinationScope==NEW?_graph->getLocalProperty<ColorVectorProperty>(tulipPropertyName):parentGraph->getProperty<ColorVectorProperty>(tulipPropertyName);
-      *colorVectorProperty= *((ColorVectorProperty*) _source);
-      property = colorVectorProperty;
-    }
-
-    if (typeid((*_source))
-        == typeid(SizeVectorProperty)) {
-      SizeVectorProperty* sizeVectorProperty = destinationScope==NEW?_graph->getLocalProperty<SizeVectorProperty>(tulipPropertyName):parentGraph->getProperty<SizeVectorProperty>(tulipPropertyName);
-      *sizeVectorProperty = *((SizeVectorProperty*) _source);
-      property = sizeVectorProperty;
-    }
+      COPY_PROPERTY(DoubleProperty,_graph,_source,tulipPropertyName,destinationScope);
+      COPY_PROPERTY(LayoutProperty,_graph,_source,tulipPropertyName,destinationScope);
+      COPY_PROPERTY(StringProperty,_graph,_source,tulipPropertyName,destinationScope);
+      COPY_PROPERTY(BooleanProperty,_graph,_source,tulipPropertyName,destinationScope);
+      COPY_PROPERTY(IntegerProperty,_graph,_source,tulipPropertyName,destinationScope);
+      COPY_PROPERTY(ColorProperty,_graph,_source,tulipPropertyName,destinationScope);
+      COPY_PROPERTY(SizeProperty,_graph,_source,tulipPropertyName,destinationScope);
+      COPY_PROPERTY(DoubleVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
+      COPY_PROPERTY(CoordVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
+      COPY_PROPERTY(StringVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
+      COPY_PROPERTY(BooleanVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
+      COPY_PROPERTY(IntegerVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
+      COPY_PROPERTY(ColorVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
+      COPY_PROPERTY(SizeVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
   }
 
   return property;
