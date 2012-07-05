@@ -140,6 +140,7 @@ void PropertiesEditor::newProperty() {
   Ui::AddPropertyDialog ui;
   QDialog dlg;
   ui.setupUi(&dlg);
+
   if (dlg.exec() == QDialog::Accepted && ui.comboBox->currentIndex() > 0 && !ui.lineEdit->text().isEmpty()) {
     std::string name = ui.lineEdit->text().toStdString();
 
@@ -150,36 +151,47 @@ void PropertiesEditor::newProperty() {
     case 1:
       _graph->getProperty<IntegerProperty>(name);
       break;
+
     case 2:
       _graph->getProperty<IntegerVectorProperty>(name);
       break;
+
     case 3:
       _graph->getProperty<BooleanProperty>(name);
       break;
+
     case 4:
       _graph->getProperty<BooleanVectorProperty>(name);
       break;
+
     case 5:
       _graph->getProperty<LayoutProperty>(name);
       break;
+
     case 6:
       _graph->getProperty<CoordVectorProperty>(name);
       break;
+
     case 7:
       _graph->getProperty<StringProperty>(name);
       break;
+
     case 8:
       _graph->getProperty<StringVectorProperty>(name);
       break;
+
     case 9:
       _graph->getProperty<SizeProperty>(name);
       break;
+
     case 10:
       _graph->getProperty<SizeVectorProperty>(name);
       break;
+
     case 11:
       _graph->getProperty<ColorProperty>(name);
       break;
+
     case 12:
       _graph->getProperty<ColorVectorProperty>(name);
       break;

@@ -162,7 +162,7 @@ PropertyInterface* CopyPropertyDialog::copyProperty(QString& errorMsg) {
 
   if(valid) {
     string tulipPropertyName = QStringToTlpString(propertyName);
-    CopyPropertyDialog::PropertyScope destinationScope = destinationPropertyScope();    
+    CopyPropertyDialog::PropertyScope destinationScope = destinationPropertyScope();
     _graph->push();
 
     COPY_PROPERTY(DoubleProperty,_graph,_source,tulipPropertyName,destinationScope);
