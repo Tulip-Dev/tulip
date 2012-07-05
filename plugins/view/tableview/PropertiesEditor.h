@@ -40,6 +40,7 @@ protected slots:
   void setAllNodes();
   void setAllEdges();
   void copyProperty();
+  void newProperty();
   void delProperty();
   void toLabels();
   void toNodesLabels();

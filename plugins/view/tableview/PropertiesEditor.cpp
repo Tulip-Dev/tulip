@@ -11,8 +11,10 @@
 #include <QtGui/QDialog>
 #include <QtGui/QCursor>
 #include <QtGui/QMainWindow>
+#include <QtGui/QMessageBox>
 
 #include "ui_PropertiesEditor.h"
+#include "ui_AddPropertyDialog.h"
 
 using namespace tlp;
 
@@ -56,6 +58,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   connect(menu.addAction(trUtf8("To labels (edges only)")),SIGNAL(triggered()),this,SLOT(toEdgesLabels()));
   menu.addSeparator();
   connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
+  connect(menu.addAction(trUtf8("New")),SIGNAL(triggered()),this,SLOT(newProperty()));
   QAction* delAction = menu.addAction(trUtf8("Delete"));
   delAction->setEnabled(!Perspective::instance()->isReservedPropertyName(_contextProperty->getName().c_str()));
   connect(delAction,SIGNAL(triggered()),this,SLOT(delProperty()));
@@ -131,6 +134,58 @@ void PropertiesEditor::setAllEdges() {
 
 void PropertiesEditor::copyProperty() {
   CopyPropertyDialog::copyProperty(_graph,_contextProperty,true,Perspective::instance()->mainWindow());
+}
+
+void PropertiesEditor::newProperty() {
+  Ui::AddPropertyDialog ui;
+  QDialog dlg;
+  ui.setupUi(&dlg);
+  if (dlg.exec() == QDialog::Accepted && ui.comboBox->currentIndex() > 0 && !ui.lineEdit->text().isEmpty()) {
+    std::string name = ui.lineEdit->text().toStdString();
+
+    if (_graph->existProperty(name))
+      QMessageBox::critical(NULL,trUtf8("Property already exists"),trUtf8("Graph already contains a property named ") + ui.lineEdit->text());
+
+    switch (ui.comboBox->currentIndex()) {
+    case 1:
+      _graph->getProperty<IntegerProperty>(name);
+      break;
+    case 2:
+      _graph->getProperty<IntegerVectorProperty>(name);
+      break;
+    case 3:
+      _graph->getProperty<BooleanProperty>(name);
+      break;
+    case 4:
+      _graph->getProperty<BooleanVectorProperty>(name);
+      break;
+    case 5:
+      _graph->getProperty<LayoutProperty>(name);
+      break;
+    case 6:
+      _graph->getProperty<CoordVectorProperty>(name);
+      break;
+    case 7:
+      _graph->getProperty<StringProperty>(name);
+      break;
+    case 8:
+      _graph->getProperty<StringVectorProperty>(name);
+      break;
+    case 9:
+      _graph->getProperty<SizeProperty>(name);
+      break;
+    case 10:
+      _graph->getProperty<SizeVectorProperty>(name);
+      break;
+    case 11:
+      _graph->getProperty<ColorProperty>(name);
+      break;
+    case 12:
+      _graph->getProperty<ColorVectorProperty>(name);
+      break;
+    }
+
+  }
 }
 
 void PropertiesEditor::delProperty() {
