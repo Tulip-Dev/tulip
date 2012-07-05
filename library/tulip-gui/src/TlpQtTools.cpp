@@ -148,8 +148,7 @@ QGLFramebufferObject *createQGLFramebufferObject(int width, int height, QGLFrame
   QGLFramebufferObject *fbo=new QGLFramebufferObject(width,height,attachment);
 
   if(!fbo->isValid()) {
-    QMessageBox::critical(NULL,"OpenGL Error","Tulip don't have enough video card memory to run. Tulip will be closed");
-    exit(1);
+    QMessageBox::critical(NULL,"OpenGL Error","Tulip don't have enough video card memory to run.");
   }
 
   return fbo;
