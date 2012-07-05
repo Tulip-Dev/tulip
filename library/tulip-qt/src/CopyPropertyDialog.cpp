@@ -162,24 +162,24 @@ PropertyInterface* CopyPropertyDialog::copyProperty(QString& errorMsg) {
   }
 
   if(valid) {
-      string tulipPropertyName = QStringToTlpString(propertyName);
-      CopyPropertyDialog::PropertyScope destinationScope = destinationPropertyScope();
-      _graph->push();
+    string tulipPropertyName = QStringToTlpString(propertyName);
+    CopyPropertyDialog::PropertyScope destinationScope = destinationPropertyScope();
+    _graph->push();
 
-      COPY_PROPERTY(DoubleProperty,_graph,_source,tulipPropertyName,destinationScope);
-      COPY_PROPERTY(LayoutProperty,_graph,_source,tulipPropertyName,destinationScope);
-      COPY_PROPERTY(StringProperty,_graph,_source,tulipPropertyName,destinationScope);
-      COPY_PROPERTY(BooleanProperty,_graph,_source,tulipPropertyName,destinationScope);
-      COPY_PROPERTY(IntegerProperty,_graph,_source,tulipPropertyName,destinationScope);
-      COPY_PROPERTY(ColorProperty,_graph,_source,tulipPropertyName,destinationScope);
-      COPY_PROPERTY(SizeProperty,_graph,_source,tulipPropertyName,destinationScope);
-      COPY_PROPERTY(DoubleVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
-      COPY_PROPERTY(CoordVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
-      COPY_PROPERTY(StringVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
-      COPY_PROPERTY(BooleanVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
-      COPY_PROPERTY(IntegerVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
-      COPY_PROPERTY(ColorVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
-      COPY_PROPERTY(SizeVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(DoubleProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(LayoutProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(StringProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(BooleanProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(IntegerProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(ColorProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(SizeProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(DoubleVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(CoordVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(StringVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(BooleanVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(IntegerVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(ColorVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
+    COPY_PROPERTY(SizeVectorProperty,_graph,_source,tulipPropertyName,destinationScope);
   }
 
   return property;
