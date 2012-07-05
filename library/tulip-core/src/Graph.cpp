@@ -429,9 +429,6 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
     outParams+=desc.getName();
   }
 
-  // Pushing before creating output properties
-  push();
-
   QMap<PropertyInterface*,PropertyInterface*> clonedProperties;
   QMap<PropertyInterface*,PropertyInterface*> namedProperties;
 

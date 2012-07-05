@@ -86,11 +86,14 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   std::string errorMessage;
   PluginProgress* progress = Perspective::instance()->progress();
+  g->push();
   bool result = g->applyAlgorithm(_pluginName.toStdString(),errorMessage,&dataSet,progress);
   delete progress;
 
-  if (!result)
+  if (!result) {
+    g->pop();
     qCritical() << name() << ": " << errorMessage.c_str();
+  }
 
   afterRun(g,dataSet);
 
