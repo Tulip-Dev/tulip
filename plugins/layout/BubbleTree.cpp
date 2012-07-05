@@ -160,7 +160,7 @@ double BubbleTree::computeRelativePosition(tlp::node n, TLP_HASH_MAP<tlp::node, 
   }
 
   double angle = 0.;
-  vector<tlp::Circle<double> > circles(Nc);
+  vector<Circled > circles(Nc);
 
   for (unsigned int i=0; i<Nc; ++i) {
     double packRadius;
@@ -180,7 +180,7 @@ double BubbleTree::computeRelativePosition(tlp::node n, TLP_HASH_MAP<tlp::node, 
     circles[i].radius = realCircleRadius[i];
   }
 
-  Circle<double> circleH = tlp::enclosingCircle(circles);
+  Circled circleH = tlp::enclosingCircle(circles);
   (*relativePosition)[n][2] = -circleH[0];
   (*relativePosition)[n][3] = -circleH[1];
   (*relativePosition)[n][4] = sqrt(circleH.radius*circleH.radius - circleH[1]*circleH[1])-fabs(circleH[0]);

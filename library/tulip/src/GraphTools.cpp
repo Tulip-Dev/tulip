@@ -160,7 +160,7 @@ node graphCenterHeuristic(Graph * graph,
   MutableContainer<unsigned int> dist;
   unsigned int i = 0;
   node n = graph->getOneNode();
-  unsigned int nbTry = graph->numberOfNodes();
+  unsigned int nbTry = 2 + sqrt(graph->numberOfNodes());
   unsigned int maxTries = nbTry;
   bool stop = false;
 

@@ -30,7 +30,7 @@ using namespace tlp;
 CPPUNIT_TEST_SUITE_REGISTRATION( CircleTest );
 
 void CircleTest::intersect() {
-  Circle<double> c1(0,0,5),c2(7,0,5);
+  Circled c1(0,0,5),c2(7,0,5);
   Vec2d p1, p2;
   bool inter = tlp::intersection(c1, c2, p1, p2);
   CPPUNIT_ASSERT_EQUAL(true, inter);
@@ -50,8 +50,8 @@ void CircleTest::intersect() {
     c2[1] = rand()%100 - 50;
     r1 = rand()%50;
     r2 = rand()%50;
-    Circle<double> cc1(c1, r1);
-    Circle<double> cc2(c2, r2);
+    Circled cc1(c1, r1);
+    Circled cc2(c2, r2);
     Vec2d p1, p2;
 
     if (tlp::intersection(cc1, cc2, p1, p2)) {

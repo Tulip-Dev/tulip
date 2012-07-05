@@ -24,14 +24,31 @@
 #include <cassert>
 #include <tulip/Array.h>
 #include <tulip/tuliphash.h>
+#include <cmath>
+#include <limits>
 
-#define VECTOR Vector<TYPE,SIZE>
-#define TEMPLATEVECTOR template <typename TYPE, unsigned int SIZE>
+#define VECTOR Vector<TYPE,SIZE,OTYPE>
+#define TEMPLATEVECTOR template <typename TYPE, unsigned int SIZE, typename OTYPE>
 
 namespace tlp {
 /**
  * \addtogroup basic
  */
+
+template<typename TYPE, typename OTYPE>
+inline OTYPE tlpsqr(const TYPE a) {
+  return static_cast<OTYPE>(a) * static_cast<OTYPE>(a);
+}
+
+template<typename TYPE, typename OTYPE>
+inline TYPE tlpsqrt(const OTYPE a) {
+  return static_cast<TYPE>(sqrt(a));
+}
+
+template<>
+inline double tlpsqrt<double, long double>(long double a) {
+  return static_cast<double>(sqrtl(a));
+}
 
 /*@{*/
 /**
@@ -40,23 +57,280 @@ namespace tlp {
  * Enables to create a Vector of TYPE (must be a numeric basic type) with a
  * fixed size and provides Mathematical operation. Mathematical
  * operators must be defined for TYPE. Out of bound accesses are only checked
- * in debug mode.
+ * in debug mode. The OTYPE is used for temporary computation to prevent overflow,
+ * by default OTYPE is a double.
  *
  * \author : David Auber auber@tulip-software.org
  * \version 0.0.1 24/01/2003
  */
-TEMPLATEVECTOR
+template <typename TYPE, unsigned int SIZE, typename OTYPE = double>
 class TLP_SCOPE Vector:public Array<TYPE,SIZE> {
 public:
+  inline VECTOR() {
+    memset( &((*this)[0]), 0, SIZE * sizeof(TYPE) );
+  }
+  inline VECTOR(const Vector<TYPE, SIZE, OTYPE> &v) {
+    set(v);
+  }
 
-  explicit inline VECTOR(int v = 0);
-  inline VECTOR & operator*=(const TYPE &);
+  inline VECTOR(const Vector<TYPE, SIZE + 1, OTYPE> &v) {
+    set(v);
+  }
+
+  explicit inline VECTOR(const TYPE x) {
+    fill(x);
+    /*
+    if (int(SIZE) - 1 > 0)
+        memset( &((*this)[1]), 0, (SIZE - 1) * sizeof(TYPE) );
+    set(x);
+    */
+  }
+
+  explicit inline VECTOR(const TYPE x, const TYPE y) {
+    if (int(SIZE) - 2 > 0)
+      memset( &((*this)[2]), 0, (SIZE - 2) * sizeof(TYPE) );
+
+    set(x,y);
+  }
+
+  explicit inline VECTOR(const TYPE x, const TYPE y, const TYPE z) {
+    if (int(SIZE) - 3 > 0)
+      memset( &((*this)[3]), 0, (SIZE - 3) * sizeof(TYPE) );
+
+    set(x, y, z);
+  }
+  explicit inline VECTOR(const Vector<TYPE, 2, OTYPE> &v, const TYPE z) {
+    set(v, z);
+  }
+  explicit inline VECTOR(const TYPE x, const TYPE y, const TYPE z, const TYPE w) {
+    set(x, y, z, w);
+  }
+  explicit inline VECTOR(const Vector<TYPE, 2, OTYPE> &v, const TYPE z, const TYPE w) {
+    set(v, z, w);
+  }
+  explicit inline VECTOR(const Vector<TYPE, 3, OTYPE> &v, const TYPE w) {
+    set(v, w);
+  }
+
+  inline void set(const TYPE x) {
+    (*this)[0] = x;
+  }
+  inline void set(const TYPE x, const TYPE y) {
+    assert(SIZE>1);
+    (*this)[0] = x;
+    (*this)[1] = y;
+  }
+  inline void set(const TYPE x, const TYPE y, const TYPE z) {
+    assert(SIZE>2);
+    (*this)[0] = x;
+    (*this)[1] = y;
+    (*this)[2] = z;
+  }
+  inline void set(const TYPE x, const TYPE y, const TYPE z, const TYPE w) {
+    assert(SIZE>3);
+    (*this)[0] = x;
+    (*this)[1] = y;
+    (*this)[2] = z;
+    (*this)[3] = w;
+  }
+  inline void set(const Vector<TYPE, 2, OTYPE> &v, const TYPE z) {
+    assert(SIZE>3);
+    memcpy( &((*this)[0]), (void*)&(v.array[0]), 2 * sizeof(TYPE) );
+    (*this)[2] = z;
+  }
+  inline void set(const Vector<TYPE, 3, OTYPE> &v, const TYPE w) {
+    assert(SIZE>3);
+    memcpy( &((*this)[0]), (void*)&(v.array[0]), 3 * sizeof(TYPE) );
+    (*this)[3] = w;
+  }
+  inline void set(const Vector<TYPE, SIZE, OTYPE> &v) {
+    memcpy(&((*this)[0]), (void*)&(v.array[0]), SIZE * sizeof(TYPE) );
+  }
+  inline void set(const Vector<TYPE, SIZE + 1, OTYPE> &v) {
+    memcpy(&((*this)[0]), &(v.array[0]), SIZE * sizeof(TYPE) );
+  }
+  inline void get(TYPE &x) const {
+    x = (*this)[0];
+  }
+  inline void get(TYPE &x,TYPE &y) const {
+    assert(SIZE>1);
+    x = (*this)[0];
+    y = (*this)[1];
+  }
+  inline void get(TYPE &x,TYPE &y,TYPE &z) const {
+    assert(SIZE>2);
+    x = (*this)[0];
+    y = (*this)[1];
+    z = (*this)[2];
+  }
+  inline void get(TYPE &x,TYPE &y,TYPE &z,TYPE &w) const {
+    assert(SIZE>3);
+    x = (*this)[0];
+    y = (*this)[1];
+    z = (*this)[2];
+    w = (*this)[3];
+  }
+
+  //convenient accessor for coordinates
+  inline TYPE x() const {
+    return (*this)[0];
+  }
+  inline TYPE y() const {
+    assert(SIZE>1);
+    return (*this)[1];
+  }
+  inline TYPE z() const {
+    assert(SIZE>2);
+    return (*this)[2];
+  }
+  inline TYPE w() const {
+    assert(SIZE>3);
+    return (*this)[3];
+  }
+
+  inline TYPE& x() {
+    return (*this)[0];
+  }
+  inline TYPE& y() {
+    assert(SIZE>1);
+    return (*this)[1];
+  }
+  inline TYPE& z() {
+    assert(SIZE>2);
+    return (*this)[2];
+  }
+  inline TYPE& w() {
+    assert(SIZE>3);
+    return (*this)[3];
+  }
+
+  inline TYPE width()  const {
+    return x();
+  }
+  inline TYPE height() const {
+    return y();
+  }
+  inline TYPE depth()  const {
+    return z();
+  }
+
+  inline TYPE& width()  {
+    return x();
+  }
+  inline TYPE& height() {
+    return y();
+  }
+  inline TYPE& depth()  {
+    return z();
+  }
+
+  inline TYPE r() const {
+    return x();
+  }
+  inline TYPE g() const {
+    return y();
+  }
+  inline TYPE b() const {
+    return z();
+  }
+  inline TYPE a() const {
+    return w();
+  }
+
+  inline TYPE& r() {
+    return x();
+  }
+  inline TYPE& g() {
+    return y();
+  }
+  inline TYPE& b() {
+    return z();
+  }
+  inline TYPE& a() {
+    return w();
+  }
+
+  inline TYPE s() const {
+    return x();
+  }
+  inline TYPE t() const {
+    return y();
+  }
+  inline TYPE p() const {
+    return z();
+  }
+  inline TYPE q() const {
+    return w();
+  }
+
+  inline TYPE& s() {
+    return x();
+  }
+  inline TYPE& t() {
+    return y();
+  }
+  inline TYPE& p() {
+    return z();
+  }
+  inline TYPE& q() {
+    return w();
+  }
+
+  inline void setX(TYPE xx) {
+    x() = xx;
+  }
+  inline void setY(TYPE yy) {
+    y() = yy;
+  }
+  inline void setZ(TYPE zz) {
+    z() = zz;
+  }
+
+  inline TYPE getX() const {
+    return x();
+  }
+  inline TYPE getY() const {
+    return y();
+  }
+  inline TYPE getZ() const {
+    return z();
+  }
+
+  inline void setW(const TYPE width) {
+    x() = width;
+  }
+
+  inline void setH(const TYPE height) {
+    y() = height;
+  }
+
+  inline void setD(const TYPE depth) {
+    z() = depth;
+  }
+
+  inline TYPE getW() const {
+    return x();
+  }
+  inline TYPE getH() const {
+    return y();
+  }
+  inline TYPE getD() const {
+    return z();
+  }
+
+
+
+//    inline VECTOR & operator*=(const OTYPE );
+  inline VECTOR & operator*=(const TYPE );
   inline VECTOR & operator*=(const VECTOR &);
-  inline VECTOR & operator/=(const TYPE &);
+//    inline VECTOR & operator/=(const OTYPE );
+  inline VECTOR & operator/=(const TYPE );
   inline VECTOR & operator/=(const VECTOR &);
-  inline VECTOR & operator+=(const TYPE &);
+//    inline VECTOR & operator+=(const OTYPE );
+  inline VECTOR & operator+=(const TYPE );
   inline VECTOR & operator+=(const VECTOR &);
-  inline VECTOR & operator-=(const TYPE &);
+//    inline VECTOR & operator-=(const OTYPE );
+  inline VECTOR & operator-=(const TYPE );
   inline VECTOR & operator-=(const VECTOR &);
   inline VECTOR & operator^=(const VECTOR &);
 
@@ -64,11 +338,44 @@ public:
   inline bool operator<(const VECTOR &) const;
   inline bool operator!=(const VECTOR &) const;
   inline bool operator==(const VECTOR &) const;
-  inline VECTOR & fill(const TYPE &obj);
+  inline VECTOR & fill(const TYPE obj);
   inline TYPE norm () const;
+  inline TYPE length () const {
+    return norm();
+  }
+  inline VECTOR & normalize () {
+    OTYPE tmp = 0;
+
+    for (unsigned int i=0; i<SIZE; ++i)
+      tmp += tlpsqr<TYPE, OTYPE>((*this)[i]);
+
+    if (tmp < sqrt(std::numeric_limits<TYPE>::epsilon())) {
+      return *this;
+    }
+
+    for (unsigned int i=0; i<SIZE; ++i) {
+      if ((*this)[i] < 0.)
+        (*this)[i] = -tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>((*this)[i]) / tmp);
+      else
+        (*this)[i] = tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>((*this)[i]) / tmp);
+    }
+
+    return *this;
+  }
   inline TYPE dist (const VECTOR &) const;
   inline TYPE dotProduct(const VECTOR &) const;
 };
+
+TEMPLATEVECTOR
+inline TYPE dotProduct(const VECTOR &a, const VECTOR &b) {
+  return a.dotProduct(b);
+}
+
+TEMPLATEVECTOR
+inline TYPE dist(const VECTOR &a, const VECTOR &b) {
+  return a.dist(b);
+}
+
 
 /**
   * Return the minimun of each dimension of the two vectors
@@ -102,22 +409,38 @@ inline VECTOR maxVector(const VECTOR &u, const VECTOR &v)  {
 TEMPLATEVECTOR
 inline VECTOR operator*(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
-inline VECTOR operator*(const TYPE & , const VECTOR &);
+inline VECTOR operator*(const TYPE  , const VECTOR &);
 TEMPLATEVECTOR
-inline VECTOR operator*(const VECTOR &, const TYPE &);
+inline VECTOR operator*(const VECTOR &, const TYPE );
+
+//TEMPLATEVECTOR
+//inline VECTOR operator*(const OTYPE  , const VECTOR &);
+//TEMPLATEVECTOR
+//inline VECTOR operator*(const VECTOR &, const OTYPE );
+
 TEMPLATEVECTOR
 inline VECTOR operator+(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
-inline VECTOR operator+(const VECTOR &, const TYPE &);
+inline VECTOR operator+(const VECTOR &, const TYPE );
+//TEMPLATEVECTOR
+//inline VECTOR operator+(const VECTOR &, const OTYPE );
+
 TEMPLATEVECTOR
 inline VECTOR operator-(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
-inline VECTOR operator-(const VECTOR &, const TYPE &);
+inline VECTOR operator-(const VECTOR &, const TYPE );
 TEMPLATEVECTOR
+//inline VECTOR operator-(const VECTOR &, const OTYPE );
+//TEMPLATEVECTOR
+
+
 inline VECTOR operator/(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
-inline VECTOR operator/(const VECTOR &, const TYPE &);
+inline VECTOR operator/(const VECTOR &, const TYPE );
 TEMPLATEVECTOR
+//inline VECTOR operator/(const VECTOR &, const OTYPE );
+//TEMPLATEVECTOR
+
 inline VECTOR operator^(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
 inline VECTOR operator-(const VECTOR&);
@@ -148,93 +471,90 @@ typedef Vector<int, 4> Vec4i;
 /**
   * @brief typedef for 2D vector of double
   */
-typedef Vector<double, 2> Vec2d;
+typedef Vector<double, 2, long double> Vec2d;
 /**
   * @brief typedef for 3D vector of double
   */
-typedef Vector<double, 3> Vec3d;
+typedef Vector<double, 3, long double> Vec3d;
 /**
   * @brief typedef for 4D vector of double
   */
-typedef Vector<double, 4> Vec4d;
+typedef Vector<double, 4, long double> Vec4d;
 /**
   * @brief typedef for 2D vector of float
   */
-typedef Vector<float,  2> Vec2f;
+typedef Vector<float,  2, double> Vec2f;
 /**
   * @brief typedef for 3D vector of float
   */
-typedef Vector<float,  3> Vec3f;
+typedef Vector<float,  3, double> Vec3f;
 /**
   * @brief typedef for 4D vector of float
   */
-typedef Vector<float,  4> Vec4f;
+typedef Vector<float,  4, double> Vec4f;
 /*@}*/
 
 #ifdef _MSC_VER
-template struct TLP_SCOPE Array<float, 1>;
-template struct TLP_SCOPE Array<float, 2>;
-template struct TLP_SCOPE Array<float, 3>;
-template struct TLP_SCOPE Array<float, 4>;
-template struct TLP_SCOPE Array<float, 5>;
-template class TLP_SCOPE Vector<float, 1>;
-template class TLP_SCOPE Vector<float, 2>;
-template class TLP_SCOPE Vector<float, 3>;
-template class TLP_SCOPE Vector<float, 4>;
-template class TLP_SCOPE Vector<float, 5>;
+template struct Array<float, 1>;
+template struct Array<float, 2>;
+template struct Array<float, 3>;
+template struct Array<float, 4>;
+template struct Array<float, 5>;
+template class Vector<float, 1>;
+template class Vector<float, 2>;
+template class Vector<float, 3>;
+template class Vector<float, 4>;
+template class Vector<float, 5>;
 
-template struct TLP_SCOPE Array<int, 1>;
-template struct TLP_SCOPE Array<int, 2>;
-template struct TLP_SCOPE Array<int, 3>;
-template struct TLP_SCOPE Array<int, 4>;
-template struct TLP_SCOPE Array<int, 5>;
-template class TLP_SCOPE Vector<int, 1>;
-template class TLP_SCOPE Vector<int, 2>;
-template class TLP_SCOPE Vector<int, 3>;
-template class TLP_SCOPE Vector<int, 4>;
-template class TLP_SCOPE Vector<int, 5>;
+template struct Array<int, 1>;
+template struct Array<int, 2>;
+template struct Array<int, 3>;
+template struct Array<int, 4>;
+template struct Array<int, 5>;
+template class Vector<int, 1>;
+template class Vector<int, 2>;
+template class Vector<int, 3>;
+template class Vector<int, 4>;
+template class Vector<int, 5>;
 
-template struct TLP_SCOPE Array<bool, 1>;
-template struct TLP_SCOPE Array<bool, 2>;
-template struct TLP_SCOPE Array<bool, 3>;
-template struct TLP_SCOPE Array<bool, 4>;
-template struct TLP_SCOPE Array<bool, 5>;
+template struct Array<bool, 1>;
+template struct Array<bool, 2>;
+template struct Array<bool, 3>;
+template struct Array<bool, 4>;
+template struct Array<bool, 5>;
 
-template struct TLP_SCOPE Array<double, 1>;
-template struct TLP_SCOPE Array<double, 2>;
-template struct TLP_SCOPE Array<double, 3>;
-template struct TLP_SCOPE Array<double, 4>;
-template struct TLP_SCOPE Array<double, 5>;
-template class TLP_SCOPE Vector<double, 1>;
-template class TLP_SCOPE Vector<double, 2>;
-template class TLP_SCOPE Vector<double, 3>;
-template class TLP_SCOPE Vector<double, 4>;
-template class TLP_SCOPE Vector<double, 5>;
-template class TLP_SCOPE Vector<long double, 1>;
-template class TLP_SCOPE Vector<long double, 2>;
-template class TLP_SCOPE Vector<long double, 3>;
+template struct Array<double, 1>;
+template struct Array<double, 2>;
+template struct Array<double, 3>;
+template struct Array<double, 4>;
+template struct Array<double, 5>;
+template class Vector<double, 1>;
+template class Vector<double, 2>;
+template class Vector<double, 3>;
+template class Vector<double, 4>;
+template class Vector<double, 5>;
+template class Vector<long double, 1>;
+template class Vector<long double, 2>;
+template class Vector<long double, 3>;
 
+template struct Array<tlp::Vector<double,1>,1>;
+template struct Array<tlp::Vector<double,2>,2>;
+template struct Array<tlp::Vector<double,3>,3>;
+template struct Array<tlp::Vector<double,4>,4>;
 
-template struct TLP_SCOPE Array<tlp::Vector<double,1>,1>;
-template struct TLP_SCOPE Array<tlp::Vector<double,2>,2>;
-template struct TLP_SCOPE Array<tlp::Vector<double,3>,3>;
-template struct TLP_SCOPE Array<tlp::Vector<double,4>,4>;
+template struct Array<tlp::Vector<long double, 4>,4>;
+template struct Array<tlp::Vector<long double, 3>,3>;
+template struct Array<tlp::Vector<long double, 2>,2>;
+template struct Array<tlp::Vector<long double, 1>,1>;
 
-template struct TLP_SCOPE Array<tlp::Vector<long double, 4>,4>;
-template struct TLP_SCOPE Array<tlp::Vector<long double, 3>,3>;
-template struct TLP_SCOPE Array<tlp::Vector<long double, 2>,2>;
-template struct TLP_SCOPE Array<tlp::Vector<long double, 1>,1>;
+template struct Array<tlp::Vector<float,1>,1>;
+template struct Array<tlp::Vector<float,2>,2>;
+template struct Array<tlp::Vector<float,3>,3>;
+template struct Array<tlp::Vector<float,4>,4>;
 
+template struct Array<tlp::Vector<int,2>,2>;
 
-
-template struct TLP_SCOPE Array<tlp::Vector<float,1>,1>;
-template struct TLP_SCOPE Array<tlp::Vector<float,2>,2>;
-template struct TLP_SCOPE Array<tlp::Vector<float,3>,3>;
-template struct TLP_SCOPE Array<tlp::Vector<float,4>,4>;
-
-template struct TLP_SCOPE Array<tlp::Vector<int,2>,2>;
-
-template class TLP_SCOPE tlp::Vector<unsigned char ,4>;
+template class tlp::Vector<unsigned char ,4>;
 #endif
 }
 
