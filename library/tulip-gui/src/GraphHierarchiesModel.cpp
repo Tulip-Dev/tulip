@@ -165,9 +165,7 @@ QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *
       continue;
 
     QString absolutePath = project->toAbsolutePath(file);
-    DataSet data;
-    data.set<std::string>("file::filename",std::string(absolutePath.toUtf8().data()));
-    Graph* g = tlp::importGraph("JSON Import",data,progress);
+    Graph* g = loadGraph(std::string(absolutePath.toUtf8().data()),progress);
     rootIds[entry] = g;
 
     addGraph(g);
@@ -184,9 +182,7 @@ QMap<tlp::Graph*,QString> GraphHierarchiesModel::writeProject(tlp::TulipProject 
     rootIds[g] = QString::number(i);
     QString folder = GRAPHS_PATH + "/" + QString::number(i++) + "/";
     project->mkpath(folder);
-    DataSet data;
-    std::fstream *stream = project->stdFileStream(folder + "graph.json");
-    tlp::exportGraph(g,*stream,"JSON Export",data,progress);
+    tlp::saveGraph(g,project->toAbsolutePath(folder + "graph.tlp").toStdString(),progress);
   }
   foreach(GraphNeedsSavingObserver* observer, _saveNeeded)
   observer->saved();

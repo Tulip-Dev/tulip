@@ -107,14 +107,17 @@ Graph * tlp::newCloneSubGraph(Graph *graph, std::string name) {
   return graph->addCloneSubGraph(name);
 }
 //=========================================================
-Graph * tlp::loadGraph(const std::string &filename) {
+Graph * tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   DataSet dataSet;
+  std::string algName = "TLP Import";
+  if (QString(filename.c_str()).endsWith("json"))
+    algName = "JSON Import";
   dataSet.set("file::filename", filename);
-  Graph *sg = tlp::importGraph("JSON Import", dataSet);
+  Graph *sg = tlp::importGraph(algName, dataSet,progress);
   return sg;
 }
 //=========================================================
-bool tlp::saveGraph(Graph* graph, const std::string& filename) {
+bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *progress) {
   ostream *os;
 
   if (filename.rfind(".gz") == (filename.length() - 3))
@@ -125,7 +128,7 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename) {
   bool result;
   DataSet data;
   data.set("file", filename);
-  result=tlp::exportGraph(graph, *os, "JSON Export", data, 0);
+  result=tlp::exportGraph(graph, *os, "TLP Export", data, progress);
   delete os;
   return result;
 }
