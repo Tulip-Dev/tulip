@@ -26,6 +26,7 @@
 #include <tulip/tuliphash.h>
 #include <cmath>
 #include <limits>
+#include <cstring>
 
 #define VECTOR Vector<TYPE,SIZE,OTYPE>
 #define TEMPLATEVECTOR template <typename TYPE, unsigned int SIZE, typename OTYPE>
