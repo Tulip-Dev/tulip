@@ -58,7 +58,7 @@ enum ElementType {
  * @param filename The file in tlp format to parse.
  * @return :Graph* The imported Graph, NULL if the import failed.
  **/
-TLP_SCOPE Graph * loadGraph(const std::string &filename);
+TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* progress = NULL);
 
 /**
  * @brief Saves the corresponding root graph and all its subgraphs to a file using the tlp format. Extension of the file can be either .tlp (human-readable text file) or .tlp.gz (gzipped text file).
@@ -71,7 +71,7 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename);
  * @param filename the file to save the graph to.
  * @return bool Whether the export was successfull or not.
  **/
-TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename);
+TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename, tlp::PluginProgress* progress = NULL);
 
 /**
  * @brief Exports a graph using the specified export plugin with parameters stored in the DataSet.
