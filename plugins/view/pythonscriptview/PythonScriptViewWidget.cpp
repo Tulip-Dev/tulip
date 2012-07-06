@@ -78,6 +78,7 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
 
   if (docRoot.exists()) {
     QWebView *webView = new QWebView();
+    webView->installEventFilter(&keyboardFocusEventFilter);
 #ifdef WIN32
     webView->load(QUrl("file:///"+docRootPath));
 #else
