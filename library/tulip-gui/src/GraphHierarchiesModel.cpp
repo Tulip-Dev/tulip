@@ -159,7 +159,7 @@ bool GraphHierarchiesModel::needsSaving() {
 QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
   QMap<QString,tlp::Graph*> rootIds;
   foreach(QString entry, project->entryList(GRAPHS_PATH,QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
-    QString file = GRAPHS_PATH + entry + "/graph.json";
+    QString file = GRAPHS_PATH + entry + "/graph.tlp";
 
     if (!project->exists(file))
       continue;
