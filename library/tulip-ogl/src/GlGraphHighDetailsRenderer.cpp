@@ -174,9 +174,10 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   GlEdge glEdge(0);
 
   bool renderOnlyOneNode=false;
-  if(!selectionDrawActivate){
+
+  if(!selectionDrawActivate) {
     if(!inputData->getElementLayout()->getNonDefaultValuatedNodes()->hasNext() &&
-       !inputData->getElementSize()->getNonDefaultValuatedNodes()->hasNext())
+        !inputData->getElementSize()->getNonDefaultValuatedNodes()->hasNext())
       renderOnlyOneNode=true;
   }
 
@@ -214,7 +215,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
     }
 
-    if(!renderOnlyOneNode){
+    if(!renderOnlyOneNode) {
       //draw edges
       for(vector<ComplexEntityLODUnit>::iterator it = layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
         if((*it).lod<=0)

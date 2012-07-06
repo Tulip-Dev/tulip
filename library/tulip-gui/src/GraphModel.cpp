@@ -148,6 +148,7 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
   qDebug() << __PRETTY_FUNCTION__;
   foreach(unsigned int id, _elementsToRemove) {
     int index = _elements.indexOf(id);
+
     if (index >= 0) {
       beginRemoveRows(QModelIndex(),index,index);
       _elements.remove(index);
@@ -155,12 +156,14 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
     }
   }
   _elementsToRemove.clear();
+
   if (_elementsToAdd.size()>0) {
     beginInsertRows(QModelIndex(),_elements.size(),_elements.size()+_elementsToAdd.size()-1);
     foreach(unsigned int id,_elementsToAdd)
-      _elements.push_back(id);
+    _elements.push_back(id);
     endInsertRows();
   }
+
   _elementsToAdd.clear();
 }
 
