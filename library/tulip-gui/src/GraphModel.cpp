@@ -19,6 +19,7 @@ unsigned int GraphModel::elementAt(int row) const {
 void GraphModel::setGraph(Graph* g) {
   if (_graph != NULL) {
     _graph->removeListener(this);
+    _graph->removeObserver(this);
     PropertyInterface* pi;
     forEach(pi, _graph->getObjectProperties()) pi->removeListener(this);
   }
@@ -29,6 +30,7 @@ void GraphModel::setGraph(Graph* g) {
 
   if (_graph != NULL) {
     _graph->addListener(this);
+    _graph->addObserver(this);
     PropertyInterface* pi;
     forEach(pi, _graph->getObjectProperties()) {
       _properties.push_back(pi);
@@ -140,6 +142,26 @@ void GraphModel::treatEvent(const Event& ev) {
       endRemoveColumns();
     }
   }
+}
+
+void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
+  qDebug() << __PRETTY_FUNCTION__;
+  foreach(unsigned int id, _elementsToRemove) {
+    int index = _elements.indexOf(id);
+    if (index >= 0) {
+      beginRemoveRows(QModelIndex(),index,index);
+      _elements.remove(index);
+      endRemoveRows();
+    }
+  }
+  _elementsToRemove.clear();
+  if (_elementsToAdd.size()>0) {
+    beginInsertRows(QModelIndex(),_elements.size(),_elements.size()+_elementsToAdd.size()-1);
+    foreach(unsigned int id,_elementsToAdd)
+      _elements.push_back(id);
+    endInsertRows();
+  }
+  _elementsToAdd.clear();
 }
 
 #define STANDARD_NODE_CHECKS(MACRO) \
@@ -310,36 +332,17 @@ void NodesGraphModel::treatEvent(const Event& ev) {
     const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
 
     if (graphEv->getType() == GraphEvent::TLP_ADD_NODE) {
-      beginInsertRows(QModelIndex(),_elements.size(),_elements.size());
-      _elements.push_back(graphEv->getNode().id);
-      endInsertRows();
+      _elementsToAdd.insert(graphEv->getNode().id);
     }
     else if (graphEv->getType() == GraphEvent::TLP_ADD_NODES) {
-      beginInsertRows(QModelIndex(),_elements.size(),_elements.size()+graphEv->getNodes().size()-1);
-
       for(std::vector<tlp::node>::const_iterator it = graphEv->getNodes().begin(); it != graphEv->getNodes().end(); ++it)
-        _elements.push_back(it->id);
-
-      endInsertRows();
+        _elementsToAdd.insert(it->id);
     }
     else if (graphEv->getType() == GraphEvent::TLP_DEL_NODE) {
-      int index = _elements.indexOf(graphEv->getNode().id);
-      beginRemoveRows(QModelIndex(),index,index);
-      _elements.remove(index);
-      endRemoveRows();
-    }
-  }
-
-  else if (dynamic_cast<const PropertyEvent*>(&ev) != NULL) {
-    const PropertyEvent* propEv = static_cast<const PropertyEvent*>(&ev);
-    int col=_properties.indexOf(propEv->getProperty());
-
-    if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
-      int row = _elements.indexOf(propEv->getNode().id);
-      emit dataChanged(index(row,col),index(row,col));
-    }
-    else if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE) {
-      emit dataChanged(index(0,col),index(_elements.size()-1,col));
+      if (_elementsToAdd.contains(graphEv->getNode().id))
+        _elementsToAdd.remove(graphEv->getNode().id);
+      else
+        _elementsToRemove.insert(graphEv->getNode().id);
     }
   }
 }
@@ -384,36 +387,17 @@ void EdgesGraphModel::treatEvent(const Event& ev) {
     const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
 
     if (graphEv->getType() == GraphEvent::TLP_ADD_EDGE) {
-      beginInsertRows(QModelIndex(),_elements.size(),_elements.size());
-      _elements.push_back(graphEv->getEdge().id);
-      endInsertRows();
+      _elementsToAdd.insert(graphEv->getEdge().id);
     }
     else if (graphEv->getType() == GraphEvent::TLP_ADD_EDGES) {
-      beginInsertRows(QModelIndex(),_elements.size(),_elements.size()+graphEv->getEdges().size()-1);
-
       for(std::vector<tlp::edge>::const_iterator it = graphEv->getEdges().begin(); it != graphEv->getEdges().end(); ++it)
-        _elements.push_back(it->id);
-
-      endInsertRows();
+        _elementsToAdd.insert(it->id);
     }
     else if (graphEv->getType() == GraphEvent::TLP_DEL_EDGE) {
-      int index = _elements.indexOf(graphEv->getEdge().id);
-      beginRemoveRows(QModelIndex(),index,index);
-      _elements.remove(index);
-      endRemoveRows();
-    }
-  }
-
-  else if (dynamic_cast<const PropertyEvent*>(&ev) != NULL) {
-    const PropertyEvent* propEv = static_cast<const PropertyEvent*>(&ev);
-    int col=_properties.indexOf(propEv->getProperty());
-
-    if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_EDGE_VALUE) {
-      int row = _elements.indexOf(propEv->getEdge().id);
-      emit dataChanged(index(row,col),index(row,col));
-    }
-    else if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE) {
-      emit dataChanged(index(0,col),index(_elements.size()-1,col));
+      if (_elementsToAdd.contains(graphEv->getEdge().id))
+        _elementsToAdd.remove(graphEv->getEdge().id);
+      else
+        _elementsToRemove.insert(graphEv->getEdge().id);
     }
   }
 }
