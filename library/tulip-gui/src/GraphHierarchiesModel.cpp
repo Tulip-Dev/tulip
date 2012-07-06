@@ -160,9 +160,11 @@ QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *
   QMap<QString,tlp::Graph*> rootIds;
   foreach(QString entry, project->entryList(GRAPHS_PATH,QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
     QString file = GRAPHS_PATH + entry + "/graph.tlp";
-
-    if (!project->exists(file))
-      continue;
+    if (!project->exists(file)) {
+      file = GRAPHS_PATH + entry + "/graph.json";
+      if (!project->exists(file))
+        continue;
+    }
 
     QString absolutePath = project->toAbsolutePath(file);
     Graph* g = loadGraph(std::string(absolutePath.toUtf8().data()),progress);
