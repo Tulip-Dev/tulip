@@ -112,8 +112,10 @@ Graph * tlp::newCloneSubGraph(Graph *graph, std::string name) {
 Graph * tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   DataSet dataSet;
   std::string algName = "TLP Import";
+
   if (QString(filename.c_str()).endsWith("json"))
     algName = "JSON Import";
+
   dataSet.set("file::filename", filename);
   Graph *sg = tlp::importGraph(algName, dataSet,progress);
   return sg;
