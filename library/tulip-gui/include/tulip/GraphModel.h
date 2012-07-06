@@ -39,6 +39,7 @@ public:
   bool setData(const QModelIndex &index, const QVariant &value, int role);
 
   void treatEvent(const tlp::Event&);
+  void treatEvents(const std::vector<tlp::Event> &);
 
   unsigned int elementAt(int) const;
   virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const = 0;
@@ -48,6 +49,8 @@ public:
 
 protected:
   QVector<unsigned int> _elements;
+  QSet<unsigned int> _elementsToAdd;
+  QSet<unsigned int> _elementsToRemove;
   QVector<tlp::PropertyInterface*> _properties;
 
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const = 0;

@@ -22,6 +22,8 @@
 
 #include <thirdparty/gzstream/gzstream.h>
 
+#include <QtCore/QDateTime>
+
 #include <tulip/ForEach.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
@@ -454,8 +456,11 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   AlgorithmContext* context = new AlgorithmContext(this, dataSet, tmpProgress);
   Algorithm *newAlgo = PluginLister::instance()->getPluginObject<Algorithm>(algorithm, context);
 
-  if ((result=newAlgo->check(errorMessage)))
+  if ((result=newAlgo->check(errorMessage))) {
+    QDateTime start = QDateTime::currentDateTime();
     newAlgo->run();
+    qDebug() << algorithm.c_str() << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
+  }
 
   delete newAlgo;
 
