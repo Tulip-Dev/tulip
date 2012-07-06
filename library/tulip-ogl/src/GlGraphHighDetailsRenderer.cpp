@@ -173,6 +173,13 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   GlNode glNode(0);
   GlEdge glEdge(0);
 
+  bool renderOnlyOneNode=false;
+  if(!selectionDrawActivate){
+    if(!inputData->getElementLayout()->getNonDefaultValuatedNodes()->hasNext() &&
+       !inputData->getElementSize()->getNonDefaultValuatedNodes()->hasNext())
+      renderOnlyOneNode=true;
+  }
+
   if(!inputData->parameters->isElementZOrdered()) {
 
     //draw nodes and metanodes
@@ -197,6 +204,9 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
         glNode.id=(*it).id;
         glNode.draw((*it).lod,inputData,camera);
+
+        if(renderOnlyOneNode)
+          break;
       }
       else {
         continue;
@@ -204,30 +214,32 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
     }
 
-    //draw edges
-    for(vector<ComplexEntityLODUnit>::iterator it = layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
-      if((*it).lod<=0)
-        continue;
-
-      if(filteringProperty) {
-        if(filteringProperty->getEdgeValue(edge((*it).id)))
-          continue;
-      }
-
-      if(!displayEdges)
-        continue;
-
-      if(selectionDrawActivate) {
-        if((selectionType & RenderingEdges)==0)
+    if(!renderOnlyOneNode){
+      //draw edges
+      for(vector<ComplexEntityLODUnit>::iterator it = layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
+        if((*it).lod<=0)
           continue;
 
-        (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id,SelectedEntity::EDGE_SELECTED);
-        glLoadName(*selectionCurrentId);
-        (*selectionCurrentId)++;
-      }
+        if(filteringProperty) {
+          if(filteringProperty->getEdgeValue(edge((*it).id)))
+            continue;
+        }
 
-      glEdge.id=(*it).id;
-      glEdge.draw((*it).lod,inputData,camera);
+        if(!displayEdges)
+          continue;
+
+        if(selectionDrawActivate) {
+          if((selectionType & RenderingEdges)==0)
+            continue;
+
+          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id,SelectedEntity::EDGE_SELECTED);
+          glLoadName(*selectionCurrentId);
+          (*selectionCurrentId)++;
+        }
+
+        glEdge.id=(*it).id;
+        glEdge.draw((*it).lod,inputData,camera);
+      }
     }
 
   }
@@ -293,12 +305,15 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
           glNode.id=entity->id;
           glNode.draw(entity->lod,inputData,camera);
+
+          if(renderOnlyOneNode)
+            break;
         }
         else {
           continue;
         }
       }
-      else if((selectionType & RenderingEdges)!=0) {
+      else if((selectionType & RenderingEdges)!=0 && !renderOnlyOneNode) {
         if(!displayEdges)
           continue;
 
