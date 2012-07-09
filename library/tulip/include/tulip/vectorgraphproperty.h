@@ -72,7 +72,7 @@ public:
    * return the value of the ith element.
    */
   typename std::vector<TYPE>::const_reference operator[](const size_t id) const {
-    assert(isValid());
+    //assert(isValid());
     assert(id < (*_array)._data.size());
     return (*_array)._data[id];
   }
@@ -83,7 +83,7 @@ public:
    * return the value of the ith element and enables to modify it.
    */
   typename std::vector<TYPE>::reference operator[](const size_t id) {
-    assert(isValid());
+    //assert(isValid());
     assert(id < (*_array)._data.size());
     return (*_array)._data[id];
   }
