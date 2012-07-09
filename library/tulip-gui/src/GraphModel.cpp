@@ -433,6 +433,7 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
   foreach(PUB e, _elementsToModify) {
     bool add = e.second;
     unsigned int id = e.first;
+
     if (add) {
       beginInsertRows(QModelIndex(),_elements.size(),_elements.size());
       _elements.push_back(id);
@@ -449,8 +450,10 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
 }
 void NodesGraphModel::treatEvent(const Event& ev) {
   GraphModel::treatEvent(ev);
+
   if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
     const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
+
     if (graphEv->getType() == GraphEvent::TLP_ADD_NODE)
       _elementsToModify.push_back(QPair<unsigned int,bool>(graphEv->getNode().id,true));
     else if (graphEv->getType() == GraphEvent::TLP_ADD_NODES) {
@@ -465,8 +468,10 @@ void NodesGraphModel::treatEvent(const Event& ev) {
 }
 void EdgesGraphModel::treatEvent(const Event& ev) {
   GraphModel::treatEvent(ev);
+
   if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
     const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
+
     if (graphEv->getType() == GraphEvent::TLP_ADD_EDGE)
       _elementsToModify.push_back(QPair<unsigned int,bool>(graphEv->getEdge().id,true));
     else if (graphEv->getType() == GraphEvent::TLP_ADD_EDGES) {
