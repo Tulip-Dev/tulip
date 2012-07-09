@@ -331,6 +331,18 @@ void GraphPerspective::importGraph() {
 
     _graphs->addGraph(g);
 
+    LayoutProperty* viewLayout = g->getProperty<LayoutProperty>("viewLayout");
+    Iterator<node>* it = viewLayout->getNonDefaultValuatedNodes();
+    if (!it->hasNext()) {
+      std::string str;
+      PluginProgress* progress = new SimplePluginProgressDialog(_mainWindow);
+      DataSet data;
+      data.set<LayoutProperty*>("result",viewLayout);
+      g->applyAlgorithm("Bubble Tree",str,&data,progress);
+      delete progress;
+    }
+    delete it;
+
     View* firstPanel = NULL;
     foreach(QString panelName, QStringList() << "Spreadsheet" << "Node Link Diagram view") {
       View* view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(),NULL);
