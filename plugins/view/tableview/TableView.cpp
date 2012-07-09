@@ -22,8 +22,10 @@ tlp::DataSet TableView::state() const {
   data.set("show_nodes",_tableViewConfiguration->isShowNodes());
   data.set("show_edges",_tableViewConfiguration->isShowEdges());
   PropertyInterface* pi = _tableViewConfiguration->filteringProperty();
+
   if (pi != NULL)
     data.set("filtering_property",pi->getName());
+
   return data;
 }
 
@@ -84,10 +86,12 @@ void TableView::readSettings() {
   if ( (_tableViewConfiguration->isShowNodes() && dynamic_cast<NodesGraphModel*>(_model) == NULL) ||
        (_tableViewConfiguration->isShowEdges() && dynamic_cast<EdgesGraphModel*>(_model) == NULL)) {
     _ui->table->setModel(NULL);
+
     if (_tableViewConfiguration->isShowNodes())
       _model = new NodesGraphModel(_ui->table);
     else
       _model = new EdgesGraphModel(_ui->table);
+
     _model->setGraph(graph());
     GraphSortFilterProxyModel* sortModel = new GraphSortFilterProxyModel(_ui->table);
     sortModel->setSourceModel(_model);
@@ -95,7 +99,9 @@ void TableView::readSettings() {
     connect(_model,SIGNAL(columnsInserted(QModelIndex,int,int)),this,SLOT(columnsInserted(QModelIndex,int,int)));
     filterChanged();
   }
+
   QSet<tlp::PropertyInterface*> visibleProperties = _ui->propertiesEditor->visibleProperties();
+
   for (int i=0; i < _model->columnCount(); ++i) {
     _ui->table->setColumnHidden(i,!visibleProperties.contains(_model->headerData(i, Qt::Horizontal, TulipModel::PropertyRole).value<tlp::PropertyInterface*>()));
   }
@@ -103,6 +109,7 @@ void TableView::readSettings() {
 
 void TableView::columnsInserted(const QModelIndex&, int start, int end) {
   QAbstractItemModel* model = static_cast<QAbstractItemModel*>(sender());
+
   for (int c = start; c <= end; c++) {
     PropertyInterface* pi = model->headerData(c,Qt::Horizontal,TulipModel::PropertyRole).value<PropertyInterface*>();
     setPropertyVisible(pi,false);
@@ -112,21 +119,26 @@ void TableView::columnsInserted(const QModelIndex&, int start, int end) {
 void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
   if (_model == NULL)
     return;
+
   QString propName = pi->getName().c_str();
+
   for(int i=0; i < _model->columnCount(); ++i) {
     if (_model->headerData(i,Qt::Horizontal,Qt::DisplayRole).toString() == propName) {
       _ui->table->horizontalHeader()->setSectionHidden(i,!v);
       break;
     }
   }
+
   // Hide table if no more column is displayed
   bool visible = false;
+
   for(int i=0; i < _model->columnCount(); ++i) {
     if (!_ui->table->isColumnHidden(i)) {
       visible = true;
       break;
     }
   }
+
   _ui->frame->setVisible(visible);
 }
 
@@ -134,6 +146,7 @@ void TableView::filterChanged() {
   QString filter = _ui->filterEdit->text();
   GraphSortFilterProxyModel* sortModel = static_cast<GraphSortFilterProxyModel*>(_ui->table->model());
   QVector<PropertyInterface*> props;
+
   for (int i=0; i < _model->columnCount(); ++i) {
     if (!_ui->table->horizontalHeader()->isSectionHidden(i))
       props += _model->headerData(i,Qt::Horizontal,TulipModel::PropertyRole).value<PropertyInterface*>();

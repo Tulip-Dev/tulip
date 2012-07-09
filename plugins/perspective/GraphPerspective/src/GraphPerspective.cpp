@@ -333,6 +333,7 @@ void GraphPerspective::importGraph() {
 
     LayoutProperty* viewLayout = g->getProperty<LayoutProperty>("viewLayout");
     Iterator<node>* it = viewLayout->getNonDefaultValuatedNodes();
+
     if (!it->hasNext()) {
       std::string str;
       PluginProgress* progress = new SimplePluginProgressDialog(_mainWindow);
@@ -341,6 +342,7 @@ void GraphPerspective::importGraph() {
       g->applyAlgorithm("Bubble Tree",str,&data,progress);
       delete progress;
     }
+
     delete it;
 
     View* firstPanel = NULL;

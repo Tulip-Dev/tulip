@@ -236,5 +236,6 @@ void PropertiesEditor::checkStateChanged(QModelIndex index,Qt::CheckState state)
 QSet<PropertyInterface *> PropertiesEditor::visibleProperties() const {
   if (_sourceModel != NULL)
     return _sourceModel->checkedProperties();
+
   return QSet<tlp::PropertyInterface*>();
 }
