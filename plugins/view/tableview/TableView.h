@@ -9,8 +9,7 @@ class TableViewWidget;
 }
 
 namespace tlp {
-class NodesGraphModel;
-class EdgesGraphModel;
+class GraphModel;
 }
 
 class TableViewConfiguration;
@@ -22,8 +21,7 @@ class TableView : public tlp::ViewWidget {
   Ui::TableViewWidget* _ui;
   TableViewConfiguration* _tableViewConfiguration;
 
-  tlp::NodesGraphModel* _nodesModel;
-  tlp::EdgesGraphModel* _edgesModel;
+  tlp::GraphModel* _model;
 
 public:
   PLUGININFORMATIONS("Spreadsheet","Tulip Team","04/17/2012","Spreadsheet view for raw data","4.0","")

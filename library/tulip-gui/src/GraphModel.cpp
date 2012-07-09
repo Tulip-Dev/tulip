@@ -144,29 +144,6 @@ void GraphModel::treatEvent(const Event& ev) {
   }
 }
 
-void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
-  qDebug() << __PRETTY_FUNCTION__;
-  foreach(unsigned int id, _elementsToRemove) {
-    int index = _elements.indexOf(id);
-
-    if (index >= 0) {
-      beginRemoveRows(QModelIndex(),index,index);
-      _elements.remove(index);
-      endRemoveRows();
-    }
-  }
-  _elementsToRemove.clear();
-
-  if (_elementsToAdd.size()>0) {
-    beginInsertRows(QModelIndex(),_elements.size(),_elements.size()+_elementsToAdd.size()-1);
-    foreach(unsigned int id,_elementsToAdd)
-    _elements.push_back(id);
-    endInsertRows();
-  }
-
-  _elementsToAdd.clear();
-}
-
 #define STANDARD_NODE_CHECKS(MACRO) \
   MACRO(DoubleProperty,double);\
   MACRO(DoubleVectorProperty,std::vector<double>);\
@@ -328,28 +305,6 @@ bool NodesGraphModel::lessThan(unsigned int a, unsigned int b, PropertyInterface
   return prop->compare(node(a),node(b)) <= -1;
 }
 
-void NodesGraphModel::treatEvent(const Event& ev) {
-  GraphModel::treatEvent(ev);
-
-  if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
-    const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
-
-    if (graphEv->getType() == GraphEvent::TLP_ADD_NODE) {
-      _elementsToAdd.insert(graphEv->getNode().id);
-    }
-    else if (graphEv->getType() == GraphEvent::TLP_ADD_NODES) {
-      for(std::vector<tlp::node>::const_iterator it = graphEv->getNodes().begin(); it != graphEv->getNodes().end(); ++it)
-        _elementsToAdd.insert(it->id);
-    }
-    else if (graphEv->getType() == GraphEvent::TLP_DEL_NODE) {
-      if (_elementsToAdd.contains(graphEv->getNode().id))
-        _elementsToAdd.remove(graphEv->getNode().id);
-      else
-        _elementsToRemove.insert(graphEv->getNode().id);
-    }
-  }
-}
-
 void NodesGraphModel::setGraph(Graph* g) {
   GraphModel::setGraph(g);
 
@@ -381,28 +336,6 @@ EdgesGraphModel::EdgesGraphModel(QObject *parent): GraphModel(parent) {
 }
 QString EdgesGraphModel::stringValue(unsigned int id, PropertyInterface* pi) const {
   return pi->getEdgeStringValue(edge(id)).c_str();
-}
-
-void EdgesGraphModel::treatEvent(const Event& ev) {
-  GraphModel::treatEvent(ev);
-
-  if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
-    const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
-
-    if (graphEv->getType() == GraphEvent::TLP_ADD_EDGE) {
-      _elementsToAdd.insert(graphEv->getEdge().id);
-    }
-    else if (graphEv->getType() == GraphEvent::TLP_ADD_EDGES) {
-      for(std::vector<tlp::edge>::const_iterator it = graphEv->getEdges().begin(); it != graphEv->getEdges().end(); ++it)
-        _elementsToAdd.insert(it->id);
-    }
-    else if (graphEv->getType() == GraphEvent::TLP_DEL_EDGE) {
-      if (_elementsToAdd.contains(graphEv->getEdge().id))
-        _elementsToAdd.remove(graphEv->getEdge().id);
-      else
-        _elementsToRemove.insert(graphEv->getEdge().id);
-    }
-  }
 }
 
 void EdgesGraphModel::setGraph(Graph* g) {
@@ -490,4 +423,59 @@ void GraphSortFilterProxyModel::setFilterProperty(BooleanProperty* prop) {
 void GraphSortFilterProxyModel::treatEvent(const Event& e) {
   if (e.sender() == _filterProperty)
     invalidateFilter();
+}
+
+/*
+ *Event handling
+ */
+void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
+  typedef QPair<unsigned int,bool> PUB;
+  foreach(PUB e, _elementsToModify) {
+    bool add = e.second;
+    unsigned int id = e.first;
+    if (add) {
+      beginInsertRows(QModelIndex(),_elements.size(),_elements.size());
+      _elements.push_back(id);
+      endInsertRows();
+    }
+    else {
+      int index = _elements.indexOf(id);
+      beginRemoveRows(QModelIndex(),index,index);
+      _elements.remove(index);
+      endRemoveRows();
+    }
+  }
+  _elementsToModify.clear();
+}
+void NodesGraphModel::treatEvent(const Event& ev) {
+  GraphModel::treatEvent(ev);
+  if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
+    const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
+    if (graphEv->getType() == GraphEvent::TLP_ADD_NODE)
+      _elementsToModify.push_back(QPair<unsigned int,bool>(graphEv->getNode().id,true));
+    else if (graphEv->getType() == GraphEvent::TLP_ADD_NODES) {
+      for (std::vector<tlp::node>::const_iterator it = graphEv->getNodes().begin(); it != graphEv->getNodes().end(); ++it) {
+        _elementsToModify.push_back(QPair<unsigned int,bool>(it->id,true));
+      }
+    }
+    else if (graphEv->getType() == GraphEvent::TLP_DEL_NODE) {
+      _elementsToModify.push_back(QPair<unsigned int,bool>(graphEv->getNode().id,false));
+    }
+  }
+}
+void EdgesGraphModel::treatEvent(const Event& ev) {
+  GraphModel::treatEvent(ev);
+  if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
+    const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
+    if (graphEv->getType() == GraphEvent::TLP_ADD_EDGE)
+      _elementsToModify.push_back(QPair<unsigned int,bool>(graphEv->getEdge().id,true));
+    else if (graphEv->getType() == GraphEvent::TLP_ADD_EDGES) {
+      for (std::vector<tlp::edge>::const_iterator it = graphEv->getEdges().begin(); it != graphEv->getEdges().end(); ++it) {
+        _elementsToModify.push_back(QPair<unsigned int,bool>(it->id,true));
+      }
+    }
+    else if (graphEv->getType() == GraphEvent::TLP_DEL_EDGE) {
+      _elementsToModify.push_back(QPair<unsigned int,bool>(graphEv->getEdge().id,false));
+    }
+  }
 }

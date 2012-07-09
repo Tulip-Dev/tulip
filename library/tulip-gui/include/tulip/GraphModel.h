@@ -49,8 +49,7 @@ public:
 
 protected:
   QVector<unsigned int> _elements;
-  QSet<unsigned int> _elementsToAdd;
-  QSet<unsigned int> _elementsToRemove;
+  QVector<QPair<unsigned int,bool> > _elementsToModify;
   QVector<tlp::PropertyInterface*> _properties;
 
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const = 0;

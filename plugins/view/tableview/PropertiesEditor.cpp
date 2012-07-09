@@ -16,6 +16,8 @@
 #include "ui_PropertiesEditor.h"
 #include "ui_AddPropertyDialog.h"
 
+Q_DECLARE_METATYPE(Qt::CheckState)
+
 using namespace tlp;
 
 PropertiesEditor::PropertiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::PropertiesEditor), _graph(NULL), _delegate(new tlp::TulipItemDelegate), _sourceModel(NULL) {
@@ -229,4 +231,10 @@ void PropertiesEditor::toLabels(bool nodes, bool edges) {
 void PropertiesEditor::checkStateChanged(QModelIndex index,Qt::CheckState state) {
   PropertyInterface* pi = _sourceModel->data(index,TulipModel::PropertyRole).value<PropertyInterface*>();
   emit propertyVisibilityChanged(pi,state == Qt::Checked);
+}
+
+QSet<PropertyInterface *> PropertiesEditor::visibleProperties() const {
+  if (_sourceModel != NULL)
+    return _sourceModel->checkedProperties();
+  return QSet<tlp::PropertyInterface*>();
 }
