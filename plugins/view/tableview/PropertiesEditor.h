@@ -30,6 +30,7 @@ public:
   virtual ~PropertiesEditor();
 
   void setGraph(tlp::Graph* g);
+  QSet<tlp::PropertyInterface*> visibleProperties() const;
 
 signals:
   void propertyVisibilityChanged(tlp::PropertyInterface*,bool);

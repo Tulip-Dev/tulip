@@ -236,52 +236,19 @@ border-top: 1px solid #C9C9C9;</string>
            </widget>
           </item>
           <item>
-           <widget class="QSplitter" name="splitter">
-            <property name="styleSheet">
-             <string notr="true">QSplitter {
-background-color: white;
-}</string>
+           <widget class="QTableView" name="table">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
             </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+            <property name="sortingEnabled">
+             <bool>true</bool>
             </property>
-            <property name="handleWidth">
-             <number>1</number>
+            <property name="wordWrap">
+             <bool>false</bool>
             </property>
-            <widget class="QTableView" name="nodesTable">
-             <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
-             </property>
-             <property name="sortingEnabled">
-              <bool>true</bool>
-             </property>
-             <property name="wordWrap">
-              <bool>false</bool>
-             </property>
-             <property name="cornerButtonEnabled">
-              <bool>false</bool>
-             </property>
-            </widget>
-            <widget class="QTableView" name="edgesTable">
-             <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
-             </property>
-             <property name="editTriggers">
-              <set>QAbstractItemView::AllEditTriggers</set>
-             </property>
-             <property name="alternatingRowColors">
-              <bool>true</bool>
-             </property>
-             <property name="sortingEnabled">
-              <bool>true</bool>
-             </property>
-             <property name="wordWrap">
-              <bool>false</bool>
-             </property>
-             <property name="cornerButtonEnabled">
-              <bool>false</bool>
-             </property>
-            </widget>
+            <property name="cornerButtonEnabled">
+             <bool>false</bool>
+            </property>
            </widget>
           </item>
          </layout>
