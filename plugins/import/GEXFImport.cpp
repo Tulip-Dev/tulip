@@ -78,7 +78,7 @@ public :
     dataSet->get<string>("file::filename", filename);
     dataSet->get<bool>("Curved edges", curvedEdges);
 
-    QString qfilename(filename.c_str());
+    QString qfilename = QString::fromUtf8(filename.c_str());
 
     // if wrong extension, abort
     if (!qfilename.endsWith(".gexf")) {
